@@ -202,12 +202,16 @@ public:
 
     virtual bool CanIncrementLabel() const { return true; }
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_text_xpm; }
+
 #if defined(DEBUG)
-    void         Show( int nestLevel, std::ostream& os );
+    void Show( int nestLevel, std::ostream& os );
 #endif
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
 };
@@ -246,7 +250,7 @@ public:
      * position of 0
      *  3 = bottom . This can be seen as the mirrored position of up
      */
-    virtual void    SetOrientation( int aSchematicOrientation );
+    virtual void SetOrientation( int aSchematicOrientation );
 
     /**
      * Function GetSchematicTextOffset (virtual)
@@ -258,9 +262,9 @@ public:
      */
     virtual wxPoint GetSchematicTextOffset();
 
-    virtual void    Mirror_X( int aXaxis_position );
+    virtual void Mirror_X( int aXaxis_position );
 
-    virtual void    Rotate( wxPoint rotationPoint );
+    virtual void Rotate( wxPoint rotationPoint );
 
     /**
      * Function GetBoundingBox
@@ -269,7 +273,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect        GetBoundingBox() const;
+    EDA_Rect GetBoundingBox() const;
 
     /**
      * Function Save
@@ -278,7 +282,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool            Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic label entry from \a aLine in a .sch file.
@@ -292,8 +296,13 @@ public:
 
     virtual bool IsConnectable() const { return true; }
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_line_label_xpm; }
+
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool doIsConnected( const wxPoint& aPosition ) const { return m_Pos == aPosition; }
     virtual EDA_ITEM* doClone() const;
 };
 
@@ -331,7 +340,7 @@ public:
      *      position of 0
      *  3 = bottom . This can be seen as the mirrored position of up
      */
-    virtual void    SetOrientation( int aSchematicOrientation );
+    virtual void SetOrientation( int aSchematicOrientation );
 
     /**
      * Function GetSchematicTextOffset (virtual)
@@ -350,7 +359,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool            Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic global label entry from \a aLine in a .sch file.
@@ -369,7 +378,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect        GetBoundingBox() const;
+    EDA_Rect GetBoundingBox() const;
 
     /**
      * Function CreateGraphicShape (virual)
@@ -377,22 +386,27 @@ public:
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
      */
-    virtual void    CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& aPos );
+    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& aPos );
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-    virtual void    Mirror_Y( int aYaxis_position );
+    virtual void Mirror_Y( int aYaxis_position );
 
-    virtual void    Mirror_X( int aXaxis_position );
+    virtual void Mirror_X( int aXaxis_position );
 
-    virtual void    Rotate( wxPoint rotationPoint );
+    virtual void Rotate( wxPoint rotationPoint );
 
     virtual bool IsConnectable() const { return true; }
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_glabel_xpm; }
+
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool doIsConnected( const wxPoint& aPosition ) const { return m_Pos == aPosition; }
     virtual EDA_ITEM* doClone() const;
 };
 
@@ -432,7 +446,7 @@ public:
      * position of 0
      *  3 = bottom . This can be seen as the mirrored position of up
      */
-    virtual void    SetOrientation( int aSchematicOrientation );
+    virtual void SetOrientation( int aSchematicOrientation );
 
     /**
      * Function GetSchematicTextOffset (virtual)
@@ -459,7 +473,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool            Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic hierarchical label entry from \a aLine in a .sch file.
@@ -478,22 +492,27 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect        GetBoundingBox() const;
+    EDA_Rect GetBoundingBox() const;
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
      * @param aYaxis_position = the y axis position
      */
-    virtual void    Mirror_Y( int aYaxis_position );
+    virtual void Mirror_Y( int aYaxis_position );
 
-    virtual void    Mirror_X( int aXaxis_position );
+    virtual void Mirror_X( int aXaxis_position );
 
-    virtual void    Rotate( wxPoint rotationPoint );
+    virtual void Rotate( wxPoint rotationPoint );
 
     virtual bool IsConnectable() const { return true; }
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_hierarchical_label_xpm; }
+
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool doIsConnected( const wxPoint& aPosition ) const { return m_Pos == aPosition; }
     virtual EDA_ITEM* doClone() const;
 };
 

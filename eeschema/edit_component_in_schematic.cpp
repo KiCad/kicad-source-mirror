@@ -80,98 +80,91 @@ void SCH_EDIT_FRAME::StartMoveCmpField( SCH_FIELD* aField, wxDC* DC )
 /*
  * Edit a field: text and size
 */
-void SCH_EDIT_FRAME::EditCmpFieldText( SCH_FIELD* Field, wxDC* DC )
+void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC )
 {
-    int            fieldNdx, flag;
-    LIB_COMPONENT* Entry;
+    wxCHECK_RET( aField != NULL && aField->Type() == SCH_FIELD_T,
+                 wxT( "Invalid schemaitic field type. " ) );
 
-    if( Field == NULL )
+    int            fieldNdx, flag;
+    SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
+
+    wxCHECK_RET( component != NULL && component->Type() == SCH_COMPONENT_T,
+                 wxT( "Invalid schematic field parent item." ) );
+
+    LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
+
+    wxCHECK_RET( entry != NULL, wxT( "Library entry for component <" ) +
+                 component->GetLibName() + wxT( "> could not be found." ) );
+
+    fieldNdx = aField->GetId();
+
+    if( fieldNdx == VALUE && entry->IsPower() )
     {
-        DisplayError( this, _( "No Field To Edit" ), 10 );
+        DisplayInfoMessage( this, _( "The component is a POWER, it's value cannot be \
+modified!\n\nYou must create a new power component with the value."  ) );
         return;
     }
 
-    SCH_COMPONENT* Cmp = (SCH_COMPONENT*) Field->GetParent();
-
-    fieldNdx = Field->m_FieldId;
-
-    if( fieldNdx == VALUE )
-    {
-        Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
-
-        if( Entry && Entry->IsPower() )
-        {
-            DisplayInfoMessage( this, _( "Part is a POWER, value cannot be \
-modified!\nYou must create a new power"  ) );
-            return;
-        }
-    }
-
     flag = 0;
-    if( fieldNdx == REFERENCE )
-    {
-        Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
 
-        if( Entry != NULL )
-        {
-            if( Entry->GetPartCount() > 1 )
-                flag = 1;
-        }
-    }
+    if( fieldNdx == REFERENCE && entry->GetPartCount() > 1 )
+        flag = 1;
 
     /* save old cmp in undo list if not already in edit, or moving ... */
-    if( Field->m_Flags == 0 )
-        SaveCopyInUndoList( Cmp, UR_CHANGED );
+    if( aField->GetFlags() == 0 )
+        SaveCopyInUndoList( component, UR_CHANGED );
 
-    wxString newtext = Field->m_Text;
-    DrawPanel->m_IgnoreMouseEvents = TRUE;
+    wxString newtext = aField->m_Text;
+    DrawPanel->m_IgnoreMouseEvents = true;
 
-    wxString title = _( "Field: " ) + Field->m_Name;
+    wxString title = _( "Field " ) + aField->m_Name;
     wxTextEntryDialog dlg( this, wxEmptyString , title, newtext );
     int diag = dlg.ShowModal();
+    DrawPanel->MoveCursorToCrossHair();
+    DrawPanel->m_IgnoreMouseEvents = false;
     newtext = dlg.GetValue( );
     newtext.Trim( true );
     newtext.Trim( false );
 
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = FALSE;
-    if ( diag != wxID_OK )
+    if ( diag != wxID_OK || newtext == aField->GetText() )
         return;  // cancelled by user
 
-    Field->m_AddExtraText = flag;
-    Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+    aField->m_AddExtraText = flag;
+    aField->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     if( !newtext.IsEmpty() )
     {
-        if( Field->m_Text.IsEmpty() )
+        if( aField->m_Text.IsEmpty() )
         {
-            Field->m_Pos    = Cmp->m_Pos;
-            Field->m_Size.x = Field->m_Size.y = m_TextFieldSize;
+            aField->m_Pos = component->m_Pos;
+            aField->m_Size.x = aField->m_Size.y = m_TextFieldSize;
         }
-        Field->m_Text = newtext;
+
+        aField->m_Text = newtext;
+
         if( fieldNdx == REFERENCE )
         {
-            Cmp->SetRef( GetSheet(), newtext );
+            component->SetRef( GetSheet(), newtext );
         }
     }
     else
     {
         if( fieldNdx == REFERENCE )
         {
-            DisplayError( this, _( "Reference needed !, No change" ) );
+            DisplayError( this, _( "The reference field cannot be empty!  No change" ) );
         }
         else if( fieldNdx == VALUE )
         {
-            DisplayError( this, _( "Value needed !, No change" ) );
+            DisplayError( this, _( "The value field cannot be empty!  No change" ) );
         }
         else
         {
-            Field->m_Text = wxT( "~" );
+            aField->m_Text = wxT( "~" );
         }
     }
 
-    Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
-    Cmp->DisplayInfo( this );
+    aField->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    component->DisplayInfo( this );
     OnModify();
 }
 
@@ -284,11 +277,11 @@ void SCH_EDIT_FRAME::RotateCmpField( SCH_FIELD* Field, wxDC* DC )
 /****************************************************************************/
 void SCH_EDIT_FRAME::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC )
 {
+    wxCHECK_RET( Cmp != NULL && Cmp->Type() == SCH_COMPONENT_T,
+                 wxT( "Invalid schematic component item." ) );
+
     LIB_COMPONENT* Entry;
     int            flag = 0;
-
-    if( Cmp == NULL )
-        return;
 
     Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
 
@@ -331,11 +324,11 @@ void SCH_EDIT_FRAME::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC )
 /*****************************************************************************/
 void SCH_EDIT_FRAME::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
 {
+    wxCHECK_RET( Cmp != NULL && Cmp->Type() == SCH_COMPONENT_T,
+                 wxT( "Invalid schematic component item." ) );
+
     wxString       message;
     LIB_COMPONENT* Entry;
-
-    if( Cmp == NULL )
-        return;
 
     Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
 
@@ -373,11 +366,11 @@ void SCH_EDIT_FRAME::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
 
 void SCH_EDIT_FRAME::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC )
 {
+    wxCHECK_RET( Cmp != NULL && Cmp->Type() == SCH_COMPONENT_T,
+                 wxT( "Invalid schematic component item." ) );
+
     wxString       message;
     LIB_COMPONENT* Entry;
-
-    if( Cmp == NULL )
-        return;
 
     Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
 

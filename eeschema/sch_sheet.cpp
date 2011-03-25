@@ -965,11 +965,42 @@ void SCH_SHEET::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-bool SCH_SHEET::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR* aInspector, const void* aTestData,
+                                const KICAD_T aFilterTypes[] )
 {
-    if( !( aFilter & SHEET_T ) )
-        return false;
+    KICAD_T stype;
 
+    for( const KICAD_T* p = aFilterTypes;  (stype = *p) != EOT;   ++p )
+    {
+        // If caller wants to inspect my type
+        if( stype == Type() )
+        {
+            if( SEARCH_QUIT == aInspector->Inspect( this, aTestData ) )
+                return SEARCH_QUIT;
+        }
+        else if( stype == SCH_SHEET_LABEL_T )
+        {
+            // Test the bounding boxes of sheet labels.
+            for( size_t i = 0;  i < m_labels.size();  i++ )
+            {
+                if( SEARCH_QUIT == aInspector->Inspect( &m_labels[ i ], aTestData ) )
+                    return SEARCH_QUIT;
+            }
+        }
+    }
+
+    return SEARCH_CONTINUE;
+}
+
+
+wxString SCH_SHEET::GetSelectMenuText() const
+{
+    return wxString( _( "Hierarchical Sheet " ) ) + m_SheetName;
+}
+
+
+bool SCH_SHEET::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
     EDA_Rect rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );

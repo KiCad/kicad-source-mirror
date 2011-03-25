@@ -30,6 +30,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     int         id = event.GetId();
     wxPoint     pos;
     SCH_SCREEN* screen = GetScreen();
+    SCH_ITEM*   item = screen->GetCurItem();
 
     pos = wxGetMousePosition();
 
@@ -126,12 +127,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
         DrawPanel->MoveCursorToCrossHair();
-        SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) screen->GetCurItem(), '/' );
+        SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) item, '/' );
         break;
 
     case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
         DrawPanel->MoveCursorToCrossHair();
-        SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) screen->GetCurItem(), '\\' );
+        SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) item, '\\' );
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -150,12 +151,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_EDIT_TEXT:
-        EditSchematicText( (SCH_TEXT*) screen->GetCurItem() );
+        EditSchematicText( (SCH_TEXT*) item );
         break;
 
     case ID_POPUP_SCH_ROTATE_TEXT:
         DrawPanel->MoveCursorToCrossHair();
-        ChangeTextOrient( (SCH_TEXT*) screen->GetCurItem(), &dc );
+        ChangeTextOrient( (SCH_TEXT*) item, &dc );
         break;
 
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
@@ -165,11 +166,11 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ROTATE_FIELD:
         DrawPanel->MoveCursorToCrossHair();
-        RotateCmpField( (SCH_FIELD*) screen->GetCurItem(), &dc );
+        RotateCmpField( (SCH_FIELD*) item, &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_FIELD:
-        EditCmpFieldText( (SCH_FIELD*) screen->GetCurItem(), &dc );
+        EditComponentFieldText( (SCH_FIELD*) item, &dc );
         break;
 
     case ID_POPUP_SCH_DELETE_NODE:
@@ -196,18 +197,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     break;
 
     case ID_POPUP_SCH_DELETE_CMP:
-        if( screen->GetCurItem() == NULL )
-            break;
-
-        // Ensure the struct is a component (could be a struct of a
-        // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-            screen->SetCurItem( LocateSmallestComponent( screen ) );
-
     case ID_POPUP_SCH_DELETE:
-    {
-        SCH_ITEM* item = screen->GetCurItem();
-
         if( item == NULL )
             break;
 
@@ -217,34 +207,33 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         screen->TestDanglingEnds( DrawPanel, &dc );
         SetSheetNumberAndCount();
         OnModify();
-    }
-    break;
+        break;
 
     case ID_POPUP_SCH_END_SHEET:
         DrawPanel->MoveCursorToCrossHair();
-        screen->GetCurItem()->Place( this, &dc );
+        item->Place( this, &dc );
         break;
 
     case ID_POPUP_SCH_RESIZE_SHEET:
         DrawPanel->MoveCursorToCrossHair();
-        ReSizeSheet( (SCH_SHEET*) screen->GetCurItem(), &dc );
+        ReSizeSheet( (SCH_SHEET*) item, &dc );
         screen->TestDanglingEnds( DrawPanel, &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_SHEET:
-        if( EditSheet( (SCH_SHEET*) screen->GetCurItem(), &dc ) )
+        if( EditSheet( (SCH_SHEET*) item, &dc ) )
             OnModify();
         break;
 
     case ID_POPUP_IMPORT_GLABEL:
-        if( screen->GetCurItem() && screen->GetCurItem()->Type() == SCH_SHEET_T )
-            screen->SetCurItem( Import_PinSheet( (SCH_SHEET*) screen->GetCurItem(), &dc ) );
+        if( item != NULL && item->Type() == SCH_SHEET_T )
+            screen->SetCurItem( Import_PinSheet( (SCH_SHEET*) item, &dc ) );
         break;
 
     case ID_POPUP_SCH_CLEANUP_SHEET:
-        if( screen->GetCurItem() && screen->GetCurItem()->Type() == SCH_SHEET_T )
+        if( item != NULL && item->Type() == SCH_SHEET_T )
         {
-            SCH_SHEET* sheet = (SCH_SHEET*) screen->GetCurItem();
+            SCH_SHEET* sheet = (SCH_SHEET*) item;
 
             if( !sheet->HasUndefinedLabels() )
             {
@@ -265,35 +254,21 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_EDIT_PINSHEET:
-        Edit_PinSheet( (SCH_SHEET_PIN*) screen->GetCurItem(), &dc );
+        Edit_PinSheet( (SCH_SHEET_PIN*) item, &dc );
         break;
 
     case ID_POPUP_SCH_MOVE_PINSHEET:
         DrawPanel->MoveCursorToCrossHair();
-        StartMove_PinSheet( (SCH_SHEET_PIN*) screen->GetCurItem(), &dc );
+        StartMove_PinSheet( (SCH_SHEET_PIN*) item, &dc );
         break;
 
     case ID_POPUP_SCH_DRAG_CMP_REQUEST:
     case ID_POPUP_SCH_MOVE_CMP_REQUEST:
-
-        // Ensure the struct is a component (could be a struct of a
-        // component, like Field, text..) or a hierarchical sheet
-        // or a label
-        if( (screen->GetCurItem()->Type() != SCH_COMPONENT_T)
-           && (screen->GetCurItem()->Type() != SCH_LABEL_T)
-           && (screen->GetCurItem()->Type() != SCH_GLOBAL_LABEL_T)
-           && (screen->GetCurItem()->Type() != SCH_HIERARCHICAL_LABEL_T)
-           && (screen->GetCurItem()->Type() != SCH_SHEET_T) )
-            screen->SetCurItem( LocateSmallestComponent( screen ) );
-
-        if( screen->GetCurItem() == NULL )
-            break;
-
-    // fall through
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
+    case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
         DrawPanel->MoveCursorToCrossHair();
 
-        if( id == ID_POPUP_SCH_DRAG_CMP_REQUEST )
+        if( (id == ID_POPUP_SCH_DRAG_CMP_REQUEST) || (id == ID_POPUP_SCH_DRAG_WIRE_REQUEST) )
         {
             // The easiest way to handle a drag component or sheet command
             // is to simulate a block drag command
@@ -308,39 +283,16 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             }
         }
         else
-            Process_Move_Item( (SCH_ITEM*) screen->GetCurItem(), &dc );
-        break;
+            Process_Move_Item( item, &dc );
 
-    case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
-        DrawPanel->MoveCursorToCrossHair();
-
-        // The easiest way to handle a drag component is to simulate a block drag command
-        if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
-        {
-            if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->GetCrossHairPosition() ) )
-                break;
-
-            // Ensure the block selection contains the segment, or one end of
-            // the segment.  The initial rect is only one point (w = h = 2)
-            // The rect contains one or 0 ends.
-            // If one end is selected, this is a drag Node
-            // if no ends selected the current segment is dragged
-            screen->m_BlockLocate.Inflate( 1 );
-            HandleBlockEnd( &dc );
-        }
         break;
 
     case ID_POPUP_SCH_EDIT_CMP:
-
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-            screen->SetCurItem( LocateSmallestComponent( screen ) );
+        if( item && item->Type() == SCH_COMPONENT_T )
+            InstallCmpeditFrame( this, (SCH_COMPONENT*) item );
 
-        if( screen->GetCurItem() == NULL )
-            break;
-
-        InstallCmpeditFrame( this, (SCH_COMPONENT*) screen->GetCurItem() );
         break;
 
     case ID_POPUP_SCH_INIT_CMP:
@@ -351,39 +303,27 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-            screen->SetCurItem( LocateSmallestComponent( screen ) );
+        if( item != NULL && item->Type() == SCH_COMPONENT_T )
+            EditComponentValue( (SCH_COMPONENT*) item, &dc );
 
-        if( screen->GetCurItem() == NULL )
-            break;
-
-        EditComponentValue( (SCH_COMPONENT*) screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_REF_CMP:
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-            screen->SetCurItem( LocateSmallestComponent( screen ) );
+        if( item != NULL && item->Type() == SCH_COMPONENT_T )
+            EditComponentReference( (SCH_COMPONENT*) item, &dc );
 
-        if( screen->GetCurItem() == NULL )
-            break;
-
-        EditComponentReference( (SCH_COMPONENT*) screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_FOOTPRINT_CMP:
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-            screen->SetCurItem( LocateSmallestComponent( screen ) );
+        if( item && item->Type() == SCH_COMPONENT_T )
+            EditComponentFootprint( (SCH_COMPONENT*) item, &dc );
 
-        if( screen->GetCurItem() == NULL )
-            break;
-
-        EditComponentFootprint( (SCH_COMPONENT*) screen->GetCurItem(), &dc );
         break;
 
 
@@ -391,28 +331,22 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-            screen->SetCurItem( LocateSmallestComponent( screen ) );
+        if( item && item->Type() == SCH_COMPONENT_T )
+        {
+            DrawPanel->MoveCursorToCrossHair();
+            ConvertPart( (SCH_COMPONENT*) item, &dc );
+        }
 
-        if( screen->GetCurItem() == NULL )
-            break;
-
-        DrawPanel->MoveCursorToCrossHair();
-        ConvertPart( (SCH_COMPONENT*) screen->GetCurItem(), &dc );
         break;
 
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
 
         // Ensure the struct is a component (could be a piece of a
         // component, like Field, text..)
-        if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-            screen->SetCurItem( LocateSmallestComponent( screen ) );
-
-        if( screen->GetCurItem() )
+        if( item && item->Type() == SCH_COMPONENT_T )
         {
             LIB_ALIAS* LibEntry;
-            LibEntry = CMP_LIBRARY::FindLibraryEntry(
-                ( (SCH_COMPONENT*) screen->GetCurItem() )->GetLibName() );
+            LibEntry = CMP_LIBRARY::FindLibraryEntry( ( (SCH_COMPONENT*) item )->GetLibName() );
 
             if( LibEntry && LibEntry->GetDocFileName() != wxEmptyString )
             {
@@ -423,16 +357,14 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_ENTER_SHEET:
-    {
-        EDA_ITEM* item = screen->GetCurItem();
 
         if( item && (item->Type() == SCH_SHEET_T) )
         {
             m_CurrentSheet->Push( (SCH_SHEET*) item );
             DisplayCurrentSheet();
         }
-    }
-    break;
+
+        break;
 
     case ID_POPUP_SCH_LEAVE_SHEET:
         m_CurrentSheet->Pop();
@@ -499,17 +431,20 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_ADD_GLABEL:
         screen->SetCurItem( CreateNewText( &dc, id == ID_POPUP_SCH_ADD_LABEL ?
                                            LAYER_LOCLABEL : LAYER_GLOBLABEL ) );
-        if( screen->GetCurItem() )
+        item = screen->GetCurItem();
+
+        if( item )
         {
-            ( (SCH_ITEM*) screen->GetCurItem() )->Place( this, &dc );
+            item->Place( this, &dc );
             screen->TestDanglingEnds( DrawPanel, &dc );
             screen->SetCurItem( NULL );
         }
+
         break;
 
     case ID_POPUP_SCH_GETINFO_MARKER:
-        if( screen->GetCurItem() && screen->GetCurItem()->Type() == SCH_MARKER_T )
-            ( (SCH_MARKER*) screen->GetCurItem() )->DisplayMarkerInfo( this );
+        if( item && item->Type() == SCH_MARKER_T )
+            ( (SCH_MARKER*) item )->DisplayMarkerInfo( this );
 
         break;
 

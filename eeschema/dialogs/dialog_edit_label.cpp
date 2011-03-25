@@ -77,11 +77,15 @@ void DialogLabelEditor::InitDialog()
         break;
 
     case SCH_HIERARCHICAL_LABEL_T:
-        SetTitle( _( "Hierarchal Label Properties" ) );
+        SetTitle( _( "Hierarchical Label Properties" ) );
         break;
 
     case SCH_LABEL_T:
         SetTitle( _( "Label Properties" ) );
+        break;
+
+    case SCH_SHEET_LABEL_T:
+        SetTitle( _( "Hierarchical Sheet Pin Properties." ) );
         break;
 
     default:

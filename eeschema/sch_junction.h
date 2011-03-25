@@ -91,12 +91,16 @@ public:
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
+    virtual wxString GetSelectMenuText() const { return wxString( _( "Junction" ) ); }
+
+    virtual const char** GetMenuImage() const { return (const char**) add_junction_xpm; }
+
 #if defined(DEBUG)
-    void         Show( int nestLevel, std::ostream& os );
+    void Show( int nestLevel, std::ostream& os );
 #endif
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;

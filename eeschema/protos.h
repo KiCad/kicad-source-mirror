@@ -67,12 +67,6 @@ void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
  */
 SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 
-/*************/
-/* LOCATE.CPP */
-/*************/
-
-SCH_COMPONENT* LocateSmallestComponent( SCH_SCREEN* Screen );
-
 
 /***************/
 /* EEREDRAW.CPP */

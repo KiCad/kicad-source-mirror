@@ -41,7 +41,7 @@ dialog_about::dialog_about(wxWindow *parent, AboutAppInfo& appInfo)
     CreateNotebooks();
     GetSizer()->SetSizeHints(this);
     m_auiNotebook->Update();
-
+    SetFocus();
     Centre();
 }
 

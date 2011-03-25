@@ -50,6 +50,16 @@ public:
         return wxT( "SCH_FIELD" );
     }
 
+    /**
+     * Function GetName
+     * returns the field name.  If the field name is emply, the default field name is
+     * returned.  Field names are VALUE, REFERENCE, etc.
+     * @return The name of the field.
+     */
+    wxString GetName() const;
+
+    int GetId() const { return m_FieldId; }
+
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     EDA_Rect GetBoundingBox() const;
@@ -161,10 +171,14 @@ public:
      * @return True if this field text matches the search criteria.
      */
     virtual bool Matches( wxFindReplaceData& aSearchData,
-                          void* aAuxData, wxPoint * aFindLocation );
+                          void* aAuxData, wxPoint* aFindLocation );
+
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const;
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
 };

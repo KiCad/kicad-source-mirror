@@ -205,11 +205,47 @@ void SCH_POLYLINE::Rotate( wxPoint rotationPoint )
 }
 
 
-bool SCH_POLYLINE::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+wxString SCH_POLYLINE::GetSelectMenuText() const
 {
-    if( !( aFilter & ( DRAW_ITEM_T | WIRE_T | BUS_T ) ) )
-        return false;
+    wxString menuText;
 
+    switch( m_Layer )
+    {
+    case LAYER_NOTES:
+        menuText = _( "Graphic Polyline " );
+        break;
+
+    case LAYER_WIRE:
+        menuText = _( "Polyline Wire " );
+        break;
+
+    case LAYER_BUS:
+        menuText = _( "Polyline Bus " );
+        break;
+
+    default:
+        menuText = _( "Polyline on Unkown Layer " );
+    }
+
+    menuText += wxString::Format( _( "with %d Points" ), m_PolyPoints.size() );
+
+    return menuText;
+}
+
+
+const char** SCH_POLYLINE::GetMenuImage() const
+{
+    if( m_Layer == LAYER_NOTES )
+        return (const char**) add_dashed_line_xpm;
+    else if( m_Layer == LAYER_WIRE )
+        return (const char**) add_line_xpm;
+
+    return (const char**) add_bus_xpm;
+}
+
+
+bool SCH_POLYLINE::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
     for( size_t i = 0;  i < m_PolyPoints.size() - 1;  i++ )
     {
         if( TestSegmentHit( aPoint, m_PolyPoints[i], m_PolyPoints[i + 1], aAccuracy ) )

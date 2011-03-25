@@ -22,28 +22,6 @@ typedef SCH_ITEMS::iterator SCH_ITEMS_ITR;
 typedef vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
 
 
-// Schematic item filter mask for hit test objects in schematic editor.
-enum SCH_FILTER_T {
-    COMPONENT_T         = 0x0001,
-    WIRE_T              = 0X0002,
-    BUS_T               = 0x0004,
-    BUS_ENTRY_T         = 0x0008,
-    JUNCTION_T          = 0x0010,
-    DRAW_ITEM_T         = 0x0020,
-    TEXT_T              = 0x0040,
-    LABEL_T             = 0x0080,
-    SHEET_T             = 0x0100,
-    MARKER_T            = 0x0200,
-    NO_CONNECT_T        = 0x0400,
-    SHEET_LABEL_T       = 0x0800,
-    FIELD_T             = 0x1000,
-    EXCLUDE_ENDPOINTS_T = 0x2000,
-    ENDPOINTS_ONLY_T    = 0x4000,
-    PIN_T               = 0x8000,
-    NO_FILTER_T         = 0xFFFF
-};
-
-
 /* used to calculate the pen size from default value
  * the actual pen size is default value * BUS_WIDTH_EXPAND
  */
@@ -147,7 +125,7 @@ public:
     /**
      * Function Move
      * moves the item by \a aMoveVector to a new position.
-     * @param aMoveVector = the deplacement vector
+     * @param aMoveVector = the displacement vector
      */
     virtual void Move( const wxPoint& aMoveVector ) = 0;
 
@@ -248,7 +226,7 @@ public:
      * True is be return anytime the select state changes.  If you need to know the
      * the current selection state, use the IsSelected() method.
      *
-     * @param aRect - Rectange to test against.
+     * @param aRect - Rectangle to test against.
      */
     virtual bool IsSelectStateChanged( const wxRect& aRect ) { return false; }
 
@@ -275,7 +253,7 @@ public:
      * The vector release method is used to prevent the item pointers from being deleted.
      * Do not use the vector erase method on the connection list.
      */
-    void ClearConnections() { m_connections.release(); }
+    void ClearConnections() { m_connections.clear(); }
 
     /**
      * Function IsConnected
@@ -286,19 +264,19 @@ public:
      */
     bool IsConnected( const wxPoint& aPoint ) const;
 
+    virtual bool HitTest( const wxPoint& aPosition ) { return HitTest( aPosition, 0 ); }
+
     /**
      * Function HitTest
      * tests if \a aPoint is contained within or on the bounding box of an item.
      *
      * @param aPoint - Point to test.
      * @param aAccuracy - Increase the item bounding box by this amount.
-     * @param aFilter - Mask to provide more granular hit testing.  See enum SCH_FILTER_T.
-     * @return True if \a aPoint is within the item and meets the filter criteria.
+     * @return True if \a aPoint is within the item bounding box.
      */
-    bool HitTest( const wxPoint& aPoint, int aAccuracy = 0,
-                  SCH_FILTER_T aFilter = NO_FILTER_T ) const
+    bool HitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const
     {
-        return doHitTest( aPoint, aAccuracy, aFilter );
+        return doHitTest( aPoint, aAccuracy );
     }
 
     /**
@@ -317,6 +295,8 @@ public:
 
     virtual bool CanIncrementLabel() const { return false; }
 
+    virtual bool operator <( const SCH_ITEM& aItem ) const;
+
     /**
      * @note - The DoXXX() functions below are used to enforce the interface while retaining
      *         the ability of change the implementation behavior of derived classes.  See
@@ -324,7 +304,7 @@ public:
      *         http://www.gotw.ca/publications/mill18.htm.
      */
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const
     {
         return false;
     }
@@ -336,5 +316,9 @@ private:
 
     virtual bool doIsConnected( const wxPoint& aPosition ) const { return false; }
 };
+
+
+extern bool sort_schematic_items( const SCH_ITEM* aItem1, const SCH_ITEM* aItem2 );
+
 
 #endif /* SCH_ITEM_STRUCT_H */

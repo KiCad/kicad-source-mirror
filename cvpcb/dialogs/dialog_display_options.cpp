@@ -7,7 +7,6 @@
 #include "wxstruct.h"
 #include "common.h"
 #include "cvpcb.h"
-//#include "protos.h"
 #include "class_drawpanel.h"
 #include "footprint_info.h"
 #include "cvstruct.h"
@@ -32,8 +31,8 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS( PCB_BASE_F
     m_Parent = parent;
 
     initDialog();
+    m_sdbSizer1OK->SetDefault();
     GetSizer()->SetSizeHints( this );
-
     Centre();
 }
 

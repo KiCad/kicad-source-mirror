@@ -78,19 +78,7 @@ void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* aTextItem, wxDC* aDC )
 
 void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC )
 {
-    if( aTextItem == NULL )
-        aTextItem = (SCH_TEXT*) GetScreen()->GetItem( GetScreen()->GetCrossHairPosition(), 0,
-                                                      TEXT_T | LABEL_T );
-    if( aTextItem == NULL )
-        return;
-
-    /* save old text in undo list if is not already in edit */
-    if( aTextItem->GetFlags() == 0 )
-        SaveCopyInUndoList( aTextItem, UR_CHANGED );
-
-    /* Erase old text */
-    DrawPanel->CrossHairOff( aDC );
-    aTextItem->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    wxCHECK_RET( aTextItem != NULL, wxT( "Invalid schematic text item." )  );
 
     int orient;
 
@@ -100,15 +88,22 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC )
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_TEXT_T:
-        orient  = aTextItem->GetOrientation() + 1;
-        orient &= 3;
-        aTextItem->SetOrientation( orient );
+        orient = ( aTextItem->GetOrientation() + 1 ) & 3;
         break;
 
     default:
-        break;
+        wxFAIL_MSG( wxT( "Invalid schematic item <" ) + aTextItem->GetClass() +
+                    wxT( "> passed to SCH_EDIT_FRAME::ChangeTextOrient()" ) );
+        return;
     }
 
+    // Save current text orientation in undo list if is not already in edit.
+    if( aTextItem->GetFlags() == 0 )
+        SaveCopyInUndoList( aTextItem, UR_CHANGED );
+
+    DrawPanel->CrossHairOff( aDC );
+    aTextItem->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    aTextItem->SetOrientation( orient );
     OnModify();
     aTextItem->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
     DrawPanel->CrossHairOn( aDC );

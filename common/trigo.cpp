@@ -425,6 +425,13 @@ int CrossProduct( wxPoint vectorA, wxPoint vectorB )
 }
 
 
+double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB )
+{
+    return sqrt( pow( (double) aPointA.x - (double) aPointB.x, 2 ) +
+                 pow( (double) aPointA.y - (double) aPointB.y, 2 ) );
+}
+
+
 double fsinus[3600] =
 {
     0.0000000000,  0.0017453284,  0.0034906514,  0.0052359638,

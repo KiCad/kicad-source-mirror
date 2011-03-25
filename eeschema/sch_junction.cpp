@@ -177,11 +177,8 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os )
 #endif
 
 
-bool SCH_JUNCTION::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+bool SCH_JUNCTION::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    if( !( aFilter & JUNCTION_T ) )
-        return false;
-
     EDA_Rect rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );

@@ -11,6 +11,7 @@
 #include "template_fieldnames.h"
 #include "block_commande.h"
 #include "class_sch_screen.h"
+#include "sch_collectors.h"
 
 
 class LIB_EDIT_FRAME;
@@ -94,6 +95,7 @@ private:
     BLOCK_SELECTOR        m_blockItems;         ///< List of selected items.
     SCH_ITEM*             m_itemToRepeat;       ///< Last item to insert by the repeat command.
     int                   m_repeatLabelDelta;   ///< Repeat label number increment step.
+    SCH_COLLECTOR         m_collectedItems;     ///< List of collected items.
 
 public:
     SCH_EDIT_FRAME( wxWindow* father,
@@ -204,24 +206,52 @@ public:
     void             OnSelectOptionToolbar( wxCommandEvent& event );
     int              BestZoom();
 
-    SCH_ITEM*        LocateAndShowItem( const wxPoint& aPosition, bool aIncludePin = true );
-    SCH_ITEM*        LocateItem( const wxPoint& aPosition, bool aIncludePin );
+    /**
+     * Function LocateAndShowItem
+     * checks the schematic at \a aPosition in logical (drawing) units for a item
+     * matching \a aFilterList and \a aGuide.
+     * <p>
+     * The search is first performed at the nearest grid position to \a aPosition.  If no
+     * item if found on grid, then \a aPosition is tested for any items.  If the item found
+     * can be cross probed, a message is send to PCBNew and the selected item is highlighted
+     * in PCB editor.
+     * </p>
+     * @param aPosition The wxPoint on the schematic to search.
+     * @param aFilterList A list of #KICAD_T types to to filter.
+     * @param aHotKeyCommandId A hot key command ID for performing additional tests when
+     *                         multiple items are found at \a aPosition.
+     * @return A SCH_ITEM pointer of the item found or NULL if no item found
+     */
+    SCH_ITEM* LocateAndShowItem( const wxPoint& aPosition,
+                                 const KICAD_T aFilterList[] = SCH_COLLECTOR::AllItems,
+                                 int aHotKeyCommandId = 0 );
+
+    /**
+     * Function LocateItem
+     * checks for items at \a aPosition matching \a aFilter.
+     * <p>
+     * If multiple items are located at \a aPosition, a context menu is displayed to clarify
+     * which item the user intended to select.  If the user aborts the context menu, NULL is
+     * returned and the abort request flag will be set to true.  Make sure to clear this flag
+     * before attempting to display any other context menus.
+     * </p>
+     *
+     * @param aPosition The wxPoint location where to search.
+     * @param aFilterList A list of #KICAD_T types to to filter.
+     * @param aHotKeyCommandId A hot key command ID for performing additional tests when
+     *                         multiple items are found at \a aPosition.
+     * @return The SCH_ITEM pointer of the item found or NULL if no item found.
+     */
+    SCH_ITEM* LocateItem( const wxPoint& aPosition,
+                          const KICAD_T aFilterList[] = SCH_COLLECTOR::AllItems,
+                          int aHotKeyCommandId = 0 );
 
     /**
      * Function DeleteItemAtCrossHair
-     * delete the item found under the cross hair.
-     * <p>
-     * If more than one item found, the priority order is:
-     * <ol>
-     * Marker
-     * Junction
-     * No connect
-     * Wire or bus
-     * Graphic item
-     * Text
-     * Component
-     * Sheet
-     * </ol></p>
+     * delete the item found under the cross hair.  If multiple items are found at the
+     * cross hair position, a context menu is displayed to clarify which item to delete.
+     * See LocateItem() for more information on locating multiple items.
+     *
      * @param aDC The device context to update if and item is deleted.
      * @return True if an item was deleted.
      */
@@ -440,6 +470,8 @@ private:
     void            OnSetOptions( wxCommandEvent& event );
     void            OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
+    void OnSelectItem( wxCommandEvent& aEvent );
+
     /* edition events functions */
     void            OnCopySchematicItemRequest( wxCommandEvent& event );
 
@@ -552,13 +584,11 @@ private:
     void           OnSelectUnit( wxCommandEvent& aEvent );
     void           ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC );
     void           SetInitCmp( SCH_COMPONENT* DrawComponent, wxDC* DC );
-    void           EditComponentReference( SCH_COMPONENT* DrawLibItem,
-                                           wxDC*          DC );
+    void           EditComponentReference( SCH_COMPONENT* DrawLibItem, wxDC* DC );
     void           EditComponentValue( SCH_COMPONENT* DrawLibItem, wxDC* DC );
-    void           EditComponentFootprint( SCH_COMPONENT* DrawLibItem,
-                                           wxDC*          DC );
+    void           EditComponentFootprint( SCH_COMPONENT* DrawLibItem, wxDC* DC );
     void           StartMoveCmpField( SCH_FIELD* Field, wxDC* DC );
-    void           EditCmpFieldText( SCH_FIELD* Field, wxDC* DC );
+    void           EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC );
     void           RotateCmpField( SCH_FIELD* Field, wxDC* DC );
 
     void           PasteListOfItems( wxDC* DC );

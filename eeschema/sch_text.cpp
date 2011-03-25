@@ -620,11 +620,20 @@ EDA_Rect SCH_TEXT::GetBoundingBox() const
 }
 
 
-bool SCH_TEXT::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+wxString SCH_TEXT::GetSelectMenuText() const
 {
-    if( !( aFilter & TEXT_T ) )
-        return false;
+    wxString tmp = GetText();
+    tmp.Replace( wxT( "\n" ), wxT( " " ) );
+    tmp.Replace( wxT( "\r" ), wxT( " " ) );
+    tmp.Replace( wxT( "\t" ), wxT( " " ) );
+    tmp =( tmp.Length() > 15 ) ? tmp.Left( 12 ) + wxT( "..." ) : tmp;
 
+    return wxString( _( "Graphic Text " ) ) + tmp;
+}
+
+
+bool SCH_TEXT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
     return TextHitTest( aPoint, aAccuracy );
 }
 
@@ -846,11 +855,16 @@ EDA_Rect SCH_LABEL::GetBoundingBox() const
 }
 
 
-bool SCH_LABEL::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+wxString SCH_LABEL::GetSelectMenuText() const
 {
-    if( !( aFilter & LABEL_T ) )
-        return false;
+    wxString tmp = ( GetText().Length() > 15 ) ? GetText().Left( 12 ) + wxT( "..." ) : GetText();
 
+    return wxString( _( "Label " ) ) + tmp;
+}
+
+
+bool SCH_LABEL::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
     return TextHitTest( aPoint, aAccuracy );
 }
 
@@ -1272,11 +1286,16 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox() const
 }
 
 
-bool SCH_GLOBALLABEL::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+wxString SCH_GLOBALLABEL::GetSelectMenuText() const
 {
-    if( !( aFilter & LABEL_T ) )
-        return false;
+    wxString tmp = ( GetText().Length() > 15 ) ? GetText().Left( 12 ) + wxT( "..." ) : GetText();
 
+    return wxString( _( "Global Label " ) ) + tmp;
+}
+
+
+bool SCH_GLOBALLABEL::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
     return TextHitTest( aPoint, aAccuracy );
 }
 
@@ -1622,10 +1641,15 @@ void SCH_HIERLABEL::Rotate( wxPoint rotationPoint )
 }
 
 
-bool SCH_HIERLABEL::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+wxString SCH_HIERLABEL::GetSelectMenuText() const
 {
-    if( !( aFilter & LABEL_T ) )
-        return false;
+    wxString tmp = ( GetText().Length() > 15 ) ? GetText().Left( 12 ) + wxT( "..." ) : GetText();
 
+    return wxString( _( "Hierarchical Label " ) ) + tmp;
+}
+
+
+bool SCH_HIERLABEL::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
     return TextHitTest( aPoint, aAccuracy );
 }

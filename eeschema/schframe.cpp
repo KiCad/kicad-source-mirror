@@ -127,6 +127,10 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_POPUP_SCH_MIROR_X_CMP, ID_POPUP_SCH_ORIENT_NORMAL_CMP,
                     SCH_EDIT_FRAME::OnChangeComponentOrientation )
 
+    // Multple item selection context menu commands.
+    EVT_MENU_RANGE( ID_SCH_SELECT_ITEM_START, ID_SCH_SELECT_ITEM_END,
+                    SCH_EDIT_FRAME::OnSelectItem )
+
     /* Handle user interface update events. */
     EVT_UPDATE_UI( wxID_CUT, SCH_EDIT_FRAME::OnUpdateBlockSelected )
     EVT_UPDATE_UI( wxID_COPY, SCH_EDIT_FRAME::OnUpdateBlockSelected )
@@ -711,4 +715,19 @@ void SCH_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
     DIALOG_SVG_PRINT frame( this );
 
     frame.ShowModal();
+}
+
+
+void SCH_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
+{
+    int id = aEvent.GetId();
+    int index = id - ID_SCH_SELECT_ITEM_START;
+
+    if( (id >= ID_SCH_SELECT_ITEM_START && id <= ID_SCH_SELECT_ITEM_END)
+        && (index >= 0 && index < m_collectedItems.GetCount()) )
+    {
+        SCH_ITEM* item = m_collectedItems[index];
+        DrawPanel->m_AbortRequest = false;
+        GetScreen()->SetCurItem( item );
+    }
 }

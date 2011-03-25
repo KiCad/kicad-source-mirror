@@ -142,6 +142,23 @@ public:
         return &m_List[0];
     }
 
+    /**
+     * Function HasItem
+     * tests if \a aItem has already been collected.
+     *
+     * @param aItem The EDA_ITEM* to be tested.
+     * @return True if \a aItem is already collected.
+     */
+    bool HasItem( const EDA_ITEM* aItem ) const
+    {
+        for( size_t i = 0;  i < m_List.size();  i++ )
+        {
+            if( m_List[i] == aItem )
+                return true;
+        }
+
+        return false;
+    }
 
     /**
      * Function SetScanTypes
@@ -159,6 +176,7 @@ public:
     {
         m_TimeAtCollection = GetTimeStamp();
     }
+
     int GetTime()
     {
         return m_TimeAtCollection;

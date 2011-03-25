@@ -259,19 +259,21 @@ struct Ki_HotkeyInfoSectionDescriptor s_Viewlib_Hokeys_Descr[] =
  */
 void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
+    if( aHotKey == 0 )
+        return;
+
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
 
     cmd.SetEventObject( this );
 
     SCH_SCREEN* screen = GetScreen();
+
     // itemInEdit == false means no item currently edited. We can ask for editing a new item
-    bool        itemInEdit = screen->GetCurItem() && screen->GetCurItem()->GetFlags();
+    bool itemInEdit = screen->GetCurItem() && screen->GetCurItem()->GetFlags();
+
     // notBusy == true means no item currently edited and no other command in progress
     // We can change active tool and ask for editing a new item
-    bool        notBusy = (!itemInEdit) && (screen->m_BlockLocate.m_State == STATE_NO_BLOCK);
-
-    if( aHotKey == 0 )
-        return;
+    bool notBusy = (!itemInEdit) && (screen->m_BlockLocate.m_State == STATE_NO_BLOCK);
 
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */
@@ -340,13 +342,9 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_DELETE:
-        if( notBusy)
-        {
+        if( notBusy )
             DeleteItemAtCrossHair( aDC );
-            OnModify();
-            GetScreen()->SetCurItem( NULL );
-            GetScreen()->TestDanglingEnds( DrawPanel, aDC );
-        }
+
         break;
 
     case HK_REPEAT_LAST:
@@ -449,7 +447,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         if( notBusy )
         {
             if( GetToolId() != ID_WIRETOBUS_ENTRY_BUTT )
-                SetToolID( ID_WIRETOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add Wire to Bus entry" ) );
+                SetToolID( ID_WIRETOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add Wire to Bus Entry" ) );
 
             OnLeftClick( aDC, aPosition );
         }
@@ -459,7 +457,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         if( notBusy )
         {
             if( GetToolId() != ID_BUSTOBUS_ENTRY_BUTT )
-                SetToolID( ID_BUSTOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add Bus to Bus entry" ) );
+                SetToolID( ID_BUSTOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add Bus to Bus Entry" ) );
 
             OnLeftClick( aDC, aPosition );
         }
@@ -552,7 +550,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         if( notBusy )
         {
             if( GetToolId() != ID_NOCONN_BUTT )
-                SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add \"NoNonnect\" Flags" ) );
+                SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add \"No Connect\" Flag" ) );
 
             OnLeftClick( aDC, aPosition );
         }
@@ -568,48 +566,37 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         if( aItem == NULL )
         {
             // Find the schematic object to rotate under the cursor
-            aItem = LocateAndShowItem( aPosition, false );
-
-            if( aItem == NULL )
-                break;
-
-            if( aItem->Type() == SCH_COMPONENT_T )
-                aItem = LocateSmallestComponent( GetScreen() );
+            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::RotatableItems );
 
             if( aItem == NULL )
                 break;
         }
 
-        if( aItem )
+        switch( aItem->Type() )
         {
-            GetScreen()->SetCurItem( (SCH_ITEM*) aItem );
+        case SCH_SHEET_T: //TODO allow sheet rotate on hotkey
+            //wxPostEvent( this, eventRotateSheet );
+            break;
 
-            switch( aItem->Type() )
-            {
-            case SCH_SHEET_T: //TODO allow sheet rotate on hotkey
-                //wxPostEvent( this, eventRotateSheet );
-                break;
+        case SCH_COMPONENT_T:
+            cmd.SetId( ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE );
+            wxPostEvent( this, cmd );
+            break;
 
-            case SCH_COMPONENT_T:
-                cmd.SetId( ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE );
-                wxPostEvent( this, cmd );
-                break;
+        case SCH_TEXT_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
+            cmd.SetId( ID_POPUP_SCH_ROTATE_TEXT );
+            wxPostEvent( this, cmd );
+            break;
 
-            case SCH_TEXT_T:
-            case SCH_LABEL_T:
-            case SCH_GLOBAL_LABEL_T:
-            case SCH_HIERARCHICAL_LABEL_T:
-                cmd.SetId( ID_POPUP_SCH_ROTATE_TEXT );
-                wxPostEvent( this, cmd );
-                break;
+        case SCH_FIELD_T:
+            cmd.SetId( ID_POPUP_SCH_ROTATE_FIELD );
+            wxPostEvent( this, cmd );
 
-            case SCH_FIELD_T:
-                cmd.SetId( ID_POPUP_SCH_ROTATE_FIELD );
-                wxPostEvent( this, cmd );
-
-            default:
-                ;
-            }
+        default:
+            ;
         }
 
         break;
@@ -622,7 +609,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
 
         if( aItem == NULL )
-            aItem = LocateSmallestComponent( GetScreen() );
+            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
 
         if( aItem )
         {
@@ -640,7 +627,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 		}
 
         if( aItem == NULL )
-            aItem = LocateSmallestComponent( GetScreen() );
+            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
 
         if( aItem )
         {
@@ -652,7 +639,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
         if( aItem == NULL )
-            aItem = LocateSmallestComponent( GetScreen() );
+            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
 
         if( aItem )
         {
@@ -663,71 +650,81 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         break;
 
-    case HK_DRAG:                           // Start drag
-    case HK_MOVE_COMPONENT_OR_ITEM:         // Start move component or other schematic item
     case HK_COPY_COMPONENT_OR_LABEL:        // Duplicate component or text/label
         if( itemInEdit )
             break;
 
         if( aItem == NULL )
         {
-            // For a drag or copy command, try to find first a component:
-            if( aItem == NULL && HK_Descr->m_Idcommand != HK_MOVE_COMPONENT_OR_ITEM )
-                aItem = LocateSmallestComponent( GetScreen() );
-
-            // If no component, find the schematic object to move/drag or copy under the cursor
-            if( aItem == NULL )
-                aItem = LocateAndShowItem( aPosition, false );
-
-            if( aItem == NULL )
-                break;
-
-            if( aItem->Type() == SCH_COMPONENT_T )
-                aItem = LocateSmallestComponent( GetScreen() );
-
-            if( aItem == NULL )
-                break;
-
-            if( aItem->Type() == SCH_SHEET_T )
-            {
-                SCH_SHEET* sheet = (SCH_SHEET*) aItem;
-                // If it's a sheet, then check if a pinsheet is under the cursor
-                SCH_SHEET_PIN* slabel = sheet->GetLabel( GetScreen()->GetCrossHairPosition() );
-
-                if( slabel )
-                    aItem = slabel;
-            }
-
-            if( aItem->Type() == SCH_JUNCTION_T )
-            {
-                // If it's a junction, pick the underlying wire instead
-                aItem = screen->GetItem( screen->GetCrossHairPosition(), 0, WIRE_T );
-            }
+            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::MovableItems );
 
             if( aItem == NULL )
                 break;
         }
 
-        if( HK_Descr->m_Idcommand == HK_COPY_COMPONENT_OR_LABEL )
-        {
-            GetScreen()->SetCurItem( (SCH_ITEM*) aItem );
-            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
-            wxPostEvent( this, event );
+        cmd.SetId( HK_Descr->m_IdMenuEvent );
+        wxPostEvent( this, cmd );
+        break;
+
+    case HK_DRAG:                           // Start drag
+        if( itemInEdit )
             break;
+
+        if( aItem == NULL )
+        {
+            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::DraggableItems,
+                                       HK_Descr->m_Idcommand );
+
+            if( aItem == NULL )
+                break;
         }
 
-        if( aItem && (aItem->GetFlags() == 0) )
+        if( aItem->GetFlags() == 0 )
         {
-            GetScreen()->SetCurItem( (SCH_ITEM*) aItem );
+            switch( aItem->Type() )
+            {
+            // select the correct event for moving an schematic object
+            // and add it to the event queue
+            case SCH_COMPONENT_T:
+            case SCH_GLOBAL_LABEL_T:
+            case SCH_HIERARCHICAL_LABEL_T:
+                cmd.SetId( HK_Descr->m_IdMenuEvent );
+                wxPostEvent( this, cmd );
+                break;
 
-            // Create the events for moving a component or other schematic item
-            wxCommandEvent eventMoveItem( wxEVT_COMMAND_TOOL_CLICKED,
-                                          ID_POPUP_SCH_MOVE_ITEM_REQUEST );
-            wxCommandEvent eventMovePinsheet( wxEVT_COMMAND_TOOL_CLICKED,
-                                              ID_POPUP_SCH_MOVE_PINSHEET );
-            wxCommandEvent eventDragWire( wxEVT_COMMAND_TOOL_CLICKED,
-                                          ID_POPUP_SCH_DRAG_WIRE_REQUEST );
+            case SCH_BUS_ENTRY_T:
+            case SCH_LINE_T:
+                if( ((SCH_ITEM*) aItem )->GetLayer() != LAYER_BUS )
+                {
+                    cmd.SetId( ID_POPUP_SCH_DRAG_WIRE_REQUEST );
+                    wxPostEvent( this, cmd );
+                }
 
+                break;
+
+            default:
+                ;
+            }
+        }
+
+        break;
+
+
+    case HK_MOVE_COMPONENT_OR_ITEM:         // Start move component or other schematic item
+        if( itemInEdit )
+            break;
+
+        if( aItem == NULL )
+        {
+            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::MovableItems,
+                                       HK_Descr->m_Idcommand );
+
+            if( aItem == NULL )
+                break;
+        }
+
+        if( aItem->GetFlags() == 0 )
+        {
             switch( aItem->Type() )
             {
             // select the correct event for moving an schematic object
@@ -737,30 +734,28 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             case SCH_LABEL_T:
             case SCH_GLOBAL_LABEL_T:
             case SCH_HIERARCHICAL_LABEL_T:
+            case SCH_TEXT_T:
+            case SCH_FIELD_T:
+            case SCH_BUS_ENTRY_T:
                 cmd.SetId( HK_Descr->m_IdMenuEvent );
                 wxPostEvent( this, cmd );
                 break;
 
-            case SCH_TEXT_T:
-            case SCH_FIELD_T:
-            case SCH_BUS_ENTRY_T:
-                if( HK_Descr->m_Idcommand != HK_DRAG )
-                    wxPostEvent( this, eventMoveItem );
-                break;
-
             case SCH_SHEET_LABEL_T:
-                if( HK_Descr->m_Idcommand != HK_DRAG )
-                    wxPostEvent( this, eventMovePinsheet );
+                cmd.SetId( ID_POPUP_SCH_MOVE_PINSHEET );
+                wxPostEvent( this, cmd );
                 break;
 
             case SCH_LINE_T:
-                if( ( (SCH_ITEM*) aItem )->GetLayer() == LAYER_WIRE )
+                /**
+                 * @todo Determine why moving bus lines are not handled here.
+                 */
+                if( ((SCH_ITEM*) aItem )->GetLayer() != LAYER_BUS )
                 {
-                    if( HK_Descr->m_Idcommand == HK_DRAG )
-                        wxPostEvent( this, eventDragWire );
-                    else
-                        wxPostEvent( this, eventMoveItem );
+                    cmd.SetId( ID_POPUP_SCH_MOVE_ITEM_REQUEST );
+                    wxPostEvent( this, cmd );
                 }
+
                 break;
 
             default:
@@ -777,43 +772,61 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( aItem == NULL )
         {
-            aItem = screen->GetItem( screen->GetCrossHairPosition(), 0,
-                                     COMPONENT_T | TEXT_T | LABEL_T | SHEET_T );
-            if( aItem == NULL )
-                break;
-
-            if( aItem->Type() == SCH_COMPONENT_T )
-                aItem = LocateSmallestComponent( GetScreen() );
+            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::EditableItems );
 
             if( aItem == NULL )
                 break;
         }
 
-        if( aItem )
+        switch( aItem->Type() )
         {
-            switch( aItem->Type() )
+        case SCH_COMPONENT_T:
+            InstallCmpeditFrame( this, (SCH_COMPONENT*) aItem );
+            break;
+
+        case SCH_SHEET_T:
+            cmd.SetId( ID_POPUP_SCH_EDIT_SHEET );
+            wxPostEvent( this, cmd );
+            break;
+
+        case SCH_SHEET_LABEL_T:
+            cmd.SetId( ID_POPUP_SCH_EDIT_PINSHEET );
+            wxPostEvent( this, cmd );
+            break;
+
+        case SCH_TEXT_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
+            EditSchematicText( (SCH_TEXT*) aItem );
+            break;
+
+        case SCH_FIELD_T:
+            switch( ( (SCH_FIELD*) aItem )->GetId() )
             {
-            case SCH_COMPONENT_T:
-                InstallCmpeditFrame( this, (SCH_COMPONENT*) aItem );
+            case REFERENCE:
+                EditComponentReference( (SCH_COMPONENT*)aItem->GetParent(), aDC );
                 break;
-
-            case SCH_SHEET_T:
-                GetScreen()->SetCurItem( (SCH_ITEM*) aItem );
-                cmd.SetId( ID_POPUP_SCH_EDIT_SHEET );
-                wxPostEvent( this, cmd );
+            case VALUE:
+                EditComponentValue( (SCH_COMPONENT*) aItem->GetParent(), aDC );
                 break;
-
-            case SCH_TEXT_T:
-            case SCH_LABEL_T:
-            case SCH_GLOBAL_LABEL_T:
-            case SCH_HIERARCHICAL_LABEL_T:
-                EditSchematicText( (SCH_TEXT*) aItem );
+            case FOOTPRINT:
+                EditComponentFootprint( (SCH_COMPONENT*) aItem->GetParent(), aDC );
                 break;
-
             default:
-                ;
+                /**
+                 * @todo Not sure exactly why there are functions specific to the reference,
+                 * value, and footprint fields when the EditComponentFieldText() function
+                 * seems like it was designed to handle any field.  This should probably be
+                 * cleaned up.
+                 */
+                EditComponentFieldText( (SCH_FIELD*) aItem, aDC );
             }
+
+        default:
+            ;
         }
+
         break;
 
     case HK_EDIT_COMPONENT_VALUE:
@@ -821,12 +834,11 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             break;
 
         if( aItem == NULL )
-            aItem = LocateSmallestComponent( GetScreen() );
+            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
 
         if( aItem )
-        {
             EditComponentValue( (SCH_COMPONENT*) aItem, aDC );
-        }
+
         break;
 
     case HK_EDIT_COMPONENT_FOOTPRINT:
@@ -834,12 +846,11 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             break;
 
         if( aItem == NULL )
-            aItem = LocateSmallestComponent( GetScreen() );
+            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
 
         if( aItem )
-        {
             EditComponentFootprint( (SCH_COMPONENT*) aItem, aDC );
-        }
+
         break;
     }
 }
@@ -852,15 +863,15 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
  */
 void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
+    if( aHotKey == 0 )
+        return;
+
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     wxCommandEvent toolCmd( wxEVT_COMMAND_TOOL_CLICKED );
 
     cmd.SetEventObject( this );
 
     bool itemInEdit = GetScreen()->GetCurItem() && GetScreen()->GetCurItem()->GetFlags();
-
-    if( aHotKey == 0 )
-        return;
 
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */
@@ -880,7 +891,6 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     default:
     case HK_NOT_FOUND:
         return;
-        break;
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, s_Libedit_Hokeys_Descr );

@@ -326,22 +326,6 @@ void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath,
 }
 
 
-wxString SCH_COMPONENT::ReturnFieldName( int aFieldNdx ) const
-{
-    SCH_FIELD* field = GetField( aFieldNdx );
-
-    if( field )
-    {
-        if( !field->m_Name.IsEmpty() )
-            return field->m_Name;
-        else
-            return TEMPLATE_FIELDNAME::GetDefaultFieldName( aFieldNdx );
-    }
-
-    return wxEmptyString;
-}
-
-
 wxString SCH_COMPONENT::GetPath( SCH_SHEET_PATH* sheet )
 {
     wxString str;
@@ -865,7 +849,7 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
-                                 << " ref=\"" << TO_UTF8( ReturnFieldName( 0 ) )
+                                 << " ref=\"" << TO_UTF8( GetField( 0 )->GetName() )
                                  << '"' << " chipName=\""
                                  << TO_UTF8( m_ChipName ) << '"' << m_Pos
                                  << " layer=\"" << m_Layer
@@ -879,7 +863,7 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
         if( !value.IsEmpty() )
         {
             NestedSpace( nestLevel + 1, os ) << "<field" << " name=\""
-                                             << TO_UTF8( ReturnFieldName( i ) )
+                                             << TO_UTF8( GetField( i )->GetName() )
                                              << '"' << " value=\""
                                              << TO_UTF8( value ) << "\"/>\n";
         }
@@ -1405,18 +1389,7 @@ EDA_Rect SCH_COMPONENT::GetBodyBoundingBox() const
 
 EDA_Rect SCH_COMPONENT::GetBoundingBox() const
 {
-    EDA_Rect bBox = GetBodyBoundingBox();
-
-    // Include BoundingBoxes of fields if they are visible and not empty.
-    for( int ii = 0; ii < GetFieldCount(); ii++ )
-    {
-        if( !GetField( ii )->IsVisible() || GetField( ii )->IsVoid() )
-            continue;
-
-        bBox.Merge( GetField( ii )->GetBoundingBox() );
-    }
-
-    return bBox;
+    return GetBodyBoundingBox();
 }
 
 
@@ -1672,34 +1645,88 @@ LIB_DRAW_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aTy
 }
 
 
-bool SCH_COMPONENT::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+wxString SCH_COMPONENT::GetSelectMenuText() const
 {
-    EDA_Rect bBox;
+    wxString tmp = _( "Component " );
 
-    if( aFilter & FIELD_T )
+    return tmp << m_ChipName << wxT( ", " ) << GetField( REFERENCE )->GetText();
+}
+
+
+SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData,
+                                    const KICAD_T aFilterTypes[] )
+{
+    KICAD_T stype;
+
+    for( const KICAD_T* p = aFilterTypes;  (stype = *p) != EOT;   ++p )
     {
-        // Test the bounding boxes of fields if they are visible and not empty.
-        for( int ii = 0; ii < GetFieldCount(); ii++ )
+        // If caller wants to inspect component type or and component children types.
+        if( stype == Type() )
         {
-            if( !GetField( ii )->IsVisible() || GetField( ii )->IsVoid() )
-                continue;
+            if( SEARCH_QUIT == aInspector->Inspect( this, aTestData ) )
+                return SEARCH_QUIT;
+        }
+        else if( stype == SCH_FIELD_T )
+        {
+            // Test the bounding boxes of fields if they are visible and not empty.
+            for( int ii = 0; ii < GetFieldCount(); ii++ )
+            {
+                if( SEARCH_QUIT == aInspector->Inspect( GetField( ii ), aTestData ) )
+                    return SEARCH_QUIT;
+            }
+        }
+        else if( stype == LIB_PIN_T )
+        {
+            LIB_COMPONENT* component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
-            bBox = GetField( ii )->GetBoundingBox();
-            bBox.Inflate( aAccuracy );
+            if( component != NULL )
+            {
+                LIB_PIN_LIST pins;
 
-            if( bBox.Contains( aPoint ) )
-                return true;
+                component->GetPins( pins, m_unit, m_convert );
+
+                for( size_t i = 0;  i < pins.size();  i++ )
+                {
+                    if( SEARCH_QUIT == aInspector->Inspect( pins[ i ], (void*) this ) )
+                        return SEARCH_QUIT;
+                }
+            }
         }
     }
 
-    if( aFilter & COMPONENT_T )
-    {
-        bBox = GetBodyBoundingBox();
-        bBox.Inflate( aAccuracy );
+    return SEARCH_CONTINUE;
+}
 
-        if( bBox.Contains( aPoint ) )
-            return true;
-    }
+
+bool SCH_COMPONENT::operator <( const SCH_ITEM& aItem ) const
+{
+    if( Type() != aItem.Type() )
+        return Type() < aItem.Type();
+
+    SCH_COMPONENT* component = (SCH_COMPONENT*) &aItem;
+
+    EDA_Rect rect = GetBodyBoundingBox();
+
+    if( rect.GetArea() != component->GetBodyBoundingBox().GetArea() )
+        return rect.GetArea() < component->GetBodyBoundingBox().GetArea();
+
+    if( m_Pos.x != component->m_Pos.x )
+        return m_Pos.x < component->m_Pos.x;
+
+    if( m_Pos.y != component->m_Pos.y )
+        return m_Pos.y < component->m_Pos.y;
+
+    return false;
+}
+
+
+bool SCH_COMPONENT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
+    EDA_Rect bBox = GetBodyBoundingBox();
+    bBox.Inflate( aAccuracy );
+
+    if( bBox.Contains( aPoint ) )
+        return true;
 
     return false;
 }

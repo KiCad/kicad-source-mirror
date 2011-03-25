@@ -49,6 +49,8 @@ private:
 
     virtual EDA_ITEM* doClone() const;
 
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+
 public:
     SCH_SHEET_PIN( SCH_SHEET* parent,
                    const wxPoint& pos = wxPoint( 0, 0 ),
@@ -65,11 +67,11 @@ public:
 
     bool operator ==( const SCH_SHEET_PIN* aPin ) const;
 
-    virtual void    Draw( EDA_DRAW_PANEL* aPanel,
-                          wxDC*           aDC,
-                          const wxPoint&  aOffset,
-                          int             aDraw_mode,
-                          int             aColor = -1 );
+    virtual void Draw( EDA_DRAW_PANEL* aPanel,
+                       wxDC*           aDC,
+                       const wxPoint&  aOffset,
+                       int             aDraw_mode,
+                       int             aColor = -1 );
 
     /**
      * Function CreateGraphicShape (virual)
@@ -77,8 +79,7 @@ public:
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
      */
-    virtual void    CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                        const wxPoint&         aPos );
+    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& aPos );
 
     void SwapData( SCH_SHEET_PIN* copyitem );
 
@@ -94,16 +95,16 @@ public:
      *
      * @param aNumber - New sheet number label.
      */
-    void        SetNumber( int aNumber );
-    void        SetEdge( int aEdge );
-    int         GetEdge();
+    void SetNumber( int aNumber );
+    void SetEdge( int aEdge );
+    int GetEdge();
 
     /**
      * Function ConstraintOnEdge
      * is used to adjust label position to egde based on proximity to vertical / horizontal edge
      * of the parent sheet.
      */
-    void        ConstraintOnEdge( wxPoint Pos );
+    void ConstraintOnEdge( wxPoint Pos );
 
     /**
      * Get the parent sheet object of this sheet pin.
@@ -113,7 +114,7 @@ public:
      */
     SCH_SHEET* GetParent() const { return (SCH_SHEET*) m_Parent; }
 
-    void        Place( SCH_EDIT_FRAME* frame, wxDC* DC );
+    void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     /**
      * Function Save
@@ -122,7 +123,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool        Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic sheet hierarchical lable from \a aLine in a .sch file.
@@ -137,7 +138,7 @@ public:
 #if defined(DEBUG)
 
     // comment inherited by Doxygen from Base_Struct
-    void        Show( int nestLevel, std::ostream& os );
+    void Show( int nestLevel, std::ostream& os );
 
 #endif
 
@@ -184,6 +185,10 @@ public:
     virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList );
 
     virtual bool IsConnectable() const { return true; }
+
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_hierar_pin_xpm; }
 };
 
 
@@ -486,13 +491,13 @@ public:
      * Function GetSheetNamePosition
      * @return the position of the anchor of sheet name text
      */
-    wxPoint GetSheetNamePosition ();
+    wxPoint GetSheetNamePosition();
 
     /**
      * Function GetFileNamePosition
      * @return the position of the anchor of filename text
      */
-    wxPoint GetFileNamePosition ();
+    wxPoint GetFileNamePosition();
 
     virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
 
@@ -506,10 +511,20 @@ public:
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
+    virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
+                                 const KICAD_T scanTypes[] );
+
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const
+    {
+        return (const char**) add_hierarchical_subsheet_xpm;
+    }
+
 #if defined(DEBUG)
 
     // comment inherited by Doxygen from Base_Struct
-    void         Show( int nestLevel, std::ostream& os );
+    void Show( int nestLevel, std::ostream& os );
 
 #endif
 
@@ -525,7 +540,7 @@ protected:
     void renumberLabels();
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
 };

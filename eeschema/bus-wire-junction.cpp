@@ -25,7 +25,6 @@
 
 
 static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer );
 static void ComputeBreakPoint( SCH_LINE* segment, const wxPoint& new_pos );
 
 SCH_ITEM* s_OldWiresList;
@@ -169,7 +168,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
 
         /* Creates the new segment, or terminates the command
          * if the end point is on a pin, junction or an other wire or bus */
-        if( IsTerminalPoint( GetScreen(), cursorpos, oldsegment->GetLayer() ) )
+        if( GetScreen()->IsTerminalPoint( cursorpos, oldsegment->GetLayer() ) )
         {
             EndSegment( DC );
             return;
@@ -571,99 +570,4 @@ void IncrementLabelMember( wxString& name )
         number += g_RepeatDeltaLabel;
         name.Remove( ii ); name << number;
     }
-}
-
-
-/* Return true if pos can be a terminal point for a wire or a bus
- * i.e. :
- *  for a WIRE, if at pos is found:
- *      - a junction
- *      - or a pin
- *      - or an other wire
- *
- *  - for a BUS, if at pos is found:
- *      - a BUS
- */
-static bool IsTerminalPoint( SCH_SCREEN* screen, const wxPoint& pos, int layer )
-{
-    EDA_ITEM*      item;
-    LIB_PIN*       pin;
-    SCH_COMPONENT* LibItem = NULL;
-    SCH_SHEET_PIN* pinsheet;
-    wxPoint        itempos;
-
-    switch( layer )
-    {
-    case LAYER_BUS:
-        item = screen->GetItem( pos, 0, BUS_T );
-
-        if( item )
-            return true;
-
-        pinsheet = screen->GetSheetLabel( pos );
-
-        if( pinsheet && IsBusLabel( pinsheet->m_Text ) )
-        {
-            itempos = pinsheet->m_Pos;
-
-            if( (itempos.x == pos.x) && (itempos.y == pos.y) )
-                return true;
-        }
-        break;
-
-    case LAYER_NOTES:
-        item = screen->GetItem( pos, 0, DRAW_ITEM_T );
-        if( item )
-            return true;
-        break;
-
-    case LAYER_WIRE:
-        item = screen->GetItem( pos, MAX( g_DrawDefaultLineThickness, 3 ),
-                                BUS_ENTRY_T | JUNCTION_T );
-
-        if( item )
-            return true;
-
-        pin = screen->GetPin( pos, &LibItem );
-
-        if( pin && LibItem )
-        {
-            // Calculate the exact position of the connection point of the pin,
-            // depending on orientation of the component.
-            itempos    = LibItem->GetScreenCoord( pin->GetPosition() );
-            itempos.x += LibItem->m_Pos.x;
-            itempos.y += LibItem->m_Pos.y;
-
-            if( ( itempos.x == pos.x ) && ( itempos.y == pos.y ) )
-                return true;
-        }
-
-        item = screen->GetItem( pos, 0, WIRE_T );
-
-        if( item )
-            return true;
-
-        item = screen->GetItem( pos, 0, LABEL_T );
-        if( item && (item->Type() != SCH_TEXT_T)
-           && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.x == pos.x )
-           && ( ( (SCH_GLOBALLABEL*) item )->m_Pos.y == pos.y ) )
-            return true;
-
-        pinsheet = screen->GetSheetLabel( pos );
-
-        if( pinsheet && !IsBusLabel( pinsheet->m_Text ) )
-        {
-            itempos = pinsheet->m_Pos;
-
-            if( ( itempos.x == pos.x ) && ( itempos.y == pos.y ) )
-                return true;
-        }
-
-        break;
-
-    default:
-        break;
-    }
-
-    return false;
 }

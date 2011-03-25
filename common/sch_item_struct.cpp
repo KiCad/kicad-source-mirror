@@ -17,6 +17,12 @@
 #include "../eeschema/dialogs/dialog_schematic_find.h"
 
 
+bool sort_schematic_items( const SCH_ITEM* aItem1, const SCH_ITEM* aItem2 )
+{
+    return *aItem1 < *aItem2;
+}
+
+
 /* Constructor and destructor for SCH_ITEM */
 /* They are not inline because this creates problems with gcc at linking time
  * in debug mode
@@ -38,18 +44,18 @@ SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
 
 SCH_ITEM::~SCH_ITEM()
 {
-    // Do not let the connections container go out of scope with any ojbects or they
+    // Do not let the connections container go out of scope with any objects or they
     // will be deleted by the container will cause the EESchema to crash.  These objects
     // are owned by the sheet object container.
     if( !m_connections.empty() )
-        m_connections.release();
+        m_connections.clear();
 }
 
 
 /**
  * place the struct in m_drawList.
  * if it is a new item, it it also put in undo list
- * for an "old" item, saving it in undo list must be done before editiing,
+ * for an "old" item, saving it in undo list must be done before editing,
  * and not here!
  */
 void SCH_ITEM::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
@@ -107,4 +113,11 @@ bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
         return false;
 
     return doIsConnected( aPosition );
+}
+
+
+bool SCH_ITEM::operator < ( const SCH_ITEM& aItem ) const
+{
+    wxCHECK_MSG( false, this->Type() < aItem.Type(),
+                 wxT( "Less than operator not defined for " ) + GetClass() );
 }

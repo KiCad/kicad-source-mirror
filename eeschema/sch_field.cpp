@@ -447,10 +447,42 @@ void SCH_FIELD::Rotate( wxPoint rotationPoint )
 }
 
 
-bool SCH_FIELD::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+wxString SCH_FIELD::GetSelectMenuText() const
+{
+    wxString tmp = _( "Field " );
+
+    return tmp + GetName();
+}
+
+
+wxString SCH_FIELD::GetName() const
+{
+    if( !m_Name.IsEmpty() )
+        return m_Name;
+    else
+        return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_FieldId );
+}
+
+
+const char** SCH_FIELD::GetMenuImage() const
+{
+    if( m_FieldId == REFERENCE )
+        return (const char**) edit_comp_ref_xpm;
+
+    if( m_FieldId == VALUE )
+        return (const char**) edit_comp_value_xpm;
+
+    if( m_FieldId == FOOTPRINT )
+        return (const char**) edit_comp_footprint_xpm;
+
+    return (const char**) edit_text_xpm;
+}
+
+
+bool SCH_FIELD::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
     // Do not hit test hidden or empty fields.
-    if( !(aFilter & FIELD_T) || !IsVisible() || IsVoid() )
+    if( !IsVisible() || IsVoid() )
         return false;
 
     EDA_Rect rect = GetBoundingBox();
@@ -464,7 +496,7 @@ bool SCH_FIELD::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aF
 bool SCH_FIELD::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
 {
     // Do not hit test hidden fields.
-    if( !IsVisible() )
+    if( !IsVisible() || IsVoid() )
         return false;
 
     EDA_Rect rect = aRect;

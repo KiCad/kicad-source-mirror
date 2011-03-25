@@ -224,11 +224,17 @@ void SCH_BUS_ENTRY::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-bool SCH_BUS_ENTRY::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+wxString SCH_BUS_ENTRY::GetSelectMenuText() const
 {
-    if( !( aFilter & BUS_ENTRY_T ) )
-        return false;
+    if( m_Layer == LAYER_WIRE )
+        return wxString( _( "Bus to Wire Entry" ) );
 
+    return wxString( _( "Bus to Bus Entry" ) );
+}
+
+
+bool SCH_BUS_ENTRY::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
     return TestSegmentHit( aPoint, m_Pos, m_End(), aAccuracy );
 }
 

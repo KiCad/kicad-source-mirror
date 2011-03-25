@@ -9,6 +9,8 @@
 
 #include "lib_draw_item.h"
 
+class SCH_COMPONENT;
+
 
 #define TARGET_PIN_DIAM     12  /* Circle diameter drawn at the active end of pins */
 
@@ -134,12 +136,15 @@ public:
     virtual bool Save( FILE* aFile );
     virtual bool Load( char* aLine, wxString& aErrorMsg );
 
-
     /**
-     * Test if the given point is within the bounds of this object.
-     *
+     * Function HitTest
+     * verifies that \a aRefPos within the bounds of this pin attached to \a aComponent.
+     * <p>
+     * The coordinates of the pin are calculated relative to \a aComponent if not NULL.
+     * Otherwise, the pin coordinates are relative to the library anchor position.
+     * </p>
      * @param aRefPos A wxPoint to test
-     * @return - true if a hit, else false
+     * @return True \a aRefPos lies within the pin bounding box else false.
      */
     virtual bool HitTest( const wxPoint& aRefPos );
 
@@ -444,6 +449,10 @@ public:
      * @return  List of valid pin electrical type bitmaps symbols in .xpm format
      */
     static const char*** GetElectricalTypeSymbols();
+
+    virtual const char** GetMenuImage() const;
+
+    virtual wxString GetSelectMenuText() const;
 
 protected:
     virtual LIB_DRAW_ITEM* DoGenCopy();

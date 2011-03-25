@@ -11,6 +11,7 @@
 
 #include "eeschema_id.h"
 #include "general.h"
+#include "hotkeys.h"
 #include "protos.h"
 #include "libeditframe.h"
 #include "viewlib_frame.h"
@@ -22,29 +23,8 @@
 #include "sch_component.h"
 
 
-/**
- * Function LocateAndShowItem
- * search the schematic at \a aPosition in logical (drawing) units for any item.
- * <p>
- * The search is first performed at \a aPosition which may be off grid.  If no item is
- * found at \a aPosition, the search is repeated for the nearest grid position to \a
- * aPosition.
- *
- * The search order is as follows:
- * <ul>
- * <li>Marker</li>
- * <li>No Connect</li>
- * <li>Junction</li>
- * <li>Wire, bus, or entry</li>
- * <li>Label</li>
- * <li>Pin</li>
- * <li>Component</li>
- * </ul></p>
- * @param aPosition The wxPoint on the schematic to search.
- * @param aIncludePin = true to search for pins, false to ignore them
- * @return A SCH_ITEM pointer on the item or NULL if no item found
- */
-SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, bool aIncludePin )
+SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KICAD_T aFilterList[],
+                                             int aHotKeyCommandId )
 {
     SCH_ITEM*      item;
     wxString       msg;
@@ -52,13 +32,26 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, bool aInc
     SCH_COMPONENT* LibItem = NULL;
     wxPoint        gridPosition = GetScreen()->GetNearestGridPosition( aPosition );
 
-    item = LocateItem( aPosition, aIncludePin );
+    // Check the on grid position first.  There is more likely to be multple items on
+    // grid than off grid.
+    item = LocateItem( gridPosition, aFilterList, aHotKeyCommandId );
 
-    if( !item && aPosition != gridPosition )
-        item = LocateItem( gridPosition, aIncludePin );
+    // If the user aborted the clarification context menu, don't show it again at the
+    // off grid position.
+    if( !item && DrawPanel->m_AbortRequest )
+    {
+        DrawPanel->m_AbortRequest = false;
+        return NULL;
+    }
+
+    if( !item && (aPosition != gridPosition) )
+        item = LocateItem( aPosition, aFilterList, aHotKeyCommandId );
 
     if( !item )
+    {
+        DrawPanel->m_AbortRequest = false;  // Just in case the user aborted the context menu.
         return NULL;
+    }
 
     /* Cross probing to pcbnew if a pin or a component is found */
     switch( item->Type() )
@@ -70,22 +63,16 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, bool aInc
         break;
 
     case SCH_COMPONENT_T:
-        Pin = GetScreen()->GetPin( GetScreen()->GetCrossHairPosition(), &LibItem );
-
-        if( Pin )
-            break;  // Priority is probing a pin first
-
         LibItem = (SCH_COMPONENT*) item;
         SendMessageToPCBNEW( item, LibItem );
-        break;
-
-    default:
-        Pin = GetScreen()->GetPin( GetScreen()->GetCrossHairPosition(), &LibItem );
         break;
 
     case LIB_PIN_T:
         Pin = (LIB_PIN*) item;
         break;
+
+    default:
+        ;
     }
 
     if( Pin )
@@ -105,134 +92,74 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, bool aInc
 }
 
 
-/**
- * Function LocateItem
- * searches for an item at \a aPosition.
- * @param aPosition The wxPoint location where to search.
- * @param aIncludePin True to search for pins, false to ignore them.
- * @return The SCH_ITEM pointer of the item or NULL if no item found.
- */
-SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, bool aIncludePin )
+SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aFilterList[],
+                                      int aHotKeyCommandId )
 {
-    SCH_ITEM*      item;
-    LIB_PIN*       Pin;
-    SCH_COMPONENT* LibItem;
-    wxString       Text;
-    wxString       msg;
+    SCH_ITEM* item = NULL;
 
-    item = GetScreen()->GetItem( aPosition, 0, MARKER_T );
+    m_collectedItems.Collect( GetScreen()->GetDrawItems(), aFilterList, aPosition );
 
-    if( item )
-    {
-        item->DisplayInfo( this );
-        return item;
-    }
-
-    item = GetScreen()->GetItem( aPosition, 0, NO_CONNECT_T );
-
-    if( item )
+    if( m_collectedItems.GetCount() == 0 )
     {
         ClearMsgPanel();
-        return item;
     }
-
-    item = GetScreen()->GetItem( aPosition, 0, JUNCTION_T );
-
-    if( item )
+    else if( m_collectedItems.GetCount() == 1 )
     {
-        ClearMsgPanel();
-        return item;
+        item = m_collectedItems[0];
+        GetScreen()->SetCurItem( item );
     }
-
-    item = GetScreen()->GetItem( aPosition, MAX( g_DrawDefaultLineThickness, 3 ),
-                                 WIRE_T | BUS_T | BUS_ENTRY_T );
-
-    if( item )  // We have found a wire: Search for a connected pin at the same location
+    else
     {
-        Pin = GetScreen()->GetPin( aPosition, &LibItem );
-
-        if( Pin )
+        // There are certain combinations of items that do not need clarification such as
+        // a corner were two lines meet or all the items form a junction.
+        if( aHotKeyCommandId )
         {
-            Pin->DisplayInfo( this );
-
-            if( LibItem )
-                AppendMsgPanel( LibItem->GetRef( GetSheet() ),
-                                LibItem->GetField( VALUE )->m_Text, DARKCYAN );
+            switch( aHotKeyCommandId )
+            {
+            case HK_DRAG:
+                if( m_collectedItems.IsCorner() || m_collectedItems.IsNode( false ) )
+                {
+                    item = m_collectedItems[0];
+                    GetScreen()->SetCurItem( item );
+                }
+            default:
+                ;
+            }
         }
-        else
-            ClearMsgPanel();
 
-        return item;
+        if( item == NULL )
+        {
+            wxASSERT_MSG( m_collectedItems.GetCount() <= MAX_SELECT_ITEM_IDS,
+                          wxT( "Select item clarification context menu size limit exceeded." ) );
+
+            wxMenu selectMenu;
+            wxMenuItem* title = new wxMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ) );
+
+            selectMenu.Append( title );
+            selectMenu.AppendSeparator();
+
+            for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
+            {
+                wxString text = m_collectedItems[i]->GetSelectMenuText();
+                const char** xpm = m_collectedItems[i]->GetMenuImage();
+                ADD_MENUITEM( &selectMenu, ID_SCH_SELECT_ITEM_START + i, text, xpm );
+            }
+
+            // Set to NULL in case user aborts the clarification context menu.
+            GetScreen()->SetCurItem( NULL );
+            DrawPanel->m_AbortRequest = true;   // Changed to false if an item is selected
+            PopupMenu( &selectMenu );
+            DrawPanel->MoveCursorToCrossHair();
+            item = GetScreen()->GetCurItem();
+        }
     }
 
-    item = GetScreen()->GetItem( aPosition, 0, DRAW_ITEM_T );
-
     if( item )
-    {
+        item->DisplayInfo( this );
+    else
         ClearMsgPanel();
-        return item;
-    }
 
-    item = GetScreen()->GetItem( aPosition, 0, FIELD_T );
-
-    if( item )
-    {
-        wxASSERT( item->Type() == SCH_FIELD_T );
-
-        SCH_FIELD* Field = (SCH_FIELD*) item;
-        LibItem = (SCH_COMPONENT*) Field->GetParent();
-        LibItem->DisplayInfo( this );
-
-        return item;
-    }
-
-    item = GetScreen()->GetItem( aPosition, 0, LABEL_T | TEXT_T );
-
-    if( item )
-    {
-        ClearMsgPanel();
-        return item;
-    }
-
-    /* search for a pin */
-    Pin = GetScreen()->GetPin( aPosition, &LibItem );
-
-    if( Pin )
-    {
-        Pin->DisplayInfo( this );
-
-        if( LibItem )
-            AppendMsgPanel( LibItem->GetRef( GetSheet() ),
-                            LibItem->GetField( VALUE )->m_Text, DARKCYAN );
-        if( aIncludePin )
-            return LibItem;
-    }
-
-    item = GetScreen()->GetItem( aPosition, 0, COMPONENT_T );
-
-    if( item )
-    {
-        item = LocateSmallestComponent( GetScreen() );
-        LibItem    = (SCH_COMPONENT*) item;
-        LibItem->DisplayInfo( this );
-        return item;
-    }
-
-    item = GetScreen()->GetItem( aPosition, 0, SHEET_T );
-
-    if( item )
-    {
-        ( (SCH_SHEET*) item )->DisplayInfo( this );
-        return item;
-    }
-
-    item = GetScreen()->GetItem( aPosition );
-
-    if( item )
-        return item;
-
-    ClearMsgPanel();
-    return NULL;
+    return item;
 }
 
 

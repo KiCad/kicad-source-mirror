@@ -50,7 +50,7 @@ static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_
  */
 bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
-    SCH_ITEM* DrawStruct  = (SCH_ITEM*) GetScreen()->GetCurItem();
+    SCH_ITEM* item = GetScreen()->GetCurItem();
     bool      BlockActive = GetScreen()->IsBlockActive();
 
     // Do not start a block command  on context menu.
@@ -64,24 +64,22 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     }
 
     // Try to locate items at cursor position.
-    if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
+    if( (item == NULL) || (item->GetFlags() == 0) )
     {
-        DrawStruct = LocateAndShowItem( aPosition, false );
+        item = LocateAndShowItem( aPosition, SCH_COLLECTOR::AllItemsButPins );
 
-        if( DrawStruct && (DrawStruct->Type() == SCH_SHEET_T) )
+        // If the clarify item selection context menu is aborted, don't show the context menu.
+        if( item == NULL && DrawPanel->m_AbortRequest )
         {
-            SCH_SHEET* sheet = (SCH_SHEET*) DrawStruct;
-            SCH_SHEET_PIN* slabel = sheet->GetLabel( GetScreen()->GetCrossHairPosition() );
-
-            if( slabel )
-                DrawStruct = slabel;
+            DrawPanel->m_AbortRequest = false;
+            return false;
         }
     }
 
     // If Command in progress: add "cancel" and "end tool" menu
     if(  GetToolId() != ID_NO_TOOL_SELECTED )
     {
-        if( DrawStruct && DrawStruct->GetFlags() )
+        if( item && item->GetFlags() )
         {
             ADD_MENUITEM( PopMenu, ID_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
         }
@@ -93,29 +91,25 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     }
     else
     {
-        if( DrawStruct && DrawStruct->GetFlags() )
+        if( item && item->GetFlags() )
         {
             ADD_MENUITEM( PopMenu, ID_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
             PopMenu->AppendSeparator();
         }
     }
 
-    if( DrawStruct == NULL )
+    if( item == NULL )
     {
         if( GetSheet()->Last() != g_RootSheet )
-        {
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_LEAVE_SHEET, _( "Leave Sheet" ), leave_sheet_xpm );
-            PopMenu->AppendSeparator();
-        }
+        PopMenu->AppendSeparator();
         return true;
     }
 
-    GetScreen()->SetCurItem( DrawStruct );
+    int  flags  = item->GetFlags();
+    bool is_new = (flags & IS_NEW) ? true : false;
 
-    int  flags  = DrawStruct->GetFlags();
-    bool is_new = (flags & IS_NEW) ? TRUE : FALSE;
-
-    switch( DrawStruct->Type() )
+    switch( item->Type() )
     {
     case SCH_NO_CONNECT_T:
 
@@ -123,7 +117,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
 
     case SCH_JUNCTION_T:
-        AddMenusForJunction( PopMenu, (SCH_JUNCTION*) DrawStruct, this );
+        AddMenusForJunction( PopMenu, (SCH_JUNCTION*) item, this );
         break;
 
     case SCH_BUS_ENTRY_T:
@@ -134,7 +128,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, msg, move_xpm );
         }
 
-        if( GetBusEntryShape( (SCH_BUS_ENTRY*) DrawStruct ) == '\\' )
+        if( GetBusEntryShape( (SCH_BUS_ENTRY*) item ) == '\\' )
             PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_SLASH, _( "Set Bus Entry /" ) );
         else
             PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH, _( "Set Bus Entry \\" ) );
@@ -142,57 +136,42 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
 
     case SCH_MARKER_T:
-        AddMenusForMarkers( PopMenu, (SCH_MARKER*) DrawStruct, this );
+        AddMenusForMarkers( PopMenu, (SCH_MARKER*) item, this );
         break;
 
     case SCH_TEXT_T:
-        AddMenusForText( PopMenu, (SCH_TEXT*) DrawStruct );
+        AddMenusForText( PopMenu, (SCH_TEXT*) item );
         break;
 
     case SCH_LABEL_T:
-        AddMenusForLabel( PopMenu, (SCH_LABEL*) DrawStruct );
+        AddMenusForLabel( PopMenu, (SCH_LABEL*) item );
         break;
 
     case SCH_GLOBAL_LABEL_T:
-        AddMenusForGLabel( PopMenu, (SCH_GLOBALLABEL*) DrawStruct );
+        AddMenusForGLabel( PopMenu, (SCH_GLOBALLABEL*) item );
         break;
 
     case SCH_HIERARCHICAL_LABEL_T:
-        AddMenusForHLabel( PopMenu, (SCH_HIERLABEL*) DrawStruct );
+        AddMenusForHLabel( PopMenu, (SCH_HIERLABEL*) item );
         break;
 
     case SCH_FIELD_T:
-    {
-        AddMenusForComponentField( PopMenu, (SCH_FIELD*) DrawStruct );
-
-        if( flags )
-            break;
-
-        // Many fields are inside a component. If this is the case, add the
-        // component menu
-        SCH_COMPONENT* Component = LocateSmallestComponent( GetScreen() );
-
-        if( Component )
-        {
-            PopMenu->AppendSeparator();
-            AddMenusForComponent( PopMenu, Component );
-        }
-    }
+        AddMenusForComponentField( PopMenu, (SCH_FIELD*) item );
         break;
 
     case SCH_COMPONENT_T:
-        AddMenusForComponent( PopMenu, (SCH_COMPONENT*) DrawStruct );
+        AddMenusForComponent( PopMenu, (SCH_COMPONENT*) item );
         break;
 
     case SCH_LINE_T:
-        switch( DrawStruct->GetLayer() )
+        switch( item->GetLayer() )
         {
         case LAYER_WIRE:
-            AddMenusForWire( PopMenu, (SCH_LINE*) DrawStruct, this );
+            AddMenusForWire( PopMenu, (SCH_LINE*) item, this );
             break;
 
         case LAYER_BUS:
-            AddMenusForBus( PopMenu, (SCH_LINE*) DrawStruct, this );
+            AddMenusForBus( PopMenu, (SCH_LINE*) item, this );
             break;
 
         default:
@@ -204,17 +183,17 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
 
     case SCH_SHEET_T:
-        AddMenusForHierchicalSheet( PopMenu, (SCH_SHEET*) DrawStruct );
+        AddMenusForHierchicalSheet( PopMenu, (SCH_SHEET*) item );
         break;
 
     case SCH_SHEET_LABEL_T:
-        AddMenusForPinSheet( PopMenu, (SCH_SHEET_PIN*) DrawStruct );
+        AddMenusForPinSheet( PopMenu, (SCH_SHEET_PIN*) item );
         break;
 
     default:
         wxString msg;
         msg.Printf( wxT( "SCH_EDIT_FRAME::OnRightClick Error: unknown DrawType %d" ),
-                    DrawStruct->Type() );
+                    item->Type() );
         DisplayError( this, msg );
         break;
     }
@@ -495,15 +474,14 @@ void AddMenusForJunction( wxMenu* PopMenu, SCH_JUNCTION* Junction, SCH_EDIT_FRAM
 
     if( !is_new )
     {
-        if( screen->GetItem( screen->GetCrossHairPosition(), 0,
-                             WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T ) )
+        if( screen->GetWire( screen->GetCrossHairPosition(), EXCLUDE_END_POINTS_T ) )
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
     }
 
     msg = AddHotkeyName( _( "Delete Junction" ), s_Schematic_Hokeys_Descr, HK_DELETE );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, msg, delete_xpm );
 
-    if( screen->GetItem( screen->GetCrossHairPosition(), 0, WIRE_T | BUS_T ) )
+    if( screen->GetWireOrBus( screen->GetCrossHairPosition() ) )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ), delete_node_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
@@ -534,8 +512,9 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
                   delete_connection_xpm );
 
-    if( screen->GetItem( screen->GetCrossHairPosition(), 0,
-                         WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T ) )
+    SCH_LINE* line = screen->GetWireOrBus( screen->GetCrossHairPosition() );
+
+    if( line && !line->IsEndPoint( screen->GetCrossHairPosition() ) )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ), break_line_xpm );
 
     PopMenu->AppendSeparator();

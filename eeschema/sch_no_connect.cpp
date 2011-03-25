@@ -157,11 +157,8 @@ bool SCH_NO_CONNECT::doIsConnected( const wxPoint& aPosition ) const
     return m_Pos == aPosition;
 }
 
-bool SCH_NO_CONNECT::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+bool SCH_NO_CONNECT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    if( !( aFilter & NO_CONNECT_T ) )
-        return false;
-
     int delta = ( ( m_Size.x + g_DrawDefaultLineThickness ) / 2 ) + aAccuracy;
 
     wxPoint dist = aPoint - m_Pos;

@@ -11,6 +11,7 @@
 #include "drawtxt.h"
 #include "plot_common.h"
 #include "wxEeschemaStruct.h"
+#include "bitmaps.h"
 
 #include "general.h"
 #include "protos.h"
@@ -18,8 +19,8 @@
 #include "class_libentry.h"
 #include "lib_pin.h"
 #include "transform.h"
+#include "sch_component.h"
 
-#include "bitmaps.h"
 
 /**
  * Note: The following name lists are sentence capitalized per the GNOME UI
@@ -1873,6 +1874,20 @@ const char*** LIB_PIN::GetOrientationSymbols()
 const char*** LIB_PIN::GetStyleSymbols()
 {
     return s_icons_Pins_Shapes;
+}
+
+const char** LIB_PIN::GetMenuImage() const
+{
+    return s_icons_Pins_Electrical_Type[m_type];
+}
+
+
+wxString LIB_PIN::GetSelectMenuText() const
+{
+    wxString tmp = _( "Pin " );
+
+    return tmp << GetNumberString() << wxT( ", " ) << GetTypeString() << wxT( ", " )
+               << wxGetTranslation( pin_style_names[ GetStyleCodeIndex( m_shape ) ] );;
 }
 
 

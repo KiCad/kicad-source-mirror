@@ -107,8 +107,12 @@ public:
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_entry_xpm; }
+
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
 };

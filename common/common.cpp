@@ -708,6 +708,47 @@ const wxString& valeur_param( int valeur, wxString& buf_texte )
 }
 
 
+
+
+wxString CoordinateToString( int aValue, int aInternalUnits, bool aConvertToMils )
+{
+    wxCHECK_MSG( (aInternalUnits == EESCHEMA_INTERNAL_UNIT)
+                 || (aInternalUnits == PCB_INTERNAL_UNIT),
+                 wxString( _( "*** Bad Internal Units ***" ) ),
+                 wxT( "Invalid interanl units value." ) );
+
+    wxString      text;
+    const wxChar* format;
+    double        value = To_User_Unit( g_UserUnit, aValue, aInternalUnits );
+
+    if( g_UserUnit == INCHES )
+    {
+        if( aConvertToMils )
+        {
+            format = ( aInternalUnits == EESCHEMA_INTERNAL_UNIT ) ? wxT( "%.0f" ) : wxT( "%.1f" );
+            value *= 1000;
+        }
+        else
+        {
+            format = ( aInternalUnits == EESCHEMA_INTERNAL_UNIT ) ? wxT( "%.3f" ) : wxT( "%.4f" );
+        }
+    }
+    else
+    {
+        format = ( aInternalUnits == EESCHEMA_INTERNAL_UNIT ) ? wxT( "%.2f" ) : wxT( "%.3f" );
+    }
+
+    text.Printf( format, value );
+
+    if( g_UserUnit == INCHES )
+        text += ( aConvertToMils ) ? _( " mils" ) : _( " in" );
+    else
+        text += _( " mm" );
+
+    return text;
+}
+
+
 /*
  *
  */

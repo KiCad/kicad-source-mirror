@@ -6,6 +6,7 @@
 #define BASE_STRUCT_H
 
 #include "colors.h"
+#include "bitmaps.h"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -39,27 +40,29 @@ enum KICAD_T {
     TYPE_ZONE,              // a segment used to fill a zone area (segment on a
                             // copper layer)
     TYPE_MARKER_PCB,        // a marker used to show something
-    TYPE_DIMENSION,          // a dimension (graphic item)
+    TYPE_DIMENSION,         // a dimension (graphic item)
     TYPE_MIRE,              // a target (graphic item)
     TYPE_ZONE_EDGE_CORNER,  // in zone outline: a point to define an outline
     TYPE_ZONE_CONTAINER,    // a zone area
     TYPE_BOARD_ITEM_LIST,   // a list of board items
 
-    // Draw Items in schematic
-    SCH_POLYLINE_T,
+    // Schematic draw Items.  The order of these items effects the sort order.
+    // It is currenlty ordered to mimic the old EESchema locate behavior where
+    // the smallest item is the selected item.
+    SCH_MARKER_T,
     SCH_JUNCTION_T,
+    SCH_NO_CONNECT_T,
+    SCH_BUS_ENTRY_T,
+    SCH_LINE_T,
+    SCH_POLYLINE_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIERARCHICAL_LABEL_T,
-    SCH_COMPONENT_T,
-    SCH_LINE_T,
-    SCH_BUS_ENTRY_T,
-    SCH_SHEET_T,
-    SCH_SHEET_LABEL_T,
-    SCH_MARKER_T,
-    SCH_NO_CONNECT_T,
     SCH_FIELD_T,
+    SCH_COMPONENT_T,
+    SCH_SHEET_LABEL_T,
+    SCH_SHEET_T,
 
     // General
     SCH_SCREEN_T,
@@ -267,14 +270,21 @@ public:
      * mainly used to calculate bounding boxes.
      * @param aRect  The rectangle to merge with this rectangle.
      */
-    void      Merge( const EDA_Rect& aRect );
+    void Merge( const EDA_Rect& aRect );
 
     /**
      * Function Merge
      * modifies the position and size of the rectangle in order to contain the given point.
      * @param aPoint The point to merge with the rectangle.
      */
-    void      Merge( const wxPoint& aPoint );
+    void Merge( const wxPoint& aPoint );
+
+    /**
+     * Function GetArea
+     * returns the area of the rectangle.
+     * @return The area of the rectangle.
+     */
+    double GetArea() const;
 };
 
 
@@ -460,7 +470,7 @@ public:
      * @param refArea : the given EDA_Rect
      * @return bool - true if a hit, else false
      */
-    virtual bool    HitTest( EDA_Rect& refArea )
+    virtual bool HitTest( EDA_Rect& refArea )
     {
         return false;   // derived classes should override this function
     }
@@ -519,7 +529,6 @@ public:
                                          const void*   testData,
                                          const KICAD_T scanTypes[] );
 
-
     /**
      * Function Visit
      * may be re-implemented for each derived class in order to handle
@@ -537,7 +546,6 @@ public:
     virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                                  const KICAD_T scanTypes[] );
 
-
     /**
      * Function GetClass
      * returns the class name.
@@ -547,6 +555,26 @@ public:
     {
         return wxT( "EDA_ITEM" );
     }
+
+    /**
+     * Function GetSelectMenuText
+     * returns the text to display to be used in the selection clarification context menu
+     * when multiple items are found at the current cursor position.  The default version
+     * of this function raises an assertion in the debug mode and returns a string to
+     * indicate that it was not overridden to provide the object specific text.
+     *
+     * @return The menu text string.
+     */
+    virtual wxString GetSelectMenuText() const;
+
+    /**
+     * Function GetMenuImage
+     * returns a pointer to an image to be used in menus.  The default version returns
+     * the right arrow image.  Overide this function to provide object specific menu
+     * images.
+     * @return The menu image associated with the item.
+     */
+    virtual const char** GetMenuImage() const { return (const char**) right_xpm; }
 
 
 #if defined(DEBUG)
@@ -576,7 +604,7 @@ public:
 
 /**
  * Function new_clone
- * provides cloning capabilities for all Boost pointer containers of EDA_ITEMs.
+ * provides cloning capabilities for all Boost pointer containers of EDA_ITEM pointers.
  *
  * @param aItem EDA_ITEM to clone.
  * @return Clone of \a aItem.
@@ -587,10 +615,10 @@ inline EDA_ITEM* new_clone( const EDA_ITEM& aItem ) { return aItem.Clone(); }
 /**
  * Define list of drawing items for screens.
  *
- * The Boost containter was choosen over the statand C++ contain because you can detach
- * the pointer from a list with the release method.
+ * The standard C++ containter was choosen so the pointer can be removed  from a list without
+ * it being destroyed.
  */
-typedef boost::ptr_vector< EDA_ITEM > EDA_ITEMS;
+typedef std::vector< EDA_ITEM* > EDA_ITEMS;
 
 
 // Graphic Text justify:

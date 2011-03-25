@@ -101,7 +101,7 @@ public:
      * @see EDA_DRAW_FRAME::GetGridColor() for the color of the grid.
      * @param aDC The device context to draw the grid.
      */
-    void DrawGrid( wxDC* DC );
+    void DrawGrid( wxDC* aDC );
 
     /**
      * Function DrawAuxiliaryAxis

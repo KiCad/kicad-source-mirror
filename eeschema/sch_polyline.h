@@ -94,8 +94,12 @@ public:
 
     virtual void Rotate( wxPoint rotationPoint );
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const;
+
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
 };

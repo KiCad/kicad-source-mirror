@@ -50,7 +50,7 @@ class SCH_COMPONENT : public SCH_ITEM
     wxArrayString m_PathsAndReferences;
 
 public:
-    wxPoint  m_Pos;
+    wxPoint m_Pos;
 
 private:
 
@@ -152,7 +152,7 @@ public:
      * ( a CMP_MIRROR_Y is find as a CMP_MIRROR_X + orientation 180, because
      * they are equivalent)
      */
-    int        GetOrientation();
+    int GetOrientation();
 
     /**
      * Function GetScreenCoord
@@ -161,9 +161,9 @@ public:
      * @param aPoint The coordinates to transform.
      * @return The transformed point.
      */
-    wxPoint    GetScreenCoord( const wxPoint& aPoint );
+    wxPoint GetScreenCoord( const wxPoint& aPoint );
 
-    void       DisplayInfo( EDA_DRAW_FRAME* frame );
+    void DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
      * Function ClearAnnotation
@@ -171,7 +171,7 @@ public:
      * @param aSheetPath: SCH_SHEET_PATH value: if NULL remove all annotations,
      *                    else remove annotation relative to this sheetpath
      */
-    void       ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
+    void ClearAnnotation( SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Function SetTimeStamp
@@ -179,7 +179,7 @@ public:
      * @see m_PathsAndReferences
      * @param aNewTimeStamp = new time stamp
      */
-    void       SetTimeStamp( long aNewTimeStamp );
+    void SetTimeStamp( long aNewTimeStamp );
 
     /**
      * Function GetBoundingBox
@@ -189,16 +189,9 @@ public:
      * few counts.
      * @return The bounding rectangle of the component.
      */
-    EDA_Rect   GetBoundingBox() const;
+    EDA_Rect GetBoundingBox() const;
 
     //-----<Fields>-----------------------------------------------------------
-
-    /**
-     * Function ReturnFieldName
-     * returns the Field name given a field index like (REFERENCE, VALUE ..)
-     * @return wxString - the field name or wxEmptyString if invalid field index.
-     */
-    wxString   ReturnFieldName( int aFieldNdx ) const;
 
     /**
      * Function GetField
@@ -261,12 +254,12 @@ public:
                int             Color,
                bool            DrawPinText );
 
-    void           SwapData( SCH_COMPONENT* copyitem );
+    void SwapData( SCH_COMPONENT* copyitem );
 
-    void           Place( SCH_EDIT_FRAME* frame, wxDC* DC );
+    void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     // returns a unique ID, in the form of a path.
-    wxString       GetPath( SCH_SHEET_PATH* sheet );
+    wxString GetPath( SCH_SHEET_PATH* sheet );
 
     /**
      * Function GetRef
@@ -275,7 +268,7 @@ public:
     const wxString GetRef( SCH_SHEET_PATH* sheet );
 
     // Set the reference, for the given sheet path.
-    void           SetRef( SCH_SHEET_PATH* sheet, const wxString& ref );
+    void SetRef( SCH_SHEET_PATH* sheet, const wxString& ref );
 
     /**
      * Function AddHierarchicalReference
@@ -285,15 +278,15 @@ public:
      * @param aRef :local reference like C45, R56
      * @param aMulti Part selection, used in multi part per package (0 or 1 for non multi)
      */
-    void           AddHierarchicalReference( const wxString& aPath,
-                                             const wxString& aRef,
-                                             int             aMulti );
+    void AddHierarchicalReference( const wxString& aPath,
+                                   const wxString& aRef,
+                                   int             aMulti );
 
     // returns the unit selection, for the given sheet path.
-    int            GetUnitSelection( SCH_SHEET_PATH* aSheet );
+    int GetUnitSelection( SCH_SHEET_PATH* aSheet );
 
     // Set the unit selection, for the given sheet path.
-    void           SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );
+    void SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection );
 
     // Geometric transforms (used in block operations):
 
@@ -353,6 +346,9 @@ public:
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
+    virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
+                                 const KICAD_T scanTypes[] );
+
     /**
      * Function GetDrawItem().
      * Return the component library item at \a aPosition that is part of this component.
@@ -362,6 +358,13 @@ public:
      * @return A pointer to the component library object if found, otherwise NULL.
      */
     LIB_DRAW_ITEM* GetDrawItem( const wxPoint& aPosition, KICAD_T aType = TYPE_NOT_INIT );
+
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_component_xpm; }
+
+    virtual bool operator <( const SCH_ITEM& aItem ) const;
+
 #if defined(DEBUG)
 
     /**
@@ -371,12 +374,12 @@ public:
      *          of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
-    void         Show( int nestLevel, std::ostream& os );
+    void Show( int nestLevel, std::ostream& os );
 
 #endif
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;

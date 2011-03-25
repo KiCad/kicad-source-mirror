@@ -191,20 +191,23 @@ public:
     virtual void SetLanguage( wxCommandEvent& event );
 
     /**
-     * function GetFileFromHistory
-     * Fetch the file name from the file history list.
-     * @param aFileHistory = the wxFileHistory in use. If null,
-     * the main application file history is used
+     * Function GetFileFromHistory
+     * fetches the file name from the file history list.
+     * @param cmdId The command ID associated with the \a aFileHistory object.
+     * @param type Please document me!
+     * @param aFileHistory The wxFileHistory in use. If null, the main application file
+     *                     history is used
      * @return a wxString containing the selected filename
      */
     wxString     GetFileFromHistory( int cmdId, const wxString& type,
-                    wxFileHistory * aFileHistory = NULL);
+                                     wxFileHistory* aFileHistory = NULL);
 
     /**
      * Function UpdateFileHistory
-     * Update the list of recent opened files.
-     * @param aFileHistory = the wxFileHistory in use. If NULL,
-     * the main application file history is used
+     * ypdates the list of recently opened files.
+     * @param FullFileName The full file name including the path.
+     * @param aFileHistory The wxFileHistory in use. If NULL, the main application file
+     *                     history is used.
      */
     void         UpdateFileHistory( const wxString& FullFileName,
                                     wxFileHistory * aFileHistory = NULL );

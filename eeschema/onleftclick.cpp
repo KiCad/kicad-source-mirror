@@ -80,9 +80,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( ( item && item->GetFlags() ) || ( g_RootSheet->CountSheets() == 0 ) )
             break;
 
-        item = LocateAndShowItem( aPosition );
+        item = LocateAndShowItem( aPosition, SCH_COLLECTOR::SheetsOnly );
 
-        if( item && ( item->Type() == SCH_SHEET_T ) )
+        if( item )
         {
             m_CurrentSheet->Push( (SCH_SHEET*) item );
             DisplayCurrentSheet();
@@ -241,7 +241,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_IMPORT_HLABEL_BUTT:
     case ID_SHEET_LABEL_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
-            item = LocateAndShowItem( aPosition );
+            item = LocateAndShowItem( aPosition, SCH_COLLECTOR::SheetsAndSheetLabels );
 
         if( item == NULL )
             break;
@@ -345,7 +345,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
             break;
 
         case SCH_FIELD_T:
-            EditCmpFieldText( (SCH_FIELD*) item, aDC );
+            EditComponentFieldText( (SCH_FIELD*) item, aDC );
             DrawPanel->MoveCursorToCrossHair();
             break;
 

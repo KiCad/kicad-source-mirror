@@ -104,7 +104,6 @@ set(EESCHEMA_SRCS
     lib_text.cpp
     libfield.cpp
     load_one_schematic_file.cpp
-    locate.cpp
     menubar.cpp
     menubar_libedit.cpp
     netform.cpp
@@ -116,6 +115,7 @@ set(EESCHEMA_SRCS
     pinedit.cpp
     plot.cpp
     sch_bus_entry.cpp
+    sch_collectors.cpp
     sch_component.cpp
     sch_field.cpp
     sch_junction.cpp

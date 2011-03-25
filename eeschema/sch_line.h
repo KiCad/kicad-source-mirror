@@ -54,6 +54,12 @@ public:
      */
     EDA_Rect GetBoundingBox() const;
 
+    /**
+     * Function GetLength
+     * @return The length of the line segment.
+     */
+    double GetLength() const;
+
     virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                        int aDrawMode, int aColor = -1 );
 
@@ -127,12 +133,18 @@ public:
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const;
+
+    virtual bool operator <( const SCH_ITEM& aItem ) const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;
 #endif
 
 private:
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;

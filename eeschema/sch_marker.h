@@ -93,16 +93,20 @@ public:
      *
      * @param aFrame - Top window that owns the message panel.
      */
-    void         DisplayInfo( EDA_DRAW_FRAME* aFrame );
+    void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
+    virtual wxString GetSelectMenuText() const { return wxString( _( "ERC Marker" ) ); }
+
+    virtual const char** GetMenuImage() const { return (const char**) erc_xpm; }
+
 #if defined(DEBUG)
-    void         Show( int nestLevel, std::ostream& os );
+    void Show( int nestLevel, std::ostream& os );
 
 #endif
 
-    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
 };
 

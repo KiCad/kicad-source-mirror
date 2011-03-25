@@ -195,11 +195,8 @@ bool SCH_MARKER::IsSelectStateChanged( const wxRect& aRect )
 }
 
 
-bool SCH_MARKER::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+bool SCH_MARKER::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    if( !( aFilter & MARKER_T ) )
-        return false;
-
     return HitTestMarker( aPoint );
 }
 

@@ -247,18 +247,12 @@ static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 void SCH_EDIT_FRAME::OnChangeComponentOrientation( wxCommandEvent& aEvent )
 {
     SCH_SCREEN* screen = GetScreen();
+    SCH_ITEM* item = screen->GetCurItem();
 
-    // Ensure the struct is a component (could be a struct of a
-    // component, like Field, text..)
-    if( screen->GetCurItem() == NULL || screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-    {
-        screen->SetCurItem( LocateSmallestComponent( screen ) );
+    wxCHECK_RET( item != NULL && item->Type() == SCH_COMPONENT_T,
+                 wxT( "Cannot change orientation of invalid schematic item." ) );
 
-        if( screen->GetCurItem() == NULL || screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-            return;
-    }
-
-    SCH_COMPONENT* component = (SCH_COMPONENT*) screen->GetCurItem();
+    SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
     int orientation;
 
@@ -287,8 +281,8 @@ void SCH_EDIT_FRAME::OnChangeComponentOrientation( wxCommandEvent& aEvent )
 
     DrawPanel->MoveCursorToCrossHair();
 
-    if( screen->GetCurItem()->GetFlags() == 0 )
-        SaveCopyInUndoList( screen->GetCurItem(), UR_CHANGED );
+    if( component->GetFlags() == 0 )
+        SaveCopyInUndoList( item, UR_CHANGED );
 
     INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
@@ -348,28 +342,16 @@ static void ExitPlaceCmp( EDA_DRAW_PANEL* Panel, wxDC* DC )
 void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
 {
     SCH_SCREEN* screen = GetScreen();
+    SCH_ITEM* item = screen->GetCurItem();
 
-    if( screen->GetCurItem() == NULL )
-        return;
+    wxCHECK_RET( item != NULL && item->Type() == SCH_COMPONENT_T,
+                 wxT( "Cannot select unit of invalid schematic item." ) );
 
     INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
-    // Verify the selected item is a component, it may be part of a component such as a field
-    // or text item.
-    if( screen->GetCurItem()->Type() != SCH_COMPONENT_T )
-    {
-        screen->SetCurItem( LocateSmallestComponent( screen ) );
-
-        if( screen->GetCurItem() == NULL )
-            return;
-    }
-
     DrawPanel->MoveCursorToCrossHair();
 
-    SCH_COMPONENT* component = (SCH_COMPONENT*) screen->GetCurItem();
-
-    wxCHECK_RET( (component != NULL) && (component->Type() == SCH_COMPONENT_T),
-                 wxT( "Cannot select unit for invalid component." ) );
+    SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
     int unit = aEvent.GetId() + 1 - ID_POPUP_SCH_SELECT_UNIT1;
 
@@ -414,7 +396,7 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
     else
         component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    GetScreen()->TestDanglingEnds( DrawPanel, &dc );
+    screen->TestDanglingEnds( DrawPanel, &dc );
     OnModify();
 }
 

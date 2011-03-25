@@ -108,6 +108,12 @@ EDA_Rect SCH_LINE::GetBoundingBox() const
 }
 
 
+double SCH_LINE::GetLength() const
+{
+    return GetLineLength( m_Start, m_End );
+}
+
+
 bool SCH_LINE::Save( FILE* aFile ) const
 {
     bool        success = true;
@@ -411,28 +417,72 @@ void SCH_LINE::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-bool SCH_LINE::doHitTest( const wxPoint& aPoint, int aAccuracy, SCH_FILTER_T aFilter ) const
+wxString SCH_LINE::GetSelectMenuText() const
 {
-    if( !( aFilter & ( DRAW_ITEM_T | WIRE_T | BUS_T ) ) )
-        return false;
+    wxString menuText;
 
-    if(  ( ( aFilter & DRAW_ITEM_T ) && ( m_Layer == LAYER_NOTES ) )
-      || ( ( aFilter & WIRE_T ) && ( m_Layer == LAYER_WIRE ) )
-      || ( ( aFilter & BUS_T ) && ( m_Layer == LAYER_BUS ) )  )
+    switch( m_Layer )
     {
-        if( !TestSegmentHit( aPoint, m_Start, m_End, aAccuracy ) )
-            return false;
+    case LAYER_NOTES:
+        menuText = _( "Graphic Line " );
+        break;
 
-        if( ( aFilter & EXCLUDE_ENDPOINTS_T ) && IsEndPoint( aPoint ) )
-            return false;
+    case LAYER_WIRE:
+        menuText = _( "Wire " );
+        break;
 
-        if( ( aFilter & ENDPOINTS_ONLY_T ) && !IsEndPoint( aPoint ) )
-            return false;
+    case LAYER_BUS:
+        menuText = _( "Bus " );
+        break;
 
-        return true;
+    default:
+        menuText = _( "Line on Unkown Layer " );
     }
 
+    menuText << wxT( "from (" ) << CoordinateToString( m_Start.x, EESCHEMA_INTERNAL_UNIT )
+             << wxT( "," ) << CoordinateToString( m_Start.y, EESCHEMA_INTERNAL_UNIT )
+             << wxT( ")" );
+    menuText << wxT( " to (" ) << CoordinateToString( m_End.x, EESCHEMA_INTERNAL_UNIT )
+             << wxT( "," ) << CoordinateToString( m_End.y, EESCHEMA_INTERNAL_UNIT ) << wxT( ")" );
+
+    return menuText;
+}
+
+
+const char** SCH_LINE::GetMenuImage() const
+{
+    if( m_Layer == LAYER_NOTES )
+        return (const char**) add_dashed_line_xpm;
+    else if( m_Layer == LAYER_WIRE )
+        return (const char**) add_line_xpm;
+
+    return (const char**) add_bus_xpm;
+}
+
+
+bool SCH_LINE::operator <( const SCH_ITEM& aItem ) const
+{
+    if( Type() != aItem.Type() )
+        return Type() < aItem.Type();
+
+    SCH_LINE* line = (SCH_LINE*) &aItem;
+
+    if( GetLength() != line->GetLength() )
+        return GetLength() < line->GetLength();
+
+    if( m_Start.x != line->m_Start.x )
+        return m_Start.x < line->m_Start.x;
+
+    if( m_Start.y != line->m_Start.y )
+        return m_Start.y < line->m_Start.y;
+
     return false;
+}
+
+
+bool SCH_LINE::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
+{
+    return TestSegmentHit( aPoint, m_Start, m_End, aAccuracy );
 }
 
 

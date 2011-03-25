@@ -27,30 +27,30 @@ bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY );
 //! @param linePointA Point on line
 //! @param linePointB Point on line
 //! @param referencePoint Reference point
-double DistanceLinePoint(wxPoint linePointA, wxPoint linePointB, wxPoint referencePoint);
+double DistanceLinePoint( wxPoint linePointA, wxPoint linePointB, wxPoint referencePoint );
 
 //! @brief Euclidean norm of a 2D vector
 //! @param vector Two-dimensional vector
 //! @return Euclidean norm of the vector
-double EuclideanNorm(wxPoint vector);
+double EuclideanNorm( wxPoint vector );
 
 //! @brief Vector between two points
 //! @param startPoint The start point
 //! @param endPoint The end point
 //! @return Vector between the points
-wxPoint TwoPointVector(wxPoint startPoint, wxPoint endPoint);
+wxPoint TwoPointVector( wxPoint startPoint, wxPoint endPoint );
 
 //! @brief Test, if two points are near each other
 //! @param pointA First point
 //! @param pointB Second point
 //! @param threshold The maximum distance
 //! @return True or false
-bool HitTestPoints(wxPoint pointA, wxPoint pointB, double threshold);
+bool HitTestPoints( wxPoint pointA, wxPoint pointB, double threshold );
 
 //! @brief Determine the cross product
 //! @param vectorA Two-dimensional vector
 //! @param vectorB Two-dimensional vector
-int CrossProduct(wxPoint vectorA, wxPoint vectorB);
+int CrossProduct( wxPoint vectorA, wxPoint vectorB );
 
 
 /**
@@ -62,9 +62,14 @@ int CrossProduct(wxPoint vectorA, wxPoint vectorB);
  * @param aEnd is the second end-point of the line segment
  * @param aDist = maximum distance for hit
 */
-bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd,
-                     int aDist );
+bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist );
 
+/**
+ * Function GetLineLength
+ * returns the length of a line segment defined by \a aPointA and \a aPointB.
+ * @return Length of a line.
+ */
+double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB );
 
 
 /*******************/

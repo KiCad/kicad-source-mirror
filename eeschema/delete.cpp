@@ -25,6 +25,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
 {
     SCH_ITEM* item;
     EDA_ITEM* tmp;
+    EDA_ITEMS list;
     PICKED_ITEMS_LIST pickList;
     SCH_SCREEN* screen = GetScreen();
     wxPoint pos = screen->GetCrossHairPosition();
@@ -33,23 +34,18 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
     screen->ClearDrawingState();
     screen->BreakSegmentsOnJunctions();
 
-    // Save the list entry point of this screen
-    SCH_ITEM* savedItems = screen->GetDrawItems();
-    item = screen->GetDrawItems();
+    if( screen->GetNode( pos, list ) == 0 )
+        return;
 
-    while( item && ( item = screen->GetItem( pos, 0, JUNCTION_T | WIRE_T | BUS_T ) ) != NULL )
+    for( size_t i = 0;  i < list.size();  i++ )
     {
+        item = (SCH_ITEM*) list[ i ];
         item->SetFlags( SELECTEDNODE | STRUCT_DELETED );
 
         /* Put this structure in the picked list: */
         ITEM_PICKER picker( item, UR_DELETED );
         pickList.PushItem( picker );
-
-        item = item->Next();
-        screen->SetDrawItems( item );
     }
-
-    screen->SetDrawItems( savedItems ); // Restore the list entry point.
 
     /* Mark all wires, junctions, .. connected to one of the item to delete
      */
@@ -172,7 +168,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool DeleteFullConnection )
             if( item->Type() != SCH_LABEL_T )
                 continue;
 
-            tmp = screen->GetItem( ( (SCH_TEXT*) item )->m_Pos, 0, WIRE_T | BUS_T );
+            tmp = screen->GetWireOrBus( ( (SCH_TEXT*) item )->m_Pos );
 
             if( tmp && tmp->GetFlags() & STRUCT_DELETED )
             {
@@ -199,42 +195,23 @@ bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
 {
     SCH_ITEM* item;
     SCH_SCREEN* screen = GetScreen();
-    bool item_deleted  = false;
 
-    item = screen->GetItem( screen->GetCrossHairPosition(), 0, MARKER_T );
-
-    if( item == NULL )
-        item = screen->GetItem( screen->GetCrossHairPosition(), 0, JUNCTION_T );
-
-    if( item == NULL )
-        item = screen->GetItem( screen->GetCrossHairPosition(), 0, NO_CONNECT_T );
-
-    if( item == NULL )
-        item = screen->GetItem( screen->GetCrossHairPosition(), 0, BUS_ENTRY_T );
-
-    if( item == NULL )
-        item = screen->GetItem( screen->GetCrossHairPosition(), 0, WIRE_T | BUS_T );
-
-    if( item == NULL )
-        item = screen->GetItem( screen->GetCrossHairPosition(), 0, DRAW_ITEM_T );
-
-    if( item == NULL )
-        item = screen->GetItem( screen->GetCrossHairPosition(), 0, TEXT_T | LABEL_T );
-
-    if( item == NULL )
-        item = screen->GetItem( screen->GetCrossHairPosition(), 0, COMPONENT_T );
-
-    if( item == NULL )
-        item = screen->GetItem( screen->GetCrossHairPosition(), 0, SHEET_T );
+    item = LocateItem( screen->GetCrossHairPosition(), SCH_COLLECTOR::ParentItems );
 
     if( item )
     {
+        bool itemHasConnections = item->IsConnectable();
+
+        GetScreen()->SetCurItem( NULL );
         SetRepeatItem( NULL );
         DeleteItem( item );
-        screen->TestDanglingEnds( DrawPanel, DC );
+
+        if( itemHasConnections )
+            screen->TestDanglingEnds( DrawPanel, DC );
+
         OnModify();
-        item_deleted = true;
+        return true;
     }
 
-    return item_deleted;
+    return false;
 }

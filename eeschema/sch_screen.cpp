@@ -21,6 +21,8 @@
 #include "sch_no_connect.h"
 #include "sch_sheet.h"
 #include "sch_component.h"
+#include "sch_collectors.h"
+#include "sch_text.h"
 
 #include <boost/foreach.hpp>
 
@@ -117,9 +119,6 @@ void SCH_SCREEN::FreeDrawList()
 }
 
 
-/* If found in GetDrawItems(), remove DrawStruct from GetDrawItems().
- *  DrawStruct is not deleted or modified
- */
 void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
 {
     if( DrawStruct == GetDrawItems() )
@@ -210,56 +209,36 @@ void SCH_SCREEN::AddToDrawList( SCH_ITEM* st )
 }
 
 
-int SCH_SCREEN::GetItems( const wxPoint& aPosition, SCH_ITEMS& aItemList ) const
+SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T aType ) const
 {
     for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
     {
-        if( item->HitTest( aPosition ) )
-            aItemList.push_back( item );
-    }
+        if( item->HitTest( aPosition, aAccuracy ) && (aType == NOT_USED) )
+            return item;
 
-    return aItemList.size();
-}
-
-
-int SCH_SCREEN::GetItems( const wxPoint& aPosition, PICKED_ITEMS_LIST& aItemList,
-                          int aAccuracy, int aFilter ) const
-{
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
-    {
-        if( item->HitTest( aPosition, aAccuracy, (SCH_FILTER_T) aFilter ) )
+        if( (aType == SCH_FIELD_T) && (item->Type() == SCH_COMPONENT_T) )
         {
-            ITEM_PICKER picker( (EDA_ITEM*) item );
-            aItemList.PushItem( picker );
-        }
-    }
+            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
-    return aItemList.GetCount();
-}
-
-
-SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, int aFilter ) const
-{
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
-    {
-        if( item->HitTest( aPosition, aAccuracy, (SCH_FILTER_T) aFilter ) )
-        {
-            if( (aFilter & FIELD_T) && (item->Type() == SCH_COMPONENT_T) )
+            for( int i = REFERENCE; i < component->GetFieldCount(); i++ )
             {
-                SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+                SCH_FIELD* field = component->GetField( i );
 
-                for( int i = REFERENCE; i < component->GetFieldCount(); i++ )
-                {
-                    SCH_FIELD* field = component->GetField( i );
-
-                    if( field->HitTest( aPosition, aAccuracy ) )
-                        return (SCH_ITEM*) field;
-                }
-
-                if( !(aFilter & COMPONENT_T) )
-                    return NULL;
+                if( field->HitTest( aPosition, aAccuracy ) )
+                    return (SCH_ITEM*) field;
             }
+        }
+        else if( (aType == SCH_SHEET_LABEL_T) && (item->Type() == SCH_SHEET_T) )
+        {
+            SCH_SHEET* sheet = (SCH_SHEET*)item;
 
+            SCH_SHEET_PIN* label = sheet->GetLabel( aPosition );
+
+            if( label )
+                return (SCH_ITEM*) label;
+        }
+        else if( (item->Type() == aType) && item->HitTest( aPosition, aAccuracy ) )
+        {
             return item;
         }
     }
@@ -374,14 +353,14 @@ void SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 }
 
 
-bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition ) const
+bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition )
 {
-    if( GetItem( aPosition, 0, JUNCTION_T ) )
+    if( GetItem( aPosition, 0, SCH_JUNCTION_T ) )
         return false;
 
-    if( GetItem( aPosition, 0, WIRE_T | EXCLUDE_ENDPOINTS_T ) )
+    if( GetWire( aPosition, 0, EXCLUDE_END_POINTS_T ) )
     {
-        if( GetItem( aPosition, 0, WIRE_T | ENDPOINTS_ONLY_T ) )
+        if( GetWire( aPosition, 0, END_POINTS_ONLY_T ) )
             return true;
 
         if( GetPin( aPosition, NULL, true ) )
@@ -392,10 +371,74 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition ) const
 }
 
 
-/* Routine cleaning:
- * - Includes segments or buses aligned in only 1 segment
- * - Detects identical objects superimposed
- */
+bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
+{
+    wxCHECK_MSG( aLayer == LAYER_NOTES || aLayer == LAYER_BUS || aLayer == LAYER_WIRE, false,
+                 wxT( "Invalid layer type passed to SCH_SCREEN::IsTerminalPoint()." ) );
+
+    SCH_SHEET_PIN* label;
+    SCH_TEXT*      text;
+
+    switch( aLayer )
+    {
+    case LAYER_BUS:
+
+        if( GetBus( aPosition ) )
+            return true;
+
+        label = GetSheetLabel( aPosition );
+
+        if( label && IsBusLabel( label->m_Text ) && label->IsConnected( aPosition ) )
+            return true;
+
+        text = GetLabel( aPosition );
+
+        if( text && IsBusLabel( text->GetText() ) && text->IsConnected( aPosition )
+            && (text->Type() != SCH_LABEL_T) )
+            return true;
+
+        break;
+
+    case LAYER_NOTES:
+
+        if( GetLine( aPosition ) )
+            return true;
+
+        break;
+
+    case LAYER_WIRE:
+        if( GetItem( aPosition, MAX( g_DrawDefaultLineThickness, 3 ), SCH_BUS_ENTRY_T ) )
+            return true;
+
+        if( GetItem( aPosition, MAX( g_DrawDefaultLineThickness, 3 ), SCH_JUNCTION_T ) )
+            return true;
+
+        if( GetPin( aPosition, NULL, true ) )
+            return true;
+
+        if( GetWire( aPosition ) )
+            return true;
+
+        text = GetLabel( aPosition );
+
+        if( text && text->IsConnected( aPosition ) && !IsBusLabel( text->GetText() ) )
+            return true;
+
+        label = GetSheetLabel( aPosition );
+
+        if( label && label->IsConnected( aPosition ) && !IsBusLabel( label->m_Text ) )
+            return true;
+
+        break;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
+
 bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 {
     SCH_ITEM* DrawList, * TstDrawList;
@@ -445,12 +488,6 @@ bool SCH_SCREEN::SchematicCleanUp( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 }
 
 
-/**
- * Function Save
- * writes the data structures for this object out to a FILE in "*.sch" format.
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
 bool SCH_SCREEN::Save( FILE* aFile ) const
 {
     // Creates header
@@ -572,7 +609,12 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
     }
 
     if( pin && aEndPointOnly && ( component->GetPinPhysicalPosition( pin ) != aPosition ) )
+    {
+        wxPoint endpt = component->GetPinPhysicalPosition( pin );
+        wxLogDebug( wxString::Format( wxT( "Pin end point at (%d, %d) not (%d, %d )." ),
+                                      endpt.x, endpt.y, aPosition.x, aPosition.y ) );
         pin = NULL;
+    }
 
     if( aComponent )
         *aComponent = component;
@@ -633,7 +675,7 @@ void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 }
 
 
-void SCH_SCREEN::GetHierarchicalItems( std::vector <SCH_ITEM*>& aItems )
+void SCH_SCREEN::GetHierarchicalItems( EDA_ITEMS& aItems )
 {
     SCH_ITEM* item = GetDrawItems();
 
@@ -810,16 +852,15 @@ bool SCH_SCREEN::BreakSegment( const wxPoint& aPoint )
     SCH_LINE* segment;
     SCH_LINE* newSegment;
     bool brokenSegments = false;
-    SCH_FILTER_T filter = ( SCH_FILTER_T ) ( WIRE_T | BUS_T | EXCLUDE_ENDPOINTS_T );
 
     for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
     {
-        if( item->Type() != SCH_LINE_T )
+        if( (item->Type() != SCH_LINE_T) || (item->GetLayer() == LAYER_NOTES) )
             continue;
 
         segment = (SCH_LINE*) item;
 
-        if( !segment->HitTest( aPoint, 0, filter ) )
+        if( !segment->HitTest( aPoint, 0 ) || segment->IsEndPoint( aPoint ) )
             continue;
 
         // Break the segment at aPoint and create a new segment.
@@ -862,6 +903,95 @@ bool SCH_SCREEN::BreakSegmentsOnJunctions()
 }
 
 
+int SCH_SCREEN::GetNode( const wxPoint& aPosition, EDA_ITEMS& aList )
+{
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() == SCH_LINE_T && item->HitTest( aPosition )
+            && (item->GetLayer() == LAYER_BUS || item->GetLayer() == LAYER_WIRE) )
+        {
+            aList.push_back( item );
+        }
+        else if( item->Type() == SCH_JUNCTION_T && item->HitTest( aPosition ) )
+        {
+            aList.push_back( item );
+        }
+    }
+
+    return (int) aList.size();
+}
+
+
+SCH_LINE* SCH_SCREEN::GetWireOrBus( const wxPoint& aPosition )
+{
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( (item->Type() == SCH_LINE_T) && item->HitTest( aPosition )
+            && (item->GetLayer() == LAYER_BUS || item->GetLayer() == LAYER_WIRE) )
+        {
+            return (SCH_LINE*) item;
+        }
+    }
+
+    return NULL;
+}
+
+
+SCH_LINE* SCH_SCREEN::GetLine( const wxPoint& aPosition, int aAccuracy, int aLayer,
+                               SCH_LINE_TEST_T aSearchType )
+{
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() != SCH_LINE_T )
+            continue;
+
+        if( item->GetLayer() != aLayer )
+            continue;
+
+        if( !item->HitTest( aPosition, aAccuracy ) )
+            continue;
+
+        switch( aSearchType )
+        {
+        case ENTIRE_LENGTH_T:
+            return (SCH_LINE*) item;
+
+        case EXCLUDE_END_POINTS_T:
+            if( !( (SCH_LINE*) item )->IsEndPoint( aPosition ) )
+                return (SCH_LINE*) item;
+            break;
+
+        case END_POINTS_ONLY_T:
+            if( ( (SCH_LINE*) item )->IsEndPoint( aPosition ) )
+                return (SCH_LINE*) item;
+        }
+    }
+
+    return NULL;
+}
+
+
+SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy )
+{
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
+            if( item->HitTest( aPosition, aAccuracy ) )
+                return (SCH_TEXT*) item;
+
+        default:
+            ;
+        }
+    }
+
+    return NULL;
+}
+
+
 /******************************************************************/
 /* Class SCH_SCREENS to handle the list of screens in a hierarchy */
 /******************************************************************/
@@ -870,7 +1000,7 @@ bool SCH_SCREEN::BreakSegmentsOnJunctions()
  * Function SortByTimeStamp
  * sorts a list of schematic items by time stamp and type.
  */
-static bool SortByTimeStamp( const SCH_ITEM* item1, const SCH_ITEM* item2 )
+static bool SortByTimeStamp( const EDA_ITEM* item1, const EDA_ITEM* item2 )
 {
     int ii = item1->m_TimeStamp - item2->m_TimeStamp;
 
@@ -989,8 +1119,8 @@ void SCH_SCREENS::SchematicCleanUp()
 
 int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 {
-    std::vector <SCH_ITEM*> items;
-    SCH_ITEM*               item;
+    EDA_ITEMS items;
+    SCH_ITEM* item;
 
     for( size_t i = 0;  i < m_screens.size();  i++ )
         m_screens[i]->GetHierarchicalItems( items );
@@ -1004,9 +1134,10 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 
     for( size_t ii = 0;  ii < items.size() - 1;  ii++ )
     {
-        item = items[ii];
+        item = (SCH_ITEM*)items[ii];
 
-        SCH_ITEM* nextItem = items[ii + 1];
+        SCH_ITEM* nextItem = (SCH_ITEM*)items[ii + 1];
+
         if( item->m_TimeStamp == nextItem->m_TimeStamp )
         {
             count++;

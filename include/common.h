@@ -302,6 +302,20 @@ int GetCommandOptions( const int argc, const char** argv,
 const wxString& valeur_param( int valeur, wxString& buf_texte );
 
 /**
+ * Function CoordinateToString
+ * is a helper to convert the integer coordinate \a aValue to a string in inches,
+ * millimeters, or unscaled units according to the current user units setting.
+ *
+ * @param aValue The coordinate to convert.
+ * @param aInternalUnits The internal units of the application.  #EESCHEMA_INTERNAL_UNIT
+ *                       and #PCB_INTERNAL_UNIT are the only valid value.
+ * @param aConvertToMils Convert inch values to mils if true.  This setting has no effect if
+ *                       the current user unit is millimeters.
+ * @return The converted string for display in user interface elements.
+ */
+wxString CoordinateToString( int aValue, int aInternalUnits, bool aConvertToMils = false );
+
+/**
  * Returns the units symbol.
  *
  * @param aUnits - Units type, default is current units setting.

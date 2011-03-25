@@ -125,6 +125,16 @@ SEARCH_RESULT EDA_ITEM::Visit( INSPECTOR* inspector, const void* testData,
     return SEARCH_CONTINUE;
 }
 
+
+wxString EDA_ITEM::GetSelectMenuText() const
+{
+    wxFAIL_MSG( wxT( "GetSelectMenuText() was not overridden for schematic item type " ) +
+                GetClass() );
+
+    return wxString( wxT( "Undefined menu text for " ) + GetClass() );
+}
+
+
 #if defined(DEBUG)
 
 
@@ -636,4 +646,10 @@ void EDA_Rect::Merge( const wxPoint& aPoint )
     end.x   = MAX( end.x, aPoint.x );
     end.y   = MAX( end.y, aPoint.y );
     SetEnd( end );
+}
+
+
+double EDA_Rect::GetArea() const
+{
+    return (double) GetWidth() * (double) GetHeight();
 }

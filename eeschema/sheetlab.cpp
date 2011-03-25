@@ -127,9 +127,6 @@ int SCH_EDIT_FRAME::Edit_PinSheet( SCH_SHEET_PIN* aLabel, wxDC* aDC )
     if( aLabel == NULL )
         return wxID_CANCEL;
 
-    if( aDC )
-        aLabel->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-
     DIALOG_SCH_EDIT_SHEET_PIN dlg( this );
 
     dlg.SetLabelName( aLabel->m_Text );
@@ -150,6 +147,9 @@ int SCH_EDIT_FRAME::Edit_PinSheet( SCH_SHEET_PIN* aLabel, wxDC* aDC )
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return wxID_CANCEL;
+
+    if( aDC )
+        aLabel->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     aLabel->m_Text = dlg.GetLabelName();
     aLabel->m_Size.y = ReturnValueFromString( g_UserUnit, dlg.GetTextHeight(), m_InternalUnits );

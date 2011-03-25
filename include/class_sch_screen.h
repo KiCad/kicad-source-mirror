@@ -9,12 +9,23 @@
 #include "sch_item_struct.h"
 #include "class_base_screen.h"
 
+#include "../eeschema/general.h"
+
 
 class LIB_PIN;
 class SCH_COMPONENT;
 class SCH_SHEET_PATH;
 class SCH_SHEET_PIN;
 class SCH_LINE;
+class SCH_TEXT;
+
+
+enum SCH_LINE_TEST_T
+{
+    ENTIRE_LENGTH_T,
+    END_POINTS_ONLY_T,
+    EXCLUDE_END_POINTS_T
+};
 
 
 /* Max number of sheets in a hierarchy project: */
@@ -30,7 +41,7 @@ class SCH_SCREEN : public BASE_SCREEN
      * Function addConnectedItemsToBlock
      * add items connected at \a aPosition to the block pick list.
      * <p>
-     * This method tests all connectable unselected items in the screen that are connected to
+     * This method tests all connectible unselected items in the screen that are connected to
      * \a aPosition and adds them to the block selection pick list.  This is used when a block
      * drag is being performed to ensure connections to items in the block are not lost.
      *</p>
@@ -84,39 +95,15 @@ public:
     void FreeDrawList();
 
     /**
-     * Function GetItems
-     * adds all items found at \a aPosition to \a aItemList.  Please note that \a aItemList
-     * will own the item pointers added to it.  Do not allow it to go out of scope without
-     * first calling the release() method.  Otherwise, the pointer will be deleted and
-     * EESchema will crash.
-     * @param aPosition The position to test.
-     * @param aItemList The list to place items into.
-     * @return The number of items found at \a aPosition.
-     */
-    int GetItems( const wxPoint& aPosition, SCH_ITEMS& aItemList ) const;
-
-    /**
-     * Function FindItem
+     * Function GetItem
      * checks \a aPosition within a distance of \a aAccuracy for items of type \a aFilter.
      * @param aPosition Position in drawing units.
      * @param aAccuracy The maximum distance within \a Position to check for an item.
-     * @param aFilter The type of items to find.
+     * @param aType The type of item to find or #NOT_USED to find any item type.
      * @return The item found that meets the search criteria or NULL if none found.
      */
     SCH_ITEM* GetItem( const wxPoint& aPosition, int aAccuracy = 0,
-                        int aFilter = NO_FILTER_T ) const;
-
-    /**
-     * Function GetItems
-     * checks \a aPosition within a distance of \a aAccuracy for items of type \a aFilter.
-     * @param aPosition Position in drawing units.
-     * @param aItemList The list to add found items to.
-     * @param aAccuracy The maximum distance within \a Position to check for an item.
-     * @param aFilter The type of items to find.
-     * @return The number of items found that meets the search criteria.
-     */
-    int GetItems( const wxPoint& aPosition, PICKED_ITEMS_LIST& aItemList, int aAccuracy = 0,
-                  int aFilter = NO_FILTER_T ) const;
+                       KICAD_T aType = NOT_USED ) const;
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
 
@@ -150,6 +137,15 @@ public:
 
     void AddToDrawList( SCH_ITEM* st );
 
+    /**
+     * Function SchematicCleanUp
+     * performs routine schematic cleaning including breaking wire and buses and
+     * deleting identical objects superimposed on top of each other.
+     *
+     * @param aCanvas The window to draw on.
+     * @param aDC The device context used for drawing to \a aCanvas.
+     * @return True if any schematic clean up was performed.
+     */
     bool SchematicCleanUp( EDA_DRAW_PANEL* aCanvas = NULL, wxDC* aDC = NULL );
 
     /**
@@ -167,8 +163,8 @@ public:
      * them with a copy.  Old item must be put in undo list, and the new ones can be
      * modified by clean up safely.  If an abort command is made, old wires must be put
      * in GetDrawItems(), and copies must be deleted.  This is because previously stored
-     * undo commands can handle pointers on wires or busses, and we do not delete wires or
-     * busses, we must put they in undo list.
+     * undo commands can handle pointers on wires or buses, and we do not delete wires or
+     * buss-es, we must put they in undo list.
      *
      * Because cleanup delete and/or modify bus and wires, the it is easier is to put
      * all wires in undo list and use a new copy of wires for cleanup.
@@ -187,7 +183,6 @@ public:
      * add all wires and junctions connected to \a aSegment which are not connected any
      * component pin to \a aItemList.
      * @param aSegment The segment to test for connections.
-     * @param aItemList List of items to add connections.
      */
     void MarkConnections( SCH_LINE* aSegment );
 
@@ -257,7 +252,18 @@ public:
      * @param aPosition The position to test.
      * @return True if a junction is required at \a aPosition.
      */
-    bool IsJunctionNeeded( const wxPoint& aPosition ) const;
+    bool IsJunctionNeeded( const wxPoint& aPosition );
+
+    /**
+     * Function IsTerminalPoint
+     * tests if \a aPosition is a connection point on \a aLayer.
+     *
+     * @param aPosition Position to test.
+     * @param aLayer The layer type to test against.  Valid layer types are #LAYER_NOTES,
+     *               #LAYER_BUS, and #LAYER_WIRE.
+     * @return True if \a Position is a connection point on \a aLayer.
+     */
+    bool IsTerminalPoint( const wxPoint& aPosition, int aLayer );
 
     /**
      * Function GetPin
@@ -292,7 +298,64 @@ public:
      * adds all schematic sheet and component object in the screen to \a aItems.
      * @param aItems Hierarchical item list to fill.
      */
-    void GetHierarchicalItems( std::vector <SCH_ITEM*>& aItems );
+    void GetHierarchicalItems( EDA_ITEMS& aItems );
+
+    /**
+     * Function GetNode
+     * returns all the items at \a aPosition that form a node.
+     *
+     * @param aPosition The wxPoint to test for node items.
+     * @param aList A #EDA_ITEMS container to place the items found.
+     * @return The number of node items found at \a aPosition.
+     */
+    int GetNode( const wxPoint& aPosition, EDA_ITEMS& aList );
+
+    /**
+     * Function GetWireOrBus
+     * returns a wire or bus item located at \a aPosition.
+     *
+     * @param aPosition The wxPoint to test for node items.
+     * @return The SCH_LINE* of the wire or bus item found at \a aPosition or NULL if item not
+     *         found.
+     */
+    SCH_LINE* GetWireOrBus( const wxPoint& aPosition );
+
+    /**
+     * Function GetLine
+     * returns a line item located at \a aPosition.
+     *
+     * @param aPosition The wxPoint to test for a line item.
+     * @param aAccuracy Amount to inflate the item hit test bounding box.
+     * @param aLayer The layer the line is drawn upon.
+     * @param aSearchType Additional line test criteria.
+     * @return The SCH_LINE* of the wire item found at \a aPosition or NULL if item not
+     *         found.
+     */
+    SCH_LINE* GetLine( const wxPoint& aPosition, int aAccuracy = 0, int aLayer = LAYER_NOTES,
+                       SCH_LINE_TEST_T aSearchType = ENTIRE_LENGTH_T );
+
+    SCH_LINE* GetWire( const wxPoint& aPosition, int aAccuracy = 0,
+                       SCH_LINE_TEST_T aSearchType = ENTIRE_LENGTH_T )
+    {
+        return GetLine( aPosition, aAccuracy, LAYER_WIRE, aSearchType );
+    }
+
+    SCH_LINE* GetBus( const wxPoint& aPosition, int aAccuracy = 0,
+                      SCH_LINE_TEST_T aSearchType = ENTIRE_LENGTH_T )
+    {
+        return GetLine( aPosition, aAccuracy, LAYER_BUS, aSearchType );
+    }
+
+    /**
+     * Function GetLabel
+     * returns a label item located at \a aPosition.
+     *
+     * @param aPosition The wxPoint to test for label items.
+     * @param aAccuracy Amount to inflate the item hit test bounding box.
+     * @return The SCH_TEXT* of the label item found at \a aPosition or NULL if item not
+     *         found.
+     */
+    SCH_TEXT* GetLabel( const wxPoint& aPosition, int aAccuracy = 0 );
 
     /**
      * Function SelectBlockItems
@@ -370,7 +433,7 @@ public:
      * Function DeleteAllMarkers
      * deletes all electronic rules check markers of \a aMarkerType from all the screens in
      * the list.
-     * @param aType Type of markers to be deleted.
+     * @param aMarkerType Type of markers to be deleted.
      */
     void DeleteAllMarkers( int aMarkerType );
 
