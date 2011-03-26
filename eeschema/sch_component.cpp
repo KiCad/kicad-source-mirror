@@ -1633,9 +1633,11 @@ LIB_DRAW_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aTy
 
 wxString SCH_COMPONENT::GetSelectMenuText() const
 {
-    wxString tmp = _( "Component " );
-
-    return tmp << m_ChipName << wxT( ", " ) << GetField( REFERENCE )->GetText();
+    wxString tmp;
+    tmp.Printf( _( "Component %s, %s" ),
+                GetChars( m_ChipName ),
+                GetChars( GetField( REFERENCE )->GetText() ) );
+    return tmp;
 }
 
 

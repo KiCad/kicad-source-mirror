@@ -419,31 +419,35 @@ void SCH_LINE::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 
 wxString SCH_LINE::GetSelectMenuText() const
 {
-    wxString menuText;
+    wxString menuText, txtfmt, orient;
+    if( m_Start.x == m_End.x )
+        orient = _("Vert.");
+    else if( m_Start.y == m_End.y )
+        orient = _("Horiz.");
 
     switch( m_Layer )
     {
     case LAYER_NOTES:
-        menuText = _( "Graphic Line " );
+        txtfmt = _( "%s Graphic Line from (%s,%s) to (%s,%s) " );
         break;
 
     case LAYER_WIRE:
-        menuText = _( "Wire " );
+        txtfmt = _( "%s Wire from (%s,%s) to (%s,%s)" );
         break;
 
     case LAYER_BUS:
-        menuText = _( "Bus " );
+        txtfmt = _( "%s Bus from (%s,%s) to (%s,%s)" );
         break;
 
     default:
-        menuText = _( "Line on Unkown Layer " );
+        txtfmt += _( "%s Line on Unkown Layer from (%s,%s) to (%s,%s)" );
     }
 
-    menuText << wxT( "from (" ) << CoordinateToString( m_Start.x, EESCHEMA_INTERNAL_UNIT )
-             << wxT( "," ) << CoordinateToString( m_Start.y, EESCHEMA_INTERNAL_UNIT )
-             << wxT( ")" );
-    menuText << wxT( " to (" ) << CoordinateToString( m_End.x, EESCHEMA_INTERNAL_UNIT )
-             << wxT( "," ) << CoordinateToString( m_End.y, EESCHEMA_INTERNAL_UNIT ) << wxT( ")" );
+    menuText.Printf( txtfmt, GetChars( orient ),
+                    GetChars(CoordinateToString( m_Start.x, EESCHEMA_INTERNAL_UNIT )),
+                    GetChars(CoordinateToString( m_Start.y, EESCHEMA_INTERNAL_UNIT )),
+                    GetChars(CoordinateToString( m_End.x, EESCHEMA_INTERNAL_UNIT )),
+                    GetChars(CoordinateToString( m_End.y, EESCHEMA_INTERNAL_UNIT )) );
 
     return menuText;
 }

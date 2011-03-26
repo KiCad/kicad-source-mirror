@@ -449,9 +449,10 @@ void SCH_FIELD::Rotate( wxPoint rotationPoint )
 
 wxString SCH_FIELD::GetSelectMenuText() const
 {
-    wxString tmp = _( "Field " );
+    wxString tmp;
+    tmp.Printf( _( "Field %s" ), GetChars(  + GetName() ) );
 
-    return tmp + GetName();
+    return tmp;
 }
 
 

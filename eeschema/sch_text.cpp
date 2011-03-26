@@ -628,7 +628,9 @@ wxString SCH_TEXT::GetSelectMenuText() const
     tmp.Replace( wxT( "\t" ), wxT( " " ) );
     tmp =( tmp.Length() > 15 ) ? tmp.Left( 12 ) + wxT( "..." ) : tmp;
 
-    return wxString( _( "Graphic Text " ) ) + tmp;
+    wxString msg;
+    msg.Printf(_( "Graphic Text %s" ), GetChars(tmp));
+    return msg;
 }
 
 
@@ -859,7 +861,9 @@ wxString SCH_LABEL::GetSelectMenuText() const
 {
     wxString tmp = ( GetText().Length() > 15 ) ? GetText().Left( 12 ) + wxT( "..." ) : GetText();
 
-    return wxString( _( "Label " ) ) + tmp;
+    wxString msg;
+    msg.Printf( _( "Label %s" ), GetChars(tmp) );
+    return msg;
 }
 
 
@@ -1290,7 +1294,9 @@ wxString SCH_GLOBALLABEL::GetSelectMenuText() const
 {
     wxString tmp = ( GetText().Length() > 15 ) ? GetText().Left( 12 ) + wxT( "..." ) : GetText();
 
-    return wxString( _( "Global Label " ) ) + tmp;
+    wxString msg;
+    msg.Printf( _( "Global Label %s" ), GetChars(tmp) );
+    return msg;
 }
 
 
@@ -1645,7 +1651,9 @@ wxString SCH_HIERLABEL::GetSelectMenuText() const
 {
     wxString tmp = ( GetText().Length() > 15 ) ? GetText().Left( 12 ) + wxT( "..." ) : GetText();
 
-    return wxString( _( "Hierarchical Label " ) ) + tmp;
+    wxString msg;
+    msg.Printf( _( "Hierarchical Label %s" ), GetChars( tmp ) );
+    return msg;
 }
 
 

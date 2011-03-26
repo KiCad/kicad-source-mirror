@@ -983,7 +983,9 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR* aInspector, const void* aTestData,
 
 wxString SCH_SHEET::GetSelectMenuText() const
 {
-    return wxString( _( "Hierarchical Sheet " ) ) + m_SheetName;
+    wxString tmp;
+    tmp.Printf( _( "Hierarchical Sheet " ), GetChars( m_SheetName ) );
+    return tmp;
 }
 
 

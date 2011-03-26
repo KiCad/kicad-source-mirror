@@ -207,27 +207,27 @@ void SCH_POLYLINE::Rotate( wxPoint rotationPoint )
 
 wxString SCH_POLYLINE::GetSelectMenuText() const
 {
-    wxString menuText;
+    wxString menuText, fmt;
 
     switch( m_Layer )
     {
     case LAYER_NOTES:
-        menuText = _( "Graphic Polyline " );
+        fmt = _( "Graphic Polyline with %d Points" );
         break;
 
     case LAYER_WIRE:
-        menuText = _( "Polyline Wire " );
+        fmt = _( "Polyline Wire with %d Points" );
         break;
 
     case LAYER_BUS:
-        menuText = _( "Polyline Bus " );
+        fmt = _( "Polyline Bus with %d Points" );
         break;
 
     default:
-        menuText = _( "Polyline on Unkown Layer " );
+        fmt = _( "Polyline on Unkown Layer with %d Points" );
     }
 
-    menuText += wxString::Format( _( "with %d Points" ), m_PolyPoints.size() );
+    menuText.Printf( fmt, m_PolyPoints.size() );
 
     return menuText;
 }

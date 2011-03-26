@@ -461,7 +461,9 @@ void SCH_SHEET_PIN::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 
 wxString SCH_SHEET_PIN::GetSelectMenuText() const
 {
-    return wxString( _( "Hierarchical Sheet Label " ) ) + GetText();
+    wxString tmp;
+    tmp.Printf( _( "Hierarchical Sheet Label %s" ), GetChars( GetText() ) );
+    return tmp;
 }
 
 

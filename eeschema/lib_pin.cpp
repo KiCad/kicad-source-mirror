@@ -1884,10 +1884,13 @@ const char** LIB_PIN::GetMenuImage() const
 
 wxString LIB_PIN::GetSelectMenuText() const
 {
-    wxString tmp = _( "Pin " );
-
-    return tmp << GetNumberString() << wxT( ", " ) << GetTypeString() << wxT( ", " )
-               << wxGetTranslation( pin_style_names[ GetStyleCodeIndex( m_shape ) ] );;
+    wxString tmp;
+    tmp.Printf( _( "Pin %s, %s, %s" ),
+                GetChars( GetNumberString() ),
+                GetChars( GetTypeString() ),
+                GetChars( wxGetTranslation( pin_style_names[ GetStyleCodeIndex( m_shape ) ] ) )
+              );
+    return tmp;
 }
 
 
