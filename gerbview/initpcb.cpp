@@ -28,7 +28,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
     SetCurItem( NULL );
     GetBoard()->m_Drawings.DeleteAll();
 
-    for( layer = 0; layer < 32; layer++ )
+    for( layer = 0; layer < LAYER_COUNT; layer++ )
     {
         if( g_GERBER_List[layer] )
         {
@@ -45,7 +45,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 
     SetScreen( ScreenPcb );
     GetScreen()->Init();
-    setActiveLayer(LAYER_N_BACK);
+    setActiveLayer(FIRST_COPPER_LAYER);
     syncLayerBox();
     return TRUE;
 }

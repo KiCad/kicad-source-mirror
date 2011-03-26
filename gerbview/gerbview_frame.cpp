@@ -62,6 +62,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
 
     SetBoard( new BOARD( NULL, this ) );
     GetBoard()->SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
+    GetBoard()->SetVisibleLayers( FULL_LAYERS );     // All 32 layers visible.
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -244,8 +245,8 @@ void GERBVIEW_FRAME::SaveSettings()
 
     config->Write( GerbviewShowPageSizeOption, pageSize_opt );
     config->Write( GerbviewShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
-    // Save the drill file history list
-    // because we have 2 file historues, we must save this one
+    // Save the drill file history list.
+    // Because we have 2 file histories, we must save this one
     // in a specific path
     config->SetPath(wxT("drl_files") );
     m_drillFileHistory.Save( *config );
@@ -334,7 +335,7 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 {
     int layer = aLayer;
 
-    for( int i = 0;  i < NB_LAYERS;  i++ )
+    for( int i = 0;  i < LAYER_COUNT;  i++ )
     {
         GERBER_IMAGE* gerber = g_GERBER_List[ layer ];
 
@@ -343,7 +344,7 @@ int GERBVIEW_FRAME::getNextAvailableLayer( int aLayer ) const
 
         layer++;
 
-        if( layer >= NB_LAYERS )
+        if( layer >= LAYER_COUNT )
             layer = 0;
     }
 

@@ -19,12 +19,7 @@
 void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
 {
     int      id = event.GetId();
-    wxPoint  pos;
     wxString FullFileName;
-
-    pos    = GetPosition();
-    pos.x += 20;
-    pos.y += 20;
 
     switch( id )
     {

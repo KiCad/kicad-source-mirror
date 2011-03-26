@@ -140,10 +140,10 @@ void PCB_LAYER_WIDGET::onRightDownLayers( wxMouseEvent& event )
     // menu text is capitalized:
     // http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
     menu.Append( new wxMenuItem( &menu, ID_SHOW_ALL_COPPERS,
-        _("Show All Cu") ) );
+        _("Show All Copper Layers") ) );
 
     menu.Append( new wxMenuItem( &menu, ID_SHOW_NO_COPPERS,
-        _( "Hide All Cu" ) ) );
+        _( "Hide All Copper Layers" ) ) );
 
     PopupMenu( &menu );
 

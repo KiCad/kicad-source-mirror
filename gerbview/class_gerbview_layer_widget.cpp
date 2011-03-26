@@ -142,18 +142,13 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
 {
     int     rowCount;
     int     menuId = event.GetId();
-    bool    visible;
+    bool    visible = (menuId == ID_SHOW_ALL_COPPERS) ? true : false;;
     int     visibleLayers = 0;
 
     switch( menuId )
     {
     case ID_SHOW_ALL_COPPERS:
-        visible = true;
-        goto L_change_coppers;
-
     case ID_SHOW_NO_COPPERS:
-        visible = false;
-    L_change_coppers:
         rowCount = GetLayerRowCount();
         for( int row=0; row < rowCount; ++row )
         {
@@ -182,7 +177,8 @@ void GERBER_LAYER_WIDGET::ReFill()
     {
         wxString msg;
         msg.Printf( _("Layer %d"), layer+1 );
-        AppendLayerRow( LAYER_WIDGET::ROW( msg, layer, brd->GetLayerColor( layer ), wxEmptyString, true ) );
+        AppendLayerRow( LAYER_WIDGET::ROW( msg, layer,
+                        brd->GetLayerColor( layer ), wxEmptyString, true ) );
     }
 
     installRightLayerClickHandler();
@@ -213,7 +209,6 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
 void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
 {
     BOARD* brd = myframe->GetBoard();
-
     int visibleLayers = brd->GetVisibleLayers();
 
     if( isVisible )

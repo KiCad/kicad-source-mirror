@@ -28,7 +28,6 @@ CvPCB
 
 EESchema
 --------
-* Use collector classes.
 * Drag and drop between two EESchema windows.
 
 Wayne:
@@ -44,11 +43,6 @@ E6)  Start initial work for changing component library file format to use Dick's
      handle the wishes of the library implementation group.  Add initial clipboard
      support to the library editor.
 
-
-GerbView
---------
-* List control for layer sort on the fly
-* Add excellon2 drill file support (small good library)
 
 
 PCBNew
