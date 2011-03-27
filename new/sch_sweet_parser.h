@@ -44,7 +44,11 @@ class ARC;
 class BEZIER;
 class GR_TEXT;
 class PIN;
-class GR_FONT;
+class FONT;
+class PROPERTY;
+
+struct PINTEXT;
+struct TEXT_EFFECTS;
 
 
 /**
@@ -73,7 +77,10 @@ class SWEET_PARSER : public SWEET_LEXER
     void parsePin( PIN* me );
     void parseAt( POINT* pos, float* angle );
     void parseBool( bool* aBool );
-    void parseFont( GR_FONT* me );
+    void parseFont( FONT* me );
+    void parsePinText( PINTEXT* me );
+    void parseTextEffects( TEXT_EFFECTS* me );
+
 
 public:
 

@@ -250,14 +250,44 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
             parseText( text );
             break;
 
+        // reference in a PART is incomplete, it is just the prefix of an
+        // unannotated reference. Only components have full reference designators.
+        case T_reference:
+            if( contains & PB(REFERENCE) )
+                Duplicate( tok );
+            contains |= PB(REFERENCE);
+            NeedSYMBOLorNUMBER();
+            me->reference.text = FromUTF8();
+            tok = NextTok();
+            if( tok == T_LEFT )
+            {
+                tok = NextTok();
+                if( tok != T_effects )
+                    Expecting( T_effects );
+                parseTextEffects( &me->reference.effects );
+                NeedRIGHT();
+            }
+            else if( tok != T_RIGHT )
+                Expecting( ") | effects" );
+            break;
+
         case T_value:
             if( contains & PB(VALUE) )
                 Duplicate( tok );
             contains |= PB(VALUE);
             NeedSYMBOLorNUMBER();
-            me->SetValue( FROM_UTF8( CurText() ) );
-            // @todo handle optional (effects..) here
-            NeedRIGHT();
+            me->value.text = FromUTF8();
+            tok = NextTok();
+            if( tok == T_LEFT )
+            {
+                tok = NextTok();
+                if( tok != T_effects )
+                    Expecting( T_effects );
+                parseTextEffects( &me->value.effects );
+                NeedRIGHT();
+            }
+            else if( tok != T_RIGHT )
+                Expecting( ") | effects" );
             break;
 
         case T_footprint:
@@ -265,9 +295,37 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
                 Duplicate( tok );
             contains |= PB(FOOTPRINT);
             NeedSYMBOLorNUMBER();
-            me->SetFootprint( FROM_UTF8( CurText() ) );
-            // @todo handle optional (effects..) here
-            NeedRIGHT();
+            me->footprint.text = FromUTF8();
+            tok = NextTok();
+            if( tok == T_LEFT )
+            {
+                tok = NextTok();
+                if( tok != T_effects )
+                    Expecting( T_effects );
+                parseTextEffects( &me->footprint.effects );
+                NeedRIGHT();
+            }
+            else if( tok != T_RIGHT )
+                Expecting( ") | effects" );
+            break;
+
+        case T_datasheet:
+            if( contains & PB(MODEL) )
+                Duplicate( tok );
+            contains |= PB(MODEL);
+            NeedSYMBOLorNUMBER();
+            me->datasheet.text = FromUTF8();
+            tok = NextTok();
+            if( tok == T_LEFT )
+            {
+                tok = NextTok();
+                if( tok != T_effects )
+                    Expecting( T_effects );
+                parseTextEffects( &me->datasheet.effects );
+                NeedRIGHT();
+            }
+            else if( tok != T_RIGHT )
+                Expecting( ") | effects" );
             break;
 
         case T_model:
@@ -275,9 +333,40 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
                 Duplicate( tok );
             contains |= PB(MODEL);
             NeedSYMBOLorNUMBER();
-            me->SetModel( FROM_UTF8( CurText() ) );
-            // @todo handle optional (effects..) here
-            NeedRIGHT();
+            me->model.text = FromUTF8();
+            tok = NextTok();
+            if( tok == T_LEFT )
+            {
+                tok = NextTok();
+                if( tok != T_effects )
+                    Expecting( T_effects );
+                parseTextEffects( &me->model.effects );
+                NeedRIGHT();
+            }
+            else if( tok != T_RIGHT )
+                Expecting( ") | effects" );
+            break;
+
+        case T_property:
+            PROPERTY* property;
+            property = new PROPERTY( me );
+            // @todo check for uniqueness
+            me->properties.push_back( property );
+            NeedSYMBOLorNUMBER();
+            property->name = FromUTF8();
+            NeedSYMBOLorNUMBER();
+            property->text = FromUTF8();
+            tok = NextTok();
+            if( tok == T_LEFT )
+            {
+                tok = NextTok();
+                if( tok != T_effects )
+                    Expecting( T_effects );
+                parseTextEffects( &property->effects );
+                NeedRIGHT();
+            }
+            else if( tok != T_RIGHT )
+                Expecting( ") | effects" );
             break;
 
         case T_pin:
@@ -287,14 +376,13 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
             parsePin( pin );
             break;
 
-    /*
+
+/*
+        @todo
         case T_keywords:
             break;
 
         case T_alternates:
-            break;
-
-        case T_property:
             break;
 
         case T_property_del:
@@ -315,15 +403,7 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
         case T_route_pin_swap:
             break;
 
-    */
-
-        // Not sure about reference in a PART, comes in at COMPONENT object.
-        // It is maybe just a hint here or a prefix.
-        case T_reference:
-            if( contains & PB(REFERENCE) )
-                Duplicate( tok );
-            contains |= PB(REFERENCE);
-            break;
+*/
         }
     }
 
@@ -333,7 +413,7 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
 }
 
 
-void SWEET_PARSER::parseFont( GR_FONT* me )
+void SWEET_PARSER::parseFont( FONT* me )
 {
     /*
         # The FONT value needs to be defined.  Currently, EESchema does not support
@@ -344,9 +424,7 @@ void SWEET_PARSER::parseFont( GR_FONT* me )
         (font [FONT] (size HEIGHT WIDTH) [italic] [bold])
     */
 
-
-
-    // handle the [FONT] position dependently, i.e. first
+    // handle the [FONT] 'position dependently', i.e. first
     T       tok = NextTok();
     bool    sawBold   = false;
     bool    sawItalic = false;
@@ -363,40 +441,47 @@ void SWEET_PARSER::parseFont( GR_FONT* me )
         if( tok == T_LEFT )
         {
             tok = NextTok();
-            if( tok != T_size )
-                Expecting( T_size );
 
-            if( sawSize )
-                Duplicate( T_size );
-            sawSize = true;
+            switch( tok )
+            {
+            case T_size:
+                if( sawSize )
+                    Duplicate( T_size );
+                sawSize = true;
 
-            NeedNUMBER( "size height" );
-            me->size.SetHeight( internal( CurText() ) );
+                NeedNUMBER( "size height" );
+                me->size.SetHeight( internal( CurText() ) );
 
-            NeedNUMBER( "size width" );
-            me->size.SetWidth( internal( CurText() ) );
-            NeedRIGHT();
+                NeedNUMBER( "size width" );
+                me->size.SetWidth( internal( CurText() ) );
+                NeedRIGHT();
+                break;
+
+            default:
+                Expecting( "size" );
+            }
         }
         else
         {
-            if( tok == T_bold )
+            switch( tok )
             {
+            case T_bold:
                 if( sawBold )
                     Duplicate( T_bold );
                 sawBold = true;
-
                 me->bold = true;
-            }
-            else if( tok == T_italic )
-            {
+                break;
+
+            case T_italic:
                 if( sawItalic )
                     Duplicate( T_italic );
                 sawItalic = true;
-
                 me->italic = true;
+                break;
+
+            default:
+                Unexpected( "bold|italic" );
             }
-            else
-                Unexpected( tok );
         }
 
         tok = NextTok();
@@ -420,26 +505,81 @@ void SWEET_PARSER::parseBool( bool* aBool )
 }
 
 
+void SWEET_PARSER::parsePinText( PINTEXT* me )
+{
+    /*  either:
+        (signal SIGNAL   (font [FONT] (size HEIGHT WIDTH) [italic] [bold])(visible YES))
+        or
+        (padname PADNAME (font [FONT] (size HEIGHT WIDTH) [italic] [bold])(visible YES))
+    */
+    T       tok;
+    bool    sawFont = false;
+    bool    sawVis  = false;
+
+    // padname or signal text
+    NeedSYMBOLorNUMBER();
+    me->text = FromUTF8();
+
+    while( ( tok = NextTok() ) != T_RIGHT )
+    {
+        if( tok == T_LEFT )
+        {
+            tok = NextTok();
+
+            switch( tok )
+            {
+            case T_font:
+                if( sawFont )
+                    Duplicate( tok );
+                sawFont = true;
+                parseFont( &me->font );
+                break;
+
+            case T_visible:
+                if( sawVis )
+                    Duplicate( tok );
+                sawVis = true;
+                parseBool( &me->isVisible );
+                NeedRIGHT();
+                break;
+
+            default:
+                Expecting( "font" );
+            }
+        }
+
+        else
+        {
+            switch( tok )
+            {
+            default:
+                Expecting( T_LEFT );
+            }
+        }
+    }
+}
+
+
 void SWEET_PARSER::parsePin( PIN* me )
 {
     /*
         (pin TYPE SHAPE
             (at X Y [ANGLE])
             (length LENGTH)
-            (name NAME (font [FONT] (size HEIGHT WIDTH) [italic] [bold])(visible YES))
-            (number NUMBER (font [FONT] (size HEIGHT WIDTH) [italic] [bold] (visible YES))
+            (signal NAME (font [FONT] (size HEIGHT WIDTH) [italic] [bold])(visible YES))
+            (padname NUMBER (font [FONT] (size HEIGHT WIDTH) [italic] [bold] (visible YES))
             (visible YES)
         )
     */
 
     T       tok;
-    bool    sawShape = false;
-    bool    sawType  = false;
-    bool    sawAt    = false;
-    bool    sawLen   = false;
-    bool    sawName  = false;
-    bool    sawNum   = false;
-    bool    sawVis   = false;
+    bool    sawShape   = false;
+    bool    sawType    = false;
+    bool    sawAt      = false;
+    bool    sawLen     = false;
+    bool    sawSignal  = false;
+    bool    sawPadName = false;
+    bool    sawVis     = false;
 
     while( ( tok = NextTok() ) != T_RIGHT )
     {
@@ -465,11 +605,19 @@ void SWEET_PARSER::parsePin( PIN* me )
                 NeedRIGHT();
                 break;
 
-/*          @todo and associated fonts
-            case T_name:
-            case T_number:
+            case T_signal:
+                if( sawSignal )
+                    Duplicate( tok );
+                sawSignal = true;
+                parsePinText( &me->signal );
                 break;
-*/
+
+            case T_padname:
+                if( sawPadName )
+                    Duplicate( tok );
+                sawPadName = true;
+                parsePinText( &me->padname );
+                break;
 
             case T_visible:
                 if( sawVis )
@@ -524,6 +672,79 @@ void SWEET_PARSER::parsePin( PIN* me )
                 Unexpected( tok );
             }
         }
+    }
+}
+
+
+void SWEET_PARSER::parseTextEffects( TEXT_EFFECTS* me )
+{
+    /*
+        (effects [PROPERTY]
+
+            # Position requires an X and Y coordinates.  Position coordinates can be
+            # non-intergr.  Angle is in degrees and defaults to 0 if not defined.
+            (at X Y [ANGLE])
+
+            # The FONT value needs to be defined.  Currently, EESchema does not support
+            # different fonts.  In the future this feature may be implemented and at
+            # that time FONT will have to be defined.  Initially, only the font size and
+            # style are required.  Italic and bold styles are optional.  The font size
+            # height and width are in units yet to be determined.
+            (font [FONT] (size HEIGHT WIDTH) [italic] [bold])
+
+            # Valid visibility values are yes and no.
+            (visible YES)
+        )
+    */
+
+    bool    sawFont = false;
+    bool    sawAt   = false;
+    bool    sawVis  = false;
+
+    T       tok = NextTok();
+
+    if( IsSymbol( tok ) )
+    {
+        me->propName = FromUTF8();
+        tok = NextTok();
+    }
+
+    while( tok != T_RIGHT )
+    {
+        if( tok != T_LEFT )
+            Expecting( T_LEFT );
+
+        tok = NextTok();
+
+        switch( tok )
+        {
+        case T_at:
+            if( sawAt )
+                Duplicate( tok );
+            sawAt = true;
+            parseAt( &me->pos, &me->angle );
+            break;
+
+        case T_font:
+            if( sawFont )
+                Duplicate( tok );
+            sawFont = true;
+            parseFont( &me->font );
+            break;
+
+        case T_visible:
+            if( sawVis )
+                Duplicate( sawVis );
+            sawVis = true;
+            parseBool( &me->isVisible );
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "at|font|visible" );
+        }
+
+        tok = NextTok();
     }
 }
 
@@ -1000,8 +1221,10 @@ void SWEET_PARSER::parseText( GR_TEXT* me )
             break;
 
         case T_font:
-            // @todo
+            if( sawFont )
+                Duplicate( tok );
             sawFont = true;
+            parseFont( &me->font );
             break;
 
         default:

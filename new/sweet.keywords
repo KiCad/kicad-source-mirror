@@ -32,14 +32,13 @@ length
 line
 line_width
 model
-name
 no
 non_logic
 none
-number
 open_collector
 open_emitter
 output
+padname
 part
 passive
 pin
@@ -61,6 +60,7 @@ reference
 right
 route_alt_swap
 route_pin_swap
+signal
 size
 start
 start_angle

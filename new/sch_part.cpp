@@ -38,7 +38,12 @@ PART::PART( LIB* aOwner, const STRING& aPartNameAndRev ) :
     contains( 0 ),
     partNameAndRev( aPartNameAndRev ),
     extends( 0 ),
-    base( 0 )
+    base( 0 ),
+    reference(  this, wxT( "reference " ) ),
+    value(      this, wxT( "value" ) ),
+    footprint(  this, wxT( "footprint" ) ),
+    model(      this, wxT( "model" ) ),
+    datasheet(  this, wxT( "datasheet" ) )
 {
     // Our goal is to have class LIB only instantiate what is needed, so print here
     // what it is doing. It is the only class where PART can be instantiated.
@@ -64,7 +69,11 @@ void PART::clear()
         delete *it;
     pins.clear();
 
-    // @todo delete all properties
+    // delete non-mandatory properties I own, since their container will not destroy them:
+    for( PROPERTIES::iterator it = properties.begin();  it != properties.end();  ++it )
+        delete *it;
+    properties.clear();
+
 }
 
 

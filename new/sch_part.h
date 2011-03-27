@@ -41,6 +41,7 @@ namespace SCH {
 
 class PART;
 class SWEET_PARSER;
+class PROPERTY;
 
 };
 
@@ -57,10 +58,12 @@ public:
     {}
 };
 
+typedef float   ANGLE;
+
 
 namespace SCH {
 
-class GR_FONT
+class FONT
 {
     friend class PART;
     friend class SWEET_PARSER;
@@ -72,13 +75,32 @@ protected:
     bool            bold;
 
 public:
-    GR_FONT() :
+    FONT() :
         italic( false ),
         bold( false )
     {}
 };
 
-class   BASE_GRAPHIC
+
+struct TEXT_EFFECTS
+{
+    POINT       pos;
+    ANGLE       angle;
+    FONT        font;
+    bool        isVisible;
+
+    PROPERTY*   property;       ///< only used from a COMPONENT, specifies PROPERTY in PART
+    wxString    propName;       ///< only used from a COMPONENT, specifies PROPERTY in PART
+
+    TEXT_EFFECTS() :
+        angle( 0 ),
+        isVisible( false ),
+        property( 0 )
+    {}
+};
+
+
+class BASE_GRAPHIC
 {
     friend class PART;
     friend class SWEET_PARSER;
@@ -186,13 +208,15 @@ class GR_TEXT : public BASE_GRAPHIC
 
 protected:
     POINT       pos;
-    float       angle;
+    ANGLE       angle;
+
     int         fillType;       ///< T_none, T_filled, or T_transparent
     int         hjustify;       ///< T_center, T_right, or T_left
     int         vjustify;       ///< T_center, T_top, or T_bottom
+
     bool        isVisible;
     wxString    text;
-//    FONT        font;
+    FONT        font;
 
 public:
     GR_TEXT( PART* aOwner ) :
@@ -206,36 +230,71 @@ public:
 };
 
 
-class PIN : public BASE_GRAPHIC
+class PROPERTY : public BASE_GRAPHIC
 {
     friend class PART;
     friend class SWEET_PARSER;
 
 protected:
-    POINT       pos;
-    float       angle;
-    int         connectionType;     ///< T_input, T_output, T_bidirectional, T_tristate, T_passive, T_unspecified,
-                                    ///< T_power_in, T_power_out, T_open_collector, T_open_emitter, or T_unconnected.
-    int         shape;              ///< T_none, T_line, T_inverted, T_clock, T_inverted_clk, T_input_low, T_clock_low,
-                                    ///< T_falling_edge, T_non_logic.
-    int         length;             ///< length of pin in internal units
-    wxString    name;
-    wxString    number;
-    bool        nameIsVisible;      ///< name is visible
-    bool        numIsVisible;       ///< number is visible
-    bool        isVisible;          ///< pin is visible
+    PART*           birthplace;     ///< at which PART in inheritance chain was this PROPERTY added
+    wxString        name;
+    wxString        text;
+    TEXT_EFFECTS    effects;
+
+public:
+    PROPERTY( PART* aOwner, const wxChar* aName = wxT( "" ) ) :
+        BASE_GRAPHIC( aOwner ),
+        birthplace( aOwner ),
+        name( aName )
+    {}
+};
+
+
+struct PINTEXT
+{
+    wxString    text;
+    FONT        font;
+    bool        isVisible;
+
+    PINTEXT() :
+        isVisible( true )
+    {}
+};
+
+
+class PIN : public BASE_GRAPHIC
+{
+    friend class PART;
+    friend class SWEET_PARSER;
 
 public:
     PIN( PART* aOwner ) :
         BASE_GRAPHIC( aOwner ),
+        birthplace( aOwner ),
         angle( 0 ),
         connectionType( PR::T_input ),
         shape( PR::T_line ),
         length( 0 ),
-        nameIsVisible( true ),
-        numIsVisible( true ),
         isVisible( true )
     {}
+
+protected:
+    PART*       birthplace;         ///< at which PART in inheritance chain was this PIN added
+    POINT       pos;
+    ANGLE       angle;
+
+    PINTEXT     padname;
+    PINTEXT     signal;
+
+    int         connectionType;     ///< T_input, T_output, T_bidirectional, T_tristate, T_passive, T_unspecified,
+                                    ///< T_power_in, T_power_out, T_open_collector, T_open_emitter, or T_unconnected.
+
+    int         shape;              ///< T_none, T_line, T_inverted, T_clock, T_inverted_clk, T_input_low, T_clock_low,
+                                    ///< T_falling_edge, T_non_logic.
+
+    int         length;             ///< length of pin in internal units
+    bool        isVisible;          ///< pin is visible
+
 };
 
 
@@ -249,6 +308,7 @@ namespace SCH {
 
 typedef std::vector< BASE_GRAPHIC* >    GRAPHICS;
 typedef std::vector< PIN* >             PINS;
+typedef std::vector< PROPERTY* >        PROPERTIES;
 
 class LPID;
 class SWEET_PARSER;
@@ -306,12 +366,20 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
     /// actually becomes cached in RAM.
     STRING          body;
 
-//    bool        cachedRevisions;    ///< allows lazy loading of revision of this same part name
+    // mandatory properties
+    PROPERTY        reference;      ///< prefix only, only components have full references
+    PROPERTY        value;
+    PROPERTY        footprint;
+    PROPERTY        model;
+    PROPERTY        datasheet;
 
-    // 3 separate lists for speed:
+    // separate lists for speed:
 
-    /// A property list.
-    //PROPERTIES    properties;
+    /**
+     * Member properties
+     * holds the non-mandatory properties.
+     */
+    PROPERTIES      properties;
 
     /**
      * Member graphics
@@ -325,14 +393,9 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
      */
     PINS            pins;
 
-
     /// Alternate body forms.
     //ALTERNATES  alternates;
 
-    // mandatory properties
-    wxString        value;
-    wxString        footprint;
-    wxString        model;
     wxString        keywords;
 
 
@@ -361,6 +424,7 @@ public:
      */
     void Parse( SWEET_PARSER* aParser, LIB_TABLE* aLibTable ) throw( IO_ERROR, PARSE_ERROR );
 
+/*
     void SetValue( const wxString& aValue )
     {
         value = aValue;
@@ -387,6 +451,7 @@ public:
     {
         return model;
     }
+*/
 
 /*
     void SetBody( const STR_UTF& aSExpression )
