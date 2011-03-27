@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-26 10:35+0100\n"
-"PO-Revision-Date: 2011-03-26 10:44+0100\n"
+"POT-Creation-Date: 2011-03-27 11:41+0100\n"
+"PO-Revision-Date: 2011-03-27 11:51+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team\n"
 "MIME-Version: 1.0\n"
@@ -1322,10 +1322,10 @@ msgstr "Długość"
 msgid "Orientation"
 msgstr "Orientacja"
 
-#: eeschema/lib_pin.cpp:1887
-#: eeschema/find.cpp:237
-msgid "Pin "
-msgstr "Pin "
+#: eeschema/lib_pin.cpp:1888
+#, c-format
+msgid "Pin %s, %s, %s"
+msgstr "Pin %s, %s, %s"
 
 #: eeschema/lib_export.cpp:43
 msgid "Import Component"
@@ -1759,6 +1759,10 @@ msgstr "Znaleziono znacznik DRC na arkuszu %s na poz. %0.3f%s, %0.3f%s"
 #: eeschema/find.cpp:82
 msgid "No more markers were found."
 msgstr "Nie znaleziono więcej znaczników."
+
+#: eeschema/find.cpp:237
+msgid "Pin "
+msgstr "Pin "
 
 #: eeschema/find.cpp:241
 msgid "Ref "
@@ -2424,25 +2428,38 @@ msgstr "Alias "
 msgid "Library"
 msgstr "Biblioteka"
 
-#: eeschema/sch_component.cpp:1636
-msgid "Component "
-msgstr "Element "
+#: eeschema/sch_component.cpp:1637
+#, c-format
+msgid "Component %s, %s"
+msgstr "Element %s, %s"
 
-#: eeschema/sch_line.cpp:427
-msgid "Graphic Line "
-msgstr "Linia graficzna"
+#: eeschema/sch_line.cpp:424
+msgid "Vert."
+msgstr "Pionowo"
+
+#: eeschema/sch_line.cpp:426
+msgid "Horiz."
+msgstr "Poziomo"
 
 #: eeschema/sch_line.cpp:431
-msgid "Wire "
-msgstr "Połączenie"
+#, c-format
+msgid "%s Graphic Line from (%s,%s) to (%s,%s) "
+msgstr "Linia (grafika) %s z (%s,%s) do (%s,%s) "
 
 #: eeschema/sch_line.cpp:435
-msgid "Bus "
-msgstr "Magistrala"
+#, c-format
+msgid "%s Wire from (%s,%s) to (%s,%s)"
+msgstr "Połączenie %s z (%s,%s) do (%s,%s)"
 
 #: eeschema/sch_line.cpp:439
-msgid "Line on Unkown Layer "
-msgstr "Linia na nieznanej wastwie"
+#, c-format
+msgid "%s Bus from (%s,%s) to (%s,%s)"
+msgstr "Magistrala %s z (%s,%s) do (%s,%s)"
+
+#: eeschema/sch_line.cpp:443
+#, c-format
+msgid "%s Line on Unkown Layer from (%s,%s) to (%s,%s)"
+msgstr "Linia %s na nieznaej warstwie z (%s,%s) do (%s,%s)"
 
 #: eeschema/netlist.cpp:96
 msgid "Building net list:"
@@ -2501,6 +2518,11 @@ msgstr "Niezgodność etykiet hierarchicznych z arkuszem pinów"
 #: eeschema/class_drc_erc_item.cpp:53
 msgid "A no connect symbol is connected to more than 1 pin"
 msgstr "Symbol \"Niepołączone\" jest połączony do więcej niż jednego pinu"
+
+#: eeschema/sch_field.cpp:453
+#, c-format
+msgid "Field %s"
+msgstr "Pole %s"
 
 #: eeschema/tool_sch.cpp:35
 msgid "Open schematic project"
@@ -2751,25 +2773,24 @@ msgid "Electronics rule check error"
 msgstr "Błąd ERC"
 
 #: eeschema/sch_polyline.cpp:215
-msgid "Graphic Polyline "
-msgstr "Linia łamana (grafika)"
+#, c-format
+msgid "Graphic Polyline with %d Points"
+msgstr "Linia łamana (grafika) o szerokości %d punktów"
 
 #: eeschema/sch_polyline.cpp:219
-msgid "Polyline Wire "
-msgstr "Połączenie łamane"
+#, c-format
+msgid "Polyline Wire with %d Points"
+msgstr "Połączenie łamane o szerokości %d punktów"
 
 #: eeschema/sch_polyline.cpp:223
-msgid "Polyline Bus "
-msgstr "Magistrala łamana"
+#, c-format
+msgid "Polyline Bus with %d Points"
+msgstr "Magistrala o szerokości %d punktów"
 
 #: eeschema/sch_polyline.cpp:227
-msgid "Polyline on Unkown Layer "
-msgstr "Linia łamana na nieznanej warstwie"
-
-#: eeschema/sch_polyline.cpp:230
 #, c-format
-msgid "with %d Points"
-msgstr "szerokość %d punktów"
+msgid "Polyline on Unkown Layer with %d Points"
+msgstr "Linia łamana o szerokości %d punktów na nieznanej warstwie"
 
 #: eeschema/sch_sheet.cpp:781
 msgid "Sheet name"
@@ -2783,29 +2804,34 @@ msgstr "Nazwa pliku"
 msgid "Time Stamp"
 msgstr "Znacznik czasowy"
 
-#: eeschema/sch_sheet.cpp:986
+#: eeschema/sch_sheet.cpp:987
 msgid "Hierarchical Sheet "
 msgstr "Arkusz hierarchiczny"
 
-#: eeschema/sch_sheet_pin.cpp:464
-msgid "Hierarchical Sheet Label "
-msgstr "Etykieta hierarchiczna"
+#: eeschema/sch_sheet_pin.cpp:465
+#, c-format
+msgid "Hierarchical Sheet Label %s"
+msgstr "Etykieta Hierarchicznego Arkusza %s"
 
-#: eeschema/sch_text.cpp:631
-msgid "Graphic Text "
-msgstr "Tekst (grafika)"
+#: eeschema/sch_text.cpp:632
+#, c-format
+msgid "Graphic Text %s"
+msgstr "Tekst (grafika) %s"
 
-#: eeschema/sch_text.cpp:862
-msgid "Label "
-msgstr "Etykieta"
+#: eeschema/sch_text.cpp:865
+#, c-format
+msgid "Label %s"
+msgstr "Etykieta %s"
 
-#: eeschema/sch_text.cpp:1293
-msgid "Global Label "
-msgstr "Etykieta globalna"
+#: eeschema/sch_text.cpp:1298
+#, c-format
+msgid "Global Label %s"
+msgstr "Etykieta Globalna %s"
 
-#: eeschema/sch_text.cpp:1648
-msgid "Hierarchical Label "
-msgstr "Etykieta hierarchiczna"
+#: eeschema/sch_text.cpp:1655
+#, c-format
+msgid "Hierarchical Label %s"
+msgstr "Etykieta Hierarchiczna %s"
 
 #: eeschema/schedit.cpp:241
 msgid "There are no undefined labels in this sheet to clean up."
@@ -6430,6 +6456,10 @@ msgid ""
 msgstr ""
 "Moduł istnieje\n"
 " Linia:"
+
+#: pcbnew/librairi.cpp:706
+msgid "Component "
+msgstr "Element "
 
 #: pcbnew/librairi.cpp:707
 msgid " added in "
@@ -13751,6 +13781,18 @@ msgstr "Edytor skrótów klawiszowych"
 #: bitmap2component/bitmap2cmp_gui_base.h:77
 msgid "Bitmap to Component Converter"
 msgstr "Konwerter obrazów"
+
+#~ msgid "Graphic Line "
+#~ msgstr "Linia graficzna"
+
+#~ msgid "Wire "
+#~ msgstr "Połączenie"
+
+#~ msgid "Bus "
+#~ msgstr "Magistrala"
+
+#~ msgid "Polyline Bus "
+#~ msgstr "Magistrala łamana"
 
 #~ msgid "No Field To Edit"
 #~ msgstr "Brak pola do edycji"
