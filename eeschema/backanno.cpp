@@ -17,78 +17,14 @@
 #include "sch_component.h"
 
 
-/**
- * Function FillFootprintFieldForAllInstancesofComponent
- * Search for component "aReference", and place a Footprint in Footprint field
- * @param aReference = reference of the component to initialize
- * @param aFootPrint = new value for the filed Footprint component
- * @param aSetVisible = true to have the field visible, false to set the
- * invisible flag
- * @return true if the given component is found
- * Note:
- * the component is searched in the whole schematic, and because some
- * components
- * have more than one instance (multiple parts per package components)
- * the search is not stopped when a reference is found (all instances must be
- * found).
- */
-bool SCH_EDIT_FRAME::FillFootprintFieldForAllInstancesofComponent( const wxString& aReference,
-                                                                   const wxString& aFootPrint,
-                                                                   bool            aSetVisible )
-{
-    SCH_SHEET_PATH* sheet;
-    SCH_ITEM*       DrawList = NULL;
-    SCH_SHEET_LIST  SheetList;
-    SCH_COMPONENT*  Cmp;
-    bool            found = false;
-
-    for( sheet = SheetList.GetFirst();
-        sheet != NULL;
-        sheet = SheetList.GetNext() )
-    {
-        DrawList = (SCH_ITEM*) sheet->LastDrawList();
-        for( ; (DrawList != NULL); DrawList = DrawList->Next() )
-        {
-            if( DrawList->Type() != SCH_COMPONENT_T )
-                continue;
-
-            Cmp = (SCH_COMPONENT*) DrawList;
-            if( aReference.CmpNoCase( Cmp->GetRef( sheet ) ) == 0 )
-            {
-                // Found: Init Footprint Field
-
-                /* Give a reasonable value to the field position and
-                 * orientation, if the text is empty at position 0, because
-                 * it is probably not yet initialized
-                 */
-                if( Cmp->GetField( FOOTPRINT )->m_Text.IsEmpty()
-                   && ( Cmp->GetField( FOOTPRINT )->m_Pos == wxPoint( 0, 0 ) ) )
-                {
-                    Cmp->GetField( FOOTPRINT )->m_Orient = Cmp->GetField(
-                        VALUE )->m_Orient;
-                    Cmp->GetField( FOOTPRINT )->m_Pos    = Cmp->GetField(
-                        VALUE )->m_Pos;
-                    Cmp->GetField( FOOTPRINT )->m_Pos.y -= 100;
-                }
-                Cmp->GetField( FOOTPRINT )->m_Text = aFootPrint;
-                if( aSetVisible )
-                    Cmp->GetField( FOOTPRINT )->m_Attributs &=
-                        ~TEXT_NO_VISIBLE;
-                else
-                    Cmp->GetField( FOOTPRINT )->m_Attributs |= TEXT_NO_VISIBLE;
-                found = true;
-            }
-        }
-    }
-
-    return found;
-}
+const wxString BackAnnotateFileWildcard( wxT( "EESchema Back Annotation File (*.stf)|*.stf" ) );
 
 
 bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFilename, bool aSetFieldAttributeToVisible  )
 {
     int   LineNum = 0;
     char* cp, Ref[256], FootPrint[256], Line[1024];
+    SCH_SHEET_LIST SheetList;
 
     while( GetLine( aFilename, Line, &LineNum, sizeof(Line) ) )
     {
@@ -104,9 +40,7 @@ bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFilename, bool aSetFieldAttributeT
 
             wxString reference = FROM_UTF8( Ref );
             wxString Footprint = FROM_UTF8( FootPrint );
-            FillFootprintFieldForAllInstancesofComponent( reference,
-                                                          Footprint,
-                                                          aSetFieldAttributeToVisible );
+            SheetList.SetComponentFootprint( reference, Footprint, aSetFieldAttributeToVisible );
         }
     }
 
@@ -114,56 +48,44 @@ bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFilename, bool aSetFieldAttributeT
 }
 
 
-/* Backann footprint info to schematic.
- */
 bool SCH_EDIT_FRAME::ReadInputStuffFile()
 {
-    wxString Line, filename;
-    FILE*    StuffFile;
+    wxString title, filename;
+    FILE*    file;
     wxString msg;
-    bool     SetFieldToVisible = true;
+    bool     visible = false;
 
-    filename = EDA_FileSelector( _( "Load Stuff File" ),
-                                 wxEmptyString,
-                                 wxEmptyString,
-                                 wxT( ".stf" ),
-                                 wxT( "*.stf" ),
-                                 this,
-                                 wxFD_OPEN,
-                                 FALSE
-                                 );
+    wxFileDialog dlg( this, _( "Load Back Annotate File" ), wxEmptyString, wxEmptyString,
+                      BackAnnotateFileWildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
-    if( filename.IsEmpty() )
-        return FALSE;
-
-    Line  = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
-    Line += wxT( " " ) + filename;
-    SetTitle( Line );
-
-    if( filename.IsEmpty() )
-        return FALSE;
-
-    int diag = wxMessageBox(
-        _( "Set the foot print field to visible?" ),
-        _( "Field Display Option" ),
-        wxYES_NO | wxICON_QUESTION | wxCANCEL, this );
-
-    if( diag == wxCANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL )
         return false;
-    if( diag == wxYES )
-        SetFieldToVisible = true;
-    else
-        SetFieldToVisible = false;
 
-    StuffFile = wxFopen( filename, wxT( "rt" ) );
-    if( StuffFile == NULL )
+    filename = dlg.GetPath();
+    title  = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+    title += wxT( " " ) + filename;
+    SetTitle( title );
+
+    int response = wxMessageBox( _( "Do you want to make all the foot print fields visible?" ),
+                                 _( "Field Display Option" ),
+                                 wxYES_NO | wxICON_QUESTION | wxCANCEL, this );
+
+    if( response == wxCANCEL )
+        return false;
+
+    if( response == wxYES )
+        visible = true;
+
+    file = wxFopen( filename, wxT( "rt" ) );
+
+    if( file == NULL )
     {
-        msg.Printf( _( "Failed to open stuff file <%s>" ), filename.GetData() );
-        DisplayError( this, msg, 20 );
-        return FALSE;
+        msg.Printf( _( "Failed to open back annotate file <%s>" ), filename.GetData() );
+        DisplayError( this, msg );
+        return false;
     }
 
-    ProcessStuffFile( StuffFile, SetFieldToVisible );
+    ProcessStuffFile( file, visible );
 
-    return TRUE;
+    return true;
 }

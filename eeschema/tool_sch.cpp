@@ -100,19 +100,19 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, wxBitmap( netlist_xpm ),
-                         _( "Netlist generation" ) );
+                         _( "Generate netlist" ) );
 
     m_HToolBar->AddTool( ID_GET_ANNOTATE, wxEmptyString, wxBitmap( annotate_xpm ),
                          _( "Annotate schematic" ) );
 
     m_HToolBar->AddTool( ID_GET_ERC, wxEmptyString, wxBitmap( erc_xpm ),
-                         _( "Schematic Electric Rules Check" ) );
+                         _( "Perform electric rules check" ) );
 
     m_HToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, wxBitmap( tools_xpm ),
-                         _( "Bill of material and/or Cross references" ) );
+                         _( "Generate bill of materials and/or cross references" ) );
 
     m_HToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString, wxBitmap( backanno_xpm ),
-                         _( "Backannotate footprint" ) );
+                         _( "Back bnnotate component foot prints" ) );
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
     m_HToolBar->Realize();
@@ -254,7 +254,7 @@ void SCH_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, wxT( "OnSelectOptionToolbar() error" ) );
+        wxFAIL_MSG( wxT( "Unexpected select option tool bar ID." ) );
         break;
     }
 }

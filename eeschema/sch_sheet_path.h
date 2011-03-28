@@ -100,27 +100,27 @@ public:
      * @param aSheetPathToTest = sheet path to compare
      * @return -1 if different, 0 if same
      */
-    int              Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const;
+    int Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const;
 
     /**
      * Function Last
      * returns a pointer to the last sheet of the list
      * One can see the others sheet as the "path" to reach this last sheet
      */
-    SCH_SHEET*      Last();
+    SCH_SHEET* Last();
 
     /**
      * Function LastScreen
      * @return the SCH_SCREEN relative to the last sheet in list
      */
-    SCH_SCREEN*      LastScreen();
+    SCH_SCREEN* LastScreen();
 
     /**
      * Function LastScreen
      * @return a pointer to the first schematic item handled by the
      * SCH_SCREEN relative to the last sheet in list
      */
-    SCH_ITEM*        LastDrawList();
+    SCH_ITEM* LastDrawList();
 
     /**
      * Get the last schematic item relative to the first sheet in the list.
@@ -128,7 +128,7 @@ public:
      * @return Last schematic item relative to the first sheet in the list if list
      *         is not empty.  Otherwise NULL.
      */
-    SCH_ITEM*        FirstDrawList();
+    SCH_ITEM* FirstDrawList();
 
     /**
      * Function Push
@@ -137,7 +137,7 @@ public:
      * Push is used when entered a sheet to select or analyze it
      * This is like cd &ltdirectory&gt in directories navigation
      */
-    void             Push( SCH_SHEET* aSheet );
+    void Push( SCH_SHEET* aSheet );
 
     /**
      * Function Pop
@@ -146,7 +146,7 @@ public:
      * Pop is used when leaving a sheet after a selection or analyze
      * This is like cd .. in directories navigation
      */
-    SCH_SHEET*      Pop();
+    SCH_SHEET* Pop();
 
     /**
      * Function Path
@@ -154,7 +154,7 @@ public:
      * sheet parameters
      * a path is something like / (root) or /34005677 or /34005677/00AE4523
      */
-    wxString         Path();
+    wxString Path();
 
     /**
      * Function PathHumanReadable
@@ -163,7 +163,7 @@ public:
      * stamps in the path.  (Time stamps do not change even when editing
      * sheet parameters).
      */
-    wxString         PathHumanReadable()  const;
+    wxString PathHumanReadable() const;
 
     /**
      * Function BuildSheetPathInfoFromSheetPathValue
@@ -172,8 +172,7 @@ public:
      * @param aFound - Please document me.
      * @return true if success else false
      */
-    bool BuildSheetPathInfoFromSheetPathValue( const wxString& aPath,
-                                               bool            aFound = false );
+    bool BuildSheetPathInfoFromSheetPathValue( const wxString& aPath, bool aFound = false );
 
     /**
      * Function UpdateAllScreenReferences
@@ -184,7 +183,7 @@ public:
      * but with different references and part selections according to the
      * displayed sheet
      */
-    void             UpdateAllScreenReferences();
+    void UpdateAllScreenReferences();
 
     /**
      * Function AnnotatePowerSymbols
@@ -202,8 +201,20 @@ public:
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
-    void GetComponents( SCH_REFERENCE_LIST& aReferences,
-                        bool                aIncludePowerSymbols = true  );
+    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true  );
+
+    /**
+     * Function SetFootprintField
+     * searches last sheet in the path for a component with \a aReference and set the footprint
+     * field to \a aFootPrint if found.
+     *
+     * @param aReference The reference designator of the component.
+     * @param aFootPrint The value to set the footprint fiield.
+     * @param aSetVisible The value to set the field visibility flag.
+     * @retrun True if \a aReference was found otherwise false.
+     */
+    bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
+                                bool aSetVisible );
 
     /**
      * Find the next schematic item in this sheet ojbect.
@@ -404,6 +415,19 @@ public:
                              SCH_SHEET_PATH**   aSheetFound,
                              SCH_ITEM*          aLastItem,
                              wxPoint * aFindLocation );
+
+    /**
+     * Function SetFootprintField
+     * searches all the sheets for a component with \a aReference and set the footprint
+     * field to \a aFootPrint if found.
+     *
+     * @param aReference The reference designator of the component.
+     * @param aFootPrint The value to set the footprint fiield.
+     * @param aSetVisible The value to set the field visibility flag.
+     * @retrun True if \a aReference was found otherwise false.
+     */
+    bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
+                                bool aSetVisible );
 
 private:
 

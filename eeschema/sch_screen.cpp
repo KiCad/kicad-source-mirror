@@ -992,6 +992,50 @@ SCH_TEXT* SCH_SCREEN::GetLabel( const wxPoint& aPosition, int aAccuracy )
 }
 
 
+bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxString& aReference,
+                                        const wxString& aFootPrint, bool aSetVisible )
+{
+    SCH_COMPONENT* component;
+    bool           found = false;
+
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() != SCH_COMPONENT_T )
+            continue;
+
+        component = (SCH_COMPONENT*) item;
+
+        if( aReference.CmpNoCase( component->GetRef( aSheetPath ) ) == 0 )
+        {
+            // Found: Init Footprint Field
+
+            /* Give a reasonable value to the field position and
+             * orientation, if the text is empty at position 0, because
+             * it is probably not yet initialized
+             */
+            if( component->GetField( FOOTPRINT )->m_Text.IsEmpty()
+                && ( component->GetField( FOOTPRINT )->m_Pos == wxPoint( 0, 0 ) ) )
+            {
+                component->GetField( FOOTPRINT )->m_Orient = component->GetField( VALUE )->m_Orient;
+                component->GetField( FOOTPRINT )->m_Pos    = component->GetField( VALUE )->m_Pos;
+                component->GetField( FOOTPRINT )->m_Pos.y -= 100;
+            }
+
+            component->GetField( FOOTPRINT )->m_Text = aFootPrint;
+
+            if( aSetVisible )
+                component->GetField( FOOTPRINT )->m_Attributs &= ~TEXT_NO_VISIBLE;
+            else
+                component->GetField( FOOTPRINT )->m_Attributs |= TEXT_NO_VISIBLE;
+
+            found = true;
+        }
+    }
+
+    return found;
+}
+
+
 /******************************************************************/
 /* Class SCH_SCREENS to handle the list of screens in a hierarchy */
 /******************************************************************/

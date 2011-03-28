@@ -448,6 +448,18 @@ SCH_ITEM* SCH_SHEET_PATH::MatchNextItem( wxFindReplaceData& aSearchData,
 }
 
 
+bool SCH_SHEET_PATH::SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
+                                            bool aSetVisible )
+{
+    SCH_SCREEN* screen = LastScreen();
+
+    if( screen == NULL )
+        return false;
+
+    return screen->SetComponentFootprint( this, aReference, aFootPrint, aSetVisible );
+}
+
+
 SCH_SHEET_PATH& SCH_SHEET_PATH::operator=( const SCH_SHEET_PATH& d1 )
 {
     if( this == &d1 )     // Self assignment is bad!
@@ -785,4 +797,16 @@ SCH_ITEM* SCH_SHEET_LIST::MatchNextItem( wxFindReplaceData& aSearchData,
     }
 
     return NULL;
+}
+
+
+bool SCH_SHEET_LIST::SetComponentFootprint( const wxString& aReference,
+                                            const wxString& aFootPrint, bool aSetVisible )
+{
+    bool found = false;
+
+    for( SCH_SHEET_PATH* path = GetFirst();  path != NULL;  path = GetNext() )
+        found = path->SetComponentFootprint( aReference, aFootPrint, aSetVisible );
+
+    return found;
 }
