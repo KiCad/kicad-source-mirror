@@ -17,7 +17,6 @@
 class LIB_EDIT_FRAME;
 class LIB_VIEW_FRAME;
 class DRAWSEGMENT;
-class DrawPickedStruct;
 class SCH_ITEM;
 class SCH_NO_CONNECT;
 class CMP_LIBRARY;
@@ -742,6 +741,17 @@ public:
      */
     void     LoadLibraries( void );
 
+
+    /** Virtual function PrintPage
+     * Previously used to print a page,
+     * but now only used to plot/print the current sheet to the clipboard
+     * @param aDC = wxDC given by the calling print function
+     * @param aPrintMask = not used here
+     * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
+     * @param aData = a pointer on an auxiliary data (not always used, NULL if not used)
+     */
+    virtual void PrintPage( wxDC* aDC, int aPrintMask,
+                            bool aPrintMirrorMode, void* aData = NULL );
 
     DECLARE_EVENT_TABLE()
 };

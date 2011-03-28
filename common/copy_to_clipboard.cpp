@@ -15,7 +15,7 @@
 #include "confirm.h"
 #include "wxstruct.h"
 
-static bool DrawPage( EDA_DRAW_FRAME* aFrame );
+static bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame );
 
 
 /* calls the function to copy the current page or the current bock to
@@ -23,7 +23,7 @@ static bool DrawPage( EDA_DRAW_FRAME* aFrame );
  */
 void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
 {
-    DrawPage( this );
+    DrawPageOnClipboard( this );
 
     if( event.GetId() == ID_GEN_COPY_BLOCK_TO_CLIPBOARD )
     {
@@ -39,7 +39,7 @@ void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
  * to export drawings to other applications (word processing ...)
  * This is not suitable for copy command within eeschema or pcbnew
  */
-bool DrawPage( EDA_DRAW_FRAME* aFrame )
+bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
 {
     bool    success = TRUE;
 
@@ -49,7 +49,7 @@ bool DrawPage( EDA_DRAW_FRAME* aFrame )
     wxPoint old_org;
     wxPoint DrawOffset;
     int     ClipboardSizeX, ClipboardSizeY;
-    bool    DrawBlock = FALSE;
+    bool    DrawBlock = false;
     wxRect  DrawArea;
     BASE_SCREEN* screen = aFrame->DrawPanel->GetScreen();
 
@@ -78,7 +78,7 @@ bool DrawPage( EDA_DRAW_FRAME* aFrame )
 
     EDA_Rect tmp = aFrame->DrawPanel->m_ClipBox;
     GRResetPenAndBrush( &dc );
-    const bool plotBlackAndWhite = FALSE;
+    const bool plotBlackAndWhite = false;
     GRForceBlackPen( plotBlackAndWhite );
     screen->m_IsPrinting = true;
     dc.SetUserScale( scale, scale );
@@ -107,7 +107,7 @@ bool DrawPage( EDA_DRAW_FRAME* aFrame )
     }
 
 
-    GRForceBlackPen( FALSE );
+    GRForceBlackPen( false );
 
     screen->m_StartVisu = tmp_startvisu;
     screen->m_DrawOrg   = old_org;

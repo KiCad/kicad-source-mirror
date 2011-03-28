@@ -343,7 +343,6 @@ protected:
 
     /** Virtual function PrintPage
      * used to print a page
-     * Print the page pointed by ActiveScreen, set by the calling print function
      * @param aDC = wxDC given by the calling print function
      * @param aPrintMask = not used here
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)

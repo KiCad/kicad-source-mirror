@@ -9,6 +9,7 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "common.h"
+#include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "gestfich.h"
 #include "bitmaps.h"
@@ -62,7 +63,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_GEN_PLOT_SVG, SCH_EDIT_FRAME::SVG_Print )
     EVT_MENU( ID_GEN_PLOT_DXF, SCH_EDIT_FRAME::ToPlot_DXF )
     EVT_MENU( ID_GEN_COPY_SHEET_TO_CLIPBOARD, EDA_DRAW_FRAME::CopyToClipboard )
-    EVT_MENU( ID_GEN_COPY_BLOCK_TO_CLIPBOARD, EDA_DRAW_FRAME::CopyToClipboard )
     EVT_MENU( wxID_EXIT, SCH_EDIT_FRAME::OnExit )
 
     EVT_MENU( ID_POPUP_SCH_COPY_ITEM, SCH_EDIT_FRAME::OnCopySchematicItemRequest )
@@ -717,6 +717,21 @@ void SCH_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
     frame.ShowModal();
 }
 
+/*
+ * Function PrintPage (virtual)
+ * Previously used to print a page,
+ * but now only used to plot/print the current sheet to the clipboard
+ * @param aDC = wxDC given by the calling print function
+ * @param aPrintMask = not used here
+ * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
+ * @param aData = a pointer on an auxiliary data (not used here)
+ */
+void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask,
+                                bool aPrintMirrorMode, void* aData)
+{
+    GetScreen()->Draw( DrawPanel, aDC, GR_DEFAULT_DRAWMODE );
+    TraceWorkSheet( aDC, GetScreen(), g_DrawDefaultLineThickness );
+}
 
 void SCH_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
 {

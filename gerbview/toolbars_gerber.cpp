@@ -34,7 +34,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, wxBitmap( gerbview_clear_layers_xpm ),
+    m_HToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString, wxBitmap( gerbview_clear_layers_xpm ),
                          _( "Erase all layers" ) );
 
     m_HToolBar->AddTool( wxID_FILE, wxEmptyString, wxBitmap( gerber_file_xpm ),
