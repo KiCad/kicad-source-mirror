@@ -34,7 +34,6 @@ using namespace PR;
 
 
 #define MAX_INHERITANCE_NESTING     6       ///< max depth of inheritance, no problem going larger
-#define INTERNAL_PER_LOGICAL        10000   ///< no. internal units per logical unit
 
 
 /**
@@ -148,7 +147,7 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
     // Caller may not have read the first two tokens out of the
     // stream: T_LEFT and T_part, so ignore them if seen here.
     // The 1st two tokens T_LEFT and T_part are then optional in the grammar.
-    if( (tok = NextTok() ) == T_LEFT )
+    if( ( tok = NextTok() ) == T_LEFT )
     {
         if( ( tok = NextTok() ) != T_part )
             Expecting( T_part );
@@ -174,242 +173,270 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
 
     for(  ; tok!=T_RIGHT;  tok = NextTok() )
     {
-        if( tok==T_EOF )
-            Unexpected( T_EOF );
-
         if( tok == T_LEFT )
-            tok = NextTok();
-
-        // because exceptions are thrown, any 'new' allocation has to be stored
-        // somewhere other than on the stack, ASAP.
-
-        switch( tok )
         {
-        default:
-            // describe what we expect at this level
-            Expecting(
-                "anchor|value|footprint|model|keywords|alternates\n"
-                "|property\n"
-                "  |property_del\n"
-                "|pin\n"
-                "  |pin_merge|pin_swap|pin_renum|pin_rename|route_pin_swap\n"
-                "|polyline|line|rectangle|circle|arc|bezier|text"
-             );
-            break;
-
-        case T_anchor:
-            if( contains & PB(ANCHOR) )
-                Duplicate( tok );
-            NeedNUMBER( "anchor x" );
-            me->anchor.x = internal( CurText() );
-            NeedNUMBER( "anchor y" );
-            me->anchor.y = internal( CurText() );
-            contains |= PB(ANCHOR);
-            break;
-
-        case T_line:
-        case T_polyline:
-            POLY_LINE*  pl;
-            pl = new POLY_LINE( me );
-            me->graphics.push_back( pl );
-            parsePolyLine( pl );
-            break;
-
-        case T_rectangle:
-            RECTANGLE* rect;
-            rect = new RECTANGLE( me );
-            me->graphics.push_back( rect );
-            parseRectangle( rect );
-            break;
-
-        case T_circle:
-            CIRCLE* circ;
-            circ = new CIRCLE( me );
-            me->graphics.push_back( circ );
-            parseCircle( circ );
-            break;
-
-        case T_arc:
-            ARC* arc;
-            arc = new ARC( me );
-            me->graphics.push_back( arc );
-            parseArc( arc );
-            break;
-
-        case T_bezier:
-            BEZIER* bezier;
-            bezier = new BEZIER( me );
-            me->graphics.push_back( bezier );
-            parseBezier( bezier );
-            break;
-
-        case T_text:
-            GR_TEXT* text;
-            text = new GR_TEXT( me );
-            me->graphics.push_back( text );
-            parseText( text );
-            break;
-
-        // reference in a PART is incomplete, it is just the prefix of an
-        // unannotated reference. Only components have full reference designators.
-        case T_reference:
-            if( contains & PB(REFERENCE) )
-                Duplicate( tok );
-            contains |= PB(REFERENCE);
-            NeedSYMBOLorNUMBER();
-            me->reference.text = FromUTF8();
             tok = NextTok();
-            if( tok == T_LEFT )
+
+            // because exceptions are thrown, any 'new' allocation has to be stored
+            // somewhere other than on the stack, ASAP.
+
+            switch( tok )
             {
-                tok = NextTok();
-                if( tok != T_effects )
-                    Expecting( T_effects );
-                parseTextEffects( &me->reference.effects );
-                NeedRIGHT();
-            }
-            else if( tok != T_RIGHT )
-                Expecting( ") | effects" );
-            break;
+            default:
+                // describe what we expect at this level
+                Expecting(
+                    "anchor|value|footprint|model|keywords|alternates\n"
+                    "|property\n"
+                    "  |property_del\n"
+                    "|pin\n"
+                    "  |pin_merge|pin_swap|pin_renum|pin_rename|route_pin_swap\n"
+                    "|polyline|line|rectangle|circle|arc|bezier|text"
+                 );
+                break;
 
-        case T_value:
-            if( contains & PB(VALUE) )
-                Duplicate( tok );
-            contains |= PB(VALUE);
-            NeedSYMBOLorNUMBER();
-            me->value.text = FromUTF8();
-            tok = NextTok();
-            if( tok == T_LEFT )
+            case T_anchor:
+                if( contains & PB(ANCHOR) )
+                    Duplicate( tok );
+                NeedNUMBER( "anchor x" );
+                me->anchor.x = internal( CurText() );
+                NeedNUMBER( "anchor y" );
+                me->anchor.y = internal( CurText() );
+                contains |= PB(ANCHOR);
+                break;
+
+            case T_line:
+            case T_polyline:
+                POLY_LINE*  pl;
+                pl = new POLY_LINE( me );
+                me->graphics.push_back( pl );
+                parsePolyLine( pl );
+                break;
+
+            case T_rectangle:
+                RECTANGLE* rect;
+                rect = new RECTANGLE( me );
+                me->graphics.push_back( rect );
+                parseRectangle( rect );
+                break;
+
+            case T_circle:
+                CIRCLE* circ;
+                circ = new CIRCLE( me );
+                me->graphics.push_back( circ );
+                parseCircle( circ );
+                break;
+
+            case T_arc:
+                ARC* arc;
+                arc = new ARC( me );
+                me->graphics.push_back( arc );
+                parseArc( arc );
+                break;
+
+            case T_bezier:
+                BEZIER* bezier;
+                bezier = new BEZIER( me );
+                me->graphics.push_back( bezier );
+                parseBezier( bezier );
+                break;
+
+            case T_text:
+                GR_TEXT* text;
+                text = new GR_TEXT( me );
+                me->graphics.push_back( text );
+                parseText( text );
+                break;
+
+            // reference in a PART is incomplete, it is just the prefix of an
+            // unannotated reference. Only components have full reference designators.
+            case T_reference:
+                if( contains & PB(REFERENCE) )
+                    Duplicate( tok );
+                contains |= PB(REFERENCE);
+                NeedSYMBOLorNUMBER();
+                me->reference.text = FromUTF8();
+                tok = NextTok();
+                if( tok == T_LEFT )
+                {
+                    tok = NextTok();
+                    if( tok != T_effects )
+                        Expecting( T_effects );
+                    parseTextEffects( &me->reference.effects );
+                    NeedRIGHT();
+                }
+                else if( tok != T_RIGHT )
+                    Expecting( ") | effects" );
+                break;
+
+            case T_value:
+                if( contains & PB(VALUE) )
+                    Duplicate( tok );
+                contains |= PB(VALUE);
+                NeedSYMBOLorNUMBER();
+                me->value.text = FromUTF8();
+                tok = NextTok();
+                if( tok == T_LEFT )
+                {
+                    tok = NextTok();
+                    if( tok != T_effects )
+                        Expecting( T_effects );
+                    parseTextEffects( &me->value.effects );
+                    NeedRIGHT();
+                }
+                else if( tok != T_RIGHT )
+                    Expecting( ") | effects" );
+                break;
+
+            case T_footprint:
+                if( contains & PB(FOOTPRINT) )
+                    Duplicate( tok );
+                contains |= PB(FOOTPRINT);
+                NeedSYMBOLorNUMBER();
+                me->footprint.text = FromUTF8();
+                tok = NextTok();
+                if( tok == T_LEFT )
+                {
+                    tok = NextTok();
+                    if( tok != T_effects )
+                        Expecting( T_effects );
+                    parseTextEffects( &me->footprint.effects );
+                    NeedRIGHT();
+                }
+                else if( tok != T_RIGHT )
+                    Expecting( ") | effects" );
+                break;
+
+            case T_datasheet:
+                if( contains & PB(MODEL) )
+                    Duplicate( tok );
+                contains |= PB(MODEL);
+                NeedSYMBOLorNUMBER();
+                me->datasheet.text = FromUTF8();
+                tok = NextTok();
+                if( tok == T_LEFT )
+                {
+                    tok = NextTok();
+                    if( tok != T_effects )
+                        Expecting( T_effects );
+                    parseTextEffects( &me->datasheet.effects );
+                    NeedRIGHT();
+                }
+                else if( tok != T_RIGHT )
+                    Expecting( ") | effects" );
+                break;
+
+            case T_model:
+                if( contains & PB(MODEL) )
+                    Duplicate( tok );
+                contains |= PB(MODEL);
+                NeedSYMBOLorNUMBER();
+                me->model.text = FromUTF8();
+                tok = NextTok();
+                if( tok == T_LEFT )
+                {
+                    tok = NextTok();
+                    if( tok != T_effects )
+                        Expecting( T_effects );
+                    parseTextEffects( &me->model.effects );
+                    NeedRIGHT();
+                }
+                else if( tok != T_RIGHT )
+                    Expecting( ") | effects" );
+                break;
+
+            case T_property:
+                PROPERTY* property;
+                property = new PROPERTY( me );
+                // @todo check for uniqueness
+                me->properties.push_back( property );
+                NeedSYMBOLorNUMBER();
+                property->name = FromUTF8();
+                NeedSYMBOLorNUMBER();
+                property->text = FromUTF8();
+                tok = NextTok();
+                if( tok == T_LEFT )
+                {
+                    tok = NextTok();
+                    if( tok != T_effects )
+                        Expecting( T_effects );
+                    parseTextEffects( &property->effects );
+                    NeedRIGHT();
+                }
+                else if( tok != T_RIGHT )
+                    Expecting( ") | effects" );
+                break;
+
+            case T_property_del:
+                NeedSYMBOLorNUMBER();
+                me->PropertyDelete( FromUTF8() );
+                NeedRIGHT();
+                break;
+
+            case T_pin:
+                PIN* pin;
+                pin = new PIN( me );
+                me->pins.push_back( pin );
+                parsePin( pin );
+                break;
+
+            case T_keywords:
+                parseKeywords( me );
+                break;
+
+            /*
+            @todo
+
+            // do we want to inherit alternates?
+            case T_alternates:
+                break;
+
+            case T_pin_merge:
+                break;
+
+            case T_pin_swap:
+                break;
+
+            case T_pin_renum:
+                break;
+
+            case T_pin_rename:
+                break;
+
+            case T_route_pin_swap:
+                break;
+
+            */
+            }
+        }
+
+        else
+        {
+            switch( tok )
             {
-                tok = NextTok();
-                if( tok != T_effects )
-                    Expecting( T_effects );
-                parseTextEffects( &me->value.effects );
-                NeedRIGHT();
+            default:
+                Unexpected( tok );
             }
-            else if( tok != T_RIGHT )
-                Expecting( ") | effects" );
-            break;
-
-        case T_footprint:
-            if( contains & PB(FOOTPRINT) )
-                Duplicate( tok );
-            contains |= PB(FOOTPRINT);
-            NeedSYMBOLorNUMBER();
-            me->footprint.text = FromUTF8();
-            tok = NextTok();
-            if( tok == T_LEFT )
-            {
-                tok = NextTok();
-                if( tok != T_effects )
-                    Expecting( T_effects );
-                parseTextEffects( &me->footprint.effects );
-                NeedRIGHT();
-            }
-            else if( tok != T_RIGHT )
-                Expecting( ") | effects" );
-            break;
-
-        case T_datasheet:
-            if( contains & PB(MODEL) )
-                Duplicate( tok );
-            contains |= PB(MODEL);
-            NeedSYMBOLorNUMBER();
-            me->datasheet.text = FromUTF8();
-            tok = NextTok();
-            if( tok == T_LEFT )
-            {
-                tok = NextTok();
-                if( tok != T_effects )
-                    Expecting( T_effects );
-                parseTextEffects( &me->datasheet.effects );
-                NeedRIGHT();
-            }
-            else if( tok != T_RIGHT )
-                Expecting( ") | effects" );
-            break;
-
-        case T_model:
-            if( contains & PB(MODEL) )
-                Duplicate( tok );
-            contains |= PB(MODEL);
-            NeedSYMBOLorNUMBER();
-            me->model.text = FromUTF8();
-            tok = NextTok();
-            if( tok == T_LEFT )
-            {
-                tok = NextTok();
-                if( tok != T_effects )
-                    Expecting( T_effects );
-                parseTextEffects( &me->model.effects );
-                NeedRIGHT();
-            }
-            else if( tok != T_RIGHT )
-                Expecting( ") | effects" );
-            break;
-
-        case T_property:
-            PROPERTY* property;
-            property = new PROPERTY( me );
-            // @todo check for uniqueness
-            me->properties.push_back( property );
-            NeedSYMBOLorNUMBER();
-            property->name = FromUTF8();
-            NeedSYMBOLorNUMBER();
-            property->text = FromUTF8();
-            tok = NextTok();
-            if( tok == T_LEFT )
-            {
-                tok = NextTok();
-                if( tok != T_effects )
-                    Expecting( T_effects );
-                parseTextEffects( &property->effects );
-                NeedRIGHT();
-            }
-            else if( tok != T_RIGHT )
-                Expecting( ") | effects" );
-            break;
-
-        case T_pin:
-            PIN* pin;
-            pin = new PIN( me );
-            me->pins.push_back( pin );
-            parsePin( pin );
-            break;
-
-
-/*
-        @todo
-        case T_keywords:
-            break;
-
-        case T_alternates:
-            break;
-
-        case T_property_del:
-            break;
-
-        case T_pin_merge:
-            break;
-
-        case T_pin_swap:
-            break;
-
-        case T_pin_renum:
-            break;
-
-        case T_pin_rename:
-            break;
-
-        case T_route_pin_swap:
-            break;
-
-*/
         }
     }
 
     contains |= PB(PARSED);
 
     me->contains |= contains;
+}
+
+
+void SWEET_PARSER::parseKeywords( PART* me )
+{
+    T   tok;
+
+    while( ( tok = NextTok() ) != T_RIGHT )
+    {
+        if( !IsSymbol( tok ) && tok!=T_NUMBER )
+            Expecting( "symbol|number" );
+
+        // just insert them, duplicates are silently removed and tossed.
+        me->keywords.insert( FromUTF8() );
+    }
 }
 
 
@@ -436,7 +463,7 @@ void SWEET_PARSER::parseFont( FONT* me )
         tok = NextTok();
     }
 
-    while( tok != T_RIGHT )
+    for( ; tok != T_RIGHT; tok = NextTok() )
     {
         if( tok == T_LEFT )
         {
@@ -483,8 +510,6 @@ void SWEET_PARSER::parseFont( FONT* me )
                 Unexpected( "bold|italic" );
             }
         }
-
-        tok = NextTok();
     }
 }
 
@@ -681,7 +706,7 @@ void SWEET_PARSER::parseTextEffects( TEXT_EFFECTS* me )
     /*
         (effects [PROPERTY]
 
-            # Position requires an X and Y coordinates.  Position coordinates can be
+            # Position requires X and Y coordinates.  Position coordinates can be
             # non-intergr.  Angle is in degrees and defaults to 0 if not defined.
             (at X Y [ANGLE])
 
@@ -709,7 +734,7 @@ void SWEET_PARSER::parseTextEffects( TEXT_EFFECTS* me )
         tok = NextTok();
     }
 
-    while( tok != T_RIGHT )
+    for(  ; tok != T_RIGHT;  tok = NextTok() )
     {
         if( tok != T_LEFT )
             Expecting( T_LEFT );
@@ -743,8 +768,6 @@ void SWEET_PARSER::parseTextEffects( TEXT_EFFECTS* me )
         default:
             Expecting( "at|font|visible" );
         }
-
-        tok = NextTok();
     }
 }
 

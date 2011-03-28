@@ -34,8 +34,10 @@
 #include <wx/gdicmn.h>
 #include <deque>
 #include <vector>
+#include <set>
 #include <sweet_lexer.h>
 
+class OUTPUTFORMATTER;
 
 namespace SCH {
 
@@ -114,6 +116,10 @@ public:
     {}
 
     virtual ~BASE_GRAPHIC() {}
+
+    virtual void Format( OUTPUTFORMATTER* aOutputFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR )
+    {}
 };
 
 typedef std::deque<POINT>  POINTS;
@@ -278,6 +284,11 @@ public:
         isVisible( true )
     {}
 
+/*
+    void Format( OUTPUTFORMATTER* aOutputFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+*/
+
 protected:
     PART*       birthplace;         ///< at which PART in inheritance chain was this PIN added
     POINT       pos;
@@ -309,6 +320,7 @@ namespace SCH {
 typedef std::vector< BASE_GRAPHIC* >    GRAPHICS;
 typedef std::vector< PIN* >             PINS;
 typedef std::vector< PROPERTY* >        PROPERTIES;
+typedef std::set< wxString >            KEYWORDS;
 
 class LPID;
 class SWEET_PARSER;
@@ -346,6 +358,14 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
      * to fulfill the requirements of the Sweet s-expression language.
      */
     void inherit( const PART& aBasePart );
+
+    /**
+     * Function propertyFind
+     * searches for aPropertyName and returns a PROPERTIES::iterator which
+     * is the found item or properties.end() if not found.
+     */
+    PROPERTIES::iterator propertyFind( const wxString& aPropertyName );
+
 
     POINT           anchor;
 
@@ -396,14 +416,14 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
     /// Alternate body forms.
     //ALTERNATES  alternates;
 
-    wxString        keywords;
+    KEYWORDS        keywords;
 
 
 public:
 
     virtual ~PART();
 
-    PART& operator=( const PART& other );
+    PART& operator = ( const PART& other );
 
     /**
      * Function Owner
@@ -423,6 +443,21 @@ public:
      *  and comes from the big containing SCHEMATIC object.
      */
     void Parse( SWEET_PARSER* aParser, LIB_TABLE* aLibTable ) throw( IO_ERROR, PARSE_ERROR );
+
+    /**
+     * Function Format
+     * outputs this PART in UTF8 encoded s-expression format to @a aFormatter.
+     * @param aFormatter is the output sink to write to.
+     * @param aNestLevel is the initial indent level
+     * @param aControlBits are bit flags ORed together which control how the output
+     *  is done.
+     */
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits = 0 ) const
+        throw( IO_ERROR );
+
+    void PropertyDelete( const wxString& aPropertyName ) throw( IO_ERROR );
+
+
 
 /*
     void SetValue( const wxString& aValue )

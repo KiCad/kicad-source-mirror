@@ -28,7 +28,7 @@
 #include <sch_sweet_parser.h>
 #include <sch_lpid.h>
 #include <sch_lib_table.h>
-
+//#include <richio.h>
 
 using namespace SCH;
 
@@ -74,6 +74,11 @@ void PART::clear()
         delete *it;
     properties.clear();
 
+    keywords.clear();
+
+    contains = 0;
+
+    // @todo clear the mandatory fields
 }
 
 
@@ -120,12 +125,68 @@ void PART::Parse( SWEET_PARSER* aParser, LIB_TABLE* aTable ) throw( IO_ERROR, PA
 }
 
 
-#if 0 && defined(DEBUG)
-
-int main( int argc, char** argv )
+void PART::PropertyDelete( const wxString& aPropertyName ) throw( IO_ERROR )
 {
-    return 0;
+    PROPERTIES::iterator it = propertyFind( aPropertyName );
+    if( it == properties.end() )
+    {
+        wxString    msg;
+        msg.Printf( _( "Unable to find property: %s" ), aPropertyName.GetData() );
+        THROW_IO_ERROR( msg );
+    }
+
+    delete *it;
+    properties.erase( it );
+    return;
 }
 
-#endif
+
+PROPERTIES::iterator PART::propertyFind( const wxString& aPropertyName )
+{
+    PROPERTIES::iterator it;
+    for( it = properties.begin();  it!=properties.end();  ++it )
+        if( (*it)->name == aPropertyName )
+            break;
+    return it;
+}
+
+
+void PART::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const throw( IO_ERROR )
+{
+    out->Print( indent, "(part %s", partNameAndRev.c_str() );
+
+    if( extends )
+        out->Print( 0, " inherits %s", extends->Format().c_str() );
+
+    out->Print( 0, "\n" );
+
+/*
+    @todo
+    for( int i=0; i<MANDATORY_FIELDS;  ++i )
+    {
+    }
+*/
+    for( PROPERTIES::const_iterator it = properties.begin();  it != properties.end();  ++it )
+    {
+        (*it)->Format( out, indent+1, ctl );
+    }
+
+    if( anchor.x || anchor.y )
+    {
+        out->Print( indent+1, "(anchor (at %.6g %.6g))\n",
+            InternalToLogical( anchor.x ),
+            InternalToLogical( anchor.y ) );
+    }
+
+    for( GRAPHICS::const_iterator it = graphics.begin();  it != graphics.end();  ++it )
+    {
+        (*it)->Format( out, indent+1, ctl );
+    }
+
+    for( PINS::const_iterator it = pins.begin();  it != pins.end();  ++it )
+    {
+        (*it)->Format( out, indent+1, ctl );
+    }
+}
+
 

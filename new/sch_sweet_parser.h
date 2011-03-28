@@ -28,6 +28,16 @@
 #include <utf8.h>
 #include <sweet_lexer.h>
 
+
+#define INTERNAL_PER_LOGICAL        10000   ///< no. internal units per logical unit
+
+
+static inline double InternalToLogical( int aCoord )
+{
+    return double( aCoord ) / INTERNAL_PER_LOGICAL;
+}
+
+
 class POINT;
 
 namespace SCH {
@@ -80,6 +90,7 @@ class SWEET_PARSER : public SWEET_LEXER
     void parseFont( FONT* me );
     void parsePinText( PINTEXT* me );
     void parseTextEffects( TEXT_EFFECTS* me );
+    void parseKeywords( PART* me );
 
 
 public:

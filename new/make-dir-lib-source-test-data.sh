@@ -61,6 +61,9 @@ PROP1="
         (effects (at 1 34 270)(font (size .5 1) italic bold)(visible no))
     )"
 
+KEYWORDS="
+    (keywords varistor batcave einstein)"
+
 
 for C in ${CATEGORIES}; do
 
@@ -79,6 +82,7 @@ for C in ${CATEGORIES}; do
                 $PIN1
                 $PIN2
                 $PROP1
+                $KEYWORDS
                 )" > $BASEDIR/$C/$P.part.$R
         done
         # also make the part without a rev:
@@ -93,6 +97,7 @@ for C in ${CATEGORIES}; do
             $PIN1
             $PIN2
             $PROP1
+            $KEYWORDS
             )" > $BASEDIR/$C/$P.part
     done
 done
