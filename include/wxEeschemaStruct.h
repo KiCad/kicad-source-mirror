@@ -119,21 +119,21 @@ public:
     /**
      * Function GetDefaultFieldName
      * returns a default symbol field name for field \a aFieldNdx for all components.
-     * These fieldnames are not modifiable, but template fieldnames are.
+     * These field names are not modifiable, but template field names are.
      * @param aFieldNdx The field number index
      */
     static wxString  GetDefaultFieldName( int aFieldNdx );
 
     /**
      * Function AddTemplateFieldName
-     * inserts or appends a wanted symbol field name into the fieldnames
+     * inserts or appends a wanted symbol field name into the field names
      * template.  Should be used for any symbol property editor.  If the name
      * already exists, it overwrites the same name.
      *
      * @param aFieldName is a full description of the wanted field, and it must not match
-     *          any of the default fieldnames.
+     *          any of the default field names.
      * @return int - the index within the config container at which aFieldName was
-     *          added, or -1 if the name is illegal because it matches a default fieldname.
+     *          added, or -1 if the name is illegal because it matches a default field name.
      */
     int AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName )
     {
@@ -143,7 +143,7 @@ public:
 
     /**
      * Function GetTemplateFieldName
-     * returns a template fieldnames list for read only access.
+     * returns a template field names list for read only access.
      */
     const TEMPLATE_FIELDNAMES& GetTemplateFieldNames()
     {
@@ -153,7 +153,7 @@ public:
 
     /**
      * Function DeleteAllTemplateFieldNames
-     * removes all template fieldnames.
+     * removes all template field names.
      */
     void DeleteAllTemplateFieldNames()
     {
@@ -254,26 +254,7 @@ public:
      * @param aDC The device context to update if and item is deleted.
      * @return True if an item was deleted.
      */
-    bool DeleteItemAtCrossHair( wxDC* DC );
-
-    /**
-     * Function FillFootprintFieldForAllInstancesofComponent
-     * searches for component "aReference", and places a Footprint in
-     * Footprint field
-     * @param aReference = reference of the component to initialize
-     * @param aFootPrint = new value for the filed Footprint component
-     * @param aSetVisible = true to have the field visible, false to set the
-     *                      invisible flag
-     * @return true if the given component is found
-     * Note:
-     * the component is searched in the whole schematic, and because some
-     * components have more than one instance (multiple parts per package
-     *  components) the search is not stopped when a reference is found
-     * (all instances must be found).
-     */
-    bool             FillFootprintFieldForAllInstancesofComponent( const wxString& aReference,
-                                                                   const wxString& aFootPrint,
-                                                                   bool            aSetVisible );
+    bool DeleteItemAtCrossHair( wxDC* aDC );
 
     SCH_ITEM*        FindComponentAndItem( const wxString& component_reference,
                                            bool            Find_in_hierarchy,
@@ -583,12 +564,10 @@ private:
     void           OnSelectUnit( wxCommandEvent& aEvent );
     void           ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC );
     void           SetInitCmp( SCH_COMPONENT* DrawComponent, wxDC* DC );
-    void           EditComponentReference( SCH_COMPONENT* DrawLibItem, wxDC* DC );
-    void           EditComponentValue( SCH_COMPONENT* DrawLibItem, wxDC* DC );
-    void           EditComponentFootprint( SCH_COMPONENT* DrawLibItem, wxDC* DC );
-    void           StartMoveCmpField( SCH_FIELD* Field, wxDC* DC );
-    void           EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC );
-    void           RotateCmpField( SCH_FIELD* Field, wxDC* DC );
+
+    void MoveField( SCH_FIELD* aField, wxDC* aDC );
+    void EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC );
+    void RotateField( SCH_FIELD* aField, wxDC* aDC );
 
     void           PasteListOfItems( wxDC* DC );
 
@@ -742,9 +721,9 @@ public:
     void     LoadLibraries( void );
 
 
-    /** Virtual function PrintPage
-     * Previously used to print a page,
-     * but now only used to plot/print the current sheet to the clipboard
+    /**
+     * Function PrintPage
+     * plots or prints the current sheet to the clipboard.
      * @param aDC = wxDC given by the calling print function
      * @param aPrintMask = not used here
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)

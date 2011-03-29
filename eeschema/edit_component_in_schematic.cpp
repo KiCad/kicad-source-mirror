@@ -16,31 +16,75 @@
 #include "sch_component.h"
 
 
-static void AbortMoveCmpField( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void MoveCmpField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                          bool aErase );
-
-
-/******************************************************************************/
-/* Prepare the displacement of the text being edited.
+/*
+ * Move standard text field.  This routine is normally attached to the cursor.
  */
-/******************************************************************************/
-void SCH_EDIT_FRAME::StartMoveCmpField( SCH_FIELD* aField, wxDC* DC )
+static void moveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
-    LIB_COMPONENT* Entry;
+    wxPoint pos;
+    int fieldNdx;
 
-    SetCurrentField( aField );
-    if( aField == NULL )
+    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
+    SCH_FIELD*      currentField = frame->GetCurrentField();
+
+    if( currentField == NULL )
         return;
 
-    if( aField->m_Text == wxEmptyString )
+    SCH_COMPONENT* component = (SCH_COMPONENT*) currentField->GetParent();
+    fieldNdx = currentField->m_FieldId;
+
+    currentField->m_AddExtraText = frame->m_Multiflag;
+
+    if( aErase )
     {
-        DisplayError( this, _( "No Field to move" ), 10 );
-        return;
+        currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
     }
 
+    pos = ( (SCH_COMPONENT*) currentField->GetParent() )->m_Pos;
+
+    // Actual positions are calculated by the rotation/mirror transform
+    // But here we want the relative position of the moved field
+    // and we know the actual position.
+    // So we are using the inverse rotation/mirror transform.
+    wxPoint pt( aPanel->GetScreen()->GetCrossHairPosition() - pos );
+
+    TRANSFORM itrsfm = component->GetTransform().InverseTransform();
+    currentField->m_Pos = pos + itrsfm.TransformCoordinate( pt );
+
+    currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+}
+
+
+static void abortMoveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
+{
+    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
+    SCH_FIELD*      currentField = frame->GetCurrentField();
+
+    if( currentField )
+    {
+        currentField->m_AddExtraText = frame->m_Multiflag;
+        currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+        currentField->ClearFlags( 0 );
+        currentField->m_Pos = frame->m_OldPos;
+        currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    }
+
+    frame->SetCurrentField( NULL );
+
+    SAFE_DELETE( g_ItemToUndoCopy );
+}
+
+
+void SCH_EDIT_FRAME::MoveField( SCH_FIELD* aField, wxDC* aDC )
+{
+    wxCHECK_RET( aField && (aField->Type() == SCH_FIELD_T) && !aField->GetText().IsEmpty(),
+                 wxT( "Cannot move invalid component field." ) );
+
+    LIB_COMPONENT* libEntry;
     wxPoint        pos, newpos;
     SCH_COMPONENT* comp = (SCH_COMPONENT*) aField->GetParent();
+
+    SetCurrentField( aField );
 
     SAFE_DELETE( g_ItemToUndoCopy );
     g_ItemToUndoCopy = new SCH_COMPONENT( *comp );
@@ -52,38 +96,32 @@ void SCH_EDIT_FRAME::StartMoveCmpField( SCH_FIELD* aField, wxDC* DC )
 
     newpos = comp->GetTransform().TransformCoordinate( newpos ) + pos;
 
-    DrawPanel->CrossHairOff( DC );
+    DrawPanel->CrossHairOff( aDC );
     GetScreen()->SetCrossHairPosition( newpos );
     DrawPanel->MoveCursorToCrossHair();
 
     m_OldPos    = aField->m_Pos;
     m_Multiflag = 0;
-    if( aField->m_FieldId == REFERENCE )
-    {
-        Entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
 
-        if( Entry  != NULL )
-        {
-            if( Entry->GetPartCount() > 1 )
-                m_Multiflag = 1;
-        }
+    if( aField->GetId() == REFERENCE )
+    {
+        libEntry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
+
+        if( (libEntry != NULL) && (libEntry->GetPartCount() > 1) )
+            m_Multiflag = 1;
     }
 
-    DrawPanel->m_endMouseCaptureCallback = AbortMoveCmpField;
-    DrawPanel->m_mouseCaptureCallback = MoveCmpField;
-    aField->m_Flags = IS_MOVED;
+    DrawPanel->SetMouseCapture( moveField, abortMoveField );
+    aField->SetFlags( IS_MOVED );
 
-    DrawPanel->CrossHairOn( DC );
+    DrawPanel->CrossHairOn( aDC );
 }
 
 
-/*
- * Edit a field: text and size
-*/
 void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC )
 {
     wxCHECK_RET( aField != NULL && aField->Type() == SCH_FIELD_T,
-                 wxT( "Invalid schemaitic field type. " ) );
+                 wxT( "Cannot edit invalid schematic field." ) );
 
     int            fieldNdx, flag;
     SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
@@ -100,8 +138,10 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC )
 
     if( fieldNdx == VALUE && entry->IsPower() )
     {
-        DisplayInfoMessage( this, _( "The component is a POWER, it's value cannot be \
-modified!\n\nYou must create a new power component with the value."  ) );
+        wxString msg;
+        msg.Printf( _( "%s is a power component and it's value cannot be modified!\n\nYou must \
+create a new power component with the new value." ), GetChars( entry->GetName() ) );
+        DisplayInfoMessage( this, msg );
         return;
     }
 
@@ -110,24 +150,27 @@ modified!\n\nYou must create a new power component with the value."  ) );
     if( fieldNdx == REFERENCE && entry->GetPartCount() > 1 )
         flag = 1;
 
-    /* save old cmp in undo list if not already in edit, or moving ... */
+    // Save old component in undo list if not already in edit, or moving.
     if( aField->GetFlags() == 0 )
         SaveCopyInUndoList( component, UR_CHANGED );
 
     wxString newtext = aField->m_Text;
     DrawPanel->m_IgnoreMouseEvents = true;
 
-    wxString title = _( "Field " ) + aField->m_Name;
+    wxString title;
+    title.Printf( _( "Edit %s Field" ), GetChars( aField->m_Name ) );
+
     wxTextEntryDialog dlg( this, wxEmptyString , title, newtext );
-    int diag = dlg.ShowModal();
+    int response = dlg.ShowModal();
+
     DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = false;
     newtext = dlg.GetValue( );
     newtext.Trim( true );
     newtext.Trim( false );
 
-    if ( diag != wxID_OK || newtext == aField->GetText() )
-        return;  // cancelled by user
+    if ( response != wxID_OK || newtext == aField->GetText() )
+        return;  // canceled by user
 
     aField->m_AddExtraText = flag;
     aField->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
@@ -169,258 +212,36 @@ modified!\n\nYou must create a new power component with the value."  ) );
 }
 
 
-/*
- * Move standard text field.  This routine is normally attached to the cursor.
- */
-static void MoveCmpField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                          bool aErase )
+void SCH_EDIT_FRAME::RotateField( SCH_FIELD* aField, wxDC* aDC )
 {
-    wxPoint pos;
-    int fieldNdx;
+    wxCHECK_RET( aField != NULL && aField->Type() == SCH_FIELD_T && !aField->GetText().IsEmpty(),
+                 wxT( "Cannot rotate invalid schematic field." ) );
 
-    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
-    SCH_FIELD*      currentField = frame->GetCurrentField();
-
-    if( currentField == NULL )
-        return;
-
-    SCH_COMPONENT* component = (SCH_COMPONENT*) currentField->GetParent();
-    fieldNdx = currentField->m_FieldId;
-
-    currentField->m_AddExtraText = frame->m_Multiflag;
-
-    if( aErase )
-    {
-        currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-    }
-
-    pos = ( (SCH_COMPONENT*) currentField->GetParent() )->m_Pos;
-
-    // Actual positions are calculated by the rotation/mirror transform
-    // But here we want the relative position of the moved field
-    // and we know the actual position.
-    // So we are using the inverse rotation/mirror transform.
-    wxPoint pt( aPanel->GetScreen()->GetCrossHairPosition() - pos );
-
-    TRANSFORM itrsfm = component->GetTransform().InverseTransform();
-    currentField->m_Pos = pos + itrsfm.TransformCoordinate( pt );
-
-    currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-}
-
-
-static void AbortMoveCmpField( EDA_DRAW_PANEL* Panel, wxDC* DC )
-{
-    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) Panel->GetParent();
-    SCH_FIELD*      currentField = frame->GetCurrentField();
-
-    if( currentField )
-    {
-        currentField->m_AddExtraText = frame->m_Multiflag;
-        currentField->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
-        currentField->m_Flags = 0;
-        currentField->m_Pos   = frame->m_OldPos;
-        currentField->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
-    }
-
-    frame->SetCurrentField( NULL );
-
-    SAFE_DELETE( g_ItemToUndoCopy );
-}
-
-
-void SCH_EDIT_FRAME::RotateCmpField( SCH_FIELD* Field, wxDC* DC )
-{
-    int            fieldNdx, flag;
-    LIB_COMPONENT* Entry;
-
-    if( Field == NULL )
-        return;
-    if( Field->m_Text == wxEmptyString )
-        return;
-
-    SCH_COMPONENT* Cmp = (SCH_COMPONENT*) Field->GetParent();
-
-    fieldNdx = Field->m_FieldId;
-    flag     = 0;
-    if( fieldNdx == REFERENCE )
-    {
-        Entry = CMP_LIBRARY::FindLibraryComponent(
-            ( (SCH_COMPONENT*) Field->GetParent() )->GetLibName() );
-
-        if( Entry != NULL )
-        {
-            if( Entry->GetPartCount() > 1 )
-                flag = 1;
-        }
-    }
-
-    /* save old cmp in undo list if not already in edit, or moving ... */
-    if( Field->m_Flags == 0 )
-        SaveCopyInUndoList( Cmp, UR_CHANGED );
-
-    Field->m_AddExtraText = flag;
-    Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
-
-    if( Field->m_Orient == TEXT_ORIENT_HORIZ )
-        Field->m_Orient = TEXT_ORIENT_VERT;
-    else
-        Field->m_Orient = TEXT_ORIENT_HORIZ;
-    Field->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
-
-    OnModify();
-}
-
-
-/****************************************************************************/
-/* Edit the component text reference*/
-/****************************************************************************/
-void SCH_EDIT_FRAME::EditComponentReference( SCH_COMPONENT* Cmp, wxDC* DC )
-{
-    wxCHECK_RET( Cmp != NULL && Cmp->Type() == SCH_COMPONENT_T,
-                 wxT( "Invalid schematic component item." ) );
-
-    LIB_COMPONENT* Entry;
     int            flag = 0;
+    LIB_COMPONENT* libEntry;
+    SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
 
-    Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
-
-    if( Entry == NULL )
-        return;
-
-    if( Entry->GetPartCount() > 1 )
-        flag = 1;
-
-    wxString ref = Cmp->GetRef( GetSheet() );
-    wxTextEntryDialog dlg( this, _( "Reference" ), _( "Component reference" ), ref );
-    if( dlg.ShowModal() != wxID_OK )
-        return; // cancelled by user
-
-    ref = dlg.GetValue( );
-    ref.Trim( true );
-    ref.Trim( false );
-
-    if( !ref.IsEmpty() ) // New text entered
+    if( aField->GetId() == REFERENCE )
     {
-        /* save old cmp in undo list if not already in edit, or moving ... */
-        if( Cmp->m_Flags == 0 )
-            SaveCopyInUndoList( Cmp, UR_CHANGED );
-        Cmp->SetRef( GetSheet(), ref );
+        libEntry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
 
-        Cmp->GetField( REFERENCE )->m_AddExtraText = flag;
-        Cmp->GetField( REFERENCE )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
-        Cmp->SetRef( GetSheet(), ref );
-        Cmp->GetField( REFERENCE )->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
-                                          Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
-        OnModify();
+        if( (libEntry != NULL) && (libEntry->GetPartCount() > 1) )
+            flag = 1;
     }
 
-    Cmp->DisplayInfo( this );
-}
+    // Save old component in undo list if not already in edit, or moving.
+    if( aField->GetFlags() == 0 )
+        SaveCopyInUndoList( component, UR_CHANGED );
 
+    aField->m_AddExtraText = flag;
+    aField->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
-/*****************************************************************************/
-/* Routine to change the selected text */
-/*****************************************************************************/
-void SCH_EDIT_FRAME::EditComponentValue( SCH_COMPONENT* Cmp, wxDC* DC )
-{
-    wxCHECK_RET( Cmp != NULL && Cmp->Type() == SCH_COMPONENT_T,
-                 wxT( "Invalid schematic component item." ) );
+    if( aField->m_Orient == TEXT_ORIENT_HORIZ )
+        aField->m_Orient = TEXT_ORIENT_VERT;
+    else
+        aField->m_Orient = TEXT_ORIENT_HORIZ;
 
-    wxString       message;
-    LIB_COMPONENT* Entry;
+    aField->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
-    Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
-
-    if( Entry == NULL )
-        return;
-
-    SCH_FIELD* TextField = Cmp->GetField( VALUE );
-
-    message = TextField->m_Text;
-
-    wxTextEntryDialog dlg( this,  _( "Value" ), _( "Component value" ), message );
-    if( dlg.ShowModal() != wxID_OK )
-        return; // cancelled by user
-
-    message = dlg.GetValue( );
-    message.Trim( true );
-    message.Trim( false );
-
-    if( !message.IsEmpty() )
-    {
-        /* save old cmp in undo list if not already in edit, or moving ... */
-        if( Cmp->m_Flags == 0 )
-            SaveCopyInUndoList( Cmp, UR_CHANGED );
-
-        TextField->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
-        TextField->m_Text = message;
-        TextField->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
-                         Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
-        OnModify();
-    }
-
-    Cmp->DisplayInfo( this );
-}
-
-
-void SCH_EDIT_FRAME::EditComponentFootprint( SCH_COMPONENT* Cmp, wxDC* DC )
-{
-    wxCHECK_RET( Cmp != NULL && Cmp->Type() == SCH_COMPONENT_T,
-                 wxT( "Invalid schematic component item." ) );
-
-    wxString       message;
-    LIB_COMPONENT* Entry;
-
-    Entry = CMP_LIBRARY::FindLibraryComponent( Cmp->GetLibName() );
-
-    if( Entry == NULL )
-        return;
-
-    SCH_FIELD* TextField = Cmp->GetField( FOOTPRINT );
-    message = TextField->m_Text;
-
-    wxTextEntryDialog dlg( this, _( "Footprint" ), _( "Component footprint" ), message );
-    if( dlg.ShowModal() != wxID_OK )
-        return; // cancelled by user
-
-    message = dlg.GetValue( );
-    message.Trim( true );
-    message.Trim( false );
-
-    bool wasEmpty = false;
-    if( TextField->m_Text.IsEmpty() )
-        wasEmpty = true;
-
-    // save old cmp in undo list if not already in edit, or moving ...
-    if( Cmp->m_Flags == 0 )
-        SaveCopyInUndoList( Cmp, UR_CHANGED );
-    Cmp->GetField( FOOTPRINT )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
-
-    // Give a suitable position to the field if it was new,
-    // and therefore has no position already given.
-    if( wasEmpty && !message.IsEmpty() )
-    {
-        Cmp->GetField( FOOTPRINT )->m_Pos = Cmp->GetField( REFERENCE )->m_Pos;
-
-        // add offset here - ? suitable heuristic below?
-        Cmp->GetField( FOOTPRINT )->m_Pos.x +=
-            ( Cmp->GetField( REFERENCE )->m_Pos.x - Cmp->m_Pos.x ) > 0 ?
-            ( Cmp->GetField( REFERENCE )->m_Size.x ) :
-            ( -1 * Cmp->GetField( REFERENCE )->m_Size.x );
-
-        Cmp->GetField( FOOTPRINT )->m_Pos.y +=
-            ( Cmp->GetField( REFERENCE )->m_Pos.y - Cmp->m_Pos.y ) > 0 ?
-            ( Cmp->GetField( REFERENCE )->m_Size.y ) :
-            ( -1 * Cmp->GetField( REFERENCE )->m_Size.y );
-
-        Cmp->GetField( FOOTPRINT )->m_Orient = Cmp->GetField( REFERENCE )->m_Orient;
-    }
-
-    TextField->m_Text = message;
-    Cmp->GetField( FOOTPRINT )->Draw( DrawPanel, DC, wxPoint( 0, 0 ),
-                                      Cmp->m_Flags ? g_XorMode : GR_DEFAULT_DRAWMODE );
     OnModify();
-
-    Cmp->DisplayInfo( this );
 }

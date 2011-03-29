@@ -124,9 +124,11 @@ static Ki_HotkeyInfo HkOrientNormalComponent( wxT( "Orient Normal Component" ),
 static Ki_HotkeyInfo HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R' );
 static Ki_HotkeyInfo HkEdit( wxT( "Edit Schematic Item" ), HK_EDIT, 'E' );
 static Ki_HotkeyInfo HkEditComponentValue( wxT( "Edit Component Value" ),
-                                           HK_EDIT_COMPONENT_VALUE, 'V' );
+                                           HK_EDIT_COMPONENT_VALUE, 'V',
+                                           ID_POPUP_SCH_EDIT_VALUE_CMP );
 static Ki_HotkeyInfo HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
-                                               HK_EDIT_COMPONENT_FOOTPRINT, 'F' );
+                                               HK_EDIT_COMPONENT_FOOTPRINT, 'F',
+                                               ID_POPUP_SCH_EDIT_FOOTPRINT_CMP );
 static Ki_HotkeyInfo HkMove( wxT( "Move Schematic Item" ),
                              HK_MOVE_COMPONENT_OR_ITEM, 'M',
                              ID_POPUP_SCH_MOVE_CMP_REQUEST );
@@ -802,26 +804,8 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             break;
 
         case SCH_FIELD_T:
-            switch( ( (SCH_FIELD*) aItem )->GetId() )
-            {
-            case REFERENCE:
-                EditComponentReference( (SCH_COMPONENT*)aItem->GetParent(), aDC );
-                break;
-            case VALUE:
-                EditComponentValue( (SCH_COMPONENT*) aItem->GetParent(), aDC );
-                break;
-            case FOOTPRINT:
-                EditComponentFootprint( (SCH_COMPONENT*) aItem->GetParent(), aDC );
-                break;
-            default:
-                /**
-                 * @todo Not sure exactly why there are functions specific to the reference,
-                 * value, and footprint fields when the EditComponentFieldText() function
-                 * seems like it was designed to handle any field.  This should probably be
-                 * cleaned up.
-                 */
-                EditComponentFieldText( (SCH_FIELD*) aItem, aDC );
-            }
+            EditComponentFieldText( (SCH_FIELD*) aItem, aDC );
+            break;
 
         default:
             ;
@@ -830,18 +814,8 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_EDIT_COMPONENT_VALUE:
-        if( itemInEdit )
-            break;
-
-        if( aItem == NULL )
-            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
-
-        if( aItem )
-            EditComponentValue( (SCH_COMPONENT*) aItem, aDC );
-
-        break;
-
     case HK_EDIT_COMPONENT_FOOTPRINT:
+
         if( itemInEdit )
             break;
 
@@ -849,7 +823,10 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
 
         if( aItem )
-            EditComponentFootprint( (SCH_COMPONENT*) aItem, aDC );
+        {
+            cmd.SetId( HK_Descr->m_IdMenuEvent );
+            wxPostEvent( this, cmd );
+        }
 
         break;
     }

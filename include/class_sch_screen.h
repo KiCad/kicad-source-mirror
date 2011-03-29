@@ -364,9 +364,9 @@ public:
      *
      * @param aSheetPath The sheet path used to look up the reference designator.
      * @param aReference The reference designator of the component.
-     * @param aFootPrint The value to set the footprint fiield.
+     * @param aFootPrint The value to set the footprint field.
      * @param aSetVisible The value to set the field visibility flag.
-     * @retrun True if \a aReference was found otherwise false.
+     * @return True if \a aReference was found otherwise false.
      */
     bool SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxString& aReference,
                                 const wxString& aFootPrint, bool aSetVisible );

@@ -166,7 +166,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ROTATE_FIELD:
         DrawPanel->MoveCursorToCrossHair();
-        RotateCmpField( (SCH_FIELD*) item, &dc );
+        RotateField( (SCH_FIELD*) item, &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_FIELD:
@@ -304,33 +304,30 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
         if( item != NULL && item->Type() == SCH_COMPONENT_T )
-            EditComponentValue( (SCH_COMPONENT*) item, &dc );
+            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( VALUE ), &dc );
 
         break;
 
     case ID_POPUP_SCH_EDIT_REF_CMP:
 
-        // Ensure the struct is a component (could be a struct of a
-        // component, like Field, text..)
+        // Ensure the struct is a component (could be a struct of a component, like Field, text..)
         if( item != NULL && item->Type() == SCH_COMPONENT_T )
-            EditComponentReference( (SCH_COMPONENT*) item, &dc );
+            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( REFERENCE ), &dc );
 
         break;
 
     case ID_POPUP_SCH_EDIT_FOOTPRINT_CMP:
 
-        // Ensure the struct is a component (could be a struct of a
-        // component, like Field, text..)
+        // Ensure the struct is a component (could be a struct of a component, like Field, text..)
         if( item && item->Type() == SCH_COMPONENT_T )
-            EditComponentFootprint( (SCH_COMPONENT*) item, &dc );
+            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( FOOTPRINT ), &dc );
 
         break;
 
 
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
 
-        // Ensure the struct is a component (could be a struct of a
-        // component, like Field, text..)
+        // Ensure the struct is a component (could be a struct of a component, like Field, text..)
         if( item && item->Type() == SCH_COMPONENT_T )
         {
             DrawPanel->MoveCursorToCrossHair();
@@ -341,8 +338,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
 
-        // Ensure the struct is a component (could be a piece of a
-        // component, like Field, text..)
+        // Ensure the struct is a component (could be a piece of a component, like Field, text..)
         if( item && item->Type() == SCH_COMPONENT_T )
         {
             LIB_ALIAS* LibEntry;
@@ -498,7 +494,7 @@ void SCH_EDIT_FRAME::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC )
         break;
 
     case SCH_FIELD_T:
-        StartMoveCmpField( (SCH_FIELD*) DrawStruct, DC );
+        MoveField( (SCH_FIELD*) DrawStruct, DC );
         break;
 
     case SCH_MARKER_T:

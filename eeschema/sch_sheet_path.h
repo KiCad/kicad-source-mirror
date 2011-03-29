@@ -209,15 +209,15 @@ public:
      * field to \a aFootPrint if found.
      *
      * @param aReference The reference designator of the component.
-     * @param aFootPrint The value to set the footprint fiield.
+     * @param aFootPrint The value to set the footprint field.
      * @param aSetVisible The value to set the field visibility flag.
-     * @retrun True if \a aReference was found otherwise false.
+     * @return True if \a aReference was found otherwise false.
      */
     bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
                                 bool aSetVisible );
 
     /**
-     * Find the next schematic item in this sheet ojbect.
+     * Find the next schematic item in this sheet object.
      *
      * @param aType - The type of schematic item object to search for.
      * @param aLastItem - Start search from aLastItem.  If no aLastItem, search from
@@ -349,7 +349,7 @@ public:
 
     /**
      * Function IsModified
-     * checks the entire hierachy for any modifications.
+     * checks the entire hierarchy for any modifications.
      * @returns True if the hierarchy is modified otherwise false.
      */
     bool IsModified();
@@ -422,9 +422,9 @@ public:
      * field to \a aFootPrint if found.
      *
      * @param aReference The reference designator of the component.
-     * @param aFootPrint The value to set the footprint fiield.
+     * @param aFootPrint The value to set the footprint field.
      * @param aSetVisible The value to set the field visibility flag.
-     * @retrun True if \a aReference was found otherwise false.
+     * @return True if \a aReference was found otherwise false.
      */
     bool SetComponentFootprint( const wxString& aReference, const wxString& aFootPrint,
                                 bool aSetVisible );

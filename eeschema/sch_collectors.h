@@ -131,7 +131,7 @@ public:
      *                    collection.
      * @param aPosition A wxPoint to use in hit-testing.
      */
-    void Collect( SCH_ITEM* aItem, const KICAD_T aScanList[], const wxPoint& aPositiion );
+    void Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPosition );
 
     /**
      * Function IsCorner
