@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-26 11:06+0100\n"
-"PO-Revision-Date: 2011-03-26 11:06+0100\n"
+"POT-Creation-Date: 2011-03-28 21:18+0100\n"
+"PO-Revision-Date: 2011-03-28 21:22+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -7393,22 +7393,22 @@ msgstr "Aide"
 msgid "%d duplicate time stamps were found and replaced."
 msgstr "%d signatures temporelles dupliquées remplacées."
 
-#: eeschema/backanno.cpp:126
-msgid "Load Stuff File"
-msgstr "Charger Fichier d'échange"
+#: eeschema/backanno.cpp:58
+msgid "Load Back Annotate File"
+msgstr "Charger Fichier de Rétro Annotation"
 
-#: eeschema/backanno.cpp:147
-msgid "Set the foot print field to visible?"
-msgstr "Rendre le champ module visible"
+#: eeschema/backanno.cpp:69
+msgid "Do you want to make all the foot print fields visible?"
+msgstr "Voulez vous rendre le champ module visible pour tous les composants?"
 
-#: eeschema/backanno.cpp:148
+#: eeschema/backanno.cpp:70
 msgid "Field Display Option"
 msgstr "Options d'affichage du Champ"
 
-#: eeschema/backanno.cpp:161
+#: eeschema/backanno.cpp:83
 #, c-format
-msgid "Failed to open stuff file <%s>"
-msgstr "Ne peut pas ouvrir fichier d'échange <%s>"
+msgid "Failed to open back annotate file <%s>"
+msgstr "Ne peut pas ouvrir fichier de rétroannotation <%s>"
 
 #: eeschema/build_BOM.cpp:150
 #, c-format
@@ -9421,7 +9421,7 @@ msgid "Run pcbnew"
 msgstr "Appel de Pcbnew"
 
 #: eeschema/tool_sch.cpp:103
-msgid "Netlist generation"
+msgid "Generate netlist"
 msgstr "Génération de la netliste"
 
 #: eeschema/tool_sch.cpp:106
@@ -9429,16 +9429,16 @@ msgid "Annotate schematic"
 msgstr "Annotation de la schématique"
 
 #: eeschema/tool_sch.cpp:109
-msgid "Schematic Electric Rules Check"
-msgstr "Contrôle des règles électriques"
+msgid "Perform electric rules check"
+msgstr "Exécute le contrôle des règles de conception"
 
 #: eeschema/tool_sch.cpp:112
-msgid "Bill of material and/or Cross references"
-msgstr "Liste des composants ou/et références croisées"
+msgid "Generate bill of materials and/or cross references"
+msgstr "Génération de la liste des composants ou/et références croisées"
 
 #: eeschema/tool_sch.cpp:115
-msgid "Backannotate footprint"
-msgstr "Rétroannotation module"
+msgid "Back annotate component foot prints"
+msgstr "Rétroannotation des empreintes des composants"
 
 #: eeschema/tool_sch.cpp:137
 msgid "Ascend or descend hierarchy"
@@ -13672,6 +13672,15 @@ msgstr "Editeur de Hotkeys"
 #: common/dialog_about/dialog_about_base.h:56
 msgid "About..."
 msgstr "Au Sujet de ..."
+
+#~ msgid "Load Stuff File"
+#~ msgstr "Charger Fichier d'échange"
+
+#~ msgid "Netlist generation"
+#~ msgstr "Génération de la netliste"
+
+#~ msgid "Schematic Electric Rules Check"
+#~ msgstr "Contrôle des règles électriques"
 
 #~ msgid "Graphic Line "
 #~ msgstr "Ligne Graphique"
