@@ -111,7 +111,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, wxBitmap( tools_xpm ),
                          _( "Generate bill of materials and/or cross references" ) );
 
-    m_HToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString, wxBitmap( backanno_xpm ),
+    m_HToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString, wxBitmap( import_footprint_names_xpm ),
                          _( "Back annotate component foot prints" ) );
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes

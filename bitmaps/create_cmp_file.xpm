@@ -1,9 +1,5 @@
 /* XPM */
-#ifndef XPMMAIN
-extern const char *save_cmpstuff_xpm[];
-
-#else
-const char * save_cmpstuff_xpm[] = {
+const char * create_cmp_file_xpm[] = {
 "16 16 99 2",
 "  	c None",
 ". 	c #160A00",
@@ -120,4 +116,3 @@ const char * save_cmpstuff_xpm[] = {
 "  @ P Q   @ R v S T U V W V X X ",
 "  @ #     @ R Y Y Z `  . . ...+.",
 "  .       @ R Y @.#.G E $.N r %."};
-#endif

@@ -59,6 +59,7 @@ set(BITMAP_SRCS
     Browse_Files.xpm
     cancel_tool.xpm
     Cancel.xpm
+    create_cmp_file.xpm
     checked_ok.xpm
     component_select_unit.xpm
     component_select_alternate_shape.xpm
@@ -125,6 +126,7 @@ set(BITMAP_SRCS
     ercwarn.xpm
     erc.xpm
     Exit.xpm
+    export_footprint_names.xpm
     Export_Module.xpm
     Export_Options_Pad.xpm
     export.xpm
@@ -171,6 +173,7 @@ set(BITMAP_SRCS
     icon_txt.xpm
     import3d.xpm
     import_cmp_from_lib.xpm
+    import_footprint_names.xpm
     import_hierarchical_label.xpm
     Import_Module.xpm
     import.xpm
@@ -368,7 +371,6 @@ set(BITMAP_SRCS
     rotate-z.xpm
     rotate+z.xpm
     save_as.xpm
-    Save_CmpStuff.xpm
     Save_Library.xpm
     Save_NetList.xpm
     Save_Project.xpm
@@ -381,6 +383,7 @@ set(BITMAP_SRCS
     shape_3d.xpm
     sheetset.xpm
     showdcode.xpm
+    show_footprint.xpm
     showmodedge.xpm
     showtrack.xpm
     Show_Zone.xpm

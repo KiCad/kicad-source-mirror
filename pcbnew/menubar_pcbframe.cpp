@@ -118,7 +118,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     item = new wxMenuItem( fabricationOutputsMenu, ID_PCB_GEN_CMP_FILE,
                            _( "&Component File" ),
                            _( "(Re)create components file (*.cmp) for CvPcb" ) );
-    item->SetBitmap( save_cmpstuff_xpm );
+    item->SetBitmap( create_cmp_file_xpm );
     fabricationOutputsMenu->Append( item );
 
     // BOM File
