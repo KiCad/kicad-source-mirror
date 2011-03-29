@@ -1,5 +1,5 @@
 /* XPM */
-char *show_footprint_xpm[] = {
+const char *show_footprint_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 16 1",
 "* c #4E4F5E",
