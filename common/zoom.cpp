@@ -60,7 +60,7 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
  *  selected area (Rect) in full window screen
  *  @param Rect = selected area to show after zooming
  */
-void EDA_DRAW_FRAME::Window_Zoom( EDA_Rect& Rect )
+void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
 {
     double scalex, bestscale;
     wxSize size;

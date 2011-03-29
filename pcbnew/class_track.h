@@ -96,7 +96,7 @@ public:
         return m_Start;  // it had to be start or end.
     }
 
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /**
      * Function Save
@@ -259,10 +259,10 @@ public:
      * Function HitTest (overlaid)
      * tests if the given wxRect intersect this object.
      * For now, an ending point must be inside this rect.
-     * @param refArea an EDA_Rect to test
+     * @param refArea an EDA_RECT to test
      * @return bool - true if a hit, else false
      */
-    bool            HitTest( EDA_Rect& refArea );
+    bool            HitTest( EDA_RECT& refArea );
 
     /**
      * Function GetClass

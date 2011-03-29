@@ -82,7 +82,7 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
     {
         if( m_FilledPolysList[indexend].end_contour )                                         // end of a filled sub-area found
         {
-            EDA_Rect bbox =
+            EDA_RECT bbox =
                 CalculateSubAreaBoundaryBox( indexstart,
                     indexend );
             for( unsigned ic = 0;
@@ -122,20 +122,20 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
 
 
 /**************************************************************************************/
-EDA_Rect ZONE_CONTAINER::CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd )
+EDA_RECT ZONE_CONTAINER::CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd )
 /**************************************************************************************/
 
 /**
  * Function CalculateSubAreaBoundaryBox
  * Calculates the bounding box of a a filled area ( list of CPolyPt )
  * use m_FilledPolysList as list of CPolyPt (that are the corners of one or more polygons or filled areas )
- * @return an EDA_Rect as bounding box
+ * @return an EDA_RECT as bounding box
  * @param aIndexStart = index of the first corner of a polygon (filled area) in m_FilledPolysList
  * @param aIndexEnd = index of the last corner of a polygon in m_FilledPolysList
  */
 {
     CPolyPt  start_point, end_point;
-    EDA_Rect bbox;
+    EDA_RECT bbox;
 
     start_point = m_FilledPolysList[aIndexStart];
     end_point   = start_point;

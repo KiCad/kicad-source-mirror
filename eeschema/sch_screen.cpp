@@ -802,7 +802,7 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
 int SCH_SCREEN::UpdatePickList()
 {
     ITEM_PICKER picker;
-    EDA_Rect area;
+    EDA_RECT area;
     area.SetOrigin( m_BlockLocate.GetOrigin());
     area.SetSize( m_BlockLocate.GetSize() );
     area.Normalize();

@@ -377,7 +377,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
     /* Enable this to draw the bounding box around the component to validate
      * the bounding box calculations. */
 #if 0
-    EDA_Rect bBox = GetBoundingBox( aMulti, aConvert );
+    EDA_RECT bBox = GetBoundingBox( aMulti, aConvert );
     GRRect( &aPanel->m_ClipBox, aDc, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
@@ -966,9 +966,9 @@ bool LIB_COMPONENT::LoadFootprints( FILE* aFile, char* aLine,
  *  if aConvert == 0 Convert is non used
  *  Invisible fields are not taken in account
  **/
-EDA_Rect LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
+EDA_RECT LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
 {
-    EDA_Rect bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+    EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
     BOOST_FOREACH( const LIB_DRAW_ITEM& item, drawings )
     {
@@ -996,9 +996,9 @@ EDA_Rect LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
  *  if aConvert == 0 Convert is non used
  *  Fields are not take in account
  **/
-EDA_Rect LIB_COMPONENT::GetBodyBoundingBox( int aUnit, int aConvert ) const
+EDA_RECT LIB_COMPONENT::GetBodyBoundingBox( int aUnit, int aConvert ) const
 {
-    EDA_Rect bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+    EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
     BOOST_FOREACH( const LIB_DRAW_ITEM& item, drawings )
     {
@@ -1220,7 +1220,7 @@ void LIB_COMPONENT::ClearStatus()
 }
 
 
-int LIB_COMPONENT::SelectItems( EDA_Rect& aRect, int aUnit, int aConvert, bool aEditPinByPin )
+int LIB_COMPONENT::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool aEditPinByPin )
 {
     int itemCount = 0;
 

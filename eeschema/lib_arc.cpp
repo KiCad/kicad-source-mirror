@@ -261,7 +261,7 @@ void LIB_ARC::DoOffset( const wxPoint& aOffset )
 }
 
 
-bool LIB_ARC::DoTestInside( EDA_Rect& aRect ) const
+bool LIB_ARC::DoTestInside( EDA_RECT& aRect ) const
 {
     return aRect.Contains( m_ArcStart.x, -m_ArcStart.y )
         || aRect.Contains( m_ArcEnd.x, -m_ArcEnd.y );
@@ -325,7 +325,7 @@ int LIB_ARC::GetPenSize()
 }
 
 
-void LIB_ARC::drawEditGraphics( EDA_Rect* aClipBox, wxDC* aDC, int aColor )
+void LIB_ARC::drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, int aColor )
 {
     // The edit indicators only get drawn when a new arc is being drawn.
     if( !IsNew() )
@@ -407,17 +407,17 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
     /* Set to one (1) to draw bounding box around arc to validate bounding box
      * calculation. */
 #if 0
-    EDA_Rect bBox = GetBoundingBox();
+    EDA_RECT bBox = GetBoundingBox();
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }
 
 
-EDA_Rect LIB_ARC::GetBoundingBox() const
+EDA_RECT LIB_ARC::GetBoundingBox() const
 {
     int      minX, minY, maxX, maxY, angleStart, angleEnd;
-    EDA_Rect rect;
+    EDA_RECT rect;
     wxPoint  nullPoint, startPos, endPos, centerPos;
     wxPoint  normStart = m_ArcStart - m_Pos;
     wxPoint  normEnd   = m_ArcEnd - m_Pos;
@@ -477,7 +477,7 @@ start(%d, %d), end(%d, %d), radius %d" ),
 void LIB_ARC::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
-    EDA_Rect bBox = GetBoundingBox();
+    EDA_RECT bBox = GetBoundingBox();
 
     LIB_DRAW_ITEM::DisplayInfo( aFrame );
 

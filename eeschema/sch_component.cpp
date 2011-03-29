@@ -278,7 +278,7 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset
 #if 0
     /* Draw the component boundary box */
     {
-        EDA_Rect BoundaryBox;
+        EDA_RECT BoundaryBox;
         BoundaryBox = GetBoundingBox();
         GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
 #if 1
@@ -1326,10 +1326,10 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-EDA_Rect SCH_COMPONENT::GetBodyBoundingBox() const
+EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
 {
     LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
-    EDA_Rect       bBox;
+    EDA_RECT       bBox;
     int            x0, xm, y0, ym;
 
     if( Entry == NULL )
@@ -1373,7 +1373,7 @@ EDA_Rect SCH_COMPONENT::GetBodyBoundingBox() const
 }
 
 
-EDA_Rect SCH_COMPONENT::GetBoundingBox() const
+EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 {
     return GetBodyBoundingBox();
 }
@@ -1579,7 +1579,7 @@ bool SCH_COMPONENT::IsSelectStateChanged( const wxRect& aRect )
 {
     bool previousState = IsSelected();
 
-    EDA_Rect boundingBox = GetBoundingBox();
+    EDA_RECT boundingBox = GetBoundingBox();
 
     if( aRect.Intersects( boundingBox ) )
         m_Flags |= SELECTED;
@@ -1693,7 +1693,7 @@ bool SCH_COMPONENT::operator <( const SCH_ITEM& aItem ) const
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) &aItem;
 
-    EDA_Rect rect = GetBodyBoundingBox();
+    EDA_RECT rect = GetBodyBoundingBox();
 
     if( rect.GetArea() != component->GetBodyBoundingBox().GetArea() )
         return rect.GetArea() < component->GetBodyBoundingBox().GetArea();
@@ -1710,7 +1710,7 @@ bool SCH_COMPONENT::operator <( const SCH_ITEM& aItem ) const
 
 bool SCH_COMPONENT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    EDA_Rect bBox = GetBodyBoundingBox();
+    EDA_RECT bBox = GetBodyBoundingBox();
     bBox.Inflate( aAccuracy );
 
     if( bBox.Contains( aPoint ) )
@@ -1720,9 +1720,9 @@ bool SCH_COMPONENT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool SCH_COMPONENT::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_COMPONENT::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_Rect rect = aRect;
+    EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
 

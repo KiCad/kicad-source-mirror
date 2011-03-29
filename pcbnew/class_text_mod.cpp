@@ -21,7 +21,7 @@
 /*******************************************************************/
 
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
-    BOARD_ITEM( parent, TYPE_TEXTE_MODULE ), EDA_TextStruct()
+    BOARD_ITEM( parent, TYPE_TEXTE_MODULE ), EDA_TEXT()
 {
     MODULE* Module = (MODULE*) m_Parent;
 
@@ -248,12 +248,12 @@ void TEXTE_MODULE:: SetLocalCoord()
 
 /**
  * Function GetTextRect
- * @return an EDA_Rect which gives the position and size of the text area
+ * @return an EDA_RECT which gives the position and size of the text area
  *         (for the footprint orientation)
  */
-EDA_Rect TEXTE_MODULE::GetTextRect( void ) const
+EDA_RECT TEXTE_MODULE::GetTextRect( void ) const
 {
-    EDA_Rect area;
+    EDA_RECT area;
 
     int      dx, dy;
 
@@ -283,7 +283,7 @@ EDA_Rect TEXTE_MODULE::GetTextRect( void ) const
 bool TEXTE_MODULE::HitTest( const wxPoint& aRefPos )
 {
     wxPoint  rel_pos;
-    EDA_Rect area = GetTextRect();
+    EDA_RECT area = GetTextRect();
 
     /* Rotate refPos to - angle
      * to test if refPos is within area (which is relative to an horizontal
@@ -304,10 +304,10 @@ bool TEXTE_MODULE::HitTest( const wxPoint& aRefPos )
  * returns the bounding box of this Text (according to text and footprint
  * orientation)
  */
-EDA_Rect TEXTE_MODULE::GetBoundingBox() const
+EDA_RECT TEXTE_MODULE::GetBoundingBox() const
 {
     // Calculate area without text fields:
-    EDA_Rect text_area;
+    EDA_RECT text_area;
     int      angle = GetDrawRotation();
     wxPoint  textstart, textend;
 

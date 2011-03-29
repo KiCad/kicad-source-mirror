@@ -469,7 +469,7 @@ wxString SCH_SHEET_PIN::GetSelectMenuText() const
 
 bool SCH_SHEET_PIN::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    EDA_Rect rect = GetBoundingBox();
+    EDA_RECT rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 

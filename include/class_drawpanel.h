@@ -36,7 +36,7 @@ private:
     int m_cursorLevel;            ///< Index for cursor redraw in XOR mode.
 
 public:
-    EDA_Rect m_ClipBox;           // the clipbox used in screen redraw (usually gives the
+    EDA_RECT m_ClipBox;           // the clipbox used in screen redraw (usually gives the
                                   // visible area in internal units)
     wxPoint m_CursorStartPos;     // useful in testing the cursor movement
     int m_scrollIncrementX;       // X axis scroll increment in pixels per unit.
@@ -231,7 +231,7 @@ public:
      * @param aRect The rectangle to repaint.
      * @param aEraseBackground Erases the background if true.
      */
-    void RefreshDrawingRect( const EDA_Rect& aRect, bool aEraseBackground = true );
+    void RefreshDrawingRect( const EDA_RECT& aRect, bool aEraseBackground = true );
 
     /**
      * Function GetScreenCenterLogicalPosition

@@ -1,7 +1,7 @@
 /****************************************/
 /* Basic classes for Kicad:             */
 /*      EDA_ITEM                        */
-/*      EDA_TextStruct                  */
+/*      EDA_TEXT                  */
 /****************************************/
 
 #include "fctsys.h"
@@ -180,9 +180,9 @@ std::ostream& EDA_ITEM::NestedSpace( int nestLevel, std::ostream& os )
 
 
 /**************************************************/
-/* EDA_TextStruct (basic class, not directly used */
+/* EDA_TEXT (basic class, not directly used */
 /**************************************************/
-EDA_TextStruct::EDA_TextStruct( const wxString& text )
+EDA_TEXT::EDA_TEXT( const wxString& text )
 {
     m_Size.x    = m_Size.y = DEFAULT_SIZE_TEXT;  // Width and height of font.
     m_Orient    = 0;                             // Rotation angle in 0.1 degrees.
@@ -198,7 +198,7 @@ EDA_TextStruct::EDA_TextStruct( const wxString& text )
 }
 
 
-EDA_TextStruct::EDA_TextStruct( const EDA_TextStruct& aText )
+EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText )
 {
     m_Pos = aText.m_Pos;
     m_Size = aText.m_Size;
@@ -215,20 +215,20 @@ EDA_TextStruct::EDA_TextStruct( const EDA_TextStruct& aText )
 }
 
 
-EDA_TextStruct::~EDA_TextStruct()
+EDA_TEXT::~EDA_TEXT()
 {
 }
 
 
-int EDA_TextStruct::LenSize( const wxString& aLine ) const
+int EDA_TEXT::LenSize( const wxString& aLine ) const
 {
     return ReturnGraphicTextWidth(aLine, m_Size.x, m_Italic, m_Bold ) + m_Thickness;
 }
 
 
-EDA_Rect EDA_TextStruct::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
+EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
 {
-    EDA_Rect       rect;
+    EDA_RECT       rect;
     wxPoint        pos;
     wxArrayString* list = NULL;
     wxString       text = m_Text;
@@ -322,9 +322,9 @@ EDA_Rect EDA_TextStruct::GetTextBox( int aLine, int aThickness, bool aInvertY ) 
 }
 
 
-bool EDA_TextStruct::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
+bool EDA_TEXT::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    EDA_Rect rect = GetTextBox( -1 );   // Get the full text area.
+    EDA_RECT rect = GetTextBox( -1 );   // Get the full text area.
     wxPoint location = aPoint;
 
     rect.Inflate( aAccuracy );
@@ -334,9 +334,9 @@ bool EDA_TextStruct::TextHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool EDA_TextStruct::TextHitTest( const EDA_Rect& aRect, bool aContains, int aAccuracy ) const
+bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy ) const
 {
-    EDA_Rect rect = aRect;
+    EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
 
@@ -347,7 +347,7 @@ bool EDA_TextStruct::TextHitTest( const EDA_Rect& aRect, bool aContains, int aAc
 }
 
 
-void EDA_TextStruct::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+void EDA_TEXT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                            EDA_Colors aColor, int aDrawMode,
                            GRTraceMode aFillMode, EDA_Colors aAnchor_color )
 {
@@ -391,7 +391,7 @@ void EDA_TextStruct::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 }
 
 
-void EDA_TextStruct::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+void EDA_TEXT::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                         const wxPoint& aOffset, EDA_Colors aColor,
                                         int aDrawMode, GRTraceMode aFillMode,
                                         EDA_Colors aAnchor_color,
@@ -435,7 +435,7 @@ void EDA_TextStruct::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                      m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
-wxString EDA_TextStruct::GetTextStyleName()
+wxString EDA_TEXT::GetTextStyleName()
 {
     int style = 0;
 
@@ -457,10 +457,10 @@ wxString EDA_TextStruct::GetTextStyleName()
 
 
 /******************/
-/* Class EDA_Rect */
+/* Class EDA_RECT */
 /******************/
 
-void EDA_Rect::Normalize()
+void EDA_RECT::Normalize()
 {
     if( m_Size.y < 0 )
     {
@@ -476,13 +476,13 @@ void EDA_Rect::Normalize()
 }
 
 
-void EDA_Rect::Move( const wxPoint& aMoveVector )
+void EDA_RECT::Move( const wxPoint& aMoveVector )
 {
     m_Pos += aMoveVector;
 }
 
 
-bool EDA_Rect::Contains( const wxPoint& aPoint ) const
+bool EDA_RECT::Contains( const wxPoint& aPoint ) const
 {
     wxPoint rel_pos = aPoint - m_Pos;
     wxSize size     = m_Size;
@@ -505,7 +505,7 @@ bool EDA_Rect::Contains( const wxPoint& aPoint ) const
 /*
  * return true if aRect is inside me (or on boundaries)
  */
-bool EDA_Rect::Contains( const EDA_Rect& aRect ) const
+bool EDA_RECT::Contains( const EDA_RECT& aRect ) const
 {
     return Contains( aRect.GetOrigin() ) && Contains( aRect.GetEnd() );
 }
@@ -515,12 +515,12 @@ bool EDA_Rect::Contains( const EDA_Rect& aRect ) const
  * test for a common area between 2 rect.
  * return true if at least a common point is found
  */
-bool EDA_Rect::Intersects( const EDA_Rect& aRect ) const
+bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
 {
     // this logic taken from wxWidgets' geometry.cpp file:
     bool rc;
-    EDA_Rect me(*this);
-    EDA_Rect rect(aRect);
+    EDA_RECT me(*this);
+    EDA_RECT rect(aRect);
     me.Normalize();         // ensure size is >= 0
     rect.Normalize();       // ensure size is >= 0
 
@@ -543,14 +543,14 @@ bool EDA_Rect::Intersects( const EDA_Rect& aRect ) const
 }
 
 
-EDA_Rect& EDA_Rect::Inflate( int aDelta )
+EDA_RECT& EDA_RECT::Inflate( int aDelta )
 {
     Inflate( aDelta, aDelta );
     return *this;
 }
 
 
-EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
+EDA_RECT& EDA_RECT::Inflate( wxCoord dx, wxCoord dy )
 {
     if( m_Size.x >= 0 )
     {
@@ -618,10 +618,10 @@ EDA_Rect& EDA_Rect::Inflate( wxCoord dx, wxCoord dy )
 }
 
 
-void EDA_Rect::Merge( const EDA_Rect& aRect )
+void EDA_RECT::Merge( const EDA_RECT& aRect )
 {
     Normalize();        // ensure width and height >= 0
-    EDA_Rect rect = aRect;
+    EDA_RECT rect = aRect;
     rect.Normalize();   // ensure width and height >= 0
     wxPoint  end = GetEnd();
     wxPoint  rect_end = rect.GetEnd();
@@ -635,7 +635,7 @@ void EDA_Rect::Merge( const EDA_Rect& aRect )
 }
 
 
-void EDA_Rect::Merge( const wxPoint& aPoint )
+void EDA_RECT::Merge( const wxPoint& aPoint )
 {
     Normalize();        // ensure width and height >= 0
 
@@ -649,7 +649,7 @@ void EDA_Rect::Merge( const wxPoint& aPoint )
 }
 
 
-double EDA_Rect::GetArea() const
+double EDA_RECT::GetArea() const
 {
     return (double) GetWidth() * (double) GetHeight();
 }

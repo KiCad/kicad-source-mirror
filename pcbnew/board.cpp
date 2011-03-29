@@ -243,7 +243,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
             if( PtText->GetLength() == 0 )
                 break;
 
-            EDA_Rect textbox = PtText->GetTextBox( -1 );
+            EDA_RECT textbox = PtText->GetTextBox( -1 );
             ux0 = textbox.GetX(); uy0 = textbox.GetY();
             dx  = textbox.GetWidth();
             dy  = textbox.GetHeight();

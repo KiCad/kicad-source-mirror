@@ -328,7 +328,7 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 #if 0
     wxString tmp = m_Text;
     m_Text = *text;
-    EDA_Rect bBox = GetBoundingBox();
+    EDA_RECT bBox = GetBoundingBox();
     m_Text = tmp;
     bBox.Inflate( 1, 1 );
     GRRect( &aPanel->m_ClipBox, aDC, bBox, 0, LIGHTMAGENTA );
@@ -453,7 +453,7 @@ void LIB_FIELD::DoOffset( const wxPoint& offset )
 }
 
 
-bool LIB_FIELD::DoTestInside( EDA_Rect& rect ) const
+bool LIB_FIELD::DoTestInside( EDA_RECT& rect ) const
 {
     /*
      * FIXME: This fails to take into acount the size and/or orientation of
@@ -504,9 +504,9 @@ wxString LIB_FIELD::GetFullText( int unit )
 }
 
 
-EDA_Rect LIB_FIELD::GetBoundingBox() const
+EDA_RECT LIB_FIELD::GetBoundingBox() const
 {
-    EDA_Rect rect = GetTextBox();
+    EDA_RECT rect = GetTextBox();
     rect.m_Pos.y *= -1;
     rect.m_Pos.y -= rect.GetHeight();
 

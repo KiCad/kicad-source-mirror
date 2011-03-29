@@ -74,7 +74,7 @@ public:
      */
     virtual int GetPenSize( );
 
-    virtual EDA_Rect GetBoundingBox() const;
+    virtual EDA_RECT GetBoundingBox() const;
 
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
@@ -108,7 +108,7 @@ protected:
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_Rect& aRect ) const;
+    virtual bool DoTestInside( EDA_RECT& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );
     virtual wxPoint DoGetPosition() const { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );

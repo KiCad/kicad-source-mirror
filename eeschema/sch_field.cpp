@@ -31,7 +31,7 @@
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent, wxString aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),
-    EDA_TextStruct()
+    EDA_TEXT()
 {
     m_Pos     = aPos;
     m_FieldId = aFieldId;
@@ -45,7 +45,7 @@ SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent,
 
 SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
     SCH_ITEM( aField ),
-    EDA_TextStruct( aField )
+    EDA_TEXT( aField )
 {
     m_FieldId = aField.m_FieldId;
     m_Name = aField.m_Name;
@@ -131,7 +131,7 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
      * so the more easily way is to use no justifications ( Centered text )
      * and use GetBoundaryBox to know the text coordinate considered as centered
      */
-    EDA_Rect BoundaryBox = GetBoundingBox();
+    EDA_RECT BoundaryBox = GetBoundingBox();
     GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
     GRTextVertJustifyType  vjustify = GR_TEXT_VJUSTIFY_CENTER;
     textpos = BoundaryBox.Centre();
@@ -218,9 +218,9 @@ void SCH_FIELD::SwapData( SCH_FIELD* aField )
 }
 
 
-EDA_Rect SCH_FIELD::GetBoundingBox() const
+EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
-    EDA_Rect       BoundaryBox;
+    EDA_RECT       BoundaryBox;
     int            hjustify, vjustify;
     int            orient;
     wxSize         size;
@@ -429,7 +429,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
 
     if( match )
     {
-        EDA_Rect BoundaryBox = GetBoundingBox();
+        EDA_RECT BoundaryBox = GetBoundingBox();
 
         if( aFindLocation )
             *aFindLocation = GetBoundingBox().Centre();
@@ -486,7 +486,7 @@ bool SCH_FIELD::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
     if( !IsVisible() || IsVoid() )
         return false;
 
-    EDA_Rect rect = GetBoundingBox();
+    EDA_RECT rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 
@@ -494,13 +494,13 @@ bool SCH_FIELD::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool SCH_FIELD::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_FIELD::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     // Do not hit test hidden fields.
     if( !IsVisible() || IsVoid() )
         return false;
 
-    EDA_Rect rect = aRect;
+    EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
 

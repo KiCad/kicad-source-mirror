@@ -332,7 +332,7 @@ void GERBVIEW_FRAME::CopyDCodesSizeToItems()
  * When an item is flashed, the DCode shape is the shape of the item
  */
 void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
-                                EDA_Rect* aClipBox, wxDC* aDC, int aColor, int aAltColor,
+                                EDA_RECT* aClipBox, wxDC* aDC, int aColor, int aAltColor,
                                 wxPoint aShapePos, bool aFilledShape )
 {
     int radius;
@@ -450,7 +450,7 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
  * polygons (shapes with holes)
  */
 void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
-                                 EDA_Rect* aClipBox, wxDC* aDC,
+                                 EDA_RECT* aClipBox, wxDC* aDC,
                                  int aColor, bool aFilled,
                                  const wxPoint& aPosition )
 {

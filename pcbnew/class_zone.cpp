@@ -686,7 +686,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 }
 
 
-EDA_Rect ZONE_CONTAINER::GetBoundingBox() const
+EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
 {
     const int PRELOAD = 0x7FFFFFFF;     // Biggest integer (32 bits)
 
@@ -707,7 +707,7 @@ EDA_Rect ZONE_CONTAINER::GetBoundingBox() const
         xmin = MIN( xmin, corner.x );
     }
 
-    EDA_Rect ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+    EDA_RECT ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
 
     return ret;
 }
@@ -905,11 +905,11 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 
 /**
  * Function HitTest (overlayed)
- * tests if the given EDA_Rect contains the bounds of this object.
- * @param refArea : the given EDA_Rect
+ * tests if the given EDA_RECT contains the bounds of this object.
+ * @param refArea : the given EDA_RECT
  * @return bool - true if a hit, else false
  */
-bool ZONE_CONTAINER::HitTest( EDA_Rect& refArea )
+bool ZONE_CONTAINER::HitTest( EDA_RECT& refArea )
 {
     bool  is_out_of_box = false;
 

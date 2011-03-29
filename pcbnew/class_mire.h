@@ -80,14 +80,14 @@ public:
 
     /**
      * Function HitTest (overlaid)
-     * tests if the given EDA_Rect intersect this object.
+     * tests if the given EDA_RECT intersect this object.
      * For now, the anchor must be inside this rect.
-     * @param refArea : the given EDA_Rect
+     * @param refArea : the given EDA_RECT
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( EDA_Rect& refArea );
+    bool    HitTest( EDA_RECT& refArea );
 
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 };
 
 

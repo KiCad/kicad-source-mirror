@@ -56,7 +56,7 @@ private:
 
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
 
-    EDA_Rect GetBodyBoundingBox() const;
+    EDA_RECT GetBodyBoundingBox() const;
 
 public:
     SCH_COMPONENT( const wxPoint& pos = wxPoint( 0, 0 ), SCH_ITEM* aParent = NULL );
@@ -189,7 +189,7 @@ public:
      * few counts.
      * @return The bounding rectangle of the component.
      */
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     //-----<Fields>-----------------------------------------------------------
 
@@ -380,7 +380,7 @@ public:
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
 };

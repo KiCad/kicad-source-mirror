@@ -36,7 +36,7 @@ public:
      * schematic coordinate system.  It is OK to overestimate the size
      * by a few counts.
      */
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     SCH_JUNCTION* GenCopy();
 
@@ -101,7 +101,7 @@ public:
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
 };

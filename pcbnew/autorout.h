@@ -65,7 +65,7 @@ public:
     bool       m_InitBoardDone;
     int        m_Layers;
     int        m_GridRouting;                   // Size of grid for autoplace/autoroute
-    EDA_Rect   m_BrdBox;                        // Actual board bouding box
+    EDA_RECT   m_BrdBox;                        // Actual board bouding box
     int        m_Nrows, m_Ncols;
     int        m_MemSize;
 

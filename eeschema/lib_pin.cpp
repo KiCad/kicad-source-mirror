@@ -831,7 +831,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
     /* Set to one (1) to draw bounding box around pin to validate bounding
      * box calculation. */
 #if 0
-    EDA_Rect bBox = GetBoundingBox();
+    EDA_RECT bBox = GetBoundingBox();
     bBox.Inflate( 5, 5 );
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
@@ -1652,7 +1652,7 @@ void LIB_PIN::DoOffset( const wxPoint& offset )
 }
 
 
-bool LIB_PIN::DoTestInside( EDA_Rect& rect ) const
+bool LIB_PIN::DoTestInside( EDA_RECT& rect ) const
 {
     wxPoint end = ReturnPinEndPoint();
 
@@ -1755,13 +1755,13 @@ void LIB_PIN::DisplayInfo( EDA_DRAW_FRAME* frame )
  * Function GetBoundingBox
  * @return the boundary box for this, in schematic coordinates
  */
-EDA_Rect LIB_PIN::GetBoundingBox() const
+EDA_RECT LIB_PIN::GetBoundingBox() const
 {
     wxPoint pt = m_position;
 
     pt.y *= -1;     // Reverse the Y axis, according to the schematic orientation
 
-    return EDA_Rect( pt, wxSize( 1, 1 ) );
+    return EDA_RECT( pt, wxSize( 1, 1 ) );
 }
 
 

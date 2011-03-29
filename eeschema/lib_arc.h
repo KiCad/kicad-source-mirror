@@ -43,7 +43,7 @@ class LIB_ARC : public LIB_DRAW_ITEM
     /**
      * Draw the graphics when the arc is being edited.
      */
-    void drawEditGraphics( EDA_Rect* aClipBox, wxDC* aDC, int aColor );
+    void drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, int aColor );
 
     /**
      * Calculates the center, radius, and angles at \a aPosition when the arc is being edited.
@@ -96,7 +96,7 @@ public:
      */
     virtual bool HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform );
 
-    virtual EDA_Rect GetBoundingBox() const;
+    virtual EDA_RECT GetBoundingBox() const;
     virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
@@ -133,7 +133,7 @@ protected:
      */
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
     virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_Rect& aRect ) const;
+    virtual bool DoTestInside( EDA_RECT& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );
     virtual wxPoint DoGetPosition() const { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );

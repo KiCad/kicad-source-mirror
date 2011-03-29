@@ -12,7 +12,7 @@
 /* Fields like Ref , value... are not Text,  */
 /* they are a separate class                 */
 /*********************************************/
-class LIB_TEXT : public LIB_DRAW_ITEM, public EDA_TextStruct
+class LIB_TEXT : public LIB_DRAW_ITEM, public EDA_TEXT
 {
     wxString m_savedText;         ///< Temporary storage for the string when edition.
     bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
@@ -83,10 +83,10 @@ public:
      *
      * For now, an ending point must be inside this rect.
      *
-     * @param aRect - the given EDA_Rect
+     * @param aRect - the given EDA_RECT
      * @return - true if a hit, else false
      */
-    virtual bool HitTest( EDA_Rect& aRect )
+    virtual bool HitTest( EDA_RECT& aRect )
     {
         return TextHitTest( aRect );
     }
@@ -98,7 +98,7 @@ public:
 
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
-    virtual EDA_Rect GetBoundingBox() const;
+    virtual EDA_RECT GetBoundingBox() const;
 
     void Rotate();
 
@@ -133,7 +133,7 @@ protected:
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_Rect& aRect ) const;
+    virtual bool DoTestInside( EDA_RECT& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );
     virtual wxPoint DoGetPosition() const { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );

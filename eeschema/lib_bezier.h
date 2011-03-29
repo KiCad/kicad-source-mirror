@@ -67,7 +67,7 @@ public:
     /**
      * @return the boundary box for this, in library coordinates
      */
-    virtual EDA_Rect GetBoundingBox() const;
+    virtual EDA_RECT GetBoundingBox() const;
 
     /**
      * @return the size of the "pen" that be used to draw or plot this item
@@ -89,7 +89,7 @@ protected:
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_Rect& aRect ) const;
+    virtual bool DoTestInside( EDA_RECT& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );
     virtual wxPoint DoGetPosition() const { return m_PolyPoints[0]; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );

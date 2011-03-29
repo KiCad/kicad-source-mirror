@@ -256,9 +256,9 @@ bool SCH_POLYLINE::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool SCH_POLYLINE::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_POLYLINE::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_Rect rect = aRect;
+    EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
 

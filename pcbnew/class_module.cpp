@@ -710,9 +710,9 @@ void MODULE::Set_Rectangle_Encadrement()
 }
 
 
-EDA_Rect MODULE::GetFootPrintRect() const
+EDA_RECT MODULE::GetFootPrintRect() const
 {
-    EDA_Rect area;
+    EDA_RECT area;
 
     area.m_Pos = m_Pos;
     area.SetEnd( m_Pos );
@@ -753,12 +753,12 @@ void MODULE::SetRectangleExinscrit()
  * returns the full bounding box of this Footprint, including fields
  * Mainly used to redraw the screen area occupied by the footprint
  */
-EDA_Rect MODULE::GetBoundingBox() const
+EDA_RECT MODULE::GetBoundingBox() const
 {
-    EDA_Rect area = GetFootPrintRect();
+    EDA_RECT area = GetFootPrintRect();
 
     // Calculate extended area including text field:
-    EDA_Rect text_area;
+    EDA_RECT text_area;
     text_area = m_Reference->GetBoundingBox();
     area.Merge( text_area );
 
@@ -885,11 +885,11 @@ bool MODULE::HitTest( const wxPoint& refPos )
 
 /**
  * Function HitTest (overlaid)
- * tests if the given EDA_Rect intersect the bounds of this object.
- * @param refArea : the given EDA_Rect
+ * tests if the given EDA_RECT intersect the bounds of this object.
+ * @param refArea : the given EDA_RECT
  * @return bool - true if a hit, else false
  */
-bool MODULE::HitTest( EDA_Rect& refArea )
+bool MODULE::HitTest( EDA_RECT& refArea )
 {
     bool is_out_of_box = false;
 

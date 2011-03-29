@@ -111,7 +111,7 @@ enum SEARCH_RESULT {
 class EDA_ITEM;
 class EDA_DRAW_FRAME;
 class BOARD;
-class EDA_Rect;
+class EDA_RECT;
 class EDA_DRAW_PANEL;
 
 /**
@@ -148,23 +148,23 @@ public:
 
 
 /**
- * Class EDA_Rect
+ * Class EDA_RECT
  * handles the component boundary box.
  * This class is similar to wxRect, but some wxRect functions are very curious,
  * and are working only if dimensions are >= 0 (not always the case in kicad)
  * and also kicad needs some specific method.
  * so I prefer this more suitable class
  */
-class EDA_Rect
+class EDA_RECT
 {
 public:
     wxPoint m_Pos;      // Rectangle Origin
     wxSize  m_Size;     // Rectangle Size
 
 public:
-    EDA_Rect() { };
+    EDA_RECT() { };
 
-    EDA_Rect( const wxPoint& aPos, const wxSize& aSize ) :
+    EDA_RECT( const wxPoint& aPos, const wxSize& aSize ) :
         m_Pos( aPos ),
         m_Size( aSize )
     { }
@@ -204,10 +204,10 @@ public:
 
     /**
      * Function Contains
-     * @param aRect = the EDA_Rect to test
+     * @param aRect = the EDA_RECT to test
      * @return true if aRect is Contained. A common edge is seen as contained
      */
-    bool Contains( const EDA_Rect& aRect ) const;
+    bool Contains( const EDA_RECT& aRect ) const;
 
     wxSize GetSize() const { return m_Size; }
     int GetX() const { return m_Pos.x; }
@@ -242,7 +242,7 @@ public:
      * @return bool - true if the argument rectangle intersects this rectangle.
      * (i.e. if the 2 rectangles have at least a common point)
      */
-    bool Intersects( const EDA_Rect& aRect ) const;
+    bool Intersects( const EDA_RECT& aRect ) const;
 
     /**
      * Function operator(wxRect)
@@ -255,14 +255,14 @@ public:
      * inflates the rectangle horizontally by \a dx and vertically by \a dy. If \a dx
      * and/or \a dy is negative the rectangle is deflated.
      */
-    EDA_Rect& Inflate( wxCoord dx, wxCoord dy );
+    EDA_RECT& Inflate( wxCoord dx, wxCoord dy );
 
     /**
      * Function Inflate
      * inflates the rectangle horizontally and vertically by \a aDelta. If \a aDelta
      * is negative the rectangle is deflated.
      */
-    EDA_Rect& Inflate( int aDelta );
+    EDA_RECT& Inflate( int aDelta );
 
     /**
      * Function Merge
@@ -270,7 +270,7 @@ public:
      * mainly used to calculate bounding boxes.
      * @param aRect  The rectangle to merge with this rectangle.
      */
-    void Merge( const EDA_Rect& aRect );
+    void Merge( const EDA_RECT& aRect );
 
     /**
      * Function Merge
@@ -465,12 +465,12 @@ public:
 
     /**
      * Function HitTest (overlaid)
-     * tests if the given EDA_Rect intersect this object.
+     * tests if the given EDA_RECT intersect this object.
      * For now, an ending point must be inside this rect.
-     * @param refArea : the given EDA_Rect
+     * @param refArea : the given EDA_RECT
      * @return bool - true if a hit, else false
      */
-    virtual bool HitTest( EDA_Rect& refArea )
+    virtual bool HitTest( EDA_RECT& refArea )
     {
         return false;   // derived classes should override this function
     }
@@ -484,7 +484,7 @@ public:
      * system.
      * It is OK to overestimate the size by a few counts.
      */
-    virtual EDA_Rect GetBoundingBox() const
+    virtual EDA_RECT GetBoundingBox() const
     {
 #if defined(DEBUG)
         printf( "Missing GetBoundingBox()\n" );
@@ -493,7 +493,7 @@ public:
 
         // return a zero-sized box per default. derived classes should override
         // this
-        return EDA_Rect( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
+        return EDA_RECT( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
     }
 
     /**
@@ -663,12 +663,12 @@ enum FILL_T {
 #define DEFAULT_SIZE_TEXT 60    /* default text height (in mils or 1/1000") */
 
 /**
- * Class EDA_TextStruct
+ * Class EDA_TEXT
  * is a basic class to handle texts (labels, texts on components or footprints
  * ..) not used directly.
- * The text classes are derived from EDA_ITEM and EDA_TextStruct
+ * The text classes are derived from EDA_ITEM and EDA_TEXT
  */
-class EDA_TextStruct
+class EDA_TEXT
 {
 public:
     wxString m_Text;                    /* text! */
@@ -689,9 +689,9 @@ public:
                                          * calculations than multiline */
 
 public:
-    EDA_TextStruct( const wxString& text = wxEmptyString );
-    EDA_TextStruct( const EDA_TextStruct& aText );
-    virtual ~EDA_TextStruct();
+    EDA_TEXT( const wxString& text = wxEmptyString );
+    EDA_TEXT( const EDA_TEXT& aText );
+    virtual ~EDA_TEXT();
 
     /**
      * Function SetThickness
@@ -744,7 +744,7 @@ private:
     /**
      * Function DrawOneLineOfText
      * Draw a single text line.
-     * Used to draw each line of this EDA_TextStruct, that can be multiline
+     * Used to draw each line of this EDA_TEXT, that can be multiline
      *  @param aPanel = the current DrawPanel
      *  @param aDC = the current Device Context
      *  @param aOffset = draw offset (usually (0,0))
@@ -782,7 +782,7 @@ public:
      * @param aAccuracy - Amount to inflate the bounding box.
      * @return bool - true if a hit, else false
      */
-    bool TextHitTest( const EDA_Rect& aRect, bool aContains = false, int aAccuracy = 0 ) const;
+    bool TextHitTest( const EDA_RECT& aRect, bool aContains = false, int aAccuracy = 0 ) const;
 
     /**
      * Function LenSize
@@ -806,7 +806,7 @@ public:
      * @param aThickness - Overrides the current thickness when greater than 0.
      * @param aInvertY - Invert the Y axis when calculating bounding box.
      */
-    EDA_Rect GetTextBox( int aLine = -1, int aThickness = -1, bool aInvertY = false ) const;
+    EDA_RECT GetTextBox( int aLine = -1, int aThickness = -1, bool aInvertY = false ) const;
 
     /**
      * Function GetInterline

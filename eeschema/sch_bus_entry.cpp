@@ -119,9 +119,9 @@ bool SCH_BUS_ENTRY::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-EDA_Rect SCH_BUS_ENTRY::GetBoundingBox() const
+EDA_RECT SCH_BUS_ENTRY::GetBoundingBox() const
 {
-    EDA_Rect box;
+    EDA_RECT box;
 
     box.SetOrigin( m_Pos );
     box.SetEnd( m_End() );
@@ -239,9 +239,9 @@ bool SCH_BUS_ENTRY::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool SCH_BUS_ENTRY::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_BUS_ENTRY::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_Rect rect = aRect;
+    EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
 

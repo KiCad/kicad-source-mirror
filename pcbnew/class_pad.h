@@ -245,7 +245,7 @@ public:
      * basic function to draw a pad.
      * used by Draw after calculation of parameters (color, ) final orientation ...
      */
-    void          DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo );
+    void          DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo );
 
     /**
      * Function BuildPadPolygon
@@ -334,7 +334,7 @@ public:
      * returns the bounding box of this pad
      * Mainly used to redraw the screen area occupied by the pad
      */
-    EDA_Rect   GetBoundingBox() const;
+    EDA_RECT   GetBoundingBox() const;
 
     /**
      * Function Compare

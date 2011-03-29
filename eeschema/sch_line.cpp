@@ -91,7 +91,7 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-EDA_Rect SCH_LINE::GetBoundingBox() const
+EDA_RECT SCH_LINE::GetBoundingBox() const
 {
     int      width = 25;
 
@@ -102,7 +102,7 @@ EDA_Rect SCH_LINE::GetBoundingBox() const
     int      ymax = MAX( m_Start.y, m_End.y ) + width;
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
-    EDA_Rect ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+    EDA_RECT ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
 
     return ret;
 }
@@ -490,9 +490,9 @@ bool SCH_LINE::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool SCH_LINE::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_LINE::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_Rect rect = aRect;
+    EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
 

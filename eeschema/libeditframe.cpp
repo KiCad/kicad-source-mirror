@@ -346,7 +346,7 @@ int LIB_EDIT_FRAME::BestZoom()
 {
     int      dx, dy, ii, jj;
     wxSize   size;
-    EDA_Rect BoundaryBox;
+    EDA_RECT BoundaryBox;
 
     if( m_component )
     {

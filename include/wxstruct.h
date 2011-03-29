@@ -35,7 +35,7 @@
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
 
 class EDA_ITEM;
-class EDA_Rect;
+class EDA_RECT;
 class EDA_DRAW_PANEL;
 class WinEDA_MsgPanel;
 class BASE_SCREEN;
@@ -458,7 +458,7 @@ public:
     void             Zoom_Automatique( bool aWarpPointer );
 
     /* Set the zoom level to show the area Rect */
-    void             Window_Zoom( EDA_Rect& Rect );
+    void             Window_Zoom( EDA_RECT& Rect );
 
     /* Return the zoom level which displays the full page on screen */
     virtual int      BestZoom() = 0;

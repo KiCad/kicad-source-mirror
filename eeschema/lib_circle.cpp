@@ -146,7 +146,7 @@ void LIB_CIRCLE::DoOffset( const wxPoint& aOffset )
 }
 
 
-bool LIB_CIRCLE::DoTestInside( EDA_Rect& aRect ) const
+bool LIB_CIRCLE::DoTestInside( EDA_RECT& aRect ) const
 {
     /*
      * FIXME: This fails to take into account the radius around the center
@@ -231,16 +231,16 @@ void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     /* Set to one (1) to draw bounding box around circle to validate bounding
      * box calculation. */
 #if 0
-    EDA_Rect bBox = GetBoundingBox();
+    EDA_RECT bBox = GetBoundingBox();
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }
 
 
-EDA_Rect LIB_CIRCLE::GetBoundingBox() const
+EDA_RECT LIB_CIRCLE::GetBoundingBox() const
 {
-    EDA_Rect rect;
+    EDA_RECT rect;
 
     rect.SetOrigin( m_Pos.x - m_Radius, ( m_Pos.y - m_Radius ) * -1 );
     rect.SetEnd( m_Pos.x + m_Radius, ( m_Pos.y + m_Radius ) * -1 );
@@ -253,7 +253,7 @@ EDA_Rect LIB_CIRCLE::GetBoundingBox() const
 void LIB_CIRCLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
-    EDA_Rect bBox = GetBoundingBox();
+    EDA_RECT bBox = GetBoundingBox();
 
     LIB_DRAW_ITEM::DisplayInfo( aFrame );
 

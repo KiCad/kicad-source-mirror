@@ -17,7 +17,7 @@
 
 BLOCK_SELECTOR::BLOCK_SELECTOR() :
     EDA_ITEM( BLOCK_LOCATE_STRUCT_TYPE ),
-    EDA_Rect()
+    EDA_RECT()
 {
     m_State   = STATE_NO_BLOCK; /* State (enum BlockState) of block. */
     m_Command = BLOCK_IDLE;     /* Type (enum CmdBlockType) of operation. */

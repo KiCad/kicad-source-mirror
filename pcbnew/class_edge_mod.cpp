@@ -62,9 +62,9 @@ void EDGE_MODULE::Copy( EDGE_MODULE* source )
  * object, and the units should be in the pcb or schematic coordinate system.
  * It is OK to overestimate the size by a few counts.
  */
-EDA_Rect EDGE_MODULE::GetBoundingBox() const
+EDA_RECT EDGE_MODULE::GetBoundingBox() const
 {
-    EDA_Rect bbox;
+    EDA_RECT bbox;
 
     bbox.SetOrigin( m_Start );
 
@@ -573,12 +573,12 @@ bool EDGE_MODULE::HitTest( const wxPoint& refPos )
 
 /**
  * Function HitTest (overlayed)
- * tests if the given EDA_Rect intersect this object.
+ * tests if the given EDA_RECT intersect this object.
  * For now, for arcs and segments, an ending point must be inside this rect.
- * @param refArea : the given EDA_Rect
+ * @param refArea : the given EDA_RECT
  * @return bool - true if a hit, else false
  */
-bool EDGE_MODULE::HitTest( EDA_Rect& refArea )
+bool EDGE_MODULE::HitTest( EDA_RECT& refArea )
 {
     switch(m_Shape)
     {
@@ -586,7 +586,7 @@ bool EDGE_MODULE::HitTest( EDA_Rect& refArea )
         {
             int radius = GetRadius();
             // Test if area intersects the circle:
-            EDA_Rect area = refArea;
+            EDA_RECT area = refArea;
             area.Inflate(radius);
             if( area.Contains(m_Start) )
                 return true;

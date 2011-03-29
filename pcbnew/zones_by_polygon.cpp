@@ -847,7 +847,7 @@ void PCB_EDIT_FRAME::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_contain
 {
     int      ncont = zone_container->m_Poly->GetContour( zone_container->m_CornerSelection );
 
-    EDA_Rect dirty = zone_container->GetBoundingBox();
+    EDA_RECT dirty = zone_container->GetBoundingBox();
 
     Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );  // Remove fill segments
 

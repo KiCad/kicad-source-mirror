@@ -288,7 +288,7 @@ public:
      * @param aAccuracy - Increase aRect by this amount.
      * @return True if \a aRect contains or intersects the item bounding box.
      */
-    bool HitTest( const EDA_Rect& aRect, bool aContained = false, int aAccuracy = 0 ) const
+    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const
     {
         return doHitTest( aRect, aContained, aAccuracy );
     }
@@ -309,7 +309,7 @@ private:
         return false;
     }
 
-    virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
     {
         return false;
     }

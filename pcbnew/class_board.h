@@ -112,7 +112,7 @@ private:
 
 public:
     PCB_BASE_FRAME*      m_PcbFrame;                        // Window of visualization
-    EDA_Rect             m_BoundaryBox;                     // Board size and position
+    EDA_RECT             m_BoundaryBox;                     // Board size and position
     int m_Status_Pcb;                                       // Flags used in ratsnet calculation and update
     int m_NbNodes;                                          // Active pads (pads attached to a net ) count
     int m_NbNoconnect;                                      // Active ratsnet count (rastnests not already connected by tracks)

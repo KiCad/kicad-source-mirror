@@ -77,7 +77,7 @@ static int* TemplateShape[5][4] =
 
 SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     SCH_ITEM( NULL, aType ),
-    EDA_TextStruct( text )
+    EDA_TEXT( text )
 {
     m_Layer = LAYER_NOTES;
     m_Pos = pos;
@@ -90,7 +90,7 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
 
 SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
     SCH_ITEM( aText ),
-    EDA_TextStruct( aText )
+    EDA_TEXT( aText )
 {
     m_Pos = aText.m_Pos;
     m_Shape = aText.m_Shape;
@@ -146,7 +146,7 @@ bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint 
 {
     if( SCH_ITEM::Matches( m_Text, aSearchData ) )
     {
-        EDA_Rect BoundaryBox = GetBoundingBox();
+        EDA_RECT BoundaryBox = GetBoundingBox();
         if( aFindLocation )
             *aFindLocation = BoundaryBox.Centre();
         return true;
@@ -380,7 +380,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
 
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
-    EDA_TextStruct::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
+    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     if( m_IsDangling )
@@ -389,7 +389,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if 0
     {
-        EDA_Rect BoundaryBox = GetBoundingBox();
+        EDA_RECT BoundaryBox = GetBoundingBox();
         GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
@@ -595,7 +595,7 @@ void SCH_TEXT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-EDA_Rect SCH_TEXT::GetBoundingBox() const
+EDA_RECT SCH_TEXT::GetBoundingBox() const
 {
     // We must pass the effective text thickness to GetTextBox
     // when calculating the bounding box
@@ -603,7 +603,7 @@ EDA_Rect SCH_TEXT::GetBoundingBox() const
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
-    EDA_Rect rect = GetTextBox( -1, linewidth );
+    EDA_RECT rect = GetTextBox( -1, linewidth );
 
     if( m_Orient )                          // Rotate rect
     {
@@ -640,7 +640,7 @@ bool SCH_TEXT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool SCH_TEXT::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_TEXT::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     return TextHitTest( aRect, aContained, aAccuracy );
 }
@@ -809,7 +809,7 @@ void SCH_LABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 }
 
 
-EDA_Rect SCH_LABEL::GetBoundingBox() const
+EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
     int x, y, dx, dy, length, height;
 
@@ -851,7 +851,7 @@ EDA_Rect SCH_LABEL::GetBoundingBox() const
         break;
     }
 
-    EDA_Rect box( wxPoint( x, y ), wxSize( dx, dy ) );
+    EDA_RECT box( wxPoint( x, y ), wxSize( dx, dy ) );
     box.Normalize();
     return box;
 }
@@ -1136,7 +1136,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     int linewidth = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
-    EDA_TextStruct::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
+    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + aOffset );
@@ -1148,7 +1148,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if 0
     {
-        EDA_Rect BoundaryBox = GetBoundingBox();
+        EDA_RECT BoundaryBox = GetBoundingBox();
         GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
@@ -1239,7 +1239,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
 }
 
 
-EDA_Rect SCH_GLOBALLABEL::GetBoundingBox() const
+EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
 {
     int x, y, dx, dy, length, height;
 
@@ -1284,7 +1284,7 @@ EDA_Rect SCH_GLOBALLABEL::GetBoundingBox() const
         break;
     }
 
-    EDA_Rect box( wxPoint( x, y ), wxSize( dx, dy ) );
+    EDA_RECT box( wxPoint( x, y ), wxSize( dx, dy ) );
     box.Normalize();
     return box;
 }
@@ -1471,7 +1471,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
     wxPoint text_offset = offset + GetSchematicTextOffset();
-    EDA_TextStruct::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
+    EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + offset );
@@ -1483,7 +1483,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
     // Enable these line to draw the bounding box (debug tests purposes only)
 #if 0
     {
-        EDA_Rect BoundaryBox = GetBoundingBox();
+        EDA_RECT BoundaryBox = GetBoundingBox();
         GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
     }
 #endif
@@ -1514,7 +1514,7 @@ void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
 }
 
 
-EDA_Rect SCH_HIERLABEL::GetBoundingBox() const
+EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 {
     int x, y, dx, dy, length, height;
 
@@ -1560,7 +1560,7 @@ EDA_Rect SCH_HIERLABEL::GetBoundingBox() const
         break;
     }
 
-    EDA_Rect box( wxPoint( x, y ), wxSize( dx, dy ) );
+    EDA_RECT box( wxPoint( x, y ), wxSize( dx, dy ) );
     box.Normalize();
     return box;
 }

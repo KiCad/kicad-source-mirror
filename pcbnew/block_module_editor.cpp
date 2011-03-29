@@ -26,7 +26,7 @@
 
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool aErase );
-static int  MarkItemsInBloc( MODULE* module, EDA_Rect& Rect );
+static int  MarkItemsInBloc( MODULE* module, EDA_RECT& Rect );
 
 static void ClearMarkItems( MODULE* module );
 static void CopyMarkedItems( MODULE* module, wxPoint offset );
@@ -637,7 +637,7 @@ void ClearMarkItems( MODULE* module )
 /* Mark items inside rect.
  *  Items are inside rect when an end point is inside rect
  */
-int MarkItemsInBloc( MODULE* module, EDA_Rect& Rect )
+int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
 {
     EDA_ITEM* item;
     int       ItemsCount = 0;

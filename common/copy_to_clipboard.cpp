@@ -76,7 +76,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
 
     wxMetafileDC dc;
 
-    EDA_Rect tmp = aFrame->DrawPanel->m_ClipBox;
+    EDA_RECT tmp = aFrame->DrawPanel->m_ClipBox;
     GRResetPenAndBrush( &dc );
     const bool plotBlackAndWhite = false;
     GRForceBlackPen( plotBlackAndWhite );

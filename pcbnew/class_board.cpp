@@ -795,7 +795,7 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
             if( aBoardEdgesOnly )
                 break;
 
-            EDA_Rect rect = ((DIMENSION*) PtStruct)->GetBoundingBox();
+            EDA_RECT rect = ((DIMENSION*) PtStruct)->GetBoundingBox();
             xmin = MIN( xmin, rect.GetX() );
             ymin = MIN( ymin, rect.GetY() );
             xmax = MAX( xmax, rect.GetRight() );
@@ -808,7 +808,7 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
             if( aBoardEdgesOnly )
                 break;
 
-            EDA_Rect rect = ((TEXTE_PCB*) PtStruct)->GetTextBox( -1 );
+            EDA_RECT rect = ((TEXTE_PCB*) PtStruct)->GetTextBox( -1 );
             xmin = MIN( xmin, rect.GetX() );
             ymin = MIN( ymin, rect.GetY() );
             xmax = MAX( xmax, rect.GetRight() );
@@ -821,7 +821,7 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
             if( aBoardEdgesOnly )
                 break;
 
-            EDA_Rect rect = ((DIMENSION*) PtStruct)->GetBoundingBox();
+            EDA_RECT rect = ((DIMENSION*) PtStruct)->GetBoundingBox();
             xmin = MIN( xmin, rect.GetX() );
             ymin = MIN( ymin, rect.GetY() );
             xmax = MAX( xmax, rect.GetRight() );
@@ -839,7 +839,7 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
         // Check modules
         for( MODULE* module = m_Modules; module; module = module->Next() )
         {
-            EDA_Rect bBox = module->GetBoundingBox();
+            EDA_RECT bBox = module->GetBoundingBox();
             xmin     = MIN( xmin, bBox.GetX() );
             ymin     = MIN( ymin, bBox.GetY() );
             xmax     = MAX( xmax, bBox.GetRight() );
@@ -881,7 +881,7 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
         for( unsigned int i = 0; i < m_ZoneDescriptorList.size(); i++ )
         {
             ZONE_CONTAINER* aZone = m_ZoneDescriptorList[i];
-            EDA_Rect bBox = aZone->GetBoundingBox();
+            EDA_RECT bBox = aZone->GetBoundingBox();
             xmin = MIN( xmin, bBox.GetX() );
             ymin = MIN( ymin, bBox.GetY() );
             xmax = MAX( xmax, bBox.GetRight() );

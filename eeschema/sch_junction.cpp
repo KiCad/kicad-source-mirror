@@ -89,9 +89,9 @@ bool SCH_JUNCTION::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-EDA_Rect SCH_JUNCTION::GetBoundingBox() const
+EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 {
-    EDA_Rect rect;
+    EDA_RECT rect;
 
     rect.SetOrigin( m_Pos );
     rect.Inflate( ( GetPenSize() + m_Size.x ) / 2 );
@@ -179,7 +179,7 @@ void SCH_JUNCTION::Show( int nestLevel, std::ostream& os )
 
 bool SCH_JUNCTION::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    EDA_Rect rect = GetBoundingBox();
+    EDA_RECT rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 
@@ -187,9 +187,9 @@ bool SCH_JUNCTION::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool SCH_JUNCTION::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_JUNCTION::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_Rect rect = aRect;
+    EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
 

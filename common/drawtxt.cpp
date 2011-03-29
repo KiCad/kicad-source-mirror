@@ -153,7 +153,7 @@ int ReturnGraphicTextWidth( const wxString& aText, int aXSize, bool aItalic, boo
 
 /* Helper function for drawing character polygons */
 static void DrawGraphicTextPline(
-    EDA_Rect* aClipBox,
+    EDA_RECT* aClipBox,
     wxDC* aDC,
     EDA_Colors aColor,
     int aWidth,
@@ -247,7 +247,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
     wxPoint   overbar_pos;                  // Start point for the current overbar
     int       overbars;                     // Number of ~ seen
     int       overbar_italic_comp;          // Italic compensation for overbar
-    EDA_Rect* clipBox;                      // Clip box used in basic draw functions
+    EDA_RECT* clipBox;                      // Clip box used in basic draw functions
 
     clipBox = aPanel ? &aPanel->m_ClipBox : NULL;
     #define        BUF_SIZE 100

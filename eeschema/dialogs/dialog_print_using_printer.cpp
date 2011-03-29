@@ -308,7 +308,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     wxPoint  tmp_startvisu;
     wxSize   SheetSize;      // Page size in internal units
     wxPoint  old_org;
-    EDA_Rect oldClipBox;
+    EDA_RECT oldClipBox;
     wxRect   fitRect;
     wxDC*    dc = GetDC();
     SCH_EDIT_FRAME* parent = m_Parent->GetParent();

@@ -188,11 +188,11 @@ bool MIREPCB::HitTest( const wxPoint& refPos )
 
 /**
  * Function HitTest (overlayed)
- * tests if the given EDA_Rect intersect this object.
- * @param refArea : the given EDA_Rect
+ * tests if the given EDA_RECT intersect this object.
+ * @param refArea : the given EDA_RECT
  * @return bool - true if a hit, else false
  */
-bool    MIREPCB::HitTest( EDA_Rect& refArea )
+bool    MIREPCB::HitTest( EDA_RECT& refArea )
 {
     if( refArea.Contains( m_Pos ) )
         return true;
@@ -224,9 +224,9 @@ void MIREPCB::Flip(const wxPoint& aCentre )
 }
 
 
-EDA_Rect MIREPCB::GetBoundingBox() const
+EDA_RECT MIREPCB::GetBoundingBox() const
 {
-    EDA_Rect bBox;
+    EDA_RECT bBox;
     bBox.SetX( m_Pos.x - m_Size/2 );
     bBox.SetY( m_Pos.y - m_Size/2 );
     bBox.SetWidth( m_Size );

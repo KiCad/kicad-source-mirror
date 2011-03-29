@@ -67,32 +67,27 @@ class SCH_REFERENCE_LIST;
  * The _last_ sheet is usually the sheet we want to select or reach (which is
  * what the function Last() returns).
  * Others sheets constitute the "path" from the first to the last sheet.
+ * </p>
  */
 class SCH_SHEET_PATH
 {
-private:
-    unsigned        m_numSheets;
-
-public:
 #define DSLSZ 32          // Max number of levels for a sheet path
-    SCH_SHEET*      m_sheets[DSLSZ];
 
+    SCH_SHEET* m_sheets[ DSLSZ ];
+    unsigned   m_numSheets;
 
 public:
     SCH_SHEET_PATH();
-    // ~SCH_SHEET_PATH() { };
 
     void Clear()
     {
         m_numSheets = 0;
     }
 
-
     unsigned GetSheetsCount()
     {
         return m_numSheets;
     }
-
 
     /**
      * Function Cmp
@@ -116,7 +111,7 @@ public:
     SCH_SCREEN* LastScreen();
 
     /**
-     * Function LastScreen
+     * Function LastDrawList
      * @return a pointer to the first schematic item handled by the
      * SCH_SCREEN relative to the last sheet in list
      */
@@ -299,6 +294,7 @@ public:
     {
         if( m_List )
             free( m_List );
+
         m_List = NULL;
     }
 
@@ -369,8 +365,7 @@ public:
      * @param aReferences List of references to populate.
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
-    void GetComponents( SCH_REFERENCE_LIST& aReferences,
-                        bool                aIncludePowerSymbols = true  );
+    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true  );
 
     /**
      * Function FindNextItem
@@ -414,7 +409,7 @@ public:
     SCH_ITEM* MatchNextItem( wxFindReplaceData& aSearchData,
                              SCH_SHEET_PATH**   aSheetFound,
                              SCH_ITEM*          aLastItem,
-                             wxPoint * aFindLocation );
+                             wxPoint*           aFindLocation );
 
     /**
      * Function SetFootprintField
@@ -439,7 +434,7 @@ private:
      * @param aSheet is the starting sheet from which the list is built,
      *   or NULL indicating that g_RootSheet should be used.
      */
-    void           BuildSheetList( SCH_SHEET* aSheet );
+    void BuildSheetList( SCH_SHEET* aSheet );
 };
 
 #endif // CLASS_DRAWSHEET_PATH_H

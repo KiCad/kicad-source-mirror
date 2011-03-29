@@ -15,7 +15,7 @@
  * the component property editor assumes it.
  * @see enum NumFieldType
  */
-class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TextStruct
+class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TEXT
 {
     int      m_id;           ///< @see enum NumFieldType
     wxString m_name;         ///< Name (not the field text value itself, that is .m_Text)
@@ -131,7 +131,7 @@ public:
      * Return the bounding rectangle of the field text.
      * @return Bounding rectangle.
      */
-    virtual EDA_Rect GetBoundingBox() const;
+    virtual EDA_RECT GetBoundingBox() const;
 
     /**
      * Displays info (type, part  convert filed name and value)
@@ -237,7 +237,7 @@ protected:
     virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
 
     virtual void DoOffset( const wxPoint& offset );
-    virtual bool DoTestInside( EDA_Rect& rect ) const;
+    virtual bool DoTestInside( EDA_RECT& rect ) const;
     virtual void DoMove( const wxPoint& newPosition );
     virtual wxPoint DoGetPosition( void ) const { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& center );

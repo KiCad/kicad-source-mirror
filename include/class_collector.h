@@ -60,7 +60,7 @@ protected:
     wxPoint         m_RefPos;
 
     /// A bounding box to test against, and that was used to make the collection.
-    EDA_Rect        m_RefBox;
+    EDA_RECT        m_RefBox;
 
     /// The time at which the collection was made.
     int             m_TimeAtCollection;
@@ -185,8 +185,8 @@ public:
     void SetRefPos( const wxPoint& aRefPos )  {  m_RefPos = aRefPos; }
     const wxPoint& GetRefPos() const  {  return m_RefPos; }
 
-    void SetBoundingBox( const EDA_Rect& aRefBox ) { m_RefBox = aRefBox;  }
-    const EDA_Rect& GetBoundingBox() const {  return m_RefBox; }
+    void SetBoundingBox( const EDA_RECT& aRefBox ) { m_RefBox = aRefBox;  }
+    const EDA_RECT& GetBoundingBox() const {  return m_RefBox; }
 
 
     /**

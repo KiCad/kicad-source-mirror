@@ -136,7 +136,7 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments()
         if ( corner->end_contour || (ic == end_list) )
         {
             iend = ic;
-            EDA_Rect rect = CalculateSubAreaBoundaryBox( istart, iend );
+            EDA_RECT rect = CalculateSubAreaBoundaryBox( istart, iend );
 
             // Calculate the y limits of the zone
             int refy = rect.GetY();

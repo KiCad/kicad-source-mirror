@@ -196,7 +196,7 @@ public:
      */
     D_CODE*  GetDcodeDescr();
 
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /* Display on screen: */
     void     Draw( EDA_DRAW_PANEL* aPanel,
@@ -216,7 +216,7 @@ public:
      * Function DrawGbrPoly
      * a helper function used to draw the polygon stored in m_PolyCorners
      */
-    void DrawGbrPoly( EDA_Rect* aClipBox,
+    void DrawGbrPoly( EDA_RECT* aClipBox,
                       wxDC* aDC, int aColor,
                       const wxPoint& aOffset, bool aFilledShape );
 
@@ -250,7 +250,7 @@ public:
      * @param aRefArea a wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool     HitTest( EDA_Rect& aRefArea );
+    bool     HitTest( EDA_RECT& aRefArea );
 
     /**
      * Function GetClass

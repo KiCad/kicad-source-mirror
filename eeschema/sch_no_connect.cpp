@@ -39,10 +39,10 @@ EDA_ITEM* SCH_NO_CONNECT::doClone() const
 }
 
 
-EDA_Rect SCH_NO_CONNECT::GetBoundingBox() const
+EDA_RECT SCH_NO_CONNECT::GetBoundingBox() const
 {
     int      delta = ( GetPenSize() + m_Size.x ) / 2;
-    EDA_Rect box;
+    EDA_RECT box;
 
     box.SetOrigin( m_Pos );
     box.Inflate( delta );
@@ -170,9 +170,9 @@ bool SCH_NO_CONNECT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool SCH_NO_CONNECT::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_NO_CONNECT::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_Rect rect = aRect;
+    EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
 

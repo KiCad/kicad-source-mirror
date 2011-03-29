@@ -117,7 +117,7 @@ void LIB_RECTANGLE::DoOffset( const wxPoint& aOffset )
 }
 
 
-bool LIB_RECTANGLE::DoTestInside( EDA_Rect& aRect ) const
+bool LIB_RECTANGLE::DoTestInside( EDA_RECT& aRect ) const
 {
     return aRect.Contains( m_Pos.x, -m_Pos.y ) || aRect.Contains( m_End.x, -m_End.y );
 }
@@ -209,7 +209,7 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     /* Set to one (1) to draw bounding box around rectangle to validate
      * bounding box calculation. */
 #if 0
-    EDA_Rect bBox = GetBoundingBox();
+    EDA_RECT bBox = GetBoundingBox();
     bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
@@ -229,9 +229,9 @@ void LIB_RECTANGLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 }
 
 
-EDA_Rect LIB_RECTANGLE::GetBoundingBox() const
+EDA_RECT LIB_RECTANGLE::GetBoundingBox() const
 {
-    EDA_Rect rect;
+    EDA_RECT rect;
 
     rect.SetOrigin( m_Pos.x, m_Pos.y * -1 );
     rect.SetEnd( m_End.x, m_End.y * -1 );

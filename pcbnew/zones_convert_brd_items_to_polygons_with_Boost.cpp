@@ -160,8 +160,8 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     /* items ouside the zone bounding box are skipped
      * the bounding box is the zone bounding box + the biggest clearance found in Netclass list
      */
-    EDA_Rect item_boundingbox;
-    EDA_Rect zone_boundingbox  = GetBoundingBox();
+    EDA_RECT item_boundingbox;
+    EDA_RECT zone_boundingbox  = GetBoundingBox();
     int      biggest_clearance = aPcb->GetBiggestClearanceValue();
     biggest_clearance = MAX( biggest_clearance, zone_clearance );
     zone_boundingbox.Inflate( biggest_clearance );

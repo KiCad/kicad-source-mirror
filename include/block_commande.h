@@ -53,7 +53,7 @@ typedef enum {
 } CmdBlockType;
 
 
-class BLOCK_SELECTOR : public EDA_ITEM, public EDA_Rect
+class BLOCK_SELECTOR : public EDA_ITEM, public EDA_RECT
 {
 public:
     BlockState        m_State;                    /* State (enum BlockState)

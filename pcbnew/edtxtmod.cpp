@@ -269,7 +269,7 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
     int newThickness;
     TEXTE_PCB* pcbText = NULL;
     TEXTE_MODULE* moduleText = NULL;
-    EDA_TextStruct* text;
+    EDA_TEXT* text;
 
     switch( aItem->Type() )
     {
@@ -277,13 +277,13 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
         newSize = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
         newThickness = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
         pcbText = (TEXTE_PCB*) aItem;
-        text = (EDA_TextStruct*) pcbText;
+        text = (EDA_TEXT*) pcbText;
         break;
     case TYPE_TEXTE_MODULE:
         newSize = g_ModuleTextSize;
         newThickness = g_ModuleTextWidth;
         moduleText = (TEXTE_MODULE*) aItem;
-        text = (EDA_TextStruct*) moduleText;
+        text = (EDA_TEXT*) moduleText;
         break;
     default:
         // Exit if aItem is not a text field

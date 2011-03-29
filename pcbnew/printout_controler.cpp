@@ -139,7 +139,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     PCB_BASE_FRAME* pcbframe = (PCB_BASE_FRAME*) m_Parent;
     pcbframe->GetBoard()->ComputeBoundingBox();
-    EDA_Rect brd_BBox = pcbframe->GetBoard()->m_BoundaryBox;
+    EDA_RECT brd_BBox = pcbframe->GetBoard()->m_BoundaryBox;
 
     // In module editor, the module is located at 0,0 but for printing
     // it is moved to SheetSize.x/2, SheetSize.y/2.
@@ -236,7 +236,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
 
     EDA_DRAW_PANEL* panel = m_Parent->DrawPanel;
-    EDA_Rect        tmp   = panel->m_ClipBox;
+    EDA_RECT        tmp   = panel->m_ClipBox;
 
     // Set clip box to the max size
     #define MAX_VALUE (INT_MAX/2)   // MAX_VALUE is the max we can use in an integer

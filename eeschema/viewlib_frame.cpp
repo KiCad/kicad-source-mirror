@@ -348,7 +348,7 @@ int LIB_VIEW_FRAME::BestZoom()
         size = m_clientSize;
     }
 
-    EDA_Rect BoundaryBox = component->GetBoundingBox( m_unit, m_convert );
+    EDA_RECT BoundaryBox = component->GetBoundingBox( m_unit, m_convert );
 
     // Reserve a 25 mils margin around component bounding box.
     size -= wxSize( 25, 25 );

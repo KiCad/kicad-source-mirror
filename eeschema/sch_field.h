@@ -27,7 +27,7 @@ class LIB_FIELD;
  * <li>Fields 4 and higher are user defineable.</li></ul>
  */
 
-class SCH_FIELD : public SCH_ITEM, public EDA_TextStruct
+class SCH_FIELD : public SCH_ITEM, public EDA_TEXT
 {
 public:
     int      m_FieldId;         ///< Field index, @see enum NumFieldType
@@ -62,7 +62,7 @@ public:
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /**
      * Function IsVoid
@@ -179,7 +179,7 @@ public:
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
 };
 

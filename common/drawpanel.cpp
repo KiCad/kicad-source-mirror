@@ -185,7 +185,7 @@ wxRealPoint EDA_DRAW_PANEL::GetGrid()
 bool EDA_DRAW_PANEL::IsPointOnDisplay( const wxPoint& aPosition )
 {
     wxPoint  pos;
-    EDA_Rect display_rect;
+    EDA_RECT display_rect;
 
     INSTALL_UNBUFFERED_DC( dc, this );  // Refresh the clip box to the entire screen size.
     SetClipBox( dc );
@@ -200,7 +200,7 @@ bool EDA_DRAW_PANEL::IsPointOnDisplay( const wxPoint& aPosition )
 }
 
 
-void EDA_DRAW_PANEL::RefreshDrawingRect( const EDA_Rect& aRect, bool aEraseBackground )
+void EDA_DRAW_PANEL::RefreshDrawingRect( const EDA_RECT& aRect, bool aEraseBackground )
 {
     INSTALL_UNBUFFERED_DC( dc, this );
 
@@ -418,7 +418,7 @@ void EDA_DRAW_PANEL::EraseScreen( wxDC* DC )
 
     /* Set to one (1) to draw bounding box validate bounding box calculation. */
 #if DEBUG_SHOW_CLIP_RECT
-    EDA_Rect bBox = m_ClipBox;
+    EDA_RECT bBox = m_ClipBox;
     GRRect( NULL, DC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif

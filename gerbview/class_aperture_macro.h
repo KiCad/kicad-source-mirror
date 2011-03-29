@@ -134,7 +134,7 @@ public: AM_PRIMITIVE( bool aGerbMetric, AM_PRIMITIVE_ID aId = AMP_UNKNOWN )
      * @param aShapePos = the actual shape position
      * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
      */
-    void DrawBasicShape( GERBER_DRAW_ITEM* aParent, EDA_Rect* aClipBox, wxDC* aDC,
+    void DrawBasicShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
                          int aColor, int aAltColor, wxPoint aShapePos, bool aFilledShape );
 
     /** GetShapeDim
@@ -206,7 +206,7 @@ struct APERTURE_MACRO
      * @param aShapePos = the actual shape position
      * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
      */
-    void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_Rect* aClipBox, wxDC* aDC,
+    void DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox, wxDC* aDC,
                                  int aColor, int aAltColor, wxPoint aShapePos, bool aFilledShape );
 
     /**

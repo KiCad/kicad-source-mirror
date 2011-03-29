@@ -128,7 +128,7 @@ int AM_PRIMITIVE::GetExposure(GERBER_DRAW_ITEM* aParent) const
  * Draw the primitive shape for flashed items.
  */
 void AM_PRIMITIVE::DrawBasicShape( GERBER_DRAW_ITEM* aParent,
-                                   EDA_Rect* aClipBox,
+                                   EDA_RECT* aClipBox,
                                    wxDC* aDC,
                                    int aColor, int aAltColor,
                                    wxPoint aShapePos,
@@ -725,7 +725,7 @@ int AM_PRIMITIVE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
  * When an item is flashed, this is the shape of the item
  */
 void APERTURE_MACRO::DrawApertureMacroShape( GERBER_DRAW_ITEM* aParent,
-                                             EDA_Rect* aClipBox, wxDC* aDC,
+                                             EDA_RECT* aClipBox, wxDC* aDC,
                                              int aColor, int aAltColor,
                                              wxPoint aShapePos, bool aFilledShape )
 {

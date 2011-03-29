@@ -28,7 +28,7 @@ typedef enum {
 
 extern const char* SheetLabelType[];    /* names of types of labels */
 
-class SCH_TEXT : public SCH_ITEM, public EDA_TextStruct
+class SCH_TEXT : public SCH_ITEM, public EDA_TEXT
 {
 public:
     int  m_Shape;
@@ -131,7 +131,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /**
      * Function Save
@@ -212,7 +212,7 @@ public:
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
 };
 
@@ -273,7 +273,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /**
      * Function Save
@@ -378,7 +378,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /**
      * Function CreateGraphicShape (virual)
@@ -492,7 +492,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis

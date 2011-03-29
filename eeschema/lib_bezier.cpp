@@ -160,7 +160,7 @@ void LIB_BEZIER::DoOffset( const wxPoint& aOffset )
 }
 
 
-bool LIB_BEZIER::DoTestInside( EDA_Rect& aRect ) const
+bool LIB_BEZIER::DoTestInside( EDA_RECT& aRect ) const
 {
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
     {
@@ -289,7 +289,7 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     /* Set to one (1) to draw bounding box around bezier curve to validate
      * bounding box calculation. */
 #if 0
-    EDA_Rect bBox = GetBoundingBox();
+    EDA_RECT bBox = GetBoundingBox();
     bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
     GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
@@ -340,9 +340,9 @@ bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
  * Function GetBoundingBox
  * @return the boundary box for this, in library coordinates
  */
-EDA_Rect LIB_BEZIER::GetBoundingBox() const
+EDA_RECT LIB_BEZIER::GetBoundingBox() const
 {
-    EDA_Rect rect;
+    EDA_RECT rect;
     int      xmin, xmax, ymin, ymax;
 
     if( !GetCornerCount() )
@@ -370,7 +370,7 @@ EDA_Rect LIB_BEZIER::GetBoundingBox() const
 void LIB_BEZIER::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
-    EDA_Rect bBox = GetBoundingBox();
+    EDA_RECT bBox = GetBoundingBox();
 
     LIB_DRAW_ITEM::DisplayInfo( aFrame );
 

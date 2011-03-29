@@ -8,7 +8,7 @@
 #include "PolyLine.h"
 #include "richio.h"
 
-class TEXTE_PCB : public BOARD_ITEM, public EDA_TextStruct
+class TEXTE_PCB : public BOARD_ITEM, public EDA_TEXT
 {
 public:
     TEXTE_PCB( BOARD_ITEM* parent );
@@ -23,7 +23,7 @@ public:
      */
     wxPoint& GetPosition()
     {
-        return m_Pos;   // within EDA_TextStruct
+        return m_Pos;   // within EDA_TEXT
     }
 
     /**
@@ -93,11 +93,11 @@ public:
 
     /**
      * Function HitTest (overlaid)
-     * tests if the given EDA_Rect intersect this object.
-     * @param refArea the given EDA_Rect to test
+     * tests if the given EDA_RECT intersect this object.
+     * @param refArea the given EDA_RECT to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( EDA_Rect& refArea )
+    bool    HitTest( EDA_RECT& refArea )
     {
         return TextHitTest( refArea );
     }

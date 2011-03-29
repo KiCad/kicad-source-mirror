@@ -154,7 +154,7 @@ int GERBVIEW_FRAME::BestZoom()
         return 16 * GetScreen()->m_ZoomScalar;
 
     double      x, y;
-    EDA_Rect    bbox;
+    EDA_RECT    bbox;
     BOARD_ITEM* item = GetBoard()->m_Drawings;
 
     bbox = ( (GERBER_DRAW_ITEM*) item )->GetBoundingBox();

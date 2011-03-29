@@ -103,9 +103,9 @@ void D_PAD::ComputeShapeMaxRadius()
  * returns the bounding box of this pad
  * Mainly used to redraw the screen area occupied by the pad
  */
-EDA_Rect D_PAD::GetBoundingBox() const
+EDA_RECT D_PAD::GetBoundingBox() const
 {
-    EDA_Rect area;
+    EDA_RECT area;
     int radius = GetMaxRadius();     // Calculate the radius of the area, considered as a circle
 
     area.SetOrigin( m_Pos );

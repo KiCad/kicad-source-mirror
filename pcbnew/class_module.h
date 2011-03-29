@@ -53,9 +53,9 @@ public:
                                          * routing. */
     int           m_ModuleStatus;       /* For autoplace: flags (LOCKED,
                                          * AUTOPLACED) */
-    EDA_Rect      m_BoundaryBox;        /* Bounding box coordinates relatives
+    EDA_RECT      m_BoundaryBox;        /* Bounding box coordinates relatives
                                          * to the anchor, orient 0*/
-    EDA_Rect      m_RealBoundaryBox;    /* Bounding box : coordinates on board,
+    EDA_RECT      m_RealBoundaryBox;    /* Bounding box : coordinates on board,
                                          * real orientation */
     int           m_PadNum;             // Pad count
     int           m_AltPadNum;          /* Pad with netcode > 0 (active pads)
@@ -129,14 +129,14 @@ public:
      * Function GetFootPrintRect()
      * Returns the area of the module footprint excluding any text.
      */
-    EDA_Rect GetFootPrintRect() const;
+    EDA_RECT GetFootPrintRect() const;
 
     /**
      * Function GetBoundingBox
      * returns the bounding box of this Footprint
      * Mainly used to redraw the screen area occupied by the footprint
      */
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /**
      * Function GetPosition
@@ -264,11 +264,11 @@ public:
 
     /**
      * Function HitTest (overlaid)
-     * tests if the given EDA_Rect intersect the bounds of this object.
-     * @param refArea : the given EDA_Rect
+     * tests if the given EDA_RECT intersect the bounds of this object.
+     * @param refArea : the given EDA_RECT
      * @return bool - true if a hit, else false
      */
-    bool HitTest( EDA_Rect& refArea );
+    bool HitTest( EDA_RECT& refArea );
 
     /**
      * Function GetReference

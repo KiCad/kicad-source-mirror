@@ -112,7 +112,7 @@ static void PlotTextField( PLOTTER* plotter, SCH_COMPONENT* DrawLibItem,
      * so the more easily way is to use no justifications ( Centered text )
      * and use GetBoundaryBox to know the text coordinate considered as centered
      */
-    EDA_Rect BoundaryBox = field->GetBoundingBox();
+    EDA_RECT BoundaryBox = field->GetBoundingBox();
     GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
     GRTextVertJustifyType vjustify  = GR_TEXT_VJUSTIFY_CENTER;
     wxPoint  textpos = BoundaryBox.Centre();

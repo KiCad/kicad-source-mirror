@@ -255,10 +255,10 @@ D_CODE* GERBER_DRAW_ITEM::GetDcodeDescr()
 }
 
 
-EDA_Rect GERBER_DRAW_ITEM::GetBoundingBox() const
+EDA_RECT GERBER_DRAW_ITEM::GetBoundingBox() const
 {
     // return a rectangle which is (pos,dim) in nature.  therefore the +1
-    EDA_Rect bbox( m_Start, wxSize( 1, 1 ) );
+    EDA_RECT bbox( m_Start, wxSize( 1, 1 ) );
 
     bbox.Inflate( m_Size.x / 2, m_Size.y / 2 );
 
@@ -557,7 +557,7 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon( )
  * a helper function used id ::Draw to draw the polygon stored in m_PolyCorners
  * Draw filled polygons
  */
-void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_Rect*      aClipBox,
+void GERBER_DRAW_ITEM::DrawGbrPoly( EDA_RECT*      aClipBox,
                                     wxDC*          aDC,
                                     int            aColor,
                                     const wxPoint& aOffset,
@@ -659,12 +659,12 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos )
 
 /**
  * Function HitTest (overlayed)
- * tests if the given EDA_Rect intersect this object.
+ * tests if the given EDA_RECT intersect this object.
  * For now, an ending point must be inside this rect.
- * @param aRefArea : the given EDA_Rect in AB plotter axis
+ * @param aRefArea : the given EDA_RECT in AB plotter axis
  * @return bool - true if a hit, else false
  */
-bool GERBER_DRAW_ITEM::HitTest( EDA_Rect& aRefArea )
+bool GERBER_DRAW_ITEM::HitTest( EDA_RECT& aRefArea )
 {
     wxPoint pos = GetABPosition( m_Start );
 

@@ -15,7 +15,7 @@ protected:
     std::vector <wxPoint> m_Corners;             ///< Corner list for shape definition (a polygon)
     int                   m_MarkerType;          ///< Can be used as a flag
     EDA_Colors            m_Color;               ///< color
-    EDA_Rect              m_ShapeBoundingBox;    ///< Bounding box of the graphic symbol, relative
+    EDA_RECT              m_ShapeBoundingBox;    ///< Bounding box of the graphic symbol, relative
                                                  ///< to the position of the shape, used for Hit
                                                  ///< Tests
     int                   m_ScalingFactor;       ///< Scaling factor for m_Size and m_Corners (can
@@ -190,7 +190,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    EDA_Rect GetBoundingBoxMarker() const;
+    EDA_RECT GetBoundingBoxMarker() const;
 };
 
 

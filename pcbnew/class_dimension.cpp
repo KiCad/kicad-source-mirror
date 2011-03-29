@@ -727,11 +727,11 @@ bool DIMENSION::HitTest( const wxPoint& ref_pos )
 
 /**
  * Function HitTest (overlaid)
- * tests if the given EDA_Rect intersect this object.
- * @param refArea : the given EDA_Rect
+ * tests if the given EDA_RECT intersect this object.
+ * @param refArea : the given EDA_RECT
  * @return bool - true if a hit, else false
  */
-bool DIMENSION::HitTest( EDA_Rect& refArea )
+bool DIMENSION::HitTest( EDA_RECT& refArea )
 {
     if( refArea.Contains( m_Pos ) )
         return true;
@@ -739,9 +739,9 @@ bool DIMENSION::HitTest( EDA_Rect& refArea )
 }
 
 
-EDA_Rect DIMENSION::GetBoundingBox() const
+EDA_RECT DIMENSION::GetBoundingBox() const
 {
-    EDA_Rect bBox;
+    EDA_RECT bBox;
     int xmin, xmax, ymin, ymax;
 
     bBox = m_Text->GetTextBox( -1 );

@@ -57,7 +57,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    virtual EDA_Rect GetBoundingBox() const;
+    virtual EDA_RECT GetBoundingBox() const;
 
     // Geometric transforms (used in block operations):
 

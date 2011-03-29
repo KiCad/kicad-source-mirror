@@ -24,7 +24,7 @@
 
 TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
     BOARD_ITEM( parent, TYPE_TEXTE ),
-    EDA_TextStruct()
+    EDA_TEXT()
 {
     m_MultilineAllowed = true;
 }
@@ -208,7 +208,7 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
         anchor_color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
 
-    EDA_TextStruct::Draw( panel, DC, offset, (EDA_Colors) color,
+    EDA_TEXT::Draw( panel, DC, offset, (EDA_Colors) color,
                           DrawMode, fillmode, (EDA_Colors) anchor_color );
 }
 

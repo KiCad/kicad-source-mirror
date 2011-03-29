@@ -212,7 +212,7 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
 }
 
 
-EDA_Rect TRACK::GetBoundingBox() const
+EDA_RECT TRACK::GetBoundingBox() const
 {
     // end of track is round, this is its radius, rounded up
     int radius = ( m_Width + 1 ) / 2;
@@ -262,7 +262,7 @@ EDA_Rect TRACK::GetBoundingBox() const
     xmin -= radius;
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
-    EDA_Rect ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
+    EDA_RECT ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
 
     return ret;
 }
@@ -1131,12 +1131,12 @@ bool TRACK::HitTest( const wxPoint& refPos )
 
 /**
  * Function HitTest (overlaid)
- * tests if the given EDA_Rect intersect this object.
+ * tests if the given EDA_RECT intersect this object.
  * For now, an ending point must be inside this rect.
- * @param refArea an EDA_Rect to test
+ * @param refArea an EDA_RECT to test
  * @return bool - true if a hit, else false
  */
-bool TRACK::HitTest( EDA_Rect& refArea )
+bool TRACK::HitTest( EDA_RECT& refArea )
 {
     if( refArea.Contains( m_Start ) )
         return true;

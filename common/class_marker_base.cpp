@@ -133,7 +133,7 @@ bool MARKER_BASE::HitTestMarker( const wxPoint& refPos ) const
 }
 
 
-EDA_Rect MARKER_BASE::GetBoundingBoxMarker() const
+EDA_RECT MARKER_BASE::GetBoundingBoxMarker() const
 {
     wxSize realsize = m_ShapeBoundingBox.GetSize();
     wxPoint realposition = m_ShapeBoundingBox.GetPosition();
@@ -142,7 +142,7 @@ EDA_Rect MARKER_BASE::GetBoundingBoxMarker() const
     realposition.x *= m_ScalingFactor;
     realposition.y *= m_ScalingFactor;
     realposition += m_Pos;
-    return EDA_Rect( m_Pos, realsize );
+    return EDA_RECT( m_Pos, realsize );
 }
 
 void MARKER_BASE::DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,

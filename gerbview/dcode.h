@@ -167,8 +167,8 @@ public:
      * @param aShapePos = the actual shape position
      * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
      */
-    void                 DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
-                                            EDA_Rect* aClipBox, wxDC* aDC, int aColor, int aAltColor,
+    void                 DrawFlashedShape(  GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox,
+                                            wxDC* aDC, int aColor, int aAltColor,
                                             wxPoint aShapePos, bool aFilledShape );
 
     /**
@@ -185,7 +185,7 @@ public:
      * @param aPosition = the actual shape position
     */
     void                 DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
-                                             EDA_Rect* aClipBox, wxDC* aDC, int aColor,
+                                             EDA_RECT* aClipBox, wxDC* aDC, int aColor,
                                              bool aFilled, const wxPoint& aPosition );
 
     /**

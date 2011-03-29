@@ -593,7 +593,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 }
 
 
-EDA_Rect SCH_SHEET::GetBoundingBox() const
+EDA_RECT SCH_SHEET::GetBoundingBox() const
 {
     int      dx, dy;
 
@@ -607,7 +607,7 @@ EDA_Rect SCH_SHEET::GetBoundingBox() const
     dx = MAX( m_Size.x, textlen1 );
     dy = m_Size.y + m_SheetNameSize + m_FileNameSize + 16;
 
-    EDA_Rect box( wxPoint( m_Pos.x, m_Pos.y - m_SheetNameSize - 8 ), wxSize( dx, dy ) );
+    EDA_RECT box( wxPoint( m_Pos.x, m_Pos.y - m_SheetNameSize - 8 ), wxSize( dx, dy ) );
 
     return box;
 }
@@ -935,7 +935,7 @@ bool SCH_SHEET::IsSelectStateChanged( const wxRect& aRect )
 {
     bool previousState = IsSelected();
 
-    EDA_Rect boundingBox = GetBoundingBox();
+    EDA_RECT boundingBox = GetBoundingBox();
 
     if( aRect.Intersects( boundingBox ) )
         m_Flags |= SELECTED;
@@ -991,7 +991,7 @@ wxString SCH_SHEET::GetSelectMenuText() const
 
 bool SCH_SHEET::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    EDA_Rect rect = GetBoundingBox();
+    EDA_RECT rect = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 
@@ -999,9 +999,9 @@ bool SCH_SHEET::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 }
 
 
-bool SCH_SHEET::doHitTest( const EDA_Rect& aRect, bool aContained, int aAccuracy ) const
+bool SCH_SHEET::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    EDA_Rect rect = aRect;
+    EDA_RECT rect = aRect;
 
     rect.Inflate( aAccuracy );
 

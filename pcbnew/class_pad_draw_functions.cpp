@@ -348,7 +348,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
  * this function can be called to draw a pad on a panel
  * even if this panel is not a EDA_DRAW_PANEL (for instance on a wxPanel inside the pad editor)
  */
-void D_PAD::DrawShape( EDA_Rect* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
+void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 {
     wxPoint coord[4];
     int     delta_cx, delta_cy;

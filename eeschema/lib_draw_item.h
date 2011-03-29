@@ -66,7 +66,7 @@ class LIB_DRAW_ITEM : public EDA_ITEM
      * @param aDC - The device context to draw on.
      * @param aColor - The index of the color to draw.
      */
-    virtual void drawEditGraphics( EDA_Rect* aClipBox, wxDC* aDC, int aColor ) {}
+    virtual void drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, int aColor ) {}
 
     /**
      * Calculates the attributes of an item  at \a aPosition when it is being edited.
@@ -226,7 +226,7 @@ public:
    /**
      * @return the boundary box for this, in library coordinates
      */
-    virtual EDA_Rect GetBoundingBox() const { return EDA_ITEM::GetBoundingBox(); }
+    virtual EDA_RECT GetBoundingBox() const { return EDA_ITEM::GetBoundingBox(); }
 
     /**
      * Displays basic info (type, part and convert) about item
@@ -281,7 +281,7 @@ public:
      * @param aRect - Rectangle to check against.
      * @return - True if object is inside rectangle.
      */
-    bool Inside( EDA_Rect& aRect ) const { return DoTestInside( aRect ); }
+    bool Inside( EDA_RECT& aRect ) const { return DoTestInside( aRect ); }
 
     /**
      * Move a draw object to a new \a aPosition.
@@ -384,7 +384,7 @@ protected:
      */
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const = 0;
     virtual void DoOffset( const wxPoint& aOffset ) = 0;
-    virtual bool DoTestInside( EDA_Rect& aRect ) const = 0;
+    virtual bool DoTestInside( EDA_RECT& aRect ) const = 0;
     virtual void DoMove( const wxPoint& aPosition ) = 0;
     virtual wxPoint DoGetPosition() const = 0;
     virtual void DoMirrorHorizontal( const wxPoint& aCenter ) = 0;

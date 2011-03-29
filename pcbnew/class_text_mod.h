@@ -14,7 +14,7 @@
 
 #define UMBILICAL_COLOR   LIGHTBLUE
 
-class TEXTE_MODULE : public BOARD_ITEM, public EDA_TextStruct
+class TEXTE_MODULE : public BOARD_ITEM, public EDA_TEXT
 {
 /* Note: orientation in 1/10 deg relative to the footprint
  * Physical orient is m_Orient + m_Parent->m_Orient
@@ -54,17 +54,17 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
 
     /**
      * Function GetTextRect
-     * @return an EDA_Rect which gives the position and size of the text area
+     * @return an EDA_RECT which gives the position and size of the text area
      * (for the 0 orient text and footprint)
      */
-    EDA_Rect GetTextRect( void ) const;
+    EDA_RECT GetTextRect( void ) const;
 
     /**
      * Function GetBoundingBox
      * returns the bounding box of this Text (according to text and footprint
      * orientation)
      */
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     void     SetDrawCoord();        // Set absolute coordinates.
 

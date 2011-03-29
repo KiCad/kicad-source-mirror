@@ -199,7 +199,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
     float       dpi = (float) frame->m_InternalUnits;
     wxSVGFileDC dc( FullFileName, SheetSize.x, SheetSize.y, dpi );
 
-    EDA_Rect    tmp = panel->m_ClipBox;
+    EDA_RECT    tmp = panel->m_ClipBox;
     GRResetPenAndBrush( &dc );
     GRForceBlackPen( aPrintBlackAndWhite );
 

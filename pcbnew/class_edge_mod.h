@@ -104,7 +104,7 @@ public:
      * object, and the units should be in the pcb or schematic coordinate system.
      * It is OK to overestimate the size by a few counts.
      */
-    virtual EDA_Rect GetBoundingBox() const;
+    virtual EDA_RECT GetBoundingBox() const;
 
     /**
      * Function HitTest
@@ -116,12 +116,12 @@ public:
 
     /**
      * Function HitTest (overlayed)
-     * tests if the given EDA_Rect intersect this object.
+     * tests if the given EDA_RECT intersect this object.
      * For now, for segments and arcs, an ending point must be inside this rect.
-     * @param refArea the given EDA_Rect to test
+     * @param refArea the given EDA_RECT to test
      * @return bool - true if a hit, else false
      */
-    bool         HitTest( EDA_Rect& refArea );
+    bool         HitTest( EDA_RECT& refArea );
 
     /**
      * Function GetClass

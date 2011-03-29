@@ -26,7 +26,7 @@
 
 LIB_TEXT::LIB_TEXT(LIB_COMPONENT * aParent) :
     LIB_DRAW_ITEM( LIB_TEXT_T, aParent ),
-    EDA_TextStruct()
+    EDA_TEXT()
 {
     m_Size       = wxSize( 50, 50 );
     m_typeName   = _( "Text" );
@@ -217,7 +217,7 @@ void LIB_TEXT::DoOffset( const wxPoint& offset )
 }
 
 
-bool LIB_TEXT::DoTestInside( EDA_Rect& rect ) const
+bool LIB_TEXT::DoTestInside( EDA_RECT& rect ) const
 {
     /*
      * FIXME: This should calculate the text size and justification and
@@ -321,7 +321,7 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
      * so the more easily way is to use no justifications ( Centered text )
      * and use GetBoundaryBox to know the text coordinate considered as centered
     */
-    EDA_Rect bBox = GetBoundingBox();
+    EDA_RECT bBox = GetBoundingBox();
     pos1 = bBox.Centre();   // this is the coordinates of the graphic text relative to the
                             // component position in schematic Y axis orientation.
 
@@ -339,7 +339,7 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
      * the bounding box calculations.
      */
 #if 0
-    EDA_Rect grBox;
+    EDA_RECT grBox;
     bBox.SetY( -bBox.GetY() );
     bBox.SetHeight( -bBox.GetHeight());
     grBox.SetOrigin( aTransform.TransformCoordinate( bBox.GetOrigin() ) );
@@ -366,12 +366,12 @@ void LIB_TEXT::DisplayInfo( EDA_DRAW_FRAME* frame )
 /**
  * @return the boundary box for this, in schematic coordinates
  */
-EDA_Rect LIB_TEXT::GetBoundingBox() const
+EDA_RECT LIB_TEXT::GetBoundingBox() const
 {
     /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
      * calling GetTextBox() that works using top to bottom Y axis orientation.
      */
-    EDA_Rect rect = GetTextBox( -1, -1, true );
+    EDA_RECT rect = GetTextBox( -1, -1, true );
 
     wxPoint orig = rect.GetOrigin();
     wxPoint end = rect.GetEnd();

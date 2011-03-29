@@ -134,9 +134,9 @@ public:
 
 
     /* Function GetBoundingBox
-     * @return an EDA_Rect that is the bounding box of the zone outline
+     * @return an EDA_RECT that is the bounding box of the zone outline
      */
-    EDA_Rect GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /**
      * Function Test_For_Copper_Island_And_Remove__Insulated_Islands
@@ -149,11 +149,11 @@ public:
      * Function CalculateSubAreaBoundaryBox
      * Calculates the bounding box of a a filled area ( list of CPolyPt )
      * use m_FilledPolysList as list of CPolyPt (that are the corners of one or more polygons or filled areas )
-     * @return an EDA_Rect as bounding box
+     * @return an EDA_RECT as bounding box
      * @param aIndexStart = index of the first corner of a polygon (filled area) in m_FilledPolysList
      * @param aIndexEnd = index of the last corner of a polygon in m_FilledPolysList
      */
-    EDA_Rect CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd );
+    EDA_RECT CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd );
 
     /**
      * Function IsOnCopperLayer
@@ -260,11 +260,11 @@ public:
 
     /**
      * Function HitTest (overlayed)
-     * tests if the given EDA_Rect contains the bounds of this object.
-     * @param refArea : the given EDA_Rect
+     * tests if the given EDA_RECT contains the bounds of this object.
+     * @param refArea : the given EDA_RECT
      * @return bool - true if a hit, else false
      */
-    bool HitTest( EDA_Rect& refArea );
+    bool HitTest( EDA_RECT& refArea );
 
     /**
      * Function Fill_Zone

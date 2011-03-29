@@ -242,7 +242,7 @@ public:
      *  if aConvert == 0 Convert is non used
      *  Invisible fields are not taken in account
      **/
-    EDA_Rect GetBoundingBox( int aUnit, int aConvert ) const;
+    EDA_RECT GetBoundingBox( int aUnit, int aConvert ) const;
 
     /**
      * Function GetBodyBoundingBox
@@ -253,7 +253,7 @@ public:
      *  if aConvert == 0 Convert is non used
      *  Fields are not taken in account
      **/
-    EDA_Rect GetBodyBoundingBox( int aUnit, int aConvert ) const;
+    EDA_RECT GetBodyBoundingBox( int aUnit, int aConvert ) const;
 
     bool SaveDateAndTime( FILE* aFile );
     bool LoadDateAndTime( char* aLine );
@@ -475,7 +475,7 @@ public:
      * @return The number of draw objects found inside the block select
      *         rectangle.
      */
-    int SelectItems( EDA_Rect& aRect, int aUnit, int aConvert, bool aEditPinByPin );
+    int SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool aEditPinByPin );
 
     /**
      * Clears all the draw items marked by a block select.

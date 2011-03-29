@@ -107,7 +107,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
             if( curr_zone->m_FilledPolysList[indexend].end_contour ) // end of a filled sub-area found
             {
                 subnet++;
-                EDA_Rect bbox = curr_zone->CalculateSubAreaBoundaryBox( indexstart, indexend );
+                EDA_RECT bbox = curr_zone->CalculateSubAreaBoundaryBox( indexstart, indexend );
                 for( unsigned ic = 0; ic < Candidates.size(); ic++ )
                 { // test if this area is connected to a board item:
                     item = Candidates[ic];

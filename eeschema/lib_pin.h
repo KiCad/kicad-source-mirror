@@ -159,7 +159,7 @@ public:
 
     virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-    virtual EDA_Rect GetBoundingBox() const;
+    virtual EDA_RECT GetBoundingBox() const;
 
     wxPoint ReturnPinEndPoint() const;
 
@@ -468,7 +468,7 @@ protected:
      */
     virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
     virtual void DoOffset( const wxPoint& aOffset );
-    virtual bool DoTestInside( EDA_Rect& aRect ) const;
+    virtual bool DoTestInside( EDA_RECT& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );
     virtual wxPoint DoGetPosition() const { return m_position; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );

@@ -99,12 +99,12 @@ public:
 
     /**
      * Function HitTest (overlayed)
-     * tests if the given EDA_Rect intersect this object.
+     * tests if the given EDA_RECT intersect this object.
      * For now, an ending point must be inside this rect.
-     * @param refArea the given EDA_Rect to test
+     * @param refArea the given EDA_RECT to test
      * @return bool - true if a hit, else false
      */
-    bool         HitTest( EDA_Rect& refArea );
+    bool         HitTest( EDA_RECT& refArea );
 
     /**
      * Function GetClass

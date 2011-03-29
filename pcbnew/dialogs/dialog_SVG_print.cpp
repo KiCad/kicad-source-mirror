@@ -242,7 +242,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
                                     // to print floating point numbers like 1.3)
     wxSVGFileDC       dc( FullFileName, SheetSize.x, SheetSize.y, dpi );
 
-    EDA_Rect          tmp = panel->m_ClipBox;
+    EDA_RECT          tmp = panel->m_ClipBox;
     GRResetPenAndBrush( &dc );
     GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? false : true );
     s_Parameters.m_DrillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
