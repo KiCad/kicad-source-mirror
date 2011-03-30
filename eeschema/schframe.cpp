@@ -393,17 +393,28 @@ int SCH_EDIT_FRAME::BestZoom()
 {
     int    dx, dy;
     wxSize size;
-    double zoom;
 
     dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
     dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
 
     size = DrawPanel->GetClientSize();
-    zoom = MAX( (double) dx / (double) size.x, (double) dy / (double) size.y );
+    int ii = wxRound( (double) dx / size.x * (double) GetScreen()->m_ZoomScalar );
+    int jj = wxRound( (double) dx / size.x * (double) GetScreen()->m_ZoomScalar );
+    int bestzoom = MAX( ii, jj );
 
     GetScreen()->SetScrollCenterPosition( wxPoint( dx / 2, dy / 2 ) );
 
-    return wxRound( zoom * (double) GetScreen()->m_ZoomScalar );
+#if defined( __WINDOWS__ ) && !wxCHECK_VERSION(2, 9, 1)
+    /* This is a workaround: wxWidgets (wxMSW) before version 2.9 seems have
+     * problems with scale values < 1
+     * corresponding to values < GetScreen()->m_ZoomScalar
+     * So we keep bestzoom >= GetScreen()->m_ZoomScalar
+     */
+    if( bestzoom < GetScreen()->m_ZoomScalar )
+        bestzoom = GetScreen()->m_ZoomScalar;
+#endif
+
+    return bestzoom;
 }
 
 
