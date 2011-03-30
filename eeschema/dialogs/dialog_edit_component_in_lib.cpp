@@ -304,8 +304,16 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::AddAliasOfPart( wxCommandEvent& event )
     if( aliasname.IsEmpty() )
         return;
 
-    if( m_PartAliasListCtrl->FindString( aliasname ) != wxNOT_FOUND
-        || library->FindEntry( aliasname ) != NULL )
+    if( m_PartAliasListCtrl->FindString( aliasname ) != wxNOT_FOUND )
+    {
+        wxString msg;
+        msg.Printf( _( "Alias or component name <%s> already in use." ),
+                    GetChars( aliasname ) );
+        DisplayError( this, msg );
+        return;
+    }
+
+    if( library && library->FindEntry( aliasname ) != NULL )
     {
         wxString msg;
         msg.Printf( _( "Alias or component name <%s> already exists in library <%s>." ),

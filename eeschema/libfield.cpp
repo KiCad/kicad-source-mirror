@@ -69,7 +69,7 @@ void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* aField )
         wxString msg;
 
         // Test the current library for name conflicts.
-        if( m_library->FindEntry( text ) != NULL )
+        if( m_library && m_library->FindEntry( text ) != NULL )
         {
             msg.Printf( _( "The name <%s> conflicts with an existing entry in the component \
 library <%s>.\n\nDo you wish to replace the current component in library with this one?" ),
@@ -88,8 +88,7 @@ library <%s>.\n\nDo you wish to replace the current component in library with th
         {
             msg.Printf( _( "The current component already has an alias named <%s>.\n\nDo you \
 wish to remove this alias from the component?" ),
-                        GetChars( text ),
-                        GetChars( m_library->GetName() ) );
+                        GetChars( text ) );
 
             int rsp = wxMessageBox( msg, _( "Confirm" ), wxYES_NO | wxICON_QUESTION, this );
 
@@ -102,7 +101,7 @@ wish to remove this alias from the component?" ),
         parent->SetName( text );
 
         // Test the library for any conflicts with the any aliases in the current component.
-        if( parent->GetAliasCount() > 1 && m_library->Conflicts( parent ) )
+        if( parent->GetAliasCount() > 1 && m_library && m_library->Conflicts( parent ) )
         {
             msg.Printf( _( "The new component contains alias names that conflict with entries \
 in the component library <%s>.\n\nDo you wish to remove all of the conflicting aliases from \
