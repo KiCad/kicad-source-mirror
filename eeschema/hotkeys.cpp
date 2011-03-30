@@ -743,8 +743,8 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                 wxPostEvent( this, cmd );
                 break;
 
-            case SCH_SHEET_LABEL_T:
-                cmd.SetId( ID_POPUP_SCH_MOVE_PINSHEET );
+            case SCH_SHEET_PIN_T:
+                cmd.SetId( ID_POPUP_SCH_MOVE_SHEET_PIN );
                 wxPostEvent( this, cmd );
                 break;
 
@@ -791,8 +791,8 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             wxPostEvent( this, cmd );
             break;
 
-        case SCH_SHEET_LABEL_T:
-            cmd.SetId( ID_POPUP_SCH_EDIT_PINSHEET );
+        case SCH_SHEET_PIN_T:
+            cmd.SetId( ID_POPUP_SCH_EDIT_SHEET_PIN );
             wxPostEvent( this, cmd );
             break;
 

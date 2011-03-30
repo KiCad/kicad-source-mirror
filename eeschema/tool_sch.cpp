@@ -175,11 +175,11 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_IMPORT_HLABEL_BUTT, wxEmptyString,
                          wxBitmap( import_hierarchical_label_xpm ),
-                         HELP_IMPORT_PINSHEET, wxITEM_CHECK );
+                         HELP_IMPORT_SHEETPIN, wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_SHEET_LABEL_BUTT, wxEmptyString,
+    m_VToolBar->AddTool( ID_SHEET_PIN_BUTT, wxEmptyString,
                          wxBitmap( add_hierar_pin_xpm ),
-                         HELP_PLACE_PINSHEET, wxITEM_CHECK );
+                         HELP_PLACE_SHEETPIN, wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_LINE_COMMENT_BUTT, wxEmptyString,
                          wxBitmap( add_dashed_line_xpm ),

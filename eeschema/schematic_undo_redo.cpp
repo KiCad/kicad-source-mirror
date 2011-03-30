@@ -160,7 +160,7 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
-    case SCH_SHEET_LABEL_T:
+    case SCH_SHEET_PIN_T:
         #undef SOURCE
         #undef DEST
         #define SOURCE ( (SCH_SHEET_PIN*) aItem )

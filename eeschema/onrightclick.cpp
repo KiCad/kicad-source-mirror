@@ -33,7 +33,7 @@ static void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame );
 static void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame );
 static void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame );
 static void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet );
-static void AddMenusForPinSheet( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet );
+static void AddMenusForSheetPin( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet );
 static void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text );
 static void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label );
 static void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel );
@@ -186,8 +186,8 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         AddMenusForHierchicalSheet( PopMenu, (SCH_SHEET*) item );
         break;
 
-    case SCH_SHEET_LABEL_T:
-        AddMenusForPinSheet( PopMenu, (SCH_SHEET_PIN*) item );
+    case SCH_SHEET_PIN_T:
+        AddMenusForSheetPin( PopMenu, (SCH_SHEET_PIN*) item );
         break;
 
     default:
@@ -587,11 +587,11 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_RESIZE_SHEET, _( "Resize Sheet" ),
                       resize_sheet_xpm );
         PopMenu->AppendSeparator();
-        ADD_MENUITEM( PopMenu, ID_POPUP_IMPORT_GLABEL, _( "Import PinSheets" ),
+        ADD_MENUITEM( PopMenu, ID_POPUP_IMPORT_GLABEL, _( "Import Sheet Pins" ),
                       import_hierarchical_label_xpm );
 
-        if( Sheet->HasUndefinedLabels() )  // Sheet has pin labels, and can be cleaned
-            ADD_MENUITEM( PopMenu, ID_POPUP_SCH_CLEANUP_SHEET, _( "Cleanup PinSheets" ),
+        if( Sheet->HasUndefinedPins() )  // Sheet has pin labels, and can be cleaned
+            ADD_MENUITEM( PopMenu, ID_POPUP_SCH_CLEANUP_SHEET, _( "Cleanup Sheet Pins" ),
                           options_pinsheet_xpm );
         PopMenu->AppendSeparator();
         msg = AddHotkeyName( _( "Delete Sheet" ), s_Schematic_Hokeys_Descr, HK_DELETE );
@@ -600,21 +600,21 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
 }
 
 
-void AddMenusForPinSheet( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet )
+void AddMenusForSheetPin( wxMenu* PopMenu, SCH_SHEET_PIN* PinSheet )
 {
     wxString msg;
 
     if( !PinSheet->GetFlags() )
     {
-        msg = AddHotkeyName( _( "Move PinSheet" ), s_Schematic_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Move Sheet Pin" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_PINSHEET, msg, move_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_SHEET_PIN, msg, move_xpm );
     }
 
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_PINSHEET, _( "Edit PinSheet" ), edit_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_SHEET_PIN, _( "Edit Sheet Pin" ), edit_xpm );
 
     if( !PinSheet->GetFlags() )
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete PinSheet" ), delete_pinsheet_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Sheet Pin" ), delete_pinsheet_xpm );
 }
 
 

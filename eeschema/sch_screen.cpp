@@ -149,14 +149,14 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
 
     SetModify();
 
-    if( aItem->Type() == SCH_SHEET_LABEL_T )
+    if( aItem->Type() == SCH_SHEET_PIN_T )
     {
         // This structure is attached to a sheet, get the parent sheet object.
-        SCH_SHEET_PIN* sheetLabel = (SCH_SHEET_PIN*) aItem;
-        SCH_SHEET* sheet = sheetLabel->GetParent();
+        SCH_SHEET_PIN* sheetPin = (SCH_SHEET_PIN*) aItem;
+        SCH_SHEET* sheet = sheetPin->GetParent();
         wxCHECK_RET( sheet != NULL,
                      wxT( "Sheet label parent not properly set, bad programmer!" ) );
-        sheet->RemoveLabel( sheetLabel );
+        sheet->RemovePin( sheetPin );
         return;
     }
     else
@@ -228,11 +228,11 @@ SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T 
                     return (SCH_ITEM*) field;
             }
         }
-        else if( (aType == SCH_SHEET_LABEL_T) && (item->Type() == SCH_SHEET_T) )
+        else if( (aType == SCH_SHEET_PIN_T) && (item->Type() == SCH_SHEET_T) )
         {
             SCH_SHEET* sheet = (SCH_SHEET*)item;
 
-            SCH_SHEET_PIN* label = sheet->GetLabel( aPosition );
+            SCH_SHEET_PIN* label = sheet->GetPin( aPosition );
 
             if( label )
                 return (SCH_ITEM*) label;
@@ -625,7 +625,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
 
 SCH_SHEET_PIN* SCH_SCREEN::GetSheetLabel( const wxPoint& aPosition )
 {
-    SCH_SHEET_PIN* sheetLabel = NULL;
+    SCH_SHEET_PIN* sheetPin = NULL;
 
     for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
     {
@@ -633,13 +633,13 @@ SCH_SHEET_PIN* SCH_SCREEN::GetSheetLabel( const wxPoint& aPosition )
             continue;
 
         SCH_SHEET* sheet = (SCH_SHEET*) item;
-        sheetLabel = sheet->GetLabel( aPosition );
+        sheetPin = sheet->GetPin( aPosition );
 
-        if( sheetLabel )
+        if( sheetPin )
             break;
     }
 
-    return sheetLabel;
+    return sheetPin;
 }
 
 

@@ -329,12 +329,12 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
     s_PreviousSheetWidth = SHEET_MIN_WIDTH;
     s_PreviousSheetHeight = SHEET_MIN_HEIGHT;
 
-    BOOST_FOREACH( SCH_SHEET_PIN sheetLabel, aSheet->GetSheetPins() )
+    BOOST_FOREACH( SCH_SHEET_PIN sheetPin, aSheet->GetPins() )
     {
         s_PreviousSheetWidth = MAX( s_PreviousSheetWidth,
-                                    ( sheetLabel.GetLength() + 1 ) * sheetLabel.m_Size.x );
+                                    ( sheetPin.GetLength() + 1 ) * sheetPin.m_Size.x );
         s_PreviousSheetHeight = MAX( s_PreviousSheetHeight,
-                                     sheetLabel.m_Pos.y - aSheet->m_Pos.y );
+                                     sheetPin.m_Pos.y - aSheet->m_Pos.y );
     }
 
     DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );

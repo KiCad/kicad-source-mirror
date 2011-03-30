@@ -53,10 +53,10 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     m_AssociatedScreen = aSheet.m_AssociatedScreen;
     m_SheetName = aSheet.m_SheetName;
     m_FileName = aSheet.m_FileName;
-    m_labels = aSheet.m_labels;
+    m_pins = aSheet.m_pins;
 
-    for( size_t i = 0;  i < m_labels.size();  i++ )
-        m_labels[i].SetParent( this );
+    for( size_t i = 0;  i < m_pins.size();  i++ )
+        m_pins[i].SetParent( this );
 
     if( m_AssociatedScreen )
         m_AssociatedScreen->IncRefCount();
@@ -145,7 +145,7 @@ bool SCH_SHEET::Save( FILE* aFile ) const
 
     /* Save the list of labels in the sheet. */
 
-    BOOST_FOREACH( const SCH_SHEET_PIN& label, m_labels )
+    BOOST_FOREACH( const SCH_SHEET_PIN& label, m_pins )
     {
         if( !label.Save( aFile ) )
             return false;
@@ -161,7 +161,7 @@ bool SCH_SHEET::Save( FILE* aFile ) const
 bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
     int              fieldNdx, size;
-    SCH_SHEET_PIN*   SheetLabel;
+    SCH_SHEET_PIN*   sheetPin;
     char*            ptcar;
 
     m_TimeStamp = GetTimeStamp();
@@ -267,16 +267,16 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
         if( fieldNdx > 1 )
         {
-            SheetLabel = new SCH_SHEET_PIN( this );
+            sheetPin = new SCH_SHEET_PIN( this );
 
-            if( !SheetLabel->Load( aLine, aErrorMsg ) )
+            if( !sheetPin->Load( aLine, aErrorMsg ) )
             {
-                delete SheetLabel;
-                SheetLabel = NULL;
+                delete sheetPin;
+                sheetPin = NULL;
                 return false;
             }
 
-            AddLabel( SheetLabel );
+            AddPin( sheetPin );
         }
     }
 
@@ -299,59 +299,59 @@ void SCH_SHEET::SwapData( SCH_SHEET* copyitem )
     EXCHG( m_SheetName, copyitem->m_SheetName );
     EXCHG( m_SheetNameSize, copyitem->m_SheetNameSize );
     EXCHG( m_FileNameSize, copyitem->m_FileNameSize );
-    m_labels.swap( copyitem->m_labels );
+    m_pins.swap( copyitem->m_pins );
 
     // Ensure sheet labels have their .m_Parent member pointing really on their
     // parent, after swapping.
-    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_pins )
     {
         sheetPin.SetParent( this );
     }
 
-    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, copyitem->m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, copyitem->m_pins )
     {
         sheetPin.SetParent( copyitem );
     }
 }
 
 
-void SCH_SHEET::AddLabel( SCH_SHEET_PIN* aLabel )
+void SCH_SHEET::AddPin( SCH_SHEET_PIN* aSheetPin )
 {
-    wxASSERT( aLabel != NULL );
-    wxASSERT( aLabel->Type() == SCH_SHEET_LABEL_T );
+    wxASSERT( aSheetPin != NULL );
+    wxASSERT( aSheetPin->Type() == SCH_SHEET_PIN_T );
 
-    m_labels.push_back( aLabel );
-    renumberLabels();
+    m_pins.push_back( aSheetPin );
+    renumberPins();
 }
 
 
-void SCH_SHEET::RemoveLabel( SCH_SHEET_PIN* aLabel )
+void SCH_SHEET::RemovePin( SCH_SHEET_PIN* aSheetPin )
 {
-    wxASSERT( aLabel != NULL );
-    wxASSERT( aLabel->Type() == SCH_SHEET_LABEL_T );
+    wxASSERT( aSheetPin != NULL );
+    wxASSERT( aSheetPin->Type() == SCH_SHEET_PIN_T );
 
-    SCH_SHEET_PIN_LIST::iterator i;
+    SCH_SHEET_PINS::iterator i;
 
-    for( i = m_labels.begin();  i < m_labels.end();  ++i )
+    for( i = m_pins.begin();  i < m_pins.end();  ++i )
     {
-        if( *i == aLabel )
+        if( *i == aSheetPin )
         {
-            m_labels.erase( i );
-            renumberLabels();
+            m_pins.erase( i );
+            renumberPins();
             return;
         }
     }
 
     wxLogDebug( wxT( "Fix me: attempt to remove label %s which is not in sheet %s." ),
-                GetChars( aLabel->m_Text ), GetChars( m_SheetName ) );
+                GetChars( aSheetPin->m_Text ), GetChars( m_SheetName ) );
 }
 
 
-bool SCH_SHEET::HasLabel( const wxString& aName )
+bool SCH_SHEET::HasPin( const wxString& aName )
 {
-    BOOST_FOREACH( SCH_SHEET_PIN label, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN pin, m_pins )
     {
-        if( label.m_Text.CmpNoCase( aName ) == 0 )
+        if( pin.m_Text.CmpNoCase( aName ) == 0 )
             return true;
     }
 
@@ -361,18 +361,18 @@ bool SCH_SHEET::HasLabel( const wxString& aName )
 
 bool SCH_SHEET::IsVerticalOrientation()
 {
-    BOOST_FOREACH( SCH_SHEET_PIN label, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN pin, m_pins )
     {
-        if( label.GetEdge() > 1 )
+        if( pin.GetEdge() > 1 )
             return true;
     }
     return false;
 }
 
 
-bool SCH_SHEET::HasUndefinedLabels()
+bool SCH_SHEET::HasUndefinedPins()
 {
-    BOOST_FOREACH( SCH_SHEET_PIN label, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN pin, m_pins )
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
         EDA_ITEM* DrawStruct  = m_AssociatedScreen->GetDrawItems();
@@ -385,7 +385,7 @@ bool SCH_SHEET::HasUndefinedLabels()
 
             HLabel = (SCH_HIERLABEL*) DrawStruct;
 
-            if( label.m_Text.CmpNoCase( HLabel->m_Text ) == 0 )
+            if( pin.m_Text.CmpNoCase( HLabel->m_Text ) == 0 )
                 break;  // Found!
 
             HLabel = NULL;
@@ -447,9 +447,9 @@ void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
  */
 void SCH_SHEET::CleanupSheet()
 {
-    SCH_SHEET_PIN_LIST::iterator i = m_labels.begin();
+    SCH_SHEET_PINS::iterator i = m_pins.begin();
 
-    while( i != m_labels.end() )
+    while( i != m_pins.end() )
     {
         /* Search the schematic for a hierarchical label corresponding to this sheet label. */
         EDA_ITEM* DrawStruct = m_AssociatedScreen->GetDrawItems();
@@ -469,19 +469,19 @@ void SCH_SHEET::CleanupSheet()
         }
 
         if( HLabel == NULL )   // Hlabel not found: delete sheet label.
-            m_labels.erase( i );
+            m_pins.erase( i );
         else
             ++i;
     }
 }
 
 
-SCH_SHEET_PIN* SCH_SHEET::GetLabel( const wxPoint& aPosition )
+SCH_SHEET_PIN* SCH_SHEET::GetPin( const wxPoint& aPosition )
 {
-    BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN& pin, m_pins )
     {
-        if( label.HitTest( aPosition ) )
-            return &label;
+        if( pin.HitTest( aPosition ) )
+            return &pin;
     }
 
     return NULL;
@@ -585,7 +585,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
 
     /* Draw text : SheetLabel */
-    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_pins )
     {
         if( !( sheetPin.m_Flags & IS_MOVED ) )
             sheetPin.Draw( aPanel, aDC, aOffset, aDrawMode, aColor );
@@ -805,7 +805,7 @@ void SCH_SHEET::Rotate(wxPoint rotationPoint)
         NEGATE( m_Size.y );
     }
 
-    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_pins )
     {
         sheetPin.Rotate( rotationPoint );
     }
@@ -819,7 +819,7 @@ void SCH_SHEET::Mirror_X( int aXaxis_position )
     m_Pos.y += aXaxis_position;
     m_Pos.y -= m_Size.y;
 
-    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_pins )
     {
         sheetPin.Mirror_X( aXaxis_position );
     }
@@ -833,7 +833,7 @@ void SCH_SHEET::Mirror_Y( int aYaxis_position )
     m_Pos.x += aYaxis_position;
     m_Pos.x -= m_Size.x;
 
-    BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN& label, m_pins )
     {
         label.Mirror_Y( aYaxis_position );
     }
@@ -848,7 +848,7 @@ void SCH_SHEET::Resize( const wxSize& aSize )
     m_Size = aSize;
 
     /* Move the sheet labels according to the new sheet size. */
-    BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN& label, m_pins )
     {
         label.ConstraintOnEdge( label.m_Pos );
     }
@@ -877,14 +877,14 @@ bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
 }
 
 
-void SCH_SHEET::renumberLabels()
+void SCH_SHEET::renumberPins()
 {
-    int labelId = 2;
+    int id = 2;
 
-    BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN& pin, m_pins )
     {
-        label.SetNumber( labelId );
-        labelId++;
+        pin.SetNumber( id );
+        id++;
     }
 }
 
@@ -893,11 +893,11 @@ void SCH_SHEET::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
     // Using BOOST_FOREACH here creates problems (bad pointer value to pinsheet).
     // I do not know why.
-    for( unsigned ii = 0; ii < GetSheetPins().size(); ii++ )
+    for( unsigned ii = 0; ii < GetPins().size(); ii++ )
     {
-        SCH_SHEET_PIN &pinsheet = GetSheetPins()[ii];
+        SCH_SHEET_PIN &pinsheet = GetPins()[ii];
 
-        wxCHECK2_MSG( pinsheet.Type() == SCH_SHEET_LABEL_T, continue,
+        wxCHECK2_MSG( pinsheet.Type() == SCH_SHEET_PIN_T, continue,
                       wxT( "Invalid item in schematic sheet pin list.  Bad programmer!" ) );
 
         pinsheet.GetEndPoints( aItemList );
@@ -909,7 +909,7 @@ bool SCH_SHEET::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemL
 {
     bool currentState = IsDangling();
 
-    BOOST_FOREACH( SCH_SHEET_PIN& pinsheet, GetSheetPins() )
+    BOOST_FOREACH( SCH_SHEET_PIN& pinsheet, GetPins() )
     {
         pinsheet.IsDanglingStateChanged( aItemList );
     }
@@ -921,9 +921,9 @@ bool SCH_SHEET::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemL
 bool SCH_SHEET::IsDangling() const
 {
     // If any hierarchical label in the sheet is dangling, then the sheet is dangling.
-    for( size_t i = 0; i < GetSheetPins().size(); i++ )
+    for( size_t i = 0; i < GetPins().size(); i++ )
     {
-        if( GetSheetPins()[i].IsDangling() )
+        if( GetPins()[i].IsDangling() )
             return true;
     }
 
@@ -948,8 +948,8 @@ bool SCH_SHEET::IsSelectStateChanged( const wxRect& aRect )
 
 void SCH_SHEET::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 {
-    for( size_t i = 0; i < GetSheetPins().size(); i++ )
-        aPoints.push_back( GetSheetPins()[i].m_Pos );
+    for( size_t i = 0; i < GetPins().size(); i++ )
+        aPoints.push_back( GetPins()[i].m_Pos );
 }
 
 
@@ -966,12 +966,12 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR* aInspector, const void* aTestData,
             if( SEARCH_QUIT == aInspector->Inspect( this, aTestData ) )
                 return SEARCH_QUIT;
         }
-        else if( stype == SCH_SHEET_LABEL_T )
+        else if( stype == SCH_SHEET_PIN_T )
         {
             // Test the bounding boxes of sheet labels.
-            for( size_t i = 0;  i < m_labels.size();  i++ )
+            for( size_t i = 0;  i < m_pins.size();  i++ )
             {
-                if( SEARCH_QUIT == aInspector->Inspect( &m_labels[ i ], aTestData ) )
+                if( SEARCH_QUIT == aInspector->Inspect( &m_pins[ i ], aTestData ) )
                     return SEARCH_QUIT;
             }
         }
@@ -1023,7 +1023,7 @@ void SCH_SHEET::Show( int nestLevel, std::ostream& os )
                                  << TO_UTF8( m_SheetName ) << '"' << ">\n";
 
     // show all the pins, and check the linked list integrity
-    BOOST_FOREACH( SCH_SHEET_PIN& label, m_labels )
+    BOOST_FOREACH( SCH_SHEET_PIN& label, m_pins )
     {
         label.Show( nestLevel + 1, os );
     }

@@ -19,122 +19,89 @@
 #include "dialogs/dialog_sch_edit_sheet_pin.h"
 
 
-static void ExitPinSheet( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void Move_PinSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                           bool aErase );
-
-
-static int     s_CurrentTypeLabel = NET_INPUT;
-static wxSize  NetSheetTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
-static wxPoint s_InitialPosition;  // remember the initial value of the pin label when moving it
-static int     s_InitialEdge;
+int SCH_EDIT_FRAME::m_lastSheetPinType = NET_INPUT;
+wxSize SCH_EDIT_FRAME::m_lastSheetPinTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
+wxPoint SCH_EDIT_FRAME::m_lastSheetPinPosition;
+int SCH_EDIT_FRAME::m_lastSheetPinEdge;
 
 
 /* Called when aborting a move pinsheet label
  * delete a new pin sheet label, or restire its old position
  */
-static void ExitPinSheet( EDA_DRAW_PANEL* Panel, wxDC* DC )
+static void abortSheetPinMove( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
-    SCH_SHEET_PIN* SheetLabel = (SCH_SHEET_PIN*) Panel->GetScreen()->GetCurItem();
+    wxCHECK_RET( (aPanel != NULL) && (aDC != NULL), wxT( "Invalid panel or device context." ) );
 
-    if( SheetLabel == NULL )
-        return;
+    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
+    SCH_SHEET_PIN* sheetPin = (SCH_SHEET_PIN*) aPanel->GetScreen()->GetCurItem();
 
-    if( SheetLabel->IsNew() )
+    wxCHECK_RET( (frame != NULL) && (sheetPin != NULL) && (sheetPin->Type() == SCH_SHEET_PIN_T),
+                 wxT( "Invalid frame or sheet pin." ) );
+
+    sheetPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+
+    if( sheetPin->IsNew() )
     {
-        SheetLabel->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
-        SAFE_DELETE( SheetLabel );
+        SAFE_DELETE( sheetPin );
     }
     else
     {
-        SheetLabel->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
-        SheetLabel->m_Pos = s_InitialPosition;
-
         // Restore edge position:
-        SheetLabel->SetEdge( s_InitialEdge );
-        SheetLabel->Draw( Panel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        SheetLabel->m_Flags = 0;
+        sheetPin->m_Pos = frame->GetLastSheetPinPosition();
+        sheetPin->SetEdge( frame->GetLastSheetPinEdge() );
+        sheetPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        sheetPin->ClearFlags();
     }
 
-    Panel->GetScreen()->SetCurItem( NULL );
+    aPanel->GetScreen()->SetCurItem( NULL );
 }
 
 
-void SCH_SHEET_PIN::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
+static void moveSheetPin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                          bool aErase )
 {
-    SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
+    SCH_SHEET_PIN* sheetPin = (SCH_SHEET_PIN*) aPanel->GetScreen()->GetCurItem();
 
-    wxASSERT( Sheet != NULL && Sheet->Type() == SCH_SHEET_T );
-    SAFE_DELETE( g_ItemToUndoCopy );
-
-    int flags = m_Flags;
-    m_Flags = 0;
-
-    if( flags & IS_NEW )
-    {
-        frame->SaveCopyInUndoList( Sheet, UR_CHANGED );
-        Sheet->AddLabel( this );
-    }
-    else    // pin sheet was existing and only moved
-    {
-        wxPoint tmp = m_Pos;
-        m_Pos = s_InitialPosition;
-        SetEdge( s_InitialEdge );
-        frame->SaveCopyInUndoList( Sheet, UR_CHANGED );
-        m_Pos = tmp;
-    }
-
-    ConstraintOnEdge( frame->GetScreen()->GetCrossHairPosition() );
-
-    Sheet->Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    frame->DrawPanel->SetMouseCapture( NULL, NULL );
-    frame->DrawPanel->EndMouseCapture();
-}
-
-
-void SCH_EDIT_FRAME::StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC )
-{
-    NetSheetTextSize     = SheetLabel->m_Size;
-    s_CurrentTypeLabel   = SheetLabel->m_Shape;
-    SheetLabel->m_Flags |= IS_MOVED;
-    s_InitialPosition    = SheetLabel->m_Pos;
-    s_InitialEdge = SheetLabel->GetEdge();
-
-    DrawPanel->SetMouseCapture( Move_PinSheet, ExitPinSheet );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
-}
-
-
-static void Move_PinSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                           bool aErase )
-{
-    SCH_SHEET_PIN* SheetLabel = (SCH_SHEET_PIN*) aPanel->GetScreen()->GetCurItem();
-
-    if( SheetLabel == NULL )
+    if( sheetPin == NULL || sheetPin->Type() != SCH_SHEET_PIN_T )
         return;
 
     if( aErase )
-        SheetLabel->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+        sheetPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
-    SheetLabel->ConstraintOnEdge( aPanel->GetScreen()->GetCrossHairPosition() );
-
-    SheetLabel->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    sheetPin->ConstraintOnEdge( aPanel->GetScreen()->GetCrossHairPosition() );
+    sheetPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
 
 
-int SCH_EDIT_FRAME::Edit_PinSheet( SCH_SHEET_PIN* aLabel, wxDC* aDC )
+void SCH_EDIT_FRAME::MoveSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
 {
-    if( aLabel == NULL )
+    wxCHECK_RET( (aSheetPin != NULL) && (aSheetPin->Type() == SCH_SHEET_PIN_T),
+                 wxT( "Cannot move invalid schematic sheet pin object." ) );
+
+    m_lastSheetPinTextSize = aSheetPin->m_Size;
+    m_lastSheetPinType     = aSheetPin->m_Shape;
+    m_lastSheetPinPosition = aSheetPin->m_Pos;
+    m_lastSheetPinEdge     = aSheetPin->GetEdge();
+    aSheetPin->SetFlags( IS_MOVED );
+
+    DrawPanel->SetMouseCapture( moveSheetPin, abortSheetPinMove );
+    moveSheetPin( DrawPanel, aDC, wxDefaultPosition, true );
+}
+
+
+int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
+{
+    if( aSheetPin == NULL )
         return wxID_CANCEL;
 
     DIALOG_SCH_EDIT_SHEET_PIN dlg( this );
 
-    dlg.SetLabelName( aLabel->m_Text );
-    dlg.SetTextHeight( ReturnStringFromValue( g_UserUnit, aLabel->m_Size.y, m_InternalUnits ) );
+    dlg.SetLabelName( aSheetPin->m_Text );
+    dlg.SetTextHeight( ReturnStringFromValue( g_UserUnit, aSheetPin->m_Size.y, m_InternalUnits ) );
     dlg.SetTextHeightUnits( GetUnitsLabel( g_UserUnit ) );
-    dlg.SetTextWidth( ReturnStringFromValue( g_UserUnit, aLabel->m_Size.x, m_InternalUnits ) );
+    dlg.SetTextWidth( ReturnStringFromValue( g_UserUnit, aSheetPin->m_Size.x, m_InternalUnits ) );
     dlg.SetTextWidthUnits( GetUnitsLabel( g_UserUnit ) );
-    dlg.SetConnectionType( aLabel->m_Shape );
+    dlg.SetConnectionType( aSheetPin->m_Shape );
 
     /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier versions for
      * the flex grid sizer in wxGTK that prevents the last column from being sized
@@ -149,98 +116,93 @@ int SCH_EDIT_FRAME::Edit_PinSheet( SCH_SHEET_PIN* aLabel, wxDC* aDC )
         return wxID_CANCEL;
 
     if( aDC )
-        aLabel->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+        aSheetPin->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
-    aLabel->m_Text = dlg.GetLabelName();
-    aLabel->m_Size.y = ReturnValueFromString( g_UserUnit, dlg.GetTextHeight(), m_InternalUnits );
-    aLabel->m_Size.x = ReturnValueFromString( g_UserUnit, dlg.GetTextWidth(), m_InternalUnits );
-    aLabel->m_Shape = dlg.GetConnectionType();
+    aSheetPin->m_Text = dlg.GetLabelName();
+    aSheetPin->m_Size.y = ReturnValueFromString( g_UserUnit, dlg.GetTextHeight(), m_InternalUnits );
+    aSheetPin->m_Size.x = ReturnValueFromString( g_UserUnit, dlg.GetTextWidth(), m_InternalUnits );
+    aSheetPin->m_Shape = dlg.GetConnectionType();
 
     if( aDC )
-        aLabel->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        aSheetPin->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
     return wxID_OK;
 }
 
 
-/* Add a new sheet pin to the sheet at the current cursor position.
- */
-SCH_SHEET_PIN* SCH_EDIT_FRAME::Create_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
+SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
 {
-    wxString       Line, Text;
-    SCH_SHEET_PIN* NewSheetLabel;
+    wxString       line;
+    SCH_SHEET_PIN* sheetPin;
 
-    NewSheetLabel = new SCH_SHEET_PIN( Sheet, wxPoint( 0, 0 ), Line );
-    NewSheetLabel->m_Flags = IS_NEW;
-    NewSheetLabel->m_Size  = NetSheetTextSize;
-    NewSheetLabel->m_Shape = s_CurrentTypeLabel;
+    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), line );
+    sheetPin->SetFlags( IS_NEW );
+    sheetPin->m_Size  = m_lastSheetPinTextSize;
+    sheetPin->m_Shape = m_lastSheetPinType;
 
-    int diag = Edit_PinSheet( NewSheetLabel, NULL );
+    int response = EditSheetPin( sheetPin, NULL );
 
-    if( NewSheetLabel->m_Text.IsEmpty() || (diag == wxID_CANCEL) )
+    if( sheetPin->m_Text.IsEmpty() || (response == wxID_CANCEL) )
     {
-        delete NewSheetLabel;
+        delete sheetPin;
         return NULL;
     }
 
-    GetScreen()->SetCurItem( NewSheetLabel );
-    s_CurrentTypeLabel = NewSheetLabel->m_Shape;
+    GetScreen()->SetCurItem( sheetPin );
+    m_lastSheetPinType = sheetPin->m_Shape;
+    m_lastSheetPinTextSize = sheetPin->m_Size;
 
-    DrawPanel->SetMouseCapture( Move_PinSheet, ExitPinSheet );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
+    DrawPanel->SetMouseCapture( moveSheetPin, abortSheetPinMove );
+    moveSheetPin( DrawPanel, aDC, wxDefaultPosition, false );
 
     OnModify();
-    return NewSheetLabel;
+    return sheetPin;
 }
 
 
-/* Automatically create a sheet labels from global labels for each node in
- * the corresponding hierarchy.
- */
-SCH_SHEET_PIN* SCH_EDIT_FRAME::Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC )
+SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
 {
-    EDA_ITEM*      DrawStruct;
-    SCH_SHEET_PIN* NewSheetLabel;
-    SCH_HIERLABEL* HLabel = NULL;
+    EDA_ITEM*      item;
+    SCH_SHEET_PIN* sheetPin;
+    SCH_HIERLABEL* label = NULL;
 
-    if( !Sheet->GetScreen() )
+    if( !aSheet->GetScreen() )
         return NULL;
 
-    DrawStruct = Sheet->GetScreen()->GetDrawItems();
-    HLabel     = NULL;
+    item = aSheet->GetScreen()->GetDrawItems();
 
-    for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
+    for( ; item != NULL; item = item->Next() )
     {
-        if( DrawStruct->Type() != SCH_HIERARCHICAL_LABEL_T )
+        if( item->Type() != SCH_HIERARCHICAL_LABEL_T )
             continue;
 
-        HLabel = (SCH_HIERLABEL*) DrawStruct;
+        label = (SCH_HIERLABEL*) item;
 
         /* A global label has been found: check if there a corresponding sheet label. */
-        if( !Sheet->HasLabel( HLabel->m_Text ) )
+        if( !aSheet->HasPin( label->m_Text ) )
             break;
 
-        HLabel = NULL;
+        label = NULL;
     }
 
-    if( HLabel == NULL )
+    if( label == NULL )
     {
-        DisplayInfoMessage( this, _( "No new hierarchical labels found" ) );
+        DisplayInfoMessage( this, _( "No new hierarchical labels found." ) );
         return NULL;
     }
 
     OnModify();
     SAFE_DELETE( g_ItemToUndoCopy );
-    SaveCopyInUndoList( Sheet, UR_CHANGED );
+    SaveCopyInUndoList( aSheet, UR_CHANGED );
 
-    NewSheetLabel = new SCH_SHEET_PIN( Sheet, wxPoint( 0, 0 ), HLabel->m_Text );
-    NewSheetLabel->m_Flags = IS_NEW;
-    NewSheetLabel->m_Size  = NetSheetTextSize;
-    s_CurrentTypeLabel     = NewSheetLabel->m_Shape = HLabel->m_Shape;
+    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), label->m_Text );
+    sheetPin->SetFlags( IS_NEW );
+    sheetPin->m_Size   = m_lastSheetPinTextSize;
+    m_lastSheetPinType = sheetPin->m_Shape = label->m_Shape;
 
-    GetScreen()->SetCurItem( NewSheetLabel );
-    DrawPanel->SetMouseCapture( Move_PinSheet, ExitPinSheet );
-    Move_PinSheet( DrawPanel, DC, wxDefaultPosition, false );
+    GetScreen()->SetCurItem( sheetPin );
+    DrawPanel->SetMouseCapture( moveSheetPin, abortSheetPinMove );
+    moveSheetPin( DrawPanel, aDC, wxDefaultPosition, false );
 
-    return NewSheetLabel;
+    return sheetPin;
 }

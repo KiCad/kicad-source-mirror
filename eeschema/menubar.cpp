@@ -337,13 +337,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     /* Import hierarchical sheet */
     item = new wxMenuItem( placeMenu, ID_IMPORT_HLABEL_BUTT, _( "Import Hierarchical Label" ),
-                           HELP_IMPORT_PINSHEET, wxITEM_NORMAL );
+                           HELP_IMPORT_SHEETPIN, wxITEM_NORMAL );
     item->SetBitmap( import_hierarchical_label_xpm );
     placeMenu->Append( item );
 
     /* Add hierarchical Pin to Sheet */
-    item = new wxMenuItem( placeMenu, ID_SHEET_LABEL_BUTT, _( "Add Hierarchical Pin to Sheet" ),
-                           HELP_PLACE_PINSHEET, wxITEM_NORMAL );
+    item = new wxMenuItem( placeMenu, ID_SHEET_PIN_BUTT, _( "Add Hierarchical Pin to Sheet" ),
+                           HELP_PLACE_SHEETPIN, wxITEM_NORMAL );
     item->SetBitmap( add_hierar_pin_xpm );
     placeMenu->Append( item );
 

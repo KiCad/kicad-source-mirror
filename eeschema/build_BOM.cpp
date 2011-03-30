@@ -46,11 +46,11 @@ void GenListeGLabels( LABEL_OBJECT_LIST& aList )
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) schItem;
 
-                BOOST_FOREACH( SCH_SHEET_PIN& sheetLabel, sheet->GetSheetPins() )
+                BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, sheet->GetPins() )
                 {
-                    label.m_LabelType = SCH_SHEET_LABEL_T;
+                    label.m_LabelType = SCH_SHEET_PIN_T;
                     label.m_SheetPath = *path;
-                    label.m_Label     = &sheetLabel;
+                    label.m_Label     = &sheetPin;
                     aList.push_back( label );
                 }
             }
@@ -75,12 +75,12 @@ bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
     int       ii;
     wxString* Text1, * Text2;
 
-    if( obj1.m_LabelType == SCH_SHEET_LABEL_T )
+    if( obj1.m_LabelType == SCH_SHEET_PIN_T )
         Text1 = &( (SCH_SHEET_PIN*)(obj1.m_Label) )->m_Text;
     else
         Text1 = &( (SCH_TEXT*)(obj1.m_Label) )->m_Text;
 
-    if( obj2.m_LabelType == SCH_SHEET_LABEL_T )
+    if( obj2.m_LabelType == SCH_SHEET_PIN_T )
         Text2 = &( (SCH_SHEET_PIN*)(obj2.m_Label) )->m_Text;
     else
         Text2 = &( (SCH_TEXT*)(obj2.m_Label) )->m_Text;
@@ -109,12 +109,12 @@ bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
 
     if( ii == 0 )
     {
-        if( obj1.m_LabelType == SCH_SHEET_LABEL_T )
+        if( obj1.m_LabelType == SCH_SHEET_PIN_T )
             Text1 = ( (SCH_SHEET_PIN*) obj1.m_Label )->m_Text;
         else
             Text1 = ( (SCH_TEXT*) obj1.m_Label )->m_Text;
 
-        if( obj2.m_LabelType == SCH_SHEET_LABEL_T )
+        if( obj2.m_LabelType == SCH_SHEET_PIN_T )
             Text2 = ( (SCH_SHEET_PIN*) obj2.m_Label )->m_Text;
         else
             Text2 = ( (SCH_TEXT*) obj2.m_Label )->m_Text;
@@ -157,7 +157,7 @@ int PrintListeGLabel( FILE* f, LABEL_OBJECT_LIST& aList )
             fputs( TO_UTF8( msg ), f );
             break;
 
-        case SCH_SHEET_LABEL_T:
+        case SCH_SHEET_PIN_T:
         {
             pinsheet = (SCH_SHEET_PIN*) aList[ii].m_Label;
             int jj = pinsheet->m_Shape;

@@ -19,6 +19,7 @@
 #include "trigo.h"
 #include "richio.h"
 #include "class_sch_screen.h"
+#include "wxEeschemaStruct.h"
 
 #include "general.h"
 #include "protos.h"
@@ -37,7 +38,7 @@
  */
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :
-    SCH_HIERLABEL( pos, text, SCH_SHEET_LABEL_T )
+    SCH_HIERLABEL( pos, text, SCH_SHEET_PIN_T )
 {
     SetParent( parent );
     wxASSERT( parent );
@@ -109,6 +110,40 @@ void SCH_SHEET_PIN::SetNumber( int aNumber )
     wxASSERT( aNumber >= 2 );
 
     m_Number = aNumber;
+}
+
+
+void SCH_SHEET_PIN::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
+{
+    SCH_SHEET* sheet = (SCH_SHEET*) GetParent();
+
+    wxCHECK_RET( (sheet != NULL) && (sheet->Type() == SCH_SHEET_T),
+                 wxT( "Cannot place sheet pin in invalid schematic sheet object." ) );
+
+    SAFE_DELETE( g_ItemToUndoCopy );
+
+    int flags = m_Flags;
+    m_Flags = 0;
+
+    if( flags & IS_NEW )
+    {
+        aFrame->SaveCopyInUndoList( sheet, UR_CHANGED );
+        sheet->AddPin( this );
+    }
+    else    // pin sheet was existing and only moved
+    {
+        wxPoint tmp = m_Pos;
+        m_Pos = aFrame->GetLastSheetPinPosition();
+        SetEdge( aFrame->GetLastSheetPinEdge() );
+        aFrame->SaveCopyInUndoList( sheet, UR_CHANGED );
+        m_Pos = tmp;
+    }
+
+    ConstraintOnEdge( aFrame->GetScreen()->GetCrossHairPosition() );
+
+    sheet->Draw( aFrame->DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    aFrame->DrawPanel->SetMouseCapture( NULL, NULL );
+    aFrame->DrawPanel->EndMouseCapture();
 }
 
 
@@ -462,7 +497,7 @@ void SCH_SHEET_PIN::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 wxString SCH_SHEET_PIN::GetSelectMenuText() const
 {
     wxString tmp;
-    tmp.Printf( _( "Hierarchical Sheet Label %s" ), GetChars( GetText() ) );
+    tmp.Printf( _( "Hierarchical Sheet Pin %s" ), GetChars( GetText() ) );
     return tmp;
 }
 

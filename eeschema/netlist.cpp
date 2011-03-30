@@ -694,19 +694,19 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             list.Push( STRUCT );
             SCH_SHEET* sheet = (SCH_SHEET*) DrawList;
 
-            BOOST_FOREACH( SCH_SHEET_PIN label, sheet->GetSheetPins() )
+            BOOST_FOREACH( SCH_SHEET_PIN pin, sheet->GetPins() )
             {
-                ii = IsBusLabel( label.m_Text );
+                ii = IsBusLabel( pin.m_Text );
                 new_item = new NETLIST_OBJECT();
                 new_item->m_SheetListInclude = *sheetlist;
-                new_item->m_Comp = &label;
+                new_item->m_Comp = &pin;
                 new_item->m_SheetList = *sheetlist;
                 new_item->m_Link = DrawList;
                 new_item->m_Type = NET_SHEETLABEL;
-                new_item->m_ElectricalType = label.m_Shape;
-                new_item->m_Label = label.m_Text;
+                new_item->m_ElectricalType = pin.m_Shape;
+                new_item->m_Label = pin.m_Text;
                 new_item->m_SheetListInclude = list;
-                new_item->m_Start = new_item->m_End = label.m_Pos;
+                new_item->m_Start = new_item->m_End = pin.m_Pos;
                 aNetItemBuffer.push_back( new_item );
 
                 if( ii )
@@ -716,7 +716,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             break;
         }
 
-        case SCH_SHEET_LABEL_T:
+        case SCH_SHEET_PIN_T:
         default:
         {
             wxString msg;

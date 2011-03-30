@@ -44,7 +44,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             case SCH_GLOBAL_LABEL_T:
             case SCH_HIERARCHICAL_LABEL_T:
             case SCH_TEXT_T:
-            case SCH_SHEET_LABEL_T:
+            case SCH_SHEET_PIN_T:
             case SCH_SHEET_T:
             case SCH_BUS_ENTRY_T:
             case SCH_JUNCTION_T:
@@ -239,7 +239,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_IMPORT_HLABEL_BUTT:
-    case ID_SHEET_LABEL_BUTT:
+    case ID_SHEET_PIN_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
             item = LocateAndShowItem( aPosition, SCH_COLLECTOR::SheetsAndSheetLabels );
 
@@ -249,11 +249,11 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (item->Type() == SCH_SHEET_T) && (item->GetFlags() == 0) )
         {
             if( GetToolId() == ID_IMPORT_HLABEL_BUTT )
-                GetScreen()->SetCurItem( Import_PinSheet( (SCH_SHEET*) item, aDC ) );
+                GetScreen()->SetCurItem( ImportSheetPin( (SCH_SHEET*) item, aDC ) );
             else
-                GetScreen()->SetCurItem( Create_PinSheet( (SCH_SHEET*) item, aDC ) );
+                GetScreen()->SetCurItem( CreateSheetPin( (SCH_SHEET*) item, aDC ) );
         }
-        else if( (item->Type() == SCH_SHEET_LABEL_T) && (item->GetFlags() != 0) )
+        else if( (item->Type() == SCH_SHEET_PIN_T) && (item->GetFlags() != 0) )
         {
             item->Place( this, aDC );
             GetScreen()->TestDanglingEnds();

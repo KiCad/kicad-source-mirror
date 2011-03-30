@@ -96,6 +96,12 @@ private:
     int                   m_repeatLabelDelta;   ///< Repeat label number increment step.
     SCH_COLLECTOR         m_collectedItems;     ///< List of collected items.
 
+    static int            m_lastSheetPinType;      ///< Last sheet pin type.
+    static wxSize         m_lastSheetPinTextSize;  ///< Last sheet pin text size.
+    static wxPoint        m_lastSheetPinPosition;  ///< Last sheet pin position.
+    static int            m_lastSheetPinEdge;      ///< Last sheet edge a sheet pin was placed.
+
+
 public:
     SCH_EDIT_FRAME( wxWindow* father,
                     const wxString& title,
@@ -528,15 +534,48 @@ private:
 public:
     bool            EditSheet( SCH_SHEET* Sheet, wxDC* DC );
 
+    wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
+
+    int GetLastSheetPinEdge() const { return m_lastSheetPinEdge; }
+
 private:
     void            StartMoveSheet( SCH_SHEET* sheet, wxDC* DC );
-    SCH_SHEET_PIN*  Create_PinSheet( SCH_SHEET* Sheet, wxDC* DC );
-    int             Edit_PinSheet( SCH_SHEET_PIN* SheetLabel, wxDC* DC );
-    void            StartMove_PinSheet( SCH_SHEET_PIN* SheetLabel,
-                                        wxDC*          DC );
-    void            Place_PinSheet( SCH_SHEET_PIN* SheetLabel,
-                                    wxDC*          DC );
-    SCH_SHEET_PIN*  Import_PinSheet( SCH_SHEET* Sheet, wxDC* DC );
+
+    /**
+     * Function CreateSheetPin
+     * creates a new SCH_SHEET_PIN object and add it to \a aSheet at the current cursor position.
+     * @param aSheet The sheet to add the new sheet pin to.
+     * @param aDC The device context to draw on.
+     * @return The new sheet pin object created or NULL if the task was aborted by the user.
+     */
+    SCH_SHEET_PIN* CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC );
+
+    /**
+     * Function EditSheetPin
+     * displays the dialog for editing the parameters of \a aSheetPin.
+     * @param aSheetPin The sheet pin item to edit.
+     * @param aDC The device context to draw on.
+     * @return The user response from the edit dialog.
+     */
+    int EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC );
+
+    /**
+     * Function MoveSheetPin
+     * moves \a aSheetPin within it's parent sheet object.
+     * @param aSheetPin The sheet pin item to move.
+     * @param aDC The device context to draw on.
+     */
+    void MoveSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC );
+
+    /**
+     * Function ImportSheetPin
+     * automatically creates a sheet pin from the hierarchical labels in the schematic
+     * referenced by \a aSheet.
+     * @param aSheet The sheet to import the new sheet pin to.
+     * @param aDC The device context to draw on.
+     * @return The new sheet pin object importd or NULL if the task was aborted by the user.
+     */
+    SCH_SHEET_PIN* ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC );
 
 public:
     /**

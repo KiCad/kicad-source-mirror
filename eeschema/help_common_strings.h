@@ -39,13 +39,13 @@
     _(\
         "Place a global label.\nWarning: all global labels with the same name are connected in whole hierarchy" )
 #define HELP_PLACE_HIER_LABEL \
-    _( "Place a hierarchical label. This label will be seen as a pin sheet in the sheet symbol" )
+    _( "Place a hierarchical label. This label will be seen as a hierarchical pin in the sheet symbol" )
 
 #define HELP_PLACE_JUNCTION     _( "Place a junction" )
 #define HELP_PLACE_SHEET        _( "Create a hierarchical sheet" )
-#define HELP_IMPORT_PINSHEET    _( \
-        "Place a pin sheet, imported from the corresponding hierarchical label in sheet" )
-#define HELP_PLACE_PINSHEET     _( "Place a hierarchical pin to sheet" )
+#define HELP_IMPORT_SHEETPIN    _( \
+        "Place a hierarchical pin imported from the corresponding hierarchical label in sheet" )
+#define HELP_PLACE_SHEETPIN     _( "Place a hierarchical pin in sheet" )
 #define HELP_PLACE_GRAPHICLINES _( "Place graphic lines or polygons" )
 #define HELP_PLACE_GRAPHICTEXTS _( "Place graphic text (comment)" )
 

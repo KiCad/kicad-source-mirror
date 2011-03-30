@@ -43,7 +43,7 @@ const KICAD_T SCH_COLLECTOR::AllItems[] = {
     SCH_FIELD_T,
     SCH_COMPONENT_T,
     LIB_PIN_T,
-    SCH_SHEET_LABEL_T,
+    SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     EOT
 };
@@ -62,7 +62,7 @@ const KICAD_T SCH_COLLECTOR::AllItemsButPins[] = {
     SCH_HIERARCHICAL_LABEL_T,
     SCH_FIELD_T,
     SCH_COMPONENT_T,
-    SCH_SHEET_LABEL_T,
+    SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     EOT
 };
@@ -75,7 +75,7 @@ const KICAD_T SCH_COLLECTOR::EditableItems[] = {
     SCH_HIERARCHICAL_LABEL_T,
     SCH_FIELD_T,
     SCH_COMPONENT_T,
-    SCH_SHEET_LABEL_T,
+    SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     EOT
 };
@@ -94,7 +94,7 @@ const KICAD_T SCH_COLLECTOR::MovableItems[] = {
     SCH_HIERARCHICAL_LABEL_T,
     SCH_FIELD_T,
     SCH_COMPONENT_T,
-    SCH_SHEET_LABEL_T,
+    SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     EOT
 };
@@ -154,7 +154,7 @@ const KICAD_T SCH_COLLECTOR::SheetsOnly[] = {
 
 
 const KICAD_T SCH_COLLECTOR::SheetsAndSheetLabels[] = {
-    SCH_SHEET_LABEL_T,
+    SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     EOT
 };

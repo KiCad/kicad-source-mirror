@@ -42,7 +42,7 @@ void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
         Struct->SetParent( Screen );
         break;
 
-    case SCH_SHEET_LABEL_T:
+    case SCH_SHEET_PIN_T:
         break;
 
     default:
@@ -121,10 +121,10 @@ void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList )
         SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
         ITEM_PICKER itemWrapper( item, UR_DELETED );
 
-        if( item->Type() == SCH_SHEET_LABEL_T )
+        if( item->Type() == SCH_SHEET_PIN_T )
         {
             /* this item is depending on a sheet, and is not in global list */
-            wxMessageBox( wxT( "DeleteItemsInList() err: unexpected SCH_SHEET_LABEL_T" ) );
+            wxMessageBox( wxT( "DeleteItemsInList() err: unexpected SCH_SHEET_PIN_T" ) );
         }
         else
         {
@@ -147,14 +147,14 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem )
 
     SCH_SCREEN* screen = GetScreen();
 
-    if( aItem->Type() == SCH_SHEET_LABEL_T )
+    if( aItem->Type() == SCH_SHEET_PIN_T )
     {
         // This iten is attached to a node, and is not accessible by the global list directly.
         SCH_SHEET* sheet = (SCH_SHEET*) aItem->GetParent();
         wxCHECK_RET( (sheet != NULL) && (sheet->Type() == SCH_SHEET_T),
                      wxT( "Sheet label has invalid parent item." ) );
         SaveCopyInUndoList( (SCH_ITEM*) sheet, UR_CHANGED );
-        sheet->RemoveLabel( (SCH_SHEET_PIN*) aItem );
+        sheet->RemovePin( (SCH_SHEET_PIN*) aItem );
         DrawPanel->RefreshDrawingRect( sheet->GetBoundingBox() );
     }
     else
@@ -198,7 +198,7 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
             case SCH_LABEL_T:
             case SCH_GLOBAL_LABEL_T:
             case SCH_HIERARCHICAL_LABEL_T:
-            case SCH_SHEET_LABEL_T:
+            case SCH_SHEET_PIN_T:
             case SCH_MARKER_T:
             case SCH_NO_CONNECT_T:
             default:

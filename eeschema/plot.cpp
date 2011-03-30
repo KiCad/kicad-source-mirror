@@ -250,7 +250,7 @@ static void PlotTextStruct( PLOTTER* plotter, SCH_TEXT* aSchText )
 
     switch( aSchText->Type() )
     {
-    case SCH_SHEET_LABEL_T:
+    case SCH_SHEET_PIN_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_LABEL_T:
@@ -373,7 +373,8 @@ static void PlotSheetStruct( PLOTTER* plotter, SCH_SHEET* Struct )
     plotter->set_color( ReturnLayerColor( Struct->GetLayer() ) );
 
     /* Draw texts : SheetLabel */
-    BOOST_FOREACH( SCH_SHEET_PIN & pin_sheet, Struct->GetSheetPins() ) {
+    BOOST_FOREACH( SCH_SHEET_PIN& pin_sheet, Struct->GetPins() )
+    {
         //pin_sheet.Plot( plotter );
         PlotTextStruct( plotter, &pin_sheet );
     }
@@ -443,7 +444,7 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* aDrawlist )
         case SCH_POLYLINE_T:
             break;
 
-        case SCH_SHEET_LABEL_T:
+        case SCH_SHEET_PIN_T:
             break;
 
         case SCH_MARKER_T:

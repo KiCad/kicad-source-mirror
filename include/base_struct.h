@@ -61,7 +61,7 @@ enum KICAD_T {
     SCH_HIERARCHICAL_LABEL_T,
     SCH_FIELD_T,
     SCH_COMPONENT_T,
-    SCH_SHEET_LABEL_T,
+    SCH_SHEET_PIN_T,
     SCH_SHEET_T,
 
     // General

@@ -53,8 +53,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_END_SHEET:
     case ID_POPUP_SCH_RESIZE_SHEET:
     case ID_POPUP_IMPORT_GLABEL:
-    case ID_POPUP_SCH_EDIT_PINSHEET:
-    case ID_POPUP_SCH_MOVE_PINSHEET:
+    case ID_POPUP_SCH_EDIT_SHEET_PIN:
+    case ID_POPUP_SCH_MOVE_SHEET_PIN:
     case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
     case ID_POPUP_SCH_MOVE_CMP_REQUEST:
     case ID_POPUP_SCH_DRAG_CMP_REQUEST:
@@ -227,7 +227,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_IMPORT_GLABEL:
         if( item != NULL && item->Type() == SCH_SHEET_T )
-            screen->SetCurItem( Import_PinSheet( (SCH_SHEET*) item, &dc ) );
+            screen->SetCurItem( ImportSheetPin( (SCH_SHEET*) item, &dc ) );
         break;
 
     case ID_POPUP_SCH_CLEANUP_SHEET:
@@ -235,7 +235,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             SCH_SHEET* sheet = (SCH_SHEET*) item;
 
-            if( !sheet->HasUndefinedLabels() )
+            if( !sheet->HasUndefinedPins() )
             {
                 DisplayInfoMessage( this,
                                     _( "There are no undefined labels in this sheet to clean up." ) );
@@ -253,13 +253,13 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_POPUP_SCH_EDIT_PINSHEET:
-        Edit_PinSheet( (SCH_SHEET_PIN*) item, &dc );
+    case ID_POPUP_SCH_EDIT_SHEET_PIN:
+        EditSheetPin( (SCH_SHEET_PIN*) item, &dc );
         break;
 
-    case ID_POPUP_SCH_MOVE_PINSHEET:
+    case ID_POPUP_SCH_MOVE_SHEET_PIN:
         DrawPanel->MoveCursorToCrossHair();
-        StartMove_PinSheet( (SCH_SHEET_PIN*) item, &dc );
+        MoveSheetPin( (SCH_SHEET_PIN*) item, &dc );
         break;
 
     case ID_POPUP_SCH_DRAG_CMP_REQUEST:
@@ -498,7 +498,7 @@ void SCH_EDIT_FRAME::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC )
         break;
 
     case SCH_MARKER_T:
-    case SCH_SHEET_LABEL_T:
+    case SCH_SHEET_PIN_T:
     default:
         wxString msg;
         msg.Printf( wxT( "SCH_EDIT_FRAME::Move_Item Error: Bad DrawType %d" ),
@@ -596,7 +596,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         SetToolID( id, wxCURSOR_PENCIL, _( "Add sheet" ) );
         break;
 
-    case ID_SHEET_LABEL_BUTT:
+    case ID_SHEET_PIN_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add sheet pins" ) );
         break;
 

@@ -38,7 +38,7 @@ private:
                         ///< 0 is reserved for the sheet name.
                         ///< 1 is reserve for the sheet file name.
     int m_Edge;         /* For pin labels only: sheet edge (0 to 3) of the pin
-                         * m_Edge define on which edge the pin is positionned:
+                         * m_Edge define on which edge the pin is positioned:
                          *        0: pin on left side
                          *        1: pin on right side
                          *        2: pin on top side
@@ -74,7 +74,7 @@ public:
                        int             aColor = -1 );
 
     /**
-     * Function CreateGraphicShape (virual)
+     * Function CreateGraphicShape (virtual)
      * Calculates the graphic shape (a polygon) associated to the text
      * @param aCorner_list = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
@@ -101,7 +101,7 @@ public:
 
     /**
      * Function ConstraintOnEdge
-     * is used to adjust label position to egde based on proximity to vertical / horizontal edge
+     * is used to adjust label position to edge based on proximity to vertical / horizontal edge
      * of the parent sheet.
      */
     void ConstraintOnEdge( wxPoint Pos );
@@ -126,12 +126,12 @@ public:
     bool Save( FILE* aFile ) const;
 
     /**
-     * Load schematic sheet hierarchical lable from \a aLine in a .sch file.
+     * Load schematic sheet hierarchical label from \a aLine in a .sch file.
      *
      * @param aLine - Essentially this is file to read the sheet hierarchical label  from.
      * @param aErrorMsg - Description of the error if an error occurs while loading the sheet
      *                    hierarchical label.
-     * @return True if the sheet heirarchical label loaded successfully.
+     * @return True if the sheet hierarchical label loaded successfully.
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
@@ -192,7 +192,7 @@ public:
 };
 
 
-typedef boost::ptr_vector<SCH_SHEET_PIN> SCH_SHEET_PIN_LIST;
+typedef boost::ptr_vector<SCH_SHEET_PIN> SCH_SHEET_PINS;
 
 
 /* class SCH_SHEET
@@ -202,19 +202,19 @@ typedef boost::ptr_vector<SCH_SHEET_PIN> SCH_SHEET_PIN_LIST;
 
 class SCH_SHEET : public SCH_ITEM
 {
-    SCH_SCREEN* m_AssociatedScreen;     ///< Screen that contains the physical data for
-                                        ///< the sheet.  In complex hierarchies multiple
-                                        ///< sheets can share a common screen.
-    SCH_SHEET_PIN_LIST m_labels;        ///< List of sheet connection points.
-    wxString m_FileName;                /* also in SCH_SCREEN (redundant),
-                                         * but need it here for loading after
-                                         * reading the sheet description from
-                                         * file. */
+    SCH_SCREEN* m_AssociatedScreen;   ///< Screen that contains the physical data for
+                                      ///< the sheet.  In complex hierarchies multiple
+                                      ///< sheets can share a common screen.
+    SCH_SHEET_PINS m_pins;            ///< List of sheet connection points.
+    wxString m_FileName;              /* also in SCH_SCREEN (redundant),
+                                       * but need it here for loading after
+                                       * reading the sheet description from
+                                       * file. */
 
 public:
-    wxString m_SheetName;               /* this is equivalent to C101 for
-                                         * components: it is stored in F0 ...
-                                         * of the file. */
+    wxString m_SheetName;             /* this is equivalent to C101 for
+                                       * components: it is stored in F0 ...
+                                       * of the file. */
 public:
     int         m_SheetNameSize;        /* Size (height) of the text, used to
                                          * draw the sheet name */
@@ -286,64 +286,64 @@ public:
     bool IsVerticalOrientation();
 
     /**
-     * Add aLabel to this sheet.
+     * Add aSheetPin to the sheet.
      *
-     * Note: Once a label is added to the sheet, it is owned by the sheet.
-     *       Do not delete the label object or you will likely get a segfault
-     *       when this sheet is destroyed.
+     * Note: Once a sheet pin is added to the sheet, it is owned by the sheet.
+     *       Do not delete the sheet pin object or you will likely get a segfault
+     *       when the sheet is destroyed.
      *
-     * @param aLabel - The label to add to the sheet.
+     * @param aSheetPin The sheet pin item to add to the sheet.
      */
-    void AddLabel( SCH_SHEET_PIN* aLabel );
+    void AddPin( SCH_SHEET_PIN* aSheetPin );
 
-    SCH_SHEET_PIN_LIST& GetSheetPins() { return m_labels; }
+    SCH_SHEET_PINS& GetPins() { return m_pins; }
 
-    SCH_SHEET_PIN_LIST& GetSheetPins() const
+    SCH_SHEET_PINS& GetPins() const
     {
-        return const_cast< SCH_SHEET_PIN_LIST& >( m_labels );
+        return const_cast< SCH_SHEET_PINS& >( m_pins );
     }
 
     /**
-     * Remove a sheet label from this sheet.
+     * Remove \a aSheetPin from the sheet.
      *
-     * @param aSheetLabel - The sheet label to remove from the list.
+     * @param aSheetPin The sheet pin item to remove from the sheet.
      */
-    void RemoveLabel( SCH_SHEET_PIN* aSheetLabel );
+    void RemovePin( SCH_SHEET_PIN* aSheetPin );
 
     /**
      * Delete sheet label which do not have a corresponding hierarchical label.
      *
      * Note: Make sure you save a copy of the sheet in the undo list before calling
-     *       CleanupSheet() otherwise any unrefernced sheet labels will be lost.
+     *       CleanupSheet() otherwise any unreferenced sheet labels will be lost.
      */
     void CleanupSheet();
 
     /**
-     * Return the label found at aPosition in this sheet.
+     * Return the sheet pin item found at \a aPosition in the sheet.
      *
-     * @param aPosition - The position to check for a label.
+     * @param aPosition The position to check for a sheet pin.
      *
-     * @return The label found at aPosition or NULL if no label is found.
+     * @return The sheet pin found at \a aPosition or NULL if no sheet pin is found.
      */
-    SCH_SHEET_PIN* GetLabel( const wxPoint& aPosition );
+    SCH_SHEET_PIN* GetPin( const wxPoint& aPosition );
 
     /**
-     * Checks if a label already exists with aName.
+     * Checks if the sheet already has a sheet pin named \a aName.
      *
-     * @param aName - Name of label to search for.
+     * @param aName Name of the sheet pin to search for.
      *
-     * @return - True if label found, otherwise false.
+     * @return  True if sheet pin with \a aName is found, otherwise false.
      */
-    bool HasLabel( const wxString& aName );
+    bool HasPin( const wxString& aName );
 
-    bool HasLabels() { return !m_labels.empty(); }
+    bool HasPins() { return !m_pins.empty(); }
 
     /**
      * Check all sheet labels against schematic for undefined hierarchical labels.
      *
      * @return True if there are any undefined labels.
      */
-    bool HasUndefinedLabels();
+    bool HasUndefinedPins();
 
     /**
      * Function GetPenSize
@@ -453,9 +453,9 @@ public:
     {
         m_Pos += aMoveVector;
 
-        BOOST_FOREACH( SCH_SHEET_PIN & label, m_labels )
+        BOOST_FOREACH( SCH_SHEET_PIN& pin, m_pins )
         {
-            label.Move( aMoveVector );
+            pin.Move( aMoveVector );
         }
     }
 
@@ -531,13 +531,13 @@ public:
 protected:
 
     /**
-     * Renumber labels in list.
+     * Renumber the sheet pins in the sheet.
      *
-     * This method is used internally by SCH_SHEET to update the label numbering
-     * when the label list changes.  Make sure you call this method any time a
-     * label is added or removed.
+     * This method is used internally by SCH_SHEET to update the pin numbering
+     * when the pin list changes.  Make sure you call this method any time a
+     * sheet pin is added or removed.
      */
-    void renumberLabels();
+    void renumberPins();
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
