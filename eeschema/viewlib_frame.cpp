@@ -358,6 +358,16 @@ int LIB_VIEW_FRAME::BestZoom()
                     (double) GetScreen()->m_ZoomScalar );
     bestzoom = MAX( ii, jj ) + 1;
 
+#if defined( __WINDOWS__ ) && !wxCHECK_VERSION(2, 9, 1)
+    /* This is a workaround: wxWidgets (wxMSW) before version 2.9 seems have
+     * problems with scale values < 1
+     * corresponding to values < GetScreen()->m_ZoomScalar
+     * So we keep bestzoom >= GetScreen()->m_ZoomScalar
+     */
+    if( bestzoom < GetScreen()->m_ZoomScalar )
+        bestzoom = GetScreen()->m_ZoomScalar;
+#endif
+
     GetScreen()->SetScrollCenterPosition( BoundaryBox.Centre() );
 
     return bestzoom;

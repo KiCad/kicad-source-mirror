@@ -30,10 +30,25 @@
 /* Default EESchema zoom values. Limited to 17 values to keep a decent size
  * to menus
  */
+#if defined( __WINDOWS__ ) && !wxCHECK_VERSION(2, 9, 1)
+/* Please, note: wxWidgets (wxMSW) before version 2.9 seems have
+ * problems with scale values < 1
+ * because  scale value is SchematicZoomList[x] / 10
+ * ( in fact is SchematicZoomList[x] / m_ZoomScalar )
+ * do not use values smaller than 10 without testing them under wxWidgets versions < 2.9
+ * value like 0.5 seems work
+ */
+static int SchematicZoomList[] =
+{
+    5, 10, 15, 20, 30, 40, 60, 80, 120, 160, 230, 320, 480, 640, 800, 1280
+};
+
+#else
 static int SchematicZoomList[] =
 {
     5, 7, 10, 15, 20, 30, 40, 60, 80, 120, 160, 230, 320, 480, 640, 800, 1280
 };
+#endif
 
 #define SCHEMATIC_ZOOM_LIST_CNT  ( sizeof( SchematicZoomList ) / sizeof( int ) )
 #define MM_TO_SCH_UNITS 1000.0 / 25.4       //schematic internal unites are mils
