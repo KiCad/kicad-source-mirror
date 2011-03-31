@@ -62,6 +62,7 @@ public:
     SCH_SHEET_PATH*       m_CurrentSheet;    ///< which sheet we are presently working on.
     int m_Multiflag;
     int m_NetlistFormat;
+    int m_AddSubPrefix;
     bool                  m_ShowAllPins;
     wxPoint               m_OldPos;
     LIB_EDIT_FRAME*       m_LibeditFrame;
@@ -289,7 +290,8 @@ public:
      */
     bool         CreateNetlist( int             aFormat,
                                 const wxString& aFullFileName,
-                                bool            aUse_netnames );
+                                bool            aUse_netnames,
+                                bool            aUsePrefix );
 
     /**
      * Function  WriteNetListFile
@@ -303,7 +305,8 @@ public:
      */
     bool         WriteNetListFile( int             aFormat,
                                    const wxString& aFullFileName,
-                                   bool            aUse_netnames );
+                                   bool            aUse_netnames,
+                                   bool aUsePrefix );
 
     /**
      * Function DeleteAnnotation

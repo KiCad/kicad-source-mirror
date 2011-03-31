@@ -29,6 +29,7 @@
 #include "dialogs/annotate_dialog.h"
 
 
+
 //Imported function:
 int TestDuplicateSheetNames( bool aCreateMarker );
 
@@ -73,6 +74,8 @@ BEGIN_EVENT_TABLE( NETLIST_DIALOG, wxDialog )
     EVT_BUTTON( ID_VALIDATE_PLUGIN, NETLIST_DIALOG::ValidatePluginPanel )
     EVT_CHECKBOX( ID_CURRENT_FORMAT_IS_DEFAULT,
                   NETLIST_DIALOG::SelectNetlistType )
+    EVT_CHECKBOX( ID_ADD_SUBCIRCUIT_PREFIX,
+                  NETLIST_DIALOG::EnableSubcircuitPrefix )
     EVT_BUTTON( ID_RUN_SIMULATOR, NETLIST_DIALOG::RunSimulator )
 END_EVENT_TABLE()
 
@@ -238,7 +241,13 @@ void NETLIST_DIALOG::InstallPageSpice()
     page->m_IsCurrentFormat = new wxCheckBox( page, ID_CURRENT_FORMAT_IS_DEFAULT,
                                               _( "Default format" ) );
     page->m_IsCurrentFormat->SetValue( m_Parent->m_NetlistFormat == NET_TYPE_SPICE );
-    page->m_LeftBoxSizer->Add( page->m_IsCurrentFormat, 0, wxGROW | wxALL, 5 );
+    page->m_LeftBoxSizer->Add( page->m_IsCurrentFormat, 1, wxGROW | wxALL, 5 );
+
+    page->m_AddSubPrefix = new wxCheckBox( page, ID_ADD_SUBCIRCUIT_PREFIX,
+                                           _( "Prefix references 'U' and 'IC' with 'X'" ) );
+    page->m_AddSubPrefix->SetValue( m_Parent->m_AddSubPrefix );
+    page->m_LeftBoxSizer->Add( page->m_AddSubPrefix, 0, wxGROW | wxALL, 5 );
+
 
     wxString netlist_opt[2] = { _( "Use Net Names" ), _( "Use Net Numbers" ) };
     m_UseNetNamesInNetlist = new wxRadioBox( page, -1, _( "Netlist Options:" ),
@@ -402,6 +411,24 @@ void NETLIST_DIALOG::SelectNetlistType( wxCommandEvent& event )
 }
 
 
+/* Called when the check box "default format" is clicked
+ */
+void NETLIST_DIALOG::EnableSubcircuitPrefix( wxCommandEvent& event )
+{
+
+    NETLIST_PAGE_DIALOG* CurrPage;
+
+    CurrPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
+
+    if( CurrPage == NULL )
+        return;
+
+    if( CurrPage->m_AddSubPrefix->IsChecked() )
+        m_Parent->m_AddSubPrefix = true;
+    else
+        m_Parent->m_AddSubPrefix = false;
+}
+
 void NETLIST_DIALOG::NetlistUpdateOpt()
 {
     int ii;
@@ -486,7 +513,8 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     else
         g_NetListerCommandLine.Empty();
 
-    m_Parent->CreateNetlist( CurrPage->m_IdNetType, dlg.GetPath(), g_OptNetListUseNames );
+    m_Parent->CreateNetlist( CurrPage->m_IdNetType, dlg.GetPath(), g_OptNetListUseNames,
+                             CurrPage->m_AddSubPrefix->GetValue() );
 
     WriteCurrentNetlistSetup();
 
@@ -508,7 +536,8 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
  * @return true if success.
  */
 bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
-                                    bool aUse_netnames )
+                                    bool aUse_netnames,
+                                    bool aUsePrefix )
 {
     SCH_SHEET_LIST sheets;
     sheets.AnnotatePowerSymbols();
@@ -540,7 +569,7 @@ Do you want to annotate schematic?" ) ) )
     screens.SchematicCleanUp();
 
     BuildNetListBase();
-    bool success = WriteNetListFile( aFormat, aFullFileName, g_OptNetListUseNames );
+    bool success = WriteNetListFile( aFormat, aFullFileName, g_OptNetListUseNames, aUsePrefix );
 
     return success;
 }
@@ -558,7 +587,7 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
     wxString   ExecFile, CommandLine;
 
     g_SimulatorCommandLine = m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue();
-    g_SimulatorCommandLine.Trim( 	false );
+    g_SimulatorCommandLine.Trim( false );
     g_SimulatorCommandLine.Trim( true );
     ExecFile = g_SimulatorCommandLine.BeforeFirst( ' ' );
 
@@ -573,7 +602,8 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
     NETLIST_PAGE_DIALOG* CurrPage;
     CurrPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
 
-    if( ! m_Parent->CreateNetlist( CurrPage->m_IdNetType, fn.GetFullPath(), g_OptNetListUseNames ) )
+    if( ! m_Parent->CreateNetlist( CurrPage->m_IdNetType, fn.GetFullPath(),
+                                   g_OptNetListUseNames,CurrPage->m_AddSubPrefix->GetValue() ) )
         return;
 
     ExecuteFile( this, ExecFile, CommandLine );

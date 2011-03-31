@@ -302,8 +302,10 @@ public:
      * @param f = the file to write to
      * @param use_netnames = true, to use netnames in netlist,
      *                      false to use net number.
+     * @param aUsePrefix = true, adds an 'X' prefix to any reference designator starting with "U" or "IC",
+     *                     false to leave reference designator unchanged.
      */
-    bool WriteNetListPspice( FILE* f, bool use_netnames );
+    bool WriteNetListPspice( FILE* f, bool use_netnames, bool aUsePrefix );
 
     /**
      * Function MakeCommandLine
@@ -362,10 +364,12 @@ wxString EXPORT_HELP::MakeCommandLine( const wxString& aFormatString,
  * @param aUse_netnames = bool. if true, use net names from labels in schematic
  *                              if false, use net numbers (net codes)
  *   bool aUse_netnames is used only for Spice netlist
+ * @param aUsePrefix = true, adds an 'X' prefix to any reference designator starting with "U" or "IC",
+ *                     false to leave reference designator unchanged.
  * @return true if success.
  */
 bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileName,
-                                       bool aUse_netnames )
+                                       bool aUse_netnames, bool aUsePrefix )
 {
     bool        ret = true;
     FILE*       f = NULL;
@@ -401,7 +405,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
         break;
 
     case NET_TYPE_SPICE:
-        ret = helper.WriteNetListPspice( f, aUse_netnames );
+        ret = helper.WriteNetListPspice( f, aUse_netnames, aUsePrefix );
         fclose( f );
         break;
 
@@ -1189,7 +1193,7 @@ bool EXPORT_HELP::WriteGENERICNetList( const wxString& aOutFileName )
 }
 
 
-bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
+bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames, bool aUsePrefix )
 {
     int                 ret = 0;
     char                line[1024];
@@ -1354,7 +1358,17 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
                 }
             }
 
-            ret |= fprintf( f, "%s ", TO_UTF8( comp->GetRef( sheet ) ) );
+            //Get Standard Reference Designator:
+            wxString RefName = comp->GetRef( sheet );
+
+            //Conditionally add Prefix only for devices that begin with U or IC:
+            if( aUsePrefix )
+            {
+                if( RefName.StartsWith( wxT( "U" ) ) || RefName.StartsWith( wxT( "IC" ) ) )
+                    RefName = wxT( "X" ) + RefName;
+            }
+
+            ret |= fprintf( f, "%s ", TO_UTF8( RefName) );
 
             // Write pin list:
             int activePinIndex = 0;
@@ -1407,8 +1421,24 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames )
                 }
             }
 
+            // Get Component Value Name:
+            wxString CompValue = comp->GetField( VALUE )->m_Text;
+
+            // Check if Override Model Name is Provided:
+            SCH_FIELD* spiceModelField = comp->FindField( wxT( "spice_model" ) );
+
+            if( spiceModelField )
+            {
+                // Get Model Name String:
+                wxString ModelNameStr = spiceModelField->m_Text;
+
+                // Verify Field Exists and is not empty:
+                if( !ModelNameStr.IsEmpty() )
+                    CompValue = ModelNameStr;
+            }
+
             // Print Component Value:
-            ret |= fprintf( f, " %s\t\t",TO_UTF8( comp->GetField( VALUE )->m_Text ) );
+            ret |= fprintf( f, " %s\t\t",TO_UTF8( CompValue ) );
 
             // Show Seq Spec on same line as component using line-comment ";":
             for( unsigned i = 0;  i < pinSequence.size();  ++i )

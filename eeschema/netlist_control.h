@@ -19,7 +19,8 @@ enum id_netlist {
     ID_VALIDATE_PLUGIN,
     ID_DELETE_PLUGIN,
     ID_NETLIST_NOTEBOOK,
-    ID_CHANGE_NOTEBOOK_PAGE
+    ID_CHANGE_NOTEBOOK_PAGE,
+    ID_ADD_SUBCIRCUIT_PREFIX,
 };
 
 /* panel (notebook page) identifiers */
@@ -46,6 +47,7 @@ class NETLIST_PAGE_DIALOG : public wxPanel
 public:
     int               m_IdNetType;
     wxCheckBox*       m_IsCurrentFormat;
+    wxCheckBox*       m_AddSubPrefix;
     WinEDA_EnterText* m_CommandStringCtrl;
     WinEDA_EnterText* m_TitleStringCtrl;
     wxButton*         m_ButtonCancel;
@@ -112,6 +114,7 @@ private:
     void    NetlistUpdateOpt();
     void    OnCancelClick( wxCommandEvent& event );
     void    SelectNetlistType( wxCommandEvent& event );
+    void    EnableSubcircuitPrefix( wxCommandEvent& event );
     void    AddNewPluginPanel( wxCommandEvent& event );
     void    DeletePluginPanel( wxCommandEvent& event );
     void    ValidatePluginPanel( wxCommandEvent& event );
