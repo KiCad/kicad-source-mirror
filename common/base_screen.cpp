@@ -100,6 +100,17 @@ void BASE_SCREEN::SetPageSize( wxSize& aPageSize )
 
 
 /**
+ * Function GetScalingFactor
+ * @return the the current scale used to draw items on screen
+ * draw coordinates are user coordinates * GetScalingFactor( )
+ */
+double BASE_SCREEN::GetScalingFactor() const
+{
+    double scale = (double) m_ZoomScalar / (double) GetZoom();
+    return scale;
+}
+
+/**
  * Function SetScalingFactor
  * calculates the .m_Zoom member to have a given scaling factor
  * @param aScale - the the current scale used to draw items on screen

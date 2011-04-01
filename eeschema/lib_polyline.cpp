@@ -502,7 +502,7 @@ void LIB_POLYLINE::EndEdit( const wxPoint& aPosition, bool aAbort )
         if( m_PolyPoints.size() > 2 // do not delete last two points... keep it alive
             && ( m_ModifyIndex > 0
                  && m_PolyPoints[ m_ModifyIndex ] == m_PolyPoints[ m_ModifyIndex - 1 ]
-                 || m_ModifyIndex < m_PolyPoints.size() - 1
+                 || m_ModifyIndex < (int)m_PolyPoints.size() - 1
                  && m_PolyPoints[ m_ModifyIndex ] == m_PolyPoints[ m_ModifyIndex + 1 ] ) )
         {
             m_PolyPoints.erase( m_PolyPoints.begin() + m_ModifyIndex ); // delete a point on this

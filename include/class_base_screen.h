@@ -263,11 +263,7 @@ public:
      * @return the the current scale used to draw items on screen
      * draw coordinates are user coordinates * GetScalingFactor( )
      */
-    double  GetScalingFactor() const
-    {
-        return (double) m_ZoomScalar / (double) GetZoom();
-    }
-
+    double  GetScalingFactor() const;
 
     /**
      * Function SetScalingFactor

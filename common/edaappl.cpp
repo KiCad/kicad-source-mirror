@@ -81,6 +81,9 @@ struct LANGUAGE_DESCR
 
 /**
  * Language list struct
+ * Note: because this list is not created on the fly, wxTranslation
+ * must be called when a language name must be displayed after translation.
+ * Do don change this behavior, because m_Lang_Label is also used as key in config
  */
 static struct LANGUAGE_DESCR s_Language_List[] =
 {
@@ -249,7 +252,7 @@ WinEDA_App::WinEDA_App()
     m_EDA_Config  = NULL;
     m_Env_Defined = FALSE;
     m_LanguageId  = wxLANGUAGE_DEFAULT;
-    m_PdfBrowserIsDefault = TRUE;
+    m_PdfBrowserIsDefault = true;
     m_Locale = NULL;
     m_ProjectConfig    = NULL;
     m_EDA_CommonConfig = NULL;
@@ -337,9 +340,20 @@ void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
     ReadPdfBrowserInfos();
 
     // Internationalization: loading the kicad suitable Dictionary
-    m_EDA_CommonConfig->Read( languageCfgKey, &m_LanguageId, wxLANGUAGE_DEFAULT );
+    wxString languageSel;
+    m_EDA_CommonConfig->Read( languageCfgKey, &languageSel);
+    m_LanguageId = wxLANGUAGE_DEFAULT;
+    // Search for the current selection
+    for( unsigned int ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
+    {
+        if( s_Language_List[ii].m_Lang_Label == languageSel )
+        {
+            m_LanguageId = s_Language_List[ii].m_WX_Lang_Identifier;
+            break;
+        }
+    }
 
-    bool succes = SetLanguage( TRUE );
+    bool succes = SetLanguage( true );
     if( !succes )
     {
     }
@@ -459,7 +473,7 @@ bool WinEDA_App::SetBinDir()
     while( m_BinDir.Last() != '/' && !m_BinDir.IsEmpty() )
         m_BinDir.RemoveLast();
 
-    return TRUE;
+    return true;
 }
 
 
@@ -627,7 +641,19 @@ void WinEDA_App::GetSettings(bool aReopenLastUsedDirectory)
     m_HelpSize.x = 500;
     m_HelpSize.y = 400;
 
-    m_LanguageId = m_EDA_CommonConfig->Read( languageCfgKey, wxLANGUAGE_DEFAULT );
+    wxString languageSel;
+    m_EDA_CommonConfig->Read( languageCfgKey, &languageSel);
+    m_LanguageId = wxLANGUAGE_DEFAULT;
+    // Search for the current selection
+    for( unsigned int ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
+    {
+        if( s_Language_List[ii].m_Lang_Label == languageSel )
+        {
+            m_LanguageId = s_Language_List[ii].m_WX_Lang_Identifier;
+            break;
+        }
+    }
+
     m_EditorName = m_EDA_CommonConfig->Read( wxT( "Editor" ) );
 
     m_fileHistory.Load( *m_EDA_Config );
@@ -717,7 +743,17 @@ bool WinEDA_App::SetLanguage( bool first_time )
 
     if( !first_time )
     {
-        m_EDA_CommonConfig->Write( languageCfgKey, m_LanguageId );
+        wxString languageSel;
+        // Search for the current selection
+        for( unsigned int ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
+        {
+            if( s_Language_List[ii].m_WX_Lang_Identifier == m_LanguageId )
+            {
+                languageSel = s_Language_List[ii].m_Lang_Label;
+                break;
+            }
+        }
+        m_EDA_CommonConfig->Write( languageCfgKey, languageSel );
     }
 
     // Test if floating point notation is working (bug in cross compilation, using wine)
@@ -758,12 +794,10 @@ bool WinEDA_App::SetLanguage( bool first_time )
  */
 void WinEDA_App::SetLanguageIdentifier( int menu_id )
 {
-    unsigned int ii;
-
     wxLogDebug( wxT( "Select language ID %d from %d possible languages." ),
                 menu_id, LANGUAGE_DESCR_COUNT );
 
-    for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
+    for( unsigned int ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )
     {
         if( menu_id == s_Language_List[ii].m_KI_Lang_Identifier )
         {
