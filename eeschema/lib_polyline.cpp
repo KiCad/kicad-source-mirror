@@ -428,6 +428,8 @@ void LIB_POLYLINE::BeginEdit( int aEditMode, const wxPoint aPosition )
         int distanceMin = (aPosition - startPoint).x * (aPosition - startPoint).x
                           + (aPosition - startPoint).y * (aPosition - startPoint).y;
 
+        wxPoint prevPoint = startPoint;
+
         // Find the right index of the point to be dragged
         BOOST_FOREACH( wxPoint point, m_PolyPoints )
         {
@@ -441,6 +443,17 @@ void LIB_POLYLINE::BeginEdit( int aEditMode, const wxPoint aPosition )
                 m_ModifyIndex = index;
                 distanceMin = distancePoint;
             }
+            // check middle of an edge
+            wxPoint offset = ( aPosition + aPosition - point - prevPoint );
+            distancePoint = ( offset.x * offset.x + offset.y * offset.y ) / 4 + 1;
+            if( distancePoint < distanceMin )
+            {
+                // Save point.
+                m_initialPos = point;
+                m_ModifyIndex = -index;  // negative indicates new vertex is to be inserted
+                distanceMin = distancePoint;
+            }
+            prevPoint = point;
 
             index++;
         }
@@ -482,8 +495,18 @@ void LIB_POLYLINE::EndEdit( const wxPoint& aPosition, bool aAbort )
     // do not include last point twice
     if( m_Flags == IS_NEW && 2 < m_PolyPoints.size() )
     {
-        if( m_PolyPoints[m_PolyPoints.size() - 2] == m_PolyPoints.back() )
+        if( m_PolyPoints[ m_PolyPoints.size() - 2 ] == m_PolyPoints.back() )
             m_PolyPoints.pop_back();
+    }
+    if( m_Flags == IS_RESIZED ) {
+        if( m_PolyPoints.size() > 2 // do not delete last two points... keep it alive
+            && ( m_ModifyIndex > 0
+                 && m_PolyPoints[ m_ModifyIndex ] == m_PolyPoints[ m_ModifyIndex - 1 ]
+                 || m_ModifyIndex < m_PolyPoints.size() - 1
+                 && m_PolyPoints[ m_ModifyIndex ] == m_PolyPoints[ m_ModifyIndex + 1 ] ) )
+        {
+            m_PolyPoints.erase( m_PolyPoints.begin() + m_ModifyIndex ); // delete a point on this
+        }
     }
     m_Flags = 0;
     SetEraseLastDrawItem( false );
@@ -499,6 +522,11 @@ void LIB_POLYLINE::calcEdit( const wxPoint& aPosition )
     }
     else if( m_Flags == IS_RESIZED )
     {
+        if( m_ModifyIndex < 0 ) // negative indicates new vertex is to be inserted
+        {
+            m_ModifyIndex = -m_ModifyIndex;
+            m_PolyPoints.insert( m_PolyPoints.begin() + m_ModifyIndex, aPosition );
+        }
         m_PolyPoints[ m_ModifyIndex ] = aPosition;
     }
     else if( m_Flags == IS_MOVED )
