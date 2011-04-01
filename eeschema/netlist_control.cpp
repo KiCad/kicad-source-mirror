@@ -100,6 +100,7 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     m_CommandStringCtrl = NULL;
     m_TitleStringCtrl   = NULL;
     m_IsCurrentFormat   = NULL;
+    m_AddSubPrefix = NULL;
     m_ButtonCancel = NULL;
 
     parent->AddPage( this, title, selected );
@@ -411,7 +412,9 @@ void NETLIST_DIALOG::SelectNetlistType( wxCommandEvent& event )
 }
 
 
-/* Called when the check box "default format" is clicked
+/* Called when the check box m_AddSubPrefix
+ * "default format" is clicked
+ * ( Spice format only )
  */
 void NETLIST_DIALOG::EnableSubcircuitPrefix( wxCommandEvent& event )
 {
@@ -420,7 +423,7 @@ void NETLIST_DIALOG::EnableSubcircuitPrefix( wxCommandEvent& event )
 
     CurrPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
 
-    if( CurrPage == NULL )
+    if( CurrPage == NULL || CurrPage->m_AddSubPrefix == NULL )
         return;
 
     if( CurrPage->m_AddSubPrefix->IsChecked() )
@@ -513,8 +516,11 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     else
         g_NetListerCommandLine.Empty();
 
+    bool addSubPrefix = false;
+    if( CurrPage->m_AddSubPrefix )
+        addSubPrefix = CurrPage->m_AddSubPrefix->GetValue();
     m_Parent->CreateNetlist( CurrPage->m_IdNetType, dlg.GetPath(), g_OptNetListUseNames,
-                             CurrPage->m_AddSubPrefix->GetValue() );
+                             addSubPrefix );
 
     WriteCurrentNetlistSetup();
 
@@ -602,8 +608,11 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
     NETLIST_PAGE_DIALOG* CurrPage;
     CurrPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
 
+    bool addSubPrefix = false;
+    if( CurrPage->m_AddSubPrefix )
+        addSubPrefix = CurrPage->m_AddSubPrefix->GetValue();
     if( ! m_Parent->CreateNetlist( CurrPage->m_IdNetType, fn.GetFullPath(),
-                                   g_OptNetListUseNames,CurrPage->m_AddSubPrefix->GetValue() ) )
+                                   g_OptNetListUseNames,addSubPrefix ) )
         return;
 
     ExecuteFile( this, ExecFile, CommandLine );
