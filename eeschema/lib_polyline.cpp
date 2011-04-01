@@ -440,7 +440,6 @@ void LIB_POLYLINE::BeginEdit( int aEditMode, const wxPoint aPosition )
                 m_initialPos = point;
                 m_ModifyIndex = index;
                 distanceMin = distancePoint;
-                break;
             }
 
             index++;
@@ -466,7 +465,9 @@ bool LIB_POLYLINE::ContinueEdit( const wxPoint aPosition )
 
     if( m_Flags == IS_NEW )
     {
-        m_PolyPoints.push_back( aPosition );
+        // do not add zero length segments
+        if( m_PolyPoints[m_PolyPoints.size() - 2] != m_PolyPoints.back() )
+            m_PolyPoints.push_back( aPosition );
         return true;
     }
 
@@ -478,7 +479,12 @@ void LIB_POLYLINE::EndEdit( const wxPoint& aPosition, bool aAbort )
 {
     wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
                    wxT( "Bad call to EndEdit().  LIB_POLYLINE is not being edited." ) );
-
+    // do not include last point twice
+    if( m_Flags == IS_NEW && 2 < m_PolyPoints.size() )
+    {
+        if( m_PolyPoints[m_PolyPoints.size() - 2] == m_PolyPoints.back() )
+            m_PolyPoints.pop_back();
+    }
     m_Flags = 0;
     SetEraseLastDrawItem( false );
 }
