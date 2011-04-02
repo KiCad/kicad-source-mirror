@@ -108,6 +108,7 @@ bool WinEDA_App::OnInit()
     frame->Zoom_Automatique( true );        // Zoom fit in frame
     frame->GetScreen()->m_FirstRedraw = false;
 
+
     if( argc <= 1 )
         return true;
 

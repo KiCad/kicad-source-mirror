@@ -27,6 +27,10 @@
  *   Recreate and read the new netlist using the Time Stamp identification
  * (that reinit the new references)
  */
+
+#include "vector"
+#include "algorithm"
+
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
@@ -40,8 +44,6 @@
 
 #include "dialog_netlist.h"
 
-#include "protos.h"
-
 // constants used by ReadPcbNetlist():
 #define TESTONLY   1
 #define READMODULE 0
@@ -53,7 +55,6 @@ public:
     wxString      m_LibName;
     wxString      m_CmpName;
     wxString      m_TimeStampPath;
-    MODULEtoLOAD* m_Next;
 
 public: MODULEtoLOAD( const wxString& libname,
                       const wxString& cmpname,
@@ -62,25 +63,16 @@ public: MODULEtoLOAD( const wxString& libname,
         m_LibName = libname;
         m_CmpName = cmpname;
         m_TimeStampPath = timestamp_path;
-        m_Next = NULL;
     }
 
-
     ~MODULEtoLOAD() { };
-
-    MODULEtoLOAD* Next() const { return (MODULEtoLOAD*) m_Next; }
-    void SetNext( MODULEtoLOAD* next ) { m_Next = next; }
 };
 
 
-static void    SortListModulesToLoadByLibname( int NbModules );
 static int     BuildFootprintsListFromNetlistFile(
     const wxString& aNetlistFullFilename,
     wxArrayString&  aBufName );
 static FILE *  OpenNetlistFile( const wxString& aFullFileName );
-static void    AddToList( const wxString& NameLibCmp,
-                          const wxString& NameCmp,
-                          const wxString& TimeStampPath );
 static int     SetPadNetName( char*       Text,
                               MODULE*     Module,
                               wxTextCtrl* aMessageWindow );
@@ -99,8 +91,7 @@ static MODULE* ReadNetModule( PCB_EDIT_FRAME* aFrame,
 static void LoadListeModules( PCB_EDIT_FRAME* aPcbFrame );
 
 
-static int           s_NbNewModules;
-static MODULEtoLOAD* s_ModuleToLoad_List;
+static std::vector < MODULEtoLOAD* > s_ModuleToLoad_List;
 
 /**
  * Function OpenNetlistFile
@@ -122,6 +113,16 @@ FILE * OpenNetlistFile( const wxString& aFullFileName )
     return netfile;
 }
 
+
+/* Function to sort the footprint list.
+ * the given list is sorted by name
+*/
+static bool SortByLibName( MODULEtoLOAD* ref, MODULEtoLOAD* cmp )
+{
+    int ii = ref->m_LibName.CmpNoCase( cmp->m_LibName );
+
+    return ii > 0;
+}
 
 /**
  * Function ReadPcbNetlist
@@ -171,9 +172,6 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
     if( !netfile )
         return false;
 
-    FILE_LINE_READER netlistReader( netfile, aNetlistFullFilename );
-    char*   Line = netlistReader;
-
     SetLastNetListRead( aNetlistFullFilename );
 
     if( aMessageWindow )
@@ -194,19 +192,22 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
 
     State = 0;
     Comment = 0;
-    s_NbNewModules = 0;
+    s_ModuleToLoad_List.clear();
 
     wxBusyCursor dummy;        // Shows an hourglass while calculating
 
     /* First, read the netlist: Build the list of footprints to load (new
      * footprints)
      */
+    FILE_LINE_READER netlistReader( netfile, aNetlistFullFilename );
     while( netlistReader.ReadLine() )
     {
+        char* Line = netlistReader.Line();
         Text = StrPurge( Line );
 
         if( Comment ) /* Comments in progress */
         {
+            // Test for end of the current comment
             if( ( Text = strchr( Text, '}' ) ) == NULL )
                 continue;
             Comment = 0;
@@ -237,44 +238,43 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
             continue;
         }
 
-        if( State >= 3 ) /* Do not analyzed pad description here. */
+        if( State >= 3 ) // First pass: pad descriptions are not read here.
         {
             State--;
         }
     }
 
     /* Load new footprints */
-    if( s_NbNewModules )
+    if( s_ModuleToLoad_List.size() )
     {
         LoadListeModules( this );
 
         // Free module list:
-        MODULEtoLOAD* item, * next_item;
-        for( item = s_ModuleToLoad_List; item != NULL; item = next_item )
+        for( unsigned ii = 0; ii < s_ModuleToLoad_List.size(); ii++ )
         {
-            next_item = item->Next();
-            delete item;
+            delete s_ModuleToLoad_List[ii];
         }
 
-        s_ModuleToLoad_List = NULL;
+        s_ModuleToLoad_List.clear();
     }
 
-    /* Second read , All footprints are on board, one must update the schematic
-     * info (pad netnames) */
+    /* Second read , All footprints are on board.
+     * One must update the schematic info (pad netnames)
+     */
     netlistReader.Rewind();
     while( netlistReader.ReadLine() )
     {
+        char* Line = netlistReader.Line();
         Text = StrPurge( Line );
 
-        if( Comment )                                       /* we are reading a
-                                                             * comment */
+        if( Comment )   // we are reading a comment
         {
-            if( ( Text = strchr( Text, '}' ) ) == NULL )    /* this is the end
-                                                             * of a comment */
+            // Test for end of the current comment
+            if( ( Text = strchr( Text, '}' ) ) == NULL )
                 continue;
             Comment = 0;
         }
-        if( *Text == '{' ) /* this is the beginning of a comment */
+        if( *Text == '{' ) // this is the beginning of a comment
         {
             Comment = 1;
             if( ( Text = strchr( Text, '}' ) ) == NULL )
@@ -326,7 +326,7 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
     if( aDeleteExtraFootprints )
     {
         wxArrayString ModuleListFromNetlist;
-        /* Build list of modules in the netlist */
+        // Build list of modules in the netlist
         int NbModulesNetListe =
             BuildFootprintsListFromNetlistFile( aNetlistFullFilename,
                                                 ModuleListFromNetlist );
@@ -366,7 +366,7 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString&  aNetlistFullFilename,
         }
     }
 
-    /* Rebuild the connectivity */
+    // Rebuild the board connectivity:
     Compile_Ratsnest( NULL, true );
 
     if( GetBoard()->m_Track )
@@ -549,7 +549,11 @@ is [%s] and netlist said [%s]\n" ),
 
 
         if( TstOnly == TESTONLY )
-            AddToList( NameLibCmp, TextCmpName, TimeStampPath );
+        {
+            MODULEtoLOAD* newMod;
+            newMod = new MODULEtoLOAD( NameLibCmp, TextCmpName, TimeStampPath );
+            s_ModuleToLoad_List.push_back(newMod);
+        }
         else
         {
             if( aMessageWindow )
@@ -968,20 +972,6 @@ int ReadListeModules( const wxString& CmpFullFileName, const wxString* RefCmp,
 }
 
 
-/* This function add to the current list of footprints found in netlist
- *  a new MODULEtoLOAD item (a descriptor of footprints)
- */
-void AddToList( const wxString& NameLibCmp, const wxString& CmpName, const wxString& path )
-{
-    MODULEtoLOAD* NewMod;
-
-    NewMod = new MODULEtoLOAD( NameLibCmp, CmpName, path );
-    NewMod->SetNext( s_ModuleToLoad_List );
-    s_ModuleToLoad_List = NewMod;
-    s_NbNewModules++;
-}
-
-
 /* Load new modules from library.
  * If a module is being loaded it is duplicated, which avoids reading
  * unnecessary library.
@@ -989,15 +979,13 @@ void AddToList( const wxString& NameLibCmp, const wxString& CmpName, const wxStr
 void LoadListeModules( PCB_EDIT_FRAME* aPcbFrame )
 {
     MODULEtoLOAD* ref, * cmp;
-    int           ii;
     MODULE*       Module = NULL;
     wxPoint       ModuleBestPosition;
 
-    if( s_NbNewModules == 0 )
+    if( s_ModuleToLoad_List.size() == 0 )
         return;
 
-    SortListModulesToLoadByLibname( s_NbNewModules );
-    ref = cmp = s_ModuleToLoad_List;
+    sort( s_ModuleToLoad_List.begin(), s_ModuleToLoad_List.end(), SortByLibName );
 
     // Calculate the footprint "best" position:
     if( aPcbFrame->GetBoard()->ComputeBoundingBox( true ) )
@@ -1010,8 +998,10 @@ void LoadListeModules( PCB_EDIT_FRAME* aPcbFrame )
     else
         ModuleBestPosition = wxPoint( 0, 0 );
 
-    for( ii = 0; ii < s_NbNewModules; ii++, cmp = cmp->Next() )
+    ref = cmp = s_ModuleToLoad_List[0];
+    for( unsigned ii = 0; ii < s_ModuleToLoad_List.size(); ii++ )
     {
+        cmp = s_ModuleToLoad_List[ii];
         if( (ii == 0) || ( ref->m_LibName != cmp->m_LibName) )
         {
             /* New footprint : must be loaded from a library */
@@ -1057,44 +1047,3 @@ void LoadListeModules( PCB_EDIT_FRAME* aPcbFrame )
     }
 }
 
-
-/* Routines used by qsort to sort a load module. */
-static int SortByLibName( MODULEtoLOAD** ref, MODULEtoLOAD** cmp )
-{
-    int ii = (*ref)->m_LibName.CmpNoCase( (*cmp)->m_LibName );
-
-    return ii;
-}
-
-
-/* Sort the module list in alphabetical order by module name.
- */
-void SortListModulesToLoadByLibname( int NbModules )
-{
-    MODULEtoLOAD** base_list, * item;
-    int            ii;
-
-    base_list = (MODULEtoLOAD**) MyMalloc( NbModules * sizeof(MODULEtoLOAD*) );
-
-    for( ii = 0, item = s_ModuleToLoad_List; ii < NbModules; ii++ )
-    {
-        base_list[ii] = item;
-        item = item->Next();
-    }
-
-    qsort( base_list, NbModules, sizeof(MODULEtoLOAD*),
-           ( int ( * )( const void*, const void* ) )SortByLibName );
-
-    s_ModuleToLoad_List = *base_list;
-
-    for( ii = 0; ii < NbModules - 1; ii++ )
-    {
-        item = base_list[ii];
-        item->SetNext( base_list[ii + 1] );
-    }
-
-    item = base_list[ii];
-    item->SetNext( NULL );
-
-    free( base_list );
-}

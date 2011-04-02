@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPCB (2011-02-21 BZR 2827)-testing date = 21/02/2011 18:31:31
+Cmp-Mod V01 Created by CvPCB (2011-03-30 BZR 2935)-testing date = 02/04/2011 13:22:13
 
 BeginCmp
 TimeStamp = /322D3011;
@@ -123,35 +123,35 @@ BeginCmp
 TimeStamp = /322D31F4;
 Reference = U1;
 ValeurCmp = 74LS245;
-IdModule  = 20dip300;
+IdModule  = DIP-20__300;
 EndCmp
 
 BeginCmp
 TimeStamp = /322D35B4;
 Reference = U2;
 ValeurCmp = 74LS688;
-IdModule  = 20dip300;
+IdModule  = DIP-20__300;
 EndCmp
 
 BeginCmp
 TimeStamp = /4A087146;
 Reference = U3;
 ValeurCmp = 74LS541;
-IdModule  = ;
+IdModule  = DIP-20__300;
 EndCmp
 
 BeginCmp
 TimeStamp = /3240023F;
 Reference = U5;
 ValeurCmp = 628128;
-IdModule  = 32dip600;
+IdModule  = DIP-32__600;
 EndCmp
 
 BeginCmp
 TimeStamp = /322D321C;
 Reference = U8;
 ValeurCmp = EP600;
-IdModule  = 24dip300;
+IdModule  = DIP-24__300;
 EndCmp
 
 BeginCmp

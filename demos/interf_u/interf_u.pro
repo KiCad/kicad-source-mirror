@@ -1,4 +1,4 @@
-update=07/03/2011 19:57:09
+update=02/04/2011 15:02:30
 version=1
 last_client=pcbnew
 [common]
@@ -72,13 +72,15 @@ DrawLar=150
 EdgeLar=50
 TxtLar=170
 MSegLar=150
-LastNetListRead=..\\pic_programmer\\pic_programmer.net
+LastNetListRead=interf_u.net
 [pcbnew/libraries]
 LibDir=
 LibName1=connect
 LibName2=discret
-LibName3=dip_sockets
-LibName4=pin_array
-LibName5=divers
-LibName6=libcms
-LibName7=display
+LibName3=led
+LibName4=sockets
+LibName5=dip_sockets
+LibName6=pin_array
+LibName7=divers
+LibName8=libcms
+LibName9=display

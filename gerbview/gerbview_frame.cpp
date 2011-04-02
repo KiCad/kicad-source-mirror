@@ -64,7 +64,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     GetBoard()->SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
     GetBoard()->SetVisibleLayers( FULL_LAYERS );     // All 32 layers visible.
 
-    // Create the PCB_LAYER_WIDGET *after* SetBoard():
+   // Create the PCB_LAYER_WIDGET *after* SetBoard():
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     int    pointSize    = font.GetPointSize();
     int    screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
@@ -213,6 +213,11 @@ void GERBVIEW_FRAME::LoadSettings()
     config->SetPath( wxT("drl_files") );
     m_drillFileHistory.Load( *config );
     config->SetPath( wxT("..") );
+
+    // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
+    // when reading doubles in config,
+    // but forget to back to current locale. So we call SetLocaleTo_Default
+    SetLocaleTo_Default( );
 }
 
 

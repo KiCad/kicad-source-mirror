@@ -475,7 +475,10 @@ void PCB_BASE_FRAME::LoadSettings()
 
     cfg->Read( m_FrameName + UserGridSizeXEntry, &m_UserGridSize.x, 0.01 );
     cfg->Read( m_FrameName + UserGridSizeYEntry, &m_UserGridSize.y, 0.01 );
-    cfg->Read( m_FrameName + UserGridUnitsEntry, (long*)&m_UserGridUnit, ( long )INCHES );
+
+    long itmp;
+    cfg->Read( m_FrameName + UserGridUnitsEntry, &itmp, ( long )INCHES );
+    m_UserGridUnit = (UserUnitType) itmp;
     cfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
     cfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );
     cfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );
@@ -488,6 +491,11 @@ void PCB_BASE_FRAME::LoadSettings()
 
     if( m_DisplayModText < FILAIRE || m_DisplayModText > SKETCH )
         m_DisplayModText = FILLED;
+
+    // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )
+    // when reading doubles in config,
+    // but forget to back to current locale. So we call SetLocaleTo_Default
+    SetLocaleTo_Default( );
 }
 
 

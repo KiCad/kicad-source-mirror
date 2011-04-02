@@ -3,14 +3,12 @@
 /************************************************/
 
 #include "fctsys.h"
-#include "appl_wxstruct.h"
 #include "common.h"
 #include "class_drawpanel.h"
-#include "confirm.h"
 #include "gestfich.h"
 #include "pcbcommon.h"
 #include "gerbview.h"
-#include "pcbplot.h"
+//#include "pcbplot.h"
 #include "hotkeys.h"
 #include "class_board_design_settings.h"
 #include "gerbview_config.h"
@@ -43,8 +41,8 @@ void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this,
-                     wxT( "GERBVIEW_FRAME::Process_Config internal error" ) );
+        wxMessageBox( wxT( "GERBVIEW_FRAME::Process_Config error" ) );
+        break;
     }
 }
 
