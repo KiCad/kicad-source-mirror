@@ -29,6 +29,32 @@
 #include <sch_lib.h>
 
 
+#define INTERNAL_PER_LOGICAL        10000   ///< no. internal units per logical unit
+
+
+/**
+ * Function InternalToLogical
+ * converts an internal coordinate to a logical coordinate.  Logical coordinates
+ * are defined as the standard distance between pins being equal to one.
+ * Internal coordinates are currently INTERNAL_PER_LOGICAL times that.
+ */
+static inline double InternalToLogical( int aCoord )
+{
+    return double( aCoord ) / INTERNAL_PER_LOGICAL;
+}
+
+
+/**
+ * Function LogicalToInternal
+ * converts a logical coordinate to an internal coordinate.  Logical coordinates
+ * are defined as the standard distance between pins being equal to one.
+ * Internal coordinates are currently INTERNAL_PER_LOGICAL times that.
+ */
+static inline int LogicalToInternal( double aCoord )
+{
+    return int( aCoord * INTERNAL_PER_LOGICAL );
+}
+
 //-----<temporary home for PART sub objects, move after stable>------------------
 
 #include <wx/gdicmn.h>
@@ -38,6 +64,9 @@
 #include <sweet_lexer.h>
 
 class OUTPUTFORMATTER;
+
+/// Control Bits for Format() functions
+#define CTL_OMIT_NL     (1<<0)          ///< omit new line in Format()s.
 
 namespace SCH {
 
@@ -81,6 +110,9 @@ public:
         italic( false ),
         bold( false )
     {}
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 };
 
 
@@ -99,6 +131,9 @@ struct TEXT_EFFECTS
         isVisible( false ),
         property( 0 )
     {}
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 };
 
 
@@ -117,7 +152,16 @@ public:
 
     virtual ~BASE_GRAPHIC() {}
 
-    virtual void Format( OUTPUTFORMATTER* aOutputFormatter, int aNestLevel, int aControlBits ) const
+    static const char* ShowFill( int aFillType )
+    {
+        return SWEET_LEXER::TokenName( PR::T( aFillType ) );
+    }
+
+    /**
+     * Function Format
+     * outputs this object to @a aFormatter in s-expression form.
+     */
+    virtual void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR )
     {}
 };
@@ -134,10 +178,19 @@ protected:
     int         fillType;       // T_none, T_filled, or T_transparent
     POINTS      pts;
 
+    void formatContents( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
+
 public:
     POLY_LINE( PART* aOwner ) :
-        BASE_GRAPHIC( aOwner )
-    {}
+        BASE_GRAPHIC( aOwner ),
+        lineWidth( 1 ),
+        fillType( PR::T_none )
+    {
+    }
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 };
 
 class BEZIER : public POLY_LINE
@@ -148,7 +201,13 @@ class BEZIER : public POLY_LINE
 public:
     BEZIER( PART* aOwner ) :
         POLY_LINE( aOwner )
-    {}
+    {
+        lineWidth = 1;
+        fillType  = PR::T_none;
+    }
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 };
 
 class RECTANGLE : public BASE_GRAPHIC
@@ -164,8 +223,14 @@ protected:
 
 public:
     RECTANGLE( PART* aOwner ) :
-        BASE_GRAPHIC( aOwner )
-    {}
+        BASE_GRAPHIC( aOwner ),
+        lineWidth( 1 ),
+        fillType( PR::T_none )
+    {
+    }
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 };
 
 
@@ -182,8 +247,15 @@ protected:
 
 public:
     CIRCLE( PART* aOwner ) :
-        BASE_GRAPHIC( aOwner )
-    {}
+        BASE_GRAPHIC( aOwner ),
+        radius( LogicalToInternal( 0.5 ) ),
+        lineWidth( 1 ),
+        fillType( PR::T_none )
+    {
+    }
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 };
 
 
@@ -202,8 +274,15 @@ protected:
 
 public:
     ARC( PART* aOwner ) :
-        BASE_GRAPHIC( aOwner )
-    {}
+        BASE_GRAPHIC( aOwner ),
+        lineWidth( 1 ),
+        fillType( PR::T_none ),
+        radius( LogicalToInternal( 0.5 ) )
+    {
+    }
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 };
 
 
@@ -233,6 +312,14 @@ public:
         vjustify( PR::T_bottom ),
         isVisible( true )
     {}
+
+    static const char* ShowJustify( int aJustify )
+    {
+        return SWEET_LEXER::TokenName( PR::T( aJustify ) );
+    }
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 };
 
 
@@ -245,14 +332,45 @@ protected:
     PART*           birthplace;     ///< at which PART in inheritance chain was this PROPERTY added
     wxString        name;
     wxString        text;
-    TEXT_EFFECTS    effects;
+    TEXT_EFFECTS*   effects;
+
+    void clear()
+    {
+        delete effects;
+        effects = 0;
+
+        name = wxEmptyString;
+        text = wxEmptyString;
+    }
 
 public:
     PROPERTY( PART* aOwner, const wxChar* aName = wxT( "" ) ) :
         BASE_GRAPHIC( aOwner ),
         birthplace( aOwner ),
-        name( aName )
+        name( aName ),
+        effects( 0 )
     {}
+
+    ~PROPERTY()
+    {
+        clear();
+    }
+
+    /**
+     * Function Effects
+     * returns a pointer to the TEXT_EFFECTS object for this PROPERTY, and optionally
+     * will lazily allocate one if it did not exist previously.
+     * @param doAlloc if true, means do an allocation of a new TEXT_EFFECTS if one
+     * currently does not exist, otherwise return NULL if non-existent.
+     */
+    TEXT_EFFECTS*   EffectsLookup();
+    TEXT_EFFECTS*   Effects() const
+    {
+        return effects;
+    }
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 };
 
 
@@ -265,6 +383,9 @@ struct PINTEXT
     PINTEXT() :
         isVisible( true )
     {}
+
+    void Format( OUTPUTFORMATTER* aFormatter, const char* aElement, int aNestLevel, int aControlBits ) const
+        throw( IO_ERROR );
 };
 
 
@@ -284,10 +405,18 @@ public:
         isVisible( true )
     {}
 
-/*
-    void Format( OUTPUTFORMATTER* aOutputFormatter, int aNestLevel, int aControlBits ) const
+    const char* ShowType() const
+    {
+        return SWEET_LEXER::TokenName( PR::T( connectionType ) );
+    }
+
+    const char* ShowShape() const
+    {
+        return SWEET_LEXER::TokenName( PR::T( shape ) );
+    }
+
+    void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
-*/
 
 protected:
     PART*       birthplace;         ///< at which PART in inheritance chain was this PIN added
@@ -340,86 +469,22 @@ class PART
     friend class LIB;           // is the owner of all PARTS, afterall
     friend class SWEET_PARSER;
 
-protected:      // not likely to have C++ descendants, but protected none-the-less.
-
-    /// a protected constructor, only a LIB can instantiate a PART.
-    PART( LIB* aOwner, const STRING& aPartNameAndRev );
-
-    /**
-     * Function destroy
-     * clears out this object, deleting all graphics, all fields, all properties,
-     * etc.
-     */
-    void clear();
-
-    /**
-     * Function inherit
-     * is a specialized assignment function that copies a specific subset, enough
-     * to fulfill the requirements of the Sweet s-expression language.
-     */
-    void inherit( const PART& aBasePart );
-
-    /**
-     * Function propertyFind
-     * searches for aPropertyName and returns a PROPERTIES::iterator which
-     * is the found item or properties.end() if not found.
-     */
-    PROPERTIES::iterator propertyFind( const wxString& aPropertyName );
-
-
-    POINT           anchor;
-
-    //PART( LIB* aOwner );
-
-    LIB*            owner;      ///< which LIB am I a part of (pun if you want)
-    int             contains;   ///< has bits from Enum PartParts
-
-    STRING          partNameAndRev;   ///< example "passives/R[/revN..]", immutable.
-
-    LPID*           extends;    ///< of base part, NULL if none, otherwise I own it.
-    PART*           base;       ///< which PART am I extending, if any.  no ownership.
-
-    /// encapsulate the old version deletion, take ownership of @a aLPID
-    void setExtends( LPID* aLPID );
-
-    /// s-expression text for the part, initially empty, and read in as this part
-    /// actually becomes cached in RAM.
-    STRING          body;
-
-    // mandatory properties
-    PROPERTY        reference;      ///< prefix only, only components have full references
-    PROPERTY        value;
-    PROPERTY        footprint;
-    PROPERTY        model;
-    PROPERTY        datasheet;
-
-    // separate lists for speed:
-
-    /**
-     * Member properties
-     * holds the non-mandatory properties.
-     */
-    PROPERTIES      properties;
-
-    /**
-     * Member graphics
-     * owns : POLY_LINE, RECTANGLE, CIRCLE, ARC, BEZIER, and GR_TEXT objects.
-     */
-    GRAPHICS        graphics;
-
-    /**
-     * Member pins
-     * owns all the PINs in pins.
-     */
-    PINS            pins;
-
-    /// Alternate body forms.
-    //ALTERNATES  alternates;
-
-    KEYWORDS        keywords;
-
-
 public:
+
+    /**
+     * Enum PROP_ID
+     * is the set of "mandatory" properties within a PART.  These are used by
+     * class PART as array indices into PART::mandatory[].
+     */
+    enum  PROP_ID
+    {
+        REFERENCE,      ///< reference prefix, a template for instantiation at COMPONENT level
+        VALUE,          ///< value, e.g. "3.3K"
+        FOOTPRINT,      ///< name of PCB module, e.g. "16DIP300"
+        DATASHEET,      ///< URI of datasheet
+        MODEL,          ///< spice model name
+        END             ///< array sentinel, not a valid index
+    };
 
     virtual ~PART();
 
@@ -457,6 +522,24 @@ public:
 
     void PropertyDelete( const wxString& aPropertyName ) throw( IO_ERROR );
 
+    /**
+     * Function Field
+     * returns a pointer to one of the mandatory properties, or NULL
+     * if non-existent.  Use FieldLookup() to potentially allocate it.
+     */
+    PROPERTY*   Field( PROP_ID aPropertyId ) const
+    {
+        wxASSERT( unsigned(aPropertyId) < unsigned(END) );
+        return mandatory[aPropertyId];
+    }
+
+    /**
+     * Function FieldLookup
+     * returns a pointer to one of the mandatory properties, which is lazily
+     * constructed by this function if need be.
+     * @param aPropertyId tells which field.
+     */
+    PROPERTY*   FieldLookup( PROP_ID aPropertyId );
 
 
 /*
@@ -494,6 +577,89 @@ public:
         body = aSExpression;
     }
 */
+
+
+protected:      // not likely to have C++ descendants, but protected none-the-less.
+
+    /// a protected constructor, only a LIB can instantiate a PART.
+    PART( LIB* aOwner, const STRING& aPartNameAndRev );
+
+    /**
+     * Function destroy
+     * clears out this object, deleting everything that this PART owns and
+     * initializing values back to a state as if the object was just constructed
+     * empty.
+     */
+    void clear();
+
+    /**
+     * Function inherit
+     * is a specialized assignment function that copies a specific subset, enough
+     * to fulfill the requirements of the Sweet s-expression language.
+     */
+    void inherit( const PART& aBasePart );
+
+    /**
+     * Function propertyFind
+     * searches for aPropertyName and returns a PROPERTIES::iterator which
+     * is the found item or properties.end() if not found.
+     */
+    PROPERTIES::iterator propertyFind( const wxString& aPropertyName );
+
+    POINT           anchor;
+
+    //PART( LIB* aOwner );
+
+    LIB*            owner;      ///< which LIB am I a part of (pun if you want)
+    int             contains;   ///< has bits from Enum PartParts
+
+    STRING          partNameAndRev;   ///< example "passives/R[/revN..]", immutable.
+
+    LPID*           extends;    ///< of base part, NULL if none, otherwise I own it.
+    PART*           base;       ///< which PART am I extending, if any.  no ownership.
+
+    /// encapsulate the old version deletion, take ownership of @a aLPID
+    void setExtends( LPID* aLPID );
+
+    /// s-expression text for the part, initially empty, and read in as this part
+    /// actually becomes cached in RAM.
+    STRING          body;
+
+    // mandatory properties
+    PROPERTY*       mandatory[END];
+
+/*
+    PROPERTY        value;
+    PROPERTY        footprint;
+    PROPERTY        model;
+    PROPERTY        datasheet;
+*/
+
+    // separate lists for speed:
+
+    /**
+     * Member properties
+     * holds the non-mandatory properties.
+     */
+    PROPERTIES      properties;
+
+    /**
+     * Member graphics
+     * owns : POLY_LINE, RECTANGLE, CIRCLE, ARC, BEZIER, and GR_TEXT objects.
+     */
+    GRAPHICS        graphics;
+
+    /**
+     * Member pins
+     * owns all the PINs in pins.
+     */
+    PINS            pins;
+
+    /// Alternate body forms.
+    //ALTERNATES  alternates;
+
+    KEYWORDS        keywords;
+
 };
 
 }   // namespace PART

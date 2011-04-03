@@ -10,7 +10,7 @@ REVS="rev1 rev5 rev10"
 
 
 REFERENCE="
-    (reference U
+    (reference U?
         (effects (at 12 13 180)(font (size .7 1))(visible yes))
     )"
 
@@ -71,7 +71,7 @@ for C in ${CATEGORIES}; do
 
     for P in ${PARTS};  do
         for R in ${REVS}; do
-            echo "(part $C/$P (value 22)(footprint SM0805)(model Airplane)
+            echo "(part $C/$P (value 22)(footprint SM0805)(model Airplane)(datasheet http://favorite.pdf)
                 $REFERENCE
                 $LINE
                 $RECT
@@ -86,7 +86,7 @@ for C in ${CATEGORIES}; do
                 )" > $BASEDIR/$C/$P.part.$R
         done
         # also make the part without a rev:
-        echo "(part $C/$P (value 22)(footprint SM0805)(model Airplane)
+        echo "(part $C/$P (value 22)(footprint SM0805)(model Airplane)(datasheet http://favorite.pdf)
             $REFERENCE
             $LINE
             $RECT

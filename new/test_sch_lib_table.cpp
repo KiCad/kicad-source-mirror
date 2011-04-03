@@ -25,6 +25,7 @@
 #include <sch_lib_table.h>
 #include <sch_lib_table_lexer.h>
 #include <sch_lpid.h>
+#include <sch_part.h>
 
 using namespace SCH;
 
@@ -86,7 +87,12 @@ void LIB_TABLE::Test()
     // find a part
     LPID    lpid( "meparts:tigers/ears" );
 
-    LookupPart( lpid );
+    PART*   part = LookupPart( lpid );
+
+    sf.Clear();
+    part->Format( &sf, 0, 0 );
+
+    printf( "%s", sf.GetString().c_str() );
 }
 
 

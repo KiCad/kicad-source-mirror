@@ -36,20 +36,9 @@ using namespace PR;
 #define MAX_INHERITANCE_NESTING     6       ///< max depth of inheritance, no problem going larger
 
 
-/**
- * Function log2int
- * converts a logical coordinate to an internal coordinate.  Logical coordinates
- * are defined as the standard distance between pins being equal to one.
- * Internal coordinates are currently INTERNAL_PER_LOGICAL times that.
- */
-static inline int log2int( double aCoord )
-{
-    return int( aCoord * INTERNAL_PER_LOGICAL );
-}
-
 static inline int internal( const STRING& aCoord )
 {
-    return log2int( strtod( aCoord.c_str(), NULL ) );
+    return LogicalToInternal( strtod( aCoord.c_str(), NULL ) );
 }
 
 
@@ -61,15 +50,15 @@ static inline int internal( const STRING& aCoord )
  */
 enum PartBit
 {
-    PARSED,     ///< have parsed this part already, otherwise 'body' text must be parsed
-    EXTENDS,    ///< saw "extends" keyword, inheriting from another PART
-    VALUE,
-    ANCHOR,
-    REFERENCE,
-    FOOTPRINT,
-    DATASHEET,
-    MODEL,
-    KEYWORDS,
+    parsed,     ///< have parsed this part already, otherwise 'body' text must be parsed
+    extends,    ///< saw "extends" keyword, inheriting from another PART
+    value,
+    anchor,
+    reference,
+    footprint,
+    datasheet,
+    model,
+    keywords,
 };
 
 
@@ -86,7 +75,7 @@ void SWEET_PARSER::parseExtends( PART* me )
     PART*   base;
     int     offset;
 
-    if( contains & PB(EXTENDS) )
+    if( contains & PB(extends) )
         Duplicate( T_extends );
 
     NeedSYMBOLorNUMBER();
@@ -129,7 +118,7 @@ void SWEET_PARSER::parseExtends( PART* me )
 
     me->inherit( *base );
     me->base = base;
-    contains |= PB(EXTENDS);
+    contains |= PB(extends);
 }
 
 
@@ -175,6 +164,8 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
     {
         if( tok == T_LEFT )
         {
+            PROPERTY*   prop;
+
             tok = NextTok();
 
             // because exceptions are thrown, any 'new' allocation has to be stored
@@ -195,13 +186,13 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
                 break;
 
             case T_anchor:
-                if( contains & PB(ANCHOR) )
+                if( contains & PB(anchor) )
                     Duplicate( tok );
                 NeedNUMBER( "anchor x" );
                 me->anchor.x = internal( CurText() );
                 NeedNUMBER( "anchor y" );
                 me->anchor.y = internal( CurText() );
-                contains |= PB(ANCHOR);
+                contains |= PB(anchor);
                 break;
 
             case T_line:
@@ -247,119 +238,23 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
                 parseText( text );
                 break;
 
-            // reference in a PART is incomplete, it is just the prefix of an
-            // unannotated reference. Only components have full reference designators.
-            case T_reference:
-                if( contains & PB(REFERENCE) )
-                    Duplicate( tok );
-                contains |= PB(REFERENCE);
-                NeedSYMBOLorNUMBER();
-                me->reference.text = FromUTF8();
-                tok = NextTok();
-                if( tok == T_LEFT )
-                {
-                    tok = NextTok();
-                    if( tok != T_effects )
-                        Expecting( T_effects );
-                    parseTextEffects( &me->reference.effects );
-                    NeedRIGHT();
-                }
-                else if( tok != T_RIGHT )
-                    Expecting( ") | effects" );
-                break;
-
-            case T_value:
-                if( contains & PB(VALUE) )
-                    Duplicate( tok );
-                contains |= PB(VALUE);
-                NeedSYMBOLorNUMBER();
-                me->value.text = FromUTF8();
-                tok = NextTok();
-                if( tok == T_LEFT )
-                {
-                    tok = NextTok();
-                    if( tok != T_effects )
-                        Expecting( T_effects );
-                    parseTextEffects( &me->value.effects );
-                    NeedRIGHT();
-                }
-                else if( tok != T_RIGHT )
-                    Expecting( ") | effects" );
-                break;
-
-            case T_footprint:
-                if( contains & PB(FOOTPRINT) )
-                    Duplicate( tok );
-                contains |= PB(FOOTPRINT);
-                NeedSYMBOLorNUMBER();
-                me->footprint.text = FromUTF8();
-                tok = NextTok();
-                if( tok == T_LEFT )
-                {
-                    tok = NextTok();
-                    if( tok != T_effects )
-                        Expecting( T_effects );
-                    parseTextEffects( &me->footprint.effects );
-                    NeedRIGHT();
-                }
-                else if( tok != T_RIGHT )
-                    Expecting( ") | effects" );
-                break;
-
-            case T_datasheet:
-                if( contains & PB(MODEL) )
-                    Duplicate( tok );
-                contains |= PB(MODEL);
-                NeedSYMBOLorNUMBER();
-                me->datasheet.text = FromUTF8();
-                tok = NextTok();
-                if( tok == T_LEFT )
-                {
-                    tok = NextTok();
-                    if( tok != T_effects )
-                        Expecting( T_effects );
-                    parseTextEffects( &me->datasheet.effects );
-                    NeedRIGHT();
-                }
-                else if( tok != T_RIGHT )
-                    Expecting( ") | effects" );
-                break;
-
-            case T_model:
-                if( contains & PB(MODEL) )
-                    Duplicate( tok );
-                contains |= PB(MODEL);
-                NeedSYMBOLorNUMBER();
-                me->model.text = FromUTF8();
-                tok = NextTok();
-                if( tok == T_LEFT )
-                {
-                    tok = NextTok();
-                    if( tok != T_effects )
-                        Expecting( T_effects );
-                    parseTextEffects( &me->model.effects );
-                    NeedRIGHT();
-                }
-                else if( tok != T_RIGHT )
-                    Expecting( ") | effects" );
-                break;
-
             case T_property:
-                PROPERTY* property;
-                property = new PROPERTY( me );
+                prop = new PROPERTY( me );
                 // @todo check for uniqueness
-                me->properties.push_back( property );
+                me->properties.push_back( prop );
                 NeedSYMBOLorNUMBER();
-                property->name = FromUTF8();
+                prop->name = FromUTF8();
+
+            L_prop:
                 NeedSYMBOLorNUMBER();
-                property->text = FromUTF8();
+                prop->text = FromUTF8();
                 tok = NextTok();
                 if( tok == T_LEFT )
                 {
                     tok = NextTok();
                     if( tok != T_effects )
                         Expecting( T_effects );
-                    parseTextEffects( &property->effects );
+                    parseTextEffects( prop->EffectsLookup() );
                     NeedRIGHT();
                 }
                 else if( tok != T_RIGHT )
@@ -371,6 +266,43 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
                 me->PropertyDelete( FromUTF8() );
                 NeedRIGHT();
                 break;
+
+            // reference in a PART is incomplete, it is just the prefix of an
+            // unannotated reference. Only components have full reference designators.
+            case T_reference:
+                if( contains & PB(reference) )
+                    Duplicate( tok );
+                contains |= PB(reference);
+                prop = me->FieldLookup( PART::REFERENCE );
+                goto L_prop;
+
+            case T_value:
+                if( contains & PB(value) )
+                    Duplicate( tok );
+                contains |= PB(value);
+                prop = me->FieldLookup( PART::VALUE );
+                goto L_prop;
+
+            case T_footprint:
+                if( contains & PB(footprint) )
+                    Duplicate( tok );
+                contains |= PB(footprint);
+                prop = me->FieldLookup( PART::FOOTPRINT );
+                goto L_prop;
+
+            case T_datasheet:
+                if( contains & PB(datasheet) )
+                    Duplicate( tok );
+                contains |= PB(datasheet);
+                prop = me->FieldLookup( PART::DATASHEET );
+                goto L_prop;
+
+            case T_model:
+                if( contains & PB(model) )
+                    Duplicate( tok );
+                contains |= PB(model);
+                prop = me->FieldLookup( PART::MODEL );
+                goto L_prop;
 
             case T_pin:
                 PIN* pin;
@@ -404,7 +336,6 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
 
             case T_route_pin_swap:
                 break;
-
             */
             }
         }
@@ -419,7 +350,7 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
         }
     }
 
-    contains |= PB(PARSED);
+    contains |= PB(parsed);
 
     me->contains |= contains;
 }
@@ -804,6 +735,7 @@ void SWEET_PARSER::parsePolyLine( POLY_LINE* me )
             if( sawWidth )
                 Duplicate( tok );
             NeedNUMBER( "line_width" );
+            // @todo Use logical units?
             me->lineWidth = strtod( CurText(), NULL );
             NeedRIGHT();
             sawWidth = true;
