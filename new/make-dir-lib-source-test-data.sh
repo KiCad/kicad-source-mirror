@@ -40,7 +40,7 @@ BEZIER="
     )"
 
 TEXT="
-    (text \"This is some text\" (at 23 23 90.0)(justify left bottom)(visible yes)(fill filled)
+    (text (at 23 23 90.0) \"This is some text\" (justify left bottom)(visible yes)(fill filled)
         (font arial (size .8 1.2))
     )"
 

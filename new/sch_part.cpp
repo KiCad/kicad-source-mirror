@@ -31,6 +31,20 @@
 #include <macros.h>
 //#include <richio.h>
 
+
+/**
+ * Function formatAt
+ * returns a formatted "(at X Y [ANGLE])" s-expression
+ */
+static void formatAt( OUTPUTFORMATTER* out, const POINT& aPos, ANGLE aAngle, int indent=0 )
+    throw( IO_ERROR )
+{
+    out->Print( indent, aAngle==0.0 ? "(at %.6g %.6g %.6g)" : "(at %.6g %.6g)",
+        InternalToLogical( aPos.x ), InternalToLogical( aPos.y ),
+        double( aAngle ) );
+}
+
+
 using namespace SCH;
 
 
@@ -40,13 +54,6 @@ PART::PART( LIB* aOwner, const STRING& aPartNameAndRev ) :
     partNameAndRev( aPartNameAndRev ),
     extends( 0 ),
     base( 0 )
-/*
-    reference(  this, wxT( "reference " ) ),
-    value(      this, wxT( "value" ) ),
-    footprint(  this, wxT( "footprint" ) ),
-    model(      this, wxT( "model" ) ),
-    datasheet(  this, wxT( "datasheet" ) )
-*/
 {
     // Our goal is to have class LIB only instantiate what is needed, so print here
     // what it is doing. It is the only class where PART can be instantiated.
@@ -307,12 +314,7 @@ void TEXT_EFFECTS::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
     else
         out->Print( indent, "(effects %s ",  out->Quotew( propName ).c_str() );
 
-    out->Print( 0, "(at %.6g %.6g", InternalToLogical( pos.x ), InternalToLogical( pos.y ) );
-
-    if( angle )
-        out->Print( 0, " %.6g)", double( angle ) );
-    else
-        out->Print( 0, ")" );
+    formatAt( out, pos, angle );
 
     font.Format( out, 0, ctl | CTL_OMIT_NL );
 
@@ -349,13 +351,8 @@ void PIN::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 {
     out->Print( indent, "(pin %s %s ", ShowType(), ShowShape() );
 
-    if( angle )
-        out->Print( 0, "(at %.6g %.6g %.6g)", InternalToLogical( pos.x ), InternalToLogical( pos.y ), double(angle) );
-    else
-        out->Print( 0, "(at %.6g %.6g)", InternalToLogical( pos.x ), InternalToLogical( pos.y ) );
-
+    formatAt( out, pos, angle );
     out->Print( 0, "(length %.6g)", InternalToLogical( length ) );
-
     out->Print( 0, "(visible %s)\n", isVisible ? "yes" : "no" );
 
     signal.Format(  out, "signal",  indent+1, 0 );
@@ -386,7 +383,7 @@ void POLY_LINE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 void POLY_LINE::formatContents(  OUTPUTFORMATTER* out, int indent, int ctl ) const
     throw( IO_ERROR )
 {
-    out->Print( 0, "(line_width %.6g)", lineWidth ); // @todo use logical units?
+    out->Print( 0, "(line_width %.6g)", InternalToWidth( lineWidth ) );
 
     if( fillType != PR::T_none )
         out->Print( 0, "(fill %s)", ShowFill( fillType ) );
@@ -437,7 +434,7 @@ void RECTANGLE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
     out->Print( indent, "(rectangle (start %.6g %.6g)(end %.6g %.6g)(line_width %.6g)",
         InternalToLogical( start.x ), InternalToLogical( start.y ),
         InternalToLogical( end.x ), InternalToLogical( end.y ),
-        lineWidth );
+        InternalToWidth( lineWidth ) );
 
     if( fillType != PR::T_none )
         out->Print( 0, "(fill %s)", ShowFill( fillType ) );
@@ -456,7 +453,7 @@ void CIRCLE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
     out->Print( indent, "(circle (center %.6g %.6g)(radius %.6g)(line_width %.6g)",
         InternalToLogical( center.x ), InternalToLogical( center.y ),
         InternalToLogical( radius),
-        lineWidth );
+        InternalToWidth( lineWidth ) );
 
     if( fillType != PR::T_none )
         out->Print( 0, "(fill %s)", ShowFill( fillType ) );
@@ -477,7 +474,7 @@ void ARC::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
         InternalToLogical( radius),
         InternalToLogical( start.x ), InternalToLogical( start.y ),
         InternalToLogical( end.x ),   InternalToLogical( end.y ),
-        lineWidth );
+        InternalToWidth( lineWidth ) );
 
     if( fillType != PR::T_none )
         out->Print( 0, "(fill %s)", ShowFill( fillType ) );
@@ -491,23 +488,14 @@ void GR_TEXT::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 {
     /*
         (text "This is the text that gets drawn."
-            (at X Y [ANGLE])
-
-            # Valid horizontal justification values are center, right, and left.  Valid
-            # vertical justification values are center, top, bottom.
-            (justify HORIZONTAL_JUSTIFY VERTICAL_JUSTIFY)
+            (at X Y [ANGLE])(justify HORIZONTAL_JUSTIFY VERTICAL_JUSTIFY)(visible YES)(fill FILL_TYPE)
             (font [FONT] (size HEIGHT WIDTH) [italic] [bold])
-            (visible YES)
-            (fill FILL_TYPE)
         )
     */
 
     out->Print( indent, "(text %s\n", out->Quotew( text ).c_str() );
 
-    if( angle )
-        out->Print( indent+1, "(at %.6g %.6g %.6g)",  InternalToLogical( pos.x ), InternalToLogical( pos.y ), double( angle ) );
-    else
-        out->Print( indent+1, "(at %.6g %.6g)",  InternalToLogical( pos.x ), InternalToLogical( pos.y ) );
+    formatAt( out, pos, angle, indent+1 );
 
     out->Print( 0, "(justify %s %s)(visible %s)",
             ShowJustify( hjustify ), ShowJustify( vjustify ),
@@ -516,8 +504,7 @@ void GR_TEXT::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
     if( fillType != PR::T_none )
         out->Print( 0, "(fill %s)", ShowFill( fillType ) );
 
-    out->Print( 0, "\n" );
-    font.Format( out, indent+1, CTL_OMIT_NL );
+    font.Format( out, 0, CTL_OMIT_NL );
     out->Print( 0, ")\n" );
 }
 

@@ -55,6 +55,19 @@ static inline int LogicalToInternal( double aCoord )
     return int( aCoord * INTERNAL_PER_LOGICAL );
 }
 
+static inline int WidthToInternal( double aWidth )
+{
+    // sweet line widths are a "percent of a logical unit"
+    return LogicalToInternal( aWidth ) / 100;
+}
+
+static inline double InternalToWidth( int aWidth )
+{
+    // sweet line widths are a "percent of a logical unit"
+    return InternalToLogical( aWidth ) * 100;
+}
+
+
 //-----<temporary home for PART sub objects, move after stable>------------------
 
 #include <wx/gdicmn.h>
@@ -174,7 +187,7 @@ class POLY_LINE : public BASE_GRAPHIC
     friend class SWEET_PARSER;
 
 protected:
-    double      lineWidth;
+    int         lineWidth;
     int         fillType;       // T_none, T_filled, or T_transparent
     POINTS      pts;
 
@@ -216,7 +229,7 @@ class RECTANGLE : public BASE_GRAPHIC
     friend class SWEET_PARSER;
 
 protected:
-    double      lineWidth;
+    int         lineWidth;
     int         fillType;       // T_none, T_filled, or T_transparent
     POINT       start;
     POINT       end;
@@ -242,7 +255,7 @@ class CIRCLE : public BASE_GRAPHIC
 protected:
     POINT       center;
     int         radius;
-    double      lineWidth;
+    int         lineWidth;
     int         fillType;       // T_none, T_filled, or T_transparent
 
 public:
@@ -266,7 +279,7 @@ class ARC : public BASE_GRAPHIC
 
 protected:
     POINT       pos;
-    double      lineWidth;
+    int         lineWidth;
     int         fillType;       // T_none, T_filled, or T_transparent
     int         radius;
     POINT       start;
