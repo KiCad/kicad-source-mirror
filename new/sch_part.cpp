@@ -39,7 +39,7 @@
 static void formatAt( OUTPUTFORMATTER* out, const POINT& aPos, ANGLE aAngle, int indent=0 )
     throw( IO_ERROR )
 {
-    out->Print( indent, aAngle==0.0 ? "(at %.6g %.6g %.6g)" : "(at %.6g %.6g)",
+    out->Print( indent, aAngle!=0.0 ? "(at %.6g %.6g %.6g)" : "(at %.6g %.6g)",
         InternalToLogical( aPos.x ), InternalToLogical( aPos.y ),
         double( aAngle ) );
 }

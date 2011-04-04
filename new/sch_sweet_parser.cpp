@@ -27,7 +27,6 @@
 #include <sch_lib_table.h>
 #include <sch_lpid.h>
 
-#include <macros.h>         // FROM_UTF8()
 
 using namespace SCH;
 using namespace PR;
@@ -1197,7 +1196,7 @@ void SWEET_PARSER::parseText( GR_TEXT* me )
                 Duplicate( tok );
             sawText = true;
 
-            me->text = FROM_UTF8( CurText() );
+            me->text = wxString::FromUTF8( CurText() );
         }
     }
 }
