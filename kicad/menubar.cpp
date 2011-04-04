@@ -42,7 +42,7 @@ EVT_MENU( ID_SAVE_AND_ZIP_FILES, WinEDA_MainFrame::OnArchiveFiles )
 EVT_MENU( ID_READ_ZIP_ARCHIVE, WinEDA_MainFrame::OnUnarchiveFiles )
 EVT_MENU( ID_PROJECT_TREE_REFRESH, WinEDA_MainFrame::OnRefresh )
 EVT_MENU( ID_GENERAL_HELP, WinEDA_MainFrame::GetKicadHelp )
-EVT_MENU( ID_KICAD_ABOUT, WinEDA_MainFrame::GetKicadAbout )
+EVT_MENU( wxID_ABOUT, WinEDA_MainFrame::GetKicadAbout )
 
 /* Range menu events */
 EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END,
@@ -122,16 +122,12 @@ void WinEDA_MainFrame::ReCreateMenuBar()
                             _( "Unarchive project files from zip file" ),
                             unzip_xpm );
 
-    /* Quit on all platforms except WXMAC */
-#if !defined( __WXMAC__ )
-
+    // Quit
     filesMenu->AppendSeparator();
+
     ADD_MENUITEM_WITH_HELP( filesMenu, wxID_EXIT, _( "&Quit" ),
                             _( "Quit KiCad" ),
                             exit_xpm );
-
-#endif /* !defined( __WXMAC__ ) */
-
 
     // Browse menu
     wxMenu* browseMenu = new wxMenu();
@@ -142,7 +138,7 @@ void WinEDA_MainFrame::ReCreateMenuBar()
                             _( "Launch preferred text editor" ),
                             editor_xpm );
 
-    /* Browse files */
+    // View file
     ADD_MENUITEM_WITH_HELP( browseMenu, ID_BROWSE_AN_SELECT_FILE,
                             _( "&View File" ),
                             _( "View, read or edit file with a text editor" ),
@@ -168,23 +164,20 @@ void WinEDA_MainFrame::ReCreateMenuBar()
                            _( "Use system default PDF viewer used to browse datasheets" ),
                            wxITEM_CHECK );
 
-#if !defined( __WXMAC__ )
     SETBITMAPS( datasheet_xpm );
-#endif /* !defined( __WXMAC__ ) */
 
     SubMenuPdfBrowserChoice->Append( item );
     SubMenuPdfBrowserChoice->Check( ID_SELECT_DEFAULT_PDF_BROWSER,
                                     wxGetApp().m_PdfBrowserIsDefault );
 
-    // Favourite viewer
+    // Favourite
     item = new wxMenuItem( SubMenuPdfBrowserChoice,
                            ID_SELECT_PREFERED_PDF_BROWSER,
                            _( "Favourite" ),
                            _( "Use your favourite PDF viewer used to browse datasheets" ),
                            wxITEM_CHECK );
-#if !defined( __WXMAC__ )
+
     SETBITMAPS( preference_xpm );
-#endif /* !defined( __WXMAC__ ) */
 
     SubMenuPdfBrowserChoice->Append( item );
     SubMenuPdfBrowserChoice->AppendSeparator();
@@ -213,14 +206,14 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
     AddHelpVersionInfoMenuEntry( helpMenu );
 
-    /* Contents */
+    // Contents
     ADD_MENUITEM_WITH_HELP( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                             _( "Open the kicad manual" ),
                             online_help_xpm );
 
     // About
     helpMenu->AppendSeparator();
-    ADD_MENUITEM_WITH_HELP( helpMenu, ID_KICAD_ABOUT, _( "&About" ),
+    ADD_MENUITEM_WITH_HELP( helpMenu, wxID_ABOUT, _( "&About" ),
                             _( "About kicad project manager" ),
                             info_xpm );
 

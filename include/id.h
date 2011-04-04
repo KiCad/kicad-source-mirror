@@ -71,7 +71,7 @@ enum main_id
     ID_GENERAL_HELP,
     ID_HELP_COPY_VERSION_STRING,
     ID_LOCAL_HELP,
-    ID_KICAD_ABOUT,
+    ID_KICAD_ABOUT, // @todo all handle by wxID_ABOUT
 
     ID_EDIT,
     ID_NO_TOOL_SELECTED,

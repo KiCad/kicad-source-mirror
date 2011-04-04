@@ -26,7 +26,6 @@
 
 #define HOTKEY_FILENAME wxT( "pcbnew" )
 
-
 void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 {
     int        id = event.GetId();
@@ -59,7 +58,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         }
         break;
 
-    case ID_OPTIONS_SETUP:
+    case wxID_PREFERENCES:
         {
             Dialog_GeneralOptions dlg( this );
             dlg.ShowModal();

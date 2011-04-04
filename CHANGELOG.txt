@@ -4,6 +4,19 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-Apr-4, UPDATE Jerry Jacobs <xor.gate.engineering@gmail.com>
+================================================================================
+More native OSX changes, this removes some WXMAC defines replaced by wxID
+macros. These are handled by wxWidgets itself and reduces in-app platform
+defines. More work needs to be done for CvPCB and Gerbview.
+
+All: 
+     Hotkey names in menu's all have tabs, this looks more uniform and pretty.
+
+EESschema & PCBNew:
+     Fix about and preferences wxMenu to be more native (remove unneeded WXMAC )
+     Disable all icons in wxMenu on OSX with macro SETBITMAPS
+
 2011-Mar-16, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 Gerbview:

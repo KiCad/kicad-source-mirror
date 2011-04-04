@@ -24,7 +24,6 @@
 
 
 // Global variables
-
 bool      g_OptNetListUseNames; /* TRUE to use names rather than net
                                  * The numbers (PSPICE netlist only) */
 wxSize    g_RepeatStep;
@@ -113,13 +112,6 @@ void WinEDA_App::MacOpenFile( const wxString &fileName )
 
 bool WinEDA_App::OnInit()
 {
-    /* WXMAC application specific */
-#ifdef __WXMAC__
-//	wxApp::SetExitOnFrameDelete(false);
-    wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
-    wxApp::s_macPreferencesMenuItemId = ID_OPTIONS_SETUP;
-#endif /* __WXMAC__ */
-
     wxFileName      filename;
     SCH_EDIT_FRAME* frame = NULL;
 
@@ -134,7 +126,7 @@ bool WinEDA_App::OnInit()
     if( argc > 1 )
         filename = argv[1];
 
-    /* init EESCHEMA */
+    // Init EESchema
     SeedLayers();
 
     // read current setup and reopen last directory if no filename to open in

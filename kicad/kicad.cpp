@@ -75,15 +75,6 @@ void WinEDA_App::MacOpenFile(const wxString &fileName) {
 bool WinEDA_App::OnInit()
 /*****************************************************************************/
 {
-    /* WXMAC application specific */
-    /* TODO fix about dialog issue */
-    /* TODO fix SetExitOnFrameDelete */
-#ifdef __WXMAC__
-//	wxApp::SetExitOnFrameDelete(false);
-    wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
-    wxApp::s_macPreferencesMenuItemId = ID_OPTIONS_SETUP;
-#endif /* __WXMAC__ */
-
     WinEDA_MainFrame* frame;
 
     InitEDA_Appl( wxT( "KiCad" ), APP_TYPE_KICAD );
