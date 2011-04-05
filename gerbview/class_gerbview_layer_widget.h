@@ -59,6 +59,13 @@ class GERBER_LAYER_WIDGET : public LAYER_WIDGET
     /// on every child control within the layer panel.
     void installRightLayerClickHandler();
 
+    /**
+     * Virtual Function useAlternateBitmap
+     * @return true if bitmaps shown in Render layer list
+     * are alternate bitmaps, or false if they are "normal" bitmaps
+     */
+    virtual bool useAlternateBitmap(int aRow);
+
 public:
 
     /**
@@ -86,6 +93,13 @@ public:
      */
     void SetLayersManagerTabsText( );
     //-----</implement LAYER_WIDGET abstract callback functions>----------
+
+    /**
+     * Function UpdateLayerIcons
+     * Update the layer manager icons (layers only)
+     * Useful when loading a file or clearing a layer because they change
+     */
+    void UpdateLayerIcons();
 };
 
 #endif  // _CLASS_GERBER_LAYER_WIDGET_H_

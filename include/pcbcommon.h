@@ -49,8 +49,6 @@ extern PCB_SCREEN* ScreenPcb;
 extern BOARD*      g_ModuleEditor_Pcb;
 
 /* Pad editing */
-extern wxString g_Current_PadName;  // Last used pad name (pad num)
-
 extern D_PAD    g_Pad_Master;
 
 #endif  /*  __PCBCOMMON_H__ */

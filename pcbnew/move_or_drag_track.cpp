@@ -32,8 +32,6 @@ static bool InitialiseDragParameters();
 static wxPoint PosInit, s_LastPos;
 static TRACK*  NewTrack;    /* New track or track being moved. */
 static int     NbPtNewTrack;
-static int     Old_HighLigth_NetCode;
-static bool    Old_HighLigt_Status;
 static double  s_StartSegmentSlope, s_EndSegmentSlope,
                s_MovingSegmentSlope,
                s_StartSegment_Yorg, s_EndSegment_Yorg,
@@ -54,6 +52,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     TRACK* NextS;
     int    ii;
+    BOARD * pcb = ( (PCB_EDIT_FRAME*) Panel->GetParent() )->GetBoard();
 
     /* Erase the current drawings */
     wxPoint             oldpos = Panel->GetScreen()->GetCrossHairPosition();
@@ -64,10 +63,8 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
         Panel->m_mouseCaptureCallback( Panel, DC, wxDefaultPosition, true );
 
     Panel->GetScreen()->SetCrossHairPosition( oldpos );
-    g_HighLight_Status = false;
-    ( (PCB_EDIT_FRAME*) Panel->GetParent() )->GetBoard()->DrawHighLight( Panel,
-                                                                         DC,
-                                                                         g_HighLight_NetCode );
+    pcb->HightLightOFF();
+    pcb->DrawHighLight( Panel, DC, pcb->GetHightLightNetCode() );
 
     if( NewTrack )
     {
@@ -122,11 +119,10 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
     // Clear the undo picker list:
     s_ItemsListPicker.ClearListAndDeleteItems();
 
-    g_HighLight_NetCode = Old_HighLigth_NetCode;
-    g_HighLight_Status   = Old_HighLigt_Status;
-    if( g_HighLight_Status )
-        ( (PCB_EDIT_FRAME*) Panel->GetParent() )->GetBoard()->DrawHighLight(
-            Panel, DC, g_HighLight_NetCode );
+    pcb->PopHightLight();
+
+    if( pcb->IsHightLightNetON() )
+        pcb->DrawHighLight( Panel, DC, pcb->GetHightLightNetCode() );
 
     EraseDragList();
     Panel->SetMouseCapture( NULL, NULL );
@@ -665,9 +661,9 @@ void PCB_EDIT_FRAME::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int com
     EraseDragList();
 
     /* Change highlighted net: the new one will be highlighted */
-    Old_HighLigt_Status   = g_HighLight_Status;
-    Old_HighLigth_NetCode = g_HighLight_NetCode;
-    if( g_HighLight_Status )
+    GetBoard()->PushHightLight();
+
+    if( GetBoard()->IsHightLightNetON() )
         High_Light( DC );
     PosInit = GetScreen()->GetCrossHairPosition();
 
@@ -738,10 +734,10 @@ void PCB_EDIT_FRAME::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int com
     s_LastPos = PosInit;
     DrawPanel->SetMouseCapture( Show_MoveNode, Abort_MoveTrack );
 
-    g_HighLight_NetCode = track->GetNet();
-    g_HighLight_Status   = true;
+    GetBoard()->SetHightLightNet( track->GetNet() );
+    GetBoard()->HightLightON();
 
-    GetBoard()->DrawHighLight( DrawPanel, DC, g_HighLight_NetCode );
+    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
     DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
 }
 
@@ -902,9 +898,8 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
         s_EndSegmentPresent = false;
 
     /* Change high light net: the new one will be highlighted */
-    Old_HighLigt_Status   = g_HighLight_Status;
-    Old_HighLigth_NetCode = g_HighLight_NetCode;
-    if( g_HighLight_Status )
+    GetBoard()->PushHightLight();
+    if( GetBoard()->IsHightLightNetON() )
         High_Light( DC );
 
     EraseDragList();
@@ -938,9 +933,9 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     s_LastPos = GetScreen()->GetCrossHairPosition();
     DrawPanel->SetMouseCapture( Show_Drag_Track_Segment_With_Cte_Slope, Abort_MoveTrack );
 
-    g_HighLight_NetCode = track->GetNet();
-    g_HighLight_Status   = true;
-    GetBoard()->DrawHighLight( DrawPanel, DC, g_HighLight_NetCode );
+    GetBoard()->SetHightLightNet( track->GetNet() );
+    GetBoard()->HightLightON();
+    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
 
     // Prepare the Undo command
     ITEM_PICKER picker( NULL, UR_CHANGED );

@@ -151,6 +151,8 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
     fclose( gerber->m_Current_File );
     SetLocaleTo_Default();
 
+    gerber->m_InUse = true;
+
     // Display errors list
     if( m_Messages.size() > 0 )
     {

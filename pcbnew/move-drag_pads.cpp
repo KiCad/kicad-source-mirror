@@ -184,13 +184,13 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
  */
 void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
 {
-    D_PAD* Pad;
-    int    rX, rY;
+    wxString lastPadName;   // Last used pad name (pad num)
+    lastPadName = g_Pad_Master.ReturnStringPadName();
 
     m_Pcb->m_Status_Pcb     = 0;
     Module->m_LastEdit_Time = time( NULL );
 
-    Pad = new D_PAD( Module );
+    D_PAD* Pad = new D_PAD( Module );
 
     /* Add the new pad to end of the module pad list. */
     Module->m_Pads.PushBack( Pad );
@@ -201,29 +201,27 @@ void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
 
     Pad->m_Pos = GetScreen()->GetCrossHairPosition();
 
-    rX = Pad->m_Pos.x - Module->m_Pos.x;
-    rY = Pad->m_Pos.y - Module->m_Pos.y;
+    // Set the relative pad position
+    // ( pad position for module orient, 0, and relative to the module position)
+    Pad->m_Pos0 = Pad->m_Pos - Module->m_Pos;
+    RotatePoint( &Pad->m_Pos0, -Module->m_Orient );
 
-    RotatePoint( &rX, &rY, -Module->m_Orient );
-
-    Pad->m_Pos0.x = rX;
-    Pad->m_Pos0.y = rY;
-
-    /* Automatically increment the current pad number and name. */
+    /* Automatically increment the current pad number. */
     long num    = 0;
     int  ponder = 1;
 
-    while( g_Current_PadName.Len() && g_Current_PadName.Last() >= '0'
-           && g_Current_PadName.Last() <= '9' )
+    while( lastPadName.Len() && lastPadName.Last() >= '0'
+           && lastPadName.Last() <= '9' )
     {
-        num += ( g_Current_PadName.Last() - '0' ) * ponder;
-        g_Current_PadName.RemoveLast();
+        num += ( lastPadName.Last() - '0' ) * ponder;
+        lastPadName.RemoveLast();
         ponder *= 10;
     }
 
-    num++;
-    g_Current_PadName << num;
-    Pad->SetPadName( g_Current_PadName );
+    num++;  // Use next number for the new pad
+    lastPadName << num;
+    Pad->SetPadName( lastPadName );
+    g_Pad_Master.SetPadName(lastPadName);
 
     Module->Set_Rectangle_Encadrement();
     Pad->DisplayInfo( this );

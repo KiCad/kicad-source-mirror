@@ -412,6 +412,7 @@ extern const char* width_segment_xpm[];
 extern const char* width_track_via_xpm[];
 extern const char* width_track_xpm[];
 extern const char* width_vias_xpm[];
+extern const char* window_close_xpm[];
 extern const char* zip_tool_xpm[];
 extern const char* zip_xpm[];
 extern const char* zoom_area_xpm[];

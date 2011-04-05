@@ -147,6 +147,7 @@ APERTURE_MACRO* GERBER_IMAGE::FindApertureMacro( const APERTURE_MACRO& aLookup )
 
 void GERBER_IMAGE::ResetDefaultValues()
 {
+    m_InUse         = false;
     m_GBRLayerParams.ResetDefaultValues();
     m_FileName.Empty();
     m_ImageName     = wxT( "no name" );             // Image name from the IN command

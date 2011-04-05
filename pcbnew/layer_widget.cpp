@@ -44,7 +44,9 @@
 #define BUTT_SIZE_Y             18
 #define BUTT_VOID               4
 
-/* XPM */
+/* XPM
+ * This bitmap  is used for not selected layers
+ */
 static const char * clear_xpm[] = {
 "10 14 1 1",
 " 	c None",
@@ -63,11 +65,38 @@ static const char * clear_xpm[] = {
 "          ",
 "          "};
 
-/* XPM */
-static const char * rightarrow_xpm[] = {
-"10 14 5 1",
+/* XPM
+ * This bitmap can be used to show a not selected layer
+ * with special property (mainly not selected layers not in use in Gerbview)
+ */
+static const char * clear_alternate_xpm[] = {
+"10 14 4 1",
 "       c None",
-".      c white",
+"X      c #008080",
+"o      c GREEN",
+"O      c #00B080",
+"          ",
+"          ",
+"          ",
+"          ",
+"    X     ",
+"   XXX    ",
+"  XXXXX   ",
+" OOOOOOO  ",
+"  ooooo   ",
+"   ooo    ",
+"    o     ",
+"          ",
+"          ",
+"          "};
+
+
+/* XPM
+ * This bitmap  is used for a normale selected layer
+ */
+static const char * rightarrow_xpm[] = {
+"10 14 4 1",
+"       c None",
 "X      c #8080ff",
 "o      c BLUE",
 "O      c gray56",
@@ -85,6 +114,32 @@ static const char * rightarrow_xpm[] = {
 "  oooO    ",
 "  ooO     ",
 "  oO      "};
+
+/* XPM
+ * This bitmap can be used to show the selected layer
+ * with special property (mainly a layer in use in Gerbview)
+ */
+static const char * rightarrow_alternate_xpm[] = {
+"10 14 5 1",
+"       c None",
+".      c #00B000",
+"X      c #8080ff",
+"o      c BLUE",
+"O      c gray56",
+"..X       ",
+"..XX      ",
+"..XXX     ",
+"..XXXX    ",
+"..XXXXX   ",
+"..XXXXXX  ",
+"..XXXXXXX ",
+"..oooooooO",
+"..ooooooO ",
+"..oooooO  ",
+"..ooooO   ",
+"..oooO    ",
+"..ooO     ",
+"..oO      "};
 
 
 /**
@@ -349,7 +404,8 @@ void LAYER_WIDGET::insertLayerRow( int aRow, const ROW& aSpec )
     // column 0
     col = 0;
     wxStaticBitmap* sbm = new wxStaticBitmap( m_LayerScrolledWindow, encodeId( col, aSpec.id ),
-                            *m_BlankBitmap, wxDefaultPosition, m_BitmapSize );
+                            useAlternateBitmap(aRow) ? *m_BlankAlternateBitmap : *m_BlankBitmap,
+                            wxDefaultPosition, m_BitmapSize );
     sbm->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( LAYER_WIDGET::OnLeftDownLayers ), NULL, this );
     m_LayersFlexGridSizer->wxSizer::Insert( index+col, sbm, 0, flags );
 
@@ -502,8 +558,10 @@ LAYER_WIDGET::LAYER_WIDGET( wxWindow* aParent, wxWindow* aFocusOwner, int aPoint
     m_CurrentRow = -1;  // hide the arrow initially
 
     m_RightArrowBitmap = new wxBitmap( rightarrow_xpm );
+    m_RightArrowAlternateBitmap = new wxBitmap( rightarrow_alternate_xpm );
 
     m_BlankBitmap = new wxBitmap( clear_xpm );     // translucent
+    m_BlankAlternateBitmap = new wxBitmap( clear_alternate_xpm );
     m_BitmapSize = wxSize(m_BlankBitmap->GetWidth(), m_BlankBitmap->GetHeight());
 
     // trap the tab changes so that we can call passOnFocus().
@@ -656,12 +714,12 @@ void LAYER_WIDGET::SelectLayerRow( int aRow )
 
     wxStaticBitmap* oldbm = (wxStaticBitmap*) getLayerComp( m_CurrentRow, 0 );
     if( oldbm )
-        oldbm->SetBitmap( *m_BlankBitmap );
+        oldbm->SetBitmap( useAlternateBitmap(m_CurrentRow) ? *m_BlankAlternateBitmap : *m_BlankBitmap );
 
     wxStaticBitmap* newbm = (wxStaticBitmap*) getLayerComp( aRow, 0 );
     if( newbm )
     {
-        newbm->SetBitmap( *m_RightArrowBitmap );
+        newbm->SetBitmap( useAlternateBitmap(aRow) ? *m_RightArrowAlternateBitmap : *m_RightArrowBitmap );
 
         // Make sure the desired layer row is visible.
         // It seems that as of 2.8.2, setting the focus does this.

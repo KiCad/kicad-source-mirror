@@ -555,7 +555,6 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         return;
 
     TransfertDataToPad( &g_Pad_Master, false );
-    g_Current_PadName = g_Pad_Master.ReturnStringPadName();
 
     if( m_CurrentPad )   // Set current Pad parameters
     {

@@ -3,9 +3,7 @@
 /*******************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "class_drawpanel.h"
-#include "confirm.h"
 #include "kicad_string.h"
 
 #include "pcbnew.h"
@@ -80,10 +78,10 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
     {
         INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
-        if( g_HighLight_Status )
+        if( GetBoard()->IsHightLightNetON() )
             High_Light( &dc );
 
-        g_HighLight_NetCode = netcode;
+        GetBoard()->SetHightLightNet( netcode );
         High_Light( &dc );
     }
 }
@@ -94,7 +92,8 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
  */
 int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
 {
-    if( g_HighLight_Status )
+    int netcode = -1;
+    if( GetBoard()->IsHightLightNetON() )
         High_Light( DC );
 
     // use this scheme because a pad is a higher priority than a track in the
@@ -115,33 +114,35 @@ int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
         switch( item->Type() )
         {
         case TYPE_PAD:
-            g_HighLight_NetCode = ( (D_PAD*) item )->GetNet();
-            High_Light( DC );
+            netcode = ( (D_PAD*) item )->GetNet();
             SendMessageToEESCHEMA( item );
-            return g_HighLight_NetCode;
+            break;
 
         case TYPE_TRACK:
         case TYPE_VIA:
         case TYPE_ZONE:
-
             // since these classes are all derived from TRACK, use a common
             // GetNet() function:
-            g_HighLight_NetCode = ( (TRACK*) item )->GetNet();
-            High_Light( DC );
-            return g_HighLight_NetCode;
+            netcode = ( (TRACK*) item )->GetNet();
+            break;
 
         case TYPE_ZONE_CONTAINER:
-            g_HighLight_NetCode = ( (ZONE_CONTAINER*) item )->GetNet();
-            High_Light( DC );
-            return g_HighLight_NetCode;
+            netcode = ( (ZONE_CONTAINER*) item )->GetNet();
+            break;
 
         default:
             ;   // until somebody changes GENERAL_COLLECTOR::PadsOrTracks,
                 // this should not happen.
         }
     }
+    if( netcode >= 0 )
+    {
+        GetBoard()->SetHightLightNet( netcode );
+        High_Light( DC );
+    }
 
-    return -1;      // HitTest() failed.
+
+    return netcode;      // HitTest() failed.
 }
 
 
@@ -152,7 +153,10 @@ int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
  */
 void PCB_EDIT_FRAME::High_Light( wxDC* DC )
 {
-    g_HighLight_Status = !g_HighLight_Status;
+    if( GetBoard()->IsHightLightNetON() )
+        GetBoard()->HightLightOFF();
+    else
+        GetBoard()->HightLightON();
 
-    GetBoard()->DrawHighLight( DrawPanel, DC, g_HighLight_NetCode );
+    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
 }

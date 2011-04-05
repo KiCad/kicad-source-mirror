@@ -183,8 +183,8 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
 
     // Synchronize layers tools with actual active layer:
     setActiveLayer( getActiveLayer() );
+    m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
-
     return true;
 }
 
@@ -268,6 +268,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 
     // Synchronize layers tools with actual active layer:
     setActiveLayer( getActiveLayer() );
+    m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
 
     return true;

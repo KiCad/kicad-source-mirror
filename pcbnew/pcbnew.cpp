@@ -61,7 +61,6 @@ int            g_MagneticTrackOption = capture_cursor_in_track_tool;
 int            g_HighLight_NetCode   = -1;
 
 wxPoint        g_Offset_Module;     /* Offset de trace du modul en depl */
-wxString       g_Current_PadName;   // Last used pad name (pad num)
 
 // Wildcard for footprint libraries filesnames
 const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*.mod)|*.mod" ) );

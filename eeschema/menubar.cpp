@@ -47,13 +47,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     item = new wxMenuItem( filesMenu, ID_NEW_PROJECT, _( "&New\tCtrl+N" ),
                            _( "New schematic project" ) );
 
-    SETBITMAPS( new_xpm );
+    SET_BITMAP( new_xpm );
     filesMenu->Append( item );
 
     // Open
     item = new wxMenuItem( filesMenu, ID_LOAD_PROJECT, _( "&Open\tCtrl+O" ),
                            _( "Open an existing schematic project" ) );
-    SETBITMAPS( open_document_xpm );
+    SET_BITMAP( open_document_xpm );
     filesMenu->Append( item );
 
     // Open Recent submenu
@@ -70,26 +70,26 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     item = new wxMenuItem( filesMenu, ID_SAVE_PROJECT,
                            _( "&Save Whole Schematic Project\tCtrl+S" ),
                            _( "Save all sheets in the schematic project" ) );
-    SETBITMAPS( save_project_xpm );
+    SET_BITMAP( save_project_xpm );
     filesMenu->Append( item );
 
     item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET, _( "Save &Current Sheet Only" ),
                            _( "Save only current schematic sheet" ) );
-    SETBITMAPS( save_xpm );
+    SET_BITMAP( save_xpm );
     filesMenu->Append( item );
 
     // Save as...
     item = new wxMenuItem( filesMenu, ID_SAVE_ONE_SHEET_AS,
                            _( "Save Current Sheet &as" ),
                            _( "Save current schematic sheet as..." ) );
-    SETBITMAPS( save_as_xpm );
+    SET_BITMAP( save_as_xpm );
     filesMenu->Append( item );
 
 
     // Print
     filesMenu->AppendSeparator();
     item = new wxMenuItem( filesMenu, wxID_PRINT, _( "P&rint" ), _( "Print schematic" ) );
-    SETBITMAPS( print_button );
+    SET_BITMAP( print_button );
     filesMenu->Append( item );
 
     // Plot submenu
@@ -97,25 +97,25 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_PS,
                            _( "Plot PostScript" ),
                            _( "Plot schematic sheet in PostScript format" ) );
-    SETBITMAPS( plot_PS_xpm );
+    SET_BITMAP( plot_PS_xpm );
     choice_plot_fmt->Append( item );
 
     /* Plot HPGL */
     item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_HPGL, _( "Plot HPGL" ),
                            _( "Plot schematic sheet in HPGL format" ) );
-    SETBITMAPS( plot_HPG_xpm );
+    SET_BITMAP( plot_HPG_xpm );
     choice_plot_fmt->Append( item );
 
     // Plot SVG
     item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_SVG, _( "Plot SVG" ),
                            _( "Plot schematic sheet in SVG format" ) );
-    SETBITMAPS( plot_xpm );
+    SET_BITMAP( plot_xpm );
     choice_plot_fmt->Append( item );
 
     // Plot DXF
     item = new wxMenuItem( choice_plot_fmt, ID_GEN_PLOT_DXF, _( "Plot DXF" ),
                            _( "Plot schematic sheet in DXF format" ) );
-    SETBITMAPS( plot_xpm );
+    SET_BITMAP( plot_xpm );
     choice_plot_fmt->Append( item );
 
     // Under windows, one can draw to the clipboard
@@ -124,7 +124,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     item = new wxMenuItem( choice_plot_fmt, ID_GEN_COPY_SHEET_TO_CLIPBOARD,
                            _( "Plot to Clipboard" ),
                            _( "Export drawings to clipboard" ) );
-    SETBITMAPS( copy_button );
+    SET_BITMAP( copy_button );
     choice_plot_fmt->Append( item );
 #endif
 
@@ -137,7 +137,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ), _( "Quit EESchema" ) );
-    SETBITMAPS( exit_xpm );
+    SET_BITMAP( exit_xpm );
     filesMenu->Append( item );
 
     // Edit menu
@@ -147,21 +147,21 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     text = AddHotkeyName( _( "Undo" ), s_Schematic_Hokeys_Descr, HK_UNDO );
 
     item = new wxMenuItem( editMenu, wxID_UNDO, text, HELP_UNDO, wxITEM_NORMAL );
-    SETBITMAPS( undo_xpm );
+    SET_BITMAP( undo_xpm );
     editMenu->Append( item );
 
     /* Redo */
     text = AddHotkeyName( _( "Redo" ), s_Schematic_Hokeys_Descr, HK_REDO );
 
     item = new wxMenuItem( editMenu, wxID_REDO, text, HELP_REDO, wxITEM_NORMAL );
-    SETBITMAPS( redo_xpm );
+    SET_BITMAP( redo_xpm );
     editMenu->Append( item );
 
     /* Delete */
     editMenu->AppendSeparator();
     item = new wxMenuItem( editMenu, ID_SCHEMATIC_DELETE_ITEM_BUTT,
                            _( "Delete" ), HELP_DELETE_ITEMS, wxITEM_NORMAL );
-    SETBITMAPS( delete_body_xpm );
+    SET_BITMAP( delete_body_xpm );
     editMenu->Append( item );
 
     /* Separator */
@@ -170,7 +170,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     /* Find */
     text = AddHotkeyName( _( "&Find" ), s_Schematic_Hokeys_Descr, HK_FIND_ITEM );
     item = new wxMenuItem( editMenu, ID_FIND_ITEMS, text, HELP_FIND, wxITEM_NORMAL );
-    SETBITMAPS( find_xpm );
+    SET_BITMAP( find_xpm );
     editMenu->Append( item );
 
     /* Separator */
@@ -180,7 +180,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     item = new wxMenuItem( editMenu, ID_BACKANNO_ITEMS, _( "Backannotate" ),
                            _( "Back annotated footprint fields" ),
                            wxITEM_NORMAL );
-    SETBITMAPS( backanno_xpm );
+    SET_BITMAP( backanno_xpm );
     editMenu->Append( item );
 
 
@@ -204,20 +204,20 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     text = AddHotkeyName( _( "Zoom In" ), s_Schematic_Hokeys_Descr,
                           ID_ZOOM_IN, false );  // add comment, not a shortcut
     item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, wxITEM_NORMAL );
-    SETBITMAPS( zoom_in_xpm );
+    SET_BITMAP( zoom_in_xpm );
     viewMenu->Append( item );
 
     /* Zoom out */
     text = AddHotkeyName( _( "Zoom Out" ), s_Schematic_Hokeys_Descr,
                           ID_ZOOM_OUT, false );  // add comment, not a shortcut
     item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, wxITEM_NORMAL );
-    SETBITMAPS( zoom_out_xpm );
+    SET_BITMAP( zoom_out_xpm );
     viewMenu->Append( item );
 
     /* Fit on screen */
     text = AddHotkeyName( _( "Fit on Screen" ), s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO );
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, wxITEM_NORMAL );
-    SETBITMAPS( zoom_fit_in_page_xpm );
+    SET_BITMAP( zoom_fit_in_page_xpm );
     viewMenu->Append( item );
 
     viewMenu->AppendSeparator();
@@ -225,7 +225,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     /* Redraw view */
     text = AddHotkeyName( _( "Redraw" ), s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
     item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, wxITEM_NORMAL );
-    SETBITMAPS( zoom_redraw_xpm );
+    SET_BITMAP( zoom_redraw_xpm );
     viewMenu->Append( item );
 
 
@@ -240,7 +240,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_NEW_COMPONENT, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_SCH_PLACE_COMPONENT, text,
                            HELP_PLACE_COMPONENTS, wxITEM_NORMAL );
-    SETBITMAPS( add_component_xpm );
+    SET_BITMAP( add_component_xpm );
     placeMenu->Append( item );
 
     /* Power port */
@@ -248,7 +248,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_NEW_POWER, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_PLACE_POWER_BUTT, text,
                            HELP_PLACE_POWERPORT, wxITEM_NORMAL );
-    SETBITMAPS( add_power_xpm );
+    SET_BITMAP( add_power_xpm );
     placeMenu->Append( item );
 
     /* Wire */
@@ -256,7 +256,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_BEGIN_WIRE, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_WIRE_BUTT, text,
                            HELP_PLACE_WIRE, wxITEM_NORMAL );
-    SETBITMAPS( add_line_xpm );
+    SET_BITMAP( add_line_xpm );
     placeMenu->Append( item );
 
     /* Bus */
@@ -264,7 +264,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_BEGIN_BUS, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_BUS_BUTT, text,
                            HELP_PLACE_BUS, wxITEM_NORMAL );
-    SETBITMAPS( add_bus_xpm );
+    SET_BITMAP( add_bus_xpm );
     placeMenu->Append( item );
 
     /* Wire to Bus entry */
@@ -272,7 +272,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_WIRE_ENTRY, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_WIRETOBUS_ENTRY_BUTT, text,
                            HELP_PLACE_WIRE2BUS_ENTRY, wxITEM_NORMAL );
-    SETBITMAPS( add_line2bus_xpm );
+    SET_BITMAP( add_line2bus_xpm );
     placeMenu->Append( item );
 
     /* Bus to Bus entry */
@@ -280,14 +280,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_BUS_ENTRY, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_BUSTOBUS_ENTRY_BUTT, text,
                            HELP_PLACE_BUS2BUS_ENTRY, wxITEM_NORMAL );
-    SETBITMAPS( add_bus2bus_xpm );
+    SET_BITMAP( add_bus2bus_xpm );
     placeMenu->Append( item );
 
     /* No connect flag */
     text = AddHotkeyName( _( "No connect flag" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_NOCONN_FLAG, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_NOCONN_BUTT, text, HELP_PLACE_NC_FLAG, wxITEM_NORMAL );
-    SETBITMAPS( noconn_button );
+    SET_BITMAP( noconn_button );
     placeMenu->Append( item );
 
     /* Net name */
@@ -295,7 +295,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_LABEL, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_LABEL_BUTT, text,
                            HELP_PLACE_NETLABEL, wxITEM_NORMAL  );
-    SETBITMAPS( add_line_label_xpm );
+    SET_BITMAP( add_line_label_xpm );
     placeMenu->Append( item );
 
     /* Global label */
@@ -303,7 +303,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_GLABEL, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_GLABEL_BUTT, text,
                            HELP_PLACE_GLOBALLABEL, wxITEM_NORMAL );
-    SETBITMAPS( add_glabel_xpm );
+    SET_BITMAP( add_glabel_xpm );
     placeMenu->Append( item );
 
     /* Junction */
@@ -311,7 +311,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_JUNCTION, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_JUNCTION_BUTT, text,
                            HELP_PLACE_JUNCTION, wxITEM_NORMAL );
-    SETBITMAPS( add_junction_xpm );
+    SET_BITMAP( add_junction_xpm );
     placeMenu->Append( item );
 
     /* Separator */
@@ -322,7 +322,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_HLABEL, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_HIERLABEL_BUTT, text,
                            HELP_PLACE_HIER_LABEL, wxITEM_NORMAL );
-    SETBITMAPS( add_hierarchical_label_xpm );
+    SET_BITMAP( add_hierarchical_label_xpm );
     placeMenu->Append( item );
 
     /* Hierarchical sheet */
@@ -330,19 +330,19 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_HIER_SHEET, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_SHEET_SYMBOL_BUTT, text,
                            HELP_PLACE_SHEET, wxITEM_NORMAL );
-    SETBITMAPS( add_hierarchical_subsheet_xpm );
+    SET_BITMAP( add_hierarchical_subsheet_xpm );
     placeMenu->Append( item );
 
     /* Import hierarchical sheet */
     item = new wxMenuItem( placeMenu, ID_IMPORT_HLABEL_BUTT, _( "Import Hierarchical Label" ),
                            HELP_IMPORT_SHEETPIN, wxITEM_NORMAL );
-    SETBITMAPS( import_hierarchical_label_xpm );
+    SET_BITMAP( import_hierarchical_label_xpm );
     placeMenu->Append( item );
 
     /* Add hierarchical Pin to Sheet */
     item = new wxMenuItem( placeMenu, ID_SHEET_PIN_BUTT, _( "Add Hierarchical Pin to Sheet" ),
                            HELP_PLACE_SHEETPIN, wxITEM_NORMAL );
-    SETBITMAPS( add_hierar_pin_xpm );
+    SET_BITMAP( add_hierar_pin_xpm );
     placeMenu->Append( item );
 
     /* Separator */
@@ -353,7 +353,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_GRAPHIC_POLYLINE, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_LINE_COMMENT_BUTT, text,
                            HELP_PLACE_GRAPHICLINES, wxITEM_NORMAL );
-    SETBITMAPS( add_dashed_line_xpm );
+    SET_BITMAP( add_dashed_line_xpm );
     placeMenu->Append( item );
 
     /* Graphic text */
@@ -361,7 +361,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_GRAPHIC_TEXT, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_TEXT_COMMENT_BUTT, text,
                            HELP_PLACE_GRAPHICTEXTS, wxITEM_NORMAL );
-    SETBITMAPS( add_text_xpm );
+    SET_BITMAP( add_text_xpm );
     placeMenu->Append( item );
 
 
@@ -371,13 +371,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     /* Library */
     item = new wxMenuItem( configmenu, ID_CONFIG_REQ, _( "&Library" ),
                            _( "Library preferences" ) );
-    SETBITMAPS( library_xpm );
+    SET_BITMAP( library_xpm );
     configmenu->Append( item );
 
     /* Colors */
     item = new wxMenuItem( configmenu, ID_COLORS_SETUP, _( "&Colors" ),
                            _( "Color preferences" ) );
-    SETBITMAPS( palette_xpm );
+    SET_BITMAP( palette_xpm );
     configmenu->Append( item );
 
     /* Options */
@@ -390,7 +390,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 #endif
 
                            _( "EESchema preferences" ) );
-    SETBITMAPS( preference_xpm );
+    SET_BITMAP( preference_xpm );
     configmenu->Append( item );
 
     /* Language submenu */
@@ -405,13 +405,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     /* Save preferences */
     item = new wxMenuItem( configmenu, ID_CONFIG_SAVE, _( "&Save preferences" ),
                            _( "Save application preferences" ) );
-    SETBITMAPS( save_setup_xpm );
+    SET_BITMAP( save_setup_xpm );
     configmenu->Append( item );
 
     /* Read preferences */
     item = new wxMenuItem( configmenu, ID_CONFIG_READ, _( "&Read preferences" ),
                            _( "Read application preferences" ) );
-    SETBITMAPS( read_setup_xpm );
+    SET_BITMAP( read_setup_xpm );
     configmenu->Append( item );
 
 
@@ -422,13 +422,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     item = new wxMenuItem( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                            _( "Open the eeschema manual" ) );
-    SETBITMAPS( online_help_xpm );
+    SET_BITMAP( online_help_xpm );
     helpMenu->Append( item );
 
     /* About on all platforms except WXMAC */
     item = new wxMenuItem( helpMenu, wxID_ABOUT, _( "&About" ),
                            _( "About eeschema schematic designer" ) );
-    SETBITMAPS( info_xpm );
+    SET_BITMAP( info_xpm );
     helpMenu->Append( item );
 
     // Create the menubar and append all submenus

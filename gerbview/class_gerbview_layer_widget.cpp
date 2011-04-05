@@ -33,6 +33,7 @@
 #include "class_drawpanel.h"
 #include "pcbstruct.h"
 #include "gerbview.h"
+#include "class_GERBER.h"
 #include "layer_widget.h"
 #include "class_gerbview_layer_widget.h"
 
@@ -238,4 +239,37 @@ void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
 
 //-----</LAYER_WIDGET callbacks>------------------------------------------
 
+/*
+ * Virtual Function useAlternateBitmap
+ * return true if bitmaps shown in Render layer list
+ * must be alternate bitmaps, or false to use "normal" bitmaps
+ */
+bool GERBER_LAYER_WIDGET::useAlternateBitmap(int aRow)
+{
+    bool inUse = false;
+    GERBER_IMAGE* gerber = g_GERBER_List[aRow];
+    if( gerber != NULL && gerber->m_InUse )
+        inUse = true;
+    return inUse;
+}
 
+/**
+ * Function UpdateLayerIcons
+ * Update the layer manager icons (layers only)
+ * Useful when loading a file or clearing a layer because they change
+ */
+void GERBER_LAYER_WIDGET::UpdateLayerIcons()
+{
+    int row_count = GetLayerRowCount();
+    for( int row = 0; row < row_count ; row++ )
+    {
+        wxStaticBitmap* bm = (wxStaticBitmap*) getLayerComp( row, 0 );
+        if( bm == NULL)
+            continue;
+
+        if( row == m_CurrentRow )
+            bm->SetBitmap( useAlternateBitmap(row) ? *m_RightArrowAlternateBitmap : *m_RightArrowBitmap );
+        else
+            bm->SetBitmap( useAlternateBitmap(row) ? *m_BlankAlternateBitmap : *m_BlankBitmap );
+    }
+}

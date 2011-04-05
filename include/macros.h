@@ -237,10 +237,18 @@ static inline void ADD_MENUITEM_WITH_HELP_AND_SUBMENU( wxMenu*         menu,
 
 #endif
 
+// macro to add a bitmap list to check menus (do not use with normal menus)
 #ifdef __WINDOWS__
 #  define SETBITMAPS( icon ) item->SetBitmaps( apply_xpm, (icon) )
 #else
 #  define SETBITMAPS( icon )
+#endif
+
+// macro to add a bitmap menus (do not use with check menus)
+#ifdef __WXMAC__
+#  define SET_BITMAP( icon )
+#else
+#  define SET_BITMAP( icon ) item->SetBitmap( (icon) )
 #endif
 
 #endif /* ifdef MACRO_H */

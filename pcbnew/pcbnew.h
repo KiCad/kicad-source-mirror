@@ -69,13 +69,7 @@ extern bool        g_TwoSegmentTrackBuild;
 extern int         g_MagneticPadOption;
 extern int         g_MagneticTrackOption;
 
-/* Variables to handle highlight nets */
-extern bool        g_HighLight_Status;
-extern int         g_HighLight_NetCode;
-
 extern wxPoint     g_Offset_Module;     /* Offset de trace du modul en depl */
-
-extern wxString    g_Current_PadName;   // Last used pad name (pad num)
 
 
 enum MagneticPadOptionValues {

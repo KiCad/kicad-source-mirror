@@ -148,7 +148,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     via->m_Flags   = IS_NEW;
     via->m_Shape   = GetBoard()->GetBoardDesignSettings()->m_CurrentViaType;
     via->m_Width   = GetBoard()->GetCurrentViaSize();
-    via->SetNet( g_HighLight_NetCode );
+    via->SetNet( GetBoard()->GetHightLightNetCode() );
     via->m_Start   = via->m_End = g_CurrentTrackSegment->m_End;
     // Usual via is from copper to component.
     // layer pair is LAYER_N_BACK and LAYER_N_FRONT.

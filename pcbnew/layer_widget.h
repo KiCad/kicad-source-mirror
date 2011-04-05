@@ -103,12 +103,24 @@ protected:
 
     wxWindow*           m_FocusOwner;
     wxBitmap*           m_BlankBitmap;
+    wxBitmap*           m_BlankAlternateBitmap;
     wxBitmap*           m_RightArrowBitmap;
+    wxBitmap*           m_RightArrowAlternateBitmap;
     wxSize              m_BitmapSize;
     int                 m_CurrentRow;           ///< selected row of layer list
     int                 m_PointSize;
 
     static wxBitmap makeBitmap( int aColor );
+
+    /**
+     * Virtual Function useAlternateBitmap
+     * @return true if bitmaps shown in Render layer list
+     * are alternate bitmaps, or false if they are "normal" bitmaps
+     * This is a virtual function because Pcbnew uses normal bitmaps
+     * but Gerbview uses both bitmaps
+     * (alternate bitmaps to show layers in use, normal fo others)
+     */
+    virtual bool useAlternateBitmap(int aRow) { return false; }
 
     /**
      * Function encodeId

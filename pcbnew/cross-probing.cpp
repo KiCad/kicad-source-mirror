@@ -41,6 +41,7 @@ void RemoteCommand(  const char* cmdline )
     char*           text;
     MODULE*         module = 0;
     PCB_EDIT_FRAME* frame  = (PCB_EDIT_FRAME*)wxGetApp().GetTopWindow();
+    BOARD* pcb             = frame->GetBoard();
     wxPoint         pos;
 
     strncpy( line, cmdline, sizeof(line) - 1 );
@@ -81,7 +82,7 @@ void RemoteCommand(  const char* cmdline )
 
         modName = FROM_UTF8( text );
 
-        module = frame->GetBoard()->FindModuleByReference( modName );
+        module = pcb->FindModuleByReference( modName );
 
         if( module )
             pad = module->FindPadByName( pinName );
@@ -96,13 +97,13 @@ void RemoteCommand(  const char* cmdline )
 
         if( netcode > 0 )               /* highlight the pad net*/
         {
-            g_HighLight_Status   = 1;
-            g_HighLight_NetCode = netcode;
+            pcb->HightLightON();
+            pcb->SetHightLightNet( netcode );
         }
         else
         {
-            g_HighLight_Status   = 0;
-            g_HighLight_NetCode = 0;
+            pcb->HightLightOFF();
+            pcb->SetHightLightNet( -1 );
         }
 
         if( module == NULL )

@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        zones_by_polygon.cpp
 // Licence:     GPL License
 /////////////////////////////////////////////////////////////////////////////
@@ -172,12 +171,13 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_cont
 {
     if( zone_container->IsOnCopperLayer() ) /* Show the Net */
     {
-        if( g_HighLight_Status && DC )
+        if( GetBoard()->IsHightLightNetON() && DC )
         {
             High_Light( DC );  // Remove old hightlight selection
         }
 
-        g_HighLight_NetCode = g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
+        g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
+        GetBoard()->SetHightLightNet( zone_container->GetNet() );
         if( DC )
             High_Light( DC );
     }
@@ -246,12 +246,13 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_co
     /* Show the Net */
     if( zone_container->IsOnCopperLayer() ) /* Show the Net */
     {
-        if( g_HighLight_Status )
+        if( GetBoard()->IsHightLightNetON() )
         {
             High_Light( DC );  // Remove old hightlight selection
         }
 
-        g_HighLight_NetCode = g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
+        g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
+        GetBoard()->SetHightLightNet( zone_container->GetNet() );
         High_Light( DC );
     }
 
@@ -507,9 +508,10 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             DrawPanel->m_IgnoreMouseEvents = TRUE;
             if( zone->IsOnCopperLayer() )
             {   // Put a zone on a copper layer
-                if ( g_HighLight_NetCode )
+                if ( GetBoard()->GetHightLightNetCode() > 0 )
                 {
-                    g_Zone_Default_Setting.m_NetcodeSelection = g_HighLight_NetCode;
+                    g_Zone_Default_Setting.m_NetcodeSelection = GetBoard()->GetHightLightNetCode();
+
                     zone->SetNet( g_Zone_Default_Setting.m_NetcodeSelection );
                     zone->SetNetNameFromNetCode( );
                 }
@@ -550,12 +552,12 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         {
             if( s_CurrentZone )
                 g_Zone_Default_Setting.m_NetcodeSelection = s_CurrentZone->GetNet();
-            if( g_HighLight_Status )
+            if( GetBoard()->IsHightLightNetON() )
             {
                 High_Light( DC ); // Remove old hightlight selection
             }
 
-            g_HighLight_NetCode = g_Zone_Default_Setting.m_NetcodeSelection;
+            GetBoard()->SetHightLightNet( g_Zone_Default_Setting.m_NetcodeSelection );
             High_Light( DC );
         }
         if( !s_AddCutoutToCurrentZone )

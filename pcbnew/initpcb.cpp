@@ -52,7 +52,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     GetScreen()->Init();
     GetScreen()->SetGrid( gridsize );
 
-    g_HighLight_Status = 0;
+    GetBoard()->ResetHightLight();
 
     // Enable all layers (SetCopperLayerCount() will adjust the copper layers enabled)
     GetBoard()->SetEnabledLayers(ALL_LAYERS);

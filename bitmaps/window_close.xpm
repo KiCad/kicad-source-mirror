@@ -1,0 +1,38 @@
+/* XPM */
+const char *window_close_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 16 16 1",
+"O c #DE7070",
+"& c #BC9392",
+"o c #BF9D9C",
+"X c #DC6464",
+"* c #CA4545",
+"% c #D45051",
+"- c #C03433",
+"+ c #E88080",
+"= c #C43C3C",
+". c #C2A6A6",
+"; c #BC8684",
+": c #B47274",
+"  c None",
+"$ c #BFB0AF",
+"@ c #C55A5B",
+"# c #DD5A59",
+/* pixels */
+"  .X.      .X.  ",
+" oO+O.    .O+Oo ",
+"oOOO+O.  .O+OOOo",
+"@OXXXOO..OOXXXO@",
+".XO#XXOXXOXX#OX.",
+" $@O###OO###O@$ ",
+"  $@X######X@$  ",
+"   $@X%%%%X@$   ",
+"   &@%%%%%%@&   ",
+"  &%%******%%&  ",
+" o*****%%*****o ",
+"o**===****===**o",
+"==---==.&*=---==",
+"&=---=.  ;=---=.",
+" &---o    :--=$ ",
+"  &-o      @*   "
+};

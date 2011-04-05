@@ -74,6 +74,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                            _( "Prevent CVPcb from exiting after saving netlist file" ),
                            wxITEM_CHECK );
     configmenu->Append( item );
+    SETBITMAPS( window_close_xpm );
 
     configmenu->AppendSeparator();
     ADD_MENUITEM_WITH_HELP( configmenu, ID_CONFIG_SAVE,

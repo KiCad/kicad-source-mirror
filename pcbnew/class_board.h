@@ -91,6 +91,26 @@ public:
     }
 };
 
+// Helper class to handle hight light nets
+class HIGHT_LIGHT_INFO
+{
+    friend class BOARD;
+protected:
+    int m_netCode;   // net selected for hightlight (-1 when no net selected )
+    bool m_hightLightOn;       // hightlight active
+
+protected:
+    void Clear()
+    {
+        m_netCode = -1;
+        m_hightLightOn = false;
+    }
+
+    HIGHT_LIGHT_INFO()
+    {
+        Clear();
+    }
+};
 
 /**
  * Class BOARD
@@ -109,6 +129,9 @@ private:
     ZONE_CONTAINERS      m_ZoneDescriptorList;              ///< edge zone descriptors, owned by pointer
 
     LAYER                m_Layer[NB_COPPER_LAYERS];
+                                                            // if true m_hightLight_NetCode is used
+    HIGHT_LIGHT_INFO m_hightLight;                          // current hight light data
+    HIGHT_LIGHT_INFO m_hightLightPrevious;                  // a previously stored hight light data
 
 public:
     PCB_BASE_FRAME*      m_PcbFrame;                        // Window of visualization
@@ -248,6 +271,67 @@ public:
         return (int) m_markers.size();
     }
 
+
+    /**
+     * Function ResetHightLight
+     * Reset all hight light data to the init state
+     */
+    void ResetHightLight()
+    {
+        m_hightLight.Clear();
+        m_hightLightPrevious.Clear();
+    }
+
+    /**
+     * Function GetHightLightNetCode
+     * @return netcode of net to hightlight (-1 when no net selected)
+     */
+    int GetHightLightNetCode() { return m_hightLight.m_netCode; }
+
+    /**
+     * Function SetHightLightNet
+     * @param aNetCode = netcode of net to hightlight
+     */
+    void SetHightLightNet( int aNetCode)
+    {
+        m_hightLight.m_netCode = aNetCode;
+    }
+
+
+    /**
+     * Function IsHightLightNetON
+     * @return true if a net is currently hightlighted
+     */
+    bool IsHightLightNetON() { return m_hightLight.m_hightLightOn; }
+
+    /**
+     * Function HightLightOFF
+     * Disable hightlight.
+     */
+    void HightLightOFF() { m_hightLight.m_hightLightOn = false; }
+
+    /**
+     * Function HightLightON
+     * Enable hightlight.
+     * if m_hightLight_NetCode >= 0, this net will be hightlighted
+     */
+    void HightLightON() { m_hightLight.m_hightLightOn = true; }
+
+    /**
+     * Function PushHightLight
+     * save current hight light info for later use
+     */
+    void PushHightLight() { m_hightLightPrevious = m_hightLight; }
+
+    /**
+     * Function PopHightLight
+     * retrieve a previously saved hight light info
+     */
+    void PopHightLight()
+    {
+        m_hightLight = m_hightLightPrevious;
+        m_hightLightPrevious.Clear();
+    }
 
     /**
      * Function GetCopperLayerCount

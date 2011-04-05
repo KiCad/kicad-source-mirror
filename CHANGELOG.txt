@@ -10,12 +10,34 @@ More native OSX changes, this removes some WXMAC defines replaced by wxID
 macros. These are handled by wxWidgets itself and reduces in-app platform
 defines. More work needs to be done for CvPCB and Gerbview.
 
-All: 
+All:
      Hotkey names in menu's all have tabs, this looks more uniform and pretty.
 
 EESschema & PCBNew:
      Fix about and preferences wxMenu to be more native (remove unneeded WXMAC )
      Disable all icons in wxMenu on OSX with macro SETBITMAPS
+
+jp charras:
+    SETBITMAPS is incorrectly used here. change to SET_BITMAP
+
+2011-Mar-25 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+  EESchema multiple item hit testing and other minor improvements.
+
+  * Add item clarification context menu to EESchema when multiple unresolved
+    items are found at the current cross hair position.
+  * Add collector class SCH_COLLECTOR for supporting multiple item hit testing.
+  * Removed bit wise masked filtering from schematic item hit testing.
+  * Removed all old hit testing functions and methods scattered about the
+    EESchema source code.
+  * Move terminal point test function into SCH_SCREEN object.
+  * Fixed bug in terminal point test when terminating a bus to a label.
+  * Define the < operator for sorting schematic items.
+  * Add area calculation method to EDA_Rect item.
+  * Add method for returning an item's bitmap for menu display purposes.
+  * Add method for returning an item's menu text for menu display purposes.
+  * Changed EDA_ITEMS container from boost::ptr_vector to std::vector.
+  * Factor coordinate string conversion code from EDA_DRAW_FRAME to function CoordinateToString().
 
 2011-Mar-16, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
