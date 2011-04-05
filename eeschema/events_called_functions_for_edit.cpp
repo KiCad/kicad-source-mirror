@@ -52,8 +52,8 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
     case SCH_HIERARCHICAL_LABEL_T:
     {
         SCH_TEXT* newitem = (SCH_TEXT*) curr_item->Clone();
-        newitem->m_Flags = IS_NEW;
-        StartMoveTexte( newitem, &dc );
+        newitem->SetFlags( IS_NEW );
+        MoveText( newitem, &dc );
         /* Redraw the original part in XOR mode */
         curr_item->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode );
     }

@@ -96,6 +96,7 @@ private:
     SCH_ITEM*             m_itemToRepeat;       ///< Last item to insert by the repeat command.
     int                   m_repeatLabelDelta;   ///< Repeat label number increment step.
     SCH_COLLECTOR         m_collectedItems;     ///< List of collected items.
+    SCH_ITEM*             m_undoItem;           ///< Copy of the current item being edited.
 
     static int            m_lastSheetPinType;      ///< Last sheet pin type.
     static wxSize         m_lastSheetPinTextSize;  ///< Last sheet pin text size.
@@ -498,11 +499,11 @@ private:
     // Junction
     SCH_JUNCTION*   AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = FALSE );
 
-    // Text ,label, glabel
+    // Text, label, glabel
     SCH_TEXT*       CreateNewText( wxDC* aDC, int aType );
     void            EditSchematicText( SCH_TEXT* TextStruct );
     void            ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC );
-    void            StartMoveTexte( SCH_TEXT* aTextItem, wxDC* aDC );
+    void            MoveText( SCH_TEXT* aTextItem, wxDC* aDC );
 
     /**
      * Function OnCovertTextType
@@ -640,12 +641,12 @@ public:
      * wires saved in Undo List (for Undo or Redo commands, saved wires will be
      * exchanged with current wire list
      * @param aItemToCopy = the schematic item modified by the command to undo
-     * @param aTypeCommand = command type (see enum UndoRedoOpType)
+     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
     void SaveCopyInUndoList( SCH_ITEM* aItemToCopy,
-                             UndoRedoOpType aTypeCommand,
+                             UNDO_REDO_T aTypeCommand,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /**
@@ -653,12 +654,12 @@ public:
      * Creates a new entry in undo list of commands.
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UndoRedoOpType)
+     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
     void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                             UndoRedoOpType aTypeCommand,
+                             UNDO_REDO_T aTypeCommand,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
 private:
@@ -738,6 +739,28 @@ public:
     void     RepeatDrawItem( wxDC* DC );
 
     void SetRepeatItem( SCH_ITEM* aItem ) { m_itemToRepeat = aItem; }
+
+    /**
+     * Function SetUndoItem
+     * clones \a aItem which can be used to restore the state of the item being edited
+     * when the user cancels the editing in progress.
+     *
+     * @param aItem The item to make a clone of for undoing the last change.  Set to
+     *              NULL to free the current undo item.
+     */
+    void SetUndoItem( const SCH_ITEM* aItem );
+
+    SCH_ITEM* GetUndoItem() const { return m_undoItem; }
+
+    /**
+     * Function SaveUndoItemInUndoList
+     * swaps the cloned item in #m_undoItem with \a aItem and saves it to the undo list
+     * then swap the data back.  This swaps the internal structure of the item with the
+     * cloned item.  It does not swap the actual item pointers themselves.
+     *
+     * @param aItem The item to swap with the current undo item.
+     */
+    void SaveUndoItemInUndoList( SCH_ITEM* aItem );
 
     // ERC:
 

@@ -2,13 +2,14 @@
 #ifndef __PROTOS_H__
 #define __PROTOS_H__
 
-#include "class_undoredo_container.h"
+//#include "class_undoredo_container.h"
 
 #include "colors.h"
 
 
 class EDA_DRAW_PANEL;
 class EDA_DRAW_FRAME;
+class PICKED_ITEMS_LIST;
 class SCH_EDIT_FRAME;
 class LIB_EDIT_FRAME;
 class CMP_LIBRARY;
@@ -20,38 +21,29 @@ class SCH_SHEET;
 class NETLIST_OBJECT;
 
 
-wxString ReturnDefaultFieldName( int aFieldNdx );
-
-
 /****************/
 /* DATABASE.CPP */
 /****************/
 void DisplayCmpDoc( wxString& Name );
 wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufName );
 
+
 /*********************/
 /* DANGLING_ENDS.CPP */
 /*********************/
 bool SegmentIntersect( wxPoint aSegStart, wxPoint aSegEnd, wxPoint aTestPoint );
+
 
 /****************/
 /* BUS_WIRE_JUNCTION.CPP */
 /****************/
 void IncrementLabelMember( wxString& name );
 
+
 /****************/
 /* EDITPART.CPP */
 /****************/
 void InstallCmpeditFrame( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent );
-
-void SnapLibItemPoint( int            OrigX,
-                       int            OrigY,
-                       int*           ClosestX,
-                       int*           ClosestY,
-                       SCH_COMPONENT* DrawLibItem );
-
-bool LibItemInBox( int x1, int y1, int x2, int y2, SCH_COMPONENT* DrawLibItem );
-
 
 // operations_on_item_lists.cpp
 void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
@@ -72,7 +64,6 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 /* EEREDRAW.CPP */
 /***************/
 void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, int Color );
-void RedrawActiveWindow( EDA_DRAW_PANEL* panel, wxDC* DC );
 
 
 /**************/
@@ -87,10 +78,12 @@ EDA_Colors ReturnLayerColor( int Layer );
 /**************/
 int IsBusLabel( const wxString& LabelDrawList );
 
+
 /************/
 /* PLOT.CPP */
 /************/
 void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* drawlist );
+
 
 /***************/
 /* DELSHEET.CPP */

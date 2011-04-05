@@ -120,8 +120,6 @@ void SCH_SHEET_PIN::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
     wxCHECK_RET( (sheet != NULL) && (sheet->Type() == SCH_SHEET_T),
                  wxT( "Cannot place sheet pin in invalid schematic sheet object." ) );
 
-    SAFE_DELETE( g_ItemToUndoCopy );
-
     int flags = m_Flags;
     m_Flags = 0;
 

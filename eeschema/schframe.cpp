@@ -175,6 +175,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     m_HotkeysZoomAndGridList = s_Schematic_Hokeys_Descr;
     m_dlgFindReplace = NULL;
     m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
+    m_undoItem = NULL;
 
     CreateScreens();
 
@@ -249,6 +250,7 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
     SetScreen( NULL );
     SAFE_DELETE( m_CurrentSheet );     // a SCH_SHEET_PATH, on the heap.
+    SAFE_DELETE( m_undoItem );
     SAFE_DELETE( g_RootSheet );
     SAFE_DELETE( m_findReplaceData );
     CMP_LIBRARY::RemoveAllLibraries();
@@ -344,6 +346,31 @@ void SCH_EDIT_FRAME::CreateScreens()
 }
 
 
+void SCH_EDIT_FRAME::SetUndoItem( const SCH_ITEM* aItem )
+{
+    if( (aItem != NULL) && (m_undoItem != NULL) )
+    {
+        delete m_undoItem;
+    }
+
+    m_undoItem = NULL;
+
+    if( aItem )
+        m_undoItem = aItem->Clone();
+}
+
+
+void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem )
+{
+    wxCHECK_RET( aItem != NULL && m_undoItem != NULL && (aItem->Type() == m_undoItem->Type() ),
+                 wxT( "Cannot swap undo item structures.  Bad programmer!." ) );
+
+    aItem->SwapData( m_undoItem );
+    SaveCopyInUndoList( aItem, UR_CHANGED );
+    aItem->SwapData( m_undoItem );
+}
+
+
 void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( m_LibeditFrame && !m_LibeditFrame->Close() )   // Can close component editor?
@@ -354,7 +381,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     if( SheetList.IsModified() )
     {
         wxMessageDialog dialog( this,
-                                _( "Schematic modified, Save before exit ?" ),
+                                _( "Schematic modified, Save before exit?" ),
                                 _( "Confirmation" ), wxYES_NO | wxCANCEL |
                                 wxICON_EXCLAMATION | wxYES_DEFAULT );
 

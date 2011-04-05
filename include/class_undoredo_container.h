@@ -56,7 +56,7 @@ class PICKED_ITEMS_LIST;
 /* Type of undo/redo operations
  * each type must be redo/undone by a specific operation
  */
-enum UndoRedoOpType {
+enum UNDO_REDO_T {
     UR_UNSPECIFIED = 0,     // illegal
     UR_CHANGED,             // params of items have a value changed: undo is made by exchange
                             // values with a copy of these values
@@ -71,8 +71,10 @@ enum UndoRedoOpType {
     UR_WIRE_IMAGE,          // Specific to eeschema: handle wires changes
     UR_MODEDIT,             // Specific to the module editor (modedit creates a full copy of
                             // the current module when changed)
-    UR_LIBEDIT              // Specific to the component editor (libedit creates a full copy
+    UR_LIBEDIT,             // Specific to the component editor (libedit creates a full copy
                             // of the current component when changed)
+    UR_EXCHANGE_T           ///< Use for changing the schematic text type where swapping
+                            ///< data structure is insufficient to restor the change.
 };
 
 
@@ -81,7 +83,7 @@ class ITEM_PICKER
     friend class PICKED_ITEMS_LIST;
 
 public:
-    UndoRedoOpType m_UndoRedoStatus;   /* type of operation to undo/redo for this item */
+    UNDO_REDO_T    m_UndoRedoStatus;   /* type of operation to undo/redo for this item */
     EDA_ITEM*      m_PickedItem;       /* Pointer on the schematic or board item that is concerned
                                         * (picked), or in undo redo commands, the copy of an
                                         * edited item. */
@@ -96,7 +98,7 @@ public:
                                         * copy of an active item) and m_Link points the active
                                         * item in schematic */
 
-    ITEM_PICKER( EDA_ITEM* aItem = NULL, UndoRedoOpType aUndoRedoStatus = UR_UNSPECIFIED );
+    ITEM_PICKER( EDA_ITEM* aItem = NULL, UNDO_REDO_T aUndoRedoStatus = UR_UNSPECIFIED );
 
     EDA_ITEM* GetItem() const { return m_PickedItem; }
 
@@ -105,6 +107,10 @@ public:
     KICAD_T GetItemType() const { return m_PickedItemType; }
 
     void SetItemType( KICAD_T aType ) { m_PickedItemType = aType; }
+
+    void SetLink( EDA_ITEM* aItem ) { m_Link = aItem; }
+
+    EDA_ITEM* GetLink() const { return m_Link; }
 };
 
 
@@ -116,7 +122,7 @@ public:
 class PICKED_ITEMS_LIST
 {
 public:
-    UndoRedoOpType m_Status;      /* info about operation to undo/redo for this item. can be
+    UNDO_REDO_T m_Status;      /* info about operation to undo/redo for this item. can be
                                    * UR_UNSPECIFIED */
     wxPoint m_TransformPoint;     /* used to undo redo command by the same command: usually
                                    * need to know the rotate point or the move vector */
@@ -208,7 +214,7 @@ public:
      *          or UR_UNSPECIFIED if does not exist
      * @param aIdx Index of the picked item in the picked list
      */
-    UndoRedoOpType GetPickedItemStatus( unsigned int aIdx );
+    UNDO_REDO_T GetPickedItemStatus( unsigned int aIdx );
 
     /**
      * Function GetPickerFlags
@@ -233,7 +239,7 @@ public:
      * @param aIdx Index of the picker in the picked list
      * @return True if the picker exists or false if does not exist
      */
-    bool SetPickedItem( EDA_ITEM* aItem, UndoRedoOpType aStatus, unsigned aIdx );
+    bool SetPickedItem( EDA_ITEM* aItem, UNDO_REDO_T aStatus, unsigned aIdx );
 
     /**
      * Function SetPickedItemLink
@@ -251,7 +257,7 @@ public:
      * @param aIdx Index of the picker in the picked list
      * @return True if the picker exists or false if does not exist
      */
-    bool SetPickedItemStatus( UndoRedoOpType aStatus, unsigned aIdx );
+    bool SetPickedItemStatus( UNDO_REDO_T aStatus, unsigned aIdx );
 
     /**
      * Function SetPickerFlags

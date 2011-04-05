@@ -114,28 +114,26 @@ public:
      * Creates a new entry in undo list of commands.
      * add a picker to handle aItemToCopy
      * @param aItem = the board item modified by the command to undo
-     * @param aTypeCommand = command type (see enum UndoRedoOpType)
+     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
      * @param aTransformPoint = the reference point of the transformation, for
      *                          commands like move
      */
     virtual void SaveCopyInUndoList( BOARD_ITEM* aItem,
-                                    UndoRedoOpType aTypeCommand,
-                                    const wxPoint& aTransformPoint =
-                                        wxPoint( 0, 0 ) );
+                                     UNDO_REDO_T aTypeCommand,
+                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /**
      * Function SaveCopyInUndoList (overloaded).
      * Creates a new entry in undo list of commands.
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UndoRedoOpType)
+     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
      * @param aTransformPoint = the reference point of the transformation, for
      *                          commands like move
      */
     virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                    UndoRedoOpType aTypeCommand,
-                                    const wxPoint& aTransformPoint =
-                                        wxPoint( 0, 0 ) );
+                                     UNDO_REDO_T aTypeCommand,
+                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
 private:
     void         GetComponentFromUndoList( wxCommandEvent& event );

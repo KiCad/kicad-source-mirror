@@ -189,8 +189,12 @@ wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
         keyname = ReturnKeyNameFromCommandId( aList, aCommandId );
 
     if( !keyname.IsEmpty() )
+    {
+        if( aIsShortCut )
             msg << wxT( "\t" ) << keyname;
-
+        else
+            msg << wxT( " <" ) << keyname << wxT( ">" );
+    }
     return msg;
 }
 
@@ -219,10 +223,12 @@ wxString AddHotkeyName( const wxString&                        aText,
         {
             List    = aDescList->m_HK_InfoList;
             keyname = ReturnKeyNameFromCommandId( List, aCommandId );
-
             if( !keyname.IsEmpty() )
             {
-                msg << wxT( "\t" ) << keyname;
+                if( aIsShortCut )
+                    msg << wxT( "\t" ) << keyname;
+                else
+                    msg << wxT( " <" ) << keyname << wxT( ">" );
                 break;
             }
         }

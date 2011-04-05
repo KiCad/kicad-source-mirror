@@ -29,10 +29,6 @@ bool      g_OptNetListUseNames; /* TRUE to use names rather than net
 wxSize    g_RepeatStep;
 int       g_RepeatDeltaLabel;
 
-SCH_ITEM* g_ItemToUndoCopy;     /* copy of last modified schematic item
-                                 * before it is modified (used for undo
-                                 * managing to restore old values ) */
-
 bool                     g_HVLines = true;      // Bool: force H or V
                                                 // directions (Wires, Bus ..)
 

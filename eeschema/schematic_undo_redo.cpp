@@ -188,7 +188,7 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
 
 
 void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
-                                         UndoRedoOpType aCommandType,
+                                         UNDO_REDO_T    aCommandType,
                                          const wxPoint& aTransformPoint )
 {
     /* Does not save a null item.
@@ -252,7 +252,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
 
 
 void SCH_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                         UndoRedoOpType     aTypeCommand,
+                                         UNDO_REDO_T        aTypeCommand,
                                          const wxPoint&     aTransformPoint )
 {
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
@@ -265,10 +265,11 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
     // Verify list, and creates data if needed
     for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )
     {
-        SCH_ITEM*      item = (SCH_ITEM*) commandToUndo->GetPickedItem( ii );
+        SCH_ITEM* item = (SCH_ITEM*) commandToUndo->GetPickedItem( ii );
         wxASSERT( item );
 
-        UndoRedoOpType command = commandToUndo->GetPickedItemStatus( ii );
+        UNDO_REDO_T command = commandToUndo->GetPickedItemStatus( ii );
+
         if( command == UR_UNSPECIFIED )
         {
             command = aTypeCommand;
@@ -294,15 +295,12 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         case UR_ROTATED:
         case UR_NEW:
         case UR_DELETED:
+        case UR_EXCHANGE_T:
             break;
 
         default:
-        {
-            wxString msg;
-            msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), command );
-            wxMessageBox( msg );
-        }
-        break;
+            wxFAIL_MSG( wxString::Format( wxT( "Unknown undo/redo command %d" ), command ) );
+            break;
         }
     }
 
@@ -399,14 +397,19 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
             break;
 
+        case UR_EXCHANGE_T:
+            GetScreen()->AddToDrawList( (SCH_ITEM*) aList->GetPickedItemLink( ii ) );
+            GetScreen()->RemoveFromDrawList( item );
+            item->SetNext( NULL );
+            item->SetBack( NULL );
+            aList->SetPickedItem( aList->GetPickedItemLink( ii ), ii );
+            aList->SetPickedItemLink( item, ii );
+            break;
+
         default:
-        {
-            wxString msg;
-            msg.Printf( wxT( "PutDataInPreviousState() error (unknown code %X)" ),
-                        aList->GetPickedItemStatus( ii ) );
-            wxMessageBox( msg );
-        }
-        break;
+            wxFAIL_MSG( wxString::Format( wxT( "Unknown undo/redo command %d" ),
+                                          aList->GetPickedItemStatus( ii ) ) );
+            break;
         }
     }
 }
@@ -429,7 +432,6 @@ void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
 
     OnModify();
     SetSheetNumberAndCount();
-    ReCreateHToolbar();
 
     GetScreen()->TestDanglingEnds();
     DrawPanel->Refresh();
@@ -440,7 +442,6 @@ void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;
-
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
@@ -454,7 +455,6 @@ void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
 
     OnModify();
     SetSheetNumberAndCount();
-    ReCreateHToolbar();
 
     GetScreen()->TestDanglingEnds();
     DrawPanel->Refresh();

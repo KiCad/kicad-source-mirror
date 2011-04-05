@@ -19,58 +19,87 @@
 #include "eeschema_id.h"
 
 
-static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                             bool aErase );
-static void ExitMoveTexte( EDA_DRAW_PANEL* panel, wxDC* DC );
+static int       lastGlobalLabelShape = (int) NET_INPUT;
+static int       lastTextOrientation = 0;
+static bool      lastTextBold = false;
+static bool      lastTextItalic = false;
 
 
-static wxPoint ItemInitialPosition;
-static int     OldOrient;
-static wxSize  OldSize;
-static int     lastGlobalLabelShape = (int) NET_INPUT;
-static int     lastTextOrientation = 0;
-static bool    lastTextBold = false;
-static bool    lastTextItalic = false;
-
-
-void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* aTextItem, wxDC* aDC )
+static void moveText( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
-    if( aTextItem == NULL )
+    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
+    SCH_TEXT* textItem = (SCH_TEXT*) screen->GetCurItem();
+
+    wxCHECK_RET( (textItem != NULL) && textItem->CanIncrementLabel(),
+                 wxT( "Cannot move invalid text type." ) );
+
+    // Erase the current text at its current position.
+    if( aErase )
+        textItem->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+
+    textItem->m_Pos = screen->GetCrossHairPosition();
+
+    // Draw the text item at it's new position.
+    textItem->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+}
+
+
+static void abortMoveText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
+{
+    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
+    SCH_ITEM* item = screen->GetCurItem();
+    SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
+
+    parent->SetRepeatItem( NULL );
+
+    if( item == NULL )  /* no current item */
         return;
+
+    // Erase the text item and delete it if new (i.e. it was being just created).
+    item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+
+    if( item->IsNew() )
+    {
+        SAFE_DELETE( item );
+    }
+    else    // Move command on an existing text item, restore the copy of the original.
+    {
+        screen->RemoveFromDrawList( item );
+        delete item;
+
+        item = parent->GetUndoItem();
+
+        wxCHECK_RET( item != NULL, wxT( "Cannot restore undefined last text item." ) );
+
+        screen->AddToDrawList( item );
+        parent->SetUndoItem( NULL );
+        item->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        item->ClearFlags();
+    }
+
+    screen->SetCurItem( NULL );
+}
+
+
+void SCH_EDIT_FRAME::MoveText( SCH_TEXT* aTextItem, wxDC* aDC )
+{
+    wxCHECK_RET( (aTextItem != NULL) && aTextItem->CanIncrementLabel(),
+                 wxT( "Cannot move invalid text item" ) );
 
     m_itemToRepeat = NULL;
 
-    if( !aTextItem->IsNew() )
-    {
-        delete g_ItemToUndoCopy;
-        g_ItemToUndoCopy = aTextItem->Clone();
-    }
-
     aTextItem->SetFlags( IS_MOVED );
 
-    switch( aTextItem->Type() )
-    {
-    case SCH_LABEL_T:
-    case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
-    case SCH_TEXT_T:
-        ItemInitialPosition = aTextItem->m_Pos;
-        OldSize = aTextItem->m_Size;
-        OldOrient = aTextItem->GetOrientation();
-        break;
-
-    default:
-        break;
-    }
+    SetUndoItem( (SCH_ITEM*) aTextItem );
 
     DrawPanel->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( ItemInitialPosition );
+    GetScreen()->SetCrossHairPosition( aTextItem->m_Pos );
     DrawPanel->MoveCursorToCrossHair();
 
     OnModify();
-    DrawPanel->SetMouseCapture( ShowWhileMoving, ExitMoveTexte );
+    DrawPanel->SetMouseCapture( moveText, abortMoveText );
     GetScreen()->SetCurItem( aTextItem );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
+    moveText( DrawPanel, aDC, wxDefaultPosition, true );
 
     DrawPanel->CrossHairOn( aDC );
 }
@@ -78,24 +107,10 @@ void SCH_EDIT_FRAME::StartMoveTexte( SCH_TEXT* aTextItem, wxDC* aDC )
 
 void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC )
 {
-    wxCHECK_RET( aTextItem != NULL, wxT( "Invalid schematic text item." )  );
+    wxCHECK_RET( (aTextItem != NULL) && aTextItem->CanIncrementLabel(),
+                 wxT( "Invalid schematic text item." )  );
 
-    int orient;
-
-    switch( aTextItem->Type() )
-    {
-    case SCH_LABEL_T:
-    case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
-    case SCH_TEXT_T:
-        orient = ( aTextItem->GetOrientation() + 1 ) & 3;
-        break;
-
-    default:
-        wxFAIL_MSG( wxT( "Invalid schematic item <" ) + aTextItem->GetClass() +
-                    wxT( "> passed to SCH_EDIT_FRAME::ChangeTextOrient()" ) );
-        return;
-    }
+    int orient = ( aTextItem->GetOrientation() + 1 ) & 3;
 
     // Save current text orientation in undo list if is not already in edit.
     if( aTextItem->GetFlags() == 0 )
@@ -160,90 +175,16 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
     lastTextItalic = textItem->m_Italic;
     lastTextOrientation = textItem->GetOrientation();
 
-    if( aType == LAYER_GLOBLABEL  || aType == LAYER_HIERLABEL )
+    if( (aType == SCH_GLOBAL_LABEL_T) || (aType == SCH_HIERARCHICAL_LABEL_T) )
     {
         lastGlobalLabelShape = textItem->m_Shape;
     }
 
     textItem->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    DrawPanel->SetMouseCapture( ShowWhileMoving, ExitMoveTexte );
+    DrawPanel->SetMouseCapture( moveText, abortMoveText );
     GetScreen()->SetCurItem( textItem );
 
     return textItem;
-}
-
-
-static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                             bool aErase )
-{
-    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_ITEM* textItem = screen->GetCurItem();
-
-    // Erase the current text at its current position.
-    if( aErase )
-        textItem->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-
-    // Draw the text item at it's new position.
-    switch( textItem->Type() )
-    {
-    case SCH_LABEL_T:
-    case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
-    case SCH_TEXT_T:
-        ( (SCH_TEXT*) textItem )->m_Pos = screen->GetCrossHairPosition();
-        break;
-
-    default:
-        break;
-    }
-
-    textItem->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-}
-
-
-/* Abort function for the command move text */
-static void ExitMoveTexte( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
-{
-    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
-    SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
-
-    parent->SetRepeatItem( NULL );
-
-    if( item == NULL )  /* no current item */
-        return;
-
-    // Erase the text item and delete it if new (i.e. it was being just created).
-    item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-
-    if( item->IsNew() )
-    {
-        SAFE_DELETE( item );
-        screen->SetCurItem( NULL );
-    }
-    else    // this was a move command on "old" text: restore its old settings.
-    {
-        switch( item->Type() )
-        {
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIERARCHICAL_LABEL_T:
-        case SCH_TEXT_T:
-        {
-            SCH_TEXT* text = (SCH_TEXT*) item;
-            text->m_Pos = ItemInitialPosition;
-            text->m_Size = OldSize;
-            text->SetOrientation( OldOrient );
-        }
-        break;
-
-        default:
-            break;
-        }
-
-        item->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        item->ClearFlags();
-    }
 }
 
 
@@ -314,6 +255,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
      * they are not used in labels.  Justifications will be set to default value in the new
      * text item type.
      */
+    newtext->SetFlags( text->GetFlags() );
     newtext->m_Shape = text->m_Shape;
     newtext->SetOrientation( text->GetOrientation() );
     newtext->m_Size = text->m_Size;
@@ -321,61 +263,38 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     newtext->m_Italic = text->m_Italic;
     newtext->m_Bold = text->m_Bold;
 
-    // save current text flag:
-    int flags = text->GetFlags();
-
-    /* add the new text in linked list if old text is in list */
-    if( (flags & IS_NEW) == 0 )
-    {
-        newtext->SetNext( GetScreen()->GetDrawItems() );
-        GetScreen()->SetDrawItems( newtext );
-        OnModify();
-    }
-
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
-
-    /* Delete the old text item.  If it is a text flagged as new it will be deleted by
-     * ending the mouse capture.
-     */
-    if( DrawPanel->IsMouseCaptured() )
-        DrawPanel->EndMouseCapture();
-
-    if( (flags & IS_NEW) == 0 )  // Remove old text from current list and save it in undo list
-    {
-        text->ClearFlags();
-        DeleteItem( text );      // old text is really saved in undo list
-        GetScreen()->SetCurItem( NULL );
-        m_itemToRepeat = NULL;
-    }
-
-    GetScreen()->SetCurItem( NULL );
-
-    delete g_ItemToUndoCopy;
-    g_ItemToUndoCopy = NULL;
-
-    DrawPanel->CrossHairOff( &dc );   // Erase schematic cursor
-
     /* Save the new text in undo list if the old text was not itself a "new created text"
      * In this case, the old text is already in undo list as a deleted item.
      * Of course if the old text was a "new created text" the new text will be
      * put in undo list later, at the end of the current command (if not aborted)
      */
-    if( (flags & IS_NEW) == 0 )
+
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    DrawPanel->CrossHairOff( &dc );   // Erase schematic cursor
+    text->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode );
+
+    screen->RemoveFromDrawList( text );
+    screen->AddToDrawList( newtext );
+    GetScreen()->SetCurItem( newtext );
+    OnModify();
+    newtext->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    DrawPanel->CrossHairOn( &dc );    // redraw schematic cursor
+
+    if( text->GetFlags() == 0 )
     {
-        SaveCopyInUndoList( newtext, UR_NEW );
+        m_itemToRepeat = NULL;
+        text->ClearFlags();
+        text->SetNext( NULL );
+        text->SetBack( NULL );
+        newtext->ClearFlags();
+        PICKED_ITEMS_LIST pickList;
+        ITEM_PICKER picker( newtext, UR_EXCHANGE_T );
+        picker.SetLink( text );
+        pickList.PushItem( picker );
+        SaveCopyInUndoList( pickList, UR_EXCHANGE_T );
     }
     else
     {
-        GetScreen()->SetCurItem( newtext );
-        newtext->SetFlags( IS_NEW );
+        delete text;
     }
-
-    if( (flags & IS_MOVED) != 0 )
-    {
-        GetScreen()->SetCurItem( newtext );
-        StartMoveTexte( newtext, &dc );
-    }
-
-    newtext->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    DrawPanel->CrossHairOn( &dc );    // redraw schematic cursor
 }

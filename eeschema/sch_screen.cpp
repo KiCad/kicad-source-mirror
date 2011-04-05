@@ -121,22 +121,22 @@ void SCH_SCREEN::DecRefCount()
 
 void SCH_SCREEN::FreeDrawList()
 {
-    SCH_ITEM* DrawStruct;
+    SCH_ITEM* item;
 
     while( GetDrawItems() != NULL )
     {
-        DrawStruct = GetDrawItems();
+        item = GetDrawItems();
         SetDrawItems( GetDrawItems()->Next() );
-        SAFE_DELETE( DrawStruct );
+        SAFE_DELETE( item );
     }
 
     SetDrawItems( NULL );
 }
 
 
-void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
+void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM* aItem )
 {
-    if( DrawStruct == GetDrawItems() )
+    if( aItem == GetDrawItems() )
     {
         SetDrawItems( GetDrawItems()->Next() );
     }
@@ -146,7 +146,7 @@ void SCH_SCREEN::RemoveFromDrawList( SCH_ITEM * DrawStruct )
 
         while( DrawList && DrawList->Next() )
         {
-            if( DrawList->Next() == DrawStruct )
+            if( DrawList->Next() == aItem )
             {
                 DrawList->SetNext( DrawList->Next()->Next() );
                 break;
@@ -201,13 +201,13 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
 }
 
 
-bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* st )
+bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* aItem )
 {
-    SCH_ITEM * itemList = GetDrawItems();
+    SCH_ITEM* itemList = GetDrawItems();
 
     while( itemList )
     {
-        if( itemList == st )
+        if( itemList == aItem )
             return true;
 
         itemList = itemList->Next();
@@ -217,10 +217,10 @@ bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* st )
 }
 
 
-void SCH_SCREEN::AddToDrawList( SCH_ITEM* st )
+void SCH_SCREEN::AddToDrawList( SCH_ITEM* aItem )
 {
-    st->SetNext( GetDrawItems() );
-    SetDrawItems( st );
+    aItem->SetNext( GetDrawItems() );
+    SetDrawItems( aItem );
 }
 
 

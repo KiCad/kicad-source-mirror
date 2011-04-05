@@ -70,8 +70,6 @@ static void abortMoveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     }
 
     frame->SetCurrentField( NULL );
-
-    SAFE_DELETE( g_ItemToUndoCopy );
 }
 
 
@@ -85,9 +83,7 @@ void SCH_EDIT_FRAME::MoveField( SCH_FIELD* aField, wxDC* aDC )
     SCH_COMPONENT* comp = (SCH_COMPONENT*) aField->GetParent();
 
     SetCurrentField( aField );
-
-    SAFE_DELETE( g_ItemToUndoCopy );
-    g_ItemToUndoCopy = new SCH_COMPONENT( *comp );
+    SetUndoItem( comp );
 
     pos = comp->m_Pos;
 

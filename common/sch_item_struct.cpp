@@ -116,6 +116,12 @@ bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
 }
 
 
+void SCH_ITEM::SwapData( SCH_ITEM* aItem )
+{
+    wxFAIL_MSG( wxT( "SwapData() method not implemented for class " ) + GetClass() );
+}
+
+
 bool SCH_ITEM::operator < ( const SCH_ITEM& aItem ) const
 {
     wxCHECK_MSG( false, this->Type() < aItem.Type(),

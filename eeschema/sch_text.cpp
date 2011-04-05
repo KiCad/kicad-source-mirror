@@ -326,18 +326,20 @@ void SCH_TEXT::SwapData( SCH_TEXT* copyitem )
 void SCH_TEXT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     /* save old text in undo list */
-    if( g_ItemToUndoCopy && !IsNew() )
+    if( !IsNew() )
     {
-        /* restore old values and save new ones */
-        SwapData( (SCH_TEXT*) g_ItemToUndoCopy );
+        ClearFlags();
+        PICKED_ITEMS_LIST pickList;
+        ITEM_PICKER picker( this, UR_EXCHANGE_T );
+        SCH_ITEM* undoItem = frame->GetUndoItem();
 
-        /* save in undo list */
-        frame->SaveCopyInUndoList( this, UR_CHANGED );
+        wxCHECK_RET( undoItem != NULL, wxT( "Invalid text undo item." ) );
 
-        /* restore new values */
-        SwapData( (SCH_TEXT*) g_ItemToUndoCopy );
-
-        SAFE_DELETE( g_ItemToUndoCopy );
+        undoItem->ClearFlags();
+        picker.SetLink( undoItem );
+        frame->SetUndoItem( NULL );
+        pickList.PushItem( picker );
+        frame->SaveCopyInUndoList( pickList, UR_EXCHANGE_T );
     }
 
     SCH_ITEM::Place( frame, DC );

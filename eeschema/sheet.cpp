@@ -276,7 +276,6 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     }
 
     screen->SetCurItem( NULL );
-    SAFE_DELETE( g_ItemToUndoCopy );
 }
 
 
@@ -288,11 +287,10 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
 {
     m_itemToRepeat = NULL;
-    SAFE_DELETE( g_ItemToUndoCopy );
 
     SCH_SHEET* sheet = new SCH_SHEET( GetScreen()->GetCrossHairPosition() );
 
-    sheet->m_Flags     = IS_NEW | IS_RESIZED;
+    sheet->SetFlags( IS_NEW | IS_RESIZED );
     sheet->m_TimeStamp = GetTimeStamp();
     sheet->SetParent( GetScreen() );
     sheet->SetScreen( NULL );
@@ -341,10 +339,7 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
     DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
 
     if( aSheet->IsNew() )    // not already in edit, save a copy for undo/redo
-    {
-        delete g_ItemToUndoCopy;
-        g_ItemToUndoCopy = DuplicateStruct( aSheet, true );
-    }
+        SetUndoItem( aSheet );
 }
 
 
@@ -364,8 +359,5 @@ void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
     DrawPanel->CrossHairOn( aDC );
 
     if( !aSheet->IsNew() )    // not already in edit, save a copy for undo/redo
-    {
-        delete g_ItemToUndoCopy;
-        g_ItemToUndoCopy = DuplicateStruct( aSheet, true );
-    }
+        SetUndoItem( aSheet );
 }

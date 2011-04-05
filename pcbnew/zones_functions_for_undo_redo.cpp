@@ -165,7 +165,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
 {
     for( unsigned kk = 0; kk < aPickList.GetCount(); kk++ )
     {
-        UndoRedoOpType  status = aPickList.GetPickedItemStatus( kk );
+        UNDO_REDO_T  status = aPickList.GetPickedItemStatus( kk );
 
         ZONE_CONTAINER* ref = (ZONE_CONTAINER*) aPickList.GetPickedItem( kk );
         for( unsigned ii = 0; ; ii++ )  // analyse the main picked list

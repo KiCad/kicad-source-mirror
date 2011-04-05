@@ -86,12 +86,9 @@ void SCH_EDIT_FRAME::StartMoveBusEntry( SCH_BUS_ENTRY* BusEntry, wxDC* DC )
         return;
 
     if( !BusEntry->IsNew() )    // not already in edit, save shape
-    {
-        delete g_ItemToUndoCopy;
-        g_ItemToUndoCopy = BusEntry->Clone();
-    }
+        SetUndoItem( BusEntry );
 
-    BusEntry->m_Flags |= IS_MOVED;
+    BusEntry->SetFlags( IS_MOVED );
 
     ItemInitialPosition = BusEntry->m_Pos;
 

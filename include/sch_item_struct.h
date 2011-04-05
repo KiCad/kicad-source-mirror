@@ -88,6 +88,14 @@ public:
 
     SCH_ITEM* Clone() const { return ( SCH_ITEM* ) EDA_ITEM::Clone(); }
 
+    /**
+     * Function SwapDate
+     * swap the internal data structures \a aItem with the schematic item.
+     *
+     * @param aItem The item to swap the data structures with.
+     */
+    virtual void SwapData( SCH_ITEM* aItem );
+
     SCH_ITEM* Next() { return (SCH_ITEM*) Pnext; }
     SCH_ITEM* Back() { return (SCH_ITEM*) Pback; }
 

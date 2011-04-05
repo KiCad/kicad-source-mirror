@@ -192,7 +192,6 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
     }
 
     OnModify();
-    SAFE_DELETE( g_ItemToUndoCopy );
     SaveCopyInUndoList( aSheet, UR_CHANGED );
 
     sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), label->m_Text );

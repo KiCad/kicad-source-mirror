@@ -339,7 +339,7 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
  *      UR_ROTATED
  */
 void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
-                                         UndoRedoOpType aCommandType,
+                                         UNDO_REDO_T    aCommandType,
                                          const wxPoint& aTransformPoint )
 {
     if( aItem == NULL )     // Nothing to save
@@ -399,7 +399,7 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
  * @param aTransformPoint - Transform items around this point.
  */
 void PCB_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                         UndoRedoOpType     aTypeCommand,
+                                         UNDO_REDO_T        aTypeCommand,
                                          const wxPoint&     aTransformPoint )
 {
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
@@ -412,8 +412,8 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
     // Verify list, and creates data if needed
     for( unsigned ii = 0; ii < commandToUndo->GetCount(); ii++ )
     {
-        BOARD_ITEM*    item    = (BOARD_ITEM*) commandToUndo->GetPickedItem( ii );
-        UndoRedoOpType command = commandToUndo->GetPickedItemStatus( ii );
+        BOARD_ITEM* item    = (BOARD_ITEM*) commandToUndo->GetPickedItem( ii );
+        UNDO_REDO_T command = commandToUndo->GetPickedItemStatus( ii );
         if( command == UR_UNSPECIFIED )
         {
             command = aTypeCommand;

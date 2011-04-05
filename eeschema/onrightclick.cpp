@@ -102,6 +102,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     {
         if( GetSheet()->Last() != g_RootSheet )
             ADD_MENUITEM( PopMenu, ID_POPUP_SCH_LEAVE_SHEET, _( "Leave Sheet" ), leave_sheet_xpm );
+
         PopMenu->AppendSeparator();
         return true;
     }
@@ -191,10 +192,8 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
 
     default:
-        wxString msg;
-        msg.Printf( wxT( "SCH_EDIT_FRAME::OnRightClick Error: unknown DrawType %d" ),
-                    item->Type() );
-        DisplayError( this, msg );
+        wxFAIL_MSG( wxString::Format( wxT( "Cannot create context menu for unknown type %d" ),
+                                      item->Type() ) );
         break;
     }
 

@@ -470,7 +470,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * but must be defined because it is a pure virtual in PCB_BASE_FRAME
      */
     virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
-                                     UndoRedoOpType aTypeCommand = UR_UNSPECIFIED,
+                                     UNDO_REDO_T aTypeCommand = UR_UNSPECIFIED,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) { }
 
     /**
@@ -478,12 +478,12 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * Creates a new entry in undo list of commands.
      * add a list of pickers to handle a list of items
      * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UndoRedoOpType)
+     * @param aTypeCommand = command type (see enum UNDO_REDO_T)
      * @param aTransformPoint = the reference point of the transformation,
      *                          for commands like move
      */
     virtual void SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                     UndoRedoOpType aTypeCommand,
+                                     UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
     {
         // currently: do nothing in gerbview.

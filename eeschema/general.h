@@ -109,15 +109,11 @@ public:
     int  Flags;
 };
 
-extern wxSize         g_RepeatStep;
-extern int            g_RepeatDeltaLabel;
-
-extern SCH_ITEM*      g_ItemToUndoCopy; /* copy of last modified schematic item
-                                         * before it is modified (used for undo
-                                         * managing to restore old values ) */
+extern wxSize g_RepeatStep;
+extern int g_RepeatDeltaLabel;
 
 // Management options.
-extern bool      g_HVLines;
+extern bool g_HVLines;
 
 // Management variables, option ... to be stored.  Reset to 0 during a
 // project reload.

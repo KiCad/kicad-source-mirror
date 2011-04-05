@@ -18,11 +18,11 @@
  * Creates a new entry in undo list of commands.
  * add a picker to handle aItemToCopy
  * @param aItem = the board item modified by the command to undo
- * @param aTypeCommand = command type (see enum UndoRedoOpType)
+ * @param aTypeCommand = command type (see enum UNDO_REDO_T)
  * @param aTransformPoint = the reference point of the transformation, for commands like move
  */
 void WinEDA_ModuleEditFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
-                                                 UndoRedoOpType aTypeCommand,
+                                                 UNDO_REDO_T aTypeCommand,
                                                  const wxPoint& aTransformPoint )
 {
     EDA_ITEM*          item;
@@ -52,12 +52,12 @@ void WinEDA_ModuleEditFrame::SaveCopyInUndoList( BOARD_ITEM*    aItem,
  * Creates a new entry in undo list of commands.
  * add a list of pickers to handle a list of items
  * @param aItemsList = the list of items modified by the command to undo
- * @param aTypeCommand = command type (see enum UndoRedoOpType)
+ * @param aTypeCommand = command type (see enum UNDO_REDO_T)
  * @param aTransformPoint = the reference point of the transformation, for commands like move
  */
 void WinEDA_ModuleEditFrame::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
-                                                UndoRedoOpType aTypeCommand,
-                                                const wxPoint& aTransformPoint )
+                                                 UNDO_REDO_T aTypeCommand,
+                                                 const wxPoint& aTransformPoint )
 {
     // Currently unused in modedit, because the module itself is saved for each change
     wxMessageBox( wxT( "SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList..) not yet in use" ) );

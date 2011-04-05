@@ -31,7 +31,7 @@
 #include "class_undoredo_container.h"
 
 
-ITEM_PICKER::ITEM_PICKER( EDA_ITEM* aItem, UndoRedoOpType aUndoRedoStatus )
+ITEM_PICKER::ITEM_PICKER( EDA_ITEM* aItem, UNDO_REDO_T aUndoRedoStatus )
 {
     m_UndoRedoStatus = aUndoRedoStatus;
     m_PickedItem     = aItem;
@@ -134,6 +134,7 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
             break;
 
         case UR_CHANGED:
+        case UR_EXCHANGE_T:
             delete wrapper.m_Link;   //  the picker is owner of this item
             break;
 
@@ -149,13 +150,9 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
             break;
 
         default:
-        {
-            wxString msg;
-            msg.Printf( wxT( "ClearUndoORRedoList() error: unknown command type %d" ),
-                        wrapper.m_UndoRedoStatus );
-            wxMessageBox( msg );
-        }
-        break;
+            wxFAIL_MSG( wxString::Format( wxT( "Cannot clear unknown undo/redo command %d" ),
+                                          wrapper.m_UndoRedoStatus ) );
+            break;
         }
     }
 }
@@ -190,7 +187,7 @@ EDA_ITEM* PICKED_ITEMS_LIST::GetPickedItemLink( unsigned int aIdx )
 }
 
 
-UndoRedoOpType PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx )
+UNDO_REDO_T PICKED_ITEMS_LIST::GetPickedItemStatus( unsigned int aIdx )
 {
     if( aIdx < m_ItemsList.size() )
         return m_ItemsList[aIdx].m_UndoRedoStatus;
@@ -232,7 +229,7 @@ bool PICKED_ITEMS_LIST::SetPickedItemLink( EDA_ITEM* aLink, unsigned aIdx )
 }
 
 
-bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, UndoRedoOpType aStatus, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, UNDO_REDO_T aStatus, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {
@@ -245,7 +242,7 @@ bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, UndoRedoOpType aStatus, 
 }
 
 
-bool PICKED_ITEMS_LIST::SetPickedItemStatus( UndoRedoOpType aStatus, unsigned aIdx )
+bool PICKED_ITEMS_LIST::SetPickedItemStatus( UNDO_REDO_T aStatus, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )
     {

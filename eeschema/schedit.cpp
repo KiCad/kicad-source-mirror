@@ -476,7 +476,7 @@ void SCH_EDIT_FRAME::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC )
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_TEXT_T:
-        StartMoveTexte( (SCH_TEXT*) DrawStruct, DC );
+        MoveText( (SCH_TEXT*) DrawStruct, DC );
         break;
 
     case SCH_COMPONENT_T:

@@ -371,12 +371,7 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
 
     // save old cmp in undo list
-    if( g_ItemToUndoCopy && ( g_ItemToUndoCopy->Type() == component->Type() ) )
-    {
-        component->SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
-        frame->SaveCopyInUndoList( component, UR_CHANGED );
-        component->SwapData( (SCH_COMPONENT*) g_ItemToUndoCopy );
-    }
+    frame->SaveUndoItemInUndoList( component );
 
     fieldNdx = m_FieldId;
     m_AddExtraText = 0;
@@ -393,7 +388,7 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     }
 
     Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    m_Flags = 0;
+    ClearFlags();
     frame->GetScreen()->SetCurItem( NULL );
     frame->OnModify();
     frame->SetCurrentField( NULL );

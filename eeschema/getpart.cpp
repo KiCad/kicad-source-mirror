@@ -455,14 +455,7 @@ void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
         return;
 
     if( Component->m_Flags == 0 )
-    {
-        if( g_ItemToUndoCopy )
-        {
-            SAFE_DELETE( g_ItemToUndoCopy );
-        }
-
-        g_ItemToUndoCopy = Component->Clone();
-    }
+        SetUndoItem( Component );
 
     DrawPanel->CrossHairOff( DC );
     GetScreen()->SetCrossHairPosition( Component->m_Pos );

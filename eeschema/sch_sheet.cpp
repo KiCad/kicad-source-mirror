@@ -418,19 +418,7 @@ void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     }
     else    /* save old text in undo list */
     {
-        if( g_ItemToUndoCopy && ( g_ItemToUndoCopy->Type() == Type() ) )
-        {
-            /* restore old values and save new ones */
-            SwapData( (SCH_SHEET*) g_ItemToUndoCopy );
-
-            /* save in undo list */
-            frame->SaveCopyInUndoList( this, UR_CHANGED );
-
-            /* restore new values */
-            SwapData( (SCH_SHEET*) g_ItemToUndoCopy );
-
-            SAFE_DELETE( g_ItemToUndoCopy );
-        }
+        frame->SaveUndoItemInUndoList( this );
     }
 
     SCH_ITEM::Place( frame, DC ); //puts it on the GetDrawItems().
