@@ -2,8 +2,6 @@
 #ifndef __PROTOS_H__
 #define __PROTOS_H__
 
-//#include "class_undoredo_container.h"
-
 #include "colors.h"
 
 

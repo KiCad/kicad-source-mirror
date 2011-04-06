@@ -1,15 +1,13 @@
-# - Convenience include for using wxWidgets library
-# Finds if wxWidgets is installed
-# and set the appropriate libs, incdirs, flags etc.
-# INCLUDE_DIRECTORIES, LINK_DIRECTORIES and ADD_DEFINITIONS
-# are called.
+# - Convenience include for using wxWidgets library.
+# Determines if wxWidgets was FOUND and sets the appropriate libs, incdirs,
+# flags, etc. INCLUDE_DIRECTORIES and LINK_DIRECTORIES are called.
 #
 # USAGE
-#  SET( wxWidgets_USE_LIBS  gl xml xrc ) # optionally: more than wx std libs
-#  FIND_PACKAGE(wxWidgets REQUIRED)
-#  INCLUDE( ${xWidgets_USE_FILE} )
-#  ... add your targets here, e.g. ADD_EXECUTABLE/ ADD_LIBRARY ...
-#  TARGET_LINK_LIBRARIERS( <yourWxDependantTarget>  ${wxWidgets_LIBRARIES})
+#  # Note that for MinGW users the order of libs is important!
+#  FIND_PACKAGE(wxWidgets REQUIRED net gl core base)
+#  INCLUDE(${wxWidgets_USE_FILE})
+#  # and for each of your dependant executable/library targets:
+#  TARGET_LINK_LIBRARIES(<YourTarget> ${wxWidgets_LIBRARIES})
 #
 # DEPRECATED
 #  LINK_LIBRARIES is not called in favor of adding dependencies per target.
@@ -17,6 +15,19 @@
 # AUTHOR
 #  Jan Woetzel <jw -at- mip.informatik.uni-kiel.de>
 
+#=============================================================================
+# Copyright 2004-2009 Kitware, Inc.
+# Copyright 2006      Jan Woetzel
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+# (To distribute this file outside of CMake, substitute the full
+#  License text for the above reference.)
 
 # debug message and logging.
 # comment these out for distribution
@@ -46,9 +57,16 @@ IF   (wxWidgets_FOUND)
   ENDIF(wxWidgets_LIBRARY_DIRS)
 
   IF   (wxWidgets_DEFINITIONS)
-    ADD_DEFINITIONS( ${wxWidgets_DEFINITIONS} )
+    SET_PROPERTY(DIRECTORY APPEND
+      PROPERTY COMPILE_DEFINITIONS ${wxWidgets_DEFINITIONS})
     MSG("wxWidgets_DEFINITIONS=${wxWidgets_DEFINITIONS}")
   ENDIF(wxWidgets_DEFINITIONS)
+
+  IF   (wxWidgets_DEFINITIONS_DEBUG)
+    SET_PROPERTY(DIRECTORY APPEND
+      PROPERTY COMPILE_DEFINITIONS_DEBUG ${wxWidgets_DEFINITIONS_DEBUG})
+    MSG("wxWidgets_DEFINITIONS_DEBUG=${wxWidgets_DEFINITIONS_DEBUG}")
+  ENDIF(wxWidgets_DEFINITIONS_DEBUG)
 
   IF   (wxWidgets_CXX_FLAGS)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${wxWidgets_CXX_FLAGS}")
