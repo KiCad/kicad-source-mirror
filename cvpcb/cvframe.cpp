@@ -43,9 +43,9 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
               CVPCB_MAINFRAME::OnQuit )
     EVT_MENU( ID_GENERAL_HELP,
               CVPCB_MAINFRAME::GetKicadHelp )
-    EVT_MENU( ID_KICAD_ABOUT,
+    EVT_MENU( wxID_ABOUT,
               CVPCB_MAINFRAME::GetKicadAbout )
-    EVT_MENU( ID_CONFIG_REQ,
+    EVT_MENU( wxID_PREFERENCES,
               CVPCB_MAINFRAME::ConfigCvpcb )
     EVT_MENU( ID_CONFIG_SAVE,
               CVPCB_MAINFRAME::Update_Config )

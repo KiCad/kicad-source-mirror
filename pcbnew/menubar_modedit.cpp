@@ -1,7 +1,7 @@
-/***
- * @file menubarmodedit.cpp
- * Module editor menu bar.
- ***/
+/**
+ * @file pcbnew/menubar_modedit.cpp
+ * @brief (Re)Create the main menubar for the module editor
+ */
 #include "fctsys.h"
 #include "common.h"
 
@@ -13,9 +13,12 @@
 #include "protos.h"
 #include "pcbnew_id.h"
 
-/* Create the menubar for the module editor */
+/**
+ * @brief (Re)Create the menubar for the module editor frame
+ */
 void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 {
+    // Create and try to get the current menubar
     wxMenuBar*  menuBar = GetMenuBar();
     wxMenuItem* item;
 
@@ -30,291 +33,297 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 
     // Recreate all menus:
 
-    /* File menu */
+    // Menu File:
     wxMenu* fileMenu = new wxMenu;
 
-    /* New module */
+    // New module
     item = new wxMenuItem( fileMenu,
                            ID_MODEDIT_NEW_MODULE,
                            _( "New Module" ),
                            _( "Create new module" ) );
-    item->SetBitmap( new_footprint_xpm );
+    SET_BITMAP( new_footprint_xpm );
     fileMenu->Append( item );
 
-    /* Open submenu */
+    // Open submenu
     wxMenu* openSubmenu = new wxMenu;
 
-    /* from File */
+    // from File
     item = new wxMenuItem( openSubmenu,
                            ID_MODEDIT_IMPORT_PART,
-                           _( "from File (Import)" ),
+                           _( "Load from File (Import)" ),
                            _( "Import a footprint from an existing file" ) );
-    item->SetBitmap( import_module_xpm );
+    SET_BITMAP( import_module_xpm );
     openSubmenu->Append( item );
 
-    /* from Library */
+    // from Library
     item = new wxMenuItem( openSubmenu,
                            ID_MODEDIT_LOAD_MODULE,
                            _( "Load from Library" ),
                            _( "Open a footprint module from a Library" ) );
-    item->SetBitmap( module_xpm );
+    SET_BITMAP( module_xpm );
     openSubmenu->Append( item );
 
-    /* from current Board */
+    // from current Board
     item = new wxMenuItem( openSubmenu,
                            ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
                            _( "Load from current Board" ),
                            _( "Load a footprint module from the current loaded board" ) );
-    item->SetBitmap( load_module_board_xpm );
+    SET_BITMAP( load_module_board_xpm );
     openSubmenu->Append( item );
 
     /* Append openSubmenu to fileMenu */
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( fileMenu, openSubmenu, -1, _( "&Load Module" ),
-                                        _( "Load a footprint module" ), open_document_xpm );
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( fileMenu, openSubmenu, -1,
+                                        _( "&Load Module" ),
+                                        _( "Load a footprint module" ),
+                                        open_document_xpm );
 
-    /* Save module */
-    item = new wxMenuItem( fileMenu, ID_MODEDIT_SAVE_LIBMODULE,
+    // Save module
+    item = new wxMenuItem( fileMenu,
+                           ID_MODEDIT_SAVE_LIBMODULE,
                            _( "&Save Module in Current Lib" ),
                            _( "Save Module in working library" ) );
-    item->SetBitmap( save_library_xpm );
+    SET_BITMAP( save_library_xpm );
     fileMenu->Append( item );
 
+    // Save module in new lib
     item = new wxMenuItem( fileMenu,
                            ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
                            _( "&Save Module in a New Lib" ),
                            _( "Create new library and save current module" ) );
-    item->SetBitmap( new_library_xpm );
+    SET_BITMAP( new_library_xpm );
     fileMenu->Append( item );
 
+    // Export module
     item = new wxMenuItem( fileMenu,
                            ID_MODEDIT_EXPORT_PART,
                            _( "&Export module" ),
                            _( "Save the current loaded module to a file" ) );
-    item->SetBitmap( export_module_xpm );
+    SET_BITMAP( export_module_xpm );
     fileMenu->Append( item );
 
-    /* Separator */
+    // Separator
     fileMenu->AppendSeparator();
 
-    /* Print */
-    item = new wxMenuItem( fileMenu, wxID_PRINT, _( "&Print\tCtrl+P" ),
+    // Print
+    item = new wxMenuItem( fileMenu,
+                           wxID_PRINT,
+                           _( "&Print\tCtrl+P" ),
                            _( "Print the current module" ) );
-    item->SetBitmap( plot_xpm );
+    SET_BITMAP( plot_xpm );
     fileMenu->Append( item );
 
-    /* Separator */
+    // Separator
     fileMenu->AppendSeparator();
 
-    /* Close editor */
-    item = new wxMenuItem( fileMenu, wxID_EXIT, _( "Close" ), _( "Close the footprint editor" ) );
-    item->SetBitmap( exit_xpm );
+    // Close editor
+    item = new wxMenuItem( fileMenu,
+                           wxID_EXIT,
+                           _( "Close" ),
+                           _( "Close the footprint editor" ) );
+    SET_BITMAP( exit_xpm );
     fileMenu->Append( item );
 
-
-    /* Edit menu */
+    // Menu Edit:
     wxMenu* editMenu = new wxMenu;
 
-    /* Undo */
+    // Undo
     item = new wxMenuItem( editMenu,
                            wxID_UNDO,
                            _( "Undo" ),
                            _( "Undo last edit" ) );
-    item->SetBitmap( undo_xpm );
+    SET_BITMAP( undo_xpm );
     editMenu->Append( item );
 
-    /* Redo */
+    // Redo
     item = new wxMenuItem( editMenu,
                            wxID_REDO,
                            _( "Redo" ),
                            _( "Redo the last undo action" ) );
-    item->SetBitmap( redo_xpm );
+    SET_BITMAP( redo_xpm );
     editMenu->Append( item );
 
-    /* Delete items */
+    // Delete items
     item = new wxMenuItem( editMenu,
                            ID_MODEDIT_DELETE_TOOL,
                            _( "Delete" ),
                            _( "Delete objects with the eraser" ) );
-    item->SetBitmap( delete_body_xpm );
+    SET_BITMAP( delete_body_xpm );
     editMenu->Append( item );
 
-    /* Separator */
+    // Separator
     editMenu->AppendSeparator();
 
-    /* Properties */
+    // Properties
     item = new wxMenuItem( editMenu,
                            ID_MODEDIT_EDIT_MODULE_PROPERTIES,
                            _( "Properties" ),
                            _( "Edit module properties" ) );
-    item->SetBitmap( module_options_xpm );
+    SET_BITMAP( module_options_xpm );
     editMenu->Append( item );
 
-    /* Dimensions submenu */
+    // Dimensions submenu
     wxMenu* dimensions_Submenu = new wxMenu;
 
-    /* Sizes and Widths */
+    // Sizes and Widths
     item = new wxMenuItem( dimensions_Submenu,
                            ID_PCB_DRAWINGS_WIDTHS_SETUP,
                            _( "Sizes and Widths" ),
                            _( "Adjust width for texts and drawings" ) );
-    item->SetBitmap( options_text_xpm );
+    SET_BITMAP( options_text_xpm );
     dimensions_Submenu->Append( item );
 
-    /* Pad settings */
+    // Pad settings
     item = new wxMenuItem( dimensions_Submenu,
                            ID_MODEDIT_PAD_SETTINGS,
                            _( "Pad settings" ),
                            _( "Edit the settings for new pads" ) );
-    item->SetBitmap( options_pad_xpm );
+    SET_BITMAP( options_pad_xpm );
     dimensions_Submenu->Append( item );
 
-    /* User Grid Size */
+    // User grid size
     item = new wxMenuItem( dimensions_Submenu,
                            ID_PCB_USER_GRID_SETUP,
                            _( "User Grid Size" ),
                            _( "Adjust user grid" ) );
-    item->SetBitmap( grid_xpm );
+    SET_BITMAP( grid_xpm );
     dimensions_Submenu->Append( item );
 
-    /* Append dimensions_Submenu to editMenu */
+    // Append dimensions_Submenu to editMenu
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( editMenu,
                                         dimensions_Submenu, -1,
                                         _( "&Dimensions" ),
                                         _( "Edit dimensions preferences" ),
                                         add_dimension_xpm );
 
-
-    /* View menu */
+    // View menu
     wxMenu* viewMenu = new wxMenu;
 
-    /* Zoom In */
+    // Zoom In
     item = new wxMenuItem( viewMenu,
                            ID_ZOOM_IN,
                            _( "Zoom In" ),
                            _( "Zoom in on the module" ) );
-    item->SetBitmap( zoom_in_xpm );
+    SET_BITMAP( zoom_in_xpm );
     viewMenu->Append( item );
 
-    /* Zoom Out */
+    // Zoom Out
     item = new wxMenuItem( viewMenu,
                            ID_ZOOM_OUT,
                            _( "Zoom Out" ),
                            _( "Zoom out on the module" ) );
-    item->SetBitmap( zoom_out_xpm );
+    SET_BITMAP( zoom_out_xpm );
     viewMenu->Append( item );
 
-    /* Fit on Screen */
+    // Fit on Screen
     item = new wxMenuItem( viewMenu,
                            ID_ZOOM_PAGE,
                            _( "Fit on Screen" ),
                            _( "Zoom and fit the module in the window" ) );
-    item->SetBitmap( zoom_fit_in_page_xpm );
+    SET_BITMAP( zoom_fit_in_page_xpm );
     viewMenu->Append( item );
 
-    /* Separator */
+    // Separator
     viewMenu->AppendSeparator();
 
-    /* Redraw */
+    // Redraw
     item = new wxMenuItem( viewMenu,
                            ID_ZOOM_REDRAW,
                            _( "Redraw" ),
                            _( "Redraw the window's viewport" ) );
-    item->SetBitmap( zoom_redraw_xpm );
+    SET_BITMAP( zoom_redraw_xpm );
     viewMenu->Append( item );
 
-    /* 3D Viewer */
+    // 3D view
     item = new wxMenuItem( viewMenu,
                            ID_MENU_PCB_SHOW_3D_FRAME,
                            _( "3D View" ),
                            _( "Show board in 3D viewer" ) );
-    item->SetBitmap( show_3d_xpm );
+    SET_BITMAP( show_3d_xpm );
     viewMenu->Append( item );
 
-
-    /* Place menu */
+    // Menu Place:
     wxMenu* placeMenu = new wxMenu;
 
-    /* Pad */
+    // Pad
     item = new wxMenuItem( placeMenu,
                            ID_MODEDIT_PAD_TOOL,
                            _( "Pad" ),
                            _( "Add pad" ) );
-    item->SetBitmap( pad_xpm );
+    SET_BITMAP( pad_xpm );
     placeMenu->Append( item );
 
-    /* Separator */
+    // Separator
     placeMenu->AppendSeparator();
 
-    /* Circle */
+    // Circle
     item = new wxMenuItem( placeMenu,
                            ID_MODEDIT_CIRCLE_TOOL,
                            _( "Circle" ),
                            _( "Add graphic circle" ) );
-    item->SetBitmap( add_circle_xpm );
+    SET_BITMAP( add_circle_xpm );
     placeMenu->Append( item );
 
-    /* Line or Polygon */
+    // Line or Polygon
     item = new wxMenuItem( placeMenu,
                            ID_MODEDIT_LINE_TOOL,
                            _( "Line or Polygon" ),
                            _( "Add graphic line or polygon" ) );
-    item->SetBitmap( add_polygon_xpm );
+    SET_BITMAP( add_polygon_xpm );
     placeMenu->Append( item );
 
-    /* Arc */
+    // Arc
     item = new wxMenuItem( placeMenu,
                            ID_MODEDIT_ARC_TOOL,
                            _( "Arc" ),
                            _( "Add graphic arc" ) );
-    item->SetBitmap( add_arc_xpm );
+    SET_BITMAP( add_arc_xpm );
     placeMenu->Append( item );
 
-    /* Text */
+    // Text
     item = new wxMenuItem( placeMenu,
                            ID_MODEDIT_TEXT_TOOL,
                            _( "Text" ),
                            _( "Add graphic text" ) );
-    item->SetBitmap( add_text_xpm );
+    SET_BITMAP( add_text_xpm );
     placeMenu->Append( item );
 
-    /* Anchor */
+    // Anchor
     placeMenu->AppendSeparator();
     item = new wxMenuItem( placeMenu,
                            ID_MODEDIT_ANCHOR_TOOL,
                            _( "Anchor" ),
                            _( "Place the footprint module reference anchor" ) );
-    item->SetBitmap( anchor_xpm );
+    SET_BITMAP( anchor_xpm );
     placeMenu->Append( item );
 
-
-    /* Help menu */
+    // Menu Help:
     wxMenu* helpMenu = new wxMenu;
 
+    // Version info
     AddHelpVersionInfoMenuEntry( helpMenu );
 
-    /* Contents */
+    // Contents
     item = new wxMenuItem( helpMenu,
                            ID_GENERAL_HELP,
                            _( "&Contents" ),
                            _( "Open the PCBNew manual" ) );
-    item->SetBitmap( online_help_xpm );
+    SET_BITMAP( online_help_xpm );
     helpMenu->Append( item );
 
-    /* About PCBNew */
+    // About PCBNew
     item = new wxMenuItem( helpMenu,
-                           ID_KICAD_ABOUT,
+                           wxID_ABOUT,
                            _( "&About PCBNew" ),
                            _( "About PCBNew PCB designer" ) );
-    item->SetBitmap( info_xpm );
+    SET_BITMAP( info_xpm );
     helpMenu->Append( item );
 
-
-    /* Append all the menu's to the menubar */
-    menuBar->Append( fileMenu, _( "&File" ) );
-    menuBar->Append( editMenu, _( "&Edit" ) );
-    menuBar->Append( viewMenu, _( "&View" ) );
+    // Append menus to the menubar
+    menuBar->Append( fileMenu,  _( "&File" ) );
+    menuBar->Append( editMenu,  _( "&Edit" ) );
+    menuBar->Append( viewMenu,  _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
-    menuBar->Append( helpMenu, _( "&Help" ) );
+    menuBar->Append( helpMenu,  _( "&Help" ) );
 
     menuBar->Thaw();
 

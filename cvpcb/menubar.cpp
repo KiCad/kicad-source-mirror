@@ -1,6 +1,6 @@
-/*
- * menubar.cpp
- * Build the CvPCB MenuBar
+/**
+ * @file cvpcb/menubar.cpp
+ * @brief (Re)Create the menubar for cvpcb
  */
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -14,9 +14,12 @@
 
 #include "bitmaps.h"
 
-
+/**
+ * @brief (Re)Create the menubar for the cvpcb mainframe
+ */
 void CVPCB_MAINFRAME::ReCreateMenuBar()
 {
+    // Create and try to get the current  menubar
     wxMenuItem* item;
     wxMenuBar*  menuBar = GetMenuBar();
 
@@ -31,53 +34,72 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     // Recreate all menus:
 
+    // Menu File:
     wxMenu* filesMenu = new wxMenu;
-    ADD_MENUITEM_WITH_HELP( filesMenu, ID_LOAD_PROJECT,
-                  _( "&Open" ), _( "Open a net list file" ),
-                    open_document_xpm );
 
-    /* Open Recent submenu */
+    // Open
+    ADD_MENUITEM_WITH_HELP( filesMenu,
+                            ID_LOAD_PROJECT,
+                            _( "&Open" ),
+                            _( "Open a net list file" ),
+                            open_document_xpm );
+
+    // Open Recent submenu
     wxMenu* openRecentMenu = new wxMenu();
     wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu, -1, _( "Open &Recent" ),
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu, -1,
+                                        _( "Open &Recent" ),
                                         _("Open a recent opened netlist document" ),
                                         open_project_xpm );
 
-
-
+    // Separator
     filesMenu->AppendSeparator();
-    ADD_MENUITEM_WITH_HELP( filesMenu, ID_SAVE_PROJECT,
-                           _( "&Save As..." ),
-                           _( "Save new net list and footprint list files" ),
+
+    // Save as
+    ADD_MENUITEM_WITH_HELP( filesMenu,
+                            ID_SAVE_PROJECT,
+                            _( "&Save As..." ),
+                            _( "Save new net list and footprint list files" ),
                             save_xpm );
 
-    /* Quit on all platforms except WXMAC */
-#if !defined(__WXMAC__)
-
+    // Separator
     filesMenu->AppendSeparator();
-    ADD_MENUITEM_WITH_HELP( filesMenu, wxID_EXIT,
-                _( "&Quit" ), _( "Quit CvPCB" ),
-                exit_xpm );
 
-#endif /* !defined( __WXMAC__) */
+    // Quit
+    ADD_MENUITEM_WITH_HELP( filesMenu,
+                            wxID_EXIT,
+                            _( "&Quit" ),
+                            _( "Quit CvPCB" ),
+                            exit_xpm );
 
-    // Menu Configuration:
-    wxMenu* configmenu = new wxMenu;
-    ADD_MENUITEM_WITH_HELP( configmenu, ID_CONFIG_REQ, _( "&Configuration" ),
-                  _( "Set libraries and library search paths" ),
-                    config_xpm );
+    // Menu Preferences:
+    wxMenu* preferencesMenu = new wxMenu;
 
-    wxGetApp().AddMenuLanguageList( configmenu );
+    // Options (Preferences on WXMAC)
+    ADD_MENUITEM_WITH_HELP( preferencesMenu,
+                            wxID_PREFERENCES,
+#ifdef __WXMAC__
+                            _( "&Preferences..." ),
+#else
+                            _( "&Options" ),
+#endif // __WXMAC__
+                            _( "Set libraries and library search paths" ),
+                            config_xpm );
 
-    item = new wxMenuItem( configmenu, ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,
+    // Language submenu
+    wxGetApp().AddMenuLanguageList( preferencesMenu );
+
+    // Keep open on save
+    item = new wxMenuItem( preferencesMenu, ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,
                            _( "Keep Open On Save" ),
                            _( "Prevent CVPcb from exiting after saving netlist file" ),
                            wxITEM_CHECK );
-    configmenu->Append( item );
+    preferencesMenu->Append( item );
     SETBITMAPS( window_close_xpm );
 
-    configmenu->AppendSeparator();
-    ADD_MENUITEM_WITH_HELP( configmenu, ID_CONFIG_SAVE,
+    // Separator
+    preferencesMenu->AppendSeparator();
+    ADD_MENUITEM_WITH_HELP( preferencesMenu, ID_CONFIG_SAVE,
                     _( "&Save Project File" ),
                     _( "Save changes to the project file" ),
                     save_setup_xpm );
@@ -85,25 +107,23 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
 
+    // Version info
     AddHelpVersionInfoMenuEntry( helpMenu );
 
+    // Contents
     ADD_MENUITEM_WITH_HELP( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
                            _( "Open the cvpcb manual" ),
                             online_help_xpm );
 
-    /* About on all platforms except WXMAC */
-#if !defined(__WXMAC__)
-
-    ADD_MENUITEM_WITH_HELP( helpMenu, ID_KICAD_ABOUT,
-                           _( "&About" ),
-                           _( "About cvpcb schematic to pcb converter" ),
+    // About
+    ADD_MENUITEM_WITH_HELP( helpMenu, wxID_ABOUT,
+                           _( "&About CvPCB" ),
+                           _( "About CvPCB schematic to pcb converter" ),
                             info_xpm );
-
-#endif /* !defined(__WXMAC__) */
 
     // Create the menubar and append all submenus
     menuBar->Append( filesMenu, _( "&File" ) );
-    menuBar->Append( configmenu, _( "&Preferences" ) );
+    menuBar->Append( preferencesMenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     menuBar->Thaw();

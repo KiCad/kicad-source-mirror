@@ -4,6 +4,13 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-Apr-6, UPDATE Jerry Jacobs <xor.gate.engineering@gmail.com>
+================================================================================
+Cleanup of all the menubar code to have the same style, remove the C comments.
+Make the wxMenu behave native on OSX for KiCad, CvPCB and Gerbview and remove
+unneeded ifdefs when using the wxIDs. Add a OnQuit for the gerber frame.
+Change item->SetBitmap( item ) to use macro SET_BITMAP for menu items.
+
 2011-Apr-4, UPDATE Jerry Jacobs <xor.gate.engineering@gmail.com>
 ================================================================================
 More native OSX changes, this removes some WXMAC defines replaced by wxID

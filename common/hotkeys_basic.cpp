@@ -673,3 +673,4 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
                                         ID_PREFERENCES_HOTKEY_SUBMENU, _( "Hotkeys" ),
                                         _( "Hotkeys configuration and preferences" ), hotkeys_xpm );
 }
+

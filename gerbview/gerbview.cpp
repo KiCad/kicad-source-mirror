@@ -64,11 +64,6 @@ bool WinEDA_App::OnInit()
     wxFileName          fn;
     GERBVIEW_FRAME* frame = NULL;
 
-#ifdef __WXMAC__
-    wxApp::s_macAboutMenuItemId = ID_KICAD_ABOUT;
-    wxApp::s_macPreferencesMenuItemId = ID_GERBVIEW_OPTIONS_SETUP;
-#endif /* __WXMAC__ */
-
     InitEDA_Appl( wxT( "GerbView" ), APP_TYPE_GERBVIEW );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )

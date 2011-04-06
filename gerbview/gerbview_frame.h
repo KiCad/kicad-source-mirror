@@ -308,6 +308,16 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      */
     void OnSelectDisplayMode( wxCommandEvent& event );
 
+    /**
+     * Function OnQuit
+     * called on request of application quit
+     */
+    void OnQuit( wxCommandEvent& event );
+
+    /**
+     * Function OnHotKey
+     * called when on hotkey trigger
+     */
     void OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     GERBER_DRAW_ITEM* GerberGeneralLocateAndDisplay();

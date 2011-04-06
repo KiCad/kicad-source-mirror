@@ -38,7 +38,7 @@ EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, GERBVIEW_FRAME::OnGbrFileHistory )
 EVT_MENU_RANGE( ID_GERBVIEW_DRILL_FILE1, ID_GERBVIEW_DRILL_FILE9,
                 GERBVIEW_FRAME::OnDrlFileHistory )
 
-EVT_MENU( ID_EXIT, GERBVIEW_FRAME::Process_Special_Functions )
+EVT_MENU( wxID_EXIT, GERBVIEW_FRAME::OnQuit )
 
 // menu Preferences
 EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
@@ -46,7 +46,7 @@ EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
 
 EVT_MENU( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
           GERBVIEW_FRAME::OnSelectOptionToolbar )
-EVT_MENU( ID_GERBVIEW_OPTIONS_SETUP, GERBVIEW_FRAME::InstallGerberOptionsDialog )
+EVT_MENU( wxID_PREFERENCES, GERBVIEW_FRAME::InstallGerberOptionsDialog )
 
 EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, EDA_DRAW_FRAME::SetLanguage )
 
@@ -61,7 +61,7 @@ EVT_MENU( ID_GERBVIEW_GLOBAL_DELETE, GERBVIEW_FRAME::Process_Special_Functions )
 
 // Menu Help
 EVT_MENU( ID_GENERAL_HELP, EDA_DRAW_FRAME::GetKicadHelp )
-EVT_MENU( ID_KICAD_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
+EVT_MENU( wxID_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
 
 EVT_TOOL( wxID_CUT, GERBVIEW_FRAME::Process_Special_Functions )
 EVT_TOOL( wxID_COPY, GERBVIEW_FRAME::Process_Special_Functions )
@@ -147,10 +147,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_EXIT:
-        Close( true );
-        break;
-
     case ID_GERBVIEW_GLOBAL_DELETE:
         Erase_Current_Layer( true );
         ClearMsgPanel();
@@ -277,6 +273,10 @@ void GERBVIEW_FRAME::OnSelectDisplayMode( wxCommandEvent& event )
         DrawPanel->Refresh();
 }
 
+void GERBVIEW_FRAME::OnQuit( wxCommandEvent& event )
+{
+    Close( true );
+}
 
 /**
  * Function SetLanguage

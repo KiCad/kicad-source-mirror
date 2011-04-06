@@ -1,6 +1,6 @@
 /**
  * @file kicad/menubar.cpp
- * @brief Project manager menubars and toolbars
+ * @brief (Re)Create the project manager menubar for KiCad
  */
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -70,6 +70,7 @@ END_EVENT_TABLE()
  */
 void WinEDA_MainFrame::ReCreateMenuBar()
 {
+    // Create and try to get the current  menubar
     wxMenuItem* item;
     wxMenuBar*  menuBar = GetMenuBar();
 
@@ -84,72 +85,86 @@ void WinEDA_MainFrame::ReCreateMenuBar()
 
     // Recreate all menus:
 
-    // Files menu
-    wxMenu* filesMenu = new wxMenu;
+    // Menu File:
+    wxMenu* fileMenu = new wxMenu;
 
     // Open
-    ADD_MENUITEM_WITH_HELP( filesMenu, ID_LOAD_PROJECT, _( "&Open\tCtrl+O" ),
+    ADD_MENUITEM_WITH_HELP( fileMenu,
+                            ID_LOAD_PROJECT,
+                            _( "&Open\tCtrl+O" ),
                             _( "Open an existing project" ),
                             open_project_xpm );
 
     // Open Recent submenu
     wxMenu* openRecentMenu = new wxMenu();
     wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu,
-                                        wxID_ANY, _( "Open &Recent" ),
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( fileMenu, openRecentMenu,
+                                        wxID_ANY,
+                                        _( "Open &Recent" ),
                                         _( "Open a recent opened schematic project" ),
                                         open_project_xpm );
 
     // New
-    ADD_MENUITEM_WITH_HELP( filesMenu, ID_NEW_PROJECT,
+    ADD_MENUITEM_WITH_HELP( fileMenu, ID_NEW_PROJECT,
                             _( "&New\tCtrl+N" ),
                             _( "Start a new project" ),
                             new_project_xpm );
 
-    /* Save */
-    ADD_MENUITEM_WITH_HELP( filesMenu, ID_SAVE_PROJECT, _( "&Save\tCtrl+S" ),
+    // Save
+    ADD_MENUITEM_WITH_HELP( fileMenu,
+                            ID_SAVE_PROJECT,
+                            _( "&Save\tCtrl+S" ),
                             _( "Save current project" ),
                             save_project_xpm );
 
     // Archive
-    filesMenu->AppendSeparator();
-    ADD_MENUITEM_WITH_HELP( filesMenu, ID_SAVE_AND_ZIP_FILES, _( "&Archive" ),
+    fileMenu->AppendSeparator();
+    ADD_MENUITEM_WITH_HELP( fileMenu, 
+                            ID_SAVE_AND_ZIP_FILES,
+                            _( "&Archive" ),
                             _( "Archive project files in zip archive" ),
                             zip_xpm );
 
     // Unarchive
-    ADD_MENUITEM_WITH_HELP( filesMenu, ID_READ_ZIP_ARCHIVE, _( "&Unarchive" ),
+    ADD_MENUITEM_WITH_HELP( fileMenu,
+                            ID_READ_ZIP_ARCHIVE,
+                            _( "&Unarchive" ),
                             _( "Unarchive project files from zip file" ),
                             unzip_xpm );
 
-    // Quit
-    filesMenu->AppendSeparator();
+    // Separator
+    fileMenu->AppendSeparator();
 
-    ADD_MENUITEM_WITH_HELP( filesMenu, wxID_EXIT, _( "&Quit" ),
+    // Quit
+    ADD_MENUITEM_WITH_HELP( fileMenu,
+                            wxID_EXIT,
+                            _( "&Quit" ),
                             _( "Quit KiCad" ),
                             exit_xpm );
 
-    // Browse menu
+    // Menu Browse:
     wxMenu* browseMenu = new wxMenu();
 
     // Text editor
-    ADD_MENUITEM_WITH_HELP( browseMenu, ID_TO_EDITOR,
+    ADD_MENUITEM_WITH_HELP( browseMenu,
+                            ID_TO_EDITOR,
                             _( "Text E&ditor" ),
                             _( "Launch preferred text editor" ),
                             editor_xpm );
 
     // View file
-    ADD_MENUITEM_WITH_HELP( browseMenu, ID_BROWSE_AN_SELECT_FILE,
+    ADD_MENUITEM_WITH_HELP( browseMenu,
+                            ID_BROWSE_AN_SELECT_FILE,
                             _( "&View File" ),
                             _( "View, read or edit file with a text editor" ),
                             browse_files_xpm );
 
-
-    // Preferences menu
-    wxMenu* PreferencesMenu = new wxMenu;
+    // Menu Preferences:
+    wxMenu* preferencesMenu = new wxMenu;
 
     // Text editor
-    ADD_MENUITEM_WITH_HELP( PreferencesMenu, ID_SELECT_PREFERED_EDITOR,
+    ADD_MENUITEM_WITH_HELP( preferencesMenu,
+                            ID_SELECT_PREFERED_EDITOR,
                             _( "&Text Editor" ),
                             _( "Select your preferred text editor" ),
                             editor_xpm );
@@ -191,36 +206,44 @@ void WinEDA_MainFrame::ReCreateMenuBar()
                             _( "Select your favourite PDF viewer used to browse datasheets" ),
                             datasheet_xpm );
 
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( PreferencesMenu,
-                                        SubMenuPdfBrowserChoice,
-                                        -1, _( "PDF Viewer" ),
+    // PDF viewer submenu
+    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( preferencesMenu,
+                                        SubMenuPdfBrowserChoice, -1,
+                                        _( "PDF Viewer" ),
                                         _( "PDF viewer preferences" ),
                                         datasheet_xpm );
 
-    // Add languages list:
-    PreferencesMenu->AppendSeparator();
-    wxGetApp().AddMenuLanguageList( PreferencesMenu );
+    // Language submenu
+    preferencesMenu->AppendSeparator();
+    wxGetApp().AddMenuLanguageList( preferencesMenu );
 
-    // Help menu
+    // Menu Help:
     wxMenu* helpMenu = new wxMenu;
-
+ 
+    // Version info
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
-    ADD_MENUITEM_WITH_HELP( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
+    ADD_MENUITEM_WITH_HELP( helpMenu,
+                            ID_GENERAL_HELP,
+                            _( "&Contents" ),
                             _( "Open the kicad manual" ),
                             online_help_xpm );
 
-    // About
+    // Separator
     helpMenu->AppendSeparator();
-    ADD_MENUITEM_WITH_HELP( helpMenu, wxID_ABOUT, _( "&About" ),
+
+    // About
+    ADD_MENUITEM_WITH_HELP( helpMenu,
+                            wxID_ABOUT,
+                            _( "&About KiCad" ),
                             _( "About kicad project manager" ),
                             info_xpm );
 
     // Create the menubar and append all submenus
-    menuBar->Append( filesMenu, _( "&File" ) );
+    menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( browseMenu, _( "&Browse" ) );
-    menuBar->Append( PreferencesMenu, _( "&Preferences" ) );
+    menuBar->Append( preferencesMenu, _( "&Preferences" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     menuBar->Thaw();
@@ -238,44 +261,44 @@ void WinEDA_MainFrame::ReCreateMenuBar()
  */
 void WinEDA_MainFrame::RecreateBaseHToolbar()
 {
-    /* Check if toolbar is not already created */
+    // Check if toolbar is not already created
     if( m_HToolBar != NULL )
         return;
 
-    /* Allocate memory for m_HToolBar */
+    // Allocate memory for m_HToolBar
     m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
-    /* New */
+    // New
     m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
                         wxBitmap( new_project_xpm ),
                         _( "Start a new project" ) );
 
-    /* Load */
+    // Load
     m_HToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString,
                         wxBitmap( open_project_xpm ),
                         _( "Load existing project" ) );
 
-    /* Save */
+    // Save
     m_HToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,
                         wxBitmap( save_project_xpm ),
                         _( "Save current project" ) );
 
-    /* Separator */
+    // Separator
     m_HToolBar->AddSeparator();
 
-    /* Archive */
+    // Archive
     m_HToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
                         wxBitmap( zip_xpm ),
                         _( "Archive all project files" ) );
 
-    /* Separator */
+    // Separator
     m_HToolBar->AddSeparator();
 
-    /* Refresh project tree */
+    // Refresh project tree
     m_HToolBar->AddTool( ID_PROJECT_TREE_REFRESH, wxEmptyString,
                         wxBitmap( reload_xpm ),
                         _( "Refresh project tree" ) );
 
-    /* Create m_HToolBar */
+    // Create m_HToolBar
     m_HToolBar->Realize();
 }
