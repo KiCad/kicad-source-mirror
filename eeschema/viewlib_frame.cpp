@@ -83,13 +83,13 @@ static wxAcceleratorEntry accels[] =
 
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaphore* semaphore ) :
-    EDA_DRAW_FRAME( father, VIEWER_FRAME, _( "Library browser" ),
-    wxDefaultPosition, wxDefaultSize )
+    EDA_DRAW_FRAME( father, VIEWER_FRAME, _( "Library Browser" ),
+                    wxDefaultPosition, wxDefaultSize )
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
     m_FrameName = wxT( "ViewlibFrame" );
-    m_ConfigPath =  wxT( "LibraryViewer" );
+    m_ConfigPath = wxT( "LibraryViewer" );
 
     // Give an icon
     SetIcon( wxIcon( library_browse_xpm ) );
@@ -103,7 +103,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     m_exportToEeschemaCmpName.Empty();
 
     if( m_Semaphore )
-        SetWindowStyle( GetWindowStyle() | wxSTAY_ON_TOP );
+        SetWindowStyle( GetWindowStyle() | wxFRAME_FLOAT_ON_PARENT );
 
     SetScreen( new SCH_SCREEN() );
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
@@ -251,6 +251,16 @@ void LIB_VIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
         m_Semaphore->Post();
 
     Destroy();
+
+    if( m_Semaphore )
+    {
+        // Raise EESchema above all other windows when the library viewer is being used
+        // to select a component.
+        wxWindow* parent = GetParent();
+
+        if( parent )
+            parent->Raise();
+    }
 }
 
 
