@@ -376,6 +376,9 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
     if( m_LibeditFrame && !m_LibeditFrame->Close() )   // Can close component editor?
         return;
 
+    if( m_ViewlibFrame && !m_ViewlibFrame->Close() )   // Can close component viewer?
+        return;
+
     SCH_SHEET_LIST SheetList;
 
     if( SheetList.IsModified() )

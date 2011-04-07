@@ -7,8 +7,11 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent ) :
     DIALOG_LIB_EDIT_PIN_BASE( parent )
 {
     /* Required to make escape key work correctly in wxGTK. */
-    m_textName->SetFocus();
-    m_sdbSizer1OK->SetDefault();
+    SetFocus();
+    // Set tab order
+    m_textPinName-> MoveAfterInTabOrder(this);
+    m_textPadName-> MoveAfterInTabOrder(m_textPinName);
+    m_sdbSizerButtonsOK->SetDefault();
 }
 
 

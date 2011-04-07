@@ -61,11 +61,11 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
                                                 pin->m_PinNameSize,
                                                 m_InternalUnits ) );
     dlg.SetNameTextSizeUnits( units );
-    dlg.SetNumber( pin->GetNumberString() );
-    dlg.SetNumberTextSize( ReturnStringFromValue( g_UserUnit,
+    dlg.SetPadName( pin->GetNumberString() );
+    dlg.SetPadNameTextSize( ReturnStringFromValue( g_UserUnit,
                                                   pin->m_PinNumSize,
                                                   m_InternalUnits ) );
-    dlg.SetNumberTextSizeUnits( units );
+    dlg.SetPadNameTextSizeUnits( units );
     dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->GetLength(), m_InternalUnits ) );
     dlg.SetLengthUnits( units );
     dlg.SetAddToAllParts( pin->GetUnit() == 0 );
@@ -94,7 +94,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
 
     /* Save the pin properties to use for the next new pin. */
     LastPinNameSize = ReturnValueFromString( g_UserUnit, dlg.GetNameTextSize(), m_InternalUnits );
-    LastPinNumSize = ReturnValueFromString( g_UserUnit, dlg.GetNumberTextSize(), m_InternalUnits );
+    LastPinNumSize = ReturnValueFromString( g_UserUnit, dlg.GetPadNameTextSize(), m_InternalUnits );
     LastPinOrient = LIB_PIN::GetOrientationCode( dlg.GetOrientation() );
     LastPinLength = ReturnValueFromString( g_UserUnit, dlg.GetLength(), m_InternalUnits );
     LastPinShape = LIB_PIN::GetStyleCode( dlg.GetStyle() );
@@ -106,7 +106,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     pin->EnableEditMode( true, g_EditPinByPinIsOn );
     pin->SetName( dlg.GetName() );
     pin->SetNameTextSize( LastPinNameSize );
-    pin->SetNumber( dlg.GetNumber() );
+    pin->SetNumber( dlg.GetPadName() );
     pin->SetNumberTextSize( LastPinNumSize );
     pin->SetOrientation( LastPinOrient );
     pin->SetLength( LastPinLength );

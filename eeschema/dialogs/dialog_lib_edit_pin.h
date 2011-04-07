@@ -38,16 +38,16 @@ public:
     void SetStyle( int style ) { m_choiceStyle->SetSelection( style ); }
     int GetStyle( void ) { return m_choiceStyle->GetSelection(); }
 
-    void SetName( const wxString& name ) { m_textName->SetValue( name ); }
-    wxString GetName( void ) { return m_textName->GetValue(); }
+    void SetName( const wxString& name ) { m_textPinName->SetValue( name ); }
+    wxString GetName( void ) { return m_textPinName->GetValue(); }
 
     void SetNameTextSize( const wxString& size )
     {
-        m_textNameTextSize->SetValue( size );
+        m_textPinNameTextSize->SetValue( size );
     }
     wxString GetNameTextSize( void )
     {
-        return m_textNameTextSize->GetValue();
+        return m_textPinNameTextSize->GetValue();
     }
 
     void SetNameTextSizeUnits( const wxString& units )
@@ -55,22 +55,22 @@ public:
         m_staticNameTextSizeUnits->SetLabel( units );
     }
 
-    void SetNumber( const wxString& number )
+    void SetPadName( const wxString& number )
     {
-        m_textNumber->SetValue( number );
+        m_textPadName->SetValue( number );
     }
-    wxString GetNumber( void ) { return m_textNumber->GetValue(); }
+    wxString GetPadName( void ) { return m_textPadName->GetValue(); }
 
-    void SetNumberTextSize( const wxString& size )
+    void SetPadNameTextSize( const wxString& size )
     {
-        m_textNumberTextSize->SetValue( size );
+        m_textPadNameTextSize->SetValue( size );
     }
-    wxString GetNumberTextSize( void )
+    wxString GetPadNameTextSize( void )
     {
-        return m_textNumberTextSize->GetValue();
+        return m_textPadNameTextSize->GetValue();
     }
 
-    void SetNumberTextSizeUnits( const wxString& units )
+    void SetPadNameTextSizeUnits( const wxString& units )
     {
         m_staticNumberTextSizeUnits->SetLabel( units );
     }

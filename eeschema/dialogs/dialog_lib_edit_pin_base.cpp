@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Nov 17 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -27,53 +27,53 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 	
-	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Pin &name:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	fgSizer1->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_staticTextPinName = new wxStaticText( this, wxID_ANY, _("Pin &name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPinName->Wrap( -1 );
+	fgSizer1->Add( m_staticTextPinName, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_textName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textName, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	m_textPinName = new wxTextCtrl( this, ID_M_TEXTPINNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_textPinName, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
 	
-	m_staticText2 = new wxStaticText( this, wxID_ANY, _("N&ame text size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	fgSizer1->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_staticTextNameSize = new wxStaticText( this, wxID_ANY, _("N&ame text size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNameSize->Wrap( -1 );
+	fgSizer1->Add( m_staticTextNameSize, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_textNameTextSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textNameTextSize, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_textPinNameTextSize = new wxTextCtrl( this, ID_M_TEXTPINNAMETEXTSIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_textPinNameTextSize, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_staticNameTextSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticNameTextSizeUnits->Wrap( -1 );
 	fgSizer1->Add( m_staticNameTextSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Pin n&umber:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	m_staticText4->SetToolTip( _("Pin number: 1 to 4 ASCII letters and/or digits") );
+	m_staticTextPadName = new wxStaticText( this, ID_M_STATICTEXTPADNAME, _("Pin n&umber:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPadName->Wrap( -1 );
+	m_staticTextPadName->SetToolTip( _("Pin number: 1 to 4 ASCII letters and/or digits") );
 	
-	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	fgSizer1->Add( m_staticTextPadName, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_textNumber = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textNumber, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
+	m_textPadName = new wxTextCtrl( this, ID_M_TEXTPADNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_textPadName, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 3 );
 	
 	
 	fgSizer1->Add( 0, 0, 1, wxEXPAND, 3 );
 	
-	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Number te&xt size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText9->Wrap( -1 );
-	fgSizer1->Add( m_staticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_staticTextPadNameSize = new wxStaticText( this, wxID_ANY, _("Number te&xt size:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPadNameSize->Wrap( -1 );
+	fgSizer1->Add( m_staticTextPadNameSize, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_textNumberTextSize = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_textNumberTextSize, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_textPadNameTextSize = new wxTextCtrl( this, ID_M_TEXTPADNAMETEXTSIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_textPadNameTextSize, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_staticNumberTextSizeUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticNumberTextSizeUnits->Wrap( -1 );
 	fgSizer1->Add( m_staticNumberTextSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _("&Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	fgSizer1->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_staticTextOrient = new wxStaticText( this, wxID_ANY, _("&Orientation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOrient->Wrap( -1 );
+	fgSizer1->Add( m_staticTextOrient, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_choiceOrientation = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	fgSizer1->Add( m_choiceOrientation, 0, wxALL, 5 );
@@ -81,9 +81,9 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	fgSizer1->Add( 15, 0, 1, wxEXPAND, 3 );
 	
-	m_staticText11 = new wxStaticText( this, wxID_ANY, _("&Length:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText11->Wrap( -1 );
-	fgSizer1->Add( m_staticText11, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_staticTextPinLen = new wxStaticText( this, ID_M_STATICTEXTPINLEN, _("&Length:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPinLen->Wrap( -1 );
+	fgSizer1->Add( m_staticTextPinLen, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_textLength = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_textLength, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
@@ -92,11 +92,11 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_staticLengthUnits->Wrap( -1 );
 	fgSizer1->Add( m_staticLengthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_staticText6 = new wxStaticText( this, wxID_ANY, _("&Electrical type:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText6->Wrap( -1 );
-	m_staticText6->SetToolTip( _("Used by the ERC.") );
+	m_staticTextEType = new wxStaticText( this, wxID_ANY, _("&Electrical type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextEType->Wrap( -1 );
+	m_staticTextEType->SetToolTip( _("Used by the ERC.") );
 	
-	fgSizer1->Add( m_staticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	fgSizer1->Add( m_staticTextEType, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_choiceElectricalType = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	fgSizer1->Add( m_choiceElectricalType, 0, wxALL, 5 );
@@ -113,9 +113,9 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	fgSizer1->Add( 0, 0, 0, wxEXPAND, 3 );
 	
-	m_staticText7 = new wxStaticText( this, wxID_ANY, _("Graphic &Style:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText7->Wrap( -1 );
-	fgSizer1->Add( m_staticText7, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	m_staticTextGstyle = new wxStaticText( this, wxID_ANY, _("Graphic &Style:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextGstyle->Wrap( -1 );
+	fgSizer1->Add( m_staticTextGstyle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_choiceStyle = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
 	fgSizer1->Add( m_choiceStyle, 0, wxALL, 5 );
@@ -147,13 +147,13 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	
 	boarderSizer->Add( 0, 5, 0, wxALL|wxEXPAND, 10 );
 	
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
-	boarderSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 0 );
+	m_sdbSizerButtons = new wxStdDialogButtonSizer();
+	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );
+	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsOK );
+	m_sdbSizerButtonsCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
+	m_sdbSizerButtons->Realize();
+	boarderSizer->Add( m_sdbSizerButtons, 0, wxALL|wxEXPAND, 0 );
 	
 	mainSizer->Add( boarderSizer, 0, wxALL|wxEXPAND, 12 );
 	

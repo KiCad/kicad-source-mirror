@@ -113,6 +113,7 @@ void EDA_BASE_FRAME::LoadSettings()
 
     config = wxGetApp().m_EDA_Config;
 
+    int maximized = 0;
     if( config )
     {
         text = m_FrameName + wxT( "Pos_x" );
@@ -123,6 +124,8 @@ void EDA_BASE_FRAME::LoadSettings()
         config->Read( text, &m_FrameSize.x, 600 );
         text = m_FrameName + wxT( "Size_y" );
         config->Read( text, &m_FrameSize.y, 400 );
+        text = m_FrameName + wxT( "Maximized" );
+        config->Read( text, &maximized, 0 );
     }
 
     // Ensure Window title bar is visible
@@ -135,6 +138,9 @@ void EDA_BASE_FRAME::LoadSettings()
 #endif
     if( m_FramePos.y < Ypos_min )
         m_FramePos.y = Ypos_min;
+
+    if( maximized )
+        Maximize();
 }
 
 
@@ -166,6 +172,8 @@ void EDA_BASE_FRAME::SaveSettings()
     config->Write( text, (long) m_FrameSize.x );
     text = m_FrameName + wxT( "Size_y" );
     config->Write( text, (long) m_FrameSize.y );
+    text = m_FrameName + wxT( "Maximized" );
+    config->Write( text, IsMaximized() );
 }
 
 
