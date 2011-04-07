@@ -128,7 +128,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
         m_auimgr.AddPane( MsgPanel,
                           wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
-    ReFillLayerWidget();    // this is near end because contents establish size
+    ReFillLayerWidget();                // this is near end because contents establish size
+    m_LayersManager->ReFillRender();    // Update colors in Render after the config is read
     m_auimgr.Update();
 }
 

@@ -50,32 +50,7 @@ GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFo
     LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
     myframe( aParent )
 {
-    BOARD*  board = myframe->GetBoard();
-
-    // Fixed "Rendering" tab rows within the LAYER_WIDGET, only the initial color
-    // is changed before appending to the LAYER_WIDGET.  This is an automatic variable
-    // not a static variable, change the color & state after copying from code to renderRows
-    // on the stack.
-    LAYER_WIDGET::ROW renderRows[2] = {
-
-#define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
-
-             // text                id                      color       tooltip                 checked
-        RR( _( "Grid" ),            GERBER_GRID_VISIBLE,    WHITE,      _( "Show the (x,y) grid dots" ) ),
-        RR( _( "DCodes" ),          DCODES_VISIBLE,         WHITE,      _( "Show DCodes identification" ) ),
-    };
-
-    for( unsigned row=0;  row<DIM(renderRows);  ++row )
-    {
-        if( renderRows[row].color != -1 )       // does this row show a color?
-        {
-            // this window frame must have an established BOARD, i.e. after SetBoard()
-            renderRows[row].color = board->GetVisibleElementColor( renderRows[row].id );
-        }
-        renderRows[row].state = board->IsElementVisible( renderRows[row].id );
-    }
-
-    AppendRenderRows( renderRows, DIM(renderRows) );
+    ReFillRender();
 
     // Update default tabs labels for gerbview
     SetLayersManagerTabsText( );
@@ -105,6 +80,40 @@ void GERBER_LAYER_WIDGET::SetLayersManagerTabsText( )
     m_notebook->SetPageText(1, _("Render") );
 }
 
+/**
+ * Function ReFillRender
+ * Rebuild Render for instance after the config is read
+ */
+void GERBER_LAYER_WIDGET::ReFillRender()
+{
+    BOARD*  board = myframe->GetBoard();
+    ClearRenderRows();
+
+    // Fixed "Rendering" tab rows within the LAYER_WIDGET, only the initial color
+    // is changed before appending to the LAYER_WIDGET.  This is an automatic variable
+    // not a static variable, change the color & state after copying from code to renderRows
+    // on the stack.
+    LAYER_WIDGET::ROW renderRows[2] = {
+
+#define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
+
+             // text                id                      color       tooltip                 checked
+        RR( _( "Grid" ),            GERBER_GRID_VISIBLE,    WHITE,      _( "Show the (x,y) grid dots" ) ),
+        RR( _( "DCodes" ),          DCODES_VISIBLE,         WHITE,      _( "Show DCodes identification" ) ),
+    };
+
+    for( unsigned row=0;  row<DIM(renderRows);  ++row )
+    {
+        if( renderRows[row].color != -1 )       // does this row show a color?
+        {
+            // this window frame must have an established BOARD, i.e. after SetBoard()
+            renderRows[row].color = board->GetVisibleElementColor( renderRows[row].id );
+        }
+        renderRows[row].state = board->IsElementVisible( renderRows[row].id );
+    }
+
+    AppendRenderRows( renderRows, DIM(renderRows) );
+}
 
 void GERBER_LAYER_WIDGET::installRightLayerClickHandler()
 {

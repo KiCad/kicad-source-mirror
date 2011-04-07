@@ -71,6 +71,12 @@ public:
 
     void ReFill();
 
+    /**
+     * Function ReFillRender
+     * Rebuild Render for instance after the config is read
+     */
+    void ReFillRender();
+
     //-----<implement LAYER_WIDGET abstract callback functions>-----------
     void OnLayerColorChange( int aLayer, int aColor );
     bool OnLayerSelect( int aLayer );

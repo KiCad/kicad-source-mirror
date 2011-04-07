@@ -400,7 +400,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
         m_auimgr.AddPane( MsgPanel,
                           wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
-    ReFillLayerWidget();    // this is near end because contents establish size
+    ReFillLayerWidget();        // this is near end because contents establish size
+    m_Layers->ReFillRender();   // Update colors in Render after the config is read
     syncLayerWidget();
     m_auimgr.Update();
 

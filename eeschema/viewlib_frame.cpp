@@ -83,7 +83,8 @@ static wxAcceleratorEntry accels[] =
 
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaphore* semaphore ) :
-    EDA_DRAW_FRAME( father, VIEWER_FRAME, _( "Library browser" ), wxDefaultPosition, wxDefaultSize )
+    EDA_DRAW_FRAME( father, VIEWER_FRAME, _( "Library browser" ),
+    wxDefaultPosition, wxDefaultSize )
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
@@ -99,6 +100,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     m_LibListWindow = NULL;
     m_CmpListWindow = NULL;
     m_Semaphore     = semaphore;
+    m_exportToEeschemaCmpName.Empty();
 
     if( m_Semaphore )
         SetWindowStyle( GetWindowStyle() | wxSTAY_ON_TOP );
@@ -148,8 +150,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
         m_convert = 1;
         m_LibListSize.x = 0;
     }
-
-    m_exportToEeschemaCmpName.Clear();
 
     // Creates the component window display
     m_CmpListSize.y = size.y;

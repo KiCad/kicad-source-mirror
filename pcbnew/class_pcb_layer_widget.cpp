@@ -55,49 +55,7 @@ PCB_LAYER_WIDGET::PCB_LAYER_WIDGET( PCB_EDIT_FRAME* aParent, wxWindow* aFocusOwn
     LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
     myframe( aParent )
 {
-    BOARD*  board = myframe->GetBoard();
-
-    // Fixed "Rendering" tab rows within the LAYER_WIDGET, only the initial color
-    // is changed before appending to the LAYER_WIDGET.  This is an automatic variable
-    // not a static variable, change the color & state after copying from code to renderRows
-    // on the stack.
-    LAYER_WIDGET::ROW renderRows[16] = {
-
-#define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
-
-             // text                id                      color       tooltip                 checked
-        RR( _( "Through Via" ),     VIA_THROUGH_VISIBLE,    WHITE,      _( "Show through vias" ) ),
-        RR( _( "Bl/Buried Via" ),   VIA_BBLIND_VISIBLE,     WHITE,      _( "Show blind or buried vias" )  ),
-        RR( _( "Micro Via" ),       VIA_MICROVIA_VISIBLE,   WHITE,      _( "Show micro vias") ),
-        RR( _( "Ratsnest" ),        RATSNEST_VISIBLE,       WHITE,      _( "Show unconnected nets as a ratsnest") ),
-
-        RR( _( "Pads Front" ),      PAD_FR_VISIBLE,         WHITE,      _( "Show footprint pads on board's front" ) ),
-        RR( _( "Pads Back" ),       PAD_BK_VISIBLE,         WHITE,      _( "Show footprint pads on board's back" ) ),
-
-        RR( _( "Text Front" ),      MOD_TEXT_FR_VISIBLE,    WHITE,      _( "Show footprint text on board's back" ) ),
-        RR( _( "Text Back" ),       MOD_TEXT_BK_VISIBLE,    WHITE,      _( "Show footprint text on board's back" ) ),
-        RR( _( "Hidden Text" ),     MOD_TEXT_INVISIBLE,     WHITE,      _( "Show footprint text marked as invisible" ) ),
-
-        RR( _( "Anchors" ),         ANCHOR_VISIBLE,         WHITE,      _( "Show footprint and text origins as a cross" ) ),
-        RR( _( "Grid" ),            GRID_VISIBLE,           WHITE,      _( "Show the (x,y) grid dots" ) ),
-        RR( _( "No-Connects" ),     NO_CONNECTS_VISIBLE,    -1,         _( "Show a marker on pads which have no net connected" ) ),
-        RR( _( "Modules Front" ),   MOD_FR_VISIBLE,         -1,         _( "Show footprints that are on board's front") ),
-        RR( _( "Modules Back" ),    MOD_BK_VISIBLE,         -1,         _( "Show footprints that are on board's back") ),
-        RR( _( "Values" ),          MOD_VALUES_VISIBLE,     -1,         _( "Show footprint's values") ),
-        RR( _( "References" ),      MOD_REFERENCES_VISIBLE, -1,         _( "Show footprint's references") ),
-    };
-
-    for( unsigned row=0;  row<DIM(renderRows);  ++row )
-    {
-        if( renderRows[row].color != -1 )       // does this row show a color?
-        {
-            // this window frame must have an established BOARD, i.e. after SetBoard()
-            renderRows[row].color = board->GetVisibleElementColor( renderRows[row].id );
-        }
-        renderRows[row].state = board->IsElementVisible( renderRows[row].id );
-    }
-
-    AppendRenderRows( renderRows, DIM(renderRows) );
+    ReFillRender();
 
     // Update default tabs labels for gerbview
     SetLayersManagerTabsText( );
@@ -210,6 +168,56 @@ void PCB_LAYER_WIDGET::SetLayersManagerTabsText( )
     m_notebook->SetPageText(1, _("Render") );
 }
 
+/**
+ * Function ReFillRender
+ * Rebuild Render for instance after the config is read
+ */
+void PCB_LAYER_WIDGET::ReFillRender()
+{
+    BOARD*  board = myframe->GetBoard();
+    ClearRenderRows();
+    // Fixed "Rendering" tab rows within the LAYER_WIDGET, only the initial color
+    // is changed before appending to the LAYER_WIDGET.  This is an automatic variable
+    // not a static variable, change the color & state after copying from code to renderRows
+    // on the stack.
+    LAYER_WIDGET::ROW renderRows[16] = {
+
+#define RR  LAYER_WIDGET::ROW   // Render Row abreviation to reduce source width
+
+             // text                id                      color       tooltip                 checked
+        RR( _( "Through Via" ),     VIA_THROUGH_VISIBLE,    WHITE,      _( "Show through vias" ) ),
+        RR( _( "Bl/Buried Via" ),   VIA_BBLIND_VISIBLE,     WHITE,      _( "Show blind or buried vias" )  ),
+        RR( _( "Micro Via" ),       VIA_MICROVIA_VISIBLE,   WHITE,      _( "Show micro vias") ),
+        RR( _( "Ratsnest" ),        RATSNEST_VISIBLE,       WHITE,      _( "Show unconnected nets as a ratsnest") ),
+
+        RR( _( "Pads Front" ),      PAD_FR_VISIBLE,         WHITE,      _( "Show footprint pads on board's front" ) ),
+        RR( _( "Pads Back" ),       PAD_BK_VISIBLE,         WHITE,      _( "Show footprint pads on board's back" ) ),
+
+        RR( _( "Text Front" ),      MOD_TEXT_FR_VISIBLE,    WHITE,      _( "Show footprint text on board's back" ) ),
+        RR( _( "Text Back" ),       MOD_TEXT_BK_VISIBLE,    WHITE,      _( "Show footprint text on board's back" ) ),
+        RR( _( "Hidden Text" ),     MOD_TEXT_INVISIBLE,     WHITE,      _( "Show footprint text marked as invisible" ) ),
+
+        RR( _( "Anchors" ),         ANCHOR_VISIBLE,         WHITE,      _( "Show footprint and text origins as a cross" ) ),
+        RR( _( "Grid" ),            GRID_VISIBLE,           WHITE,      _( "Show the (x,y) grid dots" ) ),
+        RR( _( "No-Connects" ),     NO_CONNECTS_VISIBLE,    -1,         _( "Show a marker on pads which have no net connected" ) ),
+        RR( _( "Modules Front" ),   MOD_FR_VISIBLE,         -1,         _( "Show footprints that are on board's front") ),
+        RR( _( "Modules Back" ),    MOD_BK_VISIBLE,         -1,         _( "Show footprints that are on board's back") ),
+        RR( _( "Values" ),          MOD_VALUES_VISIBLE,     -1,         _( "Show footprint's values") ),
+        RR( _( "References" ),      MOD_REFERENCES_VISIBLE, -1,         _( "Show footprint's references") ),
+    };
+
+    for( unsigned row=0;  row<DIM(renderRows);  ++row )
+    {
+        if( renderRows[row].color != -1 )       // does this row show a color?
+        {
+            // this window frame must have an established BOARD, i.e. after SetBoard()
+            renderRows[row].color = board->GetVisibleElementColor( renderRows[row].id );
+        }
+        renderRows[row].state = board->IsElementVisible( renderRows[row].id );
+    }
+
+    AppendRenderRows( renderRows, DIM(renderRows) );
+}
 
 void PCB_LAYER_WIDGET::ReFill()
 {
