@@ -391,7 +391,6 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     ClearFlags();
     frame->GetScreen()->SetCurItem( NULL );
     frame->OnModify();
-    frame->SetCurrentField( NULL );
 }
 
 

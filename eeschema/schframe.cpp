@@ -160,7 +160,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     m_Draw_Axis = FALSE;                // TRUE to show axis
     m_Draw_Sheet_Ref = TRUE;            // TRUE to show sheet references
     m_CurrentSheet   = new SCH_SHEET_PATH();
-    m_CurrentField   = NULL;
     m_Multiflag     = 0;
     m_TextFieldSize = DEFAULT_SIZE_TEXT;
     m_LibeditFrame  = NULL;         // Component editor frame.
@@ -368,6 +367,7 @@ void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem )
     aItem->SwapData( m_undoItem );
     SaveCopyInUndoList( aItem, UR_CHANGED );
     aItem->SwapData( m_undoItem );
+    m_undoItem = NULL;
 }
 
 

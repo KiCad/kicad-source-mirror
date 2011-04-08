@@ -24,12 +24,47 @@
 #include <boost/foreach.hpp>
 
 
-static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                             bool aErase );
-static void ExitPlaceCmp( EDA_DRAW_PANEL* Panel, wxDC* DC );
+/**
+ * Move a component.
+ */
+static void moveComponent( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                           bool aErase )
+{
+    SCH_SCREEN*    screen = (SCH_SCREEN*) aPanel->GetScreen();
+    SCH_COMPONENT* component = (SCH_COMPONENT*) screen->GetCurItem();
 
-static TRANSFORM OldTransform;
-static wxPoint   OldPos;
+    if( aErase )
+    {
+        component->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    }
+
+    component->Move( screen->GetCrossHairPosition() - component->m_Pos );
+    component->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+}
+
+
+/*
+ * Abort a place component command in progress.
+ */
+static void abortMoveComponent( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
+{
+    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
+    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
+    SCH_COMPONENT* component = (SCH_COMPONENT*) screen->GetCurItem();
+
+    if( component->IsNew() )
+    {
+        SAFE_DELETE( component );
+    }
+    else
+    {
+        component->SwapData( (SCH_COMPONENT*) frame->GetUndoItem() );
+        component->ClearFlags();
+    }
+
+    aPanel->Refresh( true );
+    screen->SetCurItem( NULL );
+}
 
 
 wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
@@ -75,11 +110,11 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     SCH_COMPONENT*  Component = NULL;
     CMP_LIBRARY*    Library   = NULL;
     wxString        Name, keys, msg;
-    bool            AllowWildSeach = TRUE;
+    bool            AllowWildSeach = true;
     static wxString lastCommponentName;
 
     m_itemToRepeat = NULL;
-    DrawPanel->m_IgnoreMouseEvents = TRUE;
+    DrawPanel->m_IgnoreMouseEvents = true;
 
     if( !libname.IsEmpty() )
     {
@@ -105,7 +140,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
     if ( dlg.ShowModal() == wxID_CANCEL )
     {
-        DrawPanel->m_IgnoreMouseEvents = FALSE;
+        DrawPanel->m_IgnoreMouseEvents = false;
         DrawPanel->MoveCursorToCrossHair();
         return NULL;
     }
@@ -123,7 +158,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
     if( Name.IsEmpty() )
     {
-        DrawPanel->m_IgnoreMouseEvents = FALSE;
+        DrawPanel->m_IgnoreMouseEvents = false;
         DrawPanel->MoveCursorToCrossHair();
         return NULL;
     }
@@ -134,35 +169,35 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
     if( Name.GetChar( 0 ) == '=' )
     {
-        AllowWildSeach = FALSE;
+        AllowWildSeach = false;
         keys = Name.AfterFirst( '=' );
         Name = DataBaseGetName( this, keys, Name );
 
         if( Name.IsEmpty() )
         {
-            DrawPanel->m_IgnoreMouseEvents = FALSE;
+            DrawPanel->m_IgnoreMouseEvents = false;
             DrawPanel->MoveCursorToCrossHair();
             return NULL;
         }
     }
     else if( Name == wxT( "*" ) )
     {
-        AllowWildSeach = FALSE;
+        AllowWildSeach = false;
 
         if( GetNameOfPartToLoad( this, Library, Name ) == 0 )
         {
-            DrawPanel->m_IgnoreMouseEvents = FALSE;
+            DrawPanel->m_IgnoreMouseEvents = false;
             DrawPanel->MoveCursorToCrossHair();
             return NULL;
         }
     }
     else if( Name.Contains( wxT( "?" ) ) || Name.Contains( wxT( "*" ) ) )
     {
-        AllowWildSeach = FALSE;
+        AllowWildSeach = false;
         Name = DataBaseGetName( this, keys, Name );
         if( Name.IsEmpty() )
         {
-            DrawPanel->m_IgnoreMouseEvents = FALSE;
+            DrawPanel->m_IgnoreMouseEvents = false;
             DrawPanel->MoveCursorToCrossHair();
             return NULL;
         }
@@ -172,7 +207,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
     if( ( Entry == NULL ) && AllowWildSeach ) /* Search with wildcard */
     {
-        AllowWildSeach = FALSE;
+        AllowWildSeach = false;
         wxString wildname = wxChar( '*' ) + Name + wxChar( '*' );
         Name = wildname;
         Name = DataBaseGetName( this, keys, Name );
@@ -182,13 +217,13 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
         if( Entry == NULL )
         {
-            DrawPanel->m_IgnoreMouseEvents = FALSE;
+            DrawPanel->m_IgnoreMouseEvents = false;
             DrawPanel->MoveCursorToCrossHair();
             return NULL;
         }
     }
 
-    DrawPanel->m_IgnoreMouseEvents = FALSE;
+    DrawPanel->m_IgnoreMouseEvents = false;
     DrawPanel->MoveCursorToCrossHair();
 
     if( Entry == NULL )
@@ -200,7 +235,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
     lastCommponentName = Name;
     AddHistoryComponentName( HistoryList, Name );
-    DrawPanel->SetMouseCapture( ShowWhileMoving, ExitPlaceCmp );
+    DrawPanel->SetMouseCapture( moveComponent, abortMoveComponent );
 
     Component = new SCH_COMPONENT( *Entry, GetSheet(), unit, convert,
                                    GetScreen()->GetCrossHairPosition(), true );
@@ -215,27 +250,6 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     Component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
 
     return Component;
-}
-
-
-/**
- * Move a component.
- */
-static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                             bool aErase )
-{
-    wxPoint        move_vector;
-    SCH_SCREEN*    screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_COMPONENT* Component = (SCH_COMPONENT*) screen->GetCurItem();
-
-    if( aErase )
-    {
-        Component->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
-    }
-
-    move_vector = screen->GetCrossHairPosition() - Component->m_Pos;
-    Component->Move( move_vector );
-    Component->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
 }
 
 
@@ -306,33 +320,6 @@ void SCH_EDIT_FRAME::OnChangeComponentOrientation( wxCommandEvent& aEvent )
     DrawPanel->CrossHairOn( &dc );
     GetScreen()->TestDanglingEnds( DrawPanel, &dc );
     OnModify();
-}
-
-
-/*
- * Abort a place component command in progress.
- */
-static void ExitPlaceCmp( EDA_DRAW_PANEL* Panel, wxDC* DC )
-{
-    SCH_SCREEN*    screen = (SCH_SCREEN*) Panel->GetScreen();
-
-    SCH_COMPONENT* Component = (SCH_COMPONENT*) screen->GetCurItem();
-
-    if( Component->m_Flags & IS_NEW )
-    {
-        Component->m_Flags = 0;
-        SAFE_DELETE( Component );
-    }
-    else if( Component )
-    {
-        wxPoint move_vector = OldPos - Component->m_Pos;
-        Component->Move( move_vector );
-        Component->SetTransform( OldTransform );
-        Component->m_Flags = 0;
-    }
-
-    Panel->Refresh( true );
-    screen->SetCurItem( NULL );
 }
 
 
@@ -446,25 +433,20 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
 }
 
 
-void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
+void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* aComponent, wxDC* aDC )
 {
-    if( Component == NULL )
-        return;
+    wxCHECK_RET( (aComponent != NULL) && (aComponent->Type() == SCH_COMPONENT_T),
+                 wxT( "Cannot move invalid component.  Bad Programmer!" ) );
 
-    if( Component->Type() != SCH_COMPONENT_T )
-        return;
+    if( aComponent->GetFlags() == 0 )
+        SetUndoItem( aComponent );
 
-    if( Component->m_Flags == 0 )
-        SetUndoItem( Component );
-
-    DrawPanel->CrossHairOff( DC );
-    GetScreen()->SetCrossHairPosition( Component->m_Pos );
+    DrawPanel->CrossHairOff( aDC );
+    GetScreen()->SetCrossHairPosition( aComponent->m_Pos );
     DrawPanel->MoveCursorToCrossHair();
 
-    DrawPanel->SetMouseCapture( ShowWhileMoving, ExitPlaceCmp );
-    GetScreen()->SetCurItem( Component );
-    OldPos = Component->m_Pos;
-    OldTransform = Component->GetTransform();
+    DrawPanel->SetMouseCapture( moveComponent, abortMoveComponent );
+    GetScreen()->SetCurItem( aComponent );
 
 #if 1
 
@@ -473,21 +455,21 @@ void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* Component, wxDC* DC )
     // RefreshDrawingRect(), then by drawing the first time in xor mode so that
     // subsequent xor drawing modes will fully erase this first copy.
 
-    Component->m_Flags |= IS_MOVED; // omit redrawing the component, erase only
-    DrawPanel->RefreshDrawingRect( Component->GetBoundingBox() );
+    aComponent->SetFlags( IS_MOVED ); // omit redrawing the component, erase only
+    DrawPanel->RefreshDrawingRect( aComponent->GetBoundingBox() );
 
-    Component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    aComponent->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
 
 #else
 
-    Component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+    aComponent->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
-    Component->m_Flags |= IS_MOVED;
+    aComponent->SetFlags( IS_MOVED );
 
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, FALSE );
+    moveComponent( DrawPanel, aDC, false );
 #endif
 
-    DrawPanel->m_AutoPAN_Request = TRUE;
+    DrawPanel->m_AutoPAN_Request = true;
 
-    DrawPanel->CrossHairOn( DC );
+    DrawPanel->CrossHairOn( aDC );
 }

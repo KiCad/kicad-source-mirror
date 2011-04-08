@@ -1,5 +1,5 @@
 /********************************/
-/* Scehematic component edition */
+/* Schematic component edition */
 /********************************/
 
 #include "fctsys.h"
@@ -22,16 +22,15 @@
 static void moveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
     wxPoint pos;
-    int fieldNdx;
 
     SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
-    SCH_FIELD*      currentField = frame->GetCurrentField();
+    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
+    SCH_FIELD* currentField = (SCH_FIELD*)screen->GetCurItem();
 
-    if( currentField == NULL )
+    if( (currentField == NULL) || (currentField->Type() != SCH_FIELD_T) )
         return;
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) currentField->GetParent();
-    fieldNdx = currentField->m_FieldId;
 
     currentField->m_AddExtraText = frame->m_Multiflag;
 
@@ -46,7 +45,7 @@ static void moveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositi
     // But here we want the relative position of the moved field
     // and we know the actual position.
     // So we are using the inverse rotation/mirror transform.
-    wxPoint pt( aPanel->GetScreen()->GetCrossHairPosition() - pos );
+    wxPoint pt( screen->GetCrossHairPosition() - pos );
 
     TRANSFORM itrsfm = component->GetTransform().InverseTransform();
     currentField->m_Pos = pos + itrsfm.TransformCoordinate( pt );
@@ -58,18 +57,19 @@ static void moveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositi
 static void abortMoveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
     SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
-    SCH_FIELD*      currentField = frame->GetCurrentField();
+    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
+    SCH_FIELD* currentField = (SCH_FIELD*) screen->GetCurItem();
 
     if( currentField )
     {
         currentField->m_AddExtraText = frame->m_Multiflag;
         currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-        currentField->ClearFlags( 0 );
+        currentField->ClearFlags();
         currentField->m_Pos = frame->m_OldPos;
-        currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+        currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     }
 
-    frame->SetCurrentField( NULL );
+    screen->SetCurItem( NULL );
 }
 
 
@@ -82,7 +82,7 @@ void SCH_EDIT_FRAME::MoveField( SCH_FIELD* aField, wxDC* aDC )
     wxPoint        pos, newpos;
     SCH_COMPONENT* comp = (SCH_COMPONENT*) aField->GetParent();
 
-    SetCurrentField( aField );
+    GetScreen()->SetCurItem( aField );
     SetUndoItem( comp );
 
     pos = comp->m_Pos;
@@ -96,7 +96,7 @@ void SCH_EDIT_FRAME::MoveField( SCH_FIELD* aField, wxDC* aDC )
     GetScreen()->SetCrossHairPosition( newpos );
     DrawPanel->MoveCursorToCrossHair();
 
-    m_OldPos    = aField->m_Pos;
+    m_OldPos = aField->m_Pos;
     m_Multiflag = 0;
 
     if( aField->GetId() == REFERENCE )

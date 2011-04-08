@@ -554,24 +554,29 @@ LIB_PIN* SCH_COMPONENT::GetPin( const wxString& number )
 }
 
 
-void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
+void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 {
-    EXCHG( m_ChipName, copyitem->m_ChipName );
-    EXCHG( m_Pos, copyitem->m_Pos );
-    EXCHG( m_unit, copyitem->m_unit );
-    EXCHG( m_convert, copyitem->m_convert );
+    wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_COMPONENT_T),
+                 wxT( "Cannot swap data with invalid component." ) );
+
+    SCH_COMPONENT* component = (SCH_COMPONENT*) aItem;
+
+    EXCHG( m_ChipName, component->m_ChipName );
+    EXCHG( m_Pos, component->m_Pos );
+    EXCHG( m_unit, component->m_unit );
+    EXCHG( m_convert, component->m_convert );
 
     TRANSFORM tmp = m_transform;
-    m_transform = copyitem->m_transform;
-    copyitem->m_transform = tmp;
+    m_transform = component->m_transform;
+    component->m_transform = tmp;
 
-    m_Fields.swap( copyitem->m_Fields );    // std::vector's swap()
+    m_Fields.swap( component->m_Fields );    // std::vector's swap()
 
     // Reparent items after copying data
     // (after swap(), m_Parent member does not point to the right parent):
-    for( int ii = 0; ii < copyitem->GetFieldCount();  ++ii )
+    for( int ii = 0; ii < component->GetFieldCount();  ++ii )
     {
-        copyitem->GetField( ii )->SetParent( copyitem );
+        component->GetField( ii )->SetParent( component );
     }
 
     for( int ii = 0; ii < GetFieldCount();  ++ii )
@@ -579,7 +584,7 @@ void SCH_COMPONENT::SwapData( SCH_COMPONENT* copyitem )
         GetField( ii )->SetParent( this );
     }
 
-    EXCHG( m_PathsAndReferences, copyitem->m_PathsAndReferences );
+    EXCHG( m_PathsAndReferences, component->m_PathsAndReferences );
 }
 
 

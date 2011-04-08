@@ -254,7 +254,7 @@ public:
                int             Color,
                bool            DrawPinText );
 
-    void SwapData( SCH_COMPONENT* copyitem );
+    virtual void SwapData( SCH_ITEM* aItem );
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 

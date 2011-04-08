@@ -75,7 +75,6 @@ protected:
 
 private:
     wxString              m_DefaultSchematicFileName;
-    SCH_FIELD*            m_CurrentField;
     int m_TextFieldSize;
     PARAM_CFG_ARRAY       m_projectFileParams;
     PARAM_CFG_ARRAY       m_configSettings;
@@ -182,14 +181,6 @@ public:
     void             ReCreateMenuBar();
     void             OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                                EDA_ITEM* aItem = NULL );
-
-    SCH_FIELD* GetCurrentField() { return m_CurrentField; }
-
-    void             SetCurrentField( SCH_FIELD* aCurrentField )
-    {
-        m_CurrentField = aCurrentField;
-    }
-
 
     /**
      * Function OnModify
