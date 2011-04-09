@@ -281,9 +281,9 @@ this file again." ) );
 
     // Display the loaded board:
     Zoom_Automatique( false );
-    wxSafeYield();      // Needed if we want to see the board now.
 
     // Compile ratsnest and displays net info
+    wxBusyCursor dummy;    // Displays an Hourglass while building connectivity
     Compile_Ratsnest( NULL, true );
     GetBoard()->DisplayInfo( this );
 

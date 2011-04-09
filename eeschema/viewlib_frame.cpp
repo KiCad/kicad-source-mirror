@@ -103,7 +103,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     m_exportToEeschemaCmpName.Empty();
 
     if( m_Semaphore )
-        SetWindowStyle( GetWindowStyle() | wxFRAME_FLOAT_ON_PARENT );
+        MakeModal(true);
 
     SetScreen( new SCH_SCREEN() );
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
@@ -248,19 +248,15 @@ void LIB_VIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
     SaveSettings();
 
     if( m_Semaphore )
-        m_Semaphore->Post();
-
-    Destroy();
-
-    if( m_Semaphore )
     {
-        // Raise EESchema above all other windows when the library viewer is being used
-        // to select a component.
-        wxWindow* parent = GetParent();
-
-        if( parent )
-            parent->Raise();
+        m_Semaphore->Post();
+        MakeModal(false);
+        // This window will be destroyed by the calling function,
+        // to avoid side effects
     }
+
+    else
+        Destroy();
 }
 
 

@@ -70,6 +70,7 @@ static void abortMoveComponent( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
 {
     wxSemaphore semaphore( 0, 1 );
+    wxString cmpname;
 
     /* Close the current Lib browser, if open, and open a new one, in "modal" mode */
     if( m_ViewlibFrame )
@@ -80,7 +81,6 @@ wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
 
     m_ViewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore );
     m_ViewlibFrame->AdjustScrollBars( wxPoint( 0 , 0 ) );
-
     // Show the library viewer frame until it is closed
     while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
     {
@@ -88,7 +88,10 @@ wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
         wxMilliSleep( 50 );
     }
 
-    return m_ViewlibFrame->GetSelectedComponent();
+    cmpname = m_ViewlibFrame->GetSelectedComponent();
+    m_ViewlibFrame->Destroy();
+
+    return cmpname;
 }
 
 
