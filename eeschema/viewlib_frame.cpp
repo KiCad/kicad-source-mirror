@@ -26,7 +26,6 @@ wxString LIB_VIEW_FRAME::m_libraryName;
 wxString LIB_VIEW_FRAME::m_entryName;
 int LIB_VIEW_FRAME::m_unit = 1;
 int LIB_VIEW_FRAME::m_convert = 1;
-wxSize LIB_VIEW_FRAME::m_clientSize = wxSize( -1, -1 );
 
 // When the viewer is used to select a component in schematic, the selected component is here.
 wxString LIB_VIEW_FRAME::m_exportToEeschemaCmpName;
@@ -174,14 +173,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     if( DrawPanel )
         DrawPanel->SetAcceleratorTable( table );
 
-#ifdef USE_WX_GRAPHICS_CONTEXT
-    GetScreen()->SetZoom( BestZoom() );
-#else
-    Zoom_Automatique( false );
-#endif
-
-    Show( TRUE );
-
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
@@ -233,6 +224,15 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     pane.MinSize(wxSize(m_CmpListSize.x, -1));
 
     m_auimgr.Update();
+
+    // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
+#ifdef USE_WX_GRAPHICS_CONTEXT
+    GetScreen()->SetZoom( BestZoom() );
+#else
+    Zoom_Automatique( false );
+#endif
+
+    Show( true );
 }
 
 
@@ -313,56 +313,31 @@ void LIB_VIEW_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 
 int LIB_VIEW_FRAME::BestZoom()
 {
-    int    bestzoom, ii, jj;
-    wxSize size;
-    LIB_COMPONENT* component;
+    LIB_COMPONENT* component = NULL;
     CMP_LIBRARY* lib;
-
-    GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
-    bestzoom = 16;
+    int bestzoom = 16;      // default value for bestzoom
 
     lib = CMP_LIBRARY::FindLibrary( m_libraryName );
 
-    if( lib == NULL )
-        return bestzoom;
-
-    component = lib->FindComponent( m_entryName );
+    if( lib  )
+        component = lib->FindComponent( m_entryName );
 
     if( component == NULL )
+    {
+        GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
         return bestzoom;
-
-    /*
-     * This fixes a bug where the client size of the drawing area is not
-     * correctly reported until after the window is shown.  This is most
-     * likely due to the unmanaged windows ( vertical tool bars and message
-     * panel ) that are drawn in the main window which wxWidgets knows
-     * nothing about.  When the library editor is reopened with a component
-     * already loading, the zoom will be calculated correctly.
-     */
-    if( !IsShownOnScreen() )
-    {
-        if( m_clientSize != wxSize( -1, -1 ) )
-            size = m_clientSize;
-        else
-            size = DrawPanel->GetClientSize();
     }
-    else
-    {
-        if( m_clientSize == wxSize( -1, -1 ) )
-            m_clientSize = DrawPanel->GetClientSize();
 
-        size = m_clientSize;
-    }
+    wxSize size = DrawPanel->GetClientSize();
 
     EDA_RECT BoundaryBox = component->GetBoundingBox( m_unit, m_convert );
 
-    // Reserve a 25 mils margin around component bounding box.
-    size -= wxSize( 25, 25 );
-    ii   = wxRound( ( (double) BoundaryBox.GetWidth() / double( size.x ) ) *
-                    (double) GetScreen()->m_ZoomScalar );
-    jj   = wxRound( ( (double) BoundaryBox.GetHeight() / (double) size.y ) *
-                    (double) GetScreen()->m_ZoomScalar );
-    bestzoom = MAX( ii, jj ) + 1;
+    // Reserve a 10% margin around component bounding box.
+    double zx =(double) BoundaryBox.GetWidth() / ( 0.8 * (double)size.x ) *
+                    (double) GetScreen()->m_ZoomScalar;
+    double zy = (double) BoundaryBox.GetHeight() / ( 0.8 * (double)size.y) *
+                    (double) GetScreen()->m_ZoomScalar;
+    bestzoom = wxRound( MAX( zx, zy ) );
 
 #if defined( __WINDOWS__ ) && !wxCHECK_VERSION(2, 9, 1)
     /* This is a workaround: wxWidgets (wxMSW) before version 2.9 seems have

@@ -44,7 +44,6 @@ protected:
                                                 // in schematic, the selected component is here
     static int      m_unit;
     static int      m_convert;
-    static wxSize   m_clientSize;
 
 public:
     LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library = NULL, wxSemaphore* semaphore = NULL );

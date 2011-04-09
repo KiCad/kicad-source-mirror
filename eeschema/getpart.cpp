@@ -80,7 +80,6 @@ wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
     }
 
     m_ViewlibFrame = new LIB_VIEW_FRAME( this, NULL, &semaphore );
-    m_ViewlibFrame->AdjustScrollBars( wxPoint( 0 , 0 ) );
     // Show the library viewer frame until it is closed
     while( semaphore.TryWait() == wxSEMA_BUSY ) // Wait for viewer closing event
     {

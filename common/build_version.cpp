@@ -6,14 +6,19 @@
 #endif
 
 #ifndef KICAD_BUILD_VERSION
-#define KICAD_BUILD_VERSION "(2011-04-05)"
+#define KICAD_BUILD_VERSION "(2011-04-09)"
 #endif
 
-// uncomment this line only when creating a stable version
-//#define VERSION_STABILITY      "stable"
 
-#ifndef VERSION_STABILITY
-#define VERSION_STABILITY       "testing"
+#if defined KICAD_TESTING_VERSION
+#   define VERSION_STABILITY  "testing"
+#elif defined KICAD_STABLE_VERSION
+#   define VERSION_STABILITY  "stable"
+#else
+#   define VERSION_STABILITY  "unknown"
+#   warning "unknown version stability"
+#   warning "please: when running CMAKE, add -DKICAD_TESTING_VERSION=ON"
+#   warning "or -DKICAD_STABLE_VERSION=ON option"
 #endif
 
 /**

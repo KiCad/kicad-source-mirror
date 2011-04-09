@@ -699,7 +699,6 @@ void SCH_EDIT_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
     else
     {
         m_ViewlibFrame = new LIB_VIEW_FRAME( this );
-        m_ViewlibFrame->AdjustScrollBars( wxPoint( 0 , 0 ) );
     }
 }
 

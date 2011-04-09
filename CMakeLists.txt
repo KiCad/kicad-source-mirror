@@ -32,6 +32,38 @@ option(USE_BOOST_POLYGON_LIBRARY
        "Use boost polygon library instead of Kbool to calculate filled areas in zones (default ON)."
        ON )
 
+#One of these 2 option *must* be set to ON:
+option(KICAD_STABLE_VERSION
+       "set this option to ON to build the stable version of KICAD. mainly used to set version ID (default OFF)"
+       )
+
+option(KICAD_TESTING_VERSION
+       "set this option to ON to build the stable version of KICAD. mainly used to set version ID (default OFF)"
+       )
+
+#Set version option (stable or testing)
+
+if (KICAD_STABLE_VERSION )
+    if ( KICAD_TESTING_VERSION )
+        message( FATAL_ERROR
+        "Please set to ON only one option KICAD_TESTING_VERSION or KICAD_STABLE_VERSION" )
+    endif( KICAD_TESTING_VERSION )
+    add_definitions(-DKICAD_STABLE_VERSION)
+    message( "Build stable version of Kicad" )
+else (KICAD_STABLE_VERSION )
+    if (KICAD_TESTING_VERSION )
+        add_definitions(-DKICAD_TESTING_VERSION)
+        message( "Build testing (unstable) version of Kicad" )
+    else (KICAD_TESTING_VERSION )
+        message( "Please set to ON one option of KICAD_TESTING_VERSION or KICAD_STABLE_VERSION" )
+        message( "When calling cmake add option -DKICAD_STABLE_VERSION" )
+        message( "or add option -DKICAD_TESTING_VERSION " )
+        message( FATAL_ERROR "one option of KICAD_TESTING_VERSION or KICAD_STABLE_VERSION must be defined" )
+    endif(KICAD_TESTING_VERSION )
+endif(KICAD_STABLE_VERSION )
+
+
+
 #================================================
 # Set flags for GCC.
 #================================================
