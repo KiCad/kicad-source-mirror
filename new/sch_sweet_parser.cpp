@@ -27,6 +27,7 @@
 #include <sch_lib_table.h>
 #include <sch_lpid.h>
 
+#include <macros.h>
 
 using namespace SCH;
 using namespace PR;
@@ -71,58 +72,6 @@ enum PartBit
 static inline const int PB( PartBit oneBitOnly )
 {
     return ( 1 << oneBitOnly );
-}
-
-
-void SWEET_PARSER::parseExtends( PART* me )
-{
-    PART*   base;
-    int     offset;
-
-    if( contains & PB(extends) )
-        Duplicate( T_extends );
-
-    NeedSYMBOLorNUMBER();
-    me->setExtends( new LPID() );
-
-    offset = me->extends->Parse( CurText() );
-    if( offset > -1 )   // -1 is success
-        THROW_PARSE_ERROR( _("invalid extends LPID"),
-            CurSource(),
-            CurLine(),
-            CurLineNumber(),
-            CurOffset() + offset );
-
-    base = libs->LookupPart( *me->extends, me->Owner() );
-
-    // we could be going in circles here, recursively, or too deep, set limits
-    // and disallow extending from self (even indirectly)
-    int extendsDepth = 0;
-    for( PART* ancestor = base; ancestor && extendsDepth<MAX_INHERITANCE_NESTING;
-            ++extendsDepth, ancestor = ancestor->base )
-    {
-        if( ancestor == me )
-        {
-            THROW_PARSE_ERROR( _("'extends' may not have self as any ancestor"),
-                CurSource(),
-                CurLine(),
-                CurLineNumber(),
-                CurOffset() );
-        }
-    }
-
-    if( extendsDepth == MAX_INHERITANCE_NESTING )
-    {
-        THROW_PARSE_ERROR( _("max allowed extends depth exceeded"),
-            CurSource(),
-            CurLine(),
-            CurLineNumber(),
-            CurOffset() );
-    }
-
-    me->inherit( *base );
-    me->base = base;
-    contains |= PB(extends);
 }
 
 
@@ -266,9 +215,7 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
                 break;
 
             case T_property_del:
-                NeedSYMBOLorNUMBER();
-                me->PropertyDelete( FromUTF8() );
-                NeedRIGHT();
+                parsePropertyDel( me );
                 break;
 
             // reference in a PART is incomplete, it is just the prefix of an
@@ -308,6 +255,15 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
                 prop = me->FieldLookup( PART::MODEL );
                 goto L_prop;
 
+            case T_keywords:
+                parseKeywords( me );
+                break;
+
+            case T_alternates:
+                // @todo: do we want to inherit alternates?
+                parseAlternates( me );
+                break;
+
             case T_pin:
                 PIN* pin;
                 pin = new PIN( me );
@@ -315,29 +271,28 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
                 parsePin( pin );
                 break;
 
-            case T_keywords:
-                parseKeywords( me );
-                break;
-
-
-            /*
-            @todo
-
-            case T_alternates:
-                break;
-
-            // do we want to inherit alternates?
-            case T_pin_merge:
+            case T_pin_del:
+                parsePinDel( me );
                 break;
 
             case T_pin_swap:
+                parsePinSwap( me );
                 break;
 
             case T_pin_renum:
+                parsePinRenum( me );
                 break;
 
             case T_pin_rename:
+                parsePinRename( me );
                 break;
+
+            case T_pin_merge:
+                parsePinMerge( me );
+                break;
+
+            /*
+            @todo
 
             case T_route_pin_swap:
                 break;
@@ -358,6 +313,85 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
     contains |= PB(parsed);
 
     me->contains |= contains;
+}
+
+
+void SWEET_PARSER::parseExtends( PART* me )
+{
+    PART*   base;
+    int     offset;
+
+    if( contains & PB(extends) )
+        Duplicate( T_extends );
+
+    NeedSYMBOLorNUMBER();
+    me->setExtends( new LPID() );
+
+    offset = me->extends->Parse( CurText() );
+    if( offset > -1 )   // -1 is success
+        THROW_PARSE_ERROR( _("invalid extends LPID"),
+            CurSource(),
+            CurLine(),
+            CurLineNumber(),
+            CurOffset() + offset );
+
+    base = libs->LookupPart( *me->extends, me->Owner() );
+
+    // we could be going in circles here, recursively, or too deep, set limits
+    // and disallow extending from self (even indirectly)
+    int extendsDepth = 0;
+    for( PART* ancestor = base; ancestor && extendsDepth<MAX_INHERITANCE_NESTING;
+            ++extendsDepth, ancestor = ancestor->base )
+    {
+        if( ancestor == me )
+        {
+            THROW_PARSE_ERROR( _("'extends' may not have self as any ancestor"),
+                CurSource(),
+                CurLine(),
+                CurLineNumber(),
+                CurOffset() );
+        }
+    }
+
+    if( extendsDepth == MAX_INHERITANCE_NESTING )
+    {
+        THROW_PARSE_ERROR( _("max allowed extends depth exceeded"),
+            CurSource(),
+            CurLine(),
+            CurLineNumber(),
+            CurOffset() );
+    }
+
+    me->inherit( *base );
+    me->base = base;
+    contains |= PB(extends);
+}
+
+
+void SWEET_PARSER::parseAlternates( PART* me )
+{
+    T           tok;
+    PART_REF    lpid;
+    int         offset;
+
+    while( ( tok = NextTok() ) != T_RIGHT )
+    {
+        if( !IsSymbol( tok ) && tok != T_NUMBER )
+            Expecting( "lpid" );
+
+        // lpid.clear(); Parse does this
+
+        offset = lpid.Parse( CurText() );
+        if( offset > -1 )
+        THROW_PARSE_ERROR( _("invalid alternates LPID"),
+            CurSource(),
+            CurLine(),
+            CurLineNumber(),
+            CurOffset() + offset );
+
+        // PART_REF assignment should be OK, it contains no ownership
+        me->alternates.push_back( lpid );
+    }
 }
 
 
@@ -634,6 +668,256 @@ void SWEET_PARSER::parsePin( PIN* me )
             }
         }
     }
+}
+
+
+void SWEET_PARSER::parsePinDel( PART* me )
+{
+    wxString    padName;
+
+    // we do this somewhat unorthodoxically because we want to avoid doing two lookups,
+    // which would need to be done to 1) find pin, and 2) delete pin.  Only one
+    // lookup is needed with this scheme.
+
+    NeedSYMBOLorNUMBER();
+    padName = FromUTF8();
+
+    // lookup now while CurOffset() is still meaningful.
+    PINS::iterator it = me->pinFindByPadName( padName );
+    if( it == me->pins.end() )
+    {
+        THROW_PARSE_ERROR( _("undefined pin"),
+            CurSource(),
+            CurLine(),
+            CurLineNumber(),
+            CurOffset() );
+    }
+
+/* enable in future, but not now while testing
+    if( (*it)->birthplace == me )
+    {
+        THROW_PARSE_ERROR( _("pin_del allowed for inherited pins only"),
+            CurSource(),
+            CurLine(),
+            CurLineNumber(),
+            CurOffset() );
+    }
+*/
+
+    NeedRIGHT();
+
+    delete *it;         // good thing I'm a friend.
+    me->pins.erase( it );
+}
+
+
+void SWEET_PARSER::parsePinSwap( PART* me )
+{
+    PIN*        pin1;
+    PIN*        pin2;
+
+    wxString    padName;
+
+    NeedSYMBOLorNUMBER();
+    padName = FromUTF8();
+
+    // lookup now while CurOffset() is still meaningful.
+    pin1 = me->PinFindByPadName( padName );
+    if( !pin1 )
+    {
+        THROW_PARSE_ERROR( _("undefined pin"),
+            CurSource(),
+            CurLine(),
+            CurLineNumber(),
+            CurOffset() );
+    }
+
+    NeedSYMBOLorNUMBER();
+    padName = FromUTF8();
+
+    pin2 = me->PinFindByPadName( padName );
+    if( !pin2 )
+    {
+        THROW_PARSE_ERROR( _("undefined pin"),
+            CurSource(),
+            CurLine(),
+            CurLineNumber(),
+            CurOffset() );
+    }
+
+    NeedRIGHT();
+
+    // swap only the text, but might want to swap entire PIN_TEXTs
+    pin2->padname.text = pin1->padname.text;
+    pin1->padname.text = padName;
+}
+
+
+void SWEET_PARSER::parsePinRenum( PART* me )
+{
+    PIN*        pin;
+
+    wxString    oldPadName;
+    wxString    newPadName;
+
+    NeedSYMBOLorNUMBER();
+    oldPadName = FromUTF8();
+
+    // lookup now while CurOffset() is still meaningful.
+    pin = me->PinFindByPadName( oldPadName );
+    if( !pin )
+    {
+        THROW_PARSE_ERROR( _("undefined pin"),
+            CurSource(),
+            CurLine(),
+            CurLineNumber(),
+            CurOffset() );
+    }
+
+    NeedSYMBOLorNUMBER();
+    newPadName = FromUTF8();
+
+    NeedRIGHT();
+
+    // @todo: check for padname legalities
+    pin->padname.text = newPadName;
+}
+
+
+void SWEET_PARSER::parsePinRename( PART* me )
+{
+    PIN*        pin;
+
+    wxString    oldSignal;
+    wxString    newSignal;
+
+    NeedSYMBOLorNUMBER();
+    oldSignal = FromUTF8();
+
+    // lookup now while CurOffset() is still meaningful.
+    pin = me->PinFindBySignal( oldSignal );
+    if( !pin )
+    {
+        THROW_PARSE_ERROR( _("undefined pin"),
+            CurSource(),
+            CurLine(),
+            CurLineNumber(),
+            CurOffset() );
+    }
+
+    NeedSYMBOLorNUMBER();
+    newSignal = FromUTF8();
+
+    NeedRIGHT();
+
+    pin->signal.text = newSignal;
+}
+
+
+void SWEET_PARSER::parsePinMerge( PART* me )
+{
+    T           tok;
+    wxString    padName;
+    wxString    msg;
+
+    NeedSYMBOLorNUMBER();
+
+    wxString    anchorPadName = FromUTF8();
+
+    // lookup now while CurOffset() is still good.
+    PINS::iterator pit = me->pinFindByPadName( anchorPadName );
+    if( pit == me->pins.end() )
+    {
+        msg.Printf( _( "undefined pin %s" ), anchorPadName.GetData() );
+        THROW_PARSE_ERROR( msg,
+            CurSource(),
+            CurLine(),
+            CurLineNumber(),
+            CurOffset() );
+    }
+
+    if( !(*pit)->pin_merge.IsEmpty() && anchorPadName != (*pit)->pin_merge )
+    {
+        msg.Printf( _( "pin %s already in pin_merge group %s" ),
+                anchorPadName.GetData(), (*pit)->pin_merge.GetData() );
+
+        THROW_PARSE_ERROR( msg,
+            CurSource(),
+            CurLine(),
+            CurLineNumber(),
+            CurOffset() );
+    }
+
+    NeedLEFT();
+
+    tok = NextTok();
+    if( tok != T_hide )
+        Expecting( T_hide );
+
+    (*pit)->isVisible = true;
+    (*pit)->pin_merge = anchorPadName;
+
+    // allocate or find a MERGE_SET;
+    MERGE_SET& ms = me->pin_merges[anchorPadName];
+
+    while( ( tok = NextTok() ) != T_RIGHT )
+    {
+        if( !IsSymbol( tok ) && tok != T_NUMBER )
+            Expecting( "padname" );
+
+        padName = FromUTF8();
+
+        D(printf("padName=%s\n", TO_UTF8( padName ) );)
+
+        // find the PIN and mark it as being in this MERGE_SET or throw
+        // error if already in another MERGET_SET.
+
+        pit = me->pinFindByPadName( padName );
+        if( pit == me->pins.end() )
+        {
+            msg.Printf( _( "undefined pin %s" ), padName.GetData() );
+            THROW_PARSE_ERROR( msg,
+                CurSource(),
+                CurLine(),
+                CurLineNumber(),
+                CurOffset() );
+        }
+
+        if( !(*pit)->pin_merge.IsEmpty() && anchorPadName != (*pit)->pin_merge )
+        {
+            msg.Printf( _( "pin %s already in pin_merge group %s" ),
+                    padName.GetData(), (*pit)->pin_merge.GetData() );
+
+            THROW_PARSE_ERROR( msg,
+                CurSource(),
+                CurLine(),
+                CurLineNumber(),
+                CurOffset() );
+        }
+
+        (*pit)->isVisible = false;
+        (*pit)->pin_merge = anchorPadName;
+
+        ms.insert( padName );
+    }
+
+    NeedRIGHT();
+}
+
+
+void SWEET_PARSER::parsePropertyDel( PART* me )
+{
+    NeedSYMBOLorNUMBER();
+
+    wxString propertyName = FromUTF8();
+
+    if( !me->PropertyDelete( propertyName ) )
+    {
+        wxString    msg;
+        msg.Printf( _( "Unable to find property: %s" ), propertyName.GetData() );
+        THROW_IO_ERROR( msg );
+    }
+    NeedRIGHT();
 }
 
 

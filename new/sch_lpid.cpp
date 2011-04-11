@@ -123,13 +123,19 @@ static int okRevision( const STRING& aField )
 //----</Policy and field test functions>-------------------------------------
 
 
-int LPID::Parse( const STRING& aLPID )
+void LPID::clear()
 {
     logical.clear();
     category.clear();
     baseName.clear();
     partName.clear();
     revision.clear();
+}
+
+
+int LPID::Parse( const STRING& aLPID )
+{
+    clear();
 
     const char* rev = EndsWithRev( aLPID );
     size_t      revNdx;

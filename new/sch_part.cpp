@@ -34,7 +34,7 @@
 
 /**
  * Function formatAt
- * returns a formatted "(at X Y [ANGLE])" s-expression
+ * outputs a formatted "(at X Y [ANGLE])" s-expression
  */
 static void formatAt( OUTPUTFORMATTER* out, const POINT& aPos, ANGLE aAngle, int indent=0 )
     throw( IO_ERROR )
@@ -72,6 +72,18 @@ void PART::clear()
         extends = 0;
     }
 
+    // clear the mandatory fields
+    for( int ndx = REFERENCE;  ndx < END;  ++ndx )
+    {
+        delete mandatory[ndx];
+        mandatory[ndx] = 0;
+    }
+
+    // delete properties I own, since their container will not destroy them:
+    for( PROPERTIES::iterator it = properties.begin();  it != properties.end();  ++it )
+        delete *it;
+    properties.clear();
+
     // delete graphics I own, since their container will not destroy them:
     for( GRAPHICS::iterator it = graphics.begin();  it != graphics.end();  ++it )
         delete *it;
@@ -82,21 +94,13 @@ void PART::clear()
         delete *it;
     pins.clear();
 
-    // delete properties I own, since their container will not destroy them:
-    for( PROPERTIES::iterator it = properties.begin();  it != properties.end();  ++it )
-        delete *it;
-    properties.clear();
+    alternates.clear();
 
     keywords.clear();
 
-    contains = 0;
+    pin_merges.clear();
 
-    // clear the mandatory fields
-    for( int ndx = REFERENCE;  ndx < END;  ++ndx )
-    {
-        delete mandatory[ndx];
-        mandatory[ndx] = 0;
-    }
+    contains = 0;
 }
 
 
@@ -140,6 +144,49 @@ PROPERTY* PART::FieldLookup( PROP_ID aPropertyId )
 
     return p;
 }
+
+PINS::iterator PART::pinFindByPadName( const wxString& aPadName )
+{
+    PINS::iterator it;
+
+    for( it = pins.begin();  it != pins.end();  ++it )
+    {
+        if( (*it)->padname.text == aPadName )
+            break;
+    }
+
+    return it;
+}
+
+
+PINS::iterator PART::pinFindBySignal( const wxString& aSignal )
+{
+    PINS::iterator it;
+
+    for( it = pins.begin();  it != pins.end();  ++it )
+    {
+        if( (*it)->signal.text == aSignal )
+            break;
+    }
+
+    return it;
+}
+
+
+bool PART::PinDelete( const wxString& aPadName )
+{
+    PINS::iterator it = pinFindByPadName( aPadName );
+    if( it != pins.end() )
+    {
+        delete *it;
+        pins.erase( it );
+        return true;
+    }
+
+    // there is only one reason this can fail: not found:
+    return false;
+}
+
 
 
 PART::~PART()
@@ -185,19 +232,17 @@ void PART::Parse( SWEET_PARSER* aParser , LIB_TABLE* aTable ) throw( IO_ERROR, P
 }
 
 
-void PART::PropertyDelete( const wxString& aPropertyName ) throw( IO_ERROR )
+bool PART::PropertyDelete( const wxString& aPropertyName )
 {
     PROPERTIES::iterator it = propertyFind( aPropertyName );
-    if( it == properties.end() )
+    if( it != properties.end() )
     {
-        wxString    msg;
-        msg.Printf( _( "Unable to find property: %s" ), aPropertyName.GetData() );
-        THROW_IO_ERROR( msg );
+        delete *it;
+        properties.erase( it );
+        return true;
     }
 
-    delete *it;
-    properties.erase( it );
-    return;
+    return false;
 }
 
 
@@ -256,6 +301,26 @@ void PART::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
     for( PINS::const_iterator it = pins.begin();  it != pins.end();  ++it )
     {
         (*it)->Format( out, indent+1, ctl );
+    }
+
+    if( alternates.size() )
+    {
+        out->Print( indent+1, "(alternates" );
+        for( PART_REFS::const_iterator it = alternates.begin();  it!=alternates.end();  ++it )
+            out->Print( 0, " %s", out->Quotes( it->Format() ).c_str() );
+        out->Print( 0, ")\n" );
+    }
+
+    for( MERGE_SETS::const_iterator mit = pin_merges.begin();  mit != pin_merges.end();  ++mit )
+    {
+        out->Print( indent+1, "(pin_merge %s (hide", out->Quotew( mit->first ).c_str() );
+
+        const MERGE_SET& mset = *mit->second;
+        for( MERGE_SET::const_iterator pit = mset.begin();  pit != mset.end();  ++pit )
+        {
+            out->Print( 0, " %s", out->Quotew( *pit ).c_str() );
+        }
+        out->Print( 0, "))\n" );
     }
 
     out->Print( indent, ")\n" );
@@ -349,15 +414,27 @@ void FONT::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 void PIN::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
     throw( IO_ERROR )
 {
+    bool    hasSignal  = !signal.text.IsEmpty();
+    bool    hasPadName = !padname.text.IsEmpty();
+
     out->Print( indent, "(pin %s %s ", ShowType(), ShowShape() );
 
     formatAt( out, pos, angle );
     out->Print( 0, "(length %.6g)", InternalToLogical( length ) );
     out->Print( 0, "(visible %s)\n", isVisible ? "yes" : "no" );
 
-    signal.Format(  out, "signal",  indent+1, 0 );
-    padname.Format( out, "padname", indent+1, CTL_OMIT_NL );
+    if( hasSignal )
+        signal.Format(  out, "signal",  indent+1, hasPadName ? 0 : CTL_OMIT_NL );
+
+    if( hasPadName )
+        padname.Format( out, "padname", indent+1, CTL_OMIT_NL );
+
     out->Print( 0, ")\n" );
+}
+
+
+PIN::~PIN()
+{
 }
 
 

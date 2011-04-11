@@ -27,6 +27,10 @@
 #define SCH_PART_H_
 
 #include <sch_lib.h>
+#include <sch_lib_table.h>
+#include <sch_lpid.h>
+//#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 
 #define INTERNAL_PER_LOGICAL        10000   ///< no. internal units per logical unit
@@ -88,6 +92,13 @@ class SWEET_PARSER;
 class PROPERTY;
 
 };
+
+/// a set of pin padnames that are electrically equivalent for a PART.
+typedef std::set< wxString >            MERGE_SET;
+
+/// The key is the VISIBLE_PIN from
+/// (pin_merge VISIBLE_PIN (hide HIDDEN_PIN1 HIDDEN_PIN2...))
+typedef boost::ptr_map< wxString, MERGE_SET >  MERGE_SETS;
 
 
 class POINT : public wxPoint
@@ -156,11 +167,13 @@ class BASE_GRAPHIC
     friend class SWEET_PARSER;
 
 protected:
-    PART*   owner;
+    PART*       owner;
+    PART*       birthplace;         ///< at which PART in inheritance chain was 'this' added
 
 public:
     BASE_GRAPHIC( PART* aOwner ) :
-        owner( aOwner )
+        owner( aOwner ),
+        birthplace( aOwner )
     {}
 
     virtual ~BASE_GRAPHIC() {}
@@ -342,7 +355,6 @@ class PROPERTY : public BASE_GRAPHIC
     friend class SWEET_PARSER;
 
 protected:
-    PART*           birthplace;     ///< at which PART in inheritance chain was this PROPERTY added
     wxString        name;
     wxString        text;
     TEXT_EFFECTS*   effects;
@@ -359,7 +371,6 @@ protected:
 public:
     PROPERTY( PART* aOwner, const wxChar* aName = wxT( "" ) ) :
         BASE_GRAPHIC( aOwner ),
-        birthplace( aOwner ),
         name( aName ),
         effects( 0 )
     {}
@@ -410,13 +421,14 @@ class PIN : public BASE_GRAPHIC
 public:
     PIN( PART* aOwner ) :
         BASE_GRAPHIC( aOwner ),
-        birthplace( aOwner ),
         angle( 0 ),
         connectionType( PR::T_input ),
         shape( PR::T_line ),
         length( 0 ),
         isVisible( true )
     {}
+
+    ~PIN();
 
     const char* ShowType() const
     {
@@ -432,7 +444,6 @@ public:
         throw( IO_ERROR );
 
 protected:
-    PART*       birthplace;         ///< at which PART in inheritance chain was this PIN added
     POINT       pos;
     ANGLE       angle;
 
@@ -448,7 +459,57 @@ protected:
     int         length;             ///< length of pin in internal units
     bool        isVisible;          ///< pin is visible
 
+    wxString    pin_merge;          ///< padname of (pin_merge ...) that I am a member of, else empty if none
 };
+
+
+/**
+ * Class PART_REF
+ * is an LPID with a pointer to the "looked up" PART, which is looked up lazily.
+ */
+class PART_REF : public LPID
+{
+public:
+    PART_REF() :
+        LPID(),
+        part(0)
+    {}
+
+    /**
+     * Constructor LPID
+     * takes aLPID string and parses it.  A typical LPID string uses a logical
+     * library name followed by a part name.
+     * e.g.: "kicad:passives/R/rev2", or
+     * e.g.: "mylib:R33"
+     */
+    PART_REF( const STRING& aLPID ) throw( PARSE_ERROR ) :
+        LPID( aLPID ),
+        part(0)
+    {
+    }
+
+
+    /**
+     * Function Lookup
+     * returns the PART that this LPID refers to.  Never returns NULL, because
+     * instead an exception would be thrown.
+     * @throw IO_ERROR if any problem occurs or if the part cannot be found.
+     */
+    PART* Lookup( LIB_TABLE* aLibTable, LIB* aFallBackLib ) throw( IO_ERROR )
+    {
+        if( !part )
+        {
+            part = aLibTable->LookupPart( *this, aFallBackLib );
+        }
+        return part;
+    }
+
+protected:
+    PART*   part;               ///< The looked-up PART,
+                                ///< no ownership (duh, PARTs are always owned by a LIB)
+};
+
+typedef std::vector<PART_REF>   PART_REFS;
 
 
 }  // namespace SCH
@@ -457,12 +518,15 @@ protected:
 //-----</temporary home for PART sub objects, move after stable>-----------------
 
 
+typedef std::set< wxString >            KEYWORDS;
+
 namespace SCH {
 
 typedef std::vector< BASE_GRAPHIC* >    GRAPHICS;
-typedef std::vector< PIN* >             PINS;
 typedef std::vector< PROPERTY* >        PROPERTIES;
-typedef std::set< wxString >            KEYWORDS;
+
+typedef std::vector< PIN* >             PINS;
+
 
 class LPID;
 class SWEET_PARSER;
@@ -533,7 +597,12 @@ public:
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits = 0 ) const
         throw( IO_ERROR );
 
-    void PropertyDelete( const wxString& aPropertyName ) throw( IO_ERROR );
+    /**
+     * Function PropertyDelete
+     * deletes the property with aPropertyName if found and returns true, else false
+     * if not found.
+     */
+    bool PropertyDelete( const wxString& aPropertyName );
 
     /**
      * Function Field
@@ -553,6 +622,31 @@ public:
      * @param aPropertyId tells which field.
      */
     PROPERTY*   FieldLookup( PROP_ID aPropertyId );
+
+    /**
+     * Function PinFindByPadName
+     * finds a PIN based on aPadName or returns NULL if not found.
+     * @param aPadName is the pin to find
+     * @return PIN* - the found PIN or NULL if not found.
+     */
+    PIN*        PinFindByPadName( const wxString& aPadName )
+    {
+        PINS::iterator it = pinFindByPadName( aPadName );
+        return it != pins.end() ? *it : NULL;
+    }
+
+    PIN*        PinFindBySignal( const wxString& aSignal )
+    {
+        PINS::iterator it = pinFindBySignal( aSignal );
+        return it != pins.end() ? *it : NULL;
+    }
+
+    /**
+     * Function PinDelete
+     * deletes the pin with aPadName if found and returns true, else false
+     * if not found.
+     */
+    bool PinDelete( const wxString& aPadName );
 
 
 /*
@@ -619,6 +713,15 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
      */
     PROPERTIES::iterator propertyFind( const wxString& aPropertyName );
 
+    /**
+     * Function pinFindByPadName
+     * searches for a PIN with aPadName and returns a PROPERTIES::iterator which
+     * is the found item or pins.end() if not found.
+     */
+    PINS::iterator pinFindByPadName( const wxString& aPadName );
+    PINS::iterator pinFindBySignal( const wxString& aSignal );
+
+
     POINT           anchor;
 
     //PART( LIB* aOwner );
@@ -638,17 +741,8 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
     /// actually becomes cached in RAM.
     STRING          body;
 
-    // mandatory properties
+    /// mandatory properties, aka fields.  Index into mandatory[] is PROP_ID.
     PROPERTY*       mandatory[END];
-
-/*
-    PROPERTY        value;
-    PROPERTY        footprint;
-    PROPERTY        model;
-    PROPERTY        datasheet;
-*/
-
-    // separate lists for speed:
 
     /**
      * Member properties
@@ -669,10 +763,17 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
     PINS            pins;
 
     /// Alternate body forms.
-    //ALTERNATES  alternates;
+    PART_REFS       alternates;
 
+    ///  searching aids
     KEYWORDS        keywords;
 
+    /**
+     * A pin_merge set is a set of pins that are all electrically equivalent
+     * and whose anchor pin is the only one visible.  The visible pin is the
+     * key in the MERGE_SETS boost::ptr_map::map
+     */
+    MERGE_SETS      pin_merges;
 };
 
 }   // namespace PART

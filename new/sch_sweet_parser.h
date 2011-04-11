@@ -75,14 +75,21 @@ class SWEET_PARSER : public SWEET_LEXER
     void parseCircle( CIRCLE* me );
     void parseArc( ARC* me );
     void parseText( GR_TEXT* me );
-    void parsePin( PIN* me );
     void parseAt( POINT* pos, float* angle );
     void parseBool( bool* aBool );
     void parseFont( FONT* me );
     void parsePinText( PINTEXT* me );
     void parseTextEffects( TEXT_EFFECTS* me );
     void parseKeywords( PART* me );
+    void parseAlternates( PART* me );
+    void parsePropertyDel( PART* me );
 
+    void parsePin( PIN* me );
+    void parsePinDel( PART* me );
+    void parsePinSwap( PART* me );
+    void parsePinRenum( PART* me );
+    void parsePinRename( PART* me );
+    void parsePinMerge( PART* me );
 
 public:
 

@@ -56,6 +56,28 @@ PIN2="
         (padname A24 (font (size 0.9 1.1) italic bold) (visible yes))
     )"
 
+PIN3="
+    (pin (padname A25))"
+
+PINS="
+    (pin (padname Z12))(pin (padname Y14))(pin (padname Z13))(pin (padname Y15))"
+
+
+PIN_SWAP="
+    (pin_swap A23 A24)"
+
+PIN_RENUM="
+    (pin_renum A24 B24)"
+
+PIN_RENAME="
+    (pin_rename #WE LED)"
+
+PIN_DELETE="
+    (pin_del B24)"
+
+PIN_MERGE="(pin_merge A23 (hide Z12 Y14))(pin_merge A25 (hide Z13 Y15))"
+
+
 PROP1="
     (property mWatts 12
         (effects (at 1 34 270)(font (size .5 1) italic bold)(visible no))
@@ -63,6 +85,10 @@ PROP1="
 
 KEYWORDS="
     (keywords varistor batcave einstein)"
+
+ALTERNATES="
+    (alternates 7400/7400_b 7400/7400_c)"
+
 
 
 for C in ${CATEGORIES}; do
@@ -81,8 +107,16 @@ for C in ${CATEGORIES}; do
                 $TEXT
                 $PIN1
                 $PIN2
+                $PIN3
+                $PINS
                 $PROP1
                 $KEYWORDS
+                $ALTERNATES
+                $PIN_SWAP
+                $PIN_RENUM
+                $PIN_RENAME
+                $PIN_DELETE
+                $PIN_MERGE
                 )" > $BASEDIR/$C/$P.part.$R
         done
         # also make the part without a rev:
@@ -96,8 +130,16 @@ for C in ${CATEGORIES}; do
             $TEXT
             $PIN1
             $PIN2
+            $PIN3
+            $PINS
             $PROP1
             $KEYWORDS
+            $ALTERNATES
+            $PIN_SWAP
+            $PIN_RENUM
+            $PIN_RENAME
+            $PIN_DELETE
+            $PIN_MERGE
             )" > $BASEDIR/$C/$P.part
     done
 done

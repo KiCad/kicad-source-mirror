@@ -30,6 +30,7 @@
 
 namespace SCH {
 
+
 /**
  * Class LPID
  * (aka GUID) is a Logical Part ID and consists of various portions much like a URI.
@@ -196,6 +197,7 @@ public:
     static STRING Format( const STRING& aLogicalLib, const STRING& aPartName, const STRING& aRevision="" )
         throw( PARSE_ERROR );
 
+    void clear();
 
 #if defined(DEBUG)
     static void Test();
