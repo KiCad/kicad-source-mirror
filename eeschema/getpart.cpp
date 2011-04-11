@@ -377,7 +377,8 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
     /* Update the unit number. */
     component->SetUnitSelection( GetSheet(), unit );
     component->SetUnit( unit );
-    component->SetFlags( flags );  // Restore m_Flag modified by SetUnit();
+    component->ClearFlags();
+    component->SetFlags( flags );   // Restore m_Flag modified by SetUnit()
 
     /* Redraw the component in the new position. */
     if( flags )
