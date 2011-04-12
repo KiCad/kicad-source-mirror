@@ -39,9 +39,18 @@ bool LIB_TEXT::Save( FILE* ExportFile )
 {
     wxString text = m_Text;
 
-    // Spaces are not allowed in text because it is not double quoted:
-    // changed to '~'
-    text.Replace( wxT( " " ), wxT( "~" ) );
+    if( text.Contains( wxT( "~" ) ) || text.Contains( wxT( "\"" ) ) )
+    {
+        // convert double quote to similar-looking two apostrophes
+        text.Replace( wxT( "\"" ), wxT( "''" ) );
+        text = wxT( "\"" ) + text + wxT( "\"" );
+    }
+    else
+    {
+        // Spaces are not allowed in text because it is not double quoted:
+        // changed to '~'
+        text.Replace( wxT( " " ), wxT( "~" ) );
+    }
 
     if( fprintf( ExportFile, "T %d %d %d %d %d %d %d %s ", m_Orient, m_Pos.x, m_Pos.y,
                  m_Size.x, m_Attributs, m_Unit, m_Convert, TO_UTF8( text ) ) < 0 )
@@ -79,17 +88,35 @@ bool LIB_TEXT::Load( char* line, wxString& errorMsg )
     buf[0] = 0;
     tmp[0] = 0;         // For italic option, Not in old versions
 
+    cnt = sscanf( &line[2], "%d %d %d %d %d %d %d \"%[^\"]\" %s %d %c %c",
+                  &m_Orient, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
+                  &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify,
+                  &vjustify );
+
+    
+    if( cnt >= 8 ) // if quoted loadng failed, load as not quoted
+    {
+        m_Text = FROM_UTF8( buf );
+        // convert two apostrophes back to double quote
+        m_Text.Replace( wxT( "''" ), wxT( "\"" ) );
+    }
+    else
+    {
     cnt = sscanf( &line[2], "%d %d %d %d %d %d %d %s %s %d %c %c",
                   &m_Orient, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
                   &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify,
                   &vjustify );
 
-    if( cnt < 8 )
-    {
-        errorMsg.Printf( _( "text only had %d parameters of the required 8" ), cnt );
-        return false;
+        if( cnt < 8 )
+        {
+            errorMsg.Printf( _( "text only had %d parameters of the required 8" ), cnt );
+            return false;
+        }
+        
+        /* Convert '~' to spaces (only if text is not quoted). */
+        m_Text = FROM_UTF8( buf );
+        m_Text.Replace( wxT( "~" ), wxT( " " ) );
     }
-
     m_Size.y = m_Size.x;
 
     if( strnicmp( tmp, "Italic", 6 ) == 0 )
@@ -129,9 +156,6 @@ bool LIB_TEXT::Load( char* line, wxString& errorMsg )
         break;
     }
 
-    /* Convert '~' to spaces. */
-    m_Text = FROM_UTF8( buf );
-    m_Text.Replace( wxT( "~" ), wxT( " " ) );
 
     return true;
 }
