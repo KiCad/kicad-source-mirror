@@ -33,8 +33,12 @@ If windows, then try running g++ and make from within your msys bash shell.
 
 Install or Build wxWidgets
 --------------------------
+
+WARNING:
+ see wxWidgets_patch_notes.txt for patches and issues in wxWidgets.
+
 If on windows, download
-http://sourceforge.net/projects/wxwindows/files/wxAll/2.8.10/wxWidgets-2.8.10.zip/download
+http://sourceforge.net/projects/wxwindows/files/wxAll/2.8.10/wxWidgets-2.8.12.zip/download
 or a newer version.
 Start msys so you have a bash shell.  Decide where your wxWidgets build directory
 will be.  It must be where you can access it from within the msys environment,
@@ -121,7 +125,11 @@ command prompt.
 
 Obtain Sources
 --------------
-You can use the subversion repository or a tar file for this.  See the wiki.
+You can use the Launchpad repository or a tar file for this.  See the wiki.
+
+Launchpad repository handle 2 branches:
+- a testing branch (used by developers)
+- a stable branch (a copy of the testing branch, when this testing branch is near a stable state))
 
 
 Create Makefiles with CMake
@@ -182,6 +190,16 @@ Make the Debug binaries:
 Fine-tune Build Process
 -----------------------
 These should be set from command line:
+
+One of these 2 option *must* be set to ON:
+  KICAD_STABLE_VERSION or KICAD_TESTING_VERSION
+    ** KICAD_STABLE_VERSION:
+    set this option to ON to build the stable version of KICAD. mainly used to set version ID
+    Usually set for kicad version downloaded from stable branch
+
+    ** KICAD_TESTING_VERSION
+    set this option to ON to build the stable version of KICAD. mainly used to set version ID
+    Usually set for kicad version downloaded from testing branch
 
  CMAKE_BUILD_TYPE Release/Debug (REQUIRED)
    Choose build type: Release/Debug.

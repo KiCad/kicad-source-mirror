@@ -20,6 +20,37 @@ So use a very recent version (>= 2.8.10 (that also solve other bugs)
 wxWidgets patch:
 
 
+wxMSW, version 2.8.x
+Some zoom values smaller than 3 to 5 create artifacts on screen, mainly values < 1.
+(corresponding to draw scale factor > 1 )
+
+See http://trac.wxwidgets.org/ticket/9554 (and 11669).
+
+This is fixed in version 2.9.x
+
+This is a workaround that is not a full fix, but remaining artifacts are acceptable
+edit file  edit file <wxWidgets>/src/msw/dc.cpp
+ >> search for line
+    static const int VIEWPORT_EXTENT = 1000;
+ >> and replace by
+    static const int VIEWPORT_EXTENT = 10000;
+
+
+wxWidgets 2.9.1 (all platforms)
+Has a problem when using the built in string to double conversion:
+In countries using a comm instead of a point as floating number separator
+after calling this conversion function, the comma is changed in point.
+(Happens after reading a parameter stored in a wxConfig structure, if this
+parameter is a double)
+Workaround:
+Use a version > 2.9.2
+
+Currently ( 2011, april 12 ) the 2.9.2 is not yet finalized
+(and can be found only on the wxWidgets snv server)
+can be fixed by replacing the file <wxWidgets-2.9.1>/src/common/xlocale.cpp
+by the corresponding file from the 2.9.2 version (from wxWidgets svn server)
+
+
 *************************************************************************************
 wxGTK version: All
 *************************************************************************************

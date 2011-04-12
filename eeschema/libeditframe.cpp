@@ -209,8 +209,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     UpdateAliasSelectList();
     UpdatePartSelectList();
 
-    Show( true );
-
     m_auimgr.SetManagedWindow( this );
 
     wxAuiPaneInfo horiz;
@@ -242,6 +240,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
                       wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     m_auimgr.Update();
+
+    Show( true );
 
     wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED, ID_ZOOM_PAGE );
     wxPostEvent( this, evt );
@@ -344,7 +344,13 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
 int LIB_EDIT_FRAME::BestZoom()
 {
-    int      dx, dy, ii, jj;
+/* Please, note: wxMSW before version 2.9 seems have
+ * problems with zoom values < 1 ( i.e. userscale > 1) and needs to be patched:
+ * edit file <wxWidgets>/src/msw/dc.cpp
+ * search for line static const int VIEWPORT_EXTENT = 1000;
+ * and replace by static const int VIEWPORT_EXTENT = 10000;
+ */
+    int      dx, dy;
     wxSize   size;
     EDA_RECT BoundaryBox;
 
@@ -353,7 +359,8 @@ int LIB_EDIT_FRAME::BestZoom()
         BoundaryBox = m_component->GetBoundingBox( m_unit, m_convert );
         dx = BoundaryBox.GetWidth();
         dy = BoundaryBox.GetHeight();
-        GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
+        GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 )
+        );
     }
     else
     {
@@ -362,43 +369,22 @@ int LIB_EDIT_FRAME::BestZoom()
         GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
     }
 
-    /*
-     * This fixes a bug where the client size of the drawing area is not
-     * correctly reported until after the window is shown.  This is most
-     * likely due to the unmanaged windows ( vertical tool bars and message
-     * panel ) that are drawn in the main window which wxWidgets knows
-     * nothing about.  When the library editor is reopened with a component
-     * already loading, the zoom will be calculated correctly.
-     */
-    if( !IsShownOnScreen() )
-    {
-        if( m_clientSize != wxSize( -1, -1 ) )
-            size = m_clientSize;
-        else
-            size = DrawPanel->GetClientSize();
-    }
-    else
-    {
-        if( m_clientSize == wxSize( -1, -1 ) )
-            m_clientSize = DrawPanel->GetClientSize();
+    size = DrawPanel->GetClientSize();
 
-        size = m_clientSize;
-    }
+    // Reserve a 10% margin around component bounding box.
+    double margin_scale_factor = 0.8;
+    double zx =(double) dx / ( margin_scale_factor * (double)size.x ) *
+                    (double) GetScreen()->m_ZoomScalar;
+    double zy = (double) dx / ( margin_scale_factor * (double)size.y) *
+                    (double) GetScreen()->m_ZoomScalar;
 
-    size -= wxSize( 25, 25 );   // reserve 100 mils margin
-    ii = wxRound( ( (double) dx / (double) size.x ) * (double) GetScreen()->m_ZoomScalar );
-    jj = wxRound( ( (double) dy / (double) size.y ) * (double) GetScreen()->m_ZoomScalar );
+    int bestzoom = wxRound( MAX( zx, zy ) );
 
-    int bestzoom = MAX( ii + 1, jj + 1 );
-#if defined( __WINDOWS__ ) && !wxCHECK_VERSION(2, 9, 1)
-    /* This is a workaround: wxWidgets (wxMSW) before version 2.9 seems have
-     * problems with scale values < 1
-     * corresponding to values < GetScreen()->m_ZoomScalar
-     * So we keep bestzoom >= GetScreen()->m_ZoomScalar
-     */
-    if( bestzoom < GetScreen()->m_ZoomScalar )
-        bestzoom = GetScreen()->m_ZoomScalar;
-#endif
+    // keep it >= minimal existing zoom (can happen for very small components
+    // for instance when starting a new component
+    if( bestzoom  < GetScreen()->m_ZoomList[0] )
+        bestzoom  = GetScreen()->m_ZoomList[0];
+
     return bestzoom;
 }
 

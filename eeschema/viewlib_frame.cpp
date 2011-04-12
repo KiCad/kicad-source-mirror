@@ -313,6 +313,12 @@ void LIB_VIEW_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 
 int LIB_VIEW_FRAME::BestZoom()
 {
+/* Please, note: wxMSW before version 2.9 seems have
+ * problems with zoom values < 1 ( i.e. userscale > 1) and needs to be patched:
+ * edit file <wxWidgets>/src/msw/dc.cpp
+ * search for line static const int VIEWPORT_EXTENT = 1000;
+ * and replace by static const int VIEWPORT_EXTENT = 10000;
+ */
     LIB_COMPONENT* component = NULL;
     CMP_LIBRARY* lib;
     int bestzoom = 16;      // default value for bestzoom
@@ -333,21 +339,21 @@ int LIB_VIEW_FRAME::BestZoom()
     EDA_RECT BoundaryBox = component->GetBoundingBox( m_unit, m_convert );
 
     // Reserve a 10% margin around component bounding box.
-    double zx =(double) BoundaryBox.GetWidth() / ( 0.8 * (double)size.x ) *
+    double margin_scale_factor = 0.8;
+    double zx =(double) BoundaryBox.GetWidth() /
+                    ( margin_scale_factor * (double)size.x ) *
                     (double) GetScreen()->m_ZoomScalar;
-    double zy = (double) BoundaryBox.GetHeight() / ( 0.8 * (double)size.y) *
+    double zy = (double) BoundaryBox.GetHeight() /
+                    ( margin_scale_factor * (double)size.y) *
                     (double) GetScreen()->m_ZoomScalar;
+
+    // Calculates the best zoom
     bestzoom = wxRound( MAX( zx, zy ) );
 
-#if defined( __WINDOWS__ ) && !wxCHECK_VERSION(2, 9, 1)
-    /* This is a workaround: wxWidgets (wxMSW) before version 2.9 seems have
-     * problems with scale values < 1
-     * corresponding to values < GetScreen()->m_ZoomScalar
-     * So we keep bestzoom >= GetScreen()->m_ZoomScalar
-     */
-    if( bestzoom < GetScreen()->m_ZoomScalar )
-        bestzoom = GetScreen()->m_ZoomScalar;
-#endif
+    // keep it >= minimal existing zoom (can happen for very small components
+    // like small power symbols
+    if( bestzoom  < GetScreen()->m_ZoomList[0] )
+        bestzoom  = GetScreen()->m_ZoomList[0];
 
     GetScreen()->SetScrollCenterPosition( BoundaryBox.Centre() );
 

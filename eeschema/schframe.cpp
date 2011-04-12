@@ -242,6 +242,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
         m_auimgr.AddPane( MsgPanel, wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
 
     m_auimgr.Update();
+
+    // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
+    BestZoom();
 }
 
 
@@ -428,21 +431,18 @@ int SCH_EDIT_FRAME::BestZoom()
     dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
 
     size = DrawPanel->GetClientSize();
-    int ii = wxRound( (double) dx / size.x * (double) GetScreen()->m_ZoomScalar );
-    int jj = wxRound( (double) dx / size.x * (double) GetScreen()->m_ZoomScalar );
-    int bestzoom = MAX( ii, jj );
+
+    // Reserve no margin because best zoom shows the full page
+    // and margins are already included in function that draws the sheet refernces
+    double margin_scale_factor = 1.0;
+    double zx =(double) dx / ( margin_scale_factor * (double)size.x ) *
+                    (double) GetScreen()->m_ZoomScalar;
+    double zy = (double) dy / ( margin_scale_factor * (double)size.y) *
+                    (double) GetScreen()->m_ZoomScalar;
+
+    int bestzoom = wxRound( MAX( zx, zy ) );
 
     GetScreen()->SetScrollCenterPosition( wxPoint( dx / 2, dy / 2 ) );
-
-#if defined( __WINDOWS__ ) && !wxCHECK_VERSION(2, 9, 1)
-    /* This is a workaround: wxWidgets (wxMSW) before version 2.9 seems have
-     * problems with scale values < 1
-     * corresponding to values < GetScreen()->m_ZoomScalar
-     * So we keep bestzoom >= GetScreen()->m_ZoomScalar
-     */
-    if( bestzoom < GetScreen()->m_ZoomScalar )
-        bestzoom = GetScreen()->m_ZoomScalar;
-#endif
 
     return bestzoom;
 }

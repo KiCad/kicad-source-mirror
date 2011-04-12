@@ -1,7 +1,7 @@
 /**
  * @file eeschema/menubar.cpp
  * @brief (Re)Create the main menubar for the schematic frame
- */ 
+ */
 #ifdef __GNUG__
 #pragma implementation
 #endif
@@ -230,21 +230,21 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
      * using in AddHotkeyName call the option "false" (not a shortcut)
      */
 
-    // Zoom in 
+    // Zoom in
     text = AddHotkeyName( _( "Zoom In" ), s_Schematic_Hokeys_Descr,
                           ID_ZOOM_IN, false );  // add comment, not a shortcut
     item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, wxITEM_NORMAL );
     SET_BITMAP( zoom_in_xpm );
     viewMenu->Append( item );
 
-    // Zoom out 
+    // Zoom out
     text = AddHotkeyName( _( "Zoom Out" ), s_Schematic_Hokeys_Descr,
                           ID_ZOOM_OUT, false );  // add comment, not a shortcut
     item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, wxITEM_NORMAL );
     SET_BITMAP( zoom_out_xpm );
     viewMenu->Append( item );
 
-    // Fit on screen 
+    // Fit on screen
     text = AddHotkeyName( _( "Fit on Screen" ), s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, wxITEM_NORMAL );
@@ -319,7 +319,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     SET_BITMAP( noconn_button );
     placeMenu->Append( item );
 
-    // Net name 
+    // Net name
     text = AddHotkeyName( _( "Label" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_LABEL, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_LABEL_BUTT, text,
@@ -327,7 +327,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     SET_BITMAP( add_line_label_xpm );
     placeMenu->Append( item );
 
-    // Global label 
+    // Global label
     text = AddHotkeyName( _( "Global label" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_GLABEL, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_GLABEL_BUTT, text,
@@ -349,12 +349,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Hierarchical label
     text = AddHotkeyName( _( "Hierarchical label" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_HLABEL, false );    // add comment, not a shortcut
-    item = new wxMenuItem( placeMenu, ID_HIERLABEL_BUTT, text,
-                           HELP_PLACE_HIER_LABEL, wxITEM_NORMAL );
-    SET_BITMAP( add_hierarchical_label_xpm );
-    placeMenu->Append( item );
+    text = AddHotkeyName( _( "Hierarchical label" ), s_Schematic_Hokeys_Descr,
+                          HK_ADD_HLABEL, false );    // add comment, not a shortcut
+    ADD_MENUITEM_WITH_HELP( placeMenu, ID_HIERLABEL_BUTT,
+                            text, HELP_PLACE_HIER_LABEL,
+                            add_hierarchical_label_xpm );
 
-    // Hierarchical sheet 
+
+    // Hierarchical sheet
     text = AddHotkeyName( _( "Hierarchical sheet" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_HIER_SHEET, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_SHEET_SYMBOL_BUTT, text,
@@ -362,7 +364,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     SET_BITMAP( add_hierarchical_subsheet_xpm );
     placeMenu->Append( item );
 
-    // Import hierarchical sheet 
+    // Import hierarchical sheet
     item = new wxMenuItem( placeMenu,
                            ID_IMPORT_HLABEL_BUTT,
                            _( "Import Hierarchical Label" ),
@@ -370,7 +372,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     SET_BITMAP( import_hierarchical_label_xpm );
     placeMenu->Append( item );
 
-    // Add hierarchical Pin to Sheet 
+    // Add hierarchical Pin to Sheet
     item = new wxMenuItem( placeMenu,
                            ID_SHEET_PIN_BUTT,
                            _( "Add Hierarchical Pin to Sheet" ),
@@ -378,10 +380,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     SET_BITMAP( add_hierar_pin_xpm );
     placeMenu->Append( item );
 
-    // Separator 
+    // Separator
     placeMenu->AppendSeparator();
 
-    // Graphic line or polygon 
+    // Graphic line or polygon
     text = AddHotkeyName( _( "Graphic polyline" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_GRAPHIC_POLYLINE, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_LINE_COMMENT_BUTT, text,
@@ -389,7 +391,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     SET_BITMAP( add_dashed_line_xpm );
     placeMenu->Append( item );
 
-    // Graphic text 
+    // Graphic text
     text = AddHotkeyName( _( "Graphic text" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_GRAPHIC_TEXT, false );    // add comment, not a shortcut
     item = new wxMenuItem( placeMenu, ID_TEXT_COMMENT_BUTT, text,
@@ -401,7 +403,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;
 
-    // Library 
+    // Library
     item = new wxMenuItem( preferencesMenu,
                            ID_CONFIG_REQ,
                            _( "&Library" ),
