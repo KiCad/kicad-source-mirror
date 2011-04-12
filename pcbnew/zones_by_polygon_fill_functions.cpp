@@ -85,10 +85,6 @@ void PCB_EDIT_FRAME::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
 }
 
 
-/***************************************************************************************/
-int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
-/***************************************************************************************/
-
 /**
  * Function Fill_Zone
  *  Calculate the zone filling for the outline zone_container
@@ -99,10 +95,11 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
  * @param verbose = true to show error messages
  * @return error level (0 = no error)
  */
+int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
 {
     wxString msg;
 
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
 
     if( GetBoard()->ComputeBoundingBox() == false )
     {
@@ -117,7 +114,8 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
 
     if( msg.IsEmpty() )
         msg = wxT( "No net" );
-    Affiche_1_Parametre( this, 22, _( "NetName" ), msg, RED );
+
+    AppendMsgPanel( _( "NetName" ), msg, RED );
 
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 

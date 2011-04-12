@@ -278,6 +278,7 @@ public:
      * @param aUse_netnames = bool. if true, use net names from labels in schematic
      *                              if false, use net numbers (net codes)
      *   bool aUse_netnames is used only for Spice netlist
+     * @param aUsePrefix Prefix reference designator with an 'X' for spice output.
      * @return true if success.
      */
     bool         CreateNetlist( int             aFormat,
@@ -745,9 +746,9 @@ public:
 
     /**
      * Function SaveUndoItemInUndoList
-     * swaps the cloned item in #m_undoItem with \a aItem and saves it to the undo list
-     * then swap the data back.  This swaps the internal structure of the item with the
-     * cloned item.  It does not swap the actual item pointers themselves.
+     * swaps the cloned item in member variable m_undoItem with \a aItem and saves it to
+     * the undo list then swap the data back.  This swaps the internal structure of the
+     * item with the cloned item.  It does not swap the actual item pointers themselves.
      *
      * @param aItem The item to swap with the current undo item.
      */

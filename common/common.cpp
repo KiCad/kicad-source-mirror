@@ -666,14 +666,6 @@ void WinEDA_TextFrame::OnClose( wxCloseEvent& event )
 }
 
 
-void Affiche_1_Parametre( EDA_DRAW_FRAME* frame, int pos_X,
-                          const wxString& texte_H, const wxString& texte_L,
-                          int color )
-{
-    frame->MsgPanel->Affiche_1_Parametre( pos_X, texte_H, texte_L, color );
-}
-
-
 int GetTimeStamp()
 {
     static int OldTimeStamp, NewTimeStamp;

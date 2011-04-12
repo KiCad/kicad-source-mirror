@@ -177,16 +177,14 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
     switchedLocale = true;
 
     // Display results
-    MsgPanel->EraseMsgBox();
-    Affiche_1_Parametre( this, 0, _( "Component side place file:" ),
-                         fnFront.GetFullPath(), BLUE );
+    ClearMsgPanel();
+    AppendMsgPanel( _( "Component side place file:" ), fnFront.GetFullPath(), BLUE );
 
     if( doBoardBack )
-        Affiche_1_Parametre( this, 32, _( "Copper side place file:" ),
-                             fnBack.GetFullPath(), BLUE );
+        AppendMsgPanel( _( "Copper side place file:" ), fnBack.GetFullPath(), BLUE );
 
     msg.Empty(); msg << moduleCount;
-    Affiche_1_Parametre( this, 65, _( "Module count" ), msg, RED );
+    AppendMsgPanel( _( "Module count" ), msg, RED );
 
     // Sort the list of modules alphabetically
     Liste = (LIST_MOD*) MyZMalloc( moduleCount * sizeof(LIST_MOD) );

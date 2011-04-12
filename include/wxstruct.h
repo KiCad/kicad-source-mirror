@@ -37,7 +37,7 @@
 class EDA_ITEM;
 class EDA_RECT;
 class EDA_DRAW_PANEL;
-class WinEDA_MsgPanel;
+class EDA_MSG_PANEL;
 class BASE_SCREEN;
 class WinEDA_Toolbar;
 class WinEDAChoiceBox;
@@ -227,7 +227,7 @@ class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 
 public:
     EDA_DRAW_PANEL*   DrawPanel;            // Draw area
-    WinEDA_MsgPanel*  MsgPanel;             // Panel used to display some
+    EDA_MSG_PANEL*    MsgPanel;             // Panel used to display some
                                             //  info (bottom of the screen)
     WinEDA_Toolbar*   m_VToolBar;           // Vertical (right side) Toolbar
     WinEDA_Toolbar*   m_AuxVToolBar;        // Auxiliary Vertical (right side)
@@ -602,13 +602,13 @@ public:
 
 
 /*********************************************************
-*   class WinEDA_MsgPanel : this is a panel to display various infos
+*   class EDA_MSG_PANEL : this is a panel to display various infos
 *   and messages on items in eeschema an pcbnew
 *********************************************************/
 
 /**
  * Struct MsgItem
- * is used privately by WinEDA_MsgPanel as the item type of its vector.
+ * is used privately by EDA_MSG_PANEL as the item type of its vector.
  * These items are the pairs of text strings shown in the MsgPanel.
  */
 struct MsgItem
@@ -640,7 +640,7 @@ struct MsgItem
 };
 
 
-class WinEDA_MsgPanel : public wxPanel
+class EDA_MSG_PANEL : public wxPanel
 {
 protected:
     std::vector<MsgItem>    m_Items;
@@ -668,21 +668,32 @@ public:
     int m_BgColor;
 
 public:
-    WinEDA_MsgPanel( EDA_DRAW_FRAME* parent, int id, const wxPoint& pos, const wxSize& size );
-    ~WinEDA_MsgPanel();
+    EDA_MSG_PANEL( EDA_DRAW_FRAME* parent, int id, const wxPoint& pos, const wxSize& size );
+    ~EDA_MSG_PANEL();
 
 
     /**
      * Function GetRequiredHeight
-     * returns the required height (in pixels) of a WinEDA_MsgPanel.  This takes
+     * returns the required height (in pixels) of a EDA_MSG_PANEL.  This takes
      * into consideration the system gui font, wxSYS_DEFAULT_GUI_FONT.
      */
     static int GetRequiredHeight();
 
     void OnPaint( wxPaintEvent& event );
     void EraseMsgBox();
-    void Affiche_1_Parametre( int pos_X, const wxString& texte_H,
-                              const wxString& texte_L, int color );
+
+    /**
+     * Function SetMessage
+     * sets a message at \a aXPosition to \a aUpperText and \a aLowerText in the message panel.
+     *
+     * @param aXPosition The horizontal position to display the message or less than zero
+     *                   to set the message using the last message position.
+     * @param aUpperText The text to be displayed in top line.
+     * @param aLowerText The text to be displayed in bottom line.
+     * @param aColor Color of the text to display.
+     */
+    void SetMessage( int aXPosition, const wxString& aUpperText,
+                     const wxString& aLowerText, int aColor );
 
     /**
      * Append a message to the message panel.

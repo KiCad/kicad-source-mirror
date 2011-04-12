@@ -744,10 +744,10 @@ static void Gen_Raccord_Track( PCB_EDIT_FRAME* frame, wxDC* DC )
             oldpercent = percent;
 
             msg.Printf( wxT( "%d" ), frame->GetBoard()->m_Track.GetCount() );
-            Affiche_1_Parametre( frame, POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
+            frame->MsgPanel->SetMessage( POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
 
             msg.Printf( wxT( "%d" ), ii );
-            Affiche_1_Parametre( frame, POS_AFF_NUMSEGM, wxT( "Segm" ), msg, CYAN );
+            frame->MsgPanel->SetMessage( POS_AFF_NUMSEGM, wxT( "Segm" ), msg, CYAN );
         }
 
         if( frame->DrawPanel->m_AbortRequest )
@@ -787,7 +787,7 @@ static void Gen_Raccord_Track( PCB_EDIT_FRAME* frame, wxDC* DC )
 
             nn++;
             msg.Printf( wxT( "%d" ), nn );
-            Affiche_1_Parametre( frame, POS_AFF_VAR, wxT( "New <" ), msg, YELLOW );
+            frame->MsgPanel->SetMessage( POS_AFF_VAR, wxT( "New <" ), msg, YELLOW );
 
             // create a new segment and insert it next to "other", then shorten other.
             newTrack = other->Copy();
@@ -834,7 +834,7 @@ static void Gen_Raccord_Track( PCB_EDIT_FRAME* frame, wxDC* DC )
 
             nn++;
             msg.Printf( wxT( "%d" ), nn );
-            Affiche_1_Parametre( frame, POS_AFF_VAR, wxT( "New >" ), msg, YELLOW );
+            frame->MsgPanel->SetMessage( POS_AFF_VAR, wxT( "New >" ), msg, YELLOW );
 
             // create a new segment and insert it next to "other", then shorten other.
             newTrack = other->Copy();

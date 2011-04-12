@@ -120,7 +120,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
 
     GetBoard()->m_Status_Pcb = 0;     /* we want a full ratsnest computation,
                                        * from the scratch */
-    MsgPanel->EraseMsgBox();
+    ClearMsgPanel();
 
     // Rebuild the full pads and net info list
     RecalculateAllTracksNetcode();
@@ -128,13 +128,9 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
     if( aDisplayStatus )
     {
         msg.Printf( wxT( " %d" ), m_Pcb->GetPadsCount() );
-        Affiche_1_Parametre( this, 1, wxT( "pads" ), msg, RED );
-    }
-
-    if( aDisplayStatus )
-    {
+        AppendMsgPanel( wxT( "Pads" ), msg, RED );
         msg.Printf( wxT( " %d" ), m_Pcb->m_NetInfo->GetCount() );
-        Affiche_1_Parametre( this, 8, wxT( "Nets" ), msg, CYAN );
+        AppendMsgPanel( wxT( "Nets" ), msg, CYAN );
     }
 
     /* Compute the full ratsnest

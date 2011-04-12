@@ -161,7 +161,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
             frame->OnModify();  // Ready to save the new empty board
 
             wxString msg;
-            msg.Printf( _( "File <%s> not existing\nThis is normal for a new project" ),
+            msg.Printf( _( "File <%s> does not exist.\nThis is normal for a new project" ),
                         GetChars( frame->GetScreen()->GetFileName() ) );
             wxMessageBox( msg );
         }

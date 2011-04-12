@@ -231,20 +231,15 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
     int           row_source, col_source, row_target, col_target;
     int           success, nbsucces = 0, nbunsucces = 0;
     NETINFO_ITEM* net;
-    bool          stop = FALSE;
+    bool          stop = false;
     wxString      msg;
 
-    DrawPanel->m_AbortRequest = FALSE;
+    DrawPanel->m_AbortRequest = false;
     DrawPanel->m_AbortEnable  = true;
 
     s_Clearance = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
 
     Ncurrent = 0;
-    MsgPanel->EraseMsgBox();
-    msg.Printf( wxT( "%d  " ), GetBoard()->m_NbNoconnect );
-    Affiche_1_Parametre( this, 72, wxT( "NoConn" ), msg, CYAN );
-
-
     /* go until no more work to do */
     GetWork( &row_source, &col_source, &current_net_code,
              &row_target, &col_target, &pt_cur_ch ); // First net to route.
@@ -256,6 +251,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
     {
         /* Test to stop routing ( escape key pressed ) */
         wxYield();
+
         if( DrawPanel->m_AbortRequest )
         {
             if( IsOK( this, _( "Abort routing?" ) ) )
@@ -268,25 +264,24 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
                 DrawPanel->m_AbortRequest = 0;
         }
 
+        EraseMsgBox();
+
         Ncurrent++;
         net = GetBoard()->FindNet( current_net_code );
+
         if( net )
         {
             msg.Printf( wxT( "[%8.8s]" ), GetChars( net->GetNetname() ) );
-            Affiche_1_Parametre( this, 1, wxT( "Net route" ), msg, BROWN );
+            AppendMsgPanel( wxT( "Net route" ), msg, BROWN );
             msg.Printf( wxT( "%d / %d" ), Ncurrent, Ntotal );
-            Affiche_1_Parametre( this, 12, wxT( "Activity" ), msg, BROWN );
+            AppendMsgPanel( wxT( "Activity" ), msg, BROWN );
         }
 
         pt_cur_ch = pt_cur_ch;
-        segm_oX = GetBoard()->m_BoundaryBox.m_Pos.x +
-                  (Board.m_GridRouting * col_source);
-        segm_oY = GetBoard()->m_BoundaryBox.m_Pos.y +
-                  (Board.m_GridRouting * row_source);
-        segm_fX = GetBoard()->m_BoundaryBox.m_Pos.x +
-                  (Board.m_GridRouting * col_target);
-        segm_fY = GetBoard()->m_BoundaryBox.m_Pos.y +
-                  (Board.m_GridRouting * row_target);
+        segm_oX = GetBoard()->m_BoundaryBox.m_Pos.x + (Board.m_GridRouting * col_source);
+        segm_oY = GetBoard()->m_BoundaryBox.m_Pos.y + (Board.m_GridRouting * row_source);
+        segm_fX = GetBoard()->m_BoundaryBox.m_Pos.x + (Board.m_GridRouting * col_target);
+        segm_fY = GetBoard()->m_BoundaryBox.m_Pos.y + (Board.m_GridRouting * row_target);
 
         /* Draw segment. */
         GRLine( &DrawPanel->m_ClipBox,
@@ -329,12 +324,12 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
             break;
         }
 
-        msg.Printf( wxT( "%d  " ), nbsucces );
-        Affiche_1_Parametre( this, 22, wxT( "Ok" ), msg, GREEN );
-        msg.Printf( wxT( "%d  " ), nbunsucces );
-        Affiche_1_Parametre( this, 30, wxT( "Fail" ), msg, RED );
-        msg.Printf( wxT( "%d  " ), GetBoard()->m_NbNoconnect );
-        Affiche_1_Parametre( this, 38, wxT( "NoConn" ), msg, CYAN );
+        msg.Printf( wxT( "%d" ), nbsucces );
+        AppendMsgPanel( wxT( "Ok" ), msg, GREEN );
+        msg.Printf( wxT( "%d" ), nbunsucces );
+        AppendMsgPanel( wxT( "Fail" ), msg, RED );
+        msg.Printf( wxT( "  %d" ), GetBoard()->m_NbNoconnect );
+        AppendMsgPanel( wxT( "Not Connectd" ), msg, CYAN );
 
         /* Delete routing from display. */
         pt_cur_ch->m_PadStart->Draw( DrawPanel, DC, GR_AND );
@@ -344,7 +339,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
             break;
     }
 
-    DrawPanel->m_AbortEnable = FALSE;
+    DrawPanel->m_AbortEnable = false;
 
     return SUCCESS;
 }

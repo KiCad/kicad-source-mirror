@@ -38,7 +38,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* father,
     m_HToolBar       = NULL;
     m_FrameIsActive  = TRUE;
 
-    m_MsgFrameHeight = WinEDA_MsgPanel::GetRequiredHeight();
+    m_MsgFrameHeight = EDA_MSG_PANEL::GetRequiredHeight();
 
     minsize.x = 470;
     minsize.y = 350 + m_MsgFrameHeight;

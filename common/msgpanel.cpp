@@ -12,13 +12,13 @@
 #include "colors.h"
 
 
-BEGIN_EVENT_TABLE( WinEDA_MsgPanel, wxPanel )
-    EVT_PAINT( WinEDA_MsgPanel::OnPaint )
+BEGIN_EVENT_TABLE( EDA_MSG_PANEL, wxPanel )
+    EVT_PAINT( EDA_MSG_PANEL::OnPaint )
 END_EVENT_TABLE()
 
 
-WinEDA_MsgPanel::WinEDA_MsgPanel( EDA_DRAW_FRAME* parent, int id,
-                                  const wxPoint& pos, const wxSize& size ) :
+EDA_MSG_PANEL::EDA_MSG_PANEL( EDA_DRAW_FRAME* parent, int id,
+                              const wxPoint& pos, const wxSize& size ) :
     wxPanel( parent, id, pos, size )
 {
     m_Parent = parent;
@@ -30,12 +30,12 @@ WinEDA_MsgPanel::WinEDA_MsgPanel( EDA_DRAW_FRAME* parent, int id,
 }
 
 
-WinEDA_MsgPanel::~WinEDA_MsgPanel()
+EDA_MSG_PANEL::~EDA_MSG_PANEL()
 {
 }
 
 
-wxSize WinEDA_MsgPanel::computeFontSize()
+wxSize EDA_MSG_PANEL::computeFontSize()
 {
     // Get size of the wxSYS_DEFAULT_GUI_FONT
     wxSize      fontSizeInPixels;
@@ -49,14 +49,14 @@ wxSize WinEDA_MsgPanel::computeFontSize()
 }
 
 
-int WinEDA_MsgPanel::GetRequiredHeight()
+int EDA_MSG_PANEL::GetRequiredHeight()
 {
     // make space for two rows of text plus a number of pixels between them.
     return 2 * computeFontSize().y + 0;
 }
 
 
-wxSize WinEDA_MsgPanel::computeTextSize( const wxString& text )
+wxSize EDA_MSG_PANEL::computeTextSize( const wxString& text )
 {
     // Get size of the wxSYS_DEFAULT_GUI_FONT
     wxSize      textSizeInPixels;
@@ -70,7 +70,7 @@ wxSize WinEDA_MsgPanel::computeTextSize( const wxString& text )
 }
 
 
-void WinEDA_MsgPanel::OnPaint( wxPaintEvent& event )
+void EDA_MSG_PANEL::OnPaint( wxPaintEvent& event )
 {
     wxPaintDC dc( this );
 
@@ -87,9 +87,9 @@ void WinEDA_MsgPanel::OnPaint( wxPaintEvent& event )
     event.Skip();
 }
 
-void WinEDA_MsgPanel::AppendMessage( const wxString& textUpper,
-                                     const wxString& textLower,
-                                     int color, int pad )
+void EDA_MSG_PANEL::AppendMessage( const wxString& textUpper,
+                                   const wxString& textLower,
+                                   int color, int pad )
 {
     wxString    text;
     wxSize      drawSize = GetClientSize();
@@ -122,25 +122,14 @@ void WinEDA_MsgPanel::AppendMessage( const wxString& textUpper,
 }
 
 
-/*
- * Display a parameter in message panel.
- * pos_X = horizontal position
- * If pos_X < 0: horizontal position is the last
- * Required value >= 0
- * Texte_H = text to be displayed in top line.
- * Texte_L = text to be displayed in bottom line.
- * Color = color display
- */
-void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
-                                           const wxString& texte_L, int color )
+void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
+                                const wxString& aLowerText, int aColor )
 {
-    wxPoint     pos;
-    wxSize      drawSize = GetClientSize();
+    wxPoint pos;
+    wxSize drawSize = GetClientSize();
 
-    if( pos_X >= 0 )
-    {
-        m_last_x = pos.x = pos_X * (m_fontSize.x + 2);
-    }
+    if( aXPosition >= 0 )
+        m_last_x = pos.x = aXPosition * (m_fontSize.x + 2);
     else
         pos.x = m_last_x;
 
@@ -151,14 +140,15 @@ void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
     item.m_UpperY = (drawSize.y / 2) - m_fontSize.y;
     item.m_LowerY = drawSize.y - m_fontSize.y;
 
-    item.m_UpperText = texte_H;
-    item.m_LowerText = texte_L;
-    item.m_Color = color;
+    item.m_UpperText = aUpperText;
+    item.m_LowerText = aLowerText;
+    item.m_Color = aColor;
 
     int ndx;
 
     // update the vector, which is sorted by m_X
     int limit = m_Items.size();
+
     for( ndx=0;  ndx<limit;  ++ndx )
     {
         // replace any item with same X
@@ -184,7 +174,7 @@ void WinEDA_MsgPanel::Affiche_1_Parametre( int pos_X, const wxString& texte_H,
 }
 
 
-void WinEDA_MsgPanel::showItem( wxDC& dc, const MsgItem& aItem )
+void EDA_MSG_PANEL::showItem( wxDC& dc, const MsgItem& aItem )
 {
     int color = aItem.m_Color;
 
@@ -208,14 +198,14 @@ void WinEDA_MsgPanel::showItem( wxDC& dc, const MsgItem& aItem )
 }
 
 
-void WinEDA_MsgPanel::EraseMsgBox()
+void EDA_MSG_PANEL::EraseMsgBox()
 {
    m_Items.clear();
    m_last_x = 0;
    Refresh();
 }
 
-void WinEDA_MsgPanel::erase( wxDC* DC )
+void EDA_MSG_PANEL::erase( wxDC* DC )
 {
     wxPen   pen;
     wxBrush brush;

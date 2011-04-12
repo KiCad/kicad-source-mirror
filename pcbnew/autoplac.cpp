@@ -403,24 +403,23 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
 
     MsgPanel->EraseMsgBox();
     msg.Printf( wxT( "%d" ), Ncols );
-    Affiche_1_Parametre( this, 1, _( "Cols" ), msg, GREEN );
+    MsgPanel->SetMessage( 1, _( "Cols" ), msg, GREEN );
     msg.Printf( wxT( "%d" ), Nrows );
-    Affiche_1_Parametre( this, 7, _( "Lines" ), msg, GREEN );
+    MsgPanel->SetMessage( 7, _( "Lines" ), msg, GREEN );
     msg.Printf( wxT( "%d" ), NbCells );
-    Affiche_1_Parametre( this, 14, _( "Cells." ), msg, YELLOW );
+    MsgPanel->SetMessage( 14, _( "Cells." ), msg, YELLOW );
 
     /* Choose the number of board sides. */
     Nb_Sides = TWO_SIDES;
 
-    Affiche_1_Parametre( this, 22, wxT( "S" ),
-                         ( Nb_Sides == TWO_SIDES ) ? wxT( "2" ) : wxT( "1" ),
-                         WHITE );
+    MsgPanel->SetMessage( 22, wxT( "S" ), ( Nb_Sides == TWO_SIDES ) ? wxT( "2" ) : wxT( "1" ),
+                          WHITE );
 
     Board.InitBoard();
 
     /* Display memory usage. */
     msg.Printf( wxT( "%d" ), Board.m_MemSize / 1024 );
-    Affiche_1_Parametre( this, 24, wxT( "Mem(Kb)" ), msg, CYAN );
+    MsgPanel->SetMessage( 24, wxT( "Mem(Kb)" ), msg, CYAN );
 
     Route_Layer_BOTTOM = LAYER_N_FRONT;
     if( Nb_Sides == TWO_SIDES )
@@ -470,7 +469,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     while( ii )
     {
         msg.Printf( wxT( "%d" ), jj++ );
-        Affiche_1_Parametre( this, 50, _( "Loop" ), msg, CYAN );
+        MsgPanel->SetMessage(  50, _( "Loop" ), msg, CYAN );
         ii = Propagation( this );
     }
 
@@ -1121,8 +1120,8 @@ int Propagation( PCB_EDIT_FRAME* frame )
 #define NO_CELL_ZONE (HOLE | CELL_is_EDGE | CELL_is_ZONE)
     wxString  msg;
 
-    Affiche_1_Parametre( frame, 57, wxT( "Detect" ), msg, CYAN );
-    Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "1" ), CYAN );
+    frame->MsgPanel->SetMessage( 57, wxT( "Detect" ), msg, CYAN );
+    frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "1" ), CYAN );
 
     // Alloc memory to handle 1 line or 1 colunmn on the routing matrix
     nn = MAX( Nrows, Ncols ) * sizeof(*pt_cell_V);
@@ -1151,7 +1150,7 @@ int Propagation( PCB_EDIT_FRAME* frame )
     }
 
     /* search 2 : from right to left and top to bottom */
-    Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "2" ), CYAN );
+    frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "2" ), CYAN );
     memset( pt_cell_V, 0, nn );
     for( row = 0; row < Nrows; row++ )
     {
@@ -1174,7 +1173,7 @@ int Propagation( PCB_EDIT_FRAME* frame )
     }
 
     /* search 3 : from bottom to top and right to left balayage */
-    Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "3" ), CYAN );
+    frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "3" ), CYAN );
     memset( pt_cell_V, 0, nn );
     for( col = Ncols - 1; col >= 0; col-- )
     {
@@ -1197,8 +1196,9 @@ int Propagation( PCB_EDIT_FRAME* frame )
     }
 
     /* search 4 : from bottom to top and left to right */
-    Affiche_1_Parametre( frame, -1, wxEmptyString, wxT( "4" ), CYAN );
+    frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "4" ), CYAN );
     memset( pt_cell_V, 0, nn );
+
     for( col = 0; col < Ncols; col++ )
     {
         old_cell_H = 0;

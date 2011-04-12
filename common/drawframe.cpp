@@ -121,8 +121,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_FrameSize.y -= m_MsgFrameHeight;
 
     DrawPanel = new EDA_DRAW_PANEL( this, -1, wxPoint( 0, 0 ), m_FrameSize );
-    MsgPanel  = new WinEDA_MsgPanel( this, -1, wxPoint( 0, m_FrameSize.y ),
-                                     wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
+    MsgPanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_FrameSize.y ),
+                                   wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
 
     MsgPanel->SetBackgroundColour( wxColour( ColorRefs[LIGHTGRAY].m_Red,
                                              ColorRefs[LIGHTGRAY].m_Green,

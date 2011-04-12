@@ -254,8 +254,7 @@ wxString& operator <<( wxString& aString, const wxPoint& aPoint );
  * @param aFlags The same args as allowed for wxExecute()
  * @return bool - true if success, else false
  */
-bool               ProcessExecute( const wxString& aCommandLine,
-                                   int             aFlags = wxEXEC_ASYNC );
+bool ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC );
 
 
 /*******************/
@@ -267,24 +266,6 @@ void InitKiCadAbout( wxAboutDialogInfo& info );
 /**************/
 /* common.cpp */
 /**************/
-
-/**
- * function Affiche_1_Parametre
- * Routine to display a parameter.
- * = POS_X horizontal framing
- * If POS_X <0: horizontal position is the last
- * Required value> = 0
- * Texte_H = text to be displayed in top line.
- * If "by posting on this line
- * Texte_L = text to be displayed in bottom line.
- * If "by posting on this line
- * Color = color display
- */
-void Affiche_1_Parametre( EDA_DRAW_FRAME* frame,
-                          int             pos_X,
-                          const wxString& texte_H,
-                          const wxString& texte_L,
-                          int             color );
 
 int GetTimeStamp();
 
