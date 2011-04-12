@@ -1336,92 +1336,32 @@ void GRFilledRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 void GRSRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2,
               int aWidth, int aColor, wxPenStyle aStyle )
 {
-    if( x1 > x2 )
-        EXCHG( x1, x2 );
 
-    if( y1 > y2 )
-        EXCHG( y1, y2 );
-
-    if( aClipBox )
-    {
-        int xmin = aClipBox->GetX();
-        int ymin = aClipBox->GetY();
-        int xmax = aClipBox->GetRight();
-        int ymax = aClipBox->GetBottom();
-
-        if( x1 > xmax )
-            return;
-
-        if( x2 < xmin )
-            return;
-
-        if( y1 > ymax )
-            return;
-
-        if( y2 < ymin )
-            return;
-    }
-
+    wxPoint points[5];
+    points[0] = wxPoint(x1, y1);
+    points[1] = wxPoint(x1, y2);
+    points[2] = wxPoint(x2, y2);
+    points[3] = wxPoint(x2, y1);
+    points[4] = points[0];
     GRSetColorPen( aDC, aColor, aWidth, aStyle );
-
-    if( ( x1 == x2 ) || ( y1 == y2 ) )
-        aDC->DrawLine( x1, y1, x2, y2 );
-    else
-    {
-        GRSetBrush( aDC, BLACK );
-        aDC->DrawRectangle( x1, y1, x2 - x1, y2 - y1 );
-    }
+    GRSetBrush( aDC, BLACK );
+    ClipAndDrawFilledPoly(aClipBox, aDC, points, 5); // polygon approach is more accurate
 }
 
 
 void GRSFilledRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
                     int width, int Color, int BgColor )
 {
-    if( x1 > x2 )
-        EXCHG( x1, x2 );
 
-    if( y1 > y2 )
-        EXCHG( y1, y2 );
-
-    if( ClipBox )
-    {
-        int xmin = ClipBox->GetX();
-        int ymin = ClipBox->GetY();
-        int xmax = ClipBox->GetRight();
-        int ymax = ClipBox->GetBottom();
-
-        if( x1 > xmax )
-            return;
-        if( x2 < xmin )
-            return;
-        if( y1 > ymax )
-            return;
-        if( y2 < ymin )
-            return;
-
-        // Clipping coordinates
-        if( x1 < xmin )
-            x1 = xmin - 1;
-
-        if( y1 < ymin )
-            y1 = ymin - 1;
-
-        if( x2 > xmax )
-            x2 = xmax + 1;
-
-        if( y2 > ymax )
-            y2 = ymax + 1;
-    }
-
-    GRSetColorPen( DC, Color, width );
-
-    if( ( x1 == x2 ) || ( y1 == y2 ) )
-        DC->DrawLine( x1, y1, x2, y2 );
-    else
-    {
-        GRSetBrush( DC, BgColor, FILLED );
-        DC->DrawRectangle( x1, y1, x2 - x1, y2 - y1 );
-    }
+    wxPoint points[5];
+    points[0] = wxPoint(x1, y1);
+    points[1] = wxPoint(x1, y2);
+    points[2] = wxPoint(x2, y2);
+    points[3] = wxPoint(x2, y1);
+    points[4] = points[0];
+    GRSetBrush( DC, BgColor, FILLED );
+    GRSetColorPen( DC, BgColor, width );
+    ClipAndDrawFilledPoly(ClipBox, DC, points, 5); // polygon approach is more accurate
 }
 
 
