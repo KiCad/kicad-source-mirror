@@ -205,16 +205,16 @@ class WinEDA3D_DrawFrame : public wxFrame
 public:
     PCB_BASE_FRAME* m_Parent;
 private:
-    wxString m_FrameName;       // name used for writing and reading setup
-                                // It is "Frame3D"
-    Pcb3D_GLCanvas*      m_Canvas;
-    WinEDA_Toolbar*      m_HToolBar;
-    WinEDA_Toolbar*      m_VToolBar;
-    int          m_InternalUnits;
-    wxPoint      m_FramePos;
-    wxSize       m_FrameSize;
-    wxAuiManager m_auimgr;
-    bool         m_reloadRequest;
+    wxString        m_FrameName;       // name used for writing and reading setup
+                                       // It is "Frame3D"
+    Pcb3D_GLCanvas* m_Canvas;
+    EDA_TOOLBAR*    m_HToolBar;
+    EDA_TOOLBAR*    m_VToolBar;
+    int             m_InternalUnits;
+    wxPoint         m_FramePos;
+    wxSize          m_FrameSize;
+    wxAuiManager    m_auimgr;
+    bool            m_reloadRequest;
 
 public:
     WinEDA3D_DrawFrame( PCB_BASE_FRAME* parent, const wxString& title,

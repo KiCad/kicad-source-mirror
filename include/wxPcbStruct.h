@@ -19,7 +19,6 @@
 
 /*  Forward declarations of classes. */
 class PCB_SCREEN;
-class WinEDA_Toolbar;
 class WinEDA_ModuleEditFrame;
 class BOARD;
 class TEXTE_PCB;
@@ -332,7 +331,7 @@ public:
     void             ReCreateMicrowaveVToolbar();
     void             ReCreateOptToolbar();
     void             ReCreateMenuBar();
-    LAYER_BOX_SELECTOR* ReCreateLayerBox( WinEDA_Toolbar* parent );
+    LAYER_BOX_SELECTOR* ReCreateLayerBox( EDA_TOOLBAR* parent );
 
     /** Virtual Function OnModify()
      * Must be called after a board change

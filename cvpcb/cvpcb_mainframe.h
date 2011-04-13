@@ -29,7 +29,7 @@ public:
     FOOTPRINTS_LISTBOX*  m_FootprintList;
     COMPONENTS_LISTBOX*  m_ListCmp;
     DISPLAY_FOOTPRINTS_FRAME* DrawFrame;
-    WinEDA_Toolbar*      m_HToolBar;
+    EDA_TOOLBAR*         m_HToolBar;
     wxFileName           m_NetlistFileName;
     wxArrayString        m_ModuleLibNames;
     wxArrayString        m_AliasLibNames;

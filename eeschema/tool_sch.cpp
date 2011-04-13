@@ -25,7 +25,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
         return;
 
     wxString msg;
-    m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
     // Set up toolbar
     m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, wxBitmap( new_xpm ),
@@ -126,7 +126,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     if( m_VToolBar )
         return;
 
-    m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
+    m_VToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
 
     // Set up toolbar
     m_VToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, wxBitmap( cursor_xpm ),
@@ -202,7 +202,7 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     if( m_OptionsToolBar )
         return;
 
-    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
+    m_OptionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
                                wxBitmap( grid_xpm ),

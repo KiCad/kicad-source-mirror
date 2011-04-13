@@ -14,14 +14,14 @@ private:
     bool m_layerhotkeys;
     bool m_layerorder;
 public:
-    LAYER_BOX_SELECTOR( WinEDA_Toolbar* parent, wxWindowID id,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     int n = 0, const wxString choices[] = NULL );
+    LAYER_BOX_SELECTOR( EDA_TOOLBAR* parent, wxWindowID id,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        int n = 0, const wxString choices[] = NULL );
 
-    LAYER_BOX_SELECTOR( WinEDA_Toolbar* parent, wxWindowID id,
-                     const wxPoint& pos, const wxSize& size,
-                     const wxArrayString& choices );
+    LAYER_BOX_SELECTOR( EDA_TOOLBAR* parent, wxWindowID id,
+                        const wxPoint& pos, const wxSize& size,
+                        const wxArrayString& choices );
 
     // Get Current Item #
     int GetChoice();

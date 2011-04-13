@@ -29,8 +29,7 @@
 #endif
 
 //  Option for dialog boxes
-#define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | \
-    MAYBE_RESIZE_BORDER
+#define DIALOG_STYLE wxDEFAULT_DIALOG_STYLE | wxFRAME_FLOAT_ON_PARENT | MAYBE_RESIZE_BORDER
 
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
 
@@ -39,7 +38,7 @@ class EDA_RECT;
 class EDA_DRAW_PANEL;
 class EDA_MSG_PANEL;
 class BASE_SCREEN;
-class WinEDA_Toolbar;
+class EDA_TOOLBAR;
 class WinEDAChoiceBox;
 class PARAM_CFG_BASE;
 class Ki_PageDescr;
@@ -89,18 +88,18 @@ enum id_toolbar {
 class EDA_BASE_FRAME : public wxFrame
 {
 public:
-    int             m_Ident;        // Id Type (pcb, schematic, library..)
-    wxPoint         m_FramePos;
-    wxSize          m_FrameSize;
-    int             m_MsgFrameHeight;
+    int          m_Ident;        // Id Type (pcb, schematic, library..)
+    wxPoint      m_FramePos;
+    wxSize       m_FrameSize;
+    int          m_MsgFrameHeight;
 
-    WinEDA_Toolbar* m_HToolBar;     // Standard horizontal Toolbar
-    bool            m_FrameIsActive;
-    wxString        m_FrameName;    // name used for writing and reading setup
+    EDA_TOOLBAR* m_HToolBar;     // Standard horizontal Toolbar
+    bool         m_FrameIsActive;
+    wxString     m_FrameName;    // name used for writing and reading setup
                                     // It is "SchematicFrame", "PcbFrame" ....
-    wxString        m_AboutTitle;   // Name of program displayed in About.
+    wxString     m_AboutTitle;   // Name of program displayed in About.
 
-    wxAuiManager   m_auimgr;
+    wxAuiManager m_auimgr;
 
 public:
     EDA_BASE_FRAME( wxWindow* father, int idtype,
@@ -229,11 +228,11 @@ public:
     EDA_DRAW_PANEL*   DrawPanel;            // Draw area
     EDA_MSG_PANEL*    MsgPanel;             // Panel used to display some
                                             //  info (bottom of the screen)
-    WinEDA_Toolbar*   m_VToolBar;           // Vertical (right side) Toolbar
-    WinEDA_Toolbar*   m_AuxVToolBar;        // Auxiliary Vertical (right side)
+    EDA_TOOLBAR*      m_VToolBar;           // Vertical (right side) Toolbar
+    EDA_TOOLBAR*      m_AuxVToolBar;        // Auxiliary Vertical (right side)
                                             // Toolbar
-    WinEDA_Toolbar*   m_OptionsToolBar;     // Options Toolbar (left side)
-    WinEDA_Toolbar*   m_AuxiliaryToolBar;   // Auxiliary Toolbar used in pcbnew
+    EDA_TOOLBAR*      m_OptionsToolBar;     // Options Toolbar (left side)
+    EDA_TOOLBAR*      m_AuxiliaryToolBar;   // Auxiliary Toolbar used in pcbnew
 
     WinEDAChoiceBox*  m_SelGridBox;         // Choice box to choose the grid
                                             // size
@@ -671,7 +670,6 @@ public:
     EDA_MSG_PANEL( EDA_DRAW_FRAME* parent, int id, const wxPoint& pos, const wxSize& size );
     ~EDA_MSG_PANEL();
 
-
     /**
      * Function GetRequiredHeight
      * returns the required height (in pixels) of a EDA_MSG_PANEL.  This takes
@@ -714,11 +712,12 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-/*************************/
-/* class WinEDA_Toolbar */
-/*************************/
 
-class WinEDA_Toolbar : public wxAuiToolBar
+/*********************/
+/* class EDA_TOOLBAR */
+/*********************/
+
+class EDA_TOOLBAR : public wxAuiToolBar
 {
 public:
     wxWindow*       m_Parent;
@@ -726,7 +725,7 @@ public:
     bool            m_Horizontal;       // some auxiliary TB are horizontal, others vertical
 
 public:
-    WinEDA_Toolbar( id_toolbar type, wxWindow* parent, wxWindowID id, bool horizontal );
+    EDA_TOOLBAR( id_toolbar type, wxWindow* parent, wxWindowID id, bool horizontal );
 
     bool GetToolState( int toolId ) { return GetToolToggled(toolId); };
 

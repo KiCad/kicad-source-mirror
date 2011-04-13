@@ -32,7 +32,7 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
     if( m_VToolBar != NULL )
         return;
 
-    m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
+    m_VToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
 
     // Set up toolbar
     m_VToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, wxBitmap( cursor_xpm ),
@@ -80,7 +80,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     if( m_HToolBar != NULL )
         return;
 
-    m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
+    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
 
     // Set up toolbar
     m_HToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_LIB, wxEmptyString, wxBitmap( save_library_xpm ),
@@ -187,7 +187,7 @@ void LIB_EDIT_FRAME::CreateOptionToolbar()
     if( m_OptionsToolBar )
         return;
 
-    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
+    m_OptionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, wxBitmap( grid_xpm ),
                                _( "Turn grid off" ), wxITEM_CHECK );

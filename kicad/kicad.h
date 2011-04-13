@@ -62,7 +62,7 @@ class WinEDA_MainFrame : public EDA_BASE_FRAME
 public:
     TREE_PROJECT_FRAME* m_LeftWin;
     RIGHT_KM_FRAME*     m_RightWin;
-    WinEDA_Toolbar*     m_VToolBar;  // Vertical toolbar (not used)
+    EDA_TOOLBAR*        m_VToolBar;  // Vertical toolbar (not used)
     wxString            m_BoardFileName;
     wxString            m_SchematicRootFileName;
     wxFileName          m_ProjectFileName;

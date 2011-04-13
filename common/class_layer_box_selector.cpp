@@ -20,11 +20,10 @@
  *
  */
 
-LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( WinEDA_Toolbar* parent, wxWindowID id,
-                                            const wxPoint& pos, const wxSize& size,
-                                            int n, const wxString choices[] ) :
-    wxBitmapComboBox( parent, id, wxEmptyString, pos, size,
-                      n, choices, wxCB_READONLY )
+LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( EDA_TOOLBAR* parent, wxWindowID id,
+                                        const wxPoint& pos, const wxSize& size,
+                                        int n, const wxString choices[] ) :
+    wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY )
 {
     m_layerorder   = true;
     m_layerhotkeys = true;
@@ -35,11 +34,10 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( WinEDA_Toolbar* parent, wxWindowID id,
 }
 
 
-LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( WinEDA_Toolbar* parent, wxWindowID id,
-                                            const wxPoint& pos, const wxSize& size,
-                                            const wxArrayString& choices ) :
-    wxBitmapComboBox( parent, id, wxEmptyString, pos, size,
-                      choices, wxCB_READONLY )
+LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( EDA_TOOLBAR* parent, wxWindowID id,
+                                        const wxPoint& pos, const wxSize& size,
+                                        const wxArrayString& choices ) :
+    wxBitmapComboBox( parent, id, wxEmptyString, pos, size, choices, wxCB_READONLY )
 {
     m_layerorder   = true;
     m_layerhotkeys = true;

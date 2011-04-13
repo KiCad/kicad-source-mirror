@@ -19,7 +19,7 @@ void WinEDA3D_DrawFrame::ReCreateHToolbar()
     }
 
 
-    m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
     // Set up toolbar
     m_HToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,

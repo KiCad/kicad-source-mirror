@@ -20,7 +20,6 @@
 
 
 /*  Forward declarations of classes. */
-class WinEDA_Toolbar;
 class WinEDA_CvpcbFrame;
 class PCB_EDIT_FRAME;
 class WinEDA_ModuleEditFrame;

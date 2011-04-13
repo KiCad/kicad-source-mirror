@@ -19,7 +19,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     if( m_HToolBar != NULL )
         return;
 
-    m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
     m_HToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString,
                         wxBitmap( open_document_xpm ),

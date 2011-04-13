@@ -187,7 +187,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 
     wxWindowUpdateLocker dummy( this );
 
-    m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
+    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
     m_HToolBar->SetRows( 1 );
 
     // Set up toolbar
@@ -293,7 +293,7 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
 
     wxWindowUpdateLocker dummy( this );
 
-    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
+    m_OptionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_DRC_OFF, wxEmptyString, wxBitmap( drc_off_xpm ),
                                _( "Enable design rule checking" ), wxITEM_CHECK );
@@ -385,7 +385,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
 
     wxWindowUpdateLocker dummy( this );
 
-    m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
+    m_VToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
 
     // Set up toolbar
     m_VToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, wxBitmap( cursor_xpm ),
@@ -456,7 +456,7 @@ void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
 
     wxWindowUpdateLocker dummy(this);
 
-    m_AuxVToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_MICROWAVE_V_TOOLBAR, false );
+    m_AuxVToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_MICROWAVE_V_TOOLBAR, false );
 
     // Set up toolbar
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_SELF_CMD, wxEmptyString,
@@ -504,7 +504,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     if( m_AuxiliaryToolBar )
         return;
 
-    m_AuxiliaryToolBar = new WinEDA_Toolbar( TOOLBAR_AUX, this, ID_AUX_TOOLBAR, true );
+    m_AuxiliaryToolBar = new EDA_TOOLBAR( TOOLBAR_AUX, this, ID_AUX_TOOLBAR, true );
 
     /* Set up toolbar items */
 
@@ -612,7 +612,7 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
 }
 
 
-LAYER_BOX_SELECTOR* PCB_EDIT_FRAME::ReCreateLayerBox( WinEDA_Toolbar* parent )
+LAYER_BOX_SELECTOR* PCB_EDIT_FRAME::ReCreateLayerBox( EDA_TOOLBAR* parent )
 {
     if( m_SelLayerBox == NULL )
         return NULL;

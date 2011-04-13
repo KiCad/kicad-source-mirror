@@ -158,7 +158,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
         return;
 
     // Create options tool bar.
-    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
+    m_OptionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, wxBitmap( grid_xpm ),
                                _( "Hide grid" ), wxITEM_CHECK );
@@ -201,7 +201,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     if( m_HToolBar != NULL )
         return;
 
-    m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
+    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
 
     m_HToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, wxBitmap( display_options_xpm ),
                          _( "Display options" ) );

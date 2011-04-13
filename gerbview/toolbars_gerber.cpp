@@ -31,7 +31,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
         gerber = g_GERBER_List[layer];
     }
 
-    m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
     // Set up toolbar
     m_HToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString, wxBitmap( gerbview_clear_layers_xpm ),
@@ -109,7 +109,7 @@ void GERBVIEW_FRAME::ReCreateVToolbar( void )
     if( m_VToolBar )
         return;
 
-    m_VToolBar = new WinEDA_Toolbar( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
+    m_VToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
 
     // Set up toolbar
     m_VToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, wxBitmap( cursor_xpm ) );
@@ -128,7 +128,7 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
         return;
 
     // creation of tool bar options
-    m_OptionsToolBar = new WinEDA_Toolbar( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, FALSE );
+    m_OptionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, FALSE );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, wxBitmap( grid_xpm ),
                                _( "Turn grid off" ), wxITEM_CHECK );

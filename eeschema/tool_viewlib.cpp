@@ -28,7 +28,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
     if( m_HToolBar  == NULL )
     {
-        m_HToolBar = new WinEDA_Toolbar( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
+        m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
 
         // Set up toolbar
         m_HToolBar->AddTool( ID_LIBVIEW_SELECT_LIB, wxEmptyString,
