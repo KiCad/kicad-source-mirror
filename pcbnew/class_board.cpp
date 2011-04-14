@@ -88,6 +88,24 @@ BOARD::~BOARD()
     delete m_NetInfo;
 }
 
+/*
+ * Function PushHightLight
+ * save current hight light info for later use
+ */
+void BOARD::PushHightLight()
+{
+    m_hightLightPrevious = m_hightLight;
+}
+
+/*
+ * Function PopHightLight
+ * retrieve a previously saved hight light info
+ */
+void BOARD::PopHightLight()
+{
+    m_hightLight = m_hightLightPrevious;
+    m_hightLightPrevious.Clear();
+}
 
 /**
  * Function SetCurrentNetClass

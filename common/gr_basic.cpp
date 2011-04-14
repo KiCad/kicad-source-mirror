@@ -63,7 +63,6 @@ static void ClipAndDrawFilledPoly( EDA_RECT * ClipBox, wxDC * DC, wxPoint Points
  * ( GRSCircle is called by GRCircle for instance) after mapping coordinates
  * from user units to screen units(pixels coordinates)
  */
-static void GRSMoveTo( int x, int y );
 static void GRSRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1,
                      int x2, int y2, int aWidth, int aColor,
                      wxPenStyle aStyle = wxPENSTYLE_SOLID );
@@ -326,18 +325,9 @@ static void WinClipAndDrawLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int
 
     if( ClipBox )
     {
-        xcliplo = ClipBox->GetX();
-        ycliplo = ClipBox->GetY();
-        xcliphi = ClipBox->GetRight();
-        ycliphi = ClipBox->GetBottom();
-
-        xcliplo -= width;
-        ycliplo -= width;
-
-        xcliphi += width;
-        ycliphi += width;
-
-        if( clipLine( ClipBox, x1, y1, x2, y2 ) )
+        EDA_RECT clipbox(*ClipBox);
+        clipbox.Inflate(width/2);
+        if( clipLine( &clipbox, x1, y1, x2, y2 ) )
             return;
     }
 
@@ -591,15 +581,6 @@ void GRMixedLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 }
 
 
-/*
- * Move to a new position, in screen (pixels) space.
- */
-void GRSMoveTo( int x, int y )
-{
-    GRLastMoveToX = x;
-    GRLastMoveToY = y;
-}
-
 
 /**
  * Function GRLineArray
@@ -634,15 +615,22 @@ void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
     gc->ResetClip();
     delete gc;
 #else
-    for( unsigned i = 0; i < aLines.size(); )
+
+    if( aClipBox )
+        aClipBox->Inflate(aWidth/2);
+    for( unsigned i = 0; i < aLines.size(); i += 2)
     {
-        WinClipAndDrawLine( aClipBox, aDC, aLines[i].x, aLines[i].y,
-                            aLines[i + 1].x, aLines[i + 1].y, aColor, aWidth );
-        i++;
-        GRLastMoveToX = aLines[i].x;
-        GRLastMoveToY = aLines[i].y;
-        i++;
+        int x1 = aLines[i].x;
+        int y1 = aLines[i].y;
+        int x2 = aLines[i+1].x;
+        int y2 = aLines[i+1].y;
+        GRLastMoveToX = x2;
+        GRLastMoveToY = y2;
+        if( ( aClipBox == NULL ) || clipLine( aClipBox, x1, y1, x2, y2 ) )
+            aDC->DrawLine( x1, y1, x2, y2 );
     }
+    if( aClipBox )
+        aClipBox->Inflate(-aWidth/2);
 #endif
 }
 
@@ -663,18 +651,10 @@ void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
 
     if( ClipBox )
     {
-        xcliplo = ClipBox->GetX();
-        ycliplo = ClipBox->GetY();
-        xcliphi = ClipBox->GetRight();
-        ycliphi = ClipBox->GetHeight();
+        EDA_RECT clipbox(*ClipBox);
+        clipbox.Inflate(width/2);
 
-        xcliplo -= width;
-        ycliplo -= width;
-
-        xcliphi += width;
-        ycliphi += width;
-
-        if( clipLine( ClipBox, x1, y1, x2, y2 ) )
+        if( clipLine( &clipbox, x1, y1, x2, y2 ) )
             return;
     }
 
@@ -935,7 +915,8 @@ static void GRSClosedPoly( EDA_RECT* ClipBox,
 
     if( Fill && ( aPointCount > 2 ) )
     {
-        GRSMoveTo( aPoints[aPointCount - 1].x, aPoints[aPointCount - 1].y );
+        GRLastMoveToX = aPoints[aPointCount - 1].x;
+        GRLastMoveToY = aPoints[aPointCount - 1].y;
         GRSetBrush( DC, BgColor, FILLED );
 #ifdef USE_CLIP_FILLED_POLYGONS
         ClipAndDrawFilledPoly( ClipBox, DC, aPoints, aPointCount );
@@ -1345,12 +1326,19 @@ void GRSRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2,
     points[4] = points[0];
     GRSetColorPen( aDC, aColor, aWidth, aStyle );
     GRSetBrush( aDC, BLACK );
-    ClipAndDrawFilledPoly(aClipBox, aDC, points, 5); // polygon approach is more accurate
+    if( aClipBox )
+    {
+        EDA_RECT clipbox(*aClipBox);
+        clipbox.Inflate(aWidth);
+        ClipAndDrawFilledPoly(&clipbox, aDC, points, 5); // polygon approach is more accurate
+    }
+    else
+        ClipAndDrawFilledPoly(aClipBox, aDC, points, 5);
 }
 
 
-void GRSFilledRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
-                    int width, int Color, int BgColor )
+void GRSFilledRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y2,
+                    int aWidth, int aColor, int aBgColor )
 {
 
     wxPoint points[5];
@@ -1359,9 +1347,16 @@ void GRSFilledRect( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
     points[2] = wxPoint(x2, y2);
     points[3] = wxPoint(x2, y1);
     points[4] = points[0];
-    GRSetBrush( DC, BgColor, FILLED );
-    GRSetColorPen( DC, BgColor, width );
-    ClipAndDrawFilledPoly(ClipBox, DC, points, 5); // polygon approach is more accurate
+    GRSetBrush( aDC, aBgColor, FILLED );
+    GRSetColorPen( aDC, aBgColor, aWidth );
+    if( aClipBox && (aWidth > 0) )
+    {
+        EDA_RECT clipbox(*aClipBox);
+        clipbox.Inflate(aWidth);
+        ClipAndDrawFilledPoly(&clipbox, aDC, points, 5); // polygon approach is more accurate
+    }
+    else
+        ClipAndDrawFilledPoly(aClipBox, aDC, points, 5);
 }
 
 

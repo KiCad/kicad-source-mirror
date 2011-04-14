@@ -197,7 +197,6 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC,
             Trace_Pads_Only( aPanel, DC, module, 0, 0, layerMask, aDrawMode );
     }
 
-    // @todo: this high-light functionality could be built into me.
     if( IsHightLightNetON() )
         DrawHighLight( aPanel, DC, GetHightLightNetCode() );
 

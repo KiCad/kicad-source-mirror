@@ -187,8 +187,7 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
     }
     else
     {
-        double dist = ( (double) dx * dx ) + ( (double) dy * dy );
-        dist = sqrt( dist );
+        double dist = hypot( (double)dx, (double) dy );
         if( min_dist >= (int) dist )
             result |= STARTPOINT;
     }
@@ -202,8 +201,7 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
     }
     else
     {
-        double dist = ( (double) dx * dx ) + ( (double) dy * dy );
-        dist = sqrt( dist );
+        double dist = hypot( (double) dx, (double) dy );
         if( min_dist >= (int) dist )
             result |= ENDPOINT;
     }
@@ -626,17 +624,13 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
 
     if( DC->LogicalToDeviceXRel( l_piste ) < L_MIN_DESSIN )
     {
-        GRLine( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
-                m_Start.y + aOffset.y,
-                m_End.x + aOffset.x, m_End.y + aOffset.y, 0, color );
+        GRLine( &panel->m_ClipBox, DC, m_Start + aOffset, m_End + aOffset, 0, color );
         return;
     }
 
     if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
     {
-        GRCSegm( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
-                 m_Start.y + aOffset.y,
-                 m_End.x + aOffset.x, m_End.y + aOffset.y, m_Width, color );
+        GRCSegm( &panel->m_ClipBox, DC, m_Start + aOffset, m_End + aOffset, m_Width, color );
     }
     else
     {
@@ -651,9 +645,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
     // Show clearance for tracks, not for zone segments
     if( ShowClearance( this ) )
     {
-        GRCSegm( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
-                 m_Start.y + aOffset.y,
-                 m_End.x + aOffset.x, m_End.y + aOffset.y,
+        GRCSegm( &panel->m_ClipBox, DC, m_Start + aOffset, m_End + aOffset,
                  m_Width + (GetClearance() * 2), color );
     }
 
@@ -784,18 +776,14 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
     }
 
     if( fillvia )
-        GRFilledCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
-                        m_Start.y + aOffset.y, rayon, 0, color, color );
+        GRFilledCircle( &panel->m_ClipBox, DC, m_Start + aOffset, rayon, color );
 
     else
     {
-        GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
-                  m_Start.y + aOffset.y, rayon, color );
+        GRCircle( &panel->m_ClipBox, DC, m_Start + aOffset,rayon, 0, color );
         if ( fast_draw )
             return;
-        GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
-                  m_Start.y + aOffset.y,
-                  inner_rayon, color );
+        GRCircle( &panel->m_ClipBox, DC, m_Start + aOffset, inner_rayon, 0, color );
     }
 
     // Draw the via hole if the display option allows it
@@ -831,17 +819,14 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
             else
             {
                 if( drill_rayon < inner_rayon )         // We can show the via hole
-                    GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
-                              m_Start.y + aOffset.y,
-                              drill_rayon, color );
+                    GRCircle( &panel->m_ClipBox, DC, m_Start + aOffset, drill_rayon, 0, color );
             }
         }
     }
 
     if( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS )
-        GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
-                  m_Start.y + aOffset.y,
-                  rayon + GetClearance(), color );
+        GRCircle( &panel->m_ClipBox, DC, m_Start + aOffset,
+                  rayon + GetClearance(), 0, color );
 
     // for Micro Vias, draw a partial cross :
     // X on component layer, or + on copper layer

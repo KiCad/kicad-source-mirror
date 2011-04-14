@@ -410,8 +410,8 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
         case TYPE_VIA:
             if( DrawStruct->IsNew() )
             {
-                End_Route( (TRACK*) DrawStruct, aDC );
-                DrawPanel->m_AutoPAN_Request = false;
+                if( End_Route( (TRACK*) DrawStruct, aDC ) )
+                    DrawPanel->m_AutoPAN_Request = false;
             }
             else if( DrawStruct->m_Flags == 0 )
             {
@@ -448,8 +448,8 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_TRACK_BUTT:
         if( DrawStruct && DrawStruct->IsNew() )
         {
-            End_Route( (TRACK*) DrawStruct, aDC );
-            DrawPanel->m_AutoPAN_Request = false;
+            if( End_Route( (TRACK*) DrawStruct, aDC ) )
+                DrawPanel->m_AutoPAN_Request = false;
         }
         break;
 

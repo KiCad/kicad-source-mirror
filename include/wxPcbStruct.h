@@ -818,8 +818,32 @@ public:
      */
     void   Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem );
 
-    TRACK* Begin_Route( TRACK* track, wxDC* DC );
-    void   End_Route( TRACK* track, wxDC* DC );
+    /**
+     * Function Begin_Route
+     * Starts a new track and/or establish of a new track point.
+     *
+     * For a new track:
+     * - Search the netname of the new track from the starting point
+     * if it is on a pad or an existing track
+     * - Highlight all this net
+     * If a track is in progress:
+     * - Call DRC
+     * - If DRC is OK: finish the track segment and starts a new one.
+     * @param aTrack = the current track segment, or NULL to start a new track
+     * @param aDC = the current device context
+     * @return a pointer to the new track segment or null if not created (DRC error)
+     */
+    TRACK* Begin_Route( TRACK* aTrack, wxDC* aDC );
+
+    /**
+     * Function End_Route
+     * Terminates a track currently being created
+     * @param aTrack = the current track segment in progress
+     * @param aDC = the current device context
+     * @return true if the track was created, false if not (due to a DRC error)
+     */
+    bool   End_Route( TRACK* aTrack, wxDC* aDC );
+
     void   ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC );
     void   Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On );
     void   Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On );

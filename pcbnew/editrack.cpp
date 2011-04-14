@@ -17,7 +17,7 @@
 #include "protos.h"
 
 
-static void Exit_Editrack( EDA_DRAW_PANEL* panel, wxDC* DC );
+static void Abort_Create_Track( EDA_DRAW_PANEL* panel, wxDC* DC );
 void        ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                           const wxPoint& aPosition, bool aErase );
 static void ComputeBreakPoint( TRACK* track, int n, wxPoint end );
@@ -30,7 +30,7 @@ static PICKED_ITEMS_LIST s_ItemsListPicker;
 /* Routine to cancel the route if a track is being drawn, or exit the
  * application EDITRACK.
  */
-static void Exit_Editrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
+static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Panel->GetParent();
     BOARD * pcb = frame->GetBoard();
@@ -45,11 +45,11 @@ static void Exit_Editrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
         pcb->PopHightLight();
         if( pcb->IsHightLightNetON() )
-            frame->High_Light( DC );
+            pcb->DrawHighLight( Panel, DC, pcb->GetHightLightNetCode() );
 
         frame->MsgPanel->EraseMsgBox();
 
-        // Undo pending changes (mainly a lock point cretion) and clear the
+        // Undo pending changes (mainly a lock point creation) and clear the
         // undo picker list:
         frame->PutDataInPreviousState( &s_ItemsListPicker, false, false );
         s_ItemsListPicker.ClearListAndDeleteItems();
@@ -63,16 +63,19 @@ static void Exit_Editrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 
 /*
- * Begin drawing a new track and/or establish of a new track point.
+ * Function Begin_Route
+ * Starts a new track and/or establish of a new track point.
  *
- * If no current track record of:
- * - Search netname of the new track (pad out departure netname
- *   if the departure runway on an old track
- * - Highlight all the net
- * - Initialize the various trace pointers.
- * If current track:
- * - Control DRC
- * - OK if DRC: adding a new track.
+ * For a new track:
+ * - Search the netname of the new track from the starting point
+ * if it is on a pad or an existing track
+ * - Highlight all this net
+ * If a track is in progress:
+ * - Call DRC
+ * - If DRC is OK: finish the track segment and starts a new one.
+ * param aTrack = the current track segment, or NULL to start a new track
+ * param aDC = the current device context
+ * return a pointer to the new track segment or null if not created (DRC error)
  */
 TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
 {
@@ -83,10 +86,10 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
     BOARD_ITEM* LockPoint;
     wxPoint     pos = GetScreen()->GetCrossHairPosition();
 
-    DrawPanel->SetMouseCapture( ShowNewTrackWhenMovingCursor, Exit_Editrack );
-
     if( aTrack == NULL )  /* Starting a new track  */
     {
+        DrawPanel->SetMouseCapture( ShowNewTrackWhenMovingCursor, Abort_Create_Track );
+
         // Prepare the undo command info
         s_ItemsListPicker.ClearListAndDeleteItems();        // Should not be
                                                             // necessary,
@@ -141,7 +144,8 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-        High_Light( DC );
+        GetBoard()->HightLightON();
+        GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
 
         // Display info about track Net class, and init track and vias sizes:
         g_CurrentTrackSegment->SetNet( GetBoard()->GetHightLightNetCode() );
@@ -408,19 +412,22 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
 
 
 /*
- * End trace route in progress.
+ * Function End_Route
+ * Terminates a track currently being created
+ * param aTrack = the current track segment in progress
+ * @return true if the track was created, false if not (due to a DRC error)
  */
-void PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
+bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
 {
     int masquelayer =
         g_TabOneLayerMask[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
 
     if( aTrack == NULL )
-        return;
+        return false;
 
     if( Drc_On && BAD_DRC==
        m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
-        return;
+        return false;
 
     /* Sauvegarde des coord du point terminal de la piste */
     wxPoint pos = g_CurrentTrackSegment->m_End;
@@ -428,7 +435,7 @@ void PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
     D( g_CurrentTrackList.VerifyListIntegrity(); );
 
     if( Begin_Route( aTrack, DC ) == NULL )
-        return;
+        return false;
 
     ShowNewTrackWhenMovingCursor( DrawPanel, DC, wxDefaultPosition, true );
     ShowNewTrackWhenMovingCursor( DrawPanel, DC, wxDefaultPosition, false );
@@ -531,10 +538,12 @@ void PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
     GetBoard()->PopHightLight();
 
     if( GetBoard()->IsHightLightNetON() )
-        High_Light( DC );
+        GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
 
     DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
+
+    return true;
 }
 
 

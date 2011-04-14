@@ -321,17 +321,13 @@ public:
      * Function PushHightLight
      * save current hight light info for later use
      */
-    void PushHightLight() { m_hightLightPrevious = m_hightLight; }
+    void PushHightLight();
 
     /**
      * Function PopHightLight
      * retrieve a previously saved hight light info
      */
-    void PopHightLight()
-    {
-        m_hightLight = m_hightLightPrevious;
-        m_hightLightPrevious.Clear();
-    }
+    void PopHightLight();
 
     /**
      * Function GetCopperLayerCount
