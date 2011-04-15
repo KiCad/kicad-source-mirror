@@ -1014,6 +1014,14 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner
                                         // of picked items
 
+    if( GetBoard()->IsHightLightNetON() )
+        High_Light( DC );
+
+    GetBoard()->PopHightLight();
+
+    if( GetBoard()->IsHightLightNetON() )
+        GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
+
     OnModify();
     DrawPanel->SetMouseCapture( NULL, NULL );
 

@@ -626,7 +626,7 @@ void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
         int y2 = aLines[i+1].y;
         GRLastMoveToX = x2;
         GRLastMoveToY = y2;
-        if( ( aClipBox == NULL ) || clipLine( aClipBox, x1, y1, x2, y2 ) )
+        if( ( aClipBox == NULL ) || !clipLine( aClipBox, x1, y1, x2, y2 ) )
             aDC->DrawLine( x1, y1, x2, y2 );
     }
     if( aClipBox )
