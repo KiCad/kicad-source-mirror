@@ -179,12 +179,25 @@ public:
     void ReplaceWires( SCH_ITEM* aWireList );
 
     /**
-     * Functions MarkConnections
+     * Function MarkConnections
      * add all wires and junctions connected to \a aSegment which are not connected any
      * component pin to \a aItemList.
      * @param aSegment The segment to test for connections.
      */
     void MarkConnections( SCH_LINE* aSegment );
+
+    /**
+     * Functions GetConnection
+     * adds all of the wires and junctions to \a aList that make up a connection to the
+     * object at \a aPosition.
+     * @param aPosition The position of the first connection object in drawing units.
+     * @param aList The pick list to add the connect item to.
+     * @param aFullConnection If true all the objects that make up this connection are
+     *                        add to \aList.  Otherwise, only the objects up to the first
+     *                        node are added.
+     * @return The number of items added to \a aList.
+     */
+    int GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aList, bool aFullConnection );
 
     /**
      * Function BreakSegment

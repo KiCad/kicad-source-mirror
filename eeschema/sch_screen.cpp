@@ -1044,6 +1044,165 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
 }
 
 
+int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aList,
+                               bool aFullConnection )
+{
+    SCH_ITEM* item;
+    EDA_ITEM* tmp;
+    EDA_ITEMS list;
+
+    // Clear flags member for all items.
+    ClearDrawingState();
+    BreakSegmentsOnJunctions();
+
+    if( GetNode( aPosition, list ) == 0 )
+        return 0;
+
+    for( size_t i = 0;  i < list.size();  i++ )
+    {
+        item = (SCH_ITEM*) list[ i ];
+        item->SetFlags( SELECTEDNODE | STRUCT_DELETED );
+
+        /* Put this structure in the picked list: */
+        ITEM_PICKER picker( item, UR_DELETED );
+        aList.PushItem( picker );
+    }
+
+    // Mark all wires, junctions, .. connected to the item(s) found.
+    if( aFullConnection )
+    {
+        SCH_LINE* segment;
+
+        for( item = GetDrawItems(); item != NULL; item = item->Next() )
+        {
+            if( !(item->GetFlags() & SELECTEDNODE) )
+                continue;
+
+            if( item->Type() != SCH_LINE_T )
+                continue;
+
+            MarkConnections( (SCH_LINE*) item );
+        }
+
+        // Search all attached wires (i.e wire with one new dangling end )
+        for( item = GetDrawItems(); item != NULL; item = item->Next() )
+        {
+            bool noconnect = false;
+
+            if( item->GetFlags() & STRUCT_DELETED )
+                continue;                                   // Already seen
+
+            if( !(item->GetFlags() & CANDIDATE) )
+                continue;                                   // Already seen
+
+            if( item->Type() != SCH_LINE_T )
+                continue;
+
+            item->SetFlags( SKIP_STRUCT );
+
+            segment = (SCH_LINE*) item;
+
+            /* If the wire start point is connected to a wire that has already been found
+             * and now is not connected, add the wire to the list. */
+            SCH_LINE* testSegment = NULL;
+
+            for( tmp = GetDrawItems(); tmp != NULL; tmp = tmp->Next() )
+            {
+                if( ( tmp->GetFlags() & STRUCT_DELETED ) == 0 )
+                    continue;
+
+                if( tmp->Type() != SCH_LINE_T )
+                    continue;
+
+                testSegment = (SCH_LINE*) tmp;
+
+                if( testSegment->IsEndPoint( segment->m_Start ) )
+                    break;
+            }
+
+            if( testSegment && !CountConnectedItems( segment->m_Start, true ) )
+                noconnect = true;
+
+            /* If the wire end point is connected to a wire that has already been found
+             * and now is not connected, add the wire to the list. */
+            for( tmp = GetDrawItems(); tmp != NULL; tmp = tmp->Next() )
+            {
+                if( ( tmp->GetFlags() & STRUCT_DELETED ) == 0 )
+                    continue;
+
+                if( tmp->Type() != SCH_LINE_T )
+                    continue;
+
+                if( testSegment->IsEndPoint( segment->m_End ) )
+                    break;
+            }
+
+            if( tmp && !CountConnectedItems( segment->m_End, true ) )
+                noconnect = true;
+
+            item->ClearFlags( SKIP_STRUCT );
+
+            if( noconnect )
+            {
+                item->SetFlags( STRUCT_DELETED );
+
+                ITEM_PICKER picker( item, UR_DELETED );
+                aList.PushItem( picker );
+
+                item = GetDrawItems();
+            }
+        }
+
+        // Get redundant junctions (junctions which connect < 3 end wires
+        // and no pin)
+        for( item = GetDrawItems(); item != NULL; item = item->Next() )
+        {
+            if( item->GetFlags() & STRUCT_DELETED )
+                continue;
+
+            if( !(item->GetFlags() & CANDIDATE) )
+                continue;
+
+            if( item->Type() != SCH_JUNCTION_T )
+                continue;
+
+            SCH_JUNCTION* junction = (SCH_JUNCTION*) item;
+
+            if( CountConnectedItems( junction->m_Pos, false ) <= 2 )
+            {
+                item->SetFlags( STRUCT_DELETED );
+
+                ITEM_PICKER picker( item, UR_DELETED );
+                aList.PushItem( picker );
+            }
+        }
+
+        for( item = GetDrawItems(); item != NULL;  item = item->Next() )
+        {
+            if( item->GetFlags() & STRUCT_DELETED )
+                continue;
+
+            if( item->Type() != SCH_LABEL_T )
+                continue;
+
+            tmp = GetWireOrBus( ( (SCH_TEXT*) item )->m_Pos );
+
+            if( tmp && tmp->GetFlags() & STRUCT_DELETED )
+            {
+                item->SetFlags( STRUCT_DELETED );
+
+                ITEM_PICKER picker( item, UR_DELETED );
+                aList.PushItem( picker );
+            }
+        }
+    }
+
+    ClearDrawingState();
+
+    return aList.GetCount();
+}
+
+
 /******************************************************************/
 /* Class SCH_SCREENS to handle the list of screens in a hierarchy */
 /******************************************************************/

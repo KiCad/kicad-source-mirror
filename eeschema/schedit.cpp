@@ -176,7 +176,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_DELETE_NODE:
     case ID_POPUP_SCH_DELETE_CONNECTION:
         DrawPanel->MoveCursorToCrossHair();
-        DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION ? true : false );
+        DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION );
         screen->SetCurItem( NULL );
         m_itemToRepeat = NULL;
         screen->TestDanglingEnds( DrawPanel, &dc );
@@ -626,4 +626,44 @@ void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
     if( aEvent.GetEventObject() == m_VToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
+}
+
+
+void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
+{
+    PICKED_ITEMS_LIST pickList;
+    SCH_SCREEN* screen = GetScreen();
+    wxPoint pos = screen->GetCrossHairPosition();
+
+    if( screen->GetConnection( pos, pickList, aFullConnection ) != 0 )
+    {
+        DeleteItemsInList( DrawPanel, pickList );
+        OnModify();
+    }
+}
+
+
+bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
+{
+    SCH_ITEM* item;
+    SCH_SCREEN* screen = GetScreen();
+
+    item = LocateItem( screen->GetCrossHairPosition(), SCH_COLLECTOR::ParentItems );
+
+    if( item )
+    {
+        bool itemHasConnections = item->IsConnectable();
+
+        screen->SetCurItem( NULL );
+        SetRepeatItem( NULL );
+        DeleteItem( item );
+
+        if( itemHasConnections )
+            screen->TestDanglingEnds( DrawPanel, DC );
+
+        OnModify();
+        return true;
+    }
+
+    return false;
 }

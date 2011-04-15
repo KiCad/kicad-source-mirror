@@ -25,7 +25,6 @@ set(EESCHEMA_SRCS
     cross-probing.cpp
     dangling_ends.cpp
     database.cpp
-    delete.cpp
     delsheet.cpp
     dialogs/dialog_color_config.cpp
     dialogs/dialog_plot_schematic_DXF.cpp
