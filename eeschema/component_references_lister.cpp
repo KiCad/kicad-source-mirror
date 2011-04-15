@@ -597,14 +597,14 @@ int SCH_REFERENCE_LIST::CheckAnnotation( wxArrayString* aMessageList )
         if( componentFlatList[ii].CompareValue( componentFlatList[next] ) != 0 )
         {
 #if defined(KICAD_GOST)
-            msg.Printf( _( "Different values for %s%d.%c (%s) and %s%d.%c (%s)" ),
+            msg.Printf( _( "Different values for %s%d.%d (%s) and %s%d.%d (%s)" ),
                         GetChars( componentFlatList[ii].GetRef() ),
                         componentFlatList[ii].m_NumRef,
-                        componentFlatList[ii].m_Unit + '1' - 1,
+                        componentFlatList[ii].m_Unit,
                         GetChars( *componentFlatList[ii].m_Value ),
                         GetChars( componentFlatList[next].GetRef() ),
                         componentFlatList[next].m_NumRef,
-                        componentFlatList[next].m_Unit + '1' - 1,
+                        componentFlatList[next].m_Unit,
                         componentFlatList[next].m_Value->GetData() );
 #else
             msg.Printf( _( "Different values for %s%d%c (%s) and %s%d%c (%s)" ),
