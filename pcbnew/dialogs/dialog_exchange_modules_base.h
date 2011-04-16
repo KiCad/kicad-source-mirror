@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Nov 17 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -44,17 +44,19 @@ class DIALOG_EXCHANGE_MODULE_BASE : public wxDialog
 		wxButton* m_OKbutton;
 		wxButton* m_Quitbutton;
 		wxButton* m_Browsebutton;
+		wxStaticText* m_staticTextMsg;
 		wxTextCtrl* m_WinMessages;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnSelectionClicked( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnQuit( wxCommandEvent& event ){ event.Skip(); }
-		virtual void BrowseAndSelectFootprint( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnSelectionClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnQuit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void BrowseAndSelectFootprint( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Exchange Modules"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 416,469 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Exchange Modules"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 416,469 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EXCHANGE_MODULE_BASE();
 	
 };

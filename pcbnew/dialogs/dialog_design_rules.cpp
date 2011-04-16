@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_design_rules.cpp
 /////////////////////////////////////////////////////////////////////////////
 
@@ -44,6 +43,10 @@
 #include "dialog_design_rules.h"
 #include "wx/generic/gridctrl.h"
 #include "dialog_design_rules_aux_helper_class.h"
+
+// Column labels for net lists
+#define NET_TITLE _( "Net" )
+#define CLASS_TITLE _( "Class" )
 
 // Field Positions on rules grid
 enum {
@@ -161,8 +164,8 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( PCB_EDIT_FRAME* parent ) :
     column0.SetMask( wxLIST_MASK_TEXT );
     column1.SetMask( wxLIST_MASK_TEXT );
 
-    column0.SetText( _( "Net" ) );
-    column1.SetText( _( "Class" ) );
+    column0.SetText( NET_TITLE );
+    column1.SetText( CLASS_TITLE );
 
     m_leftListCtrl->InsertColumn( 0, column0 );
     m_leftListCtrl->InsertColumn( 1, column1 );
@@ -429,24 +432,30 @@ void DIALOG_DESIGN_RULES::FillListBoxWithNetNames( NETS_LIST_CTRL* aListCtrl,
 
 #endif
 
-    // to speed up inserting we hide the control temporarily
-    aListCtrl->Hide();
-
+    // Add netclass info to m_Netnames and m_Classnames wxArrayString buffers
+    // aListCtrl uses wxLC_VIRTUAL option, so this is fast
+    wxClientDC sDC(aListCtrl);
     int row = 0;
+    // recompute the column widths here, after setting texts
+    int net_colsize = sDC.GetTextExtent( NET_TITLE ).x;
+    int class_colsize = sDC.GetTextExtent( CLASS_TITLE ).x;
     for( PNETCUPS::iterator i = ptrList.begin();  i!=ptrList.end();  ++i, ++row )
     {
+        wxSize   net_needed = sDC.GetTextExtent( (*i)->net );
+        wxSize   class_needed = sDC.GetTextExtent( (*i)->clazz );
+        net_colsize = MAX( net_colsize, net_needed.x );
+        class_colsize = MAX( class_colsize, class_needed.x );
         aListCtrl->setRowItems( row, (*i)->net, (*i)->clazz );
     }
 
-    // recompute the column widths here, after setting texts
-    aListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
-    aListCtrl->SetColumnWidth( 1, wxLIST_AUTOSIZE );
-
-    aListCtrl->Show();
+    int margin = sDC.GetTextExtent( wxT("XX") ).x;;
+    aListCtrl->SetColumnWidth( 0, net_colsize + margin);
+    aListCtrl->SetColumnWidth( 1, class_colsize + margin);
+    aListCtrl->Refresh();
 }
 
 
-/* Initialize the combo boxes by the list of existing net classes
+/* Populates combo boxes with the list of existing net classes
  */
 void DIALOG_DESIGN_RULES::InitializeRulesSelectionBoxes()
 {
