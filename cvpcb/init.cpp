@@ -115,6 +115,9 @@ bool CVPCB_MAINFRAME::ReadNetList()
     /* Update the title of the main window. */
     SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
               wxT( " " ) + m_NetlistFileName.GetFullPath() );
+
+    UpdateFileHistory( m_NetlistFileName.GetFullPath() );
+
     return true;
 }
 

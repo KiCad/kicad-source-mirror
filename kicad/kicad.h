@@ -54,10 +54,10 @@ enum id_kicad_frm {
 };
 
 
-/* class WinEDA_MainFrame
+/* class KICAD_MANAGER_FRAME
  * This is the main kicad frame
  */
-class WinEDA_MainFrame : public EDA_BASE_FRAME
+class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME
 {
 public:
     TREE_PROJECT_FRAME* m_LeftWin;
@@ -72,10 +72,10 @@ private:
 
 public:
 
-    WinEDA_MainFrame( wxWindow* parent, const wxString& title,
+    KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
                       const wxPoint& pos, const wxSize& size );
 
-    ~WinEDA_MainFrame();
+    ~KICAD_MANAGER_FRAME();
 
     /**
      * Function CreateCommandToolbar
@@ -143,7 +143,7 @@ class RIGHT_KM_FRAME : public wxSashLayoutWindow
 public:
     wxTextCtrl*       m_DialogWin;
 private:
-    WinEDA_MainFrame* m_Parent;
+    KICAD_MANAGER_FRAME* m_Parent;
     int m_ButtonsPanelHeight;
     wxPanel*          m_ButtPanel;
     int m_ButtonSeparation;                 // button distance in pixels
@@ -153,7 +153,7 @@ private:
     wxPoint           m_ButtonLastPosition; // position of the last button in the window
 
 public:
-    RIGHT_KM_FRAME( WinEDA_MainFrame* parent );
+    RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent );
     ~RIGHT_KM_FRAME() { };
     void OnSize( wxSizeEvent& event );
 

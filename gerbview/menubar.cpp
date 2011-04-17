@@ -55,8 +55,14 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
                             gerber_open_dcode_file_xpm );
 
     // Recent gerber files
-    wxMenu* openRecentGbrMenu = new wxMenu();
-    wxGetApp().m_fileHistory.AddFilesToMenu( openRecentGbrMenu );
+    static wxMenu* openRecentGbrMenu;
+    // Add this menu to list menu managed by m_fileHistory
+    // (the file history will be updated when adding/removing files in history
+    if( openRecentGbrMenu )
+        wxGetApp().m_fileHistory.RemoveMenu( openRecentGbrMenu );
+    openRecentGbrMenu = new wxMenu();
+    wxGetApp().m_fileHistory.UseMenu( openRecentGbrMenu );
+    wxGetApp().m_fileHistory.AddFilesToMenu();
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( fileMenu, openRecentGbrMenu,
                                         wxID_ANY,
                                         _( "Open &Recent Gerber File" ),
@@ -64,10 +70,14 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
                                         gerber_recent_files_xpm );
 
     // Recent drill files
-    wxMenu* openRecentDrlMenu = new wxMenu();
-    m_drillFileHistory.AddFilesToMenu( openRecentDrlMenu );
+    static wxMenu* openRecentDrlMenu;
+    if( openRecentDrlMenu )
+    wxGetApp().m_fileHistory.RemoveMenu( openRecentDrlMenu );
+        openRecentDrlMenu = new wxMenu();
+    wxGetApp().m_fileHistory.UseMenu( openRecentDrlMenu );
+    m_drillFileHistory.AddFilesToMenu( );
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( fileMenu, openRecentDrlMenu,
-                                        wxID_ANY, 
+                                        wxID_ANY,
                                         _( "Open Recent &Drill File" ),
                                         _( "Open a recent opened drill file" ),
                                         open_project_xpm );
@@ -184,9 +194,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
 
     // Contents
     ADD_MENUITEM_WITH_HELP( helpMenu,
-                            ID_GENERAL_HELP,
+                            wxID_HELP,
                             _( "&Contents" ),
-                            _( "Open the gerbview manual" ),
+                            _( "Open the Gerbview handbook" ),
                             help_xpm );
 
     // About gerbview

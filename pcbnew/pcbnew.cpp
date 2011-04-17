@@ -48,7 +48,6 @@ bool 	       g_Alternate_Track_Posture = false;
 bool           g_Track_45_Only_Allowed = true;  // True to allow horiz, vert. and 45deg only tracks
 bool           Segments_45_Only;                // True to allow horiz, vert. and 45deg only graphic segments
 bool           g_TwoSegmentTrackBuild = true;
-bool           g_HighLight_Status;
 
 wxSize         g_ModuleTextSize;      /* Default footprint texts size */
 int            g_ModuleSegmentWidth;
@@ -58,7 +57,6 @@ int            Route_Layer_BOTTOM;
 int            g_MaxLinksShowed;
 int            g_MagneticPadOption   = capture_cursor_in_track_tool;
 int            g_MagneticTrackOption = capture_cursor_in_track_tool;
-int            g_HighLight_NetCode   = -1;
 
 wxPoint        g_Offset_Module;     /* Offset de trace du modul en depl */
 

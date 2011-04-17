@@ -213,7 +213,6 @@ void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName,
         fileHistory = & wxGetApp().m_fileHistory;
 
     fileHistory->AddFileToHistory( FullFileName );
-    ReCreateMenuBar();
 }
 
 
@@ -245,7 +244,6 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
             DisplayError( this, msg );
             fileHistory->RemoveFileFromHistory( i );
             fn = wxEmptyString;
-            ReCreateMenuBar();
         }
     }
 

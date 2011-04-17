@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Nov 17 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -62,7 +62,7 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	m_OKbutton = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_OKbutton, 0, wxALL, 5 );
 	
-	m_Quitbutton = new wxButton( this, wxID_CANCEL, _("Quit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Quitbutton = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	bRightSizer->Add( m_Quitbutton, 0, wxALL, 5 );
 	
 	m_Browsebutton = new wxButton( this, wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -72,10 +72,14 @@ DIALOG_EXCHANGE_MODULE_BASE::DIALOG_EXCHANGE_MODULE_BASE( wxWindow* parent, wxWi
 	
 	bMainSizer->Add( bUpperSizer, 0, wxEXPAND, 5 );
 	
+	m_staticTextMsg = new wxStaticText( this, wxID_ANY, _("Messages:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextMsg->Wrap( -1 );
+	bMainSizer->Add( m_staticTextMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
 	m_WinMessages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
 	m_WinMessages->SetMinSize( wxSize( 450,300 ) );
 	
-	bMainSizer->Add( m_WinMessages, 1, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( m_WinMessages, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
@@ -94,4 +98,5 @@ DIALOG_EXCHANGE_MODULE_BASE::~DIALOG_EXCHANGE_MODULE_BASE()
 	m_OKbutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnOkClick ), NULL, this );
 	m_Quitbutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::OnQuit ), NULL, this );
 	m_Browsebutton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXCHANGE_MODULE_BASE::BrowseAndSelectFootprint ), NULL, this );
+	
 }

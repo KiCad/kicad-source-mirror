@@ -153,9 +153,6 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
     {
         if( !IsOK( this, _( "Discard changes to the current schematic?" ) ) )
             return false;
-
-        if( g_RootSheet->GetScreen()->GetFileName() != m_DefaultSchematicFileName )
-            UpdateFileHistory( g_RootSheet->GetScreen()->GetFileName() );
     }
 
     FullFileName = FileName;
@@ -303,6 +300,8 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
     g_RootSheet->SetScreen( NULL );
     bool diag = g_RootSheet->Load( this );
     SetScreen( m_CurrentSheet->LastScreen() );
+
+    UpdateFileHistory( g_RootSheet->GetScreen()->GetFileName() );
 
     /* Redraw base screen (ROOT) if necessary. */
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );

@@ -66,7 +66,7 @@ protected:
     TREEPROJECT_ITEM* GetItemIdData(wxTreeItemId aId);
 
 public:
-    WinEDA_MainFrame* m_Parent;
+    KICAD_MANAGER_FRAME* m_Parent;
     TREEPROJECTFILES*   m_TreeProject;
 
     wxTreeItemId      m_root;
@@ -75,7 +75,7 @@ public:
     static wxString              GetFileExt( TreeFileType type );
     static wxString              GetFileWildcard( TreeFileType type );
 
-    TREE_PROJECT_FRAME( WinEDA_MainFrame* parent );
+    TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent );
     ~TREE_PROJECT_FRAME();
     void                         OnSelect( wxTreeEvent& Event );
     void                         OnExpand( wxTreeEvent& Event );

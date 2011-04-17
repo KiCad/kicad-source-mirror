@@ -304,9 +304,9 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
 
     // Contents
     item = new wxMenuItem( helpMenu,
-                           ID_GENERAL_HELP,
+                           wxID_HELP,
                            _( "&Contents" ),
-                           _( "Open the PCBNew manual" ) );
+                           _( "Open the PCBNew handbook" ) );
     SET_BITMAP( online_help_xpm );
     helpMenu->Append( item );
 

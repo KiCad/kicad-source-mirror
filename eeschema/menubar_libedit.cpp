@@ -275,7 +275,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     // Contens
     item = new wxMenuItem( helpMenu,
-                           ID_GENERAL_HELP,
+                           wxID_HELP,
                            _( "&Contents" ),
                            _( "Open the eeschema manual" ) );
     SET_BITMAP( online_help_xpm );

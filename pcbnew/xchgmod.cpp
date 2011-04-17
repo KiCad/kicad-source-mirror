@@ -68,7 +68,7 @@ void PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module )
 void DIALOG_EXCHANGE_MODULE::OnQuit( wxCommandEvent& event )
 {
     s_SelectionMode = m_Selection->GetSelection();
-    Close( true );    // true is to force the frame to close
+    EndModal( 0 );
 }
 
 

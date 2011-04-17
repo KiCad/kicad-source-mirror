@@ -21,7 +21,7 @@ static const wxString SchematicRootNameEntry( wxT( "RootSch" ) );
 static const wxString BoardFileNameEntry( wxT( "BoardNm" ) );
 
 
-void WinEDA_MainFrame::CreateNewProject( const wxString PrjFullFileName )
+void KICAD_MANAGER_FRAME::CreateNewProject( const wxString PrjFullFileName )
 {
     wxString   filename;
     wxFileName newProjectName = PrjFullFileName;
@@ -59,7 +59,7 @@ void WinEDA_MainFrame::CreateNewProject( const wxString PrjFullFileName )
 /**
  * Loading a new project
  */
-void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 {
     int style;
     wxString title;
@@ -78,7 +78,6 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
             style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
         }
 
-        UpdateFileHistory( m_ProjectFileName.GetFullPath() );
         wxFileDialog dlg( this, title, wxGetCwd(), wxEmptyString,
                           ProjectFileWildcard, style );
 
@@ -98,8 +97,6 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
             }
             CreateNewProject( m_ProjectFileName.GetFullPath() );
         }
-
-        UpdateFileHistory( m_ProjectFileName.GetFullPath() );
     }
 
     wxLogDebug( wxT( "Loading Kicad project file: " ) +
@@ -136,7 +133,7 @@ void WinEDA_MainFrame::OnLoadProject( wxCommandEvent& event )
 /**
  * Save the project top level configuration parameters.
  */
-void WinEDA_MainFrame::OnSaveProject( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnSaveProject( wxCommandEvent& event )
 {
     wxString fn;
 

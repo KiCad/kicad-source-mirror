@@ -1,5 +1,5 @@
 /***********************************************************/
-/* mdiframe.cpp - WinEDA_MainFrame is the kicad main frame */
+/* mdiframe.cpp - KICAD_MANAGER_FRAME is the kicad main frame */
 /***********************************************************/
 
 #ifdef __GNUG__
@@ -21,7 +21,7 @@
 static const wxString TreeFrameWidthEntry( wxT( "LeftWinWidth" ) );
 
 
-WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
+KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
                                     const wxString& title,
                                     const wxPoint&  pos,
                                     const wxSize&   size ) :
@@ -99,7 +99,7 @@ WinEDA_MainFrame::WinEDA_MainFrame( wxWindow*       parent,
 }
 
 
-WinEDA_MainFrame::~WinEDA_MainFrame()
+KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 {
     m_auimgr.UnInit();
 }
@@ -108,7 +108,7 @@ WinEDA_MainFrame::~WinEDA_MainFrame()
 /*
  * Put text in the dialog frame
  */
-void WinEDA_MainFrame::PrintMsg( const wxString& text )
+void KICAD_MANAGER_FRAME::PrintMsg( const wxString& text )
 {
     m_RightWin->m_DialogWin->AppendText( text );
 }
@@ -116,13 +116,13 @@ void WinEDA_MainFrame::PrintMsg( const wxString& text )
 
 /* Resize windows when dragging window borders
  */
-void WinEDA_MainFrame::OnSashDrag( wxSashEvent& event )
+void KICAD_MANAGER_FRAME::OnSashDrag( wxSashEvent& event )
 {
     event.Skip();
 }
 
 
-void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
+void KICAD_MANAGER_FRAME::OnSize( wxSizeEvent& event )
 {
     if( m_auimgr.GetManagedWindow() )
         m_auimgr.Update();
@@ -131,7 +131,7 @@ void WinEDA_MainFrame::OnSize( wxSizeEvent& event )
 }
 
 
-void WinEDA_MainFrame::OnCloseWindow( wxCloseEvent& Event )
+void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     int px, py;
 
@@ -166,18 +166,18 @@ void WinEDA_MainFrame::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-void WinEDA_MainFrame::OnExit( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnExit( wxCommandEvent& event )
 {
     Close( true );
 }
 
-void WinEDA_MainFrame::OnRunBitmapConverter( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnRunBitmapConverter( wxCommandEvent& event )
 {
     ExecuteFile( this, BITMAPCONVERTER_EXE, wxEmptyString );
 }
 
 
-void WinEDA_MainFrame::OnRunPcbNew( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
 
@@ -186,7 +186,7 @@ void WinEDA_MainFrame::OnRunPcbNew( wxCommandEvent& event )
 }
 
 
-void WinEDA_MainFrame::OnRunCvpcb( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnRunCvpcb( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
 
@@ -195,7 +195,7 @@ void WinEDA_MainFrame::OnRunCvpcb( wxCommandEvent& event )
 }
 
 
-void WinEDA_MainFrame::OnRunEeschema( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
 
@@ -204,7 +204,7 @@ void WinEDA_MainFrame::OnRunEeschema( wxCommandEvent& event )
 }
 
 
-void WinEDA_MainFrame::OnRunGerbview( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
     wxString path = wxT("\"");
@@ -214,7 +214,7 @@ void WinEDA_MainFrame::OnRunGerbview( wxCommandEvent& event )
 }
 
 
-void WinEDA_MainFrame::OnOpenTextEditor( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnOpenTextEditor( wxCommandEvent& event )
 {
     wxString editorname = wxGetApp().GetEditorName();
 
@@ -223,7 +223,7 @@ void WinEDA_MainFrame::OnOpenTextEditor( wxCommandEvent& event )
 }
 
 
-void WinEDA_MainFrame::OnOpenFileInTextEditor( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
 {
     wxString mask( wxT( "*" ) );
 
@@ -246,13 +246,13 @@ void WinEDA_MainFrame::OnOpenFileInTextEditor( wxCommandEvent& event )
 }
 
 
-void WinEDA_MainFrame::OnRefresh( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnRefresh( wxCommandEvent& event )
 {
     m_LeftWin->ReCreateTreePrj();
 }
 
 
-void WinEDA_MainFrame::ClearMsg()
+void KICAD_MANAGER_FRAME::ClearMsg()
 {
     m_RightWin->m_DialogWin->Clear();
 }
@@ -264,7 +264,7 @@ void WinEDA_MainFrame::ClearMsg()
  * Don't forget to call this base method from any derived classes or the
  * settings will not get loaded.
  */
-void WinEDA_MainFrame::LoadSettings()
+void KICAD_MANAGER_FRAME::LoadSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
 
@@ -281,7 +281,7 @@ void WinEDA_MainFrame::LoadSettings()
  * Don't forget to call this base method from any derived classes or the
  * settings will not get saved.
  */
-void WinEDA_MainFrame::SaveSettings()
+void KICAD_MANAGER_FRAME::SaveSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
 
@@ -291,4 +291,3 @@ void WinEDA_MainFrame::SaveSettings()
 
     cfg->Write( TreeFrameWidthEntry, m_LeftWin->GetSize().x );
 }
-

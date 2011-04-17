@@ -158,16 +158,14 @@ bool WinEDA_App::OnInit()
             filename.SetExt( SchematicFileExtension );
         wxSetWorkingDirectory( filename.GetPath() );
 
-        if( frame->DrawPanel
-            && frame->LoadOneEEProject( filename.GetFullPath(), false ) )
+        if( frame->LoadOneEEProject( filename.GetFullPath(), false ) )
             frame->DrawPanel->Refresh( true );
     }
     else
     {
         // Read a default config file if no file to load.
         frame->LoadProjectFile( wxEmptyString, TRUE );
-        if( frame->DrawPanel )
-            frame->DrawPanel->Refresh( TRUE );
+        frame->DrawPanel->Refresh( TRUE );
     }
 
     return TRUE;

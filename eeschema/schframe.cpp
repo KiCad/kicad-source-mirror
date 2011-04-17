@@ -99,7 +99,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_FIND_ITEMS, SCH_EDIT_FRAME::OnFindItems )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadStuffFile )
 
-    EVT_MENU( ID_GENERAL_HELP, EDA_DRAW_FRAME::GetKicadHelp )
+    EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
 
     // Tools and buttons for vertical toolbar.

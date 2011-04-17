@@ -139,7 +139,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
               PCB_EDIT_FRAME::Process_Special_Functions )
 
     // Menu Help
-    EVT_MENU( ID_GENERAL_HELP, EDA_DRAW_FRAME::GetKicadHelp )
+    EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
 
     // Menu 3D Frame

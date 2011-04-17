@@ -60,8 +60,6 @@ void WinEDA_App::MacOpenFile(const wxString &fileName)
 
     if( frame->ReadNetList() )
     {
-        frame->UpdateFileHistory( filename.GetFullPath() );
-
         frame->SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
                   wxT( " " ) + filename.GetFullPath() );
     }
@@ -69,9 +67,6 @@ void WinEDA_App::MacOpenFile(const wxString &fileName)
     {
         frame->SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() );
     }
-
-    frame->ReCreateMenuBar();
-
 }
 
 // Create a new application object
