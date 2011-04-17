@@ -11,7 +11,7 @@
 
 #include "../bitmap2component/bitmap2component.xpm"
 
-RIGHT_KM_FRAME::RIGHT_KM_FRAME( WinEDA_MainFrame* parent ) :
+RIGHT_KM_FRAME::RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent ) :
     wxSashLayoutWindow( parent, wxID_ANY )
 {
     #define BUTTON_HEIGHT 32

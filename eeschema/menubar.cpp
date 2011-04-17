@@ -61,10 +61,16 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     fileMenu->Append( item );
 
     // Open Recent submenu
-    wxMenu* openRecentMenu = new wxMenu();
+    static wxMenu* openRecentMenu;
+    // Add this menu to list menu managed by m_fileHistory
+    // (the file history will be updated when adding/removing files in history
+    if( openRecentMenu )
+        wxGetApp().m_fileHistory.RemoveMenu( openRecentMenu );
+    openRecentMenu = new wxMenu();
+    wxGetApp().m_fileHistory.UseMenu( openRecentMenu );
     wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( fileMenu, openRecentMenu,
-                                        -1, _( "Open &Recent" ),
+                                        wxID_ANY, _( "Open &Recent" ),
                                         _( "Open a recent opened schematic project" ),
                                         open_project_xpm );
     // Separator
@@ -464,9 +470,9 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     // Contents
     item = new wxMenuItem( helpMenu,
-                           ID_GENERAL_HELP,
+                           wxID_HELP,
                            _( "&Contents" ),
-                           _( "Open the eeschema manual" ) );
+                           _( "Open the Eeschema handbook" ) );
     SET_BITMAP( online_help_xpm );
     helpMenu->Append( item );
 

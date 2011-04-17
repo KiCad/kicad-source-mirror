@@ -27,11 +27,11 @@ static const wxString ZipFileExtension( wxT( "zip" ) );
 static const wxString ZipFileWildcard( wxT( "Zip file (*.zip) | *.zip" ) );
 
 
-void WinEDA_MainFrame::OnFileHistory( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 {
     wxString fn;
 
-    fn = GetFileFromHistory( event.GetId(), _( "Printed circuit board" ) );
+    fn = GetFileFromHistory( event.GetId(), _( "Kicad project file" ) );
 
     if( fn != wxEmptyString )
     {
@@ -39,11 +39,9 @@ void WinEDA_MainFrame::OnFileHistory( wxCommandEvent& event )
         m_ProjectFileName = fn;
         OnLoadProject( cmd );
     }
-
-    ReCreateMenuBar();
 }
 
-void WinEDA_MainFrame::OnUnarchiveFiles( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 {
     wxFileName fn = m_ProjectFileName;
     fn.SetExt( ZipFileExtension );
@@ -109,7 +107,7 @@ void WinEDA_MainFrame::OnUnarchiveFiles( wxCommandEvent& event )
 }
 
 
-void WinEDA_MainFrame::OnArchiveFiles( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 {
     size_t i;
     wxFileName fileName = m_ProjectFileName;

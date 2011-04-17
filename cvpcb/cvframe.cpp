@@ -41,7 +41,7 @@ BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
               CVPCB_MAINFRAME::SaveQuitCvpcb )
     EVT_MENU( wxID_EXIT,
               CVPCB_MAINFRAME::OnQuit )
-    EVT_MENU( ID_GENERAL_HELP,
+    EVT_MENU( wxID_HELP,
               CVPCB_MAINFRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT,
               CVPCB_MAINFRAME::GetKicadAbout )

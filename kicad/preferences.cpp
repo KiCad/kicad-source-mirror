@@ -18,26 +18,26 @@
 #include <wx/fontdlg.h>
 
 
-void WinEDA_MainFrame::OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event )
+void KICAD_MANAGER_FRAME::OnUpdateDefaultPdfBrowser( wxUpdateUIEvent& event )
 {
     event.Check( wxGetApp().m_PdfBrowserIsDefault );
 }
 
 
-void WinEDA_MainFrame::OnSelectDefaultPdfBrowser( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnSelectDefaultPdfBrowser( wxCommandEvent& event )
 {
     wxGetApp().m_PdfBrowserIsDefault = true;
     wxGetApp().WritePdfBrowserInfos();
 }
 
 
-void WinEDA_MainFrame::OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event )
+void KICAD_MANAGER_FRAME::OnUpdatePreferredPdfBrowser( wxUpdateUIEvent& event )
 {
     event.Check( !wxGetApp().m_PdfBrowserIsDefault );
 }
 
 
-void WinEDA_MainFrame::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
 {
     bool select = event.GetId() == ID_SELECT_PREFERED_PDF_BROWSER_NAME;
 
@@ -69,7 +69,7 @@ void WinEDA_MainFrame::OnSelectPreferredPdfBrowser( wxCommandEvent& event )
     wxGetApp().WritePdfBrowserInfos();
 }
 
-void WinEDA_MainFrame::SetLanguage( wxCommandEvent& event )
+void KICAD_MANAGER_FRAME::SetLanguage( wxCommandEvent& event )
 {
     EDA_BASE_FRAME::SetLanguage( event );
 }

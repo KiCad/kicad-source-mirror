@@ -94,7 +94,7 @@ END_EVENT_TABLE()
 
 
 /******************************************************************/
-TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( WinEDA_MainFrame* parent ) :
+TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
     wxSashLayoutWindow( parent,
                         ID_LEFT_FRAME,
                         wxDefaultPosition,

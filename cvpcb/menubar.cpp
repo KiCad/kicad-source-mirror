@@ -45,8 +45,14 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
                             open_document_xpm );
 
     // Open Recent submenu
-    wxMenu* openRecentMenu = new wxMenu();
-    wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
+    static wxMenu* openRecentMenu;
+    // Add this menu to list menu managed by m_fileHistory
+    // (the file history will be updated when adding/removing files in history
+    if( openRecentMenu )
+        wxGetApp().m_fileHistory.RemoveMenu( openRecentMenu );
+    openRecentMenu = new wxMenu();
+    wxGetApp().m_fileHistory.UseMenu( openRecentMenu );
+    wxGetApp().m_fileHistory.AddFilesToMenu( );
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu, -1,
                                         _( "Open &Recent" ),
                                         _("Open a recent opened netlist document" ),
@@ -111,8 +117,8 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
-    ADD_MENUITEM_WITH_HELP( helpMenu, ID_GENERAL_HELP, _( "&Contents" ),
-                           _( "Open the cvpcb manual" ),
+    ADD_MENUITEM_WITH_HELP( helpMenu, wxID_HELP, _( "&Contents" ),
+                           _( "Open the Cvpcb handbook" ),
                             online_help_xpm );
 
     // About

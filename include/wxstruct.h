@@ -192,6 +192,9 @@ public:
     /**
      * Function GetFileFromHistory
      * fetches the file name from the file history list.
+     * and removes the selected file, if this file does not exists
+     * Note also the menu is updated, if wxFileHistory::UseMenu
+     * was called at init time
      * @param cmdId The command ID associated with the \a aFileHistory object.
      * @param type Please document me!
      * @param aFileHistory The wxFileHistory in use. If null, the main application file
@@ -203,15 +206,23 @@ public:
 
     /**
      * Function UpdateFileHistory
-     * ypdates the list of recently opened files.
+     * Updates the list of recently opened files.
+     * Note also the menu is updated, if wxFileHistory::UseMenu
+     * was called at init time
      * @param FullFileName The full file name including the path.
-     * @param aFileHistory The wxFileHistory in use. If NULL, the main application file
-     *                     history is used.
+     * @param aFileHistory The wxFileHistory in use.
+     * If NULL, the main application file history is used.
      */
-    void         UpdateFileHistory( const wxString& FullFileName,
+    void        UpdateFileHistory( const wxString& FullFileName,
                                     wxFileHistory * aFileHistory = NULL );
 
     void         DisplayActivity( int PerCent, const wxString& Text );
+
+    /**
+     * Function ReCreateMenuBar
+     * Creates recreates the menu bar.
+     * Needed when the language is changed
+     */
     virtual void ReCreateMenuBar();
 };
 
