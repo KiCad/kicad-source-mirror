@@ -23,7 +23,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     wxMenuItem* item;
     wxMenuBar*  menuBar = GetMenuBar();
 
-    if( ! menuBar )
+    if( ! menuBar )     // Delete all menus
         menuBar = new wxMenuBar();
 
     // Delete all existing menus so they can be rebuilt.

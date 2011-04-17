@@ -470,8 +470,6 @@ void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
     {
         SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() );
     }
-
-    ReCreateMenuBar();
 }
 
 
