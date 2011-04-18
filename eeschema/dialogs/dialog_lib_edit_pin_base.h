@@ -22,6 +22,7 @@ class wxBitmapComboBox;
 #include <wx/combobox.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -83,6 +84,7 @@ class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog
 		wxCheckBox* m_checkApplyToAllConversions;
 		wxCheckBox* m_checkShow;
 		
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
@@ -93,7 +95,7 @@ class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 487,344 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LIB_EDIT_PIN_BASE();
 	
 };
