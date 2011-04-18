@@ -94,7 +94,7 @@ public:
     /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize( );
+    virtual int GetPenSize( ) const;
 
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 

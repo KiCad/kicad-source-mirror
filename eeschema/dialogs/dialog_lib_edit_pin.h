@@ -13,17 +13,22 @@
 /** Implementing DIALOG_LIB_EDIT_PIN_BASE */
 class DIALOG_LIB_EDIT_PIN : public DIALOG_LIB_EDIT_PIN_BASE
 {
-    static wxSize		    s_LastSize;		        ///< last position and size
-    static wxPoint		    s_LastPos;
+    static wxSize	s_LastSize;		        ///< last position and size
+    static wxPoint	s_LastPos;
+
+    LIB_PIN * m_dummyPin;       // a working copy used to show changes
 
 public:
 	/** Constructor */
-	DIALOG_LIB_EDIT_PIN( wxWindow* parent );
+	DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin );
+	~DIALOG_LIB_EDIT_PIN();
 
     void SetLastSizeAndPosition();
 	void OnCloseDialog( wxCloseEvent& event );
 	void OnCancelButtonClick( wxCommandEvent& event );
 	void OnOKButtonClick( wxCommandEvent& event );
+    void OnPaintShowPanel( wxPaintEvent& event );
+	void OnPropertiesChange( wxCommandEvent& event );
 
     void SetOrientationList( const wxArrayString& list, const char *** aBitmaps );
     void SetOrientation( int orientation )

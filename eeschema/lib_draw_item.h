@@ -185,7 +185,7 @@ public:
     /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize() = 0;
+    virtual int GetPenSize() const = 0;
 
     /**
      * Write draw item object to \a aFile in "*.lib" format.

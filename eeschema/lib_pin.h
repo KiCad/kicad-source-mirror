@@ -355,7 +355,7 @@ public:
     /**
      * @return the size of the "pen" that be used to draw or plot this item.
      */
-    virtual int GetPenSize();
+    virtual int GetPenSize() const;
 
     void DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                         int aOrientation, int aDrawMode, int aColor = -1 );

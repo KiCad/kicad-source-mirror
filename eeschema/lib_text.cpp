@@ -93,7 +93,7 @@ bool LIB_TEXT::Load( char* line, wxString& errorMsg )
                   &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify,
                   &vjustify );
 
-    
+
     if( cnt >= 8 ) // if quoted loadng failed, load as not quoted
     {
         m_Text = FROM_UTF8( buf );
@@ -112,7 +112,7 @@ bool LIB_TEXT::Load( char* line, wxString& errorMsg )
             errorMsg.Printf( _( "text only had %d parameters of the required 8" ), cnt );
             return false;
         }
-        
+
         /* Convert '~' to spaces (only if text is not quoted). */
         m_Text = FROM_UTF8( buf );
         m_Text.Replace( wxT( "~" ), wxT( " " ) );
@@ -286,7 +286,7 @@ void LIB_TEXT::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
  * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LIB_TEXT::GetPenSize( )
+int LIB_TEXT::GetPenSize( ) const
 {
     int     pensize = m_Thickness;
 

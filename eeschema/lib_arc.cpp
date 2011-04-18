@@ -319,7 +319,7 @@ void LIB_ARC::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
  * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LIB_ARC::GetPenSize()
+int LIB_ARC::GetPenSize() const
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }

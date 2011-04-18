@@ -46,7 +46,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     int item_flags = m_drawItem->m_Flags;       // save flags to restore them after editing
     LIB_PIN* pin = (LIB_PIN*) m_drawItem;
 
-    DIALOG_LIB_EDIT_PIN dlg( this );
+    DIALOG_LIB_EDIT_PIN dlg( this, pin );
 
     wxString units = GetUnitsLabel( g_UserUnit );
     dlg.SetOrientationList( LIB_PIN::GetOrientationNames(), LIB_PIN::GetOrientationSymbols() );

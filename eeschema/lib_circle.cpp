@@ -191,7 +191,7 @@ void LIB_CIRCLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
  * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LIB_CIRCLE::GetPenSize()
+int LIB_CIRCLE::GetPenSize() const
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }

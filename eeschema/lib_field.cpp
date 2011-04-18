@@ -272,7 +272,7 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
  * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LIB_FIELD::GetPenSize()
+int LIB_FIELD::GetPenSize() const
 {
     return ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
 }

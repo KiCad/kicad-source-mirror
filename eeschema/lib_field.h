@@ -86,10 +86,10 @@ public:
     void SetId( int aId ) { m_id = aId; }
 
     /**
-     * Function GetPenSize virtual pure
+     * Function GetPenSize virtual
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    int GetPenSize( );
+    virtual int GetPenSize( ) const;
 
     /**
      * Writes field object out to a FILE in "*.lib" format.

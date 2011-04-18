@@ -233,7 +233,7 @@ void LIB_POLYLINE::AddPoint( const wxPoint& point )
  * Function GetPenSize
  * @return the size of the "pen" that be used to draw or plot this item
  */
-int LIB_POLYLINE::GetPenSize()
+int LIB_POLYLINE::GetPenSize() const
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }

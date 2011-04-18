@@ -1,4 +1,9 @@
 #include "fctsys.h"
+#include "macros.h"
+#include "gr_basic.h"
+#include "libeditframe.h"
+#include "class_libentry.h"
+#include "lib_pin.h"
 
 #include "dialog_lib_edit_pin.h"
 
@@ -7,15 +12,22 @@
 wxPoint DIALOG_LIB_EDIT_PIN::s_LastPos( -1, -1 );
 wxSize  DIALOG_LIB_EDIT_PIN::s_LastSize;
 
-DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent ) :
+DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin ) :
     DIALOG_LIB_EDIT_PIN_BASE( parent )
 {
+    m_dummyPin = new LIB_PIN( *aPin );
+    m_panelShowPin->SetBackgroundColour( MakeColour( g_DrawBgColor ) );
+
     /* Required to make escape key work correctly in wxGTK. */
     SetFocus();
     // Set tab order
-    m_textPinName-> MoveAfterInTabOrder(this);
     m_textPadName-> MoveAfterInTabOrder(m_textPinName);
     m_sdbSizerButtonsOK->SetDefault();
+}
+
+DIALOG_LIB_EDIT_PIN::~DIALOG_LIB_EDIT_PIN()
+{
+    delete m_dummyPin;
 }
 
 void DIALOG_LIB_EDIT_PIN::SetLastSizeAndPosition()
@@ -30,6 +42,37 @@ void DIALOG_LIB_EDIT_PIN::SetLastSizeAndPosition()
     }
     else
         Center();
+}
+
+/*
+ * Draw (on m_panelShowPin) the pin currently edited
+ * accroding to current settings in dialog
+ */
+void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
+{
+    wxPaintDC    dc( m_panelShowPin );
+    wxSize dc_size = dc.GetSize();
+    dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
+
+    // Calculate a suitable scale to fit the available draw area
+    EDA_RECT bBox = m_dummyPin->GetBoundingBox();
+    double xscale    = (double) dc_size.x / bBox.GetWidth();
+    double yscale = (double) dc_size.y / bBox.GetHeight();
+    double scale = MIN( xscale, yscale );
+
+    // Give a 10% margin
+    scale *= 0.9;
+    dc.SetUserScale( scale, scale );
+
+    wxPoint offset =  bBox.Centre();
+    NEGATE( offset.x );
+    NEGATE( offset.y );
+
+    GRResetPenAndBrush( &dc );
+    m_dummyPin->Draw( NULL, &dc, offset, -1, wxCOPY,
+                      NULL, DefaultTransform );
+
+    event.Skip();
 }
 
 void DIALOG_LIB_EDIT_PIN::OnCloseDialog( wxCloseEvent& event )
@@ -56,6 +99,26 @@ void DIALOG_LIB_EDIT_PIN::OnOKButtonClick( wxCommandEvent& event )
     EndModal( wxID_OK );
 }
 
+// Called when a pin properties changes
+void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
+{
+    int units = ((LIB_EDIT_FRAME*)GetParent())->m_InternalUnits;
+    int pinNameSize = ReturnValueFromString( g_UserUnit, GetNameTextSize(), units );
+    int pinNumSize = ReturnValueFromString( g_UserUnit, GetPadNameTextSize(), units);
+    int pinOrient = LIB_PIN::GetOrientationCode( GetOrientation() );
+    int pinLength = ReturnValueFromString( g_UserUnit, GetLength(), units );
+    int pinShape = LIB_PIN::GetStyleCode( GetStyle() );
+
+    m_dummyPin->SetName( GetName() );
+    m_dummyPin->SetNameTextSize( pinNameSize );
+    m_dummyPin->SetNumber( GetPadName() );
+    m_dummyPin->SetNumberTextSize( pinNumSize );
+    m_dummyPin->SetOrientation( pinOrient );
+    m_dummyPin->SetLength( pinLength );
+    m_dummyPin->SetShape( pinShape );
+
+    m_panelShowPin->Refresh();
+}
 
 
 void DIALOG_LIB_EDIT_PIN::SetOrientationList( const wxArrayString& list,

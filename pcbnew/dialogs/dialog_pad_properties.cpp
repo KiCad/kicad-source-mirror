@@ -5,6 +5,7 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
@@ -133,6 +134,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     scale *= 0.7;
     dc.SetUserScale( scale, scale );
 
+    GRResetPenAndBrush( &dc );
     m_dummyPad->DrawShape( NULL, &dc, drawInfo );
 
     event.Skip();

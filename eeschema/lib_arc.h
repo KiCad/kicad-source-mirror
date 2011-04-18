@@ -102,7 +102,7 @@ public:
     /**
      * @return the size of the "pen" that be used to draw or plot this item
      */
-    virtual int GetPenSize( );
+    virtual int GetPenSize( ) const;
 
     /**
      * See LIB_DRAW_ITEM::BeginEdit().
