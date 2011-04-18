@@ -71,6 +71,18 @@ static inline double InternalToWidth( int aWidth )
     return InternalToLogical( aWidth ) * 100;
 }
 
+static inline int FontzToInternal( double aFontSize )
+{
+    // sweet font sizes are deci-pins
+    return LogicalToInternal( aFontSize ) / 10;
+}
+
+static inline double InternalToFontz( int aFontSize )
+{
+    // sweet font sizes are deci-pins
+    return InternalToLogical( aFontSize ) * 10;
+}
+
 
 //-----<temporary home for PART sub objects, move after stable>------------------
 
@@ -113,7 +125,30 @@ public:
     {}
 };
 
+
+/**
+ * Class FONTZ
+ * is the size of a font, and comes with a constructor which initializes
+ * height and width to special values which defer font size decision to
+ * a higher control.
+ */
+class FONTZ
+{
+public:
+
+#define FONTZ_DEFAULT       -1  ///< when size defers to higher control
+
+    FONTZ() :
+        height( FONTZ_DEFAULT ),
+        width(  FONTZ_DEFAULT )
+    {}
+
+    int     height;
+    int     width;
+};
+
 typedef float   ANGLE;
+typedef int     STROKE;             ///< will be a class someday, currently only line width
 
 
 namespace SCH {
@@ -125,7 +160,8 @@ class FONT
 
 protected:
     wxString        name;       ///< name or other id such as number, TBD
-    wxSize          size;
+    FONTZ           size;
+
     bool            italic;
     bool            bold;
 
@@ -159,6 +195,11 @@ struct TEXT_EFFECTS
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
 };
+
+
+#define STROKE_DEFAULT      -1          ///< defer line width decision to higher control
+
+#define FILL_TYPE_DEFAULT   PR::T_none  ///< fillType defaut
 
 
 class BASE_GRAPHIC
@@ -200,7 +241,7 @@ class POLY_LINE : public BASE_GRAPHIC
     friend class SWEET_PARSER;
 
 protected:
-    int         lineWidth;
+    STROKE      stroke;
     int         fillType;       // T_none, T_filled, or T_transparent
     POINTS      pts;
 
@@ -210,7 +251,7 @@ protected:
 public:
     POLY_LINE( PART* aOwner ) :
         BASE_GRAPHIC( aOwner ),
-        lineWidth( 1 ),
+        stroke( STROKE_DEFAULT ),
         fillType( PR::T_none )
     {
     }
@@ -228,7 +269,7 @@ public:
     BEZIER( PART* aOwner ) :
         POLY_LINE( aOwner )
     {
-        lineWidth = 1;
+        stroke    = STROKE_DEFAULT;
         fillType  = PR::T_none;
     }
 
@@ -242,7 +283,7 @@ class RECTANGLE : public BASE_GRAPHIC
     friend class SWEET_PARSER;
 
 protected:
-    int         lineWidth;
+    STROKE      stroke;
     int         fillType;       // T_none, T_filled, or T_transparent
     POINT       start;
     POINT       end;
@@ -250,8 +291,8 @@ protected:
 public:
     RECTANGLE( PART* aOwner ) :
         BASE_GRAPHIC( aOwner ),
-        lineWidth( 1 ),
-        fillType( PR::T_none )
+        stroke( STROKE_DEFAULT ),
+        fillType( FILL_TYPE_DEFAULT )
     {
     }
 
@@ -268,15 +309,15 @@ class CIRCLE : public BASE_GRAPHIC
 protected:
     POINT       center;
     int         radius;
-    int         lineWidth;
+    STROKE      stroke;
     int         fillType;       // T_none, T_filled, or T_transparent
 
 public:
     CIRCLE( PART* aOwner ) :
         BASE_GRAPHIC( aOwner ),
         radius( LogicalToInternal( 0.5 ) ),
-        lineWidth( 1 ),
-        fillType( PR::T_none )
+        stroke( STROKE_DEFAULT ),
+        fillType( FILL_TYPE_DEFAULT )
     {
     }
 
@@ -292,7 +333,7 @@ class ARC : public BASE_GRAPHIC
 
 protected:
     POINT       pos;
-    int         lineWidth;
+    STROKE      stroke;
     int         fillType;       // T_none, T_filled, or T_transparent
     int         radius;
     POINT       start;
@@ -301,8 +342,8 @@ protected:
 public:
     ARC( PART* aOwner ) :
         BASE_GRAPHIC( aOwner ),
-        lineWidth( 1 ),
-        fillType( PR::T_none ),
+        stroke( STROKE_DEFAULT ),
+        fillType( FILL_TYPE_DEFAULT ),
         radius( LogicalToInternal( 0.5 ) )
     {
     }
@@ -322,6 +363,7 @@ protected:
     ANGLE       angle;
 
     int         fillType;       ///< T_none, T_filled, or T_transparent
+
     int         hjustify;       ///< T_center, T_right, or T_left
     int         vjustify;       ///< T_center, T_top, or T_bottom
 
@@ -413,6 +455,10 @@ struct PINTEXT
 };
 
 
+#define PIN_LEN_DEFAULT     -1          ///< use standard pin length for given type
+#define PIN_SHAPE_DEFAULT   PR::T_line  ///< use standard pin shape
+#define PIN_CONN_DEFAULT    PR::T_in    ///< use standard pin connection type
+
 class PIN : public BASE_GRAPHIC
 {
     friend class PART;
@@ -422,9 +468,9 @@ public:
     PIN( PART* aOwner ) :
         BASE_GRAPHIC( aOwner ),
         angle( 0 ),
-        connectionType( PR::T_input ),
-        shape( PR::T_line ),
-        length( 0 ),
+        connectionType( PIN_CONN_DEFAULT ),
+        shape( PIN_SHAPE_DEFAULT ),
+        length( PIN_LEN_DEFAULT ),
         isVisible( true )
     {}
 
@@ -447,10 +493,10 @@ protected:
     POINT       pos;
     ANGLE       angle;
 
-    PINTEXT     padname;
+    PINTEXT     pad;
     PINTEXT     signal;
 
-    int         connectionType;     ///< T_input, T_output, T_bidirectional, T_tristate, T_passive, T_unspecified,
+    int         connectionType;     ///< T_in, T_out, T_inout, T_tristate, T_passive, T_unspecified,
                                     ///< T_power_in, T_power_out, T_open_collector, T_open_emitter, or T_unconnected.
 
     int         shape;              ///< T_none, T_line, T_inverted, T_clock, T_inverted_clk, T_input_low, T_clock_low,
@@ -459,7 +505,7 @@ protected:
     int         length;             ///< length of pin in internal units
     bool        isVisible;          ///< pin is visible
 
-    wxString    pin_merge;          ///< padname of (pin_merge ...) that I am a member of, else empty if none
+    wxString    pin_merge;          ///< pad of (pin_merge ...) that I am a member of, else empty if none
 };
 
 
@@ -526,6 +572,7 @@ typedef std::vector< BASE_GRAPHIC* >    GRAPHICS;
 typedef std::vector< PROPERTY* >        PROPERTIES;
 
 typedef std::vector< PIN* >             PINS;
+typedef std::vector< PIN* >             PIN_LIST;       ///< no ownership, used for searches
 
 
 class LPID;
@@ -624,29 +671,29 @@ public:
     PROPERTY*   FieldLookup( PROP_ID aPropertyId );
 
     /**
-     * Function PinFindByPadName
-     * finds a PIN based on aPadName or returns NULL if not found.
-     * @param aPadName is the pin to find
+     * Function PinFindByPad
+     * finds a PIN based on aPad or returns NULL if not found.
+     * @param aPad is the pin to find
      * @return PIN* - the found PIN or NULL if not found.
      */
-    PIN*        PinFindByPadName( const wxString& aPadName )
+    PIN*        PinFindByPad( const wxString& aPad )
     {
-        PINS::iterator it = pinFindByPadName( aPadName );
-        return it != pins.end() ? *it : NULL;
-    }
-
-    PIN*        PinFindBySignal( const wxString& aSignal )
-    {
-        PINS::iterator it = pinFindBySignal( aSignal );
+        PINS::iterator it = pinFindByPad( aPad );
         return it != pins.end() ? *it : NULL;
     }
 
     /**
+     * Function PinsFindBySignal
+     * fetches all the pins matching aSignal into aResults.
+     */
+    void        PinsFindBySignal( PIN_LIST* aResults, const wxString& aSignal );
+
+    /**
      * Function PinDelete
-     * deletes the pin with aPadName if found and returns true, else false
+     * deletes the pin with aPad if found and returns true, else false
      * if not found.
      */
-    bool PinDelete( const wxString& aPadName );
+    bool PinDelete( const wxString& aPad );
 
 
 /*
@@ -714,13 +761,11 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
     PROPERTIES::iterator propertyFind( const wxString& aPropertyName );
 
     /**
-     * Function pinFindByPadName
-     * searches for a PIN with aPadName and returns a PROPERTIES::iterator which
+     * Function pinFindByPad
+     * searches for a PIN with aPad and returns a PROPERTIES::iterator which
      * is the found item or pins.end() if not found.
      */
-    PINS::iterator pinFindByPadName( const wxString& aPadName );
-    PINS::iterator pinFindBySignal( const wxString& aSignal );
-
+    PINS::iterator pinFindByPad( const wxString& aPad );
 
     POINT           anchor;
 

@@ -1,0 +1,1659 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+                 xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:dc="http://purl.org/dc/elements/1.1/"
+                 xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
+                 xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"
+                 xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+                 xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
+                 xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0"
+                 xmlns:math="http://www.w3.org/1998/Math/MathML"
+                 xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0"
+                 xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0"
+                 xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0"
+                 xmlns:ooo="http://openoffice.org/2004/office"
+                 xmlns:ooow="http://openoffice.org/2004/writer"
+                 xmlns:oooc="http://openoffice.org/2004/calc"
+                 xmlns:dom="http://www.w3.org/2001/xml-events"
+                 xmlns:xforms="http://www.w3.org/2002/xforms"
+                 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:rpt="http://openoffice.org/2005/report"
+                 xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2"
+                 xmlns:xhtml="http://www.w3.org/1999/xhtml"
+                 xmlns:grddl="http://www.w3.org/2003/g/data-view#"
+                 xmlns:tableooo="http://openoffice.org/2009/table"
+                 xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0"
+                 xmlns:css3t="http://www.w3.org/TR/css3-text/"
+                 office:version="1.2"
+                 grddl:transformation="http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl"
+                 office:mimetype="application/vnd.oasis.opendocument.text">
+   <office:meta>
+      <meta:creation-date>2011-04-18T01:23:31</meta:creation-date>
+      <meta:editing-duration>P0D</meta:editing-duration>
+      <meta:editing-cycles>1</meta:editing-cycles>
+      <meta:generator>LibreOffice/3.3$Unix OpenOffice.org_project/330m9$Build-1</meta:generator>
+      
+      
+      
+      <meta:document-statistic meta:table-count="0" meta:image-count="0" meta:object-count="0"
+                               meta:page-count="11"
+                               meta:paragraph-count="340"
+                               meta:word-count="2918"
+                               meta:character-count="17461"/>
+   </office:meta>
+   <office:settings>
+      <config:config-item-set config:name="ooo:view-settings">
+         <config:config-item config:name="ViewAreaTop" config:type="long">27919</config:config-item>
+         <config:config-item config:name="ViewAreaLeft" config:type="long">0</config:config-item>
+         <config:config-item config:name="ViewAreaWidth" config:type="long">23670</config:config-item>
+         <config:config-item config:name="ViewAreaHeight" config:type="long">12026</config:config-item>
+         <config:config-item config:name="ShowRedlineChanges" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="InBrowseMode" config:type="boolean">false</config:config-item>
+         <config:config-item-map-indexed config:name="Views">
+            <config:config-item-map-entry>
+               <config:config-item config:name="ViewId" config:type="string">view2</config:config-item>
+               <config:config-item config:name="ViewLeft" config:type="long">5590</config:config-item>
+               <config:config-item config:name="ViewTop" config:type="long">38299</config:config-item>
+               <config:config-item config:name="VisibleLeft" config:type="long">0</config:config-item>
+               <config:config-item config:name="VisibleTop" config:type="long">27919</config:config-item>
+               <config:config-item config:name="VisibleRight" config:type="long">23668</config:config-item>
+               <config:config-item config:name="VisibleBottom" config:type="long">39943</config:config-item>
+               <config:config-item config:name="ZoomType" config:type="short">3</config:config-item>
+               <config:config-item config:name="ViewLayoutColumns" config:type="short">1</config:config-item>
+               <config:config-item config:name="ViewLayoutBookMode" config:type="boolean">false</config:config-item>
+               <config:config-item config:name="ZoomFactor" config:type="short">205</config:config-item>
+               <config:config-item config:name="IsSelectedFrame" config:type="boolean">false</config:config-item>
+            </config:config-item-map-entry>
+         </config:config-item-map-indexed>
+      </config:config-item-set>
+      <config:config-item-set config:name="ooo:configuration-settings">
+         <config:config-item config:name="AllowPrintJobCancel" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="PrintPaperFromSetup" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="AddFrameOffsets" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="PrintLeftPages" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="IsKernAsianPunctuation" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="PrintReversed" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="PrintTables" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="ProtectForm" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="LinkUpdateMode" config:type="short">1</config:config-item>
+         <config:config-item config:name="PrintControls" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="PrinterSetup" config:type="base64Binary"/>
+         <config:config-item config:name="PrintEmptyPages" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="PrintSingleJobs" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="CurrentDatabaseCommand" config:type="string"/>
+         <config:config-item config:name="ConsiderTextWrapOnObjPos" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="ApplyUserData" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="AddParaTableSpacing" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="ChartAutoUpdate" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="IgnoreFirstLineIndentInNumbering" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="CurrentDatabaseDataSource" config:type="string"/>
+         <config:config-item config:name="LoadReadonly" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="AddParaTableSpacingAtStart" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="FieldAutoUpdate" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="TabsRelativeToIndent" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="IgnoreTabsAndBlanksForLineCalculation" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="PrintAnnotationMode" config:type="short">0</config:config-item>
+         <config:config-item config:name="TableRowKeep" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="PrintFaxName" config:type="string"/>
+         <config:config-item config:name="PrintTextPlaceholder" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="DoNotJustifyLinesWithManualBreak" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="UseFormerTextWrapping" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="IsLabelDocument" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="UseOldPrinterMetrics" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="CurrentDatabaseCommandType" config:type="int">0</config:config-item>
+         <config:config-item config:name="PrinterName" config:type="string"/>
+         <config:config-item config:name="InvertBorderSpacing" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="UnxForceZeroExtLeading" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="PrintProspect" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="PrintRightPages" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
+         <config:config-item config:name="PrintGraphics" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="AlignTabStopPosition" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="PrintHiddenText" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="DoNotResetParaAttrsForNumFont" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="UseFormerLineSpacing" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="PrintPageBackground" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="AddExternalLeading" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="OutlineLevelYieldsNumbering" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="UseFormerObjectPositioning" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="SaveGlobalDocumentLinks" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="PrintProspectRTL" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="ClipAsCharacterAnchoredWriterFlyFrames" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="CollapseEmptyCellPara" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="PrinterIndependentLayout" config:type="string">high-resolution</config:config-item>
+         <config:config-item config:name="RedlineProtectionKey" config:type="base64Binary"/>
+         <config:config-item config:name="UseOldNumbering" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="PrintBlackFonts" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="AddParaSpacingToTableCells" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="PrintDrawings" config:type="boolean">true</config:config-item>
+         <config:config-item config:name="DoNotCaptureDrawObjsOnPage" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="TabAtLeftIndentForParagraphsInList" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="SaveVersionOnClose" config:type="boolean">false</config:config-item>
+         <config:config-item config:name="UpdateFromTemplate" config:type="boolean">true</config:config-item>
+      </config:config-item-set>
+   </office:settings>
+   <office:scripts>
+      <office:script script:language="ooo:Basic">
+         <ooo:libraries>
+            <ooo:library-embedded ooo:name="Standard"/>
+         </ooo:libraries>
+      </office:script>
+   </office:scripts>
+   <office:font-face-decls>
+      <style:font-face style:name="Tahoma1" svg:font-family="Tahoma"/>
+      <style:font-face style:name="Bitstream Vera Sans Mono"
+                       svg:font-family="'Bitstream Vera Sans Mono'"
+                       style:font-adornments="Roman"
+                       style:font-family-generic="modern"
+                       style:font-pitch="fixed"/>
+      <style:font-face style:name="Times New Roman" svg:font-family="'Times New Roman'"
+                       style:font-family-generic="roman"
+                       style:font-pitch="variable"/>
+      <style:font-face style:name="Arial" svg:font-family="Arial" style:font-family-generic="swiss"
+                       style:font-pitch="variable"/>
+      <style:font-face style:name="Lucida Sans Unicode" svg:font-family="'Lucida Sans Unicode'"
+                       style:font-family-generic="system"
+                       style:font-pitch="variable"/>
+      <style:font-face style:name="Tahoma" svg:font-family="Tahoma" style:font-family-generic="system"
+                       style:font-pitch="variable"/>
+   </office:font-face-decls>
+   <office:styles>
+      <style:default-style style:family="graphic">
+         <style:graphic-properties draw:shadow-offset-x="0.1181in" draw:shadow-offset-y="0.1181in"
+                                   draw:start-line-spacing-horizontal="0.1114in"
+                                   draw:start-line-spacing-vertical="0.1114in"
+                                   draw:end-line-spacing-horizontal="0.1114in"
+                                   draw:end-line-spacing-vertical="0.1114in"
+                                   style:flow-with-text="false"/>
+         <style:paragraph-properties style:text-autospace="ideograph-alpha" style:line-break="strict"
+                                     style:writing-mode="lr-tb"
+                                     style:font-independent-line-spacing="false">
+            <style:tab-stops/>
+         </style:paragraph-properties>
+         <style:text-properties style:use-window-font-color="true" fo:font-size="12pt" fo:language="en"
+                                fo:country="US"
+                                style:letter-kerning="true"
+                                style:font-size-asian="12pt"
+                                style:language-asian="zh"
+                                style:country-asian="CN"
+                                style:font-size-complex="12pt"
+                                style:language-complex="hi"
+                                style:country-complex="IN"/>
+      </style:default-style>
+      <style:default-style style:family="paragraph">
+         <style:paragraph-properties fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha"
+                                     style:punctuation-wrap="hanging"
+                                     style:line-break="strict"
+                                     style:tab-stop-distance="0.4925in"
+                                     style:writing-mode="page"/>
+         <style:text-properties style:use-window-font-color="true" style:font-name="Times New Roman"
+                                fo:font-size="12pt"
+                                fo:language="en"
+                                fo:country="US"
+                                style:letter-kerning="true"
+                                style:font-name-asian="Lucida Sans Unicode"
+                                style:font-size-asian="12pt"
+                                style:language-asian="zh"
+                                style:country-asian="CN"
+                                style:font-name-complex="Tahoma"
+                                style:font-size-complex="12pt"
+                                style:language-complex="hi"
+                                style:country-complex="IN"
+                                fo:hyphenate="false"
+                                fo:hyphenation-remain-char-count="2"
+                                fo:hyphenation-push-char-count="2"/>
+      </style:default-style>
+      <style:default-style style:family="table">
+         <style:table-properties table:border-model="collapsing"/>
+      </style:default-style>
+      <style:default-style style:family="table-row">
+         <style:table-row-properties fo:keep-together="auto"/>
+      </style:default-style>
+      <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+      <style:style style:name="Heading" style:family="paragraph"
+                   style:parent-style-name="Standard"
+                   style:next-style-name="Text_20_body"
+                   style:class="text">
+         <style:paragraph-properties fo:margin-top="0.1665in" fo:margin-bottom="0.0835in" fo:keep-with-next="always"/>
+         <style:text-properties style:font-name="Arial" fo:font-size="14pt"
+                                style:font-name-asian="Lucida Sans Unicode"
+                                style:font-size-asian="14pt"
+                                style:font-name-complex="Tahoma"
+                                style:font-size-complex="14pt"/>
+      </style:style>
+      <style:style style:name="Text_20_body" style:display-name="Text body"
+                   style:family="paragraph"
+                   style:parent-style-name="Standard"
+                   style:class="text">
+         <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0.0835in"/>
+      </style:style>
+      <style:style style:name="List" style:family="paragraph"
+                   style:parent-style-name="Text_20_body"
+                   style:class="list">
+         <style:text-properties style:font-name-complex="Tahoma1"/>
+      </style:style>
+      <style:style style:name="Caption" style:family="paragraph"
+                   style:parent-style-name="Standard"
+                   style:class="extra">
+         <style:paragraph-properties fo:margin-top="0.0835in" fo:margin-bottom="0.0835in" text:number-lines="false"
+                                     text:line-number="0"/>
+         <style:text-properties fo:font-size="12pt" fo:font-style="italic" style:font-size-asian="12pt"
+                                style:font-style-asian="italic"
+                                style:font-name-complex="Tahoma1"
+                                style:font-size-complex="12pt"
+                                style:font-style-complex="italic"/>
+      </style:style>
+      <style:style style:name="Index" style:family="paragraph" style:parent-style-name="Standard"
+                   style:class="index">
+         <style:paragraph-properties text:number-lines="false" text:line-number="0"/>
+         <style:text-properties style:font-name-complex="Tahoma1"/>
+      </style:style>
+      <style:style style:name="Heading_20_1" style:display-name="Heading 1"
+                   style:family="paragraph"
+                   style:parent-style-name="Heading"
+                   style:next-style-name="Text_20_body"
+                   style:default-outline-level="1"
+                   style:class="text">
+         <style:text-properties fo:font-size="115%" fo:font-weight="bold" style:font-size-asian="115%"
+                                style:font-weight-asian="bold"
+                                style:font-size-complex="115%"
+                                style:font-weight-complex="bold"/>
+      </style:style>
+      <style:style style:name="Footnote" style:family="paragraph"
+                   style:parent-style-name="Standard"
+                   style:class="extra">
+         <style:paragraph-properties fo:margin-left="0.1965in" fo:margin-right="0in" fo:text-indent="-0.1965in"
+                                     style:auto-text-indent="false"
+                                     text:number-lines="false"
+                                     text:line-number="0"/>
+         <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+      </style:style>
+      <style:style style:name="code0" style:family="paragraph"
+                   style:parent-style-name="Text_20_body"
+                   style:class="chapter">
+         <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0.0201in">
+            <style:tab-stops/>
+         </style:paragraph-properties>
+         <style:text-properties style:font-name="Bitstream Vera Sans Mono" fo:font-size="10pt"/>
+      </style:style>
+      <style:style style:name="comment" style:family="paragraph" style:parent-style-name="code0"
+                   style:class="chapter">
+         <style:paragraph-properties fo:margin-top="0in" fo:margin-bottom="0.0201in"/>
+         <style:text-properties fo:color="#006b6b"/>
+      </style:style>
+      <style:style style:name="Table_20_Contents" style:display-name="Table Contents"
+                   style:family="paragraph"
+                   style:parent-style-name="Standard"
+                   style:class="extra">
+         <style:paragraph-properties text:number-lines="false" text:line-number="0"/>
+      </style:style>
+      <style:style style:name="Table_20_Heading" style:display-name="Table Heading"
+                   style:family="paragraph"
+                   style:parent-style-name="Table_20_Contents"
+                   style:class="extra">
+         <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"
+                                     text:number-lines="false"
+                                     text:line-number="0"/>
+         <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold"
+                                style:font-weight-complex="bold"/>
+      </style:style>
+      <style:style style:name="Heading_20_2" style:display-name="Heading 2"
+                   style:family="paragraph"
+                   style:parent-style-name="Heading"
+                   style:next-style-name="Text_20_body"
+                   style:default-outline-level="2"
+                   style:class="text">
+         <style:text-properties fo:font-size="14pt" fo:font-style="italic" fo:font-weight="bold"
+                                style:font-size-asian="14pt"
+                                style:font-style-asian="italic"
+                                style:font-weight-asian="bold"
+                                style:font-size-complex="14pt"
+                                style:font-style-complex="italic"
+                                style:font-weight-complex="bold"/>
+      </style:style>
+      <style:style style:name="Heading_20_3" style:display-name="Heading 3"
+                   style:family="paragraph"
+                   style:parent-style-name="Heading"
+                   style:next-style-name="Text_20_body"
+                   style:default-outline-level="3"
+                   style:class="text">
+         <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt"
+                                style:font-weight-asian="bold"
+                                style:font-size-complex="14pt"
+                                style:font-weight-complex="bold"/>
+      </style:style>
+      <style:style style:name="Heading_20_4" style:display-name="Heading 4"
+                   style:family="paragraph"
+                   style:parent-style-name="Heading"
+                   style:next-style-name="Text_20_body"
+                   style:default-outline-level="4"
+                   style:class="text">
+         <style:text-properties fo:font-size="85%" fo:font-style="italic" fo:font-weight="bold"
+                                style:font-size-asian="85%"
+                                style:font-style-asian="italic"
+                                style:font-weight-asian="bold"
+                                style:font-size-complex="85%"
+                                style:font-style-complex="italic"
+                                style:font-weight-complex="bold"/>
+      </style:style>
+      <style:style style:name="Heading_20_5" style:display-name="Heading 5"
+                   style:family="paragraph"
+                   style:parent-style-name="Heading"
+                   style:next-style-name="Text_20_body"
+                   style:default-outline-level="5"
+                   style:class="text">
+         <style:text-properties fo:font-size="85%" fo:font-weight="bold" style:font-size-asian="85%"
+                                style:font-weight-asian="bold"
+                                style:font-size-complex="85%"
+                                style:font-weight-complex="bold"/>
+      </style:style>
+      <style:style style:name="Heading_20_6" style:display-name="Heading 6"
+                   style:family="paragraph"
+                   style:parent-style-name="Heading"
+                   style:next-style-name="Text_20_body"
+                   style:default-outline-level="6"
+                   style:class="text">
+         <style:text-properties fo:font-size="75%" fo:font-weight="bold" style:font-size-asian="75%"
+                                style:font-weight-asian="bold"
+                                style:font-size-complex="75%"
+                                style:font-weight-complex="bold"/>
+      </style:style>
+      <style:style style:name="Footnote_20_Symbol" style:display-name="Footnote Symbol"
+                   style:family="text"/>
+      <style:style style:name="Footnote_20_anchor" style:display-name="Footnote anchor"
+                   style:family="text">
+         <style:text-properties style:text-position="super 58%"/>
+      </style:style>
+      <style:style style:name="Internet_20_link" style:display-name="Internet link"
+                   style:family="text">
+         <style:text-properties fo:color="#000080" fo:language="zxx" fo:country="none"
+                                style:text-underline-style="solid"
+                                style:text-underline-width="auto"
+                                style:text-underline-color="font-color"
+                                style:language-asian="zxx"
+                                style:country-asian="none"
+                                style:language-complex="zxx"
+                                style:country-complex="none"/>
+      </style:style>
+      <style:style style:name="Visited_20_Internet_20_Link"
+                   style:display-name="Visited Internet Link"
+                   style:family="text">
+         <style:text-properties fo:color="#800000" fo:language="zxx" fo:country="none"
+                                style:text-underline-style="solid"
+                                style:text-underline-width="auto"
+                                style:text-underline-color="font-color"
+                                style:language-asian="zxx"
+                                style:country-asian="none"
+                                style:language-complex="zxx"
+                                style:country-complex="none"/>
+      </style:style>
+      <text:outline-style style:name="Outline">
+         <text:outline-level-style text:level="1" style:num-format="">
+            <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+               <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.3in"
+                                                 fo:text-indent="-0.3in"
+                                                 fo:margin-left="0.3in"/>
+            </style:list-level-properties>
+         </text:outline-level-style>
+         <text:outline-level-style text:level="2" style:num-format="">
+            <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+               <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.4in"
+                                                 fo:text-indent="-0.4in"
+                                                 fo:margin-left="0.4in"/>
+            </style:list-level-properties>
+         </text:outline-level-style>
+         <text:outline-level-style text:level="3" style:num-format="">
+            <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+               <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.5in"
+                                                 fo:text-indent="-0.5in"
+                                                 fo:margin-left="0.5in"/>
+            </style:list-level-properties>
+         </text:outline-level-style>
+         <text:outline-level-style text:level="4" style:num-format="">
+            <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+               <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.6in"
+                                                 fo:text-indent="-0.6in"
+                                                 fo:margin-left="0.6in"/>
+            </style:list-level-properties>
+         </text:outline-level-style>
+         <text:outline-level-style text:level="5" style:num-format="">
+            <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+               <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.7in"
+                                                 fo:text-indent="-0.7in"
+                                                 fo:margin-left="0.7in"/>
+            </style:list-level-properties>
+         </text:outline-level-style>
+         <text:outline-level-style text:level="6" style:num-format="">
+            <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+               <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.8in"
+                                                 fo:text-indent="-0.8in"
+                                                 fo:margin-left="0.8in"/>
+            </style:list-level-properties>
+         </text:outline-level-style>
+         <text:outline-level-style text:level="7" style:num-format="">
+            <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+               <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="0.9in"
+                                                 fo:text-indent="-0.9in"
+                                                 fo:margin-left="0.9in"/>
+            </style:list-level-properties>
+         </text:outline-level-style>
+         <text:outline-level-style text:level="8" style:num-format="">
+            <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+               <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1in"
+                                                 fo:text-indent="-1in"
+                                                 fo:margin-left="1in"/>
+            </style:list-level-properties>
+         </text:outline-level-style>
+         <text:outline-level-style text:level="9" style:num-format="">
+            <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+               <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.1in"
+                                                 fo:text-indent="-1.1in"
+                                                 fo:margin-left="1.1in"/>
+            </style:list-level-properties>
+         </text:outline-level-style>
+         <text:outline-level-style text:level="10" style:num-format="">
+            <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+               <style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="1.2in"
+                                                 fo:text-indent="-1.2in"
+                                                 fo:margin-left="1.2in"/>
+            </style:list-level-properties>
+         </text:outline-level-style>
+      </text:outline-style>
+      <text:notes-configuration text:note-class="footnote" text:citation-style-name="Footnote_20_Symbol"
+                                text:citation-body-style-name="Footnote_20_anchor"
+                                style:num-format="1"
+                                text:start-value="0"
+                                text:footnotes-position="page"
+                                text:start-numbering-at="document"/>
+      <text:notes-configuration text:note-class="endnote" style:num-format="i" text:start-value="0"/>
+      <text:linenumbering-configuration text:number-lines="false" text:offset="0.1965in" style:num-format="1"
+                                        text:number-position="left"
+                                        text:increment="5"/>
+   </office:styles>
+   <office:automatic-styles>
+      <style:style style:name="P1" style:family="paragraph" style:parent-style-name="code0">
+         <style:text-properties fo:color="#000000"/>
+      </style:style>
+      <style:style style:name="P2" style:family="paragraph" style:parent-style-name="code0">
+         <style:text-properties style:use-window-font-color="true"/>
+      </style:style>
+      <style:style style:name="P3" style:family="paragraph" style:parent-style-name="comment">
+         <style:text-properties fo:color="#800000"/>
+      </style:style>
+      <style:style style:name="P4" style:family="paragraph" style:parent-style-name="comment">
+         <style:text-properties fo:color="#008080"/>
+      </style:style>
+      <style:style style:name="P5" style:family="paragraph" style:parent-style-name="code0">
+         <style:paragraph-properties fo:break-before="page"/>
+      </style:style>
+      <style:style style:name="P6" style:family="paragraph" style:parent-style-name="Text_20_body"
+                   style:list-style-name=""/>
+      <style:style style:name="P7" style:family="paragraph" style:parent-style-name="Heading_20_1">
+         <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
+      </style:style>
+      <style:style style:name="P8" style:family="paragraph" style:parent-style-name="Heading_20_1"
+                   style:list-style-name="">
+         <style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/>
+      </style:style>
+      <style:style style:name="P9" style:family="paragraph" style:parent-style-name="Heading_20_1">
+         <style:paragraph-properties fo:break-before="page"/>
+      </style:style>
+      <style:style style:name="T1" style:family="text">
+         <style:text-properties fo:color="#0000ff"/>
+      </style:style>
+      <style:style style:name="T2" style:family="text">
+         <style:text-properties fo:color="#800000"/>
+      </style:style>
+      <style:style style:name="T3" style:family="text">
+         <style:text-properties fo:color="#006b6b"/>
+      </style:style>
+      <style:style style:name="T4" style:family="text">
+         <style:text-properties fo:color="#000000"/>
+      </style:style>
+      <style:style style:name="T5" style:family="text">
+         <style:text-properties style:use-window-font-color="true"/>
+      </style:style>
+      <style:style style:name="T6" style:family="text">
+         <style:text-properties style:text-position="super 58%"/>
+      </style:style>
+      <style:page-layout style:name="pm1">
+         <style:page-layout-properties fo:page-width="8.5in" fo:page-height="11in" style:num-format="1"
+                                       style:print-orientation="portrait"
+                                       fo:margin-top="0.7874in"
+                                       fo:margin-bottom="0.7874in"
+                                       fo:margin-left="0.7874in"
+                                       fo:margin-right="0.7874in"
+                                       style:writing-mode="lr-tb"
+                                       style:footnote-max-height="0in">
+            <style:footnote-sep style:width="0.0071in" style:distance-before-sep="0.0398in"
+                                style:distance-after-sep="0.0398in"
+                                style:adjustment="left"
+                                style:rel-width="25%"
+                                style:color="#000000"/>
+         </style:page-layout-properties>
+         <style:header-style/>
+         <style:footer-style/>
+      </style:page-layout>
+   </office:automatic-styles>
+   <office:master-styles>
+      <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+   </office:master-styles>
+   <office:body>
+      <office:text text:use-soft-page-breaks="true">
+         <text:sequence-decls>
+            <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+            <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+            <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+            <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+         </text:sequence-decls>
+         <text:h text:style-name="P7" text:outline-level="1">SWEET <text:s/>S-Expression Grammar Describing a </text:h>
+         <text:h text:style-name="P8" text:outline-level="1">Schematic Part String Format Specification </text:h>
+         <text:h text:style-name="P7" text:outline-level="1"/>
+         <text:h text:style-name="P6" text:outline-level="1">Authors:</text:h>
+         <text:h text:style-name="P6" text:outline-level="1">Wayne Stambaugh</text:h>
+         <text:h text:style-name="P6" text:outline-level="1">Dick Hollenbeck</text:h>
+         <text:h text:style-name="P6" text:outline-level="1"/>
+         <text:h text:style-name="P6" text:outline-level="1"/>
+         <text:h text:style-name="P6" text:outline-level="1">Original Edits: <text:tab/>January 2011</text:h>
+         <text:h text:style-name="P6" text:outline-level="1">Latest Edits:<text:tab/>
+            <text:tab/>April 2011</text:h>
+         <text:h text:style-name="P6" text:outline-level="1"/>
+         <text:h text:style-name="P9" text:outline-level="1">Introduction</text:h>
+         <text:p text:style-name="Text_20_body">The purpose of this document is to define the new format for the Kicad schematic part descriptions, as expressed using the new SWEET grammar. <text:s/>This format supersedes the old file format defined in the file “library_file_format_EN.odt. <text:s/>The idea of component library files is no longer valid. <text:s/>The unit of retrieval from the new distributed library system is the part, not a library. <text:s text:c="2"/>To learn more about the new distributed library system see the design.h document in the Kicad source tree, or better yet, the Doxygen generated material therefrom.</text:p>
+         <text:p text:style-name="Text_20_body">The SWEET grammar format is based on the Specttra DSN lexer<text:note text:id="ftn1" text:note-class="footnote">
+               <text:note-citation>1</text:note-citation>
+               <text:note-body>
+                  <text:p text:style-name="Footnote">See source files dsnlexer.cpp and dsnlexer.h in the Kicad source code for more information about how the DSN lexer works.</text:p>
+               </text:note-body>
+            </text:note> work graciously coded and contributed by Dick Hollenbeck. <text:s/>For those not familiar with the DSN format, it is very similar the the LISP programming language in that keywords are delimited by braces. <text:s/>It is also known as an S-expression format. <text:s/>A keyword may have zero or more tokens that behave like parameters for the keyword. <text:s/>Tokens may be defined as additional keywords creating a programming language like structure. <text:s/>The decision to change to this format is driven by a desire to provide a more robust file lexer, a human readable file format, better retrieval error reporting, and improved extensibility. <text:s/>The other driving factor is to provide a more robust format for handling the various requirements of the component library developers.</text:p>
+         <text:h text:style-name="Heading_20_1" text:outline-level="1">Front Matter</text:h>
+         <text:p text:style-name="Text_20_body">This is a living document designed to be kept synchronized with the actual source code. <text:s/>If you modify the lexer, please update this specification as courtesy to other developers. <text:s/>There are many third party tools that are used to generate, manipulate, and parse component library files. <text:s/>Keeping this document current is vital to developers of these tools.</text:p>
+         <text:h text:style-name="Heading_20_1" text:outline-level="1">Formatting</text:h>
+         <text:p text:style-name="Text_20_body">The DSN lexer enforces strict formatting requirements. <text:s/>Files must be encoded in UTF8 format. <text:s/>All lexer keywords are comprised of lower case letters, numbers, and underscores. <text:s/>Tokens may be any alphanumeric character delimited by a white space character. <text:s/>Each new delimited level of keywords is indented to make files easier to read and edit with a plain text editor. <text:s/>Comments are supported as separate lines indented at the same level as the current keyword delimiter and begin with the # character. <text:s/>In line comments are not allowed. <text:s/>There is more information on s-expression support in the Kicad source tree in file Documentation/s-expressions.txt.</text:p>
+         <text:h text:style-name="Heading_20_1" text:outline-level="1">Using this document</text:h>
+         <text:p text:style-name="Text_20_body">This document is nothing more than several well commented part files. <text:s/>You should always be able to copy the text from the opening delimiter “(“ to the closing delimeter “)” into a file and open it with the library part file editor or library part viewer in Kicad's schematic capture program EESchema. <text:s/>It may not actually draw a useful component or be a very useful part but it should always be syntactically correct. <text:s/>The comments for a specific keyword always appears above the keyword it describes. <text:s/>Keywords defined within brackets [] are optional. <text:s/>A simple syntax coloring scheme has been employed to make this document more readable. <text:s/>Keywords are highlighted in <text:span text:style-name="T1">blue</text:span>, <text:s/>comments are highlighted in <text:span text:style-name="T3">turquoise</text:span>, and strings are highlighted in <text:span text:style-name="T2">red</text:span>.</text:p>
+         <text:h text:style-name="Heading_20_1" text:outline-level="1">
+            <text:soft-page-break/>Logical coordinates.</text:h>
+         <text:p text:style-name="Text_20_body">The SWEET grammar expresses schematic parts using a coordinate system without units of measure. <text:s/>That is, logical coordinates used are dimensionless. <text:s/>The advantage of having coordinates without units is any item that has an integer (non-fractional) coordinate in x and y, will be “on grid”. <text:s/>This helps ensure all connectable items such as pins, wires, junctions, etc., can be easily connected using normal grid snap. <text:s/>The normal spacing between neighboring part pins is 1 logical unit, and it is dimensionless. <text:s/>In fact, this is the definition of what a logical unit is, the normal spacing between two neighboring pins. <text:s text:c="3"/>Only non-connectable objects (e.g. arcs, text, etc.) should have non-integer coordinates. <text:s/>The zoom factor at time of printing or plotting determines the physical size of any drawing output.</text:p>
+         <text:h text:style-name="Heading_20_1" text:outline-level="1">Line Widths</text:h>
+         <text:p text:style-name="Text_20_body">Line widths are given as a percent of a logical unit. <text:s/>In other words, a line width of 1 means 1/100<text:span text:style-name="T6">th</text:span> of a logical unit. <text:s/>Recall that a logical unit of 1 is the normal spacing between two neighboring schematic pins. <text:s text:c="2"/>So a line width of 50 would mean 50/100 of a pin interval, or half the normal space between two pins. <text:s/>A line width of 50 represents a very wide line indeed, a more normal line width would be about 1-5 <text:s/>(percent).</text:p>
+         <text:h text:style-name="Heading_20_1" text:outline-level="1">An example file showing syntax for all drawable item types.</text:h>
+         <text:p text:style-name="comment"># The schematic part element is the largest entity addressed by the SWEET grammar.</text:p>
+         <text:p text:style-name="comment"># A schematic part can inherited from another part by using the “extends” keyword.</text:p>
+         <text:p text:style-name="comment"># The part name is normally the file name, although SWEET parts will not always</text:p>
+         <text:p text:style-name="comment"># exist as mere files. <text:s/>They are actually best thought of as strings held in a</text:p>
+         <text:p text:style-name="comment"># a container called a lib_source. The NAME_HINT is to be used in a manner yet to</text:p>
+         <text:p text:style-name="comment"># be determined, depending on the context from which the SWEET part came from.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T5">NAME_HINT[</text:span> 
+            <text:span text:style-name="T1">extends</text:span> 
+            <text:span text:style-name="T5">LPID]</text:span> 
+         </text:p>
+         <text:p text:style-name="P2"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Change the anchor position to something other than 0, 0. <text:s/>Anchor coordinates</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># must be integers.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">anchor</text:span> (<text:span text:style-name="T1">at </text:span>X Y))]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># The reference token is a reserved property. <text:s/>Other reserved properties are</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># value, footprint, datasheet, model, and keywords.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">reference</text:span> 
+            <text:span text:style-name="T5">REF</text:span> 
+         </text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># Effects define how a property is displayed. <text:s/>If no effect is defined then</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># the property is not displayed. <text:s/>Effects can also be used to override the</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># effects of a property in an inherited part. <text:s/>When (effects...) is used</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># in a COMPONENT to override the effects of a PART, the PROPERTY </text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># specifier must be present.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>[<text:bookmark-start text:name="__DdeLink__1991_2022311872"/>(<text:span text:style-name="T1">effects</text:span> [PROPERTY]</text:p>
+         <text:p text:style-name="P3"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="6"/># Position requires an X and Y coordinates. <text:s/>Position coordinates can be</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="6"/># non-intergr. <text:s/>Angle is in degrees and defaults to 0 if not defined.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="6"/>(<text:span text:style-name="T1">at </text:span>X Y [ANGLE])</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="6"/>
+            <text:bookmark-start text:name="__DdeLink__1994_2124759253"/># The FONT value needs to be defined. <text:s/>Currently, EESchema does not support</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="6"/># different fonts. <text:s/>In the future this feature may be implemented and at</text:p>
+         <text:p text:style-name="comment">
+            <text:soft-page-break/>
+            <text:s text:c="7"/># that time FONT will have to be defined. <text:s/>Initially, only the font size &amp;</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="6"/># style are required. <text:s/>Italic and bold styles are optional. <text:s/>The font size</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="6"/># height and width are in units yet to be determined. <text:s/>Only a variance</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="6"/># from defaults needs to be stated.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="6"/>[(<text:span text:style-name="T1">font</text:span> 
+            <text:span text:style-name="T5">[</text:span>FONT] (<text:span text:style-name="T1">size </text:span>HEIGHT WIDTH) [italic] [bold])<text:bookmark-end text:name="__DdeLink__1994_2124759253"/>]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="6"/># Default visiblity for fields is no, only a variance from the</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="6"/># the default needs to be stated.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="6"/>[(<text:span text:style-name="T1">visible yes</text:span>)]</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>)<text:bookmark-end text:name="__DdeLink__1991_2022311872"/>]</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>)]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Add a new user definable property to this part. <text:s/>Also can be use to override</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># a property defined in extended part.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">property</text:span> 
+            <text:span text:style-name="T5">NAME VALUE</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T5">
+               <text:s text:c="4"/>[(</text:span> 
+            <text:span text:style-name="T1">effects</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="6"/>
+            </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">X Y [ANGLE])</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="6"/>
+            </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font</text:span> 
+            <text:span text:style-name="T5">[</text:span>FONT] (<text:span text:style-name="T1">size </text:span>HEIGHT WIDTH) [italic] [bold])</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="6"/># Default visiblity for fields is no, only a variance from the</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="6"/># the default needs to be stated.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="6"/>[(<text:span text:style-name="T1">visible yes</text:span>)]</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>)]</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>)]</text:p>
+         <text:p text:style-name="comment"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Either polyline or line are can be used to define a line or series of lines.</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Coordinates can be non-integer.</text:p>
+         <text:p text:style-name="code0">
+            <text:bookmark-start text:name="__DdeLink__1984_2124759253"/>
+            <text:s text:c="2"/>(<text:span text:style-name="T1">polyline</text:span> 
+            <text:span text:style-name="T5">or</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">line</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">pts</text:span> (<text:span text:style-name="T1">xy </text:span>X Y)(<text:span text:style-name="T1">xy </text:span>X Y)(<text:span text:style-name="T1">xy </text:span>X Y)(<text:span text:style-name="T1">xy </text:span>X Y)(<text:span text:style-name="T1">xy </text:span>X Y))</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># Line widths are in units as defined above.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>[(stroke [WIDTH] <text:bookmark-start text:name="__DdeLink__2025_599115402"/>[(style [(dashed...)]...)]<text:bookmark-end text:name="__DdeLink__2025_599115402"/>)]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># Valid fill types are none, filled, and transparent. <text:s/>Default fill for</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># a poly_line is none. <text:s/>Only a variance from the default needs to be stated.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>[(<text:span text:style-name="T1">fill </text:span>FILL_TYPE)]</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>)<text:bookmark-end text:name="__DdeLink__1984_2124759253"/> 
+         </text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>
+            <text:bookmark-start text:name="__DdeLink__1986_2124759253"/>(<text:span text:style-name="T1">rectangle </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">start </text:span>X Y) (<text:span text:style-name="T1">end </text:span>X Y) (<text:span text:style-name="T1">stroke </text:span>WIDTH) (<text:span text:style-name="T1">fill </text:span>FILL_TYPE))<text:bookmark-end text:name="__DdeLink__1986_2124759253"/> 
+         </text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="code0">
+            <text:s/>
+            <text:bookmark-start text:name="__DdeLink__1988_2124759253"/>
+            <text:s/>(<text:span text:style-name="T1">circle</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">center</text:span> X Y)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># Radius length is in units if defined or mils.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">radius </text:span>LENGTH)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">stroke </text:span>WIDTH)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">fill </text:span>FILL_TYPE)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>)<text:bookmark-end text:name="__DdeLink__1988_2124759253"/> 
+         </text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>
+            <text:bookmark-start text:name="__DdeLink__1990_2124759253"/>(<text:span text:style-name="T1">arc</text:span> 
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">pos</text:span> 
+            <text:span text:style-name="T5">X Y) (</text:span> 
+            <text:span text:style-name="T1">radius</text:span> 
+            <text:span text:style-name="T5">RADIUS) (</text:span> 
+            <text:span text:style-name="T1">start</text:span> X Y) (<text:span text:style-name="T1">end</text:span> X Y)</text:p>
+         <text:p text:style-name="code0">
+            <text:soft-page-break/>
+            <text:s/>
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>
+            </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">stroke </text:span>WIDTH)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">fill </text:span>FILL_TYPE)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="3"/>)<text:bookmark-end text:name="__DdeLink__1990_2124759253"/> 
+         </text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">bezier</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">pts </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">xy </text:span>X Y) (<text:span text:style-name="T1">xy </text:span>X Y) (<text:span text:style-name="T1">xy </text:span>X Y) (<text:span text:style-name="T1">xy </text:span>X Y) (<text:span text:style-name="T1">xy </text:span>X Y) (<text:span text:style-name="T1">xy </text:span>X Y))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="5"/>(<text:span text:style-name="T1">stroke </text:span>WIDTH)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">fill </text:span>FILL_TYPE)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="code0">
+            <text:bookmark-start text:name="__DdeLink__1992_2124759253"/>
+            <text:s text:c="2"/>(<text:span text:style-name="T1">text</text:span> 
+            <text:span text:style-name="T2">“This is the text that gets drawn.”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T4">
+               <text:s text:c="4"/>(</text:span> 
+            <text:span text:style-name="T1">at </text:span>
+            <text:span text:style-name="T4">X Y [ANGLE])</text:span> 
+         </text:p>
+         <text:p text:style-name="P1"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># Valid horizontal justification values are center, right, and left. <text:s/>Valid</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># vertical justification values are center, top, bottom. <text:s/>Defaults are</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># left and bottom. <text:s/>Only need to state a non-default.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>[(<text:span text:style-name="T1">justify [</text:span>HORIZONTAL_JUSTIFY] [VERTICAL_JUSTIFY])]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>[(<text:span text:style-name="T1">font</text:span> 
+            <text:span text:style-name="T5">[</text:span>FONT] (<text:span text:style-name="T1">size </text:span>HEIGHT WIDTH) [italic] [bold])]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># default visibility is yes, only need to state a non-default</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>[(<text:span text:style-name="T1">visible no</text:span>)]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># default fill type for text is filled, only need to state a non-default</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>[(<text:span text:style-name="T1">fill </text:span>FILL_TYPE)]</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>)<text:bookmark-end text:name="__DdeLink__1992_2124759253"/> 
+         </text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># A pin's type is it's electrical connection. <text:s/>Valid connection types are</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># input, output, bidirectional, tristate, passive, unspecified, power_in,</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># power_out, open_collector, open_emitter, unconnected. <text:s/>Valid pin shape</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># values are none, line, inverted, clock, inverted_clk, input_low, clock_low,</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># falling_edge, and non_logic.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin</text:span> 
+            <text:span text:style-name="T5">TYPE SHAPE</text:span> 
+         </text:p>
+         <text:p text:style-name="P2"/>
+         <text:p text:style-name="P4">
+            <text:s text:c="4"/># Pin coordinates must be integers. <text:s/>The angle values 0, 180, 90, and 270</text:p>
+         <text:p text:style-name="P4">
+            <text:s text:c="4"/># replace the current right, left, up, and down specifiers respectively,</text:p>
+         <text:p text:style-name="P4">
+            <text:s text:c="4"/># and are the only angles currently supported.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">at </text:span>X Y [ANGLE])</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># Length of the pin in logical units. <text:s/>This is optional, depending on </text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># SHAPE, which in some cases may imply a fixed length</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>[(<text:span text:style-name="T1">length</text:span> LENGTH)]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># Use signal to describe the purpose of the pin. <text:s/>Signals do not have to be</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># uniquely named within a part. <text:s/>Signal can be blank.</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>[</text:span> 
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">signal</text:span> 
+            <text:span text:style-name="T2">“NAME” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font</text:span> 
+            <text:span text:style-name="T5">[</text:span>FONT] (<text:span text:style-name="T1">size </text:span>HEIGHT WIDTH) [italic][bold]) </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="6"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">YES</text:span>))]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># Use pad to uniquely identify the pin, according to the pin number</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># in the datasheet for the part. <text:s/>Padnames may not be blank and must be</text:p>
+         <text:p text:style-name="comment">
+            <text:bookmark-start text:name="__DdeLink__2027_599115402"/>
+            <text:s text:c="4"/># be unique within the part.</text:p>
+         <text:p text:style-name="code0">
+            <text:bookmark-end text:name="__DdeLink__2027_599115402"/>
+            <text:soft-page-break/>
+            <text:s/>
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>(pad</text:span> 
+            <text:span text:style-name="T2">“NUMBER” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font</text:span> 
+            <text:span text:style-name="T5">[</text:span>FONT] (<text:span text:style-name="T1">size </text:span>HEIGHT WIDTH) [italic][bold])</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="6"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">YES</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s/>
+         </text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># default visibility for pins is yes, so only a deviation from the </text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="4"/># the default needs to be stated.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>[(<text:span text:style-name="T1">visible no</text:span>)]</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="3"/>)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="P5"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Pin merge is used to group a number of pins that are connected to the same</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># net externally and show only one pin symbolizing the group. <text:s/>The group is</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># called a merge set or merge group. <text:s/>It is typically used to hide all but </text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># one power pin on parts that have a large number of power connections </text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># such as FPGAs and micro-contollers. <text:s/>VISIBLE_PAD is the pad of</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># the one pin which remains visible within the merge set. <text:s/>Pins with pads</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># listed within the (pads...) element are all made invisible, and so</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># are are all pins which may have any of the signal names listed in the </text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># (signals...) element. <text:s/>A pin may only exist within one merge group.</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Any number of (pin_merge...) statements maybe made, including more than</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># one re-stating the same VISIBLE_PAD, which is the anchor pin for the </text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># merge set.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">pin_merge</text:span> VISIBLE_PAD </text:p>
+         <text:p text:style-name="code0">
+            <text:tab/>[(pads HIDDEN_PAD1 …)][(signals HIDDEN_SIGNAL1 …)])]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># The pin swap hinting flag is used to indicate to an external tool ( i.e. an</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># auto router ) that the pins defined are functionally equivalent and</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># interchangeable.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">hint_pin_swap</text:span> NUMBER1 NUMBER2 ...)]</text:p>
+         <text:p text:style-name="code0">)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:h text:style-name="Heading_20_1" text:outline-level="1">Inheritance syntax example file.</text:h>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T5">NAME_HINT </text:span>
+            <text:span text:style-name="T1">extends</text:span> 
+            <text:span text:style-name="T5">LPID</text:span> 
+         </text:p>
+         <text:p text:style-name="comment"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Remove pin PAD defined in the base part. <text:s/>Only valid for extended parts.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">pin_del </text:span>PAD)]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Swap pin PAD1 and pin PAD2 in the base part. <text:s/>
+         </text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Only valid for extended parts.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">pin_swap </text:span>PAD1 PAD2)]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Change the pad of pin OLDPAD to NEWPAD in the base part.</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Only valid for extended parts.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">pin_renum</text:span> OLDPAD NEWPAD)]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Change the signal of pin PAD to NEWSIGNAL in the base part. <text:s/>
+         </text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Only valid for extended parts.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">pin_rename</text:span> PAD NEWSIGNAL)]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Remove property NAME from the base part. <text:s/>Only valid for extended parts.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">property_del </text:span>NAME)]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Alternates are used to define multiple part per package devices and/or</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># alternate body styles (DeMorgan). <text:s/>Parts must be defined in order. <text:s/>There</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># can more than one alternates defined.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">alternates </text:span>LP<text:span text:style-name="T5">ID [LPID...]</text:span>)]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># Add a new property to this part. <text:s/>Also can be use to override a property</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># defined in the base part.</text:p>
+         <text:p text:style-name="code0">
+            <text:soft-page-break/>
+            <text:s text:c="5"/>[(<text:span text:style-name="T1">property</text:span> 
+            <text:span text:style-name="T5">NAME VALUE</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T5">
+               <text:s text:c="4"/>[(</text:span> 
+            <text:span text:style-name="T1">effects </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">X Y [ANGLE])</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T5">
+               <text:s text:c="6"/>(</text:span> 
+            <text:span text:style-name="T1">font</text:span> 
+            <text:span text:style-name="T5">[</text:span>FONT] (<text:span text:style-name="T1">size </text:span>HEIGHT WIDTH) [italic] [bold])</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="6"/>(<text:span text:style-name="T1">visible </text:span>YES)]</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>)]</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># The alternates swap hinting flag is used to indicate to an external tool</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># that the parts defined in the alternates list are functionally equivalent</text:p>
+         <text:p text:style-name="comment">
+            <text:s text:c="2"/># and interchangeable.</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>[(<text:span text:style-name="T1">hint_alt_swap</text:span> LPID1 LPID2 ...)]</text:p>
+         <text:p text:style-name="Text_20_body">)</text:p>
+         <text:p text:style-name="Text_20_body"/>
+         <text:p text:style-name="comment"># This is an example of a dual input NAND gate A of a 7400.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T2">“dual_input_nand_a”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">reference</text:span> 
+            <text:span text:style-name="T2">“U”</text:span>)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">arc (pos</text:span> 
+            <text:span text:style-name="T5">2 0) (</text:span> 
+            <text:span text:style-name="T1">radius</text:span> 
+            <text:span text:style-name="T5">0.4) (</text:span> 
+            <text:span text:style-name="T1">start</text:span> 
+            <text:span text:style-name="T5">2</text:span> -4) (<text:span text:style-name="T1">start_angle</text:span> -90) (<text:span text:style-name="T1">end</text:span> 
+            <text:span text:style-name="T5">2</text:span> 4)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">end_angle</text:span> 90)<text:span text:style-name="T1"> </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">stroke</text:span> 
+            <text:span text:style-name="T5">0</text:span>) (<text:span text:style-name="T1">fill</text:span> 
+            <text:span text:style-name="T5">none</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">polyline</text:span> (<text:span text:style-name="T1">xy</text:span> 
+            <text:span text:style-name="T5">2</text:span> 4) (<text:span text:style-name="T1">xy </text:span>-6 4) (<text:span text:style-name="T1">xy </text:span>-6 -4) (<text:span text:style-name="T1">xy </text:span>2 -4)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">stroke </text:span>0) (<text:span text:style-name="T1">fill </text:span>none))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin</text:span> 
+            <text:span text:style-name="T5">input</text:span> line (<text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">-12</text:span> 2 3.6 180)</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>
+            </text:span>
+            <text:span text:style-name="T5">(signal</text:span> 
+            <text:span text:style-name="T2">“” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size</text:span> 
+            <text:span text:style-name="T5">1.2</text:span> 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>(pad</text:span> 
+            <text:span text:style-name="T2">“1” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size</text:span> 
+            <text:span text:style-name="T5">1.2</text:span> 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin</text:span> 
+            <text:span text:style-name="T5">input</text:span> line (<text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">-12</text:span> -2 3.6)</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>
+            </text:span>
+            <text:span text:style-name="T5">(signal</text:span> 
+            <text:span text:style-name="T2">“” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size</text:span> 
+            <text:span text:style-name="T5">1.2</text:span> 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>(pad</text:span> 
+            <text:span text:style-name="T2">“2” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size </text:span>1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin</text:span> 
+            <text:span text:style-name="T5">output</text:span> line (<text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">-12</text:span> 0)</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>
+            </text:span>
+            <text:span text:style-name="T5">(signal</text:span> 
+            <text:span text:style-name="T2">“” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size</text:span> 
+            <text:span text:style-name="T5">1.2</text:span> 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>(pad</text:span> 
+            <text:span text:style-name="T2">“3” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size</text:span> 
+            <text:span text:style-name="T5">1.2</text:span> 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin</text:span> 
+            <text:span text:style-name="T5">power_in</text:span> none (<text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">-4</text:span> -4 90)</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>
+            </text:span>
+            <text:span text:style-name="T5">(signal</text:span> 
+            <text:span text:style-name="T2">“GND” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size</text:span> 
+            <text:span text:style-name="T5">1.2</text:span> 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>(pad</text:span> 
+            <text:span text:style-name="T2">“7” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size </text:span>1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin</text:span> 
+            <text:span text:style-name="T5">power_in</text:span> none (<text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">-4</text:span> 4 90)</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>
+            </text:span>
+            <text:span text:style-name="T5">(signal</text:span> 
+            <text:span text:style-name="T2">“VCC” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size </text:span>1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>(pad</text:span> 
+            <text:span text:style-name="T2">“7” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size </text:span>1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">hint_pin_swap</text:span> 
+            <text:span text:style-name="T2">“1”</text:span> 
+            <text:span text:style-name="T2">“2”</text:span>)</text:p>
+         <text:p text:style-name="code0">)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment"># All LPIDs below this point assume that the base part is located in the same</text:p>
+         <text:p text:style-name="comment"># library as the parts that are derived from them. <text:s/>See the “Distributed Library</text:p>
+         <text:p text:style-name="comment"># &amp; EESchema Parts List Design Documentation” in the Kicad source file “design.h”</text:p>
+         <text:p text:style-name="comment"># for more information on LPIDs.</text:p>
+         <text:p text:style-name="comment"/>
+         <text:p text:style-name="comment"># This is the B gate of a 7400.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T2">“dual_input_nand_b”</text:span> 
+            <text:span text:style-name="T1">inherits</text:span> 
+            <text:span text:style-name="T2">“dual_in_nand_a/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_del</text:span> 7)</text:p>
+         <text:p text:style-name="code0">
+            <text:soft-page-break/>
+            <text:s text:c="5"/>(<text:span text:style-name="T1">pin_del</text:span> 14)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 1 4)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 2 5)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 3 6)</text:p>
+         <text:p text:style-name="code0">)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment"># This is the C gate of a 7400.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T2">“dual_input_nand_c”</text:span> 
+            <text:span text:style-name="T1">inherits</text:span> 
+            <text:span text:style-name="T2">“dual_in_nand_a/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_del</text:span> 7)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_del</text:span> 14)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 8 4)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 9 5)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 10 6)</text:p>
+         <text:p text:style-name="code0">)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment"># This is the D gate of a 7400.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T2">“dual_input_nand_b”</text:span> 
+            <text:span text:style-name="T1">inherits</text:span> 
+            <text:span text:style-name="T2">“dual_in_nand_a/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_del</text:span> 7)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_del</text:span> 14)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 1 11)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 2 12)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 3 13)</text:p>
+         <text:p text:style-name="code0">)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment"># This is a DeMorgan representation of a dual input NAND gate A.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T2">“dual_input_nand_</text:span> 
+            <text:span text:style-name="T2">demorgan</text:span> 
+            <text:span text:style-name="T2">_a”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">reference</text:span> 
+            <text:span text:style-name="T2">“U”</text:span>)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">arc (pos</text:span> 
+            <text:span text:style-name="T5">-9.3 0) (</text:span> 
+            <text:span text:style-name="T1">radius</text:span> 
+            <text:span text:style-name="T5">0.518) (</text:span> 
+            <text:span text:style-name="T1">start</text:span> 
+            <text:span text:style-name="T5">-6</text:span> 4) (<text:span text:style-name="T1">start_angle</text:span> 50.4)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">end</text:span> 
+            <text:span text:style-name="T5">-6</text:span> -4) (<text:span text:style-name="T1">end_angle</text:span> -50.4)<text:span text:style-name="T1"> </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">stroke</text:span> 
+            <text:span text:style-name="T5">0</text:span>) (<text:span text:style-name="T1">fill</text:span> 
+            <text:span text:style-name="T5">none</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">arc (pos</text:span> 
+            <text:span text:style-name="T5">-0.22 2.86) (</text:span> 
+            <text:span text:style-name="T1">radius</text:span> 
+            <text:span text:style-name="T5">7.06) (</text:span> 
+            <text:span text:style-name="T1">start</text:span> 
+            <text:span text:style-name="T5">0</text:span> -200) (<text:span text:style-name="T1">start_angle</text:span> -88.1)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">end</text:span> 
+            <text:span text:style-name="T5">6</text:span> 0) (<text:span text:style-name="T1">end_angle</text:span> -24.6)<text:span text:style-name="T1"> </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">stroke</text:span> 
+            <text:span text:style-name="T5">0</text:span>) (<text:span text:style-name="T1">fill</text:span> 
+            <text:span text:style-name="T5">none</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">arc (pos</text:span> 
+            <text:span text:style-name="T5">-0.2 2.82) (</text:span> 
+            <text:span text:style-name="T1">radius</text:span> 
+            <text:span text:style-name="T5">6.8) (</text:span> 
+            <text:span text:style-name="T1">start</text:span> 
+            <text:span text:style-name="T5">6</text:span> 0) (<text:span text:style-name="T1">start_angle</text:span> -24.4) (<text:span text:style-name="T1">end</text:span> 
+            <text:span text:style-name="T5">0</text:span> 4)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">end_angle</text:span> 88.3)<text:span text:style-name="T1"> </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">stroke</text:span> 
+            <text:span text:style-name="T5">0</text:span>) (<text:span text:style-name="T1">fill</text:span> 
+            <text:span text:style-name="T5">none</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">polyline</text:span> (<text:span text:style-name="T1">xy</text:span> 
+            <text:span text:style-name="T5">-6</text:span> 4) (<text:span text:style-name="T1">xy </text:span>0 4) (<text:span text:style-name="T1">xy </text:span>0 -4) (<text:span text:style-name="T1">xy</text:span> 
+            <text:span text:style-name="T5">-6</text:span> -4)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">stroke </text:span>0) (<text:span text:style-name="T1">fill </text:span>none))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin</text:span> 
+            <text:span text:style-name="T5">input</text:span> line (<text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">-12</text:span> 2 180) (<text:span text:style-name="T1">length</text:span> 6)</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>
+            </text:span>
+            <text:span text:style-name="T5">(signal</text:span> 
+            <text:span text:style-name="T2">“” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size </text:span>1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>(pad</text:span> 
+            <text:span text:style-name="T2">“1” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size</text:span> 
+            <text:span text:style-name="T5">1.2</text:span> 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin</text:span> 
+            <text:span text:style-name="T5">input</text:span> line (<text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">-12</text:span> -2 180) (<text:span text:style-name="T1">length</text:span> 6)</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>
+            </text:span>
+            <text:span text:style-name="T5">(signal</text:span> 
+            <text:span text:style-name="T2">“” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size </text:span>1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>(pad</text:span> 
+            <text:span text:style-name="T2">“2” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size </text:span>1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin</text:span> 
+            <text:span text:style-name="T5">output</text:span> line (<text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">-12</text:span> 0) (<text:span text:style-name="T1">length</text:span> 7.4)</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>
+            </text:span>
+            <text:span text:style-name="T5">(signal</text:span> 
+            <text:span text:style-name="T2">“” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size </text:span>1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>(pad</text:span> 
+            <text:span text:style-name="T2">“3” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size</text:span> 1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">yes</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin</text:span> 
+            <text:span text:style-name="T5">power_in</text:span> none (<text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">-4</text:span> -4 90) (<text:span text:style-name="T1">length</text:span> 0)</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>
+            </text:span>
+            <text:span text:style-name="T5">(signal</text:span> 
+            <text:span text:style-name="T2">“GND” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size </text:span>1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>(pad</text:span> 
+            <text:span text:style-name="T2">“7” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size </text:span>1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:soft-page-break/>
+            <text:s text:c="5"/>(<text:span text:style-name="T1">pin</text:span> 
+            <text:span text:style-name="T5">power_in</text:span> none (<text:span text:style-name="T1">at</text:span> 
+            <text:span text:style-name="T5">-4</text:span> 4 90) (<text:span text:style-name="T1">length</text:span> 0)</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>
+            </text:span>
+            <text:span text:style-name="T5">(signal</text:span> 
+            <text:span text:style-name="T2">“VCC” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size </text:span>1.2 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T1">
+               <text:s text:c="4"/>(pad</text:span> 
+            <text:span text:style-name="T2">“7” </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">font </text:span>(<text:span text:style-name="T1">size</text:span> 
+            <text:span text:style-name="T5">1.2</text:span> 1.2)) (<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>(<text:span text:style-name="T1">visible </text:span>
+            <text:span text:style-name="T4">no</text:span>))</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">hint_pin_swap</text:span> 1 2)</text:p>
+         <text:p text:style-name="code0">)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment"># This is the DeMorgan representation of gate B of a 7400.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T2">“dual_input_nand_demorgan_b”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>
+            <text:span text:style-name="T1">inherits</text:span> 
+            <text:span text:style-name="T2">“dual_in_nand_demorgan_a/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_del</text:span> 7)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_del</text:span> 14)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 1 4)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 2 5)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 3 6)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_rename</text:span> 1 <text:span text:style-name="T2">“D”</text:span>)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_rename</text:span> 2 <text:span text:style-name="T2">“E”</text:span>)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_rename</text:span> 3 <text:span text:style-name="T2">“F”</text:span>)</text:p>
+         <text:p text:style-name="code0">)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment"># This is the DeMorgan representation of gate C of a 7400.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T2">“dual_input_nand_demorgan_c”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>
+            <text:span text:style-name="T1">inherits</text:span> 
+            <text:span text:style-name="T2">“dual_in_nand_demorgan_a/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_del</text:span> 7)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_del</text:span> 14)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 1 8)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 2 9)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 3 10)</text:p>
+         <text:p text:style-name="code0">)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment"># This is the DeMorgan representation of gate D of a 7400.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T2">“dual_input_nand_demorgan_d”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>
+            <text:span text:style-name="T1">inherits</text:span> 
+            <text:span text:style-name="T2">“dual_in_nand_demorgan_a/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_del</text:span> 7)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_del</text:span> 14)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 1 11)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 2 12)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">pin_renum</text:span> 3 13)</text:p>
+         <text:p text:style-name="code0">)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment"># An example of putting it all together to create a 7400.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T2">“7400”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">value</text:span> 
+            <text:span text:style-name="T2">“7400”</text:span>)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">alternates</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>
+            <text:span text:style-name="T2">“dual_in_nand_a/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>
+            <text:span text:style-name="T2">“dual_in_nand_b/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>
+            <text:span text:style-name="T2">“dual_in_nand_c/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>
+            <text:span text:style-name="T2">“dual_in_nand_d/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">alternates</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>
+            <text:span text:style-name="T2">“dual_in_nand_demorgan_a/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:soft-page-break/>
+            <text:s text:c="7"/>
+            <text:span text:style-name="T2">“dual_in_nand_demorgan_b/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>
+            <text:span text:style-name="T2">“dual_in_nand_demorgan_c/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>
+            <text:span text:style-name="T2">“dual_in_nand_demorgan_d/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>)</text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>(<text:span text:style-name="T1">hint_alt_swap</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>
+            <text:span text:style-name="T2">“dual_in_nand_a/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>
+            <text:span text:style-name="T2">“dual_in_nand_b/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>
+            <text:span text:style-name="T2">“dual_in_nand_c/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="4"/>
+            <text:span text:style-name="T2">“dual_in_nand_d/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:s text:c="2"/>)</text:p>
+         <text:p text:style-name="code0">)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment"># A 74LS00 is as simple as this.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T2">“74LS00”</text:span> 
+            <text:span text:style-name="T1">inherits</text:span> 
+            <text:span text:style-name="T2">“7400/rev1”</text:span> 
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">value</text:span> 
+            <text:span text:style-name="T2">“74LS00”</text:span> 
+            <text:span text:style-name="T5">)</text:span>)</text:p>
+         <text:p text:style-name="code0"/>
+         <text:p text:style-name="comment"># This is a so called heavy weight part definition of a Texas Instruments</text:p>
+         <text:p text:style-name="comment"># part number SN74HCT00NSR.</text:p>
+         <text:p text:style-name="code0">(<text:span text:style-name="T1">part</text:span> 
+            <text:span text:style-name="T2">“SN74HCT00NSR”</text:span> 
+            <text:span text:style-name="T1">inherits</text:span> 
+            <text:span text:style-name="T2">“7400/rev1”</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T2">
+               <text:s text:c="2"/>
+            </text:span>
+            <text:span text:style-name="T5">(</text:span> 
+            <text:span text:style-name="T1">value</text:span> 
+            <text:span text:style-name="T2">“SN74HCT00NSR”</text:span> 
+            <text:span text:style-name="T5">)</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T5">
+               <text:s text:c="2"/>(</text:span> 
+            <text:span text:style-name="T1">footprint</text:span> 
+            <text:span text:style-name="T2">“14-SOP”</text:span> 
+            <text:span text:style-name="T5">)</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T5">
+               <text:s text:c="2"/>(</text:span> 
+            <text:span text:style-name="T1">datasheet</text:span> 
+            <text:span text:style-name="T2">“http://focus.ti.com/general/docs/lit/getliterature.tsp?genericPartNumber=sn74hct00&amp;fileType=pdf”</text:span> 
+            <text:span text:style-name="T5">)</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T5">
+               <text:s text:c="2"/>(</text:span> 
+            <text:span text:style-name="T1">keywords</text:span> 
+            <text:span text:style-name="T2">“LOGIC” “NAND”</text:span> 
+            <text:span text:style-name="T5">)</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T5">
+               <text:s text:c="2"/>(</text:span> 
+            <text:span text:style-name="T1">property</text:span> 
+            <text:span text:style-name="T2">“Description”</text:span> 
+            <text:span text:style-name="T2">“IC GATE POS-NAND QD 2IN 14-SOP”</text:span> 
+            <text:span text:style-name="T5">)</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T5">
+               <text:s text:c="2"/>(</text:span> 
+            <text:span text:style-name="T1">property</text:span> 
+            <text:span text:style-name="T2">“Manufacturer”</text:span> 
+            <text:span text:style-name="T2">“Texas Instruments”</text:span> 
+            <text:span text:style-name="T5">)</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T5">
+               <text:s text:c="2"/>(</text:span> 
+            <text:span text:style-name="T1">property</text:span> 
+            <text:span text:style-name="T2">“Vendor”</text:span> 
+            <text:span text:style-name="T2">“Digikey”</text:span> 
+            <text:span text:style-name="T5">)</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">
+            <text:span text:style-name="T5">
+               <text:s text:c="2"/>(</text:span> 
+            <text:span text:style-name="T1">property</text:span> 
+            <text:span text:style-name="T2">“Vendor Part Number”</text:span> 
+            <text:span text:style-name="T2">“SN74HCT00NSR-ND”</text:span> 
+            <text:span text:style-name="T5">)</text:span> 
+         </text:p>
+         <text:p text:style-name="code0">)</text:p>
+         <text:p text:style-name="code0"/>
+      </office:text>
+   </office:body>
+</office:document>

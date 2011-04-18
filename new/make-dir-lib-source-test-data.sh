@@ -11,56 +11,56 @@ REVS="rev1 rev5 rev10"
 
 REFERENCE="
     (reference U?
-        (effects (at 12 13 180)(font (size .7 1))(visible yes))
+        (effects (at 12 13 180)(font (size 7 10))(visible yes))
     )"
 
 LINE="
     (line
-        (pts (xy 12 13)(xy 12 20))(line_width 1.5)
+        (pts (xy 12 13)(xy 12 20))(stroke 1.5)
     )"
 
 RECT="
     (rectangle
-        (start 4 5)(end 6 8)(line_width 2.3)(fill transparent)
+        (start 4 5)(end 6 8)(stroke 2.3)(fill transparent)
     )"
 
 CIRCLE="
     (circle
-        (center 1 0)(radius 5)(line_width 2.1)(fill none)
+        (center 1 0)(radius 5)(stroke 2.1)(fill none)
     )"
 
 ARC="
     (arc
-        (pos 22 33)(radius 12)(start 2 4)(end 13 33)(line_width 2.3)(fill filled)
+        (pos 22 33)(radius 12)(start 2 4)(end 13 33)(stroke 2.3)(fill filled)
     )"
 
 BEZIER="
     (bezier
-        (fill none)(line_width 2.0)(pts (xy 0 1)(xy 2 4))
+        (fill none)(stroke 2.0)(pts (xy 0 1)(xy 2 4))
     )"
 
 TEXT="
     (text (at 23 23 90.0) \"This is some text\" (justify left bottom)(visible yes)(fill filled)
-        (font arial (size .8 1.2))
+        (font arial (size 8 12))
     )"
 
 PIN1="
-    (pin output line (at 7 8 90)(length 2)(visible yes)
-        (signal #WE  (font  (size 0.9 1.1) bold)(visible yes))
-        (padname A23 (font (size 0.9 1.1) italic bold) (visible yes))
+    (pin out line (at 7 8 90)
+        (signal #WE  (font  (size 8 10) bold)(visible no))
+        (pad A23 (font (size 9 11) italic bold))
     )"
 
 PIN2="
-    (pin input line (at 8 8)(length 2)(visible yes)
-        (signal #WAIT  (font  (size 0.9 1.1) bold)(visible yes))
-        (padname A24 (font (size 0.9 1.1) italic bold) (visible yes))
+    (pin in line (at 8 8)(visible yes)
+        (signal #WAIT  (visible yes))
+        (pad A24 (visible yes))
     )"
 
 PIN3="
-    (pin (padname A25))"
+    (pin (pad A25))"
 
 PINS="
-    (pin (padname Z12))(pin (padname Y14))(pin (padname Z13))(pin (padname Y15))"
+    (pin (pad Z12))(pin (pad Y14))(pin (pad Z13))(pin (pad Y15))"
 
 
 PIN_SWAP="
@@ -70,17 +70,17 @@ PIN_RENUM="
     (pin_renum A24 B24)"
 
 PIN_RENAME="
-    (pin_rename #WE LED)"
+    (pin_rename B24 LED)"
 
 PIN_DELETE="
     (pin_del B24)"
 
-PIN_MERGE="(pin_merge A23 (hide Z12 Y14))(pin_merge A25 (hide Z13 Y15))"
+PIN_MERGE="(pin_merge A23 (pads Z12 Y14))(pin_merge A25 (pads Z13 Y15))"
 
 
 PROP1="
     (property mWatts 12
-        (effects (at 1 34 270)(font (size .5 1) italic bold)(visible no))
+        (effects (at 1 34 270)(font (size 5 9) italic bold)(visible no))
     )"
 
 KEYWORDS="

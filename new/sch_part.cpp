@@ -29,7 +29,6 @@
 #include <sch_lpid.h>
 #include <sch_lib_table.h>
 #include <macros.h>
-//#include <richio.h>
 
 
 /**
@@ -39,9 +38,19 @@
 static void formatAt( OUTPUTFORMATTER* out, const POINT& aPos, ANGLE aAngle, int indent=0 )
     throw( IO_ERROR )
 {
-    out->Print( indent, aAngle!=0.0 ? "(at %.6g %.6g %.6g)" : "(at %.6g %.6g)",
-        InternalToLogical( aPos.x ), InternalToLogical( aPos.y ),
-        double( aAngle ) );
+    // if( aPos.x || aPos.y || aAngle )
+    {
+        out->Print( indent, aAngle!=0.0 ? "(at %.6g %.6g %.6g)" : "(at %.6g %.6g)",
+            InternalToLogical( aPos.x ), InternalToLogical( aPos.y ),
+            double( aAngle ) );
+    }
+}
+
+static void formatStroke( OUTPUTFORMATTER* out, STROKE aStroke, int indent=0 )
+    throw( IO_ERROR )
+{
+    if( aStroke == STROKE_DEFAULT )
+        out->Print( indent, "(stroke %.6g)", InternalToWidth( aStroke ) );
 }
 
 
@@ -145,13 +154,13 @@ PROPERTY* PART::FieldLookup( PROP_ID aPropertyId )
     return p;
 }
 
-PINS::iterator PART::pinFindByPadName( const wxString& aPadName )
+PINS::iterator PART::pinFindByPad( const wxString& aPad )
 {
     PINS::iterator it;
 
     for( it = pins.begin();  it != pins.end();  ++it )
     {
-        if( (*it)->padname.text == aPadName )
+        if( (*it)->pad.text == aPad )
             break;
     }
 
@@ -159,23 +168,21 @@ PINS::iterator PART::pinFindByPadName( const wxString& aPadName )
 }
 
 
-PINS::iterator PART::pinFindBySignal( const wxString& aSignal )
+void PART::PinsFindBySignal( PIN_LIST* aResults, const wxString& aSignal )
 {
-    PINS::iterator it;
-
-    for( it = pins.begin();  it != pins.end();  ++it )
+    for( PINS::const_iterator it = pins.begin();  it != pins.end();  ++it )
     {
         if( (*it)->signal.text == aSignal )
-            break;
+        {
+            aResults->push_back( *it );
+        }
     }
-
-    return it;
 }
 
 
-bool PART::PinDelete( const wxString& aPadName )
+bool PART::PinDelete( const wxString& aPad )
 {
-    PINS::iterator it = pinFindByPadName( aPadName );
+    PINS::iterator it = pinFindByPad( aPad );
     if( it != pins.end() )
     {
         delete *it;
@@ -313,7 +320,7 @@ void PART::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 
     for( MERGE_SETS::const_iterator mit = pin_merges.begin();  mit != pin_merges.end();  ++mit )
     {
-        out->Print( indent+1, "(pin_merge %s (hide", out->Quotew( mit->first ).c_str() );
+        out->Print( indent+1, "(pin_merge %s (pads", out->Quotew( mit->first ).c_str() );
 
         const MERGE_SET& mset = *mit->second;
         for( MERGE_SET::const_iterator pit = mset.begin();  pit != mset.end();  ++pit )
@@ -392,42 +399,58 @@ void TEXT_EFFECTS::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 void FONT::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
     throw( IO_ERROR )
 {
-    if( name.IsEmpty() )
-        out->Print( indent, "(font " );
-    else
-        out->Print( indent, "(font %s ", out->Quotew( name ).c_str() );
+    if( italic || bold || !name.IsEmpty() || size.height != FONTZ_DEFAULT || size.width != FONTZ_DEFAULT )
+    {
+        if( name.IsEmpty() )
+            out->Print( indent, "(font " );
+        else
+            out->Print( indent, "(font %s ", out->Quotew( name ).c_str() );
 
-    out->Print( 0, "(size %.6g %.6g)",
-            InternalToLogical( size.GetHeight() ),
-            InternalToLogical( size.GetWidth() ) );
+        out->Print( 0, "(size %.6g %.6g)",
+                InternalToFontz( size.height ),
+                InternalToFontz( size.width ) );
 
-    if( italic )
-        out->Print( 0, " italic" );
+        if( italic )
+            out->Print( 0, " italic" );
 
-    if( bold )
-        out->Print( 0, " bold" );
+        if( bold )
+            out->Print( 0, " bold" );
 
-    out->Print( 0, ")%s", (ctl & CTL_OMIT_NL) ? "" : "\n" );
+        out->Print( 0, ")%s", (ctl & CTL_OMIT_NL) ? "" : "\n" );
+    }
 }
 
 
 void PIN::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
     throw( IO_ERROR )
 {
-    bool    hasSignal  = !signal.text.IsEmpty();
-    bool    hasPadName = !padname.text.IsEmpty();
+    bool    hasSignal = !signal.text.IsEmpty();
+    bool    hasPad    = !pad.text.IsEmpty();
 
-    out->Print( indent, "(pin %s %s ", ShowType(), ShowShape() );
+    out->Print( indent, "(pin" );
 
-    formatAt( out, pos, angle );
-    out->Print( 0, "(length %.6g)", InternalToLogical( length ) );
-    out->Print( 0, "(visible %s)\n", isVisible ? "yes" : "no" );
+    if( connectionType != PIN_CONN_DEFAULT )
+        out->Print( 0, " %s", ShowType() );
+
+    if( shape != PIN_SHAPE_DEFAULT )
+        out->Print( 0, " %s", ShowShape() );
+
+    out->Print( 0, " " );
+
+    if( pos.x || pos.y || angle )
+        formatAt( out, pos, angle );
+
+    if( length != PIN_LEN_DEFAULT )
+        out->Print( 0, "(length %.6g)", InternalToLogical( length ) );
+
+    if( !isVisible )
+        out->Print( 0, "(visible %s)", isVisible ? "yes" : "no" );
 
     if( hasSignal )
-        signal.Format(  out, "signal",  indent+1, hasPadName ? 0 : CTL_OMIT_NL );
+        signal.Format(  out, "signal",  0, CTL_OMIT_NL );
 
-    if( hasPadName )
-        padname.Format( out, "padname", indent+1, CTL_OMIT_NL );
+    if( hasPad )
+        pad.Format( out, "pad", 0, CTL_OMIT_NL );
 
     out->Print( 0, ")\n" );
 }
@@ -441,11 +464,14 @@ PIN::~PIN()
 void PINTEXT::Format( OUTPUTFORMATTER* out, const char* aElement, int indent, int ctl ) const
     throw( IO_ERROR )
 {
-    out->Print( indent, "(%s %s ", aElement, out->Quotew( text ).c_str() );
+    out->Print( indent, "(%s %s", aElement, out->Quotew( text ).c_str() );
+
     font.Format( out, 0, CTL_OMIT_NL );
-    out->Print( 0, "(visible %s))%s",
-        isVisible ? "yes" : "no",
-        ctl & CTL_OMIT_NL ? "" : "\n" );
+
+    if( !isVisible )
+        out->Print( 0, " (visible %s)", isVisible ? "yes" : "no" );
+
+    out->Print( 0, ")%s", ctl & CTL_OMIT_NL ? "" : "\n" );
 }
 
 
@@ -460,7 +486,7 @@ void POLY_LINE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 void POLY_LINE::formatContents(  OUTPUTFORMATTER* out, int indent, int ctl ) const
     throw( IO_ERROR )
 {
-    out->Print( 0, "(line_width %.6g)", InternalToWidth( lineWidth ) );
+    formatStroke( out, stroke );
 
     if( fillType != PR::T_none )
         out->Print( 0, "(fill %s)", ShowFill( fillType ) );
@@ -506,12 +532,14 @@ void BEZIER::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 void RECTANGLE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
     throw( IO_ERROR )
 {
-    // (rectangle (start X Y) (end X Y) (line_width WIDTH) (fill FILL_TYPE))
+    // (rectangle (start X Y) (end X Y) [(stroke WIDTH)] (fill FILL_TYPE))
 
-    out->Print( indent, "(rectangle (start %.6g %.6g)(end %.6g %.6g)(line_width %.6g)",
+    out->Print( indent, "(rectangle (start %.6g %.6g)(end %.6g %.6g)",
         InternalToLogical( start.x ), InternalToLogical( start.y ),
-        InternalToLogical( end.x ), InternalToLogical( end.y ),
-        InternalToWidth( lineWidth ) );
+        InternalToLogical( end.x ), InternalToLogical( end.y )
+        );
+
+    formatStroke( out, stroke );
 
     if( fillType != PR::T_none )
         out->Print( 0, "(fill %s)", ShowFill( fillType ) );
@@ -524,13 +552,14 @@ void CIRCLE::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
     throw( IO_ERROR )
 {
     /*
-        (circle (center X Y)(radius LENGTH)(line_width WIDTH)(fill FILL_TYPE))
+        (circle (center X Y)(radius LENGTH) [(stroke WIDTH)] (fill FILL_TYPE))
     */
 
-    out->Print( indent, "(circle (center %.6g %.6g)(radius %.6g)(line_width %.6g)",
+    out->Print( indent, "(circle (center %.6g %.6g)(radius %.6g)",
         InternalToLogical( center.x ), InternalToLogical( center.y ),
-        InternalToLogical( radius),
-        InternalToWidth( lineWidth ) );
+        InternalToLogical( radius) );
+
+    formatStroke( out, stroke );
 
     if( fillType != PR::T_none )
         out->Print( 0, "(fill %s)", ShowFill( fillType ) );
@@ -543,15 +572,17 @@ void ARC::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
     throw( IO_ERROR )
 {
     /*
-        (arc (pos X Y)(radius RADIUS)(start X Y)(end X Y)(line_width WIDTH)(fill FILL_TYPE))
+        (arc (pos X Y)(radius RADIUS)(start X Y)(end X Y) [(stroke WIDTH)] (fill FILL_TYPE))
     */
 
-    out->Print( indent, "(arc (pos %.6g %.6g)(radius %.6g)(start %.6g %.6g)(end %.6g %.6g)(line_width %.6g)",
+    out->Print( indent, "(arc (pos %.6g %.6g)(radius %.6g)(start %.6g %.6g)(end %.6g %.6g)",
         InternalToLogical( pos.x ), InternalToLogical( pos.y ),
         InternalToLogical( radius),
         InternalToLogical( start.x ), InternalToLogical( start.y ),
-        InternalToLogical( end.x ),   InternalToLogical( end.y ),
-        InternalToWidth( lineWidth ) );
+        InternalToLogical( end.x ),   InternalToLogical( end.y )
+        );
+
+    formatStroke( out, stroke );
 
     if( fillType != PR::T_none )
         out->Print( 0, "(fill %s)", ShowFill( fillType ) );
@@ -574,11 +605,14 @@ void GR_TEXT::Format( OUTPUTFORMATTER* out, int indent, int ctl ) const
 
     formatAt( out, pos, angle, indent+1 );
 
-    out->Print( 0, "(justify %s %s)(visible %s)",
-            ShowJustify( hjustify ), ShowJustify( vjustify ),
-            isVisible ? "yes" : "no" );
+    if( hjustify != PR::T_left || vjustify != PR::T_bottom )
+        out->Print( 0, "(justify %s %s)",
+            ShowJustify( hjustify ), ShowJustify( vjustify ) );
 
-    if( fillType != PR::T_none )
+    if( !isVisible )
+        out->Print( 0, "(visible %s)", isVisible ? "yes" : "no" );
+
+    if( fillType != PR::T_filled )
         out->Print( 0, "(fill %s)", ShowFill( fillType ) );
 
     font.Format( out, 0, CTL_OMIT_NL );

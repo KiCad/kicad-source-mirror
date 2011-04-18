@@ -46,6 +46,11 @@ static inline int fromWidth( const STRING& aWidth )
     return WidthToInternal( strtod( aWidth.c_str(), NULL ) );
 }
 
+static inline int fromFontz( const STRING& aFontSize )
+{
+    return FontzToInternal( strtod( aFontSize.c_str(), NULL ) );
+}
+
 
 /**
  * Enum PartBit
@@ -265,6 +270,7 @@ void SWEET_PARSER::Parse( PART* me, LIB_TABLE* aTable ) throw( IO_ERROR, PARSE_E
                 break;
 
             case T_pin:
+                // @todo PADNAMEs must be unique
                 PIN* pin;
                 pin = new PIN( me );
                 me->pins.push_back( pin );
@@ -447,10 +453,10 @@ void SWEET_PARSER::parseFont( FONT* me )
                 sawSize = true;
 
                 NeedNUMBER( "size height" );
-                me->size.SetHeight( internal( CurText() ) );
+                me->size.height = fromFontz( CurText() );
 
                 NeedNUMBER( "size width" );
-                me->size.SetWidth( internal( CurText() ) );
+                me->size.width = fromFontz( CurText() );
                 NeedRIGHT();
                 break;
 
@@ -500,18 +506,32 @@ void SWEET_PARSER::parseBool( bool* aBool )
 }
 
 
+void SWEET_PARSER::parseStroke( STROKE* me )
+{
+    /*
+        (stroke [WIDTH] [(style [(dashed...)]...)])
+
+        future place holder for arrow heads, dashed lines, all line glamour
+    */
+
+    NeedNUMBER( "stroke" );
+    *me = fromWidth( CurText() );
+    NeedRIGHT();
+}
+
+
 void SWEET_PARSER::parsePinText( PINTEXT* me )
 {
     /*  either:
         (signal SIGNAL   (font [FONT] (size HEIGHT WIDTH) [italic] [bold])(visible YES))
         or
-        (padname PADNAME (font [FONT] (size HEIGHT WIDTH) [italic] [bold])(visible YES))
+        (pad PADNAME (font [FONT] (size HEIGHT WIDTH) [italic] [bold])(visible YES))
     */
     T       tok;
     bool    sawFont = false;
     bool    sawVis  = false;
 
-    // padname or signal text
+    // pad or signal text
     NeedSYMBOLorNUMBER();
     me->text = FromUTF8();
 
@@ -562,7 +582,7 @@ void SWEET_PARSER::parsePin( PIN* me )
             (at X Y [ANGLE])
             (length LENGTH)
             (signal NAME (font [FONT] (size HEIGHT WIDTH) [italic] [bold])(visible YES))
-            (padname NUMBER (font [FONT] (size HEIGHT WIDTH) [italic] [bold] (visible YES))
+            (pad NUMBER (font [FONT] (size HEIGHT WIDTH) [italic] [bold] (visible YES))
             (visible YES)
         )
     */
@@ -573,7 +593,7 @@ void SWEET_PARSER::parsePin( PIN* me )
     bool    sawAt      = false;
     bool    sawLen     = false;
     bool    sawSignal  = false;
-    bool    sawPadName = false;
+    bool    sawPad     = false;
     bool    sawVis     = false;
 
     while( ( tok = NextTok() ) != T_RIGHT )
@@ -607,11 +627,11 @@ void SWEET_PARSER::parsePin( PIN* me )
                 parsePinText( &me->signal );
                 break;
 
-            case T_padname:
-                if( sawPadName )
+            case T_pad:
+                if( sawPad )
                     Duplicate( tok );
-                sawPadName = true;
-                parsePinText( &me->padname );
+                sawPad = true;
+                parsePinText( &me->pad );
                 break;
 
             case T_visible:
@@ -631,9 +651,9 @@ void SWEET_PARSER::parsePin( PIN* me )
         {
             switch( tok )
             {
-            case T_input:
-            case T_output:
-            case T_bidirectional:
+            case T_in:
+            case T_out:
+            case T_inout:
             case T_tristate:
             case T_passive:
             case T_unspecified:
@@ -673,17 +693,17 @@ void SWEET_PARSER::parsePin( PIN* me )
 
 void SWEET_PARSER::parsePinDel( PART* me )
 {
-    wxString    padName;
+    wxString    pad;
 
     // we do this somewhat unorthodoxically because we want to avoid doing two lookups,
     // which would need to be done to 1) find pin, and 2) delete pin.  Only one
     // lookup is needed with this scheme.
 
     NeedSYMBOLorNUMBER();
-    padName = FromUTF8();
+    pad = FromUTF8();
 
     // lookup now while CurOffset() is still meaningful.
-    PINS::iterator it = me->pinFindByPadName( padName );
+    PINS::iterator it = me->pinFindByPad( pad );
     if( it == me->pins.end() )
     {
         THROW_PARSE_ERROR( _("undefined pin"),
@@ -716,13 +736,13 @@ void SWEET_PARSER::parsePinSwap( PART* me )
     PIN*        pin1;
     PIN*        pin2;
 
-    wxString    padName;
+    wxString    pad;
 
     NeedSYMBOLorNUMBER();
-    padName = FromUTF8();
+    pad = FromUTF8();
 
     // lookup now while CurOffset() is still meaningful.
-    pin1 = me->PinFindByPadName( padName );
+    pin1 = me->PinFindByPad( pad );
     if( !pin1 )
     {
         THROW_PARSE_ERROR( _("undefined pin"),
@@ -733,9 +753,9 @@ void SWEET_PARSER::parsePinSwap( PART* me )
     }
 
     NeedSYMBOLorNUMBER();
-    padName = FromUTF8();
+    pad = FromUTF8();
 
-    pin2 = me->PinFindByPadName( padName );
+    pin2 = me->PinFindByPad( pad );
     if( !pin2 )
     {
         THROW_PARSE_ERROR( _("undefined pin"),
@@ -748,8 +768,8 @@ void SWEET_PARSER::parsePinSwap( PART* me )
     NeedRIGHT();
 
     // swap only the text, but might want to swap entire PIN_TEXTs
-    pin2->padname.text = pin1->padname.text;
-    pin1->padname.text = padName;
+    pin2->pad.text = pin1->pad.text;
+    pin1->pad.text = pad;
 }
 
 
@@ -757,14 +777,14 @@ void SWEET_PARSER::parsePinRenum( PART* me )
 {
     PIN*        pin;
 
-    wxString    oldPadName;
-    wxString    newPadName;
+    wxString    oldPad;
+    wxString    newPad;
 
     NeedSYMBOLorNUMBER();
-    oldPadName = FromUTF8();
+    oldPad = FromUTF8();
 
     // lookup now while CurOffset() is still meaningful.
-    pin = me->PinFindByPadName( oldPadName );
+    pin = me->PinFindByPad( oldPad );
     if( !pin )
     {
         THROW_PARSE_ERROR( _("undefined pin"),
@@ -775,12 +795,12 @@ void SWEET_PARSER::parsePinRenum( PART* me )
     }
 
     NeedSYMBOLorNUMBER();
-    newPadName = FromUTF8();
+    newPad = FromUTF8();
 
     NeedRIGHT();
 
-    // @todo: check for padname legalities
-    pin->padname.text = newPadName;
+    // @todo: check for pad legalities
+    pin->pad.text = newPad;
 }
 
 
@@ -788,14 +808,14 @@ void SWEET_PARSER::parsePinRename( PART* me )
 {
     PIN*        pin;
 
-    wxString    oldSignal;
+    wxString    pad;
     wxString    newSignal;
 
     NeedSYMBOLorNUMBER();
-    oldSignal = FromUTF8();
+    pad = FromUTF8();
 
     // lookup now while CurOffset() is still meaningful.
-    pin = me->PinFindBySignal( oldSignal );
+    pin = me->PinFindByPad( pad );
     if( !pin )
     {
         THROW_PARSE_ERROR( _("undefined pin"),
@@ -817,18 +837,19 @@ void SWEET_PARSER::parsePinRename( PART* me )
 void SWEET_PARSER::parsePinMerge( PART* me )
 {
     T           tok;
-    wxString    padName;
+    wxString    pad;
+    wxString    signal;
     wxString    msg;
 
     NeedSYMBOLorNUMBER();
 
-    wxString    anchorPadName = FromUTF8();
+    wxString    anchorPad = FromUTF8();
 
     // lookup now while CurOffset() is still good.
-    PINS::iterator pit = me->pinFindByPadName( anchorPadName );
+    PINS::iterator pit = me->pinFindByPad( anchorPad );
     if( pit == me->pins.end() )
     {
-        msg.Printf( _( "undefined pin %s" ), anchorPadName.GetData() );
+        msg.Printf( _( "undefined pin %s" ), anchorPad.GetData() );
         THROW_PARSE_ERROR( msg,
             CurSource(),
             CurLine(),
@@ -836,10 +857,10 @@ void SWEET_PARSER::parsePinMerge( PART* me )
             CurOffset() );
     }
 
-    if( !(*pit)->pin_merge.IsEmpty() && anchorPadName != (*pit)->pin_merge )
+    if( !(*pit)->pin_merge.IsEmpty() && anchorPad != (*pit)->pin_merge )
     {
         msg.Printf( _( "pin %s already in pin_merge group %s" ),
-                anchorPadName.GetData(), (*pit)->pin_merge.GetData() );
+                anchorPad.GetData(), (*pit)->pin_merge.GetData() );
 
         THROW_PARSE_ERROR( msg,
             CurSource(),
@@ -848,60 +869,120 @@ void SWEET_PARSER::parsePinMerge( PART* me )
             CurOffset() );
     }
 
-    NeedLEFT();
-
-    tok = NextTok();
-    if( tok != T_hide )
-        Expecting( T_hide );
-
     (*pit)->isVisible = true;
-    (*pit)->pin_merge = anchorPadName;
+    (*pit)->pin_merge = anchorPad;
 
     // allocate or find a MERGE_SET;
-    MERGE_SET& ms = me->pin_merges[anchorPadName];
+    MERGE_SET& ms = me->pin_merges[anchorPad];
 
     while( ( tok = NextTok() ) != T_RIGHT )
     {
-        if( !IsSymbol( tok ) && tok != T_NUMBER )
-            Expecting( "padname" );
-
-        padName = FromUTF8();
-
-        D(printf("padName=%s\n", TO_UTF8( padName ) );)
-
-        // find the PIN and mark it as being in this MERGE_SET or throw
-        // error if already in another MERGET_SET.
-
-        pit = me->pinFindByPadName( padName );
-        if( pit == me->pins.end() )
+        if( tok == T_LEFT )
         {
-            msg.Printf( _( "undefined pin %s" ), padName.GetData() );
-            THROW_PARSE_ERROR( msg,
-                CurSource(),
-                CurLine(),
-                CurLineNumber(),
-                CurOffset() );
-        }
+            tok = NextTok();
 
-        if( !(*pit)->pin_merge.IsEmpty() && anchorPadName != (*pit)->pin_merge )
+            switch( tok )
+            {
+            case T_signals:
+                {
+                    PINS    sigPins;   // no ownership
+
+                    while( ( tok = NextTok() ) != T_RIGHT )
+                    {
+                        if( !IsSymbol( tok ) && tok != T_NUMBER )
+                            Expecting( "signal" );
+
+                        signal = FromUTF8();
+
+                        sigPins.clear();
+
+                        me->PinsFindBySignal( &sigPins, signal );
+
+                        if( !sigPins.size() )
+                        {
+                            msg.Printf( _( "no pins with signal %s" ), signal.GetData() );
+                            THROW_PARSE_ERROR( msg,
+                                CurSource(),
+                                CurLine(),
+                                CurLineNumber(),
+                                CurOffset() );
+                        }
+
+                        for( pit = sigPins.begin();  pit != sigPins.end();  ++pit )
+                        {
+                            if( !(*pit)->pin_merge.IsEmpty() && anchorPad != (*pit)->pin_merge  )
+                            {
+                                msg.Printf( _( "signal pin %s already in pin_merge group %s" ),
+                                        pad.GetData(), (*pit)->pin_merge.GetData() );
+
+                                THROW_PARSE_ERROR( msg,
+                                    CurSource(),
+                                    CurLine(),
+                                    CurLineNumber(),
+                                    CurOffset() );
+                            }
+
+                            (*pit)->isVisible = true;
+                            (*pit)->pin_merge = anchorPad;
+                            ms.insert( pad );
+                        }
+                    }
+                }
+                break;
+
+            case T_pads:
+                while( ( tok = NextTok() ) != T_RIGHT )
+                {
+                    if( !IsSymbol( tok ) && tok != T_NUMBER )
+                        Expecting( "pad" );
+
+                    pad = FromUTF8();
+
+                    D(printf("pad=%s\n", TO_UTF8( pad ) );)
+
+                    // find the PIN and mark it as being in this MERGE_SET or throw
+                    // error if already in another MERGET_SET.
+
+                    pit = me->pinFindByPad( pad );
+                    if( pit == me->pins.end() )
+                    {
+                        msg.Printf( _( "undefined pin %s" ), pad.GetData() );
+                        THROW_PARSE_ERROR( msg,
+                            CurSource(),
+                            CurLine(),
+                            CurLineNumber(),
+                            CurOffset() );
+                    }
+
+                    if( !(*pit)->pin_merge.IsEmpty() /* && anchorPad != (*pit)->pin_merge */ )
+                    {
+                        msg.Printf( _( "pin %s already in pin_merge group %s" ),
+                                pad.GetData(), (*pit)->pin_merge.GetData() );
+
+                        THROW_PARSE_ERROR( msg,
+                            CurSource(),
+                            CurLine(),
+                            CurLineNumber(),
+                            CurOffset() );
+                    }
+
+                    (*pit)->isVisible = false;
+                    (*pit)->pin_merge = anchorPad;
+
+                    ms.insert( pad );
+                }
+                break;
+
+            default:
+                Expecting( "pads|signals" );
+                break;
+            }
+        }
+        else
         {
-            msg.Printf( _( "pin %s already in pin_merge group %s" ),
-                    padName.GetData(), (*pit)->pin_merge.GetData() );
-
-            THROW_PARSE_ERROR( msg,
-                CurSource(),
-                CurLine(),
-                CurLineNumber(),
-                CurOffset() );
+            Expecting( T_LEFT );
         }
-
-        (*pit)->isVisible = false;
-        (*pit)->pin_merge = anchorPadName;
-
-        ms.insert( padName );
     }
-
-    NeedRIGHT();
 }
 
 
@@ -998,8 +1079,9 @@ void SWEET_PARSER::parsePolyLine( POLY_LINE* me )
         (polyline|line
             (pts (xy X Y) (xy X Y) (xy X Y) (xy X Y) (xy X Y))
 
-            # Line widths are in units as defined above.
-            (line_width WIDTH)
+            # Line widths are in percent of a pin delta
+            [(stroke [WIDTH] [(style [(dashed...)]...)])]
+
 
             # Valid fill types are none, filled, and transparent.
             (fill FILL_TYPE)
@@ -1008,8 +1090,8 @@ void SWEET_PARSER::parsePolyLine( POLY_LINE* me )
 
     T       tok;
     int     count = 0;
-    bool    sawWidth = false;
-    bool    sawFill  = false;
+    bool    sawStroke = false;
+    bool    sawFill   = false;
 
     while( ( tok = NextTok() ) != T_RIGHT )
     {
@@ -1020,13 +1102,11 @@ void SWEET_PARSER::parsePolyLine( POLY_LINE* me )
 
         switch( tok )
         {
-        case T_line_width:
-            if( sawWidth )
+        case T_stroke:
+            if( sawStroke )
                 Duplicate( tok );
-            NeedNUMBER( "line_width" );
-            me->lineWidth = fromWidth( CurText() );
-            NeedRIGHT();
-            sawWidth = true;
+            sawStroke = true;
+            parseStroke( &me->stroke );
             break;
 
         case T_pts:
@@ -1074,7 +1154,7 @@ void SWEET_PARSER::parsePolyLine( POLY_LINE* me )
             break;
 
         default:
-            Expecting( "pts|line_width|fill" );
+            Expecting( "pts|stroke|fill" );
         }
     }
 }
@@ -1089,14 +1169,14 @@ void SWEET_PARSER::parseBezier( BEZIER* me )
 void SWEET_PARSER::parseRectangle( RECTANGLE* me )
 {
     /*
-        (rectangle (start X Y) (end X Y) (line_width WIDTH) (fill FILL_TYPE))
+        (rectangle (start X Y) (end X Y) (stroke WIDTH) (fill FILL_TYPE))
     */
 
     T       tok;
     bool    sawStart = false;
-    bool    sawEnd   = false;
-    bool    sawWidth = false;
-    bool    sawFill  = false;
+    bool    sawEnd    = false;
+    bool    sawStroke = false;
+    bool    sawFill   = false;
 
     while( ( tok = NextTok() ) != T_RIGHT )
     {
@@ -1107,13 +1187,11 @@ void SWEET_PARSER::parseRectangle( RECTANGLE* me )
 
         switch( tok )
         {
-        case T_line_width:
-            if( sawWidth )
+        case T_stroke:
+            if( sawStroke )
                 Duplicate( tok );
-            sawWidth = true;
-            NeedNUMBER( "line_width" );
-            me->lineWidth = fromWidth( CurText() );
-            NeedRIGHT();
+            sawStroke = true;
+            parseStroke( &me->stroke );
             break;
 
         case T_fill:
@@ -1157,7 +1235,7 @@ void SWEET_PARSER::parseRectangle( RECTANGLE* me )
             break;
 
         default:
-            Expecting( "start|end|line_width|fill" );
+            Expecting( "start|end|stroke|fill" );
         }
     }
 }
@@ -1169,7 +1247,7 @@ void SWEET_PARSER::parseCircle( CIRCLE* me )
         (circle (center X Y)
             # Radius length is in units if defined or mils.
             (radius LENGTH)
-            (line_width WIDTH)
+            (stroke WIDTH)
             (fill FILL_TYPE)
         )
     */
@@ -1177,7 +1255,7 @@ void SWEET_PARSER::parseCircle( CIRCLE* me )
     T       tok;
     bool    sawCenter = false;
     bool    sawRadius = false;
-    bool    sawWidth  = false;
+    bool    sawStroke = false;
     bool    sawFill   = false;
 
     while( ( tok = NextTok() ) != T_RIGHT )
@@ -1189,13 +1267,11 @@ void SWEET_PARSER::parseCircle( CIRCLE* me )
 
         switch( tok )
         {
-        case T_line_width:
-            if( sawWidth )
+        case T_stroke:
+            if( sawStroke )
                 Duplicate( tok );
-            sawWidth = true;
-            NeedNUMBER( "line_width" );
-            me->lineWidth = fromWidth( CurText() );
-            NeedRIGHT();
+            sawStroke = true;
+            parseStroke( &me->stroke );
             break;
 
         case T_fill:
@@ -1237,7 +1313,7 @@ void SWEET_PARSER::parseCircle( CIRCLE* me )
             break;
 
         default:
-            Expecting( "center|radius|line_width|fill" );
+            Expecting( "center|radius|stroke|fill" );
         }
     }
 }
@@ -1247,7 +1323,7 @@ void SWEET_PARSER::parseArc( ARC* me )
 {
     /*
         (arc (pos X Y) (radius RADIUS) (start X Y) (end X Y)
-            (line_width WIDTH)
+            (stroke WIDTH)
             (fill FILL_TYPE)
         )
     */
@@ -1257,7 +1333,7 @@ void SWEET_PARSER::parseArc( ARC* me )
     bool    sawStart  = false;
     bool    sawEnd    = false;
     bool    sawRadius = false;
-    bool    sawWidth  = false;
+    bool    sawStroke = false;
     bool    sawFill   = false;
 
     while( ( tok = NextTok() ) != T_RIGHT )
@@ -1269,13 +1345,11 @@ void SWEET_PARSER::parseArc( ARC* me )
 
         switch( tok )
         {
-        case T_line_width:
-            if( sawWidth )
+        case T_stroke:
+            if( sawStroke )
                 Duplicate( tok );
-            sawWidth = true;
-            NeedNUMBER( "line_width" );
-            me->lineWidth = fromWidth( CurText() );
-            NeedRIGHT();
+            sawStroke = true;
+            parseStroke( &me->stroke );
             break;
 
         case T_fill:
@@ -1339,7 +1413,7 @@ void SWEET_PARSER::parseArc( ARC* me )
             break;
 
         default:
-            Expecting( "center|radius|line_width|fill" );
+            Expecting( "center|radius|stroke|fill" );
         }
     }
 }

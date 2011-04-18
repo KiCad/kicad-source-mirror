@@ -30,6 +30,7 @@
 
 
 class POINT;
+typedef int     STROKE;
 
 namespace SCH {
 
@@ -90,6 +91,7 @@ class SWEET_PARSER : public SWEET_LEXER
     void parsePinRenum( PART* me );
     void parsePinRename( PART* me );
     void parsePinMerge( PART* me );
+    void parseStroke( STROKE* me );
 
 public:
 
