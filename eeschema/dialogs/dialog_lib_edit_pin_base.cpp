@@ -144,6 +144,8 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	bRightSizer->Add( fgSizerTextsSizes, 0, wxALL|wxEXPAND, 5 );
 	
 	m_panelShowPin = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+	m_panelShowPin->SetMinSize( wxSize( 150,150 ) );
+	
 	bRightSizer->Add( m_panelShowPin, 1, wxEXPAND | wxALL, 5 );
 	
 	bUpperSizer->Add( bRightSizer, 1, wxEXPAND|wxRIGHT, 5 );
