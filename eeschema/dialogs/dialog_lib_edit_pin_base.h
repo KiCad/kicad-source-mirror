@@ -22,6 +22,7 @@ class wxBitmapComboBox;
 #include <wx/combobox.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -36,7 +37,10 @@ class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog
 	private:
 		
 		// Private event handlers
+		void _wxFB_OnCloseDialog( wxCloseEvent& event ){ OnCloseDialog( event ); }
 		void _wxFB_OnCBpartSelection( wxCommandEvent& event ){ OnCBpartSelection( event ); }
+		void _wxFB_OnCancelButtonClick( wxCommandEvent& event ){ OnCancelButtonClick( event ); }
+		void _wxFB_OnOKButtonClick( wxCommandEvent& event ){ OnOKButtonClick( event ); }
 		
 	
 	protected:
@@ -83,17 +87,21 @@ class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog
 		wxCheckBox* m_checkApplyToAllConversions;
 		wxCheckBox* m_checkShow;
 		
+		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnCBpartSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 487,344 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LIB_EDIT_PIN_BASE();
 	
 };

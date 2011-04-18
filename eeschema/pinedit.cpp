@@ -81,6 +81,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     dlg.Layout();
     dlg.Fit();
     dlg.SetMinSize( dlg.GetSize() );
+    dlg.SetLastSizeAndPosition();
 
     if( dlg.ShowModal() == wxID_CANCEL )
     {
