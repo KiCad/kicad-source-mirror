@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Nov 17 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -46,9 +46,9 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public wxDialog
 		wxRadioBox* m_TextShapeOpt;
 		wxRadioBox* m_TextHJustificationOpt;
 		wxRadioBox* m_TextVJustificationOpt;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizerButtons;
+		wxButton* m_sdbSizerButtonsOK;
+		wxButton* m_sdbSizerButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
@@ -57,7 +57,7 @@ class DIALOG_LIB_EDIT_TEXT_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Library Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Library Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LIB_EDIT_TEXT_BASE();
 	
 };
