@@ -219,18 +219,22 @@ void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
     m_AuxiliaryToolBar->AddSeparator();
 
     // Grid selection choice box.
-    m_SelGridBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                        ID_ON_GRID_SELECT,
-                                        wxPoint( -1, -1 ),
-                                        wxSize( LISTBOX_WIDTH, -1 ) );
+    m_SelGridBox = new wxComboBox( m_AuxiliaryToolBar,
+                                   ID_ON_GRID_SELECT,
+                                   wxEmptyString,
+                                   wxPoint( -1, -1 ),
+                                   wxSize( LISTBOX_WIDTH, -1 ),
+                                   0, NULL, wxCB_READONLY );
     m_AuxiliaryToolBar->AddControl( m_SelGridBox );
 
     // Zoom selection choice box.
     m_AuxiliaryToolBar->AddSeparator();
-    m_SelZoomBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                        ID_ON_ZOOM_SELECT,
-                                        wxPoint( -1, -1 ),
-                                        wxSize( LISTBOX_WIDTH, -1 ) );
+    m_SelZoomBox = new wxComboBox( m_AuxiliaryToolBar,
+                                   ID_ON_ZOOM_SELECT,
+                                   wxEmptyString,
+                                   wxPoint( -1, -1 ),
+                                   wxSize( LISTBOX_WIDTH, -1 ),
+                                   0, NULL, wxCB_READONLY );
     m_AuxiliaryToolBar->AddControl( m_SelZoomBox );
 
     // Update tool bar to reflect setting.

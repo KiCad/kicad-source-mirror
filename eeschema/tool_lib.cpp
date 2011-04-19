@@ -158,14 +158,20 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                          _( "Edit document file" ) );
 
     m_HToolBar->AddSeparator();
-    m_SelpartBox = new WinEDAChoiceBox( m_HToolBar,
-                                        ID_LIBEDIT_SELECT_PART_NUMBER,
-                                        wxDefaultPosition,
-                                        wxSize( LISTBOX_WIDTH, -1 ) );
+    m_SelpartBox = new wxComboBox( m_HToolBar,
+                                   ID_LIBEDIT_SELECT_PART_NUMBER,
+                                   wxEmptyString,
+                                   wxDefaultPosition,
+                                   wxSize( LISTBOX_WIDTH, -1 ),
+                                   0, NULL, wxCB_READONLY );
     m_HToolBar->AddControl( m_SelpartBox );
 
-    m_SelAliasBox = new WinEDAChoiceBox( m_HToolBar, ID_LIBEDIT_SELECT_ALIAS, wxDefaultPosition,
-                                         wxSize( LISTBOX_WIDTH, -1 ) );
+    m_SelAliasBox = new wxComboBox( m_HToolBar,
+                                    ID_LIBEDIT_SELECT_ALIAS,
+                                    wxEmptyString,
+                                    wxDefaultPosition,
+                                    wxSize( LISTBOX_WIDTH, -1 ),
+                                    0, NULL, wxCB_READONLY );
     m_HToolBar->AddControl( m_SelAliasBox );
 
     m_HToolBar->AddSeparator();

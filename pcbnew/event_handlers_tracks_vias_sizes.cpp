@@ -78,12 +78,12 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         break;
 
     case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:
-        ii = m_SelTrackWidthBox->GetChoice();
+        ii = m_SelTrackWidthBox->GetCurrentSelection();
         GetBoard()->m_TrackWidthSelector = ii;
         break;
 
     case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
-        ii = m_SelViaSizeBox->GetChoice();
+        ii = m_SelViaSizeBox->GetCurrentSelection();
         GetBoard()->m_ViaSizeSelector = ii;
         break;
 

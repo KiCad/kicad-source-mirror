@@ -36,8 +36,8 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, PCB_BASE_FRAME )
 
     EVT_SIZE( WinEDA_ModuleEditFrame::OnSize )
 
-    EVT_KICAD_CHOICEBOX( ID_ON_ZOOM_SELECT, WinEDA_ModuleEditFrame::OnSelectZoom )
-    EVT_KICAD_CHOICEBOX( ID_ON_GRID_SELECT, WinEDA_ModuleEditFrame::OnSelectGrid )
+    EVT_COMBOBOX( ID_ON_ZOOM_SELECT, WinEDA_ModuleEditFrame::OnSelectZoom )
+    EVT_COMBOBOX( ID_ON_GRID_SELECT, WinEDA_ModuleEditFrame::OnSelectGrid )
 
     EVT_TOOL( ID_MODEDIT_SELECT_CURRENT_LIB, WinEDA_ModuleEditFrame::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE, WinEDA_ModuleEditFrame::Process_Special_Functions )

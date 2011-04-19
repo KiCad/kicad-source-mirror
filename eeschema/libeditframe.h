@@ -28,8 +28,8 @@ class LIB_EDIT_FRAME : public EDA_DRAW_FRAME
     LIB_COMPONENT* m_tempCopyComponent;  ///< Temporary copy of current component during edit.
 
 public:
-    WinEDAChoiceBox* m_SelpartBox;       // a Box to select a part to edit (if any)
-    WinEDAChoiceBox* m_SelAliasBox;      // a box to select the alias to edit (if any)
+    wxComboBox* m_SelpartBox;            // a Box to select a part to edit (if any)
+    wxComboBox* m_SelAliasBox;           // a box to select the alias to edit (if any)
 
 public:
     LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent, const wxString& title,

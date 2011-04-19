@@ -72,7 +72,7 @@ void LIB_VIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBVIEW_SELECT_PART_NUMBER:
-        ii = SelpartBox->GetChoice();
+        ii = SelpartBox->GetCurrentSelection();
         if( ii < 0 )
             return;
         m_unit = ii + 1;

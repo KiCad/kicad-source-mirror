@@ -112,12 +112,9 @@ protected:
     virtual void unitsChangeRefresh();
 
 public:
-    LAYER_BOX_SELECTOR* m_SelLayerBox;    // a combo box to display and
-                                            // select active layer
-    WinEDAChoiceBox* m_SelTrackWidthBox;    // a combo box to display and
-                                            // select current track width
-    WinEDAChoiceBox* m_SelViaSizeBox;       // a combo box to display and
-                                            // select current via diameter
+    LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
+    wxComboBox* m_SelTrackWidthBox;     // a combo box to display and select current track width
+    wxComboBox* m_SelViaSizeBox;        // a combo box to display and select current via diameter
 
     bool             m_show_microwave_tools;
     bool             m_show_layer_manager_tools;

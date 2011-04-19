@@ -39,7 +39,6 @@ class EDA_DRAW_PANEL;
 class EDA_MSG_PANEL;
 class BASE_SCREEN;
 class EDA_TOOLBAR;
-class WinEDAChoiceBox;
 class PARAM_CFG_BASE;
 class Ki_PageDescr;
 class Ki_HotkeyInfo;
@@ -245,10 +244,8 @@ public:
     EDA_TOOLBAR*      m_OptionsToolBar;     // Options Toolbar (left side)
     EDA_TOOLBAR*      m_AuxiliaryToolBar;   // Auxiliary Toolbar used in pcbnew
 
-    WinEDAChoiceBox*  m_SelGridBox;         // Choice box to choose the grid
-                                            // size
-    WinEDAChoiceBox*  m_SelZoomBox;         // Choice box to choose the zoom
-                                            // value
+    wxComboBox*       m_SelGridBox;         // Choice box to choose the grid size
+    wxComboBox*       m_SelZoomBox;         // Choice box to choose the zoom value
 
     int          m_CursorShape;             // shape for cursor (0 = default
                                             // cursor)

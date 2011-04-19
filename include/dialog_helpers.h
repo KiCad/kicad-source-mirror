@@ -211,44 +211,5 @@ public:
     }
 };
 
-/*************************/
-/* class WinEDAChoiceBox */
-/*************************/
-
-/* class to display a choice list.
- *  This is a wrapper to wxComboBox (or wxChoice)
- *  but because they have some problems, WinEDAChoiceBox uses workarounds:
- *  - in wxGTK 2.6.2 wxGetSelection() does not work properly,
- *  - and wxChoice crashes if compiled in non unicode mode and uses utf8 codes
- */
-
-#define EVT_KICAD_CHOICEBOX EVT_COMBOBOX
-class WinEDAChoiceBox : public wxComboBox
-{
-public:
-    WinEDAChoiceBox( wxWindow* parent, wxWindowID id,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     int n = 0, const wxString choices[] = NULL ) :
-        wxComboBox( parent, id, wxEmptyString, pos, size,
-                    n, choices, wxCB_READONLY )
-    {
-    }
-
-
-    WinEDAChoiceBox( wxWindow* parent, wxWindowID id,
-                     const wxPoint& pos, const wxSize& size,
-                     const wxArrayString& choices ) :
-        wxComboBox( parent, id, wxEmptyString, pos, size,
-                    choices, wxCB_READONLY )
-    {
-    }
-
-
-    int GetChoice()
-    {
-        return GetCurrentSelection();
-    }
-};
 
 #endif

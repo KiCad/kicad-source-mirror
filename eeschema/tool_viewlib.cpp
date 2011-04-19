@@ -82,9 +82,9 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
         m_HToolBar->AddSeparator();
 
-        SelpartBox =
-            new WinEDAChoiceBox( m_HToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
-                                 wxDefaultPosition, wxSize( 150, -1 ) );
+        SelpartBox = new wxComboBox( m_HToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
+                                     wxEmptyString, wxDefaultPosition,
+                                     wxSize( 150, -1 ), 0, NULL, wxCB_READONLY );
         m_HToolBar->AddControl( SelpartBox );
 
         m_HToolBar->AddSeparator();

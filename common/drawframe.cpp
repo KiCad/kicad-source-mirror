@@ -360,7 +360,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
     if( m_SelZoomBox == NULL )
         return;                        // Should not happen!
 
-    int id = m_SelZoomBox->GetChoice();
+    int id = m_SelZoomBox->GetCurrentSelection();
 
     if( id < 0 || !( id < (int)m_SelZoomBox->GetCount() ) )
         return;

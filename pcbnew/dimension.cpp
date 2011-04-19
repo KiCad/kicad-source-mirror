@@ -49,7 +49,7 @@ private:
     WinEDA_SizeCtrl*  m_TxtSizeCtrl;
     WinEDA_ValueCtrl* m_TxtWidthCtrl;
     wxRadioBox*       m_Mirror;
-    WinEDAChoiceBox*  m_SelLayerBox;
+    wxComboBox*  m_SelLayerBox;
 
 public:
 
@@ -122,8 +122,9 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( PCB_EDIT_FRAME* parent,
 
     wxStaticText* text = new wxStaticText( this, -1, _( "Layer:" ) );
     LeftBoxSizer->Add( text, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
-    m_SelLayerBox = new WinEDAChoiceBox( this, wxID_ANY,
-                                         wxDefaultPosition, wxDefaultSize );
+    m_SelLayerBox = new wxComboBox( this, wxID_ANY, wxEmptyString,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    0, NULL, wxCB_READONLY );
     LeftBoxSizer->Add( m_SelLayerBox, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
     for( int layer = FIRST_NO_COPPER_LAYER;  layer<NB_LAYERS;  layer++ )
@@ -175,7 +176,7 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
 
     CurrentDimension->m_Text->m_Mirror = ( m_Mirror->GetSelection() == 1 ) ? true : false;
 
-    CurrentDimension->SetLayer( m_SelLayerBox->GetChoice() + FIRST_NO_COPPER_LAYER );
+    CurrentDimension->SetLayer( m_SelLayerBox->GetCurrentSelection() + FIRST_NO_COPPER_LAYER );
 
     CurrentDimension->AdjustDimensionDetails( true );
 

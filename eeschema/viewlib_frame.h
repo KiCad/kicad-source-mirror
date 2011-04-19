@@ -10,7 +10,6 @@
 class wxSashLayoutWindow;
 class wxListBox;
 class wxSemaphore;
-class WinEDAChoiceBox;
 class SCH_SCREEN;
 class CMP_LIBRARY;
 
@@ -21,7 +20,7 @@ class CMP_LIBRARY;
 class LIB_VIEW_FRAME : public EDA_DRAW_FRAME
 {
 private:
-    WinEDAChoiceBox*    SelpartBox;
+    wxComboBox*         SelpartBox;
 
     // List of libraries (for selection )
     wxSashLayoutWindow* m_LibListWindow;

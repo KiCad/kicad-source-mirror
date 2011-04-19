@@ -509,18 +509,22 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     /* Set up toolbar items */
 
     // Creates box to display and choose tracks widths:
-    m_SelTrackWidthBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                              ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
-                                              wxPoint( -1, -1 ),
-                                              wxSize( LISTBOX_WIDTH, -1 ) );
+    m_SelTrackWidthBox = new wxComboBox( m_AuxiliaryToolBar,
+                                         ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
+                                         wxEmptyString,
+                                         wxPoint( -1, -1 ),
+                                         wxSize( LISTBOX_WIDTH, -1 ),
+                                         0, NULL, wxCB_READONLY );
     m_AuxiliaryToolBar->AddControl( m_SelTrackWidthBox );
     m_AuxiliaryToolBar->AddSeparator();
 
     // Creates box to display and choose vias diameters:
-    m_SelViaSizeBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                           ID_AUX_TOOLBAR_PCB_VIA_SIZE,
-                                           wxPoint( -1, -1 ),
-                                           wxSize( (LISTBOX_WIDTH*12)/10, -1 ) );
+    m_SelViaSizeBox = new wxComboBox( m_AuxiliaryToolBar,
+                                      ID_AUX_TOOLBAR_PCB_VIA_SIZE,
+                                      wxEmptyString,
+                                      wxPoint( -1, -1 ),
+                                      wxSize( (LISTBOX_WIDTH*12)/10, -1 ),
+                                      0, NULL, wxCB_READONLY );
     m_AuxiliaryToolBar->AddControl( m_SelViaSizeBox );
     m_AuxiliaryToolBar->AddSeparator();
 
@@ -534,18 +538,22 @@ an existing track use its width\notherwise, use current width setting" ),
 
     // Add the box to display and select the current grid size:
     m_AuxiliaryToolBar->AddSeparator();
-    m_SelGridBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                        ID_ON_GRID_SELECT,
-                                        wxPoint( -1, -1 ),
-                                        wxSize( LISTBOX_WIDTH, -1 ) );
+    m_SelGridBox = new wxComboBox( m_AuxiliaryToolBar,
+                                   ID_ON_GRID_SELECT,
+                                   wxEmptyString,
+                                   wxPoint( -1, -1 ),
+                                   wxSize( LISTBOX_WIDTH, -1 ),
+                                   0, NULL, wxCB_READONLY );
     m_AuxiliaryToolBar->AddControl( m_SelGridBox );
 
     //  Add the box to display and select the current Zoom
     m_AuxiliaryToolBar->AddSeparator();
-    m_SelZoomBox = new WinEDAChoiceBox( m_AuxiliaryToolBar,
-                                        ID_ON_ZOOM_SELECT,
-                                        wxPoint( -1, -1 ),
-                                        wxSize( LISTBOX_WIDTH, -1 ) );
+    m_SelZoomBox = new wxComboBox( m_AuxiliaryToolBar,
+                                   ID_ON_ZOOM_SELECT,
+                                   wxEmptyString,
+                                   wxPoint( -1, -1 ),
+                                   wxSize( LISTBOX_WIDTH, -1 ),
+                                   0, NULL, wxCB_READONLY );
     m_AuxiliaryToolBar->AddControl( m_SelZoomBox );
 
     updateZoomSelectBox();
