@@ -26,43 +26,45 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
 {
     NETINFO_ITEM* net;
     wxString      netFilter;
-    int           selection;
+    wxArrayString list;
 
     netFilter = wxT( "*" );
-    wxTextEntryDialog dlg( this, _( "Filter for net names:" ), _( "Net Filter" ), netFilter );
+    wxTextEntryDialog dlg( this, _( "Filter Net Names" ), _( "Net Filter" ), netFilter );
+
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user
 
     netFilter = dlg.GetValue( );
+
     if( netFilter.IsEmpty() )
         return;
-
-    WinEDA_TextFrame List( this, _( "List Nets" ) );
 
     for( unsigned ii = 0; ii < GetBoard()->m_NetInfo->GetCount(); ii++ )
     {
         net = GetBoard()->m_NetInfo->GetNetItem( ii );
         wxString Line;
+
         if( !WildCompareString( netFilter, net->GetNetname(), false ) )
             continue;
 
         Line.Printf( wxT( "net_code = %3.3d  [%.16s] " ), net->GetNet(),
                      GetChars( net->GetNetname() ) );
-        List.Append( Line );
+        list.Add( Line );
     }
 
-    selection = List.ShowModal();
+    wxSingleChoiceDialog choiceDlg( this, wxEmptyString, _( "Select Net" ), list, NULL );
 
-    if( selection < 0 )
+    if( (choiceDlg.ShowModal() == wxID_CANCEL) || (choiceDlg.GetSelection() == wxNOT_FOUND) )
         return;
 
     bool     found   = false;
-    unsigned netcode = (unsigned) selection;
+    unsigned netcode = (unsigned) choiceDlg.GetSelection();
 
     // Search for the net selected.
     for( unsigned ii = 0; ii < GetBoard()->m_NetInfo->GetCount(); ii++ )
     {
         net = GetBoard()->m_NetInfo->GetNetItem( ii );
+
         if( !WildCompareString( netFilter, net->GetNetname(), false ) )
             continue;
 

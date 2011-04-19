@@ -689,47 +689,44 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
 #define MAX_LEN_TXT 32
 {
     int ii;
-    MODULE*           Module, * pt_aux;
-    int               NbModulesNetListe, nberr = 0;
-    WinEDA_TextFrame* List;
-    wxArrayString     ModuleListFromNetlist;
+    MODULE* Module, * pt_aux;
+    int NbModulesNetListe, nberr = 0;
+    wxArrayString tmp;
+    wxArrayString list;
 
     if( aPcb->m_Modules == NULL )
     {
-        DisplayInfoMessage( aFrame, _( "No modules" ), 10 );
+        DisplayInfoMessage( aFrame, _( "No modules" ) );
         return;
     }
 
     /* Build the list of references of the net list modules. */
 
-    NbModulesNetListe =
-        BuildFootprintsListFromNetlistFile( aNetlistFullFilename,
-                                            ModuleListFromNetlist );
+    NbModulesNetListe = BuildFootprintsListFromNetlistFile( aNetlistFullFilename, tmp );
+
     if( NbModulesNetListe < 0 )
         return;  /* File not found */
 
     if( NbModulesNetListe == 0 )
     {
-        DisplayError( aFrame, _( "No modules in NetList" ), 10 );
+        DisplayError( aFrame, _( "No modules in NetList" ) );
         return;
     }
 
-    List = new WinEDA_TextFrame( aFrame, _( "Check Modules" ) );
-
     /* Search for duplicate footprints. */
-    List->Append( _( "Duplicates" ) );
+    list.Add( _( "Duplicates" ) );
 
     Module = aPcb->m_Modules;
 
     for( ; Module != NULL; Module = Module->Next() )
     {
         pt_aux = Module->Next();
+
         for( ; pt_aux != NULL; pt_aux = pt_aux->Next() )
         {
-            if( Module->m_Reference->m_Text.CmpNoCase( pt_aux->m_Reference->
-                                                       m_Text ) == 0 )
+            if( Module->m_Reference->m_Text.CmpNoCase( pt_aux->m_Reference-> m_Text ) == 0 )
             {
-                List->Append( Module->m_Reference->m_Text );
+                list.Add( Module->m_Reference->m_Text );
                 nberr++;
                 break;
             }
@@ -737,15 +734,15 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
     }
 
     /* Search for the missing module by the net list. */
-    List->Append( _( "Lack:" ) );
+    list.Add( _( "Missing:" ) );
 
     for( ii = 0; ii < NbModulesNetListe; ii++ )
     {
         Module = (MODULE*) aPcb->m_Modules;
+
         for( ; Module != NULL; Module = Module->Next() )
         {
-            if( Module->m_Reference->m_Text.CmpNoCase(
-                    ModuleListFromNetlist[ii] ) == 0 )
+            if( Module->m_Reference->m_Text.CmpNoCase( tmp[ii] ) == 0 )
             {
                 break;
             }
@@ -753,21 +750,21 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
 
         if( Module == NULL )    // Module missing, not found in board
         {
-            List->Append( ModuleListFromNetlist[ii] );
+            list.Add( tmp[ii] );
             nberr++;
         }
     }
 
     /* Search for modules not in net list. */
-    List->Append( _( "Not in Netlist:" ) );
+    list.Add( _( "Not in Netlist:" ) );
 
     Module = (MODULE*) aPcb->m_Modules;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
         for( ii = 0; ii < NbModulesNetListe; ii++ )
         {
-            if( Module->m_Reference->m_Text.CmpNoCase(
-                    ModuleListFromNetlist[ii] ) == 0 )
+            if( Module->m_Reference->m_Text.CmpNoCase( tmp[ii] ) == 0 )
             {
                 break; /* Module is in net list. */
             }
@@ -775,12 +772,15 @@ void TestFor_Duplicate_Missing_And_Extra_Footprints( wxWindow*       aFrame,
 
         if( ii == NbModulesNetListe )   /* Module not found in netlist */
         {
-            List->Append( Module->m_Reference->m_Text );
+            list.Add( Module->m_Reference->m_Text );
             nberr++;
         }
     }
 
-    List->ShowModal(); List->Destroy();
+    wxSingleChoiceDialog dlg( aFrame, wxEmptyString, _( "Check Modules" ), list, NULL,
+                              wxCHOICEDLG_STYLE & ~wxCANCEL );
+
+    dlg.ShowModal();
 }
 
 

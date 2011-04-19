@@ -395,11 +395,9 @@ void GERBVIEW_FRAME::Liste_D_Codes()
     int ii, jj;
     D_CODE*           pt_D_code;
     wxString          Line;
-    WinEDA_TextFrame* List;
+    wxArrayString     list;
     int               scale = 10000;
     int               curr_layer = getActiveLayer();
-
-    List = new WinEDA_TextFrame( this, _( "List D codes" ) );
 
     for( int layer = 0; layer < 32; layer++ )
     {
@@ -416,7 +414,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
         else
             Line.Printf( wxT( "*** layer %2.2d  ***" ), layer + 1 );
 
-        List->Append( Line );
+        list.Add( Line );
 
         for( ii = 0, jj = 1; ii < TOOLS_MAX_COUNT; ii++ )
         {
@@ -442,16 +440,15 @@ void GERBVIEW_FRAME::Liste_D_Codes()
             if( !pt_D_code->m_InUse )
                 Line += wxT( " *" );
 
-            List->Append( Line );
+            list.Add( Line );
             jj++;
         }
     }
 
-    ii = List->ShowModal();
-    List->Destroy();
+    wxSingleChoiceDialog dlg( this, wxEmptyString, _( "D Codes" ), list, NULL,
+                              wxCHOICEDLG_STYLE & ~wxCANCEL );
 
-    if( ii < 0 )
-        return;
+    dlg.ShowModal();
 }
 
 

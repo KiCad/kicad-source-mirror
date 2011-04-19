@@ -95,27 +95,6 @@ enum UserUnitType {
 class LibNameList;
 
 
-/***********************************/
-/* Class to display text           */
-/***********************************/
-class WinEDA_TextFrame : public wxDialog
-{
-private:
-    wxWindow*  m_Parent;
-    wxListBox* m_List;
-
-public:
-    WinEDA_TextFrame( wxWindow* parent, const wxString& title );
-    void Append( const wxString& text );
-
-private:
-    void D_ClickOnList( wxCommandEvent& event );
-    void OnClose( wxCloseEvent& event );
-
-    DECLARE_EVENT_TABLE()
-};
-
-
 /* Class to handle pages sizes:
  */
 class Ki_PageDescr
@@ -131,8 +110,7 @@ public:
     int      m_BottomMargin;
 
 public:
-    Ki_PageDescr( const wxSize& size, const wxPoint& offset,
-                  const wxString& name );
+    Ki_PageDescr( const wxSize& size, const wxPoint& offset, const wxString& name );
 };
 
 

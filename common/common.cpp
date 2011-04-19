@@ -606,74 +606,18 @@ void MyFree( void* pt_mem )
         free( pt_mem );
 }
 
-enum textbox {
-    ID_TEXTBOX_LIST = 8010
-};
-
-
-BEGIN_EVENT_TABLE( WinEDA_TextFrame, wxDialog )
-    EVT_LISTBOX_DCLICK( ID_TEXTBOX_LIST, WinEDA_TextFrame::D_ClickOnList )
-    EVT_LISTBOX( ID_TEXTBOX_LIST, WinEDA_TextFrame::D_ClickOnList )
-    EVT_CLOSE( WinEDA_TextFrame::OnClose )
-END_EVENT_TABLE()
-
-
-WinEDA_TextFrame::WinEDA_TextFrame( wxWindow*       parent,
-                                    const wxString& title ) :
-    wxDialog( parent,
-              -1, title,
-              wxPoint( -1, -1 ),
-              wxSize( 250, 350 ),
-              wxDEFAULT_DIALOG_STYLE |
-              wxFRAME_FLOAT_ON_PARENT |
-              MAYBE_RESIZE_BORDER )
-{
-    wxSize size;
-
-    m_Parent = parent;
-
-    CentreOnParent();
-
-    size   = GetClientSize();
-    m_List = new wxListBox( this,
-                            ID_TEXTBOX_LIST,
-                            wxPoint( 0, 0 ),
-                            size,
-                            0, NULL,
-                            wxLB_ALWAYS_SB | wxLB_SINGLE );
-
-    SetReturnCode( -1 );
-}
-
-
-void WinEDA_TextFrame::Append( const wxString& text )
-{
-    m_List->Append( text );
-}
-
-
-void WinEDA_TextFrame::D_ClickOnList( wxCommandEvent& event )
-{
-    int ii = m_List->GetSelection();
-
-    EndModal( ii );
-}
-
-
-void WinEDA_TextFrame::OnClose( wxCloseEvent& event )
-{
-    EndModal( -1 );
-}
-
 
 int GetTimeStamp()
 {
     static int OldTimeStamp, NewTimeStamp;
 
     NewTimeStamp = time( NULL );
+
     if( NewTimeStamp <= OldTimeStamp )
         NewTimeStamp = OldTimeStamp + 1;
+
     OldTimeStamp = NewTimeStamp;
+
     return NewTimeStamp;
 }
 
