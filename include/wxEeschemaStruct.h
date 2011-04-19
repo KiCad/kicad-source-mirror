@@ -430,7 +430,7 @@ public:
     // General search:
 
 private:
-    void            Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC );
+    void            OnMoveItem( wxCommandEvent& aEvent );
     void            OnExit( wxCommandEvent& event );
     void            OnAnnotate( wxCommandEvent& event );
     void            OnErc( wxCommandEvent& event );

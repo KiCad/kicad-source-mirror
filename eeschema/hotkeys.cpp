@@ -131,7 +131,7 @@ static Ki_HotkeyInfo HkEditComponentFootprint( wxT( "Edit Component Footprint" )
                                                ID_POPUP_SCH_EDIT_FOOTPRINT_CMP );
 static Ki_HotkeyInfo HkMove( wxT( "Move Schematic Item" ),
                              HK_MOVE_COMPONENT_OR_ITEM, 'M',
-                             ID_POPUP_SCH_MOVE_CMP_REQUEST );
+                             ID_POPUP_SCH_MOVE_ITEM );
 
 static Ki_HotkeyInfo HkCopyComponentOrText( wxT( "Copy Component or Label" ),
                                             HK_COPY_COMPONENT_OR_LABEL, 'C',
@@ -754,7 +754,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                  */
                 if( ((SCH_ITEM*) aItem )->GetLayer() != LAYER_BUS )
                 {
-                    cmd.SetId( ID_POPUP_SCH_MOVE_ITEM_REQUEST );
+                    cmd.SetId( ID_POPUP_SCH_MOVE_ITEM );
                     wxPostEvent( this, cmd );
                 }
 

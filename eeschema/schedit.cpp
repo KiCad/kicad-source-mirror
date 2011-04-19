@@ -55,8 +55,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_IMPORT_GLABEL:
     case ID_POPUP_SCH_EDIT_SHEET_PIN:
     case ID_POPUP_SCH_MOVE_SHEET_PIN:
-    case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
-    case ID_POPUP_SCH_MOVE_CMP_REQUEST:
     case ID_POPUP_SCH_DRAG_CMP_REQUEST:
     case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
     case ID_POPUP_SCH_EDIT_CMP:
@@ -263,27 +261,20 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_DRAG_CMP_REQUEST:
-    case ID_POPUP_SCH_MOVE_CMP_REQUEST:
-    case ID_POPUP_SCH_MOVE_ITEM_REQUEST:
     case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
         DrawPanel->MoveCursorToCrossHair();
 
-        if( (id == ID_POPUP_SCH_DRAG_CMP_REQUEST) || (id == ID_POPUP_SCH_DRAG_WIRE_REQUEST) )
+        // The easiest way to handle a drag component or sheet command
+        // is to simulate a block drag command
+        if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
         {
-            // The easiest way to handle a drag component or sheet command
-            // is to simulate a block drag command
-            if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
-            {
-                if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->GetCrossHairPosition() ) )
-                    break;
+            if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->GetCrossHairPosition() ) )
+                break;
 
-                // Give a non null size to the search block:
-                screen->m_BlockLocate.Inflate( 1 );
-                HandleBlockEnd( &dc );
-            }
+            // Give a non null size to the search block:
+            screen->m_BlockLocate.Inflate( 1 );
+            HandleBlockEnd( &dc );
         }
-        else
-            Process_Move_Item( item, &dc );
 
         break;
 
@@ -456,56 +447,62 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::Process_Move_Item( SCH_ITEM* DrawStruct, wxDC* DC )
+void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
 {
-    if( DrawStruct == NULL )
+    SCH_SCREEN* screen = GetScreen();
+    SCH_ITEM* item = screen->GetCurItem();
+
+    if( item == NULL )
         return;
+
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
     DrawPanel->MoveCursorToCrossHair();
 
-    switch( DrawStruct->Type() )
+    switch( item->Type() )
     {
     case SCH_JUNCTION_T:
         break;
 
     case SCH_BUS_ENTRY_T:
-        StartMoveBusEntry( (SCH_BUS_ENTRY*) DrawStruct, DC );
+        StartMoveBusEntry( (SCH_BUS_ENTRY*) item, &dc );
         break;
 
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_TEXT_T:
-        MoveText( (SCH_TEXT*) DrawStruct, DC );
+        MoveText( (SCH_TEXT*) item, &dc );
         break;
 
     case SCH_COMPONENT_T:
-        StartMovePart( (SCH_COMPONENT*) DrawStruct, DC );
+        StartMovePart( (SCH_COMPONENT*) item, &dc );
         break;
 
     case SCH_LINE_T:
         break;
 
     case SCH_SHEET_T:
-        StartMoveSheet( (SCH_SHEET*) DrawStruct, DC );
+        StartMoveSheet( (SCH_SHEET*) item, &dc );
         break;
 
     case SCH_NO_CONNECT_T:
         break;
 
     case SCH_FIELD_T:
-        MoveField( (SCH_FIELD*) DrawStruct, DC );
+        MoveField( (SCH_FIELD*) item, &dc );
         break;
 
     case SCH_MARKER_T:
     case SCH_SHEET_PIN_T:
     default:
-        wxString msg;
-        msg.Printf( wxT( "SCH_EDIT_FRAME::Move_Item Error: Bad DrawType %d" ),
-                    DrawStruct->Type() );
-        DisplayError( this, msg );
+        wxFAIL_MSG( wxString::Format( wxT( "Cannot move item type %s" ),
+                                      GetChars( item->GetClass() ) ) );
         break;
     }
+
+    if( GetToolId() == ID_NO_TOOL_SELECTED )
+        m_itemToRepeat = NULL;
 }
 
 

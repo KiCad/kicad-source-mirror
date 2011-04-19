@@ -126,7 +126,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         {
             wxString msg = AddHotkeyName( _( "Move Bus Entry" ), s_Schematic_Hokeys_Descr,
                                           HK_MOVE_COMPONENT_OR_ITEM );
-            ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, msg, move_xpm );
+            ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, move_xpm );
         }
 
         if( GetBusEntryShape( (SCH_BUS_ENTRY*) item ) == '\\' )
@@ -210,7 +210,7 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
     {
         msg = AddHotkeyName( _( "Move Field" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, msg, move_text_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, move_text_xpm );
     }
 
     msg = AddHotkeyName( _( "Rotate Field" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
@@ -242,7 +242,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
         msg = _( "Move Component" );
         msg << wxT( " " ) << Component->GetField( REFERENCE )->m_Text;
         msg = AddHotkeyName( msg, s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_CMP_REQUEST, msg, move_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, move_xpm );
         msg = AddHotkeyName( _( "Drag Component" ), s_Schematic_Hokeys_Descr, HK_DRAG );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_CMP_REQUEST, msg, move_xpm );
     }
@@ -326,7 +326,7 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
     {
         msg = AddHotkeyName( _( "Move Global Label" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, msg, move_text_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, move_text_xpm );
         msg = AddHotkeyName( _( "Drag Global Label" ), s_Schematic_Hokeys_Descr,
                              HK_DRAG );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_CMP_REQUEST, msg, move_text_xpm );
@@ -363,7 +363,7 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
     {
         msg = AddHotkeyName( _( "Move Hierarchical Label" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, msg, move_text_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, move_text_xpm );
         msg = AddHotkeyName( _( "Drag Hierarchical Label" ), s_Schematic_Hokeys_Descr,
                              HK_DRAG );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_CMP_REQUEST, msg, move_text_xpm );
@@ -399,7 +399,7 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
     {
         msg = AddHotkeyName( _( "Move Label" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, msg, move_text_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, move_text_xpm );
         msg = AddHotkeyName( _( "Drag Label" ), s_Schematic_Hokeys_Descr,
                              HK_DRAG );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_CMP_REQUEST, msg, move_text_xpm );
@@ -435,7 +435,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
     {
         msg = AddHotkeyName( _( "Move Text" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, msg, move_text_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, move_text_xpm );
         msg = AddHotkeyName( _( "Copy Text" ), s_Schematic_Hokeys_Descr,
                              HK_COPY_COMPONENT_OR_LABEL );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, copy_button );
@@ -568,7 +568,7 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         PopMenu->AppendSeparator();
         msg = AddHotkeyName( _( "Move Sheet" ), s_Schematic_Hokeys_Descr,
                              HK_MOVE_COMPONENT_OR_ITEM );
-        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM_REQUEST, msg, move_sheet_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, move_sheet_xpm );
 
         msg = AddHotkeyName( _( "Drag Sheet" ), s_Schematic_Hokeys_Descr, HK_DRAG );
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_DRAG_CMP_REQUEST, msg, move_sheet_xpm );
