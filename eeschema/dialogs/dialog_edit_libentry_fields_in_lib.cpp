@@ -135,6 +135,9 @@ DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB(
 {
     m_Parent   = aParent;
     m_LibEntry = aLibEntry;
+
+    GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 
@@ -175,11 +178,6 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnInitDialog( wxInitDialogEvent& event 
 
     InitBuffers();
     copySelectedFieldToPanel();
-
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
 
     stdDialogButtonSizerOK->SetDefault();
 }

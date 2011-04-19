@@ -22,8 +22,6 @@
 
 
 int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_SelectedRow;
-
-
 wxSize DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = wxDefaultSize;
 
 
@@ -36,37 +34,38 @@ void InstallCmpeditFrame( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent )
 
     if( aComponent->Type() != SCH_COMPONENT_T )
     {
-        DisplayError( aParent,
-                      wxT( "InstallCmpeditFrame() error: This item is not a component" ) );
+        wxMessageBox( wxT( "InstallCmpeditFrame() error: This item is not a component" ) );
         return;
     }
 
-    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC dialog( aParent );
+    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC * dlg =
+        new DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( aParent );
 
-    dialog.InitBuffers( aComponent );
+    dlg->InitBuffers( aComponent );
 
-    wxSize sizeNow = dialog.GetSize();
+    wxSize sizeNow = dlg->GetSize();
 
     // this relies on wxDefaultSize being -1,-1, be careful here.
     if( sizeNow.GetWidth() < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetWidth()
         || sizeNow.GetHeight() < DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize.GetHeight() )
     {
-        dialog.SetSize( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize );
+        dlg->SetSize( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize );
     }
 
     // make sure the chipnameTextCtrl is wide enough to hold any
     // unusually long chip names:
-    EnsureTextCtrlWidth( dialog.chipnameTextCtrl );
+    EnsureTextCtrlWidth( dlg->chipnameTextCtrl );
 
-    dialog.ShowModal();
+    dlg->ShowModal();
 
     // Some of the field values are long and are not always fully visible because the
     // window comes up too narrow.  Remember user's manual window resizing efforts here
     // so it comes up wide enough next time.
-    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = dialog.GetSize();
+    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = dlg->GetSize();
 
     aParent->DrawPanel->MoveCursorToCrossHair();
     aParent->DrawPanel->m_IgnoreMouseEvents = false;
+    dlg->Destroy();
 }
 
 
@@ -153,15 +152,15 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     newname.Replace( wxT( " " ), wxT( "_" ) );
 
     if( newname.IsEmpty() )
-        DisplayError( this, _( "No Component Name!" ) );
+        DisplayError( NULL, _( "No Component Name!" ) );
 
     else if( newname.CmpNoCase( m_Cmp->m_ChipName ) )
     {
         if( CMP_LIBRARY::FindLibraryEntry( newname ) == NULL )
         {
             wxString message;
-            message.Printf( _( "Component [%s] not found!" ), newname.GetData() );
-            DisplayError( this, message );
+            message.Printf( _( "Component [%s] not found!" ), GetChars( newname ) );
+            DisplayError( NULL, message );
         }
         else    // Change component from lib!
         {

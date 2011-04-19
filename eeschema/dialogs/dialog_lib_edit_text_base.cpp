@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Nov 17 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -97,27 +97,27 @@ DIALOG_LIB_EDIT_TEXT_BASE::DIALOG_LIB_EDIT_TEXT_BASE( wxWindow* parent, wxWindow
 	
 	bMainSizer->Add( bPropertiesSizer, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 6 );
 	
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
-	bMainSizer->Add( m_sdbSizer1, 0, wxALL|wxEXPAND, 12 );
+	m_sdbSizerButtons = new wxStdDialogButtonSizer();
+	m_sdbSizerButtonsOK = new wxButton( this, wxID_OK );
+	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsOK );
+	m_sdbSizerButtonsCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
+	m_sdbSizerButtons->Realize();
+	bMainSizer->Add( m_sdbSizerButtons, 0, wxALL|wxEXPAND, 12 );
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
 	bMainSizer->Fit( this );
 	
 	// Connect Events
-	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnOkClick ), NULL, this );
+	m_sdbSizerButtonsCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCancelClick ), NULL, this );
+	m_sdbSizerButtonsOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnOkClick ), NULL, this );
 }
 
 DIALOG_LIB_EDIT_TEXT_BASE::~DIALOG_LIB_EDIT_TEXT_BASE()
 {
 	// Disconnect Events
-	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCancelClick ), NULL, this );
-	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnOkClick ), NULL, this );
+	m_sdbSizerButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnCancelClick ), NULL, this );
+	m_sdbSizerButtonsOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_TEXT_BASE::OnOkClick ), NULL, this );
 	
 }

@@ -102,12 +102,11 @@ void DIALOG_LIB_EDIT_TEXT::InitDialog( )
     msg = m_TextSizeText->GetLabel() + ReturnUnitSymbol();
     m_TextSizeText->SetLabel( msg );
 
-    if (GetSizer())
-    {
-        GetSizer()->SetSizeHints(this);
-    }
+    GetSizer()->SetSizeHints(this);
 
-    m_sdbSizer1OK->SetDefault();
+    Centre();
+
+    m_sdbSizerButtonsOK->SetDefault();
 }
 
 
