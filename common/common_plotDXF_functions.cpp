@@ -115,27 +115,25 @@ void DXF_PLOTTER::circle( wxPoint centre, int diameter, FILL_T fill, int width )
 }
 
 
-/* Draw a polygon (closed if completed) in DXF format
- * coord = coord table tops
+/* Draw a polygon (closed if filled) in DXF format
  * nb = number of coord (coord 1 = 2 elements: X and Y table)
- * fill: if != 0 filled polygon
+ * aFill: if != 0 filled polygon
  */
-void DXF_PLOTTER::poly( int nb, int* coord, FILL_T fill, int width )
+void DXF_PLOTTER::PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth)
 {
-    wxASSERT( output_file );
-    if( nb <= 1 )
+    if( aCornerList.size() <= 1 )
         return;
 
-    move_to( wxPoint( coord[0], coord[1] ) );
-    for( int ii = 1; ii < nb; ii++ )
-        line_to( wxPoint( coord[ii * 2], coord[(ii * 2) + 1] ) );
+    move_to( aCornerList[0] );
+    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+        line_to( aCornerList[ii] );
 
     /* Close polygon. */
-    if( fill )
+    if( aFill )
     {
-        int ii = (nb - 1) * 2;
-        if( ( coord[ii] != coord[0] ) || ( coord[ii + 1] != coord[1] ) )
-            line_to( wxPoint( coord[0], coord[1] ) );
+        unsigned ii = aCornerList.size() - 1;
+        if( aCornerList[ii] != aCornerList[0] )
+            line_to( aCornerList[0] );
     }
     pen_finish();
 }

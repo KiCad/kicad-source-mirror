@@ -100,47 +100,53 @@ double PLOTTER::user_to_device_size( double size )
 void PLOTTER::center_square( const wxPoint& position, int diametre, FILL_T fill )
 {
     int radius     = wxRound( diametre / 2.8284 );
-    int coord[10] =
-    {
-        position.x + radius, position.y + radius,
-        position.x + radius, position.y - radius,
-        position.x - radius, position.y - radius,
-        position.x - radius, position.y + radius,
-        position.x + radius, position.y + radius
-    };
+    static std::vector< wxPoint > corner_list;
+    corner_list.clear();
+    wxPoint corner;
+    corner.x = position.x + radius;
+    corner.y = position.y + radius;
+    corner_list.push_back( corner );
+    corner.x = position.x + radius;
+    corner.y = position.y - radius;
+    corner_list.push_back( corner );
+    corner.x = position.x - radius;
+    corner.y = position.y - radius;
+    corner_list.push_back( corner );
+    corner.x = position.x - radius;
+    corner.y = position.y + radius;
+    corner_list.push_back( corner );
+    corner.x = position.x + radius;
+    corner.y = position.y + radius;
+    corner_list.push_back( corner );
 
-    if( fill )
-    {
-        poly( 4, coord, fill );
-    }
-    else
-    {
-        poly( 5, coord, fill );
-    }
+    PlotPoly( corner_list, fill );
+
 }
 
 
-void PLOTTER::center_lozenge( const wxPoint& position, int diametre,
-                              FILL_T fill )
+void PLOTTER::center_lozenge( const wxPoint& position, int diametre, FILL_T fill )
 {
     int radius     = diametre / 2;
-    int coord[10] =
-    {
-        position.x,         position.y + radius,
-        position.x + radius, position.y,
-        position.x,         position.y - radius,
-        position.x - radius, position.y,
-        position.x,         position.y + radius,
-    };
+    static std::vector< wxPoint > corner_list;
+    corner_list.clear();
+    wxPoint corner;
+    corner.x = position.x;
+    corner.y = position.y + radius;
+    corner_list.push_back( corner );
+    corner.x = position.x + radius;
+    corner.y = position.y,
+    corner_list.push_back( corner );
+    corner.x = position.x;
+    corner.y = position.y - radius;
+    corner_list.push_back( corner );
+    corner.x = position.x - radius;
+    corner.y = position.y;
+    corner_list.push_back( corner );
+    corner.x = position.x;
+    corner.y = position.y + radius;
+    corner_list.push_back( corner );
 
-    if( fill )
-    {
-        poly( 4, coord, fill );
-    }
-    else
-    {
-        poly( 5, coord, fill );
-    }
+    PlotPoly( corner_list, fill );
 }
 
 

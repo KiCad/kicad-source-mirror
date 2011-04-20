@@ -98,8 +98,16 @@ public: PLOTTER( PlotFormat aPlotType );
                          int width = -1 ) = 0;
     virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
                       FILL_T fill, int width = -1 );
-    virtual void poly( int nb_segm, int* coord, FILL_T fill,
-                       int width = -1 ) = 0;
+
+    /**
+     * Function PlotPoly
+     * @brief Draw a polygon ( filled or not )
+     * @param aCornerList = corners list
+     * @param aFill :if true : filled polygon
+     * @param aWidth = line width
+     */
+    virtual void PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth = -1 ) = 0;
+
     virtual void thick_segment( wxPoint start, wxPoint end, int width,
                                 GRTraceMode tracemode );
     virtual void thick_arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
@@ -261,7 +269,15 @@ public: HPGL_PLOTTER() : PLOTTER( PLOT_FORMAT_HPGL )
     virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror );
     virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
     virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
-    virtual void poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
+    /*
+     * Function PlotPoly
+     * Draw a polygon (filled or not) in HPGL format
+     * param aCornerList = corners list
+     * param aFill :if true : filled polygon
+     * param aWidth = line width
+     */
+    virtual void PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth = -1);
+
     virtual void thick_segment( wxPoint start, wxPoint end, int width,
                                 GRTraceMode tracemode );
     virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
@@ -317,7 +333,15 @@ public: PS_PLOTTER() : PLOTTER( PLOT_FORMAT_POST )
     virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
     virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
                       FILL_T fill, int width = -1 );
-    virtual void poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
+    /*
+     * Function PlotPoly
+     * Draw a polygon (filled or not) in POSTSCRIPT format
+     * param aCornerList = corners list
+     * param aFill :if true : filled polygon
+     * param aWidth = line width
+     */
+    virtual void PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth = -1);
+
     virtual void pen_to( wxPoint pos, char plume );
     virtual void flash_pad_circle( wxPoint pos, int diametre,
                                    GRTraceMode trace_mode );
@@ -376,7 +400,15 @@ public: GERBER_PLOTTER() : PLOTTER( PLOT_FORMAT_GERBER )
     virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror );
     virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
     virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
-    virtual void poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
+    /*
+     * Function PlotPoly
+     * Draw a polygon (filled or not) in GERBER format
+     * param aCornerList = corners list
+     * param aFill :if true : filled polygon
+     * param aWidth = line width
+     */
+    virtual void PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth = -1);
+
     virtual void pen_to( wxPoint pos, char plume );
     virtual void flash_pad_circle( wxPoint pos, int diametre,
                                    GRTraceMode trace_mode );
@@ -436,7 +468,15 @@ public: DXF_PLOTTER() : PLOTTER( PLOT_FORMAT_DXF )
     virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror );
     virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
     virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
-    virtual void poly( int nb_segm, int* coord, FILL_T fill, int width = -1 );
+    /*
+     * Function PlotPoly
+     * Draw a polygon (filled or not) in DXF format
+     * param aCornerList = corners list
+     * param aFill :if true : filled polygon
+     * param aWidth = line width
+     */
+    virtual void PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth = -1 );
+
     virtual void thick_segment( wxPoint start, wxPoint end, int width,
                                 GRTraceMode tracemode );
     virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,

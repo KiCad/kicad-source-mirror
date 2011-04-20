@@ -298,7 +298,7 @@ static void PlotTextStruct( PLOTTER* plotter, SCH_TEXT* aSchText )
     /* Draw graphic symbol for global or hierarchical labels */
     aSchText->CreateGraphicShape( Poly, aSchText->m_Pos );
     if( Poly.size() )
-        plotter->poly( Poly.size(), &Poly[0].x, NO_FILL );
+        plotter->PlotPoly( Poly, NO_FILL );
 }
 
 

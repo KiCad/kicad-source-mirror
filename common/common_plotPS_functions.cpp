@@ -168,40 +168,33 @@ void PS_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
 }
 
 
-/**
- * Function poly
- * @brief Draw a polygon ( a filled polygon if fill == 1 ) in POSTSCRIPT format
- * @param nb_segm = corner count
- * @param coord = corner list (a corner uses 2 int = X coordinate followed by Y
- *  coordinate
- * @param fill :if true : filled polygon
- * @param  width = line width
+/*
+ * Function PlotPoly
+ * Draw a polygon (filled or not) in POSTSCRIPT format
+ * param aCornerList = corners list
+ * param aFill :if true : filled polygon
+ * param aWidth = line width
  */
-void PS_PLOTTER::poly( int nb_segm, int* coord, FILL_T fill, int width )
+void PS_PLOTTER::PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth )
 {
-    wxASSERT( output_file );
-    wxPoint pos;
-
-    if( nb_segm <= 1 )
+    if( aCornerList.size() <= 1 )
         return;
 
-    set_current_line_width( width );
+    set_current_line_width( aWidth );
 
-    pos.x = coord[0];
-    pos.y = coord[1];
+    wxPoint pos = aCornerList[0];
     user_to_device_coordinates( pos );
     fprintf( output_file, "newpath\n%d %d moveto\n", pos.x, pos.y );
 
-    for( int ii = 1; ii < nb_segm; ii++ )
+    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
-        pos.x = coord[2 * ii];
-        pos.y = coord[2 * ii + 1];
+        pos = aCornerList[ii];
         user_to_device_coordinates( pos );
         fprintf( output_file, "%d %d lineto\n", pos.x, pos.y );
     }
 
     // Close path
-    fprintf( output_file, "poly%d\n", fill );
+    fprintf( output_file, "poly%d\n", aFill );
 }
 
 
@@ -445,7 +438,8 @@ void PS_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
 void PS_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
                                  int orient, GRTraceMode trace_mode )
 {
-    wxASSERT( output_file );
+    static std::vector< wxPoint > cornerList;
+    cornerList.clear();
 
     set_current_line_width( -1 );
     int w = current_pen_width;
@@ -459,23 +453,28 @@ void PS_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
     int dx = size.x / 2;
     int dy = size.y / 2;
 
-    int coord[10] =
-    {
-        pos.x - dx, pos.y + dy,
-        pos.x - dx, pos.y - dy,
-        pos.x + dx, pos.y - dy,
-        pos.x + dx, pos.y + dy,
-        0,          0
-    };
+    wxPoint corner;
+    corner.x = pos.x - dx;
+    corner.y = pos.y + dy;
+    cornerList.push_back( corner );
+    corner.x = pos.x - dx;
+    corner.y = pos.y - dy;
+    cornerList.push_back( corner );
+    corner.x = pos.x + dx;
+    corner.y = pos.y - dy;
+    cornerList.push_back( corner );
+    corner.x = pos.x + dx;
+    corner.y = pos.y + dy,
+    cornerList.push_back( corner );
 
-    for( int ii = 0; ii < 4; ii++ )
+    for( unsigned ii = 0; ii < cornerList.size(); ii++ )
     {
-        RotatePoint( &coord[ii * 2], &coord[ii * 2 + 1], pos.x, pos.y, orient );
+        RotatePoint( &cornerList[ii], pos, orient );
     }
 
-    coord[8] = coord[0];
-    coord[9] = coord[1];
-    poly( 5, coord, ( trace_mode == FILLED ) ? FILLED_SHAPE : NO_FILL );
+    cornerList.push_back( cornerList[0] );
+
+    PlotPoly( cornerList, ( trace_mode == FILLED ) ? FILLED_SHAPE : NO_FILL );
 }
 
 
@@ -487,11 +486,11 @@ void PS_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
 void PS_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
                                      int aPadOrient, GRTraceMode aTrace_Mode )
 {
-    wxASSERT( output_file );
-    wxPoint coord[5];
+    static std::vector< wxPoint > cornerList;
+    cornerList.clear();
 
     for( int ii = 0; ii < 4; ii++ )
-        coord[ii] = aCorners[ii];
+        cornerList.push_back( aCorners[ii] );
 
     if( aTrace_Mode == FILLED )
     {
@@ -508,22 +507,22 @@ void PS_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
         // coord[3] is assumed the lower right
 
         /* Trace the outline. */
-        coord[0].x += w;
-        coord[0].y -= w;
-        coord[1].x += w;
-        coord[1].y += w;
-        coord[2].x -= w;
-        coord[2].y += w;
-        coord[3].x -= w;
-        coord[3].y -= w;
+        cornerList[0].x += w;
+        cornerList[0].y -= w;
+        cornerList[1].x += w;
+        cornerList[1].y += w;
+        cornerList[2].x -= w;
+        cornerList[2].y += w;
+        cornerList[3].x -= w;
+        cornerList[3].y -= w;
     }
 
     for( int ii = 0; ii < 4; ii++ )
     {
-        RotatePoint( &coord[ii], aPadOrient );
-        coord[ii] += aPadPos;
+        RotatePoint( &cornerList[ii], aPadOrient );
+        cornerList[ii] += aPadPos;
     }
 
-    coord[4] = coord[0];
-    poly( 5, &coord[0].x, ( aTrace_Mode == FILLED ) ? FILLED_SHAPE : NO_FILL );
+    cornerList.push_back( cornerList[0] );
+    PlotPoly( cornerList, ( aTrace_Mode == FILLED ) ? FILLED_SHAPE : NO_FILL );
 }

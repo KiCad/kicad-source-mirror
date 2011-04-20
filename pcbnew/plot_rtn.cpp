@@ -430,40 +430,34 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
 
     case S_POLYGON:
     {
+        if( PtEdge->m_PolyPoints.size() <= 1 )  // Malformed polygon
+            break;
+
         // We must compute true coordinates from m_PolyList
         // which are relative to module position, orientation 0
         MODULE* Module = NULL;
         if( PtEdge->GetParent() && (PtEdge->GetParent()->Type() == TYPE_MODULE) )
             Module = (MODULE*) PtEdge->GetParent();
 
-        int* ptr_base =
-            (int*) MyMalloc( 2 * PtEdge->m_PolyPoints.size() * sizeof(int) );
-        int* ptr = ptr_base;
-
-        int* source = (int*) &PtEdge->m_PolyPoints[0];
+        static std::vector< wxPoint > cornerList;
+        cornerList.clear();
 
         for( unsigned ii = 0; ii < PtEdge->m_PolyPoints.size(); ii++ )
         {
-            int x = *source++;
-            int y = *source++;
+            wxPoint corner = PtEdge->m_PolyPoints[0];
 
             if( Module )
             {
-                RotatePoint( &x, &y, Module->m_Orient );
-                x += Module->m_Pos.x;
-                y += Module->m_Pos.y;
+                RotatePoint( &corner, Module->m_Orient );
+                corner += Module->m_Pos;
             }
 
-            x += PtEdge->m_Start0.x;
-            y += PtEdge->m_Start0.y;
+            corner += PtEdge->m_Start0;
 
-            *ptr++ = x;
-            *ptr++ = y;
+            cornerList.push_back( corner );
         }
 
-        plotter->poly( PtEdge->m_PolyPoints.size(), ptr_base, FILLED_SHAPE,
-                       thickness );
-        free( ptr_base );
+        plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness );
     }
     break;
     }
@@ -532,30 +526,13 @@ void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
 void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
                       GRTraceMode trace_mode )
 {
-    static int*     CornersBuffer     = NULL;
-    static unsigned CornersBufferSize = 0;
     unsigned        imax = aZone->m_FilledPolysList.size();
-
     if( imax == 0 )  // Nothing to draw
         return;
 
     // We need a buffer to store corners coordinates:
-
-    imax++;   // provide room to sore an extra coordinate to close the polygon
-    if( CornersBuffer == NULL )
-    {
-        CornersBufferSize = imax * 2;
-        CornersBuffer     = (int*) MyMalloc( CornersBufferSize * sizeof(int) );
-    }
-
-    if( (imax * 4) > CornersBufferSize )
-    {
-        CornersBufferSize = imax * 2;
-        CornersBuffer     = (int*) realloc( CornersBuffer,
-                                            CornersBufferSize * sizeof(int) );
-    }
-
-    imax--;
+    static std::vector< wxPoint > cornerList;
+    cornerList.clear();
 
     /* Plot all filled areas: filled areas have a filled area and a thick
      * outline we must plot the filled area itself ( as a filled polygon
@@ -563,22 +540,16 @@ void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
      *
      * in non filled mode the outline is plotted, but not the filling items
      */
-    int corners_count = 0;
-    for( unsigned ic = 0, ii = 0; ic < imax; ic++ )
+    for( unsigned ic = 0; ic < imax; ic++ )
     {
         CPolyPt* corner = &aZone->m_FilledPolysList[ic];
-        CornersBuffer[ii++] = corner->x;
-        CornersBuffer[ii++] = corner->y;
-        corners_count++;
+        cornerList.push_back( wxPoint( corner->x, corner->y) );
         if( corner->end_contour )   // Plot the current filled area outline
         {
             // First, close the outline
-            if( CornersBuffer[0] != CornersBuffer[ii - 2]
-                || CornersBuffer[1] != CornersBuffer[ii - 1] )
+            if( cornerList[0] != cornerList[cornerList.size() - 1] )
             {
-                CornersBuffer[ii++] = CornersBuffer[0];
-                CornersBuffer[ii]   = CornersBuffer[1];
-                corners_count++;
+                cornerList.push_back( cornerList[0] );
             }
 
             // Plot the current filled area and its outline
@@ -587,9 +558,9 @@ void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
                 // Plot the current filled area polygon
                 if( aZone->m_FillMode == 0 )    // We are using solid polygons
                                                 // (if != 0: using segments )
-                    plotter->poly( corners_count, CornersBuffer, FILLED_SHAPE );
+                    plotter->PlotPoly( cornerList, FILLED_SHAPE );
                 else                            // We are using areas filled by
-                                                // segments: plot hem )
+                                                // segments: plot them )
                 {
                     for( unsigned iseg = 0;
                          iseg < aZone->m_FillSegmList.size();
@@ -606,26 +577,20 @@ void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
 
                 // Plot the current filled area outline
                 if( aZone->m_ZoneMinThickness > 0 )
-                    plotter->poly( corners_count, CornersBuffer, NO_FILL,
-                                   aZone->m_ZoneMinThickness );
+                    plotter->PlotPoly( cornerList, NO_FILL, aZone->m_ZoneMinThickness );
             }
             else
             {
                 if( aZone->m_ZoneMinThickness > 0 )
                 {
-                    for( int ii = 1; ii<corners_count; ii++ )
-                        plotter->thick_segment(
-                            wxPoint( CornersBuffer[ii * 2 - 2],
-                                     CornersBuffer[ii * 2 - 1] ),
-                            wxPoint( CornersBuffer[ii * 2],
-                                     CornersBuffer[ii * 2 + 1] ),
+                    for( unsigned jj = 1; jj<cornerList.size(); jj++ )
+                        plotter->thick_segment(cornerList[jj -1], cornerList[jj],
                             ( trace_mode == FILAIRE ) ? -1 : aZone->m_ZoneMinThickness,
                             trace_mode );
                 }
                 plotter->set_current_line_width( -1 );
             }
-            corners_count = 0;
-            ii = 0;
+            cornerList.clear();
         }
     }
 }

@@ -194,32 +194,26 @@ void LIB_POLYLINE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill
 {
     wxASSERT( aPlotter != NULL );
 
-    size_t i;
+    static std::vector< wxPoint > cornerList;
+    cornerList.clear();
 
-    int*   Poly = (int*) MyMalloc( sizeof(int) * 2 * GetCornerCount() );
-
-    if( Poly == NULL )
-        return;
-
-    for( i = 0; i < m_PolyPoints.size(); i++ )
+    for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
     {
-        wxPoint pos = m_PolyPoints[i];
+        wxPoint pos = m_PolyPoints[ii];
         pos = aTransform.TransformCoordinate( pos ) + aOffset;
-        Poly[i * 2]     = pos.x;
-        Poly[i * 2 + 1] = pos.y;
+        cornerList.push_back( pos );
     }
 
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
         aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
-        aPlotter->poly( i, Poly, FILLED_WITH_BG_BODYCOLOR, 0 );
+        aPlotter->PlotPoly( cornerList, FILLED_WITH_BG_BODYCOLOR, 0 );
         aFill = false;  // body is now filled, do not fill it later.
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
     aPlotter->set_color( ReturnLayerColor( LAYER_DEVICE ) );
-    aPlotter->poly( i, Poly, already_filled ? NO_FILL : m_Fill, GetPenSize() );
-    MyFree( Poly );
+    aPlotter->PlotPoly( cornerList, already_filled ? NO_FILL : m_Fill, GetPenSize() );
 }
 
 

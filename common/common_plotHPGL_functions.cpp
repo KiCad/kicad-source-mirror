@@ -75,26 +75,24 @@ void HPGL_PLOTTER::circle( wxPoint centre,
 
 
 /* Plot a polygon (closed if completed) in HPGL
- * Coord = coord table tops
- * Nb = number of coord (coord 1 = 2 elements: X and Y table)
- * Fill: if! = 0 filled polygon
+ * aCornerList = a wxPoint list of corner
+ * aFill: if != 0 filled polygon
  */
-void HPGL_PLOTTER::poly( int nb, int* coord, FILL_T fill, int width )
+void HPGL_PLOTTER::PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth)
 {
-    wxASSERT( output_file );
-    if( nb <= 1 )
+    if( aCornerList.size() <= 1 )
         return;
 
-    move_to( wxPoint( coord[0], coord[1] ) );
-    for( int ii = 1; ii < nb; ii++ )
-        line_to( wxPoint( coord[ii * 2], coord[(ii * 2) + 1] ) );
+    move_to( aCornerList[0] );
+    for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
+        line_to( aCornerList[ii] );
 
     /* Close polygon if filled. */
-    if( fill )
+    if( aFill )
     {
-        int ii = (nb - 1) * 2;
-        if( (coord[ii] != coord[0] ) || (coord[ii + 1] != coord[1]) )
-            line_to( wxPoint( coord[0], coord[1] ) );
+        int ii = aCornerList.size() - 1;
+        if( aCornerList[ii] != aCornerList[0] )
+            line_to( aCornerList[0] );
     }
     pen_finish();
 }
