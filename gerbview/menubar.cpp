@@ -72,9 +72,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     // Recent drill files
     static wxMenu* openRecentDrlMenu;
     if( openRecentDrlMenu )
-    wxGetApp().m_fileHistory.RemoveMenu( openRecentDrlMenu );
-        openRecentDrlMenu = new wxMenu();
-    wxGetApp().m_fileHistory.UseMenu( openRecentDrlMenu );
+        m_drillFileHistory.RemoveMenu( openRecentDrlMenu );
+    openRecentDrlMenu = new wxMenu();
+    m_drillFileHistory.UseMenu( openRecentDrlMenu );
     m_drillFileHistory.AddFilesToMenu( );
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( fileMenu, openRecentDrlMenu,
                                         wxID_ANY,
