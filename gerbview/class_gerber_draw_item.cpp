@@ -419,7 +419,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
         break;
 
     case GBR_ARC:
-        // Currently, arcs plotted witha rectangular aperture are not supported.
+        // Currently, arcs plotted with a rectangular aperture are not supported.
         // a round pen only is expected.
 #if 0     // for arc debug only
         GRLine( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),

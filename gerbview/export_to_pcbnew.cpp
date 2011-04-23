@@ -10,13 +10,50 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
+#include "trigo.h"
 
 #include "gerbview.h"
 #include "class_board_design_settings.h"
 #include "class_gerber_draw_item.h"
 
-static int SavePcbFormatAscii( GERBVIEW_FRAME* frame,
-                               FILE* File, int* LayerLookUpTable );
+
+/* A helper class to export a Gerber set of files to Pcbnew
+*/
+class GBR_TO_PCB_EXPORTER
+{
+    GERBVIEW_FRAME* m_gerbview_frame;   // the maint gerber frame
+    FILE * m_file;      // .brd file to write to
+    BOARD* m_pcb;       // the board to populate and export
+
+public:
+    GBR_TO_PCB_EXPORTER(GERBVIEW_FRAME * aFrame, FILE * aFile );
+    ~GBR_TO_PCB_EXPORTER();
+    bool ExportPcb( int* LayerLookUpTable );
+
+private:
+    bool WriteSetup( );  // Write the SETUP section data file
+    bool WriteGeneralDescrPcb( );
+    void export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer );
+    void export_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer );
+    void export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer );
+    void export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer );
+    void export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer );
+    void cleanBoard();
+};
+
+GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME * aFrame, FILE * aFile )
+{
+    m_gerbview_frame = aFrame;
+    m_file = aFile;
+    m_pcb = NULL;
+}
+
+GBR_TO_PCB_EXPORTER::~GBR_TO_PCB_EXPORTER()
+{
+    // the destructor should destroy all owned sub-objects
+    delete m_pcb;
+}
+
 
 
 /* Export data in pcbnew format
@@ -45,8 +82,6 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
 
     wxString PcbExt( wxT( ".brd" ) );
 
-    FILE*    dest;
-
     msg = wxT( "*" ) + PcbExt;
     FullFileName = EDA_FileSelector( _( "Board file name:" ),
                                      wxEmptyString,
@@ -68,143 +103,24 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
             if( !IsOK( this, _( "Ok to change the existing file ?" ) ) )
                 return;
         }
-        dest = wxFopen( FullFileName, wxT( "wt" ) );
-        if( dest == 0 )
+        FILE * file = wxFopen( FullFileName, wxT( "wt" ) );
+        if( file == NULL )
         {
             msg = _( "Unable to create " ) + FullFileName;
             DisplayError( this, msg );
             return;
         }
         GetScreen()->SetFileName( FullFileName );
-        SavePcbFormatAscii( this, dest, LayerLookUpTable );
-        fclose( dest );
+        GBR_TO_PCB_EXPORTER gbr_exporter( this, file );
+        gbr_exporter.ExportPcb( LayerLookUpTable );
+        fclose( file );
     }
 }
 
-
-static int WriteSetup( FILE* File, BOARD* Pcb )
+void GBR_TO_PCB_EXPORTER::cleanBoard()
 {
-    char text[1024];
-
-    fprintf( File, "$SETUP\n" );
-    sprintf( text, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
-    fprintf( File, "%s", text );
-
-    fprintf( File, "Layers %d\n", Pcb->GetCopperLayerCount() );
-
-    fprintf( File, "$EndSETUP\n\n" );
-    return 1;
-}
-
-
-static bool WriteGeneralDescrPcb( BOARD* Pcb, FILE* File )
-{
-    int NbLayers;
-
-    /* Print the copper layer count */
-    NbLayers = Pcb->GetCopperLayerCount();
-    fprintf( File, "$GENERAL\n" );
-    fprintf( File, "LayerCount %d\n", NbLayers );
-
-    /* Compute and print the board bounding box */
-    Pcb->ComputeBoundingBox();
-    fprintf( File, "Di %d %d %d %d\n",
-            Pcb->m_BoundaryBox.GetX(), Pcb->m_BoundaryBox.GetY(),
-            Pcb->m_BoundaryBox.GetRight(),
-            Pcb->m_BoundaryBox.GetBottom() );
-
-    fprintf( File, "$EndGENERAL\n\n" );
-    return TRUE;
-}
-
-
-/* Routine to save the board
- * @param frame = pointer to the main frame
- * @param File = FILE * pointer to an already opened file
- * @param LayerLookUpTable = look up table: pcbnew layer for each gerber layer
- * @return 1 if OK, 0 if fail
- */
-static int SavePcbFormatAscii( GERBVIEW_FRAME* frame, FILE* aFile,
-                               int* LayerLookUpTable )
-{
-    char   line[256];
-    BOARD* gerberPcb = frame->GetBoard();
-    BOARD* pcb;
-
-    wxBeginBusyCursor();
-
-    // create an image of gerber data
-    pcb = new BOARD( NULL, frame );
-    BOARD_ITEM* item = gerberPcb->m_Drawings;
-    for( ; item; item = item->Next() )
-    {
-        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-        int layer = gerb_item->GetLayer();
-        int pcb_layer_number = LayerLookUpTable[layer];
-        if( pcb_layer_number < 0 || pcb_layer_number > LAST_NO_COPPER_LAYER )
-            continue;
-
-        if( pcb_layer_number > LAST_COPPER_LAYER )
-        {
-            DRAWSEGMENT* drawitem = new DRAWSEGMENT( pcb, TYPE_DRAWSEGMENT );
-
-            drawitem->SetLayer( pcb_layer_number );
-            drawitem->m_Start = gerb_item->m_Start;
-            drawitem->m_End   = gerb_item->m_End;
-            drawitem->m_Width = gerb_item->m_Size.x;
-
-            if( gerb_item->m_Shape == GBR_ARC )
-            {
-                double cx = gerb_item->m_ArcCentre.x;
-                double cy = gerb_item->m_ArcCentre.y;
-                double a  = atan2( gerb_item->m_Start.y - cy,
-                                   gerb_item->m_Start.x - cx );
-                double b  = atan2( gerb_item->m_End.y - cy, gerb_item->m_End.x - cx );
-
-                drawitem->m_Shape   = S_ARC;
-                drawitem->m_Angle   = (int) fmod(
-                     (a - b) / M_PI * 1800.0 + 3600.0, 3600.0 );
-                drawitem->m_Start.x = (int) cx;
-                drawitem->m_Start.y = (int) cy;
-            }
-
-            pcb->Add( drawitem );
-        }
-        else
-        {
-            TRACK* newtrack;
-
-            // replace spots with vias when possible
-            if( gerb_item->m_Shape == GBR_SPOT_CIRCLE
-                || gerb_item->m_Shape == GBR_SPOT_RECT
-                || gerb_item->m_Shape == GBR_SPOT_OVAL )
-            {
-                newtrack = new SEGVIA( pcb );
-
-                // A spot is found, and can be a via: change it to via, and
-                // delete other
-                // spots at same location
-                newtrack->m_Shape = VIA_THROUGH;
-                newtrack->SetLayer( 0x0F );  // Layers are 0 to 15 (Cu/Cmp)
-                newtrack->SetDrillDefault();
-                newtrack->m_Start = newtrack->m_End = gerb_item->m_Start;
-                newtrack->m_Width = (gerb_item->m_Size.x + gerb_item->m_Size.y) / 2;
-            }
-            else    // a true TRACK
-            {
-                newtrack = new TRACK( pcb );
-                newtrack->SetLayer( pcb_layer_number );
-                newtrack->m_Start = gerb_item->m_Start;
-                newtrack->m_End = gerb_item->m_End;
-                newtrack->m_Width = gerb_item->m_Size.x;
-            }
-
-            pcb->Add( newtrack );
-        }
-    }
-
     // delete redundant vias
-    for( TRACK * track = pcb->m_Track; track; track = track->Next() )
+    for( TRACK * track = m_pcb->m_Track; track; track = track->Next() )
     {
         if( track->m_Shape != VIA_THROUGH )
             continue;
@@ -226,24 +142,211 @@ static int SavePcbFormatAscii( GERBVIEW_FRAME* frame, FILE* aFile,
             delete alt_track;
         }
     }
+}
 
-    // Switch the locale to standard C (needed to print floating point numbers
-    // like 1.3)
+bool GBR_TO_PCB_EXPORTER::WriteSetup( )
+{
+    fprintf( m_file, "$SETUP\n" );
+    fprintf( m_file, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
+
+    fprintf( m_file, "Layers %d\n", m_pcb->GetCopperLayerCount() );
+
+    fprintf( m_file, "$EndSETUP\n\n" );
+    return true;
+}
+
+
+bool GBR_TO_PCB_EXPORTER::WriteGeneralDescrPcb( )
+{
+    int nbLayers;
+
+    /* Print the copper layer count */
+    nbLayers = m_pcb->GetCopperLayerCount();
+    if( nbLayers <= 1 )  // Minimal layers count in Pcbnew is 2
+    {
+        nbLayers = 2;
+        m_pcb->SetCopperLayerCount(2);
+    }
+    fprintf( m_file, "$GENERAL\n" );
+    fprintf( m_file, "encoding utf-8\n");
+    fprintf( m_file, "LayerCount %d\n", nbLayers );
+
+    /* Compute and print the board bounding box */
+    m_pcb->ComputeBoundingBox();
+    fprintf( m_file, "Di %d %d %d %d\n",
+            m_pcb->m_BoundaryBox.GetX(), m_pcb->m_BoundaryBox.GetY(),
+            m_pcb->m_BoundaryBox.GetRight(),
+            m_pcb->m_BoundaryBox.GetBottom() );
+
+    fprintf( m_file, "$EndGENERAL\n\n" );
+    return true;
+}
+
+
+/* Routine to save the board
+ * @param frame = pointer to the main frame
+ * @param File = FILE * pointer to an already opened file
+ * @param LayerLookUpTable = look up table: pcbnew layer for each gerber layer
+ * @return 1 if OK, 0 if fail
+ */
+bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )
+{
+    char   line[256];
+    BOARD* gerberPcb = m_gerbview_frame->GetBoard();
+
+    // create an image of gerber data
+    m_pcb = new BOARD( NULL, m_gerbview_frame );
+    BOARD_ITEM* item = gerberPcb->m_Drawings;
+    for( ; item; item = item->Next() )
+    {
+        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+        int layer = gerb_item->GetLayer();
+        int pcb_layer_number = LayerLookUpTable[layer];
+        if( pcb_layer_number < 0 || pcb_layer_number > LAST_NO_COPPER_LAYER )
+            continue;
+
+        if( pcb_layer_number > LAST_COPPER_LAYER )
+            export_non_copper_item( gerb_item, pcb_layer_number );
+
+        else
+            export_copper_item( gerb_item, pcb_layer_number );
+    }
+
+    cleanBoard();
+
+    // Switch the locale to standard C (needed to print floating point numbers)
     SetLocaleTo_C_standard();
 
-    // write the PCB heading
-    fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
+    // write PCB header
+    fprintf( m_file, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
             DateAndTime( line ) );
-    WriteGeneralDescrPcb( pcb, aFile );
-    WriteSetup( aFile, pcb );
+    WriteGeneralDescrPcb( );
+    WriteSetup( );
 
-    // write the useful part of the pcb
-    pcb->Save( aFile );
-
-    // the destructor should destroy all owned sub-objects
-    delete pcb;
+    // write items on file
+    m_pcb->Save( m_file );
 
     SetLocaleTo_Default();       // revert to the current locale
-    wxEndBusyCursor();
-    return 1;
+    return true;
+}
+
+void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
+{
+    DRAWSEGMENT* drawitem = new DRAWSEGMENT( m_pcb, TYPE_DRAWSEGMENT );
+
+    drawitem->SetLayer( aLayer );
+    drawitem->m_Start = aGbrItem->m_Start;
+    drawitem->m_End   = aGbrItem->m_End;
+    drawitem->m_Width = aGbrItem->m_Size.x;
+
+    if( aGbrItem->m_Shape == GBR_ARC )
+    {
+        double a  = atan2( (double)( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y),
+                           (double)( aGbrItem->m_Start.x - aGbrItem->m_ArcCentre.x ) );
+        double b  = atan2( (double)( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
+                            (double)( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
+
+        drawitem->m_Shape   = S_ARC;
+        drawitem->m_Angle   = wxRound( (a - b) / M_PI * 1800.0 );
+        drawitem->m_Start = aGbrItem->m_ArcCentre;
+        if( drawitem->m_Angle < 0 )
+        {
+            NEGATE( drawitem->m_Angle );
+            drawitem->m_End = aGbrItem->m_Start;
+        }
+    }
+
+    m_pcb->Add( drawitem );
+}
+
+void GBR_TO_PCB_EXPORTER::export_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
+{
+    switch( aGbrItem->m_Shape )
+    {
+        case GBR_SPOT_CIRCLE:
+        case GBR_SPOT_RECT:
+        case GBR_SPOT_OVAL:
+            // replace spots with vias when possible
+            export_flashed_copper_item( aGbrItem, aLayer );
+            break;
+
+        case GBR_ARC:
+//            export_segarc_copper_item( aGbrItem, aLayer );
+            break;
+
+        default:
+            export_segline_copper_item( aGbrItem, aLayer );
+            break;
+    }
+}
+
+void GBR_TO_PCB_EXPORTER::export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
+{
+    TRACK * newtrack = new TRACK( m_pcb );
+    newtrack->SetLayer( aLayer );
+    newtrack->m_Start = aGbrItem->m_Start;
+    newtrack->m_End = aGbrItem->m_End;
+    newtrack->m_Width = aGbrItem->m_Size.x;
+    m_pcb->Add( newtrack );
+}
+
+void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
+{
+    double a  = atan2( (double)( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y ),
+                        (double)( aGbrItem->m_Start.x - aGbrItem->m_ArcCentre.x ) );
+    double b  = atan2( (double)( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
+                        (double)( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
+
+    int arc_angle   = wxRound( ( (a - b) / M_PI * 1800.0 ) );
+    wxPoint start = aGbrItem->m_Start;
+    wxPoint end = aGbrItem->m_End;
+    /* Because Pcbnew does not know arcs in tracks,
+     * approximate arc by segments (16 segment per 360 deg)
+     */
+    #define DELTA 3600/16
+    if( arc_angle < 0 )
+    {
+        NEGATE( arc_angle );
+        EXCHG( start, end );
+    }
+    wxPoint curr_start = start;
+    for( int rot = DELTA; rot < (arc_angle - DELTA); rot += DELTA )
+    {
+        TRACK * newtrack = new TRACK( m_pcb );
+        newtrack->SetLayer( aLayer );
+        newtrack->m_Start = curr_start;
+        wxPoint curr_end = start;
+        RotatePoint( &curr_end, aGbrItem->m_ArcCentre, rot );
+        newtrack->m_End = curr_end;
+        newtrack->m_Width = aGbrItem->m_Size.x;
+        m_pcb->Add( newtrack );
+        curr_start = curr_end;
+    }
+    if( end != curr_start )
+    {
+        TRACK * newtrack = new TRACK( m_pcb );
+        newtrack->SetLayer( aLayer );
+        newtrack->m_Start = curr_start;
+        newtrack->m_End = end;
+        newtrack->m_Width = aGbrItem->m_Size.x;
+        m_pcb->Add( newtrack );
+    }
+}
+
+
+/*
+ * creates a via from a flashed gerber item.
+ * Flashed items are usually pads or vias, so we try to export all of them
+ * using vias
+ */
+void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
+{
+    SEGVIA * newtrack = new SEGVIA( m_pcb );
+
+    newtrack->m_Shape = VIA_THROUGH;
+    newtrack->SetLayer( 0x0F );  // Layers are 0 to 15 (Cu/Cmp)
+    newtrack->SetDrillDefault();
+    newtrack->m_Start = newtrack->m_End = aGbrItem->m_Start;
+    newtrack->m_Width = (aGbrItem->m_Size.x + aGbrItem->m_Size.y) / 2;
+    m_pcb->Add( newtrack );
 }

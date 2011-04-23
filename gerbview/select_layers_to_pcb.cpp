@@ -2,15 +2,18 @@
 /* Dialog frame to choose gerber layers and pcb layers */
 /*******************************************************/
 
-/* select_layers_to_pcb.cpp */
+/**
+ * @file select_layers_to_pcb.cpp
+ */
 
 #include "fctsys.h"
 #include "common.h"
 #include "gerbview.h"
 #include "class_board_design_settings.h"
 #include "class_GERBER.h"
-
 #include "wx/statline.h"
+
+#include "dialogs/dialog_layers_select_to_pcb_base.h"
 
 #define LAYER_UNSELECTED NB_LAYERS
 
@@ -25,23 +28,18 @@ enum swap_layer_id {
 };
 
 
-class SWAP_LAYERS_DIALOG : public wxDialog
+class LAYERS_TABLE_DIALOG : public LAYERS_TABLE_DIALOG_BASE
 {
 private:
     GERBVIEW_FRAME*     m_Parent;
-    wxBoxSizer*             OuterBoxSizer;
-    wxBoxSizer*             MainBoxSizer;
-    wxFlexGridSizer*        FlexColumnBoxSizer;
     wxStaticText*           label;
     wxButton*               Button;
     wxStaticText*           text;
-    wxStaticLine*           Line;
-    wxStdDialogButtonSizer* StdDialogButtonSizer;
 
 public:
 
-    SWAP_LAYERS_DIALOG( GERBVIEW_FRAME* parent );
-    ~SWAP_LAYERS_DIALOG() {};
+    LAYERS_TABLE_DIALOG( GERBVIEW_FRAME* parent );
+    ~LAYERS_TABLE_DIALOG() {};
 
 private:
     void OnSelectLayer( wxCommandEvent& event );
@@ -52,12 +50,10 @@ private:
 };
 
 
-BEGIN_EVENT_TABLE( SWAP_LAYERS_DIALOG, wxDialog )
+BEGIN_EVENT_TABLE( LAYERS_TABLE_DIALOG, wxDialog )
     EVT_COMMAND_RANGE( ID_BUTTON_0, ID_BUTTON_0 + 31,
                        wxEVT_COMMAND_BUTTON_CLICKED,
-                       SWAP_LAYERS_DIALOG::OnSelectLayer )
-    EVT_BUTTON( wxID_OK, SWAP_LAYERS_DIALOG::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, SWAP_LAYERS_DIALOG::OnCancelClick )
+                       LAYERS_TABLE_DIALOG::OnSelectLayer )
 END_EVENT_TABLE()
 
 
@@ -67,30 +63,24 @@ END_EVENT_TABLE()
  */
 int* GERBVIEW_FRAME::InstallDialogLayerPairChoice( )
 {
-    SWAP_LAYERS_DIALOG* frame = new SWAP_LAYERS_DIALOG( this );
+    LAYERS_TABLE_DIALOG* frame = new LAYERS_TABLE_DIALOG( this );
 
     int ii = frame->ShowModal();
 
     frame->Destroy();
-    if( ii >= 0 )
+    if( ii == wxID_OK )
         return LayerLookUpTable;
     else
         return NULL;
 }
 
 
-SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( GERBVIEW_FRAME* parent ) :
-    wxDialog( parent, -1, _( "Layer selection:" ), wxPoint( -1, -1 ),
-              wxDefaultSize, wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
+LAYERS_TABLE_DIALOG::LAYERS_TABLE_DIALOG( GERBVIEW_FRAME* parent ) :
+    LAYERS_TABLE_DIALOG_BASE( parent )
 {
-    OuterBoxSizer = NULL;
-    MainBoxSizer  = NULL;
-    FlexColumnBoxSizer = NULL;
     label  = NULL;
     Button = NULL;
     text   = NULL;
-    Line   = NULL;
-    StdDialogButtonSizer = NULL;
 
     m_Parent = parent;
 
@@ -118,113 +108,90 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( GERBVIEW_FRAME* parent ) :
     // buttons should be some other size in that version.
 
     // Compute a reasonable number of copper layers
-    int pcb_layer_number = 0;
+    int pcb_copper_layer_count = 0;
     for( ii = 0; ii < 32; ii++ )
     {
         if( g_GERBER_List[ii] != NULL )
-            pcb_layer_number++;
+            pcb_copper_layer_count++;
 
         // Specify the default value for each member of these arrays.
         ButtonTable[ii] = -1;
         LayerLookUpTable[ii] = LAYER_UNSELECTED;
     }
-    m_Parent->GetBoard()->SetCopperLayerCount(pcb_layer_number);
 
-    pcb_layer_number = 0;
+    // Ensure we have at least 2 copper layers and NB_COPPER_LAYERS copper layers max
+    if( pcb_copper_layer_count < 2 )
+        pcb_copper_layer_count = 2;
+    if( pcb_copper_layer_count > NB_COPPER_LAYERS )
+        pcb_copper_layer_count = NB_COPPER_LAYERS;
+    m_Parent->GetBoard()->SetCopperLayerCount(pcb_copper_layer_count);
+
+    int pcb_layer_num = 0;
     for( nb_items = 0, ii = 0; ii < 32; ii++ )
     {
         if( g_GERBER_List[ii] == NULL )
             continue;
 
-        if( (pcb_layer_number == m_Parent->GetBoard()->GetCopperLayerCount() - 1)
+        if( (pcb_layer_num == m_Parent->GetBoard()->GetCopperLayerCount() - 1)
            && (m_Parent->GetBoard()->GetCopperLayerCount() > 1) )
-            pcb_layer_number = LAYER_N_FRONT;
+            pcb_layer_num = LAYER_N_FRONT;
 
         ButtonTable[nb_items] = ii;
-        LayerLookUpTable[ii]  = pcb_layer_number;
+        LayerLookUpTable[ii]  = pcb_layer_num;
         nb_items++;
-        pcb_layer_number++;
+        pcb_layer_num++;
     }
 
-    OuterBoxSizer = new wxBoxSizer( wxVERTICAL );
-    SetSizer( OuterBoxSizer );
+    if( nb_items <= 16 )
+        m_staticlineSep->Hide();
 
-    MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-    OuterBoxSizer->Add( MainBoxSizer, 1, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
-
+    wxFlexGridSizer* flexColumnBoxSizer = m_flexLeftColumnBoxSizer;
     for( ii = 0; ii < nb_items; ii++ )
     {
-        // If more than 16 Gerber layers are used, provide a vertical line to
-        // separate the two FlexGrid sizers
-        if( (nb_items > 16) && (ii == 16) )
-        {
-            Line = new wxStaticLine( this, -1, wxDefaultPosition, wxDefaultSize,
-                                     wxLI_VERTICAL );
-            MainBoxSizer->Add( Line, 0, wxGROW | wxLEFT | wxRIGHT, 5 );
-        }
+        // Each Gerber layer has an associated static text string (to
+        // identify that layer), a button (for invoking a child dialog
+        // box to change which pcbnew layer that the Gerber layer is
+        // mapped to), and a second static text string (to depict which
+        // pcbnew layer that the Gerber layer has been mapped to). Each
+        // of those items are placed into the left hand column, middle
+        // column, and right hand column (respectively) of the Flexgrid
+        // sizer, and the color of the second text string is set to
+        // fuchsia or blue (to respectively indicate whether the Gerber
+        // layer has been mapped to a pcbnew layer or is not being
+        // exported at all).  (Experimentation has shown that if a text
+        // control is used to depict which pcbnew layer that each Gerber
+        // layer is mapped to (instead of a static text string), then
+        // those controls do not behave in a fully satisfactory manner
+        // in the Linux version. Even when the read-only attribute is
+        // specified for all of those controls, they can still be selected
+        // when the arrow keys or Tab key is used to step through all of
+        // the controls within the dialog box, and directives to set the
+        // foreground color of the text of each such control to blue (to
+        // indicate that the text is of a read-only nature) are disregarded.
+        // Specify a FlexGrid sizer with an appropriate number of rows
+        // and three columns.  If nb_items < 16, then the number of rows
+        // is nb_items; otherwise, the number of rows is 16 (with two
+        // separate columns of controls being used if nb_items > 16).
 
-        // Provide a separate FlexGrid sizer for every sixteen sets of controls
-        if( ii % 16 == 0 )
-        {
-            // Each Gerber layer has an associated static text string (to
-            // identify that layer), a button (for invoking a child dialog
-            // box to change which pcbnew layer that the Gerber layer is
-            // mapped to), and a second static text string (to depict which
-            // pcbnew layer that the Gerber layer has been mapped to). Each
-            // of those items are placed into the left hand column, middle
-            // column, and right hand column (respectively) of the Flexgrid
-            // sizer, and the color of the second text string is set to
-            // fuchsia or blue (to respectively indicate whether the Gerber
-            // layer has been mapped to a pcbnew layer or is not being
-            // exported at all).  (Experimentation has shown that if a text
-            // control is used to depict which pcbnew layer that each Gerber
-            // layer is mapped to (instead of a static text string), then
-            // those controls do not behave in a fully satisfactory manner
-            // in the Linux version. Even when the read-only attribute is
-            // specified for all of those controls, they can still be selected
-            // when the arrow keys or Tab key is used to step through all of
-            // the controls within the dialog box, and directives to set the
-            // foreground color of the text of each such control to blue (to
-            // indicate that the text is of a read-only nature) are disregarded.
-            // Specify a FlexGrid sizer with an appropriate number of rows
-            // and three columns.  If nb_items < 16, then the number of rows
-            // is nb_items; otherwise, the number of rows is 16 (with two
-            // separate columns of controls being used if nb_items > 16).
-
-            if( nb_items < 16 )
-                FlexColumnBoxSizer = new wxFlexGridSizer( nb_items, 4, 0, 0 );
-            else
-                FlexColumnBoxSizer = new wxFlexGridSizer( 16, 4, 0, 0 );
-
-            // Specify that all of the rows can be expanded.
-            for( int jj = 0; jj < MIN( nb_items, 16 ); jj++ )
-            {
-                FlexColumnBoxSizer->AddGrowableRow( jj );
-            }
-
-            // Specify that (just) the right-hand column can be expanded.
-            FlexColumnBoxSizer->AddGrowableCol( 2 );
-
-            MainBoxSizer->Add( FlexColumnBoxSizer, 1, wxGROW | wxTOP, 5 );
-        }
+        if( ii == 16 )
+            flexColumnBoxSizer = m_flexRightColumnBoxSizer;
 
         // Provide a text string to identify the Gerber layer
-        msg = _( "Layer " );
-        msg << ButtonTable[ii] + 1;
+        msg.Printf( _( "Layer %d" ), ButtonTable[ii] + 1 );
 
         label = new wxStaticText( this, wxID_STATIC, msg, wxDefaultPosition,
                                   wxDefaultSize, wxALIGN_RIGHT );
-        FlexColumnBoxSizer->Add( label, 0,
+        flexColumnBoxSizer->Add( label, 0,
                                  wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL |
-                                 wxALL, 5 );
+                                 wxRIGHT|wxLEFT, 5 );
 
         /* Add file name and extension without path. */
         wxFileName fn( g_GERBER_List[ii]->m_FileName );
         label = new wxStaticText( this, wxID_STATIC, fn.GetFullName(),
                                   wxDefaultPosition, wxDefaultSize );
-        FlexColumnBoxSizer->Add( label, 0,
+        flexColumnBoxSizer->Add( label, 0,
                                  wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL |
-                                 wxALL, 5 );
+                                 wxRIGHT|wxLEFT, 5 );
 
         // Provide a button for this layer (which will invoke a child dialog box)
         item_ID = ID_BUTTON_0 + ii;
@@ -232,9 +199,9 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( GERBVIEW_FRAME* parent ) :
         Button = new wxButton( this, item_ID, wxT( "..." ),
                                wxDefaultPosition, wxSize( w, h ), 0 );
 
-        FlexColumnBoxSizer->Add( Button, 0,
+        flexColumnBoxSizer->Add( Button, 0,
                                  wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
-                                 wxALL, 5 );
+                                 wxRIGHT|wxLEFT, 5 );
 
         // Provide another text string to specify which pcbnew layer that this
         // Gerber layer is initially mapped to, and set the initial text to
@@ -273,57 +240,20 @@ SWAP_LAYERS_DIALOG::SWAP_LAYERS_DIALOG( GERBVIEW_FRAME* parent ) :
                                      wxDefaultSize, 0 );
         }
         text->SetMinSize( goodSize );
-        FlexColumnBoxSizer->Add( text, 1,
-                                 wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxALL,
+        flexColumnBoxSizer->Add( text, 1,
+                                 wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL | wxRIGHT| wxLEFT,
                                  5 );
 
         layer_list[ii] = text;
     }
 
-    // If required, provide spacers to occupy otherwise blank cells within the
-    // second FlexGrid sizer. (As it incorporates three columns, three spacers
-    // are thus required for each otherwise unused row.)
-    if( 16 < nb_items && nb_items < 32 )
-    {
-        for( ii = 4 * nb_items; ii < 96; ii++ )
-        {
-            FlexColumnBoxSizer->Add( 5, h, 0,
-                                     wxALIGN_CENTER_HORIZONTAL |
-                                     wxALIGN_CENTER_VERTICAL | wxLEFT |
-                                     wxRIGHT | wxBOTTOM, 5 );
-        }
-    }
-
-    // Provide a line to separate the controls which have been provided so far
-    // from the OK and Cancel buttons (which will be provided after this line)
-    Line = new wxStaticLine( this, -1, wxDefaultPosition, wxDefaultSize,
-                             wxLI_HORIZONTAL );
-    OuterBoxSizer->Add( Line, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
-
-    // Provide a StdDialogButtonSizer to accommodate the OK and Cancel buttons;
-    // using that type of sizer results in those buttons being automatically
-    // located in positions appropriate for each (OS) version of KiCad.
-    StdDialogButtonSizer = new wxStdDialogButtonSizer;
-    OuterBoxSizer->Add( StdDialogButtonSizer, 0, wxGROW | wxALL, 10 );
-
-    Button = new wxButton( this, wxID_OK, _( "&OK" ), wxDefaultPosition,
-                           wxDefaultSize, 0 );
-    StdDialogButtonSizer->AddButton( Button );
-
-    Button = new wxButton( this, wxID_CANCEL, _( "&Cancel" ),
-                           wxDefaultPosition, wxDefaultSize, 0 );
-    StdDialogButtonSizer->AddButton( Button );
-    StdDialogButtonSizer->Realize();
-
     // Resize the dialog
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
+    GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 
-void SWAP_LAYERS_DIALOG::OnSelectLayer( wxCommandEvent& event )
+void LAYERS_TABLE_DIALOG::OnSelectLayer( wxCommandEvent& event )
 {
     int ii, jj;
 
@@ -365,13 +295,13 @@ void SWAP_LAYERS_DIALOG::OnSelectLayer( wxCommandEvent& event )
 }
 
 
-void SWAP_LAYERS_DIALOG::OnCancelClick( wxCommandEvent& event )
+void LAYERS_TABLE_DIALOG::OnCancelClick( wxCommandEvent& event )
 {
-    EndModal( -1 );
+    EndModal( wxID_CANCEL );
 }
 
 
-void SWAP_LAYERS_DIALOG::OnOkClick( wxCommandEvent& event )
+void LAYERS_TABLE_DIALOG::OnOkClick( wxCommandEvent& event )
 {
     int  ii;
     bool AsCmpLayer = false;
@@ -395,10 +325,14 @@ void SWAP_LAYERS_DIALOG::OnOkClick( wxCommandEvent& event )
 
     if( AsCmpLayer )
         layers_count++;
+
     if( layers_count > NB_COPPER_LAYERS ) // should not occur.
         layers_count = NB_COPPER_LAYERS;
 
+    if( layers_count < 2 )
+        layers_count = 2;
+
     m_Parent->GetBoard()->SetCopperLayerCount( layers_count );
 
-    EndModal( 1 );
+    EndModal( wxID_OK );
 }
