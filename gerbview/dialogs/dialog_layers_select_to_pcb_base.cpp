@@ -10,6 +10,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_EVENT_TABLE( LAYERS_TABLE_DIALOG_BASE, wxDialog )
+	EVT_BUTTON( ID_STORE_CHOICE, LAYERS_TABLE_DIALOG_BASE::_wxFB_OnStoreSetup )
+	EVT_BUTTON( ID_GET_PREVIOUS_CHOICE, LAYERS_TABLE_DIALOG_BASE::_wxFB_OnGetSetup )
+	EVT_BUTTON( ID_RESET_CHOICE, LAYERS_TABLE_DIALOG_BASE::_wxFB_OnResetClick )
 	EVT_BUTTON( wxID_CANCEL, LAYERS_TABLE_DIALOG_BASE::_wxFB_OnCancelClick )
 	EVT_BUTTON( wxID_OK, LAYERS_TABLE_DIALOG_BASE::_wxFB_OnOkClick )
 END_EVENT_TABLE()
@@ -54,11 +57,14 @@ LAYERS_TABLE_DIALOG_BASE::LAYERS_TABLE_DIALOG_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizerButtons;
 	bSizerButtons = new wxBoxSizer( wxVERTICAL );
 	
-	m_buttonStore = new wxButton( this, wxID_ANY, _("Store Choice"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonStore = new wxButton( this, ID_STORE_CHOICE, _("Store Choice"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonStore, 0, wxALL|wxEXPAND, 5 );
 	
-	m_buttonRetrieve = new wxButton( this, wxID_ANY, _("Get Stored Choice"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonRetrieve = new wxButton( this, ID_GET_PREVIOUS_CHOICE, _("Get Stored Choice"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_buttonRetrieve, 0, wxALL|wxEXPAND, 5 );
+	
+	m_buttonReset = new wxButton( this, ID_RESET_CHOICE, _("Reset"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerButtons->Add( m_buttonReset, 0, wxALL|wxEXPAND, 5 );
 	
 	sbUpperSizer->Add( bSizerButtons, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	

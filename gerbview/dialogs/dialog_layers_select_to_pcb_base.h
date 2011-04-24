@@ -32,6 +32,9 @@ class LAYERS_TABLE_DIALOG_BASE : public wxDialog
 	private:
 		
 		// Private event handlers
+		void _wxFB_OnStoreSetup( wxCommandEvent& event ){ OnStoreSetup( event ); }
+		void _wxFB_OnGetSetup( wxCommandEvent& event ){ OnGetSetup( event ); }
+		void _wxFB_OnResetClick( wxCommandEvent& event ){ OnResetClick( event ); }
 		void _wxFB_OnCancelClick( wxCommandEvent& event ){ OnCancelClick( event ); }
 		void _wxFB_OnOkClick( wxCommandEvent& event ){ OnOkClick( event ); }
 		
@@ -40,6 +43,9 @@ class LAYERS_TABLE_DIALOG_BASE : public wxDialog
 		enum
 		{
 			ID_M_STATICLINESEP = 1000,
+			ID_STORE_CHOICE,
+			ID_GET_PREVIOUS_CHOICE,
+			ID_RESET_CHOICE,
 		};
 		
 		wxStaticBoxSizer* sbSizerLayersTable;
@@ -48,12 +54,16 @@ class LAYERS_TABLE_DIALOG_BASE : public wxDialog
 		wxFlexGridSizer* m_flexRightColumnBoxSizer;
 		wxButton* m_buttonStore;
 		wxButton* m_buttonRetrieve;
+		wxButton* m_buttonReset;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnStoreSetup( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGetSetup( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnResetClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
