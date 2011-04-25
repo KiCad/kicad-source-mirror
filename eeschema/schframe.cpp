@@ -467,7 +467,9 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
         filename.Replace( wxT( "/" ), wxT( "-" ) );
         filename.RemoveLast();
 #if defined(KICAD_GOST)
+#ifndef __WINDOWS__
         filename.Remove( 0, 1 );
+#endif
 #endif
     }
     else
