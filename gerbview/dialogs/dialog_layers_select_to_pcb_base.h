@@ -18,20 +18,23 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/statbox.h>
+#include <wx/stattext.h>
+#include <wx/combobox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class LAYERS_TABLE_DIALOG_BASE
+/// Class LAYERS_MAP_DIALOG_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class LAYERS_TABLE_DIALOG_BASE : public wxDialog 
+class LAYERS_MAP_DIALOG_BASE : public wxDialog 
 {
 	DECLARE_EVENT_TABLE()
 	private:
 		
 		// Private event handlers
+		void _wxFB_OnBrdLayersCountSelection( wxCommandEvent& event ){ OnBrdLayersCountSelection( event ); }
 		void _wxFB_OnStoreSetup( wxCommandEvent& event ){ OnStoreSetup( event ); }
 		void _wxFB_OnGetSetup( wxCommandEvent& event ){ OnGetSetup( event ); }
 		void _wxFB_OnResetClick( wxCommandEvent& event ){ OnResetClick( event ); }
@@ -42,7 +45,10 @@ class LAYERS_TABLE_DIALOG_BASE : public wxDialog
 	protected:
 		enum
 		{
-			ID_M_STATICLINESEP = 1000,
+			ID_LAYERS_MAP_DIALOG_BASE = 1000,
+			ID_M_STATICLINESEP,
+			ID_M_STATICTEXTCOPPERLAYERCOUNT,
+			ID_M_COMBOCOPPERLAYERSCOUNT,
 			ID_STORE_CHOICE,
 			ID_GET_PREVIOUS_CHOICE,
 			ID_RESET_CHOICE,
@@ -51,7 +57,9 @@ class LAYERS_TABLE_DIALOG_BASE : public wxDialog
 		wxStaticBoxSizer* sbSizerLayersTable;
 		wxFlexGridSizer* m_flexLeftColumnBoxSizer;
 		wxStaticLine* m_staticlineSep;
-		wxFlexGridSizer* m_flexRightColumnBoxSizer;
+		wxStaticText* m_staticTextCopperlayerCount;
+		wxComboBox* m_comboCopperLayersCount;
+		
 		wxButton* m_buttonStore;
 		wxButton* m_buttonRetrieve;
 		wxButton* m_buttonReset;
@@ -61,6 +69,7 @@ class LAYERS_TABLE_DIALOG_BASE : public wxDialog
 		wxButton* m_sdbSizerButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnBrdLayersCountSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStoreSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGetSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnResetClick( wxCommandEvent& event ) { event.Skip(); }
@@ -70,8 +79,8 @@ class LAYERS_TABLE_DIALOG_BASE : public wxDialog
 	
 	public:
 		
-		LAYERS_TABLE_DIALOG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Layer selection:"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,286 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~LAYERS_TABLE_DIALOG_BASE();
+		LAYERS_MAP_DIALOG_BASE( wxWindow* parent, wxWindowID id = ID_LAYERS_MAP_DIALOG_BASE, const wxString& title = _("Layer selection:"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 400,286 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~LAYERS_MAP_DIALOG_BASE();
 	
 };
 

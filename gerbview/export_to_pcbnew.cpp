@@ -15,7 +15,7 @@
 #include "gerbview.h"
 #include "class_board_design_settings.h"
 #include "class_gerber_draw_item.h"
-
+#include "select_layers_to_pcb.h"
 
 /* A helper class to export a Gerber set of files to Pcbnew
 */
@@ -29,6 +29,7 @@ public:
     GBR_TO_PCB_EXPORTER(GERBVIEW_FRAME * aFrame, FILE * aFile );
     ~GBR_TO_PCB_EXPORTER();
     bool ExportPcb( int* LayerLookUpTable );
+    BOARD* GetBoard() { return m_pcb; }
 
 private:
     bool WriteSetup( );  // Write the SETUP section data file
@@ -45,12 +46,11 @@ GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME * aFrame, FILE * aFile 
 {
     m_gerbview_frame = aFrame;
     m_file = aFile;
-    m_pcb = NULL;
+    m_pcb = new BOARD( NULL, m_gerbview_frame );
 }
 
 GBR_TO_PCB_EXPORTER::~GBR_TO_PCB_EXPORTER()
 {
-    // the destructor should destroy all owned sub-objects
     delete m_pcb;
 }
 
@@ -95,26 +95,31 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
     if( FullFileName == wxEmptyString )
         return;
 
-    int* LayerLookUpTable;
-    if( ( LayerLookUpTable = InstallDialogLayerPairChoice( ) ) != NULL )
+    /* Install a dialog frame to choose the mapping
+     * between gerber layers and pcbnew layers
+     */
+    LAYERS_MAP_DIALOG* dlg = new LAYERS_MAP_DIALOG( this );
+    int ok = dlg->ShowModal();
+    dlg->Destroy();
+    if( ok != wxID_OK )
+        return;
+
+    if( wxFileExists( FullFileName ) )
     {
-        if( wxFileExists( FullFileName ) )
-        {
-            if( !IsOK( this, _( "Ok to change the existing file ?" ) ) )
-                return;
-        }
-        FILE * file = wxFopen( FullFileName, wxT( "wt" ) );
-        if( file == NULL )
-        {
-            msg = _( "Unable to create " ) + FullFileName;
-            DisplayError( this, msg );
+        if( !IsOK( this, _( "Ok to change the existing file ?" ) ) )
             return;
-        }
-        GetScreen()->SetFileName( FullFileName );
-        GBR_TO_PCB_EXPORTER gbr_exporter( this, file );
-        gbr_exporter.ExportPcb( LayerLookUpTable );
-        fclose( file );
     }
+
+    FILE * file = wxFopen( FullFileName, wxT( "wt" ) );
+    if( file == NULL )
+    {
+        msg = _( "Unable to create " ) + FullFileName;
+        DisplayError( this, msg );
+        return;
+    }
+    GBR_TO_PCB_EXPORTER gbr_exporter( this, file );
+    gbr_exporter.ExportPcb( dlg->GetLayersLookUpTable() );
+    fclose( file );
 }
 
 void GBR_TO_PCB_EXPORTER::cleanBoard()
@@ -195,7 +200,6 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )
     BOARD* gerberPcb = m_gerbview_frame->GetBoard();
 
     // create an image of gerber data
-    m_pcb = new BOARD( NULL, m_gerbview_frame );
     BOARD_ITEM* item = gerberPcb->m_Drawings;
     for( ; item; item = item->Next() )
     {
