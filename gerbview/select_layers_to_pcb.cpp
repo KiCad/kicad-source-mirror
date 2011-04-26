@@ -45,6 +45,7 @@ LAYERS_MAP_DIALOG::LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent ) :
     initDialog();
 
     // Resize the dialog
+    Layout();
     GetSizer()->SetSizeHints( this );
     Centre();
 }
@@ -128,6 +129,7 @@ void LAYERS_MAP_DIALOG::initDialog()
             m_flexRightColumnBoxSizer->AddGrowableCol( ii );
         m_flexRightColumnBoxSizer->SetFlexibleDirection( wxBOTH );
         m_flexRightColumnBoxSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+        sbSizerLayersTable->Add( m_flexRightColumnBoxSizer, 1, wxEXPAND, 5 );
     }
 
     wxFlexGridSizer* flexColumnBoxSizer = m_flexLeftColumnBoxSizer;
