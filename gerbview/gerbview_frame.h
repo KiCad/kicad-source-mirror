@@ -510,14 +510,6 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
                             void* aData = NULL );
 
     /**
-     * Function InstallDialogLayerPairChoice
-     * Install a dialog frame to choose the equivalence
-     * between gerber layers and pcbnew layers
-     * @return the "lookup table" if ok, or NULL
-     */
-    int* InstallDialogLayerPairChoice();
-
-    /**
      * Function DrawItemsDCodeID
      * Draw the DCode value (if exists) corresponding to gerber item
      * (polygons do not have a DCode)

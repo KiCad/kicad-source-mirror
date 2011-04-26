@@ -17,6 +17,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 set(DIALOGS_SRCS
     dialogs/gerbview_dialog_display_options_frame_base.cpp
     dialogs/gerbview_dialog_display_options_frame.cpp
+    dialogs/dialog_layers_select_to_pcb_base.cpp
     dialogs/dialog_print_using_printer.cpp
     dialogs/dialog_print_using_printer_base.cpp
     )
