@@ -20,27 +20,32 @@
 
 void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 {
-    LIB_DRAW_ITEM* DrawEntry = m_drawItem;
+    LIB_ITEM* item = m_drawItem;
 
     if( m_component == NULL )   // No component loaded !
         return;
 
-    if( DrawEntry == NULL || DrawEntry->m_Flags == 0 )
+    if( item == NULL || item->m_Flags == 0 )
     {
-        DrawEntry = LocateItemUsingCursor( aPosition );
+        item = LocateItemUsingCursor( aPosition );
 
-        if( DrawEntry )
-            DrawEntry->DisplayInfo( this );
+        if( item )
+            item->DisplayInfo( this );
         else
+        {
             DisplayCmpDoc();
+
+            if( DrawPanel->m_AbortRequest )
+                DrawPanel->m_AbortRequest = false;
+        }
     }
 
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
-        if( DrawEntry && DrawEntry->m_Flags )   // moved object
+        if( item && item->m_Flags )   // moved object
         {
-            switch( DrawEntry->Type() )
+            switch( item->Type() )
             {
             case LIB_PIN_T:
                 PlacePin( DC );

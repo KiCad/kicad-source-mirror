@@ -20,7 +20,7 @@
 
 
 LIB_POLYLINE::LIB_POLYLINE( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( LIB_POLYLINE_T, aParent )
+    LIB_ITEM( LIB_POLYLINE_T, aParent )
 {
     m_Fill  = NO_FILL;
     m_Width = 0;
@@ -30,11 +30,10 @@ LIB_POLYLINE::LIB_POLYLINE( LIB_COMPONENT* aParent ) :
 
 
 LIB_POLYLINE::LIB_POLYLINE( const LIB_POLYLINE& polyline ) :
-    LIB_DRAW_ITEM( polyline )
+    LIB_ITEM( polyline )
 {
     m_PolyPoints = polyline.m_PolyPoints;   // Vector copy
     m_Width = polyline.m_Width;
-    m_Fill  = polyline.m_Fill;
 }
 
 
@@ -64,8 +63,7 @@ bool LIB_POLYLINE::Load( char* aLine, wxString& aErrorMsg )
     int     i, ccount = 0;
     wxPoint pt;
 
-    i = sscanf( &aLine[2], "%d %d %d %d", &ccount, &m_Unit, &m_Convert,
-                &m_Width );
+    i = sscanf( &aLine[2], "%d %d %d %d", &ccount, &m_Unit, &m_Convert, &m_Width );
 
     m_Fill = NO_FILL;
 
@@ -115,22 +113,13 @@ bool LIB_POLYLINE::Load( char* aLine, wxString& aErrorMsg )
 }
 
 
-LIB_DRAW_ITEM* LIB_POLYLINE::DoGenCopy()
+EDA_ITEM* LIB_POLYLINE::doClone() const
 {
-    LIB_POLYLINE* newitem = new LIB_POLYLINE( GetParent() );
-
-    newitem->m_PolyPoints = m_PolyPoints;   // Vector copy
-    newitem->m_Width   = m_Width;
-    newitem->m_Unit    = m_Unit;
-    newitem->m_Convert = m_Convert;
-    newitem->m_Flags   = m_Flags;
-    newitem->m_Fill    = m_Fill;
-
-    return (LIB_DRAW_ITEM*) newitem;
+    return new LIB_POLYLINE( *this );
 }
 
 
-int LIB_POLYLINE::DoCompare( const LIB_DRAW_ITEM& aOther ) const
+int LIB_POLYLINE::DoCompare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_POLYLINE_T );
 
@@ -383,7 +372,7 @@ void LIB_POLYLINE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_DRAW_ITEM::DisplayInfo( aFrame );
+    LIB_ITEM::DisplayInfo( aFrame );
 
     msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
 
@@ -393,6 +382,17 @@ void LIB_POLYLINE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
     aFrame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
+}
+
+
+wxString LIB_POLYLINE::GetSelectMenuText() const
+{
+    return wxString::Format( _( "Polyline at (%s, %s) with %u points" ),
+                             GetChars( CoordinateToString( m_PolyPoints[0].x,
+                                                           EESCHEMA_INTERNAL_UNIT ) ),
+                             GetChars( CoordinateToString( m_PolyPoints[0].y,
+                                                           EESCHEMA_INTERNAL_UNIT ) ),
+                             m_PolyPoints.size() );
 }
 
 

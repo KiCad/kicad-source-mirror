@@ -9,7 +9,7 @@
 /**************************************************/
 /* Graphic Body Item: Bezier Curve (set of lines) */
 /**************************************************/
-class LIB_BEZIER : public LIB_DRAW_ITEM
+class LIB_BEZIER : public LIB_ITEM
 {
     int m_Width;                           // Line width
     std::vector<wxPoint> m_BezierPoints;   // list of parameter (3|4)
@@ -77,7 +77,7 @@ public:
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
 protected:
-    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual EDA_ITEM* doClone() const;
 
     /**
      * Provide the bezier curve draw object specific comparison.
@@ -86,7 +86,7 @@ protected:
      *      - Bezier point horizontal (X) point position.
      *      - Bezier point vertical (Y) point position.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
+    virtual int DoCompare( const LIB_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
     virtual bool DoTestInside( EDA_RECT& aRect ) const;

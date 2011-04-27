@@ -162,7 +162,7 @@ extern void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
 
 
 LIB_PIN::LIB_PIN( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( LIB_PIN_T, aParent )
+    LIB_ITEM( LIB_PIN_T, aParent )
 {
     m_length = 300;                             /* default Pin len */
     m_orientation = PIN_RIGHT;                  /* Pin orient: Up, Down, Left, Right */
@@ -181,7 +181,7 @@ LIB_PIN::LIB_PIN( LIB_COMPONENT* aParent ) :
 }
 
 
-LIB_PIN::LIB_PIN( const LIB_PIN& pin ) : LIB_DRAW_ITEM( pin )
+LIB_PIN::LIB_PIN( const LIB_PIN& pin ) : LIB_ITEM( pin )
 {
     m_position    = pin.m_position;
     m_length      = pin.m_length;
@@ -216,7 +216,7 @@ void LIB_PIN::SetName( const wxString& aName )
     if( GetParent() == NULL )
         return;
 
-    LIB_PIN_LIST pinList;
+    LIB_PINS pinList;
     GetParent()->GetPins( pinList );
 
     for( size_t i = 0; i < pinList.size(); i++ )
@@ -241,7 +241,7 @@ void LIB_PIN::SetNameTextSize( int size )
     if( GetParent() == NULL )
         return;
 
-    LIB_PIN_LIST pinList;
+    LIB_PINS pinList;
     GetParent()->GetPins( pinList );
 
     for( size_t i = 0; i < pinList.size(); i++ )
@@ -285,7 +285,7 @@ void LIB_PIN::SetNumberTextSize( int size )
     if( GetParent() == NULL )
         return;
 
-    LIB_PIN_LIST pinList;
+    LIB_PINS pinList;
     GetParent()->GetPins( pinList );
 
     for( size_t i = 0; i < pinList.size(); i++ )
@@ -310,7 +310,7 @@ void LIB_PIN::SetOrientation( int orientation )
     if( GetParent() == NULL )
         return;
 
-    LIB_PIN_LIST pinList;
+    LIB_PINS pinList;
     GetParent()->GetPins( pinList );
 
     for( size_t i = 0; i < pinList.size(); i++ )
@@ -335,7 +335,7 @@ void LIB_PIN::SetShape( int aShape )
     if( GetParent() == NULL )
         return;
 
-    LIB_PIN_LIST pinList;
+    LIB_PINS pinList;
     GetParent()->GetPins( pinList );
 
     for( size_t i = 0; i < pinList.size(); i++ )
@@ -362,7 +362,7 @@ void LIB_PIN::SetType( int aType )
     if( GetParent() == NULL )
         return;
 
-    LIB_PIN_LIST pinList;
+    LIB_PINS pinList;
     GetParent()->GetPins( pinList );
 
     for( size_t i = 0; i < pinList.size(); i++ )
@@ -387,7 +387,7 @@ void LIB_PIN::SetLength( int length )
     if( GetParent() == NULL )
         return;
 
-    LIB_PIN_LIST pinList;
+    LIB_PINS pinList;
     GetParent()->GetPins( pinList );
 
     for( size_t i = 0; i < pinList.size(); i++ )
@@ -427,7 +427,7 @@ void LIB_PIN::SetPartNumber( int part )
                || ( pin->m_orientation != m_orientation ) )
                 continue;
 
-            GetParent()->RemoveDrawItem( (LIB_DRAW_ITEM*) pin );
+            GetParent()->RemoveDrawItem( (LIB_ITEM*) pin );
         }
     }
 }
@@ -458,7 +458,7 @@ void LIB_PIN::SetConversion( int style )
                || ( pin->m_orientation != m_orientation ) )
                 continue;
 
-            GetParent()->RemoveDrawItem( (LIB_DRAW_ITEM*) pin );
+            GetParent()->RemoveDrawItem( (LIB_ITEM*) pin );
         }
     }
 }
@@ -479,7 +479,7 @@ void LIB_PIN::SetVisible( bool visible )
     if( GetParent() == NULL )
         return;
 
-    LIB_PIN_LIST pinList;
+    LIB_PINS pinList;
     GetParent()->GetPins( pinList );
 
     for( size_t i = 0; i < pinList.size(); i++ )
@@ -499,7 +499,7 @@ void LIB_PIN::SetVisible( bool visible )
 
 void LIB_PIN::EnableEditMode( bool enable, bool editPinByPin )
 {
-    LIB_PIN_LIST pinList;
+    LIB_PINS pinList;
 
     if( GetParent() == NULL )
         return;
@@ -525,22 +525,16 @@ void LIB_PIN::EnableEditMode( bool enable, bool editPinByPin )
 
 bool LIB_PIN::HitTest( const wxPoint& aPosition )
 {
-    int mindist = m_width ? m_width / 2 : g_DrawDefaultLineThickness / 2;
-
-    // Have a minimal tolerance for hit test
-    if( mindist < 3 )
-        mindist = 3;        // = 3 mils
-
-    return HitTest( aPosition, mindist, DefaultTransform );
+    return HitTest( aPosition, 0, DefaultTransform );
 }
 
 
 bool LIB_PIN::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
-    wxPoint pinPos = aTransform.TransformCoordinate( m_position );
-    wxPoint pinEnd = aTransform.TransformCoordinate( ReturnPinEndPoint() );
+    EDA_RECT rect = GetBoundingBox();
+    rect.Inflate( aThreshold );
 
-    return TestSegmentHit( aPosition, pinPos, pinEnd, aThreshold );
+    return rect.Contains( aPosition );
 }
 
 
@@ -1599,34 +1593,13 @@ void LIB_PIN::SetPinNumFromString( wxString& buffer )
 }
 
 
-LIB_DRAW_ITEM* LIB_PIN::DoGenCopy()
+EDA_ITEM* LIB_PIN::doClone() const
 {
-    LIB_PIN* newpin = new LIB_PIN( GetParent() );
-
-    newpin->m_position    = m_position;
-    newpin->m_length      = m_length;
-    newpin->m_orientation = m_orientation;
-    newpin->m_shape = m_shape;
-    newpin->m_type  = m_type;
-    newpin->m_attributes         = m_attributes;
-    newpin->m_number             = m_number;
-    newpin->m_PinNumSize         = m_PinNumSize;
-    newpin->m_PinNameSize        = m_PinNameSize;
-    newpin->m_PinNumShapeOpt     = m_PinNumShapeOpt;
-    newpin->m_PinNameShapeOpt    = m_PinNameShapeOpt;
-    newpin->m_PinNumPositionOpt  = m_PinNumPositionOpt;
-    newpin->m_PinNamePositionOpt = m_PinNamePositionOpt;
-    newpin->m_Unit    = m_Unit;
-    newpin->m_Convert = m_Convert;
-    newpin->m_Flags   = m_Flags;
-    newpin->m_width   = m_width;
-    newpin->m_name    = m_name;
-
-    return (LIB_DRAW_ITEM*) newpin;
+    return new LIB_PIN( *this );
 }
 
 
-int LIB_PIN::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_PIN::DoCompare( const LIB_ITEM& other ) const
 {
     wxASSERT( other.Type() == LIB_PIN_T );
 
@@ -1724,7 +1697,7 @@ void LIB_PIN::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString Text;
 
-    LIB_DRAW_ITEM::DisplayInfo( frame );
+    LIB_ITEM::DisplayInfo( frame );
 
     frame->AppendMsgPanel( _( "Name" ), m_name, DARKCYAN );
 
@@ -1766,35 +1739,57 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
     EDA_RECT       bbox;
     wxPoint        begin;
     wxPoint        end;
-    int            pinname_offset = 0;
+    int            nameTextOffset = 0;
+    bool           showName = !m_name.IsEmpty() && (m_name != wxT( "~" ));
+    int            symbolX = TARGET_PIN_DIAM / 2;
+    int            symbolY = TARGET_PIN_DIAM / 2;
 
     if( entry )
-        pinname_offset = entry->GetPinNameOffset();
+    {
+        if( entry->ShowPinNames() )
+            nameTextOffset = entry->GetPinNameOffset();
+        else
+            showName = false;
+    }
 
     // First, calculate boundary box corners position
-    int pinnum_len = m_PinNumSize * GetNumberString().Len();
+    int numberTextLength = m_PinNumSize * GetNumberString().Len();
 
     // Actual text height are bigger than text size
-    int pinname_hight = wxRound( m_PinNameSize * 1.3 );
-    int pinnum_hight  = wxRound( m_PinNumSize * 1.3 );
+    int nameTextHeight = wxRound( m_PinNameSize * 1.1 );
+    int numberTextHeight  = wxRound( m_PinNumSize * 1.1 );
+
+    if( m_shape & INVERT )
+        symbolX = symbolY = INVERT_PIN_RADIUS;
 
     // calculate top left corner position
     // for the default pin orientation (PIN_RIGHT)
-    begin.y = pinnum_hight + TXTMARGE;
-    begin.x = MIN( -TARGET_PIN_DIAM, m_length - pinnum_len / 2 );
+    begin.y = numberTextHeight + TXTMARGE;
+    begin.x = MIN( -TARGET_PIN_DIAM / 2, m_length - (numberTextLength / 2) );
 
     // calculate bottom right corner position and adjust top left corner position
-    int pinname_len = m_PinNameSize * m_name.Len();
-    if( pinname_offset )
+    int nameTextLength = 0;
+
+    if( showName )
     {
-        end.y = -pinname_hight / 2;
-        end.x = m_length + pinname_offset + pinname_len;
+        int length = m_name.Len();
+
+        // Don't count the line over text symbol.
+        if( m_name.Left( 1 ) == wxT( "~" ) )
+            length -= 1;
+
+        nameTextLength = ( m_PinNameSize * length ) + nameTextOffset;
+    }
+
+    if( showName )
+    {
+        end.y = -nameTextHeight / 2;
+        end.x = m_length + nameTextLength;
     }
     else
     {
-        end.y   = -pinname_hight - TXTMARGE;
-        end.x   = MAX( m_length, pinname_len / 2 );
-        begin.x = MIN( begin.x, m_length - pinname_len / 2 );
+        end.y = -symbolY;
+        end.x = m_length;
     }
 
     // Now, calculate boundary box corners position for the actual pin orientation

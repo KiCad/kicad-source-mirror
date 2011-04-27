@@ -86,9 +86,9 @@ void LIB_EDIT_FRAME::LoadOneSymbol( void )
     }
 
     Component = Lib->GetFirstEntry()->GetComponent();
-    LIB_DRAW_ITEM_LIST& drawList = Component->GetDrawItemList();
+    LIB_ITEMS& drawList = Component->GetDrawItemList();
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawList )
+    BOOST_FOREACH( LIB_ITEM& item, drawList )
     {
         if( item.Type() == LIB_FIELD_T )
             continue;
@@ -99,7 +99,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol( void )
         item.m_Flags    = IS_NEW;
         item.m_Selected = IS_SELECTED;
 
-        LIB_DRAW_ITEM* newItem = item.GenCopy();
+        LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
         newItem->SetParent( m_component );
         m_component->AddDrawItem( newItem );
     }
@@ -196,9 +196,9 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
         || !file.Write( wxT( "DRAW\n" ) ) )
         return;
 
-    LIB_DRAW_ITEM_LIST& drawList = m_component->GetDrawItemList();
+    LIB_ITEMS& drawList = m_component->GetDrawItemList();
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawList )
+    BOOST_FOREACH( LIB_ITEM& item, drawList )
     {
         if( item.Type() == LIB_FIELD_T )
             continue;

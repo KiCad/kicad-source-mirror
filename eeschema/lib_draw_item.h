@@ -4,8 +4,8 @@
 
 /* Definitions of graphic items used to create shapes in component libraries.
  */
-#ifndef _LIB_DRAW_ITEM_H_
-#define _LIB_DRAW_ITEM_H_
+#ifndef _LIB_ITEM_H_
+#define _LIB_ITEM_H_
 
 #include "base_struct.h"
 #include "transform.h"
@@ -15,7 +15,7 @@
 
 class LIB_COMPONENT;
 class PLOTTER;
-class LIB_DRAW_ITEM;
+class LIB_ITEM;
 class LIB_PIN;
 
 
@@ -31,14 +31,14 @@ extern const int fill_tab[];
  * in them.  If you access a object pointer from the list, do not delete
  * it directly.
  */
-typedef boost::ptr_vector< LIB_DRAW_ITEM > LIB_DRAW_ITEM_LIST;
+typedef boost::ptr_vector< LIB_ITEM > LIB_ITEMS;
 
 /**
  * Helper for defining a list of pin object pointers.  The list does not
  * use a Boost pointer class so the object pointers do not accidently get
  * deleted when the container is deleted.
  */
-typedef std::vector< LIB_PIN* > LIB_PIN_LIST;
+typedef std::vector< LIB_PIN* > LIB_PINS;
 
 
 /****************************************************************************/
@@ -50,7 +50,7 @@ typedef std::vector< LIB_PIN* > LIB_PIN_LIST;
  * Base class for drawable items used in library components.
  *  (graphic shapes, texts, fields, pins)
  */
-class LIB_DRAW_ITEM : public EDA_ITEM
+class LIB_ITEM : public EDA_ITEM
 {
     /**
      * Draws the item.
@@ -111,15 +111,15 @@ protected:
 
 public:
 
-    LIB_DRAW_ITEM( KICAD_T        aType,
-                   LIB_COMPONENT* aComponent = NULL,
-                   int            aUnit      = 0,
-                   int            aConvert   = 0,
-                   FILL_T         aFillType  = NO_FILL );
+    LIB_ITEM( KICAD_T        aType,
+              LIB_COMPONENT* aComponent = NULL,
+              int            aUnit      = 0,
+              int            aConvert   = 0,
+              FILL_T         aFillType  = NO_FILL );
 
-    LIB_DRAW_ITEM( const LIB_DRAW_ITEM& aItem );
+    LIB_ITEM( const LIB_ITEM& aItem );
 
-    virtual ~LIB_DRAW_ITEM() { }
+    virtual ~LIB_ITEM() { }
 
     wxString GetTypeName() { return m_typeName; }
 
@@ -236,23 +236,13 @@ public:
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
     /**
-     * Make a copy of this draw item.
-     *
-     * Classes derived from LIB_DRAW_ITEM must implement DoGenCopy().
-     * This is just a placeholder for the derived class.
-     *
-     * @return Copy of this draw item.
-     */
-    LIB_DRAW_ITEM* GenCopy() { return DoGenCopy(); }
-
-    /**
-     * Test LIB_DRAW_ITEM objects for equivalence.
+     * Test LIB_ITEM objects for equivalence.
      *
      * @param aOther - Object to test against.
      * @return - True if object is identical to this object.
      */
-    bool operator==( const LIB_DRAW_ITEM& aOther ) const;
-    bool operator==( const LIB_DRAW_ITEM* aOther ) const
+    bool operator==( const LIB_ITEM& aOther ) const;
+    bool operator==( const LIB_ITEM* aOther ) const
     {
         return *this == *aOther;
     }
@@ -263,7 +253,7 @@ public:
      * @param aOther - Draw item to compare against.
      * @return - True if object is less than this object.
      */
-    bool operator<( const LIB_DRAW_ITEM& aOther) const;
+    bool operator<( const LIB_ITEM& aOther) const;
 
     /**
      * Set drawing object offset from the current position.
@@ -369,7 +359,6 @@ public:
     FILL_T GetFillMode() const { return m_Fill; }
 
 protected:
-    virtual LIB_DRAW_ITEM* DoGenCopy() = 0;
 
     /**
      * Provide the draw object specific comparison.
@@ -382,7 +371,7 @@ protected:
      *      - KICAD_T enum value.
      *      - Result of derived classes comparison.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const = 0;
+    virtual int DoCompare( const LIB_ITEM& aOther ) const = 0;
     virtual void DoOffset( const wxPoint& aOffset ) = 0;
     virtual bool DoTestInside( EDA_RECT& aRect ) const = 0;
     virtual void DoMove( const wxPoint& aPosition ) = 0;
@@ -398,4 +387,4 @@ protected:
 };
 
 
-#endif  //  _LIB_DRAW_ITEM_H_
+#endif  //  _LIB_ITEM_H_

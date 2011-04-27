@@ -12,7 +12,7 @@
 
 
 class SCH_SHEET_PATH;
-class LIB_DRAW_ITEM;
+class LIB_ITEM;
 class LIB_PIN;
 class LIB_COMPONENT;
 
@@ -357,7 +357,7 @@ public:
      * @param aType - Type of component library object to find or any if set to TYPE_NOT_INIT.
      * @return A pointer to the component library object if found, otherwise NULL.
      */
-    LIB_DRAW_ITEM* GetDrawItem( const wxPoint& aPosition, KICAD_T aType = TYPE_NOT_INIT );
+    LIB_ITEM* GetDrawItem( const wxPoint& aPosition, KICAD_T aType = TYPE_NOT_INIT );
 
     virtual wxString GetSelectMenuText() const;
 

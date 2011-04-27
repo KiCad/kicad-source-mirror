@@ -12,7 +12,7 @@
 /* Fields like Ref , value... are not Text,  */
 /* they are a separate class                 */
 /*********************************************/
-class LIB_TEXT : public LIB_DRAW_ITEM, public EDA_TEXT
+class LIB_TEXT : public LIB_ITEM, public EDA_TEXT
 {
     wxString m_savedText;         ///< Temporary storage for the string when edition.
     bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
@@ -103,22 +103,26 @@ public:
     void Rotate();
 
     /**
-     * See LIB_DRAW_ITEM::BeginEdit().
+     * See LIB_ITEM::BeginEdit().
      */
     void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
 
     /**
-     * See LIB_DRAW_ITEM::ContinueEdit().
+     * See LIB_ITEM::ContinueEdit().
      */
     bool ContinueEdit( const wxPoint aNextPoint );
 
     /**
-     * See LIB_DRAW_ITEM::AbortEdit().
+     * See LIB_ITEM::AbortEdit().
      */
     void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_text_xpm; }
+
 protected:
-    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual EDA_ITEM* doClone() const;
 
     /**
      * Provide the text draw object specific comparison.
@@ -130,7 +134,7 @@ protected:
      *      - Text width.
      *      - Text height.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
+    virtual int DoCompare( const LIB_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
     virtual bool DoTestInside( EDA_RECT& aRect ) const;

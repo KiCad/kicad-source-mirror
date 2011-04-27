@@ -596,7 +596,7 @@ SCH_COMPONENT* EXPORT_HELP::findNextComponentAndCreatePinList( EDA_ITEM*       a
 
         else    // entry->GetPartCount() <= 1 means one part per package
         {
-            LIB_PIN_LIST pins;      // constructed once here
+            LIB_PINS pins;      // constructed once here
 
             entry->GetPins( pins, comp->GetUnitSelection( aSheetPath ), comp->GetConvert() );
 
@@ -727,8 +727,8 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
     wxString    sFprints  = wxT( "footprints" );
     wxString    sFp       = wxT( "fp" );
 
-    LIB_PIN_LIST    pinList;
-    LIB_FIELD_LIST  fieldList;
+    LIB_PINS    pinList;
+    LIB_FIELDS  fieldList;
 
     m_Libraries.clear();
 

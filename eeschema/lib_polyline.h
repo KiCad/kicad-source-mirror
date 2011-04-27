@@ -9,7 +9,7 @@
 #include "lib_draw_item.h"
 
 
-class LIB_POLYLINE : public LIB_DRAW_ITEM
+class LIB_POLYLINE : public LIB_ITEM
 {
     int m_Width;                              // Line width
     std::vector<wxPoint> m_PolyPoints;        // list of points (>= 2)
@@ -91,22 +91,26 @@ public:
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
     /**
-     * See LIB_DRAW_ITEM::BeginEdit().
+     * See LIB_ITEM::BeginEdit().
      */
     void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
 
     /**
-     * See LIB_DRAW_ITEM::ContinueEdit().
+     * See LIB_ITEM::ContinueEdit().
      */
     bool ContinueEdit( const wxPoint aNextPoint );
 
     /**
-     * See LIB_DRAW_ITEM::AbortEdit().
+     * See LIB_ITEM::AbortEdit().
      */
     void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_polygon_xpm; }
+
 protected:
-    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual EDA_ITEM* doClone() const;
 
     /**
      * Provide the polyline segment draw object specific comparison.
@@ -115,7 +119,7 @@ protected:
      *      - Line segment point horizontal (X) position.
      *      - Line segment point vertical (Y) position.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
+    virtual int DoCompare( const LIB_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
     virtual bool DoTestInside( EDA_RECT& aRect ) const;

@@ -142,7 +142,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
             {
                 wxString text = m_collectedItems[i]->GetSelectMenuText();
                 const char** xpm = m_collectedItems[i]->GetMenuImage();
-                ADD_MENUITEM( &selectMenu, ID_SCH_SELECT_ITEM_START + i, text, xpm );
+                ADD_MENUITEM( &selectMenu, ID_SELECT_ITEM_START + i, text, xpm );
             }
 
             // Set to NULL in case user aborts the clarification context menu.
@@ -220,7 +220,7 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
         if( DrawPanel->IsMouseCaptured() )
         {
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, TRUE );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, true );
         }
     }
 
@@ -293,16 +293,13 @@ void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
         if( DrawPanel->IsMouseCaptured() )
         {
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, TRUE );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, true );
         }
     }
 
     if( aHotKey )
     {
-        if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
-            OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
-        else
-            OnHotKey( aDC, aHotKey, aPosition, NULL );
+        OnHotKey( aDC, aHotKey, aPosition, NULL );
     }
 
     UpdateStatusBar();
@@ -366,7 +363,7 @@ void LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
         if( DrawPanel->IsMouseCaptured() )
         {
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, TRUE );
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, true );
         }
     }
 

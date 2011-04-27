@@ -9,7 +9,7 @@
 #include "lib_draw_item.h"
 
 
-class LIB_CIRCLE : public LIB_DRAW_ITEM
+class LIB_CIRCLE : public LIB_ITEM
 {
     int     m_Radius;
     wxPoint m_Pos;            // Position or centre (Arc and Circle) or start point (segments).
@@ -73,22 +73,26 @@ public:
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
     /**
-     * See LIB_DRAW_ITEM::BeginEdit().
+     * See LIB_ITEM::BeginEdit().
      */
     void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
 
     /**
-     * See LIB_DRAW_ITEM::ContinueEdit().
+     * See LIB_ITEM::ContinueEdit().
      */
     bool ContinueEdit( const wxPoint aNextPoint );
 
     /**
-     * See LIB_DRAW_ITEM::AbortEdit().
+     * See LIB_ITEM::AbortEdit().
      */
     void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_circle_xpm; }
+
 protected:
-    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual EDA_ITEM* doClone() const;
 
     /**
      * Provide the circle draw object specific comparison.
@@ -98,7 +102,7 @@ protected:
      *      - Circle vertical (Y) position.
      *      - Circle radius.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
+    virtual int DoCompare( const LIB_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
     virtual bool DoTestInside( EDA_RECT& aRect ) const;

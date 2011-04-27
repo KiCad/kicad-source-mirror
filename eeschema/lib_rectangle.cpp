@@ -5,6 +5,7 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "macros.h"
 #include "class_drawpanel.h"
 #include "plot_common.h"
 #include "trigo.h"
@@ -17,7 +18,7 @@
 
 
 LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( LIB_RECTANGLE_T, aParent )
+    LIB_ITEM( LIB_RECTANGLE_T, aParent )
 {
     m_Width                = 0;
     m_Fill                 = NO_FILL;
@@ -30,7 +31,7 @@ LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :
 
 
 LIB_RECTANGLE::LIB_RECTANGLE( const LIB_RECTANGLE& aRect ) :
-    LIB_DRAW_ITEM( aRect )
+    LIB_ITEM( aRect )
 {
     m_Pos   = aRect.m_Pos;
     m_End   = aRect.m_End;
@@ -72,23 +73,13 @@ bool LIB_RECTANGLE::Load( char* aLine, wxString& aErrorMsg )
 }
 
 
-LIB_DRAW_ITEM* LIB_RECTANGLE::DoGenCopy()
+EDA_ITEM* LIB_RECTANGLE::doClone() const
 {
-    LIB_RECTANGLE* newitem = new LIB_RECTANGLE( GetParent() );
-
-    newitem->m_Pos     = m_Pos;
-    newitem->m_End     = m_End;
-    newitem->m_Width   = m_Width;
-    newitem->m_Unit    = m_Unit;
-    newitem->m_Convert = m_Convert;
-    newitem->m_Flags   = m_Flags;
-    newitem->m_Fill    = m_Fill;
-
-    return (LIB_DRAW_ITEM*) newitem;
+    return new LIB_RECTANGLE( *this );
 }
 
 
-int LIB_RECTANGLE::DoCompare( const LIB_DRAW_ITEM& aOther ) const
+int LIB_RECTANGLE::DoCompare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_RECTANGLE_T );
 
@@ -221,7 +212,7 @@ void LIB_RECTANGLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
 
-    LIB_DRAW_ITEM::DisplayInfo( aFrame );
+    LIB_ITEM::DisplayInfo( aFrame );
 
     msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
 
@@ -286,6 +277,16 @@ bool LIB_RECTANGLE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM&
         return true;
 
     return false;
+}
+
+
+wxString LIB_RECTANGLE::GetSelectMenuText() const
+{
+    return wxString::Format( _( "Rectangle from (%s, %s) to (%s, %s)" ),
+                             GetChars( CoordinateToString( m_Pos.x, EESCHEMA_INTERNAL_UNIT ) ),
+                             GetChars( CoordinateToString( m_Pos.y, EESCHEMA_INTERNAL_UNIT ) ),
+                             GetChars( CoordinateToString( m_End.x, EESCHEMA_INTERNAL_UNIT ) ),
+                             GetChars( CoordinateToString( m_End.y, EESCHEMA_INTERNAL_UNIT ) ) );
 }
 
 

@@ -9,7 +9,7 @@
 #include "lib_draw_item.h"
 
 
-class LIB_RECTANGLE  : public LIB_DRAW_ITEM
+class LIB_RECTANGLE  : public LIB_ITEM
 {
     wxPoint m_End;                  // Rectangle end point.
     wxPoint m_Pos;                  // Rectangle start point.
@@ -79,22 +79,26 @@ public:
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
     /**
-     * See LIB_DRAW_ITEM::BeginEdit().
+     * See LIB_ITEM::BeginEdit().
      */
     void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
 
     /**
-     * See LIB_DRAW_ITEM::ContinueEdit().
+     * See LIB_ITEM::ContinueEdit().
      */
     bool ContinueEdit( const wxPoint aNextPoint );
 
     /**
-     * See LIB_DRAW_ITEM::AbortEdit().
+     * See LIB_ITEM::AbortEdit().
      */
     void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_rectangle_xpm; }
+
 protected:
-    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual EDA_ITEM* doClone() const;
 
     /**
      * Provide the rectangle draw object specific comparison.
@@ -105,7 +109,7 @@ protected:
      *      - Rectangle horizontal (X) end position.
      *      - Rectangle vertical (Y) end position.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
+    virtual int DoCompare( const LIB_ITEM& aOther ) const;
 
     virtual void DoOffset( const wxPoint& aOffset );
     virtual bool DoTestInside( EDA_RECT& aRect ) const;

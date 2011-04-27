@@ -15,7 +15,7 @@
  * the component property editor assumes it.
  * @see enum NumFieldType
  */
-class LIB_FIELD : public LIB_DRAW_ITEM, public EDA_TEXT
+class LIB_FIELD : public LIB_ITEM, public EDA_TEXT
 {
     int      m_id;           ///< @see enum NumFieldType
     wxString m_name;         ///< Name (not the field text value itself, that is .m_Text)
@@ -190,17 +190,17 @@ public:
     int GetDefaultColor();
 
     /**
-     * See LIB_DRAW_ITEM::BeginEdit().
+     * See LIB_ITEM::BeginEdit().
      */
     void BeginEdit( int aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) );
 
     /**
-     * See LIB_DRAW_ITEM::ContinueEdit().
+     * See LIB_ITEM::ContinueEdit().
      */
     bool ContinueEdit( const wxPoint aNextPoint );
 
     /**
-     * See LIB_DRAW_ITEM::AbortEdit().
+     * See LIB_ITEM::AbortEdit().
      */
     void EndEdit( const wxPoint& aPosition, bool aAbort = false );
 
@@ -219,8 +219,12 @@ public:
      */
     void SetText( const wxString& aText );
 
+    virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) move_field_xpm; }
+
 protected:
-    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual EDA_ITEM* doClone() const;
 
     /**
      * Provide the field draw object specific comparison.
@@ -234,7 +238,7 @@ protected:
      *      - Field width.
      *      - Field height.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& other ) const;
+    virtual int DoCompare( const LIB_ITEM& other ) const;
 
     virtual void DoOffset( const wxPoint& offset );
     virtual bool DoTestInside( EDA_RECT& rect ) const;
@@ -247,6 +251,6 @@ protected:
     virtual void DoSetWidth( int width ) { m_Thickness = width; }
 };
 
-typedef std::vector< LIB_FIELD > LIB_FIELD_LIST;
+typedef std::vector< LIB_FIELD > LIB_FIELDS;
 
 #endif  //  CLASS_LIBENTRY_FIELDS_H

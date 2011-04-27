@@ -53,7 +53,7 @@ static wxPoint calcCenter( const wxPoint& A, const wxPoint& B, const wxPoint& C 
 }
 
 
-LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) : LIB_DRAW_ITEM( LIB_ARC_T, aParent )
+LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
 {
     m_Radius        = 0;
     m_t1            = 0;
@@ -67,7 +67,7 @@ LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) : LIB_DRAW_ITEM( LIB_ARC_T, aParent )
 }
 
 
-LIB_ARC::LIB_ARC( const LIB_ARC& aArc ) : LIB_DRAW_ITEM( aArc )
+LIB_ARC::LIB_ARC( const LIB_ARC& aArc ) : LIB_ITEM( aArc )
 {
     m_Radius   = aArc.m_Radius;
     m_t1       = aArc.m_t1;
@@ -211,27 +211,13 @@ bool LIB_ARC::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTran
 }
 
 
-LIB_DRAW_ITEM* LIB_ARC::DoGenCopy()
+EDA_ITEM* LIB_ARC::doClone() const
 {
-    LIB_ARC* newitem = new LIB_ARC( GetParent() );
-
-    newitem->m_Pos      = m_Pos;
-    newitem->m_ArcStart = m_ArcStart;
-    newitem->m_ArcEnd   = m_ArcEnd;
-    newitem->m_Radius   = m_Radius;
-    newitem->m_t1       = m_t1;
-    newitem->m_t2       = m_t2;
-    newitem->m_Width    = m_Width;
-    newitem->m_Unit     = m_Unit;
-    newitem->m_Convert  = m_Convert;
-    newitem->m_Flags    = m_Flags;
-    newitem->m_Fill     = m_Fill;
-
-    return (LIB_DRAW_ITEM*) newitem;
+    return new LIB_ARC( *this );
 }
 
 
-int LIB_ARC::DoCompare( const LIB_DRAW_ITEM& aOther ) const
+int LIB_ARC::DoCompare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_ARC_T );
 
@@ -479,7 +465,7 @@ void LIB_ARC::DisplayInfo( EDA_DRAW_FRAME* aFrame )
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_DRAW_ITEM::DisplayInfo( aFrame );
+    LIB_ITEM::DisplayInfo( aFrame );
 
     msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
 
@@ -489,6 +475,15 @@ void LIB_ARC::DisplayInfo( EDA_DRAW_FRAME* aFrame )
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
     aFrame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
+}
+
+
+wxString LIB_ARC::GetSelectMenuText() const
+{
+    return wxString::Format( _( "Arc center (%s, %s), radius %s" ),
+                             GetChars( CoordinateToString( m_Pos.x, EESCHEMA_INTERNAL_UNIT ) ),
+                             GetChars( CoordinateToString( m_Pos.y, EESCHEMA_INTERNAL_UNIT ) ),
+                             GetChars( CoordinateToString( m_Radius, EESCHEMA_INTERNAL_UNIT ) ) );
 }
 
 

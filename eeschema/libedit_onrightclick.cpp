@@ -13,6 +13,7 @@
 #include "bitmaps.h"
 #include "eeschema_id.h"
 #include "hotkeys.h"
+#include "class_drawpanel.h"
 #include "class_sch_screen.h"
 
 #include "general.h"
@@ -30,7 +31,7 @@ static void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame
 
 bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
-    LIB_DRAW_ITEM* DrawEntry = GetDrawItem();
+    LIB_ITEM* item = GetDrawItem();
     bool BlockActive = GetScreen()->IsBlockActive();
 
     if( BlockActive )
@@ -44,38 +45,47 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         return true;
 
     //  If Command in progress, put menu "cancel"
-    if( DrawEntry && DrawEntry->GetFlags() )
+    if( item && item->GetFlags() )
     {
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING, _( "Cancel" ), cancel_xpm );
         PopMenu->AppendSeparator();
     }
     else
     {
-        DrawEntry = LocateItemUsingCursor( aPosition );
+        item = LocateItemUsingCursor( aPosition );
+
+        // If the clarify item selection context menu is aborted, don't show the context menu.
+        if( item == NULL && DrawPanel->m_AbortRequest )
+        {
+            DrawPanel->m_AbortRequest = false;
+            return false;
+        }
+
         if( GetToolId() != ID_NO_TOOL_SELECTED )
         {
             // If a tool is active, put menu "end tool"
-            ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING, _( "End Tool" ), cancel_tool_xpm );
+            ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_CANCEL_EDITING, _( "End Tool" ),
+                          cancel_tool_xpm );
             PopMenu->AppendSeparator();
         }
     }
 
-    if( DrawEntry )
-        DrawEntry->DisplayInfo( this );
+    if( item )
+        item->DisplayInfo( this );
     else
         return true;
 
-    m_drawItem = DrawEntry;
+    m_drawItem = item;
     wxString msg;
 
-    switch( DrawEntry->Type() )
+    switch( item->Type() )
     {
     case LIB_PIN_T:
-        AddMenusForPin( PopMenu, (LIB_PIN*) DrawEntry, this );
+        AddMenusForPin( PopMenu, (LIB_PIN*) item, this );
         break;
 
     case LIB_ARC_T:
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Move Arc" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
@@ -87,7 +97,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         msg = AddHotkeyName( _( "Edit Arc Options" ), s_Libedit_Hokeys_Descr, HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg, options_arc_xpm );
 
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Delete Arc" ), s_Libedit_Hokeys_Descr, HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, delete_arc_xpm );
@@ -95,14 +105,14 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
 
     case LIB_CIRCLE_T:
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Move Circle" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, move_circle_xpm );
         }
 
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Drag Circle Outline" ), s_Libedit_Hokeys_Descr, HK_DRAG );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM, msg, move_rectangle_xpm );
@@ -111,7 +121,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         msg = AddHotkeyName( _( "Edit Circle Options" ), s_Libedit_Hokeys_Descr, HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg, options_circle_xpm );
 
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Delete Circle" ), s_Libedit_Hokeys_Descr, HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, delete_circle_xpm );
@@ -119,7 +129,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
 
     case LIB_RECTANGLE_T:
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Move Rectangle" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
@@ -129,13 +139,13 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         msg = AddHotkeyName( _( "Edit Rectangle Options" ), s_Libedit_Hokeys_Descr, HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg, options_rectangle_xpm );
 
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Drag Rectangle Edge" ), s_Libedit_Hokeys_Descr, HK_DRAG );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM, msg, move_rectangle_xpm );
         }
 
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Delete Rectangle" ), s_Libedit_Hokeys_Descr, HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, delete_rectangle_xpm );
@@ -144,7 +154,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
 
     case LIB_TEXT_T:
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Move Text" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
@@ -157,7 +167,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         msg = AddHotkeyName( _( "Rotate Text" ), s_Libedit_Hokeys_Descr, HK_ROTATE );
         ADD_MENUITEM( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, edit_text_xpm );
 
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Delete Text" ), s_Libedit_Hokeys_Descr, HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, delete_text_xpm );
@@ -165,7 +175,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
 
     case LIB_POLYLINE_T:
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Move Line" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
@@ -174,7 +184,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM, msg, move_line_xpm );
         }
 
-        if( DrawEntry->m_Flags & IS_NEW )
+        if( item->IsNew() )
         {
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_END_CREATE_ITEM, _( "Line End" ), apply_xpm );
         }
@@ -182,14 +192,14 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         msg = AddHotkeyName( _( "Edit Line Options" ), s_Libedit_Hokeys_Descr, HK_EDIT );
         ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg, options_segment_xpm );
 
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Delete Line " ), s_Libedit_Hokeys_Descr, HK_DELETE );
             ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, delete_segment_xpm );
         }
-        else if( (DrawEntry->m_Flags & IS_NEW) )
+        else if( item->IsNew() )
         {
-            if( ( (LIB_POLYLINE*) DrawEntry )->GetCornerCount() > 2 )
+            if( ( (LIB_POLYLINE*) item )->GetCornerCount() > 2 )
             {
                 msg = AddHotkeyName( _( "Delete Segment" ), s_Libedit_Hokeys_Descr, HK_DELETE );
                 ADD_MENUITEM( PopMenu, ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT,
@@ -200,7 +210,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
 
     case LIB_FIELD_T:
-        if( DrawEntry->m_Flags == 0 )
+        if( item->GetFlags() == 0 )
         {
             msg = AddHotkeyName( _( "Move Field" ), s_Libedit_Hokeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
@@ -214,10 +224,8 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
 
     default:
-        wxString msg;
-        msg.Printf( wxT( "LIB_EDIT_FRAME::OnRightClick Error: unknown StructType %d" ),
-                    DrawEntry->Type() );
-        DisplayError( this, msg );
+        wxFAIL_MSG( wxString::Format( wxT( "Unknown library item type %d" ),
+                                      item->Type() ) );
         m_drawItem = NULL;
         break;
     }
@@ -230,7 +238,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
 {
     bool selected    = (Pin->m_Selected & IS_SELECTED) != 0;
-    bool not_in_move = (Pin->m_Flags == 0);
+    bool not_in_move = (Pin->GetFlags() == 0);
     wxString msg;
 
     if( not_in_move )

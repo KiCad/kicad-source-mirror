@@ -136,16 +136,16 @@ this component?" ),
     if( !aField->InEditMode() )
     {
         SaveCopyInUndoList( parent );
-        ( (LIB_DRAW_ITEM*) aField )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
-                                           &fieldText, DefaultTransform );
+        ( (LIB_ITEM*) aField )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+                                      &fieldText, DefaultTransform );
     }
 
 
     if( !aField->InEditMode() )
     {
         fieldText = aField->GetFullText( m_unit );
-        ( (LIB_DRAW_ITEM*) aField )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
-                                           &fieldText, DefaultTransform );
+        ( (LIB_ITEM*) aField )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+                                      &fieldText, DefaultTransform );
     }
 
     OnModify();

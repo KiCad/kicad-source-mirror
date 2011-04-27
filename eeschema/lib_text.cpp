@@ -25,7 +25,7 @@
 
 
 LIB_TEXT::LIB_TEXT(LIB_COMPONENT * aParent) :
-    LIB_DRAW_ITEM( LIB_TEXT_T, aParent ),
+    LIB_ITEM( LIB_TEXT_T, aParent ),
     EDA_TEXT()
 {
     m_Size       = wxSize( 50, 50 );
@@ -187,7 +187,7 @@ bool LIB_TEXT::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTra
 }
 
 
-LIB_DRAW_ITEM* LIB_TEXT::DoGenCopy()
+EDA_ITEM* LIB_TEXT::doClone() const
 {
     LIB_TEXT* newitem = new LIB_TEXT(NULL);
 
@@ -204,11 +204,11 @@ LIB_DRAW_ITEM* LIB_TEXT::DoGenCopy()
     newitem->m_Bold      = m_Bold;
     newitem->m_HJustify  = m_HJustify;
     newitem->m_VJustify  = m_VJustify;
-    return (LIB_DRAW_ITEM*) newitem;
+    return (EDA_ITEM*) newitem;
 }
 
 
-int LIB_TEXT::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_TEXT::DoCompare( const LIB_ITEM& other ) const
 {
     wxASSERT( other.Type() == LIB_TEXT_T );
 
@@ -379,7 +379,7 @@ void LIB_TEXT::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString msg;
 
-    LIB_DRAW_ITEM::DisplayInfo( frame );
+    LIB_ITEM::DisplayInfo( frame );
 
     msg = ReturnStringFromValue( g_UserUnit, m_Thickness, EESCHEMA_INTERNAL_UNIT, true );
 
@@ -437,6 +437,20 @@ void LIB_TEXT::SetText( const wxString& aText )
     {
         m_Text = aText;
     }
+}
+
+
+wxString LIB_TEXT::GetSelectMenuText() const
+{
+    wxString tmp = GetText();
+    tmp.Replace( wxT( "\n" ), wxT( " " ) );
+    tmp.Replace( wxT( "\r" ), wxT( " " ) );
+    tmp.Replace( wxT( "\t" ), wxT( " " ) );
+    tmp =( tmp.Length() > 15 ) ? tmp.Left( 12 ) + wxT( "..." ) : tmp;
+
+    wxString msg;
+    msg.Printf( _( "Graphic Text %s" ), GetChars( tmp ) );
+    return msg;
 }
 
 

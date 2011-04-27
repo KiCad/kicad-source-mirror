@@ -10,6 +10,7 @@
 #include "class_sch_screen.h"
 
 #include "lib_draw_item.h"
+#include "lib_collectors.h"
 
 
 class SCH_EDIT_FRAME;
@@ -26,6 +27,9 @@ class DIALOG_LIB_EDIT_TEXT;
 class LIB_EDIT_FRAME : public EDA_DRAW_FRAME
 {
     LIB_COMPONENT* m_tempCopyComponent;  ///< Temporary copy of current component during edit.
+    LIB_COLLECTOR m_collectedItems;      // Used for hit testing.
+
+    LIB_ITEM* locateItem( const wxPoint& aPosition, const KICAD_T aFilterList[] );
 
 public:
     wxComboBox* m_SelpartBox;            // a Box to select a part to edit (if any)
@@ -74,6 +78,7 @@ public:
     void        OnCheckComponent( wxCommandEvent& event );
     void        OnSelectBodyStyle( wxCommandEvent& event );
     void        OnEditPin( wxCommandEvent& event );
+    void OnSelectItem( wxCommandEvent& aEvent );
 
     void        OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void        OnUpdateEditingPart( wxUpdateUIEvent& event );
@@ -159,17 +164,17 @@ public:
     }
 
 
-    LIB_DRAW_ITEM* GetLastDrawItem( void ) { return m_lastDrawItem; }
+    LIB_ITEM* GetLastDrawItem( void ) { return m_lastDrawItem; }
 
-    void           SetLastDrawItem( LIB_DRAW_ITEM* drawItem )
+    void SetLastDrawItem( LIB_ITEM* drawItem )
     {
         m_lastDrawItem = drawItem;
     }
 
 
-    LIB_DRAW_ITEM* GetDrawItem( void ) { return m_drawItem; }
+    LIB_ITEM* GetDrawItem( void ) { return m_drawItem; }
 
-    void SetDrawItem( LIB_DRAW_ITEM* drawItem );
+    void SetDrawItem( LIB_ITEM* drawItem );
 
     bool           GetShowDeMorgan( void ) { return m_showDeMorgan; }
 
@@ -253,16 +258,17 @@ private:
     void           PlaceAncre();
 
     // Editing graphic items
-    LIB_DRAW_ITEM* CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC );
+    LIB_ITEM* CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC );
     void           GraphicItemBeginDraw( wxDC* DC );
     void           StartMoveDrawSymbol( wxDC* DC );
     void           StartModifyDrawSymbol( wxDC* DC ); //<! Modify the item, adjust size etc.
     void           EndDrawGraphicItem( wxDC* DC );
     void           LoadOneSymbol();
     void           SaveOneSymbol();
-    void           EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem );
-    void           EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem );
-    LIB_DRAW_ITEM* LocateItemUsingCursor( const wxPoint& aPosition );
+    void           EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem );
+    void           EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem );
+    LIB_ITEM* LocateItemUsingCursor( const wxPoint& aPosition,
+                                     const KICAD_T aFilterList[] = LIB_COLLECTOR::AllItems );
     void           EditField( wxDC* DC, LIB_FIELD* Field );
 
 public:
@@ -304,8 +310,8 @@ protected:
     /** The current component being edited.  NULL if no component is selected. */
     static LIB_COMPONENT* m_component;
 
-    static LIB_DRAW_ITEM* m_lastDrawItem;
-    static LIB_DRAW_ITEM* m_drawItem;
+    static LIB_ITEM*      m_lastDrawItem;
+    static LIB_ITEM*      m_drawItem;
     static wxString       m_aliasName;
 
     // The unit number to edit and show

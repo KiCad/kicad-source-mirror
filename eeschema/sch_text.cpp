@@ -631,7 +631,7 @@ wxString SCH_TEXT::GetSelectMenuText() const
     tmp =( tmp.Length() > 15 ) ? tmp.Left( 12 ) + wxT( "..." ) : tmp;
 
     wxString msg;
-    msg.Printf(_( "Graphic Text %s" ), GetChars(tmp));
+    msg.Printf( _( "Graphic Text %s" ), GetChars( tmp ) );
     return msg;
 }
 

@@ -844,11 +844,10 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         return;
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-    wxCommandEvent toolCmd( wxEVT_COMMAND_TOOL_CLICKED );
 
     cmd.SetEventObject( this );
 
-    bool itemInEdit = GetScreen()->GetCurItem() && GetScreen()->GetCurItem()->GetFlags();
+    bool itemInEdit = m_drawItem && m_drawItem->GetFlags();
 
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */
@@ -905,16 +904,16 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_UNDO:
         if( !itemInEdit )
         {
-            toolCmd.SetId( wxID_UNDO );
-            GetEventHandler()->ProcessEvent( toolCmd );
+            cmd.SetId( wxID_UNDO );
+            GetEventHandler()->ProcessEvent( cmd );
         }
         break;
 
     case HK_REDO:
         if( !itemInEdit )
         {
-            toolCmd.SetId( wxID_REDO );
-            GetEventHandler()->ProcessEvent( toolCmd );
+            cmd.SetId( wxID_REDO );
+            GetEventHandler()->ProcessEvent( cmd );
         }
         break;
 
@@ -979,9 +978,8 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( m_drawItem && !m_drawItem->InEditMode() )
         {
-            wxCommandEvent evt;
-            evt.SetId( ID_POPUP_LIBEDIT_DELETE_ITEM );
-            Process_Special_Functions( evt );
+            cmd.SetId( ID_POPUP_LIBEDIT_DELETE_ITEM );
+            Process_Special_Functions( cmd );
         }
         break;
 
@@ -992,9 +990,8 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
             if( m_drawItem )
             {
-                wxCommandEvent evt;
-                evt.SetId( ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST );
-                Process_Special_Functions( evt );
+                cmd.SetId( ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST );
+                Process_Special_Functions( cmd );
             }
         }
         break;
@@ -1004,9 +1001,8 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( m_drawItem && !m_drawItem->InEditMode() )
         {
-            wxCommandEvent evt;
-            evt.SetId( ID_POPUP_LIBEDIT_MODIFY_ITEM );
-            Process_Special_Functions( evt );
+            cmd.SetId( ID_POPUP_LIBEDIT_MODIFY_ITEM );
+            Process_Special_Functions( cmd );
         }
         break;
     }

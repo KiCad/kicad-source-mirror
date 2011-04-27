@@ -144,13 +144,15 @@ static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( parent == NULL )
         return;
 
-    LIB_PIN* CurrentPin = (LIB_PIN*) parent->GetDrawItem();
+    LIB_PIN* pin = (LIB_PIN*) parent->GetDrawItem();
 
-    if( CurrentPin == NULL || CurrentPin->Type() != LIB_PIN_T )
+    if( pin == NULL || pin->Type() != LIB_PIN_T )
         return;
 
-    if( CurrentPin->IsNew() )
-        delete CurrentPin;
+    pin->ClearFlags();
+
+    if( pin->IsNew() )
+        delete pin;
     else
         parent->RestoreComponent();
 
@@ -408,7 +410,7 @@ static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorga
     /* Create "convert" pin at the current position. */
     if( CreateConv == true )
     {
-        NewPin = (LIB_PIN*) Pin->GenCopy();
+        NewPin = (LIB_PIN*) Pin->Clone();
 
         if( Pin->GetConvert() > 1 )
             NewPin->SetConvert( 1 );
@@ -423,7 +425,7 @@ static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorga
         if( ii == unit || Pin->GetUnit() == 0 )
             continue;                       /* Pin common to all units. */
 
-        NewPin = (LIB_PIN*) Pin->GenCopy();
+        NewPin = (LIB_PIN*) Pin->Clone();
 
         if( convert != 0 )
             NewPin->SetConvert( 1 );
@@ -434,7 +436,7 @@ static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorga
         if( CreateConv == false )
             continue;
 
-        NewPin = (LIB_PIN*) Pin->GenCopy();
+        NewPin = (LIB_PIN*) Pin->Clone();
         NewPin->SetConvert( 2 );
 
         if( Pin->GetUnit() != 0 )
@@ -510,7 +512,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     if( m_component == NULL || SourcePin == NULL || SourcePin->Type() != LIB_PIN_T )
         return;
 
-    Pin = (LIB_PIN*) SourcePin->GenCopy();
+    Pin = (LIB_PIN*) SourcePin->Clone();
     Pin->m_Flags = IS_NEW;
     Pin->SetPosition( Pin->GetPosition() + wxPoint( g_RepeatStep.x, -g_RepeatStep.y ) );
     wxString nextName = Pin->GetName();
@@ -570,12 +572,12 @@ bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
 void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
 {
     #define MIN_GRID_SIZE 25
-    int          dup_error;
-    int          offgrid_error;
-    LIB_PIN*     Pin;
-    LIB_PIN_LIST PinList;
-    wxString     msg;
-    wxString     aux_msg;
+    int      dup_error;
+    int      offgrid_error;
+    LIB_PIN* Pin;
+    LIB_PINS PinList;
+    wxString msg;
+    wxString aux_msg;
 
     if( m_component == NULL )
         return;

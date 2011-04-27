@@ -189,7 +189,7 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
 LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary ) :
     EDA_ITEM( aComponent )
 {
-    LIB_DRAW_ITEM* newItem;
+    LIB_ITEM* newItem;
 
     m_library             = aLibrary;
     m_name                = aComponent.m_name;
@@ -202,12 +202,12 @@ LIB_COMPONENT::LIB_COMPONENT( LIB_COMPONENT& aComponent, CMP_LIBRARY* aLibrary )
     m_dateModified        = aComponent.m_dateModified;
     m_options             = aComponent.m_options;
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& oldItem, aComponent.GetDrawItemList() )
+    BOOST_FOREACH( LIB_ITEM& oldItem, aComponent.GetDrawItemList() )
     {
         if( oldItem.IsNew() )
             continue;
 
-        newItem = oldItem.GenCopy();
+        newItem = (LIB_ITEM*) oldItem.Clone();
         newItem->SetParent( this );
         drawings.push_back( newItem );
     }
@@ -294,7 +294,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
      */
     if( ! (screen->m_IsPrinting && GetGRForceBlackPenState()) && (aColor == -1) )
     {
-        BOOST_FOREACH( LIB_DRAW_ITEM& drawItem, drawings )
+        BOOST_FOREACH( LIB_ITEM& drawItem, drawings )
         {
             if( drawItem.m_Fill != FILLED_WITH_BG_BODYCOLOR )
                 continue;
@@ -327,7 +327,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
         }
     }
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& drawItem, drawings )
+    BOOST_FOREACH( LIB_ITEM& drawItem, drawings )
     {
         if( aOnlySelected && drawItem.m_Selected == 0 )
             continue;
@@ -389,7 +389,7 @@ void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
 {
     wxASSERT( aPlotter != NULL );
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
         if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
             continue;
@@ -404,7 +404,7 @@ void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
 }
 
 
-void LIB_COMPONENT::RemoveDrawItem( LIB_DRAW_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aDc )
+void LIB_COMPONENT::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aDc )
 {
     wxASSERT( aItem != NULL );
 
@@ -424,7 +424,7 @@ from component %s in library %s." ),
         }
     }
 
-    LIB_DRAW_ITEM_LIST::iterator i;
+    LIB_ITEMS::iterator i;
 
     for( i = drawings.begin(); i < drawings.end(); i++ )
     {
@@ -441,7 +441,7 @@ from component %s in library %s." ),
 }
 
 
-void LIB_COMPONENT::AddDrawItem( LIB_DRAW_ITEM* aItem )
+void LIB_COMPONENT::AddDrawItem( LIB_ITEM* aItem )
 {
     wxASSERT( aItem != NULL );
 
@@ -450,7 +450,7 @@ void LIB_COMPONENT::AddDrawItem( LIB_DRAW_ITEM* aItem )
 }
 
 
-LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* aItem, KICAD_T aType )
+LIB_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_ITEM* aItem, KICAD_T aType )
 {
     /* Return the next draw object pointer.
      * If item is NULL return the first item of type in the list.
@@ -486,7 +486,7 @@ LIB_DRAW_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_DRAW_ITEM* aItem, KICAD_T aTy
 }
 
 
-void LIB_COMPONENT::GetPins( LIB_PIN_LIST& aList, int aUnit, int aConvert )
+void LIB_COMPONENT::GetPins( LIB_PINS& aList, int aUnit, int aConvert )
 {
     /* Notes:
      * when aUnit == 0: no unit filtering
@@ -494,7 +494,7 @@ void LIB_COMPONENT::GetPins( LIB_PIN_LIST& aList, int aUnit, int aConvert )
      * when .m_Unit == 0, the body item is common to units
      * when .m_Convert == 0, the body item is common to shapes
      */
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
         if( item.Type() != LIB_PIN_T )    // we search pins only
             continue;
@@ -514,8 +514,8 @@ void LIB_COMPONENT::GetPins( LIB_PIN_LIST& aList, int aUnit, int aConvert )
 
 LIB_PIN* LIB_COMPONENT::GetPin( const wxString& aNumber, int aUnit, int aConvert )
 {
-    wxString     pNumber;
-    LIB_PIN_LIST pinList;
+    wxString pNumber;
+    LIB_PINS pinList;
 
     GetPins( pinList, aUnit, aConvert );
 
@@ -581,7 +581,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
     if( !SaveDateAndTime( aFile ) )
         return false;
 
-    LIB_FIELD_LIST fields;
+    LIB_FIELDS fields;
     GetFields( fields );
 
     // Fixed fields:
@@ -657,7 +657,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
         if( fprintf( aFile, "DRAW\n" ) < 0 )
             return false;
 
-        BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+        BOOST_FOREACH( LIB_ITEM& item, drawings )
         {
             if( item.Type() == LIB_FIELD_T )
                 continue;
@@ -811,7 +811,7 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aEr
 bool LIB_COMPONENT::LoadDrawEntries( FILE* aFile, char* aLine,
                                      int* aLineNum, wxString& aErrorMsg )
 {
-    LIB_DRAW_ITEM* newEntry = NULL;
+    LIB_ITEM* newEntry = NULL;
 
     while( true )
     {
@@ -829,31 +829,31 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* aFile, char* aLine,
         switch( aLine[0] )
         {
         case 'A':    /* Arc */
-            newEntry = ( LIB_DRAW_ITEM* ) new LIB_ARC(this);
+            newEntry = ( LIB_ITEM* ) new LIB_ARC( this );
             break;
 
         case 'C':    /* Circle */
-            newEntry = ( LIB_DRAW_ITEM* ) new LIB_CIRCLE(this);
+            newEntry = ( LIB_ITEM* ) new LIB_CIRCLE( this );
             break;
 
         case 'T':    /* Text */
-            newEntry = ( LIB_DRAW_ITEM* ) new LIB_TEXT(this);
+            newEntry = ( LIB_ITEM* ) new LIB_TEXT( this );
             break;
 
         case 'S':    /* Square */
-            newEntry = ( LIB_DRAW_ITEM* ) new LIB_RECTANGLE(this);
+            newEntry = ( LIB_ITEM* ) new LIB_RECTANGLE( this );
             break;
 
         case 'X':    /* Pin Description */
-            newEntry = ( LIB_DRAW_ITEM* ) new LIB_PIN(this);
+            newEntry = ( LIB_ITEM* ) new LIB_PIN( this );
             break;
 
         case 'P':    /* Polyline */
-            newEntry = ( LIB_DRAW_ITEM* ) new LIB_POLYLINE(this);
+            newEntry = ( LIB_ITEM* ) new LIB_POLYLINE( this );
             break;
 
         case 'B':    /* Bezier Curves */
-            newEntry = ( LIB_DRAW_ITEM* ) new LIB_BEZIER(this);
+            newEntry = ( LIB_ITEM* ) new LIB_BEZIER( this );
             break;
 
         default:
@@ -970,7 +970,7 @@ EDA_RECT LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
-    BOOST_FOREACH( const LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( const LIB_ITEM& item, drawings )
     {
         if( ( item.m_Unit > 0 ) && ( ( m_unitCount > 1 ) && ( aUnit > 0 )
                                      && ( aUnit != item.m_Unit ) ) )
@@ -1000,7 +1000,7 @@ EDA_RECT LIB_COMPONENT::GetBodyBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
 
-    BOOST_FOREACH( const LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( const LIB_ITEM& item, drawings )
     {
         if( ( item.m_Unit > 0 ) && ( ( m_unitCount > 1 ) && ( aUnit > 0 )
                                      && ( aUnit != item.m_Unit ) ) )
@@ -1021,7 +1021,7 @@ EDA_RECT LIB_COMPONENT::GetBodyBoundingBox( int aUnit, int aConvert ) const
 
 void LIB_COMPONENT::deleteAllFields()
 {
-    LIB_DRAW_ITEM_LIST::iterator it;
+    LIB_ITEMS::iterator it;
 
     for( it = drawings.begin();  it!=drawings.end();  /* deleting */  )
     {
@@ -1055,7 +1055,7 @@ void LIB_COMPONENT::SetFields( const std::vector <LIB_FIELD>& aFields )
 }
 
 
-void LIB_COMPONENT::GetFields( LIB_FIELD_LIST& aList )
+void LIB_COMPONENT::GetFields( LIB_FIELDS& aList )
 {
     LIB_FIELD*  field;
 
@@ -1075,7 +1075,7 @@ void LIB_COMPONENT::GetFields( LIB_FIELD_LIST& aList )
     }
 
     // Now grab all the rest of fields.
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
         if( item.Type() != LIB_FIELD_T )
             continue;
@@ -1091,7 +1091,7 @@ void LIB_COMPONENT::GetFields( LIB_FIELD_LIST& aList )
 
 LIB_FIELD* LIB_COMPONENT::GetField( int aId )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
         if( item.Type() != LIB_FIELD_T )
             continue;
@@ -1108,7 +1108,7 @@ LIB_FIELD* LIB_COMPONENT::GetField( int aId )
 
 LIB_FIELD* LIB_COMPONENT::FindField( const wxString& aFieldName )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
         if( item.Type() != LIB_FIELD_T )
             continue;
@@ -1188,7 +1188,7 @@ bool LIB_COMPONENT::LoadDateAndTime( char* aLine )
 
 void LIB_COMPONENT::SetOffset( const wxPoint& aOffset )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
         item.SetOffset( aOffset );
     }
@@ -1203,7 +1203,7 @@ void LIB_COMPONENT::RemoveDuplicateDrawItems()
 
 bool LIB_COMPONENT::HasConversion() const
 {
-    BOOST_FOREACH( const LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( const LIB_ITEM& item, drawings )
     {
         if( item.m_Convert > 1 )
             return true;
@@ -1215,7 +1215,7 @@ bool LIB_COMPONENT::HasConversion() const
 
 void LIB_COMPONENT::ClearStatus()
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
         item.m_Flags = 0;
 }
 
@@ -1224,7 +1224,7 @@ int LIB_COMPONENT::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool a
 {
     int itemCount = 0;
 
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
         item.m_Selected = 0;
 
@@ -1253,7 +1253,7 @@ int LIB_COMPONENT::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool a
 
 void LIB_COMPONENT::MoveSelectedItems( const wxPoint& aOffset )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
         if( item.m_Selected == 0 )
             continue;
@@ -1268,14 +1268,14 @@ void LIB_COMPONENT::MoveSelectedItems( const wxPoint& aOffset )
 
 void LIB_COMPONENT::ClearSelectedItems()
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
         item.m_Flags = item.m_Selected = 0;
 }
 
 
 void LIB_COMPONENT::DeleteSelectedItems()
 {
-    LIB_DRAW_ITEM_LIST::iterator item = drawings.begin();
+    LIB_ITEMS::iterator item = drawings.begin();
 
     // We *do not* remove the 2 mandatory fields: reference and value
     // so skip them (do not remove) if they are flagged selected.
@@ -1312,7 +1312,7 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
     unsigned icnt = drawings.size();
     for( unsigned ii = 0; ii < icnt; ii++  )
     {
-        LIB_DRAW_ITEM& item = drawings[ii];
+        LIB_ITEM& item = drawings[ii];
         // We *do not* copy fields because they are unique for the whole component
         // so skip them (do not duplicate) if they are flagged selected.
         if( item.Type() == LIB_FIELD_T )
@@ -1322,7 +1322,7 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
             continue;
 
         item.m_Selected = 0;
-        LIB_DRAW_ITEM* newItem = item.GenCopy();
+        LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
         newItem->m_Selected = IS_SELECTED;
         drawings.push_back( newItem );
     }
@@ -1335,7 +1335,7 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
 
 void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& aCenter )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
         if( item.m_Selected == 0 )
             continue;
@@ -1348,22 +1348,10 @@ void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& aCenter )
 }
 
 
-
-/**
- * Locate a draw object.
- *
- * @param aUnit - Unit number of draw item.
- * @param aConvert - Body style of draw item.
- * @param aType - Draw object type, set to 0 to search for any type.
- * @param aPoint - Coordinate for hit testing.
- *
- * @return LIB_DRAW_ITEM - Pointer the the draw object if found.
- *                         Otherwise NULL.
- */
-LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert,
-                                              KICAD_T aType, const wxPoint& aPoint )
+LIB_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert,
+                                         KICAD_T aType, const wxPoint& aPoint )
 {
-    BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
         if( ( aUnit && item.m_Unit && ( aUnit != item.m_Unit) )
             || ( aConvert && item.m_Convert && ( aConvert != item.m_Convert ) )
@@ -1378,15 +1366,15 @@ LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert,
 }
 
 
-LIB_DRAW_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
-                                              const wxPoint& aPoint, const TRANSFORM& aTransform )
+LIB_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
+                                         const wxPoint& aPoint, const TRANSFORM& aTransform )
 {
     /* we use LocateDrawItem( int aUnit, int convert, KICAD_T type, const
      * wxPoint& pt ) to search items.
      * because this function uses DefaultTransformMatrix as orient/mirror matrix
      * we temporary copy aTransMat in DefaultTransformMatrix
      */
-    LIB_DRAW_ITEM* item;
+    LIB_ITEM* item;
     TRANSFORM transform = DefaultTransform;
     DefaultTransform = aTransform;
 
@@ -1406,7 +1394,7 @@ void LIB_COMPONENT::SetPartCount( int aCount )
 
     if( aCount < m_unitCount )
     {
-        LIB_DRAW_ITEM_LIST::iterator i;
+        LIB_ITEMS::iterator i;
         i = drawings.begin();
 
         while( i != drawings.end() )
@@ -1432,7 +1420,7 @@ void LIB_COMPONENT::SetPartCount( int aCount )
 
             for( int j = prevCount + 1; j <= aCount; j++ )
             {
-                LIB_DRAW_ITEM* newItem = drawings[ii].GenCopy();
+                LIB_ITEM* newItem = (LIB_ITEM*) drawings[ii].Clone();
                 newItem->m_Unit = j;
                 drawings.push_back( newItem );
             }
@@ -1454,14 +1442,14 @@ void LIB_COMPONENT::SetConversion( bool aSetConvert )
     if( aSetConvert )
     {
 
-        BOOST_FOREACH( LIB_DRAW_ITEM& item, drawings )
+        BOOST_FOREACH( LIB_ITEM& item, drawings )
         {
             /* Only pins are duplicated. */
             if( item.Type() != LIB_PIN_T )
                 continue;
             if( item.m_Convert == 1 )
             {
-                LIB_DRAW_ITEM* newItem = item.GenCopy();
+                LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
                 newItem->m_Convert = 2;
                 drawings.push_back( newItem );
             }
@@ -1471,7 +1459,7 @@ void LIB_COMPONENT::SetConversion( bool aSetConvert )
     {
         // Delete converted shape items because the converted shape does
         // not exist
-        LIB_DRAW_ITEM_LIST::iterator i = drawings.begin();
+        LIB_ITEMS::iterator i = drawings.begin();
 
         while( i != drawings.end() )
         {
@@ -1488,7 +1476,7 @@ wxArrayString LIB_COMPONENT::GetAliasNames( bool aIncludeRoot ) const
 {
     wxArrayString names;
 
-    LIB_ALIAS_LIST::const_iterator it;
+    LIB_ALIASES::const_iterator it;
 
     for( it=m_aliases.begin();  it<m_aliases.end();  ++it )
     {
@@ -1535,7 +1523,7 @@ void LIB_COMPONENT::SetAliases( const wxArrayString& aAliasList )
     }
 
     /* Remove names in the current component that are not in the new alias list. */
-    LIB_ALIAS_LIST::iterator it;
+    LIB_ALIASES::iterator it;
 
     for( it = m_aliases.begin(); it < m_aliases.end(); it++ )
     {
@@ -1555,7 +1543,7 @@ void LIB_COMPONENT::RemoveAlias( const wxString& aName )
                  wxT( "Component aliases cannot be changed when they are owned by a library." ) );
     wxCHECK_RET( !aName.IsEmpty(), wxT( "Cannot get alias with an empty name." ) );
 
-    LIB_ALIAS_LIST::iterator it;
+    LIB_ALIASES::iterator it;
 
     for( it = m_aliases.begin(); it < m_aliases.end(); it++ )
     {
@@ -1573,7 +1561,7 @@ LIB_ALIAS* LIB_COMPONENT::RemoveAlias( LIB_ALIAS* aAlias )
     wxCHECK_MSG( aAlias != NULL, NULL, wxT( "Cannot remove alias by NULL pointer." ) );
 
     LIB_ALIAS* nextAlias = NULL;
-    LIB_ALIAS_LIST::iterator it = find( m_aliases.begin(), m_aliases.end(), aAlias );
+    LIB_ALIASES::iterator it = find( m_aliases.begin(), m_aliases.end(), aAlias );
 
     if( it != m_aliases.end() )
     {

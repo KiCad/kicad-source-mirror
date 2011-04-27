@@ -416,7 +416,7 @@ int DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::getSelectedFieldNdx()
  * Function findfield
  * searches a LIB_FIELD_LIST for aFieldName.
  */
-static LIB_FIELD* findfield( const LIB_FIELD_LIST& aList, const wxString& aFieldName )
+static LIB_FIELD* findfield( const LIB_FIELDS& aList, const wxString& aFieldName )
 {
     const LIB_FIELD*  field = NULL;
 
@@ -447,7 +447,7 @@ LIB_FIELD* DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::findField( const wxString& aField
 void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
 /***********************************************************/
 {
-    LIB_FIELD_LIST cmpFields;
+    LIB_FIELDS cmpFields;
 
     m_LibEntry->GetFields( cmpFields );
 

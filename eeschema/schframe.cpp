@@ -129,8 +129,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
                     SCH_EDIT_FRAME::OnChangeComponentOrientation )
 
     // Multple item selection context menu commands.
-    EVT_MENU_RANGE( ID_SCH_SELECT_ITEM_START, ID_SCH_SELECT_ITEM_END,
-                    SCH_EDIT_FRAME::OnSelectItem )
+    EVT_MENU_RANGE( ID_SELECT_ITEM_START, ID_SELECT_ITEM_END, SCH_EDIT_FRAME::OnSelectItem )
 
     /* Handle user interface update events. */
     EVT_UPDATE_UI( wxID_CUT, SCH_EDIT_FRAME::OnUpdateBlockSelected )
@@ -769,19 +768,19 @@ void SCH_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
  * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
  * @param aData = a pointer on an auxiliary data (not used here)
  */
-void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask,
-                                bool aPrintMirrorMode, void* aData)
+void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData )
 {
     GetScreen()->Draw( DrawPanel, aDC, GR_DEFAULT_DRAWMODE );
     TraceWorkSheet( aDC, GetScreen(), g_DrawDefaultLineThickness );
 }
 
+
 void SCH_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
-    int index = id - ID_SCH_SELECT_ITEM_START;
+    int index = id - ID_SELECT_ITEM_START;
 
-    if( (id >= ID_SCH_SELECT_ITEM_START && id <= ID_SCH_SELECT_ITEM_END)
+    if( (id >= ID_SELECT_ITEM_START && id <= ID_SELECT_ITEM_END)
         && (index >= 0 && index < m_collectedItems.GetCount()) )
     {
         SCH_ITEM* item = m_collectedItems[index];

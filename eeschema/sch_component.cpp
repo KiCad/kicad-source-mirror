@@ -85,11 +85,11 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet
         m_Flags = IS_NEW | IS_MOVED;
 
     // Import user defined fields from the library component:
-    LIB_FIELD_LIST libFields;
+    LIB_FIELDS libFields;
 
     libComponent.GetFields( libFields );
 
-    for( LIB_FIELD_LIST::iterator it = libFields.begin();  it!=libFields.end();  ++it )
+    for( LIB_FIELDS::iterator it = libFields.begin();  it!=libFields.end();  ++it )
     {
         // Can no longer insert an empty name, since names are now keys.  The
         // field index is not used beyond the first MANDATORY_FIELDS
@@ -1506,7 +1506,7 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
 
     if( Entry )
     {
-        LIB_PIN_LIST pinList;
+        LIB_PINS pinList;
         Entry->GetPins( pinList, m_unit, m_convert );
 
         // Search for a match in pinList
@@ -1611,7 +1611,7 @@ void SCH_COMPONENT::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 }
 
 
-LIB_DRAW_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
+LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 {
     LIB_COMPONENT* component = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
@@ -1663,7 +1663,7 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData
 
             if( component != NULL )
             {
-                LIB_PIN_LIST pins;
+                LIB_PINS pins;
 
                 component->GetPins( pins, m_unit, m_convert );
 

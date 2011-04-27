@@ -61,8 +61,8 @@ CMP_LIBRARY* LIB_EDIT_FRAME::  m_library   = NULL;
 wxString LIB_EDIT_FRAME::      m_aliasName;
 int LIB_EDIT_FRAME::           m_unit    = 1;
 int LIB_EDIT_FRAME::           m_convert = 1;
-LIB_DRAW_ITEM* LIB_EDIT_FRAME::m_lastDrawItem    = NULL;
-LIB_DRAW_ITEM* LIB_EDIT_FRAME::m_drawItem        = NULL;
+LIB_ITEM* LIB_EDIT_FRAME::m_lastDrawItem = NULL;
+LIB_ITEM* LIB_EDIT_FRAME::m_drawItem = NULL;
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
 wxSize LIB_EDIT_FRAME::        m_clientSize      = wxSize( -1, -1 );
 int LIB_EDIT_FRAME::           m_textSize        = DEFAULT_SIZE_TEXT;
@@ -122,6 +122,9 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_CONFIG_READ, LIB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_COLORS_SETUP, LIB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_LIBEDIT_DIMENSIONS, LIB_EDIT_FRAME::InstallDimensionsDialog )
+
+    // Multple item selection context menu commands.
+    EVT_MENU_RANGE( ID_SELECT_ITEM_START, ID_SELECT_ITEM_END, LIB_EDIT_FRAME::OnSelectItem )
 
     EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
                     LIB_EDIT_FRAME::Process_Config )
@@ -282,7 +285,7 @@ void LIB_EDIT_FRAME::LoadSettings()
 }
 
 
-void LIB_EDIT_FRAME::SetDrawItem( LIB_DRAW_ITEM* drawItem )
+void LIB_EDIT_FRAME::SetDrawItem( LIB_ITEM* drawItem )
 {
     m_drawItem = drawItem;
 }
@@ -722,7 +725,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST:
         if( m_drawItem == NULL )
             break;
-        DrawPanel->MoveCursorToCrossHair();
+
         if( m_drawItem->Type() == LIB_PIN_T )
             StartMovePin( &dc );
         else
@@ -906,7 +909,7 @@ void LIB_EDIT_FRAME::SVG_Print_Component( const wxString& FullFileName )
 }
 
 
-void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
+void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )
 {
     if ( ( DrawItem == NULL ) || ( DrawItem->Type() != LIB_TEXT_T ) )
         return;
@@ -1075,18 +1078,77 @@ void LIB_EDIT_FRAME::OnRotateItem( wxCommandEvent& aEvent )
 }
 
 
-LIB_DRAW_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition )
+LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition,
+                                                 const KICAD_T aFilterList[] )
 {
     if( m_component == NULL )
         return NULL;
 
-    LIB_DRAW_ITEM* item = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT,
-                                                       aPosition );
+    LIB_ITEM* item = locateItem( aPosition, aFilterList );
+
+    if( item == NULL )
+        return NULL;
 
     wxPoint pos = GetScreen()->GetNearestGridPosition( aPosition );
 
     if( item == NULL && aPosition != pos )
-        item = m_component->LocateDrawItem( m_unit, m_convert, TYPE_NOT_INIT, pos );
+        item = locateItem( pos, aFilterList );
+
+    return item;
+}
+
+
+LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aFilterList[] )
+{
+    if( m_component == NULL )
+        return NULL;
+
+    LIB_ITEM* item = NULL;
+
+    m_collectedItems.Collect( m_component->GetDrawItemList(), aFilterList, aPosition,
+                              m_unit, m_convert );
+
+    if( m_collectedItems.GetCount() == 0 )
+    {
+        ClearMsgPanel();
+    }
+    else if( m_collectedItems.GetCount() == 1 )
+    {
+        item = m_collectedItems[0];
+    }
+    else
+    {
+        if( item == NULL )
+        {
+            wxASSERT_MSG( m_collectedItems.GetCount() <= MAX_SELECT_ITEM_IDS,
+                          wxT( "Select item clarification context menu size limit exceeded." ) );
+
+            wxMenu selectMenu;
+            wxMenuItem* title = new wxMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ) );
+
+            selectMenu.Append( title );
+            selectMenu.AppendSeparator();
+
+            for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
+            {
+                wxString text = m_collectedItems[i]->GetSelectMenuText();
+                const char** xpm = m_collectedItems[i]->GetMenuImage();
+                ADD_MENUITEM( &selectMenu, ID_SELECT_ITEM_START + i, text, xpm );
+            }
+
+            // Set to NULL in case user aborts the clarification context menu.
+            m_drawItem = NULL;
+            DrawPanel->m_AbortRequest = true;   // Changed to false if an item is selected
+            PopupMenu( &selectMenu );
+            DrawPanel->MoveCursorToCrossHair();
+            item = m_drawItem;
+        }
+    }
+
+    if( item )
+        item->DisplayInfo( this );
+    else
+        ClearMsgPanel();
 
     return item;
 }
@@ -1104,7 +1166,7 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
         LIB_PIN* pin = (LIB_PIN*) m_drawItem;
         wxPoint pos = pin->GetPosition();
 
-        m_component->RemoveDrawItem( (LIB_DRAW_ITEM*) pin, DrawPanel, aDC );
+        m_component->RemoveDrawItem( (LIB_ITEM*) pin, DrawPanel, aDC );
 
         if( g_EditPinByPinIsOn == false )
         {
@@ -1118,7 +1180,7 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
                 if( pin->GetPosition() != pos )
                     continue;
 
-                m_component->RemoveDrawItem( (LIB_DRAW_ITEM*) pin );
+                m_component->RemoveDrawItem( (LIB_ITEM*) pin );
             }
         }
     }
@@ -1133,4 +1195,19 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
     m_drawItem = NULL;
     OnModify();
     DrawPanel->CrossHairOn( aDC );
+}
+
+
+void LIB_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
+{
+    int id = aEvent.GetId();
+    int index = id - ID_SELECT_ITEM_START;
+
+    if( (id >= ID_SELECT_ITEM_START && id <= ID_SELECT_ITEM_END)
+        && (index >= 0 && index < m_collectedItems.GetCount()) )
+    {
+        LIB_ITEM* item = m_collectedItems[index];
+        DrawPanel->m_AbortRequest = false;
+        m_drawItem = item;
+    }
 }

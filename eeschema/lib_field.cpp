@@ -41,19 +41,19 @@
  *  others = free fields
  */
 LIB_FIELD::LIB_FIELD(LIB_COMPONENT * aParent, int idfield ) :
-    LIB_DRAW_ITEM( LIB_FIELD_T, aParent )
+    LIB_ITEM( LIB_FIELD_T, aParent )
 {
     Init( idfield );
 }
 
 
-LIB_FIELD::LIB_FIELD( int idfield ) : LIB_DRAW_ITEM( LIB_FIELD_T, NULL )
+LIB_FIELD::LIB_FIELD( int idfield ) : LIB_ITEM( LIB_FIELD_T, NULL )
 {
     Init( idfield );
 }
 
 
-LIB_FIELD::LIB_FIELD( const LIB_FIELD& field ) : LIB_DRAW_ITEM( field )
+LIB_FIELD::LIB_FIELD( const LIB_FIELD& field ) : LIB_ITEM( field )
 {
     m_id        = field.m_id;
     m_Pos       = field.m_Pos;
@@ -390,13 +390,13 @@ bool LIB_FIELD::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTr
 }
 
 
-LIB_DRAW_ITEM* LIB_FIELD::DoGenCopy()
+EDA_ITEM* LIB_FIELD::doClone() const
 {
     LIB_FIELD* newfield = new LIB_FIELD( m_id );
 
     Copy( newfield );
 
-    return (LIB_DRAW_ITEM*) newfield;
+    return (EDA_ITEM*) newfield;
 }
 
 
@@ -417,7 +417,7 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 }
 
 
-int LIB_FIELD::DoCompare( const LIB_DRAW_ITEM& other ) const
+int LIB_FIELD::DoCompare( const LIB_ITEM& other ) const
 {
     wxASSERT( other.Type() == LIB_FIELD_T );
 
@@ -654,6 +654,14 @@ void LIB_FIELD::SetText( const wxString& aText )
 }
 
 
+wxString LIB_FIELD::GetSelectMenuText() const
+{
+    return wxString::Format( _( "Field %s %s" ),
+                             GetChars( GetName() ),
+                             GetChars( GetText() ) );
+}
+
+
 void LIB_FIELD::BeginEdit( int aEditMode, const wxPoint aPosition )
 {
     wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED ) ) != 0,
@@ -723,7 +731,7 @@ void LIB_FIELD::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
 
-    LIB_DRAW_ITEM::DisplayInfo( aFrame );
+    LIB_ITEM::DisplayInfo( aFrame );
 
     // Display style:
     msg = GetTextStyleName();

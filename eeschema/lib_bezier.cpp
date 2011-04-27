@@ -19,7 +19,7 @@
 
 
 LIB_BEZIER::LIB_BEZIER( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( LIB_BEZIER_T, aParent )
+    LIB_ITEM( LIB_BEZIER_T, aParent )
 {
     m_Fill       = NO_FILL;
     m_Width      = 0;
@@ -28,7 +28,7 @@ LIB_BEZIER::LIB_BEZIER( LIB_COMPONENT* aParent ) :
 }
 
 
-LIB_BEZIER::LIB_BEZIER( const LIB_BEZIER& aBezier ) : LIB_DRAW_ITEM( aBezier )
+LIB_BEZIER::LIB_BEZIER( const LIB_BEZIER& aBezier ) : LIB_ITEM( aBezier )
 {
     m_PolyPoints   = aBezier.m_PolyPoints;
     m_BezierPoints = aBezier.m_BezierPoints;   // Vector copy
@@ -113,21 +113,13 @@ bool LIB_BEZIER::Load( char* aLine, wxString& aErrorMsg )
 }
 
 
-LIB_DRAW_ITEM* LIB_BEZIER::DoGenCopy()
+EDA_ITEM* LIB_BEZIER::doClone() const
 {
-    LIB_BEZIER* newitem = new LIB_BEZIER(GetParent());
-
-    newitem->m_BezierPoints = m_BezierPoints;   // Vector copy
-    newitem->m_Width   = m_Width;
-    newitem->m_Unit    = m_Unit;
-    newitem->m_Convert = m_Convert;
-    newitem->m_Flags   = m_Flags;
-    newitem->m_Fill    = m_Fill;
-    return (LIB_DRAW_ITEM*) newitem;
+    return new LIB_BEZIER( *this );
 }
 
 
-int LIB_BEZIER::DoCompare( const LIB_DRAW_ITEM& aOther ) const
+int LIB_BEZIER::DoCompare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_BEZIER_T );
 
@@ -366,7 +358,7 @@ void LIB_BEZIER::DisplayInfo( EDA_DRAW_FRAME* aFrame )
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_DRAW_ITEM::DisplayInfo( aFrame );
+    LIB_ITEM::DisplayInfo( aFrame );
 
     msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
 

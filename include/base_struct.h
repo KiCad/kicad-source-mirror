@@ -359,8 +359,8 @@ public:
                                      * editing */
 
     // member used in undo/redo function
-    EDA_ITEM*     m_Image;       // Link to an image copy to save a copy of
-                                   // old parameters values
+    EDA_ITEM*     m_Image;        // Link to an image copy to save a copy of
+                                  // old parameters values
 private:
     void InitVars();
 
@@ -576,6 +576,24 @@ public:
      */
     virtual const char** GetMenuImage() const { return (const char**) right_xpm; }
 
+    /**
+     * Test if another item is less than this object.
+     *
+     * @param aItem - Item to compare against.
+     * @return - True if \a aItem is less than the item.
+     */
+    bool operator<( const EDA_ITEM& aItem ) const;
+
+    /**
+     * Function Sort
+     * is a helper function to be used by the C++ STL sort algorithm for sorting a STL
+     * container of EDA_ITEM pointers.
+     *
+     * @param aLeft The left hand item to compare.
+     * @param aRight The right hand item to compare.
+     * @return True if \a aLeft is less than \a aRight.
+     */
+    static bool Sort( const EDA_ITEM* aLeft, const EDA_ITEM* aRight ) { return *aLeft < *aRight; }
 
 #if defined(DEBUG)
 

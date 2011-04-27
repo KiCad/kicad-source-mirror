@@ -80,7 +80,7 @@ enum DrawPinOrient {
 };
 
 
-class LIB_PIN : public LIB_DRAW_ITEM
+class LIB_PIN : public LIB_ITEM
 {
     wxPoint  m_position;     ///< Position of the pin.
     int      m_length;       ///< Length of the pin.
@@ -455,7 +455,7 @@ public:
     virtual wxString GetSelectMenuText() const;
 
 protected:
-    virtual LIB_DRAW_ITEM* DoGenCopy();
+    virtual EDA_ITEM* doClone() const;
 
     /**
      * Provide the pin draw object specific comparison.
@@ -466,7 +466,7 @@ protected:
      *      - Pin horizontal (X) position.
      *      - Pin vertical (Y) position.
      */
-    virtual int DoCompare( const LIB_DRAW_ITEM& aOther ) const;
+    virtual int DoCompare( const LIB_ITEM& aOther ) const;
     virtual void DoOffset( const wxPoint& aOffset );
     virtual bool DoTestInside( EDA_RECT& aRect ) const;
     virtual void DoMove( const wxPoint& aPosition );

@@ -81,7 +81,6 @@ EDA_ITEM* EDA_ITEM::doClone() const
 }
 
 
-// see base_struct.h
 SEARCH_RESULT EDA_ITEM::IterateForward( EDA_ITEM*     listStart,
                                         INSPECTOR*    inspector,
                                         const void*   testData,
@@ -132,6 +131,15 @@ wxString EDA_ITEM::GetSelectMenuText() const
                 GetClass() );
 
     return wxString( wxT( "Undefined menu text for " ) + GetClass() );
+}
+
+
+bool EDA_ITEM::operator<( const EDA_ITEM& aItem ) const
+{
+    wxFAIL_MSG( wxString::Format( wxT( "Less than operator not defined for item type %s." ),
+                                  GetChars( GetClass() ) ) );
+
+    return false;
 }
 
 

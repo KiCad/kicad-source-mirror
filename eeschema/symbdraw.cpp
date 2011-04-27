@@ -32,7 +32,7 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 /*
  * Show the dialog box for editing a graphical item properties
  */
-void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
+void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
 {
     if( DrawItem == NULL )
         return;
@@ -102,7 +102,7 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_DRAW_ITEM* DrawItem )
 static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) Panel->GetParent();
-    LIB_DRAW_ITEM*  item   = parent->GetDrawItem();
+    LIB_ITEM* item = parent->GetDrawItem();
 
     if( item == NULL )
         return;
@@ -122,7 +122,7 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-LIB_DRAW_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
+LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
 {
     DrawPanel->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
     wxPoint drawPos = GetScreen()->GetCrossHairPosition( true );
@@ -229,7 +229,7 @@ void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool aErase )
 {
-    LIB_DRAW_ITEM* item;
+    LIB_ITEM* item;
 
     item = ( (LIB_EDIT_FRAME*) aPanel->GetParent() )->GetDrawItem();
 
@@ -286,7 +286,7 @@ static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
                                bool aErase )
 {
     BASE_SCREEN*   Screen   = aPanel->GetScreen();
-    LIB_DRAW_ITEM* item = ( (LIB_EDIT_FRAME*) aPanel->GetParent() )->GetDrawItem();
+    LIB_ITEM* item = ( (LIB_EDIT_FRAME*) aPanel->GetParent() )->GetDrawItem();
 
     if( item == NULL )
         return;

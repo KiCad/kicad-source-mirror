@@ -32,7 +32,7 @@ struct AliasMapSort
  */
 typedef std::map< wxString, LIB_ALIAS*, AliasMapSort > LIB_ALIAS_MAP;
 
-typedef std::vector< LIB_ALIAS* > LIB_ALIAS_LIST;
+typedef std::vector< LIB_ALIAS* > LIB_ALIASES;
 
 /* values for member .m_options */
 enum  LibrEntryOptions
@@ -161,10 +161,10 @@ class LIB_COMPONENT : public EDA_ITEM
     long               m_dateModified;   ///< Date the component was last modified.
     LibrEntryOptions   m_options;        ///< Special component features such as POWER or NORMAL.)
     int                m_unitCount;      ///< Number of units (parts) per package.
-    LIB_DRAW_ITEM_LIST drawings;         ///< How to draw this part.
+    LIB_ITEMS          drawings;         ///< How to draw this part.
     wxArrayString      m_FootprintList;  /**< List of suitable footprint names for the
                                               component (wild card names accepted). */
-    LIB_ALIAS_LIST     m_aliases;        ///< List of alias object pointers associated with the
+    LIB_ALIASES        m_aliases;        ///< List of alias object pointers associated with the
                                          ///< component.
     CMP_LIBRARY*       m_library;        ///< Library the component belongs to if any.
 
@@ -308,7 +308,7 @@ public:
      *
      * @param aList - List to add fields to
      */
-    void GetFields( LIB_FIELD_LIST& aList );
+    void GetFields( LIB_FIELDS& aList );
 
     /**
      * Function FindField
@@ -373,7 +373,7 @@ public:
      *
      * @param aItem - New draw object to add to component.
      */
-    void AddDrawItem( LIB_DRAW_ITEM* aItem );
+    void AddDrawItem( LIB_ITEM* aItem );
 
     /**
      * Remove draw \a aItem from list.
@@ -382,7 +382,7 @@ public:
      * @param aPanel - Panel to remove part from.
      * @param aDc - Device context to remove part from.
      */
-    void RemoveDrawItem( LIB_DRAW_ITEM* aItem, EDA_DRAW_PANEL* aPanel = NULL, wxDC* aDc = NULL );
+    void RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel = NULL, wxDC* aDc = NULL );
 
     /**
      * Return the next draw object pointer.
@@ -393,7 +393,7 @@ public:
      *                if TYPE_NOT_INIT search for all items types
      * @return - The next drawing object in the list if found, otherwise NULL.
      */
-    LIB_DRAW_ITEM* GetNextDrawItem( LIB_DRAW_ITEM* aItem = NULL, KICAD_T aType = TYPE_NOT_INIT );
+    LIB_ITEM* GetNextDrawItem( LIB_ITEM* aItem = NULL, KICAD_T aType = TYPE_NOT_INIT );
 
     /**
      * Return the next pin object from the draw list.
@@ -406,7 +406,7 @@ public:
      */
     LIB_PIN* GetNextPin( LIB_PIN* aItem = NULL )
     {
-        return (LIB_PIN*) GetNextDrawItem( (LIB_DRAW_ITEM*) aItem, LIB_PIN_T );
+        return (LIB_PIN*) GetNextDrawItem( (LIB_ITEM*) aItem, LIB_PIN_T );
     }
 
 
@@ -423,7 +423,7 @@ public:
      * @param aConvert - Convert number of pin to add to list.  Set to 0 to
      *                   get pins from any convert of component.
      */
-    void GetPins( LIB_PIN_LIST& aList, int aUnit = 0, int aConvert = 0 );
+    void GetPins( LIB_PINS& aList, int aUnit = 0, int aConvert = 0 );
 
     /**
      * Return pin object with the requested pin \a aNumber.
@@ -521,7 +521,7 @@ public:
      * @param aPoint - Coordinate for hit testing.
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_DRAW_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType, const wxPoint& aPoint );
+    LIB_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType, const wxPoint& aPoint );
 
     /**
      * Locate a draw object (overlaid)
@@ -533,15 +533,15 @@ public:
      * @param aTransform = the transform matrix
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_DRAW_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
-                                   const wxPoint& aPoint, const TRANSFORM& aTransform );
+    LIB_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
+                              const wxPoint& aPoint, const TRANSFORM& aTransform );
 
     /**
      * Return a reference to the draw item list.
      *
-     * @return LIB_DRAW_ITEM_LIST& - Reference to the draw item object list.
+     * @return LIB_ITEMS& - Reference to the draw item object list.
      */
-    LIB_DRAW_ITEM_LIST& GetDrawItemList() { return drawings; }
+    LIB_ITEMS& GetDrawItemList() { return drawings; }
 
     /**
      * Set the part per package count.

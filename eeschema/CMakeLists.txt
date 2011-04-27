@@ -94,6 +94,7 @@ set(EESCHEMA_SRCS
     lib_arc.cpp
     lib_bezier.cpp
     lib_circle.cpp
+    lib_collectors.cpp
     lib_draw_item.cpp
     lib_export.cpp
     lib_field.cpp

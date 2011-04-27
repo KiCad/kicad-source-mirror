@@ -17,11 +17,11 @@ const int fill_tab[3] = { 'N', 'F', 'f' };
 
 
 /* Base class (abstract) for components bodies items */
-LIB_DRAW_ITEM::LIB_DRAW_ITEM( KICAD_T        aType,
-                              LIB_COMPONENT* aComponent,
-                              int            aUnit,
-                              int            aConvert,
-                              FILL_T         aFillType ) :
+LIB_ITEM::LIB_ITEM( KICAD_T        aType,
+                    LIB_COMPONENT* aComponent,
+                    int            aUnit,
+                    int            aConvert,
+                    FILL_T         aFillType ) :
     EDA_ITEM( aType )
 {
     m_Unit              = aUnit;
@@ -34,15 +34,15 @@ LIB_DRAW_ITEM::LIB_DRAW_ITEM( KICAD_T        aType,
 }
 
 
-LIB_DRAW_ITEM::LIB_DRAW_ITEM( const LIB_DRAW_ITEM& aItem ) :
+LIB_ITEM::LIB_ITEM( const LIB_ITEM& aItem ) :
     EDA_ITEM( aItem )
 {
     m_Unit = aItem.m_Unit;
     m_Convert = aItem.m_Convert;
     m_Fill = aItem.m_Fill;
-    m_Parent = aItem.m_Parent;
     m_typeName = aItem.m_typeName;
     m_isFillable = aItem.m_isFillable;
+    m_eraseLastDrawItem = false;
 }
 
 
@@ -53,7 +53,7 @@ LIB_DRAW_ITEM::LIB_DRAW_ITEM( const LIB_DRAW_ITEM& aItem ) :
  * all library items.  Call the base class from the derived class or the
  * common information will not be updated in the message panel.
  */
-void LIB_DRAW_ITEM::DisplayInfo( EDA_DRAW_FRAME* aFrame )
+void LIB_ITEM::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
 
@@ -78,7 +78,7 @@ void LIB_DRAW_ITEM::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 }
 
 
-bool LIB_DRAW_ITEM::operator==( const LIB_DRAW_ITEM& aOther ) const
+bool LIB_ITEM::operator==( const LIB_ITEM& aOther ) const
 {
     return ( ( Type() == aOther.Type() )
              && ( m_Unit == aOther.m_Unit )
@@ -87,7 +87,7 @@ bool LIB_DRAW_ITEM::operator==( const LIB_DRAW_ITEM& aOther ) const
 }
 
 
-bool LIB_DRAW_ITEM::operator<( const LIB_DRAW_ITEM& aOther ) const
+bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 {
     int result = m_Convert - aOther.m_Convert;
 
@@ -108,8 +108,8 @@ bool LIB_DRAW_ITEM::operator<( const LIB_DRAW_ITEM& aOther ) const
 }
 
 
-void LIB_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, int aColor,
-                          int aDrawMode, void* aData, const TRANSFORM& aTransform )
+void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, int aColor,
+                     int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
     if( InEditMode() )
     {
@@ -143,7 +143,7 @@ void LIB_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOff
 }
 
 
-int LIB_DRAW_ITEM::GetDefaultColor()
+int LIB_ITEM::GetDefaultColor()
 {
     return ReturnLayerColor( LAYER_DEVICE );
 }

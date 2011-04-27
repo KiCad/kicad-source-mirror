@@ -5,6 +5,7 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
+#include "macros.h"
 #include "class_drawpanel.h"
 #include "plot_common.h"
 #include "trigo.h"
@@ -17,7 +18,7 @@
 
 
 LIB_CIRCLE::LIB_CIRCLE( LIB_COMPONENT* aParent ) :
-    LIB_DRAW_ITEM( LIB_CIRCLE_T, aParent )
+    LIB_ITEM( LIB_CIRCLE_T, aParent )
 {
     m_Radius     = 0;
     m_Fill       = NO_FILL;
@@ -27,7 +28,7 @@ LIB_CIRCLE::LIB_CIRCLE( LIB_COMPONENT* aParent ) :
 
 
 LIB_CIRCLE::LIB_CIRCLE( const LIB_CIRCLE& aCircle ) :
-    LIB_DRAW_ITEM( aCircle )
+    LIB_ITEM( aCircle )
 {
     m_Pos    = aCircle.m_Pos;
     m_Radius = aCircle.m_Radius;
@@ -105,23 +106,13 @@ bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
 }
 
 
-LIB_DRAW_ITEM* LIB_CIRCLE::DoGenCopy()
+EDA_ITEM* LIB_CIRCLE::doClone() const
 {
-    LIB_CIRCLE* newitem = new LIB_CIRCLE( GetParent() );
-
-    newitem->m_Pos     = m_Pos;
-    newitem->m_Radius  = m_Radius;
-    newitem->m_Width   = m_Width;
-    newitem->m_Unit    = m_Unit;
-    newitem->m_Convert = m_Convert;
-    newitem->m_Flags   = m_Flags;
-    newitem->m_Fill    = m_Fill;
-
-    return (LIB_DRAW_ITEM*) newitem;
+    return new LIB_CIRCLE( *this );
 }
 
 
-int LIB_CIRCLE::DoCompare( const LIB_DRAW_ITEM& aOther ) const
+int LIB_CIRCLE::DoCompare( const LIB_ITEM& aOther ) const
 {
     wxASSERT( aOther.Type() == LIB_CIRCLE_T );
 
@@ -255,7 +246,7 @@ void LIB_CIRCLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
     wxString msg;
     EDA_RECT bBox = GetBoundingBox();
 
-    LIB_DRAW_ITEM::DisplayInfo( aFrame );
+    LIB_ITEM::DisplayInfo( aFrame );
 
     msg = ReturnStringFromValue( g_UserUnit, m_Width, EESCHEMA_INTERNAL_UNIT, true );
 
@@ -268,6 +259,15 @@ void LIB_CIRCLE::DisplayInfo( EDA_DRAW_FRAME* aFrame )
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
     aFrame->AppendMsgPanel( _( "Bounding box" ), msg, BROWN );
+}
+
+
+wxString LIB_CIRCLE::GetSelectMenuText() const
+{
+    return wxString::Format( _( "Circle center (%s, %s), radius %s" ),
+                             GetChars( CoordinateToString( m_Pos.x, EESCHEMA_INTERNAL_UNIT ) ),
+                             GetChars( CoordinateToString( m_Pos.y, EESCHEMA_INTERNAL_UNIT ) ),
+                             GetChars( CoordinateToString( m_Radius, EESCHEMA_INTERNAL_UNIT ) ) );
 }
 
 
