@@ -21,6 +21,7 @@ LIB_CIRCLE::LIB_CIRCLE( LIB_COMPONENT* aParent ) :
     LIB_ITEM( LIB_CIRCLE_T, aParent )
 {
     m_Radius     = 0;
+    m_Width      = 0;
     m_Fill       = NO_FILL;
     m_isFillable = true;
     m_typeName   = _( "Circle" );
@@ -33,6 +34,7 @@ LIB_CIRCLE::LIB_CIRCLE( const LIB_CIRCLE& aCircle ) :
     m_Pos    = aCircle.m_Pos;
     m_Radius = aCircle.m_Radius;
     m_Fill   = aCircle.m_Fill;
+    m_Width  = aCircle.m_Width;
 }
 
 
@@ -217,7 +219,7 @@ void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     else if( fill == FILLED_SHAPE )
         GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, m_Radius, 0, color, color );
     else
-        GRCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, m_Radius, GetPenSize( ), color );
+        GRCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, m_Radius, GetPenSize(), color );
 
     /* Set to one (1) to draw bounding box around circle to validate bounding
      * box calculation. */
