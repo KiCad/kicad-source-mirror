@@ -257,8 +257,6 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
 /*
  * Routine to rotate and mirror a component.
- *
- ** If DC == NULL: no repaint
  */
 void SCH_EDIT_FRAME::OnChangeComponentOrientation( wxCommandEvent& aEvent )
 {
@@ -409,6 +407,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
         return;
     }
 
+    int flags = DrawComponent->m_Flags;
     if( DrawComponent->m_Flags )
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
@@ -424,6 +423,9 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
     // When m_Convert = val max, return to the first shape
     if( DrawComponent->GetConvert() > 2 )
         DrawComponent->SetConvert( 1 );
+
+    DrawComponent->ClearFlags();
+    DrawComponent->SetFlags( flags );   // Restore m_Flag (modified by SetConvert())
 
     /* Redraw the component in the new position. */
     if( DrawComponent->m_Flags & IS_MOVED )
