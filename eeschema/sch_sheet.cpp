@@ -525,7 +525,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     int      name_orientation;
     wxPoint  pos_sheetname,pos_filename;
     wxPoint  pos = m_Pos + aOffset;
-    int      LineWidth = g_DrawDefaultLineThickness;
+    int      lineWidth = GetPenSize();
 
     if( aColor >= 0 )
         color = aColor;
@@ -535,7 +535,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     GRSetDrawMode( aDC, aDrawMode );
 
     GRRect( &aPanel->m_ClipBox, aDC, pos.x, pos.y,
-            pos.x + m_Size.x, pos.y + m_Size.y, LineWidth, color );
+            pos.x + m_Size.x, pos.y + m_Size.y, lineWidth, color );
 
     pos_sheetname = GetSheetNamePosition() + aOffset;
     pos_filename = GetFileNamePosition() + aOffset;
@@ -555,7 +555,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     DrawGraphicText( aPanel, aDC, pos_sheetname,
                      (EDA_Colors) txtcolor, Text, name_orientation,
                      wxSize( m_SheetNameSize, m_SheetNameSize ),
-                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, LineWidth,
+                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM, lineWidth,
                      false, false );
 
     /* Draw text : FileName */
@@ -568,7 +568,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     DrawGraphicText( aPanel, aDC, pos_filename,
                      (EDA_Colors) txtcolor, Text, name_orientation,
                      wxSize( m_FileNameSize, m_FileNameSize ),
-                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, LineWidth,
+                     GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP, lineWidth,
                      false, false );
 
 
@@ -583,19 +583,30 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
 EDA_RECT SCH_SHEET::GetBoundingBox() const
 {
-    int      dx, dy;
+    wxPoint end;
+    EDA_RECT box( m_Pos, m_Size );
+    int      lineWidth = GetPenSize();
 
     // Determine length of texts
-    wxString Text1    = wxT( "Sheet: " ) + m_SheetName;
-    wxString Text2    = wxT( "File: " ) + m_FileName;
-    int      textlen1 = 10 * Text1.Len() * m_SheetNameSize / 9;
-    int      textlen2 = 10 * Text2.Len() * m_FileNameSize / 9;
+    wxString text    = wxT( "Sheet: " ) + m_SheetName;
+    int      textlen  = ReturnGraphicTextWidth( text, m_SheetNameSize, false, lineWidth );
+    text = wxT( "File: " ) + m_FileName;
+    int      textlen2 = ReturnGraphicTextWidth( text, m_FileNameSize, false, lineWidth );
 
-    textlen1 = MAX( textlen1, textlen2 );
-    dx = MAX( m_Size.x, textlen1 );
-    dy = m_Size.y + m_SheetNameSize + m_FileNameSize + 16;
+    // Calculate bounding box X size:
+    textlen = MAX( textlen, textlen2 );
+    end.x = MAX( m_Size.x, textlen );
 
-    EDA_RECT box( wxPoint( m_Pos.x, m_Pos.y - m_SheetNameSize - 8 ), wxSize( dx, dy ) );
+    // Calculate bounding box pos:
+    end.y = m_Size.y;
+    end += m_Pos;
+
+    // Move upper and lower limits to include texts:
+    box.m_Pos.y  -= wxRound( m_SheetNameSize * 1.3 ) + 8;
+    end.y += wxRound( m_FileNameSize * 1.3 ) + 8;
+
+    box.SetEnd( end );
+    box.Inflate( lineWidth / 2 );
 
     return box;
 }
