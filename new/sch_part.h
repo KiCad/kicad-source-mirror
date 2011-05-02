@@ -103,16 +103,6 @@ class PART;
 class SWEET_PARSER;
 class PROPERTY;
 
-};
-
-/// a set of pin padnames that are electrically equivalent for a PART.
-typedef std::set< wxString >            MERGE_SET;
-
-/// The key is the VISIBLE_PIN from
-/// (pin_merge VISIBLE_PIN (hide HIDDEN_PIN1 HIDDEN_PIN2...))
-typedef boost::ptr_map< wxString, MERGE_SET >  MERGE_SETS;
-
-
 class POINT : public wxPoint
 {
 public:
@@ -124,6 +114,15 @@ public:
         wxPoint()
     {}
 };
+
+};
+
+/// a set of pin padnames that are electrically equivalent for a PART.
+typedef std::set< wxString >            MERGE_SET;
+
+/// The key is the VISIBLE_PIN from
+/// (pin_merge VISIBLE_PIN (hide HIDDEN_PIN1 HIDDEN_PIN2...))
+typedef boost::ptr_map< wxString, MERGE_SET >  MERGE_SETS;
 
 
 /**

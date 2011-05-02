@@ -29,13 +29,13 @@
 #include <sweet_lexer.h>
 
 
-class POINT;
 typedef int     STROKE;
 
 namespace SCH {
 
 class LIB_TABLE;
 class PART;
+class POINT;
 
 
 // GRAPHICS

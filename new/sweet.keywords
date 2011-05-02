@@ -3,7 +3,6 @@ anchor
 arc
 at
 bezier
-inout
 bold
 bottom
 center
@@ -22,6 +21,7 @@ font
 footprint
 hide
 in
+inout
 input_low
 inverted
 inverted_clk

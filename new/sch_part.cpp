@@ -31,11 +31,12 @@
 #include <macros.h>
 
 
+
 /**
  * Function formatAt
  * outputs a formatted "(at X Y [ANGLE])" s-expression
  */
-static void formatAt( OUTPUTFORMATTER* out, const POINT& aPos, ANGLE aAngle, int indent=0 )
+ static void formatAt( OUTPUTFORMATTER* out, const SCH::POINT& aPos, ANGLE aAngle, int indent=0 )
     throw( IO_ERROR )
 {
     // if( aPos.x || aPos.y || aAngle )
