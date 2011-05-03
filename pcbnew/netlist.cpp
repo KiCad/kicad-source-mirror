@@ -101,7 +101,6 @@ public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NUL
         m_useCmpFile = true;
     }
 
-
     ~NETLIST_READER()
     {
         // Free new modules list:
@@ -110,7 +109,6 @@ public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NUL
 
         m_newModulesList.clear();
     }
-
 
     /**
      * Function ReadNetList
@@ -125,13 +123,13 @@ public: NETLIST_READER( PCB_EDIT_FRAME* aFrame, wxTextCtrl* aMessageWindow = NUL
                       const wxString& aCmplistFileName );
 
     /**
-     * Function BuildFootprintListFromNetlist
-     * Fill aBufName with footprints references read from the netlist.
+     * Function BuildComponentsListFromNetlist
+     * Fill aBufName with component references read from the netlist.
      * @param aNetlistFilename = netlist full file name
-     * @param aBufName = wxArrayString to fill with footprint names
-     * @return the footprint count, or -1 if netlist file cannot opened
+     * @param aBufName = wxArrayString to fill with component references
+     * @return the component count, or -1 if netlist file cannot opened
      */
-    int  BuildFootprintListFromNetlist( const wxString& aNetlistFilename,
+    int  BuildComponentsListFromNetlist( const wxString& aNetlistFilename,
                                         wxArrayString&  aBufName );
 
     /**
@@ -175,15 +173,16 @@ private:
     void    loadNewModules();
 
     /**
-     * function readModulesComponentsTable
+     * function readModuleComponentLinkfile
      * read the *.cmp file ( filename in m_cmplistFullName )
-     * giving the equivalence beteween modules and components
-     * @return true and the module name in aModuleName, false if not found
+     * giving the equivalence between footprint names and components
+     * to find the footprint name corresponding to aCmpIdent
+     * @return true and the module name in aFootprintName, false if not found
      *
      * @param aCmpIdent = component identification: schematic reference or time stamp
-     * @param aModuleName the footprint name corresponding to the component identification
+     * @param aFootprintName the footprint name corresponding to the component identification
      */
-    bool    readModulesComponentsTable( const wxString* aCmpIdent, wxString& aModuleName );
+    bool    readModuleComponentLinkfile( const wxString* aCmpIdent, wxString& aFootprintName );
 };
 
 /**
@@ -289,13 +288,11 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
     // Rebuild the board connectivity:
     Compile_Ratsnest( NULL, true );
 
-    if( GetBoard()->m_Track )
+    if( aDeleteBadTracks && GetBoard()->m_Track )
     {
-        if( aDeleteBadTracks )    // Remove erroneous tracks
-        {
-            RemoveMisConnectedTracks( NULL );
-            Compile_Ratsnest( NULL, true );
-        }
+        // Remove erroneous tracks
+        RemoveMisConnectedTracks( NULL );
+        Compile_Ratsnest( NULL, true );
     }
 
     GetBoard()->DisplayInfo( this );
@@ -309,26 +306,26 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
  */
 void NETLIST_READER::RemoveExtraFootprints( const wxString& aNetlistFileName )
 {
-    wxArrayString modulesInNetlist;
+    wxArrayString componentsInNetlist;
 
     // Build list of modules in the netlist
     int modulesCount =
-        BuildFootprintListFromNetlist( aNetlistFileName, modulesInNetlist );
+        BuildComponentsListFromNetlist( aNetlistFileName, componentsInNetlist );
     if( modulesCount == 0 )
         return;
 
-    MODULE* NextModule;
-    MODULE* Module = m_pcbframe->GetBoard()->m_Modules;
+    MODULE* nextModule;
+    MODULE* module = m_pcbframe->GetBoard()->m_Modules;
     bool ask_user = true;
-    for( ; Module != NULL; Module = NextModule )
+    for( ; module != NULL; module = nextModule )
     {
         int ii;
-        NextModule = Module->Next();
-        if( Module->m_ModuleStatus & MODULE_is_LOCKED )
+        nextModule = module->Next();
+        if( module->m_ModuleStatus & MODULE_is_LOCKED )
             continue;
         for( ii = 0; ii < modulesCount; ii++ )
         {
-            if( Module->m_Reference->m_Text.CmpNoCase( modulesInNetlist[ii] ) == 0 )
+            if( module->m_Reference->m_Text.CmpNoCase( componentsInNetlist[ii] ) == 0 )
                 break; /* Module is found in net list. */
         }
 
@@ -341,7 +338,7 @@ void NETLIST_READER::RemoveExtraFootprints( const wxString& aNetlistFileName )
                     _( "Ok to delete not locked footprints not found in netlist?" ) ) )
                     break;
             }
-            Module->DeleteStructure();
+            module->DeleteStructure();
         }
     }
 }
@@ -371,8 +368,8 @@ bool NETLIST_READER::ReadNetList( FILE*           aFile,
                                   const wxString& aNetlistFileName,
                                   const wxString& aCmplistFileName )
 {
-    int State   = 0;
-    int Comment = 0;
+    int state   = 0;
+    bool is_comment = false;
 
     m_netlistFullName = aNetlistFileName;
     m_cmplistFullName = aCmplistFileName;
@@ -387,35 +384,35 @@ bool NETLIST_READER::ReadNetList( FILE*           aFile,
     {
         char* line = StrPurge( netlineReader.Line() );
 
-        if( Comment ) /* Comments in progress */
+        if( is_comment ) /* Comments in progress */
         {
             // Test for end of the current comment
             if( ( line = strchr( line, '}' ) ) == NULL )
                 continue;
-            Comment = 0;
+            is_comment = false;
         }
         if( *line == '{' ) /* Start Comment */
         {
-            Comment = 1;
+            is_comment = true;
             if( ( line = strchr( line, '}' ) ) == NULL )
                 continue;
         }
 
         if( *line == '(' )
-            State++;
+            state++;
 
         if( *line == ')' )
-            State--;
+            state--;
 
-        if( State == 2 )
+        if( state == 2 )
         {
             ReadNetlistModuleDescr( line, TESTONLY );
             continue;
         }
 
-        if( State >= 3 ) // First pass: pad descriptions are not read here.
+        if( state >= 3 ) // First pass: pad descriptions are not read here.
         {
-            State--;
+            state--;
         }
     }
 
@@ -427,30 +424,32 @@ bool NETLIST_READER::ReadNetList( FILE*           aFile,
      */
     netlineReader.Rewind();
     m_currModule = NULL;
+    state = 0;
+    is_comment = false;
     while( netlineReader.ReadLine() )
     {
         char* line = StrPurge( netlineReader.Line() );
 
-        if( Comment )   // we are reading a comment
+        if( is_comment )   // we are reading a comment
         {
             // Test for end of the current comment
             if( ( line = strchr( line, '}' ) ) == NULL )
                 continue;
-            Comment = 0;
+            is_comment = false;
         }
         if( *line == '{' ) // this is the beginning of a comment
         {
-            Comment = 1;
+            is_comment = true;
             if( ( line = strchr( line, '}' ) ) == NULL )
                 continue;
         }
 
         if( *line == '(' )
-            State++;
+            state++;
         if( *line == ')' )
-            State--;
+            state--;
 
-        if( State == 2 )
+        if( state == 2 )
         {
             m_currModule = ReadNetlistModuleDescr( line, READMODULE );
             if( m_currModule == NULL ) // the module could not be created (perhaps
@@ -458,20 +457,20 @@ bool NETLIST_READER::ReadNetList( FILE*           aFile,
                 continue;
             else /* clear pads netnames */
             {
-                D_PAD* PtPad = m_currModule->m_Pads;
-                for( ; PtPad != NULL; PtPad = PtPad->Next() )
+                D_PAD* pad = m_currModule->m_Pads;
+                for( ; pad != NULL; pad = pad->Next() )
                 {
-                    PtPad->SetNetname( wxEmptyString );
+                    pad->SetNetname( wxEmptyString );
                 }
             }
             continue;
         }
 
-        if( State >= 3 )
+        if( state >= 3 )
         {
             if( m_currModule )
                 SetPadNetName( line );
-            State--;
+            state--;
         }
     }
 
@@ -493,96 +492,106 @@ bool NETLIST_READER::ReadNetList( FILE*           aFile,
  *      If false: the netlist only is used
  *      This flag is reset to false if the .cmp file is not found
  * Analyze lines like:
- * ($ 40C08647 noname R20 4.7 K Lib = R
+ * ( /40C08647 $noname R20 4.7K {Lib=R}
  * (1 VCC)
  * (2 MODB_1)
+ * )
  */
 MODULE* NETLIST_READER::ReadNetlistModuleDescr( char* aText, bool aTstOnly )
 {
     char*    text;
-    wxString TimeStampPath;
-    wxString TextNameLibMod;
-    wxString TextValeur;
-    wxString TextCmpName;
-    wxString NameLibCmp;
-    int      Error = 0;
-    char     Line[1024];
+    wxString timeStampPath;         // the full time stamp read from netlist
+    wxString textFootprintName;     // the footprint name read from netlist
+    wxString textValue;             // the component value read from netlist
+    wxString textCmpReference;      // the component schematic reference read from netlist
+    wxString cmpFootprintName;      // the footprint name read from the *.cmp file
+                                    // giving the equivalence between footprint names and components
+    bool     error = false;
+    char     line[1024];
 
-    strcpy( Line, aText );
+    strcpy( line, aText );
 
-    TextValeur = wxT( "~" );
+    textValue = wxT( "~" );
 
-    if( ( text = strtok( Line, " ()\t\n" ) ) == NULL )
-        Error = 1;
+    // Read descr line like  /40C08647 $noname R20 4.7K {Lib=R}
+
+    // Read time stamp (first word)
+    if( ( text = strtok( line, " ()\t\n" ) ) == NULL )
+        error = true;
     else
-        TimeStampPath = FROM_UTF8( text );
+        timeStampPath = FROM_UTF8( text );
 
+    // Read footprint name (second word)
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
-        Error = 1;
+        error = true;
     else
-        TextNameLibMod = FROM_UTF8( text );
+        textFootprintName = FROM_UTF8( text );
 
+    // Read schematic reference (third word)
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
-        Error = 1;
+        error = true;
     else
-        TextCmpName = FROM_UTF8( text );
+        textCmpReference = FROM_UTF8( text );
 
+    // Read schematic value (forth word)
     if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
-        Error = -1;
+        error = true;
     else
-        TextValeur = FROM_UTF8( text );
+        textValue = FROM_UTF8( text );
 
-    if( Error > 0 )
+    if( error )
         return NULL;
 
     /* Test if module is already loaded. */
-    wxString * identMod = &TextCmpName;
+    wxString * identMod = &textCmpReference;
     if( m_UseTimeStamp )
-        identMod = &TimeStampPath;
+        identMod = &timeStampPath;
 
-    MODULE* Module = m_pcbframe->GetBoard()->m_Modules;
-    MODULE* NextModule;
+    MODULE* module = m_pcbframe->GetBoard()->m_Modules;
+    MODULE* nextModule;
     bool    found = false;
-    for( ; Module != NULL; Module = NextModule )
+    for( ; module != NULL; module = nextModule )
     {
-        NextModule = Module->Next();
+        nextModule = module->Next();
         if( m_UseTimeStamp ) /* identification by time stamp */
         {
-            if( TimeStampPath.CmpNoCase( Module->m_Path ) == 0 )
+            if( timeStampPath.CmpNoCase( module->m_Path ) == 0 )
                 found = true;
         }
         else    /* identification by Reference */
         {
-            if( TextCmpName.CmpNoCase( Module->m_Reference->m_Text ) == 0 )
+            if( textCmpReference.CmpNoCase( module->m_Reference->m_Text ) == 0 )
                 found = true;
         }
-        if( found ) // test footprint matching for existing modules: current
+        if( found ) // The footprint corresponding to the component is already on board
         {
-                    // m_LibRef and module name in netlist must match
+            // We do do load the footprint, because it is already on board
+            // but we compare m_LibRef (existing footprint name) and the footprint name from netlist
+            // and change this footprint if differs from netlist (only on demand).
             if( aTstOnly != TESTONLY )
             {
-                NameLibCmp = TextNameLibMod;        // Use footprint name from netlist
-                if( m_useCmpFile )                  // Try to get footprint name from .cmp file
+                cmpFootprintName = textFootprintName;     // Use footprint name from netlist
+                if( m_useCmpFile )                        // Try to get footprint name from .cmp file
                 {
-                    m_useCmpFile = readModulesComponentsTable( identMod, NameLibCmp );
+                    m_useCmpFile = readModuleComponentLinkfile( identMod, cmpFootprintName );
                 }
 
-                /* Module mismatch: current module and module specified in
-                 * net list are  different.
+                /* Module mismatch: current fotprint and footprint specified in
+                 * net list are different.
                  */
-                if( Module->m_LibRef.CmpNoCase( NameLibCmp ) != 0 )
+                if( module->m_LibRef.CmpNoCase( cmpFootprintName ) != 0 )
                 {
                     if( m_ChangeFootprints )   // footprint exchange allowed.
                     {
-                        MODULE* NewModule =
+                        MODULE* newModule =
                             m_pcbframe->Get_Librairie_Module( wxEmptyString,
-                                                              NameLibCmp,
+                                                              cmpFootprintName,
                                                               true );
-                        if( NewModule )  /* Change old module to the new module
-                                          * (and delete the old one) */
+                        if( newModule )
                         {
-                            m_pcbframe->Exchange_Module( Module, NewModule, NULL );
-                            Module = NewModule;
+                            // Change old module to the new module (and delete the old one)
+                            m_pcbframe->Exchange_Module( module, newModule, NULL );
+                            module = newModule;
                         }
                     }
                     else
@@ -591,9 +600,9 @@ MODULE* NETLIST_READER::ReadNetlistModuleDescr( char* aText, bool aTstOnly )
                         msg.Printf(
                             _(
                                 "Component \"%s\": Mismatch! module is [%s] and netlist said [%s]\n" ),
-                            GetChars( TextCmpName ),
-                            GetChars( Module->m_LibRef ),
-                            GetChars( NameLibCmp ) );
+                            GetChars( textCmpReference ),
+                            GetChars( module->m_LibRef ),
+                            GetChars( cmpFootprintName ) );
 
                         if( m_messageWindow )
                             m_messageWindow->AppendText( msg );
@@ -605,18 +614,18 @@ MODULE* NETLIST_READER::ReadNetlistModuleDescr( char* aText, bool aTstOnly )
         }
     }
 
-    if( Module == NULL )                    /* a new module must be loaded from libs */
+    if( module == NULL )                    // a new module must be loaded from libs
     {
-        NameLibCmp = TextNameLibMod;        // Use footprint name from netlist
-        if( m_useCmpFile )                  // Try to get footprint name from .cmp file
+        cmpFootprintName = textFootprintName;   // Use footprint name from netlist
+        if( m_useCmpFile )                      // Try to get footprint name from .cmp file
         {
-            m_useCmpFile = readModulesComponentsTable( identMod, NameLibCmp );
+            m_useCmpFile = readModuleComponentLinkfile( identMod, cmpFootprintName );
         }
 
         if( aTstOnly == TESTONLY )
         {
             MODULE_INFO* newMod;
-            newMod = new MODULE_INFO( NameLibCmp, TextCmpName, TimeStampPath );
+            newMod = new MODULE_INFO( cmpFootprintName, textCmpReference, timeStampPath );
             m_newModulesList.push_back( newMod );
         }
         else
@@ -625,19 +634,19 @@ MODULE* NETLIST_READER::ReadNetlistModuleDescr( char* aText, bool aTstOnly )
             {
                 wxString msg;
                 msg.Printf( _( "Component [%s] not found" ),
-                           GetChars( TextCmpName ) );
+                           GetChars( textCmpReference ) );
                 m_messageWindow->AppendText( msg + wxT( "\n" ) );
             }
         }
-        return NULL;    /* The module could not be loaded. */
+        return NULL;    // The module could not be loaded.
     }
 
-    /* Fields update ( reference, value and "Time Stamp") */
-    Module->m_Reference->m_Text = TextCmpName;
-    Module->m_Value->m_Text     = TextValeur;
-    Module->m_Path = TimeStampPath;
+    // Update current module ( reference, value and "Time Stamp")
+    module->m_Reference->m_Text = textCmpReference;
+    module->m_Value->m_Text     = textValue;
+    module->m_Path = timeStampPath;
 
-    return Module;
+    return module;
 }
 
 
@@ -762,7 +771,7 @@ void PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
 
     /* Build the list of references of the net list modules. */
     NETLIST_READER netList_Reader( this );
-    NbModulesNetListe = netList_Reader.BuildFootprintListFromNetlist( aNetlistFullFilename, tmp );
+    NbModulesNetListe = netList_Reader.BuildComponentsListFromNetlist( aNetlistFullFilename, tmp );
 
     if( NbModulesNetListe < 0 )
         return;  /* File not found */
@@ -843,85 +852,91 @@ void PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
 
 
 /**
- * Function BuildFootprintListFromNetlist
- *  Fill BufName with footprints names read from the netlist.
+ * Function BuildComponentsListFromNetlist
+ * Fill aBufName with component references read from the netlist.
  * @param aNetlistFilename = netlist full file name
- * @param aBufName = wxArrayString to fill with footprint names
- * @return Footprint count, or -1 if netlist file cannot opened
+ * @param aBufName = wxArrayString to fill with component references
+ * @return component count, or -1 if netlist file cannot opened
  */
-int NETLIST_READER::BuildFootprintListFromNetlist( const wxString& aNetlistFilename,
+int NETLIST_READER::BuildComponentsListFromNetlist( const wxString& aNetlistFilename,
                                                    wxArrayString&  aBufName )
 {
-    int   nb_modules_lus;
-    int   State, Comment;
-    char* Text, * LibModName;
+    int   component_count;
+    int   state;
+    bool  is_comment;
+    char* text;
 
     FILE* netfile = OpenNetlistFile( aNetlistFilename );
 
     if( netfile == NULL )
         return -1;
 
-    FILE_LINE_READER netlineReader( netfile, aNetlistFilename );
+    FILE_LINE_READER netlineReader( netfile, aNetlistFilename );    // ctor will close netfile
     char*            Line = netlineReader;
 
-    State = 0; Comment = 0;
-    nb_modules_lus = 0;
+    state = 0;
+    is_comment = false;
+    component_count = 0;
 
     while( netlineReader.ReadLine() )
     {
-        Text = StrPurge( Line );
-        if( Comment )
+        text = StrPurge( Line );
+        if( is_comment )
         {
-            if( ( Text = strchr( Text, '}' ) ) == NULL )
+            if( ( text = strchr( text, '}' ) ) == NULL )
                 continue;
-            Comment = 0;
+            is_comment = false;
         }
-        if( *Text == '{' ) /* Comments. */
+        if( *text == '{' ) /* Comments. */
         {
-            Comment = 1;
-            if( ( Text = strchr( Text, '}' ) ) == NULL )
+            is_comment = true;
+            if( ( text = strchr( text, '}' ) ) == NULL )
                 continue;
         }
 
-        if( *Text == '(' )
-            State++;
-        if( *Text == ')' )
-            State--;
+        if( *text == '(' )
+            state++;
+        if( *text == ')' )
+            state--;
 
-        if( State == 2 )
+        if( state == 2 )
         {
-            int Error = 0;
+            bool error = false;
+            // skip TimeStamp:
             if( strtok( Line, " ()\t\n" ) == NULL )
-                Error = 1;  /* TimeStamp */
-            if( ( LibModName = strtok( NULL, " ()\t\n" ) ) == NULL )
-                Error = 1;
-            /* Load the name of the component. */
-            if( ( Text = strtok( NULL, " ()\t\n" ) ) == NULL )
-                Error = 1;
-            nb_modules_lus++;
-            aBufName.Add( FROM_UTF8( Text ) );
+                error = true;
+            // skip footprint name:
+            if( ( strtok( NULL, " ()\t\n" ) ) == NULL )
+                error = true;
+            // Load the reference of the component:
+            if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
+                error = true;
+            component_count++;
+            aBufName.Add( FROM_UTF8( text ) );
             continue;
         }
 
-        if( State >= 3 )
+        if( state >= 3 )
         {
-            State--;
+            state--;
         }
     }
 
-    return nb_modules_lus;
+    return component_count;
 }
 
 
 /*
- * function readModulesComponentsTable
+ * function readModuleComponentLinkfile
  * read the *.cmp file ( filename in m_cmplistFullName )
- * giving the equivalence modules / components
- * return true and the module name in aModuleName, false if not found
+ * giving the equivalence Footprint_names / components
+ * to find the footprint name corresponding to aCmpIdent
+ * return true and the module name in aFootprintName, false if not found
  *
  * param aCmpIdent = component identification: schematic reference or time stamp
- * param aModuleName the footprint name corresponding to the component identification
- * Example file:
+ * param aFootprintName the footprint name corresponding to the component identification
+ *
+ * Sample file:
  *
  * Cmp-Mod V01 Genere by Pcbnew 29/10/2003-13: 11:6 *
  *  BeginCmp
@@ -939,7 +954,8 @@ int NETLIST_READER::BuildFootprintListFromNetlist( const wxString& aNetlistFilen
  *  EndCmp
  *
  */
-bool NETLIST_READER::readModulesComponentsTable( const wxString* aCmpIdent, wxString& aModuleName )
+bool NETLIST_READER::readModuleComponentLinkfile( const wxString* aCmpIdent,
+                                                  wxString& aFootprintName )
 {
     wxString refcurrcmp;    // Stores value read from line like Reference = BUS1;
     wxString timestamp;     // Stores value read from line like TimeStamp = /32307DE2/AA450F67;
@@ -1004,7 +1020,7 @@ bool NETLIST_READER::readModulesComponentsTable( const wxString* aCmpIdent, wxSt
         {
             if( aCmpIdent->CmpNoCase( timestamp ) == 0  && !timestamp.IsEmpty() )
             {    // Found
-                aModuleName = idmod;
+                aFootprintName = idmod;
                 return true;
             }
         }
@@ -1012,7 +1028,7 @@ bool NETLIST_READER::readModulesComponentsTable( const wxString* aCmpIdent, wxSt
         {
             if( aCmpIdent->CmpNoCase( refcurrcmp ) == 0 )   // Found!
             {
-                aModuleName = idmod;
+                aFootprintName = idmod;
                 return true;
             }
         }
