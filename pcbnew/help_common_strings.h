@@ -5,7 +5,7 @@
 
 /**
  * These strings are used in menus and tools, that do the same command
- * But they are internatinalized, and therefore must be created
+ * But they are internationalized, and therefore must be created
  * at run time, on the fly.
  * So they cannot be static.
  *

@@ -217,7 +217,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_GET_NETLIST:
-        InstallNetlistFrame( &dc, wxPoint( -1, -1 ) );
+        InstallNetlistFrame( &dc );
         break;
 
     case ID_GET_TOOLS:

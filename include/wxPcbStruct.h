@@ -270,6 +270,18 @@ public:
     void             SetLastNetListRead( const wxString& aNetListFile );
 
     /**
+     * Function Test_Duplicate_Missing_And_Extra_Footprints
+     * Build a list of duplicate, missing and extra footprints
+     * from the current board and a netlist netlist :
+     * Shows 3 lists:
+     *  1 - duplicate footprints on board
+     *  2 - missing footprints (found in netlist but not on board)
+     *  3 - footprints not in netlist but on board
+     * @param aNetlistFullFilename = the full filename netlist
+     */
+    void Test_Duplicate_Missing_And_Extra_Footprints( const wxString& aNetlistFullFilename );
+
+    /**
      * Function OnHotKey.
      *  ** Commands are case insensitive **
      *  Some commands are relatives to the item under the mouse cursor
@@ -1044,17 +1056,16 @@ public:
 
 
     // netlist  handling:
-    void         InstallNetlistFrame( wxDC* DC, const wxPoint& pos );
+    void         InstallNetlistFrame( wxDC* DC );
 
     /**
      * Function ReadPcbNetlist
-     * Update footprints (load missing footprints and delete on request extra
+     * Update footprints (load missing footprints and delete on demand extra
      * footprints)
-     * Update connectivity info ( Net Name list )
-     * Update Reference, value and "TIME STAMP"
+     * Update connectivity info, references, values and "TIME STAMP"
      * @param aNetlistFullFilename = netlist file name (*.net)
-     * @param aCmpFullFileName = cmp/footprint list file name (*.cmp) if not found,
-     * only the netlist will be used
+     * @param aCmpFullFileName = cmp/footprint link file name (*.cmp).
+      *                         if not found, only the netlist will be used
      * @param aMessageWindow = a reference to a wxTextCtrl where to display messages.
      *                  can be NULL
      * @param aChangeFootprint if true, footprints that have changed in netlist will be changed
@@ -1064,20 +1075,6 @@ public:
      *                             footprints from components (use after reannotation of the
      *                             schematic)
      * @return true if Ok
-     *
-     *  the format of the netlist is something like:
-     # EESchema Netlist Version 1.0 generee le  18/5/2005-12:30:22
-     *  (
-     *  ( 40C08647 $noname R20 4,7K {Lib=R}
-     *  (    1 VCC )
-     *  (    2 MODB_1 )
-     *  )
-     *  ( 40C0863F $noname R18 4,7_k {Lib=R}
-     *  (    1 VCC )
-     *  (    2 MODA_1 )
-     *  )
-     *  }
-     * #End
      */
     bool ReadPcbNetlist( const wxString&  aNetlistFullFilename,
                          const wxString&  aCmpFullFileName,

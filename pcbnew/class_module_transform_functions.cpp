@@ -291,22 +291,15 @@ void MODULE::Flip(const wxPoint& aCentre )
 
 void MODULE::SetPosition( const wxPoint& newpos )
 {
-    int deltaX = newpos.x - m_Pos.x;
-    int deltaY = newpos.y - m_Pos.y;
+    wxPoint delta = newpos - m_Pos;
 
-    m_Pos.x += deltaX;
-    m_Pos.y += deltaY;
-
-    m_Reference->m_Pos.x += deltaX;
-    m_Reference->m_Pos.y += deltaY;
-
-    m_Value->m_Pos.x += deltaX;
-    m_Value->m_Pos.y += deltaY;
+    m_Pos += delta;
+    m_Reference->m_Pos += delta;
+    m_Value->m_Pos += delta;
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        pad->m_Pos.x += deltaX;
-        pad->m_Pos.y += deltaY;
+        pad->m_Pos += delta;
     }
 
     EDA_ITEM* PtStruct = m_Drawings;
@@ -325,8 +318,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
         case TYPE_TEXTE_MODULE:
         {
             TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) PtStruct;
-            pt_texte->m_Pos.x += deltaX;
-            pt_texte->m_Pos.y += deltaY;
+            pt_texte->m_Pos += delta;
             break;
         }
 
@@ -357,7 +349,7 @@ void MODULE::SetOrientation( int newangle )
         pad->m_Orient += newangle; /* change m_Orientation */
         NORMALIZE_ANGLE_POS( pad->m_Orient );
 
-        RotatePoint( &px, &py, (int) m_Orient );
+        RotatePoint( &px, &py, m_Orient );
         pad->m_Pos.x = m_Pos.x + px;
         pad->m_Pos.y = m_Pos.y + py;
     }
