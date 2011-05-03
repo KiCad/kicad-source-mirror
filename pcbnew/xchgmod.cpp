@@ -473,13 +473,13 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
 
     GetBoard()->m_Status_Pcb = 0;
     oldpos = GetScreen()->GetCrossHairPosition();
-    GetScreen()->SetCrossHairPosition( aOldModule->m_Pos );
+    GetScreen()->SetCrossHairPosition( aOldModule->m_Pos, false );
 
     /* place module without ratsnest refresh: this will be made later
      * when all modules are on board
      */
     Place_Module( aNewModule, NULL, true );
-    GetScreen()->SetCrossHairPosition( oldpos );
+    GetScreen()->SetCrossHairPosition( oldpos, false );
 
     /* Flip footprint if needed */
     if( aOldModule->GetLayer() != aNewModule->GetLayer() )
