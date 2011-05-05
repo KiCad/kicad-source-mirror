@@ -78,10 +78,10 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	sbSizerPinSharing = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pin Sharing") ), wxVERTICAL );
 	
 	m_checkApplyToAllParts = new wxCheckBox( this, wxID_ANY, _("Add to all &parts in package"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkApplyToAllParts->SetValue(true); 
 	sbSizerPinSharing->Add( m_checkApplyToAllParts, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Add to all alternate &body styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkApplyToAllConversions->SetValue(true); 
 	sbSizerPinSharing->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	boarderSizer->Add( sbSizerPinSharing, 0, wxEXPAND|wxALL, 5 );
@@ -175,7 +175,9 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	m_choiceOrientation->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_choiceElectricalType->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_choiceStyle->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
-	m_checkApplyToAllConversions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnCBpartSelection ), NULL, this );
+	m_checkApplyToAllParts->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
+	m_checkApplyToAllConversions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
+	m_checkShow->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_textPinNameTextSize->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_textPadNameTextSize->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_textLength->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
@@ -193,7 +195,9 @@ DIALOG_LIB_EDIT_PIN_BASE::~DIALOG_LIB_EDIT_PIN_BASE()
 	m_choiceOrientation->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_choiceElectricalType->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_choiceStyle->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
-	m_checkApplyToAllConversions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnCBpartSelection ), NULL, this );
+	m_checkApplyToAllParts->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
+	m_checkApplyToAllConversions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
+	m_checkShow->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_textPinNameTextSize->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_textPadNameTextSize->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );
 	m_textLength->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_BASE::OnPropertiesChange ), NULL, this );

@@ -65,6 +65,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     dlg.SetPadNameTextSize( ReturnStringFromValue( g_UserUnit,
                                                   pin->m_PinNumSize,
                                                   m_InternalUnits ) );
+
     dlg.SetPadNameTextSizeUnits( units );
     dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->GetLength(), m_InternalUnits ) );
     dlg.SetLengthUnits( units );
@@ -368,7 +369,8 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     pin->SetConvert( LastPinCommonConvert ? 0 : m_convert );
     pin->SetUnit( LastPinCommonUnit ? 0 : m_unit );
     pin->SetVisible( LastPinVisible );
-
+//PlacePin( DC );
+//m_drawItem = pin;
     PinPreviousPos = pin->GetPosition();
     DrawPanel->m_IgnoreMouseEvents = true;
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );

@@ -85,7 +85,6 @@ class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseDialog( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnPropertiesChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnCBpartSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKButtonClick( wxCommandEvent& event ) { event.Skip(); }

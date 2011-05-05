@@ -42,7 +42,7 @@
 
 #include "dialog_netlist.h"
 
-// constants used by ReadPcbNetlist():
+// constants used by ReadNetlistModuleDescr():
 #define TESTONLY   true
 #define READMODULE false
 
@@ -565,10 +565,10 @@ MODULE* NETLIST_READER::ReadNetlistModuleDescr( char* aText, bool aTstOnly )
         }
         if( found ) // The footprint corresponding to the component is already on board
         {
-            // We do do load the footprint, because it is already on board
-            // but we compare m_LibRef (existing footprint name) and the footprint name from netlist
-            // and change this footprint if differs from netlist (only on demand).
-            if( aTstOnly != TESTONLY )
+            // This footprint is already on board
+            // but if m_LibRef (existing footprint name) and the footprint name from netlist
+            // do not match, change this footprint on demand.
+            if( ! aTstOnly )
             {
                 cmpFootprintName = textFootprintName;     // Use footprint name from netlist
                 if( m_useCmpFile )                        // Try to get footprint name from .cmp file
@@ -622,7 +622,7 @@ MODULE* NETLIST_READER::ReadNetlistModuleDescr( char* aText, bool aTstOnly )
             m_useCmpFile = readModuleComponentLinkfile( identMod, cmpFootprintName );
         }
 
-        if( aTstOnly == TESTONLY )
+        if( aTstOnly )
         {
             MODULE_INFO* newMod;
             newMod = new MODULE_INFO( cmpFootprintName, textCmpReference, timeStampPath );
@@ -785,16 +785,19 @@ void PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
     /* Search for duplicate footprints. */
     list.Add( _( "Duplicates" ) );
 
-    MODULE* Module = GetBoard()->m_Modules;
-    for( ; Module != NULL; Module = Module->Next() )
+    MODULE* module = GetBoard()->m_Modules;
+    for( ; module != NULL; module = module->Next() )
     {
-        MODULE* pt_aux = Module->Next();
+        MODULE* altmodule = module->Next();
 
-        for( ; pt_aux != NULL; pt_aux = pt_aux->Next() )
+        for( ; altmodule != NULL; altmodule = altmodule->Next() )
         {
-            if( Module->m_Reference->m_Text.CmpNoCase( pt_aux->m_Reference->m_Text ) == 0 )
+            if( module->m_Reference->m_Text.CmpNoCase( altmodule->m_Reference->m_Text ) == 0 )
             {
-                list.Add( Module->m_Reference->m_Text );
+                if( module->m_Reference->m_Text.IsEmpty() )
+                    list.Add( wxT("<noref>") );
+                else
+                    list.Add( module->m_Reference->m_Text );
                 nberr++;
                 break;
             }
@@ -806,17 +809,17 @@ void PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
 
     for( ii = 0; ii < NbModulesNetListe; ii++ )
     {
-        Module = (MODULE*) GetBoard()->m_Modules;
+        module = (MODULE*) GetBoard()->m_Modules;
 
-        for( ; Module != NULL; Module = Module->Next() )
+        for( ; module != NULL; module = module->Next() )
         {
-            if( Module->m_Reference->m_Text.CmpNoCase( tmp[ii] ) == 0 )
+            if( module->m_Reference->m_Text.CmpNoCase( tmp[ii] ) == 0 )
             {
                 break;
             }
         }
 
-        if( Module == NULL )    // Module missing, not found in board
+        if( module == NULL )    // Module missing, not found in board
         {
             list.Add( tmp[ii] );
             nberr++;
@@ -826,12 +829,12 @@ void PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
     /* Search for modules not in net list. */
     list.Add( _( "Not in Netlist:" ) );
 
-    Module = GetBoard()->m_Modules;
-    for( ; Module != NULL; Module = Module->Next() )
+    module = GetBoard()->m_Modules;
+    for( ; module != NULL; module = module->Next() )
     {
         for( ii = 0; ii < NbModulesNetListe; ii++ )
         {
-            if( Module->m_Reference->m_Text.CmpNoCase( tmp[ii] ) == 0 )
+            if( module->m_Reference->m_Text.CmpNoCase( tmp[ii] ) == 0 )
             {
                 break; /* Module is in net list. */
             }
@@ -839,7 +842,7 @@ void PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
 
         if( ii == NbModulesNetListe )   /* Module not found in netlist */
         {
-            list.Add( Module->m_Reference->m_Text );
+            list.Add( module->m_Reference->m_Text );
             nberr++;
         }
     }

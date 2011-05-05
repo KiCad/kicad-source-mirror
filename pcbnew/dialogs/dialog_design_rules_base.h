@@ -21,7 +21,7 @@ class NETS_LIST_CTRL;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
-#include <wx/choice.h>
+#include <wx/combobox.h>
 #include <wx/listctrl.h>
 #include <wx/panel.h>
 #include <wx/bitmap.h>
@@ -49,10 +49,8 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 		{
 			wxID_ADD_NETCLASS = 1000,
 			wxID_REMOVE_NETCLASS,
-			ID_LEFT_CHOICE_CLICK,
 			ID_LEFT_TO_RIGHT_COPY,
 			ID_RIGHT_TO_LEFT_COPY,
-			ID_RIGHT_CHOICE_CLICK,
 		};
 		
 		wxNotebook* m_DRnotebook;
@@ -61,13 +59,13 @@ class DIALOG_DESIGN_RULES_BASE : public wxDialog
 		wxButton* m_addButton;
 		wxButton* m_removeButton;
 		wxButton* m_moveUpButton;
-		wxChoice* m_leftClassChoice;
+		wxComboBox* m_leftClassChoice;
 		NETS_LIST_CTRL* m_leftListCtrl;
 		wxButton* m_buttonRightToLeft;
 		wxButton* m_buttonLeftToRight;
 		wxButton* m_buttonLeftSelAll;
 		wxButton* m_buttonRightSelAll;
-		wxChoice* m_rightClassChoice;
+		wxComboBox* m_rightClassChoice;
 		NETS_LIST_CTRL* m_rightListCtrl;
 		wxPanel* m_panelGolbalDesignRules;
 		wxRadioBox* m_OptViaType;

@@ -1371,8 +1371,8 @@ LIB_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
 {
     /* we use LocateDrawItem( int aUnit, int convert, KICAD_T type, const
      * wxPoint& pt ) to search items.
-     * because this function uses DefaultTransformMatrix as orient/mirror matrix
-     * we temporary copy aTransMat in DefaultTransformMatrix
+     * because this function uses DefaultTransform as orient/mirror matrix
+     * we temporary copy aTransform in DefaultTransform
      */
     LIB_ITEM* item;
     TRANSFORM transform = DefaultTransform;

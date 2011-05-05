@@ -226,14 +226,14 @@ EDA_RECT LIB_RECTANGLE::GetBoundingBox() const
 
     rect.SetOrigin( m_Pos.x, m_Pos.y * -1 );
     rect.SetEnd( m_End.x, m_End.y * -1 );
-    rect.Inflate( m_Width / 2, m_Width / 2 );
+    rect.Inflate( (GetPenSize() / 2) + 1 );
     return rect;
 }
 
 
 bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition )
 {
-    int mindist = ( m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2 ) + 1;
+    int mindist = ( GetPenSize() / 2 ) + 1;
 
     // Have a minimal tolerance for hit test
     if( mindist < MINIMUM_SELECTION_DISTANCE )

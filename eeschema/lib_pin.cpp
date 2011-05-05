@@ -531,8 +531,14 @@ bool LIB_PIN::HitTest( const wxPoint& aPosition )
 
 bool LIB_PIN::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
+    TRANSFORM transform = DefaultTransform;
+    DefaultTransform = aTransform;
+
     EDA_RECT rect = GetBoundingBox();
     rect.Inflate( aThreshold );
+
+    //Restore matrix
+    DefaultTransform = transform;
 
     return rect.Contains( aPosition );
 }
@@ -829,8 +835,12 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
      * box calculation. */
 #if 0
     EDA_RECT* clipbox = aPanel ? &aPanel->m_ClipBox : NULL;
+    TRANSFORM transform = DefaultTransform;
+    DefaultTransform = aTransform;
     EDA_RECT  bBox    = GetBoundingBox();
     bBox.Move( aOffset );
+    //Restore matrix
+    DefaultTransform = transform;
     GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
 #endif
 }
@@ -1731,7 +1741,7 @@ void LIB_PIN::DisplayInfo( EDA_DRAW_FRAME* frame )
 /**
  * Function GetBoundingBox
  * @return the boundary box for this, in schematic coordinates
- * for a not rotated, not mirrored component
+ * Uses DefaultTransform as transform matrix
  */
 EDA_RECT LIB_PIN::GetBoundingBox() const
 {
@@ -1741,6 +1751,7 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
     wxPoint        end;
     int            nameTextOffset = 0;
     bool           showName = !m_name.IsEmpty() && (m_name != wxT( "~" ));
+    bool           showNum = m_number != 0;
     int            symbolX = TARGET_PIN_DIAM / 2;
     int            symbolY = TARGET_PIN_DIAM / 2;
 
@@ -1750,14 +1761,15 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
             nameTextOffset = entry->GetPinNameOffset();
         else
             showName = false;
+
+        showNum = entry->ShowPinNumbers();
     }
 
     // First, calculate boundary box corners position
-    int numberTextLength = m_PinNumSize * GetNumberString().Len();
+    int numberTextLength = showNum ? m_PinNumSize * GetNumberString().Len() : 0;
 
     // Actual text height are bigger than text size
-    int nameTextHeight = wxRound( m_PinNameSize * 1.1 );
-    int numberTextHeight  = wxRound( m_PinNumSize * 1.1 );
+    int numberTextHeight  = showNum ? wxRound( m_PinNumSize * 1.1 ) : 0;
 
     if( m_shape & INVERT )
         symbolX = symbolY = INVERT_PIN_RADIUS;
@@ -1769,6 +1781,7 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
 
     // calculate bottom right corner position and adjust top left corner position
     int nameTextLength = 0;
+    int nameTextHeight = 0;
 
     if( showName )
     {
@@ -1779,18 +1792,15 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
             length -= 1;
 
         nameTextLength = ( m_PinNameSize * length ) + nameTextOffset;
+        // Actual text height are bigger than text size
+        nameTextHeight = wxRound( m_PinNameSize * 1.1 );
     }
 
-    if( showName )
-    {
-        end.y = -nameTextHeight / 2;
-        end.x = m_length + nameTextLength;
-    }
-    else
-    {
+    end.x = m_length + nameTextLength;
+
+    end.y = -nameTextHeight / 2;
+    if( end.y > -symbolY )
         end.y = -symbolY;
-        end.x = m_length;
-    }
 
     // Now, calculate boundary box corners position for the actual pin orientation
     switch( m_orientation )
@@ -1820,14 +1830,13 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
         break;
     }
 
-    bbox.SetOrigin( m_position + begin );
-    bbox.SetEnd( m_position + end );
-    bbox.Inflate( GetPenSize() / 2 );
+    begin = DefaultTransform.TransformCoordinate( begin + m_position);
+    end = DefaultTransform.TransformCoordinate( end + m_position);
 
-    NEGATE( bbox.m_Pos.y );     // Reverse the Y axis, according to the schematic orientation
-    NEGATE( bbox.m_Size.y );    // Reverse the Y axis, according to the schematic orientation
-
+    bbox.SetOrigin( begin );
+    bbox.SetEnd( end );
     bbox.Normalize();
+    bbox.Inflate( GetPenSize() / 2 );
 
     return bbox;
 }

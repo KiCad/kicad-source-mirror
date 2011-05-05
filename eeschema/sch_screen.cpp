@@ -610,21 +610,36 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
 
         component = (SCH_COMPONENT*) item;
 
-        pin = (LIB_PIN*) component->GetDrawItem( aPosition, LIB_PIN_T );
-
-        if( pin )
-            break;
+        if( aEndPointOnly )
+        {
+            pin = NULL;
+            LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
+            if( entry == NULL )
+                continue;
+            for( pin = entry->GetNextPin(); pin != NULL; pin = entry->GetNextPin( pin ) )
+            {
+                // Skip items not used for this part.
+                if( component->GetUnit() && pin->GetUnit() &&
+                    ( pin->GetUnit() != component->GetUnit() ) )
+                    continue;
+                if( component->GetConvert() && pin->GetConvert() &&
+                    ( pin->GetConvert() != component->GetConvert() ) )
+                    continue;
+                if(component->GetPinPhysicalPosition( pin ) == aPosition )
+                    break;
+            }
+            if( pin )
+                break;
+        }
+        else
+        {
+            pin = (LIB_PIN*) component->GetDrawItem( aPosition, LIB_PIN_T );
+            if( pin )
+                break;
+        }
     }
 
-    if( pin && aEndPointOnly && ( component->GetPinPhysicalPosition( pin ) != aPosition ) )
-    {
-        wxPoint endpt = component->GetPinPhysicalPosition( pin );
-        wxLogDebug( wxString::Format( wxT( "Pin end point at (%d, %d) not (%d, %d )." ),
-                                      endpt.x, endpt.y, aPosition.x, aPosition.y ) );
-        pin = NULL;
-    }
-
-    if( aComponent )
+    if( pin && aComponent )
         *aComponent = component;
 
     return pin;

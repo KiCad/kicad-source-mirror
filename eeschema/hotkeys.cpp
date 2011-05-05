@@ -924,7 +924,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
          break;
 
     case HK_EDIT:
-        if( itemInEdit )
+        if( ! itemInEdit )
             m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem )

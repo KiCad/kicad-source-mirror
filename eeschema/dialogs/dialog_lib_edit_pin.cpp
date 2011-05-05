@@ -16,6 +16,10 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin ) :
     DIALOG_LIB_EDIT_PIN_BASE( parent )
 {
     m_dummyPin = new LIB_PIN( *aPin );
+
+    // m_dummyPin changes do not proparagte to a parent, so set parent to null
+    m_dummyPin->SetParent( NULL );
+
     m_panelShowPin->SetBackgroundColour( MakeColour( g_DrawBgColor ) );
 
     /* Required to make escape key work correctly in wxGTK. */
@@ -54,6 +58,12 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     wxSize dc_size = dc.GetSize();
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
+    // Give a parent to m_dummyPin only from draw purpose.
+    // In fact m_dummyPin should not have a parent, but draw functions need a parent
+    // to know some options
+    LIB_EDIT_FRAME* libframe = (LIB_EDIT_FRAME*) GetParent();
+    m_dummyPin->SetParent( libframe->GetComponent() );
+
     // Calculate a suitable scale to fit the available draw area
     EDA_RECT bBox = m_dummyPin->GetBoundingBox();
     double xscale    = (double) dc_size.x / bBox.GetWidth();
@@ -69,8 +79,11 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     NEGATE( offset.y );
 
     GRResetPenAndBrush( &dc );
+    m_dummyPin->SetVisible( true ); // TODO find a better way to show invisible pin here
     m_dummyPin->Draw( NULL, &dc, offset, -1, wxCOPY,
                       NULL, DefaultTransform );
+
+    m_dummyPin->SetParent(NULL);
 
     event.Skip();
 }
@@ -116,6 +129,7 @@ void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
     m_dummyPin->SetOrientation( pinOrient );
     m_dummyPin->SetLength( pinLength );
     m_dummyPin->SetShape( pinShape );
+    m_dummyPin->SetVisible( GetVisible() );
 
     m_panelShowPin->Refresh();
 }
