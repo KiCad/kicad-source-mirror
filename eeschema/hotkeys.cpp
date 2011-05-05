@@ -957,7 +957,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_ROTATE:
-        if( m_drawItem == NULL )
+        if( ! itemInEdit )
             m_drawItem = LocateItemUsingCursor( aPosition );
 
         if( m_drawItem )

@@ -1878,16 +1878,29 @@ int LIB_PIN::GetOrientationCodeIndex( int code )
 
 void LIB_PIN::Rotate()
 {
-    // Get the actual pin orientation index
-    int i = GetOrientationCodeIndex( GetOrientation() );
+    int orient = PIN_RIGHT;
 
-    // Compute the next orientation, swap lower two bits for the right order
-    i = ( (i & 2) >> 1 ) | ( (i & 1) << 1 );
-    i = i + 1;
-    i = ( (i & 2) >> 1 ) | ( (i & 1) << 1 );
+    switch( GetOrientation() )
+    {
+        case PIN_UP:
+            orient = PIN_LEFT;
+            break;
+
+        case PIN_DOWN:
+            orient = PIN_RIGHT;
+            break;
+
+        case PIN_LEFT:
+            orient = PIN_DOWN;
+           break;
+
+        case PIN_RIGHT:
+            orient = PIN_UP;
+            break;
+    }
 
     // Set the new orientation
-    SetOrientation( GetOrientationCode( i ) );
+    SetOrientation( orient );
 }
 
 

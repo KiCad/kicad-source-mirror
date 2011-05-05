@@ -1071,6 +1071,10 @@ void LIB_EDIT_FRAME::OnRotateItem( wxCommandEvent& aEvent )
 
     m_drawItem->Rotate();
 	OnModify();
+
+    if( !m_drawItem->InEditMode() )
+        m_drawItem->ClearFlags();
+
     DrawPanel->Refresh();
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
