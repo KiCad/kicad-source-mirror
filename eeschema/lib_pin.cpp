@@ -470,9 +470,9 @@ void LIB_PIN::SetVisible( bool visible )
         return;
 
     if( visible )
-        m_attributes &= ~PINNOTDRAW;
+        m_attributes &= ~PIN_INVISIBLE;
     else
-        m_attributes |= PINNOTDRAW;
+        m_attributes |= PIN_INVISIBLE;
 
     SetModified();
 
@@ -488,9 +488,9 @@ void LIB_PIN::SetVisible( bool visible )
             continue;
 
         if( visible )
-            pinList[i]->m_attributes &= ~PINNOTDRAW;
+            pinList[i]->m_attributes &= ~PIN_INVISIBLE;
         else
-            pinList[i]->m_attributes |= PINNOTDRAW;
+            pinList[i]->m_attributes |= PIN_INVISIBLE;
 
         SetModified();
     }
@@ -619,13 +619,12 @@ bool LIB_PIN::Save( FILE* ExportFile )
                  m_Unit, m_Convert, Etype ) < 0 )
         return false;
 
-    if( ( m_shape ) || ( m_attributes & PINNOTDRAW ) )
+    if( m_shape || !IsVisible() )
     {
         if( fprintf( ExportFile, " " ) < 0 )
             return false;
     }
-    if( m_attributes & PINNOTDRAW
-        && fprintf( ExportFile, "N" ) < 0 )
+    if( !IsVisible() && fprintf( ExportFile, "N" ) < 0 )
         return false;
     if( m_shape & INVERT
         && fprintf( ExportFile, "I" ) < 0 )
@@ -741,7 +740,7 @@ bool LIB_PIN::Load( char* line, wxString& errorMsg )
                 break;
 
             case 'N':
-                m_attributes |= PINNOTDRAW;
+                m_attributes |= PIN_INVISIBLE;
                 break;
 
             case 'I':
@@ -797,16 +796,21 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
                            void*            aData,
                            const TRANSFORM& aTransform )
 {
-    // Invisible pins are only drawn on request.  In libedit they are drawn
-    // in g_InvisibleItemColor because we must see them.
-    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) wxGetApp().GetTopWindow();
-
-    if( m_attributes & PINNOTDRAW )
+    // Invisible pins are only drawn on request.
+    // They are drawn in g_InvisibleItemColor.
+    // in schematic, they are drawn only if m_ShowAllPins is true.
+    // In other windows, they are always drawn because we must see them.
+    if( ! IsVisible() )
     {
-        if( frame->m_LibeditFrame && frame->m_LibeditFrame->IsActive() )
-            aColor = g_InvisibleItemColor;
-        else if( !frame->m_ShowAllPins )
+        EDA_DRAW_FRAME* frame = NULL;
+        if( aPanel && aPanel->GetParent() )
+            frame = (EDA_DRAW_FRAME*)aPanel->GetParent();
+
+        if( frame && frame->m_Ident == SCHEMATIC_FRAME &&
+            ! ((SCH_EDIT_FRAME*)frame)->m_ShowAllPins )
             return;
+
+        aColor = g_InvisibleItemColor;
     }
 
     LIB_COMPONENT* Entry = GetParent();
@@ -1673,7 +1677,7 @@ void LIB_PIN::DoMirrorHorizontal( const wxPoint& center )
 void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                       const TRANSFORM& aTransform )
 {
-    if( m_attributes & PINNOTDRAW )
+    if( ! IsVisible() )
         return;
 
     int     orient = ReturnPinDrawOrient( aTransform );

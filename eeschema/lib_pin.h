@@ -52,7 +52,7 @@ enum ElectricPinType {
 extern const wxChar* MsgPinElectricType[];
 
 /* Pin visibility flag bit. */
-#define PINNOTDRAW 1    /* Set makes pin invisible */
+#define PIN_INVISIBLE 1    /* Set makes pin invisible */
 
 
 /**
@@ -350,7 +350,7 @@ public:
      *
      * @return True if draw object is visible otherwise false.
      */
-    bool IsVisible() { return ( m_attributes & PINNOTDRAW ) == 0; }
+    bool IsVisible() { return ( m_attributes & PIN_INVISIBLE ) == 0; }
 
     /**
      * @return the size of the "pen" that be used to draw or plot this item.

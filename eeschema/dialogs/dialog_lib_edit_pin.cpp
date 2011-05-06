@@ -15,10 +15,13 @@ wxSize  DIALOG_LIB_EDIT_PIN::s_LastSize;
 DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin ) :
     DIALOG_LIB_EDIT_PIN_BASE( parent )
 {
+    // Creates a dummy pin to show on a panel, insside this dialog:
     m_dummyPin = new LIB_PIN( *aPin );
 
-    // m_dummyPin changes do not proparagte to a parent, so set parent to null
+    // m_dummyPin changes do not proparagte to other pins of the current lib component,
+    // so set parent to null and clear flags
     m_dummyPin->SetParent( NULL );
+    m_dummyPin->ClearFlags();
 
     m_panelShowPin->SetBackgroundColour( MakeColour( g_DrawBgColor ) );
 
@@ -60,7 +63,7 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
 
     // Give a parent to m_dummyPin only from draw purpose.
     // In fact m_dummyPin should not have a parent, but draw functions need a parent
-    // to know some options
+    // to know some options, about pin texts
     LIB_EDIT_FRAME* libframe = (LIB_EDIT_FRAME*) GetParent();
     m_dummyPin->SetParent( libframe->GetComponent() );
 
@@ -79,7 +82,6 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     NEGATE( offset.y );
 
     GRResetPenAndBrush( &dc );
-    m_dummyPin->SetVisible( true ); // TODO find a better way to show invisible pin here
     m_dummyPin->Draw( NULL, &dc, offset, -1, wxCOPY,
                       NULL, DefaultTransform );
 
@@ -115,6 +117,8 @@ void DIALOG_LIB_EDIT_PIN::OnOKButtonClick( wxCommandEvent& event )
 // Called when a pin properties changes
 void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
 {
+    if( ! IsShown() )   // do nothing at init time
+        return;
     int units = ((LIB_EDIT_FRAME*)GetParent())->m_InternalUnits;
     int pinNameSize = ReturnValueFromString( g_UserUnit, GetNameTextSize(), units );
     int pinNumSize = ReturnValueFromString( g_UserUnit, GetPadNameTextSize(), units);
