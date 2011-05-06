@@ -344,6 +344,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     }
 
     // cornerBufferPolysToSubstract contains polygons to substract.
+    // polyset_zone_solid_areas contains the main filled area
     // Calculate now actual solid areas
     if( cornerBufferPolysToSubstract.size() > 0 )
     {
@@ -352,11 +353,11 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                                          polyset_holes );
         // Remove holes from initial area.:
         polyset_zone_solid_areas -= polyset_holes;
-
-        /* put these areas in m_FilledPolysList */
-        m_FilledPolysList.clear();
-        CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
     }
+
+    // put solid areas in m_FilledPolysList:
+    m_FilledPolysList.clear();
+    CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
 
     // Remove insulated islands:
     if( GetNet() > 0 )
