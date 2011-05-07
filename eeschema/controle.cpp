@@ -69,6 +69,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
 
     case LIB_PIN_T:
         Pin = (LIB_PIN*) item;
+        LibItem = (SCH_COMPONENT*) LocateItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
         break;
 
     default:
