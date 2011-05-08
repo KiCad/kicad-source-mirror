@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-28 18:31+0100\n"
-"PO-Revision-Date: 2011-04-28 18:31+0100\n"
+"POT-Creation-Date: 2011-05-08 09:38+0100\n"
+"PO-Revision-Date: 2011-05-08 09:39+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr "Nie mogę przenieść pliku ... "
 #: kicad/class_treeproject_item.cpp:129
 #: kicad/class_treeproject_item.cpp:204
 msgid "Permission error ?"
-msgstr "Błąd uprawnień?"
+msgstr "Błąd uprawnień ?"
 
 #: kicad/class_treeproject_item.cpp:187
 msgid ""
@@ -524,7 +524,7 @@ msgstr "bez_nazwy"
 msgid "An attempt was made to remove the %s field from component %s in library %s."
 msgstr "Podjęto próbę usunięcia pola %s z elementu %s w bibliotece %s."
 
-#: eeschema/controle.cpp:136
+#: eeschema/controle.cpp:137
 msgid "Clarify Selection"
 msgstr "Sprecyzuj Wybór"
 
@@ -1317,57 +1317,57 @@ msgstr "Nie podłączony"
 msgid "Pin"
 msgstr "Pin"
 
-#: eeschema/lib_pin.cpp:1702
+#: eeschema/lib_pin.cpp:1716
 msgid "Name"
 msgstr "Nazwa"
 
-#: eeschema/lib_pin.cpp:1709
+#: eeschema/lib_pin.cpp:1723
 msgid "Number"
 msgstr "Numer"
 
-#: eeschema/lib_pin.cpp:1715
+#: eeschema/lib_pin.cpp:1729
 msgid "Style"
 msgstr "Styl"
 
-#: eeschema/lib_pin.cpp:1717
+#: eeschema/lib_pin.cpp:1731
 msgid "Yes"
 msgstr "Tak"
 
-#: eeschema/lib_pin.cpp:1719
+#: eeschema/lib_pin.cpp:1733
 msgid "No"
 msgstr "Nie"
 
-#: eeschema/lib_pin.cpp:1720
+#: eeschema/lib_pin.cpp:1734
 msgid "Visible"
 msgstr "Widoczny"
 
-#: eeschema/lib_pin.cpp:1724
+#: eeschema/lib_pin.cpp:1738
 msgid "Length"
 msgstr "Długość"
 
-#: eeschema/lib_pin.cpp:1727
+#: eeschema/lib_pin.cpp:1741
 msgid "Orientation"
 msgstr "Orientacja"
 
-#: eeschema/lib_pin.cpp:1958
+#: eeschema/lib_pin.cpp:1984
 #, c-format
 msgid "Pin %s, %s, %s"
 msgstr "Pin %s, %s, %s"
 
-#: eeschema/lib_circle.cpp:26
+#: eeschema/lib_circle.cpp:27
 msgid "Circle"
 msgstr "Okrąg"
 
-#: eeschema/lib_circle.cpp:58
+#: eeschema/lib_circle.cpp:60
 #, c-format
 msgid "circle only had %d parameters of the required 6"
 msgstr "okrąg posiada tylko %d parematrów z wymaganych 6"
 
-#: eeschema/lib_circle.cpp:256
+#: eeschema/lib_circle.cpp:258
 msgid "Radius"
 msgstr "Promień"
 
-#: eeschema/lib_circle.cpp:267
+#: eeschema/lib_circle.cpp:269
 #, c-format
 msgid "Circle center (%s, %s), radius %s"
 msgstr "Okrąg o centrum w (%s, %s), promień %s"
@@ -1797,45 +1797,45 @@ msgstr "Rozmiar X"
 msgid "Size Y"
 msgstr "Rozmiar Y"
 
-#: eeschema/pinedit.cpp:196
+#: eeschema/pinedit.cpp:197
 msgid "This position is already occupied by another pin. Continue?"
 msgstr "Ta pozycja jest zajmowana przez inny pin. Kontynuować?"
 
-#: eeschema/pinedit.cpp:589
+#: eeschema/pinedit.cpp:591
 msgid "No pins!"
 msgstr "Brak pinów!"
 
-#: eeschema/pinedit.cpp:600
+#: eeschema/pinedit.cpp:602
 msgid "Marker Information"
 msgstr "Informacje o znacznikach"
 
-#: eeschema/pinedit.cpp:619
+#: eeschema/pinedit.cpp:621
 #, c-format
 msgid "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Zdublowany pin %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b> jest w konflikcie z pinem %s \"%s\" na pozycji <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:632
-#: eeschema/pinedit.cpp:671
+#: eeschema/pinedit.cpp:634
+#: eeschema/pinedit.cpp:673
 #, c-format
 msgid " in part %c"
 msgstr " w elemencie %c"
 
-#: eeschema/pinedit.cpp:639
-#: eeschema/pinedit.cpp:678
+#: eeschema/pinedit.cpp:641
+#: eeschema/pinedit.cpp:680
 msgid "  of converted"
 msgstr "   skonwerterowanych"
 
-#: eeschema/pinedit.cpp:641
-#: eeschema/pinedit.cpp:680
+#: eeschema/pinedit.cpp:643
+#: eeschema/pinedit.cpp:682
 msgid "  of normal"
 msgstr "   normalnych"
 
-#: eeschema/pinedit.cpp:663
+#: eeschema/pinedit.cpp:665
 #, c-format
 msgid "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
 msgstr "<b>Pin poza siatką %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b>"
 
-#: eeschema/pinedit.cpp:688
+#: eeschema/pinedit.cpp:690
 msgid "No off grid or duplicate pins were found."
 msgstr "Nie znaleziono pinów zdblowanych lub poza siatką."
 
@@ -2334,6 +2334,61 @@ msgstr " błąd!"
 msgid "The following libraries could not be found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
+#: eeschema/libeditframe.cpp:318
+msgid ""
+"Component was modified!\n"
+"Discard changes?"
+msgstr ""
+"Element został zmieniony!\n"
+"Porzucić zmiany?"
+
+#: eeschema/libeditframe.cpp:332
+#, c-format
+msgid ""
+"Library \"%s\" was modified!\n"
+"Discard changes?"
+msgstr ""
+"Biblioteka \"%s\" została zmieniona!\n"
+"Porzucić zmiany?"
+
+#: eeschema/libeditframe.cpp:432
+#: eeschema/tool_viewlib.cpp:148
+#, c-format
+msgid "Part %c"
+msgstr "Element %c"
+
+#: eeschema/libeditframe.cpp:999
+msgid "Set pin options"
+msgstr "Ustaw opcje pinu"
+
+#: eeschema/libeditframe.cpp:1012
+msgid "Add rectangle"
+msgstr "Dodaj prostokąt"
+
+#: eeschema/libeditframe.cpp:1016
+msgid "Add circle"
+msgstr "Dodaj okrąg"
+
+#: eeschema/libeditframe.cpp:1020
+msgid "Add arc"
+msgstr "Dodaj łuk"
+
+#: eeschema/libeditframe.cpp:1024
+msgid "Add line"
+msgstr "Dodaj linię"
+
+#: eeschema/libeditframe.cpp:1028
+msgid "Set anchor position"
+msgstr "Ustaw pozycję zakotwiczenia"
+
+#: eeschema/libeditframe.cpp:1032
+msgid "Import"
+msgstr "Importuj"
+
+#: eeschema/libeditframe.cpp:1038
+msgid "Export"
+msgstr "Eksportuj"
+
 #: eeschema/onrightclick.cpp:84
 #: eeschema/onrightclick.cpp:96
 #: eeschema/libedit_onrightclick.cpp:50
@@ -2754,11 +2809,6 @@ msgstr "Pokaż dokumentację elementu"
 msgid "Insert component in schematic"
 msgstr "Wstaw element do schematu"
 
-#: eeschema/tool_viewlib.cpp:148
-#, c-format
-msgid "Part %c"
-msgstr "Element %c"
-
 #: eeschema/menubar_libedit.cpp:44
 msgid "&Save Current Library\tCtrl+S"
 msgstr "Zapi&sz bieżącą bibliotekę\tCtrl+S"
@@ -2955,55 +3005,6 @@ msgstr "Powiększ blok (shift + przeciąganie myszką)"
 msgid "Select Items"
 msgstr "Wybierz elementy"
 
-#: eeschema/libeditframe.cpp:318
-msgid ""
-"Component was modified!\n"
-"Discard changes?"
-msgstr ""
-"Element został zmieniony!\n"
-"Porzucić zmiany?"
-
-#: eeschema/libeditframe.cpp:332
-#, c-format
-msgid ""
-"Library \"%s\" was modified!\n"
-"Discard changes?"
-msgstr ""
-"Biblioteka \"%s\" została zmieniona!\n"
-"Porzucić zmiany?"
-
-#: eeschema/libeditframe.cpp:999
-msgid "Set pin options"
-msgstr "Ustaw opcje pinu"
-
-#: eeschema/libeditframe.cpp:1012
-msgid "Add rectangle"
-msgstr "Dodaj prostokąt"
-
-#: eeschema/libeditframe.cpp:1016
-msgid "Add circle"
-msgstr "Dodaj okrąg"
-
-#: eeschema/libeditframe.cpp:1020
-msgid "Add arc"
-msgstr "Dodaj łuk"
-
-#: eeschema/libeditframe.cpp:1024
-msgid "Add line"
-msgstr "Dodaj linię"
-
-#: eeschema/libeditframe.cpp:1028
-msgid "Set anchor position"
-msgstr "Ustaw pozycję zakotwiczenia"
-
-#: eeschema/libeditframe.cpp:1032
-msgid "Import"
-msgstr "Importuj"
-
-#: eeschema/libeditframe.cpp:1038
-msgid "Export"
-msgstr "Eksportuj"
-
 #: eeschema/viewlib_frame.cpp:83
 #: eeschema/viewlibs.cpp:108
 msgid "Library Browser"
@@ -3094,19 +3095,19 @@ msgstr "Arkusze schematów mogą być zagnieżdżone tylko %d krotnie."
 msgid "%8.8lX/"
 msgstr "%8.8lX/"
 
-#: eeschema/sch_sheet.cpp:769
+#: eeschema/sch_sheet.cpp:780
 msgid "Sheet name"
 msgstr "Nazwa arkusza"
 
-#: eeschema/sch_sheet.cpp:770
+#: eeschema/sch_sheet.cpp:781
 msgid "File name"
 msgstr "Nazwa pliku"
 
-#: eeschema/sch_sheet.cpp:774
+#: eeschema/sch_sheet.cpp:785
 msgid "Time Stamp"
 msgstr "Znacznik czasowy"
 
-#: eeschema/sch_sheet.cpp:975
+#: eeschema/sch_sheet.cpp:986
 msgid "Hierarchical Sheet "
 msgstr "Arkusz hierarchiczny"
 
@@ -5029,6 +5030,41 @@ msgstr "Brak nazwy elementu!"
 msgid "Component [%s] not found!"
 msgstr "Nie znaleziono elementu [%s]!"
 
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
+msgid "Text:"
+msgstr "Tekst:"
+
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:57
+msgid " Text Options : "
+msgstr " Opcje tekstu: "
+
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:59
+msgid "Vertical"
+msgstr "Pionowo"
+
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:65
+msgid "Common to Units"
+msgstr "Wspólny dla części"
+
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:68
+msgid "Common to convert"
+msgstr "Wspólny dla skonwertowanych"
+
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:75
+msgid "Text Shape:"
+msgstr "Kształt tekstu:"
+
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:236
+#, c-format
+msgid ""
+"A new name is entered for this component\n"
+"An alias %s already exists!\n"
+"Cannot update this component"
+msgstr ""
+"Nowa nazwa została wpisana dla tego elementu\n"
+"Alias %s już istnieje!\n"
+"Nie można uaktualnić tego elementu."
+
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:33
 msgid "Pin &name:"
 msgstr "&Nazwa pinu:"
@@ -5065,7 +5101,7 @@ msgstr "Piny Współdzielone"
 msgid "Add to all &parts in package"
 msgstr "Dodaj do wszystkich części w paczce"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:84
+#: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:83
 msgid "Add to all alternate &body styles (DeMorgan)"
 msgstr "Dodaj do wszystkich alternatwynych stylów (DeMorgan)"
 
@@ -5088,41 +5124,6 @@ msgstr "Rozmiar numeru pinu:"
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:133
 msgid "&Length:"
 msgstr "Długość:"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
-msgid "Text:"
-msgstr "Tekst:"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:57
-msgid " Text Options : "
-msgstr " Opcje tekstu: "
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:59
-msgid "Vertical"
-msgstr "Pionowo"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:65
-msgid "Common to Units"
-msgstr "Wspólny dla części"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:68
-msgid "Common to convert"
-msgstr "Wspólny dla skonwertowanych"
-
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:75
-msgid "Text Shape:"
-msgstr "Kształt tekstu:"
-
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:236
-#, c-format
-msgid ""
-"A new name is entered for this component\n"
-"An alias %s already exists!\n"
-"Cannot update this component"
-msgstr ""
-"Nowa nazwa została wpisana dla tego elementu\n"
-"Alias %s już istnieje!\n"
-"Nie można uaktualnić tego elementu."
 
 #: pcbnew/automove.cpp:179
 msgid "No modules found!"
@@ -5220,76 +5221,79 @@ msgstr "Powiększenie "
 msgid "Block Operation"
 msgstr "Operacje na blokach"
 
-#: pcbnew/netlist.cpp:109
+#: pcbnew/edit.cpp:163
+msgid "Module Editor"
+msgstr "Edytor modułów"
+
+#: pcbnew/edit.cpp:558
+#: pcbnew/edit.cpp:576
+#: pcbnew/edit.cpp:598
+#: pcbnew/edit.cpp:622
+#: pcbnew/edit.cpp:645
+#: pcbnew/edit.cpp:667
 #, c-format
-msgid "Netlist file %s not found"
-msgstr "Nie znaleziono pliku %s z listą sieci"
+msgid "Footprint %s found, but it is locked"
+msgstr "Znaleziono obudowę %s, ale jest ona zablokowana"
 
-#: pcbnew/netlist.cpp:180
+#: pcbnew/edit.cpp:695
+#: pcbnew/edit.cpp:712
 #, c-format
-msgid "Reading Netlist \"%s\""
-msgstr "Odczytaj listę sieci \"%s\""
+msgid "The parent (%s) of the pad is locked"
+msgstr "Element nadrzędny (%s) dla wyprowadzenia jest zablokowany"
 
-#: pcbnew/netlist.cpp:360
-msgid "Ok to delete footprints not in netlist?"
-msgstr "Czy usunąć obudowy nie będące na liście sieci?"
+#: pcbnew/edit.cpp:1214
+#: pcbnew/edit.cpp:1216
+msgid "Add tracks"
+msgstr "Dodaj ścieżki"
 
-#: pcbnew/netlist.cpp:513
-#, c-format
-msgid "Component \"%s\": Mismatch! module is [%s] and netlist said [%s]\n"
-msgstr "Element %s: Niedopasowanie! Moduł to [%s], a lista sieci wskazuje [%s]\n"
+#: pcbnew/edit.cpp:1226
+#: pcbnew/edit.cpp:1270
+msgid "Add module"
+msgstr "Dodaj moduł"
 
-#: pcbnew/netlist.cpp:562
-#, c-format
-msgid "Component [%s] not found"
-msgstr "Nie znaleziono elementu [%s]"
+#: pcbnew/edit.cpp:1230
+msgid "Add zones"
+msgstr "Dodaj strefy"
 
-#: pcbnew/netlist.cpp:628
-#, c-format
-msgid "Module [%s]: Pad [%s] not found"
-msgstr "Moduł [%s]: Nie znaleziono pola [%s]"
+#: pcbnew/edit.cpp:1233
+msgid "Warning: zone display is OFF!!!"
+msgstr "Ostrzeżenie: Wyświetlanie stref jest WYŁĄCZONE!!!"
 
-#: pcbnew/netlist.cpp:650
-msgid "No Modules"
-msgstr "Brak modułów"
+#: pcbnew/edit.cpp:1242
+msgid "Add layer alignment target"
+msgstr "Dodaj element pozycjonujący warstwy"
 
-#: pcbnew/netlist.cpp:659
-msgid "Components"
-msgstr "Elementy"
+#: pcbnew/edit.cpp:1246
+msgid "Adjust zero"
+msgstr "Ustaw zero"
 
-#: pcbnew/netlist.cpp:699
-msgid "No modules"
-msgstr "Brak modułów"
+#: pcbnew/edit.cpp:1250
+msgid "Adjust grid origin"
+msgstr "Dostosuj punkt bazowy siatki"
 
-#: pcbnew/netlist.cpp:712
-msgid "No modules in NetList"
-msgstr "Brak modułów na liście sieci"
+#: pcbnew/edit.cpp:1254
+msgid "Add graphic line"
+msgstr "Dodaj linię (grafika)"
 
-#: pcbnew/netlist.cpp:717
-msgid "Duplicates"
-msgstr "Duplikaty"
+#: pcbnew/edit.cpp:1258
+msgid "Add graphic arc"
+msgstr "Dodaj łuk (grafika)"
 
-#: pcbnew/netlist.cpp:737
-msgid "Missing:"
-msgstr "Brakujące:"
+#: pcbnew/edit.cpp:1262
+msgid "Add graphic circle"
+msgstr "Dodaj okrąg (grafika)"
 
-#: pcbnew/netlist.cpp:759
-msgid "Not in Netlist:"
-msgstr "Brak na liście sieci:"
+#: pcbnew/edit.cpp:1274
+msgid "Add dimension"
+msgstr "Dodaj wymiar"
 
-#: pcbnew/netlist.cpp:780
-msgid "Check Modules"
-msgstr "Sprawdź moduły"
+#: pcbnew/edit.cpp:1282
+msgid "Highlight net"
+msgstr "Podświetl sieć"
 
-#: pcbnew/netlist.cpp:902
-#, c-format
-msgid "File <%s> not found, use Netlist for lib module selection"
-msgstr "Nie znaleziono pliku <%s>. Użyj listy sieci do wybrania biblioteki modułów"
-
-#: pcbnew/netlist.cpp:1015
-#, c-format
-msgid "Component [%s]: footprint <%s> not found"
-msgstr "Element [%s]: nie znaleziono obudowy %s"
+#: pcbnew/edit.cpp:1286
+msgid "Select rats nest"
+msgstr "Wybierz połączenia wspomagające"
 
 #: pcbnew/build_BOM_from_board.cpp:33
 msgid "Comma separated value files (*.csv)|*.csv"
@@ -5780,79 +5784,81 @@ msgstr "Kod sieci"
 msgid "Net Length"
 msgstr "Długość sieci"
 
-#: pcbnew/edit.cpp:163
-msgid "Module Editor"
-msgstr "Edytor modułów"
-
-#: pcbnew/edit.cpp:558
-#: pcbnew/edit.cpp:576
-#: pcbnew/edit.cpp:598
-#: pcbnew/edit.cpp:622
-#: pcbnew/edit.cpp:645
-#: pcbnew/edit.cpp:667
+#: pcbnew/netlist.cpp:201
 #, c-format
-msgid "Footprint %s found, but it is locked"
-msgstr "Znaleziono obudowę %s, ale jest ona zablokowana"
+msgid "Netlist file %s not found"
+msgstr "Nie znaleziono pliku %s z listą sieci"
 
-#: pcbnew/edit.cpp:695
-#: pcbnew/edit.cpp:712
+#: pcbnew/netlist.cpp:257
 #, c-format
-msgid "The parent (%s) of the pad is locked"
-msgstr "Element nadrzędny (%s) dla wyprowadzenia jest zablokowany"
+msgid "Reading Netlist \"%s\""
+msgstr "Odczytaj listę sieci \"%s\""
 
-#: pcbnew/edit.cpp:1214
-#: pcbnew/edit.cpp:1216
-msgid "Add tracks"
-msgstr "Dodaj ścieżki"
+#: pcbnew/netlist.cpp:261
+#, c-format
+msgid "Using component/footprint link file \"%s\""
+msgstr "Użyto pliku połączeń elementów/modułów \"%s\""
 
-#: pcbnew/edit.cpp:1226
-#: pcbnew/edit.cpp:1270
-msgid "Add module"
-msgstr "Dodaj moduł"
+#: pcbnew/netlist.cpp:338
+msgid "Ok to delete not locked footprints not found in netlist?"
+msgstr "Czy usunąć nie zablokowane obudowy nie będące na liście sieci?"
 
-#: pcbnew/edit.cpp:1230
-msgid "Add zones"
-msgstr "Dodaj strefy"
+#: pcbnew/netlist.cpp:602
+#, c-format
+msgid "Component \"%s\": Mismatch! module is [%s] and netlist said [%s]\n"
+msgstr "Element %s: Niedopasowanie! Moduł to [%s], a lista sieci wskazuje [%s]\n"
 
-#: pcbnew/edit.cpp:1233
-msgid "Warning: zone display is OFF!!!"
-msgstr "Ostrzeżenie: Wyświetlanie stref jest WYŁĄCZONE!!!"
+#: pcbnew/netlist.cpp:636
+#, c-format
+msgid "Component [%s] not found"
+msgstr "Nie znaleziono elementu [%s]"
 
-#: pcbnew/edit.cpp:1242
-msgid "Add layer alignment target"
-msgstr "Dodaj element pozycjonujący warstwy"
+#: pcbnew/netlist.cpp:699
+#, c-format
+msgid "Module [%s]: Pad [%s] not found"
+msgstr "Moduł [%s]: Nie znaleziono pola [%s]"
 
-#: pcbnew/edit.cpp:1246
-msgid "Adjust zero"
-msgstr "Ustaw zero"
+#: pcbnew/netlist.cpp:721
+msgid "No Modules"
+msgstr "Brak modułów"
 
-#: pcbnew/edit.cpp:1250
-msgid "Adjust grid origin"
-msgstr "Dostosuj punkt bazowy siatki"
+#: pcbnew/netlist.cpp:730
+msgid "Components"
+msgstr "Elementy"
 
-#: pcbnew/edit.cpp:1254
-msgid "Add graphic line"
-msgstr "Dodaj linię (grafika)"
+#: pcbnew/netlist.cpp:768
+msgid "No modules"
+msgstr "Brak modułów"
 
-#: pcbnew/edit.cpp:1258
-msgid "Add graphic arc"
-msgstr "Dodaj łuk (grafika)"
+#: pcbnew/netlist.cpp:781
+msgid "No modules in NetList"
+msgstr "Brak modułów na liście sieci"
 
-#: pcbnew/edit.cpp:1262
-msgid "Add graphic circle"
-msgstr "Dodaj okrąg (grafika)"
+#: pcbnew/netlist.cpp:786
+msgid "Duplicates"
+msgstr "Duplikaty"
 
-#: pcbnew/edit.cpp:1274
-msgid "Add dimension"
-msgstr "Dodaj wymiar"
+#: pcbnew/netlist.cpp:808
+msgid "Missing:"
+msgstr "Brakujące:"
 
-#: pcbnew/edit.cpp:1282
-msgid "Highlight net"
-msgstr "Podświetl sieć"
+#: pcbnew/netlist.cpp:830
+msgid "Not in Netlist:"
+msgstr "Brak na liście sieci:"
 
-#: pcbnew/edit.cpp:1286
-msgid "Select rats nest"
-msgstr "Wybierz połączenia wspomagające"
+#: pcbnew/netlist.cpp:850
+msgid "Check Modules"
+msgstr "Sprawdź moduły"
+
+#: pcbnew/netlist.cpp:972
+#, c-format
+msgid "File <%s> not found, use Netlist for lib module selection"
+msgstr "Nie znaleziono pliku <%s>. Użyj listy sieci do wybrania biblioteki modułów"
+
+#: pcbnew/netlist.cpp:1081
+#, c-format
+msgid "Component [%s]: footprint <%s> not found"
+msgstr "Element [%s]: nie znaleziono obudowy %s"
 
 #: pcbnew/class_pad.cpp:524
 msgid "Unknown pad shape"
@@ -8975,11 +8981,11 @@ msgstr "Drukuj obudowy"
 msgid "There was a problem printing"
 msgstr "Wystąpił problem podczas drukowania"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:45
+#: pcbnew/dialogs/dialog_netlist.cpp:39
 msgid "Project config has changed. Save it ?"
 msgstr "Konfiguracja projektu została zmieniona. Zapisać ją ?"
 
-#: pcbnew/dialogs/dialog_netlist.cpp:94
+#: pcbnew/dialogs/dialog_netlist.cpp:87
 msgid "Select Netlist"
 msgstr "Wybierz listę sieci"
 
@@ -9037,59 +9043,59 @@ msgstr "Przesuń zaznaczoną klasę sieci o jedną pozycję w górę"
 msgid "Membership:"
 msgstr "Lista powiązań:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:114
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:112
 msgid "<<<"
 msgstr "<<<"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:115
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:113
 msgid "Move the selected nets in the right list to the left list"
 msgstr "Przesuń zaznaczone sieci z prawej listy na lewą listę"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:119
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:117
 msgid ">>>"
 msgstr ">>>"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:120
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:118
 msgid "Move the selected nets in the left list to the right list"
 msgstr "Przesuń zaznaczone sieci z lewej listy na prawą listę"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:124
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:122
 msgid "<< Select All"
 msgstr "<< Wybierz wszystkie"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:125
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:123
 msgid "Select all nets in the left list"
 msgstr "Wybierz wszystkie sieci z lewej listy"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:129
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:127
 msgid "Select All >>"
 msgstr "Wybierz wszystkie >>"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:130
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:128
 msgid "Select all nets in the right list"
 msgstr "Wybierz wszystkie sieci z prawej listy"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:156
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:152
 msgid "Net Classes Editor"
 msgstr "Edytor klas połączeń"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:165
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:161
 msgid "Via Options:"
 msgstr "Opcje przelotek:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:167
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:163
 msgid "Through via"
 msgstr "Przelotka na wylot"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:167
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:163
 msgid "Blind or buried via"
 msgstr "Przelotka ślepa lub zagrzebana"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:169
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:165
 msgid "Default Via Type"
 msgstr "Domyślny typ przelotki"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:171
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:167
 msgid ""
 "Select the current via type.\n"
 "Trough via is the usual selection"
@@ -9097,20 +9103,20 @@ msgstr ""
 "Wybież bieżący typ przelotki.\n"
 "Przelotka na wylot jest najczęściej używana"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:175
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:171
 msgid "Do not allow micro vias"
 msgstr "Mikroprzelotki niedozwolone"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:175
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:171
 msgid "Allow micro vias"
 msgstr "Mikroprzelotki dozwolone"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:177
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:173
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:138
 msgid "Micro Vias:"
 msgstr "Mikroprzelotki:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:179
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:175
 msgid ""
 "Allows or do not allow use of micro vias\n"
 "They are very small vias only from an external copper layer to its near neightbour"
@@ -9118,32 +9124,32 @@ msgstr ""
 "Pozwala (zabrania) na używanie mikroprzelotek\n"
 "Są to bardzo małe przelotki z zewnętrznej warstwy ścieżek do jej najbliższego sąsiada"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:186
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:182
 msgid "Minimum Allowed Values:"
 msgstr "Dopuszczalna wartość minimalna:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:194
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:190
 #: pcbnew/dialogs/dialog_drc_base.cpp:45
 msgid "Min track width"
 msgstr "Minimalna szerokość ścieżki"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:201
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:197
 msgid "Min via diameter"
 msgstr "Min. średnica przelotki"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:208
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:204
 msgid "Min via drill dia"
 msgstr "Min. rozmiar otworu przelotki"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:215
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:211
 msgid "Min uvia diameter"
 msgstr "Min. średnica mikroprzelotki"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:223
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:219
 msgid "Min uvia drill dia"
 msgstr "Min. średnica otworu mikroprzelotki"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:240
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:236
 msgid ""
 "Specific via diameters and track widths, which \n"
 "can be used to replace default Netclass values \n"
@@ -9153,79 +9159,79 @@ msgstr ""
 "na żadanie użyte zamiennie z domyślnymi wartościami z klas połączeń\n"
 "dla wybranych segmentów ścieżek lub przelotek."
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:248
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:244
 msgid "Custom Via Sizes:"
 msgstr "Własne rozmiary przelotek:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:250
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:246
 msgid "Drill value: a blank or 0 => default Netclass value"
 msgstr "Średnica otworu: puste pole lub 0 => Domyślna wartość z klasy połączeń"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:267
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:263
 msgid "Diameter"
 msgstr "Średnica"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:274
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:270
 msgid "Via 1"
 msgstr "Przelotka 1"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:275
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:271
 msgid "Via 2"
 msgstr "Przelotka 2"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:276
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:272
 msgid "Via 3"
 msgstr "Przelotka 3"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:277
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:273
 msgid "Via 4"
 msgstr "Przelotka 4"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:278
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:274
 msgid "Via 5"
 msgstr "Przelotka 5"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:279
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:275
 msgid "Via 6"
 msgstr "Przelotka 6"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:280
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:276
 msgid "Via 7"
 msgstr "Przelotka 7"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:292
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:288
 msgid "Custom Track Widths:"
 msgstr "Własna szerkość ścieżek:"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:317
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:313
 msgid "Track 1"
 msgstr "Ścieżka 1"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:318
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:314
 msgid "Track 2"
 msgstr "Ścieżka 2"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:319
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:315
 msgid "Track 3"
 msgstr "Ścieżka 3"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:320
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:316
 msgid "Track 4"
 msgstr "Ścieżka 4"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:321
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:317
 msgid "Track 5"
 msgstr "Ścieżka 5"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:322
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:318
 msgid "Track 6"
 msgstr "Ścieżka 6"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:323
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:319
 msgid "Track 7"
 msgstr "Ścieżka 7"
 
-#: pcbnew/dialogs/dialog_design_rules_base.cpp:339
+#: pcbnew/dialogs/dialog_design_rules_base.cpp:335
 msgid "Global Design Rules"
 msgstr "Reguły globalne"
 
@@ -13781,13 +13787,13 @@ msgstr "Opcje edytora schematów"
 msgid "Plot Postsript"
 msgstr "Rysuj w formacie Postscript"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_base.h:96
-msgid "Pin Properties"
-msgstr "Właściwości pinu"
-
 #: eeschema/dialogs/dialog_lib_edit_text_base.h:60
 msgid "Library Text Properties"
 msgstr "Właściwości tekstów biblioteki"
+
+#: eeschema/dialogs/dialog_lib_edit_pin_base.h:95
+msgid "Pin Properties"
+msgstr "Właściwości pinu"
 
 #: pcbnew/help_common_strings.h:17
 msgid "Find components and text in current loaded board"
@@ -13814,7 +13820,7 @@ msgstr "Kontrola DRC"
 msgid "Module properties"
 msgstr "Właściwości modułu"
 
-#: pcbnew/dialogs/dialog_design_rules_base.h:113
+#: pcbnew/dialogs/dialog_design_rules_base.h:111
 msgid "Design Rules Editor"
 msgstr "Edytor reguł projektowych"
 
