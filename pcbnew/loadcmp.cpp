@@ -3,13 +3,11 @@
 /**********************************************/
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
 #include "kicad_string.h"
-#include "gestfich.h"
 #include "dialog_get_component.h"
 #include "appl_wxstruct.h"
 
@@ -17,7 +15,6 @@
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
 #include "dialog_helpers.h"
-#include "richio.h"
 #include "filter_reader.h"
 #include "footprint_info.h"
 
@@ -86,7 +83,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
     wxString             ModuleName, keys;
     static wxArrayString HistoryList;
     static wxString      lastCommponentName;
-    bool             AllowWildSeach = TRUE;
+    bool             AllowWildSeach = true;
 
     /* Ask for a component name or key words */
     DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), HistoryList,
@@ -147,7 +144,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
             return NULL;    /* Cancel command. */
         }
         else
-            module = Get_Librairie_Module( library, ModuleName, TRUE );
+            module = Get_Librairie_Module( library, ModuleName, true );
     }
 
     GetScreen()->SetCrossHairPosition( curspos );
@@ -197,7 +194,7 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
                                               const wxString& aModuleName,
                                               bool            aDisplayMessageError )
 {
-    int        Found = 0;
+    int        found = 0;
     wxFileName fn;
     char*      Line;
     wxString   Name;
@@ -261,8 +258,8 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
         }
 
         /* Reading the list of modules in the library. */
-        Found = 0;
-        while( !Found && reader.ReadLine() )
+        found = 0;
+        while( !found && reader.ReadLine() )
         {
             Line = reader.Line();
             if( strnicmp( Line, "$MODULE", 6 ) == 0 )
@@ -278,15 +275,15 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
                     msg = FROM_UTF8( Line );
                     if( msg.CmpNoCase( aModuleName ) == 0 )
                     {
-                        Found = 1;
-                        break; /* Found! */
+                        found = 1;
+                        break; /* found! */
                     }
                 }
             }
         }
 
         /* Read library. */
-        while( Found && reader.ReadLine() )
+        while( found && reader.ReadLine() )
         {
             Line = reader.Line();
             if( Line[0] != '$' )
@@ -365,8 +362,8 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
     MList.ReadFootprintFiles( libnames_list );
 
     wxArrayString footprint_names_list;
-    /* Create list of modules if search by keyword. */
-    if( !aKeyWord.IsEmpty() )
+
+    if( !aKeyWord.IsEmpty() ) // Create a list of modules found by keyword.
     {
         for( unsigned ii = 0; ii < MList.GetCount(); ii++ )
         {
@@ -374,7 +371,16 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
                 footprint_names_list.Add( MList.GetItem(ii).m_Module );
         }
     }
-    else
+    else if( !aMask.IsEmpty() ) // Create a list of modules found by pattern
+    {
+        for( unsigned ii = 0; ii < MList.GetCount(); ii++ )
+        {
+            wxString& candidate = MList.GetItem(ii).m_Module;
+            if( WildCompareString( aMask, candidate, false ) )
+                footprint_names_list.Add( candidate );
+        }
+    }
+    else        // Create the full list of modules
         for( unsigned ii = 0; ii < MList.GetCount(); ii++ )
             footprint_names_list.Add( MList.GetItem(ii).m_Module );
 

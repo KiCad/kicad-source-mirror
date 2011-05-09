@@ -15,10 +15,10 @@ wxSize  DIALOG_LIB_EDIT_PIN::s_LastSize;
 DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin ) :
     DIALOG_LIB_EDIT_PIN_BASE( parent )
 {
-    // Creates a dummy pin to show on a panel, insside this dialog:
+    // Creates a dummy pin to show on a panel, inside this dialog:
     m_dummyPin = new LIB_PIN( *aPin );
 
-    // m_dummyPin changes do not proparagte to other pins of the current lib component,
+    // m_dummyPin changes do not propagate to other pins of the current lib component,
     // so set parent to null and clear flags
     m_dummyPin->SetParent( NULL );
     m_dummyPin->ClearFlags();
