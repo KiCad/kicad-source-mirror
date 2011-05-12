@@ -716,7 +716,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
    }
    else
    {
-      m_TreeProject->AppendItem( m_root, "Empty project" );
+      m_TreeProject->AppendItem( m_root, wxT("Empty project") );
    }
 
     m_TreeProject->Expand( rootcellule );
