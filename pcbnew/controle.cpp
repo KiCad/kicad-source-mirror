@@ -107,6 +107,10 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             scanList = GENERAL_COLLECTOR::ModuleItems;
             break;
 
+        case ID_PCB_ZONES_BUTT:
+            scanList = GENERAL_COLLECTOR::Zones;
+            break;
+
         default:
             scanList = DisplayOpt.DisplayZonesMode == 0 ?
                        GENERAL_COLLECTOR::AllBoardItems :

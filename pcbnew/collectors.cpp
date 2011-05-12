@@ -119,6 +119,12 @@ const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
     EOT
 };
 
+const KICAD_T GENERAL_COLLECTOR::Zones[] = {
+    TYPE_ZONE_CONTAINER,
+    EOT
+};
+
+
 
 /**
  * Function Inspect

@@ -141,19 +141,6 @@ bool trapezoid2pointDRC( wxPoint aTref[4], wxPoint aPcompare, int aDist )
     return true;
 }
 
-
-// Rotate a vector by an angle
-wxPoint rotate( wxPoint p, int angle )
-{
-    wxPoint n;
-    double  theta = M_PI * (double) angle / 1800.0;
-
-    n.x = wxRound( (double) p.x * cos( theta ) - (double) p.y * sin( theta ) );
-    n.y = wxRound( p.x * sin( theta ) + p.y * cos( theta ) );
-    return n;
-}
-
-
 /***********************************************************************/
 bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 /***********************************************************************/
@@ -621,7 +608,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     case PAD_CIRCLE:
 
         /* One can use checkClearanceSegmToPad to test clearance
-         * aRefPad is like a track segment with a null lenght and a witdth = m_Size.x
+         * aRefPad is like a track segment with a null length and a witdth = m_Size.x
          */
         m_segmLength = 0;
         m_segmAngle  = 0;
@@ -725,14 +712,19 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         wxPoint segstart;
         segstart.x = -m_segmLength / 2;                 // Start point coordinate of the horizontal equivalent segment
 
-        RotatePoint( &segstart, m_segmAngle );          // True start point coordinate of the equivalent segment
+        RotatePoint( &segstart, m_segmAngle );          // actual start point coordinate of the equivalent segment
+        // Calculate segment end position relative to the segment origin
+        m_segmEnd.x = -2 * segstart.x;
+        m_segmEnd.y = -2 * segstart.y;
+
+        // Recalculate the equivalent segment angle in 0,1 degrees
+        // to prepare a call to checkClearanceSegmToPad()
+        m_segmAngle = ArcTangente( m_segmEnd.y, m_segmEnd.x );
 
         // move pad position relative to the segment origin
         m_padToTestPos = relativePadPos - segstart;
 
-        // Calculate segment end
-        m_segmEnd.x = -2 * segstart.x;
-        m_segmEnd.y = -2 * segstart.y;                              // end of segment coordinate
+        // Use segment to pad check to test the second pad:
         diag = checkClearanceSegmToPad( aPad, segm_width, dist_min );
         break;
     }
@@ -769,6 +761,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 
 /* test if distance between a segment is > aMinDist
  * segment start point is assumed in (0,0) and  segment start point in m_segmEnd
+ * and its orientation is m_segmAngle (m_segmAngle must be already initialized)
  * and have aSegmentWidth.
  */
 bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist )
@@ -787,7 +780,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
     if( aPad->m_PadShape == PAD_TRAPEZOID ) // The size is bigger, due to m_DeltaSize extra size
     {
         padHalfsize.x += ABS(aPad->m_DeltaSize.y) / 2;   // Remember: m_DeltaSize.y is the m_Size.x change
-        padHalfsize.y += ABS(aPad->m_DeltaSize.x) / 2;   // Remember: m_DeltaSize.x is the m_Size.x change
+        padHalfsize.y += ABS(aPad->m_DeltaSize.x) / 2;   // Remember: m_DeltaSize.x is the m_Size.y change
     }
 
     if( aPad->m_PadShape == PAD_CIRCLE )
@@ -843,7 +836,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         }
         deltay = padHalfsize.y - padHalfsize.x;
 
-        // ici: padHalfsize.x = rayon, delta = dist centre cercles a centre pad
+        // here: padHalfsize.x = radius, delta = dist centre cercles a centre pad
 
         // Test the rectangle area between the two circles
         m_xcliplo = m_padToTestPos.x - seuil - padHalfsize.x;
@@ -851,10 +844,12 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         m_xcliphi = m_padToTestPos.x + seuil + padHalfsize.x;
         m_ycliphi = m_padToTestPos.y + segmHalfWidth + deltay;
         if( !checkLine( startPoint, endPoint ) )
+        {
             return false;
+        }
 
         // test the first circle
-        startPoint.x = m_padToTestPos.x;         // segStartPoint.x,segStartPoint.y = centre of the upper circle of the oval shape
+        startPoint.x = m_padToTestPos.x;         // startPoint = centre of the upper circle of the oval shape
         startPoint.y = m_padToTestPos.y + deltay;
 
         // Calculate the actual position of the circle, given the pad orientation:
@@ -863,16 +858,20 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         // Calculate the actual position of the circle in the new X,Y axis:
         RotatePoint( &startPoint, m_segmAngle );
         if( !checkMarginToCircle( startPoint, padHalfsize.x + seuil, m_segmLength ) )
+        {
             return false;
+        }
 
         // test the second circle
-        startPoint.x = m_padToTestPos.x;         // segStartPoint.x,segStartPoint.y = centre of the lower circle of the oval shape
+        startPoint.x = m_padToTestPos.x;         // startPoint = centre of the lower circle of the oval shape
         startPoint.y = m_padToTestPos.y - deltay;
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
 
         if( !checkMarginToCircle( startPoint, padHalfsize.x + seuil, m_segmLength ) )
+        {
             return false;
+        }
         break;
 
     case PAD_RECT:          /* 2 rectangle + 4 1/4 cercles a tester */
@@ -962,7 +961,7 @@ bool DRC::checkMarginToCircle( wxPoint aCentre, int aRadius, int aLength )
     if( abs( aCentre.y ) > aRadius )     // trivial case
         return true;
 
-    // Here, didstance between aCentre and X axis is < aRadius
+    // Here, distance between aCentre and X axis is < aRadius
     if( (aCentre.x >= -aRadius ) && ( aCentre.x <= (aLength + aRadius) ) )
     {
         if( (aCentre.x >= 0) && (aCentre.x <= aLength) )

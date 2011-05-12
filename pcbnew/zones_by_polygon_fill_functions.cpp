@@ -147,7 +147,7 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
     // Create a message with a long net name, and build a wxProgressDialog
     // with a correct size to show this long net name
     msg.Printf( FORMAT_STRING,
-                000, 999, wxT("XXXXXXXXXXXXXXXXX" ) );
+                000, areaCount, wxT("XXXXXXXXXXXXXXXXX" ) );
     wxProgressDialog progressDialog( _( "Fill All Zones" ), msg,
                                      areaCount+2, this,
                                      wxPD_AUTO_HIDE | wxPD_APP_MODAL | wxPD_CAN_ABORT );

@@ -187,7 +187,7 @@ public:
  * Philosophy: this class knows nothing of the context in which a BOARD is used
  * and that means it knows nothing about which layers are visible or current,
  * but can handle those concerns by the SetPreferredLayer() function and the
- * SetLayerMask() fuction.
+ * SetLayerMask() function.
  */
 class GENERAL_COLLECTOR : public COLLECTOR
 {
@@ -226,6 +226,11 @@ public:
      * A scan list for all editable board items, except zones
      */
     static const KICAD_T AllButZones[];
+
+    /**
+     * A scan list for zones outlines only
+     */
+    static const KICAD_T Zones[];
 
 
     /**
