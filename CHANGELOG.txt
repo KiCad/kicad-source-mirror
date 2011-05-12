@@ -4,6 +4,22 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-Apr-12, UPDATE Jerry Jacobs <xor.gate.engineering@gmail.com>
+================================================================================
+Minor UI changes that affect OS X platform.
+ - Fix for opening the help contents
+ - Fix for opening files with the default editor
+ - Fix for opening PDF files
+
+Solved all with the BSD open command, for other OS'es which have X11 and
+utilities they can use the xdg-open command which I added to the pdf viewer tries
+list.
+
+Kicad projectview:
+Remove not-existing files when a empty project is created, this confuses when
+users try to open it. Show a entry that the project is empty instead of these
+void files.
+
 2011-Apr-6, UPDATE Jerry Jacobs <xor.gate.engineering@gmail.com>
 ================================================================================
 Cleanup of all the menubar code to have the same style, remove the C comments.

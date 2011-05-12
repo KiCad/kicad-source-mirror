@@ -540,7 +540,15 @@ wxString& WinEDA_App::GetEditorName()
     // We get the preferred editor name from environment variable first.
     if( editorname.IsEmpty() )
     {
-        wxGetEnv( wxT( "EDITOR" ), &editorname );
+	// If there is no EDITOR variable set, try the desktop default
+        if(!wxGetEnv( wxT( "EDITOR" ), &editorname ))
+        {
+#ifdef __WXOSX__
+          editorname = "/usr/bin/open";
+#elif __WXX11__
+          editorname = "/usr/bin/xdg-open";
+#endif
+        }
     }
     if( editorname.IsEmpty() ) // We must get a preferred editor name
     {
@@ -622,6 +630,8 @@ bool OpenPDF( const wxString& file )
                 wxT( "/usr/bin/konqueror" ),
                 wxT( "/usr/bin/kpdf" ),
                 wxT( "/usr/bin/xpdf" ),
+                wxT( "/usr/bin/open" ),     // BSD and OSX file & dir opener
+                wxT( "/usr/bin/xdg-open" ), // Freedesktop file & dir opener
                 wxT( "" ),
             };
 

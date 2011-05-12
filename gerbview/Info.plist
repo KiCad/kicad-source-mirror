@@ -8,11 +8,24 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>pen</string>
+				<string>gba</string>
 				<string>gbr</string>
+				<string>gbx</string>
+				<string>gbo</string>
+				<string>gbl</string>
+				<string>gtl</string>
+				<string>gto</string>
+				<string>gta</string>
+				<string>gbp</string>
+				<string>gbp</string>
+				<string>gbs</string>
+				<string>gts</string>
+				<string>gtp</string>
 				<string>gbx</string>
 				<string>lgr</string>
 				<string>ger</string>
 				<string>pho</string>
+				<string>drl</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>gerbview_doc.icns</string>
@@ -37,7 +50,7 @@
 	<key>CFBundleLongVersionString</key>
 	<string></string>
 	<key>CFBundleName</key>
-	<string>gerbview</string>
+	<string>GerbView</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

@@ -698,19 +698,6 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
                                                      wxEmptyString,
                                                      m_TreeProject ) );
 
-    fn.SetExt( SchematicFileExtension );
-
-    // Add at least a .sch / .brd if not existing:
-    if( !fn.FileExists() )
-        AddFile( fn.GetFullName(), m_root );
-
-    fn.SetExt( PcbFileExtension );
-
-    if( !fn.FileExists( ) )
-        AddFile( fn.GetFullName(), m_root );
-
-    fn.SetExt( ProjectFileExtension );
-
     // Now adding all current files if available
     if( prjOpened )
     {
@@ -726,7 +713,11 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
 
             cont = dir.GetNext( &filename );
         }
-    }
+   }
+   else
+   {
+      m_TreeProject->AppendItem( m_root, "Empty project" );
+   }
 
     m_TreeProject->Expand( rootcellule );
 

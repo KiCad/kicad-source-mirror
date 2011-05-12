@@ -613,7 +613,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // About
     item = new wxMenuItem( helpMenu, wxID_ABOUT,
-                           _( "&About" ),
+                           _( "&About PCBNew" ),
                            _( "About PCBnew printed circuit board designer" ));
     SET_BITMAP( info_xpm );
     helpMenu->Append( item );
