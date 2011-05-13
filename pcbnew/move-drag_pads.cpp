@@ -102,12 +102,8 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
  */
 void PCB_BASE_FRAME::Export_Pad_Settings( D_PAD* pt_pad )
 {
-    MODULE* Module;
-
     if( pt_pad == NULL )
         return;
-
-    Module = (MODULE*) pt_pad->GetParent();
 
     pt_pad->DisplayInfo( this );
 
@@ -270,12 +266,8 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
 /* Function to initialize the "move pad" command */
 void PCB_BASE_FRAME::StartMovePad( D_PAD* Pad, wxDC* DC )
 {
-    MODULE* Module;
-
     if( Pad == NULL )
         return;
-
-    Module = (MODULE*) Pad->GetParent();
 
     s_CurrentSelectedPad = Pad;
     Pad_OldPos = Pad->m_Pos;
@@ -316,8 +308,6 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
         Track = g_DragSegmentList[ii].m_Segm;
 
         // Set the old state
-        wxPoint t_start = Track->m_Start;
-        wxPoint t_end   = Track->m_End;
         if( g_DragSegmentList[ii].m_Pad_Start )
             Track->m_Start = Pad_OldPos;
         if( g_DragSegmentList[ii].m_Pad_End )
@@ -331,6 +321,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
     wxPoint pad_curr_position = Pad->m_Pos;
 
     Pad->m_Pos = Pad_OldPos;
+
     if( g_DragSegmentList.size() == 0 )
         SaveCopyInUndoList( Module, UR_CHANGED );
     else
@@ -355,6 +346,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
             Track->m_End = Pad->m_Pos;
 
         Track->SetState( IN_EDIT, OFF );
+
         if( DC )
             Track->Draw( DrawPanel, DC, GR_OR );
     }

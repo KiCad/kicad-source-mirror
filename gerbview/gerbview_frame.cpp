@@ -233,9 +233,7 @@ void GERBVIEW_FRAME::SaveSettings()
 
     wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
 
-    wxRealPoint GridSize = GetScreen()->GetGridSize();
-
-    long        pageSize_opt = 0;
+    long pageSize_opt = 0;
 
     if( m_Draw_Sheet_Ref )
     {

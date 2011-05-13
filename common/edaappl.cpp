@@ -438,19 +438,17 @@ bool WinEDA_App::SetBinDir()
     char     Line[1024];
     char     FileName[1024];
     wxString str_arg0;
-    int      ii;
-    char*    res;
 
     FileName[0] = 0;
     str_arg0    = argv[0];
     if( strchr( (const char*) argv[0], '/' ) == NULL ) // no path
     {
         sprintf( FileName, "which %s > %s", TO_UTF8( str_arg0 ), TMP_FILE );
-        ii = system( FileName );
+        system( FileName );
 
         if( ( ftmp = fopen( TMP_FILE, "rt" ) ) != NULL )
         {
-            res = fgets( Line, 1000, ftmp );
+            fgets( Line, 1000, ftmp );
             fclose( ftmp );
             remove( TMP_FILE );
         }

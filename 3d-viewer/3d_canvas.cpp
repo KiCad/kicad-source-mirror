@@ -630,7 +630,6 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         wxYield();
     }
 
-    wxSize image_size = GetClientSize();
     struct vieport_params
     {
         GLint originx;

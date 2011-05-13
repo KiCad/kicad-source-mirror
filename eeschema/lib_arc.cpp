@@ -592,10 +592,6 @@ void LIB_ARC::calcEdit( const wxPoint& aPosition )
             startPos = m_ArcStart;
             endPos   = m_ArcEnd;
 
-            wxPoint middlePoint = wxPoint( (startPos.x + endPos.x) / 2,
-                                           (startPos.y + endPos.y) / 2 );
-
-
             // If the distance is too small, use the old center point
             // else the new center point is calculated over the three points start/end/cursor
             if( DistanceLinePoint( startPos, endPos, aPosition ) > MINIMUM_SELECTION_DISTANCE )

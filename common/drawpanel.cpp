@@ -880,9 +880,6 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     INSTALL_UNBUFFERED_DC( DC, this );
     DC.SetBackground( *wxBLACK_BRUSH );
 
-    /* Compute the cursor position in screen (device) units. */
-    wxPoint pos = CalcUnscrolledPosition( event.GetPosition() );
-
     /* Compute the cursor position in drawing (logical) units. */
     screen->SetMousePosition( event.GetLogicalPosition( DC ) );
 

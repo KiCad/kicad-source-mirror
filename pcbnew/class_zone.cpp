@@ -238,7 +238,6 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
     char* Line, * text;
     char  netname_buffer[1024];
     int   ret;
-    int   n_corner_item = 0;
     int   outline_hatch = CPolyLine::NO_HATCH;
     bool  error = false, has_corner = false;
 
@@ -307,8 +306,6 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
                 error = true;
             else
             {
-                n_corner_item = x;
-
                 switch( hopt[0] )
                 {
                 case 'n':

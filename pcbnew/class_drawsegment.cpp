@@ -356,7 +356,6 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
 // see pcbstruct.h
 void DRAWSEGMENT::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
-    int      itype;
     wxString msg;
     wxString coords;
 
@@ -364,8 +363,6 @@ void DRAWSEGMENT::DisplayInfo( EDA_DRAW_FRAME* frame )
     wxASSERT( board );
 
     frame->ClearMsgPanel();
-
-    itype = m_Type & 0x0F;
 
     msg = wxT( "DRAWING" );
 

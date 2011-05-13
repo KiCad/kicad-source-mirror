@@ -177,7 +177,6 @@ MODULE* Locate_Prefered_Module( BOARD* aPcb, const wxPoint& aPosition, int aActi
                                 bool aVisibleOnly, bool aIgnoreLocked )
 {
     MODULE* pt_module;
-    int     lx, ly;
     MODULE* module      = NULL;
     MODULE* Altmodule   = NULL;
     int     min_dim     = 0x7FFFFFFF;
@@ -220,8 +219,6 @@ MODULE* Locate_Prefered_Module( BOARD* aPcb, const wxPoint& aPosition, int aActi
 
         //off x & offy point to the middle of the box.
         int dist = abs( aPosition.x - offx ) + abs( aPosition.y - offy );
-        lx = pt_module->m_BoundaryBox.GetWidth();
-        ly = pt_module->m_BoundaryBox.GetHeight();
 
         //int dist = MIN(lx, ly);  // to pick the smallest module (kinda
         // screwy with same-sized modules -- this is bad!)

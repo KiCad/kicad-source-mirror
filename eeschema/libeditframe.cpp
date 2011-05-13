@@ -378,7 +378,7 @@ int LIB_EDIT_FRAME::BestZoom()
     double margin_scale_factor = 0.8;
     double zx =(double) dx / ( margin_scale_factor * (double)size.x ) *
                     (double) GetScreen()->m_ZoomScalar;
-    double zy = (double) dx / ( margin_scale_factor * (double)size.y) *
+    double zy = (double) dy / ( margin_scale_factor * (double)size.y) *
                     (double) GetScreen()->m_ZoomScalar;
 
     int bestzoom = wxRound( MAX( zx, zy ) );

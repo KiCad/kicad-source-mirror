@@ -375,7 +375,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     long         curcell, newcell, buddy, lastopen, lastclos, lastmove;
     int          newdist, olddir, _self;
     int          current_net_code;
-    int          marge, via_marge;
+    int          marge;
     int          pad_masque_layer_s;    /* Mask layers belonging to the
                                          *starting pad. */
     int          pad_masque_layer_e;    /* Mask layers belonging to the ending
@@ -396,7 +396,6 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
     marge = s_Clearance +
             ( pcbframe->GetBoard()->GetCurrentTrackWidth() / 2 );
-    via_marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentViaSize() / 2 );
 
     /* clear direction flags */
     i = Nrows * Ncols * sizeof(DIR_CELL);

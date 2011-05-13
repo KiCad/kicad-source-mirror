@@ -151,7 +151,6 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     int             ux0, uy0, dx, dy, rayon, StAngle, EndAngle;
     int             color, type_trace;
     int             typeaff;
-    PCB_SCREEN*     screen;
     PCB_BASE_FRAME* frame;
     MODULE* module = (MODULE*) m_Parent;
 
@@ -165,8 +164,6 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     color = brd->GetLayerColor(m_Layer);
 
     frame = (PCB_BASE_FRAME*) panel->GetParent();
-
-    screen = frame->GetScreen();
 
     type_trace = m_Shape;
 

@@ -85,13 +85,10 @@ void FreeNetObjectsList( NETLIST_OBJECT_LIST& aNetObjectsBuffer )
  */
 void SCH_EDIT_FRAME::BuildNetListBase()
 {
-    int             NetNumber;
     int             NetCode;
     SCH_SHEET_PATH* sheet;
     wxString        msg, activity;
     wxBusyCursor    Busy;
-
-    NetNumber = 1;
 
     activity = _( "Building net list:" );
     SetStatusText( activity );
@@ -104,6 +101,7 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     /* Fill g_NetObjectslist with items used in connectivity calculation */
 
     sheet = SheetListList.GetFirst();
+
     for( ; sheet != NULL; sheet = SheetListList.GetNext() )
         AddConnectedObjects( sheet, g_NetObjectslist );
 
@@ -788,7 +786,6 @@ int IsBusLabel( const wxString& LabelDrawList )
     int ii;
     wxString BufLine;
     long tmp;
-    bool error = FALSE;
 
     /* Search for  '[' because a bus label is like "busname[nn..mm]" */
     ii = LabelDrawList.Find( '[' );
@@ -806,10 +803,9 @@ int IsBusLabel( const wxString& LabelDrawList )
         Num++;
     }
 
-    if( !BufLine.ToLong( &tmp ) )
-        error = true;
-
+    BufLine.ToLong( &tmp );
     FirstNumWireBus = tmp;
+
     while( LabelDrawList[Num] == '.' && Num < LabelDrawList.Len() )
         Num++;
 
@@ -820,18 +816,17 @@ int IsBusLabel( const wxString& LabelDrawList )
         Num++;
     }
 
-    if( !BufLine.ToLong( &tmp ) )
-        error = true;
+    BufLine.ToLong( &tmp );
     LastNumWireBus = tmp;
 
     if( FirstNumWireBus < 0 )
         FirstNumWireBus = 0;
+
     if( LastNumWireBus < 0 )
         LastNumWireBus = 0;
+
     if( FirstNumWireBus > LastNumWireBus )
-    {
         EXCHG( FirstNumWireBus, LastNumWireBus );
-    }
 
     return LastNumWireBus - FirstNumWireBus + 1;
 }

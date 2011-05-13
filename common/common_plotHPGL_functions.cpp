@@ -237,7 +237,7 @@ void HPGL_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
                                    GRTraceMode trace_mode )
 {
     wxASSERT( output_file );
-    int rayon, deltaxy, cx, cy;
+    int deltaxy, cx, cy;
 
     /* The pad is reduced to an oval with size.y > size.x
      * (Oval vertical orientation 0)
@@ -249,7 +249,6 @@ void HPGL_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
             orient -= 3600;
     }
     deltaxy = size.y - size.x;     /* distance between centers of the oval */
-    rayon   = size.x / 2;
 
     if( trace_mode == FILLED )
     {

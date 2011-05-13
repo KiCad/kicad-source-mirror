@@ -17,30 +17,24 @@
 
 void GERBVIEW_FRAME::ReCreateHToolbar( void )
 {
-    int           layer = 0;
-    GERBER_IMAGE* gerber = NULL;
     int           ii;
     wxString      msg;
 
     if( m_HToolBar != NULL )
         return;
 
-    if( GetScreen() )
-    {
-        layer = getActiveLayer();
-        gerber = g_GERBER_List[layer];
-    }
-
     m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString, wxBitmap( gerbview_clear_layers_xpm ),
+    m_HToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString,
+                         wxBitmap( gerbview_clear_layers_xpm ),
                          _( "Erase all layers" ) );
 
     m_HToolBar->AddTool( wxID_FILE, wxEmptyString, wxBitmap( gerber_file_xpm ),
                          _( "Load a new Gerber file on the current layer. Previous data will be deleted" ) );
 
-    m_HToolBar->AddTool( ID_GERBVIEW_LOAD_DRILL_FILE, wxEmptyString, wxBitmap( gerbview_drill_file_xpm ),
+    m_HToolBar->AddTool( ID_GERBVIEW_LOAD_DRILL_FILE, wxEmptyString,
+                         wxBitmap( gerbview_drill_file_xpm ),
                          _( "Load an excellon drill file on the current layer. Previous data will be deleted" ) );
 
     m_HToolBar->AddSeparator();
@@ -63,14 +57,15 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
     m_HToolBar->AddSeparator();
 
     wxArrayString choices;
+
     for( ii = 0; ii < 32; ii++ )
     {
-        msg.Printf( _( "Layer %d" ), ii + 1);
+        msg.Printf( _( "Layer %d" ), ii + 1 );
         choices.Add( msg );
     }
 
     m_SelLayerBox = new LAYER_BOX_SELECTOR( m_HToolBar, ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
-                                              wxDefaultPosition, wxSize( 150, -1 ), choices );
+                                            wxDefaultPosition, wxSize( 150, -1 ), choices );
     m_HToolBar->AddControl( m_SelLayerBox );
 
     m_HToolBar->AddSeparator();
@@ -85,10 +80,9 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
         m_DCodesList.Add( msg );
     }
 
-    m_DCodeSelector = new DCODE_SELECTION_BOX(
-                m_HToolBar, ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
-                wxDefaultPosition, wxSize( 150, -1 ),
-                m_DCodesList );
+    m_DCodeSelector = new DCODE_SELECTION_BOX( m_HToolBar, ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
+                                               wxDefaultPosition, wxSize( 150, -1 ),
+                                               m_DCodesList );
     m_HToolBar->AddControl( m_DCodeSelector );
 
     m_TextInfo = new wxTextCtrl( m_HToolBar, wxID_ANY, wxEmptyString, wxDefaultPosition,

@@ -199,12 +199,10 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
  */
 void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
-    bool err = false;
     wxPoint pt;
 
     if( !DrawPanel->IsMouseCaptured() )
     {
-        err = true;
         DisplayError( this, wxT( "HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
 
@@ -213,7 +211,6 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     switch( GetScreen()->m_BlockLocate.m_Command )
     {
     case  BLOCK_IDLE:
-        err = true;
         break;
 
     case BLOCK_DRAG:                /* Drag */

@@ -392,7 +392,6 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopM
 void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* item = GetCurItem();
-    wxPoint     pos = GetPosition();
 
     switch( GetToolId() )
     {

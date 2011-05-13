@@ -298,12 +298,11 @@ void TraceSegmentPcb( BOARD* Pcb,
                       int    marge,
                       int    op_logique )
 {
-    int demi_pas, demi_largeur;
+    int demi_largeur;
     int ux0, uy0, ux1, uy1;
 
-
-    demi_pas     = Board.m_GridRouting / 2;
     demi_largeur = ( pt_segm->m_Width / 2 ) + marge;
+
     /* Calculate the bounding rectangle of the segment (if H, V or Via) */
     ux0 = pt_segm->m_Start.x - Pcb->m_BoundaryBox.m_Pos.x;
     uy0 = pt_segm->m_Start.y - Pcb->m_BoundaryBox.m_Pos.y;

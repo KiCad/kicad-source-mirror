@@ -423,8 +423,6 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
 
     if( match )
     {
-        EDA_RECT BoundaryBox = GetBoundingBox();
-
         if( aFindLocation )
             *aFindLocation = GetBoundingBox().Centre();
 

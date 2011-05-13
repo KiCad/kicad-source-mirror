@@ -554,8 +554,6 @@ void PCB_EDIT_FRAME::SaveSettings()
 
     PCB_BASE_FRAME::SaveSettings();
 
-    wxRealPoint GridSize = GetScreen()->GetGridSize();
-
     config->Write( OPTKEY_DEFAULT_LINEWIDTH_VALUE, g_DrawDefaultLineThickness );
     long tmp = GetBoard()->IsElementVisible(RATSNEST_VISIBLE);
     config->Write( PCB_SHOW_FULL_RATSNET_OPT, tmp );

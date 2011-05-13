@@ -98,19 +98,16 @@ void SCH_EDIT_FRAME::InitBlockPasteInfos()
  */
 void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
-    bool            err   = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
     if( !DrawPanel->IsMouseCaptured() )
     {
-        err = true;
         DisplayError( this, wxT( "HandleBlockPLace() : m_mouseCaptureCallback = NULL" ) );
     }
 
     if( block->GetCount() == 0 )
     {
         wxString msg;
-        err = true;
         msg.Printf( wxT( "HandleBlockPLace() error : no items to place (cmd %d, state %d)" ),
                     block->m_Command, block->m_State );
         DisplayError( this, msg );
@@ -121,7 +118,6 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     switch( block->m_Command )
     {
     case BLOCK_IDLE:
-        err = true;
         break;
 
     case BLOCK_ROTATE:

@@ -1169,11 +1169,10 @@ bool LIB_COMPONENT::SaveDateAndTime( FILE* aFile )
 bool LIB_COMPONENT::LoadDateAndTime( char* aLine )
 {
     int   year, mon, day, hour, min, sec;
-    char* text;
 
     year = mon = day = hour = min = sec = 0;
-    text = strtok( aLine, " \r\t\n" );
-    text = strtok( NULL, " \r\t\n" );
+    strtok( aLine, " \r\t\n" );
+    strtok( NULL, " \r\t\n" );
 
     if (sscanf( aLine, "%d/%d/%d %d:%d:%d", &year, &mon, &day, &hour, &min, &sec ) != 6 )
         return false;

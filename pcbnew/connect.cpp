@@ -577,8 +577,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 {
     TRACK*              pt_piste;
     TRACK*              pt_next;
-    int                 a_color;
-    char                new_passe_request = 1, flag;
+    char                new_passe_request = 1;
 
     std::vector<D_PAD*> sortedPads;
     BOARD_ITEM*         PtStruct;
@@ -621,7 +620,6 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     pt_piste = m_Pcb->m_Track;
     for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
-        flag = 0;
         masque_layer = g_TabOneLayerMask[pt_piste->GetLayer()];
 
         /* Search for a pad on the segment starting point */
@@ -675,8 +673,6 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     /**********************************************************/
     /* Propagate net codes from a segment to an other segment */
     /**********************************************************/
-
-    a_color = YELLOW;
 
     while( new_passe_request )
     {

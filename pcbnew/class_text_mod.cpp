@@ -337,7 +337,6 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const w
     int             width, color, orient;
     wxSize          size;
     wxPoint         pos;      // Center of text
-    PCB_SCREEN*     screen;
     PCB_BASE_FRAME* frame;
     MODULE*         Module = (MODULE*) m_Parent;   /* parent must *not* be null
                                                     *  (a module text without a footprint
@@ -347,7 +346,6 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const w
     if( panel == NULL )
         return;
 
-    screen = (PCB_SCREEN*) panel->GetScreen();
     frame  = (PCB_BASE_FRAME*) panel->GetParent();
 
     pos.x = m_Pos.x - offset.x;

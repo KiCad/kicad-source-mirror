@@ -260,10 +260,8 @@ void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
                       int ox, int oy, int MasqueLayer, int draw_mode )
 {
     int             tmp;
-    PCB_SCREEN*     screen;
     PCB_BASE_FRAME* frame;
 
-    screen = (PCB_SCREEN*) panel->GetScreen();
     frame  = (PCB_BASE_FRAME*) panel->GetParent();
 
     tmp = frame->m_DisplayPadFill;

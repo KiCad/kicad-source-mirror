@@ -50,10 +50,13 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
 {
     int    color = 0;
     wxSize mask_margin;   // margin (clearance) used for some non copper layers
+
+#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
     int    showActualMaskSize = 0;  /* == layer number if the actual pad size on mask layer can be displayed
                                      * i.e. if only one layer is shown for this pad
                                      * and this layer is a mask (solder mask or sloder paste
                                      */
+#endif
 
     if( m_Flags & DO_NOT_DRAW )
         return;
@@ -142,12 +145,16 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
 
         case SOLDERPASTE_LAYER_BACK:
             color = brd->GetLayerColor( SOLDERPASTE_N_BACK );
+#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
             showActualMaskSize = SOLDERPASTE_N_BACK;
+#endif
             break;
 
         case SOLDERPASTE_LAYER_FRONT:
             color = brd->GetLayerColor( SOLDERPASTE_N_FRONT );
+#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
             showActualMaskSize = SOLDERPASTE_N_FRONT;
+#endif
             break;
 
         case SILKSCREEN_LAYER_BACK:
@@ -160,12 +167,16 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
 
         case SOLDERMASK_LAYER_BACK:
             color = brd->GetLayerColor( SOLDERMASK_N_BACK );
+#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
             showActualMaskSize = SOLDERMASK_N_BACK;
+#endif
             break;
 
         case SOLDERMASK_LAYER_FRONT:
             color = brd->GetLayerColor( SOLDERMASK_N_FRONT );
+#ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
             showActualMaskSize = SOLDERMASK_N_FRONT;
+#endif
             break;
 
         case DRAW_LAYER:

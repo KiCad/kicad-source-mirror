@@ -99,15 +99,13 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
     g_DrawDefaultLineThickness =
         ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
 
-    SCH_SCREEN* screen     = (SCH_SCREEN*) m_Parent->GetScreen();
-    SCH_SCREEN* oldscreen  = screen;
+    SCH_SCREEN* screen = (SCH_SCREEN*) m_Parent->GetScreen();
 
     if( aPrintAll && m_Parent->m_Ident == SCHEMATIC_FRAME )
     {
         SCH_EDIT_FRAME*  schframe = (SCH_EDIT_FRAME*) m_Parent;
         SCH_SHEET_PATH*  sheetpath, * oldsheetpath = schframe->GetSheet();
         SCH_SCREEN*      schscreen = schframe->GetScreen();
-        oldscreen = schscreen;
         SCH_SHEET_LIST   SheetList( NULL );
         sheetpath = SheetList.GetFirst();
         SCH_SHEET_PATH   list;

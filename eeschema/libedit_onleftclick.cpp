@@ -118,8 +118,6 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
  */
 void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
 {
-    wxPoint pos = GetPosition();
-
     if( m_component == NULL )
         return;
 

@@ -216,13 +216,11 @@ void TREE_PROJECT_FRAME::OnDragStart( wxTreeEvent& event )
 
     m_TreeProject->SelectItem( curr_item );
     TREEPROJECT_ITEM* data = GetSelectedData();
+
     if( data->GetFileName() == m_Parent->m_ProjectFileName.GetFullPath() )
         return;
 
-    wxTreeItemId id = m_TreeProject->GetSelection();
-
-    wxImage      img =
-        m_TreeProject->GetImageList()->GetBitmap( data->GetType() - 1 ).ConvertToImage();
+    wxImage img = m_TreeProject->GetImageList()->GetBitmap( data->GetType() - 1 ).ConvertToImage();
     m_DragCursor = wxCursor( img );
     m_Parent->wxWindow::SetCursor( (wxCursor &)m_DragCursor );
     event.Allow();
@@ -235,7 +233,6 @@ void TREE_PROJECT_FRAME::OnDragEnd( wxTreeEvent& event )
 {
     m_Parent->SetCursor( wxNullCursor );
 
-    wxTreeItemId     moved = m_TreeProject->GetSelection();
     TREEPROJECT_ITEM* source_data = GetSelectedData();
     wxTreeItemId     dest = event.GetItem();
 

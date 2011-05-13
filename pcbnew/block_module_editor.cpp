@@ -212,12 +212,10 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
  *  - block copy & paste
  */
 {
-    bool    err = FALSE;
     MODULE* currentModule = GetBoard()->m_Modules;
 
     if( !DrawPanel->IsMouseCaptured() )
     {
-        err = TRUE;
         DisplayError( this, wxT( "HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
 
@@ -226,7 +224,6 @@ void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
     switch( GetScreen()->m_BlockLocate.m_Command )
     {
     case  BLOCK_IDLE:
-        err = TRUE;
         break;
 
     case BLOCK_DRAG:                /* Drag */

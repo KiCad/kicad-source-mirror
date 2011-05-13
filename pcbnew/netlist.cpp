@@ -862,7 +862,7 @@ void PCB_EDIT_FRAME::Test_Duplicate_Missing_And_Extra_Footprints(
  * @return component count, or -1 if netlist file cannot opened
  */
 int NETLIST_READER::BuildComponentsListFromNetlist( const wxString& aNetlistFilename,
-                                                   wxArrayString&  aBufName )
+                                                    wxArrayString&  aBufName )
 {
     int   component_count;
     int   state;
@@ -904,16 +904,14 @@ int NETLIST_READER::BuildComponentsListFromNetlist( const wxString& aNetlistFile
 
         if( state == 2 )
         {
-            bool error = false;
             // skip TimeStamp:
-            if( strtok( Line, " ()\t\n" ) == NULL )
-                error = true;
+            strtok( Line, " ()\t\n" );
+
             // skip footprint name:
-            if( ( strtok( NULL, " ()\t\n" ) ) == NULL )
-                error = true;
+            strtok( NULL, " ()\t\n" );
+
             // Load the reference of the component:
-            if( ( text = strtok( NULL, " ()\t\n" ) ) == NULL )
-                error = true;
+            text = strtok( NULL, " ()\t\n" );
             component_count++;
             aBufName.Add( FROM_UTF8( text ) );
             continue;

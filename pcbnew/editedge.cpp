@@ -198,21 +198,17 @@ static void Abort_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 /* Initialize the drawing of a segment of type other than trace.
  */
-DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment,
-                                                 int shape, wxDC* DC )
+DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape, wxDC* DC )
 {
     int          s_large;
-    int          angle = 0;
     DRAWSEGMENT* DrawItem;
 
     s_large = GetBoard()->GetBoardDesignSettings()->m_DrawSegmentWidth;
+
     if( getActiveLayer() == EDGE_N )
     {
         s_large = GetBoard()->GetBoardDesignSettings()->m_EdgeSegmentWidth;
     }
-
-    if( shape == S_ARC )
-        angle = 900;
 
     if( Segment == NULL )        /* Create new trace. */
     {
@@ -262,6 +258,7 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment,
             }
         }
     }
+
     return Segment;
 }
 

@@ -312,7 +312,6 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
 {
     EDA_ITEM* item = GetScreen()->GetCurItem();
-    wxPoint   pos = aPosition;
 
     switch( GetToolId() )
     {

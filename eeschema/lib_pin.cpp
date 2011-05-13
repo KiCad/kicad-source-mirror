@@ -1756,7 +1756,6 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
     int            nameTextOffset = 0;
     bool           showName = !m_name.IsEmpty() && (m_name != wxT( "~" ));
     bool           showNum = m_number != 0;
-    int            symbolX = TARGET_PIN_DIAM / 2;
     int            symbolY = TARGET_PIN_DIAM / 2;
 
     if( entry )
@@ -1776,7 +1775,7 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
     int numberTextHeight  = showNum ? wxRound( m_PinNumSize * 1.1 ) : 0;
 
     if( m_shape & INVERT )
-        symbolX = symbolY = INVERT_PIN_RADIUS;
+        symbolY = INVERT_PIN_RADIUS;
 
     // calculate top left corner position
     // for the default pin orientation (PIN_RIGHT)
