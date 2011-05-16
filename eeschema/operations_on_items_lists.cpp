@@ -144,6 +144,8 @@ void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList )
 void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot delete invalid item." ) );
+    if( aItem == NULL )
+        return;
 
     SCH_SCREEN* screen = GetScreen();
 

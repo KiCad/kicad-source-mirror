@@ -103,6 +103,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
 
     INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    item = screen->GetCurItem();    // Can be modified by previous calls.
 
     switch( id )
     {

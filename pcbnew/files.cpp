@@ -328,7 +328,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& FileName )
                           GetScreen()->GetFileName(), PcbFileWildcard,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
-        if( dlg.ShowModal() == wxID_CANCEL )
+        if( dlg.ShowModal() != wxID_OK )
             return false;
 
         GetScreen()->SetFileName( dlg.GetPath() );

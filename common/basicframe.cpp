@@ -339,22 +339,11 @@ void EDA_BASE_FRAME::AddHelpVersionInfoMenuEntry( wxMenu* aMenu )
 {
     wxASSERT( aMenu != NULL );
 
-    wxMenuItem* item = NULL;
-
     // Copy version string to clipboard for bug report purposes.
-    item = new wxMenuItem( aMenu, ID_HELP_COPY_VERSION_STRING,
+    ADD_MENUITEM_WITH_HELP( aMenu, ID_HELP_COPY_VERSION_STRING,
                            _( "Copy &Version Information" ),
-                           _( "Copy the version string to clipboard to send with bug reports" ) );
-
-    // For some reason images are not always added to the OSX menu items.  Anyone want
-    // to clarify as to why this is the case?  Putting this information in some formal
-    // developer notes would be helpful.  A good place to put this information would be
-    // ./documentation/guidelines/UIpolicies.txt.
-#if !defined( __WXMAC__ )
-    item->SetBitmap( copy_button );
-#endif
-
-    aMenu->Append( item );
+                           _( "Copy the version string to clipboard to send with bug reports" ),
+                           copy_button );
 }
 
 

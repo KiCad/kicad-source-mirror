@@ -60,7 +60,8 @@ static void abortMoveText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
     if( item->IsNew() )
     {
-        SAFE_DELETE( item );
+        delete item;
+        item = NULL;
     }
     else    // Move command on an existing text item, restore the copy of the original.
     {
@@ -77,7 +78,7 @@ static void abortMoveText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
         item->ClearFlags();
     }
 
-    screen->SetCurItem( NULL );
+    screen->SetCurItem( item );
 }
 
 

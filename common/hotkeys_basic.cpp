@@ -632,41 +632,34 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
     if( aMenu == NULL )
         return;
 
-    wxMenuItem* item;
     wxMenu*     HotkeySubmenu = new wxMenu();
 
     /* List existing hotkey menu*/
-    item = new wxMenuItem( HotkeySubmenu,
+    ADD_MENUITEM_WITH_HELP( HotkeySubmenu,
                           ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
                           _( "List Current Keys" ),
-                          _( "Displays the current hotkeys list and corresponding commands" ) );
-    item->SetBitmap( info_xpm );
-    HotkeySubmenu->Append( item );
+                          _( "Displays the current hotkeys list and corresponding commands" ),
+                          info_xpm );
 
     /* Call hotkeys editor*/
-    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
+    ADD_MENUITEM_WITH_HELP( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
                           _( "Edit Hotkeys" ),
-                          _( "Call the hotkeys editor" ) );
-    item->SetBitmap( editor_xpm );
-    HotkeySubmenu->Append( item );
+                          _( "Call the hotkeys editor" ),
+                          editor_xpm );
 
     HotkeySubmenu->AppendSeparator();
 
     /* create hotkey file to export current hotkeys config */
-    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
+    ADD_MENUITEM_WITH_HELP( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
                            _( "Export Hotkeys Config" ),
-                           _(
-                               "Create a hotkey configuration file to export the current hotkey config" )
-                           );
-    item->SetBitmap( save_setup_xpm );
-    HotkeySubmenu->Append( item );
+                           _( "Create a hotkey configuration file to export the current hotkey config" ),
+                            save_setup_xpm );
 
     /* Reload hotkey file */
-    item = new wxMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
+    ADD_MENUITEM_WITH_HELP( HotkeySubmenu, ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
                           _( "Import Hotkeys Config" ),
-                          _( "Load an existing hotkey configuration file" ) );
-    item->SetBitmap( reload_xpm );
-    HotkeySubmenu->Append( item );
+                          _( "Load an existing hotkey configuration file" ),
+                          reload_xpm );
 
     /* Append HotkeySubmenu to menu */
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( aMenu, HotkeySubmenu,
