@@ -70,7 +70,7 @@ private:
     wxIcon GetIconResource( const wxString& aName );
     static bool ShowToolTips();
 
-    void    UpdateLayerSettings();
+    bool    UpdateColorsSettings();
     void    SetColor( wxCommandEvent& aEvent );
     void    OnOkClick( wxCommandEvent& aEvent );
     void    OnCancelClick( wxCommandEvent& aEvent );

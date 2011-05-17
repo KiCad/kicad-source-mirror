@@ -25,7 +25,7 @@ static ColorButton GeneralColorButtons[] = {
     { _( "Global label" ), LAYER_GLOBLABEL },
     { _( "Net name" ), LAYER_NETNAM },
     { _( "Notes" ), LAYER_NOTES },
-    { _( "No connection" ), LAYER_NOCONNECT },
+    { _( "No Connect Symbol" ), LAYER_NOCONNECT },
     { wxT( "" ), -1 }                           // Sentinel marking end of list.
 };
 
@@ -281,26 +281,43 @@ void DIALOG_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 }
 
 
-void DIALOG_COLOR_CONFIG::UpdateLayerSettings()
+bool DIALOG_COLOR_CONFIG::UpdateColorsSettings()
 {
-    for( int i = 0;  i < MAX_LAYERS;  i++ )
-        g_LayerDescr.LayerColor[ i ] = currentColors[ i ];
-
     // Update color of background
     if( m_SelBgColor->GetSelection() == 0 )
         g_DrawBgColor = WHITE;
     else
         g_DrawBgColor = BLACK;
 
+    bool warning = false;
+    for( int ii = 0;  ii < MAX_LAYERS;  ii++ )
+    {
+        g_LayerDescr.LayerColor[ ii ] = currentColors[ ii ];
+        if( g_DrawBgColor == g_LayerDescr.LayerColor[ ii ] )
+            warning = true;
+    }
+
     m_Parent->SetGridColor( g_LayerDescr.LayerColor[LAYER_GRID] );
-    m_Parent->Refresh();
+    if( g_DrawBgColor == g_LayerDescr.LayerColor[ LAYER_GRID ] )
+        warning = true;
+
+    return warning;
 }
 
 
 void DIALOG_COLOR_CONFIG::OnOkClick( wxCommandEvent& event )
 {
-    UpdateLayerSettings();
+    bool warning = UpdateColorsSettings();
+
+    // Prompt the user if an item has the same color as the background
+    // because this item cannot be seen:
+    if( warning )
+        wxMessageBox(
+    _("Warning:\nSome items have the same color as the background\nand they will not be seen on screen")
+                    );
+
     m_Parent->DrawPanel->Refresh();
+
     EndModal( 1 );
 }
 
@@ -313,7 +330,7 @@ void DIALOG_COLOR_CONFIG::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_COLOR_CONFIG::OnApplyClick( wxCommandEvent& event )
 {
-    UpdateLayerSettings();
+    UpdateColorsSettings();
     m_Parent->DrawPanel->Refresh();
 }
 
