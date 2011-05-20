@@ -1673,6 +1673,41 @@ void LIB_PIN::DoMirrorHorizontal( const wxPoint& center )
         m_orientation = PIN_RIGHT;
 }
 
+void LIB_PIN::DoMirrorVertical( const wxPoint& center )
+{
+    m_position.y -= center.y;
+    m_position.y *= -1;
+    m_position.y += center.y;
+
+    if( m_orientation == PIN_UP )
+        m_orientation = PIN_DOWN;
+    else if( m_orientation == PIN_DOWN )
+        m_orientation = PIN_UP;
+}
+
+void LIB_PIN::DoRotate( const wxPoint& center )
+{
+    RotatePoint( &m_position, center, -900 );
+
+    switch( m_orientation )
+    {
+        case PIN_RIGHT:
+            m_orientation = PIN_UP;
+            break;
+
+        case PIN_UP:
+            m_orientation = PIN_LEFT;
+            break;
+        case PIN_LEFT:
+            m_orientation = PIN_DOWN;
+            break;
+
+        case PIN_DOWN:
+            m_orientation = PIN_RIGHT;
+            break;
+    }
+}
+
 
 void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                       const TRANSFORM& aTransform )

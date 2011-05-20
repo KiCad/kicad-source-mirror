@@ -513,6 +513,20 @@ public:
     void MirrorSelectedItemsH( const wxPoint& aCenter );
 
     /**
+     * Vertically (Y axis) mirror selected draw items about a point.
+     *
+     * @param aCenter - Center point to mirror around.
+     */
+    void MirrorSelectedItemsV( const wxPoint& aCenter );
+
+    /**
+     * Rotate CCW selected draw items about a point.
+     *
+     * @param aCenter - Center point to mirror around.
+     */
+    void RotateSelectedItems( const wxPoint& aCenter );
+
+    /**
      * Locate a draw object.
      *
      * @param aUnit - Unit number of draw item.

@@ -300,6 +300,26 @@ public:
     }
 
     /**
+     * Mirror the draw object along the MirrorVertical (Y) axis about a point.
+     *
+     * @param aCenter - Point to mirror around.
+     */
+    void MirrorVertical( const wxPoint& aCenter )
+    {
+        DoMirrorVertical( aCenter );
+    }
+
+    /**
+     * Rotate about a point.
+     *
+     * @param aCenter - Point to mirror around.
+     */
+    void Rotate( const wxPoint& aCenter )
+    {
+        DoRotate( aCenter );
+    }
+
+    /**
      * Rotate the draw item.
      */
     virtual void Rotate() {}
@@ -377,6 +397,8 @@ protected:
     virtual void DoMove( const wxPoint& aPosition ) = 0;
     virtual wxPoint DoGetPosition() const = 0;
     virtual void DoMirrorHorizontal( const wxPoint& aCenter ) = 0;
+    virtual void DoMirrorVertical( const wxPoint& aCenter ) = 0;
+    virtual void DoRotate( const wxPoint& aCenter ) = 0;
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform ) = 0;
     virtual int DoGetWidth() const = 0;

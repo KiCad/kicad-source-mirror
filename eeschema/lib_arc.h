@@ -141,6 +141,8 @@ protected:
     virtual void DoMove( const wxPoint& aPosition );
     virtual wxPoint DoGetPosition() const { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& aCenter );
+    virtual void DoMirrorVertical( const wxPoint& aCenter );
+    virtual void DoRotate( const wxPoint& aCenter );
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform );
     virtual int DoGetWidth() const { return m_Width; }

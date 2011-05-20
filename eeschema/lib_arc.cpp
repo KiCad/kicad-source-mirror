@@ -277,6 +277,28 @@ void LIB_ARC::DoMirrorHorizontal( const wxPoint& aCenter )
     EXCHG( m_ArcStart, m_ArcEnd );
 }
 
+void LIB_ARC::DoMirrorVertical( const wxPoint& aCenter )
+{
+    m_Pos.y -= aCenter.y;
+    m_Pos.y *= -1;
+    m_Pos.y += aCenter.y;
+    m_ArcStart.y -= aCenter.y;
+    m_ArcStart.y *= -1;
+    m_ArcStart.y += aCenter.y;
+    m_ArcEnd.y -= aCenter.y;
+    m_ArcEnd.y *= -1;
+    m_ArcEnd.y += aCenter.y;
+    EXCHG( m_ArcStart, m_ArcEnd );
+}
+
+void LIB_ARC::DoRotate( const wxPoint& aCenter )
+{
+    RotatePoint( &m_Pos, aCenter, -900 );
+    RotatePoint( &m_ArcStart, aCenter, -900 );
+    RotatePoint( &m_ArcEnd, aCenter, -900 );
+}
+
+
 
 void LIB_ARC::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                       const TRANSFORM& aTransform )

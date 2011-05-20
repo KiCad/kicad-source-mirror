@@ -626,7 +626,9 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_COPY_BLOCK:
     case ID_POPUP_SELECT_ITEMS_BLOCK:
+    case ID_POPUP_MIRROR_X_BLOCK:
     case ID_POPUP_MIRROR_Y_BLOCK:
+    case ID_POPUP_ROTATE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT:
         break;
@@ -802,6 +804,20 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_MIRROR_Y_BLOCK:
         DrawPanel->m_AutoPAN_Request = false;
         GetScreen()->m_BlockLocate.m_Command = BLOCK_MIRROR_Y;
+        DrawPanel->MoveCursorToCrossHair();
+        HandleBlockPlace( &dc );
+        break;
+
+    case ID_POPUP_MIRROR_X_BLOCK:
+        DrawPanel->m_AutoPAN_Request = false;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_MIRROR_X;
+        DrawPanel->MoveCursorToCrossHair();
+        HandleBlockPlace( &dc );
+        break;
+
+    case ID_POPUP_ROTATE_BLOCK:
+        DrawPanel->m_AutoPAN_Request = false;
+        GetScreen()->m_BlockLocate.m_Command = BLOCK_ROTATE;
         DrawPanel->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;

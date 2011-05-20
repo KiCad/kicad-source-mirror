@@ -140,12 +140,12 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     case BLOCK_SAVE:     /* Save */
     case BLOCK_PASTE:
-    case BLOCK_ROTATE:
-    case BLOCK_MIRROR_X:
     case BLOCK_FLIP:
         break;
 
 
+    case BLOCK_ROTATE:
+    case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:
         if ( m_component )
             ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
@@ -158,7 +158,13 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         if ( m_component )
         {
             OnModify();
-            m_component->MirrorSelectedItemsH( pt );
+            int block_cmd = GetScreen()->m_BlockLocate.m_Command;
+            if( block_cmd == BLOCK_MIRROR_Y)
+                m_component->MirrorSelectedItemsH( pt );
+            else if( block_cmd == BLOCK_MIRROR_X)
+                m_component->MirrorSelectedItemsV( pt );
+            else if( block_cmd == BLOCK_ROTATE)
+                m_component->RotateSelectedItems( pt );
         }
         break;
 
@@ -240,19 +246,28 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
-    case BLOCK_MIRROR_Y:      /* Invert by popup menu, from block move */
+    case BLOCK_ROTATE:      // Invert by popup menu, from block move
+    case BLOCK_MIRROR_X:    // Invert by popup menu, from block move
+    case BLOCK_MIRROR_Y:    // Invert by popup menu, from block move
         if ( m_component )
             SaveCopyInUndoList( m_component );
         pt = GetScreen()->m_BlockLocate.Centre();
         pt.y *= -1;
         if ( m_component )
-            m_component->MirrorSelectedItemsH( pt );
+        {
+            int block_cmd = GetScreen()->m_BlockLocate.m_Command;
+            if( block_cmd == BLOCK_MIRROR_Y)
+                m_component->MirrorSelectedItemsH( pt );
+            else if( block_cmd == BLOCK_MIRROR_X)
+                m_component->MirrorSelectedItemsV( pt );
+            else if( block_cmd == BLOCK_ROTATE )
+                m_component->RotateSelectedItems( pt );
+        }
         break;
 
     case BLOCK_ZOOM:        // Handled by HandleBlockEnd
     case BLOCK_DELETE:
     case BLOCK_SAVE:
-    case BLOCK_ROTATE:
     case BLOCK_ABORT:
     default:
         break;

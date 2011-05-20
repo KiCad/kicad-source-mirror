@@ -1,5 +1,5 @@
 /***************************/
-/* class_BodyItem_Text.cpp */
+/* lib_text.cpp */
 /***************************/
 
 /**
@@ -262,6 +262,19 @@ void LIB_TEXT::DoMirrorHorizontal( const wxPoint& center )
     m_Pos.x -= center.x;
     m_Pos.x *= -1;
     m_Pos.x += center.x;
+}
+
+void LIB_TEXT::DoMirrorVertical( const wxPoint& center )
+{
+    m_Pos.y -= center.y;
+    m_Pos.y *= -1;
+    m_Pos.y += center.y;
+}
+
+void LIB_TEXT::DoRotate( const wxPoint& center )
+{
+    RotatePoint( &m_Pos, center, -900 );
+    m_Orient = m_Orient ? 0 : 900;
 }
 
 

@@ -132,6 +132,22 @@ void LIB_RECTANGLE::DoMirrorHorizontal( const wxPoint& aCenter )
     m_End.x += aCenter.x;
 }
 
+void LIB_RECTANGLE::DoMirrorVertical( const wxPoint& aCenter )
+{
+    m_Pos.y -= aCenter.y;
+    m_Pos.y *= -1;
+    m_Pos.y += aCenter.y;
+    m_End.y -= aCenter.y;
+    m_End.y *= -1;
+    m_End.y += aCenter.y;
+}
+
+void LIB_RECTANGLE::DoRotate( const wxPoint& aCenter )
+{
+    RotatePoint( &m_Pos, aCenter, -900 );
+    RotatePoint( &m_End, aCenter, -900 );
+}
+
 
 void LIB_RECTANGLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                             const TRANSFORM& aTransform )

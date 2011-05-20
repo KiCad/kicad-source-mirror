@@ -1215,7 +1215,10 @@ bool LIB_COMPONENT::HasConversion() const
 void LIB_COMPONENT::ClearStatus()
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
+    {
         item.m_Flags = 0;
+        item.m_Selected = 0;
+    }
 }
 
 
@@ -1345,6 +1348,35 @@ void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& aCenter )
 
     drawings.sort();
 }
+
+void LIB_COMPONENT::MirrorSelectedItemsV( const wxPoint& aCenter )
+{
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
+    {
+        if( item.m_Selected == 0 )
+            continue;
+
+        item.MirrorVertical( aCenter );
+        item.m_Flags = item.m_Selected = 0;
+    }
+
+    drawings.sort();
+}
+
+void LIB_COMPONENT::RotateSelectedItems( const wxPoint& aCenter )
+{
+    BOOST_FOREACH( LIB_ITEM& item, drawings )
+    {
+        if( item.m_Selected == 0 )
+            continue;
+
+        item.Rotate( aCenter );
+        item.m_Flags = item.m_Selected = 0;
+    }
+
+    drawings.sort();
+}
+
 
 
 LIB_ITEM* LIB_COMPONENT::LocateDrawItem( int aUnit, int aConvert,

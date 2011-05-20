@@ -476,6 +476,18 @@ void LIB_FIELD::DoMirrorHorizontal( const wxPoint& center )
     m_Pos.x += center.x;
 }
 
+void LIB_FIELD::DoMirrorVertical( const wxPoint& center )
+{
+    m_Pos.y -= center.y;
+    m_Pos.y *= -1;
+    m_Pos.y += center.y;
+}
+
+void LIB_FIELD::DoRotate( const wxPoint& center )
+{
+    RotatePoint( &m_Pos, center, -900 );
+}
+
 
 void LIB_FIELD::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                         const TRANSFORM& aTransform )

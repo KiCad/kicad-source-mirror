@@ -162,6 +162,18 @@ void LIB_CIRCLE::DoMirrorHorizontal( const wxPoint& aCenter )
     m_Pos.x += aCenter.x;
 }
 
+void LIB_CIRCLE::DoMirrorVertical( const wxPoint& aCenter )
+{
+    m_Pos.y -= aCenter.y;
+    m_Pos.y *= -1;
+    m_Pos.y += aCenter.y;
+}
+
+void LIB_CIRCLE::DoRotate( const wxPoint& aCenter )
+{
+    RotatePoint( &m_Pos, aCenter, -900 );
+}
+
 
 void LIB_CIRCLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform )

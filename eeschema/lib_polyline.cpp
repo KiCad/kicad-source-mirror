@@ -177,6 +177,28 @@ void LIB_POLYLINE::DoMirrorHorizontal( const wxPoint& aCenter )
     }
 }
 
+void LIB_POLYLINE::DoMirrorVertical( const wxPoint& aCenter )
+{
+    size_t i, imax = m_PolyPoints.size();
+
+    for( i = 0; i < imax; i++ )
+    {
+        m_PolyPoints[i].y -= aCenter.y;
+        m_PolyPoints[i].y *= -1;
+        m_PolyPoints[i].y += aCenter.y;
+    }
+}
+
+void LIB_POLYLINE::DoRotate( const wxPoint& aCenter )
+{
+    size_t i, imax = m_PolyPoints.size();
+
+    for( i = 0; i < imax; i++ )
+    {
+        RotatePoint( &m_PolyPoints[i], aCenter, -900 );
+   }
+}
+
 
 void LIB_POLYLINE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                            const TRANSFORM& aTransform )

@@ -19,16 +19,13 @@ void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, int unused_flag )
 
     CopyItem = new LIB_COMPONENT( *( (LIB_COMPONENT*) ItemToCopy ) );
 
-    if( CopyItem == NULL )
-        return;
+    // Clear current flags (which can be temporary set by a current edit command).
+    CopyItem->ClearStatus();
 
     lastcmd = new PICKED_ITEMS_LIST();
     ITEM_PICKER wrapper( CopyItem, UR_LIBEDIT );
     lastcmd->PushItem(wrapper);
     GetScreen()->PushCommandToUndoList( lastcmd );
-
-    // Clear current flags (which can be temporary set by a current edit command).
-    CopyItem->ClearStatus();
 
     // Clear redo list, because after new save there is no redo to do.
     GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
