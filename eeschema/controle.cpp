@@ -221,8 +221,18 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
         if( DrawPanel->IsMouseCaptured() )
         {
+#ifdef USE_WX_OVERLAY
+            wxDCOverlay oDC( DrawPanel->m_overlay, (wxWindowDC*)aDC );
+            oDC.Clear();
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, false );
+#else
             DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, true );
+#endif
         }
+#ifdef USE_WX_OVERLAY
+        else
+            DrawPanel->m_overlay.Reset();
+#endif
     }
 
     if( aHotKey )
@@ -294,8 +304,18 @@ void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
         if( DrawPanel->IsMouseCaptured() )
         {
+#ifdef USE_WX_OVERLAY
+            wxDCOverlay oDC( DrawPanel->m_overlay, (wxWindowDC*)aDC );
+            oDC.Clear();
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, false );
+#else
             DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, true );
+#endif
         }
+#ifdef USE_WX_OVERLAY
+        else
+            DrawPanel->m_overlay.Reset();
+#endif
     }
 
     if( aHotKey )

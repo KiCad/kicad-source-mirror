@@ -387,8 +387,18 @@ void WinEDA_ModuleEditFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition
 
         if( DrawPanel->IsMouseCaptured() )
         {
+#ifdef USE_WX_OVERLAY
+            wxDCOverlay oDC( DrawPanel->m_overlay, (wxWindowDC*)aDC );
+            oDC.Clear();
+            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, false );
+#else
             DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, true );
+#endif
         }
+#ifdef USE_WX_OVERLAY
+        else
+            DrawPanel->m_overlay.Reset();
+#endif
     }
 
     if( aHotKey )

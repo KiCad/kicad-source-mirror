@@ -688,6 +688,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     if( showTrackClearanceMode != DO_NOT_SHOW_CLEARANCE )
         DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
 
+#ifndef USE_WX_OVERLAY
     /* Erase old track */
     if( aErase )
     {
@@ -705,7 +706,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
                       color );
         }
     }
-
+#endif
     // MacOSX seems to need this.
     if( g_CurrentTrackList.GetCount() == 0 )
         return;

@@ -22,20 +22,8 @@ void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 {
     AdjustScrollBars( aCenterPoint );
 
-#if !defined(__WXMAC__)
-    /* DrawPanel->Refresh() is not used here because the redraw is delayed and the mouse
-     * events (from MoveCursorToCrossHair ot others) during this delay create problems: the
-     * mouse cursor position is false in calculations.  TODO: see exactly how the mouse
-     * creates problems when moving during refresh use Refresh() and update() do not change
-     * problems
-     */
-    INSTALL_DC( dc, DrawPanel );
-    DrawPanel->SetClipBox( dc );
-    DrawPanel->ReDraw( &dc, true );
-#else
     DrawPanel->Refresh();
     DrawPanel->Update();
-#endif
 
     /* Move the mouse cursor to the on grid graphic cursor position */
     if( aWarpPointer )
