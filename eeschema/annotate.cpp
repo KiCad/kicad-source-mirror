@@ -20,12 +20,6 @@
 #include "lib_pin.h"
 
 
-/**
- * Function DeleteAnnotation
- * Remove current component annotations
- * @param aCurrentSheetOnly : if false: remove all annotations, else remove
- *                             annotation relative to the current sheet only
- */
 void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 {
     if( aCurrentSheetOnly )
@@ -45,36 +39,11 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 }
 
 
-/**
- * Function AnnotateComponents:
- *
- *  Compute the annotation of the components for the whole project, or the
- *  current sheet only.  All the components or the new ones only will be
- *  annotated.
- * @param aAnnotateSchematic : true = entire schematic annotation,
- *                            false = current sheet only
- * @param aSortOption : 0 = annotate by sorting X position,
- *                      1 = annotate by sorting Y position,
- *                      2 = annotate by sorting value
- * @param aAlgoOption : 0 = annotate schematic using first free Id number
- *                      1 = annotate using first free Id number, starting to sheet number * 100
- *                      2 = annotate  using first free Id number, starting to sheet number * 1000
- * @param aResetAnnotation : true = remove previous annotation
- *                          false = annotate new components only
- * @param aRepairsTimestamps : true = test for duplicate times stamps and
- *                                   replace duplicated
- *        Note: this option could change previous annotation, because time
- *              stamps are used to handle annotation mainly in complex
- *              hierarchies.
- * When the sheet number is used in annotation,
- *      for each sheet annotation starts from sheet number * 100
- *      ( the first sheet uses 100 to 199, the second 200 to 299 ... )
- */
-void SCH_EDIT_FRAME::AnnotateComponents( bool aAnnotateSchematic,
-                                         int  aSortOption,
-                                         int  aAlgoOption,
-                                         bool aResetAnnotation,
-                                         bool aRepairsTimestamps )
+void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
+                                         ANNOTATE_ORDER_T  aSortOption,
+                                         ANNOTATE_OPTION_T aAlgoOption,
+                                         bool              aResetAnnotation,
+                                         bool              aRepairTimestamps )
 {
     SCH_REFERENCE_LIST references;
 
@@ -82,13 +51,13 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool aAnnotateSchematic,
 
     SCH_SCREENS screens;
 
-    /* Build the sheet list */
+    // Build the sheet list.
     SCH_SHEET_LIST sheets;
 
     // Test for and replace duplicate time stamps in components and sheets.  Duplicate
     // time stamps can happen with old schematics, schematic conversions, or manual
     // editing of files.
-    if( aRepairsTimestamps )
+    if( aRepairTimestamps )
     {
         int count = screens.ReplaceDuplicateTimeStamps();
 
@@ -127,11 +96,11 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool aAnnotateSchematic,
     switch( aSortOption )
     {
     default:
-    case 0:
+    case SORT_BY_X_POSITION:
         references.SortByXCoordinate();
         break;
 
-    case 1:
+    case SORT_BY_Y_POSITION:
         references.SortByYCoordinate();
         break;
     }
@@ -142,14 +111,14 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool aAnnotateSchematic,
     switch( aAlgoOption )
     {
     default:
-    case 0:
+    case INCREMENTAL_BY_REF:
         break;
 
-    case 1:
+    case SHEET_NUMBER_X_100:
         useSheetNum = true;
         break;
 
-    case 2:
+    case SHEET_NUMBER_X_1000:
         useSheetNum = true;
         idStep = 1000;
         break;
@@ -161,7 +130,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool aAnnotateSchematic,
 
     wxArrayString errors;
 
-    /* Final control (just in case ... )*/
+    // Final control (just in case ... ).
     if( CheckAnnotate( &errors, !aAnnotateSchematic ) )
     {
         wxString msg;
@@ -185,19 +154,6 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool aAnnotateSchematic,
 }
 
 
-/**
- * Function CheckAnnotate
- *  Check errors relatives to annotation:
- *      components not annotated
- *      components having the same reference (duplicates)
- *      for multiple parts per package components :
- *          part number > number of parts
- *          different values between parts
- * @param aMessageList = a wxArrayString to store messages.
- * @param aOneSheetOnly : true = search is made only in the current sheet
- *                        false = search in whole hierarchy (usual search).
- * @return errors count
- */
 int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly )
 {
     /* build the screen list */

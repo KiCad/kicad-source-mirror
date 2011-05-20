@@ -254,3 +254,44 @@ bool SCH_COLLECTOR::IsNode( bool aIncludePins ) const
 
     return true;
 }
+
+
+bool SCH_COLLECTOR::IsDraggableJunction() const
+{
+    int wireEndCount = 0;
+    int wireMidPoint = 0;
+    int junctionCount = 0;
+
+    for( size_t i = 0;  i < m_List.size();  i++ )
+    {
+        SCH_ITEM* item = (SCH_ITEM*) m_List[ i ];
+        KICAD_T type = item->Type();
+
+        if( type == SCH_JUNCTION_T )
+        {
+            junctionCount++;
+            continue;
+        }
+
+        if( type == SCH_LINE_T )
+        {
+            if( item->GetLayer() != LAYER_WIRE )
+                return false;
+
+            SCH_LINE* line = (SCH_LINE*) item;
+
+            if( line->IsEndPoint( m_RefPos ) )
+                wireEndCount++;
+            else
+                wireMidPoint++;
+
+            continue;
+        }
+
+        // Any other item types indicate that this collection is not a draggable junction.
+        return false;
+    }
+
+    return (wireEndCount >= 3) || ((wireEndCount >= 1) && (wireMidPoint == 1))
+        || ((wireMidPoint >= 2) && (junctionCount == 1));
+}

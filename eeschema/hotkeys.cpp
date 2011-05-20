@@ -696,6 +696,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
             case SCH_BUS_ENTRY_T:
             case SCH_LINE_T:
+            case SCH_JUNCTION_T:
                 if( ((SCH_ITEM*) aItem )->GetLayer() != LAYER_BUS )
                 {
                     cmd.SetId( ID_POPUP_SCH_DRAG_WIRE_REQUEST );
@@ -710,7 +711,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
 
         break;
-
 
     case HK_MOVE_COMPONENT_OR_ITEM:         // Start move component or other schematic item
         if( itemInEdit )

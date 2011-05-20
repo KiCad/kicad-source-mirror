@@ -52,6 +52,25 @@ enum fl_rot_cmp {
 };
 
 
+/** Schematic annotation order options. */
+enum ANNOTATE_ORDER_T {
+    SORT_BY_X_POSITION,     ///< Annotate by X position from left to right.
+    SORT_BY_Y_POSITION,     ///< Annotate by Y position from top to bottom.
+    UNSORTED,               ///< Annotate by position of component in the schematic sheet
+                            ///< object list.
+};
+
+
+/** Schematic annotation type options. */
+enum ANNOTATE_OPTION_T {
+    INCREMENTAL_BY_REF,     ///< Annotate incrementally using the first free reference number.
+    SHEET_NUMBER_X_100,     ///< Annotate using the first free reference number starting at
+                            ///< the sheet number * 100.
+    SHEET_NUMBER_X_1000,    ///< Annotate using the first free reference number starting at
+                            ///< the sheet number * 1000.
+};
+
+
 /**
  * Schematic editor (EESchema) main window.
  */
@@ -207,7 +226,7 @@ public:
     /**
      * Function LocateAndShowItem
      * checks the schematic at \a aPosition in logical (drawing) units for a item
-     * matching \a aFilterList and \a aGuide.
+     * matching the types in \a aFilterList.
      * <p>
      * The search is first performed at the nearest grid position to \a aPosition.  If no
      * item if found on grid, then \a aPosition is tested for any items.  If the item found
@@ -226,7 +245,7 @@ public:
 
     /**
      * Function LocateItem
-     * checks for items at \a aPosition matching \a aFilter.
+     * checks for items at \a aPosition matching the types in \a aFilterList.
      * <p>
      * If multiple items are located at \a aPosition, a context menu is displayed to clarify
      * which item the user intended to select.  If the user aborts the context menu, NULL is
@@ -303,40 +322,58 @@ public:
 
     /**
      * Function DeleteAnnotation
-     * Remove current component annotations
-     * @param aCurrentSheetOnly : if false: remove all annotations, else
-     *                            remove annotation relative to the current
-     *                            sheet only
+     * clears the current component annotation.
+     * @param aCurrentSheetOnly Clear the entire schematic annotation if true.  Otherwise
+     *                          only clear the annotation for the current sheet.
      */
-    void         DeleteAnnotation( bool aCurrentSheetOnly );
+    void DeleteAnnotation( bool aCurrentSheetOnly );
 
     /**
-     * Function AnnotateComponents:
+     * Function AnnotateComponents
      *
-     *  Compute the annotation of the components for the whole project, or the
-     *  current sheet only.  All the components or the new ones only will be
-     *  annotated.
-     * @param aAnnotateSchematic : true = entire schematic annotation,
-     *                            false = current sheet only
-     * @param aSortOption : 0 = annotate by sorting X position,
-     *                      1 = annotate by sorting Y position,
-     *                      2 = annotate by sorting value
-     * @param aAlgoOption : 0 = annotate schematic using first free Id number
-     *                      1 = annotate using first free Id number, starting to sheet number * 100
-     *                      2 = annotate  using first free Id number, starting to sheet number * 1000
-     * @param aResetAnnotation : true = remove previous annotation
-     *                          false = annotate new components only
-     * @param aRepairsTimestamps : true = test for duplicate times stamps and
-     *                                   replace duplicated
-     *        Note: this option could change previous annotation, because time
-     *              stamps are used to handle annotation mainly in complex
-     *              hierarchies.
-     * When the sheet number is used in annotation,
-     *      for each sheet annotation starts from sheet number * 100
-     *      ( the first sheet uses 100 to 199, the second 200 to 299 ... )
+     * annotates the components in the schematic that are not currently annotated.
+     *
+     * @param aAnnotateSchematic Annotate the entire schematic if true.  Otherwise annotate
+     *                           the current sheet only.
+     * @param aSortOption Define the annotation order.  See #ANNOTATE_ORDER_T.
+     * @param aAlgoOption Define the annotation style.  See #ANNOTATE_OPTION_T.
+     * @param aResetAnnotation Clear any previous annotation if true.  Otherwise, keep the
+     *                         existing component annotation.
+     * @param aRepairTimestamps Test for and repair any duplicate time stamps if true.
+     *                          Otherwise, keep the existing time stamps.  This option
+     *                          could change previous annotation because time stamps are
+     *                          used to handle annotation in complex hierarchies.
+     *
+     * When the sheet number is used in annotation, each sheet annotation starts from sheet
+     * number * 100.  In other words the first sheet uses 100 to 199, the second sheet uses
+     * 200 to 299, and so on.
      */
-    void AnnotateComponents( bool aAnnotateSchematic, int aSortOption, int aAlgoOption,
-                             bool aResetAnnotation, bool aRepairsTimestamps );
+    void AnnotateComponents( bool aAnnotateSchematic, ANNOTATE_ORDER_T aSortOption,
+                             ANNOTATE_OPTION_T aAlgoOption, bool aResetAnnotation,
+                             bool aRepairTimestamps );
+
+    /**
+     * Function CheckAnnotate
+     * checks for annotation errors.
+     *
+     * <p>
+     * The following list of items are checked:
+     * <ul>
+     * <li> Components that are not annotated.
+     * <li> Duplicate component references.
+     * <li> Multiple part per package components where the part\n
+     *      number is greater number of parts in the package.
+     * <li> Multiple part per package components where the reference\n
+     *      designator is different between parts.
+     * </ul>
+     * </p>
+     *
+     * @return Number of annotation errors found.
+     * @param aMessageList A wxArrayString to store error messages.
+     * @param aOneSheetOnly Check the current sheet only if true.  Otherwise check
+     *                      the entire schematic.
+     */
+    int CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly );
 
     // Functions used for hierarchy handling
     /**
@@ -690,6 +727,14 @@ private:
      */
     void copyBlockItems( PICKED_ITEMS_LIST& aItemsList );
 
+    /**
+     * Function addJunctionMenuEntries
+     * adds the context menu items to \a aMenu for \a aJunction.
+     * @params aMenu The menu to add the items to.
+     * @params aJunction The SCH_JUNCTION object selected.
+     */
+    void addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunction );
+
 public:
     void     Key( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
@@ -755,22 +800,6 @@ public:
     void SaveUndoItemInUndoList( SCH_ITEM* aItem );
 
     // ERC:
-
-    /**
-     * Function CheckAnnotate
-     *  Check errors relatives to annotation:
-     *      components not annotated
-     *      components having the same reference (duplicates)
-     *      for multiple parts per package components :
-     *          part number > number of parts
-     *          different values between parts
-     * @return errors count
-     * @param aMessageList = a wxArrayString to store messages. If NULL,
-     *                       they are displayed in a wxMessageBox
-     * @param aOneSheetOnly : true = search is made only in the current sheet
-     *                       false = search in whole hierarchy (usual search).
-     */
-    int      CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly );
 
     /**
      * Load component libraries defined in project file.

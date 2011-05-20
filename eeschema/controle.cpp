@@ -118,7 +118,8 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
             switch( aHotKeyCommandId )
             {
             case HK_DRAG:
-                if( m_collectedItems.IsCorner() || m_collectedItems.IsNode( false ) )
+                if( m_collectedItems.IsCorner() || m_collectedItems.IsNode( false )
+                    || m_collectedItems.IsDraggableJunction() )
                 {
                     item = m_collectedItems[0];
                     GetScreen()->SetCurItem( item );

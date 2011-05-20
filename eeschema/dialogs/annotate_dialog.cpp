@@ -135,7 +135,8 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     if (response == wxCANCEL)
         return;
 
-    m_Parent->AnnotateComponents( GetLevel(), GetSortOrder(), GetAnnotateAlgo(),
+    m_Parent->AnnotateComponents( GetLevel(), (ANNOTATE_ORDER_T) GetSortOrder(),
+                                  (ANNOTATE_OPTION_T) GetAnnotateAlgo(),
                                   GetResetItems() , true );
     m_Parent->DrawPanel->Refresh();
 

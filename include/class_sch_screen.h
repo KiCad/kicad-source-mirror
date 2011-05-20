@@ -193,7 +193,7 @@ public:
      * @param aPosition The position of the first connection object in drawing units.
      * @param aList The pick list to add the connect item to.
      * @param aFullConnection If true all the objects that make up this connection are
-     *                        add to \aList.  Otherwise, only the objects up to the first
+     *                        add to \a aList.  Otherwise, only the objects up to the first
      *                        node are added.
      * @return The number of items added to \a aList.
      */
