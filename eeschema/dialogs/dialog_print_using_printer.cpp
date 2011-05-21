@@ -94,6 +94,11 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent 
 
     m_checkReference->SetValue( aParent->GetPrintSheetReference() );
     m_checkMonochrome->SetValue( aParent->GetPrintMonochrome() );
+
+#ifdef __WXMAC__
+    /* Problems with modal on wx-2.9 - Anyway preview is standard for OSX */
+   m_buttonPreview->Hide();
+#endif
 }
 
 

@@ -118,6 +118,10 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( GERBVIEW_FRAME* parent )
     {
         GetSizer()->SetSizeHints( this );
     }
+#ifdef __WXMAC__
+    /* Problems with modal on wx-2.9 - Anyway preview is standard for OSX */
+   m_buttonPreview->Hide();
+#endif
 
     m_buttonPrint->SetDefault();
 }
