@@ -6,7 +6,7 @@
  */
 
 #include "fctsys.h"
-#include "gr_basic.h"
+//#include "gr_basic.h"
 #include "common.h"
 #include "macros.h"
 #include "confirm.h"
@@ -300,7 +300,7 @@ void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
         ADD_MENUITEM( PopMenu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), copyblock_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_MIRROR_Y_BLOCK, _( "Mirror Block ||" ), mirror_H_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_MIRROR_X_BLOCK, _( "Mirror Block --" ), mirror_V_xpm );
-        ADD_MENUITEM( PopMenu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block ccw" ), rotate_pos_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block ccw" ), rotate_CCW_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), delete_xpm );
     }
 }

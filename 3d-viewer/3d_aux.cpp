@@ -2,12 +2,6 @@
 // Name:        3d_aux.cpp
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __GNUG__
-#pragma implementation
-#pragma interface
-#endif
-
 #include "fctsys.h"
 
 #if !wxUSE_GLCANVAS
@@ -16,8 +10,6 @@
 
 #include "common.h"
 #include "trigo.h"
-
-#include "bitmaps.h"
 
 #include "3d_viewer.h"
 #include "trackball.h"

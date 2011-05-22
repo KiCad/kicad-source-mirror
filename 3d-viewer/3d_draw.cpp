@@ -1,7 +1,6 @@
-//////////////////////////////////////
-
-// Name:        3d_draw.cpp
-//////////////////////////////////////
+/**
+ * @file 3d_draw.cpp
+*/
 
 #include "fctsys.h"
 #include "common.h"

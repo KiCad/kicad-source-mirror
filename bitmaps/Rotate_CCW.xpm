@@ -1,9 +1,5 @@
 /* XPM */
-#ifndef XPMMAIN
-extern const char *rotate_neg_xpm[];
-
-#else
-const char * rotate_neg_xpm[] = {
+const char *rotate_CCW_xpm[] = {
 "16 16 93 2",
 "  	c None",
 ". 	c #202020",
@@ -114,4 +110,3 @@ const char * rotate_neg_xpm[] = {
 "            % % X B $ % %       ",
 "                Y Z ` %         ",
 "                   .%           "};
-#endif

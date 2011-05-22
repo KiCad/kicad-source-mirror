@@ -169,9 +169,11 @@ void LIB_CIRCLE::DoMirrorVertical( const wxPoint& aCenter )
     m_Pos.y += aCenter.y;
 }
 
-void LIB_CIRCLE::DoRotate( const wxPoint& aCenter )
+void LIB_CIRCLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 {
-    RotatePoint( &m_Pos, aCenter, -900 );
+    int rot_angle = aRotateCCW ? -900 : 900;
+
+    RotatePoint( &m_Pos, aCenter, rot_angle );
 }
 
 

@@ -248,8 +248,8 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
 
     wxMenu* orientmenu = new wxMenu;
     msg = AddHotkeyName( _( "Rotate +" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
-    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE, msg, rotate_pos_xpm );
-    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE, _( "Rotate -" ), rotate_neg_xpm );
+    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE, msg, rotate_CCW_xpm );
+    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE, _( "Rotate -" ), rotate_CW_xpm );
     msg = AddHotkeyName( _( "Mirror --" ), s_Schematic_Hokeys_Descr, HK_MIRROR_X_COMPONENT );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_MIROR_X_CMP, msg, mirror_V_xpm );
     msg = AddHotkeyName( _( "Mirror ||" ), s_Schematic_Hokeys_Descr, HK_MIRROR_Y_COMPONENT );
@@ -407,7 +407,7 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
         ADD_MENUITEM( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, copy_button );
     }
     msg = AddHotkeyName( _( "Rotate Label" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, msg, rotate_pos_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, msg, rotate_CCW_xpm );
     msg = AddHotkeyName( _( "Edit Label" ), s_Schematic_Hokeys_Descr, HK_EDIT );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, msg, edit_text_xpm );
     msg = AddHotkeyName( _( "Delete Label" ), s_Schematic_Hokeys_Descr, HK_DELETE );
@@ -441,7 +441,7 @@ void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
     }
 
     msg = AddHotkeyName( _( "Rotate Text" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
-    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, msg, rotate_pos_xpm );
+    ADD_MENUITEM( PopMenu, ID_POPUP_SCH_ROTATE_TEXT, msg, rotate_CCW_xpm );
     msg = AddHotkeyName( _( "Edit Text" ), s_Schematic_Hokeys_Descr, HK_EDIT );
     ADD_MENUITEM( PopMenu, ID_POPUP_SCH_EDIT_TEXT, msg, edit_text_xpm );
     msg = AddHotkeyName( _( "Delete Text" ), s_Schematic_Hokeys_Descr, HK_DELETE );
@@ -644,7 +644,7 @@ void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame )
         ADD_MENUITEM( PopMenu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), delete_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_MIRROR_Y_BLOCK, _( "Mirror Block ||" ), mirror_H_xpm );
         ADD_MENUITEM( PopMenu, ID_POPUP_MIRROR_X_BLOCK, _( "Mirror Block --" ), mirror_V_xpm );
-        ADD_MENUITEM( PopMenu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block ccw" ), rotate_pos_xpm );
+        ADD_MENUITEM( PopMenu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block ccw" ), rotate_CCW_xpm );
 
 #if 0
   #ifdef __WINDOWS__

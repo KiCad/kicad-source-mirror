@@ -135,7 +135,7 @@ set(BITMAP_SRCS
     fill_zone.xpm
     find_xpm.xpm
     Flag.xpm
-    Fonts.xpm
+    Fonts.xpmr
     Footprint_Text.xpm
     gbr_select_mode0.xpm
     gbr_select_mode1.xpm
@@ -362,8 +362,8 @@ set(BITMAP_SRCS
     Rotate_Module-.xpm
     Rotate_Module+.xpm
     Rotate_Pin.xpm
-    Rotate-.xpm
-    Rotate+.xpm
+    Rotate_CCW.xpm
+    Rotate_CW.xpm
     rotate-x.xpm
     rotate+x.xpm
     rotate-y.xpm

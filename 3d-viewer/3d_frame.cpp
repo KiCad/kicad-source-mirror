@@ -2,21 +2,12 @@
 // Name:        3d_frame.cpp
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __GNUG__
-#pragma implementation
-#pragma interface
-#endif
-
-
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
 #endif
-
-#include "bitmaps.h"
 
 #include "3d_viewer.h"
 #include "trackball.h"
@@ -292,7 +283,7 @@ void WinEDA3D_DrawFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_MOVE3D_DOWN:
         m_Canvas->SetView3D( WXK_DOWN );
         return;
-        
+
     case ID_ORTHO:
         m_Canvas->ToggleOrtho();
         return;

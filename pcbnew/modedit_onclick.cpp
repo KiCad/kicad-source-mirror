@@ -228,7 +228,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopM
                               mirror_H_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_ROTATE_BLOCK,
                               _( "Rotate Block (ctrl + drag mouse)" ),
-                              rotate_pos_xpm );
+                              rotate_CCW_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_DELETE_BLOCK,
                               _( "Delete Block (shift+ctrl + drag mouse)" ),
                               delete_xpm );

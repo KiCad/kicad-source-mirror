@@ -189,13 +189,15 @@ void LIB_POLYLINE::DoMirrorVertical( const wxPoint& aCenter )
     }
 }
 
-void LIB_POLYLINE::DoRotate( const wxPoint& aCenter )
+void LIB_POLYLINE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 {
+    int rot_angle = aRotateCCW ? -900 : 900;
+
     size_t i, imax = m_PolyPoints.size();
 
     for( i = 0; i < imax; i++ )
     {
-        RotatePoint( &m_PolyPoints[i], aCenter, -900 );
+        RotatePoint( &m_PolyPoints[i], aCenter, rot_angle );
    }
 }
 

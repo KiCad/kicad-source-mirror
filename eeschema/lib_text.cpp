@@ -271,9 +271,11 @@ void LIB_TEXT::DoMirrorVertical( const wxPoint& center )
     m_Pos.y += center.y;
 }
 
-void LIB_TEXT::DoRotate( const wxPoint& center )
+void LIB_TEXT::DoRotate( const wxPoint& center, bool aRotateCCW )
 {
-    RotatePoint( &m_Pos, center, -900 );
+    int rot_angle = aRotateCCW ? -900 : 900;
+
+    RotatePoint( &m_Pos, center, rot_angle );
     m_Orient = m_Orient ? 0 : 900;
 }
 

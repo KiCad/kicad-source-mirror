@@ -312,7 +312,7 @@ public:
     /**
      * Rotate about a point.
      *
-     * @param aCenter - Point to mirror around.
+     * @param aCenter - Point to rotate around.
      */
     void Rotate( const wxPoint& aCenter )
     {
@@ -398,7 +398,7 @@ protected:
     virtual wxPoint DoGetPosition() const = 0;
     virtual void DoMirrorHorizontal( const wxPoint& aCenter ) = 0;
     virtual void DoMirrorVertical( const wxPoint& aCenter ) = 0;
-    virtual void DoRotate( const wxPoint& aCenter ) = 0;
+    virtual void DoRotate( const wxPoint& aCenter, bool aRotateCCW = true ) = 0;
     virtual void DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                          const TRANSFORM& aTransform ) = 0;
     virtual int DoGetWidth() const = 0;

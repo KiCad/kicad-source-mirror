@@ -246,7 +246,7 @@ protected:
     virtual wxPoint DoGetPosition( void ) const { return m_Pos; }
     virtual void DoMirrorHorizontal( const wxPoint& center );
     virtual void DoMirrorVertical( const wxPoint& aCenter );
-    virtual void DoRotate( const wxPoint& aCenter );
+    virtual void DoRotate( const wxPoint& aCenter, bool aRotateCCW = true );
     virtual void DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
                          const TRANSFORM& aTransform );
     virtual int DoGetWidth( void ) const { return m_Thickness; }

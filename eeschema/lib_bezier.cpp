@@ -210,19 +210,20 @@ void LIB_BEZIER::DoMirrorVertical( const wxPoint& aCenter )
     }
 }
 
-void LIB_BEZIER::DoRotate( const wxPoint& aCenter )
+void LIB_BEZIER::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 {
-    size_t i, imax = m_PolyPoints.size();
+    int rot_angle = aRotateCCW ? -900 : 900;
 
+    size_t i, imax = m_PolyPoints.size();
     for( i = 0; i < imax; i++ )
     {
-        RotatePoint( &m_PolyPoints[i], aCenter, -900 );
+        RotatePoint( &m_PolyPoints[i], aCenter, rot_angle );
     }
 
     imax = m_BezierPoints.size();
     for( i = 0; i < imax; i++ )
     {
-        RotatePoint( &m_BezierPoints[i], aCenter, -900 );
+        RotatePoint( &m_BezierPoints[i], aCenter, rot_angle );
     }
 }
 

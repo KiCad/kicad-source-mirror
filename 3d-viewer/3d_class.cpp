@@ -2,12 +2,6 @@
 // Name:        3d_class.cpp
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __GNUG__
-#pragma implementation
-#pragma interface
-#endif
-
 #include "fctsys.h"
 
 #include "3d_viewer.h"

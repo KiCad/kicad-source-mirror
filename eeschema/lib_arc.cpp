@@ -291,11 +291,12 @@ void LIB_ARC::DoMirrorVertical( const wxPoint& aCenter )
     EXCHG( m_ArcStart, m_ArcEnd );
 }
 
-void LIB_ARC::DoRotate( const wxPoint& aCenter )
+void LIB_ARC::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 {
-    RotatePoint( &m_Pos, aCenter, -900 );
-    RotatePoint( &m_ArcStart, aCenter, -900 );
-    RotatePoint( &m_ArcEnd, aCenter, -900 );
+    int rot_angle = aRotateCCW ? -900 : 900;
+    RotatePoint( &m_Pos, aCenter, rot_angle );
+    RotatePoint( &m_ArcStart, aCenter, rot_angle );
+    RotatePoint( &m_ArcEnd, aCenter, rot_angle );
 }
 
 

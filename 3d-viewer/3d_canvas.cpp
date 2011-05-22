@@ -1,7 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////
-
-// Name:        3d_canvas.cpp
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file 3d_canvas.cpp
+*/
 #include "fctsys.h"
 #include "trigo.h"
 
@@ -19,9 +18,6 @@
 
 #include "3d_viewer.h"
 #include "trackball.h"
-
-/* Tool and button Bitmaps */
-#include "bitmaps.h"
 
 
 // -----------------

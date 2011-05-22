@@ -1685,26 +1685,51 @@ void LIB_PIN::DoMirrorVertical( const wxPoint& center )
         m_orientation = PIN_UP;
 }
 
-void LIB_PIN::DoRotate( const wxPoint& center )
+void LIB_PIN::DoRotate( const wxPoint& center, bool aRotateCCW )
 {
-    RotatePoint( &m_position, center, -900 );
+    int rot_angle = aRotateCCW ? -900 : 900;
 
-    switch( m_orientation )
+    RotatePoint( &m_position, center, rot_angle );
+
+    if( aRotateCCW )
     {
-        case PIN_RIGHT:
-            m_orientation = PIN_UP;
-            break;
+        switch( m_orientation )
+        {
+            case PIN_RIGHT:
+                m_orientation = PIN_UP;
+                break;
 
-        case PIN_UP:
-            m_orientation = PIN_LEFT;
-            break;
-        case PIN_LEFT:
-            m_orientation = PIN_DOWN;
-            break;
+            case PIN_UP:
+                m_orientation = PIN_LEFT;
+                break;
+            case PIN_LEFT:
+                m_orientation = PIN_DOWN;
+                break;
 
-        case PIN_DOWN:
-            m_orientation = PIN_RIGHT;
-            break;
+            case PIN_DOWN:
+                m_orientation = PIN_RIGHT;
+                break;
+        }
+    }
+    else
+    {
+        switch( m_orientation )
+        {
+            case PIN_RIGHT:
+                m_orientation = PIN_DOWN;
+                break;
+
+            case PIN_UP:
+                m_orientation = PIN_RIGHT;
+                break;
+            case PIN_LEFT:
+                m_orientation = PIN_UP;
+                break;
+
+            case PIN_DOWN:
+                m_orientation = PIN_LEFT;
+                break;
+        }
     }
 }
 

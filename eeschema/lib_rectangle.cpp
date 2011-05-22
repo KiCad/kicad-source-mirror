@@ -142,10 +142,11 @@ void LIB_RECTANGLE::DoMirrorVertical( const wxPoint& aCenter )
     m_End.y += aCenter.y;
 }
 
-void LIB_RECTANGLE::DoRotate( const wxPoint& aCenter )
+void LIB_RECTANGLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 {
-    RotatePoint( &m_Pos, aCenter, -900 );
-    RotatePoint( &m_End, aCenter, -900 );
+    int rot_angle = aRotateCCW ? -900 : 900;
+    RotatePoint( &m_Pos, aCenter, rot_angle );
+    RotatePoint( &m_End, aCenter, rot_angle );
 }
 
 
