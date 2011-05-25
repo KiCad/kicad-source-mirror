@@ -78,7 +78,7 @@ bool LIB_CIRCLE::Load( char* aLine, wxString& aErrorMsg )
  */
 bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
 {
-    int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
+    int mindist = GetPenSize() / 2;
 
     // Have a minimal tolerance for hit test
     if( mindist < MINIMUM_SELECTION_DISTANCE )
@@ -97,6 +97,9 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
  */
 bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {
+    if( aThreshold < 0 )
+        aThreshold = GetPenSize() / 2;
+
     wxPoint relpos = aPosRef - aTransform.TransformCoordinate( m_Pos );
 
     int dist = wxRound( sqrt( ( (double) relpos.x * relpos.x ) +

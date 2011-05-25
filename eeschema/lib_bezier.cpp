@@ -328,7 +328,7 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
  */
 bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
 {
-    int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
+    int mindist = GetPenSize() / 2;
     // Have a minimal tolerance for hit test
     if ( mindist < MINIMUM_SELECTION_DISTANCE )
         mindist = MINIMUM_SELECTION_DISTANCE;
@@ -345,6 +345,9 @@ bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
 bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {
     wxPoint ref, start, end;
+
+    if( aThreshold < 0 )
+        aThreshold = GetPenSize() / 2;
 
     for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
     {

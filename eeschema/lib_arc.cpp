@@ -159,7 +159,7 @@ bool LIB_ARC::Load( char* aLine, wxString& aErrorMsg )
 
 bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
 {
-    int mindist = m_Width ? m_Width / 2 : g_DrawDefaultLineThickness / 2;
+    int mindist = GetPenSize() / 2;
 
     // Have a minimal tolerance for hit test
     if( mindist < MINIMUM_SELECTION_DISTANCE )
@@ -171,6 +171,9 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint )
 
 bool LIB_ARC::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
+
+    if( aThreshold < 0 )
+        aThreshold = GetPenSize() / 2;
 
     // TODO: use aTransMat to calculates parameters
     wxPoint relativePosition = aPosition;

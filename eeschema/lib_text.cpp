@@ -169,6 +169,9 @@ bool LIB_TEXT::HitTest( const wxPoint& aPosition )
 
 bool LIB_TEXT::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
+    if( aThreshold < 0 )
+        aThreshold = 0;
+
     wxPoint physicalpos = aTransform.TransformCoordinate( m_Pos );
     wxPoint tmp = m_Pos;
     m_Pos = physicalpos;

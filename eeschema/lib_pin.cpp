@@ -531,6 +531,9 @@ bool LIB_PIN::HitTest( const wxPoint& aPosition )
 
 bool LIB_PIN::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
+    if( aThreshold < 0 )
+        aThreshold = 0;
+
     TRANSFORM transform = DefaultTransform;
     DefaultTransform = aTransform;
 
@@ -1048,7 +1051,7 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
     /* Draw the pin end target (active end of the pin)
      */
     BASE_SCREEN* screen = aPanel ? aPanel->GetScreen() : NULL;
-    #define NCSYMB_PIN_DIM TARGET_PIN_DIAM
+    #define NCSYMB_PIN_DIM TARGET_PIN_RADIUS
     if( m_type == PIN_NC )   // Draw a N.C. symbol
     {
         GRLine( clipbox, aDC,
@@ -1064,7 +1067,7 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
      */
     else if( screen == NULL || !screen->m_IsPrinting )
     {
-        GRCircle( clipbox, aDC, posX, posY, TARGET_PIN_DIAM, 0, color );
+        GRCircle( clipbox, aDC, posX, posY, TARGET_PIN_RADIUS, 0, color );
     }
 }
 
@@ -1504,7 +1507,7 @@ wxPoint LIB_PIN::ReturnPinEndPoint() const
 }
 
 
-int LIB_PIN::ReturnPinDrawOrient( const TRANSFORM& aTransform )
+int LIB_PIN::ReturnPinDrawOrient( const TRANSFORM& aTransform ) const
 {
     int     orient;
     wxPoint end;   // position of pin end starting at 0,0 according to its orientation, length = 1
@@ -1816,7 +1819,8 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
     int            nameTextOffset = 0;
     bool           showName = !m_name.IsEmpty() && (m_name != wxT( "~" ));
     bool           showNum = m_number != 0;
-    int            symbolY = TARGET_PIN_DIAM / 2;
+    int            minsizeV = TARGET_PIN_RADIUS;
+
 
     if( entry )
     {
@@ -1831,16 +1835,16 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
     // First, calculate boundary box corners position
     int numberTextLength = showNum ? m_PinNumSize * GetNumberString().Len() : 0;
 
-    // Actual text height are bigger than text size
+    // Actual text height is bigger than text size
     int numberTextHeight  = showNum ? wxRound( m_PinNumSize * 1.1 ) : 0;
 
     if( m_shape & INVERT )
-        symbolY = INVERT_PIN_RADIUS;
+        minsizeV = MAX( TARGET_PIN_RADIUS, INVERT_PIN_RADIUS );
 
     // calculate top left corner position
     // for the default pin orientation (PIN_RIGHT)
-    begin.y = numberTextHeight + TXTMARGE;
-    begin.x = MIN( -TARGET_PIN_DIAM / 2, m_length - (numberTextLength / 2) );
+    begin.y = MAX( minsizeV, numberTextHeight + TXTMARGE );
+    begin.x = MIN( -TARGET_PIN_RADIUS, m_length - (numberTextLength / 2) );
 
     // calculate bottom right corner position and adjust top left corner position
     int nameTextLength = 0;
@@ -1856,20 +1860,30 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
 
         nameTextLength = ( m_PinNameSize * length ) + nameTextOffset;
         // Actual text height are bigger than text size
-        nameTextHeight = wxRound( m_PinNameSize * 1.1 );
+        nameTextHeight = wxRound( m_PinNameSize * 1.1 ) + TXTMARGE;
     }
 
-    end.x = m_length + nameTextLength;
-
-    end.y = -nameTextHeight / 2;
-    if( end.y > -symbolY )
-        end.y = -symbolY;
+    if( nameTextOffset )        // for values > 0, pin name is inside the body
+    {
+        end.x = m_length + nameTextLength;
+        end.y = MIN( -minsizeV, -nameTextHeight / 2 );
+    }
+    else        // if value == 0:
+                // pin name is ouside the body, and above the pin line
+                // pin num is below the pin line
+    {
+        end.x = MAX(m_length, nameTextLength);
+        end.y = -begin.y;
+        begin.y = MAX( minsizeV, nameTextHeight );
+    }
 
     // Now, calculate boundary box corners position for the actual pin orientation
-    switch( m_orientation )
+    int orient = ReturnPinDrawOrient( DefaultTransform );
+
+    /* Calculate the pin position */
+    switch( orient )
     {
     case PIN_UP:
-
         // Pin is rotated and texts positions are mirrored
         RotatePoint( &begin, wxPoint( 0, 0 ), -900 );
         RotatePoint( &end, wxPoint( 0, 0 ), -900 );
@@ -1883,8 +1897,6 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
         break;
 
     case PIN_LEFT:
-
-        // Pin is mirrored, not rotated by 180.0 degrees
         NEGATE( begin.x );
         NEGATE( end.x );
         break;
@@ -1893,8 +1905,13 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
         break;
     }
 
-    begin = DefaultTransform.TransformCoordinate( begin + m_position);
-    end = DefaultTransform.TransformCoordinate( end + m_position);
+    // Draw Y axis is reversed in schematic:
+    NEGATE( begin.y );
+    NEGATE( end.y );
+
+    wxPoint pos1 = DefaultTransform.TransformCoordinate( m_position );
+    begin += pos1;
+    end += pos1;
 
     bbox.SetOrigin( begin );
     bbox.SetEnd( end );

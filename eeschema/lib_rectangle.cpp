@@ -262,6 +262,9 @@ bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition )
 
 bool LIB_RECTANGLE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
+    if( aThreshold < 0 )
+        aThreshold = GetPenSize() / 2;
+
     wxPoint actualStart = aTransform.TransformCoordinate( m_Pos );
     wxPoint actualEnd   = aTransform.TransformCoordinate( m_End );
 

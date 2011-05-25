@@ -349,6 +349,9 @@ bool LIB_FIELD::HitTest( const wxPoint& aPosition )
 
 bool LIB_FIELD::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTransform )
 {
+    if( aThreshold < 0 )
+        aThreshold = 0;
+
     int extraCharCount = 0;
 
     // Reference designator text has one or 2 additional character (displays

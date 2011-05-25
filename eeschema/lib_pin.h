@@ -12,7 +12,7 @@
 class SCH_COMPONENT;
 
 
-#define TARGET_PIN_DIAM     12  /* Circle diameter drawn at the active end of pins */
+#define TARGET_PIN_RADIUS     12  /* Circle diameter drawn at the active end of pins */
 
 #define DEFAULT_TEXT_SIZE   50  /* Default size for field texts */
 #define PART_NAME_LEN       15  /* Maximum length of part name. */
@@ -169,7 +169,7 @@ public:
      * according to its orientation and the matrix transform (rot, mirror) \a aTransform
      * @param aTransform = transform matrix
      */
-    int ReturnPinDrawOrient( const TRANSFORM& aTransform );
+    int ReturnPinDrawOrient( const TRANSFORM& aTransform ) const;
 
     /**
      * Fill a string buffer with pin number.

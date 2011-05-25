@@ -502,14 +502,16 @@ wxPoint SCH_SHEET::GetSheetNamePosition()
 wxPoint SCH_SHEET::GetFileNamePosition()
 {
     wxPoint  pos = m_Pos;
+    int      margin = GetPenSize() + 4;
+
     if( IsVerticalOrientation() )
     {
-        pos.x += m_Size.x+4;
+        pos.x += m_Size.x + margin;
         pos.y += m_Size.y;
     }
     else
     {
-        pos.y += m_Size.y + 4;
+        pos.y += m_Size.y + margin;
     }
 
     return pos;
