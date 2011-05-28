@@ -92,6 +92,11 @@ bool LIB_ALIAS::IsRoot() const
     return name.CmpNoCase( root->GetName() ) == 0;
 }
 
+CMP_LIBRARY* LIB_ALIAS::GetLibrary()
+{
+    return root->GetLibrary();
+}
+
 
 /**
  * Function SaveDoc

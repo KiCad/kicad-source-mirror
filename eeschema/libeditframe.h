@@ -222,8 +222,24 @@ private:
 
     // General:
     void           SaveOnePartInMemory();
-    void           SelectActiveLibrary();
+
+    /**
+     * function SelectActiveLibrary
+     * Select the current active library.
+     * @param aLibrary = the CMP_LIBRARY aLibrary to select, or NULL
+     * to select from a list
+     */
+    void           SelectActiveLibrary( CMP_LIBRARY* aLibrary = NULL);
+
     void           SaveActiveLibrary( wxCommandEvent& event );
+
+    /**
+     * function LoadComponentFromCurrentLib
+     * load a lib component from the current active library.
+     * @param aLibEntry = the lib component to load from aLibrary (can be an alias
+     * @return true if OK.
+     */
+    bool           LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry );
 
     bool           LoadOneLibraryPartAux( LIB_ALIAS* LibEntry, CMP_LIBRARY* Library );
 
@@ -272,6 +288,15 @@ private:
     void           EditField( wxDC* DC, LIB_FIELD* Field );
 
 public:
+    /**
+     * function LoadComponentAndSelectLib
+     * Select the current active library.
+     * @param aLibrary = the CMP_LIBRARY aLibrary to select
+     * @param aLibEntry = the lib component to load from aLibrary (can be an alias
+     * @return true if OK.
+     */
+    bool           LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, CMP_LIBRARY* aLibrary );
+
     /* Block commands: */
     virtual int    ReturnBlockCommand( int aKey );
     virtual void   HandleBlockPlace( wxDC* DC );

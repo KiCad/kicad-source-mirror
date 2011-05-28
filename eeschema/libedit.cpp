@@ -39,18 +39,57 @@ void LIB_EDIT_FRAME::DisplayLibInfos()
 
 
 /* Function to select the current library (working library) */
-void LIB_EDIT_FRAME::SelectActiveLibrary()
+void LIB_EDIT_FRAME::SelectActiveLibrary( CMP_LIBRARY* aLibrary )
 {
-    CMP_LIBRARY* Lib;
-
-    Lib = SelectLibraryFromList( this );
-    if( Lib )
+    if( aLibrary == NULL )
+        aLibrary = SelectLibraryFromList( this );
+    if( aLibrary )
     {
-        m_library = Lib;
+        m_library = aLibrary;
     }
     DisplayLibInfos();
 }
 
+/*
+ * function LoadComponentAndSelectLib
+ * Select the current active library.
+ * aLibrary = the CMP_LIBRARY aLibrary to select
+ * aLibEntry = the lib component to load from aLibrary (can be an alias
+ * return true if OK.
+ */
+bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, CMP_LIBRARY* aLibrary )
+{
+    if( GetScreen()->IsModify()
+        && !IsOK( this, _( "Current part not saved.\n\nDiscard current changes?" ) ) )
+        return false;
+
+    SelectActiveLibrary( aLibrary );
+    return LoadComponentFromCurrentLib( aLibEntry );
+}
+
+
+/**
+ * function LoadComponentFromCurrentLib
+ * load a lib component from the current active library.
+ * @param aLibEntry = the lib component to load from aLibrary (can be an alias
+ * @return true if OK.
+ */
+bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry )
+{
+    if( !LoadOneLibraryPartAux( aLibEntry, m_library ) )
+        return false;
+
+    g_EditPinByPinIsOn = m_component->UnitsLocked() ? true : false;
+    m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
+
+    GetScreen()->ClearUndoRedoList();
+    Zoom_Automatique( false );
+    DrawPanel->Refresh();
+    SetShowDeMorgan( m_component->HasConversion() );
+    m_HToolBar->Refresh();
+
+    return true;
+}
 
 /**
  * Function LoadOneLibraryPart
@@ -106,17 +145,8 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
         return;
     }
 
-    if( !LoadOneLibraryPartAux( LibEntry, m_library ) )
+    if( ! LoadComponentFromCurrentLib( LibEntry ) )
         return;
-
-    g_EditPinByPinIsOn = m_component->UnitsLocked() ? true : false;
-    m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
-
-    GetScreen()->ClearUndoRedoList();
-    Zoom_Automatique( false );
-    DrawPanel->Refresh();
-    SetShowDeMorgan( m_component->HasConversion() );
-    m_HToolBar->Refresh();
 }
 
 

@@ -299,6 +299,12 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
                                    _( "Unit" ), component_select_unit_xpm );
     }
 
+    if( !Component->GetFlags() )
+    {
+        ADD_MENUITEM( editmenu, ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP, _( "Edit with Libedit" ),
+                      library_xpm );
+    }
+
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, editmenu, ID_POPUP_SCH_GENERIC_EDIT_CMP,
                                _( "Edit Component" ), edit_component_xpm );
 

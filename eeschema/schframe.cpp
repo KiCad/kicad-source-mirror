@@ -22,6 +22,7 @@
 #include "class_library.h"
 #include "wxEeschemaStruct.h"
 #include "class_sch_screen.h"
+#include "sch_component.h"
 
 #include "dialog_helpers.h"
 #include "netlist_control.h"
@@ -79,6 +80,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_LANGUAGE_CHOICE, ID_LANGUAGE_CHOICE_END, SCH_EDIT_FRAME::SetLanguage )
 
     EVT_TOOL( ID_TO_LIBRARY, SCH_EDIT_FRAME::OnOpenLibraryEditor )
+    EVT_TOOL( ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP, SCH_EDIT_FRAME::OnOpenLibraryEditor )
     EVT_TOOL( ID_TO_LIBVIEW, SCH_EDIT_FRAME::OnOpenLibraryViewer )
 
     EVT_TOOL( ID_TO_PCB, SCH_EDIT_FRAME::OnOpenPcbnew )
@@ -707,13 +709,39 @@ void SCH_EDIT_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 {
+    SCH_COMPONENT* component = NULL;
+    if( event.GetId() == ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP )
+    {
+        SCH_ITEM* item = GetScreen()->GetCurItem();
+        if( (item == NULL) || (item->GetFlags() != 0) ||
+            ( item->Type() != SCH_COMPONENT_T ) )
+        {
+            wxMessageBox( _("Error: not a component or no component" ) );
+            return;
+        }
+
+        component = (SCH_COMPONENT*) item;
+    }
+
     if( m_LibeditFrame )
-        m_LibeditFrame->Show( true );
+    {
+        if( m_LibeditFrame->IsIconized() )
+             m_LibeditFrame->Iconize( false );
+        m_LibeditFrame->Raise();
+    }
     else
         m_LibeditFrame = new LIB_EDIT_FRAME( this,
                                              wxT( "Library Editor" ),
                                              wxPoint( -1, -1 ),
                                              wxSize( 600, 400 ) );
+    if( component )
+    {
+        LIB_ALIAS* entry = CMP_LIBRARY::FindLibraryEntry( component->GetLibName() );
+        if( entry == NULL )     // Should not occur
+            return;
+        CMP_LIBRARY* library = entry->GetLibrary();
+        m_LibeditFrame->LoadComponentAndSelectLib( entry, library );
+    }
 }
 
 

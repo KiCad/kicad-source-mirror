@@ -13,8 +13,6 @@
 #include "wxEeschemaStruct.h"
 
 #include "general.h"
-#include "macros.h"
-#include "protos.h"
 #include "class_library.h"
 #include "lib_rectangle.h"
 #include "lib_pin.h"

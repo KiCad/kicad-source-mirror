@@ -102,6 +102,8 @@ enum id_eeschema_frm
     ID_POPUP_SCH_GETINFO_MARKER,
     ID_POPUP_END_RANGE,
 
+    ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP,
+
     // Unit select context menus command IDs.
     ID_POPUP_SCH_SELECT_UNIT_CMP,
     ID_POPUP_SCH_SELECT_UNIT1,
