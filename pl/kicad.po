@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-23 18:18+0100\n"
-"PO-Revision-Date: 2011-05-23 18:21+0100\n"
+"POT-Creation-Date: 2011-05-29 08:05+0100\n"
+"PO-Revision-Date: 2011-05-29 08:06+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team\n"
 "MIME-Version: 1.0\n"
@@ -531,7 +531,8 @@ msgstr "Edytor bibliotek:"
 msgid "no library selected"
 msgstr "Nie wybrano biblioteki"
 
-#: eeschema/libedit.cpp:72
+#: eeschema/libedit.cpp:63
+#: eeschema/libedit.cpp:111
 msgid ""
 "Current part not saved.\n"
 "\n"
@@ -541,119 +542,119 @@ msgstr ""
 "\n"
 "Porzucić zmiany?"
 
-#: eeschema/libedit.cpp:102
+#: eeschema/libedit.cpp:141
 #, c-format
 msgid "Component name \"%s\" not found in library \"%s\"."
 msgstr "Nazwa elementu \"%s\" nie została znaleziona w \"%s\"."
 
-#: eeschema/libedit.cpp:166
+#: eeschema/libedit.cpp:196
 #, c-format
 msgid "Could not create copy of part <%s> in library <%s>."
 msgstr "Nie można stworzyć kopii części <%s> w bibliotece <%s>"
 
-#: eeschema/libedit.cpp:240
+#: eeschema/libedit.cpp:270
 msgid "Include last component changes?"
 msgstr "Dołączyć ostatnie zmiany elementu?"
 
-#: eeschema/libedit.cpp:253
+#: eeschema/libedit.cpp:283
 msgid "Component Library Name:"
 msgstr "Nazwa pliku biblioteki elementów:"
 
-#: eeschema/libedit.cpp:273
+#: eeschema/libedit.cpp:303
 msgid "Modify library file \""
 msgstr "Czy zmodyfikować plik biblioteki \""
 
-#: eeschema/libedit.cpp:273
+#: eeschema/libedit.cpp:303
 msgid "\"?"
 msgstr "\"?"
 
-#: eeschema/libedit.cpp:285
+#: eeschema/libedit.cpp:315
 msgid "Error while saving library file \""
 msgstr "Błąd przy zapisie pliku biblioteki \""
 
-#: eeschema/libedit.cpp:285
+#: eeschema/libedit.cpp:315
 msgid "\"."
 msgstr "\"."
 
-#: eeschema/libedit.cpp:286
+#: eeschema/libedit.cpp:316
 msgid "*** ERROR: ***"
 msgstr "*** BŁĄD: ***"
 
-#: eeschema/libedit.cpp:291
+#: eeschema/libedit.cpp:321
 msgid "Library file \""
 msgstr "Plik biblioteki \""
 
-#: eeschema/libedit.cpp:293
+#: eeschema/libedit.cpp:323
 msgid "Document file \""
 msgstr "Plik dokumentacji \""
 
-#: eeschema/libedit.cpp:316
+#: eeschema/libedit.cpp:346
 msgid "Part"
 msgstr "Element "
 
-#: eeschema/libedit.cpp:319
+#: eeschema/libedit.cpp:349
 msgid "None"
 msgstr "Brak"
 
-#: eeschema/libedit.cpp:327
+#: eeschema/libedit.cpp:357
 msgid "Alias"
 msgstr "Alias"
 
-#: eeschema/libedit.cpp:332
+#: eeschema/libedit.cpp:362
 msgid "Unit"
 msgstr "Część"
 
-#: eeschema/libedit.cpp:335
+#: eeschema/libedit.cpp:365
 msgid "Convert"
 msgstr "Skonwertowany"
 
-#: eeschema/libedit.cpp:337
+#: eeschema/libedit.cpp:367
 msgid "Normal"
 msgstr "Normalny"
 
-#: eeschema/libedit.cpp:339
+#: eeschema/libedit.cpp:369
 msgid "Body"
 msgstr "Obrys"
 
-#: eeschema/libedit.cpp:342
+#: eeschema/libedit.cpp:372
 msgid "Power Symbol"
 msgstr "Symbol zasilania"
 
-#: eeschema/libedit.cpp:344
+#: eeschema/libedit.cpp:374
 msgid "Component"
 msgstr "Element"
 
-#: eeschema/libedit.cpp:346
-#: eeschema/lib_pin.cpp:1785
+#: eeschema/libedit.cpp:376
+#: eeschema/lib_pin.cpp:1788
 msgid "Type"
 msgstr "Typ"
 
-#: eeschema/libedit.cpp:347
+#: eeschema/libedit.cpp:377
 msgid "Description"
 msgstr "Opis"
 
-#: eeschema/libedit.cpp:348
+#: eeschema/libedit.cpp:378
 msgid "Key words"
 msgstr "Słowa kluczowe"
 
-#: eeschema/libedit.cpp:349
+#: eeschema/libedit.cpp:379
 msgid "Datasheet"
 msgstr "Dokumentacja"
 
-#: eeschema/libedit.cpp:385
+#: eeschema/libedit.cpp:415
 msgid "Please select a component library."
 msgstr "Proszę wybrać bibliotekę elementów."
 
-#: eeschema/libedit.cpp:394
+#: eeschema/libedit.cpp:424
 #, c-format
 msgid "Component library <%s> is empty."
 msgstr "Biblioteka elementów <%s> jest pusta."
 
-#: eeschema/libedit.cpp:395
+#: eeschema/libedit.cpp:425
 msgid "Delete Entry Error"
 msgstr "Błąd przy usuwaniu wpisu"
 
-#: eeschema/libedit.cpp:399
+#: eeschema/libedit.cpp:429
 #, c-format
 msgid ""
 "Select 1 of %d components to delete\n"
@@ -662,25 +663,25 @@ msgstr ""
 "Wybierz jeden z %d elementów do usunięcia\n"
 "z biblioteki o nazwie <%s>."
 
-#: eeschema/libedit.cpp:403
+#: eeschema/libedit.cpp:433
 msgid "Delete Component"
 msgstr "Usuń element"
 
-#: eeschema/libedit.cpp:412
+#: eeschema/libedit.cpp:442
 #, c-format
 msgid "Entry <%s> not found in library <%s>."
 msgstr "Wpisz <%s> nie został znaleziony w <%s>."
 
-#: eeschema/libedit.cpp:419
+#: eeschema/libedit.cpp:449
 #, c-format
 msgid "Delete component \"%s\" from library \"%s\"?"
 msgstr "Usunąć element \"%s\" z biblioteki \"%s\"?"
 
-#: eeschema/libedit.cpp:437
+#: eeschema/libedit.cpp:467
 msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
 msgstr "Element który został skasowany został zmodyfikowany. Wszystkie zmiany zostaną utracone. Porzucić zmiany?"
 
-#: eeschema/libedit.cpp:469
+#: eeschema/libedit.cpp:499
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -690,29 +691,29 @@ msgstr ""
 "\n"
 "Usunąć element z ekranu?"
 
-#: eeschema/libedit.cpp:485
+#: eeschema/libedit.cpp:515
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Ten nowy element nie ma nazwy i nie może zostać utworzony. Przerwano"
 
-#: eeschema/libedit.cpp:500
+#: eeschema/libedit.cpp:530
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
 msgstr "Element \"%s\" istnieje już w bibliotece \"%s\"."
 
-#: eeschema/libedit.cpp:574
+#: eeschema/libedit.cpp:604
 msgid "No component to save."
 msgstr "Brak elementu do zapisania."
 
-#: eeschema/libedit.cpp:583
+#: eeschema/libedit.cpp:613
 msgid "No library specified."
 msgstr "Nie wybrano żadnej biblioteki."
 
-#: eeschema/libedit.cpp:593
+#: eeschema/libedit.cpp:623
 #, c-format
 msgid "Component \"%s\" already exists. Change it?"
 msgstr "Element \"%s\" istnieje, zamienić go?"
 
-#: eeschema/libedit.cpp:610
+#: eeschema/libedit.cpp:640
 #, c-format
 msgid "Component %s saved in library %s"
 msgstr "Element %s zaspisany w bibliotece %s"
@@ -722,11 +723,11 @@ msgid "Eeschema is already running, Continue?"
 msgstr "EEschema jest już uruchomiony. Kontynuować?"
 
 #: eeschema/class_libentry.cpp:86
-#: eeschema/class_libentry.cpp:251
+#: eeschema/class_libentry.cpp:256
 msgid "none"
 msgstr "bez_nazwy"
 
-#: eeschema/class_libentry.cpp:419
+#: eeschema/class_libentry.cpp:424
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
 msgstr "Podjęto próbę usunięcia pola %s z elementu %s w bibliotece %s."
@@ -922,15 +923,15 @@ msgstr "Łuk"
 msgid "arc only had %d parameters of the required 8"
 msgstr "łuk posiada tylko %d parametrów z wymaganych 8"
 
-#: eeschema/lib_arc.cpp:495
+#: eeschema/lib_arc.cpp:498
 msgid "Line width"
 msgstr "Szerokość linii"
 
-#: eeschema/lib_arc.cpp:500
+#: eeschema/lib_arc.cpp:503
 msgid "Bounding box"
 msgstr "Bryła brzegowa"
 
-#: eeschema/lib_arc.cpp:506
+#: eeschema/lib_arc.cpp:509
 #, c-format
 msgid "Arc center (%s, %s), radius %s"
 msgstr "Łuk o centrum w (%s, %s), promień %s"
@@ -1035,39 +1036,39 @@ msgstr "Nie podłączony"
 msgid "Pin"
 msgstr "Pin"
 
-#: eeschema/lib_pin.cpp:1776
+#: eeschema/lib_pin.cpp:1779
 msgid "Name"
 msgstr "Nazwa"
 
-#: eeschema/lib_pin.cpp:1783
+#: eeschema/lib_pin.cpp:1786
 msgid "Number"
 msgstr "Numer"
 
-#: eeschema/lib_pin.cpp:1789
+#: eeschema/lib_pin.cpp:1792
 msgid "Style"
 msgstr "Styl"
 
-#: eeschema/lib_pin.cpp:1791
+#: eeschema/lib_pin.cpp:1794
 msgid "Yes"
 msgstr "Tak"
 
-#: eeschema/lib_pin.cpp:1793
+#: eeschema/lib_pin.cpp:1796
 msgid "No"
 msgstr "Nie"
 
-#: eeschema/lib_pin.cpp:1794
+#: eeschema/lib_pin.cpp:1797
 msgid "Visible"
 msgstr "Widoczny"
 
-#: eeschema/lib_pin.cpp:1798
+#: eeschema/lib_pin.cpp:1801
 msgid "Length"
 msgstr "Długość"
 
-#: eeschema/lib_pin.cpp:1801
+#: eeschema/lib_pin.cpp:1804
 msgid "Orientation"
 msgstr "Orientacja"
 
-#: eeschema/lib_pin.cpp:2043
+#: eeschema/lib_pin.cpp:2060
 #, c-format
 msgid "Pin %s, %s, %s"
 msgstr "Pin %s, %s, %s"
@@ -1368,11 +1369,11 @@ msgstr "Okrąg"
 msgid "circle only had %d parameters of the required 6"
 msgstr "okrąg posiada tylko %d parematrów z wymaganych 6"
 
-#: eeschema/lib_circle.cpp:272
+#: eeschema/lib_circle.cpp:275
 msgid "Radius"
 msgstr "Promień"
 
-#: eeschema/lib_circle.cpp:283
+#: eeschema/lib_circle.cpp:286
 #, c-format
 msgid "Circle center (%s, %s), radius %s"
 msgstr "Okrąg o centrum w (%s, %s), promień %s"
@@ -1386,7 +1387,7 @@ msgstr "Tekst"
 msgid "text only had %d parameters of the required 8"
 msgstr "tekst posiada tylko %d parameterów z wymaganych 8"
 
-#: eeschema/lib_text.cpp:467
+#: eeschema/lib_text.cpp:470
 #, c-format
 msgid "Graphic Text %s"
 msgstr "Tekst (grafika) %s"
@@ -1532,12 +1533,41 @@ msgid "Change cursor shape"
 msgstr "Zmień kształt kursora"
 
 #: eeschema/tool_sch.cpp:226
+#: eeschema/schframe.cpp:541
 msgid "Show hidden pins"
 msgstr "Pokaż ukryte piny"
 
 #: eeschema/tool_sch.cpp:231
 msgid "HV orientation for wires and bus"
 msgstr "Orientacja dla połączeń i magistral"
+
+#: eeschema/schframe.cpp:392
+msgid "Schematic modified, Save before exit?"
+msgstr "Schemat został zmieniony. Zapisać przed zakończeniem?"
+
+#: eeschema/schframe.cpp:393
+msgid "Confirmation"
+msgstr "Potwierdzenie"
+
+#: eeschema/schframe.cpp:530
+msgid "Draw wires and buses in any direction"
+msgstr "Rysowanie połączeń i magistral w dowolnym kierunku"
+
+#: eeschema/schframe.cpp:531
+msgid "Draw horizontal and vertical wires and buses only"
+msgstr "Rysowanie połączeń i magistral tylko w pionie i poziomie"
+
+#: eeschema/schframe.cpp:540
+msgid "Do not show hidden pins"
+msgstr "Nie pokazuj ukrytych pinów"
+
+#: eeschema/schframe.cpp:639
+msgid "Schematic"
+msgstr "Schemat"
+
+#: eeschema/schframe.cpp:719
+msgid "Error: not a component or no component"
+msgstr "Błąd: To nie jest element lub jego brak"
 
 #: eeschema/find.cpp:76
 #, c-format
@@ -1763,42 +1793,42 @@ msgstr ""
 "Czy chcesz usunąć wszystkie niepasujące aliasy z tego elementu?"
 
 #: eeschema/lib_field.cpp:82
-#: eeschema/lib_field.cpp:762
+#: eeschema/lib_field.cpp:765
 #: eeschema/template_fieldnames.cpp:25
 msgid "Field"
 msgstr "Pole"
 
-#: eeschema/lib_field.cpp:584
+#: eeschema/lib_field.cpp:587
 #: eeschema/template_fieldnames.cpp:14
 msgid "Reference"
 msgstr "Oznaczenie"
 
-#: eeschema/lib_field.cpp:591
-#: eeschema/lib_field.cpp:765
+#: eeschema/lib_field.cpp:594
+#: eeschema/lib_field.cpp:768
 #: eeschema/template_fieldnames.cpp:15
 msgid "Value"
 msgstr "Wartość"
 
-#: eeschema/lib_field.cpp:598
+#: eeschema/lib_field.cpp:601
 #: eeschema/template_fieldnames.cpp:16
 msgid "Footprint"
 msgstr "Obudowa"
 
-#: eeschema/lib_field.cpp:614
+#: eeschema/lib_field.cpp:617
 #, c-format
 msgid "Field%d"
 msgstr "Pole%d"
 
-#: eeschema/lib_field.cpp:673
+#: eeschema/lib_field.cpp:676
 #, c-format
 msgid "Field %s %s"
 msgstr "Pole %s %s"
 
-#: eeschema/lib_field.cpp:755
+#: eeschema/lib_field.cpp:758
 msgid "Size X"
 msgstr "Rozmiar X"
 
-#: eeschema/lib_field.cpp:758
+#: eeschema/lib_field.cpp:761
 msgid "Size Y"
 msgstr "Rozmiar Y"
 
@@ -1909,7 +1939,7 @@ msgstr "pozycja punktu X lini łamanej %d nie jest ustalona"
 msgid "polyline point %d Y position not defined"
 msgstr "pozycja punktu Y lini łamanej %d nie jest ustalona"
 
-#: eeschema/lib_polyline.cpp:414
+#: eeschema/lib_polyline.cpp:417
 #, c-format
 msgid "Polyline at (%s, %s) with %u points"
 msgstr "Linia łamana na poz. (%s, %s) złożona z %u węzłów"
@@ -1923,7 +1953,7 @@ msgstr "Prostokąt"
 msgid "rectangle only had %d parameters of the required 7"
 msgstr "prostokąt posiada tylko %d z wymaganych 7"
 
-#: eeschema/lib_rectangle.cpp:302
+#: eeschema/lib_rectangle.cpp:305
 #, c-format
 msgid "Rectangle from (%s, %s) to (%s, %s)"
 msgstr "Prostokąt od (%s, %s) do (%s, %s)"
@@ -2011,30 +2041,6 @@ msgstr "Dodaj port zasilania"
 #: eeschema/schedit.cpp:614
 msgid "Delete item"
 msgstr "Usuń element"
-
-#: eeschema/schframe.cpp:390
-msgid "Schematic modified, Save before exit?"
-msgstr "Schemat został zmieniony. Zapisać przed zakończeniem?"
-
-#: eeschema/schframe.cpp:391
-msgid "Confirmation"
-msgstr "Potwierdzenie"
-
-#: eeschema/schframe.cpp:528
-msgid "Draw wires and buses in any direction"
-msgstr "Rysowanie połączeń i magistral w dowolnym kierunku"
-
-#: eeschema/schframe.cpp:529
-msgid "Draw horizontal and vertical wires and buses only"
-msgstr "Rysowanie połączeń i magistral tylko w pionie i poziomie"
-
-#: eeschema/schframe.cpp:538
-msgid "Do not show hidden pins"
-msgstr "Nie pokazuj ukrytych pinów"
-
-#: eeschema/schframe.cpp:637
-msgid "Schematic"
-msgstr "Schemat"
 
 #: eeschema/sch_field.cpp:445
 #, c-format
@@ -2320,13 +2326,10 @@ msgid "%s Line on Unkown Layer from (%s,%s) to (%s,%s)"
 msgstr "Linia %s na nieznaej warstwie z (%s,%s) do (%s,%s)"
 
 #: eeschema/libedit_onrightclick.cpp:50
-#: eeschema/onrightclick.cpp:83
-#: eeschema/onrightclick.cpp:95
 msgid "Cancel"
 msgstr "Anuluj"
 
 #: eeschema/libedit_onrightclick.cpp:67
-#: eeschema/onrightclick.cpp:87
 msgid "End Tool"
 msgstr "Wyłącz narzędzie"
 
@@ -2379,22 +2382,18 @@ msgid "Delete Rectangle"
 msgstr "Usuń prostokąt "
 
 #: eeschema/libedit_onrightclick.cpp:159
-#: eeschema/onrightclick.cpp:435
 msgid "Move Text"
 msgstr "Przesuń tekst "
 
 #: eeschema/libedit_onrightclick.cpp:164
-#: eeschema/onrightclick.cpp:445
 msgid "Edit Text"
 msgstr "Edytuj tekst"
 
 #: eeschema/libedit_onrightclick.cpp:167
-#: eeschema/onrightclick.cpp:443
 msgid "Rotate Text"
 msgstr "Obróć tekst"
 
 #: eeschema/libedit_onrightclick.cpp:172
-#: eeschema/onrightclick.cpp:447
 msgid "Delete Text"
 msgstr "Usuń tekst"
 
@@ -2423,7 +2422,6 @@ msgid "Delete Segment"
 msgstr "Usuń segment"
 
 #: eeschema/libedit_onrightclick.cpp:215
-#: eeschema/onrightclick.cpp:210
 msgid "Move Field"
 msgstr "Przesuń pole"
 
@@ -2480,7 +2478,6 @@ msgid "Pin Num Size to Others"
 msgstr "Rozmiar numeru pinu dla innych"
 
 #: eeschema/libedit_onrightclick.cpp:286
-#: eeschema/onrightclick.cpp:625
 msgid "Cancel Block"
 msgstr "Anuluj blok"
 
@@ -2489,7 +2486,6 @@ msgid "Zoom Block (drag middle mouse)"
 msgstr "Powiększ blok (shift + przeciąganie myszką)"
 
 #: eeschema/libedit_onrightclick.cpp:295
-#: eeschema/onrightclick.cpp:633
 msgid "Place Block"
 msgstr "Dodaj blok"
 
@@ -2498,27 +2494,22 @@ msgid "Select Items"
 msgstr "Wybierz elementy"
 
 #: eeschema/libedit_onrightclick.cpp:300
-#: eeschema/onrightclick.cpp:640
 msgid "Copy Block"
 msgstr "Kopiuj blok"
 
 #: eeschema/libedit_onrightclick.cpp:301
-#: eeschema/onrightclick.cpp:645
 msgid "Mirror Block ||"
 msgstr "Odbij blok ||"
 
 #: eeschema/libedit_onrightclick.cpp:302
-#: eeschema/onrightclick.cpp:646
 msgid "Mirror Block --"
 msgstr "Odbij blok --"
 
 #: eeschema/libedit_onrightclick.cpp:303
-#: eeschema/onrightclick.cpp:647
 msgid "Rotate Block ccw"
 msgstr "Obróć blok (w lewo)"
 
 #: eeschema/libedit_onrightclick.cpp:304
-#: eeschema/onrightclick.cpp:644
 msgid "Delete Block"
 msgstr "Usuń blok"
 
@@ -2596,321 +2587,6 @@ msgstr "Importuj"
 #: eeschema/libeditframe.cpp:1055
 msgid "Export"
 msgstr "Eksportuj"
-
-#: eeschema/onrightclick.cpp:103
-msgid "Leave Sheet"
-msgstr "Opuść arkusz"
-
-#: eeschema/onrightclick.cpp:116
-msgid "Delete No Connect"
-msgstr "Usuń \"Nie Połączone\""
-
-#: eeschema/onrightclick.cpp:126
-msgid "Move Bus Entry"
-msgstr "Przesuń wejście magistrali"
-
-#: eeschema/onrightclick.cpp:132
-msgid "Set Bus Entry /"
-msgstr "Ustaw wejście magistrali /"
-
-#: eeschema/onrightclick.cpp:134
-msgid "Set Bus Entry \\"
-msgstr "Ustaw wejście magistrali \\"
-
-#: eeschema/onrightclick.cpp:135
-msgid "Delete Bus Entry"
-msgstr "Usuń wejście magistrali"
-
-#: eeschema/onrightclick.cpp:179
-msgid "End Drawing"
-msgstr "Zakończ rysunek"
-
-#: eeschema/onrightclick.cpp:180
-msgid "Delete Drawing"
-msgstr "Usuń rysunek"
-
-#: eeschema/onrightclick.cpp:215
-msgid "Rotate Field"
-msgstr "Obróć pole"
-
-#: eeschema/onrightclick.cpp:241
-msgid "Move Component"
-msgstr "Przesuń element"
-
-#: eeschema/onrightclick.cpp:245
-msgid "Drag Component"
-msgstr "Przeciągnij element"
-
-#: eeschema/onrightclick.cpp:250
-msgid "Rotate +"
-msgstr "Obróć +"
-
-#: eeschema/onrightclick.cpp:252
-msgid "Rotate -"
-msgstr "Obróć -"
-
-#: eeschema/onrightclick.cpp:253
-msgid "Mirror --"
-msgstr "Odbij poziomo --"
-
-#: eeschema/onrightclick.cpp:255
-msgid "Mirror ||"
-msgstr "Odbij pionowo ||"
-
-#: eeschema/onrightclick.cpp:260
-msgid "Orient Component"
-msgstr "Zorientuj element"
-
-#: eeschema/onrightclick.cpp:263
-msgid "Edit"
-msgstr "Edytuj"
-
-#: eeschema/onrightclick.cpp:273
-msgid "Footprint "
-msgstr "Obudowa "
-
-#: eeschema/onrightclick.cpp:289
-#, c-format
-msgid "Unit %d %c"
-msgstr "Część %d %c"
-
-#: eeschema/onrightclick.cpp:303
-msgid "Edit Component"
-msgstr "Edytuj element"
-
-#: eeschema/onrightclick.cpp:307
-msgid "Copy Component"
-msgstr "Kopiuj element"
-
-#: eeschema/onrightclick.cpp:315
-msgid "Doc"
-msgstr "Dokument"
-
-#: eeschema/onrightclick.cpp:326
-msgid "Move Global Label"
-msgstr "Przesuń etykietę globalną"
-
-#: eeschema/onrightclick.cpp:329
-msgid "Drag Global Label"
-msgstr "Przeciągnij etykietę globalną"
-
-#: eeschema/onrightclick.cpp:332
-msgid "Copy Global Label"
-msgstr "Kopiuj etykietę globalną"
-
-#: eeschema/onrightclick.cpp:337
-msgid "Rotate Global Label"
-msgstr "Obróć etykietę globalną"
-
-#: eeschema/onrightclick.cpp:339
-msgid "Edit Global Label"
-msgstr "Edytuj etykietę globalną"
-
-#: eeschema/onrightclick.cpp:341
-msgid "Delete Global Label"
-msgstr "Usuń etykietę globalną"
-
-#: eeschema/onrightclick.cpp:346
-#: eeschema/onrightclick.cpp:418
-#: eeschema/onrightclick.cpp:458
-msgid "Change to Hierarchical Label"
-msgstr "Zmień na etykietę hierarchiczną"
-
-#: eeschema/onrightclick.cpp:348
-#: eeschema/onrightclick.cpp:382
-#: eeschema/onrightclick.cpp:456
-msgid "Change to Label"
-msgstr "Zmień na etykietę"
-
-#: eeschema/onrightclick.cpp:350
-#: eeschema/onrightclick.cpp:384
-#: eeschema/onrightclick.cpp:420
-msgid "Change to Text"
-msgstr "Zmień na tekst"
-
-#: eeschema/onrightclick.cpp:352
-#: eeschema/onrightclick.cpp:388
-#: eeschema/onrightclick.cpp:424
-#: eeschema/onrightclick.cpp:462
-msgid "Change Type"
-msgstr "Zmień typ"
-
-#: eeschema/onrightclick.cpp:363
-msgid "Move Hierarchical Label"
-msgstr "Przesuń etykietę hierarchiczną"
-
-#: eeschema/onrightclick.cpp:366
-msgid "Drag Hierarchical Label"
-msgstr "Przeciągnij etykietę hierarchiczną"
-
-#: eeschema/onrightclick.cpp:369
-msgid "Copy Hierarchical Label"
-msgstr "Kopiuj etykietę hierarchiczną"
-
-#: eeschema/onrightclick.cpp:373
-msgid "Rotate Hierarchical Label"
-msgstr "Obróć etykietę hierarchiczną"
-
-#: eeschema/onrightclick.cpp:375
-msgid "Edit Hierarchical Label"
-msgstr "Edytuj etykietę hierarchiczną"
-
-#: eeschema/onrightclick.cpp:377
-msgid "Delete Hierarchical Label"
-msgstr "Usuń etykietę hierarchiczną"
-
-#: eeschema/onrightclick.cpp:386
-#: eeschema/onrightclick.cpp:422
-#: eeschema/onrightclick.cpp:460
-msgid "Change to Global Label"
-msgstr "Zmień na etykietę globalną"
-
-#: eeschema/onrightclick.cpp:399
-msgid "Move Label"
-msgstr "Przesuń etykietę"
-
-#: eeschema/onrightclick.cpp:402
-msgid "Drag Label"
-msgstr "Przeciągnij etykietę"
-
-#: eeschema/onrightclick.cpp:405
-msgid "Copy Label"
-msgstr "Kopiuj etykietę"
-
-#: eeschema/onrightclick.cpp:409
-msgid "Rotate Label"
-msgstr "Obróć etykietę"
-
-#: eeschema/onrightclick.cpp:411
-msgid "Edit Label"
-msgstr "Edytuj etykietę"
-
-#: eeschema/onrightclick.cpp:413
-msgid "Delete Label"
-msgstr "Usuń etykietę"
-
-#: eeschema/onrightclick.cpp:438
-msgid "Copy Text"
-msgstr "Kopiuj tekst"
-
-#: eeschema/onrightclick.cpp:472
-msgid "Delete Junction"
-msgstr "Usuń węzeł"
-
-#: eeschema/onrightclick.cpp:478
-msgid "Drag Junction"
-msgstr "Przeciągnij Węzeł"
-
-#: eeschema/onrightclick.cpp:481
-#: eeschema/onrightclick.cpp:518
-msgid "Break Wire"
-msgstr "Przerwij połączenie"
-
-#: eeschema/onrightclick.cpp:486
-#: eeschema/onrightclick.cpp:511
-msgid "Delete Node"
-msgstr "Usuń węzeł"
-
-#: eeschema/onrightclick.cpp:487
-#: eeschema/onrightclick.cpp:512
-msgid "Delete Connection"
-msgstr "Usuń połączenie"
-
-#: eeschema/onrightclick.cpp:502
-msgid "Wire End"
-msgstr "Zakończ połączenie"
-
-#: eeschema/onrightclick.cpp:506
-msgid "Drag Wire"
-msgstr "Przeciągnij połączenie"
-
-#: eeschema/onrightclick.cpp:509
-msgid "Delete Wire"
-msgstr "Usuń połączenie"
-
-#: eeschema/onrightclick.cpp:541
-msgid "Bus End"
-msgstr "Zakończ magistralę"
-
-#: eeschema/onrightclick.cpp:545
-msgid "Delete Bus"
-msgstr "Usuń magistralę"
-
-#: eeschema/onrightclick.cpp:548
-msgid "Break Bus"
-msgstr "Przerwij magistralę"
-
-#: eeschema/onrightclick.cpp:568
-msgid "Enter Sheet"
-msgstr "Wejdź w arkusz"
-
-#: eeschema/onrightclick.cpp:570
-msgid "Move Sheet"
-msgstr "Przesuń arkusz"
-
-#: eeschema/onrightclick.cpp:574
-msgid "Drag Sheet"
-msgstr "Przeciągnij arkusz"
-
-#: eeschema/onrightclick.cpp:580
-msgid "Place Sheet"
-msgstr "Dodaj arkusz"
-
-#: eeschema/onrightclick.cpp:584
-msgid "Edit Sheet"
-msgstr "Edytuj arkusz"
-
-#: eeschema/onrightclick.cpp:587
-msgid "Resize Sheet"
-msgstr "Zmień wielkość arkusza"
-
-#: eeschema/onrightclick.cpp:590
-msgid "Import Sheet Pins"
-msgstr "Importuj arkusz pinów"
-
-#: eeschema/onrightclick.cpp:594
-msgid "Cleanup Sheet Pins"
-msgstr "Wyczyść arkusz pinów"
-
-#: eeschema/onrightclick.cpp:597
-msgid "Delete Sheet"
-msgstr "Usuń arkusz"
-
-#: eeschema/onrightclick.cpp:609
-msgid "Move Sheet Pin"
-msgstr "Przesuń pin arkusza"
-
-#: eeschema/onrightclick.cpp:614
-msgid "Edit Sheet Pin"
-msgstr "Edytuj arkusz pinów"
-
-#: eeschema/onrightclick.cpp:617
-msgid "Delete Sheet Pin"
-msgstr "Usuń arkusz pinów"
-
-#: eeschema/onrightclick.cpp:630
-msgid "Window Zoom"
-msgstr "Powiększ okno"
-
-#: eeschema/onrightclick.cpp:639
-msgid "Save Block"
-msgstr "Zapisz blok"
-
-#: eeschema/onrightclick.cpp:641
-msgid "Drag Block"
-msgstr "Przeciągnij blok"
-
-#: eeschema/onrightclick.cpp:652
-msgid "Copy to Clipboard"
-msgstr "Kopiuj do schowka"
-
-#: eeschema/onrightclick.cpp:661
-msgid "Delete Marker"
-msgstr "Usuń znacznik"
-
-#: eeschema/onrightclick.cpp:662
-msgid "Marker Error Info"
-msgstr "Informacja o znaczniku błędu"
 
 #: eeschema/tool_viewlib.cpp:36
 msgid "Select library to browse"
@@ -3106,19 +2782,19 @@ msgstr "Arkusze schematów mogą być zagnieżdżone tylko %d krotnie."
 msgid "%8.8lX/"
 msgstr "%8.8lX/"
 
-#: eeschema/sch_sheet.cpp:780
+#: eeschema/sch_sheet.cpp:782
 msgid "Sheet name"
 msgstr "Nazwa arkusza"
 
-#: eeschema/sch_sheet.cpp:781
+#: eeschema/sch_sheet.cpp:783
 msgid "File name"
 msgstr "Nazwa pliku"
 
-#: eeschema/sch_sheet.cpp:785
+#: eeschema/sch_sheet.cpp:787
 msgid "Time Stamp"
 msgstr "Znacznik czasowy"
 
-#: eeschema/sch_sheet.cpp:986
+#: eeschema/sch_sheet.cpp:988
 msgid "Hierarchical Sheet "
 msgstr "Arkusz hierarchiczny"
 
@@ -3131,23 +2807,342 @@ msgstr "Nie znaleziono nowych etykiet hierarchicznych."
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarchiczny arkusz pinów %s"
 
-#: eeschema/sch_component.cpp:180
+#: eeschema/onrightclick.cpp:103
+msgid "Leave Sheet"
+msgstr "Opuść arkusz"
+
+#: eeschema/onrightclick.cpp:116
+msgid "Delete No Connect"
+msgstr "Usuń \"Nie Połączone\""
+
+#: eeschema/onrightclick.cpp:126
+msgid "Move Bus Entry"
+msgstr "Przesuń wejście magistrali"
+
+#: eeschema/onrightclick.cpp:132
+msgid "Set Bus Entry /"
+msgstr "Ustaw wejście magistrali /"
+
+#: eeschema/onrightclick.cpp:134
+msgid "Set Bus Entry \\"
+msgstr "Ustaw wejście magistrali \\"
+
+#: eeschema/onrightclick.cpp:135
+msgid "Delete Bus Entry"
+msgstr "Usuń wejście magistrali"
+
+#: eeschema/onrightclick.cpp:179
+msgid "End Drawing"
+msgstr "Zakończ rysunek"
+
+#: eeschema/onrightclick.cpp:180
+msgid "Delete Drawing"
+msgstr "Usuń rysunek"
+
+#: eeschema/onrightclick.cpp:215
+msgid "Rotate Field"
+msgstr "Obróć pole"
+
+#: eeschema/onrightclick.cpp:241
+msgid "Move Component"
+msgstr "Przesuń element"
+
+#: eeschema/onrightclick.cpp:245
+msgid "Drag Component"
+msgstr "Przeciągnij element"
+
+#: eeschema/onrightclick.cpp:250
+msgid "Rotate +"
+msgstr "Obróć +"
+
+#: eeschema/onrightclick.cpp:252
+msgid "Rotate -"
+msgstr "Obróć -"
+
+#: eeschema/onrightclick.cpp:253
+msgid "Mirror --"
+msgstr "Odbij poziomo --"
+
+#: eeschema/onrightclick.cpp:255
+msgid "Mirror ||"
+msgstr "Odbij pionowo ||"
+
+#: eeschema/onrightclick.cpp:260
+msgid "Orient Component"
+msgstr "Zorientuj element"
+
+#: eeschema/onrightclick.cpp:263
+msgid "Edit"
+msgstr "Edytuj"
+
+#: eeschema/onrightclick.cpp:273
+msgid "Footprint "
+msgstr "Obudowa "
+
+#: eeschema/onrightclick.cpp:289
+#, c-format
+msgid "Unit %d %c"
+msgstr "Część %d %c"
+
+#: eeschema/onrightclick.cpp:304
+msgid "Edit with Libedit"
+msgstr "Edytuj w edytorze bibliotek"
+
+#: eeschema/onrightclick.cpp:309
+msgid "Edit Component"
+msgstr "Edytuj element"
+
+#: eeschema/onrightclick.cpp:313
+msgid "Copy Component"
+msgstr "Kopiuj element"
+
+#: eeschema/onrightclick.cpp:321
+msgid "Doc"
+msgstr "Dokument"
+
+#: eeschema/onrightclick.cpp:332
+msgid "Move Global Label"
+msgstr "Przesuń etykietę globalną"
+
+#: eeschema/onrightclick.cpp:335
+msgid "Drag Global Label"
+msgstr "Przeciągnij etykietę globalną"
+
+#: eeschema/onrightclick.cpp:338
+msgid "Copy Global Label"
+msgstr "Kopiuj etykietę globalną"
+
+#: eeschema/onrightclick.cpp:343
+msgid "Rotate Global Label"
+msgstr "Obróć etykietę globalną"
+
+#: eeschema/onrightclick.cpp:345
+msgid "Edit Global Label"
+msgstr "Edytuj etykietę globalną"
+
+#: eeschema/onrightclick.cpp:347
+msgid "Delete Global Label"
+msgstr "Usuń etykietę globalną"
+
+#: eeschema/onrightclick.cpp:352
+#: eeschema/onrightclick.cpp:424
+#: eeschema/onrightclick.cpp:464
+msgid "Change to Hierarchical Label"
+msgstr "Zmień na etykietę hierarchiczną"
+
+#: eeschema/onrightclick.cpp:354
+#: eeschema/onrightclick.cpp:388
+#: eeschema/onrightclick.cpp:462
+msgid "Change to Label"
+msgstr "Zmień na etykietę"
+
+#: eeschema/onrightclick.cpp:356
+#: eeschema/onrightclick.cpp:390
+#: eeschema/onrightclick.cpp:426
+msgid "Change to Text"
+msgstr "Zmień na tekst"
+
+#: eeschema/onrightclick.cpp:358
+#: eeschema/onrightclick.cpp:394
+#: eeschema/onrightclick.cpp:430
+#: eeschema/onrightclick.cpp:468
+msgid "Change Type"
+msgstr "Zmień typ"
+
+#: eeschema/onrightclick.cpp:369
+msgid "Move Hierarchical Label"
+msgstr "Przesuń etykietę hierarchiczną"
+
+#: eeschema/onrightclick.cpp:372
+msgid "Drag Hierarchical Label"
+msgstr "Przeciągnij etykietę hierarchiczną"
+
+#: eeschema/onrightclick.cpp:375
+msgid "Copy Hierarchical Label"
+msgstr "Kopiuj etykietę hierarchiczną"
+
+#: eeschema/onrightclick.cpp:379
+msgid "Rotate Hierarchical Label"
+msgstr "Obróć etykietę hierarchiczną"
+
+#: eeschema/onrightclick.cpp:381
+msgid "Edit Hierarchical Label"
+msgstr "Edytuj etykietę hierarchiczną"
+
+#: eeschema/onrightclick.cpp:383
+msgid "Delete Hierarchical Label"
+msgstr "Usuń etykietę hierarchiczną"
+
+#: eeschema/onrightclick.cpp:392
+#: eeschema/onrightclick.cpp:428
+#: eeschema/onrightclick.cpp:466
+msgid "Change to Global Label"
+msgstr "Zmień na etykietę globalną"
+
+#: eeschema/onrightclick.cpp:405
+msgid "Move Label"
+msgstr "Przesuń etykietę"
+
+#: eeschema/onrightclick.cpp:408
+msgid "Drag Label"
+msgstr "Przeciągnij etykietę"
+
+#: eeschema/onrightclick.cpp:411
+msgid "Copy Label"
+msgstr "Kopiuj etykietę"
+
+#: eeschema/onrightclick.cpp:415
+msgid "Rotate Label"
+msgstr "Obróć etykietę"
+
+#: eeschema/onrightclick.cpp:417
+msgid "Edit Label"
+msgstr "Edytuj etykietę"
+
+#: eeschema/onrightclick.cpp:419
+msgid "Delete Label"
+msgstr "Usuń etykietę"
+
+#: eeschema/onrightclick.cpp:444
+msgid "Copy Text"
+msgstr "Kopiuj tekst"
+
+#: eeschema/onrightclick.cpp:478
+msgid "Delete Junction"
+msgstr "Usuń węzeł"
+
+#: eeschema/onrightclick.cpp:484
+msgid "Drag Junction"
+msgstr "Przeciągnij Węzeł"
+
+#: eeschema/onrightclick.cpp:487
+#: eeschema/onrightclick.cpp:524
+msgid "Break Wire"
+msgstr "Przerwij połączenie"
+
+#: eeschema/onrightclick.cpp:492
+#: eeschema/onrightclick.cpp:517
+msgid "Delete Node"
+msgstr "Usuń węzeł"
+
+#: eeschema/onrightclick.cpp:493
+#: eeschema/onrightclick.cpp:518
+msgid "Delete Connection"
+msgstr "Usuń połączenie"
+
+#: eeschema/onrightclick.cpp:508
+msgid "Wire End"
+msgstr "Zakończ połączenie"
+
+#: eeschema/onrightclick.cpp:512
+msgid "Drag Wire"
+msgstr "Przeciągnij połączenie"
+
+#: eeschema/onrightclick.cpp:515
+msgid "Delete Wire"
+msgstr "Usuń połączenie"
+
+#: eeschema/onrightclick.cpp:547
+msgid "Bus End"
+msgstr "Zakończ magistralę"
+
+#: eeschema/onrightclick.cpp:551
+msgid "Delete Bus"
+msgstr "Usuń magistralę"
+
+#: eeschema/onrightclick.cpp:554
+msgid "Break Bus"
+msgstr "Przerwij magistralę"
+
+#: eeschema/onrightclick.cpp:574
+msgid "Enter Sheet"
+msgstr "Wejdź w arkusz"
+
+#: eeschema/onrightclick.cpp:576
+msgid "Move Sheet"
+msgstr "Przesuń arkusz"
+
+#: eeschema/onrightclick.cpp:580
+msgid "Drag Sheet"
+msgstr "Przeciągnij arkusz"
+
+#: eeschema/onrightclick.cpp:586
+msgid "Place Sheet"
+msgstr "Dodaj arkusz"
+
+#: eeschema/onrightclick.cpp:590
+msgid "Edit Sheet"
+msgstr "Edytuj arkusz"
+
+#: eeschema/onrightclick.cpp:593
+msgid "Resize Sheet"
+msgstr "Zmień wielkość arkusza"
+
+#: eeschema/onrightclick.cpp:596
+msgid "Import Sheet Pins"
+msgstr "Importuj arkusz pinów"
+
+#: eeschema/onrightclick.cpp:600
+msgid "Cleanup Sheet Pins"
+msgstr "Wyczyść arkusz pinów"
+
+#: eeschema/onrightclick.cpp:603
+msgid "Delete Sheet"
+msgstr "Usuń arkusz"
+
+#: eeschema/onrightclick.cpp:615
+msgid "Move Sheet Pin"
+msgstr "Przesuń pin arkusza"
+
+#: eeschema/onrightclick.cpp:620
+msgid "Edit Sheet Pin"
+msgstr "Edytuj arkusz pinów"
+
+#: eeschema/onrightclick.cpp:623
+msgid "Delete Sheet Pin"
+msgstr "Usuń arkusz pinów"
+
+#: eeschema/onrightclick.cpp:636
+msgid "Window Zoom"
+msgstr "Powiększ okno"
+
+#: eeschema/onrightclick.cpp:645
+msgid "Save Block"
+msgstr "Zapisz blok"
+
+#: eeschema/onrightclick.cpp:647
+msgid "Drag Block"
+msgstr "Przeciągnij blok"
+
+#: eeschema/onrightclick.cpp:658
+msgid "Copy to Clipboard"
+msgstr "Kopiuj do schowka"
+
+#: eeschema/onrightclick.cpp:667
+msgid "Delete Marker"
+msgstr "Usuń znacznik"
+
+#: eeschema/onrightclick.cpp:668
+msgid "Marker Error Info"
+msgstr "Informacja o znaczniku błędu"
+
+#: eeschema/sch_component.cpp:178
 msgid "U"
 msgstr "U"
 
-#: eeschema/sch_component.cpp:1394
+#: eeschema/sch_component.cpp:1392
 msgid "Power symbol"
 msgstr "Symbol zasilania"
 
-#: eeschema/sch_component.cpp:1404
+#: eeschema/sch_component.cpp:1402
 msgid "Alias of"
 msgstr "Alias "
 
-#: eeschema/sch_component.cpp:1406
+#: eeschema/sch_component.cpp:1404
 msgid "Library"
 msgstr "Biblioteka"
 
-#: eeschema/sch_component.cpp:1631
+#: eeschema/sch_component.cpp:1629
 #, c-format
 msgid "Component %s, %s"
 msgstr "Element %s, %s"
@@ -4539,91 +4534,6 @@ msgstr ""
 "\n"
 "#Cmp ( porządek = Wartość )"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:45
-msgid "Measurement &units:"
-msgstr "Jednostki miary:"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:70
-msgid "Default &line width:"
-msgstr "Domyślna szerokość &linii:"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
-msgid "Default text &size:"
-msgstr "Domyślny rozmiar tekstu:"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:114
-msgid "&Repeat label increment:"
-msgstr "Zmieniaj numer etykiety co:"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:129
-msgid "Show g&rid"
-msgstr "Pokaż siatkę"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:132
-msgid "Show hi&dden pins"
-msgstr "Pokaż ukryte piny"
-
-# Tak jest czytelniej
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:135
-msgid "Enable automatic &panning"
-msgstr "&Pozwól na automatyczne przesuwanie widoku"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:138
-msgid "Allow buses and wires to be placed in H or V &orientation only"
-msgstr "Pozwól na prowadzenie połączeń lub magistral wyłącznie pod kątem prostym"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:141
-msgid "Show p&age limits"
-msgstr "Pokaż granice strony"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:154
-msgid "General Options"
-msgstr "Opcje główne"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:157
-msgid "User defined field names for schematic components. "
-msgstr "Nazwy pól użytkownika dla elementów schematowych."
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:165
-msgid "Please enter fieldnames which you want presented in the component fieldname (property) editors.  Names may not include (, ), or \" characters."
-msgstr "Wpisz nazwy pól, które chcesz przedstawić w edytorze elementów (właściwościach). Nazwy nie mogą zawierać znaków (, ), lub \" ."
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:180
-msgid "Custom field 1"
-msgstr "Pole użytkownika 1"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:187
-msgid "Custom field 2"
-msgstr "Pole użytkownika 2"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:194
-msgid "Custom field 3"
-msgstr "Pole użytkownika 3"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:201
-msgid "Custom field 4"
-msgstr "Pole użytkownika 4"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:208
-msgid "Custom field 5"
-msgstr "Pole użytkownika 5"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:215
-msgid "Custom field 6"
-msgstr "Pole użytkownika 6"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:222
-msgid "Custom field 7"
-msgstr "Pole użytkownika 7"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:229
-msgid "Custom field 8"
-msgstr "Pole użytkownika 8"
-
-#: eeschema/dialogs/dialog_eeschema_options_base.cpp:243
-msgid "Template Field Names"
-msgstr "Wzorce nazw pól"
-
 #: eeschema/dialogs/dialog_plot_schematic_DXF.cpp:220
 #: eeschema/dialogs/dialog_plot_schematic_HPGL.cpp:367
 #: eeschema/dialogs/dialog_plot_schematic_PS.cpp:269
@@ -5141,6 +5051,91 @@ msgstr "Drukuj"
 #, c-format
 msgid "Print page %d"
 msgstr "Drukuj stronę %d"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:45
+msgid "Measurement &units:"
+msgstr "Jednostki miary:"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:70
+msgid "Default &line width:"
+msgstr "Domyślna szerokość &linii:"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:81
+msgid "Default text &size:"
+msgstr "Domyślny rozmiar tekstu:"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:114
+msgid "&Repeat label increment:"
+msgstr "Zmieniaj numer etykiety co:"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:129
+msgid "Show g&rid"
+msgstr "Pokaż siatkę"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:132
+msgid "Show hi&dden pins"
+msgstr "Pokaż ukryte piny"
+
+# Tak jest czytelniej
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:135
+msgid "Enable automatic &panning"
+msgstr "&Pozwól na automatyczne przesuwanie widoku"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:138
+msgid "Allow buses and wires to be placed in H or V &orientation only"
+msgstr "Pozwól na prowadzenie połączeń lub magistral wyłącznie pod kątem prostym"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:141
+msgid "Show p&age limits"
+msgstr "Pokaż granice strony"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:154
+msgid "General Options"
+msgstr "Opcje główne"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:157
+msgid "User defined field names for schematic components. "
+msgstr "Nazwy pól użytkownika dla elementów schematowych."
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:165
+msgid "Please enter fieldnames which you want presented in the component fieldname (property) editors.  Names may not include (, ), or \" characters."
+msgstr "Wpisz nazwy pól, które chcesz przedstawić w edytorze elementów (właściwościach). Nazwy nie mogą zawierać znaków (, ), lub \" ."
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:180
+msgid "Custom field 1"
+msgstr "Pole użytkownika 1"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:187
+msgid "Custom field 2"
+msgstr "Pole użytkownika 2"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:194
+msgid "Custom field 3"
+msgstr "Pole użytkownika 3"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:201
+msgid "Custom field 4"
+msgstr "Pole użytkownika 4"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:208
+msgid "Custom field 5"
+msgstr "Pole użytkownika 5"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:215
+msgid "Custom field 6"
+msgstr "Pole użytkownika 6"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:222
+msgid "Custom field 7"
+msgstr "Pole użytkownika 7"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:229
+msgid "Custom field 8"
+msgstr "Pole użytkownika 8"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.cpp:243
+msgid "Template Field Names"
+msgstr "Wzorce nazw pól"
 
 #: pcbnew/automove.cpp:179
 msgid "No modules found!"
@@ -13794,10 +13789,6 @@ msgstr "Właściwości arkusza pinów"
 msgid "Annotate Schematic"
 msgstr "Numeruj schemat"
 
-#: eeschema/dialogs/dialog_eeschema_options_base.h:104
-msgid "Schematic Editor Options"
-msgstr "Opcje edytora schematów"
-
 #: eeschema/dialogs/dialog_lib_edit_text_base.h:60
 msgid "Library Text Properties"
 msgstr "Właściwości tekstów biblioteki"
@@ -13809,6 +13800,10 @@ msgstr "Właściwości pinu"
 #: eeschema/dialogs/dialog_color_config.h:58
 msgid "EESchema Colors"
 msgstr "Kolory EESchema"
+
+#: eeschema/dialogs/dialog_eeschema_options_base.h:104
+msgid "Schematic Editor Options"
+msgstr "Opcje edytora schematów"
 
 #: pcbnew/help_common_strings.h:17
 msgid "Find components and text in current loaded board"
