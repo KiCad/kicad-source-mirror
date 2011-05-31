@@ -369,6 +369,32 @@ const wxString SCH_COMPONENT::GetRef( SCH_SHEET_PATH* sheet )
 }
 
 
+/* Function IsReferenceStringValid (static function)
+ * Tests for an acceptable reference string
+ * An acceptable reference string must support unannotation
+ * i.e starts by letter
+ * returns true if OK
+ */
+bool SCH_COMPONENT::IsReferenceStringValid( const wxString & aReferenceString )
+{
+    wxString text = aReferenceString;
+    bool ok = true;
+
+    // Try to unannotate this reference
+    while( !text.IsEmpty() &&
+            ( text.Last() == '?' || isdigit( text.Last() ) ) )
+        text.RemoveLast();
+
+    if( text.IsEmpty() )
+        ok = false;
+
+    // Add here other constraints
+    // Currently:no other constraint
+
+    return ok;
+}
+
+
 void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
 {
     wxString          path = GetPath( sheet );
@@ -417,9 +443,13 @@ void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
 
     // Reinit the m_prefix member if needed
     wxString prefix = ref;
-
-    while( prefix.Last() == '?' or isdigit( prefix.Last() ) )
-        prefix.RemoveLast();
+    if( IsReferenceStringValid( prefix ) )
+    {
+        while( prefix.Last() == '?' || isdigit( prefix.Last() ) )
+            prefix.RemoveLast();
+    }
+    else
+        prefix = wxT("U");        // Set to default ref prefix
 
     if( m_prefix != prefix )
         m_prefix = prefix;
@@ -598,7 +628,6 @@ void SCH_COMPONENT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 
 void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
-    wxString       defRef    = m_prefix;
     bool           keepMulti = false;
     LIB_COMPONENT* Entry;
     static const wxString separators( wxT( " " ) );
@@ -609,8 +638,18 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
     if( Entry && Entry->UnitsLocked() )
         keepMulti = true;
 
-    while( defRef.Last() == '?' )
-        defRef.RemoveLast();
+    // Build a reference with no annotation,
+    // i.e. a reference ended by only one '?'
+    wxString defRef = m_prefix;
+    if( IsReferenceStringValid( defRef ) )
+    {
+        while( defRef.Last() == '?' )
+            defRef.RemoveLast();
+    }
+    else
+    {   // This is a malformed reference: reinit this reference
+        m_prefix = defRef = wxT("U");        // Set to default ref prefix
+    }
 
     defRef.Append( wxT( "?" ) );
 

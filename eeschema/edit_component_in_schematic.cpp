@@ -179,11 +179,18 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
             aField->m_Size.x = aField->m_Size.y = m_TextFieldSize;
         }
 
-        aField->m_Text = newtext;
-
         if( fieldNdx == REFERENCE )
         {
-            component->SetRef( GetSheet(), newtext );
+            // Test is reference is acceptable:
+            if( SCH_COMPONENT::IsReferenceStringValid( newtext ) )
+            {
+                component->SetRef( GetSheet(), newtext );
+                aField->m_Text = newtext;
+            }
+            else
+            {
+                DisplayError( this, _( "Illegal reference string!  No change" ) );
+            }
         }
     }
     else

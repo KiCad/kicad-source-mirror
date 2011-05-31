@@ -16,6 +16,7 @@
 #include "protos.h"
 #include "libeditframe.h"
 #include "class_library.h"
+#include "sch_component.h"
 #include "sch_field.h"
 #include "template_fieldnames.h"
 #include "dialog_helpers.h"
@@ -220,6 +221,13 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::OnOKButtonClick( wxCommandEvent& event 
 {
     if( !copyPanelToSelectedField() )
         return;
+
+    // test if reference prefix is acceptable
+    if( ! SCH_COMPONENT::IsReferenceStringValid( m_FieldsBuf[REFERENCE].m_Text ) )
+    {
+        DisplayError( NULL, _( "Illegal reference prefix. A reference must start by a letter" ) );
+        return;
+    }
 
     /* Note: this code is now (2010-dec-04) not used, because the value field is no more editable
      * because changing the value is equivalent to create a new component or alias.

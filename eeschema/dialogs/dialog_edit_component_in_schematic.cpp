@@ -225,7 +225,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     if( !copyPanelToSelectedField() )
         return;
 
-    // save old cmp in undo list if not already in edit, or moving ...
+    if( ! SCH_COMPONENT::IsReferenceStringValid( m_FieldsBuf[REFERENCE].m_Text ) )
+    {
+        DisplayError( NULL, _( "Illegal reference. A reference must start by a letter" ) );
+        return;
+    }
+
+            // save old cmp in undo list if not already in edit, or moving ...
     if( m_Cmp->m_Flags == 0 )
         m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
 

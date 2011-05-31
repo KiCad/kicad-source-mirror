@@ -262,12 +262,24 @@ public:
     wxString GetPath( SCH_SHEET_PATH* sheet );
 
     /**
+     * Function IsReferenceStringValid (static)
+     * Tests for an acceptable reference string
+     * An acceptable reference string must support unannotation
+     * i.e starts by letter
+     * @param aReferenceString = the reference string to validate
+     * @return true if OK
+     */
+    static bool IsReferenceStringValid( const wxString &aReferenceString );
+
+    /**
      * Function GetRef
      * returns the reference, for the given sheet path.
      */
     const wxString GetRef( SCH_SHEET_PATH* sheet );
 
-    // Set the reference, for the given sheet path.
+    /**
+     * Set the reference, for the given sheet path.
+     */
     void SetRef( SCH_SHEET_PATH* sheet, const wxString& ref );
 
     /**

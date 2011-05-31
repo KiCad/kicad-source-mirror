@@ -10,7 +10,8 @@
 #include "class_sch_screen.h"
 
 #include "general.h"
-#include "protos.h"
+//#include "protos.h"
+#include "sch_component.h"
 #include "libeditframe.h"
 #include "class_library.h"
 #include "template_fieldnames.h"
@@ -51,10 +52,19 @@ void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* aField )
 
     text.Replace( wxT( " " ), wxT( "_" ) );
 
+    // Perform some controls:
     if( ( aField->GetId() == REFERENCE || aField->GetId() == VALUE ) && text.IsEmpty ( ) )
     {
         title.Printf( _( "A %s field cannot be empty." ), GetChars(aField->GetName().Lower() ) );
         DisplayError( this, title );
+        return;
+    }
+
+    // Ensure the reference prefix is acceptable:
+    if( ( aField->GetId() == REFERENCE ) &&
+        ! SCH_COMPONENT::IsReferenceStringValid( text ) )
+    {
+        DisplayError( this, _( "Illegal reference. A reference must start by a letter" ) );
         return;
     }
 
