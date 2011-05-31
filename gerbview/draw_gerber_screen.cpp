@@ -227,15 +227,17 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
                     screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight,
                                    &layerDC, 0, 0, wxOR );
                 }
+                // Restore actual values and clear bitmpap for next drawing
+                layerDC.SetDeviceOrigin( dev_org.x, dev_org.y );
+                layerDC.SetLogicalOrigin( logical_org.x, logical_org.y );
+                layerDC.SetUserScale( scale, scale );
+                layerDC.SetBackground( bgBrush );
+                layerDC.SetBackgroundMode( wxSOLID );
+                layerDC.Clear();
+
+                doBlit = false;
             }
 
-            // Restore actual values for drawing
-            layerDC.SetDeviceOrigin( dev_org.x, dev_org.y );
-            layerDC.SetLogicalOrigin( logical_org.x, logical_org.y );
-            layerDC.SetUserScale( scale, scale );
-
-            doBlit = false;
-            layerDC.Clear();
         }
 
         if( gerber->m_ImageNegative )
