@@ -173,7 +173,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
 
     if( !newtext.IsEmpty() )
     {
-        if( aField->m_Text.IsEmpty() )
+        if( aField->m_Text.IsEmpty() )  // Means the field was not already in use
         {
             aField->m_Pos = component->m_Pos;
             aField->m_Size.x = aField->m_Size.y = m_TextFieldSize;
@@ -192,6 +192,8 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
                 DisplayError( this, _( "Illegal reference string!  No change" ) );
             }
         }
+        else
+            aField->m_Text = newtext;
     }
     else
     {
