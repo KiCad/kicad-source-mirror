@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-30 08:50+0300\n"
-"PO-Revision-Date: 2011-05-30 08:51+0300\n"
+"POT-Creation-Date: 2011-06-02 10:58+0300\n"
+"PO-Revision-Date: 2011-06-02 11:02+0300\n"
 "Last-Translator: faa <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -349,11 +349,15 @@ msgstr ""
 msgid "Edit %s Field"
 msgstr "Правка %s поля"
 
-#: eeschema/edit_component_in_schematic.cpp:193
+#: eeschema/edit_component_in_schematic.cpp:192
+msgid "Illegal reference string!  No change"
+msgstr "Неправильная строка обозначения! Не изменено"
+
+#: eeschema/edit_component_in_schematic.cpp:202
 msgid "The reference field cannot be empty!  No change"
 msgstr "Поле обозначения не может быть пустым! Не изменено"
 
-#: eeschema/edit_component_in_schematic.cpp:197
+#: eeschema/edit_component_in_schematic.cpp:206
 msgid "The value field cannot be empty!  No change"
 msgstr "Поле значения не может быть пустым! Не изменено"
 
@@ -1664,30 +1668,34 @@ msgstr "Различие между иерархическими метками 
 msgid "A no connect symbol is connected to more than 1 pin"
 msgstr "Символ \"Не подключено\" подсоединен больше, чем к 1 выводу"
 
-#: eeschema/libfield.cpp:35
+#: eeschema/libfield.cpp:36
 msgid "Component Name"
 msgstr "Имя компонента"
 
-#: eeschema/libfield.cpp:36
+#: eeschema/libfield.cpp:37
 msgid "Enter a name to create a new component based on this one."
 msgstr "Ввод наименования для создаваемого компонента."
 
-#: eeschema/libfield.cpp:40
+#: eeschema/libfield.cpp:41
 #: eeschema/onrightclick.cpp:217
 msgid "Edit Field"
 msgstr "Правка поля"
 
-#: eeschema/libfield.cpp:41
+#: eeschema/libfield.cpp:42
 #, c-format
 msgid "Enter a new value for the %s field."
 msgstr "Ввод нового значения для поля %s."
 
-#: eeschema/libfield.cpp:56
+#: eeschema/libfield.cpp:58
 #, c-format
 msgid "A %s field cannot be empty."
 msgstr "Поле %s не может быть пустым."
 
-#: eeschema/libfield.cpp:74
+#: eeschema/libfield.cpp:67
+msgid "Illegal reference. A reference must start by a letter"
+msgstr "Неправильная обозначение. Обозначение должно начинаться с буквы"
+
+#: eeschema/libfield.cpp:84
 #, c-format
 msgid ""
 "The name <%s> conflicts with an existing entry in the component library <%s>.\n"
@@ -1697,13 +1705,13 @@ msgstr ""
 "Поле с именем <%s> конфликтует с компонентом в библиотеке <%s>.\n"
 "Желаете заместить компонент в библиотеке?"
 
-#: eeschema/libfield.cpp:79
-#: eeschema/libfield.cpp:93
-#: eeschema/libfield.cpp:111
+#: eeschema/libfield.cpp:89
+#: eeschema/libfield.cpp:103
+#: eeschema/libfield.cpp:121
 msgid "Confirm"
 msgstr "Подтверждение"
 
-#: eeschema/libfield.cpp:89
+#: eeschema/libfield.cpp:99
 #, c-format
 msgid ""
 "The current component already has an alias named <%s>.\n"
@@ -1714,7 +1722,7 @@ msgstr ""
 "\n"
 "Удалить этот псевдоним компонента?"
 
-#: eeschema/libfield.cpp:106
+#: eeschema/libfield.cpp:116
 #, c-format
 msgid ""
 "The new component contains alias names that conflict with entries in the component library <%s>.\n"
@@ -1874,7 +1882,7 @@ msgid "Unit %d %c"
 msgstr "Элемент %d %c"
 
 #: eeschema/onrightclick.cpp:304
-msgid "Edit with Libedit"
+msgid "Edit with Library Editor"
 msgstr "Править в редакторе библиотек"
 
 #: eeschema/onrightclick.cpp:309
@@ -2507,19 +2515,19 @@ msgstr "%s линия из (%s,%s) в (%s,%s)"
 msgid "U"
 msgstr "D"
 
-#: eeschema/sch_component.cpp:1392
+#: eeschema/sch_component.cpp:1431
 msgid "Power symbol"
 msgstr "Символ питания"
 
-#: eeschema/sch_component.cpp:1402
+#: eeschema/sch_component.cpp:1441
 msgid "Alias of"
 msgstr "Оригинал"
 
-#: eeschema/sch_component.cpp:1404
+#: eeschema/sch_component.cpp:1443
 msgid "Library"
 msgstr "Библитека"
 
-#: eeschema/sch_component.cpp:1629
+#: eeschema/sch_component.cpp:1668
 #, c-format
 msgid "Component %s, %s"
 msgstr "Компонент %s, %s"
@@ -3233,25 +3241,25 @@ msgid "Foot print filter <%s> is already defined."
 msgstr "Фильтр посадочного места <%s> уже задан."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:90
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:166
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:167
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:42
 msgid "Size"
 msgstr "Размер"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:93
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:98
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:169
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:174
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:170
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:175
 msgid "Pos "
 msgstr "Поз"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:94
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:170
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:171
 msgid "X"
 msgstr "X"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:99
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:175
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:176
 msgid "Y"
 msgstr "Y"
 
@@ -3571,7 +3579,7 @@ msgid "Pick the graphical transformation to be used when displaying the componen
 msgstr "Выберите графическое преобразование, используемое при рисовании компонента"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:63
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:632
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:640
 msgid "Chip Name"
 msgstr "Имя компонента"
 
@@ -3821,7 +3829,11 @@ msgstr "Трёхстабильный"
 msgid "S&hape"
 msgstr "Форма"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:236
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:228
+msgid "Illegal reference prefix. A reference must start by a letter"
+msgstr "Неправильный префикс обозначения. Обозначение должно начинаться с буквы"
+
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:244
 #, c-format
 msgid ""
 "A new name is entered for this component\n"
@@ -13932,6 +13944,9 @@ msgstr "Свойства текста"
 #: pcbnew/dialogs/dialog_set_grid_base.h:61
 msgid "Grid Origin and User Grid Size"
 msgstr "Начальные координаты и пользовательский шаг сетки"
+
+#~ msgid "Edit with Libedit"
+#~ msgstr "Править в редакторе библиотек"
 
 #~ msgid "No connection"
 #~ msgstr "Нет соединения"
