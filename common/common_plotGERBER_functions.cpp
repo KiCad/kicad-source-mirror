@@ -299,12 +299,12 @@ void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T aFill,
 }
 
 
-/**
+/*
  * Function PlotPoly
  * writes a filled or not filled polyline to output file
- * @param aCoord = buffer of corners coordinates
- * @param aFill = plot option (NO_FILL, FILLED_SHAPE, FILLED_WITH_BG_BODYCOLOR)
- * @param aWidth = Width of the line to plot.
+ * param aCornerList = buffer of corners coordinates
+ * param aFill = plot option (NO_FILL, FILLED_SHAPE, FILLED_WITH_BG_BODYCOLOR)
+ * param aWidth = Width of the line to plot.
  */
 void GERBER_PLOTTER::PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth )
 {

@@ -250,7 +250,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         // We must compute true coordinates from m_PolyPoints
         // which are relative to module position, orientation 0
 
-        std::vector<wxPoint>        points = m_PolyPoints;
+        std::vector<wxPoint> points = m_PolyPoints;
 
         for( unsigned ii = 0; ii < points.size(); ii++ )
         {

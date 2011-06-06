@@ -444,15 +444,13 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
 
         for( unsigned ii = 0; ii < PtEdge->m_PolyPoints.size(); ii++ )
         {
-            wxPoint corner = PtEdge->m_PolyPoints[0];
+            wxPoint corner = PtEdge->m_PolyPoints[ii];
 
             if( Module )
             {
                 RotatePoint( &corner, Module->m_Orient );
                 corner += Module->m_Pos;
             }
-
-            corner += PtEdge->m_Start0;
 
             cornerList.push_back( corner );
         }
