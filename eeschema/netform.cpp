@@ -168,8 +168,8 @@ class EXPORT_HELP
      * created by BuildNetList() in the table g_NetObjectslist.
      */
     bool addPinToComponentPinList( SCH_COMPONENT*  Component,
-                                          SCH_SHEET_PATH* sheet,
-                                          LIB_PIN*        PinEntry );
+                                   SCH_SHEET_PATH* sheet,
+                                   LIB_PIN*        PinEntry );
 
     /**
      * Function findAllInstancesOfComponent
@@ -179,9 +179,9 @@ class EXPORT_HELP
      * matching reference designator, and for each part, add all its pins
      * to the temporary sorted pin list.
      */
-    void findAllInstancesOfComponent(  SCH_COMPONENT*  aComponent,
-                                              LIB_COMPONENT*  aEntry,
-                                              SCH_SHEET_PATH* aSheetPath );
+    void findAllInstancesOfComponent( SCH_COMPONENT*  aComponent,
+                                      LIB_COMPONENT*  aEntry,
+                                      SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Function writeGENERICListOfNets
@@ -192,12 +192,13 @@ class EXPORT_HELP
 
     /**
      * Function writeListOfNetsCADSTAR
-     * writes a net list (ranked by Netcode), and
-     * Pins connected to it
+     * writes a net list (ranked by Netcode), and pins connected to it.
+     * <p>
      * Format:
-     *. ADD_TER RR2 6 "$42"
-     *. B U1 100
-     * 6 CA
+     *   - ADD_TER RR2 6 \"$42\"
+     *   - B U1 100
+     *   - 6 CA
+     * </p>
      */
     void writeListOfNetsCADSTAR( FILE* f, NETLIST_OBJECT_LIST& aObjectsList );
 

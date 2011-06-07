@@ -28,34 +28,6 @@
 #include <boost/foreach.hpp>
 
 
-static int     s_PreviousSheetWidth;
-static int     s_PreviousSheetHeight;
-static wxPoint s_OldPos;  /* Former position for cancellation or move ReSize */
-
-
-/**
- * Function EditSheet
- * is used to edit an existing sheet or add a new sheet to the schematic.
- * <p>
- * When \a aSheet is a new sheet:
- * <ul>
- * <li>and the file name already exists in the schematic hierarchy, the screen associated with
- * the sheet found in the hierarchy is associated with \a aSheet.</li>
- * <li>and the file name already exists on the system, then \a aSheet is loaded with the
- * existing file.</li>
- * <li>and the file name does not exist in the schematic hierarchy or on the file system, then
- * a new screen is created and associated with \a aSheet.</li>
- * </ul> </p> <p>
- * When \a aSheet is an existing sheet:
- * <ul>
- * <li>and the file name already exists in the schematic hierarchy, the current associated screen
- * is replace by the one found in the hierarchy.</li>
- * <li>and the file name already exists on the system, the current associated screen file name
- * is changed and the file is loaded.</li>
- * <li>and the file name does not exist in the schematic hierarchy or on the file system, the
- * current associated screen file name is changed and saved to disk.</li>
- * </ul> </p>
- */
 bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 {
     if( aSheet == NULL )
@@ -231,11 +203,30 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     if( aErase )
         sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
-    if( sheet->m_Flags & IS_RESIZED )
+    if( sheet->GetFlags() & IS_RESIZED )
     {
-        wxSize newSize( MAX( s_PreviousSheetWidth, screen->GetCrossHairPosition().x - sheet->m_Pos.x ),
-                        MAX( s_PreviousSheetHeight, screen->GetCrossHairPosition().y - sheet->m_Pos.y ) );
-        sheet->Resize( newSize );
+        int width = screen->GetCrossHairPosition().x - sheet->m_Pos.x;
+        int height = screen->GetCrossHairPosition().y - sheet->m_Pos.y;
+
+        // If the sheet doesn't have any pins, clamp the minimum size to the default values.
+        width = ( width < MIN_SHEET_WIDTH ) ? MIN_SHEET_WIDTH : width;
+        height = ( height < MIN_SHEET_HEIGHT ) ? MIN_SHEET_HEIGHT : height;
+
+        if( sheet->HasPins() )
+        {
+            int gridSizeX = wxRound( screen->GetGridSize().x );
+            int gridSizeY = wxRound( screen->GetGridSize().y );
+
+            // If the sheet has pins, use the pin positions to clamp the minimum height.
+            height = ( height < sheet->GetMinHeight() + gridSizeY ) ?
+                sheet->GetMinHeight() + gridSizeY : height;
+            width = ( width < sheet->GetMinWidth() + gridSizeX ) ?
+                sheet->GetMinWidth() + gridSizeX : width;
+        }
+
+        wxPoint grid = screen->GetNearestGridPosition( wxPoint( sheet->m_Pos.x + width,
+                                                                sheet->m_Pos.y + height ) );
+        sheet->Resize( wxSize( grid.x - sheet->m_Pos.x, grid.y - sheet->m_Pos.y ) );
     }
     else             /* Move Sheet */
     {
@@ -251,36 +242,45 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
     SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_SHEET*  sheet  = (SCH_SHEET*) screen->GetCurItem();
+    SCH_ITEM* item = screen->GetCurItem();
+    SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
 
-    if( sheet == NULL )
+    if( (item == NULL) || (item->Type() != SCH_SHEET_T) || (parent == NULL) )
         return;
 
-    if( sheet->IsNew() )
+    parent->SetRepeatItem( NULL );
+
+    item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+
+    if( item->IsNew() )
     {
-        sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-        SAFE_DELETE( sheet );
+        SAFE_DELETE( item );
     }
-    else if( (sheet->m_Flags & (IS_RESIZED|IS_MOVED)) )
+    else if( item->m_Flags & (IS_RESIZED | IS_MOVED) )
     {
-        wxPoint curspos = screen->GetCrossHairPosition();
-        aPanel->GetScreen()->SetCrossHairPosition( s_OldPos );
-        MoveOrResizeSheet( aPanel, aDC, wxDefaultPosition, true );
-        sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        sheet->m_Flags = 0;
-        screen->SetCrossHairPosition( curspos );
+        screen->RemoveFromDrawList( item );
+        delete item;
+
+        item = parent->GetUndoItem();
+
+        wxCHECK_RET( item != NULL, wxT( "Cannot restore undefined last sheet item." ) );
+
+        screen->AddToDrawList( item );
+        parent->SetUndoItem( NULL );
+        item->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        item->ClearFlags();
+        SCH_SHEET* sheet = ( SCH_SHEET* ) item;
+        aPanel->CrossHairOff( aDC );
+        screen->SetCrossHairPosition( sheet->GetResizePosition() );
+        aPanel->CrossHairOn( aDC );
     }
     else
     {
-        sheet->m_Flags = 0;
+        item->ClearFlags();
     }
 
     screen->SetCurItem( NULL );
 }
-
-
-#define SHEET_MIN_WIDTH  500
-#define SHEET_MIN_HEIGHT 150
 
 
 /* Create hierarchy sheet.  */
@@ -294,8 +294,6 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
     sheet->m_TimeStamp = GetTimeStamp();
     sheet->SetParent( GetScreen() );
     sheet->SetScreen( NULL );
-    s_PreviousSheetWidth = SHEET_MIN_WIDTH;
-    s_PreviousSheetHeight = SHEET_MIN_HEIGHT;
 
     // need to check if this is being added to the GetDrawItems().
     // also need to update the hierarchy, if we are adding
@@ -303,6 +301,9 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
     GetScreen()->SetCurItem( sheet );
     DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
     DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, false );
+    DrawPanel->CrossHairOff( aDC );
+    GetScreen()->SetCrossHairPosition( sheet->GetResizePosition() );
+    DrawPanel->CrossHairOn( aDC );
 
     return sheet;
 }
@@ -313,33 +314,24 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
     if( aSheet == NULL || aSheet->IsNew() )
         return;
 
-    if( aSheet->Type() != SCH_SHEET_T )
-    {
-        DisplayError( this, wxT( "SCH_EDIT_FRAME::ReSizeSheet: Bad SructType" ) );
-        return;
-    }
+    wxCHECK_RET( aSheet->Type() == SCH_SHEET_T,
+                 wxString::Format( wxT( "Cannot perform sheet resize on %s object." ),
+                                   GetChars( aSheet->GetClass() ) ) );
 
-    OnModify( );
-    aSheet->m_Flags |= IS_RESIZED;
+    SetUndoItem( aSheet );
+    OnModify();
+    aSheet->SetFlags( IS_RESIZED );
 
-    s_OldPos = aSheet->m_Pos + aSheet->m_Size;
-
-    s_PreviousSheetWidth = SHEET_MIN_WIDTH;
-    s_PreviousSheetHeight = SHEET_MIN_HEIGHT;
-
-    BOOST_FOREACH( SCH_SHEET_PIN sheetPin, aSheet->GetPins() )
-    {
-        s_PreviousSheetWidth = MAX( s_PreviousSheetWidth,
-                                    ( sheetPin.GetLength() + 1 ) * sheetPin.m_Size.x );
-        s_PreviousSheetHeight = MAX( s_PreviousSheetHeight,
-                                     sheetPin.m_Pos.y - aSheet->m_Pos.y );
-    }
 
     DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
     DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
 
     if( aSheet->IsNew() )    // not already in edit, save a copy for undo/redo
         SetUndoItem( aSheet );
+
+    DrawPanel->CrossHairOff( aDC );
+    GetScreen()->SetCrossHairPosition( aSheet->GetResizePosition() );
+    DrawPanel->CrossHairOn( aDC );
 }
 
 
@@ -352,12 +344,11 @@ void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
     GetScreen()->SetCrossHairPosition( aSheet->m_Pos );
     DrawPanel->MoveCursorToCrossHair();
 
-    s_OldPos = aSheet->m_Pos;
-    aSheet->m_Flags |= IS_MOVED;
+    if( !aSheet->IsNew() )
+        SetUndoItem( aSheet );
+
+    aSheet->SetFlags( IS_MOVED );
     DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
     DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
     DrawPanel->CrossHairOn( aDC );
-
-    if( !aSheet->IsNew() )    // not already in edit, save a copy for undo/redo
-        SetUndoItem( aSheet );
 }

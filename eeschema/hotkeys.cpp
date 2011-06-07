@@ -690,6 +690,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             case SCH_COMPONENT_T:
             case SCH_GLOBAL_LABEL_T:
             case SCH_HIERARCHICAL_LABEL_T:
+            case SCH_SHEET_T:
                 cmd.SetId( HK_Descr->m_IdMenuEvent );
                 wxPostEvent( this, cmd );
                 break;

@@ -955,7 +955,8 @@ double GetPointToLineSegmentDistance( int x, int y, int xi, int yi, int xf, int 
  * Function GetPointToLineSegmentDistance
  * Get distance between line segment and point
  * @param x,y = point
- * @param	xi,yi and xf,yf = the end-points of the line segment
+ * @param xi,yi Start point of the line segament
+ * @param xf,yf End point of the line segment
  * @return the distance
  */
 {

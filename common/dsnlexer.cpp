@@ -366,8 +366,8 @@ int DSNLEXER::NeedNUMBER( const char* aExpectation ) throw( IO_ERROR )
 
 
 /**
- * Function isspace
- * strips the upper bits of the int to ensure the value passed to ::isspace() is
+ * Function isSpace
+ * strips the upper bits of the int to ensure the value passed to C++ %isspace() is
  * in the range of 0-255
  */
 static inline bool isSpace( int cc )

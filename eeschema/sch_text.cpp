@@ -1602,7 +1602,7 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset()
 void SCH_HIERLABEL::Mirror_Y( int aYaxis_position )
 {
     /* The hierarchical label is NOT really mirrored for an horizontal label, the schematic
-     * orientation is changed.  For a vericalal label, the schematic orientation is not changed
+     * orientation is changed.  For a vertical label, the schematic orientation is not changed
      * and the label is moved to a suitable position.
      */
 

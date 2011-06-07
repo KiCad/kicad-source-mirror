@@ -33,6 +33,7 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
 {
     m_Layer = LAYER_SHEET;
     m_Pos = pos;
+    m_Size = wxSize( MIN_SHEET_WIDTH, MIN_SHEET_HEIGHT );
     m_TimeStamp = GetTimeStamp();
     m_SheetNameSize    = m_FileNameSize = 60;
     m_AssociatedScreen = NULL;
@@ -176,7 +177,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
     {
         if( !aLine.ReadLine() )
         {
-            aErrorMsg.Printf( wxT( "Read File Errror" ) );
+            aErrorMsg.Printf( wxT( "Read File Error" ) );
             return false;
         }
     }
@@ -292,14 +293,20 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 }
 
 
-void SCH_SHEET::SwapData( SCH_SHEET* copyitem )
+void SCH_SHEET::SwapData( SCH_ITEM* aItem )
 {
-    EXCHG( m_Pos, copyitem->m_Pos );
-    EXCHG( m_Size, copyitem->m_Size );
-    EXCHG( m_SheetName, copyitem->m_SheetName );
-    EXCHG( m_SheetNameSize, copyitem->m_SheetNameSize );
-    EXCHG( m_FileNameSize, copyitem->m_FileNameSize );
-    m_pins.swap( copyitem->m_pins );
+    wxCHECK_RET( aItem->Type() == SCH_SHEET_T,
+                 wxString::Format( wxT( "SCH_SHEET object cannot swap data with %s object." ),
+                                   GetChars( aItem->GetClass() ) ) );
+
+    SCH_SHEET* sheet = ( SCH_SHEET* ) aItem;
+
+    EXCHG( m_Pos, sheet->m_Pos );
+    EXCHG( m_Size, sheet->m_Size );
+    EXCHG( m_SheetName, sheet->m_SheetName );
+    EXCHG( m_SheetNameSize, sheet->m_SheetNameSize );
+    EXCHG( m_FileNameSize, sheet->m_FileNameSize );
+    m_pins.swap( sheet->m_pins );
 
     // Ensure sheet labels have their .m_Parent member pointing really on their
     // parent, after swapping.
@@ -308,9 +315,9 @@ void SCH_SHEET::SwapData( SCH_SHEET* copyitem )
         sheetPin.SetParent( this );
     }
 
-    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, copyitem->m_pins )
+    BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, sheet->m_pins )
     {
-        sheetPin.SetParent( copyitem );
+        sheetPin.SetParent( sheet );
     }
 }
 
@@ -396,6 +403,56 @@ bool SCH_SHEET::HasUndefinedPins()
     }
 
     return false;
+}
+
+
+int SCH_SHEET::GetMinWidth() const
+{
+    int width = MIN_SHEET_WIDTH;
+
+    for( size_t i = 0; i < m_pins.size();  i++ )
+    {
+        int edge = m_pins[i].GetEdge();
+
+        // Make sure pin is on right or left side of sheet.
+        if( edge >= 2 )
+            continue;
+
+        EDA_RECT rect = m_pins[i].GetBoundingBox();
+
+        if( width < rect.GetWidth() )
+            width = rect.GetWidth();
+
+        for( size_t j = 0; j < m_pins.size(); j++ )
+        {
+            if( (i == j) || (m_pins[i].m_Pos.y != m_pins[j].m_Pos.y) )
+                continue;
+
+            if( width < rect.GetWidth() + m_pins[j].GetBoundingBox().GetWidth() )
+            {
+                width = rect.GetWidth() + m_pins[j].GetBoundingBox().GetWidth();
+                break;
+            }
+        }
+    }
+
+    return width;
+}
+
+
+int SCH_SHEET::GetMinHeight() const
+{
+    int height = MIN_SHEET_HEIGHT;
+
+    for( size_t i = 0; i < m_pins.size();  i++ )
+    {
+        int pinY = m_pins[i].m_Pos.y - m_Pos.y;
+
+        if( pinY > height )
+            height = pinY;
+    }
+
+    return height;
 }
 
 
@@ -1010,6 +1067,12 @@ bool SCH_SHEET::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+wxPoint SCH_SHEET::GetResizePosition() const
+{
+    return wxPoint( m_Pos.x + m_Size.GetWidth(), m_Pos.y + m_Size.GetHeight() );
 }
 
 

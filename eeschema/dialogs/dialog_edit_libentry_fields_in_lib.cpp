@@ -66,7 +66,6 @@ private:
     /**
      * Function InitBuffers
      * sets up to edit the given component.
-     * @param aComponent The component to edit.
      */
     void InitBuffers();
 

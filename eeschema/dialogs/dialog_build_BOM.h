@@ -41,7 +41,7 @@ private:
      * Function CreateParstList
      * prints a list of components, in a form which can be imported by a
      * spreadsheet.  Form is:
-     *  cmp value; number of components; <footprint>; <field1>; ...;
+     *  cmp value; number of components; \<footprint\>; \<field1\>; ...;
      *  list of references having the same value
      */
     void    CreatePartsList( const wxString& aFullFileName, bool aIncludeSubComponents );

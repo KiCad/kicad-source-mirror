@@ -176,7 +176,7 @@ public:
      *
      * @param aKeywordTable is an array of KEYWORDS holding \a aKeywordCount.  This
      *  token table need not contain the lexer separators such as '(' ')', etc.
-     * @param aKeywordTable is the count of tokens in aKeywordTable.
+     * @param aKeywordCount is the count of tokens in aKeywordTable.
      * @param aFile is an open file, which will be closed when this is destructed.
      * @param aFileName is the name of the file
      */
@@ -189,7 +189,7 @@ public:
      *
      * @param aKeywordTable is an array of KEYWORDS holding \a aKeywordCount.  This
      *  token table need not contain the lexer separators such as '(' ')', etc.
-     * @param aKeywordTable is the count of tokens in aKeywordTable.
+     * @param aKeywordCount is the count of tokens in aKeywordTable.
      * @param aSExpression is text to feed through a STRING_LINE_READER
      * @param aSource is a description of aSExpression, used for error reporting.
      */
@@ -204,7 +204,7 @@ public:
      *
      * @param aKeywordTable is an array of KEYWORDS holding \a aKeywordCount.  This
      *  token table need not contain the lexer separators such as '(' ')', etc.
-     * @param aKeywordTable is the count of tokens in aKeywordTable.
+     * @param aKeywordCount is the count of tokens in aKeywordTable.
      * @param aLineReader is any subclassed instance of LINE_READER, such as
      *  STRING_LINE_READER or FILE_LINE_READER.
      */

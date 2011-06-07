@@ -120,6 +120,7 @@ const KICAD_T SCH_COLLECTOR::RotatableItems[] = {
     SCH_HIERARCHICAL_LABEL_T,
     SCH_FIELD_T,
     SCH_COMPONENT_T,
+    SCH_SHEET_T,
     EOT
 };
 

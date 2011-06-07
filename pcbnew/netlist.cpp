@@ -144,7 +144,7 @@ private:
     /**
      * Function SetPadNetName
      *  Update a pad netname using the current footprint
-     *  from the netlist (line format: ( <pad number> <net name> ) )
+     *  from the netlist (line format: ( \<pad number\> \<net name\> ) )
      *  @param aText = current line read from netlist
      */
     bool    SetPadNetName( char* aText );

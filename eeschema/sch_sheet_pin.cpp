@@ -80,15 +80,20 @@ void SCH_SHEET_PIN::Draw( EDA_DRAW_PANEL* aPanel,
 }
 
 
-void SCH_SHEET_PIN::SwapData( SCH_SHEET_PIN* copyitem )
+void SCH_SHEET_PIN::SwapData( SCH_ITEM* aItem )
 {
-    SCH_TEXT::SwapData( (SCH_TEXT*) copyitem );
+    wxCHECK_RET( aItem->Type() == SCH_SHEET_PIN_T,
+                 wxString::Format( wxT( "SCH_SHEET_PIN object cannot swap data with %s object." ),
+                                   GetChars( aItem->GetClass() ) ) );
+
+    SCH_SHEET_PIN* pin = ( SCH_SHEET_PIN* ) aItem;
+    SCH_TEXT::SwapData( (SCH_TEXT*) pin );
     int tmp;
-    tmp = copyitem->GetNumber();
-    copyitem->SetNumber( GetNumber() );
+    tmp = pin->GetNumber();
+    pin->SetNumber( GetNumber() );
     SetNumber( tmp );
-    tmp = copyitem->GetEdge();
-    copyitem->SetEdge( GetEdge() );
+    tmp = pin->GetEdge();
+    pin->SetEdge( GetEdge() );
     SetEdge( tmp );
 }
 
@@ -178,7 +183,7 @@ void SCH_SHEET_PIN::SetEdge( int aEdge )
 }
 
 
-int SCH_SHEET_PIN::GetEdge()
+int SCH_SHEET_PIN::GetEdge() const
 {
     return m_Edge;
 }

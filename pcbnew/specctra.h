@@ -1134,7 +1134,7 @@ class LAYER : public ELEM
     std::string name;
     DSN_T       layer_type; ///< one of: T_signal, T_power, T_mixed, T_jumper
     int         direction;
-    int         cost;       ///< [forbidden | high | medium | low | free | <positive_integer > | -1]
+    int         cost;       ///< [forbidden | high | medium | low | free | \<positive_integer\> | -1]
     int         cost_type;  ///< T_length | T_way
     RULE*       rules;
     STRINGS     use_net;
@@ -2678,7 +2678,7 @@ class CLASS : public ELEM
 
     STRINGS         net_ids;
 
-    /// <circuit_descriptor> list
+    /// circuit descriptor list
     STRINGS         circuit;
 
     RULE*           rules;
@@ -3619,7 +3619,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * pin_reference and it will be tested through CurTok().
      *
      * @param component_id Where to put the text preceeding the '-' hyphen.
-     * @param pin_d Where to put the text which trails the '-'.
+     * @param pid_id Where to put the text which trails the '-'.
      * @throw IO_ERROR, if the next token or two do no make up a pin_reference,
      * or there is an error reading from the input stream.
      */
@@ -3719,6 +3719,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * Function makePADSTACK
      * creates a PADSTACK which matches the given pad.  Only pads which do not
      * satisfy the function isKeepout() should be passed to this function.
+     * @param aBoard The owner of the MODULE.
      * @param aPad The D_PAD which needs to be made into a PADSTACK.
      * @return PADSTACK* - The created padstack, including its padstack_id.
      */

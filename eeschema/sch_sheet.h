@@ -19,6 +19,10 @@ class DANGLING_END_ITEM;
 class SCH_EDIT_FRAME;
 
 
+#define MIN_SHEET_WIDTH  500
+#define MIN_SHEET_HEIGHT 150
+
+
 /**
  * Pin (label) used in sheets to create hierarchical schematics.
  *
@@ -81,14 +85,14 @@ public:
      */
     virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& aPos );
 
-    void SwapData( SCH_SHEET_PIN* copyitem );
+    virtual void SwapData( SCH_ITEM* aItem );
 
     /**
      * Get the sheet label number.
      *
      * @return Number of the sheet label.
      */
-    int GetNumber() { return m_Number; }
+    int GetNumber() const { return m_Number; }
 
     /**
      * Set the sheet label number.
@@ -96,8 +100,10 @@ public:
      * @param aNumber - New sheet number label.
      */
     void SetNumber( int aNumber );
+
     void SetEdge( int aEdge );
-    int GetEdge();
+
+    int GetEdge() const;
 
     /**
      * Function ConstraintOnEdge
@@ -346,6 +352,38 @@ public:
     bool HasUndefinedPins();
 
     /**
+     * Function GetMinWidth
+     * returns the minimum width of the sheet based on the widths of the sheet pin text.
+     *
+     * <p>
+     * The minimum sheet width is determined by the width of the bounding box of each
+     * hierarchical sheet pin.  If two pins are horizontally adjacent ( same Y position )
+     * to each other, the sum of the bounding box widths is used.  If at some point in
+     * the future sheet objects can be rotated or pins can be placed in the vertical
+     * orientation, this function will need to be changed.
+     * </p>
+     *
+     * @return The minimum width the sheet can be resized.
+     */
+    int GetMinWidth() const;
+
+    /**
+     * Function GetMinHeight
+     * returns the minimum height that the sheet can be resized based on the sheet pin
+     * positions.
+     *
+     * <p>
+     * The minimum width of a sheet is determined by the Y axis location of the bottom
+     * most sheet pin.  If at some point in the future sheet objects can be rotated or
+     * pins can be placed in the vertical orientation, this function will need to be
+     * changed.
+     * </p>
+     *
+     * @return The minimum height the sheet can be resized.
+     */
+    int GetMinHeight() const;
+
+    /**
      * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
@@ -373,7 +411,15 @@ public:
      */
     EDA_RECT GetBoundingBox() const;
 
-    void SwapData( SCH_SHEET* copyitem );
+    /**
+     * Function GetResizePos
+     * returns the position of the lower right corner of the sheet in drawing units.
+     *
+     * @return A wxPoint containing lower right corner of the sheet in drawing units.
+     */
+    wxPoint GetResizePosition() const;
+
+    virtual void SwapData( SCH_ITEM* aItem );
 
     /**
      * Function ComponentCount

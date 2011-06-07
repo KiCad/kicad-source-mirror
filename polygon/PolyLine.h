@@ -143,7 +143,7 @@ public:
     /**
      * Function Fillet
      * returns a filleted version of a polygon.
-     * @param aDistance is the fillet radius.
+     * @param aRadius is the fillet radius.
      * @param aSegments is the number of segments / fillet.
      * @return CPolyLine* - Pointer to new polygon.
      */

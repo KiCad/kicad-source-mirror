@@ -199,13 +199,13 @@ private:
      * but does not add it to the BOARD.  Use this to report any kind of
      * DRC problem, or unconnected pad problem.
      *
-     * @param aTrack The reference track
+     * @param aTrack The reference track.
      * @param aItem  Another item on the BOARD, such as a SEGVIA, SEGZONE,
-     *         or TRACK.
+     *               or TRACK.
      * @param aErrorCode A categorizing identifier for the particular type
-     *         of error that is being reported.
+     *                   of error that is being reported.
      * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to
-     *         first be allocated, then filled.
+     *               first be allocated, then filled.
      */
     MARKER_PCB* fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe );
 
@@ -219,11 +219,11 @@ private:
      * but does not add it to the BOARD.  Use this to report any kind of
      * DRC problem, or unconnected pad problem.
      *
-     * @param aEdge edge zone to test
+     * @param aArea The zone to test
      * @param aPos position of error
      * @param aErrorCode  Type of error
      * @param fillMe A MARKER_PCB* which is to be filled in, or NULL if one is to
-     *         first be allocated, then filled.
+     *               first be allocated, then filled.
      */
     MARKER_PCB* fillMarker( const ZONE_CONTAINER* aArea,
                             const wxPoint&        aPos,

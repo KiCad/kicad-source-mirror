@@ -1,8 +1,8 @@
-/****************************************/
-/* Basic classes for Kicad:             */
-/*      EDA_ITEM                        */
+/**********************************/
+/* Basic classes for Kicad:       */
+/*      EDA_ITEM                  */
 /*      EDA_TEXT                  */
-/****************************************/
+/**********************************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -196,8 +196,8 @@ EDA_TEXT::EDA_TEXT( const wxString& text )
     m_Orient    = 0;                             // Rotation angle in 0.1 degrees.
     m_Attributs = 0;
     m_Mirror    = false;                         // display mirror if true
-    m_HJustify  = GR_TEXT_HJUSTIFY_CENTER;       // Defualt horizontal justification is centered.
-    m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;       // Defualt vertical justification is centered.
+    m_HJustify  = GR_TEXT_HJUSTIFY_CENTER;       // Default horizontal justification is centered.
+    m_VJustify  = GR_TEXT_VJUSTIFY_CENTER;       // Default vertical justification is centered.
     m_Thickness     = 0;                         // thickness
     m_Italic    = false;                         // true = italic shape.
     m_Bold      = false;
@@ -230,7 +230,7 @@ EDA_TEXT::~EDA_TEXT()
 
 int EDA_TEXT::LenSize( const wxString& aLine ) const
 {
-    return ReturnGraphicTextWidth(aLine, m_Size.x, m_Italic, m_Bold ) + m_Thickness;
+    return ReturnGraphicTextWidth( aLine, m_Size.x, m_Italic, m_Bold ) + m_Thickness;
 }
 
 
@@ -356,8 +356,8 @@ bool EDA_TEXT::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy
 
 
 void EDA_TEXT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                           EDA_Colors aColor, int aDrawMode,
-                           GRTraceMode aFillMode, EDA_Colors aAnchor_color )
+                     EDA_Colors aColor, int aDrawMode,
+                     GRTraceMode aFillMode, EDA_Colors aAnchor_color )
 {
     if( m_MultilineAllowed )
     {
@@ -400,10 +400,10 @@ void EDA_TEXT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
 
 
 void EDA_TEXT::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                                        const wxPoint& aOffset, EDA_Colors aColor,
-                                        int aDrawMode, GRTraceMode aFillMode,
-                                        EDA_Colors aAnchor_color,
-                                        wxString& aText, wxPoint aPos )
+                                  const wxPoint& aOffset, EDA_Colors aColor,
+                                  int aDrawMode, GRTraceMode aFillMode,
+                                  EDA_Colors aAnchor_color,
+                                  wxString& aText, wxPoint aPos )
 {
     int width = m_Thickness;
 
@@ -442,6 +442,7 @@ void EDA_TEXT::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     DrawGraphicText( aPanel, aDC, aOffset + aPos, aColor, aText, m_Orient, size,
                      m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
+
 
 wxString EDA_TEXT::GetTextStyleName()
 {
@@ -509,6 +510,7 @@ bool EDA_RECT::Contains( const wxPoint& aPoint ) const
 
     return (rel_pos.x >= 0) && (rel_pos.y >= 0) && ( rel_pos.y <= size.y) && ( rel_pos.x <= size.x);
 }
+
 
 /*
  * return true if aRect is inside me (or on boundaries)

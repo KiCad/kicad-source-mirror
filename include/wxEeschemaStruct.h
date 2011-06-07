@@ -565,7 +565,30 @@ private:
     wxString        SelectFromLibBrowser( void );
 
 public:
-    bool            EditSheet( SCH_SHEET* Sheet, wxDC* DC );
+    /**
+     * Function EditSheet
+     * is used to edit an existing sheet or add a new sheet to the schematic.
+     * <p>
+     * When \a aSheet is a new sheet:
+     * <ul>
+     * <li>and the file name already exists in the schematic hierarchy, the screen associated
+     * with the sheet found in the hierarchy is associated with \a aSheet.</li>
+     * <li>and the file name already exists on the system, then \a aSheet is loaded with the
+     * existing file.</li>
+     * <li>and the file name does not exist in the schematic hierarchy or on the file system,
+     * then a new screen is created and associated with \a aSheet.</li>
+     * </ul> </p> <p>
+     * When \a aSheet is an existing sheet:
+     * <ul>
+     * <li>and the file name already exists in the schematic hierarchy, the current associated
+     * screen is replace by the one found in the hierarchy.</li>
+     * <li>and the file name already exists on the system, the current associated screen file
+     * name is changed and the file is loaded.</li>
+     * <li>and the file name does not exist in the schematic hierarchy or on the file system,
+     * the current associated screen file name is changed and saved to disk.</li>
+     * </ul> </p>
+     */
+    bool EditSheet( SCH_SHEET* aSheet, wxDC* aDC );
 
     wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
 
@@ -723,15 +746,15 @@ private:
      * Function copyBlockItems
      * copies the list of block item.
      * @sa m_blockItems
-     * @param aItemList List to copy the block select items into.
+     * @param aItemsList List to copy the block select items into.
      */
     void copyBlockItems( PICKED_ITEMS_LIST& aItemsList );
 
     /**
      * Function addJunctionMenuEntries
      * adds the context menu items to \a aMenu for \a aJunction.
-     * @params aMenu The menu to add the items to.
-     * @params aJunction The SCH_JUNCTION object selected.
+     * @param aMenu The menu to add the items to.
+     * @param aJunction The SCH_JUNCTION object selected.
      */
     void addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunction );
 
