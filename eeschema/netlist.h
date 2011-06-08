@@ -36,6 +36,7 @@
 
 #include "class_libentry.h"
 #include "sch_sheet_path.h"
+#include "sch_component.h"
 
 
 class SCH_COMPONENT;
@@ -152,6 +153,11 @@ public:
     int CompareRef( const SCH_REFERENCE& item ) const
     {
         return m_Ref.compare( item.m_Ref );
+    }
+
+    int CompareLibName( const SCH_REFERENCE& item ) const
+    {
+        return m_RootCmp->GetLibName().CmpNoCase( item.m_RootCmp->GetLibName() );
     }
 
     bool IsPartsLocked()

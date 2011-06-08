@@ -438,6 +438,9 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId  )
                 if( componentFlatList[jj].CompareValue( componentFlatList[ii] ) != 0 )
                     continue;
 
+                if( componentFlatList[jj].CompareLibName( componentFlatList[ii] ) != 0 )
+                    continue;
+
                 if( !componentFlatList[jj].m_IsNew )
                     continue;
 
