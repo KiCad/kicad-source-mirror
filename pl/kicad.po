@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-29 08:05+0100\n"
-"PO-Revision-Date: 2011-05-29 08:06+0100\n"
+"POT-Creation-Date: 2011-06-09 21:16+0100\n"
+"PO-Revision-Date: 2011-06-09 21:16+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team\n"
 "MIME-Version: 1.0\n"
@@ -863,7 +863,7 @@ msgstr "Dodaj połączenie"
 msgid "Add \"No Connect\" Flag"
 msgstr "Dodaj flagę \"Niepołączony\""
 
-#: eeschema/hotkeys.cpp:971
+#: eeschema/hotkeys.cpp:972
 msgid "Add pin"
 msgstr "Dodaj pin"
 
@@ -1533,41 +1533,12 @@ msgid "Change cursor shape"
 msgstr "Zmień kształt kursora"
 
 #: eeschema/tool_sch.cpp:226
-#: eeschema/schframe.cpp:541
 msgid "Show hidden pins"
 msgstr "Pokaż ukryte piny"
 
 #: eeschema/tool_sch.cpp:231
 msgid "HV orientation for wires and bus"
 msgstr "Orientacja dla połączeń i magistral"
-
-#: eeschema/schframe.cpp:392
-msgid "Schematic modified, Save before exit?"
-msgstr "Schemat został zmieniony. Zapisać przed zakończeniem?"
-
-#: eeschema/schframe.cpp:393
-msgid "Confirmation"
-msgstr "Potwierdzenie"
-
-#: eeschema/schframe.cpp:530
-msgid "Draw wires and buses in any direction"
-msgstr "Rysowanie połączeń i magistral w dowolnym kierunku"
-
-#: eeschema/schframe.cpp:531
-msgid "Draw horizontal and vertical wires and buses only"
-msgstr "Rysowanie połączeń i magistral tylko w pionie i poziomie"
-
-#: eeschema/schframe.cpp:540
-msgid "Do not show hidden pins"
-msgstr "Nie pokazuj ukrytych pinów"
-
-#: eeschema/schframe.cpp:639
-msgid "Schematic"
-msgstr "Schemat"
-
-#: eeschema/schframe.cpp:719
-msgid "Error: not a component or no component"
-msgstr "Błąd: To nie jest element lub jego brak"
 
 #: eeschema/find.cpp:76
 #, c-format
@@ -1613,45 +1584,45 @@ msgstr " znaleziony w "
 msgid "No item found matching %s."
 msgstr "Nie znaleziono elementu pasującego do %s"
 
-#: eeschema/component_references_lister.cpp:484
+#: eeschema/component_references_lister.cpp:487
 #, c-format
 msgid "Item not annotated: %s%s"
 msgstr "Element nie ma numeracji: %s%s"
 
-#: eeschema/component_references_lister.cpp:490
-#: eeschema/component_references_lister.cpp:557
-#: eeschema/component_references_lister.cpp:584
+#: eeschema/component_references_lister.cpp:493
+#: eeschema/component_references_lister.cpp:560
+#: eeschema/component_references_lister.cpp:587
 #, c-format
 msgid " (unit %d)"
 msgstr " (część %d)"
 
-#: eeschema/component_references_lister.cpp:512
+#: eeschema/component_references_lister.cpp:515
 #, c-format
 msgid "Error item %s%s"
 msgstr "Błąd elementu %s%s"
 
-#: eeschema/component_references_lister.cpp:515
+#: eeschema/component_references_lister.cpp:518
 #, c-format
 msgid " unit %d and no more than %d parts"
 msgstr " część %d i nie więcej niż %d elementów"
 
-#: eeschema/component_references_lister.cpp:551
-#: eeschema/component_references_lister.cpp:578
+#: eeschema/component_references_lister.cpp:554
+#: eeschema/component_references_lister.cpp:581
 #, c-format
 msgid "Multiple item %s%s"
 msgstr "Element wielokrotny %s%s"
 
-#: eeschema/component_references_lister.cpp:600
+#: eeschema/component_references_lister.cpp:603
 #, c-format
 msgid "Different values for %s%d.%d (%s) and %s%d.%d (%s)"
 msgstr "Różnica wartości dla %s%d.%d (%s) i %s%d.%d (%s)"
 
-#: eeschema/component_references_lister.cpp:610
+#: eeschema/component_references_lister.cpp:613
 #, c-format
 msgid "Different values for %s%d%c (%s) and %s%d%c (%s)"
 msgstr "Różnica wartości dla %s%d%c (%s) i %s%d%c (%s)"
 
-#: eeschema/component_references_lister.cpp:644
+#: eeschema/component_references_lister.cpp:647
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Zdublowany odcisk czasowy (%s) dla %s%d i %s%d"
@@ -1707,6 +1678,99 @@ msgstr " został stworzony w starszej wersji EESchema. Plik zostanie zachowany w
 msgid "Done Loading "
 msgstr "Wczytywanie zakończone "
 
+#: eeschema/libfield.cpp:36
+msgid "Component Name"
+msgstr "Nazwa elementu"
+
+#: eeschema/libfield.cpp:37
+msgid "Enter a name to create a new component based on this one."
+msgstr "Wpisz nazwę by stworzyć nowy element na podstawie tego elementu."
+
+#: eeschema/libfield.cpp:41
+msgid "Edit Field"
+msgstr "Edytuj pole"
+
+#: eeschema/libfield.cpp:42
+#, c-format
+msgid "Enter a new value for the %s field."
+msgstr "Wprowadź nową wartość dla pola %s."
+
+#: eeschema/libfield.cpp:58
+#, c-format
+msgid "A %s field cannot be empty."
+msgstr "Pole %s nie może być puste."
+
+#: eeschema/libfield.cpp:67
+msgid "Illegal reference. A reference must start by a letter"
+msgstr "Niepoprawne pole oznaczenie. Oznaczenie musi rozpoczynać się literą"
+
+#: eeschema/libfield.cpp:84
+#, c-format
+msgid ""
+"The name <%s> conflicts with an existing entry in the component library <%s>.\n"
+"\n"
+"Do you wish to replace the current component in library with this one?"
+msgstr ""
+"Nazwa <%s> koliduje z istniejącym wpisem w bibliotece elementów <%s>.\n"
+"\n"
+"Czy chcesz zamienić bieżący element w bibliotece na obecny?"
+
+#: eeschema/libfield.cpp:89
+#: eeschema/libfield.cpp:103
+#: eeschema/libfield.cpp:121
+msgid "Confirm"
+msgstr "Potwierdzenie"
+
+#: eeschema/libfield.cpp:99
+#, c-format
+msgid ""
+"The current component already has an alias named <%s>.\n"
+"\n"
+"Do you wish to remove this alias from the component?"
+msgstr ""
+"Bieżący element posiada alias nazwany <%s>.\n"
+"\n"
+"Czy chcesz usunąć ten alias z tego elementu?"
+
+#: eeschema/libfield.cpp:116
+#, c-format
+msgid ""
+"The new component contains alias names that conflict with entries in the component library <%s>.\n"
+"\n"
+"Do you wish to remove all of the conflicting aliases from this component?"
+msgstr ""
+"Nowy element posiada alias(y) które są w konflikcie z wpisami w bibliotece <%s>.\n"
+"\n"
+"Czy chcesz usunąć wszystkie niepasujące aliasy z tego elementu?"
+
+#: eeschema/schframe.cpp:395
+msgid "Schematic modified, Save before exit?"
+msgstr "Schemat został zmieniony. Zapisać przed zakończeniem?"
+
+#: eeschema/schframe.cpp:396
+msgid "Confirmation"
+msgstr "Potwierdzenie"
+
+#: eeschema/schframe.cpp:533
+msgid "Draw wires and buses in any direction"
+msgstr "Rysowanie połączeń i magistral w dowolnym kierunku"
+
+#: eeschema/schframe.cpp:534
+msgid "Draw horizontal and vertical wires and buses only"
+msgstr "Rysowanie połączeń i magistral tylko w pionie i poziomie"
+
+#: eeschema/schframe.cpp:543
+msgid "Do not show hidden pins"
+msgstr "Nie pokazuj ukrytych pinów"
+
+#: eeschema/schframe.cpp:642
+msgid "Schematic"
+msgstr "Schemat"
+
+#: eeschema/schframe.cpp:722
+msgid "Error: not a component or no component"
+msgstr "Błąd: To nie jest element lub jego brak"
+
 #: eeschema/edit_component_in_schematic.cpp:138
 #, c-format
 msgid ""
@@ -1723,74 +1787,17 @@ msgstr ""
 msgid "Edit %s Field"
 msgstr "Edytuj pole %s"
 
-#: eeschema/edit_component_in_schematic.cpp:193
+#: eeschema/edit_component_in_schematic.cpp:192
+msgid "Illegal reference string!  No change"
+msgstr "Pole oznaczenie nie jest poprawne! Bez zmian"
+
+#: eeschema/edit_component_in_schematic.cpp:202
 msgid "The reference field cannot be empty!  No change"
 msgstr "Pole oznaczenie nie może być puste! Bez zmian"
 
-#: eeschema/edit_component_in_schematic.cpp:197
+#: eeschema/edit_component_in_schematic.cpp:206
 msgid "The value field cannot be empty!  No change"
 msgstr "Pole wartość nie może być puste! Bez zmian"
-
-#: eeschema/libfield.cpp:35
-msgid "Component Name"
-msgstr "Nazwa elementu"
-
-#: eeschema/libfield.cpp:36
-msgid "Enter a name to create a new component based on this one."
-msgstr "Wpisz nazwę by stworzyć nowy element na podstawie tego elementu."
-
-#: eeschema/libfield.cpp:40
-msgid "Edit Field"
-msgstr "Edytuj pole"
-
-#: eeschema/libfield.cpp:41
-#, c-format
-msgid "Enter a new value for the %s field."
-msgstr "Wprowadź nową wartość dla pola %s."
-
-#: eeschema/libfield.cpp:56
-#, c-format
-msgid "A %s field cannot be empty."
-msgstr "Pole %s nie może być puste."
-
-#: eeschema/libfield.cpp:74
-#, c-format
-msgid ""
-"The name <%s> conflicts with an existing entry in the component library <%s>.\n"
-"\n"
-"Do you wish to replace the current component in library with this one?"
-msgstr ""
-"Nazwa <%s> koliduje z istniejącym wpisem w bibliotece elementów <%s>.\n"
-"\n"
-"Czy chcesz zamienić bieżący element w bibliotece na obecny?"
-
-#: eeschema/libfield.cpp:79
-#: eeschema/libfield.cpp:93
-#: eeschema/libfield.cpp:111
-msgid "Confirm"
-msgstr "Potwierdzenie"
-
-#: eeschema/libfield.cpp:89
-#, c-format
-msgid ""
-"The current component already has an alias named <%s>.\n"
-"\n"
-"Do you wish to remove this alias from the component?"
-msgstr ""
-"Bieżący element posiada alias nazwany <%s>.\n"
-"\n"
-"Czy chcesz usunąć ten alias z tego elementu?"
-
-#: eeschema/libfield.cpp:106
-#, c-format
-msgid ""
-"The new component contains alias names that conflict with entries in the component library <%s>.\n"
-"\n"
-"Do you wish to remove all of the conflicting aliases from this component?"
-msgstr ""
-"Nowy element posiada alias(y) które są w konflikcie z wpisami w bibliotece <%s>.\n"
-"\n"
-"Czy chcesz usunąć wszystkie niepasujące aliasy z tego elementu?"
 
 #: eeschema/lib_field.cpp:82
 #: eeschema/lib_field.cpp:765
@@ -1831,6 +1838,21 @@ msgstr "Rozmiar X"
 #: eeschema/lib_field.cpp:761
 msgid "Size Y"
 msgstr "Rozmiar Y"
+
+#: eeschema/sch_text.cpp:867
+#, c-format
+msgid "Label %s"
+msgstr "Etykieta %s"
+
+#: eeschema/sch_text.cpp:1300
+#, c-format
+msgid "Global Label %s"
+msgstr "Etykieta Globalna %s"
+
+#: eeschema/sch_text.cpp:1657
+#, c-format
+msgid "Hierarchical Label %s"
+msgstr "Etykieta Hierarchiczna %s"
 
 #: eeschema/pinedit.cpp:197
 msgid "This position is already occupied by another pin. Continue?"
@@ -1874,20 +1896,56 @@ msgstr "<b>Pin poza siatką %s</b> \"%s\" na pozycji <b>(%.3f, %.3f)</b>"
 msgid "No off grid or duplicate pins were found."
 msgstr "Nie znaleziono pinów zdblowanych lub poza siatką."
 
-#: eeschema/sch_text.cpp:867
-#, c-format
-msgid "Label %s"
-msgstr "Etykieta %s"
+#: eeschema/sheet.cpp:69
+msgid "File name is not valid!"
+msgstr "Nazwa pliku jest niepoprawna!"
 
-#: eeschema/sch_text.cpp:1300
+#: eeschema/sheet.cpp:85
+#: eeschema/sheet.cpp:115
 #, c-format
-msgid "Global Label %s"
-msgstr "Etykieta Globalna %s"
+msgid "A file named \"%s\" already exists"
+msgstr "Plik \"%s\" już istnieje"
 
-#: eeschema/sch_text.cpp:1657
-#, c-format
-msgid "Hierarchical Label %s"
-msgstr "Etykieta Hierarchiczna %s"
+#: eeschema/sheet.cpp:89
+#: eeschema/sheet.cpp:120
+msgid " in the current schematic hierarchy"
+msgstr " w bieżącej hierarchii schematu."
+
+#: eeschema/sheet.cpp:91
+msgid ""
+".\n"
+"\n"
+"Do you want to create a sheet with the contents of this file?"
+msgstr ""
+".\n"
+"\n"
+"Czy chcesz utworzyć arkusz z zawartością tego pliku?"
+
+#: eeschema/sheet.cpp:111
+msgid "Changing the sheet file name cannot be undone.  "
+msgstr "Zmiana nazwy pliku arkusza nie może być cofnięta."
+
+#: eeschema/sheet.cpp:122
+msgid ""
+".\n"
+"\n"
+"Do you want to replace the sheet with the contents of this file?"
+msgstr ""
+".\n"
+"\n"
+"Czy chcesz zamienić arkusz z zawartością tego pliku?"
+
+#: eeschema/sheet.cpp:134
+msgid ""
+"This sheet uses shared data in a complex hierarchy.\n"
+"\n"
+msgstr ""
+"Ten arkusz używa danych współdzielonych w zaawansowanej hierarchii.\n"
+"\n"
+
+#: eeschema/sheet.cpp:135
+msgid "Do you wish to convert it to a simple hierarchical sheet?"
+msgstr "Czy chcesz go zamienić na prosty arkusz kierarchiczny?"
 
 #: eeschema/netlist.cpp:93
 msgid "Building net list:"
@@ -2701,6 +2759,22 @@ msgstr "Przeglądarka bibliotek"
 msgid "Electronics rule check error"
 msgstr "Błąd ERC"
 
+#: eeschema/sch_sheet.cpp:839
+msgid "Sheet name"
+msgstr "Nazwa arkusza"
+
+#: eeschema/sch_sheet.cpp:840
+msgid "File name"
+msgstr "Nazwa pliku"
+
+#: eeschema/sch_sheet.cpp:844
+msgid "Time Stamp"
+msgstr "Znacznik czasowy"
+
+#: eeschema/sch_sheet.cpp:1045
+msgid "Hierarchical Sheet "
+msgstr "Arkusz hierarchiczny"
+
 #: eeschema/sch_polyline.cpp:215
 #, c-format
 msgid "Graphic Polyline with %d Points"
@@ -2721,57 +2795,6 @@ msgstr "Magistrala o szerokości %d punktów"
 msgid "Polyline on Unkown Layer with %d Points"
 msgstr "Linia łamana o szerokości %d punktów na nieznanej warstwie"
 
-#: eeschema/sheet.cpp:97
-msgid "File name is not valid!"
-msgstr "Nazwa pliku jest niepoprawna!"
-
-#: eeschema/sheet.cpp:113
-#: eeschema/sheet.cpp:143
-#, c-format
-msgid "A file named \"%s\" already exists"
-msgstr "Plik \"%s\" już istnieje"
-
-#: eeschema/sheet.cpp:117
-#: eeschema/sheet.cpp:148
-msgid " in the current schematic hierarchy"
-msgstr " w bieżącej hierarchii schematu."
-
-#: eeschema/sheet.cpp:119
-msgid ""
-".\n"
-"\n"
-"Do you want to create a sheet with the contents of this file?"
-msgstr ""
-".\n"
-"\n"
-"Czy chcesz utworzyć arkusz z zawartością tego pliku?"
-
-#: eeschema/sheet.cpp:139
-msgid "Changing the sheet file name cannot be undone.  "
-msgstr "Zmiana nazwy pliku arkusza nie może być cofnięta."
-
-#: eeschema/sheet.cpp:150
-msgid ""
-".\n"
-"\n"
-"Do you want to replace the sheet with the contents of this file?"
-msgstr ""
-".\n"
-"\n"
-"Czy chcesz zamienić arkusz z zawartością tego pliku?"
-
-#: eeschema/sheet.cpp:162
-msgid ""
-"This sheet uses shared data in a complex hierarchy.\n"
-"\n"
-msgstr ""
-"Ten arkusz używa danych współdzielonych w zaawansowanej hierarchii.\n"
-"\n"
-
-#: eeschema/sheet.cpp:163
-msgid "Do you wish to convert it to a simple hierarchical sheet?"
-msgstr "Czy chcesz go zamienić na prosty arkusz kierarchiczny?"
-
 #: eeschema/sch_sheet_path.cpp:151
 #, c-format
 msgid "Schematic sheets can only be nested %d levels deep."
@@ -2782,27 +2805,11 @@ msgstr "Arkusze schematów mogą być zagnieżdżone tylko %d krotnie."
 msgid "%8.8lX/"
 msgstr "%8.8lX/"
 
-#: eeschema/sch_sheet.cpp:782
-msgid "Sheet name"
-msgstr "Nazwa arkusza"
-
-#: eeschema/sch_sheet.cpp:783
-msgid "File name"
-msgstr "Nazwa pliku"
-
-#: eeschema/sch_sheet.cpp:787
-msgid "Time Stamp"
-msgstr "Znacznik czasowy"
-
-#: eeschema/sch_sheet.cpp:988
-msgid "Hierarchical Sheet "
-msgstr "Arkusz hierarchiczny"
-
 #: eeschema/sheetlab.cpp:190
 msgid "No new hierarchical labels found."
 msgstr "Nie znaleziono nowych etykiet hierarchicznych."
 
-#: eeschema/sch_sheet_pin.cpp:498
+#: eeschema/sch_sheet_pin.cpp:503
 #, c-format
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Hierarchiczny arkusz pinów %s"
@@ -2885,8 +2892,8 @@ msgid "Unit %d %c"
 msgstr "Część %d %c"
 
 #: eeschema/onrightclick.cpp:304
-msgid "Edit with Libedit"
-msgstr "Edytuj w edytorze bibliotek"
+msgid "Edit with Library Editor"
+msgstr "Edytuj za pomocą Edytora Bibliotek"
 
 #: eeschema/onrightclick.cpp:309
 msgid "Edit Component"
@@ -3130,19 +3137,19 @@ msgstr "Informacja o znaczniku błędu"
 msgid "U"
 msgstr "U"
 
-#: eeschema/sch_component.cpp:1392
+#: eeschema/sch_component.cpp:1431
 msgid "Power symbol"
 msgstr "Symbol zasilania"
 
-#: eeschema/sch_component.cpp:1402
+#: eeschema/sch_component.cpp:1441
 msgid "Alias of"
 msgstr "Alias "
 
-#: eeschema/sch_component.cpp:1404
+#: eeschema/sch_component.cpp:1443
 msgid "Library"
 msgstr "Biblioteka"
 
-#: eeschema/sch_component.cpp:1629
+#: eeschema/sch_component.cpp:1668
 #, c-format
 msgid "Component %s, %s"
 msgstr "Element %s, %s"
@@ -3733,7 +3740,7 @@ msgstr "Lista elementów:"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:25
 msgid "Components by reference"
-msgstr "Elementy wg oznaczenie"
+msgstr "Elementy wg oznaczenia"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:29
 msgid "Sub components (i.e. U2A, U2B ...)"
@@ -4034,7 +4041,7 @@ msgstr ""
 "Zaznacz tą opcję dla symboli zasilania.\n"
 "Symbole zasilania posiadają specjalne właściwości w programie EESchema:\n"
 "- Wartość nie może być zmieniona (została zablokowana) ponieważ nazwa wyprowadzenia dla symbolu zasilania jest istotna.\n"
-"- Odnośnik jest aktualizowany automatycznie gdy tworzona jest lista sieci (nie ma potrzeby ich numerowania)"
+"- Oznaczenie jest aktualizowane automatycznie gdy tworzona jest lista sieci (nie ma potrzeby ich numerowania)"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:97
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:133
@@ -4149,8 +4156,8 @@ msgid ""
 "This is the reference used in schematic for annotation.\n"
 "Do not use digits in reference."
 msgstr ""
-"Jest to odnośnik używany w schematach podczas numeracji elementów.\n"
-"Cyfry nie mogą być używane w odnośnikach."
+"Jest to oznaczenie używane w schematach podczas numeracji elementów.\n"
+"Cyfry nie mogą być używane w oznaczeniach."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:80
 msgid "Number of &parts per package:"
@@ -4764,36 +4771,13 @@ msgstr " x W"
 msgid "Empty Text!"
 msgstr "Pusty tekst!"
 
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:90
-#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:42
-msgid "Size"
-msgstr "Rozmiar"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:93
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:98
-msgid "Pos "
-msgstr "Pozycja "
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:94
-msgid "X"
-msgstr "X"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:99
-msgid "Y"
-msgstr "Y"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:155
-msgid "No Component Name!"
-msgstr "Brak nazwy elementu!"
-
-#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:162
-#, c-format
-msgid "Component [%s] not found!"
-msgstr "Nie znaleziono elementu [%s]!"
-
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:28
 msgid "Text:"
 msgstr "Tekst:"
+
+#: eeschema/dialogs/dialog_lib_edit_text_base.cpp:42
+msgid "Size"
+msgstr "Rozmiar"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:57
 msgid " Text Options : "
@@ -4897,17 +4881,6 @@ msgstr "Utwórz plik "
 msgid " error"
 msgstr " błąd"
 
-#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:236
-#, c-format
-msgid ""
-"A new name is entered for this component\n"
-"An alias %s already exists!\n"
-"Cannot update this component"
-msgstr ""
-"Nowa nazwa została wpisana dla tego elementu\n"
-"Alias %s już istnieje!\n"
-"Nie można uaktualnić tego elementu."
-
 #: eeschema/dialogs/dialog_color_config.cpp:26
 msgid "Net name"
 msgstr "Nazwa sieci"
@@ -4949,7 +4922,6 @@ msgid "Erc error"
 msgstr "Błąd ERC"
 
 #: eeschema/dialogs/dialog_color_config.cpp:56
-#: pcbnew/basepcbframe.cpp:555
 msgid "Grid"
 msgstr "Siatka"
 
@@ -5136,6 +5108,47 @@ msgstr "Pole użytkownika 8"
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:243
 msgid "Template Field Names"
 msgstr "Wzorce nazw pól"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:93
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:98
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:169
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:174
+msgid "Pos "
+msgstr "Pozycja "
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:94
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:170
+msgid "X"
+msgstr "X"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:99
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:175
+msgid "Y"
+msgstr "Y"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:155
+msgid "No Component Name!"
+msgstr "Brak nazwy elementu!"
+
+#: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:162
+#, c-format
+msgid "Component [%s] not found!"
+msgstr "Nie znaleziono elementu [%s]!"
+
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:227
+msgid "Illegal reference prefix. A reference must start by a letter"
+msgstr "Niepoprawny przedrostek oznaczenia. Oznaczenie musi rozpoczynać sie literą"
+
+#: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:243
+#, c-format
+msgid ""
+"A new name is entered for this component\n"
+"An alias %s already exists!\n"
+"Cannot update this component"
+msgstr ""
+"Nowa nazwa została wpisana dla tego elementu\n"
+"Alias %s już istnieje!\n"
+"Nie można uaktualnić tego elementu."
 
 #: pcbnew/automove.cpp:179
 msgid "No modules found!"
@@ -7920,7 +7933,7 @@ msgstr "Zmień segmenty na warstwie krawędzi PCB, tak aby były ciągłe."
 #: pcbnew/specctra_export.cpp:930
 #, c-format
 msgid "Component with value of \"%s\" has empty reference id."
-msgstr "Element o wartości \"%s\" nie ma oznaczenia"
+msgstr "Element o wartości \"%s\" nie posiada oznaczenia."
 
 #: pcbnew/specctra_export.cpp:938
 #, c-format
@@ -7979,7 +7992,7 @@ msgstr "Plik sesji nie zawiera sekcji \"library_out\""
 #: pcbnew/specctra_import.cpp:393
 #, c-format
 msgid "Session file has 'reference' to non-existent component \"%s\""
-msgstr "Plik sesji zawiera oznaczenie dla nieistniejącego elementu \"%s\""
+msgstr "Plik sesji zawiera 'oznaczenie' dla nieistniejącego elementu \"%s\""
 
 #: pcbnew/specctra_import.cpp:537
 #, c-format
@@ -11648,7 +11661,7 @@ msgstr "Rysuj wartości modułów na war. opisowej"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:96
 msgid "Plot module reference on silkscreen"
-msgstr "Rysuj oznacznik modułu na war. opisowej"
+msgstr "Rysuj oznaczenie modułu na war. opisowej"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:99
 msgid "Plot other module texts on silkscreen"
@@ -12226,7 +12239,6 @@ msgid "Image name"
 msgstr "Nazwa obrazu"
 
 #: gerbview/class_GERBER.cpp:334
-#: gerbview/class_gerber_draw_item.cpp:600
 msgid "Graphic layer"
 msgstr "Warstwa grafiki"
 
@@ -12239,7 +12251,6 @@ msgid "Negative"
 msgstr "Negatyw"
 
 #: gerbview/class_GERBER.cpp:342
-#: gerbview/class_gerber_draw_item.cpp:611
 msgid "Polarity"
 msgstr "Polaryzacja"
 
@@ -12950,39 +12961,6 @@ msgstr "Przekroczona długość linii"
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "OUTPUTSTREAM_OUTPUTFORMATTER błąd zapisu"
 
-#: common/dsnlexer.cpp:83
-msgid "clipboard"
-msgstr "schowek"
-
-#: common/dsnlexer.cpp:281
-#: common/dsnlexer.cpp:289
-msgid "Expecting"
-msgstr "Spodziewano się"
-
-#: common/dsnlexer.cpp:297
-#: common/dsnlexer.cpp:314
-msgid "Unexpected"
-msgstr "Niespodziewany"
-
-#: common/dsnlexer.cpp:307
-#, c-format
-msgid "%s is a duplicate"
-msgstr "%s jest zdublowany"
-
-#: common/dsnlexer.cpp:361
-#, c-format
-msgid "need a NUMBER for '%s'"
-msgstr "potrzebny NUMER dla '%s'"
-
-#: common/dsnlexer.cpp:439
-msgid "String delimiter must be a single character of ', \", or $"
-msgstr "Separator musi być pojedynczym znakiem: ', \" lub $"
-
-#: common/dsnlexer.cpp:597
-#: common/dsnlexer.cpp:612
-msgid "Un-terminated delimited string"
-msgstr "Niezakończony separator tekstu"
-
 #: common/footprint_info.cpp:67
 msgid " (file cannot be opened)"
 msgstr " (plik nie może zostać otwarty)"
@@ -13104,10 +13082,6 @@ msgstr " w"
 #: common/drawframe.cpp:238
 msgid "Show grid"
 msgstr "Pokaż siatkę"
-
-#: common/base_struct.cpp:460
-msgid "Bold+Italic"
-msgstr "Pogrubiona kursywa"
 
 #: common/gestfich.cpp:449
 #, c-format
@@ -13325,6 +13299,43 @@ msgstr "Powiększenie: "
 msgid "Grid Select"
 msgstr "Wybór siatki"
 
+#: common/base_struct.cpp:461
+msgid "Bold+Italic"
+msgstr "Pogrubiona kursywa"
+
+#: common/dsnlexer.cpp:83
+msgid "clipboard"
+msgstr "schowek"
+
+#: common/dsnlexer.cpp:281
+#: common/dsnlexer.cpp:289
+msgid "Expecting"
+msgstr "Spodziewano się"
+
+#: common/dsnlexer.cpp:297
+#: common/dsnlexer.cpp:314
+msgid "Unexpected"
+msgstr "Niespodziewany"
+
+#: common/dsnlexer.cpp:307
+#, c-format
+msgid "%s is a duplicate"
+msgstr "%s jest zdublowany"
+
+#: common/dsnlexer.cpp:361
+#, c-format
+msgid "need a NUMBER for '%s'"
+msgstr "potrzebny NUMER dla '%s'"
+
+#: common/dsnlexer.cpp:439
+msgid "String delimiter must be a single character of ', \", or $"
+msgstr "Separator musi być pojedynczym znakiem: ', \" lub $"
+
+#: common/dsnlexer.cpp:597
+#: common/dsnlexer.cpp:612
+msgid "Un-terminated delimited string"
+msgstr "Niezakończony separator tekstu"
+
 #: common/dialog_about/dialog_about_base.cpp:31
 msgid "App Title"
 msgstr "Tytuł"
@@ -13340,6 +13351,30 @@ msgstr "Informacja o kompilacji"
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
 msgstr "Informacja o wersji biblioteki"
+
+#: common/dialog_about/dialog_about.cpp:70
+msgid "Information"
+msgstr "Informacja"
+
+#: common/dialog_about/dialog_about.cpp:72
+msgid "Developers"
+msgstr "Twórcy oprogramowania"
+
+#: common/dialog_about/dialog_about.cpp:73
+msgid "Doc Writers"
+msgstr "Twórcy dokumentacji"
+
+#: common/dialog_about/dialog_about.cpp:75
+msgid "Artists"
+msgstr "Artyści"
+
+#: common/dialog_about/dialog_about.cpp:76
+msgid "Translators"
+msgstr "Tłumacze"
+
+#: common/dialog_about/dialog_about.cpp:78
+msgid "License"
+msgstr "Licencja"
 
 #: common/dialog_about/AboutDialog_main.cpp:125
 msgid "The KiCad EDA Suite is a set of open source applications for the creation of electronic schematics and to design printed circuit boards."
@@ -13388,30 +13423,6 @@ msgstr "Kompletny Pakiet KiCad EDA jest rozpowszechniany na podstawie"
 #: common/dialog_about/AboutDialog_main.cpp:182
 msgid "GNU General Public License (GPL) version 2"
 msgstr "GNU General Public License (GPL) version 2"
-
-#: common/dialog_about/dialog_about.cpp:70
-msgid "Information"
-msgstr "Informacja"
-
-#: common/dialog_about/dialog_about.cpp:72
-msgid "Developers"
-msgstr "Twórcy oprogramowania"
-
-#: common/dialog_about/dialog_about.cpp:73
-msgid "Doc Writers"
-msgstr "Twórcy dokumentacji"
-
-#: common/dialog_about/dialog_about.cpp:75
-msgid "Artists"
-msgstr "Artyści"
-
-#: common/dialog_about/dialog_about.cpp:76
-msgid "Translators"
-msgstr "Tłumacze"
-
-#: common/dialog_about/dialog_about.cpp:78
-msgid "License"
-msgstr "Licencja"
 
 #: common/dialogs/dialog_get_component_base.cpp:29
 msgid "History list:"
@@ -13909,6 +13920,9 @@ msgstr "Edytor skrótów klawiszowych"
 #: bitmap2component/bitmap2cmp_gui_base.h:77
 msgid "Bitmap to Component Converter"
 msgstr "Konwerter obrazów"
+
+#~ msgid "Edit with Libedit"
+#~ msgstr "Edytuj w edytorze bibliotek"
 
 #~ msgid "No connection"
 #~ msgstr "Nie podłączony"
