@@ -57,7 +57,6 @@ set(COMMON_SRCS
     msgpanel.cpp
     netlist_keywords.cpp
     newstroke_font.cpp
-    ../pcbnew/class_drc_item.cpp
     projet_config.cpp
     richio.cpp
     selcolor.cpp

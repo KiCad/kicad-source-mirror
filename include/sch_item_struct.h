@@ -91,7 +91,7 @@ public:
     /**
      * Function SwapDate
      * swap the internal data structures \a aItem with the schematic item.
-     *
+     * Obviously, aItem must have the same type than me
      * @param aItem The item to swap the data structures with.
      */
     virtual void SwapData( SCH_ITEM* aItem );

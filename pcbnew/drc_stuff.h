@@ -237,6 +237,7 @@ private:
      */
     MARKER_PCB* fillMarker( int aErrorCode, const wxString& aMessage, MARKER_PCB* fillMe );
 
+
     //-----<categorical group tests>-----------------------------------------
 
     /**
@@ -447,6 +448,15 @@ public:
      * dialog, and optionally prints a report of such.
      */
     void ListUnconnectedPads();
+
+    /**
+     * @return a pointer to the current marker (last created marker
+     */
+    MARKER_PCB* GetCurrentMarker( )
+    {
+        return m_currentMarker;
+    }
+
 };
 
 

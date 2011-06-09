@@ -304,7 +304,7 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
     static const char delims[] = " \t";
 
     // Read coordinates.
-    D( printf( "line: \"%s\"\n", line );)
+    // D( printf( "line: \"%s\"\n", line );)
 
     cp = strtok( line, delims );
 

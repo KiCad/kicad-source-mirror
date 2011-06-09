@@ -352,12 +352,12 @@ void SCH_EDIT_FRAME::CreateScreens()
 
 void SCH_EDIT_FRAME::SetUndoItem( const SCH_ITEM* aItem )
 {
-    if( (aItem != NULL) && (m_undoItem != NULL) )
+    if( m_undoItem != NULL )
     {
         delete m_undoItem;
+        m_undoItem = NULL;
     }
 
-    m_undoItem = NULL;
 
     if( aItem )
         m_undoItem = aItem->Clone();
@@ -366,13 +366,16 @@ void SCH_EDIT_FRAME::SetUndoItem( const SCH_ITEM* aItem )
 
 void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem )
 {
-    wxCHECK_RET( aItem != NULL && m_undoItem != NULL && (aItem->Type() == m_undoItem->Type() ),
+    wxCHECK_RET( aItem != NULL,
+                 wxT( "Cannot swap undo item structures.  Bad programmer!." ) );
+    wxCHECK_RET( m_undoItem != NULL,
+                 wxT( "Cannot swap undo item structures.  Bad programmer!." ) );
+    wxCHECK_RET( aItem->Type() == m_undoItem->Type(),
                  wxT( "Cannot swap undo item structures.  Bad programmer!." ) );
 
     aItem->SwapData( m_undoItem );
     SaveCopyInUndoList( aItem, UR_CHANGED );
     aItem->SwapData( m_undoItem );
-    m_undoItem = NULL;
 }
 
 

@@ -207,10 +207,11 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
             Delete_Segment( DC, g_CurrentTrackSegment );
         }
 
-        // use the form of SetCurItem() which does not write to the msg panel,
-        // SCREEN::SetCurItem(), so the DRC error remains on screen.
-        // PCB_EDIT_FRAME::SetCurItem() calls DisplayInfo().
-        GetScreen()->SetCurItem( g_CurrentTrackSegment );
+         SetCurItem( g_CurrentTrackSegment, false );
+
+        // Refresh DRC diag, erased by previous calls
+        if( m_drc->GetCurrentMarker() )
+            m_drc->GetCurrentMarker()->DisplayInfo( this );
 
         return false;
     }
