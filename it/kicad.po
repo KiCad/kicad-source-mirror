@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-19 17:20+0100\n"
-"PO-Revision-Date: 2011-03-19 17:58+0100\n"
-"Last-Translator: Massimo Cioce <ciocemax@alice.it>\n"
-"Language-Team: Ciocemax <ciocemax@alice,it>\n"
+"POT-Creation-Date: 2011-04-23 22:14+0100\n"
+"PO-Revision-Date: 2011-06-07 20:54+0100\n"
+"Last-Translator: Ciocemax <ciocemax@alice.it>\n"
+"Language-Team: Ciocemax <ciocemax@alice.it>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Italiano\n"
 "X-Poedit-Country: ITALIA\n"
-"X-Poedit-Basepath: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\n"
+"X-Poedit-Basepath: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\n"
 "X-Generator: KBabel 1.9.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -28,18 +28,18 @@ msgstr ""
 "X-Poedit-SearchPath-5: 3d-viewer\n"
 "X-Poedit-SearchPath-6: gerbview\n"
 "X-Poedit-SearchPath-7: bitmap2component\n"
-"X-Poedit-SearchPath-8: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\common\\dialogs\n"
-"X-Poedit-SearchPath-9: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\common\\dialog_about\n"
-"X-Poedit-SearchPath-10: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\cvpcb\\dialogs\n"
-"X-Poedit-SearchPath-11: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\eeschema\\dialogs\n"
-"X-Poedit-SearchPath-12: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\gerbview\\dialogs\n"
-"X-Poedit-SearchPath-13: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\new\n"
-"X-Poedit-SearchPath-14: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\pcbnew\\dialogs\n"
-"X-Poedit-SearchPath-15: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\polygon\n"
-"X-Poedit-SearchPath-16: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\polygon\\kbool\\src\n"
-"X-Poedit-SearchPath-17: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\polygon\\kbool\\include\\kbool\n"
-"X-Poedit-SearchPath-18: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\polygon\\kbool\\samples\\boolonly\n"
-"X-Poedit-SearchPath-19: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\Programmi\\potrace\n"
+"X-Poedit-SearchPath-8: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\common\\dialogs\n"
+"X-Poedit-SearchPath-9: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\common\\dialog_about\n"
+"X-Poedit-SearchPath-10: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\cvpcb\\dialogs\n"
+"X-Poedit-SearchPath-11: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\eeschema\\dialogs\n"
+"X-Poedit-SearchPath-12: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\gerbview\\dialogs\n"
+"X-Poedit-SearchPath-13: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\new\n"
+"X-Poedit-SearchPath-14: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\pcbnew\\dialogs\n"
+"X-Poedit-SearchPath-15: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\polygon\n"
+"X-Poedit-SearchPath-16: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\polygon\\kbool\\src\n"
+"X-Poedit-SearchPath-17: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\polygon\\kbool\\include\\kbool\n"
+"X-Poedit-SearchPath-18: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\polygon\\kbool\\samples\\boolonly\n"
+"X-Poedit-SearchPath-19: H:\\Elettronica\\KiCad\\Traduzione\\Sorgenti\\potrace\n"
 
 #: kicad/class_treeproject_item.cpp:128
 msgid "Unable to move file ... "
@@ -266,7 +266,7 @@ msgstr "Seleziona editore di testo"
 
 #: kicad/menubar.cpp:167
 msgid "Default"
-msgstr "Predefinito"
+msgstr "Predefinita"
 
 #: kicad/menubar.cpp:168
 msgid "Use system default PDF viewer used to browse datasheets"
@@ -1977,7 +1977,7 @@ msgstr "Impossibile creare <%s>"
 #: pcbnew/librairi.cpp:214
 #, c-format
 msgid "Module exported in file <%s>"
-msgstr "Modulo esporta nel file <%s>"
+msgstr "Modulo esportato nel file <%s>"
 
 #: pcbnew/librairi.cpp:237
 #, c-format
@@ -2198,7 +2198,7 @@ msgstr "Salva il modulo corrente in un file"
 #: pcbnew/menubar_modedit.cpp:100
 #: pcbnew/menubar_pcbframe.cpp:189
 msgid "&Print\tCtrl+P"
-msgstr "&Stampa\tCtrl+P"
+msgstr "&Stampante\tCtrl+P"
 
 #: pcbnew/menubar_modedit.cpp:101
 msgid "Print the current module"
@@ -3224,7 +3224,7 @@ msgstr "Autoposiziona modulo"
 
 #: pcbnew/onrightclick.cpp:148
 msgid "Autoroute Module"
-msgstr "Autoinstrada modulo"
+msgstr "Sbroglia modulo"
 
 #: pcbnew/onrightclick.cpp:164
 msgid "End Drawing"
@@ -3244,7 +3244,7 @@ msgstr "Cancella oggetto grafico"
 
 #: pcbnew/onrightclick.cpp:179
 msgid "Delete All Drawing on Layer"
-msgstr "Cancella oggetto grafico dallo strato"
+msgstr "Ripulisci lo strato Ingombro scheda"
 
 #: pcbnew/onrightclick.cpp:185
 msgid "Delete Zone Filling"
@@ -3349,7 +3349,7 @@ msgstr "Disponi tutti i moduli"
 
 #: pcbnew/onrightclick.cpp:347
 msgid "Autoroute"
-msgstr "Tracciatura automatica"
+msgstr "Sbroglio automatico"
 
 #: pcbnew/onrightclick.cpp:349
 msgid "Select Layer Pair"
@@ -3357,11 +3357,11 @@ msgstr "Seleziona le coppie di strati"
 
 #: pcbnew/onrightclick.cpp:351
 msgid "Autoroute All Modules"
-msgstr "Traccia automaticamente tutti i moduli"
+msgstr "Sbroglia tutti i collegamenti"
 
 #: pcbnew/onrightclick.cpp:353
 msgid "Reset Unrouted"
-msgstr "Azzera collegamenti non instradati"
+msgstr "Azzera collegamenti non sbrogliati"
 
 #: pcbnew/onrightclick.cpp:377
 msgid "Zoom Block"
@@ -3561,11 +3561,11 @@ msgstr "Trascina"
 
 #: pcbnew/onrightclick.cpp:633
 msgid "Rotate +"
-msgstr "Ruota a destra"
+msgstr "Ruota a sinistra"
 
 #: pcbnew/onrightclick.cpp:637
 msgid "Rotate -"
-msgstr "Ruota a sinistra"
+msgstr "Ruota a destra"
 
 #: pcbnew/onrightclick.cpp:638
 msgid "Flip"
@@ -3582,11 +3582,11 @@ msgstr "Annulla dimensioni"
 
 #: pcbnew/onrightclick.cpp:732
 msgid "Copy Current Settings to this Pad"
-msgstr "Copia impostazioni correnti a questa piazzola"
+msgstr "Importa impostazioni piazzola"
 
 #: pcbnew/onrightclick.cpp:736
 msgid "Copy this Pad Settings to Current Settings"
-msgstr "Copia le impostazioni della piazzola come impostazioni correnti"
+msgstr "Esporta impostazioni piazzola"
 
 #: pcbnew/onrightclick.cpp:741
 msgid "Global Pads Edition"
@@ -3598,11 +3598,11 @@ msgstr "Copia le impostazioni della piazzola a tutte le piazzole di questa impro
 
 #: pcbnew/onrightclick.cpp:750
 msgid "Autoroute Pad"
-msgstr "Autoinstrada piazzola"
+msgstr "Sbroglia piazzola"
 
 #: pcbnew/onrightclick.cpp:751
 msgid "Autoroute Net"
-msgstr "Autoinstrada collegamento"
+msgstr "Sbroglia collegamento"
 
 #: pcbnew/onrightclick.cpp:796
 msgid "Delete Marker"
@@ -4065,7 +4065,7 @@ msgstr "Unità in millimetri"
 
 #: pcbnew/tool_modedit.cpp:192
 msgid "Change Cursor Shape"
-msgstr "Verifica allineamento"
+msgstr "Cambia dimensione puntatore"
 
 #: pcbnew/tool_modedit.cpp:197
 msgid "Show Pads Sketch"
@@ -4145,7 +4145,7 @@ msgstr "Accedi a FreeRoute"
 
 #: pcbnew/tool_pcb.cpp:313
 msgid "Change cursor shape"
-msgstr "Verifica allineamento"
+msgstr "Cambia dimensione puntatore"
 
 #: pcbnew/tool_pcb.cpp:321
 msgid "Show module ratsnest when moving"
@@ -6557,7 +6557,7 @@ msgstr "Se si desidera uno strato di adesivo sullo strato Retro"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:708
 msgid "PCB_Edges_later"
-msgstr "Strato ingombro scheda"
+msgstr "Strato Iingombro scheda"
 
 #: pcbnew/dialogs/dialog_layers_setup_base.cpp:720
 msgid "If you want a board perimeter layer"
@@ -7560,7 +7560,7 @@ msgstr "Anteprima di stampa"
 #: pcbnew/dialogs/dialog_print_using_printer.cpp:529
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:134
 msgid "Print"
-msgstr "Stampa"
+msgstr "Stampante"
 
 #: pcbnew/dialogs/dialog_print_using_printer_base.cpp:25
 msgid "Copper Layers:"
@@ -8157,7 +8157,7 @@ msgstr "Inquadra"
 
 #: common/zoom.cpp:181
 msgid "Zoom select"
-msgstr "Seleziona"
+msgstr "Seleziona zoom"
 
 #: common/zoom.cpp:199
 msgid "Zoom: "
@@ -9263,7 +9263,7 @@ msgstr "Seleziona voce"
 
 #: eeschema/libedit_onrightclick.cpp:289
 msgid "Mirror Block ||"
-msgstr "Blocca specchio ||"
+msgstr "Specchia blocco orrizzontale"
 
 #: eeschema/libedit_plot_component.cpp:34
 msgid "No component"
@@ -10016,11 +10016,11 @@ msgstr "Trascina componente"
 
 #: eeschema/onrightclick.cpp:276
 msgid "Mirror --"
-msgstr "Specchia --"
+msgstr "Specchia orrizontale"
 
 #: eeschema/onrightclick.cpp:278
 msgid "Mirror ||"
-msgstr "Specchia ||"
+msgstr "Specchia verticale"
 
 #: eeschema/onrightclick.cpp:283
 msgid "Orient Component"
@@ -10255,7 +10255,7 @@ msgstr "Trascina blocco"
 
 #: eeschema/onrightclick.cpp:666
 msgid "Mirror Block --"
-msgstr "Specchia blocco --"
+msgstr "Specchia blocco verticale"
 
 #: eeschema/onrightclick.cpp:667
 msgid "Rotate Block ccw"
@@ -11411,11 +11411,11 @@ msgstr "Seleziona se il componente disegnato verrà ruotato "
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
 msgid "Mirror ---"
-msgstr "Specchia ---"
+msgstr "Specchia orrizontale"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:52
 msgid "Mirror |"
-msgstr "Specchia |"
+msgstr "Specchia verticale"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:56
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:65
@@ -11425,7 +11425,7 @@ msgstr "Scegliere la trasformazione grafica da usare quando si mostra il compone
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:63
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib.cpp:639
 msgid "Chip Name"
-msgstr "Nome chip"
+msgstr "Nome identificativo del componente"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:67
 msgid "The name of the symbol in the library from which this component came"
@@ -12228,7 +12228,7 @@ msgstr "Stampa in &bianco e nero"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:38
 msgid "Page Setup"
-msgstr "Configurazione pagina"
+msgstr "Imposta pagina"
 
 #: eeschema/dialogs/dialog_schematic_find.cpp:10
 msgid "Find"
@@ -13067,7 +13067,7 @@ msgstr "Nome immagine: \"%s\"  Nome strato: \"%s\""
 
 #: gerbview/initpcb.cpp:24
 msgid "Current data will be lost?"
-msgstr "I dati correnti"
+msgstr "Cancellare tutti gli strati?"
 
 #: gerbview/initpcb.cpp:59
 #, c-format
@@ -13289,7 +13289,7 @@ msgstr "Scegliere se si vuole stampare a colori o forzare in bianco e nero."
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:37
 msgid "Large"
-msgstr "Largo"
+msgstr "Esteso"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:50
 msgid "Lines:"
@@ -13305,15 +13305,15 @@ msgstr "Poligoni:"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:74
 msgid "Full size. Do not show page limits"
-msgstr "Dimensioni intere. Non mostrare la squadratura"
+msgstr "Non mostrare la squadratura"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:74
 msgid "Full size"
-msgstr "Inquadra tutto"
+msgstr "Mostra la squadratura"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:76
 msgid "Show Page Limits:"
-msgstr "Mostra contorno pagina"
+msgstr "Imposta pagina:"
 
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:83
 msgid "Show D codes"
@@ -13427,40 +13427,40 @@ msgstr "Valore di soglia:"
 msgid "Adjust the level to convert the greyscale picture to a black and white picture."
 msgstr "Aggiusta il livello di conversione da scala di grigi a bianco e nero"
 
-#: H:\Elettronica\KiCad\Traduzione\Sorgenti\Programmi\new/sch_lib.cpp:237
+#: H:\Elettronica\KiCad\Traduzione\Sorgenti\new/sch_lib.cpp:237
 #, c-format
 msgid "part '%s' not found in lib %s"
 msgstr "Parte '%s' non trovata nella libreria %s"
 
-#: H:\Elettronica\KiCad\Traduzione\Sorgenti\Programmi\new/sch_lpid.cpp:202
+#: H:\Elettronica\KiCad\Traduzione\Sorgenti\new/sch_lpid.cpp:202
 msgid "Illegal character found in LPID string"
 msgstr "Carattere non consentito trovato nella stringa LPID"
 
-#: H:\Elettronica\KiCad\Traduzione\Sorgenti\Programmi\new/sch_lpid.cpp:369
+#: H:\Elettronica\KiCad\Traduzione\Sorgenti\new/sch_lpid.cpp:369
 msgid "Illegal character found in logical lib name"
 msgstr "Carattere non consentito trovato nel nome logico della libreria"
 
-#: H:\Elettronica\KiCad\Traduzione\Sorgenti\Programmi\new/sch_lpid.cpp:400
+#: H:\Elettronica\KiCad\Traduzione\Sorgenti\new/sch_lpid.cpp:400
 msgid "Illegal character found in category"
 msgstr "Carattere non consentito trovato nella categoria"
 
-#: H:\Elettronica\KiCad\Traduzione\Sorgenti\Programmi\new/sch_lpid.cpp:411
+#: H:\Elettronica\KiCad\Traduzione\Sorgenti\new/sch_lpid.cpp:411
 msgid "Illegal character found in base name"
 msgstr "Carattere non consentito trovato nel nome di base"
 
-#: H:\Elettronica\KiCad\Traduzione\Sorgenti\Programmi\new/sch_lpid.cpp:434
+#: H:\Elettronica\KiCad\Traduzione\Sorgenti\new/sch_lpid.cpp:434
 msgid "Illegal character found in revision"
 msgstr "Carattere non consentito trovato nella revisione"
 
-#: H:\Elettronica\KiCad\Traduzione\Sorgenti\Programmi\new/sch_sweet_parser.cpp:97
+#: H:\Elettronica\KiCad\Traduzione\Sorgenti\new/sch_sweet_parser.cpp:97
 msgid "invalid extends LPID"
 msgstr "?Extends' LPID non valida"
 
-#: H:\Elettronica\KiCad\Traduzione\Sorgenti\Programmi\new/sch_sweet_parser.cpp:113
+#: H:\Elettronica\KiCad\Traduzione\Sorgenti\new/sch_sweet_parser.cpp:113
 msgid "'extends' may not have self as any ancestor"
 msgstr "'extends' potrebbe non avere se stessa come precedente"
 
-#: H:\Elettronica\KiCad\Traduzione\Sorgenti\Programmi\new/sch_sweet_parser.cpp:123
+#: H:\Elettronica\KiCad\Traduzione\Sorgenti\new/sch_sweet_parser.cpp:123
 msgid "max allowed extends depth exceeded"
 msgstr "Massima profondità consentita 'extends' eccedente"
 
