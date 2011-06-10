@@ -35,27 +35,15 @@ typedef boost::ptr_vector< FOOTPRINT_ALIAS > FOOTPRINT_ALIAS_LIST;
  * put text in aTarget
  * return a pointer to the last read char (the second quote if Ok)
  */
-char * ReadQuotedText(wxString & aTarget, char * aText)
+wxString GetQuotedText( wxString & text )
 {
-    // search the first quote:
-    for( ; *aText != 0; aText++ )
-    {
-        if( *aText == QUOTE )
-            break;
-    }
-
-    if ( *aText == 0 )
-        return NULL;
-
-    aText++;
-    for(; *aText != 0; aText++ )
-    {
-        if( *aText == QUOTE )
-            break;
-        aTarget.Append(*aText);
-    }
-
-    return aText;
+    int i = text.Find( QUOTE );
+    if( wxNOT_FOUND == i ) return wxT( "" );
+    wxString shrt = text.Mid( i + 1 );
+    i = shrt.Find( QUOTE );
+    if( wxNOT_FOUND == i ) return wxT( "" );
+    text = shrt.Mid( i + 1 );
+    return shrt.Mid( 0, i );
 }
 
 
@@ -108,24 +96,24 @@ found in the default search paths." ),
         while( GetLine( file, Line, NULL, sizeof(Line) ) != NULL )
         {
             char* text = Line;
-            wxString value, footprint;
+            wxString value, footprint, wtext = FROM_UTF8( Line );
 
-            text = ReadQuotedText( value, text );
+            value = GetQuotedText( wtext );
 
             if( text == NULL || ( *text == 0 ) || value.IsEmpty() )
                 continue;
 
-            text++;
-            text = ReadQuotedText( footprint, text );
+            footprint = GetQuotedText( wtext );
 
             if( footprint.IsEmpty() )
                 continue;
+
+            value.Replace( wxT( " " ), wxT( "_" ) );
 
             alias = new FOOTPRINT_ALIAS();
             alias->m_Name = value;
             alias->m_FootprintName = footprint;
             aliases.push_back( alias );
-            text++;
         }
 
         fclose( file );
@@ -146,13 +134,24 @@ found in the default search paths." ),
 
         BOOST_FOREACH( FOOTPRINT_ALIAS& alias, aliases )
         {
+            bool found = false;
             if( alias.m_Name.CmpNoCase( component.m_Value ) != 0 )
                 continue;
 
-            if( m_footprints.GetModuleInfo( alias.m_FootprintName ) )
-                    SetNewPkg( alias.m_FootprintName );
+            /* filter alias so one can use multiple aliases (for polar and nonpolar caps for example) */
+            FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( alias.m_FootprintName );
 
-            if( component.m_Module.IsEmpty() )
+            if( module )
+            {
+                size_t filtercount = component.m_FootprintFilter.GetCount();
+                found = ( 0 == filtercount ); // if no entries, do not filter
+
+                for( int jj = 0; jj < filtercount && !found; jj++ )
+                {
+                    found = module->m_Module.Matches( component.m_FootprintFilter[jj] );
+                }
+            }
+            else
             {
                 msg.Printf( _( "Component %s: footprint %s not found in \
 any of the project footprint libraries." ),
@@ -161,6 +160,12 @@ any of the project footprint libraries." ),
                 wxMessageBox( msg, _( "CVPcb Error" ), wxOK | wxICON_ERROR,
                               this );
             }
+            if( found )
+            {
+                SetNewPkg( alias.m_FootprintName );
+                break;
+            }
+
         }
     }
 }
