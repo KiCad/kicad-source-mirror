@@ -283,19 +283,19 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
 }
 
 
-/* Correct a bend is 90 and changes by 2 elbows at 45
- * This only works on horizontal or vertical segments.
+/* Add a track segment between 2 tracks segments if these 2 segments
+ * make a 90 deg angle, in order to have 45 deg track segments
+ * Its only works on horizontal or vertical segments.
  *
- * Input: pointer to the segment that we have drawn
- * Assume that the preceding segment is one that has been
- * previously drawn
+ * Input: pointer to the current segment being created
+ * Assume that the previous segment is the one that has been
+ * previously created
  * Returns:
- *   1 if ok
- *   0 if not
+ *   true if ok
+ *   false if not
  */
 bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
 {
-    int pas_45;
     int dx0, dy0, dx1, dy1;
 
     if( g_CurrentTrackList.GetCount() < 2 )
@@ -304,18 +304,15 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
     TRACK* curTrack  = g_CurrentTrackSegment;
     TRACK* prevTrack = curTrack->Back();
 
-    // Test whether there has 2 consecutive segments to be connected.
+    // Test if we have 2 consecutive track segments ( not via ) to connect.
     if( curTrack->Type() != TYPE_TRACK || prevTrack->Type() != TYPE_TRACK )
     {
         return false;
     }
 
-    pas_45 = (int) GetScreen()->GetGridSize().x / 2;
+    int pas_45 = wxRound( GetScreen()->GetGridSize().x / 2 );
     if( pas_45 < curTrack->m_Width )
-        pas_45 = (int) GetScreen()->GetGridSize().x;
-
-    while( pas_45 < curTrack->m_Width )
-        pas_45 *= 2;
+        pas_45 = curTrack->m_Width;
 
     // Test if the segments are horizontal or vertical.
     dx0 = prevTrack->m_End.x - prevTrack->m_Start.x;
@@ -337,7 +334,7 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
     newTrack->m_Start = prevTrack->m_End;
     newTrack->m_End   = curTrack->m_Start;
 
-    if( dx0 == 0 )          // Segment precedent Vertical
+    if( dx0 == 0 )          // Previous segment is Vertical
     {
         if( dy1 != 0 )      // 2 segments are not 90 degrees.
         {
@@ -346,7 +343,7 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
         }
 
         /* Calculate coordinates the connection point.
-         * The new segment connects the 1st segment Vertical and the 2nd
+         * The new segment connects the 1st vertical segment and the 2nd
          * horizontal segment.
          */
         if( dy0 > 0 )
@@ -372,7 +369,7 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
         return true;
     }
 
-    if( dy0 == 0 )      // Segment precedent horizontal
+    if( dy0 == 0 )      // Previous segment is horizontal
     {
         if( dx1 != 0 )  // 2 segments are not 90 degrees
         {
@@ -381,7 +378,7 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
         }
 
         /*  Calculate the coordinates of the point of connection:
-         * A new segment has been established, connecting segment 1
+         * A new segment has been created, connecting segment 1
          * (horizontal) and segment 2 (vertical)
          */
         if( dx0 > 0 )

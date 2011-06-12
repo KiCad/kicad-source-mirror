@@ -146,7 +146,7 @@ found in the default search paths." ),
                 size_t filtercount = component.m_FootprintFilter.GetCount();
                 found = ( 0 == filtercount ); // if no entries, do not filter
 
-                for( int jj = 0; jj < filtercount && !found; jj++ )
+                for( size_t jj = 0; jj < filtercount && !found; jj++ )
                 {
                     found = module->m_Module.Matches( component.m_FootprintFilter[jj] );
                 }
