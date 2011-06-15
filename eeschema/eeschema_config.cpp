@@ -589,7 +589,7 @@ void SCH_EDIT_FRAME::LoadSettings()
 
     // Load netlists options:
     cfg->Read( SpiceNetNamesEntry,  &g_OptNetListUseNames, false );
-    cfg->Read( SimulatorCommandEntry, &g_SimulatorCommandLine );
+    cfg->Read( SimulatorCommandEntry, &m_simulatorCommand );
 
     /* Load find dialog session setting. */
     cfg->Read( FindDialogPositionXEntry, &tmp, -1 );
@@ -675,7 +675,7 @@ void SCH_EDIT_FRAME::SaveSettings()
 
     // Save netlists options:
     cfg->Write( SpiceNetNamesEntry,  g_OptNetListUseNames );
-    cfg->Write( SimulatorCommandEntry, g_SimulatorCommandLine );
+    cfg->Write( SimulatorCommandEntry, m_simulatorCommand );
 
     /* Save find dialog session setting. */
     cfg->Write( FindDialogPositionXEntry, m_findDialogPosition.x );

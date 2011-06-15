@@ -32,9 +32,9 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
 bool SegmentIntersect( wxPoint aSegStart, wxPoint aSegEnd, wxPoint aTestPoint );
 
 
-/****************/
+/*************************/
 /* BUS_WIRE_JUNCTION.CPP */
-/****************/
+/*************************/
 void IncrementLabelMember( wxString& name );
 
 
@@ -58,22 +58,21 @@ void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
 SCH_ITEM* DuplicateStruct( SCH_ITEM* DrawStruct, bool aClone = false );
 
 
-/***************/
+/****************/
 /* EEREDRAW.CPP */
-/***************/
+/****************/
 void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, int Color );
 
 
-/**************/
-/* EELAYER.CPP */
-/**************/
-void SeedLayers();
+/***********************************/
+/* dialogs/dialog_color_config.cpp */
+/***********************************/
 EDA_Colors ReturnLayerColor( int Layer );
 
 
-/**************/
+/***************/
 /* NETLIST.CPP */
-/**************/
+/***************/
 int IsBusLabel( const wxString& LabelDrawList );
 
 
@@ -84,25 +83,14 @@ void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* drawlist );
 
 
 /***************/
-/* DELSHEET.CPP */
-/***************/
-void DeleteSubHierarchy( SCH_SHEET* Sheet, bool confirm_deletion );
-bool ClearProjectDrawList( SCH_SCREEN* FirstWindow, bool confirm_deletion );
-
-/* free the draw list screen->GetDrawItems() and the subhierarchies
- *   clear the screen datas (filenames ..)
- */
-
-
-/**************/
 /* PINEDIT.CPP */
-/**************/
+/***************/
 void InstallPineditFrame( LIB_EDIT_FRAME* parent, wxDC* DC, const wxPoint& pos );
 
 
-/**************/
+/***************/
 /* SELPART.CPP */
-/**************/
+/***************/
 
 /**
  * Function DisplayComponentsNamesInLib
@@ -139,9 +127,9 @@ CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame );
  */
 int GetNameOfPartToLoad( EDA_DRAW_FRAME* frame, CMP_LIBRARY* Lib, wxString& BufName );
 
-/**************/
+/***************/
 /* LIBARCH.CPP */
-/**************/
+/***************/
 
 bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName );
 

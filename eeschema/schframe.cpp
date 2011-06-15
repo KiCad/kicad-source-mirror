@@ -418,7 +418,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
        && (g_RootSheet->GetScreen()->GetDrawItems() != NULL) )
         UpdateFileHistory( g_RootSheet->GetScreen()->GetFileName() );
 
-    ClearProjectDrawList( g_RootSheet->GetScreen(), TRUE );
+    g_RootSheet->GetScreen()->Clear();
 
     /* all sub sheets are deleted, only the main sheet is usable */
     m_CurrentSheet->Clear();

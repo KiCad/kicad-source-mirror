@@ -88,6 +88,12 @@ public:
     void SetCurItem( SCH_ITEM* aItem ) { BASE_SCREEN::SetCurItem( (EDA_ITEM*) aItem ); }
 
     /**
+     * Function Clear
+     * deletes all draw items and clears the project settings.
+     */
+    void Clear();
+
+    /**
      * Free all the items from the schematic associated with the screen.
      *
      * This does not delete any sub hierarchies.

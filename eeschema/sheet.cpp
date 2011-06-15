@@ -12,20 +12,15 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
-#include "macros.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "gestfich.h"
 #include "wxEeschemaStruct.h"
 #include "class_sch_screen.h"
 
 #include "general.h"
-#include "protos.h"
 #include "sch_sheet.h"
 
 #include "dialogs/dialog_sch_sheet_props.h"
-
-#include <boost/foreach.hpp>
 
 
 bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )

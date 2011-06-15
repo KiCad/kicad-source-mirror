@@ -115,6 +115,10 @@ private:
     int                   m_repeatLabelDelta;   ///< Repeat label number increment step.
     SCH_COLLECTOR         m_collectedItems;     ///< List of collected items.
     SCH_ITEM*             m_undoItem;           ///< Copy of the current item being edited.
+    wxString              m_simulatorCommand;   ///< Command line used to call the circuit
+                                                ///< simulator (gnucap, spice, ...)
+    wxString              m_netListerCommand;   ///< Command line to call a custom net list
+                                                ///< generator.
 
     static int            m_lastSheetPinType;      ///< Last sheet pin type.
     static wxSize         m_lastSheetPinTextSize;  ///< Last sheet pin text size.
@@ -827,8 +831,7 @@ public:
     /**
      * Load component libraries defined in project file.
      */
-    void     LoadLibraries( void );
-
+    void LoadLibraries( void );
 
     /**
      * Function PrintPage
@@ -840,6 +843,14 @@ public:
      */
     virtual void PrintPage( wxDC* aDC, int aPrintMask,
                             bool aPrintMirrorMode, void* aData = NULL );
+
+    void SetSimulatorCommand( const wxString& aCommand ) { m_simulatorCommand = aCommand; }
+
+    wxString GetSimulatorCommand() const { return m_simulatorCommand; }
+
+    void SetNetListerCommand( const wxString& aCommand ) { m_netListerCommand = aCommand; }
+
+    wxString GetNetListerCommand() const { return m_netListerCommand; }
 
     DECLARE_EVENT_TABLE()
 };

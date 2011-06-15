@@ -67,8 +67,8 @@ public:
      *    Only one page can be created with selected = true.
      */
     NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& title,
-                      int id_NetType, int idCheckBox, int idCreateFile,
-                      bool selected );
+                         int id_NetType, int idCheckBox, int idCreateFile,
+                         bool selected );
     ~NETLIST_PAGE_DIALOG() { };
 };
 

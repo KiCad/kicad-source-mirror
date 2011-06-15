@@ -10,6 +10,9 @@ class wxStaticLine;
 class wxStdDialogButtonSizer;
 
 
+extern void SeedLayers();
+
+
 // Specify the width and height of every (color-displaying / bitmap) button
 const int BUTT_SIZE_X = 16;
 const int BUTT_SIZE_Y = 16;

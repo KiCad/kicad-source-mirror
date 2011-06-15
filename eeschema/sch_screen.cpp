@@ -112,6 +112,23 @@ void SCH_SCREEN::DecRefCount()
 }
 
 
+void SCH_SCREEN::Clear()
+{
+    FreeDrawList();
+
+    /* Clear the project settings. */
+    m_ScreenNumber = m_NumberOfScreen = 1;
+    m_Title.Empty();
+    m_Revision.Empty();
+    m_Company.Empty();
+    m_Commentaire1.Empty();
+    m_Commentaire2.Empty();
+    m_Commentaire3.Empty();
+    m_Commentaire4.Empty();
+    m_Date = GenDate();
+}
+
+
 void SCH_SCREEN::FreeDrawList()
 {
     SCH_ITEM* item;

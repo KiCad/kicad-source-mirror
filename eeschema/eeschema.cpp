@@ -17,7 +17,7 @@
 #include "general.h"
 #include "protos.h"
 #include "hotkeys.h"
-
+#include "dialogs/dialog_color_config.h"
 #include "transform.h"
 
 #include <wx/snglinst.h>
@@ -47,12 +47,6 @@ const wxString CompLibFileExtension( wxT( "lib" ) );
 
 const wxString SymbolFileWildcard( wxT( "Kicad drawing symbol file (*.sym)|*.sym" ) );
 const wxString CompLibFileWildcard( wxT( "Kicad component library file (*.lib)|*.lib" ) );
-
-// command line to call the simulator (gnucap, spice..)
-wxString    g_SimulatorCommandLine;
-
-// command line to call the simulator net lister (gnucap, spice..)
-wxString    g_NetListerCommandLine;
 
 LayerStruct g_LayerDescr;            /* layer colors. */
 
@@ -138,7 +132,7 @@ bool WinEDA_App::OnInit()
     frame = new SCH_EDIT_FRAME( NULL, wxT( "EESchema" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 
     SetTopWindow( frame );
-    frame->Show( TRUE );
+    frame->Show( true );
 
     if( CreateServer( frame, KICAD_SCH_PORT_SERVICE_NUMBER ) )
     {
@@ -147,7 +141,7 @@ bool WinEDA_App::OnInit()
         SetupServerFunction( RemoteCommand );
     }
 
-    frame->Zoom_Automatique( TRUE );
+    frame->Zoom_Automatique( true );
 
     /* Load file specified in the command line. */
     if( filename.IsOk() )
@@ -156,6 +150,7 @@ bool WinEDA_App::OnInit()
 
         if( filename.GetExt() != SchematicFileExtension )
             filename.SetExt( SchematicFileExtension );
+
         wxSetWorkingDirectory( filename.GetPath() );
 
         if( frame->LoadOneEEProject( filename.GetFullPath(), false ) )
@@ -164,9 +159,9 @@ bool WinEDA_App::OnInit()
     else
     {
         // Read a default config file if no file to load.
-        frame->LoadProjectFile( wxEmptyString, TRUE );
-        frame->DrawPanel->Refresh( TRUE );
+        frame->LoadProjectFile( wxEmptyString, true );
+        frame->DrawPanel->Refresh( true );
     }
 
-    return TRUE;
+    return true;
 }

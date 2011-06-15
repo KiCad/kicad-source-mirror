@@ -262,7 +262,7 @@ void NETLIST_DIALOG::InstallPageSpice()
 
     page->m_CommandStringCtrl = new WinEDA_EnterText( page,
                                                       _( "Simulator command:" ),
-                                                      g_SimulatorCommandLine,
+                                                      m_Parent->GetSimulatorCommand(),
                                                       page->m_LowBoxSizer,
                                                       wxDefaultSize );
 
@@ -436,7 +436,7 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
 {
     int ii;
 
-    g_SimulatorCommandLine = m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue();
+    m_Parent->SetSimulatorCommand( m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue() );
     m_Parent->m_NetlistFormat = NET_TYPE_PCBNEW;
 
     for( ii = 0; ii < PANELCUSTOMBASE + CUSTOMPANEL_COUNTMAX; ii++ )
@@ -512,13 +512,14 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     m_Parent->ClearMsgPanel();
 
     if( CurrPage->m_CommandStringCtrl )
-        g_NetListerCommandLine = CurrPage->m_CommandStringCtrl->GetValue();
+        m_Parent->SetNetListerCommand( CurrPage->m_CommandStringCtrl->GetValue() );
     else
-        g_NetListerCommandLine.Empty();
+        m_Parent->SetNetListerCommand( wxEmptyString );
 
     bool addSubPrefix = false;
     if( CurrPage->m_AddSubPrefix )
         addSubPrefix = CurrPage->m_AddSubPrefix->GetValue();
+
     m_Parent->CreateNetlist( CurrPage->m_IdNetType, dlg.GetPath(), g_OptNetListUseNames,
                              addSubPrefix );
 
@@ -592,12 +593,12 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
     wxFileName fn;
     wxString   ExecFile, CommandLine;
 
-    g_SimulatorCommandLine = m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue();
-    g_SimulatorCommandLine.Trim( false );
-    g_SimulatorCommandLine.Trim( true );
-    ExecFile = g_SimulatorCommandLine.BeforeFirst( ' ' );
-
-    CommandLine = g_SimulatorCommandLine.AfterFirst( ' ' );
+    wxString tmp = m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue();
+    tmp.Trim( false );
+    tmp.Trim( true );
+    m_Parent->SetSimulatorCommand( tmp );
+    ExecFile = tmp.BeforeFirst( ' ' );
+    CommandLine = tmp.AfterFirst( ' ' );
 
     /* Calculate the netlist filename */
     fn = g_RootSheet->GetScreen()->GetFileName();
@@ -609,8 +610,10 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
     CurrPage = (NETLIST_PAGE_DIALOG*) m_NoteBook->GetCurrentPage();
 
     bool addSubPrefix = false;
+
     if( CurrPage->m_AddSubPrefix )
         addSubPrefix = CurrPage->m_AddSubPrefix->GetValue();
+
     if( ! m_Parent->CreateNetlist( CurrPage->m_IdNetType, fn.GetFullPath(),
                                    g_OptNetListUseNames,addSubPrefix ) )
         return;

@@ -146,9 +146,6 @@ extern const wxString SymbolFileWildcard;
 extern const wxString CompLibFileExtension;
 extern const wxString CompLibFileWildcard;
 
-extern wxString       g_SimulatorCommandLine;
-extern wxString       g_NetListerCommandLine;
-
 extern LayerStruct    g_LayerDescr;
 
 extern bool           g_EditPinByPinIsOn;   /* True to prevent displacing
