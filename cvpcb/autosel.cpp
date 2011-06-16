@@ -72,9 +72,6 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
     for( ii = 0; ii < m_AliasLibNames.GetCount(); ii++ )
     {
         fn = m_AliasLibNames[ii];
-            //msg.Printf( _( "Library: %s." ),
-            //            GetChars( fn.GetFullName() ) );
-            //wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR );
         if( !fn.HasExt() ) {
             fn.SetExt( FootprintAliasFileExtension );
             // above fails if filename have more than one point
