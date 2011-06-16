@@ -310,9 +310,9 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
         return false;
     }
 
-    int pas_45 = wxRound( GetScreen()->GetGridSize().x / 2 );
-    if( pas_45 < curTrack->m_Width )
-        pas_45 = curTrack->m_Width;
+    int segm_step_45 = wxRound( GetScreen()->GetGridSize().x / 2 );
+    if( segm_step_45 < ( curTrack->m_Width * 2 ) )
+        segm_step_45 = curTrack->m_Width * 2;
 
     // Test if the segments are horizontal or vertical.
     dx0 = prevTrack->m_End.x - prevTrack->m_Start.x;
@@ -322,10 +322,10 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
     dy1 = curTrack->m_End.y - curTrack->m_Start.y;
 
     // Segments must be of sufficient length.
-    if( MAX( abs( dx0 ), abs( dy0 ) ) < ( pas_45 * 2 ) )
+    if( MAX( abs( dx0 ), abs( dy0 ) ) < ( segm_step_45 * 2 ) )
         return false;
 
-    if( MAX( abs( dx1 ), abs( dy1 ) ) < ( pas_45 * 2 ) )
+    if( MAX( abs( dx1 ), abs( dy1 ) ) < ( segm_step_45 * 2 ) )
         return false;
 
     /* Create a new segment and connect it with the previous 2 segments. */
@@ -347,14 +347,14 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
          * horizontal segment.
          */
         if( dy0 > 0 )
-            newTrack->m_Start.y -= pas_45;
+            newTrack->m_Start.y -= segm_step_45;
         else
-            newTrack->m_Start.y += pas_45;
+            newTrack->m_Start.y += segm_step_45;
 
         if( dx1 > 0 )
-            newTrack->m_End.x += pas_45;
+            newTrack->m_End.x += segm_step_45;
         else
-            newTrack->m_End.x -= pas_45;
+            newTrack->m_End.x -= segm_step_45;
 
         if( Drc_On && BAD_DRC == m_drc->Drc( curTrack, GetBoard()->m_Track ) )
         {
@@ -382,14 +382,14 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
          * (horizontal) and segment 2 (vertical)
          */
         if( dx0 > 0 )
-            newTrack->m_Start.x -= pas_45;
+            newTrack->m_Start.x -= segm_step_45;
         else
-            newTrack->m_Start.x += pas_45;
+            newTrack->m_Start.x += segm_step_45;
 
         if( dy1 > 0 )
-            newTrack->m_End.y += pas_45;
+            newTrack->m_End.y += segm_step_45;
         else
-            newTrack->m_End.y -= pas_45;
+            newTrack->m_End.y -= segm_step_45;
 
         if( Drc_On && BAD_DRC==m_drc->Drc( newTrack, GetBoard()->m_Track ) )
         {

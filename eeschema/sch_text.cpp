@@ -337,7 +337,9 @@ void SCH_TEXT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 
         undoItem->ClearFlags();
         picker.SetLink( undoItem );
+        // the owner of undoItem is no more frame, this is picker:
         frame->SetUndoItem( NULL );
+
         pickList.PushItem( picker );
         frame->SaveCopyInUndoList( pickList, UR_EXCHANGE_T );
     }

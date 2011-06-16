@@ -73,7 +73,9 @@ static void abortMoveText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
         wxCHECK_RET( item != NULL, wxT( "Cannot restore undefined last text item." ) );
 
         screen->AddToDrawList( item );
+        // the owner of item is no more parent, this is the draw list of screen:
         parent->SetUndoItem( NULL );
+
         item->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         item->ClearFlags();
     }

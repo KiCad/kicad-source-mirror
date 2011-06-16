@@ -352,15 +352,20 @@ void SCH_EDIT_FRAME::CreateScreens()
 
 void SCH_EDIT_FRAME::SetUndoItem( const SCH_ITEM* aItem )
 {
-    if( m_undoItem != NULL )
+    // if aItem != NULL, delete a previous m_undoItem, if exists
+    // if aItme = NULL, just clear m_undoItem,
+    // because when calling SetUndoItem( NULL ), we only clear m_undoItem,
+    // because the owner of m_undoItem is no more me.
+    if( aItem && m_undoItem )
     {
         delete m_undoItem;
-        m_undoItem = NULL;
     }
 
+    m_undoItem = NULL;
 
     if( aItem )
         m_undoItem = aItem->Clone();
+
 }
 
 
