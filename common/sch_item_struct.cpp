@@ -26,7 +26,7 @@ bool sort_schematic_items( const SCH_ITEM* aItem1, const SCH_ITEM* aItem2 )
 /* Constructor and destructor for SCH_ITEM */
 /* They are not inline because this creates problems with gcc at linking time
  * in debug mode
-*/
+ */
 
 SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType ) :
     EDA_ITEM( aParent, aType )
@@ -126,4 +126,10 @@ bool SCH_ITEM::operator < ( const SCH_ITEM& aItem ) const
 {
     wxCHECK_MSG( false, this->Type() < aItem.Type(),
                  wxT( "Less than operator not defined for " ) + GetClass() );
+}
+
+
+void SCH_ITEM::doPlot( PLOTTER* aPlotter )
+{
+    wxFAIL_MSG( wxT( "doPlot() method not implemented for class " ) + GetClass() );
 }

@@ -293,7 +293,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::plotOneSheetPS( const wxString& FileName,
         m_Parent->PlotWorkSheet( plotter, screen );
     }
 
-    PlotDrawlist( plotter, screen->GetDrawItems() );
+    screen->Plot( plotter );
 
     plotter->end_plot();
     delete plotter;

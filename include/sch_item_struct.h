@@ -15,6 +15,7 @@ class SCH_ITEM;
 class LINE_READER;
 class SCH_EDIT_FRAME;
 class wxFindReplaceData;
+class PLOTTER;
 
 
 typedef boost::ptr_vector< SCH_ITEM > SCH_ITEMS;
@@ -303,6 +304,8 @@ public:
 
     virtual bool CanIncrementLabel() const { return false; }
 
+    void Plot( PLOTTER* aPlotter ) { doPlot( aPlotter ); }
+
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 
     /**
@@ -323,6 +326,8 @@ private:
     }
 
     virtual bool doIsConnected( const wxPoint& aPosition ) const { return false; }
+
+    virtual void doPlot( PLOTTER* aPlotter );
 };
 
 

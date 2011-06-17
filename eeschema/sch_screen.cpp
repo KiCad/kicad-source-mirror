@@ -9,6 +9,7 @@
 #include "sch_item_struct.h"
 #include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
+#include "plot_common.h"
 
 #include "general.h"
 #include "protos.h"
@@ -578,6 +579,16 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aC
         //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox()
         // ) )
         item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
+    }
+}
+
+
+void SCH_SCREEN::Plot( PLOTTER* aPlotter )
+{
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        aPlotter->set_current_line_width( item->GetPenSize() );
+        item->Plot( aPlotter );
     }
 }
 

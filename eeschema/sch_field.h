@@ -52,7 +52,7 @@ public:
 
     /**
      * Function GetName
-     * returns the field name.  If the field name is emply, the default field name is
+     * returns the field name.  If the field name is empty, the default field name is
      * returned.  Field names are VALUE, REFERENCE, etc.
      * @return The name of the field.
      */
@@ -165,7 +165,7 @@ public:
      * @param aSearchData - Criteria to search against.
      * @param aAuxData - a pointer on auxiliary data, if needed.
      *              the sheet path is needed for REFERENCE field because m_Text
-     *              value is just the valeur displayed, and in complex hierarchies
+     *              value is just the value displayed, and in complex hierarchies
      *              this is only one of all references (one per sheet path)
      * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if this field text matches the search criteria.
@@ -181,6 +181,7 @@ private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
+    virtual void doPlot( PLOTTER* aPlotter );
 };
 
 

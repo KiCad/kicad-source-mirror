@@ -11,6 +11,7 @@
 #include "kicad_string.h"
 #include "richio.h"
 #include "wxEeschemaStruct.h"
+#include "plot_common.h"
 
 #include "general.h"
 #include "class_library.h"
@@ -223,6 +224,18 @@ void SCH_COMPONENT::SetTransform( const TRANSFORM& aTransform )
         SetModified();
     }
 }
+
+
+int SCH_COMPONENT::GetPartCount() const
+{
+    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+
+    if( Entry == NULL )
+        return 0;
+
+    return Entry->GetPartCount();
+}
+
 
 
 void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
@@ -1777,4 +1790,25 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
     }
 
     return false;
+}
+
+
+void SCH_COMPONENT::doPlot( PLOTTER* aPlotter )
+{
+    LIB_COMPONENT* Entry;
+    TRANSFORM temp = TRANSFORM();
+
+    Entry = CMP_LIBRARY::FindLibraryComponent( GetLibName() );
+
+    if( Entry == NULL )
+        return;
+
+    temp = GetTransform();
+
+    Entry->Plot( aPlotter, GetUnit(), GetConvert(), m_Pos, temp );
+
+    for( size_t i = 0; i < m_Fields.size(); i++ )
+    {
+        m_Fields[i].Plot( aPlotter );
+    }
 }

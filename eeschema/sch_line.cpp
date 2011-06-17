@@ -8,6 +8,7 @@
 #include "class_drawpanel.h"
 #include "trigo.h"
 #include "richio.h"
+#include "plot_common.h"
 
 #include "general.h"
 #include "protos.h"
@@ -440,7 +441,7 @@ wxString SCH_LINE::GetSelectMenuText() const
         break;
 
     default:
-        txtfmt += _( "%s Line on Unkown Layer from (%s,%s) to (%s,%s)" );
+        txtfmt += _( "%s Line on Unknown Layer from (%s,%s) to (%s,%s)" );
     }
 
     menuText.Printf( txtfmt, GetChars( orient ),
@@ -509,4 +510,20 @@ bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
         return false;
 
     return IsEndPoint( aPosition );
+}
+
+
+void SCH_LINE::doPlot( PLOTTER* aPlotter )
+{
+    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
+    aPlotter->set_current_line_width( GetPenSize() );
+
+    if( m_Layer == LAYER_NOTES )
+        aPlotter->set_dash( true );
+
+    aPlotter->move_to( m_Start );
+    aPlotter->finish_to( m_End );
+
+    if( m_Layer == LAYER_NOTES )
+        aPlotter->set_dash( false );
 }

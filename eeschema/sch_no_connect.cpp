@@ -9,6 +9,7 @@
 #include "common.h"
 #include "trigo.h"
 #include "richio.h"
+#include "plot_common.h"
 
 #include "general.h"
 #include "protos.h"
@@ -22,6 +23,8 @@ SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
     m_Pos    = pos;
     m_Size.x = m_Size.y = DRAWNOCONNECT_SIZE;
 #undef DRAWNOCONNECT_SIZE
+
+    SetLayer( LAYER_NOCONNECT );
 }
 
 
@@ -180,4 +183,21 @@ bool SCH_NO_CONNECT::doHitTest( const EDA_RECT& aRect, bool aContained, int aAcc
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+void SCH_NO_CONNECT::doPlot( PLOTTER* aPlotter )
+{
+    int delta = m_Size.x / 2;
+    int pX, pY;
+
+    pX = m_Pos.x;
+    pY = m_Pos.y;
+
+    aPlotter->set_current_line_width( GetPenSize() );
+    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
+    aPlotter->move_to( wxPoint( pX - delta, pY - delta ) );
+    aPlotter->finish_to( wxPoint( pX + delta, pY + delta ) );
+    aPlotter->move_to( wxPoint( pX + delta, pY - delta ) );
+    aPlotter->finish_to( wxPoint( pX - delta, pY + delta ) );
 }

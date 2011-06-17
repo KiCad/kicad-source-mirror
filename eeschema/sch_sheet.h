@@ -80,10 +80,10 @@ public:
     /**
      * Function CreateGraphicShape (virtual)
      * Calculates the graphic shape (a polygon) associated to the text
-     * @param aCorner_list = a buffer to fill with polygon corners coordinates
+     * @param aPoints = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
      */
-    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& aPos );
+    virtual void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos );
 
     virtual void SwapData( SCH_ITEM* aItem );
 
@@ -289,7 +289,7 @@ public:
     /* there is no member for orientation in sch_sheet, to preserve file
      * format, we detect orientation based on pin edges
      */
-    bool IsVerticalOrientation();
+    bool IsVerticalOrientation() const;
 
     /**
      * Add aSheetPin to the sheet.
@@ -475,7 +475,7 @@ public:
      * return the filename corresponding to this sheet
      * @return a wxString containing the filename
      */
-    wxString GetFileName( void );
+    wxString GetFileName( void ) const;
 
     // Set a new filename without changing anything else
     void SetFileName( const wxString& aFilename )
@@ -589,6 +589,7 @@ private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
+    virtual void doPlot( PLOTTER* aPlotter );
 };
 
 

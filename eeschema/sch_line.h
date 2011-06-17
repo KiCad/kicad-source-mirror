@@ -109,7 +109,7 @@ public:
      * Check line against \a aLine to see if it overlaps and merge if it does.
      *
      * This method will change the line to be equivalent of the line and \a aLine if the
-     * two lines overlap.  This method is used to merge multple line segments into a single
+     * two lines overlap.  This method is used to merge multiple line segments into a single
      * line.
      *
      * @param aLine - Line to compare.
@@ -148,6 +148,7 @@ private:
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
+    virtual void doPlot( PLOTTER* aPlotter );
 };
 
 

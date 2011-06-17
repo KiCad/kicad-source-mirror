@@ -1,6 +1,6 @@
-/*****************************/
-/* class_schematic_items.cpp */
-/*****************************/
+/********************/
+/* sch_junction.cpp */
+/********************/
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -9,6 +9,7 @@
 #include "trigo.h"
 #include "common.h"
 #include "richio.h"
+#include "plot_common.h"
 
 #include "general.h"
 #include "protos.h"
@@ -203,4 +204,11 @@ bool SCH_JUNCTION::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 bool SCH_JUNCTION::doIsConnected( const wxPoint& aPosition ) const
 {
     return m_Pos == aPosition;
+}
+
+
+void SCH_JUNCTION::doPlot( PLOTTER* aPlotter )
+{
+    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
+    aPlotter->circle( m_Pos, m_Size.x, FILLED_SHAPE );
 }

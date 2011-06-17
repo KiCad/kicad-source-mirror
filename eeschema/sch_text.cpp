@@ -11,6 +11,7 @@
 #include "class_drawpanel.h"
 #include "drawtxt.h"
 #include "wxEeschemaStruct.h"
+#include "plot_common.h"
 
 #include "general.h"
 #include "protos.h"
@@ -112,7 +113,7 @@ void SCH_TEXT::IncrementLabel()
 }
 
 
-wxPoint SCH_TEXT::GetSchematicTextOffset()
+wxPoint SCH_TEXT::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
 
@@ -650,6 +651,52 @@ bool SCH_TEXT::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
 }
 
 
+void SCH_TEXT::doPlot( PLOTTER* aPlotter )
+{
+    static std::vector <wxPoint> Poly;
+
+    EDA_Colors color = ReturnLayerColor( GetLayer() );
+    wxPoint    textpos   = m_Pos + GetSchematicTextOffset();
+    int        thickness = GetPenSize();
+
+    aPlotter->set_current_line_width( thickness );
+
+    if( m_MultilineAllowed )
+    {
+        wxPoint        pos  = textpos;
+        wxArrayString* list = wxStringSplit( m_Text, '\n' );
+        wxPoint        offset;
+
+        offset.y = GetInterline();
+
+        RotatePoint( &offset, m_Orient );
+
+        for( unsigned i = 0; i<list->Count(); i++ )
+        {
+            wxString txt = list->Item( i );
+            aPlotter->text( pos, color, txt, m_Orient, m_Size, m_HJustify,
+                            m_VJustify, thickness, m_Italic, m_Bold );
+            pos += offset;
+        }
+
+        delete (list);
+    }
+    else
+    {
+        aPlotter->text( textpos, color, m_Text, m_Orient, m_Size, m_HJustify,
+                        m_VJustify, thickness, m_Italic, m_Bold );
+    }
+
+    /* Draw graphic symbol for global or hierarchical labels */
+    CreateGraphicShape( Poly, m_Pos );
+
+    aPlotter->set_current_line_width( GetPenSize() );
+
+    if( Poly.size() )
+        aPlotter->PlotPoly( Poly, NO_FILL );
+}
+
+
 #if defined(DEBUG)
 
 void SCH_TEXT::Show( int nestLevel, std::ostream& os )
@@ -691,7 +738,7 @@ EDA_ITEM* SCH_LABEL::doClone() const
 }
 
 
-wxPoint SCH_LABEL::GetSchematicTextOffset()
+wxPoint SCH_LABEL::GetSchematicTextOffset() const
 {
     return SCH_TEXT::GetSchematicTextOffset();
 }
@@ -1037,7 +1084,7 @@ void SCH_GLOBALLABEL::Rotate( wxPoint rotationPoint )
 }
 
 
-wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset()
+wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
     int     width = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
@@ -1159,15 +1206,14 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
 }
 
 
-void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                          const wxPoint&         Pos )
+void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
 {
     int HalfSize  = m_Size.y / 2;
     int linewidth = (m_Thickness == 0) ? g_DrawDefaultLineThickness : m_Thickness;
 
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
-    aCorner_list.clear();
+    aPoints.clear();
 
     int symb_len = LenSize( m_Text ) + ( TXTMARGE * 2 );
 
@@ -1178,12 +1224,12 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
     int y = wxRound( (double) HalfSize * 1.5 + (double) linewidth + 3.0 );
 
     // Starting point(anchor)
-    aCorner_list.push_back( wxPoint( 0, 0 ) );
-    aCorner_list.push_back( wxPoint( 0, -y ) );     // Up
-    aCorner_list.push_back( wxPoint( -x, -y ) );    // left
-    aCorner_list.push_back( wxPoint( -x, 0 ) );     // Up left
-    aCorner_list.push_back( wxPoint( -x, y ) );     // left down
-    aCorner_list.push_back( wxPoint( 0, y ) );      // down
+    aPoints.push_back( wxPoint( 0, 0 ) );
+    aPoints.push_back( wxPoint( 0, -y ) );     // Up
+    aPoints.push_back( wxPoint( -x, -y ) );    // left
+    aPoints.push_back( wxPoint( -x, 0 ) );     // Up left
+    aPoints.push_back( wxPoint( -x, y ) );     // left down
+    aPoints.push_back( wxPoint( 0, y ) );      // down
 
     int x_offset = 0;
 
@@ -1191,18 +1237,18 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
     {
     case NET_INPUT:
         x_offset = -HalfSize;
-        aCorner_list[0].x += HalfSize;
+        aPoints[0].x += HalfSize;
         break;
 
     case NET_OUTPUT:
-        aCorner_list[3].x -= HalfSize;
+        aPoints[3].x -= HalfSize;
         break;
 
     case NET_BIDI:
     case NET_TRISTATE:
         x_offset = -HalfSize;
-        aCorner_list[0].x += HalfSize;
-        aCorner_list[3].x -= HalfSize;
+        aPoints[0].x += HalfSize;
+        aPoints[3].x -= HalfSize;
         break;
 
     case NET_UNSPECIFIED:
@@ -1231,15 +1277,15 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
     }
 
     // Rotate outlines and move corners in real position
-    for( unsigned ii = 0; ii < aCorner_list.size(); ii++ )
+    for( unsigned ii = 0; ii < aPoints.size(); ii++ )
     {
-        aCorner_list[ii].x += x_offset;
+        aPoints[ii].x += x_offset;
         if( angle )
-            RotatePoint( &aCorner_list[ii], angle );
-        aCorner_list[ii] += Pos;
+            RotatePoint( &aPoints[ii], angle );
+        aPoints[ii] += Pos;
     }
 
-    aCorner_list.push_back( aCorner_list[0] ); // closing
+    aPoints.push_back( aPoints[0] ); // closing
 }
 
 
@@ -1494,15 +1540,14 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 }
 
 
-void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                        const wxPoint&         Pos )
+void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
 {
     int* Template = TemplateShape[m_Shape][m_SchematicOrientation];
     int  HalfSize = m_Size.x / 2;
 
     int  imax = *Template; Template++;
 
-    aCorner_list.clear();
+    aPoints.clear();
 
     for( int ii = 0; ii < imax; ii++ )
     {
@@ -1513,7 +1558,7 @@ void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
         corner.y = ( HalfSize * (*Template) ) + Pos.y;
         Template++;
 
-        aCorner_list.push_back( corner );
+        aPoints.push_back( corner );
     }
 }
 
@@ -1570,7 +1615,7 @@ EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 }
 
 
-wxPoint SCH_HIERLABEL::GetSchematicTextOffset()
+wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
 

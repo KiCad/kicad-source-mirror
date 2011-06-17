@@ -114,6 +114,14 @@ public:
     void SetTransform( const TRANSFORM& aTransform );
 
     /**
+     * Function GetPartCount
+     * returns the number of parts per package of the component.
+     *
+     * @return The number of parts per package or zero if the library entry cannot be found.
+     */
+    int GetPartCount() const;
+
+    /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.sch" format.
      * @param aFile The FILE to write to.
@@ -395,6 +403,7 @@ private:
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
+    virtual void doPlot( PLOTTER* aPlotter );
 };
 
 

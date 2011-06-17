@@ -460,8 +460,7 @@ void SCH_SHEET_PIN::Rotate( wxPoint rotationPoint )
 }
 
 
-void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
-                                        const wxPoint&         aPos )
+void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos )
 {
      /* This is the same icon shapes as SCH_HIERLABEL
      * but the graphic icon is slightly different in 2 cases:
@@ -484,7 +483,7 @@ void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aCorner_list,
         break;
     }
 
-    SCH_HIERLABEL::CreateGraphicShape( aCorner_list, aPos );
+    SCH_HIERLABEL::CreateGraphicShape( aPoints, aPos );
     m_Shape = tmp;
 }
 

@@ -9,6 +9,7 @@
 #include "trigo.h"
 #include "common.h"
 #include "richio.h"
+#include "plot_common.h"
 
 #include "general.h"
 #include "protos.h"
@@ -249,4 +250,13 @@ bool SCH_BUS_ENTRY::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccu
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+void SCH_BUS_ENTRY::doPlot( PLOTTER* aPlotter )
+{
+    aPlotter->set_current_line_width( GetPenSize() );
+    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
+    aPlotter->move_to( m_Pos );
+    aPlotter->finish_to( m_End() );
 }

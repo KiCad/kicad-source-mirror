@@ -104,6 +104,7 @@ private:
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
+    virtual void doPlot( PLOTTER* aPlotter );
 };
 
 

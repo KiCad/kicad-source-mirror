@@ -18,6 +18,7 @@ class SCH_SHEET_PATH;
 class SCH_SHEET_PIN;
 class SCH_LINE;
 class SCH_TEXT;
+class PLOTTER;
 
 
 enum SCH_LINE_TEST_T
@@ -122,6 +123,14 @@ public:
      * @param aColor The drawing color.
      */
     void Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aColor = -1 );
+
+    /**
+     * Function Plot
+     * plots all the schematic objects to \a aPlotter.
+     *
+     * @param aPlotter The plotter object to plot to.
+     */
+    void Plot( PLOTTER* aPlotter );
 
     /**
      * Remove \a aItem from the schematic associated with this screen.

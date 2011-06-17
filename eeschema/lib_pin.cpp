@@ -157,10 +157,6 @@ const wxChar* MsgPinElectricType[] =
 };
 
 
-extern void PlotPinSymbol( PLOTTER* plotter, const wxPoint& pos,
-                           int len, int orient, int Shape );
-
-
 LIB_PIN::LIB_PIN( LIB_COMPONENT* aParent ) :
     LIB_ITEM( LIB_PIN_T, aParent )
 {
@@ -1284,6 +1280,110 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
 }
 
 
+void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation )
+{
+    int        MapX1, MapY1, x1, y1;
+    EDA_Colors color = UNSPECIFIED_COLOR;
+
+    color = ReturnLayerColor( LAYER_PIN );
+
+    aPlotter->set_color( color );
+
+    MapX1 = MapY1 = 0;
+    x1 = aPosition.x; y1 = aPosition.y;
+
+    switch( aOrientation )
+    {
+    case PIN_UP:
+        y1 = aPosition.y - m_length;
+        MapY1 = 1;
+        break;
+
+    case PIN_DOWN:
+        y1 = aPosition.y + m_length;
+        MapY1 = -1;
+        break;
+
+    case PIN_LEFT:
+        x1 = aPosition.x - m_length;
+        MapX1 = 1;
+        break;
+
+    case PIN_RIGHT:
+        x1 = aPosition.x + m_length;
+        MapX1 = -1;
+        break;
+    }
+
+    if( m_shape & INVERT )
+    {
+        aPlotter->circle( wxPoint( MapX1 * INVERT_PIN_RADIUS + x1,
+                                   MapY1 * INVERT_PIN_RADIUS + y1 ),
+                          INVERT_PIN_RADIUS * 2, // diameter
+                          NO_FILL,               // fill
+                          -1 );                  // width
+
+        aPlotter->move_to( wxPoint( MapX1 * INVERT_PIN_RADIUS * 2 + x1,
+                                    MapY1 * INVERT_PIN_RADIUS * 2 + y1 ) );
+        aPlotter->finish_to( aPosition );
+    }
+    else
+    {
+        aPlotter->move_to( wxPoint( x1, y1 ) );
+        aPlotter->finish_to( aPosition );
+    }
+
+    if( m_shape & CLOCK )
+    {
+        if( MapY1 == 0 ) /* MapX1 = +- 1 */
+        {
+            aPlotter->move_to( wxPoint( x1, y1 + CLOCK_PIN_DIM ) );
+            aPlotter->line_to( wxPoint( x1 - MapX1 * CLOCK_PIN_DIM, y1 ) );
+            aPlotter->finish_to( wxPoint( x1, y1 - CLOCK_PIN_DIM ) );
+        }
+        else    /* MapX1 = 0 */
+        {
+            aPlotter->move_to( wxPoint( x1 + CLOCK_PIN_DIM, y1 ) );
+            aPlotter->line_to( wxPoint( x1, y1 - MapY1 * CLOCK_PIN_DIM ) );
+            aPlotter->finish_to( wxPoint( x1 - CLOCK_PIN_DIM, y1 ) );
+        }
+    }
+
+    if( m_shape & LOWLEVEL_IN )   /* IEEE symbol "Active Low Input" */
+    {
+        if( MapY1 == 0 )        /* MapX1 = +- 1 */
+        {
+            aPlotter->move_to( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 ) );
+            aPlotter->line_to( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2,
+                                        y1 - IEEE_SYMBOL_PIN_DIM ) );
+            aPlotter->finish_to( wxPoint( x1, y1 ) );
+        }
+        else    /* MapX1 = 0 */
+        {
+            aPlotter->move_to( wxPoint( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
+            aPlotter->line_to( wxPoint( x1 - IEEE_SYMBOL_PIN_DIM,
+                                        y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
+            aPlotter->finish_to( wxPoint( x1, y1 ) );
+        }
+    }
+
+
+    if( m_shape & LOWLEVEL_OUT )  /* IEEE symbol "Active Low Output" */
+    {
+        if( MapY1 == 0 )        /* MapX1 = +- 1 */
+        {
+            aPlotter->move_to( wxPoint( x1, y1 - IEEE_SYMBOL_PIN_DIM ) );
+            aPlotter->finish_to( wxPoint( x1 + MapX1 * IEEE_SYMBOL_PIN_DIM * 2, y1 ) );
+        }
+        else    /* MapX1 = 0 */
+        {
+            aPlotter->move_to( wxPoint( x1 - IEEE_SYMBOL_PIN_DIM, y1 ) );
+            aPlotter->finish_to( wxPoint( x1, y1 + MapY1 * IEEE_SYMBOL_PIN_DIM * 2 ) );
+        }
+    }
+}
+
+
 /*****************************************************************************
 * Plot pin number and pin text info, given the pin line coordinates.      *
 * Same as DrawPinTexts((), but output is the plotter
@@ -1748,10 +1848,10 @@ void LIB_PIN::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     wxPoint pos = aTransform.TransformCoordinate( m_position ) + offset;
 
     plotter->set_current_line_width( GetPenSize() );
-    PlotPinSymbol( plotter, pos, m_length, orient, m_shape );
+    PlotSymbol( plotter, pos, orient );
     PlotPinTexts( plotter, pos, orient, GetParent()->GetPinNameOffset(),
-                 GetParent()->ShowPinNumbers(), GetParent()->ShowPinNames(),
-                 GetPenSize() );
+                  GetParent()->ShowPinNumbers(), GetParent()->ShowPinNames(),
+                  GetPenSize() );
 }
 
 

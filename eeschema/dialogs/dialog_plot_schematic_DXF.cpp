@@ -242,7 +242,7 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString& FileName,
         m_Parent->PlotWorkSheet( plotter, screen );
     }
 
-    PlotDrawlist( plotter, screen->GetDrawItems() );
+    screen->Plot( plotter );
 
     /* fin */
     plotter->end_plot();

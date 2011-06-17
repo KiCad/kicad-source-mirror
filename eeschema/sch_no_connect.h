@@ -103,6 +103,7 @@ private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
+    virtual void doPlot( PLOTTER* aPlotter );
 };
 
 

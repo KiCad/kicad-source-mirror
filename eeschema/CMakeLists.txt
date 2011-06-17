@@ -112,7 +112,6 @@ set(EESCHEMA_SRCS
     onrightclick.cpp
     operations_on_items_lists.cpp
     pinedit.cpp
-    plot.cpp
     sch_bus_entry.cpp
     sch_collectors.cpp
     sch_component.cpp

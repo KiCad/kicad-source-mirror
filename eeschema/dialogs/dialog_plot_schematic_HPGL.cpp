@@ -392,7 +392,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_1_Page_HPGL( const wxString& FileName,
     if( m_plot_Sheet_Ref )
         m_Parent->PlotWorkSheet( plotter, screen );
 
-    PlotDrawlist( plotter, screen->GetDrawItems() );
+    screen->Plot( plotter );
 
     plotter->end_plot();
     delete plotter;

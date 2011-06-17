@@ -20,6 +20,7 @@
 #include "richio.h"
 #include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
+#include "plot_common.h"
 
 #include "general.h"
 #include "protos.h"
@@ -27,6 +28,7 @@
 #include "sch_sheet_path.h"
 #include "sch_component.h"
 #include "kicad_string.h"
+
 
 SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_SHEET_T )
@@ -366,7 +368,7 @@ bool SCH_SHEET::HasPin( const wxString& aName )
 }
 
 
-bool SCH_SHEET::IsVerticalOrientation()
+bool SCH_SHEET::IsVerticalOrientation() const
 {
     BOOST_FOREACH( SCH_SHEET_PIN pin, m_pins )
     {
@@ -827,7 +829,7 @@ int SCH_SHEET::CountSheets()
 }
 
 
-wxString SCH_SHEET::GetFileName( void )
+wxString SCH_SHEET::GetFileName( void ) const
 {
     return m_FileName;
 }
@@ -1073,6 +1075,83 @@ bool SCH_SHEET::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 wxPoint SCH_SHEET::GetResizePosition() const
 {
     return wxPoint( m_Pos.x + m_Size.GetWidth(), m_Pos.y + m_Size.GetHeight() );
+}
+
+
+void SCH_SHEET::doPlot( PLOTTER* aPlotter )
+{
+    EDA_Colors txtcolor = UNSPECIFIED_COLOR;
+    wxSize     size;
+    wxString   Text;
+    int        name_orientation;
+    wxPoint    pos_sheetname, pos_filename;
+    wxPoint    pos;
+
+    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
+
+    int thickness = GetPenSize();
+    aPlotter->set_current_line_width( thickness );
+
+    aPlotter->move_to( m_Pos );
+    pos = m_Pos;
+    pos.x += m_Size.x;
+
+    aPlotter->line_to( pos );
+    pos.y += m_Size.y;
+
+    aPlotter->line_to( pos );
+    pos = m_Pos;
+    pos.y += m_Size.y;
+
+    aPlotter->line_to( pos );
+    aPlotter->finish_to( m_Pos );
+
+    if( IsVerticalOrientation() )
+    {
+        pos_sheetname    = wxPoint( m_Pos.x - 8, m_Pos.y + m_Size.y );
+        pos_filename     = wxPoint( m_Pos.x + m_Size.x + 4, m_Pos.y + m_Size.y );
+        name_orientation = TEXT_ORIENT_VERT;
+    }
+    else
+    {
+        pos_sheetname    = wxPoint( m_Pos.x, m_Pos.y - 4 );
+        pos_filename     = wxPoint( m_Pos.x, m_Pos.y + m_Size.y + 4 );
+        name_orientation = TEXT_ORIENT_HORIZ;
+    }
+    /* Draw texts: SheetName */
+    Text = m_SheetName;
+    size = wxSize( m_SheetNameSize, m_SheetNameSize );
+
+    //pos  = m_Pos; pos.y -= 4;
+    thickness = g_DrawDefaultLineThickness;
+    thickness = Clamp_Text_PenSize( thickness, size, false );
+
+    aPlotter->set_color( ReturnLayerColor( LAYER_SHEETNAME ) );
+
+    bool italic = false;
+    aPlotter->text( pos_sheetname, txtcolor, Text, name_orientation, size,
+                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_BOTTOM,
+                    thickness, italic, false );
+
+    /*Draw texts : FileName */
+    Text = GetFileName();
+    size = wxSize( m_FileNameSize, m_FileNameSize );
+    thickness = g_DrawDefaultLineThickness;
+    thickness = Clamp_Text_PenSize( thickness, size, false );
+
+    aPlotter->set_color( ReturnLayerColor( LAYER_SHEETFILENAME ) );
+
+    aPlotter->text( pos_filename, txtcolor, Text, name_orientation, size,
+                    GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_TOP,
+                    thickness, italic, false );
+
+    aPlotter->set_color( ReturnLayerColor( GetLayer() ) );
+
+    /* Draw texts : SheetLabel */
+    for( size_t i = 0; i < m_pins.size(); i++ )
+    {
+        m_pins[i].Plot( aPlotter );
+    }
 }
 
 

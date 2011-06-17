@@ -372,6 +372,8 @@ public:
                        bool     aDrawPinName,
                        int      aWidth );
 
+    void PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation );
+
     /**
      * Get a list of pin orientation names.
      *

@@ -1,10 +1,12 @@
 project(kicad)
 
-# test the minimum Cmake version requirement (could be different under unix or Windows
+# The minimum CMake version requirement could be different under unix, OSX,  or Windows
 if(WIN32)
-    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)   # win32 and win64
+elseif(APPLE)
+    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)   # OSX
 else(WIN32)
-    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+    cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)   # Linux, Unix, and everything else.
 endif(WIN32)
 
 # Path to local CMake modules.

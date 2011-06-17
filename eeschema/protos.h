@@ -76,12 +76,6 @@ EDA_Colors ReturnLayerColor( int Layer );
 int IsBusLabel( const wxString& LabelDrawList );
 
 
-/************/
-/* PLOT.CPP */
-/************/
-void PlotDrawlist( PLOTTER* plotter, SCH_ITEM* drawlist );
-
-
 /***************/
 /* PINEDIT.CPP */
 /***************/

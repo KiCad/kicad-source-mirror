@@ -20,6 +20,7 @@
 #include "trigo.h"
 #include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
+#include "plot_common.h"
 
 #include "general.h"
 #include "protos.h"
@@ -500,4 +501,76 @@ bool SCH_FIELD::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
         return rect.Contains( GetBoundingBox() );
 
     return rect.Intersects( GetBoundingBox() );
+}
+
+
+/* Plot field text.
+ * Input:
+ * DrawLibItem: pointer to the component
+ * FieldNumber: Number Field
+ * IsMulti: true flag if there are several parts per package.
+ * Only useful for the field to add a reference to this one
+ * The identification from (A, B ...)
+ * DrawMode: trace mode
+ */
+void SCH_FIELD::doPlot( PLOTTER* aPlotter )
+{
+    SCH_COMPONENT* parent = ( SCH_COMPONENT* ) GetParent();
+
+    wxCHECK_RET( parent != NULL && parent->Type() == SCH_COMPONENT_T,
+                 wxT( "Cannot plot field with invalid parent." ) );
+
+    EDA_Colors color = UNSPECIFIED_COLOR;
+
+    color = ReturnLayerColor( GetLayer() );
+
+    if( m_Attributs & TEXT_NO_VISIBLE )
+        return;
+
+    if( IsVoid() )
+        return;
+
+    /* Calculate the text orientation, according to the component
+     * orientation/mirror */
+    int orient = m_Orient;
+
+    if( parent->GetTransform().y1 )  // Rotate component 90 deg.
+    {
+        if( orient == TEXT_ORIENT_HORIZ )
+            orient = TEXT_ORIENT_VERT;
+        else
+            orient = TEXT_ORIENT_HORIZ;
+    }
+
+    /* Calculate the text justification, according to the component
+     * orientation/mirror
+     * this is a bit complicated due to cumulative calculations:
+     * - numerous cases (mirrored or not, rotation)
+     * - the DrawGraphicText function recalculate also H and H justifications
+     *      according to the text orientation.
+     * - When a component is mirrored, the text is not mirrored and
+     *   justifications are complicated to calculate
+     * so the more easily way is to use no justifications ( Centered text )
+     * and use GetBoundaryBox to know the text coordinate considered as centered
+     */
+    EDA_RECT BoundaryBox = GetBoundingBox();
+    GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
+    GRTextVertJustifyType vjustify  = GR_TEXT_VJUSTIFY_CENTER;
+    wxPoint  textpos = BoundaryBox.Centre();
+
+    int      thickness = GetPenSize();
+
+    if( (parent->GetPartCount() <= 1) || (m_FieldId != REFERENCE) )
+    {
+        aPlotter->text( textpos, color, m_Text, orient, m_Size, hjustify, vjustify,
+                        thickness, m_Italic, m_Bold );
+    }
+    else    /* We plot the reference, for a multiple parts per package */
+    {
+        /* Adding A, B ... to the reference */
+        wxString Text = m_Text + LIB_COMPONENT::ReturnSubReference( parent->GetUnit() );
+
+        aPlotter->text( textpos, color, Text, orient, m_Size, hjustify, vjustify,
+                        thickness, m_Italic, m_Bold );
+    }
 }

@@ -97,7 +97,7 @@ public:
      * (room to draw an associated graphic symbol, or put the text above a
      * wire)
      */
-    virtual wxPoint GetSchematicTextOffset();
+    virtual wxPoint GetSchematicTextOffset() const;
 
     SCH_TEXT* GenCopy();
 
@@ -110,14 +110,14 @@ public:
     /**
      * Function CreateGraphicShape
      * Calculates the graphic shape (a polygon) associated to the text
-     * @param aCorner_list = a buffer to fill with polygon corners coordinates
+     * @param aPoints = a buffer to fill with polygon corners coordinates
      * @param Pos = Postion of the shape
      * for texts and labels: do nothing
      * Mainly for derived classes (SCH_SHEET_PIN and Hierarchical labels)
      */
-    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& Pos )
+    virtual void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
     {
-        aCorner_list.clear();
+        aPoints.clear();
     }
 
     void SwapData( SCH_TEXT* copyitem );
@@ -214,6 +214,7 @@ private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
+    virtual void doPlot( PLOTTER* aPlotter );
 };
 
 
@@ -260,7 +261,7 @@ public:
      * (room to draw an associated graphic symbol, or put the text above a
      * wire)
      */
-    virtual wxPoint GetSchematicTextOffset();
+    virtual wxPoint GetSchematicTextOffset() const;
 
     virtual void Mirror_X( int aXaxis_position );
 
@@ -350,7 +351,7 @@ public:
      * (room to draw an associated graphic symbol, or put the text above a
      * wire)
      */
-    virtual wxPoint GetSchematicTextOffset();
+    virtual wxPoint GetSchematicTextOffset() const;
 
     /**
      * Function Save
@@ -383,10 +384,10 @@ public:
     /**
      * Function CreateGraphicShape (virual)
      * Calculates the graphic shape (a polygon) associated to the text
-     * @param aCorner_list = a buffer to fill with polygon corners coordinates
+     * @param aPoints = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
      */
-    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& aPos );
+    virtual void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& aPos );
 
     /** virtual function Mirror_Y
      * mirror item relative to an Y axis
@@ -456,15 +457,15 @@ public:
      * (room to draw an associated graphic symbol, or put the text above a
      * wire)
      */
-    virtual wxPoint GetSchematicTextOffset();
+    virtual wxPoint GetSchematicTextOffset() const;
 
     /**
      * Function CreateGraphicShape
      * Calculates the graphic shape (a polygon) associated to the text
-     * @param aCorner_list = a buffer to fill with polygon corners coordinates
+     * @param aPoints = a buffer to fill with polygon corners coordinates
      * @param Pos = Postion of the shape
      */
-    virtual void CreateGraphicShape( std::vector <wxPoint>& aCorner_list, const wxPoint& Pos );
+    virtual void CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos );
 
     /**
      * Function Save
