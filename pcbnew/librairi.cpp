@@ -160,7 +160,6 @@ void WinEDA_ModuleEditFrame::Export_Module( MODULE* aModule, bool aCreateSysLib 
     if( aModule == NULL )
         return;
 
-    aModule->m_LibRef = aModule->m_Reference->m_Text;
     fn.SetName( aModule->m_LibRef );
     fn.SetExt( aCreateSysLib ? ModuleFileExtension : ModExportFileExtension );
 
