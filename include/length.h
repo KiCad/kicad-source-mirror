@@ -7,6 +7,7 @@
 #define UNITS_H_INCLUDED 1
 
 #include <math.h>
+#include <wx/gdicmn.h>
 /**********************************************/
 /*! I'm a physical length                     */
 /**********************************************/
@@ -388,13 +389,31 @@ public:
     }
 
     /*! 
-     * A point ( or vector ) given x and y multiplies of some unit.
+     * A point ( or vector ) given x and y multiplies of specified unit.
      * Given just for a convenience, you can use ( x*unit, y*unit ) instead.
      * @param x coordinate factor
      * @param y coordinate factor
      * @param unit the unit
      */
     LENGTH_XY( int x, int y, const LENGTH unit ) : m_X( unit * x ), m_Y( unit * y )
+    {
+    }
+
+    /*! 
+     * A point ( or vector ) given wxPoint and unit
+     * @param x wxPoint
+     * @param unit the unit
+     */
+    LENGTH_XY( wxPoint x, const LENGTH unit ) : m_X( unit * x.x ), m_Y( unit * x.y )
+    {
+    }
+
+    /*! 
+     * A point ( or vector ) given wxRealPoint and unit
+     * @param x wxRealPoint
+     * @param unit the unit
+     */
+    LENGTH_XY( wxRealPoint x, const LENGTH unit ) : m_X( unit * x.x ), m_Y( unit * x.y )
     {
     }
 
@@ -610,6 +629,26 @@ public:
         m_X /= y;
         m_Y /= y;
         return *this;
+    }
+
+    /*!
+     * Outputs wxPoint in specified scale.
+     * @param y scale
+     * @return wxPoint
+     */
+    const wxPoint toWxPoint ( LENGTH y ) const
+    {
+        return wxPoint( m_X.idiv( y ), m_Y.idiv( y ) );
+    }
+
+    /*!
+     * Outputs wxRealPoint in specified scale.
+     * @param y scale
+     * @return wxPoint
+     */
+    const wxRealPoint toWxRealPoint ( LENGTH y ) const
+    {
+        return wxRealPoint( m_X / y, m_Y / y );
     }
 
     /*!
