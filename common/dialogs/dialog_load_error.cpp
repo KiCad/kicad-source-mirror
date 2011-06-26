@@ -31,14 +31,14 @@ void DIALOG_LOAD_ERROR::ListSet(const wxString &aList)
     wxArrayString* wxStringSplit( wxString txt, wxChar splitter );
 
     wxArrayString* strings_list = wxStringSplit( aList, wxChar('\n') );
-    m_htmlWindow->AppendToPage(wxT("<ul>") );
+    wxString msg = wxT("<ul>");
     for ( unsigned ii = 0; ii < strings_list->GetCount(); ii ++ )
     {
-        m_htmlWindow->AppendToPage(wxT("<li>") );
-        m_htmlWindow->AppendToPage( strings_list->Item(ii) );
-        m_htmlWindow->AppendToPage(wxT("</li>") );
+        msg += wxT("<li>");
+        msg += strings_list->Item(ii) + wxT("</li>");
     }
-    m_htmlWindow->AppendToPage(wxT("</ul>") );
+    msg += wxT("</ul>");
+    m_htmlWindow->AppendToPage( msg );
 
     delete strings_list;
 }
@@ -50,14 +50,14 @@ void DIALOG_LOAD_ERROR::ListSet(const wxString &aList)
  */
 void DIALOG_LOAD_ERROR::ListSet(const wxArrayString &aList)
 {
-    m_htmlWindow->AppendToPage(wxT("<ul>") );
+    wxString msg = wxT("<ul>");
     for ( unsigned ii = 0; ii < aList.GetCount(); ii ++ )
     {
-        m_htmlWindow->AppendToPage(wxT("<li>") );
-        m_htmlWindow->AppendToPage( aList.Item(ii) );
-        m_htmlWindow->AppendToPage(wxT("</li>") );
+        msg += wxT("<li>");
+        msg += aList.Item(ii) + wxT("</li>");
     }
-    m_htmlWindow->AppendToPage(wxT("</ul>") );
+    msg += wxT("</ul>");
+    m_htmlWindow->AppendToPage( msg );
 }
 
 /**
