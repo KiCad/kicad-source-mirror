@@ -96,6 +96,7 @@ for C in ${CATEGORIES}; do
     mkdir -p $BASEDIR/$C
 
     for P in ${PARTS};  do
+
         for R in ${REVS}; do
             echo "(part $C/$P (value 22)(footprint SM0805)(model Airplane)(datasheet http://favorite.pdf)
                 $REFERENCE
@@ -119,6 +120,7 @@ for C in ${CATEGORIES}; do
                 $PIN_MERGE
                 )" > $BASEDIR/$C/$P.part.$R
         done
+
         # also make the part without a rev:
         echo "(part $C/$P (value 22)(footprint SM0805)(model Airplane)(datasheet http://favorite.pdf)
             $REFERENCE
@@ -141,6 +143,8 @@ for C in ${CATEGORIES}; do
             $PIN_DELETE
             $PIN_MERGE
             )" > $BASEDIR/$C/$P.part
+
     done
+
 done
 

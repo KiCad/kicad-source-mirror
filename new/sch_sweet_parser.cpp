@@ -346,7 +346,7 @@ void SWEET_PARSER::parseExtends( PART* me )
     // we could be going in circles here, recursively, or too deep, set limits
     // and disallow extending from self (even indirectly)
     int extendsDepth = 0;
-    for( PART* ancestor = base; ancestor && extendsDepth<MAX_INHERITANCE_NESTING;
+    for( const PART* ancestor = base; ancestor && extendsDepth<MAX_INHERITANCE_NESTING;
             ++extendsDepth, ancestor = ancestor->base )
     {
         if( ancestor == me )

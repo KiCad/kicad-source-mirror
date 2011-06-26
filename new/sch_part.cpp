@@ -155,6 +155,25 @@ PROPERTY* PART::FieldLookup( PROP_ID aPropertyId )
     return p;
 }
 
+
+PROPERTY& PROPERTY::operator = ( const PROPERTY& r )
+{
+    *(BASE_GRAPHIC*) this = (BASE_GRAPHIC&) r;
+
+    name  = r.name;
+    text  = r.text;
+
+    delete effects;
+
+    if( r.effects )
+        effects = new TEXT_EFFECTS( *r.effects );
+    else
+        effects = 0;
+
+    return *this;
+}
+
+
 PINS::iterator PART::pinFindByPad( const wxString& aPad )
 {
     PINS::iterator it;
@@ -196,7 +215,6 @@ bool PART::PinDelete( const wxString& aPad )
 }
 
 
-
 PART::~PART()
 {
     clear();
@@ -210,25 +228,60 @@ void PART::setExtends( LPID* aLPID )
 }
 
 
-void PART::inherit( const PART& other )
+void PART::inherit( const PART& r )
 {
-    contains = other.contains;
+    // Inherit can be called at any time, even from an interactive text
+    // editor, so cannot assume 'this' object is new.  Clear it.
+    clear();
 
-    // @todo copy the inherited drawables, properties, and pins here
+    // copy anything inherited, such as drawables, properties, pins, etc. here
+    contains = r.contains;
+
+    base     = &r;
+
+    anchor   = r.anchor;
+
+    for( int i=REFERENCE;  i<END;  ++i )
+    {
+        if( r.mandatory[i] )
+            mandatory[i] = (PROPERTY*) r.mandatory[i]->Clone( this );
+    }
+
+    for( PROPERTIES::const_iterator it = r.properties.begin();  it != r.properties.end();  ++it )
+        properties.push_back( (PROPERTY*) (*it)->Clone( this ) );
+
+    for( GRAPHICS::const_iterator it = r.graphics.begin();  it != r.graphics.end();  ++it )
+        graphics.push_back( (*it)->Clone( this ) );
+
+    for( PINS::const_iterator it = r.pins.begin();  it != r.pins.end();  ++it )
+        pins.push_back( (PIN*) (*it)->Clone( this ) );
+
+    /* not sure about this concept yet:
+    for( PART_REFS::const_iterator it = r.alternates.begin();  it != r.alternates.end();  ++it )
+        alternates.push_back( *it );
+    */
+
+    for( KEYWORDS::const_iterator it = r.keywords.begin();  it != r.keywords.end();  ++it )
+        keywords.insert( *it );
+
+    for( MERGE_SETS::const_iterator it = r.pin_merges.begin();  it != r.pin_merges.end();  ++it )
+    {
+        pin_merges[ *it->first ] = * new MERGE_SET( *it->second );
+    }
 }
 
 
-PART& PART::operator=( const PART& other )
+PART& PART::operator=( const PART& r )
 {
-    owner          = other.owner;
-    partNameAndRev = other.partNameAndRev;
-    body           = other.body;
-    base           = other.base;
-
-    setExtends( other.extends ? new LPID( *other.extends ) : 0 );
-
     // maintain in concert with inherit(), which is a partial assignment operator.
-    inherit( other );
+    inherit( r );
+
+    owner          = r.owner;
+    partNameAndRev = r.partNameAndRev;
+    body           = r.body;
+    base           = r.base;
+
+    setExtends( r.extends ? new LPID( *r.extends ) : 0 );
 
     return *this;
 }

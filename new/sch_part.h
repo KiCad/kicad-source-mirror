@@ -110,9 +110,15 @@ public:
         wxPoint( x, y )
     {}
 
+    POINT( const POINT& r ) :
+        wxPoint( r )
+    {}
+
     POINT() :
         wxPoint()
     {}
+
+    // assume assignment operator is inherited.
 };
 
 };
@@ -135,7 +141,7 @@ class FONTZ
 {
 public:
 
-#define FONTZ_DEFAULT       -1  ///< when size defers to higher control
+#define FONTZ_DEFAULT       -1      ///< when size defers to higher control
 
     FONTZ() :
         height( FONTZ_DEFAULT ),
@@ -145,6 +151,7 @@ public:
     int     height;
     int     width;
 };
+
 
 typedef float   ANGLE;
 typedef int     STROKE;             ///< will be a class someday, currently only line width
@@ -158,7 +165,7 @@ class FONT
     friend class SWEET_PARSER;
 
 protected:
-    wxString        name;       ///< name or other id such as number, TBD
+    wxString        name;           ///< name or other id such as number, TBD
     FONTZ           size;
 
     bool            italic;
@@ -172,6 +179,8 @@ public:
 
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
+
+    // trust compiler to write its own assignment operator for this class OK.
 };
 
 
@@ -193,13 +202,14 @@ struct TEXT_EFFECTS
 
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
+
+    // trust compiler to write its own assignment operator for this class OK.
 };
 
 
 #define STROKE_DEFAULT      -1          ///< defer line width decision to higher control
 
 #define FILL_TYPE_DEFAULT   PR::T_none  ///< fillType defaut
-
 
 class BASE_GRAPHIC
 {
@@ -218,6 +228,14 @@ public:
 
     virtual ~BASE_GRAPHIC() {}
 
+    /**
+     * Function Clone
+     * invokes the copy constructor on a heap allocated object of this same
+     * type and creates a deep copy of 'this' into it
+     * @param aOwner is the owner of the returned, new object.
+     */
+    virtual BASE_GRAPHIC* Clone( PART* aOwner ) const = 0;
+
     static const char* ShowFill( int aFillType )
     {
         return SWEET_LEXER::TokenName( PR::T( aFillType ) );
@@ -231,6 +249,7 @@ public:
         throw( IO_ERROR )
     {}
 };
+
 
 typedef std::deque<POINT>  POINTS;
 
@@ -257,7 +276,15 @@ public:
 
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
+
+    BASE_GRAPHIC* Clone( PART* aOwner ) const
+    {
+        POLY_LINE* n = new POLY_LINE( *this );
+        n->owner = aOwner;
+        return n;
+    }
 };
+
 
 class BEZIER : public POLY_LINE
 {
@@ -274,7 +301,15 @@ public:
 
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
+
+    BASE_GRAPHIC* Clone( PART* aOwner ) const
+    {
+        BEZIER* n = new BEZIER( *this );
+        n->owner = aOwner;
+        return n;
+    }
 };
+
 
 class RECTANGLE : public BASE_GRAPHIC
 {
@@ -297,6 +332,13 @@ public:
 
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
+
+    BASE_GRAPHIC* Clone( PART* aOwner ) const
+    {
+        RECTANGLE* n = new RECTANGLE( *this );
+        n->owner = aOwner;
+        return n;
+    }
 };
 
 
@@ -322,6 +364,13 @@ public:
 
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
+
+    BASE_GRAPHIC* Clone( PART* aOwner ) const
+    {
+        CIRCLE* n = new CIRCLE( *this );
+        n->owner = aOwner;
+        return n;
+    }
 };
 
 
@@ -349,6 +398,13 @@ public:
 
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
+
+    BASE_GRAPHIC* Clone( PART* aOwner ) const
+    {
+        ARC* n = new ARC( *this );
+        n->owner = aOwner;
+        return n;
+    }
 };
 
 
@@ -387,6 +443,13 @@ public:
 
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
+
+    BASE_GRAPHIC* Clone( PART* aOwner ) const
+    {
+        GR_TEXT* n = new GR_TEXT( *this );
+        n->owner = aOwner;
+        return n;
+    }
 };
 
 
@@ -416,6 +479,16 @@ public:
         effects( 0 )
     {}
 
+    PROPERTY( const PROPERTY& r ) :
+        BASE_GRAPHIC( NULL ),
+        effects( 0 )
+    {
+        // use assignment operator
+        *this = r;
+    }
+
+    PROPERTY& operator = ( const PROPERTY& r );     // @todo
+
     ~PROPERTY()
     {
         clear();
@@ -436,6 +509,13 @@ public:
 
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
+
+    BASE_GRAPHIC* Clone( PART* aOwner ) const
+    {
+        PROPERTY* n = new PROPERTY( *this );
+        n->owner = aOwner;
+        return n;
+    }
 };
 
 
@@ -488,6 +568,13 @@ public:
     void Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
         throw( IO_ERROR );
 
+    BASE_GRAPHIC* Clone( PART* aOwner ) const
+    {
+        PIN* n = new PIN( *this );
+        n->owner = aOwner;
+        return n;
+    }
+
 protected:
     POINT       pos;
     ANGLE       angle;
@@ -533,7 +620,6 @@ public:
     {
     }
 
-
     /**
      * Function Lookup
      * returns the PART that this LPID refers to.  Never returns NULL, because
@@ -555,7 +641,6 @@ protected:
 };
 
 typedef std::vector<PART_REF>   PART_REFS;
-
 
 }  // namespace SCH
 
@@ -667,7 +752,7 @@ public:
      * constructed by this function if need be.
      * @param aPropertyId tells which field.
      */
-    PROPERTY*   FieldLookup( PROP_ID aPropertyId );
+    PROPERTY* FieldLookup( PROP_ID aPropertyId );
 
     /**
      * Function PinFindByPad
@@ -675,7 +760,7 @@ public:
      * @param aPad is the pin to find
      * @return PIN* - the found PIN or NULL if not found.
      */
-    PIN*        PinFindByPad( const wxString& aPad )
+    PIN* PinFindByPad( const wxString& aPad )
     {
         PINS::iterator it = pinFindByPad( aPad );
         return it != pins.end() ? *it : NULL;
@@ -685,7 +770,7 @@ public:
      * Function PinsFindBySignal
      * fetches all the pins matching aSignal into aResults.
      */
-    void        PinsFindBySignal( PIN_LIST* aResults, const wxString& aSignal );
+    void PinsFindBySignal( PIN_LIST* aResults, const wxString& aSignal );
 
     /**
      * Function PinDelete
@@ -766,17 +851,15 @@ protected:      // not likely to have C++ descendants, but protected none-the-le
      */
     PINS::iterator pinFindByPad( const wxString& aPad );
 
-    POINT           anchor;
-
-    //PART( LIB* aOwner );
-
     LIB*            owner;      ///< which LIB am I a part of (pun if you want)
     int             contains;   ///< has bits from Enum PartParts
 
     STRING          partNameAndRev;   ///< example "passives/R[/revN..]", immutable.
 
     LPID*           extends;    ///< of base part, NULL if none, otherwise I own it.
-    PART*           base;       ///< which PART am I extending, if any.  no ownership.
+    const PART*     base;       ///< which PART am I extending, if any.  no ownership.
+
+    POINT           anchor;
 
     /// encapsulate the old version deletion, take ownership of @a aLPID
     void setExtends( LPID* aLPID );
