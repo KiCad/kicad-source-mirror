@@ -64,7 +64,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	
 	bSizernbunits->Add( m_staticTextNbUnits, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_SelNumberOfUnits = new wxSpinCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 16, 1 );
+	m_SelNumberOfUnits = new wxSpinCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 26, 1 );
 	bSizernbunits->Add( m_SelNumberOfUnits, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	bSizerMidBasicPanel->Add( bSizernbunits, 1, wxEXPAND, 5 );
