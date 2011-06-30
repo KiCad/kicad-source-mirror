@@ -100,6 +100,9 @@ public:
     static int m_PadSketchModePenSize;      // Pen size used to draw pads in sketch mode
                                     // (mode used to print pads on silkscreen layer)
 
+    // Length net from pad to die on chip
+    int	   m_LengthDie;
+
     // Local clearance. When null, the module default value is used.
     // when the module default value is null, the netclass value is used
     // Usually the local clearance is null

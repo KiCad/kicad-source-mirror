@@ -128,6 +128,7 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     MODULE*   module;
     D_PAD*    pad;
     double    lengthnet = 0;
+    double    lengthdie = 0;
 
     frame->ClearMsgPanel();
 
@@ -143,7 +144,10 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
         for( pad = module->m_Pads; pad != 0; pad = pad->Next() )
         {
             if( pad->GetNet() == GetNet() )
+            {
                 count++;
+                lengthdie += pad->m_LengthDie;
+            }
         }
     }
 
@@ -165,8 +169,15 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     txt.Printf( wxT( "%d" ), count );
     frame->AppendMsgPanel( _( "Vias" ), txt, BLUE );
 
+    valeur_param( (int) (lengthnet + lengthdie), txt );
+    frame->AppendMsgPanel( _( "Net Length:" ), txt, RED );
+
     valeur_param( (int) lengthnet, txt );
-    frame->AppendMsgPanel( _( "Net Length" ), txt, RED );
+    frame->AppendMsgPanel( _( "on pcb" ), txt, RED );
+
+    valeur_param( (int) lengthdie, txt );
+    frame->AppendMsgPanel( _( "on die" ), txt, RED );
+
 }
 
 

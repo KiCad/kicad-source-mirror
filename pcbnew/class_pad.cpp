@@ -210,6 +210,7 @@ void D_PAD::Copy( D_PAD* source )
     m_PadShape = source->m_PadShape;
     m_Attribut = source->m_Attribut;
     m_Orient   = source->m_Orient;
+    m_LengthDie = source->m_LengthDie;
     m_LocalClearance = source->m_LocalClearance;
     m_LocalSolderMaskMargin  = source->m_LocalSolderMaskMargin;
     m_LocalSolderPasteMargin = source->m_LocalSolderPasteMargin;
@@ -475,6 +476,12 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
             m_Pos = m_Pos0;
             break;
 
+        case 'L':
+    	    int lengthdie;
+            nn    = sscanf( PtLine, "%d", &lengthdie );
+            m_LengthDie = lengthdie;
+            break;
+
         case '.':    /* Read specific data */
             if( strnicmp( Line, ".SolderMask ", 12 ) == 0 )
                 m_LocalSolderMaskMargin = atoi( Line + 12 );
@@ -561,6 +568,9 @@ bool D_PAD::Save( FILE* aFile ) const
     fprintf( aFile, "Ne %d %s\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
 
     fprintf( aFile, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
+
+    if( m_LengthDie != 0 )
+        fprintf( aFile, "Le %d\n", m_LengthDie );
 
     if( m_LocalSolderMaskMargin != 0 )
         fprintf( aFile, ".SolderMask %d\n", m_LocalSolderMaskMargin );
