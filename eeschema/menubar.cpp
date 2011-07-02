@@ -99,6 +99,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Separator
     fileMenu->AppendSeparator();
 
+    // Page settings
+    ADD_MENUITEM_WITH_HELP( fileMenu,
+                            ID_SHEET_SET,
+                            _( "P&age settings" ),
+                            _( "Settigns for page size and information" ),
+                            sheetset_xpm );
+
     // Print
     ADD_MENUITEM_WITH_HELP( fileMenu,
                             wxID_PRINT,
@@ -195,13 +202,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Separator
     editMenu->AppendSeparator();
 
-    // Backannotate
-    ADD_MENUITEM_WITH_HELP( editMenu,
-                            ID_BACKANNO_ITEMS,
-                            _( "Backannotate" ),
-                            _( "Back annotated footprint fields" ),
 
-                            backanno_xpm );
 
     // Menu View:
     wxMenu* viewMenu = new wxMenu;
@@ -241,6 +242,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     // Separator
     viewMenu->AppendSeparator();
+
+    // Hierarchy 
+    ADD_MENUITEM_WITH_HELP( viewMenu,
+                            ID_HIERARCHY,
+                            _( "H&ierarchy" ),
+                            _( "Navigate schematic hierarchy" ),
+                            hierarchy_nav_xpm );
 
     // Redraw
     text = AddHotkeyName( _( "Redraw" ), s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
@@ -423,6 +431,62 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                             _( "Read application preferences" ),
                             read_setup_xpm );
 
+    // Menu Tools:
+    wxMenu* toolsMenu = new wxMenu;
+
+    // Library viewer
+    ADD_MENUITEM_WITH_HELP( toolsMenu,
+                            ID_TO_LIBRARY,
+                            _( "Library &browser" ),
+                            _( "Library browser" ),
+                            library_browse_xpm );
+
+
+    // Library editor
+    ADD_MENUITEM_WITH_HELP( toolsMenu,
+                            ID_TO_LIBRARY,
+                            _( "Library &editor" ),
+                            _( "Library editor" ),
+                            libedit_xpm );
+
+    // Separator
+    toolsMenu->AppendSeparator();
+
+    // Annotate
+    ADD_MENUITEM_WITH_HELP( toolsMenu,
+                            ID_GET_ANNOTATE,
+                            _( "&Annotate" ),
+                            _( "Annotate the components in the schematic" ),
+                            annotate_xpm );
+
+    // Backannotate
+    ADD_MENUITEM_WITH_HELP( editMenu,
+                            ID_BACKANNO_ITEMS,
+                            _( "&Backannotate" ),
+                            _( "Back annotate the footprint fields" ),
+                            backanno_xpm );
+
+    // ERC
+    ADD_MENUITEM_WITH_HELP( toolsMenu,
+                            ID_GET_ERC,
+                            _( "ER&C" ),
+                            _( "Perform electrical rule check" ),
+                            erc_xpm );
+
+    // Generate netlist
+    ADD_MENUITEM_WITH_HELP( toolsMenu,
+                            ID_GET_NETLIST,
+                            _( "Generate &netlist" ),
+                            _( "Generate the component netlist" ),
+                            netlist_xpm );
+
+    // Generate bill of materials
+    ADD_MENUITEM_WITH_HELP( toolsMenu,
+                            ID_GET_TOOLS,
+                            _( "Generate bill of materials" ),
+                            _( "Generate bill of materials" ),
+                            tools_xpm );
+
     // Help Menu:
     wxMenu* helpMenu = new wxMenu;
 
@@ -449,6 +513,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( preferencesMenu, _( "&Preferences" ) );
+    menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     menuBar->Thaw();

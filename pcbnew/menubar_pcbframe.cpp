@@ -195,6 +195,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     filesMenu->AppendSeparator();
 
+    // Page settings
+    item = new wxMenuItem( filesMenu, ID_SHEET_SET,
+                           _( "&Page settings" ),
+                           _( "Page settings for paper size and texts" ) );
+    SET_BITMAP( sheetset_xpm );
+    filesMenu->Append( item );
+
     // Print
     item = new wxMenuItem( filesMenu, wxID_PRINT,
                            _( "&Print\tCtrl+P" ),
@@ -576,6 +583,38 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     SET_BITMAP( read_setup_xpm );
     configmenu->Append( item );
 
+    /**
+     * Tools menu
+     */
+    wxMenu* toolsMenu = new wxMenu;
+
+    /* Netlist */
+    item = new wxMenuItem( toolsMenu, ID_GET_NETLIST,
+                           _( "Netlist" ),
+                           _( "Read or update the netlist" ) );
+    SET_BITMAP( netlist_xpm );
+    toolsMenu->Append( item );
+
+    /* Layer pair */
+    item = new wxMenuItem( toolsMenu, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
+                           _( "Layer Pair" ),
+                           _( "Change the active layer pair" ) );
+    SET_BITMAP( web_support_xpm );
+    toolsMenu->Append( item );
+
+    /* DRC */
+    item = new wxMenuItem( toolsMenu, ID_DRC_CONTROL,
+                           _( "DRC" ),
+                           _( "Perform design rules check" ) );
+    SET_BITMAP( erc_xpm );
+    toolsMenu->Append( item );
+
+    /* FreeRoute */
+    item = new wxMenuItem( toolsMenu, ID_TOOLBARH_PCB_FREEROUTE_ACCESS,
+                           _( "FreeRoute" ),
+                           _( "Fast access to the Web Based FreeROUTE advanced router" ) );
+    SET_BITMAP( web_support_xpm );
+    toolsMenu->Append( item );
 
     /**
      * Design Rules menu
@@ -627,6 +666,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( configmenu, _( "&Preferences" ) );
+    menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( designRulesMenu, _( "&Design Rules" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 

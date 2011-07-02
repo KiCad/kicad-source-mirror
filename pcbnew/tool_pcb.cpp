@@ -200,7 +200,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_SHEET_SET, wxEmptyString, wxBitmap( sheetset_xpm ),
-                         _( "Page settings (size, texts)" ) );
+                         _( "Page settings for paper size and texts" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString, wxBitmap( modedit_xpm ),

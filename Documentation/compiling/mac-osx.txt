@@ -12,6 +12,7 @@ Requirements
   * CMake          (http://www.cmake.org)
   * wxWidgets 2.9  (http://www.wxwidgets.org/downloads)
   * Doxygen        (http://www.doxygen.nl)
+  * ccache         (http://www.macports.org)
 
 
 Building wxWidgets 2.9 Universal
@@ -110,6 +111,15 @@ CMAKE_CXX_FLAGS = -D__ASSERTMACROS__
 
 Then we invoke make:
 user@mac-osx$ make
+
+Optional compiler cache
+~~~~~~~~~~~~~~~~~~~~~~~
+If you (re)compile often, you would love to use cache. The best is to install it using macports and set the libexec symlink
+directory of ccache in your PATH variable.
+
+Then start with a clean directory and invoke cmake, make sure that the C++ compiler points to /opt/local/libexec/ccache/g++
+
+Further reading at http://trac.macports.org/wiki/howto/ccache
 
 Known Problems
 ~~~~~~~~~~~~~~
