@@ -20,6 +20,9 @@
 #include "dialog_lib_edit_pin.h"
 
 
+extern void IncrementLabelMember( wxString& name );
+
+
 static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorgan );
 static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositon, bool aErase );

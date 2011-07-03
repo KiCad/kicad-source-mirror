@@ -47,7 +47,6 @@ extern const char* axis3d_left_xpm[];
 extern const char* axis3d_right_xpm[];
 extern const char* axis3d_top_xpm[];
 extern const char* axis3d_xpm[];
-extern const char* backanno_xpm[];
 extern const char* book_xpm[];
 extern const char* break_bus_xpm[];
 extern const char* break_line_xpm[];

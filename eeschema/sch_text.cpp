@@ -17,6 +17,8 @@
 #include "protos.h"
 #include "sch_text.h"
 
+extern void IncrementLabelMember( wxString& name );
+
 
 /************************/
 /* class SCH_TEXT */

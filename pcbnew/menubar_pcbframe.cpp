@@ -591,7 +591,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     /* Netlist */
     item = new wxMenuItem( toolsMenu, ID_GET_NETLIST,
                            _( "Netlist" ),
-                           _( "Read or update the netlist" ) );
+                           _( "Read the netlist and update board connectivity" ) );
     SET_BITMAP( netlist_xpm );
     toolsMenu->Append( item );
 

@@ -543,31 +543,3 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
     }
 }
 
-
-/* Routine incrementing labels, ie for the text ending with a number, adding
- * that a number <RepeatDeltaLabel>
- */
-void IncrementLabelMember( wxString& name )
-{
-    int  ii, nn;
-    long number = 0;
-
-    ii = name.Len() - 1; nn = 0;
-
-    if( !isdigit( name.GetChar( ii ) ) )
-        return;
-
-    while( (ii >= 0) && isdigit( name.GetChar( ii ) ) )
-    {
-        ii--; nn++;
-    }
-
-    ii++;   /* digits are starting at ii position */
-    wxString litt_number = name.Right( nn );
-
-    if( litt_number.ToLong( &number ) )
-    {
-        number += g_RepeatDeltaLabel;
-        name.Remove( ii ); name << number;
-    }
-}

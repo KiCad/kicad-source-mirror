@@ -102,7 +102,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Page settings
     ADD_MENUITEM_WITH_HELP( fileMenu,
                             ID_SHEET_SET,
-                            _( "P&age settings" ),
+                            _( "P&age Settings" ),
                             _( "Settigns for page size and information" ),
                             sheetset_xpm );
 
@@ -191,16 +191,20 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                             _( "Delete" ), HELP_DELETE_ITEMS,
                             delete_body_xpm );
 
-    // Separator
-    editMenu->AppendSeparator();
-
     // Find
+    editMenu->AppendSeparator();
     text = AddHotkeyName( _( "&Find" ), s_Schematic_Hokeys_Descr, HK_FIND_ITEM );
     ADD_MENUITEM_WITH_HELP( editMenu, ID_FIND_ITEMS, text, HELP_FIND,
                             find_xpm );
 
-    // Separator
+    // Backannotate
     editMenu->AppendSeparator();
+    ADD_MENUITEM_WITH_HELP( editMenu,
+                            ID_BACKANNO_ITEMS,
+                            _( "&Backannotate" ),
+                            _( "Back annotate the footprint fields" ),
+                            import_footprint_names_xpm );
+
 
 
 
@@ -243,7 +247,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Separator
     viewMenu->AppendSeparator();
 
-    // Hierarchy 
+    // Hierarchy
     ADD_MENUITEM_WITH_HELP( viewMenu,
                             ID_HIERARCHY,
                             _( "H&ierarchy" ),
@@ -437,7 +441,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Library viewer
     ADD_MENUITEM_WITH_HELP( toolsMenu,
                             ID_TO_LIBRARY,
-                            _( "Library &browser" ),
+                            _( "Library &Browser" ),
                             _( "Library browser" ),
                             library_browse_xpm );
 
@@ -445,7 +449,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Library editor
     ADD_MENUITEM_WITH_HELP( toolsMenu,
                             ID_TO_LIBRARY,
-                            _( "Library &editor" ),
+                            _( "Library &Editor" ),
                             _( "Library editor" ),
                             libedit_xpm );
 
@@ -459,13 +463,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                             _( "Annotate the components in the schematic" ),
                             annotate_xpm );
 
-    // Backannotate
-    ADD_MENUITEM_WITH_HELP( editMenu,
-                            ID_BACKANNO_ITEMS,
-                            _( "&Backannotate" ),
-                            _( "Back annotate the footprint fields" ),
-                            backanno_xpm );
-
     // ERC
     ADD_MENUITEM_WITH_HELP( toolsMenu,
                             ID_GET_ERC,
@@ -476,14 +473,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Generate netlist
     ADD_MENUITEM_WITH_HELP( toolsMenu,
                             ID_GET_NETLIST,
-                            _( "Generate &netlist" ),
+                            _( "Generate &Netlist" ),
                             _( "Generate the component netlist" ),
                             netlist_xpm );
 
     // Generate bill of materials
     ADD_MENUITEM_WITH_HELP( toolsMenu,
                             ID_GET_TOOLS,
-                            _( "Generate bill of materials" ),
+                            _( "Generate Bill of Materials" ),
                             _( "Generate bill of materials" ),
                             tools_xpm );
 

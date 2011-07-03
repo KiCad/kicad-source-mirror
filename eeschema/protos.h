@@ -31,13 +31,6 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
 /*********************/
 bool SegmentIntersect( wxPoint aSegStart, wxPoint aSegEnd, wxPoint aTestPoint );
 
-
-/*************************/
-/* BUS_WIRE_JUNCTION.CPP */
-/*************************/
-void IncrementLabelMember( wxString& name );
-
-
 /****************/
 /* EDITPART.CPP */
 /****************/
