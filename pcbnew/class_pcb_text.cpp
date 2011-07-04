@@ -16,7 +16,7 @@
 #include "trigo.h"
 #include "protos.h"
 #include "richio.h"
-
+#include "class_drawpanel.h"
 
 /*******************/
 /* class TEXTE_PCB */
@@ -119,8 +119,9 @@ int TEXTE_PCB::ReadTextePcbDescr( LINE_READER* aReader )
         {
             style[0] = 0;
             int normal_display = 1;
-            sscanf( line + 2, " %d %d %lX %s\n", &m_Layer, &normal_display,
-                    &m_TimeStamp, style );
+            char hJustify = 'l';
+            sscanf( line + 2, " %d %d %lX %s %c\n", &m_Layer, &normal_display,
+                    &m_TimeStamp, style, &hJustify );
 
             m_Mirror = normal_display ? false : true;
 
@@ -133,6 +134,25 @@ int TEXTE_PCB::ReadTextePcbDescr( LINE_READER* aReader )
                 m_Italic = 1;
             else
                 m_Italic = 0;
+
+            switch( hJustify )
+            {
+            case 'l':
+            case 'L':
+                m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
+                break;
+            case 'c':
+            case 'C':
+                m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
+                break;
+            case 'r':
+            case 'R':
+                m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
+                break;
+            default:
+                m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
+                break;
+            }
             continue;
         }
     }
@@ -173,9 +193,26 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
     fprintf( aFile, "Po %d %d %d %d %d %d\n",
              m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Thickness, m_Orient );
 
-    fprintf( aFile, "De %d %d %lX %s\n", m_Layer,
+    char hJustify = 'L';
+    switch( m_HJustify )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:
+        hJustify = 'L';
+        break;
+    case GR_TEXT_HJUSTIFY_CENTER:
+        hJustify = 'C';
+        break;
+    case GR_TEXT_HJUSTIFY_RIGHT:
+        hJustify = 'R';
+        break;
+    default:
+        hJustify = 'C';
+        break;
+    }
+
+    fprintf( aFile, "De %d %d %lX %s %c\n", m_Layer,
              m_Mirror ? 0 : 1,
-             m_TimeStamp, style );
+             m_TimeStamp, style, hJustify );
 
     if( fprintf( aFile, "$EndTEXTPCB\n" ) != sizeof("$EndTEXTPCB\n") - 1 )
         return false;
@@ -193,23 +230,23 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
 void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                       int DrawMode, const wxPoint& offset )
 {
-    BOARD * brd =  GetBoard( );
+    BOARD* brd = GetBoard();
 
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    int color = brd->GetLayerColor(m_Layer);
+    int color = brd->GetLayerColor( m_Layer );
 
     GRTraceMode fillmode = FILLED;
-    if ( DisplayOpt.DisplayDrawItems == SKETCH)
+    if( DisplayOpt.DisplayDrawItems == SKETCH )
         fillmode = SKETCH;
 
     int anchor_color = UNSPECIFIED_COLOR;
     if( brd->IsElementVisible( ANCHOR_VISIBLE ) )
-        anchor_color = brd->GetVisibleElementColor(ANCHOR_VISIBLE);
+        anchor_color = brd->GetVisibleElementColor( ANCHOR_VISIBLE );
 
     EDA_TEXT::Draw( panel, DC, offset, (EDA_Colors) color,
-                          DrawMode, fillmode, (EDA_Colors) anchor_color );
+                    DrawMode, fillmode, (EDA_Colors) anchor_color );
 }
 
 
@@ -245,16 +282,16 @@ void TEXTE_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
         frame->AppendMsgPanel( _( "Mirror" ), _( "Yes" ), DARKGREEN );
 
     msg.Printf( wxT( "%.1f" ), (float) m_Orient / 10 );
-    frame->AppendMsgPanel( _( "Orient" ), msg, DARKGREEN );
+    frame->AppendMsgPanel( _( "Orientation" ), msg, DARKGREEN );
 
     valeur_param( m_Thickness, msg );
     frame->AppendMsgPanel( _( "Thickness" ), msg, MAGENTA );
 
     valeur_param( m_Size.x, msg );
-    frame->AppendMsgPanel( _( "H Size" ), msg, RED );
+    frame->AppendMsgPanel( _( "Size X" ), msg, RED );
 
     valeur_param( m_Size.y, msg );
-    frame->AppendMsgPanel( _( "V Size" ), msg, RED );
+    frame->AppendMsgPanel( _( "Size Y" ), msg, RED );
 }
 
 

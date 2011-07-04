@@ -106,6 +106,10 @@ void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
     TextePcb->Draw( DrawPanel, DC, GR_XOR );
     TextePcb->m_Flags |= IS_MOVED;
     TextePcb->DisplayInfo( this );
+
+    GetScreen()->SetCrossHairPosition( TextePcb->GetPosition() );
+    DrawPanel->MoveCursorToCrossHair();
+
     DrawPanel->SetMouseCapture( Move_Texte_Pcb, Abort_Edit_Pcb_Text );
     SetCurItem( TextePcb );
     DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );

@@ -230,7 +230,7 @@ EDA_TEXT::~EDA_TEXT()
 
 int EDA_TEXT::LenSize( const wxString& aLine ) const
 {
-    return ReturnGraphicTextWidth( aLine, m_Size.x, m_Italic, m_Bold ) + m_Thickness;
+    return ReturnGraphicTextWidth( aLine, m_Size.x, m_Italic, m_Bold );
 }
 
 
@@ -286,7 +286,6 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     delete list;
 
     rect.SetSize( textsize );
-    rect.Inflate( thickness / 2 );      // ensure a small margin
 
     /* Now, calculate the rect origin, according to text justification
      * At this point the rectangle origin is the text origin (m_Pos).
@@ -297,6 +296,8 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
     switch( m_HJustify )
     {
     case GR_TEXT_HJUSTIFY_LEFT:
+        if( m_Mirror )
+            rect.SetX( rect.GetX() - rect.GetWidth() );
         break;
 
     case GR_TEXT_HJUSTIFY_CENTER:
@@ -304,7 +305,8 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
         break;
 
     case GR_TEXT_HJUSTIFY_RIGHT:
-        rect.SetX( rect.GetX() - rect.GetWidth() );
+        if( !m_Mirror )
+            rect.SetX( rect.GetX() - rect.GetWidth() );
         break;
     }
 
@@ -324,6 +326,7 @@ EDA_RECT EDA_TEXT::GetTextBox( int aLine, int aThickness, bool aInvertY ) const
         break;
     }
 
+    rect.Inflate( thickness / 2 );
     rect.Normalize();       // Make h and v sizes always >= 0
 
     return rect;
@@ -378,7 +381,7 @@ void EDA_TEXT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                                aColor,
                                aDrawMode,
                                aFillMode,
-                               aAnchor_color,
+                               i ?  UNSPECIFIED_COLOR : aAnchor_color,
                                txt,
                                pos );
             pos += offset;

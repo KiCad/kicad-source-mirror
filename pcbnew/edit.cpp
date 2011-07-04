@@ -1005,8 +1005,6 @@ static void Process_Move_Item( PCB_EDIT_FRAME* frame, EDA_ITEM* DrawStruct, wxDC
     if( DrawStruct == NULL )
         return;
 
-    frame->DrawPanel->MoveCursorToCrossHair();
-
     switch( DrawStruct->Type() )
     {
     case TYPE_TEXTE:

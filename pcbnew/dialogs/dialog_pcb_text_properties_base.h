@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Nov 18 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -17,9 +17,8 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/choice.h>
 #include <wx/sizer.h>
-#include <wx/radiobox.h>
+#include <wx/choice.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -48,21 +47,27 @@ class DIALOG_PCB_TEXT_PROPERTIES_BASE : public wxDialog
 		wxTextCtrl* m_PositionYCtrl;
 		wxStaticText* m_LayerLabel;
 		wxChoice* m_LayerSelectionCtrl;
-		wxRadioBox* m_OrientationCtrl;
-		wxRadioBox* m_StyleCtrl;
-		wxRadioBox* m_DisplayCtrl;
+		wxStaticText* m_staticText8;
+		wxChoice* m_OrientationCtrl;
+		wxStaticText* m_staticText9;
+		wxChoice* m_StyleCtrl;
+		wxStaticText* m_staticText10;
+		wxChoice* m_DisplayCtrl;
+		wxStaticText* m_staticText11;
+		wxChoice* m_justifyChoice;
 		wxStdDialogButtonSizer* m_StandardSizer;
 		wxButton* m_StandardSizerOK;
 		wxButton* m_StandardSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text item properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 433,465 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 433,465 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_PCB_TEXT_PROPERTIES_BASE();
 	
 };

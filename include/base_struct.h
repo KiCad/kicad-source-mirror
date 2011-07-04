@@ -845,6 +845,11 @@ public:
     void SetText( const wxString& aText ) { m_Text = aText; }
 
     wxString GetText() const { return m_Text; }
+
+    GRTextHorizJustifyType GetHorizJustify() const { return m_HJustify; };
+    GRTextVertJustifyType GetVertJustify() const { return m_VJustify; };
+    void SetHorizJustify( GRTextHorizJustifyType aType ) { m_HJustify = aType; };
+    void SetVertJustify( GRTextVertJustifyType aType ) { m_VJustify = aType; };
 };
 
 #endif /* BASE_STRUCT_H */

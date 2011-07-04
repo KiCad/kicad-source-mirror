@@ -58,6 +58,7 @@ DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent,
     Centre();
 }
 
+
 /**
  * Routine for main window class to launch text properties dialog.
  */
@@ -69,6 +70,7 @@ void PCB_EDIT_FRAME::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
     DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = FALSE;
 }
+
 
 void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
 {
@@ -95,11 +97,18 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     PutValueInLocalUnits( *m_PositionYCtrl, m_SelectedPCBText->m_Pos.y,
         m_Parent->m_InternalUnits );
 
+    int enabledLayers = m_Parent->GetBoard()->GetEnabledLayers();
     for( int layer = 0; layer < NB_LAYERS;  ++layer )
     {
-        m_LayerSelectionCtrl->Append( m_Parent->GetBoard()->GetLayerName( layer ) );
+        if( enabledLayers & (1 << layer) )
+        {
+            layerList.push_back( layer );
+            int itemIndex =
+                m_LayerSelectionCtrl->Append( m_Parent->GetBoard()->GetLayerName( layer ) );
+            if( m_SelectedPCBText->GetLayer() == layer )
+                m_LayerSelectionCtrl->SetSelection( itemIndex );
+        }
     }
-     m_LayerSelectionCtrl->SetSelection( m_SelectedPCBText->GetLayer() );
 
     switch( m_SelectedPCBText->m_Orient )
     {
@@ -127,15 +136,27 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     else
         m_StyleCtrl->SetSelection( 0 );
 
+    // Set justification
+    GRTextHorizJustifyType hJustify = m_SelectedPCBText->GetHorizJustify();
+    m_justifyChoice->SetSelection( (int) hJustify + 1 );
+
     // Set focus on most important control
     m_TextContentCtrl->SetFocus();
     m_TextContentCtrl->SetSelection( -1, -1 );
 }
 
+
+void DIALOG_PCB_TEXT_PROPERTIES::OnClose( wxCloseEvent& event )
+{
+    EndModal( 0 );
+}
+
+
 void DIALOG_PCB_TEXT_PROPERTIES::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( wxID_CANCEL );
 }
+
 
 void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
 {
@@ -174,6 +195,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     // Check constraints and set PCB Text size
     newSize.x = ReturnValueFromString( g_UserUnit, m_SizeXCtrl->GetValue(), m_Parent->m_InternalUnits );
     newSize.y = ReturnValueFromString( g_UserUnit, m_SizeYCtrl->GetValue(), m_Parent->m_InternalUnits );
+
     if( newSize.x < TEXTS_MIN_SIZE )
         newSize.x = TEXTS_MIN_SIZE;
     if( newSize.y < TEXTS_MIN_SIZE )
@@ -196,7 +218,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     }
 
     // Set the layer on which the PCB text is laying
-    m_SelectedPCBText->SetLayer(  m_LayerSelectionCtrl->GetSelection() );
+    m_SelectedPCBText->SetLayer( layerList[m_LayerSelectionCtrl->GetSelection()] );
 
     // Set whether the PCB text is mirrored (faced down from layer face perspective)
     m_SelectedPCBText->m_Mirror = (m_DisplayCtrl->GetSelection() == 1) ? true : false;
@@ -206,6 +228,22 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
 
     // Set whether the PCB text is slanted (it is not italics, as italics has additional curves in style)
     m_SelectedPCBText->m_Italic = m_StyleCtrl->GetSelection() ? 1 : 0;
+
+    // Set justification
+    switch( m_justifyChoice->GetSelection() )
+    {
+    case 0:
+        m_SelectedPCBText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        break;
+    case 1:
+        m_SelectedPCBText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+        break;
+    case 2:
+        m_SelectedPCBText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        break;
+    default:
+        break;
+    }
 
     // Finally, display new text if there is a context to do so
     if( m_DC )

@@ -174,15 +174,12 @@ void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MoveVector.x = MoveVector.y = 0;
 
-    DrawPanel->CrossHairOff( DC );
-
     TextInitialPosition    = Text->m_Pos;
     TextInitialOrientation = Text->m_Orient;
 
     // Center cursor on initial position of text
     GetScreen()->SetCrossHairPosition( TextInitialPosition );
     DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->CrossHairOn( DC );
 
     Text->DisplayInfo( this );
 
