@@ -1136,7 +1136,7 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
                 continue;                                   // Already seen
 
             if( !(item->GetFlags() & CANDIDATE) )
-                continue;                                   // Already seen
+                continue;                                   // not a candidate
 
             if( item->Type() != SCH_LINE_T )
                 continue;
@@ -1145,41 +1145,51 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
 
             segment = (SCH_LINE*) item;
 
-            /* If the wire start point is connected to a wire that has already been found
+            /* If the wire start point is connected to a wire that was already found
              * and now is not connected, add the wire to the list. */
-            SCH_LINE* testSegment = NULL;
-
             for( tmp = GetDrawItems(); tmp != NULL; tmp = tmp->Next() )
             {
+                // Ensure tmp is a previously deleted segment:
                 if( ( tmp->GetFlags() & STRUCT_DELETED ) == 0 )
                     continue;
 
                 if( tmp->Type() != SCH_LINE_T )
                     continue;
 
-                testSegment = (SCH_LINE*) tmp;
+                SCH_LINE* testSegment = (SCH_LINE*) tmp;
 
+               // Test for segment connected to the previously deleted segment:
                 if( testSegment->IsEndPoint( segment->m_Start ) )
                     break;
             }
 
-            if( testSegment && !CountConnectedItems( segment->m_Start, true ) )
+            // when tmp != NULL, segment is a new candidate:
+            // put it in deleted list if
+            // the start point is not connected to an other item (like pin)
+            if( tmp && !CountConnectedItems( segment->m_Start, true ) )
                 noconnect = true;
 
             /* If the wire end point is connected to a wire that has already been found
              * and now is not connected, add the wire to the list. */
             for( tmp = GetDrawItems(); tmp != NULL; tmp = tmp->Next() )
             {
+                // Ensure tmp is a previously deleted segment:
                 if( ( tmp->GetFlags() & STRUCT_DELETED ) == 0 )
                     continue;
 
                 if( tmp->Type() != SCH_LINE_T )
                     continue;
 
+                SCH_LINE* testSegment = (SCH_LINE*) tmp;
+
+                // Test for segment connected to the previously deleted segment:
                 if( testSegment->IsEndPoint( segment->m_End ) )
                     break;
             }
 
+            // when tmp != NULL, segment is a new candidate:
+            // put it in deleted list if
+            // the end point is not connected to an other item (like pin)
             if( tmp && !CountConnectedItems( segment->m_End, true ) )
                 noconnect = true;
 
