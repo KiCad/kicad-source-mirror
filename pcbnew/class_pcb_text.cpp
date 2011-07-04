@@ -119,7 +119,7 @@ int TEXTE_PCB::ReadTextePcbDescr( LINE_READER* aReader )
         {
             style[0] = 0;
             int normal_display = 1;
-            char hJustify = 'l';
+            char hJustify = 'c';
             sscanf( line + 2, " %d %d %lX %s %c\n", &m_Layer, &normal_display,
                     &m_TimeStamp, style, &hJustify );
 
