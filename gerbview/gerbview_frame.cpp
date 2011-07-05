@@ -148,13 +148,12 @@ void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-int GERBVIEW_FRAME::BestZoom()
+double GERBVIEW_FRAME::BestZoom()
 {
     // gives a minimal value to zoom, if no item in list
     if( GetBoard()->m_Drawings == NULL  )
-        return 16 * GetScreen()->m_ZoomScalar;
+        return 160.0;
 
-    double      x, y;
     EDA_RECT    bbox;
     BOARD_ITEM* item = GetBoard()->m_Drawings;
 
@@ -168,11 +167,11 @@ int GERBVIEW_FRAME::BestZoom()
 
     wxSize size = DrawPanel->GetClientSize();
 
-    x = (double) bbox.GetWidth() / (double) size.x;
-    y = (double) bbox.GetHeight() / (double) size.y;
+    double x = (double) bbox.GetWidth() / (double) size.x;
+    double y = (double) bbox.GetHeight() / (double) size.y;
     GetScreen()->SetScrollCenterPosition( bbox.Centre() );
 
-    int best_zoom = wxRound( MAX( x, y ) * (double) GetScreen()->m_ZoomScalar );
+    double best_zoom = MAX( x, y );
     return best_zoom;
 }
 

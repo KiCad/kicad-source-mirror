@@ -384,7 +384,7 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 
 
 /* Return the current zoom level */
-int EDA_DRAW_FRAME::GetZoom( void )
+double EDA_DRAW_FRAME::GetZoom( void )
 {
     return GetScreen()->GetZoom();
 }
@@ -658,10 +658,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
         return;
 
     /* Display Zoom level: zoom = zoom_coeff/ZoomScalar */
-    if ( (screen->GetZoom() % screen->m_ZoomScalar) == 0 )
-        Line.Printf( wxT( "Z %d" ), screen->GetZoom() / screen->m_ZoomScalar );
-    else
-        Line.Printf( wxT( "Z %.1f" ), (float)screen->GetZoom() / screen->m_ZoomScalar );
+    Line.Printf( wxT( "Z %g" ), screen->GetZoom() );
 
     SetStatusText( Line, 1 );
 

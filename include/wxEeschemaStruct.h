@@ -225,7 +225,7 @@ public:
     void             OnLeftDClick( wxDC* aDC, const wxPoint& aPosition );
     bool             OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu );
     void             OnSelectOptionToolbar( wxCommandEvent& event );
-    int              BestZoom();
+    double           BestZoom();
 
     /**
      * Function LocateAndShowItem

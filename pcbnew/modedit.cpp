@@ -260,6 +260,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     }
 
     case ID_MODEDIT_SAVE_LIBMODULE:
+        if( GetBoard()->m_Modules == NULL )
+            break;
     {
         wxFileName fn;
         fn = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );

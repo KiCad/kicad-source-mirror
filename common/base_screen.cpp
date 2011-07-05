@@ -24,8 +24,7 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_ITEM( aType )
     m_FirstRedraw      = TRUE;
     m_ScreenNumber     = 1;
     m_NumberOfScreen   = 1;  /* Hierarchy: Root: ScreenNumber = 1 */
-    m_ZoomScalar       = 10;
-    m_Zoom             = 32 * m_ZoomScalar;
+     m_Zoom            = 32.0;
     m_Grid.m_Size      = wxRealPoint( 50, 50 );   /* Default grid size */
     m_Grid.m_Id        = ID_POPUP_GRID_LEVEL_50;
     m_Center           = true;
@@ -106,7 +105,7 @@ void BASE_SCREEN::SetPageSize( wxSize& aPageSize )
  */
 double BASE_SCREEN::GetScalingFactor() const
 {
-    double scale = (double) m_ZoomScalar / (double) GetZoom();
+    double scale = 1.0 / GetZoom();
     return scale;
 }
 
@@ -118,7 +117,7 @@ double BASE_SCREEN::GetScalingFactor() const
  */
 void BASE_SCREEN::SetScalingFactor(double aScale )
 {
-    int zoom = static_cast<int>( ceil(aScale * m_ZoomScalar) );
+    double zoom = aScale;
 
     // Limit zoom to max and min allowed values:
     if (zoom < m_ZoomList[0])
@@ -132,7 +131,7 @@ void BASE_SCREEN::SetScalingFactor(double aScale )
     SetZoom( zoom );
 }
 
-void BASE_SCREEN::SetZoomList( const wxArrayInt& zoomlist )
+void BASE_SCREEN::SetZoomList( const wxArrayDouble& zoomlist )
 {
     if( !m_ZoomList.IsEmpty() )
         m_ZoomList.Empty();
@@ -145,9 +144,9 @@ bool BASE_SCREEN::SetFirstZoom()
 {
     if( m_ZoomList.IsEmpty() )
     {
-        if( m_Zoom != m_ZoomScalar )
+        if( m_Zoom != 1.0 )
         {
-            m_Zoom = m_ZoomScalar;
+            m_Zoom = 1.0;
             return true;
         }
     }
@@ -161,21 +160,18 @@ bool BASE_SCREEN::SetFirstZoom()
 }
 
 
-int BASE_SCREEN::GetZoom() const
+double BASE_SCREEN::GetZoom() const
 {
     return m_Zoom;
 }
 
 
-bool BASE_SCREEN::SetZoom( int coeff )
+bool BASE_SCREEN::SetZoom( double coeff )
 {
     if( coeff == m_Zoom )
         return false;
 
     m_Zoom = coeff;
-
-    if( m_Zoom < 1 )
-        m_Zoom = 1;
 
     return true;
 }

@@ -22,13 +22,14 @@
  * Also useful in Gerbview for this reason.
  * Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic functions )
  */
-static const int PcbZoomList[] =
+static const double PcbZoomList[] =
 {
-    5,    10,   15,   20,   30, 45, 70, 100, 150, 220, 350, 500, 800, 1200,
-    2000, 3500, 5000, 10000, 20000
+    0.5,    1.0,   1.5,   2.0,   3.0, 4.5, 7.0,
+    10.0, 15.0, 22.0, 35.0, 50.0, 80.0, 120.0,
+    200.0, 350.0, 500.0, 1000.0, 2000.0
 };
 
-#define PCB_ZOOM_LIST_CNT ( sizeof( PcbZoomList ) / sizeof( int ) )
+#define PCB_ZOOM_LIST_CNT ( sizeof( PcbZoomList ) / sizeof( PcbZoomList[0] ) )
 #define MM_TO_PCB_UNITS 10000.0 / 25.4
 
 

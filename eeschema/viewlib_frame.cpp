@@ -309,7 +309,7 @@ void LIB_VIEW_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 }
 
 
-int LIB_VIEW_FRAME::BestZoom()
+double LIB_VIEW_FRAME::BestZoom()
 {
 /* Please, note: wxMSW before version 2.9 seems have
  * problems with zoom values < 1 ( i.e. userscale > 1) and needs to be patched:
@@ -319,7 +319,7 @@ int LIB_VIEW_FRAME::BestZoom()
  */
     LIB_COMPONENT* component = NULL;
     CMP_LIBRARY* lib;
-    int bestzoom = 16;      // default value for bestzoom
+    double bestzoom = 16.0;      // default value for bestzoom
 
     lib = CMP_LIBRARY::FindLibrary( m_libraryName );
 
@@ -339,14 +339,12 @@ int LIB_VIEW_FRAME::BestZoom()
     // Reserve a 10% margin around component bounding box.
     double margin_scale_factor = 0.8;
     double zx =(double) BoundaryBox.GetWidth() /
-                    ( margin_scale_factor * (double)size.x ) *
-                    (double) GetScreen()->m_ZoomScalar;
+                    ( margin_scale_factor * (double)size.x );
     double zy = (double) BoundaryBox.GetHeight() /
-                    ( margin_scale_factor * (double)size.y) *
-                    (double) GetScreen()->m_ZoomScalar;
+                    ( margin_scale_factor * (double)size.y);
 
     // Calculates the best zoom
-    bestzoom = wxRound( MAX( zx, zy ) );
+    bestzoom = MAX( zx, zy );
 
     // keep it >= minimal existing zoom (can happen for very small components
     // like small power symbols

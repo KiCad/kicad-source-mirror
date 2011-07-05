@@ -177,12 +177,7 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     /* Populate zoom submenu. */
     for( int i = 0; i < maxZoomIds; i++ )
     {
-        if( ( screen->m_ZoomList[i] % screen->m_ZoomScalar ) == 0 )
-            msg.Printf( wxT( "%u" ),
-                        screen->m_ZoomList[i] / screen->m_ZoomScalar );
-        else
-            msg.Printf( wxT( "%.1f" ),
-                        (float) screen->m_ZoomList[i] / screen->m_ZoomScalar );
+        msg.Printf( wxT( "%g" ), screen->m_ZoomList[i] );
 
         zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_START + i, _( "Zoom: " ) + msg,
                              wxEmptyString, wxITEM_CHECK );

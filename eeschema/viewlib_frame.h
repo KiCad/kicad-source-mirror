@@ -60,7 +60,7 @@ public:
     void ReCreateHToolbar();
     void ReCreateVToolbar();
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    int  BestZoom();
+    double BestZoom();
     void ClickOnLibList( wxCommandEvent& event );
     void ClickOnCmpList( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );

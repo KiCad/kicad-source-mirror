@@ -68,7 +68,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    int BestZoom();
+    double BestZoom();
 
     /**
      * Function ReportMessage

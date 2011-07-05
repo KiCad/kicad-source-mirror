@@ -39,12 +39,13 @@
  * see http://trac.wxwidgets.org/ticket/9554
  * This is a workaround that is not a full fix, but remaining artifacts are acceptable
  */
-static int SchematicZoomList[] =
+static double SchematicZoomList[] =
 {
-    5, 7, 10, 15, 20, 30, 40, 60, 80, 120, 160, 230, 320, 480, 640, 800, 1280
+    0.5, 0.7, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0,
+    12.0, 16.0, 23.0, 32.0, 48.0, 64.0, 80.0, 128.0
 };
 
-#define SCHEMATIC_ZOOM_LIST_CNT  ( sizeof( SchematicZoomList ) / sizeof( int ) )
+#define SCHEMATIC_ZOOM_LIST_CNT  ( sizeof( SchematicZoomList ) / sizeof( SchematicZoomList[0] ) )
 #define MM_TO_SCH_UNITS 1000.0 / 25.4       //schematic internal unites are mils
 
 

@@ -246,7 +246,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     m_auimgr.Update();
 
     // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
-    BestZoom();
+    GetScreen()->SetZoom( BestZoom() );
 }
 
 
@@ -345,7 +345,7 @@ void SCH_EDIT_FRAME::CreateScreens()
     if( GetScreen() == NULL )
         SetScreen( new SCH_SCREEN() );
 
-    GetScreen()->SetZoom( 4 * GetScreen()->m_ZoomScalar );
+    GetScreen()->SetZoom( 32.0 );
     GetScreen()->m_UndoRedoCountMax = 10;
 }
 
@@ -432,7 +432,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-int SCH_EDIT_FRAME::BestZoom()
+double SCH_EDIT_FRAME::BestZoom()
 {
     int    dx, dy;
     wxSize size;
@@ -445,12 +445,10 @@ int SCH_EDIT_FRAME::BestZoom()
     // Reserve no margin because best zoom shows the full page
     // and margins are already included in function that draws the sheet refernces
     double margin_scale_factor = 1.0;
-    double zx =(double) dx / ( margin_scale_factor * (double)size.x ) *
-                    (double) GetScreen()->m_ZoomScalar;
-    double zy = (double) dy / ( margin_scale_factor * (double)size.y) *
-                    (double) GetScreen()->m_ZoomScalar;
+    double zx =(double) dx / ( margin_scale_factor * (double)size.x );
+    double zy = (double) dy / ( margin_scale_factor * (double)size.y );
 
-    int bestzoom = wxRound( MAX( zx, zy ) );
+    double bestzoom = MAX( zx, zy );
 
     GetScreen()->SetScrollCenterPosition( wxPoint( dx / 2, dy / 2 ) );
 

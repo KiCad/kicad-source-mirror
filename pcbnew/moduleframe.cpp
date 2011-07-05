@@ -93,7 +93,6 @@ BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, PCB_BASE_FRAME )
     // Menu 3D Frame
     EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_ModuleEditFrame::Show3D_Frame )
 
-    EVT_UPDATE_UI( ID_MODEDIT_SAVE_LIBMODULE, WinEDA_ModuleEditFrame::OnUpdateLibSelected )
     EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, WinEDA_ModuleEditFrame::OnUpdateLibSelected )
     EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, WinEDA_ModuleEditFrame::OnUpdateModuleSelected )
     EVT_UPDATE_UI( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,

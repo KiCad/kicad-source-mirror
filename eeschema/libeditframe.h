@@ -103,7 +103,7 @@ public:
     void        CreateOptionToolbar();
     void        OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     bool        OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    int         BestZoom();         // Returns the best zoom
+    double      BestZoom();         // Returns the best zoom
     void        OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }

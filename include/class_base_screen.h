@@ -122,9 +122,8 @@ public:
     /* Grid and zoom values. */
     wxPoint	m_GridOrigin;
 
-    wxArrayInt m_ZoomList;          /* Array of standard zoom coefficients. */
-    int        m_Zoom;              /* Current zoom coefficient. */
-    int        m_ZoomScalar;        /* Allow zooming to non-integer increments. */
+    wxArrayDouble m_ZoomList;       /* Array of standard zoom (i.e. scale) coefficients. */
+    double     m_Zoom;              /* Current zoom coefficient. */
     bool       m_IsPrinting;
 
 public:
@@ -278,21 +277,21 @@ public:
      * Note: the zoom factor is NOT the scaling factor
      *       the scaling factor is m_ZoomScalar * GetZoom()
      */
-    int         GetZoom() const;
+    double      GetZoom() const;
 
     /**
      * Function SetZoom
      * adjusts the current zoom factor
      * @param coeff - Zoom coefficient.
      */
-    bool        SetZoom( int coeff );
+    bool        SetZoom( double coeff );
 
     /**
      * Function SetZoomList
      * sets the list of zoom factors.
      * @param aZoomList An array of zoom factors in ascending order, zero terminated
      */
-    void        SetZoomList( const wxArrayInt& aZoomList );
+    void        SetZoomList( const wxArrayDouble& aZoomList );
 
     bool        SetNextZoom();
     bool        SetPreviousZoom();

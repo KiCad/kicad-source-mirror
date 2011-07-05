@@ -506,6 +506,9 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     FILE*      lib_module, * dest;
     bool       added = true;
 
+    if( aModule == NULL )
+        return false;
+
     aModule->DisplayInfo( this );
 
     if( !wxFileExists( aLibName ) )

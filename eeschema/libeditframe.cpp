@@ -346,7 +346,7 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-int LIB_EDIT_FRAME::BestZoom()
+double LIB_EDIT_FRAME::BestZoom()
 {
 /* Please, note: wxMSW before version 2.9 seems have
  * problems with zoom values < 1 ( i.e. userscale > 1) and needs to be patched:
@@ -377,12 +377,10 @@ int LIB_EDIT_FRAME::BestZoom()
 
     // Reserve a 10% margin around component bounding box.
     double margin_scale_factor = 0.8;
-    double zx =(double) dx / ( margin_scale_factor * (double)size.x ) *
-                    (double) GetScreen()->m_ZoomScalar;
-    double zy = (double) dy / ( margin_scale_factor * (double)size.y) *
-                    (double) GetScreen()->m_ZoomScalar;
+    double zx =(double) dx / (margin_scale_factor * (double)size.x );
+    double zy = (double) dy / ( margin_scale_factor * (double)size.y );
 
-    int bestzoom = wxRound( MAX( zx, zy ) );
+    double bestzoom = MAX( zx, zy );
 
     // keep it >= minimal existing zoom (can happen for very small components
     // for instance when starting a new component

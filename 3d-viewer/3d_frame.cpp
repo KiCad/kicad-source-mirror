@@ -222,9 +222,9 @@ void WinEDA3D_DrawFrame::OnRightClick( const wxPoint& MousePos,
 }
 
 
-int WinEDA3D_DrawFrame::BestZoom()
+double WinEDA3D_DrawFrame::BestZoom()
 {
-    return 1;
+    return 1.0;
 }
 
 

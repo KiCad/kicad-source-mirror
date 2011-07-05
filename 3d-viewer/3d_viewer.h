@@ -246,7 +246,7 @@ public:
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     void OnKeyEvent( wxKeyEvent& event );
-    int  BestZoom();
+    double BestZoom();
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void Process_Special_Functions( wxCommandEvent& event );
     void Process_Zoom( wxCommandEvent& event );

@@ -114,7 +114,7 @@ public:
         return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen();
     }
 
-    int             BestZoom();
+    virtual double  BestZoom();
 
     virtual void    Show3D_Frame( wxCommandEvent& event );
 

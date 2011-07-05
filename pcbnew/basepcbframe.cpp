@@ -99,14 +99,14 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 /**
  * Return the "best" zoom, i.e. the zoom which shows the entire board on screen
  */
-int PCB_BASE_FRAME::BestZoom( void )
+double PCB_BASE_FRAME::BestZoom( void )
 {
-    int    dx, dy, ii, jj;
-    int    bestzoom;
+    int    dx, dy;
+    double ii, jj;
     wxSize size;
 
     if( m_Pcb == NULL )
-        return 32 * GetScreen()->m_ZoomScalar;
+        return 32.0;
 
     m_Pcb->ComputeBoundingBox();
 
@@ -115,19 +115,19 @@ int PCB_BASE_FRAME::BestZoom( void )
     size = DrawPanel->GetClientSize();
 
     if( size.x )
-        ii = wxRound( ( (double) dx + ((double) size.x / 2.0) ) / (double) size.x );
+        ii = (double)(dx + ( size.x / 2) ) / (double) size.x;
     else
-        ii = 31;
+        ii = 32.0;
 
     if ( size.y )
-        jj = wxRound( ( (double) dy + ((double) size.y / 2.0) ) / (double) size.y );
+        jj = (double)( dy + (size.y / 2) ) / (double) size.y;
     else
-        jj = 31;
+        jj = 32.0;
 
-    bestzoom = MAX( ii, jj ) + 1;
+    double bestzoom = MAX( ii, jj );
     GetScreen()->SetScrollCenterPosition( m_Pcb->m_BoundaryBox.Centre() );
 
-    return bestzoom * GetScreen()->m_ZoomScalar;
+    return bestzoom ;
 }
 
 
@@ -614,15 +614,9 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
     {
         msg = _( "Zoom " );
 
-        if ( ( GetScreen()->m_ZoomList[i] % GetScreen()->m_ZoomScalar ) == 0 )
-            msg << GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar;
-        else
-        {
-            wxString value;
-            value.Printf( wxT( "%.1f" ),
-                          (float)GetScreen()->m_ZoomList[i] / GetScreen()->m_ZoomScalar );
-            msg += value;
-        }
+        wxString value;
+        value.Printf( wxT( "%g" ), GetScreen()->m_ZoomList[i]);
+        msg += value;
 
         m_SelZoomBox->Append( msg );
 

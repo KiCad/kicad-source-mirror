@@ -468,10 +468,10 @@ public:
     void             Window_Zoom( EDA_RECT& Rect );
 
     /* Return the zoom level which displays the full page on screen */
-    virtual int      BestZoom() = 0;
+    virtual double   BestZoom() = 0;
 
     /* Return the current zoom level */
-    int              GetZoom( void );
+    double           GetZoom( void );
 
     void             TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );
     void             PlotWorkSheet( PLOTTER *plotter, BASE_SCREEN* screen );
