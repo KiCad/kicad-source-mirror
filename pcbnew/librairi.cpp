@@ -307,7 +307,7 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const wxString& aLibname 
 
     /* Create header with new date. */
     fprintf( dest, ENTETE_LIBRAIRIE );
-    fprintf( dest, "  %s\n$", DateAndTime( Line ) );
+    fprintf( dest, "  %s\n", DateAndTime( Line ) );
     fprintf( dest, "# encoding utf-8\n");
     fprintf( dest, "$INDEX\n" );
 
@@ -556,9 +556,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     newmodule = 1; end = 0;
     while( !end && GetLine( lib_module, Line, &LineNum ) )
     {
-        if( Line[0] != '$' )
-            continue;
-        if( strncmp( Line + 1, "INDEX", 5 ) != 0 )
+        if( strncmp( Line, "$INDEX", 6 ) != 0 )
             continue;
 
         while( GetLine( lib_module, Line, &LineNum ) )
@@ -630,7 +628,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     while( GetLine( lib_module, Line, &LineNum ) )
     {
         StrPurge( Line );
-        if( strnicmp( Line, "$M", 2 ) == 0 )
+        if( strnicmp( Line, "$MODULE", 7 ) == 0 )
             break;
         if( strnicmp( Line, "$INDEX", 6 ) == 0 )
         {
@@ -643,7 +641,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         }
         if( newmodule )
             fprintf( dest, "%s\n", TO_UTF8( Name_Cmp ) );
-        if( strnicmp( Line, "$EndINDEX", 0 ) == 0 )
+        if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
             break;
     }
 
