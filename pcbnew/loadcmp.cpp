@@ -17,6 +17,7 @@
 #include "dialog_helpers.h"
 #include "filter_reader.h"
 #include "footprint_info.h"
+#include "class_footprint_library.h"
 
 
 static void DisplayCmpDoc( wxString& Name );
@@ -194,9 +195,7 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
                                               const wxString& aModuleName,
                                               bool            aDisplayMessageError )
 {
-    int        found = 0;
     wxFileName fn;
-    char*      Line;
     wxString   Name;
     wxString   msg, tmp;
     MODULE*    NewModule;
@@ -244,11 +243,9 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
         msg.Printf( _( "Scan Lib: %s" ), GetChars( tmp ) );
         SetStatusText( msg );
 
-        /* Reading header ENTETE_LIBRAIRIE */
-        reader.ReadLine();
-        Line = reader.Line();
-        StrPurge( Line );
-        if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
+        FOOTPRINT_LIBRARY curr_lib( file, &reader );
+
+        if( !curr_lib.IsLibrary() )
         {
             msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library file." ),
                         GetChars( tmp ) );
@@ -258,60 +255,37 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
         }
 
         /* Reading the list of modules in the library. */
-        found = 0;
-        while( !found && reader.ReadLine() )
-        {
-            Line = reader.Line();
-            if( strnicmp( Line, "$MODULE", 6 ) == 0 )
-                break;
-            if( strnicmp( Line, "$INDEX", 6 ) == 0 )
-            {
-                while( reader.ReadLine() )
-                {
-                    Line = reader.Line();
-                    if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
-                        break;
-                    StrPurge( Line );
-                    msg = FROM_UTF8( Line );
-                    if( msg.CmpNoCase( aModuleName ) == 0 )
-                    {
-                        found = 1;
-                        break; /* found! */
-                    }
-                }
-            }
-        }
+        curr_lib.ReadSectionIndex();
+        bool found = curr_lib.FindInList( aModuleName );
 
         /* Read library. */
-        while( found && reader.ReadLine() )
+        if( found  )
         {
-            Line = reader.Line();
-            if( Line[0] != '$' )
-                continue;
-
-            if( Line[1] != 'M' )
-                continue;
-
-            if( strnicmp( Line, "$MODULE", 7 ) != 0 )
-                continue;
-
-            StrPurge( Line + 8 );
-
-            // Read module name.
-            Name = FROM_UTF8( Line + 8 );
-
-            if( Name.CmpNoCase( aModuleName ) == 0 )
+            fileReader.Rewind();
+            while( reader.ReadLine() )
             {
-                NewModule = new MODULE( GetBoard() );
+                char * line = reader.Line();
+                StrPurge( line + 8 );
 
-                // Switch the locale to standard C (needed to print
-                // floating point numbers like 1.3)
-                SetLocaleTo_C_standard();
-                NewModule->ReadDescr( &reader );
-                SetLocaleTo_Default();         // revert to the current locale
-                GetBoard()->Add( NewModule, ADD_APPEND );
-                SetStatusText( wxEmptyString );
-                return NewModule;
+                if( strnicmp( line, "$MODULE", 7 ) != 0 )
+                    continue;
+
+                // Read module name.
+                Name = FROM_UTF8( line + 8 );
+
+                if( Name.CmpNoCase( aModuleName ) == 0 )
+                {
+                    NewModule = new MODULE( GetBoard() );
+
+                    // Switch the locale to standard C (needed to print
+                    // floating point numbers like 1.3)
+                    SetLocaleTo_C_standard();
+                    NewModule->ReadDescr( &reader );
+                    SetLocaleTo_Default();         // revert to the current locale
+                    GetBoard()->Add( NewModule, ADD_APPEND );
+                    SetStatusText( wxEmptyString );
+                    return NewModule;
+                }
             }
         }
 
@@ -384,14 +358,22 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
         for( unsigned ii = 0; ii < MList.GetCount(); ii++ )
             footprint_names_list.Add( MList.GetItem(ii).m_Module );
 
-    msg.Printf( _( "Modules [%d items]" ), footprint_names_list.GetCount() );
-    WinEDAListBox dlg( aWindow, msg, footprint_names_list, OldName,
-                       DisplayCmpDoc, GetComponentDialogPosition() );
+    if( footprint_names_list.GetCount() )
+    {
+        msg.Printf( _( "Modules [%d items]" ), footprint_names_list.GetCount() );
+        WinEDAListBox dlg( aWindow, msg, footprint_names_list, OldName,
+                           DisplayCmpDoc, GetComponentDialogPosition() );
 
-    if( dlg.ShowModal() == wxID_OK )
-        CmpName = dlg.GetTextSelection();
+        if( dlg.ShowModal() == wxID_OK )
+            CmpName = dlg.GetTextSelection();
+        else
+            CmpName.Empty();
+    }
     else
+    {
+        DisplayError( aWindow, _("No footprint found") );
         CmpName.Empty();
+    }
 
     if( CmpName != wxEmptyString )
         OldName = CmpName;

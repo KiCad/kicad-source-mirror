@@ -45,11 +45,6 @@ parameter is a double)
 Workaround:
 Use a version > 2.9.1
 
-Currently ( 2011, april 12 ) the 2.9.2 is not yet finalized
-(and can be found only on the wxWidgets snv server)
-can be fixed by replacing the file <wxWidgets-2.9.1>/src/common/xlocale.cpp
-by the corresponding file from the 2.9.2 version (from wxWidgets svn server)
-
 
 *************************************************************************************
 wxGTK version: All
