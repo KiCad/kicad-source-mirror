@@ -10,11 +10,16 @@
 
 #include "pcbnew.h"
 #include "trigo.h"
-#include "pcbnew_id.h"             // ID_TRACK_BUTT
+#include "pcbnew_id.h"                      // ID_TRACK_BUTT
 #include "class_board_design_settings.h"
 #include "richio.h"
 
-int D_PAD::m_PadSketchModePenSize = 0;   // Pen size used to draw pads in sketch mode
+// Due to a bug in previous versions ( m_LengthDie not initialized in D_PAD ctor)
+// m_LengthDie is no more read from .brd files
+// Uncomment this next line to read m_LengthDie from .brd files
+// #define READ_PAD_LENGTH_DIE
+
+int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode
 
 
 D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
@@ -23,6 +28,7 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
 
     m_Size.x = m_Size.y = 500;          // give it a reasonable size
     m_Orient = 0;                       // Pad rotation in 1/10 degrees
+    m_LengthDie = 0;
 
     if( m_Parent && (m_Parent->Type()  == TYPE_MODULE) )
     {
@@ -477,9 +483,11 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
             break;
 
         case 'L':
+#ifdef READ_PAD_LENGTH_DIE
     	    int lengthdie;
             nn    = sscanf( PtLine, "%d", &lengthdie );
             m_LengthDie = lengthdie;
+#endif
             break;
 
         case '.':    /* Read specific data */
