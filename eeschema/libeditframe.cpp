@@ -714,6 +714,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         ( (LIB_POLYLINE*) m_drawItem )->DeleteSegment( GetScreen()->GetCrossHairPosition( true ) );
         m_drawItem->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), -1, g_XorMode, NULL, DefaultTransform );
         m_drawItem->SetFlags( oldFlags );
+        m_lastDrawItem = NULL;
         break;
     }
 
@@ -1212,6 +1213,7 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
     }
 
     m_drawItem = NULL;
+    m_lastDrawItem = NULL;
     OnModify();
     DrawPanel->CrossHairOn( aDC );
 }
