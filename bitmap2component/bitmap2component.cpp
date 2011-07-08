@@ -283,6 +283,7 @@ static void OuputHeader( BITMAPCONV_INFO& aInfo )
                  aInfo.m_PixmapWidth, aInfo.m_PixmapHeight );
         fprintf( aInfo.m_Outfile, "$MODULE %s\n", CmpName );
         fprintf( aInfo.m_Outfile, "Po 0 0 0 15 00000000 00000000 ~~\n");
+        fprintf( aInfo.m_Outfile, "Li %s\n", CmpName );
         fprintf( aInfo.m_Outfile, "T0 0 %d %d %d 0 %d N I %d \"G***\"\n",
                 Ypos, fieldSize, fieldSize, fieldSize/5, FIELD_LAYER );
         fprintf( aInfo.m_Outfile, "T1 0 %d %d %d 0 %d N I %d \"%s\"\n",

@@ -364,7 +364,6 @@ void WinEDA_ModuleEditFrame::Delete_Module_In_Library( const wxString& aLibname 
 void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOnly )
 {
     int      ii, NbModules = 0;
-    float    Pas;
     MODULE*  Module;
     wxString fileName = LibName, path;
 
@@ -424,7 +423,7 @@ void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOn
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
         NbModules++;
 
-    Pas = (float) 100 / NbModules;
+    double step = 100.0 / NbModules;
     DisplayActivity( 0, wxEmptyString );
 
     Module = (MODULE*) GetBoard()->m_Modules;
@@ -434,7 +433,7 @@ void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOn
                                     NewModulesOnly ? false : true,
                                     false ) == 0 )
             break;
-        DisplayActivity( (int) ( ii * Pas ), wxEmptyString );
+        DisplayActivity( (int) ( ii * step ), wxEmptyString );
         /* Check for request to stop backup (ESCAPE key actuated) */
         if( DrawPanel->m_AbortRequest )
             break;
@@ -485,12 +484,19 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     {
         wxTextEntryDialog dlg( this, _( "Name:" ), _( "Save module" ), Name_Cmp );
         if( dlg.ShowModal() != wxID_OK )
-            return 0; // cancelled by user
+            return false; // cancelled by user
         Name_Cmp = dlg.GetValue();
         Name_Cmp.Trim( true );
         Name_Cmp.Trim( false );
         if( Name_Cmp.IsEmpty() )
-            return 0;
+            return false;
+        aModule->m_LibRef = Name_Cmp;
+    }
+
+    // Ensure this footprint has a libname
+    if( Name_Cmp.IsEmpty() )
+    {
+        Name_Cmp = wxT("noname");
         aModule->m_LibRef = Name_Cmp;
     }
 
@@ -528,7 +534,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         if( !aOverwrite )    // Do not save the given footprint: an old one exists
         {
             fclose( lib_module );
-            return 1;
+            return true;
         }
     }
 
@@ -565,20 +571,23 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     LineNum = 0;
     rewind( lib_module);
 
-    GetLine( lib_module, Line, &LineNum );
-    while( GetLine( lib_module, Line, &LineNum ) )
-    {
-        StrPurge( Line );
-        if( strnicmp( Line, "$MODULE", 7 ) == 0 )
-            break;
-    }
-
-    /* Copy footprints, until the old footprint to delete */
+    // Copy footprints, until the old footprint to delete
+    bool skip_header = true;
     while( GetLine( lib_module, Line, &LineNum ) )
     {
         StrPurge( Line );
         if( strnicmp( Line, "$EndLIBRARY", 8 ) == 0 )
             continue;
+
+        // Search fo the beginning of module section:
+        if( skip_header )
+        {
+            if(  strnicmp( Line, "$MODULE", 7 ) == 0 )
+                skip_header = false;
+            else
+                continue;
+        }
+
         if( strnicmp( Line, "$MODULE", 7 ) == 0 )
         {
             sscanf( Line + 7, " %s", Name );
