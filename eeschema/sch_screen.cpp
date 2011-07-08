@@ -572,7 +572,7 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aC
 {
     for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
     {
-        if( item->IsMoving() )
+        if( item->IsMoving() || item->IsResized() )
             continue;
 
         // uncomment line below when there is a virtual

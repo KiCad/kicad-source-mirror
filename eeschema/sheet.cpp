@@ -198,7 +198,7 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     if( aErase )
         sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
-    if( sheet->GetFlags() & IS_RESIZED )
+    if( sheet->IsResized() )
     {
         int width = screen->GetCrossHairPosition().x - sheet->m_Pos.x;
         int height = screen->GetCrossHairPosition().y - sheet->m_Pos.y;
@@ -223,7 +223,7 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
                                                                 sheet->m_Pos.y + height ) );
         sheet->Resize( wxSize( grid.x - sheet->m_Pos.x, grid.y - sheet->m_Pos.y ) );
     }
-    else             /* Move Sheet */
+    else if( sheet->IsMoving() )
     {
         moveVector = screen->GetCrossHairPosition() - sheet->m_Pos;
         sheet->Move( moveVector );
@@ -251,7 +251,7 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     {
         SAFE_DELETE( item );
     }
-    else if( item->m_Flags & (IS_RESIZED | IS_MOVED) )
+    else if( item->IsMoving() || item->IsResized() )
     {
         screen->RemoveFromDrawList( item );
         delete item;
@@ -266,10 +266,6 @@ static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
         item->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         item->ClearFlags();
-        SCH_SHEET* sheet = ( SCH_SHEET* ) item;
-        aPanel->CrossHairOff( aDC );
-        screen->SetCrossHairPosition( sheet->GetResizePosition() );
-        aPanel->CrossHairOn( aDC );
     }
     else
     {
@@ -300,6 +296,7 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
     DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, false );
     DrawPanel->CrossHairOff( aDC );
     GetScreen()->SetCrossHairPosition( sheet->GetResizePosition() );
+    DrawPanel->MoveCursorToCrossHair();
     DrawPanel->CrossHairOn( aDC );
 
     return sheet;
@@ -315,20 +312,19 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
                  wxString::Format( wxT( "Cannot perform sheet resize on %s object." ),
                                    GetChars( aSheet->GetClass() ) ) );
 
-    SetUndoItem( aSheet );
-    OnModify();
-    aSheet->SetFlags( IS_RESIZED );
+    DrawPanel->CrossHairOff( aDC );
+    GetScreen()->SetCrossHairPosition( aSheet->GetResizePosition() );
+    DrawPanel->MoveCursorToCrossHair();
+    DrawPanel->CrossHairOn( aDC );
 
+    SetUndoItem( aSheet );
+    aSheet->SetFlags( IS_RESIZED );
 
     DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
     DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
 
     if( aSheet->IsNew() )    // not already in edit, save a copy for undo/redo
         SetUndoItem( aSheet );
-
-    DrawPanel->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( aSheet->GetResizePosition() );
-    DrawPanel->CrossHairOn( aDC );
 }
 
 

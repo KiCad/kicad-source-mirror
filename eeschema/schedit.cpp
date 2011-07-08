@@ -214,7 +214,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_RESIZE_SHEET:
-        DrawPanel->MoveCursorToCrossHair();
         ReSizeSheet( (SCH_SHEET*) item, &dc );
         screen->TestDanglingEnds( DrawPanel, &dc );
         break;

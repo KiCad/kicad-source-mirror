@@ -412,6 +412,7 @@ public:
     inline bool IsMoving() const { return m_Flags & IS_MOVED; }
     inline bool IsDragging() const { return m_Flags & IS_DRAGGED; }
     inline bool IsSelected() const { return m_Flags & SELECTED; }
+    inline bool IsResized() const { return m_Flags & IS_RESIZED; }
 
     void SetModified();
 
