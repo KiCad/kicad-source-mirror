@@ -22,12 +22,12 @@ void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 {
     AdjustScrollBars( aCenterPoint );
 
-    DrawPanel->Refresh();
-    DrawPanel->Update();
-
-    /* Move the mouse cursor to the on grid graphic cursor position */
+    // Move the mouse cursor to the on grid graphic cursor position
     if( aWarpPointer )
         DrawPanel->MoveCursorToCrossHair();
+
+    DrawPanel->Refresh();
+    DrawPanel->Update();
  }
 
 
@@ -38,8 +38,10 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
     BASE_SCREEN * screen = GetScreen();
     screen->SetZoom( BestZoom() ); // Set the best zoom and get center point.
+
     if( screen->m_FirstRedraw )
         screen->SetCrossHairPosition( screen->GetScrollCenterPosition() );
+
     RedrawScreen( screen->GetScrollCenterPosition(), aWarpPointer );
 }
 
@@ -99,7 +101,6 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         center = screen->GetCrossHairPosition();
 
     // fall thru
-
     case ID_ZOOM_OUT:
         if( screen->SetNextZoom() )
             RedrawScreen( center, zoom_at_cursor );
