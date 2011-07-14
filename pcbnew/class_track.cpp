@@ -43,9 +43,7 @@ TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
 }
 
 
-/***************************/
-wxString TRACK::ShowWidth()
-/***************************/
+wxString TRACK::ShowWidth() const
 {
     wxString msg;
 
@@ -61,9 +59,79 @@ SEGZONE::SEGZONE( BOARD_ITEM* aParent ) :
 }
 
 
+wxString SEGZONE::GetSelectMenuText() const
+{
+    wxString text;
+    NETINFO_ITEM* net;
+    BOARD* board = GetBoard();
+
+    text << _( "Zone" ) << wxT( " " ) << wxString::Format( wxT( "(%8.8X)" ), m_TimeStamp );
+
+    if( board )
+    {
+        net = board->FindNet( GetNet() );
+
+        if( net )
+            text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
+    }
+    else
+    {
+        text << _( "** BOARD NOT DEFINED **" );
+    }
+
+    text << _( " on " ) << GetLayerName();
+
+    return text;
+}
+
+
 SEGVIA::SEGVIA( BOARD_ITEM* aParent ) :
     TRACK( aParent, TYPE_VIA )
 {
+}
+
+
+wxString SEGVIA::GetSelectMenuText() const
+{
+    wxString text;
+    NETINFO_ITEM* net;
+    BOARD* board = GetBoard();
+
+    text << _( "Via" ) << wxT( " " ) << ShowWidth();
+
+    int shape = Shape();
+
+    if( shape == VIA_BLIND_BURIED )
+        text << wxT( " " ) << _( "Blind/Buried" );
+    else if( shape == VIA_MICROVIA )
+        text << wxT( " " ) << _( "Micro Via" );
+    // else say nothing about normal (through) vias
+
+    if( board )
+    {
+        net = board->FindNet( GetNet() );
+
+        if( net )
+            text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
+
+        text << wxChar( ' ' ) << _( "Net:" ) << GetNet();
+
+        if( shape != VIA_THROUGH )
+        {
+            // say which layers, only two for now
+            int topLayer;
+            int botLayer;
+            ReturnLayerPair( &topLayer, &botLayer );
+            text << _( " on " ) << board->GetLayerName( topLayer ).Trim() << wxT( " <-> " )
+                 << board->GetLayerName( botLayer ).Trim();
+        }
+    }
+    else
+    {
+        text << _( "** BOARD NOT DEFINED **" );
+    }
+
+    return text;
 }
 
 
@@ -1128,6 +1196,36 @@ bool TRACK::HitTest( EDA_RECT& refArea )
     if( refArea.Contains( m_End ) )
         return true;
     return false;
+}
+
+
+wxString TRACK::GetSelectMenuText() const
+{
+    wxString text;
+    wxString temp;
+    NETINFO_ITEM* net;
+    BOARD* board = GetBoard();
+
+    // deleting tracks requires all the information we can get to
+    // disambiguate all the choices under the cursor!
+    text << _( "Track" ) << wxT( " " ) << ShowWidth();
+
+    if( board )
+    {
+        net = board->FindNet( GetNet() );
+
+        if( net )
+            text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
+    }
+    else
+    {
+        text << _( "** BOARD NOT DEFINED ** " );
+    }
+
+    text << _( " on " ) << GetLayerName() << wxT("  ") << _("Net:") << GetNet()
+         << wxT("  ") << _("Length:") << valeur_param( GetLength(), temp );
+
+    return text;
 }
 
 

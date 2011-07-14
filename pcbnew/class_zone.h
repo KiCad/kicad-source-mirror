@@ -47,8 +47,8 @@ public:
     int                   m_ArcToSegmentsCount;             // number of segments to convert a circle to a polygon
                                                             // (uses ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF)
     int                   m_PadOption;                      //
-    int                   m_ThermalReliefGapValue;          // tickness of the gap in thermal reliefs
-    int                   m_ThermalReliefCopperBridgeValue; // tickness of the copper bridge in thermal reliefs
+    int                   m_ThermalReliefGapValue;          // thickness of the gap in thermal reliefs
+    int                   m_ThermalReliefCopperBridgeValue; // thickness of the copper bridge in thermal reliefs
     int                   utility, utility2;                // flags used in polygon calculations
     bool                  m_IsFilled;                       // true when a zone was filled, false after deleting the filled areas
     std::vector <CPolyPt> m_FilledPolysList;  /* set of filled polygons used to draw a zone as a filled area.
@@ -56,7 +56,7 @@ public:
                                                * In very simple cases m_FilledPolysList is same as m_Poly
                                                * In less simple cases (when m_Poly has holes) m_FilledPolysList is a polygon equivalent to m_Poly, without holes
                                                * but with extra outline segment connecting "holes" with external main outline
-                                               * In complex cases an ouline decribed by m_Poly can have many filled areas
+                                               * In complex cases an outline described by m_Poly can have many filled areas
                                                */
     std::vector <SEGMENT> m_FillSegmList;      /* set of segments used to fill area, when fill zone by segment is used.
                                                 *  ( m_FillMode == 1 )
@@ -88,7 +88,7 @@ public:
 
     /**
      * Function copy
-     * copy usefull data from the source.
+     * copy useful data from the source.
      * flags and linked list pointers are NOT copied
      */
     void     Copy( ZONE_CONTAINER* src );
@@ -125,7 +125,7 @@ public:
      * Function DrawWhileCreateOutline
      * Draws the zone outline when ir is created.
      * The moving edges are in XOR graphic mode, old segment in draw_mode graphic mode (usually GR_OR)
-     * The closing edge has its owm shape
+     * The closing edge has its own shape
      * @param panel = current Draw Panel
      * @param DC = current Device Context
      * @param draw_mode = draw mode: OR, XOR ..
@@ -141,7 +141,7 @@ public:
     /**
      * Function Test_For_Copper_Island_And_Remove__Insulated_Islands
      * Remove insulated copper islands found in m_FilledPolysList.
-     * @param aPcb = the board to analyse
+     * @param aPcb = the board to analyze
      */
     void     Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD* aPcb );
 
@@ -159,7 +159,7 @@ public:
      * Function IsOnCopperLayer
      * @return true if this zone is on a copper layer, false if on a technical layer
      */
-    bool IsOnCopperLayer( void )
+    bool IsOnCopperLayer( void ) const
     {
         return ( GetLayer() < FIRST_NO_COPPER_LAYER ) ? true : false;
     }
@@ -183,7 +183,7 @@ public:
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
-     * For zones, this means near an ouline segment
+     * For zones, this means near an outline segment
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
@@ -211,13 +211,13 @@ public:
 
     /**
      * Function AddClearanceAreasPolygonsToPolysList
-     * Add non copper areas polygons (pads and tracks with clearence)
+     * Add non copper areas polygons (pads and tracks with clearance)
      * to a filled copper area
      * used in BuildFilledPolysListData when calculating filled areas in a zone
      * Non copper areas are pads and track and their clearance area
      * The filled copper area must be computed before
      * BuildFilledPolysListData() call this function just after creating the
-     *  filled copper area polygon (without clearence areas
+     *  filled copper area polygon (without clearance areas
      * @param aPcb: the current board
      */
     void AddClearanceAreasPolygonsToPolysList( BOARD* aPcb );
@@ -341,7 +341,7 @@ public:
     }
 
 
-    /** Acces to m_Poly parameters
+    /** Access to m_Poly parameters
      */
 
     int GetNumCorners( void ) const
@@ -417,6 +417,9 @@ public:
     };
 
     unsigned int GetCornerRadius() const { return cornerRadius; };
+
+    virtual wxString GetSelectMenuText() const;
+
 };
 
 

@@ -483,8 +483,9 @@ void DRC::testUnconnected()
         D_PAD*    padEnd   = rat->m_PadEnd;
 
         DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_PADS,
-                                         padStart->MenuText( m_pcb ), padEnd->MenuText( m_pcb ),
-                                         padStart->GetPosition(), padEnd->GetPosition() );
+                                          padStart->GetSelectMenuText(),
+                                          padEnd->GetSelectMenuText(),
+                                          padStart->GetPosition(), padEnd->GetPosition() );
 
         m_unconnected.push_back( uncItem );
     }

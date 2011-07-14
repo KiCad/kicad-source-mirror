@@ -720,7 +720,7 @@ EDA_RECT MODULE::GetFootPrintRect() const
 
     for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge; edge = edge->Next() )
     {
-        if( edge->Type() != TYPE_EDGE_MODULE )  // Shoud not occur
+        if( edge->Type() != TYPE_EDGE_MODULE )  // Should not occur
             continue;
 
         area.Merge( edge->GetBoundingBox() );
@@ -1001,6 +1001,17 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
     }
 
     return result;
+}
+
+
+wxString MODULE::GetSelectMenuText() const
+{
+    wxString text;
+
+    text << _( "Footprint" ) << wxT( " " ) << GetReference();
+    text << wxT( " (" ) << GetLayerName() << wxT( ")" );
+
+    return text;
 }
 
 

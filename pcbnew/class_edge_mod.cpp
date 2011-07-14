@@ -601,8 +601,20 @@ bool EDGE_MODULE::HitTest( EDA_RECT& refArea )
     return false;
 }
 
-#if defined(DEBUG)
 
+wxString EDGE_MODULE::GetSelectMenuText() const
+{
+    wxString text;
+
+    text << _( "Graphic" ) << wxT( " " ) << ShowShape( (Track_Shapes) m_Shape );
+    text << wxT( " (" ) << GetLayerName() << wxT( ")" );
+    text << _( " of " ) << ( (MODULE*) GetParent() )->GetReference();
+
+    return text;
+}
+
+
+#if defined(DEBUG)
 
 /**
  * Function Show

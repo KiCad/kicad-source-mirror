@@ -409,7 +409,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const w
                      size, m_HJustify, m_VJustify, width, m_Italic, m_Bold );
 }
 
-/* Rraws a line from the TEXTE_MODULE origin to parent MODULE origin.
+/* Draws a line from the TEXTE_MODULE origin to parent MODULE origin.
 */
 void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
                                   wxDC*           aDC,
@@ -542,6 +542,31 @@ bool TEXTE_MODULE::IsOnLayer( int aLayer ) const
  *
  * }
  */
+
+
+wxString TEXTE_MODULE::GetSelectMenuText() const
+{
+    wxString text;
+
+    switch( m_Type )
+    {
+    case TEXT_is_REFERENCE:
+        text << _( "Reference" ) << wxT( " " ) << m_Text;
+        break;
+
+    case TEXT_is_VALUE:
+        text << _( "Value" ) << wxT( " " ) << m_Text << _( " of " )
+             << ( (MODULE*) GetParent() )->GetReference();
+        break;
+
+    default:    // wrap this one in quotes:
+        text << _( "Text" ) << wxT( " \"" ) << m_Text << wxT( "\"" ) << _( " of " )
+             << ( (MODULE*) GetParent() )->GetReference();
+        break;
+    }
+
+    return text;
+}
 
 
 #if defined(DEBUG)

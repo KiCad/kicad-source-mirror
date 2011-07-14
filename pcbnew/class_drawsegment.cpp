@@ -495,6 +495,19 @@ bool DRAWSEGMENT::HitTest( EDA_RECT& refArea )
 }
 
 
+wxString DRAWSEGMENT::GetSelectMenuText() const
+{
+    wxString text;
+    wxString temp;
+
+    text << _( "Pcb Graphic" ) << wxT(": ") << ShowShape( (Track_Shapes)m_Shape )
+         << wxChar(' ') << _("Length:") << valeur_param( GetLength(), temp )
+         << _( " on " ) << GetLayerName();
+
+    return text;
+}
+
+
 #if defined(DEBUG)
 /**
  * Function Show

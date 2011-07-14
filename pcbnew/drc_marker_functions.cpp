@@ -42,7 +42,7 @@
 
 MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe )
 {
-    wxString textA = aTrack->MenuText( m_pcb );
+    wxString textA = aTrack->GetSelectMenuText();
     wxString textB;
 
     wxPoint  position;
@@ -50,7 +50,7 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, M
 
     if( aItem )     // aItem might be NULL
     {
-        textB = aItem->MenuText( m_pcb );
+        textB = aItem->GetSelectMenuText();
         posB  = aItem->GetPosition();
 
         if( aItem->Type() == TYPE_PAD )
@@ -108,8 +108,8 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, M
 
 MARKER_PCB* DRC::fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER_PCB* fillMe )
 {
-    wxString textA = aPad->MenuText( m_pcb );
-    wxString textB = bPad->MenuText( m_pcb );
+    wxString textA = aPad->GetSelectMenuText();
+    wxString textB = bPad->GetSelectMenuText();
 
     wxPoint  posA = aPad->GetPosition();
     wxPoint  posB = bPad->GetPosition();
@@ -125,7 +125,7 @@ MARKER_PCB* DRC::fillMarker( D_PAD* aPad, D_PAD* bPad, int aErrorCode, MARKER_PC
 
 MARKER_PCB* DRC::fillMarker( ZONE_CONTAINER* aArea, int aErrorCode, MARKER_PCB* fillMe )
 {
-    wxString textA = aArea->MenuText( m_pcb );
+    wxString textA = aArea->GetSelectMenuText();
 
     wxPoint  posA = aArea->GetPosition();
 
@@ -143,7 +143,7 @@ MARKER_PCB* DRC::fillMarker( const ZONE_CONTAINER* aArea,
                              int                   aErrorCode,
                              MARKER_PCB*           fillMe )
 {
-    wxString textA = aArea->MenuText( m_pcb );
+    wxString textA = aArea->GetSelectMenuText();
 
     wxPoint  posA = aPos;
 

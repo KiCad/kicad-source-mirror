@@ -59,7 +59,7 @@ public:
     bool Save( FILE* aFile ) const;
 
     void    SetText( const wxString& NewText );
-    wxString GetText( void );
+    wxString GetText( void ) const;
 
     void    Copy( DIMENSION* source );
 
@@ -134,6 +134,8 @@ public:
     }
 
     EDA_RECT GetBoundingBox() const;
+
+    virtual wxString GetSelectMenuText() const;
 };
 
 #endif  // #define DIMENSION_H

@@ -26,7 +26,7 @@ class Pcb3D_GLCanvas;
 #define PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS LAYER_BACK | SILKSCREEN_LAYER_FRONT | \
     SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT
 
-// Helper class to staore parameters used to draw a pad
+// Helper class to store parameters used to draw a pad
 class PAD_DRAWINFO
 {
 public:
@@ -177,7 +177,7 @@ public:
      * @param aClearanceValue = the clearance around the pad
      * @param aCircleToSegmentsCount = the number of segments to approximate a circle
      * @param aCorrectionFactor = the correction to apply to circles radius to keep
-     * clearance when the circle is approxiamted by segment bigger or equal
+     * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
     */
     void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
@@ -272,12 +272,12 @@ public:
      * @param aRotation = full rotation of the segment
      * @return the width of the segment
      */
-    int          BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation) const;
+    int BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation) const;
 
     // others
-    void          SetPadName( const wxString& name );       // Change pad name
-    wxString      ReturnStringPadName();                    // Return pad name as string in a wxString
-    void          ReturnStringPadName( wxString& text );    // Return pad name as string in a buffer
+    void          SetPadName( const wxString& name );    // Change pad name
+    wxString      ReturnStringPadName() const;           // Return pad name as string in a wxString
+    void ReturnStringPadName( wxString& text ) const; // Return pad name as string in a buffer
     void          ComputeShapeMaxRadius();                           // compute radius
 
     int           GetMaxRadius() const;
@@ -356,6 +356,8 @@ public:
         m_Pos += aMoveVector;
     }
 
+
+    virtual wxString GetSelectMenuText() const;
 
 #if defined(DEBUG)
 

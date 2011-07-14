@@ -274,7 +274,7 @@ public:
      * Function GetReference
      * @return const wxString& - the reference designator text.
      */
-    const wxString& GetReference()
+    const wxString& GetReference() const
     {
         return m_Reference->m_Text;
     }
@@ -328,6 +328,7 @@ public:
         return wxT( "MODULE" );
     }
 
+    virtual wxString GetSelectMenuText() const;
 
  #if defined(DEBUG)
 

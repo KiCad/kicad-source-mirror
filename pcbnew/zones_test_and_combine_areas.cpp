@@ -896,11 +896,12 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                     // COPPERAREA_COPPERAREA error: copper area ref corner inside copper area
                     if( aCreate_Markers )
                     {
-                        wxString msg1   = Area_Ref->MenuText( this );
-                        wxString msg2   = Area_To_Test->MenuText( this );
-                        MARKER_PCB*  marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA, wxPoint( x, y ),
-                                                     msg1, wxPoint( x, y ),
-                                                     msg2, wxPoint( x, y ) );
+                        wxString msg1   = Area_Ref->GetSelectMenuText();
+                        wxString msg2   = Area_To_Test->GetSelectMenuText();
+                        MARKER_PCB*  marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA,
+                                                              wxPoint( x, y ),
+                                                              msg1, wxPoint( x, y ),
+                                                              msg2, wxPoint( x, y ) );
                         Add( marker );
                     }
                     nerrors++;
@@ -917,11 +918,12 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                     // COPPERAREA_COPPERAREA error: copper area corner inside copper area ref
                     if( aCreate_Markers )
                     {
-                        wxString msg1   = Area_To_Test->MenuText( this );
-                        wxString msg2   = Area_Ref->MenuText( this );
-                        MARKER_PCB*  marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA, wxPoint( x, y ),
-                                                     msg1, wxPoint( x, y ),
-                                                     msg2, wxPoint( x, y ) );
+                        wxString msg1   = Area_To_Test->GetSelectMenuText();
+                        wxString msg2   = Area_Ref->GetSelectMenuText();
+                        MARKER_PCB*  marker = new MARKER_PCB( COPPERAREA_INSIDE_COPPERAREA,
+                                                              wxPoint( x, y ),
+                                                              msg1, wxPoint( x, y ),
+                                                              msg2, wxPoint( x, y ) );
                         Add( marker );
                     }
                     nerrors++;
@@ -985,12 +987,12 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
                                 // COPPERAREA_COPPERAREA error : intersect or too close
                                 if( aCreate_Markers )
                                 {
-                                    wxString msg1   = Area_Ref->MenuText( this );
-                                    wxString msg2   = Area_To_Test->MenuText( this );
+                                    wxString msg1   = Area_Ref->GetSelectMenuText();
+                                    wxString msg2   = Area_To_Test->GetSelectMenuText();
                                     MARKER_PCB*  marker = new MARKER_PCB( COPPERAREA_CLOSE_TO_COPPERAREA,
-                                                                 wxPoint( x, y ),
-                                                                 msg1, wxPoint( x, y ),
-                                                                 msg2, wxPoint( x, y ) );
+                                                                          wxPoint( x, y ),
+                                                                          msg1, wxPoint( x, y ),
+                                                                          msg2, wxPoint( x, y ) );
                                     Add( marker );
                                 }
                                 nerrors++;

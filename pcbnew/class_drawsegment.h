@@ -169,12 +169,12 @@ public:
      * clearance when the circle is approxiamted by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
-    void         TransformShapeWithClearanceToPolygon(
-        std::vector <CPolyPt>& aCornerBuffer,
-        int                    aClearanceValue,
-        int
-                               aCircleToSegmentsCount,
-        double                 aCorrectionFactor );
+    void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+                                               int                    aClearanceValue,
+                                               int                    aCircleToSegmentsCount,
+                                               double                 aCorrectionFactor );
+
+    virtual wxString GetSelectMenuText() const;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os );

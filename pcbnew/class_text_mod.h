@@ -159,6 +159,8 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
     }
 
 
+    virtual wxString GetSelectMenuText() const;
+
 #if defined(DEBUG)
 
     /**

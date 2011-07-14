@@ -9,10 +9,10 @@
 #include "PolyLine.h"
 
 
-// Via attributes (m_Shape parmeter)
+// Via attributes (m_Shape parameter)
 #define VIA_THROUGH             3           /* Always a through hole via */
 #define VIA_BLIND_BURIED        2           /* this via can be on internal layers */
-#define VIA_MICROVIA            1           /* this via which connect from an external layer to the near neightbour internal layer */
+#define VIA_MICROVIA            1           /* this via which connect from an external layer to the near neighbor internal layer */
 #define VIA_NOT_DEFINED         0           /* not yet used */
 
 /***/
@@ -52,7 +52,7 @@ public:
      * will copy this object whether it is a TRACK or a SEGVIA returning
      * the corresponding type.
      * @return - TRACK*, SEGVIA*, or SEGZONE*, declared as the least common
-     *  demoninator: TRACK
+     *  denominator: TRACK
      */
     TRACK* Copy() const;
 
@@ -156,7 +156,7 @@ public:
      * @param aClearanceValue = the clearance around the pad
      * @param aCircleToSegmentsCount = the number of segments to approximate a circle
      * @param aCorrectionFactor = the correction to apply to circles radius to keep
-     * clearance when the circle is approxiamted by segment bigger or equal
+     * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
     void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
@@ -228,7 +228,7 @@ public:
      * Function ShowWidth
      * returns the width of the track in displayable user units.
      */
-    wxString        ShowWidth();
+    wxString        ShowWidth() const;
 
     /**
      * Function Visit
@@ -285,6 +285,7 @@ public:
      */
     virtual int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const;
 
+    virtual wxString GetSelectMenuText() const;
 
 #if defined (DEBUG)
 
@@ -326,6 +327,9 @@ public:
 
 
     SEGZONE* Next() const { return (SEGZONE*) Pnext; }
+
+    virtual wxString GetSelectMenuText() const;
+
 };
 
 
@@ -379,6 +383,8 @@ public:
         return wxT( "VIA" );
     }
 
+
+    virtual wxString GetSelectMenuText() const;
 
 #if defined (DEBUG)
 

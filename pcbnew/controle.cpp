@@ -197,7 +197,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
             item = (*m_Collector)[i];
 
-            text = item->MenuText( m_Pcb );
+            text = item->GetSelectMenuText();
             xpm  = item->MenuIcon();
 
             ADD_MENUITEM( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START + i, text, xpm );

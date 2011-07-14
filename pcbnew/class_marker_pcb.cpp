@@ -1,5 +1,5 @@
 /*****************************************************************************/
-/* Functions to handle markers used to show somthing (usually a drc problem) */
+/* Functions to handle markers used to show something (usually a drc problem) */
 /*****************************************************************************/
 
 /* file class_marker.cpp */
@@ -93,7 +93,7 @@ void MARKER_PCB::Rotate(const wxPoint& aRotCentre, int aAngle)
 /**
  * Function Flip
  * Flip this object, i.e. change the board side for this object
- * this function has not reeally sense for a marker.
+ * this function has not really sense for a marker.
  * It moves just the marker to keep its position on board, when the board is flipped
  * @param aCentre - the rotation point.
  */
@@ -102,3 +102,12 @@ void MARKER_PCB::Flip(const wxPoint& aCentre )
     m_Pos.y  = aCentre.y - (m_Pos.y - aCentre.y);
 }
 
+
+wxString MARKER_PCB::GetSelectMenuText() const
+{
+    wxString text;
+
+    text << _( "Marker" ) << wxT( " @(" ) << GetPos().x << wxT( "," ) << GetPos().y << wxT( ")" );
+
+    return text;
+}

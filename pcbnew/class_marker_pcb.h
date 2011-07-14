@@ -114,6 +114,8 @@ public:
         // "pure" virtual-ness
         return true;
     }
+
+    virtual wxString GetSelectMenuText() const;
 };
 
 

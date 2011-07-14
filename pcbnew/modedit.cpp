@@ -99,7 +99,7 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
 
             item = (*m_Collector)[ii];
 
-            text = item->MenuText( GetBoard() );
+            text = item->GetSelectMenuText();
             xpm  = item->MenuIcon();
 
             ADD_MENUITEM( &itemMenu,

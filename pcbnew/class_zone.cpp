@@ -113,12 +113,12 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     if( ret < 3 )
         return false;
 
-    // Save the ouline layer info
+    // Save the outline layer info
     ret = fprintf( aFile, "ZLayer %d\n", m_Layer );
     if( ret < 1 )
         return false;
 
-    // Save the ouline aux info
+    // Save the outline aux info
     switch( m_Poly->GetHatchStyle() )
     {
     default:
@@ -364,7 +364,7 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
 
             m_IsFilled = (fillstate == 'S') ? true : false;
         }
-        else if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // Clearence and pad options info found
+        else if( strnicmp( Line, "ZClearance", 10 ) == 0 )    // Clearance and pad options info found
         {
             int  clearance = 200;
             char padoption;
@@ -622,11 +622,11 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 
         if( (corner->end_contour) || (ic == imax) ) // the last corner of a filled area is found: draw it
         {
-            /* Draw the current filled area: draw segments ouline first
-             * Curiously, draw segments ouline first and after draw filled polygons
-             * with oulines thickness = 0 is a faster than
-             * just draw filled polygons but with oulines thickness = m_ZoneMinThickness
-             * So DO NOT use draw filled polygons with oulines having a thickness  > 0
+            /* Draw the current filled area: draw segments outline first
+             * Curiously, draw segments outline first and after draw filled polygons
+             * with outlines thickness = 0 is a faster than
+             * just draw filled polygons but with outlines thickness = m_ZoneMinThickness
+             * So DO NOT use draw filled polygons with outlines having a thickness  > 0
              * Note: Extra segments ( added by kbool to joint holes with external outline) are not drawn
              */
             {
@@ -719,7 +719,7 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, in
  * Draws the zone outline when ir is created.
  * The moving edges (last segment and the closing edge segment) are in XOR graphic mode,
  * old segment in OR graphic mode
- * The closing edge has its owm shape
+ * The closing edge has its own shape
  * @param panel = current Draw Panel
  * @param DC = current Device Context
  * @param draw_mode = draw mode: OR, XOR ..
@@ -762,7 +762,7 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, in
             else
                 current_gr_mode = draw_mode;
         }
-        else    // Draw the line from last corner to the first corner of the current coutour
+        else    // Draw the line from last corner to the first corner of the current contour
         {
             is_close_segment = true;
             current_gr_mode  = GR_XOR;
@@ -947,7 +947,7 @@ bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos )
                 break;
             }
 
-            // Prepare test of next area which starts after the current indexend (if exists)
+            // Prepare test of next area which starts after the current index end (if exists)
             indexstart = indexend + 1;
         }
     }
@@ -997,7 +997,7 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
     else
         frame->AppendMsgPanel( _( "Non Copper Zone" ), wxEmptyString, RED );
 
-    /* Display net code : (usefull in test or debug) */
+    /* Display net code : (useful in test or debug) */
     msg.Printf( wxT( "%d" ), GetNet() );
     frame->AppendMsgPanel( _( "NetCode" ), msg, RED );
 
@@ -1176,7 +1176,7 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 
 /**
  * Function copy
- * copy usefull data from the source.
+ * copy useful data from the source.
  * flags and linked list pointers are NOT copied
  */
 void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
@@ -1220,4 +1220,52 @@ bool ZONE_CONTAINER::SetNetNameFromNetCode( void )
     }
 
     return false;
+}
+
+
+wxString ZONE_CONTAINER::GetSelectMenuText() const
+{
+    wxString text;
+    NETINFO_ITEM* net;
+    BOARD* board = GetBoard();
+
+    text = _( "Zone Outline" );
+
+    int ncont = m_Poly->GetContour( m_CornerSelection );
+
+    if( ncont )
+        text << wxT( " " ) << _( "(Cutout)" );
+
+    text << wxT( " " );
+    text << wxString::Format( wxT( "(%8.8X)" ), m_TimeStamp );
+
+    if ( !IsOnCopperLayer() )
+    {
+        text << wxT( " [" ) << _( "Not on copper layer" ) << wxT( "]" );
+    }
+    else if( GetNet() >= 0 )
+    {
+        if( board )
+        {
+            net = board->FindNet( GetNet() );
+
+            if( net )
+            {
+                text << wxT( " [" ) << net->GetNetname() << wxT( "]" );
+            }
+        }
+        else
+        {
+            text << _( "** NO BOARD DEFINED **" );
+        }
+    }
+    else    // A netcode < 0 is an error flag (Netname not found or area not initialised)
+    {
+        text << wxT( " [" ) << m_Netname << wxT( "]" );
+        text << wxT( " <" ) << _( "Not Found" ) << wxT( ">" );
+    }
+
+    text << _( " on " ) << GetLayerName();
+
+    return text;
 }

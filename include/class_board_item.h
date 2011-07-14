@@ -152,17 +152,6 @@ public:
 
 
     /**
-     * Function MenuText
-     * returns the text to use in any menu type UI control which must uniquely
-     * identify this item.
-     * @param aPcb The PCB in which this item resides, needed for Net lookup.
-     * @return wxString
-     * @todo: maybe: make this virtual and split into each derived class
-     */
-    wxString        MenuText( const BOARD* aPcb ) const;
-
-
-    /**
      * Function MenuIcon
      * @return const char** - The XPM to use in any UI control which can help
      *  identify this item.
@@ -224,7 +213,16 @@ public:
      * returns the BOARD in which this BOARD_ITEM resides, or NULL if none.
      */
     virtual BOARD* GetBoard() const;
+
+    /**
+     * Function GetLayerName
+     * returns the name of the PCB layer on which the item resides.
+     *
+     * @return wxString containing the layer name associated with this item.
+     */
+    wxString GetLayerName() const;
 };
+
 
 class NETCLASS;
 

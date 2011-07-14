@@ -88,6 +88,8 @@ public:
     bool    HitTest( EDA_RECT& refArea );
 
     EDA_RECT GetBoundingBox() const;
+
+    virtual wxString GetSelectMenuText() const;
 };
 
 

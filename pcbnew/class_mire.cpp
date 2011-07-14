@@ -234,3 +234,17 @@ EDA_RECT MIREPCB::GetBoundingBox() const
 
     return bBox;
 }
+
+
+wxString MIREPCB::GetSelectMenuText() const
+{
+    wxString text;
+    wxString msg;
+
+    valeur_param( m_Size, msg );
+
+    text << _( "Target" ) << _( " on " ) << GetLayerName() << wxT( " " ) << _( "size" )
+         << wxT( " " ) << msg;
+
+    return text;
+}

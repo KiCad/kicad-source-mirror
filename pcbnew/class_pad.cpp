@@ -144,7 +144,7 @@ const wxPoint D_PAD::ReturnShapePos()
 
 /* Return pad name as string in a wxString
  */
-wxString D_PAD::ReturnStringPadName()
+wxString D_PAD::ReturnStringPadName() const
 {
     wxString name;
 
@@ -155,7 +155,7 @@ wxString D_PAD::ReturnStringPadName()
 
 /* Return pad name as string in a buffer
  */
-void D_PAD::ReturnStringPadName( wxString& text )
+void D_PAD::ReturnStringPadName( wxString& text ) const
 {
     int ii;
 
@@ -871,7 +871,7 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 
 #if defined(DEBUG)
 
-// @todo: could this be useable elsewhere also?
+// @todo: could this be usable elsewhere also?
 static const char* ShowPadType( int aPadType )
 {
     switch( aPadType )
@@ -913,6 +913,27 @@ static const char* ShowPadAttr( int aPadAttr )
     default:
         return "??unkown??";
     }
+}
+
+
+wxString D_PAD::GetSelectMenuText() const
+{
+    wxString text;
+
+    text << _( "Pad" ) << wxT( " \"" ) << ReturnStringPadName() << wxT( "\" (" );
+
+    if ( (m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS )
+        text << _("all copper layers");
+    else if( (m_Masque_Layer & LAYER_BACK) == LAYER_BACK )
+        text << GetLayerName();
+    else if( (m_Masque_Layer & LAYER_FRONT) == LAYER_FRONT )
+        text << GetLayerName();
+    else
+        text << _( "???" );
+
+    text << _( ") of " ) << ( (MODULE*) GetParent() )->GetReference();
+
+    return text;
 }
 
 

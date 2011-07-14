@@ -329,6 +329,23 @@ void TEXTE_PCB::Flip(const wxPoint& aCentre )
 }
 
 
+wxString TEXTE_PCB::GetSelectMenuText() const
+{
+    wxString text;
+
+    text << _( "Pcb Text" ) << wxT( " " );
+
+    if( m_Text.Len() < 12 )
+        text << m_Text;
+    else
+        text += m_Text.Left( 10 ) + wxT( ".." );
+
+    text << _( " on " ) << GetLayerName();
+
+    return text;
+}
+
+
 #if defined(DEBUG)
 
 /**

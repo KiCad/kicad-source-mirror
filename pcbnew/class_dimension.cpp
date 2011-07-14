@@ -42,7 +42,7 @@ void DIMENSION::SetText( const wxString& NewText )
 
 /* Return the dimension text
 */
-wxString DIMENSION::GetText( void )
+wxString DIMENSION::GetText( void ) const
 {
     return m_Text->m_Text;
 }
@@ -430,7 +430,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     /* Init layer : */
     m_Text->SetLayer( GetLayer() );
 
-    /* calculate the size of the cdimension
+    /* calculate the size of the dimension
      * (text + line above the text) */
     ii = m_Text->m_Size.y +
          m_Text->m_Thickness + (m_Width * 3);
@@ -776,4 +776,14 @@ EDA_RECT DIMENSION::GetBoundingBox() const
     bBox.Normalize();
 
     return bBox;
+}
+
+
+wxString DIMENSION::GetSelectMenuText() const
+{
+    wxString text;
+
+    text << _( "Dimension" ) << wxT( " \"" ) << GetText() << wxT( "\"" );
+
+    return text;
 }

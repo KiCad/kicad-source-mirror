@@ -617,7 +617,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
 
     sub_menu_footprint = new wxMenu;
 
-    msg = aModule->MenuText( GetBoard() );
+    msg = aModule->GetSelectMenuText();
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_footprint, -1, msg, module_xpm );
 
     if( !flags )
@@ -657,7 +657,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* me
     wxMenu*  sub_menu_Fp_text;
     int      flags = FpText->m_Flags;
 
-    wxString msg = FpText->MenuText( GetBoard() );
+    wxString msg = FpText->GetSelectMenuText();
 
     sub_menu_Fp_text = new wxMenu;
 
@@ -717,7 +717,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     updateTraceWidthSelectBox();
     updateViaSizeSelectBox();
 
-    wxString msg = Pad->MenuText( GetBoard() );
+    wxString msg = Pad->GetSelectMenuText();
 
     sub_menu_Pad = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( menu, sub_menu_Pad, -1, msg, pad_xpm );
@@ -767,7 +767,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
     wxMenu*  sub_menu_Text;
     int      flags = Text->m_Flags;
 
-    wxString msg = Text->MenuText( GetBoard() );
+    wxString msg = Text->GetSelectMenuText();
 
     sub_menu_Text = new wxMenu;
 
