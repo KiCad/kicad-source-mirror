@@ -52,7 +52,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.SetAppName( wxT( ".: " ) + wxGetApp().GetTitle() + wxT( " :." ) );
 
     /* Copyright information */
-    info.SetCopyright( wxT( "(C) 1992-2010 KiCad Developers Team" ) );
+    info.SetCopyright( wxT( "(C) 1992-2011 KiCad Developers Team" ) );
 
     /* KiCad build version */
     wxString version;

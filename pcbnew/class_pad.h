@@ -359,6 +359,18 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
+    /**
+     * Function ShowPadShape
+     * @return the name of the shape
+     */
+    wxString ShowPadShape() const;
+
+    /**
+     * Function ShowPadAttr
+     * @return the name of the pad type (attribute) : STD, SMD ...
+     */
+    wxString ShowPadAttr() const;
+
 #if defined(DEBUG)
 
     /**

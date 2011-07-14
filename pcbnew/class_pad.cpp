@@ -605,17 +605,6 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     wxString    Line;
     BOARD*      board;
 
-    /* Pad messages */
-    static const wxString Msg_Pad_Shape[6] =
-    {
-        wxT( "??? " ), wxT( "Circ" ), wxT( "Rect" ), wxT( "Oval" ), wxT( "trap" ),
-        wxT( "spec" )
-    };
-
-    static const wxString Msg_Pad_Attribut[5] =
-    { wxT( "norm" ), wxT( "smd " ), wxT( "conn" ), wxT( "????" ) };
-
-
     frame->EraseMsgBox();
 
     module = (MODULE*) m_Parent;
@@ -739,12 +728,7 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     frame->AppendMsgPanel( _( "Layer" ), layerInfo, DARKGREEN );
 
-    int attribut = m_Attribut & 15;
-    if( attribut > 3 )
-        attribut = 3;
-
-    frame->AppendMsgPanel( Msg_Pad_Shape[m_PadShape],
-                           Msg_Pad_Attribut[attribut], DARKGREEN );
+    frame->AppendMsgPanel( ShowPadShape(), ShowPadAttr(), DARKGREEN );
 
     valeur_param( m_Size.x, Line );
     frame->AppendMsgPanel( _( "H Size" ), Line, RED );
@@ -869,49 +853,46 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 }
 
 
-#if defined(DEBUG)
-
-// @todo: could this be usable elsewhere also?
-static const char* ShowPadType( int aPadType )
+wxString D_PAD::ShowPadShape() const
 {
-    switch( aPadType )
+    switch( m_PadShape )
     {
     case PAD_CIRCLE:
-        return "circle";
+        return _("Circle");
 
     case PAD_OVAL:
-        return "oval";
+        return _("Oval");
 
     case PAD_RECT:
-        return "rect";
+        return _("Rect");
 
     case PAD_TRAPEZOID:
-        return "trap";
+        return _("Trap");
 
     default:
-        return "??unknown??";
+        return wxT("??Unknown??");
     }
 }
 
 
-static const char* ShowPadAttr( int aPadAttr )
+wxString D_PAD::ShowPadAttr() const
 {
-    switch( aPadAttr )
+    switch( m_Attribut & 0x0F )
     {
     case PAD_STANDARD:
-        return "STD";
+        return _("Std");
 
     case PAD_SMD:
-        return "SMD";
+        return _("Smd");
 
     case PAD_CONN:
-        return "CONN";
+        return _("Conn");
 
     case PAD_HOLE_NOT_PLATED:
-        return "HOLE";
+        return _("Not Plated");
 
     default:
-        return "??unkown??";
+        return wxT("??Unkown??");
     }
 }
 
@@ -936,6 +917,7 @@ wxString D_PAD::GetSelectMenuText() const
     return text;
 }
 
+#if defined(DEBUG)
 
 /**
  * Function Show
@@ -955,8 +937,8 @@ void D_PAD::Show( int nestLevel, std::ostream& os )
 
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
-    " shape=\"" << ShowPadType( m_PadShape ) << '"' <<
-    " attr=\"" << ShowPadAttr( m_Attribut ) << '"' <<
+    " shape=\"" << ShowPadShape() << '"' <<
+    " attr=\"" << ShowPadAttr( ) << '"' <<
     " num=\"" << padname << '"' <<
     " net=\"" << m_Netname.mb_str() << '"' <<
     " netcode=\"" << GetNet() << '"' <<
