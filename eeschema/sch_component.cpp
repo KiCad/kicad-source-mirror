@@ -31,6 +31,33 @@
 static LIB_COMPONENT* DummyCmp;
 
 
+/**
+ * Function toUTFTildaText
+ * convert a wxString to UTF8 and replace any control characters with a ~,
+ * where a control character is one of the first ASCII values up to ' ' 32d.
+ */
+std::string toUTFTildaText( const wxString& txt )
+{
+    std::string ret = TO_UTF8( txt );
+
+    for( std::string::iterator it = ret.begin();  it!=ret.end();  ++it )
+    {
+        if( (unsigned char) *it <= ' ' )
+            *it = '~';
+
+/*
+#if defined(KICAD_GOST)
+        if( *it == ' ' )
+#else
+        if( (unsigned char) *it <= ' ' )
+#endif
+            *it = '~';
+*/
+    }
+    return ret;
+}
+
+
 /* Descr component <DUMMY> used when a component is not found in library,
  *  to draw a dummy shape
  *  This component is a 400 mils square with the text ??
@@ -716,9 +743,8 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 
 void SCH_COMPONENT::SetOrientation( int aOrientation )
 {
-
     TRANSFORM temp = TRANSFORM();
-    bool Transform = false;
+    bool transform = false;
 
     switch( aOrientation )
     {
@@ -733,28 +759,28 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
         temp.x1   = temp.y2 = 0;
         temp.y1   = 1;
         temp.x2   = -1;
-        Transform = true;
+        transform = true;
         break;
 
     case CMP_ROTATE_COUNTERCLOCKWISE:    // Rotate - (incremental rotation)
         temp.x1   = temp.y2 = 0;
         temp.y1   = -1;
         temp.x2   = 1;
-        Transform = true;
+        transform = true;
         break;
 
     case CMP_MIRROR_Y:                  // Mirror Y (incremental rotation)
         temp.x1   = -1;
         temp.y2   = 1;
         temp.y1   = temp.x2 = 0;
-        Transform = true;
+        transform = true;
         break;
 
     case CMP_MIRROR_X:                  // Mirror X (incremental rotation)
         temp.x1   = 1;
         temp.y2   = -1;
         temp.y1   = temp.x2 = 0;
-        Transform = TRUE;
+        transform = TRUE;
         break;
 
     case CMP_ORIENT_90:
@@ -814,12 +840,12 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
         break;
 
     default:
-        Transform = FALSE;
+        transform = FALSE;
         wxMessageBox( wxT( "SetRotateMiroir() error: ill value" ) );
         break;
     }
 
-    if( Transform )
+    if( transform )
     {
         /* The new matrix transform is the old matrix transform modified by the
          *  requested transformation, which is the temp transform (rot,
@@ -921,8 +947,8 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
 
 bool SCH_COMPONENT::Save( FILE* f ) const
 {
-    int             ii;
-    char            Name1[256], Name2[256];
+    std::string     name1;
+    std::string     name2;
     wxArrayString   reference_fields;
 
     static wxString delimiters( wxT( " " ) );
@@ -933,48 +959,28 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     {
         reference_fields = wxStringTokenize( m_PathsAndReferences[0],
                                              delimiters );
-        strncpy( Name1, TO_UTF8( reference_fields[1] ), sizeof( Name1 ) );
+
+        name1 = toUTFTildaText( reference_fields[1] );
     }
     else
     {
         if( GetField( REFERENCE )->m_Text.IsEmpty() )
-            strncpy( Name1, TO_UTF8( m_prefix ), sizeof( Name1 ) );
+            name1 = toUTFTildaText( m_prefix );
         else
-            strncpy( Name1, TO_UTF8( GetField( REFERENCE )->m_Text ), sizeof( Name1 ) );
-    }
-
-    for( ii = 0; ii < (int) strlen( Name1 ); ii++ )
-    {
-#if defined(KICAD_GOST)
-        if( Name1[ii] == ' ' )
-#else
-        if( Name1[ii] <= ' ' )
-#endif
-
-            Name1[ii] = '~';
+            name1 = toUTFTildaText( GetField( REFERENCE )->m_Text );
     }
 
     if( !m_ChipName.IsEmpty() )
     {
-        strncpy( Name2, TO_UTF8( m_ChipName ), sizeof( Name2 ) );
-        for( ii = 0; ii < (int) strlen( Name2 ); ii++ )
-#if defined(KICAD_GOST)
-
-            if( Name2[ii] == ' ' )
-#else
-
-            if( Name2[ii] <= ' ' )
-#endif
-
-                Name2[ii] = '~';
+        name2 = toUTFTildaText( m_ChipName );
     }
     else
-        strncpy( Name2, NULL_STRING, sizeof( Name2 ) );
+        name2 = NULL_STRING;
 
     if( fprintf( f, "$Comp\n" ) == EOF )
         return false;
 
-    if( fprintf( f, "L %s %s\n", Name2, Name1 ) == EOF )
+    if( fprintf( f, "L %s %s\n", name2.c_str(), name1.c_str() ) == EOF )
         return false;
 
     /* Generate unit number, convert and time stamp*/
@@ -1063,8 +1069,8 @@ bool SCH_COMPONENT::Save( FILE* f ) const
 bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
     int         ii;
-    char        Name1[256], Name2[256],
-                Char1[256], Char2[256], Char3[256];
+    char        name1[256], name2[256],
+                char1[256], char2[256], char3[256];
     int         newfmt = 0;
     char*       ptcar;
     wxString    fieldName;
@@ -1082,7 +1088,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         line = aLine.Line();
     }
 
-    if( sscanf( &line[1], "%s %s", Name1, Name2 ) != 2 )
+    if( sscanf( &line[1], "%s %s", name1, name2 ) != 2 )
     {
         aErrorMsg.Printf( wxT( "EESchema Component descr error at line %d, aborted" ),
                           aLine.LineNumber() );
@@ -1090,16 +1096,16 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         return false;
     }
 
-    if( strcmp( Name1, NULL_STRING ) != 0 )
+    if( strcmp( name1, NULL_STRING ) != 0 )
     {
-        for( ii = 0; ii < (int) strlen( Name1 ); ii++ )
-            if( Name1[ii] == '~' )
-                Name1[ii] = ' ';
+        for( ii = 0; ii < (int) strlen( name1 ); ii++ )
+            if( name1[ii] == '~' )
+                name1[ii] = ' ';
 
-        m_ChipName = FROM_UTF8( Name1 );
+        m_ChipName = FROM_UTF8( name1 );
 
         if( !newfmt )
-            GetField( VALUE )->m_Text = FROM_UTF8( Name1 );
+            GetField( VALUE )->m_Text = FROM_UTF8( name1 );
     }
     else
     {
@@ -1109,31 +1115,31 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         GetField( VALUE )->m_Attributs = TEXT_NO_VISIBLE;
     }
 
-    if( strcmp( Name2, NULL_STRING ) != 0 )
+    if( strcmp( name2, NULL_STRING ) != 0 )
     {
         bool isDigit = false;
 
-        for( ii = 0; ii < (int) strlen( Name2 ); ii++ )
+        for( ii = 0; ii < (int) strlen( name2 ); ii++ )
         {
-            if( Name2[ii] == '~' )
-                Name2[ii] = ' ';
+            if( name2[ii] == '~' )
+                name2[ii] = ' ';
 
-            // get RefBase from this, too. store in Name1.
-            if( Name2[ii] >= '0' && Name2[ii] <= '9' )
+            // get RefBase from this, too. store in name1.
+            if( name2[ii] >= '0' && name2[ii] <= '9' )
             {
                 isDigit   = true;
-                Name1[ii] = 0;  //null-terminate.
+                name1[ii] = 0;  //null-terminate.
             }
             if( !isDigit )
             {
-                Name1[ii] = Name2[ii];
+                name1[ii] = name2[ii];
             }
         }
 
-        Name1[ii] = 0; //just in case
+        name1[ii] = 0; //just in case
         int  jj;
 
-        for( jj = 0; jj<ii && Name1[jj] == ' '; jj++ )
+        for( jj = 0; jj<ii && name1[jj] == ' '; jj++ )
             ;
 
         if( jj == ii )
@@ -1143,13 +1149,13 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         }
         else
         {
-            m_prefix = FROM_UTF8( &Name1[jj] );
+            m_prefix = FROM_UTF8( &name1[jj] );
 
             //printf("prefix: %s\n", TO_UTF8(component->m_prefix));
         }
 
         if( !newfmt )
-            GetField( REFERENCE )->m_Text = FROM_UTF8( Name2 );
+            GetField( REFERENCE )->m_Text = FROM_UTF8( name2 );
     }
     else
     {
@@ -1200,20 +1206,20 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             ptcar = line + 2;
 
             //copy the path.
-            ii     = ReadDelimitedText( Name1, ptcar, 255 );
+            ii     = ReadDelimitedText( name1, ptcar, 255 );
             ptcar += ii + 1;
-            wxString path = FROM_UTF8( Name1 );
+            wxString path = FROM_UTF8( name1 );
 
             // copy the reference
-            ii     = ReadDelimitedText( Name1, ptcar, 255 );
+            ii     = ReadDelimitedText( name1, ptcar, 255 );
             ptcar += ii + 1;
-            wxString ref = FROM_UTF8( Name1 );
+            wxString ref = FROM_UTF8( name1 );
 
             // copy the multi, if exists
-            ii = ReadDelimitedText( Name1, ptcar, 255 );
-            if( Name1[0] == 0 )  // Nothing read, put a default value
-                sprintf( Name1, "%d", m_unit );
-            int multi = atoi( Name1 );
+            ii = ReadDelimitedText( name1, ptcar, 255 );
+            if( name1[0] == 0 )  // Nothing read, put a default value
+                sprintf( name1, "%d", m_unit );
+            int multi = atoi( name1 );
             if( multi < 0 || multi > 25 )
                 multi = 1;
             AddHierarchicalReference( path, ref, multi );
@@ -1279,13 +1285,13 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             }
 
             GetField( fieldNdx )->m_Text = fieldText;
-            memset( Char3, 0, sizeof(Char3) );
-            if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", Char1,
+            memset( char3, 0, sizeof(char3) );
+            if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", char1,
                                &GetField( fieldNdx )->m_Pos.x,
                                &GetField( fieldNdx )->m_Pos.y,
                                &GetField( fieldNdx )->m_Size.x,
                                &GetField( fieldNdx )->m_Attributs,
-                               Char2, Char3 ) ) < 4 )
+                               char2, char3 ) ) < 4 )
             {
                 aErrorMsg.Printf( wxT( "Component Field error line %d, aborted" ),
                                   aLine.LineNumber() );
@@ -1298,24 +1304,24 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             GetField( fieldNdx )->m_Orient = TEXT_ORIENT_HORIZ;
             GetField( fieldNdx )->m_Size.y = GetField( fieldNdx )->m_Size.x;
 
-            if( Char1[0] == 'V' )
+            if( char1[0] == 'V' )
                 GetField( fieldNdx )->m_Orient = TEXT_ORIENT_VERT;
 
             if( ii >= 7 )
             {
-                if( *Char2 == 'L' )
+                if( *char2 == 'L' )
                     hjustify = GR_TEXT_HJUSTIFY_LEFT;
-                else if( *Char2 == 'R' )
+                else if( *char2 == 'R' )
                     hjustify = GR_TEXT_HJUSTIFY_RIGHT;
-                if( Char3[0] == 'B' )
+                if( char3[0] == 'B' )
                     vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
-                else if( Char3[0] == 'T' )
+                else if( char3[0] == 'T' )
                     vjustify = GR_TEXT_VJUSTIFY_TOP;
-                if( Char3[1] == 'I' )
+                if( char3[1] == 'I' )
                     GetField( fieldNdx )->m_Italic = true;
                 else
                     GetField( fieldNdx )->m_Italic = false;
-                if( Char3[2] == 'B' )
+                if( char3[2] == 'B' )
                     GetField( fieldNdx )->m_Bold = true;
                 else
                     GetField( fieldNdx )->m_Bold = false;
