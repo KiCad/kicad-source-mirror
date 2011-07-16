@@ -335,7 +335,7 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_containe
         DrawPanel->RefreshDrawingRect( zone_container->GetBoundingBox() );
         if( DC )
         {  // Remove the full zone because this is no more an area
-            Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );
+            zone_container->UnFill();
             zone_container->DrawFilledArea( DrawPanel, DC, GR_XOR );
         }
         GetBoard()->Delete( zone_container );
@@ -851,7 +851,11 @@ void PCB_EDIT_FRAME::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_contain
 
     EDA_RECT dirty = zone_container->GetBoundingBox();
 
-    Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );  // Remove fill segments
+    // For compatibility with old boards: remove old SEGZONE fill segments
+    Delete_OldZone_Fill( NULL, zone_container->m_TimeStamp );
+
+    // Remove current filling:
+    zone_container->UnFill();
 
     if( ncont == 0 )    // This is the main outline: remove all
     {

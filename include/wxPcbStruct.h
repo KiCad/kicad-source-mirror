@@ -902,15 +902,16 @@ public:
     // zone handling
 
     /**
-     * Function Delete_Zone_Fill (obsolete)
+     * Function Delete_OldZone_Fill (obsolete)
+     * Used for compatibility with old boards
      * Remove the zone filling which include the segment aZone, or the zone
-     * which have the given time stamp.  A zone is a group of segments which
-     * have the same TimeStamp
+     * which have the given time stamp.
+     * For old boards, a zone is a group of SEGZONE segments which have the same TimeStamp
      * @param aZone = zone segment within the zone to delete. Can be NULL
      * @param aTimestamp = Timestamp for the zone to delete, used if aZone ==
      *                     NULL
      */
-    void Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp = 0 );
+    void Delete_OldZone_Fill( SEGZONE* aZone, long aTimestamp = 0 );
 
 
     /**

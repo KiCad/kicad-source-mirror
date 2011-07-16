@@ -47,6 +47,22 @@ ZONE_CONTAINER::~ZONE_CONTAINER()
     m_Poly = NULL;
 }
 
+/**
+ * Function UnFill
+ * Removes the zone filling
+ * @return true if a previous filling is removed, false if no change
+ * (when no filling found)
+ */
+bool ZONE_CONTAINER::UnFill()
+{
+    bool change = ( m_FilledPolysList.size() > 0 ) || ( m_FillSegmList.size() > 0 );
+
+    m_FilledPolysList.clear();
+    m_FillSegmList.clear();
+    m_IsFilled = false;
+
+    return change;
+}
 
 /**
  * Function GetPosition (virtual)

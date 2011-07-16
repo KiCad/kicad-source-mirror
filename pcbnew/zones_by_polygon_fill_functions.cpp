@@ -36,13 +36,14 @@
 
 
 /**
- * Function Delete_Zone_Fill
- * Remove the zone fillig which include the segment aZone, or the zone which have the given time stamp.
+ * Function Delete_OldZone_Fill (obsolete)
+ * Used for compatibility with old boards
+ * Remove the zone filling which include the segment aZone, or the zone which have the given time stamp.
  * A zone is a group of segments which have the same TimeStamp
  * @param aZone = zone segment within the zone to delete. Can be NULL
  * @param aTimestamp = Timestamp for the zone to delete, used if aZone == NULL
  */
-void PCB_EDIT_FRAME::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
+void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, long aTimestamp )
 {
     bool          modify  = false;
     unsigned long TimeStamp;
@@ -61,19 +62,6 @@ void PCB_EDIT_FRAME::Delete_Zone_Fill( SEGZONE* aZone, long aTimestamp )
             modify = TRUE;
             /* remove item from linked list and free memory */
             zone->DeleteStructure();
-        }
-    }
-
-    // Now delete the outlines of the corresponding copper areas (deprecated)
-    for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
-    {
-        ZONE_CONTAINER* zone = GetBoard()->GetArea( ii );
-        if( zone->m_TimeStamp == TimeStamp )
-        {
-            modify = TRUE;
-            zone->m_FilledPolysList.clear();
-            zone->m_FillSegmList.clear();
-            zone->m_IsFilled = false;
         }
     }
 
@@ -120,7 +108,7 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
     zone_container->m_FilledPolysList.clear();
-    Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );
+    zone_container->UnFill();
     zone_container->BuildFilledPolysListData( GetBoard() );
 
     OnModify();

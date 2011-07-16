@@ -289,6 +289,13 @@ public:
      */
     int  Fill_Zone_Areas_With_Segments();
 
+    /**
+     * Function UnFill
+     * Removes the zone filling
+     * @return true if a previous filling is removed, false if no change
+     * (when no filling found)
+     */
+    bool  UnFill();
 
     /* Geometric transformations: */
 

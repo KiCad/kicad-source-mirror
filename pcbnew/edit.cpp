@@ -381,7 +381,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             SEGZONE* zsegm   = (SEGZONE*) GetCurItem();
             int      netcode = zsegm->GetNet();
-            Delete_Zone_Fill( zsegm );
+            Delete_OldZone_Fill( zsegm );
             SetCurItem( NULL );
             test_1_net_connexion( NULL, netcode );
             OnModify();
@@ -498,7 +498,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( ( GetCurItem() )->Type() == TYPE_ZONE_CONTAINER )
         {
             ZONE_CONTAINER* zone_container = (ZONE_CONTAINER*) GetCurItem();
-            Delete_Zone_Fill( NULL, zone_container->m_TimeStamp );
+            zone_container->UnFill();
             test_1_net_connexion( NULL, zone_container->GetNet() );
             OnModify();
             GetBoard()->DisplayInfo( this );
@@ -1058,7 +1058,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         break;
 
     case TYPE_ZONE:
-        Delete_Zone_Fill( (SEGZONE*) Item );
+        Delete_OldZone_Fill( (SEGZONE*) Item );
         break;
 
     case TYPE_ZONE_EDGE_CORNER:
