@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 18 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_pcb_text_properties_base__
-#define __dialog_pcb_text_properties_base__
+#ifndef __DIALOG_PCB_TEXT_PROPERTIES_BASE_H__
+#define __DIALOG_PCB_TEXT_PROPERTIES_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -67,9 +68,9 @@ class DIALOG_PCB_TEXT_PROPERTIES_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 433,465 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+		DIALOG_PCB_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Text Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 433,465 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_PCB_TEXT_PROPERTIES_BASE();
 	
 };
 
-#endif //__dialog_pcb_text_properties_base__
+#endif //__DIALOG_PCB_TEXT_PROPERTIES_BASE_H__

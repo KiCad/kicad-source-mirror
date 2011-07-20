@@ -420,6 +420,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         {
             /* Compute the rotation center and put it on grid */
             wxPoint rotationPoint = block->Centre();
+            rotationPoint = GetScreen()->GetNearestGridPosition( rotationPoint );
             GetScreen()->SetCrossHairPosition( rotationPoint );
             SaveCopyInUndoList( block->m_ItemsSelection, UR_ROTATED, rotationPoint );
             RotateListOfItems( block->m_ItemsSelection, rotationPoint );
@@ -438,6 +439,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         {
             /* Compute the mirror center and put it on grid */
             wxPoint mirrorPoint = block->Centre();
+            mirrorPoint = GetScreen()->GetNearestGridPosition( mirrorPoint );
             GetScreen()->SetCrossHairPosition( mirrorPoint );
             SaveCopyInUndoList( block->m_ItemsSelection, UR_MIRRORED_X, mirrorPoint );
             Mirror_X_ListOfItems( block->m_ItemsSelection, mirrorPoint );
@@ -455,6 +457,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         {
             /* Compute the mirror center and put it on grid */
             wxPoint mirrorPoint = block->Centre();
+            mirrorPoint = GetScreen()->GetNearestGridPosition( mirrorPoint );
             GetScreen()->SetCrossHairPosition( mirrorPoint );
             SaveCopyInUndoList( block->m_ItemsSelection, UR_MIRRORED_Y, mirrorPoint );
             MirrorListOfItems( block->m_ItemsSelection, mirrorPoint );

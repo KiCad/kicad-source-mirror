@@ -1219,7 +1219,7 @@ wxString TRACK::GetSelectMenuText() const
     }
     else
     {
-        text << _( "** BOARD NOT DEFINED ** " );
+        text << _( "** BOARD NOT DEFINED **" );
     }
 
     text << _( " on " ) << GetLayerName() << wxT("  ") << _("Net:") << GetNet()
