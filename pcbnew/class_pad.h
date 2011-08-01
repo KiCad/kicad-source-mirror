@@ -2,6 +2,10 @@
 /* class_pad.h : Pads description */
 /**********************************/
 
+#ifndef _PAD_H_
+#define _PAD_H_
+
+
 class Pcb3D_GLCanvas;
 
 #include "pad_shapes.h"
@@ -13,8 +17,8 @@ class Pcb3D_GLCanvas;
  */
 
 // PAD_STANDARD:
-#define PAD_STANDARD_DEFAULT_LAYERS ALL_CU_LAYERS | SILKSCREEN_LAYER_FRONT | SOLDERMASK_LAYER_BACK | \
-    SOLDERMASK_LAYER_FRONT
+#define PAD_STANDARD_DEFAULT_LAYERS ALL_CU_LAYERS | SILKSCREEN_LAYER_FRONT | \
+    SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT
 
 // PAD_CONN:
 #define PAD_CONN_DEFAULT_LAYERS LAYER_FRONT | SOLDERPASTE_LAYER_FRONT | SOLDERMASK_LAYER_FRONT
@@ -26,13 +30,15 @@ class Pcb3D_GLCanvas;
 #define PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS LAYER_BACK | SILKSCREEN_LAYER_FRONT | \
     SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT
 
+
 // Helper class to store parameters used to draw a pad
 class PAD_DRAWINFO
 {
 public:
     EDA_DRAW_PANEL * m_DrawPanel;    // the EDA_DRAW_PANEL used to draw a PAD ; can be null
     int m_DrawMode;             // the draw mode
-    int m_Color;                // color used to draw the pad shape , from pad layers and visible layers
+    int m_Color;                // color used to draw the pad shape , from pad layers and
+                                // visible layers
     int m_HoleColor;            // color used to draw the pad hole
     int m_PadClearance;         // clearance value, used to draw the pad area outlines
     wxSize m_Mask_margin;       // margin, used to draw solder paste when only one layer is shown
@@ -60,8 +66,8 @@ public:
     union
     {
         unsigned long m_NumPadName;
-        char          m_Padname[4]; /* Pad name (4 char) or a long identifier
-                                     *  (used in pad name comparisons because  this is faster than string comparison)
+        char          m_Padname[4]; /* Pad name (4 char) or a long identifier (used in pad name
+                                     * comparisons because  this is faster than string comparison)
                                      */
     };
 
@@ -72,8 +78,9 @@ public:
     int    m_PadShape;              // Shape: PAD_CIRCLE, PAD_RECT, PAD_OVAL, PAD_TRAPEZOID
     int    m_DrillShape;            // Shape PAD_CIRCLE, PAD_OVAL
 
-    wxSize m_Drill;                 // Drill diam (drill shape = PAD_CIRCLE) or drill size(shape = OVAL)
-                                    // for drill shape = PAD_CIRCLE, drill diam = m_Drill.x
+    wxSize m_Drill;                 // Drill diam (drill shape = PAD_CIRCLE) or drill size
+                                    // (shape = OVAL) for drill shape = PAD_CIRCLE, drill
+                                    // diam = m_Drill.x
 
     wxSize m_Offset;    /* This parameter is useful only for oblong pads (it can be used for other
                          * shapes, but without any interest).
@@ -92,7 +99,8 @@ public:
 
     wxSize  m_DeltaSize;            // delta on rectangular shapes
 
-    wxPoint m_Pos0;                 // Initial Pad position (i.e. pas position relative to the module anchor, orientation 0
+    wxPoint m_Pos0;                 // Initial Pad position (i.e. pas position relative to the
+                                    // module anchor, orientation 0
 
     int     m_ShapeMaxRadius;       // radius of the circle containing the pad shape
     int     m_Attribut;             // NORMAL, PAD_SMD, PAD_CONN
@@ -109,9 +117,9 @@ public:
     int    m_LocalClearance;
 
     // Local mask margins: when NULL, the parent footprint design values are used
-    int    m_LocalSolderMaskMargin;                             // Local solder mask margin
-    int    m_LocalSolderPasteMargin;                            // Local solder paste margin absolute value
-    double m_LocalSolderPasteMarginRatio;                       // Local solder mask margin ratio value of pad size
+    int    m_LocalSolderMaskMargin;            // Local solder mask margin
+    int    m_LocalSolderPasteMargin;           // Local solder paste margin absolute value
+    double m_LocalSolderPasteMarginRatio;      // Local solder mask margin ratio value of pad size
     // The final margin is the sum of these 2 values
 
 private:
@@ -181,7 +189,9 @@ public:
      * to the real clearance value (usually near from 1.0)
     */
     void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
-            int aClearanceValue, int aCircleToSegmentsCount, double aCorrectionFactor );
+                                               int aClearanceValue,
+                                               int aCircleToSegmentsCount,
+                                               double aCorrectionFactor );
 
      /**
      * Function GetClearance
@@ -256,7 +266,8 @@ public:
      * Build the Corner list of the polygonal shape,
      * depending on shape, extra size (clearance ...) and orientation
      * @param aCoord = a buffer to fill (4 corners).
-     * @param aInflateValue = wxSize: the clearance or margin value. value > 0: inflate, < 0 deflate
+     * @param aInflateValue = wxSize: the clearance or margin value. value > 0:
+     *                        inflate, < 0 deflate
      * @param aRotation = full rotation of the polygon
      */
     void          BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const;
@@ -267,12 +278,13 @@ public:
      * Build an equivalent segment having the same shape as the OVAL shape,
      * Useful in draw function and in DRC and HitTest functions,
      *  because segments are already well handled by track tests
-     * @param aSegStart = the starting point of the equivalent segment, relative to the shape position.
+     * @param aSegStart = the starting point of the equivalent segment relative to the shape
+     *                    position.
      * @param aSegEnd = the ending point of the equivalent segment, relative to the shape position
      * @param aRotation = full rotation of the segment
      * @return the width of the segment
      */
-    int BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation) const;
+    int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation ) const;
 
     // others
     void          SetPadName( const wxString& name );    // Change pad name
@@ -283,7 +295,6 @@ public:
     int           GetMaxRadius() const;
 
     const wxPoint ReturnShapePos();
-
 
     /**
      * Function GetNet
@@ -302,7 +313,6 @@ public:
      */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-
     /**
      * Function IsOnLayer
      * tests to see if this object is on the given layer.  Is virtual so
@@ -312,7 +322,6 @@ public:
      * @return bool - true if on given layer, else false.
      */
     bool IsOnLayer( int aLayer ) const;
-
 
     /**
      * Function HitTest
@@ -359,6 +368,8 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
+    virtual const char** GetMenuImage() const { return (const char**) pad_xpm; }
+
     /**
      * Function ShowPadShape
      * @return the name of the shape
@@ -386,3 +397,10 @@ public:
 };
 
 typedef class D_PAD* LISTE_PAD;
+
+
+/*  LocalWords:  eeschema vout
+ */
+
+
+#endif     // _PAD_H_

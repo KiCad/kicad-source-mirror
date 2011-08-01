@@ -11,13 +11,13 @@
 
 /* Shapes for segments (graphic segments and tracks) ( .m_Shape member ) */
 enum Track_Shapes {
-    S_SEGMENT = 0,      /* usual segment : line with rounded ends */
-    S_RECT,             /* segment with non rounded ends */
-    S_ARC,              /* Arcs (with rounded ends)*/
-    S_CIRCLE,           /* ring*/
-    S_POLYGON,          /* polygonal shape (not yet used for tracks, but could be in microwave apps) */
-    S_CURVE,            /* Bezier Curve*/
-    S_LAST              /* last value for this list */
+    S_SEGMENT = 0,  /* usual segment : line with rounded ends */
+    S_RECT,         /* segment with non rounded ends */
+    S_ARC,          /* Arcs (with rounded ends) */
+    S_CIRCLE,       /* ring */
+    S_POLYGON,      /* polygon (not yet used for tracks, but could be in microwave apps) */
+    S_CURVE,        /* Bezier Curve */
+    S_LAST          /* last value for this list */
 };
 
 
@@ -60,7 +60,7 @@ public:
     /**
      * A value of wxPoint(0,0) which can be passed to the Draw() functions.
      */
-    static wxPoint  ZeroOffset;
+    static wxPoint ZeroOffset;
 
     BOARD_ITEM* Next() const { return (BOARD_ITEM*) Pnext; }
     BOARD_ITEM* Back() const { return (BOARD_ITEM*) Pback; }
@@ -69,8 +69,7 @@ public:
     /**
      * Function GetPosition
      * returns the position of this object.
-     * @return wxPoint& - The position of this object, non-const so it
-     *          can be changed
+     * @return wxPoint& - The position of this object, non-const so it can be changed
      */
     virtual wxPoint& GetPosition() = 0;
 
@@ -85,9 +84,9 @@ public:
      * sets the layer this item is on.
      * @param aLayer The layer number.
      * is virtual because some items (in fact: class DIMENSION)
-     * have a slightly different initialisation
+     * have a slightly different initialization
      */
-    virtual void  SetLayer( int aLayer )  { m_Layer = aLayer; }
+    virtual void SetLayer( int aLayer )  { m_Layer = aLayer; }
 
 
     /**
@@ -117,9 +116,9 @@ public:
      * form of testing.
      * @return bool - true if a track or via, else false.
      */
-    bool IsTrack( ) const
+    bool IsTrack() const
     {
-        return (Type() == TYPE_TRACK) || (Type() == TYPE_VIA);
+        return ( Type() == TYPE_TRACK ) || ( Type() == TYPE_VIA );
     }
 
     /**
@@ -139,7 +138,6 @@ public:
      */
     virtual void UnLink();
 
-
     /**
      * Function DeleteStructure
      * deletes this object after UnLink()ing it from its owner.
@@ -152,20 +150,10 @@ public:
 
 
     /**
-     * Function MenuIcon
-     * @return const char** - The XPM to use in any UI control which can help
-     *  identify this item.
-     * @todo: make this virtual and split into each derived class
-     */
-    const char**    MenuIcon() const;
-
-
-    /**
      * Function ShowShape
      * converts the enum Track_Shapes integer value to a wxString.
      */
     static wxString ShowShape( Track_Shapes aShape );
-
 
     /**
      * Function Save
@@ -173,17 +161,17 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    virtual bool    Save( FILE* aFile ) const = 0;
+    virtual bool Save( FILE* aFile ) const = 0;
 
-    // Some geometric transforms, that must be rewrittem for derived classes
+    // Some geometric transforms, that must be rewritten for derived classes
     /**
      * Function Move
      * move this object.
      * @param aMoveVector - the move vector for this object.
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
-        wxMessageBox(wxT("virtual BOARD_ITEM::Move used, should not occur"), GetClass());
+        wxMessageBox( wxT( "virtual BOARD_ITEM::Move used, should not occur" ), GetClass() );
     }
 
     /**
@@ -192,9 +180,9 @@ public:
      * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate(const wxPoint& aRotCentre, int aAngle)
+    virtual void Rotate( const wxPoint& aRotCentre, int aAngle )
     {
-        wxMessageBox(wxT("virtual BOARD_ITEM::Rotate used, should not occur"), GetClass());
+        wxMessageBox( wxT( "virtual BOARD_ITEM::Rotate used, should not occur" ), GetClass() );
     }
 
     /**
@@ -202,9 +190,9 @@ public:
      * Flip this object, i.e. change the board side for this object
      * @param aCentre - the rotation point.
      */
-    virtual void Flip(const wxPoint& aCentre )
+    virtual void Flip( const wxPoint& aCentre )
     {
-        wxMessageBox(wxT("virtual BOARD_ITEM::Flip used, should not occur"), GetClass());
+        wxMessageBox( wxT( "virtual BOARD_ITEM::Flip used, should not occur" ), GetClass() );
     }
 
 
@@ -236,14 +224,14 @@ class NETCLASS;
 class BOARD_CONNECTED_ITEM : public BOARD_ITEM
 {
 protected:
-    int         m_NetCode;          // Net number
+    int         m_NetCode;      // Net number
 
-    int         m_Subnet;           /* In rastnest routines : for the current net,
-                                     *  block number (number common to the current connected items found)
-                                     */
+    int         m_Subnet;       /* In rastnest routines : for the current net, block number
+                                 * (number common to the current connected items found)
+                                 */
 
-    int         m_ZoneSubnet;   	   // variable used in rastnest computations : for the current net,
-                                    // handle block number in zone connection
+    int         m_ZoneSubnet;   // variable used in rastnest computations : for the current net,
+                                // handle block number in zone connection
 
 public:
     BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype );
@@ -270,7 +258,6 @@ public:
     int GetZoneSubNet() const;
     void SetZoneSubNet( int aSubNetCode );
 
-
     /**
      * Function GetClearance
      * returns the clearance in 1/10000 inches.  If \a aItem is not NULL then the
@@ -292,14 +279,14 @@ public:
      * Function GetNetClassName
      * @return the Net Class name of this item
      */
-    wxString GetNetClassName( ) const;
+    wxString GetNetClassName() const;
 };
 
 
 /*
  * class BOARD_ITEM_LIST
  * Handles a collection of BOARD_ITEM elements
-*/
+ */
 class BOARD_ITEM_LIST : public BOARD_ITEM
 {
     typedef boost::ptr_vector<BOARD_ITEM>   ITEM_ARRAY;
@@ -358,29 +345,29 @@ public:
         return myItems.size();
     }
 
-    void    Append( BOARD_ITEM* aItem )
+    void Append( BOARD_ITEM* aItem )
     {
         myItems.push_back( aItem );
     }
 
-    BOARD_ITEM*   Replace( int aIndex, BOARD_ITEM* aItem )
+    BOARD_ITEM* Replace( int aIndex, BOARD_ITEM* aItem )
     {
         ITEM_ARRAY::auto_type ret = myItems.replace( aIndex, aItem );
         return ret.release();
     }
 
-    BOARD_ITEM*   Remove( int aIndex )
+    BOARD_ITEM* Remove( int aIndex )
     {
         ITEM_ARRAY::auto_type ret = myItems.release( myItems.begin()+aIndex );
         return ret.release();
     }
 
-    void    Insert( int aIndex, BOARD_ITEM* aItem )
+    void Insert( int aIndex, BOARD_ITEM* aItem )
     {
         myItems.insert( myItems.begin()+aIndex, aItem );
     }
 
-    BOARD_ITEM*   At( int aIndex ) const
+    BOARD_ITEM* At( int aIndex ) const
     {
         // we have varying sized objects and are using polymorphism, so we
         // must return a pointer not a reference.
@@ -392,7 +379,7 @@ public:
         return At( aIndex );
     }
 
-    void    Delete( int aIndex )
+    void Delete( int aIndex )
     {
         myItems.erase( myItems.begin()+aIndex );
     }
@@ -406,10 +393,10 @@ public:
     {
         if( GetCount() )
             return Remove( GetCount()-1 );
+
         return NULL;
     }
 };
 
 
 #endif /* BOARD_ITEM_STRUCT_H */
-

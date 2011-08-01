@@ -1,11 +1,13 @@
-/*****************************/
+/******************************/
 /* DIMENSION class definition */
-/*****************************/
+/******************************/
+
 #ifndef DIMENSION_H
 #define DIMENSION_H
 
 #include "base_struct.h"
 #include "richio.h"
+
 
 class DIMENSION : public BOARD_ITEM
 {
@@ -39,16 +41,16 @@ public:
      * sets the layer this item is on.
      * @param aLayer The layer number.
      */
-    void  SetLayer( int aLayer );
+    void SetLayer( int aLayer );
 
     /**
      * Function AdjustDimensionDetails
      * Calculate coordinates of segments used to draw the dimension.
      * @param aDoNotChangeText (bool) if false, the dimension text is initialized
      */
-    void AdjustDimensionDetails( bool aDoNotChangeText = false);
+    void AdjustDimensionDetails( bool aDoNotChangeText = false );
 
-    bool    ReadDimensionDescr( LINE_READER* aReader );
+    bool ReadDimensionDescr( LINE_READER* aReader );
 
     /**
      * Function Save
@@ -58,19 +60,19 @@ public:
      */
     bool Save( FILE* aFile ) const;
 
-    void    SetText( const wxString& NewText );
+    void SetText( const wxString& NewText );
     wxString GetText( void ) const;
 
-    void    Copy( DIMENSION* source );
+    void Copy( DIMENSION* source );
 
-    void    Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                  int aColorMode, const wxPoint& offset = ZeroOffset );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
+               int aColorMode, const wxPoint& offset = ZeroOffset );
 
     /**
      * Function Move
      * @param offset : moving vector
      */
-    void    Move(const wxPoint& offset);
+    void Move(const wxPoint& offset);
 
     /**
      * Function Rotate
@@ -78,14 +80,14 @@ public:
      * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate(const wxPoint& aRotCentre, int aAngle);
+    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
 
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
      * @param aCentre - the rotation point.
      */
-    virtual void Flip(const wxPoint& aCentre );
+    virtual void Flip( const wxPoint& aCentre );
 
     /**
      * Function Mirror
@@ -94,7 +96,7 @@ public:
      * the layer is not changed
      * @param axis_pos : vertical axis position
      */
-    void    Mirror(const wxPoint& axis_pos);
+    void Mirror( const wxPoint& axis_pos );
 
     /**
      * Function DisplayInfo
@@ -103,7 +105,7 @@ public:
      * Is virtual from EDA_ITEM.
      * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void    DisplayInfo( EDA_DRAW_FRAME* frame );
+    void DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
      * Function HitTest
@@ -111,7 +113,7 @@ public:
      * @param ref_pos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( const wxPoint& ref_pos );
+    bool HitTest( const wxPoint& ref_pos );
 
     /**
      * Function HitTest (overlaid)
@@ -120,7 +122,7 @@ public:
      * @param refArea : the given EDA_RECT
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( EDA_RECT& refArea );
+    bool HitTest( EDA_RECT& refArea );
 
 
     /**
@@ -136,6 +138,8 @@ public:
     EDA_RECT GetBoundingBox() const;
 
     virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_dimension_xpm; }
 };
 
 #endif  // #define DIMENSION_H

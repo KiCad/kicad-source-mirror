@@ -4,8 +4,10 @@
 
 #ifndef CLASS_DRAWSEGMENT_H
 #define CLASS_DRAWSEGMENT_H
+
 #include "PolyLine.h"
 #include "richio.h"
+
 
 class DRAWSEGMENT : public BOARD_ITEM
 {
@@ -60,7 +62,7 @@ public:
     int         GetRadius() const
     {
         double radius = hypot( (double) (m_End.x - m_Start.x), (double) (m_End.y - m_Start.y) );
-        return wxRound(radius);
+        return wxRound( radius );
     }
 
     /**
@@ -166,7 +168,7 @@ public:
      * @param aClearanceValue = the clearance around the pad
      * @param aCircleToSegmentsCount = the number of segments to approximate a circle
      * @param aCorrectionFactor = the correction to apply to circles radius to keep
-     * clearance when the circle is approxiamted by segment bigger or equal
+     * clearance when the circle is approximated by segment bigger or equal
      * to the real clearance value (usually near from 1.0)
      */
     void TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
@@ -175,6 +177,8 @@ public:
                                                double                 aCorrectionFactor );
 
     virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_dashed_line_xpm; }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os );

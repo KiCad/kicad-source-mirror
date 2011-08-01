@@ -100,7 +100,7 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
             item = (*m_Collector)[ii];
 
             text = item->GetSelectMenuText();
-            xpm  = item->MenuIcon();
+            xpm  = item->GetMenuImage();
 
             ADD_MENUITEM( &itemMenu,
                           ID_POPUP_PCB_ITEM_SELECTION_START + ii,

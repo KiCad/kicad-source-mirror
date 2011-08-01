@@ -3,10 +3,15 @@
 /*******************************************************/
 
 
+#ifndef _MODULE_H_
+#define _MODULE_H_
+
+
 class Pcb3D_GLCanvas;
 class S3D_MASTER;
 
 #include "richio.h"
+
 
 /************************************/
 /* Modules (footprints) description */
@@ -330,6 +335,8 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
+    virtual const char** GetMenuImage() const { return (const char**) module_xpm; }
+
  #if defined(DEBUG)
 
     /**
@@ -343,3 +350,6 @@ public:
 
 #endif
 };
+
+
+#endif     // _MODULE_H_

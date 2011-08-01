@@ -11,6 +11,7 @@
 #include "richio.h"
 #include "class_zone_setting.h"
 
+
 /* a small class used when filling areas with segments */
 class SEGMENT
 {
@@ -25,6 +26,7 @@ public:
         m_End = aEnd;
     }
  };
+
 
 /************************/
 /* class ZONE_CONTAINER */
@@ -427,6 +429,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
+    virtual const char** GetMenuImage() const { return (const char**) add_zone_xpm; }
 };
 
 

@@ -12,7 +12,8 @@
 // Via attributes (m_Shape parameter)
 #define VIA_THROUGH             3           /* Always a through hole via */
 #define VIA_BLIND_BURIED        2           /* this via can be on internal layers */
-#define VIA_MICROVIA            1           /* this via which connect from an external layer to the near neighbor internal layer */
+#define VIA_MICROVIA            1           /* this via which connect from an external layer
+                                             * to the near neighbor internal layer */
 #define VIA_NOT_DEFINED         0           /* not yet used */
 
 /***/
@@ -65,7 +66,7 @@ public:
      * move this object.
      * @param aMoveVector - the move vector for this object.
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         m_Start += aMoveVector;
         m_End += aMoveVector;
@@ -77,14 +78,14 @@ public:
      * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate(const wxPoint& aRotCentre, int aAngle);
+    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
 
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
      * @param aCentre - the rotation point.
      */
-    virtual void Flip(const wxPoint& aCentre );
+    virtual void Flip( const wxPoint& aCentre );
 
     /**
      * Function GetPosition
@@ -168,19 +169,19 @@ public:
      * Set the drill value for vias
      * @param drill_value = new drill value
     */
-    void SetDrillValue(int drill_value) { m_Drill = drill_value; }
+    void SetDrillValue( int drill_value ) { m_Drill = drill_value; }
 
     /**
      * Function SetDrillDefault
      * Set the drill value for vias at default value (-1)
     */
-    void SetDrillDefault(void) { m_Drill = -1; }
+    void SetDrillDefault( void ) { m_Drill = -1; }
 
     /**
      * Function IsDrillDefault
      * @return true if the drill value is default value (-1)
     */
-    bool IsDrillDefault(void) { return m_Drill <= 0; }
+    bool IsDrillDefault( void ) { return m_Drill <= 0; }
 
     /**
      * Function GetDrillValue
@@ -287,6 +288,8 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
+    virtual const char** GetMenuImage() const { return (const char**) showtrack_xpm; }
+
 #if defined (DEBUG)
 
     /**
@@ -330,6 +333,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
+    virtual const char** GetMenuImage() const { return (const char**) add_zone_xpm; }
 };
 
 
@@ -385,6 +389,8 @@ public:
 
 
     virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) via_sketch_xpm; }
 
 #if defined (DEBUG)
 

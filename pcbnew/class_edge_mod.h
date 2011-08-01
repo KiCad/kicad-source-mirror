@@ -2,6 +2,9 @@
 /* class_edge_module.h : EDGE_MODULE class definition. */
 /*******************************************************/
 
+#ifndef CLASS_DRAWSEGMENT_H
+#define _CLASS_EDGE_MOD_H_
+
 #include "richio.h"
 
 class Pcb3D_GLCanvas;
@@ -64,7 +67,7 @@ public:
     int         GetRadius() const
     {
         double radius = hypot( (double) (m_End.x - m_Start.x), (double) (m_End.y - m_Start.y) );
-        return wxRound(radius);
+        return wxRound( radius );
     }
 
     void             Copy( EDGE_MODULE* source ); // copy structure
@@ -155,6 +158,8 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
+    virtual const char** GetMenuImage() const { return (const char**) show_mod_edge_xpm; }
+
 #if defined(DEBUG)
 
     /**
@@ -168,3 +173,5 @@ public:
 
 #endif
 };
+
+#endif    // _CLASS_EDGE_MOD_H_

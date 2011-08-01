@@ -1,12 +1,14 @@
 /********************************/
 /* TEXTE_PCB class definition. */
 /********************************/
+
 #ifndef CLASS_PCB_TEXT_H
 #define CLASS_PCB_TEXT_H
 
 #include "base_struct.h"
 #include "PolyLine.h"
 #include "richio.h"
+
 
 class TEXTE_PCB : public BOARD_ITEM, public EDA_TEXT
 {
@@ -19,7 +21,7 @@ public:
      * Function GetPosition
      * returns the position of this object.
      * @return wxPoint& - The position of this object, non-const so it
-     *          can be changed
+     *                    can be changed
      */
     wxPoint& GetPosition()
     {
@@ -31,7 +33,7 @@ public:
      * move this object.
      * @param aMoveVector - the move vector for this object.
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
@@ -42,14 +44,14 @@ public:
      * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate(const wxPoint& aRotCentre, int aAngle);
+    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
 
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
      * @param aCentre - the rotation point.
      */
-    virtual void Flip(const wxPoint& aCentre );
+    virtual void Flip( const wxPoint& aCentre );
 
     /* duplicate structure */
     void Copy( TEXTE_PCB* source );
@@ -130,6 +132,8 @@ public:
                                                double                 aCorrectionFactor );
 
     virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_text_xpm; }
 
 #if defined(DEBUG)
     /**

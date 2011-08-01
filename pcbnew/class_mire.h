@@ -1,6 +1,7 @@
 /****************************************************/
 /* MIREPCB class definition.  (targets for photos)  */
 /****************************************************/
+
 #ifndef MIRE_H
 #define MIRE_H
 
@@ -34,7 +35,7 @@ public:
      * move this object.
      * @param aMoveVector - the move vector for this object.
      */
-    virtual void Move(const wxPoint& aMoveVector)
+    virtual void Move( const wxPoint& aMoveVector )
     {
         m_Pos += aMoveVector;
     }
@@ -45,14 +46,14 @@ public:
      * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate(const wxPoint& aRotCentre, int aAngle);
+    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
 
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
      * @param aCentre - the rotation point.
      */
-    virtual void Flip(const wxPoint& aCentre );
+    virtual void Flip( const wxPoint& aCentre );
 
     /**
      * Function Save
@@ -90,6 +91,8 @@ public:
     EDA_RECT GetBoundingBox() const;
 
     virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) add_mires_xpm; }
 };
 
 

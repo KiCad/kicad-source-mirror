@@ -14,6 +14,7 @@
 
 #define UMBILICAL_COLOR   LIGHTBLUE
 
+
 class TEXTE_MODULE : public BOARD_ITEM, public EDA_TEXT
 {
 /* Note: orientation in 1/10 deg relative to the footprint
@@ -21,7 +22,7 @@ class TEXTE_MODULE : public BOARD_ITEM, public EDA_TEXT
  */
 public:
     wxPoint m_Pos0;         // text coordinates relatives to the footprint
-                            // ancre, orient 0
+                            // anchor, orient 0
                             // Text coordinate ref point is the text centre
     char    m_Type;         // 0: ref,1: val, others = 2..255
     bool    m_NoShow;       // true = invisible
@@ -45,8 +46,6 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
 
 
     void     Copy( TEXTE_MODULE* source ); // copy structure
-
-    /* Gestion du texte */
 
     int      GetLength() const;        /* text length */
 
@@ -160,6 +159,8 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
 
 
     virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) footprint_text_xpm; }
 
 #if defined(DEBUG)
 

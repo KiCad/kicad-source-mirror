@@ -1,8 +1,6 @@
-/********************************************************/
-/* Routines generales de gestion des commandes usuelles */
-/********************************************************/
-
+/****************/
 /* controle.cpp */
+/****************/
 
 #include "fctsys.h"
 #include "common.h"
@@ -14,7 +12,7 @@
 
 #include "collectors.h"
 
-//external funtions used here:
+//external functions used here:
 extern bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame,
                        int aCurrentTool, wxSize grid, wxPoint on_grid, wxPoint* curpos );
 
@@ -165,7 +163,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         item = (*m_Collector)[0];
         SetCurItem( item );
     }
-    // if all are modules, find the smallest one amoung the primary choices
+    // if all are modules, find the smallest one among the primary choices
     else if( ( item = AllAreModulesAndReturnSmallestIfSo( m_Collector ) ) != NULL )
     {
         SetCurItem( item );
@@ -198,7 +196,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             item = (*m_Collector)[i];
 
             text = item->GetSelectMenuText();
-            xpm  = item->MenuIcon();
+            xpm  = item->GetMenuImage();
 
             ADD_MENUITEM( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START + i, text, xpm );
         }
@@ -270,25 +268,25 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     switch( aHotKey )
     {
-    case WXK_NUMPAD8:       /* Deplacement curseur vers le haut */
+    case WXK_NUMPAD8:
     case WXK_UP:
         pos.y -= wxRound( gridSize.y );
         DrawPanel->MoveCursor( pos );
         break;
 
-    case WXK_NUMPAD2:       /* Deplacement curseur vers le bas */
+    case WXK_NUMPAD2:
     case WXK_DOWN:
         pos.y += wxRound( gridSize.y );
         DrawPanel->MoveCursor( pos );
         break;
 
-    case WXK_NUMPAD4:       /* Deplacement curseur vers la gauche */
+    case WXK_NUMPAD4:
     case WXK_LEFT:
         pos.x -= wxRound( gridSize.x );
         DrawPanel->MoveCursor( pos );
         break;
 
-    case WXK_NUMPAD6:      /* Deplacement curseur vers la droite */
+    case WXK_NUMPAD6:
     case WXK_RIGHT:
         pos.x += wxRound( gridSize.x );
         DrawPanel->MoveCursor( pos );

@@ -25,8 +25,8 @@ public:
      * @param bPos The position of the second of two objects
      */
     MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
-           const wxString& aText, const wxPoint& aPos,
-           const wxString& bText, const wxPoint& bPos );
+                const wxString& aText, const wxPoint& aPos,
+                const wxString& bText, const wxPoint& bPos );
 
     /**
      * Constructor
@@ -36,7 +36,7 @@ public:
      * @param aPos The position of the object
      */
     MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
-           const wxString& aText, const wxPoint& aPos );
+                const wxString& aText, const wxPoint& aPos );
 
     ~MARKER_PCB();
 
@@ -56,14 +56,14 @@ public:
      * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate(const wxPoint& aRotCentre, int aAngle);
+    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
 
     /**
      * Function Flip
      * Flip this object, i.e. change the board side for this object
      * @param aCentre - the rotation point.
      */
-    virtual void Flip(const wxPoint& aCentre );
+    virtual void Flip( const wxPoint& aCentre );
 
     /**
      * Function Draw
@@ -116,6 +116,8 @@ public:
     }
 
     virtual wxString GetSelectMenuText() const;
+
+    virtual const char** GetMenuImage() const { return (const char**) drc_xpm; }
 };
 
 
