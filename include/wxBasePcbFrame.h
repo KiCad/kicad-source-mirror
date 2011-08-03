@@ -34,7 +34,7 @@ class TEXTE_MODULE;
 class MIREPCB;
 class DIMENSION;
 class EDGE_MODULE;
-class WinEDA3D_DrawFrame;
+class EDA_3D_FRAME;
 class DRC;
 class ZONE_CONTAINER;
 class DRAWSEGMENT;
@@ -60,7 +60,7 @@ public:
     UserUnitType            m_UserGridUnit;
     wxRealPoint             m_UserGridSize;
 
-    WinEDA3D_DrawFrame*     m_Draw3DFrame;
+    EDA_3D_FRAME*           m_Draw3DFrame;
     WinEDA_ModuleEditFrame* m_ModuleEditFrame;
 
 protected:

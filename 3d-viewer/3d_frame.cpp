@@ -23,22 +23,19 @@ double       ZTop;
 double       DataScale3D; // 3D conversion units.
 
 
-BEGIN_EVENT_TABLE( WinEDA3D_DrawFrame, wxFrame )
-    EVT_ACTIVATE( WinEDA3D_DrawFrame::OnActivate )
-    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, WinEDA3D_DrawFrame::Process_Zoom )
+BEGIN_EVENT_TABLE( EDA_3D_FRAME, wxFrame )
+    EVT_ACTIVATE( EDA_3D_FRAME::OnActivate )
+    EVT_TOOL_RANGE( ID_ZOOM_IN, ID_ZOOM_PAGE, EDA_3D_FRAME::Process_Zoom )
     EVT_TOOL_RANGE( ID_START_COMMAND_3D, ID_END_COMMAND_3D,
-                    WinEDA3D_DrawFrame::Process_Special_Functions )
-    EVT_MENU( wxID_EXIT, WinEDA3D_DrawFrame::Exit3DFrame )
-    EVT_MENU( ID_MENU_SCREENCOPY_PNG,
-              WinEDA3D_DrawFrame::Process_Special_Functions )
-    EVT_MENU( ID_MENU_SCREENCOPY_JPEG,
-              WinEDA3D_DrawFrame::Process_Special_Functions )
-    EVT_CLOSE( WinEDA3D_DrawFrame::OnCloseWindow )
+                    EDA_3D_FRAME::Process_Special_Functions )
+    EVT_MENU( wxID_EXIT, EDA_3D_FRAME::Exit3DFrame )
+    EVT_MENU( ID_MENU_SCREENCOPY_PNG, EDA_3D_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_MENU_SCREENCOPY_JPEG, EDA_3D_FRAME::Process_Special_Functions )
+    EVT_CLOSE( EDA_3D_FRAME::OnCloseWindow )
 END_EVENT_TABLE()
 
-WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( PCB_BASE_FRAME* parent,
-                                        const wxString& title,
-                                        long            style ) :
+
+EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME* parent, const wxString& title, long style ) :
     wxFrame( parent, DISPLAY3D_FRAME, title, wxPoint( -1, -1 ), wxSize( -1, -1 ), style )
 {
     m_FrameName     = wxT( "Frame3D" );
@@ -68,7 +65,7 @@ WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( PCB_BASE_FRAME* parent,
     ReCreateVToolbar();
 
     // Make a Pcb3D_GLCanvas
-    int attrs[] = {WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0};
+    int attrs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
     m_Canvas = new Pcb3D_GLCanvas( this, attrs );
 
     m_auimgr.SetManagedWindow( this );
@@ -93,31 +90,37 @@ WinEDA3D_DrawFrame::WinEDA3D_DrawFrame( PCB_BASE_FRAME* parent,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     m_auimgr.Update();
+
+    // Fixes bug in Windows (XP and possibly others) where the canvas requires the focus
+    // in order to receive mouse events.  Otherwise, the user has to click somewhere on
+    // the canvas before it will respond to mouse wheel events.
+    m_Canvas->SetFocus();
 }
 
 
-void WinEDA3D_DrawFrame::Exit3DFrame( wxCommandEvent& event )
+void EDA_3D_FRAME::Exit3DFrame( wxCommandEvent& event )
 {
-    Close( TRUE );
+    Close( true );
 }
 
 
-void WinEDA3D_DrawFrame::OnCloseWindow( wxCloseEvent& Event )
+void EDA_3D_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     SaveSettings();
+
     if( m_Parent )
     {
         m_Parent->m_Draw3DFrame = NULL;
     }
+
     Destroy();
 }
 
 
-void WinEDA3D_DrawFrame::GetSettings()
+void EDA_3D_FRAME::GetSettings()
 {
     wxString  text;
-    wxConfig* config = wxGetApp().m_EDA_Config;  // Current config used by
-                                                 // application
+    wxConfig* config = wxGetApp().m_EDA_Config;  // Current config used by application
 
     if( config )
     {
@@ -129,12 +132,9 @@ void WinEDA3D_DrawFrame::GetSettings()
         config->Read( text, &m_FrameSize.x, 600 );
         text = m_FrameName + wxT( "Size_y" );
         config->Read( text, &m_FrameSize.y, 400 );
-        config->Read( wxT( "BgColor_Red" ),
-                      &g_Parm_3D_Visu.m_BgColor.m_Red, 0.0 );
-        config->Read( wxT( "BgColor_Green" ),
-                      &g_Parm_3D_Visu.m_BgColor.m_Green, 0.0 );
-        config->Read( wxT( "BgColor_Blue" ),
-                      &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
+        config->Read( wxT( "BgColor_Red" ), &g_Parm_3D_Visu.m_BgColor.m_Red, 0.0 );
+        config->Read( wxT( "BgColor_Green" ), &g_Parm_3D_Visu.m_BgColor.m_Green, 0.0 );
+        config->Read( wxT( "BgColor_Blue" ), &g_Parm_3D_Visu.m_BgColor.m_Blue, 0.0 );
     }
 #if defined( __WXMAC__ )
     // for macOSX, the window must be below system (macOSX) toolbar
@@ -144,11 +144,10 @@ void WinEDA3D_DrawFrame::GetSettings()
 }
 
 
-void WinEDA3D_DrawFrame::SaveSettings()
+void EDA_3D_FRAME::SaveSettings()
 {
     wxString  text;
-    wxConfig* Config = wxGetApp().m_EDA_Config;  //  Current config used by
-                                                 // application
+    wxConfig* Config = wxGetApp().m_EDA_Config;  //  Current config used by application
 
     if( !Config )
         return;
@@ -174,7 +173,7 @@ void WinEDA3D_DrawFrame::SaveSettings()
 }
 
 
-void WinEDA3D_DrawFrame::Process_Zoom( wxCommandEvent& event )
+void EDA_3D_FRAME::Process_Zoom( wxCommandEvent& event )
 {
     int ii;
 
@@ -206,34 +205,33 @@ void WinEDA3D_DrawFrame::Process_Zoom( wxCommandEvent& event )
         return;
     }
 
-    m_Canvas->Refresh( FALSE );
+    m_Canvas->Refresh( false );
     m_Canvas->DisplayStatus();
 }
 
 
-void WinEDA3D_DrawFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
+void EDA_3D_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
 }
 
 
-void WinEDA3D_DrawFrame::OnRightClick( const wxPoint& MousePos,
-                                       wxMenu*        PopMenu )
+void EDA_3D_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
 }
 
 
-double WinEDA3D_DrawFrame::BestZoom()
+double EDA_3D_FRAME::BestZoom()
 {
     return 1.0;
 }
 
 
-void WinEDA3D_DrawFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+void EDA_3D_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
 }
 
 
-void WinEDA3D_DrawFrame::Process_Special_Functions( wxCommandEvent& event )
+void EDA_3D_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
 #define ROT_ANGLE 10.0
 
@@ -327,8 +325,7 @@ void WinEDA3D_DrawFrame::Process_Special_Functions( wxCommandEvent& event )
         return;
 
     default:
-        wxMessageBox( wxT( "WinEDA3D_DrawFrame::Process_Special_Functions() \
-error: unknown command" ) );
+        wxMessageBox( wxT( "EDA_3D_FRAME::Process_Special_Functions() error: unknown command" ) );
         return;
     }
 
@@ -337,7 +334,7 @@ error: unknown command" ) );
 }
 
 
-void WinEDA3D_DrawFrame::NewDisplay()
+void EDA_3D_FRAME::NewDisplay()
 {
     m_reloadRequest = false;
 
@@ -350,7 +347,7 @@ void WinEDA3D_DrawFrame::NewDisplay()
 }
 
 
-void WinEDA3D_DrawFrame::OnActivate( wxActivateEvent& event )
+void EDA_3D_FRAME::OnActivate( wxActivateEvent& event )
 {
     // Reload data if 3D frame shows a footprint,
     // because it can be changed since last frame activation
@@ -363,7 +360,7 @@ void WinEDA3D_DrawFrame::OnActivate( wxActivateEvent& event )
 
 /* called to set the background color of the 3D scene
  */
-void WinEDA3D_DrawFrame::Set3DBgColor()
+void EDA_3D_FRAME::Set3DBgColor()
 {
     S3D_Color color;
     wxColour  newcolor, oldcolor;
@@ -373,6 +370,7 @@ void WinEDA3D_DrawFrame::Set3DBgColor()
                   wxRound( g_Parm_3D_Visu.m_BgColor.m_Blue * 255 ) );
 
     newcolor = wxGetColourFromUser( this, oldcolor );
+
     if( newcolor != oldcolor )
     {
         g_Parm_3D_Visu.m_BgColor.m_Red   = (double) newcolor.Red() / 255.0;
@@ -383,71 +381,77 @@ void WinEDA3D_DrawFrame::Set3DBgColor()
 }
 
 
-void WinEDA3D_DrawFrame::Set3DAxisOnOff()
+void EDA_3D_FRAME::Set3DAxisOnOff()
 {
     if( g_Parm_3D_Visu.m_Draw3DAxis )
-        g_Parm_3D_Visu.m_Draw3DAxis = FALSE;
+        g_Parm_3D_Visu.m_Draw3DAxis = false;
     else
-        g_Parm_3D_Visu.m_Draw3DAxis = TRUE;
+        g_Parm_3D_Visu.m_Draw3DAxis = true;
+
     NewDisplay();
 }
 
 
-void WinEDA3D_DrawFrame::Set3DModuleOnOff()
+void EDA_3D_FRAME::Set3DModuleOnOff()
 {
     if( g_Parm_3D_Visu.m_Draw3DModule )
-        g_Parm_3D_Visu.m_Draw3DModule = FALSE;
+        g_Parm_3D_Visu.m_Draw3DModule = false;
     else
-        g_Parm_3D_Visu.m_Draw3DModule = TRUE;
+        g_Parm_3D_Visu.m_Draw3DModule = true;
+
     NewDisplay();
 }
 
 
-void WinEDA3D_DrawFrame::Set3DZoneOnOff()
+void EDA_3D_FRAME::Set3DZoneOnOff()
 {
     if( g_Parm_3D_Visu.m_Draw3DZone )
-        g_Parm_3D_Visu.m_Draw3DZone = FALSE;
+        g_Parm_3D_Visu.m_Draw3DZone = false;
     else
-        g_Parm_3D_Visu.m_Draw3DZone = TRUE;
+        g_Parm_3D_Visu.m_Draw3DZone = true;
     NewDisplay();
 }
 
 
-void WinEDA3D_DrawFrame::Set3DCommentsOnOff()
+void EDA_3D_FRAME::Set3DCommentsOnOff()
 {
     if( g_Parm_3D_Visu.m_Draw3DComments )
-        g_Parm_3D_Visu.m_Draw3DComments = FALSE;
+        g_Parm_3D_Visu.m_Draw3DComments = false;
     else
-        g_Parm_3D_Visu.m_Draw3DComments = TRUE;
+        g_Parm_3D_Visu.m_Draw3DComments = true;
+
     NewDisplay();
 }
 
 
-void WinEDA3D_DrawFrame::Set3DDrawingsOnOff()
+void EDA_3D_FRAME::Set3DDrawingsOnOff()
 {
     if( g_Parm_3D_Visu.m_Draw3DDrawings )
-        g_Parm_3D_Visu.m_Draw3DDrawings = FALSE;
+        g_Parm_3D_Visu.m_Draw3DDrawings = false;
     else
-        g_Parm_3D_Visu.m_Draw3DDrawings = TRUE;
+        g_Parm_3D_Visu.m_Draw3DDrawings = true;
+
     NewDisplay();
 }
 
 
-void WinEDA3D_DrawFrame::Set3DEco1OnOff()
+void EDA_3D_FRAME::Set3DEco1OnOff()
 {
     if( g_Parm_3D_Visu.m_Draw3DEco1 )
-        g_Parm_3D_Visu.m_Draw3DEco1 = FALSE;
+        g_Parm_3D_Visu.m_Draw3DEco1 = false;
     else
-        g_Parm_3D_Visu.m_Draw3DEco1 = TRUE;
+        g_Parm_3D_Visu.m_Draw3DEco1 = true;
+
     NewDisplay();
 }
 
 
-void WinEDA3D_DrawFrame::Set3DEco2OnOff()
+void EDA_3D_FRAME::Set3DEco2OnOff()
 {
     if( g_Parm_3D_Visu.m_Draw3DEco2 )
-        g_Parm_3D_Visu.m_Draw3DEco2 = FALSE;
+        g_Parm_3D_Visu.m_Draw3DEco2 = false;
     else
-        g_Parm_3D_Visu.m_Draw3DEco2 = TRUE;
+        g_Parm_3D_Visu.m_Draw3DEco2 = true;
+
     NewDisplay();
 }

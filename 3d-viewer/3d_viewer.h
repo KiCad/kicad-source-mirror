@@ -87,7 +87,7 @@ enum id_3dview_frm
 
 
 class Pcb3D_GLCanvas;
-class WinEDA3D_DrawFrame;
+class EDA_3D_FRAME;
 class Info_3D_Visu;
 class S3D_Vertex;
 class SEGVIA;
@@ -116,15 +116,14 @@ public:
     wxPoint   m_BoardPos;
     wxSize    m_BoardSize;
     int       m_Layers;
-    BOARD_DESIGN_SETTINGS* m_BoardSettings;   // Link to current board design
-                                                // settings
-    double    m_Epoxy_Width;                    /* Epoxy thickness (normalized)
-                                                 **/
+    BOARD_DESIGN_SETTINGS* m_BoardSettings;   // Link to current board design settings
+    double    m_Epoxy_Width;                  // Epoxy thickness (normalized)
 
     double    m_BoardScale;     /* Normalization scale for coordinates:
                                  * when scaled between -1.0 and +1.0 */
     double    m_LayerZcoord[32];
     double	  m_ActZpos;
+
 public: Info_3D_Visu();
     ~Info_3D_Visu();
 };
@@ -133,19 +132,21 @@ public: Info_3D_Visu();
 class Pcb3D_GLCanvas : public wxGLCanvas
 {
 public:
-    WinEDA3D_DrawFrame* m_Parent;
+    EDA_3D_FRAME* m_Parent;
 
 private:
     bool         m_init;
     GLuint       m_gllist;
     /// Tracks whether to use Orthographic or Perspective projection
-    //TODO: Does this belong here, or in  WinEDA3D_DrawFrame ???
+    //TODO: Does this belong here, or in  EDA_3D_FRAME ???
     bool         m_ortho;
+
 #if wxCHECK_VERSION( 2, 7, 0 )
     wxGLContext* m_glRC;
 #endif
+
 public:
-    Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent, int* attribList = 0 );
+    Pcb3D_GLCanvas( EDA_3D_FRAME* parent, int* attribList = 0 );
     ~Pcb3D_GLCanvas();
 
     void   ClearLists();
@@ -170,9 +171,10 @@ public:
     void   InitGL();
     void   SetLights();
     void   Draw3D_Track( TRACK* track );
+
     /**
      * Function Draw3D_SolidPolygonsInZones
-     * draw all solid polygons used as filles areas in a zone
+     * draw all solid polygons used as filled areas in a zone
      * @param aZone = the zone to draw
     */
     void   Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone );
@@ -180,7 +182,7 @@ public:
     /**
      * Function Draw3D_Polygon
      * draw one solid polygon
-     * @param aCornersList = a std::vector<wxPoint> liste of corners, in physical coordinates
+     * @param aCornersList = a std::vector<wxPoint> list of corners, in physical coordinates
      * @param aZpos = the z position in 3D units
     */
     void   Draw3D_Polygon( std::vector<wxPoint>& aCornersList, double aZpos );
@@ -190,6 +192,7 @@ public:
 
     /// Toggles ortographic projection on and off
     void ToggleOrtho(){ m_ortho = !m_ortho ; Refresh(true);};
+
     /// Returns the orthographic projection flag
     bool ModeIsOrtho() { return m_ortho ;};
 
@@ -200,13 +203,12 @@ public:
 };
 
 
-class WinEDA3D_DrawFrame : public wxFrame
+class EDA_3D_FRAME : public wxFrame
 {
 public:
     PCB_BASE_FRAME* m_Parent;
 private:
-    wxString        m_FrameName;       // name used for writing and reading setup
-                                       // It is "Frame3D"
+    wxString        m_FrameName;      // name used for writing and reading setup. It is "Frame3D"
     Pcb3D_GLCanvas* m_Canvas;
     EDA_TOOLBAR*    m_HToolBar;
     EDA_TOOLBAR*    m_VToolBar;
@@ -217,9 +219,9 @@ private:
     bool            m_reloadRequest;
 
 public:
-    WinEDA3D_DrawFrame( PCB_BASE_FRAME* parent, const wxString& title,
-                        long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
-    ~WinEDA3D_DrawFrame()
+    EDA_3D_FRAME( PCB_BASE_FRAME* parent, const wxString& title,
+                  long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
+    ~EDA_3D_FRAME()
     {
         m_auimgr.UnInit();
     };
@@ -232,6 +234,7 @@ public:
     void SetToolbars();
     void GetSettings();
     void SaveSettings();
+
     /**
      * Function ReloadRequest
      * must be called when reloading data from Pcbnew is needed

@@ -9,7 +9,7 @@
 #include "3d_viewer.h"
 
 
-void WinEDA3D_DrawFrame::ReCreateHToolbar()
+void EDA_3D_FRAME::ReCreateHToolbar()
 {
     if( m_HToolBar != NULL )
     {
@@ -98,12 +98,12 @@ void WinEDA3D_DrawFrame::ReCreateHToolbar()
 }
 
 
-void WinEDA3D_DrawFrame::ReCreateVToolbar()
+void EDA_3D_FRAME::ReCreateVToolbar()
 {
 }
 
 
-void WinEDA3D_DrawFrame::ReCreateMenuBar()
+void EDA_3D_FRAME::ReCreateMenuBar()
 {
     bool full_options = true;
 
@@ -167,6 +167,6 @@ void WinEDA3D_DrawFrame::ReCreateMenuBar()
 }
 
 
-void WinEDA3D_DrawFrame::SetToolbars()
+void EDA_3D_FRAME::SetToolbars()
 {
 }

@@ -27,19 +27,26 @@
 void CVPCB_MAINFRAME::CreateScreenCmp()
 {
     wxString msg, FootprintName;
-    bool     IsNew = FALSE;
+    bool     IsNew = false;
 
     FootprintName = m_FootprintList->GetSelectedFootprint();
 
     if( DrawFrame == NULL )
     {
         DrawFrame = new DISPLAY_FOOTPRINTS_FRAME( this, _( "Module" ),
-                                             wxPoint( 0, 0 ),
-                                             wxSize( 600, 400 ),
-                                             KICAD_DEFAULT_DRAWFRAME_STYLE |
-                                             wxFRAME_FLOAT_ON_PARENT );
-        IsNew = TRUE;
-        DrawFrame->Show( TRUE );
+                                                  wxPoint( 0, 0 ),
+                                                  wxSize( 600, 400 ),
+                                                  KICAD_DEFAULT_DRAWFRAME_STYLE );
+        IsNew = true;
+        DrawFrame->Show( true );
+    }
+    else
+    {
+        DrawFrame->Raise();
+
+        // Raising the window does not set the focus on Linux.  This should work on any platform.
+        if( wxWindow::FindFocus() != DrawFrame )
+            DrawFrame->SetFocus();
     }
 
     if( !FootprintName.IsEmpty() )
@@ -63,18 +70,21 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
         }
 
         MODULE* mod = DrawFrame->Get_Module( FootprintName );
+
         if( mod )
             DrawFrame->GetBoard()->m_Modules.PushBack( mod );
 
-        DrawFrame->Zoom_Automatique( FALSE );
+        DrawFrame->Zoom_Automatique( false );
         DrawFrame->DrawPanel->Refresh();
         DrawFrame->UpdateStatusBar();    /* Display new cursor coordinates and zoom value */
+
         if( DrawFrame->m_Draw3DFrame )
             DrawFrame->m_Draw3DFrame->NewDisplay();
     }
     else if( !IsNew )
     {
         DrawFrame->Refresh();
+
         if( DrawFrame->m_Draw3DFrame )
             DrawFrame->m_Draw3DFrame->NewDisplay();
     }

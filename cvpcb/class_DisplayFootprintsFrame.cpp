@@ -408,13 +408,16 @@ void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     if( m_Draw3DFrame )
     {
-        DisplayInfoMessage( this, _( "3D Frame already opened" ) );
+        m_Draw3DFrame->Raise();
+
+        // Raising the window does not set the focus on Linux.  This should work on any platform.
+        if( wxWindow::FindFocus() != m_Draw3DFrame )
+            m_Draw3DFrame->SetFocus();
+
         return;
     }
 
-    m_Draw3DFrame = new WinEDA3D_DrawFrame( this, _( "3D Viewer" ),
-                                            KICAD_DEFAULT_3D_DRAWFRAME_STYLE |
-                                            wxFRAME_FLOAT_ON_PARENT );
+    m_Draw3DFrame = new EDA_3D_FRAME( this, _( "3D Viewer" ), KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
     m_Draw3DFrame->Show( true );
 }
 

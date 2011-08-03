@@ -167,7 +167,15 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_ModuleEditFrame->Zoom_Automatique( false );
         }
         else
-            m_ModuleEditFrame->Iconize( false );
+        {
+            m_ModuleEditFrame->Raise();
+
+            // Raising the window does not set the focus on Linux.  This should work on
+            // any platform.
+            if( wxWindow::FindFocus() != m_ModuleEditFrame )
+                m_ModuleEditFrame->SetFocus();
+        }
+
         break;
 
     case ID_PCB_GLOBAL_DELETE:

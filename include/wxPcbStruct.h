@@ -31,7 +31,6 @@ class TEXTE_MODULE;
 class MIREPCB;
 class DIMENSION;
 class EDGE_MODULE;
-class WinEDA3D_DrawFrame;
 class DRC;
 class ZONE_CONTAINER;
 class DRAWSEGMENT;

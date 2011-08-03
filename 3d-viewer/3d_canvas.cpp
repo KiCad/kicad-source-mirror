@@ -48,28 +48,29 @@ void CheckGLError()
     }
 }
 
+
 /*
  * Pcb3D_GLCanvas implementation
  */
 
 BEGIN_EVENT_TABLE( Pcb3D_GLCanvas, wxGLCanvas )
-EVT_PAINT( Pcb3D_GLCanvas::OnPaint )
+    EVT_PAINT( Pcb3D_GLCanvas::OnPaint )
 
-// key event:
-EVT_CHAR( Pcb3D_GLCanvas::OnChar )
+    // key event:
+    EVT_CHAR( Pcb3D_GLCanvas::OnChar )
 
-// mouse events
-EVT_RIGHT_DOWN( Pcb3D_GLCanvas::OnRightClick )
-EVT_MOUSEWHEEL( Pcb3D_GLCanvas::OnMouseWheel )
-EVT_MOTION( Pcb3D_GLCanvas::OnMouseMove )
+    // mouse events
+    EVT_RIGHT_DOWN( Pcb3D_GLCanvas::OnRightClick )
+    EVT_MOUSEWHEEL( Pcb3D_GLCanvas::OnMouseWheel )
+    EVT_MOTION( Pcb3D_GLCanvas::OnMouseMove )
 
-// other events
-EVT_ERASE_BACKGROUND( Pcb3D_GLCanvas::OnEraseBackground )
-EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END,
-                Pcb3D_GLCanvas::OnPopUpMenu )
+    // other events
+    EVT_ERASE_BACKGROUND( Pcb3D_GLCanvas::OnEraseBackground )
+    EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END, Pcb3D_GLCanvas::OnPopUpMenu )
 END_EVENT_TABLE()
 
-Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent, int* attribList ) :
+
+Pcb3D_GLCanvas::Pcb3D_GLCanvas( EDA_3D_FRAME* parent, int* attribList ) :
 #if wxCHECK_VERSION( 2, 7, 0 )
     wxGLCanvas( parent, -1, attribList, wxDefaultPosition, wxDefaultSize,
                 wxFULL_REPAINT_ON_RESIZE )
@@ -78,10 +79,10 @@ Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent, int* attribList ) :
                 wxFULL_REPAINT_ON_RESIZE )
 #endif
 {
-    m_init   = FALSE;
+    m_init   = false;
     m_gllist = 0;
     m_Parent = parent;
-    m_ortho = false;
+    m_ortho  = false;
 
 #if wxCHECK_VERSION( 2, 7, 0 )
 
@@ -96,7 +97,8 @@ Pcb3D_GLCanvas::Pcb3D_GLCanvas( WinEDA3D_DrawFrame* parent, int* attribList ) :
 Pcb3D_GLCanvas::~Pcb3D_GLCanvas()
 {
     ClearLists();
-    m_init = FALSE;
+    m_init = false;
+
 #if wxCHECK_VERSION( 2, 7, 0 )
     delete m_glRC;
 #endif
@@ -107,6 +109,7 @@ void Pcb3D_GLCanvas::ClearLists()
 {
     if( m_gllist > 0 )
         glDeleteLists( m_gllist, 1 );
+
     m_gllist = 0;
 }
 
@@ -230,7 +233,7 @@ void Pcb3D_GLCanvas::SetView3D( int keycode )
     }
 
     DisplayStatus();
-    Refresh( FALSE );
+    Refresh( false );
 }
 
 
@@ -269,13 +272,15 @@ void Pcb3D_GLCanvas::OnMouseWheel( wxMouseEvent& event )
         if( event.GetWheelRotation() > 0 )
         {
             g_Parm_3D_Visu.m_Zoom /= 1.4;
+
             if( g_Parm_3D_Visu.m_Zoom <= 0.01 )
                 g_Parm_3D_Visu.m_Zoom = 0.01;
         }
         else
             g_Parm_3D_Visu.m_Zoom *= 1.4;
+
         DisplayStatus();
-        Refresh( FALSE );
+        Refresh( false );
     }
 
     g_Parm_3D_Visu.m_Beginx = event.GetX();
@@ -316,7 +321,7 @@ void Pcb3D_GLCanvas::OnMouseMove( wxMouseEvent& event )
 
         /* orientation has changed, redraw mesh */
         DisplayStatus();
-        Refresh( FALSE );
+        Refresh( false );
     }
 
     g_Parm_3D_Visu.m_Beginx = event.GetX();
@@ -500,7 +505,7 @@ void Pcb3D_GLCanvas::InitGL()
 
     if( !m_init )
     {
-        m_init = TRUE;
+        m_init = true;
         g_Parm_3D_Visu.m_Zoom = 1.0;
         ZBottom = 1.0; ZTop = 10.0;
 
@@ -534,10 +539,13 @@ void Pcb3D_GLCanvas::InitGL()
 
      if( ModeIsOrtho() )
      {
-         // OrthoReductionFactor is chosen so as to provide roughly the same size as Perspective View
-         const double orthoReductionFactor = 400/g_Parm_3D_Visu.m_Zoom;
+         // OrthoReductionFactor is chosen so as to provide roughly the same size as
+         // Perspective View
+         const double orthoReductionFactor = 400 / g_Parm_3D_Visu.m_Zoom;
+
          // Initialize Projection Matrix for Ortographic View
-         glOrtho(-size.x/orthoReductionFactor, size.x/orthoReductionFactor, -size.y/orthoReductionFactor, size.y/orthoReductionFactor, 1, 10);
+         glOrtho( -size.x / orthoReductionFactor, size.x / orthoReductionFactor,
+                  -size.y / orthoReductionFactor, size.y / orthoReductionFactor, 1, 10 );
      }
      else
      {
@@ -601,10 +609,11 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
     wxFileName fn( m_Parent->m_Parent->GetScreen()->GetFileName() );
     wxString   FullFileName;
     wxString   file_ext, mask;
-    bool       fmt_is_jpeg = FALSE;
+    bool       fmt_is_jpeg = false;
 
     if( event.GetId() == ID_MENU_SCREENCOPY_JPEG )
-        fmt_is_jpeg = TRUE;
+        fmt_is_jpeg = true;
+
     if( event.GetId() != ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
         file_ext     = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
@@ -612,10 +621,9 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         FullFileName = m_Parent->m_Parent->GetScreen()->GetFileName();
         fn.SetExt( file_ext );
 
-        FullFileName =
-            EDA_FileSelector( _( "3D Image filename:" ), wxEmptyString,
-                              fn.GetFullName(), file_ext, mask, this,
-                              wxFD_SAVE, TRUE );
+        FullFileName = EDA_FileSelector( _( "3D Image filename:" ), wxEmptyString,
+                                         fn.GetFullName(), file_ext, mask, this,
+                                         wxFD_SAVE, true );
 
         if( FullFileName.IsEmpty() )
             return;
@@ -661,6 +669,7 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
     {
         wxBitmapDataObject* dobjBmp = new wxBitmapDataObject;
         dobjBmp->SetBitmap( bitmap );
+
         if( wxTheClipboard->Open() )
         {
             if( !wxTheClipboard->SetData( dobjBmp ) )
@@ -677,8 +686,7 @@ void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
         wxImage image = bitmap.ConvertToImage();
 
         if( !image.SaveFile( FullFileName,
-                             fmt_is_jpeg ? wxBITMAP_TYPE_JPEG :
-                             wxBITMAP_TYPE_PNG ) )
+                             fmt_is_jpeg ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG ) )
             wxMessageBox( _( "Can't save file" ) );
 
         image.Destroy();
