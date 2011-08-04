@@ -17,7 +17,6 @@ class COMPONENTS_LISTBOX;
 class DISPLAY_FOOTPRINTS_FRAME;
 
 
-
 /**
  * The CVPcb application main window.
  */
@@ -26,18 +25,18 @@ class CVPCB_MAINFRAME : public EDA_BASE_FRAME
 public:
 
     bool m_KeepCvpcbOpen;
-    FOOTPRINTS_LISTBOX*  m_FootprintList;
-    COMPONENTS_LISTBOX*  m_ListCmp;
-    DISPLAY_FOOTPRINTS_FRAME* DrawFrame;
-    EDA_TOOLBAR*         m_HToolBar;
-    wxFileName           m_NetlistFileName;
-    wxArrayString        m_ModuleLibNames;
-    wxArrayString        m_AliasLibNames;
-    wxString             m_UserLibraryPath;
-    wxString             m_NetlistFileExtension;
-    wxString             m_DocModulesFileName;
-    FOOTPRINT_LIST       m_footprints;
-    COMPONENT_LIST       m_components;
+    FOOTPRINTS_LISTBOX*       m_FootprintList;
+    COMPONENTS_LISTBOX*       m_ListCmp;
+    DISPLAY_FOOTPRINTS_FRAME* m_DisplayFootprintFrame;
+    EDA_TOOLBAR* m_HToolBar;
+    wxFileName m_NetlistFileName;
+    wxArrayString             m_ModuleLibNames;
+    wxArrayString             m_AliasLibNames;
+    wxString        m_UserLibraryPath;
+    wxString        m_NetlistFileExtension;
+    wxString        m_DocModulesFileName;
+    FOOTPRINT_LIST  m_footprints;
+    COMPONENT_LIST  m_components;
 
 protected:
     int             m_undefinedComponentCnt;
@@ -45,9 +44,8 @@ protected:
     bool            m_isEESchemaNetlist;
     PARAM_CFG_ARRAY m_projectFileParams;
 
-public:
-    CVPCB_MAINFRAME( const wxString& title,
-                       long            style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+public: CVPCB_MAINFRAME( const wxString& title,
+                         long            style = KICAD_DEFAULT_DRAWFRAME_STYLE );
     ~CVPCB_MAINFRAME();
 
     void             OnLeftClick( wxListEvent& event );
@@ -108,21 +106,21 @@ public:
      * fills m_footprints
      * @return true if libraries are found, false otherwise.
      */
-    bool LoadFootprintFiles( );
+    bool             LoadFootprintFiles();
 
     /**
      * function GenNetlistPcbnew
      * writes the output netlist file
      *
      */
-    int GenNetlistPcbnew( FILE* f, bool isEESchemaNetlist = true );
+    int              GenNetlistPcbnew( FILE* f, bool isEESchemaNetlist = true );
 
     /**
      * Function LoadComponentFile
      * Loads the .cmp file that stores the component/footprint association.
      * @param aCmpFileName = the full filename of .cmp file to load
      */
-    bool LoadComponentFile( const wxString& aCmpFileName );
+    bool             LoadComponentFile( const wxString& aCmpFileName );
 
     PARAM_CFG_ARRAY& GetProjectFileParameters( void );
 

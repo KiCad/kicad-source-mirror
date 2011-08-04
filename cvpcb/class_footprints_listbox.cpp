@@ -244,7 +244,7 @@ void FOOTPRINTS_LISTBOX::OnLeftClick( wxListEvent& event )
 
     Module = GetParent()->m_footprints.GetModuleInfo( FootprintName );
     wxASSERT(Module);
-    if( GetParent()->DrawFrame )
+    if( GetParent()->m_DisplayFootprintFrame )
     {
         GetParent()->CreateScreenCmp(); /* refresh general */
     }

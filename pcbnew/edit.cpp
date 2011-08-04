@@ -168,6 +168,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         else
         {
+            if( m_ModuleEditFrame->IsIconized() )
+                 m_ModuleEditFrame->Iconize( false );
             m_ModuleEditFrame->Raise();
 
             // Raising the window does not set the focus on Linux.  This should work on

@@ -483,6 +483,10 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     if( m_Draw3DFrame )
     {
+        // Raising the window does not show the window on Windows if iconized.
+        // This should work on any platform.
+        if( m_Draw3DFrame->IsIconized() )
+             m_Draw3DFrame->Iconize( false );
         m_Draw3DFrame->Raise();
 
         // Raising the window does not set the focus on Linux.  This should work on any platform.

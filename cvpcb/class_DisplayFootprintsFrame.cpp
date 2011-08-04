@@ -106,7 +106,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
 
     m_auimgr.AddPane( DrawPanel,
-                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+                      wxAuiPaneInfo().Name( wxT( "DisplayFrame" ) ).CentrePane() );
 
     m_auimgr.AddPane( MsgPanel,
                       wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
@@ -126,7 +126,7 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
     delete GetScreen();
     SetScreen( NULL );
 
-    ( (CVPCB_MAINFRAME*) wxGetApp().GetTopWindow() )->DrawFrame = NULL;
+    ( (CVPCB_MAINFRAME*) wxGetApp().GetTopWindow() )->m_DisplayFootprintFrame = NULL;
 }
 
 /* Called when the frame is closed
@@ -134,12 +134,8 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
  */
 void DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow( wxCloseEvent& event )
 {
-    wxPoint pos;
-    wxSize  size;
-
-    size = GetSize();
-    pos  = GetPosition();
-
+    if( m_Draw3DFrame )
+        m_Draw3DFrame->Close(true);
     SaveSettings();
     Destroy();
 }
@@ -408,6 +404,10 @@ void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     if( m_Draw3DFrame )
     {
+        // Raising the window does not show the window on Windows if iconized.
+        // This should work on any platform.
+        if( m_Draw3DFrame->IsIconized() )
+             m_Draw3DFrame->Iconize( false );
         m_Draw3DFrame->Raise();
 
         // Raising the window does not set the focus on Linux.  This should work on any platform.
