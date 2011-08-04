@@ -268,7 +268,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
     {
         // Temporary change the help filename
         wxString tmp = wxGetApp().m_HelpFileName;
-        wxGetApp().m_HelpFileName = "Getting_Started_in_KiCad.pdf";
+        wxGetApp().m_HelpFileName = wxT( "Getting_Started_in_KiCad.pdf" );
         wxString helpFile = wxGetApp().GetHelpFile();
         if( !helpFile )
         {
