@@ -32,85 +32,69 @@ static const wxString FootprintDocFileEntry( wxT( "footprints_doc_file" ) );
 
 
 BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, EDA_BASE_FRAME )
-    EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, CVPCB_MAINFRAME::LoadNetList )
+EVT_MENU_RANGE( wxID_FILE1, wxID_FILE9, CVPCB_MAINFRAME::LoadNetList )
 
-    // Menu events
-    EVT_MENU( ID_LOAD_PROJECT,
-              CVPCB_MAINFRAME::LoadNetList )
-    EVT_MENU( ID_SAVE_PROJECT,
-              CVPCB_MAINFRAME::SaveQuitCvpcb )
-    EVT_MENU( wxID_EXIT,
-              CVPCB_MAINFRAME::OnQuit )
-    EVT_MENU( wxID_HELP,
-              CVPCB_MAINFRAME::GetKicadHelp )
-    EVT_MENU( wxID_ABOUT,
-              CVPCB_MAINFRAME::GetKicadAbout )
-    EVT_MENU( wxID_PREFERENCES,
-              CVPCB_MAINFRAME::ConfigCvpcb )
-    EVT_MENU( ID_CONFIG_SAVE,
-              CVPCB_MAINFRAME::Update_Config )
-    EVT_MENU( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,
-              CVPCB_MAINFRAME::OnKeepOpenOnSave )
+// Menu events
+EVT_MENU( ID_LOAD_PROJECT,
+          CVPCB_MAINFRAME::LoadNetList )
+EVT_MENU( ID_SAVE_PROJECT,
+          CVPCB_MAINFRAME::SaveQuitCvpcb )
+EVT_MENU( wxID_EXIT,
+          CVPCB_MAINFRAME::OnQuit )
+EVT_MENU( wxID_HELP,
+          CVPCB_MAINFRAME::GetKicadHelp )
+EVT_MENU( wxID_ABOUT,
+          CVPCB_MAINFRAME::GetKicadAbout )
+EVT_MENU( wxID_PREFERENCES,
+          CVPCB_MAINFRAME::ConfigCvpcb )
+EVT_MENU( ID_CONFIG_SAVE,
+          CVPCB_MAINFRAME::Update_Config )
+EVT_MENU( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,
+          CVPCB_MAINFRAME::OnKeepOpenOnSave )
 
-    EVT_MENU_RANGE( ID_LANGUAGE_CHOICE,
-                    ID_LANGUAGE_CHOICE_END,
-                    CVPCB_MAINFRAME::SetLanguage )
+EVT_MENU_RANGE( ID_LANGUAGE_CHOICE,
+                ID_LANGUAGE_CHOICE_END,
+                CVPCB_MAINFRAME::SetLanguage )
 
-    // Toolbar events
-    EVT_TOOL( ID_CVPCB_QUIT,
-              CVPCB_MAINFRAME::OnQuit )
-    EVT_TOOL( ID_CVPCB_READ_INPUT_NETLIST,
-              CVPCB_MAINFRAME::LoadNetList )
-    EVT_TOOL( ID_CVPCB_SAVEQUITCVPCB,
-              CVPCB_MAINFRAME::SaveQuitCvpcb )
-    EVT_TOOL( ID_CVPCB_CREATE_CONFIGWINDOW,
-              CVPCB_MAINFRAME::ConfigCvpcb )
-    EVT_TOOL( ID_CVPCB_CREATE_SCREENCMP,
-              CVPCB_MAINFRAME::DisplayModule )
-    EVT_TOOL( ID_CVPCB_GOTO_FIRSTNA,
-              CVPCB_MAINFRAME::ToFirstNA )
-    EVT_TOOL( ID_CVPCB_GOTO_PREVIOUSNA,
-              CVPCB_MAINFRAME::ToPreviousNA )
-    EVT_TOOL( ID_CVPCB_DEL_ASSOCIATIONS,
-              CVPCB_MAINFRAME::DelAssociations )
-    EVT_TOOL( ID_CVPCB_AUTO_ASSOCIE,
-              CVPCB_MAINFRAME::AssocieModule )
-    EVT_TOOL( ID_CVPCB_CREATE_STUFF_FILE,
-              CVPCB_MAINFRAME::WriteStuffList )
-    EVT_TOOL( ID_PCB_DISPLAY_FOOTPRINT_DOC,
-              CVPCB_MAINFRAME::DisplayDocFile )
-    EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
-              CVPCB_MAINFRAME::OnSelectFilteringFootprint )
-    EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST,
-              CVPCB_MAINFRAME::OnSelectFilteringFootprint )
+// Toolbar events
+EVT_TOOL( ID_CVPCB_QUIT, CVPCB_MAINFRAME::OnQuit )
+EVT_TOOL( ID_CVPCB_READ_INPUT_NETLIST, CVPCB_MAINFRAME::LoadNetList )
+EVT_TOOL( ID_CVPCB_SAVEQUITCVPCB, CVPCB_MAINFRAME::SaveQuitCvpcb )
+EVT_TOOL( ID_CVPCB_CREATE_CONFIGWINDOW, CVPCB_MAINFRAME::ConfigCvpcb )
+EVT_TOOL( ID_CVPCB_CREATE_SCREENCMP, CVPCB_MAINFRAME::DisplayModule )
+EVT_TOOL( ID_CVPCB_GOTO_FIRSTNA, CVPCB_MAINFRAME::ToFirstNA )
+EVT_TOOL( ID_CVPCB_GOTO_PREVIOUSNA, CVPCB_MAINFRAME::ToPreviousNA )
+EVT_TOOL( ID_CVPCB_DEL_ASSOCIATIONS, CVPCB_MAINFRAME::DelAssociations )
+EVT_TOOL( ID_CVPCB_AUTO_ASSOCIE, CVPCB_MAINFRAME::AssocieModule )
+EVT_TOOL( ID_CVPCB_CREATE_STUFF_FILE, CVPCB_MAINFRAME::WriteStuffList )
+EVT_TOOL( ID_PCB_DISPLAY_FOOTPRINT_DOC, CVPCB_MAINFRAME::DisplayDocFile )
+EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
+          CVPCB_MAINFRAME::OnSelectFilteringFootprint )
+EVT_TOOL( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST,
+          CVPCB_MAINFRAME::OnSelectFilteringFootprint )
 
-    // Frame events
-    EVT_CHAR( CVPCB_MAINFRAME::OnChar )
-    EVT_CLOSE( CVPCB_MAINFRAME::OnCloseWindow )
-    EVT_SIZE( CVPCB_MAINFRAME::OnSize )
+// Frame events
+EVT_CHAR( CVPCB_MAINFRAME::OnChar )
+EVT_CLOSE( CVPCB_MAINFRAME::OnCloseWindow )
+EVT_SIZE( CVPCB_MAINFRAME::OnSize )
 
-    // List item events
-    EVT_LIST_ITEM_SELECTED( ID_CVPCB_FOOTPRINT_LIST,
-                            CVPCB_MAINFRAME::OnLeftClick )
-    EVT_LIST_ITEM_ACTIVATED( ID_CVPCB_FOOTPRINT_LIST,
-                             CVPCB_MAINFRAME::OnLeftDClick )
-    EVT_LIST_ITEM_SELECTED( ID_CVPCB_COMPONENT_LIST,
-                            CVPCB_MAINFRAME::OnSelectComponent )
+// List item events
+EVT_LIST_ITEM_SELECTED( ID_CVPCB_FOOTPRINT_LIST, CVPCB_MAINFRAME::OnLeftClick )
+EVT_LIST_ITEM_ACTIVATED( ID_CVPCB_FOOTPRINT_LIST, CVPCB_MAINFRAME::OnLeftDClick )
+EVT_LIST_ITEM_SELECTED( ID_CVPCB_COMPONENT_LIST, CVPCB_MAINFRAME::OnSelectComponent )
 
-    EVT_UPDATE_UI( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,
-                   CVPCB_MAINFRAME::OnUpdateKeepOpenOnSave )
-END_EVENT_TABLE()
-
-CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
+EVT_UPDATE_UI( ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,
+               CVPCB_MAINFRAME::OnUpdateKeepOpenOnSave )
+END_EVENT_TABLE() CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
     EDA_BASE_FRAME( NULL, CVPCB_FRAME, title, wxDefaultPosition, wxDefaultSize, style )
 {
     m_FrameName = wxT( "CvpcbFrame" );
 
     m_ListCmp = NULL;
     m_FootprintList = NULL;
-    DrawFrame      = NULL;
-    m_HToolBar     = NULL;
-    m_modified     = false;
+    m_DisplayFootprintFrame = NULL;
+    m_HToolBar = NULL;
+    m_modified = false;
     m_isEESchemaNetlist     = false;
     m_KeepCvpcbOpen         = false;
     m_undefinedComponentCnt = 0;
@@ -129,7 +113,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
     SetIcon( wxICON( icon_cvpcb ) );
     #endif
 
-    SetAutoLayout( TRUE );
+    SetAutoLayout( true );
 
     LoadSettings();
     if( m_FrameSize.x < FRAME_MIN_SIZE_X )
@@ -170,16 +154,16 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
 
     if( m_HToolBar )
         m_auimgr.AddPane( m_HToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top() );
+                         wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top() );
 
     if( m_ListCmp )
         m_auimgr.AddPane( m_ListCmp,
-                          wxAuiPaneInfo(horiz).Name( wxT( "m_ListCmp" ) ).CentrePane() );
+                         wxAuiPaneInfo( horiz ).Name( wxT( "m_ListCmp" ) ).CentrePane() );
 
     if( m_FootprintList )
         m_auimgr.AddPane( m_FootprintList,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_FootprintList" ) ).
-                          Right().BestSize( (int) ( m_FrameSize.x * 0.36 ), m_FrameSize.y ) );
+                         wxAuiPaneInfo( horiz ).Name( wxT( "m_FootprintList" ) ).
+                         Right().BestSize( (int) ( m_FrameSize.x * 0.36 ), m_FrameSize.y ) );
 
     m_auimgr.Update();
 }
@@ -245,7 +229,7 @@ void CVPCB_MAINFRAME::OnSize( wxSizeEvent& event )
 
 void CVPCB_MAINFRAME::OnQuit( wxCommandEvent& event )
 {
-    Close( TRUE );
+    Close( true );
 }
 
 
@@ -293,9 +277,9 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
     // Close the help frame
     if( wxGetApp().m_HtmlCtrl )
     {
-        if( wxGetApp().m_HtmlCtrl->GetFrame() )  // returns NULL if no help
-                                                 // frame active
-            wxGetApp().m_HtmlCtrl->GetFrame()->Close( TRUE );
+        if( wxGetApp().m_HtmlCtrl->GetFrame() )     // returns NULL if no help
+                                                    // frame active
+            wxGetApp().m_HtmlCtrl->GetFrame()->Close( true );
     }
 
     if( m_NetlistFileName.IsOk() )
@@ -303,6 +287,9 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
         UpdateFileHistory( m_NetlistFileName.GetFullPath() );
     }
 
+    // Close module display frame
+    if( m_DisplayFootprintFrame )
+        m_DisplayFootprintFrame->Close( true );
     m_modified = false;
     SaveSettings();
     Destroy();
@@ -344,8 +331,7 @@ void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
     if( selection < 0 )
         selection = 0;
 
-    BOOST_FOREACH( COMPONENT & component, m_components )
-    {
+    BOOST_FOREACH( COMPONENT & component, m_components ) {
         if( component.m_Module.IsEmpty() && ii > selection )
         {
             m_ListCmp->SetSelection( ii );
@@ -372,8 +358,7 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
     if( selection < 0 )
         selection = m_ListCmp->GetCount() - 1;
 
-    BOOST_REVERSE_FOREACH( COMPONENT & component, m_components )
-    {
+    BOOST_REVERSE_FOREACH( COMPONENT & component, m_components ) {
         if( component.m_Module.IsEmpty() && ii < selection )
         {
             m_ListCmp->SetSelection( ii );
@@ -391,7 +376,7 @@ void CVPCB_MAINFRAME::SaveQuitCvpcb( wxCommandEvent& event )
     {
         m_modified = false;
         if( !m_KeepCvpcbOpen )
-            Close( TRUE );
+            Close( true );
     }
 }
 
@@ -407,8 +392,7 @@ void CVPCB_MAINFRAME::DelAssociations( wxCommandEvent& event )
     {
         m_ListCmp->SetSelection( 0 );
 
-        BOOST_FOREACH( COMPONENT & component, m_components )
-        {
+        BOOST_FOREACH( COMPONENT & component, m_components ) {
             component.m_Module.Empty();
             SetNewPkg( wxEmptyString );
         }
@@ -462,7 +446,7 @@ void CVPCB_MAINFRAME::LoadNetList( wxCommandEvent& event )
     if( ReadNetList() )
     {
         SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
-                  wxT( " " ) + m_NetlistFileName.GetFullPath() );
+                 wxT( " " ) + m_NetlistFileName.GetFullPath() );
     }
     else
     {
@@ -488,7 +472,7 @@ void CVPCB_MAINFRAME::OnKeepOpenOnSave( wxCommandEvent& event )
 void CVPCB_MAINFRAME::DisplayModule( wxCommandEvent& event )
 {
     CreateScreenCmp();
-    DrawFrame->RedrawScreen( wxPoint( 0, 0 ), false );
+    m_DisplayFootprintFrame->RedrawScreen( wxPoint( 0, 0 ), false );
 }
 
 
@@ -504,7 +488,7 @@ void CVPCB_MAINFRAME::SetLanguage( wxCommandEvent& event )
 void CVPCB_MAINFRAME::DisplayDocFile( wxCommandEvent& event )
 {
     GetAssociatedDocument( this, m_DocModulesFileName,
-                           &wxGetApp().GetLibraryPathList() );
+                          &wxGetApp().GetLibraryPathList() );
 }
 
 
@@ -526,20 +510,20 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 
     if( !m_HToolBar->GetToolState( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
     {
-        m_FootprintList->SetActiveFootprintList( TRUE, TRUE );
+        m_FootprintList->SetActiveFootprintList( true, true );
         return;
     }
 
     selection = m_ListCmp->GetSelection();
     if( selection < 0 )
     {
-        m_FootprintList->SetActiveFootprintList( TRUE, TRUE );
+        m_FootprintList->SetActiveFootprintList( true, true );
         return;
     }
 
     if( &m_components[ selection ] == NULL )
     {
-        m_FootprintList->SetActiveFootprintList( TRUE, TRUE );
+        m_FootprintList->SetActiveFootprintList( true, true );
         return;
     }
 
@@ -553,17 +537,20 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
  */
 void CVPCB_MAINFRAME::OnSelectFilteringFootprint( wxCommandEvent& event )
 {
-    switch (event.GetId() )
+    switch( event.GetId() )
     {
-        case ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST:
-            m_HToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, false );
-            break;
-        case ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST:
-            m_HToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, false );
-            break;
-        default:
+    case ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST:
+        m_HToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, false );
+        break;
+
+    case ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST:
+        m_HToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, false );
+        break;
+
+    default:
         break;
     }
+
     wxListEvent l_event;
 
     OnSelectComponent( l_event );
@@ -582,8 +569,9 @@ void CVPCB_MAINFRAME::OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event )
 void CVPCB_MAINFRAME::DisplayStatus()
 {
     wxString msg;
+
     msg.Printf( _( "Components: %d (free: %d)" ),
-                 m_components.size(), m_undefinedComponentCnt );
+                m_components.size(), m_undefinedComponentCnt );
     SetStatusText( msg, 0 );
 
     SetStatusText( wxEmptyString, 1 );
@@ -602,6 +590,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
     SetStatusText( msg, 2 );
 }
 
+
 /*
  * Read the list of libraries (*.mod files) and populates m_footprints
  * ( list of availaible modules in libs ).
@@ -610,7 +599,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
  *      documentation string
  *      associated keywords
  */
-bool CVPCB_MAINFRAME::LoadFootprintFiles( )
+bool CVPCB_MAINFRAME::LoadFootprintFiles()
 {
     /* Check if there are footprint libraries in project file */
     if( m_ModuleLibNames.GetCount() == 0 )
@@ -620,24 +609,24 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles( )
         return false;
     }
 
-    m_footprints.ReadFootprintFiles(m_ModuleLibNames);
+    m_footprints.ReadFootprintFiles( m_ModuleLibNames );
 
     /* Display error messages, if any */
     if( !m_footprints.m_filesNotFound.IsEmpty() || !m_footprints.m_filesInvalid.IsEmpty() )
     {
-        DIALOG_LOAD_ERROR dialog(NULL);
+        DIALOG_LOAD_ERROR dialog( NULL );
         if( !m_footprints.m_filesNotFound.IsEmpty() )
         {
-            wxString message = _("Some files could not be found!");
-            dialog.MessageSet(message);
-            dialog.ListSet(m_footprints.m_filesNotFound);
+            wxString message = _( "Some files could not be found!" );
+            dialog.MessageSet( message );
+            dialog.ListSet( m_footprints.m_filesNotFound );
         }
 
         /* Display if there are invalid files */
         if( !m_footprints.m_filesInvalid.IsEmpty() )
         {
-            dialog.MessageSet( _("Some files are invalid!"));
-            dialog.ListSet(m_footprints.m_filesInvalid);
+            dialog.MessageSet( _( "Some files are invalid!" ) );
+            dialog.ListSet( m_footprints.m_filesInvalid );
         }
         dialog.ShowModal();
     }

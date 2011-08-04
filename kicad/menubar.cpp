@@ -37,6 +37,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU( ID_READ_ZIP_ARCHIVE, KICAD_MANAGER_FRAME::OnUnarchiveFiles )
     EVT_MENU( ID_PROJECT_TREE_REFRESH, KICAD_MANAGER_FRAME::OnRefresh )
     EVT_MENU( wxID_HELP, KICAD_MANAGER_FRAME::GetKicadHelp )
+    EVT_MENU( wxID_INDEX, KICAD_MANAGER_FRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, KICAD_MANAGER_FRAME::GetKicadAbout )
 
     /* Range menu events */
@@ -227,6 +228,11 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                             _( "&Contents" ),
                             _( "Open the Kicad handbook" ),
                             online_help_xpm );
+    ADD_MENUITEM_WITH_HELP( helpMenu,
+                            wxID_INDEX,
+                            _( "&Getting Started in KiCad" ),
+                            _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
+                            help_xpm );
 
     // Separator
     helpMenu->AppendSeparator();

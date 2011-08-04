@@ -244,8 +244,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                             _( "&Contents" ),
                             _( "Open the eeschema manual" ),
                             online_help_xpm );
+    ADD_MENUITEM_WITH_HELP( helpMenu,
+                            wxID_INDEX,
+                            _( "&Getting Started in KiCad" ),
+                            _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
+                            help_xpm );
 
     // About EESchema
+    helpMenu->AppendSeparator();
     ADD_MENUITEM_WITH_HELP( helpMenu,
                             wxID_ABOUT,
                             _( "&About EESchema" ),

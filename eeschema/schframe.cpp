@@ -103,6 +103,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_POPUP_SCH_MOVE_ITEM, SCH_EDIT_FRAME::OnMoveItem )
 
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
+    EVT_MENU( wxID_INDEX, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
 
     // Tools and buttons for vertical toolbar.

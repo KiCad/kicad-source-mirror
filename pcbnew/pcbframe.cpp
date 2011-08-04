@@ -140,6 +140,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 
     // Menu Help
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
+    EVT_MENU( wxID_INDEX, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
 
     // Menu 3D Frame
@@ -483,6 +484,10 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     if( m_Draw3DFrame )
     {
+        // Raising the window does not show the window on Windows if iconized.
+        // This should work on any platform.
+        if( m_Draw3DFrame->IsIconized() )
+             m_Draw3DFrame->Iconize( false );
         m_Draw3DFrame->Raise();
 
         // Raising the window does not set the focus on Linux.  This should work on any platform.

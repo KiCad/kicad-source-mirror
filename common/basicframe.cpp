@@ -258,6 +258,30 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 {
     wxString msg;
 
+    /* We have to get document for beginners,
+     * or the the full specific doc
+     * if event id is wxID_INDEX, we want the document for beginners.
+     * else the specific doc file (its name is in wxGetApp().m_HelpFileName)
+     * The document for beginners is the same for all kicad utilities
+     */
+    if( event.GetId() == wxID_INDEX )
+    {
+        // Temporary change the help filename
+        wxString tmp = wxGetApp().m_HelpFileName;
+        wxGetApp().m_HelpFileName = "Getting_Started_in_KiCad.pdf";
+        wxString helpFile = wxGetApp().GetHelpFile();
+        if( !helpFile )
+        {
+            msg.Printf( _( "Help file %s could not be found." ),
+                        GetChars( wxGetApp().m_HelpFileName ) );
+            DisplayError( this, msg );
+        }
+        else
+            GetAssociatedDocument( this, helpFile );
+        wxGetApp().m_HelpFileName = tmp;
+        return;
+    }
+
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
 
     if( wxGetApp().m_HtmlCtrl == NULL )

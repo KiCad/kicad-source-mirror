@@ -644,19 +644,23 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
-    item = new wxMenuItem( helpMenu, wxID_HELP,
-                           _( "&Contents" ),
-                           _( "Open the PCBNew handbook" ) );
-    SET_BITMAP( online_help_xpm );
-    helpMenu->Append( item );
+    ADD_MENUITEM_WITH_HELP( helpMenu,
+                            wxID_HELP,
+                            _( "&Contents" ),
+                            _( "Open the PCBNew handbook" ),
+                            online_help_xpm );
+    ADD_MENUITEM_WITH_HELP( helpMenu,
+                            wxID_INDEX,
+                            _( "&Getting Started in KiCad" ),
+                            _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
+                            help_xpm );
 
     // About
-    item = new wxMenuItem( helpMenu, wxID_ABOUT,
+    helpMenu->AppendSeparator();
+    ADD_MENUITEM_WITH_HELP( helpMenu, wxID_ABOUT,
                            _( "&About PCBNew" ),
-                           _( "About PCBnew printed circuit board designer" ));
-    SET_BITMAP( info_xpm );
-    helpMenu->Append( item );
-
+                           _( "About PCBnew printed circuit board designer" ),
+                           info_xpm );
 
     /**
      * Append all menus to the menuBar

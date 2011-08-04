@@ -31,28 +31,32 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
 
     FootprintName = m_FootprintList->GetSelectedFootprint();
 
-    if( DrawFrame == NULL )
+    if( m_DisplayFootprintFrame == NULL )
     {
-        DrawFrame = new DISPLAY_FOOTPRINTS_FRAME( this, _( "Module" ),
+        m_DisplayFootprintFrame = new DISPLAY_FOOTPRINTS_FRAME( this, _( "Module" ),
                                                   wxPoint( 0, 0 ),
                                                   wxSize( 600, 400 ),
                                                   KICAD_DEFAULT_DRAWFRAME_STYLE );
         IsNew = true;
-        DrawFrame->Show( true );
+        m_DisplayFootprintFrame->Show( true );
     }
     else
     {
-        DrawFrame->Raise();
+        // Raising the window does not show the window on Windows if iconized.
+        // This should work on any platform.
+        if( m_DisplayFootprintFrame->IsIconized() )
+             m_DisplayFootprintFrame->Iconize( false );
+        m_DisplayFootprintFrame->Raise();
 
         // Raising the window does not set the focus on Linux.  This should work on any platform.
-        if( wxWindow::FindFocus() != DrawFrame )
-            DrawFrame->SetFocus();
+        if( wxWindow::FindFocus() != m_DisplayFootprintFrame )
+            m_DisplayFootprintFrame->SetFocus();
     }
 
     if( !FootprintName.IsEmpty() )
     {
         msg = _( "Footprint: " ) + FootprintName;
-        DrawFrame->SetTitle( msg );
+        m_DisplayFootprintFrame->SetTitle( msg );
         FOOTPRINT_INFO* Module = m_footprints.GetModuleInfo( FootprintName );
         msg = _( "Lib: " );
 
@@ -61,32 +65,32 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
         else
             msg += wxT( "???" );
 
-        DrawFrame->SetStatusText( msg, 0 );
+        m_DisplayFootprintFrame->SetStatusText( msg, 0 );
 
-        if( DrawFrame->GetBoard()->m_Modules.GetCount() )
+        if( m_DisplayFootprintFrame->GetBoard()->m_Modules.GetCount() )
         {
             // there is only one module in the list
-            DrawFrame->GetBoard()->m_Modules.DeleteAll();
+            m_DisplayFootprintFrame->GetBoard()->m_Modules.DeleteAll();
         }
 
-        MODULE* mod = DrawFrame->Get_Module( FootprintName );
+        MODULE* mod = m_DisplayFootprintFrame->Get_Module( FootprintName );
 
         if( mod )
-            DrawFrame->GetBoard()->m_Modules.PushBack( mod );
+            m_DisplayFootprintFrame->GetBoard()->m_Modules.PushBack( mod );
 
-        DrawFrame->Zoom_Automatique( false );
-        DrawFrame->DrawPanel->Refresh();
-        DrawFrame->UpdateStatusBar();    /* Display new cursor coordinates and zoom value */
+        m_DisplayFootprintFrame->Zoom_Automatique( false );
+        m_DisplayFootprintFrame->DrawPanel->Refresh();
+        m_DisplayFootprintFrame->UpdateStatusBar();    /* Display new cursor coordinates and zoom value */
 
-        if( DrawFrame->m_Draw3DFrame )
-            DrawFrame->m_Draw3DFrame->NewDisplay();
+        if( m_DisplayFootprintFrame->m_Draw3DFrame )
+            m_DisplayFootprintFrame->m_Draw3DFrame->NewDisplay();
     }
     else if( !IsNew )
     {
-        DrawFrame->Refresh();
+        m_DisplayFootprintFrame->Refresh();
 
-        if( DrawFrame->m_Draw3DFrame )
-            DrawFrame->m_Draw3DFrame->NewDisplay();
+        if( m_DisplayFootprintFrame->m_Draw3DFrame )
+            m_DisplayFootprintFrame->m_Draw3DFrame->NewDisplay();
     }
 }
 
