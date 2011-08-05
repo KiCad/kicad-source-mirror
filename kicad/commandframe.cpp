@@ -10,6 +10,7 @@
 #include "kicad.h"
 
 #include "../bitmap2component/bitmap2component.xpm"
+#include "../pcb_calculator/bitmaps/pcb_calculator.xpm"
 
 RIGHT_KM_FRAME::RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent ) :
     wxSashLayoutWindow( parent, wxID_ANY )
@@ -86,6 +87,9 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
     btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, wxBitmap( bitmap2component_xpm ) );
     btn->SetToolTip( _( "Bitmap2Component (a tool to build a logo from a bitmap)\n\
 Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W picture" ) );
+
+    btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, wxBitmap( pcb_calculator_xpm ) );
+    btn->SetToolTip( _( "Pcb calculator" ) );
 }
 
 

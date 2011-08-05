@@ -44,6 +44,7 @@ enum id_kicad_frm {
     ID_TO_EESCHEMA,
     ID_TO_GERBVIEW,
     ID_TO_BITMAP_CONVERTER,
+    ID_TO_PCB_CALCULATOR,
     ID_BROWSE_AN_SELECT_FILE,
     ID_SELECT_PREFERED_EDITOR,
     ID_SELECT_PREFERED_PDF_BROWSER_NAME,
@@ -93,6 +94,7 @@ public:
     void OnRunEeschema( wxCommandEvent& event );
     void OnRunGerbview( wxCommandEvent& event );
     void OnRunBitmapConverter( wxCommandEvent& event );
+    void OnRunPcbCalculator( wxCommandEvent& event );
 
     void OnOpenTextEditor( wxCommandEvent& event );
     void OnOpenFileInTextEditor( wxCommandEvent& event );

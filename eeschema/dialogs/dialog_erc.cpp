@@ -325,17 +325,11 @@ void DIALOG_ERC::DisplayERC_MarkersList()
             SCH_MARKER* Marker = (SCH_MARKER*) DrawStruct;
             if( Marker->GetMarkerType() != MARK_ERC )
                 continue;
-
-            /* Display diag */
-
-//            wxString msg;
-//            msg.Printf( _( "<b>sheet %s</b><ul>\n" ),
-// Sheet->PathHumanReadable().GetData() );
-//            msg += Marker->GetReporter().ShowHtml();
-//            m_MarkersList->Append( msg );
-            m_MarkersList->AppendToList( Marker );
+            // Add marker without refresh the displayed list:
+            m_MarkersList->AppendToList( Marker, false );
         }
     }
+    m_MarkersList->Refresh();
 }
 
 

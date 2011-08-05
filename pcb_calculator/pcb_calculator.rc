@@ -1,0 +1,2 @@
+pcb_calculator_icon ICON pcb_calculator.ico
+#include "wx/msw/wx.rc"
