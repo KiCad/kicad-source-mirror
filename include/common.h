@@ -54,6 +54,7 @@ enum pseudokeys {
 #define EESCHEMA_EXE        wxT( "eeschema.exe" )
 #define GERBVIEW_EXE        wxT( "gerbview.exe" )
 #define BITMAPCONVERTER_EXE wxT( "bitmap2component.exe" )
+#define PCB_CALCULATOR_EXE  wxT( "pcb_calculator.exe" )
 #else
 #ifndef __WXMAC__
 #define CVPCB_EXE           wxT( "cvpcb" )
@@ -61,12 +62,14 @@ enum pseudokeys {
 #define EESCHEMA_EXE        wxT( "eeschema" )
 #define GERBVIEW_EXE        wxT( "gerbview" )
 #define BITMAPCONVERTER_EXE wxT( "bitmap2component" )
+#define PCB_CALCULATOR_EXE  wxT( "pcb_calculator" )
 #else
 #define CVPCB_EXE           wxT( "cvpcb.app/Contents/MacOS/cvpcb" )
 #define PCBNEW_EXE          wxT( "pcbnew.app/Contents/MacOS/pcbnew" )
 #define EESCHEMA_EXE        wxT( "eeschema.app/Contents/MacOS/eeschema" )
 #define GERBVIEW_EXE        wxT( "gerbview.app/Contents/MacOS/gerbview" )
 #define BITMAPCONVERTER_EXE wxT( "bitmap2component.app/Contents/MacOS/bitmap2component" )
+#define PCB_CALCULATOR_EXE  wxT( "pcb_calculator.app/Contents/MacOS/pcb_calculator" )
 # endif
 #endif
 

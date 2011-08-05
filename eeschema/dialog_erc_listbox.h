@@ -43,12 +43,14 @@ public:
      * Function AppendToList
      * @param aItem The SCH_MARKER* to add to the current list which will be
      *  displayed in the wxHtmlListBox
+     * @param aRefresh = true to refresh the display
      */
-    void AppendToList( SCH_MARKER* aItem )
+    void AppendToList( SCH_MARKER* aItem, bool aRefresh = true )
     {
         m_MarkerList.push_back( aItem);
         SetItemCount( m_MarkerList.size() );
-        Refresh();
+        if( aRefresh )
+            Refresh();
     }
 
 

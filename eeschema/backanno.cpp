@@ -15,18 +15,25 @@
 #include "general.h"
 #include "sch_sheet_path.h"
 #include "sch_component.h"
+#include "netlist.h"
 
 
 const wxString BackAnnotateFileWildcard( wxT( "EESchema Back Annotation File (*.stf)|*.stf" ) );
 
 
-bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFilename, bool aSetFieldAttributeToVisible  )
+bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFile, bool aSetFieldAttributeToVisible  )
 {
     int   LineNum = 0;
     char* cp, Ref[256], FootPrint[256], Line[1024];
     SCH_SHEET_LIST SheetList;
+    wxString reference;
+    wxString footprint;
 
-    while( GetLine( aFilename, Line, &LineNum, sizeof(Line) ) )
+    // Build a flat list of components in schematic:
+    SCH_REFERENCE_LIST referencesList;
+    SheetList.GetComponents( referencesList, false );
+
+    while( GetLine( aFile, Line, &LineNum, sizeof(Line) ) )
     {
         if( sscanf( Line, "comp = \"%s module = \"%s", Ref, FootPrint ) == 2 )
         {
@@ -38,12 +45,39 @@ bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFilename, bool aSetFieldAttributeT
                 if( *cp == '"' )
                     *cp = 0;
 
-            wxString reference = FROM_UTF8( Ref );
-            wxString Footprint = FROM_UTF8( FootPrint );
-            SheetList.SetComponentFootprint( reference, Footprint, aSetFieldAttributeToVisible );
+            reference = FROM_UTF8( Ref );
+            footprint = FROM_UTF8( FootPrint );
+
+            // Search the component in the flat list
+            for( unsigned ii = 0; ii < referencesList.GetCount(); ii++ )
+            {
+                if( reference.CmpNoCase( referencesList[ii].GetRef() ) == 0 )
+                {
+                    // We have found a candidate.
+                    // Note: it can be not unique (multiple parts per package)
+                    // So we do not stop the search here
+                    SCH_COMPONENT* component = referencesList[ii].GetComponent();
+                    SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
+                    if( fpfield->m_Text.IsEmpty()
+                        && ( fpfield->m_Pos == wxPoint( 0, 0 ) ) )
+                    {
+                        fpfield->m_Orient = component->GetField( VALUE )->m_Orient;
+                        fpfield->m_Pos    = component->GetField( VALUE )->m_Pos;
+                        fpfield->m_Pos.y -= 100;
+                    }
+
+                    fpfield->m_Text = footprint;
+
+                    if( aSetFieldAttributeToVisible )
+                        component->GetField( FOOTPRINT )->m_Attributs &= ~TEXT_NO_VISIBLE;
+                    else
+                        component->GetField( FOOTPRINT )->m_Attributs |= TEXT_NO_VISIBLE;
+                }
+            }
         }
     }
 
+    fclose( aFile );
     return true;
 }
 

@@ -176,6 +176,10 @@ void KICAD_MANAGER_FRAME::OnRunBitmapConverter( wxCommandEvent& event )
     ExecuteFile( this, BITMAPCONVERTER_EXE, wxEmptyString );
 }
 
+void KICAD_MANAGER_FRAME::OnRunPcbCalculator( wxCommandEvent& event )
+{
+    ExecuteFile( this, PCB_CALCULATOR_EXE, wxEmptyString );
+}
 
 void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
 {
