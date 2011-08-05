@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Jun  6 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -112,7 +112,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	gridStaticBoxSizer->Add( moveUpButton, 0, wxALL|wxEXPAND, 5 );
 	
-	fieldsSizer->Add( gridStaticBoxSizer, 5, wxEXPAND|wxRIGHT|wxLEFT, 8 );
+	fieldsSizer->Add( gridStaticBoxSizer, 3, wxEXPAND|wxRIGHT|wxLEFT, 8 );
 	
 	wxBoxSizer* fieldEditBoxSizer;
 	fieldEditBoxSizer = new wxBoxSizer( wxVERTICAL );
@@ -237,7 +237,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	fieldEditBoxSizer->Add( positionBoxSizer, 0, wxEXPAND, 5 );
 	
-	fieldsSizer->Add( fieldEditBoxSizer, 0, wxEXPAND, 5 );
+	fieldsSizer->Add( fieldEditBoxSizer, 2, wxEXPAND, 5 );
 	
 	upperSizer->Add( fieldsSizer, 1, wxALL|wxEXPAND, 5 );
 	
@@ -253,6 +253,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP( 
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
+	mainSizer->Fit( this );
 	
 	// Connect Events
 	defaultsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP::SetInitCmp ), NULL, this );
