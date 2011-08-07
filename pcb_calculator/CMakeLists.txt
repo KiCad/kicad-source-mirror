@@ -8,25 +8,25 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 set(PCB_CALCULATOR_SRCS
     attenuators.cpp
     board_classes_values.cpp
-    pcb_calculator.cpp
-    pcb_calculator_frame.cpp
     colorcode.cpp
     params_read_write.cpp
+    pcb_calculator.cpp
+    pcb_calculator_frame.cpp
     regulators_funct.cpp
     transline_ident.cpp
     tracks_width_versus_current.cpp
+    transline_dlg_funct.cpp
     UnitSelector.cpp
-    transline/transline.cpp
+    attenuators/attenuator_classes.cpp
+    dialogs/pcb_calculator_frame_base.cpp
     transline/c_microstrip.cpp
-    transline/microstrip.cpp
     transline/coplanar.cpp
     transline/coax.cpp
+    transline/microstrip.cpp
     transline/rectwaveguide.cpp
     transline/stripline.cpp
+    transline/transline.cpp
     transline/twistedpair.cpp
-    transline_dlg_funct.cpp
-    dialogs/pcb_calculator_frame_base.cpp
-    attenuators/attenuator_classes.cpp
     )
 
 if(WIN32)

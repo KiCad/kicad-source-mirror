@@ -188,13 +188,13 @@ void PCB_CALCULATOR_FRAME::TW_Init()
     m_TrackLengthValue->SetValue( msg );
 
     // Init formulas text
-    m_htmlWinFormulas->AppendToPage( _( "<br>The formula (from IPC 2221) is:</br><br></br>" ) );
+    m_htmlWinFormulas->AppendToPage( _( "<br><em>The formula (from IPC 2221) is:</em></br>" ) );
     m_htmlWinFormulas->AppendToPage( _( "<br><b>I = K * dT<sup>0.44</sup> * (W*H)<sup>0.725</sup></b></br>" ) );
     m_htmlWinFormulas->AppendToPage( _( "<br>Internal traces : <b>K = 0.024</b></br>" ) );
     m_htmlWinFormulas->AppendToPage( _( "<br>External traces: <b>K = 0.048</b></br>" ) );
 
     m_htmlWinFormulas->AppendToPage( _( "<br>where:</br>" ) );
     m_htmlWinFormulas->AppendToPage( _( "<br><b>I</b> = maximum current in Amps</br>" ) );
-    m_htmlWinFormulas->AppendToPage( _( "<br><b>dT</b> = temperature rise above ambient in \0B0 C</br>" ) );
+    m_htmlWinFormulas->AppendToPage( _( "<br><b>dT</b> = temperature rise above ambient in deg C</br>" ) );
     m_htmlWinFormulas->AppendToPage( _( "<br><b>W,H</b> = Width and Thickness in mils</br>" ) );
 }
