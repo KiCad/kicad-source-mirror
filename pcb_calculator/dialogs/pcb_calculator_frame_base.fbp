@@ -8,7 +8,7 @@
         <property name="disconnect_mode">source_name</property>
         <property name="disconnect_python_events">0</property>
         <property name="embedded_files_path">res</property>
-        <property name="encoding">ANSI</property>
+        <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
         <property name="file">pcb_calculator_frame_base</property>
         <property name="first_id">1000</property>
@@ -2303,7 +2303,7 @@
                                             <event name="OnUpdateUI"></event>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL</property>
+                                                <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                                                 <property name="proportion">0</property>
                                                 <object class="wxStaticText" expanded="1">
                                                     <property name="BottomDockable">1</property>
@@ -2391,7 +2391,7 @@
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
-                                                <property name="proportion">1</property>
+                                                <property name="proportion">0</property>
                                                 <object class="wxFlexGridSizer" expanded="1">
                                                     <property name="cols">3</property>
                                                     <property name="flexible_direction">wxBOTH</property>
@@ -2493,7 +2493,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALL|wxEXPAND</property>
+                                                        <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxTextCtrl" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -2758,7 +2758,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND</property>
+                                                        <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxTextCtrl" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -2876,7 +2876,7 @@
                                                             <property name="gripper">0</property>
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
-                                                            <property name="label">°C</property>
+                                                            <property name="label">deg C</property>
                                                             <property name="layer"></property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
@@ -3023,7 +3023,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALL|wxEXPAND</property>
+                                                        <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxTextCtrl" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -3114,7 +3114,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALL|wxEXPAND</property>
+                                                        <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxChoice" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -3288,7 +3288,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALL|wxEXPAND</property>
+                                                        <property name="flag">wxEXPAND|wxALL</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxTextCtrl" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -3379,7 +3379,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALL|wxEXPAND</property>
+                                                        <property name="flag">wxEXPAND|wxALL</property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxChoice" expanded="1">
                                                             <property name="BottomDockable">1</property>
@@ -3468,7 +3468,7 @@
                                             </object>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
-                                                <property name="flag">wxALL|wxEXPAND</property>
+                                                <property name="flag">wxEXPAND|wxTOP</property>
                                                 <property name="proportion">1</property>
                                                 <object class="wxHtmlWindow" expanded="1">
                                                     <property name="BottomDockable">1</property>

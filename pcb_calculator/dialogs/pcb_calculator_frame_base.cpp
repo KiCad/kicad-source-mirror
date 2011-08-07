@@ -143,11 +143,11 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	wxStaticBoxSizer* sbSizerTW_Prms;
 	sbSizerTW_Prms = new wxStaticBoxSizer( new wxStaticBox( m_panelTrackWidth, wxID_ANY, _("Parameters:") ), wxVERTICAL );
 	
-	m_staticText89 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Valid max values:\n35A for external traces and 17.5A for internal.\n400mil widths.\nMaximum temperature rise of 100°C."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText89 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Valid max values:\n35A for external traces and 17.5A for internal.\n400mil widths.\nMaximum temperature rise of 100Â°C."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText89->Wrap( -1 );
 	m_staticText89->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
 	
-	sbSizerTW_Prms->Add( m_staticText89, 0, wxALL, 5 );
+	sbSizerTW_Prms->Add( m_staticText89, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxFlexGridSizer* fgSizer10;
 	fgSizer10 = new wxFlexGridSizer( 4, 3, 0, 0 );
@@ -160,7 +160,7 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	fgSizer10->Add( m_staticTextCurrent, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
 	m_TrackCurrentValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_TrackCurrentValue, 0, wxALL|wxEXPAND, 5 );
+	fgSizer10->Add( m_TrackCurrentValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText62 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("A"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText62->Wrap( -1 );
@@ -171,9 +171,9 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	fgSizer10->Add( m_staticText63, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 	
 	m_TrackDeltaTValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_TrackDeltaTValue, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizer10->Add( m_TrackDeltaTValue, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticText64 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("°C"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText64 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("deg C"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText64->Wrap( -1 );
 	fgSizer10->Add( m_staticText64, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -182,29 +182,29 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	fgSizer10->Add( m_staticText65, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
 	
 	m_TrackThicknessValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_TrackThicknessValue, 0, wxALL|wxEXPAND, 5 );
+	fgSizer10->Add( m_TrackThicknessValue, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxArrayString m_TW_CuThickness_choiceUnitChoices;
 	m_TW_CuThickness_choiceUnit = new UNIT_SELECTOR_LEN( m_panelTrackWidth, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_TW_CuThickness_choiceUnitChoices, 0 );
 	m_TW_CuThickness_choiceUnit->SetSelection( 0 );
-	fgSizer10->Add( m_TW_CuThickness_choiceUnit, 0, wxALL|wxEXPAND, 5 );
+	fgSizer10->Add( m_TW_CuThickness_choiceUnit, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_staticText66 = new wxStaticText( m_panelTrackWidth, wxID_ANY, _("Conductor length"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText66->Wrap( -1 );
 	fgSizer10->Add( m_staticText66, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxRIGHT|wxLEFT, 5 );
 	
 	m_TrackLengthValue = new wxTextCtrl( m_panelTrackWidth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer10->Add( m_TrackLengthValue, 0, wxALL|wxEXPAND, 5 );
+	fgSizer10->Add( m_TrackLengthValue, 0, wxEXPAND|wxALL, 5 );
 	
 	wxArrayString m_TW_CuLength_choiceUnitChoices;
 	m_TW_CuLength_choiceUnit = new UNIT_SELECTOR_LEN( m_panelTrackWidth, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_TW_CuLength_choiceUnitChoices, 0 );
 	m_TW_CuLength_choiceUnit->SetSelection( 0 );
-	fgSizer10->Add( m_TW_CuLength_choiceUnit, 0, wxALL|wxEXPAND, 5 );
+	fgSizer10->Add( m_TW_CuLength_choiceUnit, 0, wxEXPAND|wxALL, 5 );
 	
-	sbSizerTW_Prms->Add( fgSizer10, 1, wxEXPAND, 5 );
+	sbSizerTW_Prms->Add( fgSizer10, 0, wxEXPAND, 5 );
 	
 	m_htmlWinFormulas = new wxHtmlWindow( m_panelTrackWidth, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHW_NO_SELECTION|wxHW_SCROLLBAR_AUTO|wxSIMPLE_BORDER );
-	sbSizerTW_Prms->Add( m_htmlWinFormulas, 1, wxALL|wxEXPAND, 5 );
+	sbSizerTW_Prms->Add( m_htmlWinFormulas, 1, wxEXPAND|wxTOP, 5 );
 	
 	bSizerTrackWidth->Add( sbSizerTW_Prms, 1, wxALL|wxEXPAND, 5 );
 	
