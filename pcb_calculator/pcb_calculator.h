@@ -46,6 +46,32 @@ private:
     void ReadConfig();
     void WriteConfig();
 
+    // tracks width versus current functions:
+    /**
+     * Function OnTWCalculateButt
+     * Called by clicking on the calculate button
+     */
+    void OnTWCalculateButt( wxCommandEvent& event );
+
+    /**
+     * Function TW_Init
+     * Read config and init dialog widgets values
+     */
+    void TW_Init();
+
+    /**
+     * Function TW_WriteConfig
+     * Write Track width prameters in config
+     */
+    void TW_WriteConfig();
+
+    /**
+     * Function TWCalculate
+     * Performs track caracteristics values calculations.
+     */
+    double TWCalculate( double aCurrent, double aThickness, double aDeltaT_C,
+                    bool aUseInternalLayer );
+
     // Transline functions:
     /**
      * Function OnTranslineSelection

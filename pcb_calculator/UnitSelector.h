@@ -27,6 +27,11 @@ public:
      * to normalized units (meter, herz, ohm, radian )
      */
     virtual double GetUnitScale() = 0;
+
+    wxString GetUnitName()
+    {
+        return GetStringSelection();
+    }
 };
 
 class UNIT_SELECTOR_LEN: public UNIT_SELECTOR

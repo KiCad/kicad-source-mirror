@@ -14,6 +14,7 @@ set(PCB_CALCULATOR_SRCS
     params_read_write.cpp
     regulators_funct.cpp
     transline_ident.cpp
+    tracks_width_versus_current.cpp
     UnitSelector.cpp
     transline/transline.cpp
     transline/c_microstrip.cpp

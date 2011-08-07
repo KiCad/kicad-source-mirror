@@ -33,10 +33,11 @@ class UNIT_SELECTOR_RESISTOR;
 #include <wx/textctrl.h>
 #include <wx/button.h>
 #include <wx/panel.h>
+#include <wx/choice.h>
+#include <wx/html/htmlwin.h>
+#include <wx/statbox.h>
 #include <wx/radiobox.h>
 #include <wx/statline.h>
-#include <wx/choice.h>
-#include <wx/statbox.h>
 #include <wx/grid.h>
 #include <wx/notebook.h>
 #include <wx/frame.h>
@@ -75,6 +76,52 @@ class PCB_CALCULATOR_FRAME_BASE : public wxFrame
 		wxStaticText* m_unitsVout;
 		wxButton* m_buttonCalculate;
 		wxStaticText* m_RegulMessage;
+		wxPanel* m_panelTrackWidth;
+		wxStaticText* m_staticText89;
+		wxStaticText* m_staticTextCurrent;
+		wxTextCtrl* m_TrackCurrentValue;
+		wxStaticText* m_staticText62;
+		wxStaticText* m_staticText63;
+		wxTextCtrl* m_TrackDeltaTValue;
+		wxStaticText* m_staticText64;
+		wxStaticText* m_staticText65;
+		wxTextCtrl* m_TrackThicknessValue;
+		UNIT_SELECTOR_LEN* m_TW_CuThickness_choiceUnit;
+		wxStaticText* m_staticText66;
+		wxTextCtrl* m_TrackLengthValue;
+		UNIT_SELECTOR_LEN* m_TW_CuLength_choiceUnit;
+		wxHtmlWindow* m_htmlWinFormulas;
+		wxButton* m_buttonTW;
+		wxStaticText* m_staticTextWidth;
+		wxTextCtrl* m_ExtTrackWidthValue;
+		UNIT_SELECTOR_LEN* m_TW_ExtTrackWidth_choiceUnit;
+		wxStaticText* m_staticTextArea;
+		wxTextCtrl* m_ExtTrackAreaValue;
+		wxStaticText* m_ExtTrackAreaUnitLabel;
+		wxStaticText* m_staticText651;
+		wxTextCtrl* m_ExtTrackResistValue;
+		wxStaticText* m_staticText84;
+		wxStaticText* m_staticText661;
+		wxTextCtrl* m_ExtTrackVDropValue;
+		wxStaticText* m_staticText83;
+		wxStaticText* m_staticText79;
+		wxTextCtrl* m_ExtTrackLossValue;
+		wxStaticText* m_staticText791;
+		wxStaticText* m_staticTextWidth11;
+		wxTextCtrl* m_IntTrackWidthValue;
+		UNIT_SELECTOR_LEN* m_TW_IntTrackWidth_choiceUnit;
+		wxStaticText* m_staticTextArea1;
+		wxTextCtrl* m_IntTrackAreaValue;
+		wxStaticText* m_IntTrackAreaUnitLabel;
+		wxStaticText* m_staticText6511;
+		wxTextCtrl* m_IntTrackResistValue;
+		wxStaticText* m_staticText841;
+		wxStaticText* m_staticText6611;
+		wxTextCtrl* m_IntTrackVDropValue;
+		wxStaticText* m_staticText831;
+		wxStaticText* m_staticText792;
+		wxTextCtrl* m_IntTrackLossValue;
+		wxStaticText* m_staticText7911;
 		wxPanel* m_panelTransline;
 		wxRadioBox* m_TranslineSelection;
 		wxPanel* m_panelDisplayshape;
@@ -195,6 +242,7 @@ class PCB_CALCULATOR_FRAME_BASE : public wxFrame
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnRegulatorCalcButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTWCalculateButt( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintTranslinePanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void OnTranslineEpsilonR_Button( wxCommandEvent& event ) { event.Skip(); }
@@ -212,7 +260,7 @@ class PCB_CALCULATOR_FRAME_BASE : public wxFrame
 	
 	public:
 		
-		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pcb Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 752,465 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL );
+		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pcb Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 670,465 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL );
 		
 		~PCB_CALCULATOR_FRAME_BASE();
 	

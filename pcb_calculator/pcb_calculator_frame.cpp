@@ -73,6 +73,8 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( wxWindow * parent ) :
     TranslineTypeSelection( m_currTransLineType );
     m_TranslineSelection->SetSelection( m_currTransLineType );
 
+    TW_Init();
+
     SetAttenuator( m_AttenuatorsSelection->GetSelection() );
 
     ToleranceSelection( m_rbToleranceSelection->GetSelection() );
@@ -174,6 +176,8 @@ void PCB_CALCULATOR_FRAME::WriteConfig()
     m_Config->Write( KEYWORD_REGUL_R2, m_RegulR2Value->GetValue() );
     m_Config->Write( KEYWORD_REGUL_VREF, m_RegulVrefValue->GetValue() );
     m_Config->Write( KEYWORD_REGUL_VOUT, m_RegulVoutValue->GetValue() );
+
+    TW_WriteConfig();
 
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
         m_transline_list[ii]->WriteConfig( m_Config );
