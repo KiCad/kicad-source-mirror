@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-11 21:05+0100\n"
-"PO-Revision-Date: 2011-06-11 22:32+0100\n"
+"PO-Revision-Date: 2011-08-08 09:39+0100\n"
 "Last-Translator: Ciocemax <ciocemax@alice.it>\n"
 "Language-Team: Ciocemax <ciocemax@alice.it>\n"
 "MIME-Version: 1.0\n"
@@ -476,7 +476,7 @@ msgstr "Ciclo"
 
 #: pcbnew/autoplac.cpp:622
 msgid "Ok to abort?"
-msgstr "Ok per abbandonare?"
+msgstr "Abbandonare l'operazione in corso?"
 
 #: pcbnew/autorout.cpp:67
 msgid "Net not selected"
@@ -912,7 +912,7 @@ msgstr "Pista vicino a foro passante"
 
 #: pcbnew/class_drc_item.cpp:44
 msgid "Track near pad"
-msgstr "Piste vicina a piazozla"
+msgstr "Pista vicina a piazzola"
 
 #: pcbnew/class_drc_item.cpp:46
 msgid "Track near via"
@@ -1753,7 +1753,7 @@ msgstr "Ok per caricare il file di recupero"
 
 #: pcbnew/files.cpp:140
 msgid "The current board has been modified.  Do you wish to discard the changes?"
-msgstr "La scheda è stata modificata. Si desidera annullare i cambiamenti?"
+msgstr "La scheda è stata modificata. Annullare le modifiche?"
 
 #: pcbnew/files.cpp:165
 msgid "Open Board File"
@@ -2413,7 +2413,7 @@ msgstr "Salva C.S. corrente"
 
 #: pcbnew/menubar_pcbframe.cpp:89
 msgid "Save as..."
-msgstr "Salva scheda..."
+msgstr "Salva scheda con nome"
 
 #: pcbnew/menubar_pcbframe.cpp:90
 msgid "Save the current board as.."
@@ -4417,7 +4417,7 @@ msgstr "Nessun collegamento selezionato"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:377
 msgid "You have chosen the \"not connected\" option. This will create insulated copper islands. Are you sure ?"
-msgstr "Hai scelto l'opzione \"non connesso\". Questo creerà delle isole di rame isolate. Sei sicuro?"
+msgstr "E' stata scelta l'opzione \"Non connesso\". Questo creerà delle zone di rame non collegate elettricamente. Continuare?"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:56
 msgid "Net Filtering"
@@ -6668,9 +6668,8 @@ msgid ""
 "by their reference (U1, R3...) (normal setting)\n"
 "or their time stamp (special setting after a full schematic reannotation)"
 msgstr ""
-"Seleziona il modo con il quale le impronte sono individuate:\n"
-"tramite il loro riferimento (R1,C2...)\n"
-"oppure la loro stampigliatura (impostazione speciale dopo una completa riannotazione dello schema)"
+"Seleziona il modo di individuazione delle impronte:\n"
+"Se tramite il riferimento (R1,C2...) oppure tramite la stampigliatura (utile dopo una riannotazione completa dello schema)"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:33
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:46
@@ -6688,7 +6687,7 @@ msgstr "Cambia moduli"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:37
 msgid "Keep or change an existing footprint when the netlist gives a different footprint"
-msgstr "Mantieni o cambia un'impronta esistente quando la Lista componenti rende differenti impronte"
+msgstr "Mantiene o cambia un'impronta quando la Lista componenti contiene impronte differenti da quelle presenti nella scheda"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:48
 msgid "Bad Tracks Deletion:"
@@ -6696,7 +6695,7 @@ msgstr "Cancellazzione piste errate"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:50
 msgid "Keep or delete bad tracks after a netlist change"
-msgstr "Mantieni o cancella piste errate dopo un cambiamento di Lista componenti"
+msgstr "Mantiene o cancella le piste risultanti errate dopo le modifiche introdotte da una Lista componenti differente"
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:56
 msgid "Extra Footprints"
@@ -6707,8 +6706,8 @@ msgid ""
 "Remove footprints found on the Board but not in netlist\n"
 "Note: only not locked footprints will be removed"
 msgstr ""
-"Mantieni o cancella  impronte trovate sulla scheda ma non nella Lista componenti.\n"
-"Soltanto le impronte non bloccate verranno rimosse."
+"Mantiene o cancella le impronte trovate nella scheda ma non nella Lista componenti.\n"
+"Verranno rimosse soltanto le impronte non bloccate."
 
 #: pcbnew/dialogs/dialog_netlist_fbp.cpp:67
 msgid "Browse Netlist Files"
@@ -6797,7 +6796,7 @@ msgstr "Selezione strato"
 #: pcbnew/dialogs/dialog_orient_footprints.cpp:126
 #, c-format
 msgid "Ok to set footprints orientation to %.1f degrees ?"
-msgstr "D'accordo per orientare le impronte a %.1f gradi?"
+msgstr "Orientare le impronte a %.1f gradi?"
 
 #: pcbnew/dialogs/dialog_orient_footprints.cpp:156
 msgid "Bad value for footprints orientation"
@@ -9948,7 +9947,7 @@ msgstr "&Esplora Plugin"
 
 #: eeschema/netlist_control.cpp:141
 msgid "&Netlist"
-msgstr "Lista collegamenti"
+msgstr "Salva Lista componenti"
 
 #: eeschema/netlist_control.cpp:154
 msgid "&Ok"
@@ -9961,7 +9960,7 @@ msgstr "&Cancella"
 #: eeschema/netlist_control.cpp:167
 #: eeschema/netlist_control.cpp:270
 msgid "Netlist"
-msgstr "Lista componenti"
+msgstr "Salva Lista componenti"
 
 #: eeschema/netlist_control.cpp:248
 msgid "Prefix references 'U' and 'IC' with 'X'"
@@ -10078,11 +10077,11 @@ msgstr "Trascina componente"
 
 #: eeschema/onrightclick.cpp:253
 msgid "Mirror --"
-msgstr "Specchia orrizontale"
+msgstr "Specchia verticale"
 
 #: eeschema/onrightclick.cpp:255
 msgid "Mirror ||"
-msgstr "Specchia verticale"
+msgstr "Specchia orizzontale"
 
 #: eeschema/onrightclick.cpp:260
 msgid "Orient Component"
