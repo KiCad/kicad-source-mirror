@@ -18,54 +18,46 @@
 #include "protos.h"
 #include "richio.h"
 
-/* DRAWSEGMENT: constructor */
 DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype )
 {
-    m_Width = m_Flags = m_Shape = m_Type = m_Angle = 0;
+    m_Width = m_Flags = m_Type = m_Angle = 0;
+    m_Shape = S_SEGMENT;
 }
 
 
-/* destructor */
 DRAWSEGMENT:: ~DRAWSEGMENT()
 {
 }
 
 
-/*******************************************/
 void DRAWSEGMENT::Copy( DRAWSEGMENT* source )
-/*******************************************/
 {
-    m_Type      = source->m_Type;
-    m_Layer     = source->m_Layer;
-    m_Width     = source->m_Width;
-    m_Start     = source->m_Start;
-    m_End       = source->m_End;
-    m_Shape     = source->m_Shape;
-    m_Angle     = source->m_Angle;
-    m_TimeStamp = source->m_TimeStamp;
-    m_BezierC1  = source->m_BezierC1;
-    m_BezierC2  = source->m_BezierC1;
+    if( source == NULL )
+        return;
+
+    m_Type         = source->m_Type;
+    m_Layer        = source->m_Layer;
+    m_Width        = source->m_Width;
+    m_Start        = source->m_Start;
+    m_End          = source->m_End;
+    m_Shape        = source->m_Shape;
+    m_Angle        = source->m_Angle;
+    m_TimeStamp    = source->m_TimeStamp;
+    m_BezierC1     = source->m_BezierC1;
+    m_BezierC2     = source->m_BezierC1;
+    m_BezierPoints = source->m_BezierPoints;
 }
 
-/**
- * Function Rotate
- * Rotate this object.
- * @param aRotCentre - the rotation point.
- * @param aAngle - the rotation angle in 0.1 degree.
- */
-void DRAWSEGMENT::Rotate(const wxPoint& aRotCentre, int aAngle)
+
+void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, int aAngle )
 {
     RotatePoint( &m_Start, aRotCentre, aAngle );
     RotatePoint( &m_End, aRotCentre, aAngle );
 }
 
-/**
- * Function Flip
- * Flip this object, i.e. change the board side for this object
- * @param aCentre - the rotation point.
- */
-void DRAWSEGMENT::Flip(const wxPoint& aCentre )
+
+void DRAWSEGMENT::Flip( const wxPoint& aCentre )
 {
     m_Start.y  = aCentre.y - (m_Start.y - aCentre.y);
     m_End.y  = aCentre.y - (m_End.y - aCentre.y);
@@ -79,56 +71,53 @@ void DRAWSEGMENT::Flip(const wxPoint& aCentre )
 
 bool DRAWSEGMENT::Save( FILE* aFile ) const
 {
-    bool rc = false;
-
     if( fprintf( aFile, "$DRAWSEGMENT\n" ) != sizeof("$DRAWSEGMENT\n") - 1 )
-        goto out;
+        return false;
 
     fprintf( aFile, "Po %d %d %d %d %d %d\n",
              m_Shape,
              m_Start.x, m_Start.y,
              m_End.x, m_End.y, m_Width );
-    if( m_Type != S_CURVE) {
+
+    if( m_Type != S_CURVE )
+    {
         fprintf( aFile, "De %d %d %d %lX %X\n",
-                m_Layer, m_Type, m_Angle,
-                m_TimeStamp, ReturnStatus() );
-    } else {
+                 m_Layer, m_Type, m_Angle,
+                 m_TimeStamp, ReturnStatus() );
+    }
+    else
+    {
         fprintf( aFile, "De %d %d %d %lX %X %d %d %d %d\n",
-                m_Layer, m_Type, m_Angle,
-                m_TimeStamp, ReturnStatus(),
-                m_BezierC1.x,m_BezierC1.y,
-                m_BezierC2.x,m_BezierC2.y);
+                 m_Layer, m_Type, m_Angle,
+                 m_TimeStamp, ReturnStatus(),
+                 m_BezierC1.x,m_BezierC1.y,
+                 m_BezierC2.x,m_BezierC2.y);
     }
 
     if( fprintf( aFile, "$EndDRAWSEGMENT\n" ) != sizeof("$EndDRAWSEGMENT\n") - 1 )
-        goto out;
+        return false;
 
-    rc = true;
-
-out:
-    return rc;
+    return true;
 }
 
 
-/******************************************************************/
 bool DRAWSEGMENT::ReadDrawSegmentDescr( LINE_READER* aReader )
-/******************************************************************/
-
-/* Read a DRAWSEGMENT from a file
- */
 {
     char* Line;
 
     while( aReader->ReadLine() )
     {
         Line = aReader->Line();
+
         if( strnicmp( Line, "$End", 4 ) == 0 )
             return TRUE; /* End of description */
+
         if( Line[0] == 'P' )
         {
             sscanf( Line + 2, " %d %d %d %d %d %d",
                     &m_Shape, &m_Start.x, &m_Start.y,
                     &m_End.x, &m_End.y, &m_Width );
+
             if( m_Width < 0 )
                 m_Width = 0;
         }
@@ -136,47 +125,50 @@ bool DRAWSEGMENT::ReadDrawSegmentDescr( LINE_READER* aReader )
         if( Line[0] == 'D' )
         {
             int status;
-            char* token=0;
+            char* token = 0;
 
-            token = strtok(Line," ");
+            token = strtok( Line," " );
 
-            for(int i=0; (token = strtok(NULL," ")) != NULL; i++){
-            switch(i){
-            case 0:
-                sscanf(token,"%d",&m_Layer);
-                break;
-            case 1:
-                sscanf(token,"%d",&m_Type);
-                break;
-            case 2:
-                sscanf(token,"%d",&m_Angle);
-                break;
-            case 3:
-                sscanf(token,"%lX",&m_TimeStamp);
-                break;
-            case 4:
-                sscanf(token,"%X",&status);
-                break;
-            /* Bezier Control Points*/
-            case 5:
-                sscanf(token,"%d",&m_BezierC1.x);
-                break;
-            case 6:
-                sscanf(token,"%d",&m_BezierC1.y);
-                break;
-            case 7:
-                sscanf(token,"%d",&m_BezierC2.x);
-                break;
-            case 8:
-                sscanf(token,"%d",&m_BezierC2.y);
-                break;
-            default:
-                break;
+            for( int i = 0; (token = strtok( NULL," " )) != NULL; i++ )
+            {
+                switch( i )
+                {
+                case 0:
+                    sscanf( token,"%d",&m_Layer );
+                    break;
+                case 1:
+                    sscanf( token,"%d",&m_Type );
+                    break;
+                case 2:
+                    sscanf( token,"%d",&m_Angle );
+                    break;
+                case 3:
+                    sscanf( token,"%lX",&m_TimeStamp );
+                    break;
+                case 4:
+                    sscanf( token,"%X",&status );
+                    break;
+                    /* Bezier Control Points*/
+                case 5:
+                    sscanf( token,"%d",&m_BezierC1.x );
+                    break;
+                case 6:
+                    sscanf( token,"%d",&m_BezierC1.y );
+                    break;
+                case 7:
+                    sscanf( token,"%d",&m_BezierC2.x );
+                    break;
+                case 8:
+                    sscanf( token,"%d",&m_BezierC2.y );
+                    break;
+                default:
+                    break;
                 }
             }
 
             if( m_Layer < FIRST_NO_COPPER_LAYER )
                 m_Layer = FIRST_NO_COPPER_LAYER;
+
             if( m_Layer > LAST_NO_COPPER_LAYER )
                 m_Layer = LAST_NO_COPPER_LAYER;
 
@@ -224,6 +216,14 @@ wxPoint DRAWSEGMENT::GetEnd() const
 }
 
 
+MODULE* DRAWSEGMENT::GetParentModule() const
+{
+    if( m_Parent->Type() != TYPE_MODULE )
+        return NULL;
+
+    return (MODULE*) m_Parent;
+}
+
 
 void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& aOffset )
 {
@@ -233,10 +233,11 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     int rayon;
 
     BOARD * brd =  GetBoard( );
+
     if( brd->IsLayerVisible( GetLayer() ) == false )
         return;
 
-    color = brd->GetLayerColor(GetLayer());
+    color = brd->GetLayerColor( GetLayer() );
 
     GRSetDrawMode( DC, draw_mode );
     l_piste = m_Width >> 1;  /* half trace width */
@@ -404,84 +405,133 @@ void DRAWSEGMENT::DisplayInfo( EDA_DRAW_FRAME* frame )
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param aRefPos A wxPoint to test
- * @return bool - true if a hit, else false
- */
+EDA_RECT DRAWSEGMENT::GetBoundingBox() const
+{
+    EDA_RECT bbox;
+
+    bbox.SetOrigin( m_Start );
+
+    switch( m_Shape )
+    {
+    case S_SEGMENT:
+        bbox.SetEnd( m_End );
+        bbox.Inflate( (m_Width / 2) + 1 );
+        break;
+
+    case S_CIRCLE:
+        bbox.Inflate( GetRadius() + 1 );
+        break;
+
+    case S_ARC:
+    {
+        bbox.Inflate( GetRadius() + 1 );
+    }
+    break;
+
+    case S_POLYGON:
+    {
+        wxPoint p_end;
+        MODULE* module = GetParentModule();
+
+        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
+        {
+            wxPoint pt = m_PolyPoints[ii];
+
+            if( module ) // Transform, if we belong to a module
+            {
+                RotatePoint( &pt, module->m_Orient );
+                pt += module->m_Pos;
+            }
+
+            if( ii == 0 )
+                p_end = pt;
+            bbox.m_Pos.x = MIN( bbox.m_Pos.x, pt.x );
+            bbox.m_Pos.y = MIN( bbox.m_Pos.y, pt.y );
+            p_end.x   = MAX( p_end.x, pt.x );
+            p_end.y   = MAX( p_end.y, pt.y );
+        }
+
+        bbox.SetEnd(p_end);
+        bbox.Inflate( 1 );
+        break;
+    }
+    }
+
+    bbox.Inflate( (m_Width+1) / 2 );
+    return bbox;
+}
+
+
 bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
 {
     /* Calculate coordinates to test relative to segment origin. */
     wxPoint relPos = aRefPos - m_Start;
 
-    switch(m_Shape)
+    switch( m_Shape )
     {
-        case S_CIRCLE:
-        case S_ARC:
+    case S_CIRCLE:
+    case S_ARC:
+    {
+        int rayon = GetRadius();
+        int dist  = (int) hypot( (double) relPos.x, (double) relPos.y );
+
+        if( abs( rayon - dist ) <= ( m_Width / 2 ) )
         {
-            int rayon = GetRadius();
-            int dist  = (int) hypot( (double) relPos.x, (double) relPos.y );
-
-            if( abs( rayon - dist ) <= ( m_Width / 2 ) )
-            {
-                 if( m_Shape == S_CIRCLE )
-                     return true;
-
-                int mouseAngle = ArcTangente( relPos.y, relPos.x );
-                int stAngle    = ArcTangente( m_End.y - m_Start.y, m_End.x - m_Start.x );
-                int endAngle   = stAngle + m_Angle;
-
-                if( endAngle > 3600 )
-                {
-                    stAngle  -= 3600;
-                    endAngle -= 3600;
-                }
-
-                if( mouseAngle >= stAngle && mouseAngle <= endAngle )
-                    return true;
-            }
-        }
-            break;
-
-        case S_CURVE:
-            for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
-            {
-                if( TestSegmentHit( aRefPos,m_BezierPoints[i-1],
-                                    m_BezierPoints[i-1], m_Width / 2 ) )
-                    return true;
-            }
-            break;
-
-        default:
-            if( TestSegmentHit( aRefPos, m_Start, m_End, m_Width / 2 ) )
+            if( m_Shape == S_CIRCLE )
                 return true;
+
+            int mouseAngle = ArcTangente( relPos.y, relPos.x );
+            int stAngle    = ArcTangente( m_End.y - m_Start.y, m_End.x - m_Start.x );
+            int endAngle   = stAngle + m_Angle;
+
+            if( endAngle > 3600 )
+            {
+                stAngle  -= 3600;
+                endAngle -= 3600;
+            }
+
+            if( mouseAngle >= stAngle && mouseAngle <= endAngle )
+                return true;
+        }
+    }
+    break;
+
+    case S_CURVE:
+        for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
+        {
+            if( TestSegmentHit( aRefPos,m_BezierPoints[i-1],
+                                m_BezierPoints[i-1], m_Width / 2 ) )
+                return true;
+        }
+        break;
+
+    case S_SEGMENT:
+        if( TestSegmentHit( aRefPos, m_Start, m_End, m_Width / 2 ) )
+            return true;
+        break;
+
+    default:
+        wxASSERT( 0 );
+        break;
     }
     return false;
 }
 
 
-/**
- * Function HitTest (overlayed)
- * tests if the given EDA_RECT intersect this object.
- * For now, for arcs and segments, an ending point must be inside this rect.
- * @param refArea : the given EDA_RECT
- * @return bool - true if a hit, else false
- */
 bool DRAWSEGMENT::HitTest( EDA_RECT& refArea )
 {
-    switch(m_Shape)
+    switch( m_Shape )
     {
         case S_CIRCLE:
         {
             int radius = GetRadius();
             // Text if area intersects the circle:
             EDA_RECT area = refArea;
-            area.Inflate(radius);
-            if( area.Contains(m_Start) )
+            area.Inflate( radius );
+            if( area.Contains( m_Start ) )
                 return true;
         }
-            break;
+        break;
 
         case S_ARC:
         case S_SEGMENT:
@@ -501,7 +551,7 @@ wxString DRAWSEGMENT::GetSelectMenuText() const
     wxString temp;
 
     text << _( "Pcb Graphic" ) << wxT(": ") << ShowShape( (Track_Shapes)m_Shape )
-         << wxChar(' ') << _("Length:") << valeur_param( GetLength(), temp )
+         << wxChar(' ') << _( "Length:" ) << valeur_param( GetLength(), temp )
          << _( " on " ) << GetLayerName();
 
     return text;

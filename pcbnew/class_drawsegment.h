@@ -22,7 +22,10 @@ public:
     wxPoint m_BezierC1;         // Bezier Control Point 1
     wxPoint m_BezierC2;         // Bezier Control Point 1
 
+protected:
     std::vector<wxPoint> m_BezierPoints;
+    std::vector<wxPoint> m_PolyPoints;
+
 public:
     DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype = TYPE_DRAWSEGMENT );
     ~DRAWSEGMENT();
@@ -40,7 +43,6 @@ public:
     {
         return m_Start;
     }
-
 
     /**
      * Function GetStart
@@ -66,6 +68,17 @@ public:
     }
 
     /**
+     * Function GetParentModule
+     * returns a pointer to the parent module, or NULL if DRAWSEGMENT does not
+     * belong to a module.
+     * @return MODULE* - pointer to the parent module or NULL.
+     */
+    MODULE* GetParentModule() const;
+
+    std::vector<wxPoint>& GetBezierPoints() { return m_BezierPoints; };
+    std::vector<wxPoint>& GetPolyPoints() { return m_PolyPoints; };
+
+    /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
@@ -89,6 +102,16 @@ public:
      * @param frame A PCB_BASE_FRAME in which to print status information.
      */
     virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
+
+
+    /**
+     * Function GetBoundingBox
+     * returns the orthogonal, bounding box of this object for display purposes.
+     * This box should be an enclosing perimeter for visible components of this
+     * object, and the units should be in the pcb or schematic coordinate system.
+     * It is OK to overestimate the size by a few counts.
+     */
+    virtual EDA_RECT GetBoundingBox() const;
 
 
     /**

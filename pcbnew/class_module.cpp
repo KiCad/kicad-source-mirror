@@ -677,16 +677,18 @@ void MODULE::Set_Rectangle_Encadrement()
             break;
 
         case S_POLYGON:
-            for( unsigned ii = 0; ii < edge->m_PolyPoints.size(); ii++ )
+        {
+            std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
+            for( unsigned ii = 0; ii < polyPoints.size(); ii++ )
             {
-                wxPoint pt = edge->m_PolyPoints[ii];
+                wxPoint pt = polyPoints[ii];
                 xmin = MIN( xmin, (pt.x - width) );
                 ymin = MIN( ymin, (pt.y - width) );
                 xmax = MAX( xmax, (pt.x + width) );
                 ymax = MAX( ymax, (pt.y + width) );
             }
-
             break;
+        }
         }
     }
 

@@ -674,11 +674,12 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent(  int shape_type )
         edge->SetLayer( LAYER_N_FRONT );
 
         int numPoints = angle / 50 + 3;     // Note: angles are in 0.1 degrees
-        edge->m_PolyPoints.reserve( numPoints );
+        std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
+        polyPoints.reserve( numPoints );
 
         edge->m_Start0.y = -pad->m_Size.y / 2;
 
-        edge->m_PolyPoints.push_back( wxPoint( 0, 0 ) );
+        polyPoints.push_back( wxPoint( 0, 0 ) );
 
         int theta = -angle / 2;
         for( int ii = 1; ii<numPoints - 1; ii++ )
@@ -687,7 +688,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent(  int shape_type )
 
             RotatePoint( &pt.x, &pt.y, theta );
 
-            edge->m_PolyPoints.push_back( pt );
+            polyPoints.push_back( pt );
 
             theta += 50;
             if( theta > angle / 2 )
@@ -695,7 +696,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent(  int shape_type )
         }
 
         // Close the polygon:
-        edge->m_PolyPoints.push_back( edge->m_PolyPoints[0] );
+        polyPoints.push_back( polyPoints[0] );
     }
     break;
 
@@ -996,10 +997,11 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     edge->SetLayer( LAYER_N_FRONT );
     npoints = PolyEdgesCount;
 
-    edge->m_PolyPoints.reserve( 2 * PolyEdgesCount + 2 );
+    std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
+    polyPoints.reserve( 2 * PolyEdgesCount + 2 );
 
     // Init start point coord:
-    edge->m_PolyPoints.push_back( wxPoint( pad1->m_Pos0.x, 0 ) );
+    polyPoints.push_back( wxPoint( pad1->m_Pos0.x, 0 ) );
 
     double* dptr = PolyEdges;
     wxPoint first_coordinate, last_coordinate;
@@ -1007,10 +1009,10 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     {
         last_coordinate.x = wxRound( *dptr++ *ShapeScaleX ) + pad1->m_Pos0.x;
         last_coordinate.y = -wxRound( *dptr++ *ShapeScaleY );
-        edge->m_PolyPoints.push_back( last_coordinate );
+        polyPoints.push_back( last_coordinate );
     }
 
-    first_coordinate.y = edge->m_PolyPoints[1].y;
+    first_coordinate.y = polyPoints[1].y;
 
     switch( PolyShapeType )
     {
@@ -1018,7 +1020,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     case 2:     // Single mirrored
         // Init end point coord:
         pad2->m_Pos0.x = last_coordinate.x;
-        edge->m_PolyPoints.push_back( wxPoint( last_coordinate.x, 0 ) );
+        polyPoints.push_back( wxPoint( last_coordinate.x, 0 ) );
 
         pad1->m_Size.x = pad1->m_Size.y = ABS( first_coordinate.y );
         pad2->m_Size.x = pad2->m_Size.y = ABS( last_coordinate.y );
@@ -1029,13 +1031,13 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
         break;
 
     case 1:     // Symmetric
-        for( int ndx = edge->m_PolyPoints.size() - 1; ndx>=0; --ndx )
+        for( int ndx = polyPoints.size() - 1; ndx>=0; --ndx )
         {
-            wxPoint pt = edge->m_PolyPoints[ndx];
+            wxPoint pt = polyPoints[ndx];
 
             pt.y = -pt.y;   // mirror about X axis
 
-            edge->m_PolyPoints.push_back( pt );
+            polyPoints.push_back( pt );
         }
 
         pad1->m_Size.x = pad1->m_Size.y = 2 * ABS( first_coordinate.y );

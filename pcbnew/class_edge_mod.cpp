@@ -24,7 +24,7 @@
 /*********************/
 
 EDGE_MODULE::EDGE_MODULE( MODULE* parent ) :
-    BOARD_ITEM( parent, TYPE_EDGE_MODULE )
+    DRAWSEGMENT( parent, TYPE_EDGE_MODULE )
 {
     m_Shape = S_SEGMENT;
     m_Angle = 0;
@@ -42,82 +42,12 @@ void EDGE_MODULE::Copy( EDGE_MODULE* source )
     if( source == NULL )
         return;
 
-    m_Start  = source->m_Start;
-    m_End    = source->m_End;
-    m_Shape  = source->m_Shape;
+    DRAWSEGMENT::Copy( source );
+
     m_Start0 = source->m_Start0;
     m_End0   = source->m_End0;
-    m_Angle  = source->m_Angle;
-    m_Layer  = source->m_Layer;
-    m_Width  = source->m_Width;
 
     m_PolyPoints = source->m_PolyPoints;    // std::vector copy
-}
-
-
-/**
- * Function GetBoundingBox
- * returns the orthogonal, bounding box of this object for display purposes.
- * This box should be an enclosing perimeter for visible components of this
- * object, and the units should be in the pcb or schematic coordinate system.
- * It is OK to overestimate the size by a few counts.
- */
-EDA_RECT EDGE_MODULE::GetBoundingBox() const
-{
-    EDA_RECT bbox;
-
-    bbox.SetOrigin( m_Start );
-
-    switch( m_Shape )
-    {
-    case S_SEGMENT:
-        bbox.SetEnd( m_End );
-        bbox.Inflate( (m_Width / 2) + 1 );
-        break;
-
-    case S_CIRCLE:
-        bbox.Inflate( GetRadius() + 1 );
-        break;
-
-    case S_ARC:
-    {
-        bbox.Inflate( GetRadius() + 1 );
-    }
-    break;
-
-    case S_POLYGON:
-    {
-        // We must compute true coordinates from m_PolyPoints
-        // which are relative to module position, orientation 0
-
-        wxPoint p_end;
-        MODULE* Module = (MODULE*) m_Parent;
-        for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
-        {
-            wxPoint pt = m_PolyPoints[ii];
-
-            if( Module )
-            {
-                RotatePoint( &pt, Module->m_Orient );
-                pt += Module->m_Pos;
-            }
-
-            if( ii == 0 )
-                p_end = pt;
-            bbox.m_Pos.x = MIN( bbox.m_Pos.x, pt.x );
-            bbox.m_Pos.y = MIN( bbox.m_Pos.y, pt.y );
-            p_end.x   = MAX( p_end.x, pt.x );
-            p_end.y   = MAX( p_end.y, pt.y );
-        }
-
-        bbox.SetEnd(p_end);
-        bbox.Inflate( 1 );
-        break;
-    }
-    }
-
-    bbox.Inflate( (m_Width+1) / 2 );
-    return bbox;
 }
 
 
@@ -158,10 +88,11 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         return;
 
     BOARD * brd = GetBoard( );
+
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
-    color = brd->GetLayerColor(m_Layer);
+    color = brd->GetLayerColor( m_Layer );
 
     frame = (PCB_BASE_FRAME*) panel->GetParent();
 
@@ -478,127 +409,6 @@ int EDGE_MODULE::ReadDescr( LINE_READER* aReader )
     if( (m_Layer < 0) || (m_Layer > LAST_NON_COPPER_LAYER) )
         m_Layer = SILKSCREEN_N_FRONT;
     return error;
-}
-
-
-wxPoint EDGE_MODULE::GetStart() const
-{
-    switch( m_Shape )
-    {
-    case S_ARC:
-        return m_End;  // the start of the arc is held in field m_End, center point is in m_Start.
-
-    case S_SEGMENT:
-    default:
-        return m_Start;
-    }
-}
-
-
-wxPoint EDGE_MODULE::GetEnd() const
-{
-    wxPoint endPoint;         // start of arc
-
-    switch( m_Shape )
-    {
-    case S_ARC:
-        // rotate the starting point of the arc, given by m_End, through the
-        // angle m_Angle to get the ending point of the arc.
-        // m_Start is the arc centre
-        endPoint  = m_End;         // m_End = start point of arc
-        RotatePoint( &endPoint, m_Start, -m_Angle );
-        return endPoint;   // after rotation, the end of the arc.
-        break;
-
-    case S_SEGMENT:
-    default:
-        return m_End;
-    }
-}
-
-
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param refPos A wxPoint to test
- * @return bool - true if a hit, else false
- */
-bool EDGE_MODULE::HitTest( const wxPoint& refPos )
-{
-    int rayon, dist;
-
-    switch( m_Shape )
-    {
-    case S_SEGMENT:
-        if( TestSegmentHit( refPos, m_Start, m_End, m_Width / 2 ) )
-            return true;
-        break;
-
-    case S_CIRCLE:
-        rayon = GetRadius();
-        dist  = (int) hypot( (double) (refPos.x - m_Start.x), (double) (refPos.y - m_Start.y) );
-        if( abs( rayon - dist ) <= (m_Width/2) )
-            return true;
-        break;
-
-    case S_ARC:
-        rayon = GetRadius();
-        dist  = (int) hypot( (double) (refPos.x - m_Start.x), (double) (refPos.y - m_Start.y) );
-
-        if( abs( rayon - dist ) > (m_Width/2) )
-            break;
-
-        int mouseAngle = ArcTangente( refPos.y - m_Start.y, refPos.x - m_Start.x );
-        int stAngle    = ArcTangente( m_End.y - m_Start.y, m_End.x - m_Start.x );
-        int endAngle   = stAngle + m_Angle;
-
-        if( endAngle > 3600 )
-        {
-            stAngle  -= 3600;
-            endAngle -= 3600;
-        }
-
-        if( (mouseAngle >= stAngle) && (mouseAngle <= endAngle) )
-            return true;
-
-        break;
-    }
-
-    return false;       // an unknown m_Shape also returns false
-}
-
-
-/**
- * Function HitTest (overlayed)
- * tests if the given EDA_RECT intersect this object.
- * For now, for arcs and segments, an ending point must be inside this rect.
- * @param refArea : the given EDA_RECT
- * @return bool - true if a hit, else false
- */
-bool EDGE_MODULE::HitTest( EDA_RECT& refArea )
-{
-    switch(m_Shape)
-    {
-        case S_CIRCLE:
-        {
-            int radius = GetRadius();
-            // Test if area intersects the circle:
-            EDA_RECT area = refArea;
-            area.Inflate(radius);
-            if( area.Contains(m_Start) )
-                return true;
-        }
-            break;
-
-        case S_ARC:
-        case S_SEGMENT:
-            if( refArea.Contains( GetStart() ) )
-                return true;
-            if( refArea.Contains( GetEnd() ) )
-                return true;
-            break;
-    }
-    return false;
 }
 
 

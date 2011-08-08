@@ -430,26 +430,25 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
 
     case S_POLYGON:
     {
-        if( PtEdge->m_PolyPoints.size() <= 1 )  // Malformed polygon
+        std::vector<wxPoint> polyPoints = PtEdge->GetPolyPoints();
+        if( polyPoints.size() <= 1 )  // Malformed polygon
             break;
 
         // We must compute true coordinates from m_PolyList
         // which are relative to module position, orientation 0
-        MODULE* Module = NULL;
-        if( PtEdge->GetParent() && (PtEdge->GetParent()->Type() == TYPE_MODULE) )
-            Module = (MODULE*) PtEdge->GetParent();
+        MODULE* module = PtEdge->GetParentModule();
 
         static std::vector< wxPoint > cornerList;
         cornerList.clear();
 
-        for( unsigned ii = 0; ii < PtEdge->m_PolyPoints.size(); ii++ )
+        for( unsigned ii = 0; ii < polyPoints.size(); ii++ )
         {
-            wxPoint corner = PtEdge->m_PolyPoints[ii];
+            wxPoint corner = polyPoints[ii];
 
-            if( Module )
+            if( module )
             {
-                RotatePoint( &corner, Module->m_Orient );
-                corner += Module->m_Pos;
+                RotatePoint( &corner, module->m_Orient );
+                corner += module->m_Pos;
             }
 
             cornerList.push_back( corner );
@@ -639,13 +638,15 @@ void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* pt_segm, int masque_layer,
         break;
 
     case S_CURVE:
-        for( unsigned i = 1; i < pt_segm->m_BezierPoints.size(); i++ )
-            plotter->thick_segment( pt_segm->m_BezierPoints[i - 1],
-                                    pt_segm->m_BezierPoints[i],
+    {
+        std::vector<wxPoint> bezierPoints = pt_segm->GetBezierPoints();
+        for( unsigned i = 1; i < bezierPoints.size(); i++ )
+            plotter->thick_segment( bezierPoints[i - 1],
+                                    bezierPoints[i],
                                     thickness,
                                     trace_mode );
-
         break;
+    }
 
     default:
         plotter->thick_segment( start, end, thickness, trace_mode );
