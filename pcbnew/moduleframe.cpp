@@ -25,6 +25,8 @@ static PCB_SCREEN* s_screenModule = NULL;   // the PCB_SCREEN used by the
 // Design setting for the module editor:
 static BOARD_DESIGN_SETTINGS s_ModuleEditorDesignSetting;
 
+wxString WinEDA_ModuleEditFrame::m_CurrentLib = wxEmptyString;
+
 /********************************/
 /* class WinEDA_ModuleEditFrame */
 /********************************/
@@ -128,7 +130,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
     // Give an icon
     SetIcon( wxICON( icon_modedit ) );
 
-    SetTitle( wxT( "Module Editor (lib: " ) + m_CurrentLib + wxT( ")" ) );
+    UpdateTitle();
 
     if( g_ModuleEditor_Pcb == NULL )
         g_ModuleEditor_Pcb = new BOARD( NULL, this );
@@ -431,4 +433,13 @@ void WinEDA_ModuleEditFrame::OnModify()
 
     if( m_Draw3DFrame )
         m_Draw3DFrame->ReloadRequest();
+}
+
+
+void WinEDA_ModuleEditFrame::UpdateTitle()
+{
+    if( m_CurrentLib.IsEmpty() )
+        SetTitle( _( "Module Editor (no active library)" ) );
+    else
+        SetTitle( _( "Module Editor (active library: " ) + m_CurrentLib + wxT( ")" ) );
 }

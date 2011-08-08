@@ -66,7 +66,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
     // from current Board
     item = new wxMenuItem( openSubmenu,
                            ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
-                           _( "Load from current Board" ),
+                           _( "Load from Current Board" ),
                            _( "Load a footprint module from the current loaded board" ) );
     SET_BITMAP( load_module_board_xpm );
     openSubmenu->Append( item );
@@ -80,8 +80,8 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
     // Save module
     item = new wxMenuItem( fileMenu,
                            ID_MODEDIT_SAVE_LIBMODULE,
-                           _( "&Save Module in Current Lib" ),
-                           _( "Save Module in working library" ) );
+                           _( "&Save Module in Active Library" ),
+                           _( "Save module in active library" ) );
     SET_BITMAP( save_library_xpm );
     fileMenu->Append( item );
 
@@ -96,7 +96,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
     // Export module
     item = new wxMenuItem( fileMenu,
                            ID_MODEDIT_EXPORT_PART,
-                           _( "&Export module" ),
+                           _( "&Export Module" ),
                            _( "Save the current loaded module to a file" ) );
     SET_BITMAP( export_module_xpm );
     fileMenu->Append( item );
@@ -175,7 +175,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
     // Pad settings
     item = new wxMenuItem( dimensions_Submenu,
                            ID_MODEDIT_PAD_SETTINGS,
-                           _( "Pad settings" ),
+                           _( "Pad Settings" ),
                            _( "Edit the settings for new pads" ) );
     SET_BITMAP( options_pad_xpm );
     dimensions_Submenu->Append( item );

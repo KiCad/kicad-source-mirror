@@ -12,7 +12,6 @@ class WinEDA_ModuleEditFrame : public PCB_BASE_FRAME
 {
 public:
     MODULE*  CurrentModule;
-    wxString m_CurrentLib;
 
 public:
     WinEDA_ModuleEditFrame( wxWindow* father,
@@ -136,8 +135,16 @@ public:
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
 private:
+    static wxString m_CurrentLib;
+
     void         GetComponentFromUndoList( wxCommandEvent& event );
     void         GetComponentFromRedoList( wxCommandEvent& event );
+
+    /**
+     * Function UpdateTitle
+     * updates window title according to m_CurrentLib.
+     */
+    void         UpdateTitle();
 
 public:
 
@@ -218,6 +225,8 @@ public:
     void         Delete_Module_In_Library( const wxString& libname );
     int          Create_Librairie( const wxString& LibName );
     void         Select_Active_Library();
+
+    wxString     GetCurrentLib() const { return m_CurrentLib; };
 
     DECLARE_EVENT_TABLE()
 };

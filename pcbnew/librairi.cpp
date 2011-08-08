@@ -720,14 +720,15 @@ void WinEDA_ModuleEditFrame::Select_Active_Library()
     if( g_LibName_List.GetCount() == 0 )
         return;
 
-    WinEDAListBox dlg( this, _( "Active Lib:" ), g_LibName_List, m_CurrentLib );
+    WinEDAListBox dlg( this, _( "Select Active Library:" ), g_LibName_List, m_CurrentLib );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
 
     m_CurrentLib = dlg.GetTextSelection();
 
-    SetTitle( _( "Module Editor (lib: " ) + m_CurrentLib + wxT( ")" ) );
+    UpdateTitle();
+
     return;
 }
 

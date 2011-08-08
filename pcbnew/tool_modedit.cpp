@@ -33,10 +33,10 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
     // Set up toolbar
     m_HToolBar->AddTool( ID_MODEDIT_SELECT_CURRENT_LIB, wxEmptyString,
                          wxBitmap( open_library_xpm ),
-                         _( "Select working library" ) );
+                         _( "Select active library" ) );
 
     m_HToolBar->AddTool( ID_MODEDIT_SAVE_LIBMODULE, wxEmptyString, wxBitmap( save_library_xpm ),
-                         _( "Save Module in working library" ) );
+                         _( "Save module in active library" ) );
 
     m_HToolBar->AddTool( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART, wxEmptyString,
                          wxBitmap( new_library_xpm ),
@@ -44,14 +44,14 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_MODEDIT_DELETE_PART, wxEmptyString, wxBitmap( delete_xpm ),
-                         _( "Delete part in current library" ) );
+                         _( "Delete part from active library" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_MODEDIT_NEW_MODULE, wxEmptyString, wxBitmap( new_footprint_xpm ),
-                         _( "New Module" ) );
+                         _( "New module" ) );
 
     m_HToolBar->AddTool( ID_MODEDIT_LOAD_MODULE, wxEmptyString, wxBitmap( module_xpm ),
-                         _( "Load module from lib" ) );
+                         _( "Load module from library" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, wxEmptyString,
@@ -68,10 +68,10 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_MODEDIT_IMPORT_PART, wxEmptyString, wxBitmap( import_module_xpm ),
-                         _( "import module" ) );
+                         _( "Import module" ) );
 
     m_HToolBar->AddTool( ID_MODEDIT_EXPORT_PART, wxEmptyString, wxBitmap( export_module_xpm ),
-                         _( "export module" ) );
+                         _( "Export module" ) );
 
 
     m_HToolBar->AddSeparator();
@@ -83,11 +83,11 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_MODEDIT_EDIT_MODULE_PROPERTIES, wxEmptyString,
                          wxBitmap( module_options_xpm ),
-                         _( "Module Properties" ) );
+                         _( "Module properties" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, wxBitmap( print_button ),
-                         _( "Print Module" ) );
+                         _( "Print module" ) );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_IN, false );
@@ -104,12 +104,12 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_MODEDIT_PAD_SETTINGS, wxEmptyString, wxBitmap( options_pad_xpm ),
-                         _( "Pad Settings" ) );
+                         _( "Pad settings" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_MODEDIT_CHECK, wxEmptyString,
                          wxBitmap( module_check_xpm ),
-                         _( "Module Check" ) );
+                         _( "Check module" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
