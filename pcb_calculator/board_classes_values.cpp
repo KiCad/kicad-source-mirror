@@ -98,41 +98,43 @@ void PCB_CALCULATOR_FRAME::OnBoardClassesUnitsSelection( wxCommandEvent& event )
 void PCB_CALCULATOR_FRAME::BoardClassesUpdateData( double aUnitScale )
 {
     wxString txt;
+    #define FMT wxT("%g")
+    #define NOVAL wxT("--")
     for( int ii = 0; ii < BRDCLASS_COUNT; ii ++ )
     {
         // Display min tracks width
         if( clist[ii].m_Lines > -1.0 )
-            txt.Printf( wxT("%f"), clist[ii].m_Lines / aUnitScale);
+            txt.Printf( FMT, clist[ii].m_Lines / aUnitScale);
         else
-            txt = wxT("--");
+            txt = NOVAL;
         m_gridClassesValuesDisplay->SetCellValue(0, ii, txt );
 
         // Display min clearance
         if( clist[ii].m_Clearance > -1.0 )
-            txt.Printf( wxT("%f"), clist[ii].m_Clearance / aUnitScale);
+            txt.Printf( FMT, clist[ii].m_Clearance / aUnitScale);
         else
-            txt = wxT("--");
+            txt = NOVAL;
         m_gridClassesValuesDisplay->SetCellValue(1, ii, txt );
 
         // Display min Via diam diff
         if( clist[ii].m_ViaDiamDiff > -1.0 )
-            txt.Printf( wxT("%f"), clist[ii].m_ViaDiamDiff / aUnitScale);
+            txt.Printf( FMT, clist[ii].m_ViaDiamDiff / aUnitScale);
         else
-            txt = wxT("--");
+            txt = NOVAL;
         m_gridClassesValuesDisplay->SetCellValue(2, ii, txt );
 
         // Display min Pad diam diff (plated)
         if( clist[ii].m_PadDiamDiffPlated > -1.0 )
-            txt.Printf( wxT("%f"), clist[ii].m_PadDiamDiffPlated / aUnitScale);
+            txt.Printf( FMT, clist[ii].m_PadDiamDiffPlated / aUnitScale);
         else
-            txt = wxT("--");
+            txt = NOVAL;
         m_gridClassesValuesDisplay->SetCellValue(3, ii, txt );
 
         // Display min Pad diam diff (non plated)
         if( clist[ii].m_PadDiamDiffNotPlated > -1.0 )
-            txt.Printf( wxT("%f"), clist[ii].m_PadDiamDiffNotPlated / aUnitScale);
+            txt.Printf( FMT, clist[ii].m_PadDiamDiffNotPlated / aUnitScale);
         else
-            txt = wxT("--");
+            txt = NOVAL;
         m_gridClassesValuesDisplay->SetCellValue(4, ii, txt );
     }
 }

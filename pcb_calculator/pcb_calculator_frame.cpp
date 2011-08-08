@@ -38,6 +38,8 @@
 #define KEYWORD_COLORCODE_SELECTION           wxT( "CC_selection" )
 #define KEYWORD_ATTENUATORS_SELECTION         wxT( "Att_selection" )
 #define KEYWORD_BRDCLASS_SELECTION            wxT( "BrdClass_selection" )
+#define KEYWORD_ELECTRICAL_SPACING_SELECTION  wxT( "ElectSpacing_selection" )
+#define KEYWORD_ELECTRICAL_SPACING_VOLTAGE    wxT( "ElectSpacing_voltage" )
 #define KEYWORD_REGUL_R1            wxT( "RegulR1" )
 #define KEYWORD_REGUL_R2            wxT( "RegulR2" )
 #define KEYWORD_REGUL_VREF          wxT( "RegulVREF" )
@@ -73,11 +75,15 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( wxWindow * parent ) :
     TranslineTypeSelection( m_currTransLineType );
     m_TranslineSelection->SetSelection( m_currTransLineType );
 
+    TW_Init();
+
     SetAttenuator( m_AttenuatorsSelection->GetSelection() );
 
     ToleranceSelection( m_rbToleranceSelection->GetSelection() );
 
     BoardClassesUpdateData( m_BoardClassesUnitsSelector->GetUnitScale() );
+
+    ElectricalSpacingUpdateData( m_ElectricalSpacingUnitsSelector->GetUnitScale() );
 
     #ifdef __WINDOWS__
     SetIcon( wxICON( pcb_calculator_icon ) );
@@ -142,6 +148,10 @@ void PCB_CALCULATOR_FRAME::ReadConfig()
     m_RegulVrefValue->SetValue( msg );
     m_Config->Read( KEYWORD_REGUL_VOUT, &msg, wxT("12") );
     m_RegulVoutValue->SetValue( msg );
+    m_Config->Read( KEYWORD_ELECTRICAL_SPACING_SELECTION, &ltmp, 0 );
+    m_ElectricalSpacingUnitsSelector->SetSelection( ltmp );
+    m_Config->Read( KEYWORD_ELECTRICAL_SPACING_VOLTAGE, &msg, wxT("500") );
+    m_ElectricalSpacingVoltage->SetValue( msg );
 
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
         m_transline_list[ii]->ReadConfig( m_Config );
@@ -174,6 +184,12 @@ void PCB_CALCULATOR_FRAME::WriteConfig()
     m_Config->Write( KEYWORD_REGUL_R2, m_RegulR2Value->GetValue() );
     m_Config->Write( KEYWORD_REGUL_VREF, m_RegulVrefValue->GetValue() );
     m_Config->Write( KEYWORD_REGUL_VOUT, m_RegulVoutValue->GetValue() );
+    m_Config->Write( KEYWORD_ELECTRICAL_SPACING_SELECTION,
+                     m_ElectricalSpacingUnitsSelector->GetSelection() );
+    m_Config->Write( KEYWORD_ELECTRICAL_SPACING_VOLTAGE,
+                     m_ElectricalSpacingVoltage->GetValue() );
+
+    TW_WriteConfig();
 
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
         m_transline_list[ii]->WriteConfig( m_Config );

@@ -105,13 +105,13 @@ void PCB_CALCULATOR_FRAME::RegulatorsSolve()
             break;
     }
     // write values to panel:
-    txt.Printf(wxT("%f"), r1);
+    txt.Printf(wxT("%g"), r1);
     m_RegulR1Value->SetValue(txt);
-    txt.Printf(wxT("%f"), r2);
+    txt.Printf(wxT("%g"), r2);
     m_RegulR2Value->SetValue(txt);
-    txt.Printf(wxT("%f"), vref);
+    txt.Printf(wxT("%g"), vref);
     m_RegulVrefValue->SetValue(txt);
-    txt.Printf(wxT("%f"), vout);
+    txt.Printf(wxT("%g"), vout);
     m_RegulVoutValue->SetValue(txt);
 
 }

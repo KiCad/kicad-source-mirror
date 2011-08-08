@@ -78,18 +78,18 @@ void PCB_CALCULATOR_FRAME::TransfAttenuatorDataToPanel()
 {
     wxString msg;
 
-    msg.Printf( wxT( "%f" ), m_currAttenuator->m_Attenuation );
+    msg.Printf( wxT( "%g" ), m_currAttenuator->m_Attenuation );
     m_AttValueCtrl->SetValue( msg );
     m_AttValueCtrl->Enable( m_currAttenuator->m_Attenuation_Enable );
 
     m_ZinValueCtrl->Enable( m_currAttenuator->m_Zin_Enable );
     if( m_currAttenuator->m_Zin_Enable )
-        msg.Printf( wxT( "%f" ), m_currAttenuator->m_Zin );
+        msg.Printf( wxT( "%g" ), m_currAttenuator->m_Zin );
     else
         msg.Clear();;
     m_ZinValueCtrl->SetValue( msg );
 
-    msg.Printf( wxT( "%f" ), m_currAttenuator->m_Zout );
+    msg.Printf( wxT( "%g" ), m_currAttenuator->m_Zout );
     m_ZoutValueCtrl->SetValue( msg );
 }
 
@@ -114,15 +114,15 @@ void PCB_CALCULATOR_FRAME::TransfAttenuatorResultsToPanel()
         return;
     }
 
-    msg.Printf( wxT( "%f" ), m_currAttenuator->m_R1 );
+    msg.Printf( wxT( "%g" ), m_currAttenuator->m_R1 );
     m_Att_R1_Value->SetValue( msg );
-    msg.Printf( wxT( "%f" ), m_currAttenuator->m_R2 );
+    msg.Printf( wxT( "%g" ), m_currAttenuator->m_R2 );
     m_Att_R2_Value->SetValue( msg );
     if( m_currAttenuator->m_ResultCount  < 3 )
         m_Att_R3_Value->SetValue( wxEmptyString );
     else
     {
-        msg.Printf( wxT( "%f" ), m_currAttenuator->m_R3 );
+        msg.Printf( wxT( "%g" ), m_currAttenuator->m_R3 );
         m_Att_R3_Value->SetValue( msg );
     }
 }

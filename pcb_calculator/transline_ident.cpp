@@ -250,9 +250,9 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum transline_type_id aType )
                                    _( "MurC" ), _( "Relative Permeability of Conductor" ), 1,
                                    false ) );
 
-        AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_S_PRM,
-                                   _( "a" ), _( "Width of Waveguide" ), 10.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_WIDTH_PRM,
+                                   _( "a" ), _( "Width of Waveguide" ), 10.0, true ) );
+        AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_S_PRM,
                                    _( "b" ), _( "Height of Waveguide" ), 5.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_PHYS, PHYS_LEN_PRM,
                                    _( "L" ), _( "Waveguide Length" ), 50.0, true ) );
