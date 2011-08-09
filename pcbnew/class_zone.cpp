@@ -941,6 +941,27 @@ bool ZONE_CONTAINER::HitTest( EDA_RECT& refArea )
 }
 
 
+int ZONE_CONTAINER::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
+{
+    NETCLASS*   myclass  = GetNetClass();
+    int         myClearance = m_ZoneClearance;
+
+#if 0  // maybe the netclass clearance should not come into play for a zone?
+
+    if( myclass )
+        myClearance = max( myClearance, myclass->GetClearance() );
+#endif
+
+    if( aItem )
+    {
+        int hisClearance = aItem->GetClearance( NULL );
+        myClearance = max( hisClearance, myClearance );
+    }
+
+    return myClearance;
+}
+
+
 /**
  * Function HitTestFilledArea
  * tests if the given wxPoint is within the bounds of a filled area of this zone.

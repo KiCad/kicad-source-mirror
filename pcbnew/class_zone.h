@@ -140,6 +140,8 @@ public:
      */
     EDA_RECT GetBoundingBox() const;
 
+    int GetClearance( BOARD_CONNECTED_ITEM* aItem = NULL ) const;
+
     /**
      * Function Test_For_Copper_Island_And_Remove__Insulated_Islands
      * Remove insulated copper islands found in m_FilledPolysList.

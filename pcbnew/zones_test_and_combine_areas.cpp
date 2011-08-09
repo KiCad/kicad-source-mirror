@@ -833,39 +833,29 @@ int BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_r
 }
 
 
-/**
- * Function Test_Drc_Areas_Outlines_To_Areas_Outlines
- * Test Areas outlines for DRC:
- *      Test areas inside other areas
- *      Test areas too close
- * @param aArea_To_Examine: area to compare with other areas. if NULL: all areas are compared tp all others
- * @param aCreate_Markers: if true create DRC markers. False: do not creates anything
- * @return errors count
- */
-
 int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_Examine,
                                                       bool            aCreate_Markers )
 {
-    wxString str;
-    long     nerrors = 0;
-    int zone2zoneClearance;
+    wxString    str;
+    int         nerrors = 0;
 
     // iterate through all areas
     for( int ia = 0; ia < GetAreaCount(); ia++ )
     {
         ZONE_CONTAINER* Area_Ref = GetArea( ia );
-        CPolyLine* refSmoothedPoly = Area_Ref->GetSmoothedPoly();
+        CPolyLine*      refSmoothedPoly = Area_Ref->GetSmoothedPoly();
 
         if( !Area_Ref->IsOnCopperLayer() )
             continue;
 
+        // If testing only a single area, then skip all others
         if( aArea_To_Examine && (aArea_To_Examine != Area_Ref) )
             continue;
 
         for( int ia2 = 0; ia2 < GetAreaCount(); ia2++ )
         {
             ZONE_CONTAINER* Area_To_Test = GetArea( ia2 );
-            CPolyLine* testSmoothedPoly = Area_To_Test->GetSmoothedPoly();
+            CPolyLine*      testSmoothedPoly = Area_To_Test->GetSmoothedPoly();
 
             if( Area_Ref == Area_To_Test )
                 continue;
@@ -878,19 +868,19 @@ int BOARD::Test_Drc_Areas_Outlines_To_Areas_Outlines( ZONE_CONTAINER* aArea_To_E
             if( Area_Ref->GetNet() == Area_To_Test->GetNet() && Area_Ref->GetNet() >= 0 )
                 continue;
 
-            /* Examine a candidate zone: compare Area_To_Test to Area_Ref
-            */
+            // Examine a candidate zone: compare Area_To_Test to Area_Ref
 
-            // Calculate the clearance used in zone to zone test:
-            zone2zoneClearance = Area_Ref->GetClearance(Area_To_Test);
-            zone2zoneClearance = MAX( zone2zoneClearance, Area_Ref->m_ZoneClearance );
-            zone2zoneClearance = MAX( zone2zoneClearance, Area_To_Test->m_ZoneClearance );
+            // Get clearance used in zone to zone test.  The policy used to
+            // obtain that value is now part of the zone object itself by way of
+            // ZONE_CONTAINER::GetClearance().
+            int zone2zoneClearance = Area_Ref->GetClearance( Area_To_Test );
 
             // test for some corners of Area_Ref inside Area_To_Test
             for( int ic = 0; ic < refSmoothedPoly->GetNumCorners(); ic++ )
             {
                 int x = refSmoothedPoly->GetX( ic );
                 int y = refSmoothedPoly->GetY( ic );
+
                 if( testSmoothedPoly->TestPointInside( x, y ) )
                 {
                     // COPPERAREA_COPPERAREA error: copper area ref corner inside copper area
