@@ -594,11 +594,10 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 
     case TYPE_TRACK:
     case TYPE_VIA:
-    {
-        TRACK* insertAid = ( (TRACK*) aBoardItem )->GetBestInsertPoint( this );
+        TRACK* insertAid;
+        insertAid = ( (TRACK*) aBoardItem )->GetBestInsertPoint( this );
         m_Track.Insert( (TRACK*) aBoardItem, insertAid );
-    }
-    break;
+        break;
 
     case TYPE_ZONE:
         if( aControl & ADD_APPEND )
@@ -635,14 +634,14 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 
     // other types may use linked list
     default:
-    {
-        wxString msg;
-        msg.Printf(
-            wxT( "BOARD::Add() needs work: BOARD_ITEM type (%d) not handled" ),
-            aBoardItem->Type() );
-        wxFAIL_MSG( msg );
-    }
-    break;
+        {
+            wxString msg;
+            msg.Printf(
+                wxT( "BOARD::Add() needs work: BOARD_ITEM type (%d) not handled" ),
+                aBoardItem->Type() );
+            wxFAIL_MSG( msg );
+        }
+        break;
     }
 }
 

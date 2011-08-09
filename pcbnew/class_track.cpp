@@ -492,12 +492,6 @@ void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
 }
 
 
-/*
- * Function GetBestInsertPoint
- *  Search the "best" insertion point within the track linked list
- *  the best point is the of the corresponding net code section
- *  return the item found in the linked list (or NULL if no track)
- */
 TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
 {
     TRACK* track;
