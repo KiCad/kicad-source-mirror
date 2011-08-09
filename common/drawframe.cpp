@@ -103,13 +103,18 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
         SetSize( 0, 0, minsize.x, minsize.y );
 
     // Pane sizes for status bar.
+    // @todo these should be sized based on typical text content, like
+    // "dx -10.123 -10.123 dy -10.123 -10.123" using the system font which is
+    // in play on a particular platform, and should not be constants.
+    // Please do not reduce these constant values, and please use dynamic
+    // system font specific sizing in the future.
     #define ZOOM_DISPLAY_SIZE       60
-    #define COORD_DISPLAY_SIZE      156
-    #define UNITS_DISPLAY_SIZE      50
-    #define FUNCTION_DISPLAY_SIZE   100
-
+    #define COORD_DISPLAY_SIZE      165
+    #define DELTA_DISPLAY_SIZE      190
+    #define UNITS_DISPLAY_SIZE      65
+    #define FUNCTION_DISPLAY_SIZE   110
     static const int dims[6] = { -1, ZOOM_DISPLAY_SIZE,
-        COORD_DISPLAY_SIZE, COORD_DISPLAY_SIZE,
+        COORD_DISPLAY_SIZE, DELTA_DISPLAY_SIZE,
         UNITS_DISPLAY_SIZE, FUNCTION_DISPLAY_SIZE };
 
     CreateStatusBar( 6 );
