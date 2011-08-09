@@ -102,9 +102,11 @@ void MODULE::Copy( MODULE* aModule )
     m_Link          = aModule->m_Link;
     m_Path          = aModule->m_Path; //is this correct behavior?
     m_TimeStamp     = GetTimeStamp();
-    m_LocalSolderMaskMargin  = aModule->m_LocalSolderMaskMargin;
-    m_LocalSolderPasteMargin = aModule->m_LocalSolderPasteMargin;
-    m_LocalSolderPasteMarginRatio = aModule->m_LocalSolderPasteMarginRatio;
+
+    m_LocalClearance                = aModule->m_LocalClearance;
+    m_LocalSolderMaskMargin         = aModule->m_LocalSolderMaskMargin;
+    m_LocalSolderPasteMargin        = aModule->m_LocalSolderPasteMargin;
+    m_LocalSolderPasteMarginRatio   = aModule->m_LocalSolderPasteMarginRatio;
 
     /* Copy reference and value. */
     m_Reference->Copy( aModule->m_Reference );
