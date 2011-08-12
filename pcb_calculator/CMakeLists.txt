@@ -3,6 +3,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
                     ${CMAKE_CURRENT_SOURCE_DIR}/transline
                     ${CMAKE_CURRENT_SOURCE_DIR}/attenuators
+                    ../polygon
+                    ${CMAKE_SOURCE_DIR}/common
                     )
 
 set(PCB_CALCULATOR_SRCS
@@ -60,7 +62,7 @@ if(APPLE)
         ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries( pcb_calculator
+target_link_libraries( pcb_calculator common polygon bitmaps
                         ${wxWidgets_LIBRARIES}
                         )
 

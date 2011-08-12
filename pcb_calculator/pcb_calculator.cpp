@@ -21,31 +21,40 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#include "fctsys.h"
+#include "appl_wxstruct.h"
+#include "wxstruct.h"
+#include "common.h"
+#include "confirm.h"
+#include "gestfich.h"
+
 #include "wx/wx.h"
 #include "wx/config.h"
 
 #include "pcb_calculator_frame_base.h"
 #include "pcb_calculator.h"
 
+#include "bitmaps.h"
+#include "colors_selection.h"
+#include "build_version.h"
+
 // PCB_CALCULATOR_APP
 
-class PCB_CALCULATOR_APP : public wxApp
+void WinEDA_App::MacOpenFile(const wxString &fileName)
 {
-public:
-    virtual bool OnInit();
-};
+}
 
-
-IMPLEMENT_APP( PCB_CALCULATOR_APP )
+IMPLEMENT_APP( WinEDA_App )
 
 ///-----------------------------------------------------------------------------
 // PCB_CALCULATOR_APP
 // main program
 //-----------------------------------------------------------------------------
 
-bool PCB_CALCULATOR_APP::OnInit()
+bool WinEDA_App::OnInit()
 {
-    SetVendorName( wxT( "kicad" ) );
+
+    InitEDA_Appl( wxT( "PCBcalc" ) );
 
     wxFrame* frame = new PCB_CALCULATOR_FRAME( NULL );
     SetTopWindow( frame );
