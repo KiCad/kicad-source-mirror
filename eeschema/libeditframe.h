@@ -68,12 +68,44 @@ public:
     void        OnExportPart( wxCommandEvent& event );
     void        OnSelectAlias( wxCommandEvent& event );
     void        OnSelectPart( wxCommandEvent& event );
-    void        DeleteOnePart( wxCommandEvent& event );
-    void        CreateNewLibraryPart( wxCommandEvent& event );
+
+    /**
+     * Function DeleteOnePart
+     * is the command event handler to delete an entry from the current library.
+     *
+     * The deleted entry can be an alias or a component.  If the entry is an alias,
+     * it is removed from the component and the list of alias is updated.  If the
+     * entry is a component and the list of aliases is empty, the component and all
+     * it drawable items are deleted.  Otherwise the first alias in the alias list
+     * becomes the new component name and the other aliases become dependent on
+     * renamed component.
+     *
+     * @note This only deletes the entry in memory.  The file does not change.
+     */
+    void DeleteOnePart( wxCommandEvent& event );
+
+    /**
+     * Function CreateNewLibraryPart
+     * is the command event handler to create a new library component.
+     *
+     * If an old component is currently in edit, it is deleted.
+     */
+    void CreateNewLibraryPart( wxCommandEvent& event );
+
     void        OnCreateNewPartFromExisting( wxCommandEvent& event );
     void        OnEditComponentProperties( wxCommandEvent& event );
     void        InstallFieldsEditorDialog(  wxCommandEvent& event );
-    void        LoadOneLibraryPart( wxCommandEvent& event );
+
+    /**
+     * Function LoadOneLibraryPart
+     * loads a library component from the currently selected library.
+     *
+     * If a library is already selected, the user is prompted for the component name
+     * to load.  If there is no current selected library, the user is prompted to select
+     * a library name and then select component to load.
+     */
+    void LoadOneLibraryPart( wxCommandEvent& event );
+
     void        OnViewEntryDoc( wxCommandEvent& event );
     void        OnCheckComponent( wxCommandEvent& event );
     void        OnSelectBodyStyle( wxCommandEvent& event );
@@ -95,7 +127,14 @@ public:
 
     void        UpdateAliasSelectList();
     void        UpdatePartSelectList();
-    void        DisplayLibInfos();
+
+    /**
+     * Function DisplayLibInfos
+     * updates the main window title bar with the current library name and read only status
+     * of the library.
+     */
+    void DisplayLibInfos();
+
     void        RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void        OnCloseWindow( wxCloseEvent& Event );
     void        ReCreateHToolbar();
@@ -112,8 +151,23 @@ public:
 
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
-    void        LoadSettings();
-    void        SaveSettings();
+    /**
+     * Function LoadSettings
+     * loads the library editor frame specific configuration settings.
+     *
+     * Don't forget to call this method from any derived classes or the settings will not
+     * get loaded.
+     */
+    void LoadSettings();
+
+    /**
+     * Function SaveSettings
+     * saves the library editor frame specific configuration settings.
+     *
+     * Don't forget to call this base method from any derived classes or the settings will
+     * not get saved.
+     */
+    void SaveSettings();
 
     /**
      * Function CloseWindow
@@ -221,29 +275,58 @@ private:
     virtual void   OnActivate( wxActivateEvent& event );
 
     // General:
-    void           SaveOnePartInMemory();
 
     /**
-     * function SelectActiveLibrary
-     * Select the current active library.
-     * @param aLibrary = the CMP_LIBRARY aLibrary to select, or NULL
-     * to select from a list
+     * Function SaveOnePartInMemory
+     * updates the current component being edited in the active library.
+     *
+     * Any changes are updated in memory only and NOT to a file.  The old component is
+     * deleted from the library and/or any aliases before the edited component is updated
+     * in the library.
      */
-    void           SelectActiveLibrary( CMP_LIBRARY* aLibrary = NULL);
-
-    void           SaveActiveLibrary( wxCommandEvent& event );
+    void SaveOnePartInMemory();
 
     /**
-     * function LoadComponentFromCurrentLib
-     * load a lib component from the current active library.
-     * @param aLibEntry = the lib component to load from aLibrary (can be an alias
-     * @return true if OK.
+     * Function SelectActiveLibrary
+     * sets the current active library to \a aLibrary.
+     *
+     * @param aLibrary A pointer to the CMP_LIBRARY object to select.  If NULL, then display
+     *                 list of available libraries to select from.
      */
-    bool           LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry );
+    void SelectActiveLibrary( CMP_LIBRARY* aLibrary = NULL );
 
-    bool           LoadOneLibraryPartAux( LIB_ALIAS* LibEntry, CMP_LIBRARY* Library );
+    /**
+     * Function SaveActiveLibrary
+     * it the command event handler to save the changes to the current library.
+     *
+     * A backup file of the current library is saved with the .bak extension before the
+     * changes made to the library are saved.
+     */
+    void SaveActiveLibrary( wxCommandEvent& event );
 
-    void           DisplayCmpDoc();
+    /**
+     * Function LoadComponentFromCurrentLib
+     * loads a component from the current active library.
+     * @param aLibEntry The component to load from \a aLibrary (can be an alias)
+     * @return true if \a aLibEntry loaded correctly.
+     */
+    bool LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry );
+
+    /**
+     * Function LoadOneLibraryPartAux
+     * loads a copy of \a aLibEntry from \a aLibrary into memory.
+     *
+     * @param aLibEntry A pointer to the LIB_ALIAS object to load.
+     * @param aLibrary A pointer to the CMP_LIBRARY object to load \a aLibEntry from.
+     * @returns True if a copy of \aLibEntry was successfully loaded from \aLibrary.
+     */
+    bool LoadOneLibraryPartAux( LIB_ALIAS* aLibEntry, CMP_LIBRARY* aLibrary );
+
+    /**
+     * Function DisplayCmpDoc
+     * displays the documentation of the selected component.
+     */
+    void DisplayCmpDoc();
 
     /**
      * Function OnRotateItem
@@ -289,13 +372,14 @@ private:
 
 public:
     /**
-     * function LoadComponentAndSelectLib
-     * Select the current active library.
-     * @param aLibrary = the CMP_LIBRARY aLibrary to select
-     * @param aLibEntry = the lib component to load from aLibrary (can be an alias
-     * @return true if OK.
+     * Function LoadComponentAndSelectLib
+     * selects the current active library.
+     *
+     * @param aLibrary The CMP_LIBRARY to select
+     * @param aLibEntry The component to load from aLibrary (can be an alias).
+     * @return true if \a aLibEntry was loaded from \a aLibrary.
      */
-    bool           LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, CMP_LIBRARY* aLibrary );
+    bool LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, CMP_LIBRARY* aLibrary );
 
     /* Block commands: */
     virtual int    ReturnBlockCommand( int aKey );
@@ -330,7 +414,7 @@ protected:
     /** Default line width for drawing or editing graphic items. */
     static int            m_drawLineWidth;
 
-    /** The current active libary. NULL if no active library is selected. */
+    /** The current active library. NULL if no active library is selected. */
     static CMP_LIBRARY*   m_library;
     /** The current component being edited.  NULL if no component is selected. */
     static LIB_COMPONENT* m_component;
@@ -386,7 +470,7 @@ protected:
      * Function SVG_Print_Component
      * Creates the SVG print file for the current edited component.
      * @param aFullFileName = the full filename of the file
-    */
+     */
     void SVG_Print_Component( const wxString& aFullFileName );
 
 

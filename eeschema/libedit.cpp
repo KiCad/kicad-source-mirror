@@ -22,7 +22,6 @@
 #include "dialogs/dialog_lib_new_component.h"
 
 
-/* Update the main window title bar with the current library name. */
 void LIB_EDIT_FRAME::DisplayLibInfos()
 {
     wxString msg = _( "Component Library Editor: " );
@@ -30,33 +29,35 @@ void LIB_EDIT_FRAME::DisplayLibInfos()
     EnsureActiveLibExists();
 
     if( m_library )
+    {
         msg += m_library->GetFullFileName();
+
+        if( m_library->IsReadOnly() )
+            msg += _( " [Read Only]" );
+    }
     else
+    {
         msg += _( "no library selected" );
+    }
 
     SetTitle( msg );
 }
 
 
-/* Function to select the current library (working library) */
 void LIB_EDIT_FRAME::SelectActiveLibrary( CMP_LIBRARY* aLibrary )
 {
     if( aLibrary == NULL )
         aLibrary = SelectLibraryFromList( this );
+
     if( aLibrary )
     {
         m_library = aLibrary;
     }
+
     DisplayLibInfos();
 }
 
-/*
- * function LoadComponentAndSelectLib
- * Select the current active library.
- * aLibrary = the CMP_LIBRARY aLibrary to select
- * aLibEntry = the lib component to load from aLibrary (can be an alias
- * return true if OK.
- */
+
 bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, CMP_LIBRARY* aLibrary )
 {
     if( GetScreen()->IsModify()
@@ -68,12 +69,6 @@ bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, CMP_LIBRAR
 }
 
 
-/**
- * function LoadComponentFromCurrentLib
- * load a lib component from the current active library.
- * @param aLibEntry = the lib component to load from aLibrary (can be an alias
- * @return true if OK.
- */
 bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry )
 {
     if( !LoadOneLibraryPartAux( aLibEntry, m_library ) )
@@ -91,13 +86,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry )
     return true;
 }
 
-/**
- * Function LoadOneLibraryPart
- * load a library component from the current selected library
- * Prompt user for component name
- * If there is no current selected library,
- * prompt user for library name and make the selected library the current lib.
- */
+
 void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 {
     int        i;
@@ -115,11 +104,13 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     if( m_library == NULL )
     {
         SelectActiveLibrary();
+
         if( m_library == NULL )
             return;
     }
 
     i = GetNameOfPartToLoad( this, m_library, CmpName );
+
     if( i == 0 )
         return;
 
@@ -150,13 +141,6 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
 }
 
 
-/*
- * Routine to load into memory a copy of 1 library part.
- * Returns
- * 0 if OK
- * 1 if error
- * m_component advanced copy and created
- */
 bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLibrary )
 {
     wxString msg, cmpName, rootName;
@@ -222,7 +206,6 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, CMP_LIBRARY* aLib
 }
 
 
-/* Function to redraw the current loaded library component */
 void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     if( GetScreen() == NULL )
@@ -254,10 +237,6 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 }
 
 
-/*
- * Save (on disk) the current library
- *  if exists the old file is renamed (.bak)
- */
 void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
 {
     wxFileName fn;
@@ -265,16 +244,16 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
 
     DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
 
+    if( m_library == NULL )
+    {
+        DisplayError( this, _( "No library specified." ) );
+        return;
+    }
+
     if( GetScreen()->IsModify() )
     {
         if( IsOK( this, _( "Include last component changes?" ) ) )
             SaveOnePartInMemory();
-    }
-
-    if( m_library == NULL )
-    {
-        DisplayError( this, wxT( "No library specified." ) );
-        return;
     }
 
     if( event.GetId() == ID_LIBEDIT_SAVE_CURRENT_LIB_AS )
@@ -292,7 +271,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
         /* The GTK file chooser doesn't return the file extension added to
          * file name so add it here. */
         if( fn.GetExt().IsEmpty() )
-            fn.SetExt( SymbolFileExtension );
+            fn.SetExt( CompLibFileExtension );
 
         wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
     }
@@ -304,6 +283,15 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
 
         if( !IsOK( this, msg ) )
             return;
+    }
+
+    // Verify the user has write privileges before attempting to save the library file.
+    if( !fn.IsDirWritable() )
+    {
+        DisplayError( this,
+                      wxString::Format( _( "You do not have permission to write to file <%s>." ),
+                                        GetChars( fn.GetFullPath() ) ) );
+        return;
     }
 
     bool success = m_library->Save( fn.GetFullPath(), true );
@@ -326,11 +314,6 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
 }
 
 
-/*
- * Display the documentation of the selected component.
- *
- * Used when displaying the list of library components.
- */
 void LIB_EDIT_FRAME::DisplayCmpDoc()
 {
     wxString msg;
@@ -380,20 +363,6 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
 }
 
 
-/*
- * Delete component in the current library.
- *
- * (Delete only in memory, the file does not change)
- *
- * The entry can be an alias or a component.
- * If an alias:
- *   It is removed, and the list of alias is updated.
- *
- * If a component:
- *   If the list of aliases is zero, it deletes the component
- *   Otherwise the alias becomes the new component name, and the other
- *   aliases become dependent on newly named component.
- */
 void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
 {
     wxString      CmpName;
@@ -486,11 +455,6 @@ All changes will be lost. Discard changes?" ) ) )
 
 
 
-/*
- * Routine to create a new library component
- *
- * If an old component is currently in edit, it is deleted.
- */
 void LIB_EDIT_FRAME::CreateNewLibraryPart( wxCommandEvent& event )
 {
     wxString name;
@@ -537,14 +501,17 @@ lost!\n\nClear the current component from the screen?" ) ) )
     LIB_COMPONENT* component = new LIB_COMPONENT( name );
     component->GetReferenceField().m_Text = dlg.GetReference();
     component->SetPartCount( dlg.GetPartCount() );
+
     // Initialize component->m_TextInside member:
     // if 0, pin text is outside the body (on the pin)
     // if > 0, pin text is inside the body
     component->SetConversion( dlg.GetAlternateBodyStyle() );
     SetShowDeMorgan( dlg.GetAlternateBodyStyle() );
-    if( dlg.GetPinNameInside( ) )
+
+    if( dlg.GetPinNameInside() )
     {
         component->SetPinNameOffset( dlg.GetPinTextPosition() );
+
         if( component->GetPinNameOffset() == 0 )
             component->SetPinNameOffset( 1 );
     }
@@ -557,6 +524,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
     component->SetShowPinNumbers( dlg.GetShowPinNumber() );
     component->SetShowPinNames( dlg.GetShowPinName() );
     component->LockUnits( dlg.GetLockItems() );
+
     if( dlg.GetPartCount() < 2 )
         component->LockUnits( false );
 
@@ -580,19 +548,12 @@ lost!\n\nClear the current component from the screen?" ) ) )
     m_HToolBar->ToggleTool( ID_LIBEDIT_EDIT_PIN_BY_PIN, g_EditPinByPinIsOn );
     m_lastDrawItem = NULL;
     GetScreen()->ClearUndoRedoList();
-    OnModify( );
+    OnModify();
     DrawPanel->Refresh();
     m_HToolBar->Refresh();
 }
 
 
-/*
- * Routine backup of "partlib" current in the current library.
- *
- * Save in memory only and NOT on file.
- * The routine deletes the old component (and / or aliases) to replace
- * If any, and saves the new and creates the corresponding alias.
- */
 void LIB_EDIT_FRAME::SaveOnePartInMemory()
 {
     LIB_COMPONENT* oldComponent;

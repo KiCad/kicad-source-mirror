@@ -1,5 +1,5 @@
 /*********************************************/
-/*	Headers for component library definition */
+/*  Headers for component library definition */
 /*********************************************/
 
 #ifndef CLASS_LIBRARY_H
@@ -163,7 +163,13 @@ public:
 
     void SetCache( void ) { isCache = true; }
 
-   /**
+    /**
+     * Function IsReadOnly
+     * @return true if current user does not have write access to the library file.
+     */
+    bool IsReadOnly() const { return !fileName.IsFileWritable(); }
+
+    /**
      * Load a string array with the names of all the entries in this library.
      *
      * @param aNames - String array to place entry names into.
@@ -171,7 +177,7 @@ public:
      * @param aMakeUpperCase - Force entry names to upper case.
      */
     void GetEntryNames( wxArrayString& aNames, bool aSort = true,
-                        bool aMakeUpperCase = 
+                        bool aMakeUpperCase =
 #ifndef KICAD_KEEPCASE
                                               true
 #else

@@ -267,12 +267,6 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 }
 
 
-/**
- * Load library editor frame specific configuration settings.
- *
- * Don't forget to call this base method from any derived classes or the
- * settings will not get loaded.
- */
 void LIB_EDIT_FRAME::LoadSettings()
 {
     wxConfig* cfg;
@@ -293,12 +287,7 @@ void LIB_EDIT_FRAME::SetDrawItem( LIB_ITEM* drawItem )
 }
 
 
-/**
- * Save library editor frame specific configuration settings.
- *
- * Don't forget to call this base method from any derived classes or the
- * settings will not get saved.
- */
+
 void LIB_EDIT_FRAME::SaveSettings()
 {
     wxConfig* cfg;
@@ -469,7 +458,8 @@ void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdateSaveCurrentLib( wxUpdateUIEvent& event )
 {
-    event.Enable( m_library != NULL && ( m_library->IsModified() || GetScreen()->IsModify() ) );
+    event.Enable( m_library != NULL && !m_library->IsReadOnly()
+                  && ( m_library->IsModified() || GetScreen()->IsModify() ) );
 }
 
 
@@ -874,11 +864,6 @@ void LIB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 }
 
 
-/**
- * Function TempCopyComponent
- * create a temporary copy of the current edited component
- * Used to prepare an Undo ant/or abort command before editing the component
- */
 void LIB_EDIT_FRAME::TempCopyComponent()
 {
     if( m_tempCopyComponent )
@@ -890,11 +875,7 @@ void LIB_EDIT_FRAME::TempCopyComponent()
         m_tempCopyComponent = new LIB_COMPONENT( *m_component );
 }
 
-/**
- * Function RestoreComponent
- * Restore the current edited component from its temporary copy.
- * Used to abort a command
- */
+
 void LIB_EDIT_FRAME::RestoreComponent()
 {
     if( m_tempCopyComponent == NULL )
@@ -907,10 +888,7 @@ void LIB_EDIT_FRAME::RestoreComponent()
     m_tempCopyComponent = NULL;
 }
 
-/**
- * Function ClearTempCopyComponent
- * delete temporary copy of the current component and clear pointer
- */
+
 void LIB_EDIT_FRAME::ClearTempCopyComponent()
 {
     delete m_tempCopyComponent;
@@ -918,8 +896,6 @@ void LIB_EDIT_FRAME::ClearTempCopyComponent()
 }
 
 
-/* Creates the SVG print file for the current edited component.
- */
 void LIB_EDIT_FRAME::SVG_Print_Component( const wxString& FullFileName )
 {
     DIALOG_SVG_PRINT::DrawSVGPage( this, FullFileName, GetScreen() );
