@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-11 22:53+0100\n"
-"PO-Revision-Date: 2011-08-11 23:17+0100\n"
+"POT-Creation-Date: 2011-08-13 09:34+0100\n"
+"PO-Revision-Date: 2011-08-13 09:54+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team\n"
 "MIME-Version: 1.0\n"
@@ -536,16 +536,20 @@ msgstr "Zamieniono %d powielonych odcisków czasowych."
 msgid "Sheet"
 msgstr "Arkusz"
 
-#: eeschema/libedit.cpp:28
+#: eeschema/libedit.cpp:27
 msgid "Component Library Editor: "
 msgstr "Edytor bibliotek:"
 
-#: eeschema/libedit.cpp:35
+#: eeschema/libedit.cpp:36
+msgid " [Read Only]"
+msgstr " [Tyko do odczytu]"
+
+#: eeschema/libedit.cpp:40
 msgid "no library selected"
 msgstr "Nie wybrano biblioteki"
 
-#: eeschema/libedit.cpp:63
-#: eeschema/libedit.cpp:111
+#: eeschema/libedit.cpp:64
+#: eeschema/libedit.cpp:100
 msgid ""
 "Current part not saved.\n"
 "\n"
@@ -555,119 +559,129 @@ msgstr ""
 "\n"
 "Porzucić zmiany?"
 
-#: eeschema/libedit.cpp:141
+#: eeschema/libedit.cpp:132
 #, c-format
 msgid "Component name \"%s\" not found in library \"%s\"."
 msgstr "Nazwa elementu \"%s\" nie została znaleziona w \"%s\"."
 
-#: eeschema/libedit.cpp:196
+#: eeschema/libedit.cpp:180
 #, c-format
 msgid "Could not create copy of part <%s> in library <%s>."
 msgstr "Nie można stworzyć kopii części <%s> w bibliotece <%s>"
 
-#: eeschema/libedit.cpp:270
+#: eeschema/libedit.cpp:249
+#: eeschema/libedit.cpp:574
+msgid "No library specified."
+msgstr "Nie wybrano żadnej biblioteki."
+
+#: eeschema/libedit.cpp:255
 msgid "Include last component changes?"
 msgstr "Dołączyć ostatnie zmiany elementu?"
 
-#: eeschema/libedit.cpp:283
+#: eeschema/libedit.cpp:262
 msgid "Component Library Name:"
 msgstr "Nazwa pliku biblioteki elementów:"
 
-#: eeschema/libedit.cpp:303
+#: eeschema/libedit.cpp:282
 msgid "Modify library file \""
 msgstr "Czy zmodyfikować plik biblioteki \""
 
-#: eeschema/libedit.cpp:303
+#: eeschema/libedit.cpp:282
 msgid "\"?"
 msgstr "\"?"
 
-#: eeschema/libedit.cpp:315
+#: eeschema/libedit.cpp:292
+#, c-format
+msgid "You do not have permission to write to file <%s>."
+msgstr "Nie masz uprawnień do zapisu do pliku <%s>."
+
+#: eeschema/libedit.cpp:303
 msgid "Error while saving library file \""
 msgstr "Błąd przy zapisie pliku biblioteki \""
 
-#: eeschema/libedit.cpp:315
+#: eeschema/libedit.cpp:303
 msgid "\"."
 msgstr "\"."
 
-#: eeschema/libedit.cpp:316
+#: eeschema/libedit.cpp:304
 msgid "*** ERROR: ***"
 msgstr "*** BŁĄD: ***"
 
-#: eeschema/libedit.cpp:321
+#: eeschema/libedit.cpp:309
 msgid "Library file \""
 msgstr "Plik biblioteki \""
 
-#: eeschema/libedit.cpp:323
+#: eeschema/libedit.cpp:311
 msgid "Document file \""
 msgstr "Plik dokumentacji \""
 
-#: eeschema/libedit.cpp:346
+#: eeschema/libedit.cpp:329
 msgid "Part"
 msgstr "Element "
 
-#: eeschema/libedit.cpp:349
+#: eeschema/libedit.cpp:332
 msgid "None"
 msgstr "Brak"
 
-#: eeschema/libedit.cpp:357
+#: eeschema/libedit.cpp:340
 msgid "Alias"
 msgstr "Alias"
 
-#: eeschema/libedit.cpp:362
+#: eeschema/libedit.cpp:345
 msgid "Unit"
 msgstr "Część"
 
-#: eeschema/libedit.cpp:365
+#: eeschema/libedit.cpp:348
 msgid "Convert"
 msgstr "Skonwertowany"
 
-#: eeschema/libedit.cpp:367
+#: eeschema/libedit.cpp:350
 msgid "Normal"
 msgstr "Normalny"
 
-#: eeschema/libedit.cpp:369
+#: eeschema/libedit.cpp:352
 msgid "Body"
 msgstr "Obrys"
 
-#: eeschema/libedit.cpp:372
+#: eeschema/libedit.cpp:355
 msgid "Power Symbol"
 msgstr "Symbol zasilania"
 
-#: eeschema/libedit.cpp:374
+#: eeschema/libedit.cpp:357
 msgid "Component"
 msgstr "Element"
 
-#: eeschema/libedit.cpp:376
+#: eeschema/libedit.cpp:359
 #: eeschema/lib_pin.cpp:1888
 msgid "Type"
 msgstr "Typ"
 
-#: eeschema/libedit.cpp:377
+#: eeschema/libedit.cpp:360
 msgid "Description"
 msgstr "Opis"
 
-#: eeschema/libedit.cpp:378
+#: eeschema/libedit.cpp:361
 msgid "Key words"
 msgstr "Słowa kluczowe"
 
-#: eeschema/libedit.cpp:379
+#: eeschema/libedit.cpp:362
 msgid "Datasheet"
 msgstr "Dokumentacja"
 
-#: eeschema/libedit.cpp:415
+#: eeschema/libedit.cpp:384
 msgid "Please select a component library."
 msgstr "Proszę wybrać bibliotekę elementów."
 
-#: eeschema/libedit.cpp:424
+#: eeschema/libedit.cpp:393
 #, c-format
 msgid "Component library <%s> is empty."
 msgstr "Biblioteka elementów <%s> jest pusta."
 
-#: eeschema/libedit.cpp:425
+#: eeschema/libedit.cpp:394
 msgid "Delete Entry Error"
 msgstr "Błąd przy usuwaniu wpisu"
 
-#: eeschema/libedit.cpp:429
+#: eeschema/libedit.cpp:398
 #, c-format
 msgid ""
 "Select 1 of %d components to delete\n"
@@ -676,25 +690,25 @@ msgstr ""
 "Wybierz jeden z %d elementów do usunięcia\n"
 "z biblioteki o nazwie <%s>."
 
-#: eeschema/libedit.cpp:433
+#: eeschema/libedit.cpp:402
 msgid "Delete Component"
 msgstr "Usuń element"
 
-#: eeschema/libedit.cpp:442
+#: eeschema/libedit.cpp:411
 #, c-format
 msgid "Entry <%s> not found in library <%s>."
 msgstr "Wpisz <%s> nie został znaleziony w <%s>."
 
-#: eeschema/libedit.cpp:449
+#: eeschema/libedit.cpp:418
 #, c-format
 msgid "Delete component \"%s\" from library \"%s\"?"
 msgstr "Usunąć element \"%s\" z biblioteki \"%s\"?"
 
-#: eeschema/libedit.cpp:467
+#: eeschema/libedit.cpp:436
 msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
 msgstr "Element który został skasowany został zmodyfikowany. Wszystkie zmiany zostaną utracone. Porzucić zmiany?"
 
-#: eeschema/libedit.cpp:499
+#: eeschema/libedit.cpp:463
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -704,29 +718,25 @@ msgstr ""
 "\n"
 "Usunąć element z ekranu?"
 
-#: eeschema/libedit.cpp:515
+#: eeschema/libedit.cpp:479
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Ten nowy element nie ma nazwy i nie może zostać utworzony. Przerwano"
 
-#: eeschema/libedit.cpp:530
+#: eeschema/libedit.cpp:494
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
 msgstr "Element \"%s\" istnieje już w bibliotece \"%s\"."
 
-#: eeschema/libedit.cpp:604
+#: eeschema/libedit.cpp:565
 msgid "No component to save."
 msgstr "Brak elementu do zapisania."
 
-#: eeschema/libedit.cpp:613
-msgid "No library specified."
-msgstr "Nie wybrano żadnej biblioteki."
-
-#: eeschema/libedit.cpp:623
+#: eeschema/libedit.cpp:584
 #, c-format
 msgid "Component \"%s\" already exists. Change it?"
 msgstr "Element \"%s\" istnieje, zamienić go?"
 
-#: eeschema/libedit.cpp:640
+#: eeschema/libedit.cpp:601
 #, c-format
 msgid "Component %s saved in library %s"
 msgstr "Element %s zaspisany w bibliotece %s"
@@ -2593,7 +2603,7 @@ msgstr " błąd!"
 msgid "The following libraries could not be found:"
 msgstr "Następujące biblioteki nie zostały znalezione:"
 
-#: eeschema/libeditframe.cpp:320
+#: eeschema/libeditframe.cpp:309
 msgid ""
 "Component was modified!\n"
 "Discard changes?"
@@ -2601,7 +2611,7 @@ msgstr ""
 "Element został zmieniony!\n"
 "Porzucić zmiany?"
 
-#: eeschema/libeditframe.cpp:334
+#: eeschema/libeditframe.cpp:323
 #, c-format
 msgid ""
 "Library \"%s\" was modified!\n"
@@ -2610,41 +2620,41 @@ msgstr ""
 "Biblioteka \"%s\" została zmieniona!\n"
 "Porzucić zmiany?"
 
-#: eeschema/libeditframe.cpp:432
+#: eeschema/libeditframe.cpp:421
 #: eeschema/tool_viewlib.cpp:148
 #, c-format
 msgid "Part %c"
 msgstr "Element %c"
 
-#: eeschema/libeditframe.cpp:1016
+#: eeschema/libeditframe.cpp:992
 msgid "Set pin options"
 msgstr "Ustaw opcje pinu"
 
-#: eeschema/libeditframe.cpp:1029
+#: eeschema/libeditframe.cpp:1005
 msgid "Add rectangle"
 msgstr "Dodaj prostokąt"
 
-#: eeschema/libeditframe.cpp:1033
+#: eeschema/libeditframe.cpp:1009
 msgid "Add circle"
 msgstr "Dodaj okrąg"
 
-#: eeschema/libeditframe.cpp:1037
+#: eeschema/libeditframe.cpp:1013
 msgid "Add arc"
 msgstr "Dodaj łuk"
 
-#: eeschema/libeditframe.cpp:1041
+#: eeschema/libeditframe.cpp:1017
 msgid "Add line"
 msgstr "Dodaj linię"
 
-#: eeschema/libeditframe.cpp:1045
+#: eeschema/libeditframe.cpp:1021
 msgid "Set anchor position"
 msgstr "Ustaw pozycję zakotwiczenia"
 
-#: eeschema/libeditframe.cpp:1049
+#: eeschema/libeditframe.cpp:1025
 msgid "Import"
 msgstr "Importuj"
 
-#: eeschema/libeditframe.cpp:1055
+#: eeschema/libeditframe.cpp:1031
 msgid "Export"
 msgstr "Eksportuj"
 
@@ -13717,50 +13727,6 @@ msgstr "Poziom odcięcia:"
 msgid "Adjust the level to convert the greyscale picture to a black and white picture."
 msgstr "Ustawia poziom odniesienia dla konwersji obrazów w skali szarości na obrazy czarno-białe"
 
-#: pcb_calculator/UnitSelector.cpp:15
-msgid "um"
-msgstr "um"
-
-#: pcb_calculator/UnitSelector.cpp:16
-msgid "cm"
-msgstr "cm"
-
-#: pcb_calculator/UnitSelector.cpp:17
-msgid "mil"
-msgstr "milsów"
-
-#: pcb_calculator/UnitSelector.cpp:46
-msgid "GHz"
-msgstr "GHz"
-
-#: pcb_calculator/UnitSelector.cpp:47
-msgid "MHz"
-msgstr "MHz"
-
-#: pcb_calculator/UnitSelector.cpp:48
-msgid "KHz"
-msgstr "KHz"
-
-#: pcb_calculator/UnitSelector.cpp:49
-msgid "Hz"
-msgstr "Hz"
-
-#: pcb_calculator/UnitSelector.cpp:75
-msgid "Radian"
-msgstr "Radiany"
-
-#: pcb_calculator/UnitSelector.cpp:76
-msgid "Degree"
-msgstr "Stopnie"
-
-#: pcb_calculator/UnitSelector.cpp:100
-msgid "Ohm"
-msgstr "Ohm"
-
-#: pcb_calculator/UnitSelector.cpp:101
-msgid "KOhm"
-msgstr "KOhm"
-
 #: pcb_calculator/transline_dlg_funct.cpp:68
 msgid "Relative Dielectric Constants"
 msgstr "Relatywna stała dielektryczna"
@@ -14201,6 +14167,54 @@ msgstr "Względna przenikalność środowiska"
 msgid "Cable Length"
 msgstr "Długość przewodu"
 
+#: pcb_calculator/UnitSelector.cpp:15
+msgid "um"
+msgstr "um"
+
+#: pcb_calculator/UnitSelector.cpp:16
+msgid "cm"
+msgstr "cm"
+
+#: pcb_calculator/UnitSelector.cpp:17
+msgid "mil"
+msgstr "milsów"
+
+#: pcb_calculator/UnitSelector.cpp:46
+msgid "GHz"
+msgstr "GHz"
+
+#: pcb_calculator/UnitSelector.cpp:47
+msgid "MHz"
+msgstr "MHz"
+
+#: pcb_calculator/UnitSelector.cpp:48
+msgid "KHz"
+msgstr "KHz"
+
+#: pcb_calculator/UnitSelector.cpp:49
+msgid "Hz"
+msgstr "Hz"
+
+#: pcb_calculator/UnitSelector.cpp:75
+msgid "Radian"
+msgstr "Radiany"
+
+#: pcb_calculator/UnitSelector.cpp:76
+msgid "Degree"
+msgstr "Stopnie"
+
+#: pcb_calculator/UnitSelector.cpp:100
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:256
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:325
+msgid "Ohm"
+msgstr "Ohm"
+
+#: pcb_calculator/UnitSelector.cpp:101
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:78
+#: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:92
+msgid "KOhm"
+msgstr "KOhm"
+
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:47
 msgid "Vout = Vref * (R1 + R2) / R2"
 msgstr "Vout = Vref * (R1 + R2) / R2"
@@ -14239,7 +14253,7 @@ msgstr "Informacje"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:138
 msgid "Regulators"
-msgstr "Regulatory"
+msgstr "Regulatory napięcia"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:144
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:853
@@ -14272,7 +14286,7 @@ msgstr "Przyrost temperatury"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:176
 msgid "deg C"
-msgstr "deg C"
+msgstr "st. C"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:180
 msgid "Cu thickness"
@@ -14284,7 +14298,7 @@ msgstr "Długość łącza"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:218
 msgid "Tracks Caracteristics (External Layers):"
-msgstr "Charakterystyki ścieżek (warstwy zewnętrzne):"
+msgstr "Charakterystyka ścieżek (warstwy zewnętrzne):"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:226
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:295
@@ -14314,7 +14328,7 @@ msgstr "Spadek napięcia"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:267
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:336
 msgid "Volt"
-msgstr "Volt(ów)"
+msgstr "V"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:271
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:340
@@ -14324,7 +14338,7 @@ msgstr "Straty"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:278
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:347
 msgid "Watt"
-msgstr "Wat(ów)"
+msgstr "W"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:287
 msgid "Tracks Caracteristics (Internal Layers):"
@@ -14430,7 +14444,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:450
 msgid "Electrical Spacing"
-msgstr "Rozstaw"
+msgstr "Prześwit"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
 msgid "Microstrip Line"
@@ -14438,11 +14452,11 @@ msgstr "Linia mikropaskowa"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
 msgid "Coplanar wave guide"
-msgstr "Koplanarny falowód"
+msgstr "Linia koplanarna"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
 msgid "Grounded Coplanar wave guide"
-msgstr "Koplanarny falowód ekranowany"
+msgstr "Linia koplanarna ekranowana"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:458
 msgid "Rectangular Waveguide"
@@ -14544,11 +14558,11 @@ msgstr "etykieta"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
 msgid "PI"
-msgstr "PI"
+msgstr "Typu Pi"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
 msgid "Tee"
-msgstr "Tee"
+msgstr "Typu T"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
 msgid "Bridged Tee"
@@ -14556,7 +14570,7 @@ msgstr "Mostkowy typu T"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:838
 msgid "Resistive Splitter"
-msgstr "Rozdzielacz rezystorowy"
+msgstr "Splitter rezystorowy"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:840
 msgid "Attenuators:"
@@ -14637,23 +14651,23 @@ msgstr "Tolerancja"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:993
 msgid "1st Band"
-msgstr "Pierwszego rzędu"
+msgstr "Pierwszy pasek"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:997
 msgid "2nd Band"
-msgstr "Drugiego rzędu"
+msgstr "Drugi pasek"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1001
 msgid "3rd Band"
-msgstr "Trzeciego rzędu"
+msgstr "Trzeci pasek"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1005
 msgid "4rd Band"
-msgstr "Czwartego rzędu"
+msgstr "Czwarty pasek"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1009
 msgid "Multiplier"
-msgstr "Współczynnik"
+msgstr "Mnożnik"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1040
 msgid "Color Code"
@@ -14689,27 +14703,27 @@ msgstr "Class 6"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1084
 msgid "Lines width"
-msgstr "Szerokość linii"
+msgstr "Szerokość ścieżek"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1085
 msgid "Min clearance"
-msgstr "Prześwit minimum"
+msgstr "Prześwit min."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1086
 msgid "Via: (diam - drill)"
-msgstr "Przelotka: (średnica - wiercenie)"
+msgstr "Przelotka: (D - otwór)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1087
 msgid "Plated Pad: (diam - drill)"
-msgstr "Pad galwanizowany: (średnica - wiercenie)"
+msgstr "Pad cynowany: (D - otwór)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1088
 msgid "NP Pad: (diam - drill)"
-msgstr "Pad niegalwanizowany: (średnica - wiercenie)"
+msgstr "Pad nie cynowany: (D - otwór)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1105
 msgid "Board Classes"
-msgstr "Klasa płytki"
+msgstr "Klasy płytek"
 
 #: eeschema/help_common_strings.h:21
 msgid "Fit the schematic sheet on the screen"
