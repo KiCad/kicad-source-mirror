@@ -21,6 +21,13 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#include "fctsys.h"
+#include "appl_wxstruct.h"
+#include "wxstruct.h"
+#include "common.h"
+#include "confirm.h"
+#include "gestfich.h"
+
 #include "wx/wx.h"
 #include "wx/config.h"
 #include "wx/filename.h"
@@ -32,6 +39,9 @@
 
 #include "bitmap2component.xpm"
 
+#include "bitmaps.h"
+#include "colors_selection.h"
+#include "build_version.h"
 
 #define KEYWORD_FRAME_POSX wxT( "Bmconverter_Pos_x" )
 #define KEYWORD_FRAME_POSY wxT( "Bmconverter_Pos_y" )
@@ -367,27 +377,25 @@ void BM2CMP_FRAME::ExportFile( FILE* aOutfile, int aFormat )
 
 // BM_TO_CMP_APP
 
-class BM_TO_CMP_APP : public wxApp
+void WinEDA_App::MacOpenFile(const wxString &fileName)
 {
-public:
-    virtual bool OnInit();
-};
+}
 
-
-IMPLEMENT_APP( BM_TO_CMP_APP )
+IMPLEMENT_APP( WinEDA_App )
 
 ///-----------------------------------------------------------------------------
 // BM_TO_CMP_APP
 // main program
 //-----------------------------------------------------------------------------
 
-bool BM_TO_CMP_APP::OnInit()
+bool WinEDA_App::OnInit()
 {
     wxInitAllImageHandlers();
 
-    SetVendorName( wxT( "kicad" ) );
+    InitEDA_Appl( wxT( "BMP2CMP" ) );
 
     wxFrame* frame = new BM2CMP_FRAME();
+    SetTopWindow( frame );
     frame->Show( true );
 
     return true;

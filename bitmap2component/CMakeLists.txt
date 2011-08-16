@@ -1,6 +1,7 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ../potrace
                     ../polygon/kbool/include
+                    ${CMAKE_SOURCE_DIR}/common
                     )
 
 set(BITMAP2COMPONENT_SRCS
@@ -39,7 +40,7 @@ if(APPLE)
         ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries( bitmap2component
+target_link_libraries( bitmap2component common polygon bitmaps
                         ${wxWidgets_LIBRARIES}
                         potrace
                         kbool )
