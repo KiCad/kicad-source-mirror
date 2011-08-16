@@ -631,8 +631,12 @@ void LIB_FIELD::SetName( const wxString& aName )
     // Mandatory field names are fixed.
 
     // So what?  Why should the low level code be in charge of such a policy issue?
-    if( m_id < MANDATORY_FIELDS )
+    // Besides, m_id is a relic that is untrustworthy now.
+    if( m_id >=0 && m_id < MANDATORY_FIELDS )
+    {
+        D(printf( "trying to set a MANDATORY_FIELD's name\n" );)
         return;
+    }
 
     if( m_name != aName )
     {

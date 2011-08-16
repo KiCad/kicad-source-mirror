@@ -710,6 +710,8 @@ void SCH_EDIT_FRAME::SaveSettings()
 
     m_TemplateFieldNames.Format( &sf, 0 );
 
+    D(printf("saving formatted template fieldnames:'%s'\n", sf.GetString().c_str() );)
+
     wxString record = FROM_UTF8( sf.GetString().c_str() );
     record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
     record.Replace( wxT("  "), wxT(" "), true );  // double space to single

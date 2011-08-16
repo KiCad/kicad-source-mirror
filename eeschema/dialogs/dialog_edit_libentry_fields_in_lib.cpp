@@ -511,7 +511,7 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::InitBuffers()
         {
             D( printf( "add template:%s\n", TO_UTF8( it->m_Name ) ); )
 
-                fld.SetName( it->m_Name );
+            fld.SetName( it->m_Name );
             fld.m_Text = it->m_Value;   // empty? ok too.
 
             if( !it->m_Visible )
