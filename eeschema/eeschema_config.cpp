@@ -59,7 +59,7 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     switch( id )
     {
     case ID_CONFIG_SAVE:
-        schFrame->SaveProjectFile( this, false );
+        schFrame->SaveProjectFile();
         break;
 
     case ID_CONFIG_READ:
@@ -74,7 +74,7 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         if( dlg.ShowModal() == wxID_CANCEL )
             break;
 
-        schFrame->LoadProjectFile( dlg.GetPath(), TRUE );
+        schFrame->LoadProjectFile( dlg.GetPath(), true );
     }
     break;
 
@@ -127,7 +127,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     switch( id )
     {
     case ID_CONFIG_SAVE:
-        SaveProjectFile( this, false );
+        SaveProjectFile();
         break;
 
     case ID_CONFIG_READ:
@@ -142,7 +142,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         if( dlg.ShowModal() == wxID_CANCEL )
             break;
 
-        LoadProjectFile( dlg.GetPath(), TRUE );
+        LoadProjectFile( dlg.GetPath(), true );
     }
     break;
 
@@ -251,15 +251,6 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 }
 
 
-/**
- * Return project file parameter list for EESchema.
- *
- * Populate the project file parameter array specific to EESchema if it hasn't
- * already been populated and return a reference to the array to the caller.
- * Creating the parameter list at run time has the advantage of being able
- * to define local variables.  The old method of statically building the array
- * at compile time requiring global variable definitions.
- */
 PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters( void )
 {
     if( !m_projectFileParams.empty() )
@@ -344,19 +335,16 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters( void )
 }
 
 
-/*
- * Load the Kicad project file (*.pro) settings specific to EESchema.
- */
-bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& CfgFileName, bool ForceRereadConfig )
+bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& aFileName, bool aForceReread )
 {
     wxFileName              fn;
-    bool                    IsRead = TRUE;
+    bool                    IsRead = true;
     wxArrayString           liblist_tmp = m_ComponentLibFiles;
 
-    if( CfgFileName.IsEmpty() )
+    if( aFileName.IsEmpty() )
         fn = g_RootSheet->GetScreen()->GetFileName();
     else
-        fn = CfgFileName;
+        fn = aFileName;
 
     m_ComponentLibFiles.Clear();
 
@@ -368,16 +356,16 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& CfgFileName, bool ForceRer
 
     if( !wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP,
                                        GetProjectFileParameters(),
-                                       ForceRereadConfig ? FALSE : TRUE ) )
+                                       !aForceReread ) )
     {
         m_ComponentLibFiles = liblist_tmp;
-        IsRead = FALSE;
+        IsRead = false;
     }
 
     /* User library path takes precedent over default library search paths. */
     wxGetApp().InsertLibraryPath( m_UserLibraryPath, 1 );
 
-    /* If the list is void, force loadind the library "power.lib" that is
+    /* If the list is void, force loading the library "power.lib" that is
      * the "standard" library for power symbols.
      */
     if( m_ComponentLibFiles.GetCount() == 0 )
@@ -390,26 +378,17 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& CfgFileName, bool ForceRer
 }
 
 
-/*
- * Save the Kicad project file (*.pro) settings specific to EESchema.
- */
-void SCH_EDIT_FRAME::SaveProjectFile( wxWindow* displayframe, bool askoverwrite )
+void SCH_EDIT_FRAME::SaveProjectFile()
 {
     wxFileName fn;
 
     fn = g_RootSheet->GetScreen()->GetFileName();  /*ConfigFileName*/
     fn.SetExt( ProjectFileExtension );
 
-    int options = wxFD_SAVE;
-    if( askoverwrite )
-        options |= wxFD_OVERWRITE_PROMPT;
-    wxFileDialog dlg( displayframe, _( "Save Project Settings" ), wxGetCwd(),
-                      fn.GetFullName(), ProjectFileWildcard, options );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
+    if( !IsWritable( fn ) )
         return;
 
-    wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP, GetProjectFileParameters() );
+    wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
 }
 
 
@@ -437,22 +416,7 @@ static const wxString FieldNamesEntry( wxT( "FieldNames" ) );
 static const wxString SpiceNetNamesEntry( wxT( "SpiceUseNetNames" ) );
 static const wxString SimulatorCommandEntry( wxT( "SimCmdLine" ) );
 
-/*
- * Return the EESchema applications settings list.
- *
- * This replaces the old statically define list that had the project
- * file settings and the application settings mixed together.  This
- * was confusing and caused some settings to get saved and loaded
- * incorrectly.  Currently, only the settings that are needed at start
- * up by the main window are defined here.  There are other locally used
- * settings scattered thoughout the EESchema source code.  If you need
- * to define a configuration setting that need to be loaded at run time,
- * this is the place to define it.
- *
- * TODO: Define the configuration variables as member variables instead of
- *       global variables or move them to the object class where they are
- *       used.
- */
+
 PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
 {
     if( !m_configSettings.empty() )
@@ -545,9 +509,6 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetConfigurationSettings( void )
 }
 
 
-/*
- * Load the EESchema configuration parameters.
- */
 void SCH_EDIT_FRAME::LoadSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
@@ -560,7 +521,7 @@ void SCH_EDIT_FRAME::LoadSettings()
 
     wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
 
-    // This is eqired until someone gets rid of the global variable g_LayerDescription().
+    // This is required until someone gets rid of the global variable g_LayerDescription().
     m_GridColor = g_LayerDescr.LayerColor[LAYER_GRID];
 
     g_DrawDefaultLineThickness = cfg->Read( DefaultDrawLineWidthEntry,(long) 6 );
@@ -644,9 +605,6 @@ void SCH_EDIT_FRAME::LoadSettings()
 }
 
 
-/*
- * Save the EESchema configuration parameters.
- */
 void SCH_EDIT_FRAME::SaveSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
@@ -718,4 +676,3 @@ void SCH_EDIT_FRAME::SaveSettings()
 
     cfg->Write( FieldNamesEntry, record );
 }
-

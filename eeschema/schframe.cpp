@@ -55,10 +55,9 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_NEW_PROJECT, SCH_EDIT_FRAME::OnNewProject )
     EVT_TOOL( ID_LOAD_PROJECT, SCH_EDIT_FRAME::OnLoadProject )
 
-    EVT_MENU( ID_SAVE_PROJECT, SCH_EDIT_FRAME::Save_File )
+    EVT_MENU( ID_SAVE_PROJECT, SCH_EDIT_FRAME::OnSaveProject )
     EVT_MENU( ID_SAVE_ONE_SHEET, SCH_EDIT_FRAME::Save_File )
     EVT_MENU( ID_SAVE_ONE_SHEET_AS, SCH_EDIT_FRAME::Save_File )
-    EVT_TOOL( ID_SAVE_PROJECT, SCH_EDIT_FRAME::Save_File )
     EVT_MENU( ID_GEN_PLOT_PS, SCH_EDIT_FRAME::ToPlot_PS )
     EVT_MENU( ID_GEN_PLOT_HPGL, SCH_EDIT_FRAME::ToPlot_HPGL )
     EVT_MENU( ID_GEN_PLOT_SVG, SCH_EDIT_FRAME::SVG_Print )
@@ -385,7 +384,7 @@ void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem )
 }
 
 
-void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
+void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
 {
     if( m_LibeditFrame && !m_LibeditFrame->Close() )   // Can close component editor?
         return;
@@ -405,7 +404,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         switch( dialog.ShowModal() )
         {
         case wxID_CANCEL:
-            Event.Veto();
+            aEvent.Veto();
             return;
 
         case wxID_NO:
@@ -413,7 +412,8 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 
         case wxID_OK:
         case wxID_YES:
-            SaveProject();
+            wxCommandEvent tmp( ID_SAVE_PROJECT );
+            OnSaveProject( tmp );
             break;
         }
     }

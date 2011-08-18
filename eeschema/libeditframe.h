@@ -318,7 +318,7 @@ private:
      *
      * @param aLibEntry A pointer to the LIB_ALIAS object to load.
      * @param aLibrary A pointer to the CMP_LIBRARY object to load \a aLibEntry from.
-     * @returns True if a copy of \aLibEntry was successfully loaded from \aLibrary.
+     * @returns True if a copy of \a aLibEntry was successfully loaded from \aLibrary.
      */
     bool LoadOneLibraryPartAux( LIB_ALIAS* aLibEntry, CMP_LIBRARY* aLibrary );
 

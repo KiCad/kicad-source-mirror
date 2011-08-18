@@ -223,6 +223,20 @@ public:
      * Needed when the language is changed
      */
     virtual void ReCreateMenuBar();
+
+    /**
+     * Function IsWritable
+     * checks if \a aFileName can be written.
+     * <p>
+     * The function performs a number of tests on \a aFileName to verify that it can
+     * be saved.  The file name is tested for validity and if the user has write
+     * permissions.
+     * </p>
+     *
+     * @param aFileName The full path and/or file name of the file to test.
+     * @return False if \a aFileName cannot be written.
+     */
+    bool IsWritable( const wxFileName& aFileName );
 };
 
 

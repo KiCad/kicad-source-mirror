@@ -26,7 +26,7 @@ private:
      * The only constructor allowing direct input of numeric value
      * in internal units. As this is not allowed in public, it's private.
      * Length objects elsewhere are created indirectly
-     * @param unit Length in internal units.
+     * @param units Length in internal units.
      */
     LENGTH( int units )
     {

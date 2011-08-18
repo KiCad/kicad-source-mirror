@@ -445,3 +445,35 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     wxTheClipboard->SetData( new wxTextDataObject( tmp ) );
     wxTheClipboard->Close();
 }
+
+
+bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
+{
+    wxString msg;
+
+    wxCHECK_MSG( aFileName.IsOk(), false, wxT( "Invalid file name object.  Bad programmer!" ) );
+
+    if( aFileName.IsDir() && !aFileName.IsDirWritable() )
+    {
+        msg.Printf( _( "You do not have write permissions to folder <%s>." ),
+                    GetChars( aFileName.GetPath() ) );
+    }
+    else if( !aFileName.FileExists() && !aFileName.IsDirWritable() )
+    {
+        msg.Printf( _( "You do not have write permissions to save file <%s> to folder <%s>." ),
+                    GetChars( aFileName.GetFullName() ), GetChars( aFileName.GetPath() ) );
+    }
+    else if( aFileName.FileExists() && !aFileName.IsFileWritable() )
+    {
+        msg.Printf( _( "You do not have write permissions to save file <%s>." ),
+                    GetChars( aFileName.GetFullPath() ) );
+    }
+
+    if( !msg.IsEmpty() )
+    {
+        DisplayError( this, msg );
+        return false;
+    }
+
+    return true;
+}

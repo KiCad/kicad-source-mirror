@@ -17,30 +17,27 @@
 #include "sch_sheet.h"
 
 
-
-/*****************************************************************************
-* Routine to save an EESchema file.                                          *
-* FileSave controls how the file is to be saved - under what name.           *
-* Returns true if the file has been saved.                                   *
-*****************************************************************************/
-bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* screen, int FileSave )
+bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType )
 {
     wxString msg;
     wxFileName schematicFileName, backupFileName;
-    FILE*    f;
+    FILE* f;
 
-    if( screen == NULL )
-        screen = GetScreen();
+    if( aScreen == NULL )
+        aScreen = GetScreen();
 
     /* If no name exists in the window yet - save as new. */
-    if( screen->GetFileName().IsEmpty() )
-        FileSave = FILE_SAVE_NEW;
+    if( aScreen->GetFileName().IsEmpty() )
+        aSaveType = FILE_SAVE_NEW;
 
-    switch( FileSave )
+    switch( aSaveType )
     {
     case FILE_SAVE_AS:
-        schematicFileName = screen->GetFileName();
+        schematicFileName = aScreen->GetFileName();
         backupFileName = schematicFileName;
+
+        if( !IsWritable( schematicFileName ) )
+            return false;
 
         /* Rename the old file to a '.bak' one: */
         if( schematicFileName.FileExists() )
@@ -50,22 +47,28 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* screen, int FileSave )
 
             if( !wxRenameFile( schematicFileName.GetFullPath(), backupFileName.GetFullPath() ) )
             {
-                DisplayError( this, wxT( "Warning: unable to rename old file" ) );
+                DisplayError( this, _( "Could not save backup of file <" ) +
+                              schematicFileName.GetFullPath() + wxT( ">." ) );
             }
         }
         break;
 
     case FILE_SAVE_NEW:
     {
+        schematicFileName = aScreen->GetFileName();
+
         wxFileDialog dlg( this, _( "Schematic Files" ), wxGetCwd(),
-                          screen->GetFileName(), SchematicFileWildcard,
+                          schematicFileName.GetFullName(), SchematicFileWildcard,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
 
-        screen->SetFileName( dlg.GetPath() );
+        aScreen->SetFileName( dlg.GetPath() );
         schematicFileName = dlg.GetPath();
+
+        if( !IsWritable( schematicFileName ) )
+            return false;
 
         break;
     }
@@ -81,19 +84,21 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* screen, int FileSave )
         return false;
     }
 
-    if( FileSave == FILE_SAVE_NEW )
-        screen->SetFileName( schematicFileName.GetFullPath() );
+    if( aSaveType == FILE_SAVE_NEW )
+        aScreen->SetFileName( schematicFileName.GetFullPath() );
 
-    bool success = screen->Save( f );
+    bool success = aScreen->Save( f );
 
     if( !success )
+    {
         DisplayError( this, _( "File write operation failed." ) );
+    }
     else
     {
-        screen->ClrModify();
+        aScreen->ClrModify();
         wxString msg;
-        msg.Printf( wxT("File %s saved"), GetChars(screen->GetFileName() ) );
-        SetStatusText(msg, 0);
+        msg.Printf( _( "File %s saved" ), GetChars( aScreen->GetFileName() ) );
+        SetStatusText( msg, 0 );
     }
 
 
@@ -103,18 +108,12 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* screen, int FileSave )
 }
 
 
-/* Commands to save project or the current page.
- */
 void SCH_EDIT_FRAME::Save_File( wxCommandEvent& event )
 {
     int id = event.GetId();
 
     switch( id )
     {
-    case ID_SAVE_PROJECT:     /* Update Schematic File */
-        SaveProject();
-        break;
-
     case ID_SAVE_ONE_SHEET:     /* Update Schematic File */
         SaveEEFile( NULL, FILE_SAVE_AS );
         break;
@@ -130,13 +129,7 @@ void SCH_EDIT_FRAME::Save_File( wxCommandEvent& event )
 }
 
 
-/**
- *  Load an entire project
- *
- *  Schematic root file and its subhierarchies, the configuration and the libs
- *  which are not already loaded)
- */
-bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
+bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
 {
     SCH_SCREEN* screen;
     wxString    FullFileName, msg;
@@ -155,9 +148,9 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
             return false;
     }
 
-    FullFileName = FileName;
+    FullFileName = aFileName;
 
-    if( ( FullFileName.IsEmpty() ) && !IsNew )
+    if( ( FullFileName.IsEmpty() ) && !aIsNew )
     {
         wxFileDialog dlg( this, _( "Open Schematic" ), wxGetCwd(),
                           wxEmptyString, SchematicFileWildcard,
@@ -184,6 +177,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
         fn.MakeAbsolute();
         FullFileName = fn.GetFullPath();
     }
+
     wxLogDebug( wxT( "Loading schematic " ) + FullFileName );
     wxSetWorkingDirectory( fn.GetPath() );
 
@@ -196,7 +190,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
 
     screen->ClrModify();
 
-    if( IsNew )
+    if( aIsNew )
     {
         screen->m_CurrentSheetDesc = &g_Sheet_A4;
         screen->SetZoom( 32 );
@@ -233,7 +227,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
      * until apr 2009 the lib is named <root_name>.cache.lib
      * and after (due to code change): <root_name>-cache.lib
      * so if the <name>-cache.lib is not found, the old way will be tried
-    */
+     */
     fn = g_RootSheet->GetScreen()->GetFileName();
 
     bool use_oldcachename = false;
@@ -263,6 +257,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
         {
             LibCache->SetCache();
             msg += wxT( " OK" );
+
             if ( use_oldcachename )     // set the new name
             {
                 fn.SetName( cachename );
@@ -312,16 +307,18 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& FileName, bool IsNew )
 }
 
 
-/**
- *  Save the entire project and create an archive for components.
- *
- *  The library archive name is &ltroot_name&gt-cache.lib
- */
-void SCH_EDIT_FRAME::SaveProject()
+void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
 {
     SCH_SCREEN* screen;
     wxFileName  fn;
+    wxFileName  tmp;
     SCH_SCREENS ScreenList;
+
+    fn = g_RootSheet->GetFileName();
+    tmp.AssignDir( fn.GetPath() );
+
+    if( !IsWritable( tmp ) )
+        return;
 
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
@@ -329,11 +326,8 @@ void SCH_EDIT_FRAME::SaveProject()
         SaveEEFile( screen, FILE_SAVE_AS );
     }
 
-    /* Archive components in current directory. */
-    fn = g_RootSheet->GetFileName();
-    wxString cachename =  fn.GetName() + wxT( "-cache" );
+    wxString cachename = fn.GetName() + wxT( "-cache" );
     fn.SetName( cachename );
     fn.SetExt( CompLibFileExtension );
     LibArchive( this, fn.GetFullPath() );
 }
-

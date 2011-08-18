@@ -79,16 +79,21 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         // Window title format:
         // [filename sheetpath] (/path/to/filedir)
 
-        // Often the /path/to/filedir is blank because of the FullFileName argument
-        // passed to LoadOneEEFile() which currently omits the path on non-root schematics.
         wxFileName t( GetScreen()->GetFileName() );
 
+        // Often the /path/to/filedir is blank because of the FullFileName argument
+        // passed to LoadOneEEFile() which omits the path on non-root schematics.
+        // Making the path absolute solves this problem.
+        t.MakeAbsolute();
         title = wxChar( '[' );
         title << t.GetName() << wxChar( ' ' );
         title << m_CurrentSheet->PathHumanReadable() << wxChar( ']' );
 
         title << wxChar( ' ' );
         title << wxChar( '(' ) << t.GetPath() << wxChar( ')' );
+
+        if( !t.IsFileWritable() )
+            title << _( " [Read Only]" );
 #endif
 
         SetTitle( title );

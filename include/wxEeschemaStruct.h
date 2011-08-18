@@ -142,9 +142,35 @@ public:
 
     void             GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
+    /**
+     * Function GetProjectFileParameters
+     * returns the project file parameter list for EESchema.
+     *
+     *<p?
+     * Populate the project file parameter array specific to EESchema if it hasn't
+     * already been populated and return a reference to the array to the caller.
+     * Creating the parameter list at run time has the advantage of being able to
+     * define local variables.  The old method of statically building the array at
+     * compile time required global variable definitions.
+     * </p>
+     */
     PARAM_CFG_ARRAY& GetProjectFileParameters( void );
-    void             SaveProjectFile( wxWindow* displayframe, bool askoverwrite = true );
-    bool             LoadProjectFile( const wxString& CfgFileName, bool ForceRereadConfig );
+
+    /**
+     * Function SaveProjectFile
+     * saves changes to the project settings to the project (.pro) file.
+     */
+    void SaveProjectFile();
+
+    /**
+     * Function LoadProjectFile
+     * soads the Kicad project file (*.pro) settings specific to EESchema.
+     *
+     * @param aFileName The project file name to load.
+     * @param aForceReread Force the project file to be reread if true.
+     * @return True if the project file was loaded correctly.
+     */
+    bool LoadProjectFile( const wxString& aFileName, bool aForceReread );
 
     /**
      * Function GetDefaultFieldName
@@ -152,7 +178,7 @@ public:
      * These field names are not modifiable, but template field names are.
      * @param aFieldNdx The field number index
      */
-    static wxString  GetDefaultFieldName( int aFieldNdx );
+    static wxString GetDefaultFieldName( int aFieldNdx );
 
     /**
      * Function AddTemplateFieldName
@@ -190,8 +216,20 @@ public:
         m_TemplateFieldNames.DeleteAllTemplateFieldNames();
     }
 
-
+    /**
+     * Function GetConfigurationSettings
+     * returns the EESchema applications settings.
+     * <p>
+     * This replaces the old statically define list that had the project file settings and
+     * the application settings mixed together.  This was confusing and caused some settings
+     * to get saved and loaded incorrectly.  Currently, only the settings that are needed at
+     * start up by the main window are defined here.  There are other locally used settings
+     * scattered throughout the EESchema source code.  If you need to define a configuration
+     * setting that need to be loaded at run time, this is the place to define it.
+     * </p>
+     */
     PARAM_CFG_ARRAY& GetConfigurationSettings( void );
+
     void             LoadSettings();
     void             SaveSettings();
 
@@ -442,10 +480,43 @@ public:
     void            ToPostProcess( wxCommandEvent& event );
 
     // read and save files
-    void            Save_File( wxCommandEvent& event );
-    void            SaveProject();
-    bool            LoadOneEEProject( const wxString& FileName, bool IsNew );
-    bool            LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName );
+    void Save_File( wxCommandEvent& event );
+
+    /**
+     * Function OnSaveProject
+     * is the command event handler to save the entire project and create a component library
+     * archive.
+     *
+     * The component library archive name is &ltroot_name&gt-cache.lib
+     */
+    void OnSaveProject( wxCommandEvent& aEvent );
+
+    /**
+     * Function LoadOneEEProject
+     * load an entire project into the schematic editor.
+     *
+     * This function loads  schematic root file and it's subhierarchies, the project
+     * configuration, and the component libraries which are not already loaded.
+     *
+     * @param aFileName The full path an file name to load.
+     * @param aIsNew True indicates that this is a new project and the default project
+     *               template is loaded.
+     * @return True if the project loaded properly.
+     */
+    bool LoadOneEEProject( const wxString& aFileName, bool aIsNew );
+
+    /**
+     * Function LoadOneEEFile
+     * loads the schematic (.sch) file \a aFullFileName into \a aScreen.
+     *
+     * @param aScreen Pointer to the associated SCH_SCREEN object in which to load
+     *                \a aFullFileName.
+     * @param aFullFileName A reference to a wxString object containing the absolute path
+     *                      and file name to load.
+     * @return True if \a aFullFileName has been loaded (at least partially.)
+     */
+    bool LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName );
+
     bool            ReadInputStuffFile();
 
     /**
@@ -466,7 +537,16 @@ public:
      */
     bool            ProcessStuffFile( FILE* aFilename, bool  aSetFieldsAttributeToVisible );
 
-    bool            SaveEEFile( SCH_SCREEN* screen, int FileSave );
+    /**
+     * Function SaveEEFile
+     * saves \a aScreen to a schematic file.
+     *
+     * @param aScreen A pointer to the SCH_SCREEN object to save.  A NULL pointer saves
+     *                the current screen.
+     * @param aSaveType Controls how the file is to be saved.
+     * @return True if the file has been saved.
+     */
+    bool SaveEEFile( SCH_SCREEN* aScreen, int aSaveType );
 
     // General search:
 

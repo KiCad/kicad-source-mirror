@@ -291,7 +291,6 @@ double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize,
     char*        text;
     bool         HasData   = FALSE;
     bool         StartData = FALSE;
-    bool         EndData   = FALSE;
     bool         EndNode   = FALSE;
     char         string_num[512];
 
@@ -338,7 +337,6 @@ double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize,
                 if( *text == ']' )
                 {
                     StartData = FALSE;
-                    EndData   = TRUE;
                 }
                 break;
 

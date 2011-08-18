@@ -851,7 +851,7 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
         dx, dx0, dy, dy0,
         delta_cx, delta_cy,
         xc, yc;
-    int     angle, delta_angle;
+    int     angle;
     double  scale;
     double  zpos;
     wxPoint shape_pos;
@@ -933,14 +933,12 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
             delta_cx = dx - dy;
             delta_cy = 0;
             w = m_Size.y * scale;
-            delta_angle = angle + 900;
         }
         else /* Vertical ellipse */
         {
             delta_cx = 0;
             delta_cy = dy - dx;
             w = m_Size.x * scale;
-            delta_angle = angle;
         }
         RotatePoint( &delta_cx, &delta_cy, angle );
         {

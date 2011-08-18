@@ -286,13 +286,8 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
     }
 
     // Verify the user has write privileges before attempting to save the library file.
-    if( !fn.IsDirWritable() )
-    {
-        DisplayError( this,
-                      wxString::Format( _( "You do not have permission to write to file <%s>." ),
-                                        GetChars( fn.GetFullPath() ) ) );
+    if( !IsWritable( fn ) )
         return;
-    }
 
     bool success = m_library->Save( fn.GetFullPath(), true );
 

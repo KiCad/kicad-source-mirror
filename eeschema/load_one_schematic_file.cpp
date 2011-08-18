@@ -27,11 +27,7 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Windo
 static void LoadLayers( LINE_READER* aLine );
 
 
-/**
- * Routine to load an EESchema file.
- *  Returns true if file has been loaded (at least partially.)
- */
-bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFileName )
+bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName )
 {
     char            Name1[256];
     bool            itemLoaded = false;
@@ -41,35 +37,35 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFile
     wxString        MsgDiag;            // Error and log messages
     char*           line;
 
-    if( screen == NULL )
+    if( aScreen == NULL )
         return FALSE;
 
-    if( FullFileName.IsEmpty() )
+    if( aFullFileName.IsEmpty() )
         return FALSE;
 
-    screen->SetCurItem( NULL );
-    screen->SetFileName( FullFileName );
+    aScreen->SetCurItem( NULL );
+    aScreen->SetFileName( aFullFileName );
 
-    // D(printf("LoadOneEEFile:%s\n", TO_UTF8( FullFileName ) ); )
+    // D(printf("LoadOneEEFile:%s\n", TO_UTF8( aFullFileName ) ); )
 
     FILE*           f;
-    if( ( f = wxFopen( FullFileName, wxT( "rt" ) ) ) == NULL )
+    if( ( f = wxFopen( aFullFileName, wxT( "rt" ) ) ) == NULL )
     {
-        MsgDiag = _( "Failed to open " ) + FullFileName;
+        MsgDiag = _( "Failed to open " ) + aFullFileName;
         DisplayError( this, MsgDiag );
         return FALSE;
     }
 
     // reader now owns the open FILE.
-    FILE_LINE_READER    reader( f, FullFileName );
+    FILE_LINE_READER    reader( f, aFullFileName );
 
-    MsgDiag = _( "Loading " ) + screen->GetFileName();
+    MsgDiag = _( "Loading " ) + aScreen->GetFileName();
     PrintMsg( MsgDiag );
 
     if( !reader.ReadLine()
         || strncmp( (char*)reader + 9, SCHEMATIC_HEAD_STRING, sizeof(SCHEMATIC_HEAD_STRING) - 1 ) != 0 )
     {
-        MsgDiag = FullFileName + _( " is NOT an EESchema file!" );
+        MsgDiag = aFullFileName + _( " is NOT an EESchema file!" );
         DisplayError( this, MsgDiag );
         return FALSE;
     }
@@ -87,7 +83,7 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* screen, const wxString& FullFile
 
     if( version > EESCHEMA_VERSION )
     {
-        MsgDiag = FullFileName + _( " was created by a more recent \
+        MsgDiag = aFullFileName + _( " was created by a more recent \
 version of EESchema and may not load correctly. Please consider updating!" );
         DisplayInfoMessage( this, MsgDiag );
     }
@@ -96,7 +92,7 @@ version of EESchema and may not load correctly. Please consider updating!" );
     // Compile it if the new version is unreadable by previous eeschema versions
     else if( version < EESCHEMA_VERSION )
     {
-        MsgDiag = FullFileName + _( " was created by an older version of \
+        MsgDiag = aFullFileName + _( " was created by an older version of \
 EESchema. It will be stored in the new file format when you save this file \
 again." );
 
@@ -106,7 +102,7 @@ again." );
 
     if( !reader.ReadLine() || strncmp( reader, "LIBS:", 5 ) != 0 )
     {
-        MsgDiag = FullFileName + _( " is NOT an EESchema file!" );
+        MsgDiag = aFullFileName + _( " is NOT an EESchema file!" );
         DisplayError( this, MsgDiag );
         return FALSE;
     }
@@ -131,7 +127,7 @@ again." );
             else if( line[1] == 'S' )
                 item = new SCH_SHEET();
             else if( line[1] == 'D' )
-                itemLoaded = ReadSchemaDescr( &reader, MsgDiag, screen );
+                itemLoaded = ReadSchemaDescr( &reader, MsgDiag, aScreen );
             break;
 
         case 'L':        // Its a library item.
@@ -197,8 +193,8 @@ again." );
             }
             else
             {
-                item->SetNext( screen->GetDrawItems() );
-                screen->SetDrawItems( item );
+                item->SetNext( aScreen->GetDrawItems() );
+                aScreen->SetDrawItems( item );
             }
         }
 
@@ -212,23 +208,23 @@ again." );
     /* GetDrawItems() was constructed in reverse order - reverse it back: */
     Phead = NULL;
 
-    while( screen->GetDrawItems() )
+    while( aScreen->GetDrawItems() )
     {
-        Pnext = screen->GetDrawItems();
-        screen->SetDrawItems( screen->GetDrawItems()->Next() );
+        Pnext = aScreen->GetDrawItems();
+        aScreen->SetDrawItems( aScreen->GetDrawItems()->Next() );
         Pnext->SetNext( Phead );
         Phead = Pnext;
     }
 
-    screen->SetDrawItems( Phead );
+    aScreen->SetDrawItems( Phead );
 
 #if 0 && defined (DEBUG)
-    screen->Show( 0, std::cout );
+    aScreen->Show( 0, std::cout );
 #endif
 
-    screen->TestDanglingEnds();
+    aScreen->TestDanglingEnds();
 
-    MsgDiag = _( "Done Loading " ) + screen->GetFileName();
+    MsgDiag = _( "Done Loading " ) + aScreen->GetFileName();
     PrintMsg( MsgDiag );
 
     return true;    // Although it may be that file is only partially loaded.

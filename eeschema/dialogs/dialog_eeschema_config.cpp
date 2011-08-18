@@ -197,7 +197,7 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
         LIB_EDIT_FRAME::EnsureActiveLibExists();
     }
 
-    m_Parent->SaveProjectFile( this, false );
+    m_Parent->SaveProjectFile();
     EndModal( wxID_OK );
 }
 
