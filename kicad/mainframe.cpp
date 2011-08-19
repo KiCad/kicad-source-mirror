@@ -1,6 +1,6 @@
-/***********************************************************/
-/* mdiframe.cpp - KICAD_MANAGER_FRAME is the kicad main frame */
-/***********************************************************/
+/***************************************************************/
+/* mainframe.cpp - KICAD_MANAGER_FRAME is the kicad main frame */
+/***************************************************************/
 
 #ifdef __GNUG__
 #pragma implementation
@@ -22,9 +22,9 @@ static const wxString TreeFrameWidthEntry( wxT( "LeftWinWidth" ) );
 
 
 KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
-                                    const wxString& title,
-                                    const wxPoint&  pos,
-                                    const wxSize&   size ) :
+                                          const wxString& title,
+                                          const wxPoint&  pos,
+                                          const wxSize&   size ) :
     EDA_BASE_FRAME( parent, KICAD_MAIN_FRAME, title, pos, size )
 {
     wxString msg;
@@ -105,17 +105,12 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 }
 
 
-/*
- * Put text in the dialog frame
- */
-void KICAD_MANAGER_FRAME::PrintMsg( const wxString& text )
+void KICAD_MANAGER_FRAME::PrintMsg( const wxString& aText )
 {
-    m_RightWin->m_DialogWin->AppendText( text );
+    m_RightWin->m_DialogWin->AppendText( aText );
 }
 
 
-/* Resize windows when dragging window borders
- */
 void KICAD_MANAGER_FRAME::OnSashDrag( wxSashEvent& event )
 {
     event.Skip();
@@ -148,7 +143,7 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
         m_FrameSize.y = py;
     }
 
-    Event.SetCanVeto( TRUE );
+    Event.SetCanVeto( true );
 
     SaveSettings();
 
@@ -156,7 +151,8 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     if( wxGetApp().m_HtmlCtrl )
     {
         if( wxGetApp().m_HtmlCtrl->GetFrame() )  // returns NULL if no help frame active
-            wxGetApp().m_HtmlCtrl->GetFrame()->Close( TRUE );
+            wxGetApp().m_HtmlCtrl->GetFrame()->Close( true );
+
         wxGetApp().m_HtmlCtrl = NULL;
     }
 
@@ -171,15 +167,18 @@ void KICAD_MANAGER_FRAME::OnExit( wxCommandEvent& event )
     Close( true );
 }
 
+
 void KICAD_MANAGER_FRAME::OnRunBitmapConverter( wxCommandEvent& event )
 {
     ExecuteFile( this, BITMAPCONVERTER_EXE, wxEmptyString );
 }
 
+
 void KICAD_MANAGER_FRAME::OnRunPcbCalculator( wxCommandEvent& event )
 {
     ExecuteFile( this, PCB_CALCULATOR_EXE, wxEmptyString );
 }
+
 
 void KICAD_MANAGER_FRAME::OnRunPcbNew( wxCommandEvent& event )
 {
@@ -211,8 +210,8 @@ void KICAD_MANAGER_FRAME::OnRunEeschema( wxCommandEvent& event )
 void KICAD_MANAGER_FRAME::OnRunGerbview( wxCommandEvent& event )
 {
     wxFileName fn( m_ProjectFileName );
-    wxString path = wxT("\"");
-    path += fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) + wxT("\"");
+    wxString path = wxT( "\"" );
+    path += fn.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) + wxT( "\"" );
 
     ExecuteFile( this, GERBVIEW_EXE, path );
 }
@@ -243,8 +242,9 @@ void KICAD_MANAGER_FRAME::OnOpenFileInTextEditor( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxString filename = wxT("\"");
-    filename += dlg.GetPath() + wxT("\"");
+    wxString filename = wxT( "\"" );
+    filename += dlg.GetPath() + wxT( "\"" );
+
     if( !dlg.GetPath().IsEmpty() &&  !wxGetApp().GetEditorName().IsEmpty() )
         ExecuteFile( this, wxGetApp().GetEditorName(), filename );
 }
@@ -262,12 +262,6 @@ void KICAD_MANAGER_FRAME::ClearMsg()
 }
 
 
-/**
- * Load Kicad main frame specific configuration settings.
- *
- * Don't forget to call this base method from any derived classes or the
- * settings will not get loaded.
- */
 void KICAD_MANAGER_FRAME::LoadSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
@@ -279,12 +273,6 @@ void KICAD_MANAGER_FRAME::LoadSettings()
 }
 
 
-/**
- * Save Kicad main frame specific configuration settings.
- *
- * Don't forget to call this base method from any derived classes or the
- * settings will not get saved.
- */
 void KICAD_MANAGER_FRAME::SaveSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );

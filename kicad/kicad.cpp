@@ -1,10 +1,7 @@
-/*****************************************************************************/
-
 /**
  * @file kicad.cpp
  * @brief Main kicad library manager file
  */
-/*****************************************************************************/
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -24,7 +21,7 @@
 
 #include "build_version.h"
 
-const wxString g_KicadPrjFilenameExtension(wxT(".pro") );
+const wxString g_KicadPrjFilenameExtension( wxT( ".pro" ) );
 
 /* Import functions */
 char* GetFileName( char* FullPathName );
@@ -42,17 +39,21 @@ IMPLEMENT_APP( WinEDA_App )
 /* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void WinEDA_App::MacOpenFile(const wxString &fileName) {
-    KICAD_MANAGER_FRAME * frame = ((KICAD_MANAGER_FRAME*)GetTopWindow());
-    wxFileName    fn = fileName;
+void WinEDA_App::MacOpenFile( const wxString &fileName )
+{
+    KICAD_MANAGER_FRAME* frame = (KICAD_MANAGER_FRAME*) GetTopWindow();
+    wxFileName fn = fileName;
 
     frame->m_ProjectFileName = fn;
 
     if( m_fileHistory.GetCount() )
     {
         frame->m_ProjectFileName = m_fileHistory.GetHistoryFile( 0 );
+
         if( !frame->m_ProjectFileName.FileExists() )
+        {
             m_fileHistory.RemoveFileFromHistory( 0 );
+        }
         else
         {
             wxCommandEvent cmd( 0, wxID_FILE1 );
@@ -60,20 +61,23 @@ void WinEDA_App::MacOpenFile(const wxString &fileName) {
         }
     }
 
-    frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() +
-                     wxT( " " ) + frame->m_ProjectFileName.GetFullPath() );
+    wxString title = GetTitle() + wxT( " " ) + GetBuildVersion() +
+        wxT( " " ) + frame->m_ProjectFileName.GetFullPath();
+
+    if( !fn.IsDirWritable() )
+        title += _( " [Read Only]" );
+
+    frame->SetTitle( title );
 
     frame->m_LeftWin->ReCreateTreePrj();
 
     frame->PrintMsg( _( "Working dir: " ) + frame->m_ProjectFileName.GetPath() +
-              _( "\nProject: " ) + frame->m_ProjectFileName.GetFullName() +
-              wxT( "\n" ) );
+                     _( "\nProject: " ) + frame->m_ProjectFileName.GetFullName() +
+                     wxT( "\n" ) );
 }
 
 
-/*****************************************************************************/
 bool WinEDA_App::OnInit()
-/*****************************************************************************/
 {
     KICAD_MANAGER_FRAME* frame;
 
@@ -81,21 +85,26 @@ bool WinEDA_App::OnInit()
 
     // read current setup and reopen last directory if no filename to open in command line
     bool reopenLastUsedDirectory = argc == 1;
-    GetSettings(reopenLastUsedDirectory);
+    GetSettings( reopenLastUsedDirectory );
 
     /* Make nameless project translatable */
     wxFileName namelessProject( wxGetCwd(), NAMELESS_PROJECT, ProjectFileExtension );
 
     frame = new KICAD_MANAGER_FRAME( NULL, wxT( "KiCad" ),
-                                  wxPoint( 30, 20 ), wxSize( 600, 400 ) );
+                                     wxPoint( 30, 20 ), wxSize( 600, 400 ) );
 
     if( argc > 1 )
+    {
         frame->m_ProjectFileName = argv[1];
+    }
     else if( m_fileHistory.GetCount() )
     {
         frame->m_ProjectFileName = m_fileHistory.GetHistoryFile( 0 );
+
         if( !frame->m_ProjectFileName.FileExists() )
+        {
             m_fileHistory.RemoveFileFromHistory( 0 );
+        }
         else
         {
             wxCommandEvent cmd( 0, wxID_FILE1 );
@@ -110,8 +119,13 @@ bool WinEDA_App::OnInit()
         frame->OnLoadProject( cmd );
     }
 
-    frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() +
-                     wxT( " " ) + frame->m_ProjectFileName.GetFullPath() );
+    wxString title = GetTitle() + wxT( " " ) + GetBuildVersion() +
+        wxT( " " ) + frame->m_ProjectFileName.GetFullPath();
+
+    if( !namelessProject.IsDirWritable() )
+        title += _( " [Read Only]" );
+
+    frame->SetTitle( title );
     frame->ReCreateMenuBar();
     frame->RecreateBaseHToolbar();
 
@@ -137,8 +151,8 @@ bool WinEDA_App::OnInit()
     }
 #endif /* USE_SPLASH_IMAGE */
 
-    frame->Show( TRUE );
+    frame->Show( true );
     frame->Raise();
 
-    return TRUE;
+    return true;
 }

@@ -74,19 +74,27 @@ private:
 public:
 
     KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
-                      const wxPoint& pos, const wxSize& size );
+                         const wxPoint& pos, const wxSize& size );
 
     ~KICAD_MANAGER_FRAME();
 
-    /**
-     * Function CreateCommandToolbar
-     * Create the main buttons (fast launch buttons)
-     */
     void OnCloseWindow( wxCloseEvent& Event );
     void OnSize( wxSizeEvent& event );
     void OnSashDrag( wxSashEvent& event );
+
+    /**
+     * Function OnLoadProject
+     * loads an exiting or creates a new project (.pro) file.
+     */
     void OnLoadProject( wxCommandEvent& event );
+
+    /**
+     * Function OnSaveProject
+     * is the command event hendler to Save the project (.pro) file containing the top level
+     * configuration parameters.
+     */
     void OnSaveProject( wxCommandEvent& event );
+
     void OnArchiveFiles( wxCommandEvent& event );
     void OnUnarchiveFiles( wxCommandEvent& event );
     void OnRunPcbNew( wxCommandEvent& event );
@@ -105,7 +113,15 @@ public:
     void Process_Preferences( wxCommandEvent& event );
     void ReCreateMenuBar();
     void RecreateBaseHToolbar();
-    void PrintMsg( const wxString& text );
+
+    /**
+     * Function PrintMsg
+     * displays \a aText in the text panel.
+     *
+     * @param aText The text to display.
+     */
+    void PrintMsg( const wxString& aText );
+
     void ClearMsg();
     void SetLanguage( wxCommandEvent& event );
     void OnRefresh( wxCommandEvent& event );
@@ -117,7 +133,22 @@ public:
 
     void CreateNewProject( const wxString PrjFullFileName );
 
+    /**
+     * Function LoadSettings
+     * loads the Kicad main frame specific configuration settings.
+     *
+     * Don't forget to call this base method from any derived classes or the
+     * settings will not get loaded.
+     */
     void LoadSettings();
+
+    /**
+     * Function SaveSettings
+     * saves the Kicad main frame specific configuration settings.
+     *
+     * Don't forget to call this base method from any derived classes or the
+     * settings will not get saved.
+     */
     void SaveSettings();
 
     DECLARE_EVENT_TABLE()
@@ -160,7 +191,12 @@ public:
     void OnSize( wxSizeEvent& event );
 
 private:
+    /**
+     * Function CreateCommandToolbar
+     * creates the main tool bar buttons (fast launch buttons)
+     */
     void CreateCommandToolbar( void );
+
     wxBitmapButton* AddBitmapButton( wxWindowID aId, const wxBitmap & aBitmap );
 
     DECLARE_EVENT_TABLE()
