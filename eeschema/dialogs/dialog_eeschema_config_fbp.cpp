@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun  6 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -51,7 +51,7 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	
 	sbLibsChoiceSizer->Add( bRightSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	bMainSizer->Add( sbLibsChoiceSizer, 1, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( sbLibsChoiceSizer, 2, wxALL|wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User defined search path") ), wxHORIZONTAL );
@@ -76,18 +76,17 @@ DIALOG_EESCHEMA_CONFIG_FBP::DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWind
 	
 	sbSizer4->Add( bUserPathsButtonsSizer, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	bMainSizer->Add( sbSizer4, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( sbSizer4, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* sbLibPathSizer;
 	sbLibPathSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Current search path list") ), wxVERTICAL );
 	
 	m_DefaultLibraryPathslistBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_NEEDED_SB ); 
 	m_DefaultLibraryPathslistBox->SetToolTip( _("Paths  (system paths and user paths) used to search and load libraries files and component doc files.\nSorted by decreasing priority order.") );
-	m_DefaultLibraryPathslistBox->SetMinSize( wxSize( -1,70 ) );
 	
-	sbLibPathSizer->Add( m_DefaultLibraryPathslistBox, 0, wxALL|wxEXPAND, 5 );
+	sbLibPathSizer->Add( m_DefaultLibraryPathslistBox, 1, wxALL|wxEXPAND, 5 );
 	
-	bMainSizer->Add( sbLibPathSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( sbLibPathSizer, 1, wxALL|wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline3, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -138,4 +137,5 @@ DIALOG_EESCHEMA_CONFIG_FBP::~DIALOG_EESCHEMA_CONFIG_FBP()
 	m_buttonRemovePath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnRemoveUserPath ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EESCHEMA_CONFIG_FBP::OnOkClick ), NULL, this );
+	
 }
