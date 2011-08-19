@@ -79,7 +79,7 @@ private:
     void PadTypeSelected( wxCommandEvent& event );
     void PadPropertiesAccept( wxCommandEvent& event );
     void SetPadLayersList( long layer_mask );
-    void OnSetLayer( wxCommandEvent& event );
+    void OnSetLayers( wxCommandEvent& event );
     void OnCancelButtonClick( wxCommandEvent& event );
     void OnPaintShowPanel( wxPaintEvent& event );
     bool TransfertDataToPad( D_PAD* aPad, bool aPromptOnError = false );
@@ -112,6 +112,8 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     drawInfo.m_Offset    = m_dummyPad->m_Pos;
     drawInfo.m_Display_padnum  = true;
     drawInfo.m_Display_netname = true;
+    if( m_dummyPad->m_Attribut == PAD_HOLE_NOT_PLATED )
+        drawInfo.m_ShowNotPlatedHole = true;
 
     // Shows the local pad clearance
     drawInfo.m_PadClearance = m_dummyPad->m_LocalClearance;
@@ -217,6 +219,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_PadShapeOffsetX_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_PadShapeOffsetY_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_PadShapeDelta_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
+    m_PadLengthDie_Unit->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_NetClearanceUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     // Display current pad masks clearances units
@@ -247,6 +250,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
         PutValueInLocalUnits( *m_ShapeDelta_Ctrl, m_dummyPad->m_DeltaSize.y, internalUnits );
         m_radioBtnDeltaYdir->SetValue(true);
     }
+
+    PutValueInLocalUnits( *m_LengthDieCtrl, m_dummyPad->m_LengthDie, internalUnits );
 
     PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_dummyPad->m_LocalClearance, internalUnits );
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
@@ -333,7 +338,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     msg.Printf( wxT( "%d" ), m_dummyPad->m_Orient );
     m_PadOrientCtrl->SetValue( msg );
 
-    // Selection du type
+    // Type of pad selection
     m_PadType->SetSelection( 0 );
     for( int ii = 0; ii < NBTYPES; ii++ )
     {
@@ -344,14 +349,22 @@ void DIALOG_PAD_PROPERTIES::initValues()
         }
     }
 
+    // Enable/disable Pad name,and pad length die
+    // (disable for NPTH pads (mechanical pads)
+    bool enable = m_dummyPad->m_Attribut != PAD_HOLE_NOT_PLATED;
+    m_PadNumCtrl->Enable( enable );
+    m_PadNetNameCtrl->Enable( enable );
+    m_LengthDieCtrl->Enable( enable );
+
     if( m_dummyPad->m_DrillShape != PAD_OVAL )
         m_DrillShapeCtrl->SetSelection( 0 );
     else
         m_DrillShapeCtrl->SetSelection( 1 );
 
     // Setup layers names from board
-    m_PadLayerCu->SetLabel( m_Board->GetLayerName( LAYER_N_BACK ) );
-    m_PadLayerCmp->SetLabel( m_Board->GetLayerName( LAYER_N_FRONT ) );
+
+    m_rbCopperLayersSel->SetString( 0, m_Board->GetLayerName( LAYER_N_FRONT ) );
+    m_rbCopperLayersSel->SetString( 1, m_Board->GetLayerName( LAYER_N_BACK ) );
 
     m_PadLayerAdhCmp->SetLabel( m_Board->GetLayerName( ADHESIVE_N_FRONT ) );
     m_PadLayerAdhCu->SetLabel( m_Board->GetLayerName( ADHESIVE_N_BACK ) );
@@ -500,6 +513,13 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
     // Enable/disable drill dialog items:
     event.SetId( m_DrillShapeCtrl->GetSelection() );
     OnDrillShapeSelected( event );
+
+    // Enable/disable Pad name,and pad length die
+    // (disable for NPTH pads (mechanical pads)
+    bool enable = ii != 3;
+    m_PadNumCtrl->Enable( enable );
+    m_PadNetNameCtrl->Enable( enable );
+    m_LengthDieCtrl->Enable( enable );
 }
 
 
@@ -512,8 +532,14 @@ void DIALOG_PAD_PROPERTIES::SetPadLayersList( long layer_mask )
  * @param layer_mask = pad layer mask (ORed layers bit mask)
  */
 {
-    m_PadLayerCu->SetValue( ( layer_mask & LAYER_BACK ) );
-    m_PadLayerCmp->SetValue( ( layer_mask & LAYER_FRONT ) );
+    if( ( layer_mask & ALL_CU_LAYERS )  == LAYER_FRONT )
+        m_rbCopperLayersSel->SetSelection(0);
+    else if( ( layer_mask & ALL_CU_LAYERS ) == LAYER_BACK)
+        m_rbCopperLayersSel->SetSelection(1);
+    else if( ( layer_mask & ALL_CU_LAYERS )  != 0 )
+        m_rbCopperLayersSel->SetSelection(2);
+    else
+        m_rbCopperLayersSel->SetSelection(3);
 
     m_PadLayerAdhCmp->SetValue( ( layer_mask & ADHESIVE_LAYER_FRONT ) );
     m_PadLayerAdhCu->SetValue( ( layer_mask & ADHESIVE_LAYER_BACK ) );
@@ -535,7 +561,7 @@ void DIALOG_PAD_PROPERTIES::SetPadLayersList( long layer_mask )
 
 
 // Called when select/deselect a layer.
-void DIALOG_PAD_PROPERTIES::OnSetLayer( wxCommandEvent& event )
+void DIALOG_PAD_PROPERTIES::OnSetLayers( wxCommandEvent& event )
 {
     TransfertDataToPad( m_dummyPad );
     m_panelShowPad->Refresh();
@@ -592,6 +618,9 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_CurrentPad->m_DrillShape = g_Pad_Master.m_DrillShape;
         m_CurrentPad->m_Offset     = g_Pad_Master.m_Offset;
         m_CurrentPad->m_Offset.y  *= isign;
+
+        m_CurrentPad->m_LengthDie = g_Pad_Master.m_LengthDie;
+
         if( m_CurrentPad->m_Masque_Layer != g_Pad_Master.m_Masque_Layer )
         {
             rastnestIsChanged = true;
@@ -645,7 +674,9 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_Parent->GetBoard()->m_Status_Pcb = 0;
 }
 
-
+// Copy values from dialog to aPad parameters.
+// If aPromptOnError is true, and an incorrect value is detected,
+// user will be prompted for an error
 bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError )
 {
     long     PadLayerMask;
@@ -703,6 +734,9 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
     else
         delta.y = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl, internalUnits );
     aPad->m_DeltaSize = delta;
+
+    // Read pad lenght die
+    aPad->m_LengthDie = ReturnValueFromTextCtrl( *m_LengthDieCtrl, internalUnits );
 
     // Test bad values (be sure delta values are not to large)
     // remember DeltaSize.x is the Y size variation
@@ -774,20 +808,37 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
         break;
 
     case PAD_HOLE_NOT_PLATED:
+        // Mechanical purpose only:
+        // no offset, no net name, no pad name allowed
+        aPad->m_Offset = wxSize( 0, 0 );
+        aPad->SetPadName( wxEmptyString );
+        aPad->SetNetname( wxEmptyString );
         break;
 
     default:
-        DisplayError( this, wxT( "Error: unknown pad type" ) );
+        DisplayError( NULL, wxT( "Error: unknown pad type" ) );
         break;
     }
 
     PadLayerMask = 0;
-    if( m_PadLayerCu->GetValue() )
-        PadLayerMask |= LAYER_BACK;
-    if( m_PadLayerCmp->GetValue() )
-        PadLayerMask |= LAYER_FRONT;
-    if( ( PadLayerMask & (LAYER_BACK | LAYER_FRONT) ) == (LAYER_BACK | LAYER_FRONT) )
-        PadLayerMask |= ALL_CU_LAYERS;
+    switch( m_rbCopperLayersSel->GetSelection() )
+    {
+        case 0:
+            PadLayerMask |= LAYER_FRONT;
+            break;
+
+        case 1:
+            PadLayerMask |= LAYER_BACK;
+            break;
+
+        case 2:
+            PadLayerMask |= ALL_CU_LAYERS;
+            break;
+
+        case 3:     // No copper layers
+            break;
+    }
+
     if( m_PadLayerAdhCmp->GetValue() )
         PadLayerMask |= ADHESIVE_LAYER_FRONT;
     if( m_PadLayerAdhCu->GetValue() )
@@ -819,7 +870,7 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
         if( (aPad->m_Size.x < aPad->m_Drill.x)
            || (aPad->m_Size.y < aPad->m_Drill.y) )
         {
-            DisplayError( this, _( "Incorrect value for pad drill: pad drill bigger than pad size" ) );
+            DisplayError( NULL, _( "Incorrect value for pad drill: pad drill bigger than pad size" ) );
             return false;
         }
 
@@ -828,7 +879,14 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
         {
             if( aPad->m_Drill.x || aPad->m_Drill.y )
             {
-                DisplayError( this, _( "Error: pad is not on a copper layer and has a hole" ) );
+                msg = _( "Error: pad is not on a copper layer and has a hole" );
+                if( aPad->m_Attribut == PAD_HOLE_NOT_PLATED )
+                {
+                    msg += wxT("\n");
+                    msg += _( "For NPTH pad, set pad drill value to pad size value,\n\
+if you do not want this pad plotted in gerber files");
+                }
+                DisplayError( NULL, msg );
                 return false;
             }
         }
@@ -836,13 +894,13 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
         if( ( aPad->m_Size.x / 2 <= ABS( aPad->m_Offset.x ) )
            || ( aPad->m_Size.y / 2 <= ABS( aPad->m_Offset.y ) ) )
         {
-            DisplayError( this, _( "Incorrect value for pad offset" ) );
+            DisplayError( NULL, _( "Incorrect value for pad offset" ) );
             return false;
         }
 
         if( error )
         {
-            DisplayError( this, _( "Too large value for pad delta size" ) );
+            DisplayError( NULL, _( "Too large value for pad delta size" ) );
             return false;
         }
     }

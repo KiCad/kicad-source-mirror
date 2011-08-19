@@ -46,10 +46,13 @@ public:
 
 private:
     PCB_EDIT_FRAME* m_Parent;
-    int m_PadsHoleCount;
-    int m_ThroughViasCount;
-    int m_MicroViasCount;
-    int m_BlindOrBuriedViasCount;
+    int m_platedPadsHoleCount;
+    int m_notplatedPadsHoleCount;
+    int m_throughViasCount;
+    int m_microViasCount;
+    int m_blindOrBuriedViasCount;
+    static bool m_createRpt;           // true to create a drill file report
+    static int m_createMap;            // > 0 to create a map file report
 
 public: DIALOG_GENDRILL( PCB_EDIT_FRAME* parent );
     ~DIALOG_GENDRILL();

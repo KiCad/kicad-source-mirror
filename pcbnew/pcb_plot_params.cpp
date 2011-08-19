@@ -74,6 +74,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     layerSelection         = LAYER_BACK | LAYER_FRONT
         | SILKSCREEN_LAYER_FRONT | SILKSCREEN_LAYER_BACK;
     useGerberExtensions    = true;
+    m_SkipNPTH_Pads        = false;
     m_ExcludeEdgeLayer     = true;
     m_PlotLineWidth        = g_DrawDefaultLineThickness;
     m_PlotFrameRef         = false;

@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_pad_properties_base__
-#define __dialog_pad_properties_base__
+#ifndef __DIALOG_PAD_PROPERTIES_BASE_H__
+#define __DIALOG_PAD_PROPERTIES_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -91,6 +92,12 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		wxRadioButton* m_radioBtnDeltaXdir;
 		wxRadioButton* m_radioBtnDeltaYdir;
 		wxStaticText* m_staticTextDDirInfo;
+		wxStaticLine* m_staticline10;
+		wxStaticLine* m_staticline101;
+		wxStaticLine* m_staticline1011;
+		wxStaticText* m_staticText38;
+		wxTextCtrl* m_LengthDieCtrl;
+		wxStaticText* m_PadLengthDie_Unit;
 		wxBoxSizer* m_DrillShapeBoxSizer;
 		wxRadioBox* m_PadShape;
 		wxRadioBox* m_DrillShapeCtrl;
@@ -120,9 +127,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		wxTextCtrl* m_SolderPasteMarginRatioCtrl;
 		wxStaticText* m_SolderPasteRatioMarginUnits;
 		wxRadioBox* m_PadType;
-		wxCheckBox* m_PadLayerCmp;
-		wxCheckBox* m_PadLayerCu;
-		
+		wxRadioBox* m_rbCopperLayersSel;
 		wxCheckBox* m_PadLayerAdhCmp;
 		wxCheckBox* m_PadLayerAdhCu;
 		wxCheckBox* m_PadLayerPateCmp;
@@ -145,16 +150,16 @@ class DIALOG_PAD_PROPERTIES_BASE : public wxDialog
 		virtual void PadOrientEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPaintShowPanel( wxPaintEvent& event ) { event.Skip(); }
 		virtual void PadTypeSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnSetLayer( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSetLayers( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void PadPropertiesAccept( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,486 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER );
+		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,535 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSUNKEN_BORDER ); 
 		~DIALOG_PAD_PROPERTIES_BASE();
 	
 };
 
-#endif //__dialog_pad_properties_base__
+#endif //__DIALOG_PAD_PROPERTIES_BASE_H__

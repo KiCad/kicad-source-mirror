@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -127,17 +127,21 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	wxStaticBoxSizer* sbSizerHoles;
 	sbSizerHoles = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Holes Count:") ), wxVERTICAL );
 	
-	m_PadsCountInfoMsg = new wxStaticText( this, wxID_ANY, _("Pads:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_PadsCountInfoMsg->Wrap( -1 );
-	sbSizerHoles->Add( m_PadsCountInfoMsg, 0, wxALL, 5 );
+	m_PlatedPadsCountInfoMsg = new wxStaticText( this, wxID_ANY, _("Plated Pads:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_PlatedPadsCountInfoMsg->Wrap( -1 );
+	sbSizerHoles->Add( m_PlatedPadsCountInfoMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_NotPlatedPadsCountInfoMsg = new wxStaticText( this, wxID_ANY, _("Not Plated Pads:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_NotPlatedPadsCountInfoMsg->Wrap( -1 );
+	sbSizerHoles->Add( m_NotPlatedPadsCountInfoMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_ThroughViasInfoMsg = new wxStaticText( this, wxID_ANY, _("Through Vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThroughViasInfoMsg->Wrap( -1 );
-	sbSizerHoles->Add( m_ThroughViasInfoMsg, 0, wxALL, 5 );
+	sbSizerHoles->Add( m_ThroughViasInfoMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_MicroViasInfoMsg = new wxStaticText( this, wxID_ANY, _("Micro Vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MicroViasInfoMsg->Wrap( -1 );
-	sbSizerHoles->Add( m_MicroViasInfoMsg, 0, wxALL, 5 );
+	sbSizerHoles->Add( m_MicroViasInfoMsg, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_BuriedViasInfoMsg = new wxStaticText( this, wxID_ANY, _("Buried Vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_BuriedViasInfoMsg->Wrap( -1 );

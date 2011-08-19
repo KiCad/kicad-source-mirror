@@ -32,11 +32,13 @@ PAD_DRAWINFO::PAD_DRAWINFO()
     m_DrawMode        = 0;
     m_Color           = BLACK;
     m_HoleColor       = BLACK; // could be DARKGRAY;
+    m_NPHoleColor     = YELLOW;
     m_PadClearance    = 0;
     m_Display_padnum  = true;
     m_Display_netname = true;
     m_ShowPadFilled   = true;
     m_ShowNCMark      = true;
+    m_ShowNotPlatedHole = false;
     m_IsPrinting = false;
 }
 
@@ -320,6 +322,8 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     if( ( m_Masque_Layer & ALL_CU_LAYERS ) == 0 )
         DisplayIsol = FALSE;
 
+    if( m_Attribut == PAD_HOLE_NOT_PLATED )
+        drawInfo.m_ShowNotPlatedHole = true;
 
     drawInfo.m_DrawMode    = aDraw_mode;
     drawInfo.m_Color       = color;
@@ -344,7 +348,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
         drawInfo.m_Display_netname = false;
 
     // Display net names is restricted to pads that are on the active layer
-    // in cotranst mode displae
+    // in hight contrast mode display
     if( !IsOnLayer( screen->m_Active_Layer ) && DisplayOpt.ContrastModeDisplay )
         drawInfo.m_Display_netname = false;
 
@@ -453,7 +457,10 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     wxPoint holepos = m_Pos - aDrawInfo.m_Offset;
     int     hole    = m_Drill.x >> 1;
 
-    if( aDrawInfo.m_ShowPadFilled && hole )
+    bool drawhole = hole > 0;
+    if( !aDrawInfo.m_ShowPadFilled && !aDrawInfo. m_ShowNotPlatedHole )
+        drawhole = false;
+    if( drawhole )
     {
         bool blackpenstate = false;
         if( aDrawInfo.m_IsPrinting )
@@ -468,13 +475,16 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         else
             GRSetDrawMode( aDC, GR_XOR );
 
+        int hole_color = aDrawInfo.m_HoleColor;
+        if( aDrawInfo. m_ShowNotPlatedHole )    // Draw a specific hole color
+            hole_color = aDrawInfo.m_NPHoleColor;
+
         switch( m_DrillShape )
         {
         case PAD_CIRCLE:
-
             if( aDC->LogicalToDeviceXRel( hole ) > 1 )
                 GRFilledCircle( aClipBox, aDC, holepos.x, holepos.y, hole, 0,
-                                aDrawInfo.m_Color, aDrawInfo.m_HoleColor );
+                                aDrawInfo.m_Color, hole_color );
             break;
 
         case PAD_OVAL:
@@ -497,7 +507,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
             GRFillCSegm( aClipBox, aDC, holepos.x + delta_cx, holepos.y + delta_cy,
                          holepos.x - delta_cx, holepos.y - delta_cy, seg_width,
-                         aDrawInfo.m_HoleColor );
+                         hole_color );
             break;
 
         default:

@@ -17,7 +17,7 @@
 // Due to a bug in previous versions ( m_LengthDie not initialized in D_PAD ctor)
 // m_LengthDie is no more read from .brd files
 // Uncomment this next line to read m_LengthDie from .brd files
-// #define READ_PAD_LENGTH_DIE
+#define READ_PAD_LENGTH_DIE
 
 int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode
 
@@ -758,13 +758,19 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     else
         Line.Printf( wxT( "%3.1f" ), (float) m_Orient / 10 );
 
-    frame->AppendMsgPanel( _( "Orient" ), Line, BLUE );
+    frame->AppendMsgPanel( _( "Orient" ), Line, LIGHTBLUE );
 
     valeur_param( m_Pos.x, Line );
-    frame->AppendMsgPanel( _( "X Pos" ), Line, BLUE );
+    frame->AppendMsgPanel( _( "X Pos" ), Line, LIGHTBLUE );
 
     valeur_param( m_Pos.y, Line );
-    frame->AppendMsgPanel( _( "Y pos" ), Line, BLUE );
+    frame->AppendMsgPanel( _( "Y pos" ), Line, LIGHTBLUE );
+
+    if( m_LengthDie )
+    {
+        valeur_param( m_LengthDie, Line );
+        frame->AppendMsgPanel( _( "Length on die" ), Line, CYAN );
+    }
 }
 
 
@@ -900,15 +906,16 @@ wxString D_PAD::ShowPadAttr() const
 wxString D_PAD::GetSelectMenuText() const
 {
     wxString text;
+    BOARD * board = GetBoard();
 
     text << _( "Pad" ) << wxT( " \"" ) << ReturnStringPadName() << wxT( "\" (" );
 
     if ( (m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS )
         text << _("all copper layers");
-    else if( (m_Masque_Layer & LAYER_BACK) == LAYER_BACK )
-        text << GetLayerName();
+    else if( (m_Masque_Layer & LAYER_BACK ) == LAYER_BACK )
+        text << board->GetLayerName(LAYER_N_BACK);
     else if( (m_Masque_Layer & LAYER_FRONT) == LAYER_FRONT )
-        text << GetLayerName();
+        text << board->GetLayerName(LAYER_N_FRONT);
     else
         text << _( "???" );
 

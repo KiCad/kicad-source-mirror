@@ -27,7 +27,7 @@ class Pcb3D_GLCanvas;
 #define PAD_SMD_DEFAULT_LAYERS LAYER_FRONT | SOLDERMASK_LAYER_FRONT
 
 //PAD_HOLE_NOT_PLATED:
-#define PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS LAYER_BACK | SILKSCREEN_LAYER_FRONT | \
+#define PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS ALL_CU_LAYERS | SILKSCREEN_LAYER_FRONT | \
     SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT
 
 
@@ -40,12 +40,14 @@ public:
     int m_Color;                // color used to draw the pad shape , from pad layers and
                                 // visible layers
     int m_HoleColor;            // color used to draw the pad hole
+    int m_NPHoleColor;          // color used to draw a pad Not Plated hole
     int m_PadClearance;         // clearance value, used to draw the pad area outlines
     wxSize m_Mask_margin;       // margin, used to draw solder paste when only one layer is shown
     bool m_Display_padnum;      // true to show pad number
     bool m_Display_netname;     // true to show net name
     bool m_ShowPadFilled;       // true to show pad as solid area, false to show pas in sketch mode
     bool m_ShowNCMark;          // true to show pad not connected mark
+    bool m_ShowNotPlatedHole;   // true when the pad hole in not plated, to draw a specifib pad shape
     bool m_IsPrinting;          // true to print, false to display on screen.
     wxPoint m_Offset;           // general draw offset
 
@@ -103,13 +105,12 @@ public:
                                     // module anchor, orientation 0
 
     int     m_ShapeMaxRadius;       // radius of the circle containing the pad shape
-    int     m_Attribut;             // NORMAL, PAD_SMD, PAD_CONN
+    int     m_Attribut;             // NORMAL, PAD_SMD, PAD_CONN, PAD_HOLE_NOT_PLATED
     int     m_Orient;               // in 1/10 degrees
     static int m_PadSketchModePenSize;      // Pen size used to draw pads in sketch mode
                                     // (mode used to print pads on silkscreen layer)
 
-    // Length net from pad to die on chip
-    int	   m_LengthDie;
+    int	    m_LengthDie;            // Length net from pad to die on chip
 
     // Local clearance. When null, the module default value is used.
     // when the module default value is null, the netclass value is used

@@ -681,7 +681,8 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_
     case LAYER_N_14:
     case LAYER_N_15:
     case LAST_COPPER_LAYER:
-        Plot_Standard_Layer( plotter, layer_mask, true, trace_mode );
+        Plot_Standard_Layer( plotter, layer_mask, true, trace_mode,
+                            g_PcbPlotOptions.m_SkipNPTH_Pads );
 
         // Adding drill marks, if required and if the plotter is able to plot
         // them:
@@ -736,9 +737,10 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_
  * HPGL unit = 0.98 mils (1 mil = 1.02041 unit HPGL).
  */
 void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
-                                              int         aLayerMask,
-                                              bool        aPlotVia,
-                                              GRTraceMode aPlotMode )
+                                          int         aLayerMask,
+                                          bool        aPlotVia,
+                                          GRTraceMode aPlotMode,
+                                          bool aSkipNPTH_Pads  )
 {
     wxPoint  pos;
     wxSize   size;
@@ -772,8 +774,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
             break;
 
         default:
-            DisplayError( this,
-                          wxT( "Plot_Standard_Layer() error : Unexpected Draw Type" ) );
+            wxMessageBox( wxT( "Plot_Standard_Layer() error : Unexpected Draw Type" ) );
             break;
         }
     }
@@ -838,10 +839,18 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
             switch( pad->m_PadShape )
             {
             case PAD_CIRCLE:
+                if( aSkipNPTH_Pads &&
+                    (pad->m_Size == pad->m_Drill) &&
+                    (pad->m_Attribut == PAD_HOLE_NOT_PLATED) )
+                    break;
                 aPlotter->flash_pad_circle( pos, size.x, aPlotMode );
                 break;
 
             case PAD_OVAL:
+                if( aSkipNPTH_Pads &&
+                    (pad->m_Size == pad->m_Drill) &&
+                    (pad->m_Attribut == PAD_HOLE_NOT_PLATED) )
+                    break;
                 aPlotter->flash_pad_oval( pos, size, pad->m_Orient, aPlotMode );
                 break;
 

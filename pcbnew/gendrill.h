@@ -44,20 +44,30 @@ public: DRILL_TOOL( int diametre )
 };
 
 
-/* the HOLE_INFO class handle hole which must be drilled (diameter, position and layers) */
+/* the HOLE_INFO class handle hole which must be drilled (diameter, position and layers)
+ * For buried or micro vias, the hole is not on all layers.
+ * So we must generate a drill file for each layer pair (adjacent layers)
+ * Not plated holes are always through holes, and must be output on a specific drill file
+ * because they are drilled after the Pcb process is finished.
+*/
 class HOLE_INFO
 {
 public:
-    int m_Hole_Diameter;            // hole value, and for oblong min(hole size x, hole size y)
+    int m_Hole_Diameter;            // hole value, and for oblong: min(hole size x, hole size y)
     int m_Tool_Reference;           // Tool reference for this hole = 1 ... n (values <=0 must not be used)
-    int m_Hole_SizeX;               // hole size x for oblong holes
-    int m_Hole_SizeY;               // hole size y for oblong holes
+    wxSize m_Hole_Size;             // hole size for oblong holes
     int m_Hole_Orient;              // Hole rotation (= pad rotation) for oblong holes
     int m_Hole_Shape;               // hole shape: round (0) or oval (1)
-    int m_Hole_Pos_X;               // hole position X
-    int m_Hole_Pos_Y;               // hole position Y
-    int m_Hole_Bottom_Layer;        // hole starting layer (usually copper)
-    int m_Hole_Top_Layer;           // hole ending layer (usually component): m_Hole_First_Layer < m_Hole_Last_Layer
+    wxPoint m_Hole_Pos;             // hole position
+    int m_Hole_Bottom_Layer;        // hole starting layer (usually back layer)
+    int m_Hole_Top_Layer;           // hole ending layer (usually front layer):
+                                    // m_Hole_First_Layer < m_Hole_Last_Layer
+    bool m_Hole_NotPlated;          // hole not plated. Must be in a specific drill file
+public:
+    HOLE_INFO()
+    {
+        m_Hole_NotPlated = false;
+    }
 };
 
 
@@ -184,12 +194,14 @@ private:
  * @param aToolListBuffer : the std::vector<DRILL_TOOL> to fill with tools to use
  * @param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored
  * @param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
- * @param aExcludeThroughHoles : if true, exclude through holes ( pads and vias through )
+ * @param aGenerateNPTH_list :
+ *       true to create NPTH only list (with no plated holes)
+ *       false to created plated holes list (with no NPTH )
  */
 void     Build_Holes_List( BOARD* aPcb, std::vector<HOLE_INFO>& aHoleListBuffer,
                            std::vector<DRILL_TOOL>& aToolListBuffer,
-                           int aFirstLayer, int aLastLayer, bool aExcludeThroughHoles );
-
+                           int aFirstLayer, int aLastLayer, bool aExcludeThroughHoles,
+                           bool aGenerateNPTH_list );
 
 void     GenDrillMapFile( BOARD* aPcb,
                           FILE* aFile,

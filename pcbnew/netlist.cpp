@@ -169,8 +169,9 @@ private:
     /**
      * Function loadNewModules
      * Load from libraries new modules found in netlist and add them to the current Board.
+     * @return false if a footprint is not found, true if all footprints are loaded
      */
-    void    loadNewModules();
+    bool    loadNewModules();
 
     /**
      * function readModuleComponentLinkfile
@@ -417,7 +418,9 @@ bool NETLIST_READER::ReadNetList( FILE*           aFile,
     }
 
     /* Load new footprints */
-    loadNewModules();
+    bool success = loadNewModules();
+    if( ! success )
+        wxMessageBox( _("Some footprints are not found in libraries") );
 
     /* Second read , All footprints are on board.
      * One must update the schematic info (pad netnames)
@@ -1042,16 +1045,18 @@ bool NETLIST_READER::readModuleComponentLinkfile( const wxString* aCmpIdent,
 /* Load new modules from library.
  * If a new module is already loaded it is duplicated, which avoids multiple
  * unnecessary disk or net access to read libraries.
+ * return false if a footprint is not found, true if OK
  */
-void NETLIST_READER::loadNewModules()
+bool NETLIST_READER::loadNewModules()
 {
     MODULE_INFO* ref, * cmp;
     MODULE*      Module = NULL;
     wxPoint      ModuleBestPosition;
     BOARD*       pcb = m_pcbframe->GetBoard();
+    bool         success = true;
 
     if( m_newModulesList.size() == 0 )
-        return;
+        return true;
 
     sort( m_newModulesList.begin(), m_newModulesList.end(), SortByLibName );
 
@@ -1075,11 +1080,18 @@ void NETLIST_READER::loadNewModules()
             ref = cmp;
             if( Module == NULL )
             {
+                success = false;
                 wxString msg;
                 msg.Printf( _( "Component [%s]: footprint <%s> not found" ),
                            GetChars( cmp->m_CmpName ),
                            GetChars( cmp->m_LibName ) );
-                DisplayError( NULL, msg );
+                if( m_messageWindow )
+                {
+                    msg += wxT("\n");
+                    m_messageWindow->AppendText( msg );
+                }
+                else
+                    DisplayError( NULL, msg );
                 continue;
             }
             Module->SetPosition( ModuleBestPosition );
@@ -1108,4 +1120,6 @@ void NETLIST_READER::loadNewModules()
             Module->m_Path = cmp->m_TimeStampPath;
         }
     }
+
+    return success;
 }

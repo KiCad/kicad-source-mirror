@@ -59,6 +59,8 @@ public:
     bool        m_PlotPSNegative;       // True to create a  negative board ps plot
 
     // Flags to enable or disable ploting of various PCB elements.
+    bool        m_SkipNPTH_Pads;        // true to disable plot NPTH pads if hole and size have same value
+                                        // GERBER only
     bool        m_PlotReference;
     bool        m_PlotValue;
     bool        m_PlotTextOther;

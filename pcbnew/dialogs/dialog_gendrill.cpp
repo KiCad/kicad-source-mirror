@@ -1,6 +1,7 @@
 /**
- ** @file dialog_gendrill.cpp
- */
+** @file dialog_gendrill.cpp
+*/
+
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
@@ -43,16 +44,16 @@
 #define UnitDrillInchKey        wxT( "DrillUnit" )
 #define DrillOriginIsAuxAxisKey wxT( "DrillAuxAxis" )
 
-// list of allowed precision for EXCELLON files, when interger format:
+// list of allowed precision for EXCELLON files, for integer format:
 // Due to difference between inches and mm,
 // there are 2 set of reasonnable precision values, one for inches and one for metric
 static DRILL_PRECISION precisionListForInches[] =
 {
-    DRILL_PRECISION(2,3), DRILL_PRECISION(2,4)
+    DRILL_PRECISION( 2, 3 ), DRILL_PRECISION( 2, 4 )
 };
 static DRILL_PRECISION precisionListForMetric[] =
 {
-    DRILL_PRECISION(3,2), DRILL_PRECISION(3,3)
+    DRILL_PRECISION( 3, 2 ), DRILL_PRECISION( 3, 3 )
 };
 
 
@@ -75,6 +76,8 @@ bool DIALOG_GENDRILL::m_MinimalHeader   = false;
 bool DIALOG_GENDRILL::m_Mirror = true;
 bool DIALOG_GENDRILL::m_DrillOriginIsAuxAxis = false;
 int DIALOG_GENDRILL:: m_PrecisionFormat = 1;
+bool DIALOG_GENDRILL::m_createRpt = false;
+int DIALOG_GENDRILL::m_createMap = 0;
 
 /*!
  * DIALOG_GENDRILL destructor
@@ -107,6 +110,7 @@ void DIALOG_GENDRILL::initDialog()
     InitDisplayParams();
 }
 
+
 /* some param values initialization before display dialog window
  */
 void DIALOG_GENDRILL::InitDisplayParams( void )
@@ -119,7 +123,7 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
     if( m_ZerosFormat == EXCELLON_WRITER::DECIMAL_FORMAT )
         m_Choice_Precision->Enable( false );
 
-    UpdatePrecisionOptions( );
+    UpdatePrecisionOptions();
 
     m_Check_Minimal->SetValue( m_MinimalHeader );
 
@@ -127,6 +131,9 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
         m_Choice_Drill_Offset->SetSelection( 1 );
 
     m_Check_Mirror->SetValue( m_Mirror );
+
+    m_Choice_Drill_Map->SetSelection( m_createMap );
+    m_Choice_Drill_Report->SetSelection( m_createRpt );
 
     m_ViaDrillValue->SetLabel( _( "Use Netclasses values" ) );
 
@@ -142,26 +149,28 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
 
     // See if we have some buried vias or/and microvias, and display
     // microvias drill value if so
-    m_ThroughViasCount = 0;
-    m_MicroViasCount   = 0;
-    m_BlindOrBuriedViasCount = 0;
+    m_throughViasCount = 0;
+    m_microViasCount   = 0;
+    m_blindOrBuriedViasCount = 0;
     for( TRACK* track = m_Parent->GetBoard()->m_Track; track != NULL;
         track = track->Next() )
     {
         if( track->Type() != TYPE_VIA )
             continue;
         if( track->Shape() == VIA_THROUGH )
-            m_ThroughViasCount++;
+            m_throughViasCount++;
         else if( track->Shape() == VIA_MICROVIA )
-            m_MicroViasCount++;
+            m_microViasCount++;
         else if( track->Shape() == VIA_BLIND_BURIED )
-            m_BlindOrBuriedViasCount++;
+            m_blindOrBuriedViasCount++;
     }
 
-    m_MicroViaDrillValue->Enable( m_MicroViasCount );
+    m_MicroViaDrillValue->Enable( m_microViasCount );
 
-    // Pads holes round:
-    m_PadsHoleCount = 0;
+    /* Count plated pad holes and not plated pad holes:
+     */
+    m_platedPadsHoleCount    = 0;
+    m_notplatedPadsHoleCount = 0;
     for( MODULE* module = m_Parent->GetBoard()->m_Modules;
         module != NULL; module = module->Next() )
     {
@@ -170,30 +179,46 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
             if( pad->m_DrillShape == PAD_CIRCLE )
             {
                 if( pad->m_Drill.x != 0 )
-                    m_PadsHoleCount++;
+                {
+                    if( pad->m_Attribut == PAD_HOLE_NOT_PLATED )
+                        m_notplatedPadsHoleCount++;
+                    else
+                        m_platedPadsHoleCount++;
+                }
             }
             else
                 if( MIN( pad->m_Drill.x, pad->m_Drill.y ) != 0 )
-                    m_PadsHoleCount++;
+                {
+                    if( pad->m_Attribut == PAD_HOLE_NOT_PLATED )
+                        m_notplatedPadsHoleCount++;
+                    else
+                        m_platedPadsHoleCount++;
+                }
         }
     }
 
-    msg = m_PadsCountInfoMsg->GetLabel();
-    msg << wxT( " " ) << m_PadsHoleCount;
-    m_PadsCountInfoMsg->SetLabel( msg );
+    // Display hole counts:
+    msg = m_PlatedPadsCountInfoMsg->GetLabel();
+    msg << wxT( " " ) << m_platedPadsHoleCount;
+    m_PlatedPadsCountInfoMsg->SetLabel( msg );
+
+    msg = m_NotPlatedPadsCountInfoMsg->GetLabel();
+    msg << wxT( " " ) << m_notplatedPadsHoleCount;
+    m_NotPlatedPadsCountInfoMsg->SetLabel( msg );
 
     msg = m_ThroughViasInfoMsg->GetLabel();
-    msg << wxT( " " ) << m_ThroughViasCount;
+    msg << wxT( " " ) << m_throughViasCount;
     m_ThroughViasInfoMsg->SetLabel( msg );
 
     msg = m_MicroViasInfoMsg->GetLabel();
-    msg << wxT( " " ) << m_MicroViasCount;
+    msg << wxT( " " ) << m_microViasCount;
     m_MicroViasInfoMsg->SetLabel( msg );
 
     msg = m_BuriedViasInfoMsg->GetLabel();
-    msg << wxT( " " ) << m_BlindOrBuriedViasCount;
+    msg << wxT( " " ) << m_blindOrBuriedViasCount;
     m_BuriedViasInfoMsg->SetLabel( msg );
 }
+
 
 /* Save drill options: */
 void DIALOG_GENDRILL::UpdateConfig()
@@ -213,13 +238,14 @@ void DIALOG_GENDRILL::UpdateConfig()
     }
 }
 
+
 /*!
  * wxEVT_COMMAND_RADIOBOX_SELECTED event handler for ID_RADIOBOX
  */
 
 void DIALOG_GENDRILL::OnSelDrillUnitsSelected( wxCommandEvent& event )
 {
-    UpdatePrecisionOptions( );
+    UpdatePrecisionOptions();
 }
 
 
@@ -229,8 +255,8 @@ void DIALOG_GENDRILL::OnSelDrillUnitsSelected( wxCommandEvent& event )
 
 void DIALOG_GENDRILL::OnOkClick( wxCommandEvent& event )
 {
-    GenDrillAndReportFiles( );
-    EndModal( wxID_OK);
+    GenDrillAndReportFiles();
+    EndModal( wxID_OK );
 }
 
 
@@ -240,8 +266,8 @@ void DIALOG_GENDRILL::OnOkClick( wxCommandEvent& event )
 
 void DIALOG_GENDRILL::OnCancelClick( wxCommandEvent& event )
 {
-    UpdateConfig();     /* Save drill options: */
-    EndModal( wxID_CANCEL);       // Process the default cancel event (close dialog)
+    UpdateConfig();                 /* Save drill options: */
+    EndModal( wxID_CANCEL );        // Process the default cancel event (close dialog)
 }
 
 
@@ -251,11 +277,11 @@ void DIALOG_GENDRILL::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_GENDRILL::OnSelZerosFmtSelected( wxCommandEvent& event )
 {
-    UpdatePrecisionOptions( );
+    UpdatePrecisionOptions();
 }
 
 
-void DIALOG_GENDRILL::UpdatePrecisionOptions( )
+void DIALOG_GENDRILL::UpdatePrecisionOptions()
 {
     if( m_Choice_Unit->GetSelection()== 1 )     // Units = inches
     {
@@ -280,6 +306,9 @@ void DIALOG_GENDRILL::SetParams( void )
 {
     wxString msg;
     long     ltmp;
+
+    m_createMap = m_Choice_Drill_Map->GetSelection();
+    m_createRpt = m_Choice_Drill_Report->GetSelection();
 
     m_UnitDrillIsInch = (m_Choice_Unit->GetSelection() == 0) ? FALSE : TRUE;
     m_MinimalHeader   = m_Check_Minimal->IsChecked();

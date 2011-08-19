@@ -1065,20 +1065,25 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
              * orientation, if the text is empty at position 0, because
              * it is probably not yet initialized
              */
-            if( component->GetField( FOOTPRINT )->m_Text.IsEmpty()
-                && ( component->GetField( FOOTPRINT )->m_Pos == wxPoint( 0, 0 ) ) )
+            SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
+            if( fpfield->m_Text.IsEmpty()
+                && ( fpfield->m_Pos == component->m_Pos ) )
             {
-                component->GetField( FOOTPRINT )->m_Orient = component->GetField( VALUE )->m_Orient;
-                component->GetField( FOOTPRINT )->m_Pos    = component->GetField( VALUE )->m_Pos;
-                component->GetField( FOOTPRINT )->m_Pos.y -= 100;
+                fpfield->m_Orient = component->GetField( VALUE )->m_Orient;
+                fpfield->m_Pos    = component->GetField( VALUE )->m_Pos;
+                fpfield->m_Size   = component->GetField( VALUE )->m_Size;
+                if( fpfield->m_Orient == 0 )
+                    fpfield->m_Pos.y += 100;
+                else
+                    fpfield->m_Pos.x += 100;
             }
 
-            component->GetField( FOOTPRINT )->m_Text = aFootPrint;
+            fpfield->m_Text = aFootPrint;
 
             if( aSetVisible )
-                component->GetField( FOOTPRINT )->m_Attributs &= ~TEXT_NO_VISIBLE;
+                fpfield->m_Attributs &= ~TEXT_NO_VISIBLE;
             else
-                component->GetField( FOOTPRINT )->m_Attributs |= TEXT_NO_VISIBLE;
+                fpfield->m_Attributs |= TEXT_NO_VISIBLE;
 
             found = true;
         }

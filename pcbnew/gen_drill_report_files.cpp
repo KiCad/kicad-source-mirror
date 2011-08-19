@@ -266,8 +266,7 @@ void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* aPlotter,
     // Plot the drill map:
     for( unsigned ii = 0; ii < aHoleListBuffer.size(); ii++ )
     {
-        pos.x = aHoleListBuffer[ii].m_Hole_Pos_X;
-        pos.y = aHoleListBuffer[ii].m_Hole_Pos_Y;
+        pos = aHoleListBuffer[ii].m_Hole_Pos;
 
         /* Always plot the drill symbol (for slots identifies the needed
          * cutter!) */
@@ -276,8 +275,7 @@ void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* aPlotter,
         if( aHoleListBuffer[ii].m_Hole_Shape != 0 )
         {
             wxSize oblong_size;
-            oblong_size.x = aHoleListBuffer[ii].m_Hole_SizeX;
-            oblong_size.y = aHoleListBuffer[ii].m_Hole_SizeY;
+            oblong_size = aHoleListBuffer[ii].m_Hole_Size;
             aPlotter->flash_pad_oval( pos, oblong_size,
                                      aHoleListBuffer[ii].m_Hole_Orient, FILAIRE );
         }
@@ -299,6 +297,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
     int      layer1 = LAYER_N_BACK;
     int      layer2 = LAYER_N_FRONT;
     bool     gen_through_holes = true;
+    bool     gen_NPTH_holes = false;
 
 
     fprintf( aFile, "Drill report for %s\n", TO_UTF8( aBoardFilename ) );
@@ -314,6 +313,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
     /* build hole lists:
      * 1 - through holes
      * 2 - for partial holes only: by layer pair
+     * 3 - Not Plated through holes
      */
 
     for( ; ; )
@@ -323,11 +323,16 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
                           aToolListBuffer,
                           layer1,
                           layer2,
-                          gen_through_holes ? false : true );
+                          gen_through_holes ? false : true, gen_NPTH_holes );
 
         TotalHoleCount = 0;
 
-        if( gen_through_holes )
+        if( gen_NPTH_holes )
+        {
+            sprintf( line, "Drill report for Not Plated through holes :\n" );
+        }
+
+        else if( gen_through_holes )
         {
             sprintf( line, "Drill report for through holes :\n" );
         }
@@ -384,25 +389,41 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
             TotalHoleCount += aToolListBuffer[ii].m_TotalCount;
         }
 
-        sprintf( line, "\ntotal holes count %d\n\n\n", TotalHoleCount );
+        if( gen_NPTH_holes )
+            sprintf( line, "\ntotal Not Plated holes count %d\n\n\n", TotalHoleCount );
+        else
+            sprintf( line, "\ntotal plated holes count %d\n\n\n", TotalHoleCount );
         fputs( line, aFile );
 
-        if( aPcb->GetCopperLayerCount() <= 2 )
+        if( gen_NPTH_holes )
+        {
             break;
-
-        if(  gen_through_holes )
-            layer2 = layer1 + 1;
+        }
         else
         {
-            if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
-                break;
-            layer1++; layer2++;           // use next layer pair
+            if( aPcb->GetCopperLayerCount() <= 2 )
+            {
+                gen_NPTH_holes = true;
+                continue;
+            }
 
-            if( layer2 == aPcb->GetCopperLayerCount() - 1 )
-                layer2 = LAYER_N_FRONT;  // the last layer is always the
-                                       // component layer
+            if(  gen_through_holes )
+                layer2 = layer1 + 1;
+            else
+            {
+                if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
+                {
+                    gen_NPTH_holes = true;
+                    continue;
+                }
+                layer1++; layer2++;           // use next layer pair
+
+                if( layer2 == aPcb->GetCopperLayerCount() - 1 )
+                    layer2 = LAYER_N_FRONT;  // the last layer is always the
+                                           // component layer
+            }
+            gen_through_holes = false;
         }
-        gen_through_holes = false;
     }
 
     fclose( aFile );

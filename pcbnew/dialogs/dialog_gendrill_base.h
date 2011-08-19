@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_gendrill_base__
-#define __dialog_gendrill_base__
+#ifndef __DIALOG_GENDRILL_BASE_H__
+#define __DIALOG_GENDRILL_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
 #include <wx/radiobox.h>
 #include <wx/gdicmn.h>
@@ -51,11 +52,11 @@ class DIALOG_GENDRILL_BASE : public wxDialog
 		wxStaticText* m_ViaDrillValue;
 		wxStaticBoxSizer* m_MicroViasDrillSizer;
 		wxStaticText* m_MicroViaDrillValue;
-		wxStaticText* m_PadsCountInfoMsg;
+		wxStaticText* m_PlatedPadsCountInfoMsg;
+		wxStaticText* m_NotPlatedPadsCountInfoMsg;
 		wxStaticText* m_ThroughViasInfoMsg;
 		wxStaticText* m_MicroViasInfoMsg;
 		wxStaticText* m_BuriedViasInfoMsg;
-		
 		wxButton* m_OkButton;
 		wxButton* m_CancelButton;
 		
@@ -68,9 +69,9 @@ class DIALOG_GENDRILL_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 447,385 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Drill Files Generation"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 447,385 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_GENDRILL_BASE();
 	
 };
 
-#endif //__dialog_gendrill_base__
+#endif //__DIALOG_GENDRILL_BASE_H__

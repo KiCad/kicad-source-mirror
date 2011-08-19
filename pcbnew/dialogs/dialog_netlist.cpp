@@ -26,6 +26,7 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
     {
         fn = GetScreen()->GetFileName();
         fn.SetExt( NetExtBuffer );
+        lastNetlistName = fn.GetFullPath();
     }
 
     DIALOG_NETLIST frame( this, DC, lastNetlistName );

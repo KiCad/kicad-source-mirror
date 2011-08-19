@@ -33,6 +33,8 @@ bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFile, bool aSetFieldAttributeToVis
     SCH_REFERENCE_LIST referencesList;
     SheetList.GetComponents( referencesList, false );
 
+    // Now, foe each component found in file,
+    // replace footprint field value by the new value:
     while( GetLine( aFile, Line, &LineNum, sizeof(Line) ) )
     {
         if( sscanf( Line, "comp = \"%s module = \"%s", Ref, FootPrint ) == 2 )
@@ -58,12 +60,20 @@ bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFile, bool aSetFieldAttributeToVis
                     // So we do not stop the search here
                     SCH_COMPONENT* component = referencesList[ii].GetComponent();
                     SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
+                    /* Give a reasonable value to the field position and
+                     * orientation, if the text is empty at position 0, because
+                     * it is probably not yet initialized
+                     */
                     if( fpfield->m_Text.IsEmpty()
-                        && ( fpfield->m_Pos == wxPoint( 0, 0 ) ) )
+                        && ( fpfield->m_Pos == component->m_Pos ) )
                     {
                         fpfield->m_Orient = component->GetField( VALUE )->m_Orient;
                         fpfield->m_Pos    = component->GetField( VALUE )->m_Pos;
-                        fpfield->m_Pos.y -= 100;
+                        fpfield->m_Size   = component->GetField( VALUE )->m_Size;
+                        if( fpfield->m_Orient == 0 )
+                            fpfield->m_Pos.y += 100;
+                        else
+                            fpfield->m_Pos.x += 100;
                     }
 
                     fpfield->m_Text = footprint;

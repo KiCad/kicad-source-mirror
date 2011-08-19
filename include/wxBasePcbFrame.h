@@ -406,8 +406,23 @@ public:
     void     Plot_Layer( PLOTTER*    plotter,
                          int         Layer,
                          GRTraceMode trace_mode );
+    /**
+     * Function Plot_Standard_Layer
+     * plot copper or technical layers.
+     * not used for silk screen layers, because these layers have specific
+     * requirements, mainly for pads
+     * @param aPlotter = the plotter to use
+     * @param aLayerMask = the mask to define the layers to plot
+     * @param aPlotVia = true to plot vias, false to skip vias (has meaning
+     *                  only for solder mask layers).
+     * @param aPlotMode = the plot mode (files, sketch). Has meaning for some formats only
+     * @param aSkipNPTH_Pads = true to skip NPTH Pads, when the pad size and the pad hole
+     *                      have the same size. Used in GERBER format only.
+     */
     void     Plot_Standard_Layer( PLOTTER* aPlotter, int aLayerMask,
-                                  bool aPlotVia, GRTraceMode aPlotMode );
+                                  bool aPlotVia, GRTraceMode aPlotMode,
+                                  bool aSkipNPTH_Pads = false );
+
     void     Plot_Serigraphie( PLOTTER*    plotter,
                                int         masque_layer,
                                GRTraceMode trace_mode );

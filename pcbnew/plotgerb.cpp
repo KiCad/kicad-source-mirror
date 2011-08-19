@@ -61,12 +61,18 @@ bool PCB_BASE_FRAME::Genere_GERBER( const wxString& FullFileName, int Layer,
 
     if( plotter->start_plot( output_file ) )
     {
+        // Skip NPTH pads on copper layers
+        // ( only if hole size == pad size ):
+        if( (Layer >= LAYER_N_BACK) && (Layer <= LAYER_N_FRONT) )
+            g_PcbPlotOptions.m_SkipNPTH_Pads = true;
         // Sheet refs on gerber CAN be useful... and they're always 1:1
         if( g_PcbPlotOptions.m_PlotFrameRef )
             PlotWorkSheet( plotter, GetScreen() );
 
         Plot_Layer( plotter, Layer, trace_mode );
         plotter->end_plot();
+
+        g_PcbPlotOptions.m_SkipNPTH_Pads = false;
     }
 
     else    // error in start_plot( ): failed opening a temporary file

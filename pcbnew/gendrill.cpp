@@ -60,6 +60,8 @@
 
 const wxString DrillFileExtension( wxT( "drl" ) );
 const wxString DrillFileWildcard( _( "Drill files (*.drl)|*.drl" ) );
+const wxString RptFileExtension( wxT( "rpt" ) );
+const wxString RptFileWildcard = _( "Drill report files (*.rpt)|*.rpt" );
 
 /*
  *  Creates the drill files in EXCELLON format
@@ -81,12 +83,12 @@ static std::vector<DRILL_TOOL> s_ToolListBuffer;
 static std::vector<HOLE_INFO>  s_HoleListBuffer;
 
 
-
 /* This function displays the dialog frame for drill tools
  */
 void PCB_EDIT_FRAME::InstallDrillFrame( wxCommandEvent& event )
 {
     DIALOG_GENDRILL dlg( this );
+
     dlg.ShowModal();
 }
 
@@ -96,11 +98,12 @@ void PCB_EDIT_FRAME::InstallDrillFrame( wxCommandEvent& event )
  * Calls the functions to create EXCELLON drill files and/or drill map files
  * >When all holes are through, only one excellon file is created.
  * >When there are some partial holes (some blind or buried vias),
- *  one excellon file is created, for all through holes,
+ *  one excellon file is created, for all plated through holes,
  *  and one file per layer pair, which have one or more holes, excluding
  *  through holes, already in the first file.
+ *  one file for all Not Plated through holes
  */
-void DIALOG_GENDRILL::GenDrillAndReportFiles( )
+void DIALOG_GENDRILL::GenDrillAndReportFiles()
 {
     wxFileName fn;
     wxString   layer_extend;              /* added to the  Board FileName to
@@ -108,31 +111,38 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles( )
                                            * FileName + layer pair names) */
     wxString   msg;
     bool       hasBuriedVias = false;  /* If true, drill files are created
-                                           * layer pair by layer pair for
-                                           * buried vias */
+                                        * layer pair by layer pair for
+                                        * buried vias */
     int        layer1 = LAYER_N_BACK;
     int        layer2 = LAYER_N_FRONT;
     bool       gen_through_holes = true;
+    bool       gen_NPTH_holes    = false;
 
-    UpdateConfig(); /* set params and Save drill options */
+    wxString   currentWD = ::wxGetCwd();
+
+    UpdateConfig(); // set params and Save drill options
 
     m_Parent->MsgPanel->EraseMsgBox();
 
-    if( m_MicroViasCount || m_BlindOrBuriedViasCount )
+    if( m_microViasCount || m_blindOrBuriedViasCount )
         hasBuriedVias = true;
 
     for( ; ; )
     {
         Build_Holes_List( m_Parent->GetBoard(), s_HoleListBuffer,
                           s_ToolListBuffer, layer1, layer2,
-                          gen_through_holes ? false : true );
+                          gen_through_holes ? false : true, gen_NPTH_holes );
 
-        if( s_ToolListBuffer.size() > 0 ) //holes?
+        if( s_ToolListBuffer.size() > 0 ) //  holes?
         {
             fn = m_Parent->GetScreen()->GetFileName();
             layer_extend.Empty();
 
-            if( !gen_through_holes )
+            if( gen_NPTH_holes )
+            {
+                layer_extend << wxT( "-NPTH" );
+            }
+            else if( !gen_through_holes )
             {
                 if( layer1 == LAYER_N_BACK )
                     layer_extend << wxT( "-copper" );
@@ -147,9 +157,9 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles( )
             fn.SetName( fn.GetName() + layer_extend );
             fn.SetExt( DrillFileExtension );
 
-            wxFileDialog dlg( this, _( "Save Drill File" ), fn.GetPath(),
-                              fn.GetFullName(), DrillFileWildcard,
-                              wxFD_SAVE );
+            wxFileDialog dlg( this, _( "Save Drill File" ), ::wxGetCwd(),
+                              fn.GetFullName(), wxGetTranslation( DrillFileWildcard ),
+                              wxFD_SAVE | wxFD_CHANGE_DIR );
 
             if( dlg.ShowModal() == wxID_CANCEL )
                 break;
@@ -158,19 +168,21 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles( )
 
             if( aFile == 0 )
             {
-                msg = _( "Unable to create file " ) + dlg.GetPath();
-                DisplayError( this, msg );
+                msg.Printf( _( "Unable to create drill file %s" ), GetChars( dlg.GetPath() ) );
+                wxMessageBox( msg );
+                ::wxSetWorkingDirectory( currentWD );
                 EndModal( 0 );
                 return;
             }
+
             EXCELLON_WRITER excellonWriter( m_Parent->GetBoard(),
-                                        aFile, m_FileDrillOffset,
-                                        &s_HoleListBuffer, &s_ToolListBuffer );
+                                            aFile, m_FileDrillOffset,
+                                            &s_HoleListBuffer, &s_ToolListBuffer );
             excellonWriter.SetFormat( !m_UnitDrillIsInch,
                                       (EXCELLON_WRITER::zeros_fmt) m_ZerosFormat,
                                       m_Precision.m_lhs, m_Precision.m_rhs );
             excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset );
-            excellonWriter.CreateDrillFile( );
+            excellonWriter.CreateDrillFile();
 
             switch( m_Choice_Drill_Map->GetSelection() )
             {
@@ -197,31 +209,45 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles( )
                              PLOT_FORMAT_DXF );
                 break;
             }
-
-            if( !hasBuriedVias )
-                break;
         }
-        if(  gen_through_holes )
-            layer2 = layer1 + 1;
+
+        if( gen_NPTH_holes )    // The last drill file was created
+            break;
+
+        if( !hasBuriedVias )
+            gen_NPTH_holes = true;
         else
         {
-            if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
-                break;
-            layer1++;
-            layer2++;                      // use next layer pair
+            if(  gen_through_holes )
+                layer2 = layer1 + 1;    // prepare generation of first layer pair
+            else
+            {
+                if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
+                {
+                    layer1 = LAYER_N_BACK;
+                    layer2 = LAYER_N_FRONT;
+                    gen_NPTH_holes = true;
+                    continue;
+                }
+                layer1++;
+                layer2++;                      // use next layer pair
 
-            if( layer2 == m_Parent->GetBoard()->GetCopperLayerCount() - 1 )
-                layer2 = LAYER_N_FRONT;         // the last layer is always the
-                                                // component layer
+                if( layer2 == m_Parent->GetBoard()->GetCopperLayerCount() - 1 )
+                    layer2 = LAYER_N_FRONT;         // the last layer is always the
+                                                    // component layer
+            }
+
+            gen_through_holes = false;
         }
-
-        gen_through_holes = false;
     }
 
     if( m_Choice_Drill_Report->GetSelection() > 0 )
     {
-        GenDrillReport( m_Parent->GetScreen()->GetFileName() );
+        fn = m_Parent->GetScreen()->GetFileName();
+        GenDrillReport( fn.GetFullName() );
     }
+
+    ::wxSetWorkingDirectory( currentWD );
 }
 
 
@@ -229,16 +255,16 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles( )
  * Create the drill file in EXCELLON format
  * @return hole count
  */
-int EXCELLON_WRITER::CreateDrillFile( )
+int EXCELLON_WRITER::CreateDrillFile()
 {
-    int   diam, holes_count;
-    int   x0, y0, xf, yf, xc, yc;
+    int    diam, holes_count;
+    int    x0, y0, xf, yf, xc, yc;
     double xt, yt;
-    char  line[1024];
+    char   line[1024];
 
     SetLocaleTo_C_standard(); // Use the standard notation for double numbers
 
-    WriteHeader( );
+    WriteHeader();
 
     holes_count = 0;
 
@@ -250,17 +276,17 @@ int EXCELLON_WRITER::CreateDrillFile( )
                  tool_descr.m_Diameter * m_conversionUnits  );
     }
 
-    fputs( "%\n", m_file );                      // End of header info
+    fputs( "%\n", m_file );                         // End of header info
 
-    fputs( "G90\n", m_file );                    // Absolute mode
-    fputs( "G05\n", m_file );                    // Drill mode
+    fputs( "G90\n", m_file );                       // Absolute mode
+    fputs( "G05\n", m_file );                       // Drill mode
     /* Units : */
     if( !m_minimalHeader )
     {
         if( m_unitsDecimal  )
-            fputs( "M71\n", m_file );    /* M71 = metric mode */
+            fputs( "M71\n", m_file );       /* M71 = metric mode */
         else
-            fputs( "M72\n", m_file );    /* M72 = inch mode */
+            fputs( "M72\n", m_file );       /* M72 = inch mode */
     }
 
     /* Read the hole file and generate lines for normal holes (oblong
@@ -278,8 +304,8 @@ int EXCELLON_WRITER::CreateDrillFile( )
             fprintf( m_file, "T%d\n", tool_reference );
         }
 
-        x0 = hole_descr.m_Hole_Pos_X - m_offset.x;
-        y0 = hole_descr.m_Hole_Pos_Y - m_offset.y;
+        x0 = hole_descr.m_Hole_Pos.x - m_offset.x;
+        y0 = hole_descr.m_Hole_Pos.y - m_offset.y;
 
         if( !m_mirror )
             y0 *= -1;
@@ -307,24 +333,24 @@ int EXCELLON_WRITER::CreateDrillFile( )
             fprintf( m_file, "T%d\n", tool_reference );
         }
 
-        diam = MIN( hole_descr.m_Hole_SizeX,
-                    hole_descr.m_Hole_SizeY );
+        diam = MIN( hole_descr.m_Hole_Size.x,
+                    hole_descr.m_Hole_Size.y );
         if( diam == 0 )
             continue;
 
         /* Compute the hole coordinates: */
-        xc = x0 = xf = hole_descr.m_Hole_Pos_X - m_offset.x;
-        yc = y0 = yf = hole_descr.m_Hole_Pos_Y - m_offset.y;
+        xc = x0 = xf = hole_descr.m_Hole_Pos.x - m_offset.x;
+        yc = y0 = yf = hole_descr.m_Hole_Pos.y - m_offset.y;
 
         /* Compute the start and end coordinates for the shape */
-        if( hole_descr.m_Hole_SizeX < hole_descr.m_Hole_SizeY )
+        if( hole_descr.m_Hole_Size.x < hole_descr.m_Hole_Size.y )
         {
-            int delta = ( hole_descr.m_Hole_SizeY - hole_descr.m_Hole_SizeX ) / 2;
+            int delta = ( hole_descr.m_Hole_Size.y - hole_descr.m_Hole_Size.x ) / 2;
             y0 -= delta; yf += delta;
         }
         else
         {
-            int delta = ( hole_descr.m_Hole_SizeX - hole_descr.m_Hole_SizeY ) / 2;
+            int delta = ( hole_descr.m_Hole_Size.x - hole_descr.m_Hole_Size.y ) / 2;
             x0 -= delta; xf += delta;
         }
         RotatePoint( &x0, &y0, xc, yc, hole_descr.m_Hole_Orient );
@@ -359,12 +385,13 @@ int EXCELLON_WRITER::CreateDrillFile( )
         holes_count++;
     }
 
-    WriteEndOfFile( );
+    WriteEndOfFile();
 
     SetLocaleTo_Default();  // Revert to locale double notation
 
     return holes_count;
 }
+
 
 /**
  * SetFormat
@@ -374,14 +401,17 @@ int EXCELLON_WRITER::CreateDrillFile( )
  * @param aLeftDigits = number of digits for integer part of coordinates
  * @param aRightDigits = number of digits for mantissa part of coordinates
  */
-void EXCELLON_WRITER::SetFormat( bool aMetric, zeros_fmt aZerosFmt, int aLeftDigits, int aRightDigits )
+void EXCELLON_WRITER::SetFormat( bool      aMetric,
+                                 zeros_fmt aZerosFmt,
+                                 int       aLeftDigits,
+                                 int       aRightDigits )
 {
     m_unitsDecimal = aMetric;
-    m_zeroFormat = aZerosFmt;
+    m_zeroFormat   = aZerosFmt;
 
     /* Set conversion scale depending on drill file units */
     if( m_unitsDecimal )
-        m_conversionUnits = 0.00254;    // EXCELLON units = mm
+        m_conversionUnits = 0.00254;        // EXCELLON units = mm
     else
         m_conversionUnits = 0.0001;         // EXCELLON units = INCHES
 
@@ -389,11 +419,12 @@ void EXCELLON_WRITER::SetFormat( bool aMetric, zeros_fmt aZerosFmt, int aLeftDig
     m_precision.m_rhs = aRightDigits;
 }
 
+
 /* Created a line like:
  * X48000Y19500
  * According to the selected format
  */
-void EXCELLON_WRITER::WriteCoordinates( char * aLine, double aCoordX, double aCoordY )
+void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoordY )
 {
     wxString xs, ys;
     int      xpad = m_precision.m_lhs + m_precision.m_rhs;
@@ -471,7 +502,7 @@ void EXCELLON_WRITER::WriteCoordinates( char * aLine, double aCoordX, double aCo
  * FMAT,2
  * INCH,TZ
  */
-void EXCELLON_WRITER::WriteHeader( )
+void EXCELLON_WRITER::WriteHeader()
 {
     char Line[256];
 
@@ -537,7 +568,7 @@ void EXCELLON_WRITER::WriteHeader( )
 }
 
 
-void EXCELLON_WRITER::WriteEndOfFile( )
+void EXCELLON_WRITER::WriteEndOfFile()
 {
     //add if minimal here
     fputs( "T0\nM30\n", m_file );
@@ -591,7 +622,7 @@ void DIALOG_GENDRILL::GenDrillMap( const wxString           aFileName,
 
     wxFileDialog dlg( this, _( "Save Drill Plot File" ), fn.GetPath(),
                       fn.GetFullName(), wildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -602,7 +633,7 @@ void DIALOG_GENDRILL::GenDrillMap( const wxString           aFileName,
     {
         msg = _( "Unable to create file" );
         msg << wxT( " <" ) << dlg.GetPath() << wxT( ">" );
-        DisplayError( this, msg );
+        wxMessageBox( msg );
         return;
     }
 
@@ -624,15 +655,14 @@ void DIALOG_GENDRILL::GenDrillReport( const wxString aFileName )
 {
     wxFileName fn;
     wxString   msg;
-    wxString   wildcard = _( "Drill report files (.rpt)|*.rpt" );
 
     fn = aFileName;
     fn.SetName( fn.GetName() + wxT( "-drl" ) );
-    fn.SetExt( wxT( "rpt" ) );
+    fn.SetExt( RptFileExtension );
 
     wxFileDialog dlg( this, _( "Save Drill Report File" ), fn.GetPath(),
-                      fn.GetFullName(), wildcard,
-                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                      fn.GetFullName(), wxGetTranslation( RptFileWildcard ),
+                      wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -642,7 +672,7 @@ void DIALOG_GENDRILL::GenDrillReport( const wxString aFileName )
     if( report_dest == 0 )
     {
         msg = _( "Unable to create file " ) + dlg.GetPath();
-        DisplayError( this, msg );
+        wxMessageBox( msg );
         return;
     }
 
