@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun  6 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -55,23 +55,24 @@ class DIALOG_EESCHEMA_CONFIG_FBP : public wxDialog
 		wxStaticLine* m_staticline3;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
-		virtual void OnFilesListClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnAddOrInsertLibClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnRemoveLibClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonUpClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonDownClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnAddOrInsertPath( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnRemoveUserPath( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnFilesListClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddOrInsertLibClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveLibClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonUpClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonDownClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAddOrInsertPath( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRemoveUserPath( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
-		DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_EESCHEMA_CONFIG_FBP( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EESCHEMA_CONFIG_FBP();
 	
 };
