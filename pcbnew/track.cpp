@@ -40,7 +40,9 @@ static void Marque_Chaine_segments( BOARD*      Pcb,
  * @param aSegmCount = a pointer to an integer where to return the number of
  *                     interesting segments
  * @param aTrackLen = a pointer to an integer where to return the length of the
- *                    track
+ *                    track on board
+ * @param aLengthDie = a pointer to an integer where to return the extra lengths inside integrated circuits
+ *                      from the pads connected to this track to the die (if any)
  * @param aReorder = bool:
  *  true for reorder the interesting segments (useful for track
  *edition/deletion)
@@ -54,6 +56,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
                          TRACK* aStartSegm,
                          int*   aSegmCount,
                          int*   aTrackLen,
+                         int*   aLengthDie,
                          bool   aReorder )
 {
     int        NbSegmBusy;
@@ -220,6 +223,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
         return NULL;
 
     double full_len = 0;
+    double lenDie = 0;
     if( aReorder )
     {
         DLIST<TRACK>* list = (DLIST<TRACK>*)firstTrack->GetList();
@@ -240,6 +244,21 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
                 list->Insert( track, firstTrack->Next() );
                 if( aTrackLen )
                     full_len += track->GetLength();
+                if( aLengthDie ) // Add now length die.
+                {
+                    // In fact only 2 pads (maximum) will be taken in account:
+                    // that are on each end of the track, if any
+                    if( track->GetState( BEGIN_ONPAD ) )
+                    {
+                        D_PAD * pad = (D_PAD *) track->start;
+                        lenDie += (double) pad->m_LengthDie;
+                    }
+                    if( track->GetState( END_ONPAD ) )
+                    {
+                        D_PAD * pad = (D_PAD *) track->end;
+                        lenDie += (double) pad->m_LengthDie;
+                    }
+                }
             }
         }
     }
@@ -253,12 +272,27 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
                 NbSegmBusy++;
                 track->SetState( BUSY, OFF );
                 full_len += track->GetLength();
+                // Add now length die.
+                // In fact only 2 pads (maximum) will be taken in account:
+                // that are on each end of the track, if any
+                if( track->GetState( BEGIN_ONPAD ) )
+                {
+                    D_PAD * pad = (D_PAD *) track->start;
+                    lenDie += (double) pad->m_LengthDie;
+                }
+                if( track->GetState( END_ONPAD ) )
+                {
+                    D_PAD * pad = (D_PAD *) track->end;
+                    lenDie += (double) pad->m_LengthDie;
+                }
             }
         }
     }
 
     if( aTrackLen )
         *aTrackLen = wxRound( full_len );
+    if( aLengthDie )
+        *aLengthDie = wxRound( lenDie );
     if( aSegmCount )
         *aSegmCount = NbSegmBusy;
 

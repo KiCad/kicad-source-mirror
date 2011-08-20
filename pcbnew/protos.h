@@ -224,6 +224,8 @@ void Calcule_Coord_Extremite_45( const wxPoint& aPosition, int ox, int oy, int* 
  *                     interesting segments
  * @param aTrackLen = a pointer to an integer where to return the lenght of the
  *                    track
+ * @param aLengthDie = a pointer to an integer where to return the extra lengths inside integrated circuits
+ *                      from the pads connected to this track to the die (if any)
  * @param aReorder = true for reorder the interesting segments (useful for
  *                   track edition/deletion) in this case the flag BUSY is
  *                   set (the user is responsible of flag clearing). False
@@ -235,6 +237,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
                          TRACK* aStartSegm,
                          int*   aSegmCount,
                          int*   aTrackLen,
+                         int*   aLengthDie,
                          bool   aReorder );
 
 /* Calculate end  coordinate of a trace.

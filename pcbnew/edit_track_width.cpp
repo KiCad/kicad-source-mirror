@@ -150,7 +150,7 @@ void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
     if( aTrackSegment == NULL )
         return;
 
-    pt_track = Marque_Une_Piste( GetBoard(), aTrackSegment, &nb_segm, NULL, true );
+    pt_track = Marque_Une_Piste( GetBoard(), aTrackSegment, &nb_segm, NULL, NULL, true );
 
     PICKED_ITEMS_LIST itemsListPicker;
     bool change = false;

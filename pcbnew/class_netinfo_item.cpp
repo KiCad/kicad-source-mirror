@@ -169,17 +169,17 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     txt.Printf( wxT( "%d" ), count );
     frame->AppendMsgPanel( _( "Vias" ), txt, BLUE );
 
-    // Displays the full net lenght (tacks on pcb + internal ICs connections ):
-    valeur_param( (int) (lengthnet + lengthdie), txt );
+    // Displays the full net lenght (tracks on pcb + internal ICs connections ):
+    txt = frame->CoordinateToString( lengthnet + lengthdie );
     frame->AppendMsgPanel( _( "Net Length:" ), txt, RED );
 
     // Displays the net lenght of tracks only:
-    valeur_param( (int) lengthnet, txt );
-    frame->AppendMsgPanel( _( "on pcb" ), txt, RED );
+    txt = frame->CoordinateToString( lengthnet );
+    frame->AppendMsgPanel( _( "On Board" ), txt, RED );
 
     // Displays the net lenght of internal ICs connections (wires inside ICs):
-    valeur_param( (int) lengthdie, txt );
-    frame->AppendMsgPanel( _( "on die" ), txt, RED );
+    txt = frame->CoordinateToString( lengthdie );
+    frame->AppendMsgPanel( _( "On Die" ), txt, RED );
 
 }
 

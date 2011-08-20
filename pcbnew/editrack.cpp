@@ -783,14 +783,31 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     // display interesting segment info only:
     isegm->DisplayInfoBase( frame );
 
-    // Add current track length
+    // Diosplay current track length (on board) and the the actual track len
+    // if there is an extra len due to the len die on the starting pad (if any)
     double   trackLen = 0.0;
+    double   lenDie = 0.0;
     wxString msg;
+    // If the starting point is on a pad, add current track length+ lenght die
+    if( g_FirstTrackSegment->GetState( BEGIN_ONPAD ) )
+    {
+        D_PAD * pad = (D_PAD *) g_FirstTrackSegment->start;
+        lenDie = (double) pad->m_LengthDie;
+     }
+    // calculate track len on board:
     for( TRACK* track = g_FirstTrackSegment; track; track = track->Next() )
         trackLen += track->GetLength();
 
     valeur_param( wxRound( trackLen ), msg );
     frame->AppendMsgPanel( _( "Track Len" ), msg, DARKCYAN );
+
+    if( lenDie != 0 )      // display the track len on board and the actual track len
+    {
+        frame->AppendMsgPanel( _( "Full Len" ), msg, DARKCYAN );
+        valeur_param( wxRound( trackLen+lenDie ), msg );
+        frame->AppendMsgPanel( _( "On Die" ), msg, DARKCYAN );
+    }
+
 
     // Add current segments count (number of segments in this new track):
     msg.Printf( wxT( "%d" ), g_CurrentTrackList.GetCount() );
@@ -1035,7 +1052,7 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
 }
 
 
-/* Ensure the end point of g_CurrentTrackSegment is on the pas "Pad"
+/* Ensure the end point of g_CurrentTrackSegment is on the pad "Pad"
  *  if no, create a new track segment if necessary
  *  and move current (or new) end segment on pad
  */

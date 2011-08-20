@@ -180,7 +180,7 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
         return;
 
     TRACK* trackList = Marque_Une_Piste( GetBoard(), pt_segm,
-                                         &segments_to_delete_count, NULL, true );
+                                         &segments_to_delete_count, NULL, NULL, true );
     if( segments_to_delete_count == 0 )
         return;
 

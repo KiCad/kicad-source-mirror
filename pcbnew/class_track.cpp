@@ -997,9 +997,18 @@ void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
     if( frame->m_Ident == PCB_FRAME )
     {
         int trackLen = 0;
-        Marque_Une_Piste( board, this, NULL, &trackLen, false );
+        int lenDie = 0;
+        Marque_Une_Piste( board, this, NULL, &trackLen, &lenDie, false );
         msg = frame->CoordinateToString( trackLen );
-        frame->AppendMsgPanel( _( "Track Length" ), msg, DARKCYAN );
+        frame->AppendMsgPanel( _( "Track Len" ), msg, DARKCYAN );
+        if( lenDie != 0 )
+        {
+            msg = frame->CoordinateToString( trackLen + lenDie );
+            frame->AppendMsgPanel( _( "Full Len" ), msg, DARKCYAN );
+
+            msg = frame->CoordinateToString( lenDie );
+            frame->AppendMsgPanel( _( "On Die" ), msg, DARKCYAN );
+        }
     }
 
     NETCLASS* netclass = GetNetClass();

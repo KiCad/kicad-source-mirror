@@ -34,7 +34,7 @@ void PCB_EDIT_FRAME::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
 
     l1 = Route_Layer_TOP; l2 = Route_Layer_BOTTOM;
 
-    pt_track = Marque_Une_Piste( GetBoard(), pt_segm, &nb_segm, NULL, true );
+    pt_track = Marque_Une_Piste( GetBoard(), pt_segm, &nb_segm, NULL, NULL, true );
     if ( DC )
         Trace_Une_Piste( DrawPanel, DC, pt_track, nb_segm, GR_XOR );
 
