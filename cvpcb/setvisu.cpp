@@ -140,6 +140,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
                          TRACK* aStartSegm,
                          int*   aSegmCount,
                          int*   aTrackLen,
+                         int*   aLenDie,
                          bool   aReorder )
 {
     return NULL;
