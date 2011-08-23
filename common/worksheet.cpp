@@ -1213,8 +1213,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                     msg << screen->m_ScreenNumber;
                 DrawGraphicText( DrawPanel, DC, pos, Color, msg,
                                  TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
-                                 GR_TEXT_VJUSTIFY_CENTER, width, false, false,
-                                 false );
+                                 GR_TEXT_VJUSTIFY_CENTER, width, false, false );
                 break;
 
             case WS_SHEETS:
@@ -1223,8 +1222,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 msg << screen->m_NumberOfScreen;
                 DrawGraphicText( DrawPanel, DC, pos, Color, msg,
                                  TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
-                                 GR_TEXT_VJUSTIFY_CENTER, width, false, false,
-                                 false );
+                                 GR_TEXT_VJUSTIFY_CENTER, width, false, false );
                 break;
 
             case WS_COMPANY_NAME:
@@ -1356,7 +1354,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  width,
-                                 false, false, false );
+                                 false, false );
                 break;
 
             case WS_IDENTSHEET_D:
@@ -1366,7 +1364,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 DrawGraphicText( DrawPanel, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
-                                 width, false, false, false );
+                                 width, false, false );
                 break;
 
             case WS_LEFT_SEGMENT_D:
