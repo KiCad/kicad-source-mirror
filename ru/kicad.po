@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-22 16:19+0300\n"
-"PO-Revision-Date: 2011-08-22 16:20+0300\n"
+"POT-Creation-Date: 2011-08-23 11:57+0300\n"
+"PO-Revision-Date: 2011-08-23 11:57+0300\n"
 "Last-Translator: faa <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -25,38 +25,38 @@ msgstr ""
 "X-Poedit-SearchPath-8: pcbnew\n"
 "X-Poedit-SearchPath-9: pcb_calculator\n"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:168
+#: bitmap2component/bitmap2cmp_gui.cpp:178
 msgid "Choose Image"
 msgstr "Выбор изображения"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:169
+#: bitmap2component/bitmap2cmp_gui.cpp:179
 msgid "Image Files "
 msgstr "Файлы изображений"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:191
+#: bitmap2component/bitmap2cmp_gui.cpp:201
 #, c-format
 msgid "Couldn't load image from <%s>"
 msgstr "Не удалось загрузить изображение из <%s>"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:284
+#: bitmap2component/bitmap2cmp_gui.cpp:294
 msgid "Schematic lib file (*.lib)|*.lib"
 msgstr "Файлы библиотеки для eeschema (*.lib)|*.lib"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:285
+#: bitmap2component/bitmap2cmp_gui.cpp:295
 msgid "Create a lib file for Eeschema"
 msgstr "Создать файл библиотеки для Eeschema"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:299
-#: bitmap2component/bitmap2cmp_gui.cpp:331
+#: bitmap2component/bitmap2cmp_gui.cpp:309
+#: bitmap2component/bitmap2cmp_gui.cpp:341
 #, c-format
 msgid "File %s could not be created"
 msgstr "Не удалось создать файл %s"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:315
+#: bitmap2component/bitmap2cmp_gui.cpp:325
 msgid "Footprint file (*.mod)|*.mod"
 msgstr "Файлы посадочных мест (*.mod)|*.mod"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:316
+#: bitmap2component/bitmap2cmp_gui.cpp:326
 msgid "Create a footprint file for PcbNew"
 msgstr "Создать файл посадочных мест для PcbNew"
 
@@ -13370,7 +13370,7 @@ msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:378
 msgid "NPTH, Mechanical"
-msgstr "NPTH, механичекое"
+msgstr "NPTH, механическое"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:380
 msgid "Pad Type:"
