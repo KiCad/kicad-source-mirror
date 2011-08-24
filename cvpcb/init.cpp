@@ -15,10 +15,7 @@
 
 #include "build_version.h"
 
-/*
- * Set the module to the selected component
- * Selects the next component
- */
+
 void CVPCB_MAINFRAME::SetNewPkg( const wxString& package )
 {
     COMPONENT* Component;
@@ -30,6 +27,7 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& package )
         return;
 
     NumCmp = m_ListCmp->GetSelection();
+
     if( NumCmp < 0 )
     {
         NumCmp = 0;
@@ -46,9 +44,9 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& package )
     Component->m_Module = package;
 
     msg.Printf( CMP_FORMAT, NumCmp + 1,
-                 GetChars( Component->m_Reference ),
-                 GetChars( Component->m_Value ),
-                 GetChars( Component->m_Module ) );
+                GetChars( Component->m_Reference ),
+                GetChars( Component->m_Value ),
+                GetChars( Component->m_Module ) );
     m_modified = true;
 
     if( isUndefined )
@@ -60,15 +58,13 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& package )
     // We activate next component:
     if( NumCmp < (m_ListCmp->GetCount() - 1) )
         NumCmp++;
+
     m_ListCmp->SetSelection( NumCmp, TRUE );
 
     DisplayStatus();
 }
 
 
-/*
- * Read the netlist format and file components.
- */
 bool CVPCB_MAINFRAME::ReadNetList()
 {
     wxString   msg;
@@ -81,6 +77,8 @@ bool CVPCB_MAINFRAME::ReadNetList()
         msg.Printf( _( "File <%s> does not appear to be a valid Kicad net list file." ),
                     GetChars( m_NetlistFileName.GetFullPath() ) );
         ::wxMessageBox( msg, _( "File Error" ), wxOK | wxICON_ERROR, this );
+        m_NetlistFileName.Clear();
+        UpdateTitle();
         return false;
     }
 
@@ -90,7 +88,7 @@ bool CVPCB_MAINFRAME::ReadNetList()
         return false;
 
     LoadProjectFile( m_NetlistFileName.GetFullPath() );
-    LoadFootprintFiles( );
+    LoadFootprintFiles();
     BuildFOOTPRINTS_LISTBOX();
 
     m_ListCmp->Clear();
@@ -103,6 +101,7 @@ bool CVPCB_MAINFRAME::ReadNetList()
                     GetChars( component.m_Value ),
                     GetChars( component.m_Module ) );
         m_ListCmp->AppendLine( msg );
+
         if( component.m_Module.IsEmpty() )
             m_undefinedComponentCnt += 1;
     }
@@ -112,9 +111,7 @@ bool CVPCB_MAINFRAME::ReadNetList()
 
     DisplayStatus();
 
-    /* Update the title of the main window. */
-    SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
-              wxT( " " ) + m_NetlistFileName.GetFullPath() );
+    UpdateTitle();
 
     UpdateFileHistory( m_NetlistFileName.GetFullPath() );
 
@@ -122,34 +119,40 @@ bool CVPCB_MAINFRAME::ReadNetList()
 }
 
 
-/*
- * Backup and NetList cmp
- * The full name of the netlist file must be in FFileName.
- * The file name is deducted in cmp
- */
-int CVPCB_MAINFRAME::SaveNetList( const wxString& fileName )
+int CVPCB_MAINFRAME::SaveNetList( const wxString& aFullFileName )
 {
     wxFileName fn;
 
-    if( !fileName && m_NetlistFileName.IsOk() )
+    if( !aFullFileName.IsEmpty() && m_NetlistFileName.IsOk() )
+    {
         fn = m_NetlistFileName;
+    }
     else
-        fn = wxFileName( wxGetCwd(), _( "unamed" ), NetExtBuffer );
+    {
+        wxFileDialog dlg( this, _( "Save Net and Component List" ), wxGetCwd(),
+                          wxEmptyString, NetlistFileWildcard, wxFD_SAVE );
 
-    wxFileDialog dlg( this, _( "Save Net and Component List" ), fn.GetPath(),
-                      fn.GetFullName(), NetlistFileWildcard,
-                      wxFD_SAVE/*| wxFD_OVERWRITE_PROMPT*/ );
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return -1;
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return -1;
+        fn = dlg.GetPath();
 
-    if( SaveComponentList( dlg.GetPath() ) == 0 )
+        if( !fn.HasExt() )
+            fn.SetExt( NetlistFileExtension );
+
+        m_NetlistFileName = fn;
+    }
+
+    if( !IsWritable( fn.GetFullPath() ) )
+        return 0;
+
+    if( SaveComponentList( fn.GetFullPath() ) == 0 )
     {
         DisplayError( this, _( "Unable to create component file (.cmp)" ) );
         return 0;
     }
 
-    FILE* netlist = wxFopen( dlg.GetPath(), wxT( "wt" ) );
+    FILE* netlist = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
 
     if( netlist == 0 )
     {

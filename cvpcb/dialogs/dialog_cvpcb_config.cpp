@@ -10,6 +10,7 @@
 #include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "id.h"
 
 #include "cvpcb.h"
 #include "cvpcb_mainframe.h"
@@ -59,15 +60,18 @@ void DIALOG_CVPCB_CONFIG::Init()
 
     // Load user libs paths:
     wxStringTokenizer Token( m_UserLibDirBufferImg, wxT( ";\n\r" ) );
+
     while( Token.HasMoreTokens() )
     {
         wxString path = Token.GetNextToken();
+
         if( wxFileName::DirExists( path ) )
             m_listUserPaths->Append( path );
     }
 
     // Display actual libraries paths:
     wxPathList libpaths = wxGetApp().GetLibraryPathList();
+
     for( unsigned ii = 0; ii < libpaths.GetCount(); ii++ )
     {
         m_DefaultLibraryPathslistBox->Append( libpaths[ii] );
@@ -102,25 +106,28 @@ void DIALOG_CVPCB_CONFIG::OnOkClick( wxCommandEvent& event )
     if( m_LibPathChanged )
     {
         m_Parent->m_UserLibraryPath.Empty();
+
         for( unsigned ii = 0; ii < m_listUserPaths->GetCount(); ii++ )
         {
             if( ii > 0 )
                 m_Parent->m_UserLibraryPath << wxT( ";" );
+
             m_Parent->m_UserLibraryPath << m_listUserPaths->GetString( ii );
         }
     }
 
-    // Set new active library list if the lib list of if default path list
-    // was modified
+    // Set new active library list if the lib list of if default path list was modified
     if( m_LibListChanged || m_LibPathChanged )
     {
         // Recreate lib list
         m_Parent->m_ModuleLibNames.Clear();
+
         for( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii++ )
             m_Parent->m_ModuleLibNames.Add( m_ListLibr->GetString( ii ) );
 
         // Recreate equ list
         m_Parent->m_AliasLibNames.Clear();
+
         for( unsigned ii = 0; ii < m_ListEquiv->GetCount(); ii++ )
             m_Parent->m_AliasLibNames.Add( m_ListEquiv->GetString( ii ) );
 
@@ -128,7 +135,8 @@ void DIALOG_CVPCB_CONFIG::OnOkClick( wxCommandEvent& event )
         m_Parent->BuildFOOTPRINTS_LISTBOX();
     }
 
-    m_Parent->SaveProjectFile( m_Parent->m_NetlistFileName.GetFullPath() );
+    wxCommandEvent evt( ID_SAVE_PROJECT );
+    m_Parent->SaveProjectFile( evt );
     EndModal( wxID_OK );
 }
 
@@ -144,6 +152,7 @@ void DIALOG_CVPCB_CONFIG::OnButtonUpClick( wxCommandEvent& event )
 /********************************************************************/
 {
     wxListBox * list = m_ListLibr;
+
     if( (event.GetId() == ID_EQU_UP) || (event.GetId() == ID_EQU_DOWN) )
     {
         list = m_ListEquiv;
@@ -151,7 +160,8 @@ void DIALOG_CVPCB_CONFIG::OnButtonUpClick( wxCommandEvent& event )
 
     wxArrayInt selections;
 
-    list->GetSelections(selections);
+    list->GetSelections( selections );
+
     if ( selections.GetCount() <= 0 )   // No selection.
         return;
 
@@ -163,15 +173,16 @@ void DIALOG_CVPCB_CONFIG::OnButtonUpClick( wxCommandEvent& event )
     for( size_t ii = 0; ii < selections.GetCount(); ii++ )
     {
         int jj = selections[ii];
-        EXCHG( libnames[jj],  libnames[jj-1]);
+        EXCHG( libnames[jj],  libnames[jj-1] );
     }
-    list->Set(libnames);
+
+    list->Set( libnames );
 
     // Reselect previously selected names
     for( size_t ii = 0; ii < selections.GetCount(); ii++ )
     {
         int jj = selections[ii];
-        list->SetSelection(jj-1);
+        list->SetSelection( jj-1 );
     }
 
     m_LibListChanged = TRUE;
@@ -183,6 +194,7 @@ void DIALOG_CVPCB_CONFIG::OnButtonDownClick( wxCommandEvent& event )
 /*********************************************************************/
 {
     wxListBox * list = m_ListLibr;
+
     if( (event.GetId() == ID_EQU_UP) || (event.GetId() == ID_EQU_DOWN) )
     {
         list = m_ListEquiv;
@@ -190,7 +202,8 @@ void DIALOG_CVPCB_CONFIG::OnButtonDownClick( wxCommandEvent& event )
 
     wxArrayInt selections;
 
-    list->GetSelections(selections);
+    list->GetSelections( selections );
+
     if ( selections.GetCount() <= 0 )   // No selection.
         return;
 
@@ -205,7 +218,8 @@ void DIALOG_CVPCB_CONFIG::OnButtonDownClick( wxCommandEvent& event )
         int jj = selections[ii];
         EXCHG( libnames[jj],  libnames[jj+1]);
     }
-    list->Set(libnames);
+
+    list->Set( libnames );
 
     // Reselect previously selected names
     for( size_t ii = 0; ii < selections.GetCount(); ii++ )
@@ -213,6 +227,7 @@ void DIALOG_CVPCB_CONFIG::OnButtonDownClick( wxCommandEvent& event )
         int jj = selections[ii];
         list->SetSelection(jj+1);
     }
+
     m_LibListChanged = TRUE;
 }
 
@@ -229,7 +244,8 @@ void DIALOG_CVPCB_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
 
     wxArrayInt selections;
 
-    list->GetSelections(selections);
+    list->GetSelections( selections );
+
     for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
     {
         list->Delete(selections[ii] );
@@ -256,6 +272,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 
     wildcard = FootprintAliasFileWildcard;
     wxListBox * list = m_ListEquiv;
+
     if( (event.GetId() == ID_ADD_LIB) || (event.GetId() == ID_INSERT_LIB) )
     {
         list = m_ListLibr;
@@ -266,6 +283,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
     list->GetSelections(selections);
 
     ii = selections.GetCount();
+
     if( ii > 0 )
         ii = selections[0];
     else
@@ -273,6 +291,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
 
     wxString libpath;
     libpath = m_DefaultLibraryPathslistBox->GetStringSelection();
+
     if( libpath.IsEmpty() )
         libpath = wxGetApp().ReturnLastVisitedLibraryPath();
 
@@ -289,6 +308,7 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
     for( unsigned jj = 0; jj < Filenames.GetCount(); jj++ )
     {
         fn = Filenames[jj];
+
         if( jj == 0 )
             wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
@@ -300,15 +320,17 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
          * is a sub path of these default paths
          */
         libfilename = wxGetApp().ReturnFilenameWithRelativePathInLibPath( fn.GetFullPath() );
+
         // Remove extension:
         fn = libfilename;
-        fn.SetExt(wxEmptyString);
+        fn.SetExt( wxEmptyString );
         libfilename = fn.GetFullPath();
 
         // Add or insert new library name, if not already in list
         if( list->FindString( libfilename, fn.IsCaseSensitive() ) == wxNOT_FOUND )
         {
             m_LibListChanged = TRUE;
+
             if( ! insert )
                 list->Append( libfilename );
             else
@@ -344,25 +366,27 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
     if( m_listUserPaths->FindString( path ) == wxNOT_FOUND )
     {
         int ipos = m_listUserPaths->GetCount();
+
         if( event.GetId() == ID_INSERT_PATH )
         {
             if( ipos  )
                 ipos--;
+
             int jj = m_listUserPaths->GetSelection();
+
             if( jj >= 0 )
                 ipos = jj;
         }
 
         // Ask the user if this is a relative path
-        int diag = wxMessageBox(
-            _( "Use a relative path?" ),
-            _( "Path type" ),
-            wxYES_NO | wxICON_QUESTION, this );
+        int diag = wxMessageBox( _( "Use a relative path?" ),
+                                 _( "Path type" ),
+                                 wxYES_NO | wxICON_QUESTION, this );
 
         if( diag == wxYES )
         {   // Make it relative
             wxFileName fn = path;
-            fn.MakeRelativeTo( wxT(".") );
+            fn.MakeRelativeTo( wxT( "." ) );
             path = fn.GetPathWithSep() + fn.GetFullName();
         }
 
@@ -373,13 +397,16 @@ void DIALOG_CVPCB_CONFIG::OnAddOrInsertPath( wxCommandEvent& event )
         // Display actual libraries paths:
         wxPathList libpaths = wxGetApp().GetLibraryPathList();
         m_DefaultLibraryPathslistBox->Clear();
+
         for( unsigned ii = 0; ii < libpaths.GetCount(); ii++ )
         {
             m_DefaultLibraryPathslistBox->Append( libpaths[ii] );
         }
     }
     else
+    {
         DisplayError( this, _( "Path already in use" ) );
+    }
 
     wxGetApp().SaveLastVisitedLibraryPath( path );
 }
@@ -391,6 +418,7 @@ void DIALOG_CVPCB_CONFIG::OnRemoveUserPath( wxCommandEvent& event )
 
     if( ii < 0 )
         ii = m_listUserPaths->GetCount() - 1;
+
     if( ii >= 0 )
     {
         wxGetApp().RemoveLibraryPath( m_listUserPaths->GetStringSelection() );
@@ -401,6 +429,7 @@ void DIALOG_CVPCB_CONFIG::OnRemoveUserPath( wxCommandEvent& event )
     // Display actual libraries paths:
     wxPathList libpaths = wxGetApp().GetLibraryPathList();
     m_DefaultLibraryPathslistBox->Clear();
+
     for( unsigned ii = 0; ii < libpaths.GetCount(); ii++ )
     {
         m_DefaultLibraryPathslistBox->Append( libpaths[ii] );

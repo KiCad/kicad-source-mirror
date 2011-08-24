@@ -41,12 +41,12 @@ const wxString titleLibLoadError( _( "Library Load Error" ) );
  */
 void WinEDA_App::MacOpenFile(const wxString &fileName)
 {
-    wxFileName    filename = fileName;
-    wxString      oldPath;
-    CVPCB_MAINFRAME * frame = ((CVPCB_MAINFRAME*)GetTopWindow());
+    wxFileName filename = fileName;
+    wxString oldPath;
+    CVPCB_MAINFRAME* frame = (CVPCB_MAINFRAME*) GetTopWindow();
 
-    if(!filename.FileExists())
-	return;
+    if( !filename.FileExists() )
+        return;
 
     if( frame->m_NetlistFileName.DirExists() )
         oldPath = frame->m_NetlistFileName.GetPath();
@@ -54,23 +54,16 @@ void WinEDA_App::MacOpenFile(const wxString &fileName)
     /* Update the library search path list. */
     if( wxGetApp().GetLibraryPathList().Index( oldPath ) != wxNOT_FOUND )
         wxGetApp().GetLibraryPathList().Remove( oldPath );
+
     wxGetApp().GetLibraryPathList().Insert( filename.GetPath(), 0 );
 
     frame->m_NetlistFileName = filename;
-
-    if( frame->ReadNetList() )
-    {
-        frame->SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
-                  wxT( " " ) + filename.GetFullPath() );
-    }
-    else
-    {
-        frame->SetTitle( wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() );
-    }
+    frame->ReadNetList();
 }
 
 // Create a new application object
 IMPLEMENT_APP( WinEDA_App )
+
 
 /************************************/
 /* Called to initialize the program */
@@ -78,15 +71,15 @@ IMPLEMENT_APP( WinEDA_App )
 
 bool WinEDA_App::OnInit()
 {
-    wxFileName         filename;
-    wxString           message;
-    CVPCB_MAINFRAME* frame   = NULL;
+    wxFileName       filename;
+    wxString         message;
+    CVPCB_MAINFRAME* frame = NULL;
 
-    InitEDA_Appl( wxT( "CvPCB" ), APP_TYPE_CVPCB );
+    InitEDA_Appl( wxT( "CVPcb" ), APP_TYPE_CVPCB );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
-        if( !IsOK( NULL, _( "Cvpcb is already running, Continue?" ) ) )
+        if( !IsOK( NULL, _( "CVPcb is already running, Continue?" ) ) )
             return false;
     }
 
@@ -126,9 +119,7 @@ bool WinEDA_App::OnInit()
     frame->LoadFootprintFiles();
     frame->m_NetlistFileExtension = wxT( "net" );
     frame->m_NetlistFileName.Clear();
-    frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() +
-                     wxGetCwd() + wxFileName::GetPathSeparator() +
-                     _( " [no file]" ) );
+    frame->UpdateTitle();
 
     return true;
 }

@@ -44,60 +44,130 @@ protected:
     bool            m_isEESchemaNetlist;
     PARAM_CFG_ARRAY m_projectFileParams;
 
-public: CVPCB_MAINFRAME( const wxString& title,
-                         long            style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+public:
+    CVPCB_MAINFRAME( const wxString& title, long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
     ~CVPCB_MAINFRAME();
 
     void             OnLeftClick( wxListEvent& event );
     void             OnLeftDClick( wxListEvent& event );
     void             OnSelectComponent( wxListEvent& event );
 
-    void             Update_Config( wxCommandEvent& event );
     void             OnQuit( wxCommandEvent& event );
     void             OnCloseWindow( wxCloseEvent& Event );
     void             OnSize( wxSizeEvent& SizeEvent );
     void             OnChar( wxKeyEvent& event );
     void             ReCreateHToolbar();
     virtual void     ReCreateMenuBar();
+
+    /**
+     * Function SetLanguage
+     * is called on a language menu selection.
+     */
     void             SetLanguage( wxCommandEvent& event );
 
     void             ToFirstNA( wxCommandEvent& event );
     void             ToPreviousNA( wxCommandEvent& event );
+
+    /**
+     * Function DelAssociations
+     * removes all component footprint associations already made
+     */
     void             DelAssociations( wxCommandEvent& event );
+
+    void             SaveProjectFile( wxCommandEvent& aEvent );
     void             SaveQuitCvpcb( wxCommandEvent& event );
+
+    /**
+     * Function LoadNetList
+     * reads a netlist selected by user when clicking on load netlist button or any entry
+     * in the file history menu.
+     */
     void             LoadNetList( wxCommandEvent& event );
+
     void             ConfigCvpcb( wxCommandEvent& event );
     void             OnKeepOpenOnSave( wxCommandEvent& event );
     void             DisplayModule( wxCommandEvent& event );
     void             AssocieModule( wxCommandEvent& event );
     void             WriteStuffList( wxCommandEvent& event );
     void             DisplayDocFile( wxCommandEvent& event );
+
+    /**
+     * Function OnSelectFilteringFootprint
+     * is the command event handler for enabling and disabling footprint filtering.
+     */
     void             OnSelectFilteringFootprint( wxCommandEvent& event );
 
     void             OnUpdateKeepOpenOnSave( wxUpdateUIEvent& event );
 
+    /**
+     * Function SetNewPkg
+     * set the module to the selected component and selects the next component.
+     */
     void             SetNewPkg( const wxString& package );
     void             BuildCmpListBox();
     void             BuildFOOTPRINTS_LISTBOX();
     void             CreateScreenCmp();
-    int              SaveNetList( const wxString& FullFileName );
-    int              SaveComponentList( const wxString& FullFileName );
+
+    /**
+     * Function SaveNetList
+     * backup and save netlist (.net) file to \a aFullFileName.
+     *
+     * @param aFullFileName A reference wxString object containing the full path and
+     *                      file name of the netlist to save.
+     * @return 0 if an error occurred saving the netlist to \a aFullFileName.
+     */
+    int              SaveNetList( const wxString& aFullFileName );
+
+    /**
+     * Function SaveComponentList
+     * backup modules to file \a aFullFileName.
+     *
+     * @param aFullFileName Name of net list file to save.
+     * @returns 1 if OK, 0 if error.
+     */
+    int              SaveComponentList( const wxString& aFullFileName );
+
+    /**
+     * Function ReadNetList
+     * reads the netlist (.net) file defined by #m_NetlistFileName.
+     */
     bool             ReadNetList();
+
     int              ReadSchematicNetlist();
-    void             LoadProjectFile( const wxString& FileName );
-    void             SaveProjectFile( const wxString& fileName );
+
+    /**
+     * Function LoadProjectFile
+     * reads the configuration parameter from the project (.pro) file \a aFileName
+     */
+    void             LoadProjectFile( const wxString& aFileName );
+
+    /**
+     * Function LoadSettings
+     * loads the CVPcb main frame specific configuration settings.
+     *
+     * Don't forget to call this base method from any derived classes or the
+     * settings will not get loaded.
+     */
     virtual void     LoadSettings();
+
+    /**
+     * Function SaveSettings
+     * save the CVPcb frame specific configuration settings.
+     *
+     * Don't forget to call this base method from any derived classes or the
+     * settings will not get saved.
+     */
     virtual void     SaveSettings();
 
     /**
-     * Function DisplayStatus()
-     * Displays info to the status line at bottom of the main frame
+     * Function DisplayStatus
+     * displays info to the status line at bottom of the main frame.
      */
     void             DisplayStatus();
 
     /**
      * Function LoadFootprintFiles
-     * Read the list of libraries (*.mod files) and generate the list of modules.
+     * reads the list of footprint (*.mod files) and generate the list of footprints.
      * for each module are stored
      *      the module name
      *      documentation string
@@ -117,12 +187,37 @@ public: CVPCB_MAINFRAME( const wxString& title,
 
     /**
      * Function LoadComponentFile
-     * Loads the .cmp file that stores the component/footprint association.
-     * @param aCmpFileName = the full filename of .cmp file to load
+     * loads the .cmp file \a aCmpFileName that stores the component/footprint association.
+     *
+     * @param aFileName The full filename of .cmp file to load
      */
-    bool             LoadComponentFile( const wxString& aCmpFileName );
+    bool             LoadComponentFile( const wxString& aFileName );
 
+    /**
+     * Function GetProjectFileParameters
+     * return project file parameter list for CVPcb.
+     * <p>
+     * Populate the project file parameter array specific to CVPcb if it hasn't
+     * already been populated and return a reference to the array to the caller.
+     * Creating the parameter list at run time has the advantage of being able
+     * to define local variables.  The old method of statically building the array
+     * at compile time requiring global variable definitions.
+     * </p>
+     *
+     * @return A reference to a PARAM_CFG_ARRAY contain the project settings for CVPcb.
+     */
     PARAM_CFG_ARRAY& GetProjectFileParameters( void );
+
+    /**
+     * Function UpdateTitle
+     * sets the main window title bar text.
+     * <p>
+     * If file name defined by CVPCB_MAINFRAME::m_NetlistFileName is not set, the title is
+     * set to the application name appended with no file.  Otherwise, the title is set to
+     * the full path and file name and read only is appended to the title if the user does
+     * not have write access to the file.
+     */
+    void UpdateTitle();
 
     DECLARE_EVENT_TABLE()
 };

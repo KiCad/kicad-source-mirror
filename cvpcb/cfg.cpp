@@ -4,6 +4,7 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
+#include "id.h"
 #include "common.h"
 #include "gestfich.h"
 #include "param_config.h"
@@ -16,15 +17,6 @@
 #define GROUPEQU wxT("/cvpcb/libraries")
 
 
-/**
- * Return project file parameter list for CVPcb.
- *
- * Populate the project file parameter array specific to CVPcb if it hasn't
- * already been populated and return a reference to the array to the caller.
- * Creating the parameter list at run time has the advantage of being able
- * to define local variables.  The old method of statically building the array
- * at compile time requiring global variable definitions.
- */
 PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters( void )
 {
     if( !m_projectFileParams.empty() )
@@ -48,19 +40,9 @@ PARAM_CFG_ARRAY& CVPCB_MAINFRAME::GetProjectFileParameters( void )
 }
 
 
-/**
- * Reads the configuration
- * 1 - bed cvpcb.cnf
- * 2 - if not in path of  <cvpcb.exe> / cvpcb.cnf
- * 3 - If not found: init variables to default values
- *
- * Note:
- * The path of the executable must be in cvpcb.exe.
- *
- */
-void CVPCB_MAINFRAME::LoadProjectFile( const wxString& FileName )
+void CVPCB_MAINFRAME::LoadProjectFile( const wxString& aFileName )
 {
-    wxFileName fn = FileName;
+    wxFileName fn = aFileName;
 
     m_ModuleLibNames.Clear();
     m_AliasLibNames.Clear();
@@ -70,8 +52,7 @@ void CVPCB_MAINFRAME::LoadProjectFile( const wxString& FileName )
 
     wxGetApp().RemoveLibraryPath( m_UserLibraryPath );
 
-    wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP,
-                                  GetProjectFileParameters(), FALSE );
+    wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
 
     if( m_NetlistFileExtension.IsEmpty() )
         m_NetlistFileExtension = wxT( "net" );
@@ -81,24 +62,28 @@ void CVPCB_MAINFRAME::LoadProjectFile( const wxString& FileName )
 }
 
 
-void CVPCB_MAINFRAME::Update_Config( wxCommandEvent& event )
+void CVPCB_MAINFRAME::SaveProjectFile( wxCommandEvent& aEvent )
 {
-    SaveProjectFile( m_NetlistFileName.GetFullPath() );
-}
-
-
-void CVPCB_MAINFRAME::SaveProjectFile( const wxString& fileName )
-{
-    wxFileName fn = fileName;
+    wxFileName fn = m_NetlistFileName;
 
     fn.SetExt( ProjectFileExtension );
 
-    wxFileDialog dlg( this, _( "Save Project File" ), fn.GetPath(),
-                      fn.GetFullName(), ProjectFileWildcard, wxFD_SAVE );
+    if( aEvent.GetId() == ID_SAVE_PROJECT_AS || !m_NetlistFileName.IsOk() )
+    {
+        wxFileDialog dlg( this, _( "Save Project File" ), fn.GetPath(),
+                          wxEmptyString, ProjectFileWildcard, wxFD_SAVE );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return;
+
+        fn = dlg.GetPath();
+
+        if( !fn.HasExt() )
+            fn.SetExt( ProjectFileExtension );
+    }
+
+    if( !IsWritable( fn ) )
         return;
 
-    wxGetApp().WriteProjectConfig( dlg.GetPath(), GROUP,
-                                   GetProjectFileParameters() );
+    wxGetApp().WriteProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters() );
 }
