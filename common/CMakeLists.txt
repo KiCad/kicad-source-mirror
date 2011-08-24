@@ -25,6 +25,7 @@ set(COMMON_SRCS
     base_struct.cpp
     basicframe.cpp
     bezier_curves.cpp
+    bitmap.cpp
     block_commande.cpp
     build_version.cpp
     class_colors_design_settings.cpp

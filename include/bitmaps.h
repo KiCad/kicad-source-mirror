@@ -1,7 +1,30 @@
 
+#ifndef BITMAPS_H_
+#define BITMAPS_H_
+
 #define VTOOLBAR_WIDTH  26
 
 #define TOOL_SIZE       23
+
+
+
+
+/// PNG memory record (file in memory).
+struct BITMAP_DEF
+{
+    const unsigned char*    png;
+    int                     byteCount;
+};
+
+
+/**
+ * Function Bitmap
+ * constructs a wxBitmap from a PNG memory record, held in a
+ * BITMAP_DEF.  This name and interface is chose to ease migration
+ * into PNG usage from XPM usage.
+ */
+wxBitmap Bitmap( const BITMAP_DEF& aBitmap );
+
 
 // Please keep list sorted alphabetically, ignoring case.
 
@@ -427,3 +450,5 @@ extern const char* zoomplus3d_xpm[];
 extern const char* zoomrefr3d_xpm[];
 extern const char* zoom_selection_xpm[];
 extern const char* zoom_xpm[];
+
+#endif  // BITMAPS_H_
