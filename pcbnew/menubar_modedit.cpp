@@ -13,10 +13,8 @@
 #include "protos.h"
 #include "pcbnew_id.h"
 
-/**
- * @brief (Re)Create the menubar for the module editor frame
- */
-void WinEDA_ModuleEditFrame::ReCreateMenuBar()
+
+void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 {
     // Create and try to get the current menubar
     wxMenuBar*  menuBar = GetMenuBar();
@@ -28,6 +26,7 @@ void WinEDA_ModuleEditFrame::ReCreateMenuBar()
     // Delete all existing menus so they can be rebuilt.
     // This allows language changes of the menu text on the fly.
     menuBar->Freeze();
+
     while( menuBar->GetMenuCount() )
         delete menuBar->Remove(0);
 

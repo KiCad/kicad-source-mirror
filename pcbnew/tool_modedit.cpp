@@ -20,8 +20,7 @@
 #endif
 
 
-/* Create the main horizontal toolbar for the footprint editor */
-void WinEDA_ModuleEditFrame::ReCreateHToolbar()
+void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 {
     if( m_HToolBar  != NULL )
         return;
@@ -111,13 +110,12 @@ void WinEDA_ModuleEditFrame::ReCreateHToolbar()
                          wxBitmap( module_check_xpm ),
                          _( "Check module" ) );
 
-    // after adding the buttons to the toolbar, must call Realize() to reflect
-    // the changes
+    // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_HToolBar->Realize();
 }
 
 
-void WinEDA_ModuleEditFrame::ReCreateVToolbar()
+void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
 {
     if( m_VToolBar )
         return;
@@ -163,7 +161,7 @@ void WinEDA_ModuleEditFrame::ReCreateVToolbar()
 }
 
 
-void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
+void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
 {
     if( m_OptionsToolBar )
         return;
@@ -206,7 +204,7 @@ void WinEDA_ModuleEditFrame::ReCreateOptToolbar()
 }
 
 
-void WinEDA_ModuleEditFrame::ReCreateAuxiliaryToolbar()
+void FOOTPRINT_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 {
     wxString msg;
 

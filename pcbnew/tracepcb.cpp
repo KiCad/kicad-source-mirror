@@ -33,9 +33,7 @@ static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
                              int ox, int oy, int MasqueLayer, int draw_mode );
 
 
-/* Draw the footprint editor BOARD, and others elements : axis, grid ..
- */
-void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
@@ -54,7 +52,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     }
 
 #ifdef USE_WX_OVERLAY
-    if(IsShown())
+    if( IsShown() )
     {
         DrawPanel->m_overlay.Reset();
         wxDCOverlay overlaydc( DrawPanel->m_overlay, (wxWindowDC*)DC );
@@ -63,7 +61,7 @@ void WinEDA_ModuleEditFrame::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 #endif
 
     if( DrawPanel->IsMouseCaptured() )
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
+        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
     /* Redraw the cursor */
     DrawPanel->DrawCrossHair( DC );
@@ -99,7 +97,7 @@ void PCB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 #endif
 
     if( DrawPanel->IsMouseCaptured() )
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
+        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
     // Redraw the cursor
     DrawPanel->DrawCrossHair( DC );
@@ -107,8 +105,7 @@ void PCB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
 
 /* Redraw the BOARD items but not cursors, axis or grid */
-void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC,
-                  int aDrawMode, const wxPoint& offset )
+void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint& offset )
 {
     /* The order of drawing is flexible on some systems and not on others.  For
      * OSes which use OR to draw, the order is not important except for the
@@ -180,14 +177,14 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC,
         if( !IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) ) )
         {
             if( module->GetLayer() == LAYER_N_FRONT )
-                display = FALSE;
+                display = false;
             layerMask &= ~LAYER_FRONT;
         }
 
         if( !IsElementVisible( PCB_VISIBLE(MOD_BK_VISIBLE) ) )
         {
             if( module->GetLayer() == LAYER_N_BACK )
-                display = FALSE;
+                display = false;
             layerMask &= ~LAYER_BACK;
         }
 
@@ -200,8 +197,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC,
     if( IsHightLightNetON() )
         DrawHighLight( aPanel, DC, GetHightLightNetCode() );
 
-    // draw the BOARD's markers last, otherwise the high light will erase
-    // any marker on a pad
+    // draw the BOARD's markers last, otherwise the high light will erase any marker on a pad
     for( unsigned i=0; i < m_markers.size();  ++i )
     {
         m_markers[i]->Draw( aPanel, DC, aDrawMode );
@@ -220,6 +216,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* aDrawPanel, wxDC* DC, int aNetCode )
 
     // Redraw ZONE_CONTAINERS
     BOARD::ZONE_CONTAINERS& zones = m_ZoneDescriptorList;
+
     for( BOARD::ZONE_CONTAINERS::iterator zc = zones.begin();  zc!=zones.end();  ++zc )
     {
         if( (*zc)->GetNet() == aNetCode )
@@ -265,7 +262,7 @@ void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
     frame  = (PCB_BASE_FRAME*) panel->GetParent();
 
     tmp = frame->m_DisplayPadFill;
-    frame->m_DisplayPadFill = FALSE;
+    frame->m_DisplayPadFill = false;
 
     /* Draw pads. */
     for( D_PAD* pad = Module->m_Pads;  pad;  pad = pad->Next() )
@@ -278,4 +275,3 @@ void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
 
     frame->m_DisplayPadFill = tmp;
 }
-

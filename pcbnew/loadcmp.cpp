@@ -24,13 +24,8 @@ static void DisplayCmpDoc( wxString& Name );
 
 static FOOTPRINT_LIST MList;
 
-/**
- * Function Load_Module_From_BOARD
- * load in Modedit a footfrint from the main board
- * @param Module = the module to load. If NULL, a module reference will we asked to user
- * @return true if a module isloaded, false otherwise.
- */
-bool WinEDA_ModuleEditFrame::Load_Module_From_BOARD( MODULE* Module )
+
+bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* Module )
 {
     MODULE* NewModule;
     PCB_BASE_FRAME* parent = (PCB_BASE_FRAME*) GetParent();
@@ -109,8 +104,8 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
     {
         AllowWildSeach = false;
         keys = ModuleName.AfterFirst( '=' );
-        ModuleName = Select_1_Module_From_List( this, library, wxEmptyString,
-                                                keys );
+        ModuleName = Select_1_Module_From_List( this, library, wxEmptyString, keys );
+
         if( ModuleName.IsEmpty() )  /* Cancel command */
         {
             DrawPanel->MoveCursorToCrossHair();
@@ -121,8 +116,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
             || ( ModuleName.Contains( wxT( "*" ) ) ) )  // Selection wild card
     {
         AllowWildSeach = false;
-        ModuleName     = Select_1_Module_From_List( this, library, ModuleName,
-                                                    wxEmptyString );
+        ModuleName     = Select_1_Module_From_List( this, library, ModuleName, wxEmptyString );
         if( ModuleName.IsEmpty() )
         {
             DrawPanel->MoveCursorToCrossHair();
@@ -137,15 +131,17 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
         AllowWildSeach = false;
         wxString wildname = wxChar( '*' ) + ModuleName + wxChar( '*' );
         ModuleName = wildname;
-        ModuleName = Select_1_Module_From_List( this, library, ModuleName,
-                                                wxEmptyString );
+        ModuleName = Select_1_Module_From_List( this, library, ModuleName, wxEmptyString );
+
         if( ModuleName.IsEmpty() )
         {
             DrawPanel->MoveCursorToCrossHair();
             return NULL;    /* Cancel command. */
         }
         else
+        {
             module = Get_Librairie_Module( library, ModuleName, true );
+        }
     }
 
     GetScreen()->SetCrossHairPosition( curspos );
@@ -167,6 +163,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
          * If all pads are not connected (usually the case in module libraries,
          * rebuild only the pad and list of nets ( faster)
          */
+
 
 //        GetBoard()->m_Pcb->m_NetInfo->BuildListOfNets();
         RecalculateAllTracksNetcode();
@@ -208,8 +205,7 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
         if( one_lib )
             fn = aLibraryFullFilename;
         else
-            fn = wxFileName( wxEmptyString, g_LibName_List[ii],
-                             ModuleFileExtension );
+            fn = wxFileName( wxEmptyString, g_LibName_List[ii], ModuleFileExtension );
 
         tmp = wxGetApp().FindLibraryPath( fn );
 
@@ -219,9 +215,9 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
             {
                 msg.Printf( _( "PCB footprint library file <%s> not found in search paths." ),
                             GetChars( fn.GetFullName() ) );
-                wxMessageBox( msg, _( "Library Load Error" ),
-                              wxOK | wxICON_ERROR, this );
+                wxMessageBox( msg, _( "Library Load Error" ), wxOK | wxICON_ERROR, this );
             }
+
             continue;
         }
 
@@ -231,8 +227,7 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
         {
             msg.Printf( _( "Could not open PCB footprint library file <%s>." ),
                         GetChars( tmp ) );
-            wxMessageBox( msg, _( "Library Load Error" ),
-                          wxOK | wxICON_ERROR, this );
+            wxMessageBox( msg, _( "Library Load Error" ), wxOK | wxICON_ERROR, this );
             continue;
         }
 
@@ -249,8 +244,7 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
         {
             msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library file." ),
                         GetChars( tmp ) );
-            wxMessageBox( msg, _( "Library Load Error" ),
-                          wxOK | wxICON_ERROR, this );
+            wxMessageBox( msg, _( "Library Load Error" ), wxOK | wxICON_ERROR, this );
             return NULL;
         }
 
@@ -312,7 +306,7 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
  *                                void, list all modules)
  * @param aMask = Display filter (wildcard)( Mask = wxEmptyString if not used )
  * @param aKeyWord = keyword list, to display a filtered list of module having
- *                    one (or more) of these keyworks in their keywork list
+ *                    one (or more) of these keyworks in their keyword list
  *                    ( aKeyWord = wxEmptyString if not used )
  *
  * @return wxEmptyString if abort or fails, or the selected module name if Ok
@@ -350,13 +344,16 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
         for( unsigned ii = 0; ii < MList.GetCount(); ii++ )
         {
             wxString& candidate = MList.GetItem(ii).m_Module;
+
             if( WildCompareString( aMask, candidate, false ) )
                 footprint_names_list.Add( candidate );
         }
     }
     else        // Create the full list of modules
+    {
         for( unsigned ii = 0; ii < MList.GetCount(); ii++ )
             footprint_names_list.Add( MList.GetItem(ii).m_Module );
+    }
 
     if( footprint_names_list.GetCount() )
     {
@@ -401,16 +398,10 @@ static void DisplayCmpDoc( wxString& Name )
 }
 
 
-/**
- * Function Select_1_Module_From_BOARD
- * Display the list of modules currently existing on the BOARD
- * @return a pointer to a module if this module is selected or NULL otherwise
- * @param aPcb = the board from modules can be loaded
- */
-MODULE* WinEDA_ModuleEditFrame::Select_1_Module_From_BOARD( BOARD* aPcb )
+MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
 {
     MODULE*         Module;
-    static wxString OldName;       /* Save name of last module selectec. */
+    static wxString OldName;       /* Save name of last module selected. */
     wxString        CmpName, msg;
 
     wxArrayString listnames;
@@ -432,6 +423,7 @@ MODULE* WinEDA_ModuleEditFrame::Select_1_Module_From_BOARD( BOARD* aPcb )
     OldName = CmpName;
 
     Module = aPcb->m_Modules;
+
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
     {
         if( CmpName == Module->m_Reference->m_Text )

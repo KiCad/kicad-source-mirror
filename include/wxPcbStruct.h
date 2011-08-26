@@ -19,7 +19,6 @@
 
 /*  Forward declarations of classes. */
 class PCB_SCREEN;
-class WinEDA_ModuleEditFrame;
 class BOARD;
 class TEXTE_PCB;
 class MODULE;
@@ -106,7 +105,7 @@ protected:
      * here and we do not want to do that.
      * </p>
      */
-    void syncLayerWidget( );
+    void syncLayerWidget();
 
     virtual void unitsChangeRefresh();
 
@@ -141,6 +140,10 @@ public:
      */
     void             ToPrinter( wxCommandEvent& event );
 
+    /**
+     * Function SVG_Print
+     * shows the print SVG file dialog.
+     */
     void             SVG_Print( wxCommandEvent& event );
 
     // User interface update command event handlers.
@@ -204,7 +207,7 @@ public:
     virtual void     SetGridColor(int aColor);
 
     // Configurations:
-    void             InstallConfigFrame( );
+    void             InstallConfigFrame();
     void             Process_Config( wxCommandEvent& event );
 
     PARAM_CFG_ARRAY& GetProjectFileParameters();
@@ -341,13 +344,14 @@ public:
     void             ReCreateMenuBar();
     LAYER_BOX_SELECTOR* ReCreateLayerBox( EDA_TOOLBAR* parent );
 
-    /** Virtual Function OnModify()
-     * Must be called after a board change
-     * in order to set the "modify" flag of the current screen
-     * and prepare, if needed the refresh of the 3D frame showing the footprint
-     * do not forget to call the basic OnModify function to update auxiliary info
+    /**
+     * Function OnModify
+     * must be called after a board change to set the modified flag.
+     * <p>
+     * Reloads the 3D view if required and calls the base PCB_BASE_FRAME::OnModify function
+     * to update auxiliary information.
      */
-    virtual void OnModify( );
+    virtual void OnModify();
 
     /**
      * Function IsElementVisible
@@ -375,7 +379,7 @@ public:
      * Function SetVisibleAlls
      * Set the status of all visible element categories and layers to VISIBLE
      */
-    void SetVisibleAlls( );
+    void SetVisibleAlls();
 
     /**
      * Function ReFillLayerWidget
@@ -384,12 +388,16 @@ public:
      */
     void             ReFillLayerWidget();
 
+    /**
+     * Function Show3D_Frame
+     * displays the 3D view of current printed circuit board.
+     */
     void             Show3D_Frame( wxCommandEvent& event );
     void             GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
      * Function ShowDesignRulesEditor
-     * Display the Design Rules Editor.
+     * displays the Design Rules Editor.
      */
     void             ShowDesignRulesEditor( wxCommandEvent& event );
 
@@ -484,7 +492,7 @@ public:
     virtual int  ReturnBlockCommand( int aKey );
 
     /**
-     * Function HandleBlockPlace( )
+     * Function HandleBlockPlace()
      * Called after HandleBlockEnd, when a block command needs to be
      * executed after the block is moved to its new place
      * (bloc move, drag, copy .. )
@@ -493,7 +501,7 @@ public:
     virtual void HandleBlockPlace( wxDC* DC );
 
     /**
-     * Function HandleBlockEnd( )
+     * Function HandleBlockEnd()
      * Handle the "end"  of a block command,
      * i.e. is called at the end of the definition of the area of a block.
      * depending on the current block command, this command is executed
@@ -567,11 +575,16 @@ public:
     void ToPostProcess( wxCommandEvent& event );
 
     void OnFileHistory( wxCommandEvent& event );
+
+    /**
+     * Function Files_io
+     * is the command event handler for read and write file commands.
+     */
     void Files_io( wxCommandEvent& event );
 
     /**
      * Function LoadOnePcbFile
-     *  Load a Kicad board (.brd) file.
+     * loads a Kicad board (.brd) from \a aFileName.
      *
      *  @param aFileName - File name including path. If empty, a file dialog will
      *                     be displayed.
@@ -595,7 +608,16 @@ public:
      */
     int  ReadPcbFile( LINE_READER* aReader, bool Append );
 
-    bool SavePcbFile( const wxString& FileName );
+    /**
+     * Function SavePcbFile
+     * writes the board data structures to \a a aFileName
+     *
+     * @param aFileName The file name to write or wxEmptyString to prompt user for
+     *                  file name.
+     * @return True if file was saved successfully.
+     */
+    bool SavePcbFile( const wxString& aFileName );
+
     int  SavePcbFormatAscii( FILE* File );
     bool WriteGeneralDescrPcb( FILE* File );
 
@@ -643,7 +665,7 @@ public:
      * @param aFullFileName = the full filename of the file to create
      * @param aScale = the general scaling factor. 1.0 to export in inches
      * @param aExport3DFiles = true to copy 3D shapes in the subir a3D_Subdir
-     * @param a3D_Subdir = sub directory where 3D sahpes files are copied
+     * @param a3D_Subdir = sub directory where 3D shapes files are copied
      * used only when aExport3DFiles == true
      * @return true if Ok.
      */
@@ -761,11 +783,15 @@ public:
     // Track and via edition:
     void   Via_Edit_Control( wxCommandEvent& event );
 
-    /* Return true if a microvia can be put on board
+    /**
+     * Function IsMicroViaAcceptable
+     * return true if a microvia can be placed on the board.
+     * <p>
      * A microvia is a small via restricted to 2 near neighbor layers
      * because its is hole is made by laser which can penetrate only one layer
      * It is mainly used to connect BGA to the first inner layer
      * And it is allowed from an external layer to the first inner layer
+     * </p>
      */
     bool IsMicroViaAcceptable( void );
 
@@ -1157,6 +1183,17 @@ public:
      * called on a language menu selection
      */
     virtual void SetLanguage( wxCommandEvent& event );
+
+    /**
+     * Function UpdateTitle
+     * sets the main window title bar text.
+     * <p>
+     * If file name defined by PCB_SCREEN::m_FileName is not set, the title is set to the
+     * application name appended with no file.  Otherwise, the title is set to the full path
+     * and file name and read only is appended to the title if the user does not have write
+     * access to the file.
+     */
+    void UpdateTitle();
 
     DECLARE_EVENT_TABLE()
 };

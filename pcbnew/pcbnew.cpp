@@ -83,7 +83,7 @@ void WinEDA_App::MacOpenFile( const wxString& fileName )
     if( !filename.FileExists() )
         return;
 
-    frame->LoadOnePcbFile( fileName, FALSE );
+    frame->LoadOnePcbFile( fileName, false );
 }
 
 
@@ -96,7 +96,7 @@ bool WinEDA_App::OnInit()
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
-        if( !IsOK( NULL, _( "Pcbnew is already running, Continue?" ) ) )
+        if( !IsOK( NULL, _( "PCBnew is already running, Continue?" ) ) )
             return false;
     }
 
@@ -112,7 +112,7 @@ bool WinEDA_App::OnInit()
 
         if( fn.GetExt() != PcbFileExtension )
         {
-            wxLogDebug( wxT( "PcbNew file <%s> has the wrong extension.  \
+            wxLogDebug( wxT( "PCBNew file <%s> has the wrong extension.  \
 Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
             fn.SetExt( PcbFileExtension );
         }
@@ -123,12 +123,12 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
 
     g_DrawBgColor = BLACK;
 
-   /* Must be called before creating the main frame in order to
-    * display the real hotkeys in menus or tool tips */
+    /* Must be called before creating the main frame in order to
+     * display the real hotkeys in menus or tool tips */
     ReadHotkeyConfig( wxT("PcbFrame"), g_Board_Editor_Hokeys_Descr );
 
-    frame = new PCB_EDIT_FRAME( NULL, wxT( "PcbNew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
-    frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
+    frame = new PCB_EDIT_FRAME( NULL, wxT( "PCBNew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
+    frame->UpdateTitle();
 
     SetTopWindow( frame );
     frame->Show( true );
@@ -144,17 +144,17 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     /* Load file specified in the command line. */
     if( fn.IsOk() )
     {
-        /* Note the first time Pcbnew is called after creating a new project
+        /* Note the first time PCBnew is called after creating a new project
          * the board file may not exists
          * So we load settings only
-        */
+         */
         if( fn.FileExists() )
             frame->LoadOnePcbFile( fn.GetFullPath() );
         else
         {   // File does not exists: prepare an empty board
             wxSetWorkingDirectory( fn.GetPath() );
             frame->GetScreen()->SetFileName( fn.GetFullPath( wxPATH_UNIX ) );
-            frame->SetTitle( frame->GetScreen()->GetFileName() );
+            frame->UpdateTitle();
             frame->UpdateFileHistory( frame->GetScreen()->GetFileName() );
             frame->OnModify();          // Ready to save the new empty board
             g_SaveTime = time( NULL );  // Init the time out to save the board

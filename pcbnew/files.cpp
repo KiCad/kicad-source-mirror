@@ -34,8 +34,6 @@ void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
 }
 
 
-/* Handle the read/write file commands
- */
 void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 {
     int        id = event.GetId();
@@ -78,6 +76,7 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
         else
         {
             msg = _( "OK to load recovery file " ) + fn.GetFullPath();
+
             if( !IsOK( this, msg ) )
                 break;
         }
@@ -85,7 +84,7 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
         LoadOnePcbFile( fn.GetFullPath(), false );
         fn.SetExt( PcbFileExtension );
         GetScreen()->SetFileName( fn.GetFullPath() );
-        SetTitle( GetScreen()->GetFileName() );
+        UpdateTitle();
         break;
     }
 
@@ -98,7 +97,7 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
         GetScreen()->GetFileName().Printf( wxT( "%s%cnoname%s" ),
                                            GetChars( wxGetCwd() ), DIR_SEP,
                                            GetChars( PcbFileExtension ) );
-        SetTitle( GetScreen()->GetFileName() );
+        UpdateTitle();
         ReCreateLayerBox( NULL );
         break;
 
@@ -116,19 +115,6 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 }
 
 
-/**
- * Function LoadOnePcbFile
- *  Load a Kicad board (.brd) file.
- *
- *  @param aFileName - File name including path. If empty, a file dialog will
- *                     be displayed.
- *  @param aAppend - Append board file aFileName to the currently loaded file if true.
- *                   Default = false.
- *  @param aForceFileDialog - Display the file open dialog even if aFullFileName is
- *                            valid if true; Default = false.
- *
- *  @return False if file load fails or is cancelled by the user, otherwise true.
- */
 bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
                                      bool aForceFileDialog )
 {
@@ -183,6 +169,7 @@ the changes?" ) ) )
     */
 
     source = wxFopen( GetScreen()->GetFileName(), wxT( "rt" ) );
+
     if( source == NULL )
     {
         msg.Printf( _( "File <%s> not found" ), GetChars( GetScreen()->GetFileName() ) );
@@ -196,6 +183,7 @@ the changes?" ) ) )
 
     /* Read header and TEST if it is a PCB file format */
     reader.ReadLine();
+
     if( strncmp( reader.Line(), "PCBNEW-BOARD", 12 ) != 0 )
     {
         DisplayError( this, wxT( "Unknown file type" ) );
@@ -204,6 +192,7 @@ the changes?" ) ) )
 
     int ver;
     sscanf( reader.Line() , "PCBNEW-BOARD Version %d date", &ver );
+
     if ( ver > g_CurrentVersionPCB )
     {
         DisplayInfoMessage( this, _( "This file was created by a more recent \
@@ -220,7 +209,9 @@ this file again." ) );
     wxSetWorkingDirectory( wxPathOnly( GetScreen()->GetFileName() ) );
 
     if( aAppend )
+    {
         ReadPcbFile( &reader, true );
+    }
     else
     {
         // Update the option toolbar
@@ -252,7 +243,7 @@ this file again." ) );
 
     GetScreen()->GetFileName().Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
-    SetTitle( GetScreen()->GetFileName() );
+    UpdateTitle();
     UpdateFileHistory( GetScreen()->GetFileName() );
 
     /* Rebuild the new pad list (for drc and ratsnet control ...) */
@@ -309,9 +300,7 @@ this file again." ) );
 }
 
 
-/* Write the board file
- */
-bool PCB_EDIT_FRAME::SavePcbFile( const wxString& FileName )
+bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName )
 {
     wxFileName  backupFileName;
     wxFileName  pcbFileName;
@@ -322,7 +311,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& FileName )
     bool        saveok = true;
     FILE*       dest;
 
-    if( FileName == wxEmptyString )
+    if( aFileName == wxEmptyString )
     {
         wxFileDialog dlg( this, _( "Save Board File" ), wxEmptyString,
                           GetScreen()->GetFileName(), PcbFileWildcard,
@@ -334,7 +323,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& FileName )
         GetScreen()->SetFileName( dlg.GetPath() );
     }
     else
-        GetScreen()->SetFileName( FileName );
+    {
+        GetScreen()->SetFileName( aFileName );
+    }
 
     /* If changes are made, update the board date */
     if( GetScreen()->IsModify() )
@@ -343,6 +334,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& FileName )
     }
 
     pcbFileName = GetScreen()->GetFileName();
+
+    if( !IsWritable( pcbFileName ) )
+        return false;
 
     /* Get the backup file name */
     backupFileName = pcbFileName;
@@ -356,10 +350,11 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& FileName )
         /* rename the "old" file" from xxx.brd to xxx.000 */
         if( backupFileName.FileExists() )    /* Remove the old file xxx.000 (if exists) */
             wxRemoveFile( backupFileName.GetFullPath() );
+
         if( !wxRenameFile( pcbFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
             msg = _( "Warning: unable to create backup file " ) + backupFileName.GetFullPath();
-            DisplayError( this, msg, 15 );
+            DisplayError( this, msg );
             saveok = false;
         }
     }
@@ -382,7 +377,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& FileName )
     if( dest )
     {
         GetScreen()->SetFileName( pcbFileName.GetFullPath() );
-        SetTitle( GetScreen()->GetFileName() );
+        UpdateTitle();
 
         SavePcbFormatAscii( dest );
         fclose( dest );
@@ -400,6 +395,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& FileName )
         lowerTxt = _( "Wrote board file: " );
     else
         lowerTxt = _( "Failed to create " );
+
     lowerTxt += pcbFileName.GetFullPath();
 
     ClearMsgPanel();

@@ -19,106 +19,100 @@
 #include "3d_viewer.h"
 
 
-static PCB_SCREEN* s_screenModule = NULL;   // the PCB_SCREEN used by the
-                                            // footprint editor
+static PCB_SCREEN* s_screenModule = NULL;   // the PCB_SCREEN used by the footprint editor
 
 // Design setting for the module editor:
 static BOARD_DESIGN_SETTINGS s_ModuleEditorDesignSetting;
 
-wxString WinEDA_ModuleEditFrame::m_CurrentLib = wxEmptyString;
+wxString FOOTPRINT_EDIT_FRAME::m_CurrentLib = wxEmptyString;
 
-/********************************/
-/* class WinEDA_ModuleEditFrame */
-/********************************/
-BEGIN_EVENT_TABLE( WinEDA_ModuleEditFrame, PCB_BASE_FRAME )
+/******************************/
+/* class FOOTPRINT_EDIT_FRAME */
+/******************************/
+BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
                     PCB_BASE_FRAME::ProcessItemSelection )
-    EVT_CLOSE( WinEDA_ModuleEditFrame::OnCloseWindow )
-    EVT_MENU( wxID_EXIT, WinEDA_ModuleEditFrame::CloseModuleEditor )
+    EVT_CLOSE( FOOTPRINT_EDIT_FRAME::OnCloseWindow )
+    EVT_MENU( wxID_EXIT, FOOTPRINT_EDIT_FRAME::CloseModuleEditor )
 
-    EVT_SIZE( WinEDA_ModuleEditFrame::OnSize )
+    EVT_SIZE( FOOTPRINT_EDIT_FRAME::OnSize )
 
-    EVT_COMBOBOX( ID_ON_ZOOM_SELECT, WinEDA_ModuleEditFrame::OnSelectZoom )
-    EVT_COMBOBOX( ID_ON_GRID_SELECT, WinEDA_ModuleEditFrame::OnSelectGrid )
+    EVT_COMBOBOX( ID_ON_ZOOM_SELECT, FOOTPRINT_EDIT_FRAME::OnSelectZoom )
+    EVT_COMBOBOX( ID_ON_GRID_SELECT, FOOTPRINT_EDIT_FRAME::OnSelectGrid )
 
-    EVT_TOOL( ID_MODEDIT_SELECT_CURRENT_LIB, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_DELETE_PART, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_NEW_MODULE, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_LOAD_MODULE, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_IMPORT_PART, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_EXPORT_PART, WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_SELECT_CURRENT_LIB, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_SAVE_LIBMODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_NEW_MODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_LOAD_MODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_IMPORT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-              WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_SHEET_SET, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( wxID_PRINT, WinEDA_ModuleEditFrame::ToPrinter )
-    EVT_TOOL( ID_MODEDIT_LOAD_MODULE, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_CHECK, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_PAD_SETTINGS, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, WinEDA_ModuleEditFrame::LoadModuleFromBoard )
-    EVT_TOOL( ID_MODEDIT_INSERT_MODULE_IN_BOARD, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( ID_MODEDIT_EDIT_MODULE_PROPERTIES, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_TOOL( wxID_UNDO, WinEDA_ModuleEditFrame::GetComponentFromUndoList )
-    EVT_TOOL( wxID_REDO, WinEDA_ModuleEditFrame::GetComponentFromRedoList )
+              FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_SHEET_SET, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_PRINT, FOOTPRINT_EDIT_FRAME::ToPrinter )
+    EVT_TOOL( ID_MODEDIT_LOAD_MODULE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_CHECK, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_PAD_SETTINGS, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard )
+    EVT_TOOL( ID_MODEDIT_INSERT_MODULE_IN_BOARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_EDIT_MODULE_PROPERTIES, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_UNDO, FOOTPRINT_EDIT_FRAME::GetComponentFromUndoList )
+    EVT_TOOL( wxID_REDO, FOOTPRINT_EDIT_FRAME::GetComponentFromRedoList )
 
     // Vertical tool bar button click event handler.
-    EVT_TOOL( ID_NO_TOOL_SELECTED, WinEDA_ModuleEditFrame::OnVerticalToolbar )
+    EVT_TOOL( ID_NO_TOOL_SELECTED, FOOTPRINT_EDIT_FRAME::OnVerticalToolbar )
     EVT_TOOL_RANGE( ID_MODEDIT_PAD_TOOL, ID_MODEDIT_PLACE_GRID_COORD,
-                    WinEDA_ModuleEditFrame::OnVerticalToolbar )
+                    FOOTPRINT_EDIT_FRAME::OnVerticalToolbar )
 
     // Options Toolbar
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                    WinEDA_ModuleEditFrame::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                    WinEDA_ModuleEditFrame::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
-                    WinEDA_ModuleEditFrame::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
-                    WinEDA_ModuleEditFrame::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
 
     // popup commands
     EVT_MENU_RANGE( ID_POPUP_PCB_START_RANGE, ID_POPUP_PCB_END_RANGE,
-                    WinEDA_ModuleEditFrame::Process_Special_Functions )
+                    FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                    WinEDA_ModuleEditFrame::Process_Special_Functions )
+                    FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
 
     // Module transformations
-    EVT_MENU( ID_MODEDIT_MODULE_ROTATE, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_MENU( ID_MODEDIT_MODULE_MIRROR, WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_MENU( ID_MODEDIT_MODULE_ROTATE, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_MODEDIT_MODULE_MIRROR, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
 
-    EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, WinEDA_ModuleEditFrame::Process_Special_Functions )
-    EVT_MENU( ID_PCB_PAD_SETUP, WinEDA_ModuleEditFrame::Process_Special_Functions )
+    EVT_MENU( ID_PCB_DRAWINGS_WIDTHS_SETUP, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_PCB_PAD_SETUP, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_PCB_USER_GRID_SETUP, PCB_EDIT_FRAME::Process_Special_Functions )
 
     // Menu 3D Frame
-    EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, WinEDA_ModuleEditFrame::Show3D_Frame )
+    EVT_MENU( ID_MENU_PCB_SHOW_3D_FRAME, FOOTPRINT_EDIT_FRAME::Show3D_Frame )
 
-    EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, WinEDA_ModuleEditFrame::OnUpdateLibSelected )
-    EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, WinEDA_ModuleEditFrame::OnUpdateModuleSelected )
+    EVT_UPDATE_UI( ID_MODEDIT_DELETE_PART, FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected )
+    EVT_UPDATE_UI( ID_MODEDIT_EXPORT_PART, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
     EVT_UPDATE_UI( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
-                   WinEDA_ModuleEditFrame::OnUpdateModuleSelected )
-    EVT_UPDATE_UI( ID_MODEDIT_SAVE_LIBMODULE,
-                   WinEDA_ModuleEditFrame::OnUpdateLibAndModuleSelected )
+                   FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
+    EVT_UPDATE_UI( ID_MODEDIT_SAVE_LIBMODULE, FOOTPRINT_EDIT_FRAME::OnUpdateLibAndModuleSelected )
     EVT_UPDATE_UI( ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
-                   WinEDA_ModuleEditFrame::OnUpdateLoadModuleFromBoard )
+                   FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard )
     EVT_UPDATE_UI( ID_MODEDIT_INSERT_MODULE_IN_BOARD,
-                   WinEDA_ModuleEditFrame::OnUpdateInsertModuleInBoard )
+                   FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard )
     EVT_UPDATE_UI( ID_MODEDIT_UPDATE_MODULE_IN_BOARD,
-                   WinEDA_ModuleEditFrame::OnUpdateReplaceModuleInBoard )
-    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, WinEDA_ModuleEditFrame::OnUpdateVerticalToolbar )
+                   FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard )
+    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI_RANGE( ID_MODEDIT_PAD_TOOL, ID_MODEDIT_PLACE_GRID_COORD,
-                         WinEDA_ModuleEditFrame::OnUpdateVerticalToolbar )
+                         FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar )
 
 END_EVENT_TABLE()
 
 
-WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
-                                                const wxString& title,
-                                                const wxPoint&  pos,
-                                                const wxSize&   size,
-                                                long            style ) :
+FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
+                                            const wxString& title,
+                                            const wxPoint&  pos,
+                                            const wxSize&   size,
+                                            long            style ) :
     PCB_BASE_FRAME( father, MODULE_EDITOR_FRAME, wxEmptyString, pos, size, style )
 {
     m_FrameName = wxT( "ModEditFrame" );
@@ -196,7 +190,7 @@ WinEDA_ModuleEditFrame::WinEDA_ModuleEditFrame( wxWindow*       father,
 }
 
 
-WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame()
+FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 {
     /* g_ModuleEditor_Pcb and its corresponding PCB_SCREEN are not deleted
      * here, because if we reopen the Footprint editor, we expect to find
@@ -211,7 +205,7 @@ WinEDA_ModuleEditFrame::~WinEDA_ModuleEditFrame()
 }
 
 
-void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
+void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() )
     {
@@ -226,13 +220,13 @@ void WinEDA_ModuleEditFrame::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-void WinEDA_ModuleEditFrame::CloseModuleEditor( wxCommandEvent& Event )
+void FOOTPRINT_EDIT_FRAME::CloseModuleEditor( wxCommandEvent& Event )
 {
     Close();
 }
 
 
-void WinEDA_ModuleEditFrame::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( GetBoard()->m_Modules != NULL );
 
@@ -241,25 +235,25 @@ void WinEDA_ModuleEditFrame::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 }
 
 
-void WinEDA_ModuleEditFrame::OnUpdateLibSelected( wxUpdateUIEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::OnUpdateLibSelected( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_CurrentLib != wxEmptyString );
 }
 
 
-void WinEDA_ModuleEditFrame::OnUpdateModuleSelected( wxUpdateUIEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( GetBoard()->m_Modules != NULL );
 }
 
 
-void WinEDA_ModuleEditFrame::OnUpdateLibAndModuleSelected( wxUpdateUIEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::OnUpdateLibAndModuleSelected( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( ( m_CurrentLib != wxEmptyString ) && ( GetBoard()->m_Modules != NULL ) );
 }
 
 
-void WinEDA_ModuleEditFrame::OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent )
 {
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
 
@@ -267,7 +261,7 @@ void WinEDA_ModuleEditFrame::OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEven
 }
 
 
-void WinEDA_ModuleEditFrame::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent )
 {
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
 
@@ -294,7 +288,7 @@ void WinEDA_ModuleEditFrame::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEven
 }
 
 
-void WinEDA_ModuleEditFrame::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent )
 {
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) GetParent();
 
@@ -320,10 +314,7 @@ void WinEDA_ModuleEditFrame::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEve
 }
 
 
-/**
- * Display 3D frame of footprint (module) being edited.
- */
-void WinEDA_ModuleEditFrame::Show3D_Frame( wxCommandEvent& event )
+void FOOTPRINT_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     if( m_Draw3DFrame )
     {
@@ -331,6 +322,7 @@ void WinEDA_ModuleEditFrame::Show3D_Frame( wxCommandEvent& event )
         // This should work on any platform.
         if( m_Draw3DFrame->IsIconized() )
              m_Draw3DFrame->Iconize( false );
+
         m_Draw3DFrame->Raise();
 
         // Raising the window does not set the focus on Linux.  This should work on any platform.
@@ -345,7 +337,7 @@ void WinEDA_ModuleEditFrame::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-void WinEDA_ModuleEditFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
+void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )
 {
     wxRealPoint gridSize;
     wxPoint     oldpos;
@@ -420,14 +412,7 @@ void WinEDA_ModuleEditFrame::GeneralControl( wxDC* aDC, const wxPoint& aPosition
 }
 
 
-/**
- * Function OnModify() (virtual)
- * Must be called after a change
- * in order to set the "modify" flag of the current screen
- * and prepare, if needed the refresh of the 3D frame showing the footprint
- * do not forget to call the basic OnModify function to update auxiliary info
- */
-void WinEDA_ModuleEditFrame::OnModify()
+void FOOTPRINT_EDIT_FRAME::OnModify()
 {
     PCB_BASE_FRAME::OnModify();
 
@@ -436,10 +421,31 @@ void WinEDA_ModuleEditFrame::OnModify()
 }
 
 
-void WinEDA_ModuleEditFrame::UpdateTitle()
+void FOOTPRINT_EDIT_FRAME::UpdateTitle()
 {
+    wxString title = _( "Module Editor " );
+
     if( m_CurrentLib.IsEmpty() )
-        SetTitle( _( "Module Editor (no active library)" ) );
+    {
+        title += _( "(no active library)" );
+    }
     else
-        SetTitle( _( "Module Editor (active library: " ) + m_CurrentLib + wxT( ")" ) );
+    {
+        wxFileName fileName = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
+        fileName = wxGetApp().FindLibraryPath( fileName );
+
+        if( !fileName.IsOk() || !fileName.FileExists() )
+        {
+            title += _( "(no active library)" );
+        }
+        else
+        {
+            title = _( "Module Editor (active library: " ) + fileName.GetFullPath() + wxT( ")" );
+
+            if( !fileName.IsFileWritable() )
+                title += _( " [Read Only]" );
+        }
+    }
+
+    SetTitle( title );
 }

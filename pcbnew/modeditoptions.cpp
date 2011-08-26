@@ -16,7 +16,7 @@
 #include "protos.h"
 
 
-void WinEDA_ModuleEditFrame::OnSelectOptionToolbar( wxCommandEvent& event )
+void FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int        id = event.GetId();
 
@@ -46,7 +46,7 @@ void WinEDA_ModuleEditFrame::OnSelectOptionToolbar( wxCommandEvent& event )
 
     default:
         DisplayError( this,
-                      wxT( "WinEDA_ModuleEditFrame::OnSelectOptionToolbar error" ) );
+                      wxT( "FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar error" ) );
         break;
     }
 }

@@ -38,6 +38,7 @@
 #include "pcbstruct.h"      // enum PCB_VISIBLE
 #include "collectors.h"
 #include "bitmaps.h"
+#include "build_version.h"
 #include "protos.h"
 #include "pcbnew_id.h"
 #include "drc_stuff.h"
@@ -477,9 +478,6 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 }
 
 
-/**
- * Display 3D frame of current printed circuit board.
- */
 void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
     if( m_Draw3DFrame )
@@ -502,9 +500,6 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-/**
- * Display the Design Rules Editor.
- */
 void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
 {
     DIALOG_DESIGN_RULES dR_editor( this );
@@ -574,54 +569,30 @@ void PCB_EDIT_FRAME::SaveSettings()
 }
 
 
-/**
- * Function IsGridVisible() , virtual
- * @return true if the grid must be shown
- */
 bool PCB_EDIT_FRAME::IsGridVisible()
 {
     return IsElementVisible( GRID_VISIBLE );
 }
 
 
-/**
- * Function SetGridVisibility() , virtual
- * It may be overloaded by derived classes
- * if you want to store/retrieve the grid visibility in configuration.
- * @param aVisible = true if the grid must be shown
- */
 void PCB_EDIT_FRAME::SetGridVisibility(bool aVisible)
 {
     SetElementVisibility( GRID_VISIBLE, aVisible );
 }
 
 
-/**
- * Function GetGridColor() , virtual
- * @return the color of the grid
- */
 int PCB_EDIT_FRAME::GetGridColor()
 {
     return GetBoard()->GetVisibleElementColor( GRID_VISIBLE );
 }
 
 
-/**
- * Function SetGridColor() , virtual
- * @param aColor = the new color of the grid
- */
 void PCB_EDIT_FRAME::SetGridColor(int aColor)
 {
     GetBoard()->SetVisibleElementColor( GRID_VISIBLE, aColor );
 }
 
 
-/* Return true if a microvia can be put on board
- * A microvia is a small via restricted to 2 near neighbor layers
- * because its is hole is made by laser which can penetrate only one layer
- * It is mainly used to connect BGA to the first inner layer
- * And it is allowed from an external layer to the first inner layer
- */
 bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
 {
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
@@ -658,13 +629,6 @@ void PCB_EDIT_FRAME::unitsChangeRefresh()
 }
 
 
-/**
- * Function SetElementVisibility
- * changes the visibility of an element category
- * @param aPCB_VISIBLE is from the enum by the same name
- * @param aNewState = The new visibility state of the element category
- * @see enum PCB_VISIBLE
- */
 void PCB_EDIT_FRAME::SetElementVisibility( int aPCB_VISIBLE, bool aNewState )
 {
     GetBoard()->SetElementVisibility( aPCB_VISIBLE, aNewState );
@@ -672,10 +636,6 @@ void PCB_EDIT_FRAME::SetElementVisibility( int aPCB_VISIBLE, bool aNewState )
 }
 
 
-/**
- * Function SetVisibleAlls
- * Set the status of all visible element categories and layers to VISIBLE
- */
 void PCB_EDIT_FRAME::SetVisibleAlls( )
 {
     GetBoard()->SetVisibleAlls(  );
@@ -685,10 +645,6 @@ void PCB_EDIT_FRAME::SetVisibleAlls( )
 }
 
 
-/**
- * Function SetLanguage
- * called on a language menu selection
- */
 void PCB_EDIT_FRAME::SetLanguage( wxCommandEvent& event )
 {
     EDA_DRAW_FRAME::SetLanguage( event );
@@ -731,13 +687,6 @@ void PCB_EDIT_FRAME::SetLastNetListRead( const wxString& aLastNetListRead )
 }
 
 
-/**
- * Function OnModify() (virtual)
- * Must be called after a change
- * in order to set the "modify" flag of the current screen
- * and prepare, if needed the refresh of the 3D frame showing the footprint
- * do not forget to call the basic OnModify function to update auxiliary info
- */
 void PCB_EDIT_FRAME::OnModify( )
 {
     PCB_BASE_FRAME::OnModify();
@@ -747,12 +696,32 @@ void PCB_EDIT_FRAME::OnModify( )
 }
 
 
-/* Prepare the data structures of print management
- * And displays the dialog window management of printing sheets
- */
 void PCB_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
 {
     DIALOG_SVG_PRINT frame( this );
 
     frame.ShowModal();
+}
+
+
+void PCB_EDIT_FRAME::UpdateTitle()
+{
+    wxString title;
+    wxFileName fileName = GetScreen()->GetFileName();
+
+    if( fileName.IsOk() && fileName.FileExists() )
+    {
+        title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
+                wxT( " " ) + fileName.GetFullPath();
+
+        if( !fileName.IsFileWritable() )
+            title += _( " [Read Only]" );
+    }
+    else
+    {
+        title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion() +
+                wxT( " " ) + _( " [no file]" );
+    }
+
+    SetTitle( title );
 }

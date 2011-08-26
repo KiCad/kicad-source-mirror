@@ -22,7 +22,7 @@
 /*  Forward declarations of classes. */
 class WinEDA_CvpcbFrame;
 class PCB_EDIT_FRAME;
-class WinEDA_ModuleEditFrame;
+class FOOTPRINT_EDIT_FRAME;
 class BOARD;
 class TEXTE_PCB;
 class MODULE;
@@ -61,7 +61,7 @@ public:
     wxRealPoint             m_UserGridSize;
 
     EDA_3D_FRAME*           m_Draw3DFrame;
-    WinEDA_ModuleEditFrame* m_ModuleEditFrame;
+    FOOTPRINT_EDIT_FRAME*   m_ModuleEditFrame;
 
 protected:
     BOARD*                  m_Pcb;
@@ -172,7 +172,6 @@ public:
      */
     GENERAL_COLLECTORS_GUIDE GetCollectorsGuide();
 
-
     /**
      * Function CursorGoto
      * positions the cursor at a given coordinate and reframes the drawing if
@@ -181,7 +180,6 @@ public:
      * @param aPos The point to go to.
      */
     void                     CursorGoto(  const wxPoint& aPos );
-
 
     void                     place_marqueur( wxDC*          DC,
                                              const wxPoint& pos,
@@ -208,8 +206,14 @@ public:
                                     bool            aOverwrite,
                                     bool            aDisplayDialog );
 
-    void    Archive_Modules( const wxString& LibName,
-                             bool            NewModulesOnly );
+    /**
+     * Function Archive_Modules
+     * Save in the library:
+     * All new modules (ie modules not found in this lib) (if NewModulesOnly == true)
+     * all modules (if NewModulesOnly == false)
+     */
+    void Archive_Modules( const wxString& LibName, bool NewModulesOnly );
+
     MODULE* GetModuleByName();
 
     /**
@@ -276,15 +280,17 @@ public:
                                               wxDC*         DC );
 
     void          AddPad( MODULE* Module, bool draw );
+
     /**
      * Function DeletePad
      * Delete the pad aPad.
      * Refresh the modified screen area
      * Refresh modified parameters of the parent module (bounding box, last date)
      * @param aPad = the pad to delete
-     * @param aQuery = true to promt for confirmation, false to delete silently
+     * @param aQuery = true to prompt for confirmation, false to delete silently
      */
     void          DeletePad( D_PAD* aPad, bool aQuery = true );
+
     void          StartMovePad( D_PAD* Pad, wxDC* DC );
     void          RotatePad( D_PAD* Pad, wxDC* DC );
     void          PlacePad( D_PAD* Pad, wxDC* DC );

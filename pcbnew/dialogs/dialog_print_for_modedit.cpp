@@ -56,7 +56,7 @@ private:
 
 
 /*************************************************************/
-void WinEDA_ModuleEditFrame::ToPrinter( wxCommandEvent& event )
+void FOOTPRINT_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
 /*************************************************************/
 /* Virtual function:
  * Display the print dialog

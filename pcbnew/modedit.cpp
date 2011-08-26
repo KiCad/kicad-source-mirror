@@ -25,7 +25,7 @@
 #include "collectors.h"
 
 
-BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
+BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
 {
     BOARD_ITEM* item = GetCurItem();
 
@@ -49,19 +49,18 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
         scanList = GENERAL_COLLECTOR::ModulesAndTheirItems;
     }
 
-    m_Collector->Collect( GetBoard(), scanList, GetScreen()->RefPos(
-                              true ), guide );
+    m_Collector->Collect( GetBoard(), scanList, GetScreen()->RefPos( true ), guide );
 
-    /* Remove redundancies: when an item is found, we can remove the
-     * module from list
-     */
+    /* Remove redundancies: when an item is found, we can remove the module from list */
     if( m_Collector->GetCount() > 1 )
     {
         for( int ii = 0; ii < m_Collector->GetCount(); ii++ )
         {
             item = (*m_Collector)[ii];
+
             if( item->Type() != TYPE_MODULE )
                 continue;
+
             m_Collector->Remove( ii );
             ii--;
         }
@@ -72,21 +71,20 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
         item = (*m_Collector)[0];
         SetCurItem( item );
     }
-    else    // we can't figure out which item user wants, do popup menu so user
-            // can choose
+    else    // we can't figure out which item user wants, do popup menu so user can choose
     {
         wxMenu      itemMenu;
 
-        /* Give a title to the selection menu. This is also a cancel
-         * menu item **/
-        wxMenuItem* item_title =
-            new wxMenuItem( &itemMenu, -1, _( "Selection Clarification" ) );
+        /* Give a title to the selection menu. This is also a cancel menu item **/
+        wxMenuItem* item_title = new wxMenuItem( &itemMenu, -1, _( "Selection Clarification" ) );
+
 #ifdef __WINDOWS__
         wxFont      bold_font( *wxNORMAL_FONT );
         bold_font.SetWeight( wxFONTWEIGHT_BOLD );
         bold_font.SetStyle( wxFONTSTYLE_ITALIC );
         item_title->SetFont( bold_font );
 #endif
+
         itemMenu.Append( item_title );
         itemMenu.AppendSeparator();
 
@@ -117,11 +115,9 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
                                             // item is selected
 
         DrawPanel->MoveCursorToCrossHair();
+        DrawPanel->m_IgnoreMouseEvents = false;
 
-        DrawPanel->m_IgnoreMouseEvents = FALSE;
-
-        // The function ProcessItemSelection() has set the current item, return
-        // it.
+        // The function ProcessItemSelection() has set the current item, return it.
         item = GetCurItem();
     }
 
@@ -133,17 +129,13 @@ BOARD_ITEM* WinEDA_ModuleEditFrame::ModeditLocateAndDisplay( int aHotKeyCode )
     return item;
 }
 
-/**
- * Function LoadModuleFromBoard
- * called from the main toolbar
- * to load a footprint from board mainly to edit it
- */
-void WinEDA_ModuleEditFrame::LoadModuleFromBoard( wxCommandEvent& event )
+
+void FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard( wxCommandEvent& event )
 {
-    if(  GetScreen()->IsModify() )
+    if( GetScreen()->IsModify() )
     {
         if( !IsOK( this,
-            _( "Current footprint changes will be lost and this operation cannot be undone. Continue ?" ) ) )
+                   _( "Current footprint changes will be lost and this operation cannot be undone. Continue?" ) ) )
             return;
     }
 
@@ -158,7 +150,7 @@ void WinEDA_ModuleEditFrame::LoadModuleFromBoard( wxCommandEvent& event )
 }
 
 
-void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
+void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
@@ -227,11 +219,12 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_DELETE_PART:
     {
-        wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib,
-                                    ModuleFileExtension );
+        wxFileName fn = wxFileName( wxEmptyString, m_CurrentLib, ModuleFileExtension );
         wxString   full_libraryfilename = wxGetApp().FindLibraryPath( fn );
+
         if( wxFileName::FileExists( full_libraryfilename ) )
             Delete_Module_In_Library( full_libraryfilename );
+
         break;
     }
 
@@ -252,8 +245,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             GetBoard()->m_NetInfo->BuildListOfNets();
             redraw = true;
             module->SetPosition( wxPoint( 0, 0 ) );
+
             if( GetBoard()->m_Modules )
                 GetBoard()->m_Modules->m_Flags = 0;
+
             Zoom_Automatique( false );
         }
         break;
@@ -286,14 +281,14 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         if( module_in_edit->m_Link )        // this is not a new module ...
         {
             source_module = mainpcb->m_Modules;
-            for( ;
-                source_module != NULL;
-                source_module = (MODULE*) source_module->Next() )
+
+            for( ; source_module != NULL; source_module = (MODULE*) source_module->Next() )
             {
                 if( module_in_edit->m_Link == source_module->m_TimeStamp )
                     break;
             }
         }
+
         if( ( source_module == NULL )
             && ( id == ID_MODEDIT_UPDATE_MODULE_IN_BOARD ) ) // source not found
         {
@@ -331,6 +326,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             PICKED_ITEMS_LIST pickList;
             pcbframe->Exchange_Module( source_module, newmodule, &pickList );
             newmodule->m_TimeStamp = module_in_edit->m_Link;
+
             if( pickList.GetCount() )
                 pcbframe->SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
         }
@@ -354,22 +350,27 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_MODEDIT_IMPORT_PART:
         if( ! Clear_Pcb( true ) )
             break;                  // //this command is aborted
+
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
         GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
-        Import_Module( );
+        Import_Module();
         redraw = true;
+
         if( GetBoard()->m_Modules )
             GetBoard()->m_Modules->m_Flags = 0;
+
         GetScreen()->ClrModify();
         Zoom_Automatique( false );
+
         if( m_Draw3DFrame )
             m_Draw3DFrame->NewDisplay();
+
         break;
 
     case ID_MODEDIT_EXPORT_PART:
         if( GetBoard()->m_Modules )
-            Export_Module( GetBoard()->m_Modules, FALSE );
+            Export_Module( GetBoard()->m_Modules, false );
         break;
 
     case ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART:
@@ -390,6 +391,8 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
             full_libraryfilename = wxGetApp().FindLibraryPath( fn );
         }
 
+        wxLogDebug( wxT( "Loading module from library " ) + full_libraryfilename );
+
         GetScreen()->ClearUndoRedoList();
         SetCurItem( NULL );
         Clear_Pcb( true );
@@ -407,20 +410,27 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             TEXTE_MODULE* ref = GetBoard()->m_Modules->m_Reference;
             TEXTE_MODULE* val = GetBoard()->m_Modules->m_Value;
+
             if( val && ref )
             {
                 ref->m_Type = TEXT_is_REFERENCE;    // just in case ...
+
                 if( ref->m_Text.Length() == 0 )
                     ref->m_Text = L"Ref**";
+
                 val->m_Type = TEXT_is_VALUE;        // just in case ...
+
                 if( val->m_Text.Length() == 0 )
                     val->m_Text = L"Val**";
             }
         }
+
         GetScreen()->ClrModify();
         Zoom_Automatique( false );
+
         if( m_Draw3DFrame )
             m_Draw3DFrame->NewDisplay();
+
         break;
 
     case ID_MODEDIT_PAD_SETTINGS:
@@ -434,11 +444,10 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         if( GetBoard()->m_Modules )
         {
             SetCurItem( GetBoard()->m_Modules );
-            DIALOG_MODULE_MODULE_EDITOR dialog( this,
-                                               (MODULE*) GetScreen()->
-                                               GetCurItem() );
+            DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()-> GetCurItem() );
             int ret = dialog.ShowModal();
             GetScreen()->GetCurItem()->m_Flags = 0;
+
             if( ret > 0 )
                 DrawPanel->Refresh();
         }
@@ -464,12 +473,12 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_EDIT_MODULE:
     {
-        DIALOG_MODULE_MODULE_EDITOR dialog( this,
-                                           (MODULE*) GetScreen()->GetCurItem() );
+        DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
         int ret = dialog.ShowModal();
         GetScreen()->GetCurItem()->m_Flags = 0;
         GetScreen()->GetCurItem()->m_Flags = 0;
         DrawPanel->MoveCursorToCrossHair();
+
         if( ret > 0 )
             DrawPanel->Refresh();
     }
@@ -515,8 +524,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_EDIT_TEXTMODULE:
     {
-        InstallTextModOptionsFrame(
-             (TEXTE_MODULE*) GetScreen()->GetCurItem(), &dc );
+        InstallTextModOptionsFrame( (TEXTE_MODULE*) GetScreen()->GetCurItem(), &dc );
         DrawPanel->MoveCursorToCrossHair();
     }
     break;
@@ -551,11 +559,13 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
         DrawPanel->MoveCursorToCrossHair();
+
         if( (GetScreen()->GetCurItem()->m_Flags & IS_NEW) )
         {
             End_Edge_Module( (EDGE_MODULE*) GetScreen()->GetCurItem() );
             SetCurItem( NULL );
         }
+
         break;
 
     case ID_POPUP_PCB_ENTER_EDGE_WIDTH:
@@ -566,36 +576,37 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
         {
             edge = (EDGE_MODULE*) GetScreen()->GetCurItem();
         }
+
         Enter_Edge_Width( edge );
         DrawPanel->MoveCursorToCrossHair();
+
         if( edge )
             DrawPanel->Refresh();
-
     }
     break;
 
     case ID_POPUP_PCB_EDIT_WIDTH_CURRENT_EDGE:
         DrawPanel->MoveCursorToCrossHair();
         Edit_Edge_Width( (EDGE_MODULE*) GetScreen()->GetCurItem() );
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
 
     case ID_POPUP_PCB_EDIT_WIDTH_ALL_EDGE:
         DrawPanel->MoveCursorToCrossHair();
         Edit_Edge_Width( NULL );
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
 
     case ID_POPUP_PCB_EDIT_LAYER_CURRENT_EDGE:
         DrawPanel->MoveCursorToCrossHair();
         Edit_Edge_Layer( (EDGE_MODULE*) GetScreen()->GetCurItem() );
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
 
     case ID_POPUP_PCB_EDIT_LAYER_ALL_EDGE:
         DrawPanel->MoveCursorToCrossHair();
         Edit_Edge_Layer( NULL );
-        DrawPanel->Refresh( );
+        DrawPanel->Refresh();
         break;
 
     case ID_POPUP_PCB_DELETE_EDGE:
@@ -619,11 +630,13 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
     case ID_PCB_PAD_SETUP:
     {
         BOARD_ITEM* item = GetCurItem();
+
         if( item )
         {
             if( item->Type() != TYPE_PAD )
                 item = NULL;
         }
+
         InstallPadOptionsFrame( (D_PAD*) item );
     }
     break;
@@ -634,14 +647,14 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PLACE_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
-        DrawPanel->m_AutoPAN_Request = FALSE;
+        DrawPanel->m_AutoPAN_Request = false;
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        DrawPanel->m_AutoPAN_Request = FALSE;
+        DrawPanel->m_AutoPAN_Request = false;
         HandleBlockPlace( &dc );
         break;
 
@@ -671,7 +684,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 
     default:
         DisplayError( this,
-                      wxT( "WinEDA_ModuleEditFrame::Process_Special_Functions error" ) );
+                      wxT( "FOOTPRINT_EDIT_FRAME::Process_Special_Functions error" ) );
         break;
     }
 
@@ -680,13 +693,7 @@ void WinEDA_ModuleEditFrame::Process_Special_Functions( wxCommandEvent& event )
 }
 
 
-/* Execute a geometric transform on the current footprint.
- *  The footprint, after transform is always in reference position and
- * orientation:
- *  position 0,0
- *  orientation 0, component side.
- */
-void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
+void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 {
     D_PAD*        pad = module->m_Pads;
     EDA_ITEM*     PtStruct = module->m_Drawings;
@@ -710,10 +717,13 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
 
         module->m_Reference->m_Pos0    = module->m_Reference->m_Pos;
         module->m_Reference->m_Orient += angle;
+
         if( module->m_Reference->m_Orient >= 1800 )
             module->m_Reference->m_Orient -= 1800;
+
         module->m_Value->m_Pos0    = module->m_Value->m_Pos;
         module->m_Value->m_Orient += angle;
+
         if( module->m_Value->m_Orient >= 1800 )
             module->m_Value->m_Orient -= 1800;
 
@@ -742,6 +752,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
             NEGATE( pad->m_Pos0.y );
             NEGATE( pad->m_Offset.y );
             NEGATE( pad->m_DeltaSize.y );
+
             if( pad->m_Orient )
                 pad->m_Orient = 3600 - pad->m_Orient;
         }
@@ -750,6 +761,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
         textmod = module->m_Reference;
         NEGATE( textmod->m_Pos.y );
         NEGATE( textmod->m_Pos0.y );
+
         if( textmod->m_Orient )
             textmod->m_Orient = 3600 - textmod->m_Orient;
 
@@ -757,6 +769,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
         textmod = module->m_Value;
         NEGATE( textmod->m_Pos.y );
         NEGATE( textmod->m_Pos0.y );
+
         if( textmod->m_Orient )
             textmod->m_Orient = 3600 - textmod->m_Orient;
 
@@ -803,7 +816,7 @@ void WinEDA_ModuleEditFrame::Transform( MODULE* module, int transform )
 }
 
 
-void WinEDA_ModuleEditFrame::OnVerticalToolbar( wxCommandEvent& aEvent )
+void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
 
@@ -840,7 +853,9 @@ void WinEDA_ModuleEditFrame::OnVerticalToolbar( wxCommandEvent& aEvent )
 
     case ID_MODEDIT_PAD_TOOL:
         if( GetBoard()->m_Modules )
+        {
             SetToolID( id, wxCURSOR_PENCIL, _( "Add pad" ) );
+        }
         else
         {
             SetToolID( id, wxCURSOR_ARROW, _( "Pad settings" ) );

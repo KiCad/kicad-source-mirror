@@ -20,19 +20,10 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
                           int aDraw_mode, int aMasklayer,
                           PRINT_PARAMETERS::DrillShapeOptT aDrillShapeOpt );
 
-/**
- * Function PrintPage
- * Used to print the board (on printer, or when creating SVF files).
- * Print the board, but only layers allowed by aPrintMaskLayer
- * @param aDC = the print device context
- * @param aPrintMaskLayer = a 32 bits mask: bit n = 1 -> layer n is printed
- * @param aPrintMirrorMode = true to plot mirrored
- * @param aData = a pointer to an optional data (NULL if not used)
- */
-void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
-                                  int   aPrintMaskLayer,
-                                  bool  aPrintMirrorMode,
-                                  void * aData)
+void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
+                                      int   aPrintMaskLayer,
+                                      bool  aPrintMirrorMode,
+                                      void * aData)
 {
     MODULE* Module;
     int drawmode = GR_COPY;
@@ -42,6 +33,7 @@ void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
 
     PRINT_PARAMETERS * printParameters = (PRINT_PARAMETERS*) aData; // can be null
     PRINT_PARAMETERS::DrillShapeOptT drillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
+
     if( printParameters )
          defaultPenSize = printParameters->m_PenDefaultSize;
 
@@ -67,9 +59,9 @@ void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
 
     DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
 
-    // The OR mode is used in color mode, but be aware the backgroud *must be
+    // The OR mode is used in color mode, but be aware the background *must be
     // BLACK.  In the print page dialog, we first print in BLACK, and after
-    // reprint in color, on the black "local" backgroud, in OR mode the black
+    // reprint in color, on the black "local" background, in OR mode the black
     // print is not made before, only a white page is printed
     if( GetGRForceBlackPenState() == false )
         drawmode = GR_OR;
@@ -92,6 +84,7 @@ void WinEDA_ModuleEditFrame::PrintPage( wxDC* aDC,
         Print_Module( DrawPanel, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
         Module->Move( -offset );
     }
+
     D_PAD::m_PadSketchModePenSize = tmp;
 
     DrawPanel->m_PrintIsMirrored = false;
@@ -166,8 +159,8 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             }
 
             // pads on Silkscreen layer are usually plot in sketch mode:
-            if( (GetScreen()->m_Active_Layer == SILKSCREEN_N_BACK) ||
-                (GetScreen()->m_Active_Layer == SILKSCREEN_N_FRONT) )
+            if( (GetScreen()->m_Active_Layer == SILKSCREEN_N_BACK)
+                || (GetScreen()->m_Active_Layer == SILKSCREEN_N_FRONT) )
                 DisplayOpt.DisplayPadFill = false;
 
         }
@@ -181,8 +174,8 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     m_DisplayPadNum = DisplayOpt.DisplayPadNum = false;
-    bool nctmp = GetBoard()->IsElementVisible(NO_CONNECTS_VISIBLE);
-    GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, false);
+    bool nctmp = GetBoard()->IsElementVisible( NO_CONNECTS_VISIBLE );
+    GetBoard()->SetElementVisibility( NO_CONNECTS_VISIBLE, false );
     DisplayOpt.DisplayPadIsol    = false;
     m_DisplayModEdge = DisplayOpt.DisplayModEdge    = FILLED;
     m_DisplayModText = DisplayOpt.DisplayModText    = FILLED;
@@ -194,15 +187,16 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
 
-    // The OR mode is used in color mode, but be aware the backgroud *must be
+    // The OR mode is used in color mode, but be aware the background *must be
     // BLACK.  In the print page dialog, we first print in BLACK, and after
-    // reprint in color, on the black "local" backgroud, in OR mode the black
+    // reprint in color, on the black "local" background, in OR mode the black
     // print is not made before, only a white page is printed
     if( GetGRForceBlackPenState() == false )
         drawmode = GR_OR;
 
     /* Print the pcb graphic items (texts, ...) */
     GRSetDrawMode( aDC, drawmode );
+
     for( BOARD_ITEM* item = Pcb->m_Drawings; item; item = item->Next() )
     {
         switch( item->Type() )
@@ -225,10 +219,12 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     /* Print tracks */
     pt_piste = Pcb->m_Track;
+
     for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
         if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
+
         if( pt_piste->Type() == TYPE_VIA ) /* VIA encountered. */
         {
             int rayon = pt_piste->m_Width >> 1;
@@ -241,22 +237,26 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
                             0, color, color );
         }
         else
+        {
             pt_piste->Draw( DrawPanel, aDC, drawmode );
+        }
     }
 
     pt_piste = Pcb->m_Zone;
+
     for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
     {
         if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
             continue;
+
         pt_piste->Draw( DrawPanel, aDC, drawmode );
     }
-
 
     /* Draw filled areas (i.e. zones) */
     for( int ii = 0; ii < Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* zone = Pcb->GetArea( ii );
+
         if( ( aPrintMaskLayer & ( 1 << zone->GetLayer() ) ) == 0 )
             continue;
 
@@ -268,10 +268,12 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     Module = (MODULE*) Pcb->m_Modules;
     int tmp = D_PAD::m_PadSketchModePenSize;
     D_PAD::m_PadSketchModePenSize = defaultPenSize;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
         Print_Module( DrawPanel, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
     }
+
     D_PAD::m_PadSketchModePenSize = tmp;
 
     /* Print via holes in bg color: Not sure it is good for buried or blind
@@ -283,23 +285,28 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         bool blackpenstate = GetGRForceBlackPenState();
         GRForceBlackPen( false );
         GRSetDrawMode( aDC, GR_COPY );
+
         for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
         {
             if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
                 continue;
+
             if( pt_piste->Type() == TYPE_VIA ) /* VIA encountered. */
             {
                 int diameter;
+
                 if( drillShapeOpt == PRINT_PARAMETERS::SMALL_DRILL_SHAPE )
-                    diameter = min( SMALL_DRILL, pt_piste->GetDrillValue());
+                    diameter = min( SMALL_DRILL, pt_piste->GetDrillValue() );
                 else
                     diameter = pt_piste->GetDrillValue();
+
                 GRFilledCircle( &DrawPanel->m_ClipBox, aDC,
                                 pt_piste->m_Start.x, pt_piste->m_Start.y,
                                 diameter/2,
                                 0, color, color );
             }
         }
+
         GRForceBlackPen( blackpenstate );
     }
 
@@ -333,8 +340,10 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
     {
         if( (pt_pad->m_Masque_Layer & aMasklayer ) == 0 )
             continue;
+
         // Manage hole according to the print drill option
         wxSize drill_tmp = pt_pad->m_Drill;
+
         switch ( aDrillShapeOpt )
         {
             case PRINT_PARAMETERS::NO_DRILL_SHAPE:
@@ -348,6 +357,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
                 // Do nothing
                 break;
         }
+
         pt_pad->Draw( aPanel, aDC, aDraw_mode );
         pt_pad->m_Drill = drill_tmp;
     }
@@ -355,6 +365,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
     /* Print footprint graphic shapes */
     PtStruct = aModule->m_Drawings;
     mlayer   = g_TabOneLayerMask[aModule->GetLayer()];
+
     if( aModule->GetLayer() == LAYER_N_BACK )
         mlayer = SILKSCREEN_LAYER_BACK;
     else if( aModule->GetLayer() == LAYER_N_FRONT )
@@ -364,6 +375,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
     {
         if( !aModule->m_Reference->m_NoShow )
             aModule->m_Reference->Draw( aPanel, aDC, aDraw_mode );
+
         if( !aModule->m_Value->m_NoShow )
             aModule->m_Value->Draw( aPanel, aDC, aDraw_mode );
     }
@@ -373,7 +385,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
         switch( PtStruct->Type() )
         {
         case TYPE_TEXTE_MODULE:
-            if( (mlayer & aMasklayer ) == 0 )
+            if( ( mlayer & aMasklayer ) == 0 )
                 break;
 
             TextMod = (TEXTE_MODULE*) PtStruct;

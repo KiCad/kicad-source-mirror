@@ -14,7 +14,7 @@ public:
     int m_LineNum;              // the line count
 
 private:
-    FILTER_READER * m_reader;   // FILTER_READER to read file. id NULL, use m_file
+    FILTER_READER * m_reader;   // FILTER_READER to read file. If NULL, use m_file
     FILE * m_file;              // footprint file to read/write.
 
 public:
@@ -23,7 +23,7 @@ public:
      * @param aFile = a FILE * pointer used for write operations,
      * and read operations when aReader = NULL
      * @param aReader = a FILTER_READER pointer used for read operations
-     * If NULL, a direct aFILE read is used
+     * If NULL, a direct aFile read is used
      */
     FOOTPRINT_LIBRARY( FILE * aFile, FILTER_READER * aReader = NULL );
 
@@ -39,7 +39,7 @@ public:
 
     /**
      * function RebuildIndex
-     * Read the full library file and build the list od footprints found
+     * Read the full library file and build the list of footprints found
      * Do not use the $INDEX ... $EndINDEX section
      */
     bool RebuildIndex();

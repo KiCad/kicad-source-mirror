@@ -19,9 +19,8 @@
 
 #include "hotkeys.h"
 
-/* Handle the left click in footprint editor
- */
-void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
+
+void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* item = GetCurItem();
 
@@ -66,6 +65,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         if( !wxGetKeyState( WXK_SHIFT ) && !wxGetKeyState( WXK_ALT )
            && !wxGetKeyState( WXK_CONTROL ) )
             item = ModeditLocateAndDisplay();
+
         SetCurItem( item );
     }
 
@@ -83,6 +83,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
             if( GetToolId() == ID_MODEDIT_CIRCLE_TOOL )
                 shape = S_CIRCLE;
+
             if( GetToolId() == ID_MODEDIT_ARC_TOOL )
                 shape = S_ARC;
 
@@ -107,7 +108,9 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 SetCurItem( Begin_Edge_Module( (EDGE_MODULE*) item, DC, 0 ) );
             }
             else
+            {
                 DisplayError( this, wxT( "ProcessCommand error: item flags error" ) );
+            }
         }
         break;
 
@@ -171,7 +174,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     default:
-        DisplayError( this, wxT( "WinEDA_ModuleEditFrame::ProcessCommand error" ) );
+        DisplayError( this, wxT( "FOOTPRINT_EDIT_FRAME::ProcessCommand error" ) );
         SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
     }
 
@@ -179,11 +182,7 @@ void WinEDA_ModuleEditFrame::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 }
 
 
-/* Handle the right click in the footprint editor:
- * Create the pull up menu
- * After this menu is built, the standard ZOOM menu is added
- */
-bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
+bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )
 {
     BOARD_ITEM* item = GetCurItem();
     wxString    msg;
@@ -358,14 +357,14 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopM
     case TYPE_SCREEN:
     case TYPE_NOT_INIT:
     case TYPE_PCB:
-        msg.Printf( wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: illegal DrawType %d" ),
-            item->Type() );
+        msg.Printf( wxT( "FOOTPRINT_EDIT_FRAME::OnRightClick Error: illegal DrawType %d" ),
+                    item->Type() );
         DisplayError( this, msg );
         break;
 
     default:
-        msg.Printf( wxT( "WinEDA_ModuleEditFrame::OnRightClick Error: unknown DrawType %d" ),
-            item->Type() );
+        msg.Printf( wxT( "FOOTPRINT_EDIT_FRAME::OnRightClick Error: unknown DrawType %d" ),
+                    item->Type() );
         DisplayError( this, msg );
         break;
     }
@@ -386,10 +385,7 @@ bool WinEDA_ModuleEditFrame::OnRightClick( const wxPoint& MousePos, wxMenu* PopM
 }
 
 
-/*  Handle the double click in the footprint editor:
- *  If the double clicked item is editable: call the corresponding editor.
- */
-void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
+void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* item = GetCurItem();
 
@@ -420,6 +416,7 @@ void WinEDA_ModuleEditFrame::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             int ret = dialog.ShowModal();
             GetScreen()->GetCurItem()->m_Flags = 0;
             DrawPanel->MoveCursorToCrossHair();
+
             if( ret > 0 )
                 DrawPanel->Refresh();
         }

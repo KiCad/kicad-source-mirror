@@ -17,7 +17,7 @@
 #include "dialog_edit_module_for_Modedit.h"
 
 
-DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( WinEDA_ModuleEditFrame* aParent,
+DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
                                                           MODULE* aModule ) :
     DIALOG_MODULE_MODULE_EDITOR_BASE( aParent )
 {

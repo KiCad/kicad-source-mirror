@@ -39,10 +39,10 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
     {
         if( m_ModuleEditFrame == NULL )
         {
-            m_ModuleEditFrame = new WinEDA_ModuleEditFrame( this,
-                                                           _( "Module Editor" ),
-                                                           wxPoint( -1, -1 ),
-                                                           wxSize( 600, 400 ) );
+            m_ModuleEditFrame = new FOOTPRINT_EDIT_FRAME( this,
+                                                          _( "Module Editor" ),
+                                                          wxPoint( -1, -1 ),
+                                                          wxSize( 600, 400 ) );
         }
 
         m_ModuleEditFrame->Load_Module_From_BOARD( Module );
@@ -57,7 +57,7 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
 /*
  * Position anchor under the cursor.
  */
-void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
+void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* pt_mod )
 {
     wxPoint   moveVector;
     EDA_ITEM* PtStruct;
@@ -112,7 +112,7 @@ void WinEDA_ModuleEditFrame::Place_Ancre( MODULE* pt_mod )
 }
 
 
-void WinEDA_ModuleEditFrame::RemoveStruct( EDA_ITEM* Item )
+void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
 {
     if( Item == NULL )
         return;
@@ -151,8 +151,7 @@ void WinEDA_ModuleEditFrame::RemoveStruct( EDA_ITEM* Item )
     default:
     {
         wxString Line;
-        Line.Printf( wxT( " Remove: draw item type %d unknown." ),
-                     Item->Type() );
+        Line.Printf( wxT( " Remove: draw item type %d unknown." ), Item->Type() );
         DisplayError( this, Line );
     }
     break;

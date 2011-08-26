@@ -20,11 +20,8 @@
  */
 
 
-/* Hot keys. Some commands are relative to the item under the mouse cursor
- *  Commands are case insensitive
- */
-void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
-                                       EDA_ITEM* aItem )
+void FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
+                                     EDA_ITEM* aItem )
 {
     if( aHotKey == 0 )
         return;
@@ -35,7 +32,8 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aP
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
-    /* Convert lower to upper case (the usual toupper function has problem with non ascii codes like function keys */
+    /* Convert lower to upper case (the usual toupper function has problem with non ascii
+     * codes like function keys */
     if( (aHotKey >= 'a') && (aHotKey <= 'z') )
         aHotKey += 'A' - 'a';
 
@@ -90,8 +88,7 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aP
     case HK_REDO:
         if( ItemFree && !blockActive )
         {
-            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED,
-                                  HK_Descr->m_IdMenuEvent );
+            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
             wxPostEvent( this, event );
         }
         break;
@@ -120,7 +117,7 @@ void WinEDA_ModuleEditFrame::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aP
 }
 
 
-bool WinEDA_ModuleEditFrame::OnHotkeyEditItem( int aIdCommand )
+bool FOOTPRINT_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
     bool        itemCurrentlyEdited = item && item->m_Flags;
@@ -136,7 +133,7 @@ bool WinEDA_ModuleEditFrame::OnHotkeyEditItem( int aIdCommand )
 
     SetCurItem( item );
 
-    int evt_type = 0;       //Used to post a wxCommandEvent on demand
+    int evt_type = 0;       // Used to post a wxCommandEvent on demand
 
     switch( item->Type() )
     {
@@ -172,7 +169,7 @@ bool WinEDA_ModuleEditFrame::OnHotkeyEditItem( int aIdCommand )
 }
 
 
-bool WinEDA_ModuleEditFrame::OnHotkeyDeleteItem( int aIdCommand )
+bool FOOTPRINT_EDIT_FRAME::OnHotkeyDeleteItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
     bool        itemCurrentlyEdited = item && item->m_Flags;
@@ -188,7 +185,7 @@ bool WinEDA_ModuleEditFrame::OnHotkeyDeleteItem( int aIdCommand )
 
     SetCurItem( item );
 
-    int evt_type = 0;       //Used to post a wxCommandEvent on demand
+    int evt_type = 0;       // Used to post a wxCommandEvent on demand
 
     switch( item->Type() )
     {
@@ -224,7 +221,7 @@ bool WinEDA_ModuleEditFrame::OnHotkeyDeleteItem( int aIdCommand )
 }
 
 
-bool WinEDA_ModuleEditFrame::OnHotkeyMoveItem( int aIdCommand )
+bool FOOTPRINT_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
     bool        itemCurrentlyEdited = item && item->m_Flags;
@@ -240,7 +237,7 @@ bool WinEDA_ModuleEditFrame::OnHotkeyMoveItem( int aIdCommand )
 
     SetCurItem( item );
 
-    int evt_type = 0;       //Used to post a wxCommandEvent on demand
+    int evt_type = 0;       // Used to post a wxCommandEvent on demand
 
     switch( item->Type() )
     {
@@ -276,7 +273,7 @@ bool WinEDA_ModuleEditFrame::OnHotkeyMoveItem( int aIdCommand )
 }
 
 
-bool WinEDA_ModuleEditFrame::OnHotkeyRotateItem( int aIdCommand )
+bool FOOTPRINT_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
     bool        itemCurrentlyEdited = item && item->m_Flags;

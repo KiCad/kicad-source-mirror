@@ -36,11 +36,7 @@ static void RotateMarkedItems( MODULE* module, wxPoint offset );
 static void DeleteMarkedItems( MODULE* module );
 
 
-/* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
- * the key (ALT, SHIFT ALT ..) pressed when dragging mouse and left or
- * middle button pressed
- */
-int WinEDA_ModuleEditFrame::ReturnBlockCommand( int key )
+int FOOTPRINT_EDIT_FRAME::ReturnBlockCommand( int key )
 {
     int cmd;
 
@@ -83,17 +79,7 @@ int WinEDA_ModuleEditFrame::ReturnBlockCommand( int key )
 }
 
 
-/**
- * Function HandleBlockEnd( )
- * Handle the "end"  of a block command,
- * i.e. is called at the end of the definition of the area of a block.
- * depending on the current block command, this command is executed
- * or parameters are initialized to prepare a call to HandleBlockPlace
- * in GetScreen()->m_BlockLocate
- * @return false if no item selected, or command finished,
- * true if some items found and HandleBlockPlace must be called later
- */
-bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
+bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 {
     int  itemsCount    = 0;
     bool nextcmd = false;
@@ -121,8 +107,8 @@ bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_DRAG:        /* Drag */
     case BLOCK_MOVE:        /* Move */
     case BLOCK_COPY:        /* Copy */
-        itemsCount = MarkItemsInBloc( currentModule,
-                                      GetScreen()->m_BlockLocate );
+        itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
+
         if( itemsCount )
         {
             nextcmd = true;
@@ -147,8 +133,10 @@ bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
 
     case BLOCK_DELETE:     /* Delete */
         itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
+
         if( itemsCount )
             SaveCopyInUndoList( currentModule, UR_MODEDIT );
+
         DeleteMarkedItems( currentModule );
         break;
 
@@ -158,8 +146,10 @@ bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
 
     case BLOCK_ROTATE:
         itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
+
         if( itemsCount )
             SaveCopyInUndoList( currentModule, UR_MODEDIT );
+
         RotateMarkedItems( currentModule, GetScreen()->m_BlockLocate.Centre() );
         break;
 
@@ -168,8 +158,10 @@ bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
     case BLOCK_MIRROR_Y:
     case BLOCK_FLIP:     /* mirror */
         itemsCount = MarkItemsInBloc( currentModule, GetScreen()->m_BlockLocate );
+
         if( itemsCount )
             SaveCopyInUndoList( currentModule, UR_MODEDIT );
+
         MirrorMarkedItems( currentModule, GetScreen()->m_BlockLocate.Centre() );
         break;
 
@@ -202,15 +194,7 @@ bool WinEDA_ModuleEditFrame::HandleBlockEnd( wxDC* DC )
 }
 
 
-/******************************************************/
-void WinEDA_ModuleEditFrame::HandleBlockPlace( wxDC* DC )
-/******************************************************/
-
-/* Routine to handle the BLOCK PLACE command
- *  Last routine for block operation for:
- *  - block move & drag
- *  - block copy & paste
- */
+void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
     MODULE* currentModule = GetBoard()->m_Modules;
 
@@ -326,6 +310,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
             {
                 if( pad->m_Selected == 0 )
                     continue;
+
                 pad->Draw( aPanel, aDC, g_XorMode, move_offset );
             }
         }
@@ -434,15 +419,18 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         return;
 
     D_PAD* pad = module->m_Pads;
+
     for( ; pad != NULL; pad = pad->Next() )
     {
         if( pad->m_Selected == 0 )
             continue;
+
         pad->SetPosition( pad->GetPosition() + offset );
         pad->m_Pos0 += offset;
     }
 
     item = module->m_Drawings;
+
     for( ; item != NULL; item = item->Next() )
     {
         if( item->m_Selected == 0 )
@@ -485,20 +473,26 @@ void DeleteMarkedItems( MODULE* module )
         return;
 
     pad = module->m_Pads;
+
     for( ; pad != NULL; pad = next_pad )
     {
         next_pad = pad->Next();
+
         if( pad->m_Selected == 0 )
             continue;
+
         pad->DeleteStructure();
     }
 
     item = module->m_Drawings;
+
     for( ; item != NULL; item = next_item )
     {
         next_item = item->Next();
+
         if( item->m_Selected == 0 )
             continue;
+
         item->DeleteStructure();
     }
 }
@@ -515,10 +509,12 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
         return;
 
     D_PAD* pad = module->m_Pads;
+
     for( ; pad != NULL; pad = pad->Next() )
     {
         if( pad->m_Selected == 0 )
             continue;
+
         SETMIRROR( pad->GetPosition().x );
         pad->m_Pos0.x = pad->GetPosition().x;
         NEGATE( pad->m_Offset.x );
@@ -528,6 +524,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
     }
 
     item = module->m_Drawings;
+
     for( ; item != NULL; item = item->Next() )
     {
         if( item->m_Selected == 0 )
@@ -536,7 +533,8 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
         switch( item->Type() )
         {
         case TYPE_EDGE_MODULE:
-        {  EDGE_MODULE * edge =  (EDGE_MODULE*) item;
+        {
+            EDGE_MODULE * edge =  (EDGE_MODULE*) item;
             SETMIRROR( edge->m_Start.x );
             edge->m_Start0.x = edge->m_Start.x;
             SETMIRROR( edge->m_End.x );
@@ -547,8 +545,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
 
         case TYPE_TEXTE_MODULE:
             SETMIRROR( ( (TEXTE_MODULE*) item )->GetPosition().x );
-            ( (TEXTE_MODULE*) item )->m_Pos0.x =
-                ( (TEXTE_MODULE*) item )->GetPosition().x;
+            ( (TEXTE_MODULE*) item )->m_Pos0.x = ( (TEXTE_MODULE*) item )->GetPosition().x;
             break;
 
         default:
@@ -572,10 +569,12 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
         return;
 
     D_PAD* pad = module->m_Pads;
+
     for( ; pad != NULL; pad = pad->Next() )
     {
         if( pad->m_Selected == 0 )
             continue;
+
         ROTATE( pad->GetPosition() );
         pad->m_Pos0    = pad->GetPosition();
         pad->m_Orient += 900;
@@ -583,6 +582,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
     }
 
     item = module->m_Drawings;
+
     for( ; item != NULL; item = item->Next() )
     {
         if( item->m_Selected == 0 )
@@ -592,16 +592,14 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
         {
         case TYPE_EDGE_MODULE:
             ROTATE( ( (EDGE_MODULE*) item )->m_Start );
-            ( (EDGE_MODULE*) item )->m_Start0 =
-                ( (EDGE_MODULE*) item )->m_Start;
+            ( (EDGE_MODULE*) item )->m_Start0 = ( (EDGE_MODULE*) item )->m_Start;
             ROTATE( ( (EDGE_MODULE*) item )->m_End );
             ( (EDGE_MODULE*) item )->m_End0 = ( (EDGE_MODULE*) item )->m_End;
             break;
 
         case TYPE_TEXTE_MODULE:
             ROTATE( ( (TEXTE_MODULE*) item )->GetPosition() );
-            ( (TEXTE_MODULE*) item )->m_Pos0 =
-                ( (TEXTE_MODULE*) item )->GetPosition();
+            ( (TEXTE_MODULE*) item )->m_Pos0 = ( (TEXTE_MODULE*) item )->GetPosition();
             ( (TEXTE_MODULE*) item )->m_Orient += 900;
             break;
 
@@ -622,10 +620,12 @@ void ClearMarkItems( MODULE* module )
         return;
 
     item = module->m_Drawings;
+
     for( ; item != NULL; item = item->Next() )
         item->m_Flags = item->m_Selected = 0;
 
     item = module->m_Pads;
+
     for( ; item != NULL; item = item->Next() )
         item->m_Flags = item->m_Selected = 0;
 }
@@ -645,10 +645,12 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
         return 0;
 
     pad = module->m_Pads;
+
     for( ; pad != NULL; pad = pad->Next() )
     {
         pad->m_Selected = 0;
         pos = pad->GetPosition();
+
         if( Rect.Contains( pos ) )
         {
             pad->m_Selected = IS_SELECTED;
@@ -657,6 +659,7 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
     }
 
     item = module->m_Drawings;
+
     for( ; item != NULL; item = item->Next() )
     {
         item->m_Selected = 0;
@@ -669,15 +672,18 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
                 item->m_Selected = IS_SELECTED;
                 ItemsCount++;
             }
+
             break;
 
         case TYPE_TEXTE_MODULE:
             pos = ( (TEXTE_MODULE*) item )->GetPosition();
+
             if( Rect.Contains( pos ) )
             {
                 item->m_Selected = IS_SELECTED;
                 ItemsCount++;
             }
+
             break;
 
         default:

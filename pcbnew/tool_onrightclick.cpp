@@ -56,7 +56,7 @@ void PCB_EDIT_FRAME::ToolOnRightClick( wxCommandEvent& event )
 }
 
 
-void WinEDA_ModuleEditFrame::ToolOnRightClick( wxCommandEvent& event )
+void FOOTPRINT_EDIT_FRAME::ToolOnRightClick( wxCommandEvent& event )
 {
     wxPoint pos;
     int     id = event.GetSelection();

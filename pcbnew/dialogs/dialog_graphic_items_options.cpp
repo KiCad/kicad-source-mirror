@@ -25,7 +25,7 @@ void PCB_EDIT_FRAME::OnConfigurePcbOptions( wxCommandEvent& aEvent )
 }
 
 
-void WinEDA_ModuleEditFrame::InstallOptionsFrame( const wxPoint& pos )
+void FOOTPRINT_EDIT_FRAME::InstallOptionsFrame( const wxPoint& pos )
 {
     DIALOG_GRAPHIC_ITEMS_OPTIONS dlg( this );
     dlg.ShowModal();

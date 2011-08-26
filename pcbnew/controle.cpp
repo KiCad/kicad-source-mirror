@@ -143,7 +143,9 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             ii--;
         }
         else
+        {
             timestampzone = item->m_TimeStamp;
+        }
     }
 
     if( m_Collector->GetCount() <= 1 )
@@ -152,7 +154,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         SetCurItem( item );
     }
 
-    // If the count is 2, and first item is a pad or moduletext, and the 2nd item is its
+    // If the count is 2, and first item is a pad or module text, and the 2nd item is its
     // parent module:
     else if( m_Collector->GetCount() == 2
              && ( (*m_Collector)[0]->Type() == TYPE_PAD || (*m_Collector)[0]->Type() ==
@@ -259,7 +261,7 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         }
 
         GetScreen()->SetFileName( tmpFileName );
-        SetTitle( GetScreen()->GetFileName() );
+        UpdateTitle();
     }
 
     oldpos = GetScreen()->GetCrossHairPosition();

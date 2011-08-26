@@ -17,7 +17,7 @@ class DIALOG_MODULE_MODULE_EDITOR : public DIALOG_MODULE_MODULE_EDITOR_BASE
 {
 private:
 
-    WinEDA_ModuleEditFrame*   m_Parent;
+    FOOTPRINT_EDIT_FRAME*   m_Parent;
     MODULE* m_CurrentModule;
     TEXTE_MODULE* m_ReferenceCopy;
     TEXTE_MODULE* m_ValueCopy;
@@ -30,7 +30,7 @@ private:
 public:
 
     // Constructor and destructor
-    DIALOG_MODULE_MODULE_EDITOR( WinEDA_ModuleEditFrame* aParent, MODULE* aModule );
+    DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* aParent, MODULE* aModule );
     ~DIALOG_MODULE_MODULE_EDITOR();
 
 private:

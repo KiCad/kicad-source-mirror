@@ -72,12 +72,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
 
 
 
-/**
- * Function Clear_Pcb
- * delete all and reinitialize the current board
- * @param aQuery = true to prompt user for confirmation, false to initialize silently
- */
-bool WinEDA_ModuleEditFrame::Clear_Pcb( bool aQuery )
+bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
 {
     if( GetBoard() == NULL )
         return FALSE;
