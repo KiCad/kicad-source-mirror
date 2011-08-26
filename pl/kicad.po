@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-20 10:05+0100\n"
-"PO-Revision-Date: 2011-08-20 10:05+0100\n"
+"POT-Creation-Date: 2011-08-26 18:04+0100\n"
+"PO-Revision-Date: 2011-08-26 18:08+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCAD Team\n"
 "MIME-Version: 1.0\n"
@@ -5849,12 +5849,12 @@ msgid "Net Length:"
 msgstr "Długość Sieci:"
 
 #: pcbnew/class_netinfo_item.cpp:178
-msgid "on pcb"
-msgstr "na pcb"
+msgid "On Board"
+msgstr "Na płytce"
 
 #: pcbnew/class_netinfo_item.cpp:182
-msgid "on die"
-msgstr "na waflu"
+msgid "On Die"
+msgstr "Na rdzeniu"
 
 #: pcbnew/class_edge_mod.cpp:217
 msgid "Graphic Item"
@@ -5938,7 +5938,7 @@ msgstr "Pozycja Y"
 
 #: pcbnew/class_pad.cpp:772
 msgid "Length on die"
-msgstr "Długość na krzemie"
+msgstr "Długość na rdzeniu"
 
 #: pcbnew/class_pad.cpp:870
 msgid "Oval"
@@ -6002,11 +6002,15 @@ msgstr "Otwórz plik PCB"
 msgid "Selection Clarification"
 msgstr "Precyzowanie wyboru"
 
-#: pcbnew/editrack.cpp:793
+#: pcbnew/editrack.cpp:802
 msgid "Track Len"
 msgstr "Długość ścieżki"
 
-#: pcbnew/editrack.cpp:797
+#: pcbnew/editrack.cpp:806
+msgid "Full Len"
+msgstr "Pełna długość"
+
+#: pcbnew/editrack.cpp:814
 msgid "Segs Count"
 msgstr "Liczba segmentów"
 
@@ -6245,9 +6249,86 @@ msgstr "Nie znaleziono pinu %s w %s"
 msgid "%s pin %s found"
 msgstr "Znaleziono pin %s w %s"
 
-#: pcbnew/editrack-part2.cpp:74
-msgid "Drc error, canceled"
-msgstr "Błąd DRC, anulowano"
+#: pcbnew/class_track.cpp:68
+#: pcbnew/class_track.cpp:1060
+msgid "Zone"
+msgstr "Strefa"
+
+#: pcbnew/class_track.cpp:79
+#: pcbnew/class_track.cpp:131
+#: pcbnew/class_track.cpp:1225
+msgid "** BOARD NOT DEFINED **"
+msgstr "** PŁYTKA NIE ZDEFINIOWANA **"
+
+#: pcbnew/class_track.cpp:100
+msgid "Via"
+msgstr "Przelotka"
+
+#: pcbnew/class_track.cpp:105
+msgid "Blind/Buried"
+msgstr "Ślepa/zagrzebana"
+
+#: pcbnew/class_track.cpp:117
+#: pcbnew/class_track.cpp:1228
+msgid "Net:"
+msgstr "Sieć:"
+
+#: pcbnew/class_track.cpp:1018
+msgid "NC Name"
+msgstr "Nazwa sieci dla NC"
+
+#: pcbnew/class_track.cpp:1019
+msgid "NC Clearance"
+msgstr "Prześwit dla NC"
+
+#: pcbnew/class_track.cpp:1022
+msgid "NC Width"
+msgstr "Szerokość dla NC"
+
+#: pcbnew/class_track.cpp:1025
+msgid "NC Via Size"
+msgstr "Rozmiar przelotki dla NC"
+
+#: pcbnew/class_track.cpp:1028
+msgid "NC Via Drill"
+msgstr "Otwór przelotki dla NC"
+
+#: pcbnew/class_track.cpp:1056
+#: pcbnew/class_track.cpp:1214
+msgid "Track"
+msgstr "Ścieżka"
+
+#: pcbnew/class_track.cpp:1078
+msgid "NetName"
+msgstr "Nazwa sieci"
+
+#: pcbnew/class_track.cpp:1082
+msgid "NetCode"
+msgstr "Kod sieci"
+
+#: pcbnew/class_track.cpp:1089
+msgid "Flags"
+msgstr "Flagi"
+
+#: pcbnew/class_track.cpp:1101
+msgid "Status"
+msgstr "Status"
+
+#: pcbnew/class_track.cpp:1124
+msgid "Diam"
+msgstr "Średnica"
+
+#: pcbnew/class_track.cpp:1135
+msgid "(Specific)"
+msgstr "(Określona)"
+
+#: pcbnew/class_track.cpp:1137
+msgid "(Default)"
+msgstr "(Domyślny)"
+
+#: pcbnew/class_track.cpp:1150
+msgid "Segment Length"
+msgstr "Długość segmentu"
 
 #: pcbnew/pcbnew.cpp:99
 msgid "Pcbnew is already running, Continue?"
@@ -6355,91 +6436,6 @@ msgstr "Dokumentacja:  "
 #: pcbnew/class_module.cpp:864
 msgid "KeyW: "
 msgstr "Słowo kluczowe: "
-
-#: pcbnew/class_track.cpp:68
-#: pcbnew/class_track.cpp:1051
-msgid "Zone"
-msgstr "Strefa"
-
-#: pcbnew/class_track.cpp:79
-#: pcbnew/class_track.cpp:131
-#: pcbnew/class_track.cpp:1216
-msgid "** BOARD NOT DEFINED **"
-msgstr "** PŁYTKA NIE ZDEFINIOWANA **"
-
-#: pcbnew/class_track.cpp:100
-msgid "Via"
-msgstr "Przelotka"
-
-#: pcbnew/class_track.cpp:105
-msgid "Blind/Buried"
-msgstr "Ślepa/zagrzebana"
-
-#: pcbnew/class_track.cpp:117
-#: pcbnew/class_track.cpp:1219
-msgid "Net:"
-msgstr "Sieć:"
-
-#: pcbnew/class_track.cpp:1002
-msgid "Track Length"
-msgstr "Długość ścieżki"
-
-#: pcbnew/class_track.cpp:1009
-msgid "NC Name"
-msgstr "Nazwa sieci dla NC"
-
-#: pcbnew/class_track.cpp:1010
-msgid "NC Clearance"
-msgstr "Prześwit dla NC"
-
-#: pcbnew/class_track.cpp:1013
-msgid "NC Width"
-msgstr "Szerokość dla NC"
-
-#: pcbnew/class_track.cpp:1016
-msgid "NC Via Size"
-msgstr "Rozmiar przelotki dla NC"
-
-#: pcbnew/class_track.cpp:1019
-msgid "NC Via Drill"
-msgstr "Otwór przelotki dla NC"
-
-#: pcbnew/class_track.cpp:1047
-#: pcbnew/class_track.cpp:1205
-msgid "Track"
-msgstr "Ścieżka"
-
-#: pcbnew/class_track.cpp:1069
-msgid "NetName"
-msgstr "Nazwa sieci"
-
-#: pcbnew/class_track.cpp:1073
-msgid "NetCode"
-msgstr "Kod sieci"
-
-#: pcbnew/class_track.cpp:1080
-msgid "Flags"
-msgstr "Flagi"
-
-#: pcbnew/class_track.cpp:1092
-msgid "Status"
-msgstr "Status"
-
-#: pcbnew/class_track.cpp:1115
-msgid "Diam"
-msgstr "Średnica"
-
-#: pcbnew/class_track.cpp:1126
-msgid "(Specific)"
-msgstr "(Określona)"
-
-#: pcbnew/class_track.cpp:1128
-msgid "(Default)"
-msgstr "(Domyślny)"
-
-#: pcbnew/class_track.cpp:1141
-msgid "Segment Length"
-msgstr "Długość segmentu"
 
 #: pcbnew/pcbplot.cpp:271
 msgid "Select Output Directory"
@@ -6707,6 +6703,10 @@ msgstr "Dodaj pole lutownicze"
 #: pcbnew/modedit.cpp:846
 msgid "Pad settings"
 msgstr "Właściwości pól lutowniczych"
+
+#: pcbnew/editrack-part2.cpp:74
+msgid "Drc error, canceled"
+msgstr "Błąd DRC, anulowano"
 
 #: pcbnew/class_zone.cpp:1012
 #: pcbnew/class_zone.cpp:1275
@@ -10335,11 +10335,11 @@ msgstr "Zeruj"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:193
 msgid "Length die"
-msgstr "Długość na krzemie"
+msgstr "Długość na rdzeniu"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:195
 msgid "Wire length from pad to die on chip ( used to calculate actual track length)"
-msgstr "Długość połączenia pomiędzy polem lutowniczym a krzemem wewnątrz układu scalonego (używana do obliczeń pełnej długości ścieżki)"
+msgstr "Długość połączenia pomiędzy polem lutowniczym a rdzeniem wewnątrz układu scalonego (używana do obliczeń pełnej długości ścieżki)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:220
 msgid "Trapezoidal"
@@ -12004,171 +12004,6 @@ msgstr "Format listy sieci: EESchema"
 msgid "Netlist error: "
 msgstr "Błąd listy sieci:"
 
-#: cvpcb/savecmp.cpp:23
-msgid "Component Library Error"
-msgstr "Edytor bibliotek elementów"
-
-#: cvpcb/savecmp.cpp:85
-#, c-format
-msgid "Cannot open CvPcb component file <%s>."
-msgstr "Nie można otworzyć pliku elementów CvPcb <%s>."
-
-#: cvpcb/savecmp.cpp:87
-msgid "This is normal if you are opening a new netlist file"
-msgstr "Jest to normalne w przypadku otwarcia nowego pliku netlisty"
-
-#: cvpcb/savecmp.cpp:95
-#, c-format
-msgid " <%s> does not appear to be a valid Kicad component library."
-msgstr " <%s> nie wygląda na poprawny plik bibliotek elementów programu KiCAD."
-
-#: cvpcb/savecmp.cpp:104
-#, c-format
-msgid "<%s> is an old version component file."
-msgstr "Plik <%s> jest zapisany w formacie z poprzedniej wersji."
-
-#: cvpcb/tool_cvpcb.cpp:26
-#: cvpcb/menubar.cpp:44
-msgid "Open a net list file"
-msgstr "Otwórz plik netlisty"
-
-#: cvpcb/tool_cvpcb.cpp:30
-msgid "Save net list and footprint files"
-msgstr "Zapisz netlistę i plik modułów"
-
-#: cvpcb/tool_cvpcb.cpp:35
-msgid "Configuration"
-msgstr "Konfiguracja"
-
-#: cvpcb/tool_cvpcb.cpp:40
-msgid "View selected footprint"
-msgstr "Pokaż zaznaczoną obudowę"
-
-#: cvpcb/tool_cvpcb.cpp:44
-msgid "Perform automatic footprint association"
-msgstr "Automatyczne kojarzenie modułów"
-
-#: cvpcb/tool_cvpcb.cpp:49
-msgid "Select previous free component"
-msgstr "Wybierz poprzedni wolny element"
-
-#: cvpcb/tool_cvpcb.cpp:53
-msgid "Select next free component"
-msgstr "Wybierz następny wolny element"
-
-#: cvpcb/tool_cvpcb.cpp:58
-msgid "Delete all associations"
-msgstr "Usuń wszystkie skojarzenia"
-
-#: cvpcb/tool_cvpcb.cpp:64
-msgid "Create export file (component/footprint list, used by eeschema to fill the footprint field of components)"
-msgstr "Utwórz plik eksportu (lista elementów/modułów, użytych przez EESchema do wypełnienia pól elementów)"
-
-#: cvpcb/tool_cvpcb.cpp:70
-msgid "Display footprints list documentation"
-msgstr "Pokaż listę obudów (dokumentacja)"
-
-#: cvpcb/tool_cvpcb.cpp:78
-msgid "Display the filtered footprint list for the current component"
-msgstr "Pokaż filtrowaną listę obudów dla bieżącego elementu"
-
-#: cvpcb/tool_cvpcb.cpp:82
-msgid "Display the full footprint list (without filtering)"
-msgstr "Pokaż pełną listę obudów (bez filtrowania)"
-
-#: cvpcb/cvpcb.cpp:32
-msgid "Kicad retroannotation files (*.stf)|*.stf"
-msgstr "Pliki KiCAD retroannotation (*.stf)|*.stf"
-
-#: cvpcb/cvpcb.cpp:33
-msgid "Kicad footprint alias files (*.equ)|*.equ"
-msgstr "Pliki aliasów modułów (*.equ)|*.equ"
-
-#: cvpcb/cvpcb.cpp:89
-msgid "Cvpcb is already running, Continue?"
-msgstr "CVPcb jest już uruchomiony. Kontynuować?"
-
-#: cvpcb/cvpcb.cpp:131
-msgid " [no file]"
-msgstr " [brak pliku]"
-
-#: cvpcb/init.cpp:81
-#, c-format
-msgid "File <%s> does not appear to be a valid Kicad net list file."
-msgstr "Plik <%s> wydaje się nie być poprawnym plikiem netlisty programu KiCAD."
-
-#: cvpcb/init.cpp:83
-msgid "File Error"
-msgstr "Błąd pliku"
-
-#: cvpcb/init.cpp:137
-msgid "unamed"
-msgstr "bez_nazwy"
-
-#: cvpcb/init.cpp:139
-msgid "Save Net and Component List"
-msgstr "Zapisz netlistę i plik listy elementów"
-
-#: cvpcb/init.cpp:148
-msgid "Unable to create component file (.cmp)"
-msgstr "Nie mogę utworzyć pliku elementów (.cmp)"
-
-#: cvpcb/init.cpp:156
-msgid "Unable to create net list file"
-msgstr "Nie mogę utworzyć pliku netlisty"
-
-#: cvpcb/menubar.cpp:43
-msgid "&Open"
-msgstr "&Otwórz "
-
-#: cvpcb/menubar.cpp:58
-msgid "Open a recent opened netlist document"
-msgstr "Otwórz często otwierane dokumenty z listą sieci"
-
-#: cvpcb/menubar.cpp:67
-msgid "&Save As..."
-msgstr "&Zapisz jako..."
-
-#: cvpcb/menubar.cpp:68
-msgid "Save new net list and footprint list files"
-msgstr "Zapisz nową netlistę i plik listy modułów"
-
-#: cvpcb/menubar.cpp:78
-msgid "Quit CvPCB"
-msgstr "Zakończ CVPcb"
-
-#: cvpcb/menubar.cpp:92
-msgid "Set libraries and library search paths"
-msgstr "Wybierz biblioteki i ścieżkę poszukiwań bibliotek"
-
-#: cvpcb/menubar.cpp:100
-msgid "Keep Open On Save"
-msgstr "Pozostaw otwarte okno po zapisie"
-
-#: cvpcb/menubar.cpp:101
-msgid "Prevent CVPcb from exiting after saving netlist file"
-msgstr "Zablokuj zamknięcie CVPcb po zapisaniu pliku listy sieci"
-
-#: cvpcb/menubar.cpp:109
-msgid "&Save Project File"
-msgstr "Zapi&sz plik projektu"
-
-#: cvpcb/menubar.cpp:110
-msgid "Save changes to the project file"
-msgstr "Zapisz zmiany w projekcie"
-
-#: cvpcb/menubar.cpp:121
-msgid "Open the Cvpcb handbook"
-msgstr "Otwórz podręcznik CVPcb"
-
-#: cvpcb/menubar.cpp:126
-msgid "&About CvPCB"
-msgstr "&O programie CvPCB"
-
-#: cvpcb/menubar.cpp:127
-msgid "About CvPCB schematic to pcb converter"
-msgstr "O programie konwertera CvPCB"
-
 #: cvpcb/autosel.cpp:87
 #, c-format
 msgid "Footprint alias library file <%s> could not be found in the default search paths."
@@ -12239,57 +12074,6 @@ msgstr "Pokaż szkic jako wypełniony"
 msgid "Show outlines in sketch mode"
 msgstr "Pokaż tylko zarys szkicu"
 
-#: cvpcb/cvframe.cpp:244
-msgid ""
-"Net and component list modified.\n"
-"Save before exit ?"
-msgstr ""
-"Netlista i lista elementów (cmp) zostały zmienione.\n"
-"Zapisać przed zakończeniem?"
-
-#: cvpcb/cvframe.cpp:267
-msgid "Problem when saving files, exit anyway ?"
-msgstr "Problem podczas zapisu pliku. Zakończyć mimo to?"
-
-#: cvpcb/cvframe.cpp:391
-msgid "Delete selections"
-msgstr "Usuń zaznaczone"
-
-#: cvpcb/cvframe.cpp:424
-msgid "Open Net List"
-msgstr "Otwórz plik netlisty"
-
-#: cvpcb/cvframe.cpp:573
-#, c-format
-msgid "Components: %d (free: %d)"
-msgstr "Elementy: %d (wolne: %d)"
-
-#: cvpcb/cvframe.cpp:582
-#, c-format
-msgid "Footprints (All): %d"
-msgstr "Obudowy (wszystkie): %d"
-
-#: cvpcb/cvframe.cpp:585
-#, c-format
-msgid "Footprints (filtered): %d"
-msgstr "Obudowy (filtrowane): %d"
-
-#: cvpcb/cvframe.cpp:607
-msgid "No PCB footprint libraries are listed in the current project file."
-msgstr "Brak wyszczególnionych bibliotek modułów w bieżącym pliku projektu."
-
-#: cvpcb/cvframe.cpp:608
-msgid "Project File Error"
-msgstr "Błąd pliku"
-
-#: cvpcb/cvframe.cpp:620
-msgid "Some files could not be found!"
-msgstr "Pewne pliki nie zostały znalezione!"
-
-#: cvpcb/cvframe.cpp:628
-msgid "Some files are invalid!"
-msgstr "Niektóre pliki są niepoprawne!"
-
 #: cvpcb/setvisu.cpp:58
 msgid "Footprint: "
 msgstr "Obudowa: "
@@ -12297,6 +12081,230 @@ msgstr "Obudowa: "
 #: cvpcb/setvisu.cpp:61
 msgid "Lib: "
 msgstr "Biblioteka: "
+
+#: cvpcb/cvframe.cpp:226
+msgid ""
+"Net and component list modified.\n"
+"Save before exit ?"
+msgstr ""
+"Netlista i lista elementów (cmp) zostały zmienione.\n"
+"Zapisać przed zakończeniem?"
+
+#: cvpcb/cvframe.cpp:251
+msgid "Problem when saving files, exit anyway ?"
+msgstr "Problem podczas zapisu pliku. Zakończyć mimo to?"
+
+#: cvpcb/cvframe.cpp:381
+msgid "Delete selections"
+msgstr "Usuń zaznaczone"
+
+#: cvpcb/cvframe.cpp:411
+msgid "Open Net List"
+msgstr "Otwórz plik netlisty"
+
+#: cvpcb/cvframe.cpp:543
+#, c-format
+msgid "Components: %d (free: %d)"
+msgstr "Elementy: %d (wolne: %d)"
+
+#: cvpcb/cvframe.cpp:551
+#, c-format
+msgid "Footprints (All): %d"
+msgstr "Obudowy (wszystkie): %d"
+
+#: cvpcb/cvframe.cpp:554
+#, c-format
+msgid "Footprints (filtered): %d"
+msgstr "Obudowy (filtrowane): %d"
+
+#: cvpcb/cvframe.cpp:571
+msgid "No PCB footprint libraries are listed in the current project file."
+msgstr "Brak wyszczególnionych bibliotek modułów w bieżącym pliku projektu."
+
+#: cvpcb/cvframe.cpp:572
+msgid "Project File Error"
+msgstr "Błąd pliku"
+
+#: cvpcb/cvframe.cpp:585
+msgid "Some files could not be found!"
+msgstr "Pewne pliki nie zostały znalezione!"
+
+#: cvpcb/cvframe.cpp:593
+msgid "Some files are invalid!"
+msgstr "Niektóre pliki są niepoprawne!"
+
+#: cvpcb/cvframe.cpp:619
+msgid " [no file]"
+msgstr " [brak pliku]"
+
+#: cvpcb/cvpcb.cpp:32
+msgid "Kicad retroannotation files (*.stf)|*.stf"
+msgstr "Pliki KiCAD retroannotation (*.stf)|*.stf"
+
+#: cvpcb/cvpcb.cpp:33
+msgid "Kicad footprint alias files (*.equ)|*.equ"
+msgstr "Pliki aliasów modułów (*.equ)|*.equ"
+
+#: cvpcb/cvpcb.cpp:82
+msgid "CVPcb is already running, Continue?"
+msgstr "CVPcb jest już uruchomiony. Kontynuować?"
+
+#: cvpcb/init.cpp:77
+#, c-format
+msgid "File <%s> does not appear to be a valid Kicad net list file."
+msgstr "Plik <%s> wydaje się nie być poprawnym plikiem netlisty programu KiCAD."
+
+#: cvpcb/init.cpp:79
+msgid "File Error"
+msgstr "Błąd pliku"
+
+#: cvpcb/init.cpp:132
+msgid "Save Net and Component List"
+msgstr "Zapisz netlistę i plik listy elementów"
+
+#: cvpcb/init.cpp:151
+msgid "Unable to create component file (.cmp)"
+msgstr "Nie mogę utworzyć pliku elementów (.cmp)"
+
+#: cvpcb/init.cpp:159
+msgid "Unable to create net list file"
+msgstr "Nie mogę utworzyć pliku netlisty"
+
+#: cvpcb/menubar.cpp:44
+msgid "&Open"
+msgstr "&Otwórz "
+
+#: cvpcb/menubar.cpp:45
+#: cvpcb/tool_cvpcb.cpp:26
+msgid "Open a net list file"
+msgstr "Otwórz plik netlisty"
+
+#: cvpcb/menubar.cpp:61
+msgid "Open a recent opened netlist document"
+msgstr "Otwórz często otwierane dokumenty z listą sieci"
+
+#: cvpcb/menubar.cpp:71
+msgid "Save net list and footprint list files"
+msgstr "Zapisuje listę sieci i plik listy modułów"
+
+#: cvpcb/menubar.cpp:77
+msgid "Save &As..."
+msgstr "Zapisz j&ako..."
+
+#: cvpcb/menubar.cpp:78
+msgid "Save new net list and footprint list files"
+msgstr "Zapisz nową netlistę i plik listy modułów"
+
+#: cvpcb/menubar.cpp:88
+msgid "Quit CVPcb"
+msgstr "Zakończ CVPcb"
+
+#: cvpcb/menubar.cpp:102
+msgid "Set libraries and library search paths"
+msgstr "Wybierz biblioteki i ścieżkę poszukiwań bibliotek"
+
+#: cvpcb/menubar.cpp:110
+msgid "Keep Open On Save"
+msgstr "Pozostaw otwarte okno po zapisie"
+
+#: cvpcb/menubar.cpp:111
+msgid "Prevent CVPcb from exiting after saving netlist file"
+msgstr "Zablokuj zamknięcie CVPcb po zapisaniu pliku listy sieci"
+
+#: cvpcb/menubar.cpp:119
+msgid "&Save Project File"
+msgstr "Zapi&sz plik projektu"
+
+#: cvpcb/menubar.cpp:120
+msgid "Save changes to the project configuration file"
+msgstr "Zapisuje zmiany w pliku konfiguracji projektu"
+
+#: cvpcb/menubar.cpp:123
+msgid "&Save Project File As"
+msgstr "Zapi&sz plik projektu jako"
+
+#: cvpcb/menubar.cpp:124
+msgid "Save changes to the project configuration to a new file"
+msgstr "Zapisuje zmiany w konfiguracji projektu w nowym pliku"
+
+#: cvpcb/menubar.cpp:135
+msgid "Open the CVPcb handbook"
+msgstr "Otwórz podręcznik programu CVPcb"
+
+#: cvpcb/menubar.cpp:140
+msgid "&About CVPcb"
+msgstr "&O programie CvPCB"
+
+#: cvpcb/menubar.cpp:141
+msgid "About CVPcb schematic to pcb converter"
+msgstr "O programie konwertera CvPCB"
+
+#: cvpcb/savecmp.cpp:23
+msgid "Component Library Error"
+msgstr "Edytor bibliotek elementów"
+
+#: cvpcb/savecmp.cpp:73
+#, c-format
+msgid "Cannot open CVPcb component file <%s>."
+msgstr "Nie można otworzyć pliku elementów CVPcb <%s>."
+
+#: cvpcb/savecmp.cpp:75
+msgid "This is normal if you are opening a new netlist file"
+msgstr "Jest to normalne w przypadku otwarcia nowego pliku netlisty"
+
+#: cvpcb/savecmp.cpp:83
+#, c-format
+msgid " <%s> does not appear to be a valid Kicad component library."
+msgstr " <%s> nie wygląda na poprawny plik bibliotek elementów programu KiCAD."
+
+#: cvpcb/savecmp.cpp:92
+#, c-format
+msgid "<%s> is an old version component file."
+msgstr "Plik <%s> jest zapisany w formacie z poprzedniej wersji."
+
+#: cvpcb/tool_cvpcb.cpp:29
+msgid "Save net list and footprint files"
+msgstr "Zapisz netlistę i plik modułów"
+
+#: cvpcb/tool_cvpcb.cpp:34
+msgid "Configuration"
+msgstr "Konfiguracja"
+
+#: cvpcb/tool_cvpcb.cpp:39
+msgid "View selected footprint"
+msgstr "Pokaż zaznaczoną obudowę"
+
+#: cvpcb/tool_cvpcb.cpp:43
+msgid "Perform automatic footprint association"
+msgstr "Automatyczne kojarzenie modułów"
+
+#: cvpcb/tool_cvpcb.cpp:48
+msgid "Select previous free component"
+msgstr "Wybierz poprzedni wolny element"
+
+#: cvpcb/tool_cvpcb.cpp:52
+msgid "Select next free component"
+msgstr "Wybierz następny wolny element"
+
+#: cvpcb/tool_cvpcb.cpp:57
+msgid "Delete all associations"
+msgstr "Usuń wszystkie skojarzenia"
+
+#: cvpcb/tool_cvpcb.cpp:62
+msgid "Create export file (component/footprint list, used by eeschema to fill the footprint field of components)"
+msgstr "Utwórz plik eksportu (lista elementów/modułów, użytych przez EESchema do wypełnienia pól elementów)"
+
+#: cvpcb/tool_cvpcb.cpp:68
+msgid "Display footprints list documentation"
+msgstr "Pokaż listę obudów (dokumentacja)"
+
+#: cvpcb/tool_cvpcb.cpp:76
+msgid "Display the filtered footprint list for the current component"
+msgstr "Pokaż filtrowaną listę obudów dla bieżącego elementu"
+
+#: cvpcb/tool_cvpcb.cpp:81
+msgid "Display the full footprint list (without filtering)"
+msgstr "Pokaż pełną listę obudów (bez filtrowania)"
 
 #: cvpcb/dialogs/dialog_cvpcb_config_fbp.cpp:57
 msgid "Footprint alias files"
@@ -12318,7 +12326,7 @@ msgstr "&Punkt lutowniczy wypełniony"
 msgid "Show pad &number"
 msgstr "Pokaż &numery pól"
 
-#: cvpcb/dialogs/dialog_cvpcb_config.cpp:33
+#: cvpcb/dialogs/dialog_cvpcb_config.cpp:34
 msgid "Project file: "
 msgstr "Plik projektu:"
 
@@ -15062,6 +15070,15 @@ msgstr "Konwerter obrazów"
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:274
 msgid "Pcb Calculator"
 msgstr "Kalkulator PCB"
+
+#~ msgid "unamed"
+#~ msgstr "bez_nazwy"
+
+#~ msgid "on pcb"
+#~ msgstr "na pcb"
+
+#~ msgid "Track Length"
+#~ msgstr "Długość ścieżki"
 
 #~ msgid "Save Project Settings"
 #~ msgstr "Zapisz ustawienia projektu"
