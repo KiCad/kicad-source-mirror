@@ -502,7 +502,7 @@ void DIALOG_COPPER_ZONE::OnRunFiltersButtonClick( wxCommandEvent& event )
 
 void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
 {
-    wxArrayString listNetName;
+    wxArrayString   listNetName;
 
     m_Parent->GetBoard()->ReturnSortedNetnamesList( listNetName, m_NetSortingByPadCount );
 
@@ -510,6 +510,7 @@ void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
     {
         wxString doNotShowFilter = m_DoNotShowNetNameFilter->GetValue();
         wxString ShowFilter = m_ShowNetNameFilter->GetValue();
+
         for( unsigned ii = 0; ii < listNetName.GetCount(); ii++ )
         {
             if( listNetName[ii].Matches( doNotShowFilter ) )
@@ -524,28 +525,43 @@ void DIALOG_COPPER_ZONE::buildAvailableListOfNets()
             }
         }
     }
-    m_ListNetNameSelection->Clear();
-    listNetName.Insert( wxT( "<no net>" ), 0 );
-    m_ListNetNameSelection->InsertItems( listNetName, 0 );
-    m_ListNetNameSelection->SetSelection( 0 );
 
-    // Ensure current select net for the zone is visible:
+    listNetName.Insert( wxT( "<no net>" ), 0 );
+
+    // Ensure currently selected net for the zone is visible, regardless of filters
+    int selectedNetListNdx = -1;
     int net_select = m_Zone_Setting->m_NetcodeSelection;
+
     if( net_select > 0 )
     {
         NETINFO_ITEM* equipot = m_Parent->GetBoard()->FindNet( net_select );
-        if( equipot )  // Search net in list and select it
+        if( equipot )
         {
-            for( unsigned ii = 0; ii < listNetName.GetCount(); ii++ )
+            selectedNetListNdx = listNetName.Index( equipot->GetNetname() );
+
+            if( wxNOT_FOUND == selectedNetListNdx )
             {
-                if( listNetName[ii] == equipot->GetNetname() )
-                {
-                    m_ListNetNameSelection->SetSelection( ii );
-                    m_ListNetNameSelection->EnsureVisible( ii );
-                    break;
-                }
+                // the currently selected net must *always* be visible.
+                listNetName.Insert( equipot->GetNetname(), 0 );
+                selectedNetListNdx = 0;
             }
         }
+    }
+    else if( net_select == 0 )
+        selectedNetListNdx = 0;     // SetSelection() on "<no net>"
+    else
+    {
+        // selectedNetListNdx remains -1, no net selected.
+    }
+
+    m_ListNetNameSelection->Clear();
+    m_ListNetNameSelection->InsertItems( listNetName, 0 );
+    m_ListNetNameSelection->SetSelection( 0 );
+
+    if( selectedNetListNdx >= 0 )
+    {
+        m_ListNetNameSelection->SetSelection( selectedNetListNdx );
+        m_ListNetNameSelection->EnsureVisible( selectedNetListNdx );
     }
 }
 

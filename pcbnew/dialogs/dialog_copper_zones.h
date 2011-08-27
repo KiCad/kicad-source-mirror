@@ -1,47 +1,53 @@
 /* dialog_copper_zones.h */
 
-#ifndef DIALOG_COPPER_ZONES
-#define DIALOG_COPPER_ZONES
+#ifndef DIALOG_COPPER_ZONES_
+#define DIALOG_COPPER_ZONES_
 
 #include <wx/wx.h>
 #include <wx/listctrl.h>
 #include "dialog_copper_zones_base.h"
 
-/* here is the derivated class from dialog_copper_zone_frame created by wxFormBuilder
+/**
+ * Class DIALOG_COPPER_ZONE
+ * is the derivated class from dialog_copper_zone_frame created by wxFormBuilder
  */
 class DIALOG_COPPER_ZONE : public DIALOG_COPPER_ZONE_BASE
 {
 private:
-    PCB_EDIT_FRAME*  m_Parent;
-    wxConfig*        m_Config;      // Current config
-    int m_OnExitCode;               /* exit code: ZONE_ABORT if no change,
-                                     *  ZONE_OK if new values accepted
-                                     *  ZONE_EXPORT_VALUES if values are exported to others zones
-                                     */
+    PCB_EDIT_FRAME* m_Parent;
+    wxConfig*       m_Config;               ///< Current config
+
+    int             m_OnExitCode;           ///< exit code: ZONE_ABORT if no change,
+                                            ///< ZONE_OK if new values accepted
+                                            ///< ZONE_EXPORT_VALUES if values are exported to others zones
 
     ZONE_SETTING*   m_Zone_Setting;
-    bool            m_NetSortingByPadCount;   /* false = alphabetic sort.
-                                               *  true = pad count sort.
-                                               */
+
+    bool            m_NetSortingByPadCount; ///< false = alphabetic sort.
+                                            ///< true = pad count sort.
+
     long            m_NetFiltering;
-    std::vector<int> m_LayerId;               // Handle the real layer number from layer
-                                              // name position in m_LayerSelectionCtrl
-    static wxString m_netNameShowFilter;    /* the filter to show nets (default * "*").
-                                             *  static to keep this pattern for an entire pcbnew session
-                                             */
+    std::vector<int> m_LayerId;             ///< Handle the real layer number from layer
+                                            ///< name position in m_LayerSelectionCtrl
+
+    static wxString m_netNameShowFilter;    ///< the filter to show nets (default * "*").
+                                            ///< static to keep this pattern for an entire pcbnew session
+
     wxListView*     m_LayerSelectionCtrl;
 
-    static wxPoint  prevPosition;             // Dialog position & size
+    static wxPoint  prevPosition;           ///< Dialog position & size
     static wxSize   prevSize;
 
 public:
     DIALOG_COPPER_ZONE( PCB_EDIT_FRAME* parent, ZONE_SETTING* zone_setting );
 private:
 
-    /** Function initDialog
+    /**
+     * Function initDialog
      * fills in the dialog controls using the current settings.
      */
     void initDialog();
+
     void OnButtonOkClick( wxCommandEvent& event );
     void OnButtonCancelClick( wxCommandEvent& event );
     void OnClose( wxCloseEvent& event );
@@ -55,13 +61,17 @@ private:
      * @return bool - false if incorrect options, true if ok.
      */
     bool AcceptOptions( bool aPromptForErrors, bool aUseExportableSetupOnly = false );
+
     void OnNetSortingOptionSelected( wxCommandEvent& event );
     void ExportSetupToOtherCopperZones( wxCommandEvent& event );
     void OnPadsInZoneClick( wxCommandEvent& event );
     void OnRunFiltersButtonClick( wxCommandEvent& event );
+
+
     void buildAvailableListOfNets();
 
-    /** Function initListNetsParams
+    /**
+     * Function initListNetsParams
      * initializes m_NetSortingByPadCount and m_NetFiltering values
      * according to m_NetDisplayOption selection.
      */
@@ -74,4 +84,5 @@ private:
      */
     wxBitmap makeLayerBitmap( int aColor );
 };
-#endif      // #ifndef DIALOG_COPPER_ZONES
+
+#endif  // DIALOG_COPPER_ZONES_
