@@ -2,12 +2,21 @@
 #ifndef BITMAPS_H_
 #define BITMAPS_H_
 
+#include <wx/bitmap.h>
+
+
 #define VTOOLBAR_WIDTH  26
 
 #define TOOL_SIZE       23
 
 
 
+#if !defined(USE_PNG_BITMAPS)
+
+// temporary during migration to KiBitmap() and KiBitmapNew().
+typedef const char** BITMAP_DEF;
+
+#else
 
 /// PNG memory record (file in memory).
 struct BITMAP_DEF
@@ -16,14 +25,25 @@ struct BITMAP_DEF
     int                     byteCount;
 };
 
+#endif
+
 
 /**
- * Function Bitmap
- * constructs a wxBitmap from a PNG memory record, held in a
- * BITMAP_DEF.  This name and interface is chose to ease migration
- * into PNG usage from XPM usage.
+ * Function KiBitmap
+ * constructs a wxBitmap from a memory record, held in a
+ * BITMAP_DEF.
  */
-wxBitmap Bitmap( const BITMAP_DEF& aBitmap );
+wxBitmap KiBitmap( const BITMAP_DEF& aBitmap );
+
+
+/**
+ * Function KiBitmapNew
+ * allocates a wxBitmap on heap from a memory record, held in a
+ * BITMAP_DEF.
+ *
+ * @return wxBitmap* - caller owns it.
+ */
+wxBitmap* KiBitmapNew( const BITMAP_DEF& aBitmap );
 
 
 // Please keep list sorted alphabetically, ignoring case.

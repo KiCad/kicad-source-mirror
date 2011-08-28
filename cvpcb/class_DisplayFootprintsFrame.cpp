@@ -156,36 +156,36 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
     // Create options tool bar.
     m_OptionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, wxBitmap( grid_xpm ),
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
                                _( "Hide grid" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
-                               wxBitmap( polar_coord_xpm ),
+                               KiBitmap( polar_coord_xpm ),
                                _( "Display polar coordinates" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
-                               wxBitmap( unit_inch_xpm ),
+                               KiBitmap( unit_inch_xpm ),
                                _( "Units in inches" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
-                               wxBitmap( unit_mm_xpm ),
+                               KiBitmap( unit_mm_xpm ),
                                _( "Units in millimeters" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               wxBitmap( cursor_shape_xpm ),
+                               KiBitmap( cursor_shape_xpm ),
                                _( "Change cursor shape" ), wxITEM_CHECK  );
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
-                               wxBitmap( pad_sketch_xpm ),
+                               KiBitmap( pad_sketch_xpm ),
                                _( "Show pads in outline mode" ), wxITEM_CHECK  );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, wxEmptyString,
-                               wxBitmap( text_sketch_xpm ),
+                               KiBitmap( text_sketch_xpm ),
                                _( "Show texts in line mode" ), wxITEM_CHECK  );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, wxEmptyString,
-                               wxBitmap( show_mod_edge_xpm ),
+                               KiBitmap( show_mod_edge_xpm ),
                                _( "Show outlines in line mode" ), wxITEM_CHECK  );
 
     m_OptionsToolBar->Realize();
@@ -199,25 +199,25 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 
     m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
 
-    m_HToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, wxBitmap( display_options_xpm ),
+    m_HToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, KiBitmap( display_options_xpm ),
                          _( "Display options" ) );
 
     m_HToolBar->AddSeparator();
 
-    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ),
                          _( "Zoom in (F1)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, wxBitmap( zoom_out_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ),
                          _( "Zoom out (F2)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, wxBitmap( zoom_redraw_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ),
                          _( "Redraw view (F3)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_fit_in_page_xpm ),
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ),
                          _( "Zoom auto (Home)" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, wxBitmap( show_3d_xpm ),
+    m_HToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, KiBitmap( show_3d_xpm ),
                          _( "3D Display" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect

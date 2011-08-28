@@ -65,8 +65,8 @@ HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
     // Make an image list containing small icons
     imageList = new wxImageList( 16, 15, TRUE, 2 );
 
-    imageList->Add( wxBitmap( tree_nosel_xpm ) );
-    imageList->Add( wxBitmap( tree_sel_xpm ) );
+    imageList->Add( KiBitmap( tree_nosel_xpm ) );
+    imageList->Add( KiBitmap( tree_sel_xpm ) );
 
     AssignImageList( imageList );
 }

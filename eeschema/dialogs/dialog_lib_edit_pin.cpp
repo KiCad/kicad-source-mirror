@@ -147,7 +147,7 @@ void DIALOG_LIB_EDIT_PIN::SetOrientationList( const wxArrayString& list,
         if( aBitmaps == NULL )
             m_choiceOrientation->Append( list[ii] );
         else
-            m_choiceOrientation->Insert( list[ii], wxBitmap( aBitmaps[ii] ), ii );
+            m_choiceOrientation->Insert( list[ii], KiBitmap( aBitmaps[ii] ), ii );
     }
 }
 
@@ -160,7 +160,7 @@ void DIALOG_LIB_EDIT_PIN::SetElectricalTypeList( const wxArrayString& list,
         if( aBitmaps == NULL )
             m_choiceElectricalType->Append( list[ii] );
         else
-            m_choiceElectricalType->Insert( list[ii], wxBitmap( aBitmaps[ii] ), ii );
+            m_choiceElectricalType->Insert( list[ii], KiBitmap( aBitmaps[ii] ), ii );
     }
 }
 
@@ -172,6 +172,6 @@ void DIALOG_LIB_EDIT_PIN::SetStyleList( const wxArrayString& list, const char***
         if( aBitmaps == NULL )
             m_choiceStyle->Append( list[ii] );
         else
-            m_choiceStyle->Insert( list[ii], wxBitmap( aBitmaps[ii] ), ii );
+            m_choiceStyle->Insert( list[ii], KiBitmap( aBitmaps[ii] ), ii );
     }
 }

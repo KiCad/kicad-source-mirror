@@ -191,66 +191,66 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->SetRows( 1 );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, wxBitmap( new_xpm ),
+    m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiBitmap( new_xpm ),
                          _( "New board" ) );
-    m_HToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, wxBitmap( open_document_xpm ),
+    m_HToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiBitmap( open_document_xpm ),
                          _( "Open existing board" ) );
-    m_HToolBar->AddTool( ID_SAVE_BOARD, wxEmptyString, wxBitmap( save_xpm ),
+    m_HToolBar->AddTool( ID_SAVE_BOARD, wxEmptyString, KiBitmap( save_xpm ),
                          _( "Save board" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_SHEET_SET, wxEmptyString, wxBitmap( sheetset_xpm ),
+    m_HToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiBitmap( sheetset_xpm ),
                          _( "Page settings for paper size and texts" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString, wxBitmap( modedit_xpm ),
+    m_HToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString, KiBitmap( modedit_xpm ),
                          _( "Open module editor" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_CUT, wxEmptyString, wxBitmap( cut_button ),
+    m_HToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button ),
                          _( "Cut selected item" ) );
 
 #if 0
-    m_HToolBar->AddTool( wxID_COPY, wxEmptyString, wxBitmap( copy_button ),
+    m_HToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button ),
                          _( "Copy selected item" ) );
 
-    m_HToolBar->AddTool( wxID_PASTE, wxEmptyString, wxBitmap( paste_xpm ),
+    m_HToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
                          _( "Paste" ) );
 #endif
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( HELP_UNDO, g_Board_Editor_Hokeys_Descr, HK_UNDO, false );
-    m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, wxBitmap( undo_xpm ), HELP_UNDO );
+    m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), HELP_UNDO );
     msg = AddHotkeyName( HELP_REDO, g_Board_Editor_Hokeys_Descr, HK_REDO, false );
-    m_HToolBar->AddTool( wxID_REDO, wxEmptyString, wxBitmap( redo_xpm ), HELP_REDO );
+    m_HToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), HELP_REDO );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, wxBitmap( print_button ),
+    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button ),
                          _( "Print board" ) );
-    m_HToolBar->AddTool( ID_GEN_PLOT, wxEmptyString, wxBitmap( plot_xpm ),
+    m_HToolBar->AddTool( ID_GEN_PLOT, wxEmptyString, KiBitmap( plot_xpm ),
                          _( "Plot (HPGL, PostScript, or GERBER format)" ) );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( HELP_ZOOM_IN, g_Board_Editor_Hokeys_Descr, HK_ZOOM_IN, false );
-    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, wxBitmap( zoom_in_xpm ), msg );
+    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_OUT, g_Board_Editor_Hokeys_Descr, HK_ZOOM_OUT, false );
-    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, wxBitmap( zoom_out_xpm ), msg );
+    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Board_Editor_Hokeys_Descr, HK_ZOOM_REDRAW, false );
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, wxBitmap( zoom_redraw_xpm ), msg );
+    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_FIT, g_Board_Editor_Hokeys_Descr, HK_ZOOM_AUTO, false );
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, wxBitmap( zoom_fit_in_page_xpm ), msg );
+    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
 
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( HELP_FIND, g_Board_Editor_Hokeys_Descr, HK_FIND_ITEM, false );
-    m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, wxBitmap( find_xpm ), msg );
+    m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiBitmap( find_xpm ), msg );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, wxBitmap( netlist_xpm ),
+    m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
                          _( "Read netlist" ) );
-    m_HToolBar->AddTool( ID_DRC_CONTROL, wxEmptyString, wxBitmap( erc_xpm ),
+    m_HToolBar->AddTool( ID_DRC_CONTROL, wxEmptyString, KiBitmap( erc_xpm ),
                          _( "Perform design rules check" ) );
 
     m_HToolBar->AddSeparator();
@@ -267,16 +267,16 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
                          *LayerPairBitmap, SEL_LAYER_HELP );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_TOOLBARH_PCB_MODE_MODULE, wxEmptyString, wxBitmap( mode_module_xpm ),
+    m_HToolBar->AddTool( ID_TOOLBARH_PCB_MODE_MODULE, wxEmptyString, KiBitmap( mode_module_xpm ),
                          _( "Mode footprint: manual and automatic move and place modules" ),
                          wxITEM_CHECK );
-    m_HToolBar->AddTool( ID_TOOLBARH_PCB_MODE_TRACKS, wxEmptyString, wxBitmap( mode_track_xpm ),
+    m_HToolBar->AddTool( ID_TOOLBARH_PCB_MODE_TRACKS, wxEmptyString, KiBitmap( mode_track_xpm ),
                          _( "Mode track: autorouting" ), wxITEM_CHECK );
 
     // Fast call to FreeROUTE Web Bases router
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, wxEmptyString,
-                         wxBitmap( web_support_xpm ),
+                         KiBitmap( web_support_xpm ),
                          _( "Fast access to the Web Based FreeROUTE advanced router" ) );
 
     m_HToolBar->AddSeparator();
@@ -295,65 +295,65 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
 
     m_OptionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_DRC_OFF, wxEmptyString, wxBitmap( drc_off_xpm ),
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_DRC_OFF, wxEmptyString, KiBitmap( drc_off_xpm ),
                                _( "Enable design rule checking" ), wxITEM_CHECK );
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, wxBitmap( grid_xpm ),
+    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
                                _( "Hide grid" ), wxITEM_CHECK );
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
-                               wxBitmap( polar_coord_xpm ),
+                               KiBitmap( polar_coord_xpm ),
                                _( "Display polar coordinates" ), wxITEM_CHECK );
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
-                               wxBitmap( unit_inch_xpm ),
+                               KiBitmap( unit_inch_xpm ),
                                _( "Units in inches" ), wxITEM_CHECK );
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
-                               wxBitmap( unit_mm_xpm ),
+                               KiBitmap( unit_mm_xpm ),
                                _( "Units in millimeters" ), wxITEM_CHECK );
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               wxBitmap( cursor_shape_xpm ),
+                               KiBitmap( cursor_shape_xpm ),
                                _( "Change cursor shape" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_RATSNEST, wxEmptyString,
-                               wxBitmap( general_ratsnet_xpm ),
+                               KiBitmap( general_ratsnet_xpm ),
                                _( "Show board ratsnest" ), wxITEM_CHECK );
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST, wxEmptyString,
-                               wxBitmap( local_ratsnet_xpm ),
+                               KiBitmap( local_ratsnet_xpm ),
                                _( "Show module ratsnest when moving" ),
                                wxITEM_CHECK );
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_AUTO_DEL_TRACK, wxEmptyString,
-                               wxBitmap( auto_delete_track_xpm ),
+                               KiBitmap( auto_delete_track_xpm ),
                                _( "Enable automatic track deletion" ),
                                wxITEM_CHECK );
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES, wxEmptyString,
-                                    wxBitmap( show_zone_xpm ), wxNullBitmap,
+                                    KiBitmap( show_zone_xpm ), wxNullBitmap,
                                     _( "Show filled areas in zones" ) );
     m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, wxEmptyString,
-                                    wxBitmap( show_zone_disable_xpm ),
+                                    KiBitmap( show_zone_disable_xpm ),
                                     wxNullBitmap, _( "Do not show filled areas in zones" ));
     m_OptionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, wxEmptyString,
-                                    wxBitmap( show_zone_outline_only_xpm ), wxNullBitmap,
+                                    KiBitmap( show_zone_outline_only_xpm ), wxNullBitmap,
                                     _( "Show outlines of filled areas only in zones" ) );
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
-                               wxBitmap( pad_sketch_xpm ),
+                               KiBitmap( pad_sketch_xpm ),
                                _( "Show pads in outline mode" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, wxEmptyString,
-                               wxBitmap( via_sketch_xpm ),
+                               KiBitmap( via_sketch_xpm ),
                                _( "Show vias in outline mode" ), wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, wxEmptyString,
-                               wxBitmap( showtrack_xpm ),
+                               KiBitmap( showtrack_xpm ),
                                _( "Show tracks in outline mode" ),
                                wxITEM_CHECK );
 
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, wxEmptyString,
-                               wxBitmap( palette_xpm ),
+                               KiBitmap( palette_xpm ),
                                _( "Enable high contrast display mode" ),
                                wxITEM_CHECK );
 
@@ -361,12 +361,12 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
                                wxEmptyString,
-                               wxBitmap( layers_manager_xpm ),
+                               KiBitmap( layers_manager_xpm ),
                                HELP_SHOW_HIDE_LAYERMANAGER,
                                wxITEM_CHECK );
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
                                wxEmptyString,
-                               wxBitmap( mw_toolbar_xpm ),
+                               KiBitmap( mw_toolbar_xpm ),
  _( "Show/hide the toolbar for microwaves tools\n This is a experimental feature (under development)" ),
                                wxITEM_CHECK );
 
@@ -388,57 +388,57 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_VToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
 
     // Set up toolbar
-    m_VToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, wxBitmap( cursor_xpm ),
+    m_VToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
                          wxEmptyString, wxITEM_CHECK );
     m_VToolBar->AddSeparator();
 
-    m_VToolBar->AddTool( ID_PCB_HIGHLIGHT_BUTT, wxEmptyString, wxBitmap( net_highlight_xpm ),
+    m_VToolBar->AddTool( ID_PCB_HIGHLIGHT_BUTT, wxEmptyString, KiBitmap( net_highlight_xpm ),
                          _( "Highlight net" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_PCB_SHOW_1_RATSNEST_BUTT, wxEmptyString, wxBitmap( tool_ratsnet_xpm ),
+    m_VToolBar->AddTool( ID_PCB_SHOW_1_RATSNEST_BUTT, wxEmptyString, KiBitmap( tool_ratsnet_xpm ),
                          _( "Display local ratsnest" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_PCB_MODULE_BUTT, wxEmptyString, wxBitmap( module_xpm ),
+    m_VToolBar->AddTool( ID_PCB_MODULE_BUTT, wxEmptyString, KiBitmap( module_xpm ),
                          _( "Add modules" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_TRACK_BUTT, wxEmptyString, wxBitmap( add_tracks_xpm ),
+    m_VToolBar->AddTool( ID_TRACK_BUTT, wxEmptyString, KiBitmap( add_tracks_xpm ),
                          _( "Add tracks and vias" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_PCB_ZONES_BUTT, wxEmptyString, wxBitmap( add_zone_xpm ),
+    m_VToolBar->AddTool( ID_PCB_ZONES_BUTT, wxEmptyString, KiBitmap( add_zone_xpm ),
                          _( "Add filled zones" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_PCB_ADD_LINE_BUTT, wxEmptyString, wxBitmap( add_dashed_line_xpm ),
+    m_VToolBar->AddTool( ID_PCB_ADD_LINE_BUTT, wxEmptyString, KiBitmap( add_dashed_line_xpm ),
                          _( "Add graphic line or polygon" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_PCB_CIRCLE_BUTT, wxEmptyString, wxBitmap( add_circle_xpm ),
+    m_VToolBar->AddTool( ID_PCB_CIRCLE_BUTT, wxEmptyString, KiBitmap( add_circle_xpm ),
                          _( "Add graphic circle" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_PCB_ARC_BUTT, wxEmptyString, wxBitmap( add_arc_xpm ),
+    m_VToolBar->AddTool( ID_PCB_ARC_BUTT, wxEmptyString, KiBitmap( add_arc_xpm ),
                          _( "Add graphic arc" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString, wxBitmap( add_text_xpm ),
+    m_VToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString, KiBitmap( add_text_xpm ),
                          _( "Add text on copper layers or graphic text" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_PCB_DIMENSION_BUTT, wxEmptyString, wxBitmap( add_dimension_xpm ),
+    m_VToolBar->AddTool( ID_PCB_DIMENSION_BUTT, wxEmptyString, KiBitmap( add_dimension_xpm ),
                          _( "Add dimension" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_PCB_MIRE_BUTT, wxEmptyString, wxBitmap( add_mires_xpm ),
+    m_VToolBar->AddTool( ID_PCB_MIRE_BUTT, wxEmptyString, KiBitmap( add_mires_xpm ),
                          _( "Add layer alignment target" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_PCB_DELETE_ITEM_BUTT, wxEmptyString, wxBitmap( delete_body_xpm ),
+    m_VToolBar->AddTool( ID_PCB_DELETE_ITEM_BUTT, wxEmptyString, KiBitmap( delete_body_xpm ),
                          _( "Delete items" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();
-    m_VToolBar->AddTool( ID_PCB_PLACE_OFFSET_COORD_BUTT, wxEmptyString, wxBitmap( pcb_offset_xpm ),
+    m_VToolBar->AddTool( ID_PCB_PLACE_OFFSET_COORD_BUTT, wxEmptyString, KiBitmap( pcb_offset_xpm ),
                          _( "Place the origin point for drill and place files" ),
                          wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_PCB_PLACE_GRID_COORD_BUTT, wxEmptyString,
-                         wxBitmap( grid_select_axis_xpm ),
+                         KiBitmap( grid_select_axis_xpm ),
                          _( "Set the origin point for the grid" ),
                          wxITEM_CHECK );
 
@@ -460,26 +460,26 @@ void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
 
     // Set up toolbar
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_SELF_CMD, wxEmptyString,
-                            wxBitmap( mw_Add_Line_xpm ),
+                            KiBitmap( mw_Add_Line_xpm ),
                             _( "Create line of specified length for microwave applications" ) );
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_GAP_CMD, wxEmptyString,
-                            wxBitmap( mw_Add_Gap_xpm ),
+                            KiBitmap( mw_Add_Gap_xpm ),
                             _( "Create gap of specified length for microwave applications" ) );
 
     m_AuxVToolBar->AddSeparator();
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_CMD, wxEmptyString,
-                            wxBitmap( mw_Add_Stub_xpm ),
+                            KiBitmap( mw_Add_Stub_xpm ),
                             _( "Create stub of specified length for microwave applications" ) );
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_ARC_CMD, wxEmptyString,
-                            wxBitmap( mw_Add_stub_arc_xpm ),
+                            KiBitmap( mw_Add_stub_arc_xpm ),
                             _( "Create stub (arc) of specified length for microwave applications" )
                             );
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD, wxEmptyString,
-                            wxBitmap( mw_Add_Shape_xpm ),
+                            KiBitmap( mw_Add_Shape_xpm ),
                             _( "Create a polynomial shape for microwave applications" ) );
 
     m_AuxVToolBar->Realize();
@@ -531,7 +531,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     // Creates box to display and choose strategy to handle tracks an vias sizes:
     m_AuxiliaryToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_AUTO_WIDTH,
                                  wxEmptyString,
-                                 wxBitmap( auto_track_width_xpm ),
+                                 KiBitmap( auto_track_width_xpm ),
                                  _( "Auto track width: when starting on \
 an existing track use its width\notherwise, use current width setting" ),
                                  wxITEM_CHECK );

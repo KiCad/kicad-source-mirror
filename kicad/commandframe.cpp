@@ -72,23 +72,23 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
 {
     wxBitmapButton* btn;
 
-    btn = AddBitmapButton( ID_TO_EESCHEMA, wxBitmap( icon_eeschema_xpm ) );
+    btn = AddBitmapButton( ID_TO_EESCHEMA, KiBitmap( icon_eeschema_xpm ) );
     btn->SetToolTip( _( "EESchema (Schematic editor)" ) );
 
-    btn = AddBitmapButton( ID_TO_CVPCB, wxBitmap( icon_cvpcb_xpm ) );
+    btn = AddBitmapButton( ID_TO_CVPCB, KiBitmap( icon_cvpcb_xpm ) );
     btn->SetToolTip( _( "CVpcb (Components to modules)" ) );
 
-    btn = AddBitmapButton( ID_TO_PCB, wxBitmap( a_icon_pcbnew_xpm ) );
+    btn = AddBitmapButton( ID_TO_PCB, KiBitmap( a_icon_pcbnew_xpm ) );
     btn->SetToolTip( _( "PCBnew (PCB editor)" ) );
 
-    btn = AddBitmapButton( ID_TO_GERBVIEW, wxBitmap( icon_gerbview_xpm ) );
+    btn = AddBitmapButton( ID_TO_GERBVIEW, KiBitmap( icon_gerbview_xpm ) );
     btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );
 
-    btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, wxBitmap( bitmap2component_xpm ) );
+    btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, KiBitmap( bitmap2component_xpm ) );
     btn->SetToolTip( _( "Bitmap2Component (a tool to build a logo from a bitmap)\n\
 Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W picture" ) );
 
-    btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, wxBitmap( pcb_calculator_xpm ) );
+    btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, KiBitmap( pcb_calculator_xpm ) );
     btn->SetToolTip( _( "Pcb calculator" ) );
 }
 

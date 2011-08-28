@@ -30,15 +30,15 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent ) :
     // Make an image list containing small icons
     m_ImageList = new wxImageList( 16, 16, TRUE, TREE_MAX );
 
-    m_ImageList->Add( wxBitmap( kicad_icon_small_xpm ) );       // TREE_PROJECT
-    m_ImageList->Add( wxBitmap( eeschema_xpm ) );               // TREE_SCHEMA
-    m_ImageList->Add( wxBitmap( pcbnew_xpm ) );                 // TREE_PCB
-    m_ImageList->Add( wxBitmap( icon_gerbview_small_xpm ) );    // TREE_GERBER
-    m_ImageList->Add( wxBitmap( datasheet_xpm ) );              // TREE_PDF
-    m_ImageList->Add( wxBitmap( icon_txt_xpm ) );               // TREE_TXT
-    m_ImageList->Add( wxBitmap( icon_cvpcb_small_xpm ) );       // TREE_NET
-    m_ImageList->Add( wxBitmap( unknown_xpm ) );                // TREE_UNKNOWN
-    m_ImageList->Add( wxBitmap( directory_xpm ) );              // TREE_DIRECTORY
+    m_ImageList->Add( KiBitmap( kicad_icon_small_xpm ) );       // TREE_PROJECT
+    m_ImageList->Add( KiBitmap( eeschema_xpm ) );               // TREE_SCHEMA
+    m_ImageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_PCB
+    m_ImageList->Add( KiBitmap( icon_gerbview_small_xpm ) );    // TREE_GERBER
+    m_ImageList->Add( KiBitmap( datasheet_xpm ) );              // TREE_PDF
+    m_ImageList->Add( KiBitmap( icon_txt_xpm ) );               // TREE_TXT
+    m_ImageList->Add( KiBitmap( icon_cvpcb_small_xpm ) );       // TREE_NET
+    m_ImageList->Add( KiBitmap( unknown_xpm ) );                // TREE_UNKNOWN
+    m_ImageList->Add( KiBitmap( directory_xpm ) );              // TREE_DIRECTORY
 
     SetImageList( m_ImageList );
 }

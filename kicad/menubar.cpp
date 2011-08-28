@@ -275,17 +275,17 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 
     // New
     m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
-                         wxBitmap( new_project_xpm ),
+                         KiBitmap( new_project_xpm ),
                          _( "Start a new project" ) );
 
     // Load
     m_HToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString,
-                         wxBitmap( open_project_xpm ),
+                         KiBitmap( open_project_xpm ),
                          _( "Load existing project" ) );
 
     // Save
     m_HToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,
-                         wxBitmap( save_project_xpm ),
+                         KiBitmap( save_project_xpm ),
                          _( "Save current project" ) );
 
     // Separator
@@ -293,7 +293,7 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 
     // Archive
     m_HToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
-                         wxBitmap( zip_xpm ),
+                         KiBitmap( zip_xpm ),
                          _( "Archive all project files" ) );
 
     // Separator
@@ -301,7 +301,7 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 
     // Refresh project tree
     m_HToolBar->AddTool( ID_PROJECT_TREE_REFRESH, wxEmptyString,
-                         wxBitmap( reload_xpm ),
+                         KiBitmap( reload_xpm ),
                          _( "Refresh project tree" ) );
 
     // Create m_HToolBar

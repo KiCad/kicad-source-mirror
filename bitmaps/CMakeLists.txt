@@ -363,12 +363,12 @@ set(BITMAP_SRCS
     Rotate_Pin.xpm
     Rotate_CCW.xpm
     Rotate_CW.xpm
-    rotate-x.xpm
-    rotate+x.xpm
-    rotate-y.xpm
-    rotate+y.xpm
-    rotate-z.xpm
-    rotate+z.xpm
+    rotate_neg_x.xpm
+    rotate_pos_x.xpm
+    rotate_neg_y.xpm
+    rotate_pos_y.xpm
+    rotate_neg_z.xpm
+    rotate_pos_z.xpm
     save_as.xpm
     Save_Library.xpm
     Save_NetList.xpm

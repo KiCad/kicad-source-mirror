@@ -32,51 +32,51 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
         // Set up toolbar
         m_HToolBar->AddTool( ID_LIBVIEW_SELECT_LIB, wxEmptyString,
-                             wxBitmap( library_xpm ),
+                             KiBitmap( library_xpm ),
                              _( "Select library to browse" ) );
 
         m_HToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
-                             wxBitmap( add_component_xpm ),
+                             KiBitmap( add_component_xpm ),
                              _( "Select part to browse" ) );
 
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
-                             wxBitmap( lib_previous_xpm ),
+                             KiBitmap( lib_previous_xpm ),
                              _( "Display previous part" ) );
 
         m_HToolBar->AddTool( ID_LIBVIEW_NEXT, wxEmptyString,
-                             wxBitmap( lib_next_xpm ),
+                             KiBitmap( lib_next_xpm ),
                              _( "Display next part" ) );
 
         m_HToolBar->AddSeparator();
         msg = AddHotkeyName( _( "Zoom in" ), s_Viewlib_Hokeys_Descr,
                              HK_ZOOM_IN, false );
         m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
-                             wxBitmap( zoom_in_xpm ), msg );
+                             KiBitmap( zoom_in_xpm ), msg );
 
         msg = AddHotkeyName( _( "Zoom out" ), s_Viewlib_Hokeys_Descr,
                              HK_ZOOM_OUT, false );
         m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
-                             wxBitmap( zoom_out_xpm ), msg );
+                             KiBitmap( zoom_out_xpm ), msg );
 
         msg = AddHotkeyName( _( "Redraw view" ), s_Viewlib_Hokeys_Descr,
                              HK_ZOOM_REDRAW, false );
         m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
-                             wxBitmap( zoom_redraw_xpm ), msg );
+                             KiBitmap( zoom_redraw_xpm ), msg );
 
         msg = AddHotkeyName( _( "Zoom auto" ), s_Viewlib_Hokeys_Descr,
                              HK_ZOOM_AUTO, false );
         m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                             wxBitmap( zoom_fit_in_page_xpm ), msg );
+                             KiBitmap( zoom_fit_in_page_xpm ), msg );
 
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
-                             wxBitmap( morgan1_xpm ),
+                             KiBitmap( morgan1_xpm ),
                              _( "Show as \"De Morgan\" normal part" ),
                              wxITEM_CHECK );
 
         m_HToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, wxEmptyString,
-                             wxBitmap( morgan2_xpm ),
+                             KiBitmap( morgan2_xpm ),
                              _( "Show as \"De Morgan\" convert part" ),
                              wxITEM_CHECK );
 
@@ -89,7 +89,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
         m_HToolBar->AddSeparator();
         m_HToolBar->AddTool( ID_LIBVIEW_VIEWDOC, wxEmptyString,
-                             wxBitmap( datasheet_xpm ),
+                             KiBitmap( datasheet_xpm ),
                              _( "View component documents" ) );
         m_HToolBar->EnableTool( ID_LIBVIEW_VIEWDOC, false );
 
@@ -98,7 +98,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
             // The library browser is called from a "load component" command
             m_HToolBar->AddSeparator();
             m_HToolBar->AddTool( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
-                                 wxEmptyString, wxBitmap( export_xpm ),
+                                 wxEmptyString, KiBitmap( export_xpm ),
                                  _( "Insert component in schematic" ) );
         }
 

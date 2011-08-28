@@ -15,12 +15,12 @@
 dialog_about::dialog_about(wxWindow *parent, AboutAppInfo& appInfo)
     : dialog_about_base(parent), info(appInfo)
 {
-    picInformation = wxBitmap(info_xpm);
-    picDevelopers  = wxBitmap(preference_xpm);
-    picDocWriters  = wxBitmap(editor_xpm);
-    picArtists     = wxBitmap(palette_xpm);
-    picTranslators = wxBitmap(language_xpm);
-    picLicense     = wxBitmap(tools_xpm);
+    picInformation = KiBitmap( info_xpm );
+    picDevelopers  = KiBitmap( preference_xpm );
+    picDocWriters  = KiBitmap( editor_xpm );
+    picArtists     = KiBitmap( palette_xpm );
+    picTranslators = KiBitmap( language_xpm );
+    picLicense     = KiBitmap( tools_xpm );
 
     m_bitmapApp->SetBitmap( info.GetIcon() );
 
@@ -53,8 +53,8 @@ wxFlexGridSizer* dialog_about::CreateFlexGridSizer()
 {
     // three colums with vertical and horizontal extra space of two pixels
     wxFlexGridSizer* fgSizer1 = new wxFlexGridSizer( 3, 2, 2 );
-	fgSizer1->SetFlexibleDirection( wxHORIZONTAL );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+    fgSizer1->SetFlexibleDirection( wxHORIZONTAL );
+    fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
     return fgSizer1;
 }
@@ -82,8 +82,8 @@ void dialog_about::CreateNotebookPage(wxAuiNotebook* parent, const wxString& cap
 {
     wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
-	m_scrolledWindow1->SetScrollRate( 5, 5 );
+    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+    m_scrolledWindow1->SetScrollRate( 5, 5 );
 
     /* Panel for additional space at the left,
      * but can also be used to show an additional bitmap.
@@ -125,18 +125,18 @@ void dialog_about::CreateNotebookPage(wxAuiNotebook* parent, const wxString& cap
     bSizer->Add( panel1, 1, wxEXPAND|wxALL, 10 );
     bSizer->Add( fgSizer1, 7, wxEXPAND|wxALL, 10 ); // adjust width of panel with first int value
     m_scrolledWindow1->SetSizer( bSizer );
-	m_scrolledWindow1->Layout();
-	bSizer->Fit( m_scrolledWindow1 );
+    m_scrolledWindow1->Layout();
+    bSizer->Fit( m_scrolledWindow1 );
 
-	parent->AddPage( m_scrolledWindow1, caption, false, icon );
+    parent->AddPage( m_scrolledWindow1, caption, false, icon );
 }
 
 void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* parent, const wxString& caption, const wxBitmap& icon, const Contributors& contributors)
 {
     wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
-	m_scrolledWindow1->SetScrollRate( 5, 5 );
+    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+    m_scrolledWindow1->SetScrollRate( 5, 5 );
 
     /* Panel for additional space at the left,
      * but can also be used to show an additional bitmap.
@@ -246,8 +246,8 @@ void dialog_about::CreateNotebookPageByCategory(wxAuiNotebook* parent, const wxS
     bSizer->Add( panel1, 1, wxEXPAND|wxALL, 10 );
     bSizer->Add( fgSizer1, 7, wxEXPAND|wxALL, 10 ); // adjust width of panel with first int value
     m_scrolledWindow1->SetSizer( bSizer );
-	m_scrolledWindow1->Layout();
-	bSizer->Fit( m_scrolledWindow1 );
+    m_scrolledWindow1->Layout();
+    bSizer->Fit( m_scrolledWindow1 );
 
     parent->AddPage( m_scrolledWindow1, caption, false, icon );
 }
@@ -258,7 +258,7 @@ void dialog_about::CreateNotebookHtmlPage(wxAuiNotebook* parent, const wxString&
 
     wxBoxSizer* bSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxString htmlPage = wxEmptyString, htmlContent = html;
+    wxString htmlPage = wxEmptyString, htmlContent = html;
 
     // to have a unique look background color for HTML pages is set to the default as it is used for all the other widgets
     wxString htmlColor = ( this->GetBackgroundColour() ).GetAsString( wxC2S_HTML_SYNTAX );
@@ -285,8 +285,8 @@ void dialog_about::CreateNotebookHtmlPage(wxAuiNotebook* parent, const wxString&
     // no additional space around the html window as it is also the case by the other notebook pages
     bSizer->Add( htmlWindow, 1, wxALL|wxEXPAND, 0 );
     panel->SetSizer( bSizer );
-	panel->Layout();
-	bSizer->Fit( panel );
+    panel->Layout();
+    bSizer->Fit( panel );
 
     parent->AddPage( panel, caption, false, icon );
 }

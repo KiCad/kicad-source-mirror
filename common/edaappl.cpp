@@ -69,7 +69,7 @@ struct LANGUAGE_DESCR
     int m_KI_Lang_Identifier;
 
     /* The menu language icons */
-    const char** m_Lang_Icon;
+    const BITMAP_DEF& m_Lang_Icon;
 
     /* Labels used in menus */
     const wxChar* m_Lang_Label;

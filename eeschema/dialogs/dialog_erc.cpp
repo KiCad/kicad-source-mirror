@@ -267,7 +267,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
             case OK:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
                                                            event_id,
-                                                           wxBitmap( erc_green_xpm ),
+                                                           KiBitmap( erc_green_xpm ),
                                                            wxPoint( x, y ) );
 
                 break;
@@ -275,7 +275,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
             case WAR:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
                                                            event_id,
-                                                           wxBitmap( warning_xpm ),
+                                                           KiBitmap( warning_xpm ),
                                                            wxPoint( x, y ) );
 
                 break;
@@ -283,7 +283,7 @@ void DIALOG_ERC::ReBuildMatrixPanel()
             case ERR:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
                                                            event_id,
-                                                           wxBitmap( error_xpm ),
+                                                           KiBitmap( error_xpm ),
                                                            wxPoint( x, y ) );
 
                 break;
@@ -381,7 +381,7 @@ void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
     if( new_bitmap_xpm )
     {
         delete Butt;
-        Butt = new wxBitmapButton( m_PanelERCOptions, id, wxBitmap( new_bitmap_xpm ), pos );
+        Butt = new wxBitmapButton( m_PanelERCOptions, id, KiBitmap( new_bitmap_xpm ), pos );
 
         m_ButtonList[y][x] = Butt;
         DiagErc[y][x] = DiagErc[x][y] = level;

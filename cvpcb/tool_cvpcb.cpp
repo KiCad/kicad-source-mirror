@@ -22,61 +22,61 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
 
     m_HToolBar->AddTool( ID_CVPCB_READ_INPUT_NETLIST, wxEmptyString,
-                         wxBitmap( open_document_xpm ),
+                         KiBitmap( open_document_xpm ),
                          _( "Open a net list file" ) );
 
-    m_HToolBar->AddTool( wxID_SAVE, wxEmptyString, wxBitmap( save_xpm ),
+    m_HToolBar->AddTool( wxID_SAVE, wxEmptyString, KiBitmap( save_xpm ),
                          _( "Save net list and footprint files" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_CVPCB_CREATE_CONFIGWINDOW, wxEmptyString,
-                         wxBitmap( config_xpm ),
+                         KiBitmap( config_xpm ),
                          _( "Configuration" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_CVPCB_CREATE_SCREENCMP, wxEmptyString,
-                         wxBitmap( show_footprint_xpm ),
+                         KiBitmap( show_footprint_xpm ),
                          _( "View selected footprint" ) );
 
     m_HToolBar->AddTool( ID_CVPCB_AUTO_ASSOCIE, wxEmptyString,
-                         wxBitmap( auto_associe_xpm ),
+                         KiBitmap( auto_associe_xpm ),
                          _( "Perform automatic footprint association" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_CVPCB_GOTO_PREVIOUSNA, wxEmptyString,
-                         wxBitmap( left_xpm ),
+                         KiBitmap( left_xpm ),
                          _( "Select previous free component" ) );
 
     m_HToolBar->AddTool( ID_CVPCB_GOTO_FIRSTNA, wxEmptyString,
-                         wxBitmap( right_xpm ),
+                         KiBitmap( right_xpm ),
                          _( "Select next free component" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_CVPCB_DEL_ASSOCIATIONS, wxEmptyString,
-                         wxBitmap( delete_association_xpm ),
+                         KiBitmap( delete_association_xpm ),
                          _( "Delete all associations" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_CVPCB_CREATE_STUFF_FILE, wxEmptyString,
-                         wxBitmap( export_footprint_names_xpm ),
+                         KiBitmap( export_footprint_names_xpm ),
                         _( "Create export file (component/footprint list, \
 used by eeschema to fill the footprint field of components)" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_PCB_DISPLAY_FOOTPRINT_DOC, wxEmptyString,
-                         wxBitmap( datasheet_xpm ),
+                         KiBitmap( datasheet_xpm ),
                          _( "Display footprints list documentation" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddSeparator();
     m_HToolBar->AddRadioTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
                               wxEmptyString,
-                              wxBitmap( module_filtered_list_xpm ),
+                              KiBitmap( module_filtered_list_xpm ),
                               wxNullBitmap,
                               _( "Display the filtered footprint list for the current component" ) );
 
     m_HToolBar->AddRadioTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST,
-                              wxEmptyString, wxBitmap( module_full_list_xpm ),
+                              wxEmptyString, KiBitmap( module_full_list_xpm ),
                               wxNullBitmap,
                               _( "Display the full footprint list (without filtering)" ) );
 
