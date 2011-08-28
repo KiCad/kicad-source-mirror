@@ -217,7 +217,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
                          _( "Zoom auto (Home)" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, KiBitmap( show_3d_xpm ),
+    m_HToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, KiBitmap( three_d_xpm ),
                          _( "3D Display" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect

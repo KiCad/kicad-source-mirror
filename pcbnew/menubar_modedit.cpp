@@ -237,7 +237,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MENU_PCB_SHOW_3D_FRAME,
                            _( "3D View" ),
                            _( "Show board in 3D viewer" ) );
-    SET_BITMAP( show_3d_xpm );
+    SET_BITMAP( three_d_xpm );
     viewMenu->Append( item );
 
     // Menu Place:

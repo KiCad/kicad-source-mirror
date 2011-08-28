@@ -186,7 +186,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     item = new wxMenuItem( submenuexport, ID_GEN_EXPORT_FILE_VRML,
                            _( "&VRML" ),
                            _( "Export a VRML board representation" ) );
-    SET_BITMAP( show_3d_xpm );
+    SET_BITMAP( three_d_xpm );
     submenuexport->Append( item );
 
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, submenuexport,
@@ -379,7 +379,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     item = new wxMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,
                            _( "3D Display" ),
                            _( "Show board in 3D viewer" ) );
-    SET_BITMAP( show_3d_xpm );
+    SET_BITMAP( three_d_xpm );
     viewMenu->Append( item );
 
     // List Nets

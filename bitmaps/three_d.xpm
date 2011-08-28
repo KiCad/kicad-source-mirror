@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char *show_3d_xpm[];
+extern const char *three_d_xpm[];
 
 #else
-const char *show_3d_xpm[] = {
+const char *three_d_xpm[] = {
 /* columns rows colors const chars-per-pixel */
 "16 15 3 1",
 "J c #FF0000",

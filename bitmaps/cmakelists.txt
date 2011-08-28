@@ -12,11 +12,10 @@
 
 # Dick: use this one instead:
 set(BITMAP_SRCS
-    3d.xpm
-    Add_Arc.xpm
-    Add_Bus2Bus.xpm
+    add_arc.xpm
+    add_bus2bus.xpm
     add_bus.xpm
-    Add_Circle.xpm
+    add_circle.xpm
     Add_Component.xpm
     Add_Corner.xpm
     Add_Dashed_Line.xpm
@@ -390,6 +389,7 @@ set(BITMAP_SRCS
     Show_Zone_Outline_Only.xpm
     Swap_Layer.xpm
     Text_Sketch.xpm
+    three_d.xpm
     tool_ratsnet.xpm
     tools.xpm
     Track_Locked.xpm
