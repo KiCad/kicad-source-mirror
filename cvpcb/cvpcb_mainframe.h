@@ -18,7 +18,7 @@ class DISPLAY_FOOTPRINTS_FRAME;
 
 
 /**
- * The CVPcb application main window.
+ * The CvPcb application main window.
  */
 class CVPCB_MAINFRAME : public EDA_BASE_FRAME
 {
@@ -87,7 +87,17 @@ public:
     void             ConfigCvpcb( wxCommandEvent& event );
     void             OnKeepOpenOnSave( wxCommandEvent& event );
     void             DisplayModule( wxCommandEvent& event );
+
+    /**
+     * Called by the automatic association button
+     * Read *.equ files to try to find corresponding footprint
+     * for each component that is not already linked to a footprint ( a "free"
+     * component )
+     * format of a line:
+     * 'cmp_ref' 'footprint_name'
+     */
     void             AssocieModule( wxCommandEvent& event );
+
     void             WriteStuffList( wxCommandEvent& event );
     void             DisplayDocFile( wxCommandEvent& event );
 
@@ -143,7 +153,7 @@ public:
 
     /**
      * Function LoadSettings
-     * loads the CVPcb main frame specific configuration settings.
+     * loads the CvPcb main frame specific configuration settings.
      *
      * Don't forget to call this base method from any derived classes or the
      * settings will not get loaded.
@@ -152,7 +162,7 @@ public:
 
     /**
      * Function SaveSettings
-     * save the CVPcb frame specific configuration settings.
+     * save the CvPcb frame specific configuration settings.
      *
      * Don't forget to call this base method from any derived classes or the
      * settings will not get saved.
@@ -195,16 +205,16 @@ public:
 
     /**
      * Function GetProjectFileParameters
-     * return project file parameter list for CVPcb.
+     * return project file parameter list for CvPcb.
      * <p>
-     * Populate the project file parameter array specific to CVPcb if it hasn't
+     * Populate the project file parameter array specific to CvPcb if it hasn't
      * already been populated and return a reference to the array to the caller.
      * Creating the parameter list at run time has the advantage of being able
      * to define local variables.  The old method of statically building the array
      * at compile time requiring global variable definitions.
      * </p>
      *
-     * @return A reference to a PARAM_CFG_ARRAY contain the project settings for CVPcb.
+     * @return A reference to a PARAM_CFG_ARRAY contain the project settings for CvPcb.
      */
     PARAM_CFG_ARRAY& GetProjectFileParameters( void );
 

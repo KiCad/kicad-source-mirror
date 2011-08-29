@@ -80,11 +80,22 @@ public: WinEDA_App();
     /**
      * Function OnInit
      * this is the first executed function (like main() )
-     * @return true if the appliction can be started.
+     * @return true if the application can be started.
      */
     bool      OnInit();
 
+    /**
+     * Function SetBinDir
+     * finds the path to the executable and store it in WinEDA_App::m_BinDir
+     *
+     * @return TODO
+     */
     bool      SetBinDir();
+
+    /**
+     * Function SetDefaultSearchPaths
+     * sets search paths for libraries, modules, internationalization files, etc.
+     */
     void      SetDefaultSearchPaths( void );
 
     /**
@@ -108,34 +119,57 @@ public: WinEDA_App();
     void      InitEDA_Appl( const wxString& aName,
                             id_app_type     aId = APP_TYPE_UNKOWN );
 
-    bool      SetLanguage( bool first_time = FALSE );
+    /**
+     * Function SetLanguage
+     * sets the dictionary file name for internationalization.
+     * <p>
+     * The files are in kicad/internat/xx or kicad/internat/xx_XX and are named kicad.mo
+     * </p>
+     * @param   first_time  must be set to true the first time this funct is
+     *          called, false otherwise
+     * @return  true if the language can be set (i.e. if the locale is available)
+     */
+    bool      SetLanguage( bool first_time = false );
 
     /**
      * Function AddMenuLanguageList
+     * creates a menu list for language choice, and add it as submenu to \a MasterMenu.
      *
-     * Create menu list for language choice, and add it as submenu to a main
-     * menu
-     *
-     * @param MasterMenu : The main menu. The sub menu list will be
-     *                     accessible from the menu item with id
-     *                     ID_LANGUAGE_CHOICE
-     *
-     * @return  the sub menu Language list
+     * @param MasterMenu The main menu. The sub menu list will be accessible from the menu
+     *                   item with id ID_LANGUAGE_CHOICE
      */
     void      AddMenuLanguageList( wxMenu* MasterMenu );
+
+    /**
+     * Function SetLanguageIdentifier
+     * sets in .m_LanguageId member the wxWidgets language identifier Id  from
+     * the kicad menu id (internal menu identifier).
+     *
+     * @param menu_id The kicad menuitem id (returned by Menu Event, when
+     *                clicking on a menu item)
+     */
     void      SetLanguageIdentifier( int menu_id );
+
     void      SetLanguagePath( void );
+
+    /**
+     * Function InitOnLineHelp
+     * initializes Kicad's online help.
+     */
     void      InitOnLineHelp();
 
     /**
      * Function GetSettings
-     * Get application settings
-     * @param aReopenLastUsedDirectory = true to switch to last opened
-     * directory, false to use current CWD
-     * @return  none
+     * gets the application settings.
+     * @param aReopenLastUsedDirectory True to switch to last opened directory, false
+     *                                 to use current CWD
      */
     void      GetSettings( bool aReopenLastUsedDirectory );
 
+    /**
+     * Function SaveSettings
+     * saves the application settings.
+     */
     void      SaveSettings();
 
     void      WriteProjectConfig( const wxString&  local_config_filename,
@@ -157,7 +191,7 @@ public: WinEDA_App();
 
     /**
      * Function ReadCurrentSetupValues
-     * Raed the current setup values previously saved, from m_EDA_Config
+     * Read the current setup values previously saved, from m_EDA_Config
      * saved parameters are parameters that have the .m_Setup member set to
      * true
      * @param aList = array of PARAM_CFG_BASE pointers
@@ -180,10 +214,32 @@ public: WinEDA_App();
     void      ReadPdfBrowserInfos();
     void      WritePdfBrowserInfos();
 
+    /**
+     * Function FindFileInSearchPaths
+     * looks in search paths for \a filename.
+     */
     wxString  FindFileInSearchPaths( const wxString&      filename,
                                      const wxArrayString* subdirs = NULL );
 
+    /**
+     * Function GetHelpFile
+     * get the help file path.
+     * <p?
+     * Return the Kicad help file with path.  The base paths defined in
+     * m_searchPaths are tested for a valid file.  The path returned can
+     * be relative depending on the paths added to m_searchPaths.  See the
+     * documentation for wxPathList for more information. If the help file
+     * for the current locale is not found, an attempt to find the English
+     * version of the help file is made.
+     * wxEmptyString is returned if help file not found.
+     * Help file is searched in directories in this order:
+     *  help/<canonical name> like help/en_GB
+     *  help/<short name> like help/en
+     *  help/en
+     * </p>
+     */
     wxString  GetHelpFile( void );
+
     wxString  GetLibraryFile( const wxString& filename );
     wxString& GetEditorName();
 
@@ -193,7 +249,8 @@ public: WinEDA_App();
     wxPathList& GetLibraryPathList() { return m_libSearchPaths; }
     wxString FindLibraryPath( const wxString& fileName );
 
-    /** FindLibraryPath
+    /**
+     * Function FindLibraryPath
      * Kicad saves user defined library files that are not in the standard
      * library search path list with the full file path.  Calling the library
      * search path list with a user library file will fail.  This helper method
@@ -207,22 +264,24 @@ public: WinEDA_App();
     }
 
 
-    /** ReturnLastVisitedLibraryPath
-     * Returns the last visited library directory, or (if void) the first
+    /**
+     * Function ReturnLastVisitedLibraryPath
+     * returns the last visited library directory, or (if void) the first
      * path in lib path list ( but not the CWD )
+     *
      * @param aSubPathToSearch = Preferred sub path to search in path list
      */
-    wxString ReturnLastVisitedLibraryPath(
-        const wxString& aSubPathToSearch = wxEmptyString );
+    wxString ReturnLastVisitedLibraryPath( const wxString& aSubPathToSearch = wxEmptyString );
+
     void     SaveLastVisitedLibraryPath( const wxString& aPath );
 
-    /** ReturnFilenameWithRelativePathInLibPath
+    /**
+     * Function  ReturnFilenameWithRelativePathInLibPath
      * @return a short filename (with extension) with only a relative path if
-     * this filename can be found in library paths
-     * @param aFullFilename = filename with path and extension.
+     *         this filename can be found in library paths
+     * @param aFullFilename The filename with path and extension.
      */
-    wxString ReturnFilenameWithRelativePathInLibPath(
-        const wxString& aFullFilename );
+    wxString ReturnFilenameWithRelativePathInLibPath( const wxString& aFullFilename );
 
     /**
      * Function RemoveLibraryPath

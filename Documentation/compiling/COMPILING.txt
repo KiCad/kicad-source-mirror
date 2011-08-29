@@ -223,5 +223,10 @@ One of these 2 option *must* be set to ON:
    It requires wxWidgets to be built with the --enable-graphics_ctx switch.
    See building wxWidgets above.
 
+ USE_IMAGES_IN_MENUS ON/OFF (OPTIONAL)
+   Force building Kicad with or without images in menu items.  If this is not defined on
+   when CMake is used to create the build files, images will be included in menu items
+   on all platforms except OSX.
+
 Note: that it is easy to build only a specific binary such as pcbnew alone:
     make pcbnew

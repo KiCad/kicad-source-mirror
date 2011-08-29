@@ -47,14 +47,6 @@ wxString GetQuotedText( wxString & text )
 }
 
 
-/*
- * Called by the automatic association button
- * Read *.equ files to try to find corresponding footprint
- * for each component that is not already linked to a footprint ( a "free"
- * component )
- * format of a line:
- * 'cmp_ref' 'footprint_name'
- */
 void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
 {
     FOOTPRINT_ALIAS_LIST aliases;
@@ -72,6 +64,7 @@ void CVPCB_MAINFRAME::AssocieModule( wxCommandEvent& event )
     for( ii = 0; ii < m_AliasLibNames.GetCount(); ii++ )
     {
         fn = m_AliasLibNames[ii];
+
         if( !fn.HasExt() ) {
             fn.SetExt( FootprintAliasFileExtension );
             // above fails if filename have more than one point
@@ -142,10 +135,12 @@ found in the default search paths." ),
         BOOST_FOREACH( FOOTPRINT_ALIAS& alias, aliases )
         {
             bool found = false;
+
             if( alias.m_Name.CmpNoCase( component.m_Value ) != 0 )
                 continue;
 
-            /* filter alias so one can use multiple aliases (for polar and nonpolar caps for example) */
+            /* filter alias so one can use multiple aliases (for polar and nonpolar caps for
+             * example) */
             FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( alias.m_FootprintName );
 
             if( module )
@@ -164,7 +159,7 @@ found in the default search paths." ),
 any of the project footprint libraries." ),
                             GetChars( component.m_Reference ),
                             GetChars( alias.m_FootprintName ) );
-                wxMessageBox( msg, _( "CVPcb Error" ), wxOK | wxICON_ERROR,
+                wxMessageBox( msg, _( "CvPcb Error" ), wxOK | wxICON_ERROR,
                               this );
             }
             if( found )

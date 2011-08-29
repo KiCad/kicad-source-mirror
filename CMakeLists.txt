@@ -107,6 +107,19 @@ if(USE_BOOST_POLYGON_LIBRARY)
     add_definitions(-DUSE_BOOST_POLYGON_LIBRARY)
 endif(USE_BOOST_POLYGON_LIBRARY)
 
+# Allow user to override the default settings for adding images to menu items.  By default
+# images in menu items are enabled on all plaforms except OSX.  This can be over ridden by
+# defining -DUSE_IMAGES_IN_MENUS=ON/OFF to force the preferred behavior.
+if(NOT DEFINED USE_IMAGES_IN_MENUS)
+    if(NOT APPLE)
+        set(USE_IMAGES_IN_MENUS ON)
+    endif(NOT APPLE)
+else(NOT DEFINED USE_IMAGES_IN_MENUS)
+    if(USE_IMAGES_IN_MENUS)
+        set(USE_IMAGES_IN_MENUS ON)
+    endif(USE_IMAGES_IN_MENUS)
+endif(NOT DEFINED USE_IMAGES_IN_MENUS)
+
 # Locations for install targets.
 set(KICAD_BIN bin
     CACHE PATH "Location of KiCad binaries.")

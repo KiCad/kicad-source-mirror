@@ -50,4 +50,6 @@
 /* Warning!!!  Using wxGraphicContext for rendering is experimental. */
 #cmakedefine USE_WX_GRAPHICS_CONTEXT 1
 
+#cmakedefine USE_IMAGES_IN_MENUS 1
+
 #endif  /* __CONFIG_H__ */

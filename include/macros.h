@@ -7,6 +7,9 @@
 
 #include <wx/wx.h>
 
+#include "bitmaps.h"
+
+
 /**
  * Macro TO_UTF8
  * converts a wxString to a UTF8 encoded C string for all wxWidgets build modes.
@@ -67,7 +70,7 @@ static inline const wxChar* GetChars( const wxString& s )
 
 #define NEGATE( x ) (x = -x)
 
-/// # of elements in an arrray
+/// # of elements in an array
 #define DIM( x )    unsigned( sizeof(x) / sizeof( (x)[0] ) )    // not size_t
 
 
@@ -85,6 +88,7 @@ static inline const wxChar* GetChars( const wxString& s )
                                            Angle += 3600;\
                                            while( Angle >= 3600 ) \
                                            Angle -= 3600;}
+
 #define NEGATE_AND_NORMALIZE_ANGLE_POS( Angle ) \
     { Angle = -Angle; while( Angle < 0 ) \
           Angle += 3600;while( Angle >= 3600 ) \
@@ -132,14 +136,15 @@ class BOARD_ITEM;
 BOOST_TYPEOF_REGISTER_TYPE( BOARD_ITEM* )
 
 #define EXCHG( a, b ) { BOOST_TYPEOF( a ) __temp__ = (a);      \
-                        (a) = (b);                           \
+                        (a) = (b);                             \
                         (b) = __temp__; }
 
 
 /*****************************************************/
 /* inline functions to insert menuitems with a icon: */
 /*****************************************************/
-static inline void ADD_MENUITEM( wxMenu* menu, int id,
+static inline void ADD_MENUITEM( wxMenu*         menu,
+                                 int             id,
                                  const wxString& text,
                                  const wxBitmap& icon )
 {
@@ -147,14 +152,15 @@ static inline void ADD_MENUITEM( wxMenu* menu, int id,
 
     l_item = new wxMenuItem( menu, id, text );
 
-#if !defined( __WXMAC__ )
+#if defined( USE_IMAGES_IN_MENUS )
     l_item->SetBitmap( icon );
-#endif /* !defined( __WXMAC__ ) */
+#endif
 
     menu->Append( l_item );
 }
 
-static inline void ADD_MENUITEM_WITH_HELP( wxMenu* menu, int id,
+static inline void ADD_MENUITEM_WITH_HELP( wxMenu*         menu,
+                                           int             id,
                                            const wxString& text,
                                            const wxString& help,
                                            const wxBitmap& icon )
@@ -163,44 +169,16 @@ static inline void ADD_MENUITEM_WITH_HELP( wxMenu* menu, int id,
 
     l_item = new wxMenuItem( menu, id, text, help );
 
-#if !defined( __WXMAC__ )
+#if defined( USE_IMAGES_IN_MENUS )
     l_item->SetBitmap( icon );
-#endif /* !defined( __WXMAC__ ) */
+#endif
 
     menu->Append( l_item );
 }
 
-#ifdef __WINDOWS__
-static inline void ADD_MENUITEM_WITH_SUBMENU( wxMenu* menu, wxMenu* submenu,
-                                              int id, const wxString& text,
-                                              const wxBitmap& icon )
-{
-    wxMenuItem* l_item;
-
-    l_item = new wxMenuItem( menu, id, text );
-    l_item->SetSubMenu( submenu );
-    l_item->SetBitmap( icon );
-    menu->Append( l_item );
-};
-
-static inline void ADD_MENUITEM_WITH_HELP_AND_SUBMENU( wxMenu*         menu,
-                                                       wxMenu*         submenu,
-                                                       int             id,
-                                                       const wxString& text,
-                                                       const wxString& help,
-                                                       const wxBitmap& icon )
-{
-    wxMenuItem* l_item;
-
-    l_item = new wxMenuItem( menu, id, text, help );
-    l_item->SetSubMenu( submenu );
-    l_item->SetBitmap( icon );
-    menu->Append( l_item );
-};
-
-#else
-static inline void ADD_MENUITEM_WITH_SUBMENU( wxMenu* menu, wxMenu* submenu,
-                                              int id,
+static inline void ADD_MENUITEM_WITH_SUBMENU( wxMenu*         menu,
+                                              wxMenu*         submenu,
+                                              int             id,
                                               const wxString& text,
                                               const wxBitmap& icon )
 {
@@ -209,12 +187,12 @@ static inline void ADD_MENUITEM_WITH_SUBMENU( wxMenu* menu, wxMenu* submenu,
     l_item = new wxMenuItem( menu, id, text );
     l_item->SetSubMenu( submenu );
 
-#if !defined( __WXMAC__ )
+#if defined( USE_IMAGES_IN_MENUS )
     l_item->SetBitmap( icon );
-#endif /* !defined( __WXMAC__ ) */
+#endif
 
     menu->Append( l_item );
-}
+};
 
 static inline void ADD_MENUITEM_WITH_HELP_AND_SUBMENU( wxMenu*         menu,
                                                        wxMenu*         submenu,
@@ -228,24 +206,23 @@ static inline void ADD_MENUITEM_WITH_HELP_AND_SUBMENU( wxMenu*         menu,
     l_item = new wxMenuItem( menu, id, text, help );
     l_item->SetSubMenu( submenu );
 
-#if !defined( __WXMAC__ )
+#if defined( USE_IMAGES_IN_MENUS )
     l_item->SetBitmap( icon );
-#endif /* !defined( __WXMAC__ ) */
-
-    menu->Append( l_item );
-}
-
 #endif
 
+    menu->Append( l_item );
+};
+
+
 // macro to add a bitmap list to check menus (do not use with normal menus)
-#ifdef __WINDOWS__
-#  define SETBITMAPS( icon ) item->SetBitmaps( apply_xpm, (icon) )
+#if defined( USE_IMAGES_IN_MENUS ) && defined(  __WINDOWS__ )
+#  define SETBITMAPS( icon ) item->SetBitmaps( KiBitmap( apply_xpm ), (icon) )
 #else
 #  define SETBITMAPS( icon )
 #endif
 
 // macro to add a bitmap menus (do not use with check menus)
-#ifdef __WXMAC__
+#if !defined( USE_IMAGES_IN_MENUS ) || defined( __WXMAC__ )
 #  define SET_BITMAP( icon )
 #else
 #  define SET_BITMAP( icon ) item->SetBitmap( (icon) )

@@ -85,7 +85,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     ADD_MENUITEM_WITH_HELP( filesMenu,
                             wxID_EXIT,
                             _( "&Quit" ),
-                            _( "Quit CVPcb" ),
+                            _( "Quit CvPcb" ),
                             exit_xpm );
 
     // Menu Preferences:
@@ -108,7 +108,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Keep open on save
     item = new wxMenuItem( preferencesMenu, ID_CVPCB_CONFIG_KEEP_OPEN_ON_SAVE,
                            _( "Keep Open On Save" ),
-                           _( "Prevent CVPcb from exiting after saving netlist file" ),
+                           _( "Prevent CvPcb from exiting after saving netlist file" ),
                            wxITEM_CHECK );
     preferencesMenu->Append( item );
     SETBITMAPS( window_close_xpm );
@@ -132,13 +132,13 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
 
     // Contents
     ADD_MENUITEM_WITH_HELP( helpMenu, wxID_HELP, _( "&Contents" ),
-                            _( "Open the CVPcb handbook" ),
+                            _( "Open the CvPcb handbook" ),
                             online_help_xpm );
 
     // About
     ADD_MENUITEM_WITH_HELP( helpMenu, wxID_ABOUT,
-                            _( "&About CVPcb" ),
-                            _( "About CVPcb schematic to pcb converter" ),
+                            _( "&About CvPcb" ),
+                            _( "About CvPcb schematic to pcb converter" ),
                             info_xpm );
 
     // Create the menubar and append all submenus
