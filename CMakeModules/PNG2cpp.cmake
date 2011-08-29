@@ -54,7 +54,8 @@ static const unsigned char png[] = {"
 
 set( output_end "};
 
-BITMAP_DEF ${png_name} = { png, sizeof(png) };
+// make as array so its name is a pointer.
+BITMAP_OPAQUE ${png_name}[1] = { png, sizeof(png) };
 
 //EOF
 " )

@@ -308,12 +308,14 @@ wxHyperlinkCtrl* dialog_about::CreateHyperlink(wxScrolledWindow* parent, const w
 wxStaticBitmap* dialog_about::CreateStaticBitmap(wxScrolledWindow* parent, wxBitmap* icon)
 {
     wxStaticBitmap* bitmap = new wxStaticBitmap( parent, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
-    if ( icon )
+
+    if( icon )
     {
         bitmap->SetBitmap( *icon );
     }
-    else {
-        bitmap->SetBitmap( right_xpm );
+    else
+    {
+        bitmap->SetBitmap( KiBitmap( right_xpm ) );
     }
     return bitmap;
 }

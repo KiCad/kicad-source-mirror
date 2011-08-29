@@ -62,19 +62,19 @@ static wxString languageCfgKey( wxT( "LanguageID" ) );
  */
 struct LANGUAGE_DESCR
 {
-    /* wxWidgets locale identifier (See wxWidgets doc) */
-    int m_WX_Lang_Identifier;
+    /// wxWidgets locale identifier (See wxWidgets doc)
+    int     m_WX_Lang_Identifier;
 
-    /* KiCad identifier used in menu selection (See id.h) */
-    int m_KI_Lang_Identifier;
+    /// KiCad identifier used in menu selection (See id.h)
+    int     m_KI_Lang_Identifier;
 
-    /* The menu language icons */
-    const wxBitmap m_Lang_Icon;
+    /// The menu language icons
+    BITMAP_DEF m_Lang_Icon;
 
-    /* Labels used in menus */
+    /// Labels used in menus
     const wxChar* m_Lang_Label;
 
-    /* Set to true if the m_Lang_Label must not be translated */
+    /// Set to true if the m_Lang_Label must not be translated
     bool m_DoNotTranslate;
 };
 
@@ -91,7 +91,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_DEFAULT,
         ID_LANGUAGE_DEFAULT,
-        KiBitmap( lang_def_xpm ),
+        lang_def_xpm,
         _( "Default" )
     },
 
@@ -99,7 +99,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_ENGLISH,
         ID_LANGUAGE_ENGLISH,
-        KiBitmap( lang_en_xpm ),
+        lang_en_xpm,
         wxT( "English" ),
         true
     },
@@ -108,7 +108,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_FRENCH,
         ID_LANGUAGE_FRENCH,
-        KiBitmap( lang_fr_xpm ),
+        lang_fr_xpm,
         _( "French" )
     },
 
@@ -116,7 +116,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_FINNISH,
         ID_LANGUAGE_FINNISH,
-        KiBitmap( lang_fi_xpm ),
+        lang_fi_xpm,
         _( "Finnish" )
     },
 
@@ -124,7 +124,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_SPANISH,
         ID_LANGUAGE_SPANISH,
-        KiBitmap( lang_es_xpm ),
+        lang_es_xpm,
         _( "Spanish" )
     },
 
@@ -132,7 +132,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_PORTUGUESE,
         ID_LANGUAGE_PORTUGUESE,
-        KiBitmap( lang_pt_xpm ),
+        lang_pt_xpm,
         _( "Portuguese" )
     },
 
@@ -140,7 +140,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_ITALIAN,
         ID_LANGUAGE_ITALIAN,
-        KiBitmap( lang_it_xpm ),
+        lang_it_xpm,
         _( "Italian" )
     },
 
@@ -148,7 +148,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_GERMAN,
         ID_LANGUAGE_GERMAN,
-        KiBitmap( lang_de_xpm ),
+        lang_de_xpm,
         _( "German" )
     },
 
@@ -156,7 +156,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_GREEK,
         ID_LANGUAGE_GREEK,
-        KiBitmap( lang_gr_xpm ),
+        lang_gr_xpm,
         _( "Greek" )
     },
 
@@ -164,7 +164,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_SLOVENIAN,
         ID_LANGUAGE_SLOVENIAN,
-        KiBitmap( lang_sl_xpm ),
+        lang_sl_xpm,
         _( "Slovenian" )
     },
 
@@ -172,7 +172,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_HUNGARIAN,
         ID_LANGUAGE_HUNGARIAN,
-        KiBitmap( lang_hu_xpm ),
+        lang_hu_xpm,
         _( "Hungarian" )
     },
 
@@ -180,7 +180,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_POLISH,
         ID_LANGUAGE_POLISH,
-        KiBitmap( lang_pl_xpm ),
+        lang_pl_xpm,
         _( "Polish" )
     },
 
@@ -188,7 +188,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_CZECH,
         ID_LANGUAGE_CZECH,
-        KiBitmap( lang_cs_xpm ),
+        lang_cs_xpm,
         _( "Czech" )
     },
 
@@ -196,7 +196,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_RUSSIAN,
         ID_LANGUAGE_RUSSIAN,
-        KiBitmap( lang_ru_xpm ),
+        lang_ru_xpm,
         _( "Russian" )
     },
 
@@ -204,7 +204,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_KOREAN,
         ID_LANGUAGE_KOREAN,
-        KiBitmap( lang_ko_xpm ),
+        lang_ko_xpm,
         _( "Korean" )
     },
 
@@ -212,7 +212,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_CHINESE_SIMPLIFIED,
         ID_LANGUAGE_CHINESE_SIMPLIFIED,
-        KiBitmap( lang_chinese_xpm ),
+        lang_chinese_xpm,
         _( "Chinese simplified" )
     },
 
@@ -220,7 +220,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_CATALAN,
         ID_LANGUAGE_CATALAN,
-        KiBitmap( lang_catalan_xpm ),
+        lang_catalan_xpm,
         _( "Catalan" )
     },
 
@@ -228,7 +228,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_DUTCH,
         ID_LANGUAGE_DUTCH,
-        KiBitmap( lang_nl_xpm ),
+        lang_nl_xpm,
         _( "Dutch" )
     },
 
@@ -236,7 +236,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
     {
         wxLANGUAGE_JAPANESE,
         ID_LANGUAGE_JAPANESE,
-        KiBitmap( lang_jp_xpm ),
+        lang_jp_xpm,
         _( "Japanese" )
      }
 };
@@ -430,11 +430,14 @@ bool WinEDA_App::SetBinDir()
     if( strchr( (const char*) argv[0], '/' ) == NULL ) // no path
     {
         sprintf( FileName, "which %s > %s", TO_UTF8( str_arg0 ), TMP_FILE );
-        system( FileName );
+
+        int ret = system( FileName );
+        (void) ret;
 
         if( ( ftmp = fopen( TMP_FILE, "rt" ) ) != NULL )
         {
-            fgets( Line, 1000, ftmp );
+            const char* line = fgets( Line, 1000, ftmp );
+            (void) line;
             fclose( ftmp );
             remove( TMP_FILE );
         }
@@ -849,7 +852,7 @@ void WinEDA_App::AddMenuLanguageList( wxMenu* MasterMenu )
                                         ID_LANGUAGE_CHOICE,
                                         _( "Language" ),
                                         _( "Select application language (only for testing!)" ),
-                                        language_xpm );
+                                        KiBitmap( language_xpm ) );
 
     // Set Check mark on current selected language
     for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )

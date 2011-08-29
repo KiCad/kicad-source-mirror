@@ -137,30 +137,30 @@ void EDA_3D_FRAME::ReCreateMenuBar()
     menuBar->Append( referencesMenu, _( "&Preferences" ) );
 
     ADD_MENUITEM( referencesMenu, ID_MENU3D_BGCOLOR_SELECTION,
-                  _( "Choose background color" ), palette_xpm );
+                  _( "Choose background color" ), KiBitmap( palette_xpm ) );
 
     ADD_MENUITEM( referencesMenu, ID_MENU3D_AXIS_ONOFF,
-                  _( "3D Axis On/Off" ), axis3d_front_xpm );
+                  _( "3D Axis On/Off" ), KiBitmap( axis3d_front_xpm ) );
 
     if( full_options )
     {
         ADD_MENUITEM( referencesMenu, ID_MENU3D_MODULE_ONOFF,
-                      _( "3D Footprints Shapes On/Off" ), shape_3d_xpm );
+                      _( "3D Footprints Shapes On/Off" ), KiBitmap( shape_3d_xpm ) );
 
         ADD_MENUITEM( referencesMenu, ID_MENU3D_ZONE_ONOFF,
-                      _( "Zone Filling On/Off" ), add_zone_xpm );
+                      _( "Zone Filling On/Off" ), KiBitmap( add_zone_xpm ) );
 
         ADD_MENUITEM( referencesMenu, ID_MENU3D_COMMENTS_ONOFF,
-                      _( "Comments Layer On/Off" ), edit_sheet_xpm );
+                      _( "Comments Layer On/Off" ), KiBitmap( edit_sheet_xpm ) );
 
         ADD_MENUITEM( referencesMenu, ID_MENU3D_DRAWINGS_ONOFF,
-                      _( "Drawings Layer On/Off" ), add_polygon_xpm );
+                      _( "Drawings Layer On/Off" ), KiBitmap( add_polygon_xpm ) );
 
         ADD_MENUITEM( referencesMenu, ID_MENU3D_ECO1_ONOFF,
-                      _( "Eco1 Layer On/Off" ), tools_xpm );
+                      _( "Eco1 Layer On/Off" ), KiBitmap( tools_xpm ) );
 
         ADD_MENUITEM( referencesMenu, ID_MENU3D_ECO2_ONOFF,
-                      _( "Eco2 Layer On/Off" ), tools_xpm );
+                      _( "Eco2 Layer On/Off" ), KiBitmap( tools_xpm ) );
     }
 
     SetMenuBar( menuBar );

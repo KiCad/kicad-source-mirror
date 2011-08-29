@@ -17,8 +17,8 @@ struct BITMAP_OPAQUE
     int                     byteCount;
 };
 
-#define EXTERN_BITMAP(x) extern const BITMAP_DEF x;
-
+// declared as single unit array, so its name is a pointer.
+#define EXTERN_BITMAP(x) extern const BITMAP_OPAQUE x[1];
 
 #else
 
@@ -29,8 +29,8 @@ typedef const char*     BITMAP_OPAQUE;
 
 #endif
 
-/// a BITMAP_DEF is really a const pointer to an opaque structure.  So you
-/// should never need to use 'const' with it.
+/// a BITMAP_DEF is really a const pointer to an opaque
+/// structure.  So you should never need to use 'const' with it.
 typedef const BITMAP_OPAQUE *BITMAP_DEF;
 
 

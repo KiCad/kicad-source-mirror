@@ -216,7 +216,7 @@ static inline void ADD_MENUITEM_WITH_HELP_AND_SUBMENU( wxMenu*         menu,
 
 // macro to add a bitmap list to check menus (do not use with normal menus)
 #if defined( USE_IMAGES_IN_MENUS ) && defined(  __WINDOWS__ )
-#  define SETBITMAPS( icon ) item->SetBitmaps( KiBitmap( apply_xpm ), (icon) )
+#  define SETBITMAPS( icon ) item->SetBitmaps( KiBitmap( apply_xpm ), KiBitmap( icon ) )
 #else
 #  define SETBITMAPS( icon )
 #endif

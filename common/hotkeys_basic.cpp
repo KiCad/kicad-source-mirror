@@ -639,13 +639,13 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
                           ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
                           _( "List Current Keys" ),
                           _( "Displays the current hotkeys list and corresponding commands" ),
-                          info_xpm );
+                          KiBitmap( info_xpm ) );
 
     /* Call hotkeys editor*/
     ADD_MENUITEM_WITH_HELP( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
                           _( "Edit Hotkeys" ),
                           _( "Call the hotkeys editor" ),
-                          editor_xpm );
+                          KiBitmap( editor_xpm ) );
 
     HotkeySubmenu->AppendSeparator();
 
@@ -653,17 +653,18 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
     ADD_MENUITEM_WITH_HELP( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
                            _( "Export Hotkeys Config" ),
                            _( "Create a hotkey configuration file to export the current hotkey config" ),
-                            save_setup_xpm );
+                           KiBitmap( save_setup_xpm ) );
 
     /* Reload hotkey file */
     ADD_MENUITEM_WITH_HELP( HotkeySubmenu, ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
                           _( "Import Hotkeys Config" ),
                           _( "Load an existing hotkey configuration file" ),
-                          reload_xpm );
+                          KiBitmap( reload_xpm ) );
 
     /* Append HotkeySubmenu to menu */
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( aMenu, HotkeySubmenu,
                                         ID_PREFERENCES_HOTKEY_SUBMENU, _( "Hotkeys" ),
-                                        _( "Hotkeys configuration and preferences" ), hotkeys_xpm );
+                                        _( "Hotkeys configuration and preferences" ),
+                                        KiBitmap( hotkeys_xpm ) );
 }
 

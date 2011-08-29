@@ -154,21 +154,21 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     BASE_SCREEN * screen = DrawPanel->GetScreen();
 
     msg = AddHotkeyName( _( "Center" ), m_HotkeysZoomAndGridList, HK_ZOOM_CENTER );
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_CENTER, msg, zoom_center_on_screen_xpm );
+    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_CENTER, msg, KiBitmap( zoom_center_on_screen_xpm ) );
     msg = AddHotkeyName( _( "Zoom in" ), m_HotkeysZoomAndGridList, HK_ZOOM_IN );
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_IN, msg, zoom_in_xpm );
+    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_IN, msg, KiBitmap( zoom_in_xpm ) );
     msg = AddHotkeyName( _( "Zoom out" ), m_HotkeysZoomAndGridList, HK_ZOOM_OUT );
-    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_OUT, msg, zoom_out_xpm );
+    ADD_MENUITEM( MasterMenu, ID_POPUP_ZOOM_OUT, msg, KiBitmap( zoom_out_xpm ) );
     msg = AddHotkeyName( _( "Redraw view" ), m_HotkeysZoomAndGridList, HK_ZOOM_REDRAW );
-    ADD_MENUITEM( MasterMenu, ID_ZOOM_REDRAW, msg, zoom_redraw_xpm );
+    ADD_MENUITEM( MasterMenu, ID_ZOOM_REDRAW, msg, KiBitmap( zoom_redraw_xpm ) );
     msg = AddHotkeyName( _( "Zoom auto" ), m_HotkeysZoomAndGridList, HK_ZOOM_AUTO );
-    ADD_MENUITEM( MasterMenu, ID_ZOOM_PAGE, msg, zoom_fit_in_page_xpm );
+    ADD_MENUITEM( MasterMenu, ID_ZOOM_PAGE, msg, KiBitmap( zoom_fit_in_page_xpm ) );
 
 
     wxMenu* zoom_choice = new wxMenu;
     ADD_MENUITEM_WITH_SUBMENU( MasterMenu, zoom_choice,
                                ID_POPUP_ZOOM_SELECT, _( "Zoom select" ),
-                               zoom_selection_xpm );
+                               KiBitmap( zoom_selection_xpm ) );
 
     zoom = screen->GetZoom();
     maxZoomIds = ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START;
@@ -191,7 +191,7 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     {
         wxMenu* gridMenu = new wxMenu;
         ADD_MENUITEM_WITH_SUBMENU( MasterMenu, gridMenu, ID_POPUP_GRID_SELECT,
-                                   _( "Grid Select" ), grid_select_xpm );
+                                   _( "Grid Select" ), KiBitmap( grid_select_xpm ) );
 
         GRID_TYPE   tmp;
         wxRealPoint grid = screen->GetGridSize();
@@ -234,5 +234,5 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     }
 
     MasterMenu->AppendSeparator();
-    ADD_MENUITEM( MasterMenu, ID_POPUP_CANCEL, _( "Close" ), cancel_xpm );
+    ADD_MENUITEM( MasterMenu, ID_POPUP_CANCEL, _( "Close" ), KiBitmap( cancel_xpm ) );
 }
