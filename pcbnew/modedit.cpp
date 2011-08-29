@@ -92,8 +92,8 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
 
         for( int ii = 0; ii<limit; ++ii )
         {
-            wxString     text;
-            const char** xpm;
+            wxString    text;
+            BITMAP_DEF  xpm;
 
             item = (*m_Collector)[ii];
 

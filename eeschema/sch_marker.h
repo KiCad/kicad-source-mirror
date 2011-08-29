@@ -99,7 +99,7 @@ public:
 
     virtual wxString GetSelectMenuText() const { return wxString( _( "ERC Marker" ) ); }
 
-    virtual const char** GetMenuImage() const { return (const char**) erc_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  erc_xpm; }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os );

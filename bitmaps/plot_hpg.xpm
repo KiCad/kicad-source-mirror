@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char *plot_HPG_xpm[];
+extern const char *plot_hpg_xpm[];
 
 #else
-const char * plot_HPG_xpm[] = {
+const char * plot_hpg_xpm[] = {
 "16 16 17 1",
 " 	c None",
 ".	c #000000",

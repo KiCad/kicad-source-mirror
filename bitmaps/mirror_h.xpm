@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char *mirror_H_xpm[];
+extern const char *mirror_h_xpm[];
 
 #else
-const char * mirror_H_xpm[] = {
+const char * mirror_h_xpm[] = {
 "16 16 29 1",
 " 	c None",
 ".	c #000000",

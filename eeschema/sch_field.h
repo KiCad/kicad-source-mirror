@@ -175,7 +175,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const;
+    virtual BITMAP_DEF GetMenuImage() const;
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;

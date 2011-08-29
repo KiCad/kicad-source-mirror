@@ -288,7 +288,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) showtrack_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  showtrack_xpm; }
 
 #if defined (DEBUG)
 
@@ -333,7 +333,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) add_zone_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  add_zone_xpm; }
 };
 
 
@@ -390,7 +390,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) via_sketch_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  via_sketch_xpm; }
 
 #if defined (DEBUG)
 

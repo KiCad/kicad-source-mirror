@@ -37,7 +37,7 @@ static const wxString pin_orientation_names[] =
 
 // bitmaps to show pins orientations in dialog editor
 // must have same order than pin_orientation_names
-static const char** s_icons_Pins_Orientations[] =
+static const BITMAP_DEF s_icons_Pins_Orientations[] =
 {
     pinorient_right_xpm,
     pinorient_left_xpm,
@@ -73,7 +73,7 @@ static const wxString pin_style_names[] =
 
 // bitmaps to show pins shapes in dialog editor
 // must have same order than pin_style_names
-static const char** s_icons_Pins_Shapes[] =
+static BITMAP_DEF s_icons_Pins_Shapes[] =
 {
     pinshape_normal_xpm,
     pinshape_invert_xpm,
@@ -121,7 +121,7 @@ static const wxString pin_electrical_type_names[] =
 
 // bitmaps to show pins electrical type in dialog editor
 // must have same order than pin_electrical_type_names
-static const char** s_icons_Pins_Electrical_Type[] =
+static const BITMAP_DEF s_icons_Pins_Electrical_Type[] =
 {
     pintype_input_xpm,
     pintype_output_xpm,
@@ -2129,25 +2129,25 @@ wxArrayString LIB_PIN::GetElectricalTypeNames( void )
 }
 
 
-const char*** LIB_PIN::GetElectricalTypeSymbols( void )
+const BITMAP_DEF* LIB_PIN::GetElectricalTypeSymbols()
 {
     return s_icons_Pins_Electrical_Type;
 }
 
 
-const char*** LIB_PIN::GetOrientationSymbols()
+const BITMAP_DEF* LIB_PIN::GetOrientationSymbols()
 {
     return s_icons_Pins_Orientations;
 }
 
 
-const char*** LIB_PIN::GetStyleSymbols()
+const BITMAP_DEF* LIB_PIN::GetStyleSymbols()
 {
     return s_icons_Pins_Shapes;
 }
 
 
-const char** LIB_PIN::GetMenuImage() const
+BITMAP_DEF LIB_PIN::GetMenuImage() const
 {
     return s_icons_Pins_Electrical_Type[m_type];
 }

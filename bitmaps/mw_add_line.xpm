@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* mw_Add_Line_xpm[];
+extern const char* mw_add_line_xpm[];
 #else
-const char * mw_Add_Line_xpm[] = {
+const char * mw_add_line_xpm[] = {
 "16 16 6 1",
 " 	c None",
 ".	c #D72E2E",

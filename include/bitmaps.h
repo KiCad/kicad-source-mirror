@@ -4,28 +4,34 @@
 
 #include <wx/bitmap.h>
 
-
 #define VTOOLBAR_WIDTH  26
 
 #define TOOL_SIZE       23
 
 
-
-#if !defined(USE_PNG_BITMAPS)
-
-// temporary during migration to KiBitmap() and KiBitmapNew().
-typedef const char** BITMAP_DEF;
-
-#else
-
+#if defined(FUTURE_PNG_BITMAPS)
 /// PNG memory record (file in memory).
-struct BITMAP_DEF
+struct BITMAP_OPAQUE
 {
     const unsigned char*    png;
     int                     byteCount;
 };
 
+#define EXTERN_BITMAP(x) extern const BITMAP_DEF x;
+
+
+#else
+
+// temporary during migration to KiBitmap() and KiBitmapNew().
+typedef const char*     BITMAP_OPAQUE;
+
+#define EXTERN_BITMAP(x) extern const char* x[];
+
 #endif
+
+/// a BITMAP_DEF is really a const pointer to an opaque structure.  So you
+/// should never need to use 'const' with it.
+typedef const BITMAP_OPAQUE *BITMAP_DEF;
 
 
 /**
@@ -33,7 +39,7 @@ struct BITMAP_DEF
  * constructs a wxBitmap from a memory record, held in a
  * BITMAP_DEF.
  */
-wxBitmap KiBitmap( const BITMAP_DEF& aBitmap );
+wxBitmap KiBitmap( BITMAP_DEF aBitmap );
 
 
 /**
@@ -43,432 +49,432 @@ wxBitmap KiBitmap( const BITMAP_DEF& aBitmap );
  *
  * @return wxBitmap* - caller owns it.
  */
-wxBitmap* KiBitmapNew( const BITMAP_DEF& aBitmap );
+wxBitmap* KiBitmapNew( BITMAP_DEF aBitmap );
 
 
-// Please keep list sorted alphabetically, ignoring case.
+// may eventually generate this file automatically.
 
-extern const char* shape_3d_xpm[];
-extern const char* add_arc_xpm[];
-extern const char* add_bus2bus_xpm[];
-extern const char* add_bus_xpm[];
-extern const char* add_circle_xpm[];
-extern const char* add_component_xpm[];
-extern const char* add_corner_xpm[];
-extern const char* add_dashed_line_xpm[];
-extern const char* add_dimension_xpm[];
-extern const char* add_entry_xpm[];
-extern const char* add_glabel_xpm[];
-extern const char* add_hierarchical_label_xpm[];
-extern const char* add_hierarchical_subsheet_xpm[];
-extern const char* add_hierar_pin_xpm[];
-extern const char* add_junction_xpm[];
-extern const char* add_line2bus_xpm[];
-extern const char* add_line_label_xpm[];
-extern const char* add_line_xpm[];
-extern const char* add_mires_xpm[];
-extern const char* add_polygon_xpm[];
-extern const char* add_power_xpm[];
-extern const char* add_rectangle_xpm[];
-extern const char* add_text_xpm[];
-extern const char* add_tracks_xpm[];
-extern const char* add_zone_cutout[];
-extern const char* add_zone_xpm[];
-extern const char* a_icon_pcbnew_xpm[];
-extern const char* anchor_xpm[];
-extern const char* annotate_down_right_xpm[];
-extern const char* annotate_right_down_xpm[];
-extern const char* annotate_xpm[];
-extern const char* apply_xpm[];
-extern const char* auto_associe_xpm[];
-extern const char* auto_delete_track_xpm[];
-extern const char* auto_track_width_xpm[];
-extern const char* axis3d_back_xpm[];
-extern const char* axis3d_bottom_xpm[];
-extern const char* axis3d_front_xpm[];
-extern const char* axis3d_left_xpm[];
-extern const char* axis3d_right_xpm[];
-extern const char* axis3d_top_xpm[];
-extern const char* axis3d_xpm[];
-extern const char* book_xpm[];
-extern const char* break_bus_xpm[];
-extern const char* break_line_xpm[];
-extern const char* browse_files_xpm[];
-extern const char* cancel_tool_xpm[];
-extern const char* cancel_xpm[];
-extern const char* checked_ok_xpm[];
-extern const char* component_select_alternate_shape_xpm[];
-extern const char* component_select_unit_xpm[];
-extern const char* config_xpm[];
-extern const char* copper_layers_setup_xpm[];
-extern const char* copyblock_xpm[];
-extern const char* copyComponent_xpm[];
-extern const char* copy_button[];
-extern const char* create_cmp_file_xpm[];
-extern const char* cursor_shape_xpm[];
-extern const char* cursor_xpm[];
-extern const char* cut_button[];
-extern const char* cvpcb_xpm[];
-extern const char* dashedline_xpm[];
-extern const char* datasheet_xpm[];
-extern const char* delete_arc_xpm[];
-extern const char* delete_association_xpm[];
-extern const char* delete_body_xpm[];
-extern const char* delete_bus_xpm[];
-extern const char* delete_circle_xpm[];
-extern const char* delete_connection_xpm[];
-extern const char* delete_cotation_xpm[];
-extern const char* delete_field_xpm[];
-extern const char* delete_glabel_xpm[];
-extern const char* delete_line_xpm[];
-extern const char* delete_module_xpm[];
-extern const char* delete_net_xpm[];
-extern const char* delete_node_xpm[];
-extern const char* delete_pad_xpm[];
-extern const char* delete_pinsheet_xpm[];
-extern const char* delete_pin_xpm[];
-extern const char* delete_polygon_xpm[];
-extern const char* delete_rectangle_xpm[];
-extern const char* delete_segment_xpm[];
-extern const char* delete_sheet_xpm[];
-extern const char* delete_text_xpm[];
-extern const char* delete_track_xpm[];
-extern const char* delete_xpm[];
-extern const char* directory_xpm[];
-extern const char* display_options_xpm[];
-extern const char* down_xpm[];
-extern const char* ortho_xpm[];
-extern const char* drag_module_xpm[];
-extern const char* drag_outline_segment_xpm[];
-extern const char* drag_pad_xpm[];
-extern const char* drag_segment_withslope_xpm[];
-extern const char* drag_track_segment_xpm[];
-extern const char* drc_off_xpm[];
-extern const char* drc_xpm[];
-extern const char* edges_sketch_xpm[];
-extern const char* edit_comp_footprint_xpm[];
-extern const char* edit_component_xpm[];
-extern const char* edit_comp_ref_xpm[];
-extern const char* edit_comp_value_xpm[];
-extern const char* edit_module_xpm[];
-extern const char* editor_xpm[];
-extern const char* edit_part_xpm[];
-extern const char* edit_sheet_xpm[];
-extern const char* edit_text_xpm[];
-extern const char* edit_xpm[];
-extern const char* eeschema_xpm[];
-extern const char* enter_sheet_xpm[];
-extern const char* erc_xpm[];
-extern const char* erc_green_xpm[];
-extern const char* error_xpm[];
-extern const char* exit_xpm[];
-extern const char* export_footprint_names_xpm[];
-extern const char* export_module_xpm[];
-extern const char* export_options_pad_xpm[];
-extern const char* export_xpm[];
-extern const char* fabrication_xpm[];
-extern const char* file_footprint_xpm[];
-extern const char* fill_zone_xpm[];
-extern const char* find_xpm[];
-extern const char* flag_xpm[];
-extern const char* fonts_xpm[];
-extern const char* footprint_text_xpm[];
-extern const char* gbr_select_mode0_xpm[];
-extern const char* gbr_select_mode1_xpm[];
-extern const char* gbr_select_mode2_xpm[];
-extern const char* gerbview_drill_file_xpm[];
-extern const char* gerber_file_xpm[];
-extern const char* gerber_recent_files_xpm[];
-extern const char* gerbview_clear_layers_xpm[];
-extern const char* gerber_open_dcode_file_xpm[];
-extern const char* general_deletions_xpm[];
-extern const char* general_ratsnet_xpm[];
-extern const char* glabel2label_xpm[];
-extern const char* glabel2text_xpm[];
-extern const char* gl_change_xpm[];
-extern const char* global_options_pad_xpm[];
-extern const char* green_xpm[];
-extern const char* grid_select_axis_xpm[];
-extern const char* grid_select_xpm[];
-extern const char* grid_xpm[];
-extern const char* hammer_xpm[];
-extern const char* help_xpm[];
-extern const char* hidden_pin_xpm[];
-extern const char* hierarchy_cursor_xpm[];
-extern const char* hierarchy_nav_xpm[];
-extern const char* hotkeys_xpm[];
-extern const char* icon_cvpcb_small_xpm[];
-extern const char* icon_cvpcb_xpm[];
-extern const char* icon_eeschema_xpm[];
-extern const char* icon_gerbview_small_xpm[];
-extern const char* icon_gerbview_xpm[];
-extern const char* icon_modedit_xpm[];
-extern const char* icon_txt_xpm[];
-extern const char* icon_w3d_xpm[];
-extern const char* import_cmp_from_lib_xpm[];
-extern const char* import_footprint_names_xpm[];
-extern const char* import_hierarchical_label_xpm[];
-extern const char* import_module_xpm[];
-extern const char* import_xpm[];
-extern const char* import3d_xpm[];
-extern const char* info_xpm[];
-extern const char* insert_module_board_xpm[];
-extern const char* invert_module_xpm[];
-extern const char* invisible_text_xpm[];
-extern const char* jigsaw_xpm[];
-extern const char* kicad_icon_small_xpm[];
-extern const char* kicad_icon_xpm[];
-extern const char* label2glabel_xpm[];
-extern const char* label2text_xpm[];
-extern const char* label_xpm[];
-extern const char* lang_catalan_xpm[];
-extern const char* lang_chinese_xpm[];
-extern const char* lang_cs_xpm[];
-extern const char* lang_def_xpm[];
-extern const char* lang_de_xpm[];
-extern const char* lang_en_xpm[];
-extern const char* lang_es_xpm[];
-extern const char* lang_fr_xpm[];
-extern const char* lang_fi_xpm[];
-extern const char* lang_gr_xpm[];
-extern const char* lang_hu_xpm[];
-extern const char* lang_it_xpm[];
-extern const char* lang_jp_xpm[];
-extern const char* lang_ko_xpm[];
-extern const char* lang_nl_xpm[];
-extern const char* lang_pl_xpm[];
-extern const char* lang_pt_xpm[];
-extern const char* lang_ru_xpm[];
-extern const char* lang_sl_xpm[];
-extern const char* language_xpm[];
-extern const char* layers_manager_xpm[];
-extern const char* leave_sheet_xpm[];
-extern const char* left_xpm[];
-extern const char* libedit_icon_xpm[];
-extern const char* libedit_xpm[];
-extern const char* libedit_part_xpm[];
-extern const char* lib_next_xpm[];
-extern const char* lib_previous_xpm[];
-extern const char* library_browse_xpm[];
-extern const char* library_update_xpm[];
-extern const char* library_xpm[];
-extern const char* libview_xpm[];
-extern const char* lines90_xpm[];
-extern const char* load_module_board_xpm[];
-extern const char* load_module_lib_xpm[];
-extern const char* local_ratsnet_xpm[];
-extern const char* locked_xpm[];
-extern const char* mirepcb_xpm[];
-extern const char* mirror_H_xpm[];
-extern const char* mirror_V_xpm[];
-extern const char* modedit_xpm[];
-extern const char* mode_module_xpm[];
-extern const char* mode_track_xpm[];
-extern const char* mod_ratsnest_xpm[];
-extern const char* module_check_xpm[];
-extern const char* module_edit_xpm[];
-extern const char* module_filtered_list_xpm[];
-extern const char* module_full_list_xpm[];
-extern const char* module_options_xpm[];
-extern const char* module_ratsnet_xpm[];
-extern const char* module_xpm[];
-extern const char* morgan1_xpm[];
-extern const char* morgan2_xpm[];
-extern const char* move_arc_xpm[];
-extern const char* move_circle_xpm[];
-extern const char* move_field_xpm[];
-extern const char* move_glabel_xpm[];
-extern const char* move_line_xpm[];
-extern const char* move_module_xpm[];
-extern const char* move_pad_xpm[];
-extern const char* move_pinsheet_xpm[];
-extern const char* move_pin_xpm[];
-extern const char* move_polygon_xpm[];
-extern const char* move_rectangle_xpm[];
-extern const char* move_sheet_xpm[];
-extern const char* move_text_xpm[];
-extern const char* move_track_segment_xpm[];
-extern const char* move_track_xpm[];
-extern const char* move_xpm[];
-extern const char* mw_Add_Gap_xpm[];
-extern const char* mw_Add_Line_xpm[];
-extern const char* mw_Add_Shape_xpm[];
-extern const char* mw_Add_stub_arc_xpm[];
-extern const char* mw_Add_Stub_xpm[];
-extern const char* mw_toolbar_xpm[];
-extern const char* net_highlight_xpm[];
-extern const char* netlist_xpm[];
-extern const char* net_locked_xpm[];
-extern const char* net_unlocked_xpm[];
-extern const char* new_component_xpm[];
-extern const char* new_cvpcb_xpm[];
-extern const char* new_footprint_xpm[];
-extern const char* new_gerb_xpm[];
-extern const char* new_library_xpm[];
-extern const char* new_module_xpm[];
-extern const char* new_pcb_xpm[];
-extern const char* new_project_xpm[];
-extern const char* new_python_xpm[];
-extern const char* new_sch_xpm[];
-extern const char* new_txt_xpm[];
-extern const char* new_xpm[];
-extern const char* noconn_button[];
-extern const char* normal_xpm[];
-extern const char* online_help_xpm[];
-extern const char* open_document_xpm[];
-extern const char* open_library_xpm[];
-extern const char* open_project_xpm[];
-extern const char* options_all_tracks_and_vias_xpm[];
-extern const char* options_all_tracks_xpm[];
-extern const char* options_all_vias_xpm[];
-extern const char* options_arc_xpm[];
-extern const char* options_circle_xpm[];
-extern const char* options_module_xpm[];
-extern const char* options_new_pad_xpm[];
-extern const char* options_pad_xpm[];
-extern const char* options_pinsheet_xpm[];
-extern const char* options_pin_xpm[];
-extern const char* options_rectangle_xpm[];
-extern const char* options_segment_xpm[];
-extern const char* options_text_xpm[];
-extern const char* options_tracks_xpm[];
-extern const char* options_track_xpm[];
-extern const char* options_vias_xpm[];
-extern const char* opt_show_polygon_xpm[];
-extern const char* orient_xpm[];
-extern const char* pad_sketch_xpm[];
-extern const char* pad_xpm[];
-extern const char* pads_mask_layers_xpm[];
-extern const char* palette_xpm[];
-extern const char* part_properties_xpm[];
-extern const char* paste_xpm[];
-extern const char* pcbnew_xpm[];
-extern const char* pcb_offset_xpm[];
-extern const char* pin2pin_xpm[];
-extern const char* pin_name_to_xpm[];
-extern const char* pin_number_to_xpm[];
-extern const char* pin_size_to_xpm[];
-extern const char* pinorient_right_xpm[];
-extern const char* pinorient_left_xpm[];
-extern const char* pinorient_up_xpm[];
-extern const char* pinorient_down_xpm[];
-extern const char* pinshape_nonlogic_xpm[];
-extern const char* pinshape_normal_xpm[];
-extern const char* pinshape_invert_xpm[];
-extern const char* pinshape_clock_fall_xpm[];
-extern const char* pinshape_clock_normal_xpm[];
-extern const char* pinshape_clock_invert_xpm[];
-extern const char* pinshape_active_low_input_xpm[];
-extern const char* pinshape_clock_active_low_xpm[];
-extern const char* pinshape_active_low_output_xpm[];
-extern const char* pintype_input_xpm[];
-extern const char* pintype_output_xpm[];
-extern const char* pintype_bidi_xpm[];
-extern const char* pintype_3states_xpm[];
-extern const char* pintype_passive_xpm[];
-extern const char* pintype_notspecif_xpm[];
-extern const char* pintype_powerinput_xpm[];
-extern const char* pintype_poweroutput_xpm[];
-extern const char* pintype_opencoll_xpm[];
-extern const char* pintype_openemit_xpm[];
-extern const char* pintype_noconnect_xpm[];
-extern const char* pin_to_xpm[];
-extern const char* pin_xpm[];
-extern const char* plot_HPG_xpm[];
-extern const char* plot_PS_xpm[];
-extern const char* plot_xpm[];
-extern const char* polar_coord_xpm[];
-extern const char* post_compo_xpm[];
-extern const char* post_drill_xpm[];
-extern const char* post_module_xpm[];
-extern const char* preference_xpm[];
-extern const char* print_button[];
-extern const char* ratsnest_xpm[];
-extern const char* read_setup_xpm[];
-extern const char* redo_xpm[];
-extern const char* red_xpm[];
-extern const char* reload2_xpm[];
-extern const char* reload_xpm[];
-extern const char* repaint_xpm[];
-extern const char* reset_text_xpm[];
-extern const char* resize_sheet_xpm[];
-extern const char* right_xpm[];
-extern const char* rotate_field_xpm[];
-extern const char* rotate_glabel_xpm[];
-extern const char* rotate_module_neg_xpm[];
-extern const char* rotate_module_pos_xpm[];
-extern const char* rotate_pin_xpm[];
-extern const char* rotate_CW_xpm[];
-extern const char* rotate_CCW_xpm[];
-extern const char* rotate_neg_X_xpm[];
-extern const char* rotate_pos_X_xpm[];
-extern const char* rotate_neg_Y_xpm[];
-extern const char* rotate_pos_Y_xpm[];
-extern const char* rotate_neg_Z_xpm[];
-extern const char* rotate_pos_Z_xpm[];
-extern const char* save_as_xpm[];
-extern const char* save_library_xpm[];
-extern const char* save_netlist_xpm[];
-extern const char* save_part_in_mem_xpm[];
-extern const char* save_project_xpm[];
-extern const char* save_setup_xpm[];
-extern const char* save_xpm[];
-extern const char* schematic_xpm[];
-extern const char* select_grid_xpm[];
-extern const char* select_layer_pair_xpm[];
-extern const char* select_w_layer_xpm[];
-extern const char* sheetset_xpm[];
-extern const char* show_dcodenumber_xpm[];
-extern const char* show_footprint_xpm[];
-extern const char* show_mod_edge_xpm[];
-extern const char* showtrack_xpm[];
-extern const char* show_zone_xpm[];
-extern const char* show_zone_disable_xpm[];
-extern const char* show_zone_outline_only_xpm[];
-extern const char* swap_layer_xpm[];
-extern const char* text_sketch_xpm[];
-extern const char* three_d_xpm[];
-extern const char* tool_ratsnet_xpm[];
-extern const char* tools_xpm[];
-extern const char* track_locked_xpm[];
-extern const char* track_sketch_xpm[];
-extern const char* track_unlocked_xpm[];
-extern const char* transistor_xpm[];
-extern const char* tree_nosel_xpm[];
-extern const char* tree_sel_xpm[];
-extern const char* undelete_xpm[];
-extern const char* undo_xpm[];
-extern const char* unit_inch_xpm[];
-extern const char* unit_mm_xpm[];
-extern const char* unknown_xpm[];
-extern const char* unlocked_xpm[];
-extern const char* unzip_xpm[];
-extern const char* update_module_board_xpm[];
-extern const char* up_xpm[];
-extern const char* via_sketch_xpm[];
-extern const char* viewlibs_icon_xpm[];
-extern const char* warning_xpm[];
-extern const char* web_support_xpm[];
-extern const char* width_net_xpm[];
-extern const char* width_segment_xpm[];
-extern const char* width_track_via_xpm[];
-extern const char* width_track_xpm[];
-extern const char* width_vias_xpm[];
-extern const char* window_close_xpm[];
-extern const char* zip_tool_xpm[];
-extern const char* zip_xpm[];
-extern const char* zoom_area_xpm[];
-extern const char* zoom_center_on_screen_xpm[];
-extern const char* zoomoins3d_xpm[];
-extern const char* zoom_redraw_xpm[];
-extern const char* zoom_fit_in_page_xpm[];
-extern const char* zoom_in_xpm[];
-extern const char* zoom_out_xpm[];
-extern const char* zoompage3d_xpm[];
-extern const char* zoom_page_xpm[];
-extern const char* zoomplus3d_xpm[];
-extern const char* zoomrefr3d_xpm[];
-extern const char* zoom_selection_xpm[];
-extern const char* zoom_xpm[];
+EXTERN_BITMAP( shape_3d_xpm )
+EXTERN_BITMAP( add_arc_xpm )
+EXTERN_BITMAP( add_bus2bus_xpm )
+EXTERN_BITMAP( add_bus_xpm )
+EXTERN_BITMAP( add_circle_xpm )
+EXTERN_BITMAP( add_component_xpm )
+EXTERN_BITMAP( add_corner_xpm )
+EXTERN_BITMAP( add_dashed_line_xpm )
+EXTERN_BITMAP( add_dimension_xpm )
+EXTERN_BITMAP( add_entry_xpm )
+EXTERN_BITMAP( add_glabel_xpm )
+EXTERN_BITMAP( add_hierarchical_label_xpm )
+EXTERN_BITMAP( add_hierarchical_subsheet_xpm )
+EXTERN_BITMAP( add_hierar_pin_xpm )
+EXTERN_BITMAP( add_junction_xpm )
+EXTERN_BITMAP( add_line2bus_xpm )
+EXTERN_BITMAP( add_line_label_xpm )
+EXTERN_BITMAP( add_line_xpm )
+EXTERN_BITMAP( add_mires_xpm )
+EXTERN_BITMAP( add_polygon_xpm )
+EXTERN_BITMAP( add_power_xpm )
+EXTERN_BITMAP( add_rectangle_xpm )
+EXTERN_BITMAP( add_text_xpm )
+EXTERN_BITMAP( add_tracks_xpm )
+EXTERN_BITMAP( add_zone_cutout_xpm )
+EXTERN_BITMAP( add_zone_xpm )
+EXTERN_BITMAP( a_icon_pcbnew_xpm )
+EXTERN_BITMAP( anchor_xpm )
+EXTERN_BITMAP( annotate_down_right_xpm )
+EXTERN_BITMAP( annotate_right_down_xpm )
+EXTERN_BITMAP( annotate_xpm )
+EXTERN_BITMAP( apply_xpm )
+EXTERN_BITMAP( auto_associe_xpm )
+EXTERN_BITMAP( auto_delete_track_xpm )
+EXTERN_BITMAP( auto_track_width_xpm )
+EXTERN_BITMAP( axis3d_back_xpm )
+EXTERN_BITMAP( axis3d_bottom_xpm )
+EXTERN_BITMAP( axis3d_front_xpm )
+EXTERN_BITMAP( axis3d_left_xpm )
+EXTERN_BITMAP( axis3d_right_xpm )
+EXTERN_BITMAP( axis3d_top_xpm )
+EXTERN_BITMAP( axis3d_xpm )
+EXTERN_BITMAP( book_xpm )
+EXTERN_BITMAP( break_bus_xpm )
+EXTERN_BITMAP( break_line_xpm )
+EXTERN_BITMAP( browse_files_xpm )
+EXTERN_BITMAP( cancel_tool_xpm )
+EXTERN_BITMAP( cancel_xpm )
+EXTERN_BITMAP( checked_ok_xpm )
+EXTERN_BITMAP( component_select_alternate_shape_xpm )
+EXTERN_BITMAP( component_select_unit_xpm )
+EXTERN_BITMAP( config_xpm )
+EXTERN_BITMAP( copper_layers_setup_xpm )
+EXTERN_BITMAP( copyblock_xpm )
+EXTERN_BITMAP( copycomponent_xpm )
+EXTERN_BITMAP( copy_button_xpm )
+EXTERN_BITMAP( create_cmp_file_xpm )
+EXTERN_BITMAP( cursor_shape_xpm )
+EXTERN_BITMAP( cursor_xpm )
+EXTERN_BITMAP( cut_button_xpm )
+EXTERN_BITMAP( cvpcb_xpm )
+EXTERN_BITMAP( dashedline_xpm )
+EXTERN_BITMAP( datasheet_xpm )
+EXTERN_BITMAP( delete_arc_xpm )
+EXTERN_BITMAP( delete_association_xpm )
+EXTERN_BITMAP( delete_body_xpm )
+EXTERN_BITMAP( delete_bus_xpm )
+EXTERN_BITMAP( delete_circle_xpm )
+EXTERN_BITMAP( delete_connection_xpm )
+EXTERN_BITMAP( delete_cotation_xpm )
+EXTERN_BITMAP( delete_field_xpm )
+EXTERN_BITMAP( delete_glabel_xpm )
+EXTERN_BITMAP( delete_line_xpm )
+EXTERN_BITMAP( delete_module_xpm )
+EXTERN_BITMAP( delete_net_xpm )
+EXTERN_BITMAP( delete_node_xpm )
+EXTERN_BITMAP( delete_pad_xpm )
+EXTERN_BITMAP( delete_pinsheet_xpm )
+EXTERN_BITMAP( delete_pin_xpm )
+EXTERN_BITMAP( delete_polygon_xpm )
+EXTERN_BITMAP( delete_rectangle_xpm )
+EXTERN_BITMAP( delete_segment_xpm )
+EXTERN_BITMAP( delete_sheet_xpm )
+EXTERN_BITMAP( delete_text_xpm )
+EXTERN_BITMAP( delete_track_xpm )
+EXTERN_BITMAP( delete_xpm )
+EXTERN_BITMAP( directory_xpm )
+EXTERN_BITMAP( display_options_xpm )
+EXTERN_BITMAP( down_xpm )
+EXTERN_BITMAP( ortho_xpm )
+EXTERN_BITMAP( drag_module_xpm )
+EXTERN_BITMAP( drag_outline_segment_xpm )
+EXTERN_BITMAP( drag_pad_xpm )
+EXTERN_BITMAP( drag_segment_withslope_xpm )
+EXTERN_BITMAP( drag_track_segment_xpm )
+EXTERN_BITMAP( drc_off_xpm )
+EXTERN_BITMAP( drc_xpm )
+EXTERN_BITMAP( edges_sketch_xpm )
+EXTERN_BITMAP( edit_comp_footprint_xpm )
+EXTERN_BITMAP( edit_component_xpm )
+EXTERN_BITMAP( edit_comp_ref_xpm )
+EXTERN_BITMAP( edit_comp_value_xpm )
+EXTERN_BITMAP( edit_module_xpm )
+EXTERN_BITMAP( editor_xpm )
+EXTERN_BITMAP( edit_part_xpm )
+EXTERN_BITMAP( edit_sheet_xpm )
+EXTERN_BITMAP( edit_text_xpm )
+EXTERN_BITMAP( edit_xpm )
+EXTERN_BITMAP( eeschema_xpm )
+EXTERN_BITMAP( enter_sheet_xpm )
+EXTERN_BITMAP( erc_xpm )
+EXTERN_BITMAP( erc_green_xpm )
+EXTERN_BITMAP( error_xpm )
+EXTERN_BITMAP( exit_xpm )
+EXTERN_BITMAP( export_footprint_names_xpm )
+EXTERN_BITMAP( export_module_xpm )
+EXTERN_BITMAP( export_options_pad_xpm )
+EXTERN_BITMAP( export_xpm )
+EXTERN_BITMAP( fabrication_xpm )
+EXTERN_BITMAP( file_footprint_xpm )
+EXTERN_BITMAP( fill_zone_xpm )
+EXTERN_BITMAP( find_xpm )
+EXTERN_BITMAP( flag_xpm )
+EXTERN_BITMAP( fonts_xpm )
+EXTERN_BITMAP( footprint_text_xpm )
+EXTERN_BITMAP( gbr_select_mode0_xpm )
+EXTERN_BITMAP( gbr_select_mode1_xpm )
+EXTERN_BITMAP( gbr_select_mode2_xpm )
+EXTERN_BITMAP( gerbview_drill_file_xpm )
+EXTERN_BITMAP( gerber_file_xpm )
+EXTERN_BITMAP( gerber_recent_files_xpm )
+EXTERN_BITMAP( gerbview_clear_layers_xpm )
+EXTERN_BITMAP( gerber_open_dcode_file_xpm )
+EXTERN_BITMAP( general_deletions_xpm )
+EXTERN_BITMAP( general_ratsnet_xpm )
+EXTERN_BITMAP( glabel2label_xpm )
+EXTERN_BITMAP( glabel2text_xpm )
+EXTERN_BITMAP( gl_change_xpm )
+EXTERN_BITMAP( global_options_pad_xpm )
+EXTERN_BITMAP( green_xpm )
+EXTERN_BITMAP( grid_select_axis_xpm )
+EXTERN_BITMAP( grid_select_xpm )
+EXTERN_BITMAP( grid_xpm )
+EXTERN_BITMAP( hammer_xpm )
+EXTERN_BITMAP( help_xpm )
+EXTERN_BITMAP( hidden_pin_xpm )
+EXTERN_BITMAP( hierarchy_cursor_xpm )
+EXTERN_BITMAP( hierarchy_nav_xpm )
+EXTERN_BITMAP( hotkeys_xpm )
+EXTERN_BITMAP( icon_cvpcb_small_xpm )
+EXTERN_BITMAP( icon_cvpcb_xpm )
+EXTERN_BITMAP( icon_eeschema_xpm )
+EXTERN_BITMAP( icon_gerbview_small_xpm )
+EXTERN_BITMAP( icon_gerbview_xpm )
+EXTERN_BITMAP( icon_kicad_xpm )
+EXTERN_BITMAP( icon_modedit_xpm )
+EXTERN_BITMAP( icon_txt_xpm )
+EXTERN_BITMAP( icon_3d_xpm )
+EXTERN_BITMAP( import_cmp_from_lib_xpm )
+EXTERN_BITMAP( import_footprint_names_xpm )
+EXTERN_BITMAP( import_hierarchical_label_xpm )
+EXTERN_BITMAP( import_module_xpm )
+EXTERN_BITMAP( import_xpm )
+EXTERN_BITMAP( import3d_xpm )
+EXTERN_BITMAP( info_xpm )
+EXTERN_BITMAP( insert_module_board_xpm )
+EXTERN_BITMAP( invert_module_xpm )
+EXTERN_BITMAP( invisible_text_xpm )
+EXTERN_BITMAP( jigsaw_xpm )
+EXTERN_BITMAP( kicad_icon_small_xpm )
+EXTERN_BITMAP( label2glabel_xpm )
+EXTERN_BITMAP( label2text_xpm )
+EXTERN_BITMAP( label_xpm )
+EXTERN_BITMAP( lang_catalan_xpm )
+EXTERN_BITMAP( lang_chinese_xpm )
+EXTERN_BITMAP( lang_cs_xpm )
+EXTERN_BITMAP( lang_def_xpm )
+EXTERN_BITMAP( lang_de_xpm )
+EXTERN_BITMAP( lang_en_xpm )
+EXTERN_BITMAP( lang_es_xpm )
+EXTERN_BITMAP( lang_fr_xpm )
+EXTERN_BITMAP( lang_fi_xpm )
+EXTERN_BITMAP( lang_gr_xpm )
+EXTERN_BITMAP( lang_hu_xpm )
+EXTERN_BITMAP( lang_it_xpm )
+EXTERN_BITMAP( lang_jp_xpm )
+EXTERN_BITMAP( lang_ko_xpm )
+EXTERN_BITMAP( lang_nl_xpm )
+EXTERN_BITMAP( lang_pl_xpm )
+EXTERN_BITMAP( lang_pt_xpm )
+EXTERN_BITMAP( lang_ru_xpm )
+EXTERN_BITMAP( lang_sl_xpm )
+EXTERN_BITMAP( language_xpm )
+EXTERN_BITMAP( layers_manager_xpm )
+EXTERN_BITMAP( leave_sheet_xpm )
+EXTERN_BITMAP( left_xpm )
+EXTERN_BITMAP( libedit_icon_xpm )
+EXTERN_BITMAP( libedit_xpm )
+EXTERN_BITMAP( libedit_part_xpm )
+EXTERN_BITMAP( lib_next_xpm )
+EXTERN_BITMAP( lib_previous_xpm )
+EXTERN_BITMAP( library_browse_xpm )
+EXTERN_BITMAP( library_update_xpm )
+EXTERN_BITMAP( library_xpm )
+EXTERN_BITMAP( libview_xpm )
+EXTERN_BITMAP( lines90_xpm )
+EXTERN_BITMAP( load_module_board_xpm )
+EXTERN_BITMAP( load_module_lib_xpm )
+EXTERN_BITMAP( local_ratsnet_xpm )
+EXTERN_BITMAP( locked_xpm )
+EXTERN_BITMAP( mirepcb_xpm )
+EXTERN_BITMAP( mirror_h_xpm )
+EXTERN_BITMAP( mirror_v_xpm )
+EXTERN_BITMAP( modedit_xpm )
+EXTERN_BITMAP( mode_module_xpm )
+EXTERN_BITMAP( mode_track_xpm )
+EXTERN_BITMAP( mod_ratsnest_xpm )
+EXTERN_BITMAP( module_check_xpm )
+EXTERN_BITMAP( module_edit_xpm )
+EXTERN_BITMAP( module_filtered_list_xpm )
+EXTERN_BITMAP( module_full_list_xpm )
+EXTERN_BITMAP( module_options_xpm )
+EXTERN_BITMAP( module_ratsnet_xpm )
+EXTERN_BITMAP( module_xpm )
+EXTERN_BITMAP( morgan1_xpm )
+EXTERN_BITMAP( morgan2_xpm )
+EXTERN_BITMAP( move_arc_xpm )
+EXTERN_BITMAP( move_circle_xpm )
+EXTERN_BITMAP( move_field_xpm )
+EXTERN_BITMAP( move_glabel_xpm )
+EXTERN_BITMAP( move_line_xpm )
+EXTERN_BITMAP( move_module_xpm )
+EXTERN_BITMAP( move_pad_xpm )
+EXTERN_BITMAP( move_pinsheet_xpm )
+EXTERN_BITMAP( move_pin_xpm )
+EXTERN_BITMAP( move_polygon_xpm )
+EXTERN_BITMAP( move_rectangle_xpm )
+EXTERN_BITMAP( move_sheet_xpm )
+EXTERN_BITMAP( move_text_xpm )
+EXTERN_BITMAP( move_track_segment_xpm )
+EXTERN_BITMAP( move_track_xpm )
+EXTERN_BITMAP( move_xpm )
+EXTERN_BITMAP( mw_add_gap_xpm )
+EXTERN_BITMAP( mw_add_line_xpm )
+EXTERN_BITMAP( mw_add_shape_xpm )
+EXTERN_BITMAP( mw_add_stub_arc_xpm )
+EXTERN_BITMAP( mw_add_stub_xpm )
+EXTERN_BITMAP( mw_toolbar_xpm )
+EXTERN_BITMAP( net_highlight_xpm )
+EXTERN_BITMAP( netlist_xpm )
+EXTERN_BITMAP( net_locked_xpm )
+EXTERN_BITMAP( net_unlocked_xpm )
+EXTERN_BITMAP( new_component_xpm )
+EXTERN_BITMAP( new_cvpcb_xpm )
+EXTERN_BITMAP( new_footprint_xpm )
+EXTERN_BITMAP( new_gerb_xpm )
+EXTERN_BITMAP( new_library_xpm )
+EXTERN_BITMAP( new_module_xpm )
+EXTERN_BITMAP( new_pcb_xpm )
+EXTERN_BITMAP( new_project_xpm )
+EXTERN_BITMAP( new_python_xpm )
+EXTERN_BITMAP( new_sch_xpm )
+EXTERN_BITMAP( new_txt_xpm )
+EXTERN_BITMAP( new_xpm )
+EXTERN_BITMAP( noconn_xpm )
+EXTERN_BITMAP( normal_xpm )
+EXTERN_BITMAP( online_help_xpm )
+EXTERN_BITMAP( open_document_xpm )
+EXTERN_BITMAP( open_library_xpm )
+EXTERN_BITMAP( open_project_xpm )
+EXTERN_BITMAP( options_all_tracks_and_vias_xpm )
+EXTERN_BITMAP( options_all_tracks_xpm )
+EXTERN_BITMAP( options_all_vias_xpm )
+EXTERN_BITMAP( options_arc_xpm )
+EXTERN_BITMAP( options_circle_xpm )
+EXTERN_BITMAP( options_module_xpm )
+EXTERN_BITMAP( options_new_pad_xpm )
+EXTERN_BITMAP( options_pad_xpm )
+EXTERN_BITMAP( options_pinsheet_xpm )
+EXTERN_BITMAP( options_pin_xpm )
+EXTERN_BITMAP( options_rectangle_xpm )
+EXTERN_BITMAP( options_segment_xpm )
+EXTERN_BITMAP( options_text_xpm )
+EXTERN_BITMAP( options_tracks_xpm )
+EXTERN_BITMAP( options_track_xpm )
+EXTERN_BITMAP( options_vias_xpm )
+EXTERN_BITMAP( opt_show_polygon_xpm )
+EXTERN_BITMAP( orient_xpm )
+EXTERN_BITMAP( pad_sketch_xpm )
+EXTERN_BITMAP( pad_xpm )
+EXTERN_BITMAP( pads_mask_layers_xpm )
+EXTERN_BITMAP( palette_xpm )
+EXTERN_BITMAP( part_properties_xpm )
+EXTERN_BITMAP( paste_xpm )
+EXTERN_BITMAP( pcbnew_xpm )
+EXTERN_BITMAP( pcb_offset_xpm )
+EXTERN_BITMAP( pin2pin_xpm )
+EXTERN_BITMAP( pin_name_to_xpm )
+EXTERN_BITMAP( pin_number_to_xpm )
+EXTERN_BITMAP( pin_size_to_xpm )
+EXTERN_BITMAP( pinorient_right_xpm )
+EXTERN_BITMAP( pinorient_left_xpm )
+EXTERN_BITMAP( pinorient_up_xpm )
+EXTERN_BITMAP( pinorient_down_xpm )
+EXTERN_BITMAP( pinshape_nonlogic_xpm )
+EXTERN_BITMAP( pinshape_normal_xpm )
+EXTERN_BITMAP( pinshape_invert_xpm )
+EXTERN_BITMAP( pinshape_clock_fall_xpm )
+EXTERN_BITMAP( pinshape_clock_normal_xpm )
+EXTERN_BITMAP( pinshape_clock_invert_xpm )
+EXTERN_BITMAP( pinshape_active_low_input_xpm )
+EXTERN_BITMAP( pinshape_clock_active_low_xpm )
+EXTERN_BITMAP( pinshape_active_low_output_xpm )
+EXTERN_BITMAP( pintype_input_xpm )
+EXTERN_BITMAP( pintype_output_xpm )
+EXTERN_BITMAP( pintype_bidi_xpm )
+EXTERN_BITMAP( pintype_3states_xpm )
+EXTERN_BITMAP( pintype_passive_xpm )
+EXTERN_BITMAP( pintype_notspecif_xpm )
+EXTERN_BITMAP( pintype_powerinput_xpm )
+EXTERN_BITMAP( pintype_poweroutput_xpm )
+EXTERN_BITMAP( pintype_opencoll_xpm )
+EXTERN_BITMAP( pintype_openemit_xpm )
+EXTERN_BITMAP( pintype_noconnect_xpm )
+EXTERN_BITMAP( pin_to_xpm )
+EXTERN_BITMAP( pin_xpm )
+EXTERN_BITMAP( plot_hpg_xpm )
+EXTERN_BITMAP( plot_ps_xpm )
+EXTERN_BITMAP( plot_xpm )
+EXTERN_BITMAP( polar_coord_xpm )
+EXTERN_BITMAP( post_compo_xpm )
+EXTERN_BITMAP( post_drill_xpm )
+EXTERN_BITMAP( post_module_xpm )
+EXTERN_BITMAP( preference_xpm )
+EXTERN_BITMAP( print_button_xpm )
+EXTERN_BITMAP( ratsnest_xpm )
+EXTERN_BITMAP( read_setup_xpm )
+EXTERN_BITMAP( redo_xpm )
+EXTERN_BITMAP( red_xpm )
+EXTERN_BITMAP( reload2_xpm )
+EXTERN_BITMAP( reload_xpm )
+EXTERN_BITMAP( repaint_xpm )
+EXTERN_BITMAP( reset_text_xpm )
+EXTERN_BITMAP( resize_sheet_xpm )
+EXTERN_BITMAP( right_xpm )
+EXTERN_BITMAP( rotate_field_xpm )
+EXTERN_BITMAP( rotate_glabel_xpm )
+EXTERN_BITMAP( rotate_module_neg_xpm )
+EXTERN_BITMAP( rotate_module_pos_xpm )
+EXTERN_BITMAP( rotate_pin_xpm )
+EXTERN_BITMAP( rotate_cw_xpm )
+EXTERN_BITMAP( rotate_ccw_xpm )
+EXTERN_BITMAP( rotate_neg_x_xpm )
+EXTERN_BITMAP( rotate_pos_x_xpm )
+EXTERN_BITMAP( rotate_neg_y_xpm )
+EXTERN_BITMAP( rotate_pos_y_xpm )
+EXTERN_BITMAP( rotate_neg_z_xpm )
+EXTERN_BITMAP( rotate_pos_z_xpm )
+EXTERN_BITMAP( save_as_xpm )
+EXTERN_BITMAP( save_library_xpm )
+EXTERN_BITMAP( save_netlist_xpm )
+EXTERN_BITMAP( save_part_in_mem_xpm )
+EXTERN_BITMAP( save_project_xpm )
+EXTERN_BITMAP( save_setup_xpm )
+EXTERN_BITMAP( save_xpm )
+EXTERN_BITMAP( schematic_xpm )
+EXTERN_BITMAP( select_grid_xpm )
+EXTERN_BITMAP( select_layer_pair_xpm )
+EXTERN_BITMAP( select_w_layer_xpm )
+EXTERN_BITMAP( sheetset_xpm )
+EXTERN_BITMAP( show_dcodenumber_xpm )
+EXTERN_BITMAP( show_footprint_xpm )
+EXTERN_BITMAP( show_mod_edge_xpm )
+EXTERN_BITMAP( showtrack_xpm )
+EXTERN_BITMAP( show_zone_xpm )
+EXTERN_BITMAP( show_zone_disable_xpm )
+EXTERN_BITMAP( show_zone_outline_only_xpm )
+EXTERN_BITMAP( swap_layer_xpm )
+EXTERN_BITMAP( text_sketch_xpm )
+EXTERN_BITMAP( three_d_xpm )
+EXTERN_BITMAP( tool_ratsnet_xpm )
+EXTERN_BITMAP( tools_xpm )
+EXTERN_BITMAP( track_locked_xpm )
+EXTERN_BITMAP( track_sketch_xpm )
+EXTERN_BITMAP( track_unlocked_xpm )
+EXTERN_BITMAP( transistor_xpm )
+EXTERN_BITMAP( tree_nosel_xpm )
+EXTERN_BITMAP( tree_sel_xpm )
+EXTERN_BITMAP( undelete_xpm )
+EXTERN_BITMAP( undo_xpm )
+EXTERN_BITMAP( unit_inch_xpm )
+EXTERN_BITMAP( unit_mm_xpm )
+EXTERN_BITMAP( unknown_xpm )
+EXTERN_BITMAP( unlocked_xpm )
+EXTERN_BITMAP( unzip_xpm )
+EXTERN_BITMAP( update_module_board_xpm )
+EXTERN_BITMAP( up_xpm )
+EXTERN_BITMAP( via_sketch_xpm )
+EXTERN_BITMAP( viewlibs_icon_xpm )
+EXTERN_BITMAP( warning_xpm )
+EXTERN_BITMAP( web_support_xpm )
+EXTERN_BITMAP( width_net_xpm )
+EXTERN_BITMAP( width_segment_xpm )
+EXTERN_BITMAP( width_track_via_xpm )
+EXTERN_BITMAP( width_track_xpm )
+EXTERN_BITMAP( width_vias_xpm )
+EXTERN_BITMAP( window_close_xpm )
+EXTERN_BITMAP( zip_tool_xpm )
+EXTERN_BITMAP( zip_xpm )
+EXTERN_BITMAP( zoom_area_xpm )
+EXTERN_BITMAP( zoom_center_on_screen_xpm )
+EXTERN_BITMAP( zoomoins3d_xpm )
+EXTERN_BITMAP( zoom_redraw_xpm )
+EXTERN_BITMAP( zoom_fit_in_page_xpm )
+EXTERN_BITMAP( zoom_in_xpm )
+EXTERN_BITMAP( zoom_out_xpm )
+EXTERN_BITMAP( zoompage3d_xpm )
+EXTERN_BITMAP( zoom_page_xpm )
+EXTERN_BITMAP( zoomplus3d_xpm )
+EXTERN_BITMAP( zoomrefr3d_xpm )
+EXTERN_BITMAP( zoom_selection_xpm )
+EXTERN_BITMAP( zoom_xpm )
 
 #endif  // BITMAPS_H_

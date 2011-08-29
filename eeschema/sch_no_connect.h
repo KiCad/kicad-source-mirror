@@ -96,7 +96,7 @@ public:
 
     virtual wxString GetSelectMenuText() const { return wxString( _( "No Connect" ) ); }
 
-    virtual const char** GetMenuImage() const { return (const char**) noconn_button; }
+    virtual BITMAP_DEF GetMenuImage() const { return noconn_xpm; }
 
 private:
     virtual bool doIsConnected( const wxPoint& aPosition ) const;

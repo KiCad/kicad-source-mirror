@@ -224,10 +224,10 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                               copyblock_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_MIRROR_X_BLOCK,
                               _( "Mirror Block (alt + drag mouse)" ),
-                              mirror_H_xpm );
+                              mirror_h_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_ROTATE_BLOCK,
                               _( "Rotate Block (ctrl + drag mouse)" ),
-                              rotate_CCW_xpm );
+                              rotate_ccw_xpm );
                 ADD_MENUITEM( PopMenu, ID_POPUP_DELETE_BLOCK,
                               _( "Delete Block (shift+ctrl + drag mouse)" ),
                               delete_xpm );
@@ -254,7 +254,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         wxMenu* transform_choice = new wxMenu;
         ADD_MENUITEM( transform_choice, ID_MODEDIT_MODULE_ROTATE, _( "Rotate" ),
                       rotate_module_pos_xpm );
-        ADD_MENUITEM( transform_choice, ID_MODEDIT_MODULE_MIRROR, _( "Mirror" ), mirror_H_xpm );
+        ADD_MENUITEM( transform_choice, ID_MODEDIT_MODULE_MIRROR, _( "Mirror" ), mirror_h_xpm );
         msg = AddHotkeyName( _( "Edit Module" ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         ADD_MENUITEM( PopMenu, ID_POPUP_PCB_EDIT_MODULE, msg, edit_module_xpm );
         ADD_MENUITEM_WITH_SUBMENU( PopMenu, transform_choice, ID_MODEDIT_TRANSFORM_MODULE,

@@ -101,7 +101,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                          _( "Load component to edit from the current lib" ) );
 
     m_HToolBar->AddTool( ID_LIBEDIT_NEW_PART_FROM_EXISTING, wxEmptyString,
-                         KiBitmap( copyComponent_xpm ),
+                         KiBitmap( copycomponent_xpm ),
                          _( "Create a new component from the current one" ) );
 
     m_HToolBar->AddTool( ID_LIBEDIT_SAVE_CURRENT_PART, wxEmptyString,

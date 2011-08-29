@@ -50,11 +50,11 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
     SetStatusWidths( 3, dims );
 
     // Give an icon
-    #ifdef __WINDOWS__
+#ifdef __WINDOWS__
     SetIcon( wxICON( a_kicad_icon ) );
-    #else
-    SetIcon( wxICON( kicad_icon ) );
-    #endif
+#else
+    SetIcon( wxICON( icon_kicad ) );
+#endif
 
     clientsize = GetClientSize();
 

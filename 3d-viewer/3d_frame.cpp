@@ -47,7 +47,7 @@ EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME* parent, const wxString& title, long 
     m_reloadRequest = false;
 
     // Give it an icon
-    SetIcon( wxICON( icon_w3d ) );
+    SetIcon( wxICON( icon_3d ) );
 
     GetSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );

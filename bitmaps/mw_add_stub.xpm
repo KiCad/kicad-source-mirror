@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* mw_Add_Stub_xpm[];
+extern const char* mw_add_stub_xpm[];
 #else
-const char * mw_Add_Stub_xpm[] = {
+const char * mw_add_stub_xpm[] = {
 "16 16 14 1",
 " 	c None",
 ".	c #D72E2E",

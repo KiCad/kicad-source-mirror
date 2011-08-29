@@ -111,7 +111,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                             wxID_PRINT,
                             _( "P&rint" ),
                             _( "Print schematic" ),
-                            print_button );
+                            print_button_xpm );
 
     // Plot submenu
     wxMenu* choice_plot_fmt = new wxMenu;
@@ -120,14 +120,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     ADD_MENUITEM_WITH_HELP( choice_plot_fmt, ID_GEN_PLOT_PS,
                             _( "Plot PostScript" ),
                             _( "Plot schematic sheet in PostScript format" ),
-                            plot_PS_xpm );
+                            plot_ps_xpm );
 
     // Plot HPGL
     ADD_MENUITEM_WITH_HELP( choice_plot_fmt,
                             ID_GEN_PLOT_HPGL,
                             _( "Plot HPGL" ),
                             _( "Plot schematic sheet in HPGL format" ),
-                            plot_HPG_xpm );
+                            plot_hpg_xpm );
 
     // Plot SVG
     ADD_MENUITEM_WITH_HELP( choice_plot_fmt,
@@ -149,7 +149,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     ADD_MENUITEM_WITH_HELP( choice_plot_fmt, ID_GEN_COPY_SHEET_TO_CLIPBOARD,
                             _( "Plot to Clipboard" ),
                             _( "Export drawings to clipboard" ),
-                            copy_button );
+                            copy_button_xpm );
 
 #endif // __WINDOWS__
 
@@ -309,7 +309,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     text = AddHotkeyName( _( "No connect flag" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_NOCONN_FLAG, false );    // add comment, not a shortcut
     ADD_MENUITEM_WITH_HELP( placeMenu, ID_NOCONN_BUTT, text, HELP_PLACE_NC_FLAG,
-                            noconn_button );
+                            noconn_xpm );
 
     // Net name
     text = AddHotkeyName( _( "Label" ), s_Schematic_Hokeys_Descr,

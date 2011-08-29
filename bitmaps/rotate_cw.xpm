@@ -1,6 +1,6 @@
 /* XPM */
 
-const char *rotate_CW_xpm[] = {
+const char *rotate_cw_xpm[] = {
 "16 16 96 2",
 "  	c None",
 ". 	c #000000",

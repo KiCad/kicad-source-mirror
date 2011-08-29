@@ -110,7 +110,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
                             wxID_PRINT,
                             _( "P&rint" ),
                             _( "Print gerber" ),
-                            print_button );
+                            print_button_xpm );
 
     // Separator
     fileMenu->AppendSeparator();

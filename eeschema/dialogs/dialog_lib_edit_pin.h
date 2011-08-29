@@ -19,25 +19,25 @@ class DIALOG_LIB_EDIT_PIN : public DIALOG_LIB_EDIT_PIN_BASE
     LIB_PIN * m_dummyPin;       // a working copy used to show changes
 
 public:
-	/** Constructor */
-	DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin );
-	~DIALOG_LIB_EDIT_PIN();
+    /** Constructor */
+    DIALOG_LIB_EDIT_PIN( wxWindow* parent, LIB_PIN* aPin );
+    ~DIALOG_LIB_EDIT_PIN();
 
     void SetLastSizeAndPosition();
-	void OnCloseDialog( wxCloseEvent& event );
-	void OnCancelButtonClick( wxCommandEvent& event );
-	void OnOKButtonClick( wxCommandEvent& event );
+    void OnCloseDialog( wxCloseEvent& event );
+    void OnCancelButtonClick( wxCommandEvent& event );
+    void OnOKButtonClick( wxCommandEvent& event );
     void OnPaintShowPanel( wxPaintEvent& event );
-	void OnPropertiesChange( wxCommandEvent& event );
+    void OnPropertiesChange( wxCommandEvent& event );
 
-    void SetOrientationList( const wxArrayString& list, const char *** aBitmaps );
+    void SetOrientationList( const wxArrayString& list, const BITMAP_DEF* aBitmaps );
     void SetOrientation( int orientation )
     {
         m_choiceOrientation->SetSelection( orientation );
     }
     int GetOrientation( void ) { return m_choiceOrientation->GetSelection(); }
 
-    void SetElectricalTypeList( const wxArrayString& list, const char *** aBitmaps );
+    void SetElectricalTypeList( const wxArrayString& list, const BITMAP_DEF* aBitmaps );
     void SetElectricalType( int type )
     {
         m_choiceElectricalType->SetSelection( type );
@@ -47,7 +47,7 @@ public:
         return m_choiceElectricalType->GetSelection();
     }
 
-    void SetStyleList( const wxArrayString& list, const char *** aBitmaps );
+    void SetStyleList( const wxArrayString& list, const BITMAP_DEF* aBitmaps );
     void SetStyle( int style ) { m_choiceStyle->SetSelection( style ); }
     int GetStyle( void ) { return m_choiceStyle->GetSelection(); }
 

@@ -16,7 +16,7 @@
  *  lang_xx_xpm[];      // Icons of various national flags
  *  show_3d_xpm[];      // 3D icon
  *  edit_module_xpm[];
- *  kicad_icon_xpm[];   // Icon of the application
+ *  icon_kicad_xpm[];   // Icon of the application
  */
 #include "bitmaps.h"
 #include "wxstruct.h"
@@ -40,13 +40,20 @@ static wxString HtmlNewline( const unsigned int amount = 1 );
  */
 static void InitKiCadAboutNew( AboutAppInfo& info )
 {
-    /* Set application specific icon */
-
+    // Set application specific icon
     const wxTopLevelWindow * const tlw = wxDynamicCast(::wxGetApp().GetTopWindow(), wxTopLevelWindow);
+
     if( tlw )
         info.SetIcon( tlw->GetIcon() );
     else
-        info.SetIcon( kicad_icon_xpm );
+    {
+        wxBitmap    bitmap = KiBitmap( icon_kicad_xpm  );
+        wxIcon      icon;
+
+        icon.CopyFromBitmap( bitmap );
+
+        info.SetIcon( icon );
+    }
 
     /* Set title */
     info.SetAppName( wxT( ".: " ) + wxGetApp().GetTitle() + wxT( " :." ) );

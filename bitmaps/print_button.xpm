@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char *print_button[];
+extern const char *print_button_xpm[];
 
 #else
-const char *print_button[] = {
+const char *print_button_xpm[] = {
 /* columns rows colors const chars-per-pixel */
 "16 15 5 1",
 "  c None",

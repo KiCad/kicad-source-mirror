@@ -1,5 +1,5 @@
 /* XPM */
-const char *copyComponent_xpm[] = {
+const char *copycomponent_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 16 1",
 "; c #DC4149",

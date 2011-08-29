@@ -1,5 +1,5 @@
 /* XPM */
-const char *rotate_CCW_xpm[] = {
+const char *rotate_ccw_xpm[] = {
 "16 16 93 2",
 "  	c None",
 ". 	c #202020",

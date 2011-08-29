@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* mw_Add_Shape_xpm[];
+extern const char* mw_add_shape_xpm[];
 #else
-const char * mw_Add_Shape_xpm[] = {
+const char * mw_add_shape_xpm[] = {
 "16 16 21 1",
 " 	c None",
 ".	c #D72E2E",

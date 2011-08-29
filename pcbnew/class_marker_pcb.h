@@ -117,7 +117,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) drc_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  drc_xpm; }
 };
 
 

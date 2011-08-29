@@ -206,14 +206,14 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     item = new wxMenuItem( filesMenu, wxID_PRINT,
                            _( "&Print\tCtrl+P" ),
                            _( "Print board" ) );
-    SET_BITMAP( print_button );
+    SET_BITMAP( print_button_xpm );
     filesMenu->Append( item );
 
     // Create SVG file
     item = new wxMenuItem( filesMenu, ID_GEN_PLOT_SVG,
                            _( "Print S&VG" ),
                            _( "Plot board in Scalable Vector Graphics format" ) );
-    SET_BITMAP( print_button );
+    SET_BITMAP( print_button_xpm );
     filesMenu->Append( item );
 
     // Plot

@@ -207,11 +207,11 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
                          _( "Open module editor" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button ),
+    m_HToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
                          _( "Cut selected item" ) );
 
 #if 0
-    m_HToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button ),
+    m_HToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button_xpm ),
                          _( "Copy selected item" ) );
 
     m_HToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
@@ -225,7 +225,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), HELP_REDO );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button ),
+    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
                          _( "Print board" ) );
     m_HToolBar->AddTool( ID_GEN_PLOT, wxEmptyString, KiBitmap( plot_xpm ),
                          _( "Plot (HPGL, PostScript, or GERBER format)" ) );
@@ -460,26 +460,26 @@ void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
 
     // Set up toolbar
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_SELF_CMD, wxEmptyString,
-                            KiBitmap( mw_Add_Line_xpm ),
+                            KiBitmap( mw_add_line_xpm ),
                             _( "Create line of specified length for microwave applications" ) );
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_GAP_CMD, wxEmptyString,
-                            KiBitmap( mw_Add_Gap_xpm ),
+                            KiBitmap( mw_add_gap_xpm ),
                             _( "Create gap of specified length for microwave applications" ) );
 
     m_AuxVToolBar->AddSeparator();
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_CMD, wxEmptyString,
-                            KiBitmap( mw_Add_Stub_xpm ),
+                            KiBitmap( mw_add_stub_xpm ),
                             _( "Create stub of specified length for microwave applications" ) );
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_STUB_ARC_CMD, wxEmptyString,
-                            KiBitmap( mw_Add_stub_arc_xpm ),
+                            KiBitmap( mw_add_stub_arc_xpm ),
                             _( "Create stub (arc) of specified length for microwave applications" )
                             );
 
     m_AuxVToolBar->AddTool( ID_PCB_MUWAVE_TOOL_FUNCTION_SHAPE_CMD, wxEmptyString,
-                            KiBitmap( mw_Add_Shape_xpm ),
+                            KiBitmap( mw_add_shape_xpm ),
                             _( "Create a polynomial shape for microwave applications" ) );
 
     m_AuxVToolBar->Realize();

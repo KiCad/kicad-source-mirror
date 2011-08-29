@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char *rotate_neg_Y_xpm[];
+extern const char *rotate_neg_y_xpm[];
 
 #else
-const char *rotate_neg_Y_xpm[] = {
+const char *rotate_neg_y_xpm[] = {
 /* width height num_colors const chars_per_pixel */
 "    16    15        4            1",
 /* colors */

@@ -233,14 +233,14 @@ wxString SCH_POLYLINE::GetSelectMenuText() const
 }
 
 
-const char** SCH_POLYLINE::GetMenuImage() const
+BITMAP_DEF SCH_POLYLINE::GetMenuImage() const
 {
     if( m_Layer == LAYER_NOTES )
-        return (const char**) add_dashed_line_xpm;
+        return add_dashed_line_xpm;
     else if( m_Layer == LAYER_WIRE )
-        return (const char**) add_line_xpm;
+        return add_line_xpm;
 
-    return (const char**) add_bus_xpm;
+    return add_bus_xpm;
 }
 
 

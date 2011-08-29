@@ -93,7 +93,7 @@ public:
 
     virtual wxString GetSelectMenuText() const { return wxString( _( "Junction" ) ); }
 
-    virtual const char** GetMenuImage() const { return (const char**) add_junction_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  add_junction_xpm; }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os );

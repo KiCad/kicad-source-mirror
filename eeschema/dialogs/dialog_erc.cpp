@@ -348,7 +348,7 @@ void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
 {
     int             id, level, ii, x, y;
     wxBitmapButton* Butt;
-    const char**    new_bitmap_xpm = NULL;
+    BITMAP_DEF      new_bitmap_xpm = NULL;
     wxPoint         pos;
 
     id   = event.GetId();

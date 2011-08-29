@@ -367,7 +367,7 @@ void EDA_BASE_FRAME::AddHelpVersionInfoMenuEntry( wxMenu* aMenu )
     ADD_MENUITEM_WITH_HELP( aMenu, ID_HELP_COPY_VERSION_STRING,
                            _( "Copy &Version Information" ),
                            _( "Copy the version string to clipboard to send with bug reports" ),
-                           copy_button );
+                           copy_button_xpm );
 }
 
 

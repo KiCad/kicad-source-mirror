@@ -201,7 +201,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) add_dashed_line_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  add_dashed_line_xpm; }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os );

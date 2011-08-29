@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char * icon_w3d_xpm[];
+extern const char * icon_3d_xpm[];
 
 #else
-const char * icon_w3d_xpm[] =
+const char * icon_3d_xpm[] =
 {
 "32 32 3 1",
 "J c #FF0000",

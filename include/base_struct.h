@@ -575,7 +575,7 @@ public:
      * images.
      * @return The menu image associated with the item.
      */
-    virtual const char** GetMenuImage() const { return (const char**) right_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return right_xpm; }
 
     /**
      * Test if another item is less than this object.

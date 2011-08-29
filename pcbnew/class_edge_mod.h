@@ -69,7 +69,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) show_mod_edge_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  show_mod_edge_xpm; }
 
 #if defined(DEBUG)
 

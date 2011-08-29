@@ -140,7 +140,7 @@ void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
 
 
 void DIALOG_LIB_EDIT_PIN::SetOrientationList( const wxArrayString& list,
-                                              const char*** aBitmaps )
+                                              const BITMAP_DEF* aBitmaps )
 {
     for ( unsigned ii = 0; ii < list.GetCount(); ii++ )
     {
@@ -153,7 +153,7 @@ void DIALOG_LIB_EDIT_PIN::SetOrientationList( const wxArrayString& list,
 
 
 void DIALOG_LIB_EDIT_PIN::SetElectricalTypeList( const wxArrayString& list,
-                                                 const char*** aBitmaps )
+                                                 const BITMAP_DEF* aBitmaps )
 {
     for ( unsigned ii = 0; ii < list.GetCount(); ii++ )
     {
@@ -165,7 +165,7 @@ void DIALOG_LIB_EDIT_PIN::SetElectricalTypeList( const wxArrayString& list,
 }
 
 
-void DIALOG_LIB_EDIT_PIN::SetStyleList( const wxArrayString& list, const char*** aBitmaps )
+void DIALOG_LIB_EDIT_PIN::SetStyleList( const wxArrayString& list, const BITMAP_DEF* aBitmaps )
 {
     for ( unsigned ii = 0; ii < list.GetCount(); ii++ )
     {

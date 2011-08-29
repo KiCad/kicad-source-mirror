@@ -160,7 +160,7 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) footprint_text_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  footprint_text_xpm; }
 
 #if defined(DEBUG)
 

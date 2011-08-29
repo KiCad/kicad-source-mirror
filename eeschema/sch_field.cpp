@@ -458,18 +458,18 @@ wxString SCH_FIELD::GetName() const
 }
 
 
-const char** SCH_FIELD::GetMenuImage() const
+BITMAP_DEF SCH_FIELD::GetMenuImage() const
 {
     if( m_FieldId == REFERENCE )
-        return (const char**) edit_comp_ref_xpm;
+        return edit_comp_ref_xpm;
 
     if( m_FieldId == VALUE )
-        return (const char**) edit_comp_value_xpm;
+        return edit_comp_value_xpm;
 
     if( m_FieldId == FOOTPRINT )
-        return (const char**) edit_comp_footprint_xpm;
+        return edit_comp_footprint_xpm;
 
-    return (const char**) edit_text_xpm;
+    return edit_text_xpm;
 }
 
 

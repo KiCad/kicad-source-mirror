@@ -369,7 +369,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) pad_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return pad_xpm; }
 
     /**
      * Function ShowPadShape

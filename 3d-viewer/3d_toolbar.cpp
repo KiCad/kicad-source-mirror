@@ -31,7 +31,7 @@ void EDA_3D_FRAME::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
 
     m_HToolBar->AddTool( ID_TOOL_SCREENCOPY_TOCLIBBOARD, wxEmptyString,
-                         KiBitmap( copy_button ),
+                         KiBitmap( copy_button_xpm ),
                          _( "Copy 3D Image to Clipboard" ) );
 #endif
 
@@ -51,29 +51,29 @@ void EDA_3D_FRAME::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_ROTATE3D_X_NEG, wxEmptyString,
-                         KiBitmap( rotate_neg_X_xpm ),
+                         KiBitmap( rotate_neg_x_xpm ),
                          _( "Rotate X <-" ) );
 
     m_HToolBar->AddTool( ID_ROTATE3D_X_POS, wxEmptyString,
-                         KiBitmap( rotate_pos_X_xpm ),
+                         KiBitmap( rotate_pos_x_xpm ),
                          _( "Rotate X ->" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_ROTATE3D_Y_NEG, wxEmptyString,
-                         KiBitmap( rotate_neg_Y_xpm ),
+                         KiBitmap( rotate_neg_y_xpm ),
                          _( "Rotate Y <-" ) );
 
     m_HToolBar->AddTool( ID_ROTATE3D_Y_POS, wxEmptyString,
-                         KiBitmap( rotate_pos_Y_xpm ),
+                         KiBitmap( rotate_pos_y_xpm ),
                          _( "Rotate Y ->" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_ROTATE3D_Z_NEG, wxEmptyString,
-                         KiBitmap( rotate_neg_Z_xpm ),
+                         KiBitmap( rotate_neg_z_xpm ),
                          _( "Rotate Z <-" ) );
 
     m_HToolBar->AddTool( ID_ROTATE3D_Z_POS, wxEmptyString,
-                         KiBitmap( rotate_pos_Z_xpm ),
+                         KiBitmap( rotate_pos_z_xpm ),
                          _( "Rotate Z ->" ) );
 
     m_HToolBar->AddSeparator();

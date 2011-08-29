@@ -54,10 +54,10 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_HToolBar->AddSeparator();
 
-    m_HToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button ),
+    m_HToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
                          _( "Cut selected item" ) );
 
-    m_HToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button ),
+    m_HToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button_xpm ),
                          _( "Copy selected item" ) );
 
     m_HToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
@@ -71,7 +71,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), msg );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button ),
+    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
                          _( "Print schematic" ) );
 
     m_HToolBar->AddSeparator();
@@ -154,7 +154,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_VToolBar->AddTool( ID_BUSTOBUS_ENTRY_BUTT, wxEmptyString, KiBitmap( add_bus2bus_xpm ),
                          HELP_PLACE_BUS2BUS_ENTRY, wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_NOCONN_BUTT, wxEmptyString, wxBitmap( noconn_button ),
+    m_VToolBar->AddTool( ID_NOCONN_BUTT, wxEmptyString, wxBitmap( noconn_xpm ),
                          HELP_PLACE_NC_FLAG, wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_LABEL_BUTT, wxEmptyString, KiBitmap( add_line_label_xpm ),

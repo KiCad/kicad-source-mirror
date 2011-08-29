@@ -4,46 +4,43 @@
 # Copy the *.xpm files to ${XPM_CPP_PATH}/*.cpp, on change only.
 # Compile those *.cpp files and put them into the library, then done.
 
-# NAKed by Dick:
-# builds a set of all the .xpm files
-# file(GLOB BITMAP_SRCS *.xpm)  NO, does not build proper dependency
-# generation or allow renaming of bitmap files, NAKed by Dick.
-# this is twice now I've had to change this.
+# bitmap file names should be all lowercase and basename thereof should also
+# be a valid C++ identifier name.  This means no leading number, or embedded - or +
 
-# Dick: use this one instead:
 set(BITMAP_SRCS
     add_arc.xpm
     add_bus2bus.xpm
     add_bus.xpm
     add_circle.xpm
-    Add_Component.xpm
-    Add_Corner.xpm
-    Add_Dashed_Line.xpm
+    add_component.xpm
+    add_corner.xpm
+    add_dashed_line.xpm
     add_dimension.xpm
-    Add_Entry.xpm
-    Add_GLabel.xpm
+    add_entry.xpm
+    add_glabel.xpm
     add_hierarchical_label.xpm
     add_hierar_pin.xpm
     add_hierar_subsheet.xpm
-    Add_Junction.xpm
-    Add_Line2Bus.xpm
-    Add_Line_Label.xpm
-    Add_Line.xpm
-    Add_Mires.xpm
-    Add_Polygon.xpm
-    Add_Power.xpm
-    Add_Rectangle.xpm
-    Add_Text.xpm
-    Add_Tracks.xpm
-    Add_Zone_Cutout.xpm
-    Add_Zone.xpm
+    add_junction.xpm
+    add_line2bus.xpm
+    add_line_label.xpm
+    add_line.xpm
+    add_mires.xpm
+    add_polygon.xpm
+    add_power.xpm
+    add_rectangle.xpm
+    add_text.xpm
+    add_tracks.xpm
+    add_zone_cutout.xpm
+    add_zone.xpm
     anchor.xpm
     annotate_down_right.xpm
     annotate_right_down.xpm
     annotate.xpm
-    Apply.xpm
+    apply.xpm
     auto_associe.xpm
-    Auto_track_width.xpm
+    auto_delete_track.xpm
+    auto_track_width.xpm
     axis3d_back.xpm
     axis3d_bottom.xpm
     axis3d_front.xpm
@@ -52,89 +49,88 @@ set(BITMAP_SRCS
     axis3d_top.xpm
     axis3d.xpm
     book.xpm
-    Break_Bus.xpm
-    Break_Line.xpm
-    Browse_Files.xpm
+    break_bus.xpm
+    break_line.xpm
+    browse_files.xpm
     cancel_tool.xpm
-    Cancel.xpm
+    cancel.xpm
     create_cmp_file.xpm
     checked_ok.xpm
     component_select_unit.xpm
     component_select_alternate_shape.xpm
     config.xpm
-    CopyBlock.xpm
-    copyComponent.xmp
-    copy.xpm
+    copyblock.xpm
+    copycomponent.xmp
+    copy_button.xpm
     copper_layers_setup.cpp
-    Cursor_Shape.xpm
+    cursor_shape.xpm
     cursor.xpm
-    cut.xpm
+    cut_button.xpm
     cvpcb.xpm
     dashline.xpm
-    Datasheet.xpm
-    del_body.xpm
-    Delete_Arc.xpm
+    datasheet.xpm
+    delete_body.xpm
+    delete_arc.xpm
     delete_association.xpm
-    Delete_Bus.xpm
-    Delete_Circle.xpm
-    Delete_Connection.xpm
-    Delete_Cotation.xpm
-    Delete_Field.xpm
-    Delete_GLabel.xpm
-    Delete_Line.xpm
-    Delete_Module.xpm
-    Delete_Net.xpm
-    Delete_Node.xpm
-    Delete_Pad.xpm
-    Delete_Pinsheet.xpm
-    Delete_Pin.xpm
-    Delete_Polygon.xpm
-    Delete_Rectangle.xpm
-    Delete_Segment.xpm
-    Delete_Sheet.xpm
-    Delete_Text.xpm
-    Delete_Track.xpm
+    delete_bus.xpm
+    delete_circle.xpm
+    delete_connection.xpm
+    delete_cotation.xpm
+    delete_field.xpm
+    delete_glabel.xpm
+    delete_line.xpm
+    delete_module.xpm
+    delete_net.xpm
+    delete_node.xpm
+    delete_pad.xpm
+    delete_pinsheet.xpm
+    delete_pin.xpm
+    delete_polygon.xpm
+    delete_rectangle.xpm
+    delete_segment.xpm
+    delete_sheet.xpm
+    delete_text.xpm
+    delete_track.xpm
     delete.xpm
-    del_track.xpm
     directory.xpm
-    Display_Options.xpm
+    display_options.xpm
     down.xpm
-    Drag_Module.xpm
-    Drag_Outline_Segment.xpm
-    Drag_Pad.xpm
-    Drag_Segment_WithSlope.xpm
-    Drag_Track_Segment.xpm
+    drag_module.xpm
+    drag_outline_segment.xpm
+    drag_pad.xpm
+    drag_segment_withslope.xpm
+    drag_track_segment.xpm
     drc_off.xpm
     drc.xpm
-    Edges_Sketch.xpm
-    Edit_Comp_Footprint.xpm
-    Edit_Component.xpm
-    Edit_Comp_Ref.xpm
-    Edit_Comp_Value.xpm
-    Edit_Module.xpm
-    Editor.xpm
-    Edit_Part.xpm
-    Edit_Sheet.xpm
-    Edit_Text.xpm
-    Edit.xpm
+    edges_sketch.xpm
+    edit_comp_footprint.xpm
+    edit_component.xpm
+    edit_comp_ref.xpm
+    edit_comp_value.xpm
+    edit_module.xpm
+    editor.xpm
+    edit_part.xpm
+    edit_sheet.xpm
+    edit_text.xpm
+    edit.xpm
     eeschema.xpm
-    Enter_Sheet.xpm
+    enter_sheet.xpm
     ercerr.xpm
     ercgreen.xpm
     ercwarn.xpm
     erc.xpm
-    Exit.xpm
+    exit.xpm
     export_footprint_names.xpm
-    Export_Module.xpm
-    Export_Options_Pad.xpm
+    export_module.xpm
+    export_options_pad.xpm
     export.xpm
     fabrication.xpm
-    File_FootPrint.xpm
+    file_footprint.xpm
     fill_zone.xpm
     find_xpm.xpm
-    Flag.xpm
-    Fonts.xpmr
-    Footprint_Text.xpm
+    flag.xpm
+    fonts.xpmr
+    footprint_text.xpm
     gbr_select_mode0.xpm
     gbr_select_mode1.xpm
     gbr_select_mode2.xpm
@@ -145,19 +141,19 @@ set(BITMAP_SRCS
     gerber_open_dcode_file.xpm
     general_deletions.xpm
     general_ratsnet.xpm
-    GLabel2Label.xpm
-    GLabel2Text.xpm
-    GL_Change.xpm
-    Global_Options_Pad.xpm
+    glabel2label.xpm
+    glabel2text.xpm
+    gl_change.xpm
+    global_options_pad.xpm
     green.xpm
     grid_select.xpm
     grid_select_axis.xpm
     grid.xpm
     hammer.xpm
     help.xpm
-    Hidden_Pin.xpm
-    Hierarchy_cursor.xpm
-    Hierarchy_Nav.xpm
+    hidden_pin.xpm
+    hierarchy_cursor.xpm
+    hierarchy_nav.xpm
     hotkeys.xpm
     icon_3d.xpm
     icon_cvpcb_small.xpm
@@ -173,144 +169,144 @@ set(BITMAP_SRCS
     import_cmp_from_lib.xpm
     import_footprint_names.xpm
     import_hierarchical_label.xpm
-    Import_Module.xpm
+    import_module.xpm
     import.xpm
-    Info.xpm
-    Insert_Module_Board.xpm
-    Invert_Module.xpm
+    info.xpm
+    insert_module_board.xpm
+    invert_module.xpm
     invisible_text.xpm
     jigsaw.xpm
     kicad_icon_small.xpm
-    Label2GLabel.xpm
-    Label2Text.xpm
+    label2glabel.xpm
+    label2text.xpm
     label.xpm
-    Lang_Catalan.xpm
-    Lang_chinese.xpm
-    Lang_Cs.xpm
-    Lang_Default.xpm
-    Lang_De.xpm
-    Lang_En.xpm
-    Lang_Es.xpm
-    Lang_Fr.xpm
-    Lang_Fi.xpm
-    Lang_Gr.xpm
-    Lang_Hu.xpm
-    Lang_It.xpm
-    Lang_Jp.xpm
-    Lang_Ko.xpm
-    Lang_Nl.xpm
-    Lang_Pl.xpm
-    Lang_Pt.xpm
-    Lang_Ru.xpm
-    Lang_Sl.xpm
-    Language.xpm
+    lang_catalan.xpm
+    lang_chinese.xpm
+    lang_cs.xpm
+    lang_default.xpm
+    lang_de.xpm
+    lang_en.xpm
+    lang_es.xpm
+    lang_fr.xpm
+    lang_fi.xpm
+    lang_gr.xpm
+    lang_hu.xpm
+    lang_it.xpm
+    lang_jp.xpm
+    lang_ko.xpm
+    lang_nl.xpm
+    lang_pl.xpm
+    lang_pt.xpm
+    lang_ru.xpm
+    lang_sl.xpm
+    language.xpm
     layers_manager.xpm
-    Leave_Sheet.xpm
+    leave_sheet.xpm
     left.xpm
     libedit_icon.xpm
     libedit.xpm
     libedprt.xpm
-    Lib_next.xpm
-    Lib_previous.xpm
+    lib_next.xpm
+    lib_previous.xpm
     library_browse.xpm
     library_update.xpm
     library.xpm
     libsavem.xpm
     libview.xpm
-    Lines90.xpm
-    Load_Module_Board.xpm
-    Load_Module_Lib.xpm
+    lines90.xpm
+    load_module_board.xpm
+    load_module_lib.xpm
     local_ratsnet.xpm
-    Locked.xpm
+    locked.xpm
     mirepcb.xpm
-    Mirror_H.xpm
-    Mirror_V.xpm
+    mirror_h.xpm
+    mirror_v.xpm
     modedit.xpm
-    Mode_Module.xpm
-    Mode_Track.xpm
+    mode_module.xpm
+    mode_track.xpm
     modratsnest.xpm
-    Module_Check.xpm
-    Modul_Edit.xpm
+    module_check.xpm
+    modul_edit.xpm
     module_filtered_list.xpm
     module_full_list.xpm
     module_options.xpm
-    Module_Ratsnet.xpm
+    module_ratsnet.xpm
     module.xpm
-    Morgan1.xpm
-    Morgan2.xpm
-    Move_Arc.xpm
-    Move_Circle.xpm
-    Move_Field.xpm
-    Move_GLabel.xpm
-    Move_Line.xpm
-    Move_Module.xpm
-    Move_Pad.xpm
-    Move_Pinsheet.xpm
-    Move_Pin.xpm
-    Move_Polygon.xpm
-    Move_Rectangle.xpm
-    Move_Sheet.xpm
-    Move_Text.xpm
-    Move_Track_Segment.xpm
-    Move_Track.xpm
-    Move.xpm
-    mw_Add_Gap.xpm
-    mw_Add_Line.xpm
-    mw_Add_Shape.xpm
-    mw_Add_stub_arc.xpm
-    mw_Add_Stub.xpm
+    morgan1.xpm
+    morgan2.xpm
+    move_arc.xpm
+    move_circle.xpm
+    move_field.xpm
+    move_glabel.xpm
+    move_line.xpm
+    move_module.xpm
+    move_pad.xpm
+    move_pinsheet.xpm
+    move_pin.xpm
+    move_polygon.xpm
+    move_rectangle.xpm
+    move_sheet.xpm
+    move_text.xpm
+    move_track_segment.xpm
+    move_track.xpm
+    move.xpm
+    mw_add_gap.xpm
+    mw_add_line.xpm
+    mw_add_shape.xpm
+    mw_add_stub_arc.xpm
+    mw_add_stub.xpm
     mw_toolbar.xpm
-    Net_HighLight.xpm
+    net_highlight.xpm
     netlist.xpm
-    Net_Locked.xpm
-    Net_UnLocked.xpm
+    net_locked.xpm
+    net_unlocked.xpm
     new_component.xpm
     new_cvpcb.xpm
-    New_FootPrint.xpm
-    New_Library.xpm
-    New_Module.xpm
+    new_footprint.xpm
+    new_library.xpm
+    new_module.xpm
     new_pcb.xpm
-    New_Project.xpm
+    new_project.xpm
     new_sch.xpm
     new_txt.xpm
     new.xpm
     noconn.xpm
-    Normal.xpm
+    normal.xpm
     online_help.xpm
-    Open_Library.xpm
-    Open_Project.xpm
+    open_library.xpm
+    open_project.xpm
     open_document.xpm
     options_all_tracks_and_vias.xpm
-    Options_All_Tracks.xpm
-    Options_All_Vias.xpm
-    Options_Arc.xpm
-    Options_Circle.xpm
-    Options_Module.xpm
-    Options_New_Pad.xpm
-    Options_Pad.xpm
-    Options_Pinsheet.xpm
-    Options_Pin.xpm
-    Options_Rectangle.xpm
-    Options_Segment.xpm
-    Options_Text.xpm
-    Options_Tracks.xpm
-    Options_Track.xpm
-    Options_Vias.xpm
+    options_all_tracks.xpm
+    options_all_vias.xpm
+    options_arc.xpm
+    options_circle.xpm
+    options_module.xpm
+    options_new_pad.xpm
+    options_pad.xpm
+    options_pinsheet.xpm
+    options_pin.xpm
+    options_rectangle.xpm
+    options_segment.xpm
+    options_text.xpm
+    options_tracks.xpm
+    options_track.xpm
+    options_vias.xpm
     opt_show_polygon.xpm
-    Orient.xpm
+    orient.xpm
     ortho.xpm
-    Pad_Sketch.xpm
+    pad_sketch.xpm
     pad.xpm
     pads_mask_layers.xpm
     palette.xpm
     part_properties.xpm
     paste.xpm
     pcbnew.xpm
-    PcbOffset.xpm
+    pcboffset.xpm
     pin2pin.xpm
-    Pin_Name_to.xpm
-    Pin_Number_to.xpm
-    Pin_Size_to.xpm
+    pin_name_to.xpm
+    pin_number_to.xpm
+    pin_size_to.xpm
     pinorient_right.xpm
     pinorient_left.xpm
     pinorient_up.xpm
@@ -335,33 +331,33 @@ set(BITMAP_SRCS
     pintype_opencoll.xpm
     pintype_openemit.xpm
     pintype_noconnect.xpm
-    Pin_to.xpm
+    pin_to.xpm
     pin.xpm
-    plot_HPG.xpm
-    plot_PS.xpm
+    plot_hpg.xpm
+    plot_ps.xpm
     plot_xpm.xpm
     polar.xpm
-    Post_Compo.xpm
-    Post_Drill.xpm
-    Post_Module.xpm
+    post_compo.xpm
+    post_drill.xpm
+    post_module.xpm
     preference.xpm
-    print.xpm
+    print_button.xpm
     ratsnest.xpm
-    Read_SetUp.xpm
+    read_setup.xpm
     redo.xpm
     red.xpm
     reload2.xpm
     reload.xpm
-    Reset_Text.xpm
-    Resize_Sheet.xpm
+    reset_text.xpm
+    resize_sheet.xpm
     right.xpm
-    Rotate_Field.xpm
-    Rotate_GLabel.xpm
-    Rotate_Module-.xpm
-    Rotate_Module+.xpm
-    Rotate_Pin.xpm
-    Rotate_CCW.xpm
-    Rotate_CW.xpm
+    rotate_field.xpm
+    rotate_glabel.xpm
+    rotate_module_neg.xpm
+    rotate_module_pos.xpm
+    rotate_pin.xpm
+    rotate_ccw.xpm
+    rotate_cw.xpm
     rotate_neg_x.xpm
     rotate_pos_x.xpm
     rotate_neg_y.xpm
@@ -369,32 +365,32 @@ set(BITMAP_SRCS
     rotate_neg_z.xpm
     rotate_pos_z.xpm
     save_as.xpm
-    Save_Library.xpm
-    Save_NetList.xpm
-    Save_Project.xpm
-    Save_SetUp.xpm
+    save_library.xpm
+    save_netlist.xpm
+    save_project.xpm
+    save_setup.xpm
     save.xpm
     schematic.xpm
     select_grid.xpm
-    Select_Layer_Pair.xpm
-    Select_W_Layer.xpm
+    select_layer_pair.xpm
+    select_w_layer.xpm
     shape_3d.xpm
     sheetset.xpm
     showdcode.xpm
     show_footprint.xpm
     showmodedge.xpm
     showtrack.xpm
-    Show_Zone.xpm
-    Show_Zone_Disable.xpm
-    Show_Zone_Outline_Only.xpm
-    Swap_Layer.xpm
-    Text_Sketch.xpm
+    show_zone.xpm
+    show_zone_disable.xpm
+    show_zone_outline_only.xpm
+    swap_layer.xpm
+    text_sketch.xpm
     three_d.xpm
     tool_ratsnet.xpm
     tools.xpm
-    Track_Locked.xpm
-    Track_Sketch.xpm
-    Track_UnLocked.xpm
+    track_locked.xpm
+    track_sketch.xpm
+    track_unlocked.xpm
     transistor.xpm
     treensel.xpm
     treesel.xpm
@@ -403,18 +399,18 @@ set(BITMAP_SRCS
     unit_inch.xpm
     unit_mm.xpm
     unknown.xpm
-    Unlocked.xpm
+    unlocked.xpm
     unzip.xpm
-    Update_Module_Board.xpm
+    update_module_board.xpm
     up.xpm
-    Via_Sketch.xpm
+    via_sketch.xpm
     viewlibs_icon.xpm
-    Web_support.xpm
-    Width_Net.xpm
-    Width_Segment.xpm
-    Width_Track_Via.xpm
-    Width_Track.xpm
-    Width_Vias.xpm
+    web_support.xpm
+    width_net.xpm
+    width_segment.xpm
+    width_track_via.xpm
+    width_track.xpm
+    width_vias.xpm
     window_close.xpm
     zip_tool.xpm
     zip.xpm

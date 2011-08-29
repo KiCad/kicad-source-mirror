@@ -194,7 +194,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) add_hierar_pin_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  add_hierar_pin_xpm; }
 };
 
 
@@ -562,10 +562,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const
-    {
-        return (const char**) add_hierarchical_subsheet_xpm;
-    }
+    virtual BITMAP_DEF GetMenuImage() const { return add_hierarchical_subsheet_xpm; }
 
 #if defined(DEBUG)
 

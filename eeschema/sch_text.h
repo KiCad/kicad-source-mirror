@@ -204,7 +204,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) add_text_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os );
@@ -299,7 +299,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) add_line_label_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  add_line_label_xpm; }
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
@@ -403,7 +403,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) add_glabel_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  add_glabel_xpm; }
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
@@ -509,7 +509,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) add_hierarchical_label_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  add_hierarchical_label_xpm; }
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;

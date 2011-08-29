@@ -143,7 +143,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
             for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
             {
                 wxString text = m_collectedItems[i]->GetSelectMenuText();
-                const char** xpm = m_collectedItems[i]->GetMenuImage();
+                BITMAP_DEF xpm = m_collectedItems[i]->GetMenuImage();
                 ADD_MENUITEM( &selectMenu, ID_SELECT_ITEM_START + i, text, xpm );
             }
 

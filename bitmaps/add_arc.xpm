@@ -1,4 +1,7 @@
 /* XPM */
+
+#include "bitmaps.h"
+
 #ifndef XPMMAIN
 extern const char *add_arc_xpm[];
 

@@ -759,26 +759,29 @@ static void export_vrml_tracks( BOARD* pcb ) /*{{{*/
 }
 
 
-static void export_vrml_zones( BOARD* pcb ) /*{{{*/
+/* not used? @todo complete
+static void export_vrml_zones( BOARD* pcb )
 {
-    /* Export fill segments */
+    // Export fill segments
     for( SEGZONE* segzone = pcb->m_Zone;
         segzone != 0;
         segzone = segzone->Next() )
     {
-        /* Fill tracks are exported with low subdivisions */
+        // Fill tracks are exported with low subdivisions
         if( segzone->Type() == TYPE_ZONE )
             export_vrml_line( segzone->GetLayer(), segzone->m_Start.x, segzone->m_Start.y,
                               segzone->m_End.x, segzone->m_End.y, segzone->m_Width, 1 );
     }
 
-    /* Export zone outlines */
+    // Export zone outlines
     for( int i = 0; i < pcb->GetAreaCount(); i++ )
     {
         ZONE_CONTAINER* zone = pcb->GetArea( i );
+
         if( ( zone->m_FilledPolysList.size() == 0 )
            ||( zone->m_ZoneMinThickness <= 1 ) )
             continue;
+
         int width = zone->m_ZoneMinThickness;
         if( width > 0 )
         {
@@ -786,7 +789,8 @@ static void export_vrml_zones( BOARD* pcb ) /*{{{*/
             int      layer = zone->GetLayer();
             CPolyPt* firstcorner = &zone->m_FilledPolysList[0];
             CPolyPt* begincorner = firstcorner;
-            /* I'm not really positive about what he's doing here... */
+
+            // I'm not really positive about what he's doing here...
             for( int ic = 1; ic <= imax; ic++ )
             {
                 CPolyPt* endcorner = &zone->m_FilledPolysList[ic];
@@ -799,7 +803,8 @@ static void export_vrml_zones( BOARD* pcb ) /*{{{*/
                         export_vrml_line( layer, endcorner->x, endcorner->y,
                                           firstcorner->x, firstcorner->y, width, 1 );
                     ic++;
-                    /* A new contour? */
+
+                    // A new contour?
                     if( ic < imax - 1 )
                         begincorner = firstcorner = &zone->m_FilledPolysList[ic];
                 }
@@ -809,7 +814,7 @@ static void export_vrml_zones( BOARD* pcb ) /*{{{*/
         }
     }
 }
-
+*/
 
 static void export_vrml_text_module( TEXTE_MODULE* module ) /*{{{*/
 {

@@ -109,7 +109,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) add_entry_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  add_entry_xpm; }
 
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;

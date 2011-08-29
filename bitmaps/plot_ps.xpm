@@ -1,9 +1,9 @@
-/* XPM */ 
+/* XPM */
 #ifndef XPMMAIN
-extern const char *plot_PS_xpm[];
+extern const char *plot_ps_xpm[];
 
 #else
-const char * plot_PS_xpm[] = {
+const char * plot_ps_xpm[] = {
 "16 16 14 1",
 " 	c None",
 "!	c black",

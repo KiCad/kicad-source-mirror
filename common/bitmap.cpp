@@ -30,18 +30,18 @@
 #include "bitmaps.h"
 
 
-#if defined(USE_PNG_BITMAPS)
+#if defined(FUTURE_PNG_BITMAPS)
 
-wxBitmap KiBitmap( const BITMAP_DEF& aBitmap )
+wxBitmap KiBitmap( BITMAP_DEF aBitmap )
 {
-    wxMemoryInputStream is( aBitmap.png, aBitmap.byteCount );
+    wxMemoryInputStream is( aBitmap->png, aBitmap->byteCount );
 
     return wxBitmap( wxImage( is, wxBITMAP_TYPE_PNG, -1 ), -1 );
 }
 
-wxBitmap* KiBitmapNew( const BITMAP_DEF& aBitmap )
+wxBitmap* KiBitmapNew( BITMAP_DEF aBitmap )
 {
-    wxMemoryInputStream is( aBitmap.png, aBitmap.byteCount );
+    wxMemoryInputStream is( aBitmap->png, aBitmap->byteCount );
 
     return new wxBitmap( wxImage( is, wxBITMAP_TYPE_PNG, -1 ), -1 );
 }
@@ -51,12 +51,12 @@ wxBitmap* KiBitmapNew( const BITMAP_DEF& aBitmap )
 // temporary during migration to PNG.  Soon the argument to these calls becomes the
 // opaque BITMAP_DEF&.
 
-wxBitmap KiBitmap( const BITMAP_DEF& aBitmap  )
+wxBitmap KiBitmap( BITMAP_DEF aBitmap )
 {
     return wxBitmap( aBitmap );
 }
 
-wxBitmap* KiBitmapNew( const BITMAP_DEF& aBitmap )
+wxBitmap* KiBitmapNew( BITMAP_DEF aBitmap )
 {
     return new wxBitmap( aBitmap );
 }

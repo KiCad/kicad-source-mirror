@@ -1,9 +1,9 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char *add_zone_cutout[];
+extern const char *add_zone_cutout_xpm[];
 
 #else
-const char * add_zone_cutout[] = {
+const char * add_zone_cutout_xpm[] = {
 "16 16 3 1",
 " 	c None",
 ".	c #007D00",

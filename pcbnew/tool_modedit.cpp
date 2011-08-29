@@ -85,7 +85,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                          _( "Module properties" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button ),
+    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
                          _( "Print module" ) );
 
     m_HToolBar->AddSeparator();

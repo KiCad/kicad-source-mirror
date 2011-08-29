@@ -221,7 +221,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) move_field_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  move_field_xpm; }
 
 protected:
     virtual EDA_ITEM* doClone() const;

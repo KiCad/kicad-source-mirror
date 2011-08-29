@@ -335,7 +335,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) module_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  module_xpm; }
 
  #if defined(DEBUG)
 

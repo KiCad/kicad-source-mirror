@@ -121,7 +121,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) add_arc_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  add_arc_xpm; }
 
 protected:
     virtual EDA_ITEM* doClone() const;

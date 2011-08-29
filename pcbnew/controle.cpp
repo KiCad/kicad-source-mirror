@@ -192,13 +192,12 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
         for( int i = 0;  i<limit;  ++i )
         {
-            wxString     text;
-            const char** xpm;
-
+            wxString    text;
             item = (*m_Collector)[i];
 
             text = item->GetSelectMenuText();
-            xpm  = item->GetMenuImage();
+
+            BITMAP_DEF xpm = item->GetMenuImage();
 
             ADD_MENUITEM( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START + i, text, xpm );
         }

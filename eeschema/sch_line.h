@@ -135,7 +135,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const;
+    virtual BITMAP_DEF GetMenuImage() const;
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 

@@ -139,7 +139,7 @@ public:
 
     virtual wxString GetSelectMenuText() const;
 
-    virtual const char** GetMenuImage() const { return (const char**) add_dimension_xpm; }
+    virtual BITMAP_DEF GetMenuImage() const { return  add_dimension_xpm; }
 };
 
 #endif  // #define DIMENSION_H

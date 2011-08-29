@@ -379,7 +379,7 @@ void PCB_EDIT_FRAME::createPopUpBlockMenu( wxMenu* menu )
     ADD_MENUITEM( menu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), apply_xpm );
     ADD_MENUITEM( menu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), copyblock_xpm );
     ADD_MENUITEM( menu, ID_POPUP_FLIP_BLOCK, _( "Flip Block" ), invert_module_xpm );
-    ADD_MENUITEM( menu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block" ), rotate_CCW_xpm );
+    ADD_MENUITEM( menu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block" ), rotate_ccw_xpm );
     ADD_MENUITEM( menu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), delete_xpm );
 }
 
@@ -577,7 +577,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
                       _( "Add Similar Zone" ), add_zone_xpm );
 
         ADD_MENUITEM( zones_menu, ID_POPUP_PCB_ZONE_ADD_CUTOUT_ZONE,
-                      _( "Add Cutout Area" ), add_zone_cutout );
+                      _( "Add Cutout Area" ), add_zone_cutout_xpm );
         zones_menu->AppendSeparator();
 
         ADD_MENUITEM( zones_menu, ID_POPUP_PCB_FILL_ZONE, _( "Fill Zone" ), fill_zone_xpm );
@@ -780,7 +780,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
                       msg, move_text_xpm );
     }
     msg = AddHotkeyName( _( "Rotate" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
-    ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_ROTATE_TEXTEPCB, msg, rotate_CCW_xpm );
+    ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_ROTATE_TEXTEPCB, msg, rotate_ccw_xpm );
     msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
     ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_EDIT_TEXTEPCB, msg, edit_text_xpm );
     ADD_MENUITEM( sub_menu_Text, ID_POPUP_PCB_RESET_TEXT_SIZE,

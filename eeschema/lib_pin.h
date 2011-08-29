@@ -386,7 +386,7 @@ public:
      *
      * @return  List of valid pin orientation bitmaps symbols in .xpm format
      */
-    static const char*** GetOrientationSymbols();
+    static const BITMAP_DEF* GetOrientationSymbols();
 
     /**
      * Get the orientation code by index used to set the pin orientation.
@@ -418,7 +418,7 @@ public:
      *
      * @return  List of valid pin electrical type bitmaps symbols in .xpm format.
      */
-    static const char*** GetStyleSymbols();
+    static const BITMAP_DEF* GetStyleSymbols();
 
     /**
      * Get the pin draw style code by index used to set the pin draw style.
@@ -450,9 +450,9 @@ public:
      *
      * @return  List of valid pin electrical type bitmaps symbols in .xpm format
      */
-    static const char*** GetElectricalTypeSymbols();
+    static const BITMAP_DEF* GetElectricalTypeSymbols();
 
-    virtual const char** GetMenuImage() const;
+    virtual BITMAP_DEF GetMenuImage() const;
 
     virtual wxString GetSelectMenuText() const;
 
