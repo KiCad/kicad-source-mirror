@@ -37,22 +37,23 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString, KiBitmap( save_project_xpm ),
                          _( "Save schematic project" ) );
 
+
     m_HToolBar->AddSeparator();
+
+
     m_HToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiBitmap( sheetset_xpm ),
                          _( "Page settings" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_TO_LIBRARY, wxEmptyString, KiBitmap( libedit_xpm ),
-                         _( "Library editor" ) );
-
-    m_HToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
-                         _( "Library browser" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_HIERARCHY, wxEmptyString, KiBitmap( hierarchy_nav_xpm ),
-                         _( "Navigate schematic hierarchy" ) );
+
+
+    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
+                         _( "Print schematic" ) );
+
 
     m_HToolBar->AddSeparator();
+
 
     m_HToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
                          _( "Cut selected item" ) );
@@ -63,25 +64,27 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
                          _( "Paste" ) );
 
+
     m_HToolBar->AddSeparator();
+
+
     msg = AddHotkeyName( HELP_UNDO, s_Schematic_Hokeys_Descr, HK_UNDO, false );
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), msg );
 
     msg = AddHotkeyName( HELP_REDO, s_Schematic_Hokeys_Descr, HK_REDO, false );
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), msg );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
-                         _( "Print schematic" ) );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_TO_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
-                         _( "Run Cvpcb" ) );
 
-    m_HToolBar->AddTool( ID_TO_PCB, wxEmptyString, KiBitmap( pcbnew_xpm ),
-                         _( "Run pcbnew" ) );
+
+    msg = AddHotkeyName( HELP_FIND, s_Schematic_Hokeys_Descr, HK_FIND_ITEM, false );
+    m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiBitmap( find_xpm ), msg );
+
 
     m_HToolBar->AddSeparator();
+
+
     msg = AddHotkeyName( HELP_ZOOM_IN, s_Schematic_Hokeys_Descr, HK_ZOOM_IN, false );
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
 
@@ -94,13 +97,26 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     msg = AddHotkeyName( HELP_ZOOM_FIT, s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO, false );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
 
-    m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( HELP_FIND, s_Schematic_Hokeys_Descr, HK_FIND_ITEM, false );
-    m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiBitmap( find_xpm ), msg );
 
     m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
-                         _( "Generate netlist" ) );
+
+
+    m_HToolBar->AddTool( ID_HIERARCHY, wxEmptyString, KiBitmap( hierarchy_nav_xpm ),
+                         _( "Navigate schematic hierarchy" ) );
+
+
+    m_HToolBar->AddSeparator();
+
+
+    m_HToolBar->AddTool( ID_TO_LIBRARY, wxEmptyString, KiBitmap( libedit_xpm ),
+                         _( "Library editor - Create and edit components" ) );
+
+    m_HToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
+                         _( "Library browser - Browse components" ) );
+
+
+    m_HToolBar->AddSeparator();
+
 
     m_HToolBar->AddTool( ID_GET_ANNOTATE, wxEmptyString, KiBitmap( annotate_xpm ),
                          _( "Annotate schematic" ) );
@@ -108,8 +124,21 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_GET_ERC, wxEmptyString, KiBitmap( erc_xpm ),
                          _( "Perform electric rules check" ) );
 
+    m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
+                         _( "Generate netlist" ) );
+
     m_HToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, KiBitmap( tools_xpm ),
                          _( "Generate bill of materials and/or cross references" ) );
+
+
+    m_HToolBar->AddSeparator();
+
+
+    m_HToolBar->AddTool( ID_TO_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
+                         _( "Run CVPcb - Associate components and footprints" ) );
+
+    m_HToolBar->AddTool( ID_TO_PCB, wxEmptyString, KiBitmap( pcbnew_xpm ),
+                         _( "Run PCBNew - Layout printed circuit board" ) );
 
     m_HToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString, KiBitmap( import_footprint_names_xpm ),
                          _( "Back annotate component foot prints" ) );

@@ -156,8 +156,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Plot submenu
     ADD_MENUITEM_WITH_HELP_AND_SUBMENU( fileMenu, choice_plot_fmt,
                                         ID_GEN_PLOT, _( "&Plot" ),
-                                        _(
-                                            "Plot schematic sheet in HPGL, PostScript or SVG format" ),
+                                        _( "Plot schematic sheet in HPGL, PostScript or SVG format" ),
                                         plot_xpm );
 
     // Separator
@@ -483,6 +482,23 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                             _( "Generate Bill of Materials" ),
                             _( "Generate bill of materials" ),
                             tools_xpm );
+
+    // Separator
+    toolsMenu->AppendSeparator();
+
+    //Run CVPcb
+    ADD_MENUITEM_WITH_HELP( toolsMenu,
+                            ID_TO_CVPCB,
+                            _( "A&ssign component footprints" ),
+                            _( "Run CVPcb" ),
+                            cvpcb_xpm );
+    // Run PCBNew
+    ADD_MENUITEM_WITH_HELP( toolsMenu,
+                            ID_TO_PCB,
+                            _( "&Layout printed circuit board" ),
+                            _( "Run PCBNew" ),
+                            pcbnew_xpm );
+
 
     // Help Menu:
     wxMenu* helpMenu = new wxMenu;
