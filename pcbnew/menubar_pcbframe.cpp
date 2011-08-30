@@ -497,17 +497,16 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     configmenu->Append( item );
 
     // General
-    item = new wxMenuItem( configmenu, wxID_PREFERENCES,
-
 #ifdef __WXMAC__
-                           _( "&Preferences..." ),
+	configmenu->Append(wxID_PREFERENCES);
 #else
+    item = new wxMenuItem( configmenu, wxID_PREFERENCES,
                            _( "&General" ),
-#endif
                            _( "Select general options for PCBnew" ) );
 
     SET_BITMAP( preference_xpm );
     configmenu->Append( item );
+#endif
 
     // Display
     item = new wxMenuItem( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP,

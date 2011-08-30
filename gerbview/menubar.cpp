@@ -133,15 +133,17 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
                             layers_manager_xpm );
 
     // Options (Preferences on WXMAC)
+
+#ifdef __WXMAC__
+	configMenu->Append(wxID_PREFERENCES);
+#else
     ADD_MENUITEM_WITH_HELP( configMenu,
                             wxID_PREFERENCES,
-#ifdef __WXMAC__
-                            _( "Preferences..." ),
-#else
                             _( "&Options" ),
-#endif // __WXMAC__
                             _( "Set options to draw items" ),
                             preference_xpm );
+#endif // __WXMAC__
+
 
     // Language submenu
     wxGetApp().AddMenuLanguageList( configMenu );

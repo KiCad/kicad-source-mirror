@@ -401,15 +401,17 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                             palette_xpm );
 
     // Options (Preferences on WXMAC)
+
+#ifdef __WXMAC__
+	preferencesMenu->Append(wxID_PREFERENCES);
+#else
     ADD_MENUITEM_WITH_HELP( preferencesMenu,
                             wxID_PREFERENCES,
-#ifdef __WXMAC__
-                            _( "&Preferences..." ),
-#else
                             _( "&Options" ),
-#endif // __WXMAC__
                             _( "EESchema preferences" ),
                             preference_xpm );
+#endif // __WXMAC__
+
 
     // Language submenu
     wxGetApp().AddMenuLanguageList( preferencesMenu );
