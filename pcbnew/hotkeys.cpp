@@ -65,6 +65,8 @@ static Ki_HotkeyInfo HkAddNewTrack( wxT( "Add new track" ), HK_ADD_NEW_TRACK, 'X
 static Ki_HotkeyInfo HkAddVia( wxT( "Add Via" ), HK_ADD_VIA, 'V' );
 static Ki_HotkeyInfo HkSwitchTrackPosture( wxT( "Switch Track Posture" ),
                                            HK_SWITCH_TRACK_POSTURE, '/' );
+static Ki_HotkeyInfo HkDragTrackKeepSlope( wxT( "Drag track keep slope" ),
+                                           HK_DRAG_TRACK_KEEP_SLOPE, 'D' );
 static Ki_HotkeyInfo HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V'
                                     + GR_KB_CTRL );
 static Ki_HotkeyInfo HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
@@ -154,6 +156,7 @@ Ki_HotkeyInfo* board_edit_Hotkey_List[] =
     &HkBackspace,
     &HkAddNewTrack,            &HkAddVia,                    &HkAddMicroVia,
     &HkSwitchTrackPosture,
+    &HkDragTrackKeepSlope,
     &HkEndTrack,               &HkMoveItem,
     &HkFlipFootprint,          &HkRotateItem,                &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile,

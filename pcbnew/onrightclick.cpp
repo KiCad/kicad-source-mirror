@@ -414,8 +414,10 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
             }
             else
             {
+                msg = AddHotkeyName( _( "Drag Segments, Keep Slope" ), g_Board_Editor_Hokeys_Descr,
+                                     HK_DRAG_TRACK_KEEP_SLOPE );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE,
-                              _( "Drag Segments, Keep Slope" ), drag_segment_withslope_xpm );
+                              msg, drag_segment_withslope_xpm );
                 msg = AddHotkeyName( _( "Drag Segment" ), g_Board_Editor_Hokeys_Descr,
                                      HK_DRAG_ITEM );
                 ADD_MENUITEM( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT,

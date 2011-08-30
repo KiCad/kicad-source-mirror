@@ -279,6 +279,10 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         evt_type = ID_POPUP_PCB_SWITCH_TRACK_POSTURE ;
         break;
 
+    case HK_DRAG_TRACK_KEEP_SLOPE:
+        OnHotkeyMoveItem( HK_DRAG_TRACK_KEEP_SLOPE );
+        break;
+
     case HK_ADD_NEW_TRACK: // Start new track
         if( getActiveLayer() > LAYER_N_FRONT )
             break;
@@ -558,6 +562,8 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
             evt_type = ID_POPUP_PCB_MOVE_TRACK_NODE;
         if( aIdCommand == HK_DRAG_ITEM )
             evt_type = ID_POPUP_PCB_DRAG_TRACK_SEGMENT;
+        if( aIdCommand == HK_DRAG_TRACK_KEEP_SLOPE )
+            evt_type = ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE;
         break;
 
     case TYPE_MODULE:
