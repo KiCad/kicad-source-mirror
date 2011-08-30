@@ -112,6 +112,10 @@ CMAKE_CXX_FLAGS = -D__ASSERTMACROS__
 Then we invoke make:
 user@mac-osx$ make
 
+It is also possible to give all the options on the commandline and not to edit the CMakeCache.txt. This is a oneliner for Leopard and up:
+
+cmake ~/Repositories/testing -DKICAD_TESTING_VERSION=ON -DCMAKE_OSX_ARCHITECTURES="i386 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.6.sdk -mmacosx-version-min=10.6" -DCMAKE_CXX_FLAGS="-D__ASSERTMACROS__" -DCMAKE_OSX_SYSROOT="/Developer/SDKs/MacOSX10.6.sdk"
+
 Optional compiler cache
 ~~~~~~~~~~~~~~~~~~~~~~~
 If you (re)compile often, you would love to use cache. The best is to install it using macports and set the libexec symlink

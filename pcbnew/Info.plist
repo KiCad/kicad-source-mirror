@@ -5,6 +5,8 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleTypeIconFile</key>
 			<string>pcbnew_doc.icns</string>
 			<key>CFBundleTypeExtensions</key>

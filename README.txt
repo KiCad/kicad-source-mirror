@@ -26,7 +26,7 @@ CMakeModules   - Modules for the CMAKE build tool
 common         - Sourcecode of the common library (common functions shared across whole suite)
 cvpcb          - Sourcecode of CvPCB, tool to link components with footprints sourcecode
 demos          - Some demo examples
-Documentation  - Misc documentation. Translating the GUI, old changelogs etcetera.
+Documentation  - Compiling documentation. Translating the GUI, old changelogs etcetera.
 eeschema       - Sourcecode of the schematic editor
 gerbview       - Sourcecode of the gerber viewer
 helpers        - Helper tools and utilities for development

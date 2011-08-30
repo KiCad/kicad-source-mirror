@@ -33,6 +33,8 @@
 			<string>gerbview document</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 		</dict>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
