@@ -208,6 +208,15 @@ public:
 
 
     /**
+     * Function GetTemplates
+     * returns the field names template for read only access.
+     */
+    const TEMPLATES& GetTemplates()
+    {
+        return m_TemplateFieldNames;
+    }
+
+    /**
      * Function DeleteAllTemplateFieldNames
      * removes all template field names.
      */
@@ -735,6 +744,14 @@ private:
                                    wxArrayString&  List,
                                    bool            UseLibBrowser );
     void           StartMovePart( SCH_COMPONENT* DrawLibItem, wxDC* DC );
+
+    /**
+     * Function EditComponent
+     * displays the edit component dialog to edit the parameters of \a aComponent.
+     *
+     * @param aComponent is a pointer to the SCH_COMPONENT object to be edited.
+     */
+    void EditComponent( SCH_COMPONENT* aComponent );
 
 public:
     void OnChangeComponentOrientation( wxCommandEvent& aEvent );

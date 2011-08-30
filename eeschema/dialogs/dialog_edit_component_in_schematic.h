@@ -8,6 +8,10 @@
 
 #include "dialog_edit_component_in_schematic_fbp.h"
 
+
+class SCH_EDIT_FRAME;
+
+
 /**
  * class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC
  * is hand coded and implements DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP which
@@ -16,7 +20,7 @@
  */
 class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_FBP
 {
-    friend void InstallCmpeditFrame( SCH_EDIT_FRAME* parent, SCH_COMPONENT* aComponent );
+    friend class SCH_EDIT_FRAME;
 
     SCH_EDIT_FRAME* m_Parent;
     SCH_COMPONENT*  m_Cmp;

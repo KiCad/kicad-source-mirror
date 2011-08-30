@@ -784,7 +784,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         switch( aItem->Type() )
         {
         case SCH_COMPONENT_T:
-            InstallCmpeditFrame( this, (SCH_COMPONENT*) aItem );
+            EditComponent( (SCH_COMPONENT*) aItem );
             break;
 
         case SCH_SHEET_T:

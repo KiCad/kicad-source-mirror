@@ -170,3 +170,15 @@ int TEMPLATES::AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName )
     return m_Fields.size() - 1; // return the index of insertion.
 }
 
+
+bool TEMPLATES::HasFieldName( const wxString& aName ) const
+{
+    for( size_t i=0; i<m_Fields.size();  ++i )
+    {
+        if( m_Fields[i].m_Name == aName )
+            return true;
+    }
+
+    return false;
+}
+

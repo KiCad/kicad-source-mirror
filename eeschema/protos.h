@@ -31,11 +31,6 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
 /*********************/
 bool SegmentIntersect( wxPoint aSegStart, wxPoint aSegEnd, wxPoint aTestPoint );
 
-/****************/
-/* EDITPART.CPP */
-/****************/
-void InstallCmpeditFrame( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent );
-
 // operations_on_item_lists.cpp
 void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
 

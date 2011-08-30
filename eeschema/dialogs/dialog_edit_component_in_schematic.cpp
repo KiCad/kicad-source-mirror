@@ -25,21 +25,14 @@ int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_SelectedRow;
 wxSize DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = wxDefaultSize;
 
 
-void InstallCmpeditFrame( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent )
+void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
 {
-    if( aComponent == NULL )    // Null component not accepted
-        return;
+    wxCHECK_RET( aComponent != NULL && aComponent->Type() == SCH_COMPONENT_T,
+                 wxT( "Invalid component object pointer.  Bad Programmer!" )  );
 
-    aParent->DrawPanel->m_IgnoreMouseEvents = TRUE;
+    DrawPanel->m_IgnoreMouseEvents = true;
 
-    if( aComponent->Type() != SCH_COMPONENT_T )
-    {
-        wxMessageBox( wxT( "InstallCmpeditFrame() error: This item is not a component" ) );
-        return;
-    }
-
-    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC * dlg =
-        new DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( aParent );
+    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC* dlg = new DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( this );
 
     dlg->InitBuffers( aComponent );
 
@@ -52,8 +45,7 @@ void InstallCmpeditFrame( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent )
         dlg->SetSize( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize );
     }
 
-    // make sure the chipnameTextCtrl is wide enough to hold any
-    // unusually long chip names:
+    // make sure the chipnameTextCtrl is wide enough to hold any unusually long chip names:
     EnsureTextCtrlWidth( dlg->chipnameTextCtrl );
 
     dlg->ShowModal();
@@ -63,8 +55,8 @@ void InstallCmpeditFrame( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent )
     // so it comes up wide enough next time.
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = dlg->GetSize();
 
-    aParent->DrawPanel->MoveCursorToCrossHair();
-    aParent->DrawPanel->m_IgnoreMouseEvents = false;
+    DrawPanel->MoveCursorToCrossHair();
+    DrawPanel->m_IgnoreMouseEvents = false;
     dlg->Destroy();
 }
 
@@ -168,14 +160,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
         }
     }
 
-    // For components with multiple shapes (De Morgan representation) Set the
-    // selected shape:
+    // For components with multiple shapes (De Morgan representation) Set the selected shape:
     if( convertCheckBox->IsEnabled() )
     {
         m_Cmp->SetConvert( convertCheckBox->GetValue() ? 2 : 1 );
     }
 
-    //Set the part selection in multiple part per pakcage
+    //Set the part selection in multiple part per package
     if( m_Cmp->GetUnit() )
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
@@ -222,16 +213,18 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event )
 {
+    bool removeRemainingFields = false;
+
     if( !copyPanelToSelectedField() )
         return;
 
     if( ! SCH_COMPONENT::IsReferenceStringValid( m_FieldsBuf[REFERENCE].m_Text ) )
     {
-        DisplayError( NULL, _( "Illegal reference. A reference must start by a letter" ) );
+        DisplayError( NULL, _( "Illegal reference. A reference must start with a letter" ) );
         return;
     }
 
-            // save old cmp in undo list if not already in edit, or moving ...
+    // save old cmp in undo list if not already in edit, or moving ...
     if( m_Cmp->m_Flags == 0 )
         m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
 
@@ -243,12 +236,34 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
         m_FieldsBuf[i].m_Pos += m_Cmp->m_Pos;
     }
 
-    // delete any fields with no name or no value before we copy all of m_FieldsBuf
-    // back into the component
+    // Delete any fields with no name before we copy all of m_FieldsBuf back into the component.
     for( unsigned i = MANDATORY_FIELDS;  i<m_FieldsBuf.size(); )
     {
         if( m_FieldsBuf[i].m_Name.IsEmpty() || m_FieldsBuf[i].m_Text.IsEmpty() )
         {
+            // If a field has no value and is not it the field template list, warn the user
+            // that it will be remove from the component.  This gives the user a chance to
+            // correct the problem before removing the undefined fields.  It should also
+            // resolve most of the bug reports and questions regarding missing fields.
+            if( !m_FieldsBuf[i].m_Name.IsEmpty() && m_FieldsBuf[i].m_Text.IsEmpty()
+                && !m_Parent->GetTemplates().HasFieldName( m_FieldsBuf[i].m_Name )
+                && !removeRemainingFields )
+            {
+                wxString msg;
+
+                msg.Printf( _( "The field name <%s> does not have a value and is not defined in \
+the field template list.  Empty field values are invalid an will be removed from the component.  \
+Do you wish to remove this and all remaining undefined fields?" ),
+                            GetChars( m_FieldsBuf[i].m_Name ) );
+
+                wxMessageDialog dlg( this, msg, _( "Remove Fields" ), wxYES_NO | wxNO_DEFAULT );
+
+                if( dlg.ShowModal() == wxID_NO )
+                    return;
+
+                removeRemainingFields = true;
+            }
+
             m_FieldsBuf.erase( m_FieldsBuf.begin() + i );
             continue;
         }
@@ -264,14 +279,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // copy all the fields back, and change the length of m_Fields.
     m_Cmp->SetFields( m_FieldsBuf );
 
-    // Reference has a specific initialisation, depending on the current active sheet
-    // because for a given component, in a complexe hierarchy, there are more than one
+    // Reference has a specific initialization, depending on the current active sheet
+    // because for a given component, in a complex hierarchy, there are more than one
     // reference.
     m_Cmp->SetRef( m_Parent->GetSheet(), m_FieldsBuf[REFERENCE].m_Text );
 
     m_Parent->OnModify();
     m_Parent->GetScreen()->TestDanglingEnds();
-    m_Parent->DrawPanel->Refresh( TRUE );
+    m_Parent->DrawPanel->Refresh( true );
 
     EndModal( 0 );
 }
@@ -321,7 +336,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::deleteFieldButtonHandler( wxCommandEven
     if( fieldNdx >= m_FieldsBuf.size() )
         --fieldNdx;
 
-    updateDisplay( );
+    updateDisplay();
 
     setSelectedFieldNdx( fieldNdx );
     m_skipCopyFromPanel = false;
@@ -357,7 +372,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::moveUpButtonHandler( wxCommandEvent& ev
     m_FieldsBuf[fieldNdx] = tmp;
     setRowItem( fieldNdx, tmp );
 
-    updateDisplay( );
+    updateDisplay();
 
     m_skipCopyFromPanel = true;
     setSelectedFieldNdx( fieldNdx - 1 );
@@ -399,6 +414,7 @@ SCH_FIELD* DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::findField( const wxString& aField
         if( aFieldName == m_FieldsBuf[i].m_Name )
             return &m_FieldsBuf[i];
     }
+
     return NULL;
 }
 
@@ -449,6 +465,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     // Now copy in the template fields, in the order that they are present in the
     // template field editor UI.
     const TEMPLATE_FIELDNAMES& tfnames = m_Parent->GetTemplateFieldNames();
+
     for( TEMPLATE_FIELDNAMES::const_iterator it = tfnames.begin();  it!=tfnames.end();  ++it )
     {
         // add a new field unconditionally to the UI only
@@ -532,8 +549,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
 }
 
 
-void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setRowItem( int              aFieldNdx,
-                                                     const SCH_FIELD& aField )
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setRowItem( int aFieldNdx, const SCH_FIELD& aField )
 {
     wxASSERT( aFieldNdx >= 0 );
 
@@ -643,12 +659,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
         // top of each other.
     }
 
-    wxString coordText = ReturnStringFromValue( g_UserUnit, coord.x,
-                                                EESCHEMA_INTERNAL_UNIT );
+    wxString coordText = ReturnStringFromValue( g_UserUnit, coord.x, EESCHEMA_INTERNAL_UNIT );
     posXTextCtrl->SetValue( coordText );
 
-    coordText = ReturnStringFromValue( g_UserUnit, coord.y,
-                                       EESCHEMA_INTERNAL_UNIT );
+    coordText = ReturnStringFromValue( g_UserUnit, coord.y, EESCHEMA_INTERNAL_UNIT );
     posYTextCtrl->SetValue( coordText );
 }
 
@@ -689,10 +703,11 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     field.m_VJustify = vjustify[m_FieldVJustifyCtrl->GetSelection()];
 
     field.m_Name = fieldNameTextCtrl->GetValue();
+
     /* Void fields texts for REFERENCE and VALUE (value is the name of the
-     * compinent in lib ! ) are not allowed
+     * component in lib ! ) are not allowed
      * change them only for a new non void value
-     * When woid, usually netlists are broken
+     * When void, usually netlists are broken
      */
     if( !fieldValueTextCtrl->GetValue().IsEmpty() || fieldNdx > VALUE )
         field.m_Text = fieldValueTextCtrl->GetValue();
@@ -798,13 +813,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
         partsAreLockedLabel->Show( false );
     }
 
-    // Positionnement de la reference en librairie
+    // Set the component's library name.
     chipnameTextCtrl->SetValue( m_Cmp->m_ChipName );
 }
 
+
 #include "kicad_device_context.h"
 
-/* reinitialize components parametres to default values found in lib
+/* reinitialize components parameters to default values found in lib
  */
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 {
@@ -836,7 +852,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
     m_Cmp->SetOrientation( CMP_NORMAL );
 
-    m_Parent->OnModify( );
+    m_Parent->OnModify();
 
     m_Cmp->Draw( m_Parent->DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     EndModal( 1 );

@@ -145,6 +145,15 @@ public:
     {
         return m_Fields;
     }
+
+    /**
+     * Function HasFieldName
+     * checks for \a aName in the the template field name list.
+     *
+     * @param aName A wxString object containing the field name to search for.
+     * @param True if \a aName is found in the list.
+     */
+    bool HasFieldName( const wxString& aName ) const;
 };
 
 #endif // _TEMPLATE_FIELDNAME_H_

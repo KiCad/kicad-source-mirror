@@ -282,7 +282,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         // Ensure the struct is a component (could be a struct of a
         // component, like Field, text..)
         if( item && item->Type() == SCH_COMPONENT_T )
-            InstallCmpeditFrame( this, (SCH_COMPONENT*) item );
+            EditComponent( (SCH_COMPONENT*) item );
 
         break;
 

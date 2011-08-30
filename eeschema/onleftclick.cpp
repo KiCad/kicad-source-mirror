@@ -332,7 +332,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
             break;
 
         case SCH_COMPONENT_T:
-            InstallCmpeditFrame( this, (SCH_COMPONENT*) item );
+            EditComponent( (SCH_COMPONENT*) item );
             DrawPanel->MoveCursorToCrossHair();
             break;
 
