@@ -305,11 +305,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         case UR_ROTATED:
         case UR_NEW:
         case UR_DELETED:
-            break;
         case UR_EXCHANGE_T:
-wxLogMessage("commandToUndo %p, save UR_EXCHANGE_T %p %p",commandToUndo,
-        item, commandToUndo->GetPickedItemLink( ii ));
-
             break;
 
         default:
@@ -388,8 +384,13 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
         case UR_ROTATED:
         {
+            // To undo a rotate 90 deg transform we must rotate 270 deg to undo
+            // and 90 deg to redo:
             wxPoint RotationPoint = aList->m_TransformPoint;
             item->Rotate( RotationPoint );
+            if( aRedoCommand )
+                break;  // A only one rotate transform is OK
+            // Make 3 rotate 90 deg transforms is this is actually an undo command
             item->Rotate( RotationPoint );
             item->Rotate( RotationPoint );
         }
