@@ -279,10 +279,17 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     screen->RemoveFromDrawList( text );
     screen->AddToDrawList( newtext );
     GetScreen()->SetCurItem( newtext );
+    m_itemToRepeat = NULL;
     OnModify();
     newtext->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     DrawPanel->CrossHairOn( &dc );    // redraw schematic cursor
 
+/*
+    // this code uses UR_EXCHANGE_T
+    // to prepare undo command
+    // But UR_EXCHANGE_T does not work if more than one change is made
+    // on the same text, so do not use it
+    /: Should this code be removed ?
     if( text->GetFlags() == 0 )
     {
         m_itemToRepeat = NULL;
@@ -300,6 +307,54 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     {
         delete text;
     }
+*/
+    if( text->IsNew() )
+    {
+        // if the previous text is new, no undo command to prepare here
+        // just delete this text.
+        delete text;
+        return;
+    }
+
+
+    // previous text is not new and we replace text by new text.
+    // So this is equivalent to delete text and add newtext
+    // If text if being currently edited (i.e. moved)
+    // we also save the initial copy of text, and prepare undo command for new text modifications.
+    // we must save it as modified text (if currently beeing edited), then deleted text,
+    // and replace text with newtext
+    PICKED_ITEMS_LIST pickList;
+    ITEM_PICKER picker( text, UR_CHANGED );
+    if( text->GetFlags() )
+    {
+        // text is being edited, save it in undo command
+        picker.SetLink( GetUndoItem() );
+        pickList.PushItem( picker );
+        // the owner of undoItem is no more this, it now is picker:
+        SetUndoItem( NULL );
+    }
+
+    // Prepare undo command for delete old text
+    picker.m_UndoRedoStatus = UR_DELETED;
+    picker.SetLink( NULL );
+    pickList.PushItem( picker );
+
+    // Prepare undo command for new text
+    picker.m_UndoRedoStatus = UR_NEW;
+    picker.SetItem(newtext);
+    pickList.PushItem( picker );
+
+   // Prepare undo modify new text if currently edited
+    if( newtext->GetFlags() )
+    {
+        SetUndoItem( newtext );
+        picker.m_UndoRedoStatus = UR_CHANGED;
+        picker.SetLink( GetUndoItem() );
+        pickList.PushItem( picker );
+        SetUndoItem( NULL );
+    }
+
+    SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
 }
 
 

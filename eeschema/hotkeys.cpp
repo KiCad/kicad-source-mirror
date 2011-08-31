@@ -597,6 +597,10 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             cmd.SetId( ID_POPUP_SCH_ROTATE_FIELD );
             wxPostEvent( this, cmd );
 
+        case SCH_BITMAP_T:
+            cmd.SetId( ID_POPUP_SCH_ROTATE_IMAGE );
+            wxPostEvent( this, cmd );
+
         default:
             ;
         }
@@ -616,7 +620,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         if( aItem )
         {
             screen->SetCurItem( (SCH_ITEM*) aItem );
-            cmd.SetId( ID_POPUP_SCH_MIROR_Y_CMP );
+            cmd.SetId( ID_POPUP_SCH_MIRROR_Y_CMP );
             GetEventHandler()->ProcessEvent( cmd );
         }
         break;
@@ -634,7 +638,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         if( aItem )
         {
             screen->SetCurItem( (SCH_ITEM*) aItem );
-            cmd.SetId( ID_POPUP_SCH_MIROR_X_CMP );
+            cmd.SetId( ID_POPUP_SCH_MIRROR_X_CMP );
             GetEventHandler()->ProcessEvent( cmd );
         }
         break;
@@ -740,6 +744,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             case SCH_TEXT_T:
             case SCH_FIELD_T:
             case SCH_BUS_ENTRY_T:
+            case SCH_BITMAP_T:
                 cmd.SetId( HK_Descr->m_IdMenuEvent );
                 wxPostEvent( this, cmd );
                 break;
@@ -808,6 +813,9 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             EditComponentFieldText( (SCH_FIELD*) aItem, aDC );
             break;
 
+        case SCH_BITMAP_T:
+            EditImage( (SCH_BITMAP*) aItem );
+            break;
         default:
             ;
         }

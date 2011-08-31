@@ -108,6 +108,18 @@ public: PLOTTER( PlotFormat aPlotType );
      */
     virtual void PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth = -1 ) = 0;
 
+    /**
+     * Function PlotImage
+     * Only Postscript plotters can plot bitmaps
+     * for plotters that cannot plot a bitmap, a rectangle is plotted
+     * @brief Draw an image bitmap
+     * @param aImage = the bitmap
+     * @param aPos = position of the center of the bitmap
+     * @param aScaleFactor = the scale factor to apply to the bitmap size
+     *                      (this is not the plot scale factor)
+     */
+    virtual void PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor ) = 0;
+
     virtual void thick_segment( wxPoint start, wxPoint end, int width,
                                 GRTraceMode tracemode );
     virtual void thick_arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
@@ -278,6 +290,18 @@ public: HPGL_PLOTTER() : PLOTTER( PLOT_FORMAT_HPGL )
      */
     virtual void PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth = -1);
 
+    /*
+     * Function PlotImage
+     * Only Postscript plotters can plot bitmaps
+     * for plotters that cannot plot a bitmap, a rectangle is plotted
+     * Draw an image bitmap
+     * param aImage = the bitmap
+     * param aPos = position of the center of the bitmap
+     * param aScaleFactor = the scale factor to apply to the bitmap size
+     *                      (this is not the plot scale factor)
+     */
+    virtual void PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor );
+
     virtual void thick_segment( wxPoint start, wxPoint end, int width,
                                 GRTraceMode tracemode );
     virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
@@ -341,6 +365,18 @@ public: PS_PLOTTER() : PLOTTER( PLOT_FORMAT_POST )
      * param aWidth = line width
      */
     virtual void PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth = -1);
+
+    /*
+     * Function PlotImage
+     * Only Postscript plotters can plot bitmaps
+     * for plotters that cannot plot a bitmap, a rectangle is plotted
+     * Draw an image bitmap
+     * param aImage = the bitmap
+     * param aPos = position of the center of the bitmap
+     * param aScaleFactor = the scale factor to apply to the bitmap size
+     *                      (this is not the plot scale factor)
+     */
+    virtual void PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor );
 
     virtual void pen_to( wxPoint pos, char plume );
     virtual void flash_pad_circle( wxPoint pos, int diametre,
@@ -409,6 +445,18 @@ public: GERBER_PLOTTER() : PLOTTER( PLOT_FORMAT_GERBER )
      */
     virtual void PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth = -1);
 
+    /*
+     * Function PlotImage
+     * Only Postscript plotters can plot bitmaps
+     * for plotters that cannot plot a bitmap, a rectangle is plotted
+     * Draw an image bitmap
+     * param aImage = the bitmap
+     * param aPos = position of the center of the bitmap
+     * param aScaleFactor = the scale factor to apply to the bitmap size
+     *                      (this is not the plot scale factor)
+     */
+    virtual void PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor );
+
     virtual void pen_to( wxPoint pos, char plume );
     virtual void flash_pad_circle( wxPoint pos, int diametre,
                                    GRTraceMode trace_mode );
@@ -476,6 +524,18 @@ public: DXF_PLOTTER() : PLOTTER( PLOT_FORMAT_DXF )
      * param aWidth = line width
      */
     virtual void PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, int aWidth = -1 );
+
+    /*
+     * Function PlotImage
+     * Only Postscript plotters can plot bitmaps
+     * for plotters that cannot plot a bitmap, a rectangle is plotted
+     * Draw an image bitmap
+     * param aImage = the bitmap
+     * param aPos = position of the center of the bitmap
+     * param aScaleFactor = the scale factor to apply to the bitmap size
+     *                      (this is not the plot scale factor)
+     */
+    virtual void PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor );
 
     virtual void thick_segment( wxPoint start, wxPoint end, int width,
                                 GRTraceMode tracemode );

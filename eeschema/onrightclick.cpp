@@ -24,10 +24,9 @@
 #include "sch_no_connect.h"
 #include "sch_sheet.h"
 #include "sch_sheet_path.h"
+#include "sch_bitmap.h"
 
 #include <iostream>
-using namespace std;
-
 
 static void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame );
 static void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame );
@@ -41,6 +40,7 @@ static void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* GLabel );
 static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component );
 static void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field );
 static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* aFrame );
+static void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap );
 
 
 /* Prepare context menu when a click on the right mouse button occurs.
@@ -163,6 +163,10 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         AddMenusForComponent( PopMenu, (SCH_COMPONENT*) item );
         break;
 
+    case SCH_BITMAP_T:
+        AddMenusForBitmap( PopMenu, (SCH_BITMAP*) item );
+        break;
+
     case SCH_LINE_T:
         switch( item->GetLayer() )
         {
@@ -251,9 +255,9 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE, msg, rotate_ccw_xpm );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE, _( "Rotate -" ), rotate_cw_xpm );
     msg = AddHotkeyName( _( "Mirror --" ), s_Schematic_Hokeys_Descr, HK_MIRROR_X_COMPONENT );
-    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_MIROR_X_CMP, msg, mirror_v_xpm );
+    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_MIRROR_X_CMP, msg, mirror_v_xpm );
     msg = AddHotkeyName( _( "Mirror ||" ), s_Schematic_Hokeys_Descr, HK_MIRROR_Y_COMPONENT );
-    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_MIROR_Y_CMP, msg, mirror_h_xpm );
+    ADD_MENUITEM( orientmenu, ID_POPUP_SCH_MIRROR_Y_CMP, msg, mirror_h_xpm );
     msg = AddHotkeyName( _( "Normal" ), s_Schematic_Hokeys_Descr, HK_ORIENT_NORMAL_COMPONENT );
     ADD_MENUITEM( orientmenu, ID_POPUP_SCH_ORIENT_NORMAL_CMP, msg, normal_xpm );
     ADD_MENUITEM_WITH_SUBMENU( PopMenu, orientmenu, ID_POPUP_SCH_GENERIC_ORIENT_CMP,
@@ -666,4 +670,31 @@ void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* 
 {
     ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_DELETE, _( "Delete Marker" ), delete_xpm );
     ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_GETINFO_MARKER, _( "Marker Error Info" ), info_xpm );
+}
+
+void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap )
+{
+    wxString msg;
+    if( aBitmap->GetFlags() == 0 )
+    {
+        msg = AddHotkeyName( _( "Move Image" ), s_Schematic_Hokeys_Descr,
+                                          HK_MOVE_COMPONENT_OR_ITEM );
+        ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, move_xpm );
+    }
+
+    msg = AddHotkeyName( _( "Rotate Image" ), s_Schematic_Hokeys_Descr, HK_ROTATE );
+    ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_ROTATE_IMAGE, msg, rotate_ccw_xpm );
+    ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_MIRROR_X_IMAGE,
+                  _( "Mirror --" ), mirror_v_xpm );
+    ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_MIRROR_Y_IMAGE,
+                  _( "Mirror ||" ), mirror_h_xpm );
+
+    if( aBitmap->GetFlags() == 0 )
+    {
+        msg = AddHotkeyName( _( "Edit Image" ), s_Schematic_Hokeys_Descr, HK_EDIT );
+        ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_EDIT_IMAGE, msg, image_xpm );
+        aPopMenu->AppendSeparator();
+        msg = AddHotkeyName( _( "Delete Image" ), s_Schematic_Hokeys_Descr, HK_DELETE );
+        ADD_MENUITEM( aPopMenu, ID_POPUP_SCH_DELETE, msg, delete_xpm );
+    }
 }

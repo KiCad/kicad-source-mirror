@@ -38,8 +38,6 @@ public:
      */
     EDA_RECT GetBoundingBox() const;
 
-    SCH_JUNCTION* GenCopy();
-
     virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                        int aDrawMode, int aColor = -1 );
 

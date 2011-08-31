@@ -36,6 +36,7 @@ const KICAD_T SCH_COLLECTOR::AllItems[] = {
     SCH_BUS_ENTRY_T,
     SCH_LINE_T,
     SCH_POLYLINE_T,
+    SCH_BITMAP_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
@@ -56,6 +57,7 @@ const KICAD_T SCH_COLLECTOR::AllItemsButPins[] = {
     SCH_BUS_ENTRY_T,
     SCH_LINE_T,
     SCH_POLYLINE_T,
+    SCH_BITMAP_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
@@ -77,6 +79,7 @@ const KICAD_T SCH_COLLECTOR::EditableItems[] = {
     SCH_COMPONENT_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
+    SCH_BITMAP_T,
     EOT
 };
 
@@ -88,6 +91,7 @@ const KICAD_T SCH_COLLECTOR::MovableItems[] = {
     SCH_BUS_ENTRY_T,
 //    SCH_LINE_T,
     SCH_POLYLINE_T,
+    SCH_BITMAP_T,
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
@@ -121,6 +125,7 @@ const KICAD_T SCH_COLLECTOR::RotatableItems[] = {
     SCH_FIELD_T,
     SCH_COMPONENT_T,
     SCH_SHEET_T,
+    SCH_BITMAP_T,
     EOT
 };
 
@@ -139,6 +144,7 @@ const KICAD_T SCH_COLLECTOR::ParentItems[] = {
     SCH_COMPONENT_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
+    SCH_BITMAP_T,
     EOT
 };
 

@@ -18,6 +18,7 @@
 #include "sch_component.h"
 #include "sch_polyline.h"
 #include "sch_sheet.h"
+#include "sch_bitmap.h"
 
 
 /* Functions to undo and redo edit commands.
@@ -176,6 +177,14 @@ void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
         EXCHG( SOURCE->m_Pos, DEST->m_Pos );
         break;
 
+    case SCH_BITMAP_T:
+        #undef SOURCE
+        #undef DEST
+        #define SOURCE ( (SCH_BITMAP*) aItem )
+        #define DEST   ( (SCH_BITMAP*) aImage )
+        DEST->SwapData( SOURCE );
+        break;
+
     case SCH_FIELD_T:
         break;
 
@@ -224,6 +233,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
     case UR_NEW:
     case UR_WIRE_IMAGE:
     case UR_DELETED:
+    case UR_ROTATED:
     case UR_MOVED:
         commandToUndo->PushItem( itemWrapper );
         break;
@@ -295,7 +305,11 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         case UR_ROTATED:
         case UR_NEW:
         case UR_DELETED:
+            break;
         case UR_EXCHANGE_T:
+wxLogMessage("commandToUndo %p, save UR_EXCHANGE_T %p %p",commandToUndo,
+        item, commandToUndo->GetPickedItemLink( ii ));
+
             break;
 
         default:
@@ -398,11 +412,12 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             break;
 
         case UR_EXCHANGE_T:
-            GetScreen()->AddToDrawList( (SCH_ITEM*) aList->GetPickedItemLink( ii ) );
+            alt_item = (SCH_ITEM*) aList->GetPickedItemLink( ii );
+            alt_item->SetNext( NULL );
+            alt_item->SetBack( NULL );
             GetScreen()->RemoveFromDrawList( item );
-            item->SetNext( NULL );
-            item->SetBack( NULL );
-            aList->SetPickedItem( aList->GetPickedItemLink( ii ), ii );
+            GetScreen()->AddToDrawList( alt_item );
+            aList->SetPickedItem( alt_item, ii );
             aList->SetPickedItemLink( item, ii );
             break;
 

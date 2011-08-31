@@ -81,6 +81,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_ADD_JUNCTION:
     case ID_POPUP_SCH_ADD_LABEL:
     case ID_POPUP_SCH_GETINFO_MARKER:
+    case ID_POPUP_SCH_ROTATE_IMAGE:
+    case ID_POPUP_SCH_MIRROR_X_IMAGE:
+    case ID_POPUP_SCH_MIRROR_Y_IMAGE:
 
         /* At this point: Do nothing. these commands do not need to stop the
          * current command (mainly a block command) or reset the current state
@@ -435,6 +438,26 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         break;
 
+    case ID_POPUP_SCH_EDIT_IMAGE:
+        if( item && item->GetFlags() == 0 )
+            EditImage( (SCH_BITMAP*) item );
+        break;
+
+    case ID_POPUP_SCH_ROTATE_IMAGE:
+        if( item )
+            RotateImage( (SCH_BITMAP*) item );
+        break;
+
+    case ID_POPUP_SCH_MIRROR_X_IMAGE:
+        if( item )
+            MirrorImage( (SCH_BITMAP*) item, true );
+        break;
+
+    case ID_POPUP_SCH_MIRROR_Y_IMAGE:
+        if( item )
+            MirrorImage( (SCH_BITMAP*) item, false );
+        break;
+
     default:        // Log error:
         DisplayError( this, wxT( "SCH_EDIT_FRAME::Process_Special_Functions error" ) );
         break;
@@ -473,6 +496,10 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_TEXT_T:
         MoveText( (SCH_TEXT*) item, &dc );
+        break;
+
+    case SCH_BITMAP_T:
+        MoveImage( (SCH_BITMAP*) item, &dc );
         break;
 
     case SCH_COMPONENT_T:
@@ -579,6 +606,10 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
     case ID_TEXT_COMMENT_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add text" ) );
+        break;
+
+    case ID_ADD_IMAGE_BUTT:
+        SetToolID( id, wxCURSOR_PENCIL, _( "Add image" ) );
         break;
 
     case ID_WIRETOBUS_ENTRY_BUTT:

@@ -328,15 +328,16 @@ void SCH_TEXT::SwapData( SCH_TEXT* copyitem )
 
 void SCH_TEXT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
-    /* save old text in undo list */
     if( !IsNew() )
     {
+        // For existing (not new texts: save in undo list the old text:
         ClearFlags();
         PICKED_ITEMS_LIST pickList;
-        ITEM_PICKER picker( this, UR_EXCHANGE_T );
+        ITEM_PICKER picker( this, UR_CHANGED); //UR_EXCHANGE_T );
         SCH_ITEM* undoItem = frame->GetUndoItem();
 
-        wxCHECK_RET( undoItem != NULL, wxT( "Invalid text undo item." ) );
+        wxCHECK_RET( undoItem != NULL && undoItem->Type() == Type(),
+                    wxT( "Invalid text undo item." ) );
 
         undoItem->ClearFlags();
         picker.SetLink( undoItem );
@@ -344,7 +345,7 @@ void SCH_TEXT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
         frame->SetUndoItem( NULL );
 
         pickList.PushItem( picker );
-        frame->SaveCopyInUndoList( pickList, UR_EXCHANGE_T );
+        frame->SaveCopyInUndoList( pickList, UR_CHANGED); //UR_EXCHANGE_T );
     }
 
     SCH_ITEM::Place( frame, DC );
@@ -385,11 +386,9 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     GRSetDrawMode( DC, DrawMode );
 
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
-
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
     EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
-
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
 

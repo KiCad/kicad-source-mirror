@@ -20,6 +20,7 @@
 #include "sch_no_connect.h"
 #include "sch_component.h"
 #include "sch_sheet.h"
+#include "sch_bitmap.h"
 
 
 static wxArrayString s_CmpNameList;
@@ -50,6 +51,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             case SCH_JUNCTION_T:
             case SCH_COMPONENT_T:
             case SCH_FIELD_T:
+            case SCH_BITMAP_T:
                 item->Place( this, aDC );
                 GetScreen()->SetCurItem( NULL );
                 GetScreen()->TestDanglingEnds();
@@ -178,6 +180,19 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_NOTES ) );
+            DrawPanel->m_AutoPAN_Request = true;
+        }
+        else
+        {
+            item->Place( this, aDC );
+            DrawPanel->m_AutoPAN_Request = false;
+        }
+        break;
+
+    case ID_ADD_IMAGE_BUTT:
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
+        {
+            GetScreen()->SetCurItem( CreateNewImage( aDC ) );
             DrawPanel->m_AutoPAN_Request = true;
         }
         else
@@ -341,6 +356,10 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIERARCHICAL_LABEL_T:
             EditSchematicText( (SCH_TEXT*) item );
+            break;
+
+        case SCH_BITMAP_T:
+            EditImage( (SCH_BITMAP*) item );
             break;
 
         case SCH_FIELD_T:

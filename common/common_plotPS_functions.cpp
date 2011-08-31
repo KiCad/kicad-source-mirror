@@ -197,6 +197,76 @@ void PS_PLOTTER::PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, in
     fprintf( output_file, "poly%d\n", aFill );
 }
 
+/*
+ * Function PlotImage
+ * Only some plotters can plot image bitmaps
+ * for plotters that cannot plot a bitmap, a rectangle is plotted
+ * param aImage = the bitmap
+ * param aPos = position of the center of the bitmap
+ * param aScaleFactor = the scale factor to apply to the bitmap size
+ *                      (this is not the plot scale factor)
+ */
+void PS_PLOTTER::PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor )
+{
+    wxSize pix_size;                // size of the bitmap in pixels
+    pix_size.x = aImage.GetWidth();
+    pix_size.y = aImage.GetHeight();
+    wxSize drawsize;                // requested size of image
+    drawsize.x = wxRound( aScaleFactor * pix_size.x );
+    drawsize.y = wxRound( aScaleFactor * pix_size.y );
+
+    // calculate the bottom left corner position of bitmap
+    wxPoint start = aPos;
+    start.x -= drawsize.x / 2;    // left
+    start.y += drawsize.y / 2;    // bottom (Y axis reversed)
+
+    // calculate the top right corner position of bitmap
+    wxPoint end;
+    end.x = start.x + drawsize.x;
+    end.y = start.y - drawsize.y;
+
+    fprintf( output_file, "/origstate save def\n" );
+    fprintf( output_file, "/pix %d string def\n", pix_size.x );
+    fprintf( output_file, "/greys %d string def\n", pix_size.x );
+
+    // Locate lower-left corner of image
+    user_to_device_coordinates( start );
+    fprintf( output_file, "%d %d translate\n", start.x, start.y );
+    // Map image size to device
+    user_to_device_coordinates( end );
+    fprintf( output_file, "%d %d scale\n",
+            ABS(end.x - start.x), ABS(end.y - start.y));
+
+    // Dimensions of source image (in pixels
+    fprintf( output_file, "%d %d 8", pix_size.x, pix_size.y );
+    //  Map unit square to source
+    fprintf( output_file, " [%d 0 0 %d 0 %d]\n", pix_size.x, -pix_size.y , pix_size.y);
+    // include image data in ps file
+    fprintf( output_file, "{currentfile pix readhexstring pop}\n" );
+    fprintf( output_file, "false 3 colorimage\n");
+    // Single data source, 3 colors, Output RGB data (hexadecimal)
+    int jj = 0;
+    for( int yy = 0; yy < pix_size.y; yy ++ )
+    {
+        for( int xx = 0; xx < pix_size.x; xx++, jj++ )
+        {
+            if( jj >= 16 )
+            {
+                jj = 0;
+                fprintf( output_file, "\n");
+            }
+            int red, green, blue;
+            red = aImage.GetRed( xx, yy) & 0xFF;
+            green = aImage.GetGreen( xx, yy) & 0xFF;
+            blue = aImage.GetBlue( xx, yy) & 0xFF;
+            fprintf( output_file, "%2.2X%2.2X%2.2X", red, green, blue);
+        }
+    }
+    fprintf( output_file, "\n");
+    fprintf( output_file, "origstate restore\n" );
+}
+
+
 
 /* Routine to draw to a new position
  */

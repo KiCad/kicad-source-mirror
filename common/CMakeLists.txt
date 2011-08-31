@@ -11,6 +11,8 @@ set( COMMON_ABOUT_DLG_SRCS
     dialog_about/dialog_about.cpp
     dialog_about/dialog_about_base.cpp
     dialogs/dialog_display_info_HTML_base.cpp
+    dialogs/dialog_image_editor.cpp
+    dialogs/dialog_image_editor_base.cpp
     dialogs/dialog_get_component.cpp
     dialogs/dialog_get_component_base.cpp
     dialogs/dialog_hotkeys_editor.cpp
@@ -28,6 +30,7 @@ set(COMMON_SRCS
     bitmap.cpp
     block_commande.cpp
     build_version.cpp
+    class_bitmap_base.cpp
     class_colors_design_settings.cpp
     class_marker_base.cpp
     class_plotter.cpp
