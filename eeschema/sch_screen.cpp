@@ -675,6 +675,23 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
 }
 
 
+SCH_SHEET* SCH_SCREEN::GetSheet( const wxString& aName )
+{
+    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    {
+        if( item->Type() != SCH_SHEET_T )
+            continue;
+
+        SCH_SHEET* sheet = (SCH_SHEET*) item;
+
+        if( aName.CmpNoCase( sheet->m_SheetName ) == 0 )
+            return sheet;
+    }
+
+    return NULL;
+}
+
+
 SCH_SHEET_PIN* SCH_SCREEN::GetSheetLabel( const wxPoint& aPosition )
 {
     SCH_SHEET_PIN* sheetPin = NULL;

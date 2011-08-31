@@ -65,6 +65,16 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         return false;
     }
 
+    // Duplicate sheet names are not valid.
+    const SCH_SHEET* sheet = GetScreen()->GetSheet( dlg.GetSheetName() );
+
+    if( (sheet != NULL) && (sheet != aSheet) )
+    {
+        DisplayError( this, wxString::Format( _( "A sheet named \"%s\" already exists." ),
+                                              GetChars( dlg.GetSheetName() ) ) );
+        return false;
+    }
+
     wxString msg;
     wxString tmp;
     bool loadFromFile = false;

@@ -306,6 +306,16 @@ public:
                      bool aEndPointOnly = false ) const;
 
     /**
+     * Function GetSheet
+     * returns a sheet object pointer that is named \a aName.
+     *
+     * @note The screen hierarchy is not descened.
+     * @param aName is the case insensitive name of the sheet.
+     * @return A pointer to the SCH_SHEET object found or NULL.
+     */
+    SCH_SHEET* GetSheet( const wxString& aName );
+
+    /**
      * Function GetSheetLabel
      * test the screen if \a aPosition is a sheet label object.
      * @param aPosition The position to test.
