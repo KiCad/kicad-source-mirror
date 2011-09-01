@@ -209,13 +209,9 @@ MODULE* Locate_Prefered_Module( BOARD* aPcb, const wxPoint& aPosition, int aActi
 
         /* Test of minimum size to choosing the best candidate. */
 
-        int offx = pt_module->m_BoundaryBox.m_Size.x / 2 +
-            pt_module->m_BoundaryBox.m_Pos.x +
-            pt_module->m_Pos.x;
-
-        int offy = pt_module->m_BoundaryBox.m_Size.y / 2
-            + pt_module->m_BoundaryBox.m_Pos.y
-            + pt_module->m_Pos.y;
+        EDA_RECT bb = pt_module->GetFootPrintRect();
+        int offx = bb.GetX() + bb.GetWidth() / 2;
+        int offy = bb.GetY() + bb.GetHeight() / 2;
 
         //off x & offy point to the middle of the box.
         int dist = abs( aPosition.x - offx ) + abs( aPosition.y - offy );

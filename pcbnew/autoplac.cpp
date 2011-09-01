@@ -122,7 +122,6 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     for( ; Module != NULL; Module = Module->Next() )
     {
         Module->Set_Rectangle_Encadrement();
-        Module->SetRectangleExinscrit();
         NbTotalModules ++;
     }
 
@@ -204,7 +203,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         {
             int Angle_Rot_Module = 1800;
             Rotate_Module( DC, Module, Angle_Rot_Module, false );
-            Module->SetRectangleExinscrit();
+            Module->Set_Rectangle_Encadrement();
             error    = RecherchePlacementModule( Module, DC );
             MinCout *= OrientPenality[ii];
             if( BestScore > MinCout )   /* This orientation is best. */
@@ -277,7 +276,6 @@ end_of_tst:
         GetScreen()->SetCrossHairPosition( CurrPosition );
 
         Module->Set_Rectangle_Encadrement();
-        Module->SetRectangleExinscrit();
 
         GenModuleOnBoard( Module );
         Module->m_ModuleStatus |= MODULE_is_PLACED;
@@ -491,10 +489,10 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     int    masque_layer;
     D_PAD* Pad;
 
-    ox = Module->m_RealBoundaryBox.m_Pos.x - marge;
-    fx = Module->m_RealBoundaryBox.GetRight() + marge;
-    oy = Module->m_RealBoundaryBox.m_Pos.y - marge;
-    fy = Module->m_RealBoundaryBox.GetBottom() + marge;
+    ox = Module->m_BoundaryBox.m_Pos.x - marge;
+    fx = Module->m_BoundaryBox.GetRight() + marge;
+    oy = Module->m_BoundaryBox.m_Pos.y - marge;
+    fy = Module->m_BoundaryBox.GetBottom() + marge;
 
     if( ox < GetBoard()->m_BoundaryBox.m_Pos.x )
         ox = GetBoard()->m_BoundaryBox.m_Pos.x;
@@ -571,10 +569,10 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
     LastPosOK.y = GetBoard()->m_BoundaryBox.m_Pos.y;
 
     cx = Module->m_Pos.x; cy = Module->m_Pos.y;
-    ox = Module->m_RealBoundaryBox.m_Pos.x - cx;
-    fx = Module->m_RealBoundaryBox.m_Size.x + ox;
-    oy = Module->m_RealBoundaryBox.m_Pos.y - cy;
-    fy = Module->m_RealBoundaryBox.m_Size.y + oy;
+    ox = Module->m_BoundaryBox.m_Pos.x - cx;
+    fx = Module->m_BoundaryBox.m_Size.x + ox;
+    oy = Module->m_BoundaryBox.m_Pos.y - cy;
+    fy = Module->m_BoundaryBox.m_Size.y + oy;
 
     CurrPosition.x = GetBoard()->m_BoundaryBox.m_Pos.x - ox;
     CurrPosition.y = GetBoard()->m_BoundaryBox.m_Pos.y - oy;
@@ -626,8 +624,8 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
         }
 
         cx = Module->m_Pos.x; cy = Module->m_Pos.y;
-        Module->m_RealBoundaryBox.m_Pos.x = ox + CurrPosition.x;
-        Module->m_RealBoundaryBox.m_Pos.y = oy + CurrPosition.y;
+        Module->m_BoundaryBox.m_Pos.x = ox + CurrPosition.x;
+        Module->m_BoundaryBox.m_Pos.y = oy + CurrPosition.y;
 
         DrawModuleOutlines( DrawPanel, DC, Module );
 
@@ -646,8 +644,8 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
             if( DisplayChevelu )
                 Compute_Ratsnest_PlaceModule( DC );
             DisplayChevelu = 0;
-            Module->m_RealBoundaryBox.m_Pos.x = ox + CurrPosition.x;
-            Module->m_RealBoundaryBox.m_Pos.y = oy + CurrPosition.y;
+            Module->m_BoundaryBox.m_Pos.x = ox + CurrPosition.x;
+            Module->m_BoundaryBox.m_Pos.y = oy + CurrPosition.y;
 
             g_Offset_Module.y = cy - CurrPosition.y;
             DrawModuleOutlines( DrawPanel, DC, Module );
@@ -683,8 +681,8 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
         Compute_Ratsnest_PlaceModule( DC );
 
     /* Regeneration of the modified variable. */
-    Module->m_RealBoundaryBox.m_Pos.x = ox + cx;
-    Module->m_RealBoundaryBox.m_Pos.y = oy + cy;
+    Module->m_BoundaryBox.m_Pos.x = ox + cx;
+    Module->m_BoundaryBox.m_Pos.y = oy + cy;
     CurrPosition = LastPosOK;
 
     GetBoard()->m_Status_Pcb &= ~( RATSNEST_ITEM_LOCAL_OK | LISTE_PAD_OK );
@@ -807,10 +805,10 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
         side = BOTTOM; otherside = TOP;
     }
 
-    ox = Module->m_RealBoundaryBox.m_Pos.x;
-    fx = Module->m_RealBoundaryBox.GetRight();
-    oy = Module->m_RealBoundaryBox.m_Pos.y;
-    fy = Module->m_RealBoundaryBox.GetBottom();
+    ox = Module->m_BoundaryBox.m_Pos.x;
+    fx = Module->m_BoundaryBox.GetRight();
+    oy = Module->m_BoundaryBox.m_Pos.y;
+    fy = Module->m_BoundaryBox.GetBottom();
 
     error = TstRectangle( Pcb, ox, oy, fx, fy, side );
     if( error < 0 )
@@ -1031,7 +1029,6 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
     for( ; Module != NULL; Module = Module->Next() )
     {
         Module->Set_Rectangle_Encadrement();
-        Module->SetRectangleExinscrit();
         moduleList.push_back(Module);
     }
     sort( moduleList.begin(), moduleList.end(), Tri_PlaceModules );

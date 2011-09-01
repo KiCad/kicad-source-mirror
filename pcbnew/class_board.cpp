@@ -761,94 +761,20 @@ unsigned BOARD::GetNodesCount()
 
 bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
 {
-    int  rayon, cx, cy, d, xmin, ymin, xmax, ymax;
     bool hasItems = false;
-
-    xmin = ymin = INT_MAX;
-    xmax = ymax = INT_MIN;
+    EDA_RECT area;
 
     // Check segments, dimensions, texts, and fiducials
-    for( EDA_ITEM* PtStruct = m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
+    for( BOARD_ITEM* item = m_Drawings; item != NULL; item = item->Next() )
     {
-        switch( PtStruct->Type() )
-        {
-        case TYPE_DRAWSEGMENT:
-        {
-            DRAWSEGMENT* ptr;
-            ptr = (DRAWSEGMENT*) PtStruct;
-            d   = (ptr->m_Width / 2) + 1;
+        if( aBoardEdgesOnly && item->Type() != TYPE_DRAWSEGMENT && item->GetLayer() != EDGE_N )
+            continue;
 
-            if( aBoardEdgesOnly && ptr->GetLayer() != EDGE_N )
-                break;
-
-            if( ptr->m_Shape == S_CIRCLE )
-            {
-                cx    = ptr->m_Start.x; cy = ptr->m_Start.y;
-                rayon = (int) hypot( (double) ( ptr->m_End.x - cx ),
-                                     (double) ( ptr->m_End.y - cy ) );
-                rayon   += d;
-                xmin     = MIN( xmin, cx - rayon );
-                ymin     = MIN( ymin, cy - rayon );
-                xmax     = MAX( xmax, cx + rayon );
-                ymax     = MAX( ymax, cy + rayon );
-                hasItems = true;
-            }
-            else
-            {
-                cx = MIN( ptr->m_Start.x, ptr->m_End.x );
-                cy = MIN( ptr->m_Start.y, ptr->m_End.y );
-                xmin     = MIN( xmin, cx - d );
-                ymin     = MIN( ymin, cy - d );
-                cx       = MAX( ptr->m_Start.x, ptr->m_End.x );
-                cy       = MAX( ptr->m_Start.y, ptr->m_End.y );
-                xmax     = MAX( xmax, cx + d );
-                ymax     = MAX( ymax, cy + d );
-                hasItems = true;
-            }
-            break;
-        }
-        case TYPE_DIMENSION:
-        {
-            if( aBoardEdgesOnly )
-                break;
-
-            EDA_RECT rect = ((DIMENSION*) PtStruct)->GetBoundingBox();
-            xmin = MIN( xmin, rect.GetX() );
-            ymin = MIN( ymin, rect.GetY() );
-            xmax = MAX( xmax, rect.GetRight() );
-            ymax = MAX( ymax, rect.GetBottom() );
-            hasItems = true;
-            break;
-        }
-        case TYPE_TEXTE:
-        {
-            if( aBoardEdgesOnly )
-                break;
-
-            EDA_RECT rect = ((TEXTE_PCB*) PtStruct)->GetTextBox( -1 );
-            xmin = MIN( xmin, rect.GetX() );
-            ymin = MIN( ymin, rect.GetY() );
-            xmax = MAX( xmax, rect.GetRight() );
-            ymax = MAX( ymax, rect.GetBottom() );
-            hasItems = true;
-            break;
-        }
-        case TYPE_MIRE:
-        {
-            if( aBoardEdgesOnly )
-                break;
-
-            EDA_RECT rect = ((DIMENSION*) PtStruct)->GetBoundingBox();
-            xmin = MIN( xmin, rect.GetX() );
-            ymin = MIN( ymin, rect.GetY() );
-            xmax = MAX( xmax, rect.GetRight() );
-            ymax = MAX( ymax, rect.GetBottom() );
-            hasItems = true;
-            break;
-        }
-        default:
-            break;
-        }
+        if( !hasItems )
+            area = item->GetBoundingBox();
+        else
+            area.Merge( item->GetBoundingBox() );
+        hasItems = true;
     }
 
     if( !aBoardEdgesOnly )
@@ -856,41 +782,30 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
         // Check modules
         for( MODULE* module = m_Modules; module; module = module->Next() )
         {
-            EDA_RECT bBox = module->GetBoundingBox();
-            xmin     = MIN( xmin, bBox.GetX() );
-            ymin     = MIN( ymin, bBox.GetY() );
-            xmax     = MAX( xmax, bBox.GetRight() );
-            ymax     = MAX( ymax, bBox.GetBottom() );
+            if( !hasItems )
+                area = module->GetBoundingBox();
+            else
+                area.Merge( module->GetBoundingBox() );
             hasItems = true;
         }
 
         // Check tracks
         for( TRACK* track = m_Track; track; track = track->Next() )
         {
-            d = ( track->m_Width / 2 ) + 1;
-            cx = MIN( track->m_Start.x, track->m_End.x );
-            cy = MIN( track->m_Start.y, track->m_End.y );
-            xmin     = MIN( xmin, cx - d );
-            ymin     = MIN( ymin, cy - d );
-            cx       = MAX( track->m_Start.x, track->m_End.x );
-            cy       = MAX( track->m_Start.y, track->m_End.y );
-            xmax     = MAX( xmax, cx + d );
-            ymax     = MAX( ymax, cy + d );
+            if( !hasItems )
+                area = track->GetBoundingBox();
+            else
+                area.Merge( track->GetBoundingBox() );
             hasItems = true;
         }
 
         // Check segment zones
         for( TRACK* track = m_Zone; track; track = track->Next() )
         {
-            d = ( track->m_Width / 2 ) + 1;
-            cx = MIN( track->m_Start.x, track->m_End.x );
-            cy = MIN( track->m_Start.y, track->m_End.y );
-            xmin     = MIN( xmin, cx - d );
-            ymin     = MIN( ymin, cy - d );
-            cx       = MAX( track->m_Start.x, track->m_End.x );
-            cy       = MAX( track->m_Start.y, track->m_End.y );
-            xmax     = MAX( xmax, cx + d );
-            ymax     = MAX( ymax, cy + d );
+            if( !hasItems )
+                area = track->GetBoundingBox();
+            else
+                area.Merge( track->GetBoundingBox() );
             hasItems = true;
         }
 
@@ -898,11 +813,12 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
         for( unsigned int i = 0; i < m_ZoneDescriptorList.size(); i++ )
         {
             ZONE_CONTAINER* aZone = m_ZoneDescriptorList[i];
-            EDA_RECT bBox = aZone->GetBoundingBox();
-            xmin = MIN( xmin, bBox.GetX() );
-            ymin = MIN( ymin, bBox.GetY() );
-            xmax = MAX( xmax, bBox.GetRight() );
-            ymax = MAX( ymax, bBox.GetBottom() );
+
+            if( !hasItems )
+                area = aZone->GetBoundingBox();
+            else
+                area.Merge( aZone->GetBoundingBox() );
+            area.Merge( aZone->GetBoundingBox() );
             hasItems = true;
         }
     }
@@ -911,23 +827,20 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
     {
         if( m_PcbFrame->m_Draw_Sheet_Ref )
         {
-            xmin = ymin = 0;
-            xmax = m_PcbFrame->GetScreen()->ReturnPageSize().x;
-            ymax = m_PcbFrame->GetScreen()->ReturnPageSize().y;
+            area.SetOrigin( 0, 0 );
+            area.SetEnd( m_PcbFrame->GetScreen()->ReturnPageSize().x,
+                         m_PcbFrame->GetScreen()->ReturnPageSize().y );
         }
         else
         {
-            xmin = -m_PcbFrame->GetScreen()->ReturnPageSize().x / 2;
-            ymin = -m_PcbFrame->GetScreen()->ReturnPageSize().y / 2;
-            xmax = m_PcbFrame->GetScreen()->ReturnPageSize().x / 2;
-            ymax = m_PcbFrame->GetScreen()->ReturnPageSize().y / 2;
+            area.SetOrigin( -m_PcbFrame->GetScreen()->ReturnPageSize().x / 2,
+                            -m_PcbFrame->GetScreen()->ReturnPageSize().y / 2 );
+            area.SetEnd( m_PcbFrame->GetScreen()->ReturnPageSize().x / 2,
+                        m_PcbFrame->GetScreen()->ReturnPageSize().y / 2 );
         }
     }
 
-    m_BoundaryBox.SetX( xmin );
-    m_BoundaryBox.SetY( ymin );
-    m_BoundaryBox.SetWidth( xmax - xmin );
-    m_BoundaryBox.SetHeight( ymax - ymin );
+    m_BoundaryBox = area;
 
     return hasItems;
 }

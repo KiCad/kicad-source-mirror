@@ -58,9 +58,7 @@ public:
                                          * routing. */
     int           m_ModuleStatus;       /* For autoplace: flags (LOCKED,
                                          * AUTOPLACED) */
-    EDA_RECT      m_BoundaryBox;        /* Bounding box coordinates relatives
-                                         * to the anchor, orient 0*/
-    EDA_RECT      m_RealBoundaryBox;    /* Bounding box : coordinates on board,
+    EDA_RECT      m_BoundaryBox;        /* Bounding box : coordinates on board,
                                          * real orientation */
     int           m_PadNum;             // Pad count
     int           m_AltPadNum;          /* Pad with netcode > 0 (active pads)
@@ -115,31 +113,25 @@ public:
      *  void    Add( BOARD_ITEM* aBoardItem, bool doInsert = true );
      */
 
-
     /**
      * Function Set_Rectangle_Encadrement
-     * calculates the bounding box for orient 0 at origin = module anchor)
+     * calculates the bounding box in board coordinates.
      */
     void     Set_Rectangle_Encadrement();
 
     /**
-     * Function SetRectangleExinscrit
-     * Calculates the real bounding box according to the board position,
-     * and real orientation and also calculates the area value (used in
-     * automatic placement)
-     */
-    void     SetRectangleExinscrit();
-
-    /**
      * Function GetFootPrintRect()
      * Returns the area of the module footprint excluding any text.
+     * @return EDA_RECT - The rectangle containing the footprint.
      */
     EDA_RECT GetFootPrintRect() const;
 
     /**
      * Function GetBoundingBox
-     * returns the bounding box of this Footprint
-     * Mainly used to redraw the screen area occupied by the footprint
+     * returns the bounding box of this
+     * tootprint.  Mainly used to redraw the screen area occupied by
+     * the footprint.
+     * @return EDA_RECT - The rectangle containing the footprint and texts.
      */
     EDA_RECT GetBoundingBox() const;
 
@@ -261,19 +253,19 @@ public:
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
-     * @param refPos A wxPoint to test
-     * @return bool - true if a hit, else false
+     * @param aRefPos is a wxPoint to test.
+     * @return bool - true if a hit, else false.
      */
-    bool HitTest( const wxPoint& refPos );
+    bool HitTest( const wxPoint& aRefPos );
 
 
     /**
      * Function HitTest (overlaid)
      * tests if the given EDA_RECT intersect the bounds of this object.
-     * @param refArea : the given EDA_RECT
-     * @return bool - true if a hit, else false
+     * @param aRefArea is the given EDA_RECT.
+     * @return bool - true if a hit, else false.
      */
-    bool HitTest( EDA_RECT& refArea );
+    bool HitTest( EDA_RECT& aRefArea );
 
     /**
      * Function GetReference

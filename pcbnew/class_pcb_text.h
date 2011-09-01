@@ -135,6 +135,8 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_text_xpm; }
 
+    virtual EDA_RECT GetBoundingBox() const { return GetTextBox(); };
+
 #if defined(DEBUG)
     /**
      * Function Show

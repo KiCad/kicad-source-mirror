@@ -623,94 +623,10 @@ int MODULE::ReadDescr( LINE_READER* aReader )
 }
 
 
-/* Update the bounding rectangle of the module
- *
- * The bounding box includes outlines and pads, but not the fields.
- * The rectangle is:
- *      for orientation 0
- *      coordinates relative to the module anchor.
- */
 void MODULE::Set_Rectangle_Encadrement()
 {
-    int width;
-    int cx, cy, uxf, uyf, rayon;
-    int xmax, ymax;
-    int xmin, ymin;
-
-    /* Initial coordinates of the module has a nonzero limit value. */
-    xmin = ymin = -250;
-    xmax = ymax = 250;
-
-    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst();
-        edge; edge = edge->Next() )
-    {
-        if( edge->Type() != TYPE_EDGE_MODULE )
-            continue;
-
-        width = edge->m_Width / 2;
-
-        switch( edge->m_Shape )
-        {
-        case S_ARC:
-        case S_CIRCLE:
-        {
-            cx     = edge->m_Start0.x;
-            cy     = edge->m_Start0.y; // center
-            uxf    = edge->m_End0.x;
-            uyf    = edge->m_End0.y;
-            rayon  = (int) hypot( (double) ( cx - uxf ), (double) ( cy - uyf ) );
-            rayon += width;
-            xmin   = MIN( xmin, cx - rayon );
-            ymin   = MIN( ymin, cy - rayon );
-            xmax   = MAX( xmax, cx + rayon );
-            ymax   = MAX( ymax, cy + rayon );
-            break;
-        }
-
-        case S_SEGMENT:
-            xmin = MIN( xmin, edge->m_Start0.x - width );
-            xmin = MIN( xmin, edge->m_End0.x - width );
-            ymin = MIN( ymin, edge->m_Start0.y - width );
-            ymin = MIN( ymin, edge->m_End0.y - width );
-            xmax = MAX( xmax, edge->m_Start0.x + width );
-            xmax = MAX( xmax, edge->m_End0.x + width );
-            ymax = MAX( ymax, edge->m_Start0.y + width );
-            ymax = MAX( ymax, edge->m_End0.y + width );
-            break;
-
-        case S_POLYGON:
-        {
-            std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
-            for( unsigned ii = 0; ii < polyPoints.size(); ii++ )
-            {
-                wxPoint pt = polyPoints[ii];
-                xmin = MIN( xmin, (pt.x - width) );
-                ymin = MIN( ymin, (pt.y - width) );
-                xmax = MAX( xmax, (pt.x + width) );
-                ymax = MAX( ymax, (pt.y + width) );
-            }
-            break;
-        }
-        }
-    }
-
-    /* Pads: find the min and max coordinates and update the bounding box.
-     */
-    for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
-    {
-        rayon = pad->m_ShapeMaxRadius;
-        cx    = pad->m_Pos0.x;
-        cy    = pad->m_Pos0.y;
-        xmin  = MIN( xmin, cx - rayon );
-        ymin  = MIN( ymin, cy - rayon );
-        xmax  = MAX( xmax, cx + rayon );
-        ymax  = MAX( ymax, cy + rayon );
-    }
-
-    m_BoundaryBox.m_Pos.x = xmin;
-    m_BoundaryBox.m_Pos.y = ymin;
-    m_BoundaryBox.SetWidth( xmax - xmin );
-    m_BoundaryBox.SetHeight( ymax - ymin );
+    m_BoundaryBox = GetFootPrintRect();
+    m_Surface = ABS( (double) m_BoundaryBox.GetWidth() * m_BoundaryBox.GetHeight() );
 }
 
 
@@ -723,60 +639,27 @@ EDA_RECT MODULE::GetFootPrintRect() const
     area.Inflate( 500 );       // Give a min size
 
     for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge; edge = edge->Next() )
-    {
-        if( edge->Type() != TYPE_EDGE_MODULE )  // Should not occur
-            continue;
-
-        area.Merge( edge->GetBoundingBox() );
-    }
+        if( edge->Type() == TYPE_TEXTE_MODULE )
+            area.Merge( edge->GetBoundingBox() );
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
-    {
         area.Merge( pad->GetBoundingBox() );
-    }
 
     return area;
 }
 
 
-/* Equivalent to Module::Set_Rectangle_Encadrement() but in board coordinates:
- * Updates the module bounding box on the board
- * The rectangle is the rectangle with outlines and pads, but not the fields
- * Also updates the surface (.M_Surface) module.
- */
-void MODULE::SetRectangleExinscrit()
-{
-    m_RealBoundaryBox = GetFootPrintRect();
-
-    m_Surface = ABS( (double) m_RealBoundaryBox.GetWidth() * m_RealBoundaryBox.GetHeight() );
-}
-
-
-/**
- * Function GetBoundingBox
- * returns the full bounding box of this Footprint, including fields
- * Mainly used to redraw the screen area occupied by the footprint
- */
 EDA_RECT MODULE::GetBoundingBox() const
 {
     EDA_RECT area = GetFootPrintRect();
 
     // Calculate extended area including text field:
-    EDA_RECT text_area;
-    text_area = m_Reference->GetBoundingBox();
-    area.Merge( text_area );
-
-    text_area = m_Value->GetBoundingBox();
-    area.Merge( text_area );
+    area.Merge( m_Reference->GetBoundingBox() );
+    area.Merge( m_Value->GetBoundingBox() );
 
     for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge;  edge = edge->Next() )
-    {
-        if( edge->Type() != TYPE_TEXTE_MODULE )
-            continue;
-
-        text_area = ( (TEXTE_MODULE*) edge )->GetBoundingBox();
-        area.Merge( text_area );
-    }
+        if( edge->Type() == TYPE_TEXTE_MODULE )
+            area.Merge( edge->GetBoundingBox() );
 
     // Add the Clearance shape size: (shape around the pads when the
     // clearance is shown.  Not optimized, but the draw cost is small
@@ -866,49 +749,30 @@ void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param refPos A wxPoint to test
- * @return bool - true if a hit, else false
- */
-bool MODULE::HitTest( const wxPoint& refPos )
+bool MODULE::HitTest( const wxPoint& aRefPos )
 {
-    /* Calculation of the cursor coordinate relative to  module */
-    wxPoint pos = refPos - m_Pos;
-
-    RotatePoint( &pos, -m_Orient );
-
-    /* Check if cursor is in the rectangle. */
-    if( m_BoundaryBox.Contains( pos ) )
+    if( m_BoundaryBox.Contains( aRefPos ) )
         return true;
 
     return false;
 }
 
 
-/**
- * Function HitTest (overlaid)
- * tests if the given EDA_RECT intersect the bounds of this object.
- * @param refArea : the given EDA_RECT
- * @return bool - true if a hit, else false
- */
-bool MODULE::HitTest( EDA_RECT& refArea )
+bool MODULE::HitTest( EDA_RECT& aRefArea )
 {
-    bool is_out_of_box = false;
+    if( m_BoundaryBox.m_Pos.x < aRefArea.GetX() )
+        return false;
 
-    SetRectangleExinscrit();
+    if( m_BoundaryBox.m_Pos.y < aRefArea.GetY() )
+        return false;
 
-    if( m_RealBoundaryBox.m_Pos.x < refArea.GetX() )
-        is_out_of_box = true;
-    if( m_RealBoundaryBox.m_Pos.y < refArea.GetY() )
-        is_out_of_box = true;
-    if( m_RealBoundaryBox.GetRight() > refArea.GetRight() )
-        is_out_of_box = true;
-    if( m_RealBoundaryBox.GetBottom() > refArea.GetBottom() )
-        is_out_of_box = true;
+    if( m_BoundaryBox.GetRight() > aRefArea.GetRight() )
+        return false;
 
-    return is_out_of_box ? false : true;
+    if( m_BoundaryBox.GetBottom() > aRefArea.GetBottom() )
+        return false;
+
+    return true;
 }
 
 

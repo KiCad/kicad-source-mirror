@@ -198,7 +198,6 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     for( ; Module != NULL; Module = Module->Next() )
     {
         Module->Set_Rectangle_Encadrement();
-        Module->SetRectangleExinscrit();
         moduleList.push_back(Module);
     }
     sort( moduleList.begin(), moduleList.end(), sortModulesbySize );
@@ -254,12 +253,12 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
         }
 
         GetScreen()->SetCrossHairPosition( current + Module->m_Pos -
-                                           Module->m_RealBoundaryBox.GetPosition() );
-        Ymax_size = MAX( Ymax_size, Module->m_RealBoundaryBox.GetHeight() );
+                                           Module->m_BoundaryBox.GetPosition() );
+        Ymax_size = MAX( Ymax_size, Module->m_BoundaryBox.GetHeight() );
 
         Place_Module( Module, NULL, true );
 
-        current.x += Module->m_RealBoundaryBox.GetWidth() + pas_grille;
+        current.x += Module->m_BoundaryBox.GetWidth() + pas_grille;
     }
 
     DrawPanel->Refresh();
