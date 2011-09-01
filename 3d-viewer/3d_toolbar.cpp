@@ -3,8 +3,6 @@
 /********************/
 
 #include "fctsys.h"
-#include "macros.h"
-#include "bitmaps.h"
 
 #include "3d_viewer.h"
 
@@ -128,7 +126,7 @@ void EDA_3D_FRAME::ReCreateMenuBar()
     // Does not work properly under linux
     fileMenu->AppendSeparator();
     fileMenu->Append( ID_TOOL_SCREENCOPY_TOCLIBBOARD,
-                         _( "Copy 3D Image to Clipboard" ) );
+                      _( "Copy 3D Image to Clipboard" ) );
 #endif
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, _( "&Exit" ) );
@@ -136,31 +134,31 @@ void EDA_3D_FRAME::ReCreateMenuBar()
     wxMenu* referencesMenu = new wxMenu;
     menuBar->Append( referencesMenu, _( "&Preferences" ) );
 
-    ADD_MENUITEM( referencesMenu, ID_MENU3D_BGCOLOR_SELECTION,
-                  _( "Choose background color" ), KiBitmap( palette_xpm ) );
+    AddMenuItem( referencesMenu, ID_MENU3D_BGCOLOR_SELECTION,
+                 _( "Choose background color" ), KiBitmap( palette_xpm ) );
 
-    ADD_MENUITEM( referencesMenu, ID_MENU3D_AXIS_ONOFF,
-                  _( "3D Axis On/Off" ), KiBitmap( axis3d_front_xpm ) );
+    AddMenuItem( referencesMenu, ID_MENU3D_AXIS_ONOFF,
+                 _( "3D Axis On/Off" ), KiBitmap( axis3d_front_xpm ) );
 
     if( full_options )
     {
-        ADD_MENUITEM( referencesMenu, ID_MENU3D_MODULE_ONOFF,
-                      _( "3D Footprints Shapes On/Off" ), KiBitmap( shape_3d_xpm ) );
+        AddMenuItem( referencesMenu, ID_MENU3D_MODULE_ONOFF,
+                     _( "3D Footprints Shapes On/Off" ), KiBitmap( shape_3d_xpm ) );
 
-        ADD_MENUITEM( referencesMenu, ID_MENU3D_ZONE_ONOFF,
-                      _( "Zone Filling On/Off" ), KiBitmap( add_zone_xpm ) );
+        AddMenuItem( referencesMenu, ID_MENU3D_ZONE_ONOFF,
+                     _( "Zone Filling On/Off" ), KiBitmap( add_zone_xpm ) );
 
-        ADD_MENUITEM( referencesMenu, ID_MENU3D_COMMENTS_ONOFF,
-                      _( "Comments Layer On/Off" ), KiBitmap( edit_sheet_xpm ) );
+        AddMenuItem( referencesMenu, ID_MENU3D_COMMENTS_ONOFF,
+                     _( "Comments Layer On/Off" ), KiBitmap( edit_sheet_xpm ) );
 
-        ADD_MENUITEM( referencesMenu, ID_MENU3D_DRAWINGS_ONOFF,
-                      _( "Drawings Layer On/Off" ), KiBitmap( add_polygon_xpm ) );
+        AddMenuItem( referencesMenu, ID_MENU3D_DRAWINGS_ONOFF,
+                     _( "Drawings Layer On/Off" ), KiBitmap( add_polygon_xpm ) );
 
-        ADD_MENUITEM( referencesMenu, ID_MENU3D_ECO1_ONOFF,
-                      _( "Eco1 Layer On/Off" ), KiBitmap( tools_xpm ) );
+        AddMenuItem( referencesMenu, ID_MENU3D_ECO1_ONOFF,
+                     _( "Eco1 Layer On/Off" ), KiBitmap( tools_xpm ) );
 
-        ADD_MENUITEM( referencesMenu, ID_MENU3D_ECO2_ONOFF,
-                      _( "Eco2 Layer On/Off" ), KiBitmap( tools_xpm ) );
+        AddMenuItem( referencesMenu, ID_MENU3D_ECO2_ONOFF,
+                     _( "Eco2 Layer On/Off" ), KiBitmap( tools_xpm ) );
     }
 
     SetMenuBar( menuBar );

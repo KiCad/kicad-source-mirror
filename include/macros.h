@@ -1,14 +1,12 @@
-/**************************************/
-/* Useful macros and inline functions */
-/**************************************/
+/**
+ * @file macros.h
+ * @brief This file contains miscellaneous helper definitions and functions.
+ */
 
 #ifndef MACROS_H
 #define MACROS_H
 
 #include <wx/wx.h>
-
-#include "bitmaps.h"
-
 
 /**
  * Macro TO_UTF8
@@ -26,8 +24,10 @@
 static inline wxString FROM_UTF8( const char* cstring )
 {
     wxString line = wxString::FromUTF8( cstring );
+
     if( line.IsEmpty() )  // happens when cstring is not a valid UTF8 sequence
         line = wxConvCurrent->cMB2WC( cstring );    // try to use locale conversion
+
     return line;
 }
 
@@ -78,33 +78,39 @@ static inline const wxChar* GetChars( const wxString& s )
 #define RAD2DEG( Rad ) ( (Rad) * 180.0 / M_PI )
 
 // Normalize angle to be in the -360.0 .. 360.0:
-#define NORMALIZE_ANGLE_360( Angle ) { while( Angle < -3600 ) \
-                                       Angle += 3600;\
-                                   while( Angle > 3600 ) \
-                                       Angle -= 3600;}
+#define NORMALIZE_ANGLE_360( Angle ) {                        \
+        while( Angle < -3600 )                                \
+            Angle += 3600;                                    \
+        while( Angle > 3600 )                                 \
+            Angle -= 3600; }
 
 /* Normalize angle to be in the 0.0 .. 360.0 range: */
-#define NORMALIZE_ANGLE_POS( Angle ) { while( Angle < 0 ) \
-                                           Angle += 3600;\
-                                           while( Angle >= 3600 ) \
-                                           Angle -= 3600;}
+#define NORMALIZE_ANGLE_POS( Angle ) {                        \
+        while( Angle < 0 )                                    \
+            Angle += 3600;                                    \
+        while( Angle >= 3600 )                                \
+            Angle -= 3600; }
 
-#define NEGATE_AND_NORMALIZE_ANGLE_POS( Angle ) \
-    { Angle = -Angle; while( Angle < 0 ) \
-          Angle += 3600;while( Angle >= 3600 ) \
-          Angle -= 3600;}
+#define NEGATE_AND_NORMALIZE_ANGLE_POS( Angle ) {             \
+        Angle = -Angle;                                       \
+        while( Angle < 0 )                                    \
+            Angle += 3600;                                    \
+        while( Angle >= 3600 )                                \
+            Angle -= 3600; }
 
 /* Normalize angle to be in the -90.0 .. 90.0 range */
-#define NORMALIZE_ANGLE_90( Angle ) { while( Angle < -900 ) \
-                                          Angle += 1800;\
-                                      while( Angle > 900 ) \
-                                          Angle -= 1800;}
+#define NORMALIZE_ANGLE_90( Angle ) {                         \
+        while( Angle < -900 )                                 \
+            Angle += 1800;                                    \
+        while( Angle > 900 )                                  \
+            Angle -= 1800; }
 
 /* Normalize angle to be in the -180.0 .. 180.0 range */
-#define NORMALIZE_ANGLE_180( Angle ) { while( Angle <= -1800 ) \
-                                           Angle += 3600;\
-                                       while( Angle > 1800 ) \
-                                           Angle -= 3600;}
+#define NORMALIZE_ANGLE_180( Angle ) {                        \
+        while( Angle <= -1800 )                               \
+            Angle += 3600;                                    \
+        while( Angle > 1800 )                                 \
+            Angle -= 3600; }
 
 /*****************************/
 /* macro to exchange 2 items */
@@ -139,93 +145,5 @@ BOOST_TYPEOF_REGISTER_TYPE( BOARD_ITEM* )
                         (a) = (b);                             \
                         (b) = __temp__; }
 
-
-/*****************************************************/
-/* inline functions to insert menuitems with a icon: */
-/*****************************************************/
-static inline void ADD_MENUITEM( wxMenu*         menu,
-                                 int             id,
-                                 const wxString& text,
-                                 const wxBitmap& icon )
-{
-    wxMenuItem* l_item;
-
-    l_item = new wxMenuItem( menu, id, text );
-
-#if defined( USE_IMAGES_IN_MENUS )
-    l_item->SetBitmap( icon );
-#endif
-
-    menu->Append( l_item );
-}
-
-static inline void ADD_MENUITEM_WITH_HELP( wxMenu*         menu,
-                                           int             id,
-                                           const wxString& text,
-                                           const wxString& help,
-                                           const wxBitmap& icon )
-{
-    wxMenuItem* l_item;
-
-    l_item = new wxMenuItem( menu, id, text, help );
-
-#if defined( USE_IMAGES_IN_MENUS )
-    l_item->SetBitmap( icon );
-#endif
-
-    menu->Append( l_item );
-}
-
-static inline void ADD_MENUITEM_WITH_SUBMENU( wxMenu*         menu,
-                                              wxMenu*         submenu,
-                                              int             id,
-                                              const wxString& text,
-                                              const wxBitmap& icon )
-{
-    wxMenuItem* l_item;
-
-    l_item = new wxMenuItem( menu, id, text );
-    l_item->SetSubMenu( submenu );
-
-#if defined( USE_IMAGES_IN_MENUS )
-    l_item->SetBitmap( icon );
-#endif
-
-    menu->Append( l_item );
-};
-
-static inline void ADD_MENUITEM_WITH_HELP_AND_SUBMENU( wxMenu*         menu,
-                                                       wxMenu*         submenu,
-                                                       int             id,
-                                                       const wxString& text,
-                                                       const wxString& help,
-                                                       const wxBitmap& icon )
-{
-    wxMenuItem* l_item;
-
-    l_item = new wxMenuItem( menu, id, text, help );
-    l_item->SetSubMenu( submenu );
-
-#if defined( USE_IMAGES_IN_MENUS )
-    l_item->SetBitmap( icon );
-#endif
-
-    menu->Append( l_item );
-};
-
-
-// macro to add a bitmap list to check menus (do not use with normal menus)
-#if defined( USE_IMAGES_IN_MENUS ) && defined(  __WINDOWS__ )
-#  define SETBITMAPS( icon ) item->SetBitmaps( KiBitmap( apply_xpm ), KiBitmap( icon ) )
-#else
-#  define SETBITMAPS( icon )
-#endif
-
-// macro to add a bitmap menus (do not use with check menus)
-#if !defined( USE_IMAGES_IN_MENUS ) || defined( __WXMAC__ )
-#  define SET_BITMAP( icon )
-#else
-#  define SET_BITMAP( icon ) item->SetBitmap( (icon) )
-#endif
 
 #endif /* ifdef MACRO_H */

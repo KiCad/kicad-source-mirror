@@ -8,7 +8,6 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
-#include "bitmaps.h"
 #include "pcbnew_id.h"
 #include "trigo.h"
 
@@ -100,10 +99,10 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
             text = item->GetSelectMenuText();
             xpm  = item->GetMenuImage();
 
-            ADD_MENUITEM( &itemMenu,
-                          ID_POPUP_PCB_ITEM_SELECTION_START + ii,
-                          text,
-                          xpm );
+            AddMenuItem( &itemMenu,
+                         ID_POPUP_PCB_ITEM_SELECTION_START + ii,
+                         text,
+                         xpm );
         }
 
         // this menu's handler is void
@@ -735,6 +734,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
                 edgemod->m_Start0 = edgemod->m_Start;
                 edgemod->m_End0   = edgemod->m_End;
             }
+
             if( PtStruct->Type() == TYPE_TEXTE_MODULE )
             {
                 textmod = (TEXTE_MODULE*) PtStruct;
@@ -775,6 +775,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 
         /* Reverse mirror of footprints. */
         PtStruct = module->m_Drawings;
+
         for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
         {
             switch( PtStruct->Type() )

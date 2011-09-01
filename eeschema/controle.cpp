@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "eda_dde.h"
 #include "wxEeschemaStruct.h"
@@ -144,7 +143,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
             {
                 wxString text = m_collectedItems[i]->GetSelectMenuText();
                 BITMAP_DEF xpm = m_collectedItems[i]->GetMenuImage();
-                ADD_MENUITEM( &selectMenu, ID_SELECT_ITEM_START + i, text, xpm );
+                AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, xpm );
             }
 
             // Set to NULL in case user aborts the clarification context menu.

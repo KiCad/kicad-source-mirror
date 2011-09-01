@@ -19,6 +19,8 @@ class GERBVIEW_FRAME;
 //class BOARD;
 
 class GERBER_IMAGE;
+class Ki_PageDescr;
+
 
 // Type of photoplotter action:
 #define GERB_ACTIVE_DRAW 1      // Activate light (lower pen)

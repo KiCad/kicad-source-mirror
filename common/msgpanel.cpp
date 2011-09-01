@@ -97,7 +97,7 @@ void EDA_MSG_PANEL::AppendMessage( const wxString& textUpper,
     text = ( textUpper.Len() > textLower.Len() ) ? textUpper : textLower;
     text.Append( ' ', pad );
 
-    MsgItem item;
+    EDA_MSG_ITEM item;
 
     /* Don't put the first message a window client position 0.  Offset by
      * one 'W' character width. */
@@ -133,7 +133,7 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
     else
         pos.x = m_last_x;
 
-    MsgItem item;
+    EDA_MSG_ITEM item;
 
     item.m_X = pos.x;
 
@@ -174,7 +174,7 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
 }
 
 
-void EDA_MSG_PANEL::showItem( wxDC& dc, const MsgItem& aItem )
+void EDA_MSG_PANEL::showItem( wxDC& dc, const EDA_MSG_ITEM& aItem )
 {
     int color = aItem.m_Color;
 
@@ -204,6 +204,7 @@ void EDA_MSG_PANEL::EraseMsgBox()
    m_last_x = 0;
    Refresh();
 }
+
 
 void EDA_MSG_PANEL::erase( wxDC* DC )
 {

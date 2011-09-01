@@ -3,13 +3,11 @@
  * @brief (Re)Create the main menubar for the module editor
  */
 #include "fctsys.h"
-#include "common.h"
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
 
-#include "bitmaps.h"
 #include "protos.h"
 #include "pcbnew_id.h"
 
@@ -71,10 +69,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     openSubmenu->Append( item );
 
     /* Append openSubmenu to fileMenu */
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( fileMenu, openSubmenu, -1,
-                                        _( "&Load Module" ),
-                                        _( "Load a footprint module" ),
-                                        open_document_xpm );
+    AddMenuItem( fileMenu, openSubmenu, -1,
+                 _( "&Load Module" ),
+                 _( "Load a footprint module" ),
+                 open_document_xpm );
 
     // Save module
     item = new wxMenuItem( fileMenu,
@@ -188,11 +186,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     dimensions_Submenu->Append( item );
 
     // Append dimensions_Submenu to editMenu
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( editMenu,
-                                        dimensions_Submenu, -1,
-                                        _( "&Dimensions" ),
-                                        _( "Edit dimensions preferences" ),
-                                        add_dimension_xpm );
+    AddMenuItem( editMenu,
+                 dimensions_Submenu, -1,
+                 _( "&Dimensions" ),
+                 _( "Edit dimensions preferences" ),
+                 add_dimension_xpm );
 
     // View menu
     wxMenu* viewMenu = new wxMenu;
@@ -302,23 +300,23 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
-    ADD_MENUITEM_WITH_HELP( helpMenu,
-                            wxID_HELP,
-                            _( "&Contents" ),
-                            _( "Open the PCBNew handbook" ),
-                            online_help_xpm );
-    ADD_MENUITEM_WITH_HELP( helpMenu,
-                            wxID_INDEX,
-                            _( "&Getting Started in KiCad" ),
-                            _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
-                            help_xpm );
+    AddMenuItem( helpMenu,
+                 wxID_HELP,
+                 _( "&Contents" ),
+                 _( "Open the PCBNew handbook" ),
+                 online_help_xpm );
+    AddMenuItem( helpMenu,
+                 wxID_INDEX,
+                 _( "&Getting Started in KiCad" ),
+                 _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
+                 help_xpm );
 
     // About PCBNew
     helpMenu->AppendSeparator();
-    ADD_MENUITEM_WITH_HELP( helpMenu, wxID_ABOUT,
-                           _( "&About PCBNew" ),
-                           _( "About PCBNew PCB designer" ),
-                           info_xpm );
+    AddMenuItem( helpMenu, wxID_ABOUT,
+                 _( "&About PCBNew" ),
+                 _( "About PCBNew PCB designer" ),
+                 info_xpm );
 
     // Append menus to the menubar
     menuBar->Append( fileMenu,  _( "&File" ) );

@@ -4,10 +4,8 @@
  */
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "kicad.h"
-#include "macros.h"
-#include "bitmaps.h"
+
 
 /* Menubar and toolbar event table */
 BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
@@ -74,6 +72,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Delete all existing menus so they can be rebuilt.
     // This allows language changes of the menu text on the fly.
     menuBar->Freeze();
+
     while( menuBar->GetMenuCount() )
         delete menuBar->Remove( 0 );
 
@@ -83,91 +82,93 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     wxMenu* fileMenu = new wxMenu;
 
     // Open
-    ADD_MENUITEM_WITH_HELP( fileMenu,
-                            ID_LOAD_PROJECT,
-                            _( "&Open\tCtrl+O" ),
-                            _( "Open an existing project" ),
-                            open_project_xpm );
+    AddMenuItem( fileMenu,
+                 ID_LOAD_PROJECT,
+                 _( "&Open\tCtrl+O" ),
+                 _( "Open an existing project" ),
+                 open_project_xpm );
 
     // Open Recent submenu
     static wxMenu* openRecentMenu;
+
     // Add this menu to list menu managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
     if( openRecentMenu )
         wxGetApp().m_fileHistory.RemoveMenu( openRecentMenu );
+
     openRecentMenu = new wxMenu();
     wxGetApp().m_fileHistory.UseMenu( openRecentMenu );
     wxGetApp().m_fileHistory.AddFilesToMenu( );
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( fileMenu, openRecentMenu,
-                                        wxID_ANY,
-                                        _( "Open &Recent" ),
-                                        _( "Open a recent opened schematic project" ),
-                                        open_project_xpm );
+    AddMenuItem( fileMenu, openRecentMenu,
+                 wxID_ANY,
+                 _( "Open &Recent" ),
+                 _( "Open a recent opened schematic project" ),
+                 open_project_xpm );
 
     // New
-    ADD_MENUITEM_WITH_HELP( fileMenu, ID_NEW_PROJECT,
-                            _( "&New\tCtrl+N" ),
-                            _( "Start a new project" ),
-                            new_project_xpm );
+    AddMenuItem( fileMenu, ID_NEW_PROJECT,
+                 _( "&New\tCtrl+N" ),
+                 _( "Start a new project" ),
+                 new_project_xpm );
 
     // Save
-    ADD_MENUITEM_WITH_HELP( fileMenu,
-                            ID_SAVE_PROJECT,
-                            _( "&Save\tCtrl+S" ),
-                            _( "Save current project" ),
-                            save_project_xpm );
+    AddMenuItem( fileMenu,
+                 ID_SAVE_PROJECT,
+                 _( "&Save\tCtrl+S" ),
+                 _( "Save current project" ),
+                 save_project_xpm );
 
     // Archive
     fileMenu->AppendSeparator();
-    ADD_MENUITEM_WITH_HELP( fileMenu,
-                            ID_SAVE_AND_ZIP_FILES,
-                            _( "&Archive" ),
-                            _( "Archive project files in zip archive" ),
-                            zip_xpm );
+    AddMenuItem( fileMenu,
+                 ID_SAVE_AND_ZIP_FILES,
+                 _( "&Archive" ),
+                 _( "Archive project files in zip archive" ),
+                 zip_xpm );
 
     // Unarchive
-    ADD_MENUITEM_WITH_HELP( fileMenu,
-                            ID_READ_ZIP_ARCHIVE,
-                            _( "&Unarchive" ),
-                            _( "Unarchive project files from zip file" ),
-                            unzip_xpm );
+    AddMenuItem( fileMenu,
+                 ID_READ_ZIP_ARCHIVE,
+                 _( "&Unarchive" ),
+                 _( "Unarchive project files from zip file" ),
+                 unzip_xpm );
 
     // Separator
     fileMenu->AppendSeparator();
 
     // Quit
-    ADD_MENUITEM_WITH_HELP( fileMenu,
-                            wxID_EXIT,
-                            _( "&Quit" ),
-                            _( "Quit KiCad" ),
-                            exit_xpm );
+    AddMenuItem( fileMenu,
+                 wxID_EXIT,
+                 _( "&Quit" ),
+                 _( "Quit KiCad" ),
+                 exit_xpm );
 
     // Menu Browse:
     wxMenu* browseMenu = new wxMenu();
 
     // Text editor
-    ADD_MENUITEM_WITH_HELP( browseMenu,
-                            ID_TO_EDITOR,
-                            _( "Text E&ditor" ),
-                            _( "Launch preferred text editor" ),
-                            editor_xpm );
+    AddMenuItem( browseMenu,
+                 ID_TO_EDITOR,
+                 _( "Text E&ditor" ),
+                 _( "Launch preferred text editor" ),
+                 editor_xpm );
 
     // View file
-    ADD_MENUITEM_WITH_HELP( browseMenu,
-                            ID_BROWSE_AN_SELECT_FILE,
-                            _( "&View File" ),
-                            _( "View, read or edit file with a text editor" ),
-                            browse_files_xpm );
+    AddMenuItem( browseMenu,
+                 ID_BROWSE_AN_SELECT_FILE,
+                 _( "&View File" ),
+                 _( "View, read or edit file with a text editor" ),
+                 browse_files_xpm );
 
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;
 
     // Text editor
-    ADD_MENUITEM_WITH_HELP( preferencesMenu,
-                            ID_SELECT_PREFERED_EDITOR,
-                            _( "&Text Editor" ),
-                            _( "Select your preferred text editor" ),
-                            editor_xpm );
+    AddMenuItem( preferencesMenu,
+                 ID_SELECT_PREFERED_EDITOR,
+                 _( "&Text Editor" ),
+                 _( "Select your preferred text editor" ),
+                 editor_xpm );
 
     // PDF Viewer submenu:System browser or user defined checkbox
     wxMenu* SubMenuPdfBrowserChoice = new wxMenu;
@@ -200,18 +201,18 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                                     !wxGetApp().m_PdfBrowserIsDefault );
 
     // Append PDF Viewer submenu to preferences
-    ADD_MENUITEM_WITH_HELP( SubMenuPdfBrowserChoice,
-                            ID_SELECT_PREFERED_PDF_BROWSER_NAME,
-                            _( "PDF Viewer" ),
-                            _( "Select your favourite PDF viewer used to browse datasheets" ),
-                            datasheet_xpm );
+    AddMenuItem( SubMenuPdfBrowserChoice,
+                 ID_SELECT_PREFERED_PDF_BROWSER_NAME,
+                 _( "PDF Viewer" ),
+                 _( "Select your favourite PDF viewer used to browse datasheets" ),
+                 datasheet_xpm );
 
     // PDF viewer submenu
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( preferencesMenu,
-                                        SubMenuPdfBrowserChoice, -1,
-                                        _( "PDF Viewer" ),
-                                        _( "PDF viewer preferences" ),
-                                        datasheet_xpm );
+    AddMenuItem( preferencesMenu,
+                 SubMenuPdfBrowserChoice, -1,
+                 _( "PDF Viewer" ),
+                 _( "PDF viewer preferences" ),
+                 datasheet_xpm );
 
     // Language submenu
     preferencesMenu->AppendSeparator();
@@ -224,26 +225,26 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
-    ADD_MENUITEM_WITH_HELP( helpMenu,
-                            wxID_HELP,
-                            _( "&Contents" ),
-                            _( "Open the Kicad handbook" ),
-                            online_help_xpm );
-    ADD_MENUITEM_WITH_HELP( helpMenu,
-                            wxID_INDEX,
-                            _( "&Getting Started in KiCad" ),
-                            _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
-                            help_xpm );
+    AddMenuItem( helpMenu,
+                 wxID_HELP,
+                 _( "&Contents" ),
+                 _( "Open the Kicad handbook" ),
+                 online_help_xpm );
+    AddMenuItem( helpMenu,
+                 wxID_INDEX,
+                 _( "&Getting Started in KiCad" ),
+                 _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
+                 help_xpm );
 
     // Separator
     helpMenu->AppendSeparator();
 
     // About
-    ADD_MENUITEM_WITH_HELP( helpMenu,
-                            wxID_ABOUT,
-                            _( "&About KiCad" ),
-                            _( "About kicad project manager" ),
-                            info_xpm );
+    AddMenuItem( helpMenu,
+                 wxID_ABOUT,
+                 _( "&About KiCad" ),
+                 _( "About kicad project manager" ),
+                 info_xpm );
 
     // Create the menubar and append all submenus
     menuBar->Append( fileMenu, _( "&File" ) );

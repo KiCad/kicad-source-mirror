@@ -6,12 +6,9 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
-#include "macros.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
-#include "bitmaps.h"
 #include "gr_basic.h"
 #include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
@@ -745,11 +742,14 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM:
         if( m_drawItem == NULL )
             break;
+
         DrawPanel->CrossHairOff( &dc );
+
         if( m_drawItem->Type() == LIB_FIELD_T )
         {
             EditField( &dc, (LIB_FIELD*) m_drawItem );
         }
+
         DrawPanel->MoveCursorToCrossHair();
         DrawPanel->CrossHairOn( &dc );
         break;
@@ -759,6 +759,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
         if( ( m_drawItem == NULL ) || ( m_drawItem->Type() != LIB_PIN_T ) )
             break;
+
         SaveCopyInUndoList( m_component );
         GlobalSetPins( &dc, (LIB_PIN*) m_drawItem, id );
         DrawPanel->MoveCursorToCrossHair();
@@ -1130,7 +1131,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
             {
                 wxString text = m_collectedItems[i]->GetSelectMenuText();
                 BITMAP_DEF xpm = m_collectedItems[i]->GetMenuImage();
-                ADD_MENUITEM( &selectMenu, ID_SELECT_ITEM_START + i, text, xpm );
+                AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, xpm );
             }
 
             // Set to NULL in case user aborts the clarification context menu.

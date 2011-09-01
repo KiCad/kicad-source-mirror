@@ -3,7 +3,6 @@
 /****************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
@@ -176,16 +175,16 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         wxMenu itemMenu;
 
         /* Give a title to the selection menu. This is also a cancel menu item */
-        wxMenuItem * item_title = new wxMenuItem(&itemMenu, -1, _( "Selection Clarification" ) );
+        wxMenuItem * item_title = new wxMenuItem( &itemMenu, -1, _( "Selection Clarification" ) );
 
 #ifdef __WINDOWS__
-        wxFont bold_font(*wxNORMAL_FONT);
-        bold_font.SetWeight(wxFONTWEIGHT_BOLD);
-        bold_font.SetStyle( wxFONTSTYLE_ITALIC);
-        item_title->SetFont(bold_font);
+        wxFont bold_font( *wxNORMAL_FONT );
+        bold_font.SetWeight( wxFONTWEIGHT_BOLD );
+        bold_font.SetStyle( wxFONTSTYLE_ITALIC );
+        item_title->SetFont( bold_font );
 #endif
 
-        itemMenu.Append(item_title);
+        itemMenu.Append( item_title );
         itemMenu.AppendSeparator();
 
         int limit = MIN( MAX_ITEMS_IN_PICKER, m_Collector->GetCount() );
@@ -199,7 +198,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
             BITMAP_DEF xpm = item->GetMenuImage();
 
-            ADD_MENUITEM( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START + i, text, xpm );
+            AddMenuItem( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START + i, text, xpm );
         }
 
         /* @todo: rather than assignment to true, these should be increment and decrement

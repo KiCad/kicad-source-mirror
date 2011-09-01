@@ -30,7 +30,7 @@ public:
 
     /**
      * Function RedrawActiveWindoow
-     * daws the footprint editor BOARD, and others elements : axis, grid ..
+     * daws the footprint editor BOARD, and others elements such as axis and grid.
      */
     void         RedrawActiveWindow( wxDC* DC, bool EraseBg );
 

@@ -7,15 +7,13 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "hotkeys_basic.h"
-#include "macros.h"
-#include "bitmaps.h"
 #include "id.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "wxstruct.h"
+#include "macros.h"
 #include "dialog_hotkeys_editor.h"
 
 #include <wx/apptrait.h>
@@ -133,8 +131,10 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 
     if( (aKeycode & GR_KB_CTRL) != 0 )
         modifier << MODIFIER_CTRL;
+
     if( (aKeycode & GR_KB_ALT) != 0 )
         modifier << MODIFIER_ALT;
+
     if( (aKeycode & GR_KB_SHIFT) != 0 )
         modifier << MODIFIER_SHIFT;
 
@@ -143,7 +143,7 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
     if( (aKeycode > ' ') && (aKeycode < 0x7F ) )
     {
         found   = true;
-        keyname.Append((wxChar)aKeycode);
+        keyname.Append( (wxChar)aKeycode );
     }
     else
     {
@@ -165,6 +165,7 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 
     if( aIsFound )
         *aIsFound = found;
+
     fullkeyname = modifier + keyname;
     return fullkeyname;
 }
@@ -195,6 +196,7 @@ wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
         else
             msg << wxT( " <" ) << keyname << wxT( ">" );
     }
+
     return msg;
 }
 
@@ -223,12 +225,14 @@ wxString AddHotkeyName( const wxString&                        aText,
         {
             List    = aDescList->m_HK_InfoList;
             keyname = ReturnKeyNameFromCommandId( List, aCommandId );
+
             if( !keyname.IsEmpty() )
             {
                 if( aIsShortCut )
                     msg << wxT( "\t" ) << keyname;
                 else
                     msg << wxT( " <" ) << keyname << wxT( ">" );
+
                 break;
             }
         }
@@ -252,6 +256,7 @@ wxString ReturnKeyNameFromCommandId( Ki_HotkeyInfo** aList, int aCommandId )
     for( ; *aList != NULL; aList++ )
     {
         Ki_HotkeyInfo* hk_decr = *aList;
+
         if( hk_decr->m_Idcommand == aCommandId )
         {
             keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
@@ -285,7 +290,6 @@ int ReturnKeyCodeFromKeyName( const wxString& keyname )
             modifier |= GR_KB_CTRL;
             key.Remove( 0, 5 );
         }
-
         else if( key.StartsWith( MODIFIER_ALT ) )
         {
             modifier |= GR_KB_ALT;
@@ -297,7 +301,9 @@ int ReturnKeyCodeFromKeyName( const wxString& keyname )
             key.Remove( 0, 6 );
         }
         else
+        {
             break;
+        }
     }
 
     if( (key.length() == 1) && (key[0] > ' ') && (key[0] < 0x7F) )
@@ -338,6 +344,7 @@ void DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
     for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
     {
         List = aDescList->m_HK_InfoList;
+
         for( ; *List != NULL; List++ )
         {
             Ki_HotkeyInfo* hk_decr = *List;
@@ -392,6 +399,7 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aD
 
     /* Print the current hotkey list */
     Ki_HotkeyInfo** List;
+
     for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
     {
         if( aDescList->m_Comment )
@@ -400,10 +408,12 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aD
             msg += wxString( aDescList->m_Comment );
             msg += wxT( "\n" );
         }
+
         msg += *aDescList->m_SectionTag;
         msg += wxT( "\n" );
 
         List = aDescList->m_HK_InfoList;
+
         for( ; *List != NULL; List++ )
         {
             Ki_HotkeyInfo* hk_decr = *List;
@@ -421,8 +431,11 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aD
     if( aFullFileName )
     {
         FILE* file = wxFopen( *aFullFileName, wxT( "wt" ) );
+
         if( file )
+        {
             fputs( TO_UTF8( msg ), file );
+        }
         else
         {
             msg.Printf( wxT( "Unable to write file %s" ), GetChars( *aFullFileName ) );
@@ -504,9 +517,8 @@ int EDA_BASE_FRAME::ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDe
  * lines starting by # are ignored (comments)
  * lines like [xxx] are tags (example: [common] or [libedit] which identify sections
  */
-void ParseHotkeyConfig(
-    const wxString&                        data,
-    struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+void ParseHotkeyConfig( const wxString&                        data,
+                        struct Ki_HotkeyInfoSectionDescriptor* aDescList )
 {
     /* Read the config */
     wxStringTokenizer tokenizer( data, L"\r\n", wxTOKEN_STRTOK );
@@ -525,6 +537,7 @@ void ParseHotkeyConfig(
         {
             CurrentHotkeyList = 0;
             Ki_HotkeyInfoSectionDescriptor* DList = aDescList;
+
             for( ; DList->m_HK_InfoList; DList++ )
             {
                 if( *DList->m_SectionTag == line_type )
@@ -536,10 +549,13 @@ void ParseHotkeyConfig(
 
             continue;
         }
+
         if( line_type == wxT( "$Endlist" ) )
             break;
+
         if( line_type != wxT( "shortcut" ) )
             continue;
+
         if( CurrentHotkeyList == NULL )
             continue;
 
@@ -559,6 +575,7 @@ void ParseHotkeyConfig(
             if( hk_decr->m_InfoMsg == fctname )
             {
                 int code = ReturnKeyCodeFromKeyName( keyname );
+
                 if( code )
                     hk_decr->m_KeyCode = code;
 
@@ -635,36 +652,35 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
     wxMenu*     HotkeySubmenu = new wxMenu();
 
     /* List existing hotkey menu*/
-    ADD_MENUITEM_WITH_HELP( HotkeySubmenu,
-                          ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                          _( "List Current Keys" ),
-                          _( "Displays the current hotkeys list and corresponding commands" ),
-                          KiBitmap( info_xpm ) );
+    AddMenuItem( HotkeySubmenu,
+                 ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
+                 _( "List Current Keys" ),
+                 _( "Displays the current hotkeys list and corresponding commands" ),
+                 KiBitmap( info_xpm ) );
 
     /* Call hotkeys editor*/
-    ADD_MENUITEM_WITH_HELP( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
-                          _( "Edit Hotkeys" ),
-                          _( "Call the hotkeys editor" ),
-                          KiBitmap( editor_xpm ) );
+    AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
+                 _( "Edit Hotkeys" ),
+                 _( "Call the hotkeys editor" ),
+                 KiBitmap( editor_xpm ) );
 
     HotkeySubmenu->AppendSeparator();
 
     /* create hotkey file to export current hotkeys config */
-    ADD_MENUITEM_WITH_HELP( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
-                           _( "Export Hotkeys Config" ),
-                           _( "Create a hotkey configuration file to export the current hotkey config" ),
-                           KiBitmap( save_setup_xpm ) );
+    AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
+                 _( "Export Hotkeys Config" ),
+                 _( "Create a hotkey configuration file to export the current hotkey config" ),
+                 KiBitmap( save_setup_xpm ) );
 
     /* Reload hotkey file */
-    ADD_MENUITEM_WITH_HELP( HotkeySubmenu, ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
-                          _( "Import Hotkeys Config" ),
-                          _( "Load an existing hotkey configuration file" ),
-                          KiBitmap( reload_xpm ) );
+    AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
+                 _( "Import Hotkeys Config" ),
+                 _( "Load an existing hotkey configuration file" ),
+                 KiBitmap( reload_xpm ) );
 
     /* Append HotkeySubmenu to menu */
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( aMenu, HotkeySubmenu,
-                                        ID_PREFERENCES_HOTKEY_SUBMENU, _( "Hotkeys" ),
-                                        _( "Hotkeys configuration and preferences" ),
-                                        KiBitmap( hotkeys_xpm ) );
+    AddMenuItem( aMenu, HotkeySubmenu,
+                 ID_PREFERENCES_HOTKEY_SUBMENU, _( "Hotkeys" ),
+                 _( "Hotkeys configuration and preferences" ),
+                 KiBitmap( hotkeys_xpm ) );
 }
-

@@ -4,14 +4,11 @@
  */
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "bitmaps.h"
 #include "protos.h"
 #include "hotkeys.h"
 #include "pcbnew_id.h"
-#include "macros.h"
 
 #include "help_common_strings.h"
 
@@ -30,6 +27,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Delete all existing menus so they can be rebuilt.
     // This allows language changes of the menu text on the fly.
     menuBar->Freeze();
+
     while( menuBar->GetMenuCount() )
         delete menuBar->Remove(0);
 
@@ -54,17 +52,19 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // Load Recent submenu
     static wxMenu* openRecentMenu;
+
     // Add this menu to list menu managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
     if( openRecentMenu )
         wxGetApp().m_fileHistory.RemoveMenu( openRecentMenu );
+
     openRecentMenu = new wxMenu();
     wxGetApp().m_fileHistory.UseMenu( openRecentMenu );
     wxGetApp().m_fileHistory.AddFilesToMenu();
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, openRecentMenu,
-                                        -1, _( "Open &Recent" ),
-                                        _( "Open a recent opened board" ),
-                                        open_project_xpm );
+    AddMenuItem( filesMenu, openRecentMenu,
+                 -1, _( "Open &Recent" ),
+                 _( "Open a recent opened board" ),
+                 open_project_xpm );
 
 
     // PCBNew Board
@@ -136,10 +136,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     fabricationOutputsMenu->Append( item );
 
     // Fabrications Outputs submenu append
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, fabricationOutputsMenu,
-                                        -1, _( "Fabrication Outputs" ),
-                                        _( "Generate files for fabrication" ),
-                                        fabrication_xpm );
+    AddMenuItem( filesMenu, fabricationOutputsMenu,
+                 -1, _( "Fabrication Outputs" ),
+                 _( "Generate files for fabrication" ),
+                 fabrication_xpm );
 
 
 
@@ -153,9 +153,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     SET_BITMAP( import_xpm );    // @todo need better bitmap
     submenuImport->Append( item );
 
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, submenuImport,
-                                        ID_GEN_IMPORT_FILE, _( "Import" ),
-                                        _( "Import files" ), import_xpm );
+    AddMenuItem( filesMenu, submenuImport,
+                 ID_GEN_IMPORT_FILE, _( "Import" ),
+                 _( "Import files" ), import_xpm );
 
 
 
@@ -189,9 +189,9 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     SET_BITMAP( three_d_xpm );
     submenuexport->Append( item );
 
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, submenuexport,
-                                        ID_GEN_EXPORT_FILE, _( "&Export" ),
-                                        _( "Export board" ), export_xpm );
+    AddMenuItem( filesMenu, submenuexport,
+                 ID_GEN_EXPORT_FILE, _( "&Export" ),
+                 _( "Export board" ), export_xpm );
 
     filesMenu->AppendSeparator();
 
@@ -240,11 +240,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     SET_BITMAP( library_xpm );
     submenuarchive->Append( item );
 
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( filesMenu, submenuarchive,
-                                        ID_MENU_ARCHIVE_MODULES,
-                                        _( "Archive Footprints" ),
-                                        _( "Archive or add footprints in a library file" ),
-                                        library_xpm );
+    AddMenuItem( filesMenu, submenuarchive,
+                 ID_MENU_ARCHIVE_MODULES,
+                 _( "Archive Footprints" ),
+                 _( "Archive or add footprints in a library file" ),
+                 library_xpm );
 
     /* Quit */
     filesMenu->AppendSeparator();
@@ -337,36 +337,29 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
      * for Zoom in and Zoom out sub menus
      */
     // Zoom In
-    text = AddHotkeyName( _( "Zoom In" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ZOOM_IN, false );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text,
-                           HELP_ZOOM_IN, wxITEM_NORMAL );
+    text = AddHotkeyName( _( "Zoom In" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ZOOM_IN, false );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, wxITEM_NORMAL );
     SET_BITMAP( zoom_in_xpm );
     viewMenu->Append( item );
 
     // Zoom Out
-    text = AddHotkeyName( _( "Zoom Out" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ZOOM_OUT, false );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text,
-                           HELP_ZOOM_OUT, wxITEM_NORMAL );
+    text = AddHotkeyName( _( "Zoom Out" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ZOOM_OUT, false );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, wxITEM_NORMAL );
 
     SET_BITMAP( zoom_out_xpm );
     viewMenu->Append( item );
 
     // Fit on Screen
-    text = AddHotkeyName( _( "Fit on Screen" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ZOOM_AUTO );
+    text = AddHotkeyName( _( "Fit on Screen" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ZOOM_AUTO );
 
-    item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text,
-                           HELP_ZOOM_FIT, wxITEM_NORMAL );
+    item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, wxITEM_NORMAL );
     SET_BITMAP( zoom_fit_in_page_xpm );
     viewMenu->Append( item );
 
     viewMenu->AppendSeparator();
 
     // Redraw
-    text = AddHotkeyName( _( "Redraw" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ZOOM_REDRAW );
+    text = AddHotkeyName( _( "Redraw" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ZOOM_REDRAW );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
                            HELP_ZOOM_REDRAW,
@@ -403,8 +396,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->Append( item );
 
     // Track
-    text = AddHotkeyName( _( "Track" ), g_Pcbnew_Editor_Hokeys_Descr,
-                          HK_ADD_NEW_TRACK, false );
+    text = AddHotkeyName( _( "Track" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK, false );
     item = new wxMenuItem( placeMenu, ID_TRACK_BUTT, text,
                            _( "Add tracks and vias" ), wxITEM_NORMAL );
 
@@ -449,8 +441,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // Dimension
     item = new wxMenuItem( placeMenu, ID_PCB_DIMENSION_BUTT,
-                         _( "Dimension" ),
-                         _( "Add dimension" ) );
+                           _( "Dimension" ),
+                           _( "Add dimension" ) );
     SET_BITMAP( add_dimension_xpm );
     placeMenu->Append( item );
 
@@ -464,8 +456,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // Drill & Place Offset
     item = new wxMenuItem( placeMenu, ID_PCB_PLACE_OFFSET_COORD_BUTT,
-                      _( "Drill and Place Offset" ),
-                      _( "Place the origin point for drill and place files" ));
+                           _( "Drill and Place Offset" ),
+                           _( "Place the origin point for drill and place files" ));
     SET_BITMAP( pcb_offset_xpm );
     placeMenu->Append( item );
 
@@ -556,10 +548,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     dimensionsMenu->Append( item );
 
     // Append dimension menu to config menu
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( configmenu, dimensionsMenu,
-                                        -1, _( "Di&mensions" ),
-                                        _( "Global dimensions preferences" ),
-                                        add_dimension_xpm );
+    AddMenuItem( configmenu, dimensionsMenu,
+                 -1, _( "Di&mensions" ),
+                 _( "Global dimensions preferences" ),
+                 add_dimension_xpm );
 
     // Language submenu
     wxGetApp().AddMenuLanguageList( configmenu );
@@ -634,7 +626,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     SET_BITMAP( copper_layers_setup_xpm );
     designRulesMenu->Append( item );
 
-
     /**
      * Help menu
      */
@@ -643,23 +634,23 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
-    ADD_MENUITEM_WITH_HELP( helpMenu,
-                            wxID_HELP,
-                            _( "&Contents" ),
-                            _( "Open the PCBNew handbook" ),
-                            online_help_xpm );
-    ADD_MENUITEM_WITH_HELP( helpMenu,
-                            wxID_INDEX,
-                            _( "&Getting Started in KiCad" ),
-                            _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
-                            help_xpm );
+    AddMenuItem( helpMenu,
+                 wxID_HELP,
+                 _( "&Contents" ),
+                 _( "Open the PCBNew handbook" ),
+                 online_help_xpm );
+    AddMenuItem( helpMenu,
+                 wxID_INDEX,
+                 _( "&Getting Started in KiCad" ),
+                 _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
+                 help_xpm );
 
     // About
     helpMenu->AppendSeparator();
-    ADD_MENUITEM_WITH_HELP( helpMenu, wxID_ABOUT,
-                           _( "&About PCBNew" ),
-                           _( "About PCBnew printed circuit board designer" ),
-                           info_xpm );
+    AddMenuItem( helpMenu, wxID_ABOUT,
+                 _( "&About PCBNew" ),
+                 _( "About PCBnew printed circuit board designer" ),
+                 info_xpm );
 
     /**
      * Append all menus to the menuBar

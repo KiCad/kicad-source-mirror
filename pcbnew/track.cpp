@@ -28,30 +28,6 @@ static void Marque_Chaine_segments( BOARD*      Pcb,
                                     TRACK_PTRS* aList );
 
 
-/**
- * Function Marque_Une_Piste
- * marks a chain of track segments, connected to aTrackList.
- * Each segment is marked by setting the BUSY bit into m_Flags.  Electrical
- * continuity is detected by walking each segment, and finally the segments
- * are rearranged into a contiguous chain within the given list.
- * @param aPcb = the board to analyze
- * @param aStartSegm - The first interesting segment within a list of track
- *                     segment of aPcb
- * @param aSegmCount = a pointer to an integer where to return the number of
- *                     interesting segments
- * @param aTrackLen = a pointer to an integer where to return the length of the
- *                    track on board
- * @param aLengthDie = a pointer to an integer where to return the extra lengths inside integrated circuits
- *                      from the pads connected to this track to the die (if any)
- * @param aReorder = bool:
- *  true for reorder the interesting segments (useful for track
- *edition/deletion)
- *   in this case the flag BUSY is set (the user is responsible of flag
- *clearing)
- *  false for no reorder : useful when we want just calculate the track length
- *  in this case, flags are reset
- * @return TRACK* the first in the chain of interesting segments.
- */
 TRACK* Marque_Une_Piste( BOARD* aPcb,
                          TRACK* aStartSegm,
                          int*   aSegmCount,

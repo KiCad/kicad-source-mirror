@@ -188,12 +188,14 @@ private:
  * Function BuildHolesList
  * Create the list of holes and tools for a given board
  * The list is sorted by increasing drill values
- * Only holes from aFirstLayer to aLastLayer copper layers  are listed (for vias, because pad holes are always through holes)
+ * Only holes from aFirstLayer to aLastLayer copper layers  are listed (for vias, because
+ * pad holes are always through holes)
  * @param aPcb : the given board
  * @param aHoleListBuffer : the std::vector<HOLE_INFO> to fill with pcb holes info
  * @param aToolListBuffer : the std::vector<DRILL_TOOL> to fill with tools to use
  * @param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored
  * @param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
+ * @param aExcludeThroughHoles Exclude through holes if true.
  * @param aGenerateNPTH_list :
  *       true to create NPTH only list (with no plated holes)
  *       false to created plated holes list (with no NPTH )

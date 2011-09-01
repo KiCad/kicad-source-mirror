@@ -12,14 +12,13 @@
 #include "build_version.h"
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "online_help.h"
 #include "id.h"
 #include "confirm.h"
 #include "eda_doc.h"
 #include "wxstruct.h"
 #include "macros.h"
-#include "bitmaps.h"
+
 
 /*
  * Class constructor for EDA_BASE_FRAME general options
@@ -364,10 +363,10 @@ void EDA_BASE_FRAME::AddHelpVersionInfoMenuEntry( wxMenu* aMenu )
     wxASSERT( aMenu != NULL );
 
     // Copy version string to clipboard for bug report purposes.
-    ADD_MENUITEM_WITH_HELP( aMenu, ID_HELP_COPY_VERSION_STRING,
-                           _( "Copy &Version Information" ),
-                           _( "Copy the version string to clipboard to send with bug reports" ),
-                           KiBitmap( copy_button_xpm ) );
+    AddMenuItem( aMenu, ID_HELP_COPY_VERSION_STRING,
+                 _( "Copy &Version Information" ),
+                 _( "Copy the version string to clipboard to send with bug reports" ),
+                 KiBitmap( copy_button_xpm ) );
 }
 
 

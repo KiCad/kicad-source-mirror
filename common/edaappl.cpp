@@ -1,7 +1,3 @@
-/***************/
-/* edaappl.cpp */
-/***************/
-
 /***
  * @file edaapl.cpp
  *
@@ -21,15 +17,14 @@
 #include <wx/tokenzr.h>
 
 #include "appl_wxstruct.h"
-#include "common.h"
+#include "wxstruct.h"
+#include "macros.h"
 #include "param_config.h"
 #include "worksheet.h"
 #include "id.h"
 #include "build_version.h"
 #include "hotkeys_basic.h"
-#include "macros.h"
 #include "online_help.h"
-#include "bitmaps.h"
 #include "gestfich.h"
 
 
@@ -242,15 +237,12 @@ static struct LANGUAGE_DESCR s_Language_List[] =
 };
 
 
-/**
- * WinEDA_App Constructor
- */
 WinEDA_App::WinEDA_App()
 {
     m_Checker     = NULL;
     m_HtmlCtrl    = NULL;
     m_EDA_Config  = NULL;
-    m_Env_Defined = FALSE;
+    m_Env_Defined = false;
     m_LanguageId  = wxLANGUAGE_DEFAULT;
     m_PdfBrowserIsDefault = true;
     m_Locale = NULL;
@@ -259,9 +251,6 @@ WinEDA_App::WinEDA_App()
 }
 
 
-/**
- * WinEDA_App Destructor
- */
 WinEDA_App::~WinEDA_App()
 {
     SaveSettings();
@@ -269,11 +258,15 @@ WinEDA_App::~WinEDA_App()
     /* delete user datas */
     if( m_ProjectConfig )
         delete m_ProjectConfig;
+
     if( m_EDA_CommonConfig )
         delete m_EDA_CommonConfig;
+
     delete m_EDA_Config;
+
     if( m_Checker )
         delete m_Checker;
+
     delete m_Locale;
 }
 
@@ -848,11 +841,11 @@ void WinEDA_App::AddMenuLanguageList( wxMenu* MasterMenu )
         menu->Append( item );
     }
 
-    ADD_MENUITEM_WITH_HELP_AND_SUBMENU( MasterMenu, menu,
-                                        ID_LANGUAGE_CHOICE,
-                                        _( "Language" ),
-                                        _( "Select application language (only for testing!)" ),
-                                        KiBitmap( language_xpm ) );
+    AddMenuItem( MasterMenu, menu,
+                 ID_LANGUAGE_CHOICE,
+                 _( "Language" ),
+                 _( "Select application language (only for testing!)" ),
+                 KiBitmap( language_xpm ) );
 
     // Set Check mark on current selected language
     for( ii = 0; ii < LANGUAGE_DESCR_COUNT; ii++ )

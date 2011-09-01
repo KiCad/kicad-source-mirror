@@ -11,6 +11,9 @@
 #define DEFAULT_HOTKEY_FILENAME_EXT wxT( "key" )
 
 
+class EDA_DRAW_FRAME;
+
+
 /* Class to handle hotkey commnands. hotkeys have a default value
  *  This class allows the real key code changed by user(from a key code list file)
  */

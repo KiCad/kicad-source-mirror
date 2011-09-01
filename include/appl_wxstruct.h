@@ -224,7 +224,7 @@ public: WinEDA_App();
     /**
      * Function GetHelpFile
      * get the help file path.
-     * <p?
+     * <p>
      * Return the Kicad help file with path.  The base paths defined in
      * m_searchPaths are tested for a valid file.  The path returned can
      * be relative depending on the paths added to m_searchPaths.  See the
@@ -233,8 +233,8 @@ public: WinEDA_App();
      * version of the help file is made.
      * wxEmptyString is returned if help file not found.
      * Help file is searched in directories in this order:
-     *  help/<canonical name> like help/en_GB
-     *  help/<short name> like help/en
+     *  help/\<canonical name\> like help/en_GB
+     *  help/\<short name\> like help/en
      *  help/en
      * </p>
      */
