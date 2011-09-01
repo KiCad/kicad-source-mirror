@@ -639,7 +639,7 @@ EDA_RECT MODULE::GetFootPrintRect() const
     area.Inflate( 500 );       // Give a min size
 
     for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge; edge = edge->Next() )
-        if( edge->Type() == TYPE_TEXTE_MODULE )
+        if( edge->Type() == TYPE_EDGE_MODULE )
             area.Merge( edge->GetBoundingBox() );
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
@@ -653,13 +653,9 @@ EDA_RECT MODULE::GetBoundingBox() const
 {
     EDA_RECT area = GetFootPrintRect();
 
-    // Calculate extended area including text field:
+    // Calculate extended area including text fields
     area.Merge( m_Reference->GetBoundingBox() );
     area.Merge( m_Value->GetBoundingBox() );
-
-    for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge;  edge = edge->Next() )
-        if( edge->Type() == TYPE_TEXTE_MODULE )
-            area.Merge( edge->GetBoundingBox() );
 
     // Add the Clearance shape size: (shape around the pads when the
     // clearance is shown.  Not optimized, but the draw cost is small
