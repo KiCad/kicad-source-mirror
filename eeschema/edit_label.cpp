@@ -47,40 +47,33 @@ static void moveText( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositio
 static void abortMoveText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
     SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_TEXT* item = (SCH_TEXT*)screen->GetCurItem();
     SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
 
     parent->SetRepeatItem( NULL );
+    screen->SetCurItem( NULL );
 
     if( item == NULL )  /* no current item */
         return;
-
-    // Erase the text item and delete it if new (i.e. it was being just created).
-    item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     if( item->IsNew() )
     {
         delete item;
         item = NULL;
     }
-    else    // Move command on an existing text item, restore the copy of the original.
+    else    // Move command on an existing text item, restore the values of the original.
     {
-        screen->RemoveFromDrawList( item );
-        delete item;
+        SCH_TEXT* olditem = (SCH_TEXT* )parent->GetUndoItem();
+        screen->SetCurItem( item );
 
-        item = parent->GetUndoItem();
-
-        wxCHECK_RET( item != NULL, wxT( "Cannot restore undefined last text item." ) );
-
-        screen->AddToDrawList( item );
-        // the owner of item is no more parent, this is the draw list of screen:
-        parent->SetUndoItem( NULL );
-
-        item->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        item->ClearFlags();
+        wxCHECK_RET( olditem != NULL && item->Type() == olditem->Type(),
+            wxT( "Cannot restore undefined or bad last text item." ) );
+        // Never delete existing item, because it can be referenced by an undo/redo command
+        // Just restore its data
+        item->SwapData(olditem);
     }
 
-    screen->SetCurItem( item );
+    aPanel->Refresh();
 }
 
 
@@ -93,7 +86,7 @@ void SCH_EDIT_FRAME::MoveText( SCH_TEXT* aTextItem, wxDC* aDC )
 
     aTextItem->SetFlags( IS_MOVED );
 
-    SetUndoItem( (SCH_ITEM*) aTextItem );
+    SetUndoItem( aTextItem );
 
     DrawPanel->CrossHairOff( aDC );
     GetScreen()->SetCrossHairPosition( aTextItem->m_Pos );
@@ -190,7 +183,14 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
     return textItem;
 }
 
-
+/*
+ * OnConvertTextType is a command event handler to change a text type to an other one.
+ * The new text, label, hierarchical label, or global label is created from the old text
+ * The old text is deleted.
+ * A tricky case is when the 'old" text is being edited (i.e. moving)
+ * because we must create a new text, and prepare the undo/redo command data for this
+ * change and the current move/edit command
+ */
 void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
 {
     SCH_SCREEN* screen = GetScreen();
@@ -279,27 +279,49 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     screen->RemoveFromDrawList( text );
     screen->AddToDrawList( newtext );
     GetScreen()->SetCurItem( newtext );
+    m_itemToRepeat = NULL;
     OnModify();
     newtext->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     DrawPanel->CrossHairOn( &dc );    // redraw schematic cursor
 
-    if( text->GetFlags() == 0 )
+    if( text->IsNew() )
     {
-        m_itemToRepeat = NULL;
-        text->ClearFlags();
-        text->SetNext( NULL );
-        text->SetBack( NULL );
-        newtext->ClearFlags();
-        PICKED_ITEMS_LIST pickList;
-        ITEM_PICKER picker( newtext, UR_EXCHANGE_T );
-        picker.SetLink( text );
-        pickList.PushItem( picker );
-        SaveCopyInUndoList( pickList, UR_EXCHANGE_T );
-    }
-    else
-    {
+        // if the previous text is new, no undo command to prepare here
+        // just delete this previous text.
         delete text;
+        return;
     }
+
+    // previous text is not new and we replace text by new text.
+    // So this is equivalent to delete text and add newtext
+    // If text if being currently edited (i.e. moved)
+    // we also save the initial copy of text, and prepare undo command for new text modifications.
+    // we must save it as modified text (if currently beeing edited), then deleted text,
+    // and replace text with newtext
+    PICKED_ITEMS_LIST pickList;
+    ITEM_PICKER picker( text, UR_CHANGED );
+    if( text->GetFlags() )
+    {
+        // text is being edited, save initial text for undo command
+        picker.SetLink( GetUndoItem() );
+        pickList.PushItem( picker );
+        // the owner of undoItem is no more "this", it is now "picker":
+        SetUndoItem( NULL );
+        // save current newtext copy for undo/abort current command
+        SetUndoItem( newtext );
+    }
+
+    // Prepare undo command for delete old text
+    picker.m_UndoRedoStatus = UR_DELETED;
+    picker.SetLink( NULL );
+    pickList.PushItem( picker );
+
+    // Prepare undo command for new text
+    picker.m_UndoRedoStatus = UR_NEW;
+    picker.SetItem(newtext);
+    pickList.PushItem( picker );
+
+    SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
 }
 
 

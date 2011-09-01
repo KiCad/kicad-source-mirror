@@ -231,6 +231,8 @@ bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* aItem )
 
 void SCH_SCREEN::AddToDrawList( SCH_ITEM* aItem )
 {
+    if( aItem == NULL )
+        return;
     aItem->SetNext( GetDrawItems() );
     SetDrawItems( aItem );
 }

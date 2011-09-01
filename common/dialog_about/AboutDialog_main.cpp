@@ -275,6 +275,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     /* Programm credits for icons */
     info.AddArtist( new Contributor( wxT( "Iñigo Zuluagaz" ), wxT( "inigo_zuluaga@yahoo.es" ),
                                     wxT( "Icons by" ), KiBitmapNew( edit_module_xpm ) ) );
+    info.AddArtist( new Contributor( wxT( "Fabrizio Tappero" ), wxT( "fabrizio.tappero@gmail.com" ),
+                                    wxT( "New icons by" ), KiBitmapNew( edit_module_xpm ) ) );
     info.AddArtist( new Contributor( wxT( "Renie Marquet" ), wxT( "reniemarquet@uol.com.br" ),
                                     wxT( "3D modules by" ), KiBitmapNew( three_d_xpm ) ) );
     info.AddArtist( new Contributor( wxT( "Christophe Boschat" ), wxT( "nox454@hotmail.fr" ),

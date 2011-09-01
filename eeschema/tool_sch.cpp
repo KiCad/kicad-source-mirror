@@ -5,12 +5,12 @@
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
-#include "confirm.h"
+//#include "confirm.h"
 #include "bitmaps.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"
-#include "protos.h"
+//#include "protos.h"
 #include "hotkeys.h"
 #include "eeschema_id.h"
 
@@ -216,6 +216,9 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
 
     m_VToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString, KiBitmap( add_text_xpm ),
                          HELP_PLACE_GRAPHICTEXTS, wxITEM_CHECK );
+
+    m_VToolBar->AddTool( ID_ADD_IMAGE_BUTT, wxEmptyString, wxBitmap( image_xpm ),
+                         _("Add a bitmap image"), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxEmptyString, KiBitmap( delete_body_xpm ),
                          HELP_DELETE_ITEMS, wxITEM_CHECK );

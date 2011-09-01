@@ -26,6 +26,7 @@ class EDA_ITEM;
 class SCH_BUS_ENTRY;
 class SCH_GLOBALLABEL;
 class SCH_TEXT;
+class SCH_BITMAP;
 class SCH_SHEET;
 class SCH_SHEET_PATH;
 class SCH_SHEET_PIN;
@@ -646,6 +647,20 @@ private:
     void            Drawing_SetNewWidth( DRAWSEGMENT* DrawSegm, wxDC* DC );
     void            Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC );
     DRAWSEGMENT*    Begin_Edge( DRAWSEGMENT* Segment, wxDC* DC );
+
+    // Images:
+    SCH_BITMAP*     CreateNewImage( wxDC* aDC );
+    void            MoveImage( SCH_BITMAP* aItem, wxDC* aDC );
+    void            RotateImage( SCH_BITMAP* aItem );
+    /**
+     * Function MirrorImage
+     * Mirror a bitmap
+     * @param aItem = the SCH_BITMAP item to mirror
+     * @param Is_X_axis = true to mirror relative to Horizontal axis
+     *                      false to mirror relative to vertical axis
+     */
+    void            MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis );
+    void            EditImage( SCH_BITMAP* aItem );
 
     // Hierarchical Sheet & PinSheet
     void            InstallHierarchyFrame( wxDC* DC, wxPoint& pos );

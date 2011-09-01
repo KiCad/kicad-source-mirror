@@ -39,18 +39,6 @@ SCH_JUNCTION::SCH_JUNCTION( const SCH_JUNCTION& aJunction ) :
 }
 
 
-SCH_JUNCTION* SCH_JUNCTION::GenCopy()
-{
-    SCH_JUNCTION* newitem = new SCH_JUNCTION( m_Pos );
-
-    newitem->m_Size  = m_Size;
-    newitem->m_Layer = m_Layer;
-    newitem->m_Flags = m_Flags;
-
-    return newitem;
-}
-
-
 bool SCH_JUNCTION::Save( FILE* aFile ) const
 {
     bool success = true;

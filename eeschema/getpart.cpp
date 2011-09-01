@@ -272,11 +272,11 @@ void SCH_EDIT_FRAME::OnChangeComponentOrientation( wxCommandEvent& aEvent )
 
     switch( aEvent.GetId() )
     {
-    case ID_POPUP_SCH_MIROR_X_CMP:
+    case ID_POPUP_SCH_MIRROR_X_CMP:
         orientation = CMP_MIRROR_X;
         break;
 
-    case ID_POPUP_SCH_MIROR_Y_CMP:
+    case ID_POPUP_SCH_MIRROR_Y_CMP:
         orientation = CMP_MIRROR_Y;
         break;
 

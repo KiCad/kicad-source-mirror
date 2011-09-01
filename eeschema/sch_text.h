@@ -99,8 +99,6 @@ public:
      */
     virtual wxPoint GetSchematicTextOffset() const;
 
-    SCH_TEXT* GenCopy();
-
     virtual void Draw( EDA_DRAW_PANEL* panel,
                        wxDC*           DC,
                        const wxPoint&  offset,

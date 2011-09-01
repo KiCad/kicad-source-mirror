@@ -166,6 +166,7 @@ set(BITMAP_SRCS
     icon_pcbnew.xpm
     icon_txt.xpm
     import3d.xpm
+    image.xpm
     import_cmp_from_lib.xpm
     import_footprint_names.xpm
     import_hierarchical_label.xpm

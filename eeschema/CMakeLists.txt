@@ -3,6 +3,7 @@ add_definitions(-DEESCHEMA)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
                     ${CMAKE_SOURCE_DIR}/common
+                    ${CMAKE_SOURCE_DIR}/common/dialogs
                     ${Boost_INCLUDE_DIR}
                    )
 
@@ -71,6 +72,7 @@ set(EESCHEMA_SRCS
     dialogs/dialog_SVG_print.cpp
     dialogs/dialog_SVG_print_base.cpp
     edit_component_in_schematic.cpp
+    edit_bitmap.cpp
     edit_label.cpp
     eelibs_read_libraryfiles.cpp
     eeredraw.cpp
@@ -112,6 +114,7 @@ set(EESCHEMA_SRCS
     onrightclick.cpp
     operations_on_items_lists.cpp
     pinedit.cpp
+    sch_bitmap.cpp
     sch_bus_entry.cpp
     sch_collectors.cpp
     sch_component.cpp

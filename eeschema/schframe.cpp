@@ -127,7 +127,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
                     SCH_EDIT_FRAME::OnSelectUnit )
     EVT_MENU_RANGE( ID_POPUP_SCH_CHANGE_TYPE_TEXT, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
                     SCH_EDIT_FRAME::OnConvertTextType )
-    EVT_MENU_RANGE( ID_POPUP_SCH_MIROR_X_CMP, ID_POPUP_SCH_ORIENT_NORMAL_CMP,
+    EVT_MENU_RANGE( ID_POPUP_SCH_MIRROR_X_CMP, ID_POPUP_SCH_ORIENT_NORMAL_CMP,
                     SCH_EDIT_FRAME::OnChangeComponentOrientation )
 
     // Multple item selection context menu commands.

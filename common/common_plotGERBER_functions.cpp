@@ -333,6 +333,36 @@ void GERBER_PLOTTER::PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill
     }
 }
 
+/*
+ * Function PlotImage
+ * Only Postscript plotters can plot bitmaps
+ * for plotters that cannot plot a bitmap, a rectangle is plotted
+ * For GERBER_PLOTTER, draws a rectangle
+ * param aImage = the bitmap
+ * param aPos = position of the center of the bitmap
+ * param aScaleFactor = the scale factor to apply to the bitmap size
+ *                      (this is not the plot scale factor)
+ */
+void GERBER_PLOTTER::PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor )
+{
+    wxSize size;
+    size.x = aImage.GetWidth();
+    size.y = aImage.GetHeight();
+
+    size.x = wxRound( size.x * aScaleFactor );
+    size.y = wxRound( size.y * aScaleFactor );
+
+    wxPoint start = aPos;
+    start.x -= size.x / 2;
+    start.y -= size.y / 2;
+
+    wxPoint end = start;
+    end.x += size.x;
+    end.y += size.y;
+
+    rect( start, end, NO_FILL );
+
+}
 
 /* Function flash_pad_circle
  * Plot a circular pad or via at the user position pos

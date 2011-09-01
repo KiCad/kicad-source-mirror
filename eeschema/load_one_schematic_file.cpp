@@ -20,6 +20,7 @@
 #include "sch_polyline.h"
 #include "sch_text.h"
 #include "sch_sheet.h"
+#include "sch_bitmap.h"
 
 
 bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window );
@@ -128,6 +129,8 @@ again." );
                 item = new SCH_SHEET();
             else if( line[1] == 'D' )
                 itemLoaded = ReadSchemaDescr( &reader, MsgDiag, aScreen );
+            else if( line[1] == 'B' )
+                item = new SCH_BITMAP();
             break;
 
         case 'L':        // Its a library item.

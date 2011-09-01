@@ -39,5 +39,6 @@ Remy Halvick, David Briscoe, Dominique Laigle, Paul Burke
 
 == Programm credits for icons and others
 Icons by Iñigo Zuluagaz <inigo_zuluaga[at]yahoo-dot-es>
+New Icons by Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com>
 3D modules by Renie Marquet <reniemarquet[at]uol.com-dot-br>
 3D modules by Christophe Boschat <nox454[at]hotmail-dot-fr>
