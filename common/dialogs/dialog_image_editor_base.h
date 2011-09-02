@@ -38,6 +38,9 @@ class DIALOG_IMAGE_EDITOR_BASE : public wxDialog
 		wxButton* m_buttonMirrorX;
 		wxButton* m_buttonMirrorY;
 		wxButton* m_buttonRotate;
+		wxButton* m_buttonGrey;
+		wxButton* m_buttonHalfSize;
+		wxButton* m_buttonUndoLast;
 		wxStaticText* m_staticTextScale;
 		wxTextCtrl* m_textCtrlScale;
 		wxStdDialogButtonSizer* m_sdbSizer1;
@@ -49,13 +52,16 @@ class DIALOG_IMAGE_EDITOR_BASE : public wxDialog
 		virtual void OnMirrorX_click( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMirrorY_click( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRotateClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGreyScaleConvert( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnHalfSize( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUndoLastChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOK_Button( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Image Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 340,256 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Image Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 340,299 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_IMAGE_EDITOR_BASE();
 	
 };

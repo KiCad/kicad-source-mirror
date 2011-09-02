@@ -236,7 +236,7 @@ void BITMAP_BASE::Mirror( bool aVertically )
     if( m_image )
     {
         *m_image  = m_image->Mirror( not aVertically );
-        *m_bitmap = wxBitmap( *m_image );
+        RebuildBitmap();
     }
 }
 
@@ -246,7 +246,7 @@ void BITMAP_BASE::Rotate( bool aRotateCCW )
     if( m_image )
     {
         *m_image  = m_image->Rotate90( aRotateCCW );
-        *m_bitmap = wxBitmap( *m_image );
+        RebuildBitmap();
     }
 }
 
