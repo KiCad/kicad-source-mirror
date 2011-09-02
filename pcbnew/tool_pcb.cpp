@@ -317,7 +317,7 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
                                KiBitmap( general_ratsnet_xpm ),
                                _( "Show board ratsnest" ), wxITEM_CHECK );
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST, wxEmptyString,
-                               KiBitmap( local_ratsnet_xpm ),
+                               KiBitmap( local_ratsnest_xpm ),
                                _( "Show module ratsnest when moving" ),
                                wxITEM_CHECK );
 
@@ -395,7 +395,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     m_VToolBar->AddTool( ID_PCB_HIGHLIGHT_BUTT, wxEmptyString, KiBitmap( net_highlight_xpm ),
                          _( "Highlight net" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_PCB_SHOW_1_RATSNEST_BUTT, wxEmptyString, KiBitmap( tool_ratsnet_xpm ),
+    m_VToolBar->AddTool( ID_PCB_SHOW_1_RATSNEST_BUTT, wxEmptyString, KiBitmap( tool_ratsnest_xpm ),
                          _( "Display local ratsnest" ), wxITEM_CHECK );
 
     m_VToolBar->AddSeparator();

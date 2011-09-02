@@ -217,7 +217,7 @@ set(BITMAP_SRCS
     lines90.xpm
     load_module_board.xpm
     load_module_lib.xpm
-    local_ratsnet.xpm
+    local_ratsnest.xpm
     locked.xpm
     mirepcb.xpm
     mirror_h.xpm
@@ -231,7 +231,7 @@ set(BITMAP_SRCS
     module_filtered_list.xpm
     module_full_list.xpm
     module_options.xpm
-    module_ratsnet.xpm
+#    module_ratsnest.xpm
     module.xpm
     morgan1.xpm
     morgan2.xpm
@@ -387,7 +387,7 @@ set(BITMAP_SRCS
     swap_layer.xpm
     text_sketch.xpm
     three_d.xpm
-    tool_ratsnet.xpm
+    tool_ratsnest.xpm
     tools.xpm
     track_locked.xpm
     track_sketch.xpm

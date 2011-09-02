@@ -1,8 +1,8 @@
 /* XPM */
 #ifndef XPMMAIN
-extern const char* module_ratsnet_xpm[];
+extern const char* module_ratsnest_xpm[];
 #else
-const char * module_ratsnet_xpm[] = {
+const char * module_ratsnest_xpm[] = {
 "16 16 39 1",
 " 	c None",
 ".	c #FFFFFF",
