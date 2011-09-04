@@ -17,7 +17,6 @@ set( COMMON_ABOUT_DLG_SRCS
     dialogs/dialog_get_component_base.cpp
     dialogs/dialog_hotkeys_editor.cpp
     dialogs/dialog_hotkeys_editor_base.cpp
-    dialogs/dialog_load_error.cpp
     dialogs/dialog_page_settings_base.cpp
 )
 
@@ -58,6 +57,7 @@ set(COMMON_SRCS
     gr_basic.cpp
     hotkeys_basic.cpp
     hotkey_grid_table.cpp
+    html_messagebox.cpp
     msgpanel.cpp
     netlist_keywords.cpp
     newstroke_font.cpp

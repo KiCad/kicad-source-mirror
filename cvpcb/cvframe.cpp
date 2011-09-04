@@ -17,7 +17,7 @@
 #include "dialog_cvpcb_config.h"
 #include "class_DisplayFootprintsFrame.h"
 #include "cvpcb_id.h"
-#include "dialog_load_error.h"
+#include "html_messagebox.h"
 
 
 #include "build_version.h"
@@ -578,7 +578,7 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
     /* Display error messages, if any */
     if( !m_footprints.m_filesNotFound.IsEmpty() || !m_footprints.m_filesInvalid.IsEmpty() )
     {
-        DIALOG_LOAD_ERROR dialog( NULL );
+        HTML_MESSAGE_BOX dialog( this, _("Load Error") );
 
         if( !m_footprints.m_filesNotFound.IsEmpty() )
         {

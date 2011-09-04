@@ -70,7 +70,7 @@
 
 #include <math.h>
 
-#include "dialog_load_error.h"
+#include "html_messagebox.h"
 
 extern int    ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );
@@ -180,7 +180,7 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     // Display errors list
     if( m_Messages.size() > 0 )
     {
-        DIALOG_LOAD_ERROR dlg( this );
+        HTML_MESSAGE_BOX dlg( this, _("Files not found") );
         dlg.ListSet( m_Messages );
         dlg.ShowModal();
     }
