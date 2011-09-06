@@ -694,7 +694,7 @@ void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
     if( g_LibName_List.GetCount() == 0 )
         return;
 
-    WinEDAListBox dlg( this, _( "Select Active Library:" ), g_LibName_List, m_CurrentLib );
+    EDA_LIST_DIALOG dlg( this, _( "Select Active Library:" ), g_LibName_List, m_CurrentLib );
 
     if( dlg.ShowModal() != wxID_OK )
         return;

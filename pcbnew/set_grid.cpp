@@ -48,7 +48,7 @@ void PCB_BASE_FRAME::InstallGridFrame( const wxPoint& pos )
         return;
 
     m_UserGridSize = dlg.GetGridSize();
-    m_UserGridUnit = (UserUnitType) dlg.GetGridUnits();
+    m_UserGridUnit = (EDA_UNITS_T) dlg.GetGridUnits();
     GetScreen()->m_GridOrigin = dlg.GetGridOrigin();
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );

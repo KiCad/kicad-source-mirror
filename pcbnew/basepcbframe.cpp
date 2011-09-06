@@ -476,7 +476,7 @@ void PCB_BASE_FRAME::LoadSettings()
 
     long itmp;
     cfg->Read( m_FrameName + UserGridUnitsEntry, &itmp, ( long )INCHES );
-    m_UserGridUnit = (UserUnitType) itmp;
+    m_UserGridUnit = (EDA_UNITS_T) itmp;
     cfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
     cfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );
     cfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );

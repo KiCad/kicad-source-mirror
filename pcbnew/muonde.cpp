@@ -724,7 +724,7 @@ class WinEDA_SetParamShapeFrame : public wxDialog
 private:
     PCB_EDIT_FRAME*  m_Parent;
     wxRadioBox*      m_ShapeOptionCtrl;
-    WinEDA_SizeCtrl* m_SizeCtrl;
+    EDA_SIZE_CTRL*   m_SizeCtrl;
 
 public: WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent, const wxPoint& pos );
     ~WinEDA_SetParamShapeFrame() { };
@@ -740,11 +740,11 @@ private:
 
 
 BEGIN_EVENT_TABLE( WinEDA_SetParamShapeFrame, wxDialog )
-EVT_BUTTON( wxID_OK, WinEDA_SetParamShapeFrame::OnOkClick )
-EVT_BUTTON( wxID_CANCEL, WinEDA_SetParamShapeFrame::OnCancelClick )
-EVT_BUTTON( ID_READ_SHAPE_FILE,
-            WinEDA_SetParamShapeFrame::ReadDataShapeDescr )
+    EVT_BUTTON( wxID_OK, WinEDA_SetParamShapeFrame::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_SetParamShapeFrame::OnCancelClick )
+    EVT_BUTTON( ID_READ_SHAPE_FILE, WinEDA_SetParamShapeFrame::ReadDataShapeDescr )
 END_EVENT_TABLE()
+
 
 WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent,
                                                       const wxPoint&  framepos ) :
@@ -755,6 +755,7 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent,
 
     if( PolyEdges )
         free( PolyEdges );
+
     PolyEdges = NULL;
     PolyEdgesCount = 0;
 
@@ -787,9 +788,9 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent,
                                         wxRA_SPECIFY_COLS );
     LeftBoxSizer->Add( m_ShapeOptionCtrl, 0, wxGROW | wxALL, 5 );
 
-    m_SizeCtrl = new WinEDA_SizeCtrl( this, _( "Size" ), ShapeSize,
-                                      g_UserUnit, LeftBoxSizer,
-                                      PCB_INTERNAL_UNIT );
+    m_SizeCtrl = new EDA_SIZE_CTRL( this, _( "Size" ), ShapeSize,
+                                    g_UserUnit, LeftBoxSizer,
+                                    PCB_INTERNAL_UNIT );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );

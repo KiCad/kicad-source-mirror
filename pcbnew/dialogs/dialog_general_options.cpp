@@ -69,12 +69,13 @@ void Dialog_GeneralOptions::OnCancelClick( wxCommandEvent& event )
 
 void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 {
-    UserUnitType ii;
+    EDA_UNITS_T ii;
 
     DisplayOpt.DisplayPolarCood =
         ( m_PolarDisplay->GetSelection() == 0 ) ? false : true;
     ii = g_UserUnit;
     g_UserUnit = ( m_UnitsSelection->GetSelection() == 0 )  ? INCHES : MILLIMETRES;
+
     if( ii != g_UserUnit )
         m_Parent->ReCreateAuxiliaryToolbar();
 
@@ -84,11 +85,13 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     /* Updating the combobox to display the active layer. */
     g_MaxLinksShowed = m_MaxShowLinks->GetValue();
     Drc_On = m_DrcOn->GetValue();
+
     if( m_Board->IsElementVisible(RATSNEST_VISIBLE) != m_ShowGlobalRatsnest->GetValue() )
     {
         m_Parent->SetElementVisibility(RATSNEST_VISIBLE, m_ShowGlobalRatsnest->GetValue() );
         m_Parent->DrawPanel->Refresh( );
     }
+
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
     Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();

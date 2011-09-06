@@ -16,14 +16,14 @@ enum listbox {
 };
 
 
-BEGIN_EVENT_TABLE( WinEDAListBox, wxDialog )
-    EVT_BUTTON( wxID_OK, WinEDAListBox::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, WinEDAListBox::OnCancelClick )
-    EVT_LISTBOX( ID_LISTBOX_LIST, WinEDAListBox::ClickOnList )
-    EVT_LISTBOX_DCLICK( ID_LISTBOX_LIST, WinEDAListBox::D_ClickOnList )
-    EVT_CHAR( WinEDAListBox::OnKeyEvent )
-    EVT_CHAR_HOOK( WinEDAListBox::OnKeyEvent )
-    EVT_CLOSE( WinEDAListBox::OnClose )
+BEGIN_EVENT_TABLE( EDA_LIST_DIALOG, wxDialog )
+    EVT_BUTTON( wxID_OK, EDA_LIST_DIALOG::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, EDA_LIST_DIALOG::OnCancelClick )
+    EVT_LISTBOX( ID_LISTBOX_LIST, EDA_LIST_DIALOG::ClickOnList )
+    EVT_LISTBOX_DCLICK( ID_LISTBOX_LIST, EDA_LIST_DIALOG::D_ClickOnList )
+    EVT_CHAR( EDA_LIST_DIALOG::OnKeyEvent )
+    EVT_CHAR_HOOK( EDA_LIST_DIALOG::OnKeyEvent )
+    EVT_CLOSE( EDA_LIST_DIALOG::OnClose )
 END_EVENT_TABLE()
 
 
@@ -37,9 +37,9 @@ END_EVENT_TABLE()
  * @param aCallBackFunction callback function to display comments
  * @param aPos = position of the dialog.
  */
-WinEDAListBox::WinEDAListBox( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
-                              const wxArrayString& aItemList, const wxString& aRefText,
-                              void(* aCallBackFunction)(wxString& Text), wxPoint aPos ) :
+EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
+                                  const wxArrayString& aItemList, const wxString& aRefText,
+                                  void(* aCallBackFunction)(wxString& Text), wxPoint aPos ) :
     wxDialog( aParent, wxID_ANY, aTitle, aPos, wxDefaultSize,
               wxDEFAULT_DIALOG_STYLE | MAYBE_RESIZE_BORDER )
 {
@@ -61,8 +61,8 @@ WinEDAListBox::WinEDAListBox( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
     if( m_callBackFct )
     {
         m_messages = new wxTextCtrl( this, -1, wxEmptyString,
-                                   wxDefaultPosition, wxSize( -1, 60 ),
-                                   wxTE_READONLY | wxTE_MULTILINE );
+                                     wxDefaultPosition, wxSize( -1, 60 ),
+                                     wxTE_READONLY | wxTE_MULTILINE );
 
         GeneralBoxSizer->Add( m_messages, 0, wxGROW | wxALL, 5 );
     }
@@ -78,12 +78,12 @@ WinEDAListBox::WinEDAListBox( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
 }
 
 
-WinEDAListBox::~WinEDAListBox()
+EDA_LIST_DIALOG::~EDA_LIST_DIALOG()
 {
 }
 
 
-void WinEDAListBox::MoveMouseToOrigin()
+void EDA_LIST_DIALOG::MoveMouseToOrigin()
 {
     int    x, y, w, h;
     wxSize list_size = m_listBox->GetSize();
@@ -96,32 +96,32 @@ void WinEDAListBox::MoveMouseToOrigin()
 }
 
 
-wxString WinEDAListBox::GetTextSelection()
+wxString EDA_LIST_DIALOG::GetTextSelection()
 {
     wxString text = m_listBox->GetStringSelection();
     return text;
 }
 
 
-void WinEDAListBox::Append( const wxString& item )
+void EDA_LIST_DIALOG::Append( const wxString& item )
 {
     m_listBox->Append( item );
 }
 
 
-void WinEDAListBox::InsertItems( const wxArrayString& itemlist, int position )
+void EDA_LIST_DIALOG::InsertItems( const wxArrayString& itemlist, int position )
 {
     m_listBox->InsertItems( itemlist, position );
 }
 
 
-void WinEDAListBox::OnCancelClick( wxCommandEvent& event )
+void EDA_LIST_DIALOG::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( wxID_CANCEL );
 }
 
 
-void WinEDAListBox::ClickOnList( wxCommandEvent& event )
+void EDA_LIST_DIALOG::ClickOnList( wxCommandEvent& event )
 {
     wxString text;
 
@@ -135,19 +135,19 @@ void WinEDAListBox::ClickOnList( wxCommandEvent& event )
 }
 
 
-void WinEDAListBox::D_ClickOnList( wxCommandEvent& event )
+void EDA_LIST_DIALOG::D_ClickOnList( wxCommandEvent& event )
 {
     EndModal( wxID_OK );
 }
 
 
-void WinEDAListBox::OnOkClick( wxCommandEvent& event )
+void EDA_LIST_DIALOG::OnOkClick( wxCommandEvent& event )
 {
     EndModal( wxID_OK );
 }
 
 
-void WinEDAListBox::OnClose( wxCloseEvent& event )
+void EDA_LIST_DIALOG::OnClose( wxCloseEvent& event )
 {
     EndModal( wxID_CANCEL );
 }
@@ -161,7 +161,7 @@ static int SortItems( const wxString** ptr1, const wxString** ptr2 )
 }
 
 
-void WinEDAListBox:: SortList()
+void EDA_LIST_DIALOG:: SortList()
 {
     int ii, NbItems = m_listBox->GetCount();
     const wxString** BufList;
@@ -170,6 +170,7 @@ void WinEDAListBox:: SortList()
         return;
 
     BufList = (const wxString**) MyZMalloc( 100 * NbItems * sizeof(wxString*) );
+
     for( ii = 0; ii < NbItems; ii++ )
     {
         BufList[ii] = new wxString( m_listBox->GetString( ii ) );
@@ -179,6 +180,7 @@ void WinEDAListBox:: SortList()
            ( int( * ) ( const void*, const void* ) )SortItems );
 
     m_listBox->Clear();
+
     for( ii = 0; ii < NbItems; ii++ )
     {
         m_listBox->Append( *BufList[ii] );
@@ -189,7 +191,7 @@ void WinEDAListBox:: SortList()
 }
 
 
-void WinEDAListBox::OnKeyEvent( wxKeyEvent& event )
+void EDA_LIST_DIALOG::OnKeyEvent( wxKeyEvent& event )
 {
     event.Skip();
 }

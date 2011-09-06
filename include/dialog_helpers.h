@@ -1,20 +1,20 @@
-// file dialog_helpers.h
+/**
+ * @file dialog_helpers.h
+ * @brief Helper dialog and control classes.
+ * @note Due to use of wxFormBuilder to create dialogs many of them should be removed.
+ */
 
 #ifndef  _DIALOG_HELPERS_H_
 #define  _DIALOG_HELPERS_H_
 
-/* some small helper classes used in dialogs
- * Due to use of wxFormBuilder to create dialogs
- * Many of them should be removed
- */
 
 /**
- * class WinEDAListBox
+ * class EDA_LIST_DIALOG
  *
  * Used to display a list of elements for selection, and an help of info line
  * about the selected item.
  */
-class WinEDAListBox : public wxDialog
+class EDA_LIST_DIALOG : public wxDialog
 {
 private:
     wxListBox*           m_listBox;
@@ -24,18 +24,18 @@ private:
 public:
     /**
      * Constructor:
-     * @param aParent = apointeur to the parent window
-     * @param aTitle = the title shown on top.
-     * @param aItemList = a wxArrayStrin: the list of elements.
-     * @param aRefText = an item name if an item must be preselected.
+     * @param aParent Pointer to the parent window.
+     * @param aTitle The title shown on top.
+     * @param aItemList A wxArrayString of the list of elements.
+     * @param aRefText An item name if an item must be preselected.
      * @param aCallBackFunction callback function to display comments
-     * @param aPos = position of the dialog.
+     * @param aPos The position of the dialog.
      */
-    WinEDAListBox( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
-                   const wxArrayString& aItemList, const wxString& aRefText,
-                   void(* aCallBackFunction)(wxString& Text) = NULL,
-                   wxPoint aPos = wxDefaultPosition );
-    ~WinEDAListBox();
+    EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
+                     const wxArrayString& aItemList, const wxString& aRefText,
+                     void(* aCallBackFunction)(wxString& Text) = NULL,
+                     wxPoint aPos = wxDefaultPosition );
+    ~EDA_LIST_DIALOG();
 
     void     SortList();
     void     Append( const wxString& aItemStr );
@@ -55,50 +55,14 @@ private:
 };
 
 
-/************************************************/
-/* Class to enter a line, is some dialog frames */
-/************************************************/
-class WinEDA_EnterText
+/**
+ * Class EDA_GRAPHIC_TEXT_CTRL
+ * is a custom text edit control to edit/enter Kicad dimensions ( INCHES or MM )
+ */
+class EDA_GRAPHIC_TEXT_CTRL
 {
 public:
-    bool          m_Modify;
-
-private:
-    wxString      m_NewText;
-    wxTextCtrl*   m_FrameText;
-    wxStaticText* m_Title;
-
-public:
-    WinEDA_EnterText( wxWindow* parent, const wxString& Title,
-                      const wxString& TextToEdit, wxBoxSizer* BoxSizer,
-                      const wxSize& Size, bool Multiline = false );
-
-    ~WinEDA_EnterText()
-    {
-    }
-
-
-    wxString GetValue();
-    void     GetValue( char* buffer, int lenmax );
-    void     SetValue( const wxString& new_text );
-    void     Enable( bool enbl );
-
-    void SetFocus() { m_FrameText->SetFocus(); }
-    void SetInsertionPoint( int n ) { m_FrameText->SetInsertionPoint( n ); }
-    void SetSelection( int n, int m )
-    {
-        m_FrameText->SetSelection( n, m );
-    }
-};
-
-
-/************************************************************************/
-/* Class to edit/enter a graphic text and its dimension ( INCHES or MM )*/
-/************************************************************************/
-class WinEDA_GraphicTextCtrl
-{
-public:
-    UserUnitType  m_UserUnit;
+    EDA_UNITS_T   m_UserUnit;
     int           m_Internal_Unit;
 
     wxTextCtrl*   m_FrameText;
@@ -107,12 +71,12 @@ private:
     wxStaticText* m_Title;
 
 public:
-    WinEDA_GraphicTextCtrl( wxWindow* parent, const wxString& Title,
-                            const wxString& TextToEdit, int textsize,
-                            UserUnitType user_unit, wxBoxSizer* BoxSizer, int framelen = 200,
-                            int internal_unit = EESCHEMA_INTERNAL_UNIT );
+    EDA_GRAPHIC_TEXT_CTRL( wxWindow* parent, const wxString& Title,
+                           const wxString& TextToEdit, int textsize,
+                           EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer, int framelen = 200,
+                           int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
-    ~WinEDA_GraphicTextCtrl();
+    ~EDA_GRAPHIC_TEXT_CTRL();
 
     wxString        GetText();
     int             GetTextSize();
@@ -127,10 +91,10 @@ public:
      * Function FormatSize
      * formats a string containing the size in the desired units.
      */
-    static wxString FormatSize( int internalUnit, UserUnitType user_unit, int textSize );
+    static wxString FormatSize( int internalUnit, EDA_UNITS_T user_unit, int textSize );
 
     static int      ParseSize( const wxString& sizeText, int internalUnit,
-                               UserUnitType user_unit );
+                               EDA_UNITS_T user_unit );
 };
 
 
@@ -138,10 +102,10 @@ public:
 /* Class to edit/enter a coordinate (pair of values) ( INCHES or MM ) in  */
 /* dialog boxes,                                                          */
 /**************************************************************************/
-class WinEDA_PositionCtrl
+class EDA_POSITION_CTRL
 {
 public:
-    UserUnitType  m_UserUnit;
+    EDA_UNITS_T   m_UserUnit;
     int           m_Internal_Unit;
     wxPoint       m_Pos_To_Edit;
 
@@ -151,12 +115,12 @@ private:
     wxStaticText* m_TextX, * m_TextY;
 
 public:
-    WinEDA_PositionCtrl( wxWindow* parent, const wxString& title,
+    EDA_POSITION_CTRL( wxWindow* parent, const wxString& title,
                          const wxPoint& pos_to_edit,
-                         UserUnitType user_unit, wxBoxSizer* BoxSizer,
+                         EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer,
                          int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
-    ~WinEDA_PositionCtrl();
+    ~EDA_POSITION_CTRL();
 
     void    Enable( bool x_win_on, bool y_win_on );
     void    SetValue( int x_value, int y_value );
@@ -168,15 +132,15 @@ public:
  *  Class to edit/enter a size (pair of values for X and Y size)
  *  ( INCHES or MM ) in dialog boxes
  ***************************************************************/
-class WinEDA_SizeCtrl : public WinEDA_PositionCtrl
+class EDA_SIZE_CTRL : public EDA_POSITION_CTRL
 {
 public:
-    WinEDA_SizeCtrl( wxWindow* parent, const wxString& title,
-                     const wxSize& size_to_edit,
-                     UserUnitType user_unit, wxBoxSizer* BoxSizer,
-                     int internal_unit = EESCHEMA_INTERNAL_UNIT );
+    EDA_SIZE_CTRL( wxWindow* parent, const wxString& title,
+                   const wxSize& size_to_edit,
+                   EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer,
+                   int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
-    ~WinEDA_SizeCtrl() { }
+    ~EDA_SIZE_CTRL() { }
     wxSize GetValue();
 };
 
@@ -184,10 +148,10 @@ public:
 /****************************************************************/
 /* Class to edit/enter a value ( INCHES or MM ) in dialog boxes */
 /****************************************************************/
-class WinEDA_ValueCtrl
+class EDA_VALUE_CTRL
 {
 public:
-    UserUnitType  m_UserUnit;
+    EDA_UNITS_T   m_UserUnit;
     int           m_Value;
     wxTextCtrl*   m_ValueCtrl;
 private:
@@ -195,11 +159,11 @@ private:
     wxStaticText* m_Text;
 
 public:
-    WinEDA_ValueCtrl( wxWindow* parent, const wxString& title, int value,
-                      UserUnitType user_unit, wxBoxSizer* BoxSizer,
-                      int internal_unit = EESCHEMA_INTERNAL_UNIT );
+    EDA_VALUE_CTRL( wxWindow* parent, const wxString& title, int value,
+                    EDA_UNITS_T user_unit, wxBoxSizer* BoxSizer,
+                    int internal_unit = EESCHEMA_INTERNAL_UNIT );
 
-    ~WinEDA_ValueCtrl();
+    ~EDA_VALUE_CTRL();
 
     int  GetValue();
     void SetValue( int new_value );
@@ -212,4 +176,4 @@ public:
 };
 
 
-#endif
+#endif    // _DIALOG_HELPERS_H_

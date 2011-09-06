@@ -39,8 +39,8 @@ private:
     PCB_EDIT_FRAME*   m_Parent;
     wxDC*             m_DC;
     MIREPCB*          m_MirePcb;
-    WinEDA_ValueCtrl* m_MireWidthCtrl;
-    WinEDA_ValueCtrl* m_MireSizeCtrl;
+    EDA_VALUE_CTRL*   m_MireWidthCtrl;
+    EDA_VALUE_CTRL*   m_MireSizeCtrl;
     wxRadioBox*       m_MireShape;
 
 public:
@@ -99,16 +99,16 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR(
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     // Size:
-    m_MireSizeCtrl = new WinEDA_ValueCtrl( this, _( "Size" ),
-                                           m_MirePcb->m_Size,
-                                           g_UserUnit, LeftBoxSizer,
-                                           m_Parent->m_InternalUnits );
+    m_MireSizeCtrl = new EDA_VALUE_CTRL( this, _( "Size" ),
+                                         m_MirePcb->m_Size,
+                                         g_UserUnit, LeftBoxSizer,
+                                         m_Parent->m_InternalUnits );
 
     // Width:
-    m_MireWidthCtrl = new WinEDA_ValueCtrl( this, _( "Width" ),
-                                            m_MirePcb->m_Width,
-                                            g_UserUnit, LeftBoxSizer,
-                                            m_Parent->m_InternalUnits );
+    m_MireWidthCtrl = new EDA_VALUE_CTRL( this, _( "Width" ),
+                                          m_MirePcb->m_Width,
+                                          g_UserUnit, LeftBoxSizer,
+                                          m_Parent->m_InternalUnits );
 
     // Shape
     wxString shape_list[2] = { _( "shape +" ), _( "shape X" ) };

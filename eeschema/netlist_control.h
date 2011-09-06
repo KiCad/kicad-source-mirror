@@ -48,8 +48,8 @@ public:
     int               m_IdNetType;
     wxCheckBox*       m_IsCurrentFormat;
     wxCheckBox*       m_AddSubPrefix;
-    WinEDA_EnterText* m_CommandStringCtrl;
-    WinEDA_EnterText* m_TitleStringCtrl;
+    wxTextCtrl*       m_CommandStringCtrl;
+    wxTextCtrl*       m_TitleStringCtrl;
     wxButton*         m_ButtonCancel;
     wxBoxSizer*       m_LeftBoxSizer;
     wxBoxSizer*       m_RightBoxSizer;
