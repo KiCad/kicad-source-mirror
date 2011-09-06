@@ -14,8 +14,6 @@
 #include <wx/zstream.h>
 #include <wx/dir.h>
 
-#include "common.h"
-#include "bitmaps.h"
 #include "confirm.h"
 #include "gestfich.h"
 #include "macros.h"

@@ -10,7 +10,6 @@
 #include "wx/valgen.h"
 #include "wxEeschemaStruct.h"
 
-#include "common.h"
 #include "class_drawpanel.h"
 #include "general.h"
 #include "drawtxt.h"

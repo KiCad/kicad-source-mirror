@@ -520,20 +520,20 @@ wxString ReturnKicadDatasPath()
     if( PathFound )
     {
         data_path.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+
         if( data_path.Last() != '/' )
             data_path += UNIX_STRING_DIR_SEP;
     }
     else
+    {
         data_path.Empty();
+    }
 
     return data_path;
 }
 
 
-/*
- * Return the preferred editor name
- */
-wxString& WinEDA_App::GetEditorName()
+wxString& EDA_APP::GetEditorName()
 {
     wxString editorname = m_EditorName;
 

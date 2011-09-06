@@ -9,7 +9,6 @@
  */
 
 #include "fctsys.h"
-#include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"

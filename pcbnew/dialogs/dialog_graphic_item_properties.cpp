@@ -12,7 +12,6 @@
  */
 #include "fctsys.h"
 #include "macros.h"
-#include "common.h"
 #include "confirm.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"

@@ -7,11 +7,9 @@
 // License:     GPL
 /////////////////////////////////////////////////////////////////////////////
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "bitmaps.h"
 #include "appl_wxstruct.h"
 #include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"

@@ -1,7 +1,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "kicad_string.h"
 #include "eeschema_id.h"
 #include "appl_wxstruct.h"

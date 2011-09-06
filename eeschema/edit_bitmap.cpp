@@ -31,7 +31,6 @@
 #include "macros.h"
 #include "class_drawpanel.h"
 #include "trigo.h"
-#include "common.h"
 #include "richio.h"
 #include "plot_common.h"
 

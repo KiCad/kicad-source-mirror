@@ -3,7 +3,6 @@
 /***************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "eeschema_id.h"
 #include "hotkeys.h"
 #include "wxEeschemaStruct.h"

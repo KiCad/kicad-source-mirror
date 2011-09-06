@@ -29,7 +29,6 @@
 #include "dialog_pcb_text_properties.h"
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"

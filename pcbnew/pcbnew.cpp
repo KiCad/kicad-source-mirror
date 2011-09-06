@@ -9,7 +9,6 @@
 #include <wx/file.h>
 #include <wx/snglinst.h>
 
-#include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "plot_common.h"
@@ -70,12 +69,12 @@ const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*
  */
 wxString g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
 
-IMPLEMENT_APP( WinEDA_App )
+IMPLEMENT_APP( EDA_APP )
 
 /* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void WinEDA_App::MacOpenFile( const wxString& fileName )
+void EDA_APP::MacOpenFile( const wxString& fileName )
 {
     wxFileName      filename = fileName;
     PCB_EDIT_FRAME* frame    = ( (PCB_EDIT_FRAME*) GetTopWindow() );
@@ -87,12 +86,12 @@ void WinEDA_App::MacOpenFile( const wxString& fileName )
 }
 
 
-bool WinEDA_App::OnInit()
+bool EDA_APP::OnInit()
 {
     wxFileName      fn;
     PCB_EDIT_FRAME* frame = NULL;
 
-    InitEDA_Appl( wxT( "PCBnew" ), APP_TYPE_PCBNEW );
+    InitEDA_Appl( wxT( "PCBnew" ), APP_PCBNEW_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
@@ -149,7 +148,9 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
          * So we load settings only
          */
         if( fn.FileExists() )
+        {
             frame->LoadOnePcbFile( fn.GetFullPath() );
+        }
         else
         {   // File does not exists: prepare an empty board
             wxSetWorkingDirectory( fn.GetPath() );

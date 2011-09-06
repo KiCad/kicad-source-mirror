@@ -3,7 +3,6 @@
  * Handles the dialog so set current texts and pins sizes in LibEdit
  */
 #include "fctsys.h"
-#include "common.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"

@@ -3,11 +3,9 @@
 /*******************************************************************************************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
-#include "bitmaps.h"
 #include "appl_wxstruct.h"
 #include "gestfich.h"
 #include "3d_struct.h"

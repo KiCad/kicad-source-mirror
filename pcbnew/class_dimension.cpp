@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "pcbnew.h"
 #include "trigo.h"
 #include "wxstruct.h"

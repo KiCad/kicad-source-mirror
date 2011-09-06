@@ -16,7 +16,7 @@
 
 /* Read from Common config the Pdf browser choice
  */
-void WinEDA_App::ReadPdfBrowserInfos()
+void EDA_APP::ReadPdfBrowserInfos()
 {
     wxASSERT( m_EDA_CommonConfig != NULL );
 
@@ -32,7 +32,7 @@ void WinEDA_App::ReadPdfBrowserInfos()
 
 /* Write into Common config the Pdf browser choice
  */
-void WinEDA_App::WritePdfBrowserInfos()
+void EDA_APP::WritePdfBrowserInfos()
 {
     wxASSERT( m_EDA_CommonConfig != NULL );
 

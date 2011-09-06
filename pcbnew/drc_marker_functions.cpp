@@ -33,9 +33,7 @@
 
 #include "fctsys.h"
 #include "common.h"
-//#include "class_drawpanel.h"
 #include "pcbnew.h"
-//#include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 
 #include "drc_stuff.h"

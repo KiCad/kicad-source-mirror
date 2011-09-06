@@ -3,7 +3,6 @@
 #include "appl_wxstruct.h"
 #include "gr_basic.h"
 #include "confirm.h"
-#include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 

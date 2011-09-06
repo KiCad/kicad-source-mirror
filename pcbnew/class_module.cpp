@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "wxstruct.h"
-#include "common.h"
 #include "plot_common.h"
 #include "class_drawpanel.h"
 #include "trigo.h"

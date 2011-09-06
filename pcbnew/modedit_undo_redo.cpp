@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "class_drawpanel.h"
 
-#include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"

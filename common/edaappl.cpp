@@ -237,7 +237,7 @@ static struct LANGUAGE_DESCR s_Language_List[] =
 };
 
 
-WinEDA_App::WinEDA_App()
+EDA_APP::EDA_APP()
 {
     m_Checker     = NULL;
     m_HtmlCtrl    = NULL;
@@ -251,7 +251,7 @@ WinEDA_App::WinEDA_App()
 }
 
 
-WinEDA_App::~WinEDA_App()
+EDA_APP::~EDA_APP()
 {
     SaveSettings();
 
@@ -271,7 +271,7 @@ WinEDA_App::~WinEDA_App()
 }
 
 
-void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
+void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
 {
     wxString EnvLang;
 
@@ -349,7 +349,7 @@ void WinEDA_App::InitEDA_Appl( const wxString& aName, id_app_type aId )
 }
 
 
-void WinEDA_App::InitOnLineHelp()
+void EDA_APP::InitOnLineHelp()
 {
     wxString fullfilename = FindKicadHelpPath();
 
@@ -376,7 +376,7 @@ void WinEDA_App::InitOnLineHelp()
 }
 
 
-bool WinEDA_App::SetBinDir()
+bool EDA_APP::SetBinDir()
 {
 /* Apple MacOSx */
 #ifdef __APPLE__
@@ -460,7 +460,7 @@ bool WinEDA_App::SetBinDir()
 }
 
 
-void WinEDA_App::SetDefaultSearchPaths( void )
+void EDA_APP::SetDefaultSearchPaths( void )
 {
     size_t     i;
     wxString   path = m_BinDir;
@@ -554,7 +554,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
             /* Add schematic library file path to search path list.
              * we must add <kicad path>/library and <kicad path>/library/doc
              */
-            if( m_Id == APP_TYPE_EESCHEMA )
+            if( m_Id == APP_EESCHEMA_T )
             {
                 fn.AppendDir( wxT( "library" ) );
 
@@ -576,7 +576,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
             }
 
             /* Add PCB library file path to search path list. */
-            if( ( m_Id == APP_TYPE_PCBNEW ) || ( m_Id == APP_TYPE_CVPCB ) )
+            if( ( m_Id == APP_PCBNEW_T ) || ( m_Id == APP_CVPCB_T ) )
             {
                 fn.AppendDir( wxT( "modules" ) );
 
@@ -611,7 +611,7 @@ void WinEDA_App::SetDefaultSearchPaths( void )
 }
 
 
-void WinEDA_App::GetSettings( bool aReopenLastUsedDirectory )
+void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
 {
     wxASSERT( m_EDA_Config != NULL && m_EDA_CommonConfig != NULL );
 
@@ -669,7 +669,7 @@ void WinEDA_App::GetSettings( bool aReopenLastUsedDirectory )
 }
 
 
-void WinEDA_App::SaveSettings()
+void EDA_APP::SaveSettings()
 {
     wxASSERT( m_EDA_Config != NULL );
     m_EDA_Config->Write( wxT( "ShowPageLimits" ), g_ShowPageLimits );
@@ -681,7 +681,7 @@ void WinEDA_App::SaveSettings()
 }
 
 
-bool WinEDA_App::SetLanguage( bool first_time )
+bool EDA_APP::SetLanguage( bool first_time )
 {
     bool     retv = true;
 
@@ -757,7 +757,7 @@ bool WinEDA_App::SetLanguage( bool first_time )
 }
 
 
-void WinEDA_App::SetLanguageIdentifier( int menu_id )
+void EDA_APP::SetLanguageIdentifier( int menu_id )
 {
     wxLogDebug( wxT( "Select language ID %d from %d possible languages." ),
                 menu_id, LANGUAGE_DESCR_COUNT );
@@ -773,7 +773,7 @@ void WinEDA_App::SetLanguageIdentifier( int menu_id )
 }
 
 
-void WinEDA_App::SetLanguagePath( void )
+void EDA_APP::SetLanguagePath( void )
 {
     size_t i;
 
@@ -811,7 +811,7 @@ void WinEDA_App::SetLanguagePath( void )
 }
 
 
-void WinEDA_App::AddMenuLanguageList( wxMenu* MasterMenu )
+void EDA_APP::AddMenuLanguageList( wxMenu* MasterMenu )
 {
     wxMenu*      menu = NULL;
     wxMenuItem*  item;
@@ -858,7 +858,7 @@ void WinEDA_App::AddMenuLanguageList( wxMenu* MasterMenu )
 }
 
 
-wxString WinEDA_App::FindFileInSearchPaths( const wxString&      filename,
+wxString EDA_APP::FindFileInSearchPaths( const wxString&      filename,
                                             const wxArrayString* subdirs )
 {
     size_t     i, j;
@@ -885,7 +885,7 @@ wxString WinEDA_App::FindFileInSearchPaths( const wxString&      filename,
 }
 
 
-wxString WinEDA_App::GetHelpFile( void )
+wxString EDA_APP::GetHelpFile( void )
 {
     wxString      fn;
     wxArrayString subdirs, altsubdirs;
@@ -963,7 +963,7 @@ wxString WinEDA_App::GetHelpFile( void )
 }
 
 
-wxString WinEDA_App::GetLibraryFile( const wxString& filename )
+wxString EDA_APP::GetLibraryFile( const wxString& filename )
 {
     wxArrayString subdirs;
 
@@ -978,7 +978,7 @@ wxString WinEDA_App::GetLibraryFile( const wxString& filename )
 }
 
 
-wxString WinEDA_App::ReturnLastVisitedLibraryPath( const wxString& aSubPathToSearch )
+wxString EDA_APP::ReturnLastVisitedLibraryPath( const wxString& aSubPathToSearch )
 {
     if( !m_LastVisitedLibPath.IsEmpty() )
         return m_LastVisitedLibPath;
@@ -1021,13 +1021,13 @@ wxString WinEDA_App::ReturnLastVisitedLibraryPath( const wxString& aSubPathToSea
 }
 
 
-void WinEDA_App::SaveLastVisitedLibraryPath( const wxString& aPath )
+void EDA_APP::SaveLastVisitedLibraryPath( const wxString& aPath )
 {
     m_LastVisitedLibPath = aPath;
 }
 
 
-wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath( const wxString& aFullFilename )
+wxString EDA_APP::ReturnFilenameWithRelativePathInLibPath( const wxString& aFullFilename )
 {
     /* If the library path is already in the library search paths
      * list, just add the library name to the list.  Otherwise, add
@@ -1065,7 +1065,7 @@ wxString WinEDA_App::ReturnFilenameWithRelativePathInLibPath( const wxString& aF
 }
 
 
-wxString WinEDA_App::FindLibraryPath( const wxString& aFileName )
+wxString EDA_APP::FindLibraryPath( const wxString& aFileName )
 {
     if( wxFileName::FileExists( aFileName ) )
         return aFileName;
@@ -1074,7 +1074,7 @@ wxString WinEDA_App::FindLibraryPath( const wxString& aFileName )
 }
 
 
-void WinEDA_App::RemoveLibraryPath( const wxString& aPaths )
+void EDA_APP::RemoveLibraryPath( const wxString& aPaths )
 {
     wxStringTokenizer Token( aPaths, wxT( ";\n\r" ) );
 
@@ -1090,7 +1090,7 @@ void WinEDA_App::RemoveLibraryPath( const wxString& aPaths )
 }
 
 
-void WinEDA_App::InsertLibraryPath( const wxString& aPaths, size_t aIndex )
+void EDA_APP::InsertLibraryPath( const wxString& aPaths, size_t aIndex )
 {
     wxStringTokenizer Token( aPaths, wxT( ";\n\r" ) );
 

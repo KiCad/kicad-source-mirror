@@ -6,7 +6,6 @@
 #include "wxstruct.h"
 #include "gr_basic.h"
 #include "bezier_curves.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "kicad_string.h"
 #include "colors_selection.h"

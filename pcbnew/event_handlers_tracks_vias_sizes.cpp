@@ -7,7 +7,6 @@
 
 #include "fctsys.h"
 
-//#include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew_id.h"

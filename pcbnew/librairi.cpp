@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "kicad_string.h"

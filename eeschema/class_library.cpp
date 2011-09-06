@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "macros.h"
 #include "kicad_string.h"
 #include "confirm.h"

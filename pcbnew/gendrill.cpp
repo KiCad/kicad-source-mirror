@@ -39,7 +39,6 @@
 
 #include <vector>
 
-#include "common.h"
 #include "plot_common.h"
 #include "trigo.h"
 #include "confirm.h"

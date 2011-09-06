@@ -1,5 +1,4 @@
 #include "fctsys.h"
-#include "common.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"

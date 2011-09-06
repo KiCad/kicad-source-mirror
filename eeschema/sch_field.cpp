@@ -11,7 +11,6 @@
  */
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "base_struct.h"
 #include "gr_basic.h"

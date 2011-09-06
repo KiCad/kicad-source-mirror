@@ -4,10 +4,8 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "eeschema_id.h"
 #include "class_drawpanel.h"
-#include "bitmaps.h"
 #include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 

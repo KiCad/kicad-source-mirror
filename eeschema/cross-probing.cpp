@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "macros.h"
 #include "eda_dde.h"
 #include "wxEeschemaStruct.h"

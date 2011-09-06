@@ -3,9 +3,7 @@
 /******************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "hotkeys.h"
-#include "bitmaps.h"
 #include "eeschema_id.h"
 
 #include "general.h"

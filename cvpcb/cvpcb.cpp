@@ -5,13 +5,11 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "wxstruct.h"
-#include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
 
 #include "cvpcb.h"
 #include "zones.h"
-#include "bitmaps.h"
 #include "cvpcb_mainframe.h"
 #include "colors_selection.h"
 #include "cvpcb_id.h"
@@ -39,7 +37,7 @@ const wxString titleLibLoadError( _( "Library Load Error" ) );
  * MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void WinEDA_App::MacOpenFile(const wxString &fileName)
+void EDA_APP::MacOpenFile(const wxString &fileName)
 {
     wxFileName filename = fileName;
     wxString oldPath;
@@ -62,20 +60,20 @@ void WinEDA_App::MacOpenFile(const wxString &fileName)
 }
 
 // Create a new application object
-IMPLEMENT_APP( WinEDA_App )
+IMPLEMENT_APP( EDA_APP )
 
 
 /************************************/
 /* Called to initialize the program */
 /************************************/
 
-bool WinEDA_App::OnInit()
+bool EDA_APP::OnInit()
 {
     wxFileName       filename;
     wxString         message;
     CVPCB_MAINFRAME* frame = NULL;
 
-    InitEDA_Appl( wxT( "CvPcb" ), APP_TYPE_CVPCB );
+    InitEDA_Appl( wxT( "CvPcb" ), APP_CVPCB_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {

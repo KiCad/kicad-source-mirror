@@ -6,7 +6,6 @@
  */
 
 #include "fctsys.h"
-#include "common.h"
 #include "gestfich.h"
 
 #include "kicad.h"

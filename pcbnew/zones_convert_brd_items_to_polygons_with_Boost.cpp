@@ -26,7 +26,6 @@
 #include "fctsys.h"
 #include "polygons_defs.h"
 
-#include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"

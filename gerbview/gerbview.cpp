@@ -3,7 +3,6 @@
 /************************************************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
@@ -12,7 +11,6 @@
 #include "gerbview.h"
 #include "gerbview_id.h"
 #include "pcbplot.h"
-#include "bitmaps.h"
 #include "zones.h"
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
@@ -42,12 +40,12 @@ Ki_PageDescr* g_GerberPageSizeList[] =
  };
 
 
-IMPLEMENT_APP( WinEDA_App )
+IMPLEMENT_APP( EDA_APP )
 
 /* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void WinEDA_App::MacOpenFile(const wxString &fileName)
+void EDA_APP::MacOpenFile(const wxString &fileName)
 {
     wxFileName           filename = fileName;
     GERBVIEW_FRAME * frame = ((GERBVIEW_FRAME*)GetTopWindow());
@@ -59,18 +57,19 @@ void WinEDA_App::MacOpenFile(const wxString &fileName)
 }
 
 
-bool WinEDA_App::OnInit()
+bool EDA_APP::OnInit()
 {
     wxFileName          fn;
     GERBVIEW_FRAME* frame = NULL;
 
-    InitEDA_Appl( wxT( "GerbView" ), APP_TYPE_GERBVIEW );
+    InitEDA_Appl( wxT( "GerbView" ), APP_GERBVIEW_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
         if( !IsOK( NULL, _( "GerbView is already running. Continue?" ) ) )
             return false;
     }
+
     ScreenPcb = new PCB_SCREEN();
     ScreenPcb->m_CurrentSheetDesc = &g_Sheet_GERBER;
 
@@ -85,9 +84,7 @@ bool WinEDA_App::OnInit()
     * display the real hotkeys in menus or tool tips */
     ReadHotkeyConfig( wxT("GerberFrame"), s_Gerbview_Hokeys_Descr );
 
-    frame = new  GERBVIEW_FRAME( NULL, wxT( "GerbView" ),
-                                     wxPoint( 0, 0 ),
-                                     wxSize( 600, 400 ) );
+    frame = new  GERBVIEW_FRAME( NULL, wxT( "GerbView" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 
     /* Gerbview mainframe title */
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
@@ -116,6 +113,7 @@ bool WinEDA_App::OnInit()
 
         // Load all files specified on the command line.
         int jj = 0;
+
         for( int ii = 1; ii < argc && ii <= LAYER_COUNT; ++ii )
         {
             fn = wxFileName( argv[ii] );

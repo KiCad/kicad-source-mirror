@@ -3,7 +3,6 @@
 /************************************************************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"

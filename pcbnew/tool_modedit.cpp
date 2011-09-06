@@ -4,12 +4,10 @@
 
 #include "fctsys.h"
 
-#include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "module_editor_frame.h"
 #include "dialog_helpers.h"
-#include "bitmaps.h"
 #include "pcbnew_id.h"
 #include "hotkeys.h"
 

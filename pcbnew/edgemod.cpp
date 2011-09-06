@@ -10,7 +10,6 @@
 
 #include "fctsys.h"
 #include "trigo.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 

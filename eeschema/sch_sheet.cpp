@@ -12,7 +12,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "macros.h"
 #include "class_drawpanel.h"
 #include "drawtxt.h"

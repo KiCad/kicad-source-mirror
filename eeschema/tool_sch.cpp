@@ -3,14 +3,10 @@
 /******************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
-//#include "confirm.h"
-#include "bitmaps.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"
-//#include "protos.h"
 #include "hotkeys.h"
 #include "eeschema_id.h"
 

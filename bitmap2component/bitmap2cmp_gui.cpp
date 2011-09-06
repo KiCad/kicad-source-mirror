@@ -24,7 +24,6 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "wxstruct.h"
-#include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
 
@@ -39,7 +38,6 @@
 
 #include "bitmap2component.xpm"
 
-#include "bitmaps.h"
 #include "colors_selection.h"
 #include "build_version.h"
 
@@ -89,6 +87,7 @@ private:
     void ExportFile( FILE* aOutfile, int aFormat );
 };
 
+
 BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
 {
     m_Config = new wxConfig();
@@ -116,6 +115,7 @@ BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
         Centre();
 }
 
+
 BM2CMP_FRAME::~BM2CMP_FRAME()
 {
     if( ( m_Config == NULL ) || IsIconized() )
@@ -133,7 +133,7 @@ BM2CMP_FRAME::~BM2CMP_FRAME()
 
     delete m_Config;
 
-    /* This needed for OSX: avoids furter OnDraw processing after this
+    /* This needed for OSX: avoids further OnDraw processing after this
      * destructor and before the native window is destroyed
      */
     this->Freeze( );
@@ -156,7 +156,7 @@ void BM2CMP_FRAME::OnPaint( wxPaintEvent& event )
     m_InitialPicturePanel->PrepareDC( pict_dc );
     m_GreyscalePicturePanel->PrepareDC( greyscale_dc );
     m_BNPicturePanel->PrepareDC( nb_dc );
-    
+
     // OSX crashes with empty bitmaps (on initial refreshes)
     if(m_Pict_Bitmap.IsOk() && m_Greyscale_Bitmap.IsOk() && m_BN_Bitmap.IsOk())
     {
@@ -166,12 +166,14 @@ void BM2CMP_FRAME::OnPaint( wxPaintEvent& event )
     }
 }
 
+
 /* Called to load a bitmap file
  */
 void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
 {
     wxFileName fn(m_BitmapFileName);
     wxString path = fn.GetPath();
+
     if( path.IsEmpty() || !wxDirExists(path) )
         path = wxGetCwd();
 
@@ -182,7 +184,9 @@ void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
 
     if( diag != wxID_OK )
         return;
+
     wxString fullFilename = FileDlg.GetPath();
+
     if( ! LoadFile( fullFilename ) )
         return;
 
@@ -191,6 +195,7 @@ void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
     SetStatusText( fullFilename );
     Refresh();
 }
+
 
 bool BM2CMP_FRAME::LoadFile( wxString& aFullFileName )
 {
@@ -232,6 +237,7 @@ bool BM2CMP_FRAME::LoadFile( wxString& aFullFileName )
     return true;
 }
 
+
 void BM2CMP_FRAME::Binarize( double aThreshold )
 {
     unsigned int  pixin;
@@ -244,10 +250,12 @@ void BM2CMP_FRAME::Binarize( double aThreshold )
         for( int x = 1; x < w; x++ )
         {
             pixin   = m_Greyscale_Image.GetGreen( x, y );
+
             if( pixin < threshold )
                 pixout = 0;
             else
                 pixout = 255;
+
             m_NB_Image.SetRGB( x, y, pixout, pixout, pixout );
         }
 
@@ -289,8 +297,10 @@ void BM2CMP_FRAME::OnExportEeschema( wxCommandEvent& event )
 {
     wxFileName fn(m_ConvertedFileName);
     wxString path = fn.GetPath();
+
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
+
     wxString     msg = _( "Schematic lib file (*.lib)|*.lib" );
     wxFileDialog FileDlg( this, _( "Create a lib file for Eeschema" ), path, wxEmptyString,
                           msg,
@@ -299,10 +309,12 @@ void BM2CMP_FRAME::OnExportEeschema( wxCommandEvent& event )
 
     if( diag != wxID_OK )
         return;
+
     m_ConvertedFileName = FileDlg.GetPath();
 
     FILE*    outfile;
     outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
+
     if( outfile == NULL )
     {
         wxString msg;
@@ -320,8 +332,10 @@ void BM2CMP_FRAME::OnExportPcbnew( wxCommandEvent& event )
 {
     wxFileName fn(m_ConvertedFileName);
     wxString path = fn.GetPath();
+
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
+
     wxString     msg = _( "Footprint file (*.mod)|*.mod" );
     wxFileDialog FileDlg( this, _( "Create a footprint file for PcbNew" ),
                           path, wxEmptyString,
@@ -331,10 +345,13 @@ void BM2CMP_FRAME::OnExportPcbnew( wxCommandEvent& event )
 
     if( diag != wxID_OK )
         return;
+
     m_ConvertedFileName = FileDlg.GetPath();
+
 
     FILE*    outfile;
     outfile = wxFopen( m_ConvertedFileName, wxT( "w" ) );
+
     if( outfile == NULL )
     {
         wxString msg;
@@ -353,6 +370,7 @@ void BM2CMP_FRAME::ExportFile( FILE* aOutfile, int aFormat )
     int h = m_NB_Image.GetHeight();
     int w = m_NB_Image.GetWidth();
     potrace_bitmap_t* potrace_bitmap = bm_new( w, h );
+
     if( !potrace_bitmap )
     {
         wxString msg;
@@ -377,18 +395,18 @@ void BM2CMP_FRAME::ExportFile( FILE* aOutfile, int aFormat )
 
 // BM_TO_CMP_APP
 
-void WinEDA_App::MacOpenFile(const wxString &fileName)
+void EDA_APP::MacOpenFile(const wxString &fileName)
 {
 }
 
-IMPLEMENT_APP( WinEDA_App )
+IMPLEMENT_APP( EDA_APP )
 
 ///-----------------------------------------------------------------------------
 // BM_TO_CMP_APP
 // main program
 //-----------------------------------------------------------------------------
 
-bool WinEDA_App::OnInit()
+bool EDA_APP::OnInit()
 {
     wxInitAllImageHandlers();
 

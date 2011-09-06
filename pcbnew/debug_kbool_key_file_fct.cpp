@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "fctsys.h"
-#include "common.h"
 #include "kicad_string.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"

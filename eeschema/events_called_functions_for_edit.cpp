@@ -5,7 +5,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "general.h"
 #include "kicad_device_context.h"
