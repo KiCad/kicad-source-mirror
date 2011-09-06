@@ -16,4 +16,9 @@ void    DisplayInfoMessage( wxWindow* parent, const wxString& msg,
 
 bool    IsOK( wxWindow* parent, const wxString& msg );
 
+void    DisplayHtmlInfoMessage( wxWindow* parent, const wxString& title,
+                                const wxString& msg,
+                                const wxSize& size=wxDefaultSize );
+
+
 #endif /* __INCLUDE__CONFIRM_H__ */

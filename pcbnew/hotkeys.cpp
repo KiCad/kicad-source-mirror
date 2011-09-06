@@ -82,7 +82,7 @@ static Ki_HotkeyInfo HkGetAndMoveFootprint( wxT( "Get and Move Footprint" ),
 static Ki_HotkeyInfo HkLock_Unlock_Footprint( wxT( "Lock/Unlock Footprint" ),
                                               HK_LOCK_UNLOCK_FOOTPRINT, 'L' );
 static Ki_HotkeyInfo HkDelete( wxT( "Delete Track or Footprint" ), HK_DELETE, WXK_DELETE );
-static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset local coord." ),
+static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
                                         HK_RESET_LOCAL_COORD, ' ' );
 
 /* Fit on Screen */
@@ -115,7 +115,7 @@ static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-' );
 #endif
 
-static Ki_HotkeyInfo HkHelp( wxT( "Help: this message" ), HK_HELP, '?' );
+static Ki_HotkeyInfo HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
 
 
 /* Undo */

@@ -339,8 +339,9 @@ void DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
     wxString        keyname;
     Ki_HotkeyInfo** List;
 
-    wxString        msg = _( "Current hotkey list:\n\n" );
+    wxString        msg = _( "<html><body>" );
 
+    msg += _( "<H3>Hotkeys List</H3> <table cellpadding=\"0\">");
     for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
     {
         List = aDescList->m_HK_InfoList;
@@ -348,13 +349,14 @@ void DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
         for( ; *List != NULL; List++ )
         {
             Ki_HotkeyInfo* hk_decr = *List;
-            msg    += _( "key " );
             keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
-            msg    += keyname + wxT( ":    " ) + hk_decr->m_InfoMsg + wxT( "\n" );
+            msg    += wxT( "<tr><td>" ) + hk_decr->m_InfoMsg + wxT("</td>");
+            msg    += wxT("<td><b>&nbsp;&nbsp;") + keyname + wxT( "</b></td></tr>" );
         }
     }
 
-    DisplayInfoMessage( aFrame, msg );
+    msg += wxT("</table></html></body>");
+    DisplayHtmlInfoMessage( aFrame, _("Hotkeys List"), msg, wxSize(340, 750));
 }
 
 

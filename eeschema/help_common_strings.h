@@ -57,3 +57,4 @@
 #define HELP_ADD_BODYCIRCLE _( "Add circles to the component body" )
 #define HELP_ADD_BODYARC _( "Add arcs to the component body" )
 #define HELP_ADD_BODYPOLYGON _( "Add lines and polygons to the component body" )
+#define HELP_PLACE_GRAPHICIMAGES _("Add a bitmap image")
