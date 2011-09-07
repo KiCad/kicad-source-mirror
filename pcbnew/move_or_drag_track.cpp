@@ -1004,7 +1004,16 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
          * tested by test_1_net_connexion() ) */
         int masque_layer = g_TabOneLayerMask[Track->GetLayer()];
         Track->start = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_Start, masque_layer );
+        if( Track->start )
+            Track->SetState( BEGIN_ONPAD, ON );
+        else
+            Track->SetState( BEGIN_ONPAD, OFF );
+
         Track->end   = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_End, masque_layer );
+        if( Track->end )
+            Track->SetState( END_ONPAD, ON );
+        else
+            Track->SetState( END_ONPAD, OFF );
     }
 
     EraseDragList();

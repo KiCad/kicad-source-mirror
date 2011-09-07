@@ -59,6 +59,7 @@ const wxString NetlistFileExtension( wxT( "net" ) );
 const wxString GerberFileExtension( wxT( "pho" ) );
 const wxString PcbFileExtension( wxT( "brd" ) );
 const wxString PdfFileExtension( wxT( "pdf" ) );
+const wxString MacrosFileExtension( wxT( "mcr" ) );
 
 /* Proper wxFileDialog wild card definitions. */
 const wxString ProjectFileWildcard( _( "Kicad project files (*.pro)|*.pro" ) );
@@ -67,6 +68,7 @@ const wxString NetlistFileWildcard( _( "Kicad netlist files (*.net)|*.net" ) );
 const wxString GerberFileWildcard( _( "Gerber files (*.pho)|*.pho" ) );
 const wxString PcbFileWildcard( _( "Kicad printed circuit board files (*.brd)|*.brd" ) );
 const wxString PdfFileWildcard( _( "Portable document format files (*.pdf)|*.pdf" ) );
+const wxString MacrosFileWildcard( _( "Kicad recorded macros (*.mcr)|*.mcr" ) );
 const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 
 

@@ -116,6 +116,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PCB_PAD_SETUP, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_SAVE, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_CONFIG_READ, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_PREFRENCES_MACROS_SAVE, PCB_EDIT_FRAME::Process_Config )
+    EVT_MENU( ID_PREFRENCES_MACROS_READ, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_PCB_DISPLAY_OPTIONS_SETUP, PCB_EDIT_FRAME::InstallDisplayOptionsDialog )
     EVT_MENU( ID_PCB_USER_GRID_SETUP, PCB_EDIT_FRAME::Process_Special_Functions )
 
@@ -274,6 +276,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_show_layer_manager_tools = true;
     m_HotkeysZoomAndGridList = g_Board_Editor_Hokeys_Descr;
 
+    m_RecordingMacros = -1;
+    for ( int i = 0; i < 10; i++ )
+        m_Macros[i].m_Record.clear();
+
     SetBoard( new BOARD( NULL, this ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
@@ -409,6 +415,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
+    m_RecordingMacros = -1;
+    for( int i = 0; i < 10; i++ )
+        m_Macros[i].m_Record.clear();
+
     delete m_drc;
 }
 

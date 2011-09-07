@@ -146,6 +146,7 @@ extern const wxString NetlistFileExtension;
 extern const wxString GerberFileExtension;
 extern const wxString PcbFileExtension;
 extern const wxString PdfFileExtension;
+extern const wxString MacrosFileExtension;
 
 extern const wxString ProjectFileWildcard;
 extern const wxString SchematicFileWildcard;
@@ -154,6 +155,7 @@ extern const wxString NetlistFileWildcard;
 extern const wxString GerberFileWildcard;
 extern const wxString PcbFileWildcard;
 extern const wxString PdfFileWildcard;
+extern const wxString MacrosFileWildcard;
 extern const wxString AllFilesWildcard;
 
 

@@ -558,6 +558,27 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // Hotkey submenu
     AddHotkeyConfigMenu( configmenu );
+
+
+    // Macros submenu
+    wxMenu* macrosMenu = new wxMenu;
+
+    item = new wxMenuItem( macrosMenu, ID_PREFRENCES_MACROS_SAVE,
+                           _( "Save macros" ),
+                           _( "Save macros to file" ) );
+    macrosMenu->Append( item );
+
+    item = new wxMenuItem( macrosMenu, ID_PREFRENCES_MACROS_READ,
+                           _( "Read macros" ),
+                           _( "Read macros from file" ) );
+    macrosMenu->Append( item );
+
+    // Append macros menu to config menu
+    AddMenuItem( configmenu, macrosMenu,
+                 -1, _( "Macros" ),
+                 _( "Macros save/read operations" ),
+                 add_dimension_xpm );
+
     configmenu->AppendSeparator();
 
     // Save Preferences

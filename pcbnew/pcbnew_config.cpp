@@ -2,6 +2,8 @@
 /** pcbnew_config.cpp : configuration  **/
 /****************************************/
 
+#include <wx-2.8/wx/xml/xml.h>
+
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
@@ -112,6 +114,15 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for eeschema.
         DisplayHotkeyList( this, g_Board_Editor_Hokeys_Descr );
+        break;
+
+   /* Macros IDs*/
+    case ID_PREFRENCES_MACROS_SAVE:
+        SaveMacros();
+        break;
+
+    case ID_PREFRENCES_MACROS_READ:
+        ReadMacros();
         break;
 
     default:
@@ -383,6 +394,8 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
                                                         WHITE ) );
 
     // Miscellaneous:
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RotationAngle" ), &g_RotationAngle,
+                                                   900, 450, 900 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "TimeOut" ), &g_TimeOut,
                                                    600, 0, 60000 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "MaxLnkS" ), &g_MaxLinksShowed,
@@ -394,4 +407,124 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SegmPcb45Only" ), &Segments_45_Only,
                                                        true ) );
     return m_configSettings;
+}
+
+
+/**
+ */
+void PCB_EDIT_FRAME::SaveMacros()
+{
+    wxFileName fn;
+    wxXmlDocument xml;
+    wxXmlNode *rootNode = new wxXmlNode::wxXmlNode( NULL, wxXML_ELEMENT_NODE, wxT( "macrosrootnode" ), wxEmptyString, NULL);
+    wxXmlNode *macrosNode, *hkNode;
+    wxXmlProperty *macrosProp, *hkProp, *xProp, *yProp;
+    wxString str, hkStr, xStr, yStr;
+
+    fn = GetScreen()->GetFileName();
+    fn.SetExt( MacrosFileExtension );
+
+    wxFileDialog dlg( this, _( "Save Macros File" ), fn.GetPath(), fn.GetFullName(),
+                      MacrosFileWildcard, wxFD_SAVE | wxFD_CHANGE_DIR );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    xml.SetRoot( rootNode );
+
+    for( int number = 9; number >= 0; number--)
+    {
+        str.Printf( wxT( "%d" ), number);
+        macrosProp = new wxXmlProperty::wxXmlProperty( wxT("number"), str);
+
+        macrosNode = new wxXmlNode::wxXmlNode(rootNode, wxXML_ELEMENT_NODE, wxT( "macros" ), wxEmptyString, macrosProp);
+
+        for( std::list<MACROS_RECORD>::reverse_iterator i = m_Macros[number].m_Record.rbegin(); i != m_Macros[number].m_Record.rend(); i++ )
+        {
+            hkStr.Printf( wxT( "%d" ), i->m_HotkeyCode);
+            xStr.Printf( wxT( "%d" ), i->m_Position.x);
+            yStr.Printf( wxT( "%d" ), i->m_Position.y);
+
+            yProp = new wxXmlProperty( wxT( "y" ), yStr);
+            xProp = new wxXmlProperty( wxT( "x" ), xStr, yProp);
+            hkProp = new wxXmlProperty( wxT( "hkcode" ), hkStr, xProp);
+
+            hkNode = new wxXmlNode(macrosNode, wxXML_ELEMENT_NODE, wxT( "hotkey" ), wxEmptyString,  hkProp);
+        }
+    }
+
+    xml.SetFileEncoding(wxT("UTF-8"));
+    xml.Save(dlg.GetFilename());
+}
+
+
+/**
+ */
+void PCB_EDIT_FRAME::ReadMacros()
+{
+    wxString str;
+    wxFileName fn;
+
+    fn = GetScreen()->GetFileName();
+    fn.SetExt( MacrosFileExtension );
+
+    wxFileDialog dlg( this, _( "Read Macros File" ), fn.GetPath(),
+                      fn.GetFullName(), MacrosFileWildcard,
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    if( !wxFileExists( dlg.GetPath() ) )
+    {
+        wxString msg;
+        msg.Printf( _( "File %s not found" ), GetChars( dlg.GetPath() ) );
+        DisplayError( this, msg );
+        return;
+    }
+
+    wxXmlDocument xml;
+
+    xml.SetFileEncoding(wxT("UTF-8"));
+    if( !xml.Load( dlg.GetFilename() ) )
+            return;
+
+    wxXmlNode *macrosNode = xml.GetRoot()->GetChildren();
+
+    while( macrosNode )
+    {
+        int number = -1;
+
+        if( macrosNode->GetName() == wxT( "macros" ) )
+        {
+            number = wxAtoi( macrosNode->GetPropVal( wxT( "number" ), wxT( "-1" ) ) );
+
+            if( number >= 0  && number < 10 )
+            {
+                m_Macros[number].m_Record.clear();
+
+                wxXmlNode *hotkeyNode = macrosNode->GetChildren();
+                while( hotkeyNode )
+                {
+                    if( hotkeyNode->GetName() == wxT( "hotkey" ) )
+                    {
+                        int x = wxAtoi( hotkeyNode->GetPropVal( wxT( "x" ), wxT( "0" ) ) );
+                        int y = wxAtoi( hotkeyNode->GetPropVal( wxT( "y" ), wxT( "0" ) ) );
+                        int hk = wxAtoi( hotkeyNode->GetPropVal( wxT( "hkcode" ), wxT( "0" ) ) );
+
+                        MACROS_RECORD macros_record;
+                        macros_record.m_HotkeyCode = hk;
+                        macros_record.m_Position.x = x;
+                        macros_record.m_Position.y = y;
+                        m_Macros[number].m_Record.push_back(macros_record);
+                    }
+
+                    hotkeyNode = hotkeyNode->GetNext();
+                }
+            }
+        }
+
+        macrosNode = macrosNode->GetNext();
+    }
+
 }

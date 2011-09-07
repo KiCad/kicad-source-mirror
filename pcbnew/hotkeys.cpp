@@ -65,6 +65,8 @@ static Ki_HotkeyInfo HkSwitchTrackPosture( wxT( "Switch Track Posture" ),
                                            HK_SWITCH_TRACK_POSTURE, '/' );
 static Ki_HotkeyInfo HkDragTrackKeepSlope( wxT( "Drag track keep slope" ),
                                            HK_DRAG_TRACK_KEEP_SLOPE, 'D' );
+static Ki_HotkeyInfo HkPlaceItem( wxT( "Place Item" ),
+                                           HK_PLACE_ITEM, 'P' );
 static Ki_HotkeyInfo HkAddMicroVia( wxT( "Add MicroVia" ), HK_ADD_MICROVIA, 'V'
                                     + GR_KB_CTRL );
 static Ki_HotkeyInfo HkEndTrack( wxT( "End Track" ), HK_END_TRACK, WXK_END );
@@ -136,6 +138,46 @@ static Ki_HotkeyInfo HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U'
 static Ki_HotkeyInfo HkTrackDisplayMode( wxT( "Track Display Mode" ),
                                          HK_SWITCH_TRACK_DISPLAY_MODE, 'K' );
 static Ki_HotkeyInfo HkAddModule( wxT( "Add Module" ), HK_ADD_MODULE, 'O' );
+/* Record and play macros */
+static Ki_HotkeyInfo HkRecordMacros0( wxT( "Record Macros 0" ), HK_RECORD_MACROS_0, GR_KB_CTRL+'0' );
+
+static Ki_HotkeyInfo HkCallMacros0( wxT( "Call Macross 0" ), HK_CALL_MACROS_0, '0' );
+
+static Ki_HotkeyInfo HkRecordMacros1( wxT( "Record Macros 1" ), HK_RECORD_MACROS_1, GR_KB_CTRL+'1' );
+
+static Ki_HotkeyInfo HkCallMacros1( wxT( "Call Macross 1" ), HK_CALL_MACROS_1, '1' );
+
+static Ki_HotkeyInfo HkRecordMacros2( wxT( "Record Macros 2" ), HK_RECORD_MACROS_2, GR_KB_CTRL+'2' );
+
+static Ki_HotkeyInfo HkCallMacros2( wxT( "Call Macross 2" ), HK_CALL_MACROS_2, '2' );
+
+static Ki_HotkeyInfo HkRecordMacros3( wxT( "Record Macros 3" ), HK_RECORD_MACROS_3, GR_KB_CTRL+'3' );
+
+static Ki_HotkeyInfo HkCallMacros3( wxT( "Call Macross 3" ), HK_CALL_MACROS_3, '3' );
+
+static Ki_HotkeyInfo HkRecordMacros4( wxT( "Record Macros 4" ), HK_RECORD_MACROS_4, GR_KB_CTRL+'4' );
+
+static Ki_HotkeyInfo HkCallMacros4( wxT( "Call Macross 4" ), HK_CALL_MACROS_4, '4' );
+
+static Ki_HotkeyInfo HkRecordMacros5( wxT( "Record Macros 5" ), HK_RECORD_MACROS_5, GR_KB_CTRL+'5' );
+
+static Ki_HotkeyInfo HkCallMacros5( wxT( "Call Macross 5" ), HK_CALL_MACROS_5, '5' );
+
+static Ki_HotkeyInfo HkRecordMacros6( wxT( "Record Macros 6" ), HK_RECORD_MACROS_6, GR_KB_CTRL+'6' );
+
+static Ki_HotkeyInfo HkCallMacros6( wxT( "Call Macross 6" ), HK_CALL_MACROS_6, '6' );
+
+static Ki_HotkeyInfo HkRecordMacros7( wxT( "Record Macros 7" ), HK_RECORD_MACROS_7, GR_KB_CTRL+'7' );
+
+static Ki_HotkeyInfo HkCallMacros7( wxT( "Call Macross 7" ), HK_CALL_MACROS_7, '7' );
+
+static Ki_HotkeyInfo HkRecordMacros8( wxT( "Record Macros 8" ), HK_RECORD_MACROS_8, GR_KB_CTRL+'8' );
+
+static Ki_HotkeyInfo HkCallMacros8( wxT( "Call Macross 8" ), HK_CALL_MACROS_8, '8' );
+
+static Ki_HotkeyInfo HkRecordMacros9( wxT( "Record Macros 9" ), HK_RECORD_MACROS_9, GR_KB_CTRL+'9' );
+
+static Ki_HotkeyInfo HkCallMacros9( wxT( "Call Macross 9" ), HK_CALL_MACROS_9, '9' );
 
 // List of common hotkey descriptors
 Ki_HotkeyInfo* common_Hotkey_List[] =
@@ -155,6 +197,7 @@ Ki_HotkeyInfo* board_edit_Hotkey_List[] =
     &HkAddNewTrack,            &HkAddVia,                    &HkAddMicroVia,
     &HkSwitchTrackPosture,
     &HkDragTrackKeepSlope,
+    &HkPlaceItem,
     &HkEndTrack,               &HkMoveItem,
     &HkFlipFootprint,          &HkRotateItem,                &HkDragFootprint,
     &HkGetAndMoveFootprint,    &HkLock_Unlock_Footprint,     &HkSavefile,
@@ -163,6 +206,16 @@ Ki_HotkeyInfo* board_edit_Hotkey_List[] =
     &HkSwitch2InnerLayer2,     &HkSwitch2InnerLayer3,        &HkSwitch2InnerLayer4,
     &HkSwitch2InnerLayer5,     &HkSwitch2InnerLayer6,        &HkSwitch2ComponentLayer,
     &HkSwitch2NextCopperLayer, &HkSwitch2PreviousCopperLayer,&HkAddModule,
+    &HkRecordMacros0,          &HkCallMacros0,
+    &HkRecordMacros1,          &HkCallMacros1,
+    &HkRecordMacros2,          &HkCallMacros2,
+    &HkRecordMacros3,          &HkCallMacros3,
+    &HkRecordMacros4,          &HkCallMacros4,
+    &HkRecordMacros5,          &HkCallMacros5,
+    &HkRecordMacros6,          &HkCallMacros6,
+    &HkRecordMacros7,          &HkCallMacros7,
+    &HkRecordMacros8,          &HkCallMacros8,
+    &HkRecordMacros9,          &HkCallMacros9,
     NULL
 };
 

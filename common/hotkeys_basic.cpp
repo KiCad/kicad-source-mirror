@@ -349,9 +349,12 @@ void DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
         for( ; *List != NULL; List++ )
         {
             Ki_HotkeyInfo* hk_decr = *List;
-            keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
-            msg    += wxT( "<tr><td>" ) + hk_decr->m_InfoMsg + wxT("</td>");
-            msg    += wxT("<td><b>&nbsp;&nbsp;") + keyname + wxT( "</b></td></tr>" );
+            if( !hk_decr->m_InfoMsg.Contains( wxT( "Macros" ) ) )
+            {
+                keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
+                msg    += wxT( "<tr><td>" ) + hk_decr->m_InfoMsg + wxT("</td>");
+                msg    += wxT("<td><b>&nbsp;&nbsp;") + keyname + wxT( "</b></td></tr>" );
+            }
         }
     }
 

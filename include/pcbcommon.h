@@ -35,6 +35,7 @@ extern wxString g_ViaType_Name[4];
 extern int g_CurrentVersionPCB;
 
 
+extern int    g_RotationAngle;
 extern int    g_TimeOut;            // Timer for automatic saving
 extern int    g_SaveTime;           // Time for next saving
 

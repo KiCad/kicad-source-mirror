@@ -10,6 +10,7 @@
 #include "base_struct.h"
 #include "param_config.h"
 #include "class_layer_box_selector.h"
+#include "class_macros_record.h"
 #include "richio.h"
 
 #ifndef PCB_INTERNAL_UNIT
@@ -52,6 +53,9 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
     void updateTraceWidthSelectBox();
     void updateViaSizeSelectBox();
+
+    int             m_RecordingMacros;
+    MACROS_RECORDED m_Macros[10];
 
 protected:
 
@@ -164,6 +168,22 @@ public:
     void OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent );
+
+    /**
+     * Function RecordMacros
+     * record sequence hotkeys and cursor position to macros.
+     */
+    void RecordMacros(wxDC* aDC, int aNumber);
+
+    /**
+     * Function CallMacros
+     * play hotkeys and cursor position from recorded macros.
+     */
+    void CallMacros(wxDC* aDC, const wxPoint& aPosition, int aNumber);
+
+    void SaveMacros();
+
+    void ReadMacros();
 
     /**
      * Function PrintPage , virtual
@@ -307,6 +327,8 @@ public:
      * @return true if an item was deleted
      */
     bool             OnHotkeyDeleteItem( wxDC* aDC );
+
+    bool             OnHotkeyPlaceItem( wxDC* aDC );
 
     bool             OnHotkeyEditItem( int aIdCommand );
 

@@ -41,6 +41,16 @@ void Dialog_GeneralOptions::init()
     m_UnitsSelection->SetSelection( g_UserUnit ? 1 : 0 );
     m_CursorShape->SetSelection( m_Parent->m_CursorShape ? 1 : 0 );
 
+
+    switch( g_RotationAngle )
+    {
+    case 450:
+        m_RotationAngle->SetSelection( 0 );
+        break;
+    default:
+        m_RotationAngle->SetSelection( 1 );
+    }
+
     wxString timevalue;
     timevalue << g_TimeOut / 60;
     m_SaveTime->SetValue( timevalue );
@@ -81,6 +91,9 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 
     m_Parent->m_CursorShape = m_CursorShape->GetSelection();
     g_TimeOut = 60 * m_SaveTime->GetValue();
+
+
+    g_RotationAngle = 10 * wxAtoi( m_RotationAngle->GetStringSelection() );
 
     /* Updating the combobox to display the active layer. */
     g_MaxLinksShowed = m_MaxShowLinks->GetValue();
