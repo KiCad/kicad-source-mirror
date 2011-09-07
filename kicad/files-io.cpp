@@ -9,6 +9,7 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include <wx/fs_zip.h>
+#include <wx/zipstrm.h>
 #include <wx/docview.h>
 #include <wx/wfstream.h>
 #include <wx/zstream.h>
@@ -107,6 +108,15 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 {
+    /* List of file extensions to save. */
+    static const wxChar* extentionList[] = {
+        wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.cmp" ), wxT( "*.brd" ),
+        wxT( "*.net" ), wxT( "*.pro" ), wxT( "*.pho" ), wxT( "*.py" ),
+        wxT( "*.pdf" ), wxT( "*.txt" ), wxT( "*.dcm" ),
+        NULL
+    };
+
+    wxString msg;
     size_t i;
     wxFileName fileName = m_ProjectFileName;
     wxString oldPath = wxGetCwd();
@@ -123,17 +133,6 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
     wxFileName zip = dlg.GetPath();
 
-    /* List of file extensions to save. */
-    static const wxChar* extList[] = {
-        wxT( "*.sch" ), wxT( "*.lib" ), wxT( "*.cmp" ), wxT( "*.brd" ),
-        wxT( "*.net" ), wxT( "*.pro" ), wxT( "*.pho" ), wxT( "*.py" ),
-        wxT( "*.pdf" ), wxT( "*.txt" ), wxT( "*.dcm" ),
-        NULL
-    };
-
-    wxString cmd = wxT( "-o " );    // run minizip with option -o (overwrite)
-    cmd += QuoteFullPath(zip);
-
     wxString currdirname = wxT( "." );
     currdirname += zip.GetPathSeparator();
     wxDir dir( currdirname );
@@ -141,37 +140,61 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
     if( !dir.IsOpened() )
         return;
 
-    wxString f;
+    // Prepare the zip file
+    wxString zipfilename = zip.GetFullPath();
 
-    for( i = 0; extList[i] != 0; i++ )
+    wxFFileOutputStream ostream(zipfilename);
+    wxZipOutputStream zipstream( ostream );
+
+    // Build list of filenames to put in zip archive
+    wxString currFilename;
+    int zipBytesCnt = 0;    // Size of the zip file
+    for( i = 0; extentionList[i] != 0; i++ )
     {
-        bool cont = dir.GetFirst( &f, extList[i] );
+        bool cont = dir.GetFirst( &currFilename, extentionList[i] );
 
         while( cont )
         {
-            wxFileName fn( f );
-            wxString filename = QuoteFullPath(fn);
-            cmd += wxT( " " ) + filename;
-            PrintMsg( _( "Archive file " ) + filename + wxT( "\n" ) );
-            cont = dir.GetNext( &f );
+            wxFileSystem fsfile;
+            PrintMsg( _( "Archive file " ) + currFilename );
+            // Read input file and put it in zip file:
+            wxFSFile * infile = fsfile.OpenFile(currFilename);
+            if( infile )
+            {
+                zipstream.PutNextEntry( currFilename, infile->GetModificationTime() );
+                infile->GetStream()->Read( zipstream );
+                zipstream.CloseEntry();
+                int zippedsize = zipstream.GetSize() - zipBytesCnt;
+                zipBytesCnt = zipstream.GetSize();
+                PrintMsg( wxT("  ") );
+                msg.Printf( _( "(%d bytes, compressed %d bytes)\n"),
+                            infile->GetStream()->GetSize(), zippedsize );
+                PrintMsg( msg );
+                delete infile;
+             }
+            else
+            {
+                PrintMsg( _(" >>Error\n") );
+            }
+
+            cont = dir.GetNext( &currFilename );
         }
     }
 
-#ifdef __WINDOWS__
-#define ZIPPER wxT( "minizip.exe" )
-#else
-#define ZIPPER wxT( "minizip" )
-#endif
-    if( ExecuteFile( this, ZIPPER, cmd ) >= 0 )
+    zipBytesCnt = ostream.GetSize();
+    if( zipstream.Close() )
     {
-        wxString msg;
-        wxString filename = QuoteFullPath(zip);
-        msg.Printf( _("\nZip archive <%s> created" ), GetChars( filename ) );
+        msg.Printf( _("\nZip archive <%s> created (%d bytes)" ),
+                    GetChars( zipfilename ), zipBytesCnt );
         PrintMsg( msg );
         PrintMsg( wxT( "\n** end **\n" ) );
     }
     else
-        PrintMsg( wxT( "Minizip command error, abort\n" ) );
+    {
+        msg.Printf( wxT( "Unable to create archive <%s>, abort\n" ),
+                  GetChars( zipfilename ) );
+        PrintMsg( msg );
+    }
 
     wxSetWorkingDirectory( oldPath );
 }
