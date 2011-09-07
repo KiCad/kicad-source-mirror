@@ -14,7 +14,7 @@
 #include "class_board_design_settings.h"
 
 
-static void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int masque_layer,
+static void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask,
                                 GRTraceMode trace_mode );
 static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
                             GRTraceMode trace_mode );
@@ -23,7 +23,7 @@ static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
 /* Creates the plot for silkscreen layers
  */
 void PCB_BASE_FRAME::Plot_Serigraphie( PLOTTER*    plotter,
-                                       int         masque_layer,
+                                       int         aLayerMask,
                                        GRTraceMode trace_mode )
 {
     bool          trace_val, trace_ref;
@@ -37,19 +37,19 @@ void PCB_BASE_FRAME::Plot_Serigraphie( PLOTTER*    plotter,
         switch( PtStruct->Type() )
         {
         case TYPE_DRAWSEGMENT:
-            PlotDrawSegment( plotter, (DRAWSEGMENT*) PtStruct, masque_layer, trace_mode );
+            PlotDrawSegment( plotter, (DRAWSEGMENT*) PtStruct, aLayerMask, trace_mode );
             break;
 
         case TYPE_TEXTE:
-            PlotTextePcb( plotter, (TEXTE_PCB*) PtStruct, masque_layer, trace_mode );
+            PlotTextePcb( plotter, (TEXTE_PCB*) PtStruct, aLayerMask, trace_mode );
             break;
 
         case TYPE_DIMENSION:
-            PlotDimension( plotter, (DIMENSION*) PtStruct, masque_layer, trace_mode );
+            PlotDimension( plotter, (DIMENSION*) PtStruct, aLayerMask, trace_mode );
             break;
 
-        case TYPE_MIRE:
-            PlotMirePcb( plotter, (MIREPCB*) PtStruct, masque_layer, trace_mode );
+        case PCB_TARGET_T:
+            PlotPcbTarget( plotter, (PCB_TARGET*) PtStruct, aLayerMask, trace_mode );
             break;
 
         case TYPE_MARKER_PCB:
@@ -62,13 +62,15 @@ void PCB_BASE_FRAME::Plot_Serigraphie( PLOTTER*    plotter,
     }
 
     /* Plot footprint outlines : */
-    Plot_Edges_Modules( plotter, m_Pcb, masque_layer, trace_mode );
+    Plot_Edges_Modules( plotter, m_Pcb, aLayerMask, trace_mode );
 
     /* Plot pads (creates pads outlines, for pads on silkscreen layers) */
-    int layersmask_plotpads = masque_layer;
+    int layersmask_plotpads = aLayerMask;
     // Calculate the mask layers of allowed layers for pads
+
     if( !g_PcbPlotOptions.m_PlotPadsOnSilkLayer )       // Do not plot pads on silk screen layers
         layersmask_plotpads &= ~(SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT );
+
     if( layersmask_plotpads )
     {
         for( MODULE* Module = m_Pcb->m_Modules; Module; Module = Module->Next() )
@@ -76,7 +78,7 @@ void PCB_BASE_FRAME::Plot_Serigraphie( PLOTTER*    plotter,
             for( D_PAD * pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
             {
                 /* See if the pad is on this layer */
-                if( (pad->m_Masque_Layer & layersmask_plotpads) == 0 )
+                if( (pad->m_layerMask & layersmask_plotpads) == 0 )
                     continue;
 
                 wxPoint shape_pos = pad->ReturnShapePos();
@@ -129,11 +131,11 @@ module\n %s's \"reference\" text." ),
             return;
         }
 
-        if( ( ( 1 << textLayer ) & masque_layer ) == 0 )
-            trace_ref = FALSE;
+        if( ( ( 1 << textLayer ) & aLayerMask ) == 0 )
+            trace_ref = false;
 
         if( text->m_NoShow && !g_PcbPlotOptions.m_PlotInvisibleTexts )
-            trace_ref = FALSE;
+            trace_ref = false;
 
         text = Module->m_Value;
         textLayer = text->GetLayer();
@@ -149,11 +151,11 @@ module\n %s's \"value\" text." ),
             return;
         }
 
-        if( ( (1 << textLayer) & masque_layer ) == 0 )
-            trace_val = FALSE;
+        if( ( (1 << textLayer) & aLayerMask ) == 0 )
+            trace_val = false;
 
         if( text->m_NoShow && !g_PcbPlotOptions.m_PlotInvisibleTexts )
-            trace_val = FALSE;
+            trace_val = false;
 
         /* Plot text fields, if allowed */
         if( trace_ref )
@@ -171,11 +173,12 @@ module\n %s's \"value\" text." ),
 
             if( !g_PcbPlotOptions.m_PlotTextOther )
                 continue;
-            if( (pt_texte->m_NoShow)
-               && !g_PcbPlotOptions.m_PlotInvisibleTexts )
+
+            if( (pt_texte->m_NoShow) && !g_PcbPlotOptions.m_PlotInvisibleTexts )
                 continue;
 
             textLayer = pt_texte->GetLayer();
+
             if( textLayer >= 32 )
             {
                 wxString errMsg;
@@ -188,7 +191,7 @@ for module\n %s's \"module text\" text of %s." ),
                 return;
             }
 
-            if( !( ( 1 << textLayer ) & masque_layer ) )
+            if( !( ( 1 << textLayer ) & aLayerMask ) )
                 continue;
 
             PlotTextModule( plotter, pt_texte, trace_mode );
@@ -199,8 +202,10 @@ for module\n %s's \"module text\" text of %s." ),
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* edge_zone = m_Pcb->GetArea( ii );
-        if( ( ( 1 << edge_zone->GetLayer() ) & masque_layer ) == 0 )
+
+        if( ( ( 1 << edge_zone->GetLayer() ) & aLayerMask ) == 0 )
             continue;
+
         PlotFilledAreas( plotter, edge_zone, trace_mode );
     }
 
@@ -208,16 +213,15 @@ for module\n %s's \"module text\" text of %s." ),
     // compatibility):
     for( SEGZONE* seg = m_Pcb->m_Zone; seg != NULL; seg = seg->Next() )
     {
-        if( ( ( 1 << seg->GetLayer() ) & masque_layer ) == 0 )
+        if( ( ( 1 << seg->GetLayer() ) & aLayerMask ) == 0 )
             continue;
-        plotter->thick_segment( seg->m_Start, seg->m_End, seg->m_Width,
-                                trace_mode );
+
+        plotter->thick_segment( seg->m_Start, seg->m_End, seg->m_Width, trace_mode );
     }
 }
 
 
-static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
-                            GRTraceMode trace_mode )
+static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte, GRTraceMode trace_mode )
 {
     wxSize  size;
     wxPoint pos;
@@ -230,6 +234,7 @@ static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
     orient = pt_texte->GetDrawRotation();
 
     thickness = pt_texte->m_Thickness;
+
     if( trace_mode == FILAIRE )
         thickness = -1;
 
@@ -250,12 +255,12 @@ static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
 }
 
 
-void PlotDimension( PLOTTER* plotter, DIMENSION* Dimension, int masque_layer,
+void PlotDimension( PLOTTER* plotter, DIMENSION* Dimension, int aLayerMask,
                    GRTraceMode trace_mode )
 {
     DRAWSEGMENT* DrawTmp;
 
-    if( (g_TabOneLayerMask[Dimension->GetLayer()] & masque_layer) == 0 )
+    if( (g_TabOneLayerMask[Dimension->GetLayer()] & aLayerMask) == 0 )
         return;
 
     DrawTmp = new DRAWSEGMENT( NULL );
@@ -263,61 +268,60 @@ void PlotDimension( PLOTTER* plotter, DIMENSION* Dimension, int masque_layer,
     DrawTmp->m_Width = (trace_mode==FILAIRE) ? -1 : Dimension->m_Width;
     DrawTmp->SetLayer( Dimension->GetLayer() );
 
-    PlotTextePcb( plotter, Dimension->m_Text, masque_layer, trace_mode );
+    PlotTextePcb( plotter, Dimension->m_Text, aLayerMask, trace_mode );
 
     DrawTmp->m_Start.x = Dimension->Barre_ox;
     DrawTmp->m_Start.y = Dimension->Barre_oy;
     DrawTmp->m_End.x = Dimension->Barre_fx;
     DrawTmp->m_End.y = Dimension->Barre_fy;
-    PlotDrawSegment( plotter, DrawTmp, masque_layer, trace_mode );
+    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
     DrawTmp->m_Start.x = Dimension->TraitG_ox;
     DrawTmp->m_Start.y = Dimension->TraitG_oy;
     DrawTmp->m_End.x = Dimension->TraitG_fx;
     DrawTmp->m_End.y = Dimension->TraitG_fy;
-    PlotDrawSegment( plotter, DrawTmp, masque_layer, trace_mode );
+    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
     DrawTmp->m_Start.x = Dimension->TraitD_ox;
     DrawTmp->m_Start.y = Dimension->TraitD_oy;
     DrawTmp->m_End.x = Dimension->TraitD_fx;
     DrawTmp->m_End.y = Dimension->TraitD_fy;
-    PlotDrawSegment( plotter, DrawTmp, masque_layer, trace_mode );
+    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
     DrawTmp->m_Start.x = Dimension->FlecheD1_ox;
     DrawTmp->m_Start.y = Dimension->FlecheD1_oy;
     DrawTmp->m_End.x = Dimension->FlecheD1_fx;
     DrawTmp->m_End.y = Dimension->FlecheD1_fy;
-    PlotDrawSegment( plotter, DrawTmp, masque_layer, trace_mode );
+    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
     DrawTmp->m_Start.x = Dimension->FlecheD2_ox;
     DrawTmp->m_Start.y = Dimension->FlecheD2_oy;
     DrawTmp->m_End.x = Dimension->FlecheD2_fx;
     DrawTmp->m_End.y = Dimension->FlecheD2_fy;
-    PlotDrawSegment( plotter, DrawTmp, masque_layer, trace_mode );
+    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
     DrawTmp->m_Start.x = Dimension->FlecheG1_ox;
     DrawTmp->m_Start.y = Dimension->FlecheG1_oy;
     DrawTmp->m_End.x = Dimension->FlecheG1_fx;
     DrawTmp->m_End.y = Dimension->FlecheG1_fy;
-    PlotDrawSegment( plotter, DrawTmp, masque_layer, trace_mode );
+    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
     DrawTmp->m_Start.x = Dimension->FlecheG2_ox;
     DrawTmp->m_Start.y = Dimension->FlecheG2_oy;
     DrawTmp->m_End.x = Dimension->FlecheG2_fx;
     DrawTmp->m_End.y = Dimension->FlecheG2_fy;
-    PlotDrawSegment( plotter, DrawTmp, masque_layer, trace_mode );
+    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
     delete DrawTmp;
 }
 
 
-void PlotMirePcb( PLOTTER* plotter, MIREPCB* Mire, int masque_layer,
-                  GRTraceMode trace_mode )
+void PlotPcbTarget( PLOTTER* plotter, PCB_TARGET* Mire, int aLayerMask, GRTraceMode trace_mode )
 {
     DRAWSEGMENT* DrawTmp;
     int          dx1, dx2, dy1, dy2, radius;
 
-    if( (g_TabOneLayerMask[Mire->GetLayer()] & masque_layer) == 0 )
+    if( (g_TabOneLayerMask[Mire->GetLayer()] & aLayerMask) == 0 )
         return;
 
     DrawTmp = new DRAWSEGMENT( NULL );
@@ -329,7 +333,7 @@ void PlotMirePcb( PLOTTER* plotter, MIREPCB* Mire, int masque_layer,
     DrawTmp->m_End.x   = DrawTmp->m_Start.x + ( Mire->m_Size / 4 );
     DrawTmp->m_End.y   = DrawTmp->m_Start.y;
     DrawTmp->m_Shape   = S_CIRCLE;
-    PlotDrawSegment( plotter, DrawTmp, masque_layer, trace_mode );
+    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
     DrawTmp->m_Shape = S_SEGMENT;
 
@@ -350,20 +354,20 @@ void PlotMirePcb( PLOTTER* plotter, MIREPCB* Mire, int masque_layer,
     DrawTmp->m_Start.y = Mire->m_Pos.y - dy1;
     DrawTmp->m_End.x = Mire->m_Pos.x + dx1;
     DrawTmp->m_End.y = Mire->m_Pos.y + dy1;
-    PlotDrawSegment( plotter, DrawTmp, masque_layer, trace_mode );
+    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
     DrawTmp->m_Start.x = Mire->m_Pos.x - dx2;
     DrawTmp->m_Start.y = Mire->m_Pos.y - dy2;
     DrawTmp->m_End.x = Mire->m_Pos.x + dx2;
     DrawTmp->m_End.y = Mire->m_Pos.y + dy2;
-    PlotDrawSegment( plotter, DrawTmp, masque_layer, trace_mode );
+    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
     delete DrawTmp;
 }
 
 
 /* Plot footprints graphic items (outlines) */
-void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int masque_layer,
+void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask,
                          GRTraceMode trace_mode )
 {
     for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
@@ -375,7 +379,7 @@ void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int masque_layer,
             if( edge->Type() != TYPE_EDGE_MODULE )
                 continue;
 
-            if( ( g_TabOneLayerMask[edge->GetLayer()] & masque_layer ) == 0 )
+            if( ( g_TabOneLayerMask[edge->GetLayer()] & aLayerMask ) == 0 )
                 continue;
 
             Plot_1_EdgeModule( plotter, edge, trace_mode );
@@ -431,6 +435,7 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
     case S_POLYGON:
     {
         std::vector<wxPoint> polyPoints = PtEdge->GetPolyPoints();
+
         if( polyPoints.size() <= 1 )  // Malformed polygon
             break;
 
@@ -462,7 +467,7 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
 
 
 /* Plot a PCB Text, i;e. a text found on a copper or technical layer */
-void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
+void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int aLayerMask,
                    GRTraceMode trace_mode )
 {
     int     orient, thickness;
@@ -471,7 +476,8 @@ void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
 
     if( pt_texte->m_Text.IsEmpty() )
         return;
-    if( ( g_TabOneLayerMask[pt_texte->GetLayer()] & masque_layer ) == 0 )
+
+    if( ( g_TabOneLayerMask[pt_texte->GetLayer()] & aLayerMask ) == 0 )
         return;
 
     size = pt_texte->m_Size;
@@ -496,6 +502,7 @@ void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
         offset.y = pt_texte->GetInterline();
 
         RotatePoint( &offset, orient );
+
         for( unsigned i = 0; i < list->Count(); i++ )
         {
             wxString txt = list->Item( i );
@@ -510,20 +517,22 @@ void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
         delete (list);
     }
     else
+    {
         plotter->text( pos, BLACK,
                        pt_texte->m_Text,
                        orient, size,
                        pt_texte->m_HJustify, pt_texte->m_VJustify,
                        thickness, pt_texte->m_Italic, allow_bold );
+    }
 }
 
 
 /* Plot areas (given by .m_FilledPolysList member) in a zone
  */
-void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
-                      GRTraceMode trace_mode )
+void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone, GRTraceMode trace_mode )
 {
     unsigned        imax = aZone->m_FilledPolysList.size();
+
     if( imax == 0 )  // Nothing to draw
         return;
 
@@ -541,6 +550,7 @@ void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
     {
         CPolyPt* corner = &aZone->m_FilledPolysList[ic];
         cornerList.push_back( wxPoint( corner->x, corner->y) );
+
         if( corner->end_contour )   // Plot the current filled area outline
         {
             // First, close the outline
@@ -554,14 +564,12 @@ void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
             {
                 // Plot the current filled area polygon
                 if( aZone->m_FillMode == 0 )    // We are using solid polygons
-                                                // (if != 0: using segments )
+                {                               // (if != 0: using segments )
                     plotter->PlotPoly( cornerList, FILLED_SHAPE );
+                }
                 else                            // We are using areas filled by
-                                                // segments: plot them )
-                {
-                    for( unsigned iseg = 0;
-                         iseg < aZone->m_FillSegmList.size();
-                         iseg++ )
+                {                               // segments: plot them )
+                    for( unsigned iseg = 0; iseg < aZone->m_FillSegmList.size(); iseg++ )
                     {
                         wxPoint start = aZone->m_FillSegmList[iseg].m_Start;
                         wxPoint end   = aZone->m_FillSegmList[iseg].m_End;
@@ -581,28 +589,30 @@ void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
                 if( aZone->m_ZoneMinThickness > 0 )
                 {
                     for( unsigned jj = 1; jj<cornerList.size(); jj++ )
-                        plotter->thick_segment(cornerList[jj -1], cornerList[jj],
-                            ( trace_mode == FILAIRE ) ? -1 : aZone->m_ZoneMinThickness,
-                            trace_mode );
+                        plotter->thick_segment( cornerList[jj -1], cornerList[jj],
+                                                ( trace_mode == FILAIRE ) ? -1 : aZone->m_ZoneMinThickness,
+                                                trace_mode );
                 }
+
                 plotter->set_current_line_width( -1 );
             }
+
             cornerList.clear();
         }
     }
 }
 
 
-/* Plot items type DRAWSEGMENT on layers allowed by masque_layer
+/* Plot items type DRAWSEGMENT on layers allowed by aLayerMask
  */
-void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* pt_segm, int masque_layer,
+void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* pt_segm, int aLayerMask,
                       GRTraceMode trace_mode )
 {
     wxPoint start, end;
     int     thickness;
     int     radius = 0, StAngle = 0, EndAngle = 0;
 
-    if( (g_TabOneLayerMask[pt_segm->GetLayer()] & masque_layer) == 0 )
+    if( (g_TabOneLayerMask[pt_segm->GetLayer()] & aLayerMask) == 0 )
         return;
 
     if( trace_mode == FILAIRE )
@@ -614,27 +624,21 @@ void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* pt_segm, int masque_layer,
     end   = pt_segm->m_End;
 
     plotter->set_current_line_width( thickness );
+
     switch( pt_segm->m_Shape )
     {
     case S_CIRCLE:
-        radius =
-            (int) hypot( (double) ( end.x - start.x ),
-                         (double) ( end.y - start.y ) );
+        radius = (int) hypot( (double) ( end.x - start.x ),
+                              (double) ( end.y - start.y ) );
         plotter->thick_circle( start, radius * 2, thickness, trace_mode );
         break;
 
     case S_ARC:
-        radius =
-            (int) hypot( (double) ( end.x - start.x ),
-                         (double) ( end.y - start.y ) );
+        radius = (int) hypot( (double) ( end.x - start.x ),
+                              (double) ( end.y - start.y ) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
         EndAngle = StAngle + pt_segm->m_Angle;
-        plotter->thick_arc( start,
-                            -EndAngle,
-                            -StAngle,
-                            radius,
-                            thickness,
-                            trace_mode );
+        plotter->thick_arc( start, -EndAngle, -StAngle, radius, thickness, trace_mode );
         break;
 
     case S_CURVE:
@@ -684,8 +688,7 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_
         Plot_Standard_Layer( plotter, layer_mask, true, trace_mode,
                             g_PcbPlotOptions.m_SkipNPTH_Pads );
 
-        // Adding drill marks, if required and if the plotter is able to plot
-        // them:
+        // Adding drill marks, if required and if the plotter is able to plot them:
         if( g_PcbPlotOptions.m_DrillShapeOpt != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
         {
             if( plotter->GetPlotterType() == PLOT_FORMAT_POST )
@@ -693,6 +696,7 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_
                                g_PcbPlotOptions.m_DrillShapeOpt ==
                                PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE );
         }
+
         break;
 
     case SOLDERMASK_N_BACK:
@@ -728,6 +732,7 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_
                                  g_PcbPlotOptions.m_PlotViaOnMaskLayer,
                                  trace_mode );
         }
+
         break;
     }
 }
@@ -752,10 +757,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
         switch( item->Type() )
         {
         case TYPE_DRAWSEGMENT:
-            PlotDrawSegment( aPlotter,
-                             (DRAWSEGMENT*) item,
-                             aLayerMask,
-                             aPlotMode );
+            PlotDrawSegment( aPlotter, (DRAWSEGMENT*) item, aLayerMask, aPlotMode );
             break;
 
         case TYPE_TEXTE:
@@ -766,8 +768,8 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
             PlotDimension( aPlotter, (DIMENSION*) item, aLayerMask, aPlotMode );
             break;
 
-        case TYPE_MIRE:
-            PlotMirePcb( aPlotter, (MIREPCB*) item, aLayerMask, aPlotMode );
+        case PCB_TARGET_T:
+            PlotPcbTarget( aPlotter, (PCB_TARGET*) item, aLayerMask, aPlotMode );
             break;
 
         case TYPE_MARKER_PCB:
@@ -788,9 +790,8 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
             {
             case TYPE_EDGE_MODULE:
                 if( aLayerMask & g_TabOneLayerMask[ item->GetLayer() ] )
-                    Plot_1_EdgeModule( aPlotter,
-                                       (EDGE_MODULE*) item,
-                                       aPlotMode );
+                    Plot_1_EdgeModule( aPlotter, (EDGE_MODULE*) item, aPlotMode );
+
                 break;
 
             default:
@@ -805,12 +806,14 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
         for( D_PAD* pad = module->m_Pads; pad; pad = pad->Next() )
         {
             wxPoint shape_pos;
-            if( (pad->m_Masque_Layer & aLayerMask) == 0 )
+
+            if( (pad->m_layerMask & aLayerMask) == 0 )
                 continue;
 
             shape_pos = pad->ReturnShapePos();
             pos = shape_pos;
             wxSize margin;
+
             switch( aLayerMask &
                    ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
                      SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT ) )
@@ -843,6 +846,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
                     (pad->m_Size == pad->m_Drill) &&
                     (pad->m_Attribut == PAD_HOLE_NOT_PLATED) )
                     break;
+
                 aPlotter->flash_pad_circle( pos, size.x, aPlotMode );
                 break;
 
@@ -851,6 +855,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
                     (pad->m_Size == pad->m_Drill) &&
                     (pad->m_Attribut == PAD_HOLE_NOT_PLATED) )
                     break;
+
                 aPlotter->flash_pad_oval( pos, size, pad->m_Orient, aPlotMode );
                 break;
 
@@ -884,10 +889,13 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
             // is SOLDERMASK_LAYER_BACK or SOLDERMASK_LAYER_FRONT,vias are drawn,
             // if they are on an external copper layer
             int via_mask_layer = Via->ReturnMaskLayer();
+
             if( via_mask_layer & LAYER_BACK )
                 via_mask_layer |= SOLDERMASK_LAYER_BACK;
+
             if( via_mask_layer & LAYER_FRONT )
                 via_mask_layer |= SOLDERMASK_LAYER_FRONT;
+
             if( ( via_mask_layer & aLayerMask ) == 0 )
                 continue;
 
@@ -897,6 +905,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
             // clearance for vias
             if( ( aLayerMask & ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT ) ) )
                 via_margin = GetBoard()->GetBoardDesignSettings()->m_SolderMaskMargin;
+
             pos    = Via->m_Start;
             size.x = size.y = Via->m_Width + 2 * via_margin;
 
@@ -945,8 +954,10 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
     for( int ii = 0; ii < m_Pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* edge_zone = m_Pcb->GetArea( ii );
+
         if( ( ( 1 << edge_zone->GetLayer() ) & aLayerMask ) == 0 )
             continue;
+
         PlotFilledAreas( aPlotter, edge_zone, aPlotMode );
     }
 }
@@ -982,7 +993,9 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*    aPlotter,
     {
         if( pts->Type() != TYPE_VIA )
             continue;
+
         pos = pts->m_Start;
+
         if( g_PcbPlotOptions.m_DrillShapeOpt == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE )
             diam.x = diam.y = SMALL_DRILL;
         else
@@ -991,26 +1004,20 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*    aPlotter,
         aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
     }
 
-    for( Module = m_Pcb->m_Modules;
-         Module != NULL;
-         Module = Module->Next() )
+    for( Module = m_Pcb->m_Modules; Module != NULL; Module = Module->Next() )
     {
-        for( PtPad = Module->m_Pads;
-             PtPad != NULL;
-             PtPad = PtPad->Next() )
+        for( PtPad = Module->m_Pads; PtPad != NULL; PtPad = PtPad->Next() )
         {
             if( PtPad->m_Drill.x == 0 )
                 continue;
 
             // Output hole shapes:
             pos = PtPad->m_Pos;
+
             if( PtPad->m_DrillShape == PAD_OVAL )
             {
                 diam = PtPad->m_Drill;
-                aPlotter->flash_pad_oval( pos,
-                                          diam,
-                                          PtPad->m_Orient,
-                                          aTraceMode );
+                aPlotter->flash_pad_oval( pos, diam, PtPad->m_Orient, aTraceMode );
             }
             else
             {

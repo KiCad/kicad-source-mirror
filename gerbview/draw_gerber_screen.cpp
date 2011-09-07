@@ -420,12 +420,12 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
  *  but they must exist because they appear in some classes, and here, no nothing.
  */
 
-TRACK* Marque_Une_Piste( BOARD* aPcb,
-                         TRACK* aStartSegm,
-                         int*   aSegmCount,
-                         int*   aTrackLen,
-                         int*   aLenDie,
-                         bool   aReorder )
+TRACK* MarkTrace( BOARD* aPcb,
+                  TRACK* aStartSegm,
+                  int*   aSegmCount,
+                  int*   aTrackLen,
+                  int*   aLenDie,
+                  bool   aReorder )
 {
     return NULL;
 }

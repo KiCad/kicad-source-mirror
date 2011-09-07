@@ -22,18 +22,18 @@ typedef std::vector<TRACK*> TRACK_PTRS; // buffer of item candidates when
 
 
 /* Local functions */
-static void Marque_Chaine_segments( BOARD*      Pcb,
-                                    wxPoint     ref_pos,
-                                    int         masklayer,
-                                    TRACK_PTRS* aList );
+static void ChainMarkedSegments( BOARD*      Pcb,
+                                 wxPoint     ref_pos,
+                                 int         masklayer,
+                                 TRACK_PTRS* aList );
 
 
-TRACK* Marque_Une_Piste( BOARD* aPcb,
-                         TRACK* aStartSegm,
-                         int*   aSegmCount,
-                         int*   aTrackLen,
-                         int*   aLengthDie,
-                         bool   aReorder )
+TRACK* MarkTrace( BOARD* aPcb,
+                  TRACK* aStartSegm,
+                  int*   aSegmCount,
+                  int*   aTrackLen,
+                  int*   aLengthDie,
+                  bool   aReorder )
 {
     int        NbSegmBusy;
 
@@ -55,7 +55,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
 
     /* Set flags of the initial track segment */
     aStartSegm->SetState( BUSY, ON );
-    int masque_layer = aStartSegm->ReturnMaskLayer();
+    int layerMask = aStartSegm->ReturnMaskLayer();
 
     trackList.push_back( aStartSegm );
 
@@ -69,50 +69,42 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
     if( aStartSegm->Type() == TYPE_VIA )
     {
         TRACK* Segm1, * Segm2 = NULL, * Segm3 = NULL;
-        Segm1 = Fast_Locate_Piste( aPcb->m_Track, NULL,
-                                   aStartSegm->m_Start, masque_layer );
+        Segm1 = GetTrace( aPcb->m_Track, NULL, aStartSegm->m_Start, layerMask );
+
         if( Segm1 )
         {
-            Segm2 = Fast_Locate_Piste( Segm1->Next(), NULL,
-                                       aStartSegm->m_Start, masque_layer );
+            Segm2 = GetTrace( Segm1->Next(), NULL, aStartSegm->m_Start, layerMask );
         }
+
         if( Segm2 )
         {
-            Segm3 = Fast_Locate_Piste( Segm2->Next(), NULL,
-                                       aStartSegm->m_Start, masque_layer );
+            Segm3 = GetTrace( Segm2->Next(), NULL, aStartSegm->m_Start, layerMask );
         }
-        if( Segm3 )     // More than 2 segments are connected to this via. the
-                        // "track" is only this via
+
+        if( Segm3 ) // More than 2 segments are connected to this via. the track" is only this via
         {
             if( aSegmCount )
                 *aSegmCount = 1;
+
             return aStartSegm;
         }
-        if( Segm1 )     // search for others segments connected to the initial
-                        // segment start point
+
+        if( Segm1 ) // search for others segments connected to the initial segment start point
         {
-            masque_layer = Segm1->ReturnMaskLayer();
-            Marque_Chaine_segments( aPcb, aStartSegm->m_Start, masque_layer,
-                                    &trackList );
+            layerMask = Segm1->ReturnMaskLayer();
+            ChainMarkedSegments( aPcb, aStartSegm->m_Start, layerMask, &trackList );
         }
-        if( Segm2 )     // search for others segments connected to the initial
-                        // segment end point
+
+        if( Segm2 ) // search for others segments connected to the initial segment end point
         {
-            masque_layer = Segm2->ReturnMaskLayer();
-            Marque_Chaine_segments( aPcb, aStartSegm->m_Start, masque_layer,
-                                    &trackList );
+            layerMask = Segm2->ReturnMaskLayer();
+            ChainMarkedSegments( aPcb, aStartSegm->m_Start, layerMask, &trackList );
         }
     }
     else    // mark the chain using both ends of the initial segment
     {
-        Marque_Chaine_segments( aPcb,
-                                aStartSegm->m_Start,
-                                masque_layer,
-                                &trackList );
-        Marque_Chaine_segments( aPcb,
-                                aStartSegm->m_End,
-                                masque_layer,
-                                &trackList );
+        ChainMarkedSegments( aPcb, aStartSegm->m_Start, layerMask, &trackList );
+        ChainMarkedSegments( aPcb, aStartSegm->m_End, layerMask, &trackList );
     }
 
     // Now examine selected vias and flag them if they are on the track
@@ -131,17 +123,13 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
         if( via == aStartSegm )
             continue;
 
-        via->SetState( BUSY, ON );  // Try to flag it. the flag will be cleared
-                                    // later if needed
+        via->SetState( BUSY, ON );  // Try to flag it. the flag will be cleared later if needed
 
-        masque_layer = via->ReturnMaskLayer();
+        layerMask = via->ReturnMaskLayer();
 
-        TRACK* track = Fast_Locate_Piste( aPcb->m_Track,
-                                          NULL,
-                                          via->m_Start,
-                                          masque_layer );
+        TRACK* track = GetTrace( aPcb->m_Track, NULL, via->m_Start, layerMask );
 
-        // Fast_Locate_Piste does not consider tracks flagged BUSY.
+        // GetTrace does not consider tracks flagged BUSY.
         // So if no connected track found, this via is on the current track
         // only: keep it
         if( track == NULL )
@@ -161,9 +149,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
          */
         int layer = track->GetLayer();
 
-        while( ( track = Fast_Locate_Piste( track->Next(), NULL,
-                                            via->m_Start,
-                                            masque_layer ) ) != NULL )
+        while( ( track = GetTrace( track->Next(), NULL, via->m_Start, layerMask ) ) != NULL )
         {
             if( layer != track->GetLayer() )
             {
@@ -183,9 +169,8 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
      */
     NbSegmBusy = 0;
     TRACK* firstTrack;
-    for( firstTrack = aPcb->m_Track;
-         firstTrack;
-         firstTrack = firstTrack->Next() )
+
+    for( firstTrack = aPcb->m_Track; firstTrack; firstTrack = firstTrack->Next() )
     {
         // Search for the first flagged BUSY segments
         if( firstTrack->GetState( BUSY ) )
@@ -200,6 +185,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
 
     double full_len = 0;
     double lenDie = 0;
+
     if( aReorder )
     {
         DLIST<TRACK>* list = (DLIST<TRACK>*)firstTrack->GetList();
@@ -210,16 +196,20 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
          * of the flagged list
          */
         TRACK* next;
+
         for( TRACK* track = firstTrack->Next(); track; track = next )
         {
             next = track->Next();
+
             if( track->GetState( BUSY ) )   // move it!
             {
                 NbSegmBusy++;
                 track->UnLink();
                 list->Insert( track, firstTrack->Next() );
+
                 if( aTrackLen )
                     full_len += track->GetLength();
+
                 if( aLengthDie ) // Add now length die.
                 {
                     // In fact only 2 pads (maximum) will be taken in account:
@@ -229,6 +219,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
                         D_PAD * pad = (D_PAD *) track->start;
                         lenDie += (double) pad->m_LengthDie;
                     }
+
                     if( track->GetState( END_ONPAD ) )
                     {
                         D_PAD * pad = (D_PAD *) track->end;
@@ -241,6 +232,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
     else if( aTrackLen )
     {
         NbSegmBusy = 0;
+
         for( TRACK* track = firstTrack; track; track = track->Next() )
         {
             if( track->GetState( BUSY ) )
@@ -248,6 +240,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
                 NbSegmBusy++;
                 track->SetState( BUSY, OFF );
                 full_len += track->GetLength();
+
                 // Add now length die.
                 // In fact only 2 pads (maximum) will be taken in account:
                 // that are on each end of the track, if any
@@ -256,6 +249,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
                     D_PAD * pad = (D_PAD *) track->start;
                     lenDie += (double) pad->m_LengthDie;
                 }
+
                 if( track->GetState( END_ONPAD ) )
                 {
                     D_PAD * pad = (D_PAD *) track->end;
@@ -267,8 +261,10 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
 
     if( aTrackLen )
         *aTrackLen = wxRound( full_len );
+
     if( aLengthDie )
         *aLengthDie = wxRound( lenDie );
+
     if( aSegmCount )
         *aSegmCount = NbSegmBusy;
 
@@ -277,7 +273,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
 
 
 /**
- * Function used by Marque_Une_Piste
+ * Function used by MarkTrace
  *  - Set the BUSY flag of connected segments, the first search point is
  *      ref_pos on layers allowed in masque_layer
  *  - Put segments fount in aList
@@ -289,10 +285,10 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
  *  starting point is on a via)
  * @param aList = the track list to fill with points of segments flagged
  */
-static void Marque_Chaine_segments( BOARD*      aPcb,
-                                    wxPoint     aRef_pos,
-                                    int         aLayerMask,
-                                    TRACK_PTRS* aList )
+static void ChainMarkedSegments( BOARD*      aPcb,
+                                 wxPoint     aRef_pos,
+                                 int         aLayerMask,
+                                 TRACK_PTRS* aList )
 {
     TRACK* pt_segm,             // The current segment being analyzed.
     * pt_via,                   // The via identified, eventually destroy
@@ -332,6 +328,7 @@ static void Marque_Chaine_segments( BOARD*      aPcb,
          * and we do not know if this via is on the track or finish the track
          */
         pt_via = Fast_Locate_Via( aPcb->m_Track, NULL, aRef_pos, aLayerMask );
+
         if( pt_via )
         {
             aLayerMask = pt_via->ReturnMaskLayer();
@@ -346,11 +343,10 @@ static void Marque_Chaine_segments( BOARD*      aPcb,
          */
         pt_segm = aPcb->m_Track; SegmentCandidate = NULL;
         NbSegm  = 0;
-        while( ( pt_segm = Fast_Locate_Piste( pt_segm, NULL,
-                                              aRef_pos, aLayerMask ) ) != NULL )
+
+        while( ( pt_segm = GetTrace( pt_segm, NULL, aRef_pos, aLayerMask ) ) != NULL )
         {
-            if( pt_segm->GetState( BUSY ) ) // already found and selected: skip
-                                            // it
+            if( pt_segm->GetState( BUSY ) ) // already found and selected: skip it
             {
                 pt_segm = pt_segm->Next();
                 continue;
@@ -363,21 +359,19 @@ static void Marque_Chaine_segments( BOARD*      aPcb,
             }
 
             NbSegm++;
-            if( NbSegm == 1 ) /* First time we found a connected item: pt_segm
-                               * is candidate */
+
+            if( NbSegm == 1 ) /* First time we found a connected item: pt_segm is candidate */
             {
                 SegmentCandidate = pt_segm;
                 pt_segm = pt_segm->Next();
             }
-            else /* More than 1 segment connected -> this location is an end of
-                  * the track */
+            else /* More than 1 segment connected -> this location is an end of the track */
             {
                 return;
             }
         }
 
-        if( SegmentCandidate )      // A candidate is found: flag it an push it
-                                    // in list
+        if( SegmentCandidate )      // A candidate is found: flag it an push it in list
         {
             /* Initialize parameters to search items connected to this
              * candidate:
@@ -401,7 +395,9 @@ static void Marque_Chaine_segments( BOARD*      aPcb,
             SegmentCandidate->SetState( BUSY, ON );
         }
         else
+        {
             return;
+        }
     }
 }
 
@@ -416,11 +412,10 @@ static void Marque_Chaine_segments( BOARD*      aPcb,
  *  (*EndTrack)->m_End coordinate is the end of the track
  *  Segments connected must be consecutive in list
  */
-int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
-                     TRACK** StartTrack, TRACK** EndTrack )
+int ReturnEndsTrack( TRACK* RefTrack, int NbSegm, TRACK** StartTrack, TRACK** EndTrack )
 {
     TRACK* Track, * via, * segm, * TrackListEnd;
-    int    NbEnds, masque_layer, ii, ok = 0;
+    int    NbEnds, layerMask, ii, ok = 0;
 
     if( NbSegm <= 1 )
     {
@@ -431,6 +426,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
     /* Calculation of the limit analysis. */
     *StartTrack  = *EndTrack = NULL;
     TrackListEnd = Track = RefTrack; ii = 0;
+
     for( ; ( Track != NULL ) && ( ii < NbSegm ); ii++, Track = Track->Next() )
     {
         TrackListEnd   = Track;
@@ -439,24 +435,25 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
 
     /* Calculate the extremes. */
     NbEnds = 0; Track = RefTrack; ii = 0;
+
     for( ; ( Track != NULL ) && ( ii < NbSegm ); ii++, Track = Track->Next() )
     {
         if( Track->Type() == TYPE_VIA )
             continue;
 
-        masque_layer = Track->ReturnMaskLayer();
-        via = Fast_Locate_Via( RefTrack, TrackListEnd,
-                               Track->m_Start, masque_layer );
+        layerMask = Track->ReturnMaskLayer();
+        via = Fast_Locate_Via( RefTrack, TrackListEnd, Track->m_Start, layerMask );
+
         if( via )
         {
-            masque_layer |= via->ReturnMaskLayer();
+            layerMask |= via->ReturnMaskLayer();
             via->SetState( BUSY, ON );
         }
 
         Track->SetState( BUSY, ON );
-        segm = Fast_Locate_Piste( RefTrack, TrackListEnd,
-                                  Track->m_Start, masque_layer );
+        segm = GetTrace( RefTrack, TrackListEnd, Track->m_Start, layerMask );
         Track->SetState( BUSY, OFF );
+
         if( via )
             via->SetState( BUSY, OFF );
 
@@ -480,6 +477,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
 
                 if( BeginPad )
                     Track->SetState( END_ONPAD, ON );
+
                 if( EndPad )
                     Track->SetState( BEGIN_ONPAD, ON );
 
@@ -490,21 +488,22 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
             }
         }
 
-        masque_layer = Track->ReturnMaskLayer();
-        via = Fast_Locate_Via( RefTrack, TrackListEnd,
-                               Track->m_End, masque_layer );
+        layerMask = Track->ReturnMaskLayer();
+        via = Fast_Locate_Via( RefTrack, TrackListEnd, Track->m_End, layerMask );
+
         if( via )
         {
-            masque_layer |= via->ReturnMaskLayer();
+            layerMask |= via->ReturnMaskLayer();
             via->SetState( BUSY, ON );
         }
 
         Track->SetState( BUSY, ON );
-        segm = Fast_Locate_Piste( RefTrack, TrackListEnd,
-                                  Track->m_End, masque_layer );
+        segm = GetTrace( RefTrack, TrackListEnd, Track->m_End, layerMask );
         Track->SetState( BUSY, OFF );
+
         if( via )
             via->SetState( BUSY, OFF );
+
         if( segm == NULL )
         {
             switch( NbEnds )
@@ -522,6 +521,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
 
                 if( BeginPad )
                     Track->SetState( END_ONPAD, ON );
+
                 if( EndPad )
                     Track->SetState( BEGIN_ONPAD, ON );
 
@@ -539,4 +539,3 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
 
     return ok;
 }
-

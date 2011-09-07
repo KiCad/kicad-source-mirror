@@ -2,13 +2,13 @@
 /** pcbnew_config.cpp : configuration  **/
 /****************************************/
 
-#include <wx-2.8/wx/xml/xml.h>
-
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "xnode.h"
+
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
@@ -405,7 +405,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "TwoSegT" ),
                                                     &g_TwoSegmentTrackBuild, true ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "SegmPcb45Only" ), &Segments_45_Only,
-                                                       true ) );
+                                                    true ) );
     return m_configSettings;
 }
 
@@ -416,8 +416,8 @@ void PCB_EDIT_FRAME::SaveMacros()
 {
     wxFileName fn;
     wxXmlDocument xml;
-    wxXmlNode *rootNode = new wxXmlNode::wxXmlNode( NULL, wxXML_ELEMENT_NODE, wxT( "macrosrootnode" ), wxEmptyString, NULL);
-    wxXmlNode *macrosNode, *hkNode;
+    XNODE *rootNode = new XNODE( wxXML_ELEMENT_NODE, wxT( "macrosrootnode" ), wxEmptyString );
+    XNODE *macrosNode, *hkNode;
     wxXmlProperty *macrosProp, *hkProp, *xProp, *yProp;
     wxString str, hkStr, xStr, yStr;
 
@@ -432,29 +432,33 @@ void PCB_EDIT_FRAME::SaveMacros()
 
     xml.SetRoot( rootNode );
 
-    for( int number = 9; number >= 0; number--)
+    for( int number = 9; number >= 0; number-- )
     {
-        str.Printf( wxT( "%d" ), number);
-        macrosProp = new wxXmlProperty::wxXmlProperty( wxT("number"), str);
+        str.Printf( wxT( "%d" ), number );
+        macrosProp = new wxXmlProperty( wxT( "number" ), str );
 
-        macrosNode = new wxXmlNode::wxXmlNode(rootNode, wxXML_ELEMENT_NODE, wxT( "macros" ), wxEmptyString, macrosProp);
+        macrosNode = new XNODE( rootNode, wxXML_ELEMENT_NODE, wxT( "macros" ), wxEmptyString,
+                                macrosProp );
 
-        for( std::list<MACROS_RECORD>::reverse_iterator i = m_Macros[number].m_Record.rbegin(); i != m_Macros[number].m_Record.rend(); i++ )
+        for( std::list<MACROS_RECORD>::reverse_iterator i = m_Macros[number].m_Record.rbegin();
+             i != m_Macros[number].m_Record.rend();
+             i++ )
         {
-            hkStr.Printf( wxT( "%d" ), i->m_HotkeyCode);
-            xStr.Printf( wxT( "%d" ), i->m_Position.x);
-            yStr.Printf( wxT( "%d" ), i->m_Position.y);
+            hkStr.Printf( wxT( "%d" ), i->m_HotkeyCode );
+            xStr.Printf( wxT( "%d" ), i->m_Position.x );
+            yStr.Printf( wxT( "%d" ), i->m_Position.y );
 
-            yProp = new wxXmlProperty( wxT( "y" ), yStr);
-            xProp = new wxXmlProperty( wxT( "x" ), xStr, yProp);
-            hkProp = new wxXmlProperty( wxT( "hkcode" ), hkStr, xProp);
+            yProp = new wxXmlProperty( wxT( "y" ), yStr );
+            xProp = new wxXmlProperty( wxT( "x" ), xStr, yProp );
+            hkProp = new wxXmlProperty( wxT( "hkcode" ), hkStr, xProp );
 
-            hkNode = new wxXmlNode(macrosNode, wxXML_ELEMENT_NODE, wxT( "hotkey" ), wxEmptyString,  hkProp);
+            hkNode = new XNODE( macrosNode, wxXML_ELEMENT_NODE, wxT( "hotkey" ),
+                                wxEmptyString, hkProp );
         }
     }
 
-    xml.SetFileEncoding(wxT("UTF-8"));
-    xml.Save(dlg.GetFilename());
+    xml.SetFileEncoding( wxT("UTF-8") );
+    xml.Save( dlg.GetFilename() );
 }
 
 
@@ -485,11 +489,12 @@ void PCB_EDIT_FRAME::ReadMacros()
 
     wxXmlDocument xml;
 
-    xml.SetFileEncoding(wxT("UTF-8"));
+    xml.SetFileEncoding( wxT( "UTF-8" ) );
+
     if( !xml.Load( dlg.GetFilename() ) )
             return;
 
-    wxXmlNode *macrosNode = xml.GetRoot()->GetChildren();
+    XNODE *macrosNode = (XNODE*) xml.GetRoot()->GetChildren();
 
     while( macrosNode )
     {
@@ -497,34 +502,34 @@ void PCB_EDIT_FRAME::ReadMacros()
 
         if( macrosNode->GetName() == wxT( "macros" ) )
         {
-            number = wxAtoi( macrosNode->GetPropVal( wxT( "number" ), wxT( "-1" ) ) );
+            number = wxAtoi( macrosNode->GetAttribute( wxT( "number" ), wxT( "-1" ) ) );
 
             if( number >= 0  && number < 10 )
             {
                 m_Macros[number].m_Record.clear();
 
-                wxXmlNode *hotkeyNode = macrosNode->GetChildren();
+                XNODE *hotkeyNode = (XNODE*) macrosNode->GetChildren();
+
                 while( hotkeyNode )
                 {
                     if( hotkeyNode->GetName() == wxT( "hotkey" ) )
                     {
-                        int x = wxAtoi( hotkeyNode->GetPropVal( wxT( "x" ), wxT( "0" ) ) );
-                        int y = wxAtoi( hotkeyNode->GetPropVal( wxT( "y" ), wxT( "0" ) ) );
-                        int hk = wxAtoi( hotkeyNode->GetPropVal( wxT( "hkcode" ), wxT( "0" ) ) );
+                        int x = wxAtoi( hotkeyNode->GetAttribute( wxT( "x" ), wxT( "0" ) ) );
+                        int y = wxAtoi( hotkeyNode->GetAttribute( wxT( "y" ), wxT( "0" ) ) );
+                        int hk = wxAtoi( hotkeyNode->GetAttribute( wxT( "hkcode" ), wxT( "0" ) ) );
 
                         MACROS_RECORD macros_record;
                         macros_record.m_HotkeyCode = hk;
                         macros_record.m_Position.x = x;
                         macros_record.m_Position.y = y;
-                        m_Macros[number].m_Record.push_back(macros_record);
+                        m_Macros[number].m_Record.push_back( macros_record );
                     }
 
-                    hotkeyNode = hotkeyNode->GetNext();
+                    hotkeyNode = (XNODE*) hotkeyNode->GetNext();
                 }
             }
         }
 
-        macrosNode = macrosNode->GetNext();
+        macrosNode = (XNODE*) macrosNode->GetNext();
     }
-
 }

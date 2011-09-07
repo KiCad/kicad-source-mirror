@@ -52,10 +52,12 @@ bool trapezoid2trapezoidDRC( wxPoint aTref[4], wxPoint aTcompare[4], int aDist )
      */
     if( TestPointInsidePolygon( aTref, 4, aTcompare[0] ) )
         return false;
+
     if( TestPointInsidePolygon( aTcompare, 4, aTref[0] ) )
         return false;
 
     int ii, jj, kk, ll;
+
     for( ii = 0, jj = 3; ii<4; jj = ii, ii++ )          // for all edges in aTref
     {
         for( kk = 0, ll = 3; kk < 4; ll = kk, kk++ )    // for all edges in aTcompare
@@ -91,6 +93,7 @@ bool trapezoid2segmentDRC( wxPoint aTref[4], wxPoint aSegStart, wxPoint aSegEnd,
         return false;
 
     int ii, jj;
+
     for( ii = 0, jj = 3; ii < 4; jj = ii, ii++ )  // for all edges in aTref
     {
         double d;
@@ -128,6 +131,7 @@ bool trapezoid2pointDRC( wxPoint aTref[4], wxPoint aPcompare, int aDist )
     // Test distance between aPcompare and polygon edges:
     int    ii, jj;
     double dist = (double) aDist;
+
     for( ii = 0, jj = 3; ii < 4; jj = ii, ii++ )  // for all edges in polygon
     {
         if( TestLineHit( aTref[ii].x, aTref[ii].y,
@@ -140,9 +144,7 @@ bool trapezoid2pointDRC( wxPoint aTref[4], wxPoint aPcompare, int aDist )
     return true;
 }
 
-/***********************************************************************/
 bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
-/***********************************************************************/
 {
     TRACK*    track;
     wxPoint   delta;           // lenght on X and Y axis of segments
@@ -205,15 +207,18 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             bool err = true;
 
             ( (SEGVIA*) aRefSeg )->ReturnLayerPair( &layer1, &layer2 );
-            if( layer1> layer2 )
+
+            if( layer1 > layer2 )
                 EXCHG( layer1, layer2 );
 
             // test:
             if( layer1 == LAYER_N_BACK && layer2 == LAYER_N_2 )
                 err = false;
+
             if( layer1 == (m_pcb->GetBoardDesignSettings()->GetCopperLayerCount() - 2 )
                 && layer2 == LAYER_N_FRONT )
                 err = false;
+
             if( err )
             {
                 m_currentMarker = fillMarker( aRefSeg, NULL,
@@ -260,7 +265,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
      */
     MODULE dummymodule( m_pcb );    // Creates a dummy parent
     D_PAD dummypad( &dummymodule );
-    dummypad.m_Masque_Layer = ALL_CU_LAYERS;    // Ensure the hole is on all layers
+    dummypad.m_layerMask = ALL_CU_LAYERS;    // Ensure the hole is on all layers
 
     // Compute the min distance to pads
     if( testPads )
@@ -273,10 +278,11 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
              * But if a drill hole exists	(a pad on a single layer can have a hole!)
              * we must test the hole
              */
-            if( (pad->m_Masque_Layer & layerMask ) == 0 )
+            if( (pad->m_layerMask & layerMask ) == 0 )
             {
-                /* We must test the pad hole. In order to use the function checkClearanceSegmToPad(),
-                 * a pseudo pad is used, with a shape and a size like the hole
+                /* We must test the pad hole. In order to use the function
+                 * checkClearanceSegmToPad(),a pseudo pad is used, with a shape and a
+                 * size like the hole
                  */
                 if( pad->m_Drill.x == 0 )
                     continue;
@@ -289,12 +295,13 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                 m_padToTestPos = dummypad.GetPosition() - origin;
 
                 if( !checkClearanceSegmToPad( &dummypad, aRefSeg->m_Width,
-                                             netclass->GetClearance() ) )
+                                              netclass->GetClearance() ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, pad,
                                                   DRCE_TRACK_NEAR_THROUGH_HOLE, m_currentMarker );
                     return false;
                 }
+
                 continue;
             }
 
@@ -378,6 +385,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                     return false;
                 }
             }
+
             continue;
         }
 
@@ -396,8 +404,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             if( checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
                 continue;
 
-            m_currentMarker = fillMarker( aRefSeg, track,
-                                          DRCE_TRACK_NEAR_VIA, m_currentMarker );
+            m_currentMarker = fillMarker( aRefSeg, track, DRCE_TRACK_NEAR_VIA, m_currentMarker );
             return false;
         }
 
@@ -423,6 +430,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                                                   DRCE_TRACK_ENDS1, m_currentMarker );
                     return false;
                 }
+
                 if( !checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
@@ -430,6 +438,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                     return false;
                 }
             }
+
             if( segEndPoint.x > (-w_dist) && segEndPoint.x < (m_segmLength + w_dist) )
             {
                 /* Fine test : we consider the rounded shape of the ends */
@@ -439,6 +448,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                                                   DRCE_TRACK_ENDS3, m_currentMarker );
                     return false;
                 }
+
                 if( !checkMarginToCircle( segEndPoint, w_dist, m_segmLength ) )
                 {
                     m_currentMarker = fillMarker( aRefSeg, track,
@@ -462,6 +472,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             // Test if segments are crossing
             if( segStartPoint.y > segEndPoint.y )
                 EXCHG( segStartPoint.y, segEndPoint.y );
+
             if( (segStartPoint.y < 0) && (segEndPoint.y > 0) )
             {
                 m_currentMarker = fillMarker( aRefSeg, track,
@@ -531,12 +542,14 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
 
                     RotatePoint( &relStartPos, angle );
                     RotatePoint( &relEndPos, angle );
+
                     if( !checkMarginToCircle( relStartPos, w_dist, delta.x ) )
                     {
                         m_currentMarker = fillMarker( aRefSeg, track,
                                                       DRCE_ENDS_PROBLEM4, m_currentMarker );
                         return false;
                     }
+
                     if( !checkMarginToCircle( relEndPos, w_dist, delta.x ) )
                     {
                         m_currentMarker = fillMarker( aRefSeg, track,
@@ -583,6 +596,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
      */
     bool swap_pads;
     swap_pads = false;
+
     if( (aRefPad->m_PadShape != PAD_CIRCLE) && (aPad->m_PadShape == PAD_CIRCLE) )
         swap_pads = true;
     else if( (aRefPad->m_PadShape != PAD_OVAL) && (aPad->m_PadShape == PAD_OVAL) )
@@ -602,6 +616,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
      * aPad is also a PAD_RECT or a PAD_TRAPEZOID
      */
     bool diag = true;
+
     switch( aRefPad->m_PadShape )
     {
     case PAD_CIRCLE:
@@ -623,6 +638,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         // pad_angle = pad orient relative to the aRefPad orient
         pad_angle = aRefPad->m_Orient + aPad->m_Orient;
         NORMALIZE_ANGLE_POS( pad_angle );
+
         if( aPad->m_PadShape == PAD_RECT )
         {
             wxSize size = aPad->m_Size;
@@ -657,9 +673,11 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 wxPoint polycompare[4];     // Shape of aPad
                 aRefPad->BuildPadPolygon( polyref, wxSize( 0, 0 ), aRefPad->m_Orient );
                 aPad->BuildPadPolygon( polycompare, wxSize( 0, 0 ), aPad->m_Orient );
+
                 // Move aPad shape to relativePadPos
                 for( int ii = 0; ii < 4; ii++ )
                     polycompare[ii] += relativePadPos;
+
                 // And now test polygons:
                 if( !trapezoid2trapezoidDRC( polyref, polycompare, dist_min ) )
                     diag = false;
@@ -694,6 +712,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
          */
         int segm_width;
         m_segmAngle = aRefPad->m_Orient;                // Segment orient.
+
         if( aRefPad->m_Size.y < aRefPad->m_Size.x )     // Build an horizontal equiv segment
         {
             segm_width   = aRefPad->m_Size.y;
@@ -776,6 +795,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
     seuil = segmHalfWidth + aMinDist;
     padHalfsize.x = aPad->m_Size.x >> 1;
     padHalfsize.y = aPad->m_Size.y >> 1;
+
     if( aPad->m_PadShape == PAD_TRAPEZOID ) // The size is bigger, due to m_DeltaSize extra size
     {
         padHalfsize.x += ABS(aPad->m_DeltaSize.y) / 2;   // Remember: m_DeltaSize.y is the m_Size.x change
@@ -830,9 +850,11 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         {
             EXCHG( padHalfsize.x, padHalfsize.y );
             orient += 900;
+
             if( orient >= 3600 )
                 orient -= 3600;
         }
+
         deltay = padHalfsize.y - padHalfsize.x;
 
         // here: padHalfsize.x = radius, delta = dist centre cercles a centre pad
@@ -842,6 +864,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         m_ycliplo = m_padToTestPos.y - segmHalfWidth - deltay;
         m_xcliphi = m_padToTestPos.x + seuil + padHalfsize.x;
         m_ycliphi = m_padToTestPos.y + segmHalfWidth + deltay;
+
         if( !checkLine( startPoint, endPoint ) )
         {
             return false;
@@ -856,6 +879,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
 
         // Calculate the actual position of the circle in the new X,Y axis:
         RotatePoint( &startPoint, m_segmAngle );
+
         if( !checkMarginToCircle( startPoint, padHalfsize.x + seuil, m_segmLength ) )
         {
             return false;
@@ -871,6 +895,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         {
             return false;
         }
+
         break;
 
     case PAD_RECT:          /* 2 rectangle + 4 1/4 cercles a tester */
@@ -898,6 +923,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         startPoint.y = m_padToTestPos.y - padHalfsize.y;
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
+
         if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
             return false;
 
@@ -906,6 +932,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         startPoint.y = m_padToTestPos.y - padHalfsize.y;
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
+
         if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
             return false;
 
@@ -914,6 +941,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         startPoint.y = m_padToTestPos.y + padHalfsize.y;
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
+
         if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
             return false;
 
@@ -922,6 +950,7 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
         startPoint.y = m_padToTestPos.y + padHalfsize.y;
         RotatePoint( &startPoint, m_padToTestPos, orient );
         RotatePoint( &startPoint, m_segmAngle );
+
         if( !checkMarginToCircle( startPoint, seuil, m_segmLength ) )
             return false;
 
@@ -1006,50 +1035,55 @@ bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
     {
         WHEN_OUTSIDE;
     }
+
     if( aSegStart.y < aSegEnd.y )
     {
         if( (aSegEnd.y < m_ycliplo) || (aSegStart.y > m_ycliphi) )
         {
             WHEN_OUTSIDE;
         }
+
         if( aSegStart.y < m_ycliplo )
         {
-            temp =
-                USCALE( (aSegEnd.x - aSegStart.x), (m_ycliplo - aSegStart.y),
-                       (aSegEnd.y - aSegStart.y) );
+            temp = USCALE( (aSegEnd.x - aSegStart.x), (m_ycliplo - aSegStart.y),
+                           (aSegEnd.y - aSegStart.y) );
+
             if( (aSegStart.x += temp) > m_xcliphi )
             {
                 WHEN_OUTSIDE;
             }
+
             aSegStart.y = m_ycliplo;
             WHEN_INSIDE;
         }
+
         if( aSegEnd.y > m_ycliphi )
         {
-            temp =
-                USCALE( (aSegEnd.x - aSegStart.x), (aSegEnd.y - m_ycliphi),
-                       (aSegEnd.y - aSegStart.y) );
+            temp = USCALE( (aSegEnd.x - aSegStart.x), (aSegEnd.y - m_ycliphi),
+                           (aSegEnd.y - aSegStart.y) );
+
             if( (aSegEnd.x -= temp) < m_xcliplo )
             {
                 WHEN_OUTSIDE;
             }
+
             aSegEnd.y = m_ycliphi;
             WHEN_INSIDE;
         }
+
         if( aSegStart.x < m_xcliplo )
         {
-            temp =
-                USCALE( (aSegEnd.y - aSegStart.y), (m_xcliplo - aSegStart.x),
-                       (aSegEnd.x - aSegStart.x) );
+            temp = USCALE( (aSegEnd.y - aSegStart.y), (m_xcliplo - aSegStart.x),
+                           (aSegEnd.x - aSegStart.x) );
             aSegStart.y += temp;
             aSegStart.x  = m_xcliplo;
             WHEN_INSIDE;
         }
+
         if( aSegEnd.x > m_xcliphi )
         {
-            temp =
-                USCALE( (aSegEnd.y - aSegStart.y), (aSegEnd.x - m_xcliphi),
-                       (aSegEnd.x - aSegStart.x) );
+            temp = USCALE( (aSegEnd.y - aSegStart.y), (aSegEnd.x - m_xcliphi),
+                           (aSegEnd.x - aSegStart.x) );
             aSegEnd.y -= temp;
             aSegEnd.x  = m_xcliphi;
             WHEN_INSIDE;
@@ -1061,44 +1095,48 @@ bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
         {
             WHEN_OUTSIDE;
         }
+
         if( aSegStart.y > m_ycliphi )
         {
-            temp =
-                USCALE( (aSegEnd.x - aSegStart.x), (aSegStart.y - m_ycliphi),
-                       (aSegStart.y - aSegEnd.y) );
+            temp = USCALE( (aSegEnd.x - aSegStart.x), (aSegStart.y - m_ycliphi),
+                           (aSegStart.y - aSegEnd.y) );
+
             if( (aSegStart.x += temp) > m_xcliphi )
             {
                 WHEN_OUTSIDE;
             }
+
             aSegStart.y = m_ycliphi;
             WHEN_INSIDE;
         }
+
         if( aSegEnd.y < m_ycliplo )
         {
-            temp =
-                USCALE( (aSegEnd.x - aSegStart.x), (m_ycliplo - aSegEnd.y),
-                       (aSegStart.y - aSegEnd.y) );
+            temp = USCALE( (aSegEnd.x - aSegStart.x), (m_ycliplo - aSegEnd.y),
+                           (aSegStart.y - aSegEnd.y) );
+
             if( (aSegEnd.x -= temp) < m_xcliplo )
             {
                 WHEN_OUTSIDE;
             }
+
             aSegEnd.y = m_ycliplo;
             WHEN_INSIDE;
         }
+
         if( aSegStart.x < m_xcliplo )
         {
-            temp =
-                USCALE( (aSegStart.y - aSegEnd.y), (m_xcliplo - aSegStart.x),
-                       (aSegEnd.x - aSegStart.x) );
+            temp = USCALE( (aSegStart.y - aSegEnd.y), (m_xcliplo - aSegStart.x),
+                           (aSegEnd.x - aSegStart.x) );
             aSegStart.y -= temp;
             aSegStart.x  = m_xcliplo;
             WHEN_INSIDE;
         }
+
         if( aSegEnd.x > m_xcliphi )
         {
-            temp =
-                USCALE( (aSegStart.y - aSegEnd.y), (aSegEnd.x - m_xcliphi),
-                       (aSegEnd.x - aSegStart.x) );
+            temp = USCALE( (aSegStart.y - aSegEnd.y), (aSegEnd.x - m_xcliphi),
+                           (aSegEnd.x - aSegStart.x) );
             aSegEnd.y += temp;
             aSegEnd.x  = m_xcliphi;
             WHEN_INSIDE;
@@ -1113,5 +1151,7 @@ bool DRC::checkLine( wxPoint aSegStart, wxPoint aSegEnd )
         return false;
     }
     else
+    {
         return true;
+    }
 }

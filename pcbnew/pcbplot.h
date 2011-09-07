@@ -38,8 +38,8 @@ void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* PtSegm, int masque_layer,
 void PlotDimension( PLOTTER* plotter, DIMENSION* Dimension, int masque_layer,
                     GRTraceMode trace_mode );
 
-void PlotMirePcb( PLOTTER* plotter, MIREPCB* PtMire, int masque_layer,
-                  GRTraceMode trace_mode );
+void PlotPcbTarget( PLOTTER* plotter, PCB_TARGET* PtMire, int masque_layer,
+                    GRTraceMode trace_mode );
 
 void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
                         GRTraceMode trace_mode );

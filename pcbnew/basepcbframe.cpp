@@ -69,7 +69,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
 
     m_DisplayModEdge      = FILLED; // How to display module drawings (line/ filled / sketch)
     m_DisplayModText      = FILLED; // How to display module texts (line/ filled / sketch)
-    m_DisplayPcbTrackFill = true;   /* FALSE = sketch , true = filled */
+    m_DisplayPcbTrackFill = true;   /* false = sketch , true = filled */
     m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
     m_ModuleEditFrame     = NULL;   // Frame for footprint edition
 

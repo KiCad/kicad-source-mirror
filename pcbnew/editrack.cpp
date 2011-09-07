@@ -26,8 +26,7 @@ static void EnsureEndTrackOnPad( D_PAD* Pad );
 static PICKED_ITEMS_LIST s_ItemsListPicker;
 
 
-/* Routine to cancel the route if a track is being drawn, or exit the
- * application EDITRACK.
+/* Routine to cancel the route if a track is being drawn, or exit the application EDITRACK.
  */
 static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
@@ -39,10 +38,12 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
     {
         /* Erase the current drawing */
         ShowNewTrackWhenMovingCursor( Panel, DC, wxDefaultPosition, false );
+
         if( pcb->IsHightLightNetON() )
             frame->High_Light( DC );
 
         pcb->PopHightLight();
+
         if( pcb->IsHightLightNetON() )
             pcb->DrawHighLight( Panel, DC, pcb->GetHightLightNetCode() );
 
@@ -80,8 +81,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
 {
     D_PAD*      pt_pad = NULL;
     TRACK*      TrackOnStartPoint = NULL;
-    int         masquelayer =
-        g_TabOneLayerMask[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
+    int         layerMask = g_TabOneLayerMask[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
     BOARD_ITEM* LockPoint;
     wxPoint     pos = GetScreen()->GetCrossHairPosition();
 
@@ -90,9 +90,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
         DrawPanel->SetMouseCapture( ShowNewTrackWhenMovingCursor, Abort_Create_Track );
 
         // Prepare the undo command info
-        s_ItemsListPicker.ClearListAndDeleteItems();        // Should not be
-                                                            // necessary,
-                                                            // but...
+        s_ItemsListPicker.ClearListAndDeleteItems();  // Should not be necessary, but...
 
         GetBoard()->PushHightLight();
 
@@ -106,7 +104,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
         GetBoard()->SetHightLightNet(0);
 
         // Search for a starting point of the new track, a track or pad
-        LockPoint = LocateLockPoint( GetBoard(), pos, masquelayer );
+        LockPoint = LocateLockPoint( GetBoard(), pos, layerMask );
 
         if( LockPoint ) // An item (pad or track) is found
         {
@@ -122,9 +120,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
             {
                 TrackOnStartPoint    = (TRACK*) LockPoint;
                 GetBoard()->SetHightLightNet( TrackOnStartPoint->GetNet() );
-                CreateLockPoint( GetBoard(), pos,
-                                 TrackOnStartPoint,
-                                 &s_ItemsListPicker );
+                CreateLockPoint( GetBoard(), pos, TrackOnStartPoint, &s_ItemsListPicker );
             }
         }
         else    // no starting point, but a filled zone area can exist. This is
@@ -158,6 +154,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
             if( TrackOnStartPoint && TrackOnStartPoint->Type() == TYPE_TRACK )
                 g_CurrentTrackSegment->m_Width = TrackOnStartPoint->m_Width;
         }
+
         g_CurrentTrackSegment->m_Start = pos;
         g_CurrentTrackSegment->m_End   = pos;
 
@@ -167,7 +164,9 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
             g_CurrentTrackSegment->SetState( BEGIN_ONPAD, ON );
         }
         else
+        {
             g_CurrentTrackSegment->start = TrackOnStartPoint;
+        }
 
         if( g_TwoSegmentTrackBuild )
         {
@@ -190,8 +189,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         if( Drc_On )
         {
-            if( BAD_DRC ==
-               m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
+            if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
             {
                 return g_CurrentTrackSegment;
             }
@@ -202,16 +200,13 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
         /* Tst for a D.R.C. error: */
         if( Drc_On )
         {
-            if( BAD_DRC ==
-               m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
+            if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
                 return NULL;
 
             // We must handle 2 segments
             if( g_TwoSegmentTrackBuild && g_CurrentTrackSegment->Back() )
             {
-                if( BAD_DRC ==
-                   m_drc->Drc( g_CurrentTrackSegment->Back(),
-                               GetBoard()->m_Track ) )
+                if( BAD_DRC == m_drc->Drc( g_CurrentTrackSegment->Back(), GetBoard()->m_Track ) )
                     return NULL;
             }
         }
@@ -221,6 +216,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
          * if a 2 segments track build.
          */
         bool CanCreateNewSegment = true;
+
         if( !g_TwoSegmentTrackBuild && g_CurrentTrackSegment->IsNull() )
             CanCreateNewSegment = false;
 
@@ -251,13 +247,14 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
 
             newTrack->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
 
-            oneBeforeLatest->end = Locate_Pad_Connecte(
-                GetBoard(), oneBeforeLatest, END );
+            oneBeforeLatest->end = Locate_Pad_Connecte( GetBoard(), oneBeforeLatest, END );
+
             if( oneBeforeLatest->end )
             {
                 oneBeforeLatest->SetState( END_ONPAD, ON );
                 newTrack->SetState( BEGIN_ONPAD, ON );
             }
+
             newTrack->start = oneBeforeLatest->end;
 
             D( g_CurrentTrackList.VerifyListIntegrity(); );
@@ -265,6 +262,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
             newTrack->m_Start = newTrack->m_End;
 
             newTrack->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
+
             if( !GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
             {
                 newTrack->m_Width = GetBoard()->GetCurrentTrackWidth();
@@ -310,6 +308,7 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
     }
 
     int segm_step_45 = wxRound( GetScreen()->GetGridSize().x / 2 );
+
     if( segm_step_45 < ( curTrack->m_Width * 2 ) )
         segm_step_45 = curTrack->m_Width * 2;
 
@@ -415,17 +414,15 @@ bool PCB_EDIT_FRAME::Add_45_degrees_Segment( wxDC* DC )
  */
 bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
 {
-    int masquelayer =
-        g_TabOneLayerMask[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
+    int layerMask = g_TabOneLayerMask[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
 
     if( aTrack == NULL )
         return false;
 
-    if( Drc_On && BAD_DRC==
-       m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
+    if( Drc_On && BAD_DRC == m_drc->Drc( g_CurrentTrackSegment, GetBoard()->m_Track ) )
         return false;
 
-    /* Sauvegarde des coord du point terminal de la piste */
+    /* Saving the coordinate of end point of the trace */
     wxPoint pos = g_CurrentTrackSegment->m_End;
 
     D( g_CurrentTrackList.VerifyListIntegrity(); );
@@ -454,7 +451,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
      * This helps to reduce the computing time */
 
     /* Attaching the end of the track. */
-    BOARD_ITEM* LockPoint = LocateLockPoint( GetBoard(), pos, masquelayer );
+    BOARD_ITEM* LockPoint = LocateLockPoint( GetBoard(), pos, layerMask );
 
     if( LockPoint ) /* End of trace is on a pad. */
     {
@@ -490,8 +487,8 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
         // Put entire new current segment list in BOARD, and prepare undo
         // command
         TRACK* track;
-        TRACK* insertBeforeMe = g_CurrentTrackSegment->GetBestInsertPoint(
-             GetBoard() );
+        TRACK* insertBeforeMe = g_CurrentTrackSegment->GetBestInsertPoint( GetBoard() );
+
         while( ( track = g_CurrentTrackList.PopFront() ) != NULL )
         {
             ITEM_PICKER picker( track, UR_NEW );
@@ -501,9 +498,10 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
 
         trace_ratsnest_pad( DC );
 
-        Trace_Une_Piste( DrawPanel, DC, firstTrack, newCount, GR_OR );
+        DrawTraces( DrawPanel, DC, firstTrack, newCount, GR_OR );
 
         int i = 0;
+
         for( track = firstTrack; track && i<newCount; ++i, track = track->Next() )
         {
             track->m_Flags = 0;
@@ -515,6 +513,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
         {
             EraseRedundantTrack( DC, firstTrack, newCount, &s_ItemsListPicker );
         }
+
         SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
         s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more
                                             // owner of picked items
@@ -524,9 +523,9 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
         GetBoard()->DisplayInfo( this );
     }
 
-    wxASSERT( g_FirstTrackSegment==NULL );
-    wxASSERT( g_CurrentTrackSegment==NULL );
-    wxASSERT( g_CurrentTrackList.GetCount()==0 );
+    wxASSERT( g_FirstTrackSegment == NULL );
+    wxASSERT( g_CurrentTrackSegment == NULL );
+    wxASSERT( g_CurrentTrackList.GetCount() == 0 );
 
     if( GetBoard()->IsHightLightNetON() )
         High_Light( DC );
@@ -632,10 +631,7 @@ static void PushTrack( EDA_DRAW_PANEL* panel )
     if( !det )
         return;
 
-    dist =
-        (track->m_Width +
-         1) / 2 + (other->m_Width + 1) / 2 + track->GetClearance(
-            other ) + 2;
+    dist = (track->m_Width + 1) / 2 + (other->m_Width + 1) / 2 + track->GetClearance( other ) + 2;
 
     /*
      * DRC wants >, so +1.
@@ -653,6 +649,7 @@ static void PushTrack( EDA_DRAW_PANEL* panel )
         n.x = -vec.y;
         n.y = vec.x;
     }
+
     f   = dist / hypot( double(n.x), double(n.y) );
     n.x = wxRound( f * n.x );
     n.y = wxRound( f * n.y );
@@ -688,7 +685,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     /* Erase old track */
     if( aErase )
     {
-        Trace_Une_Piste( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
+        DrawTraces( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
 
         frame->trace_ratsnest_pad( aDC );
 
@@ -744,7 +741,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
             /* Calculate of the end of the path for the permitted directions:
              * horizontal, vertical or 45 degrees.
              */
-            Calcule_Coord_Extremite_45( screen->GetCrossHairPosition(),
+            CalculateSegmentEndPoint( screen->GetCrossHairPosition(),
                                         g_CurrentTrackSegment->m_Start.x,
                                         g_CurrentTrackSegment->m_Start.y,
                                         &g_CurrentTrackSegment->m_End.x,
@@ -758,7 +755,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
     /* Redraw the new track */
     D( g_CurrentTrackList.VerifyListIntegrity(); );
-    Trace_Une_Piste( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
+    DrawTraces( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
 
     if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
     {
@@ -776,6 +773,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
      * interesting segment.
      */
     TRACK* isegm = g_CurrentTrackSegment;
+
     if( isegm->GetLength() == 0 && g_CurrentTrackSegment->Back() )
         isegm = g_CurrentTrackSegment->Back();
 
@@ -787,12 +785,14 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     double   trackLen = 0.0;
     double   lenDie = 0.0;
     wxString msg;
+
     // If the starting point is on a pad, add current track length+ lenght die
     if( g_FirstTrackSegment->GetState( BEGIN_ONPAD ) )
     {
         D_PAD * pad = (D_PAD *) g_FirstTrackSegment->start;
         lenDie = (double) pad->m_LengthDie;
-     }
+    }
+
     // calculate track len on board:
     for( TRACK* track = g_FirstTrackSegment; track; track = track->Next() )
         trackLen += track->GetLength();
@@ -823,7 +823,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 /* Determine the coordinate to advanced the the current segment
  * in 0, 90, or 45 degrees, depending on position of origin and \a aPosition.
  */
-void Calcule_Coord_Extremite_45( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy )
+void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy )
 {
     int deltax, deltay, angle;
 
@@ -865,6 +865,7 @@ void Calcule_Coord_Extremite_45( const wxPoint& aPosition, int ox, int oy, int* 
         /* Recalculate the signs fo deltax and deltaY. */
         if( ( aPosition.x - ox ) < 0 )
             deltax = -deltax;
+
         if( ( aPosition.y - oy ) < 0 )
             deltay = -deltay;
 
@@ -891,12 +892,14 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
 
     if( SegmentCount <= 0 )
         return;
+
     if( track == NULL )
         return;
 
     TRACK* newTrack = track;
     track = track->Back();
     SegmentCount--;
+
     if( track )
     {
         iDx = end.x - track->m_Start.x;
@@ -907,6 +910,7 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
     }
 
     TRACK* lastTrack = track ? track->Back() : NULL;
+
     if( lastTrack )
     {
         if(( (lastTrack->m_End.x == lastTrack->m_Start.x)
@@ -915,10 +919,13 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
         {
             iAngle = 45;
         }
-    } else {
-	if (g_Alternate_Track_Posture) {
-	    iAngle = 45;
-	}
+    }
+    else
+    {
+        if( g_Alternate_Track_Posture )
+        {
+            iAngle = 45;
+        }
     }
 
     if( iAngle == 0 )
@@ -942,6 +949,7 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
             track->m_End.x = end.x + iDy;
         else
             track->m_End.x = end.x - iDy;
+
         track->m_End.y = track->m_Start.y;
         break;
 
@@ -952,6 +960,7 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
         /* Recalculate the signs fo deltax and deltaY. */
         if( ( end.x - track->m_Start.x ) < 0 )
             iDx = -iDx;
+
         if( ( end.y - track->m_Start.y ) < 0 )
             iDy = -iDy;
 
@@ -976,6 +985,7 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
 
         newTrack->m_Start = track->m_End;
     }
+
     newTrack->m_End = end;
 }
 
@@ -993,10 +1003,12 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
     TRACK*      oldtrack;
 
     BOARD_ITEM* LockPoint = track->start;
+
     while( track != NULL )
     {
         oldtrack = track;
         track    = track->Next();
+
         if( !oldtrack->IsNull() )
         {
             continue;
@@ -1015,6 +1027,7 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
     // we must set the pointers on connected items and the connection status
     oldtrack = track = firsttrack;
     firsttrack->start = NULL;
+
     while( track != NULL )
     {
         oldtrack = track;
@@ -1028,24 +1041,29 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
     }
 
     firsttrack->start = LockPoint;
+
     if( LockPoint &&  LockPoint->Type()==TYPE_PAD )
         firsttrack->SetState( BEGIN_ONPAD, ON );
 
     track = firsttrack;
+
     while( track != NULL )
     {
         TRACK* next_track = track->Next();
         LockPoint = Locate_Pad_Connecte( pcb, track, END );
+
         if( LockPoint )
         {
             track->end = LockPoint;
             track->SetState( END_ONPAD, ON );
+
             if( next_track )
             {
                 next_track->start = LockPoint;
                 next_track->SetState( BEGIN_ONPAD, ON );
             }
         }
+
         track = next_track;
     }
 }
@@ -1065,6 +1083,7 @@ void EnsureEndTrackOnPad( D_PAD* Pad )
     }
 
     TRACK* lasttrack = g_CurrentTrackSegment;
+
     if( !g_CurrentTrackSegment->IsNull() )
     {
         /* Must create a new segment, from track end to pad center */

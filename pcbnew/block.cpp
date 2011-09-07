@@ -378,7 +378,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
  */
 void PCB_EDIT_FRAME::Block_SelectItems()
 {
-    int masque_layer;
+    int layerMask;
 
     GetScreen()->m_BlockLocate.Normalize();
 
@@ -388,8 +388,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     // Add modules
     if( blockIncludeModules )
     {
-        for( MODULE* module = m_Pcb->m_Modules; module != NULL;
-             module = module->Next() )
+        for( MODULE* module = m_Pcb->m_Modules; module != NULL; module = module->Next() )
         {
             int layer = module->GetLayer();
 
@@ -409,8 +408,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     // Add tracks and vias
     if( blockIncludeTracks )
     {
-        for( TRACK* pt_segm = m_Pcb->m_Track; pt_segm != NULL;
-             pt_segm = pt_segm->Next() )
+        for( TRACK* pt_segm = m_Pcb->m_Track; pt_segm != NULL; pt_segm = pt_segm->Next() )
         {
             if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
             {
@@ -425,16 +423,15 @@ void PCB_EDIT_FRAME::Block_SelectItems()
     }
 
     // Add graphic items
-    masque_layer = EDGE_LAYER;
+    layerMask = EDGE_LAYER;
 
     if( blockIncludeItemsOnTechLayers )
-        masque_layer = ALL_LAYERS;
+        layerMask = ALL_LAYERS;
 
     if( !blockIncludeBoardOutlineLayer )
-        masque_layer &= ~EDGE_LAYER;
+        layerMask &= ~EDGE_LAYER;
 
-    for( BOARD_ITEM* PtStruct = m_Pcb->m_Drawings; PtStruct != NULL;
-         PtStruct = PtStruct->Next() )
+    for( BOARD_ITEM* PtStruct = m_Pcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( !m_Pcb->IsLayerVisible( PtStruct->GetLayer() ) && ! blockIncludeItemsOnInvisibleLayers)
             continue;
@@ -442,7 +439,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         switch( PtStruct->Type() )
         {
         case TYPE_DRAWSEGMENT:
-            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer) == 0  )
+            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & layerMask) == 0  )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
@@ -459,21 +456,23 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             select_me = true; // This item is in bloc: select it
             break;
 
-        case TYPE_MIRE:
-            if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer ) == 0  )
+        case PCB_TARGET_T:
+            if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & layerMask ) == 0  )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
+
             select_me = true; // This item is in bloc: select it
             break;
 
         case TYPE_DIMENSION:
-            if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & masque_layer ) == 0 )
+            if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & layerMask ) == 0 )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
+
             select_me = true; // This item is in bloc: select it
             break;
 
@@ -517,9 +516,11 @@ static void drawPickedItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint aOffset 
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) aPanel->GetParent();
 
     g_Offset_Module = -aOffset;
+
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
+
         switch( item->Type() )
         {
         case TYPE_MODULE:
@@ -531,7 +532,7 @@ static void drawPickedItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint aOffset 
         case TYPE_TEXTE:
         case TYPE_TRACK:
         case TYPE_VIA:
-        case TYPE_MIRE:
+        case PCB_TARGET_T:
         case TYPE_DIMENSION:    // Currently markers are not affected by block commands
         case TYPE_MARKER_PCB:
             item->Draw( aPanel, aDC, GR_XOR, aOffset );
@@ -600,6 +601,7 @@ void PCB_EDIT_FRAME::Block_Delete()
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
         itemsList->SetPickedItemStatus( UR_DELETED, ii );
+
         switch( item->Type() )
         {
         case TYPE_MODULE:
@@ -620,7 +622,7 @@ void PCB_EDIT_FRAME::Block_Delete()
         case TYPE_TRACK:            // a track segment (segment on a copper layer)
         case TYPE_VIA:              // a via (like atrack segment on a copper layer)
         case TYPE_DIMENSION:        // a dimension (graphic item)
-        case TYPE_MIRE:             // a target (graphic item)
+        case PCB_TARGET_T:             // a target (graphic item)
             item->UnLink();
             break;
 
@@ -671,6 +673,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
         wxASSERT( item );
         itemsList->SetPickedItemStatus( UR_ROTATED, ii );
         item->Rotate( centre, rotAngle );
+
         switch( item->Type() )
         {
         case TYPE_MODULE:
@@ -687,7 +690,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
         case TYPE_ZONE_CONTAINER:
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
-        case TYPE_MIRE:
+        case PCB_TARGET_T:
         case TYPE_DIMENSION:
             break;
 
@@ -736,6 +739,7 @@ void PCB_EDIT_FRAME::Block_Flip()
         wxASSERT( item );
         itemsList->SetPickedItemStatus( UR_FLIPPED, ii );
         item->Flip( center );
+
         switch( item->Type() )
         {
         case TYPE_MODULE:
@@ -752,7 +756,7 @@ void PCB_EDIT_FRAME::Block_Flip()
         case TYPE_ZONE_CONTAINER:
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
-        case TYPE_MIRE:
+        case PCB_TARGET_T:
         case TYPE_DIMENSION:
             break;
 
@@ -812,7 +816,7 @@ void PCB_EDIT_FRAME::Block_Move()
         case TYPE_ZONE_CONTAINER:
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
-        case TYPE_MIRE:
+        case PCB_TARGET_T:
         case TYPE_DIMENSION:
             break;
 
@@ -890,8 +894,7 @@ void PCB_EDIT_FRAME::Block_Duplicate()
 
         case TYPE_ZONE_CONTAINER:
             {
-                ZONE_CONTAINER* new_zone =
-                    new ZONE_CONTAINER( (BOARD*) item->GetParent() );
+                ZONE_CONTAINER* new_zone = new ZONE_CONTAINER( (BOARD*) item->GetParent() );
                 new_zone->Copy( (ZONE_CONTAINER*) item );
                 new_zone->m_TimeStamp = GetTimeStamp();
                 newitem = new_zone;
@@ -917,12 +920,12 @@ void PCB_EDIT_FRAME::Block_Duplicate()
         }
         break;
 
-        case TYPE_MIRE:
+        case PCB_TARGET_T:
             {
-                MIREPCB* new_mire = new MIREPCB( m_Pcb );
-                new_mire->Copy( (MIREPCB*) item );
-                m_Pcb->Add( new_mire );
-                newitem = new_mire;
+                PCB_TARGET* target = new PCB_TARGET( m_Pcb );
+                target->Copy( (PCB_TARGET*) item );
+                m_Pcb->Add( target );
+                newitem = target;
             }
             break;
 
@@ -941,12 +944,12 @@ void PCB_EDIT_FRAME::Block_Duplicate()
         }
 
         if( newitem )
-            {
-                newitem->Move( MoveVector );
-                picker.m_PickedItem     = newitem;
-                picker.m_PickedItemType = newitem->Type();
-                newList.PushItem( picker );
-            }
+        {
+            newitem->Move( MoveVector );
+            picker.m_PickedItem     = newitem;
+            picker.m_PickedItemType = newitem->Type();
+            newList.PushItem( picker );
+        }
     }
 
     if( newList.GetCount() )

@@ -121,8 +121,7 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
     if( Module == NULL )
     {
-        DisplayError( this,
-                     wxT( "Global_Import_Pad_Settings() Error: NULL module" ) );
+        DisplayError( this, wxT( "Global_Import_Pad_Settings() Error: NULL module" ) );
         return;
     }
 
@@ -135,6 +134,7 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
     if( diag == -1 )
         return;
+
     if( diag == 1 )
         edit_Same_Modules = true;
 
@@ -155,6 +155,7 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
         bool   saveMe = false;
         D_PAD* pt_pad = (D_PAD*) Module->m_Pads;
+
         for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
         {
             /* Filters changes prohibited. */
@@ -167,7 +168,7 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
                 continue;
 
             if( DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter
-               && ( pt_pad->m_Masque_Layer != aPad->m_Masque_Layer ) )
+               && ( pt_pad->m_layerMask != aPad->m_layerMask ) )
                 continue;
 
             saveMe = true;
@@ -185,6 +186,7 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
     /* Update the current module and same others modules if requested. */
     Module = (MODULE*) m_Pcb->m_Modules;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
         if( !edit_Same_Modules && (Module != Module_Ref) )
@@ -202,6 +204,7 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         }
 
         D_PAD* pt_pad = (D_PAD*) Module->m_Pads;
+
         for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
         {
             /* Filters changes prohibited. */
@@ -215,18 +218,17 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
             if( DIALOG_GLOBAL_PADS_EDITION::m_Pad_Layer_Filter )
             {
-                if( pt_pad->m_Masque_Layer != aPad->m_Masque_Layer )
+                if( pt_pad->m_layerMask != aPad->m_layerMask )
                     continue;
                 else
-                    m_Pcb->m_Status_Pcb &=
-                        ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
+                    m_Pcb->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
             }
 
             /* Change characteristics.: */
             pt_pad->m_Attribut = aPad->m_Attribut;
             pt_pad->m_PadShape = aPad->m_PadShape;
 
-            pt_pad->m_Masque_Layer = aPad->m_Masque_Layer;
+            pt_pad->m_layerMask = aPad->m_layerMask;
 
             pt_pad->m_Size = aPad->m_Size;
             pt_pad->m_DeltaSize = aPad->m_DeltaSize;
@@ -269,7 +271,8 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
             pt_pad->ComputeShapeMaxRadius();
         }
 
-        Module->Set_Rectangle_Encadrement();
+        Module->CalculateBoundingBox();
+
         if( aDraw )
             DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
     }

@@ -73,48 +73,54 @@ int ChangeSideNumLayer( int oldlayer )
 /* Calculate the mask layer when flipping a footprint
  * BACK and FRONT copper layers , mask, paste, solder layers are swapped
  */
-int ChangeSideMaskLayer( int masque )
+int ChangeSideMaskLayer( int aMask )
 {
-    int newmasque;
+    int newMask;
 
-    newmasque = masque & ~(LAYER_BACK | LAYER_FRONT |
+    newMask = aMask & ~(LAYER_BACK | LAYER_FRONT |
                            SILKSCREEN_LAYER_BACK | SILKSCREEN_LAYER_FRONT |
                            ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT |
                            SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
                            SOLDERPASTE_LAYER_BACK | SOLDERPASTE_LAYER_FRONT |
                            ADHESIVE_LAYER_BACK | ADHESIVE_LAYER_FRONT);
 
-    if( masque & LAYER_BACK )
-        newmasque |= LAYER_FRONT;
-    if( masque & LAYER_FRONT )
-        newmasque |= LAYER_BACK;
+    if( aMask & LAYER_BACK )
+        newMask |= LAYER_FRONT;
 
-    if( masque & SILKSCREEN_LAYER_BACK )
-        newmasque |= SILKSCREEN_LAYER_FRONT;
-    if( masque & SILKSCREEN_LAYER_FRONT )
-        newmasque |= SILKSCREEN_LAYER_BACK;
+    if( aMask & LAYER_FRONT )
+        newMask |= LAYER_BACK;
 
-    if( masque & ADHESIVE_LAYER_BACK )
-        newmasque |= ADHESIVE_LAYER_FRONT;
-    if( masque & ADHESIVE_LAYER_FRONT )
-        newmasque |= ADHESIVE_LAYER_BACK;
+    if( aMask & SILKSCREEN_LAYER_BACK )
+        newMask |= SILKSCREEN_LAYER_FRONT;
 
-    if( masque & SOLDERMASK_LAYER_BACK )
-        newmasque |= SOLDERMASK_LAYER_FRONT;
-    if( masque & SOLDERMASK_LAYER_FRONT )
-        newmasque |= SOLDERMASK_LAYER_BACK;
+    if( aMask & SILKSCREEN_LAYER_FRONT )
+        newMask |= SILKSCREEN_LAYER_BACK;
 
-    if( masque & SOLDERPASTE_LAYER_BACK )
-        newmasque |= SOLDERPASTE_LAYER_FRONT;
-    if( masque & SOLDERPASTE_LAYER_FRONT )
-        newmasque |= SOLDERPASTE_LAYER_BACK;
+    if( aMask & ADHESIVE_LAYER_BACK )
+        newMask |= ADHESIVE_LAYER_FRONT;
 
-    if( masque & ADHESIVE_LAYER_BACK )
-        newmasque |= ADHESIVE_LAYER_FRONT;
-    if( masque & ADHESIVE_LAYER_FRONT )
-        newmasque |= ADHESIVE_LAYER_BACK;
+    if( aMask & ADHESIVE_LAYER_FRONT )
+        newMask |= ADHESIVE_LAYER_BACK;
 
-    return newmasque;
+    if( aMask & SOLDERMASK_LAYER_BACK )
+        newMask |= SOLDERMASK_LAYER_FRONT;
+
+    if( aMask & SOLDERMASK_LAYER_FRONT )
+        newMask |= SOLDERMASK_LAYER_BACK;
+
+    if( aMask & SOLDERPASTE_LAYER_BACK )
+        newMask |= SOLDERPASTE_LAYER_FRONT;
+
+    if( aMask & SOLDERPASTE_LAYER_FRONT )
+        newMask |= SOLDERPASTE_LAYER_BACK;
+
+    if( aMask & ADHESIVE_LAYER_BACK )
+        newMask |= ADHESIVE_LAYER_FRONT;
+
+    if( aMask & ADHESIVE_LAYER_FRONT )
+        newMask |= ADHESIVE_LAYER_BACK;
+
+    return newMask;
 }
 
 
@@ -160,7 +166,7 @@ void MODULE::Flip(const wxPoint& aCentre )
     // Move module to its final position:
     wxPoint finalPos = m_Pos;
     finalPos.y  = aCentre.y - ( finalPos.y - aCentre.y );     /// Mirror the Y position
-     SetPosition(finalPos);
+    SetPosition(finalPos);
 
     /* Flip layer */
     SetLayer( ChangeSideNumLayer( GetLayer() ) );
@@ -171,6 +177,7 @@ void MODULE::Flip(const wxPoint& aCentre )
 
     /* Mirror inversion layers pads. */
     pt_pad = m_Pads;
+
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
         pt_pad->m_Pos.y      -= m_Pos.y;
@@ -182,7 +189,7 @@ void MODULE::Flip(const wxPoint& aCentre )
         NEGATE_AND_NORMALIZE_ANGLE_POS( pt_pad->m_Orient );
 
         /* flip pads layers*/
-        pt_pad->m_Masque_Layer = ChangeSideMaskLayer( pt_pad->m_Masque_Layer );
+        pt_pad->m_layerMask = ChangeSideMaskLayer( pt_pad->m_layerMask );
     }
 
     /* Mirror reference. */
@@ -285,7 +292,7 @@ void MODULE::Flip(const wxPoint& aCentre )
         }
     }
 
-    Set_Rectangle_Encadrement();
+    CalculateBoundingBox();
 }
 
 void MODULE::SetPosition( const wxPoint& newpos )
@@ -327,7 +334,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
         }
     }
 
-    Set_Rectangle_Encadrement();
+    CalculateBoundingBox();
 }
 
 
@@ -373,5 +380,5 @@ void MODULE::SetOrientation( int newangle )
         }
     }
 
-    Set_Rectangle_Encadrement();
+    CalculateBoundingBox();
 }

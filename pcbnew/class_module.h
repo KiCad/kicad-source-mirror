@@ -114,10 +114,10 @@ public:
      */
 
     /**
-     * Function Set_Rectangle_Encadrement
+     * Function CalculateBoundingBox
      * calculates the bounding box in board coordinates.
      */
-    void     Set_Rectangle_Encadrement();
+    void     CalculateBoundingBox();
 
     /**
      * Function GetFootPrintRect()

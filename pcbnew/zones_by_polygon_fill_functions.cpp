@@ -37,7 +37,8 @@
 /**
  * Function Delete_OldZone_Fill (obsolete)
  * Used for compatibility with old boards
- * Remove the zone filling which include the segment aZone, or the zone which have the given time stamp.
+ * Remove the zone filling which include the segment aZone, or the zone which have the
+ * given time stamp.
  * A zone is a group of segments which have the same TimeStamp
  * @param aZone = zone segment within the zone to delete. Can be NULL
  * @param aTimestamp = Timestamp for the zone to delete, used if aZone == NULL
@@ -53,12 +54,14 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, long aTimestamp )
         TimeStamp = aZone->m_TimeStamp; // Save reference time stamp (aZone will be deleted)
 
     SEGZONE* next;
+
     for( SEGZONE* zone = GetBoard()->m_Zone; zone != NULL; zone = next )
     {
         next = zone->Next();
+
         if( zone->m_TimeStamp == TimeStamp )
         {
-            modify = TRUE;
+            modify = true;
             /* remove item from linked list and free memory */
             zone->DeleteStructure();
         }
@@ -116,7 +119,6 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
 }
 
 
-int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
 /**
  * Function Fill_All_Zones
  *  Fill all zones on the board
@@ -124,6 +126,7 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
  * @param verbose = true to show error messages
  * @return error level (0 = no error)
  */
+int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
 {
     int errorLevel = 0;
     int areaCount = GetBoard()->GetAreaCount();
@@ -133,8 +136,7 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
 
     // Create a message with a long net name, and build a wxProgressDialog
     // with a correct size to show this long net name
-    msg.Printf( FORMAT_STRING,
-                000, areaCount, wxT("XXXXXXXXXXXXXXXXX" ) );
+    msg.Printf( FORMAT_STRING, 000, areaCount, wxT("XXXXXXXXXXXXXXXXX" ) );
     wxProgressDialog progressDialog( _( "Fill All Zones" ), msg,
                                      areaCount+2, this,
                                      wxPD_AUTO_HIDE | wxPD_APP_MODAL | wxPD_CAN_ABORT );
@@ -145,11 +147,11 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
     GetBoard()->m_Zone.DeleteAll();
 
     int ii;
+
     for( ii = 0; ii < areaCount; ii++ )
     {
         ZONE_CONTAINER* zoneContainer = GetBoard()->GetArea( ii );
-        msg.Printf( FORMAT_STRING,
-                    ii+1, areaCount, GetChars( zoneContainer->GetNetName() ) );
+        msg.Printf( FORMAT_STRING, ii+1, areaCount, GetChars( zoneContainer->GetNetName() ) );
 
         if( !progressDialog.Update( ii+1, msg ) )
             break;
@@ -159,6 +161,7 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
         if( errorLevel && !verbose )
             break;
     }
+
     progressDialog.Update( ii+2, _( "Updating ratsnest..." ) );
     test_connexions( NULL );
 
@@ -168,5 +171,3 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
 
     return errorLevel;
 }
-
-

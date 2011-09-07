@@ -38,12 +38,10 @@ public:
 };
 
 
-/*******************************************************************************************/
 DialogNonCopperZonesEditor::DialogNonCopperZonesEditor( PCB_EDIT_FRAME* parent,
                                                         ZONE_CONTAINER* zone_container,
                                                         ZONE_SETTING*   zone_setting ) :
     DialogNonCopperZonesPropertiesBase( parent )
-/*******************************************************************************************/
 {
     m_Parent = parent;
     m_Zone_Container = zone_container;
@@ -54,9 +52,7 @@ DialogNonCopperZonesEditor::DialogNonCopperZonesEditor( PCB_EDIT_FRAME* parent,
 }
 
 
-/********************************************************/
 DialogNonCopperZonesEditor::~DialogNonCopperZonesEditor()
-/********************************************************/
 {
 }
 
@@ -70,9 +66,7 @@ bool PCB_EDIT_FRAME::InstallDialogNonCopperZonesEditor( ZONE_CONTAINER* aZone )
 }
 
 
-/********************************************************************/
 void DialogNonCopperZonesEditor::Init()
-/********************************************************************/
 {
     SetFocus();
     SetReturnCode( ZONE_ABORT );  // Will be changed on buttons click
@@ -81,8 +75,8 @@ void DialogNonCopperZonesEditor::Init()
 
     AddUnitSymbol( *m_MinThicknessValueTitle, g_UserUnit );
     wxString msg = ReturnStringFromValue( g_UserUnit,
-                                 m_Zone_Setting->m_ZoneMinThickness,
-                                 m_Parent->m_InternalUnits );
+                                          m_Zone_Setting->m_ZoneMinThickness,
+                                          m_Parent->m_InternalUnits );
     m_ZoneMinThicknessCtrl->SetValue( msg );
 
     if( g_Zone_45_Only )
@@ -126,18 +120,16 @@ void DialogNonCopperZonesEditor::Init()
 }
 
 
-/******************************************************************/
 void DialogNonCopperZonesEditor::OnOkClick( wxCommandEvent& event )
-/******************************************************************/
 {
     wxString txtvalue = m_ZoneMinThicknessCtrl->GetValue();
     m_Zone_Setting->m_ZoneMinThickness =
         ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->m_InternalUnits );
+
     if( m_Zone_Setting->m_ZoneMinThickness < 10 )
     {
         DisplayError( this,
-                     _(
-                         "Error :\nyou must choose a copper min thickness value bigger than 0.001 inch (or 0.0254 mm)" ) );
+                      _( "Error :\nyou must choose a copper min thickness value bigger than 0.001 inch (or 0.0254 mm)" ) );
         return;
     }
 
@@ -165,25 +157,25 @@ void DialogNonCopperZonesEditor::OnOkClick( wxCommandEvent& event )
     }
 
     if( m_OrientEdgesOpt->GetSelection() == 0 )
-        g_Zone_45_Only = FALSE;
+        g_Zone_45_Only = false;
     else
-        g_Zone_45_Only = TRUE;
+        g_Zone_45_Only = true;
 
     /* Get the layer selection for this zone */
     int ii = m_LayerSelectionCtrl->GetSelection();
+
     if( ii < 0 )
     {
         DisplayError( this, _( "Error : you must choose a layer" ) );
         return;
     }
+
     g_Zone_Default_Setting.m_CurrentZone_Layer = ii + FIRST_NO_COPPER_LAYER;
     EndModal( ZONE_OK );
 }
 
 
-/**********************************************************************/
 void DialogNonCopperZonesEditor::OnCancelClick( wxCommandEvent& event )
-/**********************************************************************/
 {
     EndModal( ZONE_ABORT );
 }

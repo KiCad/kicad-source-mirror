@@ -209,17 +209,21 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
             for( int jj = 1; jj < NB_LAYERS; jj++ )
             {
                 text->SetLabel( board->GetLayerName( jj ) );
+
                 if( goodSize.x < text->GetSize().x )
                     goodSize.x = text->GetSize().x;
             }
 
             text->SetLabel( _( "No Change" ) );
+
             if( goodSize.x < text->GetSize().x )
                 goodSize.x = text->GetSize().x;
         }
         else
+        {
             text = new wxStaticText( this, item_ID, _( "No Change" ),
                                      wxDefaultPosition, wxDefaultSize, 0 );
+        }
 
         text->SetMinSize( goodSize );
         FlexColumnBoxSizer->Add( text, 1,
@@ -241,8 +245,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
 
     // Provide a line to separate the controls which have been provided so far
     // from the OK and Cancel buttons (which will be provided after this line)
-    Line = new wxStaticLine( this, -1, wxDefaultPosition, wxDefaultSize,
-                             wxLI_HORIZONTAL );
+    Line = new wxStaticLine( this, -1, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
     OuterBoxSizer->Add( Line, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
 
     // Provide a StdDialogButtonSizer to accommodate the OK and Cancel buttons;
@@ -251,8 +254,7 @@ WinEDA_SwapLayerFrame::WinEDA_SwapLayerFrame( PCB_BASE_FRAME* parent ) :
     StdDialogButtonSizer = new wxStdDialogButtonSizer;
     OuterBoxSizer->Add( StdDialogButtonSizer, 0, wxGROW | wxALL, 10 );
 
-    Button = new wxButton( this, wxID_OK, _( "&OK" ), wxDefaultPosition,
-                           wxDefaultSize, 0 );
+    Button = new wxButton( this, wxID_OK, _( "&OK" ), wxDefaultPosition, wxDefaultSize, 0 );
     Button->SetDefault();
     StdDialogButtonSizer->AddButton( Button );
 
@@ -281,8 +283,10 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
     ii = event.GetId() - ID_BUTTON_0;
 
     jj = New_Layer[ii];
+
     if( (jj < 0) || (jj > NB_LAYERS) )
         jj = LAYER_NO_CHANGE; // (Defaults to "No Change".)
+
     jj = m_Parent->SelectLayer( jj, -1, -1, true );
 
     if( (jj < 0) || (jj > NB_LAYERS) )
@@ -303,6 +307,7 @@ void WinEDA_SwapLayerFrame::Sel_Layer( wxCommandEvent& event )
     if( jj != New_Layer[ii] )
     {
         New_Layer[ii] = jj;
+
         if( jj >= LAYER_NO_CHANGE )
         {
             layer_list[ii]->SetLabel( _( "No Change" ) );
@@ -356,27 +361,34 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
 
     /* Change traces. */
     pt_segm = GetBoard()->m_Track;
+
     for( ; pt_segm != NULL; pt_segm = pt_segm->Next() )
     {
         OnModify();
+
         if( pt_segm->Type() == TYPE_VIA )
         {
             SEGVIA* Via = (SEGVIA*) pt_segm;
+
             if( Via->Shape() == VIA_THROUGH )
                 continue;
+
             int     top_layer, bottom_layer;
+
             Via->ReturnLayerPair( &top_layer, &bottom_layer );
-            if(  New_Layer[bottom_layer] >= 0 && New_Layer[bottom_layer] <
-                 LAYER_NO_CHANGE )
+
+            if(  New_Layer[bottom_layer] >= 0 && New_Layer[bottom_layer] < LAYER_NO_CHANGE )
                 bottom_layer = New_Layer[bottom_layer];
-            if( New_Layer[top_layer] >= 0
-                && New_Layer[top_layer] < LAYER_NO_CHANGE )
+
+            if( New_Layer[top_layer] >= 0 && New_Layer[top_layer] < LAYER_NO_CHANGE )
                 top_layer = New_Layer[top_layer];
+
             Via->SetLayerPair( top_layer, bottom_layer );
         }
         else
         {
             jj = pt_segm->GetLayer();
+
             if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )
                 pt_segm->SetLayer( New_Layer[jj] );
         }
@@ -387,12 +399,14 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
     {
         OnModify();
         jj = pt_segm->GetLayer();
+
         if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )
             pt_segm->SetLayer( New_Layer[jj] );
     }
 
     /* Change other segments. */
     PtStruct = GetBoard()->m_Drawings;
+
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         if( PtStruct->Type() == TYPE_DRAWSEGMENT )
@@ -400,10 +414,11 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
             OnModify();
             pt_drawsegm = (DRAWSEGMENT*) PtStruct;
             jj = pt_drawsegm->GetLayer();
+
             if( New_Layer[jj] >= 0 && New_Layer[jj] < LAYER_NO_CHANGE )
                 pt_drawsegm->SetLayer( New_Layer[jj] );
         }
     }
 
-    DrawPanel->Refresh( TRUE );
+    DrawPanel->Refresh( true );
 }

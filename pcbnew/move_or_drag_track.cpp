@@ -83,6 +83,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
             TRACK* Track = NewTrack;
             int    dx    = s_LastPos.x - PosInit.x;
             int    dy    = s_LastPos.y - PosInit.y;
+
             for( ii = 0; ii < NbPtNewTrack; ii++, Track = Track->Next() )
             {
                 if( Track == NULL )
@@ -97,7 +98,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
                 Track->m_Flags = 0;
             }
 
-            Trace_Une_Piste( Panel, DC, NewTrack, NbPtNewTrack, GR_OR );
+            DrawTraces( Panel, DC, NewTrack, NbPtNewTrack, GR_OR );
         }
 
         NewTrack = NULL;
@@ -147,7 +148,7 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     if( aErase )
     {
         if( NewTrack )
-            Trace_Une_Piste( aPanel, aDC, NewTrack, NbPtNewTrack, draw_mode );
+            DrawTraces( aPanel, aDC, NewTrack, NbPtNewTrack, draw_mode );
     }
 
     /* set the new track coordinates */
@@ -169,7 +170,7 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     }
 
     /* Redraw the current moved track segments */
-    Trace_Une_Piste( aPanel, aDC, NewTrack, NbPtNewTrack, draw_mode );
+    DrawTraces( aPanel, aDC, NewTrack, NbPtNewTrack, draw_mode );
 
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
@@ -422,12 +423,12 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
         xi1 = tx1;
         yi1 = ty1;
     }
+
     if( tSegmentToEnd == NULL )
     {
         xi2 = tx2;
         yi2 = ty2;
     }
-
 
     if( update )
     {
@@ -492,22 +493,23 @@ bool InitialiseDragParameters()
     Track = g_DragSegmentList[ii].m_Segm;
     if( Track == NULL )
         return false;
+
     ii--;
+
     if( ii >= 0)
     {
         if( s_EndSegmentPresent )
         {
-            tSegmentToEnd   = g_DragSegmentList[ii].m_Segm;  // Get the segment
-                                                        // connected to the end
-                                                        // point
+            tSegmentToEnd   = g_DragSegmentList[ii].m_Segm;  // Get the segment connected to
+                                                             // the end point
             ii--;
         }
+
         if( s_StartSegmentPresent )
         {
             if( ii  >= 0 )
-                tSegmentToStart = g_DragSegmentList[ii].m_Segm;  // Get the segment
-                                                            // connected to the
-                                                            // start point
+                tSegmentToStart = g_DragSegmentList[ii].m_Segm;  // Get the segment connected to
+                                                                 // the start point
         }
     }
 
@@ -549,6 +551,7 @@ bool InitialiseDragParameters()
         ty2 = (double) Track->m_End.y;
         RotatePoint( &tx2, &ty2, tx1, ty1, 900 );
     }
+
     if( tx1 != tx2 )
     {
         s_StartSegmentSlope = ( ty2 - ty1 ) / ( tx2 - tx1 );
@@ -558,6 +561,7 @@ bool InitialiseDragParameters()
     {
         s_StartPointVertical = true;            //signal first segment vertical
     }
+
     if( ty1 == ty2 )
     {
         s_StartPointHorizontal = true;
@@ -602,6 +606,7 @@ bool InitialiseDragParameters()
     {
         s_EndPointVertical = true;      //signal second segment vertical
     }
+
     if( ty1 == ty2 )
     {
         s_EndPointHorizontal = true;
@@ -621,6 +626,7 @@ bool InitialiseDragParameters()
     {
         s_MovingSegmentVertical = true;      //signal vertical line
     }
+
     if( ty1 == ty2 )
     {
         s_MovingSegmentHorizontal = true;
@@ -634,11 +640,10 @@ bool InitialiseDragParameters()
     }
     else
     {
-        if( !s_EndPointVertical
-           && ( s_MovingSegmentSlope == s_EndSegmentSlope ) )
+        if( !s_EndPointVertical && ( s_MovingSegmentSlope == s_EndSegmentSlope ) )
             return false;
-        if( !s_StartPointVertical
-           && ( s_MovingSegmentSlope == s_StartSegmentSlope ) )
+
+        if( !s_StartPointVertical && ( s_MovingSegmentSlope == s_StartSegmentSlope ) )
             return false;
     }
 
@@ -664,17 +669,20 @@ void PCB_EDIT_FRAME::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int com
 
     if( GetBoard()->IsHightLightNetON() )
         High_Light( DC );
+
     PosInit = GetScreen()->GetCrossHairPosition();
 
     if( track->Type() == TYPE_VIA )     // For a via: always drag it
     {
         track->m_Flags = IS_DRAGGED | STARTPOINT | ENDPOINT;
+
         if( command != ID_POPUP_PCB_MOVE_TRACK_SEGMENT )
         {
             Collect_TrackSegmentsToDrag( DrawPanel, DC, track->m_Start,
                                          track->ReturnMaskLayer(),
                                          track->GetNet() );
         }
+
         NewTrack     = track;
         NbPtNewTrack = 1;
         PosInit = track->m_Start;
@@ -719,6 +727,7 @@ void PCB_EDIT_FRAME::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int com
     ITEM_PICKER picker( track, UR_CHANGED );
     picker.m_Link = track->Copy();
     s_ItemsListPicker.PushItem( picker );
+
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         TRACK* draggedtrack = g_DragSegmentList[ii].m_Segm;
@@ -774,13 +783,12 @@ void SortTrackEndPoints( TRACK* track )
  * 2 collinear segments can be merged only in no other segment or via is
  * connected to the common point
  * and if they have the same width. See cleanup.cpp for merge functions,
- * and consider Marque_Une_Piste() to locate segments that can be merged
+ * and consider MarkTrace() to locate segments that can be merged
  */
 bool PCB_EDIT_FRAME::MergeCollinearTracks( TRACK* track, wxDC* DC, int end )
 {
-    testtrack = (TRACK*) Locate_Piste_Connectee( track,
-                                                 GetBoard()->m_Track, NULL,
-                                                 end );
+    testtrack = (TRACK*) GetConnectedTrace( track, GetBoard()->m_Track, NULL, end );
+
     if( testtrack )
     {
         SortTrackEndPoints( track );
@@ -790,14 +798,12 @@ bool PCB_EDIT_FRAME::MergeCollinearTracks( TRACK* track, wxDC* DC, int end )
         int tdx = testtrack->m_End.x - testtrack->m_Start.x;
         int tdy = testtrack->m_End.y - testtrack->m_Start.y;
 
-        if( ( dy * tdx == dx * tdy && dy != 0 && dx != 0 && tdy != 0 && tdx !=
-             0 )                                  /* angle, same slope */
+        if( ( dy * tdx == dx * tdy && dy != 0 && dx != 0 && tdy != 0 && tdx != 0 )  /* angle, same slope */
            || ( dy == 0 && tdy == 0 && dx * tdx ) /*horizontal */
            || ( dx == 0 && tdx == 0 && dy * tdy ) /*vertical */
             )
         {
-            if( track->m_Start == testtrack->m_Start || track->m_End ==
-                testtrack->m_Start )
+            if( track->m_Start == testtrack->m_Start || track->m_End == testtrack->m_Start )
             {
                 if( ( dx * tdx && testtrack->m_End.x > track->m_End.x )
                    ||( dy * tdy && testtrack->m_End.y > track->m_End.y ) )
@@ -808,11 +814,11 @@ bool PCB_EDIT_FRAME::MergeCollinearTracks( TRACK* track, wxDC* DC, int end )
                     return true;
                 }
             }
-            if( track->m_Start == testtrack->m_End || track->m_End ==
-                testtrack->m_End )
+
+            if( track->m_Start == testtrack->m_End || track->m_End == testtrack->m_End )
             {
                 if( ( dx * tdx && testtrack->m_Start.x < track->m_Start.x )
-                   ||( dy * tdy && testtrack->m_Start.y < track->m_Start.y ) )
+                   || ( dy * tdy && testtrack->m_Start.y < track->m_Start.y ) )
                 {
                     track->m_Start = testtrack->m_Start;
 
@@ -846,6 +852,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     while( MergeCollinearTracks( track, DC, START ) )
     {
     };
+
     while( MergeCollinearTracks( track, DC, END ) )
     {
     };
@@ -854,32 +861,32 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     s_StartSegmentPresent = s_EndSegmentPresent = true;
 
     if( ( track->start == NULL ) || ( track->start->Type() == TYPE_TRACK ) )
-        TrackToStartPoint = Locate_Piste_Connectee( track,
-                                                    GetBoard()->m_Track, NULL,
-                                                    START );
+        TrackToStartPoint = GetConnectedTrace( track, GetBoard()->m_Track, NULL, START );
 
     //  Test if more than one segment is connected to this point
     if( TrackToStartPoint )
     {
         TrackToStartPoint->SetState( BUSY, ON );
+
         if( ( TrackToStartPoint->Type() == TYPE_VIA )
-           || Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, START ) )
+           || GetConnectedTrace( track, GetBoard()->m_Track, NULL, START ) )
             error = true;
+
         TrackToStartPoint->SetState( BUSY, OFF );
     }
 
     if( ( track->end == NULL ) || ( track->end->Type() == TYPE_TRACK ) )
-        TrackToEndPoint = Locate_Piste_Connectee( track,
-                                                  GetBoard()->m_Track, NULL,
-                                                  END );
+        TrackToEndPoint = GetConnectedTrace( track, GetBoard()->m_Track, NULL, END );
 
     //  Test if more than one segment is connected to this point
     if( TrackToEndPoint )
     {
         TrackToEndPoint->SetState( BUSY, ON );
+
         if( (TrackToEndPoint->Type() == TYPE_VIA)
-           || Locate_Piste_Connectee( track, GetBoard()->m_Track, NULL, END ) )
+           || GetConnectedTrace( track, GetBoard()->m_Track, NULL, END ) )
             error = true;
+
         TrackToEndPoint->SetState( BUSY, OFF );
     }
 
@@ -898,6 +905,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
 
     /* Change high light net: the new one will be highlighted */
     GetBoard()->PushHightLight();
+
     if( GetBoard()->IsHightLightNetON() )
         High_Light( DC );
 
@@ -910,8 +918,10 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     if( TrackToStartPoint )
     {
         int flag = STARTPOINT;
+
         if( track->m_Start != TrackToStartPoint->m_Start )
             flag = ENDPOINT;
+
         AddSegmentToDragList( DrawPanel, DC, flag, TrackToStartPoint );
         track->m_Flags |= STARTPOINT;
     }
@@ -919,8 +929,10 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     if( TrackToEndPoint )
     {
         int flag = STARTPOINT;
+
         if( track->m_End != TrackToEndPoint->m_Start )
             flag = ENDPOINT;
+
         AddSegmentToDragList( DrawPanel, DC, flag, TrackToEndPoint );
         track->m_Flags |= ENDPOINT;
     }
@@ -938,6 +950,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
 
     // Prepare the Undo command
     ITEM_PICKER picker( NULL, UR_CHANGED );
+
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         TRACK* draggedtrack = g_DragSegmentList[ii].m_Segm;
@@ -973,12 +986,15 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     if( Drc_On )
     {
         errdrc = m_drc->Drc( Track, GetBoard()->m_Track );
+
         if( errdrc == BAD_DRC )
             return false;
+
         /* Redraw the dragged segments */
         for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
         {
             errdrc = m_drc->Drc( g_DragSegmentList[ii].m_Segm, GetBoard()->m_Track );
+
             if( errdrc == BAD_DRC )
                 return false;
         }
@@ -1002,14 +1018,15 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
         /* Test the connections modified by the move
          *  (only pad connection must be tested, track connection will be
          * tested by test_1_net_connexion() ) */
-        int masque_layer = g_TabOneLayerMask[Track->GetLayer()];
-        Track->start = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_Start, masque_layer );
+        int layerMask = g_TabOneLayerMask[Track->GetLayer()];
+        Track->start = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_Start, layerMask );
+
         if( Track->start )
             Track->SetState( BEGIN_ONPAD, ON );
         else
             Track->SetState( BEGIN_ONPAD, OFF );
 
-        Track->end   = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_End, masque_layer );
+        Track->end   = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_End, layerMask );
         if( Track->end )
             Track->SetState( END_ONPAD, ON );
         else
@@ -1019,8 +1036,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     EraseDragList();
 
     SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
-    s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner
-                                        // of picked items
+    s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
 
     if( GetBoard()->IsHightLightNetON() )
         High_Light( DC );
@@ -1061,10 +1077,10 @@ BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
     }
 
     /* No pad has been located so check for a segment of the trace. */
-    TRACK* ptsegm = Fast_Locate_Piste( Pcb->m_Track, NULL, pos, LayerMask );
+    TRACK* ptsegm = GetTrace( Pcb->m_Track, NULL, pos, LayerMask );
 
     if( ptsegm == NULL )
-        ptsegm = Locate_Pistes( Pcb, Pcb->m_Track, pos, LayerMask );
+        ptsegm = GetTrace( Pcb, Pcb->m_Track, pos, LayerMask );
 
     return ptsegm;
 }
@@ -1133,6 +1149,7 @@ TRACK* CreateLockPoint( BOARD* aPcb,
     newPoint.y += aSegm->m_Start.y;
 
     TRACK* newTrack = aSegm->Copy();
+
     if( aItemsListPicker )
     {
         ITEM_PICKER picker( newTrack, UR_NEW );
@@ -1169,6 +1186,7 @@ TRACK* CreateLockPoint( BOARD* aPcb,
     newTrack->SetState( BEGIN_ONPAD, OFF );
 
     D_PAD * pad = Locate_Pad_Connecte( aPcb, newTrack, START );
+
     if ( pad )
     {
         newTrack->start = pad;

@@ -23,16 +23,12 @@ static void RebuildTrackChain( BOARD* pcb );
 /*..*/
 
 
-/**************************************************************************************************/
-static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_val, int new_val )
-/**************************************************************************************************/
-
 /**
  * Function Merge_Two_SubNets
  * Used by Propagate_SubNet()
- * Change a subnet value to a new value, for tracks ans pads which are connected to corresponding track
- * for pads and tracks, this is the .m_Subnet member that is tested and modified
- * these members are block numbers (or cluster numbers) for a given net
+ * Change a subnet value to a new value, for tracks ans pads which are connected to
+ * corresponding track for pads and tracks, this is the .m_Subnet member that is tested
+ * and modified these members are block numbers (or cluster numbers) for a given net
  * The result is merging 2 blocks (or subnets)
  * @return modification count
  * @param old_val = subnet value to modify
@@ -41,6 +37,7 @@ static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_
  * @param pt_end_conn = last track segment to test
  * If pt_end_conn = NULL: search is made from pt_start_conn to end of linked list
  */
+static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_val, int new_val )
 {
     TRACK* pt_conn;
     int    nb_change = 0;
@@ -53,12 +50,14 @@ static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_
         EXCHG( old_val, new_val );
 
     pt_conn = pt_start_conn;
+
     for( ; pt_conn != NULL; pt_conn = pt_conn->Next() )
     {
         if( pt_conn->GetSubNet() != old_val )
         {
             if( pt_conn == pt_end_conn )
                 break;
+
             continue;
         }
 
@@ -68,6 +67,7 @@ static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_
         if( pt_conn->start && ( pt_conn->start->Type() == TYPE_PAD) )
         {
             pt_pad = (D_PAD*) (pt_conn->start);
+
             if( pt_pad->GetSubNet() == old_val )
                 pt_pad->SetSubNet( pt_conn->GetSubNet() );
         }
@@ -75,9 +75,11 @@ static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_
         if( pt_conn->end && (pt_conn->end->Type() == TYPE_PAD) )
         {
             pt_pad = (D_PAD*) (pt_conn->end);
+
             if( pt_pad->GetSubNet() == old_val )
                 pt_pad->SetSubNet( pt_conn->GetSubNet() );
         }
+
         if( pt_conn == pt_end_conn )
             break;
     }
@@ -86,39 +88,42 @@ static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_
 }
 
 
-/******************************************************************/
-static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
-/******************************************************************/
 
 /**
  * Function Propagate_SubNet
- * Test a list of track segment, to create or propagate a sub netcode to pads and segments connected together
- * the track list must be sorted by nets, and all segments from pt_start_conn to pt_end_conn have the same net
- * When 2 items are connected (a track to a pad, or a track to an other track) they are grouped in a cluster.
+ * Test a list of track segments, to create or propagate a sub netcode to pads and
+ * segments connected together the track list must be sorted by nets, and all segments
+ * from pt_start_conn to pt_end_conn have the same net when 2 items are connected (a
+ * track to a pad, or a track to an other track) they are grouped in a cluster.
  * for pads, this is the .m_physical_connexion member which is a cluster identifier
  * for tracks, this is the .m_Subnet member which is a cluster identifier
  * For a given net, if all tracks are created, there is only one cluster.
- * but if not all tracks are created, there are more than one cluster, and some ratsnets will be shown.
+ * but if not all tracks are created, there are more than one cluster, and some ratsnets
+ * will be shown.
  * @param pt_start_conn = first track to test
  * @param pt_end_conn = last segment to test
  */
+static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
 {
     TRACK*      pt_conn;
     int         sub_netcode;
     D_PAD*      pt_pad;
-    TRACK*      pt_autre_piste;
+    TRACK*      pt_other_trace;
     BOARD_ITEM* PtStruct;
 
     /* Clear variables used in computations */
     pt_conn = pt_start_conn;
+
     for( ; pt_conn != NULL; pt_conn = pt_conn->Next() )
     {
         pt_conn->SetSubNet( 0 );
         PtStruct = pt_conn->start;
+
         if( PtStruct && (PtStruct->Type() == TYPE_PAD) )
             ( (D_PAD*) PtStruct )->SetSubNet( 0 );
 
         PtStruct = pt_conn->end;
+
         if( PtStruct && (PtStruct->Type() == TYPE_PAD) )
             ( (D_PAD*) PtStruct )->SetSubNet( 0 );
 
@@ -131,6 +136,7 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
 
     /* Start of calculation */
     pt_conn = pt_start_conn;
+
     for( ; pt_conn != NULL; pt_conn = pt_conn->Next() )
     {
         /* First: handling connections to pads */
@@ -140,19 +146,20 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
         if( PtStruct && (PtStruct->Type() == TYPE_PAD) )
         {
             pt_pad = (D_PAD*) PtStruct;
-            if( pt_conn->GetSubNet() )                  /* the track segment is already a cluster member */
+
+            if( pt_conn->GetSubNet() )        /* the track segment is already a cluster member */
             {
-                if( pt_pad->GetSubNet() > 0 )           /* The pad is already a cluster member, so we can merge the 2 clusters */
+                if( pt_pad->GetSubNet() > 0 ) /* The pad is already a cluster member, so we can merge the 2 clusters */
                 {
                     Merge_Two_SubNets( pt_start_conn, pt_end_conn,
-                                      pt_pad->GetSubNet(), pt_conn->GetSubNet() );
+                                       pt_pad->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else  /* The pad is not yet attached to a cluster , so we can add this pad to the cluster */
                     pt_pad->SetSubNet( pt_conn->GetSubNet() );
             }
-            else                                        /* the track segment is not attached to a cluster */
+            else                              /* the track segment is not attached to a cluster */
             {
-                if( pt_pad->GetSubNet() > 0 )           /* it is connected to a pad in a cluster, merge this track */
+                if( pt_pad->GetSubNet() > 0 ) /* it is connected to a pad in a cluster, merge this track */
                 {
                     pt_conn->SetSubNet( pt_pad->GetSubNet() );
                 }
@@ -166,19 +173,23 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
         }
 
         PtStruct = pt_conn->end;
+
         if( PtStruct && (PtStruct->Type() == TYPE_PAD) )
         /* The segment end on a pad */
         {
             pt_pad = (D_PAD*) PtStruct;
+
             if( pt_conn->GetSubNet() )
             {
                 if( pt_pad->GetSubNet() > 0 )
                 {
                     Merge_Two_SubNets( pt_start_conn, pt_end_conn,
-                                      pt_pad->GetSubNet(), pt_conn->GetSubNet() );
+                                       pt_pad->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else
+                {
                     pt_pad->SetSubNet( pt_conn->GetSubNet() );
+                }
             }
             else
             {
@@ -198,85 +209,88 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
 
         /* Test connections between segments */
         PtStruct = pt_conn->start;
+
         if( PtStruct && (PtStruct->Type() != TYPE_PAD) )
         {
             /* The segment starts on an other track */
-            pt_autre_piste = (TRACK*) PtStruct;
+            pt_other_trace = (TRACK*) PtStruct;
 
             if( pt_conn->GetSubNet() )              /* the track segment is already a cluster member */
             {
-                if( pt_autre_piste->GetSubNet() )   /* The other track is already a cluster member, so we can merge the 2 clusters */
+                if( pt_other_trace->GetSubNet() )   /* The other track is already a cluster member, so we can merge the 2 clusters */
                 {
                     Merge_Two_SubNets( pt_start_conn, pt_end_conn,
-                                      pt_autre_piste->GetSubNet(), pt_conn->GetSubNet() );
+                                       pt_other_trace->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else /* The other track is not yet attached to a cluster , so we can add this other track to the cluster */
                 {
-                    pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
+                    pt_other_trace->SetSubNet( pt_conn->GetSubNet() );
                 }
             }
             else                                    /* the track segment is not yet attached to a cluster */
             {
-                if( pt_autre_piste->GetSubNet() )   /* The other track is already a cluster member, so we can add the segment to the cluster */
+                if( pt_other_trace->GetSubNet() )   /* The other track is already a cluster member, so we can add the segment to the cluster */
                 {
-                    pt_conn->SetSubNet( pt_autre_piste->GetSubNet() );
+                    pt_conn->SetSubNet( pt_other_trace->GetSubNet() );
                 }
                 else    /* it is connected to an other segment not in a cluster, so we must create a new cluster (only with the 2 track segments) */
                 {
                     sub_netcode++;
                     pt_conn->SetSubNet( sub_netcode );
-                    pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
+                    pt_other_trace->SetSubNet( pt_conn->GetSubNet() );
                 }
             }
         }
 
         PtStruct = pt_conn->end;    // Do the same calculations for the segment end point
+
         if( PtStruct && (PtStruct->Type() != TYPE_PAD) )
         {
-            pt_autre_piste = (TRACK*) PtStruct;
+            pt_other_trace = (TRACK*) PtStruct;
 
             if( pt_conn->GetSubNet() )  /* the track segment is already a cluster member */
             {
-                if( pt_autre_piste->GetSubNet() )
+                if( pt_other_trace->GetSubNet() )
                 {
                     Merge_Two_SubNets( pt_start_conn, pt_end_conn,
-                                      pt_autre_piste->GetSubNet(), pt_conn->GetSubNet() );
+                                       pt_other_trace->GetSubNet(), pt_conn->GetSubNet() );
                 }
                 else
-                    pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
+                {
+                    pt_other_trace->SetSubNet( pt_conn->GetSubNet() );
+                }
             }
             else      /* the track segment is not yet attached to a cluster */
             {
-                if( pt_autre_piste->GetSubNet() )
+                if( pt_other_trace->GetSubNet() )
                 {
-                    pt_conn->SetSubNet( pt_autre_piste->GetSubNet() );
+                    pt_conn->SetSubNet( pt_other_trace->GetSubNet() );
                 }
                 else
                 {
                     sub_netcode++;
                     pt_conn->SetSubNet( sub_netcode );
-                    pt_autre_piste->SetSubNet( pt_conn->GetSubNet() );
+                    pt_other_trace->SetSubNet( pt_conn->GetSubNet() );
                 }
             }
         }
+
         if( pt_conn == pt_end_conn )
             break;
     }
 }
 
 
-/***************************************************/
-void PCB_BASE_FRAME::test_connexions( wxDC* DC )
-/***************************************************/
-
 /**
  * Function testing the connections relative to all nets
- *  This function update the status of the ratsnest ( flag CH_ACTIF = 0 if a connection is found, = 1 else)
- * track segments are assumed to be sorted by net codes.
- * This is the case because when a new track is added, it is inserted in the linked list according to its net code.
- * and when nets are changed (when a new netlist is read) tracks are sorted before using this function
+ * This function update the status of the ratsnest ( flag CH_ACTIF = 0 if a connection
+ * is found, = 1 else) track segments are assumed to be sorted by net codes.
+ * This is the case because when a new track is added, it is inserted in the linked list
+ * according to its net code. and when nets are changed (when a new netlist is read)
+ * tracks are sorted before using this function
  * @param DC = current Device Context
  */
+void PCB_BASE_FRAME::test_connexions( wxDC* DC )
 {
     // Clear the cluster identifier for all pads
     for( unsigned i = 0;  i< m_Pcb->GetPadsCount();  ++i )
@@ -290,7 +304,7 @@ void PCB_BASE_FRAME::test_connexions( wxDC* DC )
     m_Pcb->Test_Connections_To_Copper_Areas();
 
     // Test existing connections net by net
-    for( TRACK* track = m_Pcb->m_Track;  track;  )
+    for( TRACK* track = m_Pcb->m_Track;  track; )
     {
         // this is the current net because pt_start_conn is the first segment of the net
         int    current_net_code = track->GetNet();
@@ -309,16 +323,13 @@ void PCB_BASE_FRAME::test_connexions( wxDC* DC )
 }
 
 
-/*************************************************************************/
-void PCB_BASE_FRAME::test_1_net_connexion( wxDC* DC, int net_code )
-/*************************************************************************/
-
 /**
  * Function testing the connections relative to a given net
  * track segments are assumed to be sorted by net codes
  * @param DC = current Device Context
  * @param net_code = net code to test
  */
+void PCB_BASE_FRAME::test_1_net_connexion( wxDC* DC, int net_code )
 {
     wxString msg;
 
@@ -326,7 +337,7 @@ void PCB_BASE_FRAME::test_1_net_connexion( wxDC* DC, int net_code )
         return;
 
     if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
-        Compile_Ratsnest( DC, TRUE );
+        Compile_Ratsnest( DC, true );
 
     for( unsigned i = 0;  i<m_Pcb->GetPadsCount();  ++i )
     {
@@ -355,11 +366,12 @@ void PCB_BASE_FRAME::test_1_net_connexion( wxDC* DC, int net_code )
         if( pt_start_conn )
             pt_end_conn = pt_start_conn->GetEndNetCode( net_code );
 
-        if( pt_start_conn && pt_end_conn ) // c.a.d. s'il y a des segments
+        if( pt_start_conn && pt_end_conn ) // c.a.d. if there are segments
         {
             Build_Pads_Info_Connections_By_Tracks( pt_start_conn, pt_end_conn );
         }
     }
+
     Merge_SubNets_Connected_By_CopperAreas( m_Pcb, net_code );
 
     /* Test the rastnest for this net */
@@ -375,10 +387,6 @@ void PCB_BASE_FRAME::test_1_net_connexion( wxDC* DC, int net_code )
 }
 
 
-/*******************************************************************************************/
-static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* pt_end_conn )
-/*******************************************************************************************/
-
 /**  Used after a track change (delete a track ou add a track)
  * Compute connections (initialize the .start and .end members) for a single net.
  * tracks must be sorted by net, as usual
@@ -388,6 +396,7 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
  *  If a track is deleted, the other pointers to pads do not change.
  *  When a track is added, its pointers to pads are already initialized
  */
+static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* pt_end_conn )
 {
     TRACK* Track;
 
@@ -413,6 +422,7 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
         {
             TRACK* pt_segm;
             int    layermask = Track->ReturnMaskLayer();
+
             for( pt_segm = pt_start_conn; pt_segm != NULL; pt_segm = pt_segm->Next() )
             {
                 int curlayermask = pt_segm->ReturnMaskLayer();
@@ -428,6 +438,7 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
                 {
                     pt_segm->end = Track;
                 }
+
                 if( pt_segm == pt_end_conn )
                     break;
             }
@@ -435,12 +446,12 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
 
         if( Track->start == NULL )  // end track not already connected, search a connection
         {
-            Track->start = Locate_Piste_Connectee( Track, Track, pt_end_conn, START );
+            Track->start = GetConnectedTrace( Track, Track, pt_end_conn, START );
         }
 
         if( Track->end == NULL )    // end track not already connected, search a connection
         {
-            Track->end = Locate_Piste_Connectee( Track, Track, pt_end_conn, END );
+            Track->end = GetConnectedTrace( Track, Track, pt_end_conn, END );
         }
 
         if( Track == pt_end_conn )
@@ -460,18 +471,19 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
  * A track is seen as connected if the px, py position is same as the pad position.
  *
  * @param aPcb = the board.
- * @param pt_liste = Pointers to pads buffer
- *      This buffer is a list like the list created by build_liste_pad, but sorted by increasing X pad coordinate
+ * @param pt_liste = Pointers to pads buffer.  This buffer is a list like the list
+ *                   created by build_liste_pad, but sorted by increasing X pad coordinate
  * @param posref = reference coordinate
- * @param masque_layer = Layers (bit to bit) to consider
- * @return : pointer on the connected pad
- *  This function uses a fast search in this sorted pad list and it is faster than Fast_Locate_Pad_connecte(),
+ * @param aLayerMask = Layers (bit to bit) to consider
+ * @return : pointer on the connected pad.  This function uses a fast search in this sorted
+ *           pad list and it is faster than Fast_Locate_Pad_connecte(),
  *  But this sorted pad list must be built before calling this function.
  *
- *  (Note: The usual pad list (created by build_liste_pad) m_Pcb->m_Pads is sorted by increasing netcodes )
+ *  (Note: The usual pad list (created by build_liste_pad) m_Pcb->m_Pads is sorted by
+ * increasing netcodes )
  */
 static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* aPcb, LISTE_PAD* pt_liste,
-                                             const wxPoint& posref, int masque_layer )
+                                             const wxPoint& posref, int aLayerMask )
 {
     D_PAD*     pad;
     int        ii;
@@ -481,6 +493,7 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* aPcb, LISTE_PAD* pt_liste,
     LISTE_PAD* lim = pt_liste + nb_pad - 1;
 
     ptr_pad = pt_liste;
+
     while( nb_pad )
     {
         pad      = *ptr_pad;
@@ -493,15 +506,20 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* aPcb, LISTE_PAD* pt_liste,
         if( pad->m_Pos.x < posref.x ) /* Must search after this item */
         {
             ptr_pad += nb_pad;
+
             if( ptr_pad > lim )
                 ptr_pad = lim;
+
             continue;
         }
+
         if( pad->m_Pos.x > posref.x ) /* Must search before this item */
         {
             ptr_pad -= nb_pad;
+
             if( ptr_pad < pt_liste )
                 ptr_pad = pt_liste;
+
             continue;
         }
 
@@ -511,6 +529,7 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* aPcb, LISTE_PAD* pt_liste,
             while( ptr_pad >= pt_liste )
             {
                 pad = *ptr_pad;
+
                 if( pad->m_Pos.x == posref.x )
                     ptr_pad--;
                 else
@@ -525,6 +544,7 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* aPcb, LISTE_PAD* pt_liste,
                     return NULL; /* outside suitable block */
 
                 pad = *ptr_pad;
+
                 if( pad->m_Pos.x != posref.x )
                     return NULL; /* outside suitable block */
 
@@ -532,7 +552,7 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* aPcb, LISTE_PAD* pt_liste,
                     continue;
 
                 /* A Pad if found here: but it must mach the layer */
-                if( pad->m_Masque_Layer & masque_layer )  // Matches layer => a connected pad is found !
+                if( pad->m_layerMask & aLayerMask )  // Matches layer => a connected pad is found !
                     return pad;
             }
         }
@@ -555,48 +575,47 @@ static int SortPadsByXCoord( const void* pt_ref, const void* pt_comp )
 }
 
 
-/*****************************************************************************/
 void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector )
-/*****************************************************************************/
 {
-    aVector->insert( aVector->end(), aBoard->m_NetInfo->m_PadsFullList.begin(), aBoard->m_NetInfo->m_PadsFullList.end() );
+    aVector->insert( aVector->end(), aBoard->m_NetInfo->m_PadsFullList.begin(),
+                     aBoard->m_NetInfo->m_PadsFullList.end() );
 
     qsort( &(*aVector)[0], aBoard->GetPadsCount(), sizeof( D_PAD*), SortPadsByXCoord );
 }
 
 
-/********************************************************************/
-void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
-/********************************************************************/
-
 /* search connections between tracks and pads, and propagate pad net codes to the track segments
  * This is a 2 pass computation.
  * First:
- * We search a connection between a track segment and a pad: if found : this segment  netcode is set to the pad netcode
+ * We search a connection between a track segment and a pad: if found : this segment netcode
+ * is set to the pad netcode
  */
+void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 {
-    TRACK*              pt_piste;
+    TRACK*              pt_trace;
     TRACK*              pt_next;
     char                new_passe_request = 1;
 
     std::vector<D_PAD*> sortedPads;
     BOARD_ITEM*         PtStruct;
-    int                 masque_layer;
+    int                 layerMask;
     wxString            msg;
 
     // Build the net info list
     GetBoard()->m_NetInfo->BuildListOfNets();
 
-    if( m_Pcb->GetPadsCount() == 0 )     // If no pad, reset pointers and netcode, and do nothing else
+    if( m_Pcb->GetPadsCount() == 0 ) // If no pad, reset pointers and netcode, and do nothing else
     {
-        pt_piste = m_Pcb->m_Track;
-        for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
+        pt_trace = m_Pcb->m_Track;
+
+        for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
         {
-            pt_piste->start = NULL;
-            pt_piste->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
-            pt_piste->SetNet( 0 );
-            pt_piste->end = NULL;
+            pt_trace->start = NULL;
+            pt_trace->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
+            pt_trace->SetNet( 0 );
+            pt_trace->end = NULL;
         }
+
         return;
     }
 
@@ -606,43 +625,45 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     CreateSortedPadListByXCoord( m_Pcb, &sortedPads );
 
     /* Reset variables and flags used in computation */
-    pt_piste = m_Pcb->m_Track;
-    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
+    pt_trace = m_Pcb->m_Track;
+
+    for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
     {
-        pt_piste->SetState( BUSY | IN_EDIT | BEGIN_ONPAD | END_ONPAD, OFF );
-        pt_piste->SetZoneSubNet( 0 );
-        pt_piste->SetNet( 0 );  // net code = 0 means not connected
+        pt_trace->SetState( BUSY | IN_EDIT | BEGIN_ONPAD | END_ONPAD, OFF );
+        pt_trace->SetZoneSubNet( 0 );
+        pt_trace->SetNet( 0 );  // net code = 0 means not connected
     }
 
     /* First pass: search connection between a track segment and a pad.
      * if found, set the track net code to the pad netcode
      */
-    pt_piste = m_Pcb->m_Track;
-    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
+    pt_trace = m_Pcb->m_Track;
+
+    for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
     {
-        masque_layer = g_TabOneLayerMask[pt_piste->GetLayer()];
+        layerMask = g_TabOneLayerMask[pt_trace->GetLayer()];
 
         /* Search for a pad on the segment starting point */
-        pt_piste->start = SuperFast_Locate_Pad_Connecte( m_Pcb,
+        pt_trace->start = SuperFast_Locate_Pad_Connecte( m_Pcb,
                                                          &sortedPads[0],
-                                                         pt_piste->m_Start,
-                                                         masque_layer );
-        if( pt_piste->start != NULL )
+                                                         pt_trace->m_Start,
+                                                         layerMask );
+        if( pt_trace->start != NULL )
         {
-            pt_piste->SetState( BEGIN_ONPAD, ON );
-            pt_piste->SetNet( ( (D_PAD*) (pt_piste->start) )->GetNet() );
+            pt_trace->SetState( BEGIN_ONPAD, ON );
+            pt_trace->SetNet( ( (D_PAD*) (pt_trace->start) )->GetNet() );
         }
 
         /* Search for a pad on the segment ending point */
-        pt_piste->end = SuperFast_Locate_Pad_Connecte( m_Pcb,
+        pt_trace->end = SuperFast_Locate_Pad_Connecte( m_Pcb,
                                                        &sortedPads[0],
-                                                       pt_piste->m_End,
-                                                       masque_layer );
+                                                       pt_trace->m_End,
+                                                       layerMask );
 
-        if( pt_piste->end != NULL )
+        if( pt_trace->end != NULL )
         {
-            pt_piste->SetState( END_ONPAD, ON );
-            pt_piste->SetNet( ( (D_PAD*) (pt_piste->end) )->GetNet() );
+            pt_trace->SetState( END_ONPAD, ON );
+            pt_trace->SetNet( ( (D_PAD*) (pt_trace->end) )->GetNet() );
         }
     }
 
@@ -657,16 +678,16 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
      * when a track has a net code and the other has a null net code, the null net code is changed
      */
 
-    for( pt_piste = m_Pcb->m_Track; pt_piste != NULL; pt_piste = pt_piste->Next() )
+    for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
     {
-        if( pt_piste->start == NULL )
+        if( pt_trace->start == NULL )
         {
-            pt_piste->start = Locate_Piste_Connectee( pt_piste, m_Pcb->m_Track, NULL, START );
+            pt_trace->start = GetConnectedTrace( pt_trace, m_Pcb->m_Track, NULL, START );
         }
 
-        if( pt_piste->end == NULL )
+        if( pt_trace->end == NULL )
         {
-            pt_piste->end = Locate_Piste_Connectee( pt_piste, m_Pcb->m_Track, NULL, END );
+            pt_trace->end = GetConnectedTrace( pt_trace, m_Pcb->m_Track, NULL, END );
         }
     }
 
@@ -676,7 +697,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 
     while( new_passe_request )
     {
-        bool reset_flag = FALSE;
+        bool reset_flag = false;
         new_passe_request = 0;
 
         /* look for vias which could be connect many tracks */
@@ -690,77 +711,83 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 
             // Lock for a connection to a track with a known netcode
             pt_next = m_Pcb->m_Track;
-            while( ( pt_next = Locate_Piste_Connectee( via, pt_next, NULL, START ) ) != NULL )
+
+            while( ( pt_next = GetConnectedTrace( via, pt_next, NULL, START ) ) != NULL )
             {
                 if( pt_next->GetNet() )
                 {
                     via->SetNet( pt_next->GetNet() );
                     break;
                 }
+
                 pt_next->SetState( BUSY, ON );
-                reset_flag = TRUE;
+                reset_flag = true;
             }
         }
 
         if( reset_flag )
-            for( pt_piste = m_Pcb->m_Track; pt_piste != NULL; pt_piste = pt_piste->Next() )
+            for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
             {
-                pt_piste->SetState( BUSY, OFF );
+                pt_trace->SetState( BUSY, OFF );
             }
 
-        /* set the netcode of connected tracks: if at track is connected to a pad, its net code is already set.
+        /* set the netcode of connected tracks: if at track is connected to a pad, its net
+         * code is already set.
          * if the current track is connected to an other track:
          * if a track has a net code, it is used for the other track.
          * Thus there is a propagation of the netcode from a track to an other.
          * if none of the 2 track has a net code we do nothing
          * the iteration is stopped when no new change occurs
          */
-        for( pt_piste = m_Pcb->m_Track; pt_piste != NULL; pt_piste = pt_piste->Next() )
+        for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
         {
             /* look for the connection to the current segment starting point */
-            PtStruct = (BOARD_ITEM*) pt_piste->start;
+            PtStruct = (BOARD_ITEM*) pt_trace->start;
+
             if( PtStruct && (PtStruct->Type() != TYPE_PAD) )
             {
                 // Begin on an other track segment
                 pt_next = (TRACK*) PtStruct;
-                if( pt_piste->GetNet() )
+
+                if( pt_trace->GetNet() )
                 {
                     if( pt_next->GetNet() == 0 )    // the current track has a netcode, we use it for the other track
                     {
                         new_passe_request = 1;      // A change is made: a new iteration is requested.
-                        pt_next->SetNet( pt_piste->GetNet() );
+                        pt_next->SetNet( pt_trace->GetNet() );
                     }
                 }
                 else
                 {
                     if( pt_next->GetNet() != 0 )    // the other track has a netcode, we use it for the current track
                     {
-                        pt_piste->SetNet( pt_next->GetNet() );
+                        pt_trace->SetNet( pt_next->GetNet() );
                         new_passe_request = 1;
                     }
                 }
             }
 
             /* look for the connection to the current segment ending point */
-            PtStruct = pt_piste->end;
-            if( PtStruct &&(PtStruct->Type() != TYPE_PAD) )
+            PtStruct = pt_trace->end;
+
+            if( PtStruct && (PtStruct->Type() != TYPE_PAD) )
             {
                 pt_next = (TRACK*) PtStruct;
 
                 // End on an other track: propagate netcode if possible
-                if( pt_piste->GetNet() )
+                if( pt_trace->GetNet() )
                 {
                     if( pt_next->GetNet() == 0 )
                     {
                         new_passe_request = 1;
-                        pt_next->SetNet( pt_piste->GetNet() );
+                        pt_next->SetNet( pt_trace->GetNet() );
                     }
                 }
                 else
                 {
                     if( pt_next->GetNet() != 0 )
                     {
-                        pt_piste->SetNet( pt_next->GetNet() );
+                        pt_trace->SetNet( pt_next->GetNet() );
                         new_passe_request = 1;
                     }
                 }

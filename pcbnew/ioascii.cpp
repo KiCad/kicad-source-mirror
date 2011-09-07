@@ -149,8 +149,7 @@ int PCB_BASE_FRAME::ReadListeSegmentDescr( LINE_READER* aReader,
 
         case TYPE_ZONE:     // this is now deprecated, but exits in old boards
             newTrack = new SEGZONE( GetBoard() );
-            GetBoard()->m_Zone.Insert( (SEGZONE*) newTrack,
-                                       (SEGZONE*) insertBeforeMe );
+            GetBoard()->m_Zone.Insert( (SEGZONE*) newTrack, (SEGZONE*) insertBeforeMe );
             break;
         }
 
@@ -174,8 +173,7 @@ int PCB_BASE_FRAME::ReadListeSegmentDescr( LINE_READER* aReader,
         if( makeType == TYPE_VIA ) // Ensure layers are OK when possible:
         {
             if( newTrack->Shape() == VIA_THROUGH )
-                ( (SEGVIA*) newTrack )->SetLayerPair( LAYER_N_FRONT,
-                                                      LAYER_N_BACK );
+                ( (SEGVIA*) newTrack )->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
         }
 
         newTrack->SetNet( net_code );
@@ -195,6 +193,7 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
     {
         Line = aReader->Line();
         data = strtok( Line, " =\n\r" );
+
         if( strnicmp( data, "$EndGENERAL", 10 ) == 0 )
             break;
 
@@ -218,10 +217,12 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
 
             // Setup layer count
             int layer_count = 0;
+
             for( ii = 0; ii < NB_COPPER_LAYERS; ii++ )
             {
                 if( Masque_Layer & 1 )
                     layer_count++;
+
                 Masque_Layer >>= 1;
             }
 
@@ -229,6 +230,7 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
 
             continue;
         }
+
         if( stricmp( data, "BoardThickness" ) == 0 )
         {
             data = strtok( NULL, " =\n\r" );
@@ -257,11 +259,9 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
             data = strtok( NULL, " =\n\r" );
             GetBoard()->m_BoundaryBox.SetY( atoi( data ) );
             data = strtok( NULL, " =\n\r" );
-            GetBoard()->m_BoundaryBox.SetWidth(
-                atoi( data ) - GetBoard()->m_BoundaryBox.GetX() );
+            GetBoard()->m_BoundaryBox.SetWidth( atoi( data ) - GetBoard()->m_BoundaryBox.GetX() );
             data = strtok( NULL, " =\n\r" );
-            GetBoard()->m_BoundaryBox.SetHeight(
-                atoi( data ) - GetBoard()->m_BoundaryBox.GetY() );
+            GetBoard()->m_BoundaryBox.SetHeight( atoi( data ) - GetBoard()->m_BoundaryBox.GetY() );
             continue;
         }
 
@@ -367,8 +367,10 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             int gx = 0, gy = 0;
             gx   = atoi( data );
             data = strtok( NULL, " =\n\r" );
+
             if( data )
                 gy = atoi( data );
+
             m_Auxiliary_Axis_Position.x = gx;
             m_Auxiliary_Axis_Position.y = gy;
             continue;
@@ -398,12 +400,14 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
                 GetBoard()->SetLayerName( layer, layerName );
 
                 data = strtok( NULL, " \n\r" );
+
                 if( data )
                 {
                     LAYER_T type = LAYER::ParseType( data );
                     GetBoard()->SetLayerType( layer, type );
                 }
             }
+
             continue;
         }
 
@@ -477,11 +481,13 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             VIA_DIMENSION via_dim;
             via_dim.m_Diameter = tmp;
             data = strtok( NULL, " \n\r" );
+
             if( data )
             {
                 tmp = atoi( data );
                 via_dim.m_Drill = tmp > 0 ? tmp : 0;
             }
+
             GetBoard()->m_ViasDimensionsList.push_back( via_dim );
             continue;
         }
@@ -567,16 +573,19 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             g_Pad_Master.m_Drill.y = g_Pad_Master.m_Drill.x;
             continue;
         }
+
         if( stricmp( Line, "Pad2MaskClearance" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_SolderMaskMargin = atoi( data );
             continue;
         }
+
         if( stricmp( Line, "Pad2PasteClearance" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_SolderPasteMargin = atoi( data );
             continue;
         }
+
         if( stricmp( Line, "Pad2PasteClearanceRatio" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_SolderPasteMarginRatio = atof( data );
@@ -606,30 +615,23 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
      * Sort lists by by increasing value and remove duplicates
      * (the first value is not tested, because it is the netclass value
      */
-    sort( GetBoard()->m_ViasDimensionsList.begin() + 1,
-         GetBoard()->m_ViasDimensionsList.end() );
-    sort( GetBoard()->m_TrackWidthList.begin() + 1,
-         GetBoard()->m_TrackWidthList.end() );
-    for( unsigned ii = 1;
-         ii < GetBoard()->m_ViasDimensionsList.size() - 1;
-         ii++ )
+    sort( GetBoard()->m_ViasDimensionsList.begin() + 1, GetBoard()->m_ViasDimensionsList.end() );
+    sort( GetBoard()->m_TrackWidthList.begin() + 1, GetBoard()->m_TrackWidthList.end() );
+
+    for( unsigned ii = 1; ii < GetBoard()->m_ViasDimensionsList.size() - 1; ii++ )
     {
-        if( GetBoard()->m_ViasDimensionsList[ii]
-            == GetBoard()->m_ViasDimensionsList[ii + 1] )
+        if( GetBoard()->m_ViasDimensionsList[ii] == GetBoard()->m_ViasDimensionsList[ii + 1] )
         {
-            GetBoard()->m_ViasDimensionsList.erase(
-                GetBoard()->m_ViasDimensionsList.begin() + ii );
+            GetBoard()->m_ViasDimensionsList.erase( GetBoard()->m_ViasDimensionsList.begin() + ii );
             ii--;
         }
     }
 
     for( unsigned ii = 1; ii < GetBoard()->m_TrackWidthList.size() - 1; ii++ )
     {
-        if( GetBoard()->m_TrackWidthList[ii]
-            == GetBoard()->m_TrackWidthList[ii + 1] )
+        if( GetBoard()->m_TrackWidthList[ii] == GetBoard()->m_TrackWidthList[ii + 1] )
         {
-            GetBoard()->m_TrackWidthList.erase(
-                GetBoard()->m_TrackWidthList.begin() + ii );
+            GetBoard()->m_TrackWidthList.erase( GetBoard()->m_TrackWidthList.begin() + ii );
             ii--;
         }
     }
@@ -650,8 +652,7 @@ static int WriteSetup( FILE* aFile, PCB_BASE_FRAME* aFrame, BOARD* aBoard )
 
     fprintf( aFile, "Layers %d\n", aBoard->GetCopperLayerCount() );
 
-    unsigned layerMask =
-        g_TabAllCopperLayerMask[aBoard->GetCopperLayerCount() - 1];
+    unsigned layerMask = g_TabAllCopperLayerMask[aBoard->GetCopperLayerCount() - 1];
 
     for( int layer = 0; layerMask; ++layer, layerMask >>= 1 )
     {
@@ -663,27 +664,22 @@ static int WriteSetup( FILE* aFile, PCB_BASE_FRAME* aFrame, BOARD* aBoard )
         }
     }
 
-    // Save current default track width, for compatibility with older
-    // pcbnew version;
+    // Save current default track width, for compatibility with older pcbnew version;
     fprintf( aFile, "TrackWidth %d\n", aBoard->GetCurrentTrackWidth() );
 
-    // Save custom tracks width list (the first is not saved here: this is the
-    // netclass value
+    // Save custom tracks width list (the first is not saved here: this is the netclass value
     for( unsigned ii = 1; ii < aBoard->m_TrackWidthList.size(); ii++ )
         fprintf( aFile, "TrackWidthList %d\n", aBoard->m_TrackWidthList[ii] );
 
 
     fprintf( aFile, "TrackClearence %d\n", netclass_default->GetClearance() );
-    fprintf( aFile,
-             "ZoneClearence %d\n",
-             g_Zone_Default_Setting.m_ZoneClearance );
+    fprintf( aFile, "ZoneClearence %d\n", g_Zone_Default_Setting.m_ZoneClearance );
     fprintf( aFile, "TrackMinWidth %d\n", aBoard->GetBoardDesignSettings()->m_TrackMinWidth );
 
     fprintf( aFile, "DrawSegmWidth %d\n", aBoard->GetBoardDesignSettings()->m_DrawSegmentWidth );
     fprintf( aFile, "EdgeSegmWidth %d\n", aBoard->GetBoardDesignSettings()->m_EdgeSegmentWidth );
 
-    // Save current default via size, for compatibility with older pcbnew
-    // version;
+    // Save current default via size, for compatibility with older pcbnew version;
     fprintf( aFile, "ViaSize %d\n", netclass_default->GetViaDiameter() );
     fprintf( aFile, "ViaDrill %d\n", netclass_default->GetViaDrill() );
     fprintf( aFile, "ViaMinSize %d\n", aBoard->GetBoardDesignSettings()->m_ViasMinSize );
@@ -718,18 +714,17 @@ static int WriteSetup( FILE* aFile, PCB_BASE_FRAME* aFrame, BOARD* aBoard )
     fprintf( aFile, "EdgeModWidth %d\n", g_ModuleSegmentWidth );
     fprintf( aFile, "TextModSize %d %d\n", g_ModuleTextSize.x, g_ModuleTextSize.y );
     fprintf( aFile, "TextModWidth %d\n", g_ModuleTextWidth );
-    fprintf( aFile,
-             "PadSize %d %d\n",
-             g_Pad_Master.m_Size.x,
-             g_Pad_Master.m_Size.y );
+    fprintf( aFile, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
     fprintf( aFile, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
     fprintf( aFile,
              "Pad2MaskClearance %d\n",
              aBoard->GetBoardDesignSettings()->m_SolderMaskMargin );
+
     if( aBoard->GetBoardDesignSettings()->m_SolderPasteMargin != 0 )
         fprintf( aFile,
                  "Pad2PasteClearance %d\n",
                  aBoard->GetBoardDesignSettings()->m_SolderPasteMargin );
+
     if( aBoard->GetBoardDesignSettings()->m_SolderPasteMarginRatio != 0 )
         fprintf( aFile,
                  "Pad2PasteClearanceRatio %g\n",
@@ -756,7 +751,6 @@ static int WriteSetup( FILE* aFile, PCB_BASE_FRAME* aFrame, BOARD* aBoard )
     record.Replace( wxT("\n"), wxT(""), true );
     record.Replace( wxT("  "), wxT(" "), true);
     fprintf( aFile, "PcbPlotParams %s\n", TO_UTF8( record ) );
-
     fprintf( aFile, "$EndSETUP\n\n" );
     return 1;
 }
@@ -799,20 +793,18 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
         NbModules++;
 
     PtStruct = GetBoard()->m_Drawings; NbDrawItem = 0;
+
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
         NbDrawItem++;
 
     fprintf( File, "Ndraw %d\n", NbDrawItem );
     fprintf( File, "Ntrack %d\n", GetBoard()->GetNumSegmTrack() );
     fprintf( File, "Nzone %d\n", GetBoard()->GetNumSegmZone() );
-    fprintf( File, "BoardThickness %d\n",
-             GetBoard()->GetBoardDesignSettings()->m_BoardThickness );
-
+    fprintf( File, "BoardThickness %d\n", GetBoard()->GetBoardDesignSettings()->m_BoardThickness );
     fprintf( File, "Nmodule %d\n", NbModules );
     fprintf( File, "Nnets %d\n", GetBoard()->m_NetInfo->GetCount() );
-
     fprintf( File, "$EndGENERAL\n\n" );
-    return TRUE;
+    return true;
 }
 
 
@@ -839,7 +831,7 @@ bool WriteSheetDescr( BASE_SCREEN* screen, FILE* File )
     fprintf( File, "Comment4 %s\n",     EscapedUTF8( screen->m_Commentaire4 ).c_str() );
 
     fprintf( File, "$EndSHEETDESCR\n\n" );
-    return TRUE;
+    return true;
 }
 
 
@@ -850,8 +842,9 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
     while(  aReader->ReadLine() )
     {
         Line = aReader->Line();
+
         if( strnicmp( Line, "$End", 4 ) == 0 )
-            return TRUE;
+            return true;
 
         if( strnicmp( Line, "Sheet", 4 ) == 0 )
         {
@@ -859,20 +852,26 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
             text = strtok( NULL, " \t\n\r" );
             Ki_PageDescr* sheet = g_SheetSizeList[0];
             int           ii;
+
             for( ii = 0; sheet != NULL; ii++, sheet = g_SheetSizeList[ii] )
             {
                 if( stricmp( TO_UTF8( sheet->m_Name ), text ) == 0 )
                 {
                     screen->m_CurrentSheetDesc = sheet;
+
                     if( sheet == &g_Sheet_user )
                     {
                         text = strtok( NULL, " \t\n\r" );
+
                         if( text )
                             sheet->m_Size.x = atoi( text );
+
                         text = strtok( NULL, " \t\n\r" );
+
                         if( text )
                             sheet->m_Size.y = atoi( text );
                     }
+
                     break;
                 }
             }
@@ -937,7 +936,7 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -1008,8 +1007,7 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
         {
 #ifdef PCBNEW
             TRACK* insertBeforeMe = Append ? NULL : board->m_Track.GetFirst();
-            ReadListeSegmentDescr( aReader, insertBeforeMe, TYPE_TRACK,
-                                   NbTrack );
+            ReadListeSegmentDescr( aReader, insertBeforeMe, TYPE_TRACK, NbTrack );
 #endif
             continue;
         }
@@ -1054,9 +1052,9 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
             continue;
         }
 
-        if( TESTLINE( "MIREPCB" ) )
+        if( TESTLINE( "PCB_TARGET" ) )
         {
-            MIREPCB* Mire = new MIREPCB( board );
+            PCB_TARGET* Mire = new PCB_TARGET( board );
             board->Add( Mire, ADD_APPEND );
             Mire->ReadMirePcbDescr( aReader );
             continue;
@@ -1067,8 +1065,7 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 #ifdef PCBNEW
             SEGZONE* insertBeforeMe = Append ? NULL : board->m_Zone.GetFirst();
 
-            ReadListeSegmentDescr( aReader, insertBeforeMe, TYPE_ZONE,
-                                   NbZone );
+            ReadListeSegmentDescr( aReader, insertBeforeMe, TYPE_ZONE, NbZone );
 #endif
             continue;
         }
@@ -1093,12 +1090,15 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
             }
             else
             {
-                while( aReader->ReadLine() ) {
+                while( aReader->ReadLine() )
+                {
                     Line = aReader->Line();
+
                     if( TESTLINE( "EndSETUP" ) )
                         break;
                 }
             }
+
             continue;
         }
 
@@ -1144,8 +1144,7 @@ int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
     /* Writing file header. */
     fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
              DateAndTime( line ) );
-    fprintf( aFile, "# Created by Pcbnew%s\n\n",
-             TO_UTF8( GetBuildVersion() ) );
+    fprintf( aFile, "# Created by Pcbnew%s\n\n", TO_UTF8( GetBuildVersion() ) );
 
     GetBoard()->SynchronizeNetsAndNetClasses();
 

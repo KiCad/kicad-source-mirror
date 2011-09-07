@@ -663,7 +663,7 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
             evt_type = ID_POPUP_PCB_EDIT_MODULE;
         break;
 
-    case TYPE_MIRE:
+    case PCB_TARGET_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_MIRE;
         break;
@@ -757,8 +757,10 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
         // the parent.
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_MODULE_REQUEST;
+
         if( aIdCommand == HK_DRAG_ITEM )
             evt_type = ID_POPUP_PCB_DRAG_MODULE_REQUEST;
+
         break;
 
     case TYPE_TEXTE:
@@ -766,7 +768,7 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
             evt_type = ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST;
         break;
 
-    case TYPE_MIRE:
+    case PCB_TARGET_T:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_MIRE_REQUEST;
         break;
@@ -849,8 +851,8 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
             Place_Module( (MODULE*) item, aDC );
             break;
 
-        case TYPE_MIRE:
-            Place_Mire( (MIREPCB*) item, aDC );
+        case PCB_TARGET_T:
+            PlaceTarget( (PCB_TARGET*) item, aDC );
             break;
 
         case TYPE_DRAWSEGMENT:

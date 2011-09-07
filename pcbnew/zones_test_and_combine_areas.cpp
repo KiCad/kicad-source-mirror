@@ -1019,7 +1019,7 @@ bool DRC::doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex )
     wxPoint  end;
 
     // Search the end point of the edge starting at aCornerIndex
-    if( aArea->m_Poly->corner[aCornerIndex].end_contour == FALSE
+    if( aArea->m_Poly->corner[aCornerIndex].end_contour == false
        && aCornerIndex < (aArea->GetNumCorners() - 1) )
     {
         end = aArea->GetCornerPosition( aCornerIndex + 1 );

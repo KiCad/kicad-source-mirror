@@ -28,7 +28,7 @@ class SEGZONE;
 class SEGVIA;
 class D_PAD;
 class TEXTE_MODULE;
-class MIREPCB;
+class PCB_TARGET;
 class DIMENSION;
 class EDGE_MODULE;
 class DRC;
@@ -830,8 +830,8 @@ public:
      *                the case where DRC would not allow a via.
      */
     bool   Other_Layer_Route( TRACK* track, wxDC* DC );
-    void   Affiche_PadsNoConnect( wxDC* DC );
-    void   Affiche_Status_Net( wxDC* DC );
+    void   HighlightUnconnectedPads( wxDC* DC );
+    void   DisplayNetStatus( wxDC* DC );
     TRACK* Delete_Segment( wxDC* DC, TRACK* Track );
     void   Delete_Track( wxDC* DC, TRACK* Track );
     void   Delete_net( wxDC* DC, TRACK* Track );
@@ -910,7 +910,6 @@ public:
     void   Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
     void   SwitchLayer( wxDC* DC, int layer );
     bool   Add_45_degrees_Segment( wxDC* DC );
-    bool   Genere_Pad_Connexion( wxDC* DC, int layer );
 
     /**
      * Function EraseRedundantTrack
@@ -1085,11 +1084,11 @@ public:
     void         Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
 
     // Target handling
-    MIREPCB*     Create_Mire( wxDC* DC );
-    void         Delete_Mire( MIREPCB* MirePcb, wxDC* DC );
-    void         StartMove_Mire( MIREPCB* MirePcb, wxDC* DC );
-    void         Place_Mire( MIREPCB* MirePcb, wxDC* DC );
-    void         InstallMireOptionsFrame( MIREPCB* MirePcb, wxDC* DC );
+    PCB_TARGET*  CreateTarget( wxDC* DC );
+    void         DeleteTarget( PCB_TARGET* aTarget, wxDC* DC );
+    void         BeginMoveTarget( PCB_TARGET* aTarget, wxDC* DC );
+    void         PlaceTarget( PCB_TARGET* aTarget, wxDC* DC );
+    void         ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC );
 
     // Graphic segments type DRAWSEGMENT handling:
     DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, int shape, wxDC* DC );

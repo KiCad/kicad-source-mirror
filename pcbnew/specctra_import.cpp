@@ -80,7 +80,7 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
                             mask,
                             this,
                             wxFD_OPEN,
-                            FALSE
+                            false
                             );
 
     if( fullFileName == wxEmptyString )

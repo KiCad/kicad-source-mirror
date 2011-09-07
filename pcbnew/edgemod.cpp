@@ -40,7 +40,7 @@ void FOOTPRINT_EDIT_FRAME::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
     CursorInitialPosition    = GetScreen()->GetCrossHairPosition();
     DrawPanel->SetMouseCapture( ShowCurrentOutlineWhileMoving, Abort_Move_ModuleOutline );
     SetCurItem( Edge );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 }
 
 
@@ -48,6 +48,7 @@ void FOOTPRINT_EDIT_FRAME::Place_EdgeMod( EDGE_MODULE* Edge )
 {
     if( Edge == NULL )
         return;
+
     Edge->m_Start -= MoveVector;
     Edge->m_End   -= MoveVector;
 
@@ -59,7 +60,7 @@ void FOOTPRINT_EDIT_FRAME::Place_EdgeMod( EDGE_MODULE* Edge )
     SetCurItem( NULL );
     OnModify();
     MODULE* Module = (MODULE*) Edge->GetParent();
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
     DrawPanel->Refresh( );
 }
 
@@ -87,7 +88,7 @@ static void ShowCurrentOutlineWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     Edge->Draw( aPanel, aDC, GR_XOR, MoveVector );
 
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
 }
 
 
@@ -105,7 +106,7 @@ static void ShowNewEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
     MODULE* Module = (MODULE*) Edge->GetParent();
 
-    //	if( erase )
+    //  if( erase )
     {
         Edge->Draw( aPanel, aDC, GR_XOR );
     }
@@ -118,7 +119,7 @@ static void ShowNewEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
     Edge->Draw( aPanel, aDC, GR_XOR );
 
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
 }
 
 
@@ -131,18 +132,22 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
     if( aEdge == NULL )
     {
         aEdge = (EDGE_MODULE*) (BOARD_ITEM*) Module->m_Drawings;
+
         for( ; aEdge != NULL; aEdge = aEdge->Next() )
         {
             if( aEdge->Type() != TYPE_EDGE_MODULE )
                 continue;
+
             aEdge->m_Width = g_ModuleSegmentWidth;
         }
     }
     else
+    {
         aEdge->m_Width = g_ModuleSegmentWidth;
+    }
 
     OnModify();
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
     Module->m_LastEdit_Time = time( NULL );
 }
 
@@ -155,9 +160,9 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* Edge )
     if( Edge != NULL )
         new_layer = Edge->GetLayer();
 
-
     /* Ask for the new layer */
     new_layer = SelectLayer( new_layer, FIRST_COPPER_LAYER, LAST_NO_COPPER_LAYER );
+
     if( new_layer < 0 )
         return;
 
@@ -190,7 +195,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* Edge )
     }
 
     OnModify();
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
     Module->m_LastEdit_Time = time( NULL );
 }
 
@@ -214,7 +219,7 @@ void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
     {
         MODULE* Module = GetBoard()->m_Modules;
         aEdge->m_Width = g_ModuleSegmentWidth;
-        Module->Set_Rectangle_Encadrement();
+        Module->CalculateBoundingBox();
         OnModify();
     }
 }
@@ -236,7 +241,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Edge_Module( EDGE_MODULE* Edge )
     /* Delete segment. */
     Edge->DeleteStructure();
     Module->m_LastEdit_Time = time( NULL );
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
     OnModify();
 }
 
@@ -256,7 +261,7 @@ static void Abort_Move_ModuleOutline( EDA_DRAW_PANEL* Panel, wxDC* DC )
             MODULE* Module = (MODULE*) Edge->GetParent();
             Edge->Draw( Panel, DC, GR_XOR, MoveVector );
             Edge->DeleteStructure();
-            Module->Set_Rectangle_Encadrement();
+            Module->CalculateBoundingBox();
         }
         else   // On aborting, move existing outline to its initial position.
         {
@@ -319,7 +324,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
         RotatePoint( &Edge->m_Start0, -module->m_Orient );
 
         Edge->m_End0 = Edge->m_Start0;
-        module->Set_Rectangle_Encadrement();
+        module->CalculateBoundingBox();
         DrawPanel->SetMouseCapture( ShowNewEdgeModule, Abort_Move_ModuleOutline );
     }
     /* Segment creation in progress.
@@ -356,7 +361,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
 
                 Edge->m_End0 = Edge->m_Start0;
 
-                module->Set_Rectangle_Encadrement();
+                module->CalculateBoundingBox();
                 module->m_LastEdit_Time = time( NULL );
                 OnModify();
             }
@@ -384,7 +389,7 @@ void FOOTPRINT_EDIT_FRAME::End_Edge_Module( EDGE_MODULE* Edge )
             Edge->DeleteStructure();
     }
 
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
     Module->m_LastEdit_Time = time( NULL );
     OnModify();
     DrawPanel->SetMouseCapture( NULL, NULL );

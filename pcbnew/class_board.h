@@ -842,6 +842,7 @@ public:
     {
         if( (unsigned) index < m_ZoneDescriptorList.size() )
             return m_ZoneDescriptorList[index];
+
         return NULL;
     }
 
@@ -879,8 +880,8 @@ public:
     /**
      * Function AddArea
      * Add an empty copper area to board areas list
-     * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas  pickers (useful in undo commands)
-     *                      can be NULL
+     * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas  pickers (useful
+     *                        in undo commands) can be NULL
      * @param aNetcode = the necode of the copper area (0 = no net)
      * @param aLayer = the layer of area
      * @param aStartPointPosition = position of the first point of the polygon outline of this area
@@ -924,8 +925,8 @@ public:
      * Function ClipAreaPolygon
      * Process an area that has been modified, by clipping its polygon against itself.
      * This may change the number and order of copper areas in the net.
-     * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas pickers (useful in undo commands)
-     *                      can be NULL
+     * @param aNewZonesList = a PICKED_ITEMS_LIST * where to store new areas pickers (useful
+     *                        in undo commands) can be NULL
      * @param aCurrArea = the zone to process
      * @param bMessageBoxInt == true, shows message when clipping occurs.
      * @param  bMessageBoxArc == true, shows message when clipping can't be done due to arcs.
@@ -940,7 +941,7 @@ public:
                                      ZONE_CONTAINER*    aCurrArea,
                                      bool               bMessageBoxArc,
                                      bool               bMessageBoxInt,
-                                     bool               bRetainArcs = TRUE );
+                                     bool               bRetainArcs = true );
 
     /**
      * Process an area that has been modified, by clipping its polygon against
@@ -949,7 +950,7 @@ public:
      * @param aModifiedZonesList = a PICKED_ITEMS_LIST * where to store deleted or added areas
      *                      (useful in undo commands. Can be NULL
      * @param modified_area = area to test
-     * @param bMessageBoxInt : if TRUE, shows message boxes when clipping occurs.
+     * @param bMessageBoxInt : if true, shows message boxes when clipping occurs.
      * @param bMessageBoxArc if true, shows message when clipping can't be done due to arcs.
      * @return :
      * -1 if arcs intersect other sides, so polygon can't be clipped

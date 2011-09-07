@@ -108,8 +108,9 @@ bool DIMENSION::ReadDimensionDescr( LINE_READER* aReader )
     while( aReader->ReadLine() )
     {
         Line = aReader->Line();
+
         if( strnicmp( Line, "$EndDIMENSION", 4 ) == 0 )
-            return TRUE;
+            return true;
 
         if( Line[0] == 'V' )
         {
@@ -125,6 +126,7 @@ bool DIMENSION::ReadDimensionDescr( LINE_READER* aReader )
 
             if( layer < FIRST_NO_COPPER_LAYER )
                 layer = FIRST_NO_COPPER_LAYER;
+
             if( layer > LAST_NO_COPPER_LAYER )
                 layer = LAST_NO_COPPER_LAYER;
 
@@ -221,7 +223,7 @@ bool DIMENSION::ReadDimensionDescr( LINE_READER* aReader )
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -275,8 +277,10 @@ void DIMENSION::Rotate(const wxPoint& aRotCentre, int aAngle)
 
     RotatePoint( &m_Text->m_Pos, aRotCentre, aAngle );
     m_Text->m_Orient += aAngle;
+
     if( m_Text->m_Orient >= 3600 )
         m_Text->m_Orient -= 3600;
+
     if( ( m_Text->m_Orient > 900 ) && ( m_Text->m_Orient <2700 ) )
         m_Text->m_Orient -= 1800;
 
@@ -323,8 +327,10 @@ void DIMENSION::Mirror(const wxPoint& axis_pos)
     INVERT( m_Pos.y );
     INVERT( m_Text->m_Pos.y );
     INVERT_ANGLE( m_Text->m_Orient );
+
     if( m_Text->m_Orient >= 3600 )
         m_Text->m_Orient -= 3600;
+
     if( ( m_Text->m_Orient > 900 ) && ( m_Text->m_Orient < 2700 ) )
         m_Text->m_Orient -= 1800;
 
@@ -456,10 +462,13 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 
         if( TraitG_ox > Barre_ox )
             hx = -hx;
+
         if( TraitG_ox == Barre_ox )
             hx = 0;
+
         if( TraitG_oy > Barre_oy )
             hy = -hy;
+
         if( TraitG_oy == Barre_oy )
             hy = 0;
 
@@ -503,16 +512,17 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     TraitD_fy = Barre_fy + hy;
 
     /* Calculate the better text position and orientation: */
-    m_Pos.x   = m_Text->m_Pos.x
-                          = (Barre_fx + TraitG_fx) / 2;
-    m_Pos.y   = m_Text->m_Pos.y
-                          = (Barre_fy + TraitG_fy) / 2;
+    m_Pos.x = m_Text->m_Pos.x = (Barre_fx + TraitG_fx) / 2;
+    m_Pos.y = m_Text->m_Pos.y = (Barre_fy + TraitG_fy) / 2;
 
     m_Text->m_Orient = -(int) (angle * 1800 / M_PI);
+
     if( m_Text->m_Orient < 0 )
         m_Text->m_Orient += 3600;
+
     if( m_Text->m_Orient >= 3600 )
         m_Text->m_Orient -= 3600;
+
     if( (m_Text->m_Orient > 900) && (m_Text->m_Orient <2700) )
         m_Text->m_Orient -= 1800;
 
@@ -537,6 +547,7 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxP
     m_Text->Draw( panel, DC, mode_color, offset );
 
     BOARD * brd =  GetBoard( );
+
     if( brd->IsLayerVisible( m_Layer ) == false )
         return;
 
@@ -734,6 +745,7 @@ bool DIMENSION::HitTest( EDA_RECT& refArea )
 {
     if( refArea.Contains( m_Pos ) )
         return true;
+
     return false;
 }
 

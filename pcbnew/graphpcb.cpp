@@ -41,7 +41,7 @@ static void TraceFilledCercle( BOARD* Pcb,
                                int    cx,
                                int    cy,
                                int    radius,
-                               int    masque_layer,
+                               int    aLayerMask,
                                int    color,
                                int    op_logique );
 static void TraceCercle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
@@ -102,7 +102,7 @@ void Place_1_Pad_Board( BOARD* Pcb,
     if( pt_pad->m_PadShape == PAD_CIRCLE )
     {
         TraceFilledCercle( Pcb, shape_pos.x, shape_pos.y, dx,
-                           pt_pad->m_Masque_Layer, color, op_logique );
+                           pt_pad->m_layerMask, color, op_logique );
         return;
     }
 
@@ -126,14 +126,14 @@ void Place_1_Pad_Board( BOARD* Pcb,
 
         TraceFilledRectangle( Pcb, shape_pos.x - dx, shape_pos.y - dy,
                               shape_pos.x + dx, shape_pos.y + dy,
-                              pt_pad->m_Masque_Layer, color, op_logique );
+                              pt_pad->m_layerMask, color, op_logique );
     }
     else
     {
         TraceFilledRectangle( Pcb, shape_pos.x - dx, shape_pos.y - dy,
                               shape_pos.x + dx, shape_pos.y + dy,
                               (int) pt_pad->m_Orient,
-                              pt_pad->m_Masque_Layer, color, op_logique );
+                              pt_pad->m_layerMask, color, op_logique );
     }
 }
 
@@ -142,7 +142,7 @@ void Place_1_Pad_Board( BOARD* Pcb,
  * circle center cx, cy.
  * Parameters:
  * radius: a value add to the radius or half the score pad
- * masque_layer: layer occupied
+ * aLayerMask: layer occupied
  * color: mask write in cells
  * op_logique: type of writing in the cell (WRITE, OR)
  */
@@ -150,7 +150,7 @@ void TraceFilledCercle( BOARD* Pcb,
                         int    cx,
                         int    cy,
                         int    radius,
-                        int    masque_layer,
+                        int    aLayerMask,
                         int    color,
                         int    op_logique )
 {
@@ -169,10 +169,10 @@ void TraceFilledCercle( BOARD* Pcb,
     /* Single routing layer on bitmap and BOTTOM
      * Route_Layer_B = Route_Layer_A */
 
-    if( masque_layer & g_TabOneLayerMask[Route_Layer_BOTTOM] )
+    if( aLayerMask & g_TabOneLayerMask[Route_Layer_BOTTOM] )
         trace = 1;       /* Trace on BOTTOM */
 
-    if( masque_layer & g_TabOneLayerMask[Route_Layer_TOP] )
+    if( aLayerMask & g_TabOneLayerMask[Route_Layer_TOP] )
         if( Nb_Sides )
             trace |= 2;  /* Trace on TOP */
 
@@ -528,7 +528,7 @@ void TraceLignePcb( int x0,
  * Contact PCBs.
  */
 void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
-                           int masque_layer, int color, int op_logique )
+                           int aLayerMask, int color, int op_logique )
 {
     int  row, col;
     int  row_min, row_max, col_min, col_max;
@@ -536,10 +536,10 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
 
     void (* WriteCell)( int, int, int, MATRIX_CELL );
 
-    if( masque_layer & g_TabOneLayerMask[Route_Layer_BOTTOM] )
+    if( aLayerMask & g_TabOneLayerMask[Route_Layer_BOTTOM] )
         trace = 1;     /* Trace on BOTTOM */
 
-    if( ( masque_layer & g_TabOneLayerMask[Route_Layer_TOP] ) && Nb_Sides )
+    if( ( aLayerMask & g_TabOneLayerMask[Route_Layer_TOP] ) && Nb_Sides )
         trace |= 2;    /* Trace on TOP */
 
     if( trace == 0 )
@@ -615,7 +615,7 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
  * contact PCBs.
  */
 void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
-                           int angle, int masque_layer, int color,
+                           int angle, int aLayerMask, int color,
                            int op_logique )
 {
     int  row, col;
@@ -627,10 +627,10 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
 
     void (* WriteCell)( int, int, int, MATRIX_CELL );
 
-    if( masque_layer & g_TabOneLayerMask[Route_Layer_BOTTOM] )
+    if( aLayerMask & g_TabOneLayerMask[Route_Layer_BOTTOM] )
         trace = 1;     /* Trace on BOTTOM */
 
-    if( masque_layer & g_TabOneLayerMask[Route_Layer_TOP] )
+    if( aLayerMask & g_TabOneLayerMask[Route_Layer_TOP] )
         if( Nb_Sides )
             trace |= 2;  /* Trace on TOP */
 

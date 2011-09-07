@@ -119,15 +119,12 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 
     /* Draw items on edge layer */
 
-    for( PtStruct = aPcb->m_Drawings;
-        PtStruct != NULL;
-        PtStruct = PtStruct->Next() )
+    for( PtStruct = aPcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         switch( PtStruct->Type() )
         {
         case TYPE_DRAWSEGMENT:
-            PlotDrawSegment( plotter, (DRAWSEGMENT*) PtStruct, EDGE_LAYER,
-                             FILLED );
+            PlotDrawSegment( plotter, (DRAWSEGMENT*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
         case TYPE_TEXTE:
@@ -138,8 +135,8 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             PlotDimension( plotter, (DIMENSION*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
-        case TYPE_MIRE:
-            PlotMirePcb( plotter, (MIREPCB*) PtStruct, EDGE_LAYER, FILLED );
+        case PCB_TARGET_T:
+            PlotPcbTarget( plotter, (PCB_TARGET*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
         case TYPE_MARKER_PCB:     // do not draw
@@ -181,6 +178,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     for( unsigned ii = 0; ii < aToolListBuffer.size(); ii++ )
     {
         int plot_diam;
+
         if( aToolListBuffer[ii].m_TotalCount == 0 )
             continue;
 
@@ -203,6 +201,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             sprintf( line, "%2.2fmm / %2.3f\" ",
                      double (aToolListBuffer[ii].m_Diameter) * 0.00254,
                      double (aToolListBuffer[ii].m_Diameter) * 0.0001 );
+
         msg = FROM_UTF8( line );
 
         // Now list how many holes and ovals are associated with each drill.
@@ -212,16 +211,15 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         else if( aToolListBuffer[ii].m_TotalCount == 1 )      // && ( aToolListBuffer[ii]m_OvalCount == 1 )
             sprintf( line, "(1 slot)" );
         else if( aToolListBuffer[ii].m_OvalCount == 0 )
-            sprintf( line, "(%d holes)",
-                     aToolListBuffer[ii].m_TotalCount );
+            sprintf( line, "(%d holes)", aToolListBuffer[ii].m_TotalCount );
         else if( aToolListBuffer[ii].m_OvalCount == 1 )
-            sprintf( line, "(%d holes + 1 slot)",
-                     aToolListBuffer[ii].m_TotalCount - 1 );
+            sprintf( line, "(%d holes + 1 slot)", aToolListBuffer[ii].m_TotalCount - 1 );
         else      // if ( aToolListBuffer[ii]m_OvalCount > 1 )
             sprintf( line, "(%d holes + %d slots)",
                      aToolListBuffer[ii].m_TotalCount -
                      aToolListBuffer[ii].m_OvalCount,
                      aToolListBuffer[ii].m_OvalCount );
+
         msg += FROM_UTF8( line );
         plotter->text( wxPoint( plotX, y ), BLACK,
                        msg,
@@ -258,8 +256,7 @@ void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* aPlotter,
     if( aToolListBuffer.size() > 13 )
     {
         DisplayInfoMessage( NULL,
-                            _(
-                                " Drill map: Too many diameter values to draw to draw one symbol per drill value (max 13)\nPlot uses circle shape for some drill values" ),
+                            _( " Drill map: Too many diameter values to draw to draw one symbol per drill value (max 13)\nPlot uses circle shape for some drill values" ),
                             10 );
     }
 
@@ -271,13 +268,14 @@ void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* aPlotter,
         /* Always plot the drill symbol (for slots identifies the needed
          * cutter!) */
         aPlotter->marker( pos, aHoleListBuffer[ii].m_Hole_Diameter,
-                         aHoleListBuffer[ii].m_Tool_Reference - 1 );
+                          aHoleListBuffer[ii].m_Tool_Reference - 1 );
+
         if( aHoleListBuffer[ii].m_Hole_Shape != 0 )
         {
             wxSize oblong_size;
             oblong_size = aHoleListBuffer[ii].m_Hole_Size;
             aPlotter->flash_pad_oval( pos, oblong_size,
-                                     aHoleListBuffer[ii].m_Hole_Orient, FILAIRE );
+                                      aHoleListBuffer[ii].m_Hole_Orient, FILAIRE );
         }
     }
 }
@@ -345,8 +343,8 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
             }
 
             sprintf( line, "Drill report for holes from layer %s to layer %s\n",
-                    TO_UTF8( aPcb->GetLayerName( layer1 ) ),
-                    TO_UTF8( aPcb->GetLayerName( layer2 ) ) );
+                     TO_UTF8( aPcb->GetLayerName( layer1 ) ),
+                     TO_UTF8( aPcb->GetLayerName( layer2 ) ) );
         }
 
         fputs( line, aFile );
@@ -366,6 +364,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
                          ii + 1,
                          double (aToolListBuffer[ii].m_Diameter) * 0.00254,
                          double (aToolListBuffer[ii].m_Diameter) * 0.0001 );
+
             fputs( line, aFile );
 
             // Now list how many holes and ovals are associated with each drill.
@@ -375,15 +374,14 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
             else if( aToolListBuffer[ii].m_TotalCount == 1 )
                 sprintf( line, "(1 hole)  (with 1 oblong)\n" );
             else if( aToolListBuffer[ii].m_OvalCount == 0 )
-                sprintf( line, "(%d holes)\n",
-                         aToolListBuffer[ii].m_TotalCount );
+                sprintf( line, "(%d holes)\n", aToolListBuffer[ii].m_TotalCount );
             else if( aToolListBuffer[ii].m_OvalCount == 1 )
-                sprintf( line, "(%d holes)  (with 1 oblong)\n",
-                         aToolListBuffer[ii].m_TotalCount );
+                sprintf( line, "(%d holes)  (with 1 oblong)\n", aToolListBuffer[ii].m_TotalCount );
             else  //  if ( buffer[ii]m_OvalCount > 1 )
                 sprintf( line, "(%d holes)  (with %d oblongs)\n",
                          aToolListBuffer[ii].m_TotalCount,
                          aToolListBuffer[ii].m_OvalCount );
+
             fputs( line, aFile );
 
             TotalHoleCount += aToolListBuffer[ii].m_TotalCount;
@@ -393,6 +391,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
             sprintf( line, "\ntotal Not Plated holes count %d\n\n\n", TotalHoleCount );
         else
             sprintf( line, "\ntotal plated holes count %d\n\n\n", TotalHoleCount );
+
         fputs( line, aFile );
 
         if( gen_NPTH_holes )
@@ -408,7 +407,9 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
             }
 
             if(  gen_through_holes )
+            {
                 layer2 = layer1 + 1;
+            }
             else
             {
                 if( layer2 >= LAYER_N_FRONT )    // no more layer pair to consider
@@ -416,6 +417,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
                     gen_NPTH_holes = true;
                     continue;
                 }
+
                 layer1++; layer2++;           // use next layer pair
 
                 if( layer2 == aPcb->GetCopperLayerCount() - 1 )

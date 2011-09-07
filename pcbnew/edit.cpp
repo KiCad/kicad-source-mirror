@@ -881,18 +881,18 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_MOVE_MIRE_REQUEST:
-        StartMove_Mire( (MIREPCB*) GetCurItem(), &dc );
+        BeginMoveTarget( (PCB_TARGET*) GetCurItem(), &dc );
         DrawPanel->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_EDIT_MIRE:
-        InstallMireOptionsFrame( (MIREPCB*) GetCurItem(), &dc );
+        ShowTargetOptionsDialog( (PCB_TARGET*) GetCurItem(), &dc );
         DrawPanel->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_DELETE_MIRE:
         DrawPanel->MoveCursorToCrossHair();
-        Delete_Mire( (MIREPCB*) GetCurItem(), &dc );
+        DeleteTarget( (PCB_TARGET*) GetCurItem(), &dc );
         SetCurItem( NULL );
         break;
 
@@ -1096,8 +1096,8 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         Delete_Dimension( (DIMENSION*) Item, DC );
         break;
 
-    case TYPE_MIRE:
-        Delete_Mire( (MIREPCB*) Item, DC );
+    case PCB_TARGET_T:
+        DeleteTarget( (PCB_TARGET*) Item, DC );
         break;
 
     case TYPE_DRAWSEGMENT:

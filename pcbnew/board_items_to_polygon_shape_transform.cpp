@@ -46,9 +46,10 @@ void TransformArcToPolygon( std::vector <CPolyPt>& aCornerBuffer,
                             int aCircleToSegmentsCount, int aWidth )
 {
     wxPoint arc_start, arc_end;
-    int     delta = 3600 / aCircleToSegmentsCount;                                                                 // rot angle in 0.1 degree
+    int     delta = 3600 / aCircleToSegmentsCount;   // rotate angle in 0.1 degree
 
     arc_end = arc_start = aStart;
+
     if( aArcAngle != 3600 )
     {
         RotatePoint( &arc_end, aCentre, -aArcAngle );
@@ -63,12 +64,13 @@ void TransformArcToPolygon( std::vector <CPolyPt>& aCornerBuffer,
     // Compute the ends of segments and creates poly
     wxPoint curr_end   = arc_start;
     wxPoint curr_start = arc_start;
+
     for( int ii = delta; ii < aArcAngle; ii += delta )
     {
         curr_end = arc_start;
         RotatePoint( &curr_end, aCentre, -ii );
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                                              curr_start, curr_end, aCircleToSegmentsCount, aWidth );
+        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, curr_start, curr_end,
+                                              aCircleToSegmentsCount, aWidth );
         curr_start = curr_end;
     }
 
@@ -90,11 +92,10 @@ void TransformArcToPolygon( std::vector <CPolyPt>& aCornerBuffer,
  * clearance when the circle is approximated by segment bigger or equal
  * to the real clearance value (usually near from 1.0)
  */
-void TEXTE_PCB::TransformShapeWithClearanceToPolygon(
-    std::vector <CPolyPt>& aCornerBuffer,
-    int                    aClearanceValue,
-    int                    aCircleToSegmentsCount,
-    double                 aCorrectionFactor )
+void TEXTE_PCB::TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+                                                      int                    aClearanceValue,
+                                                      int                    aCircleToSegmentsCount,
+                                                      double                 aCorrectionFactor )
 {
     if( GetLength() == 0 )
         return;
@@ -115,9 +116,7 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygon(
     for( int ii = 0; ii < 4; ii++ )
     {
         // Rotate polygon
-        RotatePoint( &corners[ii].x, &corners[ii].y,
-                     m_Pos.x, m_Pos.y,
-                     m_Orient );
+        RotatePoint( &corners[ii].x, &corners[ii].y, m_Pos.x, m_Pos.y, m_Orient );
         aCornerBuffer.push_back( corners[ii] );
     }
 
@@ -137,32 +136,31 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygon(
  * clearance when the circle is approxiamted by segment bigger or equal
  * to the real clearance value (usually near from 1.0)
  */
-void DRAWSEGMENT::TransformShapeWithClearanceToPolygon(
-    std::vector <CPolyPt>& aCornerBuffer,
-    int                    aClearanceValue,
-    int                    aCircleToSegmentsCount,
-    double                 aCorrectionFactor )
+void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( std::vector <CPolyPt>& aCornerBuffer,
+                                                        int                    aClearanceValue,
+                                                        int                    aCircleToSegmentsCount,
+                                                        double                 aCorrectionFactor )
 {
     switch( m_Shape )
     {
     case S_CIRCLE:
         TransformArcToPolygon( aCornerBuffer, m_Start,         // Circle centre
-                              m_End, 3600,
-                              aCircleToSegmentsCount,
-                              m_Width + (2 * aClearanceValue) );
+                               m_End, 3600,
+                               aCircleToSegmentsCount,
+                               m_Width + (2 * aClearanceValue) );
         break;
 
     case S_ARC:
         TransformArcToPolygon( aCornerBuffer, m_Start,
-                              m_End, m_Angle,
-                              aCircleToSegmentsCount,
-                              m_Width + (2 * aClearanceValue) );
+                               m_End, m_Angle,
+                               aCircleToSegmentsCount,
+                               m_Width + (2 * aClearanceValue) );
         break;
 
     default:
-        TransformRoundedEndsSegmentToPolygon(
-            aCornerBuffer, m_Start, m_End,
-            aCircleToSegmentsCount, m_Width + (2 * aClearanceValue) );
+        TransformRoundedEndsSegmentToPolygon( aCornerBuffer, m_Start, m_End,
+                                              aCircleToSegmentsCount,
+                                              m_Width + (2 * aClearanceValue) );
         break;
     }
 }
@@ -188,17 +186,17 @@ void TRACK:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
     wxPoint corner_position;
     int     ii, angle;
     int     dx    = (m_Width / 2) + aClearanceValue;
-    int     delta = 3600 / aCircleToSegmentsCount;                                                // rot angle in 0.1 degree
+    int     delta = 3600 / aCircleToSegmentsCount;           // rot angle in 0.1 degree
 
     switch( Type() )
     {
     case TYPE_VIA:
         dx = (int) ( dx * aCorrectionFactor );
+
         for( ii = 0; ii < aCircleToSegmentsCount; ii++ )
         {
             corner_position = wxPoint( dx, 0 );
-            RotatePoint( &corner_position.x, &corner_position.y,
-                        (1800 / aCircleToSegmentsCount) );
+            RotatePoint( &corner_position.x, &corner_position.y, (1800 / aCircleToSegmentsCount) );
             angle = ii * delta;
             RotatePoint( &corner_position.x, &corner_position.y, angle );
             corner_position.x += m_Start.x;
@@ -211,11 +209,10 @@ void TRACK:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
         break;
 
     default:
-        TransformRoundedEndsSegmentToPolygon(
-            aCornerBuffer,
-            m_Start, m_End,
-            aCircleToSegmentsCount,
-            m_Width + ( 2 * aClearanceValue) );
+        TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
+                                              m_Start, m_End,
+                                              aCircleToSegmentsCount,
+                                              m_Width + ( 2 * aClearanceValue) );
         break;
     }
 }
@@ -228,7 +225,7 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
                                            int aCircleToSegmentsCount,
                                            int aWidth )
 {
-    int     rayon  = aWidth / 2;
+    int     radius = aWidth / 2;
     wxPoint endp   = aEnd - aStart; // end point coordinate for the same segment starting at (0,0)
     wxPoint startp = aStart;
     wxPoint corner;
@@ -241,20 +238,21 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
         endp   = aStart - aEnd;
         startp = aEnd;
     }
+
     int delta_angle = ArcTangente( endp.y, endp.x );    // delta_angle is in 0.1 degrees
     seg_len = (int) sqrt( ( (double) endp.y * endp.y ) + ( (double) endp.x * endp.x ) );
 
     int delta = 3600 / aCircleToSegmentsCount; // rot angle in 0.1 degree
 
     // Compute the outlines of the segment, and creates a polygon
-    corner = wxPoint( 0, rayon );
+    corner = wxPoint( 0, radius );
     RotatePoint( &corner, -delta_angle );
     corner += startp;
     polypoint.x = corner.x;
     polypoint.y = corner.y;
     aCornerBuffer.push_back( polypoint );
 
-    corner = wxPoint( seg_len, rayon );
+    corner = wxPoint( seg_len, radius );
     RotatePoint( &corner, -delta_angle );
     corner += startp;
     polypoint.x = corner.x;
@@ -264,7 +262,7 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
     // add right rounded end:
     for( int ii = delta; ii < 1800; ii += delta )
     {
-        corner = wxPoint( 0, rayon );
+        corner = wxPoint( 0, radius );
         RotatePoint( &corner, ii );
         corner.x += seg_len;
         RotatePoint( &corner, -delta_angle );
@@ -274,14 +272,14 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
         aCornerBuffer.push_back( polypoint );
     }
 
-    corner = wxPoint( seg_len, -rayon );
+    corner = wxPoint( seg_len, -radius );
     RotatePoint( &corner, -delta_angle );
     corner += startp;
     polypoint.x = corner.x;
     polypoint.y = corner.y;
     aCornerBuffer.push_back( polypoint );
 
-    corner = wxPoint( 0, -rayon );
+    corner = wxPoint( 0, -radius );
     RotatePoint( &corner, -delta_angle );
     corner += startp;
     polypoint.x = corner.x;
@@ -291,7 +289,7 @@ void TransformRoundedEndsSegmentToPolygon( std::vector <CPolyPt>& aCornerBuffer,
     // add left rounded end:
     for( int ii = delta; ii < 1800; ii += delta )
     {
-        corner = wxPoint( 0, -rayon );
+        corner = wxPoint( 0, -radius );
         RotatePoint( &corner, ii );
         RotatePoint( &corner, -delta_angle );
         corner += startp;
@@ -326,17 +324,18 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
     int     dx = (m_Size.x / 2) + aClearanceValue;
     int     dy = (m_Size.y / 2) + aClearanceValue;
 
-    int     delta = 3600 / aCircleToSegmentsCount;                   // rot angle in 0.1 degree
-    wxPoint PadShapePos = ReturnShapePos();                                                    /* Note: for pad having a shape offset,
-                                                                                                * the pad position is NOT the shape position */
-    wxSize  psize = m_Size;                                                   /* pad size unsed in RECT and TRAPEZOIDAL pads
-                                                                               *  trapezoidal pads are considered as rect pad shape having they boudary box size
-                                                                               */
+    int     delta = 3600 / aCircleToSegmentsCount;  // rot angle in 0.1 degree
+    wxPoint PadShapePos = ReturnShapePos();         /* Note: for pad having a shape offset,
+                                                     * the pad position is NOT the shape position */
+    wxSize  psize = m_Size;                         /* pad size unsed in RECT and TRAPEZOIDAL pads
+                                                     * trapezoidal pads are considered as rect
+                                                     * pad shape having they boudary box size */
 
     switch( m_PadShape )
     {
     case PAD_CIRCLE:
         dx = (int) ( dx * aCorrectionFactor );
+
         for( ii = 0; ii < aCircleToSegmentsCount; ii++ )
         {
             corner_position = wxPoint( dx, 0 );
@@ -360,7 +359,8 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
             dy = (int) ( dy * aCorrectionFactor );
             int     angle_pg;                                           // Polygon angle
             wxPoint shape_offset = wxPoint( 0, dy - dx );
-            RotatePoint( &shape_offset, angle );                        // Rotating shape offset vector with component
+
+            RotatePoint( &shape_offset, angle );    // Rotating shape offset vector with component
 
             for( ii = 0; ii < aCircleToSegmentsCount / 2 + 1; ii++ )    // Half circle end cap...
             {
@@ -434,10 +434,13 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
         psize.y += ABS( m_DeltaSize.x );
 
     // fall through
-    case PAD_RECT:                                                                                                              // Easy implementation for rectangular cutouts with rounded corners                                                                  // Easy implementation for rectangular cutouts with rounded corners
+    case PAD_RECT:
+        // Easy implementation for rectangular cutouts with rounded corners
         angle = m_Orient;
-        int rounding_radius = (int) ( aClearanceValue * aCorrectionFactor );                                                    // Corner rounding radius
-        int angle_pg;                                                                                                           // Polygon increment angle
+
+        // Corner rounding radius
+        int rounding_radius = (int) ( aClearanceValue * aCorrectionFactor );
+        int angle_pg;  // Polygon increment angle
 
         for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
         {
@@ -449,11 +452,11 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
             RotatePoint( &corner_position, angle_pg );
 
             // Rounding vector rotation
-            corner_position -= psize / 2;                                                       // Rounding vector + Pad corner offset
+            corner_position -= psize / 2;            // Rounding vector + Pad corner offset
             RotatePoint( &corner_position, angle );
 
             // Rotate according to module orientation
-            corner_position += PadShapePos;                                                    // Shift origin to position
+            corner_position += PadShapePos;          // Shift origin to position
             CPolyPt polypoint( corner_position.x, corner_position.y );
             aCornerBuffer.push_back( polypoint );
         }
@@ -471,9 +474,7 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
             aCornerBuffer.push_back( polypoint );
         }
 
-        for( int i = 0;
-             i < aCircleToSegmentsCount / 4 + 1;
-             i++ )
+        for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
         {
             corner_position = wxPoint( 0, rounding_radius );
             RotatePoint( &corner_position, (1800 / aCircleToSegmentsCount) );
@@ -533,7 +534,8 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
  * And
  * nothing else between holes
  * And
- * angles less than 90 deg between 2 consecutive lines in hole outline (sometime occurs without this condition)
+ * angles less than 90 deg between 2 consecutive lines in hole outline (sometime occurs without
+ * this condition)
  * And
  * a hole above the identical holes
  *
@@ -547,8 +549,8 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
  *
  * Note 2:
  *      Trapezoidal pads are not considered here because they are very special case
- *      and are used in microwave applications and they *DO NOT* have a thermal relief that change the shape
- *      by creating stubs and destroy their properties.
+ *      and are used in microwave applications and they *DO NOT* have a thermal relief that
+ *      change the shape by creating stubs and destroy their properties.
  */
 void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
                                        D_PAD&                aPad,
@@ -579,6 +581,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
      * with a thickness of aMinThicknessValue will increase real thickness by aMinThicknessValue
      */
     aCopperThickness -= aMinThicknessValue;
+
     if( aCopperThickness < 0 )
         aCopperThickness = 0;
 
@@ -611,17 +614,20 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
         // Crosspoint of thermal spoke sides, the first point of polygon buffer
         corners_buffer.push_back( wxPoint( copper_thickness.x / 2, copper_thickness.y / 2 ) );
 
-        // Add an intermediate point on spoke sides, to allow a > 90 deg angle between side and first seg of arc approx
+        // Add an intermediate point on spoke sides, to allow a > 90 deg angle between side
+        // and first seg of arc approx
         corner.x = copper_thickness.x / 2;
         int y = outer_radius - (aThermalGap / 4);
         corner.y = (int) sqrt( ( ( (double) y * y ) - (double) corner.x * corner.x ) );
+
         if( aThermalRot != 0 )
             corners_buffer.push_back( corner );
 
         // calculate the starting point of the outter arc
         corner.x = copper_thickness.x / 2;
-        double dtmp =
-            sqrt( ( (double) outer_radius * outer_radius ) - ( (double) corner.x * corner.x ) );
+
+        double dtmp = sqrt( ( (double) outer_radius * outer_radius ) -
+                            ( (double) corner.x * corner.x ) );
         corner.y = (int) dtmp;
         RotatePoint( &corner, 90 );
 
@@ -638,7 +644,8 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
 
         corners_buffer.push_back( corner_end );
 
-        /* add an intermediate point, to avoid angles < 90 deg between last arc approx line and radius line
+        /* add an intermediate point, to avoid angles < 90 deg between last arc approx line
+         * and radius line
          */
         corner.x = corners_buffer[1].y;
         corner.y = corners_buffer[1].x;
@@ -649,10 +656,12 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
         // bad filled polygon on some cases, when pads are on a same vertical line
         // this seems a bug in kbool polygon (exists in 2.0 kbool version)
         // aThermalRot = 450 (45.0 degrees orientation) seems work fine.
-        // aThermalRot = 0 with thermal shapes without angle < 90 deg has problems in rare circumstances
+        // aThermalRot = 0 with thermal shapes without angle < 90 deg has problems in rare
+        // circumstances.
         // Note: with the 2 step build ( thermal shapes added after areas are built), 0 seems work
         int angle_pad = aPad.m_Orient;              // Pad orientation
         int th_angle  = aThermalRot;
+
         for( unsigned ihole = 0; ihole < 4; ihole++ )
         {
             for( unsigned ii = 0; ii < corners_buffer.size(); ii++ )
@@ -682,12 +691,14 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
         // We want to calculate an oval shape with dx > dy.
         // if this is not the case, exchange dx and dy, and rotate the shape 90 deg.
         int supp_angle = 0;
+
         if( dx < dy )
         {
             EXCHG( dx, dy );
             supp_angle = 900;
             EXCHG( copper_thickness.x, copper_thickness.y );
         }
+
         int deltasize = dx - dy;        // = distance between shape position and the 2 demi-circle ends centre
         // here we have dx > dy
         // Radius of outer arcs of the shape:
@@ -703,9 +714,8 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
         if( copper_thickness.x > deltasize )          // If copper thickness is more than shape offset, we need to calculate arc intercept point.
         {
             corner.x = copper_thickness.x / 2;
-            corner.y =
-                (int) sqrt( ( (double) outer_radius * outer_radius ) -
-                           ( (double) ( corner.x - delta ) * ( corner.x - deltasize ) ) );
+            corner.y =  (int) sqrt( ( (double) outer_radius * outer_radius ) -
+                                    ( (double) ( corner.x - delta ) * ( corner.x - deltasize ) ) );
             corner.x -= deltasize;
 
             /* creates an intermediate point, to have a > 90 deg angle
@@ -724,7 +734,8 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
             corner.x = ( deltasize - copper_thickness.x ) / 2;
         }
 
-        // Add an intermediate point on spoke sides, to allow a > 90 deg angle between side and first seg of arc approx
+        // Add an intermediate point on spoke sides, to allow a > 90 deg angle between side
+        // and first seg of arc approx
         wxPoint last_corner;
         last_corner.y = copper_thickness.y / 2;
         int     px = outer_radius - (aThermalGap / 4);
@@ -745,13 +756,14 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
             RotatePoint( &corner, delta );
         }
 
-        //corners_buffer.push_back(corner + shape_offset);		// TODO: about one mil geometry error forms somewhere.
+        //corners_buffer.push_back(corner + shape_offset);      // TODO: about one mil geometry error forms somewhere.
         corners_buffer.push_back( corner_end + shape_offset );
         corners_buffer.push_back( last_corner + shape_offset );         // Enabling the line above shows intersection point.
 
         /* Create 2 holes, rotated by pad rotation.
          */
         int angle = aPad.m_Orient + supp_angle;
+
         for( int irect = 0; irect < 2; irect++ )
         {
             for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
@@ -764,6 +776,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
 
             aCornerBuffer.back().end_contour = true;
             angle += 1800;       // this is calculate hole 3
+
             if( angle >= 3600 )
                 angle -= 3600;
         }
@@ -778,6 +791,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
 
         // Now add corner 4 and 2 (2 is the corner 4 rotated by 180 deg
         angle = aPad.m_Orient + supp_angle;
+
         for( int irect = 0; irect < 2; irect++ )
         {
             for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
@@ -790,6 +804,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
 
             aCornerBuffer.back().end_contour = true;
             angle += 1800;
+
             if( angle >= 3600 )
                 angle -= 3600;
         }
@@ -818,15 +833,17 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
         //  |        |
         // 1  -------4
 
-        // Modified rectangles with one corner rounded. TODO: merging with oval thermals and possibly round too.
+        // Modified rectangles with one corner rounded. TODO: merging with oval thermals
+        // and possibly round too.
 
         std::vector <wxPoint> corners_buffer;               // Polygon buffer as vector
 
         int dx = (aPad.m_Size.x / 2) + aThermalGap;         // Cutout radius x
         int dy = (aPad.m_Size.y / 2) + aThermalGap;         // Cutout radius y
 
-        // The first point of polygon buffer is left lower corner, second the crosspoint of thermal spoke sides,
-        // the third is upper right corner and the rest are rounding vertices going anticlockwise. Note the inveted Y-axis in CG.
+        // The first point of polygon buffer is left lower corner, second the crosspoint of
+        // thermal spoke sides, the third is upper right corner and the rest are rounding
+        // vertices going anticlockwise. Note the inveted Y-axis in CG.
         corners_buffer.push_back( wxPoint( -dx, -(aThermalGap / 4 + copper_thickness.y / 2) ) );    // Adds small miters to zone
         corners_buffer.push_back( wxPoint( -(dx - aThermalGap / 4), -copper_thickness.y / 2 ) );    // fill and spoke corner
         corners_buffer.push_back( wxPoint( -copper_thickness.x / 2, -copper_thickness.y / 2 ) );
@@ -852,13 +869,14 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
             for( unsigned ic = 0; ic < corners_buffer.size(); ic++ )
             {
                 wxPoint cpos = corners_buffer[ic];
-                RotatePoint( &cpos, angle );                                    // Rotate according to module orientation
-                cpos += PadShapePos;                                            // Shift origin to position
+                RotatePoint( &cpos, angle );            // Rotate according to module orientation
+                cpos += PadShapePos;                    // Shift origin to position
                 aCornerBuffer.push_back( CPolyPt( cpos.x, cpos.y ) );
             }
 
             aCornerBuffer.back().end_contour = true;
             angle += 1800;       // this is calculate hole 3
+
             if( angle >= 3600 )
                 angle -= 3600;
         }
@@ -884,6 +902,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
 
             aCornerBuffer.back().end_contour = true;
             angle += 1800;
+
             if( angle >= 3600 )
                 angle -= 3600;
         }

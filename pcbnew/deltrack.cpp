@@ -33,7 +33,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             D( g_CurrentTrackList.VerifyListIntegrity(); )
 
             // Delete the current trace
-            ShowNewTrackWhenMovingCursor( DrawPanel, DC, wxDefaultPosition, FALSE );
+            ShowNewTrackWhenMovingCursor( DrawPanel, DC, wxDefaultPosition, false );
 
             // delete the most recently entered
             delete g_CurrentTrackList.PopBack();
@@ -51,13 +51,11 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
                 }
             }
 
-            while( g_CurrentTrackSegment && g_CurrentTrackSegment->Type() ==
-                   TYPE_VIA )
+            while( g_CurrentTrackSegment && g_CurrentTrackSegment->Type() == TYPE_VIA )
             {
                 delete g_CurrentTrackList.PopBack();
 
-                if( g_CurrentTrackSegment && g_CurrentTrackSegment->Type() !=
-                    TYPE_VIA )
+                if( g_CurrentTrackSegment && g_CurrentTrackSegment->Type() != TYPE_VIA )
                     previous_layer = g_CurrentTrackSegment->GetLayer();
             }
 
@@ -66,8 +64,8 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             setActiveLayer( previous_layer );
 
             UpdateStatusBar();
-            if( g_TwoSegmentTrackBuild )   // We must have 2 segments or more,
-                                           // or 0
+
+            if( g_TwoSegmentTrackBuild )   // We must have 2 segments or more, or 0
             {
                 if( g_CurrentTrackList.GetCount() == 1
                     && g_CurrentTrackSegment->Type() != TYPE_VIA )
@@ -89,7 +87,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             else
             {
                 if( DrawPanel->IsMouseCaptured() )
-                    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
+                    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 
                 return g_CurrentTrackSegment;
             }
@@ -178,8 +176,9 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     if( pt_segm == NULL )
         return;
 
-    TRACK* trackList = Marque_Une_Piste( GetBoard(), pt_segm,
-                                         &segments_to_delete_count, NULL, NULL, true );
+    TRACK* trackList = MarkTrace( GetBoard(), pt_segm, &segments_to_delete_count,
+                                  NULL, NULL, true );
+
     if( segments_to_delete_count == 0 )
         return;
 
@@ -190,6 +189,7 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     int               ii = 0;
     TRACK*            tracksegment = trackList;
     TRACK*            next_track;
+
     for( ; ii < segments_to_delete_count; ii++, tracksegment = next_track )
     {
         next_track = tracksegment->Next();
@@ -198,9 +198,9 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
         //D( printf( "%s: track %p status=\"%s\"\n", __func__, tracksegment,
         //           TO_UTF8( TRACK::ShowState( tracksegment->GetState( -1 ) ) )
         //          ); )
-        D( std::cout<<__func__<<": track "<<tracksegment<<" status=" \
-                   <<TO_UTF8( TRACK::ShowState( tracksegment->GetState( -1 ) ) ) \
-                   <<std::endl;)
+        D( std::cout << __func__ << ": track " << tracksegment << " status=" \
+                     << TO_UTF8( TRACK::ShowState( tracksegment->GetState( -1 ) ) ) \
+                     << std::endl; )
 
         GetBoard()->m_Track.Remove( tracksegment );
 
@@ -212,6 +212,7 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     }
 
     SaveCopyInUndoList( itemsList, UR_DELETED );
+
     if( net_code > 0 )
         test_1_net_connexion( DC, net_code );
 }

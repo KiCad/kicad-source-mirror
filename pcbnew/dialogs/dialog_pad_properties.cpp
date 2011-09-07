@@ -94,12 +94,12 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     int          color = 0;
 
-    if( m_dummyPad->m_Masque_Layer & LAYER_FRONT )
+    if( m_dummyPad->m_layerMask & LAYER_FRONT )
     {
         color = m_Board->GetVisibleElementColor( PAD_FR_VISIBLE );
     }
 
-    if( m_dummyPad->m_Masque_Layer & LAYER_BACK )
+    if( m_dummyPad->m_layerMask & LAYER_BACK )
     {
         color |= m_Board->GetVisibleElementColor( PAD_BK_VISIBLE );
     }
@@ -202,7 +202,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         NEGATE( m_dummyPad->m_Offset.y );
         NEGATE( m_dummyPad->m_DeltaSize.y );
         /* flip pads layers*/
-        m_dummyPad->m_Masque_Layer = ChangeSideMaskLayer( m_dummyPad->m_Masque_Layer );
+        m_dummyPad->m_layerMask = ChangeSideMaskLayer( m_dummyPad->m_layerMask );
     }
     m_staticTextWarningPadFlipped->Show(m_isFlipped);
 
@@ -284,7 +284,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     NORMALIZE_ANGLE_180( m_dummyPad->m_Orient );
 
     // Set layers used by this pad: :
-    SetPadLayersList( m_dummyPad->m_Masque_Layer );
+    SetPadLayersList( m_dummyPad->m_layerMask );
 
     msg.Clear();
     msg << m_dummyPad->m_Orient;
@@ -621,13 +621,13 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
         m_CurrentPad->m_LengthDie = g_Pad_Master.m_LengthDie;
 
-        if( m_CurrentPad->m_Masque_Layer != g_Pad_Master.m_Masque_Layer )
+        if( m_CurrentPad->m_layerMask != g_Pad_Master.m_layerMask )
         {
             rastnestIsChanged = true;
-            m_CurrentPad->m_Masque_Layer = g_Pad_Master.m_Masque_Layer;
+            m_CurrentPad->m_layerMask = g_Pad_Master.m_layerMask;
         }
         if( m_isFlipped )
-            m_CurrentPad->m_Masque_Layer = ChangeSideMaskLayer( m_CurrentPad->m_Masque_Layer );
+            m_CurrentPad->m_layerMask = ChangeSideMaskLayer( m_CurrentPad->m_layerMask );
 
         m_CurrentPad->SetPadName( g_Pad_Master.ReturnStringPadName() );
 
@@ -660,7 +660,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
         m_CurrentPad->ComputeShapeMaxRadius();
 
-        Module->Set_Rectangle_Encadrement();
+        Module->CalculateBoundingBox();
         m_CurrentPad->DisplayInfo( m_Parent );
 
         // redraw the area where the pad was
@@ -862,7 +862,7 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
     if( m_PadLayerDraft->GetValue() )
         PadLayerMask |= DRAW_LAYER;
 
-    aPad->m_Masque_Layer = PadLayerMask;
+    aPad->m_layerMask = PadLayerMask;
 
     /* Test for incorrect values */
     if( aPromptOnError )

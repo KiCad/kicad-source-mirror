@@ -35,22 +35,27 @@ MODULE* PCB_BASE_FRAME::GetModuleByName()
     MODULE*           module = NULL;
 
     wxTextEntryDialog dlg( this, _( "Name:" ), _( "Search footprint" ), moduleName );
+
     if( dlg.ShowModal() != wxID_OK )
         return NULL;    //Aborted by user
 
     moduleName = dlg.GetValue();
     moduleName.Trim( true );
     moduleName.Trim( false );
+
     if( !moduleName.IsEmpty() )
     {
         module = GetBoard()->m_Modules;
+
         while( module )
         {
             if( module->m_Reference->m_Text.CmpNoCase( moduleName ) == 0 )
                 break;
+
             module = module->Next();
         }
     }
+
     return module;
 }
 
@@ -83,6 +88,7 @@ void PCB_EDIT_FRAME::StartMove_Module( MODULE* module, wxDC* DC )
     {
         Build_Drag_Liste( DrawPanel, DC, module );
         ITEM_PICKER itemWrapper( NULL, UR_CHANGED );
+
         for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
         {
             TRACK* segm = g_DragSegmentList[ii].m_Segm;
@@ -94,7 +100,7 @@ void PCB_EDIT_FRAME::StartMove_Module( MODULE* module, wxDC* DC )
     }
 
     GetBoard()->m_Status_Pcb |= DO_NOT_SHOW_GENERAL_RASTNEST;
-    DrawPanel->SetMouseCapture( Montre_Position_Empreinte, Abort_MoveOrCopyModule );
+    DrawPanel->SetMouseCapture( MoveFootprint, Abort_MoveOrCopyModule );
     DrawPanel->m_AutoPAN_Request = true;
 
     // Erase the module.
@@ -229,8 +235,7 @@ MODULE* PCB_BASE_FRAME::Copie_Module( MODULE* module )
 
 /* Redraw the footprint when moving the mouse.
  */
-void Montre_Position_Empreinte( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                                bool aErase )
+void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
     MODULE* module = (MODULE*) aPanel->GetScreen()->GetCurItem();
 
@@ -247,7 +252,7 @@ void Montre_Position_Empreinte( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
     g_Offset_Module = module->m_Pos - aPanel->GetScreen()->GetCrossHairPosition();
     DrawModuleOutlines( aPanel, aDC, module );
 
-    Dessine_Segments_Dragges( aPanel, aDC );
+    DrawSegmentWhileMovingFootprint( aPanel, aDC );
 }
 
 
@@ -274,6 +279,7 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeD
         msg.Printf( _( "Delete Module %s (value %s) ?" ),
                     GetChars( aModule->m_Reference->m_Text ),
                     GetChars( aModule->m_Value->m_Text ) );
+
         if( !IsOK( this, msg ) )
         {
             return false;
@@ -311,16 +317,16 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
 {
     if( Module == NULL )
         return;
-    if( ( Module->GetLayer() != LAYER_N_FRONT )
-       && ( Module->GetLayer() != LAYER_N_BACK ) )
+
+    if( ( Module->GetLayer() != LAYER_N_FRONT ) && ( Module->GetLayer() != LAYER_N_BACK ) )
         return;
 
     OnModify();
 
-    if( !( Module->m_Flags & IS_MOVED ) ) /* This is a simple flip, no other
-                                           *edition in progress */
+    if( !( Module->m_Flags & IS_MOVED ) ) /* This is a simple flip, no other edition in progress */
     {
         GetBoard()->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK );
+
         if( DC )
         {
             int tmp = Module->m_Flags;
@@ -342,7 +348,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
         if( DC )
         {
             DrawModuleOutlines( DrawPanel, DC, Module );
-            Dessine_Segments_Dragges( DrawPanel, DC );
+            DrawSegmentWhileMovingFootprint( DrawPanel, DC );
         }
     }
 
@@ -356,6 +362,7 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
         if( DC )
         {
             Module->Draw( DrawPanel, DC, GR_OR );
+
             if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
                 Compile_Ratsnest( DC, true );
         }
@@ -365,8 +372,9 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
         if( DC )
         {
             DrawModuleOutlines( DrawPanel, DC, Module );
-            Dessine_Segments_Dragges( DrawPanel, DC );
+            DrawSegmentWhileMovingFootprint( DrawPanel, DC );
         }
+
         GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
     }
 }
@@ -397,22 +405,19 @@ void PCB_BASE_FRAME::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRecreate
         ITEM_PICKER picker( module, UR_CHANGED );
         picker.m_Link = s_ModuleInitialCopy;
         s_PickedList.PushItem( picker );
-        s_ModuleInitialCopy = NULL;     // the picker is now owner of
-                                        // s_ModuleInitialCopy.
+        s_ModuleInitialCopy = NULL;     // the picker is now owner of s_ModuleInitialCopy.
     }
 
     if( s_PickedList.GetCount() )
     {
         SaveCopyInUndoList( s_PickedList, UR_UNSPECIFIED );
 
-        // Clear list, but DO NOT delete items,
-        // because they are owned by the saved undo list and they therefore in
-        // use
+        // Clear list, but DO NOT delete items, because they are owned by the saved undo
+        // list and they therefore in use
         s_PickedList.ClearItemsList();
     }
 
-    if( g_Show_Module_Ratsnest && ( GetBoard()->m_Status_Pcb & LISTE_PAD_OK )
-        && DC )
+    if( g_Show_Module_Ratsnest && ( GetBoard()->m_Status_Pcb & LISTE_PAD_OK ) && DC )
         trace_ratsnest_module( DC );
 
     newpos = GetScreen()->GetCrossHairPosition();
@@ -487,7 +492,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, int angle, bool in
         if( DC )
         {
             DrawModuleOutlines( DrawPanel, DC, module );
-            Dessine_Segments_Dragges( DrawPanel, DC );
+            DrawSegmentWhileMovingFootprint( DrawPanel, DC );
         }
     }
 
@@ -506,6 +511,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, int angle, bool in
         {
             //  not beiing moved: redraw the module and update ratsnest
             module->Draw( DrawPanel, DC, GR_OR );
+
             if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
                 Compile_Ratsnest( DC, true );
         }
@@ -513,7 +519,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, int angle, bool in
         {
             // Beiing moved: just redraw it
             DrawModuleOutlines( DrawPanel, DC, module );
-            Dessine_Segments_Dragges( DrawPanel, DC );
+            DrawSegmentWhileMovingFootprint( DrawPanel, DC );
         }
 
         if( module->m_Flags == 0 )  // module not in edit: redraw full screen
@@ -540,6 +546,7 @@ void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module )
         DisplayOpt.DisplayPadFill = true;
 
         pt_pad = module->m_Pads;
+
         for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
         {
             pt_pad->Draw( panel, DC, GR_XOR, g_Offset_Module );

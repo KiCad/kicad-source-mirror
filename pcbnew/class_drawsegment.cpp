@@ -109,7 +109,7 @@ bool DRAWSEGMENT::ReadDrawSegmentDescr( LINE_READER* aReader )
         Line = aReader->Line();
 
         if( strnicmp( Line, "$End", 4 ) == 0 )
-            return TRUE; /* End of description */
+            return true; /* End of description */
 
         if( Line[0] == 'P' )
         {
@@ -175,7 +175,7 @@ bool DRAWSEGMENT::ReadDrawSegmentDescr( LINE_READER* aReader )
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -227,9 +227,9 @@ MODULE* DRAWSEGMENT::GetParentModule() const
 void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& aOffset )
 {
     int ux0, uy0, dx, dy;
-    int l_piste;
+    int l_trace;
     int color, mode;
-    int rayon;
+    int radius;
 
     BOARD * brd =  GetBoard( );
 
@@ -239,7 +239,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     color = brd->GetLayerColor( GetLayer() );
 
     GRSetDrawMode( DC, draw_mode );
-    l_piste = m_Width >> 1;  /* half trace width */
+    l_trace = m_Width >> 1;  /* half trace width */
 
     // Line start point or Circle and Arc center
     ux0 = m_Start.x + aOffset.x;
@@ -250,34 +250,37 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     dy = m_End.y + aOffset.y;
 
     mode = DisplayOpt.DisplayDrawItems;
+
     if( m_Flags & FORCE_SKETCH )
         mode = SKETCH;
 
-    if( l_piste < DC->DeviceToLogicalXRel( L_MIN_DESSIN ) )
+    if( l_trace < DC->DeviceToLogicalXRel( L_MIN_DESSIN ) )
         mode = FILAIRE;
 
     switch( m_Shape )
     {
     case S_CIRCLE:
-        rayon = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
+        radius = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
+
         if( mode == FILAIRE )
         {
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon, color );
+            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius, color );
         }
         else if( mode == SKETCH )
         {
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon - l_piste, color );
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon + l_piste, color );
+            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius - l_trace, color );
+            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius + l_trace, color );
         }
         else
         {
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon, m_Width, color );
+            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius, m_Width, color );
         }
+
         break;
 
     case S_ARC:
         int StAngle, EndAngle;
-        rayon    = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
+        radius    = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
         StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
         EndAngle = StAngle + m_Angle;
 
@@ -295,19 +298,19 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
 
         if( mode == FILAIRE )
             GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                   rayon, color );
+                   radius, color );
 
         else if( mode == SKETCH )
         {
             GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                   rayon - l_piste, color );
+                   radius - l_trace, color );
             GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                   rayon + l_piste, color );
+                   radius + l_trace, color );
         }
         else
         {
             GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                   rayon, m_Width, color );
+                   radius, m_Width, color );
         }
         break;
     case S_CURVE:
@@ -329,15 +332,17 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
                 else
                 {
                     GRFillCSegm( &panel->m_ClipBox, DC,
-                                m_BezierPoints[i].x, m_BezierPoints[i].y,
-                                m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
+                                 m_BezierPoints[i].x, m_BezierPoints[i].y,
+                                 m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
                                  m_Width, color );
                 }
             }
          break;
     default:
         if( mode == FILAIRE )
+        {
             GRLine( &panel->m_ClipBox, DC, ux0, uy0, dx, dy, 0, color );
+        }
         else if( mode == SKETCH )
         {
             GRCSegm( &panel->m_ClipBox, DC, ux0, uy0, dx, dy,
@@ -348,6 +353,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
             GRFillCSegm( &panel->m_ClipBox, DC, ux0, uy0, dx, dy,
                          m_Width, color );
         }
+
         break;
     }
 }
@@ -388,6 +394,7 @@ void DRAWSEGMENT::DisplayInfo( EDA_DRAW_FRAME* frame )
         default:
             frame->AppendMsgPanel( shape, _( "Segment" ), RED );
     }
+
     wxString start;
     start << GetStart();
 
@@ -396,8 +403,7 @@ void DRAWSEGMENT::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     frame->AppendMsgPanel( start, end, DARKGREEN );
 
-    frame->AppendMsgPanel( _( "Layer" ),
-                         board->GetLayerName( m_Layer ), DARKBROWN );
+    frame->AppendMsgPanel( _( "Layer" ), board->GetLayerName( m_Layer ), DARKBROWN );
 
     valeur_param( (unsigned) m_Width, msg );
     frame->AppendMsgPanel( _( "Width" ), msg, DARKCYAN );
@@ -444,6 +450,7 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 
             if( ii == 0 )
                 p_end = pt;
+
             bbox.m_Pos.x = MIN( bbox.m_Pos.x, pt.x );
             bbox.m_Pos.y = MIN( bbox.m_Pos.y, pt.y );
             p_end.x   = MAX( p_end.x, pt.x );
@@ -471,10 +478,10 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
     case S_CIRCLE:
     case S_ARC:
     {
-        int rayon = GetRadius();
+        int radius = GetRadius();
         int dist  = (int) hypot( (double) relPos.x, (double) relPos.y );
 
-        if( abs( rayon - dist ) <= ( m_Width / 2 ) )
+        if( abs( radius - dist ) <= ( m_Width / 2 ) )
         {
             if( m_Shape == S_CIRCLE )
                 return true;
@@ -498,8 +505,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
     case S_CURVE:
         for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
         {
-            if( TestSegmentHit( aRefPos,m_BezierPoints[i-1],
-                                m_BezierPoints[i-1], m_Width / 2 ) )
+            if( TestSegmentHit( aRefPos,m_BezierPoints[i-1], m_BezierPoints[i-1], m_Width / 2 ) )
                 return true;
         }
         break;
@@ -527,6 +533,7 @@ bool DRAWSEGMENT::HitTest( EDA_RECT& refArea )
             // Text if area intersects the circle:
             EDA_RECT area = refArea;
             area.Inflate( radius );
+
             if( area.Contains( m_Start ) )
                 return true;
         }

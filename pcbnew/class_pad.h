@@ -73,7 +73,7 @@ public:
                                      */
     };
 
-    int m_Masque_Layer;             // Bitwise layer :1= copper layer, 15= cmp,
+    int m_layerMask;                // Bitwise layer :1= copper layer, 15= cmp,
                                     // 2..14 = internal layers
                                     // 16 .. 31 = technical layers
 

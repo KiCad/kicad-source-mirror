@@ -795,8 +795,10 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
                 textmod = (TEXTE_MODULE*) PtStruct;
                 NEGATE( textmod->m_Pos.y );
                 NEGATE( textmod->m_Pos0.y );
+
                 if( textmod->m_Orient )
                     textmod->m_Orient = 3600 - textmod->m_Orient;
+
                 break;
 
             default:
@@ -812,7 +814,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
         break;
     }
 
-    module->Set_Rectangle_Encadrement();
+    module->CalculateBoundingBox();
     OnModify();
 }
 

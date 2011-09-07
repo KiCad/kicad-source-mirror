@@ -113,16 +113,17 @@ void MODULE::Copy( MODULE* aModule )
 
     /* Copy auxiliary data: Pads */
     m_Pads.DeleteAll();
+
     for( D_PAD* pad = aModule->m_Pads;  pad;  pad = pad->Next() )
     {
         D_PAD* newpad = new D_PAD( this );
         newpad->Copy( pad );
-
         m_Pads.PushBack( newpad );
     }
 
     /* Copy auxiliary data: Drawings */
     m_Drawings.DeleteAll();
+
     for( BOARD_ITEM* item = aModule->m_Drawings;  item;  item = item->Next() )
     {
         switch( item->Type() )
@@ -152,15 +153,18 @@ void MODULE::Copy( MODULE* aModule )
 
     // Ensure there is one (or more) item in m_3D_Drawings
     m_3D_Drawings.PushBack( new S3D_MASTER( this ) ); // push a void item
+
     for( S3D_MASTER* item = aModule->m_3D_Drawings;  item;  item = item->Next() )
     {
         if( item->m_Shape3DName.IsEmpty() )           // do not copy empty shapes.
             continue;
+
         S3D_MASTER* t3d = m_3D_Drawings;
+
         if( t3d && t3d->m_Shape3DName.IsEmpty() )       // The first entry can
-                                                        // exist, but is empty :
-                                                        // use it.
+        {                                               // exist, but is empty : use it.
             t3d->Copy( item );
+        }
         else
         {
             t3d = new S3D_MASTER( this );
@@ -297,12 +301,16 @@ bool MODULE::Save( FILE* aFile ) const
     fprintf( aFile, "Sc %8.8lX\n", m_TimeStamp );
     fprintf( aFile, "AR %s\n", TO_UTF8( m_Path ) );
     fprintf( aFile, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
+
     if( m_LocalSolderMaskMargin != 0 )
         fprintf( aFile, ".SolderMask %d\n", m_LocalSolderMaskMargin );
+
     if( m_LocalSolderPasteMargin != 0 )
         fprintf( aFile, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
+
     if( m_LocalSolderPasteMarginRatio != 0 )
         fprintf( aFile, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
+
     if( m_LocalClearance != 0 )
         fprintf( aFile, ".LocalClearance %d\n", m_LocalClearance );
 
@@ -310,10 +318,13 @@ bool MODULE::Save( FILE* aFile ) const
     if( m_Attributs != MOD_DEFAULT )
     {
         fprintf( aFile, "At " );
+
         if( m_Attributs & MOD_CMS )
             fprintf( aFile, "SMD " );
+
         if( m_Attributs & MOD_VIRTUAL )
             fprintf( aFile, "VIRTUAL " );
+
         fprintf( aFile, "\n" );
     }
 
@@ -334,6 +345,7 @@ bool MODULE::Save( FILE* aFile ) const
         case TYPE_EDGE_MODULE:
             if( !item->Save( aFile ) )
                 goto out;
+
             break;
 
         default:
@@ -422,11 +434,13 @@ int MODULE::Read_3D_Descr( LINE_READER* aReader )
     while( aReader->ReadLine() )
     {
         Line = aReader->Line();
+
         switch( Line[0] )
         {
         case '$':
             if( Line[1] == 'E' )
                 return 0;
+
             return 1;
 
         case 'N':       // Shape File Name
@@ -484,6 +498,7 @@ int MODULE::ReadDescr( LINE_READER* aReader )
         {
             if( Line[1] == 'E' )
                 break;
+
             if( Line[1] == 'P' )
             {
                 D_PAD* pad = new D_PAD( this );
@@ -495,6 +510,7 @@ int MODULE::ReadDescr( LINE_READER* aReader )
                 m_Pads.PushBack( pad );
                 continue;
             }
+
             if( Line[1] == 'S' )
                 Read_3D_Descr( aReader );
         }
@@ -517,10 +533,13 @@ int MODULE::ReadDescr( LINE_READER* aReader )
                     &m_LastEdit_Time, &m_TimeStamp, BufCar1 );
 
             m_ModuleStatus = 0;
+
             if( BufCar1[0] == 'F' )
                 SetLocked( true );
+
             if( BufCar1[1] == 'P' )
                 m_ModuleStatus |= MODULE_is_PLACED;
+
             break;
 
         case 'L':       /* Li = read the library name of the footprint */
@@ -539,15 +558,20 @@ int MODULE::ReadDescr( LINE_READER* aReader )
             sscanf( PtLine, " %X %X", &itmp1, &itmp2 );
 
             m_CntRot180 = itmp2 & 0x0F;
+
             if( m_CntRot180 > 10 )
                 m_CntRot180 = 10;
 
             m_CntRot90 = itmp1 & 0x0F;
+
             if( m_CntRot90 > 10 )
                 m_CntRot90 = 0;
+
             itmp1 = (itmp1 >> 4) & 0x0F;
+
             if( itmp1 > 10 )
                 itmp1 = 0;
+
             m_CntRot90 |= itmp1 << 4;
             break;
 
@@ -557,21 +581,25 @@ int MODULE::ReadDescr( LINE_READER* aReader )
                 /* At = (At)tributes of module */
                 if( strstr( PtLine, "SMD" ) )
                     m_Attributs |= MOD_CMS;
+
                 if( strstr( PtLine, "VIRTUAL" ) )
                     m_Attributs |= MOD_VIRTUAL;
             }
+
             if( Line[1] == 'R' )
             {
                 // alternate reference, e.g. /478C2408/478AD1B6
                 sscanf( PtLine, " %s", BufLine );
                 m_Path = FROM_UTF8( BufLine );
             }
+
             break;
 
         case 'T':    /* Read a footprint text description (ref, value, or
                       * drawing */
             TEXTE_MODULE * textm;
             sscanf( Line + 1, "%d", &itmp1 );
+
             if( itmp1 == TEXT_is_REFERENCE )
                 textm = m_Reference;
             else if( itmp1 == TEXT_is_VALUE )
@@ -609,6 +637,7 @@ int MODULE::ReadDescr( LINE_READER* aReader )
                 m_LocalSolderPasteMarginRatio = atof( Line + 18 );
             else if( strnicmp( Line, ".LocalClearance ", 16 ) == 0 )
                 m_LocalClearance = atoi( Line + 16 );
+
             break;
 
         default:
@@ -617,12 +646,12 @@ int MODULE::ReadDescr( LINE_READER* aReader )
     }
 
     /* Recalculate the bounding box */
-    Set_Rectangle_Encadrement();
+    CalculateBoundingBox();
     return 0;
 }
 
 
-void MODULE::Set_Rectangle_Encadrement()
+void MODULE::CalculateBoundingBox()
 {
     m_BoundaryBox = GetFootPrintRect();
     m_Surface = ABS( (double) m_BoundaryBox.GetWidth() * m_BoundaryBox.GetHeight() );
@@ -673,14 +702,14 @@ void MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     int      nbpad;
     char     bufcar[512], Line[512];
-    bool     flag = FALSE;
+    bool     flag = false;
     wxString msg;
     BOARD*   board = GetBoard();
 
     frame->EraseMsgBox();
 
     if( frame->m_Ident != PCB_FRAME )
-        flag = TRUE;
+        flag = true;
 
     frame->AppendMsgPanel( m_Reference->m_Text, m_Value->m_Text, DARKCYAN );
 
@@ -783,9 +812,6 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 #else
         if( buf == aPadName )
 #endif
-
-
-
             return pad;
     }
 
@@ -824,10 +850,12 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 
         case TYPE_TEXTE_MODULE:
             result = inspector->Inspect( m_Reference, testData );
+
             if( result == SEARCH_QUIT )
                 break;
 
             result = inspector->Inspect( m_Value, testData );
+
             if( result == SEARCH_QUIT )
                 break;
 
@@ -908,6 +936,7 @@ void MODULE::Show( int nestLevel, std::ostream& os )
 
     NestedSpace( nestLevel + 1, os ) << "<mpads>\n";
     p = m_Pads;
+
     for( ; p; p = p->Next() )
         p->Show( nestLevel + 2, os );
 
@@ -915,12 +944,14 @@ void MODULE::Show( int nestLevel, std::ostream& os )
 
     NestedSpace( nestLevel + 1, os ) << "<mdrawings>\n";
     p = m_Drawings;
+
     for( ; p; p = p->Next() )
         p->Show( nestLevel + 2, os );
 
     NestedSpace( nestLevel + 1, os ) << "</mdrawings>\n";
 
     p = m_Son;
+
     for( ; p;  p = p->Next() )
     {
         p->Show( nestLevel + 1, os );

@@ -26,10 +26,8 @@ DRAG_SEGM::DRAG_SEGM( TRACK* segm )
 }
 
 
-/*******************************************************************/
-void Dessine_Segments_Dragges( EDA_DRAW_PANEL* panel, wxDC* DC )
-/*******************************************************************/
 /* Redraw the list of segments starting in g_DragSegmentList, while moving a footprint */
+void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC )
 {
     D_PAD* pt_pad;
     TRACK* Track;
@@ -45,6 +43,7 @@ void Dessine_Segments_Dragges( EDA_DRAW_PANEL* panel, wxDC* DC )
         Track->Draw( panel, DC, GR_XOR );   // erase from screen at old position
 #endif
         pt_pad = g_DragSegmentList[ii].m_Pad_Start;
+
         if( pt_pad )
         {
             pos = pt_pad->m_Pos - g_Offset_Module;
@@ -52,6 +51,7 @@ void Dessine_Segments_Dragges( EDA_DRAW_PANEL* panel, wxDC* DC )
         }
 
         pt_pad = g_DragSegmentList[ii].m_Pad_End;
+
         if( pt_pad )
         {
             pos = pt_pad->m_Pos - g_Offset_Module;
@@ -63,18 +63,17 @@ void Dessine_Segments_Dragges( EDA_DRAW_PANEL* panel, wxDC* DC )
 }
 
 
-/*************************************************************************/
-void Build_Drag_Liste( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module )
-/*************************************************************************/
 /** Build the list of track segments connected to pads of a given module
  *  by populate the std::vector<DRAG_SEGM> g_DragSegmentList
  *  For each selected track segment set the EDIT flag
  *  and redraw them in EDIT mode (sketch mode)
  */
+void Build_Drag_Liste( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module )
 {
     D_PAD* pt_pad;
 
     pt_pad = Module->m_Pads;
+
     for( ; pt_pad != NULL; pt_pad = (D_PAD*) pt_pad->Next() )
     {
         Build_1_Pad_SegmentsToDrag( panel, DC, pt_pad );
@@ -84,32 +83,31 @@ void Build_Drag_Liste( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module )
 }
 
 
-/**********************************************************************************/
-void Build_1_Pad_SegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC, D_PAD* PtPad )
-/**********************************************************************************/
 /** Build the list of track segments connected to a given pad
  *  by populate the std::vector<DRAG_SEGM> g_DragSegmentList
  *  For each selected track segment set the EDIT flag
  *  and redraw them in EDIT mode (sketch mode)
  *  Net codes must be OK.
  */
+void Build_1_Pad_SegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC, D_PAD* PtPad )
 {
     TRACK*  Track;
     int     net_code = PtPad->GetNet();
-    int     MasqueLayer;
+    int     LayerMask;
     wxPoint pos;
     BOARD*  pcb = ( (PCB_BASE_FRAME*)( panel->GetParent() ) )->GetBoard();
 
     Track = pcb->m_Track->GetStartNetCode( net_code );
 
     pos = PtPad->m_Pos;
-    MasqueLayer = PtPad->m_Masque_Layer;
+    LayerMask = PtPad->m_layerMask;
+
     for( ; Track; Track = Track->Next() )
     {
         if( Track->GetNet() != net_code )
             break;
 
-        if( ( MasqueLayer & Track->ReturnMaskLayer() ) == 0 )
+        if( ( LayerMask & Track->ReturnMaskLayer() ) == 0 )
             continue;
 
         if( pos == Track->m_Start )
@@ -127,12 +125,10 @@ void Build_1_Pad_SegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC, D_PAD* PtPad )
 }
 
 
-/******************************************************************/
-void AddSegmentToDragList( EDA_DRAW_PANEL* panel, wxDC* DC, int flag, TRACK* Track )
-/******************************************************************/
 /* Add the segment"Track" to the drag list, and erase it from screen
  *  flag = STARTPOINT (if the point to drag is the start point of Track) or ENDPOINT
  */
+void AddSegmentToDragList( EDA_DRAW_PANEL* panel, wxDC* DC, int flag, TRACK* Track )
 {
     DRAG_SEGM wrapper( Track );
 
@@ -156,15 +152,12 @@ void AddSegmentToDragList( EDA_DRAW_PANEL* panel, wxDC* DC, int flag, TRACK* Tra
 }
 
 
-/**********************************************************************************/
-void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
-                                  wxPoint& aRefPos, int MasqueLayer, int net_code )
-/**********************************************************************************/
-
 /* Build the list of tracks connected to the ref point
  *  Net codes must be OK.
  * @param aRefPos = reference point of connection
  */
+void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
+                                  wxPoint& aRefPos, int LayerMask, int net_code )
 {
     BOARD* pcb = ( (PCB_BASE_FRAME*)( panel->GetParent() ) )->GetBoard();
 
@@ -175,7 +168,7 @@ void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
         if( track->GetNet() != net_code )   // Bad net, not connected
             break;
 
-        if( ( MasqueLayer & track->ReturnMaskLayer() ) == 0 )
+        if( ( LayerMask & track->ReturnMaskLayer() ) == 0 )
             continue;                       // Cannot be connected, not on the same layer
 
         if( track->m_Flags & IS_DRAGGED )
@@ -194,12 +187,12 @@ void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
         if( flag )
         {
             AddSegmentToDragList( panel, DC, flag, track );
+
             // If a connected via is found at location aRefPos,
             // collect also tracks connected by this via.
             if( track->Type() == TYPE_VIA )
-                Collect_TrackSegmentsToDrag( panel, DC, aRefPos,
-                                            track->ReturnMaskLayer(),
-                                            net_code );
+                Collect_TrackSegmentsToDrag( panel, DC, aRefPos, track->ReturnMaskLayer(),
+                                             net_code );
         }
     }
 }

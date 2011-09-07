@@ -412,7 +412,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
         m_CurrentModule->m_3D_Drawings.PushBack( new S3D_MASTER( m_CurrentModule ) );
 
 
-    m_CurrentModule->Set_Rectangle_Encadrement();
+    m_CurrentModule->CalculateBoundingBox();
 
     m_Parent->OnModify();
 

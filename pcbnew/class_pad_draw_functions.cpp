@@ -97,29 +97,30 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     /* If pad are only on front side (no layer on back side)
      * and if hide front side pads is enabled, do not draw
      */
-    if( !frontVisible && ( (m_Masque_Layer & BACK_SIDE_LAYERS) == 0 ) )
+    if( !frontVisible && ( (m_layerMask & BACK_SIDE_LAYERS) == 0 ) )
         return;
 
     /* If pad are only on back side (no layer on front side)
      * and if hide back side pads is enabled, do not draw
      */
-    if( !backVisible && ( (m_Masque_Layer & FRONT_SIDE_LAYERS) == 0 ) )
+    if( !backVisible && ( (m_layerMask & FRONT_SIDE_LAYERS) == 0 ) )
         return;
 
 
     PCB_BASE_FRAME* frame  = (PCB_BASE_FRAME*) aPanel->GetParent();
     PCB_SCREEN*     screen = frame->GetScreen();
+
     if( frame->m_DisplayPadFill == FILLED )
         drawInfo.m_ShowPadFilled = true;
     else
         drawInfo.m_ShowPadFilled = false;
 
-    if( m_Masque_Layer & LAYER_FRONT )
+    if( m_layerMask & LAYER_FRONT )
     {
         color = brd->GetVisibleElementColor( PAD_FR_VISIBLE );
     }
 
-    if( m_Masque_Layer & LAYER_BACK )
+    if( m_layerMask & LAYER_BACK )
     {
         color |= brd->GetVisibleElementColor( PAD_BK_VISIBLE );
     }
@@ -128,7 +129,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     {
         // If the pad in on only one tech layer, use the layer color
         // else use DARKGRAY
-        int mask_non_copper_layers = m_Masque_Layer & ~ALL_CU_LAYERS;
+        int mask_non_copper_layers = m_layerMask & ~ALL_CU_LAYERS;
 #ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
         mask_non_copper_layers &= brd->GetVisibleLayers();
 #endif
@@ -208,8 +209,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     }
 
     // if PAD_SMD pad and high contrast mode
-    if( ( m_Attribut == PAD_SMD || m_Attribut == PAD_CONN )
-       && DisplayOpt.ContrastModeDisplay )
+    if( ( m_Attribut == PAD_SMD || m_Attribut == PAD_CONN ) && DisplayOpt.ContrastModeDisplay )
     {
         // when routing tracks
         if( frame && frame->GetToolId() == ID_TRACK_BUTT )
@@ -220,10 +220,8 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
             // if routing between copper and component layers,
             // or the current layer is one of said 2 external copper layers,
             // then highlight only the current layer.
-            if( ( ( 1 << routeTop ) | ( 1 << routeBot ) )
-               == ( LAYER_BACK | LAYER_FRONT )
-               || ( ( 1 << screen->m_Active_Layer )
-                   & ( LAYER_BACK | LAYER_FRONT ) ) )
+            if( ( ( 1 << routeTop ) | ( 1 << routeBot ) ) == ( LAYER_BACK | LAYER_FRONT )
+               || ( ( 1 << screen->m_Active_Layer ) & ( LAYER_BACK | LAYER_FRONT ) ) )
             {
                 if( !IsOnLayer( screen->m_Active_Layer ) )
                 {
@@ -319,8 +317,9 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
         color = ColorRefs[color & MASKCOLOR].m_LightColor;
 
     bool DisplayIsol = DisplayOpt.DisplayPadIsol;
-    if( ( m_Masque_Layer & ALL_CU_LAYERS ) == 0 )
-        DisplayIsol = FALSE;
+
+    if( ( m_layerMask & ALL_CU_LAYERS ) == 0 )
+        DisplayIsol = false;
 
     if( m_Attribut == PAD_HOLE_NOT_PLATED )
         drawInfo.m_ShowNotPlatedHole = true;
@@ -339,12 +338,12 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
      *   needed (never needed in Cvpcb nor in Gerbview)
      */
     drawInfo.m_PadClearance = DisplayIsol ? GetClearance() : 0;
+
     /* Draw the pad number */
     if( frame && !frame->m_DisplayPadNum )
         drawInfo.m_Display_padnum = false;
 
-    if( ( DisplayOpt.DisplayNetNamesMode == 0 )
-       || ( DisplayOpt.DisplayNetNamesMode == 2 ) )
+    if( ( DisplayOpt.DisplayNetNamesMode == 0 ) || ( DisplayOpt.DisplayNetNamesMode == 2 ) )
         drawInfo.m_Display_netname = false;
 
     // Display net names is restricted to pads that are on the active layer
@@ -378,6 +377,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     wxSize  halfsize = m_Size;
     halfsize.x >>= 1;
     halfsize.y >>= 1;
+
     switch( GetShape() )
     {
     case PAD_CIRCLE:
@@ -398,6 +398,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
                       0,
                       aDrawInfo.m_Color );
         }
+
         break;
 
     case PAD_OVAL:
@@ -406,6 +407,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         seg_width = BuildSegmentFromOvalShape(segStart, segEnd, angle);
         segStart += shape_pos;
         segEnd += shape_pos;
+
         if( aDrawInfo.m_ShowPadFilled )
         {
             GRFillCSegm( aClipBox, aDC, segStart.x, segStart.y, segEnd.x, segEnd.y,
@@ -430,6 +432,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     case PAD_RECT:
     case PAD_TRAPEZOID:
         BuildPadPolygon( coord, aDrawInfo.m_Mask_margin, angle );
+
         for( int ii = 0; ii < 4; ii++ )
             coord[ii] += shape_pos;
 
@@ -458,11 +461,14 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     int     hole    = m_Drill.x >> 1;
 
     bool drawhole = hole > 0;
+
     if( !aDrawInfo.m_ShowPadFilled && !aDrawInfo. m_ShowNotPlatedHole )
         drawhole = false;
+
     if( drawhole )
     {
         bool blackpenstate = false;
+
         if( aDrawInfo.m_IsPrinting )
         {
             blackpenstate = GetGRForceBlackPenState();
@@ -476,6 +482,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             GRSetDrawMode( aDC, GR_XOR );
 
         int hole_color = aDrawInfo.m_HoleColor;
+
         if( aDrawInfo. m_ShowNotPlatedHole )    // Draw a specific hole color
             hole_color = aDrawInfo.m_NPHoleColor;
 
@@ -503,6 +510,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
                 delta_cy = halfsize.y - halfsize.x;
                 seg_width    = m_Drill.x;
             }
+
             RotatePoint( &delta_cx, &delta_cy, angle );
 
             GRFillCSegm( aClipBox, aDC, holepos.x + delta_cx, holepos.y + delta_cy,
@@ -526,11 +534,11 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         int dx0 = MIN( halfsize.x, halfsize.y );
         int nc_color = BLUE;
 
-        if( m_Masque_Layer & LAYER_FRONT )    /* Draw \ */
+        if( m_layerMask & LAYER_FRONT )    /* Draw \ */
             GRLine( aClipBox, aDC, holepos.x - dx0, holepos.y - dx0,
                     holepos.x + dx0, holepos.y + dx0, 0, nc_color );
 
-        if( m_Masque_Layer & LAYER_BACK ) /* Draw / */
+        if( m_layerMask & LAYER_BACK ) /* Draw / */
             GRLine( aClipBox, aDC, holepos.x + dx0, holepos.y - dx0,
                     holepos.x - dx0, holepos.y + dx0, 0, nc_color );
     }
@@ -544,11 +552,15 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     wxSize  AreaSize;                       // size of text area, normalized to
                                             // AreaSize.y < AreaSize.x
     int     shortname_len = m_ShortNetname.Len();
+
     if( !aDrawInfo.m_Display_netname )
         shortname_len = 0;
+
     if( GetShape() == PAD_CIRCLE )
         angle = 0;
+
     AreaSize = m_Size;
+
     if( m_Size.y > m_Size.x )
     {
         angle += 900;
@@ -556,12 +568,10 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         AreaSize.y = m_Size.x;
     }
 
-    if( shortname_len > 0 )             // if there is a netname, provides room
-                                        // to display this netname
+    if( shortname_len > 0 )       // if there is a netname, provides room to display this netname
     {
-        AreaSize.y /= 2;                // Text used only the upper area of the
-                                        // pad. The lower area displays the net
-                                        // name
+        AreaSize.y /= 2;          // Text used only the upper area of the
+                                  // pad. The lower area displays the net name
         tpos.y -= AreaSize.y / 2;
     }
 
@@ -581,6 +591,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     wxString buffer;
 
     int      tsize;
+
     if( aDrawInfo.m_Display_padnum )
     {
         ReturnStringPadName( buffer );
@@ -610,8 +621,10 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     if( aDC->LogicalToDeviceXRel( tsize ) >= CHAR_SIZE_MIN )  // Not drawable in size too small.
     {
         tpos = tpos0;
+
         if( aDrawInfo.m_Display_padnum )
             tpos.y += AreaSize.y / 2;
+
         RotatePoint( &tpos, shape_pos, angle );
 
         // tsize reserve room for marges and segments thickness
@@ -621,6 +634,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
                          GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
     }
 }
+
 
 /**
  * Function BuildSegmentFromOvalShape
@@ -632,6 +646,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation) const
 {
     int width;
+
     if( m_Size.y < m_Size.x )     // Build an horizontal equiv segment
     {
         int delta   = ( m_Size.x - m_Size.y ) / 2;
@@ -659,6 +674,7 @@ int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int a
 
     return width;
 }
+
 
 /**
  * Function BuildPadPolygon
@@ -690,6 +706,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
         // Only possible for inflate negative values.
         if( halfsize.x < 0 )
             halfsize.x = 0;
+
         if( halfsize.y < 0 )
             halfsize.y = 0;
     }
@@ -702,10 +719,13 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
         // be sure delta values are not to large
         if( (delta.x < 0) && (delta.x <= -halfsize.y) )
             delta.x = -halfsize.y + 1;
+
         if( (delta.x > 0) && (delta.x >= halfsize.y) )
             delta.x = halfsize.y - 1;
+
         if( (delta.y < 0) && (delta.y <= -halfsize.x) )
             delta.y = -halfsize.x + 1;
+
         if( (delta.y > 0) && (delta.y >= halfsize.x) )
             delta.y = halfsize.x - 1;
     }
@@ -730,6 +750,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
     {
         double angle;
         wxSize corr;
+
         if( delta.y )    // lower and upper segment is horizontal
         {
             // Calculate angle of left (or right) segment with vertical axis
@@ -766,6 +787,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
         {
             delta = aInflateValue;              // this pad is rectangular (delta null).
         }
+
         aCoord[0].x += -delta.x - corr.x;       // lower left
         aCoord[0].y += delta.y + corr.y;
 
@@ -786,10 +808,13 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
 
         if( aCoord[0].x > 0 )       // lower left x coordinate must be <= 0
             aCoord[0].x = aCoord[3].x = 0;
+
         if( aCoord[1].x > 0 )       // upper left x coordinate must be <= 0
             aCoord[1].x = aCoord[2].x = 0;
+
         if( aCoord[0].y < 0 )       // lower left y coordinate must be >= 0
             aCoord[0].y = aCoord[1].y = 0;
+
         if( aCoord[3].y < 0 )       // lower right y coordinate must be >= 0
             aCoord[3].y = aCoord[2].y = 0;
     }

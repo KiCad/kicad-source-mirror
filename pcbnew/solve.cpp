@@ -23,6 +23,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                                 int             row_target,
                                 int             col_target,
                                 RATSNEST_ITEM*  pt_chevelu );
+
 static int Retrace( PCB_EDIT_FRAME* pcbframe,
                     wxDC*           DC,
                     int,
@@ -31,13 +32,15 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe,
                     int,
                     int,
                     int              net_code );
+
 static void OrCell_Trace( BOARD* pcb,
                           int    col,
                           int    row,
                           int    side,
                           int    orient,
                           int    current_net_code );
-static void Place_Piste_en_Buffer( PCB_EDIT_FRAME* pcbframe, wxDC* DC );
+
+static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC );
 
 
 static int            segm_oX, segm_oY;
@@ -260,7 +263,9 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
                 break;
             }
             else
+            {
                 DrawPanel->m_AbortRequest = 0;
+            }
         }
 
         EraseMsgBox();
@@ -375,15 +380,12 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     int          newdist, olddir, _self;
     int          current_net_code;
     int          marge;
-    int          pad_masque_layer_s;    /* Mask layers belonging to the
-                                         *starting pad. */
-    int          pad_masque_layer_e;    /* Mask layers belonging to the ending
-                                         *pad. */
-    int          masque_layer_TOP    = g_TabOneLayerMask[Route_Layer_TOP];
-    int          masque_layer_BOTTOM = g_TabOneLayerMask[Route_Layer_BOTTOM];
-    int          masque_layers;     /* Mask two layers for routing. */
-    int          tab_mask[2];       /* Enables the calculation of the mask
-                                     * layer being
+    int          padLayerMaskStart;    /* Mask layers belonging to the starting pad. */
+    int          padLayerMaskEnd;      /* Mask layers belonging to the ending pad. */
+    int          topLayerMask = g_TabOneLayerMask[Route_Layer_TOP];
+    int          bottomLayerMask = g_TabOneLayerMask[Route_Layer_BOTTOM];
+    int          routeLayerMask;       /* Mask two layers for routing. */
+    int          tab_mask[2];       /* Enables the calculation of the mask layer being
                                      * tested. (side = TOP or BOTTOM) */
     int          start_mask_layer = 0;
     wxString     msg;
@@ -393,8 +395,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
     result = NOSUCCESS;
 
-    marge = s_Clearance +
-            ( pcbframe->GetBoard()->GetCurrentTrackWidth() / 2 );
+    marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentTrackWidth() / 2 );
 
     /* clear direction flags */
     i = Nrows * Ncols * sizeof(DIR_CELL);
@@ -404,23 +405,24 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     lastopen = lastclos = lastmove = 0;
 
     /* Set tab_masque[side] for final test of routing. */
-    tab_mask[TOP]    = masque_layer_TOP;
-    tab_mask[BOTTOM] = masque_layer_BOTTOM;
+    tab_mask[TOP]    = topLayerMask;
+    tab_mask[BOTTOM] = bottomLayerMask;
     /* Set active layers mask. */
-    masque_layers = masque_layer_TOP | masque_layer_BOTTOM;
+    routeLayerMask = topLayerMask | bottomLayerMask;
 
     pt_cur_ch = pt_chevelu;
     current_net_code   = pt_chevelu->GetNet();
-    pad_masque_layer_s = pt_cur_ch->m_PadStart->m_Masque_Layer;
-    pad_masque_layer_e = pt_cur_ch->m_PadEnd->m_Masque_Layer;
+    padLayerMaskStart = pt_cur_ch->m_PadStart->m_layerMask;
+    padLayerMaskEnd = pt_cur_ch->m_PadEnd->m_layerMask;
 
 
     /* First Test if routing possible ie if the pads are accessible
      * on the routing layers.
      */
-    if( ( masque_layers & pad_masque_layer_s ) == 0 )
+    if( ( routeLayerMask & padLayerMaskStart ) == 0 )
         goto end_of_route;
-    if( ( masque_layers & pad_masque_layer_e ) == 0 )
+
+    if( ( routeLayerMask & padLayerMaskEnd ) == 0 )
         goto end_of_route;
 
     /* Then test if routing possible ie if the pads are accessible
@@ -438,6 +440,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
         if( ( ( pt_cur_ch->m_PadStart->m_Orient / 900 ) & 1 ) != 0 )
             EXCHG( dx, dy );
+
         if( ( abs( cX - px ) > dx ) || ( abs( cY - py ) > dy ) )
             goto end_of_route;
 
@@ -449,6 +452,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         dy = pt_cur_ch->m_PadEnd->m_Size.y / 2;
         px = pt_cur_ch->m_PadEnd->GetPosition().x;
         py = pt_cur_ch->m_PadEnd->GetPosition().y;
+
         if( ( (pt_cur_ch->m_PadEnd->m_Orient / 900) & 1 ) != 0 )
             EXCHG( dx, dy );
 
@@ -458,7 +462,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
     /* Test the trivial case: direct connection overlay pads. */
     if( ( row_source == row_target ) && ( col_source == col_target )
-       && ( pad_masque_layer_e & pad_masque_layer_s &
+       && ( padLayerMaskEnd & padLayerMaskStart &
             g_TabAllCopperLayerMask[pcbframe->GetBoard()->GetCopperLayerCount() - 1] ) )
     {
         result = TRIVIAL_SUCCESS;
@@ -477,13 +481,15 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
      * bits precedent)
      */
     i = pcbframe->GetBoard()->GetPadsCount();
+
     for( unsigned ii = 0; ii < pcbframe->GetBoard()->GetPadsCount(); ii++ )
     {
+
         D_PAD* ptr = pcbframe->GetBoard()->m_NetInfo->GetPad( ii );
+
         if( ( pt_cur_ch->m_PadStart != ptr ) && ( pt_cur_ch->m_PadEnd != ptr ) )
         {
-            Place_1_Pad_Board( pcbframe->GetBoard(), ptr, ~CURRENT_PAD,
-                               marge, WRITE_AND_CELL );
+            Place_1_Pad_Board( pcbframe->GetBoard(), ptr, ~CURRENT_PAD, marge, WRITE_AND_CELL );
         }
     }
 
@@ -495,16 +501,18 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     {
         if( abs( row_target - row_source ) > abs( col_target - col_source ) )
         {
-            if( pad_masque_layer_s & masque_layer_TOP )
+            if( padLayerMaskStart & topLayerMask )
             {
                 start_mask_layer = 2;
+
                 if( SetQueue( row_source, col_source, TOP, 0, apx_dist,
                               row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
             }
-            if( pad_masque_layer_s & masque_layer_BOTTOM )
+
+            if( padLayerMaskStart & bottomLayerMask )
             {
                 start_mask_layer |= 1;
 
@@ -517,16 +525,18 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         }
         else
         {
-            if( pad_masque_layer_s & masque_layer_BOTTOM )
+            if( padLayerMaskStart & bottomLayerMask )
             {
                 start_mask_layer = 1;
+
                 if( SetQueue( row_source, col_source, BOTTOM, 0, apx_dist,
                               row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
             }
-            if( pad_masque_layer_s & masque_layer_TOP )
+
+            if( padLayerMaskStart & topLayerMask )
             {
                 start_mask_layer |= 2;
 
@@ -538,12 +548,11 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             }
         }
     }
-    else if( pad_masque_layer_s & masque_layer_BOTTOM )
+    else if( padLayerMaskStart & bottomLayerMask )
     {
         start_mask_layer = 1;
 
-        if( SetQueue( row_source, col_source, BOTTOM, 0, apx_dist,
-                      row_target, col_target ) == 0 )
+        if( SetQueue( row_source, col_source, BOTTOM, 0, apx_dist, row_target, col_target ) == 0 )
         {
             return ERR_MEMORY;
         }
@@ -551,13 +560,16 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
     /* search until success or we exhaust all possibilities */
     GetQueue( &r, &c, &side, &d, &apx_dist );
+
     for( ; r != ILLEGAL; GetQueue( &r, &c, &side, &d, &apx_dist ) )
     {
         curcell = GetCell( r, c, side );
+
         if( curcell & CURRENT_PAD )
             curcell &= ~HOLE;
+
         if( (r == row_target) && (c == col_target)  /* success if layer OK */
-           && ( tab_mask[side] & pad_masque_layer_e) )
+           && ( tab_mask[side] & padLayerMaskEnd) )
         {
             /* Remove link. */
             GRSetDrawMode( DC, GR_XOR );
@@ -576,6 +588,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             {
                 result = SUCCESS;   /* Success : Route OK */
             }
+
             break;                  /* Routing complete. */
         }
 
@@ -600,9 +613,11 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         }
 
         _self = 0;
+
         if( curcell & HOLE )
         {
             _self = 5;
+
             /* set 'present' bits */
             for( i = 0; i < 8; i++ )
             {
@@ -622,7 +637,9 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
             if( _self == 5 && selfok2[i].present )
                 continue;
+
             newcell = GetCell( nr, nc, side );
+
             if( newcell & CURRENT_PAD )
                 newcell &= ~HOLE;
 
@@ -634,23 +651,29 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             }
             /* check for traces */
             else if( newcell & HOLE & ~(newmask[i]) )
+            {
                 continue;
+            }
 
             /* check blocking on corner neighbors */
             if( delta[i][0] && delta[i][1] )
             {
                 /* check first buddy */
                 buddy = GetCell( r + blocking[i].r1, c + blocking[i].c1, side );
+
                 if( buddy & CURRENT_PAD )
                     buddy &= ~HOLE;
+
                 if( buddy & HOLE )
                     continue;
 
 //				if (buddy & (blocking[i].b1)) continue;
                 /* check second buddy */
                 buddy = GetCell( r + blocking[i].r2, c + blocking[i].c2, side );
+
                 if( buddy & CURRENT_PAD )
                     buddy &= ~HOLE;
+
                 if( buddy & HOLE )
                     continue;
 
@@ -668,6 +691,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             {
                 SetDir( nr, nc, side, ndir[i] );
                 SetDist( nr, nc, side, newdist );
+
                 if( SetQueue( nr, nc, side, newdist,
                               GetApxDist( nr, nc, row_target, col_target ),
                               row_target, col_target ) == 0 )
@@ -689,13 +713,17 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         if( two_sides )
         {
             olddir = GetDir( r, c, side );
+
             if( olddir == FROM_OTHERSIDE )
                 continue;   /* useless move, so don't bother */
+
             if( curcell )   /* can't drill via if anything here */
                 continue;
+
             /* check for holes or traces on other side */
             if( ( newcell = GetCell( r, c, 1 - side ) ) != 0 )
                 continue;
+
             /* check for nearby holes or traces on both sides */
             for( skip = 0, i = 0; i < 8; i++ )
             {
@@ -729,8 +757,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             {
                 SetDir( r, c, 1 - side, FROM_OTHERSIDE );
                 SetDist( r, c, 1 - side, newdist );
-                if( SetQueue( r, c, 1 - side, newdist, apx_dist, row_target,
-                              col_target ) == 0 )
+
+                if( SetQueue( r, c, 1 - side, newdist, apx_dist, row_target, col_target ) == 0 )
                 {
                     return ERR_MEMORY;
                 }
@@ -899,7 +927,8 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
 
     wxASSERT( g_CurrentTrackList.GetCount() == 0 );
 
-    do {
+    do
+    {
         /* find where we came from to get here */
         r2 = r1; c2 = c1; s2 = s1;
         x  = GetDir( r1, c1, s1 );
@@ -947,8 +976,7 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
             break;
 
         default:
-            DisplayError( pcbframe,
-                          wxT( "Retrace: internal error: no way back" ) );
+            DisplayError( pcbframe, wxT( "Retrace: internal error: no way back" ) );
             return 0;
         }
 
@@ -1001,8 +1029,7 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
                 return 0;
             }
 
-            OrCell_Trace(
-                pcbframe->GetBoard(), r1, c1, s1, p_dir, current_net_code );
+            OrCell_Trace( pcbframe->GetBoard(), r1, c1, s1, p_dir, current_net_code );
         }
         else
         {
@@ -1017,11 +1044,10 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
                     || x == FROM_OTHERSIDE )
                && ( ( b = bit[y - 1][x - 1] ) != 0 ) )
             {
-                OrCell_Trace( pcbframe->GetBoard(), r1, c1, s1, b,
-                              current_net_code );
+                OrCell_Trace( pcbframe->GetBoard(), r1, c1, s1, b, current_net_code );
+
                 if( b & HOLE )
-                    OrCell_Trace( pcbframe->GetBoard(), r2, c2, s2, HOLE,
-                                  current_net_code );
+                    OrCell_Trace( pcbframe->GetBoard(), r2, c2, s2, HOLE, current_net_code );
             }
             else
             {
@@ -1074,9 +1100,9 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
                 return 0;
             }
 
-            OrCell_Trace( pcbframe->GetBoard(), r2, c2, s2, p_dir,
-                          current_net_code );
+            OrCell_Trace( pcbframe->GetBoard(), r2, c2, s2, p_dir, current_net_code );
         }
+
         /* move to next cell */
         r0 = r1;
         c0 = c1;
@@ -1086,7 +1112,7 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
         s1 = s2;
     } while( !( ( r2 == row_source ) && ( c2 == col_source ) ) );
 
-    Place_Piste_en_Buffer( pcbframe, DC );
+    AddNewTrace( pcbframe, DC );
     return 1;
 }
 
@@ -1129,6 +1155,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         g_CurrentTrackList.PushBack( newTrack );
 
         g_CurrentTrackSegment->SetLayer( Route_Layer_BOTTOM );
+
         if( side == TOP )
             g_CurrentTrackSegment->SetLayer( Route_Layer_TOP );
 
@@ -1145,26 +1172,20 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
             g_CurrentTrackSegment->m_Start.y = segm_fY;
 
             /* Placement on the center of the pad if outside grid. */
-            dx1 = g_CurrentTrackSegment->m_End.x -
-                  g_CurrentTrackSegment->m_Start.x;
-            dy1 = g_CurrentTrackSegment->m_End.y -
-                  g_CurrentTrackSegment->m_Start.y;
+            dx1 = g_CurrentTrackSegment->m_End.x - g_CurrentTrackSegment->m_Start.x;
+            dy1 = g_CurrentTrackSegment->m_End.y - g_CurrentTrackSegment->m_Start.y;
 
-            dx0 = pt_cur_ch->m_PadEnd->GetPosition().x -
-                  g_CurrentTrackSegment->m_Start.x;
-            dy0 = pt_cur_ch->m_PadEnd->GetPosition().y -
-                  g_CurrentTrackSegment->m_Start.y;
+            dx0 = pt_cur_ch->m_PadEnd->GetPosition().x - g_CurrentTrackSegment->m_Start.x;
+            dy0 = pt_cur_ch->m_PadEnd->GetPosition().y - g_CurrentTrackSegment->m_Start.y;
 
             /* If aligned, change the origin point. */
             if( abs( dx0 * dy1 ) == abs( dx1 * dy0 ) )
             {
-                g_CurrentTrackSegment->m_Start =
-                    pt_cur_ch->m_PadEnd->GetPosition();
+                g_CurrentTrackSegment->m_Start = pt_cur_ch->m_PadEnd->GetPosition();
             }
             else    // Creation of a supplemental segment
             {
-                g_CurrentTrackSegment->m_Start =
-                    pt_cur_ch->m_PadEnd->GetPosition();
+                g_CurrentTrackSegment->m_Start = pt_cur_ch->m_PadEnd->GetPosition();
 
                 newTrack = g_CurrentTrackSegment->Copy();
                 newTrack->m_Start = g_CurrentTrackSegment->m_End;
@@ -1176,22 +1197,21 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         {
             if( g_CurrentTrackSegment->Back() )
             {
-                g_CurrentTrackSegment->m_Start =
-                    g_CurrentTrackSegment->Back()->m_End;
+                g_CurrentTrackSegment->m_Start = g_CurrentTrackSegment->Back()->m_End;
             }
         }
+
         g_CurrentTrackSegment->m_Width = pcb->GetCurrentTrackWidth();
 
         if( g_CurrentTrackSegment->m_Start != g_CurrentTrackSegment->m_End )
         {
             /* Reduce aligned segments by one. */
             TRACK* oldTrack = g_CurrentTrackSegment->Back();
+
             if( oldTrack &&  oldTrack->Type() != TYPE_VIA )
             {
-                dx1 = g_CurrentTrackSegment->m_End.x -
-                      g_CurrentTrackSegment->m_Start.x;
-                dy1 = g_CurrentTrackSegment->m_End.y -
-                      g_CurrentTrackSegment->m_Start.y;
+                dx1 = g_CurrentTrackSegment->m_End.x - g_CurrentTrackSegment->m_Start.x;
+                dy1 = g_CurrentTrackSegment->m_End.y - g_CurrentTrackSegment->m_Start.y;
 
                 dx0 = oldTrack->m_End.x - oldTrack->m_Start.x;
                 dy0 = oldTrack->m_End.y - oldTrack->m_Start.y;
@@ -1213,7 +1233,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
  * connected
  * Center on pads even if they are off grid.
  */
-static void Place_Piste_en_Buffer( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
+static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 {
     if( g_FirstTrackSegment == NULL )
         return;
@@ -1282,7 +1302,7 @@ static void Place_Piste_en_Buffer( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
         pcbframe->GetBoard()->m_Track.Insert( track, insertBeforeMe );
     }
 
-    Trace_Une_Piste( panel, DC, firstTrack, newCount, GR_OR );
+    DrawTraces( panel, DC, firstTrack, newCount, GR_OR );
 
     pcbframe->test_1_net_connexion( DC, netcode );
 

@@ -1,5 +1,5 @@
 /****************************************************/
-/* MIREPCB class definition.  (targets for photos)  */
+/* PCB_TARGET class definition.  (targets for photos)  */
 /****************************************************/
 
 #ifndef MIRE_H
@@ -9,7 +9,7 @@
 #include "richio.h"
 
 
-class MIREPCB : public BOARD_ITEM
+class PCB_TARGET : public BOARD_ITEM
 {
 public:
     int     m_Width;
@@ -18,11 +18,11 @@ public:
     int     m_Size;
 
 public:
-    MIREPCB( BOARD_ITEM* aParent );
-    ~MIREPCB();
+    PCB_TARGET( BOARD_ITEM* aParent );
+    ~PCB_TARGET();
 
-    MIREPCB*    Next() const { return (MIREPCB*) Pnext; }
-    MIREPCB*    Back() const { return (MIREPCB*) Pnext; }
+    PCB_TARGET*    Next() const { return (PCB_TARGET*) Pnext; }
+    PCB_TARGET*    Back() const { return (PCB_TARGET*) Pnext; }
 
     wxPoint& GetPosition()
     {
@@ -65,7 +65,7 @@ public:
 
     bool    ReadMirePcbDescr( LINE_READER* aReader );
 
-    void    Copy( MIREPCB* source );
+    void    Copy( PCB_TARGET* source );
 
     void    Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
                   const wxPoint& offset = ZeroOffset );

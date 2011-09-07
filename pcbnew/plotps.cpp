@@ -23,13 +23,14 @@ bool PCB_BASE_FRAME::Genere_PS( const wxString& FullFileName, int Layer,
     wxSize        PaperSize;
     wxSize        BoardSize;
     wxPoint       BoardCenter;
-    bool          Center = FALSE;
+    bool          Center = false;
     Ki_PageDescr* currentsheet = GetScreen()->m_CurrentSheetDesc;
     double        scale, paperscale;
     Ki_PageDescr* SheetPS;
     wxPoint       offset;
 
     FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
+
     if( output_file == NULL )
     {
         return false;
@@ -80,10 +81,8 @@ bool PCB_BASE_FRAME::Genere_PS( const wxString& FullFileName, int Layer,
 
     if( Center )
     {
-        offset.x = wxRound( (double) BoardCenter.x -
-                            ( (double) PaperSize.x / 2.0 ) / scale );
-        offset.y = wxRound( (double) BoardCenter.y -
-                            ( (double) PaperSize.y / 2.0 ) / scale );
+        offset.x = wxRound( (double) BoardCenter.x - ( (double) PaperSize.x / 2.0 ) / scale );
+        offset.y = wxRound( (double) BoardCenter.y - ( (double) PaperSize.y / 2.0 ) / scale );
     }
     else
     {

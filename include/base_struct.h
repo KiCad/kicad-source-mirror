@@ -1,6 +1,7 @@
-/*********************************************************************/
-/*  base_struct.h :  Basic classes for most kicad item descriptions  */
-/*********************************************************************/
+/**
+ * @file  base_struct.h
+ * @brief Basic classes for most kicad items.
+ */
 
 #ifndef BASE_STRUCT_H
 #define BASE_STRUCT_H
@@ -41,7 +42,7 @@ enum KICAD_T {
                             // copper layer)
     TYPE_MARKER_PCB,        // a marker used to show something
     TYPE_DIMENSION,         // a dimension (graphic item)
-    TYPE_MIRE,              // a target (graphic item)
+    PCB_TARGET_T,           // a target (graphic item)
     TYPE_ZONE_EDGE_CORNER,  // in zone outline: a point to define an outline
     TYPE_ZONE_CONTAINER,    // a zone area
     TYPE_BOARD_ITEM_LIST,   // a list of board items
