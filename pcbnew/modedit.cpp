@@ -91,18 +91,15 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
 
         for( int ii = 0; ii<limit; ++ii )
         {
-            wxString    text;
-            BITMAP_DEF  xpm;
-
             item = (*m_Collector)[ii];
 
-            text = item->GetSelectMenuText();
-            xpm  = item->GetMenuImage();
+            wxString    text = item->GetSelectMenuText();
+            BITMAP_DEF  xpm  = item->GetMenuImage();
 
             AddMenuItem( &itemMenu,
                          ID_POPUP_PCB_ITEM_SELECTION_START + ii,
                          text,
-                         xpm );
+                         KiBitmap( xpm ) );
         }
 
         // this menu's handler is void

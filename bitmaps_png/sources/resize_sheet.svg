@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <linearGradient id="r" y2="549.06" gradientUnits="userSpaceOnUse" x2="399.77" gradientTransform="matrix(.060716 0 0 .09759 24.202 -45.628)" y1="1164.7" x1="399.77">
+   <stop stop-color="#b4b4b6" offset="0"/>
+   <stop stop-color="#9c9ca1" offset=".5"/>
+   <stop stop-color="#cdcdd1" offset="1"/>
+  </linearGradient>
+  <linearGradient id="s" y2="109.65" gradientUnits="userSpaceOnUse" x2="16" gradientTransform="matrix(.54154 0 0 .72222 23.478 -8.2222)" y1="23.793" x1="119.58">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" offset=".42597"/>
+   <stop stop-color="#f1f1f1" offset=".58928"/>
+   <stop stop-color="#eaeaea" offset=".80220"/>
+   <stop stop-color="#dfdfdf" offset="1"/>
+  </linearGradient>
+  <linearGradient id="t" y2="32" gradientUnits="userSpaceOnUse" x2="74.33" gradientTransform="matrix(0,-1.5975,-2,0,96,199.27)" y1="-5.8302" x1="102.31">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <linearGradient id="u" y2="10.133" gradientUnits="userSpaceOnUse" x2="6.0553" gradientTransform="matrix(1.4169 -.74251 1.2813 2.0143 175.44 62.152)" y1="4.4591" x1="3.4422">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#9b9bff" offset="1"/>
+  </linearGradient>
+  <linearGradient id="v" y2="-1.4048" gradientUnits="userSpaceOnUse" x2="8.2386" gradientTransform="matrix(.74765 0 0 .74765 12.8 -4.8)" y1="-13.865" x1="8.2386">
+   <stop stop-color="#06f" offset="0"/>
+   <stop stop-color="#80b3ff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <rect opacity=".57787" height="0" width="1" y="-388.2" x="15.057" fill="#fff"/>
+ <g transform="matrix(.36617 0 0 .35785 -.31867 2.3561)">
+  <rect fill-opacity=".091954" rx=".15376" ry=".18705" height="92" width="92" y="12.93" x="20.8" fill="#618fd2"/>
+  <g transform="translate(44.8,-15.33)">
+   <rect opacity=".75" transform="matrix(0,1,1,0,0,0)" rx="3.9617" ry="3.9617" height="72" width="71.987" y="-4" x="28.142" fill="url(#r)"/>
+   <rect transform="matrix(0,1,1,0,0,0)" fill-rule="evenodd" rx="1.1998" ry="1.4444" height="64" width="63.987" y="0" x="32.142" fill="url(#s)"/>
+   <path fill-rule="evenodd" fill="url(#t)" d="m64 53.097c-18.856 17.067-39.251 33.066-64 43.033v-43.482c23.694-2.436 45.098-10.038 64-20.518v20.967z"/>
+  </g>
+  <g id="n" fill="#7193c6" transform="translate(-3.2,4.9297)">
+   <rect id="a" transform="rotate(90)" rx=".077154" ry="1.3513" height="4" width="4" y="-116" x="16" fill="#7193c6"/>
+   <use xlink:href="#a" transform="translate(0,8)" height="128" width="128" y="0" x="0" fill="#7193c6"/>
+   <use id="w" xlink:href="#a" transform="translate(0,16)" height="128" width="128" y="0" x="0" fill="#7193c6"/>
+   <use id="q" xlink:href="#a" transform="translate(0,24)" height="128" width="128" y="0" x="0" fill="#7193c6"/>
+   <use id="x" xlink:href="#a" transform="translate(0,32)" height="128" width="128" y="0" x="0" fill="#7193c6"/>
+   <use id="y" xlink:href="#w" transform="translate(0,24)" height="88" width="88" y="0" x="0"/>
+   <use xlink:href="#q" transform="translate(0,24)" height="88" width="88" y="0" x="0"/>
+   <use xlink:href="#q" transform="translate(0,32)" height="128" width="128" y="0" x="0"/>
+   <use xlink:href="#x" transform="translate(0,32)" height="128" width="128" y="0" x="0"/>
+   <use xlink:href="#y" transform="translate(0,32)" height="128" width="128" y="0" x="0"/>
+  </g>
+  <use xlink:href="#n" transform="matrix(8.5713e-8,-1,1,8.5713e-8,7.8703,125.73)" height="128" width="128" y="0" x="0"/>
+  <use xlink:href="#n" transform="translate(-88)" height="128" width="128" y="0" x="0"/>
+  <use xlink:href="#n" transform="matrix(8.5713e-8,-1,1,8.5713e-8,7.8703,213.73)" height="128" width="128" y="0" x="0"/>
+  <use xlink:href="#p" transform="translate(96 .12965)" height="128" width="128" y="0" x="0"/>
+  <use xlink:href="#p" transform="translate(7.5e-6,96.13)" height="128" width="128" y="0" x="0"/>
+  <use xlink:href="#p" transform="translate(96,96.13)" height="128" width="128" y="0" x="0"/>
+  <rect id="p" transform="scale(1,-1)" rx=".15479" ry=".18697" height="12" width="12" y="-16.8" x="12.8" fill="url(#v)"/>
+  <rect id="o" transform="scale(1,-1)" rx=".15479" ry=".18697" height="4" width="4" y="-12.8" x="16.8" fill="#bfd9ff"/>
+  <use xlink:href="#o" transform="translate(96 .12965)" height="88" width="88" y="0" x="0" fill="#a4c0e4"/>
+  <use xlink:href="#o" transform="translate(7.5e-6,96.13)" height="88" width="88" y="0" x="0" fill="#a4c0e4"/>
+  <use xlink:href="#o" transform="translate(96,96.13)" height="88" width="88" y="0" x="0" fill="#a4c0e4"/>
+  <g fill-rule="evenodd" transform="matrix(1.4318,0,0,1.1886,-216.81,5.8696)">
+   <path fill-opacity=".39216" d="m181.93 65.913 1.3773 20.75 5.689-4.0659 4.8168 9.2907 7.0487-3.6936-6.5456-8.3848 6.7241-2.4388-19.11-11.458z"/>
+   <path d="m181.58 62.196 1.3773 20.75 5.689-4.0659 4.8168 9.2907 7.0486-3.6936-6.5455-8.3848 6.7241-2.4388-19.11-11.458z"/>
+   <path fill="url(#u)" d="m183.63 65.415 0.96016 14.519 4.808-3.5925 4.7443 9.3169 3.5466-1.8585-6.5176-8.3876 5.8318-1.983-13.373-8.0141z"/>
+  </g>
+ </g>
+</svg>

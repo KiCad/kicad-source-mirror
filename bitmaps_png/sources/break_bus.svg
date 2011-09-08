@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="a" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.31984412"/>
+  </filter>
+ </defs>
+ <g opacity=".62109" filter="url(#a)" transform="matrix(2.8443,0,0,2.9435,4.2788,4.4613)">
+  <path d="m0 9 6.0622-3.5 1.5 2.5981-6.0622 3.4999-1.5-2.598z"/>
+  <path d="m15.062 9-6.062-3.5-1.5 2.5981 6.062 3.4999 1.5-2.598z"/>
+  <rect y="1" width="1" x="7" height="3"/>
+  <rect transform="rotate(45)" height="3" width="1" y="-6.4497" x="9.2782"/>
+  <rect transform="matrix(-.70711 .70711 .70711 .70711 0 0)" height="3" width="1" y="4.0711" x="-1.4142"/>
+ </g>
+ <path fill="#0000c3" d="m1.7796 28.298 17.242-10.302 4.267 7.647-17.243 10.302-4.2664-7.647z"/>
+ <path fill="#0000c3" d="m44.621 28.298-17.243-10.302-4.266 7.647 17.243 10.302 4.266-7.647z"/>
+ <rect height="8.8304" width="2.8443" y="4.75" x="21.69" fill="#d72e2e"/>
+ <rect transform="matrix(.69489 .71912 -.69489 .71912 0 0)" height="8.683" width="2.8943" y="-18.692" x="29.391" fill="#d72e2e"/>
+ <rect transform="matrix(-.69489 .71912 .69489 .71912 0 0)" height="8.683" width="2.8943" y="14.32" x="-4.1176" fill="#d72e2e"/>
+</svg>

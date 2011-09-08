@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="g" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.70420991"/>
+  </filter>
+  <filter id="h" height="2.4084" width="1.0878" color-interpolation-filters="sRGB" y="-.70421" x="-.043899">
+   <feGaussianBlur stdDeviation="0.70420991"/>
+  </filter>
+  <filter id="i" height="1.4957" width="1.4326" color-interpolation-filters="sRGB" y="-.24783" x="-.21629">
+   <feGaussianBlur stdDeviation="0.70747002"/>
+  </filter>
+  <filter id="j" height="1.4957" width="1.4326" color-interpolation-filters="sRGB" y="-.24783" x="-.21629">
+   <feGaussianBlur stdDeviation="0.70747002"/>
+  </filter>
+  <filter id="k" height="1.4957" width="1.4326" color-interpolation-filters="sRGB" y="-.24783" x="-.21629">
+   <feGaussianBlur stdDeviation="0.70747002"/>
+  </filter>
+  <filter id="l" height="1.4957" width="1.4326" color-interpolation-filters="sRGB" y="-.24783" x="-.21629">
+   <feGaussianBlur stdDeviation="0.70747002"/>
+  </filter>
+ </defs>
+ <g transform="translate(0,32)">
+  <path opacity=".25391" d="m5.5735-13.7 2.5441-0.08956v-8.5815l2.6471-2.1454h2.6471l2.6471 2.1454v19.308h2.6471v-19.308l2.6471-2.1454h2.6471l2.6471 2.1454v19.308h2.6471v-19.308l2.6471-2.1454h2.6471l2.6471 2.1454v19.308h2.6471v-10.727h7.9412v2.1454h-5.2941v8.5815l-2.6471 2.1454h-2.6471l-2.6471-2.1454v-19.308h-2.6471v19.308l-2.6471 2.1454h-2.6471l-2.647-2.1439v-19.308h-2.6471v19.308l-2.6471 2.1454h-2.647l-2.6471-2.1454v-19.308h-2.6471v10.727h-5.2945l0.10297-2.0558z" fill-rule="evenodd" filter="url(#g)"/>
+  <rect opacity=".25391" height="2.4" filter="url(#h)" width="38.5" y="7.3055" x="6.592"/>
+  <rect opacity=".25391" transform="matrix(.75342 -.65753 .75342 .65753 0 0)" height="2.5809" filter="url(#i)" width="7.7428" y="10.151" x="-1.4019"/>
+  <rect opacity=".25391" transform="matrix(.75342 .65753 .75342 -.65753 0 0)" height="2.5809" filter="url(#j)" width="7.7428" y="-2.7841" x="11.534"/>
+  <rect opacity=".25391" transform="matrix(-.75342 -.65753 -.75342 .65753 0 0)" height="2.5809" filter="url(#k)" width="7.7428" y="-24.148" x="-35.701"/>
+  <rect opacity=".25391" transform="matrix(-.75342 .65753 -.75342 -.65753 0 0)" height="2.5809" filter="url(#l)" width="7.7428" y="-37.084" x="-22.766"/>
+  <path fill-rule="evenodd" fill="#d72e2e" d="m3.5147-15.785 2.5441-0.08956v-8.5815l2.6471-2.1454h2.6471l2.6471 2.1454v19.308h2.6471v-19.308l2.6471-2.1454h2.6471l2.6471 2.1454v19.308h2.6471v-19.308l2.6471-2.1454h2.6471l2.6471 2.1454v19.308h2.6471v-10.727h7.9412v2.1454h-5.2941v8.5815l-2.6471 2.1454h-2.6471l-2.6471-2.1454v-19.308h-2.6471v19.308l-2.6471 2.1454h-2.6471l-2.6471-2.1454v-19.308h-2.6471v19.308l-2.6471 2.1454h-2.6471l-2.6471-2.1454v-19.308h-2.6471v10.727h-5.2941l0.10297-2.0558z"/>
+  <rect y="5.2212" width="38.5" x="4.5332" height="2.4"/>
+  <rect transform="matrix(.75342 -.65753 .75342 .65753 0 0)" height="2.5809" width="7.7428" y="7.2001" x="-1.1833"/>
+  <rect transform="matrix(.75342 .65753 .75342 -.65753 0 0)" height="2.5809" width="7.7428" y="-2.5655" x="8.5823"/>
+  <rect transform="matrix(-.75342 -.65753 -.75342 .65753 0 0)" height="2.5809" width="7.7428" y="-24.367" x="-32.75"/>
+  <rect transform="matrix(-.75342 .65753 -.75342 -.65753 0 0)" height="2.5809" width="7.7428" y="-34.132" x="-22.984"/>
+ </g>
+ <g transform="translate(0,32)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+</svg>

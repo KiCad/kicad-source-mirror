@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <g transform="matrix(2.9379,0,0,2.1996,-5.2815,-32.414)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(2.6705,0,0,2.3789,-158.94,-34.248)">
+  <g transform="translate(41.782,-18.013)">
+   <path d="m0 0h12l4 5h-12l-4-5z" transform="translate(18.949,44.467)"/>
+   <path fill="#fff" d="m2 1h9.5l2.5 3h-9.5l-2.5-3z" transform="translate(18.949,44.467)"/>
+  </g>
+  <g fill-opacity=".39216" transform="translate(41.782,-20.013)">
+   <path d="m1.5 1h5l4.5 0.0000029 3.5 4-4.5-0.000003h-5l-3.5-4z" transform="translate(18.949,44.467)"/>
+   <path d="m2 1h9.5l2.5 3h-9.5l-2.5-3z" transform="translate(18.949,44.467)"/>
+  </g>
+  <g transform="translate(41.782,-21.013)">
+   <path d="m0 0h12l4 5h-12l-4-5z" transform="translate(18.949,44.467)"/>
+   <path fill="#fff" d="m2 1h9.5l2.5 3h-9.5l-2.5-3z" transform="translate(18.949,44.467)"/>
+  </g>
+  <g fill-opacity=".39216" transform="translate(41.782,-23.013)">
+   <path d="m1.5 1h5l4.5 0.0000029 3.5 4-4.5-0.000003h-5l-3.5-4z" transform="translate(18.949,44.467)"/>
+   <path d="m2 1h9.5l2.5 3h-9.5l-2.5-3z" transform="translate(18.949,44.467)"/>
+  </g>
+  <g transform="translate(41.782,-24.013)">
+   <path d="m0 0h12l4 5h-12l-4-5z" transform="translate(18.949,44.467)"/>
+   <path fill="#c30000" d="m2 1h9.5l2.5 3h-9.5l-2.5-3z" transform="translate(18.949,44.467)"/>
+  </g>
+  <g fill-opacity=".39216" transform="translate(41.782,-26.013)">
+   <path d="m1.5 1h5l4.5 0.0000029 3.5 4-4.5-0.000003h-5l-3.5-4z" transform="translate(18.949,44.467)"/>
+   <path d="m2 1h9.5l2.5 3h-9.5l-2.5-3z" transform="translate(18.949,44.467)"/>
+  </g>
+  <g transform="translate(41.782,-27.013)">
+   <path d="m0 0h12l4 5h-12l-4-5z" transform="translate(18.949,44.467)"/>
+   <path fill="#fff" d="m2 1h9.5l2.5 3h-9.5l-2.5-3z" transform="translate(18.949,44.467)"/>
+  </g>
+ </g>
+</svg>

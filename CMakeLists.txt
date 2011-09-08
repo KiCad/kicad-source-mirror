@@ -236,7 +236,13 @@ include_directories(${CMAKE_SOURCE_DIR}/include
 # Binaries #
 ############
 add_subdirectory(3d-viewer)
-add_subdirectory(bitmaps)
+
+if( USE_PNG_BITMAPS )
+    add_subdirectory(bitmaps_png)
+else()
+    add_subdirectory(bitmaps_xpm)
+endif()
+
 add_subdirectory(common)
 add_subdirectory(cvpcb)
 add_subdirectory(eeschema)

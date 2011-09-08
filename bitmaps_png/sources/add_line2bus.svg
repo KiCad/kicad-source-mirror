@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="h" height="1.3436" width="1.4604" color-interpolation-filters="sRGB" y="-.17179" x="-.23018">
+   <feGaussianBlur stdDeviation="1.1820932"/>
+  </filter>
+  <filter id="i" height="1.3436" width="1.4604" color-interpolation-filters="sRGB" y="-.17179" x="-.23018">
+   <feGaussianBlur stdDeviation="1.1820932"/>
+  </filter>
+  <filter id="j" height="1.3436" width="1.4604" color-interpolation-filters="sRGB" y="-.17179" x="-.23018">
+   <feGaussianBlur stdDeviation="1.1820932"/>
+  </filter>
+  <filter id="k" height="2.2042" width="1.3288" color-interpolation-filters="sRGB" y="-.60208" x="-.16441">
+   <feGaussianBlur stdDeviation="1.1820932"/>
+  </filter>
+  <filter id="l" height="2.2042" width="1.3288" color-interpolation-filters="sRGB" y="-.60208" x="-.16441">
+   <feGaussianBlur stdDeviation="1.1820932"/>
+  </filter>
+  <filter id="m" height="2.2042" width="1.3288" color-interpolation-filters="sRGB" y="-.60208" x="-.16441">
+   <feGaussianBlur stdDeviation="1.1820932"/>
+  </filter>
+  <filter id="n" height="1.1606" width="1.7673" color-interpolation-filters="sRGB" y="-.080278" x="-.38363">
+   <feGaussianBlur stdDeviation="1.1820932"/>
+  </filter>
+ </defs>
+ <g transform="matrix(2.4566,0,0,2.2316,-37.589,-39.022)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <rect fill-opacity="0" height="38.871" width="43.287" y="-47.036" x="-74.787"/>
+ <g opacity=".57812" transform="translate(79.95,-1.65)">
+  <g transform="matrix(3.0687,0,0,2.2729,-75.919,15.626)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+  <g transform="matrix(3.0012,0,0,2.9062,-76.081,9.3)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+  <path opacity=".5625" filter="url(#n)" d="m-72.27 11.832h7.3953v35.34h-7.395v-35.34z"/>
+  <path opacity=".5625" filter="url(#m)" d="m-52.549 30.68h17.256v4.712h-17.256v-4.712z"/>
+  <path opacity=".5625" filter="url(#l)" d="m-52.549 21.256h17.256v4.712h-17.256v-4.712z"/>
+  <path opacity=".5625" filter="url(#k)" d="m-52.549 11.832h17.256v4.712h-17.256v-4.712z"/>
+  <path opacity=".5625" d="m-52.549 11.832-12.276 11.802v4.712l12.325-11.78-0.04911-4.7344z" fill-rule="evenodd" filter="url(#j)"/>
+  <path opacity=".5625" d="m-52.598 21.256-12.276 11.802v4.712l12.325-11.78-0.04911-4.7344z" fill-rule="evenodd" filter="url(#i)"/>
+  <path opacity=".5625" d="m-52.549 30.657-12.276 11.802v4.712l12.325-11.78-0.04911-4.7344z" fill-rule="evenodd" filter="url(#h)"/>
+ </g>
+ <g transform="matrix(1.0445 0 0 1.0333 -.060192 -.19333)">
+  <g transform="matrix(2.9379,0,0,2.1996,1.5067,11.922)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+  <g transform="matrix(2.8733,0,0,2.8125,1.3518,5.8)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+  <path fill="#000069" d="m5 8.25h7.08v34.2h-7.08v-34.2z"/>
+  <path fill="#006900" d="m23.88 26.49h16.52v4.56h-16.52v-4.56z"/>
+  <path fill="#006900" d="m23.88 17.37h16.52v4.56h-16.52v-4.56z"/>
+  <path fill="#006900" d="m23.88 8.25h16.52v4.56h-16.52v-4.56z"/>
+  <path fill-rule="evenodd" fill="#d72e2e" d="m23.88 8.25-11.753 11.422v4.56l11.8-11.4-0.047-4.582z"/>
+  <path fill-rule="evenodd" fill="#d72e2e" d="m23.833 17.37-11.753 11.422v4.56l11.8-11.4-0.047-4.582z"/>
+  <path fill-rule="evenodd" fill="#d72e2e" d="m23.88 26.468-11.753 11.422v4.56l11.8-11.4-0.047-4.582z"/>
+ </g>
+</svg>

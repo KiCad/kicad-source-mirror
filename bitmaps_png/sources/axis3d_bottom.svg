@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="64" width="64" version="1.1">
+ <defs>
+  <radialGradient id="a" gradientUnits="userSpaceOnUse" cy="65.832" cx="16.675" gradientTransform="matrix(.95824 -.19642 .1424 .69469 -6.1635 -4.022)" r="27.987">
+   <stop stop-color="#89d5f8" offset="0"/>
+   <stop stop-color="#00899e" offset="1"/>
+  </radialGradient>
+ </defs>
+ <g stroke-linejoin="bevel" stroke="#004c5b">
+  <path style="color:#000000" stroke-width="2.1615" fill="#fff" d="m4.215 18.77 37.115 7.3804v36.311l-35.614-10.641-1.501-33.05z"/>
+  <path style="color:#000000" stroke-width="2.1615" fill="#fff" d="m40.916 26.084 17.186-19.341-1.091 32.808-15.549 22.977-0.546-36.444z"/>
+  <path style="color:#000000" stroke-width="2.1615" fill="#fff" d="m27.056 2.2749 30.976 4.47-17.291 19.511-36.482-7.374 22.797-16.607z"/>
+  <path style="color:#000000" stroke-width="2.1615" fill="url(#a)" d="m56.979 39.146-15.551 23.28-35.652-10.531 22.516-18.949l28.687 6.2z"/>
+  <path style="color:#000000" d="m27.938 33.282-0.603-30.607" stroke-dasharray="4.322, 2.161" stroke-width="2.161" fill="url(#a)"/>
+  <path style="color:#000000" stroke-width="2.1615" fill="url(#a)" d="m41 60.882 0.075-25.738"/>
+ </g>
+</svg>

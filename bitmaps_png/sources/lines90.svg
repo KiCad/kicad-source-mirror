@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <g transform="translate(0,24)">
+  <g fill="none" transform="matrix(2.1667,0,0,2.1,138.5,-22)">
+   <path stroke-width="2" d="m-63 20h6v-6h12v3" stroke="#000d00"/>
+   <path opacity=".74219" d="m-63 10 5-1 6-6 7 6 2-8" stroke="#000" stroke-width="2"/>
+   <path stroke-width="1.7321" d="m-56 1 6 8" stroke="#ef2020"/>
+   <path stroke-linejoin="bevel" d="m-24 11.5a5 5.5 0 1 1 -10 0 5 5.5 0 1 1 10 0z" transform="matrix(1 0 0 .90909 -24 -5.4545)" stroke="#ef2020" stroke-width="1.56"/>
+  </g>
+ </g>
+</svg>

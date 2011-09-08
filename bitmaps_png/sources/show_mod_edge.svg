@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <path d="m13.448 42.023h23.716l-0.000027-35.494h-7.9053l-1.9763 3.2268h-3.9527l-1.9763-3.2268h-7.9054v35.494z" stroke="#ff0303" stroke-width="2.5685" fill="none"/>
+ <g fill="#001bff" transform="matrix(1,0,0,1.1644,1.2,-5.1035)">
+  <rect transform="matrix(8.5006e-8,-1,1,9.219e-8,0,0)" height="3.2984" width="6.4535" y="37.06" x="-19.435"/>
+  <rect transform="matrix(8.5006e-8,-1,1,9.219e-8,0,0)" height="3.2984" width="6.4535" y="37.06" x="-29.116"/>
+  <rect transform="matrix(8.5006e-8,-1,1,9.219e-8,0,0)" height="3.2984" width="6.4535" y="37.06" x="-38.796"/>
+ </g>
+ <g transform="matrix(1,0,0,1.1972,0,-5.7423)">
+  <g fill="#001bff" transform="translate(-1.35)">
+   <rect transform="matrix(8.5008e-8,-1,1,9.2188e-8,0,0)" height="3.2985" width="6.4535" y="10.573" x="-19.435"/>
+   <rect transform="matrix(8.5008e-8,-1,1,9.2188e-8,0,0)" height="3.2985" width="6.4535" y="10.573" x="-29.116"/>
+   <rect transform="matrix(8.5008e-8,-1,1,9.2188e-8,0,0)" height="3.2985" width="6.4535" y="10.573" x="-38.796"/>
+  </g>
+ </g>
+ <path d="m17.617 37.182h14.917l-0.000017-23.653h-4.9722l-1.2431 2.1503h-2.4861l-1.2431-2.1503h-4.9722v23.653z" stroke="#ff0303" stroke-width="1.6629" fill="none"/>
+</svg>

@@ -33,10 +33,10 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     {
         if( DrawStruct && DrawStruct->m_Flags )
             AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-                         _( "Cancel" ), cancel_xpm  );
+                         _( "Cancel" ), KiBitmap( cancel_xpm )  );
         else
             AddMenuItem( PopMenu, ID_POPUP_CLOSE_CURRENT_TOOL,
-                         _( "End Tool" ), cancel_tool_xpm );
+                         _( "End Tool" ), KiBitmap( cancel_tool_xpm ) );
 
         PopMenu->AppendSeparator();
     }
@@ -47,17 +47,17 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
             if( BlockActive )
             {
                 AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-                             _( "Cancel Block" ), cancel_xpm );
+                             _( "Cancel Block" ), KiBitmap( cancel_xpm ) );
                 PopMenu->AppendSeparator();
                 AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK,
-                             _( "Place Block" ), apply_xpm );
+                             _( "Place Block" ), KiBitmap( apply_xpm ) );
                 AddMenuItem( PopMenu, ID_POPUP_DELETE_BLOCK,
-                             _( "Delete Block (ctrl + drag mouse)" ), delete_xpm );
+                             _( "Delete Block (ctrl + drag mouse)" ), KiBitmap( delete_xpm ) );
             }
             else
             {
                 AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-                             _( "Cancel" ), cancel_xpm );
+                             _( "Cancel" ), KiBitmap( cancel_xpm ) );
             }
 
             PopMenu->AppendSeparator();

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <linearGradient id="a" y2="1726.1" gradientUnits="userSpaceOnUse" x2="2067.2" gradientTransform="matrix(-.071921 .013544 -.012748 -.067692 186.63 121.01)" y1="1726.1" x1="1669.7">
+   <stop stop-color="#003ddd" offset="0"/>
+   <stop stop-color="#639ef0" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path d="m42.631 22.194c-3.4692-6.4962-11.926-8.9904-18.878-5.5675-6.9516 3.4229-9.7778 11.473-6.3086 17.969 1.8282 3.4235 5.0414 5.7349 8.6896 6.6551l-1.7936 5.9463 14.501-6.4903-9.4099-10.834-2.0635 6.5831c-2.3011-0.62837-4.3188-2.1123-5.4791-4.2852-2.2591-4.2302-0.41893-9.4716 4.1079-11.701 4.5268-2.2289 10.035-0.60595 12.294 3.6243 0.64638 1.2104 0.95558 2.503 0.96362 3.7848l4.8567 0.16367c-0.0069-1.9805-0.48167-3.9787-1.4805-5.8491z" fill-rule="evenodd" stroke="#000" stroke-width=".85201" fill="url(#a)"/>
+ <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(.93298 1.0718)" line-height="125%" font-size="36.447px" y="28.521093" x="1.6162341" font-family="Sans" fill="#333333"><tspan font-family="Saab" y="28.521093" x="1.6162341" font-weight="bold" fill="#333333">Z</tspan></text>
+</svg>

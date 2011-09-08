@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="c" height="1.212" width="1.059" color-interpolation-filters="sRGB" y="-.10598" x="-.029501">
+   <feGaussianBlur stdDeviation="0.52522041"/>
+  </filter>
+  <filter id="d" height="1.212" width="1.059" color-interpolation-filters="sRGB" y="-.10598" x="-.029501">
+   <feGaussianBlur stdDeviation="0.52522041"/>
+  </filter>
+ </defs>
+ <path opacity=".21484" d="m3.6673 10.113h32.046l10.682 11.894h-32.046l-10.682-11.894z" transform="matrix(.92387 0 0 .95411 1.4303 .28605)" filter="url(#d)" stroke="#000" stroke-width="2.42" fill="#030000"/>
+ <path opacity=".21484" d="m4.3945 30.386h32.046l10.682 11.894h-32.046l-10.682-11.894z" transform="matrix(.92387 0 0 .95411 1.4303 .28605)" filter="url(#c)" stroke="#000" stroke-width="2.42" fill="#030000"/>
+ <g transform="matrix(2.9379,0,0,2.1996,-5.2815,-32.414)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <path d="m4.6224 26.581h29.606l9.869 11.349h-29.606l-9.8678-11.349z" stroke="#000" stroke-width="2.2721" fill="#1cff06"/>
+ <path d="m4.4264 7.2234h29.606l9.8689 11.349h-29.606l-9.8677-11.349z" stroke="#000" stroke-width="2.4598" fill="#ff0606"/>
+</svg>

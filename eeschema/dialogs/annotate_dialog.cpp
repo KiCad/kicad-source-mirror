@@ -58,7 +58,7 @@ void DIALOG_ANNOTATE::InitValues()
 /*********************************/
 {
     m_Config = wxGetApp().m_EDA_Config;
-	SetFocus();	// needed to close dialog by escape key
+    SetFocus();	// needed to close dialog by escape key
     if( m_Config )
     {
         long option;
@@ -97,10 +97,8 @@ void DIALOG_ANNOTATE::InitValues()
         }
     }
 
-    wxBitmap bitmap0(annotate_down_right_xpm);
-    annotate_down_right_bitmap->SetBitmap(bitmap0);
-    wxBitmap bitmap1(annotate_right_down_xpm);
-	annotate_right_down_bitmap->SetBitmap(bitmap1);
+    annotate_down_right_bitmap->SetBitmap( KiBitmap( annotate_down_right_xpm ) );
+    annotate_right_down_bitmap->SetBitmap( KiBitmap( annotate_right_down_xpm ) );
 
     m_btnApply->SetDefault();
 }

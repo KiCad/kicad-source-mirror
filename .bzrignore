@@ -26,3 +26,5 @@ new/sch_lib_table_keywords.cpp
 new/sch_lib_table_lexer.h
 new/sweet_keywords.cpp
 new/sweet_lexer.h
+bitmaps_png/png*
+bitmaps_png/tmp

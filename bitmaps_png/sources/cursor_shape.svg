@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <g transform="translate(0,24)">
+  <g transform="matrix(2.0888,0,0,2.1566,94.067,-36.212)">
+   <path d="m-45 11.656h23" stroke="#000" stroke-width="1.6241px" fill="none"/>
+   <path d="m-36.594 5.75v22" stroke="#000" stroke-width="1.5315px" fill="none"/>
+   <path d="m-36 12.25 12.308 4.0625-2.8658 3.0398 3.0867 3.2835-2.529 2.614-3.077-3.25-3.0769 3.25z"/>
+   <path d="m-29.776 11.656h-13.83" stroke="#07c022" stroke-width="1.56" fill="none"/>
+   <path d="m-36.609 19.602v-13.83" stroke="#07c022" stroke-width="1.5443" fill="none"/>
+  </g>
+ </g>
+</svg>

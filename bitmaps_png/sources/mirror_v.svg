@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="c" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.44929879"/>
+  </filter>
+  <linearGradient id="d" y2="8.8558" gradientUnits="userSpaceOnUse" x2="20.937" gradientTransform="matrix(0,1.781,-4.2777,0,45.856,3.8884)" y1="5.0633" x1="17.402">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#afadff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path opacity="0.28" d="m18.184 4.5304v38.429h-16.653l16.653-38.429z" fill-rule="evenodd" transform="matrix(0,1,-1,0,47.641,2.3566)" filter="url(#c)"/>
+ <rect transform="rotate(90)" height="10.98" width="2.7754" y="-45.856" x="23.316"/>
+ <rect transform="rotate(90)" height="10.98" width="2.7754" y="-29.386" x="23.316"/>
+ <rect transform="rotate(90)" height="10.98" width="2.7754" y="-12.916" x="23.316"/>
+ <path fill-rule="evenodd" d="m43.111 28.867h-38.429v16.653l38.429-16.653z"/>
+ <path fill-rule="evenodd" fill="url(#d)" d="m30.758 31.643h-23.332v9.714l23.332-9.714z"/>
+ <g transform="matrix(0,1,-1,0,15.641,2.3566)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+</svg>

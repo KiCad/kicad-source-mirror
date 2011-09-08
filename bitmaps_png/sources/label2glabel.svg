@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="d" height="1.2015" width="1.1849" color-interpolation-filters="sRGB" y="-.10076" x="-.092439">
+   <feGaussianBlur stdDeviation="0.60157468"/>
+  </filter>
+  <filter id="e" height="1.2015" width="1.1849" color-interpolation-filters="sRGB" y="-.10076" x="-.092439">
+   <feGaussianBlur stdDeviation="0.60157468"/>
+  </filter>
+  <filter id="f" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.60157468"/>
+  </filter>
+ </defs>
+ <g transform="matrix(2.4566,0,0,2.2316,-37.589,-39.022)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(2.9379,0,0,2.1996,2.1067,22.422)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <rect fill-opacity="0" height="38.871" width="43.287" y="-47.036" x="-74.787"/>
+ <g transform="matrix(2.9804,0,0,2.6654,-59.032,-7.5565)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(1.0163 0 0 1.0631 -.61961 -.96792)">
+  <g fill-rule="evenodd">
+   <path opacity=".39844" filter="url(#f)" d="m20.818 30.669 0.10186-6.9165 10.311 10.499-10.412 10.747v-7.1647c-9.1109 0-14.215-4.7765-14.215-14.329h7.7075c0 4.7765 2.6031 7.1647 6.5078 7.1647z"/>
+   <path opacity=".39844" filter="url(#e)" d="m35.238 27.334-5.2062 14.329h3.9047l1.3016-4.7765h5.2062l1.3016 4.7765h3.9047l-5.208-14.328h-5.2062zm2.6031 2.3882 1.3016 4.7765h-2.6031l1.3016-4.7765z"/>
+   <path opacity=".39844" filter="url(#d)" d="m11.809 5.8402-5.2062 14.329h3.9047l1.3016-4.7765h5.2063l1.3016 4.7765h3.9047l-5.207-14.328h-5.2063zm2.6031 2.3882 1.3016 4.7765h-2.6031l1.301-4.7766z"/>
+  </g>
+  <g transform="matrix(2.8733,0,0,2.8125,1.2018,8.35)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+  <path fill-rule="evenodd" d="m9.2062 3.452-5.2063 14.329h3.9047l1.3016-4.7765h5.2062l1.3016 4.7765h3.9047l-5.207-14.326h-5.206zm2.6031 2.3882 1.3016 4.7765h-2.6031l1.3016-4.7765z"/>
+  <path fill-rule="evenodd" fill="#695f00" d="m32.634 24.946-5.2062 14.329h3.9047l1.3016-4.7765h5.2062l1.3016 4.7765h3.9047l-5.208-14.328h-5.2062zm2.6031 2.3882 1.3016 4.7765h-2.6031l1.3016-4.7765z"/>
+  <g fill-rule="evenodd" transform="matrix(2.6031,0,0,2.3882,-12.92,47.494)">
+   <path d="m12-8.441 0.03913-2.8961 3.9609 4.3961-4 4.5v-3c-3.5 0-5.4609-2-5.4609-6h2.9609c0 2 1 3 2.5 3z"/>
+   <path fill="#00bd00" d="m12.5-7.941v-1.5l2.5 2.5-2.5 3v-2c-2 0-5-0.5-5-4.5h1.5c0 2 2 2.5 3.5 2.5z"/>
+  </g>
+ </g>
+</svg>

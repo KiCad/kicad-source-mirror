@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.0">
+ <defs>
+  <radialGradient id="d" gradientUnits="userSpaceOnUse" cy="19.031" cx="11.25" gradientTransform="matrix(1 0 0 .28295 0 13.646)" r="8.0625">
+   <stop offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <linearGradient id="c" y2="34.731" gradientUnits="userSpaceOnUse" x2="7.9314" gradientTransform="matrix(-1.0046,0,0,-1,49.27,51.634)" y1="15.195" x1="43.13">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path opacity=".16292" style="color:#000000" d="m19.312 19.031a8.0625 2.2812 0 1 1 -16.125 0 8.0625 2.2812 0 1 1 16.125 0z" transform="matrix(2.4806,0,0,2.411,-4.6141,-4.1462)" fill="url(#d)"/>
+ <path style="color:#000000" fill="#3465a4" d="m25.969 41.965-19.004-16.506 19.004-16.424v7.8698h14.996v17.055h-14.996v8.0043z" stroke="#204a87"/>
+ <path opacity=".35393" style="color:#000000" fill="#729fcf" d="m40.438 33.315v-7.952l-32.769 0.024 17.615 15.345v-7.417h15.154z"/>
+ <path opacity="0.354" style="color:#000000" d="m24.659 40.001-16.517-14.386 16.517-14.199v6.7384h15.067v14.978h-15.067v6.8689z" stroke="url(#c)" fill="none"/>
+</svg>

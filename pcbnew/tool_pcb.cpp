@@ -312,7 +312,7 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
 
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_RATSNEST, wxEmptyString,
-                               KiBitmap( general_ratsnet_xpm ),
+                               KiBitmap( general_ratsnest_xpm ),
                                _( "Show board ratsnest" ), wxITEM_CHECK );
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST, wxEmptyString,
                                KiBitmap( local_ratsnest_xpm ),

@@ -38,7 +38,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_NEW_MODULE,
                            _( "New Module" ),
                            _( "Create new module" ) );
-    SET_BITMAP( new_footprint_xpm );
+    SET_BITMAP( KiBitmap( new_footprint_xpm ) );
     fileMenu->Append( item );
 
     // Open submenu
@@ -49,7 +49,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_IMPORT_PART,
                            _( "Load from File (Import)" ),
                            _( "Import a footprint from an existing file" ) );
-    SET_BITMAP( import_module_xpm );
+    SET_BITMAP( KiBitmap( import_module_xpm ) );
     openSubmenu->Append( item );
 
     // from Library
@@ -57,7 +57,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_LOAD_MODULE,
                            _( "Load from Library" ),
                            _( "Open a footprint module from a Library" ) );
-    SET_BITMAP( module_xpm );
+    SET_BITMAP( KiBitmap( module_xpm ) );
     openSubmenu->Append( item );
 
     // from current Board
@@ -65,21 +65,21 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_LOAD_MODULE_FROM_BOARD,
                            _( "Load from Current Board" ),
                            _( "Load a footprint module from the current loaded board" ) );
-    SET_BITMAP( load_module_board_xpm );
+    SET_BITMAP( KiBitmap( load_module_board_xpm ) );
     openSubmenu->Append( item );
 
     /* Append openSubmenu to fileMenu */
     AddMenuItem( fileMenu, openSubmenu, -1,
                  _( "&Load Module" ),
                  _( "Load a footprint module" ),
-                 open_document_xpm );
+                 KiBitmap( open_document_xpm ) );
 
     // Save module
     item = new wxMenuItem( fileMenu,
                            ID_MODEDIT_SAVE_LIBMODULE,
                            _( "&Save Module in Active Library" ),
                            _( "Save module in active library" ) );
-    SET_BITMAP( save_library_xpm );
+    SET_BITMAP( KiBitmap( save_library_xpm ) );
     fileMenu->Append( item );
 
     // Save module in new lib
@@ -87,7 +87,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART,
                            _( "&Save Module in a New Lib" ),
                            _( "Create new library and save current module" ) );
-    SET_BITMAP( new_library_xpm );
+    SET_BITMAP( KiBitmap( new_library_xpm ) );
     fileMenu->Append( item );
 
     // Export module
@@ -95,7 +95,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_EXPORT_PART,
                            _( "&Export Module" ),
                            _( "Save the current loaded module to a file" ) );
-    SET_BITMAP( export_module_xpm );
+    SET_BITMAP( KiBitmap( export_module_xpm ) );
     fileMenu->Append( item );
 
     // Separator
@@ -106,7 +106,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            wxID_PRINT,
                            _( "&Print\tCtrl+P" ),
                            _( "Print the current module" ) );
-    SET_BITMAP( plot_xpm );
+    SET_BITMAP( KiBitmap( plot_xpm ) );
     fileMenu->Append( item );
 
     // Separator
@@ -117,7 +117,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            wxID_EXIT,
                            _( "Close" ),
                            _( "Close the footprint editor" ) );
-    SET_BITMAP( exit_xpm );
+    SET_BITMAP( KiBitmap( exit_xpm ) );
     fileMenu->Append( item );
 
     // Menu Edit:
@@ -128,7 +128,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            wxID_UNDO,
                            _( "Undo" ),
                            _( "Undo last edit" ) );
-    SET_BITMAP( undo_xpm );
+    SET_BITMAP( KiBitmap( undo_xpm ) );
     editMenu->Append( item );
 
     // Redo
@@ -136,7 +136,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            wxID_REDO,
                            _( "Redo" ),
                            _( "Redo the last undo action" ) );
-    SET_BITMAP( redo_xpm );
+    SET_BITMAP( KiBitmap( redo_xpm ) );
     editMenu->Append( item );
 
     // Delete items
@@ -144,7 +144,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_DELETE_TOOL,
                            _( "Delete" ),
                            _( "Delete objects with the eraser" ) );
-    SET_BITMAP( delete_body_xpm );
+    SET_BITMAP( KiBitmap( delete_body_xpm ) );
     editMenu->Append( item );
 
     // Separator
@@ -155,7 +155,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_EDIT_MODULE_PROPERTIES,
                            _( "Properties" ),
                            _( "Edit module properties" ) );
-    SET_BITMAP( module_options_xpm );
+    SET_BITMAP( KiBitmap( module_options_xpm ) );
     editMenu->Append( item );
 
     // Dimensions submenu
@@ -166,7 +166,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_PCB_DRAWINGS_WIDTHS_SETUP,
                            _( "Sizes and Widths" ),
                            _( "Adjust width for texts and drawings" ) );
-    SET_BITMAP( options_text_xpm );
+    SET_BITMAP( KiBitmap( options_text_xpm ) );
     dimensions_Submenu->Append( item );
 
     // Pad settings
@@ -174,7 +174,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_PAD_SETTINGS,
                            _( "Pad Settings" ),
                            _( "Edit the settings for new pads" ) );
-    SET_BITMAP( options_pad_xpm );
+    SET_BITMAP( KiBitmap( options_pad_xpm ) );
     dimensions_Submenu->Append( item );
 
     // User grid size
@@ -182,7 +182,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_PCB_USER_GRID_SETUP,
                            _( "User Grid Size" ),
                            _( "Adjust user grid" ) );
-    SET_BITMAP( grid_xpm );
+    SET_BITMAP( KiBitmap( grid_xpm ) );
     dimensions_Submenu->Append( item );
 
     // Append dimensions_Submenu to editMenu
@@ -190,7 +190,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  dimensions_Submenu, -1,
                  _( "&Dimensions" ),
                  _( "Edit dimensions preferences" ),
-                 add_dimension_xpm );
+                 KiBitmap( add_dimension_xpm ) );
 
     // View menu
     wxMenu* viewMenu = new wxMenu;
@@ -200,7 +200,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_ZOOM_IN,
                            _( "Zoom In" ),
                            _( "Zoom in on the module" ) );
-    SET_BITMAP( zoom_in_xpm );
+    SET_BITMAP( KiBitmap( zoom_in_xpm ) );
     viewMenu->Append( item );
 
     // Zoom Out
@@ -208,7 +208,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_ZOOM_OUT,
                            _( "Zoom Out" ),
                            _( "Zoom out on the module" ) );
-    SET_BITMAP( zoom_out_xpm );
+    SET_BITMAP( KiBitmap( zoom_out_xpm ) );
     viewMenu->Append( item );
 
     // Fit on Screen
@@ -216,7 +216,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_ZOOM_PAGE,
                            _( "Fit on Screen" ),
                            _( "Zoom and fit the module in the window" ) );
-    SET_BITMAP( zoom_fit_in_page_xpm );
+    SET_BITMAP( KiBitmap( zoom_fit_in_page_xpm ) );
     viewMenu->Append( item );
 
     // Separator
@@ -227,7 +227,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_ZOOM_REDRAW,
                            _( "Redraw" ),
                            _( "Redraw the window's viewport" ) );
-    SET_BITMAP( zoom_redraw_xpm );
+    SET_BITMAP( KiBitmap( zoom_redraw_xpm ) );
     viewMenu->Append( item );
 
     // 3D view
@@ -235,7 +235,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MENU_PCB_SHOW_3D_FRAME,
                            _( "3D View" ),
                            _( "Show board in 3D viewer" ) );
-    SET_BITMAP( three_d_xpm );
+    SET_BITMAP( KiBitmap( three_d_xpm ) );
     viewMenu->Append( item );
 
     // Menu Place:
@@ -246,7 +246,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_PAD_TOOL,
                            _( "Pad" ),
                            _( "Add pad" ) );
-    SET_BITMAP( pad_xpm );
+    SET_BITMAP( KiBitmap( pad_xpm ) );
     placeMenu->Append( item );
 
     // Separator
@@ -257,7 +257,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_CIRCLE_TOOL,
                            _( "Circle" ),
                            _( "Add graphic circle" ) );
-    SET_BITMAP( add_circle_xpm );
+    SET_BITMAP( KiBitmap( add_circle_xpm ) );
     placeMenu->Append( item );
 
     // Line or Polygon
@@ -265,7 +265,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_LINE_TOOL,
                            _( "Line or Polygon" ),
                            _( "Add graphic line or polygon" ) );
-    SET_BITMAP( add_polygon_xpm );
+    SET_BITMAP( KiBitmap( add_polygon_xpm ) );
     placeMenu->Append( item );
 
     // Arc
@@ -273,7 +273,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_ARC_TOOL,
                            _( "Arc" ),
                            _( "Add graphic arc" ) );
-    SET_BITMAP( add_arc_xpm );
+    SET_BITMAP( KiBitmap( add_arc_xpm ) );
     placeMenu->Append( item );
 
     // Text
@@ -281,7 +281,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_TEXT_TOOL,
                            _( "Text" ),
                            _( "Add graphic text" ) );
-    SET_BITMAP( add_text_xpm );
+    SET_BITMAP( KiBitmap( add_text_xpm ) );
     placeMenu->Append( item );
 
     // Anchor
@@ -290,7 +290,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                            ID_MODEDIT_ANCHOR_TOOL,
                            _( "Anchor" ),
                            _( "Place the footprint module reference anchor" ) );
-    SET_BITMAP( anchor_xpm );
+    SET_BITMAP( KiBitmap( anchor_xpm ) );
     placeMenu->Append( item );
 
     // Menu Help:
@@ -304,19 +304,19 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  wxID_HELP,
                  _( "&Contents" ),
                  _( "Open the PCBNew handbook" ),
-                 online_help_xpm );
+                 KiBitmap( online_help_xpm ) );
     AddMenuItem( helpMenu,
                  wxID_INDEX,
                  _( "&Getting Started in KiCad" ),
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
-                 help_xpm );
+                 KiBitmap( help_xpm ) );
 
     // About PCBNew
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu, wxID_ABOUT,
                  _( "&About PCBNew" ),
                  _( "About PCBNew PCB designer" ),
-                 info_xpm );
+                 KiBitmap( info_xpm ) );
 
     // Append menus to the menubar
     menuBar->Append( fileMenu,  _( "&File" ) );

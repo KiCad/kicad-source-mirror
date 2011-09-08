@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <linearGradient id="c" y2="6.4143" gradientUnits="userSpaceOnUse" x2="3.7417" gradientTransform="matrix(1.069 0 0 .93541 -1 -5.0387)" y1="13.722" x1="11.124">
+   <stop stop-color="#afafff" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+  <linearGradient id="d" y2="6.4143" gradientUnits="userSpaceOnUse" x2="3.7417" gradientTransform="matrix(1.069 0 0 .93541 17.743 -1.6547)" y1="13.722" x1="11.124">
+   <stop stop-color="#afafff" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g transform="matrix(2.9875 0 0 2.9875 .4 .2)">
+  <g transform="translate(0 .069282)">
+   <rect height="1" width="4" y="4.9613" x="11" fill="#9b9b9b"/>
+   <rect height="1" width="4" y="7.9613" x="1" fill="#9b9b9b"/>
+   <rect height="1" width="4" y="2.9613" x="1" fill="#9b9b9b"/>
+   <path fill="#9b9b9b" d="m2.9222 0.96133h5.5778c5.7877 0 5.9238 9 0 9h-5.5778v-9z"/>
+   <rect height="1" width="3" y="3.9613" x="11" fill="#008000"/>
+   <path fill="#008000" d="m2.0454-0.038674h5.5778c5.7877 0 5.9238 9 0 9h-5.5778v-9z"/>
+   <rect height="1" width="3" y="6.9613" x="9.5367e-7" fill="#008000"/>
+   <rect height="1" width="3" y="1.9613" x="9.5367e-7" fill="#008000"/>
+   <path fill="url(#c)" d="m3 0.96133h4.6587c4.4031 0 4.5066 7 0 7h-4.6587v-7z"/>
+  </g>
+  <g transform="translate(-17.743,2.6547)">
+   <rect height="1" width="4" y="8.3453" x="29.743" fill="#9b9b9b"/>
+   <rect height="1" width="4" y="11.345" x="19.743" fill="#9b9b9b"/>
+   <rect height="1" width="4" y="6.3453" x="19.743" fill="#9b9b9b"/>
+   <path fill="#9b9b9b" d="m21.665 4.3453h5.5778c5.7877 0 5.9238 9 0 9h-5.578v-9z"/>
+   <rect height="1" width="3" y="7.3453" x="29.743" fill="#f00"/>
+   <path fill="#f00" d="m20.788 3.3453h5.5778c5.7877 0 5.9238 9 0 9h-5.578v-9z"/>
+   <rect height="1" width="3" y="10.345" x="18.743" fill="#f00"/>
+   <rect height="1" width="3" y="5.3453" x="18.743" fill="#f00"/>
+   <path fill="url(#d)" d="m21.743 4.3453h4.6587c4.4031 0 4.5066 7 0 7h-4.659v-7z"/>
+  </g>
+  <path fill-rule="evenodd" fill="#000080" d="m8.5679 8-2.8961 0.039129 4 4 4-4h-3c0-3.5-1.1039-5.5-5.1039-5.5v2.5c2 0 3 0.5 3 2.9609z"/>
+ </g>
+ <g transform="matrix(2.9875 0 0 2.9875 .4 .2)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+</svg>

@@ -52,4 +52,6 @@
 
 #cmakedefine USE_IMAGES_IN_MENUS 1
 
+#cmakedefine USE_PNG_BITMAPS 1
+
 #endif  /* __CONFIG_H__ */

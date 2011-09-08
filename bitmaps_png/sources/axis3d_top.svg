@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="64" width="64" version="1.1">
+ <defs>
+  <radialGradient id="a" gradientUnits="userSpaceOnUse" cy="17.014" cx="18.418" gradientTransform="matrix(.97244 -.10566 .050523 .465 -.35195 9.5854)" r="27.987">
+   <stop stop-color="#89d5f8" offset="0"/>
+   <stop stop-color="#00899e" offset="1"/>
+  </radialGradient>
+ </defs>
+ <g stroke-linejoin="bevel" transform="matrix(1 0 0 .96528 -.36364 .76807)" stroke="#004c5b" stroke-width="2.2">
+  <path fill="#fff" d="m4.4079 18.191 36.922 7.959 0.193 36.761l-34.534-10.526-2.5814-34.194z"/>
+  <path fill="#fff" d="m40.499 26.63 17.185-19.34-0.673 32.261-15.549 22.977-0.963-35.898z"/>
+  <path d="m27.182 3.6364 0.818 30.182 28.909 5.909" stroke-dashoffset="5.06" stroke-dasharray="4.4000001, 2.20000005" fill="none"/>
+  <path fill="url(#a)" d="m27.056 2.2749 30.976 4.47-17.291 19.511-36.482-7.374 22.797-16.607z"/>
+  <path d="m28.091 33.818-20.727 18.319" stroke-dashoffset="1.54" stroke-dasharray="4.4000001, 2.20000005" fill="#7bdeff"/>
+ </g>
+</svg>

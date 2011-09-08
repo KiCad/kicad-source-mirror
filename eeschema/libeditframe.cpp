@@ -182,8 +182,12 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     m_tempCopyComponent   = NULL;
     m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
 
-    // Give an icon
-    SetIcon( wxIcon( libedit_xpm ) );
+    wxIcon icon;
+
+    icon.CopyFromBitmap( KiBitmap( libedit_xpm ) );
+
+    SetIcon( icon );
+
     SetScreen( new SCH_SCREEN() );
     GetScreen()->m_Center = true;
     GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
@@ -1131,7 +1135,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
             {
                 wxString text = m_collectedItems[i]->GetSelectMenuText();
                 BITMAP_DEF xpm = m_collectedItems[i]->GetMenuImage();
-                AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, xpm );
+                AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, KiBitmap( xpm ) );
             }
 
             // Set to NULL in case user aborts the clarification context menu.

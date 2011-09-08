@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <linearGradient id="i" y2="1726.1" gradientUnits="userSpaceOnUse" x2="2067.2" gradientTransform="matrix(.014067 -.078042 -.07724 -.01259 133.32 190.33)" y1="1726.1" x1="1669.7">
+   <stop stop-color="#003ddd" offset="0"/>
+   <stop stop-color="#639ef0" offset="1"/>
+  </linearGradient>
+  <linearGradient id="j" y2="28.505" gradientUnits="userSpaceOnUse" x2="39.686" gradientTransform="matrix(.95437 0 0 .95437 -55.306 .54511)" y1="42.958" x1="24.669">
+   <stop stop-color="#fff" stop-opacity="0" offset="0"/>
+   <stop stop-color="#fff" stop-opacity=".14384" offset=".57424"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <linearGradient id="k" y2="43.366" gradientUnits="userSpaceOnUse" x2="22.245" gradientTransform="matrix(.95437 0 0 .95437 -55.306 .54511)" y1="2.1102" x1="21.629">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <linearGradient id="l" y2="26.843" gradientUnits="userSpaceOnUse" x2="34.966" gradientTransform="translate(-55.8,-2.3495)" y1="34.601" x1="31.226">
+   <stop stop-color="#3465a4" offset="0"/>
+   <stop stop-color="#3465a4" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <linearGradient id="m" y2="29.857" gradientUnits="userSpaceOnUse" x2="37.04" gradientTransform="translate(-55.8,-2.3495)" y1="35.774" x1="33.687">
+   <stop stop-color="#204a87" offset="0"/>
+   <stop stop-color="#204a87" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <linearGradient id="n" y2="31.444" gradientUnits="userSpaceOnUse" x2="36.277" gradientTransform="matrix(.95437 0 0 .95437 -55.306 .54511)" y1="1.1527" x1="24.664">
+   <stop stop-color="#729fcf" offset="0"/>
+   <stop stop-color="#3465a4" offset="1"/>
+  </linearGradient>
+  <radialGradient id="o" gradientUnits="userSpaceOnUse" cy="4.625" cx="62.625" gradientTransform="matrix(2.1499 0 0 .87466 -166.44 33.311)" r="10.625">
+   <stop offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <radialGradient id="p" gradientUnits="userSpaceOnUse" cy="4.625" cx="62.625" gradientTransform="matrix(1.804 0 0 .3876 -86.35 37.582)" r="10.625">
+   <stop offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </radialGradient>
+ </defs>
+ <path opacity=".56044" d="m-8.9572 37.357a22.842 9.2939 0 0 1 -45.685 0 22.842 9.2939 0 1 1 45.685 0z" fill-rule="evenodd" fill="url(#o)"/>
+ <path stroke-linejoin="round" d="m-31.8 31.15c-4.895-0.05388-8.5532-4.1267-8.4991-9 0.05412-4.8733 4.1041-9.0539 8.9991-9 2.3639 0.02602 4.439 0.50979 6.1368 2.1476l-7.5653 8.1381 20.429-1.7143 2.1429-21.286-7.614 7.3238c-3.709-3.6438-7.995-5.5532-13.468-5.6134-11.134-0.1226-20.013 8.9466-20.137 20.032-0.123 11.084 8.736 19.753 19.87 19.876" stroke="#204a87" fill="url(#n)"/>
+ <path fill="url(#l)" d="m-31.936 42.052c9.3101 0.10247 19.729-7.0911 19.712-19.526l-9.8591-0.07674c-0.18151 5.0725-5.5466 8.8897-9.967 8.7009" stroke="url(#m)"/>
+ <path opacity=".4" d="m-31.55 32.3c-5.4232-0.07929-9.7443-3.8685-9.75-10.15-0.0049-5.3964 4.6722-10.219 10.095-10.14 2.6731 0.03908 5.7129 0.89004 7.7267 3.1669l-5.326 5.5474 14.098-1.5511 2.1429-14.75-5.2348 5.0176c-3.542-3.9499-7.981-6.0998-13.521-6.1553-10.598-0.106-18.807 8.4017-18.889 18.999 0.25907 11.856 9.3928 18.619 18.703 18.821" stroke="url(#k)" stroke-width="1.193" fill="none"/>
+ <path stroke-linejoin="round" d="m-32.081 40.946c7.9526 0 18.799-5.5343 18.899-18.389l-8.0569-0.20629c0.0072 5.2159-4.7465 9.7251-10.31 9.89" stroke="url(#j)" stroke-width="1.193" fill="none"/>
+ <path d="m18.23 36.309c-7.454-3.638-10.449-12.742-6.685-20.323 3.764-7.5805 12.869-10.78 20.323-7.1427 3.9284 1.9171 6.6177 5.352 7.7323 9.2822l6.7307-2.0457-7.1127 15.802-12.499-9.9874 7.45-2.3489c-0.75768-2.4781-2.4833-4.6345-4.9766-5.8512-4.8542-2.3688-10.782-0.28534-13.233 4.6511-2.4511 4.9365-0.50229 10.867 4.3519 13.235 1.3889 0.67778 2.865 0.98936 4.3233 0.97535l0.27669 5.251c-2.253 0.02766-4.5349-0.45055-6.6811-1.4979z" fill-rule="evenodd" stroke="#000" stroke-width=".94527" fill="url(#i)"/>
+ <path opacity=".56044" d="m45.792 39.375a19.168 4.1184 0 0 1 -38.335 0 19.168 4.1184 0 1 1 38.335 0z" fill-rule="evenodd" fill="url(#p)"/>
+</svg>

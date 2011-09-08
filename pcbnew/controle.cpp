@@ -198,7 +198,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
             BITMAP_DEF xpm = item->GetMenuImage();
 
-            AddMenuItem( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START + i, text, xpm );
+            AddMenuItem( &itemMenu, ID_POPUP_PCB_ITEM_SELECTION_START + i, text, KiBitmap( xpm ) );
         }
 
         /* @todo: rather than assignment to true, these should be increment and decrement

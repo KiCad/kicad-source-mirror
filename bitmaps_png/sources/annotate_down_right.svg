@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="a" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="5.4804575"/>
+  </filter>
+ </defs>
+ <g transform="matrix(.2798 0 0 .24832 -1.4294 .80886)">
+  <g transform="matrix(1.0384,0,0,1.0604,-6.4678,-9.5182)">
+   <path d="m34.321 26.857c11.72 107.25 39.47 196.69 61.459 78.893 13.63-112.28 39.73-84.752 56.12 26.02" stroke="#6e5252" stroke-width="6.8918" fill="none"/>
+   <path fill="#6e5252" d="m129.17 121.6 39.202-5.0798-11.114 41.135z"/>
+   <path fill="#6e5252" d="m17.873 54.999 39.369-5.119-13.057 41.224z"/>
+  </g>
+  <g opacity=".73828" filter="url(#a)" transform="matrix(1.0384,0,0,1.0604,2.1575,-6.2025)">
+   <path d="m34.321 26.857c11.72 107.25 39.47 196.69 61.459 78.893 13.63-112.28 39.73-84.752 56.12 26.02" stroke="#6e5252" stroke-width="6.8918" fill="none"/>
+   <path fill="#6e5252" d="m129.17 121.6 39.202-5.0798-11.114 41.135z"/>
+   <path fill="#6e5252" d="m17.873 54.999 39.369-5.119-13.057 41.224z"/>
+  </g>
+ </g>
+</svg>

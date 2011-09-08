@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <mask id="e">
+   <rect transform="rotate(90)" height="8.6868" width="9.3725" y="-72.949" x="35.044" fill="#fff"/>
+   <rect transform="rotate(90)" height="8.6868" width="9.3725" y="-87.48" x="35.044" fill="#fff"/>
+   <rect transform="rotate(90)" height="8.6868" width="9.3725" y="-102.01" x="35.044" fill="#fff"/>
+   <rect transform="rotate(90)" height="8.6868" width="9.3725" y="-116.54" x="35.044" fill="#fff"/>
+  </mask>
+  <mask id="f">
+   <rect transform="rotate(90)" height="8.6868" width="9.3725" y="-72.949" x="35.044" fill="#fff"/>
+   <rect transform="rotate(90)" height="8.6868" width="9.3725" y="-87.48" x="35.044" fill="#fff"/>
+   <rect transform="rotate(90)" height="8.6868" width="9.3725" y="-102.01" x="35.044" fill="#fff"/>
+   <rect transform="rotate(90)" height="8.6868" width="9.3725" y="-116.54" x="35.044" fill="#fff"/>
+  </mask>
+  <filter id="d" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.76169817"/>
+  </filter>
+ </defs>
+ <g opacity=".32031" filter="url(#d)" transform="matrix(.67436 -.62512 .80951 .85338 -69.426 51.707)">
+  <rect mask="url(#f)" height="4.3512" width="64.872" y="37.555" x="57.967"/>
+ </g>
+ <g transform="matrix(.67436 -.62512 .80951 .85338 -70.92 49.048)">
+  <rect mask="url(#e)" height="4.3512" width="64.872" y="37.555" x="57.967" fill="#009b00"/>
+ </g>
+ <g transform="matrix(2.9379,0,0,2.1996,2.1067,3.2221)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(3.433,0,0,3.1874,32.979,20.986)">
+  <path fill="#afaf00" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.86499 0 0 .86499 3.3638 -4.5167)"/>
+  <path fill="#ebeb00" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.61624 0 0 .61624 5.7296 -4.1188)"/>
+  <path fill="#ff0" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.3815 0 0 .3815 7.9622 -3.7434)"/>
+ </g>
+ <g transform="matrix(2.8733,0,0,2.8125,97.495,4.2)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+</svg>

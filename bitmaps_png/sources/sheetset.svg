@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.0">
+ <defs>
+  <filter id="n" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="1.0394514"/>
+  </filter>
+  <marker id="l" refY="0" refX="0" overflow="visible" orient="auto">
+   <path d="m5.77 0-8.65 5v-10l8.65 5z" fill-rule="evenodd" transform="scale(-.4)" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="m" refY="0" refX="0" overflow="visible" orient="auto">
+   <path d="m5.77 0-8.65 5v-10l8.65 5z" fill-rule="evenodd" transform="scale(.4)" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <linearGradient id="o" y2="94.537" gradientUnits="userSpaceOnUse" x2="86.536" y1="102.34" x1="94.344">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#555753" offset="1"/>
+  </linearGradient>
+  <linearGradient id="p" y2="94.587" gradientUnits="userSpaceOnUse" x2="86.587" y1="103" x1="95">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#555753" offset="1"/>
+  </linearGradient>
+  <linearGradient id="q" y2="95.293" gradientUnits="userSpaceOnUse" x2="87.293" y1="103" x1="95">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#393b38" offset="1"/>
+  </linearGradient>
+  <linearGradient id="r" y2="96" gradientUnits="userSpaceOnUse" x2="88" y1="104" x1="96">
+   <stop stop-color="#888a85" offset="0"/>
+   <stop stop-color="#8c8e89" offset=".0072"/>
+   <stop stop-color="#abaca9" offset=".0673"/>
+   <stop stop-color="#c5c6c4" offset=".1347"/>
+   <stop stop-color="#dbdbda" offset=".2115"/>
+   <stop stop-color="#ebebeb" offset=".3012"/>
+   <stop stop-color="#f7f7f6" offset=".4122"/>
+   <stop stop-color="#fdfdfd" offset=".5679"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+  <radialGradient id="t" gradientUnits="userSpaceOnUse" cy="112.3" cx="102" gradientTransform="matrix(0 -.45424 .39495 0 -1.4196 53.788)" r="139.56">
+   <stop stop-color="#535557" offset="0"/>
+   <stop stop-color="#898a8c" offset=".11366"/>
+   <stop stop-color="#ececec" offset=".20297"/>
+   <stop stop-color="#fafafa" offset=".23630"/>
+   <stop stop-color="#fff" offset=".27220"/>
+   <stop stop-color="#fafafa" offset=".53130"/>
+   <stop stop-color="#ebecec" offset=".84490"/>
+   <stop stop-color="#e1e2e3" offset="1"/>
+  </radialGradient>
+  <radialGradient id="u" gradientUnits="userSpaceOnUse" cy="112.3" cx="102" gradientTransform="matrix(0 -.46411 .40227 0 -1.8877 54.42)" r="139.56">
+   <stop stop-color="#00537d" offset="0"/>
+   <stop stop-color="#186389" offset=".0151"/>
+   <stop stop-color="#558ca8" offset=".0558"/>
+   <stop stop-color="#89afc3" offset=".0964"/>
+   <stop stop-color="#b3ccd8" offset=".1357"/>
+   <stop stop-color="#d4e2e9" offset=".1737"/>
+   <stop stop-color="#ecf2f5" offset=".20990"/>
+   <stop stop-color="#fafcfd" offset=".24350"/>
+   <stop stop-color="#fff" offset=".27220"/>
+  </radialGradient>
+  <linearGradient id="s" y2="9.6875" gradientUnits="userSpaceOnUse" x2="-24.75" gradientTransform="matrix(0 -.46411 .40227 0 8.0055 -6.441)" y1="11.566" x1="-26.754">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <radialGradient id="v" gradientUnits="userSpaceOnUse" cy="5.3" cx="4" gradientTransform="matrix(0 -.87533 .47326 0 6.3018 23.051)" r="17">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </radialGradient>
+ </defs>
+ <rect opacity="0" height="48" width="48" y="-42.45" x="-50.85"/>
+ <path opacity=".68016" fill="url(#v)" d="m9.6146 17.446c0 0.39829 0.27076 0.71068 0.61597 0.71068h14.859c0.34521 0 0.61597-0.31239 0.61597-0.71068v-14.359c0-0.39829-0.27076-0.71068-0.61597-0.71068h-10.044c-0.55994 0-1.7295 0.22601-2.4765 1.0878l-2.013 2.3214c-0.7465 0.8618-0.9424 2.2112-0.9424 2.8572v8.8037z"/>
+ <path d="m9.8157 17.446c0 0.27066 0.18025 0.47862 0.41484 0.47862h14.859c0.23459 0 0.41484-0.20796 0.41484-0.47862v-14.359c0-0.27066-0.18025-0.47862-0.41484-0.47862h-10.044c-0.51451 0-1.6515 0.22299-2.3382 1.0153l-2.012 2.3214c-0.687 0.7922-0.8803 2.104-0.8803 2.6976v8.8037z" stroke="url(#s)" stroke-width=".43209" fill="none"/>
+ <path opacity=".5" d="m23 9 0.04082 112h61.131c0.53 0 1.039-0.211 1.414-0.586l32.824-32.824c0.38-0.375 0.59-0.884 0.59-1.414v-77.16h-96z" transform="matrix(0 -.48345 .41663 0 -3.2239 59.042)" filter="url(#n)"/>
+ <path fill="url(#u)" d="m1.3304 46.994h45.054v-28.391c0-0.24598-0.08488-0.48221-0.23573-0.65626l-13.205-15.236c-0.151-0.1736-0.356-0.2715-0.569-0.2715h-31.044v44.555z"/>
+ <path fill="url(#t)" d="m2.135 45.612c0 0.25028 0.17733 0.45424 0.39495 0.45424h42.655c0.21802 0 0.39495-0.20396 0.39495-0.45424v-26.878c0-0.11946-0.04186-0.23666-0.11572-0.32114l-12.965-14.912c-0.074-0.0852-0.176-0.1333-0.28-0.1333h-29.689c-0.21762 0-0.39495 0.2035-0.39495 0.45424v41.79z"/>
+ <path d="m25.146 45.804v-9.288h21.171" stroke="#4f3737" stroke-width="1.6187" fill="none"/>
+ <path d="m45.32 40.353h-3.472" stroke="#1e2716" stroke-width="1.3493px" fill="none"/>
+ <path d="m34.185 40.353h-5.28" stroke="#1e2716" stroke-width="1.3493px" fill="none"/>
+ <path d="m45.393 43.5h-4.629" stroke="#1e2716" stroke-width="1.3493px" fill="none"/>
+ <path d="m37.27 43.525h-8.556" stroke="#1e2716" stroke-width="1.2928px" fill="none"/>
+ <g transform="matrix(0 -.46411 .40227 0 -1.8877 54.42)">
+  <path opacity=".1" fill="url(#o)" d="m111.41 86.586c0.25-0.25-18.375 6.414-23.41 6.414-1.654 0-3 1.346-3 3 0 5.035-6.664 23.664-6.414 23.414l32.828-32.828z"/>
+  <path opacity=".1" fill="url(#p)" d="m111.41 86.586c0.38-0.375-13.966 7.414-23.41 7.414-1.103 0-2 0.897-2 2 0 9.444-7.789 23.789-7.414 23.414l32.828-32.828z"/>
+  <path opacity=".1" fill="url(#q)" d="m111.41 86.586c0.24-0.239-13.603 8.414-23.41 8.414-0.553 0-1 0.447-1 1 0 9.807-8.653 23.653-8.414 23.414l32.828-32.828z"/>
+  <path fill="url(#r)" d="m78.586 119.41s11.914-9.914 17.414-15.414 15.414-17.414 15.414-17.414-13.164 9.414-23.414 9.414c0 10.25-9.414 23.414-9.414 23.414z"/>
+ </g>
+ <path opacity="0.76" marker-end="url(#m)" d="m5.7558 28.8h36.184" marker-start="url(#l)" stroke="#000" stroke-width="1.9284px" fill="none"/>
+ <path opacity="0.76" marker-end="url(#m)" d="m13.1 6.9482v34.495" marker-start="url(#l)" stroke="#000" stroke-width="1.883" fill="none"/>
+</svg>

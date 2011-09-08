@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.0">
+ <defs>
+  <filter id="h" height="2.4744" width="1.1706" color-interpolation-filters="sRGB" y="-.73720" x="-.085321">
+   <feGaussianBlur stdDeviation="0.38394476"/>
+  </filter>
+  <filter id="i" height="1.6375" width="1.1813" color-interpolation-filters="sRGB" y="-.31875" x="-.090667">
+   <feGaussianBlur stdDeviation="0.79295562"/>
+  </filter>
+  <filter id="a" height="1.9041" width="1.1673" color-interpolation-filters="sRGB" y="-.45204" x="-.083651">
+   <feGaussianBlur stdDeviation="1.4691176"/>
+  </filter>
+  <linearGradient id="j" y2="-39.125" gradientUnits="userSpaceOnUse" x2="26" y1="-13.625" x1="25.5">
+   <stop stop-color="#e2b369" offset="0"/>
+   <stop stop-color="#c79b55" offset="1"/>
+  </linearGradient>
+  <linearGradient id="k" y2="-1.625" gradientUnits="userSpaceOnUse" x2="24.5" y1="-38.5" x1="24.5">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <linearGradient id="l" y2="12.381" gradientUnits="userSpaceOnUse" x2="24.635" y1="7.2027" x1="24.635">
+   <stop stop-color="#bfbcb3" offset="0"/>
+   <stop stop-color="#9c988a" offset="1"/>
+  </linearGradient>
+  <linearGradient id="m" y2="10.983" gradientUnits="userSpaceOnUse" x2="5.496" gradientTransform="matrix(.97161 0 0 1.2833 -40.478 -6.131)" y1="37.669" x1="37.927">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#ddd" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g transform="matrix(1.1422,0,0,1.121,-5.7572,-1.9976)">
+  <rect opacity=".35294" style="color:#000000" transform="matrix(.7245 0 0 .44686 6.1717 23.28)" display="block" rx="4.4858" ry="7.273" height="6.5" filter="url(#a)" width="35.125" y="38.438" x="19.515"/>
+  <rect opacity=".41765" style="color:#000000" transform="matrix(1 0 0 .61538 0 15.798)" display="block" rx="3.25" ry="5.2812" height="6.5" filter="url(#a)" width="35.125" y="35.875" x="6.875"/>
+  <rect style="color:#000000" transform="scale(1,-1)" display="block" rx="2.75" ry="2.75" height="32" width="30" stroke="#8f5902" y="-40.5" x="9.5" fill="url(#j)"/>
+  <path opacity=".44118" style="color:#000000" d="m16.722 14.507h15.632c0.97227 0.04419 1.0268-1.8891 1.0268-1.8891l-2.884-2.311 0.009-0.7541-12.015-0.0206v0.8902l-2.6009 2.2426s-0.05203 1.7976 0.83185 1.8418z" transform="matrix(1.0502,0,0,1.0502,-1.2379,-1.6665)" display="block" filter="url(#i)"/>
+  <rect opacity=".41765" style="color:#000000" transform="scale(1,-1)" display="block" rx="1.25" ry="1.25" height="29.578" width="27.73" stroke="url(#k)" y="-39.289" x="10.635" fill="none"/>
+  <path style="color:#000000" d="m16.722 12.507h15.632c0.97227 0.04419 1.0268-1.8891 1.0268-1.8891l-2.884-2.3106 0.009-3.7545c0-0.82261-0.6918-1.9333-1.6988-1.9333l-8.52-0.088388c-1.2124 0-1.7963 1.1882-1.7963 2.0011v3.8902l-2.6009 2.2426s-0.05203 1.7976 0.83185 1.8418z" stroke="#555753" display="block" fill="url(#l)"/>
+  <rect opacity=".46471" style="color:#000000" display="block" rx=".52082" ry=".52082" height="1.0416" width="15" y="10" x="17" fill="#fff"/>
+  <rect opacity=".53529" style="color:#000000" display="block" rx=".52082" ry=".52082" height="1.0416" filter="url(#h)" width="9" y="4" x="20" fill="#fff"/>
+  <g transform="translate(-64,1.3466)">
+   <g transform="matrix(.54545 0 0 .54545 106.46 17.135)">
+    <g stroke-width="1.8333">
+     <rect style="color:#000000" fill-rule="evenodd" rx="2.6243" ry="2.6243" height="38.5" width="38.5" stroke="#939393" y="5.4189" x="-36.592" fill="url(#m)"/>
+     <rect style="color:#000000" rx="1.0502" ry="1.0502" height="34.833" width="34.833" stroke="#fff" y="7.2523" x="-34.758" fill="none"/>
+    </g>
+   </g>
+   <rect style="color:#000000" fill-rule="evenodd" rx="0" ry="0" height="2.0625" width="16" y="23.591" x="89" fill="#adaeab"/>
+   <rect style="color:#000000" fill-rule="evenodd" rx="0" ry="0" height="2.0625" width="16" y="27.591" x="89" fill="#adaeab"/>
+   <rect style="color:#000000" fill-rule="evenodd" rx="0" ry="0" height="2.007" width="16" y="31.646" x="89" fill="#adaeab"/>
+   <rect style="color:#000000" fill-rule="evenodd" rx="0" ry="0" height="2.0625" width="9" y="35.591" x="89" fill="#adaeab"/>
+  </g>
+ </g>
+</svg>

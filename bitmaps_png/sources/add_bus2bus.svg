@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="a" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.54949422"/>
+  </filter>
+ </defs>
+ <g transform="translate(30.172,34.75)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g opacity=".39062" filter="url(#a)" transform="matrix(2.7304,0,0,-2.3848,68.445,27.813)">
+  <path d="m-23.319-7.0854h3v15h-3v-15z"/>
+  <path fill-rule="evenodd" d="m-15.319-0.094877-4.9801 5.0095v3l5-5-0.01992-3.0095z"/>
+  <path d="m-15.319 2.9146v-3h7v3h-7z"/>
+  <path d="m-15.319-4.0854v-3h7v3h-7z"/>
+  <path fill-rule="evenodd" d="m-15.319-7.0949-4.9801 5.0095v3l5-5-0.01992-3.0095z"/>
+ </g>
+ <g transform="matrix(2.7304,0,0,-2.3848,65.669,22.875)">
+  <path fill="#000069" d="m-23.319-7.0854h3v15h-3v-15z"/>
+  <path fill-rule="evenodd" fill="#d72e2e" d="m-15.319-0.094877-4.9801 5.0095v3l5-5-0.01992-3.0095z"/>
+  <path fill="#000069" d="m-15.319 2.9146v-3h7v3h-7z"/>
+  <path fill="#000069" d="m-15.319-4.0854v-3h7v3h-7z"/>
+  <path fill-rule="evenodd" fill="#d72e2e" d="m-15.319-7.0949-4.9801 5.0095v3l5-5-0.01992-3.0095z"/>
+ </g>
+ <g transform="matrix(3.433,0,0,3.1874,29.167,24.996)">
+  <path fill="#afaf00" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.86499 0 0 .86499 3.3638 -4.5167)"/>
+  <path fill="#ebeb00" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.61624 0 0 .61624 5.7296 -4.1188)"/>
+  <path fill="#ff0" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.3815 0 0 .3815 7.9622 -3.7434)"/>
+ </g>
+ <rect fill-opacity="0" height="16" width="16" y="33.25" x="1.5"/>
+ <rect fill-opacity="0" height="16" width="16" y="36.25" x="7.9217"/>
+ <g transform="translate(-9,27)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+</svg>

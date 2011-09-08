@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <marker id="d" refY="0" refX="0" overflow="visible" orient="auto">
+   <path d="m5.77 0-8.65 5v-10l8.65 5z" fill-rule="evenodd" transform="scale(.4)" stroke="#000" stroke-width="1pt"/>
+  </marker>
+  <marker id="c" refY="0" refX="0" overflow="visible" orient="auto">
+   <path d="m5.77 0-8.65 5v-10l8.65 5z" fill-rule="evenodd" transform="scale(-.4)" stroke="#000" stroke-width="1pt"/>
+  </marker>
+ </defs>
+ <g transform="translate(0,24)">
+  <path marker-end="url(#d)" d="m7 10h33.819" marker-start="url(#c)" stroke="#000" stroke-width="2.272px" fill="none"/>
+  <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(.92854 1.077)" line-height="125%" font-size="86.157px" y="-6.6613381e-16" x="10.769588" font-family="Sans" fill="#3e3e3e"><tspan font-family="DejaVu Serif" font-size="25px" y="-6.6613381e-16" x="10.769588" font-weight="bold" fill="#3e3e3e">In</tspan></text>
+ </g>
+</svg>

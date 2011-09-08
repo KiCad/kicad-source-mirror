@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="f" height="1.2293" width="1.09" color-interpolation-filters="sRGB" y="-.11464" x="-.044985">
+   <feGaussianBlur stdDeviation="0.68425161"/>
+  </filter>
+  <filter id="a" height="1.1071" width="1.2934" color-interpolation-filters="sRGB" y="-.053551" x="-.14671">
+   <feGaussianBlur stdDeviation="0.77576414"/>
+  </filter>
+  <filter id="e" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.83745026"/>
+  </filter>
+  <linearGradient id="g" y2="5.5" gradientUnits="userSpaceOnUse" x2="1.0312" gradientTransform="matrix(1.9385,0,0,1.7906,-101.39,-12.363)" y1="9.4062" x1="4.9688">
+   <stop stop-color="#afafff" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g transform="matrix(.81501 0 0 .84727 56.09 16.537)">
+  <g transform="matrix(2.9379,0,0,2.1996,-65.711,-14.882)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+  <g opacity=".58594" filter="url(#e)">
+   <g opacity=".58594" filter="url(#f)" transform="matrix(1.0211 0 0 1.0154 41.047 .50817)">
+    <rect transform="rotate(-90)" height="23.582" width="3.5811" y="-90.407" x="-2.8595"/>
+    <path d="m-95.576-6.0964c-4.2802 0-7.754 3.2087-7.754 7.1622s3.4738 7.1622 7.754 7.1622 7.754-3.2087 7.754-7.1622-3.4738-7.1622-7.754-7.1622z"/>
+    <path d="m-95.576-2.5153c2.1401 0 3.877 1.6043 3.877 3.5811s-1.7369 3.5811-3.877 3.5811-3.877-1.6043-3.877-3.5811 1.7369-3.5811 3.877-3.5811z"/>
+   </g>
+   <text opacity=".58594" style="word-spacing:0px;letter-spacing:0px" font-weight="bold" xml:space="preserve" transform="matrix(1.0713 0 0 .96778 -18.938 30.307)" line-height="125%" filter="url(#a)" font-size="18.731px" y="-35.033535" x="-26.868841" font-family="Arial" fill="#000000"><tspan y="-35.033535" x="-26.868841">P</tspan></text>
+   <text opacity=".58594" style="word-spacing:0px;letter-spacing:0px" font-weight="bold" xml:space="preserve" transform="matrix(1.0713 0 0 .96778 -18.938 30.307)" line-height="125%" filter="url(#a)" font-size="18.731px" y="-11.963096" x="-28.812323" font-family="Arial" fill="#000000"><tspan y="-11.963096" x="-28.812323">1</tspan></text>
+  </g>
+  <g transform="matrix(2.5084,0,0,2.2659,-64.764,-15.84)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+  <g transform="matrix(2.7239,0,0,2.0515,-65.754,-13.8)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+  <g transform="matrix(1.0211,0,0,1.0154,39.228,-1.9122)">
+   <rect transform="rotate(-90)" height="23.582" width="3.5811" y="-90.407" x="-2.8595" fill="#d72e2e"/>
+   <path fill="#d72e2e" d="m-95.576-6.0964c-4.2802 0-7.754 3.2087-7.754 7.1622s3.4738 7.1622 7.754 7.1622 7.754-3.2087 7.754-7.1622-3.4738-7.1622-7.754-7.1622z"/>
+   <path fill="url(#g)" d="m-95.576-2.5153c2.1401 0 3.877 1.6043 3.877 3.5811s-1.7369 3.5811-3.877 3.5811-3.877-1.6043-3.877-3.5811 1.7369-3.5811 3.877-3.5811z"/>
+  </g>
+  <g font-weight="bold" transform="translate(17.56,-24.022)" font-size="19.073px" font-family="Arial">
+   <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(1.0521 .95044)" line-height="125%" y="20.360397" x="-63.920635"><tspan y="20.360397" x="-63.920635">P</tspan></text>
+   <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(1.0521 .95044)" line-height="125%" y="43.851746" x="-65.899574"><tspan y="43.851746" x="-65.899574">1</tspan></text>
+  </g>
+  <g transform="matrix(2.5084,0,0,2.2659,-68.977,-11.462)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+  <g transform="matrix(2.5084,0,0,2.2659,-66.583,-18.26)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+ </g>
+ <path d="m32.612 19.273-6.506 5.3467h4.1453v6.1131h-1.3957v0.031h-5.9939v-3.69l-5.9423 5.8562 5.9423 5.8539v-3.73h7.3897v0.93246h0.03447v5.3932h-4.101l6.5084 5.3467 6.506-5.3467h-4.1453v-6.3257h0.44308v-0.03101h5.9915v3.69l5.9423-5.8562-5.9423-5.8539v3.7299h-6.4346v-0.721h-0.033v-5.391h4.101l-6.5084-5.3467z" fill-rule="evenodd" stroke="#44a118" stroke-width="1.2599" fill="#59d421"/>
+</svg>

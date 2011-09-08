@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <marker id="d" refY="0" refX="0" overflow="visible" orient="auto">
+   <path stroke-linejoin="round" d="m8.7186 4.0337-10.926-4.0177 10.926-4.0177c-1.7455 2.3721-1.7354 5.6175-6e-7 8.0354z" fill-rule="evenodd" transform="matrix(-1.1,0,0,-1.1,-1.1,0)" stroke-width=".625"/>
+  </marker>
+  <marker id="e" refY="0" refX="0" overflow="visible" orient="auto">
+   <path stroke-linejoin="round" d="m8.7186 4.0337-10.926-4.0177 10.926-4.0177c-1.7455 2.3721-1.7354 5.6175-6e-7 8.0354z" fill-rule="evenodd" transform="matrix(1.1,0,0,1.1,1.1,0)" stroke-width=".625"/>
+  </marker>
+  <filter id="a" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="2.0308453"/>
+  </filter>
+ </defs>
+ <g transform="matrix(.32839 0 0 .32842 1.9354 4.4338)">
+  <path opacity=".42188" d="m880 472.36a20 20 0 1 1 -40 0 20 20 0 1 1 40 0z" transform="matrix(.56085 .0038144 0 .53662 -372.72 -237.69)" filter="url(#a)" stroke="#f00"/>
+  <path stroke-linejoin="round" d="m23.278 106.96 79.962-85.555" stroke="#000" stroke-linecap="round" stroke-width="5.627" fill="none"/>
+  <text font-family="Century Schoolbook" xml:space="preserve" transform="scale(1.0196 .98079)" line-height="125%" font-size="35.973px" y="52.021015" x="48.977516" font-weight="bold" fill="#000000"><tspan y="52.021015" x="48.977516" font-size="45px">r</tspan></text>
+  <path stroke-linejoin="round" marker-end="url(#d)" d="m122.58 111.34h-103.16v-105.32" marker-start="url(#e)" stroke="#000" stroke-linecap="round" stroke-width="3.8183" fill="none"/>
+  <path stroke-linejoin="bevel" d="m69.733 111.76a49.808 37.808 0 0 0 -22.335 -31.54l-27.473 31.54z" stroke="#000" stroke-linecap="round" stroke-width="3.6823" fill="none"/>
+  <text xml:space="preserve" transform="scale(1.3061 .76561)" line-height="125%" font-size="31.417px" y="97.719246" x="63.314964" font-family="Bitstream Vera Sans" fill="#000000"><tspan y="97.719246" x="63.314964" font-size="45px">φ</tspan></text>
+  <path d="m116.62 15.987a10.343 9.9952 84 0 1 -19.997 -0.147 10.343 9.9952 84 1 1 19.997 0.147z" stroke="#f00" stroke-width=".50837" fill="#f00"/>
+  <path opacity=".42188" stroke-linejoin="round" d="m23.13 112.75 79.97-85.551" filter="url(#a)" stroke="#000" stroke-linecap="round" stroke-width="5.627" fill="none"/>
+ </g>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="c" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.44929879"/>
+  </filter>
+  <linearGradient id="d" y2="8.8558" gradientUnits="userSpaceOnUse" x2="20.937" gradientTransform="matrix(1.781,0,0,4.2777,1.5318,1.7855)" y1="5.0633" x1="17.402">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#afadff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path opacity="0.285" d="m18.184 4.5304v38.429h-16.653l16.653-38.429z" fill-rule="evenodd" filter="url(#c)"/>
+ <rect y="1.7855" width="2.7754" x="20.96" height="10.98"/>
+ <rect y="18.255" width="2.7754" x="20.96" height="10.98"/>
+ <rect y="34.725" width="2.7754" x="20.96" height="10.98"/>
+ <path fill-rule="evenodd" d="m26.511 4.5304v38.429h16.653l-16.653-38.429z"/>
+ <path fill-rule="evenodd" fill="url(#d)" d="m29.286 16.883v23.332h9.714l-9.714-23.332z"/>
+ <g transform="translate(0,32)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+</svg>

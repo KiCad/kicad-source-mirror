@@ -48,12 +48,12 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     {
         if( item && item->m_Flags )
         {
-            AddMenuItem( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
+            AddMenuItem( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), KiBitmap( cancel_xpm ) );
         }
         else
         {
             AddMenuItem( aPopMenu, ID_POPUP_CLOSE_CURRENT_TOOL,
-                         _( "End Tool" ), cancel_tool_xpm );
+                         _( "End Tool" ), KiBitmap( cancel_tool_xpm ) );
         }
 
         aPopMenu->AppendSeparator();
@@ -63,7 +63,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         if( item && item->m_Flags )
         {
             AddMenuItem( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-                         _( "Cancel" ), cancel_xpm );
+                         _( "Cancel" ), KiBitmap( cancel_xpm ) );
             aPopMenu->AppendSeparator();
         }
     }
@@ -123,14 +123,14 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                     msg = AddHotkeyName( _("Lock Module" ), g_Board_Editor_Hokeys_Descr,
                                          HK_LOCK_UNLOCK_FOOTPRINT );
                     AddMenuItem( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FIXE_MODULE, msg,
-                                 locked_xpm );
+                                 KiBitmap( locked_xpm ) );
                 }
                 else
                 {
                     msg = AddHotkeyName( _( "Unlock Module" ), g_Board_Editor_Hokeys_Descr,
                                          HK_LOCK_UNLOCK_FOOTPRINT );
                     AddMenuItem( aPopMenu, ID_POPUP_PCB_AUTOPLACE_FREE_MODULE, msg,
-                                 unlocked_xpm );
+                                 KiBitmap( unlocked_xpm ) );
                 }
 
                 if( !flags )
@@ -157,7 +157,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             if( (flags & IS_NEW) )
             {
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING,
-                             _( "End Drawing" ), apply_xpm );
+                             _( "End Drawing" ), KiBitmap( apply_xpm ) );
             }
 
             if( !flags )
@@ -165,30 +165,30 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 msg = AddHotkeyName( _( "Move Drawing" ), g_Board_Editor_Hokeys_Descr,
                                      HK_MOVE_ITEM );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_MOVE_DRAWING_REQUEST,
-                             msg, move_xpm );
-                AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_DRAWING, _( "Edit Drawing" ), edit_xpm );
+                             msg, KiBitmap( move_xpm ) );
+                AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_DRAWING, _( "Edit Drawing" ), KiBitmap( edit_xpm ) );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING,
-                             _( "Delete Drawing" ), delete_xpm );
+                             _( "Delete Drawing" ), KiBitmap( delete_xpm ) );
 
                 if( item->GetLayer() > LAST_COPPER_LAYER )
                     AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING_LAYER,
-                                 _( "Delete All Drawing on Layer" ), delete_body_xpm );
+                                 _( "Delete All Drawing on Layer" ), KiBitmap( delete_body_xpm ) );
             }
 
             break;
 
         case TYPE_ZONE:      // Item used to fill a zone
             AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_ZONE,
-                         _( "Delete Zone Filling" ), delete_xpm );
+                         _( "Delete Zone Filling" ), KiBitmap( delete_xpm ) );
             break;
 
         case TYPE_ZONE_CONTAINER:    // Item used to handle a zone area (outlines, holes ...)
             if( flags & IS_NEW )
             {
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE,
-                             _( "Close Zone Outline" ), apply_xpm );
+                             _( "Close Zone Outline" ), KiBitmap( apply_xpm ) );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER,
-                             _( "Delete Last Corner" ), delete_xpm );
+                             _( "Delete Last Corner" ), KiBitmap( delete_xpm ) );
             }
             else
             {
@@ -216,9 +216,9 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             {
                 msg = AddHotkeyName( _( "Edit Dimension" ), g_Board_Editor_Hokeys_Descr,
                                      HK_EDIT_ITEM );
-                AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_DIMENSION, msg, edit_xpm );
+                AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_DIMENSION, msg, KiBitmap( edit_xpm ) );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DIMENSION,
-                             _( "Delete Dimension" ), delete_xpm );
+                             _( "Delete Dimension" ), KiBitmap( delete_xpm ) );
             }
 
             break;
@@ -228,12 +228,12 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             {
                 msg = AddHotkeyName( _( "Move Target" ), g_Board_Editor_Hokeys_Descr,
                                      HK_MOVE_ITEM );
-                AddMenuItem( aPopMenu, ID_POPUP_PCB_MOVE_MIRE_REQUEST, msg, move_xpm );
+                AddMenuItem( aPopMenu, ID_POPUP_PCB_MOVE_MIRE_REQUEST, msg, KiBitmap( move_xpm ) );
                 msg = AddHotkeyName( _( "Edit Target" ), g_Board_Editor_Hokeys_Descr,
                                      HK_EDIT_ITEM );
-                AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_MIRE, msg, edit_xpm );
+                AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_MIRE, msg, KiBitmap( edit_xpm ) );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_MIRE,
-                             _( "Delete Target" ), delete_xpm );
+                             _( "Delete Target" ), KiBitmap( delete_xpm ) );
             }
 
             break;
@@ -268,7 +268,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         msg = AddHotkeyName( _( "Get and Move Footprint" ),
                              g_Board_Editor_Hokeys_Descr, HK_GET_AND_MOVE_FOOTPRINT );
         AddMenuItem( aPopMenu, ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST,
-                     msg, move_module_xpm );
+                     msg, KiBitmap( move_module_xpm ) );
     }
 
     /* Display context sensitive comands: */
@@ -279,26 +279,26 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         {
             aPopMenu->AppendSeparator();
             AddMenuItem( aPopMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
-                         _( "Fill or Refill All Zones" ), fill_zone_xpm );
+                         _( "Fill or Refill All Zones" ), KiBitmap( fill_zone_xpm ) );
             AddMenuItem( aPopMenu, ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES,
-                         _( "Remove Filled Areas in All Zones" ), fill_zone_xpm );
+                         _( "Remove Filled Areas in All Zones" ), KiBitmap( fill_zone_xpm ) );
             aPopMenu->AppendSeparator();
         }
 
         AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_LAYER,
-                     _( "Select Working Layer" ), select_w_layer_xpm );
+                     _( "Select Working Layer" ), KiBitmap( select_w_layer_xpm ) );
         aPopMenu->AppendSeparator();
         break;
 
     case ID_TRACK_BUTT:
         if ( ! locate_track )   // This menu is already added when a track is located
             AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard() ),
-                         ID_POPUP_PCB_SELECT_WIDTH, _( "Select Track Width" ), width_track_xpm );
+                         ID_POPUP_PCB_SELECT_WIDTH, _( "Select Track Width" ), KiBitmap( width_track_xpm ) );
 
         AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_CU_LAYER,
-                     _( "Select Working Layer" ), select_w_layer_xpm );
+                     _( "Select Working Layer" ), KiBitmap( select_w_layer_xpm ) );
         AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_LAYER_PAIR,
-                     _( "Select Layer Pair for Vias" ), select_layer_pair_xpm );
+                     _( "Select Layer Pair for Vias" ), KiBitmap( select_layer_pair_xpm ) );
         aPopMenu->AppendSeparator();
         break;
 
@@ -308,13 +308,13 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     case ID_PCB_ADD_LINE_BUTT:
     case ID_PCB_DIMENSION_BUTT:
         AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_NO_CU_LAYER,
-                      _( "Select Working Layer" ), select_w_layer_xpm );
+                      _( "Select Working Layer" ), KiBitmap( select_w_layer_xpm ) );
         aPopMenu->AppendSeparator();
         break;
 
     case ID_PCB_MODULE_BUTT:
         AddMenuItem( aPopMenu, ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC,
-                     _( "Footprint Documentation" ), book_xpm );
+                     _( "Footprint Documentation" ), KiBitmap( book_xpm ) );
         aPopMenu->AppendSeparator();
         break;
 
@@ -323,14 +323,14 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         {
             wxMenu* commands = new wxMenu;
             AddMenuItem( aPopMenu, commands, ID_POPUP_PCB_AUTOPLACE_COMMANDS,
-                         _( "Glob Move and Place" ), move_xpm );
+                         _( "Glob Move and Place" ), KiBitmap( move_xpm ) );
             AddMenuItem( commands, ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES,
-                         _( "Unlock All Modules" ), unlocked_xpm );
+                         _( "Unlock All Modules" ), KiBitmap( unlocked_xpm ) );
             AddMenuItem( commands, ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES,
-                         _( "Lock All Modules" ), locked_xpm );
+                         _( "Lock All Modules" ), KiBitmap( locked_xpm ) );
             commands->AppendSeparator();
             AddMenuItem( commands, ID_POPUP_PCB_AUTOMOVE_ALL_MODULES,
-                         _( "Move All Modules" ), move_xpm );
+                         _( "Move All Modules" ), KiBitmap( move_xpm ) );
             commands->Append( ID_POPUP_PCB_AUTOMOVE_NEW_MODULES, _( "Move New Modules" ) );
             commands->AppendSeparator();
             commands->Append( ID_POPUP_PCB_AUTOPLACE_ALL_MODULES, _( "Autoplace All Modules" ) );
@@ -338,7 +338,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             commands->Append( ID_POPUP_PCB_AUTOPLACE_NEXT_MODULE, _( "Autoplace Next Module" ) );
             commands->AppendSeparator();
             AddMenuItem( commands, ID_POPUP_PCB_REORIENT_ALL_MODULES,
-                         _( "Orient All Modules" ), rotate_module_pos_xpm );
+                         _( "Orient All Modules" ), KiBitmap( rotate_module_pos_xpm ) );
             aPopMenu->AppendSeparator();
         }
 
@@ -347,7 +347,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             wxMenu* commands = new wxMenu;
             aPopMenu->Append( ID_POPUP_PCB_AUTOROUTE_COMMANDS, _( "Autoroute" ), commands );
             AddMenuItem( commands, ID_POPUP_PCB_SELECT_LAYER_PAIR,
-                         _( "Select Layer Pair" ), select_layer_pair_xpm );
+                         _( "Select Layer Pair" ), KiBitmap( select_layer_pair_xpm ) );
             commands->AppendSeparator();
             commands->Append( ID_POPUP_PCB_AUTOROUTE_ALL_MODULES, _( "Autoroute All Modules" ) );
             commands->AppendSeparator();
@@ -358,10 +358,10 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         if( locate_track )
             AddMenuItem( aPopMenu, Append_Track_Width_List( GetBoard() ),
                          ID_POPUP_PCB_SELECT_WIDTH, _( "Select Track Width" ),
-                         width_track_xpm );
+                         KiBitmap( width_track_xpm ) );
 
         AddMenuItem( aPopMenu, ID_POPUP_PCB_SELECT_LAYER,
-                     _( "Select Working Layer" ), select_w_layer_xpm );
+                     _( "Select Working Layer" ), KiBitmap( select_w_layer_xpm ) );
         aPopMenu->AppendSeparator();
         break;
     }
@@ -375,14 +375,14 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
  */
 void PCB_EDIT_FRAME::createPopUpBlockMenu( wxMenu* menu )
 {
-    AddMenuItem( menu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel Block" ), cancel_xpm );
-    AddMenuItem( menu, ID_POPUP_ZOOM_BLOCK, _( "Zoom Block" ), zoom_area_xpm );
+    AddMenuItem( menu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel Block" ), KiBitmap( cancel_xpm ) );
+    AddMenuItem( menu, ID_POPUP_ZOOM_BLOCK, _( "Zoom Block" ), KiBitmap( zoom_area_xpm ) );
     menu->AppendSeparator();
-    AddMenuItem( menu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), apply_xpm );
-    AddMenuItem( menu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), copyblock_xpm );
-    AddMenuItem( menu, ID_POPUP_FLIP_BLOCK, _( "Flip Block" ), invert_module_xpm );
-    AddMenuItem( menu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block" ), rotate_ccw_xpm );
-    AddMenuItem( menu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), delete_xpm );
+    AddMenuItem( menu, ID_POPUP_PLACE_BLOCK, _( "Place Block" ), KiBitmap( apply_xpm ) );
+    AddMenuItem( menu, ID_POPUP_COPY_BLOCK, _( "Copy Block" ), KiBitmap( copyblock_xpm ) );
+    AddMenuItem( menu, ID_POPUP_FLIP_BLOCK, _( "Flip Block" ), KiBitmap( invert_module_xpm ) );
+    AddMenuItem( menu, ID_POPUP_ROTATE_BLOCK, _( "Rotate Block" ), KiBitmap( rotate_ccw_xpm ) );
+    AddMenuItem( menu, ID_POPUP_DELETE_BLOCK, _( "Delete Block" ), KiBitmap( delete_xpm ) );
 }
 
 
@@ -404,7 +404,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         if( Track->Type() == TYPE_VIA )
         {
-            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE, _( "Drag Via" ), move_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE, _( "Drag Via" ), KiBitmap( move_xpm ) );
         }
         else
         {
@@ -412,27 +412,27 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
             {
                 msg = AddHotkeyName( _( "Move Node" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE,
-                             msg, move_xpm );
+                             msg, KiBitmap( move_xpm ) );
             }
             else
             {
                 msg = AddHotkeyName( _( "Drag Segments, Keep Slope" ), g_Board_Editor_Hokeys_Descr,
                                      HK_DRAG_TRACK_KEEP_SLOPE );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE,
-                             msg, drag_segment_withslope_xpm );
+                             msg, KiBitmap( drag_segment_withslope_xpm ) );
                 msg = AddHotkeyName( _( "Drag Segment" ), g_Board_Editor_Hokeys_Descr,
                                      HK_DRAG_ITEM );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_DRAG_TRACK_SEGMENT,
-                             msg, drag_track_segment_xpm );
+                             msg, KiBitmap( drag_track_segment_xpm ) );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_BREAK_TRACK,
-                             _( "Break Track" ), break_line_xpm );
+                             _( "Break Track" ), KiBitmap( break_line_xpm ) );
             }
         }
     }
     else if( flags & IS_DRAGGED )   // Drag via or node in progress
     {
         AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_MOVED_TRACK_NODE,
-                     _( "Place Node" ), apply_xpm );
+                     _( "Place Node" ), KiBitmap( apply_xpm ) );
         return;
     }
     else // Edition in progress
@@ -440,7 +440,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         if( flags & IS_NEW )
         {
             msg = AddHotkeyName( _( "End Track" ), g_Board_Editor_Hokeys_Descr, HK_END_TRACK );
-            AddMenuItem( PopMenu, ID_POPUP_PCB_END_TRACK, msg, apply_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_END_TRACK, msg, KiBitmap( apply_xpm ) );
         }
 
         msg = AddHotkeyName( _( "Place Via" ), g_Board_Editor_Hokeys_Descr, HK_ADD_VIA );
@@ -466,38 +466,38 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         {
             msg = AddHotkeyName( _( "Change Via Size and Drill" ), g_Board_Editor_Hokeys_Descr,
                                  HK_EDIT_ITEM );
-            AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG, msg, width_segment_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG, msg, KiBitmap( width_segment_xpm ) );
         }
         else
         {
             msg = AddHotkeyName( _( "Change Segment Width" ), g_Board_Editor_Hokeys_Descr,
                                  HK_EDIT_ITEM );
-            AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG, msg, width_segment_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_TRACKSEG, msg, KiBitmap( width_segment_xpm ) );
             AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_TRACK,
-                         _( "Change Track Width" ), width_track_xpm );
+                         _( "Change Track Width" ), KiBitmap( width_track_xpm ) );
         }
     }
 
     // Allows switching to an other track/via size when routing
     AddMenuItem( PopMenu, Append_Track_Width_List( GetBoard() ), ID_POPUP_PCB_SELECT_WIDTH,
-                 _( "Select Track Width" ), width_track_xpm );
+                 _( "Select Track Width" ), KiBitmap( width_track_xpm ) );
 
     // Delete control:
     PopMenu->AppendSeparator();
     wxMenu* track_mnu = new wxMenu;
-    AddMenuItem( PopMenu, track_mnu, ID_POPUP_PCB_DELETE_TRACK_MNU, _( "Delete" ), delete_xpm );
+    AddMenuItem( PopMenu, track_mnu, ID_POPUP_PCB_DELETE_TRACK_MNU, _( "Delete" ), KiBitmap( delete_xpm ) );
 
     msg = AddHotkeyName( Track->Type()==TYPE_VIA ?
                         _( "Delete Via" ) : _( "Delete Segment" ),
                          g_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
 
-    AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACKSEG, msg, delete_line_xpm );
+    AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACKSEG, msg, KiBitmap( delete_line_xpm ) );
 
     if( !flags )
     {
         msg = AddHotkeyName( _( "Delete Track" ), g_Board_Editor_Hokeys_Descr, HK_DELETE );
-        AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACK, msg, delete_track_xpm );
-        AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET, _( "Delete Net" ), delete_net_xpm );
+        AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACK, msg, KiBitmap( delete_track_xpm ) );
+        AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET, _( "Delete Net" ), KiBitmap( delete_net_xpm ) );
     }
 
     // Add global edition command
@@ -505,13 +505,13 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         PopMenu->AppendSeparator();
         AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_ALL_VIAS_AND_TRACK_SIZE,
-                     _( "Global Tracks and Vias Edition" ), width_track_via_xpm );
+                     _( "Global Tracks and Vias Edition" ), KiBitmap( width_track_via_xpm ) );
     }
 
     // Add lock/unlock flags menu:
     track_mnu = new wxMenu;
 
-    AddMenuItem( PopMenu, track_mnu, ID_POPUP_PCB_SETFLAGS_TRACK_MNU, _( "Set Flags" ), flag_xpm );
+    AddMenuItem( PopMenu, track_mnu, ID_POPUP_PCB_SETFLAGS_TRACK_MNU, _( "Set Flags" ), KiBitmap( flag_xpm ) );
     track_mnu->Append( ID_POPUP_PCB_LOCK_ON_TRACKSEG, _( "Locked: Yes" ), wxEmptyString, true );
     track_mnu->Append( ID_POPUP_PCB_LOCK_OFF_TRACKSEG, _( "Locked: No" ), wxEmptyString, true );
 
@@ -540,72 +540,72 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
     if( edge_zone->m_Flags == IS_DRAGGED )
     {
         AddMenuItem( aPopMenu, ID_POPUP_PCB_PLACE_DRAGGED_ZONE_OUTLINE_SEGMENT,
-                     _( "Place Edge Outline" ), apply_xpm );
+                     _( "Place Edge Outline" ), KiBitmap( apply_xpm ) );
     }
     else if( edge_zone->m_Flags )
     {
         if( (edge_zone->m_Flags & IN_EDIT ) )
             AddMenuItem( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
-                         _( "Place Corner" ), apply_xpm );
+                         _( "Place Corner" ), KiBitmap( apply_xpm ) );
         else
             AddMenuItem( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_OUTLINES,
-                         _( "Place Zone" ), apply_xpm );
+                         _( "Place Zone" ), KiBitmap( apply_xpm ) );
     }
     else
     {
         wxMenu* zones_menu = new wxMenu();
 
-        AddMenuItem( aPopMenu, zones_menu, -1, _( "Zones" ), add_zone_xpm );
+        AddMenuItem( aPopMenu, zones_menu, -1, _( "Zones" ), KiBitmap( add_zone_xpm ) );
 
         if( edge_zone->HitTestForCorner( GetScreen()->RefPos( true ) ) )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
-                         _( "Move Corner" ), move_xpm );
+                         _( "Move Corner" ), KiBitmap( move_xpm ) );
             AddMenuItem( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
-                         _( "Delete Corner" ), delete_xpm );
+                         _( "Delete Corner" ), KiBitmap( delete_xpm ) );
         }
         else if( edge_zone->HitTestForEdge( GetScreen()->RefPos( true ) ) )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_ADD_ZONE_CORNER,
-                         _( "Create Corner" ), add_corner_xpm );
+                         _( "Create Corner" ), KiBitmap( add_corner_xpm ) );
             msg = AddHotkeyName( _( "Drag Outline Segment" ), g_Board_Editor_Hokeys_Descr,
                                  HK_DRAG_ITEM );
             AddMenuItem( zones_menu, ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT,
-                         msg, drag_outline_segment_xpm );
+                         msg, KiBitmap( drag_outline_segment_xpm ) );
         }
 
         zones_menu->AppendSeparator();
         AddMenuItem( zones_menu, ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE,
-                     _( "Add Similar Zone" ), add_zone_xpm );
+                     _( "Add Similar Zone" ), KiBitmap( add_zone_xpm ) );
 
         AddMenuItem( zones_menu, ID_POPUP_PCB_ZONE_ADD_CUTOUT_ZONE,
-                     _( "Add Cutout Area" ), add_zone_cutout_xpm );
+                     _( "Add Cutout Area" ), KiBitmap( add_zone_cutout_xpm ) );
         zones_menu->AppendSeparator();
 
-        AddMenuItem( zones_menu, ID_POPUP_PCB_FILL_ZONE, _( "Fill Zone" ), fill_zone_xpm );
+        AddMenuItem( zones_menu, ID_POPUP_PCB_FILL_ZONE, _( "Fill Zone" ), KiBitmap( fill_zone_xpm ) );
 
         if( edge_zone->m_FilledPolysList.size() > 0 )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE,
-                         _( "Remove Filled Areas in Zone" ), fill_zone_xpm );
+                         _( "Remove Filled Areas in Zone" ), KiBitmap( fill_zone_xpm ) );
         }
 
         msg = AddHotkeyName( _( "Move Zone" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
-        AddMenuItem( zones_menu, ID_POPUP_PCB_MOVE_ZONE_OUTLINES, msg, move_xpm );
+        AddMenuItem( zones_menu, ID_POPUP_PCB_MOVE_ZONE_OUTLINES, msg, KiBitmap( move_xpm ) );
 
         msg = AddHotkeyName( _( "Edit Zone Params" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         AddMenuItem( zones_menu, ID_POPUP_PCB_EDIT_ZONE_PARAMS,
-                     msg, edit_xpm );
+                     msg, KiBitmap( edit_xpm ) );
 
         zones_menu->AppendSeparator();
 
         if( edge_zone->m_CornerSelection >= 0 &&
             edge_zone->m_Poly->IsCutoutContour( edge_zone->m_CornerSelection ) )
             AddMenuItem( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CUTOUT,
-                         _( "Delete Cutout" ), delete_xpm );
+                         _( "Delete Cutout" ), KiBitmap( delete_xpm ) );
 
         AddMenuItem( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CONTAINER,
-                     _( "Delete Zone Outline" ), delete_xpm );
+                     _( "Delete Zone Outline" ), KiBitmap( delete_xpm ) );
     }
 }
 
@@ -621,34 +621,34 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
     sub_menu_footprint = new wxMenu;
 
     msg = aModule->GetSelectMenuText();
-    AddMenuItem( menu, sub_menu_footprint, -1, msg, module_xpm );
+    AddMenuItem( menu, sub_menu_footprint, -1, msg, KiBitmap( module_xpm ) );
 
     if( !flags )
     {
         msg = AddHotkeyName( _( "Move" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_MOVE_MODULE_REQUEST,
-                     msg, move_module_xpm );
+                     msg, KiBitmap( move_module_xpm ) );
         msg = AddHotkeyName( _( "Drag" ), g_Board_Editor_Hokeys_Descr, HK_DRAG_ITEM  );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_DRAG_MODULE_REQUEST,
-                     msg, drag_module_xpm );
+                     msg, KiBitmap( drag_module_xpm ) );
     }
 
     msg = AddHotkeyName( _( "Rotate +" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
     AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE,
-                 msg, rotate_module_pos_xpm );
+                 msg, KiBitmap( rotate_module_pos_xpm ) );
     AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE,
-                 _( "Rotate -" ), rotate_module_neg_xpm );
+                 _( "Rotate -" ), KiBitmap( rotate_module_neg_xpm ) );
     msg = AddHotkeyName( _( "Flip" ), g_Board_Editor_Hokeys_Descr, HK_FLIP_FOOTPRINT );
     AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_CHANGE_SIDE_MODULE,
-                 msg, invert_module_xpm );
+                 msg, KiBitmap( invert_module_xpm ) );
 
     if( !flags )
     {
         msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
-        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE, msg, edit_module_xpm );
+        AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE, msg, KiBitmap( edit_module_xpm ) );
         sub_menu_footprint->AppendSeparator();
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_DELETE_MODULE,
-                     _( "Delete Module" ), delete_module_xpm );
+                     _( "Delete Module" ), KiBitmap( delete_module_xpm ) );
     }
 }
 
@@ -664,32 +664,32 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* me
 
     sub_menu_Fp_text = new wxMenu;
 
-    AddMenuItem( menu, sub_menu_Fp_text, -1, msg, footprint_text_xpm );
+    AddMenuItem( menu, sub_menu_Fp_text, -1, msg, KiBitmap( footprint_text_xpm ) );
 
     if( !flags )
     {
         msg = AddHotkeyName( _( "Move" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
         AddMenuItem( sub_menu_Fp_text, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST,
-                     msg, move_field_xpm );
+                     msg, KiBitmap( move_field_xpm ) );
     }
 
     msg = AddHotkeyName( _( "Rotate" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
     AddMenuItem( sub_menu_Fp_text, ID_POPUP_PCB_ROTATE_TEXTMODULE,
-                 msg, rotate_field_xpm );
+                 msg, KiBitmap( rotate_field_xpm ) );
     if( !flags )
     {
         msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         AddMenuItem( sub_menu_Fp_text, ID_POPUP_PCB_EDIT_TEXTMODULE,
-                     msg, edit_text_xpm );
+                     msg, KiBitmap( edit_text_xpm ) );
         AddMenuItem( sub_menu_Fp_text, ID_POPUP_PCB_RESET_TEXT_SIZE,
-                     _( "Reset Size" ), reset_text_xpm );
+                     _( "Reset Size" ), KiBitmap( reset_text_xpm ) );
     }
 
     // Graphic texts can be deleted only if are not currently edited.
     if( !flags && FpText->m_Type == TEXT_is_DIVERS )
     {
         AddMenuItem( sub_menu_Fp_text, ID_POPUP_PCB_DELETE_TEXTMODULE,
-                     _( "Delete" ), delete_xpm );
+                     _( "Delete" ), KiBitmap( delete_xpm ) );
     }
 
     if( !flags )
@@ -723,30 +723,30 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     wxString msg = Pad->GetSelectMenuText();
 
     sub_menu_Pad = new wxMenu;
-    AddMenuItem( menu, sub_menu_Pad, -1, msg, pad_xpm );
+    AddMenuItem( menu, sub_menu_Pad, -1, msg, KiBitmap( pad_xpm ) );
 
-    AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_MOVE_PAD_REQUEST, _( "Move" ), move_pad_xpm );
-    AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_DRAG_PAD_REQUEST, _( "Drag" ), drag_pad_xpm );
+    AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_MOVE_PAD_REQUEST, _( "Move" ), KiBitmap( move_pad_xpm ) );
+    AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_DRAG_PAD_REQUEST, _( "Drag" ), KiBitmap( drag_pad_xpm ) );
 
-    AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_EDIT_PAD, _( "Edit" ), options_pad_xpm );
+    AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_EDIT_PAD, _( "Edit" ), KiBitmap( options_pad_xpm ) );
     sub_menu_Pad->AppendSeparator();
 
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_IMPORT_PAD_SETTINGS,
                  _( "Copy Current Settings to this Pad" ),
                  wxEmptyString,
-                 options_new_pad_xpm );
+                 KiBitmap( options_new_pad_xpm ) );
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_EXPORT_PAD_SETTINGS,
                  _( "Copy this Pad Settings to Current Settings" ),
                  wxEmptyString,
-                 export_options_pad_xpm );
+                 KiBitmap( export_options_pad_xpm ) );
 
     AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS,
                  _( "Global Pads Edition" ),
                  _( "Copy this pad settings to all pads in this footprint (or similar footprints)" ),
-                 global_options_pad_xpm );
+                 KiBitmap( global_options_pad_xpm ) );
     sub_menu_Pad->AppendSeparator();
 
-    AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_DELETE_PAD, _( "Delete" ), delete_pad_xpm );
+    AddMenuItem( sub_menu_Pad, ID_POPUP_PCB_DELETE_PAD, _( "Delete" ), KiBitmap( delete_pad_xpm ) );
 
     if( m_HTOOL_current_state == ID_TOOLBARH_PCB_MODE_TRACKS )
     {
@@ -774,30 +774,30 @@ void PCB_EDIT_FRAME::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
 
     sub_menu_Text = new wxMenu;
 
-    AddMenuItem( menu, sub_menu_Text, -1, msg, add_text_xpm );
+    AddMenuItem( menu, sub_menu_Text, -1, msg, KiBitmap( add_text_xpm ) );
 
     if( !flags )
     {
         msg = AddHotkeyName( _( "Move" ), g_Board_Editor_Hokeys_Descr, HK_MOVE_ITEM );
         AddMenuItem( sub_menu_Text, ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST,
-                     msg, move_text_xpm );
+                     msg, KiBitmap( move_text_xpm ) );
     }
     msg = AddHotkeyName( _( "Rotate" ), g_Board_Editor_Hokeys_Descr, HK_ROTATE_ITEM );
-    AddMenuItem( sub_menu_Text, ID_POPUP_PCB_ROTATE_TEXTEPCB, msg, rotate_ccw_xpm );
+    AddMenuItem( sub_menu_Text, ID_POPUP_PCB_ROTATE_TEXTEPCB, msg, KiBitmap( rotate_ccw_xpm ) );
     msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
-    AddMenuItem( sub_menu_Text, ID_POPUP_PCB_EDIT_TEXTEPCB, msg, edit_text_xpm );
+    AddMenuItem( sub_menu_Text, ID_POPUP_PCB_EDIT_TEXTEPCB, msg, KiBitmap( edit_text_xpm ) );
     AddMenuItem( sub_menu_Text, ID_POPUP_PCB_RESET_TEXT_SIZE,
-                 _( "Reset Size" ), reset_text_xpm );
+                 _( "Reset Size" ), KiBitmap( reset_text_xpm ) );
 
     sub_menu_Text->AppendSeparator();
-    AddMenuItem( sub_menu_Text, ID_POPUP_PCB_DELETE_TEXTEPCB, _( "Delete" ), delete_text_xpm );
+    AddMenuItem( sub_menu_Text, ID_POPUP_PCB_DELETE_TEXTEPCB, _( "Delete" ), KiBitmap( delete_text_xpm ) );
 }
 
 
 void PCB_EDIT_FRAME::createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu )
 {
-    AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_MARKER, _( "Delete Marker" ), delete_xpm );
-    AddMenuItem( aPopMenu, ID_POPUP_PCB_GETINFO_MARKER, _( "Marker Error Info" ), info_xpm );
+    AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_MARKER, _( "Delete Marker" ), KiBitmap( delete_xpm ) );
+    AddMenuItem( aPopMenu, ID_POPUP_PCB_GETINFO_MARKER, _( "Marker Error Info" ), KiBitmap( info_xpm ) );
 }
 
 

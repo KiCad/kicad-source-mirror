@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <linearGradient id="a" y2="1726.1" gradientUnits="userSpaceOnUse" x2="2067.2" gradientTransform="matrix(.012364 -.072133 -.067892 -.011637 122.22 185.98)" y1="1726.1" x1="1669.7">
+   <stop stop-color="#003ddd" offset="0"/>
+   <stop stop-color="#639ef0" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path d="m21.056 43.628c-6.552-3.362-9.184-11.777-5.876-18.784 3.3085-7.0067 11.311-9.9644 17.863-6.6021 3.453 1.7719 5.8167 4.9468 6.7965 8.5794l5.9161-1.8908-6.2519 14.605-10.986-9.2312 6.5484-2.1711c-0.66598-2.2905-2.1828-4.2836-4.3743-5.4082-4.2667-2.1895-9.4772-0.26374-11.632 4.299-2.1545 4.5627-0.4415 10.044 3.8252 12.233 1.2208 0.62646 2.5183 0.91445 3.8 0.9015l0.2432 4.8534c-1.9803 0.02556-3.9861-0.41644-5.8725-1.3845z" fill-rule="evenodd" stroke="#000" stroke-width=".85201" fill="url(#a)"/>
+ <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(.97273 1.028)" line-height="125%" font-size="32.905px" y="27.466415" x="2.0753386" font-family="Sans" fill="#333333"><tspan font-family="Saab" y="27.466415" x="2.0753386" font-weight="bold" fill="#333333">X</tspan></text>
+</svg>

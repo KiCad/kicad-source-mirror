@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <linearGradient id="a" y2="5.5" gradientUnits="userSpaceOnUse" x2="1.0312" gradientTransform="matrix(.75 0 0 .75 -23.15 5.6005)" y1="9.4062" x1="4.9688">
+   <stop stop-color="#afafff" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g transform="matrix(2.4566,0,0,2.2316,-37.589,-39.022)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(0,-2.6586,2.1996,0,13.827,45.164)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <path d="m41.28 22.245h-25.216" stroke="#000" stroke-width="3.75" fill="none"/>
+ <path stroke-linejoin="round" d="m27.75 10.65a5.7 5.4 0 1 1 -11.4 0 5.7 5.4 0 1 1 11.4 0z" transform="matrix(0 -1 1 0 -.19506 44.295)" stroke="#040404" stroke-width="3.75" fill="none"/>
+ <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(.98043 1.02)" line-height="125%" font-size="21.061px" y="42.20731" x="19.303852" font-family="Sans" fill="#000000"><tspan y="42.20731" x="19.303852" font-weight="bold" fill="#4a12ff">1</tspan></text>
+ <rect transform="rotate(-90)" height="7" width="1.9715" y="-18.4" x="-12.725" fill="#9b9b9b"/>
+ <path fill="#9b9b9b" d="m-20.4 9.2255c-1.656 0-3 1.344-3 3s1.344 3 3 3 3-1.344 3-3-1.344-3-3-3z"/>
+ <path fill="#d72e2e" d="m-18.9 11.725v-1.5l7 0.02846v1.5l-7-0.02846z"/>
+ <path fill="#d72e2e" d="m-20.9 8.2255c-1.656 0-3 1.344-3 3s1.344 3 3 3 3-1.344 3-3-1.344-3-3-3z"/>
+ <path fill="url(#a)" d="m-20.9 9.7255c0.828 0 1.5 0.672 1.5 1.5s-0.672 1.5-1.5 1.5-1.5-0.672-1.5-1.5 0.672-1.5 1.5-1.5z"/>
+ <path fill-rule="evenodd" fill="#f8283c" d="m21.75 17.454v-11.888l4.9-3.9625h4.9l4.9 3.9625v11.888h-4.9v-11.888h-4.9v11.888h-4.9z"/>
+ <rect height="3.9625" width="4.9" y="9.5289" x="26.65" fill="#f8283c"/>
+ <path fill-rule="evenodd" fill="#00009b" d="m-10.9 13.254v-3l1-1h1l1 1v3h-1v-3h-1v3h-1z"/>
+ <rect height="1" width="1" y="11.254" x="-9.9" fill="#00009b"/>
+ <g fill-rule="evenodd" transform="translate(-27.361,27.546)">
+  <path fill-opacity=".39216" d="m13.961-9.5 0.039-2.896 3.9609 4.3961-4 4.5v-3c-3.5 0-5.4609-2-5.4609-6h2.9609c0 2 1 3 2.5 3z"/>
+  <g transform="translate(1,-2.4551)">
+   <path d="m12-8.441 0.03913-2.8961 3.9609 4.3961-4 4.5v-3c-3.5 0-5.4609-2-5.4609-6h2.9609c0 2 1 3 2.5 3z"/>
+   <path fill="#00bd00" d="m12.5-7.941v-1.5l2.5 2.5-2.5 3v-2c-2 0-5-0.5-5-4.5h1.5c0 2 2 2.5 3.5 2.5z"/>
+  </g>
+ </g>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="128" width="128" version="1.1" viewBox="0 0 0.64 0.64">
+ <desc>Flag of Germany</desc>
+ <g transform="matrix(.12 0 0 .12099 .015 .42553)">
+  <rect y="-2.36" width="5" x="0" height="3"/>
+  <rect height="2" width="5" y="-1.36" x="0" fill="#d00"/>
+  <rect height="1" width="5" y="-0.36" x="0" fill="#ffce00"/>
+ </g>
+</svg>

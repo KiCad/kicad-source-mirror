@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <radialGradient id="f" gradientUnits="userSpaceOnUse" cy="10.108" cx="-26.305" gradientTransform="matrix(.44971 -.29369 .82915 1.1474 36.036 -10.021)" r="7.0421">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" offset=".47534"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <linearGradient id="d" y2="4.6406" gradientUnits="userSpaceOnUse" x2="6.0964" gradientTransform="matrix(1.4468,0,0,1.3132,2.1217,5.8086)" y1="8.6836" x1="8.9893">
+   <stop stop-color="#ff7800" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+  <linearGradient id="e" y2="4.6406" gradientUnits="userSpaceOnUse" x2="6.0964" gradientTransform="matrix(1.4468,0,0,1.3132,23.014,26.837)" y1="8.6836" x1="8.9893">
+   <stop stop-color="#ff7800" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <rect opacity="0" height="50.379" width="52.993" y="-1.1654" x="-2.4003"/>
+ <path fill="url(#f)" d="m27.96 3.0328c-1.5334 0-0.04648 0.52172 1.4835 1.1807 1.53 0.65903 5.4901 3.3744 4.5886 7.2157 4.773-0.45192 7.3739 3.2771 7.7281 4.4934 0.35425 1.2163 1.104 2.7369 1.104 1.2791 0.03124-3.9942-3.1414-6.7504-5.3476-9.0852-2.205-2.3348-5.522-4.5834-9.556-5.0838z"/>
+ <rect opacity=".76562" transform="scale(-1)" height="37.819" width="5.2654" stroke="#000" y="-43.037" x="-16.662" stroke-width="0.6" fill="#46ff00"/>
+ <rect opacity=".76562" transform="rotate(90)" height="41.668" width="4.7791" stroke="#000" y="-45.309" x="12.309" stroke-width="0.6" fill="#f00"/>
+ <path d="m19.266 14.672a5.2085 4.7274 0 0 1 -10.417 0 5.2085 4.7274 0 1 1 10.417 0z"/>
+ <path fill="url(#d)" d="m17.313 14.672a3.2553 2.9546 0 0 1 -6.5106 0 3.2553 2.9546 0 1 1 6.5106 0z"/>
+ <rect opacity=".76562" transform="scale(-1)" height="37.819" width="5.2654" stroke="#000" y="-42.61" x="-37.583" stroke-width="0.6" fill="#46ff00"/>
+ <rect opacity=".76562" transform="rotate(90)" height="41.668" width="4.7791" stroke="#000" y="-45.134" x="33.31" stroke-width="0.6" fill="#f00"/>
+ <path d="m40.158 35.701a5.2085 4.7274 0 0 1 -10.417 0 5.2085 4.7274 0 1 1 10.417 0z"/>
+ <path fill="url(#e)" d="m38.205 35.701a3.2553 2.9546 0 0 1 -6.5106 0 3.2553 2.9546 0 1 1 6.5106 0z"/>
+</svg>

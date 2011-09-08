@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.0">
+ <defs>
+  <radialGradient id="h" gradientUnits="userSpaceOnUse" cy="36.421" cx="24.837" gradientTransform="matrix(1 0 0 .53672 0 16.873)" r="15.645">
+   <stop offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <linearGradient id="f" y2="55.692" gradientUnits="userSpaceOnUse" x2="18.072" y1="29.205" x1="21.552">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <linearGradient id="g" y2="13.526" gradientUnits="userSpaceOnUse" x2="25.561" gradientTransform="matrix(-1.4306,0,0,1.4302,50.646,2.3548)" y1="8.7344" x1="15.457">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <linearGradient id="e" y2="38.875" gradientUnits="userSpaceOnUse" x2="17.938" y1="35.938" x1="13.188">
+   <stop stop-color="#73d216" offset="0"/>
+   <stop stop-color="#8ae234" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path opacity="0.13" style="color:#000000" d="m40.482 36.421a15.645 8.3969 0 1 1 -31.289 0 15.645 8.3969 0 1 1 31.289 0z" fill-rule="evenodd" transform="matrix(1.4797 0 0 -.87235 -13.551 72.567)" fill="url(#h)"/>
+ <path style="color:#000000" d="m17.425 41.893c-17.141-9.451-7.4894-29.484 8.997-29.327v-8.0665l16.078 14.058-16.078 14.744v-8.729c-10.235-0.41516-14.742 7.267-5.7723 13.363 2.5671 1.7448 0.78878 6.1707-3.2252 3.9575z" stroke="#4e9a06" display="block" fill="url(#e)"/>
+ <path opacity=".61798" style="color:#000000" d="m27.438 6.6875v5.875c-0.0084 0.54875-0.45125 0.99157-1 1-7.83-0.074-13.983 4.682-16.157 10.438-2.1736 5.756-0.5775 12.491 7.657 17.031 0.85018 0.46877 1.4658 0.51573 1.875 0.4375 0.40918-0.07823 0.66761-0.29706 0.84375-0.59375 0.35229-0.59337 0.30018-1.5074-0.5625-2.0938-2.3572-1.6022-3.9089-3.351-4.6875-5.1562-0.77857-1.8052-0.73982-3.6723 0.03125-5.25 1.5421-3.1553 5.654-5.0306 11.031-4.8125 0.53652 0.02478 0.96101 0.46297 0.96875 1v6.4375l13.562-12.439-13.562-11.874z" stroke="url(#f)" display="block" fill="none"/>
+ <path opacity=".45" d="m41.66 18.605c-18.55-3.13-28.895 2.15-32.795 10.436-0.1537-12.643 12.963-16.32 18.09-15.932l-0.016-7.507 14.721 13.003z" fill-rule="evenodd" fill="url(#g)"/>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <g transform="matrix(0,2.6586,-2.1996,0,27.273,2.8266)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <path d="m3.0968 24.095h42.167" stroke="#000" stroke-width="3.5" fill="none"/>
+ <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(1.0286 .97222)" line-height="125%" font-size="44.885px" y="41.81144" x="12.257134" font-family="Sans" fill="#fb541a"><tspan y="41.81144" x="12.257134">?</tspan></text>
+</svg>

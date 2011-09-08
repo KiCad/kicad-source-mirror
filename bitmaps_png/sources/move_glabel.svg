@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="c" height="1.2029" width="1.1161" color-interpolation-filters="sRGB" y="-.10147" x="-.058043">
+   <feGaussianBlur stdDeviation="0.81103601"/>
+  </filter>
+  <linearGradient id="d" y2="6.4143" gradientUnits="userSpaceOnUse" x2="3.7417" gradientTransform="matrix(2.5607 0 0 1.9937 -.84439 15.09)" y1="13.722" x1="11.124">
+   <stop stop-color="#afafff" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g transform="matrix(.88977 0 0 .82746 79.877 -4.6037)">
+  <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(.91929 1.0878)" line-height="125%" font-size="41.869px" y="31.994635" x="-94.689133" font-family="Sans" fill="#000000"><tspan style="letter-spacing:3.6844px" font-family="FreeMono" font-size="36.635px" y="31.994635" x="-94.689133" font-weight="bold">A</tspan></text>
+  <g transform="matrix(2.9379,0,0,2.1996,-87.134,24.086)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+  <g transform="matrix(1.0448,0,0,1.0547,-88.361,9.4364)">
+   <g opacity=".66016" filter="url(#c)">
+    <rect y="36.403" width="9.5814" x="27.9" height="2.1314"/>
+    <rect y="42.798" width="9.5814" x="3.9463" height="2.1314"/>
+    <rect y="32.141" width="9.5814" x="3.9463" height="2.1314"/>
+    <path d="m8.5506 27.878h13.36c13.864 0 14.19 19.182 0 19.182h-13.36v-19.182z"/>
+   </g>
+   <rect height="2.1314" width="7.1861" y="34.272" x="27.9" fill="#d72e2e"/>
+   <path fill="#d72e2e" d="m6.4504 25.747h13.36c13.864 0 14.19 19.182 0 19.182h-13.36v-19.182z"/>
+   <rect height="2.1314" width="7.1861" y="40.666" x="1.551" fill="#d72e2e"/>
+   <rect height="2.1314" width="7.1861" y="30.009" x="1.551" fill="#d72e2e"/>
+   <path fill="url(#d)" d="m8.737 27.878h11.159c10.547 0 10.795 14.92 0 14.92h-11.159v-14.92z"/>
+  </g>
+ </g>
+ <path d="m34.312 0.82327-6.506 5.3467h4.1453v6.1131h-1.3957v0.031h-5.9939v-3.69l-5.9423 5.8562 5.9423 5.8539v-3.7299h7.3897v0.93246h0.03447v5.3932h-4.101l6.5084 5.3467 6.506-5.3467h-4.1453v-6.3257h0.44308v-0.03101h5.9915v3.69l5.9423-5.8562-5.9423-5.8539v3.7299h-6.4346v-0.721h-0.033v-5.391h4.101l-6.5084-5.3467z" fill-rule="evenodd" stroke="#44a118" stroke-width="1.2599" fill="#59d421"/>
+</svg>

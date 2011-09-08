@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="d" height="1.2565" width="1.1558" color-interpolation-filters="sRGB" y="-.12823" x="-.077903">
+   <feGaussianBlur stdDeviation="0.90561719"/>
+  </filter>
+  <filter id="c" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.36923077"/>
+  </filter>
+ </defs>
+ <path opacity=".33984" stroke-linejoin="round" d="m46.35 9.6a6 6 0 1 1 -12 0 6 6 0 1 1 12 0z" transform="translate(-1.5,3.15)" filter="url(#c)" stroke="#070707" stroke-width="3.8" fill="none"/>
+ <path opacity=".28125" d="m23.503 28.583 9.947-0.158 4.5416 16.95h16.608" transform="matrix(.89159 0 0 .94872 2.382 .91524)" filter="url(#d)" stroke="#000" stroke-width="6.9" fill="none"/>
+ <path d="m21.866 23.123 8.8682-0.15 4.0493 16.08h14.808" stroke="#1ddd0d" stroke-width="6.346" fill="none"/>
+ <path stroke-linejoin="round" d="m46.35 9.6a6 6 0 1 1 -12 0 6 6 0 1 1 12 0z" transform="translate(-2.85 .6)" stroke="#f00" stroke-width="3.8" fill="none"/>
+ <g transform="translate(2.863 -.32515)" stroke="#000">
+  <path stroke-width="1.8269" fill="none" d="m9.287 28.771v16.639"/>
+  <path stroke-width="2.1706" fill="none" d="m1.4156 19.903h15.743"/>
+  <path stroke-width="2.1706" fill="none" d="m1.4156 27.629h15.743"/>
+  <path stroke-width="1.8269" fill="none" d="m9.287 2.6395v16.639"/>
+  <path stroke-width=".91347px" d="m9.3461 27.947-6.031 8.0969h11.944z"/>
+  <path stroke-width=".91347px" d="m9.3461 19.612-6.031-8.0969h11.944z"/>
+ </g>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <linearGradient id="a" y2="1726.1" gradientUnits="userSpaceOnUse" x2="2067.2" gradientTransform="matrix(-.057926 .024038 -.022474 -.052048 180.5 74.726)" y1="1726.1" x1="1669.7">
+   <stop stop-color="#003ddd" offset="0"/>
+   <stop stop-color="#639ef0" offset="1"/>
+  </linearGradient>
+ </defs>
+ <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(.93298 1.0718)" line-height="125%" font-size="36.447px" y="28.521093" x="1.6162341" font-family="Sans" fill="#333333"><tspan font-family="Saab" y="28.521093" x="1.6162341" font-weight="bold" fill="#333333">Y</tspan></text>
+ <path d="m42.592 21.686c-4.039-4.584-11.563-5.04-16.793-1.019-5.2307 4.0215-6.1977 11.005-2.1585 15.589 2.1287 2.4157 5.2245 3.6848 8.4427 3.7565l-0.46785 5.105 11.024-7.8668-9.7742-6.9815-0.58317 5.666c-2.0382-0.08381-3.9879-0.90682-5.339-2.4401-2.6303-2.985-2.0007-7.5323 1.4055-10.151 3.4062-2.6188 8.3061-2.3227 10.936 0.66231 0.75259 0.8541 1.2369 1.8359 1.4669 2.8642l4.0995-0.75704c-0.35068-1.5897-1.0967-3.1081-2.2596-4.4279z" fill-rule="evenodd" stroke="#000" stroke-width=".7155" fill="url(#a)"/>
+</svg>

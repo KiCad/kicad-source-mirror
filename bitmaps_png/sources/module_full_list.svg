@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1" viewBox="0 0 48 48">
+ <g transform="matrix(-2.8288,0,0,-2.4916,-6.4559,36.786)">
+  <g stroke-linejoin="round">
+   <rect transform="rotate(90)" height="14.619" width="9.7086" stroke="#000" y="3.4905" x="1.904" stroke-width="0.4" fill="#fff"/>
+   <path d="m693.26 625.06a18.914 18.914 0 0 1 -37.828 0.11702" transform="matrix(0 .071482 -.071482 0 41.168 -41.24)" stroke="#030303" stroke-width="5.5958" fill="none"/>
+  </g>
+  <g stroke-linejoin="round" transform="translate(-.0375 -.15)" stroke="#030303">
+   <rect transform="rotate(90)" height="2.511" width="4.7176" y="13.332" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <rect transform="rotate(90)" height="2.511" width="4.7176" y="5.3636" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <path d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 46.083 -44.072)" stroke-width="4.1969" fill="#ffede0"/>
+   <rect transform="rotate(90)" height="2.511" width="4.7176" y="9.3478" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <path d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 42.08 -44.072)" stroke-width="4.1969" fill="#ffede0"/>
+   <path d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 38.077 -44.072)" stroke-width="4.1969" fill="#ffede0"/>
+  </g>
+  <g transform="translate(-.0375 9.6261)">
+   <rect stroke-linejoin="round" transform="rotate(90)" height="2.511" width="4.7176" stroke="#030303" y="13.332" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <rect stroke-linejoin="round" transform="rotate(90)" height="2.511" width="4.7176" stroke="#030303" y="5.3636" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <path stroke-linejoin="round" d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 46.083 -44.072)" stroke="#030303" stroke-width="4.1969" fill="#ffede0"/>
+   <rect stroke-linejoin="round" transform="rotate(90)" height="2.511" width="4.7176" stroke="#030303" y="9.3478" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <path stroke-linejoin="round" d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 42.08 -44.072)" stroke="#030303" stroke-width="4.1969" fill="#ffede0"/>
+   <g stroke-width="0.3">
+    <path stroke-linejoin="round" d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 38.077 -44.072)" stroke="#030303" stroke-width="4.1969" fill="#ffede0"/>
+   </g>
+  </g>
+ </g>
+ <rect ry="2.1184" height="31.004" width="24.273" y="15.396" x="21.327" fill="#3e3e3e"/>
+ <g stroke-width="2.5" stroke="#f2f2f4" fill="none">
+  <path d="m25.2 19.172h17.8"/>
+  <path d="m25.2 24.929h17.8"/>
+  <path d="m25.2 30.686h17.8"/>
+  <path d="m25.2 42.2h17.8"/>
+  <path d="m25.2 36.443h17.8"/>
+ </g>
+</svg>

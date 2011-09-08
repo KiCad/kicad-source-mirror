@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <linearGradient id="d" y2="6.4143" gradientUnits="userSpaceOnUse" x2="3.7417" gradientTransform="matrix(2.7439 0 0 2.4395 .91122 -28.824)" y1="13.722" x1="11.124">
+   <stop stop-color="#afafff" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+  <filter id="c" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.77671979"/>
+  </filter>
+ </defs>
+ <g transform="translate(0,32)">
+  <g transform="translate(-.95462 3)">
+   <g opacity=".80172" filter="url(#c)" transform="translate(.11696 .17615)">
+    <path fill-rule="evenodd" d="m6.0446-15.784v-7.8239l7.7-5.2159h5.1333l8.9833 5.2159v3.9119l1.2833 1.304h3.85l3.85-5.2159h7.7l3.85 7.8239h-3.85l-2.5667-5.2159h-2.5667l-3.85 5.2159h-8.9833l-2.5667-2.608v-2.608l-5.1333-3.9119h-3.85l-5.1325 3.912v5.2159h-3.85z"/>
+    <rect y="-2.7443" width="12.833" x="31.711" height="2.608"/>
+    <rect y="5.0795" width="10.267" x="6.0446" height="2.608"/>
+    <rect y="-7.9602" width="10.267" x="6.0446" height="2.608"/>
+    <path d="m10.978-13.176h14.317c14.855 0 15.204 23.472 0 23.472h-14.317v-23.472z"/>
+   </g>
+   <rect height="2.608" width="7.7" y="-5.3523" x="36.845" fill="#d72e2e"/>
+   <path fill="#d72e2e" d="m8.7277-15.784h14.317c14.855 0 15.204 23.472 0 23.472h-14.317v-23.472z"/>
+   <rect height="2.608" width="7.7" y="2.4716" x="3.4779" fill="#d72e2e"/>
+   <rect height="2.608" width="7.7" y="-10.568" x="3.4779" fill="#d72e2e"/>
+   <path fill="url(#d)" d="m11.178-13.176h11.958c11.301 0 11.567 18.256 0 18.256h-11.958v-18.256z"/>
+   <path fill="#d72e2e" d="m-9 3.5a1.5 1.5 0 1 1 -3 0 1.5 1.5 0 1 1 3 0z" transform="matrix(2.5667,0,0,2.608,62.511,-13.176)"/>
+   <rect height="2.608" width="2.5667" y="-5.3523" x="34.278" fill="#b5ccff"/>
+   <path fill-rule="evenodd" fill="#6361d1" d="m3.4779-18.392v-7.8239l7.7-5.2159h5.1333l8.9833 5.2159v3.9119l1.284 1.304h3.85l3.85-5.2159h7.7l3.85 7.8239h-3.85l-2.5667-5.2159h-2.5667l-3.85 5.2159h-8.983l-2.565-2.608v-2.608l-5.1333-3.9119h-3.85l-5.1333 3.9119v5.2159h-3.85z"/>
+  </g>
+  <g transform="translate(-.95462 3)">
+   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  </g>
+ </g>
+ <g transform="translate(0,32)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+</svg>

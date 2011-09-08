@@ -305,8 +305,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_DisplayModEdge = DisplayOpt.DisplayModEdge;
     m_DisplayModText = DisplayOpt.DisplayModText;
 
-    // Give an icon
-    SetIcon( wxICON( a_icon_pcbnew ) );
+    wxIcon  icon;
+    icon.CopyFromBitmap( KiBitmap( icon_pcbnew_xpm ) );
+
+    SetIcon( icon );
 
     m_InternalUnits = PCB_INTERNAL_UNIT;    // Unites internes = 1/10000 inch
     SetScreen( ScreenPcb );

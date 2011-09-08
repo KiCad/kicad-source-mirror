@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="250" width="250" version="1.1">
+ <rect fill-rule="evenodd" height="246.04" width="245.2" y="1.4196" x="1.691" fill="#e6e6e6"/>
+ <g transform="matrix(.131 0 0 .1445 66.857 108.13)">
+  <rect height="1100" width="1800" y="-491.93" x="-451.03" fill="#fff"/>
+  <rect height="300" width="1800" y="-91.931" x="-451.03" fill="#003580"/>
+  <rect height="1100" width="300" y="-491.93" x="48.967" fill="#003580"/>
+ </g>
+</svg>

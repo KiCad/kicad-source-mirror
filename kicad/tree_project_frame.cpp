@@ -139,7 +139,7 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
                                ID_PROJECT_NEWDIR,
                                _( "New D&irectory" ),
                                _( "Create a New Directory" ) );
-        item->SetBitmap( directory_xpm );
+        item->SetBitmap( KiBitmap( directory_xpm ) );
         menu->Append( item );
 
     }
@@ -157,7 +157,7 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
                                _( "&Rename directory" ),
                                TREE_DIRECTORY != i ? _( "Rename file" ) :
                                _( "&Rename directory" ) );
-        item->SetBitmap( right_xpm );
+        item->SetBitmap( KiBitmap( right_xpm ) );
         menu->Append( item );
 
 
@@ -168,7 +168,7 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
                                    ID_PROJECT_TXTEDIT,
                                    _( "&Edit in a text editor" ),
                                    _( "Open the file in a Text Editor" ) );
-            item->SetBitmap( icon_txt_xpm );
+            item->SetBitmap( KiBitmap( icon_txt_xpm ) );
             menu->Append( item );
         }
 
@@ -179,12 +179,13 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
                                _( "&Delete Directory" ),
                                TREE_DIRECTORY != i ? _( "Delete the File" ) :
                                _( "&Delete the Directory and its content" ) );
-        item->SetBitmap( delete_xpm );
+        item->SetBitmap( KiBitmap( delete_xpm ) );
         menu->Append( item );
     }
 
     ReCreateTreePrj();
 }
+
 
 TREE_PROJECT_FRAME::~TREE_PROJECT_FRAME()
 {
