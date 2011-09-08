@@ -3,7 +3,6 @@
 /***************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "pcbnew_id.h"
@@ -17,6 +16,79 @@
 /* How to add a new hotkey:
  * see hotkeys.cpp
  */
+
+
+/**
+ * Function RecordMacros.
+ * Record sequence hotkeys and cursor position to macros.
+ * @param aDC = current device context
+ * @param aNumber The current number macros.
+ */
+void PCB_EDIT_FRAME::RecordMacros(wxDC* aDC, int aNumber)
+{
+    assert(aNumber >= 0);
+    assert(aNumber < 10);
+    wxString msg, tmp;
+
+    if( m_RecordingMacros < 0 )
+    {
+       m_RecordingMacros = aNumber;
+        m_Macros[aNumber].m_StartPosition = GetScreen()->GetCrossHairPosition(false);
+        m_Macros[aNumber].m_Record.clear();
+
+        msg.Printf( wxT("%s %d"), _( "Recording macros" ), aNumber);
+        SetStatusText(msg);
+    }
+    else
+    {
+        m_RecordingMacros = -1;
+
+        msg.Printf( wxT("%s %d %s"), _( "Macros" ), aNumber, _( "recorded" ));
+        SetStatusText(msg);
+    }
+}
+
+
+/**
+ * Function CallMacros
+ * play hotkeys and cursor position from recorded macros.
+ * @param aDC = current device context
+ * @param aPosition The current cursor position in logical (drawing) units.
+ * @param aNumber The current number macros.
+*/
+void PCB_EDIT_FRAME::CallMacros(wxDC* aDC, const wxPoint& aPosition, int aNumber)
+{
+    PCB_SCREEN* screen = GetScreen();
+    wxPoint tPosition;
+
+    wxString msg;
+
+    msg.Printf( wxT("%s %d"), _( "Call macros"), aNumber);
+    SetStatusText( msg );
+
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    cmd.SetEventObject( this );
+
+    tPosition = screen->GetNearestGridPosition( aPosition );
+
+    DrawPanel->CrossHairOff( aDC );
+    screen->SetMousePosition( tPosition );
+    GeneralControl( aDC, tPosition );
+
+    for( std::list<MACROS_RECORD>::iterator i = m_Macros[aNumber].m_Record.begin(); i != m_Macros[aNumber].m_Record.end(); i++ )
+    {
+        wxPoint tmpPos = tPosition + i->m_Position;
+
+        screen->SetMousePosition( tmpPos );
+
+        GeneralControl( aDC, tmpPos, i->m_HotkeyCode );
+    }
+
+    cmd.SetId( ID_ZOOM_REDRAW );
+    GetEventHandler()->ProcessEvent( cmd );
+
+    DrawPanel->CrossHairOn( aDC );
+}
 
 
 /**
@@ -54,6 +126,25 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     if( HK_Descr == NULL )
         return;
 
+    if( (m_RecordingMacros != -1) &&
+        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_1) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_1) &&
+        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_2) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_2) &&
+        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_3) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_3) &&
+        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_4) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_4) &&
+        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_5) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_5) &&
+        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_6) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_6) &&
+        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_7) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_7) &&
+        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_8) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_8) &&
+        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_9) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_9) &&
+        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_0) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_0) )
+    {
+        MACROS_RECORD macros_record;
+        macros_record.m_HotkeyCode = aHotkeyCode;
+        macros_record.m_Idcommand = HK_Descr->m_Idcommand;
+        macros_record.m_Position = screen->GetNearestGridPosition( aPosition ) - m_Macros[m_RecordingMacros].m_StartPosition;
+        m_Macros[m_RecordingMacros].m_Record.push_back(macros_record);
+    }
+
     // Create a wxCommandEvent that will be posted in some hot keys functions
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
@@ -65,6 +156,86 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     default:
     case HK_NOT_FOUND:
         return;
+        break;
+
+    case HK_RECORD_MACROS_0:
+        RecordMacros(aDC, 0);
+        break;
+
+    case HK_RECORD_MACROS_1:
+        RecordMacros(aDC, 1);
+        break;
+
+    case HK_RECORD_MACROS_2:
+        RecordMacros(aDC, 2);
+        break;
+
+    case HK_RECORD_MACROS_3:
+        RecordMacros(aDC, 3);
+        break;
+
+    case HK_RECORD_MACROS_4:
+        RecordMacros(aDC, 4);
+        break;
+
+    case HK_RECORD_MACROS_5:
+        RecordMacros(aDC, 5);
+        break;
+
+    case HK_RECORD_MACROS_6:
+        RecordMacros(aDC, 6);
+        break;
+
+    case HK_RECORD_MACROS_7:
+        RecordMacros(aDC, 7);
+        break;
+
+    case HK_RECORD_MACROS_8:
+        RecordMacros(aDC, 8);
+        break;
+
+    case HK_RECORD_MACROS_9:
+        RecordMacros(aDC, 9);
+        break;
+
+    case HK_CALL_MACROS_0:
+        CallMacros(aDC, aPosition, 0);
+        break;
+
+    case HK_CALL_MACROS_1:
+        CallMacros(aDC, aPosition, 1);
+        break;
+
+    case HK_CALL_MACROS_2:
+        CallMacros(aDC, aPosition, 2);
+        break;
+
+    case HK_CALL_MACROS_3:
+        CallMacros(aDC, aPosition, 3);
+        break;
+
+    case HK_CALL_MACROS_4:
+        CallMacros(aDC, aPosition, 4);
+        break;
+
+    case HK_CALL_MACROS_5:
+        CallMacros(aDC, aPosition, 5);
+        break;
+
+    case HK_CALL_MACROS_6:
+        CallMacros(aDC, aPosition, 6);
+        break;
+
+    case HK_CALL_MACROS_7:
+        CallMacros(aDC, aPosition, 7);
+        break;
+
+    case HK_CALL_MACROS_8:
+        CallMacros(aDC, aPosition, 8);
+        break;
+
+    case HK_CALL_MACROS_9:
+        CallMacros(aDC, aPosition, 9);
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
@@ -283,6 +454,10 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         OnHotkeyMoveItem( HK_DRAG_TRACK_KEEP_SLOPE );
         break;
 
+    case HK_PLACE_ITEM:
+        OnHotkeyPlaceItem( aDC );
+        break;
+
     case HK_ADD_NEW_TRACK: // Start new track
         if( getActiveLayer() > LAYER_N_FRONT )
             break;
@@ -362,7 +537,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
         evt.SetEventObject( this );
         evt.SetId( evt_type );
-        wxPostEvent( this, evt );
+        GetEventHandler()->ProcessEvent( evt );
     }
 }
 
@@ -488,7 +663,7 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
             evt_type = ID_POPUP_PCB_EDIT_MODULE;
         break;
 
-    case TYPE_MIRE:
+    case PCB_TARGET_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_MIRE;
         break;
@@ -522,7 +697,7 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
         wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
         evt.SetEventObject( this );
         evt.SetId( evt_type );
-        wxPostEvent( this, evt );
+        GetEventHandler()->ProcessEvent( evt );
         return true;
     }
 
@@ -582,8 +757,10 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
         // the parent.
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_MODULE_REQUEST;
+
         if( aIdCommand == HK_DRAG_ITEM )
             evt_type = ID_POPUP_PCB_DRAG_MODULE_REQUEST;
+
         break;
 
     case TYPE_TEXTE:
@@ -591,7 +768,7 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
             evt_type = ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST;
         break;
 
-    case TYPE_MIRE:
+    case PCB_TARGET_T:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_MIRE_REQUEST;
         break;
@@ -622,13 +799,78 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
         wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
         evt.SetEventObject( this );
         evt.SetId( evt_type );
-        wxPostEvent( this, evt );
+        GetEventHandler()->ProcessEvent( evt );
         return true;
     }
 
     return false;
 }
 
+/**
+ * Function OnHotkeyPlaceItem
+ * Place the item (footprint, track, text .. ) found under the mouse cursor
+ * An item can be placed only if there is this item currently edited
+ * Only a footprint, a pad or a track can be placed
+ * @param aDC = current device context
+ * @return true if an item was placedd
+ */
+bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
+{
+    BOARD_ITEM* item = GetCurItem();
+    bool no_tool = GetToolId() == ID_NO_TOOL_SELECTED;
+    bool itemCurrentlyEdited = item && item->m_Flags;
+
+    DrawPanel->m_AutoPAN_Request = false;
+
+    if( itemCurrentlyEdited )
+    {
+        DrawPanel->m_IgnoreMouseEvents = true;
+        DrawPanel->CrossHairOff( aDC );
+
+        switch( item->Type() )
+        {
+        case TYPE_TRACK:
+        case TYPE_VIA:
+            if( item->m_Flags & IS_DRAGGED )
+                PlaceDraggedOrMovedTrackSegment( (TRACK*) item, aDC );
+            break;
+
+        case TYPE_TEXTE:
+            Place_Texte_Pcb( (TEXTE_PCB*) item, aDC );
+            break;
+
+        case TYPE_TEXTE_MODULE:
+            PlaceTexteModule( (TEXTE_MODULE*) item, aDC );
+            break;
+
+        case TYPE_PAD:
+            PlacePad( (D_PAD*) item, aDC );
+            break;
+
+        case TYPE_MODULE:
+            Place_Module( (MODULE*) item, aDC );
+            break;
+
+        case PCB_TARGET_T:
+            PlaceTarget( (PCB_TARGET*) item, aDC );
+            break;
+
+        case TYPE_DRAWSEGMENT:
+            if( no_tool )   // when no tools: existing item moving.
+                Place_DrawItem( (DRAWSEGMENT*) item, aDC );
+            break;
+
+        default:
+            break;
+        }
+
+        DrawPanel->m_IgnoreMouseEvents = false;
+        DrawPanel->CrossHairOn( aDC );
+
+        return true;
+    }
+    return false;
+}
 
 /**
  * Function OnHotkeyRotateItem
@@ -683,7 +925,7 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
         wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
         evt.SetEventObject( this );
         evt.SetId( evt_type );
-        wxPostEvent( this, evt );
+        GetEventHandler()->ProcessEvent( evt );
         return true;
     }
 

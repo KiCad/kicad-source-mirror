@@ -33,10 +33,8 @@
 #include <vector>
 
 #include "fctsys.h"
-#include "common.h"
 #include "kicad_string.h"
 #include "wxEeschemaStruct.h"
-#include "wxstruct.h"
 #include "netlist.h"
 #include "class_sch_screen.h"
 #include "sch_component.h"

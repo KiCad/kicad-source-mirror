@@ -116,7 +116,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
 {
     wxString msg;
 
-    DisplayRastnestInProgress = TRUE;
+    DisplayRastnestInProgress = true;
 
     GetBoard()->m_Status_Pcb = 0;     /* we want a full ratsnest computation,
                                        * from the scratch */
@@ -203,7 +203,8 @@ static int sort_by_length( const void* o1, const void* o2 )
  *  @param  aPadIdxMax	  = ending index (within the pad list) for search
  *  @return blocks not connected count
  */
-static int gen_rats_block_to_block(
+static int gen_rats_block_to_block
+(
     std::vector<RATSNEST_ITEM>& aRatsnestBuffer,
     std::vector<D_PAD*>&        aPadBuffer,
     unsigned                    aPadIdxStart,
@@ -271,8 +272,10 @@ static int gen_rats_block_to_block(
         }
 
         if( padBlock1Idx < 0 )
+        {
             DisplayError( NULL,
                           wxT( "gen_rats_block_to_block() internal error" ) );
+        }
         else
         {
             /* Create the new ratsnest */
@@ -285,6 +288,7 @@ static int gen_rats_block_to_block(
             aRatsnestBuffer.push_back( net );
         }
     }
+
     return current_num_block;
 }
 
@@ -355,11 +359,9 @@ static int gen_rats_pad_to_pad( vector<RATSNEST_ITEM>& aRatsnestBuffer,
             /* Update the block number
              *  if the 2 pads are not already created : a new block is created
              */
-            if( (pad->GetSubRatsnest() == 0)
-               && (ref_pad->GetSubRatsnest() == 0) )
+            if( (pad->GetSubRatsnest() == 0) && (ref_pad->GetSubRatsnest() == 0) )
             {
-                current_num_block++;        // Creates a new block number (or
-                                            // subratsnest)
+                current_num_block++;        // Creates a new block number (or subratsnest)
                 pad->SetSubRatsnest( current_num_block );
                 ref_pad->SetSubRatsnest( current_num_block );
             }
@@ -437,7 +439,7 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest( wxDC* DC )
         return;                       /* No useful connections. */
 
     /* Ratsnest computation */
-    DisplayRastnestInProgress = TRUE;
+    DisplayRastnestInProgress = true;
 
     unsigned current_net_code = 1;      // First net code is analyzed.
                                         // (net_code = 0 -> no connect)
@@ -446,19 +448,23 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest( wxDC* DC )
     for( ; current_net_code < m_Pcb->m_NetInfo->GetCount(); current_net_code++ )
     {
         NETINFO_ITEM* net = m_Pcb->FindNet( current_net_code );
+
         if( net == NULL )       //Should not occur
         {
             DisplayError( this,
                           wxT( "Build_Board_Ratsnest() error: net not found" ) );
             return;
         }
+
         net->m_RatsnestStartIdx = m_Pcb->GetRatsnestsCount();
 
         // Search for the last subratsnest already in use
         int num_block = 0;
+
         for( unsigned ii = 0; ii < net->m_ListPad.size(); ii++ )
         {
             pad = net->m_ListPad[ii];
+
             if( num_block < pad->GetSubRatsnest() )
                 num_block = pad->GetSubRatsnest();
         }
@@ -486,6 +492,7 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest( wxDC* DC )
 
         /* sort by length */
         net = m_Pcb->FindNet( current_net_code );
+
         if( ( net->m_RatsnestEndIdx - net->m_RatsnestStartIdx ) > 1 )
         {
             RATSNEST_ITEM* rats = &m_Pcb->m_FullRatsnest[0];
@@ -522,14 +529,19 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 {
     if( ( m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
         return;
+
     if( ( m_Pcb->m_Status_Pcb & DO_NOT_SHOW_GENERAL_RASTNEST ) )
         return;
+
     if( aDC == NULL )
         return;
+
     int state = CH_VISIBLE | CH_ACTIF;
+
     for( unsigned ii = 0; ii < m_Pcb->GetRatsnestsCount(); ii++ )
     {
         RATSNEST_ITEM& item = m_Pcb->m_FullRatsnest[ii];
+
         if( ( item.m_Status & state ) != state )
             continue;
 
@@ -565,13 +577,12 @@ static int tst_rats_block_to_block( NETINFO_ITEM*          net,
 
     /* Search a link from a block to an other block */
     min_rats = NULL;
-    for( unsigned ii = net->m_RatsnestStartIdx;
-         ii < net->m_RatsnestEndIdx;
-         ii++ )
+
+    for( unsigned ii = net->m_RatsnestStartIdx; ii < net->m_RatsnestEndIdx; ii++ )
     {
         rats = &aRatsnestBuffer[ii];
-        if( rats->m_PadStart->GetSubRatsnest() ==
-            rats->m_PadEnd->GetSubRatsnest() )       // Same block
+
+        if( rats->m_PadStart->GetSubRatsnest() == rats->m_PadEnd->GetSubRatsnest() ) // Same block
             continue;
 
         if( min_rats == NULL )
@@ -631,35 +642,33 @@ static int tst_rats_pad_to_pad( int            current_num_block,
                                 RATSNEST_ITEM* end_rat_list )
 {
     D_PAD*         pad_start, * pad_end;
-    RATSNEST_ITEM* chevelu;
+    RATSNEST_ITEM* item;
 
-    for( chevelu = start_rat_list; chevelu < end_rat_list; chevelu++ )
+    for( item = start_rat_list; item < end_rat_list; item++ )
     {
-        pad_start = chevelu->m_PadStart;
-        pad_end   = chevelu->m_PadEnd;
+        pad_start = item->m_PadStart;
+        pad_end   = item->m_PadEnd;
 
-        /* Update the block if the 2 pads are not connected : a new block is
-         * created
+        /* Update the block if the 2 pads are not connected : a new block is created
          */
-        if( (pad_start->GetSubRatsnest() == 0)
-           && (pad_end->GetSubRatsnest() == 0) )
+        if( (pad_start->GetSubRatsnest() == 0) && (pad_end->GetSubRatsnest() == 0) )
         {
             current_num_block++;
             pad_start->SetSubRatsnest( current_num_block );
             pad_end->SetSubRatsnest( current_num_block );
-            chevelu->m_Status |= CH_ACTIF;
+            item->m_Status |= CH_ACTIF;
         }
-        /* If a pad is already connected : the other is merged in the current
-         * block */
+
+        /* If a pad is already connected : the other is merged in the current block */
         else if( pad_start->GetSubRatsnest() == 0 )
         {
             pad_start->SetSubRatsnest( pad_end->GetSubRatsnest() );
-            chevelu->m_Status |= CH_ACTIF;
+            item->m_Status |= CH_ACTIF;
         }
         else if( pad_end->GetSubRatsnest() == 0 )
         {
             pad_end->SetSubRatsnest( pad_start->GetSubRatsnest() );
-            chevelu->m_Status |= CH_ACTIF;
+            item->m_Status |= CH_ACTIF;
         }
     }
 
@@ -680,14 +689,14 @@ void PCB_BASE_FRAME::Tst_Ratsnest( wxDC* DC, int ref_netcode )
 
     if( m_Pcb->GetPadsCount() == 0 )
         return;
+
     if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         Build_Board_Ratsnest( DC );
 
-    for( int net_code = 1;
-         net_code < (int) m_Pcb->m_NetInfo->GetCount();
-         net_code++ )
+    for( int net_code = 1; net_code < (int) m_Pcb->m_NetInfo->GetCount(); net_code++ )
     {
         net = m_Pcb->FindNet( net_code );
+
         if( net == NULL )       //Should not occur
         {
             DisplayError( this, wxT( "Tst_Ratsnest() error: net not found" ) );
@@ -698,6 +707,7 @@ void PCB_BASE_FRAME::Tst_Ratsnest( wxDC* DC, int ref_netcode )
             continue;
 
         int num_block = 0;
+
         for( unsigned ip = 0; ip < net->m_ListPad.size(); ip++ )
         {
             pad = net->m_ListPad[ip];
@@ -706,9 +716,7 @@ void PCB_BASE_FRAME::Tst_Ratsnest( wxDC* DC, int ref_netcode )
             num_block = MAX( num_block, subnet );
         }
 
-        for( unsigned ii = net->m_RatsnestStartIdx;
-             ii < net->m_RatsnestEndIdx;
-             ii++ )
+        for( unsigned ii = net->m_RatsnestStartIdx; ii < net->m_RatsnestEndIdx; ii++ )
         {
             m_Pcb->m_FullRatsnest[ii].m_Status &= ~CH_ACTIF;
         }
@@ -727,6 +735,7 @@ void PCB_BASE_FRAME::Tst_Ratsnest( wxDC* DC, int ref_netcode )
     }
 
     m_Pcb->m_NbNoconnect = 0;
+
     for( unsigned ii = 0; ii < m_Pcb->GetRatsnestsCount(); ii++ )
     {
         if( m_Pcb->m_FullRatsnest[ii].m_Status & CH_ACTIF )
@@ -743,7 +752,7 @@ void PCB_BASE_FRAME::Tst_Ratsnest( wxDC* DC, int ref_netcode )
  */
 int PCB_BASE_FRAME::Test_1_Net_Ratsnest( wxDC* aDC, int aNetcode )
 {
-    DisplayRastnestInProgress = FALSE;
+    DisplayRastnestInProgress = false;
     DrawGeneralRatsnest( aDC, aNetcode );
     Tst_Ratsnest( aDC, aNetcode );
     DrawGeneralRatsnest( aDC, aNetcode );
@@ -811,27 +820,27 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
     }
 
     pads_module_count = s_localPadBuffer.size();
+
     if( pads_module_count == 0 )
         return;  /* no connection! */
 
-    qsort( &s_localPadBuffer[0],
-           pads_module_count,
-           sizeof(D_PAD*),
-           sortByNetcode );
+    qsort( &s_localPadBuffer[0], pads_module_count, sizeof( D_PAD* ), sortByNetcode );
 
     /* Build the list of pads linked to the current footprint pads */
-    DisplayRastnestInProgress = FALSE;
+    DisplayRastnestInProgress = false;
 
     current_net_code = 0;
+
     for( unsigned ii = 0; ii < pads_module_count; ii++ )
     {
         pad_ref = s_localPadBuffer[ii];
+
         if( pad_ref->GetNet() == current_net_code )
             continue;
 
-        // A new net was found, load all pads of others modules members of this
-        // net:
+        // A new net was found, load all pads of others modules members of this net:
         NETINFO_ITEM* net = m_Pcb->FindNet( pad_ref->GetNet() );
+
         if( net == NULL )       //Should not occur
         {
             DisplayError( this,
@@ -842,6 +851,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
         for( unsigned jj = 0; jj < net->m_ListPad.size(); jj++ )
         {
             pad_externe = net->m_ListPad[jj];
+
             if( pad_externe->GetParent() == aModule )
                 continue;
 
@@ -854,8 +864,8 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
 
     /* Sort the pad list by net_code */
     baseListePad = &s_localPadBuffer[0];
-    qsort( baseListePad + pads_module_count,
-           s_localPadBuffer.size() - pads_module_count,
+
+    qsort( baseListePad + pads_module_count, s_localPadBuffer.size() - pads_module_count,
            sizeof(D_PAD*), sortByNetcode );
 
     /* Compute the internal rats nest:
@@ -869,6 +879,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
     {
         /* Search the end of pad list relative to the current net */
         unsigned jj = ii + 1;
+
         for( ; jj <= pads_module_count; jj++ )
         {
             if( jj >= pads_module_count )
@@ -880,20 +891,17 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
 
         /* End of list found: */
         /* a - first step of lee algorithm : build the pad to pad link list */
-        int icnt = gen_rats_pad_to_pad( m_Pcb->m_LocalRatsnest,
-                                        s_localPadBuffer,
-                                        ii, jj, 0 );
+        int icnt = gen_rats_pad_to_pad( m_Pcb->m_LocalRatsnest, s_localPadBuffer, ii, jj, 0 );
 
         /* b - second step of lee algorithm : build the block to block link
          *list (Iteration) */
         while( icnt > 1 )
         {
-            icnt = gen_rats_block_to_block( m_Pcb->m_LocalRatsnest,
-                                            s_localPadBuffer,
-                                            ii, jj );
+            icnt = gen_rats_block_to_block( m_Pcb->m_LocalRatsnest, s_localPadBuffer, ii, jj );
         }
 
         ii = jj;
+
         if( ii < s_localPadBuffer.size() )
             current_net_code = s_localPadBuffer[ii]->GetNet();
     }
@@ -926,14 +934,15 @@ CalculateExternalRatsnest:
     local_rats.m_Status = 0;
     bool addRats = false;
     if( internalRatsCount < m_Pcb->m_LocalRatsnest.size() )
-        m_Pcb->m_LocalRatsnest.erase(
-            m_Pcb->m_LocalRatsnest.begin() + internalRatsCount,
-            m_Pcb->m_LocalRatsnest.end() );
+        m_Pcb->m_LocalRatsnest.erase( m_Pcb->m_LocalRatsnest.begin() + internalRatsCount,
+                                      m_Pcb->m_LocalRatsnest.end() );
 
     current_net_code = s_localPadBuffer[0]->GetNet();
+
     for( unsigned ii = 0; ii < pads_module_count; ii++ )
     {
         pad_ref = s_localPadBuffer[ii];
+
         if( pad_ref->GetNet() != current_net_code )
         {
             /* if needed, creates a new ratsnest for the old net */
@@ -941,6 +950,7 @@ CalculateExternalRatsnest:
             {
                 m_Pcb->m_LocalRatsnest.push_back( local_rats );
             }
+
             addRats = false;
             current_net_code    = pad_ref->GetNet();
             local_rats.m_Lenght = 0x7FFFFFFF;
@@ -949,9 +959,7 @@ CalculateExternalRatsnest:
         pad_pos = pad_ref->m_Pos - g_Offset_Module;
 
         // Search the nearest external pad of this current pad
-        for( unsigned jj = pads_module_count;
-             jj < s_localPadBuffer.size();
-             jj++ )
+        for( unsigned jj = pads_module_count; jj < s_localPadBuffer.size(); jj++ )
         {
             pad_externe = s_localPadBuffer[jj];
 
@@ -959,9 +967,7 @@ CalculateExternalRatsnest:
             if( pad_externe->GetNet() < pad_ref->GetNet() )
                 continue;
 
-            if( pad_externe->GetNet() > pad_ref->GetNet() ) // remember pads
-                                                            // are sorted by
-                                                            // net code
+            if( pad_externe->GetNet() > pad_ref->GetNet() ) // pads are sorted by net code
                 break;
 
             distance = abs( pad_externe->m_Pos.x - pad_pos.x ) +
@@ -993,13 +999,16 @@ void PCB_BASE_FRAME::trace_ratsnest_module( wxDC* DC )
 {
     if( DC == NULL )
         return;
+
     if( ( m_Pcb->m_Status_Pcb & RATSNEST_ITEM_LOCAL_OK ) == 0 )
         return;
 
     int tmpcolor = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
+
     for( unsigned ii = 0; ii < m_Pcb->m_LocalRatsnest.size(); ii++ )
     {
         RATSNEST_ITEM* rats = &m_Pcb->m_LocalRatsnest[ii];
+
         if( rats->m_Status & LOCAL_RATSNEST_ITEM )
         {
             g_ColorsSettings.SetItemColor(RATSNEST_VISIBLE, YELLOW);
@@ -1073,9 +1082,11 @@ void PCB_BASE_FRAME::build_ratsnest_pad( BOARD_ITEM* ref, const wxPoint& refpos,
     }
 
     s_CursorPos = refpos;
+
     if( init )
     {
         s_RatsnestMouseToPads.clear();
+
         if( ref == NULL )
             return;
 
@@ -1107,8 +1118,7 @@ void PCB_BASE_FRAME::build_ratsnest_pad( BOARD_ITEM* ref, const wxPoint& refpos,
 
         if( net == NULL )        // Should not occur
         {
-            DisplayError( this,
-                          wxT( "build_ratsnest_pad() error: net not found" ) );
+            DisplayError( this, wxT( "build_ratsnest_pad() error: net not found" ) );
             return;
         }
 
@@ -1117,6 +1127,7 @@ void PCB_BASE_FRAME::build_ratsnest_pad( BOARD_ITEM* ref, const wxPoint& refpos,
         for( unsigned ii = 0; ii < net->m_ListPad.size(); ii++ )
         {
             D_PAD* pad = net->m_ListPad[ii];
+
             if( pad == pad_ref )
                 continue;
 
@@ -1126,8 +1137,7 @@ void PCB_BASE_FRAME::build_ratsnest_pad( BOARD_ITEM* ref, const wxPoint& refpos,
     }   /* end if Init */
 
     if( s_RatsnestMouseToPads.size() > 1 )
-        sort( s_RatsnestMouseToPads.begin(),
-              s_RatsnestMouseToPads.end(), sort_by_localnetlength );
+        sort( s_RatsnestMouseToPads.begin(), s_RatsnestMouseToPads.end(), sort_by_localnetlength );
 }
 
 
@@ -1144,12 +1154,12 @@ void PCB_BASE_FRAME::trace_ratsnest_pad( wxDC* DC )
 
 
     GRSetDrawMode( DC, GR_XOR );
+
     for( int ii = 0; ii < (int) s_RatsnestMouseToPads.size(); ii++ )
     {
         if( ii >= g_MaxLinksShowed )
             break;
 
-        GRLine( &DrawPanel->m_ClipBox, DC, s_CursorPos,
-                s_RatsnestMouseToPads[ii], 0, YELLOW );
+        GRLine( &DrawPanel->m_ClipBox, DC, s_CursorPos, s_RatsnestMouseToPads[ii], 0, YELLOW );
     }
 }

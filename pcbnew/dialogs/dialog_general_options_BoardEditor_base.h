@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  6 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,6 +19,7 @@
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/spinctrl.h>
+#include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
 #include <wx/button.h>
@@ -56,6 +57,8 @@ class DialogGeneralOptionsBoardEditor_base : public wxDialog
 		wxSpinCtrl* m_MaxShowLinks;
 		wxStaticText* m_staticTextautosave;
 		wxSpinCtrl* m_SaveTime;
+		wxStaticText* m_staticTextRotationAngle;
+		wxChoice* m_RotationAngle;
 		wxCheckBox* m_DrcOn;
 		wxCheckBox* m_ShowGlobalRatsnest;
 		wxCheckBox* m_ShowModuleRatsnest;
@@ -70,11 +73,12 @@ class DialogGeneralOptionsBoardEditor_base : public wxDialog
 		wxButton* m_buttonCANCEL;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
+		
 		DialogGeneralOptionsBoardEditor_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("General settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 585,280 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DialogGeneralOptionsBoardEditor_base();
 	

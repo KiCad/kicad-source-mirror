@@ -3,7 +3,6 @@
 /*******************************************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
@@ -57,7 +56,7 @@ static void TracePenaliteRectangle( BOARD* Pcb,
                                     int    uy1,
                                     int    marge,
                                     int    Penalite,
-                                    int    masque_layer );
+                                    int    aLayerMask );
 static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC );
 
 
@@ -87,8 +86,10 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     {
     case PLACE_1_MODULE:
         ThisModule = Module;
+
         if( ThisModule == NULL )
             return;
+
         ThisModule->m_ModuleStatus &= ~(MODULE_is_PLACED | MODULE_to_PLACE);
         break;
 
@@ -98,11 +99,13 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     case PLACE_ALL:
         if( !IsOK( this, _( "Footprints NOT LOCKED will be moved" ) ) )
             return;
+
         break;
 
     case PLACE_INCREMENTAL:
         if( !IsOK( this, _( "Footprints NOT PLACED will be moved" ) ) )
             return;
+
         break;
     }
 
@@ -119,9 +122,10 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     /* Compute module parmeters used in auto place */
     Module = GetBoard()->m_Modules;
     NbTotalModules = 0;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
-        Module->Set_Rectangle_Encadrement();
+        Module->CalculateBoundingBox();
         NbTotalModules ++;
     }
 
@@ -129,6 +133,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         return;
 
     Module = GetBoard()->m_Modules;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
         Module->m_ModuleStatus &= ~MODULE_to_PLACE;
@@ -142,16 +147,21 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
 
         case PLACE_OUT_OF_BOARD:
             Module->m_ModuleStatus &= ~MODULE_is_PLACED;
+
             if( Module->m_ModuleStatus & MODULE_is_LOCKED )
                 break;
+
             if( !GetBoard()->m_BoundaryBox.Contains( Module->m_Pos ) )
                 Module->m_ModuleStatus |= MODULE_to_PLACE;
+
             break;
 
         case PLACE_ALL:
             Module->m_ModuleStatus &= ~MODULE_is_PLACED;
+
             if( Module->m_ModuleStatus & MODULE_is_LOCKED )
                 break;
+
             Module->m_ModuleStatus |= MODULE_to_PLACE;
             break;
 
@@ -160,8 +170,10 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             {
                 Module->m_ModuleStatus &= ~MODULE_is_PLACED; break;
             }
+
             if( !(Module->m_ModuleStatus & MODULE_is_PLACED) )
                 Module->m_ModuleStatus |= MODULE_to_PLACE;
+
             break;
         }
 
@@ -182,6 +194,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
 
     if( NbModules )
         Pas = 100.0 / (float) NbModules;
+
     while( ( Module = PickModule( this, DC ) ) != NULL )
     {
         float BestScore;
@@ -193,6 +206,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         error     = RecherchePlacementModule( Module, DC );
         BestScore = MinCout;
         PosOK     = CurrPosition;
+
         if( error == ESC )
             goto end_of_tst;
 
@@ -203,9 +217,10 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         {
             int Angle_Rot_Module = 1800;
             Rotate_Module( DC, Module, Angle_Rot_Module, false );
-            Module->Set_Rectangle_Encadrement();
+            Module->CalculateBoundingBox();
             error    = RecherchePlacementModule( Module, DC );
             MinCout *= OrientPenality[ii];
+
             if( BestScore > MinCout )   /* This orientation is best. */
             {
                 PosOK     = CurrPosition;
@@ -216,18 +231,21 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
                 Angle_Rot_Module = -1800;
                 Rotate_Module( DC, Module, Angle_Rot_Module, false );
             }
+
             if( error == ESC )
                 goto end_of_tst;
         }
 
         /* Determine if the best orientation of a module is 90. */
         ii = Module->m_CntRot90 & 0x0F;
+
         if( ii != 0 )
         {
             int Angle_Rot_Module = 900;
             Rotate_Module( DC, Module, Angle_Rot_Module, false );
             error    = RecherchePlacementModule( Module, DC );
             MinCout *= OrientPenality[ii];
+
             if( BestScore > MinCout )   /* This orientation is best. */
             {
                 PosOK     = CurrPosition;
@@ -238,18 +256,21 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
                 Angle_Rot_Module = -900;
                 Rotate_Module( DC, Module, Angle_Rot_Module, false );
             }
+
             if( error == ESC )
                 goto end_of_tst;
         }
 
         /*  Determine if the best orientation of a module is 270. */
         ii = (Module->m_CntRot90 >> 4 ) & 0x0F;
+
         if( ii != 0 )
         {
             int Angle_Rot_Module = 2700;
             Rotate_Module( DC, Module, Angle_Rot_Module, false );
             error    = RecherchePlacementModule( Module, DC );
             MinCout *= OrientPenality[ii];
+
             if( BestScore > MinCout )   /* This orientation is best. */
             {
                 PosOK     = CurrPosition;
@@ -260,6 +281,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
                 Angle_Rot_Module = -2700;
                 Rotate_Module( DC, Module, Angle_Rot_Module, false );
             }
+
             if( error == ESC )
                 goto end_of_tst;
         }
@@ -275,7 +297,7 @@ end_of_tst:
         Place_Module( Module, DC );
         GetScreen()->SetCrossHairPosition( CurrPosition );
 
-        Module->Set_Rectangle_Encadrement();
+        Module->CalculateBoundingBox();
 
         GenModuleOnBoard( Module );
         Module->m_ModuleStatus |= MODULE_is_PLACED;
@@ -290,15 +312,15 @@ end_of_tst:
     Route_Layer_BOTTOM = lay_tmp_BOTTOM;
 
     Module = GetBoard()->m_Modules;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
-        Module->Set_Rectangle_Encadrement();
+        Module->CalculateBoundingBox();
     }
 
     GetBoard()->m_Status_Pcb = 0;
     Compile_Ratsnest( DC, true );
     DrawPanel->ReDraw( DC, true );
-
     DrawPanel->m_AbortEnable = false;
 }
 
@@ -310,14 +332,14 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
     MATRIX_CELL top_state, bottom_state;
 
     GRSetDrawMode( DC, GR_COPY );
+
     for( ii = 0; ii < Board.m_Nrows; ii++ )
     {
         oy = GetBoard()->m_BoundaryBox.m_Pos.y + ( ii * Board.m_GridRouting );
 
         for( jj = 0; jj < Board.m_Ncols; jj++ )
         {
-            ox = GetBoard()->m_BoundaryBox.m_Pos.x +
-                 (jj * Board.m_GridRouting);
+            ox = GetBoard()->m_BoundaryBox.m_Pos.x + (jj * Board.m_GridRouting);
             color = BLACK;
 
             top_state    = GetCell( ii, jj, TOP );
@@ -329,12 +351,10 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
             /* obstacles */
             if( ( top_state & CELL_is_EDGE ) || ( bottom_state & CELL_is_EDGE ) )
                 color = WHITE;
-
             else if( top_state & ( HOLE | CELL_is_MODULE ) )
                 color = LIGHTRED;
             else if( bottom_state & (HOLE | CELL_is_MODULE) )
                 color = LIGHTGREEN;
-
             else /* Display the filling and keep out regions. */
             {
                 if( GetDist( ii, jj, TOP ) || GetDist( ii, jj, BOTTOM ) )
@@ -420,8 +440,10 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     MsgPanel->SetMessage( 24, wxT( "Mem(Kb)" ), msg, CYAN );
 
     Route_Layer_BOTTOM = LAYER_N_FRONT;
+
     if( Nb_Sides == TWO_SIDES )
         Route_Layer_BOTTOM = LAYER_N_BACK;
+
     Route_Layer_TOP = LAYER_N_FRONT;
 
     /* Place the edge layer segments */
@@ -431,6 +453,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     TmpSegm.SetLayer( -1 );
     TmpSegm.SetNet( -1 );
     TmpSegm.m_Width = Board.m_GridRouting / 2;
+
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
         DRAWSEGMENT* DrawSegm;
@@ -439,6 +462,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
         {
         case TYPE_DRAWSEGMENT:
             DrawSegm = (DRAWSEGMENT*) PtStruct;
+
             if( DrawSegm->GetLayer() != EDGE_N )
                 break;
 
@@ -486,7 +510,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 {
     int    ox, oy, fx, fy, Penalite;
     int    marge = Board.m_GridRouting / 2;
-    int    masque_layer;
+    int    layerMask;
     D_PAD* Pad;
 
     ox = Module->m_BoundaryBox.m_Pos.x - marge;
@@ -496,31 +520,37 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 
     if( ox < GetBoard()->m_BoundaryBox.m_Pos.x )
         ox = GetBoard()->m_BoundaryBox.m_Pos.x;
+
     if( ox > GetBoard()->m_BoundaryBox.GetRight() )
         ox = GetBoard()->m_BoundaryBox.GetRight();
 
     if( fx < GetBoard()->m_BoundaryBox.m_Pos.x )
         fx = GetBoard()->m_BoundaryBox.m_Pos.x;
+
     if( fx > GetBoard()->m_BoundaryBox.GetRight() )
         fx = GetBoard()->m_BoundaryBox.GetRight();
 
     if( oy < GetBoard()->m_BoundaryBox.m_Pos.y )
         oy = GetBoard()->m_BoundaryBox.m_Pos.y;
+
     if( oy > GetBoard()->m_BoundaryBox.GetBottom() )
         oy = GetBoard()->m_BoundaryBox.GetBottom();
 
     if( fy < GetBoard()->m_BoundaryBox.m_Pos.y )
         fy = GetBoard()->m_BoundaryBox.m_Pos.y;
+
     if( fy > GetBoard()->m_BoundaryBox.GetBottom() )
         fy = GetBoard()->m_BoundaryBox.GetBottom();
 
-    masque_layer = 0;
-    if( Module->GetLayer() == LAYER_N_FRONT )
-        masque_layer = LAYER_FRONT;
-    if( Module->GetLayer() == LAYER_N_BACK )
-        masque_layer = LAYER_BACK;
+    layerMask = 0;
 
-    TraceFilledRectangle( GetBoard(), ox, oy, fx, fy, masque_layer,
+    if( Module->GetLayer() == LAYER_N_FRONT )
+        layerMask = LAYER_FRONT;
+
+    if( Module->GetLayer() == LAYER_N_BACK )
+        layerMask = LAYER_BACK;
+
+    TraceFilledRectangle( GetBoard(), ox, oy, fx, fy, layerMask,
                           CELL_is_MODULE, WRITE_OR_CELL );
 
     int trackWidth = GetBoard()->m_NetClasses.GetDefault()->GetTrackWidth();
@@ -531,15 +561,13 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 
     for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
     {
-        Place_1_Pad_Board( GetBoard(), Pad, CELL_is_MODULE, marge,
-                           WRITE_OR_CELL );
+        Place_1_Pad_Board( GetBoard(), Pad, CELL_is_MODULE, marge, WRITE_OR_CELL );
     }
 
     /* Trace clearance. */
-    marge    = (Board.m_GridRouting * Module->m_PadNum ) / GAIN;
+    marge    = ( Board.m_GridRouting * Module->m_PadNum ) / GAIN;
     Penalite = PENALITE;
-    TracePenaliteRectangle( GetBoard(), ox, oy, fx, fy, marge, Penalite,
-                            masque_layer );
+    TracePenaliteRectangle( GetBoard(), ox, oy, fx, fy, marge, Penalite, layerMask );
 }
 
 
@@ -589,22 +617,24 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
      * appearing on the other side.
      */
     TstOtherSide = false;
+
     if( Nb_Sides == TWO_SIDES )
     {
-        D_PAD* Pad; int masque_otherlayer;
-        masque_otherlayer = LAYER_BACK;
+        D_PAD* Pad;
+        int otherLayerMask = LAYER_BACK;
+
         if( Module->GetLayer() == LAYER_N_BACK )
-            masque_otherlayer = LAYER_FRONT;
+            otherLayerMask = LAYER_FRONT;
 
         for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
         {
-            if( ( Pad->m_Masque_Layer & masque_otherlayer ) == 0 )
+            if( ( Pad->m_layerMask & otherLayerMask ) == 0 )
                 continue;
+
             TstOtherSide = true;
             break;
         }
     }
-
 
     DrawModuleOutlines( DrawPanel, DC, Module );
 
@@ -615,6 +645,7 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
          CurrPosition.x += Board.m_GridRouting )
     {
         wxYield();
+
         if( DrawPanel->m_AbortRequest )
         {
             if( IsOK( this, _( "Ok to abort?" ) ) )
@@ -641,8 +672,10 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
         {
             /* Erase traces. */
             DrawModuleOutlines( DrawPanel, DC, Module );
+
             if( DisplayChevelu )
                 Compute_Ratsnest_PlaceModule( DC );
+
             DisplayChevelu = 0;
             Module->m_BoundaryBox.m_Pos.x = ox + CurrPosition.x;
             Module->m_BoundaryBox.m_Pos.y = oy + CurrPosition.y;
@@ -650,6 +683,7 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
             g_Offset_Module.y = cy - CurrPosition.y;
             DrawModuleOutlines( DrawPanel, DC, Module );
             Penalite = TstModuleOnBoard( GetBoard(), Module, TstOtherSide );
+
             if( Penalite >= 0 ) /* c a d if the module can be placed. */
             {
                 error = 0;
@@ -670,13 +704,16 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
                     SetStatusText( msg );
                 }
             }
+
             if( DisplayChevelu )
                 Compute_Ratsnest_PlaceModule( DC );
+
             DisplayChevelu = 0;
         }
     }
 
     DrawModuleOutlines( DrawPanel, DC, Module );  /* erasing the last traces */
+
     if( DisplayChevelu )
         Compute_Ratsnest_PlaceModule( DC );
 
@@ -712,18 +749,24 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
     row_max = uy1 / Board.m_GridRouting;
     col_max = ux1 / Board.m_GridRouting;
     row_min = uy0 / Board.m_GridRouting;
+
     if( uy0 > row_min * Board.m_GridRouting )
         row_min++;
+
     col_min = ux0 / Board.m_GridRouting;
+
     if( ux0 > col_min * Board.m_GridRouting )
         col_min++;
 
     if( row_min < 0 )
         row_min = 0;
+
     if( row_max >= ( Nrows - 1 ) )
         row_max = Nrows - 1;
+
     if( col_min < 0 )
         col_min = 0;
+
     if( col_max >= ( Ncols - 1 ) )
         col_max = Ncols - 1;
 
@@ -732,8 +775,10 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
         for( col = col_min; col <= col_max; col++ )
         {
             data = GetCell( row, col, side );
+
             if( ( data & CELL_is_ZONE ) == 0 )
                 return OUT_OF_BOARD;
+
             if( data & CELL_is_MODULE )
                 return OCCUPED_By_MODULE;
         }
@@ -762,22 +807,29 @@ unsigned int CalculePenaliteRectangle( BOARD* Pcb, int ux0, int uy0,
     row_max = uy1 / Board.m_GridRouting;
     col_max = ux1 / Board.m_GridRouting;
     row_min = uy0 / Board.m_GridRouting;
+
     if( uy0 > row_min * Board.m_GridRouting )
         row_min++;
+
     col_min = ux0 / Board.m_GridRouting;
+
     if( ux0 > col_min * Board.m_GridRouting )
         col_min++;
 
     if( row_min < 0 )
         row_min = 0;
+
     if( row_max >= ( Nrows - 1 ) )
         row_max = Nrows - 1;
+
     if( col_min < 0 )
         col_min = 0;
+
     if( col_max >= ( Ncols - 1 ) )
         col_max = Ncols - 1;
 
     Penalite = 0;
+
     for( row = row_min; row <= row_max; row++ )
     {
         for( col = col_min; col <= col_max; col++ )
@@ -800,6 +852,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
     int error, Penalite, marge, side, otherside;
 
     side = TOP; otherside = BOTTOM;
+
     if( Module->GetLayer() == LAYER_N_BACK )
     {
         side = BOTTOM; otherside = TOP;
@@ -811,12 +864,14 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
     fy = Module->m_BoundaryBox.GetBottom();
 
     error = TstRectangle( Pcb, ox, oy, fx, fy, side );
+
     if( error < 0 )
         return error;
 
     if( TstOtherSide )
     {
         error = TstRectangle( Pcb, ox, oy, fx, fy, otherside );
+
         if( error < 0 )
             return error;
     }
@@ -844,15 +899,18 @@ float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 
     if( ( GetBoard()->m_Status_Pcb & RATSNEST_ITEM_LOCAL_OK ) == 0 )
         return -1;
+
     cout = 0;
 
     int color = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
 
     if( AutoPlaceShowAll )
         GRSetDrawMode( DC, GR_XOR );
+
     for( unsigned ii = 0; ii < GetBoard()->m_LocalRatsnest.size(); ii++ )
     {
         RATSNEST_ITEM* pt_local_chevelu = &GetBoard()->m_LocalRatsnest[ii];
+
         if( !( pt_local_chevelu->m_Status & LOCAL_RATSNEST_ITEM ) )
         {
             ox = pt_local_chevelu->m_PadStart->GetPosition().x -
@@ -864,8 +922,7 @@ float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 
             if( AutoPlaceShowAll )
             {
-                GRLine( &DrawPanel->m_ClipBox, DC, ox, oy, fx, fy,
-                        0, color );
+                GRLine( &DrawPanel->m_ClipBox, DC, ox, oy, fx, fy, 0, color );
             }
 
             /* Cost of the ratsnest. */
@@ -902,7 +959,7 @@ float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
  *  Cell outside this rectangle, but inside the rectangle
  *  x0,y0 -marge to x1,y1 + marge sont incrementede by a decreasing value
  *  (Penalite ... 0). The decreasing value de pends on the distance to the first rectangle
- *  Therefore the cost is hight in  rect x0,y0 a x1,y1, and decrease outside this rectangle
+ *  Therefore the cost is high in rect x0,y0 a x1,y1, and decrease outside this rectangle
  */
 static void TracePenaliteRectangle( BOARD* Pcb,
                                     int    ux0,
@@ -911,7 +968,7 @@ static void TracePenaliteRectangle( BOARD* Pcb,
                                     int    uy1,
                                     int    marge,
                                     int    Penalite,
-                                    int    masque_layer )
+                                    int    aLayerMask )
 {
     int      row, col;
     int      row_min, row_max, col_min, col_max, pmarge;
@@ -919,10 +976,10 @@ static void TracePenaliteRectangle( BOARD* Pcb,
     DIST_CELL data, LocalPenalite;
     int      lgain, cgain;
 
-    if( masque_layer & g_TabOneLayerMask[Route_Layer_BOTTOM] )
+    if( aLayerMask & g_TabOneLayerMask[Route_Layer_BOTTOM] )
         trace = 1;     /* Trace on bottom layer. */
 
-    if( ( masque_layer & g_TabOneLayerMask[Route_Layer_TOP] ) && Nb_Sides )
+    if( ( aLayerMask & g_TabOneLayerMask[Route_Layer_TOP] ) && Nb_Sides )
         trace |= 2;    /* Trace on top layer. */
 
     if( trace == 0 )
@@ -943,24 +1000,31 @@ static void TracePenaliteRectangle( BOARD* Pcb,
     row_max = uy1 / Board.m_GridRouting;
     col_max = ux1 / Board.m_GridRouting;
     row_min = uy0 / Board.m_GridRouting;
+
     if( uy0 > row_min * Board.m_GridRouting )
         row_min++;
+
     col_min = ux0 / Board.m_GridRouting;
+
     if( ux0 > col_min * Board.m_GridRouting )
         col_min++;
 
     if( row_min < 0 )
         row_min = 0;
+
     if( row_max >= (Nrows - 1) )
         row_max = Nrows - 1;
+
     if( col_min < 0 )
         col_min = 0;
+
     if( col_max >= (Ncols - 1) )
         col_max = Ncols - 1;
 
     for( row = row_min; row <= row_max; row++ )
     {
         lgain = 256;
+
         if( row < pmarge )
             lgain = ( 256 * row ) / pmarge;
         else if( row > row_max - pmarge )
@@ -970,19 +1034,23 @@ static void TracePenaliteRectangle( BOARD* Pcb,
         {
             cgain = 256;
             LocalPenalite = Penalite;
+
             if( col < pmarge )
                 cgain = ( 256 * col ) / pmarge;
             else if( col > col_max - pmarge )
                 cgain = ( 256 * ( col_max - col ) ) / pmarge;
 
             cgain = ( cgain * lgain ) / 256;
+
             if( cgain != 256 )
                 LocalPenalite = ( LocalPenalite * cgain ) / 256;
+
             if( trace & 1 )
             {
                 data = GetDist( row, col, BOTTOM ) + LocalPenalite;
                 SetDist( row, col, BOTTOM, data );
             }
+
             if( trace & 2 )
             {
                 data = GetDist( row, col, TOP );
@@ -1026,27 +1094,29 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 
     // Build sorted footprints list (sort by decreasing size )
     Module = pcbframe->GetBoard()->m_Modules;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
-        Module->Set_Rectangle_Encadrement();
+        Module->CalculateBoundingBox();
         moduleList.push_back(Module);
     }
+
     sort( moduleList.begin(), moduleList.end(), Tri_PlaceModules );
 
     for( unsigned ii = 0; ii < moduleList.size(); ii++ )
     {
         Module = moduleList[ii];
         Module->flag = 0;
+
         if( !( Module->m_ModuleStatus & MODULE_to_PLACE ) )
             continue;
+
         pcbframe->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
         Module->DisplayInfo( pcbframe );
         pcbframe->build_ratsnest_module( Module );
 
         /* Calculate external ratsnet. */
-        for( unsigned ii = 0;
-             ii < pcbframe->GetBoard()->m_LocalRatsnest.size();
-             ii++ )
+        for( unsigned ii = 0; ii < pcbframe->GetBoard()->m_LocalRatsnest.size(); ii++ )
         {
             if( ( pcbframe->GetBoard()->m_LocalRatsnest[ii].m_Status &
                   LOCAL_RATSNEST_ITEM ) == 0 )
@@ -1061,14 +1131,19 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
     /* Search for "best" module. */
     MODULE* bestModule = NULL;
     MODULE* altModule = NULL;
+
     for( unsigned ii = 0; ii < moduleList.size(); ii++ )
     {
         Module = moduleList[ii];
+
         if( !( Module->m_ModuleStatus & MODULE_to_PLACE ) )
             continue;
+
         altModule = Module;
+
         if( Module->flag == 0 )
             continue;
+
         bestModule = Module;
         break;
     }
@@ -1079,10 +1154,6 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
         return altModule;
 }
 
-
-/********************************************/
-int Propagation( PCB_EDIT_FRAME* frame )
-/********************************************/
 
 /**
  * Function Propagation
@@ -1108,6 +1179,7 @@ int Propagation( PCB_EDIT_FRAME* frame )
  *  Iterations are made until no cell is added to the zone.
  *  @return: added cells count (i.e. which the attribute CELL_is_ZONE is set)
  */
+int Propagation( PCB_EDIT_FRAME* frame )
 {
     int       row, col, nn;
     long      current_cell, old_cell_H;
@@ -1126,22 +1198,25 @@ int Propagation( PCB_EDIT_FRAME* frame )
 
     /* search 1 : from left to right and top to bottom */
     memset( pt_cell_V, 0, nn );
+
     for( row = 0; row < Nrows; row++ )
     {
         old_cell_H = 0;
+
         for( col = 0; col < Ncols; col++ )
         {
             current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+
             if( current_cell == 0 )  /* a free cell is found */
             {
-                if( (old_cell_H & CELL_is_ZONE)
-                   || (pt_cell_V[col] & CELL_is_ZONE) )
+                if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[col] & CELL_is_ZONE) )
                 {
                     OrCell( row, col, BOTTOM, CELL_is_ZONE );
                     current_cell = CELL_is_ZONE;
                     nbpoints++;
                 }
             }
+
             pt_cell_V[col] = old_cell_H = current_cell;
         }
     }
@@ -1149,22 +1224,24 @@ int Propagation( PCB_EDIT_FRAME* frame )
     /* search 2 : from right to left and top to bottom */
     frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "2" ), CYAN );
     memset( pt_cell_V, 0, nn );
+
     for( row = 0; row < Nrows; row++ )
     {
         old_cell_H = 0;
         for( col = Ncols - 1; col >= 0; col-- )
         {
             current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+
             if( current_cell == 0 )  /* a free cell is found */
             {
-                if( (old_cell_H & CELL_is_ZONE)
-                   || (pt_cell_V[col] & CELL_is_ZONE) )
+                if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[col] & CELL_is_ZONE) )
                 {
                     OrCell( row, col, BOTTOM, CELL_is_ZONE );
                     current_cell = CELL_is_ZONE;
                     nbpoints++;
                 }
             }
+
             pt_cell_V[col] = old_cell_H = current_cell;
         }
     }
@@ -1172,22 +1249,25 @@ int Propagation( PCB_EDIT_FRAME* frame )
     /* search 3 : from bottom to top and right to left balayage */
     frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "3" ), CYAN );
     memset( pt_cell_V, 0, nn );
+
     for( col = Ncols - 1; col >= 0; col-- )
     {
         old_cell_H = 0;
+
         for( row = Nrows - 1; row >= 0; row-- )
         {
             current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+
             if( current_cell == 0 )  /* a free cell is found */
             {
-                if( (old_cell_H & CELL_is_ZONE)
-                   || (pt_cell_V[row] & CELL_is_ZONE) )
+                if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[row] & CELL_is_ZONE) )
                 {
                     OrCell( row, col, BOTTOM, CELL_is_ZONE );
                     current_cell = CELL_is_ZONE;
                     nbpoints++;
                 }
             }
+
             pt_cell_V[row] = old_cell_H = current_cell;
         }
     }
@@ -1199,19 +1279,21 @@ int Propagation( PCB_EDIT_FRAME* frame )
     for( col = 0; col < Ncols; col++ )
     {
         old_cell_H = 0;
+
         for( row = Nrows - 1; row >= 0; row-- )
         {
             current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
+
             if( current_cell == 0 )  /* a free cell is found */
             {
-                if( (old_cell_H & CELL_is_ZONE)
-                   || (pt_cell_V[row] & CELL_is_ZONE) )
+                if( (old_cell_H & CELL_is_ZONE) || (pt_cell_V[row] & CELL_is_ZONE) )
                 {
                     OrCell( row, col, BOTTOM, CELL_is_ZONE );
                     current_cell = CELL_is_ZONE;
                     nbpoints++;
                 }
             }
+
             pt_cell_V[row] = old_cell_H = current_cell;
         }
     }
@@ -1220,4 +1302,3 @@ int Propagation( PCB_EDIT_FRAME* frame )
 
     return nbpoints;
 }
-

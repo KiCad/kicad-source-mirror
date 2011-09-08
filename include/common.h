@@ -13,7 +13,6 @@
 class wxAboutDialogInfo;
 class BASE_SCREEN;
 class EDA_DRAW_FRAME;
-class WinEDAListBox;
 class EDA_DRAW_PANEL;
 
 /* Flag for special keys */
@@ -81,7 +80,8 @@ enum pseudokeys {
 #define ON  1
 #define OFF 0
 
-enum UserUnitType {
+
+enum EDA_UNITS_T {
     INCHES = 0,
     MILLIMETRES = 1,
     UNSCALED_UNITS = 2
@@ -146,6 +146,7 @@ extern const wxString NetlistFileExtension;
 extern const wxString GerberFileExtension;
 extern const wxString PcbFileExtension;
 extern const wxString PdfFileExtension;
+extern const wxString MacrosFileExtension;
 
 extern const wxString ProjectFileWildcard;
 extern const wxString SchematicFileWildcard;
@@ -154,6 +155,7 @@ extern const wxString NetlistFileWildcard;
 extern const wxString GerberFileWildcard;
 extern const wxString PcbFileWildcard;
 extern const wxString PdfFileWildcard;
+extern const wxString MacrosFileWildcard;
 extern const wxString AllFilesWildcard;
 
 
@@ -163,7 +165,7 @@ extern wxString     g_Prj_Default_Config_FullFilename;
 // Name of local configuration file. (<curr projet>.pro)
 extern wxString     g_Prj_Config_LocalFilename;
 
-extern UserUnitType g_UserUnit;     ///< display units
+extern EDA_UNITS_T  g_UserUnit;     ///< display units
 
 /* Draw color for moving objects: */
 extern int          g_GhostColor;
@@ -285,7 +287,7 @@ wxString CoordinateToString( int aValue, int aInternalUnits, bool aConvertToMils
  *                        the format string must contain the %s format specifier.
  * @return The formatted units symbol.
  */
-wxString        ReturnUnitSymbol( UserUnitType aUnits = g_UserUnit,
+wxString        ReturnUnitSymbol( EDA_UNITS_T aUnits = g_UserUnit,
                                   const wxString& aFormatString = _( " (%s):" ) );
 
 /**
@@ -297,10 +299,10 @@ wxString        ReturnUnitSymbol( UserUnitType aUnits = g_UserUnit,
  * @param aUnits - The units text to return.
  * @return The human readable units string.
  */
-wxString        GetUnitsLabel( UserUnitType aUnits );
-wxString        GetAbbreviatedUnitsLabel( UserUnitType aUnit = g_UserUnit );
+wxString        GetUnitsLabel( EDA_UNITS_T aUnits );
+wxString        GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit = g_UserUnit );
 
-int             ReturnValueFromString( UserUnitType aUnit, const wxString& TextValue,
+int             ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue,
                                        int Internal_Unit );
 
 /**
@@ -314,12 +316,12 @@ int             ReturnValueFromString( UserUnitType aUnit, const wxString& TextV
  * @return a wxString what contains value and optionally the symbol unit (like
  *         2.000 mm)
  */
-wxString        ReturnStringFromValue( UserUnitType aUnit,
+wxString        ReturnStringFromValue( EDA_UNITS_T aUnit,
                                        int  aValue,
                                        int  aInternal_Unit,
                                        bool aAdd_unit_symbol = false );
 
-void            AddUnitSymbol( wxStaticText& Stext, UserUnitType aUnit = g_UserUnit );
+void            AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
 
 /* Add string "  (mm):" or " ("):" to the static text Stext.
  *  Used in dialog boxes for entering values depending on selected units */
@@ -343,11 +345,11 @@ wxArrayString*  wxStringSplit( wxString txt, wxChar splitter );
  * @param val : double : the given value
  * @param internal_unit_value = internal units per inch
  */
-double          To_User_Unit( UserUnitType aUnit,
+double          To_User_Unit( EDA_UNITS_T aUnit,
                               double val,
                               int    internal_unit_value );
 
-int             From_User_Unit( UserUnitType aUnit,
+int             From_User_Unit( EDA_UNITS_T aUnit,
                                 double val,
                                 int    internal_unit_value );
 wxString        GenDate();

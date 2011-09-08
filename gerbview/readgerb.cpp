@@ -10,7 +10,7 @@
 #include "gerbview.h"
 #include "class_GERBER.h"
 
-#include "dialog_load_error.h"
+#include "html_messagebox.h"
 
 /* Read a gerber file, RS274D or RS274X format.
  */
@@ -156,7 +156,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
     // Display errors list
     if( m_Messages.size() > 0 )
     {
-        DIALOG_LOAD_ERROR dlg( this );
+        HTML_MESSAGE_BOX dlg( this, _("Errors") );
         dlg.ListSet(m_Messages);
         dlg.ShowModal();
     }

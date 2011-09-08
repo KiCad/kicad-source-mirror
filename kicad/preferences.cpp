@@ -8,10 +8,8 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "bitmaps.h"
 
 #include "kicad.h"
 

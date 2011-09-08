@@ -6,7 +6,6 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "confirm.h"
 #include "class_drawpanel.h"
 #include "wxEeschemaStruct.h"
@@ -658,8 +657,8 @@ void DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copySelectedFieldToPanel()
 
     fieldValueTextCtrl->SetValue( field.m_Text );
 
-    textSizeTextCtrl->SetValue(
-        WinEDA_GraphicTextCtrl::FormatSize( EESCHEMA_INTERNAL_UNIT, g_UserUnit, field.m_Size.x ) );
+    textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( EESCHEMA_INTERNAL_UNIT,
+                                                                   g_UserUnit, field.m_Size.x ) );
 
     wxPoint coord = field.m_Pos;
     wxPoint zero;
@@ -745,8 +744,8 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
 
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 
-    field.m_Size.x = WinEDA_GraphicTextCtrl::ParseSize(
-        textSizeTextCtrl->GetValue(), EESCHEMA_INTERNAL_UNIT, g_UserUnit );
+    field.m_Size.x = EDA_GRAPHIC_TEXT_CTRL::ParseSize( textSizeTextCtrl->GetValue(),
+                                                       EESCHEMA_INTERNAL_UNIT, g_UserUnit );
 
     field.m_Size.y = field.m_Size.x;
 

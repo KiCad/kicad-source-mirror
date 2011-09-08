@@ -5,11 +5,9 @@
 
 
 #include "fctsys.h"
-#include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
-#include "bitmaps.h"
 
 #include "kicad.h"
 #include "tree_project_frame.h"

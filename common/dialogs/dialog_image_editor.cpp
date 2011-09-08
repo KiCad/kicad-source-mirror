@@ -40,6 +40,8 @@ DIALOG_IMAGE_EDITOR::DIALOG_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem 
     : DIALOG_IMAGE_EDITOR_BASE( aParent )
 {
     m_workingImage = new BITMAP_BASE( * aItem );
+    m_lastImage = NULL;
+    m_buttonUndoLast->Enable( false );
     wxString msg;
     msg.Printf( wxT("%f"), m_workingImage->m_Scale );
     m_textCtrlScale->SetValue( msg );;
@@ -53,28 +55,106 @@ DIALOG_IMAGE_EDITOR::DIALOG_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem 
     SetFocus();
 }
 
+void DIALOG_IMAGE_EDITOR::OnUndoLastChange( wxCommandEvent& event )
+{
+    BITMAP_BASE * tmp = m_workingImage;
+    m_workingImage = m_lastImage;
+    delete tmp;
+    m_buttonUndoLast->Enable( false );
+    m_lastImage = NULL;
+    m_panelDraw->Refresh();
+}
+
 void DIALOG_IMAGE_EDITOR::OnMirrorX_click( wxCommandEvent& event )
 {
-
+    delete m_lastImage;
+    m_lastImage = new BITMAP_BASE( *  m_workingImage );
+    m_buttonUndoLast->Enable( true );
+    m_buttonUndoLast->Enable( true );
     m_workingImage->Mirror( true );
     m_panelDraw->Refresh();
 }
 
 void DIALOG_IMAGE_EDITOR::OnMirrorY_click( wxCommandEvent& event )
 {
+    delete m_lastImage;
+    m_lastImage = new BITMAP_BASE( *  m_workingImage );
+    m_buttonUndoLast->Enable( true );
     m_workingImage->Mirror( false );
     m_panelDraw->Refresh();
 }
 
 void DIALOG_IMAGE_EDITOR::OnRotateClick( wxCommandEvent& event )
 {
+    delete m_lastImage;
+    m_lastImage = new BITMAP_BASE( *  m_workingImage );
+    m_buttonUndoLast->Enable( true );
     m_workingImage->Rotate( false );
     m_panelDraw->Refresh();
 }
 
+void DIALOG_IMAGE_EDITOR::OnGreyScaleConvert( wxCommandEvent& event )
+{
+    delete m_lastImage;
+    m_lastImage = new BITMAP_BASE( *  m_workingImage );
+    m_buttonUndoLast->Enable( true );
+    wxImage& image = *m_workingImage->GetImageData();
+    image = image.ConvertToGreyscale();
+    m_workingImage->RebuildBitmap();
+    m_panelDraw->Refresh();
+}
+
+void DIALOG_IMAGE_EDITOR::OnHalfSize( wxCommandEvent& event )
+{
+    delete m_lastImage;
+    m_lastImage = new BITMAP_BASE( *  m_workingImage );
+    m_buttonUndoLast->Enable( true );
+    wxSize psize = m_workingImage->GetSizePixels();
+    wxImage& image = *m_workingImage->GetImageData();
+
+    image = image.Scale(psize.x/2, psize.y/2, wxIMAGE_QUALITY_HIGH);
+    m_workingImage->RebuildBitmap();
+    m_panelDraw->Refresh();
+}
+
+/* Test params values correctness
+ * Currently scale value must give an actual image
+ * > MIN_SIZE pixels and < MAX_SIZE pixels
+ */
+bool DIALOG_IMAGE_EDITOR::CheckValues()
+{
+    #define MIN_SIZE 16
+    #define MAX_SIZE 6000
+    double tmp;
+    wxString msg = m_textCtrlScale->GetValue();
+    // Test number correctness
+    if( ! msg.ToDouble( &tmp ) )
+    {
+        wxMessageBox( _("Incorrect scale number" ) );
+        return false;
+    }
+
+    // Test value  correctness
+    wxSize psize = m_workingImage->GetSizePixels();
+    if ( (psize.x * tmp) < MIN_SIZE ||  (psize.y * tmp) < MIN_SIZE )
+    {
+        wxMessageBox( _("Scale is too small for this image" ) );
+        return false;
+    }
+    if ( (psize.x * tmp) > MAX_SIZE ||  (psize.y * tmp) > MAX_SIZE )
+    {
+        wxMessageBox( _("Scale is too large for this image" ) );
+        return false;
+    }
+
+    return true;
+}
+
 void DIALOG_IMAGE_EDITOR::OnOK_Button( wxCommandEvent& aEvent )
 {
-    EndModal( wxID_OK );
+    if( CheckValues() )
+        EndModal( wxID_OK );
+    return;
 }
 
 void DIALOG_IMAGE_EDITOR::OnCancel_Button( wxCommandEvent& aEvent )
@@ -97,7 +177,6 @@ void DIALOG_IMAGE_EDITOR::TransfertToImage(BITMAP_BASE* aItem )
 {
     wxString msg = m_textCtrlScale->GetValue();
     msg.ToDouble( &m_workingImage->m_Scale );
-    m_textCtrlScale->SetValue( msg );
     aItem->ImportData( m_workingImage );
 }
 

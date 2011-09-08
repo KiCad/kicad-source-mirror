@@ -1,7 +1,7 @@
-/******************************************/
-/*			appl_wxstruct.h               */
-/* Base application class implementation. */
-/******************************************/
+/**
+ * @file appl_wxstruct.h
+ * @brief Base class implementation for all Kicad applications.
+ */
 
 #ifndef  APPL_WXSTRUCT_H
 #define  APPL_WXSTRUCT_H
@@ -13,13 +13,13 @@
 #include "param_config.h"
 
 
-enum id_app_type {
-    APP_TYPE_UNKOWN,
-    APP_TYPE_EESCHEMA,
-    APP_TYPE_PCBNEW,
-    APP_TYPE_CVPCB,
-    APP_TYPE_GERBVIEW,
-    APP_TYPE_KICAD
+enum EDA_APP_T {
+    APP_UNKNOWN_T,
+    APP_EESCHEMA_T,
+    APP_PCBNEW_T,
+    APP_CVPCB_T,
+    APP_GERBVIEW_T,
+    APP_KICAD_T
 };
 
 class wxConfigBase;
@@ -28,18 +28,15 @@ class wxSingleInstanceChecker;
 class wxHtmlHelpController;
 
 
-/**********************************************/
-/*  Class representing the entire Application */
-/**********************************************/
-
-class WinEDA_App : public wxApp
+/**
+ * Class EDA_APP
+ * is the base class representing all of Kicad applications.
+ */
+class EDA_APP : public wxApp
 {
 public:
-    id_app_type m_Id;                       /* Used mainly to handle
-                                             * default paths libs
-                                             * m_Id = APP_TYPE_EESCHEMA,
-                                             * APP_TYPE_PCBNEW ...
-                                             */
+    EDA_APP_T m_Id;                         /* Used mainly to handle default paths libs
+                                             * m_Id = APP_EESCHEMA_T, APP_PCBNEW_T ... */
     wxString m_Project;
     wxSingleInstanceChecker* m_Checker;
 
@@ -56,8 +53,7 @@ public:
 
     wxString                 m_BinDir;      /* Kicad executable path.*/
     wxString                 m_KicadEnv;    /* environment variable KICAD */
-    bool                     m_Env_Defined; // TRUE if environment KICAD is
-                                            // defined.
+    bool                     m_Env_Defined; // TRUE if environment KICAD is defined.
 
     wxLocale*                m_Locale;      // The current locale.
     int                      m_LanguageId;  // The current language setting.
@@ -74,29 +70,29 @@ protected:
     wxFileName               m_projectFileName;
     wxString                 m_LastVisitedLibPath;
 
-public: WinEDA_App();
-    ~WinEDA_App();
+public: EDA_APP();
+    ~EDA_APP();
 
     /**
      * Function OnInit
      * this is the first executed function (like main() )
      * @return true if the application can be started.
      */
-    bool      OnInit();
+    bool OnInit();
 
     /**
      * Function SetBinDir
-     * finds the path to the executable and store it in WinEDA_App::m_BinDir
+     * finds the path to the executable and store it in EDA_APP::m_BinDir
      *
      * @return TODO
      */
-    bool      SetBinDir();
+    bool SetBinDir();
 
     /**
      * Function SetDefaultSearchPaths
      * sets search paths for libraries, modules, internationalization files, etc.
      */
-    void      SetDefaultSearchPaths( void );
+    void SetDefaultSearchPaths( void );
 
     /**
      * Function MacOpenFile
@@ -116,8 +112,7 @@ public: WinEDA_App();
      * @param aId = flag : LIBRARY_TYPE_EESCHEMA or LIBRARY_TYPE_PCBNEW
      *              used to choose what default library path must be used
      */
-    void      InitEDA_Appl( const wxString& aName,
-                            id_app_type     aId = APP_TYPE_UNKOWN );
+    void InitEDA_Appl( const wxString& aName, EDA_APP_T aId = APP_UNKNOWN_T );
 
     /**
      * Function SetLanguage
@@ -129,7 +124,7 @@ public: WinEDA_App();
      *          called, false otherwise
      * @return  true if the language can be set (i.e. if the locale is available)
      */
-    bool      SetLanguage( bool first_time = false );
+    bool SetLanguage( bool first_time = false );
 
     /**
      * Function AddMenuLanguageList
@@ -138,7 +133,7 @@ public: WinEDA_App();
      * @param MasterMenu The main menu. The sub menu list will be accessible from the menu
      *                   item with id ID_LANGUAGE_CHOICE
      */
-    void      AddMenuLanguageList( wxMenu* MasterMenu );
+    void AddMenuLanguageList( wxMenu* MasterMenu );
 
     /**
      * Function SetLanguageIdentifier
@@ -148,15 +143,15 @@ public: WinEDA_App();
      * @param menu_id The kicad menuitem id (returned by Menu Event, when
      *                clicking on a menu item)
      */
-    void      SetLanguageIdentifier( int menu_id );
+    void SetLanguageIdentifier( int menu_id );
 
-    void      SetLanguagePath( void );
+    void SetLanguagePath( void );
 
     /**
      * Function InitOnLineHelp
      * initializes Kicad's online help.
      */
-    void      InitOnLineHelp();
+    void InitOnLineHelp();
 
     /**
      * Function GetSettings
@@ -164,20 +159,26 @@ public: WinEDA_App();
      * @param aReopenLastUsedDirectory True to switch to last opened directory, false
      *                                 to use current CWD
      */
-    void      GetSettings( bool aReopenLastUsedDirectory );
+    void GetSettings( bool aReopenLastUsedDirectory );
 
     /**
      * Function SaveSettings
      * saves the application settings.
      */
-    void      SaveSettings();
+    void SaveSettings();
 
-    void      WriteProjectConfig( const wxString&  local_config_filename,
-                                  const wxString&  GroupName,
-                                  PARAM_CFG_BASE** List );
-    void      WriteProjectConfig( const wxString&  fileName,
-                                  const wxString&  GroupName,
-                                  PARAM_CFG_ARRAY& params );
+    /**
+     * Function WriteProjectConfig
+     *  Save the current "projet" parameters
+     *  saved parameters are parameters that have the .m_Setup member set to false
+     *  saving file is the .pro file project
+     */
+    void WriteProjectConfig( const wxString&  local_config_filename,
+                             const wxString&  GroupName,
+                             PARAM_CFG_BASE** List );
+    void WriteProjectConfig( const wxString&  fileName,
+                             const wxString&  GroupName,
+                             PARAM_CFG_ARRAY& params );
 
     /**
      * Function SaveCurrentSetupValues
@@ -186,8 +187,8 @@ public: WinEDA_App();
      * true
      * @param aList = array of PARAM_CFG_BASE pointers
      */
-    void      SaveCurrentSetupValues( PARAM_CFG_BASE** aList );
-    void      SaveCurrentSetupValues( PARAM_CFG_ARRAY& List );
+    void SaveCurrentSetupValues( PARAM_CFG_BASE** aList );
+    void SaveCurrentSetupValues( PARAM_CFG_ARRAY& List );
 
     /**
      * Function ReadCurrentSetupValues
@@ -196,30 +197,55 @@ public: WinEDA_App();
      * true
      * @param aList = array of PARAM_CFG_BASE pointers
      */
-    void      ReadCurrentSetupValues( PARAM_CFG_BASE** aList );
-    void      ReadCurrentSetupValues( PARAM_CFG_ARRAY& List );
+    void ReadCurrentSetupValues( PARAM_CFG_BASE** aList );
+    void ReadCurrentSetupValues( PARAM_CFG_ARRAY& List );
 
-    bool      ReadProjectConfig( const wxString&  local_config_filename,
-                                 const wxString&  GroupName,
-                                 PARAM_CFG_BASE** List,
-                                 bool             Load_Only_if_New );
-    bool      ReadProjectConfig( const wxString&  local_config_filename,
-                                 const wxString&  GroupName,
-                                 PARAM_CFG_ARRAY& List,
-                                 bool             Load_Only_if_New );
-    bool      ReCreatePrjConfig( const wxString& local_config_filename,
-                                 const wxString& GroupName,
-                                 bool            ForceUseLocalConfig );
+    /**
+     * Function ReadProjectConfig
+     *  Read the current "projet" parameters
+     *  Parameters are parameters that have the .m_Setup member set to false
+     *  read file is the .pro file project
+     *
+     * if Load_Only_if_New == true, this file is read only if it differs from
+     * the current config (different dates )
+     *
+     * @return      true if read.
+     * Also set:
+     *     wxGetApp().m_CurrentOptionFileDateAndTime
+     *     wxGetApp().m_CurrentOptionFile
+     */
+    bool ReadProjectConfig( const wxString&  local_config_filename,
+                            const wxString&  GroupName,
+                            PARAM_CFG_BASE** List,
+                            bool             Load_Only_if_New );
+    bool ReadProjectConfig( const wxString&  local_config_filename,
+                            const wxString&  GroupName,
+                            PARAM_CFG_ARRAY& List,
+                            bool             Load_Only_if_New );
 
-    void      ReadPdfBrowserInfos();
-    void      WritePdfBrowserInfos();
+    /**
+     * Creates or recreates the kicad project file. (filename.pro)
+     * Initialize:
+     * G_Prj_Config
+     * G_Prj_Config_LocalFilename
+     * G_Prj_Default_Config_FullFilename
+     * Return:
+     * True if local config
+     * False if default config
+     */
+    bool ReCreatePrjConfig( const wxString& local_config_filename,
+                            const wxString& GroupName,
+                            bool            ForceUseLocalConfig );
+
+    void ReadPdfBrowserInfos();
+    void WritePdfBrowserInfos();
 
     /**
      * Function FindFileInSearchPaths
      * looks in search paths for \a filename.
      */
-    wxString  FindFileInSearchPaths( const wxString&      filename,
-                                     const wxArrayString* subdirs = NULL );
+    wxString FindFileInSearchPaths( const wxString&      filename,
+                                    const wxArrayString* subdirs = NULL );
 
     /**
      * Function GetHelpFile
@@ -238,9 +264,13 @@ public: WinEDA_App();
      *  help/en
      * </p>
      */
-    wxString  GetHelpFile( void );
+    wxString GetHelpFile( void );
 
-    wxString  GetLibraryFile( const wxString& filename );
+    wxString GetLibraryFile( const wxString& filename );
+
+    /**
+     * Return the preferred editor name.
+     */
     wxString& GetEditorName();
 
     const wxString& GetTitle() { return m_Title; }
@@ -273,7 +303,7 @@ public: WinEDA_App();
      */
     wxString ReturnLastVisitedLibraryPath( const wxString& aSubPathToSearch = wxEmptyString );
 
-    void     SaveLastVisitedLibraryPath( const wxString& aPath );
+    void SaveLastVisitedLibraryPath( const wxString& aPath );
 
     /**
      * Function  ReturnFilenameWithRelativePathInLibPath
@@ -289,7 +319,7 @@ public: WinEDA_App();
      * @param aPaths = path or path list to remove. paths must be separated by
      * ";"
      */
-    void     RemoveLibraryPath( const wxString& aPaths );
+    void RemoveLibraryPath( const wxString& aPaths );
 
     /**
      * Function InsertLibraryPath
@@ -297,14 +327,14 @@ public: WinEDA_App();
      * @param aPaths = path or path list to add. paths must be separated by ";"
      * @param aIndex = insertion point
      */
-    void     InsertLibraryPath( const wxString& aPaths, size_t aIndex );
+    void InsertLibraryPath( const wxString& aPaths, size_t aIndex );
 };
 
 /*
- * Use wxGetApp() to access WinEDA_App.  It is not necessary to keep copies
+ * Use wxGetApp() to access EDA_APP.  It is not necessary to keep copies
  * of the application pointer all over the place or worse yet in a global
  * variable.
  */
-DECLARE_APP( WinEDA_App )
+DECLARE_APP( EDA_APP )
 
 #endif  /* APPL_WXSTRUCT_H */

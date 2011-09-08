@@ -3,6 +3,22 @@ KiCad ChangeLog 2010
 
 Please add newer entries at the top, list the date and your name with
 email address.
+
+2011-Sept-07, UPDATE Andrey Fedorushkov <andrf@mail.ru>
+================================================================================
+Pcbnew:
+    Add hotkey "P" - place item
+    Add Roman Bashkov patch for record/play sequence hotkey macros
+    Add record and play macros for sequence hotkey.
+        Macros set to numeric key 0..9:
+        <Ctrl>+<numkey> - start record macros
+        <hotkey> <mouse move> ... <hotkey>|<mouse place>
+        <Ctrl>+<numkey> - end record macros
+        <numkey> - play macros
+    Add menu save/read macros to/from xml-file
+    Add configure rotate angle for rotate module: 45 or 90 deg.
+    Fix segfault when move/drag segment if disconnected to pad
+
 2011-Sept-01, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
     Add Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com> in contribuotors list.

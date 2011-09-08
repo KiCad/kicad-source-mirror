@@ -5,7 +5,6 @@
 /**************************************************************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
@@ -73,8 +72,8 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 exit = true;
                 break;
 
-            case TYPE_MIRE:
-                Place_Mire( (MIREPCB*) DrawStruct, aDC );
+            case PCB_TARGET_T:
+                PlaceTarget( (PCB_TARGET*) DrawStruct, aDC );
                 exit = true;
                 break;
 
@@ -172,15 +171,18 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_PCB_MIRE_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            SetCurItem( Create_Mire( aDC ) );
+            SetCurItem( CreateTarget( aDC ) );
             DrawPanel->MoveCursorToCrossHair();
         }
-        else if( DrawStruct->Type() == TYPE_MIRE )
+        else if( DrawStruct->Type() == PCB_TARGET_T )
         {
-            Place_Mire( (MIREPCB*) DrawStruct, aDC );
+            PlaceTarget( (PCB_TARGET*) DrawStruct, aDC );
         }
         else
-            DisplayError( this, wxT( "Internal err: Struct not TYPE_MIRE" ) );
+        {
+            DisplayError( this, wxT( "Internal err: Struct not PCB_TARGET_T" ) );
+        }
+
         break;
 
     case ID_PCB_CIRCLE_BUTT:
@@ -287,7 +289,10 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             GetScreen()->SetCurItem( DrawStruct );
         }
         else
+        {
             DisplayError( this, wxT( "PCB_EDIT_FRAME::OnLeftClick() zone internal error" ) );
+        }
+
         break;
 
     case ID_PCB_ADD_TEXT_BUTT:
@@ -303,7 +308,10 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             DrawPanel->m_AutoPAN_Request = false;
         }
         else
+        {
             DisplayError( this, wxT( "Internal err: Struct not TYPE_TEXTE" ) );
+        }
+
         break;
 
     case ID_PCB_MODULE_BUTT:
@@ -312,6 +320,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             DrawPanel->MoveCursorToCrossHair();
             DrawStruct = Load_Module_From_Library( wxEmptyString, aDC );
             SetCurItem( DrawStruct );
+
             if( DrawStruct )
                 StartMove_Module( (MODULE*) DrawStruct, aDC );
         }
@@ -321,7 +330,10 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             DrawPanel->m_AutoPAN_Request = false;
         }
         else
+        {
             DisplayError( this, wxT( "Internal err: Struct not TYPE_MODULE" ) );
+        }
+
         break;
 
     case ID_PCB_DIMENSION_BUTT:
@@ -345,20 +357,25 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             DrawPanel->m_AutoPAN_Request = true;
         }
         else
+        {
             DisplayError( this,
                           wxT( "PCB_EDIT_FRAME::OnLeftClick() error item is not a DIMENSION" ) );
+        }
+
         break;
 
     case ID_PCB_DELETE_ITEM_BUTT:
         if( !DrawStruct || (DrawStruct->m_Flags == 0) )
         {
             DrawStruct = PcbGeneralLocateAndDisplay();
+
             if( DrawStruct && (DrawStruct->m_Flags == 0) )
             {
                 RemoveStruct( DrawStruct, aDC );
                 SetCurItem( DrawStruct = NULL );
             }
         }
+
         break;
 
     case ID_PCB_PLACE_OFFSET_COORD_BUTT:
@@ -417,12 +434,13 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
             {
                 Edit_TrackSegm_Width( aDC, (TRACK*) DrawStruct );
             }
+
             break;
 
         case TYPE_TEXTE:
         case TYPE_PAD:
         case TYPE_MODULE:
-        case TYPE_MIRE:
+        case PCB_TARGET_T:
         case TYPE_DIMENSION:
         case TYPE_TEXTE_MODULE:
             OnEditItemRequest( aDC, DrawStruct );
@@ -451,6 +469,7 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
             if( End_Route( (TRACK*) DrawStruct, aDC ) )
                 DrawPanel->m_AutoPAN_Request = false;
         }
+
         break;
 
     case ID_PCB_ZONES_BUTT:
@@ -507,8 +526,8 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         InstallModuleOptionsFrame( (MODULE*) aItem, aDC );
         break;
 
-    case TYPE_MIRE:
-        InstallMireOptionsFrame( (MIREPCB*) aItem, aDC );
+    case PCB_TARGET_T:
+        ShowTargetOptionsDialog( (PCB_TARGET*) aItem, aDC );
         break;
 
     case TYPE_DIMENSION:

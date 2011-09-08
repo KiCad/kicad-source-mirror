@@ -6,7 +6,6 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "block_commande.h"
@@ -115,13 +114,13 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
             if( DrawPanel->IsMouseCaptured() )
             {
-                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
+                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
                 DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
-                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
+                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
             }
 
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
-            DrawPanel->Refresh( TRUE );
+            DrawPanel->Refresh( true );
         }
         break;
 
@@ -216,7 +215,7 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( currentModule, UR_MODEDIT );
         MoveMarkedItems( currentModule, GetScreen()->m_BlockLocate.m_MoveVector );
-        DrawPanel->Refresh( TRUE );
+        DrawPanel->Refresh( true );
         break;
 
     case BLOCK_COPY:     /* Copy */
@@ -367,6 +366,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
     {
         if( pad->m_Selected == 0 )
             continue;
+
         pad->m_Selected = 0;
         D_PAD* NewPad = new D_PAD( module );
         NewPad->Copy( pad );

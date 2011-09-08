@@ -53,6 +53,12 @@ public:
     {
     }
 
+    XNODE( XNODE* aParent, wxXmlNodeType aType, const wxString& aName,
+           const wxString& aContent = wxEmptyString, wxXmlProperty* aProperties = NULL ) :
+        wxXmlNode( aParent, aType, aName, aContent, aProperties )
+    {
+    }
+
     /**
      * Function Format
      * writes this object as UTF8 out to an OUTPUTFORMATTER as an S-expression.

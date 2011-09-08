@@ -29,7 +29,6 @@
 /****************************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
@@ -229,6 +228,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         aMessages->AppendText( _( "Fill zones...\n" ) );
         wxSafeYield();
     }
+
     m_mainWindow->Fill_All_Zones( false );
 
     // test zone clearances to other zones, pads, tracks, and vias
@@ -264,9 +264,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
 }
 
 
-/***************************************************************/
 void DRC::ListUnconnectedPads()
-/***************************************************************/
 {
     testUnconnected();
 
@@ -409,9 +407,7 @@ bool DRC::testNetClasses()
 }
 
 
-/***********************/
 void DRC::testPad2Pad()
-/***********************/
 {
     std::vector<D_PAD*> sortedPads;
 
@@ -467,7 +463,7 @@ void DRC::testUnconnected()
     if( (m_pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
     {
         wxClientDC dc( m_mainWindow->DrawPanel );
-        m_mainWindow->Compile_Ratsnest( &dc, TRUE );
+        m_mainWindow->Compile_Ratsnest( &dc, true );
     }
 
     if( m_pcb->GetRatsnestsCount() == 0 )
@@ -476,6 +472,7 @@ void DRC::testUnconnected()
     for( unsigned ii = 0; ii < m_pcb->GetRatsnestsCount();  ++ii )
     {
         RATSNEST_ITEM* rat = &m_pcb->m_FullRatsnest[ii];
+
         if( (rat->m_Status & CH_ACTIF) == 0 )
             continue;
 
@@ -492,9 +489,7 @@ void DRC::testUnconnected()
 }
 
 
-/**********************************************/
 void DRC::testZones( bool adoTestFillSegments )
-/**********************************************/
 {
     // Test copper areas for valide netcodes
     // if a netcode is < 0 the netname was not found when reading a netlist
@@ -503,8 +498,10 @@ void DRC::testZones( bool adoTestFillSegments )
     for( int ii = 0; ii < m_pcb->GetAreaCount(); ii++ )
     {
         ZONE_CONTAINER* Area_To_Test = m_pcb->GetArea( ii );
+
         if( !Area_To_Test->IsOnCopperLayer() )
             continue;
+
         if( Area_To_Test->GetNet() < 0 )
         {
             m_currentMarker = fillMarker( Area_To_Test,
@@ -537,6 +534,7 @@ void DRC::testZones( bool adoTestFillSegments )
         // Pads already tested: disable pad test
 
         bool rc = doTrackDrc( zoneSeg, m_pcb->m_Track, false );
+
         if( !rc )
         {
             wxASSERT( m_currentMarker );
@@ -547,12 +545,9 @@ void DRC::testZones( bool adoTestFillSegments )
 }
 
 
-/*****************************************************************************/
-bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
-                          int x_limit )
-/*****************************************************************************/
+bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd, int x_limit )
 {
-    int layerMask = aRefPad->m_Masque_Layer & ALL_CU_LAYERS;
+    int layerMask = aRefPad->m_layerMask & ALL_CU_LAYERS;
 
     /* used to test DRC pad to holes: this dummy pad has the size and shape of the hole
      * to test pad to pad hole DRC, using the pad to pad DRC test function.
@@ -562,7 +557,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
      */
     MODULE dummymodule( m_pcb );    // Creates a dummy parent
     D_PAD dummypad( &dummymodule );
-    dummypad.m_Masque_Layer   |= ALL_CU_LAYERS;  // Ensure the hole is on all copper layers
+    dummypad.m_layerMask   |= ALL_CU_LAYERS;  // Ensure the hole is on all copper layers
     dummypad.m_LocalClearance = 1;   /* Use the minimal local clerance value for the dummy pad
                                       *  the clearance of the active pad will be used
                                       *  as minimum distance to a hole
@@ -572,6 +567,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
     for(  LISTE_PAD* pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
         D_PAD* pad = *pad_list;
+
         if( pad == aRefPad )
             continue;
 
@@ -583,7 +579,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
         // No problem if pads are on different copper layers,
         // but their hole (if any ) can create RDC error because they are on all
         // copper layers, so we test them
-        if( (pad->m_Masque_Layer & layerMask ) == 0 )
+        if( (pad->m_layerMask & layerMask ) == 0 )
         {
             // if holes are in the same location and have the same size and shape,
             // this can be accepted
@@ -593,6 +589,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
             {
                 if( aRefPad->m_DrillShape == PAD_CIRCLE )
                     continue;
+
                 if( pad->m_Orient == aRefPad->m_Orient )                       // for oval holes: must also have the same orientation
                     continue;
             }
@@ -607,6 +604,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
                 dummypad.m_PadShape = (pad->m_DrillShape == PAD_OVAL) ? PAD_OVAL : PAD_CIRCLE;
                 dummypad.m_Orient   = pad->m_Orient;
                 dummypad.ComputeShapeMaxRadius();      // compute the radius of the circle containing this pad
+
                 if( !checkClearancePadToPad( aRefPad, &dummypad ) )
                 {
                     // here we have a drc error on pad!
@@ -631,6 +629,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
                     return false;
                 }
             }
+
             continue;
         }
 
@@ -655,8 +654,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd,
         if( !checkClearancePadToPad( aRefPad, pad ) )
         {
             // here we have a drc error!
-            m_currentMarker = fillMarker( aRefPad, pad,
-                                          DRCE_PAD_NEAR_PAD1, m_currentMarker );
+            m_currentMarker = fillMarker( aRefPad, pad, DRCE_PAD_NEAR_PAD1, m_currentMarker );
             return false;
         }
     }

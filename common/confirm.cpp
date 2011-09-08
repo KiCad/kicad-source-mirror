@@ -5,7 +5,9 @@
 
 #include "fctsys.h"
 #include "common.h"
-
+#include "wx/wx.h"
+#include "wx/html/htmlwin.h"
+#include "html_messagebox.h"
 
 /* Display an error or warning message.
  * TODO:
@@ -42,6 +44,18 @@ void DisplayInfoMessage( wxWindow* parent, const wxString& text,
 
     dialog->ShowModal();
     dialog->Destroy();
+}
+
+
+ /* Display a simple message window in html format.
+ */
+void DisplayHtmlInfoMessage( wxWindow* parent, const wxString& title,
+                             const wxString& text, const wxSize& size )
+{
+    HTML_MESSAGE_BOX *dlg = new HTML_MESSAGE_BOX(parent,title, wxDefaultPosition, size );
+    dlg->AddHTML_Text( text );
+    dlg->ShowModal();
+    dlg->Destroy();
 }
 
 

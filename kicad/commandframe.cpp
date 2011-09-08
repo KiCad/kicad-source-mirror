@@ -3,8 +3,6 @@
 /*****************************************************/
 
 #include "fctsys.h"
-#include "common.h"
-#include "bitmaps.h"
 #include "macros.h"
 
 #include "kicad.h"

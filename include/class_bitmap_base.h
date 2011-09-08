@@ -72,6 +72,14 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
      */
     double GetPixelScaleFactor() { return m_pixelScaleFactor; }
     void SetPixelScaleFactor( double aSF ) { m_pixelScaleFactor = aSF; }
+    wxImage* GetImageData() { return m_image; }
+
+    /*
+     * Function RebuildBitmap
+     * Rebuild the internal bitmap used to draw/plot image
+     * must be called after a m_image change
+     */
+    void RebuildBitmap() { *m_bitmap = wxBitmap( *m_image ); }
 
     /**
      * Function ImportData
@@ -101,6 +109,18 @@ public: BITMAP_BASE( const wxPoint& pos = wxPoint( 0, 0 ) );
      * @returns the actual size (in user units, not in pixels) of the image
      */
     wxSize   GetSize() const;
+
+    /**
+     * Function GetSizePixels
+     * @returns the size in pixels of the image
+     */
+    wxSize GetSizePixels() const
+    {
+        if( m_image )
+            return wxSize( m_image->GetWidth(), m_image->GetHeight() );
+        else
+            return wxSize(0,0);
+    }
 
     /**
      * Function GetBoundingBox

@@ -24,7 +24,6 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "wxstruct.h"
-#include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
 
@@ -40,18 +39,18 @@
 
 // PCB_CALCULATOR_APP
 
-void WinEDA_App::MacOpenFile(const wxString &fileName)
+void EDA_APP::MacOpenFile(const wxString &fileName)
 {
 }
 
-IMPLEMENT_APP( WinEDA_App )
+IMPLEMENT_APP( EDA_APP )
 
 ///-----------------------------------------------------------------------------
 // PCB_CALCULATOR_APP
 // main program
 //-----------------------------------------------------------------------------
 
-bool WinEDA_App::OnInit()
+bool EDA_APP::OnInit()
 {
 
     InitEDA_Appl( wxT( "PCBcalc" ) );

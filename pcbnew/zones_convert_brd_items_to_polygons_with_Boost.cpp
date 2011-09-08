@@ -9,9 +9,11 @@
  * calculated from these items shapes and the clearance area
  *
  * Important note:
- * Because filled areas must have a minimum thickness to match with Design rule, they are draw in 2 step:
+ * Because filled areas must have a minimum thickness to match with Design rule, they are
+ * draw in 2 step:
  * 1 - filled polygons are drawn
- * 2 - polygon outlines are drawn with a "minimum thickness width" ( or with a minimum thickness pen )
+ * 2 - polygon outlines are drawn with a "minimum thickness width" ( or with a minimum
+ *     thickness pen )
  * So outlines of filled polygons are calculated with the constraint they match with clearance,
  * taking in account outlines have thickness
  * This ensures:
@@ -26,7 +28,6 @@
 #include "fctsys.h"
 #include "polygons_defs.h"
 
-#include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
@@ -39,8 +40,10 @@ extern void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCorn
                                                      BOARD* aPcb, ZONE_CONTAINER* aZone,
                                                       double aArcCorrection,
                                                       int aRoundPadThermalRotation);
+
 extern void Test_For_Copper_Island_And_Remove( BOARD*          aPcb,
                                                ZONE_CONTAINER* aZone_container );
+
 extern void CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
                                            D_PAD&                aPad,
                                            int                   aThermalGap,
@@ -56,6 +59,7 @@ static void AddPolygonCornersToKPolygonList( std::vector <CPolyPt>& aCornersBuff
 
 static int  CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER* aZone,
                                                            KPolygonSet&    aKPolyList );
+
 static int  CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER* aZone,
                                                             KPolygonSet&    aKPolyList );
 
@@ -87,9 +91,10 @@ double s_Correction;     /* mult coeff used to enlarge rounded and oval pads (an
  * 1 - Creates the main outline (zone outline) using a correction to shrink the resulting area
  *     with m_ZoneMinThickness/2 value.
  *     The result is areas with a margin of m_ZoneMinThickness/2
- *     When drawing outline with segments having a thickness of m_ZoneMinThickness, the outlines will
- *     match exactly the initial outlines
- * 3 - Add all non filled areas (pads, tracks) in group B with a clearance of m_Clearance + m_ZoneMinThickness/2
+ *     When drawing outline with segments having a thickness of m_ZoneMinThickness, the
+ *      outlines will match exactly the initial outlines
+ * 3 - Add all non filled areas (pads, tracks) in group B with a clearance of m_Clearance +
+ *     m_ZoneMinThickness/2
  *     in a buffer
  *   - If Thermal shapes are wanted, add non filled area, in order to create these thermal shapes
  * 4 - calculates the polygon A - B
@@ -97,9 +102,9 @@ double s_Correction;     /* mult coeff used to enlarge rounded and oval pads (an
  *     This zone contains pads with the same net.
  * 6 - Remove insulated copper islands
  * 7 - If Thermal shapes are wanted, remove unconnected stubs in thermal shapes:
- *      creates a buffer of polygons corresponding to stubs to remove
- *      sub them to the filled areas.
- *      Remove new insulated copper islands
+ *     creates a buffer of polygons corresponding to stubs to remove
+ *     sub them to the filled areas.
+ *     Remove new insulated copper islands
  */
 void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 {
@@ -135,8 +140,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      * the main polygon is stored in polyset_zone_solid_areas
      */
 
-    CopyPolygonsFromFilledPolysListTotKPolygonList( this,
-                                                    polyset_zone_solid_areas );
+    CopyPolygonsFromFilledPolysListTotKPolygonList( this, polyset_zone_solid_areas );
     polyset_zone_solid_areas -= margin;
 
     if( polyset_zone_solid_areas.size() == 0 )
@@ -190,17 +194,21 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = nextpad )
         {
-            nextpad = pad->Next();  // pad pointer can be modified by next code, so calculate the next pad here
+            nextpad = pad->Next();  // pad pointer can be modified by next code, so
+                                    // calculate the next pad here
+
             if( !pad->IsOnLayer( GetLayer() ) )
             {
                 /* Test for pads that are on top or bottom only and have a hole.
-                 * There are curious pads but they can be used for some components that are inside the
-                 * board (in fact inside the hole. Some photo diodes and Leds are like this)
+                 * There are curious pads but they can be used for some components that are
+                 * inside the board (in fact inside the hole. Some photo diodes and Leds are
+                 * like this)
                  */
                 if( (pad->m_Drill.x == 0) && (pad->m_Drill.y == 0) )
                     continue;
 
-                // Use a dummy pad to calculate a hole shape that have the same dimension as the pad hole
+                // Use a dummy pad to calculate a hole shape that have the same dimension as
+                // the pad hole
                 dummypad.m_Size     = pad->m_Drill;
                 dummypad.m_Orient   = pad->m_Orient;
                 dummypad.m_PadShape = pad->m_DrillShape;
@@ -212,6 +220,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             {
                 item_clearance   = pad->GetClearance() + margin;
                 item_boundingbox = pad->GetBoundingBox();
+
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                 {
                     int clearance = MAX( zone_clearance, item_clearance );
@@ -220,10 +229,12 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                                                                s_CircleToSegmentsCount,
                                                                s_Correction );
                 }
+
                 continue;
             }
 
             int gap = zone_clearance;
+
             if( (m_PadOption == PAD_NOT_IN_ZONE)
                || (GetNet() == 0) || pad->m_PadShape == PAD_TRAPEZOID )
 
@@ -231,6 +242,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             // and i think it is good that shapes are not changed by thermal pads or others
             {
                 item_boundingbox = pad->GetBoundingBox();
+
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                 {
                     pad->TransformShapeWithClearanceToPolygon( cornerBufferPolysToSubstract,
@@ -249,11 +261,13 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     {
         if( !track->IsOnLayer( GetLayer() ) )
             continue;
+
         if( track->GetNet() == GetNet()  && (GetNet() != 0) )
             continue;
 
         item_clearance   = track->GetClearance() + margin;
         item_boundingbox = track->GetBoundingBox();
+
         if( item_boundingbox.Intersects( zone_boundingbox ) )
         {
             int clearance = MAX( zone_clearance, item_clearance );
@@ -274,9 +288,12 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
         {
             if( !item->IsOnLayer( GetLayer() ) )
                 continue;
+
             if( item->Type() != TYPE_EDGE_MODULE )
                 continue;
+
             item_boundingbox = item->GetBoundingBox();
+
             if( item_boundingbox.Intersects( zone_boundingbox ) )
             {
                 ( (EDGE_MODULE*) item )->TransformShapeWithClearanceToPolygon(
@@ -301,7 +318,6 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 s_CircleToSegmentsCount,
                 s_Correction );
             break;
-
 
         case TYPE_TEXTE:
             ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygon(
@@ -330,6 +346,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                     continue;
                 item_boundingbox = pad->GetBoundingBox();
                 item_boundingbox.Inflate( m_ThermalReliefGapValue, m_ThermalReliefGapValue );
+
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                 {
                     CreateThermalReliefPadPolygon( cornerBufferPolysToSubstract,
@@ -349,8 +366,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     if( cornerBufferPolysToSubstract.size() > 0 )
     {
         KPolygonSet polyset_holes;
-        AddPolygonCornersToKPolygonList( cornerBufferPolysToSubstract,
-                                         polyset_holes );
+        AddPolygonCornersToKPolygonList( cornerBufferPolysToSubstract, polyset_holes );
         // Remove holes from initial area.:
         polyset_zone_solid_areas -= polyset_holes;
     }
@@ -363,12 +379,13 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     if( GetNet() > 0 )
         Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
 
-// Now we remove all unused thermal stubs.
+    // Now we remove all unused thermal stubs.
     if( m_PadOption == THERMAL_PAD )
     {
         cornerBufferPolysToSubstract.clear();
         // Test thermal stubs connections and add polygons to remove unconnected stubs.
-        BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this, s_Correction, s_thermalRot );
+        BuildUnconnectedThermalStubsPolygonList( cornerBufferPolysToSubstract, aPcb, this,
+                                                 s_Correction, s_thermalRot );
 
         /* remove copper areas */
         if( cornerBufferPolysToSubstract.size() )
@@ -380,6 +397,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             /* put these areas in m_FilledPolysList */
             m_FilledPolysList.clear();
             CopyPolygonsFromKPolygonListToFilledPolysList( this, polyset_zone_solid_areas );
+
             if( GetNet() > 0 )
                 Test_For_Copper_Island_And_Remove_Insulated_Islands( aPcb );
         }
@@ -388,15 +406,15 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     cornerBufferPolysToSubstract.clear();
 }
 
-void AddPolygonCornersToKPolygonList( std::vector <CPolyPt>&
-                                                   aCornersBuffer,
-                                      KPolygonSet& aKPolyList )
+void AddPolygonCornersToKPolygonList( std::vector <CPolyPt>& aCornersBuffer,
+                                      KPolygonSet&           aKPolyList )
 {
     unsigned ii;
 
     std::vector<KPolyPoint> cornerslist;
 
     int polycount = 0;
+
     for( unsigned ii = 0; ii < aCornersBuffer.size(); ii++ )
     {
         if( aCornersBuffer[ii].end_contour )
@@ -409,10 +427,11 @@ void AddPolygonCornersToKPolygonList( std::vector <CPolyPt>&
     {
         KPolygon poly;
         cornerslist.clear();
+
         for( ii = icnt; ii < aCornersBuffer.size(); ii++ )
         {
-            cornerslist.push_back( KPolyPoint( aCornersBuffer[ii].x,
-                                               aCornersBuffer[ii].y ) );
+            cornerslist.push_back( KPolyPoint( aCornersBuffer[ii].x, aCornersBuffer[ii].y ) );
+
             if( aCornersBuffer[ii].end_contour )
                 break;
         }
@@ -424,9 +443,8 @@ void AddPolygonCornersToKPolygonList( std::vector <CPolyPt>&
 }
 
 
-int CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER*
-                                                   aZone, KPolygonSet&
-                                                   aKPolyList )
+int CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER* aZone,
+                                                   KPolygonSet&    aKPolyList )
 {
     int count = 0;
 
@@ -434,6 +452,7 @@ int CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER*
     {
         KPolygon& poly = aKPolyList[ii];
         CPolyPt   corner( 0, 0, false );
+
         for( unsigned jj = 0; jj < poly.size(); jj++ )
         {
             KPolyPoint point = *(poly.begin() + jj);
@@ -457,9 +476,8 @@ int CopyPolygonsFromKPolygonListToFilledPolysList( ZONE_CONTAINER*
 }
 
 
-int CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER*
-                                                    aZone, KPolygonSet&
-                                                    aKPolyList )
+int CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER* aZone,
+                                                    KPolygonSet&    aKPolyList )
 {
     unsigned corners_count = aZone->m_FilledPolysList.size();
     int      count = 0;
@@ -470,12 +488,14 @@ int CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER*
     for( unsigned ii = 0; ii < corners_count; ii++ )
     {
         CPolyPt* corner = &aZone->m_FilledPolysList[ic];
+
         if( corner->end_contour )
             polycount++;
     }
 
     aKPolyList.reserve( polycount );
     std::vector<KPolyPoint> cornerslist;
+
     while( ic < corners_count )
     {
         cornerslist.clear();
@@ -486,6 +506,7 @@ int CopyPolygonsFromFilledPolysListTotKPolygonList( ZONE_CONTAINER*
                 CPolyPt* corner = &aZone->m_FilledPolysList[ic];
                 cornerslist.push_back( KPolyPoint( corner->x, corner->y ) );
                 count++;
+
                 if( corner->end_contour )
                 {
                     ic++;

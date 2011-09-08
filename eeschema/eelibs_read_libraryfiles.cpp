@@ -11,7 +11,7 @@
 #include "general.h"
 #include "class_library.h"
 
-#include "dialog_load_error.h"
+#include "html_messagebox.h"
 
 
 /**
@@ -94,7 +94,7 @@ void SCH_EDIT_FRAME::LoadLibraries( void )
     /* Print the libraries not found */
     if( !libraries_not_found.IsEmpty() )
     {
-        DIALOG_LOAD_ERROR dialog( this );
+        HTML_MESSAGE_BOX dialog( this, _("Files not found") );
         dialog.MessageSet( _( "The following libraries could not be found:" ) );
         dialog.ListSet( libraries_not_found );
         libraries_not_found.empty();

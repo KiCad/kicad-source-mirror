@@ -23,7 +23,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 {
     wxString    msg;
     int         flags = 0;
-    bool        locate_track = FALSE;
+    bool        locate_track = false;
     bool        blockActive  = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
 
     wxClientDC  dc( DrawPanel );
@@ -223,7 +223,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
             break;
 
-        case TYPE_MIRE:
+        case PCB_TARGET_T:
             if( !flags )
             {
                 msg = AddHotkeyName( _( "Move Target" ), g_Board_Editor_Hokeys_Descr,

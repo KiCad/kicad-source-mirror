@@ -1,0 +1,44 @@
+Contribute to KiCad (under Linux)
+--------------------
+
+1) make sure you have all the dependencies of KiCad:
+	sudo apt-get install debhelper dpatch libx11-dev 
+	sudo apt-get install libglu1-mesa-dev libgl1-mesa-dev mesa-common-dev 
+	sudo apt-get install libwxbase2.8-dev libwxgtk2.8-dev libboost-dev fakeroot 
+	sudo apt-get install cmake bzr
+
+2) initialize Bazaar:
+	bzr whoami "John Doe <john.doe@gmail.com>"
+
+3) get LATEST KiCad source tree and name it, for instance, "kicad_john":
+	cd ~/
+	bzr branch lp:kicad kicad_john
+
+4) create a copy of this folder and zip it away (just in case).
+
+5) Modify/add source code.
+	cd kicad_john
+	gedit .......
+
+6) Compile:
+	cd kicad_john
+	mkdir build; cd build
+	cmake ../ -DKICAD_TESTING_VERSION=ON -DCMAKE_BUILD_TYPE=Debug
+	make -j 4				# this is for a 4 core machine
+
+7) Repeat step 5 and 6 until satisfied.
+
+8) Delete the "build" folder and create a patch:
+	cd kicad_john
+	rm -R ./build
+	bzr add .
+	bzr status
+	bzr diff  > gui_better_zoom.patch
+
+9) Send the patch file "gui_better_zoom.patch" to the KiCad developers mailing list.
+   in the subject of the e-mail include the keyword "[PATCH]".
+   in the body of the e-mail clearly explain what you have done.
+
+
+for more info see INSTALL.txt.
+

@@ -3,7 +3,6 @@
 /***************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "eeschema_id.h"
 #include "hotkeys.h"
 #include "wxEeschemaStruct.h"
@@ -87,8 +86,8 @@ static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-' );
 #endif
 
-static Ki_HotkeyInfo HkHelp( wxT( "Help: this message" ), HK_HELP, '?' );
-static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset local coord." ),
+static Ki_HotkeyInfo HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
+static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
                                         HK_RESET_LOCAL_COORD, ' ' );
 
 /* Undo */
@@ -104,11 +103,11 @@ static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 
 
 // Schematic editor
 static Ki_HotkeyInfo HkAddLabel( wxT( "add Label" ), HK_ADD_LABEL, 'L' );
-static Ki_HotkeyInfo HkAddHierarchicalLabel( wxT( "add Hierarchical Label" ), HK_ADD_HLABEL, 'H' );
-static Ki_HotkeyInfo HkAddGlobalLabel( wxT( "add Global Label" ), HK_ADD_GLABEL, GR_KB_CTRL + 'L' );
-static Ki_HotkeyInfo HkAddJunction( wxT( "add Junction" ), HK_ADD_JUNCTION, 'J' );
-static Ki_HotkeyInfo HkBeginWire( wxT( "begin Wire" ), HK_BEGIN_WIRE, 'W' );
-static Ki_HotkeyInfo HkBeginBus( wxT( "begin Bus" ), HK_BEGIN_BUS, 'B' );
+static Ki_HotkeyInfo HkAddHierarchicalLabel( wxT( "Add Hierarchical Label" ), HK_ADD_HLABEL, 'H' );
+static Ki_HotkeyInfo HkAddGlobalLabel( wxT( "Add Global Label" ), HK_ADD_GLABEL, GR_KB_CTRL + 'L' );
+static Ki_HotkeyInfo HkAddJunction( wxT( "Add Junction" ), HK_ADD_JUNCTION, 'J' );
+static Ki_HotkeyInfo HkBeginWire( wxT( "Draw Wire" ), HK_BEGIN_WIRE, 'W' );
+static Ki_HotkeyInfo HkBeginBus( wxT( "Draw Bus" ), HK_BEGIN_BUS, 'B' );
 static Ki_HotkeyInfo HkAddComponent( wxT( "Add Component" ), HK_ADD_NEW_COMPONENT, 'A' );
 static Ki_HotkeyInfo HkAddPower( wxT( "Add Power" ), HK_ADD_NEW_POWER, 'P' );
 static Ki_HotkeyInfo HkAddNoConn( wxT( "Add NoConnected Flag" ), HK_ADD_NOCONN_FLAG, 'Q' );
@@ -139,20 +138,20 @@ static Ki_HotkeyInfo HkCopyComponentOrText( wxT( "Copy Component or Label" ),
 
 static Ki_HotkeyInfo HkDrag( wxT( "Drag Schematic Item" ), HK_DRAG, 'G',
                              ID_POPUP_SCH_DRAG_CMP_REQUEST );
-static Ki_HotkeyInfo HkMove2Drag( wxT( "Switch move block to drag block" ),
+static Ki_HotkeyInfo HkMove2Drag( wxT( "Move Block -> Drag Block" ),
                                   HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
 static Ki_HotkeyInfo HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
 static Ki_HotkeyInfo HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
 static Ki_HotkeyInfo HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
 static Ki_HotkeyInfo HkFindNextItem( wxT( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5 );
-static Ki_HotkeyInfo HkFindNextDrcMarker( wxT( "Find next DRC marker" ), HK_FIND_NEXT_DRC_MARKER,
+static Ki_HotkeyInfo HkFindNextDrcMarker( wxT( "Find Next DRC Marker" ), HK_FIND_NEXT_DRC_MARKER,
                                           WXK_F5 + GR_KB_SHIFT );
 
 // Special keys for library editor:
 static Ki_HotkeyInfo HkCreatePin( wxT( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
 static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
-static Ki_HotkeyInfo HkMoveLibItem( wxT( "Move Lib Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
+static Ki_HotkeyInfo HkMoveLibItem( wxT( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
 
 
 // List of common hotkey descriptors
@@ -977,7 +976,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_LIBEDIT_CREATE_PIN:
-        SetToolID( ID_LIBEDIT_PIN_BUTT, wxCURSOR_PENCIL, _( "Add pin" ) );
+        SetToolID( ID_LIBEDIT_PIN_BUTT, wxCURSOR_PENCIL, _( "Add Pin" ) );
         OnLeftClick( aDC, aPosition );
         break;
 

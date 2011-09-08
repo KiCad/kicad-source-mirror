@@ -45,8 +45,7 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
     Text->m_Text = wxT( "text" );
 
     g_ModuleTextWidth = Clamp_Text_PenSize( g_ModuleTextWidth,
-                                          MIN( g_ModuleTextSize.x,
-                                               g_ModuleTextSize.y ), true );
+                                            MIN( g_ModuleTextSize.x, g_ModuleTextSize.y ), true );
     Text->m_Size  = g_ModuleTextSize;
     Text->m_Thickness = g_ModuleTextWidth;
     Text->m_Pos   = GetScreen()->GetCrossHairPosition();
@@ -56,6 +55,7 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
     DrawPanel->MoveCursorToCrossHair();
 
     Text->m_Flags = 0;
+
     if( DC )
         Text->Draw( DrawPanel, DC, GR_OR );
 
@@ -74,8 +74,7 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MODULE* module = (MODULE*) Text->GetParent();
 
-    if( module && module->m_Flags == 0 && Text->m_Flags == 0 ) // prepare undo
-                                                               // command
+    if( module && module->m_Flags == 0 && Text->m_Flags == 0 ) // prepare undo command
     {
         if( this->m_Ident == PCB_FRAME )
             SaveCopyInUndoList( module, UR_CHANGED );
@@ -85,6 +84,7 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
     Text->Draw( DrawPanel, DC, GR_XOR, MoveVector );
 
     Text->m_Orient += 900;
+
     while( Text->m_Orient >= 1800 )
         Text->m_Orient -= 1800;
 
@@ -93,6 +93,7 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     if( module )
         module->m_LastEdit_Time = time( NULL );
+
     OnModify();
 }
 
@@ -185,7 +186,7 @@ void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     SetCurItem( Text );
     DrawPanel->SetMouseCapture( Show_MoveTexte_Module, AbortMoveTextModule );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, TRUE );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
 }
 
 
@@ -200,14 +201,17 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
         /* Update the coordinates for anchor. */
         MODULE* Module = (MODULE*) Text->GetParent();
+
         if( Module )
         {
             // Prepare undo command (a rotation can be made while moving)
             EXCHG( Text->m_Orient, TextInitialOrientation );
+
             if( m_Ident == PCB_FRAME )
                 SaveCopyInUndoList( Module, UR_CHANGED );
             else
                 SaveCopyInUndoList( Module, UR_MODEDIT );
+
             EXCHG( Text->m_Orient, TextInitialOrientation );
 
             // Set the new position for text.
@@ -224,7 +228,9 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             DrawPanel->RefreshDrawingRect( Text->GetBoundingBox() );
         }
         else
+        {
             Text->m_Pos = GetScreen()->GetCrossHairPosition();
+        }
     }
 
     // leave it at (0,0) so we can use it Rotate when not moving.
@@ -276,12 +282,14 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
         pcbText = (TEXTE_PCB*) aItem;
         text = (EDA_TEXT*) pcbText;
         break;
+
     case TYPE_TEXTE_MODULE:
         newSize = g_ModuleTextSize;
         newThickness = g_ModuleTextWidth;
         moduleText = (TEXTE_MODULE*) aItem;
         text = (EDA_TEXT*) moduleText;
         break;
+
     default:
         // Exit if aItem is not a text field
         return;
@@ -289,8 +297,7 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
     }
 
     // Exit if there's nothing to do
-    if( text->GetSize() == newSize
-        && text->GetThickness() == newThickness )
+    if( text->GetSize() == newSize && text->GetThickness() == newThickness )
         return;
 
     // Push item to undo list
@@ -299,9 +306,11 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
     case TYPE_TEXTE:
         SaveCopyInUndoList( pcbText, UR_CHANGED );
         break;
+
     case TYPE_TEXTE_MODULE:
         SaveCopyInUndoList( moduleText->GetParent(), UR_CHANGED );
         break;
+
     default:
         break;
     }
@@ -333,28 +342,33 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
     while( module )
     {
         itemWrapper.m_PickedItem = module;
+
         switch( aType )
         {
         case TEXT_is_REFERENCE:
             item = module->m_Reference;
-            if( item->GetSize() != g_ModuleTextSize
-                || item->GetThickness() != g_ModuleTextWidth )
+
+            if( item->GetSize() != g_ModuleTextSize || item->GetThickness() != g_ModuleTextWidth )
                 undoItemList.PushItem( itemWrapper );
+
             break;
+
         case TEXT_is_VALUE:
             item = module->m_Value;
-            if( item->GetSize() != g_ModuleTextSize
-                || item->GetThickness() != g_ModuleTextWidth )
+
+            if( item->GetSize() != g_ModuleTextSize || item->GetThickness() != g_ModuleTextWidth )
                 undoItemList.PushItem( itemWrapper );
+
             break;
+
         case TEXT_is_DIVERS:
             // Go through all other module text fields
-            for( boardItem = module->m_Drawings; boardItem;
-                 boardItem = boardItem->Next() )
+            for( boardItem = module->m_Drawings; boardItem; boardItem = boardItem->Next() )
             {
                 if( boardItem->Type() == TYPE_TEXTE_MODULE )
                 {
                     item = (TEXTE_MODULE*) boardItem;
+
                     if( item->GetSize() != g_ModuleTextSize
                         || item->GetThickness() != g_ModuleTextWidth )
                     {
@@ -363,7 +377,9 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
                     }
                 }
             }
+
             break;
+
         default:
             break;
         }
@@ -380,19 +396,21 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
     for( ii = 0; ii < undoItemList.GetCount(); ii++ )
     {
         module = (MODULE*) undoItemList.GetPickedItem( ii );
+
         switch( aType )
         {
         case TEXT_is_REFERENCE:
             module->m_Reference->SetThickness( g_ModuleTextWidth );
             module->m_Reference->SetSize( g_ModuleTextSize );
             break;
+
         case TEXT_is_VALUE:
             module->m_Value->SetThickness( g_ModuleTextWidth );
             module->m_Value->SetSize( g_ModuleTextSize );
             break;
+
         case TEXT_is_DIVERS:
-            for( boardItem = module->m_Drawings; boardItem;
-                 boardItem = boardItem->Next() )
+            for( boardItem = module->m_Drawings; boardItem; boardItem = boardItem->Next() )
             {
                 if( boardItem->Type() == TYPE_TEXTE_MODULE )
                 {
@@ -401,6 +419,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
                     item->SetSize( g_ModuleTextSize );
                 }
             }
+
             break;
         }
     }

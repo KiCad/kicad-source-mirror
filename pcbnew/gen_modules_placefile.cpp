@@ -7,7 +7,6 @@
  *  2 - create a module report (pos and module descr) (ascii file)
  */
 #include "fctsys.h"
-#include "common.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
@@ -190,6 +189,7 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
     Liste = (LIST_MOD*) MyZMalloc( moduleCount * sizeof(LIST_MOD) );
 
     module = GetBoard()->m_Modules;
+
     for( int ii = 0;  module;  module = module->Next() )
     {
         if( module->m_Attributs & MOD_VIRTUAL )
@@ -207,8 +207,7 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
     qsort( Liste, moduleCount, sizeof(LIST_MOD), ListeModCmp );
 
     // Write file header
-    sprintf( line, "### Module positions - created on %s ###\n",
-             DateAndTime( Buff ) );
+    sprintf( line, "### Module positions - created on %s ###\n", DateAndTime( Buff ) );
     fputs( line, fpFront );
 
     if( doBoardBack )
@@ -239,6 +238,7 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
     sprintf( line,
              "# Ref    Val                  PosX       PosY        Rot     Side\n" );
     fputs( line, fpFront );
+
     if( doBoardBack )
         fputs( line, fpBack );
 
@@ -247,8 +247,7 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
         wxPoint  module_pos;
         wxString ref = Liste[ii].m_Reference;
         wxString val = Liste[ii].m_Value;
-        sprintf( line, "%-8.8s %-16.16s ", TO_UTF8( ref ),
-                 TO_UTF8( val ) );
+        sprintf( line, "%-8.8s %-16.16s ", TO_UTF8( ref ), TO_UTF8( val ) );
 
         module_pos    = Liste[ii].m_Module->m_Pos;
         module_pos.x -= File_Place_Offset.x;
@@ -352,7 +351,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
 
     // Switch the locale to standard C (needed to print floating point
     // numbers like 1.3)
-    SetLocaleTo_C_standard( );
+    SetLocaleTo_C_standard();
 
     /* Generate header file comments.) */
     sprintf( line, "## Module report - date %s\n", DateAndTime( Buff ) );
@@ -382,6 +381,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
     fputs( "$EndBOARD\n\n", rptfile );
 
     Module = (MODULE*) GetBoard()->m_Modules;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
         sprintf( line, "$MODULE %s\n", EscapedUTF8( Module->m_Reference->m_Text ).c_str() );
@@ -395,12 +395,16 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
         fputs( line, rptfile );
 
         msg = wxT( "attribut" );
+
         if( Module->m_Attributs & MOD_VIRTUAL )
             msg += wxT( " virtual" );
+
         if( Module->m_Attributs & MOD_CMS )
             msg += wxT( " smd" );
+
         if( ( Module->m_Attributs & (MOD_VIRTUAL | MOD_CMS) ) == 0 )
             msg += wxT( " none" );
+
         msg += wxT( "\n" );
         fputs( TO_UTF8( msg ), rptfile );
 
@@ -414,12 +418,14 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
         fputs( line, rptfile );
 
         sprintf( line, "orientation  %.2f\n", (double) Module->m_Orient / 10 );
+
         if( Module->GetLayer() == LAYER_N_FRONT )
             strcat( line, "layer component\n" );
         else if( Module->GetLayer() == LAYER_N_BACK )
             strcat( line, "layer copper\n" );
         else
             strcat( line, "layer other\n" );
+
         fputs( line, rptfile );
 
         Module->Write_3D_Descr( rptfile );
@@ -446,16 +452,18 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
             sprintf( line, "orientation  %.2f\n",
                      double(pad->m_Orient - Module->m_Orient) / 10 );
             fputs( line, rptfile );
-            const char* shape_name[6] =
-                { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
+            const char* shape_name[6] = { "??? ", "Circ", "Rect", "Oval", "trap", "spec" };
             sprintf( line, "Shape  %s\n", shape_name[pad->m_PadShape] );
             fputs( line, rptfile );
 
             int layer = 0;
-            if( pad->m_Masque_Layer & LAYER_BACK )
+
+            if( pad->m_layerMask & LAYER_BACK )
                 layer = 1;
-            if( pad->m_Masque_Layer & LAYER_FRONT )
+
+            if( pad->m_layerMask & LAYER_FRONT )
                 layer |= 2;
+
             const char* layer_name[4] = { "??? ", "copper", "component", "all" };
             sprintf( line, "Layer  %s\n", layer_name[layer] );
             fputs( line, rptfile );
@@ -476,6 +484,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
 
         if( ( (DRAWSEGMENT*) PtStruct )->GetLayer() != EDGE_N )
             continue;
+
         WriteDrawSegmentPcb( (DRAWSEGMENT*) PtStruct, rptfile );
     }
 
@@ -500,7 +509,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
 void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
 {
     double conv_unit, ux0, uy0, dx, dy;
-    double rayon, width;
+    double radius, width;
     char   line[1024];
 
     conv_unit = 0.0001; /* units = INCHES */
@@ -516,10 +525,10 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
     switch( PtDrawSegment->m_Shape )
     {
     case S_CIRCLE:
-        rayon = hypot( dx - ux0, dy - uy0 );
+        radius = hypot( dx - ux0, dy - uy0 );
         fprintf( rptfile, "$CIRCLE \n" );
         fprintf( rptfile, "centre %.6lf %.6lf\n", ux0, uy0 );
-        fprintf( rptfile, "radius %.6lf\n", rayon );
+        fprintf( rptfile, "radius %.6lf\n", radius );
         fprintf( rptfile, "width %.6lf\n", width );
         fprintf( rptfile, "$EndCIRCLE \n" );
         break;
@@ -527,7 +536,7 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
     case S_ARC:
         {
             int endx = PtDrawSegment->m_End.x, endy = PtDrawSegment->m_End.y;
-            rayon = hypot( dx - ux0, dy - uy0 );
+            radius = hypot( dx - ux0, dy - uy0 );
             RotatePoint( &endx,
                          &endy,
                          PtDrawSegment->m_Start.x,

@@ -4,13 +4,11 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "class_sch_screen.h"
 
 #include "general.h"
-//#include "protos.h"
 #include "sch_component.h"
 #include "libeditframe.h"
 #include "class_library.h"

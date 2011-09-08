@@ -31,13 +31,23 @@ DIALOG_IMAGE_EDITOR_BASE::DIALOG_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID
 	bSizerRight = new wxBoxSizer( wxVERTICAL );
 	
 	m_buttonMirrorX = new wxButton( this, wxID_ANY, _("Mirror X"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonMirrorX, 0, wxEXPAND|wxALL, 5 );
+	bSizerRight->Add( m_buttonMirrorX, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonMirrorY = new wxButton( this, wxID_ANY, _("Mirror Y"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonMirrorY, 0, wxEXPAND|wxALL, 5 );
+	bSizerRight->Add( m_buttonMirrorY, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_buttonRotate = new wxButton( this, wxID_ANY, _("Rotate"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerRight->Add( m_buttonRotate, 0, wxALL|wxEXPAND, 5 );
+	bSizerRight->Add( m_buttonRotate, 0, wxEXPAND|wxALL, 5 );
+	
+	m_buttonGrey = new wxButton( this, wxID_ANY, _("Grey"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRight->Add( m_buttonGrey, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_buttonHalfSize = new wxButton( this, wxID_ANY, _("Half Size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonHalfSize->SetDefault(); 
+	bSizerRight->Add( m_buttonHalfSize, 0, wxALL|wxEXPAND, 5 );
+	
+	m_buttonUndoLast = new wxButton( this, wxID_ANY, _("Undo Last"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerRight->Add( m_buttonUndoLast, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticTextScale = new wxStaticText( this, wxID_ANY, _("Image Scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextScale->Wrap( -1 );
@@ -70,6 +80,9 @@ DIALOG_IMAGE_EDITOR_BASE::DIALOG_IMAGE_EDITOR_BASE( wxWindow* parent, wxWindowID
 	m_buttonMirrorX->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnMirrorX_click ), NULL, this );
 	m_buttonMirrorY->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnMirrorY_click ), NULL, this );
 	m_buttonRotate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnRotateClick ), NULL, this );
+	m_buttonGrey->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnGreyScaleConvert ), NULL, this );
+	m_buttonHalfSize->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnHalfSize ), NULL, this );
+	m_buttonUndoLast->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnUndoLastChange ), NULL, this );
 	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnCancel_Button ), NULL, this );
 	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnOK_Button ), NULL, this );
 }
@@ -81,6 +94,9 @@ DIALOG_IMAGE_EDITOR_BASE::~DIALOG_IMAGE_EDITOR_BASE()
 	m_buttonMirrorX->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnMirrorX_click ), NULL, this );
 	m_buttonMirrorY->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnMirrorY_click ), NULL, this );
 	m_buttonRotate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnRotateClick ), NULL, this );
+	m_buttonGrey->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnGreyScaleConvert ), NULL, this );
+	m_buttonHalfSize->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnHalfSize ), NULL, this );
+	m_buttonUndoLast->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnUndoLastChange ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnCancel_Button ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMAGE_EDITOR_BASE::OnOK_Button ), NULL, this );
 	

@@ -9,10 +9,10 @@
 class DRAG_SEGM
 {
 public:
-    TRACK*  m_Segm;         /* pointeur sur le segment a "dragger */
-    D_PAD*  m_Pad_Start;    /* pointeur sur le Pad origine si origine segment sur pad */
-    D_PAD*  m_Pad_End;      /* pointeur sur le Pad fin si fin segment sur pad */
-    int     m_Flag;         /* indicateur divers */
+    TRACK*  m_Segm;         /* pointer to the segment a "dragger */
+    D_PAD*  m_Pad_Start;    /* pointer to the pad origin if origin segment of pad */
+    D_PAD*  m_Pad_End;      /* pointer to the pad end if end segment of pad */
+    int     m_Flag;         /* indicator flags */
 
 private:
     wxPoint m_StartInitialValue;
@@ -38,11 +38,11 @@ public:
 extern std::vector<DRAG_SEGM> g_DragSegmentList;
 
 /* Functions */
-void Dessine_Segments_Dragges( EDA_DRAW_PANEL* panel, wxDC* DC );
+void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC );
 void Build_Drag_Liste( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module );
 void Build_1_Pad_SegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC, D_PAD* PtPad );
 void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
-                                  wxPoint& point, int MasqueLayer, int net_code );
+                                  wxPoint& point, int LayerMask, int net_code );
 
 
 /**

@@ -1,22 +1,22 @@
 #include "fctsys.h"
-#include "dialog_load_error.h"
+#include "html_messagebox.h"
 #include "macros.h"
 
-DIALOG_LOAD_ERROR::DIALOG_LOAD_ERROR( wxWindow* parent )
-:
-DIALOG_DISPLAY_HTML_TEXT_BASE( parent, wxID_ANY, _("Load Error!"),wxDefaultPosition, wxSize( 450,250 ) )
+HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* parent, const wxString & aTitle,
+                                      wxPoint aPos, wxSize aSize)
+    : DIALOG_DISPLAY_HTML_TEXT_BASE( parent, wxID_ANY, aTitle, aPos, aSize )
 {
     SetFocus();
     ListClear();
 }
 
-void DIALOG_LOAD_ERROR::OnCloseButtonClick( wxCommandEvent& event )
+void HTML_MESSAGE_BOX::OnCloseButtonClick( wxCommandEvent& event )
 {
     EndModal(0);
 }
 
 
-void DIALOG_LOAD_ERROR::ListClear(void)
+void HTML_MESSAGE_BOX::ListClear(void)
 {
     m_htmlWindow->SetPage(wxEmptyString);
 }
@@ -26,7 +26,7 @@ void DIALOG_LOAD_ERROR::ListClear(void)
  * Add a list of items.
  * @param aList = a string containing items. Items are separated by '\n'
  */
-void DIALOG_LOAD_ERROR::ListSet(const wxString &aList)
+void HTML_MESSAGE_BOX::ListSet(const wxString &aList)
 {
     wxArrayString* wxStringSplit( wxString txt, wxChar splitter );
 
@@ -48,7 +48,7 @@ void DIALOG_LOAD_ERROR::ListSet(const wxString &aList)
  * Add a list of items.
  * @param aList = a wxArrayString containing items
  */
-void DIALOG_LOAD_ERROR::ListSet(const wxArrayString &aList)
+void HTML_MESSAGE_BOX::ListSet(const wxArrayString &aList)
 {
     wxString msg = wxT("<ul>");
     for ( unsigned ii = 0; ii < aList.GetCount(); ii ++ )
@@ -65,10 +65,20 @@ void DIALOG_LOAD_ERROR::ListSet(const wxArrayString &aList)
  * Add a message (in bold) to message list.
  * @param message = the message
  */
-void DIALOG_LOAD_ERROR::MessageSet(const wxString &message)
+void HTML_MESSAGE_BOX::MessageSet(const wxString &message)
 {
     wxString message_value;
     message_value.Printf(wxT("<b>%s</b><br>"), GetChars( message ) );
     m_htmlWindow->AppendToPage( message_value );
+}
+
+/**
+ * Function AddHTML_Text
+ * Add a text to message list.
+ * @param message = the text to add
+ */
+void HTML_MESSAGE_BOX::AddHTML_Text(const wxString &message)
+{
+    m_htmlWindow->AppendToPage( message );
 }
 

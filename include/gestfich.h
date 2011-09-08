@@ -13,7 +13,7 @@
 
 
 /* Forward class declarations. */
-class WinEDAListBox;
+class EDA_LIST_DIALOG;
 
 
 /**
@@ -54,7 +54,7 @@ wxString MakeReducedFileName( const wxString& fullfilename,
                               const wxString& default_path,
                               const wxString& default_ext );
 
-WinEDAListBox* GetFileNames( char* Directory, char* Mask );
+EDA_LIST_DIALOG* GetFileNames( char* Directory, char* Mask );
 
 
 int            ExecuteFile( wxWindow* frame, const wxString& ExecFile,

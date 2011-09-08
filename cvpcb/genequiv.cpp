@@ -6,7 +6,6 @@
 #include "wxstruct.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "macros.h"
 
 #include "cvpcb.h"
 #include "cvpcb_mainframe.h"

@@ -8,7 +8,6 @@
  *   Preferences/display
  */
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
@@ -42,6 +41,16 @@ void Dialog_GeneralOptions::init()
     m_UnitsSelection->SetSelection( g_UserUnit ? 1 : 0 );
     m_CursorShape->SetSelection( m_Parent->m_CursorShape ? 1 : 0 );
 
+
+    switch( g_RotationAngle )
+    {
+    case 450:
+        m_RotationAngle->SetSelection( 0 );
+        break;
+    default:
+        m_RotationAngle->SetSelection( 1 );
+    }
+
     wxString timevalue;
     timevalue << g_TimeOut / 60;
     m_SaveTime->SetValue( timevalue );
@@ -70,26 +79,32 @@ void Dialog_GeneralOptions::OnCancelClick( wxCommandEvent& event )
 
 void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 {
-    UserUnitType ii;
+    EDA_UNITS_T ii;
 
     DisplayOpt.DisplayPolarCood =
         ( m_PolarDisplay->GetSelection() == 0 ) ? false : true;
     ii = g_UserUnit;
     g_UserUnit = ( m_UnitsSelection->GetSelection() == 0 )  ? INCHES : MILLIMETRES;
+
     if( ii != g_UserUnit )
         m_Parent->ReCreateAuxiliaryToolbar();
 
     m_Parent->m_CursorShape = m_CursorShape->GetSelection();
     g_TimeOut = 60 * m_SaveTime->GetValue();
 
+
+    g_RotationAngle = 10 * wxAtoi( m_RotationAngle->GetStringSelection() );
+
     /* Updating the combobox to display the active layer. */
     g_MaxLinksShowed = m_MaxShowLinks->GetValue();
     Drc_On = m_DrcOn->GetValue();
+
     if( m_Board->IsElementVisible(RATSNEST_VISIBLE) != m_ShowGlobalRatsnest->GetValue() )
     {
         m_Parent->SetElementVisibility(RATSNEST_VISIBLE, m_ShowGlobalRatsnest->GetValue() );
         m_Parent->DrawPanel->Refresh( );
     }
+
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
     Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();

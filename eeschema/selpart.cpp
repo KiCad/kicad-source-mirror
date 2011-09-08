@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "confirm.h"
 #include "wxstruct.h"
 
@@ -65,7 +64,7 @@ int DisplayComponentsNamesInLib( EDA_DRAW_FRAME* frame,
 
     Library->GetEntryNames( nameList );
 
-    WinEDAListBox dlg( frame, _( "Select Component" ), nameList, OldName, DisplayCmpDoc );
+    EDA_LIST_DIALOG dlg( frame, _( "Select Component" ), nameList, OldName, DisplayCmpDoc );
 
     if( dlg.ShowModal() != wxID_OK )
         return 0;

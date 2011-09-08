@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
@@ -112,7 +111,7 @@ void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
 
     DrawPanel->SetMouseCapture( Move_Texte_Pcb, Abort_Edit_Pcb_Text );
     SetCurItem( TextePcb );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
 }
 
 
@@ -161,6 +160,7 @@ TEXTE_PCB* PCB_EDIT_FRAME::Create_Texte_Pcb( wxDC* DC )
     TextePcb->m_Flags = IS_NEW;
     TextePcb->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
     TextePcb->m_Mirror = false;
+
     if( TextePcb->GetLayer() == LAYER_N_BACK )
         TextePcb->m_Mirror = true;
 
@@ -169,13 +169,16 @@ TEXTE_PCB* PCB_EDIT_FRAME::Create_Texte_Pcb( wxDC* DC )
     TextePcb->m_Thickness = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
 
     InstallTextPCBOptionsFrame( TextePcb, DC );
+
     if( TextePcb->m_Text.IsEmpty() )
     {
         TextePcb->DeleteStructure();
         TextePcb = NULL;
     }
     else
+    {
         StartMoveTextePcb( TextePcb, DC );
+    }
 
     return TextePcb;
 }
@@ -198,6 +201,7 @@ void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     /* Redraw text in new position. */
     TextePcb->Draw( DrawPanel, DC, drawmode );
     TextePcb->DisplayInfo( this );
+
     if( TextePcb->m_Flags == 0 )    // i.e. not edited, or moved
         SaveCopyInUndoList( TextePcb, UR_ROTATED, TextePcb->m_Pos );
     else                 // set flag edit, to show it was a complex command

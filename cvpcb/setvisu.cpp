@@ -136,12 +136,12 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
  *  but they must exist because they appear in some classes.
  *  Do nothing in CvPcb.
  */
-TRACK* Marque_Une_Piste( BOARD* aPcb,
-                         TRACK* aStartSegm,
-                         int*   aSegmCount,
-                         int*   aTrackLen,
-                         int*   aLenDie,
-                         bool   aReorder )
+TRACK* MarkTrace( BOARD* aPcb,
+                  TRACK* aStartSegm,
+                  int*   aSegmCount,
+                  int*   aTrackLen,
+                  int*   aLenDie,
+                  bool   aReorder )
 {
     return NULL;
 }

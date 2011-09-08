@@ -3,7 +3,6 @@
 /***********************************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 
@@ -15,8 +14,7 @@
 
 
 static void Abort_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC );
-static void Montre_Position_NewSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                                        const wxPoint& aPosition, bool aErase );
+static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase );
 static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                           bool aErase );
 
@@ -30,6 +28,7 @@ void PCB_EDIT_FRAME::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
 {
     if( drawitem == NULL )
         return;
+
     drawitem->Draw( DrawPanel, DC, GR_XOR );
     drawitem->m_Flags |= IS_MOVED;
     s_InitialPosition = s_LastPosition = GetScreen()->GetCrossHairPosition();
@@ -95,8 +94,10 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         Segment->Draw( DrawPanel, DC, GR_XOR );
         PtStruct = Segment->Back();
         Segment ->DeleteStructure();
+
         if( PtStruct && (PtStruct->Type() == TYPE_DRAWSEGMENT ) )
             Segment = (DRAWSEGMENT*) PtStruct;
+
         DisplayOpt.DisplayDrawItems = track_fill_copy;
         SetCurItem( NULL );
     }
@@ -121,6 +122,7 @@ void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( int aLayer )
     }
 
     wxString msg = _( "Delete Layer " ) + GetBoard()->GetLayerName( aLayer );
+
     if( !IsOK( this, msg ) )
         return;
 
@@ -137,13 +139,14 @@ void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( int aLayer )
         case TYPE_DRAWSEGMENT:
         case TYPE_TEXTE:
         case TYPE_DIMENSION:
-        case TYPE_MIRE:
+        case PCB_TARGET_T:
             if( item->GetLayer() == aLayer )
             {
                 item->UnLink();
                 picker.m_PickedItem = item;
                 pickList.PushItem( picker );
             }
+
             break;
 
         default:
@@ -219,10 +222,10 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape,
         Segment->m_Shape = shape;
         Segment->m_Angle = 900;
         Segment->m_Start = Segment->m_End = GetScreen()->GetCrossHairPosition();
-        DrawPanel->SetMouseCapture( Montre_Position_NewSegment, Abort_EditEdge );
+        DrawPanel->SetMouseCapture( DrawSegment, Abort_EditEdge );
     }
     else    /* The ending point ccordinate Segment->m_End was updated by he function
-             * Montre_Position_NewSegment() called on a move mouse event
+             * DrawSegment() called on a move mouse event
              * during the segment creation
              */
     {
@@ -249,7 +252,7 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape,
                 Segment->m_Type  = DrawItem->m_Type;
                 Segment->m_Angle = DrawItem->m_Angle;
                 Segment->m_Start = Segment->m_End = DrawItem->m_End;
-                Montre_Position_NewSegment( DrawPanel, DC, wxDefaultPosition, false );
+                DrawSegment( DrawPanel, DC, wxDefaultPosition, false );
             }
             else
             {
@@ -267,12 +270,14 @@ void PCB_EDIT_FRAME::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 {
     if( Segment == NULL )
         return;
+
     Segment->Draw( DrawPanel, DC, GR_OR );
 
     /* Delete if segment length is zero. */
     if( Segment->m_Start == Segment->m_End )
+    {
         Segment ->DeleteStructure();
-
+    }
     else
     {
         Segment->m_Flags = 0;
@@ -288,8 +293,7 @@ void PCB_EDIT_FRAME::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 
 /* Redraw segment during cursor movement
  */
-static void Montre_Position_NewSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                                        const wxPoint& aPosition, bool aErase )
+static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
     DRAWSEGMENT* Segment = (DRAWSEGMENT*) aPanel->GetScreen()->GetCurItem();
     int          t_fill = DisplayOpt.DisplayDrawItems;
@@ -304,9 +308,9 @@ static void Montre_Position_NewSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     if( Segments_45_Only && ( Segment->m_Shape == S_SEGMENT ) )
     {
-        Calcule_Coord_Extremite_45( aPanel->GetScreen()->GetCrossHairPosition(),
-                                    Segment->m_Start.x, Segment->m_Start.y,
-                                    &Segment->m_End.x, &Segment->m_End.y );
+        CalculateSegmentEndPoint( aPanel->GetScreen()->GetCrossHairPosition(),
+                                  Segment->m_Start.x, Segment->m_Start.y,
+                                  &Segment->m_End.x, &Segment->m_End.y );
     }
     else    /* here the angle is arbitrary */
     {

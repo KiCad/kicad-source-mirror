@@ -3,7 +3,6 @@
 /**********************************************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
@@ -358,8 +357,8 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
     if( footprint_names_list.GetCount() )
     {
         msg.Printf( _( "Modules [%d items]" ), footprint_names_list.GetCount() );
-        WinEDAListBox dlg( aWindow, msg, footprint_names_list, OldName,
-                           DisplayCmpDoc, GetComponentDialogPosition() );
+        EDA_LIST_DIALOG dlg( aWindow, msg, footprint_names_list, OldName,
+                             DisplayCmpDoc, GetComponentDialogPosition() );
 
         if( dlg.ShowModal() == wxID_OK )
             CmpName = dlg.GetTextSelection();
@@ -412,7 +411,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
 
     msg.Printf( _( "Modules [%d items]" ), listnames.GetCount() );
 
-    WinEDAListBox dlg( this, msg, listnames, wxEmptyString );
+    EDA_LIST_DIALOG dlg( this, msg, listnames, wxEmptyString );
     dlg.SortList();
 
     if( dlg.ShowModal() == wxID_OK )

@@ -4,12 +4,10 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "eda_doc.h"
-#include "wxstruct.h"
 #include "class_sch_screen.h"
 
 #include "general.h"

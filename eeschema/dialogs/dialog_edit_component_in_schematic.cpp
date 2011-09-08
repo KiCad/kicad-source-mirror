@@ -7,7 +7,6 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "class_sch_screen.h"
@@ -633,9 +632,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
     else
         fieldValueTextCtrl->Enable( true );
 
-    textSizeTextCtrl->SetValue(
-        WinEDA_GraphicTextCtrl::FormatSize( EESCHEMA_INTERNAL_UNIT,
-                                            g_UserUnit, field.m_Size.x ) );
+    textSizeTextCtrl->SetValue( EDA_GRAPHIC_TEXT_CTRL::FormatSize( EESCHEMA_INTERNAL_UNIT,
+                                                                   g_UserUnit, field.m_Size.x ) );
 
     wxPoint coord = field.m_Pos;
     wxPoint zero  = -m_Cmp->m_Pos;  // relative zero
@@ -714,8 +712,8 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
 
     setRowItem( fieldNdx, field );  // update fieldListCtrl
 
-    field.m_Size.x = WinEDA_GraphicTextCtrl::ParseSize(
-        textSizeTextCtrl->GetValue(), EESCHEMA_INTERNAL_UNIT, g_UserUnit );
+    field.m_Size.x = EDA_GRAPHIC_TEXT_CTRL::ParseSize( textSizeTextCtrl->GetValue(),
+                                                       EESCHEMA_INTERNAL_UNIT, g_UserUnit );
     field.m_Size.y = field.m_Size.x;
 
     int style = m_StyleRadioBox->GetSelection();

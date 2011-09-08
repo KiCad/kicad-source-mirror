@@ -8,14 +8,12 @@
 
 #include "fctsys.h"
 #include "wxstruct.h"
-#include "common.h"
 #include "confirm.h"
 #include "appl_wxstruct.h"
 #include "dialog_helpers.h"
 #include "kicad_device_context.h"
 
 #include "pcbnew.h"
-#include "bitmaps.h"
 #include "pcbnew_id.h"
 #include "class_board_design_settings.h"
 
@@ -71,7 +69,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
 
     m_DisplayModEdge      = FILLED; // How to display module drawings (line/ filled / sketch)
     m_DisplayModText      = FILLED; // How to display module texts (line/ filled / sketch)
-    m_DisplayPcbTrackFill = true;   /* FALSE = sketch , true = filled */
+    m_DisplayPcbTrackFill = true;   /* false = sketch , true = filled */
     m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
     m_ModuleEditFrame     = NULL;   // Frame for footprint edition
 
@@ -478,7 +476,7 @@ void PCB_BASE_FRAME::LoadSettings()
 
     long itmp;
     cfg->Read( m_FrameName + UserGridUnitsEntry, &itmp, ( long )INCHES );
-    m_UserGridUnit = (UserUnitType) itmp;
+    m_UserGridUnit = (EDA_UNITS_T) itmp;
     cfg->Read( m_FrameName + DisplayPadFillEntry, &m_DisplayPadFill, true );
     cfg->Read( m_FrameName + DisplayViaFillEntry, &m_DisplayViaFill, true );
     cfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );

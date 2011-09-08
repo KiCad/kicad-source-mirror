@@ -11,7 +11,6 @@
 #include "drawtxt.h"
 #include "plot_common.h"
 #include "wxEeschemaStruct.h"
-#include "bitmaps.h"
 
 #include "general.h"
 #include "protos.h"

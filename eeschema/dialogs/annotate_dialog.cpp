@@ -33,8 +33,6 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "bitmaps.h"
-#include "common.h"
 #include "wxEeschemaStruct.h"
 #include "class_drawpanel.h"
 

@@ -1,10 +1,9 @@
 /************************************************/
-/* Module editor: Dialog box for editing module	*/
-/*  properties and characteristics				*/
+/* Module editor: Dialog box for editing module */
+/*  properties and characteristics              */
 /************************************************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
@@ -24,8 +23,7 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
     if( Module == NULL )
         return;
 
-    DIALOG_MODULE_BOARD_EDITOR* dialog =
-        new DIALOG_MODULE_BOARD_EDITOR( this, Module, DC );
+    DIALOG_MODULE_BOARD_EDITOR* dialog = new DIALOG_MODULE_BOARD_EDITOR( this, Module, DC );
 
     int retvalue = dialog->ShowModal(); /* retvalue =
                                          *  -1 if abort,
@@ -48,8 +46,8 @@ void PCB_EDIT_FRAME::InstallModuleOptionsFrame( MODULE* Module, wxDC* DC )
         m_ModuleEditFrame->Load_Module_From_BOARD( Module );
         SetCurItem( NULL );
 
-        m_ModuleEditFrame->Show( TRUE );
-        m_ModuleEditFrame->Iconize( FALSE );
+        m_ModuleEditFrame->Show( true );
+        m_ModuleEditFrame->Iconize( false );
     }
 }
 
@@ -108,7 +106,7 @@ void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* pt_mod )
         }
     }
 
-    pt_mod->Set_Rectangle_Encadrement();
+    pt_mod->CalculateBoundingBox();
 }
 
 
@@ -126,16 +124,19 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
     case TYPE_TEXTE_MODULE:
     {
         TEXTE_MODULE* text = (TEXTE_MODULE*) Item;
+
         if( text->m_Type == TEXT_is_REFERENCE )
         {
             DisplayError( this, _( "Text is REFERENCE!" ) );
             break;
         }
+
         if( text->m_Type == TEXT_is_VALUE )
         {
             DisplayError( this, _( "Text is VALUE!" ) );
             break;
         }
+
         DeleteTextModule( text );
     }
     break;

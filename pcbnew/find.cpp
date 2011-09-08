@@ -5,7 +5,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "kicad_string.h"
@@ -37,7 +36,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
     PCB_SCREEN* screen = (PCB_SCREEN*) ( m_Parent->GetScreen() );
     wxPoint     locate_pos;
     wxString    msg;
-    bool        FindMarker = FALSE;
+    bool        FindMarker = false;
     BOARD_ITEM* foundItem  = 0;
 
     switch( event.GetId() )
@@ -52,7 +51,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
     // fall thru
 
     case ID_FIND_NEXT_MARKER:
-        FindMarker = TRUE;
+        FindMarker = true;
         break;
     }
 
@@ -64,6 +63,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
     if( FindMarker )
     {
         MARKER_PCB* marker = m_Parent->GetBoard()->GetMARKER( s_MarkerCount++ );
+
         if( marker )
         {
             foundItem  = marker;
@@ -73,14 +73,13 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
     else
     {
         int StartCount = 0;
-        for( MODULE* module = m_Parent->GetBoard()->m_Modules;
-            module;
-            module = module->Next() )
+
+        for( MODULE* module = m_Parent->GetBoard()->m_Modules; module; module = module->Next() )
         {
-            if( WildCompareString( s_OldStringFound,
-                                   module->GetReference().GetData(), FALSE ) )
+            if( WildCompareString( s_OldStringFound, module->GetReference().GetData(), false ) )
             {
                 StartCount++;
+
                 if( StartCount > s_ItemCount )
                 {
                     foundItem  = module;
@@ -89,10 +88,11 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
                     break;
                 }
             }
-            if( WildCompareString( s_OldStringFound,
-                                   module->m_Value->m_Text.GetData(), FALSE ) )
+
+            if( WildCompareString( s_OldStringFound, module->m_Value->m_Text.GetData(), false ) )
             {
                 StartCount++;
+
                 if( StartCount > s_ItemCount )
                 {
                     foundItem  = module;
@@ -202,10 +202,12 @@ bool WinEDA_PcbFindFrame::Create( wxWindow*       parent,
     wxDialog::Create( parent, id, caption, pos, size, style );
 
     CreateControls();
+
     if( GetSizer() )
     {
         GetSizer()->SetSizeHints( this );
     }
+
     Centre();
 
 ////@end WinEDA_PcbFindFrame creation

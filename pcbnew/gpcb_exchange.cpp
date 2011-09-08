@@ -17,10 +17,6 @@ static void Extract_Parameters( wxArrayString& param_list, char* text );
 static bool TestFlags( const wxString& flg_string, long flg_mask, const wxChar* flg_name );
 
 
-/**************************************************************/
-bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
-/**************************************************************/
-
 /**
  * Function Read_GPCB_Descr
  * Read a footprint description in GPCB (Newlib) format
@@ -148,6 +144,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
  * For pads, set to prevent a solderpaste stencil opening for the pad. Primarily
  * used for pads used as fiducials.
  */
+bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 {
     #define TEXT_DEFAULT_SIZE  400
     #define OLD_GPCB_UNIT_CONV 10
@@ -187,12 +184,13 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
     // Test symbol after "Element": if [ units = 0.01 mils, and if ( units = 1 mil
     iprmcnt++;
+
     if( params[iprmcnt] == wxT( "(" ) )
         conv_unit = OLD_GPCB_UNIT_CONV;
 
     /* Analyse first line :
      * Element [element_flags, description, pcb-name, value, mark_x, mark_y, text_x, text_y,
-     *		text_direction, text_scale, text_flags]
+     *      text_direction, text_scale, text_flags]
      */
 
     // Read flags (unused)
@@ -212,6 +210,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
     // Read other infos
     iprmcnt++;
+
     for( int ii = 0; ii < 6; ii++ )
     {
         if( iprmcnt < icnt_max )
@@ -220,7 +219,10 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             ibuf[ii] = 0;
         }
         else
+        {
             params[iprmcnt].ToLong( &ibuf[ii] );
+        }
+
         iprmcnt++;
     }
 
@@ -267,6 +269,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             for( unsigned ii = 0; ii < 5; ii++ )
             {
                 long dim;
+
                 if( ii < (params.GetCount() - 2) )
                 {
                     if( params[ii + 2].ToLong( &dim ) )
@@ -301,7 +304,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                     ibuf[ii] = 0;
             }
 
-            int     rayon = (ibuf[2] + ibuf[3]) / 4; // for and arc: ibuf[3] = ibuf[4]. pcbnew does not know ellipses
+            int     radius = (ibuf[2] + ibuf[3]) / 4; // for and arc: ibuf[3] = ibuf[4]. pcbnew does not know ellipses
             wxPoint centre;
             centre.x = wxRound( ibuf[0] * conv_unit );
             centre.y = wxRound( ibuf[1] * conv_unit );
@@ -309,9 +312,9 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             int start_angle = ibuf[4] * 10;     // Pcbnew uses 0.1 degrees as units
             start_angle       -= 1800;          // Use normal X axis  as reference
             DrawSegm->m_Angle  = ibuf[5] * 10;  // Angle value is clockwise in gpcb and pcbnew
-            DrawSegm->m_End0.x = wxRound( rayon * conv_unit );
+            DrawSegm->m_End0.x = wxRound( radius * conv_unit );
             DrawSegm->m_End0.y = 0;
-            RotatePoint( &DrawSegm->m_End0, -start_angle );	// Calculate start point coordinate of arc
+            RotatePoint( &DrawSegm->m_End0, -start_angle );// Calculate start point coordinate of arc
             DrawSegm->m_End0 += centre;
 
             DrawSegm->m_Width = wxRound( ibuf[6] * conv_unit );
@@ -323,23 +326,27 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         {                                                   //	format: Pad [x1 y1 x2 y2 thickness clearance mask "name" "pad_number" flags]
             Pad = new D_PAD( this );
             Pad->m_PadShape     = PAD_RECT;
-            Pad->m_Masque_Layer = LAYER_FRONT | SOLDERMASK_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT;
+            Pad->m_layerMask = LAYER_FRONT | SOLDERMASK_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT;
 
             // Set shape from flags
             iflgidx = params.GetCount() - 2;
+
             if( TestFlags( params[iflgidx], 0x0080, wxT( "onsolder" ) ) )
-                Pad->m_Masque_Layer = LAYER_BACK | SOLDERMASK_LAYER_BACK | SOLDERPASTE_LAYER_BACK;
+                Pad->m_layerMask = LAYER_BACK | SOLDERMASK_LAYER_BACK | SOLDERPASTE_LAYER_BACK;
 
             for( unsigned ii = 0; ii < 5; ii++ )
             {
                 if( ii < params.GetCount() - 2 )
                 {
                     long dim;
+
                     if( params[ii + 2].ToLong( &dim ) )
                         ibuf[ii] = wxRound( dim * conv_unit );
                 }
                 else
+                {
                     ibuf[ii] = 0;
+                }
             }
 
             // Read name:
@@ -356,6 +363,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             Pad->m_Size.y = ibuf[4] + abs( ibuf[1] - ibuf[3] );
             Pad->m_Pos.x += m_Pos.x;
             Pad->m_Pos.y += m_Pos.y;
+
             if( !TestFlags( params[iflgidx], 0x0100, wxT( "square" ) ) )
             {
                 if( Pad->m_Size.x == Pad->m_Size.y )
@@ -372,7 +380,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         {                                                   // format: Pin[x y Thickness Clearance Mask DrillHole Name Number Flags]
             Pad = new D_PAD( this );
             Pad->m_PadShape     = PAD_ROUND;
-            Pad->m_Masque_Layer = ALL_CU_LAYERS |
+            Pad->m_layerMask = ALL_CU_LAYERS |
                                   SILKSCREEN_LAYER_FRONT |
                                   SOLDERMASK_LAYER_FRONT |
                                   SOLDERMASK_LAYER_BACK;
@@ -390,7 +398,9 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                         ibuf[ii] = wxRound( dim * conv_unit );
                 }
                 else
+                {
                     ibuf[ii] = 0;
+                }
             }
 
             // Read name:
@@ -401,12 +411,14 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             {
                 strncpy( Pad->m_Padname, TO_UTF8( params[9] ), 4 );
             }
+
             Pad->m_Pos.x   = ibuf[0];
             Pad->m_Pos.y   = ibuf[1];
             Pad->m_Drill.x = Pad->m_Drill.y = ibuf[5];
             Pad->m_Size.x  = Pad->m_Size.y = ibuf[3] + Pad->m_Drill.x;
             Pad->m_Pos.x  += m_Pos.x;
             Pad->m_Pos.y  += m_Pos.y;
+
             if( (Pad->m_PadShape == PAD_ROUND) && (Pad->m_Size.x != Pad->m_Size.y) )
                 Pad->m_PadShape = PAD_OVAL;
 
@@ -417,6 +429,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
     if( m_Value->m_Text.IsEmpty() )
         m_Value->m_Text = wxT( "Val**" );
+
     if( m_Reference->m_Text.IsEmpty() )
     {
         wxFileName filename( CmpFullFileName );
@@ -424,14 +437,10 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     }
 
     /* Recalculate the bounding box */
-    Set_Rectangle_Encadrement();
+    CalculateBoundingBox();
     return success;
 }
 
-
-/***********************************************************************/
-static void Extract_Parameters( wxArrayString& param_list, char* text )
-/***********************************************************************/
 
 /* Read a text line and extract params and tokens.
  * special chars are:
@@ -443,8 +452,9 @@ static void Extract_Parameters( wxArrayString& param_list, char* text )
  * other are parameters (number or delimited string)
  * last parameter is ) or ]
  */
+static void Extract_Parameters( wxArrayString& param_list, char* text )
 {
-    char      key;
+    char     key;
     wxString tmp;
 
     while( *text != 0 )
@@ -484,6 +494,7 @@ static void Extract_Parameters( wxArrayString& param_list, char* text )
             {
                 key = *text;
                 text++;
+
                 if( key == '"' )
                 {
                     param_list.Add( tmp );
@@ -491,7 +502,9 @@ static void Extract_Parameters( wxArrayString& param_list, char* text )
                     break;
                 }
                 else
+                {
                     tmp.Append( key );
+                }
             }
 
             break;
@@ -504,10 +517,6 @@ static void Extract_Parameters( wxArrayString& param_list, char* text )
 }
 
 
-/***********************************************************************************/
-bool TestFlags( const wxString& flg_string, long flg_mask, const wxChar* flg_name )
-/***********************************************************************************/
-
 /**
  * Function TestFlags
  * Test flag flg_mask or flg_name.
@@ -518,19 +527,23 @@ bool TestFlags( const wxString& flg_string, long flg_mask, const wxChar* flg_nam
  * @param flg_name = flag name to find in list
  * @return true if found
  */
+bool TestFlags( const wxString& flg_string, long flg_mask, const wxChar* flg_name )
 {
     wxString strnumber;
 
-    if( flg_string.StartsWith( wxT( "0x" ),
-           &strnumber ) || flg_string.StartsWith( wxT( "0X" ), &strnumber ) )
+    if( flg_string.StartsWith( wxT( "0x" ), &strnumber )
+        || flg_string.StartsWith( wxT( "0X" ), &strnumber ) )
     {
         long lflags;
+
         if( strnumber.ToLong( &lflags, 16 ) )
             if( lflags & flg_mask )
                 return true;
     }
     else if( flg_string.Contains( flg_name ) )
+    {
         return true;
+    }
 
     return false;
 }

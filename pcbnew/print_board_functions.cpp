@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
@@ -114,17 +113,19 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 {
     MODULE* Module;
     int drawmode = GR_COPY;
-    DISPLAY_OPTIONS      save_opt;
-    TRACK*               pt_piste;
-    BOARD*               Pcb   = GetBoard();
-    int                  defaultPenSize = 50;
-    bool                onePagePerLayer = false;
+    DISPLAY_OPTIONS save_opt;
+    TRACK*          pt_trace;
+    BOARD*          Pcb   = GetBoard();
+    int             defaultPenSize = 50;
+    bool            onePagePerLayer = false;
 
     PRINT_PARAMETERS * printParameters = (PRINT_PARAMETERS*) aData; // can be null
+
     if( printParameters && printParameters->m_OptionPrintPage == 0 )
         onePagePerLayer = true;
 
     PRINT_PARAMETERS::DrillShapeOptT drillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
+
     if( printParameters )
     {
         drillShapeOpt = printParameters->m_DrillShapeOpt;
@@ -141,14 +142,15 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     if( (aPrintMaskLayer & ALL_CU_LAYERS) == 0 )
     {
         if( onePagePerLayer )
-        {   // We can print mask layers (solder mask and solder paste) with the actual pad sizes
-            // To do that, we must set ContrastModeDisplay to true and set the GetScreen()->m_Active_Layer
-            // to the current printed layer
+        {   // We can print mask layers (solder mask and solder paste) with the actual
+            // pad sizes.  To do that, we must set ContrastModeDisplay to true and set
+            //the GetScreen()->m_Active_Layer to the current printed layer
             DisplayOpt.ContrastModeDisplay = true;
             DisplayOpt.DisplayPadFill = true;
 
             // Calculate the active layer number to print from its mask layer:
             GetScreen()->m_Active_Layer = 0;
+
             for(int kk = 0; kk < 32; kk ++ )
             {
                 if( ((1 << kk) & aPrintMaskLayer) != 0 )
@@ -204,7 +206,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         case TYPE_DRAWSEGMENT:
         case TYPE_DIMENSION:
         case TYPE_TEXTE:
-        case TYPE_MIRE:
+        case PCB_TARGET_T:
             if( ( ( 1 << item->GetLayer() ) & aPrintMaskLayer ) == 0 )
                 break;
 
@@ -218,38 +220,38 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     }
 
     /* Print tracks */
-    pt_piste = Pcb->m_Track;
+    pt_trace = Pcb->m_Track;
 
-    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
+    for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
     {
-        if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
+        if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )
             continue;
 
-        if( pt_piste->Type() == TYPE_VIA ) /* VIA encountered. */
+        if( pt_trace->Type() == TYPE_VIA ) /* VIA encountered. */
         {
-            int rayon = pt_piste->m_Width >> 1;
-            int color = g_ColorsSettings.GetItemColor(VIAS_VISIBLE+pt_piste->m_Shape);
+            int radius = pt_trace->m_Width >> 1;
+            int color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + pt_trace->m_Shape );
             GRSetDrawMode( aDC, drawmode );
             GRFilledCircle( &DrawPanel->m_ClipBox, aDC,
-                            pt_piste->m_Start.x,
-                            pt_piste->m_Start.y,
-                            rayon,
+                            pt_trace->m_Start.x,
+                            pt_trace->m_Start.y,
+                            radius,
                             0, color, color );
         }
         else
         {
-            pt_piste->Draw( DrawPanel, aDC, drawmode );
+            pt_trace->Draw( DrawPanel, aDC, drawmode );
         }
     }
 
-    pt_piste = Pcb->m_Zone;
+    pt_trace = Pcb->m_Zone;
 
-    for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
+    for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
     {
-        if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
+        if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )
             continue;
 
-        pt_piste->Draw( DrawPanel, aDC, drawmode );
+        pt_trace->Draw( DrawPanel, aDC, drawmode );
     }
 
     /* Draw filled areas (i.e. zones) */
@@ -280,28 +282,28 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
      * vias */
     if( drillShapeOpt != PRINT_PARAMETERS::NO_DRILL_SHAPE )
     {
-        pt_piste = Pcb->m_Track;
+        pt_trace = Pcb->m_Track;
         int  color = g_DrawBgColor;
         bool blackpenstate = GetGRForceBlackPenState();
         GRForceBlackPen( false );
         GRSetDrawMode( aDC, GR_COPY );
 
-        for( ; pt_piste != NULL; pt_piste = pt_piste->Next() )
+        for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
         {
-            if( ( aPrintMaskLayer & pt_piste->ReturnMaskLayer() ) == 0 )
+            if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )
                 continue;
 
-            if( pt_piste->Type() == TYPE_VIA ) /* VIA encountered. */
+            if( pt_trace->Type() == TYPE_VIA ) /* VIA encountered. */
             {
                 int diameter;
 
                 if( drillShapeOpt == PRINT_PARAMETERS::SMALL_DRILL_SHAPE )
-                    diameter = min( SMALL_DRILL, pt_piste->GetDrillValue() );
+                    diameter = min( SMALL_DRILL, pt_trace->GetDrillValue() );
                 else
-                    diameter = pt_piste->GetDrillValue();
+                    diameter = pt_trace->GetDrillValue();
 
                 GRFilledCircle( &DrawPanel->m_ClipBox, aDC,
-                                pt_piste->m_Start.x, pt_piste->m_Start.y,
+                                pt_trace->m_Start.x, pt_trace->m_Start.y,
                                 diameter/2,
                                 0, color, color );
             }
@@ -338,7 +340,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
 
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
-        if( (pt_pad->m_Masque_Layer & aMasklayer ) == 0 )
+        if( (pt_pad->m_layerMask & aMasklayer ) == 0 )
             continue;
 
         // Manage hole according to the print drill option
@@ -395,8 +397,10 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
         case TYPE_EDGE_MODULE:
         {
             EDGE_MODULE* edge = (EDGE_MODULE*) PtStruct;
+
             if( ( g_TabOneLayerMask[edge->GetLayer()] & aMasklayer ) == 0 )
                 break;
+
             edge->Draw( aPanel, aDC, aDraw_mode );
             break;
         }

@@ -184,7 +184,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
 {
     BOARD_ITEM* item = GetCurItem();
     wxString    msg;
-    bool        append_set_width = FALSE;
+    bool        append_set_width = false;
     bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
 
     // Simple location of elements where possible.
@@ -337,8 +337,9 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         AddMenuItem( edit_mnu, ID_POPUP_PCB_EDIT_LAYER_ALL_EDGE,
                      _( "Edit Layer (All)" ), KiBitmap( select_layer_pair_xpm ) );
         msg = AddHotkeyName( _("Delete edge" ), g_Module_Editor_Hokeys_Descr, HK_DELETE );
+
         AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_EDGE, msg, KiBitmap( delete_xpm ) );
-        append_set_width = TRUE;
+        append_set_width = true;
     }
     break;
 
@@ -349,7 +350,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
     case TYPE_ZONE:
     case TYPE_MARKER_PCB:
     case TYPE_DIMENSION:
-    case TYPE_MIRE:
+    case PCB_TARGET_T:
         break;
 
     case TYPE_SCREEN:

@@ -5,9 +5,6 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
-#include "bitmaps.h"
-#include "colors.h"
 
 #ifdef USE_SPLASH_IMAGE
   #define SPLASH_IMAGE logo_kicad.png
@@ -17,7 +14,6 @@
 
 #include "kicad.h"
 #include "tree_project_frame.h"
-#include "macros.h"
 
 #include "build_version.h"
 
@@ -34,12 +30,12 @@ void  ShowLogo( char* FonteFileName );
 /************************************/
 
 // Create a new application object
-IMPLEMENT_APP( WinEDA_App )
+IMPLEMENT_APP( EDA_APP )
 
 /* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void WinEDA_App::MacOpenFile( const wxString &fileName )
+void EDA_APP::MacOpenFile( const wxString &fileName )
 {
     KICAD_MANAGER_FRAME* frame = (KICAD_MANAGER_FRAME*) GetTopWindow();
     wxFileName fn = fileName;
@@ -62,7 +58,7 @@ void WinEDA_App::MacOpenFile( const wxString &fileName )
     }
 
     wxString title = GetTitle() + wxT( " " ) + GetBuildVersion() +
-        wxT( " " ) + frame->m_ProjectFileName.GetFullPath();
+                     wxT( " " ) + frame->m_ProjectFileName.GetFullPath();
 
     if( !fn.IsDirWritable() )
         title += _( " [Read Only]" );
@@ -77,11 +73,11 @@ void WinEDA_App::MacOpenFile( const wxString &fileName )
 }
 
 
-bool WinEDA_App::OnInit()
+bool EDA_APP::OnInit()
 {
     KICAD_MANAGER_FRAME* frame;
 
-    InitEDA_Appl( wxT( "KiCad" ), APP_TYPE_KICAD );
+    InitEDA_Appl( wxT( "KiCad" ), APP_KICAD_T );
 
     // read current setup and reopen last directory if no filename to open in command line
     bool reopenLastUsedDirectory = argc == 1;
@@ -120,7 +116,7 @@ bool WinEDA_App::OnInit()
     }
 
     wxString title = GetTitle() + wxT( " " ) + GetBuildVersion() +
-        wxT( " " ) + frame->m_ProjectFileName.GetFullPath();
+                     wxT( " " ) + frame->m_ProjectFileName.GetFullPath();
 
     if( !namelessProject.IsDirWritable() )
         title += _( " [Read Only]" );
@@ -136,7 +132,7 @@ bool WinEDA_App::OnInit()
 #ifdef USE_SPLASH_IMAGE
     wxBitmap bmp;
     wxString binDir = GetTraits()->GetStandardPaths().GetExecutablePath() +
-        wxFileName::GetPathSeparator();
+                      wxFileName::GetPathSeparator();
 
     if( bmp.LoadFile( binDir + _T( "logokicad.png" ), wxBITMAP_TYPE_PNG ) )
     {

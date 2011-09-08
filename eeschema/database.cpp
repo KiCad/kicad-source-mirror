@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "macros.h"
 #include "confirm.h"
 #include "eda_doc.h"
@@ -50,9 +49,11 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
     if( nameList.IsEmpty() )
     {
         msg = _( "No components found matching " );
+
         if( !BufName.IsEmpty() )
         {
             msg += _( "name search criteria <" ) + BufName + wxT( "> " );
+
             if( !Keys.IsEmpty() )
                 msg += _( "and " );
         }
@@ -67,8 +68,8 @@ wxString DataBaseGetName( EDA_DRAW_FRAME* frame, wxString& Keys, wxString& BufNa
 
     // Show candidate list:
     wxString cmpname;
-    WinEDAListBox dlg( frame, _( "Select Component" ),
-                               nameList, cmpname, DisplayCmpDoc );
+    EDA_LIST_DIALOG dlg( frame, _( "Select Component" ), nameList, cmpname, DisplayCmpDoc );
+
     if( dlg.ShowModal() != wxID_OK )
         return wxEmptyString;
 

@@ -51,7 +51,7 @@ static void Abort_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     EraseDragList();
     s_CurrentSelectedPad = NULL;
-    g_Drag_Pistes_On     = FALSE;
+    g_Drag_Pistes_On     = false;
 }
 
 
@@ -109,7 +109,7 @@ void PCB_BASE_FRAME::Export_Pad_Settings( D_PAD* pt_pad )
 
     g_Pad_Master.m_PadShape     = pt_pad->m_PadShape;
     g_Pad_Master.m_Attribut     = pt_pad->m_Attribut;
-    g_Pad_Master.m_Masque_Layer = pt_pad->m_Masque_Layer;
+    g_Pad_Master.m_layerMask = pt_pad->m_layerMask;
     g_Pad_Master.m_Orient = pt_pad->m_Orient -
                             ( (MODULE*) pt_pad->GetParent() )->m_Orient;
     g_Pad_Master.m_Size = pt_pad->m_Size;
@@ -137,7 +137,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     }
 
     aPad->m_PadShape     = g_Pad_Master.m_PadShape;
-    aPad->m_Masque_Layer = g_Pad_Master.m_Masque_Layer;
+    aPad->m_layerMask = g_Pad_Master.m_layerMask;
     aPad->m_Attribut     = g_Pad_Master.m_Attribut;
     aPad->m_Orient = g_Pad_Master.m_Orient +
                      ( (MODULE*) aPad->GetParent() )->m_Orient;
@@ -206,8 +206,7 @@ void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
     long num    = 0;
     int  ponder = 1;
 
-    while( lastPadName.Len() && lastPadName.Last() >= '0'
-           && lastPadName.Last() <= '9' )
+    while( lastPadName.Len() && lastPadName.Last() >= '0' && lastPadName.Last() <= '9' )
     {
         num += ( lastPadName.Last() - '0' ) * ponder;
         lastPadName.RemoveLast();
@@ -219,8 +218,9 @@ void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
     Pad->SetPadName( lastPadName );
     g_Pad_Master.SetPadName(lastPadName);
 
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
     Pad->DisplayInfo( this );
+
     if( draw )
         DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
 }
@@ -248,8 +248,9 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
     {
         wxString msg;
         msg.Printf( _( "Delete Pad (module %s %s) " ),
-                     GetChars( Module->m_Reference->m_Text ),
-                     GetChars( Module->m_Value->m_Text ) );
+                    GetChars( Module->m_Reference->m_Text ),
+                    GetChars( Module->m_Value->m_Text ) );
+
         if( !IsOK( this, msg ) )
             return;
     }
@@ -257,7 +258,7 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
     m_Pcb->m_Status_Pcb = 0;
     aPad->DeleteStructure();
     DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
 
     OnModify();
 }
@@ -310,6 +311,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
         // Set the old state
         if( g_DragSegmentList[ii].m_Pad_Start )
             Track->m_Start = Pad_OldPos;
+
         if( g_DragSegmentList[ii].m_Pad_End )
             Track->m_End = Pad_OldPos;
 
@@ -342,6 +344,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
         // Set the new state
         if( g_DragSegmentList[ii].m_Pad_Start )
             Track->m_Start = Pad->m_Pos;
+
         if( g_DragSegmentList[ii].m_Pad_End )
             Track->m_End = Pad->m_Pos;
 
@@ -351,8 +354,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
             Track->Draw( DrawPanel, DC, GR_OR );
     }
 
-    /* Compute local coordinates (i.e refer to Module position and for Module
-     * orient = 0) */
+    /* Compute local coordinates (i.e refer to Module position and for Module orient = 0) */
     dX = Pad->m_Pos.x - Pad_OldPos.x;
     dY = Pad->m_Pos.y - Pad_OldPos.y;
     RotatePoint( &dX, &dY, -Module->m_Orient );
@@ -365,7 +367,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
     if( DC )
         Pad->Draw( DrawPanel, DC, GR_OR );
 
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
     Module->m_LastEdit_Time = time( NULL );
 
     EraseDragList();
@@ -400,7 +402,7 @@ void PCB_BASE_FRAME::RotatePad( D_PAD* Pad, wxDC* DC )
 
     EXCHG( Pad->m_DeltaSize.x, Pad->m_DeltaSize.y );
     Pad->m_DeltaSize.x = -Pad->m_DeltaSize.x;
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
     Pad->DisplayInfo( this );
 
     if( DC )

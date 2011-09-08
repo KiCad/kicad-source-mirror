@@ -7,7 +7,6 @@
 
 #include "fctsys.h"
 #include "wxstruct.h"
-#include "common.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "macros.h"

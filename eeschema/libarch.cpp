@@ -3,7 +3,6 @@
 /* Module for generation of component archive files. */
 /*****************************************************/
 #include "fctsys.h"
-#include "common.h"
 #include "confirm.h"
 #include "class_sch_screen.h"
 #include "wxstruct.h"

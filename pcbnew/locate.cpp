@@ -76,32 +76,32 @@ TRACK* Locate_Via_Area( TRACK* aStart, const wxPoint& pos, int layer )
 
 
 /* Locate the pad CONNECTED to a track
- * input: ptr_piste: pointer to the segment of track
+ * input: ptr_trace: pointer to the segment of track
  * Extr = flag = START -> beginning of the test segment
  * END -> end of the segment to be tested
  * Returns:
  * A pointer to the description of the pad if found.
  * NULL pointer if pad NOT FOUND
  */
-D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_piste, int extr )
+D_PAD* Locate_Pad_Connecte( BOARD* Pcb, TRACK* ptr_trace, int extr )
 {
     D_PAD*  ptr_pad = NULL;
     wxPoint ref_pos;
 
-    int     masque_layer = g_TabOneLayerMask[ptr_piste->GetLayer()];
+    int     aLayerMask = g_TabOneLayerMask[ptr_trace->GetLayer()];
 
     if( extr == START )
     {
-        ref_pos = ptr_piste->m_Start;
+        ref_pos = ptr_trace->m_Start;
     }
     else
     {
-        ref_pos = ptr_piste->m_End;
+        ref_pos = ptr_trace->m_End;
     }
 
     for( MODULE* module = Pcb->m_Modules;  module;  module = module->Next() )
     {
-        ptr_pad = Locate_Pads( module, ref_pos, masque_layer );
+        ptr_pad = Locate_Pads( module, ref_pos, aLayerMask );
 
         if( ptr_pad != NULL )
             break;
@@ -140,12 +140,12 @@ D_PAD* Locate_Any_Pad( BOARD* Pcb, const wxPoint& ref_pos, int aLayerMask )
  * Returns:
  * A pointer to the pad if found or NULL
  */
-D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int masque_layer )
+D_PAD* Locate_Pads( MODULE* module, const wxPoint& ref_pos, int aLayerMask )
 {
     for( D_PAD* pt_pad = module->m_Pads;   pt_pad;   pt_pad = pt_pad->Next() )
     {
         /* ... and on the correct layer. */
-        if( ( pt_pad->m_Masque_Layer & masque_layer ) == 0 )
+        if( ( pt_pad->m_layerMask & aLayerMask ) == 0 )
             continue;
 
         if( pt_pad->HitTest( ref_pos ) )
@@ -274,7 +274,8 @@ int dist;
 }
 
 
-/** Search for the track (or via) segment which is connected to the track
+/**
+ * Search for the track (or via) segment which is connected to the track
  *  segment PtRefSegm
  *  if extr == START, the starting track segment PtRefSegm is used to locate
  *  a connected segment
@@ -294,7 +295,7 @@ int dist;
  *  @param pt_lim = upper limit for search (can be NULL)
  *  @param extr = START or END = end of ref track segment to use in tests
  */
-TRACK* Locate_Piste_Connectee( TRACK* PtRefSegm, TRACK* pt_base, TRACK* pt_lim, int extr )
+TRACK* GetConnectedTrace( TRACK* PtRefSegm, TRACK* pt_base, TRACK* pt_lim, int extr )
 {
     const int NEIGHTBOUR_COUNT_MAX = 50;
 
@@ -389,6 +390,7 @@ suite1:
 
             continue;
         }
+
         if( PtSegmN == PtRefSegm )
         {
             if( PtSegmN == pt_lim )
@@ -410,6 +412,7 @@ suite1:
             if( Reflayer & PtSegmN->ReturnMaskLayer() )
                 return PtSegmN;
         }
+
         if( PtSegmN == pt_lim )
             break;
     }
@@ -425,7 +428,7 @@ suite1:
  *
  * The search begins to address start_adresse
  */
-TRACK* Locate_Pistes( BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos, int MasqueLayer )
+TRACK* GetTrace( BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos, int LayerMask )
 {
     for( TRACK* track = start_adresse;   track;  track =  track->Next() )
     {
@@ -449,7 +452,7 @@ TRACK* Locate_Pistes( BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos,
         }
         else
         {
-            if( (g_TabOneLayerMask[layer] & MasqueLayer) == 0 )
+            if( (g_TabOneLayerMask[layer] & LayerMask) == 0 )
                 continue;   /* Segments on different layers. */
 
             if( track->HitTest( ref_pos ) )
@@ -486,7 +489,7 @@ TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer )
 
 
 /* Find the pad center px, py,
- * The layer INDICATED BY masque_layer (bitwise)
+ * The layer INDICATED BY aLayerMask (bitwise)
  * (Runway end)
  * The list of pads must already exist.
  *
@@ -495,7 +498,7 @@ TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer )
  *   Pointer to the structure corresponding descr_pad if pad found
  * (Good position and good layer).
  */
-D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int masque_layer )
+D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int aLayerMask )
 {
     for( unsigned i=0; i<Pcb->GetPadsCount();  ++i )
     {
@@ -505,7 +508,7 @@ D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int masque_
             continue;
 
         /* Pad found, it must be on the correct layer */
-        if( pad->m_Masque_Layer & masque_layer )
+        if( pad->m_layerMask & aLayerMask )
             return pad;
     }
 
@@ -520,7 +523,7 @@ D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int masque_
  * The segments of track marks with the flag are not IS_DELETED or taken
  * into account
  */
-TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr, const wxPoint& ref_pos, int MaskLayer )
+TRACK* GetTrace( TRACK* start_adr, TRACK* end_adr, const wxPoint& ref_pos, int MaskLayer )
 {
     TRACK* PtSegm;
 

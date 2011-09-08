@@ -10,6 +10,7 @@
 #include "base_struct.h"
 #include "param_config.h"
 #include "class_layer_box_selector.h"
+#include "class_macros_record.h"
 #include "richio.h"
 
 #ifndef PCB_INTERNAL_UNIT
@@ -27,7 +28,7 @@ class SEGZONE;
 class SEGVIA;
 class D_PAD;
 class TEXTE_MODULE;
-class MIREPCB;
+class PCB_TARGET;
 class DIMENSION;
 class EDGE_MODULE;
 class DRC;
@@ -52,6 +53,9 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
     void updateTraceWidthSelectBox();
     void updateViaSizeSelectBox();
+
+    int             m_RecordingMacros;
+    MACROS_RECORDED m_Macros[10];
 
 protected:
 
@@ -164,6 +168,22 @@ public:
     void OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent );
+
+    /**
+     * Function RecordMacros
+     * record sequence hotkeys and cursor position to macros.
+     */
+    void RecordMacros(wxDC* aDC, int aNumber);
+
+    /**
+     * Function CallMacros
+     * play hotkeys and cursor position from recorded macros.
+     */
+    void CallMacros(wxDC* aDC, const wxPoint& aPosition, int aNumber);
+
+    void SaveMacros();
+
+    void ReadMacros();
 
     /**
      * Function PrintPage , virtual
@@ -307,6 +327,8 @@ public:
      * @return true if an item was deleted
      */
     bool             OnHotkeyDeleteItem( wxDC* aDC );
+
+    bool             OnHotkeyPlaceItem( wxDC* aDC );
 
     bool             OnHotkeyEditItem( int aIdCommand );
 
@@ -808,8 +830,8 @@ public:
      *                the case where DRC would not allow a via.
      */
     bool   Other_Layer_Route( TRACK* track, wxDC* DC );
-    void   Affiche_PadsNoConnect( wxDC* DC );
-    void   Affiche_Status_Net( wxDC* DC );
+    void   HighlightUnconnectedPads( wxDC* DC );
+    void   DisplayNetStatus( wxDC* DC );
     TRACK* Delete_Segment( wxDC* DC, TRACK* Track );
     void   Delete_Track( wxDC* DC, TRACK* Track );
     void   Delete_net( wxDC* DC, TRACK* Track );
@@ -888,7 +910,6 @@ public:
     void   Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
     void   SwitchLayer( wxDC* DC, int layer );
     bool   Add_45_degrees_Segment( wxDC* DC );
-    bool   Genere_Pad_Connexion( wxDC* DC, int layer );
 
     /**
      * Function EraseRedundantTrack
@@ -1063,11 +1084,11 @@ public:
     void         Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
 
     // Target handling
-    MIREPCB*     Create_Mire( wxDC* DC );
-    void         Delete_Mire( MIREPCB* MirePcb, wxDC* DC );
-    void         StartMove_Mire( MIREPCB* MirePcb, wxDC* DC );
-    void         Place_Mire( MIREPCB* MirePcb, wxDC* DC );
-    void         InstallMireOptionsFrame( MIREPCB* MirePcb, wxDC* DC );
+    PCB_TARGET*  CreateTarget( wxDC* DC );
+    void         DeleteTarget( PCB_TARGET* aTarget, wxDC* DC );
+    void         BeginMoveTarget( PCB_TARGET* aTarget, wxDC* DC );
+    void         PlaceTarget( PCB_TARGET* aTarget, wxDC* DC );
+    void         ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC );
 
     // Graphic segments type DRAWSEGMENT handling:
     DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, int shape, wxDC* DC );

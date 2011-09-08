@@ -175,7 +175,7 @@ Info_3D_Visu::~Info_3D_Visu()
  * units */
 WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
                                       wxBoxSizer* BoxSizer,
-                                      UserUnitType units, int internal_unit )
+                                      EDA_UNITS_T units, int internal_unit )
 {
     wxString      text;
     wxStaticText* msgtitle;

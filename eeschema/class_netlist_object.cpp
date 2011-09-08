@@ -4,7 +4,6 @@
 
 
 #include "fctsys.h"
-#include "common.h"
 #include "macros.h"
 #include "wxEeschemaStruct.h"
 

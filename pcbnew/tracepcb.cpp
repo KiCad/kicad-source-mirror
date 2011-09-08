@@ -10,7 +10,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
@@ -27,10 +26,10 @@ extern int g_DrawDefaultLineThickness; // Default line thickness, used to draw F
 /* Trace the pads of a module in sketch mode.
  * Used to display pads when when the module visibility is set to not visible
  * and we want to see pad through.
- * The pads must appear on the layers selected in MasqueLayer
+ * The pads must appear on the layers selected in LayerMask
  */
 static void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
-                             int ox, int oy, int MasqueLayer, int draw_mode );
+                             int ox, int oy, int LayerMask, int draw_mode );
 
 
 void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
@@ -142,7 +141,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
         {
         case TYPE_DIMENSION:
         case TYPE_TEXTE:
-        case TYPE_MIRE:
+        case PCB_TARGET_T:
         case TYPE_DRAWSEGMENT:
             item->Draw( aPanel, DC, aDrawMode );
             break;
@@ -178,6 +177,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
         {
             if( module->GetLayer() == LAYER_N_FRONT )
                 display = false;
+
             layerMask &= ~LAYER_FRONT;
         }
 
@@ -251,10 +251,10 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* aDrawPanel, wxDC* DC, int aNetCode )
 /* Trace the pads of a module in sketch mode.
  * Used to display pads when when the module visibility is set to not visible
  * and we want to see pad through.
- * The pads must appear on the layers selected in MasqueLayer
+ * The pads must appear on the layers selected in LayerMask
  */
 void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
-                      int ox, int oy, int MasqueLayer, int draw_mode )
+                      int ox, int oy, int LayerMask, int draw_mode )
 {
     int             tmp;
     PCB_BASE_FRAME* frame;
@@ -267,7 +267,7 @@ void Trace_Pads_Only( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* Module,
     /* Draw pads. */
     for( D_PAD* pad = Module->m_Pads;  pad;  pad = pad->Next() )
     {
-        if( (pad->m_Masque_Layer & MasqueLayer) == 0 )
+        if( (pad->m_layerMask & LayerMask) == 0 )
             continue;
 
         pad->Draw( panel, DC, draw_mode, wxPoint( ox, oy ) );

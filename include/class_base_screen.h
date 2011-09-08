@@ -327,7 +327,7 @@ public:
     void        SetGridList( GRIDS& sizelist );
     void        AddGrid( const GRID_TYPE& grid );
     void        AddGrid( const wxRealPoint& size, int id );
-    void        AddGrid( const wxRealPoint& size, UserUnitType aUnit, int id );
+    void        AddGrid( const wxRealPoint& size, EDA_UNITS_T aUnit, int id );
 
     /**
      * Function GetGridCount().

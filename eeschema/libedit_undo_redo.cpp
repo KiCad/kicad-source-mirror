@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "class_drawpanel.h"
 
-#include "common.h"
 #include "general.h"
 #include "protos.h"
 #include "libeditframe.h"

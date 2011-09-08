@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "macros.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"

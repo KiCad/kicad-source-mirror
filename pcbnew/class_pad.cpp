@@ -45,9 +45,8 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
     m_LocalSolderMaskMargin  = 0;
     m_LocalSolderPasteMargin = 0;
     m_LocalSolderPasteMarginRatio = 0.0;
-    m_Masque_Layer = PAD_STANDARD_DEFAULT_LAYERS;   // set layers mask to
-                                                    // default for a standard
-                                                    // pad
+    m_layerMask = PAD_STANDARD_DEFAULT_LAYERS;      // set layers mask to
+                                                    // default for a standard pad
 
     SetSubRatsnest( 0 );                            // used in ratsnest
                                                     // calculations
@@ -160,10 +159,12 @@ void D_PAD::ReturnStringPadName( wxString& text ) const
     int ii;
 
     text.Empty();
+
     for( ii = 0; ii < 4; ii++ )
     {
         if( m_Padname[ii] == 0 )
             break;
+
         text.Append( m_Padname[ii] );
     }
 }
@@ -175,8 +176,10 @@ void D_PAD::SetPadName( const wxString& name )
     int ii, len;
 
     len = name.Length();
+
     if( len > 4 )
         len = 4;
+
     for( ii = 0; ii < len; ii++ )
         m_Padname[ii] = name.GetChar( ii );
 
@@ -202,7 +205,7 @@ void D_PAD::Copy( D_PAD* source )
         return;
 
     m_Pos = source->m_Pos;
-    m_Masque_Layer = source->m_Masque_Layer;
+    m_layerMask = source->m_layerMask;
 
     m_NumPadName = source->m_NumPadName;
     SetNet( source->GetNet() );
@@ -280,6 +283,7 @@ int D_PAD::GetSolderMaskMargin()
 {
     int margin = m_LocalSolderMaskMargin;
     MODULE * module = (MODULE*) GetParent();
+
     if( module )
     {
         if( margin == 0 )
@@ -287,6 +291,7 @@ int D_PAD::GetSolderMaskMargin()
             if( module->m_LocalSolderMaskMargin )
                 margin = module->m_LocalSolderMaskMargin;
         }
+
         if( margin == 0 )
         {
             BOARD * brd = GetBoard();
@@ -298,9 +303,11 @@ int D_PAD::GetSolderMaskMargin()
     if( margin < 0 )
     {
         int minsize = -MIN( m_Size.x, m_Size.y ) / 2;
+
         if( margin < minsize )
             minsize = minsize;
     }
+
     return margin;
 }
 
@@ -326,11 +333,13 @@ wxSize D_PAD::GetSolderPasteMargin()
             margin = module->m_LocalSolderPasteMargin;
 
         BOARD * brd = GetBoard();
+
         if( margin == 0  )
             margin = brd->GetBoardDesignSettings()->m_SolderPasteMargin;
 
         if( mratio == 0.0 )
             mratio = module->m_LocalSolderPasteMarginRatio;
+
         if( mratio == 0.0 )
         {
            mratio = brd->GetBoardDesignSettings()->m_SolderPasteMarginRatio;
@@ -373,6 +382,7 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
     while( aReader->ReadLine() )
     {
         Line = aReader->Line();
+
         if( Line[0] == '$' )
             return 0;
 
@@ -385,6 +395,7 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
         case 'S': // = Sh
             /* Read pad name */
             nn = 0;
+
             while( (*PtLine != '"') && *PtLine )
                 PtLine++;
 
@@ -392,6 +403,7 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
                 PtLine++;
 
             memset( m_Padname, 0, sizeof(m_Padname) );
+
             while( (*PtLine != '"') && *PtLine )
             {
                 if( nn < (int) sizeof(m_Padname) )
@@ -450,21 +462,24 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
                     m_DrillShape = PAD_OVAL;
                 }
             }
+
             break;
 
         case 'A':
             nn = sscanf( PtLine, "%s %s %X", BufLine, BufCar,
-                         &m_Masque_Layer );
+                         &m_layerMask );
 
-            /* BufCar is not used now */
-            /* update attributes */
+            /* BufCar is not used now update attributes */
             m_Attribut = PAD_STANDARD;
             if( strncmp( BufLine, "SMD", 3 ) == 0 )
                 m_Attribut = PAD_SMD;
+
             if( strncmp( BufLine, "CONN", 4 ) == 0 )
                 m_Attribut = PAD_CONN;
+
             if( strncmp( BufLine, "HOLE", 4 ) == 0 )
                 m_Attribut = PAD_HOLE_NOT_PLATED;
+
             break;
 
         case 'N':       /* Read Netname */
@@ -545,10 +560,12 @@ bool D_PAD::Save( FILE* aFile ) const
              m_DeltaSize.x, m_DeltaSize.y, m_Orient );
 
     fprintf( aFile, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
+
     if( m_DrillShape == PAD_OVAL )
     {
         fprintf( aFile, " %c %d %d", 'O', m_Drill.x, m_Drill.y );
     }
+
     fprintf( aFile, "\n" );
 
     switch( m_Attribut )
@@ -571,7 +588,7 @@ bool D_PAD::Save( FILE* aFile ) const
         break;
     }
 
-    fprintf( aFile, "At %s N %8.8X\n", texttype, m_Masque_Layer );
+    fprintf( aFile, "At %s N %8.8X\n", texttype, m_layerMask );
 
     fprintf( aFile, "Ne %d %s\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
 
@@ -608,6 +625,7 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     frame->EraseMsgBox();
 
     module = (MODULE*) m_Parent;
+
     if( module )
     {
         wxString msg = module->GetReference();
@@ -621,8 +639,7 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     /* For test and debug only: display m_physical_connexion and
      * m_logical_connexion */
 #if 1   // Used only to debug connectivity calculations
-    Line.Printf( wxT( "%d-%d-%d " ), GetSubRatsnest(),
-                 GetSubNet(), m_ZoneSubnet );
+    Line.Printf( wxT( "%d-%d-%d " ), GetSubRatsnest(), GetSubNet(), m_ZoneSubnet );
     frame->AppendMsgPanel( wxT( "L-P-Z" ), Line, DARKGREEN );
 #endif
 
@@ -630,9 +647,9 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     wxString layerInfo;
 
-    if( (m_Masque_Layer & ALL_CU_LAYERS) == 0 )     // pad is not on any copper layers
+    if( (m_layerMask & ALL_CU_LAYERS) == 0 )     // pad is not on any copper layers
     {
-        switch( m_Masque_Layer & ~ALL_CU_LAYERS )
+        switch( m_layerMask & ~ALL_CU_LAYERS )
         {
         case ADHESIVE_LAYER_BACK:
             layerInfo = board->GetLayerName( ADHESIVE_N_BACK );
@@ -697,33 +714,34 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
 
         static const wxChar* andInternal = _( " & int" );
 
-        if( (m_Masque_Layer & (LAYER_BACK | LAYER_FRONT)) == LAYER_BACK )
+        if( (m_layerMask & (LAYER_BACK | LAYER_FRONT)) == LAYER_BACK )
         {
             layerInfo = board->GetLayerName( LAYER_N_BACK );
 
-            if( m_Masque_Layer & INTERIOR_COPPER )
+            if( m_layerMask & INTERIOR_COPPER )
                 layerInfo += andInternal;
         }
 
-        else if( (m_Masque_Layer & (LAYER_BACK | LAYER_FRONT)) == (LAYER_BACK | LAYER_FRONT) )
+        else if( (m_layerMask & (LAYER_BACK | LAYER_FRONT)) == (LAYER_BACK | LAYER_FRONT) )
         {
             layerInfo = board->GetLayerName( LAYER_N_BACK ) + wxT(", ") +
                         board->GetLayerName( LAYER_N_FRONT );
 
-            if( m_Masque_Layer & INTERIOR_COPPER )
+            if( m_layerMask & INTERIOR_COPPER )
                 layerInfo += andInternal;
         }
 
-        else if( (m_Masque_Layer & (LAYER_BACK | LAYER_FRONT)) == LAYER_FRONT )
+        else if( (m_layerMask & (LAYER_BACK | LAYER_FRONT)) == LAYER_FRONT )
         {
             layerInfo = board->GetLayerName( LAYER_N_FRONT );
 
-            if( m_Masque_Layer & INTERIOR_COPPER )
+            if( m_layerMask & INTERIOR_COPPER )
                 layerInfo += andInternal;
         }
-
-        else // necessarily true: if( m_Masque_Layer & INTERIOR_COPPER )
+        else // necessarily true: if( m_layerMask & INTERIOR_COPPER )
+        {
             layerInfo = _( "internal" );
+        }
     }
 
     frame->AppendMsgPanel( _( "Layer" ), layerInfo, DARKGREEN );
@@ -737,6 +755,7 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     frame->AppendMsgPanel( _( "V Size" ), Line, RED );
 
     valeur_param( (unsigned) m_Drill.x, Line );
+
     if( m_DrillShape == PAD_CIRCLE )
     {
         frame->AppendMsgPanel( _( "Drill" ), Line, RED );
@@ -751,6 +770,7 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     }
 
     int module_orient = module ? module->m_Orient : 0;
+
     if( module_orient )
         Line.Printf( wxT( "%3.1f(+%3.1f)" ),
                      (float) ( m_Orient - module_orient ) / 10,
@@ -777,7 +797,7 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
 // see class_pad.h
 bool D_PAD::IsOnLayer( int aLayer ) const
 {
-    return (1 << aLayer) & m_Masque_Layer;
+    return (1 << aLayer) & m_layerMask;
 }
 
 
@@ -807,8 +827,10 @@ bool D_PAD::HitTest( const wxPoint& refPos )
     {
     case PAD_CIRCLE:
         dist = hypot( delta.x, delta.y );
+
         if( wxRound( dist ) <= dx )
             return true;
+
         break;
 
     case PAD_TRAPEZOID:
@@ -821,8 +843,10 @@ bool D_PAD::HitTest( const wxPoint& refPos )
 
     default:
         RotatePoint( &delta, -m_Orient );
+
         if( (abs( delta.x ) <= dx ) && (abs( delta.y ) <= dy) )
             return true;
+
         break;
     }
 
@@ -836,23 +860,29 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 
     if( (diff = padref->m_PadShape - padcmp->m_PadShape) )
         return diff;
+
     if( (diff = padref->m_Size.x - padcmp->m_Size.x) )
         return diff;
+
     if( (diff = padref->m_Size.y - padcmp->m_Size.y) )
         return diff;
+
     if( (diff = padref->m_Offset.x - padcmp->m_Offset.x) )
         return diff;
+
     if( (diff = padref->m_Offset.y - padcmp->m_Offset.y) )
         return diff;
+
     if( (diff = padref->m_DeltaSize.x - padcmp->m_DeltaSize.x) )
         return diff;
+
     if( (diff = padref->m_DeltaSize.y - padcmp->m_DeltaSize.y) )
         return diff;
 
     // @todo check if export_gencad still works:
     // specctra_export needs this, but maybe export_gencad does not.  added on
     // Jan 24 2008 by Dick.
-    if( ( diff = padref->m_Masque_Layer - padcmp->m_Masque_Layer ) )
+    if( ( diff = padref->m_layerMask - padcmp->m_layerMask ) )
         return diff;
 
     return 0;
@@ -864,19 +894,19 @@ wxString D_PAD::ShowPadShape() const
     switch( m_PadShape )
     {
     case PAD_CIRCLE:
-        return _("Circle");
+        return _( "Circle" );
 
     case PAD_OVAL:
-        return _("Oval");
+        return _( "Oval" );
 
     case PAD_RECT:
-        return _("Rect");
+        return _( "Rect" );
 
     case PAD_TRAPEZOID:
-        return _("Trap");
+        return _( "Trap" );
 
     default:
-        return wxT("??Unknown??");
+        return wxT( "??Unknown??" );
     }
 }
 
@@ -886,19 +916,19 @@ wxString D_PAD::ShowPadAttr() const
     switch( m_Attribut & 0x0F )
     {
     case PAD_STANDARD:
-        return _("Std");
+        return _( "Std" );
 
     case PAD_SMD:
-        return _("Smd");
+        return _( "Smd" );
 
     case PAD_CONN:
-        return _("Conn");
+        return _( "Conn" );
 
     case PAD_HOLE_NOT_PLATED:
-        return _("Not Plated");
+        return _( "Not Plated" );
 
     default:
-        return wxT("??Unkown??");
+        return wxT( "??Unkown??" );
     }
 }
 
@@ -910,11 +940,11 @@ wxString D_PAD::GetSelectMenuText() const
 
     text << _( "Pad" ) << wxT( " \"" ) << ReturnStringPadName() << wxT( "\" (" );
 
-    if ( (m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS )
+    if ( (m_layerMask & ALL_CU_LAYERS) == ALL_CU_LAYERS )
         text << _("all copper layers");
-    else if( (m_Masque_Layer & LAYER_BACK ) == LAYER_BACK )
+    else if( (m_layerMask & LAYER_BACK ) == LAYER_BACK )
         text << board->GetLayerName(LAYER_N_BACK);
-    else if( (m_Masque_Layer & LAYER_FRONT) == LAYER_FRONT )
+    else if( (m_layerMask & LAYER_FRONT) == LAYER_FRONT )
         text << board->GetLayerName(LAYER_N_FRONT);
     else
         text << _( "???" );
@@ -935,12 +965,11 @@ wxString D_PAD::GetSelectMenuText() const
  */
 void D_PAD::Show( int nestLevel, std::ostream& os )
 {
-    char padname[5] =
-    { m_Padname[0], m_Padname[1], m_Padname[2], m_Padname[3], 0 };
+    char padname[5] = { m_Padname[0], m_Padname[1], m_Padname[2], m_Padname[3], 0 };
 
     char layerMask[16];
 
-    sprintf( layerMask, "0x%08X", m_Masque_Layer );
+    sprintf( layerMask, "0x%08X", m_layerMask );
 
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<

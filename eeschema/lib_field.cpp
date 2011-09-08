@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "macros.h"
 #include "base_struct.h"
 #include "drawtxt.h"

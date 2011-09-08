@@ -3,7 +3,6 @@
 /*******************************************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "trigo.h"
@@ -200,6 +199,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     /* Enter the desired length. */
     msg = ReturnStringFromValue( g_UserUnit, Mself.lng, GetScreen()->GetInternalUnits() );
     wxTextEntryDialog dlg( this, _( "Length:" ), _( "Length" ), msg );
+
     if( dlg.ShowModal() != wxID_OK )
         return NULL; // cancelled by user
 
@@ -217,8 +217,8 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     Mself.m_Width = GetBoard()->GetCurrentTrackWidth();
 
     std::vector <wxPoint> buffer;
-    ll = BuildCornersList_S_Shape( buffer, Mself.m_Start, Mself.m_End,
-                                   Mself.lng, Mself.m_Width );
+    ll = BuildCornersList_S_Shape( buffer, Mself.m_Start, Mself.m_End, Mself.lng, Mself.m_Width );
+
     if( !ll )
     {
         DisplayError( this, _( "Requested length too large" ) );
@@ -229,6 +229,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     /* Generate module. */
     MODULE* Module;
     Module = Create_1_Module( wxEmptyString );
+
     if( Module == NULL )
         return NULL;
 
@@ -262,7 +263,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     PtPad->m_Pos    = Mself.m_End;
     PtPad->m_Pos0   = PtPad->m_Pos - Module->m_Pos;
     PtPad->m_Size.x = PtPad->m_Size.y = Mself.m_Width;
-    PtPad->m_Masque_Layer = g_TabOneLayerMask[Module->GetLayer()];
+    PtPad->m_layerMask = g_TabOneLayerMask[Module->GetLayer()];
     PtPad->m_Attribut     = PAD_SMD;
     PtPad->m_PadShape     = PAD_CIRCLE;
     PtPad->ComputeShapeMaxRadius();
@@ -280,17 +281,16 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     /* Modify text positions. */
     Module->DisplayInfo( this );
     Module->m_Value->m_Pos.x = Module->m_Reference->m_Pos.x =
-                                   ( Mself.m_Start.x + Mself.m_End.x ) / 2;
+                               ( Mself.m_Start.x + Mself.m_End.x ) / 2;
     Module->m_Value->m_Pos.y = Module->m_Reference->m_Pos.y =
-                                   ( Mself.m_Start.y + Mself.m_End.y ) / 2;
+                               ( Mself.m_Start.y + Mself.m_End.y ) / 2;
 
     Module->m_Reference->m_Pos.y -= Module->m_Reference->m_Size.y;
     Module->m_Value->m_Pos.y     += Module->m_Value->m_Size.y;
     Module->m_Reference->m_Pos0   = Module->m_Reference->m_Pos - Module->m_Pos;
     Module->m_Value->m_Pos0 = Module->m_Value->m_Pos - Module->m_Pos;
 
-
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
     Module->Draw( DrawPanel, DC, GR_OR );
 
     return Module;
@@ -395,7 +395,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     wxPoint pt       = aEndPoint - aStartPoint;
     int     angle    = -wxRound( atan2( (double) pt.y, (double) pt.x ) * 1800.0 / M_PI );
     int     min_len  = wxRound( sqrt( (double) pt.x * pt.x + (double) pt.y * pt.y ) );
-    int     segm_len = 0;           // lenght of segments
+    int     segm_len = 0;           // length of segments
     int     full_len;               // full len of shape (sum of lenght of all segments + arcs)
 
 
@@ -416,25 +416,29 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     int segm_count;     // number of full len segments
                         // the half size segments (first and last segment) are not counted here
     int stubs_len = 0;  // lenght of first or last segment (half size of others segments)
+
     for( segm_count = 0; ; segm_count++ )
     {
         stubs_len = ( size.y - ( radius * 2 * (segm_count + 2 ) ) ) / 2;
+
         if( stubs_len < size.y / 10 ) // Reduce radius.
         {
             stubs_len = size.y / 10;
             radius    = ( size.y - (2 * stubs_len) ) / ( 2 * (segm_count + 2) );
+
             if( radius < aWidth ) // Radius too small.
             {
                 // Unable to create line: Requested length value is too large for room
                 return 0;
             }
         }
+
         segm_len  = size.x - ( radius * 2 );
-        full_len  = 2 * stubs_len;                                                  // Length of coil connections.
-        full_len += segm_len * segm_count;                                          // Length of full length segments.
+        full_len  = 2 * stubs_len;               // Length of coil connections.
+        full_len += segm_len * segm_count;       // Length of full length segments.
         full_len += wxRound( ( segm_count + 2 ) * M_PI * ADJUST_SIZE * radius );    // Ard arcs len
-        full_len += segm_len - (2 * radius);                                        // Length of first and last segments
-                                                                                    // (half size segments len = segm_len/2 - radius).
+        full_len += segm_len - (2 * radius);     // Length of first and last segments
+                                                 // (half size segments len = segm_len/2 - radius).
 
         if( full_len >= aLength )
             break;
@@ -458,6 +462,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     pt = aBuffer.back();
 
     int half_size_seg_len = segm_len / 2 - radius;
+
     if( half_size_seg_len )
     {
         pt.x -= half_size_seg_len;
@@ -468,6 +473,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     int ii;
     int sign = 1;
     segm_count += 1;    // increase segm_count to create the last half_size segment
+
     for( ii = 0; ii < segm_count; ii++ )
     {
         int arc_angle;
@@ -476,6 +482,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
             sign = -1;
         else
             sign = 1;
+
         arc_angle = 1800 * sign;
         centre    = pt;
         centre.y += radius;
@@ -499,10 +506,10 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
 
     // Rotate point
     angle += 900;
+
     for( unsigned jj = 0; jj < aBuffer.size(); jj++ )
     {
-        RotatePoint( &aBuffer[jj].x, &aBuffer[jj].y,
-                     aStartPoint.x, aStartPoint.y, angle );
+        RotatePoint( &aBuffer[jj].x, &aBuffer[jj].y, aStartPoint.x, aStartPoint.y, angle );
     }
 
     // push last point (end point)
@@ -523,6 +530,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
     wxString Line;
 
     Module = Create_1_Module( name );
+
     if( Module == NULL )
         return NULL;
 
@@ -547,11 +555,11 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
 
         Module->m_Pads.PushFront( pad );
 
-        pad->m_Size.x       = pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();
-        pad->m_Pos          = Module->m_Pos;
-        pad->m_PadShape     = PAD_RECT;
-        pad->m_Attribut     = PAD_SMD;
-        pad->m_Masque_Layer = LAYER_FRONT;
+        pad->m_Size.x    = pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();
+        pad->m_Pos       = Module->m_Pos;
+        pad->m_PadShape  = PAD_RECT;
+        pad->m_Attribut  = PAD_SMD;
+        pad->m_layerMask = LAYER_FRONT;
         Line.Printf( wxT( "%d" ), pad_num );
         pad->SetPadName( Line );
         pad_num++;
@@ -567,7 +575,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
  *  PAD_SMD, rectangular, H size = V size = current track width.
  *  the "gap" is isolation created between this 2 pads
  */
-MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent(  int shape_type )
+MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
 {
     int      oX;
     D_PAD*   pad;
@@ -604,8 +612,9 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent(  int shape_type )
     }
 
     wxString          value = ReturnStringFromValue( g_UserUnit, gap_size,
-                                                    GetScreen()->GetInternalUnits() );
+                                                     GetScreen()->GetInternalUnits() );
     wxTextEntryDialog dlg( this, msg, _( "Create microwave module" ), value );
+
     if( dlg.ShowModal() != wxID_OK )
     {
         DrawPanel->MoveCursorToCrossHair();
@@ -616,24 +625,30 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent(  int shape_type )
     gap_size = ReturnValueFromString( g_UserUnit, value, GetScreen()->GetInternalUnits() );
 
     bool abort = false;
+
     if( shape_type == 2 )
     {
         double            fcoeff = 10.0, fval;
         msg.Printf( wxT( "%3.1f" ), angle / fcoeff );
-        wxTextEntryDialog angledlg( this, _( "Angle (0.1deg):" ), _(
-                                        "Create microwave module" ), msg );
+        wxTextEntryDialog angledlg( this, _( "Angle (0.1deg):" ),
+                                    _( "Create microwave module" ), msg );
+
         if( angledlg.ShowModal() != wxID_OK )
         {
             DrawPanel->MoveCursorToCrossHair();
             return NULL; // cancelled by user
         }
+
         msg = angledlg.GetValue();
+
         if( !msg.ToDouble( &fval ) )
         {
             DisplayError( this, _( "Incorrect number, abort" ) );
-            abort = TRUE;
+            abort = true;
         }
+
         angle = ABS( wxRound( fval * fcoeff ) );
+
         if( angle > 1800 )
             angle = 1800;
     }
@@ -682,6 +697,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent(  int shape_type )
         polyPoints.push_back( wxPoint( 0, 0 ) );
 
         int theta = -angle / 2;
+
         for( int ii = 1; ii<numPoints - 1; ii++ )
         {
             wxPoint pt( 0, -gap_size );
@@ -691,6 +707,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent(  int shape_type )
             polyPoints.push_back( pt );
 
             theta += 50;
+
             if( theta > angle / 2 )
                 theta = angle / 2;
         }
@@ -704,7 +721,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent(  int shape_type )
         break;
     }
 
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
     GetBoard()->m_Status_Pcb = 0;
     OnModify();
     return Module;
@@ -725,7 +742,7 @@ class WinEDA_SetParamShapeFrame : public wxDialog
 private:
     PCB_EDIT_FRAME*  m_Parent;
     wxRadioBox*      m_ShapeOptionCtrl;
-    WinEDA_SizeCtrl* m_SizeCtrl;
+    EDA_SIZE_CTRL*   m_SizeCtrl;
 
 public: WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent, const wxPoint& pos );
     ~WinEDA_SetParamShapeFrame() { };
@@ -741,21 +758,21 @@ private:
 
 
 BEGIN_EVENT_TABLE( WinEDA_SetParamShapeFrame, wxDialog )
-EVT_BUTTON( wxID_OK, WinEDA_SetParamShapeFrame::OnOkClick )
-EVT_BUTTON( wxID_CANCEL, WinEDA_SetParamShapeFrame::OnCancelClick )
-EVT_BUTTON( ID_READ_SHAPE_FILE,
-            WinEDA_SetParamShapeFrame::ReadDataShapeDescr )
+    EVT_BUTTON( wxID_OK, WinEDA_SetParamShapeFrame::OnOkClick )
+    EVT_BUTTON( wxID_CANCEL, WinEDA_SetParamShapeFrame::OnCancelClick )
+    EVT_BUTTON( ID_READ_SHAPE_FILE, WinEDA_SetParamShapeFrame::ReadDataShapeDescr )
 END_EVENT_TABLE()
+
 
 WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent,
                                                       const wxPoint&  framepos ) :
-    wxDialog( parent, -1, _( "Complex shape" ), framepos, wxSize( 350, 280 ),
-              DIALOG_STYLE )
+    wxDialog( parent, -1, _( "Complex shape" ), framepos, wxSize( 350, 280 ), DIALOG_STYLE )
 {
     m_Parent = parent;
 
     if( PolyEdges )
         free( PolyEdges );
+
     PolyEdges = NULL;
     PolyEdgesCount = 0;
 
@@ -772,9 +789,8 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent,
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
-    Button =
-        new wxButton( this, ID_READ_SHAPE_FILE,
-                     _( "Read Shape Description File..." ) );
+    Button = new wxButton( this, ID_READ_SHAPE_FILE,
+                           _( "Read Shape Description File..." ) );
     RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
     wxString shapelist[3] =
@@ -782,15 +798,16 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent,
         _( "Normal" ), _( "Symmetrical" ),
         _( "Mirrored" )
     };
+
     m_ShapeOptionCtrl = new wxRadioBox( this, -1, _( "Shape Option" ),
                                         wxDefaultPosition, wxDefaultSize, 3,
                                         shapelist, 1,
                                         wxRA_SPECIFY_COLS );
     LeftBoxSizer->Add( m_ShapeOptionCtrl, 0, wxGROW | wxALL, 5 );
 
-    m_SizeCtrl = new WinEDA_SizeCtrl( this, _( "Size" ), ShapeSize,
-                                      g_UserUnit, LeftBoxSizer,
-                                      PCB_INTERNAL_UNIT );
+    m_SizeCtrl = new EDA_SIZE_CTRL( this, _( "Size" ), ShapeSize,
+                                    g_UserUnit, LeftBoxSizer,
+                                    PCB_INTERNAL_UNIT );
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -801,6 +818,7 @@ void WinEDA_SetParamShapeFrame::OnCancelClick( wxCommandEvent& event )
 {
     if( PolyEdges )
         free( PolyEdges );
+
     PolyEdges = NULL;
     PolyEdgesCount = 0;
     EndModal( -1 );
@@ -849,7 +867,7 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
                                      mask,
                                      this,
                                      wxFD_OPEN,
-                                     TRUE );
+                                     true );
     if( FullFileName.IsEmpty() )
         return;
 
@@ -869,6 +887,7 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
     ptbuf   = PolyEdges = (double*) MyZMalloc( bufsize * 2 * sizeof(double) );
 
     SetLocaleTo_C_standard();
+
     while( reader.ReadLine() )
     {
         Line = reader.Line();
@@ -879,11 +898,14 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
         {
             if( strnicmp( param2, "inch", 4 ) == 0 )
                 unitconv = 10000;
+
             if( strnicmp( param2, "mm", 2 ) == 0 )
                 unitconv = 10000 / 25.4;
         }
+
         if( strnicmp( param1, "$ENDCOORD", 8 ) == 0 )
             break;
+
         if( strnicmp( param1, "$COORD", 6 ) == 0 )
         {
             while( reader.ReadLine() )
@@ -891,17 +913,19 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
                 Line = reader.Line();
                 param1 = strtok( Line, " \t\n\r" );
                 param2 = strtok( NULL, " \t\n\r" );
+
                 if( strnicmp( param1, "$ENDCOORD", 8 ) == 0 )
                     break;
+
                 if( bufsize <= PolyEdgesCount )
                 {
                     int index = ptbuf - PolyEdges;
                     bufsize *= 2;
-                    ptbuf    = PolyEdges = (double*) realloc(
-                                   PolyEdges, bufsize * 2 *
-                                   sizeof(double) );
+                    ptbuf    = PolyEdges = (double*) realloc( PolyEdges, bufsize * 2 *
+                                                              sizeof(double) );
                     ptbuf += index;
                 }
+
                 *ptbuf = atof( param1 );
                 ptbuf++;
                 *ptbuf = atof( param2 );
@@ -909,10 +933,12 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
                 PolyEdgesCount++;
             }
         }
+
         if( strnicmp( Line, "XScale", 6 ) == 0 )
         {
             ShapeScaleX = atof( param2 );
         }
+
         if( strnicmp( Line, "YScale", 6 ) == 0 )
         {
             ShapeScaleY = atof( param2 );
@@ -924,6 +950,7 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
         free( PolyEdges );
         PolyEdges = NULL;
     }
+
     SetLocaleTo_Default();       // revert to the current locale
 
     ShapeScaleX *= unitconv;
@@ -942,8 +969,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     EDGE_MODULE* edge;
     int          ii, npoints;
 
-    WinEDA_SetParamShapeFrame* frame = new WinEDA_SetParamShapeFrame(
-        this, wxPoint( -1, -1 ) );
+    WinEDA_SetParamShapeFrame* frame = new WinEDA_SetParamShapeFrame( this, wxPoint( -1, -1 ) );
 
     int ok = frame->ShowModal();
 
@@ -955,6 +981,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     {
         if( PolyEdges )
             free( PolyEdges );
+
         PolyEdges = NULL;
         PolyEdgesCount = 0;
         return NULL;
@@ -971,6 +998,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
         DisplayError( this, _( "Shape has a null size!" ) );
         return NULL;
     }
+
     if( PolyEdgesCount == 0 )
     {
         DisplayError( this, _( "Shape has no points!" ) );
@@ -1005,6 +1033,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
 
     double* dptr = PolyEdges;
     wxPoint first_coordinate, last_coordinate;
+
     for( ii = 0; ii < npoints; ii++ )  // Copy points
     {
         last_coordinate.x = wxRound( *dptr++ *ShapeScaleX ) + pad1->m_Pos0.x;
@@ -1049,7 +1078,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     PolyEdgesCount = 0;
     PolyEdges = NULL;
 
-    Module->Set_Rectangle_Encadrement();
+    Module->CalculateBoundingBox();
     GetBoard()->m_Status_Pcb = 0;
     OnModify();
     return Module;
@@ -1071,16 +1100,20 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* Module )
 
     /* Test if module is a gap type (name begins with GAP, and has 2 pads). */
     msg = Module->m_Reference->m_Text.Left( 3 );
+
     if( msg != wxT( "GAP" ) )
         return;
 
     pad = Module->m_Pads;
+
     if( pad == NULL )
     {
         DisplayError( this, _( "No pad for this module" ) );
         return;
     }
+
     next_pad = (D_PAD*) pad->Next();
+
     if( next_pad == NULL )
     {
         DisplayError( this, _( "Only one pad for this module" ) );
@@ -1095,6 +1128,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* Module )
     /* Entrer the desired length of the gap. */
     msg = ReturnStringFromValue( g_UserUnit, gap_size, GetScreen()->GetInternalUnits() );
     wxTextEntryDialog dlg( this, _( "Gap:" ), _( "Create Microwave Gap" ), msg );
+
     if( dlg.ShowModal() != wxID_OK )
         return; // cancelled by user
 

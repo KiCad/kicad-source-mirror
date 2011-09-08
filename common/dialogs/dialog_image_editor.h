@@ -35,7 +35,9 @@
 class DIALOG_IMAGE_EDITOR : public DIALOG_IMAGE_EDITOR_BASE
 {
 private:
-    BITMAP_BASE*     m_workingImage;
+    BITMAP_BASE*     m_workingImage;        // The copy of BITMAP_BASE to be edited
+    BITMAP_BASE*     m_lastImage;           // the saved BITMAP_BASE before a new change.
+                                            // Used to undo the last change
 
 public:
     DIALOG_IMAGE_EDITOR( wxWindow* aParent, BITMAP_BASE* aItem );
@@ -51,12 +53,16 @@ public:
     void TransfertToImage( BITMAP_BASE* aItem );
 
 private:
+	void OnUndoLastChange( wxCommandEvent& event );
+	void OnGreyScaleConvert( wxCommandEvent& event );
+	void OnHalfSize( wxCommandEvent& event );
     void OnMirrorX_click( wxCommandEvent& event );
     void OnMirrorY_click( wxCommandEvent& event );
     void OnRotateClick( wxCommandEvent& event );
     void OnOK_Button( wxCommandEvent& aEvent );
     void OnCancel_Button( wxCommandEvent& aEvent );
 	void OnRedrawPanel( wxPaintEvent& event );
+    bool CheckValues();
 };
 
 

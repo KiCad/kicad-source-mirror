@@ -30,7 +30,6 @@
 #include "algorithm"
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "kicad_string.h"
@@ -730,13 +729,14 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName( void )
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
         listnames.Add( Module->m_Reference->m_Text );
 
-    WinEDAListBox dlg( this, _( "Components" ), listnames, wxEmptyString );
+    EDA_LIST_DIALOG dlg( this, _( "Components" ), listnames, wxEmptyString );
 
     if( dlg.ShowModal() != wxID_OK )
         return NULL;
 
     wxString ref = dlg.GetTextSelection();
     Module = (MODULE*) GetBoard()->m_Modules;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
         if( Module->m_Reference->m_Text == ref )

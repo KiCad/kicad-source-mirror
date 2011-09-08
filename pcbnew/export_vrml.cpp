@@ -1,5 +1,4 @@
 #include "fctsys.h"
-#include "common.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
@@ -169,8 +168,7 @@ static void bag_flat_triangle( int layer, /*{{{*/
 {
     double z = layer_z[layer];
 
-    layer_triangles[layer].push_back( Triangle( x1, y1, z,
-                                                x2, y2, z, x3, y3, z ) );
+    layer_triangles[layer].push_back( Triangle( x1, y1, z, x2, y2, z, x3, y3, z ) );
 }
 
 
@@ -179,12 +177,10 @@ void FlatFan::bag( int layer, bool close ) /*{{{*/
     unsigned i;
 
     for( i = 0; i < pts.size() - 1; i++ )
-        bag_flat_triangle( layer, c.x, c.y, pts[i].x, pts[i].y,
-                           pts[i + 1].x, pts[i + 1].y );
+        bag_flat_triangle( layer, c.x, c.y, pts[i].x, pts[i].y, pts[i + 1].x, pts[i + 1].y );
 
     if( close )
-        bag_flat_triangle( layer, c.x, c.y, pts[i].x, pts[i].y,
-                           pts[0].x, pts[0].y );
+        bag_flat_triangle( layer, c.x, c.y, pts[i].x, pts[i].y, pts[0].x, pts[0].y );
 }
 
 
@@ -223,14 +219,12 @@ static void bag_vquad( TriangleBag& triangles, /*{{{*/
                        double x1, double y1, double x2, double y2,
                        double z1, double z2 )
 {
-    triangles.push_back( Triangle(
-                            x1, y1, z1,
-                            x2, y2, z1,
-                            x2, y2, z2 ) );
-    triangles.push_back( Triangle(
-                            x1, y1, z1,
-                            x2, y2, z2,
-                            x1, y1, z2 ) );
+    triangles.push_back( Triangle( x1, y1, z1,
+                                   x2, y2, z1,
+                                   x2, y2, z2 ) );
+    triangles.push_back( Triangle( x1, y1, z1,
+                                   x2, y2, z2,
+                                   x1, y1, z2 ) );
 }
 
 
@@ -346,8 +340,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, /*{{{*/
                      i != triangles.end();
                      i++ )
                 {
-                    fprintf( output_file, "%d %d %d -1\n",
-                             j, j + 1, j + 2 );
+                    fprintf( output_file, "%d %d %d -1\n", j, j + 1, j + 2 );
                     j += 3;
                 }
             }
@@ -409,6 +402,7 @@ static void export_vrml_line( int layer, double startx, double starty, /*{{{*/
     /* Output the 'bone' as a triangle fan, this is the fan centre */
     fan.c.x = (startx + endx) / 2;
     fan.c.y = (starty + endy) / 2;
+
     /* The 'end' side cap */
     for( alpha = angle - PI2; alpha < angle + PI2; alpha += PI2 / divisions )
         fan.add( endx + r * cos( alpha ), endy + r * sin( alpha ) );
@@ -429,16 +423,16 @@ static void export_vrml_line( int layer, double startx, double starty, /*{{{*/
 static void export_vrml_circle( int layer, double startx, double starty, /*{{{*/
                                 double endx, double endy, double width, int divisions )
 {
-    double   hole, rayon;
+    double   hole, radius;
     FlatRing ring;
 
-    rayon = hypot( startx - endx, starty - endy ) + ( width / 2);
-    hole  = rayon - width;
+    radius = hypot( startx - endx, starty - endy ) + ( width / 2);
+    hole  = radius - width;
 
     for( double alpha = 0; alpha < M_PI * 2; alpha += M_PI * 2 / divisions )
     {
         ring.add_inner( startx + hole * cos( alpha ), starty + hole * sin( alpha ) );
-        ring.add_outer( startx + rayon * cos( alpha ), starty + rayon * sin( alpha ) );
+        ring.add_outer( startx + radius * cos( alpha ), starty + radius * sin( alpha ) );
     }
 
     ring.bag( layer );
@@ -455,6 +449,7 @@ static void export_vrml_slot( TriangleBag& triangles, /*{{{*/
     loop.z_top    = layer_z[top_layer];
     loop.z_bottom = layer_z[bottom_layer];
     double angle = orient / 1800.0 * M_PI;
+
     if( dy > dx )
     {
         EXCHG( dx, dy );
@@ -467,14 +462,17 @@ static void export_vrml_slot( TriangleBag& triangles, /*{{{*/
     /* The first side cap */
     capx = xc + cos( angle ) * dx / 2;
     capy = yc + sin( angle ) * dx / 2;
+
     for( alpha = angle - PI2; alpha < angle + PI2; alpha += PI2 / divisions )
         loop.add( capx + r * cos( alpha ), capy + r * sin( alpha ) );
 
     alpha = angle + PI2;
     loop.add( capx + r * cos( alpha ), capy + r * sin( alpha ) );
+
     /* The other side cap */
     capx = xc - cos( angle ) * dx / 2;
     capy = yc - sin( angle ) * dx / 2;
+
     for( alpha = angle + PI2; alpha < angle + 3 * PI2; alpha += PI2 / divisions )
         loop.add( capx + r * cos( alpha ), capy + r * sin( alpha ) );
 
@@ -492,6 +490,7 @@ static void export_vrml_hole( TriangleBag& triangles, /*{{{*/
 
     loop.z_top    = layer_z[top_layer];
     loop.z_bottom = layer_z[bottom_layer];
+
     for( double alpha = 0; alpha < M_PI * 2; alpha += M_PI * 2 / divisions )
         loop.add( xc + cos( alpha ) * hole, yc + sin( alpha ) * hole );
 
@@ -508,10 +507,11 @@ static void export_vrml_varc( TriangleBag& triangles, /*{{{*/
     loop.z_top    = layer_z[top_layer];
     loop.z_bottom = layer_z[bottom_layer];
     double angle = atan2( endx - startx, endy - starty );
-    double rayon = hypot( startx - endx, starty - endy );
+    double radius = hypot( startx - endx, starty - endy );
+
     for( double alpha = angle; alpha < angle + PI2; alpha += PI2 / divisions )
     {
-        loop.add( startx + cos( alpha ) * rayon, starty + sin( alpha ) * rayon );
+        loop.add( startx + cos( alpha ) * radius, starty + sin( alpha ) * radius );
     }
 
     loop.bag( triangles );
@@ -528,6 +528,7 @@ static void export_vrml_oval_pad( int layer, /*{{{*/
     fan.c.x = xc;
     fan.c.y = yc;
     double angle = orient / 1800.0 * M_PI;
+
     if( dy > dx )
     {
         EXCHG( dx, dy );
@@ -537,9 +538,11 @@ static void export_vrml_oval_pad( int layer, /*{{{*/
     /* The exchange above means that cutter radius is alvays dy/2 */
     double r = dy / 2;
     double alpha;
+
     /* The first side cap */
     capx = xc + cos( angle ) * dx / 2;
     capy = yc + sin( angle ) * dx / 2;
+
     for( alpha = angle - PI2; alpha < angle + PI2; alpha += PI2 / divisions )
         fan.add( capx + r * cos( alpha ), capy + r * sin( alpha ) );
 
@@ -548,6 +551,7 @@ static void export_vrml_oval_pad( int layer, /*{{{*/
     /* The other side cap */
     capx = xc - cos( angle ) * dx / 2;
     capy = yc - sin( angle ) * dx / 2;
+
     for( alpha = angle + PI2; alpha < angle + 3 * PI2; alpha += PI2 / divisions )
         fan.add( capx + r * cos( alpha ), capy + r * sin( alpha ) );
 
@@ -561,16 +565,16 @@ static void export_vrml_arc( int layer, double startx, double starty, /*{{{*/
                              double endx, double endy, double width, int divisions )
 {
     FlatRing ring;
-    double   hole, rayon;
+    double   hole, radius;
     double   angle = atan2( endx - startx, endy - starty );
 
-    rayon = hypot( startx - endx, starty - endy ) + ( width / 2);
-    hole  = rayon - width;
+    radius = hypot( startx - endx, starty - endy ) + ( width / 2);
+    hole  = radius - width;
 
     for( double alpha = angle; alpha < angle + PI2; alpha += PI2 / divisions )
     {
         ring.add_inner( startx + cos( alpha ) * hole, starty + sin( alpha ) * hole );
-        ring.add_outer( startx + cos( alpha ) * rayon, starty + sin( alpha ) * rayon );
+        ring.add_outer( startx + cos( alpha ) * radius, starty + sin( alpha ) * radius );
     }
 
     ring.bag( layer, false );
@@ -651,9 +655,11 @@ static void export_vrml_pcbtext( TEXTE_PCB* text )
     /* Coupling by globals! Ewwww... */
     s_text_layer = text->GetLayer();
     s_text_width = text->m_Thickness;
+
     wxSize size = text->m_Size;
     if( text->m_Mirror )
         NEGATE( size.x );
+
     if( text->m_MultilineAllowed )
     {
         wxPoint        pos  = text->m_Pos;
@@ -721,6 +727,7 @@ static void export_round_padstack( BOARD* pcb, double x, double y, double r, /*{
         /* The last layer is always the component one, unless it's single face */
         if( (layer > FIRST_COPPER_LAYER) && (layer == copper_layers - 1) )
             layer = LAST_COPPER_LAYER;
+
         if( layer <= top_layer )
             export_vrml_circle( layer, x, y, x + r / 2, y, r, divisions );
     }
@@ -891,7 +898,7 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* pad ) /*{{{*/
     }
 
     /* The pad proper, on the selected layers */
-    unsigned long layer_mask    = pad->m_Masque_Layer;
+    unsigned long layer_mask    = pad->m_layerMask;
     int           copper_layers = pcb->GetCopperLayerCount( );
     /* The (maybe offseted) pad position */
     wxPoint       pad_pos   = pad->ReturnShapePos();
@@ -902,6 +909,7 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* pad ) /*{{{*/
     double        pad_dy    = pad_delta.y / 2;
     double        pad_w     = pad->m_Size.x / 2;
     double        pad_h     = pad->m_Size.y / 2;
+
     for( int layer = FIRST_COPPER_LAYER; layer < copper_layers; layer++ )
     {
         /* The last layer is always the component one, unless it's single face */
@@ -974,6 +982,7 @@ static void build_quat( double x, double y, double z, double a, double q[4] )
 static void from_quat( double q[4], double rot[4] )
 {
     rot[3] = acos( q[3] ) * 2;
+
     for( int i = 0; i < 3; i++ )
     {
         rot[i] = q[i] / sin( rot[3] / 2 );
@@ -996,8 +1005,8 @@ static void compose_quat( double q1[4], double q2[4], double qr[4] )
 
 
 static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
-        FILE* aOutputFile, double aScalingFactor,
-        bool aExport3DFiles, const wxString & a3D_Subdir )
+                                FILE* aOutputFile, double aScalingFactor,
+                                bool aExport3DFiles, const wxString & a3D_Subdir )
 {
     /* Reference and value */
     export_vrml_text_module( aModule->m_Reference );
@@ -1022,17 +1031,16 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
     }
 
     /* Export pads */
-    for( D_PAD* pad = aModule->m_Pads;
-        pad != 0;
-        pad = pad->Next() )
+    for( D_PAD* pad = aModule->m_Pads; pad != 0; pad = pad->Next() )
         export_vrml_pad( aPcb, pad );
 
     bool isFlipped = aModule->GetLayer() == LAYER_N_BACK;
+
     /* Export the object VRML model(s) */
-    for( S3D_MASTER* vrmlm = aModule->m_3D_Drawings;
-        vrmlm != 0; vrmlm = vrmlm->Next() )
+    for( S3D_MASTER* vrmlm = aModule->m_3D_Drawings; vrmlm != 0; vrmlm = vrmlm->Next() )
     {
         wxString fname = vrmlm->m_Shape3DName;
+
         if( fname.IsEmpty() )
             continue;
 
@@ -1040,16 +1048,19 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         {
             wxFileName fn = fname;
             fname = wxGetApp().FindLibraryPath( fn );
+
             if( fname.IsEmpty() )   // keep "short" name if full filemane not found
                 fname = vrmlm->m_Shape3DName;
         }
 
         fname.Replace(wxT("\\"), wxT("/" ) );
         wxString source_fname = fname;
+
         if( aExport3DFiles )    // Change illegal characters in short filename
         {
             ChangeIllegalCharacters( fname, true );
             fname = a3D_Subdir + wxT("/") + fname;
+
             if( !wxFileExists( fname ) )
                 wxCopyFile( source_fname, fname );
         }
@@ -1062,6 +1073,7 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         double rotx = - vrmlm->m_MatRotation.x;
         double roty = - vrmlm->m_MatRotation.y;
         double rotz = - vrmlm->m_MatRotation.z;
+
         if ( isFlipped )
         {
             rotx += 180.0;
@@ -1086,13 +1098,14 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
         /* A null rotation would fail the acos! */
         if( rot[3] != 0.0 )
         {
-            fprintf( aOutputFile, "  rotation %g %g %g %g\n",
-                     rot[0], rot[1], rot[2], rot[3] );
+            fprintf( aOutputFile, "  rotation %g %g %g %g\n", rot[0], rot[1], rot[2], rot[3] );
         }
+
         fprintf( aOutputFile, "  scale %g %g %g\n",
                  vrmlm->m_MatScale.x * aScalingFactor,
                  vrmlm->m_MatScale.y * aScalingFactor,
                  vrmlm->m_MatScale.z * aScalingFactor );
+
         /* adjust 3D shape offset position (offset is given inch) */
         #define UNITS_3D_TO_PCB_UNITS PCB_INTERNAL_UNIT
         int offsetx = wxRound( vrmlm->m_MatPosition.x * UNITS_3D_TO_PCB_UNITS );
@@ -1111,16 +1124,14 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
                  - (double)(offsety + aModule->m_Pos.y),    // Y axis is reversed in pcbnew
                  offsetz + layer_z[aModule->GetLayer()] );
         fprintf( aOutputFile,
-                "  children [\n    Inline {\n      url \"%s\"\n    } ]\n",
-                TO_UTF8( fname ) );
+                 "  children [\n    Inline {\n      url \"%s\"\n    } ]\n",
+                 TO_UTF8( fname ) );
         fprintf( aOutputFile, "  }\n" );
-
     }
 }
 
 
-static void write_and_empty_triangle_bag( FILE* output_file,
-                                          TriangleBag& triangles, int color )
+static void write_and_empty_triangle_bag( FILE* output_file, TriangleBag& triangles, int color )
 {
     if( !triangles.empty() )
     {
@@ -1159,8 +1170,10 @@ wxBusyCursor dummy;
 
     wxString fullFilename = dlg.FilePicker()->GetPath();
     subDirFor3Dshapes = dlg.GetSubdir();
+
     if( ! wxDirExists( subDirFor3Dshapes ) )
         wxMkdir( subDirFor3Dshapes );
+
     if( ! ExportVRML_File( fullFilename, scale, export3DFiles, subDirFor3Dshapes ) )
     {
         wxString msg = _( "Unable to create " ) + fullFilename;
@@ -1216,12 +1229,13 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
     /* scaling factor to convert internal units (decimils) to inches
     */
     double board_scaling_factor = 0.0001;
+
     /* auxiliary scale to export to a different scale.
      */
     double general_scaling_factor = board_scaling_factor * aScale;
-    fprintf(output_file, "Transform {\n");
-    fprintf(output_file, "  scale %g %g %g\n",
-            general_scaling_factor, general_scaling_factor, general_scaling_factor );
+    fprintf( output_file, "Transform {\n" );
+    fprintf( output_file, "  scale %g %g %g\n",
+             general_scaling_factor, general_scaling_factor, general_scaling_factor );
 
     /* Define the translation to have the board centre to the 2D axis origin
      * more easy for rotations...
@@ -1229,9 +1243,9 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
     pcb->ComputeBoundingBox();
     double dx = board_scaling_factor * pcb->m_BoundaryBox.Centre().x * aScale;
     double dy = board_scaling_factor * pcb->m_BoundaryBox.Centre().y * aScale;
-    fprintf(output_file, "  translation %g %g 0.0\n", -dx, dy );
+    fprintf( output_file, "  translation %g %g 0.0\n", -dx, dy );
 
-    fprintf(output_file, "  children [\n" );
+    fprintf( output_file, "  children [\n" );
 
     /* scaling factor to convert 3D models to board units (decimils)
      * Usually we use Wings3D to create thems.
@@ -1239,7 +1253,8 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
      * So the scaling factor from 0.1 inch to board units
      * is 0.1 / board_scaling_factor
      */
-     double wrml_3D_models_scaling_factor = 0.1 / board_scaling_factor;
+
+    double wrml_3D_models_scaling_factor = 0.1 / board_scaling_factor;
     /* Preliminary computation: the z value for each layer */
     compute_layer_Zs( pcb );
 
@@ -1254,9 +1269,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
 */
 
     /* Export footprints */
-    for( MODULE* module = pcb->m_Modules;
-        module != 0;
-        module = module->Next() )
+    for( MODULE* module = pcb->m_Modules; module != 0; module = module->Next() )
         export_vrml_module( pcb, module, output_file,
                             wrml_3D_models_scaling_factor,
                             aExport3DFiles, a3D_Subdir );
@@ -1292,6 +1305,7 @@ static void ChangeIllegalCharacters( wxString & aFileName, bool aDirSepIsIllegal
 {
     if( aDirSepIsIllegal )
         aFileName.Replace(wxT("/"), wxT("_" ) );
+
     aFileName.Replace(wxT(" "), wxT("_" ) );
     aFileName.Replace(wxT(":"), wxT("_" ) );
 }

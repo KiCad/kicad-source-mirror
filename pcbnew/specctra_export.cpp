@@ -81,7 +81,7 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
                                      mask,
                                      this,
                                      wxFD_SAVE,
-                                     FALSE
+                                     false
                                      );
     if( fullFileName == wxEmptyString )
         return;
@@ -245,7 +245,7 @@ static bool isRoundKeepout( D_PAD* aPad )
         if( aPad->m_Drill.x >= aPad->m_Size.x )
             return true;
 
-        if( (aPad->m_Masque_Layer & ALL_CU_LAYERS) == 0 )
+        if( (aPad->m_layerMask & ALL_CU_LAYERS) == 0 )
             return true;
     }
 
@@ -283,7 +283,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
 
     uniqifier = '[';
 
-    bool onAllCopperLayers = ( (aPad->m_Masque_Layer & ALL_CU_LAYERS) == ALL_CU_LAYERS );
+    bool onAllCopperLayers = ( (aPad->m_layerMask & ALL_CU_LAYERS) == ALL_CU_LAYERS );
 
     if( onAllCopperLayers )
         uniqifier += 'A';               // A for all layers

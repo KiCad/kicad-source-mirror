@@ -3,11 +3,8 @@
 /****************************************************************/
 
 #include "fctsys.h"
-#include "common.h"
-#include "bitmaps.h"
 #include "macros.h"
 #include "eeschema_id.h"
-#include "wxstruct.h"
 
 #include "general.h"
 #include "protos.h"

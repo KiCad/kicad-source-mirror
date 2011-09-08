@@ -55,11 +55,11 @@ void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector );
  * The starting point of a track following MUST exist: may be
  * Then put a 0 before calling a routine if the track is the last draw
  */
-void Trace_Une_Piste( EDA_DRAW_PANEL* panel,
-                      wxDC*           DC,
-                      TRACK*          pt_start_piste,
-                      int             nbsegment,
-                      int             mode_color );
+void DrawTraces( EDA_DRAW_PANEL* panel,
+                 wxDC*           DC,
+                 TRACK*          aStartTrace,
+                 int             nbsegment,
+                 int             mode_color );
 
 
 /****************/
@@ -67,7 +67,7 @@ void Trace_Une_Piste( EDA_DRAW_PANEL* panel,
 /****************/
 
 /* Find a pad by it's name om the module. */
-TRACK*       Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer = -1 );
+TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer = -1 );
 
 /**
  * Function Locate_Via_Area
@@ -89,8 +89,7 @@ TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr, const wxPoint& pos, in
  * by masquelayer.
  * Search is done to address start_adr has end_adr (not included)
  */
-TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
-                          const wxPoint& ref_pos, int masquelayer );
+TRACK* GetTrace( TRACK* start_adr, TRACK* end_adr, const wxPoint& ref_pos, int masquelayer );
 
 /* Search for segment connected to the segment edge by
  * Ptr_piste:
@@ -99,7 +98,7 @@ TRACK* Fast_Locate_Piste( TRACK* start_adr, TRACK* end_adr,
  * The search is done only on the ends of segments
  * The search is limited to the area [... pt_base] pt_lim.
  */
-TRACK* Locate_Piste_Connectee( TRACK* ptr_piste, TRACK* pt_base, TRACK* pt_lim, int extr );
+TRACK* GetConnectedTrace( TRACK* aTrace, TRACK* pt_base, TRACK* pt_lim, int extr );
 
 /*
  * 1 - Locate segment of track leading from the mouse.
@@ -110,7 +109,7 @@ TRACK* Locate_Piste_Connectee( TRACK* ptr_piste, TRACK* pt_base, TRACK* pt_lim, 
  *
  * The search begins to address start_adresse
  */
-TRACK* Locate_Pistes( BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos, int layer );
+TRACK* GetTrace( BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos, int layer );
 
 /* Locate pad connected to the beginning or end of a segment
  * Input: pointer to the segment, and flag = START or END
@@ -158,7 +157,7 @@ D_PAD* Locate_Pads( MODULE* Module, int typeloc );
 /* Locate a trace segment at the current cursor position.
  * The search begins to address start_adresse.
  */
-TRACK* Locate_Pistes( TRACK* start_adresse, int typeloc );
+TRACK* GetTrace( TRACK* start_adresse, int typeloc );
 
 DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc );
 
@@ -187,8 +186,7 @@ TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer );
 /*************/
 int ChangeSideNumLayer( int oldlayer );
 void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module );
-void Montre_Position_Empreinte( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                                bool aErase );
+void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase );
 
 
 /****************/
@@ -203,7 +201,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 /* Determine coordinate for a segment direction of 0, 90 or 45 degrees,
  * depending on it's position from the origin (ox, oy) and \a aPosiition..
  */
-void Calcule_Coord_Extremite_45( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
+void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
 
 
 /*****************/
@@ -211,7 +209,7 @@ void Calcule_Coord_Extremite_45( const wxPoint& aPosition, int ox, int oy, int* 
 /*****************/
 
 /**
- * Function Marque_Une_Piste
+ * Function MarkTrace
  * marks a chain of track segments, connected to aTrackList.
  * Each segment is marked by setting the BUSY bit into m_Flags.  Electrical
  * continuity is detected by walking each segment, and finally the segments
@@ -234,12 +232,12 @@ void Calcule_Coord_Extremite_45( const wxPoint& aPosition, int ox, int oy, int* 
  *                   track length in this case, flags are reset
  * @return TRACK* the first in the chain of interesting segments.
  */
-TRACK* Marque_Une_Piste( BOARD* aPcb,
-                         TRACK* aStartSegm,
-                         int*   aSegmCount,
-                         int*   aTrackLen,
-                         int*   aLengthDie,
-                         bool   aReorder );
+TRACK* MarkTrace( BOARD* aPcb,
+                  TRACK* aStartSegm,
+                  int*   aSegmCount,
+                  int*   aTrackLen,
+                  int*   aLengthDie,
+                  bool   aReorder );
 
 /* Calculate end  coordinate of a trace.
  * Returns 1 if OK, 0 if trace looped back on itself.
@@ -247,7 +245,7 @@ TRACK* Marque_Une_Piste( BOARD* aPcb,
  * And EndTrack-> fx, fy if OK
  * The segments are drawn consecutively.
  */
-int  ReturnEndsTrack( TRACK* RefTrack, int NbSegm, TRACK** StartTrack, TRACK** EndTrack );
+int ReturnEndsTrack( TRACK* RefTrack, int NbSegm, TRACK** StartTrack, TRACK** EndTrack );
 
 
 /***************/
@@ -279,10 +277,10 @@ BOARD_ITEM* LocateLockPoint( BOARD* aPcb, wxPoint aPos, int aLayerMask );
  *   Returns the exact value of aRefPoint and a pointer to the via,
  *   But does not create extra point
  */
-TRACK*      CreateLockPoint( BOARD* aPcb,
-                             wxPoint&           aRefPoint,
-                             TRACK*             aSegm,
-                             PICKED_ITEMS_LIST* aItemsListPicker );
+TRACK* CreateLockPoint( BOARD*             aPcb,
+                        wxPoint&           aRefPoint,
+                        TRACK*             aSegm,
+                        PICKED_ITEMS_LIST* aItemsListPicker );
 
 
 /****************/

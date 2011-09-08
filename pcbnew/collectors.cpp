@@ -36,15 +36,15 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     // there are some restrictions on the order of items in the general case.
     // all items in m_Drawings for instance should be contiguous.
     //  *** all items in a same list (shown here) must be contiguous ****
-    TYPE_MARKER_PCB,                 // in m_markers
+    TYPE_MARKER_PCB,             // in m_markers
     TYPE_TEXTE,                  // in m_Drawings
     TYPE_DRAWSEGMENT,            // in m_Drawings
-    TYPE_DIMENSION,               // in m_Drawings
-    TYPE_MIRE,                   // in m_Drawings
+    TYPE_DIMENSION,              // in m_Drawings
+    PCB_TARGET_T,                // in m_Drawings
     TYPE_VIA,                    // in m_Tracks
     TYPE_TRACK,                  // in m_Tracks
     TYPE_PAD,                    // in modules
-    TYPE_TEXTE_MODULE,            // in modules
+    TYPE_TEXTE_MODULE,           // in modules
     TYPE_MODULE,                 // in m_Modules
     TYPE_ZONE,                   // in m_Zones
     TYPE_ZONE_CONTAINER,         // in m_ZoneDescriptorList
@@ -70,7 +70,7 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     TYPE_TEXTE,
     TYPE_DRAWSEGMENT,
     TYPE_DIMENSION,
-    TYPE_MIRE,
+    PCB_TARGET_T,
     TYPE_VIA,
     TYPE_TRACK,
     TYPE_PAD,
@@ -153,6 +153,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     case TYPE_PAD:
     {
         MODULE* m = (MODULE*) item->GetParent();
+
         if( m->GetReference() == wxT( "Y2" ) )
         {
             breakhere++;
@@ -187,6 +188,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     case TYPE_TEXTE_MODULE:
     {
         TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
+
         if( tm->m_Text == wxT( "10uH" ) )
         {
             breakhere++;
@@ -197,6 +199,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     case TYPE_MODULE:
     {
         MODULE* m = (MODULE*) item;
+
         if( m->GetReference() == wxT( "C98" ) )
         {
             breakhere++;
@@ -217,10 +220,12 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     case TYPE_PAD:
         // there are pad specific visibility controls.
         // Criterias to select a pad is:
-        // for smd pads: the module parent must be seen, and pads on the corresponding board side must be seen
+        // for smd pads: the module parent must be seen, and pads on the corresponding
+        // board side must be seen
         // if pad is a thru hole, then it can be visible when its parent module is not.
         // for through pads: pads on Front or Back board sides must be seen
         pad = (D_PAD*) item;
+
         if( (pad->m_Attribut != PAD_SMD) &&
             (pad->m_Attribut != PAD_CONN) )    // a hole is present, so multiple layers
         {
@@ -229,7 +234,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
             pad_through = true;
         }
         else  // smd, so use pads test after module test
+        {
             module = (MODULE*) item->GetParent();
+        }
+
         break;
 
     case TYPE_VIA:
@@ -253,7 +261,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     case TYPE_DIMENSION:
         break;
 
-    case TYPE_MIRE:
+    case PCB_TARGET_T:
         break;
 
     case TYPE_TEXTE_MODULE:
@@ -298,10 +306,12 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     {
         if( m_Guide->IgnorePads() )
             goto exit;
+
         if( ! pad_through )
         {
             if( m_Guide->IgnorePadsOnFront() && pad->IsOnLayer(LAYER_N_FRONT ) )
                 goto exit;
+
             if( m_Guide->IgnorePadsOnBack() && pad->IsOnLayer(LAYER_N_BACK ) )
                 goto exit;
         }

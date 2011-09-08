@@ -5,13 +5,11 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "wxstruct.h"
-#include "common.h"
 #include "class_drawpanel.h"
 
 #include "gerbview.h"
 #include "class_gerber_draw_item.h"
 #include "pcbplot.h"
-#include "bitmaps.h"
 #include "gerbview_id.h"
 #include "hotkeys.h"
 #include "class_GERBER.h"
@@ -31,10 +29,10 @@ const wxString GerbviewShowDCodes( wxT( "ShowDCodesOpt" ) );
 
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
-                                        const wxString& title,
-                                        const wxPoint&  pos,
-                                        const wxSize&   size,
-                                        long            style ) :
+                                const wxString& title,
+                                const wxPoint&  pos,
+                                const wxSize&   size,
+                                long            style ) :
     PCB_BASE_FRAME( father, GERBER_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "GerberFrame" );

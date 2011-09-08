@@ -123,7 +123,7 @@ private:
 
 public:
     WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
-                       wxBoxSizer* BoxSizer, UserUnitType units, int internal_unit );
+                       wxBoxSizer* BoxSizer, EDA_UNITS_T units, int internal_unit );
 
     ~WinEDA_VertexCtrl();
 

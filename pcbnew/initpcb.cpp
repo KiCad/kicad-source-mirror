@@ -4,7 +4,6 @@
 
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
@@ -23,7 +22,7 @@
 bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
 {
     if( GetBoard() == NULL )
-        return FALSE;
+        return false;
 
     if( aQuery )
     {
@@ -31,8 +30,8 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
             || GetBoard()->m_Track || GetBoard()->m_Zone )
         {
             if( !IsOK( this,
-                _( "Current Board will be lost and this operation cannot be undone. Continue ?" ) ) )
-                return FALSE;
+                       _( "Current Board will be lost and this operation cannot be undone. Continue ?" ) ) )
+                return false;
         }
     }
 
@@ -75,15 +74,15 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
 bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
 {
     if( GetBoard() == NULL )
-        return FALSE;
+        return false;
 
     if( aQuery && GetScreen()->IsModify() )
     {
         if( GetBoard()->m_Modules )
         {
             if( !IsOK( this,
-                _( "Current Footprint will be lost and this operation cannot be undone. Continue ?" ) ) )
-                return FALSE;
+                       _( "Current Footprint will be lost and this operation cannot be undone. Continue ?" ) ) )
+                return false;
         }
     }
 

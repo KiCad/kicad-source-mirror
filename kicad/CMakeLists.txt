@@ -52,7 +52,3 @@ endif(APPLE)
 install(TARGETS kicad
         DESTINATION ${KICAD_BIN}
         COMPONENT binary)
-
-if(KICAD_MINIZIP)
-    add_subdirectory(minizip)
-endif(KICAD_MINIZIP)

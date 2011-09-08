@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  6 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -66,6 +66,16 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 	
 	bMiddleLeftSizer->Add( m_SaveTime, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
+	m_staticTextRotationAngle = new wxStaticText( this, wxID_ANY, _("Rotation Angle"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextRotationAngle->Wrap( -1 );
+	bMiddleLeftSizer->Add( m_staticTextRotationAngle, 0, wxALL, 5 );
+	
+	wxString m_RotationAngleChoices[] = { _("45"), _("90") };
+	int m_RotationAngleNChoices = sizeof( m_RotationAngleChoices ) / sizeof( wxString );
+	m_RotationAngle = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_RotationAngleNChoices, m_RotationAngleChoices, 0 );
+	m_RotationAngle->SetSelection( 0 );
+	bMiddleLeftSizer->Add( m_RotationAngle, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
 	bMainSizer->Add( bMiddleLeftSizer, 1, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* bMiddleRightBoxSizer;
@@ -73,49 +83,41 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 	
 	m_DrcOn = new wxCheckBox( this, wxID_DRC_ONOFF, _("Drc ON"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_DrcOn->SetValue(true);
-	
 	m_DrcOn->SetToolTip( _("Enable/disable the DRC control.\nWhen DRC is disable, all connections are allowed.") );
 	
 	bMiddleRightBoxSizer->Add( m_DrcOn, 0, wxALL|wxEXPAND, 5 );
 	
 	m_ShowGlobalRatsnest = new wxCheckBox( this, wxID_GENERAL_RATSNEST, _("Show Ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_ShowGlobalRatsnest->SetToolTip( _("Show (or not) the full rastnest.") );
 	
 	bMiddleRightBoxSizer->Add( m_ShowGlobalRatsnest, 0, wxALL, 5 );
 	
 	m_ShowModuleRatsnest = new wxCheckBox( this, wxID_RATSNEST_MODULE, _("Show Mod Ratsnest"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_ShowModuleRatsnest->SetToolTip( _("Shows (or not) the local ratsnest relative to a footprint, when moving it.\nThis ratsnest is useful to place a footprint.") );
 	
 	bMiddleRightBoxSizer->Add( m_ShowModuleRatsnest, 0, wxALL, 5 );
 	
 	m_TrackAutodel = new wxCheckBox( this, wxID_TRACK_AUTODEL, _("Tracks Auto Del"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_TrackAutodel->SetToolTip( _("Enable/disable the automatic track deletion when recreating a track.") );
 	
 	bMiddleRightBoxSizer->Add( m_TrackAutodel, 0, wxALL, 5 );
 	
 	m_Track_45_Only_Ctrl = new wxCheckBox( this, wxID_TRACKS45, _("Track only 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_Track_45_Only_Ctrl->SetToolTip( _("If enabled, force tracks directions to H, V or 45 degrees, when creating a track.") );
 	
 	bMiddleRightBoxSizer->Add( m_Track_45_Only_Ctrl, 0, wxALL, 5 );
 	
 	m_Segments_45_Only_Ctrl = new wxCheckBox( this, wxID_SEGMENTS45, _("Segments 45 Only"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_Segments_45_Only_Ctrl->SetToolTip( _("If enabled, force segments directions to H, V or 45 degrees, when creating a segment on technical layers.") );
 	
 	bMiddleRightBoxSizer->Add( m_Segments_45_Only_Ctrl, 0, wxALL, 5 );
 	
 	m_AutoPANOpt = new wxCheckBox( this, wxID_AUTOPAN, _("Auto PAN"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_AutoPANOpt->SetToolTip( _("Allows auto pan when creating a track, or moving an item.") );
 	
 	bMiddleRightBoxSizer->Add( m_AutoPANOpt, 0, wxALL, 5 );
 	
 	m_Track_DoubleSegm_Ctrl = new wxCheckBox( this, wxID_ANY, _("Double Segm Track"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_Track_DoubleSegm_Ctrl->SetToolTip( _("If enabled, uses two track segments, with 45 degrees angle between them when creating a new track ") );
 	
 	bMiddleRightBoxSizer->Add( m_Track_DoubleSegm_Ctrl, 0, wxALL, 5 );
@@ -163,4 +165,5 @@ DialogGeneralOptionsBoardEditor_base::~DialogGeneralOptionsBoardEditor_base()
 	// Disconnect Events
 	m_buttonOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGeneralOptionsBoardEditor_base::OnOkClick ), NULL, this );
 	m_buttonCANCEL->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DialogGeneralOptionsBoardEditor_base::OnCancelClick ), NULL, this );
+	
 }

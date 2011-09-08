@@ -18,29 +18,34 @@ bool PCB_BASE_FRAME::Genere_HPGL( const wxString& FullFileName, int Layer, GRTra
     wxSize        SheetSize;
     wxSize        BoardSize;
     wxPoint       BoardCenter;
-    bool          Center = FALSE;
+    bool          Center = false;
     Ki_PageDescr* currentsheet = GetScreen()->m_CurrentSheetDesc;
     double        scale;
     wxPoint       offset;
 
     FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
+
     if( output_file == NULL )
     {
         return false;
     }
+
     // Compute pen_dim (from g_m_HPGLPenDiam in mils) in pcb units,
     // with plot scale (if Scale is 2, pen diameter is always g_m_HPGLPenDiam
     // so apparent pen diam is real pen diam / Scale
-    int pen_diam = wxRound( (g_PcbPlotOptions.m_HPGLPenDiam * U_PCB) / g_PcbPlotOptions.m_PlotScale );
+    int pen_diam = wxRound( (g_PcbPlotOptions.m_HPGLPenDiam * U_PCB) /
+                            g_PcbPlotOptions.m_PlotScale );
 
     // compute pen_overlay (from g_m_HPGLPenOvr in mils)
     // with plot scale
     if( g_PcbPlotOptions.m_HPGLPenOvr < 0 )
         g_PcbPlotOptions.m_HPGLPenOvr = 0;
+
     if( g_PcbPlotOptions.m_HPGLPenOvr >= g_PcbPlotOptions.m_HPGLPenDiam )
         g_PcbPlotOptions.m_HPGLPenOvr = g_PcbPlotOptions.m_HPGLPenDiam - 1;
-    int   pen_overlay = wxRound(
-        g_PcbPlotOptions.m_HPGLPenOvr * 10.0 / g_PcbPlotOptions.m_PlotScale );
+
+    int   pen_overlay = wxRound( g_PcbPlotOptions.m_HPGLPenOvr * 10.0 /
+                                 g_PcbPlotOptions.m_PlotScale );
 
 
     SetLocaleTo_C_standard();
@@ -68,7 +73,9 @@ bool PCB_BASE_FRAME::Genere_HPGL( const wxString& FullFileName, int Layer, GRTra
         scale  = MIN( Xscale, Yscale );
     }
     else
+    {
         scale = g_PcbPlotOptions.m_PlotScale;
+    }
 
     // Calculate the page size offset.
     if( Center )

@@ -5,7 +5,6 @@
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "wxstruct.h"
-#include "common.h"
 #include "trigo.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
@@ -78,7 +77,7 @@ void EDGE_MODULE::SetDrawCoord()
  */
 void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& offset )
 {
-    int             ux0, uy0, dx, dy, rayon, StAngle, EndAngle;
+    int             ux0, uy0, dx, dy, radius, StAngle, EndAngle;
     int             color, type_trace;
     int             typeaff;
     PCB_BASE_FRAME* frame;
@@ -106,9 +105,11 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
 
     GRSetDrawMode( DC, draw_mode );
     typeaff = frame->m_DisplayModEdge;
+
     if( m_Layer <= LAST_COPPER_LAYER )
     {
         typeaff = frame->m_DisplayPcbTrackFill;
+
         if( !typeaff )
             typeaff = SKETCH;
     }
@@ -126,53 +127,53 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         else
             // SKETCH Mode
             GRCSegm( &panel->m_ClipBox, DC, ux0, uy0, dx, dy, m_Width, color );
+
         break;
 
     case S_CIRCLE:
-        rayon = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
+        radius = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
+
         if( typeaff == FILAIRE )
         {
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon, color );
+            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius, color );
         }
         else
         {
             if( typeaff == FILLED )
             {
-                GRCircle( &panel->m_ClipBox, DC, ux0, uy0, rayon,
-                          m_Width, color );
+                GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius, m_Width, color );
             }
             else        // SKETCH Mode
             {
-                GRCircle( &panel->m_ClipBox, DC, ux0, uy0,
-                          rayon + (m_Width / 2), color );
-                GRCircle( &panel->m_ClipBox, DC, ux0, uy0,
-                          rayon - (m_Width / 2), color );
+                GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius + (m_Width / 2), color );
+                GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius - (m_Width / 2), color );
             }
         }
+
         break;
 
     case S_ARC:
-        rayon    = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
+        radius   = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
         StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
         EndAngle = StAngle + m_Angle;
+
         if( StAngle > EndAngle )
             EXCHG( StAngle, EndAngle );
+
         if( typeaff == FILAIRE )
         {
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                   rayon, color );
+            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, radius, color );
         }
         else if( typeaff == FILLED )
         {
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, rayon,
-                   m_Width, color );
+            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, radius, m_Width, color );
         }
         else        // SKETCH Mode
         {
             GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                   rayon + (m_Width / 2), color );
+                   radius + (m_Width / 2), color );
             GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                   rayon - (m_Width / 2), color );
+                   radius - (m_Width / 2), color );
         }
         break;
 
@@ -191,8 +192,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
             pt += module->m_Pos - offset;
         }
 
-        GRPoly( &panel->m_ClipBox, DC, points.size(), &points[0],
-                TRUE, m_Width, color, color );
+        GRPoly( &panel->m_ClipBox, DC, points.size(), &points[0], true, m_Width, color, color );
         break;
     }
 }
@@ -209,34 +209,27 @@ void EDGE_MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
         return;
 
     BOARD* board = (BOARD*) module->GetParent();
+
     if( !board )
         return;
 
     frame->ClearMsgPanel();
 
     frame->AppendMsgPanel( _( "Graphic Item" ), wxEmptyString, DARKCYAN );
-
-    frame->AppendMsgPanel( _( "Module" ), module->m_Reference->m_Text,
-                           DARKCYAN );
+    frame->AppendMsgPanel( _( "Module" ), module->m_Reference->m_Text, DARKCYAN );
     frame->AppendMsgPanel( _( "Value" ), module->m_Value->m_Text, BLUE );
 
     msg.Printf( wxT( "%8.8lX" ), module->m_TimeStamp );
     frame->AppendMsgPanel( _( "TimeStamp" ), msg, BROWN );
-
-    frame->AppendMsgPanel( _( "Mod Layer" ),
-                           board->GetLayerName( module->GetLayer() ), RED );
-
-    frame->AppendMsgPanel( _( "Seg Layer" ),
-                           board->GetLayerName( GetLayer() ), RED );
+    frame->AppendMsgPanel( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ), RED );
+    frame->AppendMsgPanel( _( "Seg Layer" ), board->GetLayerName( GetLayer() ), RED );
 
     valeur_param( m_Width, msg );
     frame->AppendMsgPanel( _( "Width" ), msg, BLUE );
 }
 
 
-/*******************************************/
 bool EDGE_MODULE::Save( FILE* aFile ) const
-/*******************************************/
 {
     int ret = -1;
 
@@ -272,8 +265,7 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
                        m_Width, m_Layer );
 
         for( unsigned i = 0;  i<m_PolyPoints.size();  ++i )
-            fprintf( aFile, "Dl %d %d\n", m_PolyPoints[i].x,
-                     m_PolyPoints[i].y );
+            fprintf( aFile, "Dl %d %d\n", m_PolyPoints[i].x, m_PolyPoints[i].y );
 
         break;
 
@@ -362,11 +354,13 @@ int EDGE_MODULE::ReadDescr( LINE_READER* aReader )
 
         m_PolyPoints.clear();
         m_PolyPoints.reserve( pointCount );
+
         for( ii = 0;  ii<pointCount;  ii++ )
         {
             if( aReader->ReadLine() )
             {
                 Buf = aReader->Line();
+
                 if( strncmp( Buf, "Dl", 2 ) != 0 )
                 {
                     error = 1;
@@ -399,15 +393,18 @@ int EDGE_MODULE::ReadDescr( LINE_READER* aReader )
     // Check for a reasonable width:
     if( m_Width <= 1 )
         m_Width = 1;
+
     if( m_Width > MAX_WIDTH )
         m_Width = MAX_WIDTH;
 
     // Check for a reasonable layer:
     // m_Layer must be >= FIRST_NON_COPPER_LAYER, but because microwave footprints
     // can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
-    // @todo: changes use of EDGE_MODULE these footprints and allows only m_Layer >= FIRST_NON_COPPER_LAYER
+    // @todo: changes use of EDGE_MODULE these footprints and allows only
+    // m_Layer >= FIRST_NON_COPPER_LAYER
     if( (m_Layer < 0) || (m_Layer > LAST_NON_COPPER_LAYER) )
         m_Layer = SILKSCREEN_N_FRONT;
+
     return error;
 }
 

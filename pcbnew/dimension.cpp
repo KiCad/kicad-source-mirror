@@ -1,9 +1,9 @@
-/*****************************************/
-/* Edition du pcb: Gestion des dimensions */
-/*****************************************/
+/**
+ * @file dimension.cpp
+ * @brief Dialog and code for editing a deminsion object.
+ */
 
 #include "fctsys.h"
-#include "common.h"
 #include "confirm.h"
 #include "class_drawpanel.h"
 #include "pcbnew.h"
@@ -12,7 +12,7 @@
 #include "drawtxt.h"
 #include "dialog_helpers.h"
 
-/* Loca functions */
+/* Local functions */
 static void Exit_EditDimension( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                            const wxPoint& aPosition, bool aErase );
@@ -34,22 +34,22 @@ static int status_dimension; /* Used in cimension creation:
  */
 
 
-/************************************/
+/*********************************/
 /* class DIMENSION_EDITOR_DIALOG */
-/************************************/
+/*********************************/
 
 class DIMENSION_EDITOR_DIALOG : public wxDialog
 {
 private:
 
-    PCB_EDIT_FRAME*   m_Parent;
-    wxDC*             m_DC;
-    DIMENSION*         CurrentDimension;
-    WinEDA_EnterText* m_Name;
-    WinEDA_SizeCtrl*  m_TxtSizeCtrl;
-    WinEDA_ValueCtrl* m_TxtWidthCtrl;
-    wxRadioBox*       m_Mirror;
-    wxComboBox*  m_SelLayerBox;
+    PCB_EDIT_FRAME* m_Parent;
+    wxDC*           m_DC;
+    DIMENSION*      CurrentDimension;
+    wxTextCtrl*     m_Name;
+    EDA_SIZE_CTRL*  m_TxtSizeCtrl;
+    EDA_VALUE_CTRL* m_TxtWidthCtrl;
+    wxRadioBox*     m_Mirror;
+    wxComboBox*     m_SelLayerBox;
 
 public:
 
@@ -104,21 +104,32 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( PCB_EDIT_FRAME* parent,
     m_Mirror = new wxRadioBox( this, -1, _( "Display" ),
                                wxDefaultPosition, wxSize( -1, -1 ), 2, display_msg,
                                1, wxRA_SPECIFY_COLS );
+
     if( Dimension->m_Text->m_Mirror )
         m_Mirror->SetSelection( 1 );
+
     RightBoxSizer->Add( m_Mirror, 0, wxGROW | wxALL, 5 );
 
-    m_Name = new WinEDA_EnterText( this, wxT( "Text:" ),
-                                   Dimension->m_Text->m_Text,
-                                   LeftBoxSizer, wxSize( 200, -1 ) );
+    LeftBoxSizer->Add( new wxStaticText( this, -1, _( "Text:" ) ),
+                       0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
 
-    m_TxtSizeCtrl = new WinEDA_SizeCtrl( this, _( "Size" ),
-                                         Dimension->m_Text->m_Size,
+    m_Name = new wxTextCtrl( this, -1, Dimension->m_Text->m_Text,
+                             wxDefaultPosition, wxSize( 200, -1 ) );
+
+    m_Name->SetInsertionPoint( 1 );
+
+    LeftBoxSizer->Add( m_Name,
+                       0,
+                       wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
+                       5 );
+
+    m_TxtSizeCtrl = new EDA_SIZE_CTRL( this, _( "Size" ),
+                                       Dimension->m_Text->m_Size,
+                                       g_UserUnit, LeftBoxSizer, m_Parent->m_InternalUnits );
+
+    m_TxtWidthCtrl = new EDA_VALUE_CTRL( this, _( "Width" ),
+                                         Dimension->m_Width,
                                          g_UserUnit, LeftBoxSizer, m_Parent->m_InternalUnits );
-
-    m_TxtWidthCtrl = new WinEDA_ValueCtrl( this, _( "Width" ),
-                                           Dimension->m_Width,
-                                           g_UserUnit, LeftBoxSizer, m_Parent->m_InternalUnits );
 
     wxStaticText* text = new wxStaticText( this, -1, _( "Layer:" ) );
     LeftBoxSizer->Add( text, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
@@ -139,24 +150,21 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( PCB_EDIT_FRAME* parent,
 }
 
 
-/**********************************************************************/
 void DIMENSION_EDITOR_DIALOG::OnCancelClick( wxCommandEvent& event )
-/**********************************************************************/
 {
     EndModal( -1 );
 }
 
 
-/***********************************************************************************/
 void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
-/***********************************************************************************/
 {
-    if( m_DC )     // Effacement ancien texte
+    if( m_DC )     // Delete old text.
     {
         CurrentDimension->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
     }
 
     m_Parent->SaveCopyInUndoList(CurrentDimension, UR_CHANGED);
+
     if( m_Name->GetValue() != wxEmptyString )
     {
         CurrentDimension->SetText( m_Name->GetValue() );
@@ -166,12 +174,14 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
 
     int width = m_TxtWidthCtrl->GetValue();
     int maxthickness = Clamp_Text_PenSize( width, CurrentDimension->m_Text->m_Size );
+
     if( width > maxthickness )
     {
         DisplayError( NULL,
                       _( "The text thickness is too large for the text size. It will be clamped") );
         width = maxthickness;
     }
+
     CurrentDimension->m_Text->m_Thickness = CurrentDimension->m_Width = width ;
 
     CurrentDimension->m_Text->m_Mirror = ( m_Mirror->GetSelection() == 1 ) ? true : false;
@@ -180,9 +190,8 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
 
     CurrentDimension->AdjustDimensionDetails( true );
 
-    if( m_DC )     // Affichage nouveau texte
+    if( m_DC )     // Display new text
     {
-        /* Redessin du Texte */
         CurrentDimension->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     }
 
@@ -191,9 +200,7 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
 }
 
 
-/**************************************************************/
 static void Exit_EditDimension( EDA_DRAW_PANEL* Panel, wxDC* DC )
-/**************************************************************/
 {
     DIMENSION* Dimension = (DIMENSION*) Panel->GetScreen()->GetCurItem();
 
@@ -215,9 +222,7 @@ static void Exit_EditDimension( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-/*************************************************************************/
 DIMENSION* PCB_EDIT_FRAME::Begin_Dimension( DIMENSION* Dimension, wxDC* DC )
-/*************************************************************************/
 {
     wxPoint pos;
 
@@ -255,10 +260,12 @@ DIMENSION* PCB_EDIT_FRAME::Begin_Dimension( DIMENSION* Dimension, wxDC* DC )
         Dimension->m_Text->m_Size   = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
         int width = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
         int maxthickness = Clamp_Text_PenSize(width, Dimension->m_Text->m_Size );
+
         if( width > maxthickness )
         {
             width = maxthickness;
         }
+
         Dimension->m_Text->m_Thickness = Dimension->m_Width = width ;
 
         Dimension->AdjustDimensionDetails( );
@@ -325,8 +332,7 @@ static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         deltax = Dimension->TraitD_ox - Dimension->TraitG_ox;
         deltay = Dimension->TraitD_oy - Dimension->TraitG_oy;
 
-        /* Calcul de la direction de deplacement
-         *  ( perpendiculaire a l'axe de la cote ) */
+        /* Calculating the direction of travel perpendicular to the selected axis. */
         angle = atan2( (double)deltay, (double)deltax ) + (M_PI / 2);
 
         deltax = pos.x - Dimension->TraitD_ox;
@@ -346,9 +352,7 @@ static void Montre_Position_New_Dimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 }
 
 
-/***************************************************************/
 void PCB_EDIT_FRAME::Install_Edit_Dimension( DIMENSION* Dimension, wxDC* DC )
-/***************************************************************/
 {
     if( Dimension == NULL )
         return;
@@ -359,9 +363,7 @@ void PCB_EDIT_FRAME::Install_Edit_Dimension( DIMENSION* Dimension, wxDC* DC )
 }
 
 
-/*******************************************************************/
 void PCB_EDIT_FRAME::Delete_Dimension( DIMENSION* Dimension, wxDC* DC )
-/*******************************************************************/
 {
     if( Dimension == NULL )
         return;
@@ -373,4 +375,3 @@ void PCB_EDIT_FRAME::Delete_Dimension( DIMENSION* Dimension, wxDC* DC )
     Dimension->UnLink();
     OnModify();
 }
-

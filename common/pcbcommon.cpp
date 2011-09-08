@@ -83,6 +83,7 @@ const wxString ModuleFileWildcard( _( "Kicad footprint library files (*.mod)|*.m
 
 int g_CurrentVersionPCB = 1;
 
+int    g_RotationAngle;
 int    g_TimeOut;            // Timer for automatic saving
 int    g_SaveTime;           // Time for next saving
 

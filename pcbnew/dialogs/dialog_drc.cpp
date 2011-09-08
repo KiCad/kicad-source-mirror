@@ -7,9 +7,7 @@
 
 
 #include "fctsys.h"
-#include "wxstruct.h"
 #include "dialog_drc.h"
-#include "common.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
 

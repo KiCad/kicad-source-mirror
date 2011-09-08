@@ -14,7 +14,6 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "confirm.h"
 #include "gestfich.h"
 #include "wxEeschemaStruct.h"
@@ -255,16 +254,23 @@ void NETLIST_DIALOG::InstallPageSpice()
                                              wxDefaultPosition, wxDefaultSize,
                                              2, netlist_opt, 1,
                                              wxRA_SPECIFY_COLS );
+
     if( !g_OptNetListUseNames )
         m_UseNetNamesInNetlist->SetSelection( 1 );
 
     page->m_LeftBoxSizer->Add( m_UseNetNamesInNetlist, 0, wxGROW | wxALL, 5 );
 
-    page->m_CommandStringCtrl = new WinEDA_EnterText( page,
-                                                      _( "Simulator command:" ),
-                                                      m_Parent->GetSimulatorCommand(),
-                                                      page->m_LowBoxSizer,
-                                                      wxDefaultSize );
+    page->m_LowBoxSizer->Add( new wxStaticText( page, -1, _( "Simulator command:" ) ), 0,
+                              wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+
+    page->m_CommandStringCtrl = new wxTextCtrl( page, -1, m_Parent->GetSimulatorCommand(),
+                                                wxDefaultPosition, wxDefaultSize );
+
+    page->m_CommandStringCtrl->SetInsertionPoint( 1 );
+    page->m_LowBoxSizer->Add( page->m_CommandStringCtrl,
+                              0,
+                              wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
+                              5 );
 
     // Add buttons
     Button = new wxButton( page, ID_CREATE_NETLIST, _( "Netlist" ) );
@@ -302,6 +308,7 @@ void NETLIST_DIALOG::InstallCustomPages()
 
         /* Install the panel "Add Plugin" after
          * the last initialized panel */
+
         previoustitle = title;
         if( title.IsEmpty() )
             CurrPage =
@@ -325,17 +332,32 @@ void NETLIST_DIALOG::InstallCustomPages()
         msg = CUSTOM_NETLIST_COMMAND;
         msg << ii + 1;
         wxString Command = wxGetApp().m_EDA_Config->Read( msg );
-        CurrPage->m_CommandStringCtrl =
-            new WinEDA_EnterText( CurrPage,
-                                  _( "Netlist command:" ), Command,
-                                  CurrPage->m_LowBoxSizer,
-                                  wxDefaultSize );
 
-        CurrPage->m_TitleStringCtrl =
-            new WinEDA_EnterText( CurrPage,
-                                  _( "Title:" ), title,
-                                  CurrPage->m_LowBoxSizer,
-                                  wxDefaultSize );
+        CurrPage->m_LowBoxSizer->Add( new wxStaticText( CurrPage,
+                                                        -1, _( "Netlist command:" ) ), 0,
+                                      wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+
+        CurrPage->m_CommandStringCtrl = new wxTextCtrl( CurrPage, -1, Command,
+                                                        wxDefaultPosition, wxDefaultSize );
+
+        CurrPage->m_CommandStringCtrl->SetInsertionPoint( 1 );
+        CurrPage->m_LowBoxSizer->Add( CurrPage->m_CommandStringCtrl,
+                                      0,
+                                      wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
+                                      5 );
+
+        CurrPage->m_LowBoxSizer->Add( new wxStaticText( CurrPage,
+                                                        -1, _( "Title:" ) ), 0,
+                                      wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+
+        CurrPage->m_TitleStringCtrl = new wxTextCtrl( CurrPage, -1, title,
+                                                      wxDefaultPosition, wxDefaultSize );
+
+        CurrPage->m_TitleStringCtrl->SetInsertionPoint( 1 );
+        CurrPage->m_LowBoxSizer->Add( CurrPage->m_TitleStringCtrl,
+                                      0,
+                                      wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
+                                      5 );
     }
 }
 
@@ -385,6 +407,7 @@ void NETLIST_DIALOG::AddNewPluginPanel( wxCommandEvent& event )
 
     /* Get a title for this page */
     wxString title = CurrPage->m_TitleStringCtrl->GetValue();
+
     if( title.IsEmpty() )
         DisplayInfoMessage( this,
                             _( "Do not forget to choose a title for this netlist control page" ) );

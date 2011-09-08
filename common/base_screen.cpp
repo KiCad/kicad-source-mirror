@@ -334,7 +334,7 @@ void BASE_SCREEN::AddGrid( const wxRealPoint& size, int id )
 }
 
 
-void BASE_SCREEN::AddGrid( const wxRealPoint& size, UserUnitType aUnit, int id )
+void BASE_SCREEN::AddGrid( const wxRealPoint& size, EDA_UNITS_T aUnit, int id )
 {
     double x, y;
     wxRealPoint new_size;

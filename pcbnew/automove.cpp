@@ -5,7 +5,6 @@
 #include <algorithm>
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "kicad_string.h"
@@ -47,24 +46,32 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
     {
     case ID_TOOLBARH_PCB_MODE_MODULE:
         on_state = m_HToolBar->GetToolState( ID_TOOLBARH_PCB_MODE_MODULE );
+
         if( on_state )
         {
-            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, FALSE );
+            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_TRACKS, false );
             m_HTOOL_current_state = ID_TOOLBARH_PCB_MODE_MODULE;
         }
         else
+        {
             m_HTOOL_current_state = 0;
+        }
+
         return;
 
     case ID_TOOLBARH_PCB_MODE_TRACKS:
         on_state = m_HToolBar->GetToolState( ID_TOOLBARH_PCB_MODE_TRACKS );
+
         if( on_state )
         {
-            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, FALSE );
+            m_HToolBar->ToggleTool( ID_TOOLBARH_PCB_MODE_MODULE, false );
             m_HTOOL_current_state = ID_TOOLBARH_PCB_MODE_TRACKS;
         }
         else
+        {
             m_HTOOL_current_state = 0;
+        }
+
         return;
 
 
@@ -76,11 +83,11 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
         return;
 
     case ID_POPUP_PCB_AUTOPLACE_FREE_MODULE:
-        LockModule( (MODULE*) GetScreen()->GetCurItem(), FALSE );
+        LockModule( (MODULE*) GetScreen()->GetCurItem(), false );
         return;
 
     case ID_POPUP_PCB_AUTOPLACE_FREE_ALL_MODULES:
-        LockModule( NULL, FALSE );
+        LockModule( NULL, false );
         return;
 
     case ID_POPUP_PCB_AUTOPLACE_FIXE_ALL_MODULES:
@@ -92,6 +99,7 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
         {
             DrawPanel->m_endMouseCaptureCallback( DrawPanel, &dc );
         }
+
         break;
 
     default:   // Abort a current command (if any)
@@ -102,13 +110,13 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
     /* Erase ratsnest if needed */
     if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) )
         DrawGeneralRatsnest( &dc );
+
     GetBoard()->m_Status_Pcb |= DO_NOT_SHOW_GENERAL_RASTNEST;
 
     switch( id )
     {
     case ID_POPUP_PCB_AUTOPLACE_CURRENT_MODULE:
-        AutoPlaceModule( (MODULE*) GetScreen()->GetCurItem(),
-                        PLACE_1_MODULE, &dc );
+        AutoPlaceModule( (MODULE*) GetScreen()->GetCurItem(), PLACE_1_MODULE, &dc );
         break;
 
     case ID_POPUP_PCB_AUTOPLACE_ALL_MODULES:
@@ -124,7 +132,7 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_AUTOMOVE_ALL_MODULES:
-        AutoMoveModulesOnPcb( FALSE );
+        AutoMoveModulesOnPcb( false );
         break;
 
     case ID_POPUP_PCB_AUTOMOVE_NEW_MODULES:
@@ -195,11 +203,13 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 
     // Build sorted footprints list (sort by decreasing size )
     MODULE* Module = GetBoard()->m_Modules;
+
     for( ; Module != NULL; Module = Module->Next() )
     {
-        Module->Set_Rectangle_Encadrement();
+        Module->CalculateBoundingBox();
         moduleList.push_back(Module);
     }
+
     sort( moduleList.begin(), moduleList.end(), sortModulesbySize );
 
     /* to move modules outside the board, the cursor is placed below
@@ -217,14 +227,17 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 
     /* calculate the area needed by footprints */
     surface = 0.0;
+
     for( unsigned ii = 0; ii < moduleList.size(); ii++ )
     {
         Module = moduleList[ii];
+
         if( PlaceModulesHorsPcb && edgesExists )
         {
             if( GetBoard()->m_BoundaryBox.Contains( Module->m_Pos ) )
                 continue;
         }
+
         surface += Module->m_Surface;
     }
 
@@ -236,6 +249,7 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     for( unsigned ii = 0; ii < moduleList.size(); ii++ )
     {
         Module = moduleList[ii];
+
         if( Module->IsLocked() )
             continue;
 
@@ -254,6 +268,7 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 
         GetScreen()->SetCrossHairPosition( current + Module->m_Pos -
                                            Module->m_BoundaryBox.GetPosition() );
+
         Ymax_size = MAX( Ymax_size, Module->m_BoundaryBox.GetHeight() );
 
         Place_Module( Module, NULL, true );
@@ -265,8 +280,7 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 }
 
 
-/* Set or reset (true or FALSE) Lock attribute of aModule
- * or all modules if aModule == NULL
+/* Set or reset (true or false) Lock attribute of aModule or all modules if aModule == NULL
  */
 void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
 {
@@ -280,10 +294,10 @@ void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
     else
     {
         aModule = GetBoard()->m_Modules;
+
         for( ; aModule != NULL; aModule = aModule->Next() )
         {
-            if( WildCompareString( ModulesMaskSelection,
-                                   aModule->m_Reference->m_Text ) )
+            if( WildCompareString( ModulesMaskSelection, aModule->m_Reference->m_Text ) )
             {
                 aModule->SetLocked( aLocked );
                 OnModify();
@@ -297,4 +311,3 @@ static bool sortModulesbySize( MODULE* ref, MODULE* compare )
 {
     return compare->m_Surface < ref->m_Surface;
 }
-

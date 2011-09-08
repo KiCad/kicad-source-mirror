@@ -4,11 +4,9 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "bitmaps.h"
 #include "eda_dde.h"
 #include "id.h"
 #include "class_sch_screen.h"
@@ -80,12 +78,12 @@ TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
 // static object for many reasons) and also declares the accessor function
 // wxGetApp() which will return the reference of the right type (i.e. MyApp and
 // not wxApp)
-IMPLEMENT_APP( WinEDA_App )
+IMPLEMENT_APP( EDA_APP )
 
 /* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
  */
-void WinEDA_App::MacOpenFile( const wxString &fileName )
+void EDA_APP::MacOpenFile( const wxString &fileName )
 {
     wxFileName      filename = fileName;
     SCH_EDIT_FRAME* frame = ((SCH_EDIT_FRAME*) GetTopWindow());
@@ -100,12 +98,12 @@ void WinEDA_App::MacOpenFile( const wxString &fileName )
 }
 
 
-bool WinEDA_App::OnInit()
+bool EDA_APP::OnInit()
 {
     wxFileName      filename;
     SCH_EDIT_FRAME* frame = NULL;
 
-    InitEDA_Appl( wxT( "EESchema" ), APP_TYPE_EESCHEMA );
+    InitEDA_Appl( wxT( "EESchema" ), APP_EESCHEMA_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {

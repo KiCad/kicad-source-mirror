@@ -27,7 +27,6 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "confirm.h"
 #include "worksheet.h"
 #include "plot_common.h"

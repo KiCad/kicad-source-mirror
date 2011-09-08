@@ -196,8 +196,13 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( editMenu,
                  ID_BACKANNO_ITEMS,
                  _( "&Backannotate" ),
+<<<<<<< TREE
                  _( "Back annotate the footprint fields" ),
                  KiBitmap( import_footprint_names_xpm ) );
+=======
+                 _( "Back Annotate Footprint Fields" ),
+                 import_footprint_names_xpm );
+>>>>>>> MERGE-SOURCE
 
     // Menu View:
     wxMenu* viewMenu = new wxMenu;
@@ -258,7 +263,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( add_component_xpm ) );
 
     // Power port
-    text = AddHotkeyName( _( "Power port" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Power Port" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_NEW_POWER, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_PLACE_POWER_BUTT, text,
                  HELP_PLACE_POWERPORT,
@@ -279,21 +284,21 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( add_bus_xpm ) );
 
     // Wire to Bus entry
-    text = AddHotkeyName( _( "Wire to bus entry" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Wire to Bus Entry" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_WIRE_ENTRY, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_WIRETOBUS_ENTRY_BUTT, text,
                  HELP_PLACE_WIRE2BUS_ENTRY,
                  KiBitmap( add_line2bus_xpm ) );
 
     // Bus to Bus entry
-    text = AddHotkeyName( _( "Bus to bus entry" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Bus to Bus Entry" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_BUS_ENTRY, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_BUSTOBUS_ENTRY_BUTT, text,
                  HELP_PLACE_BUS2BUS_ENTRY,
                  KiBitmap( add_bus2bus_xpm ) );
 
-    // No connect flag
-    text = AddHotkeyName( _( "No connect flag" ), s_Schematic_Hokeys_Descr,
+    // No Connect Flag
+    text = AddHotkeyName( _( "No Connect Flag" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_NOCONN_FLAG, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_NOCONN_BUTT, text, HELP_PLACE_NC_FLAG, KiBitmap( noconn_xpm ) );
 
@@ -305,7 +310,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( add_line_label_xpm ) );
 
     // Global label
-    text = AddHotkeyName( _( "Global label" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Global Label" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_GLABEL, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_GLABEL_BUTT, text,
                  HELP_PLACE_GLOBALLABEL,
@@ -322,9 +327,9 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AppendSeparator();
 
     // Hierarchical label
-    text = AddHotkeyName( _( "Hierarchical label" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Hierarchical Label" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_HLABEL, false );       // add comment, not a shortcut
-    text = AddHotkeyName( _( "Hierarchical label" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Hierarchical Label" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_HLABEL, false );       // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_HIERLABEL_BUTT,
                  text, HELP_PLACE_HIER_LABEL,
@@ -332,7 +337,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
 
     // Hierarchical sheet
-    text = AddHotkeyName( _( "Hierarchical sheet" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Hierarchical Sheet" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_HIER_SHEET, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_SHEET_SYMBOL_BUTT, text,
                  HELP_PLACE_SHEET,
@@ -348,7 +353,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Add hierarchical Pin to Sheet
     AddMenuItem( placeMenu,
                  ID_SHEET_PIN_BUTT,
-                 _( "Add Hierarchical Pin to Sheet" ),
+                 _( "Hierarchical Pin to Sheet" ),
                  HELP_PLACE_SHEETPIN,
                  KiBitmap( add_hierar_pin_xpm ) );
 
@@ -356,19 +361,23 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->AppendSeparator();
 
     // Graphic line or polygon
-    text = AddHotkeyName( _( "Graphic polyline" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Graphic Polyline" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_GRAPHIC_POLYLINE, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_LINE_COMMENT_BUTT, text,
                  HELP_PLACE_GRAPHICLINES,
                  KiBitmap( add_dashed_line_xpm ) );
 
     // Graphic text
-    text = AddHotkeyName( _( "Graphic text" ), s_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Graphic Text" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_GRAPHIC_TEXT, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_TEXT_COMMENT_BUTT, text,
                  HELP_PLACE_GRAPHICTEXTS,
                  KiBitmap( add_text_xpm ) );
 
+    // Graphic image
+    AddMenuItem( placeMenu, ID_ADD_IMAGE_BUTT, _("Image"),
+                 HELP_PLACE_GRAPHICIMAGES,
+                 image_xpm );
 
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;
@@ -412,14 +421,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Save preferences
     AddMenuItem( preferencesMenu,
                  ID_CONFIG_SAVE,
-                 _( "&Save preferences" ),
+                 _( "&Save Preferences" ),
                  _( "Save application preferences" ),
                  KiBitmap( save_setup_xpm ) );
 
     // Read preferences
     AddMenuItem( preferencesMenu,
                  ID_CONFIG_READ,
-                 _( "&Read preferences" ),
+                 _( "&Read Preferences" ),
                  _( "Read application preferences" ),
                  KiBitmap( read_setup_xpm ) );
 
@@ -478,14 +487,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     //Run CVPcb
     AddMenuItem( toolsMenu,
                  ID_TO_CVPCB,
-                 _( "A&ssign component footprints" ),
+                 _( "A&ssign Component Footprints" ),
                  _( "Run CVPcb" ),
                  KiBitmap( cvpcb_xpm ) );
 
     // Run PCBNew
     AddMenuItem( toolsMenu,
                  ID_TO_PCB,
-                 _( "&Layout printed circuit board" ),
+                 _( "&Layout Printed Circuit Board" ),
                  _( "Run PCBNew" ),
                  KiBitmap( pcbnew_xpm ) );
 

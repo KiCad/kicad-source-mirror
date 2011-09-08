@@ -9,7 +9,6 @@
  */
 
 #include "fctsys.h"
-#include "common.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
@@ -47,6 +46,7 @@ static bool Join( wxPoint* res, wxPoint a0, wxPoint a1, wxPoint b0, wxPoint b1 )
     b0 -= a0;
 
     denom = (double) b1.y * a1.x - (double) b1.x * a1.y;
+
     if( !denom )
     {
         return false;       // parallel
@@ -75,7 +75,7 @@ bool Project( wxPoint* res, wxPoint on_grid, const TRACK* track )
     wxPoint vec = track->m_End - track->m_Start;
 
     double t = double( on_grid.x - track->m_Start.x ) * vec.x +
-        double( on_grid.y - track->m_Start.y ) * vec.y;
+               double( on_grid.y - track->m_Start.y ) * vec.y;
 
     t /= (double) vec.x * vec.x + (double) vec.y * vec.y;
     t = min( max( t, 0.0 ), 1.0 );
@@ -193,7 +193,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
         {
             int layer_mask = g_TabOneLayerMask[layer];
 
-            TRACK* track = Locate_Pistes( m_Pcb, m_Pcb->m_Track, pos, layer_mask );
+            TRACK* track = GetTrace( m_Pcb, m_Pcb->m_Track, pos, layer_mask );
 
             if( !track || track->Type() != TYPE_TRACK )
             {

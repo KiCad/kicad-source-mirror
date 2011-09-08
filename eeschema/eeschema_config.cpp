@@ -4,7 +4,6 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
@@ -211,7 +210,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    g_UserUnit = (UserUnitType)dlg.GetUnitsSelection();
+    g_UserUnit = (EDA_UNITS_T)dlg.GetUnitsSelection();
 
     GetScreen()->SetGrid( grid_list[ (size_t) dlg.GetGridSelection() ].m_Size );
 

@@ -3,7 +3,6 @@
 /*************************************************************/
 
 #include "fctsys.h"
-#include "common.h"
 #include "class_drawpanel.h"
 
 #include "pcbnew.h"
@@ -17,7 +16,8 @@
  *  Each PICKED_ITEMS_LIST handle a std::vector of pickers (class ITEM_PICKER),
  *  that store the list of schematic items that are concerned by the command to undo or redo
  *  and is created for each command to undo (handle also a command to redo).
- *  each picker has a pointer pointing to an item to undo or redo (in fact: deleted, added or modified),
+ *  each picker has a pointer pointing to an item to undo or redo (in fact: deleted, added or
+ *  modified),
  * and has a pointer to a copy of this item, when this item has been modified
  * (the old values of parameters are therefore saved)
  *
@@ -50,9 +50,11 @@
  *      => the copy of item(s) is moved in Undo list
  *
  *  - add item(s) command
- *      => The list of item(s) is used to create a deleted list in undo list(same as a delete command)
+ *      => The list of item(s) is used to create a deleted list in undo list(same as a delete
+ *         command)
  *
- *   Some block operations that change items can be undoed without memorise items, just the coordiantes of the transform:
+ *   Some block operations that change items can be undoed without memorise items, just the
+ *   coordiantes of the transform:
  *      move list of items (undo/redo is made by moving with the opposite move vector)
  *      mirror (Y) and flip list of items (undo/redo is made by mirror or flip items)
  *      so they are handled specifically.
@@ -107,10 +109,6 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 }
 
 
-/**************************************************************/
-void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
-/***************************************************************/
-
 /**
  * Function SwapData
  * Used in undo / redo command:
@@ -120,6 +118,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
  * @param aItem = the item
  * @param aImage = a copy of the item
  */
+void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 {
     if( aItem == NULL || aImage == NULL )
     {
@@ -174,16 +173,22 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         EXCHG( track->m_Width, image->m_Width );
         EXCHG( track->m_Shape, image->m_Shape );
         int atmp = track->GetDrillValue();
+
         if( track->IsDrillDefault() )
             atmp = -1;
+
         int itmp = image->GetDrillValue();
+
         if( image->IsDrillDefault() )
             itmp = -1;
+
         EXCHG(itmp, atmp );
+
         if( atmp > 0 )
             track->SetDrillValue( atmp );
         else
             track->SetDrillDefault();
+
         if( itmp > 0 )
             image->SetDrillValue( itmp );
         else
@@ -204,11 +209,11 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         EXCHG( ( (TEXTE_PCB*) aItem )->m_VJustify, ( (TEXTE_PCB*) aImage )->m_VJustify );
         break;
 
-    case TYPE_MIRE:
-        EXCHG( ( (MIREPCB*) aItem )->m_Pos, ( (MIREPCB*) aImage )->m_Pos );
-        EXCHG( ( (MIREPCB*) aItem )->m_Width, ( (MIREPCB*) aImage )->m_Width );
-        EXCHG( ( (MIREPCB*) aItem )->m_Size, ( (MIREPCB*) aImage )->m_Size );
-        EXCHG( ( (MIREPCB*) aItem )->m_Shape, ( (MIREPCB*) aImage )->m_Shape );
+    case PCB_TARGET_T:
+        EXCHG( ( (PCB_TARGET*) aItem )->m_Pos, ( (PCB_TARGET*) aImage )->m_Pos );
+        EXCHG( ( (PCB_TARGET*) aItem )->m_Width, ( (PCB_TARGET*) aImage )->m_Width );
+        EXCHG( ( (PCB_TARGET*) aItem )->m_Size, ( (PCB_TARGET*) aImage )->m_Size );
+        EXCHG( ( (PCB_TARGET*) aItem )->m_Shape, ( (PCB_TARGET*) aImage )->m_Shape );
         break;
 
     case TYPE_DIMENSION:
@@ -218,8 +223,10 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         ( (DIMENSION*) aImage )->SetText( txt );
         EXCHG( ( (DIMENSION*) aItem )->m_Width, ( (DIMENSION*) aImage )->m_Width );
         EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Size, ( (DIMENSION*) aImage )->m_Text->m_Size );
-        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Thickness, ( (DIMENSION*) aImage )->m_Text->m_Thickness );
-        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Mirror, ( (DIMENSION*) aImage )->m_Text->m_Mirror );
+        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Thickness,
+               ( (DIMENSION*) aImage )->m_Text->m_Thickness );
+        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Mirror,
+               ( (DIMENSION*) aImage )->m_Text->m_Mirror );
     }
     break;
 
@@ -231,13 +238,10 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 }
 
 
-/************************************************************/
-BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
-/************************************************************/
-
 /* Routine to create a new copy of given struct.
  *  The new object is not put in list (not linked)
  */
+BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
 {
     if( aItem == NULL )
     {
@@ -296,11 +300,11 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
     }
     break;
 
-    case TYPE_MIRE:
+    case PCB_TARGET_T:
     {
-        MIREPCB* new_mire = new MIREPCB( aItem->GetParent() );
-        new_mire->Copy( (MIREPCB*) aItem );
-        return new_mire;
+        PCB_TARGET* target = new PCB_TARGET( aItem->GetParent() );
+        target->Copy( (PCB_TARGET*) aItem );
+        return target;
     }
     break;
 
@@ -414,6 +418,7 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
     {
         BOARD_ITEM* item    = (BOARD_ITEM*) commandToUndo->GetPickedItem( ii );
         UNDO_REDO_T command = commandToUndo->GetPickedItemStatus( ii );
+
         if( command == UR_UNSPECIFIED )
         {
             command = aTypeCommand;
@@ -462,7 +467,9 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
     }
     else    // Should not occur
+    {
         delete commandToUndo;
+    }
 }
 
 
@@ -556,9 +563,8 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         default:
         {
             wxString msg;
-            msg.Printf( wxT(
-                           "PutDataInPreviousState() error (unknown code %X)" ),
-                       aList->GetPickedItemStatus( ii ) );
+            msg.Printf( wxT( "PutDataInPreviousState() error (unknown code %X)" ),
+                        aList->GetPickedItemStatus( ii ) );
             wxMessageBox( msg );
         }
         break;
@@ -574,10 +580,6 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 }
 
 
-/**********************************************************/
-void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
-/**********************************************************/
-
 /**
  * Function GetBoardFromUndoList
  *  Undo the last edition:
@@ -585,6 +587,7 @@ void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
  *  - Get an old version of the board state from Undo list
  *  @return none
  */
+void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
@@ -631,10 +634,6 @@ void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& event )
 }
 
 
-/***********************************************************************************/
-void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
-/**********************************************************************************/
-
 /**
  * Function ClearUndoORRedoList
  * free the undo or redo list from List element
@@ -646,11 +645,13 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
  * items (commands stored in list) are removed from the beginning of the list.
  * So this function can be called to remove old commands
  */
+void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount )
 {
     if( aItemCount == 0 )
         return;
 
     unsigned icnt = aList.m_CommandsList.size();
+
     if( aItemCount > 0 )
         icnt = aItemCount;
 
@@ -658,6 +659,7 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
     {
         if( aList.m_CommandsList.size() == 0 )
             break;
+
         PICKED_ITEMS_LIST* curr_cmd = aList.m_CommandsList[0];
         aList.m_CommandsList.erase( aList.m_CommandsList.begin() );
 

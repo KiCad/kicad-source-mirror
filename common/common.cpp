@@ -59,6 +59,7 @@ const wxString NetlistFileExtension( wxT( "net" ) );
 const wxString GerberFileExtension( wxT( "pho" ) );
 const wxString PcbFileExtension( wxT( "brd" ) );
 const wxString PdfFileExtension( wxT( "pdf" ) );
+const wxString MacrosFileExtension( wxT( "mcr" ) );
 
 /* Proper wxFileDialog wild card definitions. */
 const wxString ProjectFileWildcard( _( "Kicad project files (*.pro)|*.pro" ) );
@@ -67,6 +68,7 @@ const wxString NetlistFileWildcard( _( "Kicad netlist files (*.net)|*.net" ) );
 const wxString GerberFileWildcard( _( "Gerber files (*.pho)|*.pho" ) );
 const wxString PcbFileWildcard( _( "Kicad printed circuit board files (*.brd)|*.brd" ) );
 const wxString PdfFileWildcard( _( "Portable document format files (*.pdf)|*.pdf" ) );
+const wxString MacrosFileWildcard( _( "Kicad recorded macros (*.mcr)|*.mcr" ) );
 const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 
 
@@ -78,7 +80,7 @@ wxString       g_Prj_Default_Config_FullFilename;
 wxString       g_Prj_Config_LocalFilename;
 
 /* Current user unit of measure */
-UserUnitType   g_UserUnit;
+EDA_UNITS_T    g_UserUnit;
 
 /* Draw color for moving objects: */
 int            g_GhostColor;
@@ -221,7 +223,7 @@ Ki_PageDescr::Ki_PageDescr( const wxSize&   size,
 }
 
 
-wxString ReturnUnitSymbol( UserUnitType aUnit, const wxString& formatString )
+wxString ReturnUnitSymbol( EDA_UNITS_T aUnit, const wxString& formatString )
 {
     wxString tmp;
     wxString label;
@@ -249,7 +251,7 @@ wxString ReturnUnitSymbol( UserUnitType aUnit, const wxString& formatString )
 }
 
 
-wxString GetUnitsLabel( UserUnitType aUnit )
+wxString GetUnitsLabel( EDA_UNITS_T aUnit )
 {
     wxString label;
 
@@ -272,7 +274,7 @@ wxString GetUnitsLabel( UserUnitType aUnit )
 }
 
 
-wxString GetAbbreviatedUnitsLabel( UserUnitType aUnit )
+wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit )
 {
     wxString label;
 
@@ -298,7 +300,7 @@ wxString GetAbbreviatedUnitsLabel( UserUnitType aUnit )
  * Add string "  (mm):" or " ("):" to the static text Stext.
  *  Used in dialog boxes for entering values depending on selected units
  */
-void AddUnitSymbol( wxStaticText& Stext, UserUnitType aUnit )
+void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit )
 {
     wxString msg = Stext.GetLabel();
 
@@ -346,7 +348,7 @@ int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit )
  * @return a wxString what contains value and optionally the symbol unit
  *         (like 2.000 mm)
  */
-wxString ReturnStringFromValue( UserUnitType aUnit, int aValue, int aInternal_Unit,
+wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, int aInternal_Unit,
                                 bool aAdd_unit_symbol )
 {
     wxString StringValue;
@@ -384,7 +386,7 @@ wxString ReturnStringFromValue( UserUnitType aUnit, int aValue, int aInternal_Un
  *  Value = text
  *  Internal_Unit = units per inch for computed value
  */
-int ReturnValueFromString( UserUnitType aUnit, const wxString& TextValue,
+int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue,
                            int Internal_Unit )
 {
     int    Value;
@@ -479,7 +481,7 @@ wxArrayString* wxStringSplit( wxString txt, wxChar splitter )
  * @param val : double : the given value
  * @param internal_unit_value = internal units per inch
  */
-double To_User_Unit( UserUnitType aUnit, double val, int internal_unit_value )
+double To_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value )
 {
     switch( aUnit )
     {
@@ -498,7 +500,7 @@ double To_User_Unit( UserUnitType aUnit, double val, int internal_unit_value )
 /*
  * Return in internal units the value "val" given in inch or mm
  */
-int From_User_Unit( UserUnitType aUnit, double val, int internal_unit_value )
+int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value )
 {
     double value;
 

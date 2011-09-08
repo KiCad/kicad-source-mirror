@@ -5,7 +5,6 @@
 
 #include "fctsys.h"
 #include "wxstruct.h"
-#include "common.h"
 
 #include "cvpcb.h"
 #include "cvpcb_mainframe.h"

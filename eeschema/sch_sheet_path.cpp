@@ -9,7 +9,6 @@
 
 #include "fctsys.h"
 
-#include "common.h"
 #include "general.h"
 #include "dlist.h"
 #include "class_sch_screen.h"
