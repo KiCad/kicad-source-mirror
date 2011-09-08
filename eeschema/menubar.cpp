@@ -372,7 +372,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Graphic image
     AddMenuItem( placeMenu, ID_ADD_IMAGE_BUTT, _("Image"),
                  HELP_PLACE_GRAPHICIMAGES,
-                 image_xpm );
+                 KiBitmap( image_xpm ) );
 
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;

@@ -577,7 +577,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( configmenu, macrosMenu,
                  -1, _( "Macros" ),
                  _( "Macros save/read operations" ),
-                 add_dimension_xpm );
+                 KiBitmap( add_dimension_xpm ) );
 
     configmenu->AppendSeparator();
 
