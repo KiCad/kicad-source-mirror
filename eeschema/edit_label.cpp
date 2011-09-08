@@ -70,6 +70,7 @@ static void abortMoveText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
         // Never delete existing item, because it can be referenced by an undo/redo command
         // Just restore its data
         item->SwapData(olditem);
+        item->ClearFlags();
     }
 
     aPanel->Refresh();
