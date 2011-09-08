@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <linearGradient id="a" y2="4.6406" gradientUnits="userSpaceOnUse" x2="6.0964" y1="8.6836" x1="8.9893">
+   <stop stop-color="#ff7800" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+  <filter id="b" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="1.7161664"/>
+  </filter>
+ </defs>
+ <g opacity=".30078" filter="url(#b)" transform="matrix(.8336 0 0 .7901 -68.84 -23.728)">
+  <path d="m96.125 43.619-3.25 3.0125v33.138l3.25 3.0125h35.75l3.25-3.0125v-33.138l-3.25-3.0125h-35.75zm3.25 6.025h29.25v27.113h-29.235v-27.113z"/>
+  <path d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(2.8889,0,0,2.6778,72.292,28.556)"/>
+  <path d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(1.8056,0,0,1.6736,81.229,35.334)"/>
+  <path d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(2.8889,0,0,2.6778,108.04,61.694)"/>
+  <path d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(1.8056,0,0,1.6736,116.98,68.472)"/>
+ </g>
+ <g transform="matrix(.8336 0 0 .7901 87.711 20.676)">
+  <path fill="#00009b" d="m-96.5-17.588-3.25 3.0125v33.138l3.25 3.0125h35.75l3.25-3.0125v-33.138l-3.25-3.0125h-35.75zm3.25 6.025h29.25v27.113h-29.25v-27.113z"/>
+  <path d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(2.8889,0,0,2.6778,-120.33,-32.65)"/>
+  <path fill="url(#a)" d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(1.8056,0,0,1.6736,-111.4,-25.872)"/>
+  <path d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(2.8889 0 0 2.6778 -84.583 .48749)"/>
+  <path fill="url(#a)" d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(1.8056,0,0,1.6736,-75.646,7.2656)"/>
+ </g>
+ <g transform="matrix(2.4566,0,0,2.2316,-37.589,-39.022)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(2.9379,0,0,2.1996,1.5067,11.922)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <rect fill-opacity="0" height="38.871" width="43.287" y="-47.036" x="-74.787"/>
+</svg>

@@ -183,7 +183,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_VToolBar->AddTool( ID_BUSTOBUS_ENTRY_BUTT, wxEmptyString, KiBitmap( add_bus2bus_xpm ),
                          HELP_PLACE_BUS2BUS_ENTRY, wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_NOCONN_BUTT, wxEmptyString, wxBitmap( noconn_xpm ),
+    m_VToolBar->AddTool( ID_NOCONN_BUTT, wxEmptyString, KiBitmap( noconn_xpm ),
                          HELP_PLACE_NC_FLAG, wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_LABEL_BUTT, wxEmptyString, KiBitmap( add_line_label_xpm ),
@@ -217,7 +217,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_VToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString, KiBitmap( add_text_xpm ),
                          HELP_PLACE_GRAPHICTEXTS, wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_ADD_IMAGE_BUTT, wxEmptyString, wxBitmap( image_xpm ),
+    m_VToolBar->AddTool( ID_ADD_IMAGE_BUTT, wxEmptyString, KiBitmap( image_xpm ),
                          _("Add a bitmap image"), wxITEM_CHECK );
 
     m_VToolBar->AddTool( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxEmptyString, KiBitmap( delete_body_xpm ),

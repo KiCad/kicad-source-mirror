@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <radialGradient id="d" xlink:href="#a" gradientUnits="userSpaceOnUse" cy="6.4023" cx="44.287" gradientTransform="matrix(.80354 .0018983 -.0048367 .29678 6.8669 4.9301)" r="27.987"/>
+  <linearGradient id="a">
+   <stop stop-color="#89d5f8" offset="0"/>
+   <stop stop-color="#00899e" offset="1"/>
+  </linearGradient>
+  <radialGradient id="e" xlink:href="#a" gradientUnits="userSpaceOnUse" cy="17.388" cx="18.195" gradientTransform="matrix(-.37415 .42367 -.58256 -.51448 35.158 16.986)" r="27.987"/>
+ </defs>
+ <g stroke-linejoin="bevel" stroke="#004c5b">
+  <path style="color:#000000" d="m45.608 25.019a18.208 18.208 0 1 1 -36.416 0 18.208 18.208 0 1 1 36.416 0z" transform="matrix(.74531 0 0 .73436 -.17154 1.8432)" stroke-width="2.4161" fill="url(#e)"/>
+  <rect style="color:#000000" stroke-width="1.7882" transform="matrix(.70778 .70644 -.67767 .73536 0 0)" ry="2.7139" width="13.866" y="-3.7225" x="44.621" height="7.7758" fill="url(#d)"/>
+  <rect height="20.282" width="18.829" stroke-dasharray="3.79669746, 1.89834872" y="10.244" x="11.022" stroke-width="1.8983" fill="#fff"/>
+ </g>
+</svg>

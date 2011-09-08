@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="a" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="1.0440547"/>
+  </filter>
+  <linearGradient id="d" y2="6.4143" gradientUnits="userSpaceOnUse" x2="3.7417" gradientTransform="matrix(2.4705,0,0,1.7768,1.1953,-6.4793)" y1="13.722" x1="11.124">
+   <stop stop-color="#afafff" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+  <linearGradient id="e" y2="6.4143" gradientUnits="userSpaceOnUse" x2="3.7417" gradientTransform="matrix(2.2823,0,0,1.7103,6.807,16.054)" y1="13.722" x1="11.124">
+   <stop stop-color="#afafff" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path opacity=".41406" filter="url(#a)" d="m14.75 27.043 11.613 0.000005c5.3372 0.000005 9.607 4.5709 11.774 8.2276-2.167 2.7425-6.4367 8.2276-11.774 8.2276l-11.613-0.000005c6.3078-5.485 6.3078-10.97 0-16.455z"/>
+ <rect opacity=".41406" height="1.8283" filter="url(#a)" width="6.4046" y="38.013" x="10.384"/>
+ <rect opacity=".41406" height="1.8283" filter="url(#a)" width="6.4046" y="30.7" x="10.383"/>
+ <path opacity=".41406" filter="url(#a)" d="m18.923 31.614a3.2023 2.7425 0 0 1 -6.4046 0 3.2023 2.7425 0 1 1 6.4046 0z"/>
+ <path opacity=".41406" filter="url(#a)" d="m18.923 38.927a3.2023 2.7425 0 0 1 -6.4046 0 3.2023 2.7425 0 1 1 6.4046 0z"/>
+ <rect opacity=".41406" height="1.8283" filter="url(#a)" width="2.1349" y="38.013" x="14.653"/>
+ <rect opacity=".41406" height="1.8283" filter="url(#a)" width="2.1349" y="30.7" x="14.653"/>
+ <path opacity=".41406" filter="url(#a)" d="m18.923 28.872 7.2349-0.000005c3.4395 0.000005 6.6418 3.6567 8.7767 6.3992-2.1349 2.7425-5.3372 6.3992-8.7767 6.3992l-7.2349 0.000004c4.2698-2.7425 4.2698-9.1417 0-12.798z"/>
+ <rect opacity=".41406" height="1.8283" filter="url(#a)" width="7.4721" y="34.357" x="37.07"/>
+ <rect opacity=".41406" height="1.8995" filter="url(#a)" width="6.9327" y="12.327" x="35.273"/>
+ <path opacity=".41406" filter="url(#a)" d="m9.9582 4.7294h12.89c13.375 0 13.689 17.095 0 17.095h-12.89v-17.095z"/>
+ <rect opacity=".41406" height="1.8995" filter="url(#a)" width="6.9327" y="18.026" x="5.2316"/>
+ <rect opacity=".41406" height="1.8995" filter="url(#a)" width="6.9327" y="8.5283" x="5.2316"/>
+ <path opacity=".41406" filter="url(#a)" d="m11.881 6.7651h10.766c10.175 0 10.414 13.296 0 13.296h-10.766v-13.296z"/>
+ <path opacity=".41406" filter="url(#a)" d="m37.584 13.277a3.4664 2.8492 0 0 1 -6.9327 0 3.4664 2.8492 0 1 1 6.9327 0z"/>
+ <rect opacity=".41406" height="1.8995" filter="url(#a)" width="2.3109" y="12.327" x="32.962"/>
+ <rect fill-opacity="0" height="12.555" width="14.062" y="38.295" x="4.7454"/>
+ <g transform="translate(62.862,32.916)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <path fill="#d72e2e" d="m13.309 25.196 11.613 0.000005c5.3372 0.000005 9.607 4.5709 11.774 8.2276-2.167 2.7425-6.4367 8.2276-11.774 8.2276l-11.613-0.000005c6.3078-5.485 6.3078-10.97 0-16.455z"/>
+ <rect height="1.8283" width="6.4046" y="36.166" x="8.9419" fill="#d72e2e"/>
+ <rect height="1.8283" width="6.4046" y="28.852" x="8.9419" fill="#d72e2e"/>
+ <path fill="#d72e2e" d="m17.481 29.766a3.2023 2.7425 0 0 1 -6.4046 0 3.2023 2.7425 0 1 1 6.4046 0z"/>
+ <path fill="#d72e2e" d="m17.481 37.08a3.2023 2.7425 0 0 1 -6.4046 0 3.2023 2.7425 0 1 1 6.4046 0z"/>
+ <rect height="1.8283" width="2.1349" y="36.166" x="13.212" fill="#b5ccff"/>
+ <rect height="1.8283" width="2.1349" y="28.852" x="13.212" fill="#b5ccff"/>
+ <path fill="url(#e)" d="m17.481 27.024 7.2349-0.000005c3.4395 0.000005 6.6418 3.6567 8.7767 6.3992-2.1349 2.7425-5.3372 6.3992-8.7767 6.3992l-7.2349 0.000004c4.2698-2.7425 4.2698-9.1417 0-12.798z"/>
+ <rect height="1.8283" width="7.4721" y="32.509" x="35.628" fill="#d72e2e"/>
+ <g transform="matrix(.83134 0 0 .71262 4.7752 34.071)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <rect height="1.8995" width="6.9327" y="10.48" x="33.832" fill="#d72e2e"/>
+ <path fill="#d72e2e" d="m8.5166 2.8818h12.89c13.375 0 13.689 17.095 0 17.095h-12.89v-17.095z"/>
+ <rect height="1.8995" width="6.9327" y="16.178" x="3.79" fill="#d72e2e"/>
+ <rect height="1.8995" width="6.9327" y="6.6807" x="3.79" fill="#d72e2e"/>
+ <path fill="url(#d)" d="m10.439 4.9175h10.766c10.175 0 10.414 13.296 0 13.296h-10.766v-13.296z"/>
+ <path fill="#d72e2e" d="m36.143 11.429a3.4664 2.8492 0 0 1 -6.9327 0 3.4664 2.8492 0 1 1 6.9327 0z"/>
+ <rect height="1.8995" width="2.3109" y="10.48" x="31.521" fill="#b5ccff"/>
+ <rect fill-opacity="0" height="11.653" width="14.406" y="11.239" x=".66680"/>
+</svg>

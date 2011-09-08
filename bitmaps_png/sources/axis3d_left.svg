@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="64" width="64" version="1.1">
+ <defs>
+  <radialGradient id="a" gradientUnits="userSpaceOnUse" cy="17.014" cx="18.418" gradientTransform="matrix(.97275 -.10391 .05054 .45729 -.36227 9.453)" r="27.987">
+   <stop stop-color="#89d5f8" offset="0"/>
+   <stop stop-color="#00899e" offset="1"/>
+  </radialGradient>
+  <linearGradient id="b" y2="36.601" gradientUnits="userSpaceOnUse" x2="1.7074" gradientTransform="matrix(.70397 .69868 .71069 -.69207 -12.123 55.758)" y1="7.924" x1="13.093">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#3465a4" stop-opacity="0" offset="1"/>
+  </linearGradient>
+ </defs>
+ <path stroke-linejoin="bevel" d="m4.2062 18.485 37.127 7.258v35.709l-35.625-10.464-1.5012-32.503z" stroke="#004c5b" stroke-width="2.2" fill="#fff"/>
+ <path stroke-linejoin="bevel" d="m40.469 26.247 17.69-20.174-1.139 32.849-16.005 23.165-0.546-35.84z" stroke="#004c5b" stroke-width="2.2" fill="#fff"/>
+ <path stroke-linejoin="bevel" d="m27.296 2.1214 30.986 4.3959-17.538 19.33-36.494-7.251 23.046-16.475z" stroke="#004c5b" stroke-width="2.2" fill="#fff"/>
+ <path stroke-linejoin="bevel" d="m27.279 2.3705 0.378 30.442-21.67 18.176-1.5126-32.791 22.805-15.826z" stroke="#004c5b" stroke-width="2.2" fill="url(#a)"/>
+ <path fill-rule="evenodd" fill="url(#b)" d="m31.717 26.571s-20.991 19.53-23.397 21.296c-1.7729 1.3015-1.5377 0.3652-2.1978-15.171-0.39301-9.2497 12.723 1.9654 12.723 1.9654s-9.4944-0.11424-3.7294-2.0857c3.8603-1.3201 11.715-4.7775 16.601-6.0045z"/>
+ <path stroke-linejoin="bevel" d="m28.128 33.158 28.348 5.9222" stroke="#004c5b" stroke-dasharray="4.4000001, 2.20000005" stroke-width="2.2" fill="url(#a)"/>
+ <path stroke-linejoin="bevel" d="m27.908 23.271-23.28-4.47" stroke="#004c5b" stroke-width="2.2" fill="url(#a)"/>
+</svg>

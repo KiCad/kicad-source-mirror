@@ -30,7 +30,7 @@
 #include "bitmaps.h"
 
 
-#if defined(FUTURE_PNG_BITMAPS)
+#if defined(USE_PNG_BITMAPS)
 
 wxBitmap KiBitmap( BITMAP_DEF aBitmap )
 {

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="256" width="256" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-72 -48 40.96 40.96">
+ <defs>
+  <rect id="c" y="-2" width="24" x="-12" height="4"/>
+  <g id="d">
+   <rect y="-2" width="11" x="-12" height="4"/>
+   <rect y="-2" width="11" x="1" height="4"/>
+  </g>
+ </defs>
+ <rect fill-rule="evenodd" height="41.6" width="41.6" y="-48.64" x="-72" fill="#e6e6e6"/>
+ <g transform="matrix(.2844 0 0 .30323 -50.998 -11.348)">
+  <rect height="96" width="144" y="-103.04" x="-72" fill="#fff"/>
+  <g transform="matrix(.5547 .83205 -.83205 .5547 0 -55.04)">
+   <use xlink:href="#d" transform="translate(0,-38)" height="96" width="144" y="0" x="0"/>
+   <use xlink:href="#c" transform="translate(0,-44)" height="96" width="144" y="0" x="0"/>
+   <use xlink:href="#d" transform="translate(0,-50)" height="96" width="144" y="0" x="0"/>
+   <use xlink:href="#c" transform="translate(0,38)" height="96" width="144" y="0" x="0"/>
+   <use xlink:href="#d" transform="translate(0,44)" height="96" width="144" y="0" x="0"/>
+   <use xlink:href="#c" transform="translate(0,50)" height="96" width="144" y="0" x="0"/>
+  </g>
+  <g transform="matrix(.5547 -.83205 .83205 .5547 0 -55.04)">
+   <use xlink:href="#c" transform="translate(0,-38)" height="96" width="144" y="0" x="0"/>
+   <use xlink:href="#c" transform="translate(0,-44)" height="96" width="144" y="0" x="0"/>
+   <use xlink:href="#c" transform="translate(0,-50)" height="96" width="144" y="0" x="0"/>
+   <use xlink:href="#d" transform="translate(0,38)" height="96" width="144" y="0" x="0"/>
+   <use xlink:href="#d" transform="translate(0,44)" height="96" width="144" y="0" x="0"/>
+   <use xlink:href="#d" transform="translate(0,50)" height="96" width="144" y="0" x="0"/>
+   <path fill="#c60c30" d="m0 24a24 24 0 0 0 0 -48 18 18 0 0 0 0 36"/>
+   <path fill="#003478" d="m0-24a12 12 0 0 0 0 24 12 12 0 0 1 0 24 24 24 0 0 1 0 -48"/>
+  </g>
+ </g>
+</svg>

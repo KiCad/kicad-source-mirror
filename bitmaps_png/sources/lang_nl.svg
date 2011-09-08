@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="256" width="256" version="1.1" viewBox="-72 -48 40.96 40.96">
+ <rect fill-rule="evenodd" height="41.6" width="41.6" y="-48.64" x="-72" fill="#e6e6e6"/>
+ <g transform="matrix(1 0 0 .96078 .64 -.56889)">
+  <rect height="27.2" width="40" y="-41.707" x="-72" fill="#21468b"/>
+  <rect height="18.133" width="40" y="-41.707" x="-72" fill="#fff"/>
+  <rect height="9.0667" width="40" y="-41.707" x="-72" fill="#ae1c28"/>
+ </g>
+</svg>

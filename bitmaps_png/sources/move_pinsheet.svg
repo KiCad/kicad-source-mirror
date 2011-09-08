@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="g" height="2.1508" width="1.1114" color-interpolation-filters="sRGB" y="-.57538" x="-.055682">
+   <feGaussianBlur stdDeviation="0.35961538"/>
+  </filter>
+  <filter id="f" height="1.2466" width="1.1726" color-interpolation-filters="sRGB" y="-.1233" x="-.086308">
+   <feGaussianBlur stdDeviation="0.35961538"/>
+  </filter>
+  <filter id="e" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.27692308"/>
+  </filter>
+  <linearGradient id="h" y2="12.267" gradientUnits="userSpaceOnUse" x2="6.0408" gradientTransform="matrix(2.5432,0,0,1.6273,3.4805,-13.061)" y1="17.051" x1="11.431">
+   <stop stop-color="#8787ff" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g transform="matrix(2.0469,0,0,1.6447,4.2039,-6.6832)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <rect opacity=".71484" transform="matrix(.91213 0 0 1.993 4.0627 -13.061)" height="1.5" filter="url(#g)" width="15.5" y="12" x=".5" fill="#9b9b9b"/>
+ <rect height="3.0558" width="29.798" y="8.3982" x="3.4805" fill="#009b00"/>
+ <path opacity=".70703" d="m-45.932 18.743h-7l-3 3.5 3 3.5h7v-7z" fill-rule="evenodd" transform="matrix(2.0765,0,0,1.993,131.67,-32.579)" filter="url(#f)" fill="#9b9b9b"/>
+ <g transform="matrix(.69673 0 0 .74776 -2.8377 13.015)">
+  <path opacity=".77734" d="m7 7.5-0.5 1.5h-2l3-8h2l3 8h-2l-0.5-1.5m-0.5-1.5-0.9121-2.9492-1.0879 2.9492" transform="matrix(2.6769 0 0 2.3368 .73836 2.9706)" filter="url(#e)" fill="#9b9b9b"/>
+  <path d="m16.349 19.636-1.3878 3.7482h-5.551l8.3266-19.99h5.551l8.3266 19.99h-5.551l-1.388-3.748m-1.389-3.749-2.531-7.3691-3.02 7.3691"/>
+ </g>
+ <path fill-rule="evenodd" fill="#6f6500" d="m34.629 2.8838h-14.536l-6.2296 6.9757 6.2296 6.9757h14.536v-13.951z"/>
+ <path fill-rule="evenodd" fill="url(#h)" d="m32.552 4.8769h-11.421l-4.1531 4.9826 4.1531 4.9826h11.421v-9.965z"/>
+ <g transform="matrix(2.0765,0,0,1.993,3.4805,-13.061)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <path d="m32.612 19.273-6.506 5.3467h4.1453v6.1131h-1.3957v0.031h-5.9939v-3.69l-5.9423 5.8562 5.9423 5.8539v-3.73h7.3897v0.93246h0.03447v5.3932h-4.101l6.5084 5.3467 6.506-5.3467h-4.1453v-6.3257h0.44308v-0.03101h5.9915v3.69l5.9423-5.8562-5.9423-5.8539v3.7299h-6.4346v-0.721h-0.033v-5.391h4.101l-6.5084-5.3467z" fill-rule="evenodd" stroke="#44a118" stroke-width="1.2599" fill="#59d421"/>
+</svg>

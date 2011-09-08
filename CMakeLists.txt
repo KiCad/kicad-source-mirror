@@ -17,6 +17,10 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 # building minizip.
 option(KICAD_MINIZIP "enable/disable building minizip (default ON)" ON)
 
+
+option(USE_PNG_BITMAPS "use PNG bitmaps instead of XPM (default OFF)" OFF)
+
+
 # Russian GOST patch
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
 option(KICAD_GOST "enable/disable building using GOST notation for multiple gates per package (default OFF)")
@@ -241,7 +245,13 @@ include_directories(${CMAKE_SOURCE_DIR}/include
 # Binaries #
 ############
 add_subdirectory(3d-viewer)
-add_subdirectory(bitmaps)
+
+if( USE_PNG_BITMAPS )
+    add_subdirectory(bitmaps_png)
+else()
+    add_subdirectory(bitmaps_xpm)
+endif()
+
 add_subdirectory(common)
 add_subdirectory(cvpcb)
 add_subdirectory(eeschema)

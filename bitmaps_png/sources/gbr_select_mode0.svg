@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <linearGradient id="a">
+   <stop offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <radialGradient id="g" gradientUnits="userSpaceOnUse" cy="10.108" cx="-26.305" gradientTransform="matrix(.44971 -.29369 .82915 1.1474 36.036 -10.021)" r="7.0421">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" offset=".47534"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <radialGradient id="h" xlink:href="#a" gradientUnits="userSpaceOnUse" cy="43.5" cx="4.993" gradientTransform="matrix(2.0038,0,0,1.4,27.988,-17.4)" r="2.5"/>
+  <radialGradient id="i" xlink:href="#a" gradientUnits="userSpaceOnUse" cy="43.5" cx="4.993" gradientTransform="matrix(2.0038,0,0,1.4,-20.012,-104.4)" r="2.5"/>
+  <linearGradient id="f" y2="39.999" gradientUnits="userSpaceOnUse" x2="25.058" y1="47.028" x1="25.058">
+   <stop stop-opacity="0" offset="0"/>
+   <stop offset=".5"/>
+   <stop stop-opacity="0" offset="1"/>
+  </linearGradient>
+ </defs>
+ <rect opacity="0" height="50.379" width="52.993" y="-1.1654" x="-2.4003"/>
+ <g opacity=".65587" transform="matrix(1.1553 0 0 .93294 -3.4972 .80989)">
+  <g opacity=".4" transform="matrix(1.0526,0,0,1.2857,-1.2632,-13.429)">
+   <rect height="7" width="5" y="40" x="38" fill="url(#h)"/>
+   <rect transform="scale(-1)" height="7" width="5" y="-47" x="-10" fill="url(#i)"/>
+   <rect height="7" width="28" y="40" x="10" fill="url(#f)"/>
+  </g>
+ </g>
+ <path fill="url(#g)" d="m27.96 3.0328c-1.5334 0-0.04648 0.52172 1.4835 1.1807 1.53 0.65903 5.4901 3.3744 4.5886 7.2157 4.773-0.45192 7.3739 3.2771 7.7281 4.4934 0.35425 1.2163 1.104 2.7369 1.104 1.2791 0.03124-3.9942-3.1414-6.7504-5.3476-9.0852-2.205-2.3348-5.522-4.5834-9.556-5.0838z"/>
+ <g transform="matrix(2.4054,0,0,2.0076,3.9855,-58.397)">
+  <rect transform="matrix(1 0 .23919 .97097 0 0)" rx=".2509" ry=".38428" height="10.299" width="13.537" y="32.957" x="-7.883" fill="#4d4d4d"/>
+  <rect transform="matrix(1 0 .23919 .97097 0 0)" rx=".2509" ry=".38428" height="10.299" width="13.537" y="39.136" x="-9.3611" fill="#a00"/>
+ </g>
+</svg>

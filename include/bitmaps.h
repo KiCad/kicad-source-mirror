@@ -3,24 +3,30 @@
 #define BITMAPS_H_
 
 #include <wx/bitmap.h>
-
-#define VTOOLBAR_WIDTH  26
-
-#define TOOL_SIZE       23
+#include "config.h"
 
 
-#if defined(FUTURE_PNG_BITMAPS)
+#if defined(USE_PNG_BITMAPS)
+
+#define VTOOLBAR_WIDTH  29
+#define TOOL_SIZE       26
+
+
 /// PNG memory record (file in memory).
 struct BITMAP_OPAQUE
 {
-    const unsigned char*    png;
-    int                     byteCount;
+    const char* png;
+    int         byteCount;
+    const char* name;       // for debug, or future lazy dynamic linking
 };
 
-// declared as single unit array, so its name is a pointer.
+// declared as single element _array_, so its name assigns to pointer
 #define EXTERN_BITMAP(x) extern const BITMAP_OPAQUE x[1];
 
-#else
+#else   // XPM
+
+#define VTOOLBAR_WIDTH  26
+#define TOOL_SIZE       23
 
 // temporary during migration to KiBitmap() and KiBitmapNew().
 typedef const char*     BITMAP_OPAQUE;
@@ -80,7 +86,7 @@ EXTERN_BITMAP( add_text_xpm )
 EXTERN_BITMAP( add_tracks_xpm )
 EXTERN_BITMAP( add_zone_cutout_xpm )
 EXTERN_BITMAP( add_zone_xpm )
-EXTERN_BITMAP( a_icon_pcbnew_xpm )
+EXTERN_BITMAP( icon_pcbnew_xpm )
 EXTERN_BITMAP( anchor_xpm )
 EXTERN_BITMAP( annotate_down_right_xpm )
 EXTERN_BITMAP( annotate_right_down_xpm )
@@ -188,7 +194,7 @@ EXTERN_BITMAP( gerber_recent_files_xpm )
 EXTERN_BITMAP( gerbview_clear_layers_xpm )
 EXTERN_BITMAP( gerber_open_dcode_file_xpm )
 EXTERN_BITMAP( general_deletions_xpm )
-EXTERN_BITMAP( general_ratsnet_xpm )
+EXTERN_BITMAP( general_ratsnest_xpm )
 EXTERN_BITMAP( glabel2label_xpm )
 EXTERN_BITMAP( glabel2text_xpm )
 EXTERN_BITMAP( gl_change_xpm )

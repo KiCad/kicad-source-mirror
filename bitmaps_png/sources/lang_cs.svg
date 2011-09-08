@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="128" width="128" version="1.1" viewBox="0 0 0.85333333 0.85333333">
+ <desc>Flag of the Czech Republic</desc>
+ <rect fill-rule="evenodd" height="0.9" width=".86667" y="-.013333" x="0" fill="#e6e6e6"/>
+ <g transform="matrix(.13611 0 0 .1375 .025 .57767)">
+  <rect height="4" width="6" y="-3.1467" x="0" fill="#d7141a"/>
+  <rect height="2" width="6" y="-3.1467" x="0" fill="#fff"/>
+  <path fill="#11457e" d="m3-1.1467-3-2v4z"/>
+ </g>
+</svg>

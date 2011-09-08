@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="50" width="50" version="1.1" viewBox="0 0 50 50">
+ <g stroke-width=".75" transform="matrix(.94933 0 0 .93794 .64841 10.178)" stroke="#000">
+  <polygon points="49.423 27.934 25.213 42.458 1.018 26.902 25.224 12.379" fill="#bcbec0"/>
+  <polygon points="49.241 24.649 25.036 39.169 0.837 23.615 25.042 9.094" fill="#808284"/>
+  <polygon points="49.423 20.714 25.213 35.238 1.018 19.684 25.224 5.16" fill="#0071bc"/>
+  <polygon points="49.423 16.266 25.217 30.787 1.018 15.232 25.224 0.711" fill="#008fd4"/>
+ </g>
+ <g transform="matrix(1 0 0 1.377 -.3125 -20.71)">
+  <rect fill-rule="evenodd" height="10.666" width="49.219" y="15.493" x=".78125" fill="#fff"/>
+  <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" font-size="40px" line-height="125%" y="24.711681" x="0.46875" font-family="Sans" fill="#000000"><tspan style="word-spacing:0px;letter-spacing:.034087px" font-size="11.078px" dx="0" y="24.711681" x="0.46875" font-weight="bold">GERBER</tspan></text>
+ </g>
+</svg>

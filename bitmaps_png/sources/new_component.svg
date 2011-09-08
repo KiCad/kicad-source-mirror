@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="c" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.67858004"/>
+  </filter>
+  <radialGradient id="d" gradientUnits="userSpaceOnUse" cy="9.3411" cx="38.659" r="8.3417">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fefede" stop-opacity=".91837" offset=".25"/>
+   <stop stop-color="#f5f328" offset=".5"/>
+   <stop stop-color="#f5f32d" stop-opacity=".12234" offset="1"/>
+  </radialGradient>
+ </defs>
+ <g transform="matrix(.4881 0 0 .49208 -45.545 68.584)">
+  <path d="m342.86 213.79a30 30 0 1 1 -60 0 30 30 0 1 1 60 0z" transform="matrix(.34831 0 0 .35578 -41.505 -71.608)" stroke="#000" stroke-linecap="square" stroke-width="4" fill="none"/>
+  <path d="m68.809-2.8316v14.572" stroke="#000" stroke-width="2.5055" fill="none"/>
+  <path fill-rule="evenodd" d="m60.806 1.8533v5.1285l7.281-2.5643-7.281-2.5643z"/>
+  <path d="m66.476 4.4141h-13.436l-2.4897 0.01078" stroke="#000" stroke-width="1.1244" fill="none"/>
+  <path d="m87.946 9.422h-19.044" stroke="#000" stroke-width="1.1244" fill="none"/>
+  <path d="m88.014-0.47027h-19.18" stroke="#000" stroke-width="1.1244" fill="none"/>
+  <text style="text-anchor:middle;text-align:center" font-weight="bold" xml:space="preserve" transform="scale(.98945 1.0107)" line-height="125%" font-size="4.2243px" y="0.865556" x="52.530464" font-family="Bitstream Vera Sans" fill="#000000"><tspan y="0.865556" x="52.530464" font-size="8px">G</tspan></text>
+  <text style="text-anchor:middle;text-align:center" font-weight="bold" xml:space="preserve" transform="scale(.98945 1.0107)" line-height="125%" font-size="4.2243px" y="-3.4846289" x="82.322983" font-family="Bitstream Vera Sans" fill="#000000"><tspan y="-3.4846289" x="82.322983" font-size="8px">D</tspan></text>
+  <text style="text-anchor:middle;text-align:center" font-weight="bold" xml:space="preserve" transform="scale(.98945 1.0107)" line-height="125%" font-size="4.2243px" y="17.237249" x="82.322983" font-family="Bitstream Vera Sans" fill="#000000"><tspan y="17.237249" x="82.322983" font-size="8px">S</tspan></text>
+  <g opacity=".61719" filter="url(#c)" transform="translate(50.3,-71.377)">
+   <path d="m342.86 213.79a30 30 0 1 1 -60 0 30 30 0 1 1 60 0z" transform="matrix(.34831 0 0 .35578 -91.165 1.813)" stroke="#000" stroke-linecap="square" stroke-width="4" fill="none"/>
+   <path d="m19.15 70.589v14.572" stroke="#000" stroke-width="2.5055" fill="none"/>
+   <path fill-rule="evenodd" d="m11.146 75.274v5.1285l7.2808-2.5643-7.2808-2.5643z"/>
+   <path d="m16.817 77.835h-13.436l-2.4897 0.01078" stroke="#000" stroke-width="1.1244" fill="none"/>
+   <path d="m38.286 82.843h-19.044" stroke="#000" stroke-width="1.1244" fill="none"/>
+   <path d="m38.354 72.95h-19.18" stroke="#000" stroke-width="1.1244" fill="none"/>
+  </g>
+ </g>
+ <g transform="translate(-15.854,44.692)">
+  <rect y="10.43" width="3.5138" x="12.657" height="1.1228"/>
+  <path d="m2.936 5.9392h6.0555c6.2834 0 6.4311 10.105 0 10.105h-6.0555v-10.105z"/>
+  <rect y="13.799" width="3.9006" x=".071817" height="1.1228"/>
+  <rect y="8.1848" width="3.9006" x=".071817" height="1.1228"/>
+  <path fill="#afafff" d="m3.9724 7.062h5.0577c4.7802 0 4.8925 7.8594 0 7.8594h-5.0577v-7.859z"/>
+ </g>
+ <path d="m11.493 11.76v29.423" stroke="#000" stroke-width="4.001" fill="none"/>
+ <path d="m11.493 18.549 17.671-5.694v-5.9697" stroke="#000" stroke-width="1.5389px" fill="none"/>
+ <path d="m11.493 34.392 17.671 4.8394v6.2062" stroke="#000" stroke-width="1.5389px" fill="none"/>
+ <path d="m10.849 26.819h-10.684" stroke="#000" stroke-width="1.5389px" fill="none"/>
+ <path d="m20.318 32.491 7.9146 6.289-10.44 1.6233z" fill-rule="evenodd" stroke="#000" stroke-width="1.5389px"/>
+ <g fill-rule="evenodd" transform="matrix(1.35,0,0,1.3516,-11.742,-5.4788)">
+  <path fill="url(#d)" d="m47.001 9.3411a8.3417 8.3417 0 1 1 -16.683 0 8.3417 8.3417 0 1 1 16.683 0z" transform="matrix(1.1498 0 0 1.1498 -7.5953 .4909)"/>
+  <path style="color:#000000" fill="#fff" d="m44.52 15.503c-0.50717 0.87845-4.5947-0.16082-5.5214 0.25175-0.92665 0.41257-2.8894 4.1456-3.8816 3.9347-0.99218-0.21089-1.2669-4.4195-1.9456-5.1733-0.67873-0.7538-4.8356-1.4669-4.9416-2.4757-0.10603-1.0088 3.8117-2.5706 4.3189-3.449 0.50717-0.87845-0.09914-5.0522 0.82751-5.4648 0.92665-0.41257 3.6227 2.8308 4.6148 3.0417 0.99218 0.21089 4.7743-1.6555 5.453-0.90171 0.67873 0.7538-1.5728 4.3201-1.4668 5.3289 0.10603 1.0088 3.0498 4.0291 2.5427 4.9075z" transform="matrix(.67412 .29958 -.29958 .67412 15.464 -7.1925)"/>
+ </g>
+ <g transform="matrix(3.1014,0,0,3.0886,-2.6,-1.6674)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+</svg>

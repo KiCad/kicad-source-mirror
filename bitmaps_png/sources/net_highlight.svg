@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <radialGradient id="f" gradientUnits="userSpaceOnUse" cy="10.108" cx="-26.305" gradientTransform="matrix(.44971 -.29369 .82915 1.1474 36.036 -10.021)" r="7.0421">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" offset=".47534"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <linearGradient id="d" y2="4.6406" gradientUnits="userSpaceOnUse" x2="6.0964" y1="8.6836" x1="8.9893">
+   <stop stop-color="#ff7800" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+  <linearGradient id="e" y2="10.133" gradientUnits="userSpaceOnUse" x2="6.0553" gradientTransform="matrix(.54409 -.31413 .492 .85218 93.741 15.4)" y1="4.4591" x1="3.4422">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#9b9bff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <rect opacity="0" height="50.379" width="52.993" y="-1.1654" x="-2.4003"/>
+ <path fill="url(#f)" d="m27.96 3.0328c-1.5334 0-0.04648 0.52172 1.4835 1.1807 1.53 0.65903 5.4901 3.3744 4.5886 7.2157 4.773-0.45192 7.3739 3.2771 7.7281 4.4934 0.35425 1.2163 1.104 2.7369 1.104 1.2791 0.03124-3.9942-3.1414-6.7504-5.3476-9.0852-2.205-2.3348-5.522-4.5834-9.556-5.0838z"/>
+ <g transform="matrix(2.6042,0,0,2.3637,-236.21,-21.943)">
+  <rect fill-opacity=".50980" height="16" width="2.0219" y="11.491" x="103.1"/>
+  <rect fill-opacity=".50980" transform="rotate(-90)" height="16" width="2.0219" y="92.1" x="-24.491"/>
+  <rect transform="scale(-1)" height="16" width="2.0219" y="-27.491" x="-97.1" fill="#46ff00"/>
+  <rect transform="rotate(90)" height="16" width="2.0219" y="-108.1" x="14.491" fill="#f00"/>
+  <path d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(.88889 0 0 .88889 88.767 9.4908)"/>
+  <path fill="url(#d)" d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(.55556 0 0 .55556 91.517 11.741)"/>
+  <path fill="#7d7d7d" d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(-.88889 0 0 -.88889 111.43 29.491)"/>
+  <path fill-opacity=".39216" fill-rule="evenodd" d="m96.231 16.991 0.52886 8.7787 2.1845-1.7202 1.8496 3.9306 2.7066-1.5627-2.5134-3.5473 2.582-1.0318-7.3381-4.8473z"/>
+  <path fill-rule="evenodd" d="m96.1 15.418 0.52886 8.7787 2.1845-1.7202 1.8496 3.9306 2.7066-1.5627-2.5134-3.5473 2.582-1.0318-7.3381-4.8473z"/>
+  <path fill-rule="evenodd" fill="url(#e)" d="m96.886 16.78 0.36869 6.1424 1.8462-1.5199 1.8218 3.9417 1.3619-0.78627-2.5027-3.5485 2.2393-0.83894-5.1352-3.3905z"/>
+ </g>
+</svg>

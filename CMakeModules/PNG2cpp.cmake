@@ -49,13 +49,12 @@ set( output_begin "
 
 #include \"bitmaps.h\"
 
-static const unsigned char png[] = {"
+static const char png[] = {"
 )
 
 set( output_end "};
 
-// make as array so its name is a pointer.
-BITMAP_OPAQUE ${png_name}[1] = { png, sizeof(png) };
+const BITMAP_OPAQUE ${png_name}_xpm[1] = {{ png, sizeof( png ), \"${png_name}_xpm\" }};
 
 //EOF
 " )

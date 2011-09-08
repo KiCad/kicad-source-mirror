@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1" viewBox="0 0 48 48">
+ <defs>
+  <linearGradient id="a" y2="4.2193" gradientUnits="userSpaceOnUse" x2="7.5955" gradientTransform="matrix(.88924 0 0 .78227 .62292 7.6472)" y1="43.994" x1="40.752">
+   <stop stop-color="#333" offset="0"/>
+   <stop stop-color="#474747" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g transform="matrix(0,-2.1261,1.54,0,22.424,44.254)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g stroke-linejoin="round" stroke-linecap="round" transform="matrix(1.3562,0,0,1.3468,-6.0414,-11.242)">
+  <rect style="color:#000000" fill-opacity=".63253" ry=".89887" height="32.011" width="31.012" stroke="url(#a)" display="block" y="10.5" x="6.495" fill="#fff"/>
+  <rect opacity=".79121" style="color:#000000" display="block" rx=".13187" ry=".11482" height="30.004" width="28.998" stroke="#fff" y="11.496" x="7.5" fill="none"/>
+  <path style="color:#000000" d="m10.184 13.468 5.316 0.032 3 3v8" stroke="#000" display="block" fill="none"/>
+  <path style="color:#000000" d="m22.5 24.5v-8l-3-3" stroke="#000" display="block" fill="none"/>
+  <path style="color:#000000" d="m26.5 24.5v-8l-3-3" stroke="#000" display="block" fill="none"/>
+  <path style="color:#000000" d="m30.5 24.5v-11" stroke="#000" display="block" fill="none"/>
+  <path style="color:#000000" d="m18.5 24.5v2" stroke="#000" stroke-width="2" display="block" fill="none"/>
+  <path style="color:#000000" d="m22.5 24.5v2" stroke="#000" stroke-width="2" display="block" fill="none"/>
+  <path style="color:#000000" d="m26.5 24.5v2" stroke="#000" stroke-width="2" display="block" fill="none"/>
+  <path style="color:#000000" d="m30.5 24.5v2" stroke="#000" stroke-width="2" display="block" fill="none"/>
+  <path style="color:#000000" d="m30.5 31.5v2" stroke="#000" stroke-width="2" display="block" fill="none"/>
+  <path style="color:#000000" d="m26.5 31.5v2" stroke="#000" stroke-width="2" display="block" fill="none"/>
+  <path style="color:#000000" d="m22.5 31.5v2" stroke="#000" stroke-width="2" display="block" fill="none"/>
+  <path style="color:#000000" d="m18.5 31.5v2" stroke="#000" stroke-width="2" display="block" fill="none"/>
+  <path style="color:#000000" d="m18.5 33.5v3l-2 2h-6" stroke="#000" display="block" fill="none"/>
+  <path style="color:#000000" d="m22.5 33.5v5" stroke="#000" display="block" fill="none"/>
+  <path style="color:#000000" d="m26.5 33.5v3l2 2h6" stroke="#000" display="block" fill="none"/>
+  <path style="color:#000000" d="m30.5 33.5 2 2h2" stroke="#000" display="block" fill="none"/>
+  <path style="color:#000000" display="block" d="m10.5 15.5h4l2 2v18l-1 1h-5v-21z" stroke="#000"/>
+  <rect style="color:#000000" display="block" ry="2.028" height="13" width="16" stroke="#000" y="22.5" x="16.5" fill="none"/>
+ </g>
+ <g transform="matrix(2.995,0,0,2.8613,2.828,18.757)">
+  <path fill="#afaf00" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.86499 0 0 .86499 3.3638 -4.5167)"/>
+  <path fill="#ebeb00" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.61624 0 0 .61624 5.7296 -4.1188)"/>
+  <path fill="#ff0" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.3815 0 0 .3815 7.9622 -3.7434)"/>
+ </g>
+</svg>

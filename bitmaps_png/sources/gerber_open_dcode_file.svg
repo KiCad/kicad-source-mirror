@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="50" width="50" version="1.1" viewBox="0 0 50 50">
+ <defs>
+  <radialGradient id="a" gradientUnits="userSpaceOnUse" cy="9.3411" cx="38.659" r="8.3417">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fefede" stop-opacity=".91837" offset=".25"/>
+   <stop stop-color="#f5f328" offset=".5"/>
+   <stop stop-color="#f5f32d" stop-opacity=".12234" offset="1"/>
+  </radialGradient>
+ </defs>
+ <g stroke-width=".75" transform="matrix(.94933 0 0 .93794 .80466 -1.0724)" stroke="#000">
+  <polygon points="1.018 26.902 25.224 12.379 49.423 27.934 25.213 42.458" fill="#bcbec0"/>
+  <polygon points="0.837 23.615 25.042 9.094 49.241 24.649 25.036 39.169" fill="#808284"/>
+  <polygon points="1.018 19.684 25.224 5.16 49.423 20.714 25.213 35.238" fill="#0071bc"/>
+  <polygon points="1.018 15.232 25.224 0.711 49.423 16.266 25.217 30.787" fill="#008fd4"/>
+ </g>
+ <g fill-rule="evenodd" transform="matrix(1.5701,0,0,1.4602,-21.775,-2.9627)">
+  <path fill="url(#a)" d="m47.001 9.3411a8.3417 8.3417 0 1 1 -16.683 0 8.3417 8.3417 0 1 1 16.683 0z" transform="matrix(1.1498 0 0 1.1498 -7.5953 .4909)"/>
+  <path style="color:#000000" fill="#fff" d="m44.52 15.503c-0.50717 0.87845-4.5947-0.16082-5.5214 0.25175-0.92665 0.41257-2.8894 4.1456-3.8816 3.9347-0.99218-0.21089-1.2669-4.4195-1.9456-5.1733-0.67873-0.7538-4.8356-1.4669-4.9416-2.4757-0.10603-1.0088 3.8117-2.5706 4.3189-3.449 0.50717-0.87845-0.09914-5.0522 0.82751-5.4648 0.92665-0.41257 3.6227 2.8308 4.6148 3.0417 0.99218 0.21089 4.7743-1.6555 5.453-0.90171 0.67873 0.7538-1.5728 4.3201-1.4668 5.3289 0.10603 1.0088 3.0498 4.0291 2.5427 4.9075z" transform="matrix(.67412 .29958 -.29958 .67412 15.464 -7.1925)"/>
+ </g>
+ <g transform="translate(5.7812,-20.156)">
+  <rect fill-rule="evenodd" height="15.625" width="49.219" y="54.219" x="-5.463" fill="#fff"/>
+  <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(.85217 1.1735)" line-height="125%" font-size="46.939px" y="57.820393" x="-6.7774625" font-family="Sans" fill="#000000"><tspan style="word-spacing:0px;letter-spacing:.04px" font-size="13px" dx="0" y="57.820393" x="-6.7774625" font-weight="bold">GERBER</tspan></text>
+ </g>
+</svg>

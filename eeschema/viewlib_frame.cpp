@@ -89,7 +89,10 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     m_ConfigPath = wxT( "LibraryViewer" );
 
     // Give an icon
-    SetIcon( wxIcon( library_browse_xpm ) );
+    wxIcon  icon;
+    icon.CopyFromBitmap( KiBitmap( library_browse_xpm ) );
+
+    SetIcon( icon );
 
     m_HotkeysZoomAndGridList = s_Viewlib_Hokeys_Descr;
     m_CmpList = NULL;

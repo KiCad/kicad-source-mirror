@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <radialGradient id="c" gradientUnits="userSpaceOnUse" cy="36.812" cx="25.375" gradientTransform="matrix(1 0 0 .45357 0 20.115)" r="17.5">
+   <stop offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <radialGradient id="d" gradientUnits="userSpaceOnUse" cy="24.149" cx="17.814" gradientTransform="matrix(-4.378,0,4.8624e-8,3.6749,144.59,-83.252)" r="9.125">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#b6b6b6" offset="1"/>
+  </radialGradient>
+ </defs>
+ <g transform="matrix(.70426 0 0 .66174 -28.08 8.7253)">
+  <path opacity=".39873" d="m42.875 36.812a17.5 7.9375 0 1 1 -35 0 17.5 7.9375 0 1 1 35 0z" transform="matrix(1.0451 0 0 .64275 55.941 16.987)" display="block" fill="url(#c)"/>
+  <path stroke-linejoin="round" d="m64.736 2.1869 28.149 23.925-12.833 0.363s5.3814 9.7875 5.3814 9.7875c1.6558 4.35-5.7954 5.9813-7.0373 2.7188l-4.9675-9.7875-9.1071 8.5188 0.41396-35.525z" fill-rule="evenodd" stroke="#555753" stroke-width="1.5495" fill="url(#d)"/>
+  <path d="m66.652 6.352 21.438 18.119-10.461 0.77732 6.1616 11.247c1.1934 2.1784-2.7263 3.31-3.6513 1.5467l-6.0985-11.625-7.8266 7.0771z" stroke="#fff" stroke-width="2.05" fill="none"/>
+ </g>
+ <g transform="translate(71.5,10)">
+  <polygon points="18 14 24 8 0 0 8 23.995 14 17.995 28 32 32 28" fill="#010101"/>
+ </g>
+</svg>

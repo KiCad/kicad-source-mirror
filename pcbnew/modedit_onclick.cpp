@@ -197,9 +197,9 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
     if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
         if( item && item->m_Flags )
-            AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), cancel_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), KiBitmap( cancel_xpm ) );
         else
-            AddMenuItem( PopMenu, ID_POPUP_CLOSE_CURRENT_TOOL, _( "End Tool" ), cancel_tool_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_CLOSE_CURRENT_TOOL, _( "End Tool" ), KiBitmap( cancel_tool_xpm ) );
 
         PopMenu->AppendSeparator();
     }
@@ -210,30 +210,30 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             if( blockActive )  // Put block commands in list
             {
                 AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-                             _( "Cancel Block" ), cancel_xpm );
+                             _( "Cancel Block" ), KiBitmap( cancel_xpm ) );
                 AddMenuItem( PopMenu, ID_POPUP_ZOOM_BLOCK,
                              _( "Zoom Block (drag middle mouse)" ),
-                             zoom_area_xpm );
+                             KiBitmap( zoom_area_xpm ) );
                 PopMenu->AppendSeparator();
                 AddMenuItem( PopMenu, ID_POPUP_PLACE_BLOCK,
-                             _( "Place Block" ), apply_xpm );
+                             _( "Place Block" ), KiBitmap( apply_xpm ) );
                 AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK,
                              _( "Copy Block (shift + drag mouse)" ),
-                             copyblock_xpm );
+                             KiBitmap( copyblock_xpm ) );
                 AddMenuItem( PopMenu, ID_POPUP_MIRROR_X_BLOCK,
                              _( "Mirror Block (alt + drag mouse)" ),
-                             mirror_h_xpm );
+                             KiBitmap( mirror_h_xpm ) );
                 AddMenuItem( PopMenu, ID_POPUP_ROTATE_BLOCK,
                              _( "Rotate Block (ctrl + drag mouse)" ),
-                             rotate_ccw_xpm );
+                             KiBitmap( rotate_ccw_xpm ) );
                 AddMenuItem( PopMenu, ID_POPUP_DELETE_BLOCK,
                              _( "Delete Block (shift+ctrl + drag mouse)" ),
-                             delete_xpm );
+                             KiBitmap( delete_xpm ) );
             }
             else
             {
                 AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
-                             _( "Cancel" ), cancel_xpm );
+                             _( "Cancel" ), KiBitmap( cancel_xpm ) );
             }
 
             PopMenu->AppendSeparator();
@@ -251,12 +251,12 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
     {
         wxMenu* transform_choice = new wxMenu;
         AddMenuItem( transform_choice, ID_MODEDIT_MODULE_ROTATE, _( "Rotate" ),
-                     rotate_module_pos_xpm );
-        AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MIRROR, _( "Mirror" ), mirror_h_xpm );
+                     KiBitmap( rotate_module_pos_xpm ) );
+        AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MIRROR, _( "Mirror" ), KiBitmap( mirror_h_xpm ) );
         msg = AddHotkeyName( _( "Edit Module" ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
-        AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_MODULE, msg, edit_module_xpm );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_MODULE, msg, KiBitmap( edit_module_xpm ) );
         AddMenuItem( PopMenu, transform_choice, ID_MODEDIT_TRANSFORM_MODULE,
-                     _( "Transform Module" ), edit_xpm );
+                     _( "Transform Module" ), KiBitmap( edit_xpm ) );
         break;
     }
 
@@ -264,23 +264,23 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         if( !flags )
         {
             msg = AddHotkeyName( _("Move Pad" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM );
-            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_PAD_REQUEST, msg, move_pad_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_PAD_REQUEST, msg, KiBitmap( move_pad_xpm ) );
         }
 
         msg = AddHotkeyName( _("Edit Pad" ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
-        AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_PAD, msg, options_pad_xpm );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_PAD, msg, KiBitmap( options_pad_xpm ) );
         AddMenuItem( PopMenu, ID_POPUP_PCB_IMPORT_PAD_SETTINGS,
-                     _( "New Pad Settings" ), options_new_pad_xpm );
+                     _( "New Pad Settings" ), KiBitmap( options_new_pad_xpm ) );
         AddMenuItem( PopMenu, ID_POPUP_PCB_EXPORT_PAD_SETTINGS,
-                     _( "Export Pad Settings" ), export_options_pad_xpm );
+                     _( "Export Pad Settings" ), KiBitmap( export_options_pad_xpm ) );
         msg = AddHotkeyName( _("Delete Pad" ), g_Module_Editor_Hokeys_Descr, HK_DELETE );
-        AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_PAD, msg, delete_pad_xpm );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_PAD, msg, KiBitmap( delete_pad_xpm ) );
 
         if( !flags )
         {
             PopMenu->AppendSeparator();
             AddMenuItem( PopMenu, ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS,
-                         _( "Global Pad Settings" ), global_options_pad_xpm );
+                         _( "Global Pad Settings" ), KiBitmap( global_options_pad_xpm ) );
         }
 
         break;
@@ -290,24 +290,24 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         {
             msg = AddHotkeyName( _("Move Text Mod." ), g_Module_Editor_Hokeys_Descr,
                                  HK_MOVE_ITEM );
-            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST, msg, move_field_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST, msg, KiBitmap( move_field_xpm ) );
         }
 
         msg = AddHotkeyName( _("Rotate Text Mod." ), g_Module_Editor_Hokeys_Descr,
                              HK_ROTATE_ITEM );
-        AddMenuItem( PopMenu, ID_POPUP_PCB_ROTATE_TEXTMODULE, msg, rotate_field_xpm );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_ROTATE_TEXTMODULE, msg, KiBitmap( rotate_field_xpm ) );
 
         if( !flags )
         {
             msg = AddHotkeyName( _("Edit Text Mod." ), g_Module_Editor_Hokeys_Descr,
                                  HK_EDIT_ITEM );
-            AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_TEXTMODULE, msg, edit_text_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_TEXTMODULE, msg, KiBitmap( edit_text_xpm ) );
 
             if( ( (TEXTE_MODULE*) item )->m_Type == TEXT_is_DIVERS )
             {
                 msg = AddHotkeyName( _("Delete Text Mod." ), g_Module_Editor_Hokeys_Descr,
                                      HK_DELETE );
-                AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_TEXTMODULE, msg, delete_text_xpm );
+                AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_TEXTMODULE, msg, KiBitmap( delete_text_xpm ) );
             }
         }
         break;
@@ -315,29 +315,29 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
     case TYPE_EDGE_MODULE:
     {
         if( (flags & IS_NEW) )
-            AddMenuItem( PopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING, _( "End edge" ), apply_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING, _( "End edge" ), KiBitmap( apply_xpm ) );
 
         if( !flags )
         {
             msg = AddHotkeyName( _("Move edge" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM );
-            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EDGE, msg, move_line_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EDGE, msg, KiBitmap( move_line_xpm ) );
         }
 
         if( ( flags & (IS_NEW | IS_MOVED) ) == IS_MOVED )
-            AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_EDGE, _( "Place edge" ), apply_xpm );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_EDGE, _( "Place edge" ), KiBitmap( apply_xpm ) );
 
         wxMenu* edit_mnu = new wxMenu;
-        AddMenuItem( PopMenu, edit_mnu, ID_POPUP_PCB_EDIT_EDGE, _( "Edit" ), edit_xpm );
+        AddMenuItem( PopMenu, edit_mnu, ID_POPUP_PCB_EDIT_EDGE, _( "Edit" ), KiBitmap( edit_xpm ) );
         AddMenuItem( edit_mnu, ID_POPUP_PCB_EDIT_WIDTH_CURRENT_EDGE,
-                     _( "Edit Width (Current)" ), width_segment_xpm );
+                     _( "Edit Width (Current)" ), KiBitmap( width_segment_xpm ) );
         AddMenuItem( edit_mnu, ID_POPUP_PCB_EDIT_WIDTH_ALL_EDGE,
-                     _( "Edit Width (All)" ), width_segment_xpm );
+                     _( "Edit Width (All)" ), KiBitmap( width_segment_xpm ) );
         AddMenuItem( edit_mnu, ID_POPUP_PCB_EDIT_LAYER_CURRENT_EDGE,
-                     _( "Edit Layer (Current)" ), select_layer_pair_xpm );
+                     _( "Edit Layer (Current)" ), KiBitmap( select_layer_pair_xpm ) );
         AddMenuItem( edit_mnu, ID_POPUP_PCB_EDIT_LAYER_ALL_EDGE,
-                     _( "Edit Layer (All)" ), select_layer_pair_xpm );
+                     _( "Edit Layer (All)" ), KiBitmap( select_layer_pair_xpm ) );
         msg = AddHotkeyName( _("Delete edge" ), g_Module_Editor_Hokeys_Descr, HK_DELETE );
-        AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_EDGE, msg, delete_xpm );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_EDGE, msg, KiBitmap( delete_xpm ) );
         append_set_width = TRUE;
     }
     break;
@@ -375,7 +375,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                || ( GetToolId() == ID_PCB_CIRCLE_BUTT )
                || ( GetToolId() == ID_PCB_ARC_BUTT ) ) ) )
     {
-        AddMenuItem( PopMenu, ID_POPUP_PCB_ENTER_EDGE_WIDTH, _("Set Width" ), width_segment_xpm );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_ENTER_EDGE_WIDTH, _("Set Width" ), KiBitmap( width_segment_xpm ) );
         PopMenu->AppendSeparator();
     }
 

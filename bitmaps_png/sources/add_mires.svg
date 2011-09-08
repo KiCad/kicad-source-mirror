@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <mask id="i">
+   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
+  </mask>
+  <mask id="n">
+   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
+  </mask>
+  <mask id="o">
+   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
+  </mask>
+  <mask id="p">
+   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
+  </mask>
+  <mask id="j">
+   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
+  </mask>
+  <mask id="m">
+   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
+  </mask>
+  <mask id="k">
+   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
+  </mask>
+  <mask id="l">
+   <rect fill-rule="evenodd" height="26.092" width="25.032" y="-3.7337" x="-4.6404" fill="#fff"/>
+  </mask>
+ </defs>
+ <a fill="#e5e500" mask="url(#o)" transform="matrix(-1.0533,0,0,-1.0414,46.87,47.939)">
+  <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#e5e500"/>
+ </a>
+ <a opacity=".83203" mask="url(#p)" transform="matrix(0 -1.0414 1.0533 0 -.64254 45.87)">
+  <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
+ </a>
+ <a fill="#eded00" mask="url(#i)" transform="matrix(1.0533 0 0 1.0414 1.4155 -.94445)">
+  <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#eded00"/>
+ </a>
+ <path opacity=".9" d="m39.075 22.875a13.875 14.25 0 1 1 -0.0016 -0.21848l-13.873 0.218z" transform="matrix(.99191 0 0 .94943 -.85146 1.8348)" stroke="#000" stroke-width="1.5405" fill="none"/>
+ <a opacity="0.83" mask="url(#n)" transform="matrix(0,1.0414,-1.0533,0,48.922,1.1043)">
+  <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
+ </a>
+ <path opacity=".9" d="m4.5373 23.491h38.818" stroke="#000" stroke-width="2.016px" fill="none"/>
+ <path opacity=".9" d="m24.134 4.5338v38.704" stroke="#000" stroke-width="2.1559px" fill="none"/>
+ <a fill="#c1c100" mask="url(#j)" transform="matrix(.67174 0 0 .76458 7.6512 3.9816)">
+  <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#c1c100"/>
+ </a>
+ <a fill="#c1c100" mask="url(#m)" transform="matrix(-.67174 0 0 -.76458 40.662 43.016)">
+  <path d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" fill-rule="evenodd" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)" fill="#c1c100"/>
+ </a>
+ <a mask="url(#k)" transform="matrix(0 .67174 -.76458 0 43.801 7.3614)">
+  <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
+ </a>
+ <a mask="url(#l)" transform="matrix(0 -.67174 .76458 0 4.4238 39.589)">
+  <path fill-rule="evenodd" d="m40.093 23.074a14.001 13.576 0 1 1 -28.001 0 14.001 13.576 0 1 1 28.001 0z" transform="matrix(.86364 0 0 .875 -1.0028 3.2555)"/>
+ </a>
+</svg>

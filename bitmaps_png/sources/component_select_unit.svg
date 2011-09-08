@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <g transform="translate(62.862,32.916)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(.9504 0 0 1.058 3.8422 .80892)">
+  <path fill="#d72e2e" d="m16.183 2.4318h11.684c12.124 0 12.409 14.276 0 14.276h-11.684v-14.276z"/>
+  <rect height="1.5862" width="6.2844" y="8.7767" x="39.13" fill="#d72e2e"/>
+  <rect height="1.5862" width="6.2844" y="13.535" x="11.898" fill="#d72e2e"/>
+  <rect height="1.5862" width="6.2844" y="5.6043" x="11.898" fill="#d72e2e"/>
+  <path fill="#f4fd0d" d="m17.925 4.1318h9.7592c9.2236 0 9.4403 11.104 0 11.104h-9.759v-11.104z"/>
+  <path fill="#d72e2e" d="m41.225 9.5698a3.1422 2.3793 0 0 1 -6.2844 0 3.1422 2.3793 0 1 1 6.2844 0z"/>
+  <rect height="1.5862" width="2.0948" y="8.7767" x="37.035" fill="#f4fd0d"/>
+ </g>
+ <rect fill-opacity="0" height="9.0549" width="12.411" y="9.8757" x="12.459"/>
+ <g transform="matrix(.9504 0 0 1.1157 -.83111 -8.148)">
+  <path fill="#d72e2e" d="m13.692 20.145h11.684c12.124 0 12.409 14.276 0 14.276h-11.684v-14.276z"/>
+  <rect height="1.5862" width="6.2844" y="26.489" x="36.639" fill="#d72e2e"/>
+  <rect height="1.5862" width="6.2844" y="31.248" x="9.4072" fill="#d72e2e"/>
+  <rect height="1.5862" width="6.2844" y="23.317" x="9.4072" fill="#d72e2e"/>
+  <path fill="#110dfd" d="m15.434 21.845h9.7592c9.2236 0 9.4403 11.104 0 11.104h-9.759v-11.104z"/>
+  <path fill="#d72e2e" d="m38.734 27.283a3.1422 2.3793 0 0 1 -6.2844 0 3.1422 2.3793 0 1 1 6.2844 0z"/>
+  <rect height="1.5862" width="2.0948" y="26.489" x="34.545" fill="#110dfd"/>
+  <rect fill-opacity="0" height="9.7316" width="13.058" y="27.124" x="6.5761"/>
+ </g>
+ <g transform="matrix(.9504 0 0 1.109 -51.385 14.957)">
+  <path fill="#d72e2e" d="m60.042 9.0445h11.684c12.124 0 12.409 14.276 0 14.276h-11.684v-14.276z"/>
+  <rect height="1.5862" width="6.2844" y="15.389" x="82.989" fill="#d72e2e"/>
+  <rect height="1.5862" width="6.2844" y="20.148" x="55.757" fill="#d72e2e"/>
+  <rect height="1.5862" width="6.2844" y="12.217" x="55.757" fill="#d72e2e"/>
+  <path fill="#fff" d="m61.784 10.745h9.7592c9.2236 0 9.4403 11.104 0 11.104h-9.759v-11.104z"/>
+  <path fill="#d72e2e" d="m85.084 16.183a3.1422 2.3793 0 0 1 -6.2844 0 3.1422 2.3793 0 1 1 6.2844 0z"/>
+  <rect height="1.5862" width="2.0948" y="15.389" x="80.895" fill="#fff"/>
+ </g>
+ <rect fill-opacity="0" height="7.4586" width="11.328" y="13.799" x="52.106"/>
+</svg>

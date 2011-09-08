@@ -78,7 +78,7 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
     btn = AddBitmapButton( ID_TO_CVPCB, KiBitmap( icon_cvpcb_xpm ) );
     btn->SetToolTip( _( "CVpcb (Components to modules)" ) );
 
-    btn = AddBitmapButton( ID_TO_PCB, KiBitmap( a_icon_pcbnew_xpm ) );
+    btn = AddBitmapButton( ID_TO_PCB, KiBitmap( icon_pcbnew_xpm ) );
     btn->SetToolTip( _( "PCBnew (PCB editor)" ) );
 
     btn = AddBitmapButton( ID_TO_GERBVIEW, KiBitmap( icon_gerbview_xpm ) );

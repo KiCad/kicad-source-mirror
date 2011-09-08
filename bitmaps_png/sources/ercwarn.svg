@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.0">
+ <defs>
+  <filter id="a" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.7125797"/>
+  </filter>
+ </defs>
+ <g transform="matrix(1.2114,0,0,1.1636,-5.3855,-4.35)">
+  <rect stroke-linejoin="round" fill-rule="evenodd" rx=".72608" ry="1.3898" height="34.248" width="33.268" stroke="#78781e" y="7.1759" x="7.775" stroke-width="1.5056" fill="#fdfd40"/>
+  <text opacity=".80078" style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="matrix(.85154 0 0 .88026 6.6875 11.812)" line-height="125%" filter="url(#a)" font-size="36.4px" y="29.40612" x="6.1734886" font-family="Sans" fill="#000000"><tspan font-family="UnDotum" y="29.40612" x="6.1734886" font-weight="bold" fill="#000000">W</tspan></text>
+  <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(.98355 1.0167)" line-height="125%" font-size="31.515px" y="35.885643" x="10.682997" font-family="Sans" fill="#ffffff"><tspan font-family="UnDotum" y="35.885643" x="10.682997" font-weight="bold" fill="#ffffff">W</tspan></text>
+ </g>
+</svg>

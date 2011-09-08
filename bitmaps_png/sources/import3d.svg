@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1" viewBox="0 0 48 48">
+ <defs>
+  <radialGradient id="h" gradientUnits="userSpaceOnUse" cy="115.71" cx="63.912" gradientTransform="matrix(1.0014 0 0 .081174 28.49 150.31)" r="63.912">
+   <stop offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </radialGradient>
+  <linearGradient id="f" y2="50" gradientUnits="userSpaceOnUse" x2="67.692" gradientTransform="matrix(1,0,0,-1,0,100)" y1="50" x1="16.097">
+   <stop stop-color="#646464" offset="0"/>
+   <stop stop-color="#7e7e7e" offset="0"/>
+   <stop stop-color="#999" stop-opacity=".58763" offset="0.86"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <linearGradient id="g" y2="50" gradientUnits="userSpaceOnUse" x2="72" y1="50" x1="4">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#fff" offset=".5"/>
+   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
+  </linearGradient>
+  <filter id="e" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.30275611"/>
+  </filter>
+ </defs>
+ <g transform="translate(-.9)" font-size="21.48px" font-family="Sans" fill="#5a5a5a">
+  <text opacity=".35156" style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(.87318 1.1452)" line-height="125%" filter="url(#e)" y="18.952009" x="24.173265"><tspan y="18.952009" x="24.173265" font-weight="bold" fill="#5a5a5a">3D</tspan></text>
+  <text style="word-spacing:0px;letter-spacing:0px" xml:space="preserve" transform="scale(.87318 1.1452)" line-height="125%" y="17.469219" x="22.354277"><tspan y="17.469219" x="22.354277" font-weight="bold" fill="#5a5a5a">3D</tspan></text>
+ </g>
+ <g transform="matrix(.35639 0 0 .40269 .99377 11.962)">
+  <path fill="url(#f)" d="m39.656 12c-0.94393 0.07733-1.8298 0.48705-2.5 1.1562l-8 8c-1.446 1.447-1.568 3.753-0.281 5.344l10.813 13.5h-35.688c-2.209 0.000221-3.9998 1.791-4 4v12c0.00022087 2.209 1.791 3.9998 4 4h35.688l-10.813 13.5c-1.2867 1.591-1.1654 3.8966 0.28125 5.3438l8 8c0.76629 0.7668 1.8223 1.2052 2.9062 1.1875 1.0839-0.01768 2.1029-0.48988 2.8438-1.2812l32-34c1.4601-1.5426 1.4601-3.9574 0-5.5l-32-34c-0.835-0.891-2.032-1.351-3.25-1.25zm0.344 4 32 34-32 34-8-8 16-20h-44v-12h44l-16-20 8-8z"/>
+  <path fill="url(#g)" d="m32 76 8 8 32-34-32-34-8 8 16 20h-44v12h44l-16 20z"/>
+ </g>
+ <g transform="matrix(0,-2.1261,1.54,0,22.424,44.254)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <path opacity=".38140" fill="url(#h)" d="m156.49 159.7a64 5.188 0 0 1 -128 0 64 5.188 0 1 1 128 0z"/>
+</svg>

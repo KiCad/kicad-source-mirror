@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <linearGradient id="g" y2="4.6406" gradientUnits="userSpaceOnUse" x2="6.0964" gradientTransform="matrix(1.4444,0,0,1.3333,-59.078,30.888)" y1="8.6836" x1="8.9893">
+   <stop stop-color="#ff7800" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+  <filter id="e" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.25961539"/>
+  </filter>
+  <filter id="f" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.93712498"/>
+  </filter>
+  <linearGradient id="h" y2="6.4143" gradientUnits="userSpaceOnUse" x2="3.7417" gradientTransform="matrix(2.5978 0 0 2.4227 -.48 7.7664)" y1="13.722" x1="11.124">
+   <stop stop-color="#afafff" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g transform="matrix(2.4566,0,0,2.2316,-37.589,-39.022)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(1.1744,0,0,1.1859,-89.29,-37.601)">
+  <g opacity=".72656" filter="url(#f)" transform="translate(0 .9)">
+   <rect y="33.666" width="9.72" x="28.68" height="2.59"/>
+   <rect y="41.436" width="9.72" x="4.38" height="2.59"/>
+   <rect y="28.486" width="9.72" x="4.38" height="2.59"/>
+   <path d="m9.0509 23.306h13.554c14.064 0 14.395 23.31 0 23.31h-13.554v-23.31z"/>
+  </g>
+  <rect height="2.59" width="7.29" y="31.076" x="28.68" fill="#d72e2e"/>
+  <path fill="#d72e2e" d="m6.9203 20.716h13.554c14.064 0 14.395 23.31 0 23.31h-13.554v-23.31z"/>
+  <rect height="2.59" width="7.29" y="38.846" x="1.95" fill="#d72e2e"/>
+  <rect height="2.59" width="7.29" y="25.896" x="1.95" fill="#d72e2e"/>
+  <path fill="url(#h)" d="m9.24 23.306h11.321c10.7 0 10.951 18.13 0 18.13h-11.321v-18.13z"/>
+ </g>
+ <rect y="28.1" width="4" x="-13" height="1"/>
+ <path d="m-21.955 24.1h5.5778c5.7877 0 5.9238 9 0 9h-5.5778v-9z"/>
+ <rect y="31.1" width="4" x="-25" height="1"/>
+ <rect y="26.1" width="4" x="-25" height="1"/>
+ <path fill="#afafff" d="m-21 25.1h4.6587c4.4031 0 4.5066 7 0 7h-4.659v-7z"/>
+ <g transform="matrix(2.9379,0,0,2.1996,1.5067,11.922)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(3.433,0,0,3.1874,-62.271,56.386)">
+  <path fill="#afaf00" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.86499 0 0 .86499 3.3638 -4.5167)"/>
+  <path fill="#ebeb00" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.61624 0 0 .61624 5.7296 -4.1188)"/>
+  <path fill="#ff0" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.3815 0 0 .3815 7.9622 -3.7434)"/>
+ </g>
+ <g filter="url(#e)" fill="#9b9b9b" transform="translate(-54.712,32.288)">
+  <path d="m12.5 8a4.25 4 0 0 1 -8.5 0 4.25 4 0 1 1 8.5 0z"/>
+  <path d="m8 16-0.000001-15h1.5l0.0000011 15h-1.5z"/>
+  <path d="m1 7h15v1.5h-15v-1.5z"/>
+ </g>
+ <path fill="#007d00" d="m-54.712 38.288 15-0.000001v1.5l-15 0.000001v-1.5z"/>
+ <path fill="#007d00" d="m-47.712 47.288-0.000001-15h1.5l0.000001 15h-1.5z"/>
+ <path d="m-42.712 39.288a4.25 4 0 0 1 -8.5 0 4.25 4 0 1 1 8.5 0z"/>
+ <path fill="url(#g)" d="m-43.912 39.888a3.25 3 0 0 1 -6.5 0 3.25 3 0 1 1 6.5 0z"/>
+ <g transform="translate(-54.712,32.288)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <rect fill-opacity="0" height="38.871" width="43.287" y="-47.036" x="-74.787"/>
+ <g transform="matrix(2.6993,0,0,2.3778,52.403,8.9624)">
+  <g stroke-linejoin="round">
+   <rect transform="rotate(90)" height="14.619" width="9.7086" stroke="#000" y="3.4905" x="1.904" stroke-width="0.4" fill="#fff"/>
+   <path d="m693.26 625.06a18.914 18.914 0 0 1 -37.828 0.11702" transform="matrix(0 .071482 -.071482 0 41.168 -41.24)" stroke="#030303" stroke-width="5.5958" fill="none"/>
+  </g>
+  <g stroke-linejoin="round" transform="translate(-.0375 -.15)" stroke="#030303">
+   <rect transform="rotate(90)" height="2.511" width="4.7176" y="13.332" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <rect transform="rotate(90)" height="2.511" width="4.7176" y="5.3636" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <path d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 46.083 -44.072)" stroke-width="4.1969" fill="#ffede0"/>
+   <rect transform="rotate(90)" height="2.511" width="4.7176" y="9.3478" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <path d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 42.08 -44.072)" stroke-width="4.1969" fill="#ffede0"/>
+   <path d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 38.077 -44.072)" stroke-width="4.1969" fill="#ffede0"/>
+  </g>
+  <g transform="translate(-.0375 9.6261)">
+   <rect stroke-linejoin="round" transform="rotate(90)" height="2.511" width="4.7176" stroke="#030303" y="13.332" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <rect stroke-linejoin="round" transform="rotate(90)" height="2.511" width="4.7176" stroke="#030303" y="5.3636" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <path stroke-linejoin="round" d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 46.083 -44.072)" stroke="#030303" stroke-width="4.1969" fill="#ffede0"/>
+   <rect stroke-linejoin="round" transform="rotate(90)" height="2.511" width="4.7176" stroke="#030303" y="9.3478" x="-.31959" stroke-width="0.3" fill="#ff7800"/>
+   <path stroke-linejoin="round" d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 42.08 -44.072)" stroke="#030303" stroke-width="4.1969" fill="#ffede0"/>
+   <g stroke-width="0.3">
+    <path stroke-linejoin="round" d="m654.65 737.28a9.5805 9.5805 0 1 1 -19.161 0 9.5805 9.5805 0 1 1 19.161 0z" transform="matrix(0 .071482 -.071482 0 38.077 -44.072)" stroke="#030303" stroke-width="4.1969" fill="#ffede0"/>
+   </g>
+  </g>
+ </g>
+</svg>

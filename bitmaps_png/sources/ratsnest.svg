@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <rect opacity=".070312" fill-rule="evenodd" ry="7.1565" height="47.9" width="48.426" y=".10326" x="-.14154"/>
+ <g transform="matrix(.96886 0 0 1.0297 1.7227 -.15643)" stroke="#fff" stroke-width="2.4024" fill="none">
+  <path d="m7.2 27.15 20.25-1.8"/>
+  <path d="m14.056 7.0716 4.283 5.7374 8.511 12.091 13.35 13.65"/>
+  <path d="m16.2 40.5-9.15-13.65"/>
+  <path d="m40.95 12.9-1.2 25.05"/>
+ </g>
+ <path d="m50.7 18.302a15.698 14.849 0 1 1 -31.396 0 15.698 14.849 0 1 1 31.396 0z" transform="matrix(.27773 0 0 .30682 30.74 33.76)" stroke="#fb0801" stroke-width="9.0433" fill="none"/>
+ <path d="m50.7 18.302a15.698 14.849 0 1 1 -31.396 0 15.698 14.849 0 1 1 31.396 0z" transform="matrix(.27773 0 0 .30682 31.733 7.9829)" stroke="#fb0801" stroke-width="9.0433" fill="none"/>
+ <path d="m50.7 18.302a15.698 14.849 0 1 1 -31.396 0 15.698 14.849 0 1 1 31.396 0z" transform="matrix(.27773 0 0 .30682 18.558 20.364)" stroke="#fb0801" stroke-width="9.0433" fill="none"/>
+ <path d="m50.7 18.302a15.698 14.849 0 1 1 -31.396 0 15.698 14.849 0 1 1 31.396 0z" transform="matrix(.27773 0 0 .30682 7.5412 35.843)" stroke="#fb0801" stroke-width="9.0433" fill="none"/>
+ <path d="m50.7 18.302a15.698 14.849 0 1 1 -31.396 0 15.698 14.849 0 1 1 31.396 0z" transform="matrix(.27773 0 0 .30682 -.9117 22.373)" stroke="#fb0801" stroke-width="9.0433" fill="none"/>
+ <path d="m50.7 18.302a15.698 14.849 0 1 1 -31.396 0 15.698 14.849 0 1 1 31.396 0z" transform="matrix(.27773 0 0 .30682 5.7957 1.8034)" stroke="#fb0801" stroke-width="9.0433" fill="none"/>
+</svg>

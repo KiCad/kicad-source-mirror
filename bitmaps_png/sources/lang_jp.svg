@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="250" width="250" version="1.1">
+ <rect fill-rule="evenodd" height="250.27" width="249.43" y=".57410" x="1.691" fill="#e6e6e6"/>
+ <g transform="matrix(1.3758,0,0,1.3922,-523.72,-761.42)">
+  <rect height="109.75" width="171.8" y="582.54" x="387.01" fill="#fff"/>
+  <circle transform="matrix(.19089 0 0 .18292 387.01 582.54)" cy="300" cx="450" r="180" fill="#bc002d"/>
+ </g>
+</svg>

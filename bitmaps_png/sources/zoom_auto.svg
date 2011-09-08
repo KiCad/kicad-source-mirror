@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <radialGradient id="d" xlink:href="#a" gradientUnits="userSpaceOnUse" cy="6.4023" cx="44.287" gradientTransform="matrix(.80354 .0018983 -.0048367 .29678 7.1289 4.9447)" r="27.987"/>
+  <linearGradient id="a">
+   <stop stop-color="#89d5f8" offset="0"/>
+   <stop stop-color="#00899e" offset="1"/>
+  </linearGradient>
+  <radialGradient id="e" xlink:href="#a" gradientUnits="userSpaceOnUse" cy="17.388" cx="18.195" gradientTransform="matrix(-.37415 .42367 -.58256 -.51448 35.158 16.986)" r="27.987"/>
+ </defs>
+ <g stroke="#004c5b">
+  <path stroke-linejoin="bevel" style="color:#000000" d="m45.608 25.019a18.208 18.208 0 1 1 -36.416 0 18.208 18.208 0 1 1 36.416 0z" transform="matrix(.74531 0 0 .73436 .0039746 2.039)" stroke-width="2.4161" fill="url(#e)"/>
+  <rect stroke-linejoin="bevel" style="color:#000000" stroke-width="1.7882" transform="matrix(.70778 .70644 -.67767 .73536 0 0)" ry="2.7139" width="13.866" y="-3.7079" x="44.883" height="7.7758" fill="url(#d)"/>
+  <path stroke-linejoin="bevel" d="m-23.557 8.4335v6.4901h-6.6128v6.7466h6.6128v6.4901h6.8472v-6.4901h6.5608v-6.7466h-6.5608v-6.4913h-6.8472z" stroke-width="1.8193" fill="#fff"/>
+  <text style="word-spacing:0px;letter-spacing:0px" stroke-width="1.8" xml:space="preserve" transform="scale(1.0093 .99076)" line-height="125%" font-size="32.296px" y="45.949608" x="2.1375346" font-family="Sans" fill="#ffffff"><tspan font-weight="bold" stroke="#004c5b" y="45.949608" x="2.1375346" stroke-width="1.8" fill="#ffffff">A</tspan></text>
+ </g>
+</svg>

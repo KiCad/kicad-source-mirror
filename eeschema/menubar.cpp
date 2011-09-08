@@ -45,14 +45,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_NEW_PROJECT,
                  _( "&New\tCtrl+N" ),
                  _( "New schematic project" ),
-                 new_xpm );
+                 KiBitmap( new_xpm ) );
 
     // Open
     AddMenuItem( fileMenu,
                  ID_LOAD_PROJECT,
                  _( "&Open\tCtrl+O" ),
                  _( "Open an existing schematic project" ),
-                 open_document_xpm );
+                 KiBitmap( open_document_xpm ) );
 
     // Open Recent submenu
     static wxMenu* openRecentMenu;
@@ -68,7 +68,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu, openRecentMenu,
                  wxID_ANY, _( "Open &Recent" ),
                  _( "Open a recent opened schematic project" ),
-                 open_project_xpm );
+                 KiBitmap( open_project_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();
@@ -78,21 +78,21 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_SAVE_PROJECT,
                  _( "&Save Whole Schematic Project\tCtrl+S" ),
                  _( "Save all sheets in the schematic project" ),
-                 save_project_xpm );
+                 KiBitmap( save_project_xpm ) );
 
     // Save current sheet
     AddMenuItem( fileMenu,
                  ID_SAVE_ONE_SHEET,
                  _( "Save &Current Sheet Only" ),
                  _( "Save only current schematic sheet" ),
-                 save_xpm );
+                 KiBitmap( save_xpm ) );
 
     // Save current sheet as
     AddMenuItem( fileMenu,
                  ID_SAVE_ONE_SHEET_AS,
                  _( "Save Current Sheet &as" ),
                  _( "Save current schematic sheet as..." ),
-                 save_as_xpm );
+                 KiBitmap( save_as_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();
@@ -102,14 +102,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_SHEET_SET,
                  _( "P&age Settings" ),
                  _( "Settigns for page size and information" ),
-                 sheetset_xpm );
+                 KiBitmap( sheetset_xpm ) );
 
     // Print
     AddMenuItem( fileMenu,
                  wxID_PRINT,
                  _( "P&rint" ),
                  _( "Print schematic" ),
-                 print_button_xpm );
+                 KiBitmap( print_button_xpm ) );
 
     // Plot submenu
     wxMenu* choice_plot_fmt = new wxMenu;
@@ -118,28 +118,28 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( choice_plot_fmt, ID_GEN_PLOT_PS,
                  _( "Plot PostScript" ),
                  _( "Plot schematic sheet in PostScript format" ),
-                 plot_ps_xpm );
+                 KiBitmap( plot_ps_xpm ) );
 
     // Plot HPGL
     AddMenuItem( choice_plot_fmt,
                  ID_GEN_PLOT_HPGL,
                  _( "Plot HPGL" ),
                  _( "Plot schematic sheet in HPGL format" ),
-                 plot_hpg_xpm );
+                 KiBitmap( plot_hpg_xpm ) );
 
     // Plot SVG
     AddMenuItem( choice_plot_fmt,
                  ID_GEN_PLOT_SVG,
                  _( "Plot SVG" ),
                  _( "Plot schematic sheet in SVG format" ),
-                 plot_xpm );
+                 KiBitmap( plot_xpm ) );
 
     // Plot DXF
     AddMenuItem( choice_plot_fmt,
                  ID_GEN_PLOT_DXF,
                  _( "Plot DXF" ),
                  _( "Plot schematic sheet in DXF format" ),
-                 plot_xpm );
+                 KiBitmap( plot_xpm ) );
 
     // Plot to Clipboard (Windows only)
 #ifdef __WINDOWS__
@@ -147,7 +147,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( choice_plot_fmt, ID_GEN_COPY_SHEET_TO_CLIPBOARD,
                  _( "Plot to Clipboard" ),
                  _( "Export drawings to clipboard" ),
-                 copy_button_xpm );
+                 KiBitmap( copy_button_xpm ) );
 
 #endif // __WINDOWS__
 
@@ -155,7 +155,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu, choice_plot_fmt,
                  ID_GEN_PLOT, _( "&Plot" ),
                  _( "Plot schematic sheet in HPGL, PostScript or SVG format" ),
-                 plot_xpm );
+                 KiBitmap( plot_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();
@@ -165,7 +165,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  wxID_EXIT,
                  _( "&Quit" ),
                  _( "Quit EESchema" ),
-                 exit_xpm );
+                 KiBitmap( exit_xpm ) );
 
     // Menu Edit:
     wxMenu* editMenu = new wxMenu;
@@ -173,23 +173,23 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Undo
     text = AddHotkeyName( _( "Undo" ), s_Schematic_Hokeys_Descr, HK_UNDO );
 
-    AddMenuItem( editMenu, wxID_UNDO, text, HELP_UNDO, undo_xpm );
+    AddMenuItem( editMenu, wxID_UNDO, text, HELP_UNDO, KiBitmap( undo_xpm ) );
 
     // Redo
     text = AddHotkeyName( _( "Redo" ), s_Schematic_Hokeys_Descr, HK_REDO );
 
-    AddMenuItem( editMenu, wxID_REDO, text, HELP_REDO, redo_xpm );
+    AddMenuItem( editMenu, wxID_REDO, text, HELP_REDO, KiBitmap( redo_xpm ) );
 
     // Delete
     editMenu->AppendSeparator();
     AddMenuItem( editMenu, ID_SCHEMATIC_DELETE_ITEM_BUTT,
                  _( "Delete" ), HELP_DELETE_ITEMS,
-                 delete_body_xpm );
+                 KiBitmap( delete_body_xpm ) );
 
     // Find
     editMenu->AppendSeparator();
     text = AddHotkeyName( _( "&Find" ), s_Schematic_Hokeys_Descr, HK_FIND_ITEM );
-    AddMenuItem( editMenu, ID_FIND_ITEMS, text, HELP_FIND, find_xpm );
+    AddMenuItem( editMenu, ID_FIND_ITEMS, text, HELP_FIND, KiBitmap( find_xpm ) );
 
     // Backannotate
     editMenu->AppendSeparator();
@@ -197,7 +197,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_BACKANNO_ITEMS,
                  _( "&Backannotate" ),
                  _( "Back annotate the footprint fields" ),
-                 import_footprint_names_xpm );
+                 KiBitmap( import_footprint_names_xpm ) );
 
     // Menu View:
     wxMenu* viewMenu = new wxMenu;
@@ -220,17 +220,17 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Zoom in
     text = AddHotkeyName( _( "Zoom In" ), s_Schematic_Hokeys_Descr,
                           ID_ZOOM_IN, false );  // add comment, not a shortcut
-    AddMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, zoom_in_xpm );
+    AddMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
 
     // Zoom out
     text = AddHotkeyName( _( "Zoom Out" ), s_Schematic_Hokeys_Descr,
                           ID_ZOOM_OUT, false );  // add comment, not a shortcut
-    AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, zoom_out_xpm );
+    AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
     // Fit on screen
     text = AddHotkeyName( _( "Fit on Screen" ), s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO );
 
-    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, zoom_fit_in_page_xpm );
+    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, KiBitmap( zoom_fit_in_page_xpm ) );
 
     // Separator
     viewMenu->AppendSeparator();
@@ -240,11 +240,11 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_HIERARCHY,
                  _( "H&ierarchy" ),
                  _( "Navigate schematic hierarchy" ),
-                 hierarchy_nav_xpm );
+                 KiBitmap( hierarchy_nav_xpm ) );
 
     // Redraw
     text = AddHotkeyName( _( "Redraw" ), s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
-    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, zoom_redraw_xpm );
+    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
 
     // Menu place:
     // @todo unify IDs
@@ -255,68 +255,68 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_NEW_COMPONENT, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_SCH_PLACE_COMPONENT, text,
                  HELP_PLACE_COMPONENTS,
-                 add_component_xpm );
+                 KiBitmap( add_component_xpm ) );
 
     // Power port
     text = AddHotkeyName( _( "Power port" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_NEW_POWER, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_PLACE_POWER_BUTT, text,
                  HELP_PLACE_POWERPORT,
-                 add_power_xpm );
+                 KiBitmap( add_power_xpm ) );
 
     // Wire
     text = AddHotkeyName( _( "Wire" ), s_Schematic_Hokeys_Descr,
                           HK_BEGIN_WIRE, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_WIRE_BUTT, text,
                  HELP_PLACE_WIRE,
-                 add_line_xpm );
+                 KiBitmap( add_line_xpm ) );
 
     // Bus
     text = AddHotkeyName( _( "Bus" ), s_Schematic_Hokeys_Descr,
                           HK_BEGIN_BUS, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_BUS_BUTT, text,
                  HELP_PLACE_BUS,
-                 add_bus_xpm );
+                 KiBitmap( add_bus_xpm ) );
 
     // Wire to Bus entry
     text = AddHotkeyName( _( "Wire to bus entry" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_WIRE_ENTRY, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_WIRETOBUS_ENTRY_BUTT, text,
                  HELP_PLACE_WIRE2BUS_ENTRY,
-                 add_line2bus_xpm );
+                 KiBitmap( add_line2bus_xpm ) );
 
     // Bus to Bus entry
     text = AddHotkeyName( _( "Bus to bus entry" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_BUS_ENTRY, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_BUSTOBUS_ENTRY_BUTT, text,
                  HELP_PLACE_BUS2BUS_ENTRY,
-                 add_bus2bus_xpm );
+                 KiBitmap( add_bus2bus_xpm ) );
 
     // No connect flag
     text = AddHotkeyName( _( "No connect flag" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_NOCONN_FLAG, false );    // add comment, not a shortcut
-    AddMenuItem( placeMenu, ID_NOCONN_BUTT, text, HELP_PLACE_NC_FLAG, noconn_xpm );
+    AddMenuItem( placeMenu, ID_NOCONN_BUTT, text, HELP_PLACE_NC_FLAG, KiBitmap( noconn_xpm ) );
 
     // Net name
     text = AddHotkeyName( _( "Label" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_LABEL, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_LABEL_BUTT, text,
                  HELP_PLACE_NETLABEL,
-                 add_line_label_xpm );
+                 KiBitmap( add_line_label_xpm ) );
 
     // Global label
     text = AddHotkeyName( _( "Global label" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_GLABEL, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_GLABEL_BUTT, text,
                  HELP_PLACE_GLOBALLABEL,
-                 add_glabel_xpm );
+                 KiBitmap( add_glabel_xpm ) );
 
     // Junction
     text = AddHotkeyName( _( "Junction" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_JUNCTION, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_JUNCTION_BUTT, text,
                  HELP_PLACE_JUNCTION,
-                 add_junction_xpm );
+                 KiBitmap( add_junction_xpm ) );
 
     // Separator
     placeMenu->AppendSeparator();
@@ -328,7 +328,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_HLABEL, false );       // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_HIERLABEL_BUTT,
                  text, HELP_PLACE_HIER_LABEL,
-                 add_hierarchical_label_xpm );
+                 KiBitmap( add_hierarchical_label_xpm ) );
 
 
     // Hierarchical sheet
@@ -336,21 +336,21 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_HIER_SHEET, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_SHEET_SYMBOL_BUTT, text,
                  HELP_PLACE_SHEET,
-                 add_hierarchical_subsheet_xpm );
+                 KiBitmap( add_hierarchical_subsheet_xpm ) );
 
     // Import hierarchical sheet
     AddMenuItem( placeMenu,
                  ID_IMPORT_HLABEL_BUTT,
                  _( "Import Hierarchical Label" ),
                  HELP_IMPORT_SHEETPIN,
-                 import_hierarchical_label_xpm );
+                 KiBitmap( import_hierarchical_label_xpm ) );
 
     // Add hierarchical Pin to Sheet
     AddMenuItem( placeMenu,
                  ID_SHEET_PIN_BUTT,
                  _( "Add Hierarchical Pin to Sheet" ),
                  HELP_PLACE_SHEETPIN,
-                 add_hierar_pin_xpm );
+                 KiBitmap( add_hierar_pin_xpm ) );
 
     // Separator
     placeMenu->AppendSeparator();
@@ -360,14 +360,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                           HK_ADD_GRAPHIC_POLYLINE, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_LINE_COMMENT_BUTT, text,
                  HELP_PLACE_GRAPHICLINES,
-                 add_dashed_line_xpm );
+                 KiBitmap( add_dashed_line_xpm ) );
 
     // Graphic text
     text = AddHotkeyName( _( "Graphic text" ), s_Schematic_Hokeys_Descr,
                           HK_ADD_GRAPHIC_TEXT, false );    // add comment, not a shortcut
     AddMenuItem( placeMenu, ID_TEXT_COMMENT_BUTT, text,
                  HELP_PLACE_GRAPHICTEXTS,
-                 add_text_xpm );
+                 KiBitmap( add_text_xpm ) );
 
 
     // Menu Preferences:
@@ -378,25 +378,25 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_CONFIG_REQ,
                  _( "&Library" ),
                  _( "Library preferences" ),
-                 library_xpm );
+                 KiBitmap( library_xpm ) );
 
     // Colors
     AddMenuItem( preferencesMenu,
                  ID_COLORS_SETUP,
                  _( "&Colors" ),
                  _( "Color preferences" ),
-                 palette_xpm );
+                 KiBitmap( palette_xpm ) );
 
     // Options (Preferences on WXMAC)
 
 #ifdef __WXMAC__
-	preferencesMenu->Append(wxID_PREFERENCES);
+    preferencesMenu->Append(wxID_PREFERENCES);
 #else
     AddMenuItem( preferencesMenu,
                  wxID_PREFERENCES,
                  _( "&Options" ),
                  _( "EESchema preferences" ),
-                 preference_xpm );
+                 KiBitmap( preference_xpm ) );
 #endif // __WXMAC__
 
 
@@ -414,14 +414,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_CONFIG_SAVE,
                  _( "&Save preferences" ),
                  _( "Save application preferences" ),
-                 save_setup_xpm );
+                 KiBitmap( save_setup_xpm ) );
 
     // Read preferences
     AddMenuItem( preferencesMenu,
                  ID_CONFIG_READ,
                  _( "&Read preferences" ),
                  _( "Read application preferences" ),
-                 read_setup_xpm );
+                 KiBitmap( read_setup_xpm ) );
 
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;
@@ -431,7 +431,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_TO_LIBRARY,
                  _( "Library &Browser" ),
                  _( "Library browser" ),
-                 library_browse_xpm );
+                 KiBitmap( library_browse_xpm ) );
 
 
     // Library editor
@@ -439,7 +439,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_TO_LIBRARY,
                  _( "Library &Editor" ),
                  _( "Library editor" ),
-                 libedit_xpm );
+                 KiBitmap( libedit_xpm ) );
 
     // Separator
     toolsMenu->AppendSeparator();
@@ -449,28 +449,28 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_GET_ANNOTATE,
                  _( "&Annotate" ),
                  _( "Annotate the components in the schematic" ),
-                 annotate_xpm );
+                 KiBitmap( annotate_xpm ) );
 
     // ERC
     AddMenuItem( toolsMenu,
                  ID_GET_ERC,
                  _( "ER&C" ),
                  _( "Perform electrical rule check" ),
-                 erc_xpm );
+                 KiBitmap( erc_xpm ) );
 
     // Generate netlist
     AddMenuItem( toolsMenu,
                  ID_GET_NETLIST,
                  _( "Generate &Netlist" ),
                  _( "Generate the component netlist" ),
-                            netlist_xpm );
+                            KiBitmap( netlist_xpm ) );
 
     // Generate bill of materials
     AddMenuItem( toolsMenu,
                  ID_GET_TOOLS,
                  _( "Generate Bill of Materials" ),
                  _( "Generate bill of materials" ),
-                            tools_xpm );
+                            KiBitmap( tools_xpm ) );
 
     // Separator
     toolsMenu->AppendSeparator();
@@ -480,14 +480,14 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  ID_TO_CVPCB,
                  _( "A&ssign component footprints" ),
                  _( "Run CVPcb" ),
-                 cvpcb_xpm );
+                 KiBitmap( cvpcb_xpm ) );
 
     // Run PCBNew
     AddMenuItem( toolsMenu,
                  ID_TO_PCB,
                  _( "&Layout printed circuit board" ),
                  _( "Run PCBNew" ),
-                 pcbnew_xpm );
+                 KiBitmap( pcbnew_xpm ) );
 
 
     // Help Menu:
@@ -501,12 +501,12 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  wxID_HELP,
                  _( "&Contents" ),
                  _( "Open the Eeschema handbook" ),
-                 online_help_xpm );
+                 KiBitmap( online_help_xpm ) );
     AddMenuItem( helpMenu,
                  wxID_INDEX,
                  _( "&Getting Started in KiCad" ),
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
-                 help_xpm );
+                 KiBitmap( help_xpm ) );
 
     // About EESchema
     helpMenu->AppendSeparator();
@@ -514,7 +514,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  wxID_ABOUT,
                  _( "&About EESchema" ),
                  _( "About EESchema schematic designer" ),
-                 info_xpm );
+                 KiBitmap( info_xpm ) );
 
     // Create the menubar and append all submenus
     menuBar->Append( fileMenu, _( "&File" ) );

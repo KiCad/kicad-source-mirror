@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <linearGradient id="a">
+   <stop stop-color="#ff7800" offset="0"/>
+   <stop stop-color="#fff" offset="1"/>
+  </linearGradient>
+  <filter id="f" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.97595273"/>
+  </filter>
+  <linearGradient id="g" y2="4.6406" xlink:href="#a" gradientUnits="userSpaceOnUse" x2="6.0964" gradientTransform="matrix(1.6427,0,0,1.4148,2.8961,20.245)" y1="8.6836" x1="8.9893"/>
+  <linearGradient id="h" y2="4.6406" xlink:href="#a" gradientUnits="userSpaceOnUse" x2="6.0964" gradientTransform="matrix(1.6427,0,0,1.4148,-5.9743,2.4183)" y1="8.6836" x1="8.9893"/>
+  <linearGradient id="i" y2="4.6406" xlink:href="#a" gradientUnits="userSpaceOnUse" x2="6.0964" gradientTransform="matrix(1.6427,0,0,1.4148,24.333,27.885)" y1="8.6836" x1="8.9893"/>
+ </defs>
+ <g transform="matrix(.94651 0 0 .9482 1.139 1.2561)">
+  <g opacity=".58203" filter="url(#f)">
+   <path d="m6.8326 12.68 3.0167 4.3815c9.7245-5.0939 22.427-2.4615 28.391 5.9 3.4304 4.8096 3.5381 10.359 1.4693 15.287l5.568 1.724c2.657-6.336 2.411-13.495-1.998-19.677-7.656-10.734-23.951-14.125-36.446-7.616z"/>
+   <path d="m16.448 14.515a5.9136 5.0933 0 0 1 -11.827 0 5.9136 5.0933 0 1 1 11.827 0z"/>
+   <path d="m25.318 32.342a5.9136 5.0933 0 0 1 -11.827 0 5.9136 5.0933 0 1 1 11.827 0z"/>
+   <path d="m46.755 39.982a5.9136 5.0933 0 0 1 -11.827 0 5.9136 5.0933 0 1 1 11.827 0z"/>
+  </g>
+  <path d="m22.362 29.795a5.9136 5.0933 0 0 1 -11.827 0 5.9136 5.0933 0 1 1 11.827 0z"/>
+  <path fill="url(#g)" d="m20.144 29.795a3.696 3.1833 0 0 1 -7.392 0 3.696 3.1833 0 1 1 7.392 0z"/>
+  <path fill="#00009b" d="m3.6355 10.182 3.0166 4.3815c9.7246-5.0939 22.427-2.4615 28.391 5.9 3.4304 4.8096 3.5381 10.359 1.4693 15.287l5.5675 1.7242c2.657-6.336 2.411-13.495-1.998-19.678-7.656-10.734-23.951-14.124-36.446-7.615z"/>
+  <path d="m13.491 11.968a5.9136 5.0933 0 0 1 -11.827 0 5.9136 5.0933 0 1 1 11.827 0z"/>
+  <path fill="url(#h)" d="m11.274 11.968a3.696 3.1833 0 0 1 -7.392 0 3.696 3.1833 0 1 1 7.392 0z"/>
+  <path d="m43.798 37.435a5.9136 5.0933 0 0 1 -11.827 0 5.9136 5.0933 0 1 1 11.827 0z"/>
+  <path fill="url(#i)" d="m41.581 37.435a3.696 3.1833 0 0 1 -7.392 0 3.696 3.1833 0 1 1 7.392 0z"/>
+ </g>
+ <g fill-rule="evenodd" fill="#00009b" transform="translate(23.372,94.042)">
+  <path d="m-36.422-52.442-1.5 1.5h1v3.5h1v-3.5h1l-1.5-1.5z"/>
+  <path d="m-36.422-44.442-1.5-1.5h1v-2h1v2h1l-1.5 1.5z"/>
+  <path d="m-40.422-48.442 1.5 1.5v-1h2.5v-1h-2.5v-1l-1.5 1.5z"/>
+  <path d="m-32.422-48.442-1.5 1.5v-1h-2v-1h2v-1l1.5 1.5z"/>
+ </g>
+</svg>

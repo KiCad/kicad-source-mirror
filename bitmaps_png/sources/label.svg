@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="c" height="1.7323" width="1.0709" color-interpolation-filters="sRGB" y="-.36615" x="-.035434">
+   <feGaussianBlur stdDeviation="0.22884615"/>
+  </filter>
+  <filter id="d" color-interpolation-filters="sRGB">
+   <feGaussianBlur stdDeviation="0.27692308"/>
+  </filter>
+ </defs>
+ <g transform="matrix(2.4566,0,0,2.2316,-37.589,-39.022)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(2.9379,0,0,2.1996,2.1067,22.422)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <rect fill-opacity="0" height="38.871" width="43.287" y="-47.036" x="-74.787"/>
+ <rect opacity=".44531" transform="matrix(2.7236,0,0,2.8125,151.62,7.75)" height="1.5" filter="url(#c)" width="15.5" y="9.3" x="-54.15"/>
+ <rect height="5.0621" width="42.672" y="29.8" x="1.9518" fill="#009b00"/>
+ <g transform="matrix(2.8733,0,0,2.8125,1.2018,8.35)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <path opacity=".44141" d="m7 7.5-0.5 1.5h-2l3-8h2l3 8h-2l-0.5-1.5m-0.5-1.5-0.9121-2.9492-1.0879 2.9492" transform="matrix(2.6769,0,0,2.3368,2.2884,5.9706)" filter="url(#d)"/>
+ <path d="m17.899 22.636-1.3878 3.7482h-5.551l8.3266-19.99h5.551l8.3266 19.99h-5.551l-1.388-3.748m-1.388-3.748-2.532-7.37-3.02 7.37"/>
+ <g transform="matrix(2.9804,0,0,2.6654,-59.032,-7.5565)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+</svg>

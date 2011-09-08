@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
+ <defs>
+  <filter id="a" height="1.1065" width="1.2823" color-interpolation-filters="sRGB" y="-.053251" x="-.14116">
+   <feGaussianBlur stdDeviation="0.2911364"/>
+  </filter>
+ </defs>
+ <g transform="matrix(2.4566,0,0,2.2316,-37.589,-39.022)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(0,-2.6586,2.1996,0,13.227,40.664)">
+  <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+ </g>
+ <g transform="matrix(.88743 0 0 .88119 2.6904 -11.457)" stroke="#f00" stroke-width="3.75" fill="none">
+  <path d="m40.68 22.245h-25.216"/>
+  <path stroke-linejoin="round" d="m27.75 10.65a5.7 5.4 0 1 1 -11.4 0 5.7 5.4 0 1 1 11.4 0z" transform="matrix(0 -1 1 0 -.79506 44.295)"/>
+ </g>
+ <g transform="matrix(1.1624,0,0,1.2042,-6.3579,-6.0899)">
+  <g fill-rule="evenodd" transform="matrix(1.9499,0,0,1.8369,5.9774,53.875)">
+   <path fill-opacity=".39216" d="m13.961-9.5 0.039-2.896 3.9609 4.3961-4 4.5v-3c-3.5 0-5.4609-2-5.4609-6h2.9609c0 2 1 3 2.5 3z"/>
+   <g transform="translate(1,-2.4551)">
+    <path d="m12-8.441 0.03913-2.8961 3.9609 4.3961-4 4.5v-3c-3.5 0-5.4609-2-5.4609-6h2.9609c0 2 1 3 2.5 3z"/>
+    <path fill="#00bd00" d="m12.5-7.941v-1.5l2.5 2.5-2.5 3v-2c-2 0-5-0.5-5-4.5h1.5c0 2 2 2.5 3.5 2.5z"/>
+   </g>
+  </g>
+ </g>
+ <g transform="matrix(0,1,1,0,-35.7,17.7)">
+  <g opacity=".33203" filter="url(#a)" transform="matrix(2.9282,0,0,2.5646,-33.219,39.331)">
+   <rect transform="matrix(-.70711 .70711 .70711 .70711 0 0)" height="1" width="3" y="10.814" x="-7.9853"/>
+   <rect transform="rotate(45)" height="1" width="3" y="-8.2782" x="11.107"/>
+   <rect transform="rotate(-90)" height="1" width="13" y="13" x="-15"/>
+   <rect transform="matrix(.70711 -.70711 -.70711 -.70711 0 0)" height="1" width="3" y="-20.506" x="-.70711"/>
+   <rect transform="rotate(225)" height="1" width="3" y="-1.2929" x="-20.092"/>
+  </g>
+  <rect transform="matrix(-.75227 .65886 .75227 .65886 0 0)" height="2.7525" width="8.2574" y="33.64" x="29.948" fill="#070707"/>
+  <rect transform="matrix(.75227 .65886 -.75227 .65886 0 0)" height="2.7525" width="8.2574" y="29.142" x="34.447" fill="#070707"/>
+  <rect transform="rotate(-90)" height="2.9282" width="33.34" y="1.9199" x="-75.236" fill="#070707"/>
+  <rect transform="matrix(.75227 -.65886 -.75227 -.65886 0 0)" height="2.7525" width="8.2574" y="-60.318" x="-53.873" fill="#070707"/>
+  <rect transform="matrix(-.75227 -.65886 .75227 -.65886 0 0)" height="2.7525" width="8.2574" y="-55.486" x="-59.178" fill="#070707"/>
+ </g>
+</svg>
