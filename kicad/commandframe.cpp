@@ -18,10 +18,10 @@ RIGHT_KM_FRAME::RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent ) :
     m_DialogWin = NULL;
     m_ButtPanel = new wxPanel( this, wxID_ANY );
     m_ButtonSeparation     = 10;    // control of command buttons position
-    m_ButtonsListPosition.x = 20;
-    m_ButtonsListPosition.y = 20 + BUTTON_HEIGHT;
+    m_ButtonsListPosition.x = 10;
+    m_ButtonsListPosition.y = 35 + BUTTON_HEIGHT;
     m_ButtonLastPosition = m_ButtonsListPosition;
-    m_ButtonsPanelHeight   = m_ButtonsListPosition.y + 20;
+    m_ButtonsPanelHeight   = m_ButtonsListPosition.y + 10;
     CreateCommandToolbar();
     m_DialogWin = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
                                   wxDefaultPosition, wxDefaultSize,
@@ -82,11 +82,11 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
     btn = AddBitmapButton( ID_TO_GERBVIEW, KiBitmap( icon_gerbview_xpm ) );
     btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );
 
-    btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, bitmap2component_xpm );
+    btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, KiBitmap( icon_bitmap2component_xpm ) );
     btn->SetToolTip( _( "Bitmap2Component (a tool to build a logo from a bitmap)\n\
 Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W picture" ) );
 
-    btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, pcb_calculator_xpm );
+    btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, KiBitmap( icon_pcbcalculator_xpm ) );
     btn->SetToolTip( _( "Pcb calculator" ) );
 }
 

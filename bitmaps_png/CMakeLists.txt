@@ -49,23 +49,25 @@
 # lower case is used for local variables, uppercase for global variables
 
 
-#if( 0 )
-if( 1 )
-    # stand alone debugging
-    project(kicad_for_bitmaps)
+# If this file is used as part of the Kicad build, disable the stand alone build mode.
+if( NOT DEFINED CMAKE_PROJECT_NAME )
 
-    cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+    # stand alone debugging
+    project( kicad_for_bitmaps )
+
+    cmake_minimum_required( VERSION 2.8.0 FATAL_ERROR )
 
     include_directories( /svn/kicad/work/include )
 
     set( CMAKE_MODULE_PATH /svn/kicad/work/CMakeModules )
+
     add_definitions( -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__ -pthread )
 
-endif()
+endif( NOT DEFINED CMAKE_PROJECT_NAME )
 
 option( MAINTAIN_PNGS
         "Set to true if you are a PNG maintainer and have the required tools given in the bitmaps_png/CMakeLists.txt file (default OFF)."
-        OFF )
+        OFF)
 
 
 
@@ -299,7 +301,7 @@ set( BMAPS_MID
     module_filtered_list
     module_full_list
     module_options
-#    module_ratsnest
+    module_ratsnest
     module
     morgan1
     morgan2
@@ -508,6 +510,8 @@ set( BMAPS_BIG
     icon_kicad
     icon_modedit
     icon_pcbnew
+    icon_bitmap2component
+    icon_pcbcalculator
     libedit_icon
     viewlibs_icon
     )
@@ -526,7 +530,7 @@ function( svg2png inputFile outFile pngWidth pngHeight )
 
     add_custom_command(
         OUTPUT ${outFile}
-        COMMAND inkscape -f ${inputFile} -e ${outFile} -w ${pngWidth} -h ${pngHeight} > ${TMP_DIR}/${bmn}.inkscape.log
+        COMMAND ${Inkscape_EXECUTABLE} -f ${inputFile} -e ${outFile} -w ${pngWidth} -h ${pngHeight} > ${TMP_DIR}/${bmn}.inkscape.log
         DEPENDS ${inputFile}
         COMMENT "Creating ${pngHeight} pixel tall ${outFile}"
         )
@@ -543,10 +547,13 @@ function( png2png inputFile bkgndFile outFile )
         OUTPUT  ${outFile}
 
         # blend in the unified background into the png before converting to cpp.
-        COMMAND composite -compose Over ${inputFile} ${bkgndFile} -alpha set ${TMP_DIR}/scratch.png
+#        COMMAND ${COMPOSITE_PROG} -compose Over ${inputFile} ${bkgndFile} -alpha set ${TMP_DIR}/scratch.png
 
         # remove any extraneous tEXt records
-        COMMAND pngcrush -rem alla ${TMP_DIR}/scratch.png ${outFile} > ${TMP_DIR}/${bmn}.pngcrush.log
+#        COMMAND ${pngcrush_EXECUTABLE} -rem alla ${TMP_DIR}/scratch.png ${outFile} > ${TMP_DIR}/${bmn}.pngcrush.log
+
+        # pngcrush all icons without background.
+        COMMAND pngcrush -rem alla ${inputFile} ${outFile} > ${TMP_DIR}/${bmn}.pngcrush.log
 
         DEPENDS ${inputFile} ${bkgndFile}
 
@@ -607,6 +614,50 @@ endfunction()
 
 
 if( MAINTAIN_PNGS )
+
+    # Inkscape is required to convert SVG files to PNG files.
+    set( Inkscape_FOUND FALSE )
+
+    if( NOT Inkscape_FOUND )
+        find_program( Inkscape_EXECUTABLE inkscape
+                      PATHS "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Inkscape;InstallDir]"
+                      DOC "Inkscape vector drawing program." )
+
+        if( NOT Inkscape_EXECUTABLE )
+            message( FATAL_ERROR "Could not find the Inkscape vector drawing program." )
+        else( NOT Inkscape_EXECUTABLE )
+            set( Inkscape_FOUND TRUE )
+            set( Inkscape_EXECUTABLE ${Inkscape_EXECUTABLE}
+                 CACHE FILEPATH "Path and file name of the Inkscape program." )
+            message( STATUS "The Inkscape vector drawing program found." )
+        endif( NOT Inkscape_EXECUTABLE )
+    endif( NOT Inkscape_FOUND )
+
+    # pngcrush is required to reduce the size of the converted PNG files.
+    set( pngcrush_FOUND FALSE )
+
+    if( NOT pngcrush_FOUND )
+        find_program( pngcrush_EXECUTABLE pngcrush DOC "The PNG size reduction program." )
+
+        if( NOT pngcrush_EXECUTABLE )
+            message( FATAL_ERROR "Could not find the pngcrush PNG size reduction program." )
+        else( NOT pngcrush_EXECUTABLE )
+            set( pngcrush_FOUND TRUE )
+            set( pngcrush_EXECUTABLE ${pngcrush_EXECUTABLE}
+                 CACHE FILEPATH "Path and file name of the pngcrush program." )
+            message( STATUS "The pngcrush PNG size reduction program found." )
+        endif( NOT pngcrush_EXECUTABLE )
+    endif( NOT pngcrush_FOUND )
+
+    # composite is required to convert a basic PNG to one with a composited background
+    # image behind it
+#    find_program( COMPOSITE_PROG composite DOC "The image compositing program." )
+
+#    if( NOT COMPOSITE_PROG )
+#        message( FATAL_ERROR "Could not find the ImagMagik composite program." )
+#    else( NOT COMPOSITE_PROG )
+#        message( STATUS "The ImageMagick composite program found." )
+#    endif( NOT COMPOSITE_PROG )
 
     # these 2 cmake commands for each desired bitmap size set, repeat as needed:
     bitmap_dir( 26 26 "${BMAPS_MID}" )
