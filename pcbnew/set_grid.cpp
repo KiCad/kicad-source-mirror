@@ -28,6 +28,8 @@ public:
     int         GetGridUnits();
     void        SetGridOrigin( const wxPoint& grid );
     wxPoint     GetGridOrigin();
+    void        SetGridForFastSwitching( wxArrayString aGrids, int aGrid1, int aGrid2 );
+    void        GetGridForFastSwitching( int& aGrid1, int& aGrid2 );
 
 private:
     void        OnResetGridOrgClick( wxCommandEvent& event );
@@ -44,6 +46,9 @@ void PCB_BASE_FRAME::InstallGridFrame( const wxPoint& pos )
     dlg.SetGridSize( m_UserGridSize );
     dlg.SetGridOrigin( GetScreen()->m_GridOrigin );
 
+    if( m_SelGridBox )
+        dlg.SetGridForFastSwitching( m_SelGridBox->GetStrings(), m_FastGrid1, m_FastGrid2 );
+
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
@@ -52,6 +57,8 @@ void PCB_BASE_FRAME::InstallGridFrame( const wxPoint& pos )
     GetScreen()->m_GridOrigin = dlg.GetGridOrigin();
 
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
+
+    dlg.GetGridForFastSwitching( m_FastGrid1, m_FastGrid2 );
 
     // If the user grid is the current option, recall SetGrid()
     // to force new values put in list as current grid value
@@ -131,6 +138,24 @@ void DIALOG_SET_GRID::SetGridOrigin( const wxPoint& grid )
 
     PutValueInLocalUnits( *m_GridOriginXCtrl, grid.x, m_internalUnits );
     PutValueInLocalUnits( *m_GridOriginYCtrl, grid.y, m_internalUnits );
+}
+
+void DIALOG_SET_GRID::SetGridForFastSwitching( wxArrayString aGrids, int aGrid1, int aGrid2  )
+{
+    for( wxArrayString::iterator i = aGrids.begin(); i != aGrids.end(); i++ )
+    {
+        m_comboBoxGrid1->Append( *i );
+        m_comboBoxGrid2->Append( *i );
+    }
+
+    m_comboBoxGrid1->SetSelection( aGrid1 );
+    m_comboBoxGrid2->SetSelection( aGrid2 );
+}
+
+void DIALOG_SET_GRID::GetGridForFastSwitching( int& aGrid1, int& aGrid2 )
+{
+    aGrid1 = m_comboBoxGrid1->GetSelection();
+    aGrid2 = m_comboBoxGrid2->GetSelection();
 }
 
 

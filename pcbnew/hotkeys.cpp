@@ -132,12 +132,26 @@ static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO,
                              (int) wxID_REDO );
 #endif
 
+static Ki_HotkeyInfo HkSwitchTrackWidthToNext( wxT( "Switch Track Width To Next" ), HK_SWITCH_TRACK_WIDTH_TO_NEXT, 'W' );
+
+static Ki_HotkeyInfo HkSwitchTrackWidthToPrevious( wxT( "Switch Track Width To Previous" ), HK_SWITCH_TRACK_WIDTH_TO_PREVIOUS, 'W'
+                                    + GR_KB_CTRL );
+
+static Ki_HotkeyInfo HkSwitchGridToFastGrid1( wxT( "Switch Grid To Fast Grid1" ), HK_SWITCH_GRID_TO_FASTGRID1, GR_KB_ALT + '1' );
+
+static Ki_HotkeyInfo HkSwitchGridToFastGrid2( wxT( "Switch Grid To Fast Grid2" ), HK_SWITCH_GRID_TO_FASTGRID2, GR_KB_ALT + '2' );
+
+static Ki_HotkeyInfo HkSwitchGridToNext( wxT( "Switch Grid To Next" ), HK_SWITCH_GRID_TO_NEXT, '`' );
+
+static Ki_HotkeyInfo HkSwitchGridToPrevious( wxT( "Switch Grid To Previous" ), HK_SWITCH_GRID_TO_PREVIOUS, '`'
+                                    + GR_KB_CTRL );
 
 static Ki_HotkeyInfo HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U'
                                     + GR_KB_CTRL );
 static Ki_HotkeyInfo HkTrackDisplayMode( wxT( "Track Display Mode" ),
                                          HK_SWITCH_TRACK_DISPLAY_MODE, 'K' );
 static Ki_HotkeyInfo HkAddModule( wxT( "Add Module" ), HK_ADD_MODULE, 'O' );
+
 /* Record and play macros */
 static Ki_HotkeyInfo HkRecordMacros0( wxT( "Record Macros 0" ), HK_RECORD_MACROS_0, GR_KB_CTRL+'0' );
 
@@ -206,16 +220,13 @@ Ki_HotkeyInfo* board_edit_Hotkey_List[] =
     &HkSwitch2InnerLayer2,     &HkSwitch2InnerLayer3,        &HkSwitch2InnerLayer4,
     &HkSwitch2InnerLayer5,     &HkSwitch2InnerLayer6,        &HkSwitch2ComponentLayer,
     &HkSwitch2NextCopperLayer, &HkSwitch2PreviousCopperLayer,&HkAddModule,
-    &HkRecordMacros0,          &HkCallMacros0,
-    &HkRecordMacros1,          &HkCallMacros1,
-    &HkRecordMacros2,          &HkCallMacros2,
-    &HkRecordMacros3,          &HkCallMacros3,
-    &HkRecordMacros4,          &HkCallMacros4,
-    &HkRecordMacros5,          &HkCallMacros5,
-    &HkRecordMacros6,          &HkCallMacros6,
-    &HkRecordMacros7,          &HkCallMacros7,
-    &HkRecordMacros8,          &HkCallMacros8,
-    &HkRecordMacros9,          &HkCallMacros9,
+    &HkSwitchTrackWidthToNext, &HkSwitchTrackWidthToPrevious,&HkSwitchGridToFastGrid1,
+    &HkSwitchGridToFastGrid2,  &HkSwitchGridToNext,          &HkSwitchGridToPrevious,
+    &HkRecordMacros0,          &HkCallMacros0,    &HkRecordMacros1,          &HkCallMacros1,
+    &HkRecordMacros2,          &HkCallMacros2,    &HkRecordMacros3,          &HkCallMacros3,
+    &HkRecordMacros4,          &HkCallMacros4,    &HkRecordMacros5,          &HkCallMacros5,
+    &HkRecordMacros6,          &HkCallMacros6,    &HkRecordMacros7,          &HkCallMacros7,
+    &HkRecordMacros8,          &HkCallMacros8,    &HkRecordMacros9,          &HkCallMacros9,
     NULL
 };
 

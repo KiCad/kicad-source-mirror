@@ -30,6 +30,8 @@ static const wxString DisplayViaFillEntry( wxT( "DiViaFi" ) );
 static const wxString DisplayPadNumberEntry( wxT( "DiPadNu" ) );
 static const wxString DisplayModuleEdgeEntry( wxT( "DiModEd" ) );
 static const wxString DisplayModuleTextEntry( wxT( "DiModTx" ) );
+static const wxString FastGrid1Entry( wxT( "FastGrid1" ) );
+static const wxString FastGrid2Entry( wxT( "FastGrid2" ) );
 
 
 /****************************/
@@ -76,6 +78,9 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
     m_UserGridSize        = wxRealPoint( 100.0, 100.0 );
     m_UserGridUnit        = INCHES;
     m_Collector           = new GENERAL_COLLECTOR();
+
+    m_FastGrid1           = 0;
+    m_FastGrid2           = 0;
 }
 
 
@@ -482,6 +487,11 @@ void PCB_BASE_FRAME::LoadSettings()
     cfg->Read( m_FrameName + DisplayPadNumberEntry, &m_DisplayPadNum, true );
     cfg->Read( m_FrameName + DisplayModuleEdgeEntry, &m_DisplayModEdge, ( long )FILLED );
 
+    cfg->Read( m_FrameName + FastGrid1Entry, &itmp, ( long )0);
+    m_FastGrid1 = itmp;
+    cfg->Read( m_FrameName + FastGrid2Entry, &itmp, ( long )0);
+    m_FastGrid2 = itmp;
+
     if( m_DisplayModEdge < FILAIRE || m_DisplayModEdge > SKETCH )
         m_DisplayModEdge = FILLED;
 
@@ -518,6 +528,8 @@ void PCB_BASE_FRAME::SaveSettings()
     cfg->Write( m_FrameName + DisplayPadNumberEntry, m_DisplayPadNum );
     cfg->Write( m_FrameName + DisplayModuleEdgeEntry, ( long )m_DisplayModEdge );
     cfg->Write( m_FrameName + DisplayModuleTextEntry, ( long )m_DisplayModText );
+    cfg->Write( m_FrameName + FastGrid1Entry, ( long )m_FastGrid1 );
+    cfg->Write( m_FrameName + FastGrid2Entry, ( long )m_FastGrid2 );
 }
 
 

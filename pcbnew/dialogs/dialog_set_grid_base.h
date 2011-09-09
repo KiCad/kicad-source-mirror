@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  6 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,6 +21,7 @@
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/button.h>
+#include <wx/combobox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -47,18 +48,23 @@ class DIALOG_SET_GRID_BASE : public wxDialog
 		wxTextCtrl* m_GridOriginYCtrl;
 		wxStaticText* m_TextPosYUnits;
 		wxButton* m_buttonReset;
+		wxStaticText* m_staticTextGrid1;
+		wxComboBox* m_comboBoxGrid1;
+		wxStaticText* m_staticTextGrid2;
+		wxComboBox* m_comboBoxGrid2;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnResetGridOrgClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnResetGridOrgClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Grid Origin and User Grid Size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 374,267 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Grid Origin and User Grid Size"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_SET_GRID_BASE();
 	
 };

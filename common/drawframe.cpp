@@ -346,8 +346,8 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
      * index returned by GetSelection().
      */
     m_LastGridSizeId = id - ID_POPUP_GRID_LEVEL_1000;
-    screen->SetCrossHairPosition( DrawPanel->GetScreenCenterLogicalPosition() );
     screen->SetGrid( id );
+    screen->SetCrossHairPosition( screen->RefPos( true ) );
     Refresh();
 }
 

@@ -149,7 +149,10 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
+
+
     int            ll;
+    unsigned int   cnt;
 
     switch( HK_Descr->m_Idcommand )
     {
@@ -236,6 +239,58 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
     case HK_CALL_MACROS_9:
         CallMacros(aDC, aPosition, 9);
+        break;
+
+    case HK_SWITCH_TRACK_WIDTH_TO_NEXT:
+        GetBoard()->m_TrackWidthSelector = ( GetBoard()->m_TrackWidthSelector + 1 ) % GetBoard()->m_TrackWidthList.size();
+        break;
+
+    case HK_SWITCH_TRACK_WIDTH_TO_PREVIOUS:
+        if( GetBoard()->m_TrackWidthSelector == 0 )
+            GetBoard()->m_TrackWidthSelector = GetBoard()->m_TrackWidthList.size();
+
+        GetBoard()->m_TrackWidthSelector--;
+        break;
+
+    case HK_SWITCH_GRID_TO_FASTGRID1:
+        if( m_SelGridBox )
+        {
+            m_SelGridBox->SetSelection( m_FastGrid1 );
+            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
+            OnSelectGrid( cmd );
+        }
+        break;
+
+    case HK_SWITCH_GRID_TO_FASTGRID2:
+        if( m_SelGridBox )
+        {
+            m_SelGridBox->SetSelection( m_FastGrid2 );
+            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
+            OnSelectGrid( cmd );
+        }
+        break;
+
+    case HK_SWITCH_GRID_TO_NEXT:
+        if( m_SelGridBox )
+        {
+            m_SelGridBox->SetSelection( ( m_SelGridBox->GetSelection() + 1 ) % m_SelGridBox->GetCount() );
+            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
+            OnSelectGrid( cmd );
+        }
+        break;
+
+    case HK_SWITCH_GRID_TO_PREVIOUS:
+        if( m_SelGridBox )
+        {
+            cnt = m_SelGridBox->GetSelection();
+            if ( cnt == 0 )
+                cnt = m_SelGridBox->GetCount() - 1;
+            else
+                cnt--;
+            m_SelGridBox->SetSelection( cnt );
+            cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
+            OnSelectGrid( cmd );
+        }
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:

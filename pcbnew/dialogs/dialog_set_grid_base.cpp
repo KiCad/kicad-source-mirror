@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  6 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -47,6 +47,9 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	
 	bUpperSizer->Add( sbLeftSizer, 1, wxEXPAND|wxALL, 5 );
 	
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	
 	wxStaticBoxSizer* sbRightSizer;
 	sbRightSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Grid Origin") ), wxVERTICAL );
 	
@@ -83,7 +86,36 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	m_buttonReset = new wxButton( this, wxID_ANY, _("Reset Grid Origin"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbRightSizer->Add( m_buttonReset, 0, wxALL|wxEXPAND, 5 );
 	
-	bUpperSizer->Add( sbRightSizer, 2, wxEXPAND|wxALL, 5 );
+	bSizer4->Add( sbRightSizer, 1, wxEXPAND|wxALL, 5 );
+	
+	wxStaticBoxSizer* sbSizer4;
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Grid for fast switching") ), wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer3;
+	fgSizer3 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer3->AddGrowableCol( 1 );
+	fgSizer3->SetFlexibleDirection( wxBOTH );
+	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticTextGrid1 = new wxStaticText( this, wxID_ANY, _("Fast Grid 1:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextGrid1->Wrap( -1 );
+	fgSizer3->Add( m_staticTextGrid1, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	
+	m_comboBoxGrid1 = new wxComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	fgSizer3->Add( m_comboBoxGrid1, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	
+	m_staticTextGrid2 = new wxStaticText( this, wxID_ANY, _("Fast Grid 2:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextGrid2->Wrap( -1 );
+	fgSizer3->Add( m_staticTextGrid2, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+	
+	m_comboBoxGrid2 = new wxComboBox( this, wxID_ANY, _("Combo!"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	fgSizer3->Add( m_comboBoxGrid2, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	
+	sbSizer4->Add( fgSizer3, 1, wxALL|wxEXPAND, 5 );
+	
+	bSizer4->Add( sbSizer4, 1, wxALL|wxEXPAND, 5 );
+	
+	bUpperSizer->Add( bSizer4, 1, wxEXPAND, 5 );
 	
 	bSizerMain->Add( bUpperSizer, 1, wxEXPAND, 5 );
 	
@@ -97,6 +129,7 @@ DIALOG_SET_GRID_BASE::DIALOG_SET_GRID_BASE( wxWindow* parent, wxWindowID id, con
 	
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 	
 	// Connect Events
 	m_buttonReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_GRID_BASE::OnResetGridOrgClick ), NULL, this );
@@ -110,4 +143,5 @@ DIALOG_SET_GRID_BASE::~DIALOG_SET_GRID_BASE()
 	m_buttonReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_GRID_BASE::OnResetGridOrgClick ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_GRID_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SET_GRID_BASE::OnOkClick ), NULL, this );
+	
 }

@@ -56,7 +56,11 @@ macro( create_bzr_version_header )
     if( Kicad_REPO_LAST_CHANGED_DATE )
         string( REGEX REPLACE "^([0-9]+)\\-([0-9]+)\\-([0-9]+)" "\\1-\\2-\\3"
                 _kicad_bzr_date ${Kicad_REPO_LAST_CHANGED_DATE} )
-        set( KICAD_BUILD_VERSION "(${_kicad_bzr_date} BZR ${Kicad_REPO_REVISION})" )
+        if( KICAD_GOST )
+        	set( KICAD_BUILD_VERSION "(${_kicad_bzr_date} BZR ${Kicad_REPO_REVISION} GOST)" )
+        else( KICAD_GOST )
+        	set( KICAD_BUILD_VERSION "(${_kicad_bzr_date} BZR ${Kicad_REPO_REVISION})" )
+        endif( KICAD_GOST )
 
         # Definition to conditionally use date and revision returned from the
         # Bazaar log command instead of hand coded date and revision in

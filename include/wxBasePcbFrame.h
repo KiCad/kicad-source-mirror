@@ -60,6 +60,9 @@ public:
     EDA_UNITS_T             m_UserGridUnit;
     wxRealPoint             m_UserGridSize;
 
+    int                     m_FastGrid1;
+    int                     m_FastGrid2;
+
     EDA_3D_FRAME*           m_Draw3DFrame;
     FOOTPRINT_EDIT_FRAME*   m_ModuleEditFrame;
 
