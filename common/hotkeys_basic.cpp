@@ -339,9 +339,11 @@ void DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
     wxString        keyname;
     Ki_HotkeyInfo** List;
 
-    wxString        msg = _( "<html><body>" );
+    wxString        msg = wxT( "<html><body>" );
 
-    msg += _( "<H3>Hotkeys List</H3> <table cellpadding=\"0\">");
+    msg += wxT( "<H3>");
+    msg += _("Hotkeys List") + wxT("</H3> <table cellpadding=\"0\">");
+
     for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
     {
         List = aDescList->m_HK_InfoList;

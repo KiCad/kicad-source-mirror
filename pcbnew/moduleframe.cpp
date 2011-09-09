@@ -120,7 +120,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
     m_HotkeysZoomAndGridList = g_Module_Editor_Hokeys_Descr;
 
     // Give an icon
-    SetIcon( wxICON( icon_modedit ) );
+    wxIcon icon;
+    icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
+    SetIcon( icon );
 
     UpdateTitle();
 

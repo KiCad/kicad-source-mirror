@@ -27,7 +27,12 @@
 #include "pcb_calculator.h"
 #include "UnitSelector.h"
 
-#include "pcb_calculator.xpm"
+#include "bitmaps.h"
+
+#ifndef USE_PNG_BITMAPS
+#include "icon_pcbcalculator.xpm"
+#endif
+
 
 #define KEYWORD_FRAME_POSX                    wxT( "Pcb_calculator_Pos_x" )
 #define KEYWORD_FRAME_POSY                    wxT( "Pcb_calculator_Pos_y" )
@@ -85,11 +90,10 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( wxWindow * parent ) :
 
     ElectricalSpacingUpdateData( m_ElectricalSpacingUnitsSelector->GetUnitScale() );
 
-    #ifdef __WINDOWS__
-    SetIcon( wxICON( pcb_calculator_icon ) );
-    #else
-    SetIcon( wxICON( pcb_calculator ) );
-    #endif
+    // Give an icon
+    wxIcon icon;
+    icon.CopyFromBitmap( KiBitmap( icon_pcbcalculator_xpm ) );
+    SetIcon( icon );
 
     GetSizer()->SetSizeHints( this );
 

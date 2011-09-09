@@ -1,2 +1,1 @@
-a_kicad_icon ICON kicad.ico
 #include "wx/msw/wx.rc"

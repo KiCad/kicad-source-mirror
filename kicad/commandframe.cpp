@@ -7,45 +7,51 @@
 
 #include "kicad.h"
 
-#include "../bitmap2component/bitmap2component.xpm"
-#include "../pcb_calculator/bitmaps/pcb_calculator.xpm"
+#ifndef USE_PNG_BITMAPS
+#include "../bitmap2component/icon_bitmap2component.xpm"
+#include "../pcb_calculator/bitmaps/icon_pcbcalculator.xpm"
+#endif
 
 RIGHT_KM_FRAME::RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent ) :
     wxSashLayoutWindow( parent, wxID_ANY )
 {
-    #define BUTTON_HEIGHT 32
     m_Parent    = parent;
-    m_DialogWin = NULL;
+    m_MessagesBox = NULL;
     m_ButtPanel = new wxPanel( this, wxID_ANY );
-    m_ButtonSeparation     = 10;    // control of command buttons position
-    m_ButtonsListPosition.x = 10;
-    m_ButtonsListPosition.y = 35 + BUTTON_HEIGHT;
-    m_ButtonLastPosition = m_ButtonsListPosition;
-    m_ButtonsPanelHeight   = m_ButtonsListPosition.y + 10;
+    m_bitmapButtons_maxHeigth = 0;
+    m_ButtonSeparation = 10;        // control of command buttons position
+    m_ButtonsListPosition.x = m_ButtonSeparation;
+    m_ButtonsListPosition.y = m_ButtonSeparation;
+    m_ButtonLastPosition    = m_ButtonsListPosition;
+
+    // Add bitmap buttons to launch Kicad utilities:
     CreateCommandToolbar();
-    m_DialogWin = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
+    m_ButtonsPanelHeight    = m_ButtonsListPosition.y + m_bitmapButtons_maxHeigth + 10;
+
+    // Add the wxTextCtrl showaing all messages from Kicad:
+    m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
                                   wxDefaultPosition, wxDefaultSize,
                                   wxTE_MULTILINE | wxSUNKEN_BORDER | wxTE_READONLY );
-
 }
+
 
 void RIGHT_KM_FRAME::OnSize( wxSizeEvent& event )
 {
     #define EXTRA_MARGE 4
-    wxSize wsize = GetClientSize();
+    wxSize  wsize = GetClientSize();
     wsize.x -= EXTRA_MARGE;
     wsize.y -= m_ButtonsPanelHeight + EXTRA_MARGE;
     wxPoint wpos;
-    wpos.x = EXTRA_MARGE/2;
-    wpos.y = m_ButtonsPanelHeight + (EXTRA_MARGE/2);
-    if( m_DialogWin )
+    wpos.x = EXTRA_MARGE / 2;
+    wpos.y = m_ButtonsPanelHeight + (EXTRA_MARGE / 2);
+    if( m_MessagesBox )
     {
-        m_DialogWin->SetSize( wsize );
-        m_DialogWin->SetPosition(wpos );
+        m_MessagesBox->SetSize( wsize );
+        m_MessagesBox->SetPosition( wpos );
     }
 
-    wpos.y = EXTRA_MARGE/2;
-    m_ButtPanel->SetPosition(wpos );
+    wpos.y = EXTRA_MARGE / 2;
+    m_ButtPanel->SetPosition( wpos );
     wsize.y -= m_ButtonsPanelHeight - EXTRA_MARGE;
     m_ButtPanel->SetSize( wsize );
     m_ButtPanel->Refresh();
@@ -59,14 +65,11 @@ EVT_SIZE( RIGHT_KM_FRAME::OnSize )
 END_EVENT_TABLE()
 
 
-/*************************************************/
-void RIGHT_KM_FRAME::CreateCommandToolbar( void )
-/*************************************************/
-
 /**
  * Function CreateCommandToolbar
  * create the buttons to call eescheman cvpcb, pcbnew and gerbview
  */
+void RIGHT_KM_FRAME::CreateCommandToolbar( void )
 {
     wxBitmapButton* btn;
 
@@ -83,8 +86,9 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
     btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );
 
     btn = AddBitmapButton( ID_TO_BITMAP_CONVERTER, KiBitmap( icon_bitmap2component_xpm ) );
-    btn->SetToolTip( _( "Bitmap2Component (a tool to build a logo from a bitmap)\n\
-Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W picture" ) );
+    btn->SetToolTip( _(
+                        "Bitmap2Component (a tool to build a logo from a bitmap)\n\
+Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W picture"                                                                                     ) );
 
     btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, KiBitmap( icon_pcbcalculator_xpm ) );
     btn->SetToolTip( _( "Pcb calculator" ) );
@@ -97,15 +101,19 @@ Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W 
  * @param aId = the button id
  * @param aBitmap = the wxBitmap used to create the button
  */
-wxBitmapButton* RIGHT_KM_FRAME::AddBitmapButton( wxWindowID aId, const wxBitmap & aBitmap  )
+wxBitmapButton* RIGHT_KM_FRAME::AddBitmapButton( wxWindowID aId, const wxBitmap& aBitmap  )
 {
     wxPoint buttPos = m_ButtonLastPosition;
-    wxSize buttSize;
-    int btn_margin = 10;
+    wxSize  buttSize;
+    int     btn_margin = 0;     // extra margin around the bitmap.
+
     buttSize.x = aBitmap.GetWidth() + btn_margin;
     buttSize.y = aBitmap.GetHeight() + btn_margin;
-    buttPos.y -= buttSize.y;
-    wxBitmapButton* btn = new wxBitmapButton( m_ButtPanel, aId, aBitmap, buttPos, buttSize);
+
+    if( m_bitmapButtons_maxHeigth < buttSize.y )
+        m_bitmapButtons_maxHeigth = buttSize.y;
+
+    wxBitmapButton* btn = new wxBitmapButton( m_ButtPanel, aId, aBitmap, buttPos, buttSize );
     m_ButtonLastPosition.x += buttSize.x + m_ButtonSeparation;
 
     return btn;

@@ -153,45 +153,45 @@ static Ki_HotkeyInfo HkTrackDisplayMode( wxT( "Track Display Mode" ),
 static Ki_HotkeyInfo HkAddModule( wxT( "Add Module" ), HK_ADD_MODULE, 'O' );
 
 /* Record and play macros */
-static Ki_HotkeyInfo HkRecordMacros0( wxT( "Record Macros 0" ), HK_RECORD_MACROS_0, GR_KB_CTRL+'0' );
+static Ki_HotkeyInfo HkRecordMacros0( wxT( "Record Macro 0" ), HK_RECORD_MACROS_0, GR_KB_CTRL+'0' );
 
-static Ki_HotkeyInfo HkCallMacros0( wxT( "Call Macross 0" ), HK_CALL_MACROS_0, '0' );
+static Ki_HotkeyInfo HkCallMacros0( wxT( "Call Macro 0" ), HK_CALL_MACROS_0, '0' );
 
-static Ki_HotkeyInfo HkRecordMacros1( wxT( "Record Macros 1" ), HK_RECORD_MACROS_1, GR_KB_CTRL+'1' );
+static Ki_HotkeyInfo HkRecordMacros1( wxT( "Record Macro 1" ), HK_RECORD_MACROS_1, GR_KB_CTRL+'1' );
 
-static Ki_HotkeyInfo HkCallMacros1( wxT( "Call Macross 1" ), HK_CALL_MACROS_1, '1' );
+static Ki_HotkeyInfo HkCallMacros1( wxT( "Call Macro 1" ), HK_CALL_MACROS_1, '1' );
 
-static Ki_HotkeyInfo HkRecordMacros2( wxT( "Record Macros 2" ), HK_RECORD_MACROS_2, GR_KB_CTRL+'2' );
+static Ki_HotkeyInfo HkRecordMacros2( wxT( "Record Macro 2" ), HK_RECORD_MACROS_2, GR_KB_CTRL+'2' );
 
-static Ki_HotkeyInfo HkCallMacros2( wxT( "Call Macross 2" ), HK_CALL_MACROS_2, '2' );
+static Ki_HotkeyInfo HkCallMacros2( wxT( "Call Macro 2" ), HK_CALL_MACROS_2, '2' );
 
-static Ki_HotkeyInfo HkRecordMacros3( wxT( "Record Macros 3" ), HK_RECORD_MACROS_3, GR_KB_CTRL+'3' );
+static Ki_HotkeyInfo HkRecordMacros3( wxT( "Record Macro 3" ), HK_RECORD_MACROS_3, GR_KB_CTRL+'3' );
 
-static Ki_HotkeyInfo HkCallMacros3( wxT( "Call Macross 3" ), HK_CALL_MACROS_3, '3' );
+static Ki_HotkeyInfo HkCallMacros3( wxT( "Call Macro 3" ), HK_CALL_MACROS_3, '3' );
 
-static Ki_HotkeyInfo HkRecordMacros4( wxT( "Record Macros 4" ), HK_RECORD_MACROS_4, GR_KB_CTRL+'4' );
+static Ki_HotkeyInfo HkRecordMacros4( wxT( "Record Macro 4" ), HK_RECORD_MACROS_4, GR_KB_CTRL+'4' );
 
-static Ki_HotkeyInfo HkCallMacros4( wxT( "Call Macross 4" ), HK_CALL_MACROS_4, '4' );
+static Ki_HotkeyInfo HkCallMacros4( wxT( "Call Macro 4" ), HK_CALL_MACROS_4, '4' );
 
-static Ki_HotkeyInfo HkRecordMacros5( wxT( "Record Macros 5" ), HK_RECORD_MACROS_5, GR_KB_CTRL+'5' );
+static Ki_HotkeyInfo HkRecordMacros5( wxT( "Record Macro 5" ), HK_RECORD_MACROS_5, GR_KB_CTRL+'5' );
 
-static Ki_HotkeyInfo HkCallMacros5( wxT( "Call Macross 5" ), HK_CALL_MACROS_5, '5' );
+static Ki_HotkeyInfo HkCallMacros5( wxT( "Call Macro 5" ), HK_CALL_MACROS_5, '5' );
 
-static Ki_HotkeyInfo HkRecordMacros6( wxT( "Record Macros 6" ), HK_RECORD_MACROS_6, GR_KB_CTRL+'6' );
+static Ki_HotkeyInfo HkRecordMacros6( wxT( "Record Macro 6" ), HK_RECORD_MACROS_6, GR_KB_CTRL+'6' );
 
-static Ki_HotkeyInfo HkCallMacros6( wxT( "Call Macross 6" ), HK_CALL_MACROS_6, '6' );
+static Ki_HotkeyInfo HkCallMacros6( wxT( "Call Macro 6" ), HK_CALL_MACROS_6, '6' );
 
-static Ki_HotkeyInfo HkRecordMacros7( wxT( "Record Macros 7" ), HK_RECORD_MACROS_7, GR_KB_CTRL+'7' );
+static Ki_HotkeyInfo HkRecordMacros7( wxT( "Record Macro 7" ), HK_RECORD_MACROS_7, GR_KB_CTRL+'7' );
 
-static Ki_HotkeyInfo HkCallMacros7( wxT( "Call Macross 7" ), HK_CALL_MACROS_7, '7' );
+static Ki_HotkeyInfo HkCallMacros7( wxT( "Call Macro 7" ), HK_CALL_MACROS_7, '7' );
 
-static Ki_HotkeyInfo HkRecordMacros8( wxT( "Record Macros 8" ), HK_RECORD_MACROS_8, GR_KB_CTRL+'8' );
+static Ki_HotkeyInfo HkRecordMacros8( wxT( "Record Macro 8" ), HK_RECORD_MACROS_8, GR_KB_CTRL+'8' );
 
-static Ki_HotkeyInfo HkCallMacros8( wxT( "Call Macross 8" ), HK_CALL_MACROS_8, '8' );
+static Ki_HotkeyInfo HkCallMacros8( wxT( "Call Macro 8" ), HK_CALL_MACROS_8, '8' );
 
-static Ki_HotkeyInfo HkRecordMacros9( wxT( "Record Macros 9" ), HK_RECORD_MACROS_9, GR_KB_CTRL+'9' );
+static Ki_HotkeyInfo HkRecordMacros9( wxT( "Record Macro 9" ), HK_RECORD_MACROS_9, GR_KB_CTRL+'9' );
 
-static Ki_HotkeyInfo HkCallMacros9( wxT( "Call Macross 9" ), HK_CALL_MACROS_9, '9' );
+static Ki_HotkeyInfo HkCallMacros9( wxT( "Call Macro 9" ), HK_CALL_MACROS_9, '9' );
 
 // List of common hotkey descriptors
 Ki_HotkeyInfo* common_Hotkey_List[] =

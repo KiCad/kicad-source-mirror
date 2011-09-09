@@ -100,11 +100,9 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
     m_DocModulesFileName = DEFAULT_FOOTPRINTS_LIST_FILENAME;
 
     // Give an icon
-    #ifdef __WINDOWS__
-    SetIcon( wxICON( a_icon_cvpcb ) );
-    #else
-    SetIcon( wxICON( icon_cvpcb ) );
-    #endif
+    wxIcon icon;
+    icon.CopyFromBitmap( KiBitmap( icon_cvpcb_xpm ) );
+    SetIcon( icon );
 
     SetAutoLayout( true );
 

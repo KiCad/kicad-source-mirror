@@ -1,2 +1,1 @@
-a_icon_cvpcb ICON "cvpcb.ico"
 #include "wx/msw/wx.rc"

@@ -48,11 +48,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
     SetStatusWidths( 3, dims );
 
     // Give an icon
-#ifdef __WINDOWS__
-    SetIcon( wxICON( a_kicad_icon ) );
-#else
-    SetIcon( wxICON( icon_kicad ) );
-#endif
+    wxIcon icon;
+    icon.CopyFromBitmap( KiBitmap( icon_kicad_xpm ) );
+    SetIcon( icon );
 
     clientsize = GetClientSize();
 
@@ -105,7 +103,7 @@ KICAD_MANAGER_FRAME::~KICAD_MANAGER_FRAME()
 
 void KICAD_MANAGER_FRAME::PrintMsg( const wxString& aText )
 {
-    m_RightWin->m_DialogWin->AppendText( aText );
+    m_RightWin->m_MessagesBox->AppendText( aText );
 }
 
 
@@ -256,7 +254,7 @@ void KICAD_MANAGER_FRAME::OnRefresh( wxCommandEvent& event )
 
 void KICAD_MANAGER_FRAME::ClearMsg()
 {
-    m_RightWin->m_DialogWin->Clear();
+    m_RightWin->m_MessagesBox->Clear();
 }
 
 
