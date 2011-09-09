@@ -546,14 +546,8 @@ function( png2png inputFile bkgndFile outFile )
     add_custom_command(
         OUTPUT  ${outFile}
 
-        # blend in the unified background into the png before converting to cpp.
-#        COMMAND ${COMPOSITE_PROG} -compose Over ${inputFile} ${bkgndFile} -alpha set ${TMP_DIR}/scratch.png
-
-        # remove any extraneous tEXt records
-#        COMMAND ${pngcrush_EXECUTABLE} -rem alla ${TMP_DIR}/scratch.png ${outFile} > ${TMP_DIR}/${bmn}.pngcrush.log
-
-        # pngcrush all icons without background.
-        COMMAND pngcrush -rem alla ${inputFile} ${outFile} > ${TMP_DIR}/${bmn}.pngcrush.log
+        # pngcrush all icons without background to remove any extraneous tEXt records.
+        COMMAND ${pngcrush_EXECUTABLE} -rem alla ${inputFile} ${outFile} > ${TMP_DIR}/${bmn}.pngcrush.log
 
         DEPENDS ${inputFile} ${bkgndFile}
 
@@ -648,16 +642,6 @@ if( MAINTAIN_PNGS )
             message( STATUS "The pngcrush PNG size reduction program found." )
         endif( NOT pngcrush_EXECUTABLE )
     endif( NOT pngcrush_FOUND )
-
-    # composite is required to convert a basic PNG to one with a composited background
-    # image behind it
-#    find_program( COMPOSITE_PROG composite DOC "The image compositing program." )
-
-#    if( NOT COMPOSITE_PROG )
-#        message( FATAL_ERROR "Could not find the ImagMagik composite program." )
-#    else( NOT COMPOSITE_PROG )
-#        message( STATUS "The ImageMagick composite program found." )
-#    endif( NOT COMPOSITE_PROG )
 
     # these 2 cmake commands for each desired bitmap size set, repeat as needed:
     bitmap_dir( 26 26 "${BMAPS_MID}" )
