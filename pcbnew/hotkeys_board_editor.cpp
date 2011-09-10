@@ -77,7 +77,7 @@ void PCB_EDIT_FRAME::CallMacros(wxDC* aDC, const wxPoint& aPosition, int aNumber
 
     for( std::list<MACROS_RECORD>::iterator i = m_Macros[aNumber].m_Record.begin(); i != m_Macros[aNumber].m_Record.end(); i++ )
     {
-        wxPoint tmpPos = tPosition + i->m_Position;
+        wxPoint tmpPos = screen->GetNearestGridPosition( tPosition + i->m_Position );
 
         screen->SetMousePosition( tmpPos );
 
@@ -202,43 +202,43 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_CALL_MACROS_0:
-        CallMacros(aDC, aPosition, 0);
+        CallMacros(aDC, screen->GetCrossHairPosition(false), 0);
         break;
 
     case HK_CALL_MACROS_1:
-        CallMacros(aDC, aPosition, 1);
+        CallMacros(aDC, screen->GetCrossHairPosition(false), 1);
         break;
 
     case HK_CALL_MACROS_2:
-        CallMacros(aDC, aPosition, 2);
+        CallMacros(aDC, screen->GetCrossHairPosition(false), 2);
         break;
 
     case HK_CALL_MACROS_3:
-        CallMacros(aDC, aPosition, 3);
+        CallMacros(aDC, screen->GetCrossHairPosition(false), 3);
         break;
 
     case HK_CALL_MACROS_4:
-        CallMacros(aDC, aPosition, 4);
+        CallMacros(aDC, screen->GetCrossHairPosition(false), 4);
         break;
 
     case HK_CALL_MACROS_5:
-        CallMacros(aDC, aPosition, 5);
+        CallMacros(aDC, screen->GetCrossHairPosition(false), 5);
         break;
 
     case HK_CALL_MACROS_6:
-        CallMacros(aDC, aPosition, 6);
+        CallMacros(aDC, screen->GetCrossHairPosition(false), 6);
         break;
 
     case HK_CALL_MACROS_7:
-        CallMacros(aDC, aPosition, 7);
+        CallMacros(aDC, screen->GetCrossHairPosition(false), 7);
         break;
 
     case HK_CALL_MACROS_8:
-        CallMacros(aDC, aPosition, 8);
+        CallMacros(aDC, screen->GetCrossHairPosition(false), 8);
         break;
 
     case HK_CALL_MACROS_9:
-        CallMacros(aDC, aPosition, 9);
+        CallMacros(aDC, screen->GetCrossHairPosition(false), 9);
         break;
 
     case HK_SWITCH_TRACK_WIDTH_TO_NEXT:
