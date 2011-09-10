@@ -71,10 +71,8 @@ public:
 private:
     int m_LeftWin_Width;
 
-public:
-
-    KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
-                         const wxPoint& pos, const wxSize& size );
+public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
+                             const wxPoint& pos, const wxSize& size );
 
     ~KICAD_MANAGER_FRAME();
 
@@ -174,30 +172,32 @@ enum TreeFileType {
 class RIGHT_KM_FRAME : public wxSashLayoutWindow
 {
 public:
-    wxTextCtrl*       m_DialogWin;
+    wxTextCtrl*          m_MessagesBox;
 private:
-    KICAD_MANAGER_FRAME* m_Parent;
+    KICAD_MANAGER_FRAME* m_Parent;          // a wxTextCtrl to displays messages frm Kicad
     int m_ButtonsPanelHeight;
-    wxPanel*          m_ButtPanel;
-    int m_ButtonSeparation;                 // button distance in pixels
-    wxPoint           m_ButtonsListPosition; /* position of the left bottom corner
-                                              *  of the first bitmap button
-                                              */
-    wxPoint           m_ButtonLastPosition; // position of the last button in the window
+    wxPanel*             m_ButtPanel;
+    int     m_ButtonSeparation;             // button distance in pixels
+    wxPoint m_ButtonsListPosition;          /* position of the left bottom corner
+                                             *  of the first bitmap button
+                                             */
+    wxPoint m_ButtonLastPosition;           // position of the last button in the window
+    int     m_bitmapButtons_maxHeigth;      // height of bigger bitmap buttons
+                                            // Used to calculate the height of the panel.
 
-public:
-    RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent );
+public: RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent );
     ~RIGHT_KM_FRAME() { };
-    void OnSize( wxSizeEvent& event );
+    void            OnSize( wxSizeEvent& event );
 
 private:
+
     /**
      * Function CreateCommandToolbar
      * creates the main tool bar buttons (fast launch buttons)
      */
-    void CreateCommandToolbar( void );
+    void            CreateCommandToolbar( void );
 
-    wxBitmapButton* AddBitmapButton( wxWindowID aId, const wxBitmap & aBitmap );
+    wxBitmapButton* AddBitmapButton( wxWindowID aId, const wxBitmap& aBitmap );
 
     DECLARE_EVENT_TABLE()
 };

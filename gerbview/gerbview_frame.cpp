@@ -50,11 +50,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
         DrawPanel->m_Block_Enable = true;
 
     // Give an icon
-#ifdef __WINDOWS__
-    SetIcon( wxICON( a_icon_gerbview ) );
-#else
-    SetIcon( wxICON( icon_gerbview ) );
-#endif
+    wxIcon icon;
+    icon.CopyFromBitmap( KiBitmap( icon_gerbview_xpm ) );
+    SetIcon( icon );
 
     SetScreen( ScreenPcb );
 

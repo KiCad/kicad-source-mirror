@@ -164,6 +164,8 @@ set(BITMAP_SRCS
     icon_kicad.xpm
     icon_modedit.xpm
     icon_pcbnew.xpm
+    icon_pcbcalculator.xpm
+    icon_bitmap2component.xpm
     icon_txt.xpm
     import3d.xpm
     image.xpm

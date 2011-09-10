@@ -179,18 +179,16 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     CreateScreens();
 
     // Give an icon
-#ifdef __WINDOWS__
-    SetIcon( wxICON( a_icon_eeschema ) );
-#else
-    SetIcon( wxICON( icon_eeschema ) );
-#endif
+    wxIcon icon;
+    icon.CopyFromBitmap( KiBitmap( icon_eeschema_xpm ) );
+    SetIcon( icon );
 
     m_itemToRepeat = NULL;
 
     /* Get config */
     LoadSettings();
 
-    // Internalize grid id to a default value if not found in config or bad:
+    // Initialize grid id to a default value if not found in config or bad:
     if( (m_LastGridSizeId <= 0)
        || ( m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000) ) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;

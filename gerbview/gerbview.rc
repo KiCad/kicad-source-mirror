@@ -1,2 +1,7 @@
-a_icon_gerbview ICON "gerbview.ico"
+#ifdef USE_PNG_BITMAPS
+icon_gerbview ICON "../bitmaps_png/icons/icon_gerbview.ico"
+#else
+icon_gerbview ICON "../bitmaps_xpm/icons/icon_gerbview.ico"
+#endif
+
 #include "wx/msw/wx.rc"

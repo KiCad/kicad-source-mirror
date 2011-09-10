@@ -8,6 +8,7 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "macros.h"
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "trigo.h"
@@ -57,6 +58,7 @@ GBR_TO_PCB_EXPORTER::~GBR_TO_PCB_EXPORTER()
 
 
 /* Export data in pcbnew format
+ * remember Pcbnew uses a Y reversed axis, so we must negate all Y coordinates
  */
 void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
 {
@@ -260,6 +262,10 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, in
         }
     }
 
+    // Reverse Y axis:
+    NEGATE( drawitem->m_Start.y );
+    NEGATE( drawitem->m_End.y );
+
     m_pcb->Add( drawitem );
 }
 
@@ -291,6 +297,11 @@ void GBR_TO_PCB_EXPORTER::export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem
     newtrack->m_Start = aGbrItem->m_Start;
     newtrack->m_End = aGbrItem->m_End;
     newtrack->m_Width = aGbrItem->m_Size.x;
+
+    // Reverse Y axis:
+    NEGATE( newtrack->m_Start.y );
+    NEGATE( newtrack->m_End.y );
+
     m_pcb->Add( newtrack );
 }
 
@@ -323,6 +334,9 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
         RotatePoint( &curr_end, aGbrItem->m_ArcCentre, rot );
         newtrack->m_End = curr_end;
         newtrack->m_Width = aGbrItem->m_Size.x;
+        // Reverse Y axis:
+        NEGATE( newtrack->m_Start.y );
+        NEGATE( newtrack->m_End.y );
         m_pcb->Add( newtrack );
         curr_start = curr_end;
     }
@@ -333,6 +347,9 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
         newtrack->m_Start = curr_start;
         newtrack->m_End = end;
         newtrack->m_Width = aGbrItem->m_Size.x;
+        // Reverse Y axis:
+        NEGATE( newtrack->m_Start.y );
+        NEGATE( newtrack->m_End.y );
         m_pcb->Add( newtrack );
     }
 }
@@ -352,5 +369,8 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem
     newtrack->SetDrillDefault();
     newtrack->m_Start = newtrack->m_End = aGbrItem->m_Start;
     newtrack->m_Width = (aGbrItem->m_Size.x + aGbrItem->m_Size.y) / 2;
+    // Reverse Y axis:
+    NEGATE( newtrack->m_Start.y );
+    NEGATE( newtrack->m_End.y );
     m_pcb->Add( newtrack );
 }

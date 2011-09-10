@@ -184,7 +184,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
 
     wxIcon icon;
 
-    icon.CopyFromBitmap( KiBitmap( libedit_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( libedit_icon_xpm ) );
 
     SetIcon( icon );
 

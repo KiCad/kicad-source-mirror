@@ -36,8 +36,6 @@
 #include "potracelib.h"
 #include "bitmap_io.h"
 
-#include "bitmap2component.xpm"
-
 #include "colors_selection.h"
 #include "build_version.h"
 
@@ -98,11 +96,10 @@ BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
     m_Config->Read( KEYWORD_LAST_INPUT_FILE, &m_BitmapFileName );
     m_Config->Read( KEYWORD_LAST_OUTPUT_FILE, &m_ConvertedFileName );
 
-    #ifdef __WINDOWS__
-    SetIcon( wxICON( bitmap2component_icon ) );
-    #else
-    SetIcon( wxICON( bitmap2component ) );
-    #endif
+    // Give an icon
+    wxIcon icon;
+    icon.CopyFromBitmap( KiBitmap( icon_bitmap2component_xpm ) );
+    SetIcon( icon );
 
     GetSizer()->SetSizeHints( this );
 

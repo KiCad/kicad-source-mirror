@@ -1,4 +1,7 @@
-a_icon_eeschema ICON eeschema.ico
-libsch ICON libedit_icon.ico
-viewlibs ICON viewlibs_icon.ico
+#ifdef USE_PNG_BITMAPS
+icon_eeschema ICON "../bitmaps_png/icons/icon_eeschema.ico"
+#else
+icon_eeschema ICON "../bitmaps_xpm/icons/icon_eeschema.ico"
+#endif
+
 #include "wx/msw/wx.rc"

@@ -1,2 +1,7 @@
-a_kicad_icon ICON kicad.ico
+#ifdef USE_PNG_BITMAPS
+icon_kicad ICON "../bitmaps_png/icons/icon_kicad.ico"
+#else
+icon_kicad ICON "../bitmaps_xpm/icons/icon_kicad.ico"
+#endif
+
 #include "wx/msw/wx.rc"

@@ -1,2 +1,7 @@
-bitmap2component_icon ICON bitmap2component.ico
+#ifdef USE_PNG_BITMAPS
+icon_bitmap2component ICON "../bitmaps_png/icons/icon_bitmap2component.ico"
+#else
+icon_bitmap2component ICON "../bitmaps_xpm/icons/icon_bitmap2component.ico"
+#endif
+
 #include "wx/msw/wx.rc"

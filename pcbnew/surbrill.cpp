@@ -39,15 +39,15 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
     if( netFilter.IsEmpty() )
         return;
 
+    wxString Line;
     for( unsigned ii = 0; ii < GetBoard()->m_NetInfo->GetCount(); ii++ )
     {
         net = GetBoard()->m_NetInfo->GetNetItem( ii );
-        wxString Line;
 
         if( !WildCompareString( netFilter, net->GetNetname(), false ) )
             continue;
 
-        Line.Printf( wxT( "net_code = %3.3d  [%.16s] " ), net->GetNet(),
+        Line.Printf( wxT( "net %3.3d:  %s" ), net->GetNet(),
                      GetChars( net->GetNetname() ) );
         list.Add( Line );
     }

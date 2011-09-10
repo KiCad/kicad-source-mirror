@@ -1,4 +1,7 @@
-a_icon_pcbnew ICON "icon_pcbnew.ico"
-icon_w3d ICON "icon_w3d.ico"
-icon_modedit ICON "icon_modedit.ico"
+#ifdef USE_PNG_BITMAPS
+icon_pcbnew ICON "../bitmaps_png/icons/icon_pcbnew.ico"
+#else
+icon_pcbnew ICON "../bitmaps_xpm/icons/icon_pcbnew.ico"
+#endif
+
 #include "wx/msw/wx.rc"

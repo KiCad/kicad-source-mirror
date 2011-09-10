@@ -76,6 +76,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     # Set default flags for Debug build.
     set(CMAKE_C_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall -g3 -ggdb3 -DDEBUG")
+
+    if( USE_PNG_BITMAPS )
+        #Add  -DUSE_PNG_BITMAPS to windres.exe command line
+        set(CMAKE_RC_COMPILER windres.exe -DUSE_PNG_BITMAPS)
+    endif( USE_PNG_BITMAPS )
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 if(wxUSE_UNICODE)
