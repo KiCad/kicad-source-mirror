@@ -1,8 +1,5 @@
 /* XPM */
-#ifndef XPMMAIN
-extern const char * warning_xpm[];
-#else
-const char *warning_xpm[] = {
+const char *ercwarn_xpm[] = {
 /* columns rows colors const chars-per-pixel */
 "11 11 2 1",
 "- c Black",
@@ -21,5 +18,3 @@ const char *warning_xpm[] = {
 "XXX-XXX-XXX",
 "XXXXXXXXXXX"
 };
-#endif
-

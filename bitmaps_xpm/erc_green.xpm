@@ -1,7 +1,4 @@
 /* XPM */
-#ifndef XPMMAIN
-extern const char * erc_green_xpm[];
-#else
 const char *erc_green_xpm[] = {
 /* columns rows colors const chars-per-pixel */
 "11 11 2 1",
@@ -21,5 +18,3 @@ const char *erc_green_xpm[] = {
 "XXXXXXXXXXXX",
 "XXXXXXXXXXXX"
 };
-#endif
-

@@ -197,7 +197,6 @@ set( BMAPS_MID
     erc_green
     ercwarn
     erc
-    error
     exit
     export_footprint_names
     export_module

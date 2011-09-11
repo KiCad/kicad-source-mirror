@@ -116,7 +116,7 @@ set(BITMAP_SRCS
     eeschema.xpm
     enter_sheet.xpm
     ercerr.xpm
-    ercgreen.xpm
+    erc_green.xpm
     ercwarn.xpm
     erc.xpm
     exit.xpm

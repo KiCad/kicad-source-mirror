@@ -1,4 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
+
 // Name:        dialog_erc.cpp
 // Purpose:
 // Author:      jean-pierre Charras
@@ -30,12 +31,10 @@ bool DIALOG_ERC::m_writeErcFile = false;
 
 
 BEGIN_EVENT_TABLE( DIALOG_ERC, DIALOG_ERC_BASE )
-    EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( PIN_NMAX * PIN_NMAX ) - 1,
-                       wxEVT_COMMAND_BUTTON_CLICKED,
-                       DIALOG_ERC::ChangeErrorLevel )
-END_EVENT_TABLE()
-
-DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
+EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( PIN_NMAX * PIN_NMAX ) - 1,
+                   wxEVT_COMMAND_BUTTON_CLICKED,
+                   DIALOG_ERC::ChangeErrorLevel )
+END_EVENT_TABLE() DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     DIALOG_ERC_BASE( parent )
 {
     m_Parent = parent;
@@ -84,6 +83,7 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 /* Delete the old ERC markers, over the whole hierarchy
  */
     SCH_SCREENS ScreenList;
+
     ScreenList.DeleteAllMarkers( MARK_ERC );
     m_MarkersList->ClearList();
     m_Parent->DrawPanel->Refresh();
@@ -174,7 +174,7 @@ void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
         m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
     }
 
-    m_Parent->GetScreen()->SetCrossHairPosition(pos);
+    m_Parent->GetScreen()->SetCrossHairPosition( pos );
     m_Parent->RedrawScreen( pos, true );
 }
 
@@ -185,12 +185,15 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 {
     int           ii, jj, event_id, text_height;
     wxPoint       pos, BoxMatrixPosition;
-
-#define BITMAP_SIZE 19
-    int           bitmap_size = BITMAP_SIZE;
     wxStaticText* text;
-    int           x, y;
     wxSize        BoxMatrixMinSize;
+
+    // Try to know the size of bitmaps used in drc matrix
+    wxBitmap      bitmap = KiBitmap( ercwarn_xpm );
+    wxSize        bitmap_size = bitmap.GetSize();
+
+    bitmap_size.x += 5;
+    bitmap_size.y += 8;    // Add a margin around the bitmap
 
     if( !DiagErcTableInit )
     {
@@ -201,12 +204,12 @@ void DIALOG_ERC::ReBuildMatrixPanel()
     // Get the current text size: this is a dummy text.
     text = new wxStaticText( m_PanelERCOptions, -1, wxT( "W" ), pos );
 
-    text_height = text->GetRect().GetHeight();
-    bitmap_size = MAX( bitmap_size, text_height );
+    text_height   = text->GetRect().GetHeight();
+    bitmap_size.y = MAX( bitmap_size.y, text_height );
     SAFE_DELETE( text );
 
     // compute the Y pos interval:
-    BoxMatrixMinSize.y = ( bitmap_size * (PIN_NMAX + 1) ) + 5;
+    BoxMatrixMinSize.y = ( bitmap_size.y * (PIN_NMAX + 1) ) + 5;
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     pos = m_MatrixSizer->GetPosition();
@@ -222,13 +225,14 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 
     if( m_Initialized == FALSE )
     {
+        // Print row labels
         for( ii = 0; ii < PIN_NMAX; ii++ )
         {
-            y    = pos.y + (ii * bitmap_size);
+            int y = pos.y + (ii * bitmap_size.y);
             text = new wxStaticText( m_PanelERCOptions, -1, CommentERC_H[ii],
-                                     wxPoint( 5, y ) );
+                                    wxPoint( 5, y + ( bitmap_size.y / 2) - (text_height / 2) ) );
 
-            x     = text->GetRect().GetRight();
+            int x = text->GetRect().GetRight();
             pos.x = MAX( pos.x, x );
         }
 
@@ -239,50 +243,52 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 
     for( ii = 0; ii < PIN_NMAX; ii++ )
     {
-        y = pos.y + (ii * bitmap_size);
+        int y = pos.y + (ii * bitmap_size.y);
         for( jj = 0; jj <= ii; jj++ )
         {
+            // Add column labels (only once)
             int diag = DiagErc[ii][jj];
-            x = pos.x + (jj * bitmap_size);
+            int x    = pos.x + (jj * bitmap_size.x);
             if( (ii == jj) && !m_Initialized )
             {
                 wxPoint txtpos;
-                txtpos.x = x + 6;
-                txtpos.y = y - bitmap_size;
+                txtpos.x = x + (bitmap_size.x / 2);
+                txtpos.y = y - text_height;
                 text     = new wxStaticText( m_PanelERCOptions,
                                              -1,
                                              CommentERC_V[ii],
                                              txtpos );
 
                 BoxMatrixMinSize.x = MAX( BoxMatrixMinSize.x,
-                                          text->GetRect().GetRight() );
+                                         text->GetRect().GetRight() );
             }
             event_id = ID_MATRIX_0 + ii + ( jj * PIN_NMAX );
             delete m_ButtonList[ii][jj];
 
+            // Add button on matrix
             switch( diag )
             {
             case OK:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
-                                                           event_id,
-                                                           KiBitmap( erc_green_xpm ),
-                                                           wxPoint( x, y ) );
+                                                          event_id,
+                                                          KiBitmap( erc_green_xpm ),
+                                                          wxPoint( x, y ) );
 
                 break;
 
             case WAR:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
-                                                           event_id,
-                                                           KiBitmap( warning_xpm ),
-                                                           wxPoint( x, y ) );
+                                                          event_id,
+                                                          KiBitmap( ercwarn_xpm ),
+                                                          wxPoint( x, y ) );
 
                 break;
 
             case ERR:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
-                                                           event_id,
-                                                           KiBitmap( error_xpm ),
-                                                           wxPoint( x, y ) );
+                                                          event_id,
+                                                          KiBitmap( ercerr_xpm ),
+                                                          wxPoint( x, y ) );
 
                 break;
             }
@@ -323,10 +329,12 @@ void DIALOG_ERC::DisplayERC_MarkersList()
             SCH_MARKER* Marker = (SCH_MARKER*) DrawStruct;
             if( Marker->GetMarkerType() != MARK_ERC )
                 continue;
+
             // Add marker without refresh the displayed list:
             m_MarkersList->AppendToList( Marker, false );
         }
     }
+
     m_MarkersList->Refresh();
 }
 
@@ -362,12 +370,12 @@ void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
     {
     case OK:
         level = WAR;
-        new_bitmap_xpm = warning_xpm;
+        new_bitmap_xpm = ercwarn_xpm;
         break;
 
     case WAR:
         level = ERR;
-        new_bitmap_xpm = error_xpm;
+        new_bitmap_xpm = ercerr_xpm;
         break;
 
     case ERR:
@@ -405,7 +413,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     m_writeErcFile = m_WriteResultOpt->GetValue();
 
     /* Build the whole sheet list in hierarchy (sheet, not screen) */
-    SCH_SHEET_LIST  sheets;
+    SCH_SHEET_LIST sheets;
     sheets.AnnotatePowerSymbols();
 
     if( m_Parent->CheckAnnotate( aMessagesList, false ) )
@@ -428,8 +436,8 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     g_EESchemaVar.NbWarningErc = 0;
 
     for( SCH_SCREEN* Screen = ScreenList.GetFirst();
-         Screen != NULL;
-         Screen = ScreenList.GetNext() )
+        Screen != NULL;
+        Screen = ScreenList.GetNext() )
     {
         bool ModifyWires;
         ModifyWires = Screen->SchematicCleanUp( NULL );
@@ -445,7 +453,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
      * names can be duplicated).
      */
     int errcnt = TestDuplicateSheetNames( true );
-    g_EESchemaVar.NbErrorErc   += errcnt;
+    g_EESchemaVar.NbErrorErc += errcnt;
 
     m_Parent->BuildNetListBase();
 
@@ -460,8 +468,8 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 
     for( NetItemRef = 0; NetItemRef < g_NetObjectslist.size(); NetItemRef++ )
     {
-        if( g_NetObjectslist[OldItem]->GetNet() != g_NetObjectslist[NetItemRef]->GetNet() )
-        {   // New net found:
+        if( g_NetObjectslist[OldItem]->GetNet() != g_NetObjectslist[NetItemRef]->GetNet() ) // New net found:
+        {
             MinConn    = NOC;
             NetNbItems = 0;
             StartNet   = NetItemRef;

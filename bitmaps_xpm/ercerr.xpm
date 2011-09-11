@@ -1,8 +1,5 @@
 /* XPM */
-#ifndef XPMMAIN
-extern const char * error_xpm[];
-#else
-const char *error_xpm[] = {
+const char *ercerr_xpm[] = {
 /* columns rows colors const chars-per-pixel */
 "11 11 2 1",
 "- c Black",
@@ -21,5 +18,3 @@ const char *error_xpm[] = {
 "X----------X",
 "XXXXXXXXXXXX"
 };
-#endif
-

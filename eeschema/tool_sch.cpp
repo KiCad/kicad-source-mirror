@@ -139,6 +139,11 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString, KiBitmap( import_footprint_names_xpm ),
                          _( "Back annotate component foot prints" ) );
 
+    // set icon paddings
+    m_HToolBar->SetToolBorderPadding(3); // padding
+    m_HToolBar->SetToolSeparation(0);
+    //m_HToolBar->SetMargins(0,1); // margins width and height
+
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
     m_HToolBar->Realize();
 }
@@ -219,6 +224,11 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_VToolBar->AddTool( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxEmptyString, KiBitmap( delete_body_xpm ),
                          HELP_DELETE_ITEMS, wxITEM_CHECK );
 
+    // set icon paddings
+    m_VToolBar->SetToolBorderPadding(2); // padding
+    m_VToolBar->SetToolSeparation(0);
+    //m_VToolBar->SetMargins(1,0); // margins width and height
+
     m_VToolBar->Realize();
 }
 
@@ -248,16 +258,20 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
                                KiBitmap( cursor_shape_xpm ),
                                _( "Change cursor shape" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddSeparator();
+    //m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_HIDDEN_PINS, wxEmptyString,
                                KiBitmap( hidden_pin_xpm ),
                                _( "Show hidden pins" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddSeparator();
+    //m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_BUS_WIRES_ORIENT, wxEmptyString,
                                KiBitmap( lines90_xpm ),
                                _( "HV orientation for wires and bus" ),
                                wxITEM_CHECK );
+    // set icon paddings
+    m_OptionsToolBar->SetToolBorderPadding(2); // padding
+    m_OptionsToolBar->SetToolSeparation(0);
+    //m_OptionsToolBar->SetMargins(4,0); // margins width and height
 
     m_OptionsToolBar->Realize();
 }

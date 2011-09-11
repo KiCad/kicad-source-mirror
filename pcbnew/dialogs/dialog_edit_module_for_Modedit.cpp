@@ -21,7 +21,12 @@ DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* 
 {
     m_Parent = aParent;
     m_CurrentModule = aModule;
-    SetIcon( wxICON( icon_modedit ) );        // Give an icon
+
+    // Give an icon
+    wxIcon  icon;
+    icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
+    SetIcon( icon );
+
     InitModeditProperties();
     m_sdbSizerStdButtonsOK->SetDefault();
     GetSizer()->Fit( this );

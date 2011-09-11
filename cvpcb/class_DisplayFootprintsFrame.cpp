@@ -55,12 +55,9 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     m_Draw_Axis = true;         // true to draw axis.
 
     // Give an icon
-#ifdef __WINDOWS__
-    SetIcon( wxICON( a_icon_cvpcb ) );
-#else
-    SetIcon( wxICON( icon_cvpcb ) );
-#endif
-    SetTitle( title );
+    wxIcon  icon;
+    icon.CopyFromBitmap( KiBitmap( icon_cvpcb_xpm ) );
+    SetIcon( icon );
 
     SetBoard( new BOARD( NULL, this ) );
     SetScreen( new PCB_SCREEN() );

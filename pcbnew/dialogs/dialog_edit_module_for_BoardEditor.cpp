@@ -23,7 +23,10 @@ DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent
     m_DC     = aDC;
     m_CurrentModule = aModule;
 
-    SetIcon( wxICON( icon_modedit ) );        // Give an icon
+    // Give an icon
+    wxIcon  icon;
+    icon.CopyFromBitmap( KiBitmap( icon_modedit_xpm ) );
+    SetIcon( icon );
 
     InitModeditProperties();
     InitBoardProperties();
