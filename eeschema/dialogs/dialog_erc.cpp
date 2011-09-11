@@ -188,12 +188,11 @@ void DIALOG_ERC::ReBuildMatrixPanel()
     wxStaticText* text;
     wxSize        BoxMatrixMinSize;
 
-    // Try to know the size of bitmaps used in drc matrix
-    wxBitmap      bitmap = KiBitmap( ercwarn_xpm );
-    wxSize        bitmap_size = bitmap.GetSize();
-
-    bitmap_size.x += 5;
-    bitmap_size.y += 8;    // Add a margin around the bitmap
+    // Try to know the size of bitmap button used in drc matrix
+    wxBitmapButton * dummy = new wxBitmapButton( m_PanelERCOptions, wxID_ANY,
+                                              KiBitmap( ercerr_xpm ) );
+    wxSize bitmap_size = dummy->GetSize();
+    delete dummy;
 
     if( !DiagErcTableInit )
     {
