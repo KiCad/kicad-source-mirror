@@ -339,7 +339,7 @@ void DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
     wxString        keyname;
     Ki_HotkeyInfo** List;
 
-    wxString        msg = wxT( "<html><body>" );
+    wxString        msg = wxT( "<html><body bgcolor=\"#E2E2E2\">" );
 
     msg += wxT( "<H3>");
     msg += _("Hotkeys List");

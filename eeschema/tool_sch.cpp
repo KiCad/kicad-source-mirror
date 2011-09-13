@@ -123,7 +123,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
                          _( "Generate netlist" ) );
 
-    m_HToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, KiBitmap( tools_xpm ),
+    m_HToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, KiBitmap( bom_xpm ),
                          _( "Generate bill of materials and/or cross references" ) );
 
 

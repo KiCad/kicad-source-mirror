@@ -25,8 +25,15 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent ) :
 {
     m_Parent = parent;
 
+    // icons size is not know (depending on they are built)
+    // so get it:
+    wxSize iconsize;
+    wxBitmap dummy = KiBitmap( eeschema_xpm );
+    iconsize.x = dummy.GetWidth();
+    iconsize.y = dummy.GetHeight();
+
     // Make an image list containing small icons
-    m_ImageList = new wxImageList( 16, 16, TRUE, TREE_MAX );
+    m_ImageList = new wxImageList( iconsize.x, iconsize.y, TRUE, TREE_MAX );
 
     m_ImageList->Add( KiBitmap( kicad_icon_small_xpm ) );       // TREE_PROJECT
     m_ImageList->Add( KiBitmap( eeschema_xpm ) );               // TREE_SCHEMA

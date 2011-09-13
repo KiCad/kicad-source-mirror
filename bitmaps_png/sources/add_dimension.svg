@@ -1,42 +1,173 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
- <defs>
-  <filter id="i" color-interpolation-filters="sRGB">
-   <feGaussianBlur stdDeviation="0.11294425"/>
-  </filter>
-  <marker id="h" refY="0" refX="0" overflow="visible" orient="auto">
-   <path stroke-linejoin="round" d="m8.7186 4.0337-10.926-4.0177 10.926-4.0177c-1.7455 2.3721-1.7354 5.6175-6e-7 8.0354z" fill-rule="evenodd" transform="scale(.6)" stroke-width=".625"/>
-  </marker>
-  <marker id="g" refY="0" refX="0" overflow="visible" orient="auto">
-   <path stroke-linejoin="round" d="m8.7186 4.0337-10.926-4.0177 10.926-4.0177c-1.7455 2.3721-1.7354 5.6175-6e-7 8.0354z" fill-rule="evenodd" transform="scale(-.6)" stroke-width=".625"/>
-  </marker>
-  <filter id="j" height="38.835" width="1.0879" color-interpolation-filters="sRGB" y="-18.917" x="-.043948">
-   <feGaussianBlur stdDeviation="0.23111596"/>
-  </filter>
-  <filter id="k" height="1.1117" width="2.1169" color-interpolation-filters="sRGB" y="-.055846" x="-.55846">
-   <feGaussianBlur stdDeviation="0.23269231"/>
-  </filter>
-  <filter id="l" height="1.1117" width="2.1169" color-interpolation-filters="sRGB" y="-.055846" x="-.55846">
-   <feGaussianBlur stdDeviation="0.23269231"/>
-  </filter>
- </defs>
- <g transform="matrix(3.433,0,0,3.1874,31.479,21.586)">
-  <path fill="#afaf00" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.86499 0 0 .86499 3.3638 -4.5167)"/>
-  <path fill="#ebeb00" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.61624 0 0 .61624 5.7296 -4.1188)"/>
-  <path fill="#ff0" d="m12 5.5-2.5174-1.3495-2.5388 1.3087 0.5056-2.8112-2.0292-2.0101 2.8298-0.3879 1.2847-2.551 1.2433 2.5714 2.823 0.43352-2.061 1.9771z" transform="matrix(.3815 0 0 .3815 7.9622 -3.7434)"/>
- </g>
- <g transform="matrix(.96238 0 0 .95676 .20488 .29428)">
-  <g opacity=".65234">
-   <rect opacity=".57422" transform="matrix(-2.9379,0,0,2.1996,15.953,10.905)" height="10" filter="url(#l)" width="1" y="3.35" x="3.375"/>
-   <rect opacity=".57422" transform="matrix(-2.9379,0,0,2.1996,56.79,10.685)" height="10" filter="url(#k)" width="1" y="3.35" x="3.375"/>
-   <path opacity=".72266" marker-end="url(#g)" d="m81.485 4.0679 12.621-0.0293" marker-start="url(#h)" transform="matrix(2.9379,0,0,2.1996,-231.98,17.383)" filter="url(#j)"/>
-   <path opacity=".44922" d="m85.283 0.33485 0.00001-5.0355h1l2 2.5355 0.00001-2.5355h1l-0.00001 5.0355h-1v-1l-2-2.5355-0.00001 3.5355h-1z" fill-rule="evenodd" transform="matrix(2.9379,0,0,2.1996,-231.03,15.133)" filter="url(#i)"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="48"
+   width="48"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="add_dimension.svg">
+  <metadata
+     id="metadata58">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="949"
+     id="namedview56"
+     showgrid="false"
+     inkscape:zoom="4.9166667"
+     inkscape:cx="-12.610169"
+     inkscape:cy="23.59322"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <defs
+     id="defs4">
+    <marker
+       id="h"
+       refY="0"
+       refX="0"
+       overflow="visible"
+       orient="auto">
+      <path
+         stroke-linejoin="round"
+         d="m8.7186 4.0337-10.926-4.0177 10.926-4.0177c-1.7455 2.3721-1.7354 5.6175-6e-7 8.0354z"
+         fill-rule="evenodd"
+         transform="scale(.6)"
+         stroke-width=".625"
+         id="path10" />
+    </marker>
+    <marker
+       id="g"
+       refY="0"
+       refX="0"
+       overflow="visible"
+       orient="auto">
+      <path
+         stroke-linejoin="round"
+         d="m8.7186 4.0337-10.926-4.0177 10.926-4.0177c-1.7455 2.3721-1.7354 5.6175-6e-7 8.0354z"
+         fill-rule="evenodd"
+         transform="scale(-.6)"
+         stroke-width=".625"
+         id="path13" />
+    </marker>
+    <filter
+       inkscape:collect="always"
+       id="filter3750">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.48916009"
+         id="feGaussianBlur3752" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3802">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.65221346"
+         id="feGaussianBlur3804" />
+    </filter>
+  </defs>
+  <g
+     id="g3794"
+     style="opacity:0.3414634;filter:url(#filter3802)"
+     transform="translate(60.20339,25.016949)">
+    <path
+       d="m -53.113133,1.0458908 35.685051,-0.062189"
+       id="path44-7"
+       style="fill:none;stroke:#000000;stroke-width:1.9916749px;marker-start:url(#h);marker-end:url(#g)" />
+    <rect
+       height="21.044893"
+       width="2.8273764"
+       y="-6.150856"
+       x="-56.58511"
+       id="rect46-0"
+       style="fill:#000000;fill-opacity:1" />
+    <rect
+       transform="matrix(-1,0,0,1,-58.240009,-22.851658)"
+       height="21.044893"
+       width="2.8273764"
+       y="16.700802"
+       x="-44.06535"
+       id="rect48-3"
+       style="fill:#000000;fill-opacity:1" />
+    <g
+       transform="matrix(2.8273762,0,0,2.1044893,-56.585111,-16.747836)"
+       id="g50-4"
+       style="opacity:0.18292685;filter:url(#filter3750)">
+      <rect
+         height="16"
+         width="16"
+         y="0"
+         x="0"
+         id="rect52-6"
+         style="fill-opacity:0" />
+    </g>
+    <path
+       d="m -40.920163,-8.7675962 2.9e-5,-10.5970738 2.827376,0 5.654752,5.335946 2.8e-5,-5.335946 2.827377,0 -2.9e-5,10.5970738 -2.827377,0 0,-2.1044888 -5.654752,-5.335947 -2.8e-5,7.4403398 -2.827472,0 z"
+       id="path54-3"
+       style="fill-rule:evenodd" />
   </g>
-  <path marker-end="url(#g)" d="m5.1144 24.67 37.08-0.065" marker-start="url(#h)" stroke="#000" stroke-width="2.0756px" fill="none"/>
-  <rect height="21.996" width="2.9379" y="17.148" x="1.5067" fill="#00009b"/>
-  <rect transform="scale(-1,1)" height="21.996" width="2.9379" y="17.148" x="-45.575" fill="#00009b"/>
-  <g transform="matrix(2.9379,0,0,2.1996,1.5067,6.0721)">
-   <rect fill-opacity="0" height="16" width="16" y="0" x="0"/>
+  <g
+     id="g3661"
+     transform="translate(0.61016949,0)">
+    <path
+       d="M 5.1268763,23.897549 40.811927,23.83536"
+       id="path44"
+       style="fill:none;stroke:#000000;stroke-width:1.9916749px;marker-start:url(#h);marker-end:url(#g)" />
+    <rect
+       height="21.044893"
+       width="2.8273764"
+       y="16.700802"
+       x="1.6548979"
+       id="rect46"
+       style="fill:#2c2cff;fill-opacity:1" />
+    <rect
+       transform="scale(-1,1)"
+       height="21.044893"
+       width="2.8273764"
+       y="16.700802"
+       x="-44.06535"
+       id="rect48"
+       style="fill:#2c2cff;fill-opacity:1" />
+    <g
+       transform="matrix(2.8273762,0,0,2.1044893,1.6548979,6.1038224)"
+       id="g50">
+      <rect
+         height="16"
+         width="16"
+         y="0"
+         x="0"
+         id="rect52"
+         style="fill-opacity:0" />
+    </g>
+    <path
+       d="m 17.319846,14.084062 2.9e-5,-10.5970739 2.827376,0 5.654752,5.3359462 2.8e-5,-5.3359462 2.827377,0 -2.9e-5,10.5970739 -2.827377,0 0,-2.104489 -5.654752,-5.3359466 -2.8e-5,7.4403396 -2.827472,0 z"
+       id="path54"
+       style="fill-rule:evenodd" />
   </g>
-  <path fill-rule="evenodd" d="m17.784 14.413 0.00003-11.076h2.9379l5.8758 5.5771 0.000029-5.5771h2.9379l-0.00003 11.076h-2.9379v-2.1996l-5.8758-5.5771-0.000029 7.7766h-2.938z"/>
- </g>
 </svg>

@@ -1,27 +1,157 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
- <defs>
-  <linearGradient id="a">
-   <stop stop-color="#ff7800" offset="0"/>
-   <stop stop-color="#fff" offset="1"/>
-  </linearGradient>
-  <filter id="e" color-interpolation-filters="sRGB">
-   <feGaussianBlur stdDeviation="1.1680352"/>
-  </filter>
-  <linearGradient id="f" y2="4.6406" xlink:href="#a" gradientUnits="userSpaceOnUse" x2="6.0964" gradientTransform="matrix(1.3965,0,0,1.3225,186.81,36.076)" y1="8.6836" x1="8.9893"/>
-  <linearGradient id="g" y2="4.6406" xlink:href="#a" gradientUnits="userSpaceOnUse" x2="6.0964" gradientTransform="matrix(1.3965,0,0,1.3225,171.73,36.076)" y1="8.6836" x1="8.9893"/>
- </defs>
- <rect fill-opacity="0" height="16" width="16" y="32.05" x="32.272"/>
- <g opacity=".37891" filter="url(#e)" transform="matrix(.95982 0 0 1.0323 2.8361 29.724)">
-  <path d="m22.832-17.789c-10.119 0-18.332 7.2315-18.332 16.142 0 8.9102 8.2129 16.142 18.332 16.142s18.332-7.2315 18.332-16.142c0-8.9102-8.2129-16.142-18.332-16.142zm0 4.6119c7.2282 0 13.094 5.1654 13.094 11.53 0 6.3644-5.8663 11.53-13.094 11.53-7.2282 0-13.094-5.1654-13.094-11.53 0-6.3644 5.8663-11.53 13.094-11.53z"/>
-  <path d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(2.3279,0,0,2.0497,19.34,-15.484)"/>
-  <path d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z" transform="matrix(2.3279,0,0,2.0497,3.6271,-15.484)"/>
- </g>
- <g transform="translate(-160.2,-21)">
-  <path fill="#00009b" d="m183.25 28.339c-9.7128 0-17.596 7.4654-17.596 16.664 0 9.1984 7.8828 16.664 17.596 16.664 9.7128 0 17.596-7.4654 17.596-16.664 0-9.1984-7.8828-16.664-17.596-16.664zm0 4.7611c6.9377 0 12.568 5.3324 12.568 11.903 0 6.5703-5.6306 11.903-12.568 11.903-6.9377 0-12.568-5.3324-12.568-11.903 0-6.5703 5.6306-11.903 12.568-11.903z"/>
-  <path d="m203.36 45.003a5.0275 4.7613 0 0 1 -10.055 0 5.0275 4.7613 0 1 1 10.055 0z"/>
-  <path fill="url(#f)" d="m201.47 45.003a3.1421 2.9757 0 0 1 -6.2842 0 3.1421 2.9757 0 1 1 6.2842 0z"/>
-  <path d="m188.28 45.003a5.0275 4.7613 0 0 1 -10.055 0 5.0275 4.7613 0 1 1 10.055 0z"/>
-  <path fill="url(#g)" d="m186.39 45.003a3.1421 2.9757 0 0 1 -6.2842 0 3.1421 2.9757 0 1 1 6.2842 0z"/>
- </g>
- <rect fill-opacity="0" height="16" width="16" y="33.55" x="10.022"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="48"
+   width="48"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="add_circle.svg">
+  <metadata
+     id="metadata42">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="949"
+     id="namedview40"
+     showgrid="false"
+     inkscape:zoom="4.9166667"
+     inkscape:cx="24"
+     inkscape:cy="23.59322"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <defs
+     id="defs4">
+    <linearGradient
+       id="a">
+      <stop
+         stop-color="#ff7800"
+         offset="0"
+         id="stop7" />
+      <stop
+         stop-color="#fff"
+         offset="1"
+         id="stop9" />
+    </linearGradient>
+    <filter
+       id="e"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         stdDeviation="1.1680352"
+         id="feGaussianBlur12" />
+    </filter>
+    <linearGradient
+       id="f"
+       y2="4.6406"
+       xlink:href="#a"
+       gradientUnits="userSpaceOnUse"
+       x2="6.0964"
+       gradientTransform="matrix(1.3965,0,0,1.3225,186.81,36.076)"
+       y1="8.6836"
+       x1="8.9893" />
+    <linearGradient
+       id="g"
+       y2="4.6406"
+       xlink:href="#a"
+       gradientUnits="userSpaceOnUse"
+       x2="6.0964"
+       gradientTransform="matrix(1.3965,0,0,1.3225,171.73,36.076)"
+       y1="8.6836"
+       x1="8.9893" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#a"
+       id="linearGradient2851"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.3965,0,0,1.3225,11.53,15.076)"
+       x1="8.9893"
+       y1="8.6836"
+       x2="6.0964"
+       y2="4.6406" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#a"
+       id="linearGradient2855"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.3965,0,0,1.3225,26.61,15.076)"
+       x1="8.9893"
+       y1="8.6836"
+       x2="6.0964"
+       y2="4.6406" />
+  </defs>
+  <rect
+     fill-opacity="0"
+     height="16"
+     width="16"
+     y="32.05"
+     x="32.272"
+     id="rect16" />
+  <g
+     opacity=".37891"
+     filter="url(#e)"
+     transform="matrix(.95982 0 0 1.0323 2.8361 29.724)"
+     id="g18">
+    <path
+       d="m22.832-17.789c-10.119 0-18.332 7.2315-18.332 16.142 0 8.9102 8.2129 16.142 18.332 16.142s18.332-7.2315 18.332-16.142c0-8.9102-8.2129-16.142-18.332-16.142zm0 4.6119c7.2282 0 13.094 5.1654 13.094 11.53 0 6.3644-5.8663 11.53-13.094 11.53-7.2282 0-13.094-5.1654-13.094-11.53 0-6.3644 5.8663-11.53 13.094-11.53z"
+       id="path20" />
+    <path
+       d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z"
+       transform="matrix(2.3279,0,0,2.0497,19.34,-15.484)"
+       id="path22" />
+    <path
+       d="m10.5 6.75a2.25 2.25 0 1 1 -4.5 0 2.25 2.25 0 1 1 4.5 0z"
+       transform="matrix(2.3279,0,0,2.0497,3.6271,-15.484)"
+       id="path24" />
+  </g>
+  <path
+     style="fill:#2c2cff;fill-opacity:1"
+     id="path28"
+     d="m 23.05,7.339 c -9.7128,0 -17.596,7.4654 -17.596,16.664 0,9.1984 7.8828,16.664 17.596,16.664 9.7128,0 17.596,-7.4654 17.596,-16.664 0,-9.1984 -7.8828,-16.664 -17.596,-16.664 z m 0,4.7611 c 6.9377,0 12.568,5.3324 12.568,11.903 0,6.5703 -5.6306,11.903 -12.568,11.903 -6.9377,0 -12.568,-5.3324 -12.568,-11.903 0,-6.5703 5.6306,-11.903 12.568,-11.903 z" />
+  <path
+     id="path30"
+     d="m 43.16,24.003 a 5.0275,4.7613 0 0 1 -10.055,0 5.0275,4.7613 0 1 1 10.055,0 z" />
+  <path
+     style="fill:url(#linearGradient2855)"
+     id="path32"
+     d="m 41.27,24.003 a 3.1421,2.9757 0 0 1 -6.2842,0 3.1421,2.9757 0 1 1 6.2842,0 z" />
+  <path
+     id="path34"
+     d="m 28.08,24.003 a 5.0275,4.7613 0 0 1 -10.055,0 5.0275,4.7613 0 1 1 10.055,0 z" />
+  <path
+     style="fill:url(#linearGradient2851)"
+     id="path36"
+     d="m 26.19,24.003 a 3.1421,2.9757 0 0 1 -6.2842,0 3.1421,2.9757 0 1 1 6.2842,0 z" />
+  <rect
+     fill-opacity="0"
+     height="16"
+     width="16"
+     y="33.55"
+     x="10.022"
+     id="rect38" />
 </svg>

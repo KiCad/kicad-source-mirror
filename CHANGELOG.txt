@@ -4,6 +4,17 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-sept-13 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+  PCBNew locate code refactoring.
+
+  * Move various locate functions into the appropriate board item object.
+  * Unified best zoom for all frames derived from PCB_BASE_FRAME.
+  * Remove track.cpp as it is no longer needed.
+  * Dead code removal.
+  * Remove scary frame window pointer member from board item objects.
+  * Add draw bounding box to gerber draw item for debugging purposes.
+
 2011-Sept-07, UPDATE Andrey Fedorushkov <andrf@mail.ru>
 ================================================================================
 Pcbnew:

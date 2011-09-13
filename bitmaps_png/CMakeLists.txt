@@ -126,6 +126,7 @@ set( BMAPS_MID
     axis3d_right
     axis3d_top
     axis3d
+    bom
     book
     break_bus
     break_line
@@ -519,9 +520,6 @@ set( BMAPS_BIG
 # @todo keep these in sync with .bzrignore
 set( TMP_DIR   "${CMAKE_CURRENT_SOURCE_DIR}/tmp" )
 
-set( BKGND background_metal )
-
-
 function( svg2png inputFile outFile pngWidth pngHeight )
     #message( "svg2png( inputFile: ${inputFile} outFile: ${outFile} pngWidth: ${pngWidth} pngHeight: ${pngHeight})")
 
@@ -529,7 +527,7 @@ function( svg2png inputFile outFile pngWidth pngHeight )
 
     add_custom_command(
         OUTPUT ${outFile}
-        COMMAND ${Inkscape_EXECUTABLE} -f ${inputFile} -e ${outFile} -w ${pngWidth} -h ${pngHeight} > ${TMP_DIR}/${bmn}.inkscape.log
+        COMMAND ${Inkscape_EXECUTABLE} --export-area-snap -f ${inputFile} -e ${outFile} -w ${pngWidth} -h ${pngHeight} > ${TMP_DIR}/${bmn}.inkscape.log
         DEPENDS ${inputFile}
         COMMENT "Creating ${pngHeight} pixel tall ${outFile}"
         )
@@ -537,8 +535,8 @@ endfunction()
 
 
 # Function png2png
-# converts a basic PNG to one with a composited background image behind it.
-function( png2png inputFile bkgndFile outFile )
+# converts a basic PNG to one
+function( png2png inputFile outFile )
 
     get_filename_component( bmn ${inputFile} NAME_WE )
 
@@ -548,9 +546,9 @@ function( png2png inputFile bkgndFile outFile )
         # pngcrush all icons without background to remove any extraneous tEXt records.
         COMMAND ${pngcrush_EXECUTABLE} -rem alla ${inputFile} ${outFile} > ${TMP_DIR}/${bmn}.pngcrush.log
 
-        DEPENDS ${inputFile} ${bkgndFile}
+        DEPENDS ${inputFile}
 
-        COMMENT "Creating composited ${outFile}"
+        COMMENT "Creating ${outFile}"
         )
 endfunction()
 
@@ -578,7 +576,6 @@ function( bitmap_dir pngWidth pngHeight bmapList )
 
     set( cppDir "${CMAKE_CURRENT_SOURCE_DIR}/cpp_${pngHeight}" )
     set( pngDir "${CMAKE_CURRENT_SOURCE_DIR}/png_${pngHeight}" )
-    set( bkgndPng "${pngDir}/${BKGND}.png" )
 
     file( MAKE_DIRECTORY ${pngDir} ${cppDir} )
 
@@ -586,7 +583,6 @@ function( bitmap_dir pngWidth pngHeight bmapList )
     file( MAKE_DIRECTORY ${TMP_DIR} )
 
     #svg2png( inputFile outFile pngWidth pngHeight )
-    svg2png( ${CMAKE_CURRENT_SOURCE_DIR}/${BKGND}.svg ${bkgndPng} ${pngWidth} ${pngHeight} )
 
     foreach( bmn ${bmapList} )
         set( pngFile "${pngDir}/${bmn}.png" )
@@ -596,8 +592,8 @@ function( bitmap_dir pngWidth pngHeight bmapList )
         #svg2png( inputFile outFile pngWidth pngHeight )
         svg2png( ${CMAKE_CURRENT_SOURCE_DIR}/sources/${bmn}.svg ${tmpFile} ${pngWidth} ${pngHeight} )
 
-        #png2png( inputFile bkgndFile outFile )
-        png2png( ${tmpFile} ${bkgndPng} ${pngFile} )
+        #png2png( inputFile outFile )
+        png2png( ${tmpFile} ${pngFile} )
 
         #png2cpp( inputFile outFile )
         png2cpp( ${pngFile} ${cppFile} )

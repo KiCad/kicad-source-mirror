@@ -1,11 +1,105 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1">
- <g transform="translate(0,24)">
-  <g transform="matrix(2.0888,0,0,2.1566,94.067,-36.212)">
-   <path d="m-45 11.656h23" stroke="#000" stroke-width="1.6241px" fill="none"/>
-   <path d="m-36.594 5.75v22" stroke="#000" stroke-width="1.5315px" fill="none"/>
-   <path d="m-36 12.25 12.308 4.0625-2.8658 3.0398 3.0867 3.2835-2.529 2.614-3.077-3.25-3.0769 3.25z"/>
-   <path d="m-29.776 11.656h-13.83" stroke="#07c022" stroke-width="1.56" fill="none"/>
-   <path d="m-36.609 19.602v-13.83" stroke="#07c022" stroke-width="1.5443" fill="none"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="48"
+   width="48"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="cursor_shape.svg">
+  <metadata
+     id="metadata22">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs20">
+    <radialGradient
+       id="d"
+       gradientUnits="userSpaceOnUse"
+       cy="24.149"
+       cx="17.813999"
+       gradientTransform="matrix(-4.378,0,4.8624e-8,3.6749,144.59,-83.252)"
+       r="9.125">
+      <stop
+         stop-color="#fff"
+         offset="0"
+         id="stop12" />
+      <stop
+         stop-color="#b6b6b6"
+         offset="1"
+         id="stop14" />
+    </radialGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#d"
+       id="radialGradient2832"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-3.0341547,0.54803047,0.43224387,2.3931056,67.922824,-48.292071)"
+       cx="17.813999"
+       cy="24.149"
+       r="9.125" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="949"
+     id="namedview18"
+     showgrid="false"
+     inkscape:zoom="3.4766084"
+     inkscape:cx="-2.9003266"
+     inkscape:cy="4.2735932"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <path
+     d="m 0.071,12.92533 48.0424,0"
+     id="path8"
+     style="fill:none;stroke:#000000;stroke-width:3.44703746000000022px;opacity:0.69105691" />
+  <path
+     d="m 17.629453,0.18845 0,47.4452"
+     id="path10"
+     style="fill:none;stroke:#000000;stroke-width:3.25050044000000016px;opacity:0.69105691" />
+  <path
+     d="m 31.870891,12.92533 -28.8881038,0"
+     id="path14"
+     style="fill:none;stroke:#07c022;stroke-width:3.31098961999999997;opacity:0.69105691" />
+  <path
+     d="m 17.598121,30.061673 0,-29.8257778"
+     id="path16"
+     style="fill:none;stroke:#07c022;stroke-width:3.27766752000000006;opacity:0.69105691" />
+  <g
+     id="g2828"
+     transform="matrix(0.99683754,-0.07946648,0.07946648,0.99683754,-4.9250569,-1.3939838)">
+    <path
+       style="fill:url(#radialGradient2832);fill-rule:evenodd;stroke:#555753;stroke-width:1.05779564;stroke-linejoin:round"
+       d="m 22.629713,17.341975 22.322619,12.056387 -8.851161,1.842799 c 0,0 4.880768,5.700014 4.880768,5.700014 1.659195,2.625463 -3.312954,4.620498 -4.557384,2.651408 l -4.593917,-5.751826 -5.309652,6.687479 -3.891577,-23.185803 z"
+       id="path20" />
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:1.39947152"
+       d="m 24.44749,19.814459 16.988684,9.115574 -7.158524,1.815683 5.59315,6.55278 c 1.083306,1.269193 -1.500127,2.496755 -2.348595,1.464279 l -5.593879,-6.806834 -4.59178,5.588348 z"
+       id="path22" />
   </g>
- </g>
 </svg>

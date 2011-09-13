@@ -48,6 +48,7 @@ set(BITMAP_SRCS
     axis3d_right.xpm
     axis3d_top.xpm
     axis3d.xpm
+    bom.xpm
     book.xpm
     break_bus.xpm
     break_line.xpm
