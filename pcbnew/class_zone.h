@@ -12,6 +12,10 @@
 #include "class_zone_setting.h"
 
 
+#define CORNER_MIN_DIST 100   // distance (in internal units) to detect a corner in a zone outline
+#define EDGE_MIN_DIST   200   // distance (in internal units) to detect a zone outline
+
+
 /* a small class used when filling areas with segments */
 class SEGMENT
 {
@@ -246,21 +250,23 @@ public:
 
     /**
      * Function HitTestForCorner
-     * tests if the given wxPoint near a corner
+     * tests if \a aPosition is with \a aDistance a zone corner.
      * Set m_CornerSelection to -1 if nothing found, or index of corner
      * @return true if found
-     * @param refPos : A wxPoint to test
+     * @param aPosition A wxPoint to test
+     * @param aMinDistance The minimum distance with \a aPosition that will still yield a hit.
      */
-    bool  HitTestForCorner( const wxPoint& refPos );
+    bool HitTestForCorner( const wxPoint& aPosition, int aMinDistance = CORNER_MIN_DIST );
 
     /**
      * Function HitTestForEdge
      * tests if the given wxPoint is near a segment defined by 2 corners.
      * Set m_CornerSelection to -1 if nothing found, or index of the starting corner of vertice
      * @return true if found
-     * @param refPos : A wxPoint to test
+     * @param aPosition A wxPoint to test
+     * @param aMinDistance The minimum distance with \a aPosition that will still yield a hit.
      */
-    bool  HitTestForEdge( const wxPoint& refPos );
+    bool HitTestForEdge( const wxPoint& aPosition, int aMinDistance = EDGE_MIN_DIST );
 
     /**
      * Function HitTest (overlayed)

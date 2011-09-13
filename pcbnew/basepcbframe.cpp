@@ -105,32 +105,48 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 double PCB_BASE_FRAME::BestZoom( void )
 {
     int    dx, dy;
-    double ii, jj;
+    double zx, zy;
     wxSize size;
+    wxPoint center;
 
-    if( m_Pcb == NULL )
-        return 32.0;
+    if( m_Pcb != NULL && m_Pcb->ComputeBoundingBox() )
+    {
+        dx = m_Pcb->m_BoundaryBox.GetWidth();
+        dy = m_Pcb->m_BoundaryBox.GetHeight();
+        center = m_Pcb->m_BoundaryBox.Centre();
+    }
+    else
+    {
+        if( m_Draw_Sheet_Ref )
+        {
+            dx = GetScreen()->ReturnPageSize().x;
+            dy = GetScreen()->ReturnPageSize().y;
+        }
+        else
+        {
+            dx = GetScreen()->ReturnPageSize().x;
+            dy = GetScreen()->ReturnPageSize().y;
+        }
 
-    m_Pcb->ComputeBoundingBox();
+        center = wxPoint( dx / 2, dy / 2 );
+    }
 
-    dx = m_Pcb->m_BoundaryBox.GetWidth();
-    dy = m_Pcb->m_BoundaryBox.GetHeight();
     size = DrawPanel->GetClientSize();
 
     if( size.x )
-        ii = (double)(dx + ( size.x / 2) ) / (double) size.x;
+        zx = (double) dx / (double) size.x;
     else
-        ii = 32.0;
+        zx = 32.0;
 
     if ( size.y )
-        jj = (double)( dy + (size.y / 2) ) / (double) size.y;
+        zy = (double) dy / (double) size.y;
     else
-        jj = 32.0;
+        zy = 32.0;
 
-    double bestzoom = MAX( ii, jj );
-    GetScreen()->SetScrollCenterPosition( m_Pcb->m_BoundaryBox.Centre() );
+    double bestzoom = MAX( zx, zy );
+    GetScreen()->SetScrollCenterPosition( center );
 
-    return bestzoom ;
+    return bestzoom;
 }
 
 

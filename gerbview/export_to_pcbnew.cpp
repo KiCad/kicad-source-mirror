@@ -47,7 +47,7 @@ GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME * aFrame, FILE * aFile 
 {
     m_gerbview_frame = aFrame;
     m_file = aFile;
-    m_pcb = new BOARD( NULL, m_gerbview_frame );
+    m_pcb = new BOARD( NULL );
 }
 
 GBR_TO_PCB_EXPORTER::~GBR_TO_PCB_EXPORTER()

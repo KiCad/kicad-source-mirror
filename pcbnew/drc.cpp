@@ -411,7 +411,7 @@ void DRC::testPad2Pad()
 {
     std::vector<D_PAD*> sortedPads;
 
-    CreateSortedPadListByXCoord( m_pcb, &sortedPads );
+    m_pcb->CreateSortedPadListByXCoord( &sortedPads );
 
     // find the max size of the pads (used to stop the test)
     int max_size = 0;
@@ -420,7 +420,8 @@ void DRC::testPad2Pad()
     {
         D_PAD* pad = sortedPads[i];
 
-        if( pad->m_ShapeMaxRadius > max_size )       // m_ShapeMaxRadius is the radius value of the circle containing the pad
+        // m_ShapeMaxRadius is the radius value of the circle containing the pad.
+        if( pad->m_ShapeMaxRadius > max_size )
             max_size = pad->m_ShapeMaxRadius;
     }
 

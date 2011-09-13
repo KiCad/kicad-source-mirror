@@ -139,6 +139,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
     // this is due to negative objects (drawn using background color) that create artefacct
     // on other images when drawn on screen
     bool useBufferBitmap = false;
+
     if( (aDrawMode == GR_COPY) || ( aDrawMode == GR_OR ) )
         useBufferBitmap = true;
 
@@ -173,9 +174,11 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
     bool doBlit = false; // this flag requests an image transfert to actual screen when true.
 
     bool end = false;
+
     for( int layer = 0; !end; layer++ )
     {
-        int active_layer = ( (GERBVIEW_FRAME*) m_PcbFrame )->getActiveLayer();
+        int active_layer = ( (GERBVIEW_FRAME*) aPanel->GetParent() )->getActiveLayer();
+
         if( layer == active_layer ) // active layer will be drawn after other layers
             continue;
 
@@ -205,6 +208,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
                 layerDC.SetDeviceOrigin(0,0);
                 layerDC.SetLogicalOrigin( 0, 0 );
                 layerDC.SetUserScale( 1, 1 );
+
                 if( aDrawMode == GR_COPY )
                 {
                     // Use the layer bitmap itself as a mask when blitting.  The bitmap
@@ -212,8 +216,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
                     layerDC.SelectObject( wxNullBitmap );
                     layerBitmap->SetMask( new wxMask( *layerBitmap, bgColor ) );
                     layerDC.SelectObject( *layerBitmap );
-                    screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight,
-                                   &layerDC, 0, 0, wxCOPY, true );
+                    screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxCOPY, true );
                 }
                 else if( aDrawMode == GR_OR )
                 {
@@ -224,9 +227,9 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
                     // the cpu cycles needed to create the monochromatic bitmap above, and
                     // the extra time needed to do bit indexing into the monochromatic bitmap
                     // on the blit above.
-                    screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight,
-                                   &layerDC, 0, 0, wxOR );
+                    screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxOR );
                 }
+
                 // Restore actual values and clear bitmpap for next drawing
                 layerDC.SetDeviceOrigin( dev_org.x, dev_org.y );
                 layerDC.SetLogicalOrigin( logical_org.x, logical_org.y );
@@ -256,7 +259,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
 
         int dcode_highlight = 0;
 
-        if( layer == ( (GERBVIEW_FRAME*) m_PcbFrame )->getActiveLayer() )
+        if( layer == ( (GERBVIEW_FRAME*) aPanel->GetParent() )->getActiveLayer() )
             dcode_highlight = gerber->m_Selected_Tool;
 
         int layerdrawMode = GR_COPY;
@@ -277,6 +280,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
 
             if( dcode_highlight && dcode_highlight == gerb_item->m_DCode )
                 drawMode |= GR_SURBRILL;
+
             gerb_item->Draw( aPanel, plotDC, drawMode );
             doBlit = true;
         }
@@ -297,14 +301,12 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
             layerDC.SelectObject( wxNullBitmap );
             layerBitmap->SetMask( new wxMask( *layerBitmap, bgColor ) );
             layerDC.SelectObject( *layerBitmap );
-            screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight,
-                           &layerDC, 0, 0, wxCOPY, true );
+            screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxCOPY, true );
 
         }
         else if( aDrawMode == GR_OR )
         {
-            screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight,
-                           &layerDC, 0, 0, wxOR );
+            screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxOR );
         }
     }
 

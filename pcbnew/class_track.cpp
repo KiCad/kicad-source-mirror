@@ -152,14 +152,15 @@ TRACK::TRACK( const TRACK& Source ) :
 }
 
 
-/*  Because of the way SEGVIA and SEGZONE are derived from TRACK and because there are
- *  virtual functions being used, we can no longer simply copy a TRACK and
- *  expect it to be a via or zone.  We must construct a true SEGVIA or SEGZONE so its constructor
- *  can initialize the virtual function table properly.  This factory type of
- *  function called Copy() can duplicate either a TRACK, SEGVIA, or SEGZONE.
- */
 TRACK* TRACK::Copy() const
 {
+    /* Because of the way SEGVIA and SEGZONE are derived from TRACK and because
+     * there are virtual functions being used, we can no longer simply copy a
+     * TRACK and expect it to be a via or zone.  We must construct a true SEGVIA
+     * or SEGZONE so its constructor can initialize the virtual function table
+     * properly.  This factory type of function called Copy() can duplicate either
+     * a TRACK, SEGVIA, or SEGZONE.
+     */
     if( Type() == TYPE_TRACK )
         return new TRACK( *this );
 
@@ -173,30 +174,14 @@ TRACK* TRACK::Copy() const
 }
 
 
-/**
- * Function GetClearance (virtual)
- * returns the clearance in internal units.  If \a aItem is not NULL then the
- * returned clearance is the greater of this object's clearance and
- * aItem's clearance.  If \a aItem is NULL, then this objects
- * clearance
- * is returned.
- * @param aItem is another BOARD_CONNECTED_ITEM or NULL
- * @return int - the clearance in internal units.
- */
 int TRACK::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 {
-    // Currently tracks have no specific clearance parameter
-    // on a per track or per segment basis.
-    // the NETCLASS clearance is used
+    // Currently tracks have no specific clearance parameter on a per track or per
+    // segment basis.  The NETCLASS clearance is used
     return BOARD_CONNECTED_ITEM::GetClearance( aItem );
 }
 
 
-/**
- * Function GetDrillValue
- * calculate the drill value for vias (m_Drill if > 0, or default drill value for the Netclass
- * @return real drill_value
- */
 int TRACK::GetDrillValue() const
 {
     if( Type() != TYPE_VIA )
@@ -215,7 +200,6 @@ int TRACK::GetDrillValue() const
 }
 
 
-// return true if segment length = 0
 bool TRACK::IsNull()
 {
     if( ( Type() != TYPE_VIA ) && ( m_Start == m_End ) )
@@ -225,24 +209,17 @@ bool TRACK::IsNull()
 }
 
 
-/* Return:
- *  STARTPOINT if point if near (dist = min_dist) star point
- *  ENDPOINT  if point if near (dist = min_dist) end point
- *  STARTPOINT|ENDPOINT  if point if near (dist = min_dist) both ends
- *  0 if no
- *  if min_dist < 0: min_dist = track_width/2
- */
-int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
+int TRACK::IsPointOnEnds( const wxPoint& aPosition, int aDistance )
 {
     int result = 0;
 
-    if( min_dist < 0 )
-        min_dist = m_Width / 2;
+    if( aDistance < 0 )
+        aDistance = m_Width / 2;
 
-    int dx = m_Start.x - point.x;
-    int dy = m_Start.y - point.y;
+    int dx = m_Start.x - aPosition.x;
+    int dy = m_Start.y - aPosition.y;
 
-    if( min_dist == 0 )
+    if( aDistance == 0 )
     {
         if( (dx == 0) && (dy == 0 ) )
             result |= STARTPOINT;
@@ -251,14 +228,14 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
     {
         double dist = hypot( (double)dx, (double) dy );
 
-        if( min_dist >= (int) dist )
+        if( aDistance >= (int) dist )
             result |= STARTPOINT;
     }
 
-    dx = m_End.x - point.x;
-    dy = m_End.y - point.y;
+    dx = m_End.x - aPosition.x;
+    dy = m_End.y - aPosition.y;
 
-    if( min_dist == 0 )
+    if( aDistance == 0 )
     {
         if( (dx == 0) && (dy == 0 ) )
             result |= ENDPOINT;
@@ -267,7 +244,7 @@ int TRACK::IsPointOnEnds( const wxPoint& point, int min_dist )
     {
         double dist = hypot( (double) dx, (double) dy );
 
-        if( min_dist >= (int) dist )
+        if( aDistance >= (int) dist )
             result |= ENDPOINT;
     }
 
@@ -331,12 +308,6 @@ EDA_RECT TRACK::GetBoundingBox() const
 }
 
 
-/**
- * Function Rotate
- * Rotate this object.
- * @param aRotCentre - the rotation point.
- * @param aAngle - the rotation angle in 0.1 degree.
- */
 void TRACK::Rotate( const wxPoint& aRotCentre, int aAngle )
 {
     RotatePoint( &m_Start, aRotCentre, aAngle );
@@ -344,29 +315,18 @@ void TRACK::Rotate( const wxPoint& aRotCentre, int aAngle )
 }
 
 
-/**
- * Function Flip
- * Flip this object, i.e. change the board side for this object
- * @param aCentre - the rotation point.
- */
 void TRACK::Flip( const wxPoint& aCentre )
 {
     m_Start.y = aCentre.y - (m_Start.y - aCentre.y);
     m_End.y   = aCentre.y - (m_End.y - aCentre.y);
 
-    if( Type() == TYPE_VIA )
-    {
-        // Huh?  Wouldn't it be better to us Type() != VIA and get rid of these brackets?
-    }
-    else
+    if( Type() != TYPE_VIA )
     {
         SetLayer( ChangeSideNumLayer( GetLayer() ) );
     }
 }
 
 
-// see class_track.h
-// SEGVIA and SEGZONE inherit this version
 SEARCH_RESULT TRACK::Visit( INSPECTOR* inspector, const void* testData,
                             const KICAD_T scanTypes[] )
 {
@@ -400,9 +360,6 @@ bool SEGVIA::IsOnLayer( int layer_number ) const
 }
 
 
-/* Return the mask layer for this.
- *  for a via, there is more than one layer used
- */
 int TRACK::ReturnMaskLayer()
 {
     if( Type() == TYPE_VIA )
@@ -435,14 +392,6 @@ int TRACK::ReturnMaskLayer()
 }
 
 
-/** Set the .m_Layer member param:
- *  For a via m_Layer contains the 2 layers :
- * top layer and bottom layer used by the via.
- * The via connect all layers from top layer to bottom layer
- * 4 bits for the first layer and 4 next bits for the secaon layer
- * @param top_layer = first layer connected by the via
- * @param bottom_layer = last layer connected by the via
- */
 void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 {
     if( Shape() == VIA_THROUGH )
@@ -458,13 +407,6 @@ void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 }
 
 
-/**
- * Function ReturnLayerPair
- * Return the 2 layers used by  the via (the via actually uses
- * all layers between these 2 layers)
- *  @param top_layer = pointer to the first layer (can be null)
- *  @param bottom_layer = pointer to the last layer (can be null)
- */
 void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
 {
     int b_layer = LAYER_N_BACK;
@@ -506,9 +448,6 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
 }
 
 
-/* Search (within the track linked list) the first segment matching the netcode
- * ( the linked list is always sorted by net codes )
- */
 TRACK* TRACK::GetStartNetCode( int NetCode )
 {
     TRACK* Track = this;
@@ -538,9 +477,6 @@ TRACK* TRACK::GetStartNetCode( int NetCode )
 }
 
 
-/* Search (within the track linked list) the last segment matching the netcode
- * ( the linked list is always sorted by net codes )
- */
 TRACK* TRACK::GetEndNetCode( int NetCode )
 {
     TRACK* NextS, * Track = this;
@@ -760,6 +696,226 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
 }
 
 
+int TRACK::GetEndSegments( int aCount, TRACK** aStartTrack, TRACK** aEndTrack )
+{
+    TRACK* Track, * via, * segm, * TrackListEnd;
+    int    NbEnds, layerMask, ii, ok = 0;
+
+    if( aCount <= 1 )
+    {
+        *aStartTrack = *aEndTrack = this;
+        return 1;
+    }
+
+    /* Calculation of the limit analysis. */
+    *aStartTrack = *aEndTrack = NULL;
+    TrackListEnd = Track = this;
+    ii = 0;
+
+    for( ; ( Track != NULL ) && ( ii < aCount ); ii++, Track = Track->Next() )
+    {
+        TrackListEnd   = Track;
+        Track->m_Param = 0;
+    }
+
+    /* Calculate the extremes. */
+    NbEnds = 0;
+    Track = this;
+    ii = 0;
+
+    for( ; ( Track != NULL ) && ( ii < aCount ); ii++, Track = Track->Next() )
+    {
+        if( Track->Type() == TYPE_VIA )
+            continue;
+
+        layerMask = Track->ReturnMaskLayer();
+        via = GetVia( TrackListEnd, Track->m_Start, layerMask );
+
+        if( via )
+        {
+            layerMask |= via->ReturnMaskLayer();
+            via->SetState( BUSY, ON );
+        }
+
+        Track->SetState( BUSY, ON );
+        segm = GetTraceByEndPoint( this, TrackListEnd, Track->m_Start, layerMask );
+        Track->SetState( BUSY, OFF );
+
+        if( via )
+            via->SetState( BUSY, OFF );
+
+        if( segm == NULL )
+        {
+            switch( NbEnds )
+            {
+            case 0:
+                *aStartTrack = Track; NbEnds++;
+                break;
+
+            case 1:
+                int BeginPad, EndPad;
+                *aEndTrack = Track;
+
+                /* Swap ox, oy with fx, fy */
+                BeginPad = Track->GetState( BEGIN_ONPAD );
+                EndPad   = Track->GetState( END_ONPAD );
+
+                Track->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
+
+                if( BeginPad )
+                    Track->SetState( END_ONPAD, ON );
+
+                if( EndPad )
+                    Track->SetState( BEGIN_ONPAD, ON );
+
+                EXCHG( Track->m_Start, Track->m_End );
+                EXCHG( Track->start, Track->end );
+                ok = 1;
+                return ok;
+            }
+        }
+
+        layerMask = Track->ReturnMaskLayer();
+        via = GetVia( TrackListEnd, Track->m_End, layerMask );
+
+        if( via )
+        {
+            layerMask |= via->ReturnMaskLayer();
+            via->SetState( BUSY, ON );
+        }
+
+        Track->SetState( BUSY, ON );
+        segm = GetTraceByEndPoint( this, TrackListEnd, Track->m_End, layerMask );
+        Track->SetState( BUSY, OFF );
+
+        if( via )
+            via->SetState( BUSY, OFF );
+
+        if( segm == NULL )
+        {
+            switch( NbEnds )
+            {
+            case 0:
+                int BeginPad, EndPad;
+                *aStartTrack = Track;
+                NbEnds++;
+
+                /* Swap ox, oy with fx, fy */
+                BeginPad = Track->GetState( BEGIN_ONPAD );
+                EndPad   = Track->GetState( END_ONPAD );
+
+                Track->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
+
+                if( BeginPad )
+                    Track->SetState( END_ONPAD, ON );
+
+                if( EndPad )
+                    Track->SetState( BEGIN_ONPAD, ON );
+
+                EXCHG( Track->m_Start, Track->m_End );
+                EXCHG( Track->start, Track->end );
+                break;
+
+            case 1:
+                *aEndTrack = Track;
+                ok = 1;
+                return ok;
+            }
+        }
+    }
+
+    return ok;
+}
+
+
+TRACK* TRACK::GetTrace( const wxPoint& aPosition, int aLayer )
+{
+    for( TRACK* track = this;   track;  track = track->Next() )
+    {
+        int layer = track->GetLayer();
+
+        if( track->GetState( BUSY | IS_DELETED ) )
+        {
+            // D( printf( "track %p is BUSY | IS_DELETED. BUSY=%d IS_DELETED=%d\n",
+            //            track, track->GetState( BUSY ),
+            //            track->GetState( IS_DELETED ) );)
+            continue;
+        }
+
+        if( GetBoard()->GetBoardDesignSettings()->IsLayerVisible( layer ) == false )
+            continue;
+
+        if( track->Type() == TYPE_VIA ) /* VIA encountered. */
+        {
+            if( track->HitTest( aPosition ) )
+                return track;
+        }
+        else
+        {
+            if( (g_TabOneLayerMask[layer] & aLayer) == 0 )
+                continue;              /* Segments on different layers. */
+
+            if( track->HitTest( aPosition ) )
+                return track;
+        }
+    }
+
+    return NULL;
+}
+
+
+TRACK* TRACK::GetVia( const wxPoint& aPosition, int aLayer )
+{
+    TRACK* track;
+
+    for( track = this;   track;  track = track->Next() )
+    {
+        if( track->Type() != TYPE_VIA )
+            continue;
+
+        if( !track->HitTest( aPosition ) )
+            continue;
+
+        if( track->GetState( BUSY | IS_DELETED ) )
+            continue;
+
+        if( aLayer < 0 )
+            break;
+
+        if( track->IsOnLayer( aLayer ) )
+            break;
+    }
+
+    return track;
+}
+
+
+TRACK* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, int aLayer )
+{
+    TRACK* trace;
+
+    for( trace = this; trace != NULL; trace = trace->Next() )
+    {
+        if( trace->Type() == TYPE_VIA )
+        {
+            if( aPosition == trace->m_Start )
+            {
+                if( trace->GetState( BUSY | IS_DELETED ) == 0 )
+                {
+                    if( aLayer & trace->ReturnMaskLayer() )
+                        return trace;
+                }
+            }
+        }
+
+        if( trace == aEndTrace )
+            break;
+    }
+
+    return NULL;
+}
+
+
 void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& aOffset )
 {
     int color;
@@ -830,17 +986,19 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
     else
     {
         GRCircle( &panel->m_ClipBox, DC, m_Start + aOffset,radius, 0, color );
+
         if ( fast_draw )
             return;
+
         GRCircle( &panel->m_ClipBox, DC, m_Start + aOffset, inner_radius, 0, color );
     }
 
     // Draw the via hole if the display option allows it
     if( DisplayOpt.m_DisplayViaMode != VIA_HOLE_NOT_SHOW )
     {
-        if( (DisplayOpt.m_DisplayViaMode == ALL_VIA_HOLE_SHOW)          // Display all drill holes requested
-           || ( (drill_radius > 0 ) && !IsDrillDefault() ) )             // Or Display non default holes requested
-        {
+        if( (DisplayOpt.m_DisplayViaMode == ALL_VIA_HOLE_SHOW) // Display all drill holes requested
+           || ( (drill_radius > 0 ) && !IsDrillDefault() ) )   // Or Display non default holes
+        {                                                      // requested.
             if( fillvia )
             {
                 bool blackpenstate = false;
@@ -977,7 +1135,6 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
 }
 
 
-// see class_track.h
 void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString msg;
@@ -991,7 +1148,7 @@ void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
     {
         int trackLen = 0;
         int lenDie = 0;
-        MarkTrace( board, this, NULL, &trackLen, &lenDie, false );
+        board->MarkTrace( this, NULL, &trackLen, &lenDie, false );
         msg = frame->CoordinateToString( trackLen );
         frame->AppendMsgPanel( _( "Track Len" ), msg, DARKCYAN );
 
@@ -1026,13 +1183,6 @@ void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
 }
 
 
-/*
- * Function DisplayInfoBase
- * has knowledge about the frame and how and where to put status information
- * about this object into the frame's message panel.
- * Display info about the track segment only, and does not calculate the full track length
- * @param frame A EDA_DRAW_FRAME in which to print status information.
- */
 void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
 {
     wxString msg;
@@ -1148,12 +1298,6 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param refPos A wxPoint to test
- * @return bool - true if a hit, else false
- */
 bool TRACK::HitTest( const wxPoint& refPos )
 {
     int radius = m_Width >> 1;
@@ -1180,13 +1324,6 @@ bool TRACK::HitTest( const wxPoint& refPos )
 }
 
 
-/**
- * Function HitTest (overlaid)
- * tests if the given EDA_RECT intersect this object.
- * For now, an ending point must be inside this rect.
- * @param refArea an EDA_RECT to test
- * @return bool - true if a hit, else false
- */
 bool TRACK::HitTest( EDA_RECT& refArea )
 {
     if( refArea.Contains( m_Start ) )
@@ -1231,13 +1368,6 @@ wxString TRACK::GetSelectMenuText() const
 
 #if defined(DEBUG)
 
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
 void TRACK::Show( int nestLevel, std::ostream& os )
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
@@ -1258,13 +1388,6 @@ void TRACK::Show( int nestLevel, std::ostream& os )
 }
 
 
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
 void SEGVIA::Show( int nestLevel, std::ostream& os )
 {
     const char* cp;

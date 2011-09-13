@@ -1019,14 +1019,15 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
          *  (only pad connection must be tested, track connection will be
          * tested by test_1_net_connexion() ) */
         int layerMask = g_TabOneLayerMask[Track->GetLayer()];
-        Track->start = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_Start, layerMask );
+        Track->start = GetBoard()->GetPadFast( Track->m_Start, layerMask );
 
         if( Track->start )
             Track->SetState( BEGIN_ONPAD, ON );
         else
             Track->SetState( BEGIN_ONPAD, OFF );
 
-        Track->end   = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_End, layerMask );
+        Track->end = GetBoard()->GetPadFast( Track->m_End, layerMask );
+
         if( Track->end )
             Track->SetState( END_ONPAD, ON );
         else
@@ -1053,148 +1054,4 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
         test_1_net_connexion( DC, current_net_code );
 
     return true;
-}
-
-
-/* Find the point "attachment" of the end of a trace.
- * This may be a TBP or another segment of the trace
- * Returns:
- * - Pointer to the PAD or:
- * - Pointer to the segment or:
- * - NULL
- * Parameters:
- * - position to test
- * - mask layers to be tested
- */
-BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
-{
-    for( MODULE* module = Pcb->m_Modules; module; module = module->Next() )
-    {
-        D_PAD* pad = Locate_Pads( module, pos, LayerMask );
-
-        if( pad )
-            return pad;
-    }
-
-    /* No pad has been located so check for a segment of the trace. */
-    TRACK* ptsegm = GetTrace( Pcb->m_Track, NULL, pos, LayerMask );
-
-    if( ptsegm == NULL )
-        ptsegm = GetTrace( Pcb, Pcb->m_Track, pos, LayerMask );
-
-    return ptsegm;
-}
-
-
-/* Create an intermediate point on a segment
- * aSegm segment is broken into 2 segments connecting point pX, pY
- * After insertion:
- *   The new segment starts from  to new point, and ends to initial aSegm ending point
- *   the old segment aSegm ends to new point
- * Returns:
- *   NULL if no new point (ie if aRefPoint already corresponded at one end of aSegm
- * or
- *   Pointer to the segment created
- *   Returns the exact value of aRefPoint
- * If aSegm points to a via:
- *   Returns the exact value of aRefPoint and a pointer to the via,
- *   But does not create extra point
- */
-TRACK* CreateLockPoint( BOARD* aPcb,
-                        wxPoint&           aRefPoint,
-                        TRACK*             aSegm,
-                        PICKED_ITEMS_LIST* aItemsListPicker )
-{
-    if( aSegm->m_Start == aRefPoint || aSegm->m_End == aRefPoint )
-        return NULL;
-
-    /* A via is a good lock point */
-    if( aSegm->Type() == TYPE_VIA )
-    {
-        aRefPoint = aSegm->m_Start;
-        return aSegm;
-    }
-
-    /* Calculation coordinate of intermediate point relative to
-     * the start point of aSegm
-     */
-     wxPoint delta = aSegm->m_End - aSegm->m_Start;
-
-    // Not yet in use:
-#if 0
-    int ox, oy, fx, fy;
-
-    if( aRefSegm )
-    {
-        ox = aRefSegm->m_Start.x - aSegm->m_Start.x;
-        oy = aRefSegm->m_Start.y - aSegm->m_Start.y;
-        fx = aRefSegm->m_End.x - aSegm->m_Start.x;
-        fy = aRefSegm->m_End.y - aSegm->m_Start.y;
-    }
-#endif
-
-    // calculate coordinates of aRefPoint relative to aSegm->m_Start
-    wxPoint newPoint = aRefPoint - aSegm->m_Start;
-    // newPoint must be on aSegm:
-    // Ensure newPoint.y/newPoint.y = delta.y/delta.x
-    if( delta.x == 0 )
-        newPoint.x = 0;         /* horizontal segment*/
-    else
-        newPoint.y = wxRound(( (double)newPoint.x * delta.y ) / delta.x);
-
-    /* Create the intermediate point (that is to say creation of a new
-     * segment, beginning at the intermediate point.
-     */
-    newPoint.x += aSegm->m_Start.x;
-    newPoint.y += aSegm->m_Start.y;
-
-    TRACK* newTrack = aSegm->Copy();
-
-    if( aItemsListPicker )
-    {
-        ITEM_PICKER picker( newTrack, UR_NEW );
-        aItemsListPicker->PushItem( picker );
-    }
-
-
-    DLIST<TRACK>* list = (DLIST<TRACK>*)aSegm->GetList();
-    wxASSERT( list );
-    list->Insert( newTrack, aSegm->Next() );
-
-    if( aItemsListPicker )
-    {
-        ITEM_PICKER picker( aSegm, UR_CHANGED );
-        picker.m_Link = aSegm->Copy();
-        aItemsListPicker->PushItem( picker );
-    }
-
-    /* Correct pointer at the end of the new segment. */
-    newTrack->end = aSegm->end;
-    newTrack->SetState( END_ONPAD, aSegm->GetState( END_ONPAD ) );
-
-    /* Set connections info relative to the new point
-    */
-
-    /* Old segment now ends at new point. */
-    aSegm->m_End = newPoint;
-    aSegm->end = newTrack;
-    aSegm->SetState( END_ONPAD, OFF );
-
-    /* The new segment begins at the new point. */
-    newTrack->m_Start = newPoint;
-    newTrack->start = aSegm;
-    newTrack->SetState( BEGIN_ONPAD, OFF );
-
-    D_PAD * pad = Locate_Pad_Connecte( aPcb, newTrack, START );
-
-    if ( pad )
-    {
-        newTrack->start = pad;
-        newTrack->SetState( BEGIN_ONPAD, ON );
-        aSegm->end = pad;
-        aSegm->SetState( END_ONPAD, ON );
-    }
-
-    aRefPoint = newPoint;
-    return newTrack;
 }

@@ -1,15 +1,10 @@
-/***********/
-/* protos.h */
-/***********/
+/**
+ * @file pcbnew/protos.h
+ */
 
 #ifndef PROTO_H
 #define PROTO_H
 
-
-#include <vector>
-
-
-class COMMAND;
 
 /**
  * Function SwapData
@@ -20,24 +15,6 @@ class COMMAND;
  * @param aImage = a copy of the item
  */
 void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage );
-
-
-/*******************/
-/* PAD_CONNECT.CPP */
-/*******************/
-
-class D_PAD;
-
-/**
- * Function CreateSortedPadListByXCoord
- * first empties then fills the vector with all pads and sorts them by
- * increasing x coordinate.  The vector only holds pointers to the pads and
- * those pointers are only references to pads which are owned by the BOARD
- * through other links.
- * @param aBoard Which board to gather pads from.
- * @param aVector Where to put the pad pointers.
- */
-void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector );
 
 
 /***************/
@@ -66,31 +43,6 @@ void DrawTraces( EDA_DRAW_PANEL* panel,
 /* LOCATE.CPP : */
 /****************/
 
-/* Find a pad by it's name om the module. */
-TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer = -1 );
-
-/**
- * Function Locate_Via_Area
- * finds the first SEGVIA which covers the given aPos with a matching layer.
- * @param aStart The starting TRACK or SEGVIA in the BOARD's list.
- * @param aPos The wxPoint to HitTest() against.
- * @param aLayer The layer to match, pass -1 for a don't care.
- * @return TRACK* - actually a SEGVIA* if found, else NULL.
- */
-TRACK* Locate_Via_Area( TRACK* aStart, const wxPoint& aPos, int aLayer = ALL_LAYERS );
-
-/* Locates the center through the point x, y, on layer data
- * by masquelayer.
- * Search is done to address start_adr has end_adr (not included)
- */
-TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr, const wxPoint& pos, int masquelayer );
-
-/* Locates the center through the point x, y, on layer data
- * by masquelayer.
- * Search is done to address start_adr has end_adr (not included)
- */
-TRACK* GetTrace( TRACK* start_adr, TRACK* end_adr, const wxPoint& ref_pos, int masquelayer );
-
 /* Search for segment connected to the segment edge by
  * Ptr_piste:
  * If int = START, the point of beginning of the segment is used
@@ -99,86 +51,6 @@ TRACK* GetTrace( TRACK* start_adr, TRACK* end_adr, const wxPoint& ref_pos, int m
  * The search is limited to the area [... pt_base] pt_lim.
  */
 TRACK* GetConnectedTrace( TRACK* aTrace, TRACK* pt_base, TRACK* pt_lim, int extr );
-
-/*
- * 1 - Locate segment of track leading from the mouse.
- * 2 - Locate segment of track point by point.
- * Ref_pX, ref_pY.
- *
- * If layer <0 the layer is not tested.
- *
- * The search begins to address start_adresse
- */
-TRACK* GetTrace( BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos, int layer );
-
-/* Locate pad connected to the beginning or end of a segment
- * Input: pointer to the segment, and flag = START or END
- * Returns:
- * A pointer to the description of the patch if pad was found.
- * NULL pointer if pad was not found.
- */
-D_PAD* Locate_Pad_Connecte( BOARD* aPcb, TRACK* ptr_segment, int extr );
-
-/*
- * Locate pad pointed to by the coordinate ref_pX,, ref_pY or the current
- * cursor position, search done on all tracks.
- * Entry:
- * - Mouse coord (Curseur_X and Curseur_Y)
- * Or ref_pX, ref_pY
- * Returns:
- * Pointer to the pad if found
- * NULL pointer if pad not found
- */
-D_PAD* Locate_Any_Pad( BOARD* aPcb, const wxPoint& aPosition, int aLayerMask = ALL_LAYERS );
-
-/* Locate pad pointed to by the coordinate ref_pX,, ref_pY or the cursor
- * position of the current footprint.
- * Input:
- * - The module to search.
- * - Layer to search or -1 to search all layers.
- * Returns:
- * A pointer to the pad if found otherwise NULL.
- */
-D_PAD* Locate_Pads( MODULE* Module, const wxPoint& ref_pos, int layer );
-
-/* Locate a footprint by its bounding rectangle. */
-MODULE* Locate_Prefered_Module( BOARD* aPcb, const wxPoint& aPosition, int aActiveLayer,
-                                bool aVisibleOnly, bool aIgnoreLocked = false );
-
-/* Locate a pad pointed to by the cursor on the footprint.
- * Module.
- * Input:
- * - Module to search.
- * Returns:
- * A pointer to the pad if found otherwise NULL.
- */
-D_PAD* Locate_Pads( MODULE* Module, int typeloc );
-
-/* Locate a trace segment at the current cursor position.
- * The search begins to address start_adresse.
- */
-TRACK* GetTrace( TRACK* start_adresse, int typeloc );
-
-DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc );
-
-/* Locate pad containing the point px, py, layer on layer.
- *
- * The list of pads must already exist.
- *
- * Returns:
- * Pointer to the pad if found, otherwise NULL.
- */
-D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int layer );
-
-/*
- * 1 - Locate trace segment at the current cursor position.
- * 2 - Locate trace segment at the given coordinates ref_pos.
- *
- * If layer == -1, check all layers.
- *
- * The search begins to address start_adresse
- */
-TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer );
 
 
 /*************/
@@ -204,83 +76,8 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
 
 
-/*****************/
-/* TRACK.CPP : */
-/*****************/
-
-/**
- * Function MarkTrace
- * marks a chain of track segments, connected to aTrackList.
- * Each segment is marked by setting the BUSY bit into m_Flags.  Electrical
- * continuity is detected by walking each segment, and finally the segments
- * are rearranged into a contiguous chain within the given list.
- *
- * @param aPcb = the board to analyze
- * @param aStartSegm - The first interesting segment within a list of track
- *                     segment of aPcb
- * @param aSegmCount = a pointer to an integer where to return the number of
- *                     interesting segments
- * @param aTrackLen = a pointer to an integer where to return the lenght of the
- *                    track
- * @param aLengthDie = a pointer to an integer where to return the extra lengths inside
- *                     integrated circuits from the pads connected to this track to the
- *                     die (if any)
- * @param aReorder = true for reorder the interesting segments (useful for
- *                   track edition/deletion) in this case the flag BUSY is
- *                   set (the user is responsible of flag clearing). False
- *                   for no reorder : useful when we want just calculate the
- *                   track length in this case, flags are reset
- * @return TRACK* the first in the chain of interesting segments.
- */
-TRACK* MarkTrace( BOARD* aPcb,
-                  TRACK* aStartSegm,
-                  int*   aSegmCount,
-                  int*   aTrackLen,
-                  int*   aLengthDie,
-                  bool   aReorder );
-
-/* Calculate end  coordinate of a trace.
- * Returns 1 if OK, 0 if trace looped back on itself.
- * The coord are returned StartTrack-> ox, oy
- * And EndTrack-> fx, fy if OK
- * The segments are drawn consecutively.
- */
-int ReturnEndsTrack( TRACK* RefTrack, int NbSegm, TRACK** StartTrack, TRACK** EndTrack );
-
-
 /***************/
 /***************/
-
-/* Routine to find the point "attachment" at the end of a trace.
- * This may be a PAD or another trace segment.
- * Returns:
- * - Pointer to the PAD or:
- * - Pointer to the segment or:
- * - NULL
- * Parameters:
- * - aPos - coordinate point test
- * ALayerMask of mask layers to be tested
- */
-BOARD_ITEM* LocateLockPoint( BOARD* aPcb, wxPoint aPos, int aLayerMask );
-
-/* Create an intermediate point on a segment
- * aSegm segment is broken into 2 segments connecting point pX, pY
- * After insertion:
- *   The new segment starts from  to new point, and ends to initial aSegm ending point
- *   the old segment aSegm ends to new point
- * Returns:
- *   NULL if no new point (ie if aRefPoint already corresponded at one end of aSegm
- * or
- *   Pointer to the segment created
- *   Returns the exact value of aRefPoint
- * If aSegm points to a via:
- *   Returns the exact value of aRefPoint and a pointer to the via,
- *   But does not create extra point
- */
-TRACK* CreateLockPoint( BOARD*             aPcb,
-                        wxPoint&           aRefPoint,
-                        TRACK*             aSegm,
-                        PICKED_ITEMS_LIST* aItemsListPicker );
 
 
 /****************/

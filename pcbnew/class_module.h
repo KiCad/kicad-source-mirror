@@ -299,6 +299,16 @@ public:
 
 
     /**
+     * Function GetPad
+     * return a pad at \a aPosition on \a aLayerMask
+     *
+     * @param aPosition A wxPoint object containing the position to hit test.
+     * @param aLayerMask A layer or layers to mask the hit test.
+     * @return A pointer to a D_PAD object if found or NULL if not found.
+     */
+    D_PAD* GetPad( const wxPoint& aPosition, int aLayerMask = ALL_LAYERS );
+
+    /**
      * Function Visit
      * should be re-implemented for each derived class in order to handle
      * all the types given by its member data.  Implementations should call

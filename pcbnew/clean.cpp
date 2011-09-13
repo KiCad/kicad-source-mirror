@@ -153,7 +153,7 @@ void clean_vias( BOARD * aPcb )
         if( track->m_Shape != VIA_THROUGH )
             continue;
 
-        D_PAD* pad = Fast_Locate_Pad_Connecte( aPcb, track->m_Start, ALL_CU_LAYERS );
+        D_PAD* pad = aPcb->GetPadFast( track->m_Start, ALL_CU_LAYERS );
 
         if( pad && (pad->m_layerMask & EXTERNAL_LAYERS) == EXTERNAL_LAYERS )    // redundant Via
         {
@@ -225,7 +225,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
 
         D_PAD* pad;
 
-        pad = Fast_Locate_Pad_Connecte( frame->GetBoard(), segment->m_Start, masklayer );
+        pad = frame->GetBoard()->GetPadFast( segment->m_Start, masklayer );
 
         if( pad != NULL )
         {
@@ -233,7 +233,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
             type_end |= START_ON_PAD;
         }
 
-        pad = Fast_Locate_Pad_Connecte( frame->GetBoard(), segment->m_End, masklayer );
+        pad = frame->GetBoard()->GetPadFast( segment->m_End, masklayer );
 
         if( pad != NULL )
         {
@@ -601,8 +601,7 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
     if( extremite == START )
     {
         /* We do not have a pad */
-        if( Fast_Locate_Pad_Connecte( Pcb, pt_ref->m_Start,
-                                      g_TabOneLayerMask[pt_ref->GetLayer()] ) )
+        if( Pcb->GetPadFast( pt_ref->m_Start, g_TabOneLayerMask[pt_ref->GetLayer()] ) )
             return NULL;
 
         /* change the common point coordinate of pt_segm tu use the other point
@@ -621,8 +620,7 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
     else    /* extremite == END */
     {
         /* We do not have a pad */
-        if( Fast_Locate_Pad_Connecte( Pcb, pt_ref->m_End,
-                                      g_TabOneLayerMask[pt_ref->GetLayer()] ) )
+        if( Pcb->GetPadFast( pt_ref->m_End, g_TabOneLayerMask[pt_ref->GetLayer()] ) )
             return NULL;
 
         /* change the common point coordinate of pt_segm tu use the other point
@@ -782,7 +780,7 @@ static void Gen_Raccord_Track( PCB_EDIT_FRAME* frame, wxDC* DC )
         {
             TRACK* newTrack;
 
-            other = GetTrace( other, segment->m_Start, layerMask );
+            other = frame->GetBoard()->GetTrace( other, segment->m_Start, layerMask );
 
             if( other == NULL )
                 break;
@@ -831,7 +829,7 @@ static void Gen_Raccord_Track( PCB_EDIT_FRAME* frame, wxDC* DC )
         {
             TRACK* newTrack;
 
-            other = GetTrace( other, segment->m_End, layerMask );
+            other = frame->GetBoard()->GetTrace( other, segment->m_End, layerMask );
 
             if( other == NULL )
                 break;
@@ -980,7 +978,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC )
         if( frame->DrawPanel->m_AbortRequest )
             return;
 
-        pad = Locate_Pad_Connecte( frame->GetBoard(), segment, START );
+        pad = frame->GetBoard()->GetPad( segment, START );
 
         if( pad )
         {
@@ -1004,7 +1002,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC )
             }
         }
 
-        pad = Locate_Pad_Connecte( frame->GetBoard(), segment, END );
+        pad = frame->GetBoard()->GetPad( segment, END );
 
         if( pad )
         {

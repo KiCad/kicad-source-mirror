@@ -1,6 +1,7 @@
-/*******************************************************************/
-/*	class_track.h: definitions relatives to tracks, vias and zones */
-/*******************************************************************/
+/**
+ * @file class_track.h
+ * @brief Class definitions for tracks, vias, and zones.
+ */
 
 #ifndef CLASS_TRACK_H
 #define CLASS_TRACK_H
@@ -15,6 +16,9 @@
 #define VIA_MICROVIA            1           /* this via which connect from an external layer
                                              * to the near neighbor internal layer */
 #define VIA_NOT_DEFINED         0           /* not yet used */
+
+#define IGNORE_LAYERS           -1
+
 
 /***/
 
@@ -105,7 +109,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool    Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Function GetBestInsertPoint
@@ -115,24 +119,24 @@ public:
      * @param aPcb The BOARD to search for the insertion point.
      * @return TRACK* - the item found in the linked list (or NULL if no track)
      */
-    TRACK*  GetBestInsertPoint( BOARD* aPcb );
+    TRACK* GetBestInsertPoint( BOARD* aPcb );
 
     /* Search (within the track linked list) the first segment matching the netcode
      * ( the linked list is always sorted by net codes )
      */
-    TRACK*  GetStartNetCode( int NetCode );
+    TRACK* GetStartNetCode( int NetCode );
 
     /* Search (within the track linked list) the last segment matching the netcode
      * ( the linked list is always sorted by net codes )
      */
-    TRACK*  GetEndNetCode( int NetCode );
+    TRACK* GetEndNetCode( int NetCode );
 
     /**
      * Function GetLength
      * returns the length of the track using the hypotenuse calculation.
      * @return double - the length of the track
      */
-    double  GetLength() const
+    double GetLength() const
     {
         int dx = m_Start.x - m_End.x;
         int dy = m_Start.y - m_End.y;
@@ -141,9 +145,53 @@ public:
     }
 
 
+    /**
+     * Function GetEndSegments
+     * get the end points connected to the track.
+     *
+     * @param aCount The maximum number of connected segments to test.
+     * @param aStartTrack The beginning segment connected to the trace.
+     * @param aEndTrack The end segment connected to the trace.
+     * @return A 1 if the end points are valid or a 0 when a trace is a closed loop.
+     */
+    int GetEndSegments( int aCount, TRACK** aStartTrack, TRACK** aEndTrack );
+
+    /**
+     * Function GetTrace
+     * returns a trace segment or via at \a aPosition on \a aLayer starting from this
+     * trace.
+     *
+     * @param aPosition The wxPoint to HitTest() against.
+     * @param aLayer The layer to search.  Use -1 for a don't care.
+     * @return A pointer to the TRACK or SEGVIA object if found, else NULL.
+     */
+    TRACK* GetTrace( const wxPoint& aPosition, int aLayer );
+
+    /**
+     * Function GetVia
+     * finds the first SEGVIA object at \a aPosition on \a aLayer starting at the trace.
+     *
+     * @param aPosition The wxPoint to HitTest() against.
+     * @param aLayer The layer to match, pass -1 for a don't care.
+     * @return A pointer to a TRACK object ( actually a SEGVIA ) if found, else NULL.
+     */
+    TRACK* GetVia( const wxPoint& aPosition, int aLayer = IGNORE_LAYERS );
+
+    /**
+     * Function GetVia
+     * finds the first SEGVIA object at \a aPosition on \a aLayer starting at the trace
+     * and ending at \a aEndTrace.
+     *
+     * @param aEndTrace Pointer to the last TRACK object to end search.
+     * @param aPosition The wxPoint to HitTest() against.
+     * @param aLayer The layer to match, pass -1 for a don't care.
+     * @return A pointer to a TRACK object ( actually a SEGVIA ) if found, else NULL.
+     */
+    TRACK* GetVia( TRACK* aEndTrace, const wxPoint& aPosition, int aLayer );
+
     /* Display on screen: */
-    void    Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
-                  const wxPoint& aOffset = ZeroOffset );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
+               const wxPoint& aOffset = ZeroOffset );
 
     /* divers */
     int Shape() const { return m_Shape & 0xFF; }
@@ -196,15 +244,20 @@ public:
      * TRACK segment or SEGVIA physically resides.
      * @return int - a layer mask, see pcbstruct.h's LAYER_BACK, etc.
      */
-    int             ReturnMaskLayer();
+    int ReturnMaskLayer();
 
-    int             IsPointOnEnds( const wxPoint& point, int min_dist = 0 );
+    /**
+     * Function IsPointOnEnds
+     * returns #STARTPOINT or #ENDPOINT if the start or end point is within \a aDistance
+     * of \a aPosition otherwise 0 is returned.
+     */
+    int IsPointOnEnds( const wxPoint& aPosition, int aDistance = 0 );
 
     /**
      * Function IsNull
      * returns true if segment length is zero.
      */
-    bool            IsNull();
+    bool IsNull();
 
     /**
      * Function DisplayInfo
@@ -214,7 +267,7 @@ public:
      * Display info about the track segment and the full track length
      * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void            DisplayInfo( EDA_DRAW_FRAME* frame );
+    void DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
      * Function DisplayInfoBase
@@ -223,13 +276,13 @@ public:
      * Display info about the track segment only, and does not calculate the full track length
      * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void            DisplayInfoBase( EDA_DRAW_FRAME* frame );
+    void DisplayInfoBase( EDA_DRAW_FRAME* frame );
 
     /**
      * Function ShowWidth
      * returns the width of the track in displayable user units.
      */
-    wxString        ShowWidth() const;
+    wxString ShowWidth() const;
 
     /**
      * Function Visit
@@ -244,8 +297,8 @@ public:
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *  else SCAN_CONTINUE, and determined by the inspector.
      */
-    SEARCH_RESULT   Visit( INSPECTOR* inspector, const void* testData,
-                           const KICAD_T scanTypes[] );
+    SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
+                         const KICAD_T scanTypes[] );
 
 
     /**
@@ -254,7 +307,7 @@ public:
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool            HitTest( const wxPoint& refPos );
+    bool HitTest( const wxPoint& refPos );
 
     /**
      * Function HitTest (overlaid)
@@ -263,7 +316,7 @@ public:
      * @param refArea an EDA_RECT to test
      * @return bool - true if a hit, else false
      */
-    bool            HitTest( EDA_RECT& refArea );
+    bool HitTest( EDA_RECT& refArea );
 
     /**
      * Function GetClass
@@ -348,9 +401,8 @@ public:
     }
 
 
-    void    Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
-                  const wxPoint& aOffset = ZeroOffset );
-
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
+               const wxPoint& aOffset = ZeroOffset );
 
     /**
      * Function IsOnLayer
@@ -359,10 +411,28 @@ public:
      * @param aLayer the layer to test for.
      * @return bool - true if on given layer, else false.
      */
-    bool    IsOnLayer( int aLayer ) const;
+    bool IsOnLayer( int aLayer ) const;
 
-    void    SetLayerPair( int top_layer, int bottom_layer );
-    void    ReturnLayerPair( int* top_layer, int* bottom_layer ) const;
+    /**
+     * Function SetLayerPair
+     * set the .m_Layer member for a via m_Layer contains the 2 layers :
+     * top layer and bottom layer used by the via.
+     * The via connect all layers from top layer to bottom layer
+     * 4 bits for the first layer and 4 next bits for the second layer
+     * @param top_layer = first layer connected by the via
+     * @param bottom_layer = last layer connected by the via
+     */
+    void SetLayerPair( int top_layer, int bottom_layer );
+
+    /**
+     * Function ReturnLayerPair
+     * return the 2 layers used by  the via (the via actually uses all layers between
+     * these 2 layers)
+     *
+     * @param top_layer = pointer to the first layer (can be null)
+     * @param bottom_layer = pointer to the last layer (can be null)
+     */
+    void ReturnLayerPair( int* top_layer, int* bottom_layer ) const;
 
     /**
      * Function GetPosition
@@ -375,7 +445,7 @@ public:
     }
 
 
-    void  SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }
+    void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }
 
     /**
      * Function GetClass

@@ -39,7 +39,7 @@ void PCB_EDIT_FRAME::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
         return;
 
     DrawPanel->CrossHairOff( DC );   // Erase cursor shape
-    Track = MarkTrace( GetBoard(), track, &nb_segm, NULL, NULL, true );
+    Track = GetBoard()->MarkTrace( track, &nb_segm, NULL, NULL, true );
     DrawTraces( DrawPanel, DC, Track, nb_segm, GR_OR | GR_SURBRILL );
 
     for( ; (Track != NULL) && (nb_segm > 0); nb_segm-- )

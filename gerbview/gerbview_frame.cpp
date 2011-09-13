@@ -44,7 +44,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     m_SelLayerBox   = NULL;
     m_DCodeSelector = NULL;
     m_displayMode   = 0;
-    m_drillFileHistory.SetBaseId(ID_GERBVIEW_DRILL_FILE1);
+    m_drillFileHistory.SetBaseId( ID_GERBVIEW_DRILL_FILE1 );
 
     if( DrawPanel )
         DrawPanel->m_Block_Enable = true;
@@ -56,7 +56,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
 
     SetScreen( ScreenPcb );
 
-    SetBoard( new BOARD( NULL, this ) );
+    SetBoard( new BOARD( NULL ) );
     GetBoard()->SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
     GetBoard()->SetVisibleLayers( FULL_LAYERS );     // All 32 layers visible.
 
@@ -74,7 +74,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     // initialize parameters in m_LayersManager
     LoadSettings();
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
+    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -141,34 +141,6 @@ void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     SaveSettings();
     Destroy();
-}
-
-
-double GERBVIEW_FRAME::BestZoom()
-{
-    // gives a minimal value to zoom, if no item in list
-    if( GetBoard()->m_Drawings == NULL  )
-        return 160.0;
-
-    EDA_RECT    bbox;
-    BOARD_ITEM* item = GetBoard()->m_Drawings;
-
-    bbox = ( (GERBER_DRAW_ITEM*) item )->GetBoundingBox();
-
-    for( ; item; item = item->Next() )
-    {
-        GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
-        bbox.Merge( gerb_item->GetBoundingBox() );
-    }
-
-    wxSize size = DrawPanel->GetClientSize();
-
-    double x = (double) bbox.GetWidth() / (double) size.x;
-    double y = (double) bbox.GetHeight() / (double) size.y;
-    GetScreen()->SetScrollCenterPosition( bbox.Centre() );
-
-    double best_zoom = MAX( x, y );
-    return best_zoom;
 }
 
 

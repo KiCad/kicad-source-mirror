@@ -104,7 +104,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
         GetBoard()->SetHightLightNet(0);
 
         // Search for a starting point of the new track, a track or pad
-        LockPoint = LocateLockPoint( GetBoard(), pos, layerMask );
+        LockPoint = GetBoard()->GetLockPoint( pos, layerMask );
 
         if( LockPoint ) // An item (pad or track) is found
         {
@@ -120,7 +120,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
             {
                 TrackOnStartPoint    = (TRACK*) LockPoint;
                 GetBoard()->SetHightLightNet( TrackOnStartPoint->GetNet() );
-                CreateLockPoint( GetBoard(), pos, TrackOnStartPoint, &s_ItemsListPicker );
+                GetBoard()->CreateLockPoint( pos, TrackOnStartPoint, &s_ItemsListPicker );
             }
         }
         else    // no starting point, but a filled zone area can exist. This is
@@ -247,7 +247,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
 
             newTrack->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
 
-            oneBeforeLatest->end = Locate_Pad_Connecte( GetBoard(), oneBeforeLatest, END );
+            oneBeforeLatest->end = GetBoard()->GetPad( oneBeforeLatest, END );
 
             if( oneBeforeLatest->end )
             {
@@ -451,7 +451,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
      * This helps to reduce the computing time */
 
     /* Attaching the end of the track. */
-    BOARD_ITEM* LockPoint = LocateLockPoint( GetBoard(), pos, layerMask );
+    BOARD_ITEM* LockPoint = GetBoard()->GetLockPoint( pos, layerMask );
 
     if( LockPoint ) /* End of trace is on a pad. */
     {
@@ -466,10 +466,9 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
             GetBoard()->SetHightLightNet( adr_buf->GetNet() );
 
             /* Possible establishment of a hanging point. */
-            LockPoint = CreateLockPoint( GetBoard(),
-                                         g_CurrentTrackSegment->m_End,
-                                         adr_buf,
-                                         &s_ItemsListPicker );
+            LockPoint = GetBoard()->CreateLockPoint( g_CurrentTrackSegment->m_End,
+                                                     adr_buf,
+                                                     &s_ItemsListPicker );
         }
     }
 
@@ -1050,7 +1049,7 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
     while( track != NULL )
     {
         TRACK* next_track = track->Next();
-        LockPoint = Locate_Pad_Connecte( pcb, track, END );
+        LockPoint = pcb->GetPad( track, END );
 
         if( LockPoint )
         {

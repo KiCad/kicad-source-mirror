@@ -1002,7 +1002,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             wxPoint pos   = GetScreen()->GetCrossHairPosition();
             track->Draw( DrawPanel, &dc, GR_XOR );
             PICKED_ITEMS_LIST itemsListPicker;
-            TRACK*  newtrack = CreateLockPoint( GetBoard(), pos, track, &itemsListPicker );
+            TRACK*  newtrack = GetBoard()->CreateLockPoint( pos, track, &itemsListPicker );
             SaveCopyInUndoList( itemsListPicker, UR_UNSPECIFIED );
             track->Draw( DrawPanel, &dc, GR_XOR );
             newtrack->Draw( DrawPanel, &dc, GR_XOR );

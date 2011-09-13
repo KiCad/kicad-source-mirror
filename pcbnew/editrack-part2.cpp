@@ -33,7 +33,7 @@ void PCB_EDIT_FRAME::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
 
     l1 = Route_Layer_TOP; l2 = Route_Layer_BOTTOM;
 
-    pt_track = MarkTrace( GetBoard(), pt_segm, &nb_segm, NULL, NULL, true );
+    pt_track = GetBoard()->MarkTrace( pt_segm, &nb_segm, NULL, NULL, true );
 
     if ( DC )
         DrawTraces( DrawPanel, DC, pt_track, nb_segm, GR_XOR );
@@ -87,8 +87,8 @@ void PCB_EDIT_FRAME::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
 
     for( ; ii < nb_segm; pt_segm = pt_segm->Next(), ii++ )
     {
-        pt_segm->start = Locate_Pad_Connecte( GetBoard(), pt_segm, START );
-        pt_segm->end   = Locate_Pad_Connecte( GetBoard(), pt_segm, END );
+        pt_segm->start = GetBoard()->GetPad( pt_segm, START );
+        pt_segm->end   = GetBoard()->GetPad( pt_segm, END );
     }
 
     test_1_net_connexion( DC, pt_track->GetNet() );
@@ -113,7 +113,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     }
 
     /* Avoid more than one via on the current location: */
-    if( Locate_Via( GetBoard(), g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->GetLayer() ) )
+    if( GetBoard()->GetVia( g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->GetLayer() ) )
         return false;
 
     for( TRACK* segm = g_FirstTrackSegment;  segm;  segm = segm->Next() )
@@ -277,7 +277,7 @@ void PCB_EDIT_FRAME::DisplayNetStatus( wxDC* DC )
     int    layerMask = (1 << getActiveLayer());
     wxPoint pos = GetScreen()->RefPos( true );
 
-    pt_segm = GetTrace( GetBoard(), GetBoard()->m_Track, pos, layerMask );
+    pt_segm = GetBoard()->GetTrace( pos, layerMask );
 
     if( pt_segm == NULL )
         GetBoard()->DisplayInfo( this );

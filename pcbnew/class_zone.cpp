@@ -857,43 +857,26 @@ bool ZONE_CONTAINER::HitTest( const wxPoint& refPos )
 }
 
 
-/**
- * Function HitTestForCorner
- * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
- * Choose the nearest corner
- * "near" means grid size (or CORNER_MIN_DIST if grid is not known)
- * Set m_CornerSelection to corner index in .m_Poly-&gtcorner or -1 if no corner found
- * @return true if a corner found
- * @param refPos : A wxPoint to test
- */
-bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
+bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& aPosition, int aMinDistance )
 {
     m_CornerSelection = -1;         // Set to not found
 
-    #define CORNER_MIN_DIST 100     // distance (in internal units) to detect a corner in a zone outline
-    int min_dist = CORNER_MIN_DIST + 1;
-
-    if( GetBoard() && GetBoard()->m_PcbFrame )
-    {
-        // Use grid size because it is known
-        wxRealPoint grid = GetBoard()->m_PcbFrame->DrawPanel->GetGrid();
-        min_dist = wxRound( MIN( grid.x, grid.y ) );
-    }
-
-    wxPoint delta;
+    int x, y;
+    int closestDistance = aMinDistance;
     unsigned lim = m_Poly->corner.size();
 
     for( unsigned item_pos = 0; item_pos < lim; item_pos++ )
     {
-        delta.x = refPos.x - m_Poly->corner[item_pos].x;
-        delta.y = refPos.y - m_Poly->corner[item_pos].y;
-        // Calculate a distance:
-        int dist = MAX( abs( delta.x ), abs( delta.y ) );
+        x = aPosition.x - m_Poly->corner[item_pos].x;
+        y = aPosition.y - m_Poly->corner[item_pos].y;
 
-        if( dist < min_dist )  // this corner is a candidate:
+        // Calculate a distance:
+        int dist = MAX( abs( x ), abs( y ) );
+
+        if( dist < closestDistance )  // this corner is a candidate:
         {
             m_CornerSelection = item_pos;
-            min_dist = dist;
+            closestDistance = dist;
         }
     }
 
@@ -901,31 +884,13 @@ bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 }
 
 
-/**
- * Function HitTestForEdge
- * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
- * choose the nearest segment
- * "near" means  grid size (or EDGE_MIN_DIST if grid is not known)
- * Set m_CornerSelection to -1 if nothing found, or index of the starting corner of edge
- * in .m_Poly-&gtcorner
- * @return true if found
- * @param refPos : A wxPoint to test
- */
-bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
+bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& aPosition, int aMinDistance )
 {
     unsigned lim = m_Poly->corner.size();
 
     m_CornerSelection = -1;     // Set to not found
 
-    #define EDGE_MIN_DIST 200   // distance (in internal units) to detect a zone outline
-    int min_dist = EDGE_MIN_DIST+1;
-
-    if( GetBoard() && GetBoard()->m_PcbFrame )
-    {
-        // Use grid size because it is known
-        wxRealPoint grid = GetBoard()->m_PcbFrame->DrawPanel->GetGrid();
-        min_dist = wxRound( MIN( grid.x, grid.y ) );
-    }
+    int closestDistance = aMinDistance;
 
     unsigned first_corner_pos = 0;
 
@@ -945,17 +910,17 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
         }
 
         /* test the dist between segment and ref point */
-        int dist = (int) GetPointToLineSegmentDistance( refPos.x,
-                                                        refPos.y,
+        int dist = (int) GetPointToLineSegmentDistance( aPosition.x,
+                                                        aPosition.y,
                                                         m_Poly->corner[item_pos].x,
                                                         m_Poly->corner[item_pos].y,
                                                         m_Poly->corner[end_segm].x,
                                                         m_Poly->corner[end_segm].y );
 
-        if( dist < min_dist )
+        if( dist < closestDistance )
         {
             m_CornerSelection = item_pos;
-            min_dist = dist;
+            closestDistance = dist;
         }
     }
 
