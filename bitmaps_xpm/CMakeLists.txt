@@ -423,12 +423,8 @@ set(BITMAP_SRCS
     zoom_fit_in_page.xpm
     zoom_center_on_screen.xpm
     zoom_in.xpm
-    zoomoins3d.xpm
     zoom_out.xpm
-    zoompage3d.xpm
-    zoomplus3d.xpm
     zoom_redraw.xpm
-    zoomrefr3d.xpm
     zoom_selection.xpm
 )
 

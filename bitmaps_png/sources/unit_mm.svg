@@ -7,11 +7,11 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="48"
-   width="48"
+   height="26"
+   width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.1 r9760"
    sodipodi:docname="unit_mm.svg">
   <metadata
      id="metadata22">
@@ -21,7 +21,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -34,77 +33,77 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="949"
+     inkscape:window-width="1600"
+     inkscape:window-height="876"
      id="namedview20"
-     showgrid="false"
-     inkscape:zoom="4.9166667"
-     inkscape:cx="-12.610169"
-     inkscape:cy="23.59322"
+     showgrid="true"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="false"
+     inkscape:zoom="26.666667"
+     inkscape:cx="10.190049"
+     inkscape:cy="17.467619"
      inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2" />
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2999"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
   <defs
      id="defs4">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 24 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="48 : 24 : 1"
-       inkscape:persp3d-origin="24 : 16 : 1"
-       id="perspective24" />
     <marker
        id="d"
        refY="0"
        refX="0"
        overflow="visible"
-       orient="auto">
+       orient="auto"
+       style="overflow:visible">
       <path
-         d="m5.77 0-8.65 5v-10l8.65 5z"
-         fill-rule="evenodd"
-         transform="scale(.4)"
-         stroke="#000"
-         stroke-width="1pt"
-         id="path7" />
+         d="M 5.77,0 -2.88,5 V -5 l 8.65,5 z"
+         transform="scale(0.4,0.4)"
+         id="path7"
+         inkscape:connector-curvature="0"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt" />
     </marker>
     <marker
        id="c"
        refY="0"
        refX="0"
        overflow="visible"
-       orient="auto">
+       orient="auto"
+       style="overflow:visible">
       <path
-         d="m5.77 0-8.65 5v-10l8.65 5z"
-         fill-rule="evenodd"
-         transform="scale(-.4)"
-         stroke="#000"
-         stroke-width="1pt"
-         id="path10" />
+         d="M 5.77,0 -2.88,5 V -5 l 8.65,5 z"
+         transform="scale(-0.4,-0.4)"
+         id="path10"
+         inkscape:connector-curvature="0"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt" />
     </marker>
   </defs>
-  <g
-     id="g3617"
-     transform="translate(0.40677966,0)">
-    <path
-       d="m 6.1532,32.875 h 33.819"
-       id="path14"
-       style="opacity:0.79674796;fill:none;stroke:#000000;stroke-width:2.27200007px;marker-start:url(#c);marker-end:url(#d)" />
-    <text
-       style="font-size:86.15861511px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#3e3e3e;font-family:Sans"
-       xml:space="preserve"
-       transform="scale(0.92852255,1.0769798)"
-       line-height="125%"
-       font-size="86.157px"
-       y="20.543495"
-       x="0.67311186"
-       id="text16"
-       sodipodi:linespacing="125%"><tspan
-         font-size="23.693px"
-         y="20.543495"
-         x="0.67311186"
-         font-weight="bold"
-         id="tspan18"
-         style="font-size:23.69344521px;font-weight:bold;fill:#3e3e3e;font-family:DejaVu Serif">mm</tspan></text>
-  </g>
+  <path
+     style="fill:#eaeaea;stroke:#000000;stroke-width:1.40652621000000000px;marker-start:url(#c);marker-end:url(#d);fill-opacity:1;opacity:0.765625"
+     inkscape:connector-curvature="0"
+     id="path14"
+     d="M 4.1773116,18.416498 H 21.858836" />
+  <text
+     sodipodi:linespacing="125%"
+     id="text16"
+     x="1.0430609"
+     y="11.067214"
+     font-size="86.157px"
+     line-height="125%"
+     transform="scale(0.85543679,1.1689935)"
+     xml:space="preserve"
+     style="font-size:47.36594772px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#3e3e3e;font-family:Sans"><tspan
+       style="font-size:13.02554035px;font-weight:bold;fill:#3e3e3e;font-family:DejaVu Serif"
+       id="tspan18"
+       font-weight="bold"
+       x="1.0430609"
+       y="11.067214"
+       font-size="23.693px">mm</tspan></text>
 </svg>

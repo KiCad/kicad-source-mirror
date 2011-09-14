@@ -491,12 +491,8 @@ set( BMAPS_MID
     zoom_fit_in_page
     zoom_center_on_screen
     zoom_in
-    zoomoins3d
     zoom_out
-    zoompage3d
-    zoomplus3d
     zoom_redraw
-    zoomrefr3d
     zoom_selection
     )
 
