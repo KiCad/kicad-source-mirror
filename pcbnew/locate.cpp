@@ -13,68 +13,6 @@
 
 
 
-/* Locates a via point pX, pY
- * If layer < 0 will be located via whatever layer
- * If layer = 0 .. 15 Via will be located according to its type:
- * - Traverse: all layers
- * - = Blind between layers useful
- * - Blind idem
- * Entry: coord point of reference, layer
- * Output: NULL if not via
- * (* TRACK) address via
- */
-TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer )
-{
-    TRACK* track;
-
-    for( track = Pcb->m_Track;  track; track = track->Next() )
-    {
-        if( track->Type() != TYPE_VIA )
-            continue;
-
-        if( track->m_Start != pos )
-            continue;
-
-        if( track->GetState( BUSY | IS_DELETED ) )
-            continue;
-
-        if( layer < 0 )
-            break;
-
-        if( track->IsOnLayer( layer ) )
-            break;
-    }
-
-    return track;
-}
-
-
-TRACK* Locate_Via_Area( TRACK* aStart, const wxPoint& pos, int layer )
-{
-    TRACK* track;
-
-    for( track = aStart;   track;  track = track->Next() )
-    {
-        if( track->Type() != TYPE_VIA )
-            continue;
-
-        if( !track->HitTest(pos) )
-            continue;
-
-        if( track->GetState( BUSY | IS_DELETED ) )
-            continue;
-
-        if( layer < 0 )
-            break;
-
-        if( track->IsOnLayer( layer ) )
-            break;
-    }
-
-    return track;
-}
-
-
 /* Locate the pad CONNECTED to a track
  * input: ptr_trace: pointer to the segment of track
  * Extr = flag = START -> beginning of the test segment
@@ -544,37 +482,6 @@ TRACK* GetTrace( TRACK* start_adr, TRACK* end_adr, const wxPoint& ref_pos, int M
             {
                 if( MaskLayer & PtSegm->ReturnMaskLayer() )
                     return PtSegm;
-            }
-        }
-
-        if( PtSegm == end_adr )
-            break;
-    }
-
-    return NULL;
-}
-
-
-/* Locates via through the point x, y, on layer data by masklayer.
- * Search is done to address start_adr has end_adr.
- * If end_adr = NULL, end search list
- * Vias whose parameter has the State or IS_DELETED bit BUSY = 1 are ignored
- */
-TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr, const wxPoint& pos, int MaskLayer )
-{
-    TRACK* PtSegm;
-
-    for( PtSegm = start_adr; PtSegm != NULL; PtSegm = PtSegm->Next() )
-    {
-        if( PtSegm->Type() == TYPE_VIA )
-        {
-            if( pos == PtSegm->m_Start )
-            {
-                if( PtSegm->GetState( BUSY | IS_DELETED ) == 0 )
-                {
-                    if( MaskLayer & PtSegm->ReturnMaskLayer() )
-                        return PtSegm;
-                }
             }
         }
 

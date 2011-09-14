@@ -1290,8 +1290,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         if( DisplayOpt.DisplayZonesMode != 0 )
             DisplayInfoMessage( this, _( "Warning: zone display is OFF!!!" ) );
 
-        if( !GetBoard()->IsHightLightNetON() &&
-            (GetBoard()->GetHightLightNetCode() > 0 ) )
+        if( !GetBoard()->IsHighLightNetON() && (GetBoard()->GetHighLightNetCode() > 0 ) )
             High_Light( &dc );
 
         break;

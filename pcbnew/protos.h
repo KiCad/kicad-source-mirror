@@ -66,25 +66,6 @@ void DrawTraces( EDA_DRAW_PANEL* panel,
 /* LOCATE.CPP : */
 /****************/
 
-/* Find a pad by it's name om the module. */
-TRACK* Locate_Via( BOARD* Pcb, const wxPoint& pos, int layer = -1 );
-
-/**
- * Function Locate_Via_Area
- * finds the first SEGVIA which covers the given aPos with a matching layer.
- * @param aStart The starting TRACK or SEGVIA in the BOARD's list.
- * @param aPos The wxPoint to HitTest() against.
- * @param aLayer The layer to match, pass -1 for a don't care.
- * @return TRACK* - actually a SEGVIA* if found, else NULL.
- */
-TRACK* Locate_Via_Area( TRACK* aStart, const wxPoint& aPos, int aLayer = ALL_LAYERS );
-
-/* Locates the center through the point x, y, on layer data
- * by masquelayer.
- * Search is done to address start_adr has end_adr (not included)
- */
-TRACK* Fast_Locate_Via( TRACK* start_adr, TRACK* end_adr, const wxPoint& pos, int masquelayer );
-
 /* Locates the center through the point x, y, on layer data
  * by masquelayer.
  * Search is done to address start_adr has end_adr (not included)

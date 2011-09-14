@@ -78,7 +78,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             {
                 DrawPanel->SetMouseCapture( NULL, NULL );
 
-                if( GetBoard()->IsHightLightNetON() )
+                if( GetBoard()->IsHighLightNetON() )
                     High_Light( DC );
 
                 SetCurItem( NULL );

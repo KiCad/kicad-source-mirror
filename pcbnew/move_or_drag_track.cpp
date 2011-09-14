@@ -62,8 +62,8 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
         Panel->m_mouseCaptureCallback( Panel, DC, wxDefaultPosition, true );
 
     Panel->GetScreen()->SetCrossHairPosition( oldpos );
-    pcb->HightLightOFF();
-    pcb->DrawHighLight( Panel, DC, pcb->GetHightLightNetCode() );
+    pcb->HighLightOFF();
+    pcb->DrawHighLight( Panel, DC, pcb->GetHighLightNetCode() );
 
     if( NewTrack )
     {
@@ -119,10 +119,10 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
     // Clear the undo picker list:
     s_ItemsListPicker.ClearListAndDeleteItems();
 
-    pcb->PopHightLight();
+    pcb->PopHighLight();
 
-    if( pcb->IsHightLightNetON() )
-        pcb->DrawHighLight( Panel, DC, pcb->GetHightLightNetCode() );
+    if( pcb->IsHighLightNetON() )
+        pcb->DrawHighLight( Panel, DC, pcb->GetHighLightNetCode() );
 
     EraseDragList();
     Panel->SetMouseCapture( NULL, NULL );
@@ -665,9 +665,9 @@ void PCB_EDIT_FRAME::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int com
     EraseDragList();
 
     /* Change highlighted net: the new one will be highlighted */
-    GetBoard()->PushHightLight();
+    GetBoard()->PushHighLight();
 
-    if( GetBoard()->IsHightLightNetON() )
+    if( GetBoard()->IsHighLightNetON() )
         High_Light( DC );
 
     PosInit = GetScreen()->GetCrossHairPosition();
@@ -742,10 +742,10 @@ void PCB_EDIT_FRAME::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int com
     s_LastPos = PosInit;
     DrawPanel->SetMouseCapture( Show_MoveNode, Abort_MoveTrack );
 
-    GetBoard()->SetHightLightNet( track->GetNet() );
-    GetBoard()->HightLightON();
+    GetBoard()->SetHighLightNet( track->GetNet() );
+    GetBoard()->HighLightON();
 
-    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
+    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHighLightNetCode() );
     DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
 }
 
@@ -904,9 +904,9 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
         s_EndSegmentPresent = false;
 
     /* Change high light net: the new one will be highlighted */
-    GetBoard()->PushHightLight();
+    GetBoard()->PushHighLight();
 
-    if( GetBoard()->IsHightLightNetON() )
+    if( GetBoard()->IsHighLightNetON() )
         High_Light( DC );
 
     EraseDragList();
@@ -944,9 +944,9 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     s_LastPos = GetScreen()->GetCrossHairPosition();
     DrawPanel->SetMouseCapture( Show_Drag_Track_Segment_With_Cte_Slope, Abort_MoveTrack );
 
-    GetBoard()->SetHightLightNet( track->GetNet() );
-    GetBoard()->HightLightON();
-    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
+    GetBoard()->SetHighLightNet( track->GetNet() );
+    GetBoard()->HighLightON();
+    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHighLightNetCode() );
 
     // Prepare the Undo command
     ITEM_PICKER picker( NULL, UR_CHANGED );
@@ -1038,13 +1038,13 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
     s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
 
-    if( GetBoard()->IsHightLightNetON() )
+    if( GetBoard()->IsHighLightNetON() )
         High_Light( DC );
 
-    GetBoard()->PopHightLight();
+    GetBoard()->PopHighLight();
 
-    if( GetBoard()->IsHightLightNetON() )
-        GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
+    if( GetBoard()->IsHighLightNetON() )
+        GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHighLightNetCode() );
 
     OnModify();
     DrawPanel->SetMouseCapture( NULL, NULL );

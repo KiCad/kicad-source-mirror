@@ -831,7 +831,14 @@ public:
      */
     bool   Other_Layer_Route( TRACK* track, wxDC* DC );
     void   HighlightUnconnectedPads( wxDC* DC );
+
+    /**
+     * Function DisplayNetStatus
+     * shows the status of the net at the current mouse position or the
+     * PCB status if no segment selected.
+     */
     void   DisplayNetStatus( wxDC* DC );
+
     TRACK* Delete_Segment( wxDC* DC, TRACK* Track );
     void   Delete_Track( wxDC* DC, TRACK* Track );
     void   Delete_net( wxDC* DC, TRACK* Track );
@@ -900,7 +907,6 @@ public:
      */
     bool   End_Route( TRACK* aTrack, wxDC* aDC );
 
-    void   ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC );
     void   Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On );
     void   Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On );
     void   Attribut_net( wxDC* DC, int net_code, bool Flag_On );
@@ -1177,7 +1183,15 @@ public:
     void         ReadAutoroutedTracks( wxDC* DC );
     void         GlobalRoute( wxDC* DC );
 
+    /**
+     * Function Show_1_Ratsnest
+     * draw ratsnest.
+     *
+     * The net edge pad with mouse or module locates the mouse.
+     * Delete the ratsnest if no module or pad is selected.
+     */
     void         Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC );
+
     void         Clean_Pcb( wxDC* DC );
 
     void         InstallFindFrame( const wxPoint& pos, wxDC* DC );

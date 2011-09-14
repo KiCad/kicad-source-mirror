@@ -1,8 +1,8 @@
-/********************************************************/
+/*********************************/
 /* magnetic_tracks_functions.cpp */
-/********************************************************/
+/*********************************/
 
-/* functions used to controle the cursor position, when creating a track
+/* functions used to control the cursor position, when creating a track
  * and when the "magnetic tracks" option is on
  * (the current created track is kept near existing tracks
  *  the distance is the clearance between tracks)
@@ -171,7 +171,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
         int layer = screen->m_Active_Layer;
 
         for( TRACK* via = m_Pcb->m_Track;
-             via && (via = Locate_Via_Area( via, *curpos, layer )) != NULL;
+             via && (via = via->GetVia( *curpos, layer )) != NULL;
              via = via->Next() )
         {
             if( via != currTrack )   // a via cannot influence itself
@@ -206,8 +206,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
         }
 
         /*
-         * In two segment mode, ignore the final segment if it's inside a grid
-         * square.
+         * In two segment mode, ignore the final segment if it's inside a grid square.
          */
         if( !amMovingVia && currTrack && g_TwoSegmentTrackBuild && currTrack->Back()
             && currTrack->m_Start.x - grid.x < currTrack->m_End.x
@@ -259,7 +258,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
 
                 // if track not via, or if its a via dragging but not with its adjacent track
                 if( currTrack->Type() != TYPE_VIA
-                    || ( currTrack->m_Start != track->m_Start && currTrack->m_Start != track->m_End ))
+                  || ( currTrack->m_Start != track->m_Start && currTrack->m_Start != track->m_End ))
                 {
                     if( distStart <= currTrack->m_Width/2 )
                     {
@@ -275,8 +274,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
                         return true;
                     }
 
-                    // @todo otherwise confine curpos such that it stays centered
-                    // within "track"
+                    // @todo otherwise confine curpos such that it stays centered within "track"
                 }
             }
         }

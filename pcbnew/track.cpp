@@ -10,11 +10,9 @@
 #include "protos.h"
 
 /* Functions to recognize a track.
- *  A track is a list of connected segments (or/and vias)
- *  from a starting to an ending point
- *  starting and ending points are a pad or a point with more than 2 segments
- *connected
- *  (and obviously a dangling segment end)
+ * A track is a list of connected segments (or/and vias) from a starting to an ending point
+ * starting and ending points are a pad or a point with more than 2 segments connected
+ * (and obviously a dangling segment end)
  */
 
 typedef std::vector<TRACK*> TRACK_PTRS; // buffer of item candidates when
@@ -22,10 +20,7 @@ typedef std::vector<TRACK*> TRACK_PTRS; // buffer of item candidates when
 
 
 /* Local functions */
-static void ChainMarkedSegments( BOARD*      Pcb,
-                                 wxPoint     ref_pos,
-                                 int         masklayer,
-                                 TRACK_PTRS* aList );
+static void ChainMarkedSegments( BOARD* Pcb, wxPoint ref_pos, int masklayer, TRACK_PTRS* aList );
 
 
 TRACK* MarkTrace( BOARD* aPcb,
@@ -108,8 +103,7 @@ TRACK* MarkTrace( BOARD* aPcb,
     }
 
     // Now examine selected vias and flag them if they are on the track
-    // If a via is connected to only one or 2 segments, it is flagged (is on
-    // the track)
+    // If a via is connected to only one or 2 segments, it is flagged (is on the track)
     // If a via is connected to more than 2 segments, it is a track end, and it
     // is removed from the list
     // go through the list backwards.
@@ -327,7 +321,7 @@ static void ChainMarkedSegments( BOARD*      aPcb,
          * is found we do not know at this time the number of connected items
          * and we do not know if this via is on the track or finish the track
          */
-        pt_via = Fast_Locate_Via( aPcb->m_Track, NULL, aRef_pos, aLayerMask );
+        pt_via = aPcb->m_Track->GetVia( NULL, aRef_pos, aLayerMask );
 
         if( pt_via )
         {
@@ -442,7 +436,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm, TRACK** StartTrack, TRACK** En
             continue;
 
         layerMask = Track->ReturnMaskLayer();
-        via = Fast_Locate_Via( RefTrack, TrackListEnd, Track->m_Start, layerMask );
+        via = RefTrack->GetVia( TrackListEnd, Track->m_Start, layerMask );
 
         if( via )
         {
@@ -489,7 +483,7 @@ int ReturnEndsTrack( TRACK* RefTrack, int NbSegm, TRACK** StartTrack, TRACK** En
         }
 
         layerMask = Track->ReturnMaskLayer();
-        via = Fast_Locate_Via( RefTrack, TrackListEnd, Track->m_End, layerMask );
+        via = RefTrack->GetVia( TrackListEnd, Track->m_End, layerMask );
 
         if( via )
         {

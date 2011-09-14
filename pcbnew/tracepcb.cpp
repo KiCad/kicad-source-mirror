@@ -194,8 +194,8 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
             Trace_Pads_Only( aPanel, DC, module, 0, 0, layerMask, aDrawMode );
     }
 
-    if( IsHightLightNetON() )
-        DrawHighLight( aPanel, DC, GetHightLightNetCode() );
+    if( IsHighLightNetON() )
+        DrawHighLight( aPanel, DC, GetHighLightNetCode() );
 
     // draw the BOARD's markers last, otherwise the high light will erase any marker on a pad
     for( unsigned i=0; i < m_markers.size();  ++i )
@@ -209,7 +209,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* aDrawPanel, wxDC* DC, int aNetCode )
 {
     int draw_mode;
 
-    if( IsHightLightNetON() )
+    if( IsHighLightNetON() )
         draw_mode = GR_SURBRILL | GR_OR;
     else
         draw_mode = GR_AND | GR_SURBRILL;

@@ -14,18 +14,6 @@ extern int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
                             TRACK** StartTrack, TRACK** EndTrack );
 
 
-/**
- * Function EraseRedundantTrack
- * Called after creating a track
- * Remove (if exists) the old track that have the same starting and the same
- * ending point as the new created track (this is the redunding track)
- * @param aDC = the current device context (can be NULL)
- * @param aNewTrack = the new created track (a pointer to a segment of the
- *                    track list)
- * @param aNewTrackSegmentsCount = number of segments in this new track
- * @param aItemsListPicker = the list picker to use for an undo command (can
- *                           be NULL)
- */
 int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
                                          TRACK*             aNewTrack,
                                          int                aNewTrackSegmentsCount,
@@ -41,9 +29,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
 
     int     netcode = aNewTrack->GetNet();
 
-
-    /* Reconstruct the complete track (the new track has to start on a
-     * segment of track).
+    /* Reconstruct the complete track (the new track has to start on a segment of track).
      */
     ListSetState( aNewTrack, aNewTrackSegmentsCount, BUSY, OFF );
 
@@ -58,8 +44,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     wxASSERT( aNewTrack );
 
 #if 0 && defined(DEBUG)
-    TRACK* EndNewTrack;      /* The last segment of the list chained to
-                              * the track */
+    TRACK* EndNewTrack;      /* The last segment of the list chained to the track */
 
     EndNewTrack = aNewTrack;
 
@@ -110,7 +95,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     endmasklayer   = EndTrack->ReturnMaskLayer();
 
     /* There may be a via or a pad on the end points. */
-    pt_segm = Fast_Locate_Via( m_Pcb->m_Track, NULL, start, startmasklayer );
+    pt_segm = m_Pcb->m_Track->GetVia( NULL, start, startmasklayer );
 
     if( pt_segm )
         startmasklayer |= pt_segm->ReturnMaskLayer();
@@ -122,7 +107,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         startmasklayer |= pt_pad->m_layerMask;
     }
 
-    pt_segm = Fast_Locate_Via( m_Pcb->m_Track, NULL, end, endmasklayer );
+    pt_segm = m_Pcb->m_Track->GetVia( NULL, end, endmasklayer );
 
     if( pt_segm )
         endmasklayer |= pt_segm->ReturnMaskLayer();
@@ -133,8 +118,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         endmasklayer |= pt_pad->m_layerMask;
     }
 
-    /* Mark as deleted a new track (which is not involved in the search for
-     * other connections)
+    /* Mark as deleted a new track (which is not involved in the search for other connections)
      */
     ListSetState( aNewTrack, aNewTrackSegmentsCount, IS_DELETED, ON );
 
@@ -190,9 +174,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         return 0;
     }
 
-    /* Mark trace as edited (which does not involve searching for other
-     * tracks)
-     */
+    // Mark trace as edited (which does not involve searching for other tracks)
     ListSetState( aNewTrack, aNewTrackSegmentsCount, IS_DELETED, OFF );
     ListSetState( aNewTrack, aNewTrackSegmentsCount, IN_EDIT, ON );
 
@@ -285,8 +267,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
 }
 
 
-
-/* Set the bits of .m_State member to onoff value, using bit mask State
+/* Set the bits of .m_State member to on off value, using bit mask State
  * of a list of EDA_ITEM
  */
 static void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff )

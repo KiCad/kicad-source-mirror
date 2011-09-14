@@ -39,13 +39,13 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
         /* Erase the current drawing */
         ShowNewTrackWhenMovingCursor( Panel, DC, wxDefaultPosition, false );
 
-        if( pcb->IsHightLightNetON() )
+        if( pcb->IsHighLightNetON() )
             frame->High_Light( DC );
 
-        pcb->PopHightLight();
+        pcb->PopHighLight();
 
-        if( pcb->IsHightLightNetON() )
-            pcb->DrawHighLight( Panel, DC, pcb->GetHightLightNetCode() );
+        if( pcb->IsHighLightNetON() )
+            pcb->DrawHighLight( Panel, DC, pcb->GetHighLightNetCode() );
 
         frame->MsgPanel->EraseMsgBox();
 
@@ -92,16 +92,16 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
         // Prepare the undo command info
         s_ItemsListPicker.ClearListAndDeleteItems();  // Should not be necessary, but...
 
-        GetBoard()->PushHightLight();
+        GetBoard()->PushHighLight();
 
         // erase old highlight
-        if( GetBoard()->IsHightLightNetON() )
+        if( GetBoard()->IsHighLightNetON() )
             High_Light( DC );
 
         g_CurrentTrackList.PushBack( new TRACK( GetBoard() ) );
         g_CurrentTrackSegment->m_Flags = IS_NEW;
 
-        GetBoard()->SetHightLightNet(0);
+        GetBoard()->SetHighLightNet( 0 );
 
         // Search for a starting point of the new track, a track or pad
         LockPoint = LocateLockPoint( GetBoard(), pos, layerMask );
@@ -114,12 +114,12 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
 
                 /* A pad is found: put the starting point on pad centre */
                 pos = pt_pad->m_Pos;
-                GetBoard()->SetHightLightNet( pt_pad->GetNet() );
+                GetBoard()->SetHighLightNet( pt_pad->GetNet() );
             }
             else /* A track segment is found */
             {
                 TrackOnStartPoint    = (TRACK*) LockPoint;
-                GetBoard()->SetHightLightNet( TrackOnStartPoint->GetNet() );
+                GetBoard()->SetHighLightNet( TrackOnStartPoint->GetNet() );
                 CreateLockPoint( GetBoard(), pos, TrackOnStartPoint, &s_ItemsListPicker );
             }
         }
@@ -130,7 +130,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
             zone = GetBoard()->HitTestForAnyFilledArea( pos, GetScreen()-> m_Active_Layer );
 
             if( zone )
-                GetBoard()->SetHightLightNet( zone->GetNet() );
+                GetBoard()->SetHighLightNet( zone->GetNet() );
         }
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
@@ -139,11 +139,11 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* DC )
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-        GetBoard()->HightLightON();
-        GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
+        GetBoard()->HighLightON();
+        GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHighLightNetCode() );
 
         // Display info about track Net class, and init track and vias sizes:
-        g_CurrentTrackSegment->SetNet( GetBoard()->GetHightLightNetCode() );
+        g_CurrentTrackSegment->SetNet( GetBoard()->GetHighLightNetCode() );
         GetBoard()->SetCurrentNetClass( g_CurrentTrackSegment->GetNetClassName() );
 
         g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
@@ -463,7 +463,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
                  * possibly create an anchor. */
         {
             TRACK* adr_buf = (TRACK*) LockPoint;
-            GetBoard()->SetHightLightNet( adr_buf->GetNet() );
+            GetBoard()->SetHighLightNet( adr_buf->GetNet() );
 
             /* Possible establishment of a hanging point. */
             LockPoint = CreateLockPoint( GetBoard(),
@@ -527,13 +527,13 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* DC )
     wxASSERT( g_CurrentTrackSegment == NULL );
     wxASSERT( g_CurrentTrackList.GetCount() == 0 );
 
-    if( GetBoard()->IsHightLightNetON() )
+    if( GetBoard()->IsHighLightNetON() )
         High_Light( DC );
 
-    GetBoard()->PopHightLight();
+    GetBoard()->PopHighLight();
 
-    if( GetBoard()->IsHightLightNetON() )
-        GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
+    if( GetBoard()->IsHighLightNetON() )
+        GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHighLightNetCode() );
 
     DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );

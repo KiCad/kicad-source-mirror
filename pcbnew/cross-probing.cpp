@@ -96,17 +96,19 @@ void RemoteCommand(  const char* cmdline )
 
         if( netcode > 0 )               /* highlight the pad net*/
         {
-            pcb->HightLightON();
-            pcb->SetHightLightNet( netcode );
+            pcb->HighLightON();
+            pcb->SetHighLightNet( netcode );
         }
         else
         {
-            pcb->HightLightOFF();
-            pcb->SetHightLightNet( -1 );
+            pcb->HighLightOFF();
+            pcb->SetHighLightNet( -1 );
         }
 
         if( module == NULL )
+        {
             msg.Printf( _( "%s not found" ), GetChars( modName ) );
+        }
         else if( pad == NULL )
         {
             msg.Printf( _( "%s pin %s not found" ), GetChars( modName ), GetChars( pinName ) );

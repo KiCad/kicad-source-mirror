@@ -15,13 +15,10 @@
  */
 wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
+
 // Current design settings (used also to read configs):
 BOARD_DESIGN_SETTINGS boardDesignSettings;
 
-
-/*****************/
-/* Class BOARD: */
-/*****************/
 
 BOARD::BOARD( EDA_ITEM* parent, PCB_BASE_FRAME* frame ) :
     BOARD_ITEM( (BOARD_ITEM*)parent, TYPE_PCB ),
@@ -87,36 +84,19 @@ BOARD::~BOARD()
 }
 
 
-/*
- * Function PushHightLight
- * save current hight light info for later use
- */
-void BOARD::PushHightLight()
+void BOARD::PushHighLight()
 {
     m_hightLightPrevious = m_hightLight;
 }
 
 
-/*
- * Function PopHightLight
- * retrieve a previously saved hight light info
- */
-void BOARD::PopHightLight()
+void BOARD::PopHighLight()
 {
     m_hightLight = m_hightLightPrevious;
     m_hightLightPrevious.Clear();
 }
 
 
-/**
- * Function SetCurrentNetClass
- * Must be called after a netclass selection (or after a netclass parameter
- * change
- * Initialize vias and tracks values displayed in combo boxes of the auxiliary
- * toolbar and some other parameters (netclass name ....)
- * @param aNetClassName = the new netclass name
- * @return true if lists of tracks and vias sizes are modified
- */
 bool BOARD::SetCurrentNetClass( const wxString& aNetClassName )
 {
     NETCLASS* netClass = m_NetClasses.Find( aNetClassName );
@@ -165,10 +145,6 @@ bool BOARD::SetCurrentNetClass( const wxString& aNetClassName )
 }
 
 
-/**
- * Function GetBiggestClearanceValue
- * @return the biggest clearance value found in NetClasses list
- */
 int BOARD::GetBiggestClearanceValue()
 {
     int clearance = m_NetClasses.GetDefault()->GetClearance();
@@ -184,11 +160,6 @@ int BOARD::GetBiggestClearanceValue()
 }
 
 
-/**
- * Function GetCurrentMicroViaSize
- * @return the current micro via size,
- * that is the current netclass value
- */
 int BOARD::GetCurrentMicroViaSize()
 {
     NETCLASS* netclass = m_NetClasses.Find( m_CurrentNetClassName );
@@ -197,11 +168,6 @@ int BOARD::GetCurrentMicroViaSize()
 }
 
 
-/**
- * Function GetCurrentMicroViaDrill
- * @return the current micro via drill,
- * that is the current netclass value
- */
 int BOARD::GetCurrentMicroViaDrill()
 {
     NETCLASS* netclass = m_NetClasses.Find( m_CurrentNetClassName );
@@ -423,7 +389,7 @@ void BOARD::SetVisibleElements( int aMask )
      * to ensure specific calculations that can be needed by some items
      * just change the visibility flags could be not sufficient
      */
-    for( int ii = 0; ii < PCB_VISIBLE(END_PCB_VISIBLE_LIST); ii++ )
+    for( int ii = 0; ii < PCB_VISIBLE( END_PCB_VISIBLE_LIST ); ii++ )
     {
         int item_mask = 1 << ii;
         SetElementVisibility( ii, aMask & item_mask );
@@ -548,13 +514,6 @@ int BOARD::GetLayerColor( int aLayer )
 }
 
 
-/**
- * Function IsModuleLayerVisible
- * expects either of the two layers on which a module can reside, and returns
- * whether that layer is visible.
- * @param layer One of the two allowed layers for modules: LAYER_N_FRONT or LAYER_N_BACK
- * @return bool - true if the layer is visible, else false.
- */
 bool BOARD::IsModuleLayerVisible( int layer )
 {
     if( layer==LAYER_N_FRONT )
@@ -621,8 +580,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         aBoardItem->SetParent( this );
 
         // Because the list of pads has changed, reset the status
-        // This indicate the list of pad and nets must be recalculated before
-        // use
+        // This indicate the list of pad and nets must be recalculated before use
         m_Status_Pcb = 0;
         break;
 
@@ -654,7 +612,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 
 BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
 {
-    // find these calls and fix them!  Don't send me no stinkin' NULL.
+    // find these calls and fix them!  Don't send me no stinking' NULL.
     wxASSERT( aBoardItem );
 
     switch( aBoardItem->Type() )
@@ -737,28 +695,24 @@ void BOARD::DeleteZONEOutlines()
 }
 
 
-/* Calculate the track segment count */
 int BOARD::GetNumSegmTrack()
 {
     return m_Track.GetCount();
 }
 
 
-/* Calculate the zone segment count */
 int BOARD::GetNumSegmZone()
 {
     return m_Zone.GetCount();
 }
 
 
-// return the unconnection count
 unsigned BOARD::GetNoconnectCount()
 {
     return m_NbNoconnect;
 }
 
 
-// return the active pad count ( pads with a netcode > 0 )
 unsigned BOARD::GetNodesCount()
 {
     return m_NbNodes;
@@ -858,9 +812,6 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
 
 
 // virtual, see pcbstruct.h
-
-/* Display board statistics: pads, nets, connections.. count
- */
 void BOARD::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     wxString txt;
@@ -1005,7 +956,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
         // when created, if a track or via is connected to an existing track or
         // via, it is put in linked list after this existing track or via
         // So usually, connected tracks or vias are grouped in this list
-        // So the algorithm (used in rastnest computations) which computes the
+        // So the algorithm (used in ratsnest computations) which computes the
         // track connectivity is faster (more than 100 time regarding to
         // a non ordered list) because when it searches for a connexion, first
         // it tests the near (near in term of linked list) 50 items
@@ -1174,12 +1125,6 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
  */
 
 
-/**
- * Function FindNet
- * searches for a net with the given netcode.
- * @param aNetcode The netcode to search for.
- * @return NETINFO_ITEM* - the net or NULL if not found.
- */
 NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
 {
     // the first valid netcode is 1 and the last is m_NetInfo->GetCount()-1.
@@ -1202,12 +1147,6 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
 }
 
 
-/**
- * Function FindNet overlaid
- * searches for a net with the given name.
- * @param aNetname A Netname to search for.
- * @return NETINFO_ITEM* - the net or NULL if not found.
- */
 NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
 {
     // the first valid netcode is 1.
@@ -1327,13 +1266,6 @@ static bool s_SortByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 }
 
 
-/**
- * Function ReturnSortedNetnamesList
- * @param aNames An array string to fill with net names.
- * @param aSortbyPadsCount : true = sort by active pads count, false = no sort
- * (i.e. leave the sort by net names)
- * @return int - net names count.
- */
 int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 {
     if( m_NetInfo->GetCount() == 0 )
@@ -1406,6 +1338,7 @@ bool BOARD::Save( FILE* aFile ) const
 
     // save the tracks & vias
     fprintf( aFile, "$TRACK\n" );
+
     for( item = m_Track; item; item = item->Next() )
         if( !item->Save( aFile ) )
             goto out;
@@ -1439,10 +1372,6 @@ out:
 }
 
 
-/*
- * Function RedrawAreasOutlines
- * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
- */
 void BOARD::RedrawAreasOutlines( EDA_DRAW_PANEL* panel, wxDC* aDC, int aDrawMode, int aLayer )
 {
     if( !aDC )
@@ -1458,10 +1387,6 @@ void BOARD::RedrawAreasOutlines( EDA_DRAW_PANEL* panel, wxDC* aDC, int aDrawMode
 }
 
 
-/**
- * Function RedrawFilledAreas
- * Redraw all areas outlines on layer aLayer ( redraw all if aLayer < 0 )
- */
 void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, int aDrawMode, int aLayer )
 {
     if( !aDC )
@@ -1477,18 +1402,6 @@ void BOARD::RedrawFilledAreas( EDA_DRAW_PANEL* panel, wxDC* aDC, int aDrawMode, 
 }
 
 
-/**
- * Function HitTestForAnyFilledArea
- * tests if the given wxPoint is within the bounds of a filled area of this
- * zone.
- * the test is made on zones on layer from aStartLayer to aEndLayer
- * Note: if a zone has its flag BUSY (in .m_State) is set, it is ignored.
- * @param aRefPos A wxPoint to test
- * @param aStartLayer the first layer to test
- * @param aEndLayer the last layer (-1 to ignore it) to test
- * @return ZONE_CONTAINER* return a pointer to the ZONE_CONTAINER found, else
- * NULL
- */
 ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
                                                 int            aStartLayer,
                                                 int            aEndLayer )
@@ -1507,8 +1420,8 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
         if( (layer < aStartLayer) || (layer > aEndLayer) )
             continue;
 
-        if( area->GetState( BUSY ) )      // In locate functions we must skip
-                                          // tagged items with BUSY flag set.
+        // In locate functions we must skip tagged items with BUSY flag set.
+        if( area->GetState( BUSY ) )
             continue;
 
         if( area->HitTestFilledArea( aRefPos ) )
@@ -1519,19 +1432,6 @@ ZONE_CONTAINER* BOARD::HitTestForAnyFilledArea( const wxPoint& aRefPos,
 }
 
 
-/**
- * Function SetAreasNetCodesFromNetNames
- * Set the .m_NetCode member of all copper areas, according to the area Net
- * Name
- * The SetNetCodesFromNetNames is an equivalent to net name, for fast
- * comparisons.
- * However the Netcode is an arbitrary equivalence, it must be set after each
- * netlist read
- * or net change
- * Must be called after pad netcodes are calculated
- * @return : error count
- * For non copper areas, netcode is set to 0
- */
 int BOARD::SetAreasNetCodesFromNetNames( void )
 {
     int error_count = 0;
@@ -1555,8 +1455,9 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
             else
             {
                 error_count++;
-                GetArea( ii )->SetNet( -1 );    // keep Net Name and set
-                                                // m_NetCode to -1 : error flag
+
+                // keep Net Name and set m_NetCode to -1 : error flag.
+                GetArea( ii )->SetNet( -1 );
             }
         }
     }
@@ -1565,15 +1466,34 @@ int BOARD::SetAreasNetCodesFromNetNames( void )
 }
 
 
+TRACK* BOARD::GetViaByPosition( const wxPoint& aPosition, int aLayerMask )
+{
+    TRACK* track;
+
+    for( track = m_Track;  track; track = track->Next() )
+    {
+        if( track->Type() != TYPE_VIA )
+            continue;
+
+        if( track->m_Start != aPosition )
+            continue;
+
+        if( track->GetState( BUSY | IS_DELETED ) )
+            continue;
+
+        if( aLayerMask < 0 )
+            break;
+
+        if( track->IsOnLayer( aLayerMask ) )
+            break;
+    }
+
+    return track;
+}
+
+
 #if defined(DEBUG)
 
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
 void BOARD::Show( int nestLevel, std::ostream& os )
 {
     BOARD_ITEM* p;
@@ -1630,9 +1550,7 @@ void BOARD::Show( int nestLevel, std::ostream& os )
         p->Show( nestLevel + 1, os );
     }
 
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str()
-                                 << ">\n";
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
-
 
 #endif

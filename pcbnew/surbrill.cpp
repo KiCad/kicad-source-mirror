@@ -80,10 +80,10 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
     {
         INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
-        if( GetBoard()->IsHightLightNetON() )
+        if( GetBoard()->IsHighLightNetON() )
             High_Light( &dc );
 
-        GetBoard()->SetHightLightNet( netcode );
+        GetBoard()->SetHighLightNet( netcode );
         High_Light( &dc );
     }
 }
@@ -95,7 +95,8 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
 int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
 {
     int netcode = -1;
-    if( GetBoard()->IsHightLightNetON() )
+
+    if( GetBoard()->IsHighLightNetON() )
         High_Light( DC );
 
     // use this scheme because a pad is a higher priority than a track in the
@@ -139,7 +140,7 @@ int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
     }
     if( netcode >= 0 )
     {
-        GetBoard()->SetHightLightNet( netcode );
+        GetBoard()->SetHighLightNet( netcode );
         High_Light( DC );
     }
 
@@ -155,10 +156,10 @@ int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
  */
 void PCB_EDIT_FRAME::High_Light( wxDC* DC )
 {
-    if( GetBoard()->IsHightLightNetON() )
-        GetBoard()->HightLightOFF();
+    if( GetBoard()->IsHighLightNetON() )
+        GetBoard()->HighLightOFF();
     else
-        GetBoard()->HightLightON();
+        GetBoard()->HighLightON();
 
-    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHightLightNetCode() );
+    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHighLightNetCode() );
 }

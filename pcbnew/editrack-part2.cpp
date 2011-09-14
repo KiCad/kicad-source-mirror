@@ -14,89 +14,6 @@
 #include "protos.h"
 
 
-/*
- * Exchange layer the track pointed to by the mouse:
- * The track must be on one layer of work,
- * It is put on another layer of work, if possible
- * (Or DRC = Off).
- */
-void PCB_EDIT_FRAME::ExChange_Track_Layer( TRACK* pt_segm, wxDC* DC )
-{
-    int    ii;
-    TRACK* pt_track;
-    int    l1, l2, nb_segm;
-
-    if( ( pt_segm == NULL ) || ( pt_segm->Type() == TYPE_ZONE ) )
-    {
-        return;
-    }
-
-    l1 = Route_Layer_TOP; l2 = Route_Layer_BOTTOM;
-
-    pt_track = MarkTrace( GetBoard(), pt_segm, &nb_segm, NULL, NULL, true );
-
-    if ( DC )
-        DrawTraces( DrawPanel, DC, pt_track, nb_segm, GR_XOR );
-
-    /* Clear the BUSY flag and backup member. Param layer original. */
-    ii = nb_segm; pt_segm = pt_track;
-
-    for( ; ii > 0; ii--, pt_segm = (TRACK*) pt_segm->Next() )
-    {
-        pt_segm->SetState( BUSY, OFF );
-        pt_segm->m_Param = pt_segm->GetLayer();    /* For backup. */
-    }
-
-    ii = 0; pt_segm = pt_track;
-
-    for( ; ii < nb_segm; ii++, pt_segm = (TRACK*) pt_segm->Next() )
-    {
-        if( pt_segm->Type() == TYPE_VIA )
-            continue;
-
-        /* Invert layers. */
-        if( pt_segm->GetLayer() == l1 )
-            pt_segm->SetLayer( l2 );
-        else if( pt_segm->GetLayer() == l2 )
-            pt_segm->SetLayer( l1 );
-
-        if( Drc_On && BAD_DRC==m_drc->Drc( pt_segm, GetBoard()->m_Track ) )
-        {
-            /* Discard changes. */
-            ii = 0;
-            pt_segm = pt_track;
-
-            for( ; ii < nb_segm; ii++, pt_segm = pt_segm->Next() )
-            {
-                pt_segm->SetLayer( pt_segm->m_Param );
-            }
-
-            if( DC )
-                DrawTraces( DrawPanel, DC, pt_track, nb_segm, GR_OR );
-
-            DisplayError( this, _( "Drc error, canceled" ) );
-            return;
-        }
-    }
-
-    DrawTraces( DrawPanel, DC, pt_track, nb_segm, GR_OR | GR_SURBRILL );
-
-    /* Control of segment end point, is it on a pad? */
-    ii = 0;
-    pt_segm = pt_track;
-
-    for( ; ii < nb_segm; pt_segm = pt_segm->Next(), ii++ )
-    {
-        pt_segm->start = Locate_Pad_Connecte( GetBoard(), pt_segm, START );
-        pt_segm->end   = Locate_Pad_Connecte( GetBoard(), pt_segm, END );
-    }
-
-    test_1_net_connexion( DC, pt_track->GetNet() );
-    pt_track->DisplayInfo( this );
-    OnModify();
-}
-
-
 bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 {
     unsigned    itmp;
@@ -113,7 +30,8 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     }
 
     /* Avoid more than one via on the current location: */
-    if( Locate_Via( GetBoard(), g_CurrentTrackSegment->m_End, g_CurrentTrackSegment->GetLayer() ) )
+    if( GetBoard()->GetViaByPosition( g_CurrentTrackSegment->m_End,
+                                      g_CurrentTrackSegment->GetLayer() ) )
         return false;
 
     for( TRACK* segm = g_FirstTrackSegment;  segm;  segm = segm->Next() )
@@ -150,7 +68,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     via->m_Flags   = IS_NEW;
     via->m_Shape   = GetBoard()->GetBoardDesignSettings()->m_CurrentViaType;
     via->m_Width   = GetBoard()->GetCurrentViaSize();
-    via->SetNet( GetBoard()->GetHightLightNetCode() );
+    via->SetNet( GetBoard()->GetHighLightNetCode() );
     via->m_Start   = via->m_End = g_CurrentTrackSegment->m_End;
 
     // Usual via is from copper to component.
@@ -267,10 +185,6 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 }
 
 
-/* Displays:
- * The status of the net on top of the screen segment advanced by mouse.
- * PCB status or bottom of screen if no segment peak.
- */
 void PCB_EDIT_FRAME::DisplayNetStatus( wxDC* DC )
 {
     TRACK* pt_segm;
@@ -286,11 +200,6 @@ void PCB_EDIT_FRAME::DisplayNetStatus( wxDC* DC )
 }
 
 
-/* Draw ratsnest.
- *
- * The net edge pad with mouse or module locates the mouse.
- * Delete if the ratsnest if no module or pad is selected.
- */
 void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
 {
     D_PAD*   pt_pad = NULL;
@@ -386,8 +295,6 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
 }
 
 
-/* High light the unconnected pads
- */
 void PCB_EDIT_FRAME::HighlightUnconnectedPads( wxDC* DC )
 {
     for( unsigned ii = 0; ii < GetBoard()->GetRatsnestsCount(); ii++ )
