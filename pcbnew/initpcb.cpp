@@ -40,7 +40,7 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
 
     // delete the old BOARD and create a new BOARD so that the default
     // layer names are put into the BOARD.
-    SetBoard( new BOARD( NULL ) );
+    SetBoard( new BOARD( NULL, this ) );
     SetCurItem( NULL );
 
     /* clear filename, to avoid overwriting an old file */

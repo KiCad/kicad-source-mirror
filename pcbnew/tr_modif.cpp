@@ -10,6 +10,8 @@
 #include "protos.h"
 
 static void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff );
+extern int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
+                            TRACK** StartTrack, TRACK** EndTrack );
 
 
 /**
@@ -52,7 +54,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     if( aNewTrack->Type() == TYPE_VIA && ( aNewTrackSegmentsCount > 1 ) )
         aNewTrack = aNewTrack->Next();
 
-    aNewTrack = GetBoard()->MarkTrace( aNewTrack, &aNewTrackSegmentsCount, NULL, NULL, true );
+    aNewTrack = MarkTrace( GetBoard(), aNewTrack, &aNewTrackSegmentsCount, NULL, NULL, true );
     wxASSERT( aNewTrack );
 
 #if 0 && defined(DEBUG)
@@ -90,7 +92,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
             break;
     }
 
-    if( aNewTrack->GetEndSegments( aNewTrackSegmentsCount, &StartTrack, &EndTrack ) == 0 )
+    if( ReturnEndsTrack( aNewTrack, aNewTrackSegmentsCount, &StartTrack, &EndTrack ) == 0 )
         return 0;
 
     if( ( StartTrack == NULL ) || ( EndTrack == NULL ) )
@@ -108,7 +110,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     endmasklayer   = EndTrack->ReturnMaskLayer();
 
     /* There may be a via or a pad on the end points. */
-    pt_segm = m_Pcb->m_Track->GetVia( NULL, start, startmasklayer );
+    pt_segm = Fast_Locate_Via( m_Pcb->m_Track, NULL, start, startmasklayer );
 
     if( pt_segm )
         startmasklayer |= pt_segm->ReturnMaskLayer();
@@ -120,7 +122,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         startmasklayer |= pt_pad->m_layerMask;
     }
 
-    pt_segm = m_Pcb->m_Track->GetVia( NULL, end, endmasklayer );
+    pt_segm = Fast_Locate_Via( m_Pcb->m_Track, NULL, end, endmasklayer );
 
     if( pt_segm )
         endmasklayer |= pt_segm->ReturnMaskLayer();
@@ -139,7 +141,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     /* A segment must be connected to the starting point, otherwise
      * it is unnecessary to analyze the other point
      */
-    pt_segm = GetTraceByEndPoint( bufStart, bufEnd, start, startmasklayer );
+    pt_segm = GetTrace( bufStart, bufEnd, start, startmasklayer );
 
     if( pt_segm == NULL )     /* Not connected to the track starting point. */
     {
@@ -154,7 +156,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
      */
     for( pt_del = bufStart, nbconnect = 0; ; )
     {
-        pt_segm = GetTraceByEndPoint( pt_del, bufEnd, end, endmasklayer );
+        pt_segm = GetTrace( pt_del, bufEnd, end, endmasklayer );
 
         if( pt_segm == NULL )
             break;
@@ -209,7 +211,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         nbconnect--;
         pt_del->SetState( IS_LINKED, OFF );
 
-        pt_del = GetBoard()->MarkTrace( pt_del, &nb_segm, NULL, NULL, true );
+        pt_del = MarkTrace( GetBoard(), pt_del, &nb_segm, NULL, NULL, true );
 
         /* Test if the marked track is redundant, i.e. if one of marked segments
          * is connected to the starting point of the new track.

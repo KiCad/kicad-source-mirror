@@ -1268,12 +1268,14 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
         g_CurrentTrackList.PushBack( newTrack );
     }
 
-    g_FirstTrackSegment->start = pcbframe->GetBoard()->GetPad( g_FirstTrackSegment, START );
+    g_FirstTrackSegment->start = Locate_Pad_Connecte( pcbframe->GetBoard(),
+                                                      g_FirstTrackSegment, START );
 
     if( g_FirstTrackSegment->start )
         g_FirstTrackSegment->SetState( BEGIN_ONPAD, ON );
 
-    g_CurrentTrackSegment->end = pcbframe->GetBoard()->GetPad( g_CurrentTrackSegment, END );
+    g_CurrentTrackSegment->end = Locate_Pad_Connecte( pcbframe->GetBoard(),
+                                                      g_CurrentTrackSegment, END );
 
     if( g_CurrentTrackSegment->end )
         g_CurrentTrackSegment->SetState( END_ONPAD, ON );

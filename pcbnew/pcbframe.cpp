@@ -277,11 +277,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_HotkeysZoomAndGridList = g_Board_Editor_Hokeys_Descr;
 
     m_RecordingMacros = -1;
-
     for ( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
 
-    SetBoard( new BOARD( NULL ) );
+    SetBoard( new BOARD( NULL, this ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
 
@@ -418,7 +417,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
     m_RecordingMacros = -1;
-
     for( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
 

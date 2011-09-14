@@ -41,11 +41,10 @@
 #include "class_GERBER.h"
 
 
-#define SHOW_BOUNDING_BOX     0   // Set to 1 to draw the bounding box for debugging purposes.
-
-
+/**********************************************************/
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER_IMAGE* aGerberparams ) :
     BOARD_ITEM( aParent, TYPE_GERBER_DRAW_ITEM )
+/**********************************************************/
 {
     m_imageParams = aGerberparams;
     m_Layer         = 0;
@@ -340,8 +339,10 @@ bool GERBER_DRAW_ITEM::HasNegativeItems()
 }
 
 
+/*********************************************************************/
 void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
                              const wxPoint& aOffset )
+/*********************************************************************/
 {
     static D_CODE dummyD_CODE( 0 );      // used when a D_CODE is not found. default D_CODE to draw a flashed item
     int           color, alt_color;
@@ -485,14 +486,6 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
         }
         break;
     }
-
-#if SHOW_BOUNDING_BOX
-    /* Draw the component boundary box */
-    {
-        EDA_RECT boundaryBox = GetBoundingBox();
-        GRRect( &aPanel->m_ClipBox, aDC, boundaryBox, 0, BROWN );
-    }
-#endif
 }
 
 /**

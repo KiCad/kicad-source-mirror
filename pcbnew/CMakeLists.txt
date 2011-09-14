@@ -182,6 +182,7 @@ set(PCBNEW_SRCS
     tool_pcb.cpp
     toolbars_update_user_interface.cpp
     tracepcb.cpp
+    track.cpp
     tr_modif.cpp
     trpiste.cpp
     work.cpp

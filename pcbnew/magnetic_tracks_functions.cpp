@@ -153,7 +153,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
     if( doPad )
     {
         int layer_mask = g_TabOneLayerMask[screen->m_Active_Layer];
-        D_PAD* pad = m_Pcb->GetPad( pos, layer_mask );
+        D_PAD* pad = Locate_Any_Pad( m_Pcb, pos, layer_mask );
 
         if( pad )
         {
@@ -171,7 +171,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
         int layer = screen->m_Active_Layer;
 
         for( TRACK* via = m_Pcb->m_Track;
-             via && (via = via->GetVia( *curpos, layer )) != NULL;
+             via && (via = Locate_Via_Area( via, *curpos, layer )) != NULL;
              via = via->Next() )
         {
             if( via != currTrack )   // a via cannot influence itself
@@ -193,7 +193,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
         {
             int layer_mask = g_TabOneLayerMask[layer];
 
-            TRACK* track = m_Pcb->m_Track->GetTrace( pos, layer_mask );
+            TRACK* track = GetTrace( m_Pcb, m_Pcb->m_Track, pos, layer_mask );
 
             if( !track || track->Type() != TYPE_TRACK )
             {

@@ -59,7 +59,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     icon.CopyFromBitmap( KiBitmap( icon_cvpcb_xpm ) );
     SetIcon( icon );
 
-    SetBoard( new BOARD( NULL ) );
+    SetBoard( new BOARD( NULL, this ) );
     SetScreen( new PCB_SCREEN() );
 
     LoadSettings();
@@ -68,7 +68,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     if( (m_LastGridSizeId <= 0) ||
         (m_LastGridSizeId > (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000)) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_500 - ID_POPUP_GRID_LEVEL_1000;
-
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
 
     // Initialize some display options

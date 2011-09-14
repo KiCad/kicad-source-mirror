@@ -562,6 +562,28 @@ static D_PAD* SuperFast_Locate_Pad_Connecte( BOARD* aPcb, LISTE_PAD* pt_liste,
 }
 
 
+/**
+ * Function SortPadsByXCoord
+ * is used to Sort a pad list by x coordinate value.
+ */
+static int SortPadsByXCoord( const void* pt_ref, const void* pt_comp )
+{
+    D_PAD* ref  = *(LISTE_PAD*) pt_ref;
+    D_PAD* comp = *(LISTE_PAD*) pt_comp;
+
+    return ref->m_Pos.x - comp->m_Pos.x;
+}
+
+
+void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector )
+{
+    aVector->insert( aVector->end(), aBoard->m_NetInfo->m_PadsFullList.begin(),
+                     aBoard->m_NetInfo->m_PadsFullList.end() );
+
+    qsort( &(*aVector)[0], aBoard->GetPadsCount(), sizeof( D_PAD*), SortPadsByXCoord );
+}
+
+
 /* search connections between tracks and pads, and propagate pad net codes to the track segments
  * This is a 2 pass computation.
  * First:
@@ -600,7 +622,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     /**************************************************************/
     /* Pass 1: search the connections between track ends and pads */
     /**************************************************************/
-    m_Pcb->CreateSortedPadListByXCoord( &sortedPads );
+    CreateSortedPadListByXCoord( m_Pcb, &sortedPads );
 
     /* Reset variables and flags used in computation */
     pt_trace = m_Pcb->m_Track;

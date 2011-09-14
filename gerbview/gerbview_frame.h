@@ -52,8 +52,8 @@ private:
                                         // a gerber file
 
 public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
-                        const wxPoint& pos, const wxSize& size,
-                        long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+                            const wxPoint& pos, const wxSize& size,
+                            long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~GERBVIEW_FRAME();
 
@@ -68,6 +68,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    double BestZoom();
 
     /**
      * Function ReportMessage
