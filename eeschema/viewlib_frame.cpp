@@ -174,18 +174,19 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
 
     m_auimgr.SetManagedWindow( this );
 
-    wxAuiPaneInfo horiz;
-    horiz.Gripper( false );
-    horiz.DockFixed( true );
-    horiz.Movable( false );
-    horiz.Floatable( false );
-    horiz.CloseButton( false );
-    horiz.CaptionVisible( false );
 
-    wxAuiPaneInfo vert( horiz );
+    EDA_PANEINFO horiz;
+    horiz.HorizontalToolbarPane();
 
-    vert.TopDockable( false ).BottomDockable( false );
-    horiz.LeftDockable( false ).RightDockable( false );
+    EDA_PANEINFO vert;
+    vert.VerticalToolbarPane();
+
+    EDA_PANEINFO info;
+    info.InfoToolbarPane();
+
+    EDA_PANEINFO mesg;
+    mesg.MessageToolbarPane();
+
 
     // Manage main toolbal
     m_auimgr.AddPane( m_HToolBar,
@@ -195,21 +196,21 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
 
     // Manage the left window (list of libraries)
     if( m_LibListWindow )
-        m_auimgr.AddPane( m_LibListWindow, wxAuiPaneInfo( vert ).Name( wxT( "m_LibList" ) ).
-                          Left().Row( 0 ).MinSize( minsize ) );
+        m_auimgr.AddPane( m_LibListWindow, wxAuiPaneInfo( info ).Name( wxT( "m_LibList" ) ).
+                          Left().Row( 0 ));
 
     // Manage the list of components)
     m_auimgr.AddPane( m_CmpListWindow,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_CmpList" ) ).
-                      Left().Row( 1 ).MinSize( minsize ) );
+                      wxAuiPaneInfo( info ).Name( wxT( "m_CmpList" ) ).
+                      Left().Row( 1 ) );
 
     // Manage the draw panel
     m_auimgr.AddPane( DrawPanel,
-                      wxAuiPaneInfo( vert ).Name( wxT( "DrawFrame" ) ).Centre() );
+                      wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).Centre() );
 
     // Manage the message panel
     m_auimgr.AddPane( MsgPanel,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
+                      wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     /* Now the minimum windows are fixed, set library list
     and component list of the previous values from last viewlib use

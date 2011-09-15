@@ -82,24 +82,21 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
 
     m_auimgr.SetManagedWindow( this );
 
-    wxAuiPaneInfo horiz;
-    horiz.Gripper( false );
-    horiz.DockFixed( true );
-    horiz.Movable( false );
-    horiz.Floatable( false );
-    horiz.CloseButton( false );
-    horiz.CaptionVisible( false );
+    EDA_PANEINFO horiz;
+    horiz.HorizontalToolbarPane();
 
-    wxAuiPaneInfo vert( horiz );
+    EDA_PANEINFO vert;
+    vert.VerticalToolbarPane();
 
-    vert.TopDockable( false ).BottomDockable( false );
-    horiz.LeftDockable( false ).RightDockable( false );
+    EDA_PANEINFO mesg;
+    mesg.MessageToolbarPane();
 
-    // LAYER_WIDGET is floatable, but initially docked at far right
-    wxAuiPaneInfo lyrs;
-    lyrs.CloseButton( false );
+    EDA_PANEINFO   lyrs;
+    lyrs.LayersToolbarPane();
+    lyrs.MinSize( m_LayersManager->GetBestSize() );
+    lyrs.BestSize( m_LayersManager->GetBestSize() );
     lyrs.Caption( _( "Visibles" ) );
-    lyrs.IsFloatable();
+
 
     if( m_HToolBar )
         m_auimgr.AddPane( m_HToolBar,
@@ -110,7 +107,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Row( 1 ) );
 
     m_auimgr.AddPane( m_LayersManager,
-                      lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Row( 0 ) );
+                      lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 0 ) );
 
     if( m_OptionsToolBar )
         m_auimgr.AddPane( m_OptionsToolBar,
@@ -122,7 +119,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
 
     if( MsgPanel )
         m_auimgr.AddPane( MsgPanel,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
+                          wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     ReFillLayerWidget();                // this is near end because contents establish size
     m_LayersManager->ReFillRender();    // Update colors in Render after the config is read

@@ -68,15 +68,11 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
 
     m_auimgr.SetManagedWindow( this );
 
-    wxAuiPaneInfo horiz;
-    horiz.Gripper( false );
-    horiz.DockFixed( true );
-    horiz.Movable( false );
-    horiz.Floatable( false );
-    horiz.CloseButton( false );
-    horiz.CaptionVisible( false );
-    horiz.LeftDockable( false );
-    horiz.RightDockable( false );
+    EDA_PANEINFO horiz;
+    horiz.HorizontalToolbarPane();
+
+    EDA_PANEINFO info;
+    info.InfoToolbarPane();
 
     if( m_HToolBar )
         m_auimgr.AddPane( m_HToolBar,
@@ -88,9 +84,10 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
 
     if( m_LeftWin )
         m_auimgr.AddPane( m_LeftWin,
-                          wxAuiPaneInfo().Name( wxT( "m_LeftWin" ) ).Floatable( false ).
-                          CloseButton( false ).Left().BestSize( m_LeftWin_Width, clientsize.y ).
-                          Layer( 1 ).CaptionVisible( false ) );
+                          wxAuiPaneInfo(info).Name( wxT( "m_LeftWin" ) ).Left().
+                          BestSize( m_LeftWin_Width, clientsize.y ).
+                          Layer( 1 ) );
+        
     m_auimgr.Update();
 }
 

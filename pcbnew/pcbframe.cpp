@@ -333,66 +333,51 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     m_auimgr.SetManagedWindow( this );
 
-    // Create a wxAuiPaneInfo template for other wxAuiPaneInfo items
-    // Actual wxAuiPaneInfo items will be built from this item.
-    wxAuiPaneInfo horiz;
-    horiz.Gripper( false );
-    horiz.DockFixed( true );
-    horiz.Movable( false );
-    horiz.Floatable( false );
-    horiz.CloseButton( false );
-    horiz.CaptionVisible( false );
+    EDA_PANEINFO horiz;
+    horiz.HorizontalToolbarPane();
 
-    // Create a second template from the first:
-    wxAuiPaneInfo vert( horiz );
+    EDA_PANEINFO vert;
+    vert.VerticalToolbarPane();
 
-    // Set specific options for horizontal and vertical toolbars, using horiz and vert
-    // wxAuiPaneInfo items to manage them.
-    vert.TopDockable( false ).BottomDockable( false );
-    horiz.LeftDockable( false ).RightDockable( false );
-
-    // Create a template from the horiz wxAuiPaneInfo, specific to horizontal toolbars:
-    wxAuiPaneInfo horiz_tb( horiz );
-    horiz_tb.ToolbarPane().Gripper( false );
+    EDA_PANEINFO mesg;
+    mesg.MessageToolbarPane();
 
     // Create a wxAuiPaneInfo for the Layers Manager, not derived from the template.
     // LAYER_WIDGET is floatable, but initially docked at far right
-    wxAuiPaneInfo   lyrs;
+    EDA_PANEINFO   lyrs;
+    lyrs.LayersToolbarPane();
     lyrs.MinSize( m_Layers->GetBestSize() );    // updated in ReFillLayerWidget
     lyrs.BestSize( m_Layers->GetBestSize() );
-    lyrs.CloseButton( false );
     lyrs.Caption( _( "Visibles" ) );
-    lyrs.IsFloatable();
 
 
     if( m_HToolBar )    // The main horizontal toolbar
     {
         m_auimgr.AddPane( m_HToolBar,
-                          wxAuiPaneInfo( horiz_tb ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
     }
 
     if( m_AuxiliaryToolBar )    // the auxiliary horizontal toolbar, that shows track and via sizes, zoom ...)
     {
         m_auimgr.AddPane( m_AuxiliaryToolBar,
-                          wxAuiPaneInfo( horiz_tb ).Name( wxT( "m_AuxiliaryToolBar" ) ).Top().Row( 1 ) );
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_AuxiliaryToolBar" ) ).Top().Row( 1 ) );
     }
 
     if( m_AuxVToolBar )    // The auxiliary vertical toolbar (currently microwave tools)
         m_auimgr.AddPane( m_AuxVToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_AuxVToolBar" ) ).Right().Row( 2 ).Hide() );
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_AuxVToolBar" ) ).Right().Layer( 1 ).Position(1).Hide() );
 
     if( m_VToolBar )    // The main right vertical toolbar
         m_auimgr.AddPane( m_VToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Row( 1 ) );
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Layer( 1 ) );
 
     // Add the layer manager (right side of pcbframe)
-    m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Row( 0 ) );
+    m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 2 ) );
 
     if( m_OptionsToolBar )    // The left vertical toolbar
     {
         m_auimgr.AddPane( m_OptionsToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left()
-                          .ToolbarPane().Gripper( false ) );
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left().Layer(1) );
 
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
         m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).Show( m_show_microwave_tools );
@@ -404,7 +389,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     if( MsgPanel )
         m_auimgr.AddPane( MsgPanel,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
+                          wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     ReFillLayerWidget();        // this is near end because contents establish size
     m_Layers->ReFillRender();   // Update colors in Render after the config is read

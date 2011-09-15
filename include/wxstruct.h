@@ -911,4 +911,111 @@ static inline void AddMenuItem( wxMenu*         aMenu,
 #  define SET_BITMAP( aImage ) item->SetBitmap( aImage )
 #endif
 
+
+/**
+ * Specialization of the wxAuiPaneInfo class for Kicad panels.
+ *
+ * Documentation for wxAui is poor at this time. The following notes spring from errors made in
+ * previous kicad implementations:
+ *
+ * wxAuiPaneInfo.ToolbarPane() and .Defaults() are used to clear and then prepare the objects so
+ * only use them once at the beginning of configuration..
+ *
+ * Panels are organized in layers, from 0 (close to the center) and increasing outward. Note
+ * that for ToolbarPanes, layer 0 considered a special default value, and ToolbarPanes on
+ * layer 0 are pushed to layer 10 automatically. Use Layer 1 for the inner layer as a work-
+ * around.
+ *
+ * Each panel has rows, starting at 0. Each row has positions starting at 0. Each item in a panel
+ * can have it's row and position set.
+ *
+ * Eventually panels will be moveable. Each initialization function sets up the panel for this,
+ * then after a //==// break has additional calls to anchor toolbars in a way that matches
+ * present functionality.
+ */
+
+class EDA_PANEINFO : public wxAuiPaneInfo
+{
+
+public:
+
+    /**
+     * Function HorizontalToolbarPane
+     * Change *this to a horizontal toolbar for kicad.
+     */
+    EDA_PANEINFO& HorizontalToolbarPane()
+    {
+        ToolbarPane();
+        CloseButton( false );
+        LeftDockable( false );
+        RightDockable( false );
+        //====================  Remove calls below here for moveable toolbars //
+        Gripper( false );
+        DockFixed( true );
+        Movable( false );
+        Resizable( true );
+        return *this;
+    }
+
+    /**
+     * Function VerticalToolbarPane
+     * Change *this to a vertical toolbar for kicad.
+     */
+    EDA_PANEINFO& VerticalToolbarPane()
+    {
+        ToolbarPane();
+        CloseButton( false );
+        TopDockable( false );
+        BottomDockable( false );
+        //====================  Remove calls below here for moveable toolbars //
+        Gripper( false );
+        DockFixed( true );
+        Movable( false );
+        Resizable( true );
+        return *this;
+    }
+
+    /**
+     * Function MessageToolbarPane
+     * Change *this to a message pane for kicad.
+     *
+     */
+    EDA_PANEINFO& MessageToolbarPane()
+    {
+        Gripper( false );
+        DockFixed( true );
+        Movable( false );
+        Floatable( false );
+        CloseButton( false );
+        CaptionVisible( false );
+        return *this;
+    }
+
+    /**
+     * Function LayersToolbarPane
+     * Change *this to a layers toolbar for kicad.
+     */
+    EDA_PANEINFO& LayersToolbarPane()
+    {
+        CloseButton( false );
+        return *this;
+    }
+
+    /**
+     * Function InfoToolbarPane
+     * Change *this to a information panel for for kicad.
+     *
+     * Info panes are used for vertical display of information next to the center pane.
+     * Used in cvpcb and libviewer primarily
+     */
+    EDA_PANEINFO& InfoToolbarPane()
+    {
+        Gripper( false );
+        CloseButton( false );
+        CaptionVisible( false );
+        return *this;
+    }
+
+};
+
 #endif  /* WXSTRUCT_H */

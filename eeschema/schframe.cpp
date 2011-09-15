@@ -209,18 +209,16 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
 
     m_auimgr.SetManagedWindow( this );
 
-    wxAuiPaneInfo horiz;
-    horiz.Gripper( false );
-    horiz.DockFixed( true );
-    horiz.Movable( false );
-    horiz.Floatable( false );
-    horiz.CloseButton( false );
-    horiz.CaptionVisible( false );
+    EDA_PANEINFO horiz;
+    horiz.HorizontalToolbarPane();
 
-    wxAuiPaneInfo vert( horiz );
+    EDA_PANEINFO vert;
+    vert.VerticalToolbarPane();
 
-    vert.TopDockable( false ).BottomDockable( false );
-    horiz.LeftDockable( false ).RightDockable( false );
+    EDA_PANEINFO mesg;
+    mesg.MessageToolbarPane();
+
+
 
     if( m_HToolBar )
         m_auimgr.AddPane( m_HToolBar,
@@ -237,7 +235,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
         m_auimgr.AddPane( DrawPanel, wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     if( MsgPanel )
-        m_auimgr.AddPane( MsgPanel, wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
+        m_auimgr.AddPane( MsgPanel, wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().
+            Layer(10) );
 
     m_auimgr.Update();
 

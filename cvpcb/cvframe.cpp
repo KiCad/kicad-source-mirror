@@ -135,15 +135,13 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
 
     m_auimgr.SetManagedWindow( this );
 
-    wxAuiPaneInfo horiz;
-    horiz.Gripper( false );
-    horiz.DockFixed( true );
-    horiz.Movable( false );
-    horiz.Floatable( false );
-    horiz.CloseButton( false );
-    horiz.CaptionVisible( false );
 
-    horiz.LeftDockable( false ).RightDockable( false );
+    EDA_PANEINFO horiz;
+    horiz.HorizontalToolbarPane();
+
+    EDA_PANEINFO info;
+    info.InfoToolbarPane();
+
 
     if( m_HToolBar )
         m_auimgr.AddPane( m_HToolBar,
@@ -155,7 +153,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
 
     if( m_FootprintList )
         m_auimgr.AddPane( m_FootprintList,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_FootprintList" ) ).
+                          wxAuiPaneInfo( info ).Name( wxT( "m_FootprintList" ) ).
                           Right().BestSize( (int) ( m_FrameSize.x * 0.36 ), m_FrameSize.y ) );
 
     m_auimgr.Update();

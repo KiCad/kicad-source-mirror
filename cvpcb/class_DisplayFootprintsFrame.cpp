@@ -82,18 +82,17 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
 
     m_auimgr.SetManagedWindow( this );
 
-    wxAuiPaneInfo horiz;
-    horiz.Gripper( false );
-    horiz.DockFixed( true );
-    horiz.Movable( false );
-    horiz.Floatable( false );
-    horiz.CloseButton( false );
-    horiz.CaptionVisible( false );
 
-    wxAuiPaneInfo vert( horiz );
+    EDA_PANEINFO horiz;
+    horiz.HorizontalToolbarPane();
 
-    vert.TopDockable( false ).BottomDockable( false );
-    horiz.LeftDockable( false ).RightDockable( false );
+    EDA_PANEINFO vert;
+    vert.VerticalToolbarPane();
+
+    EDA_PANEINFO mesg;
+    mesg.MessageToolbarPane();
+
+
 
     m_auimgr.AddPane( m_HToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top(). Row( 0 ) );
@@ -106,7 +105,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
                       wxAuiPaneInfo().Name( wxT( "DisplayFrame" ) ).CentrePane() );
 
     m_auimgr.AddPane( MsgPanel,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "MsgPanel" ) ).Bottom() );
+                      wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     m_auimgr.AddPane( m_OptionsToolBar,
                       wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left() );
