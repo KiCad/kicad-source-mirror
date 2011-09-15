@@ -287,8 +287,7 @@ static void ChainMarkedSegments( BOARD*      aPcb,
     TRACK* pt_segm,             // The current segment being analyzed.
     * pt_via,                   // The via identified, eventually destroy
 
-    * SegmentCandidate;         // The end segment to destroy (or NULL =
-                                // pt_segm
+    * SegmentCandidate;         // The end segment to destroy (or NULL = pt_segm
     int NbSegm;
 
     if( aPcb->m_Track == NULL )
@@ -311,7 +310,7 @@ static void ChainMarkedSegments( BOARD*      aPcb,
      */
     for( ; ; )
     {
-        if( Fast_Locate_Pad_Connecte( aPcb, aRef_pos, aLayerMask ) != NULL )
+        if( aPcb->GetPadFast( aRef_pos, aLayerMask ) != NULL )
             return;
 
         /* Test for a via: a via changes the layer mask and can connect a lot

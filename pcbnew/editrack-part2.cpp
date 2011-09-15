@@ -196,7 +196,7 @@ void PCB_EDIT_FRAME::DisplayNetStatus( wxDC* DC )
     if( pt_segm == NULL )
         GetBoard()->DisplayInfo( this );
     else
-        test_1_net_connexion( DC, pt_segm->GetNet() );
+        TestNetConnection( DC, pt_segm->GetNet() );
 }
 
 

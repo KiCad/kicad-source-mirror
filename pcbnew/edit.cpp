@@ -326,8 +326,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         else
         {
             int v_type = GetBoard()->GetBoardDesignSettings()->m_CurrentViaType;
+
+             // place micro via and switch layer.
             if( id == ID_POPUP_PCB_PLACE_MICROVIA )
-                GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = VIA_MICROVIA; // place micro via and switch layer
+                GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = VIA_MICROVIA;
 
             Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
             GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = v_type;
@@ -400,7 +402,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             int      netcode = zsegm->GetNet();
             Delete_OldZone_Fill( zsegm );
             SetCurItem( NULL );
-            test_1_net_connexion( NULL, netcode );
+            TestNetConnection( NULL, netcode );
             OnModify();
             GetBoard()->DisplayInfo( this );
         }
@@ -430,7 +432,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             int netcode = ( (ZONE_CONTAINER*) GetCurItem() )->GetNet();
             Delete_Zone_Contour( &dc, (ZONE_CONTAINER*) GetCurItem() );
             SetCurItem( NULL );
-            test_1_net_connexion( NULL, netcode );
+            TestNetConnection( NULL, netcode );
             GetBoard()->DisplayInfo( this );
         }
         break;
@@ -445,10 +447,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MoveCursorToCrossHair();
         ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
         DrawPanel->m_AutoPAN_Request = true;
-        Start_Move_Zone_Corner( &dc,
-                                zone_cont,
-                                zone_cont->m_CornerSelection,
-                                false );
+        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->m_CornerSelection, false );
         break;
     }
 
@@ -457,9 +456,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MoveCursorToCrossHair();
         ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
         DrawPanel->m_AutoPAN_Request = true;
-        Start_Move_Zone_Drag_Outline_Edge( &dc,
-                                           zone_cont,
-                                           zone_cont->m_CornerSelection );
+        Start_Move_Zone_Drag_Outline_Edge( &dc, zone_cont, zone_cont->m_CornerSelection );
         break;
     }
 
@@ -487,10 +484,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         zone_cont->m_CornerSelection++;
         zone_cont->Draw( DrawPanel, &dc, GR_XOR );
         DrawPanel->m_AutoPAN_Request = true;
-        Start_Move_Zone_Corner( &dc,
-                                zone_cont,
-                                zone_cont->m_CornerSelection,
-                                true );
+        Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->m_CornerSelection, true );
         break;
     }
 
@@ -515,7 +509,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             ZONE_CONTAINER* zone_container = (ZONE_CONTAINER*) GetCurItem();
             zone_container->UnFill();
-            test_1_net_connexion( NULL, zone_container->GetNet() );
+            TestNetConnection( NULL, zone_container->GetNet() );
             OnModify();
             GetBoard()->DisplayInfo( this );
             DrawPanel->Refresh();
@@ -534,7 +528,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         SetCurItem( NULL );        // CurItem might be deleted by this command, clear the pointer
-        test_connexions( NULL );
+        TestConnections( NULL );
         Tst_Ratsnest( NULL, 0 );   // Recalculate the active ratsnest, i.e. the unconnected links
         OnModify();
         GetBoard()->DisplayInfo( this );
@@ -544,7 +538,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_FILL_ZONE:
         DrawPanel->MoveCursorToCrossHair();
         Fill_Zone( (ZONE_CONTAINER*) GetCurItem() );
-        test_1_net_connexion( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNet() );
+        TestNetConnection( NULL, ( (ZONE_CONTAINER*) GetCurItem() )->GetNet() );
         GetBoard()->DisplayInfo( this );
         DrawPanel->Refresh();
         break;
@@ -560,6 +554,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
         if( GetCurItem() == NULL )
             break;
+
         // If the current Item is a pad, text module ...: Get its parent
         if( GetCurItem()->Type() != TYPE_MODULE )
             SetCurItem( GetCurItem()->GetParent() );
@@ -655,7 +650,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         }
 
-        if( !(GetCurItem()->m_Flags & IS_MOVED) ) /* This is a simple rotation, no other edition in progress */
+        /* This is a simple rotation, no other editing in progress */
+        if( !(GetCurItem()->m_Flags & IS_MOVED) )
             SaveCopyInUndoList(GetCurItem(), UR_ROTATED, ((MODULE*)GetCurItem())->m_Pos);
 
         Rotate_Module( &dc, (MODULE*) GetCurItem(), g_RotationAngle, true );
@@ -682,8 +678,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         }
 
-        if( !(GetCurItem()->m_Flags & IS_MOVED) ) /* This is a simple rotation, no other edition in progress */
-            SaveCopyInUndoList(GetCurItem(), UR_ROTATED_CLOCKWISE, ((MODULE*)GetCurItem())->m_Pos);
+        /* This is a simple rotation, no other editing in progress */
+        if( !(GetCurItem()->m_Flags & IS_MOVED) )
+            SaveCopyInUndoList( GetCurItem(), UR_ROTATED_CLOCKWISE,
+                                ((MODULE*)GetCurItem())->m_Pos );
 
         Rotate_Module( &dc, (MODULE*) GetCurItem(), -g_RotationAngle, true );
         break;
@@ -709,7 +707,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         }
 
-        if( !(GetCurItem()->m_Flags & IS_MOVED) ) /* This is a simple flip, no other edition in progress */
+        /* This is a simple flip, no other editing in progress */
+        if( !(GetCurItem()->m_Flags & IS_MOVED) )
             SaveCopyInUndoList(GetCurItem(), UR_FLIPPED, ((MODULE*)GetCurItem())->m_Pos);
 
         Change_Side_Module( (MODULE*) GetCurItem(), &dc );
@@ -981,13 +980,13 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:
         DrawPanel->MoveCursorToCrossHair();
-        Start_MoveOneNodeOrSegment( (TRACK*) GetScreen()->GetCurItem(), &dc, id );
+        StartMoveOneNodeOrSegment( (TRACK*) GetScreen()->GetCurItem(), &dc, id );
         break;
 
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:
     case ID_POPUP_PCB_MOVE_TRACK_NODE:
         DrawPanel->MoveCursorToCrossHair();
-        Start_MoveOneNodeOrSegment( (TRACK*) GetScreen()->GetCurItem(), &dc, id );
+        StartMoveOneNodeOrSegment( (TRACK*) GetScreen()->GetCurItem(), &dc, id );
         break;
 
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE:
@@ -1007,7 +1006,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             track->Draw( DrawPanel, &dc, GR_XOR );
             newtrack->Draw( DrawPanel, &dc, GR_XOR );
             /* compute the new ratsnest, because connectivity could change */
-            test_1_net_connexion( &dc, track->GetNet() );
+            TestNetConnection( &dc, track->GetNet() );
         }
         break;
 
@@ -1130,7 +1129,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         SetCurItem( NULL );
         int netcode = ( (ZONE_CONTAINER*) Item )->GetNet();
         Delete_Zone_Contour( DC, (ZONE_CONTAINER*) Item );
-        test_1_net_connexion( NULL, netcode );
+        TestNetConnection( NULL, netcode );
         GetBoard()->DisplayInfo( this );
     }
     break;

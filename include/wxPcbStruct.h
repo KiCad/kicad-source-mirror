@@ -1,6 +1,6 @@
-/***********************************************************/
-/*                      wxPcbStruct.h                      */
-/***********************************************************/
+/**
+ * @file wxPcbStruct.h
+ */
 
 #ifndef  WXPCB_STRUCT_H
 #define  WXPCB_STRUCT_H
@@ -118,8 +118,8 @@ public:
     wxComboBox* m_SelTrackWidthBox;     // a combo box to display and select current track width
     wxComboBox* m_SelViaSizeBox;        // a combo box to display and select current via diameter
 
-    bool             m_show_microwave_tools;
-    bool             m_show_layer_manager_tools;
+    bool m_show_microwave_tools;
+    bool m_show_layer_manager_tools;
 
 
 public:
@@ -129,26 +129,26 @@ public:
 
     ~PCB_EDIT_FRAME();
 
-    void             OnQuit( wxCommandEvent& event );
+    void OnQuit( wxCommandEvent& event );
 
     /**
      * Function ToPlotter
      * Open a dialog frame to create plot and drill files
      * relative to the current board
      */
-    void             ToPlotter( wxCommandEvent& event );
+    void ToPlotter( wxCommandEvent& event );
 
     /**
      * Function ToPrinter
      * Install the print dialog
      */
-    void             ToPrinter( wxCommandEvent& event );
+    void ToPrinter( wxCommandEvent& event );
 
     /**
      * Function SVG_Print
      * shows the print SVG file dialog.
      */
-    void             SVG_Print( wxCommandEvent& event );
+    void SVG_Print( wxCommandEvent& event );
 
     // User interface update command event handlers.
     void OnUpdateSave( wxUpdateUIEvent& aEvent );
@@ -194,17 +194,16 @@ public:
      * @param aPrintMirrorMode = true to plot mirrored
      * @param aData = a pointer on an auxiliary data (NULL if not used)
      */
-    virtual void PrintPage( wxDC* aDC,
-                            int aPrintMaskLayer, bool aPrintMirrorMode,
+    virtual void PrintPage( wxDC* aDC, int aPrintMaskLayer, bool aPrintMirrorMode,
                             void * aData = NULL );
 
-    void             GetKicadAbout( wxCommandEvent& event );
+    void GetKicadAbout( wxCommandEvent& event );
 
     /**
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
-    virtual bool     IsGridVisible();
+    virtual bool IsGridVisible();
 
     /**
      * Function SetGridVisibility() , virtual
@@ -212,26 +211,26 @@ public:
      * if you want to store/retrieve the grid visibility in configuration.
      * @param aVisible = true if the grid must be shown
      */
-    virtual void     SetGridVisibility( bool aVisible );
+    virtual void SetGridVisibility( bool aVisible );
 
     /**
      * Function GetGridColor() , virtual
      * @return the color of the grid
      */
-    virtual int     GetGridColor();
+    virtual int GetGridColor();
 
     /**
      * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
-    virtual void     SetGridColor(int aColor);
+    virtual void SetGridColor(int aColor);
 
     // Configurations:
-    void             InstallConfigFrame();
-    void             Process_Config( wxCommandEvent& event );
+    void InstallConfigFrame();
+    void Process_Config( wxCommandEvent& event );
 
     PARAM_CFG_ARRAY& GetProjectFileParameters();
-    void             SaveProjectSettings();
+    void SaveProjectSettings();
 
     /**
      * Load the project file configuration settings.
@@ -240,7 +239,7 @@ public:
      *  if not found use kicad.pro and initialize default values
      * @return always returns true.
      */
-    bool             LoadProjectSettings( const wxString& aProjectFileName );
+    bool LoadProjectSettings( const wxString& aProjectFileName );
 
     /**
      * Get the list of application specific settings.
@@ -276,7 +275,7 @@ public:
      *
      * @return - Absolute path and file name of the last net list file successfully read.
      */
-    wxString         GetLastNetListRead();
+    wxString GetLastNetListRead();
 
     /**
      * Set the last net list successfully read by the net list dialog box.
@@ -289,7 +288,7 @@ public:
      *
      * @param aNetListFile - The last net list file with full path successfully read.
      */
-    void             SetLastNetListRead( const wxString& aNetListFile );
+    void SetLastNetListRead( const wxString& aNetListFile );
 
     /**
      * Function Test_Duplicate_Missing_And_Extra_Footprints
@@ -320,17 +319,17 @@ public:
      *  Depending on the current active tool::
      *      Tool track
      *          if a track is in progress: Delete the last segment
-     *			else delete the entire track
+     *          else delete the entire track
      *      Tool module (footprint):
      *          Delete the module.
      * @param aDC = current device context
      * @return true if an item was deleted
      */
-    bool             OnHotkeyDeleteItem( wxDC* aDC );
+    bool OnHotkeyDeleteItem( wxDC* aDC );
 
-    bool             OnHotkeyPlaceItem( wxDC* aDC );
+    bool OnHotkeyPlaceItem( wxDC* aDC );
 
-    bool             OnHotkeyEditItem( int aIdCommand );
+    bool OnHotkeyEditItem( int aIdCommand );
 
     /**
      * Function OnHotkeyMoveItem
@@ -339,7 +338,7 @@ public:
      * @param aIdCommand = the hotkey command id
      * @return true if an item was moved
      */
-    bool             OnHotkeyMoveItem( int aIdCommand );
+    bool OnHotkeyMoveItem( int aIdCommand );
 
     /**
      * Function OnHotkeyRotateItem
@@ -347,23 +346,23 @@ public:
      * @param aIdCommand = the hotkey command id
      * @return true if an item was moved
      */
-    bool             OnHotkeyRotateItem( int aIdCommand );
+    bool OnHotkeyRotateItem( int aIdCommand );
 
-    void             OnCloseWindow( wxCloseEvent& Event );
-    void             Process_Special_Functions( wxCommandEvent& event );
-    void             Tracks_and_Vias_Size_Event( wxCommandEvent& event );
-    void             OnSelectTool( wxCommandEvent& aEvent );
+    void OnCloseWindow( wxCloseEvent& Event );
+    void Process_Special_Functions( wxCommandEvent& event );
+    void Tracks_and_Vias_Size_Event( wxCommandEvent& event );
+    void OnSelectTool( wxCommandEvent& aEvent );
 
-    void             ProcessMuWaveFunctions( wxCommandEvent& event );
-    void             MuWaveCommand( wxDC* DC, const wxPoint& MousePos );
+    void ProcessMuWaveFunctions( wxCommandEvent& event );
+    void MuWaveCommand( wxDC* DC, const wxPoint& MousePos );
 
-    void             RedrawActiveWindow( wxDC* DC, bool EraseBg );
-    void             ReCreateHToolbar();
-    void             ReCreateAuxiliaryToolbar();
-    void             ReCreateVToolbar();
-    void             ReCreateMicrowaveVToolbar();
-    void             ReCreateOptToolbar();
-    void             ReCreateMenuBar();
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void ReCreateHToolbar();
+    void ReCreateAuxiliaryToolbar();
+    void ReCreateVToolbar();
+    void ReCreateMicrowaveVToolbar();
+    void ReCreateOptToolbar();
+    void ReCreateMenuBar();
     LAYER_BOX_SELECTOR* ReCreateLayerBox( EDA_TOOLBAR* parent );
 
     /**
@@ -372,6 +371,7 @@ public:
      * <p>
      * Reloads the 3D view if required and calls the base PCB_BASE_FRAME::OnModify function
      * to update auxiliary information.
+     * </p>
      */
     virtual void OnModify();
 
@@ -408,28 +408,28 @@ public:
      * changes out all the layers in m_Layers and may be called upon
      * loading a new BOARD.
      */
-    void             ReFillLayerWidget();
+    void ReFillLayerWidget();
 
     /**
      * Function Show3D_Frame
      * displays the 3D view of current printed circuit board.
      */
-    void             Show3D_Frame( wxCommandEvent& event );
-    void             GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+    void Show3D_Frame( wxCommandEvent& event );
+    void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
      * Function ShowDesignRulesEditor
      * displays the Design Rules Editor.
      */
-    void             ShowDesignRulesEditor( wxCommandEvent& event );
+    void ShowDesignRulesEditor( wxCommandEvent& event );
 
     /* toolbars update UI functions: */
 
-    void             PrepareLayerIndicator();
+    void PrepareLayerIndicator();
 
     /* mouse functions events: */
-    void             OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    void             OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
+    void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
+    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
     /**
      * Function OnRightClick
@@ -438,10 +438,10 @@ public:
      * @param aMousePos The current mouse position
      * @param aPopMenu The menu to add to.
      */
-    bool             OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu );
+    bool OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu );
 
-    void             OnSelectOptionToolbar( wxCommandEvent& event );
-    void             ToolOnRightClick( wxCommandEvent& event );
+    void OnSelectOptionToolbar( wxCommandEvent& event );
+    void ToolOnRightClick( wxCommandEvent& event );
 
     /**
      * Function SaveCopyInUndoList.
@@ -452,9 +452,9 @@ public:
      * @param aTransformPoint = the reference point of the transformation, for
      *                          commands like move
      */
-    virtual void     SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
-                                         UNDO_REDO_T aTypeCommand,
-                                         const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
+    virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
+                                     UNDO_REDO_T aTypeCommand,
+                                     const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
     /**
      * Function SaveCopyInUndoList (overloaded).
@@ -475,7 +475,7 @@ public:
      * Put data pointed by List in the previous state, i.e. the state memorized by List
      * @param aList = a PICKED_ITEMS_LIST pointer to the list of items to undo/redo
      * @param aRedoCommand = a bool: true for redo, false for undo
-     * @param aRebuildRatsnet = a bool: true to rebuild ratsnet (normal use), false
+     * @param aRebuildRatsnet = a bool: true to rebuild ratsnest (normal use), false
      * to just retrieve last state (used in abort commands that do not need to
      * rebuild ratsnest)
      */
@@ -511,7 +511,7 @@ public:
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int  ReturnBlockCommand( int aKey );
+    virtual int ReturnBlockCommand( int aKey );
 
     /**
      * Function HandleBlockPlace()
@@ -628,7 +628,7 @@ public:
      *               the file else all items of the board file are added to the
      *               existing board
      */
-    int  ReadPcbFile( LINE_READER* aReader, bool Append );
+    int ReadPcbFile( LINE_READER* aReader, bool Append );
 
     /**
      * Function SavePcbFile
@@ -640,7 +640,7 @@ public:
      */
     bool SavePcbFile( const wxString& aFileName );
 
-    int  SavePcbFormatAscii( FILE* File );
+    int SavePcbFormatAscii( FILE* File );
     bool WriteGeneralDescrPcb( FILE* File );
 
     // BOARD handling
@@ -665,15 +665,15 @@ public:
      * this is the same as created by cvpcb.
      * can be used if this file is lost
      */
-    void       RecreateCmpFileFromBoard( wxCommandEvent& aEvent );
+    void RecreateCmpFileFromBoard( wxCommandEvent& aEvent );
 
     /**
      * Function RecreateBOMFileFromBoard
      * Creates a BOM file from the current loaded board
      */
-    void       RecreateBOMFileFromBoard( wxCommandEvent& aEvent );
+    void RecreateBOMFileFromBoard( wxCommandEvent& aEvent );
 
-    void       ExportToGenCAD( wxCommandEvent& event );
+    void ExportToGenCAD( wxCommandEvent& event );
 
     /**
      * Function OnExportVRML
@@ -700,7 +700,7 @@ public:
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
      * specification.
      */
-    void       ExportToSpecctra( wxCommandEvent& event );
+    void ExportToSpecctra( wxCommandEvent& event );
 
     /**
      * Function ImportSpecctraSession
@@ -709,7 +709,7 @@ public:
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
      * specification.
      */
-    void       ImportSpecctraSession( wxCommandEvent& event );
+    void ImportSpecctraSession( wxCommandEvent& event );
 
     /**
      * Function ImportSpecctraDesign
@@ -719,15 +719,15 @@ public:
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
      * specification.
      */
-    void       ImportSpecctraDesign( wxCommandEvent& event );
+    void ImportSpecctraDesign( wxCommandEvent& event );
 
     /**
      * Function Access_to_External_Tool
      * Run an external tool (like freeroute )
      */
-    void       Access_to_External_Tool( wxCommandEvent& event );
+    void Access_to_External_Tool( wxCommandEvent& event );
 
-    MODULE*    ListAndSelectModuleName();
+    MODULE* ListAndSelectModuleName();
 
     /**
      * Function ListNetsAndSelect
@@ -735,26 +735,26 @@ public:
      * displays the sorted list of nets in a dialog frame
      * If a net is selected, it is highlighted
      */
-    void       ListNetsAndSelect( wxCommandEvent& event );
+    void ListNetsAndSelect( wxCommandEvent& event );
 
-    void       Swap_Layers( wxCommandEvent& event );
+    void Swap_Layers( wxCommandEvent& event );
 
     // Handling texts on the board
-    void       Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
+    void Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
     TEXTE_PCB* Create_Texte_Pcb( wxDC* DC );
-    void       Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
-    void       StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC );
-    void       Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
-    void       InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC );
+    void Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
+    void StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC );
+    void Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC );
+    void InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC );
 
     // Graphic Segments type DRAWSEGMENT
-    void       Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
-    void       Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
-    void       InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem, wxDC* aDC );
+    void Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
+    void Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC );
+    void InstallGraphicItemPropertiesDialog( DRAWSEGMENT* aItem, wxDC* aDC );
 
     // Footprint edition (see also PCB_BASE_FRAME)
-    void       InstallModuleOptionsFrame( MODULE* Module, wxDC* DC );
-    void       StartMove_Module( MODULE* module, wxDC* DC );
+    void InstallModuleOptionsFrame( MODULE* Module, wxDC* DC );
+    void StartMove_Module( MODULE* module, wxDC* DC );
 
     /**
      * Function Delete Module
@@ -764,11 +764,11 @@ public:
      * @param aDC = currentDevice Context. if NULL: do not redraw new ratsnest
      * @param aAskBeforeDeleting : if true: ask for confirmation before deleting
      */
-    bool       Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeDeleting );
+    bool Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeDeleting );
 
-    void       Change_Side_Module( MODULE* Module, wxDC* DC );
+    void Change_Side_Module( MODULE* Module, wxDC* DC );
 
-    void       InstallExchangeModuleFrame( MODULE* ExchangeModuleModule );
+    void InstallExchangeModuleFrame( MODULE* ExchangeModuleModule );
 
     /**
      * Function Exchange_Module
@@ -780,14 +780,13 @@ public:
      * @param aUndoPickList = the undo list used to save  OldModule. If null,
      *                        OldModule is deleted
      */
-    void       Exchange_Module( MODULE*            aOldModule,
-                                MODULE*            aNewModule,
-                                PICKED_ITEMS_LIST* aUndoPickList );
+    void Exchange_Module( MODULE* aOldModule, MODULE* aNewModule,
+                          PICKED_ITEMS_LIST* aUndoPickList );
 
     // loading modules: see PCB_BASE_FRAME
 
     // Board handling
-    void   RemoveStruct( BOARD_ITEM* Item, wxDC* DC );
+    void RemoveStruct( BOARD_ITEM* Item, wxDC* DC );
 
     /**
      * Function OnEditItemRequest
@@ -797,10 +796,9 @@ public:
      */
     void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem );
 
-
     // Highlight functions:
-    int    Select_High_Light( wxDC* DC );
-    void   High_Light( wxDC* DC );
+    int Select_High_Light( wxDC* DC );
+    void High_Light( wxDC* DC );
 
     // Track and via edition:
     void   Via_Edit_Control( wxCommandEvent& event );
@@ -829,20 +827,20 @@ public:
      * @return bool - true if the operation was successful, else false such as
      *                the case where DRC would not allow a via.
      */
-    bool   Other_Layer_Route( TRACK* track, wxDC* DC );
-    void   HighlightUnconnectedPads( wxDC* DC );
+    bool Other_Layer_Route( TRACK* track, wxDC* DC );
+    void HighlightUnconnectedPads( wxDC* DC );
 
     /**
      * Function DisplayNetStatus
      * shows the status of the net at the current mouse position or the
      * PCB status if no segment selected.
      */
-    void   DisplayNetStatus( wxDC* DC );
+    void DisplayNetStatus( wxDC* DC );
 
     TRACK* Delete_Segment( wxDC* DC, TRACK* Track );
-    void   Delete_Track( wxDC* DC, TRACK* Track );
-    void   Delete_net( wxDC* DC, TRACK* Track );
-    void   Remove_One_Track( wxDC* DC, TRACK* pt_segm );
+    void Delete_Track( wxDC* DC, TRACK* Track );
+    void Delete_net( wxDC* DC, TRACK* Track );
+    void Remove_One_Track( wxDC* DC, TRACK* pt_segm );
 
     /**
      * Function Reset_All_Tracks_And_Vias_To_Netclass_Values
@@ -851,7 +849,7 @@ public:
      * @param aTrack : bool true to modify tracks
      * @param aVia : bool true to modify vias
      */
-    bool   Reset_All_Tracks_And_Vias_To_Netclass_Values( bool aTrack, bool aVia );
+    bool Reset_All_Tracks_And_Vias_To_Netclass_Values( bool aTrack, bool aVia );
 
     /**
      * Function Change_Net_Tracks_And_Vias_Sizes
@@ -861,7 +859,7 @@ public:
      * @param aUseNetclassValue : bool. True to use netclass values, false to
      *                            use current values
      */
-    bool   Change_Net_Tracks_And_Vias_Sizes( int  aNetcode, bool aUseNetclassValue );
+    bool Change_Net_Tracks_And_Vias_Sizes( int  aNetcode, bool aUseNetclassValue );
 
     /**
      * Function Edit_Track_Width
@@ -871,7 +869,7 @@ public:
      * @param  aDC = the curred device context (can be NULL)
      * @param aTrackSegment = a segment or via on the track to change
      */
-    void   Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment );
+    void Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment );
 
     /**
      * Function Edit_TrackSegm_Width
@@ -879,7 +877,7 @@ public:
      * @param  aDC = the current device context (can be NULL)
      * @param aTrackItem = the track segment or via to modify
      */
-    void   Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem );
+    void Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem );
 
     /**
      * Function Begin_Route
@@ -905,17 +903,44 @@ public:
      * @param aDC = the current device context
      * @return true if the track was created, false if not (due to a DRC error)
      */
-    bool   End_Route( TRACK* aTrack, wxDC* aDC );
+    bool End_Route( TRACK* aTrack, wxDC* aDC );
 
-    void   Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On );
-    void   Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On );
-    void   Attribut_net( wxDC* DC, int net_code, bool Flag_On );
-    void   Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int command );
-    bool   PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC );
-    bool   MergeCollinearTracks( TRACK* track, wxDC* DC, int end );
-    void   Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
-    void   SwitchLayer( wxDC* DC, int layer );
-    bool   Add_45_degrees_Segment( wxDC* DC );
+    void Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On );
+    void Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On );
+    void Attribut_net( wxDC* DC, int net_code, bool Flag_On );
+
+    /**
+     * Function StartMoveOneNodeOrSegment
+     * initializes the parameters to move one  via or/and a terminal point of a track segment
+     * The terminal point of other connected segments (if any) are moved too.
+     */
+    void StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aCommand );
+
+    bool PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC );
+
+    /**
+     * @todo This function is broken, because it merge segments having different
+     *       widths or without any connectivity test.
+     * 2 collinear segments can be merged only if no other segment or via is
+     * connected to the common point and if they have the same width. See
+     * cleanup.cpp for merge functions and consider MarkTrace() to locate segments
+     * that can be merged
+     */
+    bool MergeCollinearTracks( TRACK* track, wxDC* DC, int end );
+
+    void Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC* DC );
+    void SwitchLayer( wxDC* DC, int layer );
+
+    /**
+     * Function Add45DegreeSegment
+     * adds a track segment between 2 tracks segments if these 2 segments
+     * make a 90 deg angle, in order to have 45 deg track segments
+     * Its only works on horizontal or vertical segments.
+     *
+     * @param aDC The wxDC device context to draw on.
+     * @return A bool value true if ok or false if not.
+     */
+    bool Add45DegreeSegment( wxDC* aDC );
 
     /**
      * Function EraseRedundantTrack
@@ -930,10 +955,10 @@ public:
      * @param aItemsListPicker = the list picker to use for an undo command
      *                           (can be NULL)
      */
-    int    EraseRedundantTrack( wxDC*              aDC,
-                                TRACK*             aNewTrack,
-                                int                aNewTrackSegmentsCount,
-                                PICKED_ITEMS_LIST* aItemsListPicker );
+    int EraseRedundantTrack( wxDC*              aDC,
+                             TRACK*             aNewTrack,
+                             int                aNewTrackSegmentsCount,
+                             PICKED_ITEMS_LIST* aItemsListPicker );
 
     /**
      * Function SetTrackSegmentWidth
@@ -965,7 +990,6 @@ public:
      */
     void Delete_OldZone_Fill( SEGZONE* aZone, long aTimestamp = 0 );
 
-
     /**
      * Function Delete_LastCreatedCorner
      * Used only while creating a new zone outline
@@ -979,7 +1003,7 @@ public:
      * initiates a zone edge creation process,
      * or terminates the current zone edge and creates a new zone edge stub
      */
-    int  Begin_Zone( wxDC* DC );
+    int Begin_Zone( wxDC* DC );
 
     /**
      * Function End_Zone
@@ -999,7 +1023,7 @@ public:
      * @param verbose = true to show error messages
      * @return error level (0 = no error)
      */
-    int  Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose = TRUE );
+    int Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose = TRUE );
 
     /**
      * Function Fill_All_Zones
@@ -1008,7 +1032,7 @@ public:
      * @param verbose = true to show error messages
      * @return error level (0 = no error)
      */
-    int  Fill_All_Zones( bool verbose = TRUE );
+    int Fill_All_Zones( bool verbose = TRUE );
 
 
     /**
@@ -1066,7 +1090,7 @@ public:
      * Remove the currently selected corner in a zone outline
      * the .m_CornerSelection is used as corner selection
      */
-    void         Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container );
+    void Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container );
 
     /**
      * Function Delete_Zone
@@ -1079,7 +1103,7 @@ public:
      * if the outline is the main outline, all the zone is removed
      * otherwise, the hole is deleted
      */
-    void         Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container );
+    void Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container );
 
     /**
      * Function Start_Move_Zone_Outlines
@@ -1087,29 +1111,28 @@ public:
      * @param DC = current Device Context (can be NULL)
      * @param zone_container: the given zone to move
      */
-    void         Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
+    void Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container );
 
     // Target handling
-    PCB_TARGET*  CreateTarget( wxDC* DC );
-    void         DeleteTarget( PCB_TARGET* aTarget, wxDC* DC );
-    void         BeginMoveTarget( PCB_TARGET* aTarget, wxDC* DC );
-    void         PlaceTarget( PCB_TARGET* aTarget, wxDC* DC );
-    void         ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC );
+    PCB_TARGET* CreateTarget( wxDC* DC );
+    void DeleteTarget( PCB_TARGET* aTarget, wxDC* DC );
+    void BeginMoveTarget( PCB_TARGET* aTarget, wxDC* DC );
+    void PlaceTarget( PCB_TARGET* aTarget, wxDC* DC );
+    void ShowTargetOptionsDialog( PCB_TARGET* aTarget, wxDC* DC );
 
     // Graphic segments type DRAWSEGMENT handling:
     DRAWSEGMENT* Begin_DrawSegment( DRAWSEGMENT* Segment, int shape, wxDC* DC );
-    void         End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void         Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void         Delete_Drawings_All_Layer( int aLayer );
+    void End_Edge( DRAWSEGMENT* Segment, wxDC* DC );
+    void Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
+    void Delete_Drawings_All_Layer( int aLayer );
 
     // Dimension handling:
-    void         Install_Edit_Dimension( DIMENSION* Dimension, wxDC* DC );
-    DIMENSION*   Begin_Dimension( DIMENSION* Dimension, wxDC* DC );
-    void         Delete_Dimension( DIMENSION* Dimension, wxDC* DC );
-
+    void Install_Edit_Dimension( DIMENSION* Dimension, wxDC* DC );
+    DIMENSION* Begin_Dimension( DIMENSION* Dimension, wxDC* DC );
+    void Delete_Dimension( DIMENSION* Dimension, wxDC* DC );
 
     // netlist  handling:
-    void         InstallNetlistFrame( wxDC* DC );
+    void InstallNetlistFrame( wxDC* DC );
 
     /**
      * Function ReadPcbNetlist
@@ -1149,13 +1172,13 @@ public:
 
 
     // Autoplacement:
-    void         AutoPlace( wxCommandEvent& event );
+    void AutoPlace( wxCommandEvent& event );
 
     /**
      * Function OnOrientFootprints
      * install the dialog box for the common Orient Footprints
      */
-    void         OnOrientFootprints( wxCommandEvent& event );
+    void OnOrientFootprints( wxCommandEvent& event );
 
     /**
      * Function ReOrientModules
@@ -1165,23 +1188,23 @@ public:
      * @param include_fixe = true to orient locked footprints
      * @return true if some footprints modified, false if no change
      */
-    bool         ReOrientModules( const wxString& ModuleMask, int Orient,
+    bool ReOrientModules( const wxString& ModuleMask, int Orient,
                                   bool include_fixe );
-    void         LockModule( MODULE* aModule, bool aLocked );
-    void         AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );
-    void         AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC );
-    int          RecherchePlacementModule( MODULE* Module, wxDC* DC );
-    void         GenModuleOnBoard( MODULE* Module );
-    float        Compute_Ratsnest_PlaceModule( wxDC* DC );
-    int          GenPlaceBoard();
-    void         DrawInfoPlace( wxDC* DC );
+    void LockModule( MODULE* aModule, bool aLocked );
+    void AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );
+    void AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC );
+    int RecherchePlacementModule( MODULE* Module, wxDC* DC );
+    void GenModuleOnBoard( MODULE* Module );
+    float Compute_Ratsnest_PlaceModule( wxDC* DC );
+    int GenPlaceBoard();
+    void DrawInfoPlace( wxDC* DC );
 
     // Autorouting:
-    int          Solve( wxDC* DC, int two_sides );
-    void         Reset_Noroutable( wxDC* DC );
-    void         Autoroute( wxDC* DC, int mode );
-    void         ReadAutoroutedTracks( wxDC* DC );
-    void         GlobalRoute( wxDC* DC );
+    int Solve( wxDC* DC, int two_sides );
+    void Reset_Noroutable( wxDC* DC );
+    void Autoroute( wxDC* DC, int mode );
+    void ReadAutoroutedTracks( wxDC* DC );
+    void GlobalRoute( wxDC* DC );
 
     /**
      * Function Show_1_Ratsnest
@@ -1190,11 +1213,11 @@ public:
      * The net edge pad with mouse or module locates the mouse.
      * Delete the ratsnest if no module or pad is selected.
      */
-    void         Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC );
+    void Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC );
 
-    void         Clean_Pcb( wxDC* DC );
+    void Clean_Pcb( wxDC* DC );
 
-    void         InstallFindFrame( const wxPoint& pos, wxDC* DC );
+    void InstallFindFrame( const wxPoint& pos, wxDC* DC );
 
     /**
      * Function SendMessageToEESCHEMA
@@ -1203,15 +1226,15 @@ public:
      * @param objectToSync The object whose reference is used to synchronize
      *                     eeschema.
      */
-    void         SendMessageToEESCHEMA( BOARD_ITEM* objectToSync );
+    void SendMessageToEESCHEMA( BOARD_ITEM* objectToSync );
 
     /* Micro waves functions */
-    void         Edit_Gap( wxDC* DC, MODULE* Module );
-    MODULE*      Create_MuWaveBasicShape( const wxString& name, int pad_count );
-    MODULE*      Create_MuWaveComponent( int shape_type );
-    MODULE*      Create_MuWavePolygonShape();
-    void         Begin_Self( wxDC* DC );
-    MODULE*      Genere_Self( wxDC* DC );
+    void Edit_Gap( wxDC* DC, MODULE* Module );
+    MODULE* Create_MuWaveBasicShape( const wxString& name, int pad_count );
+    MODULE* Create_MuWaveComponent( int shape_type );
+    MODULE* Create_MuWavePolygonShape();
+    void Begin_Self( wxDC* DC );
+    MODULE* Genere_Self( wxDC* DC );
 
     /**
      * Function SetLanguage
@@ -1227,6 +1250,7 @@ public:
      * application name appended with no file.  Otherwise, the title is set to the full path
      * and file name and read only is appended to the title if the user does not have write
      * access to the file.
+     * </p>
      */
     void UpdateTitle();
 

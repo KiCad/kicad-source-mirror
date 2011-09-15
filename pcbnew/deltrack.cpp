@@ -107,7 +107,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
     SaveCopyInUndoList( aTrack, UR_DELETED );
     OnModify();
 
-    test_1_net_connexion( DC, current_net_code );
+    TestNetConnection( DC, current_net_code );
     GetBoard()->DisplayInfo( this );
     return NULL;
 }
@@ -120,7 +120,7 @@ void PCB_EDIT_FRAME::Delete_Track( wxDC* DC, TRACK* aTrack )
         int current_net_code = aTrack->GetNet();
         Remove_One_Track( DC, aTrack );
         OnModify();
-        test_1_net_connexion( DC, current_net_code );
+        TestNetConnection( DC, current_net_code );
     }
 }
 
@@ -160,7 +160,7 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
 
     SaveCopyInUndoList( itemsList, UR_DELETED );
     OnModify();
-    test_1_net_connexion( DC, net_code_delete );
+    TestNetConnection( DC, net_code_delete );
     GetBoard()->DisplayInfo( this );
 }
 
@@ -214,5 +214,5 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
     SaveCopyInUndoList( itemsList, UR_DELETED );
 
     if( net_code > 0 )
-        test_1_net_connexion( DC, net_code );
+        TestNetConnection( DC, net_code );
 }

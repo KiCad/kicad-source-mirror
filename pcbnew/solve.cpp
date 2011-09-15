@@ -60,13 +60,13 @@ static int            s_Clearance;  // Clearance value used in autorouter
 /*
 ** visit neighboring cells like this (where [9] is on the other side):
 **
-**	+---+---+---+
-**	| 1 | 2 | 3 |
-**	+---+---+---+
-**	| 4 |[9]| 5 |
-**	+---+---+---+
-**	| 6 | 7 | 8 |
-**	+---+---+---+
+**  +---+---+---+
+**  | 1 | 2 | 3 |
+**  +---+---+---+
+**  | 4 |[9]| 5 |
+**  +---+---+---+
+**  | 6 | 7 | 8 |
+**  +---+---+---+
 */
 
 /* for visiting neighbors on the same side: increments/decrements coord of
@@ -75,14 +75,14 @@ static int            s_Clearance;  // Clearance value used in autorouter
  */
 static int delta[8][2] =
 {
-    {  1, -1 },     /* northwest	*/
-    {  1, 0  },     /* north		*/
-    {  1, 1  },     /* northeast	*/
-    {  0, -1 },     /* west		*/
-    {  0, 1  },     /* east		*/
-    { -1, -1 },     /* southwest	*/
-    { -1, 0  },     /* south		*/
-    { -1, 1  }      /* southeast	*/
+    {  1, -1 },     /* northwest    */
+    {  1, 0  },     /* north        */
+    {  1, 1  },     /* northeast    */
+    {  0, -1 },     /* west     */
+    {  0, 1  },     /* east     */
+    { -1, -1 },     /* southwest    */
+    { -1, 0  },     /* south        */
+    { -1, 1  }      /* southeast    */
 };
 
 static int ndir[8] =
@@ -242,6 +242,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
     s_Clearance = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
 
     Ncurrent = 0;
+
     /* go until no more work to do */
     GetWork( &row_source, &col_source, &current_net_code,
              &row_target, &col_target, &pt_cur_ch ); // First net to route.
@@ -333,7 +334,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
         msg.Printf( wxT( "%d" ), nbunsucces );
         AppendMsgPanel( wxT( "Fail" ), msg, RED );
         msg.Printf( wxT( "  %d" ), GetBoard()->m_NbNoconnect );
-        AppendMsgPanel( wxT( "Not Connectd" ), msg, CYAN );
+        AppendMsgPanel( wxT( "Not Connected" ), msg, CYAN );
 
         /* Delete routing from display. */
         pt_cur_ch->m_PadStart->Draw( DrawPanel, DC, GR_AND );
@@ -407,6 +408,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     /* Set tab_masque[side] for final test of routing. */
     tab_mask[TOP]    = topLayerMask;
     tab_mask[BOTTOM] = bottomLayerMask;
+
     /* Set active layers mask. */
     routeLayerMask = topLayerMask | bottomLayerMask;
 
@@ -667,7 +669,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                 if( buddy & HOLE )
                     continue;
 
-//				if (buddy & (blocking[i].b1)) continue;
+//              if (buddy & (blocking[i].b1)) continue;
                 /* check second buddy */
                 buddy = GetCell( r + blocking[i].r2, c + blocking[i].c2, side );
 
@@ -677,7 +679,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                 if( buddy & HOLE )
                     continue;
 
-//				if (buddy & (blocking[i].b2)) continue;
+//              if (buddy & (blocking[i].b2)) continue;
             }
 
             olddir  = GetDir( r, c, side );
@@ -1268,14 +1270,12 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
         g_CurrentTrackList.PushBack( newTrack );
     }
 
-    g_FirstTrackSegment->start = Locate_Pad_Connecte( pcbframe->GetBoard(),
-                                                      g_FirstTrackSegment, START );
+    g_FirstTrackSegment->start = pcbframe->GetBoard()->GetPad( g_FirstTrackSegment, START );
 
     if( g_FirstTrackSegment->start )
         g_FirstTrackSegment->SetState( BEGIN_ONPAD, ON );
 
-    g_CurrentTrackSegment->end = Locate_Pad_Connecte( pcbframe->GetBoard(),
-                                                      g_CurrentTrackSegment, END );
+    g_CurrentTrackSegment->end = pcbframe->GetBoard()->GetPad( g_CurrentTrackSegment, END );
 
     if( g_CurrentTrackSegment->end )
         g_CurrentTrackSegment->SetState( END_ONPAD, ON );
@@ -1304,7 +1304,7 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 
     DrawTraces( panel, DC, firstTrack, newCount, GR_OR );
 
-    pcbframe->test_1_net_connexion( DC, netcode );
+    pcbframe->TestNetConnection( DC, netcode );
 
     screen->SetModify();
 }

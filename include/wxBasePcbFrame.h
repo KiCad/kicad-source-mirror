@@ -1,7 +1,7 @@
-/***********************************************************/
-/*                      wxPcbStruct.h:                     */
-/*      Classes used in pcbnew, cvpcb and gerbview         */
-/***********************************************************/
+/**
+ * @file wxBasePcbStruct.h
+ * @brief Classes used in pcbnew, cvpcb and gerbview.
+ */
 
 #ifndef  WX_BASE_PCB_FRAME_H
 #define  WX_BASE_PCB_FRAME_H
@@ -57,18 +57,18 @@ public:
     int  m_DisplayModText;          // How to display module texts (line/ filled / sketch)
     bool m_DisplayPcbTrackFill;     /* FALSE : tracks are show in sketch mode,
                                      * TRUE = filled */
-    EDA_UNITS_T             m_UserGridUnit;
-    wxRealPoint             m_UserGridSize;
+    EDA_UNITS_T m_UserGridUnit;
+    wxRealPoint m_UserGridSize;
 
-    int                     m_FastGrid1;
-    int                     m_FastGrid2;
+    int m_FastGrid1;
+    int m_FastGrid2;
 
-    EDA_3D_FRAME*           m_Draw3DFrame;
-    FOOTPRINT_EDIT_FRAME*   m_ModuleEditFrame;
+    EDA_3D_FRAME* m_Draw3DFrame;
+    FOOTPRINT_EDIT_FRAME* m_ModuleEditFrame;
 
 protected:
-    BOARD*                  m_Pcb;
-    GENERAL_COLLECTOR*      m_Collector;
+    BOARD* m_Pcb;
+    GENERAL_COLLECTOR* m_Collector;
 
     void updateGridSelectBox();
     void updateZoomSelectBox();
@@ -97,41 +97,37 @@ public:
 
 
     // General
-    virtual void    OnCloseWindow( wxCloseEvent& Event ) = 0;
-
-    virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
-    virtual void    ReCreateHToolbar() = 0;
-    virtual void    ReCreateVToolbar() = 0;
-    virtual void    OnLeftClick( wxDC*          DC,
-                                 const wxPoint& MousePos ) = 0;
-    virtual void    OnLeftDClick( wxDC*          DC,
-                                  const wxPoint& MousePos ) = 0;
-    virtual bool    OnRightClick( const wxPoint& MousePos,
-                                  wxMenu*        PopMenu )  = 0;
-    virtual void    ReCreateMenuBar();
-    virtual void    SetToolID( int aId, int aCursor, const wxString& aToolMsg );
-    virtual void    UpdateStatusBar();
+    virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
+    virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
+    virtual void ReCreateHToolbar() = 0;
+    virtual void ReCreateVToolbar() = 0;
+    virtual void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) = 0;
+    virtual void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) = 0;
+    virtual bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu )  = 0;
+    virtual void ReCreateMenuBar();
+    virtual void SetToolID( int aId, int aCursor, const wxString& aToolMsg );
+    virtual void UpdateStatusBar();
 
     virtual PCB_SCREEN* GetScreen() const
     {
         return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen();
     }
 
-    virtual double  BestZoom();
+    virtual double BestZoom();
 
-    virtual void    Show3D_Frame( wxCommandEvent& event );
+    virtual void Show3D_Frame( wxCommandEvent& event );
 
 public:
 
     // Read/write functions:
     EDA_ITEM* ReadDrawSegmentDescr( LINE_READER* aReader );
-    int             ReadListeSegmentDescr( LINE_READER* aReader,
-                                           TRACK* PtSegm,
-                                           int    StructType,
-                                           int    NumSegm );
+    int ReadListeSegmentDescr( LINE_READER* aReader,
+                               TRACK*       PtSegm,
+                               int          StructType,
+                               int          NumSegm );
 
-    int             ReadSetup( LINE_READER* aReader );
-    int             ReadGeneralDescrPcb( LINE_READER* aReader );
+    int ReadSetup( LINE_READER* aReader );
+    int ReadGeneralDescrPcb( LINE_READER* aReader );
 
 
     /**
@@ -149,9 +145,9 @@ public:
      *                    the type of search to be performed.  If zero, then
      *                    the mouse tools will be tested instead.
      */
-    BOARD_ITEM*              PcbGeneralLocateAndDisplay( int aHotKeyCode = 0 );
+    BOARD_ITEM* PcbGeneralLocateAndDisplay( int aHotKeyCode = 0 );
 
-    void                     ProcessItemSelection( wxCommandEvent& event );
+    void ProcessItemSelection( wxCommandEvent& event );
 
     /**
      * Function SetCurItem
@@ -161,12 +157,11 @@ public:
      * of "selecting" an item more formal, and to indivisibly tie the operation
      * of selecting an item to displaying it using BOARD_ITEM::Display_Infos().
      * @param aItem The BOARD_ITEM to make the selected item or NULL if none.
-     * @param aDisplayInfo = true to display item info, false if not (default =
-     *true)
+     * @param aDisplayInfo = true to display item info, false if not (default = true)
      */
-    void                     SetCurItem( BOARD_ITEM* aItem,
-                                         bool        aDisplayInfo = true );
-    BOARD_ITEM*              GetCurItem();
+    void SetCurItem( BOARD_ITEM* aItem, bool aDisplayInfo = true );
+
+    BOARD_ITEM* GetCurItem();
 
     /**
      * Function GetCollectorsGuide
@@ -182,14 +177,14 @@ public:
      * requested point is out of view.
      * @param aPos The point to go to.
      */
-    void                     CursorGoto(  const wxPoint& aPos );
+    void CursorGoto(  const wxPoint& aPos );
 
-    void                     place_marqueur( wxDC*          DC,
-                                             const wxPoint& pos,
-                                             char*          pt_bitmap,
-                                             int            DrawMode,
-                                             int            color,
-                                             int            type );
+    void place_marqueur( wxDC*          DC,
+                         const wxPoint& pos,
+                         char*          pt_bitmap,
+                         int            DrawMode,
+                         int            color,
+                         int            type );
 
     MODULE* Copie_Module( MODULE* module );
 
@@ -204,10 +199,10 @@ public:
      *                         footprint name
      * @return : true if OK, false if abort
      */
-    bool    Save_Module_In_Library( const wxString& aLibName,
-                                    MODULE*         aModule,
-                                    bool            aOverwrite,
-                                    bool            aDisplayDialog );
+    bool Save_Module_In_Library( const wxString& aLibName,
+                                 MODULE*         aModule,
+                                 bool            aOverwrite,
+                                 bool            aDisplayDialog );
 
     /**
      * Function Archive_Modules
@@ -243,21 +238,20 @@ public:
      */
     MODULE* Create_1_Module( const wxString& aModuleName );
 
-    void    Edit_Module( MODULE* module, wxDC* DC );
-    void    Rotate_Module( wxDC*   DC,
-                           MODULE* module,
-                           int     angle,
-                           bool    incremental );
-    void    Place_Module( MODULE* module,
-                          wxDC*   DC,
-                          bool    aDoNotRecreateRatsnest = false );
+    void Edit_Module( MODULE* module, wxDC* DC );
+    void Rotate_Module( wxDC*   DC,
+                        MODULE* module,
+                        int     angle,
+                        bool    incremental );
+    void Place_Module( MODULE* module,
+                       wxDC*   DC,
+                       bool    aDoNotRecreateRatsnest = false );
 
     // module texts
-    void          RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
-    void          DeleteTextModule( TEXTE_MODULE* Text );
-    void          PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC );
-    void          StartMoveTexteModule( TEXTE_MODULE* Text,
-                                        wxDC*         DC );
+    void RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
+    void DeleteTextModule( TEXTE_MODULE* Text );
+    void PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC );
+    void StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC );
     TEXTE_MODULE* CreateTextModule( MODULE* Module, wxDC* DC );
 
     /**
@@ -267,7 +261,7 @@ public:
      * @param aItem is the item to be reset, either TEXTE_PCB or TEXTE_MODULE.
      * @param aDC is the drawing context.
      */
-    void          ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC );
+    void ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC );
 
     /**
      * Function ResetModuleTextSizes
@@ -276,13 +270,12 @@ public:
      * @param aType is the field type (TEXT_is_REFERENCE, TEXT_is_VALUE, or TEXT_is_DIVERS).
      * @param aDC is the drawing context.
      */
-    void          ResetModuleTextSizes( int aType, wxDC* aDC );
+    void ResetModuleTextSizes( int aType, wxDC* aDC );
 
-    void          InstallPadOptionsFrame( D_PAD*         pad );
-    void          InstallTextModOptionsFrame( TEXTE_MODULE* TextMod,
-                                              wxDC*         DC );
+    void InstallPadOptionsFrame( D_PAD*         pad );
+    void InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC );
 
-    void          AddPad( MODULE* Module, bool draw );
+    void AddPad( MODULE* Module, bool draw );
 
     /**
      * Function DeletePad
@@ -292,16 +285,14 @@ public:
      * @param aPad = the pad to delete
      * @param aQuery = true to prompt for confirmation, false to delete silently
      */
-    void          DeletePad( D_PAD* aPad, bool aQuery = true );
+    void DeletePad( D_PAD* aPad, bool aQuery = true );
 
-    void          StartMovePad( D_PAD* Pad, wxDC* DC );
-    void          RotatePad( D_PAD* Pad, wxDC* DC );
-    void          PlacePad( D_PAD* Pad, wxDC* DC );
-    void          Export_Pad_Settings( D_PAD* aPad );
-    void          Import_Pad_Settings( D_PAD* aPad, bool aDraw );
-    void          Global_Import_Pad_Settings( D_PAD* aPad,
-                                              bool   aDraw );
-
+    void StartMovePad( D_PAD* Pad, wxDC* DC );
+    void RotatePad( D_PAD* Pad, wxDC* DC );
+    void PlacePad( D_PAD* Pad, wxDC* DC );
+    void Export_Pad_Settings( D_PAD* aPad );
+    void Import_Pad_Settings( D_PAD* aPad, bool aDraw );
+    void Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw );
 
     // loading footprints
 
@@ -317,9 +308,9 @@ public:
      *  @return a pointer to the new module, or NULL
      *
      */
-    MODULE*  Get_Librairie_Module( const wxString& aLibraryFullFilename,
-                                   const wxString& aModuleName,
-                                   bool            aDisplayMessageError );
+    MODULE* Get_Librairie_Module( const wxString& aLibraryFullFilename,
+                                  const wxString& aModuleName,
+                                  bool            aDisplayMessageError );
 
     /**
      * Function Select_1_Module_From_List
@@ -333,15 +324,14 @@ public:
      *                    having one (or more) of these keywords in their
      *                    keyword list ( aKeyWord = wxEmptyString if not used )
      *
-     *  @return wxEmptyString if abort or fails, or the selected module name if
-     *          Ok
+     *  @return wxEmptyString if abort or fails, or the selected module name if Ok
      */
     wxString Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
                                         const wxString& aLibraryFullFilename,
                                         const wxString& aMask,
                                         const wxString& aKeyWord );
 
-    MODULE*  Load_Module_From_Library( const wxString& library, wxDC* DC );
+    MODULE* Load_Module_From_Library( const wxString& library, wxDC* DC );
 
     //  ratsnest functions
     /**
@@ -352,7 +342,7 @@ public:
      * @param aDC = the current device context (can be NULL)
      * @param aDisplayStatus : if true, display the computation results
      */
-    void     Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus );
+    void Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus );
 
     /**
      * Function Test_1_Net_Ratsnest
@@ -360,7 +350,7 @@ public:
      * @param aDC - Device context to draw on.
      * @param aNetcode = netcode used to compute the ratsnest.
      */
-    int      Test_1_Net_Ratsnest( wxDC* aDC, int aNetcode );
+    int Test_1_Net_Ratsnest( wxDC* aDC, int aNetcode );
 
     /**
      * Function build_ratsnest_module
@@ -370,51 +360,80 @@ public:
      * It shows the connections from a pad to the nearest connected pad
      * @param aModule = module to consider.
      */
-    void     build_ratsnest_module( MODULE* aModule );
+    void build_ratsnest_module( MODULE* aModule );
 
-    void     trace_ratsnest_module( wxDC* DC );
-    void     Build_Board_Ratsnest( wxDC* DC );
+    void trace_ratsnest_module( wxDC* DC );
+    void Build_Board_Ratsnest( wxDC* DC );
 
     /**
      *  function Displays the general ratsnest
      *  Only ratsnest with the status bit CH_VISIBLE is set are displayed
      * @param aDC = the current device context (can be NULL)
      * @param aNetcode if > 0, Display only the ratsnest relative to the
-     * corresponding net_code
+     *                 corresponding net_code
      */
-    void     DrawGeneralRatsnest( wxDC* aDC, int aNetcode = 0 );
+    void DrawGeneralRatsnest( wxDC* aDC, int aNetcode = 0 );
 
-    void     trace_ratsnest_pad( wxDC* DC );
-    void     build_ratsnest_pad( BOARD_ITEM*    ref,
-                                 const wxPoint& refpos,
-                                 bool           init );
+    void trace_ratsnest_pad( wxDC* DC );
+    void build_ratsnest_pad( BOARD_ITEM* ref, const wxPoint& refpos, bool init );
 
-    void     Tst_Ratsnest( wxDC* DC, int ref_netcode );
-    void     test_connexions( wxDC* DC );
-    void     test_1_net_connexion( wxDC* DC, int net_code );
-    void     RecalculateAllTracksNetcode();
+    void Tst_Ratsnest( wxDC* DC, int ref_netcode );
+
+    /**
+     * Function TestConnections
+     * tests the connections relative to all nets.
+     * <p>
+     * This function update the status of the ratsnest ( flag CH_ACTIF = 0 if a connection
+     * is found, = 1 else) track segments are assumed to be sorted by net codes.
+     * This is the case because when a new track is added, it is inserted in the linked list
+     * according to its net code. and when nets are changed (when a new netlist is read)
+     * tracks are sorted before using this function.
+     * </p>
+     * @param aDC = current Device Context
+     */
+    void TestConnections( wxDC* aDC );
+
+    /**
+     * Function TestNetConnection
+     * tests the connections relative to \a aNetCode.  Track segments are assumed to be
+     * sorted by net codes.
+     * @param aDC Cyrrent Device Context
+     * @param aNetCode The net code to test
+     */
+    void TestNetConnection( wxDC* aDC, int aNetCode );
+
+    /**
+     * Function RecalculateAllTracksNetcode
+     * search connections between tracks and pads and propagate pad net codes to the track
+     * segments.
+     * <p>
+     * This is a 2 pass computation.  First we search a connection between a track segment
+     * and a pad.  If the connection is found, the segment netcode is set to the pad netcode.
+     */
+    void RecalculateAllTracksNetcode();
 
     /* Plotting functions:
      * Return true if OK, false if the file is not created (or has a problem)
      */
 
-    bool     Genere_GERBER( const wxString& FullFileName,
-                            int             Layer,
-                            bool            PlotOriginIsAuxAxis,
-                            GRTraceMode     trace_mode );
-    bool     Genere_HPGL( const wxString& FullFileName,
-                          int             Layer,
-                          GRTraceMode     trace_mode );
-    bool     Genere_PS( const wxString& FullFileName,
+    bool Genere_GERBER( const wxString& FullFileName,
                         int             Layer,
-                        bool            useA4,
+                        bool            PlotOriginIsAuxAxis,
                         GRTraceMode     trace_mode );
-    bool     Genere_DXF( const wxString& FullFileName,
-                         int             Layer,
-                         GRTraceMode     trace_mode );
-    void     Plot_Layer( PLOTTER*    plotter,
-                         int         Layer,
-                         GRTraceMode trace_mode );
+    bool Genere_HPGL( const wxString& FullFileName,
+                      int             Layer,
+                      GRTraceMode     trace_mode );
+    bool Genere_PS( const wxString& FullFileName,
+                    int             Layer,
+                    bool            useA4,
+                    GRTraceMode     trace_mode );
+    bool Genere_DXF( const wxString& FullFileName,
+                     int             Layer,
+                     GRTraceMode     trace_mode );
+    void Plot_Layer( PLOTTER*    plotter,
+                     int         Layer,
+                     GRTraceMode trace_mode );
+
     /**
      * Function Plot_Standard_Layer
      * plot copper or technical layers.
@@ -428,13 +447,11 @@ public:
      * @param aSkipNPTH_Pads = true to skip NPTH Pads, when the pad size and the pad hole
      *                      have the same size. Used in GERBER format only.
      */
-    void     Plot_Standard_Layer( PLOTTER* aPlotter, int aLayerMask,
-                                  bool aPlotVia, GRTraceMode aPlotMode,
-                                  bool aSkipNPTH_Pads = false );
+    void Plot_Standard_Layer( PLOTTER* aPlotter, int aLayerMask,
+                              bool aPlotVia, GRTraceMode aPlotMode,
+                              bool aSkipNPTH_Pads = false );
 
-    void     Plot_Serigraphie( PLOTTER*    plotter,
-                               int         masque_layer,
-                               GRTraceMode trace_mode );
+    void Plot_Serigraphie( PLOTTER* plotter, int masque_layer, GRTraceMode trace_mode );
 
     /**
      * Function PlotDrillMark
@@ -447,9 +464,7 @@ public:
      * @param aSmallDrillShape = true to plot a small drill shape, false to
      *                           plot the actual drill shape
      */
-    void     PlotDrillMark( PLOTTER*    aPlotter,
-                            GRTraceMode aTraceMode,
-                            bool        aSmallDrillShape );
+    void PlotDrillMark( PLOTTER* aPlotter, GRTraceMode aTraceMode, bool aSmallDrillShape );
 
     /* Functions relative to Undo/redo commands:
      */
@@ -484,12 +499,11 @@ public:
     // layerhandling:
     // (See pcbnew/sel_layer.cpp for description of why null_layer parameter
     // is provided)
-    int          SelectLayer( int default_layer, int min_layer, int max_layer,
-                              bool null_layer = false );
-    void         SelectLayerPair();
+    int SelectLayer( int default_layer, int min_layer, int max_layer, bool null_layer = false );
+    void SelectLayerPair();
     virtual void SwitchLayer( wxDC* DC, int layer );
 
-    void         InstallGridFrame( const wxPoint& pos );
+    void InstallGridFrame( const wxPoint& pos );
 
     /**
      * Load applications settings common to PCB draw frame objects.

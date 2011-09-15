@@ -27,7 +27,6 @@ static void Clean_Pcb_Items( PCB_EDIT_FRAME* frame, wxDC* DC,
 #ifdef CONN2PAD_ENBL
 static void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC );
 static void ConnectDanglingEndToVia( BOARD* pcb );
-//static void Gen_Raccord_Track( PCB_EDIT_FRAME* frame, wxDC* DC );
 #endif
 
 
@@ -52,7 +51,7 @@ void PCB_EDIT_FRAME::Clean_Pcb( wxDC* DC )
  * - vias on pad
  * - null segments
  * - Redundant segments
- *  Create segments when track ends are incorrecty connected:
+ *  Create segments when track ends are incorrectly connected:
  *  i.e. when a track end covers a pad or a via but is not exactly on the pad or the via center
  */
 void Clean_Pcb_Items( PCB_EDIT_FRAME* frame, wxDC* DC,
@@ -79,15 +78,13 @@ void Clean_Pcb_Items( PCB_EDIT_FRAME* frame, wxDC* DC,
 
 #ifdef CONN2PAD_ENBL
     /* Create missing segments when a track end covers a pad or a via,
-    but is not on the pad  or the via center */
+     * but is not on the pad  or the via center */
     if( aConnectToPads )
     {
         frame->SetStatusText( _( "Reconnect pads" ) );
+
         /* Create missing segments when a track end covers a pad, but is not on the pad center */
         ConnectDanglingEndToPad( frame, DC );
-
-        // creation of points of connections at the intersection of tracks
-//		Gen_Raccord_Track(frame, DC);
 
         /* Create missing segments when a track end covers a via, but is not on the via center */
         ConnectDanglingEndToVia( frame->GetBoard() );
@@ -153,7 +150,7 @@ void clean_vias( BOARD * aPcb )
         if( track->m_Shape != VIA_THROUGH )
             continue;
 
-        D_PAD* pad = Fast_Locate_Pad_Connecte( aPcb, track->m_Start, ALL_CU_LAYERS );
+        D_PAD* pad = aPcb->GetPadFast( track->m_Start, ALL_CU_LAYERS );
 
         if( pad && (pad->m_layerMask & EXTERNAL_LAYERS) == EXTERNAL_LAYERS )    // redundant Via
         {
@@ -225,7 +222,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
 
         D_PAD* pad;
 
-        pad = Fast_Locate_Pad_Connecte( frame->GetBoard(), segment->m_Start, masklayer );
+        pad = frame->GetBoard()->GetPadFast( segment->m_Start, masklayer );
 
         if( pad != NULL )
         {
@@ -233,7 +230,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
             type_end |= START_ON_PAD;
         }
 
-        pad = Fast_Locate_Pad_Connecte( frame->GetBoard(), segment->m_End, masklayer );
+        pad = frame->GetBoard()->GetPadFast( segment->m_End, masklayer );
 
         if( pad != NULL )
         {
@@ -243,7 +240,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
 
         // if not connected to a pad, test if segment's START is connected to another track
         // For via tests, an enhancement could to test if connected to 2 items on different layers.
-        // Currently a via must be connected to 2 items, taht can be on the same layer
+        // Currently a via must be connected to 2 items, that can be on the same layer
         int top_layer, bottom_layer;
 
         if( (type_end & START_ON_PAD ) == 0 )
@@ -307,8 +304,10 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
             if( other == NULL )     // Test a connection to zones
             {
                 if( segment->Type() != TYPE_VIA )
+                {
                     zone = frame->GetBoard()->HitTestForAnyFilledArea( segment->m_End,
                                                                        segment->GetLayer() );
+                }
                 else
                 {
                     ((SEGVIA*)segment)->ReturnLayerPair( &top_layer, &bottom_layer );
@@ -376,7 +375,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
 }
 
 
-/* Delete null lenght segments, and intermediate points .. */
+/* Delete null length segments, and intermediate points .. */
 static void clean_segments( PCB_EDIT_FRAME* frame )
 {
     TRACK*          segment, * nextsegment;
@@ -484,7 +483,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
             break;
         }
 
-        if( flag )   // We have the starting point of the segment is connecte to an other segment
+        if( flag )   // We have the starting point of the segment is connected to an other segment
         {
             segDelete = AlignSegment( frame->GetBoard(), segment, segStart, START );
 
@@ -524,7 +523,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
             }
         }
 
-        if( flag & 2 )  // We have the ending point of the segment is connecte to an other segment
+        if( flag & 2 )  // We have the ending point of the segment is connected to an other segment
         {
             segDelete = AlignSegment( frame->GetBoard(), segment, segEnd, END );
 
@@ -544,7 +543,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
 
 
 /* Function used by clean_segments.
- *  Test alignement of pt_segm and pt_ref (which must have acommon end).
+ *  Test alignment of pt_segm and pt_ref (which must have a common end).
  *  and see if the common point is not on a pad (i.e. if this common point can be removed).
  *  the ending point of pt_ref is the start point (extremite == START)
  *  or the end point (extremite == FIN)
@@ -582,7 +581,7 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
             flag = 2;
     }
 
-    /* tst if alignement in other cases
+    /* test if alignment in other cases
      *  We must have refdy/refdx == (+/-)segmdy/segmdx, (i.e. same orientation) */
     if( flag == 0 )
     {
@@ -594,19 +593,18 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
     }
 
     /* Here we have 2 aligned segments:
-    We must change the pt_ref common point only if not on a pad
-    (this function) is called when thre is only 2 connected segments,
-    and if this point is not on a pad, it can be removed and the 2 segments will be merged
-    */
+     * We must change the pt_ref common point only if not on a pad
+     * (this function) is called when there is only 2 connected segments,
+     *and if this point is not on a pad, it can be removed and the 2 segments will be merged
+     */
     if( extremite == START )
     {
         /* We do not have a pad */
-        if( Fast_Locate_Pad_Connecte( Pcb, pt_ref->m_Start,
-                                      g_TabOneLayerMask[pt_ref->GetLayer()] ) )
+        if( Pcb->GetPadFast( pt_ref->m_Start, g_TabOneLayerMask[pt_ref->GetLayer()] ) )
             return NULL;
 
-        /* change the common point coordinate of pt_segm tu use the other point
-        of pt_segm (pt_segm will be removed later) */
+        /* change the common point coordinate of pt_segm to use the other point
+         * of pt_segm (pt_segm will be removed later) */
         if( pt_ref->m_Start == pt_segm->m_Start )
         {
             pt_ref->m_Start = pt_segm->m_End;
@@ -621,12 +619,11 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
     else    /* extremite == END */
     {
         /* We do not have a pad */
-        if( Fast_Locate_Pad_Connecte( Pcb, pt_ref->m_End,
-                                      g_TabOneLayerMask[pt_ref->GetLayer()] ) )
+        if( Pcb->GetPadFast( pt_ref->m_End, g_TabOneLayerMask[pt_ref->GetLayer()] ) )
             return NULL;
 
-        /* change the common point coordinate of pt_segm tu use the other point
-        of pt_segm (pt_segm will be removed later) */
+        /* change the common point coordinate of pt_segm to use the other point
+         * of pt_segm (pt_segm will be removed later) */
         if( pt_ref->m_End == pt_segm->m_Start )
         {
             pt_ref->m_End = pt_segm->m_End;
@@ -643,14 +640,6 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
 }
 
 
-/**
- * Function RemoveMisConnectedTracks
- * finds all track segments which are mis-connected (to more than one net).
- * When such a bad segment is found, mark it as needing to be removed.
- * and remove all tracks having at least one flagged segment.
- * @param aDC = the current device context (can be NULL)
- * @return true if any change is made
- */
 bool PCB_EDIT_FRAME::RemoveMisConnectedTracks( wxDC* aDC )
 {
     TRACK*          segment;
@@ -711,12 +700,13 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks( wxDC* aDC )
     {
         next = (TRACK*) segment->Next();
 
-        if( segment->GetState( FLAG0 ) )    // Ssegment is flagged to be removed
+        if( segment->GetState( FLAG0 ) )    // Segment is flagged to be removed
         {
             segment->SetState( FLAG0, OFF );
             isModified = true;
             GetBoard()->m_Status_Pcb = 0;
             Remove_One_Track( aDC, segment );
+
             // the current segment could be deleted, so restart to the beginning
             next = GetBoard()->m_Track;
         }
@@ -724,158 +714,6 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks( wxDC* aDC )
 
     return isModified;
 }
-
-
-#if 0
-
-
-/**
- * Function Gen_Raccord_Track
- * tests the ends of segments.  If and end is on a segment of other track, but not
- * on other's end, the other segment is cut into 2, the point of cut being the end of
- * segment first being operated on.  This is done so that the subsequent tests
- * of connection, which do not test segment overlaps, will see this continuity.
- */
-static void Gen_Raccord_Track( PCB_EDIT_FRAME* frame, wxDC* DC )
-{
-    TRACK*          segment;
-    TRACK*          other;
-    int             nn = 0;
-    int             layerMask;
-    int             ii, percent, oldpercent;
-    wxString        msg;
-
-    frame->Affiche_Message( wxT( "Gen Raccords sur Pistes:" ) );
-
-    if( frame->GetBoard()->GetNumSegmTrack() == 0 )
-        return;
-
-    frame->DrawPanel->m_AbortRequest = false;
-
-    oldpercent = -1; ii = 0;
-
-    for( segment = frame->GetBoard()->m_Track;  segment;  segment = segment->Next() )
-    {
-        // display activity
-        ii++;
-        percent = (100 * ii) / frame->GetBoard()->m_Track.GetCount();
-
-        if( percent != oldpercent )
-        {
-            frame->DisplayActivity( percent, wxT( "Tracks: " ) );
-            oldpercent = percent;
-
-            msg.Printf( wxT( "%d" ), frame->GetBoard()->m_Track.GetCount() );
-            frame->MsgPanel->SetMessage( POS_AFF_MAX, wxT( "Max" ), msg, GREEN );
-
-            msg.Printf( wxT( "%d" ), ii );
-            frame->MsgPanel->SetMessage( POS_AFF_NUMSEGM, wxT( "Segm" ), msg, CYAN );
-        }
-
-        if( frame->DrawPanel->m_AbortRequest )
-            return;
-
-        layerMask = segment->ReturnMaskLayer();
-
-        // look at the "start" of the "segment"
-        for( other = frame->GetBoard()->m_Track;  other;  other = other->Next() )
-        {
-            TRACK* newTrack;
-
-            other = GetTrace( other, segment->m_Start, layerMask );
-
-            if( other == NULL )
-                break;
-
-            if( other == segment )
-                continue;
-
-            if( other->Type() == TYPE_VIA )
-                continue;
-
-            if( segment->m_Start == other->m_Start )
-                continue;
-
-            if( segment->m_Start == other->m_End )
-                continue;
-
-            // Test if the "end" of this segment is already connected to other
-            if( segment->m_End == other->m_Start )
-                continue;
-
-            if( segment->m_End == other->m_End )
-                continue;
-
-            other->Draw( frame->DrawPanel, DC, GR_XOR );
-
-            nn++;
-            msg.Printf( wxT( "%d" ), nn );
-            frame->MsgPanel->SetMessage( POS_AFF_VAR, wxT( "New <" ), msg, YELLOW );
-
-            // create a new segment and insert it next to "other", then shorten other.
-            newTrack = other->Copy();
-
-            frame->GetBoard()->m_Track.Insert( newTrack, other->Next() );
-
-            other->m_End      = segment->m_Start;
-            newTrack->m_Start = segment->m_Start;
-
-            DrawTraces( frame->DrawPanel, DC, other, 2, GR_OR );
-
-            // skip forward one, skipping the newTrack
-            other = newTrack;
-        }
-
-        // look at the "end" of the "segment"
-        for( other = frame->GetBoard()->m_Track;  other;  other = other->Next() )
-        {
-            TRACK* newTrack;
-
-            other = GetTrace( other, segment->m_End, layerMask );
-
-            if( other == NULL )
-                break;
-
-            if( other == segment )
-                continue;
-
-            if( other->Type() == TYPE_VIA )
-                continue;
-
-            if( segment->m_End == other->m_Start )
-                continue;
-
-            if( segment->m_End == other->m_End )
-                continue;
-
-            if( segment->m_Start == other->m_Start )
-                continue;
-
-            if( segment->m_Start == other->m_End )
-                continue;
-
-            other->Draw( frame->DrawPanel, DC, GR_XOR );
-
-            nn++;
-            msg.Printf( wxT( "%d" ), nn );
-            frame->MsgPanel->SetMessage( POS_AFF_VAR, wxT( "New >" ), msg, YELLOW );
-
-            // create a new segment and insert it next to "other", then shorten other.
-            newTrack = other->Copy();
-            frame->GetBoard()->m_Track.Insert( newTrack, other->Next() );
-
-            other->m_End      = segment->m_End;
-            newTrack->m_Start = segment->m_End;
-
-            DrawTraces( frame->DrawPanel, DC, other, 2, GR_OR );
-
-            // skip forward one, skipping the newTrack
-            other = newTrack;
-        }
-    }
-}
-
-#endif
 
 
 #if defined(CONN2PAD_ENBL)
@@ -980,7 +818,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC )
         if( frame->DrawPanel->m_AbortRequest )
             return;
 
-        pad = Locate_Pad_Connecte( frame->GetBoard(), segment, START );
+        pad = frame->GetBoard()->GetPad( segment, START );
 
         if( pad )
         {
@@ -1004,7 +842,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC )
             }
         }
 
-        pad = Locate_Pad_Connecte( frame->GetBoard(), segment, END );
+        pad = frame->GetBoard()->GetPad( segment, END );
 
         if( pad )
         {

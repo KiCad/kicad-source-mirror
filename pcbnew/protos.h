@@ -92,48 +92,9 @@ TRACK* GetConnectedTrace( TRACK* aTrace, TRACK* pt_base, TRACK* pt_lim, int extr
  */
 TRACK* GetTrace( BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos, int layer );
 
-/* Locate pad connected to the beginning or end of a segment
- * Input: pointer to the segment, and flag = START or END
- * Returns:
- * A pointer to the description of the patch if pad was found.
- * NULL pointer if pad was not found.
- */
-D_PAD* Locate_Pad_Connecte( BOARD* aPcb, TRACK* ptr_segment, int extr );
-
-/*
- * Locate pad pointed to by the coordinate ref_pX,, ref_pY or the current
- * cursor position, search done on all tracks.
- * Entry:
- * - Mouse coord (Curseur_X and Curseur_Y)
- * Or ref_pX, ref_pY
- * Returns:
- * Pointer to the pad if found
- * NULL pointer if pad not found
- */
-D_PAD* Locate_Any_Pad( BOARD* aPcb, const wxPoint& aPosition, int aLayerMask = ALL_LAYERS );
-
-/* Locate pad pointed to by the coordinate ref_pX,, ref_pY or the cursor
- * position of the current footprint.
- * Input:
- * - The module to search.
- * - Layer to search or -1 to search all layers.
- * Returns:
- * A pointer to the pad if found otherwise NULL.
- */
-D_PAD* Locate_Pads( MODULE* Module, const wxPoint& ref_pos, int layer );
-
 /* Locate a footprint by its bounding rectangle. */
 MODULE* Locate_Prefered_Module( BOARD* aPcb, const wxPoint& aPosition, int aActiveLayer,
                                 bool aVisibleOnly, bool aIgnoreLocked = false );
-
-/* Locate a pad pointed to by the cursor on the footprint.
- * Module.
- * Input:
- * - Module to search.
- * Returns:
- * A pointer to the pad if found otherwise NULL.
- */
-D_PAD* Locate_Pads( MODULE* Module, int typeloc );
 
 /* Locate a trace segment at the current cursor position.
  * The search begins to address start_adresse.
@@ -141,26 +102,6 @@ D_PAD* Locate_Pads( MODULE* Module, int typeloc );
 TRACK* GetTrace( TRACK* start_adresse, int typeloc );
 
 DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc );
-
-/* Locate pad containing the point px, py, layer on layer.
- *
- * The list of pads must already exist.
- *
- * Returns:
- * Pointer to the pad if found, otherwise NULL.
- */
-D_PAD* Fast_Locate_Pad_Connecte( BOARD* Pcb, const wxPoint& ref_pos, int layer );
-
-/*
- * 1 - Locate trace segment at the current cursor position.
- * 2 - Locate trace segment at the given coordinates ref_pos.
- *
- * If layer == -1, check all layers.
- *
- * The search begins to address start_adresse
- */
-TRACK* Locate_Zone( TRACK* start_adresse, const wxPoint& ref_pos, int layer );
-
 
 /*************/
 /* MODULES.C */
@@ -185,9 +126,9 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
 
 
-/*****************/
+/***************/
 /* TRACK.CPP : */
-/*****************/
+/***************/
 
 /**
  * Function MarkTrace

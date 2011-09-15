@@ -7,6 +7,7 @@
 
 #include "dlist.h"
 #include "class_netinfo.h"
+#include "class_pad.h"
 #include "class_colors_design_settings.h"
 #include "class_board_design_settings.h"
 
@@ -1091,6 +1092,55 @@ public:
      * @return TRACK* A point a to the SEGVIA object if found, else NULL.
      */
     TRACK* GetViaByPosition( const wxPoint& aPosition, int aLayerMask = -1 );
+
+    /**
+     * Function GetPad
+     * finds a pad \a aPosition on \a aLayer.
+     *
+     * @param aPosition A wxPoint object containing the position to hit test.
+     * @param aLayerMask A layer or layers to mask the hit test.
+     * @return A pointer to a D_PAD object if found or NULL if not found.
+     */
+    D_PAD* GetPad( const wxPoint& aPosition, int aLayerMask = ALL_LAYERS );
+
+    /**
+     * Function GetPad
+     * finds a pad connected to \a aEndPoint of \a aTrace.
+     *
+     * @param aTrace A pointer to a TRACK object to hit test against.
+     * @param aEndPoint The end point of \a aTrace the hit test against.
+     * @return A pointer to a D_PAD object if found or NULL if not found.
+     */
+    D_PAD* GetPad( TRACK* aTrace, int aEndPoint );
+
+    /**
+     * Function GetPadFast
+     * return pad found at \a aPosition on \a aLayer uning the fast search method.
+     * <p>
+     * The fast search method only works if the pad list has already been built.
+     * </p>
+     * @param aPosition A wxPoint object containing the position to hit test.
+     * @param aLayer A layer or layers to mask the hit test.
+     * @return A pointer to a D_PAD object if found or NULL if not found.
+     */
+    D_PAD* GetPadFast( const wxPoint& aPosition, int aLayer );
+
+    /**
+     * Function GetPad
+     * locates the pad connected at \a aPosition on \a aLayer starting at list postion
+     * \a aPad
+     * <p>
+     * This function uses a fast search in this sorted pad list and it is faster than
+     * GetPadFast().  This list is a sorted pad list must be built before calling this
+     * function.
+     * </p>
+     * @note The normal pad list #m_Pads is sorted by increasing netcodes.
+     * @param aPad A D_PAD object pointer the first pad in the list to begin searching.
+     * @param aPosition A wxPoint object containing the position to test.
+     * @param aLayerMast A layer or layers to mask the hit test.
+     * @return A D_PAD object pointer to the connected pad.
+     */
+    D_PAD* GetPad( LISTE_PAD* aPad, const wxPoint& aPosition, int aLayerMask );
 };
 
 #endif      // #ifndef CLASS_BOARD_H

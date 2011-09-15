@@ -163,7 +163,7 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
     }
 
     progressDialog.Update( ii+2, _( "Updating ratsnest..." ) );
-    test_connexions( NULL );
+    TestConnections( NULL );
 
     // Recalculate the active ratsnest, i.e. the unconnected links
     Tst_Ratsnest( NULL, 0 );

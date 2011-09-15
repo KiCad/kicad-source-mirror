@@ -118,8 +118,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
 
     DisplayRastnestInProgress = true;
 
-    GetBoard()->m_Status_Pcb = 0;     /* we want a full ratsnest computation,
-                                       * from the scratch */
+    GetBoard()->m_Status_Pcb = 0;   /* we want a full ratsnest computation, from the scratch */
     ClearMsgPanel();
 
     // Rebuild the full pads and net info list
@@ -142,9 +141,8 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
      */
     Build_Board_Ratsnest( aDC );
 
-    /* Compute the pad connections due to the existing tracks (physical
-     * connections) */
-    test_connexions( aDC );
+    /* Compute the pad connections due to the existing tracks (physical connections) */
+    TestConnections( aDC );
 
     /* Compute the active ratsnest, i.e. the unconnected links
      *  it is faster than Build_Board_Ratsnest()
@@ -200,7 +198,7 @@ static int sort_by_length( const void* o1, const void* o2 )
  * new ratsnest items
  *  @param aPadBuffer = a std::vector<D_PAD*> that is the list of pads to consider
  *  @param  aPadIdxStart = starting index (within the pad list) for search
- *  @param  aPadIdxMax	  = ending index (within the pad list) for search
+ *  @param  aPadIdxMax    = ending index (within the pad list) for search
  *  @return blocks not connected count
  */
 static int gen_rats_block_to_block
@@ -309,7 +307,7 @@ static int gen_rats_block_to_block
  * @param aPadBuffer = a std::vector<D_PAD*> that is the list of pads to
  * consider
  * @param  aPadIdxStart = starting index (within the pad list) for search
- * @param  aPadIdxMax	  = ending index (within the pad list) for search
+ * @param  aPadIdxMax     = ending index (within the pad list) for search
  * @param   current_num_block = Last existing block number of pads
  *      These block are created by the existing tracks analysis
  *
@@ -410,7 +408,7 @@ static int gen_rats_pad_to_pad( vector<RATSNEST_ITEM>& aRatsnestBuffer,
  * Update :
  *      nb_nodes = Active pads count for the board
  *      nb_links = link count for the board (logical connection count)
- *           (there are n-1 links for an equipotent which have n active pads) .
+ *           (there are n-1 links for an connection which have n active pads) .
  *
  */
 void PCB_BASE_FRAME::Build_Board_Ratsnest( wxDC* DC )
@@ -512,8 +510,7 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest( wxDC* DC )
             m_Pcb->m_FullRatsnest[ii].m_Status &= ~CH_VISIBLE;
 
         if( DC )
-            m_Pcb->m_FullRatsnest[ii].Draw( DrawPanel, DC, GR_XOR,
-                                            wxPoint( 0, 0 ) );
+            m_Pcb->m_FullRatsnest[ii].Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
     }
 }
 
@@ -620,7 +617,7 @@ static int tst_rats_block_to_block( NETINFO_ITEM*          net,
 /**
  * Function used by Tst_Ratsnest_general
  *  The general ratsnest list must exists
- *  Activates the ratsnest between 2 pads ( supposes du meme net )
+ *  Activates the ratsnest between 2 pads ( assumes the same net )
  *  The function links 1 pad not already connected an other pad and activate
  *  some blocks linked by a ratsnest
  *  Its test only the existing ratsnest and activate some ratsnest (status bit
@@ -933,6 +930,7 @@ CalculateExternalRatsnest:
     local_rats.m_Lenght = 0x7FFFFFFF;
     local_rats.m_Status = 0;
     bool addRats = false;
+
     if( internalRatsCount < m_Pcb->m_LocalRatsnest.size() )
         m_Pcb->m_LocalRatsnest.erase( m_Pcb->m_LocalRatsnest.begin() + internalRatsCount,
                                       m_Pcb->m_LocalRatsnest.end() );

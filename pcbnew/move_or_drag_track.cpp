@@ -1,5 +1,5 @@
 /****************************************************/
-/*              Track editing						*/
+/*              Track editing                       */
 /* routines to move and drag track segments or node */
 /****************************************************/
 
@@ -239,10 +239,8 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
 static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                                     const wxPoint& aPosition, bool aErase )
 {
-    double       xi1 = 0, yi1 = 0, xi2 = 0, yi2 = 0;    // calculated
-                                                        // intersection points
-    double       tx1, tx2, ty1, ty2;                    // temporary storage of
-                                                        // points
+    double       xi1 = 0, yi1 = 0, xi2 = 0, yi2 = 0;    // calculated intersection points
+    double       tx1, tx2, ty1, ty2;                    // temporary storage of points
     int          dx, dy;
     BASE_SCREEN* screen = aPanel->GetScreen();
     bool         update = true;
@@ -287,7 +285,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
 
     /* Undraw the current moved track segments before modification*/
 
-//	if( erase )
+//  if( erase )
     {
         Track->Draw( aPanel, aDC, draw_mode );
 
@@ -500,8 +498,8 @@ bool InitialiseDragParameters()
     {
         if( s_EndSegmentPresent )
         {
-            tSegmentToEnd   = g_DragSegmentList[ii].m_Segm;  // Get the segment connected to
-                                                             // the end point
+            tSegmentToEnd = g_DragSegmentList[ii].m_Segm;  // Get the segment connected to
+                                                           // the end point
             ii--;
         }
 
@@ -513,8 +511,8 @@ bool InitialiseDragParameters()
         }
     }
 
-    //would be nice to eliminate collinear segments here, so we don't
-    //have to deal with that annoying "Unable to drag this segment: two
+    // would be nice to eliminate collinear segments here, so we don't
+    // have to deal with that annoying "Unable to drag this segment: two
     // collinear segments"
 
     s_StartPointVertical = false;
@@ -542,8 +540,7 @@ bool InitialiseDragParameters()
             ty2 = (double) tSegmentToStart->m_Start.y;
         }
     }
-    else // move the start point on a line starting at Track->m_Start, and
-         // perpendicular to Track
+    else // move the start point on a line starting at Track->m_Start, and perpendicular to Track
     {
         tx1 = (double) Track->m_Start.x;
         ty1 = (double) Track->m_Start.y;
@@ -567,7 +564,6 @@ bool InitialiseDragParameters()
         s_StartPointHorizontal = true;
     }
 
-
     // Init parameters for the ending point of the moved segment
     if( tSegmentToEnd )
     {
@@ -587,8 +583,7 @@ bool InitialiseDragParameters()
             ty2 = (double) tSegmentToEnd->m_Start.y;
         }
     }
-    else // move the start point on a line starting at Track->m_End, and
-         // perpendicular to Track
+    else // move the start point on a line starting at Track->m_End, and perpendicular to Track
     {
         tx1 = (double) Track->m_End.x;
         ty1 = (double) Track->m_End.y;
@@ -624,7 +619,7 @@ bool InitialiseDragParameters()
     }
     else
     {
-        s_MovingSegmentVertical = true;      //signal vertical line
+        s_MovingSegmentVertical = true;      // signal vertical line
     }
 
     if( ty1 == ty2 )
@@ -651,13 +646,9 @@ bool InitialiseDragParameters()
 }
 
 
-/* Init parameters to move one node:
- *  a via or/and a terminal point of a track segment
- *  The terminal point of other connected segments (if any) are moved too.
- */
-void PCB_EDIT_FRAME::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int command )
+void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aCommand )
 {
-    if( !track )
+    if( !aTrack )
         return;
 
     NewTrack     = NULL;
@@ -668,64 +659,64 @@ void PCB_EDIT_FRAME::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int com
     GetBoard()->PushHighLight();
 
     if( GetBoard()->IsHighLightNetON() )
-        High_Light( DC );
+        High_Light( aDC );
 
     PosInit = GetScreen()->GetCrossHairPosition();
 
-    if( track->Type() == TYPE_VIA )     // For a via: always drag it
+    if( aTrack->Type() == TYPE_VIA )     // For a via: always drag it
     {
-        track->m_Flags = IS_DRAGGED | STARTPOINT | ENDPOINT;
+        aTrack->m_Flags = IS_DRAGGED | STARTPOINT | ENDPOINT;
 
-        if( command != ID_POPUP_PCB_MOVE_TRACK_SEGMENT )
+        if( aCommand != ID_POPUP_PCB_MOVE_TRACK_SEGMENT )
         {
-            Collect_TrackSegmentsToDrag( DrawPanel, DC, track->m_Start,
-                                         track->ReturnMaskLayer(),
-                                         track->GetNet() );
+            Collect_TrackSegmentsToDrag( DrawPanel, aDC, aTrack->m_Start,
+                                         aTrack->ReturnMaskLayer(),
+                                         aTrack->GetNet() );
         }
 
-        NewTrack     = track;
+        NewTrack     = aTrack;
         NbPtNewTrack = 1;
-        PosInit = track->m_Start;
+        PosInit = aTrack->m_Start;
     }
     else
     {
-        int     diag = track->IsPointOnEnds( GetScreen()->GetCrossHairPosition(), -1 );
+        int     diag = aTrack->IsPointOnEnds( GetScreen()->GetCrossHairPosition(), -1 );
         wxPoint pos;
 
-        switch( command )
+        switch( aCommand )
         {
         case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:   // Move segment
-            track->m_Flags |= IS_DRAGGED | ENDPOINT | STARTPOINT;
-            AddSegmentToDragList( DrawPanel, DC, track->m_Flags, track );
+            aTrack->m_Flags |= IS_DRAGGED | ENDPOINT | STARTPOINT;
+            AddSegmentToDragList( DrawPanel, aDC, aTrack->m_Flags, aTrack );
             break;
 
         case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:   // drag a segment
-            pos = track->m_Start;
-            Collect_TrackSegmentsToDrag( DrawPanel, DC, pos,
-                                         track->ReturnMaskLayer(),
-                                         track->GetNet() );
-            pos = track->m_End;
-            track->m_Flags |= IS_DRAGGED | ENDPOINT | STARTPOINT;
-            Collect_TrackSegmentsToDrag( DrawPanel, DC, pos,
-                                         track->ReturnMaskLayer(),
-                                         track->GetNet() );
+            pos = aTrack->m_Start;
+            Collect_TrackSegmentsToDrag( DrawPanel, aDC, pos,
+                                         aTrack->ReturnMaskLayer(),
+                                         aTrack->GetNet() );
+            pos = aTrack->m_End;
+            aTrack->m_Flags |= IS_DRAGGED | ENDPOINT | STARTPOINT;
+            Collect_TrackSegmentsToDrag( DrawPanel, aDC, pos,
+                                         aTrack->ReturnMaskLayer(),
+                                         aTrack->GetNet() );
             break;
 
         case ID_POPUP_PCB_MOVE_TRACK_NODE:  // Drag via or move node
-            pos = (diag & STARTPOINT) ? track->m_Start : track->m_End;
-            Collect_TrackSegmentsToDrag( DrawPanel, DC, pos,
-                                         track->ReturnMaskLayer(),
-                                         track->GetNet() );
+            pos = (diag & STARTPOINT) ? aTrack->m_Start : aTrack->m_End;
+            Collect_TrackSegmentsToDrag( DrawPanel, aDC, pos,
+                                         aTrack->ReturnMaskLayer(),
+                                         aTrack->GetNet() );
             PosInit = pos;
             break;
         }
 
-        track->m_Flags |= IS_DRAGGED;
+        aTrack->m_Flags |= IS_DRAGGED;
     }
 
     // Prepare the Undo command
-    ITEM_PICKER picker( track, UR_CHANGED );
-    picker.m_Link = track->Copy();
+    ITEM_PICKER picker( aTrack, UR_CHANGED );
+    picker.m_Link = aTrack->Copy();
     s_ItemsListPicker.PushItem( picker );
 
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
@@ -742,11 +733,11 @@ void PCB_EDIT_FRAME::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int com
     s_LastPos = PosInit;
     DrawPanel->SetMouseCapture( Show_MoveNode, Abort_MoveTrack );
 
-    GetBoard()->SetHighLightNet( track->GetNet() );
+    GetBoard()->SetHighLightNet( aTrack->GetNet() );
     GetBoard()->HighLightON();
 
-    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHighLightNetCode() );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
+    GetBoard()->DrawHighLight( DrawPanel, aDC, GetBoard()->GetHighLightNetCode() );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
 }
 
 
@@ -756,8 +747,8 @@ void PCB_EDIT_FRAME::Start_MoveOneNodeOrSegment( TRACK* track, wxDC* DC, int com
 // and end and flags relative to these pointers
 void SortTrackEndPoints( TRACK* track )
 {
-    //sort the track endpoints -- should not matter in terms of drawing
-    //or producing the pcb -- but makes doing comparisons easier.
+    // sort the track endpoints -- should not matter in terms of drawing
+    // or producing the pcb -- but makes doing comparisons easier.
     int dx = track->m_End.x - track->m_Start.x;
 
     if( dx )
@@ -777,14 +768,6 @@ void SortTrackEndPoints( TRACK* track )
 }
 
 
-/**
- * @todo: this function is broken, because it merge segments having different
- * width or without any connectivity test.
- * 2 collinear segments can be merged only in no other segment or via is
- * connected to the common point
- * and if they have the same width. See cleanup.cpp for merge functions,
- * and consider MarkTrace() to locate segments that can be merged
- */
 bool PCB_EDIT_FRAME::MergeCollinearTracks( TRACK* track, wxDC* DC, int end )
 {
     testtrack = (TRACK*) GetConnectedTrace( track, GetBoard()->m_Track, NULL, end );
@@ -1017,16 +1000,17 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
 
         /* Test the connections modified by the move
          *  (only pad connection must be tested, track connection will be
-         * tested by test_1_net_connexion() ) */
+         * tested by TestNetConnection() ) */
         int layerMask = g_TabOneLayerMask[Track->GetLayer()];
-        Track->start = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_Start, layerMask );
+        Track->start = GetBoard()->GetPadFast( Track->m_Start, layerMask );
 
         if( Track->start )
             Track->SetState( BEGIN_ONPAD, ON );
         else
             Track->SetState( BEGIN_ONPAD, OFF );
 
-        Track->end   = Fast_Locate_Pad_Connecte( GetBoard(), Track->m_End, layerMask );
+        Track->end = GetBoard()->GetPadFast( Track->m_End, layerMask );
+
         if( Track->end )
             Track->SetState( END_ONPAD, ON );
         else
@@ -1050,7 +1034,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     DrawPanel->SetMouseCapture( NULL, NULL );
 
     if( current_net_code > 0 )
-        test_1_net_connexion( DC, current_net_code );
+        TestNetConnection( DC, current_net_code );
 
     return true;
 }
@@ -1070,7 +1054,7 @@ BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
 {
     for( MODULE* module = Pcb->m_Modules; module; module = module->Next() )
     {
-        D_PAD* pad = Locate_Pads( module, pos, LayerMask );
+        D_PAD* pad = module->GetPad( pos, LayerMask );
 
         if( pad )
             return pad;
@@ -1100,7 +1084,7 @@ BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
  *   Returns the exact value of aRefPoint and a pointer to the via,
  *   But does not create extra point
  */
-TRACK* CreateLockPoint( BOARD* aPcb,
+TRACK* CreateLockPoint( BOARD*             aPcb,
                         wxPoint&           aRefPoint,
                         TRACK*             aSegm,
                         PICKED_ITEMS_LIST* aItemsListPicker )
@@ -1135,6 +1119,7 @@ TRACK* CreateLockPoint( BOARD* aPcb,
 
     // calculate coordinates of aRefPoint relative to aSegm->m_Start
     wxPoint newPoint = aRefPoint - aSegm->m_Start;
+
     // newPoint must be on aSegm:
     // Ensure newPoint.y/newPoint.y = delta.y/delta.x
     if( delta.x == 0 )
@@ -1185,7 +1170,7 @@ TRACK* CreateLockPoint( BOARD* aPcb,
     newTrack->start = aSegm;
     newTrack->SetState( BEGIN_ONPAD, OFF );
 
-    D_PAD * pad = Locate_Pad_Connecte( aPcb, newTrack, START );
+    D_PAD * pad = aPcb->GetPad( newTrack, START );
 
     if ( pad )
     {

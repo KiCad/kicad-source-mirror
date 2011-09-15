@@ -819,6 +819,22 @@ D_PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 }
 
 
+D_PAD* MODULE::GetPad( const wxPoint& aPosition, int aLayerMask )
+{
+    for( D_PAD* pad = m_Pads;   pad;   pad = pad->Next() )
+    {
+        /* ... and on the correct layer. */
+        if( ( pad->m_layerMask & aLayerMask ) == 0 )
+            continue;
+
+        if( pad->HitTest( aPosition ) )
+            return pad;
+    }
+
+    return NULL;
+}
+
+
 // see class_module.h
 SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
                              const KICAD_T scanTypes[] )

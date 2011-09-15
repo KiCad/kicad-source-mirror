@@ -6,9 +6,8 @@
 #include "common.h"
 
 #include "pcbnew.h"
-#include "class_board_design_settings.h"
 #include "colors_selection.h"
-
+#include "class_board.h"
 
 /* This is an odd place for this, but cvpcb won't link if it is
  *  in class_board_item.cpp like I first tried it.
@@ -32,10 +31,8 @@ BOARD::BOARD( EDA_ITEM* parent, PCB_BASE_FRAME* frame ) :
     m_NbNoconnect = 0;                      // Number of unconnected nets.
 
     m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
-                                            // zone contour currently in
-                                            // progress
-    m_NetInfo = new NETINFO_LIST( this );   // handle nets info list (name,
-                                            // design constraints ..
+                                            // zone contour currently in progress
+    m_NetInfo = new NETINFO_LIST( this );   // handle nets info list (name, design constraints ..
     m_NetInfo->BuildListOfNets();           // prepare pads and nets lists containers.
 
     for( int layer = 0; layer < NB_COPPER_LAYERS; ++layer )
@@ -45,11 +42,9 @@ BOARD::BOARD( EDA_ITEM* parent, PCB_BASE_FRAME* frame ) :
     }
 
     // Initial parameters for the default NETCLASS come from the global
-    // preferences
-    // within g_DesignSettings via the NETCLASS() constructor.
+    // preferences within g_DesignSettings via the NETCLASS() constructor.
     // Should user eventually load a board from a disk file, then these
-    // defaults
-    // will get overwritten during load.
+    // defaults will get overwritten during load.
     m_NetClasses.GetDefault()->SetDescription( _( "This is the default net class." ) );
     m_ViaSizeSelector    = 0;
     m_TrackWidthSelector = 0;
@@ -1340,8 +1335,10 @@ bool BOARD::Save( FILE* aFile ) const
     fprintf( aFile, "$TRACK\n" );
 
     for( item = m_Track; item; item = item->Next() )
+    {
         if( !item->Save( aFile ) )
             goto out;
+    }
 
     fprintf( aFile, "$EndTRACK\n" );
 
@@ -1349,8 +1346,10 @@ bool BOARD::Save( FILE* aFile ) const
     fprintf( aFile, "$ZONE\n" );
 
     for( item = m_Zone; item; item = item->Next() )
+    {
         if( !item->Save( aFile ) )
             goto out;
+    }
 
     fprintf( aFile, "$EndZONE\n" );
 
@@ -1489,6 +1488,149 @@ TRACK* BOARD::GetViaByPosition( const wxPoint& aPosition, int aLayerMask )
     }
 
     return track;
+}
+
+
+D_PAD* BOARD::GetPad( const wxPoint& aPosition, int aLayerMask )
+{
+    D_PAD* pad = NULL;
+
+    for( MODULE* module = m_Modules;  module && ( pad == NULL );  module = module->Next() )
+    {
+        if( aLayerMask )
+            pad = module->GetPad( aPosition, aLayerMask );
+        else
+            pad = module->GetPad( aPosition, ALL_LAYERS );
+    }
+
+    return pad;
+}
+
+
+D_PAD* BOARD::GetPad( TRACK* aTrace, int aEndPoint )
+{
+    D_PAD*  pad = NULL;
+    wxPoint aPosition;
+
+    int     aLayerMask = g_TabOneLayerMask[aTrace->GetLayer()];
+
+    if( aEndPoint == START )
+    {
+        aPosition = aTrace->m_Start;
+    }
+    else
+    {
+        aPosition = aTrace->m_End;
+    }
+
+    for( MODULE* module = m_Modules;  module;  module = module->Next() )
+    {
+        pad = module->GetPad( aPosition, aLayerMask );
+
+        if( pad != NULL )
+            break;
+    }
+
+    return pad;
+}
+
+
+D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, int aLayerMask )
+{
+    for( unsigned i=0; i<GetPadsCount();  ++i )
+    {
+        D_PAD* pad = m_NetInfo->GetPad(i);
+
+        if( pad->m_Pos != aPosition )
+            continue;
+
+        /* Pad found, it must be on the correct layer */
+        if( pad->m_layerMask & aLayerMask )
+            return pad;
+    }
+
+    return NULL;
+}
+
+
+D_PAD* BOARD::GetPad( LISTE_PAD* aPad, const wxPoint& aPosition, int aLayerMask )
+{
+    D_PAD*     pad;
+    int        ii;
+
+    int        nb_pad  = GetPadsCount();
+    LISTE_PAD* ptr_pad = aPad;
+    LISTE_PAD* lim = aPad + nb_pad - 1;
+
+    ptr_pad = aPad;
+
+    while( nb_pad )
+    {
+        pad      = *ptr_pad;
+        ii       = nb_pad;
+        nb_pad >>= 1;
+
+        if( (ii & 1) && ( ii > 1 ) )
+            nb_pad++;
+
+        if( pad->m_Pos.x < aPosition.x ) /* Must search after this item */
+        {
+            ptr_pad += nb_pad;
+
+            if( ptr_pad > lim )
+                ptr_pad = lim;
+
+            continue;
+        }
+
+        if( pad->m_Pos.x > aPosition.x ) /* Must search before this item */
+        {
+            ptr_pad -= nb_pad;
+
+            if( ptr_pad < aPad )
+                ptr_pad = aPad;
+
+            continue;
+        }
+
+        /* A suitable block is found (X coordinate matches the px reference: but we
+         * must matches the Y coordinate */
+        if( pad->m_Pos.x == aPosition.x )
+        {
+            /* Search the beginning of the block */
+            while( ptr_pad >= aPad )
+            {
+                pad = *ptr_pad;
+
+                if( pad->m_Pos.x == aPosition.x )
+                    ptr_pad--;
+                else
+                    break;
+            }
+
+            ptr_pad++;  /* ptr_pad = first pad which have pad->m_Pos.x = px */
+
+            for( ; ; ptr_pad++ )
+            {
+                if( ptr_pad > lim )
+                    return NULL; /* outside suitable block */
+
+                pad = *ptr_pad;
+
+                if( pad->m_Pos.x != aPosition.x )
+                    return NULL; /* outside suitable block */
+
+                if( pad->m_Pos.y != aPosition.y )
+                    continue;
+
+                /* A Pad if found here: but it must mach the layer */
+                if( pad->m_layerMask & aLayerMask )  // Matches layer => a connected pad is found!
+                    return pad;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 

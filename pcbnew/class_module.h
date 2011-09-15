@@ -1,6 +1,7 @@
-/*******************************************************/
-/* class_module.h : module description (excepted pads) */
-/*******************************************************/
+/**
+ * @file class_module.h
+ * @brief Module description (excepted pads)
+ */
 
 
 #ifndef _MODULE_H_
@@ -54,7 +55,7 @@ public:
 
     int           m_Attributs;          /* Flag bits ( see Mod_Attribut ) */
     int           m_Orient;             /* orientation in 0.1 degrees */
-    int           flag;                 /* Use to trace rastnest and auto
+    int           flag;                 /* Use to trace ratsnest and auto
                                          * routing. */
     int           m_ModuleStatus;       /* For autoplace: flags (LOCKED,
                                          * AUTOPLACED) */
@@ -117,7 +118,7 @@ public:
      * Function CalculateBoundingBox
      * calculates the bounding box in board coordinates.
      */
-    void     CalculateBoundingBox();
+    void CalculateBoundingBox();
 
     /**
      * Function GetFootPrintRect()
@@ -129,7 +130,7 @@ public:
     /**
      * Function GetBoundingBox
      * returns the bounding box of this
-     * tootprint.  Mainly used to redraw the screen area occupied by
+     * footprint.  Mainly used to redraw the screen area occupied by
      * the footprint.
      * @return EDA_RECT - The rectangle containing the footprint and texts.
      */
@@ -147,8 +148,9 @@ public:
     }
 
     // Moves
-    void         SetPosition( const wxPoint& newpos );
-    void         SetOrientation( int newangle );
+    void SetPosition( const wxPoint& newpos );
+
+    void SetOrientation( int newangle );
 
     /**
      * Function Move
@@ -208,8 +210,9 @@ public:
      */
     bool Save( FILE* aFile ) const;
 
-    int  Write_3D_Descr( FILE* File ) const;
-    int  ReadDescr( LINE_READER* aReader );
+    int Write_3D_Descr( FILE* File ) const;
+
+    int ReadDescr( LINE_READER* aReader );
 
     /**
      * Function Read_GPCB_Descr
@@ -219,7 +222,8 @@ public:
      * @return bool - true if success reading else false.
      */
     bool Read_GPCB_Descr( const wxString& CmpFullFileName );
-    int  Read_3D_Descr( LINE_READER* aReader );
+
+    int Read_3D_Descr( LINE_READER* aReader );
 
     /* drawing functions */
 
@@ -237,7 +241,9 @@ public:
                const wxPoint&  aOffset = ZeroOffset );
 
     void Draw3D( Pcb3D_GLCanvas* glcanvas );
+
     void DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset, int draw_mode );
+
     void DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC,
                     const wxPoint& offset, int dim_ancre, int draw_mode );
 
@@ -249,7 +255,6 @@ public:
      */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
@@ -257,7 +262,6 @@ public:
      * @return bool - true if a hit, else false.
      */
     bool HitTest( const wxPoint& aRefPos );
-
 
     /**
      * Function HitTest (overlaid)
@@ -295,8 +299,17 @@ public:
      * @return D_PAD* - The first matching name is returned, or NULL if not
      *                  found.
      */
-    D_PAD*        FindPadByName( const wxString& aPadName ) const;
+    D_PAD* FindPadByName( const wxString& aPadName ) const;
 
+    /**
+     * Function GetPad
+     * get a pad at \a aPosition on \a aLayer in the footprint.
+     *
+     * @param aPosition A wxPoint object containing the position to hit test.
+     * @param aLayerMask A layer or layers to mask the hit test.
+     * @return A pointer to a D_PAD object if found otherwise NULL.
+     */
+    D_PAD* GetPad( const wxPoint& aPosition, int aLayerMask = ALL_LAYERS );
 
     /**
      * Function Visit
@@ -307,13 +320,12 @@ public:
      * @param inspector An INSPECTOR instance to use in the inspection.
      * @param testData Arbitrary data used by the inspector.
      * @param scanTypes Which KICAD_T types are of interest and the order
-     *  is significant too, terminated by EOT.
+     *                  is significant too, terminated by EOT.
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *   else SCAN_CONTINUE;
+     *                         else SCAN_CONTINUE;
      */
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                          const KICAD_T scanTypes[] );
-
 
     /**
      * Function GetClass
@@ -335,7 +347,7 @@ public:
      * Function Show
      * is used to output the object tree, currently for debugging only.
      * @param nestLevel An aid to prettier tree indenting, and is the level
-     *          of nesting of this object within the overall tree.
+     *                  of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );
