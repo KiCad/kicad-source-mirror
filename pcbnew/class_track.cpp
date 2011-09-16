@@ -30,6 +30,60 @@ static bool ShowClearance( const TRACK* aTrack )
 }
 
 
+/*
+ * return true if the dist between p1 and p2 < max_dist
+ * Currently in test (currently rasnest algos work only if p1 == p2)
+ */
+inline bool IsNear( wxPoint& p1, wxPoint& p2, int max_dist )
+{
+#if 0   // Do not change it: does not work
+    int dist;
+    dist = abs( p1.x - p2.x ) + abs( p1.y - p2.y );
+    dist *= 7;
+    dist /= 10;
+
+    if ( dist < max_dist )
+        return true;
+#else
+    if ( p1 == p2 )
+        return true;
+#endif
+    return false;
+}
+
+
+TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition, int aLayerMask )
+{
+    TRACK* PtSegm;
+
+    if( aStartTrace == NULL )
+        return NULL;
+
+    for( PtSegm = aStartTrace; PtSegm != NULL; PtSegm =  PtSegm->Next() )
+    {
+        if( PtSegm->GetState( IS_DELETED | BUSY ) == 0 )
+        {
+            if( aPosition == PtSegm->m_Start )
+            {
+                if( aLayerMask & PtSegm->ReturnMaskLayer() )
+                    return PtSegm;
+            }
+
+            if( aPosition == PtSegm->m_End )
+            {
+                if( aLayerMask & PtSegm->ReturnMaskLayer() )
+                    return PtSegm;
+            }
+        }
+
+        if( PtSegm == aEndTrace )
+            break;
+    }
+
+    return NULL;
+}
+
+
 TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_CONNECTED_ITEM( aParent, idtype )
 {
@@ -1162,6 +1216,265 @@ TRACK* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, int aLayerMask
     }
 
     return NULL;
+}
+
+
+TRACK* TRACK::GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint )
+{
+    const int NEIGHTBOUR_COUNT_MAX = 50;
+
+    TRACK*  previousSegment;
+    TRACK*  nextSegment;
+    int     Reflayer;
+    wxPoint position;
+    int     ii;
+    int     max_dist;
+
+    if( aEndPoint == START )
+        position = m_Start;
+    else
+        position = m_End;
+
+    Reflayer = ReturnMaskLayer();
+
+    previousSegment = nextSegment = this;
+
+    for( ii = 0; ii < NEIGHTBOUR_COUNT_MAX; ii++ )
+    {
+        if( (nextSegment == NULL) && (previousSegment == NULL) )
+            break;
+
+        if( nextSegment )
+        {
+            if( nextSegment->GetState( BUSY | IS_DELETED ) )
+                goto suite;
+
+            if( nextSegment == this )
+                goto suite;
+
+            /* max_dist is the max distance between 2 track ends which
+             * ensure a copper continuity */
+            max_dist = ( nextSegment->m_Width + this->m_Width ) / 2;
+
+            if( IsNear( position, nextSegment->m_Start, max_dist ) )
+            {
+                if( Reflayer & nextSegment->ReturnMaskLayer() )
+                    return nextSegment;
+            }
+
+            if( IsNear( position, nextSegment->m_End, max_dist ) )
+            {
+                if( Reflayer & nextSegment->ReturnMaskLayer() )
+                    return nextSegment;
+            }
+suite:
+            if( nextSegment == aEndTrace )
+                nextSegment = NULL;
+            else
+                nextSegment =  nextSegment->Next();
+        }
+
+        if( previousSegment )
+        {
+            if( previousSegment->GetState( BUSY | IS_DELETED ) )
+                goto suite1;
+
+            if( previousSegment == this )
+                goto suite1;
+
+            max_dist = ( previousSegment->m_Width + m_Width ) / 2;
+
+            if( IsNear( position, previousSegment->m_Start, max_dist ) )
+            {
+                if( Reflayer & previousSegment->ReturnMaskLayer() )
+                    return previousSegment;
+            }
+
+            if( IsNear( position, previousSegment->m_End, max_dist ) )
+            {
+                if( Reflayer & previousSegment->ReturnMaskLayer() )
+                    return previousSegment;
+            }
+suite1:
+            if( previousSegment == aStartTrace )
+                previousSegment = NULL;
+            else if( previousSegment->Type() != TYPE_PCB )
+                previousSegment =  previousSegment->Back();
+            else
+                previousSegment = NULL;
+        }
+    }
+
+    /* General search. */
+    for( nextSegment = aStartTrace; nextSegment != NULL; nextSegment =  nextSegment->Next() )
+    {
+        if( nextSegment->GetState( IS_DELETED | BUSY ) )
+        {
+            if( nextSegment == aEndTrace )
+                break;
+
+            continue;
+        }
+
+        if( nextSegment == this )
+        {
+            if( nextSegment == aEndTrace )
+                break;
+
+            continue;
+        }
+
+        max_dist = ( nextSegment->m_Width + m_Width ) / 2;
+
+        if( IsNear( position, nextSegment->m_Start, max_dist ) )
+        {
+            if( Reflayer & nextSegment->ReturnMaskLayer() )
+                return nextSegment;
+        }
+
+        if( IsNear( position, nextSegment->m_End, max_dist ) )
+        {
+            if( Reflayer & nextSegment->ReturnMaskLayer() )
+                return nextSegment;
+        }
+
+        if( nextSegment == aEndTrace )
+            break;
+    }
+
+    return NULL;
+}
+
+
+int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
+{
+    TRACK* Track, * via, * segm, * TrackListEnd;
+    int    NbEnds, layerMask, ii, ok = 0;
+
+    if( aCount <= 1 )
+    {
+        *aStartTrace = *aEndTrace = this;
+        return 1;
+    }
+
+    /* Calculation of the limit analysis. */
+    *aStartTrace = *aEndTrace = NULL;
+    TrackListEnd = Track = this;
+    ii = 0;
+
+    for( ; ( Track != NULL ) && ( ii < aCount ); ii++, Track = Track->Next() )
+    {
+        TrackListEnd   = Track;
+        Track->m_Param = 0;
+    }
+
+    /* Calculate the extremes. */
+    NbEnds = 0;
+    Track = this;
+    ii = 0;
+
+    for( ; ( Track != NULL ) && ( ii < aCount ); ii++, Track = Track->Next() )
+    {
+        if( Track->Type() == TYPE_VIA )
+            continue;
+
+        layerMask = Track->ReturnMaskLayer();
+        via = GetVia( TrackListEnd, Track->m_Start, layerMask );
+
+        if( via )
+        {
+            layerMask |= via->ReturnMaskLayer();
+            via->SetState( BUSY, ON );
+        }
+
+        Track->SetState( BUSY, ON );
+        segm = ::GetTrace( this, TrackListEnd, Track->m_Start, layerMask );
+        Track->SetState( BUSY, OFF );
+
+        if( via )
+            via->SetState( BUSY, OFF );
+
+        if( segm == NULL )
+        {
+            switch( NbEnds )
+            {
+            case 0:
+                *aStartTrace = Track; NbEnds++;
+                break;
+
+            case 1:
+                int BeginPad, EndPad;
+                *aEndTrace = Track;
+
+                /* Swap ox, oy with fx, fy */
+                BeginPad = Track->GetState( BEGIN_ONPAD );
+                EndPad   = Track->GetState( END_ONPAD );
+
+                Track->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
+
+                if( BeginPad )
+                    Track->SetState( END_ONPAD, ON );
+
+                if( EndPad )
+                    Track->SetState( BEGIN_ONPAD, ON );
+
+                EXCHG( Track->m_Start, Track->m_End );
+                EXCHG( Track->start, Track->end );
+                ok = 1;
+                return ok;
+            }
+        }
+
+        layerMask = Track->ReturnMaskLayer();
+        via = GetVia( TrackListEnd, Track->m_End, layerMask );
+
+        if( via )
+        {
+            layerMask |= via->ReturnMaskLayer();
+            via->SetState( BUSY, ON );
+        }
+
+        Track->SetState( BUSY, ON );
+        segm = ::GetTrace( this, TrackListEnd, Track->m_End, layerMask );
+        Track->SetState( BUSY, OFF );
+
+        if( via )
+            via->SetState( BUSY, OFF );
+
+        if( segm == NULL )
+        {
+            switch( NbEnds )
+            {
+            case 0:
+                int BeginPad, EndPad;
+                *aStartTrace = Track;
+                NbEnds++;
+
+                /* Swap ox, oy with fx, fy */
+                BeginPad = Track->GetState( BEGIN_ONPAD );
+                EndPad   = Track->GetState( END_ONPAD );
+
+                Track->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
+
+                if( BeginPad )
+                    Track->SetState( END_ONPAD, ON );
+
+                if( EndPad )
+                    Track->SetState( BEGIN_ONPAD, ON );
+
+                EXCHG( Track->m_Start, Track->m_End );
+                EXCHG( Track->start, Track->end );
+                break;
+
+            case 1:
+                *aEndTrace = Track;
+                ok = 1;
+                return ok;
+            }
+        }
+    }
+
+    return ok;
 }
 
 

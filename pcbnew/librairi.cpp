@@ -122,7 +122,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
 
     /* Display info : */
     module->DisplayInfo( this );
-    Place_Module( module, NULL );
+    PlaceModule( module, NULL );
     GetBoard()->m_Status_Pcb = 0;
     GetBoard()->m_NetInfo->BuildListOfNets();
 
@@ -411,6 +411,7 @@ void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOn
                                     NewModulesOnly ? false : true,
                                     false ) == 0 )
             break;
+
         DisplayActivity( (int) ( ii * step ), wxEmptyString );
 
         /* Check for request to stop backup (ESCAPE key actuated) */
@@ -458,7 +459,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         wxTextEntryDialog dlg( this, _( "Name:" ), _( "Save module" ), Name_Cmp );
 
         if( dlg.ShowModal() != wxID_OK )
-            return false; // cancelled by user
+            return false; // canceled by user
 
         Name_Cmp = dlg.GetValue();
         Name_Cmp.Trim( true );
@@ -557,7 +558,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         if( strnicmp( Line, "$EndLIBRARY", 8 ) == 0 )
             continue;
 
-        // Search fo the beginning of module section:
+        // Search for the beginning of module section:
         if( skip_header )
         {
             if(  strnicmp( Line, "$MODULE", 7 ) == 0 )

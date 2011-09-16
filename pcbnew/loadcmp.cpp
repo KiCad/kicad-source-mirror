@@ -58,7 +58,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* Module )
     GetBoard()->m_NetInfo->BuildListOfNets();
 
     GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
-    Place_Module( Module, NULL );
+    PlaceModule( Module, NULL );
 
     if( Module->GetLayer() != LAYER_N_FRONT )
         Module->Flip( Module->m_Pos );
@@ -123,9 +123,9 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
         }
     }
 
-    module = Get_Librairie_Module( library, ModuleName, false );
+    module = GetModuleLibrary( library, ModuleName, false );
 
-    if( ( module == NULL ) && AllowWildSeach )    /* Search with wildcard */
+    if( ( module == NULL ) && AllowWildSeach )    /* Search with wild card */
     {
         AllowWildSeach = false;
         wxString wildname = wxChar( '*' ) + ModuleName + wxChar( '*' );
@@ -139,7 +139,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
         }
         else
         {
-            module = Get_Librairie_Module( library, ModuleName, true );
+            module = GetModuleLibrary( library, ModuleName, true );
         }
     }
 
@@ -175,21 +175,9 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
 }
 
 
-/**
- * Function Get_Librairie_Module
- *
- *  Read active libraries or one library to find and load a given module
- *  If found the module is linked to the tail of linked list of modules
- *  @param aLibraryFullFilename: the full filename of the library to read. If empty,
- *                    all active libraries are read
- *  @param aModuleName = module name to load
- *  @param aDisplayMessageError = true to display an error message if any.
- *  @return a MODULE * pointer to the new module, or NULL
- *
- */
-MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilename,
-                                              const wxString& aModuleName,
-                                              bool            aDisplayMessageError )
+MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryFullFilename,
+                                          const wxString& aModuleName,
+                                          bool            aDisplayMessageError )
 {
     wxFileName fn;
     wxString   Name;
@@ -296,20 +284,6 @@ MODULE* PCB_BASE_FRAME::Get_Librairie_Module( const wxString& aLibraryFullFilena
 }
 
 
-/**
- * Function Select_1_Module_From_List
- * Display a list of modules found in active libraries or a given library
- *
- * @param aWindow - The active window.
- * @param aLibraryFullFilename = library to list (if aLibraryFullFilename ==
- *                                void, list all modules)
- * @param aMask = Display filter (wildcard)( Mask = wxEmptyString if not used )
- * @param aKeyWord = keyword list, to display a filtered list of module having
- *                    one (or more) of these keyworks in their keyword list
- *                    ( aKeyWord = wxEmptyString if not used )
- *
- * @return wxEmptyString if abort or fails, or the selected module name if Ok
- */
 wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
                                                     const wxString& aLibraryFullFilename,
                                                     const wxString& aMask,
@@ -406,6 +380,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
     wxArrayString listnames;
 
     Module = aPcb->m_Modules;
+
     for( ; Module != NULL; Module = (MODULE*) Module->Next() )
         listnames.Add( Module->m_Reference->m_Text );
 

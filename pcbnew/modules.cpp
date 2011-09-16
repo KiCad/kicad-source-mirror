@@ -69,6 +69,7 @@ void PCB_EDIT_FRAME::StartMove_Module( MODULE* module, wxDC* DC )
         delete s_ModuleInitialCopy;
 
     s_PickedList.ClearItemsList();  // Should be empty, but...
+
     // Creates a copy of the current module, for abort and undo commands
     s_ModuleInitialCopy = new MODULE( GetBoard() );
     s_ModuleInitialCopy->Copy( module );
@@ -256,14 +257,6 @@ void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
 }
 
 
-/**
- * Function Delete Module
- * Remove a footprint from m_Modules linked list and put it in undelete buffer
- * The ratsnest and pad list are recalculated
- * @param aModule = footprint to delete
- * @param aDC = currentDevice Context. if NULL: do not redraw new ratsnest
- * @param aAskBeforeDeleting : if true: ask for confirmation before deleting
- */
 bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeDeleting )
 {
     wxString msg;
@@ -304,15 +297,6 @@ bool PCB_EDIT_FRAME::Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeD
 }
 
 
-/**
- * Function Change_Side_Module
- * Flip a footprint (switch layer from component or component to copper)
- * The mirroring is made from X axis
- * if a footprint is not on copper or component layer it is not flipped
- * (it could be on an adhesive layer, not supported at this time)
- * @param Module the footprint to flip
- * @param  DC Current Device Context. if NULL, no redraw
- */
 void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
 {
     if( Module == NULL )
@@ -380,29 +364,24 @@ void PCB_EDIT_FRAME::Change_Side_Module( MODULE* Module, wxDC* DC )
 }
 
 
-/* Place module at cursor position.
- *
- * DC (if NULL: no display screen has the output.
- * Update module coordinates with the new position.
- */
-void PCB_BASE_FRAME::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRecreateRatsnest )
+void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreateRatsnest )
 {
     TRACK*  pt_segm;
     wxPoint newpos;
 
-    if( module == 0 )
+    if( aModule == 0 )
         return;
 
     OnModify();
     GetBoard()->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK);
 
-    if( module->IsNew() )
+    if( aModule->IsNew() )
     {
-        SaveCopyInUndoList( module, UR_NEW );
+        SaveCopyInUndoList( aModule, UR_NEW );
     }
-    else if( (module->m_Flags & IS_MOVED ) )
+    else if( (aModule->m_Flags & IS_MOVED ) )
     {
-        ITEM_PICKER picker( module, UR_CHANGED );
+        ITEM_PICKER picker( aModule, UR_CHANGED );
         picker.m_Link = s_ModuleInitialCopy;
         s_PickedList.PushItem( picker );
         s_ModuleInitialCopy = NULL;     // the picker is now owner of s_ModuleInitialCopy.
@@ -417,18 +396,18 @@ void PCB_BASE_FRAME::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRecreate
         s_PickedList.ClearItemsList();
     }
 
-    if( g_Show_Module_Ratsnest && ( GetBoard()->m_Status_Pcb & LISTE_PAD_OK ) && DC )
-        trace_ratsnest_module( DC );
+    if( g_Show_Module_Ratsnest && ( GetBoard()->m_Status_Pcb & LISTE_PAD_OK ) && aDC )
+        TraceModuleRatsNest( aDC );
 
     newpos = GetScreen()->GetCrossHairPosition();
-    module->SetPosition( newpos );
-    module->m_Flags = 0;
+    aModule->SetPosition( newpos );
+    aModule->m_Flags = 0;
 
     delete s_ModuleInitialCopy;
     s_ModuleInitialCopy = NULL;
 
-    if( DC )
-        module->Draw( DrawPanel, DC, GR_OR );
+    if( aDC )
+        aModule->Draw( DrawPanel, aDC, GR_OR );
 
     if( g_DragSegmentList.size() )
     {
@@ -438,8 +417,8 @@ void PCB_BASE_FRAME::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRecreate
             pt_segm = g_DragSegmentList[ii].m_Segm;
             pt_segm->SetState( IN_EDIT, OFF );
 
-            if( DC )
-                pt_segm->Draw( DrawPanel, DC, GR_OR );
+            if( aDC )
+                pt_segm->Draw( DrawPanel, aDC, GR_OR );
         }
 
         // Delete drag list
@@ -450,12 +429,12 @@ void PCB_BASE_FRAME::Place_Module( MODULE* module, wxDC* DC, bool aDoNotRecreate
     DrawPanel->SetMouseCapture( NULL, NULL );
 
     if( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) && !aDoNotRecreateRatsnest )
-        Compile_Ratsnest( DC, true );
+        Compile_Ratsnest( aDC, true );
 
-    if( DC )
+    if( aDC )
         DrawPanel->Refresh();
 
-    module->DisplayInfo( this );
+    aModule->DisplayInfo( this );
 }
 
 
@@ -559,6 +538,6 @@ void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module )
     {
         PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) panel->GetParent();
         frame->build_ratsnest_module( module );
-        frame->trace_ratsnest_module( DC );
+        frame->TraceModuleRatsNest( DC );
     }
 }

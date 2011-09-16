@@ -191,7 +191,7 @@ void PCB_EDIT_FRAME::DisplayNetStatus( wxDC* DC )
     int    layerMask = (1 << getActiveLayer());
     wxPoint pos = GetScreen()->RefPos( true );
 
-    pt_segm = GetTrace( GetBoard(), GetBoard()->m_Track, pos, layerMask );
+    pt_segm = GetBoard()->GetTrace( GetBoard()->m_Track, pos, layerMask );
 
     if( pt_segm == NULL )
         GetBoard()->DisplayInfo( this );

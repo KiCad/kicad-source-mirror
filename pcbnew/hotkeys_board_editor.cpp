@@ -1,6 +1,6 @@
-/***************/
+/****************************/
 /* hotkeys_board_editor.cpp */
-/***************/
+/****************************/
 
 #include "fctsys.h"
 #include "pcbnew.h"
@@ -32,7 +32,7 @@ void PCB_EDIT_FRAME::RecordMacros(wxDC* aDC, int aNumber)
 
     if( m_RecordingMacros < 0 )
     {
-       m_RecordingMacros = aNumber;
+        m_RecordingMacros = aNumber;
         m_Macros[aNumber].m_StartPosition = GetScreen()->GetCrossHairPosition(false);
         m_Macros[aNumber].m_Record.clear();
 
@@ -75,7 +75,9 @@ void PCB_EDIT_FRAME::CallMacros(wxDC* aDC, const wxPoint& aPosition, int aNumber
     screen->SetMousePosition( tPosition );
     GeneralControl( aDC, tPosition );
 
-    for( std::list<MACROS_RECORD>::iterator i = m_Macros[aNumber].m_Record.begin(); i != m_Macros[aNumber].m_Record.end(); i++ )
+    for( std::list<MACROS_RECORD>::iterator i = m_Macros[aNumber].m_Record.begin();
+         i != m_Macros[aNumber].m_Record.end();
+         i++ )
     {
         wxPoint tmpPos = screen->GetNearestGridPosition( tPosition + i->m_Position );
 
@@ -126,23 +128,34 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     if( HK_Descr == NULL )
         return;
 
-    if( (m_RecordingMacros != -1) &&
-        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_1) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_1) &&
-        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_2) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_2) &&
-        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_3) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_3) &&
-        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_4) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_4) &&
-        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_5) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_5) &&
-        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_6) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_6) &&
-        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_7) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_7) &&
-        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_8) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_8) &&
-        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_9) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_9) &&
-        (HK_Descr->m_Idcommand != HK_RECORD_MACROS_0) && (HK_Descr->m_Idcommand != HK_CALL_MACROS_0) )
+    if( (m_RecordingMacros != -1)
+      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_1)
+      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_1)
+      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_2)
+      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_2)
+      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_3)
+      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_3)
+      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_4)
+      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_4)
+      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_5)
+      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_5)
+      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_6)
+      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_6)
+      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_7)
+      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_7)
+      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_8)
+      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_8)
+      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_9)
+      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_9)
+      && (HK_Descr->m_Idcommand != HK_RECORD_MACROS_0)
+      && (HK_Descr->m_Idcommand != HK_CALL_MACROS_0) )
     {
         MACROS_RECORD macros_record;
         macros_record.m_HotkeyCode = aHotkeyCode;
         macros_record.m_Idcommand = HK_Descr->m_Idcommand;
-        macros_record.m_Position = screen->GetNearestGridPosition( aPosition ) - m_Macros[m_RecordingMacros].m_StartPosition;
-        m_Macros[m_RecordingMacros].m_Record.push_back(macros_record);
+        macros_record.m_Position = screen->GetNearestGridPosition( aPosition ) -
+                                   m_Macros[m_RecordingMacros].m_StartPosition;
+        m_Macros[m_RecordingMacros].m_Record.push_back( macros_record );
     }
 
     // Create a wxCommandEvent that will be posted in some hot keys functions
@@ -162,87 +175,88 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_RECORD_MACROS_0:
-        RecordMacros(aDC, 0);
+        RecordMacros( aDC, 0 );
         break;
 
     case HK_RECORD_MACROS_1:
-        RecordMacros(aDC, 1);
+        RecordMacros( aDC, 1 );
         break;
 
     case HK_RECORD_MACROS_2:
-        RecordMacros(aDC, 2);
+        RecordMacros( aDC, 2 );
         break;
 
     case HK_RECORD_MACROS_3:
-        RecordMacros(aDC, 3);
+        RecordMacros( aDC, 3 );
         break;
 
     case HK_RECORD_MACROS_4:
-        RecordMacros(aDC, 4);
+        RecordMacros( aDC, 4 );
         break;
 
     case HK_RECORD_MACROS_5:
-        RecordMacros(aDC, 5);
+        RecordMacros( aDC, 5 );
         break;
 
     case HK_RECORD_MACROS_6:
-        RecordMacros(aDC, 6);
+        RecordMacros( aDC, 6 );
         break;
 
     case HK_RECORD_MACROS_7:
-        RecordMacros(aDC, 7);
+        RecordMacros( aDC, 7 );
         break;
 
     case HK_RECORD_MACROS_8:
-        RecordMacros(aDC, 8);
+        RecordMacros( aDC, 8 );
         break;
 
     case HK_RECORD_MACROS_9:
-        RecordMacros(aDC, 9);
+        RecordMacros( aDC, 9 );
         break;
 
     case HK_CALL_MACROS_0:
-        CallMacros(aDC, screen->GetCrossHairPosition(false), 0);
+        CallMacros( aDC, screen->GetCrossHairPosition( false ), 0 );
         break;
 
     case HK_CALL_MACROS_1:
-        CallMacros(aDC, screen->GetCrossHairPosition(false), 1);
+        CallMacros( aDC, screen->GetCrossHairPosition( false ), 1 );
         break;
 
     case HK_CALL_MACROS_2:
-        CallMacros(aDC, screen->GetCrossHairPosition(false), 2);
+        CallMacros( aDC, screen->GetCrossHairPosition( false ), 2 );
         break;
 
     case HK_CALL_MACROS_3:
-        CallMacros(aDC, screen->GetCrossHairPosition(false), 3);
+        CallMacros( aDC, screen->GetCrossHairPosition( false ), 3 );
         break;
 
     case HK_CALL_MACROS_4:
-        CallMacros(aDC, screen->GetCrossHairPosition(false), 4);
+        CallMacros( aDC, screen->GetCrossHairPosition( false ), 4 );
         break;
 
     case HK_CALL_MACROS_5:
-        CallMacros(aDC, screen->GetCrossHairPosition(false), 5);
+        CallMacros( aDC, screen->GetCrossHairPosition( false ), 5 );
         break;
 
     case HK_CALL_MACROS_6:
-        CallMacros(aDC, screen->GetCrossHairPosition(false), 6);
+        CallMacros( aDC, screen->GetCrossHairPosition( false ), 6 );
         break;
 
     case HK_CALL_MACROS_7:
-        CallMacros(aDC, screen->GetCrossHairPosition(false), 7);
+        CallMacros( aDC, screen->GetCrossHairPosition( false ), 7 );
         break;
 
     case HK_CALL_MACROS_8:
-        CallMacros(aDC, screen->GetCrossHairPosition(false), 8);
+        CallMacros( aDC, screen->GetCrossHairPosition( false ), 8 );
         break;
 
     case HK_CALL_MACROS_9:
-        CallMacros(aDC, screen->GetCrossHairPosition(false), 9);
+        CallMacros( aDC, screen->GetCrossHairPosition( false ), 9 );
         break;
 
     case HK_SWITCH_TRACK_WIDTH_TO_NEXT:
-        GetBoard()->m_TrackWidthSelector = ( GetBoard()->m_TrackWidthSelector + 1 ) % GetBoard()->m_TrackWidthList.size();
+        GetBoard()->m_TrackWidthSelector = ( GetBoard()->m_TrackWidthSelector + 1 ) %
+                                           GetBoard()->m_TrackWidthList.size();
         break;
 
     case HK_SWITCH_TRACK_WIDTH_TO_PREVIOUS:
@@ -259,6 +273,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
             OnSelectGrid( cmd );
         }
+
         break;
 
     case HK_SWITCH_GRID_TO_FASTGRID2:
@@ -268,56 +283,66 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
             OnSelectGrid( cmd );
         }
+
         break;
 
     case HK_SWITCH_GRID_TO_NEXT:
         if( m_SelGridBox )
         {
-            m_SelGridBox->SetSelection( ( m_SelGridBox->GetSelection() + 1 ) % m_SelGridBox->GetCount() );
+            m_SelGridBox->SetSelection( ( m_SelGridBox->GetSelection() + 1 ) %
+                                        m_SelGridBox->GetCount() );
             cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
             OnSelectGrid( cmd );
         }
+
         break;
 
     case HK_SWITCH_GRID_TO_PREVIOUS:
         if( m_SelGridBox )
         {
             cnt = m_SelGridBox->GetSelection();
+
             if ( cnt == 0 )
                 cnt = m_SelGridBox->GetCount() - 1;
             else
                 cnt--;
+
             m_SelGridBox->SetSelection( cnt );
             cmd.SetEventType( wxEVT_COMMAND_COMBOBOX_SELECTED );
             OnSelectGrid( cmd );
         }
+
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
         ll = getActiveLayer();
+
         if( (ll <= LAYER_N_BACK) || (ll > LAYER_N_FRONT) )
             break;
 
         if( GetBoard()->GetCopperLayerCount() < 2 ) // Single layer
             ll = LAYER_N_BACK;
         else if( ll == LAYER_N_FRONT )
-            ll = MAX( LAYER_N_BACK,
-                      GetBoard()->GetCopperLayerCount() - 2 );
+            ll = MAX( LAYER_N_BACK, GetBoard()->GetCopperLayerCount() - 2 );
         else
             ll--;
+
         SwitchLayer( aDC, ll );
         break;
 
     case HK_SWITCH_LAYER_TO_NEXT:
         ll = getActiveLayer();
+
         if( (ll < LAYER_N_BACK) || (ll >= LAYER_N_FRONT) )
             break;
+
         if( GetBoard()->GetCopperLayerCount() < 2 ) // Single layer
             ll = LAYER_N_BACK;
         else if( ll >= GetBoard()->GetCopperLayerCount() - 2 )
             ll = LAYER_N_FRONT;
         else
             ll++;
+
         SwitchLayer( aDC, ll );
         break;
 
@@ -388,6 +413,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
             wxPostEvent( this, event );
         }
+
         break;
 
     case HK_RESET_LOCAL_COORD: /*Reset the relative coord  */
@@ -425,6 +451,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
                     Delete_Segment( aDC, (TRACK*) item );
                     SetCurItem( NULL );
                 }
+
                 OnModify();
             }
             else if( GetCurItem()->IsTrack() )
@@ -437,6 +464,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
                 OnModify();
             }
         }
+
         break;
 
     case HK_END_TRACK:
@@ -446,41 +474,50 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             DrawPanel->MoveCursorToCrossHair();
             End_Route( (TRACK*) GetCurItem(), aDC );
         }
+
         break;
 
     case HK_GET_AND_MOVE_FOOTPRINT:
         if( !itemCurrentlyEdited )
             evt_type = ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST;
+
         break;
 
     case HK_FIND_ITEM:
         if( !itemCurrentlyEdited )
             evt_type = ID_FIND_ITEMS;
+
         break;
 
     case HK_LOAD_BOARD:
         if( !itemCurrentlyEdited )
             evt_type = ID_LOAD_FILE ;
+
         break;
 
     case HK_SAVE_BOARD:
         if( !itemCurrentlyEdited )
             evt_type = ID_SAVE_BOARD;
+
         break;
 
     case HK_ADD_MICROVIA: // Place a micro via if a track is in progress
         if( GetToolId() != ID_TRACK_BUTT )
             return;
+
         if( !itemCurrentlyEdited )                         // no track in progress: nothing to do
             break;
+
         if( GetCurItem()->Type() != TYPE_TRACK )           // Should not occur
             return;
+
         if( !GetCurItem()->IsNew() )
             return;
 
         // place micro via and switch layer
         if( IsMicroViaAcceptable() )
             evt_type = ID_POPUP_PCB_PLACE_MICROVIA;
+
         break;
 
     case HK_ADD_VIA: // Switch to alternate layer and Place a via if a track is in progress
@@ -489,12 +526,16 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             Other_Layer_Route( NULL, aDC );
             break;
         }
+
         if( GetToolId() != ID_TRACK_BUTT )
             return;
+
         if( GetCurItem()->Type() != TYPE_TRACK )
             return;
+
         if( !GetCurItem()->IsNew() )
             return;
+
         evt_type = ID_POPUP_PCB_PLACE_VIA;
         break;
 
@@ -530,6 +571,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         {
             TRACK* track = Begin_Route( NULL, aDC );
             SetCurItem( track );
+
             if( track )
                 DrawPanel->m_AutoPAN_Request = true;
         }
@@ -541,8 +583,10 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             // because a track info is displayed while moving the mouse cursor
             if( track )      // A new segment was created
                 SetCurItem( track, false );
+
             DrawPanel->m_AutoPAN_Request = true;
         }
+
         break;
 
     case HK_EDIT_ITEM:      // Edit board item
@@ -568,6 +612,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             module->SetLocked( !module->IsLocked() );
             module->DisplayInfo( this );
         }
+
         break;
 
     case HK_DRAG_ITEM:    // Start drag module or track segment
@@ -603,7 +648,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
  *  Depending on the current active tool::
  *      Tool track
  *          if a track is in progress: Delete the last segment
- *			else delete the entire track
+ *          else delete the entire track
  *      Tool module (footprint):
  *          Delete the module.
  * @param aDC = current device context
@@ -619,11 +664,14 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
     case ID_TRACK_BUTT:
         if( getActiveLayer() > LAYER_N_FRONT )
             return false;
+
         if( ItemFree )
         {
             item = PcbGeneralLocateAndDisplay();
+
             if( item && !item->IsTrack( ) )
                 return false;
+
             Delete_Track( aDC, (TRACK*) item );
         }
         else if( item->IsTrack( ) )
@@ -659,10 +707,13 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
         if( ItemFree )
         {
             item = PcbGeneralLocateAndDisplay();
+
             if( item == NULL )
                 return false;
+
             if( (item->Type() == TYPE_MODULE) && !IsOK( this, _( "Delete module?" ) ) )
                 return false;
+
             RemoveStruct( item, aDC );
         }
         else
@@ -697,16 +748,19 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
     case TYPE_VIA:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_TRACKSEG;
+
         break;
 
     case TYPE_TEXTE:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_TEXTEPCB;
+
         break;
 
     case TYPE_MODULE:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_MODULE;
+
         break;
 
     case TYPE_PAD:
@@ -716,31 +770,37 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
         // the parent.
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_MODULE;
+
         break;
 
     case PCB_TARGET_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_MIRE;
+
         break;
 
     case TYPE_DIMENSION:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_DIMENSION;
+
         break;
 
     case TYPE_TEXTE_MODULE:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_TEXTMODULE;
+
         break;
 
     case TYPE_DRAWSEGMENT:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_DRAWING;
+
         break;
 
     case TYPE_ZONE_CONTAINER:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_ZONE_PARAMS;
+
         break;
 
     default:
@@ -790,16 +850,20 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
     case TYPE_VIA:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_TRACK_NODE;
+
         if( aIdCommand == HK_DRAG_ITEM )
             evt_type = ID_POPUP_PCB_DRAG_TRACK_SEGMENT;
+
         if( aIdCommand == HK_DRAG_TRACK_KEEP_SLOPE )
             evt_type = ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE;
+
         break;
 
     case TYPE_MODULE:
     {
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_MODULE_REQUEST;
+
         if( aIdCommand == HK_DRAG_ITEM )
             evt_type = ID_POPUP_PCB_DRAG_MODULE_REQUEST;
     }
@@ -821,28 +885,34 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
     case TYPE_TEXTE:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST;
+
         break;
 
     case PCB_TARGET_T:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_MIRE_REQUEST;
+
         break;
 
     case TYPE_ZONE_CONTAINER:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_ZONE_OUTLINES;
+
         if( aIdCommand == HK_DRAG_ITEM )
             evt_type = ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT;
+
         break;
 
     case TYPE_TEXTE_MODULE:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST;
+
         break;
 
     case TYPE_DRAWSEGMENT:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_DRAWING_REQUEST;
+
         break;
 
     default:
@@ -861,14 +931,7 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
     return false;
 }
 
-/**
- * Function OnHotkeyPlaceItem
- * Place the item (footprint, track, text .. ) found under the mouse cursor
- * An item can be placed only if there is this item currently edited
- * Only a footprint, a pad or a track can be placed
- * @param aDC = current device context
- * @return true if an item was placedd
- */
+
 bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
 {
     BOARD_ITEM* item = GetCurItem();
@@ -888,6 +951,7 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
         case TYPE_VIA:
             if( item->m_Flags & IS_DRAGGED )
                 PlaceDraggedOrMovedTrackSegment( (TRACK*) item, aDC );
+
             break;
 
         case TYPE_TEXTE:
@@ -903,7 +967,7 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
             break;
 
         case TYPE_MODULE:
-            Place_Module( (MODULE*) item, aDC );
+            PlaceModule( (MODULE*) item, aDC );
             break;
 
         case PCB_TARGET_T:
@@ -913,6 +977,7 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
         case TYPE_DRAWSEGMENT:
             if( no_tool )   // when no tools: existing item moving.
                 Place_DrawItem( (DRAWSEGMENT*) item, aDC );
+
             break;
 
         default:
@@ -924,18 +989,11 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
 
         return true;
     }
+
     return false;
 }
 
-/**
- * Function OnHotkeyRotateItem
- * Rotate the item (text or footprint) found under the mouse cursor
- * Note:
- *     this command can be used with an item currently in edit
- *     Only some items can be rotated (footprints and texts)
- * @param aIdCommand = the hotkey command id
- * @return true if an item was moved
- */
+
 bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
@@ -956,6 +1014,7 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
     {
         if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
             evt_type = ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE;
+
         if( aIdCommand == HK_FLIP_FOOTPRINT )                   // move to other side
             evt_type = ID_POPUP_PCB_CHANGE_SIDE_MODULE;
     }
@@ -964,11 +1023,13 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
     case TYPE_TEXTE:
         if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
             evt_type = ID_POPUP_PCB_ROTATE_TEXTEPCB;
+
         break;
 
     case TYPE_TEXTE_MODULE:
         if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
             evt_type = ID_POPUP_PCB_ROTATE_TEXTMODULE;
+
         break;
 
     default:

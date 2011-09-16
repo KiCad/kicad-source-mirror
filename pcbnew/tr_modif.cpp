@@ -10,8 +10,6 @@
 #include "protos.h"
 
 static void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff );
-extern int ReturnEndsTrack( TRACK* RefTrack, int NbSegm,
-                            TRACK** StartTrack, TRACK** EndTrack );
 
 
 int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
@@ -64,7 +62,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
 #endif
 
     TRACK* bufStart = m_Pcb->m_Track->GetStartNetCode( netcode ); // Beginning of tracks of the net
-    TRACK* bufEnd = bufStart->GetEndNetCode( netcode );           // Enf of tracks of the net
+    TRACK* bufEnd = bufStart->GetEndNetCode( netcode );           // End of tracks of the net
 
     /* Flags for cleaning the net. */
     for( pt_del = bufStart;  pt_del;  pt_del = pt_del->Next() )
@@ -77,7 +75,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
             break;
     }
 
-    if( ReturnEndsTrack( aNewTrack, aNewTrackSegmentsCount, &StartTrack, &EndTrack ) == 0 )
+    if( aNewTrack->GetEndSegments( aNewTrackSegmentsCount, &StartTrack, &EndTrack ) == 0 )
         return 0;
 
     if( ( StartTrack == NULL ) || ( EndTrack == NULL ) )
@@ -118,8 +116,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         endmasklayer |= pt_pad->m_layerMask;
     }
 
-    /* Mark as deleted a new track (which is not involved in the search for other connections)
-     */
+    // Mark as deleted a new track (which is not involved in the search for other connections)
     ListSetState( aNewTrack, aNewTrackSegmentsCount, IS_DELETED, ON );
 
     /* A segment must be connected to the starting point, otherwise
@@ -249,8 +246,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
             }
         }
 
-        /* Clear BUSY flag here because the track did not get marked.
-         */
+        // Clear BUSY flag here because the track did not get marked.
         ListSetState( pt_del, nb_segm, BUSY, OFF );
     }
 

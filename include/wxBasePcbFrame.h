@@ -1,5 +1,5 @@
 /**
- * @file wxBasePcbStruct.h
+ * @file wxBasePcbFrame.h
  * @brief Classes used in pcbnew, cvpcb and gerbview.
  */
 
@@ -239,13 +239,19 @@ public:
     MODULE* Create_1_Module( const wxString& aModuleName );
 
     void Edit_Module( MODULE* module, wxDC* DC );
-    void Rotate_Module( wxDC*   DC,
-                        MODULE* module,
-                        int     angle,
-                        bool    incremental );
-    void Place_Module( MODULE* module,
-                       wxDC*   DC,
-                       bool    aDoNotRecreateRatsnest = false );
+    void Rotate_Module( wxDC* DC, MODULE* module, int angle, bool incremental );
+
+    /**
+     * Function PlaceModule
+     * places \a aModule at the current cursor position and updates module coordinates
+     * with the new position.
+     *
+     * @param aModule A MODULE object point of the module to be placed.
+     * @param aDC A wxDC object point of the device context to draw \a aModule on
+     *            or  NULL if no display screen need updated.
+     * @param aDoNotRecreateRatsnest A bool true redraws the module rats nest.
+     */
+    void PlaceModule( MODULE* aModule, wxDC* aDC, bool aDoNotRecreateRatsnest = false );
 
     // module texts
     void RotateTextModule( TEXTE_MODULE* Text, wxDC* DC );
@@ -297,7 +303,7 @@ public:
     // loading footprints
 
     /**
-     * Function Get_Librairie_Module
+     * Function GetModuleLibrary
      *
      *  Read active libraries or one library to find and load a given module
      *  If found the module is linked to the tail of linked list of modules
@@ -308,9 +314,9 @@ public:
      *  @return a pointer to the new module, or NULL
      *
      */
-    MODULE* Get_Librairie_Module( const wxString& aLibraryFullFilename,
-                                  const wxString& aModuleName,
-                                  bool            aDisplayMessageError );
+    MODULE* GetModuleLibrary( const wxString& aLibraryFullFilename,
+                              const wxString& aModuleName,
+                              bool            aDisplayMessageError );
 
     /**
      * Function Select_1_Module_From_List
@@ -345,12 +351,12 @@ public:
     void Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus );
 
     /**
-     * Function Test_1_Net_Ratsnest
+     * Function TestOneRatsNest
      * Compute the ratsnest relative to the net "net_code"
      * @param aDC - Device context to draw on.
-     * @param aNetcode = netcode used to compute the ratsnest.
+     * @param aNetCode = netcode used to compute the ratsnest.
      */
-    int Test_1_Net_Ratsnest( wxDC* aDC, int aNetcode );
+    int TestOneRatsNest( wxDC* aDC, int aNetCode );
 
     /**
      * Function build_ratsnest_module
@@ -362,7 +368,13 @@ public:
      */
     void build_ratsnest_module( MODULE* aModule );
 
-    void trace_ratsnest_module( wxDC* DC );
+    /**
+     * Function TraceModuleRatsNest
+     * display the rats nest of a moving footprint, computed by
+     * build_ratsnest_module()
+     */
+    void TraceModuleRatsNest( wxDC* aDC );
+
     void Build_Board_Ratsnest( wxDC* DC );
 
     /**
@@ -377,7 +389,14 @@ public:
     void trace_ratsnest_pad( wxDC* DC );
     void build_ratsnest_pad( BOARD_ITEM* ref, const wxPoint& refpos, bool init );
 
-    void Tst_Ratsnest( wxDC* DC, int ref_netcode );
+    /**
+     * Fucntion TestRatsNest
+     * computes the active rats nest
+     * The general rats nest list must exist.
+     * Compute the ACTIVE rats nest in the general rats nest list
+     * if aNetCode == 0, test all nets, else test only aNetCode
+     */
+    void TestRatsNest( wxDC* aDC, int aNetCode );
 
     /**
      * Function TestConnections
@@ -409,6 +428,7 @@ public:
      * <p>
      * This is a 2 pass computation.  First we search a connection between a track segment
      * and a pad.  If the connection is found, the segment netcode is set to the pad netcode.
+     * </p>
      */
     void RecalculateAllTracksNetcode();
 

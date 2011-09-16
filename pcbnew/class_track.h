@@ -17,7 +17,26 @@
                                              * to the near neighbor internal layer */
 #define VIA_NOT_DEFINED         0           /* not yet used */
 
-/***/
+
+/**
+ * Function GetTrace
+ * is a helper function to locate a trace segment having an end point at \a aPosition
+ * on \a aLayerMask starting at \a aStartTrace and end at \a aEndTrace.
+ * <p>
+ * The segments of track that are flagged as deleted or busy are ignored.  Layer
+ * visibility is also ignored.
+ * </p>
+ * @param aStartTrace A pointer to the TRACK object to begin searching.
+ * @param aEndTrace A pointer to the TRACK object to stop the search.  A NULL value
+ *                  searches to the end of the list.
+ * @param aPosition A wxPoint object containing the position to test.
+ * @param aLayerMask A layer or layers to mask the hit test.  Use -1 to ignore
+ *                   layer mask.
+ * @return A TRACK object pointer if found otherwise NULL.
+ */
+extern TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, const wxPoint& aPosition,
+                        int aLayerMask );
+
 
 class TRACK : public BOARD_CONNECTED_ITEM
 {
@@ -299,6 +318,31 @@ public:
      * @return A pointer to a SEGVIA object if found, else NULL.
      */
     TRACK* GetVia( TRACK* aEndTrace, const wxPoint& aPosition, int aLayerMask );
+
+    /**
+     * Function GetTrace
+     * return the trace segment connected to the segment at \a aEndPoint from \a
+     * aStartTrace to \a aEndTrace.
+     *
+     * @param aStartTrace A pointer to the TRACK object to begin searching.
+     * @param aEndTrace A pointer to the TRACK object to stop the search.  A NULL value
+     *                  searches to the end of the list.
+     * @param aEndPoint The start or end point of the segment to test against.
+     * @return A TRACK object pointer if found otherwise NULL.
+     */
+    TRACK* GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint );
+
+    /**
+     * Function GetEndSegments
+     * get the segments connected to the end point of the track.
+     *  return 1 if OK, 0 when a track is a closed loop
+     *  and the beginning and the end of the track in *StartTrack and *EndTrack
+     *  Modify *StartTrack en *EndTrack  :
+     *  (*StartTrack)->m_Start coordinate is the beginning of the track
+     *  (*EndTrack)->m_End coordinate is the end of the track
+     *  Segments connected must be consecutive in list
+     */
+    int GetEndSegments( int NbSegm, TRACK** StartTrack, TRACK** EndTrack );
 
     /**
      * Function GetClass

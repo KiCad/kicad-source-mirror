@@ -245,7 +245,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
 
         if( (type_end & START_ON_PAD ) == 0 )
         {
-            other = GetConnectedTrace( segment, frame->GetBoard()->m_Track, NULL, START );
+            other = segment->GetTrace( frame->GetBoard()->m_Track, NULL, START );
 
             if( other == NULL )     // Test a connection to zones
             {
@@ -278,7 +278,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
                     segment->SetState( BUSY, ON );
 
                     SEGVIA* via = (SEGVIA*) other;
-                    other = GetConnectedTrace( via, frame->GetBoard()->m_Track, NULL, START );
+                    other = via->GetTrace( frame->GetBoard()->m_Track, NULL, START );
 
                     if( other == NULL )
                     {
@@ -299,7 +299,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
         // if not connected to a pad, test if segment's END is connected to another track
         if( (type_end & END_ON_PAD ) == 0 )
         {
-            other = GetConnectedTrace( segment, frame->GetBoard()->m_Track, NULL, END );
+            other = segment->GetTrace( frame->GetBoard()->m_Track, NULL, END );
 
             if( other == NULL )     // Test a connection to zones
             {
@@ -333,7 +333,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
                     segment->SetState( BUSY, ON );
 
                     SEGVIA* via = (SEGVIA*) other;
-                    other = GetConnectedTrace( via, frame->GetBoard()->m_Track, NULL, END );
+                    other = via->GetTrace( frame->GetBoard()->m_Track, NULL, END );
 
                     if( other == NULL )
                     {
@@ -458,7 +458,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
         // search for a possible point that connects on the START point of the segment
         for( segStart = segment->Next(); ; )
         {
-            segStart = GetConnectedTrace( segment, segStart, NULL, START );
+            segStart = segment->GetTrace( segStart, NULL, START );
 
             if( segStart )
             {
@@ -472,7 +472,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
 
                 /* We must have only one segment connected */
                 segStart->SetState( BUSY, ON );
-                other = GetConnectedTrace( segment, frame->GetBoard()->m_Track, NULL, START );
+                other = segment->GetTrace( frame->GetBoard()->m_Track, NULL, START );
                 segStart->SetState( BUSY, OFF );
 
                 if( other == NULL )
@@ -497,7 +497,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
         /* search for a possible point that connects on the END point of the segment: */
         for( segEnd = segment->Next(); ; )
         {
-            segEnd = GetConnectedTrace( segment, segEnd, NULL, END );
+            segEnd = segment->GetTrace( segEnd, NULL, END );
 
             if( segEnd )
             {
@@ -509,7 +509,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
 
                 /* We must have only one segment connected */
                 segEnd->SetState( BUSY, ON );
-                other = GetConnectedTrace( segment, frame->GetBoard()->m_Track, NULL, END );
+                other = segment->GetTrace( frame->GetBoard()->m_Track, NULL, END );
                 segEnd->SetState( BUSY, OFF );
 
                 if( other == NULL )
@@ -662,7 +662,8 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks( wxDC* aDC )
         }
         else
         {
-            other = GetConnectedTrace( segment, GetBoard()->m_Track, NULL, START );
+            other = segment->GetTrace( GetBoard()->m_Track, NULL, START );
+
             if( other )
                 net_code_s = other->GetNet();
         }
@@ -679,7 +680,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks( wxDC* aDC )
         }
         else
         {
-            other = GetConnectedTrace( segment, GetBoard()->m_Track, NULL, END );
+            other = segment->GetTrace( GetBoard()->m_Track, NULL, END );
 
             if( other )
                 net_code_e = other->GetNet();
@@ -825,7 +826,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC )
             // test if the track is not precisely starting on the found pad
             if( segment->m_Start != pad->m_Pos )
             {
-                if( GetConnectedTrace( segment, frame->GetBoard()->m_Track, NULL, START ) == NULL )
+                if( segment->GetTrace( frame->GetBoard()->m_Track, NULL, START ) == NULL )
                 {
                     TRACK* newTrack = segment->Copy();
 
@@ -849,7 +850,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC )
             // test if the track is not precisely ending on the found pad
             if( segment->m_End != pad->m_Pos )
             {
-                if( GetConnectedTrace( segment, frame->GetBoard()->m_Track, NULL, END ) == NULL )
+                if( segment->GetTrace( frame->GetBoard()->m_Track, NULL, END ) == NULL )
                 {
                     TRACK* newTrack = segment->Copy();
 

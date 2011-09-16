@@ -49,7 +49,7 @@ float          MinCout;
 
 static int  TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide );
 
-static void TracePenaliteRectangle( BOARD* Pcb,
+static void CreateKeepOutRectangle( BOARD* Pcb,
                                     int    ux0,
                                     int    uy0,
                                     int    ux1,
@@ -115,11 +115,11 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
 
     Board.m_GridRouting = (int) GetScreen()->GetGridSize().x;
 
-    // Ensure Board.m_GridRouting has a reasonnable value:
+    // Ensure Board.m_GridRouting has a reasonable value:
     if( Board.m_GridRouting < 10 )
         Board.m_GridRouting = 10;                      // Min value = 1/1000 inch
 
-    /* Compute module parmeters used in auto place */
+    /* Compute module parameters used in auto place */
     Module = GetBoard()->m_Modules;
     NbTotalModules = 0;
 
@@ -143,6 +143,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         case PLACE_1_MODULE:
             if( ThisModule == Module )
                 Module->m_ModuleStatus |= MODULE_to_PLACE;
+
             break;
 
         case PLACE_OUT_OF_BOARD:
@@ -294,7 +295,7 @@ end_of_tst:
         /* Place module. */
         CurrPosition = GetScreen()->GetCrossHairPosition();
         GetScreen()->SetCrossHairPosition( PosOK );
-        Place_Module( Module, DC );
+        PlaceModule( Module, DC );
         GetScreen()->SetCrossHairPosition( CurrPosition );
 
         Module->CalculateBoundingBox();
@@ -567,7 +568,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     /* Trace clearance. */
     marge    = ( Board.m_GridRouting * Module->m_PadNum ) / GAIN;
     Penalite = PENALITE;
-    TracePenaliteRectangle( GetBoard(), ox, oy, fx, fy, marge, Penalite, layerMask );
+    CreateKeepOutRectangle( GetBoard(), ox, oy, fx, fy, marge, Penalite, layerMask );
 }
 
 
@@ -582,8 +583,7 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
 {
     int     cx, cy;
-    int     ox, oy, fx, fy; /* occupying part of the module focuses on the
-                             * cursor */
+    int     ox, oy, fx, fy; /* occupying part of the module focuses on the cursor */
     int     error = 1;
     int     DisplayChevelu = 0;
     wxPoint LastPosOK;
@@ -604,6 +604,7 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
 
     CurrPosition.x = GetBoard()->m_BoundaryBox.m_Pos.x - ox;
     CurrPosition.y = GetBoard()->m_BoundaryBox.m_Pos.y - oy;
+
     /* Module placement on grid. */
     CurrPosition.x -= CurrPosition.x % Board.m_GridRouting;
     CurrPosition.y -= CurrPosition.y % Board.m_GridRouting;
@@ -885,7 +886,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
 
 
 /*
- * Display the module's ratsnet during displacement, and
+ * Display the module's ratsnest during displacement, and
  * assess the "cost" of the position.
  * The cost is the longest ratsnest distance with penalty for connections
  * approaching 45 degrees.
@@ -909,16 +910,14 @@ float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 
     for( unsigned ii = 0; ii < GetBoard()->m_LocalRatsnest.size(); ii++ )
     {
-        RATSNEST_ITEM* pt_local_chevelu = &GetBoard()->m_LocalRatsnest[ii];
+        RATSNEST_ITEM* pt_local_rats_nest = &GetBoard()->m_LocalRatsnest[ii];
 
-        if( !( pt_local_chevelu->m_Status & LOCAL_RATSNEST_ITEM ) )
+        if( !( pt_local_rats_nest->m_Status & LOCAL_RATSNEST_ITEM ) )
         {
-            ox = pt_local_chevelu->m_PadStart->GetPosition().x -
-                 g_Offset_Module.x;
-            oy = pt_local_chevelu->m_PadStart->GetPosition().y -
-                 g_Offset_Module.y;
-            fx = pt_local_chevelu->m_PadEnd->GetPosition().x;
-            fy = pt_local_chevelu->m_PadEnd->GetPosition().y;
+            ox = pt_local_rats_nest->m_PadStart->GetPosition().x - g_Offset_Module.x;
+            oy = pt_local_rats_nest->m_PadStart->GetPosition().y - g_Offset_Module.y;
+            fx = pt_local_rats_nest->m_PadEnd->GetPosition().x;
+            fy = pt_local_rats_nest->m_PadEnd->GetPosition().y;
 
             if( AutoPlaceShowAll )
             {
@@ -953,7 +952,7 @@ float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 /* Draw keep out area of a module. */
 /***********************************/
 
-/* Buid the cost map.
+/* Build the cost map.
  * Cells ( in Dist mao ) inside the rect x0,y0 a x1,y1 are
  *  incremented by value Penalite
  *  Cell outside this rectangle, but inside the rectangle
@@ -961,7 +960,7 @@ float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
  *  (Penalite ... 0). The decreasing value de pends on the distance to the first rectangle
  *  Therefore the cost is high in rect x0,y0 a x1,y1, and decrease outside this rectangle
  */
-static void TracePenaliteRectangle( BOARD* Pcb,
+static void CreateKeepOutRectangle( BOARD* Pcb,
                                     int    ux0,
                                     int    uy0,
                                     int    ux1,
@@ -973,7 +972,7 @@ static void TracePenaliteRectangle( BOARD* Pcb,
     int      row, col;
     int      row_min, row_max, col_min, col_max, pmarge;
     int      trace = 0;
-    DIST_CELL data, LocalPenalite;
+    DIST_CELL data, LocalKeepOut;
     int      lgain, cgain;
 
     if( aLayerMask & g_TabOneLayerMask[Route_Layer_BOTTOM] )
@@ -993,7 +992,9 @@ static void TracePenaliteRectangle( BOARD* Pcb,
     ux0 -= marge; ux1 += marge;
     uy0 -= marge; uy1 += marge;
 
-    pmarge = marge / Board.m_GridRouting; if( pmarge < 1 )
+    pmarge = marge / Board.m_GridRouting;
+
+    if( pmarge < 1 )
         pmarge = 1;
 
     /* Calculate the coordinate limits of the rectangle. */
@@ -1033,7 +1034,7 @@ static void TracePenaliteRectangle( BOARD* Pcb,
         for( col = col_min; col <= col_max; col++ )
         {
             cgain = 256;
-            LocalPenalite = Penalite;
+            LocalKeepOut = Penalite;
 
             if( col < pmarge )
                 cgain = ( 256 * col ) / pmarge;
@@ -1043,18 +1044,18 @@ static void TracePenaliteRectangle( BOARD* Pcb,
             cgain = ( cgain * lgain ) / 256;
 
             if( cgain != 256 )
-                LocalPenalite = ( LocalPenalite * cgain ) / 256;
+                LocalKeepOut = ( LocalKeepOut * cgain ) / 256;
 
             if( trace & 1 )
             {
-                data = GetDist( row, col, BOTTOM ) + LocalPenalite;
+                data = GetDist( row, col, BOTTOM ) + LocalKeepOut;
                 SetDist( row, col, BOTTOM, data );
             }
 
             if( trace & 2 )
             {
                 data = GetDist( row, col, TOP );
-                data = MAX( data, LocalPenalite );
+                data = MAX( data, LocalKeepOut );
                 SetDist( row, col, TOP, data );
             }
         }
@@ -1072,6 +1073,7 @@ static bool Tri_PlaceModules( MODULE* ref, MODULE* compare )
     return ff2 < ff1;
 }
 
+
 static bool Tri_RatsModules( MODULE* ref, MODULE* compare )
 {
     double ff1, ff2;
@@ -1084,7 +1086,7 @@ static bool Tri_RatsModules( MODULE* ref, MODULE* compare )
 
 /* Find the "best" module place
  * The criteria of choice are:
- * - Maximum ratsnet with modules already placed
+ * - Maximum ratsnest with modules already placed
  * - Max size, and number of pads max
  */
 static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
@@ -1115,7 +1117,7 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
         Module->DisplayInfo( pcbframe );
         pcbframe->build_ratsnest_module( Module );
 
-        /* Calculate external ratsnet. */
+        /* Calculate external ratsnest. */
         for( unsigned ii = 0; ii < pcbframe->GetBoard()->m_LocalRatsnest.size(); ii++ )
         {
             if( ( pcbframe->GetBoard()->m_LocalRatsnest[ii].m_Status &
@@ -1164,7 +1166,7 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
  * Start from an initial point, to fill zone
  * The zone must have no "copper island"
  *  Algorithm:
- *  If the current cell has a neightbour flagged as "cell in the zone", it
+ *  If the current cell has a neighbor flagged as "cell in the zone", it
  *  become a cell in the zone
  *  The first point in the zone is the starting point
  *  4 searches within the matrix are made:
@@ -1172,10 +1174,10 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
  *          2 - Right to left and top to bottom
  *          3 - bottom to top and Right to left
  *          4 - bottom to top and Left to right
- *  Given the current cell, for each search, we consider the 2 neightbour cells
+ *  Given the current cell, for each search, we consider the 2 neighbor cells
  *  the previous cell on the same line and the previous cell on the same column.
  *
- *  This funtion can request some iterations
+ *  This function can request some iterations
  *  Iterations are made until no cell is added to the zone.
  *  @return: added cells count (i.e. which the attribute CELL_is_ZONE is set)
  */
@@ -1192,7 +1194,7 @@ int Propagation( PCB_EDIT_FRAME* frame )
     frame->MsgPanel->SetMessage( 57, wxT( "Detect" ), msg, CYAN );
     frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "1" ), CYAN );
 
-    // Alloc memory to handle 1 line or 1 colunmn on the routing matrix
+    // Alloc memory to handle 1 line or 1 column on the routing matrix
     nn = MAX( Nrows, Ncols ) * sizeof(*pt_cell_V);
     pt_cell_V = (long*) MyMalloc( nn );
 

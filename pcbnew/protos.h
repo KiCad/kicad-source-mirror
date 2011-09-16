@@ -66,40 +66,9 @@ void DrawTraces( EDA_DRAW_PANEL* panel,
 /* LOCATE.CPP : */
 /****************/
 
-/* Locates the center through the point x, y, on layer data
- * by masquelayer.
- * Search is done to address start_adr has end_adr (not included)
- */
-TRACK* GetTrace( TRACK* start_adr, TRACK* end_adr, const wxPoint& ref_pos, int masquelayer );
-
-/* Search for segment connected to the segment edge by
- * Ptr_piste:
- * If int = START, the point of beginning of the segment is used
- * If int = END, the end point of the segment is used
- * The search is done only on the ends of segments
- * The search is limited to the area [... pt_base] pt_lim.
- */
-TRACK* GetConnectedTrace( TRACK* aTrace, TRACK* pt_base, TRACK* pt_lim, int extr );
-
-/*
- * 1 - Locate segment of track leading from the mouse.
- * 2 - Locate segment of track point by point.
- * Ref_pX, ref_pY.
- *
- * If layer <0 the layer is not tested.
- *
- * The search begins to address start_adresse
- */
-TRACK* GetTrace( BOARD* aPcb, TRACK* start_adresse, const wxPoint& ref_pos, int layer );
-
 /* Locate a footprint by its bounding rectangle. */
 MODULE* Locate_Prefered_Module( BOARD* aPcb, const wxPoint& aPosition, int aActiveLayer,
                                 bool aVisibleOnly, bool aIgnoreLocked = false );
-
-/* Locate a trace segment at the current cursor position.
- * The search begins to address start_adresse.
- */
-TRACK* GetTrace( TRACK* start_adresse, int typeloc );
 
 DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc );
 

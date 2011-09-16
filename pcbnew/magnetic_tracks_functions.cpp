@@ -193,7 +193,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
         {
             int layer_mask = g_TabOneLayerMask[layer];
 
-            TRACK* track = GetTrace( m_Pcb, m_Pcb->m_Track, pos, layer_mask );
+            TRACK* track = m_Pcb->GetTrace( m_Pcb->m_Track, pos, layer_mask );
 
             if( !track || track->Type() != TYPE_TRACK )
             {

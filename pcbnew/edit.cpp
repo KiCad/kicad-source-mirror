@@ -529,7 +529,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         SetCurItem( NULL );        // CurItem might be deleted by this command, clear the pointer
         TestConnections( NULL );
-        Tst_Ratsnest( NULL, 0 );   // Recalculate the active ratsnest, i.e. the unconnected links
+        TestRatsNest( NULL, 0 );   // Recalculate the active ratsnest, i.e. the unconnected links
         OnModify();
         GetBoard()->DisplayInfo( this );
         DrawPanel->Refresh();

@@ -271,7 +271,7 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 
         Ymax_size = MAX( Ymax_size, Module->m_BoundaryBox.GetHeight() );
 
-        Place_Module( Module, NULL, true );
+        PlaceModule( Module, NULL, true );
 
         current.x += Module->m_BoundaryBox.GetWidth() + pas_grille;
     }

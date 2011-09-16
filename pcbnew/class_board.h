@@ -1134,13 +1134,26 @@ public:
      * GetPadFast().  This list is a sorted pad list must be built before calling this
      * function.
      * </p>
-     * @note The normal pad list #m_Pads is sorted by increasing netcodes.
+     * @note The normal pad list is sorted by increasing netcodes.
      * @param aPad A D_PAD object pointer the first pad in the list to begin searching.
      * @param aPosition A wxPoint object containing the position to test.
-     * @param aLayerMast A layer or layers to mask the hit test.
+     * @param aLayerMask A layer or layers to mask the hit test.
      * @return A D_PAD object pointer to the connected pad.
      */
     D_PAD* GetPad( LISTE_PAD* aPad, const wxPoint& aPosition, int aLayerMask );
+
+    /**
+     * Function GetTrace
+     * find the segment of \a aTrace at \a aPosition on \a aLayer if \a Layer is visible.
+     * Traces that are flagged as deleted or busy are ignored.
+     *
+     * @param aTrace A pointer to the TRACK object to search.
+     * @param aPosition A wxPoint object containing the position to test.
+     * @param aLayerMask A layer or layers to mask the hit test.  Use -1 to ignore
+     *                   layer mask.
+     * @return A TRACK object pointer if found otherwise NULL.
+     */
+    TRACK* GetTrace( TRACK* aTrace, const wxPoint& aPosition, int aLayerMask );
 };
 
 #endif      // #ifndef CLASS_BOARD_H

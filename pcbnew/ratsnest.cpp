@@ -148,7 +148,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
      *  it is faster than Build_Board_Ratsnest()
      *  because many optimizations and computations are already made
      */
-    Tst_Ratsnest( aDC, 0 );
+    TestRatsNest( aDC, 0 );
 
     // Redraw the active ratsnest ( if enabled )
     if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) && aDC )
@@ -551,7 +551,7 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 
 
 /**
- * Function used by Tst_Ratsnest
+ * Function used by TestRatsNest
  *  Function like gen_rats_block_to_block(..)
  *  Function testing the ratsnest between 2 blocks ( same net )
  *  The search is made between pads in block 1 and the others blocks
@@ -615,7 +615,7 @@ static int tst_rats_block_to_block( NETINFO_ITEM*          net,
 
 
 /**
- * Function used by Tst_Ratsnest_general
+ * Function used by TestRatsNest_general
  *  The general ratsnest list must exists
  *  Activates the ratsnest between 2 pads ( assumes the same net )
  *  The function links 1 pad not already connected an other pad and activate
@@ -673,12 +673,7 @@ static int tst_rats_pad_to_pad( int            current_num_block,
 }
 
 
-/* Compute the active ratsnest
- *  The general ratsnest list must exists
- *  Compute the ACTIVE ratsnest in the general ratsnest list
- * if ref_netcode == 0, test all nets, else test only ref_netcode
- */
-void PCB_BASE_FRAME::Tst_Ratsnest( wxDC* DC, int ref_netcode )
+void PCB_BASE_FRAME::TestRatsNest( wxDC* aDC, int aNetCode )
 {
     RATSNEST_ITEM* rats;
     D_PAD*         pad;
@@ -688,19 +683,16 @@ void PCB_BASE_FRAME::Tst_Ratsnest( wxDC* DC, int ref_netcode )
         return;
 
     if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
-        Build_Board_Ratsnest( DC );
+        Build_Board_Ratsnest( aDC );
 
     for( int net_code = 1; net_code < (int) m_Pcb->m_NetInfo->GetCount(); net_code++ )
     {
         net = m_Pcb->FindNet( net_code );
 
-        if( net == NULL )       //Should not occur
-        {
-            DisplayError( this, wxT( "Tst_Ratsnest() error: net not found" ) );
-            return;
-        }
+        wxCHECK_RET( net != NULL,
+                     wxString::Format( wxT( "Net code %d not found!" ), net_code ) );
 
-        if( ref_netcode && (net_code != ref_netcode) )
+        if( aNetCode && (net_code != aNetCode) )
             continue;
 
         int num_block = 0;
@@ -741,38 +733,17 @@ void PCB_BASE_FRAME::Tst_Ratsnest( wxDC* DC, int ref_netcode )
 }
 
 
-/**
- * Function Test_1_Net_Ratsnest
- * Compute the ratsnest relative to the net "net_code"
- * @param aDC - Device context to draw on.
- * @param aNetcode = netcode used to compute the ratsnest.
- */
-int PCB_BASE_FRAME::Test_1_Net_Ratsnest( wxDC* aDC, int aNetcode )
+int PCB_BASE_FRAME::TestOneRatsNest( wxDC* aDC, int aNetCode )
 {
     DisplayRastnestInProgress = false;
-    DrawGeneralRatsnest( aDC, aNetcode );
-    Tst_Ratsnest( aDC, aNetcode );
-    DrawGeneralRatsnest( aDC, aNetcode );
+    DrawGeneralRatsnest( aDC, aNetCode );
+    TestRatsNest( aDC, aNetCode );
+    DrawGeneralRatsnest( aDC, aNetCode );
 
     return m_Pcb->GetRatsnestsCount();
 }
 
 
-/*
- * Function build_ratsnest_module
- * Build a ratsnest relative to one footprint. This is a simplified computation
- * used only in move footprint. It is not optimal, but it is fast and sufficient
- * to help a footprint placement
- * It shows the connections from a pad to the nearest connected pad
- *
- *  The ratsnest has 2 sections:
- *      - An "internal" ratsnest relative to pads of this footprint which are
- * in the same net.
- *          this ratsnest section is computed once.
- *      - An "external" ratsnest connecting a pad of this footprint to an other
- * pad (in an other footprint)
- *          The ratsnest section must be computed for each new position
- */
 void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
 {
     static unsigned pads_module_count;  // node count (node = pad with a net
@@ -989,11 +960,7 @@ CalculateExternalRatsnest:
 }
 
 
-/*
- *  Display the ratsnest of a moving footprint, computed by
- * build_ratsnest_module()
- */
-void PCB_BASE_FRAME::trace_ratsnest_module( wxDC* DC )
+void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
 {
     if( DC == NULL )
         return;
@@ -1022,7 +989,7 @@ void PCB_BASE_FRAME::trace_ratsnest_module( wxDC* DC )
         }
     }
 
-    g_ColorsSettings.SetItemColor(RATSNEST_VISIBLE, tmpcolor);
+    g_ColorsSettings.SetItemColor( RATSNEST_VISIBLE, tmpcolor );
 }
 
 

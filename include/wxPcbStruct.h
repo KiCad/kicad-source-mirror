@@ -327,6 +327,14 @@ public:
      */
     bool OnHotkeyDeleteItem( wxDC* aDC );
 
+    /**
+     * Function OnHotkeyPlaceItem
+     * Place the item (footprint, track, text .. ) found under the mouse cursor
+     * An item can be placed only if there is this item currently edited
+     * Only a footprint, a pad or a track can be placed
+     * @param aDC = current device context
+     * @return true if an item was placedd
+     */
     bool OnHotkeyPlaceItem( wxDC* aDC );
 
     bool OnHotkeyEditItem( int aIdCommand );
@@ -343,6 +351,8 @@ public:
     /**
      * Function OnHotkeyRotateItem
      * Rotate the item (text or footprint) found under the mouse cursor
+     * @note This command can be used with an item currently in edit.
+     *       Only some items can be rotated (footprints and texts).
      * @param aIdCommand = the hotkey command id
      * @return true if an item was moved
      */
@@ -766,6 +776,15 @@ public:
      */
     bool Delete_Module( MODULE* aModule, wxDC* aDC, bool aAskBeforeDeleting );
 
+    /**
+     * Function Change_Side_Module
+     * Flip a footprint (switch layer from component or component to copper)
+     * The mirroring is made from X axis
+     * if a footprint is not on copper or component layer it is not flipped
+     * (it could be on an adhesive layer, not supported at this time)
+     * @param Module the footprint to flip
+     * @param  DC Current Device Context. if NULL, no redraw
+     */
     void Change_Side_Module( MODULE* Module, wxDC* DC );
 
     void InstallExchangeModuleFrame( MODULE* ExchangeModuleModule );

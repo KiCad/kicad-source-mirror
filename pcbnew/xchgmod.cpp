@@ -12,8 +12,7 @@
 #include "dialog_exchange_modules_base.h"
 
 
-int s_SelectionMode = 0;    // Remember the last exchange option, when exit
-                            // dialog.
+int s_SelectionMode = 0;    // Remember the last exchange option, when exit dialog.
 
 
 class DIALOG_EXCHANGE_MODULE : public DIALOG_EXCHANGE_MODULE_BASE
@@ -420,9 +419,8 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
 
     namecmp.Trim( true );
     namecmp.Trim( false );
-    NewModule = m_Parent->Get_Librairie_Module( wxEmptyString,
-                                                namecmp,
-                                                ShowError );
+    NewModule = m_Parent->GetModuleLibrary( wxEmptyString, namecmp, ShowError );
+
     if( NewModule == NULL )  /* New module not found, redraw the old one. */
     {
         m_WinMessages->AppendText( wxT( "No\n" ) );
@@ -431,6 +429,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
 
     if( Module == m_CurrentModule )
         m_CurrentModule = NewModule;
+
     m_WinMessages->AppendText( wxT( "Ok\n" ) );
 
     m_Parent->Exchange_Module( Module, NewModule, aUndoPickList );
@@ -477,7 +476,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     /* place module without ratsnest refresh: this will be made later
      * when all modules are on board
      */
-    Place_Module( aNewModule, NULL, true );
+    PlaceModule( aNewModule, NULL, true );
     GetScreen()->SetCrossHairPosition( oldpos, false );
 
     /* Flip footprint if needed */

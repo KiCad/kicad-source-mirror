@@ -770,7 +770,7 @@ void SortTrackEndPoints( TRACK* track )
 
 bool PCB_EDIT_FRAME::MergeCollinearTracks( TRACK* track, wxDC* DC, int end )
 {
-    testtrack = (TRACK*) GetConnectedTrace( track, GetBoard()->m_Track, NULL, end );
+    testtrack = track->GetTrace( GetBoard()->m_Track, NULL, end );
 
     if( testtrack )
     {
@@ -844,7 +844,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     s_StartSegmentPresent = s_EndSegmentPresent = true;
 
     if( ( track->start == NULL ) || ( track->start->Type() == TYPE_TRACK ) )
-        TrackToStartPoint = GetConnectedTrace( track, GetBoard()->m_Track, NULL, START );
+        TrackToStartPoint = track->GetTrace( GetBoard()->m_Track, NULL, START );
 
     //  Test if more than one segment is connected to this point
     if( TrackToStartPoint )
@@ -852,14 +852,14 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
         TrackToStartPoint->SetState( BUSY, ON );
 
         if( ( TrackToStartPoint->Type() == TYPE_VIA )
-           || GetConnectedTrace( track, GetBoard()->m_Track, NULL, START ) )
+           || track->GetTrace( GetBoard()->m_Track, NULL, START ) )
             error = true;
 
         TrackToStartPoint->SetState( BUSY, OFF );
     }
 
     if( ( track->end == NULL ) || ( track->end->Type() == TYPE_TRACK ) )
-        TrackToEndPoint = GetConnectedTrace( track, GetBoard()->m_Track, NULL, END );
+        TrackToEndPoint = track->GetTrace( GetBoard()->m_Track, NULL, END );
 
     //  Test if more than one segment is connected to this point
     if( TrackToEndPoint )
@@ -867,7 +867,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
         TrackToEndPoint->SetState( BUSY, ON );
 
         if( (TrackToEndPoint->Type() == TYPE_VIA)
-           || GetConnectedTrace( track, GetBoard()->m_Track, NULL, END ) )
+           || track->GetTrace( GetBoard()->m_Track, NULL, END ) )
             error = true;
 
         TrackToEndPoint->SetState( BUSY, OFF );
@@ -1064,7 +1064,7 @@ BOARD_ITEM* LocateLockPoint( BOARD* Pcb, wxPoint pos, int LayerMask )
     TRACK* ptsegm = GetTrace( Pcb->m_Track, NULL, pos, LayerMask );
 
     if( ptsegm == NULL )
-        ptsegm = GetTrace( Pcb, Pcb->m_Track, pos, LayerMask );
+        ptsegm = Pcb->GetTrace( Pcb->m_Track, pos, LayerMask );
 
     return ptsegm;
 }

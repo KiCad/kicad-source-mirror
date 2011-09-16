@@ -68,7 +68,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 break;
 
             case TYPE_MODULE:
-                Place_Module( (MODULE*) DrawStruct, aDC );
+                PlaceModule( (MODULE*) DrawStruct, aDC );
                 exit = true;
                 break;
 
@@ -190,8 +190,10 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_PCB_ADD_LINE_BUTT:
     {
         int shape = S_SEGMENT;
+
         if( GetToolId() == ID_PCB_CIRCLE_BUTT )
             shape = S_CIRCLE;
+
         if( GetToolId() == ID_PCB_ARC_BUTT )
             shape = S_ARC;
 
@@ -200,6 +202,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             DisplayError( this, _( "Graphic not authorized on Copper layers" ) );
             break;
         }
+
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
             DrawStruct = Begin_DrawSegment( NULL, shape, aDC );
@@ -207,8 +210,8 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             DrawPanel->m_AutoPAN_Request = true;
         }
         else if( DrawStruct
-                && (DrawStruct->Type() == TYPE_DRAWSEGMENT)
-                && DrawStruct->IsNew() )
+               && (DrawStruct->Type() == TYPE_DRAWSEGMENT)
+               && DrawStruct->IsNew() )
         {
             DrawStruct = Begin_DrawSegment( (DRAWSEGMENT*) DrawStruct, shape, aDC );
             SetCurItem( DrawStruct );
@@ -228,20 +231,23 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             DrawStruct = Begin_Route( NULL, aDC );
             SetCurItem( DrawStruct );
+
             if( DrawStruct )
                 DrawPanel->m_AutoPAN_Request = true;
         }
         else if( DrawStruct && DrawStruct->IsNew() )
         {
             TRACK* track = Begin_Route( (TRACK*) DrawStruct, aDC );
+
             // SetCurItem() must not write to the msg panel
             // because a track info is displayed while moving the mouse cursor
             if( track )  // A new segment was created
                 SetCurItem( DrawStruct = track, false );
+
             DrawPanel->m_AutoPAN_Request = true;
         }
-        break;
 
+        break;
 
     case ID_PCB_ZONES_BUTT:
 
@@ -254,23 +260,23 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             // there is no current item, try to find something under mouse
             DrawStruct = PcbGeneralLocateAndDisplay();
             bool hit_on_corner = false;
+
             if( DrawStruct && (DrawStruct->Type() == TYPE_ZONE_CONTAINER) )
             {
                 // We have a hit under mouse (a zone outline corner or segment)
                 // test for a corner only because want to move corners only.
                 ZONE_CONTAINER* edge_zone = (ZONE_CONTAINER*) DrawStruct;
+
                 if( edge_zone->HitTestForCorner( GetScreen()->RefPos( true ) ) ) // corner located!
                     hit_on_corner = true;
             }
+
             if( hit_on_corner )
             {
                 DrawPanel->MoveCursorToCrossHair();
                 ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
                 DrawPanel->m_AutoPAN_Request = true;
-                Start_Move_Zone_Corner( aDC,
-                                        zone_cont,
-                                        zone_cont->m_CornerSelection,
-                                        false );
+                Start_Move_Zone_Corner( aDC, zone_cont, zone_cont->m_CornerSelection, false );
             }
             else if( Begin_Zone( aDC ) )
             {
@@ -279,9 +285,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 GetScreen()->SetCurItem( DrawStruct );
             }
         }
-        else if( DrawStruct
-                && (DrawStruct->Type() == TYPE_ZONE_CONTAINER)
-                && DrawStruct->IsNew() )
+        else if( DrawStruct && (DrawStruct->Type() == TYPE_ZONE_CONTAINER) && DrawStruct->IsNew() )
         {   // Add a new corner to the current outline beeing created:
             DrawPanel->m_AutoPAN_Request = true;
             Begin_Zone( aDC );
@@ -326,7 +330,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else if( DrawStruct->Type() == TYPE_MODULE )
         {
-            Place_Module( (MODULE*) DrawStruct, aDC );
+            PlaceModule( (MODULE*) DrawStruct, aDC );
             DrawPanel->m_AutoPAN_Request = false;
         }
         else
@@ -342,15 +346,14 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             DisplayError( this, _( "Dimension not authorized on Copper layers" ) );
             break;
         }
+
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
             DrawStruct = Begin_Dimension( NULL, aDC );
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = true;
         }
-        else if( DrawStruct
-                && (DrawStruct->Type() == TYPE_DIMENSION)
-                && DrawStruct->IsNew() )
+        else if( DrawStruct && (DrawStruct->Type() == TYPE_DIMENSION) && DrawStruct->IsNew() )
         {
             DrawStruct = Begin_Dimension( (DIMENSION*) DrawStruct, aDC );
             SetCurItem( DrawStruct );
@@ -478,6 +481,7 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
             DrawPanel->m_AutoPAN_Request = false;
             SetCurItem( NULL );
         }
+
         break;
 
     case ID_PCB_ADD_LINE_BUTT:

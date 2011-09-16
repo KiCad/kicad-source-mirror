@@ -1634,6 +1634,37 @@ D_PAD* BOARD::GetPad( LISTE_PAD* aPad, const wxPoint& aPosition, int aLayerMask 
 }
 
 
+TRACK* BOARD::GetTrace( TRACK* aTrace, const wxPoint& aPosition, int aLayerMask )
+{
+    for( TRACK* track = aTrace;   track;  track =  track->Next() )
+    {
+        int layer = track->GetLayer();
+
+        if( track->GetState( BUSY | IS_DELETED ) )
+            continue;
+
+        if( GetBoardDesignSettings()->IsLayerVisible( layer ) == false )
+            continue;
+
+        if( track->Type() == TYPE_VIA )    /* VIA encountered. */
+        {
+            if( track->HitTest( aPosition ) )
+                return track;
+        }
+        else
+        {
+            if( (g_TabOneLayerMask[layer] & aLayerMask) == 0 )
+                continue;   /* Segments on different layers. */
+
+            if( track->HitTest( aPosition ) )
+                return track;
+        }
+    }
+
+    return NULL;
+}
+
+
 #if defined(DEBUG)
 
 void BOARD::Show( int nestLevel, std::ostream& os )

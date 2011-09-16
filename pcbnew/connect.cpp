@@ -378,7 +378,7 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
     Merge_SubNets_Connected_By_CopperAreas( m_Pcb, aNetCode );
 
     /* Test the ratsnest for this net */
-    int nb_net_noconnect = Test_1_Net_Ratsnest( aDC, aNetCode );
+    int nb_net_noconnect = TestOneRatsNest( aDC, aNetCode );
 
     /* Display results */
     msg.Printf( wxT( "links %d nc %d  net:nc %d" ),
@@ -450,12 +450,12 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
 
         if( Track->start == NULL )  // end track not already connected, search a connection
         {
-            Track->start = GetConnectedTrace( Track, Track, pt_end_conn, START );
+            Track->start = Track->GetTrace( Track, pt_end_conn, START );
         }
 
         if( Track->end == NULL )    // end track not already connected, search a connection
         {
-            Track->end = GetConnectedTrace( Track, Track, pt_end_conn, END );
+            Track->end = Track->GetTrace( Track, pt_end_conn, END );
         }
 
         if( Track == pt_end_conn )
@@ -578,12 +578,12 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     {
         if( pt_trace->start == NULL )
         {
-            pt_trace->start = GetConnectedTrace( pt_trace, m_Pcb->m_Track, NULL, START );
+            pt_trace->start = pt_trace->GetTrace( m_Pcb->m_Track, NULL, START );
         }
 
         if( pt_trace->end == NULL )
         {
-            pt_trace->end = GetConnectedTrace( pt_trace, m_Pcb->m_Track, NULL, END );
+            pt_trace->end = pt_trace->GetTrace( m_Pcb->m_Track, NULL, END );
         }
     }
 
@@ -608,7 +608,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
             // Lock for a connection to a track with a known netcode
             pt_next = m_Pcb->m_Track;
 
-            while( ( pt_next = GetConnectedTrace( via, pt_next, NULL, START ) ) != NULL )
+            while( ( pt_next = via->GetTrace( pt_next, NULL, START ) ) != NULL )
             {
                 if( pt_next->GetNet() )
                 {

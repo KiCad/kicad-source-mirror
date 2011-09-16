@@ -330,7 +330,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             wxPoint cursor_pos = pcbframe->GetScreen()->GetCrossHairPosition();
             pcbframe->GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
-            pcbframe->Place_Module( newmodule, NULL );
+            pcbframe->PlaceModule( newmodule, NULL );
             pcbframe->GetScreen()->SetCrossHairPosition( cursor_pos );
             newmodule->m_TimeStamp = GetTimeStamp();
             pcbframe->SaveCopyInUndoList( newmodule, UR_NEW );
@@ -568,7 +568,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
         EDGE_MODULE* edge = NULL;
         if( GetScreen()->GetCurItem()
-           && ( GetScreen()->GetCurItem()->Type() == TYPE_EDGE_MODULE ) )
+          && ( GetScreen()->GetCurItem()->Type() == TYPE_EDGE_MODULE ) )
         {
             edge = (EDGE_MODULE*) GetScreen()->GetCurItem();
         }
