@@ -79,6 +79,116 @@ BOARD::~BOARD()
 }
 
 
+void BOARD::chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* aList )
+{
+    TRACK* segment;             // The current segment being analyzed.
+    TRACK* via;                 // The via identified, eventually destroy
+    TRACK* candidate;           // The end segment to destroy (or NULL = segment)
+    int NbSegm;
+
+    if( m_Track == NULL )
+        return;
+
+    /* Set the BUSY flag of all connected segments, first search starting at
+     * aPosition.  The search ends when a pad is found (end of a track), a
+     * segment end has more than one other segment end connected, or when no
+     * connected item found.
+     *
+     * Vias are a special case because they must look for segments connected
+     * on other layers and they change the layer mask.  They can be a track
+     * end or not.  They will be analyzer later and vias on terminal points
+     * of the track will be considered as part of this track if they do not
+     * connect segments of an other track together and will be considered as
+     * part of an other track when removing the via, the segments of that other
+     * track are disconnected.
+     */
+    for( ; ; )
+    {
+        if( GetPadFast( aPosition, aLayerMask ) != NULL )
+            return;
+
+        /* Test for a via: a via changes the layer mask and can connect a lot
+         * of segments at location aPosition. When found, the via is just
+         * pushed in list.  Vias will be examined later, when all connected
+         * segment are found and push in list.  This is because when a via
+         * is found we do not know at this time the number of connected items
+         * and we do not know if this via is on the track or finish the track
+         */
+        via = m_Track->GetVia( NULL, aPosition, aLayerMask );
+
+        if( via )
+        {
+            aLayerMask = via->ReturnMaskLayer();
+
+            aList->push_back( via );
+        }
+
+        /* Now we search all segments connected to point aPosition
+         *  if only 1 segment: this segment is candidate
+         *  if > 1 segment:
+         *      end of track (more than 2 segment connected at this location)
+         */
+        segment = m_Track; candidate = NULL;
+        NbSegm  = 0;
+
+        while( ( segment = ::GetTrace( segment, NULL, aPosition, aLayerMask ) ) != NULL )
+        {
+            if( segment->GetState( BUSY ) ) // already found and selected: skip it
+            {
+                segment = segment->Next();
+                continue;
+            }
+
+            if( segment == via ) // just previously found: skip it
+            {
+                segment = segment->Next();
+                continue;
+            }
+
+            NbSegm++;
+
+            if( NbSegm == 1 ) /* First time we found a connected item: segment is candidate */
+            {
+                candidate = segment;
+                segment = segment->Next();
+            }
+            else /* More than 1 segment connected -> this location is an end of the track */
+            {
+                return;
+            }
+        }
+
+        if( candidate )      // A candidate is found: flag it an push it in list
+        {
+            /* Initialize parameters to search items connected to this
+             * candidate:
+             * we must analyze connections to its other end
+             */
+            aLayerMask = candidate->ReturnMaskLayer();
+
+            if( aPosition == candidate->m_Start )
+            {
+                aPosition = candidate->m_End;
+            }
+            else
+            {
+                aPosition = candidate->m_Start;
+            }
+
+            segment = m_Track; /* restart list of tracks to analyze */
+
+            /* flag this item an push it in list of selected items */
+            aList->push_back( candidate );
+            candidate->SetState( BUSY, ON );
+        }
+        else
+        {
+            return;
+        }
+    }
+}
+
+
 void BOARD::PushHighLight()
 {
     m_hightLightPrevious = m_hightLight;
@@ -1662,6 +1772,248 @@ TRACK* BOARD::GetTrace( TRACK* aTrace, const wxPoint& aPosition, int aLayerMask 
     }
 
     return NULL;
+}
+
+
+TRACK* BOARD::MarkTrace( TRACK* aTrace,
+                         int*   aCount,
+                         int*   aTraceLength,
+                         int*   aDieLength,
+                         bool   aReorder )
+{
+    int        NbSegmBusy;
+
+    TRACK_PTRS trackList;
+
+    if( aCount )
+        *aCount = 0;
+
+    if( aTraceLength )
+        *aTraceLength = 0;
+
+    if( aTrace == NULL )
+        return NULL;
+
+    // Ensure the flag BUSY of all tracks of the board is cleared
+    // because we use it to mark segments of the track
+    for( TRACK* track = m_Track; track; track = track->Next() )
+        track->SetState( BUSY, OFF );
+
+    /* Set flags of the initial track segment */
+    aTrace->SetState( BUSY, ON );
+    int layerMask = aTrace->ReturnMaskLayer();
+
+    trackList.push_back( aTrace );
+
+    /* Examine the initial track segment : if it is really a segment, this is
+     * easy.
+     *  If it is a via, one must search for connected segments.
+     *  If <=2, this via connect 2 segments (or is connected to only one
+     *  segment) and this via and these 2 segments are a part of a track.
+     *  If > 2 only this via is flagged (the track has only this via)
+     */
+    if( aTrace->Type() == TYPE_VIA )
+    {
+        TRACK* Segm1, * Segm2 = NULL, * Segm3 = NULL;
+        Segm1 = ::GetTrace( m_Track, NULL, aTrace->m_Start, layerMask );
+
+        if( Segm1 )
+        {
+            Segm2 = ::GetTrace( Segm1->Next(), NULL, aTrace->m_Start, layerMask );
+        }
+
+        if( Segm2 )
+        {
+            Segm3 = ::GetTrace( Segm2->Next(), NULL, aTrace->m_Start, layerMask );
+        }
+
+        if( Segm3 ) // More than 2 segments are connected to this via. the track" is only this via
+        {
+            if( aCount )
+                *aCount = 1;
+
+            return aTrace;
+        }
+
+        if( Segm1 ) // search for others segments connected to the initial segment start point
+        {
+            layerMask = Segm1->ReturnMaskLayer();
+            chainMarkedSegments( aTrace->m_Start, layerMask, &trackList );
+        }
+
+        if( Segm2 ) // search for others segments connected to the initial segment end point
+        {
+            layerMask = Segm2->ReturnMaskLayer();
+            chainMarkedSegments( aTrace->m_Start, layerMask, &trackList );
+        }
+    }
+    else    // mark the chain using both ends of the initial segment
+    {
+        chainMarkedSegments( aTrace->m_Start, layerMask, &trackList );
+        chainMarkedSegments( aTrace->m_End, layerMask, &trackList );
+    }
+
+    // Now examine selected vias and flag them if they are on the track
+    // If a via is connected to only one or 2 segments, it is flagged (is on the track)
+    // If a via is connected to more than 2 segments, it is a track end, and it
+    // is removed from the list
+    // go through the list backwards.
+    for( int i = trackList.size() - 1;  i>=0;  --i )
+    {
+        TRACK* via = trackList[i];
+
+        if( via->Type() != TYPE_VIA )
+            continue;
+
+        if( via == aTrace )
+            continue;
+
+        via->SetState( BUSY, ON );  // Try to flag it. the flag will be cleared later if needed
+
+        layerMask = via->ReturnMaskLayer();
+
+        TRACK* track = ::GetTrace( m_Track, NULL, via->m_Start, layerMask );
+
+        // GetTrace does not consider tracks flagged BUSY.
+        // So if no connected track found, this via is on the current track
+        // only: keep it
+        if( track == NULL )
+            continue;
+
+        /* If a track is found, this via connects also others segments of an
+         * other track.  This case happens when the vias ends the selected
+         * track but must we consider this via is on the selected track, or
+         * on an other track.
+         * (this is important when selecting a track for deletion: must this
+         * via be deleted or not?)
+         * We consider here this via on the track if others segment connected
+         * to this via remain connected when removing this via.
+         * We search for all others segment connected together:
+         * if there are on the same layer, the via is on the selected track
+         * if there are on different layers, the via is on an other track
+         */
+        int layer = track->GetLayer();
+
+        while( ( track = ::GetTrace( track->Next(), NULL, via->m_Start, layerMask ) ) != NULL )
+        {
+            if( layer != track->GetLayer() )
+            {
+                // The via connects segments of an other track: it is removed
+                // from list because it is member of an other track
+                via->SetState( BUSY, OFF );
+                break;
+            }
+        }
+    }
+
+    /* Rearrange the track list in order to have flagged segments linked
+     * from firstTrack so the NbSegmBusy segments are consecutive segments
+     * in list, the first item in the full track list is firstTrack, and
+     * the NbSegmBusy-1 next items (NbSegmBusy when including firstTrack)
+     * are the flagged segments
+     */
+    NbSegmBusy = 0;
+    TRACK* firstTrack;
+
+    for( firstTrack = m_Track; firstTrack; firstTrack = firstTrack->Next() )
+    {
+        // Search for the first flagged BUSY segments
+        if( firstTrack->GetState( BUSY ) )
+        {
+            NbSegmBusy = 1;
+            break;
+        }
+    }
+
+    if( firstTrack == NULL )
+        return NULL;
+
+    double full_len = 0;
+    double lenDie = 0;
+
+    if( aReorder )
+    {
+        DLIST<TRACK>* list = (DLIST<TRACK>*)firstTrack->GetList();
+        wxASSERT( list );
+
+        /* Rearrange the chain starting at firstTrack
+         * All others flagged items are moved from their position to the end
+         * of the flagged list
+         */
+        TRACK* next;
+
+        for( TRACK* track = firstTrack->Next(); track; track = next )
+        {
+            next = track->Next();
+
+            if( track->GetState( BUSY ) )   // move it!
+            {
+                NbSegmBusy++;
+                track->UnLink();
+                list->Insert( track, firstTrack->Next() );
+
+                if( aTraceLength )
+                    full_len += track->GetLength();
+
+                if( aDieLength ) // Add now length die.
+                {
+                    // In fact only 2 pads (maximum) will be taken in account:
+                    // that are on each end of the track, if any
+                    if( track->GetState( BEGIN_ONPAD ) )
+                    {
+                        D_PAD * pad = (D_PAD *) track->start;
+                        lenDie += (double) pad->m_LengthDie;
+                    }
+
+                    if( track->GetState( END_ONPAD ) )
+                    {
+                        D_PAD * pad = (D_PAD *) track->end;
+                        lenDie += (double) pad->m_LengthDie;
+                    }
+                }
+            }
+        }
+    }
+    else if( aTraceLength )
+    {
+        NbSegmBusy = 0;
+
+        for( TRACK* track = firstTrack; track; track = track->Next() )
+        {
+            if( track->GetState( BUSY ) )
+            {
+                NbSegmBusy++;
+                track->SetState( BUSY, OFF );
+                full_len += track->GetLength();
+
+                // Add now length die.
+                // In fact only 2 pads (maximum) will be taken in account:
+                // that are on each end of the track, if any
+                if( track->GetState( BEGIN_ONPAD ) )
+                {
+                    D_PAD * pad = (D_PAD *) track->start;
+                    lenDie += (double) pad->m_LengthDie;
+                }
+
+                if( track->GetState( END_ONPAD ) )
+                {
+                    D_PAD * pad = (D_PAD *) track->end;
+                    lenDie += (double) pad->m_LengthDie;
+                }
+            }
+        }
+    }
+
+    if( aTraceLength )
+        *aTraceLength = wxRound( full_len );
+
+    if( aDieLength )
+        *aDieLength = wxRound( lenDie );
+
+    if( aCount )
+        *aCount = NbSegmBusy;
+
+    return firstTrack;
 }
 
 

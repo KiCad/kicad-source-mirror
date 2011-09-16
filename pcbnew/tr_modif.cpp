@@ -38,7 +38,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     if( aNewTrack->Type() == TYPE_VIA && ( aNewTrackSegmentsCount > 1 ) )
         aNewTrack = aNewTrack->Next();
 
-    aNewTrack = MarkTrace( GetBoard(), aNewTrack, &aNewTrackSegmentsCount, NULL, NULL, true );
+    aNewTrack = GetBoard()->MarkTrace( aNewTrack, &aNewTrackSegmentsCount, NULL, NULL, true );
     wxASSERT( aNewTrack );
 
 #if 0 && defined(DEBUG)
@@ -190,7 +190,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         nbconnect--;
         pt_del->SetState( IS_LINKED, OFF );
 
-        pt_del = MarkTrace( GetBoard(), pt_del, &nb_segm, NULL, NULL, true );
+        pt_del = GetBoard()->MarkTrace( pt_del, &nb_segm, NULL, NULL, true );
 
         /* Test if the marked track is redundant, i.e. if one of marked segments
          * is connected to the starting point of the new track.

@@ -979,7 +979,7 @@ void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
     {
         int trackLen = 0;
         int lenDie = 0;
-        MarkTrace( board, this, NULL, &trackLen, &lenDie, false );
+        board->MarkTrace( this, NULL, &trackLen, &lenDie, false );
         msg = frame->CoordinateToString( trackLen );
         frame->AppendMsgPanel( _( "Track Len" ), msg, DARKCYAN );
 

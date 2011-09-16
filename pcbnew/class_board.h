@@ -15,6 +15,10 @@
 class ZONE_CONTAINER;
 
 
+// buffer of item candidates when search for items on the same track.
+typedef std::vector< TRACK* > TRACK_PTRS;
+
+
 #define HISTORY_MAX_COUNT 8
 
 
@@ -202,6 +206,17 @@ public:
 private:
     BOARD_DESIGN_SETTINGS*  m_boardDesignSettings;  // Link to current design settings
     COLORS_DESIGN_SETTINGS* m_colorsSettings;       // Link to current colors settings
+
+    /**
+     * Function chainMarkedSegments
+     * is used by MarkTrace() to set the BUSY flag of connected segments of the trace
+     * segment located at \a aPosition on aLayerMask.
+     *  Vias are put in list but their flags BUSY is not set
+     * @param aPosition A wxPoint object containing the position of the starting search.
+     * @param aLayerMask The allowed layers for segments to search.
+     * @param aList The track list to fill with points of flagged segments.
+     */
+    void chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* aList );
 
 public:
     BOARD( EDA_ITEM* aParent, PCB_BASE_FRAME* frame );
@@ -1154,6 +1169,33 @@ public:
      * @return A TRACK object pointer if found otherwise NULL.
      */
     TRACK* GetTrace( TRACK* aTrace, const wxPoint& aPosition, int aLayerMask );
+
+    /**
+     * Function MarkTrace
+     * marks a chain of trace segments, connected to \aaTrace.
+     * <p>
+     * Each segment is marked by setting the BUSY bit into m_Flags.  Electrical
+     * continuity is detected by walking each segment, and finally the segments
+     * are rearranged into a contiguous chain within the given list.
+     * </p>
+     *
+     * @param aTrace The segment within a list of trace segments to test.
+     * @param aCount A pointer to an integer where to return the number of
+     *               marked segments.
+     * @param aTraceLength A pointer to an integer where to return the length of the
+     *                     trace.
+     * @param aDieLength A pointer to an integer where to return the extra lengths inside
+     *                   integrated circuits from the pads connected to this track to the
+     *                   die (if any).
+     * @param aReorder true for reorder the interesting segments (useful for
+     *                 track edition/deletion) in this case the flag BUSY is
+     *                 set (the user is responsible of flag clearing). False
+     *                 for no reorder : useful when we want just calculate the
+     *                 track length in this case, flags are reset
+     * @return TRACK* The first in the chain of interesting segments.
+     */
+    TRACK* MarkTrace( TRACK* aTrace, int* aCount, int* aTraceLength,
+                      int* aDieLength, bool aReorder );
 };
 
 #endif      // #ifndef CLASS_BOARD_H

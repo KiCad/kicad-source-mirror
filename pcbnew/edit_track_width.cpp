@@ -1,7 +1,7 @@
-/***************************************************************
-*   Tracks and Vias size edition:
-*   Functions to modify sizes of segment, track, net , all vias and/or all tracks
-***************************************************************/
+/**
+ * @file edit_track_width.cpp
+ * @breif Functions to modify sizes of segment, track, net , all vias and/or all tracks
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
@@ -68,7 +68,8 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
 
     aTrackItem->m_Width = new_width;
 
-    if( initial_width < new_width )     /* make a DRC test because the new size is bigger than the old size */
+    /* make a DRC test because the new size is bigger than the old size */
+    if( initial_width < new_width )
     {
         int diagdrc = OK_DRC;
 
@@ -82,11 +83,9 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     {
         change_ok = true;
     }
-
-    // if new width == initial_width: do nothing,
-    // unless a via has its drill value changed
     else if( (aTrackItem->Type() == TYPE_VIA) && (initial_drill != new_drill) )
     {
+        // if new width == initial_width: do nothing, unless a via has its drill value changed
         change_ok = true;
     }
 
@@ -166,7 +165,7 @@ void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
     if( aTrackSegment == NULL )
         return;
 
-    pt_track = MarkTrace( GetBoard(), aTrackSegment, &nb_segm, NULL, NULL, true );
+    pt_track = GetBoard()->MarkTrace( aTrackSegment, &nb_segm, NULL, NULL, true );
 
     PICKED_ITEMS_LIST itemsListPicker;
     bool change = false;
@@ -205,7 +204,7 @@ void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
 /**
  * Function Change_Net_Tracks_And_Vias_Sizes
  * Reset all tracks width and vias diameters and drill
- * to their default Netclass value ou current values
+ * to their default Netclass value or current values
  * @param aNetcode : the netcode of the net to edit
  * @param aUseNetclassValue : bool. True to use netclass values, false to use current values
  */

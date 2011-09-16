@@ -70,8 +70,6 @@ void DrawTraces( EDA_DRAW_PANEL* panel,
 MODULE* Locate_Prefered_Module( BOARD* aPcb, const wxPoint& aPosition, int aActiveLayer,
                                 bool aVisibleOnly, bool aIgnoreLocked = false );
 
-DRAWSEGMENT* Locate_Segment_Pcb( BOARD* Pcb, int LayerSearch, int typeloc );
-
 /*************/
 /* MODULES.C */
 /*************/
@@ -94,53 +92,6 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
  */
 void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
 
-
-/***************/
-/* TRACK.CPP : */
-/***************/
-
-/**
- * Function MarkTrace
- * marks a chain of track segments, connected to aTrackList.
- * Each segment is marked by setting the BUSY bit into m_Flags.  Electrical
- * continuity is detected by walking each segment, and finally the segments
- * are rearranged into a contiguous chain within the given list.
- *
- * @param aPcb = the board to analyze
- * @param aStartSegm - The first interesting segment within a list of track
- *                     segment of aPcb
- * @param aSegmCount = a pointer to an integer where to return the number of
- *                     interesting segments
- * @param aTrackLen = a pointer to an integer where to return the lenght of the
- *                    track
- * @param aLengthDie = a pointer to an integer where to return the extra lengths inside
- *                     integrated circuits from the pads connected to this track to the
- *                     die (if any)
- * @param aReorder = true for reorder the interesting segments (useful for
- *                   track edition/deletion) in this case the flag BUSY is
- *                   set (the user is responsible of flag clearing). False
- *                   for no reorder : useful when we want just calculate the
- *                   track length in this case, flags are reset
- * @return TRACK* the first in the chain of interesting segments.
- */
-TRACK* MarkTrace( BOARD* aPcb,
-                  TRACK* aStartSegm,
-                  int*   aSegmCount,
-                  int*   aTrackLen,
-                  int*   aLengthDie,
-                  bool   aReorder );
-
-/* Calculate end  coordinate of a trace.
- * Returns 1 if OK, 0 if trace looped back on itself.
- * The coord are returned StartTrack-> ox, oy
- * And EndTrack-> fx, fy if OK
- * The segments are drawn consecutively.
- */
-int ReturnEndsTrack( TRACK* RefTrack, int NbSegm, TRACK** StartTrack, TRACK** EndTrack );
-
-
-/***************/
-/***************/
 
 /* Routine to find the point "attachment" at the end of a trace.
  * This may be a PAD or another trace segment.
