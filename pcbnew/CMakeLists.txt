@@ -137,7 +137,6 @@ set(PCBNEW_SRCS
     layer_widget.cpp
     librairi.cpp
     loadcmp.cpp
-    locate.cpp
     magnetic_tracks_functions.cpp
     menubar_modedit.cpp
     menubar_pcbframe.cpp

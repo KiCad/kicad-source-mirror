@@ -1196,6 +1196,23 @@ public:
      */
     TRACK* MarkTrace( TRACK* aTrace, int* aCount, int* aTraceLength,
                       int* aDieLength, bool aReorder );
+
+    /**
+     * Function GetFootprint
+     * get a footprint by its bounding rectangle at \a aPosition on \a aLayer.
+     * <p>
+     * If more than one footprint is at \a aPosition, then the closest footprint on the
+     * active layer is returned.  The distance is calculated via manhattan distance from
+     * the center of the bounding rectangle to \a aPosition.
+     *
+     * @param aPosition Flag bits, tuning the search, see pcbnew.h
+     * @param aActiveLayer Layer to test.
+     * @param aVisibleOnly Search only the visible layers if true.
+     * @param aIgnoreLocked Ignore locked modules when true.
+     * @return MODULE* The best module or NULL if none.
+     */
+    MODULE* GetFootprint( const wxPoint& aPosition, int aActiveLayer,
+                          bool aVisibleOnly, bool aIgnoreLocked = false );
 };
 
 #endif      // #ifndef CLASS_BOARD_H

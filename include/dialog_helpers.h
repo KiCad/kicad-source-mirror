@@ -8,6 +8,9 @@
 #define  _DIALOG_HELPERS_H_
 
 
+#include "common.h"             // EDA_UNITS_T
+
+
 /**
  * class EDA_LIST_DIALOG
  *

@@ -4,6 +4,10 @@
 #include "hotkeys_basic.h"
 #include <wx/bmpcbox.h>
 
+
+class EDA_TOOLBAR;
+
+
 /* class to display a layer list.
  *
  */

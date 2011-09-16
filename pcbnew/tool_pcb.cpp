@@ -1,16 +1,22 @@
-/***************************************/
-/*  tool_pcb.cpp: PCB editor tool bars */
-/***************************************/
+/**
+ * @file tool_pcb.cpp
+ * @brief PCB editor tool bars
+ */
 
 #include "fctsys.h"
-#include "wx/wupdlock.h"
+#include "help_common_strings.h"
+#include "dialog_helpers.h"
+#include "class_layer_box_selector.h"
+#include "colors_selection.h"
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
-#include "colors_selection.h"
-#include "dialog_helpers.h"
 #include "pcbnew_id.h"
+#include "hotkeys.h"
+
+#include "wx/wupdlock.h"
+
 
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 150
@@ -18,42 +24,40 @@
 #define LISTBOX_WIDTH 130
 #endif
 
-#include  "wx/ownerdrw.h"
-#include  "wx/menuitem.h"
-
-#include "hotkeys.h"
-
-#include "help_common_strings.h"
-#include "class_layer_box_selector.h"
-
 #define SEL_LAYER_HELP _( \
         "Show active layer selections\nand select layer pair for route and place via" )
+
 
 /* Data to build the layer pair indicator button */
 static wxBitmap*  LayerPairBitmap = NULL;
 
-static const char s_BitmapLayerIcon[16][16] = {
+static const char s_BitmapLayerIcon[24][24] = {
     // 0 = draw pixel with active layer color
-    // 1 = draw pixel with top layer color (top/bottom layer used in
-    //     autoroute and place via)
+    // 1 = draw pixel with top layer color (top/bottom layer used inautoroute and place via)
     // 2 = draw pixel with bottom layer color
     // 3 = draw pixel with via color
-    { 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 1, 1, 1, 1, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 1, 1, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 3, 3, 0, 1, 1, 3, 3, 0, 0, 0, 0 },
-    { 2, 2, 2, 2, 3, 3, 0, 1, 1, 1, 1, 3, 3, 2, 2, 2 },
-    { 2, 2, 2, 2, 3, 3, 1, 1, 1, 0, 0, 3, 3, 2, 2, 2 },
-    { 2, 2, 2, 2, 3, 3, 1, 1, 1, 1, 0, 3, 3, 2, 2, 2 },
-    { 0, 0, 0, 0, 0, 3, 3, 1, 1, 0, 3, 3, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 1, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 1, 1, 3, 3, 3, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 }
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 1, 1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 0, 1, 1, 1, 1, 3, 3, 2, 2, 2, 2, 2, 2, 2 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 1, 1, 1, 1, 0, 3, 3, 2, 2, 2, 2, 2, 2, 2 },
+    { 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 1, 1, 1, 1, 0, 3, 3, 2, 2, 2, 2, 2, 2, 2 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 1, 1, 1, 0, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
 
@@ -111,7 +115,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     /* Create the bitmap too and its Memory DC, if not already made */
     if( LayerPairBitmap == NULL )
     {
-        LayerPairBitmap = new wxBitmap( 16, 16 );
+        LayerPairBitmap = new wxBitmap( 24, 24 );
     }
 
     /* Draw the icon, with colors according to the active layer and layer
@@ -119,42 +123,36 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
      */
     wxMemoryDC iconDC;
     iconDC.SelectObject( *LayerPairBitmap );
-    int        buttcolor = -1;
     wxPen      pen;
+    int buttonColor = -1;
 
-    for( ii = 0; ii < 16; ii++ )
+    for( ii = 0; ii < 24; ii++ )
     {
-        for( jj = 0; jj < 16; jj++ )
+        for( jj = 0; jj < 24; jj++ )
         {
-            if( s_BitmapLayerIcon[ii][jj] != buttcolor )
+            if( s_BitmapLayerIcon[ii][jj] != buttonColor )
             {
-                buttcolor = s_BitmapLayerIcon[ii][jj];
-                int color;
-
-                switch( buttcolor )
+                switch( s_BitmapLayerIcon[ii][jj] )
                 {
                 default:
                 case 0:
-                    color = active_layer_color;
+                    pen.SetColour( MakeColour( active_layer_color ) );
                     break;
 
                 case 1:
-                    color = Route_Layer_TOP_color;
+                    pen.SetColour( MakeColour( Route_Layer_TOP_color) );
                     break;
 
                 case 2:
-                    color = Route_Layer_BOTTOM_color;
+                    pen.SetColour( MakeColour( Route_Layer_BOTTOM_color ) );
                     break;
 
                 case 3:
-                    color = via_color;
+                    pen.SetColour( MakeColour( via_color ) );
                     break;
                 }
 
-                color &= MASKCOLOR;
-                pen.SetColour( ColorRefs[color].m_Red,
-                               ColorRefs[color].m_Green,
-                               ColorRefs[color].m_Blue );
+                buttonColor = s_BitmapLayerIcon[ii][jj];
                 iconDC.SetPen( pen );
             }
 
@@ -444,8 +442,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
 }
 
 
-/* Create the auxiliary vertical right toolbar, showing tools for
- * microwave applications
+/* Create the auxiliary vertical right toolbar, showing tools for microwave applications
  */
 void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
 {

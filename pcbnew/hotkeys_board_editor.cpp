@@ -599,7 +599,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( !itemCurrentlyEdited )
         {
             pos = screen->RefPos( true );
-            module = Locate_Prefered_Module( GetBoard(), pos, screen->m_Active_Layer, true );
+            module = GetBoard()->GetFootprint( pos, screen->m_Active_Layer, true );
         }
         else if( GetCurItem()->Type() == TYPE_MODULE )
         {
@@ -689,7 +689,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
         if( ItemFree )
         {
             wxPoint pos = GetScreen()->RefPos( false );
-            MODULE* module = Locate_Prefered_Module( GetBoard(), pos, ALL_LAYERS, false );
+            MODULE* module = GetBoard()->GetFootprint( pos, ALL_LAYERS, false );
 
             if( module == NULL )
                 return false;

@@ -2017,6 +2017,84 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
 }
 
 
+MODULE* BOARD::GetFootprint( const wxPoint& aPosition, int aActiveLayer,
+                             bool aVisibleOnly, bool aIgnoreLocked )
+{
+    MODULE* pt_module;
+    MODULE* module      = NULL;
+    MODULE* Altmodule   = NULL;
+    int     min_dim     = 0x7FFFFFFF;
+    int     alt_min_dim = 0x7FFFFFFF;
+    int     layer;
+
+    for( pt_module = m_Modules;  pt_module;  pt_module = (MODULE*) pt_module->Next() )
+    {
+        // is the ref point within the module's bounds?
+        if( !pt_module->HitTest( aPosition ) )
+            continue;
+
+        // if caller wants to ignore locked modules, and this one is locked, skip it.
+        if( aIgnoreLocked && pt_module->IsLocked() )
+            continue;
+
+        /* Calculate priority: the priority is given to the layer of the
+         * module and the copper layer if the module layer is indelible,
+         * adhesive copper, a layer if cmp module layer is indelible,
+         * adhesive component.
+         */
+        layer = pt_module->GetLayer();
+
+        if( layer==ADHESIVE_N_BACK || layer==SILKSCREEN_N_BACK )
+            layer = LAYER_N_BACK;
+        else if( layer==ADHESIVE_N_FRONT || layer==SILKSCREEN_N_FRONT )
+            layer = LAYER_N_FRONT;
+
+        /* Test of minimum size to choosing the best candidate. */
+
+        EDA_RECT bb = pt_module->GetFootPrintRect();
+        int offx = bb.GetX() + bb.GetWidth() / 2;
+        int offy = bb.GetY() + bb.GetHeight() / 2;
+
+        //off x & offy point to the middle of the box.
+        int dist = abs( aPosition.x - offx ) + abs( aPosition.y - offy );
+
+        //int dist = MIN(lx, ly);  // to pick the smallest module (kinda
+        // screwy with same-sized modules -- this is bad!)
+
+        if( aActiveLayer == layer )
+        {
+            if( dist <= min_dim )
+            {
+                /* better footprint shown on the active layer */
+                module  = pt_module;
+                min_dim = dist;
+            }
+        }
+        else if( aVisibleOnly && IsModuleLayerVisible( layer ) )
+        {
+            if( dist <= alt_min_dim )
+            {
+                /* better footprint shown on other layers */
+                Altmodule   = pt_module;
+                alt_min_dim = dist;
+            }
+        }
+    }
+
+    if( module )
+    {
+        return module;
+    }
+
+    if( Altmodule )
+    {
+        return Altmodule;
+    }
+
+    return NULL;
+}
+
+
 #if defined(DEBUG)
 
 void BOARD::Show( int nestLevel, std::ostream& os )

@@ -61,15 +61,6 @@ void DrawTraces( EDA_DRAW_PANEL* panel,
                  int             nbsegment,
                  int             mode_color );
 
-
-/****************/
-/* LOCATE.CPP : */
-/****************/
-
-/* Locate a footprint by its bounding rectangle. */
-MODULE* Locate_Prefered_Module( BOARD* aPcb, const wxPoint& aPosition, int aActiveLayer,
-                                bool aVisibleOnly, bool aIgnoreLocked = false );
-
 /*************/
 /* MODULES.C */
 /*************/
