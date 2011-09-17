@@ -1,16 +1,19 @@
-/**********************************/
-/* class_pad.h : Pads description */
-/**********************************/
+/**
+ * @file class_pad.h
+ * @brief Pad object description
+ */
 
 #ifndef _PAD_H_
 #define _PAD_H_
 
 
-class Pcb3D_GLCanvas;
-
 #include "pad_shapes.h"
 #include "PolyLine.h"
 #include "richio.h"
+
+
+class EDA_3D_CANVAS;
+
 
 /* Default layers used for pads, according to the pad type.
  * this is default values only, they can be changed for a given pad
@@ -35,23 +38,25 @@ class Pcb3D_GLCanvas;
 class PAD_DRAWINFO
 {
 public:
-    EDA_DRAW_PANEL * m_DrawPanel;    // the EDA_DRAW_PANEL used to draw a PAD ; can be null
-    int m_DrawMode;             // the draw mode
-    int m_Color;                // color used to draw the pad shape , from pad layers and
-                                // visible layers
-    int m_HoleColor;            // color used to draw the pad hole
-    int m_NPHoleColor;          // color used to draw a pad Not Plated hole
-    int m_PadClearance;         // clearance value, used to draw the pad area outlines
-    wxSize m_Mask_margin;       // margin, used to draw solder paste when only one layer is shown
-    bool m_Display_padnum;      // true to show pad number
-    bool m_Display_netname;     // true to show net name
-    bool m_ShowPadFilled;       // true to show pad as solid area, false to show pas in sketch mode
-    bool m_ShowNCMark;          // true to show pad not connected mark
-    bool m_ShowNotPlatedHole;   // true when the pad hole in not plated, to draw a specifib pad shape
-    bool m_IsPrinting;          // true to print, false to display on screen.
-    wxPoint m_Offset;           // general draw offset
+    EDA_DRAW_PANEL* m_DrawPanel;  // the EDA_DRAW_PANEL used to draw a PAD ; can be null
+    int m_DrawMode;               // the draw mode
+    int m_Color;                  // color used to draw the pad shape , from pad layers and
+                                  // visible layers
+    int m_HoleColor;              // color used to draw the pad hole
+    int m_NPHoleColor;            // color used to draw a pad Not Plated hole
+    int m_PadClearance;           // clearance value, used to draw the pad area outlines
+    wxSize m_Mask_margin;         // margin, used to draw solder paste when only one layer is shown
+    bool m_Display_padnum;        // true to show pad number
+    bool m_Display_netname;       // true to show net name
+    bool m_ShowPadFilled;         // true to show pad as solid area, false to show pas in
+                                  // sketch mode
+    bool m_ShowNCMark;            // true to show pad not connected mark
+    bool m_ShowNotPlatedHole;     // true when the pad hole in not plated, to draw a specific
+                                  // pad shape
+    bool m_IsPrinting;            // true to print, false to display on screen.
+    wxPoint m_Offset;             // general draw offset
 
-    PAD_DRAWINFO( );
+    PAD_DRAWINFO();
 };
 
 
@@ -110,7 +115,7 @@ public:
     static int m_PadSketchModePenSize;      // Pen size used to draw pads in sketch mode
                                     // (mode used to print pads on silkscreen layer)
 
-    int	    m_LengthDie;            // Length net from pad to die on chip
+    int     m_LengthDie;            // Length net from pad to die on chip
 
     // Local clearance. When null, the module default value is used.
     // when the module default value is null, the netclass value is used
@@ -121,11 +126,11 @@ public:
     int    m_LocalSolderMaskMargin;            // Local solder mask margin
     int    m_LocalSolderPasteMargin;           // Local solder paste margin absolute value
     double m_LocalSolderPasteMarginRatio;      // Local solder mask margin ratio value of pad size
-    // The final margin is the sum of these 2 values
+                                               // The final margin is the sum of these 2 values
 
 private:
     int m_SubRatsnest;                  // variable used in rats nest computations
-                                        // handle subnet (block) number in ratsnet connection
+                                        // handle subnet (block) number in ratsnest connection
 
 public:
     D_PAD( MODULE* parent );
@@ -135,7 +140,6 @@ public:
     void Copy( D_PAD* source );
 
     D_PAD* Next() { return (D_PAD*) Pnext; }
-
 
     /**
      * Function GetNetname
@@ -216,7 +220,7 @@ public:
      * 2 - if null, the parent footprint value
      * 1 - if null, the global value
      */
-    int           GetSolderMaskMargin();
+    int GetSolderMaskMargin();
 
     /**
      * Function GetSolderPasteMargin
@@ -228,10 +232,10 @@ public:
      * 2 - if null, the parent footprint value
      * 1 - if null, the global value
      */
-    wxSize        GetSolderPasteMargin();
+    wxSize GetSolderPasteMargin();
 
     /* Reading and writing data on files */
-    int           ReadDescr( LINE_READER* aReader );
+    int ReadDescr( LINE_READER* aReader );
 
     /**
      * Function Save
@@ -239,27 +243,28 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool          Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
 
     /* drawing functions */
-    /** Draw a pad:
+    /**
+     * Draw a pad:
      * @param aPanel = the EDA_DRAW_PANEL panel
      * @param aDC = the current device context
      * @param aDraw_mode = mode: GR_OR, GR_XOR, GR_AND...
      * @param aOffset = draw offset
      */
-    void          Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                        int aDrawMode, const wxPoint& aOffset = ZeroOffset );
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+               int aDrawMode, const wxPoint& aOffset = ZeroOffset );
 
-    void          Draw3D( Pcb3D_GLCanvas* glcanvas );
+    void Draw3D( EDA_3D_CANVAS* glcanvas );
 
     /**
      * Function DrawShape
      * basic function to draw a pad.
      * used by Draw after calculation of parameters (color, ) final orientation ...
      */
-    void          DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo );
+    void DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo );
 
     /**
      * Function BuildPadPolygon
@@ -271,7 +276,7 @@ public:
      *                        inflate, < 0 deflate
      * @param aRotation = full rotation of the polygon
      */
-    void          BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const;
+    void BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const;
 
     /**
      * Function BuildSegmentFromOvalShape
@@ -288,12 +293,15 @@ public:
     int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation ) const;
 
     // others
-    void          SetPadName( const wxString& name );    // Change pad name
-    wxString      ReturnStringPadName() const;           // Return pad name as string in a wxString
-    void ReturnStringPadName( wxString& text ) const; // Return pad name as string in a buffer
-    void          ComputeShapeMaxRadius();                           // compute radius
+    void SetPadName( const wxString& name );    // Change pad name
 
-    int           GetMaxRadius() const;
+    wxString ReturnStringPadName() const;           // Return pad name as string in a wxString
+
+    void ReturnStringPadName( wxString& text ) const; // Return pad name as string in a buffer
+
+    void ComputeShapeMaxRadius();                           // compute radius
+
+    int GetMaxRadius() const;
 
     const wxPoint ReturnShapePos();
 
@@ -302,6 +310,7 @@ public:
      * @return int - the netcode
      */
     int GetSubRatsnest() const { return m_SubRatsnest; }
+
     void SetSubRatsnest( int aSubRatsnest ) { m_SubRatsnest = aSubRatsnest; }
 
 
@@ -347,7 +356,7 @@ public:
      * returns the bounding box of this pad
      * Mainly used to redraw the screen area occupied by the pad
      */
-    EDA_RECT   GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     /**
      * Function Compare
@@ -389,7 +398,7 @@ public:
      * Function Show
      * is used to output the object tree, currently for debugging only.
      * @param nestLevel An aid to prettier tree indenting, and is the level
-     *          of nesting of this object within the overall tree.
+     *                  of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );

@@ -1,7 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        3d_viewer.h
-/////////////////////////////////////////////////////////////////////////////
-
+/**
+ * @file 3d_viewer.h
+ */
 #ifndef __3D_VIEWER_H__
 #define __3D_VIEWER_H__
 
@@ -86,7 +85,7 @@ enum id_3dview_frm
 };
 
 
-class Pcb3D_GLCanvas;
+class EDA_3D_CANVAS;
 class EDA_3D_FRAME;
 class Info_3D_Visu;
 class S3D_Vertex;
@@ -129,7 +128,7 @@ public: Info_3D_Visu();
 };
 
 
-class Pcb3D_GLCanvas : public wxGLCanvas
+class EDA_3D_CANVAS : public wxGLCanvas
 {
 public:
     EDA_3D_FRAME* m_Parent;
@@ -146,8 +145,8 @@ private:
 #endif
 
 public:
-    Pcb3D_GLCanvas( EDA_3D_FRAME* parent, int* attribList = 0 );
-    ~Pcb3D_GLCanvas();
+    EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList = 0 );
+    ~EDA_3D_CANVAS();
 
     void   ClearLists();
 
@@ -209,7 +208,7 @@ public:
     PCB_BASE_FRAME* m_Parent;
 private:
     wxString        m_FrameName;      // name used for writing and reading setup. It is "Frame3D"
-    Pcb3D_GLCanvas* m_Canvas;
+    EDA_3D_CANVAS*  m_Canvas;
     EDA_TOOLBAR*    m_HToolBar;
     EDA_TOOLBAR*    m_VToolBar;
     int             m_InternalUnits;
@@ -238,7 +237,7 @@ public:
     /**
      * Function ReloadRequest
      * must be called when reloading data from Pcbnew is needed
-     * mainly after edition of the board or footprint beeing displayed.
+     * mainly after edition of the board or footprint being displayed.
      * mainly for the module editor.
      */
     void ReloadRequest( )

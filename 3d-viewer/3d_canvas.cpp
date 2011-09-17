@@ -50,27 +50,27 @@ void CheckGLError()
 
 
 /*
- * Pcb3D_GLCanvas implementation
+ * EDA_3D_CANVAS implementation
  */
 
-BEGIN_EVENT_TABLE( Pcb3D_GLCanvas, wxGLCanvas )
-    EVT_PAINT( Pcb3D_GLCanvas::OnPaint )
+BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
+    EVT_PAINT( EDA_3D_CANVAS::OnPaint )
 
     // key event:
-    EVT_CHAR( Pcb3D_GLCanvas::OnChar )
+    EVT_CHAR( EDA_3D_CANVAS::OnChar )
 
     // mouse events
-    EVT_RIGHT_DOWN( Pcb3D_GLCanvas::OnRightClick )
-    EVT_MOUSEWHEEL( Pcb3D_GLCanvas::OnMouseWheel )
-    EVT_MOTION( Pcb3D_GLCanvas::OnMouseMove )
+    EVT_RIGHT_DOWN( EDA_3D_CANVAS::OnRightClick )
+    EVT_MOUSEWHEEL( EDA_3D_CANVAS::OnMouseWheel )
+    EVT_MOTION( EDA_3D_CANVAS::OnMouseMove )
 
     // other events
-    EVT_ERASE_BACKGROUND( Pcb3D_GLCanvas::OnEraseBackground )
-    EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END, Pcb3D_GLCanvas::OnPopUpMenu )
+    EVT_ERASE_BACKGROUND( EDA_3D_CANVAS::OnEraseBackground )
+    EVT_MENU_RANGE( ID_POPUP_3D_VIEW_START, ID_POPUP_3D_VIEW_END, EDA_3D_CANVAS::OnPopUpMenu )
 END_EVENT_TABLE()
 
 
-Pcb3D_GLCanvas::Pcb3D_GLCanvas( EDA_3D_FRAME* parent, int* attribList ) :
+EDA_3D_CANVAS::EDA_3D_CANVAS( EDA_3D_FRAME* parent, int* attribList ) :
 #if wxCHECK_VERSION( 2, 7, 0 )
     wxGLCanvas( parent, -1, attribList, wxDefaultPosition, wxDefaultSize,
                 wxFULL_REPAINT_ON_RESIZE )
@@ -94,7 +94,7 @@ Pcb3D_GLCanvas::Pcb3D_GLCanvas( EDA_3D_FRAME* parent, int* attribList ) :
 }
 
 
-Pcb3D_GLCanvas::~Pcb3D_GLCanvas()
+EDA_3D_CANVAS::~EDA_3D_CANVAS()
 {
     ClearLists();
     m_init = false;
@@ -105,7 +105,7 @@ Pcb3D_GLCanvas::~Pcb3D_GLCanvas()
 }
 
 
-void Pcb3D_GLCanvas::ClearLists()
+void EDA_3D_CANVAS::ClearLists()
 {
     if( m_gllist > 0 )
         glDeleteLists( m_gllist, 1 );
@@ -114,14 +114,14 @@ void Pcb3D_GLCanvas::ClearLists()
 }
 
 
-void Pcb3D_GLCanvas::OnChar( wxKeyEvent& event )
+void EDA_3D_CANVAS::OnChar( wxKeyEvent& event )
 {
     SetView3D( event.GetKeyCode() );
     event.Skip();
 }
 
 
-void Pcb3D_GLCanvas::SetView3D( int keycode )
+void EDA_3D_CANVAS::SetView3D( int keycode )
 {
     int    ii;
     double delta_move = 0.7 * g_Parm_3D_Visu.m_Zoom;
@@ -237,7 +237,7 @@ void Pcb3D_GLCanvas::SetView3D( int keycode )
 }
 
 
-void Pcb3D_GLCanvas::OnMouseWheel( wxMouseEvent& event )
+void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
 {
     wxSize size( GetClientSize() );
 
@@ -288,7 +288,7 @@ void Pcb3D_GLCanvas::OnMouseWheel( wxMouseEvent& event )
 }
 
 
-void Pcb3D_GLCanvas::OnMouseMove( wxMouseEvent& event )
+void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 {
     wxSize size( GetClientSize() );
     double spin_quat[4];
@@ -331,7 +331,7 @@ void Pcb3D_GLCanvas::OnMouseMove( wxMouseEvent& event )
 
 /* Construct and display a popup menu when the right button is clicked.
  */
-void Pcb3D_GLCanvas::OnRightClick( wxMouseEvent& event )
+void EDA_3D_CANVAS::OnRightClick( wxMouseEvent& event )
 {
     wxPoint     pos;
     wxMenu      PopUpMenu;
@@ -406,7 +406,7 @@ void Pcb3D_GLCanvas::OnRightClick( wxMouseEvent& event )
 }
 
 
-void Pcb3D_GLCanvas::OnPopUpMenu( wxCommandEvent& event )
+void EDA_3D_CANVAS::OnPopUpMenu( wxCommandEvent& event )
 {
     int key = 0;
 
@@ -468,7 +468,7 @@ void Pcb3D_GLCanvas::OnPopUpMenu( wxCommandEvent& event )
 }
 
 
-void Pcb3D_GLCanvas::DisplayStatus()
+void EDA_3D_CANVAS::DisplayStatus()
 {
     wxString msg;
 
@@ -483,7 +483,7 @@ void Pcb3D_GLCanvas::DisplayStatus()
 }
 
 
-void Pcb3D_GLCanvas::OnPaint( wxPaintEvent& event )
+void EDA_3D_CANVAS::OnPaint( wxPaintEvent& event )
 {
     wxPaintDC dc( this );
 
@@ -492,14 +492,14 @@ void Pcb3D_GLCanvas::OnPaint( wxPaintEvent& event )
 }
 
 
-void Pcb3D_GLCanvas::OnEraseBackground( wxEraseEvent& event )
+void EDA_3D_CANVAS::OnEraseBackground( wxEraseEvent& event )
 {
     // Do nothing, to avoid flashing.
 }
 
 
 /* Initialize broad parameters for OpenGL */
-void Pcb3D_GLCanvas::InitGL()
+void EDA_3D_CANVAS::InitGL()
 {
     wxSize size = GetClientSize();
 
@@ -568,7 +568,7 @@ void Pcb3D_GLCanvas::InitGL()
                   g_Parm_3D_Visu.m_BgColor.m_Blue, 1 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    // Setup light souces:
+    // Setup light sources:
     SetLights();
 
     CheckGLError();
@@ -576,7 +576,7 @@ void Pcb3D_GLCanvas::InitGL()
 
 
 /* Initialize OpenGL light sources. */
-void Pcb3D_GLCanvas::SetLights()
+void EDA_3D_CANVAS::SetLights()
 {
     double  light;
     GLfloat light_color[4];
@@ -604,7 +604,7 @@ void Pcb3D_GLCanvas::SetLights()
 /* Create a Screenshot of the current 3D view.
  *  Output file format is png or jpeg, or image is copied to the clipboard
  */
-void Pcb3D_GLCanvas::TakeScreenshot( wxCommandEvent& event )
+void EDA_3D_CANVAS::TakeScreenshot( wxCommandEvent& event )
 {
     wxFileName fn( m_Parent->m_Parent->GetScreen()->GetFileName() );
     wxString   FullFileName;

@@ -24,9 +24,10 @@ int S3D_MASTER::ReadData()
         return 1;
     }
 
-
     if( wxFileName::FileExists( m_Shape3DName ) )
+    {
         FullFilename = m_Shape3DName;
+    }
     else
     {
         fn = m_Shape3DName;
@@ -50,18 +51,23 @@ int S3D_MASTER::ReadData()
     // Switch the locale to standard C (needed to print floating point
     // numbers like 1.3)
     SetLocaleTo_C_standard();
+
     while( GetLine( file, line, &LineNum, 512 ) )
     {
         text = strtok( line, " \t\n\r" );
+
         if( stricmp( text, "DEF" ) == 0 )
         {
             while( GetLine( file, line, &LineNum, 512 ) )
             {
                 text = strtok( line, " \t\n\r" );
+
                 if( text == NULL )
                     continue;
+
                 if( *text == '}' )
                     break;
+
                 if( stricmp( text, "children" ) == 0 )
                 {
                     ReadChildren( file, &LineNum );
@@ -98,6 +104,7 @@ int S3D_MASTER:: ReadMaterial( FILE* file, int* LineNum )
     command  = strtok( NULL, " \t\n\r" );
     text     = strtok( NULL, " \t\n\r" );
     mat_name = FROM_UTF8( text );
+
     if( stricmp( command, "USE" ) == 0 )
     {
         for( material = m_Materials; material; material = material->Next() )
@@ -122,13 +129,16 @@ int S3D_MASTER:: ReadMaterial( FILE* file, int* LineNum )
         while( GetLine( file, line, LineNum, 512 ) )
         {
             text = strtok( line, " \t\n\r" );
+
             if( text == NULL )
                 continue;
+
             if( text[0] == '}' )
             {
                 material->SetMaterial();
                 return 0;
             }
+
             if( stricmp( text, "diffuseColor" ) == 0 )
             {
                 text = strtok( NULL, " \t\n\r" );
@@ -173,6 +183,7 @@ int S3D_MASTER:: ReadMaterial( FILE* file, int* LineNum )
             }
         }
     }
+
     return -1;
 }
 
@@ -184,8 +195,10 @@ int S3D_MASTER::ReadChildren( FILE* file, int* LineNum )
     while( GetLine( file, line, LineNum, 512 ) )
     {
         text = strtok( line, " \t\n\r" );
+
         if( *text == ']' )
             return 0;
+
         if( *text == ',' )
             continue;
 
@@ -212,6 +225,7 @@ int S3D_MASTER::ReadShape( FILE* file, int* LineNum )
     while( GetLine( file, line, LineNum, 512 ) )
     {
         text = strtok( line, " \t\n\r" );
+
         if( *text == '}' )
         {
             err = 0;
@@ -245,6 +259,7 @@ int S3D_MASTER::ReadAppearance( FILE* file, int* LineNum )
     while( GetLine( file, line, LineNum, 512 ) )
     {
         text = strtok( line, " \t\n\r" );
+
         if( *text == '}' )
         {
             err = 0; break;
@@ -283,18 +298,18 @@ int S3D_MASTER::ReadAppearance( FILE* file, int* LineNum )
  *  text_buffer contains the first line of this node :
  *     "coord Coordinate { point ["
  */
-double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize,
-                        int* LineNum )
+double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize, int* LineNum )
 {
     double*      data_list = NULL;
     unsigned int ii = 0, jj = 0, nn = BUFSIZE;
     char*        text;
-    bool         HasData   = FALSE;
-    bool         StartData = FALSE;
-    bool         EndNode   = FALSE;
+    bool         HasData   = false;
+    bool         StartData = false;
+    bool         EndNode   = false;
     char         string_num[512];
 
     text = text_buffer;
+
     while( !EndNode )
     {
         if( *text == 0 )  // Needs data !
@@ -308,13 +323,13 @@ double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize,
             switch( *text )
             {
             case '[':
-                StartData = TRUE;
+                StartData = true;
                 jj = 0; string_num[jj] = 0;
                 data_list = (double*) MyZMalloc( nn * sizeof(double) );
                 break;
 
             case '}':
-                EndNode = TRUE;
+                EndNode = true;
                 break;
 
             case ']':
@@ -322,32 +337,38 @@ double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize,
             case ' ':
             case ',':
                 jj = 0;
+
                 if( !StartData || !HasData )
                     break;
+
                 data_list[ii]  = atof( string_num );
                 string_num[jj] = 0;
                 ii++;
+
                 if( ii >= nn )
                 {
                     nn *= 2;
-                    data_list =
-                        (double*) realloc( data_list, ( nn * sizeof(double) ) );
+                    data_list = (double*) realloc( data_list, ( nn * sizeof(double) ) );
                 }
-                HasData = FALSE;
+
+                HasData = false;
+
                 if( *text == ']' )
                 {
-                    StartData = FALSE;
+                    StartData = false;
                 }
                 break;
 
             default:
                 if( !StartData )
                     break;
+
                 if( jj >= sizeof(string_num) )
                     break;
+
                 string_num[jj] = *text;
                 jj++; string_num[jj] = 0;
-                HasData = TRUE;
+                HasData = true;
                 break;
             }
 
@@ -357,8 +378,10 @@ double* ReadCoordsList( FILE* file, char* text_buffer, int* bufsize,
 
     if( data_list )
         data_list = (double*) realloc( data_list, ( ii * sizeof(double) ) );
+
     if( bufsize )
         *bufsize = ii;
+
     return data_list;
 }
 
@@ -375,6 +398,7 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
     {
         strcpy( buffer, line );
         text = strtok( buffer, " \t\n\r" );
+
         if( *text == '}' )
         {
             err = 0; break;
@@ -383,7 +407,8 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
         if( stricmp( text, "normalPerVertex" ) == 0 )
         {
             text = strtok( NULL, " ,\t\n\r" );
-            if( stricmp( text, "TRUE" ) == 0 )
+
+            if( stricmp( text, "true" ) == 0 )
             {
             }
             else
@@ -395,7 +420,8 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
         if( stricmp( text, "colorPerVertex" ) == 0 )
         {
             text = strtok( NULL, " ,\t\n\r" );
-            if( stricmp( text, "TRUE" ) == 0 )
+
+            if( stricmp( text, "true" ) == 0 )
             {
             }
             else
@@ -407,8 +433,8 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
         if( stricmp( text, "normal" ) == 0 )
         {
             int     coord_number;
-            double* buf_points = ReadCoordsList( file, line, &coord_number,
-                                                 LineNum );
+            double* buf_points = ReadCoordsList( file, line, &coord_number, LineNum );
+
             // Do something if needed
             free( buf_points );
             continue;
@@ -418,10 +444,12 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
             while( GetLine( file, line, LineNum, 512 ) )
             {
                 text = strtok( line, " ,\t\n\r" );
+
                 while( text )
                 {
                     if( *text == ']' )
                         break;
+
                     text = strtok( NULL, " ,\t\n\r" );
                 }
 
@@ -435,21 +463,24 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
         if( stricmp( text, "color" ) == 0 )
         {
             int     coord_number;
-            double* buf_points = ReadCoordsList( file, line, &coord_number,
-                                                 LineNum );
+            double* buf_points = ReadCoordsList( file, line, &coord_number, LineNum );
+
             // Do something if needed
             free( buf_points );
             continue;
         }
+
         if( stricmp( text, "colorIndex" ) == 0 )
         {
             while( GetLine( file, line, LineNum, 512 ) )
             {
                 text = strtok( line, " ,\t\n\r" );
+
                 while( text )
                 {
                     if( *text == ']' )
                         break;
+
                     text = strtok( NULL, " ,\t\n\r" );
                 }
 
@@ -468,20 +499,24 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
         else if( stricmp( text, "coordIndex" ) == 0 )
         {
             index = (int*) MyMalloc( nn * sizeof(int) );
-            S3D_Vertex* coords =
-                (S3D_Vertex*) MyMalloc( nn * sizeof(S3D_Vertex) );
+            S3D_Vertex* coords = (S3D_Vertex*) MyMalloc( nn * sizeof(S3D_Vertex) );
+
             while( GetLine( file, line, LineNum, 512 ) )
             {
                 int coord_count = 0, jj;
                 text = strtok( line, " ,\t\n\r" );
+
                 while( text )
                 {
                     if( *text == ']' )
                         break;
+
                     jj = atoi( text );
+
                     if( jj < 0 )
                     {
                         S3D_Vertex* curr_coord = coords;
+
                         for( jj = 0; jj < coord_count; jj++ )
                         {
                             int kk = index[jj] * 3;
@@ -499,6 +534,7 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
                     {
                         index[coord_count++] = jj;
                     }
+
                     text = strtok( NULL, " ,\t\n\r" );
                 }
 
@@ -523,7 +559,7 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
 }
 
 
-int Struct3D_Shape:: ReadData( FILE* file, int* LineNum )
+int Struct3D_Shape::ReadData( FILE* file, int* LineNum )
 {
     char line[512];
 

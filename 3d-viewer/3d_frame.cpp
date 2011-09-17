@@ -66,9 +66,9 @@ EDA_3D_FRAME::EDA_3D_FRAME( PCB_BASE_FRAME* parent, const wxString& title, long 
     //	ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
 
-    // Make a Pcb3D_GLCanvas
+    // Make a EDA_3D_CANVAS
     int attrs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
-    m_Canvas = new Pcb3D_GLCanvas( this, attrs );
+    m_Canvas = new EDA_3D_CANVAS( this, attrs );
 
     m_auimgr.SetManagedWindow( this );
 

@@ -26,16 +26,17 @@ void S3D_MASTER::Set_Object_Coords( S3D_Vertex* coord, int nbcoord )
         coord[ii].x *= m_MatScale.x;
         coord[ii].y *= m_MatScale.y;
         coord[ii].z *= m_MatScale.z;
+
         /* adjust rotation */
         if( m_MatRotation.x )
-            RotatePoint( &coord[ii].y, &coord[ii].z,
-                        (int) (m_MatRotation.x * 10) );
+            RotatePoint( &coord[ii].y, &coord[ii].z, (int) (m_MatRotation.x * 10) );
+
         if( m_MatRotation.y )
-            RotatePoint( &coord[ii].z, &coord[ii].x,
-                        (int) (m_MatRotation.y * 10) );
+            RotatePoint( &coord[ii].z, &coord[ii].x, (int) (m_MatRotation.y * 10) );
+
         if( m_MatRotation.z )
-            RotatePoint( &coord[ii].x, &coord[ii].y,
-                        (int) (m_MatRotation.z * 10) );
+            RotatePoint( &coord[ii].x, &coord[ii].y, (int) (m_MatRotation.z * 10) );
+
         /* adjust offset position (offset is given in UNIT 3D (0.1 inch) */
 #define SCALE_3D_CONV (PCB_INTERNAL_UNIT / UNITS3D_TO_UNITSPCB)
         coord[ii].x += m_MatPosition.x * SCALE_3D_CONV;
@@ -68,6 +69,7 @@ void Set_Object_Data( const S3D_Vertex* coord, int nbcoord )
     nz = ax * by - ay * bx;
 
     r = sqrt( nx * nx + ny * ny + nz * nz );
+
     if( r >= 0.000001 ) /* avoid division by zero */
     {
         nx /= r; ny /= r; nz /= r;
@@ -102,7 +104,7 @@ void Set_Object_Data( const S3D_Vertex* coord, int nbcoord )
 }
 
 
-GLuint Pcb3D_GLCanvas::DisplayCubeforTest()
+GLuint EDA_3D_CANVAS::DisplayCubeforTest()
 {
     GLuint gllist = glGenLists( 1 );
 
@@ -151,18 +153,19 @@ Info_3D_Visu::Info_3D_Visu()
     m_Beginx = m_Beginy = 0.0;  /* position of mouse */
     m_Zoom   = 1.0;             /* field of view in degrees */
     trackball( m_Quat, 0.0, 0.0, 0.0, 0.0 );
+
     for( ii = 0; ii < 4; ii++ )
         m_Rot[ii] = 0.0;
 
     m_Layers = 1;
     m_BoardSettings  = NULL;
-    m_Draw3DAxis     = TRUE;
-    m_Draw3DModule   = TRUE;
-    m_Draw3DZone     = TRUE;
-    m_Draw3DComments = TRUE;
-    m_Draw3DDrawings = TRUE;
-    m_Draw3DEco1     = TRUE;
-    m_Draw3DEco2     = TRUE;
+    m_Draw3DAxis     = true;
+    m_Draw3DModule   = true;
+    m_Draw3DZone     = true;
+    m_Draw3DComments = true;
+    m_Draw3DDrawings = true;
+    m_Draw3DEco1     = true;
+    m_Draw3DEco2     = true;
 }
 
 
@@ -187,15 +190,12 @@ WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
         text = _( "Vertex " );
     else
         text = title;
+
     text += ReturnUnitSymbol( units );
 
-    msgtitle = new wxStaticText( parent, -1, text, wxDefaultPosition,
-                                 wxSize( -1, -1 ), 0 );
+    msgtitle = new wxStaticText( parent, -1, text, wxDefaultPosition, wxSize( -1, -1 ), 0 );
 
-    BoxSizer->Add(
-        msgtitle,
-        wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM |
-        wxADJUST_MINSIZE );
+    BoxSizer->Add( msgtitle, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxBOTTOM | wxADJUST_MINSIZE );
 
     wxFlexGridSizer* GridSizer = new wxFlexGridSizer( 3, 2, 0, 0 );
 

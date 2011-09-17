@@ -1,6 +1,7 @@
-/*******************************************************/
-/* class_edge_module.h : EDGE_MODULE class definition. */
-/*******************************************************/
+/**
+ * @file class_edge_module.h
+ * @brief EDGE_MODULE class definition.
+ */
 
 #ifndef _CLASS_EDGE_MOD_H_
 #define _CLASS_EDGE_MOD_H_
@@ -8,13 +9,13 @@
 #include "class_drawsegment.h"
 #include "richio.h"
 
-class Pcb3D_GLCanvas;
+class EDA_3D_CANVAS;
 
 
 class EDGE_MODULE : public DRAWSEGMENT
 {
 public:
-    wxPoint m_Start0;       // Start point or centre, relative to module origin, orient 0.
+    wxPoint m_Start0;       // Start point or center, relative to module origin, orient 0.
     wxPoint m_End0;         // End point, relative to module origin, orient 0.
 
 public:
@@ -25,7 +26,7 @@ public:
     EDGE_MODULE* Next() const { return (EDGE_MODULE*) Pnext; }
     EDGE_MODULE* Back() const { return (EDGE_MODULE*) Pback; }
 
-    void             Copy( EDGE_MODULE* source ); // copy structure
+    void Copy( EDGE_MODULE* source ); // copy structure
 
     /**
      * Function Save
@@ -33,17 +34,17 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool             Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
-    int              ReadDescr( LINE_READER* aReader );
+    int ReadDescr( LINE_READER* aReader );
 
-    void             SetDrawCoord();
+    void SetDrawCoord();
 
     /* drawing functions */
-    void             Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-                           int aDrawMode, const wxPoint& offset = ZeroOffset );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
+               int aDrawMode, const wxPoint& offset = ZeroOffset );
 
-    void             Draw3D( Pcb3D_GLCanvas* glcanvas );
+    void Draw3D( EDA_3D_CANVAS* glcanvas );
 
     /**
      * Function DisplayInfo
@@ -52,7 +53,7 @@ public:
      * Is virtual from EDA_ITEM.
      * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void             DisplayInfo( EDA_DRAW_FRAME* frame );
+    void DisplayInfo( EDA_DRAW_FRAME* frame );
 
 
     /**
@@ -77,7 +78,7 @@ public:
      * Function Show
      * is used to output the object tree, currently for debugging only.
      * @param nestLevel An aid to prettier tree indenting, and is the level
-     *          of nesting of this object within the overall tree.
+     *                  of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );

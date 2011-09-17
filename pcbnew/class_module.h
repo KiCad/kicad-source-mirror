@@ -8,16 +8,11 @@
 #define _MODULE_H_
 
 
-class Pcb3D_GLCanvas;
-class S3D_MASTER;
-
 #include "richio.h"
 
 
-/************************************/
-/* Modules (footprints) description */
-/* pad are in class_pad.xx          */
-/************************************/
+class EDA_3D_CANVAS;
+class S3D_MASTER;
 
 
 enum Mod_Attribut       /* Attributes used for modules */
@@ -41,13 +36,12 @@ public:
     wxPoint           m_Pos;           // Real coord on board
     DLIST<D_PAD>      m_Pads;          /* Pad list (linked list) */
     DLIST<BOARD_ITEM> m_Drawings;      /* Graphic items list (linked list) */
-    DLIST<S3D_MASTER> m_3D_Drawings;   /* First item of the 3D shapes (linked
-                                        * list)*/
+    DLIST<S3D_MASTER> m_3D_Drawings;   /* First item of the 3D shapes (linked list)*/
     TEXTE_MODULE*     m_Reference;     // Component reference (U34, R18..)
     TEXTE_MODULE*     m_Value;         // Component value (74LS00, 22K..)
     wxString          m_LibRef;        /* Name of the module in library (and
                                         * the default value when loading a
-                                        *module from the library) */
+                                        * module from the library) */
     wxString          m_AlternateReference;  /* Used when m_Reference cannot
                                               * be used to identify the
                                               * footprint ( after a full
@@ -55,28 +49,20 @@ public:
 
     int           m_Attributs;          /* Flag bits ( see Mod_Attribut ) */
     int           m_Orient;             /* orientation in 0.1 degrees */
-    int           flag;                 /* Use to trace ratsnest and auto
-                                         * routing. */
-    int           m_ModuleStatus;       /* For autoplace: flags (LOCKED,
-                                         * AUTOPLACED) */
-    EDA_RECT      m_BoundaryBox;        /* Bounding box : coordinates on board,
-                                         * real orientation */
+    int           flag;                 /* Use to trace ratsnest and auto routing. */
+    int           m_ModuleStatus;       /* For autoplace: flags (LOCKED, AUTOPLACED) */
+    EDA_RECT      m_BoundaryBox;        // Bounding box : coordinates on board, real orientation.
     int           m_PadNum;             // Pad count
-    int           m_AltPadNum;          /* Pad with netcode > 0 (active pads)
-                                         * count */
+    int           m_AltPadNum;          /* Pad with netcode > 0 (active pads) count */
 
     int           m_CntRot90;           /* Automatic placement : cost ( 0..10 )
-                                         * for 90 degrees rotation
-                                         * (Horiz<->Vertical) */
+                                         * for 90 degrees rotation (Horiz<->Vertical) */
     int           m_CntRot180;          /* Automatic placement : cost ( 0..10 )
-                                         * for 180 degrees rotation
-                                         * (UP <->Down) */
-    wxSize        m_Ext;                /* Automatic placement margin around
-                                         * the module */
-    double         m_Surface;            // Bounding box area
+                                         * for 180 degrees rotation (UP <->Down) */
+    wxSize        m_Ext;                /* Automatic placement margin around the module */
+    double         m_Surface;           // Bounding box area
 
-    unsigned long m_Link;               /* Temporary variable ( used in
-                                         * editions, ...) */
+    unsigned long m_Link;               /* Temporary variable ( used in editions, ...) */
     long          m_LastEdit_Time;
     wxString      m_Path;
 
@@ -240,7 +226,7 @@ public:
                int             aDrawMode,
                const wxPoint&  aOffset = ZeroOffset );
 
-    void Draw3D( Pcb3D_GLCanvas* glcanvas );
+    void Draw3D( EDA_3D_CANVAS* glcanvas );
 
     void DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset, int draw_mode );
 

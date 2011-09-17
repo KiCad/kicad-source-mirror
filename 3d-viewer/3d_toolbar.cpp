@@ -16,13 +16,13 @@ void EDA_3D_FRAME::ReCreateHToolbar()
         return;
     }
 
-
-    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
 
     // Set up toolbar
     m_HToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,
                          KiBitmap( import3d_xpm ),
                          _( "Reload board" ) );
+
 #if (defined(__WINDOWS__) || defined(__APPLE__ ) )
 
     // Does not work properly under linux
@@ -117,16 +117,13 @@ void EDA_3D_FRAME::ReCreateMenuBar()
 
     menuBar->Append( fileMenu, _( "&File" ) );
 
-    fileMenu->Append( ID_MENU_SCREENCOPY_PNG,
-                      _( "Create Image (png format)" ) );
-    fileMenu->Append( ID_MENU_SCREENCOPY_JPEG,
-                      _( "Create Image (jpeg format)" ) );
+    fileMenu->Append( ID_MENU_SCREENCOPY_PNG, _( "Create Image (png format)" ) );
+    fileMenu->Append( ID_MENU_SCREENCOPY_JPEG, _( "Create Image (jpeg format)" ) );
 
 #if (defined(__WINDOWS__) || defined(__APPLE__ ) )
     // Does not work properly under linux
     fileMenu->AppendSeparator();
-    fileMenu->Append( ID_TOOL_SCREENCOPY_TOCLIBBOARD,
-                      _( "Copy 3D Image to Clipboard" ) );
+    fileMenu->Append( ID_TOOL_SCREENCOPY_TOCLIBBOARD, _( "Copy 3D Image to Clipboard" ) );
 #endif
     fileMenu->AppendSeparator();
     fileMenu->Append( wxID_EXIT, _( "&Exit" ) );

@@ -52,7 +52,7 @@ static void CALLBACK tessErrorCB( GLenum errorCode );
 static void CALLBACK tessCPolyPt2Vertex( const GLvoid* data );
 static void CALLBACK tesswxPoint2Vertex( const GLvoid* data );
 
-void Pcb3D_GLCanvas::Redraw( bool finish )
+void EDA_3D_CANVAS::Redraw( bool finish )
 {
     /* SwapBuffer requires the window to be shown before calling */
     if( !IsShown() )
@@ -110,7 +110,7 @@ void Pcb3D_GLCanvas::Redraw( bool finish )
 
 /* Create the draw list items
  */
-GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
+GLuint EDA_3D_CANVAS::CreateDrawGL_List()
 {
     PCB_BASE_FRAME* pcbframe = m_Parent->m_Parent;
     BOARD* pcb = pcbframe->GetBoard();
@@ -219,8 +219,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
     glEnd();
 #endif
 
-    /* move the board in order to draw it with its center at 0,0 3D
-     * coordinates */
+    /* move the board in order to draw it with its center at 0,0 3D coordinates */
     glTranslatef( -g_Parm_3D_Visu.m_BoardPos.x * g_Parm_3D_Visu.m_BoardScale,
                   -g_Parm_3D_Visu.m_BoardPos.y * g_Parm_3D_Visu.m_BoardScale,
                   0.0F );
@@ -248,6 +247,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
         for( ii = 0; ii < pcb->GetAreaCount(); ii++ )
         {
             ZONE_CONTAINER* curr_zone = pcb->GetArea( ii );
+
             if( curr_zone->m_FillMode == 0 )
             {
                 // solid polygons only are used to fill areas
@@ -295,6 +295,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
             for( int ic = 1; ic <= imax; ic++ )
             {
                 CPolyPt* endcorner = &zone->m_FilledPolysList[ic];
+
                 if( begincorner->utility == 0 )
                 {
                     // Draw only basic outlines, not extra segments
@@ -304,6 +305,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
                     dummysegment.m_End.y   = endcorner->y;
                     Draw3D_Track( &dummysegment );
                 }
+
                 if( (endcorner->end_contour) || (ic == imax) )
                 {
                     // the last corner of a filled area is found: draw it
@@ -368,7 +370,7 @@ GLuint Pcb3D_GLCanvas::CreateDrawGL_List()
 }
 
 
-void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
+void EDA_3D_CANVAS::Draw3D_Track( TRACK* track )
 {
     double zpos;
     int    layer = track->GetLayer();
@@ -402,7 +404,7 @@ void Pcb3D_GLCanvas::Draw3D_Track( TRACK* track )
  * draw all solid polygons used as filles areas in a zone
  * @param aZone = the zone to draw
  */
-void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone )
+void EDA_3D_CANVAS::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone )
 {
     double zpos;
     int    layer = aZone->GetLayer();
@@ -435,6 +437,7 @@ void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone )
 
     // Draw solid areas contained in this zone
     int StartContour = 1;
+
     for( unsigned ii = 0; ii < aZone->m_FilledPolysList.size(); ii++ )
     {
         if( StartContour == 1 )
@@ -443,6 +446,7 @@ void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone )
             gluTessBeginContour( tess );
             StartContour = 0;
         }
+
         v_data[0] = aZone->m_FilledPolysList[ii].x * g_Parm_3D_Visu.m_BoardScale;
         v_data[1] = -aZone->m_FilledPolysList[ii].y * g_Parm_3D_Visu.m_BoardScale;
         gluTessVertex( tess, v_data, &aZone->m_FilledPolysList[ii] );
@@ -461,7 +465,7 @@ void Pcb3D_GLCanvas::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone )
 
 /* 3D drawing for a VIA (cylinder + filled circles)
  */
-void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
+void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
 {
     double x, y, r, hole;
     int    layer, top_layer, bottom_layer;
@@ -480,6 +484,7 @@ void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
     for( layer = bottom_layer; layer < g_Parm_3D_Visu.m_Layers; layer++ )
     {
         zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
+
         if( layer < g_Parm_3D_Visu.m_Layers - 1 )
         {
             if( g_Parm_3D_Visu.m_BoardSettings->IsLayerVisible( layer ) == false )
@@ -519,7 +524,7 @@ void Pcb3D_GLCanvas::Draw3D_Via( SEGVIA* via )
 }
 
 
-void Pcb3D_GLCanvas::Draw3D_DrawSegment( DRAWSEGMENT* segment )
+void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 {
     double x, y, xf, yf;
     double zpos, w;
@@ -608,7 +613,7 @@ static void Draw3dTextSegm( int x0, int y0, int xf, int yf )
 }
 
 
-void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
+void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
 {
     int layer = text->GetLayer();
 
@@ -661,7 +666,7 @@ void Pcb3D_GLCanvas::Draw3D_DrawText( TEXTE_PCB* text )
 }
 
 
-void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
+void MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
 {
     D_PAD* pad = m_Pads;
 
@@ -676,7 +681,7 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 
     /* Draw module shape: 3D shape if exists (or module outlines if not exists) */
     S3D_MASTER* Struct3D  = m_3D_Drawings;
-    bool        As3dShape = FALSE;
+    bool        As3dShape = false;
 
     if( g_Parm_3D_Visu.m_Draw3DModule )
     {
@@ -703,7 +708,7 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
         {
             if( !Struct3D->m_Shape3DName.IsEmpty() )
             {
-                As3dShape = TRUE;
+                As3dShape = true;
                 Struct3D->ReadData();
             }
         }
@@ -739,7 +744,7 @@ void MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 }
 
 
-void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
+void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
 {
     wxString s;
     int      dx, dy;
@@ -862,7 +867,7 @@ void EDGE_MODULE::Draw3D( Pcb3D_GLCanvas* glcanvas )
 
 
 /* Draw 3D pads. */
-void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
+void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
 {
     int ii, ll, layer, nlmax;
     int ux0, uy0,
@@ -907,8 +912,8 @@ void D_PAD::Draw3D( Pcb3D_GLCanvas* glcanvas )
 
     glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
     nlmax = g_Parm_3D_Visu.m_Layers - 1;
-    Oncu  = (m_layerMask & LAYER_BACK) ? TRUE : FALSE;
-    Oncmp = (m_layerMask & LAYER_FRONT) ? TRUE : FALSE;
+    Oncu  = (m_layerMask & LAYER_BACK) ? true : false;
+    Oncmp = (m_layerMask & LAYER_FRONT) ? true : false;
     Both  = Oncu && Oncmp;
 
     switch( m_PadShape & 0x7F )
@@ -1364,10 +1369,10 @@ static void Draw3D_CircleSegment( double startx, double starty, double endx,
 /**
  * Function Draw3D_Polygon
  * draw one solid polygon
- * @param aCornersList = a std::vector<wxPoint> liste of corners, in physical coordinates
+ * @param aCornersList = a std::vector<wxPoint> list of corners, in physical coordinates
  * @param aZpos = the z position in 3D units
  */
-void Pcb3D_GLCanvas::Draw3D_Polygon( std::vector<wxPoint>& aCornersList, double aZpos )
+void EDA_3D_CANVAS::Draw3D_Polygon( std::vector<wxPoint>& aCornersList, double aZpos )
 {
     g_Parm_3D_Visu.m_ActZpos = aZpos;
 
@@ -1407,19 +1412,19 @@ static int Get3DLayerEnable( int act_layer )
 {
     bool enablelayer;
 
-    enablelayer = TRUE;
+    enablelayer = true;
 
     if( act_layer == DRAW_N && !g_Parm_3D_Visu.m_Draw3DDrawings )
-        enablelayer = FALSE;
+        enablelayer = false;
 
     if( act_layer == COMMENT_N && !g_Parm_3D_Visu.m_Draw3DComments )
-        enablelayer = FALSE;
+        enablelayer = false;
 
     if( act_layer == ECO1_N && !g_Parm_3D_Visu.m_Draw3DEco1 )
-        enablelayer = FALSE;
+        enablelayer = false;
 
     if( act_layer == ECO2_N && !g_Parm_3D_Visu.m_Draw3DEco2 )
-        enablelayer = FALSE;
+        enablelayer = false;
 
     return enablelayer;
 }
