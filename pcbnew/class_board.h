@@ -1158,6 +1158,17 @@ public:
     D_PAD* GetPad( LISTE_PAD* aPad, const wxPoint& aPosition, int aLayerMask );
 
     /**
+     * Function GetSortedPadListByXCoord
+     * first empties then fills the vector with all pads and sorts them by
+     * increasing x coordinate.  The vector only holds pointers to the pads and
+     * those pointers are only references to pads which are owned by the BOARD
+     * through other links.
+     * @param aVector Where to put the pad pointers.
+     */
+    void GetSortedPadListByXCoord( std::vector<D_PAD*>& aVector );
+
+
+    /**
      * Function GetTrace
      * find the segment of \a aTrace at \a aPosition on \a aLayer if \a Layer is visible.
      * Traces that are flagged as deleted or busy are ignored.
@@ -1205,7 +1216,7 @@ public:
      * active layer is returned.  The distance is calculated via manhattan distance from
      * the center of the bounding rectangle to \a aPosition.
      *
-     * @param aPosition Flag bits, tuning the search, see pcbnew.h
+     * @param aPosition A wxPoint object containing the position to test.
      * @param aActiveLayer Layer to test.
      * @param aVisibleOnly Search only the visible layers if true.
      * @param aIgnoreLocked Ignore locked modules when true.
@@ -1213,6 +1224,40 @@ public:
      */
     MODULE* GetFootprint( const wxPoint& aPosition, int aActiveLayer,
                           bool aVisibleOnly, bool aIgnoreLocked = false );
+
+    /**
+     * Function GetLockPoint
+     * returns the item at the "attachment" point at the end of a trace at \a aPosition
+     * on \a aLayerMask.
+     * <p>
+     * This may be a PAD or another trace segment.
+     * </p>
+     *
+     * @param aPosition A wxPoint object containing the position to test.
+     * @param aLayerMask A layer or layers to mask the hit test.  Use -1 to ignore
+     *                   layer mask.
+     * @return A pointer to a BOARD_ITEM object if found otherwise NULL.
+     */
+    BOARD_ITEM* GetLockPoint( const wxPoint& aPosition, int aLayerMask );
+
+    /**
+     * Function CreateLockPoint
+     * creates an intermediate point on \a aSegment and break it into two segments
+     * at \a aPoition.
+     * <p>
+     * The new segment starts from \a aPosition and ends at the end point of \a
+     * aSegement.  The original segment now ends at \a aPosition.
+     * </p>
+     *
+     * @param aPosition A wxPoint object containing the position to test and the new
+     *                  segment start position if the return value is not NULL.
+     * @param aSegment The trace segment to create the lock point on.
+     * @param aList The pick list to add the created items to.
+     * @return NULL if no new point was created or a pointer to a TRACK ojbect of the
+     *         created segment.  If \a aSegment points to a via the exact value of \a
+     *         aPosition and a pointer to the via are returned.
+     */
+    TRACK* CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS_LIST* aList );
 };
 
 #endif      // #ifndef CLASS_BOARD_H

@@ -89,7 +89,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         GetBoard()->SetHighLightNet( 0 );
 
         // Search for a starting point of the new track, a track or pad
-        LockPoint = LocateLockPoint( GetBoard(), pos, layerMask );
+        LockPoint = GetBoard()->GetLockPoint( pos, layerMask );
 
         if( LockPoint ) // An item (pad or track) is found
         {
@@ -105,7 +105,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             {
                 TrackOnStartPoint    = (TRACK*) LockPoint;
                 GetBoard()->SetHighLightNet( TrackOnStartPoint->GetNet() );
-                CreateLockPoint( GetBoard(), pos, TrackOnStartPoint, &s_ItemsListPicker );
+                GetBoard()->CreateLockPoint( pos, TrackOnStartPoint, &s_ItemsListPicker );
             }
         }
         else
@@ -420,7 +420,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
      * This helps to reduce the computing time */
 
     /* Attaching the end of the track. */
-    BOARD_ITEM* LockPoint = LocateLockPoint( GetBoard(), pos, layerMask );
+    BOARD_ITEM* LockPoint = GetBoard()->GetLockPoint( pos, layerMask );
 
     if( LockPoint ) /* End of trace is on a pad. */
     {
@@ -434,10 +434,9 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
             GetBoard()->SetHighLightNet( adr_buf->GetNet() );
 
             /* Possible establishment of a hanging point. */
-            LockPoint = CreateLockPoint( GetBoard(),
-                                         g_CurrentTrackSegment->m_End,
-                                         adr_buf,
-                                         &s_ItemsListPicker );
+            LockPoint = GetBoard()->CreateLockPoint( g_CurrentTrackSegment->m_End,
+                                                     adr_buf,
+                                                     &s_ItemsListPicker );
         }
     }
 

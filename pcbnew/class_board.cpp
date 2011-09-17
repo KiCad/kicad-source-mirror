@@ -19,6 +19,19 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 BOARD_DESIGN_SETTINGS boardDesignSettings;
 
 
+/**
+ * Function SortPadsByXCoord
+ * is used to Sort a pad list by x coordinate value.
+ */
+static int sortPadsByXCoord( const void* pt_ref, const void* pt_comp )
+{
+    D_PAD* ref  = *(LISTE_PAD*) pt_ref;
+    D_PAD* comp = *(LISTE_PAD*) pt_comp;
+
+    return ref->m_Pos.x - comp->m_Pos.x;
+}
+
+
 BOARD::BOARD( EDA_ITEM* parent, PCB_BASE_FRAME* frame ) :
     BOARD_ITEM( (BOARD_ITEM*)parent, TYPE_PCB ),
     m_NetClasses( this )
@@ -1744,6 +1757,15 @@ D_PAD* BOARD::GetPad( LISTE_PAD* aPad, const wxPoint& aPosition, int aLayerMask 
 }
 
 
+void BOARD::GetSortedPadListByXCoord( std::vector<D_PAD*>& aVector )
+{
+    aVector.insert( aVector.end(), m_NetInfo->m_PadsFullList.begin(),
+                    m_NetInfo->m_PadsFullList.end() );
+
+    qsort( &aVector[0], GetPadsCount(), sizeof( D_PAD*), sortPadsByXCoord );
+}
+
+
 TRACK* BOARD::GetTrace( TRACK* aTrace, const wxPoint& aPosition, int aLayerMask )
 {
     for( TRACK* track = aTrace;   track;  track =  track->Next() )
@@ -2092,6 +2114,122 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, int aActiveLayer,
     }
 
     return NULL;
+}
+
+
+BOARD_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, int aLayerMask )
+{
+    for( MODULE* module = m_Modules; module; module = module->Next() )
+    {
+        D_PAD* pad = module->GetPad( aPosition, aLayerMask );
+
+        if( pad )
+            return pad;
+    }
+
+    /* No pad has been located so check for a segment of the trace. */
+    TRACK* segment = ::GetTrace( m_Track, NULL, aPosition, aLayerMask );
+
+    if( segment == NULL )
+        segment = GetTrace( m_Track, aPosition, aLayerMask );
+
+    return segment;
+}
+
+
+TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS_LIST* aList )
+{
+    if( aSegment->m_Start == aPosition || aSegment->m_End == aPosition )
+        return NULL;
+
+    /* A via is a good lock point */
+    if( aSegment->Type() == TYPE_VIA )
+    {
+        aPosition = aSegment->m_Start;
+        return aSegment;
+    }
+
+    // Calculation coordinate of intermediate point relative to the start point of aSegment
+     wxPoint delta = aSegment->m_End - aSegment->m_Start;
+
+    // Not yet in use:
+#if 0
+    int ox, oy, fx, fy;
+
+    if( aRefSegm )
+    {
+        ox = aRefSegm->m_Start.x - aSegment->m_Start.x;
+        oy = aRefSegm->m_Start.y - aSegment->m_Start.y;
+        fx = aRefSegm->m_End.x - aSegment->m_Start.x;
+        fy = aRefSegm->m_End.y - aSegment->m_Start.y;
+    }
+#endif
+
+    // calculate coordinates of aPosition relative to aSegment->m_Start
+    wxPoint newPoint = aPosition - aSegment->m_Start;
+
+    // newPoint must be on aSegment:
+    // Ensure newPoint.y/newPoint.y = delta.y/delta.x
+    if( delta.x == 0 )
+        newPoint.x = 0;         /* horizontal segment*/
+    else
+        newPoint.y = wxRound( ( (double)newPoint.x * delta.y ) / delta.x );
+
+    /* Create the intermediate point (that is to say creation of a new
+     * segment, beginning at the intermediate point.
+     */
+    newPoint.x += aSegment->m_Start.x;
+    newPoint.y += aSegment->m_Start.y;
+
+    TRACK* newTrack = aSegment->Copy();
+
+    if( aList )
+    {
+        ITEM_PICKER picker( newTrack, UR_NEW );
+        aList->PushItem( picker );
+    }
+
+
+    DLIST<TRACK>* list = (DLIST<TRACK>*)aSegment->GetList();
+    wxASSERT( list );
+    list->Insert( newTrack, aSegment->Next() );
+
+    if( aList )
+    {
+        ITEM_PICKER picker( aSegment, UR_CHANGED );
+        picker.m_Link = aSegment->Copy();
+        aList->PushItem( picker );
+    }
+
+    /* Correct pointer at the end of the new segment. */
+    newTrack->end = aSegment->end;
+    newTrack->SetState( END_ONPAD, aSegment->GetState( END_ONPAD ) );
+
+    /* Set connections info relative to the new point
+    */
+
+    /* Old segment now ends at new point. */
+    aSegment->m_End = newPoint;
+    aSegment->end = newTrack;
+    aSegment->SetState( END_ONPAD, OFF );
+
+    /* The new segment begins at the new point. */
+    newTrack->m_Start = newPoint;
+    newTrack->start = aSegment;
+    newTrack->SetState( BEGIN_ONPAD, OFF );
+
+    D_PAD * pad = GetPad( newTrack, START );
+
+    if ( pad )
+    {
+        newTrack->start = pad;
+        newTrack->SetState( BEGIN_ONPAD, ON );
+        aSegment->end = pad;
+        aSegment->SetState( END_ONPAD, ON );
+    }
+
+    aPosition = newPoint;
+    return newTrack;
 }
 
 

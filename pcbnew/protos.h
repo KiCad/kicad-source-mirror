@@ -28,17 +28,6 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage );
 
 class D_PAD;
 
-/**
- * Function CreateSortedPadListByXCoord
- * first empties then fills the vector with all pads and sorts them by
- * increasing x coordinate.  The vector only holds pointers to the pads and
- * those pointers are only references to pads which are owned by the BOARD
- * through other links.
- * @param aBoard Which board to gather pads from.
- * @param aVector Where to put the pad pointers.
- */
-void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector );
-
 
 /***************/
 /* TRPISTE.CPP */
@@ -82,38 +71,6 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
  * depending on it's position from the origin (ox, oy) and \a aPosiition..
  */
 void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
-
-
-/* Routine to find the point "attachment" at the end of a trace.
- * This may be a PAD or another trace segment.
- * Returns:
- * - Pointer to the PAD or:
- * - Pointer to the segment or:
- * - NULL
- * Parameters:
- * - aPos - coordinate point test
- * ALayerMask of mask layers to be tested
- */
-BOARD_ITEM* LocateLockPoint( BOARD* aPcb, wxPoint aPos, int aLayerMask );
-
-/* Create an intermediate point on a segment
- * aSegm segment is broken into 2 segments connecting point pX, pY
- * After insertion:
- *   The new segment starts from  to new point, and ends to initial aSegm ending point
- *   the old segment aSegm ends to new point
- * Returns:
- *   NULL if no new point (ie if aRefPoint already corresponded at one end of aSegm
- * or
- *   Pointer to the segment created
- *   Returns the exact value of aRefPoint
- * If aSegm points to a via:
- *   Returns the exact value of aRefPoint and a pointer to the via,
- *   But does not create extra point
- */
-TRACK* CreateLockPoint( BOARD*             aPcb,
-                        wxPoint&           aRefPoint,
-                        TRACK*             aSegm,
-                        PICKED_ITEMS_LIST* aItemsListPicker );
 
 
 /****************/

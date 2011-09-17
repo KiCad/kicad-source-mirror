@@ -469,27 +469,6 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
 
 #define POS_AFF_CHREF 62
 
-/**
- * Function SortPadsByXCoord
- * is used to Sort a pad list by x coordinate value.
- */
-static int SortPadsByXCoord( const void* pt_ref, const void* pt_comp )
-{
-    D_PAD* ref  = *(LISTE_PAD*) pt_ref;
-    D_PAD* comp = *(LISTE_PAD*) pt_comp;
-
-    return ref->m_Pos.x - comp->m_Pos.x;
-}
-
-
-void CreateSortedPadListByXCoord( BOARD* aBoard, std::vector<D_PAD*>* aVector )
-{
-    aVector->insert( aVector->end(), aBoard->m_NetInfo->m_PadsFullList.begin(),
-                     aBoard->m_NetInfo->m_PadsFullList.end() );
-
-    qsort( &(*aVector)[0], aBoard->GetPadsCount(), sizeof( D_PAD*), SortPadsByXCoord );
-}
-
 
 void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 {
@@ -523,7 +502,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     /**************************************************************/
     /* Pass 1: search the connections between track ends and pads */
     /**************************************************************/
-    CreateSortedPadListByXCoord( m_Pcb, &sortedPads );
+    m_Pcb->GetSortedPadListByXCoord( sortedPads );
 
     /* Reset variables and flags used in computation */
     pt_trace = m_Pcb->m_Track;

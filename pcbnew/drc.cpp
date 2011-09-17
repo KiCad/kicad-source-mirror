@@ -25,7 +25,7 @@
  */
 
 /****************************/
-/* DRC control				*/
+/* DRC control              */
 /****************************/
 
 #include "fctsys.h"
@@ -121,9 +121,7 @@ DRC::~DRC()
 }
 
 
-/*********************************************/
 int DRC::Drc( TRACK* aRefSegm, TRACK* aList )
-/*********************************************/
 {
     updatePointers();
 
@@ -411,7 +409,7 @@ void DRC::testPad2Pad()
 {
     std::vector<D_PAD*> sortedPads;
 
-    CreateSortedPadListByXCoord( m_pcb, &sortedPads );
+    m_pcb->GetSortedPadListByXCoord( sortedPads );
 
     // find the max size of the pads (used to stop the test)
     int max_size = 0;
@@ -420,7 +418,8 @@ void DRC::testPad2Pad()
     {
         D_PAD* pad = sortedPads[i];
 
-        if( pad->m_ShapeMaxRadius > max_size )       // m_ShapeMaxRadius is the radius value of the circle containing the pad
+        // m_ShapeMaxRadius is the radius value of the circle containing the pad
+        if( pad->m_ShapeMaxRadius > max_size )
             max_size = pad->m_ShapeMaxRadius;
     }
 
@@ -491,7 +490,7 @@ void DRC::testUnconnected()
 
 void DRC::testZones( bool adoTestFillSegments )
 {
-    // Test copper areas for valide netcodes
+    // Test copper areas for valid netcodes
     // if a netcode is < 0 the netname was not found when reading a netlist
     // if a netcode is == 0 the netname is void, and the zone is not connected.
     // This is allowed, but i am not sure this is a good idea
@@ -558,7 +557,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd, in
     MODULE dummymodule( m_pcb );    // Creates a dummy parent
     D_PAD dummypad( &dummymodule );
     dummypad.m_layerMask   |= ALL_CU_LAYERS;  // Ensure the hole is on all copper layers
-    dummypad.m_LocalClearance = 1;   /* Use the minimal local clerance value for the dummy pad
+    dummypad.m_LocalClearance = 1;   /* Use the minimal local clearance value for the dummy pad
                                       *  the clearance of the active pad will be used
                                       *  as minimum distance to a hole
                                       *  (a value = 0 means use netclass value)
@@ -577,7 +576,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd, in
             break;
 
         // No problem if pads are on different copper layers,
-        // but their hole (if any ) can create RDC error because they are on all
+        // but their hole (if any ) can create DRC error because they are on all
         // copper layers, so we test them
         if( (pad->m_layerMask & layerMask ) == 0 )
         {
@@ -590,20 +589,24 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd, in
                 if( aRefPad->m_DrillShape == PAD_CIRCLE )
                     continue;
 
-                if( pad->m_Orient == aRefPad->m_Orient )                       // for oval holes: must also have the same orientation
+                // for oval holes: must also have the same orientation
+                if( pad->m_Orient == aRefPad->m_Orient )
                     continue;
             }
 
             /* Here, we must test clearance between holes and pads
-             * dummypad size and shape is adjusted to pad drill size and shape
+             * dummy pad size and shape is adjusted to pad drill size and shape
              */
-            if( pad->m_Drill.x )  // pad under testing has a hole, test this hole against pad reference
+            if( pad->m_Drill.x )
             {
+                // pad under testing has a hole, test this hole against pad reference
                 dummypad.SetPosition( pad->GetPosition() );
                 dummypad.m_Size     = pad->m_Drill;
                 dummypad.m_PadShape = (pad->m_DrillShape == PAD_OVAL) ? PAD_OVAL : PAD_CIRCLE;
                 dummypad.m_Orient   = pad->m_Orient;
-                dummypad.ComputeShapeMaxRadius();      // compute the radius of the circle containing this pad
+
+                // compute the radius of the circle containing this pad
+                dummypad.ComputeShapeMaxRadius();
 
                 if( !checkClearancePadToPad( aRefPad, &dummypad ) )
                 {
@@ -620,10 +623,13 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd, in
                 dummypad.m_Size     = aRefPad->m_Drill;
                 dummypad.m_PadShape = (aRefPad->m_DrillShape == PAD_OVAL) ? PAD_OVAL : PAD_CIRCLE;
                 dummypad.m_Orient   = aRefPad->m_Orient;
-                dummypad.ComputeShapeMaxRadius();      // compute the radius of the circle containing this pad
+
+                // compute the radius of the circle containing this pad
+                dummypad.ComputeShapeMaxRadius();
+
                 if( !checkClearancePadToPad( pad, &dummypad ) )
                 {
-                    // here we have a drc erroron aRefPad!
+                    // here we have a drc error on aRefPad!
                     m_currentMarker = fillMarker( aRefPad, pad,
                                                   DRCE_HOLE_NEAR_PAD, m_currentMarker );
                     return false;
