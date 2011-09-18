@@ -300,11 +300,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->Append( item );
 
     // Swap Layers
-    item = new wxMenuItem( editMenu, ID_MENU_PCB_SWAP_LAYERS,
-                           _( "&Swap Layers" ),
-                           _( "Swap tracks on copper layers or drawings on other layers" ) );
-    SET_BITMAP( KiBitmap( swap_layer_xpm ) );
-    editMenu->Append( item );
+    AddMenuItem( editMenu, ID_MENU_PCB_SWAP_LAYERS,
+                 _( "&Swap Layers" ),
+                 _( "Swap tracks on copper layers or drawings on other layers" ),
+                 KiBitmap( swap_layer_xpm ) );
 
     // Reset module reference sizes
     item = new wxMenuItem( editMenu,
@@ -608,11 +607,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     toolsMenu->Append( item );
 
     /* Layer pair */
-    item = new wxMenuItem( toolsMenu, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
+    AddMenuItem( toolsMenu, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
                            _( "Layer Pair" ),
-                           _( "Change the active layer pair" ) );
-    SET_BITMAP( KiBitmap( web_support_xpm ) );
-    toolsMenu->Append( item );
+                           _( "Change the active layer pair" ),
+                           KiBitmap( select_layer_pair_xpm ) );
 
     /* DRC */
     item = new wxMenuItem( toolsMenu, ID_DRC_CONTROL,
@@ -655,13 +653,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddHelpVersionInfoMenuEntry( helpMenu );
 
     // Contents
-    AddMenuItem( helpMenu,
-                 wxID_HELP,
+    AddMenuItem( helpMenu, wxID_HELP,
                  _( "&Contents" ),
                  _( "Open the PCBNew handbook" ),
                  KiBitmap( online_help_xpm ) );
-    AddMenuItem( helpMenu,
-                 wxID_INDEX,
+    AddMenuItem( helpMenu, wxID_INDEX,
                  _( "&Getting Started in KiCad" ),
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );

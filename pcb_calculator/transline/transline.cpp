@@ -21,8 +21,48 @@
  *
  */
 
+#include <limits>
 #include "transline.h"
 #include "units.h"
+
+#ifndef INFINITY
+#define INFINITY std::numeric_limits<double>::infinity()
+#endif
+
+
+#ifndef M_PI_2
+#define M_PI_2 (M_PI/2)
+#endif
+
+#ifdef _MSC_VER
+inline bool isinf(double x)
+{
+	return x == INFINITY; // return true if x is infinity
+}
+
+inline double asinh(double x)
+{
+  return log(x+sqrt(x*x+1));
+}
+
+inline double acosh(double x)
+{
+  // must be x>=1, if not return Nan (Not a Number)
+  if(!(x>=1.0)) return sqrt(-1.0);
+
+  // return only the positive result (as sqrt does).
+  return log(x+sqrt(x*x-1.0));
+}
+
+inline double atanh(double x)
+{
+  // must be x>-1, x<1, if not return Nan (Not a Number)
+  if(!(x>-1.0 && x<1.0)) return sqrt(-1.0);
+
+  return log((1.0+x)/(1.0-x))/2.0;
+}
+#endif
+
 
 // Functions to Read/Write parameters in pcb_calculator main frame:
 // They are wrapper to actual functions, so all transline functions do not
