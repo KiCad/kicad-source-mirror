@@ -91,8 +91,11 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 
     /* Operating System Information */
 
-#if defined __WINDOWS__
-    libVersion << wxT( "on Windows" );
+#if defined __WIN64__
+	libVersion << wxT( "on 64 Bits Windows" );
+
+#   elif defined __WINDOWS__
+    libVersion << wxT( "on 32 Bits Windows" );
 
     /* Check for wxMAC */
 #   elif defined __WXMAC__

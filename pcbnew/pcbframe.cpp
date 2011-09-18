@@ -363,18 +363,18 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_AuxiliaryToolBar" ) ).Top().Row( 1 ) );
     }
 
-    if( m_AuxVToolBar )    // The auxiliary vertical toolbar (currently microwave tools)
+    if( m_AuxVToolBar )    // The auxiliary vertical right toolbar (currently microwave tools)
         m_auimgr.AddPane( m_AuxVToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_AuxVToolBar" ) ).Right().Layer( 1 ).Position(1).Hide() );
 
     if( m_VToolBar )    // The main right vertical toolbar
         m_auimgr.AddPane( m_VToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Layer( 1 ) );
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Layer( 2 ) );
 
-    // Add the layer manager (right side of pcbframe)
-    m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 2 ) );
+    // Add the layer manager ( most right side of pcbframe )
+    m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 3 ) );
 
-    if( m_OptionsToolBar )    // The left vertical toolbar
+    if( m_OptionsToolBar )    // The left vertical toolbar (fast acces display options of Pcbnew)
     {
         m_auimgr.AddPane( m_OptionsToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left().Layer(1) );

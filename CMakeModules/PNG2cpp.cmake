@@ -49,7 +49,7 @@ set( output_begin "
 
 #include \"bitmaps.h\"
 
-static const char png[] = {"
+static const unsigned char png[] = {"
 )
 
 set( output_end "};

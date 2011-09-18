@@ -19,7 +19,7 @@ class wxBitmap;     // only to define wxBitmap
 /// PNG memory record (file in memory).
 struct BITMAP_OPAQUE
 {
-    const char* png;
+    const unsigned char* png;
     int         byteCount;
     const char* name;       // for debug, or future lazy dynamic linking
 };

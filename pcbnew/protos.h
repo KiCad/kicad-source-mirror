@@ -9,8 +9,6 @@
 #include <vector>
 
 
-class COMMAND;
-
 /**
  * Function SwapData
  * Used in undo / redo command:
