@@ -3,661 +3,186 @@
  * @file length.h
  */
 
-#ifndef UNITS_H_INCLUDED
-#define UNITS_H_INCLUDED 1
+/* sorry it is not styles correctly, i'll work on it further */
 
-#include <math.h>
-#include <wx/gdicmn.h>
-/**********************************************/
-/*! I'm a physical length                     */
-/**********************************************/
+#ifndef LENGTH_H_INCLUDED
+#define LENGTH_H_INCLUDED 1
 
-class LENGTH
-{
+typedef int DEF_LENGTH_VALUE;
 
-private:
+template <typename T = DEF_LENGTH_VALUE, int P = 1> class LENGTH;
+
+template <typename T> class LENGTH_UNITS;
+
+template <typename T, int P> struct LENGTH_TRAITS {
+	typedef LENGTH<T, P> flat;
+};
+
+template <typename T> struct LENGTH_TRAITS<T, 0> {
+	typedef T flat;
+};
+
+template<typename T, int P> class LENGTH {
+	friend class LENGTH_UNITS<T>;
+	friend class LENGTH_TRAITS<T, P>;
+	template <typename Y, int R> friend class LENGTH;
+protected:
+
+	T m_U;
+	LENGTH(T units) : m_U(units) {
+	}
+	static T RawValue(const LENGTH<T, P> &x) {
+		return x.m_U;
+	}
+	static T RawValue(const T& x) {
+		return x;
+	}
+public:
+	typedef LENGTH<T, P> flat;
+	typedef T value_type;
+	enum {
+		dimension = P
+	};
+	LENGTH(const LENGTH <T, P> &orig) : m_U(orig.m_U) {
+	}
+	LENGTH( void ) : m_U() {
+	}
+	
+	static LENGTH<T, P> zero (void) {
+		return T(0);
+	}
+
+	LENGTH<T, P> & operator = (const LENGTH<T, P> & y) {
+		this->m_U = y.m_U;
+		return *this;
+	}
+	template<typename Y>
+	operator LENGTH<Y, P> (void) {
+		return this->m_U;
+	}
+	/*************************/
+	/* comparisons and tests */
+	/*************************/
+	bool operator ==(const LENGTH <T, P> y) const {
+		return m_U == y.m_U;
+	}
+	bool operator !=(const LENGTH <T, P> y) const {
+		return m_U != y.m_U;
+	}
+	bool operator <(const LENGTH <T, P> y) const {
+		return m_U < y.m_U;
+	}
+	bool operator >=(const LENGTH <T, P> y) const {
+		return m_U >= y.m_U;
+	}
+	bool operator >(const LENGTH <T, P> y) const {
+		return m_U > y.m_U;
+	}
+	bool operator <=(const LENGTH <T, P> y) const {
+		return m_U <= y.m_U;
+	}
+	bool operator !( void ) const {
+		return !m_U;
+	}
+	/*************************/
+	/* basic arithmetic      */
+	/*************************/
+	LENGTH<T, P> operator - (void) const {
+		return LENGTH<T, P>(-this->m_U);
+	}
+	LENGTH<T, P> operator - (const LENGTH<T, P> y) const {
+		return m_U - y.m_U;
+	}
+	LENGTH<T, P> operator + (const LENGTH<T, P> y) const {
+		return m_U + y.m_U;
+	}
+	template <int R>
+	typename LENGTH_TRAITS<T, P + R>::flat operator * (const LENGTH<T, R> &y) const {
+		return m_U * y.m_U;
+	}
+	LENGTH<T, P> operator * (const T &y) const {
+		return m_U * y;
+	}
+	LENGTH<T, P> friend operator * (const T &y, const LENGTH<T, P> &x) {
+		return x.m_U * y;
+	}
+	
+	template <int R>
+	typename LENGTH_TRAITS<T, P - R>::flat operator / (const LENGTH<T, R> &y) const {
+		return m_U / y.m_U;
+	}
+	LENGTH<T, P> operator / (const T &y) const {
+		return m_U / y;
+	}
+	LENGTH<T, -P> friend operator / (const T &y, const LENGTH<T, P> &x) {
+		return y / x.m_U;
+	}
+
+	friend LENGTH<T, P> sqrt(LENGTH<T, P*2> y) {
+		return sqrt(y.m_U);
+	}
+	friend LENGTH<T, P> cbrt(LENGTH<T, P*3> y) {
+		return cbrt(y.m_U);
+	}
+	/*************************/
+	/* assignment arithmetic */
+	/*************************/
+	LENGTH<T, P>& operator -= (const LENGTH<T, P> y) {
+		return m_U -= y.m_U;
+	}
+	LENGTH<T, P>& operator += (const LENGTH<T, P> y) {
+		return m_U += y.m_U;
+	}
+	LENGTH<T, P>& operator *= (const T y) {
+		return m_U *= y;
+	}
+	LENGTH<T, P>& operator /= (const T y) {
+		return m_U /= y;
+	}
+	/*************************/
+	/* more arithmetic       */
+	/*************************/
+};
+
+template <typename T = DEF_LENGTH_VALUE> class LENGTH_UNITS {
+protected:
     enum
     {
-        METER = 1000000000, /* The ONLY constant connecting length to the real world */
+        METRE = 1000000000, /* The ONLY constant connecting length to the real world */
+        
+        INCH = METRE / 10000 * 254
     };
-    int m_Units;
-
-    /*!
-     * The only constructor allowing direct input of numeric value
-     * in internal units. As this is not allowed in public, it's private.
-     * Length objects elsewhere are created indirectly
-     * @param units Length in internal units.
-     */
-    LENGTH( int units )
-    {
-        m_Units = units;
-    }
-
-public:
-    /*!
-     * Equality comparison of physical lengths.
-     * @param y length to compare
-     * @return lengths are equal
-     */
-    bool operator == ( const LENGTH y ) const
-    {
-        return m_Units == y.m_Units;
-    }
-
-    /*!
-     * Non-equality comparison of physical lengths.
-     * @param y length to compare
-     * @return lengts are different
-     */
-    bool operator != ( const LENGTH y ) const
-    {
-        return m_Units != y.m_Units;
-    }
-
-    /*!
-     * Order comparison of physical lengths.
-     * @param y length to compare
-     * @return one less than another
-     */
-    bool operator < ( const LENGTH y ) const
-    {
-        return m_Units < y.m_Units;
-    }
-
-    /*!
-     * Order comparison of physical lengths.
-     * @param y length to compare
-     * @return one greater than another
-     */
-    bool operator > ( const LENGTH y ) const
-    {
-        return m_Units > y.m_Units;
-    }
-
-    /*!
-     * Order comparison of physical lengths.
-     * @param y length to compare
-     * @return one less or equal than another
-     */
-    bool operator <= ( const LENGTH y ) const
-    {
-        return m_Units <= y.m_Units;
-    }
-
-    /*!
-     * Order comparison of physical lengths.
-     * @param y length to compare
-     * @return one greater or equal than another
-     */
-    bool operator >= ( const LENGTH y ) const
-    {
-        return m_Units >= y.m_Units;
-    }
-
-    /*!
-     * Sum of two physical lengths. Only another length can be added.
-     * @param y length to add
-     * @return result of addition
-     */
-    const LENGTH operator + ( const LENGTH y ) const
-    {
-        return LENGTH( m_Units + y.m_Units );
-    }
-
-    /*!
-     * Add a length inplace
-     * @param y length to add
-     * @return result of addition
-     */
-    LENGTH & operator += ( const LENGTH y )
-    {
-        m_Units += y.m_Units;
-        return *this;
-    }
-
-    /*!
-     * Differece of two physical lengths. Only another length can be subtracted.
-     * @param y length to subtract
-     * @return result of subtraction
-     */
-    const LENGTH operator - ( const LENGTH y ) const
-    {
-        return LENGTH( m_Units - y.m_Units );
-    }
-
-    /*!
-     * Subtract a length inplace
-     * @param y length to add
-     * @return result of addition
-     */
-    LENGTH & operator -= ( const LENGTH y )
-    {
-        m_Units -= y.m_Units;
-        return *this;
-    }
-
-    /*!
-     * Negation of length.
-     * @return length negated
-     */
-    const LENGTH operator - ( void ) const {
-        return LENGTH( - m_Units );
-    }
-
-    /*!
-     * Scale length to rational number, given numerator and denominator.
-     * This is done without overflow or precision loss unlike dealing
-     * with * / and floating point.
-     * @param mul numerator, length is multiplied by this value
-     * @param div denominator. length is divided by this value
-     * @return scaled length
-     */
-    const LENGTH byRatio ( int mul, int div ) const
-    {
-        return LENGTH( ( int )( ( long long ) m_Units * mul / div ) );
-    }
-
-    /*!
-     * Scale length to rational number inplace.
-     * @param mul numerator, length is multiplied by this value
-     * @param div denominator. length is divided by this value
-     * @return scaled length
-     */
-    LENGTH & setByRatio ( int mul, int div )
-    {
-        m_Units = ( int )( ( long long ) m_Units * mul / div );
-	return *this;
-    }
-
-    /*!
-     * Multiplies length by integer number.
-     * @param y factor
-     * @return scaled length
-     */
-    const LENGTH operator * ( int y ) const
-    {
-        return LENGTH( m_Units * y );
-    }
-
-    /*!
-     * Multiply a length inplace
-     * @param y factor
-     * @return scaled length
-     */
-    LENGTH & operator *= ( int y )
-    {
-        m_Units *= y;
-        return *this;
-    }
-
-    /*!
-     * Multiplies length by floating point.
-     * @param y factor
-     * @return scaled length
-     */
-    const LENGTH operator * ( double y ) const
-    {
-        return LENGTH( ( int )( m_Units * y ) );
-    }
-
-    /*!
-     * Multiply a length inplace
-     * @param y factor
-     * @return scaled length
-     */
-    LENGTH & operator *= ( double y )
-    {
-        m_Units *= y;
-        return *this;
-    }
-
-    /*!
-     * Multiplies integer by length ( like abowe with args swapped ).
-     * @param x factor
-     * @param y length
-     * @return scaled length
-     */
-    const LENGTH friend operator * ( int x, const LENGTH y )
-    {
-        return y * x;
-    }
-
-    /*!
-     * Multiplies floating point by length ( like abowe with args swapped ).
-     * @param x factor
-     * @param y length
-     * @return scaled length
-     */
-    const LENGTH friend operator * ( double x, const LENGTH y )
-    {
-        return y * x;
-    }
-
-    /*!
-     * Divides length by integer number.
-     * @param y divider
-     * @return scaled length
-     */
-    const LENGTH operator / ( int y ) const
-    {
-        return LENGTH( m_Units / y );
-    }
-
-    /*!
-     * Divide a length inplace
-     * @param y divider
-     * @return scaled length
-     */
-    LENGTH & operator /= ( int y )
-    {
-        m_Units /= y;
-        return *this;
-    }
-
-    /*!
-     * Divides length by floating point.
-     * @param y divider
-     * @return scaled length
-     */
-    const LENGTH operator / ( double y ) const
-    {
-        return LENGTH( ( long long )( m_Units / y ) );
-    }
-
-    /*!
-     * Divide a length inplace
-     * @param y divider
-     * @return scaled length
-     */
-    LENGTH & operator /= ( double y )
-    {
-        m_Units /= y;
-        return *this;
-    }
-
-    /*!
-     * Gets ratio of two lengths.
-     * It is usable to get number of length units in length by
-     * division of length by length unit ( See length units below ).
-     * @param y base length
-     * @return scaled length
-     */
-    double operator / ( const LENGTH y ) const
-    {
-        return ( double ) m_Units / y.m_Units;
-    }
-
-    /*!
-     * Gets integer ( unlike operator / ) ratio of two lengths.
-     * It is usable to get number of length units in length by
-     * division of length by length unit ( See length units below ).
-     * @param y base length
-     * @return scaled length
-     */
-    int idiv( const LENGTH y ) const
-    {
-        return ( int )( m_Units / y.m_Units );
-    }
-
-    /*!
-     * Zero.
-     * @return Zero length
-     */
-    static const LENGTH zero( void )
-    {
-        return LENGTH( 0 );
-    }
-
-    /*!
-     * The metre unit.
-     * @return One metre length
-     */
-    static const LENGTH metre( void )
-    {
-        return LENGTH( METER );
-    }
-
-    /*!
-     * The millimetre unit.
-     * @return One millimetre length
-     */
-    static const LENGTH millimetre( void )
-    {
-        return LENGTH( METER/1000 );
-    }
-
-    /*!
-     * The inch unit.
-     * @return One inch length
-     */
-    static const LENGTH inch( void )
-    {
-        return LENGTH( METER/10000*254 ); // ensure it's done without precision loss
-    }
-
-    /*!
-     * The mil unit.
-     * @return One mil length
-     */
-    static const LENGTH mil( void )
-    {
-        return inch()/1000;
-    }
-
-    /*!
-     * Hypotenuse of a triangle with two given katheti.
-     * @param y another kathetus
-     * @return hypothenuse
-     */
-    const LENGTH hypotenuse( LENGTH y ) const
-    {
-        return LENGTH ( ( int ) sqrt (
-                ( ( double ) m_Units * m_Units
-                + ( double ) y.m_Units * y.m_Units ) ) );
-    }
-
-    /*!
-     * Another kathetus of a triangle with given hypothenuse and kathetus.
-     * @param y kathetus
-     * @return another kathetus
-     */
-    const LENGTH kathetus( LENGTH y ) const
-    {
-        return LENGTH ( ( int ) sqrt ( 
-               ( ( double ) m_Units * m_Units
-               - ( double ) y.m_Units * y.m_Units ) ) );
-    }
-
+	public:
+	static LENGTH<T, 1> metre( void ) {
+		return T(METRE);
+	}
+	static LENGTH<T, 1> decimetre( void ) {
+		return T(METRE / 10);
+	}
+	static LENGTH<T, 1> centimetre( void ) {
+		return T(METRE / 100);
+	}
+	static LENGTH<T, 1> millimetre( void ) {
+		return T(METRE / 1000);
+	}
+	static LENGTH<T, 1> micrometre( void ) {
+		return T(METRE / 1000000);
+	}
+	static LENGTH<T, 1> foot( void ) { /* do not think this will ever need */
+		return T(INCH * 12);
+	}
+	static LENGTH<T, 1> inch( void ) {
+		return T(INCH);
+	}
+	static LENGTH<T, 1> mil( void ) {
+		return T(INCH / 1000);
+	}
 };
 
-/**********************************************/
-/*! I'm a point/vector in a physical 2D plane */
-/**********************************************/
-
-class LENGTH_XY {
-private:
-    LENGTH m_X, m_Y;
-
-public:
-    /*!
-     * One given x and y coords of type LENGTH
-     * @param x coordinate
-     * @param y coordinate
-     */
-    LENGTH_XY( const LENGTH x, const LENGTH y ) : m_X( x ), m_Y( y )
-    {
-    }
-
-    /*! 
-     * A point ( or vector ) given x and y multiplies of specified unit.
-     * Given just for a convenience, you can use ( x*unit, y*unit ) instead.
-     * @param x coordinate factor
-     * @param y coordinate factor
-     * @param unit the unit
-     */
-    LENGTH_XY( int x, int y, const LENGTH unit ) : m_X( unit * x ), m_Y( unit * y )
-    {
-    }
-
-    /*! 
-     * A point ( or vector ) given wxPoint and unit
-     * @param x wxPoint
-     * @param unit the unit
-     */
-    LENGTH_XY( wxPoint x, const LENGTH unit ) : m_X( unit * x.x ), m_Y( unit * x.y )
-    {
-    }
-
-    /*! 
-     * A point ( or vector ) given wxRealPoint and unit
-     * @param x wxRealPoint
-     * @param unit the unit
-     */
-    LENGTH_XY( wxRealPoint x, const LENGTH unit ) : m_X( unit * x.x ), m_Y( unit * x.y )
-    {
-    }
-
-    /*!
-     * x coordinate
-     * @return x coordinate
-     */
-    const LENGTH x( void ) const
-    {
-        return m_X;
-    }
-
-    /*!
-     * y coordinate
-     * @return y coordinate
-     */
-    const LENGTH y( void ) const 
-    {
-        return m_Y;
-    }
-    
-    /*!
-     * Absoulte value / length
-     * @return absolute value 
-     */
-    const LENGTH abs( void ) const
-    {
-        return m_X.hypotenuse(m_Y);
-    }
-
-    /*!
-     * Equality comparison of vectors.
-     * @param y vectors to compare
-     * @return vectors are equal
-     */
-    bool operator == ( const LENGTH_XY y ) const
-    {
-        return m_X == y.m_X && m_Y == y.m_Y;
-    }
-
-    /*!
-     * Non-equality comparison of vectors.
-     * @param y vectors to compare
-     * @return vectors are different
-     */
-    bool operator != ( const LENGTH_XY y ) const
-    {
-        return m_X != y.m_X || m_Y != y.m_Y;
-    }
-
-    /*!
-     * Sum of two vectors ( or a point translated by vector )
-     * @param y vector to add
-     * @return result of addition
-     */
-    const LENGTH_XY operator + ( const LENGTH_XY y ) const
-    {
-        return LENGTH_XY( m_X + y.m_X, m_Y + y.m_Y );
-    }
-
-    /*!
-     * Translate a vector inplace
-     * @param y vector to add
-     * @return result of addition
-     */
-    LENGTH_XY & operator += ( const LENGTH_XY y )
-    {
-        m_X += y.m_X;
-        m_Y += y.m_Y;
-        return *this;
-    }
-
-    /*!
-     * Difference of two vectors ( or a point translated by vector in reverse direction ).
-     * @param y vector to subtract
-     * @return result of subtraction
-     */
-    const LENGTH_XY operator - ( const LENGTH_XY y ) const
-    {
-        return LENGTH_XY( m_X - y.m_X, m_Y - y.m_Y );
-    }
-
-    /*!
-     * Translate a vector inplace in opposite direction
-     * @param y vector to subtract
-     * @return result of subtraction
-     */
-    LENGTH_XY & operator -= ( const LENGTH_XY y )
-    {
-        m_X -= y.m_X;
-        m_Y -= y.m_Y;
-        return *this;
-    }
-
-    /*!
-     * Vector with reverse direction.
-     * @return reverse direction vector
-     */
-    const LENGTH_XY operator - ( void ) const
-    {
-        return LENGTH_XY( - m_X, - m_Y );
-    }
-
-    /*!
-     * Scale vector to rational number, given numerator and denominator.
-     * This is done without overflow or precision loss unlike dealing
-     * with * / and floating point.
-     * @param mul numerator ( length is multiplied by this value )
-     * @param div denominator ( length is divided by this value )
-     * @return scaled vector
-     */
-    const LENGTH_XY byRatio ( int mul, int div )
-    {
-        return LENGTH_XY( m_X.byRatio( mul, div ), m_Y.byRatio( mul, div ) );
-    }
-
-    /*!
-     * Scale vector to rational number, inplace (like operator *=).
-     * @param mul numerator ( length is multiplied by this value )
-     * @param div denominator ( length is divided by this value )
-     * @return scaled vector
-     */
-    LENGTH_XY & setByRatio ( int mul, int div )
-    {
-        m_X.setByRatio( mul, div );
-        m_Y.setByRatio( mul, div );
-        return *this;
-    }
-
-    /*!
-     * Multiplies vector length by integer number.
-     * @param y factor
-     * @return scaled vector
-     */
-    const LENGTH_XY operator * ( int y ) const
-    {
-        return LENGTH_XY( m_X * y, m_Y * y );
-    }
-
-    /*!
-     * Multiply a vector inplace
-     * @param y factor
-     * @return scaled vector
-     */
-    LENGTH_XY & operator *= ( int y )
-    {
-        m_X *= y;
-        m_Y *= y;
-        return *this;
-    }
-
-    /*!
-     * Multiplies vector length by floating point number.
-     * @param y factor
-     * @return scaled length
-     */
-    const LENGTH_XY operator * ( double y ) const
-    {
-        return LENGTH_XY( m_X * y, m_Y * y );
-    }
-
-    /*!
-     * Multiply a vector inplace
-     * @param y factor
-     * @return scaled vector
-     */
-    LENGTH_XY & operator *= ( double y )
-    {
-        m_X *= y;
-        m_Y *= y;
-        return *this;
-    }
-
-    /*!
-     * Divides vector length by integer number.
-     * @param y divider
-     * @return scaled vector
-     */
-    const LENGTH_XY operator / ( int y ) const
-    {
-        return LENGTH_XY( m_X / y, m_Y / y );
-    }
-
-    /*!
-     * Divide a vector inplace
-     * @param y divider
-     * @return scaled vector
-     */
-    LENGTH_XY & operator /= ( int y )
-    {
-        m_X /= y;
-        m_Y /= y;
-        return *this;
-    }
-
-    /*!
-     * Divides vector length by floating point number.
-     * @param y divider
-     * @return scaled vector
-     */
-    const LENGTH_XY operator / ( double y ) const
-    {
-        return LENGTH_XY( m_X / y, m_Y / y );
-    }
-
-    /*!
-     * Divide a vector inplace
-     * @param y divider
-     * @return scaled vector
-     */
-    LENGTH_XY & operator /= ( double y )
-    {
-        m_X /= y;
-        m_Y /= y;
-        return *this;
-    }
-
-    /*!
-     * Outputs wxPoint in specified scale.
-     * @param y scale
-     * @return wxPoint
-     */
-    const wxPoint toWxPoint ( LENGTH y ) const
-    {
-        return wxPoint( m_X.idiv( y ), m_Y.idiv( y ) );
-    }
-
-    /*!
-     * Outputs wxRealPoint in specified scale.
-     * @param y scale
-     * @return wxPoint
-     */
-    const wxRealPoint toWxRealPoint ( LENGTH y ) const
-    {
-        return wxRealPoint( m_X / y, m_Y / y );
-    }
-
-    /*!
-     * Rotates vector 90 degrees ( X axis towards Y )
-     * @return rotated
-     */
-    const LENGTH_XY rot90 ( void ) const
-    {
-        return LENGTH_XY( m_Y, -m_X );
-    }
+/* shortcut */
+template <typename T, int D> class LENGTH_UNITS<LENGTH<T, D> >: public LENGTH_UNITS<T> {
 };
+
+/* TODO: argument promotion (but is this need? explicit casts would be enough) */
+
 #endif
