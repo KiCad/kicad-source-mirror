@@ -69,6 +69,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     int        active_layer_color, Route_Layer_TOP_color,
                Route_Layer_BOTTOM_color, via_color;
     bool       change = false;
+    bool first_call = LayerPairBitmap == NULL;
 
     static int previous_active_layer_color, previous_Route_Layer_TOP_color,
                previous_Route_Layer_BOTTOM_color, previous_via_color;
@@ -112,7 +113,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
     if( !change && (LayerPairBitmap != NULL) )
         return;
 
-    /* Create the bitmap too and its Memory DC, if not already made */
+    /* Create the bitmap and its Memory DC, if not already made */
     if( LayerPairBitmap == NULL )
     {
         LayerPairBitmap = new wxBitmap( 24, 24 );
@@ -164,10 +165,10 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
      *  in order to delete the MemoryDC safely without deleting the bitmap */
     iconDC.SelectObject( wxNullBitmap );
 
-    if( m_HToolBar )
+    if( m_HToolBar && ! first_call )
     {
         m_HToolBar->SetToolBitmap( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, *LayerPairBitmap );
-        m_HToolBar->Realize();
+        m_HToolBar->Refresh();
     }
 }
 

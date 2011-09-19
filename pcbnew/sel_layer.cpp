@@ -31,7 +31,7 @@ public:
     ~SELECT_LAYER_DIALOG() { };
 
 private:
-    void Sel_Layer( wxCommandEvent& event );
+    void OnLayerSelected( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
@@ -39,9 +39,9 @@ private:
 
 
 BEGIN_EVENT_TABLE( SELECT_LAYER_DIALOG, wxDialog )
-    EVT_BUTTON( wxID_OK, SELECT_LAYER_DIALOG::Sel_Layer )
+    EVT_BUTTON( wxID_OK, SELECT_LAYER_DIALOG::OnLayerSelected )
     EVT_BUTTON( wxID_CANCEL, SELECT_LAYER_DIALOG::OnCancelClick )
-    EVT_RADIOBOX( ID_LAYER_SELECT, SELECT_LAYER_DIALOG::Sel_Layer )
+    EVT_RADIOBOX( ID_LAYER_SELECT, SELECT_LAYER_DIALOG::OnLayerSelected )
 END_EVENT_TABLE()
 
 
@@ -163,11 +163,15 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( PCB_BASE_FRAME* parent,
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
     ButtonBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
 
+    SetFocus();
+
     GetSizer()->SetSizeHints( this );
+
+    Center();
 }
 
 
-void SELECT_LAYER_DIALOG::Sel_Layer( wxCommandEvent& event )
+void SELECT_LAYER_DIALOG::OnLayerSelected( wxCommandEvent& event )
 {
     int ii = m_LayerId[m_LayerList->GetSelection()];
 
@@ -312,11 +316,10 @@ SELECT_LAYERS_PAIR_DIALOG::SELECT_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* parent ) :
 
     Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
     ButtonBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
+    SetFocus();
 
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
+    GetSizer()->SetSizeHints( this );
+    Center();
 }
 
 
