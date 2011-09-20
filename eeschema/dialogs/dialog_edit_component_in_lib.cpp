@@ -24,12 +24,10 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
 	m_Parent = aParent;
 	m_RecreateToolbar = false;
 
-	Init();
+	initDlg();
 
-    if( GetSizer() )
-    {
-        GetSizer()->SetSizeHints( this );
-    }
+    GetSizer()->SetSizeHints( this );
+    Center();
 }
 
 
@@ -39,7 +37,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::~DIALOG_EDIT_COMPONENT_IN_LIBRARY()
 
 /* Initialize state of check boxes and texts
 */
-void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init()
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::initDlg()
 {
     SetFocus();
     m_AliasLocation = -1;
@@ -90,7 +88,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::Init()
         m_ButtonDeleteOneFootprintFilter->Enable( false );
     }
 
-    m_sdbSizer2OK->SetDefault();
+    m_stdSizerButtonOK->SetDefault();
 }
 
 

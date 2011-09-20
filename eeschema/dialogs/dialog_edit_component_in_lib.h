@@ -24,7 +24,7 @@ public:
     ~DIALOG_EDIT_COMPONENT_IN_LIBRARY();
 
 private:
-    void Init();
+    void initDlg();
     void InitPanelDoc();
     void InitBasicPanel();
 	void OnCancelClick( wxCommandEvent& event );

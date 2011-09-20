@@ -1,21 +1,22 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_edit_libentry_fields_in_lib_base__
-#define __dialog_edit_libentry_fields_in_lib_base__
+#ifndef __DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE_H__
+#define __DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/listctrl.h>
+#include <wx/string.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/string.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -72,9 +73,9 @@ class DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fields Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 615,550 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Fields Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 615,550 ), long style = wxCAPTION|wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
 		~DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE();
 	
 };
 
-#endif //__dialog_edit_libentry_fields_in_lib_base__
+#endif //__DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB_BASE_H__

@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_edit_component_in_lib_base__
-#define __dialog_edit_component_in_lib_base__
+#ifndef __DIALOG_EDIT_COMPONENT_IN_LIB_BASE_H__
+#define __DIALOG_EDIT_COMPONENT_IN_LIB_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
 #include <wx/checkbox.h>
 #include <wx/gdicmn.h>
@@ -86,9 +87,9 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public wxDialog
 		wxButton* m_buttonAddFpF;
 		wxButton* m_ButtonDeleteOneFootprintFilter;
 		wxButton* m_ButtonDeleteAllFootprintFilter;
-		wxStdDialogButtonSizer* m_sdbSizer2;
-		wxButton* m_sdbSizer2OK;
-		wxButton* m_sdbSizer2Cancel;
+		wxStdDialogButtonSizer* m_stdSizerButton;
+		wxButton* m_stdSizerButtonOK;
+		wxButton* m_stdSizerButtonCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void CopyDocToAlias( wxCommandEvent& event ) { event.Skip(); }
@@ -105,9 +106,9 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Lib Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 546,384 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Lib Component Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 465,384 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE();
 	
 };
 
-#endif //__dialog_edit_component_in_lib_base__
+#endif //__DIALOG_EDIT_COMPONENT_IN_LIB_BASE_H__
