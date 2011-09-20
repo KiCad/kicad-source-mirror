@@ -1,15 +1,18 @@
-/***************************************/
-/* PCBNEW: Autorouting command control */
-/***************************************/
+/**
+ * @file autorout.cpp
+ * @brief Autorouting command and control.
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
+
+#include "pcbnew.h"
 #include "autorout.h"
 #include "cell.h"
 #include "zones.h"
 #include "class_board_design_settings.h"
+#include "ar_protos.h"
 
 
 int E_scale;         /* Scaling factor of distance tables. */
@@ -41,8 +44,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     }
     else
     {
-        Route_Layer_TOP =
-            Route_Layer_BOTTOM = LAYER_N_BACK;
+        Route_Layer_TOP = Route_Layer_BOTTOM = LAYER_N_BACK;
     }
 
     switch( mode )
@@ -78,11 +80,13 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 
     case ROUTE_PAD:
         Pad = (D_PAD*) GetScreen()->GetCurItem();
+
         if( (Pad == NULL)  || (Pad->Type() != TYPE_PAD) )
         {
             wxMessageBox( _( "Pad not selected" ) );
             return;
         }
+
         break;
     }
 
@@ -113,6 +117,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
             {
                 if( ptmp->m_PadStart == pt_pad )
                     ptmp->m_Status |= CH_ROUTE_REQ;
+
                 if( ptmp->m_PadEnd == pt_pad )
                     ptmp->m_Status |= CH_ROUTE_REQ;
             }
@@ -123,6 +128,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
         case ROUTE_PAD:
             if( ( ptmp->m_PadStart == Pad ) || ( ptmp->m_PadEnd == Pad ) )
                 ptmp->m_Status |= CH_ROUTE_REQ;
+
             break;
         }
     }
@@ -131,9 +137,13 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 
     /* Calculation of no fixed routing to 5 mils and more. */
     Board.m_GridRouting = (int)GetScreen()->GetGridSize().x;
+
     if( Board.m_GridRouting < 50 )
         Board.m_GridRouting = 50;
-    E_scale = Board.m_GridRouting / 50; if( E_scale < 1 )
+
+    E_scale = Board.m_GridRouting / 50;
+
+    if( E_scale < 1 )
         E_scale = 1;
 
     /* Calculated ncol and nrow, matrix size for routing. */
@@ -143,6 +153,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 
     /* Map the board */
     Nb_Sides = ONE_SIDE;
+
     if( Route_Layer_TOP != Route_Layer_BOTTOM )
         Nb_Sides = TWO_SIDES;
 
@@ -201,25 +212,33 @@ void DisplayBoard( EDA_DRAW_PANEL* panel, wxDC* DC )
 
     maxi = 600 / Ncols;
     maxi = ( maxi * 3 ) / 4;
+
     if( !maxi )
         maxi = 1;
 
     GRSetDrawMode( DC, GR_COPY );
+
     for( col = 0; col < Ncols; col++ )
     {
         for( row = 0; row < Nrows; row++ )
         {
             color  = 0;
             dcell0 = GetCell( row, col, BOTTOM );
+
             if( dcell0 & HOLE )
                 color = GREEN;
+
 //            if( Nb_Sides )
 //                dcell1 = GetCell( row, col, TOP );
+
             if( dcell1 & HOLE )
                 color |= RED;
+
 //            dcell0 |= dcell1;
+
             if( !color && ( dcell0 & VIA_IMPOSSIBLE ) )
                 color = BLUE;
+
             if( dcell0 & CELL_is_EDGE )
                 color = YELLOW;
             else if( dcell0 & CELL_is_ZONE )

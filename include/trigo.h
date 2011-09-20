@@ -1,16 +1,37 @@
-/*************/
-/*  trigo.h  */
-/*************/
+/**
+ * @file trigo.h
+ */
 
 #ifndef TRIGO_H
 #define TRIGO_H
 
 
+/*
+ * Calculate the new point of coord coord pX, pY,
+ * for a rotation center 0, 0, and angle in (1 / 10 degree)
+ */
 void RotatePoint( int *pX, int *pY, int angle );
+
+/*
+ * Calculate the new point of coord coord pX, pY,
+ * for a rotation center cx, cy, and angle in (1 / 10 degree)
+ */
 void RotatePoint( int *pX, int *pY, int cx, int cy, int angle );
+
+/*
+ * Calculates the new coord point point
+ * for a rotation angle in (1 / 10 degree)
+ */
 void RotatePoint( wxPoint* point, int angle );
+
+/*
+ * Calculates the new coord point point
+ * for a center rotation center and angle in (1 / 10 degree)
+ */
 void RotatePoint( wxPoint *point, const wxPoint & centre, int angle );
+
 void RotatePoint( double *pX, double *pY, int angle );
+
 void RotatePoint( double *pX, double *pY, double cx, double cy, int angle );
 
 /* Return the arc tangent of 0.1 degrees coord vector dx, dy
@@ -20,6 +41,11 @@ void RotatePoint( double *pX, double *pY, double cx, double cy, int angle );
  */
 int ArcTangente( int dy, int dx );
 
+/**
+ * Function DistanceTest
+ * Calculate the distance from mouse cursor to a line segment.
+ * @return  False if distance > threshold or true if distance <= threshold.
+ */
 bool DistanceTest( int seuil, int dx, int dy, int spot_cX, int spot_cY );
 
 //! @brief Compute the distance between a line and a reference point
@@ -82,7 +108,7 @@ double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB );
  *           either: xrot = (y + x * tg) * cos
  *                   yrot = (y - x * tg) * cos
  *
- * Cosine coefficients are loaded from a trigometric table by 16 bit values.
+ * Cosine coefficients are loaded from a trigonometric table by 16 bit values.
  */
 #define NEW_COORD( x0, y0 )                       \
     do {                                          \
@@ -94,8 +120,5 @@ double GetLineLength( const wxPoint& aPointA, const wxPoint& aPointB );
         y0 = ( y0 * cosinus ) >> 8;               \
     } while( 0 );
 
-
-extern double fsinus[];
-extern double fcosinus[];
 
 #endif

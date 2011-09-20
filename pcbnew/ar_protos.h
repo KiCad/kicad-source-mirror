@@ -1,44 +1,51 @@
-/**************/
-/* ar-proto.h */
-/**************/
+/**
+ * @file ar_protos.h
+ */
+
+
+#ifndef _AR_PROTOS_H_
+#define _AR_PROTOS_H_
+
+
+#include "autorout.h"
+
+
+class PCB_EDIT_FRAME;
+class BOARD;
+class D_PAD;
+class RATSNEST_ITEM;
 
 
 int Propagation( PCB_EDIT_FRAME* frame );
 
-/* Initialize a value type, the cells included in the board surface of the
- * pad edge by pt_pad, with the margin reserved for isolation. */
-void Place_1_Pad_Board( BOARD * Pcb, D_PAD * pt_pad, int type, int marge,
-                        int op_logique );
+/* Initialize a color value, the cells included in the board edge of the
+ * pad surface by pt_pad, with the margin reserved for isolation and the
+ * half width of the runway
+ * Parameters:
+ * Pt_pad: pointer to the description of the pad
+ * color: mask write in cells
+ * margin: add a value to the radius or half the score pad
+ * op_logic: type of writing in the cell (WRITE, OR)
+ */
+void PlacePad( BOARD* Pcb, D_PAD* pt_pad, int type, int marge, int op_logic );
 
 /* Draws a segment of track on the board. */
-void TraceSegmentPcb( BOARD * Pcb, TRACK * pt_segm, int type, int marge,
-                      int op_logique );
-
-void TraceLignePcb( int x0, int y0, int x1, int y1, int layer, int type,
-                    int op_logique );
+void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int type, int marge, int op_logic );
 
 /* Uses the color value of all cells included in the board
  * coord of the rectangle ux0, uy0 (top right corner)
  * a ux1, uy1 (lower left corner) (coord PCB)
  * the rectangle is horizontal (or vertical)
  * masque_layer = mask layers;
- * op_logique = WRITE_CELL, WRITE_OR_CELL, WRITE_XOR_CELL, WRITE_AND_CELL
+ * op_logic = WRITE_CELL, WRITE_OR_CELL, WRITE_XOR_CELL, WRITE_AND_CELL
  */
-void TraceFilledRectangle( BOARD * Pcb, int ux0, int uy0, int ux1, int uy1,
-                           int side, int color, int op_logique);
+void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
+                           int side, int color, int op_logic);
 
 
 /* Same as above, but the rectangle is inclined angle angle. */
-void TraceFilledRectangle( BOARD * Pcb, int ux0, int uy0, int ux1, int uy1,
-                           int angle, int masque_layer, int color,
-                           int op_logique );
-
-/* Fills all BOARD cells contained in the arc of "L" angle half-width lg
- * ux center, starting in ux y0, y1 is set to color.  Coordinates are in
- * PCB units (0.1 mil) relating to the origin pt_pcb-> Pcb_oX, Y's board.
- */
-void TraceArc( int ux0,int uy0, int ux1, int uy1, int ArcAngle, int lg,
-               int layer, int color, int op_logique);
+void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
+                           int angle, int masque_layer, int color, int op_logic );
 
 /* QUEUE.CPP */
 void FreeQueue();
@@ -72,3 +79,6 @@ DIST_CELL GetDist( int aRow, int aCol, int aSide );
 void SetDist( int aRow, int aCol, int aSide, DIST_CELL );
 int GetDir( int aRow, int aCol, int aSide );
 void SetDir( int aRow, int aCol, int aSide, int aDir);
+
+
+#endif    // _AR_PROTOS_H_

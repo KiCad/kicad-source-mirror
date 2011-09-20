@@ -1,17 +1,17 @@
-/*************/
-/* solve.cpp */
-/*************/
+/**
+ * @file solve.cpp
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "autorout.h"
+#include "wxPcbStruct.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
-#include "autorout.h"
 #include "protos.h"
-
+#include "ar_protos.h"
 #include "cell.h"
 
 
@@ -22,7 +22,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                                 int             col_source,
                                 int             row_target,
                                 int             col_target,
-                                RATSNEST_ITEM*  pt_chevelu );
+                                RATSNEST_ITEM*  pt_rat );
 
 static int Retrace( PCB_EDIT_FRAME* pcbframe,
                     wxDC*           DC,
@@ -372,7 +372,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                                 int             col_source,
                                 int             row_target,
                                 int             col_target,
-                                RATSNEST_ITEM*  pt_chevelu )
+                                RATSNEST_ITEM*  pt_rat )
 {
     int          r, c, side, d, apx_dist, nr, nc;
     int          result, skip;
@@ -412,8 +412,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     /* Set active layers mask. */
     routeLayerMask = topLayerMask | bottomLayerMask;
 
-    pt_cur_ch = pt_chevelu;
-    current_net_code   = pt_chevelu->GetNet();
+    pt_cur_ch = pt_rat;
+    current_net_code   = pt_rat->GetNet();
     padLayerMaskStart = pt_cur_ch->m_PadStart->m_layerMask;
     padLayerMaskEnd = pt_cur_ch->m_PadEnd->m_layerMask;
 
@@ -474,13 +474,10 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     /* Placing the bit to remove obstacles on 2 pads to a link. */
     pcbframe->SetStatusText( wxT( "Gen Cells" ) );
 
-    Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->m_PadStart,
-                       CURRENT_PAD, marge, WRITE_OR_CELL );
-    Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->m_PadEnd,
-                       CURRENT_PAD, marge, WRITE_OR_CELL );
+    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadStart, CURRENT_PAD, marge, WRITE_OR_CELL );
+    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadEnd, CURRENT_PAD, marge, WRITE_OR_CELL );
 
-    /* Regenerates the remaining barriers (which may encroach on the placement
-     * bits precedent)
+    /* Regenerates the remaining barriers (which may encroach on the placement bits precedent)
      */
     i = pcbframe->GetBoard()->GetPadsCount();
 
@@ -491,7 +488,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
         if( ( pt_cur_ch->m_PadStart != ptr ) && ( pt_cur_ch->m_PadEnd != ptr ) )
         {
-            Place_1_Pad_Board( pcbframe->GetBoard(), ptr, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+            PlacePad( pcbframe->GetBoard(), ptr, ~CURRENT_PAD, marge, WRITE_AND_CELL );
         }
     }
 
@@ -624,6 +621,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             for( i = 0; i < 8; i++ )
             {
                 selfok2[i].present = 0;
+
                 if( curcell & selfok2[i].trace )
                     selfok2[i].present = 1;
             }
@@ -631,7 +629,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
         for( i = 0; i < 8; i++ ) /* consider neighbors */
         {
-            nr = r + delta[i][0]; nc = c + delta[i][1];
+            nr = r + delta[i][0];
+            nc = c + delta[i][1];
 
             /* off the edge? */
             if( nr < 0 || nr >= Nrows || nc < 0 || nc >= Ncols )
@@ -781,10 +780,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     }
 
 end_of_route:
-    Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->m_PadStart,
-                       ~CURRENT_PAD, marge, WRITE_AND_CELL );
-    Place_1_Pad_Board( pcbframe->GetBoard(), pt_cur_ch->m_PadEnd,
-                       ~CURRENT_PAD, marge, WRITE_AND_CELL );
+    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadStart, ~CURRENT_PAD, marge, WRITE_AND_CELL );
+    PlacePad( pcbframe->GetBoard(), pt_cur_ch->m_PadEnd, ~CURRENT_PAD, marge, WRITE_AND_CELL );
 
     msg.Printf( wxT( "Activity: Open %d   Closed %d   Moved %d"),
                 OpenNodes, ClosNodes, MoveNodes );
@@ -986,8 +983,7 @@ static int Retrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC,
             y = GetDir( r0, c0, s0 );
 
         /* see if target or hole */
-        if( ( ( r1 == row_target ) && ( c1 == col_target ) )
-           || ( s1 != s0 ) )
+        if( ( ( r1 == row_target ) && ( c1 == col_target ) ) || ( s1 != s0 ) )
         {
             int p_dir;
 

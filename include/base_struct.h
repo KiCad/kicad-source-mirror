@@ -112,7 +112,6 @@ enum SEARCH_RESULT {
 
 class EDA_ITEM;
 class EDA_DRAW_FRAME;
-class BOARD;
 class EDA_RECT;
 class EDA_DRAW_PANEL;
 
@@ -136,12 +135,11 @@ public:
      * Function Inspect
      * is the examining function within the INSPECTOR which is passed to the
      * Iterate function.  It is used primarily for searching, but not limited
-     *to
-     * that.  It can also collect or modify the scanned objects.
+     * to that.  It can also collect or modify the scanned objects.
      *
      * @param testItem An EDA_ITEM to examine.
      * @param testData is arbitrary data needed by the inspector to determine
-     *   if the BOARD_ITEM under test meets its match criteria.
+     *                 if the EDA_ITEM under test meets its match criteria.
      * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
      *   else SCAN_CONTINUE;
      */

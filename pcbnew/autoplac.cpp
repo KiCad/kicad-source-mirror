@@ -1,22 +1,25 @@
-/*******************************************/
-/* Routines to automatically place MODULES */
-/*******************************************/
+/**
+ * @file autoplac.cpp
+ * @brief Routiness to automatically place MODULES on a board.
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+
+#include "protos.h"
+#include "ar_protos.h"
 #include "autorout.h"
 #include "cell.h"
 #include "class_board_design_settings.h"
 #include "colors_selection.h"
 
-#include "protos.h"
 
+#define GAIN            16
+#define KEEP_OUT_MARGIN 500
 
-#define GAIN     16
-#define PENALITE 500
 
 /* Penalty for guidance given by CntRot90 and CntRot180:
  * graduated from 0 (rotation allowed) to 10 (rotation count null)
@@ -41,8 +44,7 @@ static const float OrientPenality[11] =
 #define OUT_OF_BOARD      -2
 #define OCCUPED_By_MODULE -1
 
-static wxPoint CurrPosition; // Current position of the current module
-                             // placement
+static wxPoint CurrPosition; // Current position of the current module placement
 static bool    AutoPlaceShowAll = true;
 
 float          MinCout;
@@ -55,8 +57,9 @@ static void CreateKeepOutRectangle( BOARD* Pcb,
                                     int    ux1,
                                     int    uy1,
                                     int    marge,
-                                    int    Penalite,
+                                    int    aKeepOut,
                                     int    aLayerMask );
+
 static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC );
 
 
@@ -169,7 +172,8 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         case PLACE_INCREMENTAL:
             if( Module->m_ModuleStatus & MODULE_is_LOCKED )
             {
-                Module->m_ModuleStatus &= ~MODULE_is_PLACED; break;
+                Module->m_ModuleStatus &= ~MODULE_is_PLACED;
+                break;
             }
 
             if( !(Module->m_ModuleStatus & MODULE_is_PLACED) )
@@ -204,7 +208,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         /* Display fill area of interest, barriers, penalties. */
         DrawInfoPlace( DC );
 
-        error     = RecherchePlacementModule( Module, DC );
+        error     = GetOptimalModulePlacement( Module, DC );
         BestScore = MinCout;
         PosOK     = CurrPosition;
 
@@ -219,7 +223,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             int Angle_Rot_Module = 1800;
             Rotate_Module( DC, Module, Angle_Rot_Module, false );
             Module->CalculateBoundingBox();
-            error    = RecherchePlacementModule( Module, DC );
+            error    = GetOptimalModulePlacement( Module, DC );
             MinCout *= OrientPenality[ii];
 
             if( BestScore > MinCout )   /* This orientation is best. */
@@ -244,7 +248,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         {
             int Angle_Rot_Module = 900;
             Rotate_Module( DC, Module, Angle_Rot_Module, false );
-            error    = RecherchePlacementModule( Module, DC );
+            error    = GetOptimalModulePlacement( Module, DC );
             MinCout *= OrientPenality[ii];
 
             if( BestScore > MinCout )   /* This orientation is best. */
@@ -269,7 +273,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         {
             int Angle_Rot_Module = 2700;
             Rotate_Module( DC, Module, Angle_Rot_Module, false );
-            error    = RecherchePlacementModule( Module, DC );
+            error    = GetOptimalModulePlacement( Module, DC );
             MinCout *= OrientPenality[ii];
 
             if( BestScore > MinCout )   /* This orientation is best. */
@@ -368,24 +372,6 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
 }
 
 
-/* Generate board (component side copper + rating):
- * Allocate the memory needed to represent in "bitmap" on the grid
- * Current:
- * - The size of clearance area of component (the board)
- * - The bitmap PENALTIES
- * And initialize the cells of the board has
- * - Hole in the cells occupied by a segment EDGE
- * - CELL_is_ZONE for cell internal contour EDGE (if closed)
- *
- * Placement surface (board) gives the cells internal to the contour
- * PCB, and among the latter the free cells and cells already occupied
- *
- * The bitmap PENALTIES give cells occupied by the modules,
- * Plus a surface penalty related to the number of pads of the module
- *
- * Bitmap of the penalty is set to 0
- * Occupation cell is a 0 leaves
- */
 int PCB_EDIT_FRAME::GenPlaceBoard()
 {
     int       jj, ii;
@@ -406,6 +392,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
                                          Board.m_GridRouting;
     GetBoard()->m_BoundaryBox.m_Pos.y -= GetBoard()->m_BoundaryBox.m_Pos.y %
                                          Board.m_GridRouting;
+
     /* The boundary box must have its end point on placing grid: */
     wxPoint end = GetBoard()->m_BoundaryBox.GetEnd();
     end.x -= end.x % Board.m_GridRouting;
@@ -509,7 +496,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
  */
 void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 {
-    int    ox, oy, fx, fy, Penalite;
+    int    ox, oy, fx, fy;
     int    marge = Board.m_GridRouting / 2;
     int    layerMask;
     D_PAD* Pad;
@@ -562,45 +549,36 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
 
     for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
     {
-        Place_1_Pad_Board( GetBoard(), Pad, CELL_is_MODULE, marge, WRITE_OR_CELL );
+        ::PlacePad( GetBoard(), Pad, CELL_is_MODULE, marge, WRITE_OR_CELL );
     }
 
     /* Trace clearance. */
-    marge    = ( Board.m_GridRouting * Module->m_PadNum ) / GAIN;
-    Penalite = PENALITE;
-    CreateKeepOutRectangle( GetBoard(), ox, oy, fx, fy, marge, Penalite, layerMask );
+    marge   = ( Board.m_GridRouting * Module->m_PadNum ) / GAIN;
+    CreateKeepOutRectangle( GetBoard(), ox, oy, fx, fy, marge, KEEP_OUT_MARGIN, layerMask );
 }
 
 
-/*
- * Search for the optimal position of the module.
- * Entree:
- * Module tip MODULE struct module's place.
- * Returns:
- * 1 if placement impossible, 0 if OK
- * = MinCout and external variable = cost of best placement
- */
-int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
+int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
 {
     int     cx, cy;
     int     ox, oy, fx, fy; /* occupying part of the module focuses on the cursor */
     int     error = 1;
-    int     DisplayChevelu = 0;
+    int     showRat = 0;
     wxPoint LastPosOK;
     float   mincout, cout, Score;
-    int     Penalite;
+    int     keepOut;
     bool    TstOtherSide;
 
-    Module->DisplayInfo( this );
+    aModule->DisplayInfo( this );
 
     LastPosOK.x = GetBoard()->m_BoundaryBox.m_Pos.x;
     LastPosOK.y = GetBoard()->m_BoundaryBox.m_Pos.y;
 
-    cx = Module->m_Pos.x; cy = Module->m_Pos.y;
-    ox = Module->m_BoundaryBox.m_Pos.x - cx;
-    fx = Module->m_BoundaryBox.m_Size.x + ox;
-    oy = Module->m_BoundaryBox.m_Pos.y - cy;
-    fy = Module->m_BoundaryBox.m_Size.y + oy;
+    cx = aModule->m_Pos.x; cy = aModule->m_Pos.y;
+    ox = aModule->m_BoundaryBox.m_Pos.x - cx;
+    fx = aModule->m_BoundaryBox.m_Size.x + ox;
+    oy = aModule->m_BoundaryBox.m_Pos.y - cy;
+    fy = aModule->m_BoundaryBox.m_Size.y + oy;
 
     CurrPosition.x = GetBoard()->m_BoundaryBox.m_Pos.x - ox;
     CurrPosition.y = GetBoard()->m_BoundaryBox.m_Pos.y - oy;
@@ -624,10 +602,10 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
         D_PAD* Pad;
         int otherLayerMask = LAYER_BACK;
 
-        if( Module->GetLayer() == LAYER_N_BACK )
+        if( aModule->GetLayer() == LAYER_N_BACK )
             otherLayerMask = LAYER_FRONT;
 
-        for( Pad = Module->m_Pads; Pad != NULL; Pad = Pad->Next() )
+        for( Pad = aModule->m_Pads; Pad != NULL; Pad = Pad->Next() )
         {
             if( ( Pad->m_layerMask & otherLayerMask ) == 0 )
                 continue;
@@ -637,7 +615,7 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
         }
     }
 
-    DrawModuleOutlines( DrawPanel, DC, Module );
+    DrawModuleOutlines( DrawPanel, aDC, aModule );
 
     mincout = -1.0;
     SetStatusText( wxT( "Score ??, pos ??" ) );
@@ -655,43 +633,44 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
                 DrawPanel->m_AbortRequest = false;
         }
 
-        cx = Module->m_Pos.x; cy = Module->m_Pos.y;
-        Module->m_BoundaryBox.m_Pos.x = ox + CurrPosition.x;
-        Module->m_BoundaryBox.m_Pos.y = oy + CurrPosition.y;
+        cx = aModule->m_Pos.x; cy = aModule->m_Pos.y;
+        aModule->m_BoundaryBox.m_Pos.x = ox + CurrPosition.x;
+        aModule->m_BoundaryBox.m_Pos.y = oy + CurrPosition.y;
 
-        DrawModuleOutlines( DrawPanel, DC, Module );
+        DrawModuleOutlines( DrawPanel, aDC, aModule );
 
         g_Offset_Module.x = cx - CurrPosition.x;
         CurrPosition.y    = GetBoard()->m_BoundaryBox.m_Pos.y - oy;
+
         /* Placement on grid. */
         CurrPosition.y -= CurrPosition.y % Board.m_GridRouting;
 
-        DrawModuleOutlines( DrawPanel, DC, Module );
+        DrawModuleOutlines( DrawPanel, aDC, aModule );
 
         for( ; CurrPosition.y < GetBoard()->m_BoundaryBox.GetBottom() - fy;
              CurrPosition.y += Board.m_GridRouting )
         {
             /* Erase traces. */
-            DrawModuleOutlines( DrawPanel, DC, Module );
+            DrawModuleOutlines( DrawPanel, aDC, aModule );
 
-            if( DisplayChevelu )
-                Compute_Ratsnest_PlaceModule( DC );
+            if( showRat )
+                Compute_Ratsnest_PlaceModule( aDC );
 
-            DisplayChevelu = 0;
-            Module->m_BoundaryBox.m_Pos.x = ox + CurrPosition.x;
-            Module->m_BoundaryBox.m_Pos.y = oy + CurrPosition.y;
+            showRat = 0;
+            aModule->m_BoundaryBox.m_Pos.x = ox + CurrPosition.x;
+            aModule->m_BoundaryBox.m_Pos.y = oy + CurrPosition.y;
 
             g_Offset_Module.y = cy - CurrPosition.y;
-            DrawModuleOutlines( DrawPanel, DC, Module );
-            Penalite = TstModuleOnBoard( GetBoard(), Module, TstOtherSide );
+            DrawModuleOutlines( DrawPanel, aDC, aModule );
+            keepOut = TstModuleOnBoard( GetBoard(), aModule, TstOtherSide );
 
-            if( Penalite >= 0 ) /* c a d if the module can be placed. */
+            if( keepOut >= 0 ) /* c a d if the module can be placed. */
             {
                 error = 0;
-                build_ratsnest_module( Module );
-                cout = Compute_Ratsnest_PlaceModule( DC );
-                DisplayChevelu = 1;
-                Score = cout + (float) Penalite;
+                build_ratsnest_module( aModule );
+                cout = Compute_Ratsnest_PlaceModule( aDC );
+                showRat = 1;
+                Score = cout + (float) keepOut;
 
                 if( (mincout >= Score ) || (mincout < 0 ) )
                 {
@@ -706,21 +685,21 @@ int PCB_EDIT_FRAME::RecherchePlacementModule( MODULE* Module, wxDC* DC )
                 }
             }
 
-            if( DisplayChevelu )
-                Compute_Ratsnest_PlaceModule( DC );
+            if( showRat )
+                Compute_Ratsnest_PlaceModule( aDC );
 
-            DisplayChevelu = 0;
+            showRat = 0;
         }
     }
 
-    DrawModuleOutlines( DrawPanel, DC, Module );  /* erasing the last traces */
+    DrawModuleOutlines( DrawPanel, aDC, aModule );  /* erasing the last traces */
 
-    if( DisplayChevelu )
-        Compute_Ratsnest_PlaceModule( DC );
+    if( showRat )
+        Compute_Ratsnest_PlaceModule( aDC );
 
     /* Regeneration of the modified variable. */
-    Module->m_BoundaryBox.m_Pos.x = ox + cx;
-    Module->m_BoundaryBox.m_Pos.y = oy + cy;
+    aModule->m_BoundaryBox.m_Pos.x = ox + cx;
+    aModule->m_BoundaryBox.m_Pos.y = oy + cy;
     CurrPosition = LastPosOK;
 
     GetBoard()->m_Status_Pcb &= ~( RATSNEST_ITEM_LOCAL_OK | LISTE_PAD_OK );
@@ -793,12 +772,11 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
  * (ux, ux .. y0, y1):
  * (Sum of cells in terms of distance)
  */
-unsigned int CalculePenaliteRectangle( BOARD* Pcb, int ux0, int uy0,
-                                       int ux1, int uy1, int side )
+unsigned int CalculateKeepOutArea( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
 {
     int          row, col;
     int          row_min, row_max, col_min, col_max;
-    unsigned int Penalite;
+    unsigned int keepOut;
 
     ux0 -= Pcb->m_BoundaryBox.m_Pos.x;
     uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
@@ -829,17 +807,17 @@ unsigned int CalculePenaliteRectangle( BOARD* Pcb, int ux0, int uy0,
     if( col_max >= ( Ncols - 1 ) )
         col_max = Ncols - 1;
 
-    Penalite = 0;
+    keepOut = 0;
 
     for( row = row_min; row <= row_max; row++ )
     {
         for( col = col_min; col <= col_max; col++ )
         {
-            Penalite += (int) GetDist( row, col, side );
+            keepOut += (int) GetDist( row, col, side );
         }
     }
 
-    return Penalite;
+    return keepOut;
 }
 
 
@@ -850,7 +828,7 @@ unsigned int CalculePenaliteRectangle( BOARD* Pcb, int ux0, int uy0,
 int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
 {
     int ox, oy, fx, fy;
-    int error, Penalite, marge, side, otherside;
+    int error, marge, side, otherside;
 
     side = TOP; otherside = BOTTOM;
 
@@ -879,9 +857,7 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
 
     marge = ( Board.m_GridRouting * Module->m_PadNum ) / GAIN;
 
-    Penalite = CalculePenaliteRectangle( Pcb, ox - marge, oy - marge,
-                                         fx + marge, fy + marge, side );
-    return Penalite;
+    return CalculateKeepOutArea( Pcb, ox - marge, oy - marge, fx + marge, fy + marge, side );
 }
 
 
@@ -954,10 +930,10 @@ float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 
 /* Build the cost map.
  * Cells ( in Dist mao ) inside the rect x0,y0 a x1,y1 are
- *  incremented by value Penalite
+ *  incremented by value aKeepOut
  *  Cell outside this rectangle, but inside the rectangle
  *  x0,y0 -marge to x1,y1 + marge sont incrementede by a decreasing value
- *  (Penalite ... 0). The decreasing value de pends on the distance to the first rectangle
+ *  (aKeepOut ... 0). The decreasing value de pends on the distance to the first rectangle
  *  Therefore the cost is high in rect x0,y0 a x1,y1, and decrease outside this rectangle
  */
 static void CreateKeepOutRectangle( BOARD* Pcb,
@@ -966,7 +942,7 @@ static void CreateKeepOutRectangle( BOARD* Pcb,
                                     int    ux1,
                                     int    uy1,
                                     int    marge,
-                                    int    Penalite,
+                                    int    aKeepOut,
                                     int    aLayerMask )
 {
     int      row, col;
@@ -1034,7 +1010,7 @@ static void CreateKeepOutRectangle( BOARD* Pcb,
         for( col = col_min; col <= col_max; col++ )
         {
             cgain = 256;
-            LocalKeepOut = Penalite;
+            LocalKeepOut = aKeepOut;
 
             if( col < pmarge )
                 cgain = ( 256 * col ) / pmarge;

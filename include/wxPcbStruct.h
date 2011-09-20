@@ -6,12 +6,12 @@
 #define  WXPCB_STRUCT_H
 
 
-#include "wxstruct.h"
-#include "base_struct.h"
+#include "wxBasePcbFrame.h"
 #include "param_config.h"
 #include "class_layer_box_selector.h"
 #include "class_macros_record.h"
-#include "richio.h"
+#include "class_undoredo_container.h"
+
 
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000
@@ -37,6 +37,8 @@ class DRAWSEGMENT;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
 class PCB_LAYER_WIDGET;
+class MARKER_PCB;
+class BOARD_ITEM;
 
 
 /**
@@ -389,23 +391,20 @@ public:
      * Function IsElementVisible
      * tests whether a given element category is visible. Keep this as an
      * inline function.
-     * @param aPCB_VISIBLE is from the enum by the same name
+     * @param aElement is from the enum by the same name
      * @return bool - true if the element is visible.
      * @see enum PCB_VISIBLE
      */
-    bool IsElementVisible( int aPCB_VISIBLE )
-    {
-        return GetBoard()->IsElementVisible( aPCB_VISIBLE );
-    }
+    bool IsElementVisible( int aElement );
 
     /**
      * Function SetElementVisibility
      * changes the visibility of an element category
-     * @param aPCB_VISIBLE is from the enum by the same name
+     * @param aElement is from the enum by the same name
      * @param aNewState = The new visibility state of the element category
      * @see enum PCB_VISIBLE
      */
-    void SetElementVisibility( int aPCB_VISIBLE, bool aNewState );
+    void SetElementVisibility( int aElement, bool aNewState );
 
     /**
      * Function SetVisibleAlls
@@ -1212,10 +1211,42 @@ public:
     void LockModule( MODULE* aModule, bool aLocked );
     void AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );
     void AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC );
-    int RecherchePlacementModule( MODULE* Module, wxDC* DC );
+
+    /**
+     * Function GetOptimalModulePlacement
+     * searches for the optimal position of the \a aModule.
+     *
+     * @param aModule A pointer to the MODULE object to get the optimal placement.
+     * @param aDC The device context to draw on.
+     * @return 1 if placement impossible or 0 if OK.
+     */
+    int GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC );
+
     void GenModuleOnBoard( MODULE* Module );
     float Compute_Ratsnest_PlaceModule( wxDC* DC );
+
+    /**
+     * Function GenPlaceBoard
+     * generates board board (component side copper + rating):
+     * Allocate the memory needed to represent in "bitmap" on the grid
+     * Current:
+     * - The size of clearance area of component (the board)
+     * - The bitmap PENALTIES
+     * And initialize the cells of the board has
+     * - Hole in the cells occupied by a segment EDGE
+     * - CELL_is_ZONE for cell internal contour EDGE (if closed)
+     *
+     * Placement surface (board) gives the cells internal to the contour
+     * PCB, and among the latter the free cells and cells already occupied
+     *
+     * The bitmap PENALTIES give cells occupied by the modules,
+     * Plus a surface penalty related to the number of pads of the module
+     *
+     * Bitmap of the penalty is set to 0
+     * Occupation cell is a 0 leaves
+     */
     int GenPlaceBoard();
+
     void DrawInfoPlace( wxDC* DC );
 
     // Autorouting:

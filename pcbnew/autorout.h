@@ -1,9 +1,12 @@
-/****************************************************/
-/*					AUTOROUT.H						*/
-/****************************************************/
+/**
+ * @file autorout.h
+ */
 
 #ifndef AUTOROUT_H
 #define AUTOROUT_H
+
+
+class BOARD;
 
 
 #define TOP     0
@@ -52,26 +55,27 @@ extern int MaxNodes;    /* maximum number of nodes opened at one time */
 /* Structures useful to the generation of board as bitmap. */
 typedef char MATRIX_CELL;
 typedef int  DIST_CELL;
-typedef char  DIR_CELL;
+typedef char DIR_CELL;
 
 class MATRIX_ROUTING_HEAD  /* header of blocks of MATRIX_CELL */
 {
 public:
     MATRIX_CELL* m_BoardSide[MAX_SIDES_COUNT];  /* ptr to block of memory: 2-sided board */
     DIST_CELL*   m_DistSide[MAX_SIDES_COUNT];   /* ptr to block of memory: path distance to
-                                                * cells */
-    DIR_CELL*   m_DirSide[MAX_SIDES_COUNT];    /* header of blocks of chars:pointers back to
-                                                * source */
-    bool       m_InitBoardDone;
-    int        m_Layers;
-    int        m_GridRouting;                   // Size of grid for autoplace/autoroute
-    EDA_RECT   m_BrdBox;                        // Actual board bouding box
-    int        m_Nrows, m_Ncols;
-    int        m_MemSize;
+                                                 * cells */
+    DIR_CELL*    m_DirSide[MAX_SIDES_COUNT];    /* header of blocks of chars:pointers back to
+                                                 * source */
+    bool         m_InitBoardDone;
+    int          m_Layers;
+    int          m_GridRouting;                 // Size of grid for autoplace/autoroute
+    EDA_RECT     m_BrdBox;                      // Actual board bounding box
+    int          m_Nrows, m_Ncols;
+    int          m_MemSize;
 
 public:
     MATRIX_ROUTING_HEAD();
     ~MATRIX_ROUTING_HEAD();
+
     bool    ComputeMatrixSize( BOARD* aPcb );
     int     InitBoard();
     void    UnInitBoard();
@@ -88,8 +92,4 @@ extern MATRIX_ROUTING_HEAD Board;        /* 2-sided board */
 #define WRITE_ADD_CELL 4
 
 
-#include "ar_protos.h"
-
-
 #endif  // AUTOROUT_H
-

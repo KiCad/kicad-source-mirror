@@ -12,7 +12,11 @@
 #include "class_board_design_settings.h"
 
 
+class BOARD;
 class ZONE_CONTAINER;
+class SEGZONE;
+class TRACK;
+class PCB_EDIT_FRAME;
 
 
 // buffer of item candidates when search for items on the same track.
@@ -1183,7 +1187,7 @@ public:
 
     /**
      * Function MarkTrace
-     * marks a chain of trace segments, connected to \aaTrace.
+     * marks a chain of trace segments, connected to \a aTrace.
      * <p>
      * Each segment is marked by setting the BUSY bit into m_Flags.  Electrical
      * continuity is detected by walking each segment, and finally the segments

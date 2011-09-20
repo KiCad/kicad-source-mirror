@@ -6,10 +6,11 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "kicad_string.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 
+#include "pcbnew.h"
 #include "dialog_exchange_modules_base.h"
+#include "ar_protos.h"
 
 
 int s_SelectionMode = 0;    // Remember the last exchange option, when exit dialog.
@@ -145,7 +146,6 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     FILE*      FichCmp, * NewFile;
     char       Line[1024];
     wxString   msg;
-    char*      result;              // quiet compiler
 
     if( old_name == new_name )
         return 0;
@@ -155,6 +155,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     fn.SetExt( NetCmpExtBuffer );
 
     FichCmp = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
+
     if( FichCmp == NULL )
     {
         if( ShowError )
@@ -162,12 +163,14 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
             msg.Printf( _( "file %s not found" ), GetChars( fn.GetFullPath() ) );
             m_WinMessages->AppendText( msg );
         }
+
         return 1;
     }
 
     tmpFileName = fn;
     tmpFileName.SetExt( wxT( "$$$" ) );
     NewFile = wxFopen( tmpFileName.GetFullPath(), wxT( "wt" ) );
+
     if( NewFile == NULL )
     {
         if( ShowError )
@@ -176,14 +179,15 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
                         GetChars( tmpFileName.GetFullPath() ) );
             m_WinMessages->AppendText( msg );
         }
+
         return 1;
     }
 
-    result = fgets( Line, sizeof(Line), FichCmp );
-    fprintf( NewFile, "Cmp-Mod V01 Genere par PcbNew le %s\n",
-            DateAndTime( Line ) );
+    fgets( Line, sizeof(Line), FichCmp );
+    fprintf( NewFile, "Cmp-Mod V01 Genere par PcbNew le %s\n", DateAndTime( Line ) );
 
     bool start_descr = false;
+
     while( fgets( Line, sizeof(Line), FichCmp ) != NULL )
     {
         if( strnicmp( Line, "Reference = ", 9 ) == 0 )
@@ -191,14 +195,14 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
             char buf[1024];
             strcpy( buf, Line + 12 );
             strtok( buf, ";\n\r" );
+
             if( stricmp( buf, TO_UTF8( reference ) ) == 0 )
             {
                 start_descr = true;
             }
         }
 
-        if( (strnicmp( Line, "Begin", 5 ) == 0)
-           || (strnicmp( Line, "End", 3 ) == 0) )
+        if( (strnicmp( Line, "Begin", 5 ) == 0) || (strnicmp( Line, "End", 3 ) == 0) )
         {
             start_descr = false;
         }
@@ -212,6 +216,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
 
             start_descr = false;
         }
+
         fputs( Line, NewFile );
     }
 
@@ -243,6 +248,7 @@ void DIALOG_EXCHANGE_MODULE::Change_Current_Module()
     {
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
+
         m_Parent->DrawPanel->Refresh();
     }
 
@@ -274,10 +280,12 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
 
     if( m_Parent->GetBoard()->m_Modules == NULL )
         return;
+
     if( newmodulename == wxEmptyString )
         return;
 
     lib_reference = m_CurrentModule->m_LibRef;
+
     if( aUseValue )
     {
         check_module_value = true;
@@ -305,16 +313,20 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
      * points the board or is NULL
      */
     Module = m_Parent->GetBoard()->m_Modules.GetLast();
+
     for( ; Module && ( Module->Type() == TYPE_MODULE ); Module = PtBack )
     {
         PtBack = Module->Back();
+
         if( lib_reference.CmpNoCase( Module->m_LibRef ) != 0 )
             continue;
+
         if( check_module_value )
         {
             if( value.CmpNoCase( Module->m_Value->m_Text ) != 0 )
                 continue;
         }
+
         if( Change_1_Module( Module, newmodulename, &pickList, ShowErr ) )
             change = true;
         else if( ShowErr )
@@ -325,6 +337,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
     {
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
+
         m_Parent->DrawPanel->Refresh();
     }
 
@@ -362,9 +375,11 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
      * points the board or is NULL
      */
     Module = m_Parent->GetBoard()->m_Modules.GetLast();
+
     for( ; Module && ( Module->Type() == TYPE_MODULE ); Module = PtBack )
     {
         PtBack = Module->Back();
+
         if( Change_1_Module( Module, Module->m_LibRef, &pickList, ShowErr ) )
             change = true;
         else if( ShowErr )
@@ -375,8 +390,10 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
     {
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
+
         m_Parent->DrawPanel->Refresh();
     }
+
     if( pickList.GetCount() )
         m_Parent->SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
 }
@@ -434,10 +451,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
 
     m_Parent->Exchange_Module( Module, NewModule, aUndoPickList );
 
-    Maj_ListeCmp( NewModule->m_Reference->m_Text,
-                  oldnamecmp,
-                  namecmp,
-                  ShowError );
+    Maj_ListeCmp( NewModule->m_Reference->m_Text, oldnamecmp, namecmp, ShowError );
 
     return true;
 }
@@ -460,8 +474,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     wxPoint oldpos;
     D_PAD*  pad, * old_pad;
 
-    if( ( aOldModule->Type() != TYPE_MODULE )
-       || ( aNewModule->Type() != TYPE_MODULE ) )
+    if( ( aOldModule->Type() != TYPE_MODULE ) || ( aNewModule->Type() != TYPE_MODULE ) )
     {
         wxMessageBox( wxT( "PCB_EDIT_FRAME::Exchange_Module() StuctType error" ) );
         return;
@@ -501,15 +514,16 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
 
     /* Update pad netnames ( when possible) */
     pad = aNewModule->m_Pads;
+
     for( ; pad != NULL; pad = pad->Next() )
     {
         pad->SetNetname( wxEmptyString );
         pad->SetNet( 0 );
         old_pad = aOldModule->m_Pads;
+
         for( ; old_pad != NULL; old_pad = old_pad->Next() )
         {
-            if( strnicmp( pad->m_Padname, old_pad->m_Padname,
-                          sizeof(pad->m_Padname) ) == 0 )
+            if( strnicmp( pad->m_Padname, old_pad->m_Padname, sizeof(pad->m_Padname) ) == 0 )
             {
                 pad->SetNetname( old_pad->GetNetname() );
                 pad->SetNet( old_pad->GetNet() );
@@ -526,7 +540,9 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
         aUndoPickList->PushItem( picker_new );
     }
     else
+    {
         aOldModule->DeleteStructure();
+    }
 
     GetBoard()->m_Status_Pcb = 0;
     aNewModule->m_Flags = 0;
@@ -564,7 +580,6 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     MODULE*    Module = GetBoard()->m_Modules;
     wxString   msg;
     wxString   wildcard;
-    char*      result;              // quiet compiler
 
     if( Module == NULL )
     {
@@ -575,8 +590,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     /* Calculation file name by changing the extension name to NetList */
     fn = GetScreen()->GetFileName();
     fn.SetExt( NetCmpExtBuffer );
-    wildcard = _( "Component files (." ) + NetCmpExtBuffer + wxT( ")|*." ) +
-               NetCmpExtBuffer;
+    wildcard = _( "Component files (." ) + NetCmpExtBuffer + wxT( ")|*." ) + NetCmpExtBuffer;
 
     wxFileDialog dlg( this, _( "Save Component Files" ), wxGetCwd(),
                       fn.GetFullName(), wildcard,
@@ -588,6 +602,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     fn = dlg.GetPath();
 
     FichCmp = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
+
     if( FichCmp == NULL )
     {
         msg = _( "Unable to create file " ) + fn.GetFullPath();
@@ -595,9 +610,8 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         return;
     }
 
-    result = fgets( Line, sizeof(Line), FichCmp );
-    fprintf( FichCmp, "Cmp-Mod V01 Genere par PcbNew le %s\n",
-             DateAndTime( Line ) );
+    fgets( Line, sizeof(Line), FichCmp );
+    fprintf( FichCmp, "Cmp-Mod V01 Genere par PcbNew le %s\n", DateAndTime( Line ) );
 
     for( ; Module != NULL; Module = Module->Next() )
     {
@@ -610,8 +624,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         fprintf( FichCmp, "ValeurCmp = %s;\n",
                  !Module->m_Value->m_Text.IsEmpty() ?
                  TO_UTF8( Module->m_Value->m_Text ) : "[NoVal]" );
-        fprintf( FichCmp, "IdModule  = %s;\n",
-                 TO_UTF8( Module->m_LibRef ) );
+        fprintf( FichCmp, "IdModule  = %s;\n", TO_UTF8( Module->m_LibRef ) );
         fprintf( FichCmp, "EndCmp\n" );
     }
 

@@ -1,25 +1,26 @@
-/************************/
-/* Autorouting routines */
-/************************/
+/**
+ * @file work.cpp
+ * @brief Automatic routing routines
+ */
 
 #include "fctsys.h"
-
 #include "common.h"
+
 #include "pcbnew.h"
-#include "autorout.h"
 #include "cell.h"
+#include "ar_protos.h"
 
 
 struct CWORK /* a unit of work is a hole-pair to connect */
 {
     struct CWORK*  Next;
-    int            FromRow;     /* source row		*/
-    int            FromCol;     /* source column	*/
-    int            net_code;    /* net_code			*/
-    int            ToRow;       /* target row		*/
-    int            ToCol;       /* target column	*/
+    int            FromRow;     /* source row       */
+    int            FromCol;     /* source column    */
+    int            net_code;    /* net_code         */
+    int            ToRow;       /* target row       */
+    int            ToCol;       /* target column    */
     RATSNEST_ITEM* pt_rats;     /* Corresponding ratsnest */
-    int            ApxDist;     /* approximate distance	*/
+    int            ApxDist;     /* approximate distance */
     int            Cost;        /* cost for sort by length */
     int            Priority;    /* route priority */
 };
@@ -90,14 +91,18 @@ int SetWork( int            r1,
         p->Priority = pri;
         p->Next     = NULL;
         if( Head )  /* attach at end */
+
             Tail->Next = p;
         else        /* first in list */
             Head = Current = p;
+
         Tail = p;
         return 1;
     }
     else /* can't get any more memory */
+    {
         return 0;
+    }
 }
 
 
@@ -137,12 +142,15 @@ void SortWork()
     CWORK* r;
 
     q0 = q1 = NULL;
+
     while( (p = Head) != NULL ) /* prioritize each work item */
     {
         Head = Head->Next;
+
         if( p->Priority ) /* put at end of priority list */
         {
             p->Next = NULL;
+
             if( (r = q0) == NULL )  /* empty list? */
                 q0 = p;
             else                    /* attach at end */
@@ -203,6 +211,7 @@ static int GetCost( int r1, int c1, int r2, int c2 )
     {
         mx = dy; my = dx;
     }
+
     if( mx )
         incl += (2 * (float) my / mx);
 

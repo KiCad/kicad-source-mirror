@@ -623,10 +623,16 @@ void PCB_EDIT_FRAME::unitsChangeRefresh()
 }
 
 
-void PCB_EDIT_FRAME::SetElementVisibility( int aPCB_VISIBLE, bool aNewState )
+bool PCB_EDIT_FRAME::IsElementVisible( int aElement )
 {
-    GetBoard()->SetElementVisibility( aPCB_VISIBLE, aNewState );
-    m_Layers->SetRenderState( aPCB_VISIBLE, aNewState );
+    return GetBoard()->IsElementVisible( aElement );
+}
+
+
+void PCB_EDIT_FRAME::SetElementVisibility( int aElement, bool aNewState )
+{
+    GetBoard()->SetElementVisibility( aElement, aNewState );
+    m_Layers->SetRenderState( aElement, aNewState );
 }
 
 

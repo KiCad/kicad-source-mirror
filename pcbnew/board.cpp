@@ -1,10 +1,14 @@
-/* BOARD.CPP : functions for autorouting */
+/**
+ * @file board.cpp
+ * @brief Functions for autorouting
+ */
 
 #include "fctsys.h"
 #include "common.h"
+
 #include "pcbnew.h"
-#include "autorout.h"
 #include "cell.h"
+#include "ar_protos.h"
 
 
 /*
@@ -19,6 +23,7 @@ bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb )
     aPcb->m_BoundaryBox.m_Pos.x -= aPcb->m_BoundaryBox.m_Pos.x % m_GridRouting;
     aPcb->m_BoundaryBox.m_Pos.y -= aPcb->m_BoundaryBox.m_Pos.y % m_GridRouting;
     m_BrdBox = aPcb->m_BoundaryBox;
+
     /* The boundary box must have its end point on routing grid: */
     wxPoint end = m_BrdBox.GetEnd();
     end.x -= end.x % m_GridRouting;
@@ -115,19 +120,22 @@ void MATRIX_ROUTING_HEAD::UnInitBoard()
         /***** de-allocate Dir matrix *****/
         if( m_DirSide[ii] )
         {
-            MyFree( m_DirSide[ii] ); m_DirSide[ii] = NULL;
+            MyFree( m_DirSide[ii] );
+            m_DirSide[ii] = NULL;
         }
 
         /***** de-allocate Distances matrix *****/
         if( m_DistSide[ii] )
         {
-            MyFree( m_DistSide[ii] ); m_DistSide[ii] = NULL;
+            MyFree( m_DistSide[ii] );
+            m_DistSide[ii] = NULL;
         }
 
         /**** de-allocate cells matrix *****/
         if( m_BoardSide[ii] )
         {
-            MyFree( m_BoardSide[ii] ); m_BoardSide[ii] = NULL;
+            MyFree( m_BoardSide[ii] );
+            m_BoardSide[ii] = NULL;
         }
     }
 
@@ -168,10 +176,10 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
         if( net_code != pad->GetNet() || (flag & FORCE_PADS) )
         {
-            Place_1_Pad_Board( aPcb, pad, HOLE, marge, WRITE_CELL );
+            ::PlacePad( aPcb, pad, HOLE, marge, WRITE_CELL );
         }
 
-        Place_1_Pad_Board( aPcb, pad, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
+        ::PlacePad( aPcb, pad, VIA_IMPOSSIBLE, via_marge, WRITE_OR_CELL );
     }
 
     // Place outlines of modules on matrix routing, if they are on a copper layer
@@ -250,7 +258,8 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
                 break;
 
             EDA_RECT textbox = PtText->GetTextBox( -1 );
-            ux0 = textbox.GetX(); uy0 = textbox.GetY();
+            ux0 = textbox.GetX();
+            uy0 = textbox.GetY();
             dx  = textbox.GetWidth();
             dy  = textbox.GetHeight();
 
@@ -310,7 +319,7 @@ int Build_Work( BOARD* Pcb )
     {
         pt_rats = &Pcb->m_FullRatsnest[ii];
 
-        /* We consider her only ratsnets that are active ( obviously not yet routed)
+        /* We consider her only ratsnest that are active ( obviously not yet routed)
          * and routables (that are not yet attempt to be routed and fail
          */
         if( (pt_rats->m_Status & CH_ACTIF) == 0 )

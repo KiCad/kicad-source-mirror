@@ -21,23 +21,13 @@
 
 /*  Forward declarations of classes. */
 class WinEDA_CvpcbFrame;
-class PCB_EDIT_FRAME;
 class FOOTPRINT_EDIT_FRAME;
 class BOARD;
-class TEXTE_PCB;
 class MODULE;
 class TRACK;
-class SEGZONE;
-class SEGVIA;
 class D_PAD;
 class TEXTE_MODULE;
-class MIREPCB;
-class DIMENSION;
-class EDGE_MODULE;
 class EDA_3D_FRAME;
-class DRC;
-class ZONE_CONTAINER;
-class DRAWSEGMENT;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
 

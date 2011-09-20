@@ -1,9 +1,11 @@
-/**********************************/
-/* classes to handle copper zones */
-/**********************************/
+/**
+ * @file class_zone.h
+ * @brief Classes to handle copper zones
+ */
 
 #ifndef CLASS_ZONE_H
 #define CLASS_ZONE_H
+
 
 #include <vector>
 #include "gr_basic.h"
@@ -12,15 +14,25 @@
 #include "class_zone_setting.h"
 
 
+class EDA_RECT;
+class EDA_DRAW_FRAME;
+class EDA_DRAW_PANEL;
+class PCB_EDIT_FRAME;
+class BOARD;
+class BOARD_CONNECTED_ITEM;
+class ZONE_CONTAINER;
+
+
 /* a small class used when filling areas with segments */
 class SEGMENT
 {
 public:
     wxPoint m_Start;        // starting point of a segment
     wxPoint m_End;          // ending point of a segment
+
 public:
     SEGMENT() {}
-    SEGMENT( const wxPoint & aStart, const wxPoint & aEnd)
+    SEGMENT( const wxPoint& aStart, const wxPoint& aEnd)
     {
         m_Start = aStart;
         m_End = aEnd;

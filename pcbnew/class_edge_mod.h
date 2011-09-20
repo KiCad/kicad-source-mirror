@@ -1,5 +1,5 @@
 /**
- * @file class_edge_module.h
+ * @file class_edge_mod.h
  * @brief EDGE_MODULE class definition.
  */
 

@@ -1,6 +1,7 @@
-/******************************************/
-/* Kicad: Common plot GERBER Routines */
-/******************************************/
+/**
+ * @file common_plotGERBER_functions.cpp
+ * @brief Common GERBER plot routines.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -49,18 +50,18 @@ bool GERBER_PLOTTER::start_plot( FILE* aFile )
     final_file  = aFile;
 
     // Create a temporary filename to store gerber file
-    // note tmpfile() does not work under Vista and W7 un user mode
+    // note tmpfile() does not work under Vista and W7 in user mode
     m_workFilename = filename + wxT(".tmp");
     work_file   = wxFopen( m_workFilename, wxT( "wt" ));
     output_file = work_file;
     wxASSERT( output_file );
+
     if( output_file == NULL )
         return false;
 
     DateAndTime( Line );
     wxString Title = creator + wxT( " " ) + GetBuildVersion();
-    fprintf( output_file, "G04 (created by %s) date %s*\n",
-             TO_UTF8( Title ), Line );
+    fprintf( output_file, "G04 (created by %s) date %s*\n", TO_UTF8( Title ), Line );
 
     // Specify linear interpol (G01), unit = INCH (G70), abs format (G90):
     fputs( "G01*\nG70*\nG90*\n", output_file );
@@ -84,20 +85,22 @@ bool GERBER_PLOTTER::end_plot()
     wxString msg;
 
     wxASSERT( output_file );
+
     /* Outfile is actually a temporary file! */
     fputs( "M02*\n", output_file );
     fflush( output_file );
+
 //    rewind( work_file ); // work_file == output_file !!!
     fclose( work_file );
     work_file   = wxFopen( m_workFilename, wxT( "rt" ));
     wxASSERT( work_file );
     output_file = final_file;
 
-
     // Placement of apertures in RS274X
     while( fgets( line, 1024, work_file ) )
     {
         fputs( line, output_file );
+
         if( strcmp( strtok( line, "\n\r" ), "G04 APERTURE LIST*" ) == 0 )
         {
             write_aperture_list();
@@ -146,12 +149,14 @@ std::vector<APERTURE>::iterator GERBER_PLOTTER::get_aperture( const wxSize&     
 
     // Search an existing aperture
     std::vector<APERTURE>::iterator tool = apertures.begin();
+
     while( tool != apertures.end() )
     {
         last_D_code = tool->D_code;
-        if( (tool->type == type)
-           && (tool->size == size) )
+
+        if( (tool->type == type) && (tool->size == size) )
             return tool;
+
         tool++;
     }
 
@@ -214,8 +219,7 @@ void GERBER_PLOTTER::write_aperture_list()
             break;
 
         case APERTURE::Oval:
-            sprintf( text, "O,%fX%f*%%\n", tool->size.x * fscale,
-                     tool->size.y * fscale );
+            sprintf( text, "O,%fX%f*%%\n", tool->size.x * fscale, tool->size.y * fscale );
             break;
         }
 
@@ -275,23 +279,22 @@ void GERBER_PLOTTER::rect( wxPoint p1, wxPoint p2, FILL_T fill, int width )
  * not used here: circles are always not filled the gerber. Filled circles are flashed
  * @param aWidth = line width
  */
-void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T aFill,
-                             int aWidth )
+void GERBER_PLOTTER::circle( wxPoint aCentre, int aDiameter, FILL_T aFill, int aWidth )
 {
     wxASSERT( output_file );
     wxPoint   start, end;
     double    radius = aDiameter / 2;
-    const int delta  = 3600 / 32; /* increment (in 0.1 degrees) to draw
-                                   * circles */
+    const int delta  = 3600 / 32; /* increment (in 0.1 degrees) to draw circles */
 
     start.x = aCentre.x + wxRound( radius );
     start.y = aCentre.y;
     set_current_line_width( aWidth );
     move_to( start );
+
     for( int ii = delta; ii < 3600; ii += delta )
     {
-        end.x = aCentre.x + (int) ( radius * fcosinus[ii] );
-        end.y = aCentre.y + (int) ( radius * fsinus[ii] );
+        end.x = aCentre.x + (int) ( radius * cos( DEG2RAD( (double)ii / 10.0 ) ) );
+        end.y = aCentre.y + (int) ( radius * sin( DEG2RAD( (double)ii / 10.0 ) ) );
         line_to( end );
     }
 
@@ -317,6 +320,7 @@ void GERBER_PLOTTER::PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill
         fputs( "G36*\n", output_file );
 
     move_to( aCornerList[0] );
+
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
         line_to( aCornerList[ii] );
@@ -367,8 +371,7 @@ void GERBER_PLOTTER::PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFac
 /* Function flash_pad_circle
  * Plot a circular pad or via at the user position pos
  */
-void GERBER_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
-                                       GRTraceMode trace_mode )
+void GERBER_PLOTTER::flash_pad_circle( wxPoint pos, int diametre, GRTraceMode trace_mode )
 {
     wxASSERT( output_file );
     wxSize size( diametre, diametre );
@@ -408,6 +411,7 @@ void GERBER_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
     {
         if( orient == 900 || orient == 2700 ) /* orientation turned 90 deg. */
             EXCHG( size.x, size.y );
+
         user_to_device_coordinates( pos );
         select_aperture( size, APERTURE::Oval );
         fprintf( output_file, "X%5.5dY%5.5dD03*\n", pos.x, pos.y );
@@ -417,11 +421,13 @@ void GERBER_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
         if( size.x > size.y )
         {
             EXCHG( size.x, size.y );
+
             if( orient < 2700 )
                 orient += 900;
             else
                 orient -= 2700;
         }
+
         if( trace_mode == FILLED )
         {
             /* The pad  is reduced to an oval with dy > dx */
@@ -437,7 +443,9 @@ void GERBER_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
                            size.x, trace_mode );
         }
         else
+        {
             sketch_oval( pos, size, orient, -1 );
+        }
     }
 }
 
@@ -516,7 +524,7 @@ void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
  * Plot mode  = FILLED or SKETCH
  */
  void GERBER_PLOTTER::flash_pad_trapez( wxPoint aPadPos,  wxPoint aCorners[4],
-                                   int aPadOrient, GRTraceMode aTrace_Mode )
+                                        int aPadOrient, GRTraceMode aTrace_Mode )
 
 {
     // polygon corners list
@@ -533,12 +541,14 @@ void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
         RotatePoint( &cornerList[ii], aPadOrient );
         cornerList[ii] += aPadPos;
     }
+
     // Close the polygon
     cornerList.push_back( cornerList[0] );
 
     set_current_line_width( -1 );
     PlotPoly( cornerList, aTrace_Mode==FILLED ? FILLED_SHAPE : NO_FILL );
 }
+
 
 void GERBER_PLOTTER::SetLayerPolarity( bool aPositive )
 {

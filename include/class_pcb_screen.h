@@ -1,9 +1,17 @@
-/****************/
-/*  pcbstruct.h */
-/****************/
+/**
+ * @file class_pcb_screen.h
+ */
 
 #ifndef __CLASSPCB_SCREEN_H__
 #define __CLASSPCB_SCREEN_H__
+
+
+#include "class_base_screen.h"
+#include "class_board_item.h"
+
+
+class UNDO_REDO_CONTAINER;
+
 
 /* Handle info to display a board */
 class PCB_SCREEN : public BASE_SCREEN
@@ -41,7 +49,7 @@ public:
      * sets the currently selected object, m_CurrentItem.
      * @param aItem Any object derived from BOARD_ITEM
      */
-    void SetCurItem( BOARD_ITEM* aItem ) { BASE_SCREEN::SetCurItem( aItem ); }
+    void SetCurItem( BOARD_ITEM* aItem ) { BASE_SCREEN::SetCurItem( (EDA_ITEM*)aItem ); }
 
 
     /* full undo redo management : */

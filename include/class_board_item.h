@@ -1,12 +1,19 @@
-/**********************************************************************************************/
-/*  board_item_struct.h :  Classes BOARD_ITEM and BOARD_CONNECTED_ITEM                        */
-/**********************************************************************************************/
+/**
+ * @file  class_board_item.h
+ * @brief Classes BOARD_ITEM and BOARD_CONNECTED_ITEM.
+ */
 
 #ifndef BOARD_ITEM_STRUCT_H
 #define BOARD_ITEM_STRUCT_H
 
 
+#include "base_struct.h"
+
 #include <boost/ptr_container/ptr_vector.hpp>
+
+
+class BOARD;
+class EDA_DRAW_PANEL;
 
 
 /* Shapes for segments (graphic segments and tracks) ( .m_Shape member ) */

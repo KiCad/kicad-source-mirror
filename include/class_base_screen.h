@@ -131,11 +131,12 @@ public:
     ~BASE_SCREEN();
 
     /**
-     * Function setCurItem
+     * Function SetCurItem
      * sets the currently selected object, m_CurrentItem.
      * @param aItem Any object derived from EDA_ITEM
      */
     void SetCurItem( EDA_ITEM* aItem ) { m_CurrentItem = aItem; }
+
     EDA_ITEM* GetCurItem() const { return m_CurrentItem; }
 
     /**

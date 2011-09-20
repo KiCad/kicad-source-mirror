@@ -1,6 +1,6 @@
 /**
  * @file edit_track_width.cpp
- * @breif Functions to modify sizes of segment, track, net , all vias and/or all tracks
+ * @brief Functions to modify sizes of segment, track, net, all vias and/or all tracks.
  */
 
 #include "fctsys.h"
