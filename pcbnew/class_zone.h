@@ -10,11 +10,11 @@
 #include <vector>
 #include "gr_basic.h"
 #include "PolyLine.h"
-#include "richio.h"
 #include "class_zone_setting.h"
 
 
 class EDA_RECT;
+class LINE_READER;
 class EDA_DRAW_FRAME;
 class EDA_DRAW_PANEL;
 class PCB_EDIT_FRAME;
@@ -32,6 +32,7 @@ public:
 
 public:
     SEGMENT() {}
+
     SEGMENT( const wxPoint& aStart, const wxPoint& aEnd)
     {
         m_Start = aStart;
@@ -40,51 +41,69 @@ public:
  };
 
 
-/************************/
-/* class ZONE_CONTAINER */
-/************************/
-
-/* handle a list of polygons delimiting a copper zone
- * a zone is described by a main polygon, a time stamp, a layer and a net name.
- * others polygons inside this main polygon are holes.
+/**
+ * Class ZONE_CONTAINER
+ * handles a list of polygons defining a copper zone.
+ * A zone is described by a main polygon, a time stamp, a layer, and a net name.
+ * Other polygons inside the main polygon are holes in the zone.
  */
-
 class ZONE_CONTAINER : public BOARD_CONNECTED_ITEM
 {
 public:
     wxString              m_Netname;                        // Net Name
     CPolyLine*            m_Poly;                           // outlines
-    int                   m_CornerSelection;                // For corner moving, corner index to drag, or -1 if no selection
+
+    // For corner moving, corner index to drag, or -1 if no selection.
+    int                   m_CornerSelection;
     int                   m_ZoneClearance;                  // clearance value
     int                   m_ZoneMinThickness;               // Min thickness value in filled areas
-    int                   m_FillMode;                       // How to fill areas: 0 = use filled polygons, != 0 fill with segments
-    int                   m_ArcToSegmentsCount;             // number of segments to convert a circle to a polygon
-                                                            // (uses ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF)
-    int                   m_PadOption;                      //
-    int                   m_ThermalReliefGapValue;          // thickness of the gap in thermal reliefs
-    int                   m_ThermalReliefCopperBridgeValue; // thickness of the copper bridge in thermal reliefs
+
+    // How to fill areas: 0 = use filled polygons, != 0 fill with segments.
+    int                   m_FillMode;
+
+    // number of segments to convert a circle to a polygon (uses
+    //ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF)
+    int                   m_ArcToSegmentsCount;
+
+    int                   m_PadOption;
+
+    // thickness of the gap in thermal reliefs.
+    int                   m_ThermalReliefGapValue;
+
+    // thickness of the copper bridge in thermal reliefs
+    int                   m_ThermalReliefCopperBridgeValue;
     int                   utility, utility2;                // flags used in polygon calculations
-    bool                  m_IsFilled;                       // true when a zone was filled, false after deleting the filled areas
-    std::vector <CPolyPt> m_FilledPolysList;  /* set of filled polygons used to draw a zone as a filled area.
-                                               * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole (they are all in one piece)
-                                               * In very simple cases m_FilledPolysList is same as m_Poly
-                                               * In less simple cases (when m_Poly has holes) m_FilledPolysList is a polygon equivalent to m_Poly, without holes
-                                               * but with extra outline segment connecting "holes" with external main outline
-                                               * In complex cases an outline described by m_Poly can have many filled areas
-                                               */
-    std::vector <SEGMENT> m_FillSegmList;      /* set of segments used to fill area, when fill zone by segment is used.
-                                                *  ( m_FillMode == 1 )
-                                                *  in this case segments have m_ZoneMinThickness width
-                                                */
+
+    // true when a zone was filled, false after deleting the filled areas
+    bool                  m_IsFilled;
+
+    /* set of filled polygons used to draw a zone as a filled area.
+     * from outlines (m_Poly) but unlike m_Poly these filled polygons have no hole
+     * (they are* all in one piece)  In very simple cases m_FilledPolysList is same
+     * as m_Poly.  In less simple cases (when m_Poly has holes) m_FilledPolysList is
+     * a polygon equivalent to m_Poly, without holes but with extra outline segment
+     * connecting "holes" with external main outline.  In complex cases an outline
+     * described by m_Poly can have many filled areas
+     */
+    std::vector <CPolyPt> m_FilledPolysList;
+
+    /* set of segments used to fill area, when fill zone by segment is used.
+     *  ( m_FillMode == 1 )
+     *  in this case segments have m_ZoneMinThickness width
+     */
+    std::vector <SEGMENT> m_FillSegmList;
+
 private:
     CPolyLine*            smoothedPoly;         // Corner-smoothed version of m_Poly
     int                   cornerSmoothingType;
     unsigned int          cornerRadius;
+
 public:
     ZONE_CONTAINER( BOARD* parent );
+
     ~ZONE_CONTAINER();
 
-    bool     Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
      /**
      * Function ReadDescr
@@ -92,22 +111,22 @@ public:
      * @param aReader is a pointer to a LINE_READER to read from.
      * @return int - 1 if success, 0 if not.
      */
-    int      ReadDescr( LINE_READER* aReader );
+    int ReadDescr( LINE_READER* aReader );
 
-    /** virtual function GetPosition
+    /**
+     * Function GetPosition
      * @return a wxPoint, position of the first point of the outline
      */
     wxPoint& GetPosition();
-
 
     /**
      * Function copy
      * copy useful data from the source.
      * flags and linked list pointers are NOT copied
      */
-    void     Copy( ZONE_CONTAINER* src );
+    void Copy( ZONE_CONTAINER* src );
 
-    void     DisplayInfo( EDA_DRAW_FRAME* frame );
+    void DisplayInfo( EDA_DRAW_FRAME* frame );
 
     /**
      * Function Draw
@@ -117,10 +136,10 @@ public:
      * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
      * @param offset = Draw offset (usually wxPoint(0,0))
      */
-    void     Draw( EDA_DRAW_PANEL* panel,
-                   wxDC*           DC,
-                   int             aDrawMode,
-                   const wxPoint&  offset = ZeroOffset );
+    void Draw( EDA_DRAW_PANEL* panel,
+               wxDC*           DC,
+               int             aDrawMode,
+               const wxPoint&  offset = ZeroOffset );
 
     /**
      * Function DrawDrawFilledArea
@@ -137,14 +156,14 @@ public:
 
     /**
      * Function DrawWhileCreateOutline
-     * Draws the zone outline when ir is created.
-     * The moving edges are in XOR graphic mode, old segment in draw_mode graphic mode (usually GR_OR)
-     * The closing edge has its own shape
+     * Draws the zone outline when it is created.
+     * The moving edges are in XOR graphic mode, old segment in draw_mode graphic mode
+     * (usually GR_OR).  The closing edge has its own shape.
      * @param panel = current Draw Panel
      * @param DC = current Device Context
      * @param draw_mode = draw mode: OR, XOR ..
      */
-    void     DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode = GR_OR );
+    void DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode = GR_OR );
 
 
     /* Function GetBoundingBox
@@ -159,14 +178,16 @@ public:
      * Remove insulated copper islands found in m_FilledPolysList.
      * @param aPcb = the board to analyze
      */
-    void     Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD* aPcb );
+    void Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD* aPcb );
 
     /**
      * Function CalculateSubAreaBoundaryBox
      * Calculates the bounding box of a a filled area ( list of CPolyPt )
-     * use m_FilledPolysList as list of CPolyPt (that are the corners of one or more polygons or filled areas )
+     * use m_FilledPolysList as list of CPolyPt (that are the corners of one or more
+     * polygons or filled areas )
      * @return an EDA_RECT as bounding box
-     * @param aIndexStart = index of the first corner of a polygon (filled area) in m_FilledPolysList
+     * @param aIndexStart = index of the first corner of a polygon (filled area)
+     *                      in m_FilledPolysList
      * @param aIndexEnd = index of the last corner of a polygon in m_FilledPolysList
      */
     EDA_RECT CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd );
@@ -223,7 +244,7 @@ public:
      * This function does not add holes for pads and tracks but calls
      * AddClearanceAreasPolygonsToPolysList() to do that for copper layers
      */
-    int  BuildFilledPolysListData( BOARD* aPcb );
+    int BuildFilledPolysListData( BOARD* aPcb );
 
     /**
      * Function AddClearanceAreasPolygonsToPolysList
@@ -244,7 +265,7 @@ public:
      * @param aBoolengine = the kbool engine used in Do_Operation
      * @return the corner count
      */
-    int  CopyPolygonsFromBoolengineToFilledPolysList( Bool_Engine* aBoolengine );
+    int CopyPolygonsFromBoolengineToFilledPolysList( Bool_Engine* aBoolengine );
 
     /**
      * Function CopyPolygonsFromFilledPolysListToBoolengine
@@ -253,8 +274,8 @@ public:
      * @param aGroup = group in kbool engine (GROUP_A or GROUP_B only)
      * @return the corner count
      */
-    int  CopyPolygonsFromFilledPolysListToBoolengine( Bool_Engine* aBoolengine,
-                                                      GroupType    aGroup = GROUP_A );
+    int CopyPolygonsFromFilledPolysListToBoolengine( Bool_Engine* aBoolengine,
+                                                     GroupType    aGroup = GROUP_A );
 
     /**
      * Function HitTestForCorner
@@ -263,7 +284,7 @@ public:
      * @return true if found
      * @param refPos : A wxPoint to test
      */
-    bool  HitTestForCorner( const wxPoint& refPos );
+    bool HitTestForCorner( const wxPoint& refPos );
 
     /**
      * Function HitTestForEdge
@@ -272,10 +293,10 @@ public:
      * @return true if found
      * @param refPos : A wxPoint to test
      */
-    bool  HitTestForEdge( const wxPoint& refPos );
+    bool HitTestForEdge( const wxPoint& refPos );
 
     /**
-     * Function HitTest (overlayed)
+     * Function HitTest (overloaded)
      * tests if the given EDA_RECT contains the bounds of this object.
      * @param refArea : the given EDA_RECT
      * @return bool - true if a hit, else false
@@ -293,7 +314,7 @@ public:
      * @param verbose = true to show error messages
      * @return error level (0 = no error)
      */
-    int  Fill_Zone( PCB_EDIT_FRAME* frame, wxDC* DC, bool verbose = true );
+    int Fill_Zone( PCB_EDIT_FRAME* frame, wxDC* DC, bool verbose = true );
 
     /**
      * Function Fill_Zone_Areas_With_Segments
@@ -303,7 +324,7 @@ public:
      * a list of SEGZONE items is built, line per line
      * @return number of segments created
      */
-    int  Fill_Zone_Areas_With_Segments();
+    int Fill_Zone_Areas_With_Segments();
 
     /**
      * Function UnFill
@@ -311,7 +332,7 @@ public:
      * @return true if a previous filling is removed, false if no change
      * (when no filling found)
      */
-    bool  UnFill();
+    bool UnFill();
 
     /* Geometric transformations: */
 
@@ -320,14 +341,14 @@ public:
      * Move the outlines
      * @param offset = moving vector
      */
-    void         Move( const wxPoint& offset );
+    void Move( const wxPoint& offset );
 
     /**
      * Function MoveEdge
      * Move the outline Edge. m_CornerSelection is the start point of the outline edge
      * @param offset = moving vector
      */
-    void         MoveEdge( const wxPoint& offset );
+    void MoveEdge( const wxPoint& offset );
 
     /**
      * Function Rotate
@@ -335,7 +356,7 @@ public:
      * @param centre = rot centre
      * @param angle = in 0.1 degree
      */
-    void         Rotate( const wxPoint& centre, int angle );
+    void Rotate( const wxPoint& centre, int angle );
 
     /**
      * Function Flip
@@ -351,7 +372,7 @@ public:
      * the layer is not changed
      * @param mirror_ref = vertical axis position
      */
-    void         Mirror( const wxPoint& mirror_ref );
+    void Mirror( const wxPoint& mirror_ref );
 
     /**
      * Function GetClass
@@ -427,6 +448,7 @@ public:
     };
 
     void SetCornerSmoothingType( int aType ) { cornerSmoothingType = aType; };
+
     int  GetCornerSmoothingType() const { return cornerSmoothingType; };
 
     void SetCornerRadius( unsigned int aRadius )

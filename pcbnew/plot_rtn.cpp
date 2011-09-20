@@ -1,6 +1,7 @@
-/*************************/
-/* Common plot routines. */
-/*************************/
+/**
+ * @file plot_rtn.cpp
+ * @brief Common plot routines.
+ */
 
 #include "fctsys.h"
 #include "common.h"
@@ -22,9 +23,7 @@ static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
 
 /* Creates the plot for silkscreen layers
  */
-void PCB_BASE_FRAME::Plot_Serigraphie( PLOTTER*    plotter,
-                                       int         aLayerMask,
-                                       GRTraceMode trace_mode )
+void PCB_BASE_FRAME::PlotSilkScreen( PLOTTER* plotter, int aLayerMask, GRTraceMode trace_mode )
 {
     bool          trace_val, trace_ref;
     TEXTE_MODULE* pt_texte;
@@ -56,7 +55,7 @@ void PCB_BASE_FRAME::Plot_Serigraphie( PLOTTER*    plotter,
             break;
 
         default:
-            DisplayError( this, wxT( "Plot_Serigraphie() error: unexpected Type()" ) );
+            DisplayError( this, wxT( "PlotSilkScreen() error: unexpected Type()" ) );
             break;
         }
     }
@@ -256,7 +255,7 @@ static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte, GRTraceMod
 
 
 void PlotDimension( PLOTTER* plotter, DIMENSION* Dimension, int aLayerMask,
-                   GRTraceMode trace_mode )
+                    GRTraceMode trace_mode )
 {
     DRAWSEGMENT* DrawTmp;
 
@@ -270,46 +269,46 @@ void PlotDimension( PLOTTER* plotter, DIMENSION* Dimension, int aLayerMask,
 
     PlotTextePcb( plotter, Dimension->m_Text, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->Barre_ox;
-    DrawTmp->m_Start.y = Dimension->Barre_oy;
-    DrawTmp->m_End.x = Dimension->Barre_fx;
-    DrawTmp->m_End.y = Dimension->Barre_fy;
+    DrawTmp->m_Start.x = Dimension->m_crossBarOx;
+    DrawTmp->m_Start.y = Dimension->m_crossBarOy;
+    DrawTmp->m_End.x = Dimension->m_crossBarFx;
+    DrawTmp->m_End.y = Dimension->m_crossBarFy;
     PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->TraitG_ox;
-    DrawTmp->m_Start.y = Dimension->TraitG_oy;
-    DrawTmp->m_End.x = Dimension->TraitG_fx;
-    DrawTmp->m_End.y = Dimension->TraitG_fy;
+    DrawTmp->m_Start.x = Dimension->m_featureLineGOx;
+    DrawTmp->m_Start.y = Dimension->m_featureLineGOy;
+    DrawTmp->m_End.x = Dimension->m_featureLineGFx;
+    DrawTmp->m_End.y = Dimension->m_featureLineGFy;
     PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->TraitD_ox;
-    DrawTmp->m_Start.y = Dimension->TraitD_oy;
-    DrawTmp->m_End.x = Dimension->TraitD_fx;
-    DrawTmp->m_End.y = Dimension->TraitD_fy;
+    DrawTmp->m_Start.x = Dimension->m_featureLineDOx;
+    DrawTmp->m_Start.y = Dimension->m_featureLineDOy;
+    DrawTmp->m_End.x = Dimension->m_featureLineDFx;
+    DrawTmp->m_End.y = Dimension->m_featureLineDFy;
     PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->FlecheD1_ox;
-    DrawTmp->m_Start.y = Dimension->FlecheD1_oy;
-    DrawTmp->m_End.x = Dimension->FlecheD1_fx;
-    DrawTmp->m_End.y = Dimension->FlecheD1_fy;
+    DrawTmp->m_Start.x = Dimension->m_arrowD1Ox;
+    DrawTmp->m_Start.y = Dimension->m_arrowD1Oy;
+    DrawTmp->m_End.x = Dimension->m_arrowD1Fx;
+    DrawTmp->m_End.y = Dimension->m_arrowD1Fy;
     PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->FlecheD2_ox;
-    DrawTmp->m_Start.y = Dimension->FlecheD2_oy;
-    DrawTmp->m_End.x = Dimension->FlecheD2_fx;
-    DrawTmp->m_End.y = Dimension->FlecheD2_fy;
+    DrawTmp->m_Start.x = Dimension->m_arrowD2Ox;
+    DrawTmp->m_Start.y = Dimension->m_arrowD2Oy;
+    DrawTmp->m_End.x = Dimension->m_arrowD2Fx;
+    DrawTmp->m_End.y = Dimension->m_arrowD2Fy;
     PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->FlecheG1_ox;
-    DrawTmp->m_Start.y = Dimension->FlecheG1_oy;
-    DrawTmp->m_End.x = Dimension->FlecheG1_fx;
-    DrawTmp->m_End.y = Dimension->FlecheG1_fy;
+    DrawTmp->m_Start.x = Dimension->m_arrowG1Ox;
+    DrawTmp->m_Start.y = Dimension->m_arrowG1Oy;
+    DrawTmp->m_End.x = Dimension->m_arrowG1Fx;
+    DrawTmp->m_End.y = Dimension->m_arrowG1Fy;
     PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->FlecheG2_ox;
-    DrawTmp->m_Start.y = Dimension->FlecheG2_oy;
-    DrawTmp->m_End.x = Dimension->FlecheG2_fx;
-    DrawTmp->m_End.y = Dimension->FlecheG2_fy;
+    DrawTmp->m_Start.x = Dimension->m_arrowG2Ox;
+    DrawTmp->m_Start.y = Dimension->m_arrowG2Oy;
+    DrawTmp->m_End.x = Dimension->m_arrowG2Fx;
+    DrawTmp->m_End.y = Dimension->m_arrowG2Fy;
     PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
 
     delete DrawTmp;
@@ -367,8 +366,7 @@ void PlotPcbTarget( PLOTTER* plotter, PCB_TARGET* Mire, int aLayerMask, GRTraceM
 
 
 /* Plot footprints graphic items (outlines) */
-void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask,
-                         GRTraceMode trace_mode )
+void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask, GRTraceMode trace_mode )
 {
     for( MODULE* module = pcb->m_Modules; module; module = module->Next() )
     {
@@ -389,8 +387,7 @@ void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask,
 
 
 /* Plot a graphic item (outline) relative to a footprint */
-void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
-                        GRTraceMode trace_mode )
+void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge, GRTraceMode trace_mode )
 {
     int     type_trace;         /* Type of item to plot. */
     int     thickness;          /* Segment thickness. */
@@ -467,8 +464,7 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
 
 
 /* Plot a PCB Text, i;e. a text found on a copper or technical layer */
-void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int aLayerMask,
-                   GRTraceMode trace_mode )
+void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int aLayerMask, GRTraceMode trace_mode )
 {
     int     orient, thickness;
     wxPoint pos;
@@ -686,7 +682,7 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_
     case LAYER_N_15:
     case LAST_COPPER_LAYER:
         Plot_Standard_Layer( plotter, layer_mask, true, trace_mode,
-                            g_PcbPlotOptions.m_SkipNPTH_Pads );
+                             g_PcbPlotOptions.m_SkipNPTH_Pads );
 
         // Adding drill marks, if required and if the plotter is able to plot them:
         if( g_PcbPlotOptions.m_DrillShapeOpt != PCB_PLOT_PARAMS::NO_DRILL_SHAPE )
@@ -711,7 +707,7 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_
         break;
 
     default:
-        Plot_Serigraphie( plotter, layer_mask, trace_mode );
+        PlotSilkScreen( plotter, layer_mask, trace_mode );
 
         // Gerber: Subtract soldermask from silkscreen if enabled
         if( plotter->GetPlotterType() == PLOT_FORMAT_GERBER

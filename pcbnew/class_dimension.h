@@ -1,12 +1,17 @@
-/******************************/
-/* DIMENSION class definition */
-/******************************/
+/**
+ * @file class_dimension.h
+ * @brief DIMENSION class definition.
+ */
 
 #ifndef DIMENSION_H
 #define DIMENSION_H
 
-#include "base_struct.h"
-#include "richio.h"
+#include "class_board_item.h"
+
+
+class EDA_RECT;
+class READER;
+class EDA_DRAW_PANEL;
 
 
 class DIMENSION : public BOARD_ITEM
@@ -19,13 +24,13 @@ public:
     int        m_Value; /* value of  PCB dimensions. */
 
     TEXTE_PCB* m_Text;
-    int        Barre_ox, Barre_oy, Barre_fx, Barre_fy;
-    int        TraitG_ox, TraitG_oy, TraitG_fx, TraitG_fy;
-    int        TraitD_ox, TraitD_oy, TraitD_fx, TraitD_fy;
-    int        FlecheD1_ox, FlecheD1_oy, FlecheD1_fx, FlecheD1_fy;
-    int        FlecheD2_ox, FlecheD2_oy, FlecheD2_fx, FlecheD2_fy;
-    int        FlecheG1_ox, FlecheG1_oy, FlecheG1_fx, FlecheG1_fy;
-    int        FlecheG2_ox, FlecheG2_oy, FlecheG2_fx, FlecheG2_fy;
+    int        m_crossBarOx, m_crossBarOy, m_crossBarFx, m_crossBarFy;
+    int        m_featureLineGOx, m_featureLineGOy, m_featureLineGFx, m_featureLineGFy;
+    int        m_featureLineDOx, m_featureLineDOy, m_featureLineDFx, m_featureLineDFy;
+    int        m_arrowD1Ox, m_arrowD1Oy, m_arrowD1Fx, m_arrowD1Fy;
+    int        m_arrowD2Ox, m_arrowD2Oy, m_arrowD2Fx, m_arrowD2Fy;
+    int        m_arrowG1Ox, m_arrowG1Oy, m_arrowG1Fx, m_arrowG1Fy;
+    int        m_arrowG2Ox, m_arrowG2Oy, m_arrowG2Fx, m_arrowG2Fy;
 
 public:
     DIMENSION( BOARD_ITEM* aParent );

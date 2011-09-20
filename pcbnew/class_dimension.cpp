@@ -1,6 +1,6 @@
-/*****************************/
-/* DIMENSION class definition */
-/*****************************/
+/**
+ * @file class_dimension.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -13,6 +13,7 @@
 #include "kicad_string.h"
 #include "protos.h"
 #include "richio.h"
+
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, TYPE_DIMENSION )
@@ -32,25 +33,18 @@ DIMENSION::~DIMENSION()
 }
 
 
-/* Setup the dimension text */
 void DIMENSION::SetText( const wxString& NewText )
 {
     m_Text->m_Text = NewText;
 }
 
 
-/* Return the dimension text
-*/
 wxString DIMENSION::GetText( void ) const
 {
     return m_Text->m_Text;
 }
 
-/**
- * Function SetLayer
- * sets the layer this item is on.
- * @param aLayer The layer number.
- */
+
 void  DIMENSION::SetLayer( int aLayer )
 {
     m_Layer = aLayer;
@@ -69,34 +63,34 @@ void DIMENSION::Copy( DIMENSION* source )
     m_TimeStamp = GetTimeStamp();
     m_Text->Copy( source->m_Text );
 
-    Barre_ox    = source->Barre_ox;
-    Barre_oy    = source->Barre_oy;
-    Barre_fx    = source->Barre_fx;
-    Barre_fy    = source->Barre_fy;
-    TraitG_ox   = source->TraitG_ox;
-    TraitG_oy   = source->TraitG_oy;
-    TraitG_fx   = source->TraitG_fx;
-    TraitG_fy   = source->TraitG_fy;
-    TraitD_ox   = source->TraitD_ox;
-    TraitD_oy   = source->TraitD_oy;
-    TraitD_fx   = source->TraitD_fx;
-    TraitD_fy   = source->TraitD_fy;
-    FlecheD1_ox = source->FlecheD1_ox;
-    FlecheD1_oy = source->FlecheD1_oy;
-    FlecheD1_fx = source->FlecheD1_fx;
-    FlecheD1_fy = source->FlecheD1_fy;
-    FlecheD2_ox = source->FlecheD2_ox;
-    FlecheD2_oy = source->FlecheD2_oy;
-    FlecheD2_fx = source->FlecheD2_fx;
-    FlecheD2_fy = source->FlecheD2_fy;
-    FlecheG1_ox = source->FlecheG1_ox;
-    FlecheG1_oy = source->FlecheG1_oy;
-    FlecheG1_fx = source->FlecheG1_fx;
-    FlecheG1_fy = source->FlecheG1_fy;
-    FlecheG2_ox = source->FlecheG2_ox;
-    FlecheG2_oy = source->FlecheG2_oy;
-    FlecheG2_fx = source->FlecheG2_fx;
-    FlecheG2_fy = source->FlecheG2_fy;
+    m_crossBarOx    = source->m_crossBarOx;
+    m_crossBarOy    = source->m_crossBarOy;
+    m_crossBarFx    = source->m_crossBarFx;
+    m_crossBarFy    = source->m_crossBarFy;
+    m_featureLineGOx   = source->m_featureLineGOx;
+    m_featureLineGOy   = source->m_featureLineGOy;
+    m_featureLineGFx   = source->m_featureLineGFx;
+    m_featureLineGFy   = source->m_featureLineGFy;
+    m_featureLineDOx   = source->m_featureLineDOx;
+    m_featureLineDOy   = source->m_featureLineDOy;
+    m_featureLineDFx   = source->m_featureLineDFx;
+    m_featureLineDFy   = source->m_featureLineDFy;
+    m_arrowD1Ox = source->m_arrowD1Ox;
+    m_arrowD1Oy = source->m_arrowD1Oy;
+    m_arrowD1Fx = source->m_arrowD1Fx;
+    m_arrowD1Fy = source->m_arrowD1Fy;
+    m_arrowD2Ox = source->m_arrowD2Ox;
+    m_arrowD2Oy = source->m_arrowD2Oy;
+    m_arrowD2Fx = source->m_arrowD2Fx;
+    m_arrowD2Fy = source->m_arrowD2Fy;
+    m_arrowG1Ox = source->m_arrowG1Ox;
+    m_arrowG1Oy = source->m_arrowG1Oy;
+    m_arrowG1Fx = source->m_arrowG1Fx;
+    m_arrowG1Fy = source->m_arrowG1Fy;
+    m_arrowG2Ox = source->m_arrowG2Ox;
+    m_arrowG2Oy = source->m_arrowG2Oy;
+    m_arrowG2Fx = source->m_arrowG2Fx;
+    m_arrowG2Fy = source->m_arrowG2Fy;
 }
 
 
@@ -165,56 +159,56 @@ bool DIMENSION::ReadDimensionDescr( LINE_READER* aReader )
             case 'b':
                 sscanf( Line + 2, " %d %d %d %d %d %d",
                         &Dummy,
-                        &Barre_ox, &Barre_oy,
-                        &Barre_fx, &Barre_fy,
+                        &m_crossBarOx, &m_crossBarOy,
+                        &m_crossBarFx, &m_crossBarFy,
                         &m_Width );
                 break;
 
             case 'd':
                 sscanf( Line + 2, " %d %d %d %d %d %d",
                         &Dummy,
-                        &TraitD_ox, &TraitD_oy,
-                        &TraitD_fx, &TraitD_fy,
+                        &m_featureLineDOx, &m_featureLineDOy,
+                        &m_featureLineDFx, &m_featureLineDFy,
                         &Dummy );
                 break;
 
             case 'g':
                 sscanf( Line + 2, " %d %d %d %d %d %d",
                         &Dummy,
-                        &TraitG_ox, &TraitG_oy,
-                        &TraitG_fx, &TraitG_fy,
+                        &m_featureLineGOx, &m_featureLineGOy,
+                        &m_featureLineGFx, &m_featureLineGFy,
                         &Dummy );
                 break;
 
             case '1':
                 sscanf( Line + 2, " %d %d %d %d %d %d",
                         &Dummy,
-                        &FlecheD1_ox, &FlecheD1_oy,
-                        &FlecheD1_fx, &FlecheD1_fy,
+                        &m_arrowD1Ox, &m_arrowD1Oy,
+                        &m_arrowD1Fx, &m_arrowD1Fy,
                         &Dummy );
                 break;
 
             case '2':
                 sscanf( Line + 2, " %d %d %d %d %d %d",
                         &Dummy,
-                        &FlecheD2_ox, &FlecheD2_oy,
-                        &FlecheD2_fx, &FlecheD2_fy,
+                        &m_arrowD2Ox, &m_arrowD2Oy,
+                        &m_arrowD2Fx, &m_arrowD2Fy,
                         &Dummy );
                 break;
 
             case '3':
                 sscanf( Line + 2, " %d %d %d %d %d %d\n",
                         &Dummy,
-                        &FlecheG1_ox, &FlecheG1_oy,
-                        &FlecheG1_fx, &FlecheG1_fy,
+                        &m_arrowG1Ox, &m_arrowG1Oy,
+                        &m_arrowG1Fx, &m_arrowG1Fy,
                         &Dummy );
                 break;
 
             case '4':
                 sscanf( Line + 2, " %d %d %d %d %d %d",
                         &Dummy,
-                        &FlecheG2_ox, &FlecheG2_oy,
-                        &FlecheG2_fx, &FlecheG2_fy,
+                        &m_arrowG2Ox, &m_arrowG2Oy,
+                        &m_arrowG2Fx, &m_arrowG2Fy,
                         &Dummy );
                 break;
             }
@@ -227,50 +221,41 @@ bool DIMENSION::ReadDimensionDescr( LINE_READER* aReader )
 }
 
 
-/**
- * Function Move
- * @param offset : moving vector
- */
 void DIMENSION::Move(const wxPoint& offset)
 {
     m_Pos += offset;
     m_Text->m_Pos += offset;
-    Barre_ox    += offset.x;
-    Barre_oy    += offset.y;
-    Barre_fx    += offset.x;
-    Barre_fy    += offset.y;
-    TraitG_ox   += offset.x;
-    TraitG_oy   += offset.y;
-    TraitG_fx   += offset.x;
-    TraitG_fy   += offset.y;
-    TraitD_ox   += offset.x;
-    TraitD_oy   += offset.y;
-    TraitD_fx   += offset.x;
-    TraitD_fy   += offset.y;
-    FlecheG1_ox += offset.x;
-    FlecheG1_oy += offset.y;
-    FlecheG1_fx += offset.x;
-    FlecheG1_fy += offset.y;
-    FlecheG2_ox += offset.x;
-    FlecheG2_oy += offset.y;
-    FlecheG2_fx += offset.x;
-    FlecheG2_fy += offset.y;
-    FlecheD1_ox += offset.x;
-    FlecheD1_oy += offset.y;
-    FlecheD1_fx += offset.x;
-    FlecheD1_fy += offset.y;
-    FlecheD2_ox += offset.x;
-    FlecheD2_oy += offset.y;
-    FlecheD2_fx += offset.x;
-    FlecheD2_fy += offset.y;
+    m_crossBarOx    += offset.x;
+    m_crossBarOy    += offset.y;
+    m_crossBarFx    += offset.x;
+    m_crossBarFy    += offset.y;
+    m_featureLineGOx   += offset.x;
+    m_featureLineGOy   += offset.y;
+    m_featureLineGFx   += offset.x;
+    m_featureLineGFy   += offset.y;
+    m_featureLineDOx   += offset.x;
+    m_featureLineDOy   += offset.y;
+    m_featureLineDFx   += offset.x;
+    m_featureLineDFy   += offset.y;
+    m_arrowG1Ox += offset.x;
+    m_arrowG1Oy += offset.y;
+    m_arrowG1Fx += offset.x;
+    m_arrowG1Fy += offset.y;
+    m_arrowG2Ox += offset.x;
+    m_arrowG2Oy += offset.y;
+    m_arrowG2Fx += offset.x;
+    m_arrowG2Fy += offset.y;
+    m_arrowD1Ox += offset.x;
+    m_arrowD1Oy += offset.y;
+    m_arrowD1Fx += offset.x;
+    m_arrowD1Fy += offset.y;
+    m_arrowD2Ox += offset.x;
+    m_arrowD2Oy += offset.y;
+    m_arrowD2Fx += offset.x;
+    m_arrowD2Fy += offset.y;
 }
 
 
-/**
- * Function Rotate
- * @param aRotCentre - the rotation point.
- * @param aAngle - the rotation angle in 0.1 degree.
- */
 void DIMENSION::Rotate(const wxPoint& aRotCentre, int aAngle)
 {
     RotatePoint( &m_Pos, aRotCentre, aAngle );
@@ -284,28 +269,23 @@ void DIMENSION::Rotate(const wxPoint& aRotCentre, int aAngle)
     if( ( m_Text->m_Orient > 900 ) && ( m_Text->m_Orient <2700 ) )
         m_Text->m_Orient -= 1800;
 
-    RotatePoint( &Barre_ox, &Barre_oy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &Barre_fx, &Barre_fy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &TraitG_ox, &TraitG_oy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &TraitG_fx, &TraitG_fy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &TraitD_ox, &TraitD_oy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &TraitD_fx, &TraitD_fy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &FlecheG1_ox, &FlecheG1_oy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &FlecheG1_fx, &FlecheG1_fy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &FlecheG2_ox, &FlecheG2_oy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &FlecheG2_fx, &FlecheG2_fy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &FlecheD1_ox, &FlecheD1_oy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &FlecheD1_fx, &FlecheD1_fy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &FlecheD2_ox, &FlecheD2_oy, aRotCentre.x, aRotCentre.y, aAngle );
-    RotatePoint( &FlecheD2_fx, &FlecheD2_fy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_crossBarOx, &m_crossBarOy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_crossBarFx, &m_crossBarFy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_featureLineGOx, &m_featureLineGOy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_featureLineGFx, &m_featureLineGFy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_featureLineDOx, &m_featureLineDOy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_featureLineDFx, &m_featureLineDFy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_arrowG1Ox, &m_arrowG1Oy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_arrowG1Fx, &m_arrowG1Fy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_arrowG2Ox, &m_arrowG2Oy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_arrowG2Fx, &m_arrowG2Fy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_arrowD1Ox, &m_arrowD1Oy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_arrowD1Fx, &m_arrowD1Fy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_arrowD2Ox, &m_arrowD2Oy, aRotCentre.x, aRotCentre.y, aAngle );
+    RotatePoint( &m_arrowD2Fx, &m_arrowD2Fy, aRotCentre.x, aRotCentre.y, aAngle );
 }
 
 
-/**
- * Function Flip
- * Flip this object, i.e. change the board side for this object
- * @param aCentre - the rotation point.
- */
 void DIMENSION::Flip(const wxPoint& aCentre )
 {
     Mirror( aCentre );
@@ -313,13 +293,6 @@ void DIMENSION::Flip(const wxPoint& aCentre )
 }
 
 
-/**
- * Function Mirror
- * Mirror the Dimension , relative to a given horizontal axis
- * the text is not mirrored. only its position (and angle) is mirrored
- * the layer is not changed
- * @param axis_pos : vertical axis position
- */
 void DIMENSION::Mirror(const wxPoint& axis_pos)
 {
 #define INVERT( pos )       (pos) = axis_pos.y - ( (pos) - axis_pos.y )
@@ -334,26 +307,27 @@ void DIMENSION::Mirror(const wxPoint& axis_pos)
     if( ( m_Text->m_Orient > 900 ) && ( m_Text->m_Orient < 2700 ) )
         m_Text->m_Orient -= 1800;
 
-    INVERT( Barre_oy );
-    INVERT( Barre_fy );
-    INVERT( TraitG_oy );
-    INVERT( TraitG_fy );
-    INVERT( TraitD_oy );
-    INVERT( TraitD_fy );
-    INVERT( FlecheG1_oy );
-    INVERT( FlecheG1_fy );
-    INVERT( FlecheG2_oy );
-    INVERT( FlecheG2_fy );
-    INVERT( FlecheD1_oy );
-    INVERT( FlecheD1_fy );
-    INVERT( FlecheD2_oy );
-    INVERT( FlecheD2_fy );
+    INVERT( m_crossBarOy );
+    INVERT( m_crossBarFy );
+    INVERT( m_featureLineGOy );
+    INVERT( m_featureLineGFy );
+    INVERT( m_featureLineDOy );
+    INVERT( m_featureLineDFy );
+    INVERT( m_arrowG1Oy );
+    INVERT( m_arrowG1Fy );
+    INVERT( m_arrowG2Oy );
+    INVERT( m_arrowG2Fy );
+    INVERT( m_arrowD1Oy );
+    INVERT( m_arrowD1Fy );
+    INVERT( m_arrowD2Oy );
+    INVERT( m_arrowD2Fy );
 }
 
 
 bool DIMENSION::Save( FILE* aFile ) const
 {
     bool rc = false;
+
     // note: COTATION was the previous name of DIMENSION
     // this old keyword is used here for compatibility
     const char keyWordLine[] = "$COTATION\n";
@@ -378,33 +352,33 @@ bool DIMENSION::Save( FILE* aFile ) const
              m_Text->m_Mirror ? 0 : 1 );
 
     fprintf( aFile, "Sb %d %d %d %d %d %d\n", S_SEGMENT,
-             Barre_ox, Barre_oy,
-             Barre_fx, Barre_fy, m_Width );
+             m_crossBarOx, m_crossBarOy,
+             m_crossBarFx, m_crossBarFy, m_Width );
 
     fprintf( aFile, "Sd %d %d %d %d %d %d\n", S_SEGMENT,
-             TraitD_ox, TraitD_oy,
-             TraitD_fx, TraitD_fy, m_Width );
+             m_featureLineDOx, m_featureLineDOy,
+             m_featureLineDFx, m_featureLineDFy, m_Width );
 
     fprintf( aFile, "Sg %d %d %d %d %d %d\n", S_SEGMENT,
-             TraitG_ox, TraitG_oy,
-             TraitG_fx, TraitG_fy, m_Width );
+             m_featureLineGOx, m_featureLineGOy,
+             m_featureLineGFx, m_featureLineGFy, m_Width );
 
     fprintf( aFile, "S1 %d %d %d %d %d %d\n", S_SEGMENT,
-             FlecheD1_ox, FlecheD1_oy,
-             FlecheD1_fx, FlecheD1_fy, m_Width );
+             m_arrowD1Ox, m_arrowD1Oy,
+             m_arrowD1Fx, m_arrowD1Fy, m_Width );
 
     fprintf( aFile, "S2 %d %d %d %d %d %d\n", S_SEGMENT,
-             FlecheD2_ox, FlecheD2_oy,
-             FlecheD2_fx, FlecheD2_fy, m_Width );
+             m_arrowD2Ox, m_arrowD2Oy,
+             m_arrowD2Fx, m_arrowD2Fy, m_Width );
 
 
     fprintf( aFile, "S3 %d %d %d %d %d %d\n", S_SEGMENT,
-             FlecheG1_ox, FlecheG1_oy,
-             FlecheG1_fx, FlecheG1_fy, m_Width );
+             m_arrowG1Ox, m_arrowG1Oy,
+             m_arrowG1Fx, m_arrowG1Fy, m_Width );
 
     fprintf( aFile, "S4 %d %d %d %d %d %d\n", S_SEGMENT,
-             FlecheG2_ox, FlecheG2_oy,
-             FlecheG2_fx, FlecheG2_fy, m_Width );
+             m_arrowG2Ox, m_arrowG2Oy,
+             m_arrowG2Fx, m_arrowG2Fy, m_Width );
 
     if( fputs( keyWordLineEnd, aFile ) == EOF )
         goto out;
@@ -416,32 +390,26 @@ out:
 }
 
 
-/**
- * Function AdjustDimensionDetails
- * Calculate coordinates of segments used to draw the dimension.
- * @param aDoNotChangeText (bool) if false, the dimension text is initialized
- */
 void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 {
     #define ARROW_SIZE 500    //size of arrows
     int      ii;
-    int      mesure, deltax, deltay;            /* valeur de la mesure sur les axes X et Y */
-    int      fleche_up_X = 0, fleche_up_Y = 0;  /* coord des fleches : barre / */
-    int      fleche_dw_X = 0, fleche_dw_Y = 0;  /* coord des fleches : barre \ */
-    int      hx, hy;                            /* coord des traits de rappel de cote */
+    int      mesure, deltax, deltay;            /* value of the measure on X and Y axes */
+    int      arrow_up_X = 0, arrow_up_Y = 0;    /* coordinates of arrow line / */
+    int      arrow_dw_X = 0, arrow_dw_Y = 0;    /* coordinates of arrow line \ */
+    int      hx, hy;                            /* dimension line interval */
     float    angle, angle_f;
     wxString msg;
 
     /* Init layer : */
     m_Text->SetLayer( GetLayer() );
 
-    /* calculate the size of the dimension
-     * (text + line above the text) */
+    /* calculate the size of the dimension (text + line above the text) */
     ii = m_Text->m_Size.y +
          m_Text->m_Thickness + (m_Width * 3);
 
-    deltax = TraitD_ox - TraitG_ox;
-    deltay = TraitD_oy - TraitG_oy;
+    deltax = m_featureLineDOx - m_featureLineGOx;
+    deltay = m_featureLineDOy - m_featureLineGOy;
 
     /* Calculate dimension value */
     mesure = wxRound(hypot( (double) deltax, (double) deltay ) );
@@ -451,69 +419,69 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     else
         angle = 0.0;
 
-    /* Calcul des parametre dimensions X et Y des fleches et traits de cotes */
+    /* Calculation of parameters X and Y dimensions of the arrows and lines. */
     hx = hy = ii;
 
-    /* On tient compte de l'inclinaison de la cote */
+    /* Taking into account the slope of the side lines. */
     if( mesure )
     {
         hx = (abs) ( (int) ( ( (double) deltay * hx ) / mesure ) );
         hy = (abs) ( (int) ( ( (double) deltax * hy ) / mesure ) );
 
-        if( TraitG_ox > Barre_ox )
+        if( m_featureLineGOx > m_crossBarOx )
             hx = -hx;
 
-        if( TraitG_ox == Barre_ox )
+        if( m_featureLineGOx == m_crossBarOx )
             hx = 0;
 
-        if( TraitG_oy > Barre_oy )
+        if( m_featureLineGOy > m_crossBarOy )
             hy = -hy;
 
-        if( TraitG_oy == Barre_oy )
+        if( m_featureLineGOy == m_crossBarOy )
             hy = 0;
 
         angle_f     = angle + (M_PI * 27.5 / 180);
-        fleche_up_X = (int) ( ARROW_SIZE * cos( angle_f ) );
-        fleche_up_Y = (int) ( ARROW_SIZE * sin( angle_f ) );
+        arrow_up_X = (int) ( ARROW_SIZE * cos( angle_f ) );
+        arrow_up_Y = (int) ( ARROW_SIZE * sin( angle_f ) );
         angle_f     = angle - (M_PI * 27.5 / 180);
-        fleche_dw_X = (int) ( ARROW_SIZE * cos( angle_f ) );
-        fleche_dw_Y = (int) ( ARROW_SIZE * sin( angle_f ) );
+        arrow_dw_X = (int) ( ARROW_SIZE * cos( angle_f ) );
+        arrow_dw_Y = (int) ( ARROW_SIZE * sin( angle_f ) );
     }
 
 
-    FlecheG1_ox = Barre_ox;
-    FlecheG1_oy = Barre_oy;
-    FlecheG1_fx = Barre_ox + fleche_up_X;
-    FlecheG1_fy = Barre_oy + fleche_up_Y;
+    m_arrowG1Ox = m_crossBarOx;
+    m_arrowG1Oy = m_crossBarOy;
+    m_arrowG1Fx = m_crossBarOx + arrow_up_X;
+    m_arrowG1Fy = m_crossBarOy + arrow_up_Y;
 
-    FlecheG2_ox = Barre_ox;
-    FlecheG2_oy = Barre_oy;
-    FlecheG2_fx = Barre_ox + fleche_dw_X;
-    FlecheG2_fy = Barre_oy + fleche_dw_Y;
+    m_arrowG2Ox = m_crossBarOx;
+    m_arrowG2Oy = m_crossBarOy;
+    m_arrowG2Fx = m_crossBarOx + arrow_dw_X;
+    m_arrowG2Fy = m_crossBarOy + arrow_dw_Y;
 
-    /*la fleche de droite est symetrique a celle de gauche:
-     *  / = -\  et  \ = -/
+    /* The right arrow is symmetrical to the left.
+     *  / = -\  and  \ = -/
      */
-    FlecheD1_ox = Barre_fx;
-    FlecheD1_oy = Barre_fy;
-    FlecheD1_fx = Barre_fx - fleche_dw_X;
-    FlecheD1_fy = Barre_fy - fleche_dw_Y;
+    m_arrowD1Ox = m_crossBarFx;
+    m_arrowD1Oy = m_crossBarFy;
+    m_arrowD1Fx = m_crossBarFx - arrow_dw_X;
+    m_arrowD1Fy = m_crossBarFy - arrow_dw_Y;
 
-    FlecheD2_ox = Barre_fx;
-    FlecheD2_oy = Barre_fy;
-    FlecheD2_fx = Barre_fx - fleche_up_X;
-    FlecheD2_fy = Barre_fy - fleche_up_Y;
+    m_arrowD2Ox = m_crossBarFx;
+    m_arrowD2Oy = m_crossBarFy;
+    m_arrowD2Fx = m_crossBarFx - arrow_up_X;
+    m_arrowD2Fy = m_crossBarFy - arrow_up_Y;
 
 
-    TraitG_fx = Barre_ox + hx;
-    TraitG_fy = Barre_oy + hy;
+    m_featureLineGFx = m_crossBarOx + hx;
+    m_featureLineGFy = m_crossBarOy + hy;
 
-    TraitD_fx = Barre_fx + hx;
-    TraitD_fy = Barre_fy + hy;
+    m_featureLineDFx = m_crossBarFx + hx;
+    m_featureLineDFy = m_crossBarFy + hy;
 
     /* Calculate the better text position and orientation: */
-    m_Pos.x = m_Text->m_Pos.x = (Barre_fx + TraitG_fx) / 2;
-    m_Pos.y = m_Text->m_Pos.y = (Barre_fy + TraitG_fy) / 2;
+    m_Pos.x = m_Text->m_Pos.x = (m_crossBarFx + m_featureLineGFx) / 2;
+    m_Pos.y = m_Text->m_Pos.y = (m_crossBarFy + m_featureLineGFy) / 2;
 
     m_Text->m_Orient = -(int) (angle * 1800 / M_PI);
 
@@ -535,8 +503,6 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 }
 
 
-/* Print 1 dimension: segments and text
- */
 void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxPoint& offset )
 {
     int ox, oy, typeaff, width, gcolor;
@@ -567,56 +533,56 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxP
 
     case FILLED:
         GRLine( &panel->m_ClipBox, DC,
-                Barre_ox - ox, Barre_oy - oy,
-                Barre_fx - ox, Barre_fy - oy, width, gcolor );
+                m_crossBarOx - ox, m_crossBarOy - oy,
+                m_crossBarFx - ox, m_crossBarFy - oy, width, gcolor );
         GRLine( &panel->m_ClipBox, DC,
-                TraitG_ox - ox, TraitG_oy - oy,
-                TraitG_fx - ox, TraitG_fy - oy, width, gcolor );
+                m_featureLineGOx - ox, m_featureLineGOy - oy,
+                m_featureLineGFx - ox, m_featureLineGFy - oy, width, gcolor );
         GRLine( &panel->m_ClipBox, DC,
-                TraitD_ox - ox, TraitD_oy - oy,
-                TraitD_fx - ox, TraitD_fy - oy, width, gcolor );
+                m_featureLineDOx - ox, m_featureLineDOy - oy,
+                m_featureLineDFx - ox, m_featureLineDFy - oy, width, gcolor );
         GRLine( &panel->m_ClipBox, DC,
-                FlecheD1_ox - ox, FlecheD1_oy - oy,
-                FlecheD1_fx - ox, FlecheD1_fy - oy, width, gcolor );
+                m_arrowD1Ox - ox, m_arrowD1Oy - oy,
+                m_arrowD1Fx - ox, m_arrowD1Fy - oy, width, gcolor );
         GRLine( &panel->m_ClipBox, DC,
-                FlecheD2_ox - ox, FlecheD2_oy - oy,
-                FlecheD2_fx - ox, FlecheD2_fy - oy, width, gcolor );
+                m_arrowD2Ox - ox, m_arrowD2Oy - oy,
+                m_arrowD2Fx - ox, m_arrowD2Fy - oy, width, gcolor );
         GRLine( &panel->m_ClipBox, DC,
-                FlecheG1_ox - ox, FlecheG1_oy - oy,
-                FlecheG1_fx - ox, FlecheG1_fy - oy, width, gcolor );
+                m_arrowG1Ox - ox, m_arrowG1Oy - oy,
+                m_arrowG1Fx - ox, m_arrowG1Fy - oy, width, gcolor );
         GRLine( &panel->m_ClipBox, DC,
-                FlecheG2_ox - ox, FlecheG2_oy - oy,
-                FlecheG2_fx - ox, FlecheG2_fy - oy, width, gcolor );
+                m_arrowG2Ox - ox, m_arrowG2Oy - oy,
+                m_arrowG2Fx - ox, m_arrowG2Fy - oy, width, gcolor );
         break;
 
     case SKETCH:
         GRCSegm( &panel->m_ClipBox, DC,
-                 Barre_ox - ox, Barre_oy - oy,
-                 Barre_fx - ox, Barre_fy - oy,
+                 m_crossBarOx - ox, m_crossBarOy - oy,
+                 m_crossBarFx - ox, m_crossBarFy - oy,
                  width, gcolor );
         GRCSegm( &panel->m_ClipBox, DC,
-                 TraitG_ox - ox, TraitG_oy - oy,
-                 TraitG_fx - ox, TraitG_fy - oy,
+                 m_featureLineGOx - ox, m_featureLineGOy - oy,
+                 m_featureLineGFx - ox, m_featureLineGFy - oy,
                  width, gcolor );
         GRCSegm( &panel->m_ClipBox, DC,
-                 TraitD_ox - ox, TraitD_oy - oy,
-                 TraitD_fx - ox, TraitD_fy - oy,
+                 m_featureLineDOx - ox, m_featureLineDOy - oy,
+                 m_featureLineDFx - ox, m_featureLineDFy - oy,
                  width, gcolor );
         GRCSegm( &panel->m_ClipBox, DC,
-                 FlecheD1_ox - ox, FlecheD1_oy - oy,
-                 FlecheD1_fx - ox, FlecheD1_fy - oy,
+                 m_arrowD1Ox - ox, m_arrowD1Oy - oy,
+                 m_arrowD1Fx - ox, m_arrowD1Fy - oy,
                  width, gcolor );
         GRCSegm( &panel->m_ClipBox, DC,
-                 FlecheD2_ox - ox, FlecheD2_oy - oy,
-                 FlecheD2_fx - ox, FlecheD2_fy - oy,
+                 m_arrowD2Ox - ox, m_arrowD2Oy - oy,
+                 m_arrowD2Fx - ox, m_arrowD2Fy - oy,
                  width, gcolor );
         GRCSegm( &panel->m_ClipBox, DC,
-                 FlecheG1_ox - ox, FlecheG1_oy - oy,
-                 FlecheG1_fx - ox, FlecheG1_fy - oy,
+                 m_arrowG1Ox - ox, m_arrowG1Oy - oy,
+                 m_arrowG1Fx - ox, m_arrowG1Fy - oy,
                  width, gcolor );
         GRCSegm( &panel->m_ClipBox, DC,
-                 FlecheG2_ox - ox, FlecheG2_oy - oy,
-                 FlecheG2_fx - ox, FlecheG2_fy - oy,
+                 m_arrowG2Ox - ox, m_arrowG2Oy - oy,
+                 m_arrowG2Fx - ox, m_arrowG2Fy - oy,
                  width, gcolor );
         break;
     }
@@ -631,102 +597,96 @@ void DIMENSION::DisplayInfo( EDA_DRAW_FRAME* frame )
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param ref_pos A wxPoint to test
- * @return bool - true if a hit, else false
- */
-bool DIMENSION::HitTest( const wxPoint& ref_pos )
+bool DIMENSION::HitTest( const wxPoint& aPoint )
 {
-    int             ux0, uy0;
-    int             dx, dy, spot_cX, spot_cY;
+    int ux0, uy0;
+    int dx, dy, spot_cX, spot_cY;
 
-    if( m_Text && m_Text->TextHitTest( ref_pos ) )
-            return true;
+    if( m_Text && m_Text->TextHitTest( aPoint ) )
+        return true;
 
     /* Locate SEGMENTS? */
-    ux0 = Barre_ox;
-    uy0 = Barre_oy;
+    ux0 = m_crossBarOx;
+    uy0 = m_crossBarOy;
 
     /* Recalculate coordinates with ux0, uy0 = origin. */
-    dx = Barre_fx - ux0;
-    dy = Barre_fy - uy0;
+    dx = m_crossBarFx - ux0;
+    dy = m_crossBarFy - uy0;
 
-    spot_cX = ref_pos.x - ux0;
-    spot_cY = ref_pos.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
-        return true;
-
-    ux0 = TraitG_ox;
-    uy0 = TraitG_oy;
-
-    dx = TraitG_fx - ux0;
-    dy = TraitG_fy - uy0;
-
-    spot_cX = ref_pos.x - ux0;
-    spot_cY = ref_pos.y - uy0;
+    spot_cX = aPoint.x - ux0;
+    spot_cY = aPoint.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = TraitD_ox;
-    uy0 = TraitD_oy;
+    ux0 = m_featureLineGOx;
+    uy0 = m_featureLineGOy;
 
-    dx = TraitD_fx - ux0;
-    dy = TraitD_fy - uy0;
+    dx = m_featureLineGFx - ux0;
+    dy = m_featureLineGFy - uy0;
 
-    spot_cX = ref_pos.x - ux0;
-    spot_cY = ref_pos.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
-        return true;
-
-    ux0 = FlecheD1_ox;
-    uy0 = FlecheD1_oy;
-
-    dx = FlecheD1_fx - ux0;
-    dy = FlecheD1_fy - uy0;
-
-    spot_cX = ref_pos.x - ux0;
-    spot_cY = ref_pos.y - uy0;
+    spot_cX = aPoint.x - ux0;
+    spot_cY = aPoint.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = FlecheD2_ox;
-    uy0 = FlecheD2_oy;
+    ux0 = m_featureLineDOx;
+    uy0 = m_featureLineDOy;
 
-    dx = FlecheD2_fx - ux0;
-    dy = FlecheD2_fy - uy0;
+    dx = m_featureLineDFx - ux0;
+    dy = m_featureLineDFy - uy0;
 
-    spot_cX = ref_pos.x - ux0;
-    spot_cY = ref_pos.y - uy0;
-
-    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
-        return true;
-
-    ux0 = FlecheG1_ox;
-    uy0 = FlecheG1_oy;
-
-    dx = FlecheG1_fx - ux0;
-    dy = FlecheG1_fy - uy0;
-
-    spot_cX = ref_pos.x - ux0;
-    spot_cY = ref_pos.y - uy0;
+    spot_cX = aPoint.x - ux0;
+    spot_cY = aPoint.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
 
-    ux0 = FlecheG2_ox;
-    uy0 = FlecheG2_oy;
+    ux0 = m_arrowD1Ox;
+    uy0 = m_arrowD1Oy;
 
-    dx = FlecheG2_fx - ux0;
-    dy = FlecheG2_fy - uy0;
+    dx = m_arrowD1Fx - ux0;
+    dy = m_arrowD1Fy - uy0;
 
-    spot_cX = ref_pos.x - ux0;
-    spot_cY = ref_pos.y - uy0;
+    spot_cX = aPoint.x - ux0;
+    spot_cY = aPoint.y - uy0;
+
+    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+        return true;
+
+    ux0 = m_arrowD2Ox;
+    uy0 = m_arrowD2Oy;
+
+    dx = m_arrowD2Fx - ux0;
+    dy = m_arrowD2Fy - uy0;
+
+    spot_cX = aPoint.x - ux0;
+    spot_cY = aPoint.y - uy0;
+
+    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+        return true;
+
+    ux0 = m_arrowG1Ox;
+    uy0 = m_arrowG1Oy;
+
+    dx = m_arrowG1Fx - ux0;
+    dy = m_arrowG1Fy - uy0;
+
+    spot_cX = aPoint.x - ux0;
+    spot_cY = aPoint.y - uy0;
+
+    if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
+        return true;
+
+    ux0 = m_arrowG2Ox;
+    uy0 = m_arrowG2Oy;
+
+    dx = m_arrowG2Fx - ux0;
+    dy = m_arrowG2Fy - uy0;
+
+    spot_cX = aPoint.x - ux0;
+    spot_cY = aPoint.y - uy0;
 
     if( DistanceTest( m_Width / 2, dx, dy, spot_cX, spot_cY ) )
         return true;
@@ -735,12 +695,6 @@ bool DIMENSION::HitTest( const wxPoint& ref_pos )
 }
 
 
-/**
- * Function HitTest (overlaid)
- * tests if the given EDA_RECT intersect this object.
- * @param refArea : the given EDA_RECT
- * @return bool - true if a hit, else false
- */
 bool DIMENSION::HitTest( EDA_RECT& refArea )
 {
     if( refArea.Contains( m_Pos ) )
@@ -761,23 +715,23 @@ EDA_RECT DIMENSION::GetBoundingBox() const
     ymin = bBox.GetY();
     ymax = bBox.GetBottom();
 
-    xmin = MIN( xmin, Barre_ox );
-    xmin = MIN( xmin, Barre_fx );
-    ymin = MIN( ymin, Barre_oy );
-    ymin = MIN( ymin, Barre_fy );
-    xmax = MAX( xmax, Barre_ox );
-    xmax = MAX( xmax, Barre_fx );
-    ymax = MAX( ymax, Barre_oy );
-    ymax = MAX( ymax, Barre_fy );
+    xmin = MIN( xmin, m_crossBarOx );
+    xmin = MIN( xmin, m_crossBarFx );
+    ymin = MIN( ymin, m_crossBarOy );
+    ymin = MIN( ymin, m_crossBarFy );
+    xmax = MAX( xmax, m_crossBarOx );
+    xmax = MAX( xmax, m_crossBarFx );
+    ymax = MAX( ymax, m_crossBarOy );
+    ymax = MAX( ymax, m_crossBarFy );
 
-    xmin = MIN( xmin, TraitG_ox );
-    xmin = MIN( xmin, TraitG_fx );
-    ymin = MIN( ymin, TraitG_oy );
-    ymin = MIN( ymin, TraitG_fy );
-    xmax = MAX( xmax, TraitG_ox );
-    xmax = MAX( xmax, TraitG_fx );
-    ymax = MAX( ymax, TraitG_oy );
-    ymax = MAX( ymax, TraitG_fy );
+    xmin = MIN( xmin, m_featureLineGOx );
+    xmin = MIN( xmin, m_featureLineGFx );
+    ymin = MIN( ymin, m_featureLineGOy );
+    ymin = MIN( ymin, m_featureLineGFy );
+    xmax = MAX( xmax, m_featureLineGOx );
+    xmax = MAX( xmax, m_featureLineGFx );
+    ymax = MAX( ymax, m_featureLineGOy );
+    ymax = MAX( ymax, m_featureLineGFy );
 
     bBox.SetX( xmin );
     bBox.SetY( ymin );

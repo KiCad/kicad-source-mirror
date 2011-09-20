@@ -20,7 +20,6 @@
 
 
 /*  Forward declarations of classes. */
-class WinEDA_CvpcbFrame;
 class FOOTPRINT_EDIT_FRAME;
 class BOARD;
 class MODULE;
@@ -461,7 +460,7 @@ public:
                               bool aPlotVia, GRTraceMode aPlotMode,
                               bool aSkipNPTH_Pads = false );
 
-    void Plot_Serigraphie( PLOTTER* plotter, int masque_layer, GRTraceMode trace_mode );
+    void PlotSilkScreen( PLOTTER* plotter, int masque_layer, GRTraceMode trace_mode );
 
     /**
      * Function PlotDrillMark

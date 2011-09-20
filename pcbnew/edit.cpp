@@ -1,6 +1,7 @@
-/**************************************/
-/* edit.cpp: edit PCB implementation. */
-/**************************************/
+/**
+ * @file edit.cpp
+ * @brief Edit PCB implementation.
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -897,12 +898,12 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_DELETE_DIMENSION:
         DrawPanel->MoveCursorToCrossHair();
-        Delete_Dimension( (DIMENSION*) GetCurItem(), &dc );
+        DeleteDimension( (DIMENSION*) GetCurItem(), &dc );
         SetCurItem( NULL );
         break;
 
     case ID_POPUP_PCB_EDIT_DIMENSION:
-        Install_Edit_Dimension( (DIMENSION*) GetCurItem(), &dc );
+        ShowDimensionPropertyDialog( (DIMENSION*) GetCurItem(), &dc );
         DrawPanel->MoveCursorToCrossHair();
         break;
 
@@ -1092,7 +1093,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         break;
 
     case TYPE_DIMENSION:
-        Delete_Dimension( (DIMENSION*) Item, DC );
+        DeleteDimension( (DIMENSION*) Item, DC );
         break;
 
     case PCB_TARGET_T:

@@ -1145,9 +1145,9 @@ public:
     void Delete_Drawings_All_Layer( int aLayer );
 
     // Dimension handling:
-    void Install_Edit_Dimension( DIMENSION* Dimension, wxDC* DC );
-    DIMENSION* Begin_Dimension( DIMENSION* Dimension, wxDC* DC );
-    void Delete_Dimension( DIMENSION* Dimension, wxDC* DC );
+    void ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* aDC );
+    DIMENSION* EditDimension( DIMENSION* aDimension, wxDC* aDC );
+    void DeleteDimension( DIMENSION* aDimension, wxDC* aDC );
 
     // netlist  handling:
     void InstallNetlistFrame( wxDC* DC );

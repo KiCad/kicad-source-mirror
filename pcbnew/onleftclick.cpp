@@ -1,8 +1,7 @@
-/**************************************************************/
-/* onleftclick.cpp:                                           */
-/* function called when the left button is clicked (released) */
-/* function called when the left button is double clicked     */
-/**************************************************************/
+/**
+ * @file pcbnew/onleftclick.cpp
+ * @brief Functions called when the left button is clicked or double clicked.
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
@@ -13,7 +12,7 @@
 #include "pcbnew_id.h"
 
 
-/* Handle the left buttom mouse click, when a tool is active
+/* Handle the left button mouse click, when a tool is active
  */
 void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
@@ -286,7 +285,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             }
         }
         else if( DrawStruct && (DrawStruct->Type() == TYPE_ZONE_CONTAINER) && DrawStruct->IsNew() )
-        {   // Add a new corner to the current outline beeing created:
+        {   // Add a new corner to the current outline being created:
             DrawPanel->m_AutoPAN_Request = true;
             Begin_Zone( aDC );
             DrawStruct = GetBoard()->m_CurrentZoneContour;
@@ -349,13 +348,13 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            DrawStruct = Begin_Dimension( NULL, aDC );
+            DrawStruct = EditDimension( NULL, aDC );
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = true;
         }
         else if( DrawStruct && (DrawStruct->Type() == TYPE_DIMENSION) && DrawStruct->IsNew() )
         {
-            DrawStruct = Begin_Dimension( (DIMENSION*) DrawStruct, aDC );
+            DrawStruct = EditDimension( (DIMENSION*) DrawStruct, aDC );
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = true;
         }
@@ -535,7 +534,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case TYPE_DIMENSION:
-        Install_Edit_Dimension( (DIMENSION*) aItem, aDC );
+        ShowDimensionPropertyDialog( (DIMENSION*) aItem, aDC );
         break;
 
     case TYPE_TEXTE_MODULE:
@@ -554,4 +553,3 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
     }
 }
-
