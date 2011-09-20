@@ -39,20 +39,13 @@
      showgrid="false"
      inkscape:zoom="4.9166667"
      inkscape:cx="24"
-     inkscape:cy="39.864407"
+     inkscape:cy="39.457628"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <defs
      id="defs4">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 24 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="48 : 24 : 1"
-       inkscape:persp3d-origin="24 : 16 : 1"
-       id="perspective30" />
     <radialGradient
        id="d"
        gradientUnits="userSpaceOnUse"
@@ -78,130 +71,6 @@
          offset="1"
          id="stop13" />
     </radialGradient>
-    <mask
-       id="c">
-      <path
-         d="m-39.987 49.061-3.7123-2.2274-8.061-0.74246 0.21213-36.699 37.866 0.42426 3.7123 2.4395-1.0607 33.305-8.1671 1.4849-2.5456 2.1213z"
-         stroke="#000"
-         stroke-width="1px"
-         fill="#fff"
-         id="path16" />
-    </mask>
-    <inkscape:perspective
-       id="perspective2916"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
-    <linearGradient
-       id="h"
-       y2="14.691"
-       gradientUnits="userSpaceOnUse"
-       x2="30.431999"
-       gradientTransform="translate(6.3922,12.185)"
-       y1="12.338"
-       x1="28.079">
-      <stop
-         stop-color="#fcaf3e"
-         offset="0"
-         id="stop7-3" />
-      <stop
-         stop-color="#ce5c00"
-         offset="1"
-         id="stop9-9" />
-    </linearGradient>
-    <linearGradient
-       id="i"
-       y2="22.118999"
-       gradientUnits="userSpaceOnUse"
-       x2="22.809999"
-       gradientTransform="translate(6.3922,12.185)"
-       y1="21.481001"
-       x1="23.448">
-      <stop
-         stop-color="#ce5c00"
-         offset="0"
-         id="stop12" />
-      <stop
-         stop-color="#ce5c00"
-         offset="1"
-         id="stop14" />
-    </linearGradient>
-    <linearGradient
-       id="j"
-       y2="32.714001"
-       gradientUnits="userSpaceOnUse"
-       x2="25.485001"
-       y1="34.389999"
-       x1="26.379">
-      <stop
-         stop-color="#e9b96e"
-         offset="0"
-         id="stop17" />
-      <stop
-         stop-color="#fff"
-         offset="1"
-         id="stop19" />
-    </linearGradient>
-    <radialGradient
-       id="l"
-       gradientUnits="userSpaceOnUse"
-       cy="128"
-       cx="-138.84"
-       gradientTransform="matrix(0.35473,-0.34328,0.35696,0.34544,130.15,-71.026)"
-       r="9.1267004">
-      <stop
-         stop-color="#f9a9a9"
-         offset="0"
-         id="stop22" />
-      <stop
-         stop-color="#ab5f5f"
-         offset="1"
-         id="stop24" />
-    </radialGradient>
-    <linearGradient
-       id="k"
-       y2="134.25"
-       gradientUnits="userSpaceOnUse"
-       x2="-158.75"
-       gradientTransform="matrix(0.20949,-0.20274,0.20949,0.20274,129.28,-31.999)"
-       y1="115.94"
-       x1="-158.75">
-      <stop
-         stop-color="#ddd"
-         offset="0"
-         id="stop27" />
-      <stop
-         stop-color="#fff"
-         offset=".34468"
-         id="stop29" />
-      <stop
-         stop-color="#737373"
-         offset=".72695"
-         id="stop31" />
-      <stop
-         stop-color="#bbb"
-         offset="1"
-         id="stop33" />
-    </linearGradient>
-    <linearGradient
-       id="g"
-       y2="-20.465"
-       gradientUnits="userSpaceOnUse"
-       x2="253.64999"
-       gradientTransform="matrix(0.076209,0,0,0.0837,-39.668472,-30.421641)"
-       y1="-3.7385001"
-       x1="-15.36">
-      <stop
-         stop-color="#faff00"
-         offset="0"
-         id="stop36" />
-      <stop
-         stop-color="#0bae09"
-         offset="1"
-         id="stop38" />
-    </linearGradient>
   </defs>
   <g
      transform="matrix(-2.8288,0,0,-2.4916,-6.7442013,42.554748)"
@@ -316,18 +185,22 @@
     </g>
   </g>
   <g
-     transform="matrix(1.4431,0,0,1.417,-16.547101,-3.921288)"
-     id="g20"
-     style="fill-rule:evenodd">
+     transform="matrix(4.1228166,0,0,4.0916513,-12.395156,23.802802)"
+     id="g78">
     <path
-       d="m 47.001,9.3411 a 8.3417,8.3417 0 1 1 -16.683,0 8.3417,8.3417 0 1 1 16.683,0 z"
-       transform="matrix(1.1498,0,0,1.1498,-7.5953,0.4909)"
-       id="path22"
-       style="fill:url(#d)" />
+       style="fill:#afaf00"
+       d="M 12,5.5 9.4826,4.1505 6.9438,5.4592 7.4494,2.648 5.4202,0.6379 8.25,0.25 9.5347,-2.301 10.778,0.2704 13.601,0.70392 11.54,2.68102 z"
+       transform="matrix(0.86499,0,0,0.86499,3.3638,-4.5167)"
+       id="path80" />
     <path
-       style="color:#000000;fill:#ffffff"
-       d="m 44.52,15.503 c -0.50717,0.87845 -4.5947,-0.16082 -5.5214,0.25175 -0.92665,0.41257 -2.8894,4.1456 -3.8816,3.9347 -0.99218,-0.21089 -1.2669,-4.4195 -1.9456,-5.1733 -0.67873,-0.7538 -4.8356,-1.4669 -4.9416,-2.4757 -0.10603,-1.0088 3.8117,-2.5706 4.3189,-3.449 0.50717,-0.87845 -0.09914,-5.0522 0.82751,-5.4648 0.92665,-0.41257 3.6227,2.8308 4.6148,3.0417 0.99218,0.21089 4.7743,-1.6555 5.453,-0.90171 0.67873,0.7538 -1.5728,4.3201 -1.4668,5.3289 0.10603,1.0088 3.0498,4.0291 2.5427,4.9075 z"
-       transform="matrix(0.67412,0.29958,-0.29958,0.67412,15.464,-7.1925)"
-       id="path24" />
+       style="fill:#ebeb00"
+       d="M 12,5.5 9.4826,4.1505 6.9438,5.4592 7.4494,2.648 5.4202,0.6379 8.25,0.25 9.5347,-2.301 10.778,0.2704 13.601,0.70392 11.54,2.68102 z"
+       transform="matrix(0.61624,0,0,0.61624,5.7296,-4.1188)"
+       id="path82" />
+    <path
+       style="fill:#ffff00"
+       d="M 12,5.5 9.4826,4.1505 6.9438,5.4592 7.4494,2.648 5.4202,0.6379 8.25,0.25 9.5347,-2.301 10.778,0.2704 13.601,0.70392 11.54,2.68102 z"
+       transform="matrix(0.3815,0,0,0.3815,7.9622,-3.7434)"
+       id="path84" />
   </g>
 </svg>

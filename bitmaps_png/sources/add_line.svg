@@ -7,11 +7,11 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="48"
-   width="48"
+   height="26"
+   width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.1 r9760"
    sodipodi:docname="add_line.svg">
   <metadata
      id="metadata33">
@@ -33,51 +33,54 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="949"
+     inkscape:window-width="1600"
+     inkscape:window-height="876"
      id="namedview31"
-     showgrid="false"
-     inkscape:zoom="4.9166667"
-     inkscape:cx="-12.610169"
-     inkscape:cy="23.59322"
+     showgrid="true"
+     inkscape:zoom="19.666667"
+     inkscape:cx="6.1146086"
+     inkscape:cy="13.986"
      inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-y="24"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2" />
+     inkscape:current-layer="svg2"
+     inkscape:snap-grids="false"
+     inkscape:snap-to-guides="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2990"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
   <defs
      id="defs4">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 24 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="48 : 24 : 1"
-       inkscape:persp3d-origin="24 : 16 : 1"
-       id="perspective35" />
     <filter
        id="a"
-       height="1.2015"
+       height="1.2015001"
        width="1.1159"
        color-interpolation-filters="sRGB"
-       y="-.10075"
-       x="-.057925">
+       y="-0.10075"
+       x="-0.057925001">
       <feGaussianBlur
          stdDeviation="0.88285369"
          id="feGaussianBlur7" />
     </filter>
   </defs>
   <g
-     transform="matrix(2.4566,0,0,2.2316,-37.589,-39.022)"
+     transform="matrix(2.4566,0,0,2.2316,-37.589,-61.022)"
      id="g9">
     <rect
-       fill-opacity="0"
        height="16"
        width="16"
        y="0"
        x="0"
-       id="rect11" />
+       id="rect11"
+       style="fill-opacity:0" />
   </g>
   <g
-     transform="matrix(3.0141712,0,0,2.3140068,0.28636102,8.2609835)"
+     transform="matrix(1.5880707,0,0,1.5072646,1.2179867,1.559322)"
      id="g13">
     <rect
        height="16"
@@ -91,9 +94,12 @@
      style="opacity:0.45702999;fill-rule:evenodd;filter:url(#a)"
      id="path27"
      d="m -89.671,-7.5642 18.873,-0.02542 0.074,16.365 h 17.632 l -0.13021,4.666 -21.99,-0.03352 -0.13512,-16.298 h -14.324 v -4.6743 z"
-     transform="matrix(1.1140912,0,0,1.1767812,103.80922,24.467237)" />
+     transform="matrix(0.58697914,0,0,0.76651487,55.760882,12.115519)"
+     inkscape:connector-curvature="0" />
   <path
      style="fill:#007d00;fill-rule:evenodd"
      id="path29"
-     d="m 1.6147483,13.521171 21.0262437,-0.02992 0.08242,19.258024 19.643656,0 -0.145066,5.490861 -24.498865,-0.03945 -0.150536,-19.17918 -15.9582426,0 0,-5.500628 z" />
+     d="m 1.9178716,4.9856272 11.0780574,-0.019489 0.04342,12.0355398 11.010633,0 -0.07643,3.983339 -14.9415694,-0.02569 -0.07931,-11.9333371 -7.8485674,0.050847 0,-4.0405474 z"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccccc" />
 </svg>

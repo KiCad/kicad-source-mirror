@@ -7,8 +7,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="48"
-   width="48"
+   height="26"
+   width="26"
    version="1.1"
    id="svg2"
    inkscape:version="0.47 r22583"
@@ -36,40 +36,24 @@
      inkscape:window-width="1280"
      inkscape:window-height="949"
      id="namedview52"
-     showgrid="false"
-     inkscape:zoom="4.9166667"
-     inkscape:cx="-29.458994"
-     inkscape:cy="26.237289"
+     showgrid="true"
+     inkscape:zoom="1.2291667"
+     inkscape:cx="-242.32399"
+     inkscape:cy="-0.69109567"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2" />
+     inkscape:current-layer="svg2">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2837"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
   <defs
      id="defs4">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 24 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="48 : 24 : 1"
-       inkscape:persp3d-origin="24 : 16 : 1"
-       id="perspective56" />
-    <linearGradient
-       id="d"
-       y2="5.5"
-       gradientUnits="userSpaceOnUse"
-       x2="1.0312"
-       gradientTransform="matrix(-2.1349,0,0,1.9493,-82.395,-17.388)"
-       y1="9.4062"
-       x1="4.9688">
-      <stop
-         stop-color="#afafff"
-         offset="0"
-         id="stop7" />
-      <stop
-         stop-color="#fff"
-         offset="1"
-         id="stop9" />
-    </linearGradient>
     <filter
        id="c"
        color-interpolation-filters="sRGB">
@@ -77,84 +61,65 @@
          stdDeviation="0.69535627"
          id="feGaussianBlur12" />
     </filter>
-    <inkscape:perspective
-       id="perspective3665"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
     <filter
-       id="c-7"
+       id="c-1"
        color-interpolation-filters="sRGB">
       <feGaussianBlur
          stdDeviation="0.69535627"
-         id="feGaussianBlur12-9" />
+         id="feGaussianBlur12-8" />
     </filter>
     <filter
        inkscape:collect="always"
-       id="filter3731">
+       id="filter3660">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="0.9945757"
-         id="feGaussianBlur3733" />
+         stdDeviation="0.54112259"
+         id="feGaussianBlur3662" />
     </filter>
   </defs>
   <g
-     transform="translate(4.1053542,1.9974836)"
-     id="g3649-4"
-     style="opacity:0.44715445;fill:#000000;stroke:none;filter:url(#filter3731)">
-    <g
-       id="g18-9"
-       transform="matrix(2.9379,0,0,2.1996,2.4931407,10.31522)"
-       style="fill:#000000;stroke:none">
-      <rect
-         style="fill:#000000;fill-opacity:0;stroke:none"
-         id="rect20-9"
-         x="0"
-         y="0"
-         width="16"
-         height="16" />
-    </g>
+     id="g3654"
+     transform="translate(-18.178314,-29.012604)"
+     style="opacity:0.48373984;filter:url(#filter3660)">
     <path
-       transform="matrix(1.216,0,0,1.2391,139.1335,28.920555)"
-       id="path32-1"
+       transform="matrix(0.58304281,0,0,0.55020984,88.293773,44.817991)"
+       id="path32-7"
        d="m -88.8,-6.6671 c -2.3569,0 -4.2698,1.7466 -4.2698,3.8987 0,2.1521 1.9129,3.8987 4.2698,3.8987 2.3569,0 4.2698,-1.7466 4.2698,-3.8987 0,-2.1521 -1.9129,-3.8987 -4.2698,-3.8987 z"
-       style="opacity:0.71094001;fill:#000000;stroke:none;filter:url(#c-7)" />
+       style="opacity:0.71094000999999996;fill:#000000;fill-opacity:1;filter:url(#c-1)" />
     <rect
        transform="scale(1,-1)"
-       height="43.409573"
-       width="7.3848867"
-       y="-45.537811"
-       x="26.412182"
+       height="24"
+       width="3"
+       y="-55"
+       x="34.85955"
        id="rect34-9"
-       style="fill:#000000;fill-opacity:1;stroke:none" />
+       style="fill:#000000;fill-opacity:1" />
     <rect
        transform="matrix(0,-1,-1,0,0,0)"
-       height="31.590176"
-       width="7.2715573"
-       y="-34.612186"
-       x="-26.926184"
-       id="rect36-4"
-       style="fill:#000000;fill-opacity:1;stroke:none" />
+       height="17.178312"
+       width="3"
+       y="-38.178314"
+       x="-44.012604"
+       id="rect36-1"
+       style="fill:#000000;fill-opacity:1" />
     <path
-       d="m 30.104624,13.628771 c 5.731981,0 10.384154,4.328425 10.384154,9.661635 0,5.33321 -4.652052,9.661634 -10.384154,9.661634 -5.731981,0 -10.384154,-4.328424 -10.384154,-9.661634 0,-5.33321 4.652052,-9.661635 10.384154,-9.661635 z"
-       id="path38-2"
-       style="fill:#000000;fill-opacity:1;stroke:none" />
+       d="m 36.359553,36.784272 c 3.165126,0 5.733998,2.566301 5.733998,5.728333 0,3.162033 -2.568804,5.728332 -5.733998,5.728332 -3.165128,0 -5.733999,-2.566299 -5.733999,-5.728332 0,-3.162032 2.568804,-5.728333 5.733999,-5.728333 z"
+       id="path38-0"
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
   </g>
   <g
-     transform="matrix(2.4566,0,0,2.2316,-37.589,-39.022)"
+     transform="matrix(2.4566,0,0,2.2316,-37.589,-61.022)"
      id="g14">
     <rect
-       fill-opacity="0"
        height="16"
        width="16"
        y="0"
        x="0"
-       id="rect16" />
+       id="rect16"
+       style="fill-opacity:0" />
   </g>
   <g
-     transform="matrix(2.9379,0,0,2.1996,2.4931407,9.9084403)"
+     transform="matrix(1.4086525,0,0,0.97671012,2.7780007,6.5564801)"
      id="g18">
     <rect
        height="16"
@@ -168,32 +133,32 @@
      style="opacity:0.71094001;filter:url(#c)"
      d="m -88.8,-6.6671 c -2.3569,0 -4.2698,1.7466 -4.2698,3.8987 0,2.1521 1.9129,3.8987 4.2698,3.8987 2.3569,0 4.2698,-1.7466 4.2698,-3.8987 0,-2.1521 -1.9129,-3.8987 -4.2698,-3.8987 z"
      id="path32"
-     transform="matrix(1.216,0,0,1.2391,139.1335,28.513775)" />
+     transform="matrix(0.58304281,0,0,0.55020984,68.293773,14.817991)" />
   <rect
      style="fill:#007d00;fill-opacity:1"
      id="rect34"
-     x="26.412182"
-     y="-45.131031"
-     width="7.3848867"
-     height="43.409573"
+     x="15.00337"
+     y="-25"
+     width="3"
+     height="24"
      transform="scale(1,-1)" />
   <rect
      style="fill:#007d00;fill-opacity:1"
      id="rect36"
-     x="-26.519403"
-     y="-34.612186"
-     width="7.2715573"
-     height="31.590176"
+     x="-14.012605"
+     y="-18.178312"
+     width="3"
+     height="17.178312"
      transform="matrix(0,-1,-1,0,0,0)" />
   <path
-     style="fill:#007d00;fill-opacity:1"
+     style="fill:#007d00;fill-opacity:1;stroke:#004300;stroke-width:1.03875768;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
      id="path38"
-     d="m 29.494454,13.221991 c 5.731981,0 10.384154,4.328425 10.384154,9.661635 0,5.33321 -4.652052,9.661634 -10.384154,9.661634 -5.731981,0 -10.384154,-4.328424 -10.384154,-9.661634 0,-5.33321 4.652052,-9.661635 10.384154,-9.661635 z" />
+     d="m 16.512096,6.5748377 c 3.294766,0 5.968855,2.6601276 5.968855,5.9377673 0,3.27764 -2.674019,5.937767 -5.968855,5.937767 -3.294769,0 -5.968858,-2.660127 -5.968858,-5.937767 0,-3.2776397 2.674019,-5.9377673 5.968858,-5.9377673 z" />
   <rect
-     fill-opacity="0"
-     height="38.871"
-     width="43.287"
-     y="-47.036"
-     x="-74.787"
-     id="rect50" />
+     height="38.870998"
+     width="43.286999"
+     y="-69.035995"
+     x="-74.787003"
+     id="rect50"
+     style="fill-opacity:0" />
 </svg>

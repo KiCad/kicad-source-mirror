@@ -11,7 +11,7 @@
    width="26"
    version="1.1"
    id="svg2"
-   inkscape:version="0.48.1 r9760"
+   inkscape:version="0.47 r22583"
    sodipodi:docname="grid_select_axis.svg">
   <metadata
      id="metadata72">
@@ -36,17 +36,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="876"
+     inkscape:window-width="1280"
+     inkscape:window-height="949"
      id="namedview68"
      showgrid="true"
      inkscape:snap-grids="true"
      inkscape:snap-to-guides="true"
      inkscape:zoom="22.627417"
-     inkscape:cx="15.231242"
-     inkscape:cy="16.255803"
+     inkscape:cx="8.9102332"
+     inkscape:cy="12.631881"
      inkscape:window-x="0"
-     inkscape:window-y="24"
+     inkscape:window-y="25"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2">
     <inkscape:grid
@@ -154,7 +154,7 @@
        style="fill-rule:evenodd" />
   </g>
   <rect
-     style="opacity:0.96484375000000000;fill:#7d95db;fill-opacity:1;fill-rule:evenodd;stroke:none"
+     style="opacity:1;fill:#e03e40;fill-opacity:1;fill-rule:evenodd;stroke:none"
      id="rect3002"
      width="24"
      height="1"
@@ -162,7 +162,7 @@
      y="9"
      ry="0" />
   <rect
-     style="opacity:0.96484375000000000;fill:#7d95db;fill-opacity:1;fill-rule:evenodd;stroke:none"
+     style="opacity:1;fill:#e03e40;fill-opacity:1;fill-rule:evenodd;stroke:none"
      id="rect3002-0"
      width="24"
      height="1"

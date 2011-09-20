@@ -13,7 +13,7 @@
    version="1.1"
    viewBox="0 0 26 26"
    id="svg2"
-   inkscape:version="0.48.1 r9760"
+   inkscape:version="0.47 r22583"
    sodipodi:docname="annotate.svg">
   <metadata
      id="metadata186">
@@ -36,15 +36,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="876"
+     inkscape:window-width="1280"
+     inkscape:window-height="949"
      id="namedview184"
      showgrid="true"
-     inkscape:zoom="3.6875"
-     inkscape:cx="44.124101"
-     inkscape:cy="-22.809128"
+     inkscape:zoom="14.75"
+     inkscape:cx="27.936555"
+     inkscape:cy="11.264231"
      inkscape:window-x="0"
-     inkscape:window-y="24"
+     inkscape:window-y="25"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2"
      inkscape:snap-grids="false"
@@ -59,6 +59,13 @@
   </sodipodi:namedview>
   <defs
      id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 13 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="26 : 13 : 1"
+       inkscape:persp3d-origin="13 : 8.6666667 : 1"
+       id="perspective38" />
     <radialGradient
        id="a-0"
        gradientUnits="userSpaceOnUse"
@@ -200,7 +207,7 @@
   </g>
   <g
      id="g3069"
-     transform="matrix(1.0173421,0,0,1.0421207,-0.91471308,-0.04173623)">
+     transform="matrix(1.0216776,0,0,1.2246437,-0.95695067,-1.1039492)">
     <path
        inkscape:connector-curvature="0"
        style="fill-rule:evenodd"

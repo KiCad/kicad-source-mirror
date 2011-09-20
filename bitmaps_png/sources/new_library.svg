@@ -42,13 +42,28 @@
      showgrid="false"
      inkscape:zoom="6.9532166"
      inkscape:cx="42.968253"
-     inkscape:cy="-2.0098492"
+     inkscape:cy="9.2079805"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" />
   <defs
-     id="defs4" />
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 24 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="48 : 24 : 1"
+       inkscape:persp3d-origin="24 : 16 : 1"
+       id="perspective38" />
+    <inkscape:perspective
+       id="perspective3037"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
   <g
      id="g3324"
      transform="matrix(1.4518901,0,0,1.534722,-109.41366,9.9953925)">
@@ -162,22 +177,22 @@
        id="path95" />
   </g>
   <g
-     transform="matrix(3.0362499,0,0,2.9064648,2.1295846,19.066435)"
-     id="g221">
+     transform="matrix(4.1228166,0,0,4.0916513,-12.98095,25.296624)"
+     id="g78">
     <path
        style="fill:#afaf00"
        d="M 12,5.5 9.4826,4.1505 6.9438,5.4592 7.4494,2.648 5.4202,0.6379 8.25,0.25 9.5347,-2.301 10.778,0.2704 13.601,0.70392 11.54,2.68102 z"
        transform="matrix(0.86499,0,0,0.86499,3.3638,-4.5167)"
-       id="path223" />
+       id="path80" />
     <path
        style="fill:#ebeb00"
        d="M 12,5.5 9.4826,4.1505 6.9438,5.4592 7.4494,2.648 5.4202,0.6379 8.25,0.25 9.5347,-2.301 10.778,0.2704 13.601,0.70392 11.54,2.68102 z"
        transform="matrix(0.61624,0,0,0.61624,5.7296,-4.1188)"
-       id="path225" />
+       id="path82" />
     <path
        style="fill:#ffff00"
        d="M 12,5.5 9.4826,4.1505 6.9438,5.4592 7.4494,2.648 5.4202,0.6379 8.25,0.25 9.5347,-2.301 10.778,0.2704 13.601,0.70392 11.54,2.68102 z"
        transform="matrix(0.3815,0,0,0.3815,7.9622,-3.7434)"
-       id="path227" />
+       id="path84" />
   </g>
 </svg>
