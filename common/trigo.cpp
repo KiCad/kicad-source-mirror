@@ -346,8 +346,10 @@ void RotatePoint( double* pX, double* pY, int angle )
     {
         double fangle = DEG2RAD( (double) angle / 10.0 );
 
-        *pX = (*pY * sin( fangle ) ) + (*pX * cos( fangle ) );
-        *pY = (*pY * cos( fangle ) ) - (*pX * sin( fangle ) );
+        double fpx = (*pY * sin( fangle ) ) + (*pX * cos( fangle ) );
+        double fpy = (*pY * cos( fangle ) ) - (*pX * sin( fangle ) );
+        *pX = fpx;
+        *pY = fpy;
     }
 }
 
