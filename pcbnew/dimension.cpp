@@ -74,13 +74,13 @@ END_EVENT_TABLE()
 
 DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( PCB_EDIT_FRAME* aParent,
                                                   DIMENSION* aDimension, wxDC* aDC ) :
-    wxDialog( aParent, -1,  _( "Dimension Properties" ) )
+    wxDialog( aParent, -1, wxString( _( "Dimension Properties" ) ) )
 {
+    SetFocus();
     wxButton* Button;
 
     m_Parent = aParent;
     m_DC = aDC;
-    Centre();
 
     CurrentDimension = aDimension;
 
@@ -143,6 +143,7 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( PCB_EDIT_FRAME* aParent,
 
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 

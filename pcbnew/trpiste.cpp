@@ -12,16 +12,13 @@
 #include "protos.h"
 
 
-/**
- * Draw a list of trace segmants.
- *
- * Parameters:
- * Pt_start_trace = first segment in the list
- * Nbsegment = number of segments traced
- * Draw_mode = mode (GR_XOR, GR_OR ..)
- * CAUTION:
- * The starting point of a track following MUST exist: may be
- * then put a 0 before calling a routine if the track is the last drawn.
+/*
+ * Draws n consecutive track segments in list.
+ * Useful to show a track when it is a chain of segments
+ * (fir instance when creating a new track)
+ * param aTrackList = First segment
+ * param nbsegment = number of segments in list
+ * param Mode_color = mode (GRXOR, GROR ..)
  */
 void DrawTraces( EDA_DRAW_PANEL* panel, wxDC* DC, TRACK* aTrackList, int nbsegment, int draw_mode )
 {

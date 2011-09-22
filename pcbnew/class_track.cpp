@@ -1059,11 +1059,30 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
 
 #if defined(DEBUG)
 
-    /* Display the flags */
+    // Display the flags
     msg.Printf( wxT( "0x%08X" ), m_Flags );
-    frame->AppendMsgPanel( _( "Flags" ), msg, BLUE );
+    frame->AppendMsgPanel( wxT( "Flags" ), msg, BLUE );
 
+#if 0
+    // Display start and end pointers:
+    msg.Printf( wxT( "%p" ), start );
+    frame->AppendMsgPanel( wxT( "start ptr" ), msg, BLUE );
+    msg.Printf( wxT( "%p" ), end );
+    frame->AppendMsgPanel( wxT( "end ptr" ), msg, BLUE );
+    // Display this ptr
+    msg.Printf( wxT( "%p" ), this );
+    frame->AppendMsgPanel( wxT( "this" ), msg, BLUE );
 #endif
+
+#if 0
+    // Display start and end positions:
+    msg.Printf( wxT( "%d %d" ), m_Start.x, m_Start.y );
+    frame->AppendMsgPanel( wxT( "Start pos" ), msg, BLUE );
+    msg.Printf( wxT( "%d %d" ), m_End.x, m_End.y );
+    frame->AppendMsgPanel( wxT( "End pos" ), msg, BLUE );
+#endif
+
+#endif  // defined(DEBUG)
 
     /* Display the State member */
     msg = wxT( ". . " );
@@ -1219,6 +1238,18 @@ TRACK* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, int aLayerMask
 }
 
 
+/*
+ * GetTrace is a helper function to locate a trace segment having an end point at aPosition
+ * on aLayerMask starting at aStartTrace and end at aEndTrace.
+ * The segments of track that are flagged as deleted or busy are ignored.
+ * To speed up the search, this search is made:
+ *   first on the previous and next neightbour (NEIGHTBOUR_COUNT_MAX size)
+ *   of this.
+ *   After, only if no track found, on aStartTrace to aEndTrace
+ * Because tracks are grouped when entered in list, most of time the first search
+ * find the connection.
+ * The speedup is *very* large
+ */
 TRACK* TRACK::GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint )
 {
     const int NEIGHTBOUR_COUNT_MAX = 50;
@@ -1239,6 +1270,7 @@ TRACK* TRACK::GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint )
 
     previousSegment = nextSegment = this;
 
+    // Local search:
     for( ii = 0; ii < NEIGHTBOUR_COUNT_MAX; ii++ )
     {
         if( (nextSegment == NULL) && (previousSegment == NULL) )

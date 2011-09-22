@@ -10,8 +10,6 @@
 
 #include "protos.h"
 
-//#include <algorithm>
-
 extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb );
 extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );
 
@@ -552,7 +550,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
      * the connection (if found) is between segments
      * when a track has a net code and the other has a null net code, the null net code is changed
      */
-
+#if 1
     for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
     {
         if( pt_trace->start == NULL )
@@ -564,8 +562,43 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         {
             pt_trace->end = pt_trace->GetTrace( m_Pcb->m_Track, NULL, END );
         }
-    }
+   }
+#else
+    for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
+    {
+        if( pt_trace->start != NULL )
+            continue;
 
+        TRACK * candidate = pt_trace->GetTrace( m_Pcb->m_Track, NULL, START );
+        if( candidate == NULL )
+            continue;
+        if( candidate->start == pt_trace || candidate->end == pt_trace )
+        {
+            candidate->SetState( BUSY, ON );
+            pt_trace->start = pt_trace->GetTrace( m_Pcb->m_Track, NULL, START );
+            candidate->SetState( BUSY, OFF );
+        }
+        else
+            pt_trace->start = candidate;
+   }
+    for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
+    {
+        if( pt_trace->end != NULL )
+            continue;
+
+        TRACK * candidate = pt_trace->GetTrace( m_Pcb->m_Track, NULL, END );
+        if( candidate == NULL )
+            continue;
+        if( candidate->start == pt_trace || candidate->end == pt_trace )
+        {
+            candidate->SetState( BUSY, ON );
+            pt_trace->end = pt_trace->GetTrace( m_Pcb->m_Track, NULL, END );
+            candidate->SetState( BUSY, OFF );
+        }
+        else
+            pt_trace->end = candidate;
+   }
+#endif
     /**********************************************************/
     /* Propagate net codes from a segment to an other segment */
     /**********************************************************/

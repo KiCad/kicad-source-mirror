@@ -153,7 +153,7 @@ void AddSegmentToDragList( EDA_DRAW_PANEL* panel, wxDC* DC, int flag, TRACK* Tra
 
 
 /* Build the list of tracks connected to the ref point
- *  Net codes must be OK.
+ * Net codes must be up to date, because only tracks having the right net code are tested.
  * @param aRefPos = reference point of connection
  */
 void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
@@ -165,7 +165,7 @@ void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
 
     for( ; track; track = track->Next() )
     {
-        if( track->GetNet() != net_code )   // Bad net, not connected
+        if( track->GetNet() != net_code )   // not the same netcodenet code: all candidates tested
             break;
 
         if( ( LayerMask & track->ReturnMaskLayer() ) == 0 )
