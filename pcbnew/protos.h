@@ -31,16 +31,14 @@ class D_PAD;
 /* TRPISTE.CPP */
 /***************/
 
-/* Routine trace of n consecutive segments in memory.
- * Useful for mounting a track record for being the segments that
- * Tracks are contiguous in memory
- * Parameters:
- * Pt_start_piste = starting address of the list of segments
- * Nbsegment = number of segments was traced
- * Mode_color = mode (GrXOR, Gror ..)
- * CAUTION:
- * The starting point of a track following MUST exist: may be
- * Then put a 0 before calling a routine if the track is the last draw
+/**
+ * Function DrawTraces
+ * Draws n consecutive track segments in list.
+ * Useful to show a track when it is a chain of segments
+ * (fir instance when creating a new track)
+ * @param aTrackList = First segment
+ * @param nbsegment = number of segments in list
+ * @param Mode_color = mode (GRXOR, GROR ..)
  */
 void DrawTraces( EDA_DRAW_PANEL* panel,
                  wxDC*           DC,
