@@ -171,17 +171,40 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 }
 
 
+/*
+ * helper function use in AddHotkeyName to calculate an accelerator string
+ * In some menus, accelerators do not perform exactely the same action as
+ * the hotkey that perfoms a similar action.
+ * this is usually the case when this action uses the current mouse position
+ * for instance zoom action is ran from the F1 key or the Zoom menu.
+ * a zoom uses the mouse position from a hot key and not from the menu
+ * In this case, the accelerator if Shift+<hotkey>
+ * But for some keys, the Shift modifier is not usable, and the accelerator is Alt+<hotkey>
+ */
+static void AddModifierToKey( wxString& aFullKey, const wxString & aKey )
+{
+#if 1       // set to 0 for new behavior, 1 for old
+    aFullKey << wxT( " <" ) << aKey << wxT( ">" );
+#else
+    if( aKey.IsSameAs(wxT( "/" ) ) )
+        aFullKey << wxT( "\t" ) << MODIFIER_ALT << aKey;
+    else
+        aFullKey << wxT( "\t" ) << MODIFIER_SHIFT << aKey;
+#endif
+}
+
 /* AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  *  aText = a wxString. returns aText + key name
  *  aList = pointer to a Ki_HotkeyInfo list of commands
  *  aCommandId = Command Id value
- *  aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
- *                    = false to add <spaces><(keyname)>
+ *  aShortCutType = IS_HOTKEY to add <tab><keyname> (shortcuts in menus, same as hotkeys)
+ *                  IS_ACCELERATOR to add <tab><Shift+keyname> (accelerators in menus, not hotkeys)
+ *                  IS_COMMENT to add <spaces><(keyname)> mainly in tooltips
  *  Return a wxString (aTest + key name) if key found or aText without modification
  */
 wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
-                        int aCommandId, bool aIsShortCut )
+                        int aCommandId, HOTKEY_ACTION_TYPE aShortCutType )
 {
     wxString msg = aText;
     wxString keyname;
@@ -191,10 +214,18 @@ wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
 
     if( !keyname.IsEmpty() )
     {
-        if( aIsShortCut )
-            msg << wxT( "\t" ) << keyname;
-        else
-            msg << wxT( " <" ) << keyname << wxT( ">" );
+        switch( aShortCutType )
+        {
+            case IS_HOTKEY:
+                msg << wxT( "\t" ) << keyname;
+                break;
+            case IS_ACCELERATOR:
+                AddModifierToKey( msg, keyname );
+                break;
+            case IS_COMMENT:
+                msg << wxT( " (" ) << keyname << wxT( ")" );
+                break;
+        }
     }
 
     return msg;
@@ -206,14 +237,15 @@ wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
  *  aText = a wxString. returns aText + key name
  *  aList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
  *  aCommandId = Command Id value
- *  aIsShortCut = true to add <tab><keyname> (active shortcuts in menus)
- *                    = false to add <spaces><(keyname)>
+ *  aShortCutType = IS_HOTKEY to add <tab><keyname> (active shortcuts in menus)
+ *                  IS_ACCELERATOR to add <tab><Shift+keyname> (active accelerators in menus)
+ *                  IS_COMMENT to add <spaces><(keyname)>
  * Return a wxString (aText + key name) if key found or aText without modification
  */
 wxString AddHotkeyName( const wxString&                        aText,
                         struct Ki_HotkeyInfoSectionDescriptor* aDescList,
                         int                                    aCommandId,
-                        bool                                   aIsShortCut )
+                        HOTKEY_ACTION_TYPE                     aShortCutType )
 {
     wxString        msg = aText;
     wxString        keyname;
@@ -228,11 +260,18 @@ wxString AddHotkeyName( const wxString&                        aText,
 
             if( !keyname.IsEmpty() )
             {
-                if( aIsShortCut )
-                    msg << wxT( "\t" ) << keyname;
-                else
-                    msg << wxT( " <" ) << keyname << wxT( ">" );
-
+                switch( aShortCutType )
+                {
+                    case IS_HOTKEY:
+                        msg << wxT( "\t" ) << keyname;
+                        break;
+                    case IS_ACCELERATOR:
+                        AddModifierToKey( msg, keyname );
+                        break;
+                    case IS_COMMENT:
+                        msg << wxT( " (" ) << keyname << wxT( ")" );
+                        break;
+                }
                 break;
             }
         }

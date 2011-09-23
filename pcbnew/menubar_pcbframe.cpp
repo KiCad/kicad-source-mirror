@@ -44,11 +44,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     filesMenu->Append( item );
 
     // Open
-    item = new wxMenuItem( filesMenu, ID_LOAD_FILE,
-                           _( "&Open\tCtrl+O" ),
-                           _( "Delete current board and load new board" ) );
-    SET_BITMAP( KiBitmap( open_document_xpm ) );
-    filesMenu->Append( item );
+    text = AddHotkeyName( _( "&Open" ), g_Board_Editor_Hokeys_Descr,
+                          HK_LOAD_BOARD );
+    AddMenuItem( filesMenu, ID_LOAD_FILE, text,
+                _( "Delete current board and load new board" ),
+                KiBitmap( open_document_xpm ) );
 
     // Load Recent submenu
     static wxMenu* openRecentMenu;
@@ -78,11 +78,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     // Save
-    item = new wxMenuItem( filesMenu, ID_SAVE_BOARD,
-                           _( "&Save\tCtrl+S" ),
-                           _( "Save current board" ) );
-    SET_BITMAP( KiBitmap( save_xpm ) );
-    filesMenu->Append( item );
+    text = AddHotkeyName( _( "&Save" ), g_Board_Editor_Hokeys_Descr,
+                          HK_SAVE_BOARD );
+    AddMenuItem( filesMenu, ID_SAVE_BOARD, text,
+                _( "Save current board" ),
+                KiBitmap( save_xpm ) );
 
     // Save As
     item = new wxMenuItem( filesMenu, ID_SAVE_BOARD_AS,
@@ -204,7 +204,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     // Print
     item = new wxMenuItem( filesMenu, wxID_PRINT,
-                           _( "&Print\tCtrl+P" ),
+                           _( "&Print" ),
                            _( "Print board" ) );
     SET_BITMAP( KiBitmap( print_button_xpm ) );
     filesMenu->Append( item );
@@ -336,20 +336,23 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
      * for Zoom in and Zoom out sub menus
      */
     // Zoom In
-    text = AddHotkeyName( _( "Zoom In" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ZOOM_IN, false );
+    text = AddHotkeyName( _( "Zoom In" ), g_Pcbnew_Editor_Hokeys_Descr,
+                          HK_ZOOM_IN, IS_ACCELERATOR );
     item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, wxITEM_NORMAL );
     SET_BITMAP( KiBitmap( zoom_in_xpm ) );
     viewMenu->Append( item );
 
     // Zoom Out
-    text = AddHotkeyName( _( "Zoom Out" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ZOOM_OUT, false );
+    text = AddHotkeyName( _( "Zoom Out" ), g_Pcbnew_Editor_Hokeys_Descr,
+                          HK_ZOOM_OUT, IS_ACCELERATOR );
     item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, wxITEM_NORMAL );
 
     SET_BITMAP( KiBitmap( zoom_out_xpm ) );
     viewMenu->Append( item );
 
     // Fit on Screen
-    text = AddHotkeyName( _( "Fit on Screen" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ZOOM_AUTO );
+    text = AddHotkeyName( _( "Fit on Screen" ), g_Pcbnew_Editor_Hokeys_Descr,
+                          HK_ZOOM_AUTO );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, wxITEM_NORMAL );
     SET_BITMAP( KiBitmap( zoom_fit_in_page_xpm ) );
@@ -361,8 +364,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     text = AddHotkeyName( _( "Redraw" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ZOOM_REDRAW );
 
     item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
-                           HELP_ZOOM_REDRAW,
-                           wxITEM_NORMAL );
+                           HELP_ZOOM_REDRAW, wxITEM_NORMAL );
     SET_BITMAP( KiBitmap( zoom_redraw_xpm ) );
     viewMenu->Append( item );
     viewMenu->AppendSeparator();
@@ -387,7 +389,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* placeMenu = new wxMenu;
 
     // Module
-    text = AddHotkeyName( _( "Module" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ADD_MODULE, false );
+    text = AddHotkeyName( _( "Module" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ADD_MODULE, IS_ACCELERATOR );
     item = new wxMenuItem( placeMenu, ID_PCB_MODULE_BUTT, text,
                            _( "Add modules" ), wxITEM_NORMAL );
 
@@ -395,7 +397,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     placeMenu->Append( item );
 
     // Track
-    text = AddHotkeyName( _( "Track" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK, false );
+    text = AddHotkeyName( _( "Track" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK, IS_ACCELERATOR );
     item = new wxMenuItem( placeMenu, ID_TRACK_BUTT, text,
                            _( "Add tracks and vias" ), wxITEM_NORMAL );
 

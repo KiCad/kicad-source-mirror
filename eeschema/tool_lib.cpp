@@ -116,9 +116,9 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                          _( "Save current component to new library" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Undo last command" ), s_Schematic_Hokeys_Descr, HK_UNDO, false );
+    msg = AddHotkeyName( _( "Undo last command" ), s_Schematic_Hokeys_Descr, HK_UNDO, IS_COMMENT );
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), msg );
-    msg = AddHotkeyName( _( "Redo the last command" ), s_Schematic_Hokeys_Descr, HK_REDO, false );
+    msg = AddHotkeyName( _( "Redo the last command" ), s_Schematic_Hokeys_Descr, HK_REDO, IS_COMMENT );
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), msg );
 
     m_HToolBar->AddSeparator();
@@ -133,16 +133,16 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                          _( "Test for duplicate pins and off grid pins" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( HELP_ZOOM_IN, s_Libedit_Hokeys_Descr, HK_ZOOM_IN, false );
+    msg = AddHotkeyName( HELP_ZOOM_IN, s_Libedit_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_OUT, s_Libedit_Hokeys_Descr, HK_ZOOM_OUT, false );
+    msg = AddHotkeyName( HELP_ZOOM_OUT, s_Libedit_Hokeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
     m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, s_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW, false );
+    msg = AddHotkeyName( HELP_ZOOM_REDRAW, s_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_FIT, s_Libedit_Hokeys_Descr, HK_ZOOM_AUTO, false );
+    msg = AddHotkeyName( HELP_ZOOM_FIT, s_Libedit_Hokeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
 
     m_HToolBar->AddSeparator();

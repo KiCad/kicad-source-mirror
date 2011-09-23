@@ -217,9 +217,9 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 #endif
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( HELP_UNDO, g_Board_Editor_Hokeys_Descr, HK_UNDO, false );
+    msg = AddHotkeyName( HELP_UNDO, g_Board_Editor_Hokeys_Descr, HK_UNDO, IS_COMMENT );
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), HELP_UNDO );
-    msg = AddHotkeyName( HELP_REDO, g_Board_Editor_Hokeys_Descr, HK_REDO, false );
+    msg = AddHotkeyName( HELP_REDO, g_Board_Editor_Hokeys_Descr, HK_REDO, IS_COMMENT );
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), HELP_REDO );
 
     m_HToolBar->AddSeparator();
@@ -229,20 +229,20 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
                          _( "Plot (HPGL, PostScript, or GERBER format)" ) );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( HELP_ZOOM_IN, g_Board_Editor_Hokeys_Descr, HK_ZOOM_IN, false );
+    msg = AddHotkeyName( HELP_ZOOM_IN, g_Board_Editor_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
     m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_OUT, g_Board_Editor_Hokeys_Descr, HK_ZOOM_OUT, false );
+    msg = AddHotkeyName( HELP_ZOOM_OUT, g_Board_Editor_Hokeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
     m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Board_Editor_Hokeys_Descr, HK_ZOOM_REDRAW, false );
+    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Board_Editor_Hokeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
     m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_FIT, g_Board_Editor_Hokeys_Descr, HK_ZOOM_AUTO, false );
+    msg = AddHotkeyName( HELP_ZOOM_FIT, g_Board_Editor_Hokeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
     m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
 
     m_HToolBar->AddSeparator();
-    msg = AddHotkeyName( HELP_FIND, g_Board_Editor_Hokeys_Descr, HK_FIND_ITEM, false );
+    msg = AddHotkeyName( HELP_FIND, g_Board_Editor_Hokeys_Descr, HK_FIND_ITEM, IS_COMMENT );
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiBitmap( find_xpm ), msg );
 
     m_HToolBar->AddSeparator();

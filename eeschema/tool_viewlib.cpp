@@ -47,22 +47,22 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 
         m_HToolBar->AddSeparator();
         msg = AddHotkeyName( _( "Zoom in" ), s_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_IN, false );
+                             HK_ZOOM_IN, IS_COMMENT );
         m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
                              KiBitmap( zoom_in_xpm ), msg );
 
         msg = AddHotkeyName( _( "Zoom out" ), s_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_OUT, false );
+                             HK_ZOOM_OUT, IS_COMMENT );
         m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
                              KiBitmap( zoom_out_xpm ), msg );
 
         msg = AddHotkeyName( _( "Redraw view" ), s_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_REDRAW, false );
+                             HK_ZOOM_REDRAW, IS_COMMENT );
         m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                              KiBitmap( zoom_redraw_xpm ), msg );
 
         msg = AddHotkeyName( _( "Zoom auto" ), s_Viewlib_Hokeys_Descr,
-                             HK_ZOOM_AUTO, false );
+                             HK_ZOOM_AUTO, IS_COMMENT );
         m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                              KiBitmap( zoom_fit_in_page_xpm ), msg );
 

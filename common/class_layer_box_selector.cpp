@@ -143,7 +143,7 @@ void LAYER_BOX_SELECTOR::Resync()
         layername = board->GetLayerName( layerid );
 
         if( m_layerhotkeys && m_hotkeys != NULL )
-            layername = AddHotkeyName( layername, m_hotkeys, layerhk[layerid], false );
+            layername = AddHotkeyName( layername, m_hotkeys, layerhk[layerid], IS_COMMENT );
 
         Append( layername, layerbmp, (void*) layerid );
     }
