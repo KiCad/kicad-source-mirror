@@ -14,7 +14,7 @@
 class EDA_DRAW_FRAME;
 
 
-/* Class to handle hotkey commnands. hotkeys have a default value
+/* Class to handle hotkey commands. hotkeys have a default value
  *  This class allows the real key code changed by user(from a key code list file)
  */
 class Ki_HotkeyInfo
@@ -93,6 +93,20 @@ wxString        ReturnKeyNameFromCommandId( Ki_HotkeyInfo** aList, int aCommandI
  */
 int ReturnKeyCodeFromKeyName( const wxString& keyname );
 
+/* An helper enum for AddHotkeyName function
+ * In menus we can an a hot key, or an accelerator , or sometimes just a comment
+ * Hot keys can perform actions using the current mouse cursor position
+ * Accelerators performs the same action as the associated menu
+ * A comment is used in tool tips for some tools (zoom ..)
+ *    to show the hot key that perfoms this action
+ */
+enum HOTKEY_ACTION_TYPE
+{
+    IS_HOTKEY,
+    IS_ACCELERATOR,
+    IS_COMMENT
+};
+
 /**
  * Function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
@@ -105,7 +119,7 @@ int ReturnKeyCodeFromKeyName( const wxString& keyname );
  */
 wxString        AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
                                int  aCommandId,
-                               bool aIsShortCut = true);
+                               HOTKEY_ACTION_TYPE aShortCutType = IS_HOTKEY);
 
 /**
  * Function AddHotkeyName
@@ -120,7 +134,7 @@ wxString        AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
 wxString        AddHotkeyName( const wxString&                        aText,
                                struct Ki_HotkeyInfoSectionDescriptor* aDescrList,
                                int                                    aCommandId,
-                               bool                                   aIsShortCut = true);
+                               HOTKEY_ACTION_TYPE           aShortCutType = IS_HOTKEY );
 
 /**
  * Function DisplayHotkeyList
