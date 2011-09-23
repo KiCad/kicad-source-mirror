@@ -5,12 +5,18 @@
 
 #include "fctsys.h"
 #include "confirm.h"
+#include "gr_basic.h"
 #include "class_drawpanel.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
 #include "drawtxt.h"
 #include "dialog_helpers.h"
+
+#include "class_board.h"
+#include "class_pcb_text.h"
+#include "class_dimension.h"
+
+#include "pcbnew.h"
+
 
 /* Local functions */
 static void MoveDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,

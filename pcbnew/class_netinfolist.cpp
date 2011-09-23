@@ -1,12 +1,17 @@
-/***********************/
-/**** class_netinfolist.cpp  ****/
-/***********************/
+/**
+ * @file class_netinfolist.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
+
 #include "pcbnew.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_netinfo.h"
 
 
 // Constructor and destructor
@@ -31,6 +36,7 @@ NETINFO_ITEM* NETINFO_LIST::GetNetItem( int aNetcode )
 {
     if( aNetcode < 0 || ( aNetcode > (int) ( GetCount() - 1 ) ) )
         return NULL;
+
     return m_NetBuffer[aNetcode];
 }
 
@@ -72,10 +78,6 @@ static bool PadlistSortByNetnames( const D_PAD* a, const D_PAD* b )
 }
 
 
-/*****************************************************/
-void NETINFO_LIST::BuildListOfNets()
-/*****************************************************/
-
 /**
  *  Compute and update the net_codes for PADS et and equipots (.m_NetCode member)
  *  net_codes are >= 1 (net_code = 0 means not connected)
@@ -88,8 +90,9 @@ void NETINFO_LIST::BuildListOfNets()
  * and expects to have a nets list sorted by an alphabetic case sensitive sort
  * So do not change Build_Pads_Full_List() taht build a sorted list of pads
  */
+void NETINFO_LIST::BuildListOfNets()
 {
-    D_PAD*        pad;
+    D_PAD* pad;
     int nodes_count = 0;
     NETINFO_ITEM* net_item;
 
@@ -97,7 +100,7 @@ void NETINFO_LIST::BuildListOfNets()
 
     // Create and add the "unconnected net", always existing,
     // used to handle pads and tracks that are not member of a "real" net
-    net_item = new NETINFO_ITEM( m_Parent );
+    net_item = new NETINFO_ITEM( (BOARD_ITEM*) m_Parent );
     AppendNet( net_item );
 
     /* Build the PAD list, sorted by net */
@@ -106,9 +109,11 @@ void NETINFO_LIST::BuildListOfNets()
     /* Build netnames list, and create a netcode for each netname */
     D_PAD* last_pad = NULL;
     int    netcode = 0;
+
     for( unsigned ii = 0; ii < m_PadsFullList.size(); ii++ )
     {
         pad = m_PadsFullList[ii];
+
         if( pad->GetNetname().IsEmpty() ) // pad not connected
         {
             pad->SetNet( 0 );
@@ -118,10 +123,10 @@ void NETINFO_LIST::BuildListOfNets()
         /* if the current netname was already found: add pad to the current net_item ,
          *  else create a new net_code and a new net_item
          */
-        if( last_pad == NULL || ( pad->GetNetname() != last_pad->GetNetname() ) )   // create a new net_code
+        if( last_pad == NULL || ( pad->GetNetname() != last_pad->GetNetname() ) )
         {
             netcode++;
-            net_item = new NETINFO_ITEM( m_Parent );
+            net_item = new NETINFO_ITEM( (BOARD_ITEM*)m_Parent );
             net_item->SetNet( netcode );
             net_item->SetNetname( pad->GetNetname() );
             AppendNet( net_item );
@@ -145,17 +150,13 @@ void NETINFO_LIST::BuildListOfNets()
 #if 0
     for( unsigned icnt = 0; icnt < GetCount(); icnt++)
     {
-        wxLogWarning(wxT("icnt %d, netcode %d, netname <%s>\n"),
-            icnt, m_NetBuffer[icnt]->GetNet(),
-             GetChars( m_NetBuffer[icnt]->GetNetname() ) );
+        wxLogWarning( wxT( "icnt %d, netcode %d, netname <%s>\n" ),
+                      icnt, m_NetBuffer[icnt]->GetNet(),
+                      GetChars( m_NetBuffer[icnt]->GetNetname() ) );
     }
 #endif
 }
 
-
-/*****************************************/
-void NETINFO_LIST::Build_Pads_Full_List()
-/*****************************************/
 
 /**
  * Function Build_Pads_Full_List
@@ -170,6 +171,7 @@ void NETINFO_LIST::Build_Pads_Full_List()
  * and expects to have a nets list sorted by an alphabetic case sensitive sort
  * So do not change the sort function used here
  */
+void NETINFO_LIST::Build_Pads_Full_List()
 {
     if( m_Parent->m_Status_Pcb & LISTE_PAD_OK )
         return;

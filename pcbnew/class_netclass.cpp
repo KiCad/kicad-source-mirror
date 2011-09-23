@@ -25,12 +25,15 @@
 
 
 #include "fctsys.h"
-
 #include "common.h"
 #include "kicad_string.h"
 #include "pcbnew.h"
-#include "class_board_design_settings.h"
 #include "richio.h"
+#include "macros.h"
+
+#include "class_board.h"
+#include "class_netclass.h"
+
 
 // Current design settings (used also to read configs):
 extern BOARD_DESIGN_SETTINGS boardDesignSettings;

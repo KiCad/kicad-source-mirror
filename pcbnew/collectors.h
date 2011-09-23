@@ -22,6 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file collectors.h
+ */
+
 #ifndef COLLECTORS_H
 #define COLLECTORS_H
 
@@ -32,7 +36,10 @@
 
 
 #include "class_collector.h"
-#include "pcbstruct.h"              // LAYER_COUNT, layer defs
+#include "layers_id_colors_and_visibility.h"              // LAYER_COUNT, layer defs
+
+
+class BOARD_ITEM;
 
 
 /**

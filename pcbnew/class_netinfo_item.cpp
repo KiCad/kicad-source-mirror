@@ -3,13 +3,20 @@
 /*************************************************************************/
 
 #include "fctsys.h"
+#include "gr_basic.h"
 #include "class_drawpanel.h"
+#include "wxBasePcbFrame.h"
 #include "common.h"
 #include "kicad_string.h"
 #include "pcbnew.h"
-#include "class_board_design_settings.h"
 #include "colors_selection.h"
 #include "richio.h"
+#include "macros.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+
 
 /*********************************************************/
 /* class NETINFO_ITEM: handle data relative to a given net */

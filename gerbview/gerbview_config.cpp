@@ -1,18 +1,21 @@
-/************************************************/
-/** gerbview_config.cpp : Gerbview configuration*/
-/************************************************/
+/**
+ * @file gerbview_config.cpp
+ * @brief Gerbview configuration.
+*/
 
 #include "fctsys.h"
+#include "id.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "gestfich.h"
 #include "pcbcommon.h"
+
 #include "gerbview.h"
-//#include "pcbplot.h"
 #include "hotkeys.h"
 #include "class_board_design_settings.h"
 #include "gerbview_config.h"
 #include "dialog_hotkeys_editor.h"
+
 
 void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
 {
@@ -71,10 +74,10 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings( void )
         return m_configSettings;
 
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
-                                                    (int*) &g_UserUnit, 0, 0, 1 ) );
+                                                   (int*) &g_UserUnit, 0, 0, 1 ) );
 
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "DrawModeOption" ),
-                                                    &m_displayMode, 2, 0, 2 ) );
+                                                   &m_displayMode, 2, 0, 2 ) );
     m_configSettings.push_back( new PARAM_CFG_SETCOLOR( true,
                                                         wxT( "DCodeColor" ),
                                                         &g_ColorsSettings.m_ItemsColors[
@@ -110,6 +113,7 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings( void )
         wxT("ColorLayer8"), wxT("ColorLayer9"), wxT("ColorLayer10"), wxT("ColorLayer11"),
         wxT("ColorLayer12"), wxT("ColorLaye13"), wxT("ColorLayer14"), wxT("ColorLayer15")
     };
+
     for( unsigned ii = 0; ii < 32; ii++ )
     {
         int * prm = &g_ColorsSettings.m_LayersColors[1];

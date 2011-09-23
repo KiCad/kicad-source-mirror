@@ -32,6 +32,8 @@
 #include "common.h"
 #include "macros.h"
 #include "trigo.h"
+#include "gr_basic.h"
+
 #include "gerbview.h"
 #include "class_GERBER.h"
 

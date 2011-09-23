@@ -1,18 +1,25 @@
-/************************************************************/
-/* print_board_functions.cpp: some functions to plot boards */
-/************************************************************/
+/**
+ * @file print_board_functions.cpp
+ * @brief Functions to print boards.
+ */
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "class_drawpanel.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "module_editor_frame.h"
-#include "class_board_design_settings.h"
-#include "pcbplot.h"
 #include "printout_controler.h"
 #include "colors_selection.h"
+#include "pcbcommon.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_edge_mod.h"
+#include "class_track.h"
+#include "class_zone.h"
+
+#include "pcbnew.h"
 #include "protos.h"
+#include "pcbplot.h"
+#include "module_editor_frame.h"
 
 
 static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,

@@ -1,10 +1,18 @@
-/* class_DisplayFootprintsFrame.h */
+/**
+ * @file class_DisplayFootprintsFrame.h
+ */
 
 
-/*******************************************************/
-/* class DISPLAY_FOOTPRINTS_FRAME: used to display footprints */
-/*******************************************************/
+#include "wxBasePcbFrame.h"
 
+
+class CVPCB_MAINFRAME;
+
+
+/**
+ * Class DISPLAY_FOOTPRINTS_FRAME
+ * is used to display footprints.
+ */
 class DISPLAY_FOOTPRINTS_FRAME : public PCB_BASE_FRAME
 {
 public:

@@ -6,13 +6,17 @@
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "wxPcbStruct.h"
+#include "gr_basic.h"
 
 #include "pcbnew.h"
 #include "autorout.h"
 #include "cell.h"
 #include "zones.h"
-#include "class_board_design_settings.h"
 #include "ar_protos.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
 
 
 int E_scale;         /* Scaling factor of distance tables. */

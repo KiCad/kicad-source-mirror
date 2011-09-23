@@ -8,14 +8,16 @@
 
 #include "fctsys.h"
 #include "wxstruct.h"
+#include "pcbcommon.h"
 #include "confirm.h"
 #include "appl_wxstruct.h"
 #include "dialog_helpers.h"
 #include "kicad_device_context.h"
+#include "wxBasePcbFrame.h"
 
 #include "pcbnew.h"
 #include "pcbnew_id.h"
-#include "class_board_design_settings.h"
+#include "class_board.h"
 
 #include "collectors.h"
 #include "class_drawpanel.h"

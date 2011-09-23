@@ -5,13 +5,17 @@
 #ifndef _CVPCB_MAINFRAME_H_
 #define _CVPCB_MAINFRAME_H_
 
-#include "wx/listctrl.h"
+#include <wx/listctrl.h>
 #include <wx/filename.h>
+
+#include "wxBasePcbFrame.h"
 #include "param_config.h"
 #include "cvpcb.h"
 #include "footprint_info.h"
 
+
 /*  Forward declarations of all top-level window classes. */
+class EDA_TOOLBAR;
 class FOOTPRINTS_LISTBOX;
 class COMPONENTS_LISTBOX;
 class DISPLAY_FOOTPRINTS_FRAME;

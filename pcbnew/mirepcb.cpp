@@ -1,15 +1,18 @@
-/********************************************/
-/*  Functions to edit targets (class MIRE)  */
-/********************************************/
+/**
+ * @file mirepcb.cpp
+ * @brief Functions to edit targets (class MIRE).
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
+#include "wxPcbStruct.h"
+#include "dialog_helpers.h"
+#include "gr_basic.h"
+
+#include "class_board.h"
+#include "class_mire.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
-#include "dialog_helpers.h"
-
 #include "protos.h"
 
 

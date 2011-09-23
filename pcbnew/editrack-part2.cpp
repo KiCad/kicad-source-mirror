@@ -3,14 +3,19 @@
 /************************/
 
 #include "fctsys.h"
+#include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "wxPcbStruct.h"
+#include "pcbcommon.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_marker_pcb.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
 #include "drc_stuff.h"
-
 #include "protos.h"
 
 

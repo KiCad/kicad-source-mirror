@@ -1,6 +1,19 @@
-/**************************************************/
-/* Useful class and functions used to drag tracks */
-/**************************************************/
+/**
+ * @file drag.h
+ * @brief Useful class and functions used to drag tracks
+ */
+
+
+#include <vector>
+#include <wx/gdicmn.h>
+#include "class_track.h"
+
+
+class wxDC;
+class EDA_DRAW_PANEL;
+class MODULE;
+class D_PAD;
+
 
 /** Helper class to handle a list of track segments to drag
  * and has info to undo/abort the move command

@@ -6,8 +6,12 @@
 #ifndef CLASS_TRACK_H
 #define CLASS_TRACK_H
 
-#include "base_struct.h"
+
+#include "class_board_item.h"
 #include "PolyLine.h"
+
+
+class TRACK;
 
 
 // Via attributes (m_Shape parameter)

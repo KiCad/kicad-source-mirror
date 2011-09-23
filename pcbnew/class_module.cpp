@@ -1,6 +1,7 @@
-/****************************************************/
-/* class_module.cpp : MODULE class implementation.  */
-/****************************************************/
+/**
+ * @file class_module.cpp
+ * @brief MODULE class implementation.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -11,24 +12,23 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "pcbcommon.h"
-
 #include "pcbnew.h"
-#include "class_board_design_settings.h"
 #include "colors_selection.h"
+#include "richio.h"
+#include "filter_reader.h"
+#include "macros.h"
+#include "3d_struct.h"
 
 #include "drag.h"
 
-#include "3d_struct.h"
 #include "protos.h"
-#include "richio.h"
-#include "filter_reader.h"
+#include "class_board.h"
+#include "class_edge_mod.h"
+#include "class_module.h"
 
 
-/*********************************************/
-/* Class MODULE : describes a pcb component. */
-/*********************************************/
 MODULE::MODULE( BOARD* parent ) :
-    BOARD_ITEM( parent, TYPE_MODULE )
+    BOARD_ITEM( (BOARD_ITEM*) parent, TYPE_MODULE )
 {
     m_Attributs    = MOD_DEFAULT;
     m_Layer        = LAYER_N_FRONT;

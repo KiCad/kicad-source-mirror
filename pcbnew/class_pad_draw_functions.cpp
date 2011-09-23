@@ -1,19 +1,25 @@
-/*******************************/
-/* class_pad_draw_function.cpp */
-/*******************************/
+/**
+ * @file class_pad_draw_functions.cpp
+ */
 
 #include "fctsys.h"
-
 #include "gr_basic.h"
 #include "common.h"
 #include "trigo.h"
-#include "pcbnew_id.h"             // ID_TRACK_BUTT
+#include "class_pcb_screen.h"
 #include "class_drawpanel.h"
 #include "drawtxt.h"
+#include "layers_id_colors_and_visibility.h"
+#include "wxBasePcbFrame.h"
+#include "pcbcommon.h"
+#include "macros.h"
 
+#include "pcbnew_id.h"             // ID_TRACK_BUTT
 #include "pcbnew.h"
-#include "class_board_design_settings.h"
 #include "colors_selection.h"
+
+#include "class_board.h"
+
 
 /* uncomment this line to show this pad with its specfic size and color
  * when it is not on copper layers, and only one solder mask layer or solder paste layer

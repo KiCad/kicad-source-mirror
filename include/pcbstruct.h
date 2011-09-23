@@ -1,29 +1,15 @@
-/**************************************************************/
-/*  pcbstruct.h :  some classes and definitions used in pcbnew */
-/**************************************************************/
+/**
+ * @file pcbstruct.h
+ * @brief Classes and definitions used in pcbnew.
+ */
 
 #ifndef PCBSTRUCT_H
 #define PCBSTRUCT_H
 
-#include "base_struct.h"
-#include "class_base_screen.h"
-#include "class_board_item.h"
-#include "layers_id_colors_and_visibility.h"
 
 // Definitions relatives aux libraries
 #define ENTETE_LIBRAIRIE        "PCBNEW-LibModule-V1"
 #define L_ENTETE_LIB            18
-
-class NETINFO_ITEM;
-class MARKER_PCB;
-class RATSNEST_ITEM;
-
-
-/* main window classes : */
-#include "wxBasePcbFrame.h"
-
-/* Class to handle a board */
-#include "class_board.h"
 
 
 // Values for m_DisplayViaMode member:
@@ -34,46 +20,24 @@ enum DisplayViaMode {
     OPT_VIA_HOLE_END
 };
 
-/* Handle info to display a board */
-#include "class_pcb_screen.h"
-
-/**********************************/
-/* Module (Footprint) description */
-/**********************************/
-
-#include "class_pad.h"          // class for pads
-#include "class_edge_mod.h"     // Class for  footprint graphic elements
-#include "class_text_mod.h"     // Class for  footprint fields
-#include "class_module.h"       // Class for the footprint
-#include "class_netinfo.h"      // Class for nets
-
-#include "class_drawsegment.h"
-#include "class_pcb_text.h"
-#include "class_dimension.h"
-#include "class_mire.h"
-#include "class_track.h"
-#include "class_marker_pcb.h"
-#include "class_zone.h"
 
 /* Values for DISPLAY_OPTIONS.ShowTrackClearanceMode parameter option
- *  This parameter controls how to show tracks and vias clearance area
+ * This parameter controls how to show tracks and vias clearance area
  */
 enum ShowTrackClearanceModeList {
     DO_NOT_SHOW_CLEARANCE = 0,                // Do not show clearance areas
-    SHOW_CLEARANCE_NEW_TRACKS,                /* Show clearance areas only
-                                               * for new track during track
-                                               * creation */
-    SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS,  /* Show clearance areas only
-                                               * for new track during track
-                                               * creation, and shows a via
-                                               * clearance area at end of
-                                               * current new segment (guide
-                                               * to place a new via
+    SHOW_CLEARANCE_NEW_TRACKS,                /* Show clearance areas only for new track
+                                               * during track creation. */
+    SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS,  /* Show clearance areas only for new track
+                                               * during track creation, and shows a via
+                                               * clearance area at end of current new
+                                               * segment (guide to place a new via
                                                */
     SHOW_CLEARANCE_ALWAYS                      /* Show Always clearance areas
                                                 * for track and vias
                                                 */
 };
+
 
 class DISPLAY_OPTIONS
 {

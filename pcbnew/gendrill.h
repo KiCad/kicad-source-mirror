@@ -1,6 +1,8 @@
-/******************************************************************************/
-/* classes and functions declaration used in drill file and report generation */
-/******************************************************************************/
+/**
+ * @file gendrill.h
+ * @brief Classes and functions declaration used in drill file and report generation.
+ */
+
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
@@ -27,6 +29,13 @@
 
 #ifndef _GENDRILL_H_
 #define _GENDRILL_H_
+
+#include <vector>
+
+
+class BOARD;
+class PLOTTER;
+
 
 /* the DRILL_TOOL class  handles tools used in the excellon drill file */
 class DRILL_TOOL
@@ -228,4 +237,4 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb, const wxString& aBoardFilenam
                          std::vector<DRILL_TOOL>& aToolListBuffer
                          );
 
-#endif  //	#ifndef _GENDRILL_H_
+#endif  //  #ifndef _GENDRILL_H_

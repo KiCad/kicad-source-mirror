@@ -1,3 +1,7 @@
+/**
+ * @file drc_stuff.h
+ */
+
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
@@ -26,8 +30,7 @@
 #define _DRC_STUFF_H
 
 
-#include "fctsys.h"
-#include "class_marker_pcb.h"
+#include <vector>
 
 
 #define OK_DRC  0
@@ -73,8 +76,16 @@
 
 
 class EDA_DRAW_PANEL;
-class MARKER_PCB;
+class PCB_EDIT_FRAME;
 class DIALOG_DRC_CONTROL;
+class BOARD_ITEM;
+class BOARD;
+class D_PAD;
+class ZONE_CONTAINER;
+class TRACK;
+class MARKER_PCB;
+class DRC_ITEM;
+class NETCLASS;
 
 
 /**
@@ -92,7 +103,7 @@ public:
      * Function DeleteAllItems
      * removes and deletes all the items in the list.
      */
-    virtual void            DeleteAllItems() = 0;
+    virtual void DeleteAllItems() = 0;
 
     /**
      * Function GetItem
@@ -109,13 +120,13 @@ public:
      * @param aIndex The 0 based index into the list of the desired item which
      *         is to be deleted.
      */
-    virtual void            DeleteItem( int aIndex ) = 0;
+    virtual void DeleteItem( int aIndex ) = 0;
 
     /**
      * Function GetCount
      * returns the number of items in the list.
      */
-    virtual int             GetCount() = 0;
+    virtual int GetCount() = 0;
 
     virtual ~DRC_ITEM_LIST() { }
 };
@@ -159,16 +170,16 @@ private:
      * to the position of the segment under test (segm to segm DRC, segm to pad DRC
      * Next variables store coordinates relative to the start point of this segment
      */
-    wxPoint m_padToTestPos;         // Position of the pad to compare in drc test segm to pad or pad to pad
-    wxPoint m_segmEnd;              // End point of the reference segment (start point = (0,0) )
+    wxPoint m_padToTestPos; // Position of the pad to compare in drc test segm to pad or pad to pad
+    wxPoint m_segmEnd;      // End point of the reference segment (start point = (0,0) )
 
     /* Some functions are comparing the ref segm to pads or others segments using
      * coordinates relative to the ref segment considered as the X axis
      * so we store the ref segment length (the end point relative to these axis)
      * and the segment orientation (used to rotate other coordinates)
      */
-    int m_segmAngle;                // Ref segm orientation in 0,1 degre
-    int m_segmLength;               // length of the reference segment
+    int m_segmAngle;        // Ref segm orientation in 0,1 degre
+    int m_segmLength;       // length of the reference segment
 
     /* variables used in checkLine to test DRC segm to segm:
      * define the area relative to the ref segment that does not contains anu other segment
@@ -190,7 +201,7 @@ private:
      * is a private helper function used to update needed pointers from the
      * one pointer which is known not to change, m_mainWindow.
      */
-    void        updatePointers();
+    void updatePointers();
 
 
     /**
@@ -250,20 +261,20 @@ private:
      * @return bool - true if succes, else false but only after
      *  reporting _all_ NETCLASS violations.
      */
-    bool        testNetClasses();
+    bool testNetClasses();
 
-    void        testTracks();
+    void testTracks();
 
-    void        testPad2Pad();
+    void testPad2Pad();
 
-    void        testUnconnected();
+    void testUnconnected();
 
-    void        testZones( bool adoTestFillSegments );
+    void testZones( bool adoTestFillSegments );
 
 
     //-----<single "item" tests>-----------------------------------------
 
-    bool        doNetClass( NETCLASS* aNetClass, wxString& msg );
+    bool doNetClass( NETCLASS* aNetClass, wxString& msg );
 
     /**
      * Function doPadToPadsDrc
@@ -274,8 +285,7 @@ private:
      * @param aEnd Marks the end of the list and is not included
      * @param x_limit is used to stop the test (when the any pad's X coord exceeds this)
      */
-    bool        doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart,
-                                LISTE_PAD* aEnd, int x_limit );
+    bool doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit );
 
     /**
      * Function DoTrackDrc
@@ -286,7 +296,7 @@ private:
      * @return bool - true if no poblems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
-    bool        doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool doPads = true );
+    bool doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool doPads = true );
 
 
     /**
@@ -298,7 +308,7 @@ private:
      * @param aCornerIndex The first corner of the segment to test.
      * @return bool - false if DRC error  or true if OK
      */
-    bool        doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex );
+    bool doEdgeZoneDrc( ZONE_CONTAINER* aArea, int aCornerIndex );
 
     //-----<single tests>----------------------------------------------
 
@@ -308,7 +318,7 @@ private:
      * @param aPad Another pad to check against
      * @return bool - true if clearance between aRefPad and aPad is >= dist_min, else false
      */
-    bool        checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad );
+    bool checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad );
 
 
     /**
@@ -326,7 +336,7 @@ private:
      * @return true distance >= dist_min,
      *         false if distance < dist_min
      */
-    bool        checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist );
+    bool checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMinDist );
 
 
     /**
@@ -336,7 +346,8 @@ private:
      * (used to test DRC between a segment and a round pad, via or round end of a track
      * @param aCentre The coordinate of the circle's center
      * @param aRadius A "keep out" radius centered over the circle
-     * @param aLength The length of the segment (i.e. coordinate of end, becuase it is on the X axis)
+     * @param aLength The length of the segment (i.e. coordinate of end, becuase it is on
+     *                the X axis)
      * @return bool - true if distance >= radius, else
      *                false when distance < aRadius
      */
@@ -345,7 +356,8 @@ private:
 
     /**
      * Function checkLine
-     * (helper function used in drc calculations to see if one track is in contact with another track).
+     * (helper function used in drc calculations to see if one track is in contact with
+     *  another track).
      * Test if a line intersects a bounding box (a rectangle)
      * The rectangle is defined by m_xcliplo, m_ycliplo and m_xcliphi, m_ycliphi
      * return true if the line from aSegStart to aSegEnd is outside the bounding box
@@ -371,15 +383,15 @@ public:
 
     /**
      * Function Drc
-     * tests the outline segment starting at CornerIndex and returns the result and displays the error
-     * in the status panel only if one exists.
+     * tests the outline segment starting at CornerIndex and returns the result and displays
+     * the error in the status panel only if one exists.
      *      Test Edge inside other areas
      *      Test Edge too close other areas
      * @param aArea The areaparent which contains the corner.
      * @param aCornerIndex The starting point of the segment to test.
      * @return int - BAD_DRC (1) if DRC error  or OK_DRC (0) if OK
      */
-    int Drc( ZONE_CONTAINER* aArea, int aCornerIndex  );
+    int Drc( ZONE_CONTAINER* aArea, int aCornerIndex );
 
     /**
      * Function DrcBlind
@@ -428,9 +440,9 @@ public:
     {
         m_doPad2PadTest     = aPad2PadTest;
         m_doUnconnectedTest = aUnconnectedTest;
-        m_doZonesTest     = aZonesTest;
-        m_rptFilename     = aReportName;
-        m_doCreateRptFile = aSaveReport;
+        m_doZonesTest       = aZonesTest;
+        m_rptFilename       = aReportName;
+        m_doCreateRptFile   = aSaveReport;
     }
 
 

@@ -6,18 +6,16 @@
 
 #include "fctsys.h"
 #include "gr_basic.h"
-#include "common.h"
 #include "class_drawpanel.h"
+#include "wxstruct.h"
 #include "trigo.h"
 
 #include "pcbnew.h"
 #include "class_marker_pcb.h"
 
+
 #define SCALING_FACTOR 30       // Adjust the actual size of markers, when using default shape
 
-/*******************/
-/* Classe MARKER_PCB */
-/*******************/
 
 MARKER_PCB::MARKER_PCB( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, TYPE_MARKER_PCB ),
@@ -29,10 +27,10 @@ MARKER_PCB::MARKER_PCB( BOARD_ITEM* aParent ) :
 
 
 MARKER_PCB::MARKER_PCB( int aErrorCode, const wxPoint& aMarkerPos,
-               const wxString& aText, const wxPoint& aPos,
-               const wxString& bText, const wxPoint& bPos ) :
+                        const wxString& aText, const wxPoint& aPos,
+                        const wxString& bText, const wxPoint& bPos ) :
     BOARD_ITEM( NULL, TYPE_MARKER_PCB ),  // parent set during BOARD::Add()
-    MARKER_BASE(  aErrorCode, aMarkerPos, aText, aPos, bText, bPos )
+    MARKER_BASE( aErrorCode, aMarkerPos, aText, aPos, bText, bPos )
 
 {
     m_Color = WHITE;
@@ -61,23 +59,26 @@ void MARKER_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     const DRC_ITEM& rpt = m_drc;
 
-    frame->AppendMsgPanel( _( "Type" ), _("Marker"), DARKCYAN );
+    frame->AppendMsgPanel( _( "Type" ), _( "Marker" ), DARKCYAN );
 
     wxString errorTxt;
 
-    errorTxt << _("ErrType") << wxT("(") << rpt.GetErrorCode() << wxT(")-  ") << rpt.GetErrorText() << wxT(":");
+    errorTxt << _( "ErrType" ) << wxT( "(" ) << rpt.GetErrorCode() << wxT( ")-  " )
+             << rpt.GetErrorText() << wxT( ":" );
 
     frame->AppendMsgPanel( errorTxt, wxEmptyString, RED );
 
     wxString txtA;
-    txtA << DRC_ITEM::ShowCoord( rpt.GetPointA() ) << wxT(": ") << rpt.GetTextA();
+    txtA << DRC_ITEM::ShowCoord( rpt.GetPointA() ) << wxT( ": " ) << rpt.GetTextA();
 
     wxString txtB;
+
     if ( rpt.HasSecondItem() )
-        txtB << DRC_ITEM::ShowCoord( rpt.GetPointB() ) << wxT(": ") << rpt.GetTextB();
+        txtB << DRC_ITEM::ShowCoord( rpt.GetPointB() ) << wxT( ": " ) << rpt.GetTextB();
 
     frame->AppendMsgPanel( txtA, txtB, DARKBROWN );
 }
+
 
 /**
  * Function Rotate
@@ -89,6 +90,7 @@ void MARKER_PCB::Rotate(const wxPoint& aRotCentre, int aAngle)
 {
     RotatePoint( &m_Pos, aRotCentre, aAngle );
 }
+
 
 /**
  * Function Flip

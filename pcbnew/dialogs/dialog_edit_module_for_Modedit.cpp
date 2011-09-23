@@ -11,6 +11,9 @@
 #include "3d_struct.h"
 #include "3d_viewer.h"
 #include "wxPcbStruct.h"
+
+#include "class_module.h"
+#include "class_text_mod.h"
 #include "module_editor_frame.h"
 #include "dialog_edit_module_for_Modedit.h"
 

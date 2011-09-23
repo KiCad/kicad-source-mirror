@@ -2,13 +2,18 @@
 /* Edit Track: Erase Routines             */
 /* Delete segments, tracks, and net areas */
 /******************************************/
-#include "fctsys.h"
 
+#include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "macros.h"
+#include "pcbcommon.h"
 
+#include "class_board.h"
+#include "class_track.h"
+
+#include "pcbnew.h"
 #include "protos.h"
 
 

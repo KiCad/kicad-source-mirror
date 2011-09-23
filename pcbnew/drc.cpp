@@ -29,14 +29,19 @@
 /****************************/
 
 #include "fctsys.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
 #include "class_board_design_settings.h"
 
-#include "protos.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_pad.h"
+#include "class_zone.h"
 
+#include "pcbnew.h"
+#include "protos.h"
 #include "drc_stuff.h"
+
 #include "dialog_drc.h"
 
 
@@ -544,7 +549,7 @@ void DRC::testZones( bool adoTestFillSegments )
 }
 
 
-bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd, int x_limit )
+bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_limit )
 {
     int layerMask = aRefPad->m_layerMask & ALL_CU_LAYERS;
 
@@ -563,7 +568,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd, in
                                       *  (a value = 0 means use netclass value)
                                       */
 
-    for(  LISTE_PAD* pad_list = aStart;  pad_list<aEnd;  ++pad_list )
+    for( D_PAD** pad_list = aStart;  pad_list<aEnd;  ++pad_list )
     {
         D_PAD* pad = *pad_list;
 
@@ -578,7 +583,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, LISTE_PAD* aStart, LISTE_PAD* aEnd, in
         // No problem if pads are on different copper layers,
         // but their hole (if any ) can create DRC error because they are on all
         // copper layers, so we test them
-        if( (pad->m_layerMask & layerMask ) == 0 )
+        if( ( pad->m_layerMask & layerMask ) == 0 )
         {
             // if holes are in the same location and have the same size and shape,
             // this can be accepted

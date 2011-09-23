@@ -1,54 +1,38 @@
-/////////////////////////////////////////////////////////////////////////////
-
-// Name:        zones_polygons_insulated_copper_islands.cpp
-// Licence:     GPL License
-/////////////////////////////////////////////////////////////////////////////
-
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
-
-
-// For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
+/**
+ * @file zones_polygons_insulated_copper_islands.cpp
+ */
 
 using namespace std;
 
 #include "fctsys.h"
-
 #include "common.h"
-#include "pcbnew.h"
-#include "PolyLine.h"
 
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_zone.h"
+
+#include "pcbnew.h"
 #include "zones.h"
 
-
-/***************************************************************************************/
-void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD * aPcb )
-/***************************************************************************************/
 
 /**
  * Function Test_For_Copper_Island_And_Remove__Insulated_Islands
  * Remove insulated copper islands found in m_FilledPolysList.
  * @param aPcb = the board to analyse
  */
+void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD * aPcb )
 {
     if( m_FilledPolysList.size() == 0 )
         return;
 
     // Build a list of points connected to the net:
-    std::vector <wxPoint> ListPointsCandidates;                                         // list of coordinates of pads and vias on this layer and on this net.
-    for( MODULE* module = aPcb->m_Modules;
-        module;
-        module = module->Next() )
+    // list of coordinates of pads and vias on this layer and on this net.
+    std::vector <wxPoint> ListPointsCandidates;
+
+    for( MODULE* module = aPcb->m_Modules; module; module = module->Next() )
     {
-        for( D_PAD* pad = module->m_Pads;
-            pad != NULL;
-            pad = pad->Next() )
+        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
             if( !pad->IsOnLayer( GetLayer() ) )
                 continue;
@@ -60,15 +44,16 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
         }
     }
 
-    for( TRACK* track = aPcb->m_Track;
-        track;
-        track = track->Next() )
+    for( TRACK* track = aPcb->m_Track; track; track = track->Next() )
     {
         if( !track->IsOnLayer( GetLayer() ) )
             continue;
+
         if( track->GetNet() != GetNet() )
             continue;
+
         ListPointsCandidates.push_back( track->m_Start );
+
         if( track->Type() != TYPE_VIA )
             ListPointsCandidates.push_back( track->m_End );
     }
@@ -76,78 +61,77 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
     // test if a point is inside
     unsigned indexstart = 0, indexend;
     bool     connected  = false;
-    for( indexend = 0;
-         indexend < m_FilledPolysList.size();
-         indexend++ )
+
+    for( indexend = 0; indexend < m_FilledPolysList.size(); indexend++ )
     {
-        if( m_FilledPolysList[indexend].end_contour )                                         // end of a filled sub-area found
+        if( m_FilledPolysList[indexend].end_contour )    // end of a filled sub-area found
         {
-            EDA_RECT bbox =
-                CalculateSubAreaBoundaryBox( indexstart,
-                    indexend );
-            for( unsigned ic = 0;
-                 ic < ListPointsCandidates.size();
-                 ic++ )
-            {                                         // test if this area is connected to a board item:
+            EDA_RECT bbox = CalculateSubAreaBoundaryBox( indexstart, indexend );
+
+            for( unsigned ic = 0; ic < ListPointsCandidates.size(); ic++ )
+            {
+                // test if this area is connected to a board item:
                 wxPoint pos = ListPointsCandidates[ic];
+
                 if( !bbox.Contains( pos ) )
                     continue;
-                if( TestPointInsidePolygon(
-                       m_FilledPolysList, indexstart,
-                       indexend, pos.x,
-                       pos.y ) )
+
+                if( TestPointInsidePolygon( m_FilledPolysList, indexstart, indexend,
+                                            pos.x, pos.y ) )
                 {
                     connected = true;
                     break;
                 }
             }
 
-            if( connected )                                                         // this polygon is connected: analyse next polygon
+            if( connected )                 // this polygon is connected: analyse next polygon
             {
-                indexstart = indexend + 1;                                          // indexstart points the first point of the next polygon
+                indexstart = indexend + 1;  // indexstart points the first point of the next polygon
                 connected  = false;
             }
-            else                                         // Not connected: remove this polygon
+            else                             // Not connected: remove this polygon
             {
-                m_FilledPolysList.erase(
-                    m_FilledPolysList.begin() + indexstart,
-                    m_FilledPolysList.begin() + indexend +
-                    1 );
-                indexend = indexstart;                                         /* indexstart points the first point of the next polygon
-                                                                                * because the current poly is removed */
+                m_FilledPolysList.erase( m_FilledPolysList.begin() + indexstart,
+                                         m_FilledPolysList.begin() + indexend + 1 );
+
+                indexend = indexstart;   /* indexstart points the first point of the next polygon
+                                          * because the current poly is removed */
             }
         }
     }
 }
 
 
-/**************************************************************************************/
-EDA_RECT ZONE_CONTAINER::CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd )
-/**************************************************************************************/
-
 /**
  * Function CalculateSubAreaBoundaryBox
  * Calculates the bounding box of a a filled area ( list of CPolyPt )
- * use m_FilledPolysList as list of CPolyPt (that are the corners of one or more polygons or filled areas )
+ * use m_FilledPolysList as list of CPolyPt (that are the corners of one or more polygons or
+ * filled areas )
  * @return an EDA_RECT as bounding box
  * @param aIndexStart = index of the first corner of a polygon (filled area) in m_FilledPolysList
  * @param aIndexEnd = index of the last corner of a polygon in m_FilledPolysList
  */
+EDA_RECT ZONE_CONTAINER::CalculateSubAreaBoundaryBox( int aIndexStart, int aIndexEnd )
 {
     CPolyPt  start_point, end_point;
     EDA_RECT bbox;
 
     start_point = m_FilledPolysList[aIndexStart];
     end_point   = start_point;
+
     for( int ii = aIndexStart; ii <= aIndexEnd; ii++ )
     {
         CPolyPt ptst = m_FilledPolysList[ii];
+
         if( start_point.x > ptst.x )
             start_point.x = ptst.x;
+
         if( start_point.y > ptst.y )
             start_point.y = ptst.y;
+
         if( end_point.x < ptst.x )
             end_point.x = ptst.x;
+
         if( end_point.y < ptst.y )
             end_point.y = ptst.y;
     }

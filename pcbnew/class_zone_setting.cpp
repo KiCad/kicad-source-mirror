@@ -15,11 +15,11 @@
 #endif
 
 #include "fctsys.h"
-#include "PolyLine.h"
 
 #include "common.h"
 #include "pcbnew.h"
 #include "zones.h"
+
 #include "class_zone.h"
 
 ZONE_SETTING::ZONE_SETTING( void )

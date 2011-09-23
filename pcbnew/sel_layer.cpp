@@ -1,12 +1,16 @@
-/* Set up the basic primitives for Layer control */
+/**
+ * @file sel_layer.cpp
+ * @brief Set up the basic primitives for Layer control.
+ */
 
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "wxBasePcbFrame.h"
+#include "pcbcommon.h"
 
-#include "pcbnew.h"
-#include "class_board_design_settings.h"
+#include "class_board.h"
 
 
 enum layer_sel_id {
@@ -21,13 +25,12 @@ class SELECT_LAYER_DIALOG : public wxDialog
 private:
     PCB_BASE_FRAME* m_Parent;
     wxRadioBox*     m_LayerList;
-    int m_LayerId[NB_LAYERS + 1]; // One extra element for "(Deselect)"
-                                  // radiobutton
+    int m_LayerId[NB_LAYERS + 1]; // One extra element for "(Deselect)" radiobutton
 
 public:
     // Constructor and destructor
     SELECT_LAYER_DIALOG( PCB_BASE_FRAME* parent, int default_layer,
-                          int min_layer, int max_layer, bool null_layer );
+                         int min_layer, int max_layer, bool null_layer );
     ~SELECT_LAYER_DIALOG() { };
 
 private:

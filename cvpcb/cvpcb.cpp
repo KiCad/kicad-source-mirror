@@ -3,6 +3,7 @@
 /*******************/
 
 #include "fctsys.h"
+#include "gr_basic.h"
 #include "appl_wxstruct.h"
 #include "wxstruct.h"
 #include "confirm.h"

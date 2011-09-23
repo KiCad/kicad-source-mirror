@@ -2,20 +2,27 @@
 #ifndef __PCBCOMMON_H__
 #define __PCBCOMMON_H__
 
-#include "pcbstruct.h"
+
 #include "dlist.h"
+#include "layers_id_colors_and_visibility.h"  // LAYER_COUNT and NB_COPPER_LAYERS definitions.
+
+#include <wx/string.h>                        // wxString class.
+#include <wx/arrstr.h>                        // wxArrayString class.
+
 
 #define L_MIN_DESSIN 1  /* Min width segments to allow draws with thickness */
 
-class DPAD;
-class BOARD_ITEM;
+
 class PCB_SCREEN;
+class D_PAD;
+class TRACK;
+class BOARD;
 class DISPLAY_OPTIONS;
+
 
 /* Look up Table for conversion one layer number -> one bit layer mask: */
 extern int g_TabOneLayerMask[LAYER_COUNT];
-/* Look up Table for conversion copper layer count -> general copper layer
- * mask: */
+/* Look up Table for conversion copper layer count -> general copper layer mask: */
 extern int g_TabAllCopperLayerMask[NB_COPPER_LAYERS];
 
 

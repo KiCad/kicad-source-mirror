@@ -26,7 +26,6 @@
  * (that reinit the new references)
  */
 
-#include "vector"
 #include "algorithm"
 
 #include "fctsys.h"
@@ -34,11 +33,15 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "richio.h"
 #include "dialog_helpers.h"
+#include "macros.h"
 
+#include "class_board.h"
+#include "class_module.h"
+
+#include "pcbnew.h"
 #include "dialog_netlist.h"
 
 

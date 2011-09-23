@@ -1,10 +1,13 @@
-/******************************************/
-/* class BOARD_ITEM: some basic functions */
-/******************************************/
+/**
+ * @file class_board_item.cpp
+ * @brief Class BOARD_ITEM definition and  some basic functions.
+ */
 
 #include "fctsys.h"
 #include "common.h"
 #include "pcbnew.h"
+
+#include "class_board.h"
 
 
 wxString BOARD_ITEM::ShowShape( Track_Shapes aShape )

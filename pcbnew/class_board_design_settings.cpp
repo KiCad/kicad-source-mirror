@@ -1,46 +1,52 @@
-/***************************************************************************/
-/* class_board_design_settings.cpp - BOARD_DESIGN_SETTINGS class functions */
-/***************************************************************************/
+/**
+ * @file class_board_design_settings.cpp
+ * BOARD_DESIGN_SETTINGS class functions.
+ */
+
 #include "fctsys.h"
 #include "common.h"
+#include "layers_id_colors_and_visibility.h"
 
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
 
+#include "class_track.h"
 
-/*****************************************************/
+
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
-/*****************************************************/
-
-// Default values for designing boards
 {
-    m_EnabledLayers = ALL_LAYERS;                       // All layers enabled at first.
-                                                        // SetCopperLayerCount() will adjust this.
-    SetVisibleAlls( );                                  // All layers  and all elements visible at first.
+    m_EnabledLayers = ALL_LAYERS;               // All layers enabled at first.
+                                                // SetCopperLayerCount() will adjust this.
+    SetVisibleAlls( );                          // All layers  and all elements visible at first.
 
-    SetCopperLayerCount( 2 );                           // Default design is a double sided board
+    SetCopperLayerCount( 2 );                   // Default design is a double sided board
 
-    m_CurrentViaType = VIA_THROUGH;                     // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA)
-    m_UseConnectedTrackWidth = false;                   // if true, when creating a new track starting on an existing track, use this track width
-    m_MicroViasAllowed = false;                         // true to allow micro vias
-    m_DrawSegmentWidth = 100;                           // current graphic line width (not EDGE layer)
-    m_EdgeSegmentWidth = 100;                           // current graphic line width (EDGE layer only)
-    m_PcbTextWidth     = 100;                           // current Pcb (not module) Text width
-    m_PcbTextSize       = wxSize( 500, 500 );           // current Pcb (not module) Text size
-    m_TrackMinWidth     = 80;                           // track min value for width ((min copper size value
-    m_ViasMinSize       = 350;                          // vias (not micro vias) min diameter
-    m_ViasMinDrill      = 200;                          // vias (not micro vias) min drill diameter
-    m_MicroViasMinSize  = 200;                          // micro vias (not vias) min diameter
-    m_MicroViasMinDrill = 50;                           // micro vias (not vias) min drill diameter
+    // via type (VIA_BLIND_BURIED, VIA_THROUGH VIA_MICROVIA).
+    m_CurrentViaType = VIA_THROUGH;
+
+    // if true, when creating a new track starting on an existing track, use this track width
+    m_UseConnectedTrackWidth = false;
+
+    m_MicroViasAllowed = false;                 // true to allow micro vias
+    m_DrawSegmentWidth = 100;                   // current graphic line width (not EDGE layer)
+    m_EdgeSegmentWidth = 100;                   // current graphic line width (EDGE layer only)
+    m_PcbTextWidth     = 100;                   // current Pcb (not module) Text width
+    m_PcbTextSize       = wxSize( 500, 500 );   // current Pcb (not module) Text size
+    m_TrackMinWidth     = 80;                   // track min value for width ((min copper size value
+    m_ViasMinSize       = 350;                  // vias (not micro vias) min diameter
+    m_ViasMinDrill      = 200;                  // vias (not micro vias) min drill diameter
+    m_MicroViasMinSize  = 200;                  // micro vias (not vias) min diameter
+    m_MicroViasMinDrill = 50;                   // micro vias (not vias) min drill diameter
 
     // Global mask margins:
-    m_SolderMaskMargin  = 150;                          // Solder mask margin
-    m_SolderPasteMargin = 0;                            // Solder paste margin absolute value
-    m_SolderPasteMarginRatio = 0.0;                     // Solder pask margin ratio value of pad size
-                                                        // The final margin is the sum of these 2 values
-                                                        // Usually < 0 because the mask is smaller than pad
+    m_SolderMaskMargin  = 150;                  // Solder mask margin
+    m_SolderPasteMargin = 0;                    // Solder paste margin absolute value
+    m_SolderPasteMarginRatio = 0.0;             // Solder pask margin ratio value of pad size
+                                                // The final margin is the sum of these 2 values
+                                                // Usually < 0 because the mask is smaller than pad
 
-    m_BoardThickness = (int)(1.6 * PCB_INTERNAL_UNIT / 25.4);  // Epoxy thickness for 3D view (and microwave calculations)                               // Layer Thickness for 3D viewer
+    // Layer thickness for 3D viewer
+    m_BoardThickness = (int)(1.6 * PCB_INTERNAL_UNIT / 25.4);
 
 }
 
@@ -57,11 +63,12 @@ int BOARD_DESIGN_SETTINGS::GetVisibleLayers() const
  * Set the bit-mask of all visible elements categories,
  * including enabled layers
  */
-void BOARD_DESIGN_SETTINGS::SetVisibleAlls( )
+void BOARD_DESIGN_SETTINGS::SetVisibleAlls()
 {
     SetVisibleLayers( FULL_LAYERS );
     m_VisibleElements = 0xFFFFFFFF;
 }
+
 
 void BOARD_DESIGN_SETTINGS::SetVisibleLayers( int aMask )
 {
@@ -75,6 +82,7 @@ void BOARD_DESIGN_SETTINGS::SetLayerVisibility( int aLayerIndex, bool aNewState 
     // Altough Pcbnew uses only 29, Gerbview uses all 32 layers
     if( aLayerIndex < 0 || aLayerIndex >= 32 )
         return;
+
     if( aNewState && IsLayerEnabled( aLayerIndex ) )
         m_VisibleLayers |= 1 << aLayerIndex;
     else
@@ -86,6 +94,7 @@ void BOARD_DESIGN_SETTINGS::SetElementVisibility( int aElementCategory, bool aNe
 {
     if( aElementCategory < 0 || aElementCategory >= END_PCB_VISIBLE_LIST )
         return;
+
     if( aNewState )
         m_VisibleElements |= 1 << aElementCategory;
     else
@@ -110,6 +119,7 @@ void BOARD_DESIGN_SETTINGS::SetCopperLayerCount( int aNewLayerCount )
         m_EnabledLayers |= 1 << ii;
 }
 
+
 /**
  * Function SetEnabledLayers
  * changes the bit-mask of enabled layers
@@ -127,10 +137,10 @@ void BOARD_DESIGN_SETTINGS::SetEnabledLayers( int aMask )
 
     // update m_CopperLayerCount to ensure its consistency with m_EnabledLayers
     m_CopperLayerCount = 0;
+
     for( int ii = 0;  aMask && ii < NB_COPPER_LAYERS;  ii++, aMask >>= 1 )
     {
         if( aMask & 1 )
             m_CopperLayerCount++;
     }
 }
-

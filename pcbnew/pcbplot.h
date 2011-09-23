@@ -1,11 +1,21 @@
-/************/
-/* pcbplot.h*/
-/************/
+/**
+ * @file pcbnew/pcbplot.h
+ */
 
 #ifndef PCBPLOT_H
 #define PCBPLOT_H
 
 #include "pcb_plot_params.h"
+
+
+class PLOTTER;
+class TEXTE_PCB;
+class DRAWSEGMENT;
+class DIMENSION;
+class EDGE_MODULE;
+class PCB_TARGET;
+class ZONE_CONTAINER;
+
 
 /* Shared Config keys for plot and print */
 #define OPTKEY_LAYERBASE             wxT( "PlotLayer_%d" )

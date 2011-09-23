@@ -1,14 +1,21 @@
-/***************************************************************************************/
-/* Ratsnest calculations: Function to handle existing tracks in ratsnest calculations */
-/***************************************************************************************/
+/**
+ * @file connect.cpp
+ * @brief Functions to handle existing tracks in ratsnest calculations.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
-
 #include "common.h"
-#include "pcbnew.h"
+#include "pcbcommon.h"
+#include "macros.h"
+#include "wxBasePcbFrame.h"
 
+#include "class_track.h"
+#include "class_board.h"
+
+#include "pcbnew.h"
 #include "protos.h"
+
 
 extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb );
 extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );

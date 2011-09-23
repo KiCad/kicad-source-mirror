@@ -10,6 +10,7 @@
 
 #include "gerbview.h"
 #include "gerbview_id.h"
+#include "class_gerbview_layer_widget.h"
 
 
 /* Load a Gerber file selected from history list on current layer

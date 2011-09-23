@@ -1,20 +1,25 @@
-/************************************************************/
-/* moduleframe.cpp - Footprint (module) editor main window. */
-/************************************************************/
+/**
+ * @file moduleframe.cpp
+ * @brief Footprint (module) editor main window.
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "module_editor_frame.h"
+#include "dialog_helpers.h"
+#include "3d_viewer.h"
+#include "pcbcommon.h"
+
+#include "class_board.h"
+#include "class_module.h"
+
+#include "pcbnew.h"
 #include "protos.h"
 #include "pcbnew_id.h"
 #include "hotkeys.h"
-#include "dialog_helpers.h"
-
-#include "3d_viewer.h"
+#include "module_editor_frame.h"
 
 
 static PCB_SCREEN* s_screenModule = NULL;   // the PCB_SCREEN used by the footprint editor

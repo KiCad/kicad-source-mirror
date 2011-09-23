@@ -1,18 +1,19 @@
-/*******************************/
-/* Dialog frame to swap layers */
-/*******************************/
-
-/*
- * swap_layers.cpp
+/**
+ * @file swap_layers.cpp
+ * @brief Dialog to swap layers.
  */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "protos.h"
 
+#include "class_board.h"
+#include "class_track.h"
+#include "class_drawsegment.h"
+
+#include "pcbnew.h"
+#include "protos.h"
 
 #include "wx/statline.h"
 

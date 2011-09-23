@@ -1,12 +1,18 @@
-/****************************************************/
-/* PCB_TARGET class definition.  (targets for photos)  */
-/****************************************************/
+/**
+ * @file class_mire.h
+ * @brief PCB_TARGET class definition.  (targets for photo plots).
+ */
 
 #ifndef MIRE_H
 #define MIRE_H
 
-#include "base_struct.h"
-#include "richio.h"
+
+#include "class_board_item.h"
+
+
+class EDA_RECT;
+class LINE_READER;
+class EDA_DRAW_PANEL;
 
 
 class PCB_TARGET : public BOARD_ITEM
@@ -21,8 +27,8 @@ public:
     PCB_TARGET( BOARD_ITEM* aParent );
     ~PCB_TARGET();
 
-    PCB_TARGET*    Next() const { return (PCB_TARGET*) Pnext; }
-    PCB_TARGET*    Back() const { return (PCB_TARGET*) Pnext; }
+    PCB_TARGET* Next() const { return (PCB_TARGET*) Pnext; }
+    PCB_TARGET* Back() const { return (PCB_TARGET*) Pnext; }
 
     wxPoint& GetPosition()
     {
@@ -63,12 +69,12 @@ public:
      */
     bool Save( FILE* aFile ) const;
 
-    bool    ReadMirePcbDescr( LINE_READER* aReader );
+    bool ReadMirePcbDescr( LINE_READER* aReader );
 
-    void    Copy( PCB_TARGET* source );
+    void Copy( PCB_TARGET* source );
 
-    void    Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
-                  const wxPoint& offset = ZeroOffset );
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
+               const wxPoint& offset = ZeroOffset );
 
 
     /**
@@ -77,7 +83,7 @@ public:
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( const wxPoint& refPos );
+    bool HitTest( const wxPoint& refPos );
 
     /**
      * Function HitTest (overlaid)
@@ -86,7 +92,7 @@ public:
      * @param refArea : the given EDA_RECT
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( EDA_RECT& refArea );
+    bool HitTest( EDA_RECT& refArea );
 
     EDA_RECT GetBoundingBox() const;
 

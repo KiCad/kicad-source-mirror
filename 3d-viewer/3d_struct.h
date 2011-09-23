@@ -1,10 +1,11 @@
-/*****************/
-/*	3d_struct.h  */
-/*****************/
+/**
+ * @file 3d_struct.h
+ */
 
 #ifndef STRUCT_3D_H
 #define STRUCT_3D_H
 
+#include "common.h"
 #include "base_struct.h"
 
 

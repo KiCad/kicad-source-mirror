@@ -1,14 +1,18 @@
-/***************/
-/* loadcmp.cpp */
-/***************/
+/**
+ * @file cvpcb/loadcmp.cpp
+ */
 
 #include "fctsys.h"
 #include "wxstruct.h"
+#include "gr_basic.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "macros.h"
 #include "appl_wxstruct.h"
+
+#include "pcbstruct.h"
+#include "class_module.h"
 
 #include "cvpcb.h"
 #include "cvpcb_mainframe.h"
@@ -80,6 +84,7 @@ found in the default search paths." ),
         }
 
         Found = 0;
+
         while( !Found && reader.ReadLine() )
         {
             Line = reader.Line();
@@ -91,10 +96,12 @@ found in the default search paths." ),
                 while( reader.ReadLine() )
                 {
                     Line = reader.Line();
+
                     if( strnicmp( Line, "$EndINDEX", 9 ) == 0 )
                         break;
 
                     StrPurge( Line );
+
                     if( stricmp( Line, TO_UTF8( CmpName ) ) == 0 )
                     {
                         Found = 1;
@@ -118,9 +125,11 @@ found in the default search paths." ),
 
             /* Read component name. */
             sscanf( Line + 7, " %s", Name );
+
             if( stricmp( Name, TO_UTF8( CmpName ) ) == 0 )
             {
                 Module = new MODULE( GetBoard() );
+
                 // Switch the locale to standard C (needed to print floating
                 // point numbers like 1.3)
                 SetLocaleTo_C_standard();

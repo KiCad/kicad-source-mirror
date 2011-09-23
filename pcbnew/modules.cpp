@@ -1,18 +1,21 @@
-/***************/
-/* modules.cpp */
-/***************/
+/*
+ * @file modules.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
+#include "macros.h"
+#include "pcbcommon.h"
 
+#include "class_board.h"
+#include "class_module.h"
+
+#include "pcbnew.h"
 #include "protos.h"
-
 #include "drag.h"
 
 
@@ -517,6 +520,7 @@ void DrawModuleOutlines( EDA_DRAW_PANEL* panel, wxDC* DC, MODULE* module )
 
     if( module == NULL )
         return;
+
     module->DrawEdgesOnly( panel, DC, g_Offset_Module, GR_XOR );
 
     if( g_Show_Pads_Module_in_Move )

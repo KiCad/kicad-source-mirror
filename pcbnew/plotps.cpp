@@ -1,16 +1,21 @@
-/*************************/
-/**** Plot Postscript ****/
-/*************************/
+/**
+ * @file plotps.cpp
+ * @brief Plot Postscript.
+ */
 
 #include "fctsys.h"
 #include "common.h"
 #include "plot_common.h"
 #include "confirm.h"
-#include "pcbnew.h"
-#include "pcbplot.h"
 #include "trigo.h"
+#include "wxBasePcbFrame.h"
+#include "macros.h"
 
+#include "class_board.h"
+
+#include "pcbnew.h"
 #include "protos.h"
+#include "pcbplot.h"
 
 
 /* Generate a PostScript file (*. ps) of the circuit layer.

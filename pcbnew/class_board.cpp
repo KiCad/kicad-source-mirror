@@ -1,13 +1,24 @@
-/*******************************************/
-/* class_board.cpp - BOARD class functions */
-/*******************************************/
+/**
+ * @file class_board.cpp
+ * @brief  BOARD class functions.
+ */
+
 #include <limits.h>
+
 #include "fctsys.h"
 #include "common.h"
+#include "pcbcommon.h"
+#include "wxBasePcbFrame.h"
 
 #include "pcbnew.h"
 #include "colors_selection.h"
+
 #include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_zone.h"
+#include "class_marker_pcb.h"
+
 
 /* This is an odd place for this, but cvpcb won't link if it is
  *  in class_board_item.cpp like I first tried it.
@@ -25,8 +36,8 @@ BOARD_DESIGN_SETTINGS boardDesignSettings;
  */
 static int sortPadsByXCoord( const void* pt_ref, const void* pt_comp )
 {
-    D_PAD* ref  = *(LISTE_PAD*) pt_ref;
-    D_PAD* comp = *(LISTE_PAD*) pt_comp;
+    D_PAD* ref  = *(D_PAD**) pt_ref;
+    D_PAD* comp = *(D_PAD**) pt_comp;
 
     return ref->m_Pos.x - comp->m_Pos.x;
 }
@@ -1676,14 +1687,14 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, int aLayerMask )
 }
 
 
-D_PAD* BOARD::GetPad( LISTE_PAD* aPad, const wxPoint& aPosition, int aLayerMask )
+D_PAD* BOARD::GetPad( D_PAD** aPad, const wxPoint& aPosition, int aLayerMask )
 {
-    D_PAD*     pad;
-    int        ii;
+    D_PAD*  pad;
+    int     ii;
 
-    int        nb_pad  = GetPadsCount();
-    LISTE_PAD* ptr_pad = aPad;
-    LISTE_PAD* lim = aPad + nb_pad - 1;
+    int     nb_pad  = GetPadsCount();
+    D_PAD** ptr_pad = aPad;
+    D_PAD** lim = aPad + nb_pad - 1;
 
     ptr_pad = aPad;
 

@@ -9,17 +9,21 @@
 #include "confirm.h"
 #include "eda_doc.h"
 #include "gestfich.h"
-#include "pcbnew_id.h"
-
-#include "pcbnew.h"
+#include "kicad_device_context.h"
 #include "wxPcbStruct.h"
+#include "pcbcommon.h"
+
+#include "pcbnew_id.h"
+#include "pcbnew.h"
 #include "module_editor_frame.h"
-#include "class_board_design_settings.h"
 #include "protos.h"
 
-#include "dialog_drc.h"
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_zone.h"
 
-#include "kicad_device_context.h"
+#include "dialog_drc.h"
 
 #include "dialog_global_edit_tracks_and_vias.h"
 

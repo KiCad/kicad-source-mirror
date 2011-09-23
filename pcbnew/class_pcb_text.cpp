@@ -1,6 +1,7 @@
-/*********************************************************/
-/* class TEXTE_PCB : texts on copper or technical layers */
-/*********************************************************/
+/**
+ * @file class_pcb_text.cpp
+ * @brief Class TEXTE_PCB texts on copper or technical layers implementation
+ */
 
 #include "fctsys.h"
 #include "wxstruct.h"
@@ -8,18 +9,18 @@
 #include "base_struct.h"
 #include "drawtxt.h"
 #include "kicad_string.h"
-
-#include "pcbnew.h"
-#include "class_board_design_settings.h"
-#include "colors_selection.h"
 #include "trigo.h"
-#include "protos.h"
+#include "pcbcommon.h"
+#include "colors_selection.h"
 #include "richio.h"
 #include "class_drawpanel.h"
+#include "macros.h"
 
-/*******************/
-/* class TEXTE_PCB */
-/*******************/
+#include "class_board.h"
+#include "class_pcb_text.h"
+
+#include "protos.h"
+
 
 TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
     BOARD_ITEM( parent, TYPE_TEXTE ),

@@ -1,19 +1,26 @@
-/***************************************/
-/* files.cpp: read / write board files */
-/***************************************/
+/**
+ * @file pcbnew/files.cpp
+ * @brief Read and write board files.
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "protos.h"
-#include "pcbnew_id.h"
+#include "macros.h"
+#include "pcbcommon.h"
 #include "3d_viewer.h"
 #include "richio.h"
 #include "filter_reader.h"
+
+#include "pcbnew.h"
+#include "protos.h"
+#include "pcbnew_id.h"
+
+#include "class_board.h"
+
 
 #define BACKUP_FILE_EXT wxT( "000" )
 

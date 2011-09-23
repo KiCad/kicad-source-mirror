@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_global_edit_tracks_and_vias.cpp
 // Author:      jean-pierre Charras
 // Created:     30 oct 2009
@@ -12,7 +11,10 @@
 #include "wxPcbStruct.h"
 #include "class_drawpanel.h"
 
+#include "class_board.h"
+
 #include "dialog_global_edit_tracks_and_vias.h"
+
 
 /**
  *  DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS, derived from DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE_BASE

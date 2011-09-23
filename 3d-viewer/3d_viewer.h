@@ -4,6 +4,9 @@
 #ifndef __3D_VIEWER_H__
 #define __3D_VIEWER_H__
 
+#include "wxBasePcbFrame.h"        // m_auimanager member.
+
+
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
 #endif
@@ -20,9 +23,15 @@
 #  include <GL/glu.h>
 #endif
 
-#include "pcbstruct.h"
 #include "3d_struct.h"
 #include "id.h"
+
+
+class BOARD_DESIGN_SETTINGS;
+class TRACK;
+class TEXTE_PCB;
+class DRAWSEGMENT;
+class ZONE_CONTAINER;
 
 
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS

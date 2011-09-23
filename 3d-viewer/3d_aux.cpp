@@ -10,6 +10,14 @@
 
 #include "common.h"
 #include "trigo.h"
+#include "wxBasePcbFrame.h"
+
+#include "class_board_design_settings.h"
+#include "class_zone.h"
+#include "class_text_mod.h"
+#include "class_module.h"
+#include "class_drawsegment.h"
+#include "class_pcb_text.h"
 
 #include "3d_viewer.h"
 #include "trackball.h"

@@ -1,18 +1,25 @@
-/************************************************/
-/* export_gencad.cpp - export GenCAD 1.4 format */
-/************************************************/
+/**
+ * @file export_gencad.cpp
+ * @brief Export GenCAD 1.4 format.
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
-
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
-
 #include "build_version.h"
+#include "macros.h"
+
+#include "pcbnew.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_edge_mod.h"
+
 
 bool        CreateHeaderInfoData( FILE* file, PCB_EDIT_FRAME* frame );
 static void CreateTracksInfoData( FILE* file, BOARD* pcb );

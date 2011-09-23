@@ -1,25 +1,30 @@
-/***********************************************************/
-/*                   wxGerberFrame.h:                     */
-/***********************************************************/
+/**
+ * @file gerbview_frame.h
+ */
 
 #ifndef  WX_GERBER_STRUCT_H
 #define  WX_GERBER_STRUCT_H
 
-#include "id.h"
+
 #include "param_config.h"
-#include "class_gerbview_layer_widget.h"
-#include "class_layer_box_selector.h"
+#include "wxBasePcbFrame.h"
+
+#include "../pcbnew/class_board.h"
+
+
+class DCODE_SELECTION_BOX;
+class GERBER_LAYER_WIDGET;
+class LAYER_BOX_SELECTOR;
+class GERBER_DRAW_ITEM;
 
 
 #define NO_AVAILABLE_LAYERS -1
 
 
-class DCODE_SELECTION_BOX;
-
-
-/******************************************************************
- *  class GERBVIEW_FRAME: this is the main window used in gerbview
- ******************************************************************/
+/**
+ * Class GERBVIEW_FRAME
+ * is the main window used in gerbview.
+ */
 
 class GERBVIEW_FRAME : public PCB_BASE_FRAME
 {
@@ -27,7 +32,9 @@ class GERBVIEW_FRAME : public PCB_BASE_FRAME
 
 protected:
     GERBER_LAYER_WIDGET*  m_LayersManager;
-    wxFileHistory         m_drillFileHistory;   // Auxiliary file history used to store drill files history
+
+    // Auxiliary file history used to store drill files history.
+    wxFileHistory         m_drillFileHistory;
 
 public:
     LAYER_BOX_SELECTOR* m_SelLayerBox;
@@ -37,7 +44,9 @@ public:
     wxArrayString         m_DCodesList;     // an array string containing all decodes Id (10 to 999)
 
 private:
-    PARAM_CFG_ARRAY       m_configSettings; // list of PARAM_CFG_xxx to read/write parameters saved in config
+    // list of PARAM_CFG_xxx to read/write parameters saved in config
+    PARAM_CFG_ARRAY       m_configSettings;
+
     int m_displayMode;                  // Gerber images ("layers" in Gerbview) can be drawn:
                                         //  - in fast mode (write mode) but if there are negative
                                         // items only the last image is correctly drawn (no
@@ -47,13 +56,15 @@ private:
                                         //  - in "exact" mode (also slower) in OR mode
                                         //                (transparency mode)
                                         // m_displayMode = 0, 1 or 2
+
     bool          m_show_layer_manager_tools;
-    wxArrayString m_Messages;           // An array sting to store warning messages when reaging
-                                        // a gerber file
+
+    // An array sting to store warning messages when reaging a gerber file.
+    wxArrayString m_Messages;
 
 public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
-                            const wxPoint& pos, const wxSize& size,
-                            long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+                        const wxPoint& pos, const wxSize& size,
+                        long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~GERBVIEW_FRAME();
 

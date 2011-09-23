@@ -23,7 +23,10 @@
  */
 
 #include "collectors.h"
-#include "pcbnew.h"             // class BOARD
+#include "class_board_item.h"             // class BOARD_ITEM
+
+#include "class_module.h"
+#include "class_pad.h"
 
 
 /*  This module contains out of line member functions for classes given in

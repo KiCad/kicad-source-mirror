@@ -1,21 +1,28 @@
-/*****************************/
-/* gen_modules_placefile.cpp */
-/*****************************/
+/**
+ * @file gen_modules_placefile.cpp
+ */
 
 /*
  *  1 - create ascii files for automatic placement of smd components
  *  2 - create a module report (pos and module descr) (ascii file)
  */
+
 #include "fctsys.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
 #include "appl_wxstruct.h"
-
 #include "build_version.h"
+#include "macros.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_drawsegment.h"
+
+#include "pcbnew.h"
+
 
 class LIST_MOD      /* Can list the elements of useful modules. */
 {

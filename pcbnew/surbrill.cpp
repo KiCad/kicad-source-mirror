@@ -1,19 +1,24 @@
-/*******************/
-/* Highlight nets. */
-/*******************/
+/**
+ * @file surbrill.cpp
+ * @brief Highlight nets.
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "kicad_string.h"
+#include "wxPcbStruct.h"
+#include "kicad_device_context.h"
+#include "macros.h"
+
+#include "class_board.h"
+#include "class_track.h"
+#include "class_zone.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
 #include "collectors.h"
 
-#include "kicad_device_context.h"
 
-
-#define Pad_fill (Pad_Fill_Item.State == RUN)
+#define Pad_fill ( Pad_Fill_Item.State == RUN )
 
 
 /**
@@ -138,6 +143,7 @@ int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
                 // this should not happen.
         }
     }
+
     if( netcode >= 0 )
     {
         GetBoard()->SetHighLightNet( netcode );

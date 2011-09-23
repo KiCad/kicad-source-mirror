@@ -5,30 +5,21 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "confirm.h"
+#include "macros.h"
+#include "class_drawpanel.h"
+#include "wxPcbStruct.h"
+#include "eda_dde.h"
+#include "pcbcommon.h"
+#include "colors_selection.h"
+#include "gr_basic.h"
 
 #include <wx/file.h>
 #include <wx/snglinst.h>
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "plot_common.h"
-#include "gestfich.h"
-#include "pcbplot.h"
-#include "autorout.h"
-#include "cell.h"
-#include "worksheet.h"
-#include "zones.h"
-#include "drag.h"
-#include "eda_dde.h"
-#include "colors_selection.h"
-#include "class_drawpanel.h"
-
-#include "id.h"
+#include "protos.h"
 #include "hotkeys.h"
 
-#include "build_version.h"
-
-#include "protos.h"
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;

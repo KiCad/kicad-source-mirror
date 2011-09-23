@@ -1,20 +1,21 @@
-/* event_handlers_tracks_vias_sizes.cpp
- *
- *  Handlers for popup and toolbars events relative
- *  to the tracks and vias sizes
+/**
+ * @file event_handlers_tracks_vias_sizes.cpp
+ * @brief Handlers for popup and toolbars events relative to the tracks and vias sizes.
  */
 
 
 #include "fctsys.h"
-
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "pcbnew_id.h"
-
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
 #include "dialog_helpers.h"
+
+#include "pcbnew_id.h"
+#include "pcbnew.h"
+
+#include "class_board.h"
+#include "class_module.h"
+
 
 /**
  * Function Tracks_and_Vias_Size_Event

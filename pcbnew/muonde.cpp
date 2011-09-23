@@ -1,6 +1,7 @@
-/*******************************************/
-/* mounde.cpp - Microwave pcb layout code. */
-/*******************************************/
+/**
+ * @file muonde.cpp
+ * @brief Microwave pcb layout code.
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
@@ -8,13 +9,21 @@
 #include "trigo.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
-#include "protos.h"
 #include "dialog_helpers.h"
 #include "richio.h"
 #include "filter_reader.h"
+#include "gr_basic.h"
+#include "pcbcommon.h"
+#include "macros.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_edge_mod.h"
+
+#include "protos.h"
+#include "pcbnew.h"
+
 
 #define COEFF_COUNT 6
 static double* PolyEdges;

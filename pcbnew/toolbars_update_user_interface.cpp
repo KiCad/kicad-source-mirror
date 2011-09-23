@@ -1,21 +1,21 @@
-/****************************************************************
- *   toolbars_update_user_interface.cpp
- ****************************************************************/
-
-/*
- *  function to update toolbars UI after changing parameters
+/**
+ * @file toolbars_update_user_interface.cpp
+ * @brief Function to update toolbars UI after changing parameters.
  */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "3d_viewer.h"
+#include "dialog_helpers.h"
+#include "pcbcommon.h"
+
+#include "class_board.h"
+
+#include "pcbnew.h"
 #include "pcbnew_id.h"
 #include "drc_stuff.h"
-#include "3d_viewer.h"
-#include "class_board_design_settings.h"
-#include "dialog_helpers.h"
 
 
 void PCB_EDIT_FRAME::OnUpdateLayerPair( wxUpdateUIEvent& aEvent )

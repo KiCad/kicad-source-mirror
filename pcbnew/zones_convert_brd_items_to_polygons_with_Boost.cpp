@@ -1,6 +1,6 @@
-/*******************************************/
-/* zones_convert_brd_items_to_polygons.cpp */
-/*******************************************/
+/**
+ * @file zones_convert_brd_items_to_polygons_with_Boost.cpp
+ */
 
 /* Functions to convert some board items to polygons
  * (pads, tracks ..)
@@ -22,18 +22,22 @@
  */
 
 #include <math.h>
-#include <vector>
-
 
 #include "fctsys.h"
 #include "polygons_defs.h"
-
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
 
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_edge_mod.h"
+#include "class_drawsegment.h"
+#include "class_pcb_text.h"
+#include "class_zone.h"
+
+#include "pcbnew.h"
 #include "zones.h"
-#include "PolyLine.h"
 
 
 extern void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffer,

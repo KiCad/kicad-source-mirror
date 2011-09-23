@@ -1,12 +1,17 @@
-/*******************************/
-/* Pcbnew: exchange modules */
-/*******************************/
+/**
+ * @file xchgmod.cpp
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "kicad_string.h"
 #include "wxPcbStruct.h"
+#include "macros.h"
+#include "pcbcommon.h"
+
+#include "class_board.h"
+#include "class_module.h"
 
 #include "pcbnew.h"
 #include "dialog_exchange_modules_base.h"

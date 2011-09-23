@@ -44,18 +44,19 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "pcbplot.h"
 #include "macros.h"
 #include "appl_wxstruct.h"
-#include "class_board_design_settings.h"
+#include "build_version.h"
 
+#include "class_board.h"
+
+#include "pcbplot.h"
+#include "pcbnew.h"
 #include "gendrill.h"
 
 #include "dialog_gendrill.h"   //  Dialog box for drill file generation
 
-#include "build_version.h"
 
 const wxString DrillFileExtension( wxT( "drl" ) );
 const wxString DrillFileWildcard( _( "Drill files (*.drl)|*.drl" ) );

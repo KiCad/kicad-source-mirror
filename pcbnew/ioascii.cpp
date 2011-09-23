@@ -1,17 +1,21 @@
-/****************************************************/
-/* Routines for reading and saving of structures in */
-/* ASCII file common to Pcbnew and CVPCB.           */
-/****************************************************/
+ /**
+ * @file ioascii.cpp
+ * @brief Routines for reading and saving of structures in ASCII file common to Pcbnew and CVPCB.
+ */
 
 #include "fctsys.h"
 #include "confirm.h"
 #include "kicad_string.h"
-
-#include "pcbnew.h"
+#include "build_version.h"
 #include "wxPcbStruct.h"
-#include "autorout.h"
-#include "class_board_design_settings.h"
+#include "richio.h"
+#include "macros.h"
+#include "pcbcommon.h"
 
+/**
+ * @todo Fix having to recompile the same file with a different defintion.  This is
+ *       what C++ derivation was designed to solve.
+ */
 #ifdef PCBNEW
 #include "zones.h"
 #endif
@@ -20,12 +24,20 @@
 #include "cvpcb.h"
 #endif
 
-#include "build_version.h"
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_pcb_text.h"
+#include "class_zone.h"
+#include "class_dimension.h"
+#include "class_drawsegment.h"
+#include "class_mire.h"
 
+#include "pcbnew.h"
 #include "pcbnew_id.h"
-#include "richio.h"
-
+#include "autorout.h"
 #include "pcb_plot_params.h"
+
 
 /* ASCII format of structures:
  *

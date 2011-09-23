@@ -1,9 +1,11 @@
-/*************************************************************************/
-/* listboxes.cpp: class for displaying footprint list and component list */
-/*************************************************************************/
+/**
+ * @file listboxes.cpp
+ * @brief Implementation of class for displaying footprint list and component lists.
+ */
 
 #include "fctsys.h"
 #include "wxstruct.h"
+#include "macros.h"
 
 #include "cvpcb.h"
 #include "cvpcb_mainframe.h"

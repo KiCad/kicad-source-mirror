@@ -8,10 +8,11 @@
 #include "dialog_helpers.h"
 #include "class_layer_box_selector.h"
 #include "colors_selection.h"
+#include "wxPcbStruct.h"
+
+#include "class_board.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
 #include "pcbnew_id.h"
 #include "hotkeys.h"
 

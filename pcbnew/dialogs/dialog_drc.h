@@ -9,17 +9,23 @@
 
 #include <wx/htmllbox.h>
 
-// forward declarations
-class DRCLISTBOX;
-//end forward declarations
-
 #include "fctsys.h"
 #include "pcbnew.h"
 #include "class_drawpanel.h"
 #include "wxstruct.h"
 #include "drc_stuff.h"
+#include "class_marker_pcb.h"
+#include "class_board.h"
 
 #include "dialog_drc_base.h"
+
+
+// forward declarations
+class DRCLISTBOX;
+class BOARD_DESIGN_SETTINGS;
+
+
+//end forward declarations
 
 // outside @end control identifiers since wxFormBuilder knows not DRCLISTBOX
 #define ID_DRCLISTCTRL 14000

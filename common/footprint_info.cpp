@@ -13,11 +13,15 @@
 #include "kicad_string.h"
 #include "macros.h"
 #include "appl_wxstruct.h"
-#include "pcbstruct.h"
+
 #include "pcbcommon.h"
+#include "pcbstruct.h"
 #include "richio.h"
 #include "filter_reader.h"
 #include "footprint_info.h"
+
+#include "class_pad.h"
+#include "class_module.h"
 
 
 /* Read the list of libraries (*.mod files)

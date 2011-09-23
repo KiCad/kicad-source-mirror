@@ -1,7 +1,6 @@
-/* export_to_pcbnew.cpp */
-
-/*
- *  Export the layers to pcbnew
+/**
+ * @file export_to_pcbnew.cpp
+ * @brief Export the layers to pcbnew.
  */
 
 #include "fctsys.h"
@@ -13,10 +12,14 @@
 #include "gestfich.h"
 #include "trigo.h"
 
+#include "../pcbnew/class_track.h"
+#include "../pcbnew/class_drawsegment.h"
+
 #include "gerbview.h"
 #include "class_board_design_settings.h"
 #include "class_gerber_draw_item.h"
 #include "select_layers_to_pcb.h"
+
 
 /* A helper class to export a Gerber set of files to Pcbnew
 */

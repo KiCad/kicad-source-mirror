@@ -10,7 +10,17 @@
 #include "confirm.h"
 #include "pcbnew.h"
 #include "trigo.h"
+#include "macros.h"
+#include "wxBasePcbFrame.h"
+#include "pcbcommon.h"
+
 #include <wx/dcbuffer.h>
+
+#include "class_board.h"
+#include "class_module.h"
+
+#include "dialog_pad_properties_base.h"
+
 
 #define NBSHAPES 4
 int CodeShape[NBSHAPES] = // list of pad shapes.
@@ -41,8 +51,6 @@ static long Std_Pad_Layers[NBTYPES] =
     PAD_HOLE_NOT_PLATED_DEFAULT_LAYERS
 };
 
-
-#include "dialog_pad_properties_base.h"
 
 extern int ChangeSideMaskLayer( int masque );
 

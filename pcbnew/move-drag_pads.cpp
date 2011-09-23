@@ -1,18 +1,24 @@
-/************************/
-/* Edit footprint pads. */
-/************************/
+/**
+ * @file move-drag_pads.cpp
+ * @brief Edit footprint pads.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "pcbnew.h"
 #include "trigo.h"
 #include "block_commande.h"
+#include "wxBasePcbFrame.h"
+#include "macros.h"
+#include "pcbcommon.h"
 
+#include "class_board.h"
+#include "class_module.h"
+
+#include "pcbnew.h"
 #include "drag.h"
-
 #include "protos.h"
 
 

@@ -4,16 +4,18 @@
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
-
-#include "pcbnew.h"
+#include "trigo.h"
+#include "pcbcommon.h"
 #include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
 #include "colors_selection.h"
 
+#include "pcbnew.h"
 #include "drc_stuff.h"
-#include "trigo.h"
-
 #include "protos.h"
+
+#include "class_board.h"
+#include "class_track.h"
+#include "class_zone.h"
 
 
 static void Abort_Create_Track( EDA_DRAW_PANEL* panel, wxDC* DC );

@@ -14,8 +14,9 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "pcbnew.h"
-
+#include "macros.h"
 #include "wxPcbStruct.h"
+#include "pcbcommon.h"
 
 #include "dialog_pcbnew_config_libs_and_paths.h"
 

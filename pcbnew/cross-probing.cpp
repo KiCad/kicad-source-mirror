@@ -13,17 +13,18 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "eda_dde.h"
+#include "macros.h"
+
 #include "pcbnew_id.h"
+#include "class_board.h"
+#include "class_module.h"
+
 #include "collectors.h"
+#include "pcbnew.h"
 #include "protos.h"
 
-
-/*******************************************/
-void RemoteCommand(  const char* cmdline )
-/*******************************************/
 
 /** Read a remote command send by eeschema via a socket,
  *  port KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242)
@@ -32,6 +33,7 @@ void RemoteCommand(  const char* cmdline )
  * $PART: "reference"   put cursor on component
  * $PIN: "pin name"  $PART: "reference" put cursor on the footprint pin
  */
+void RemoteCommand( const char* cmdline )
 {
     char            line[1024];
     wxString        msg;
@@ -131,11 +133,6 @@ void RemoteCommand(  const char* cmdline )
 }
 
 
-// see wxstruct.h
-/**************************************************************************/
-void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
-/**************************************************************************/
-
 /** Send a remote command to eeschema via a socket,
  * @param objectToSync = item to be located on schematic (module, pin or text)
  * Commands are
@@ -144,6 +141,7 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
  * $PART: "reference" $REF: "reference" put cursor on the component ref
  * $PART: "reference" $VAL: "value" put cursor on the component value
  */
+void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
 {
     char          cmd[1024];
     const char*   text_key;
@@ -159,8 +157,7 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
     {
     case TYPE_MODULE:
         module = (MODULE*) objectToSync;
-        sprintf( cmd, "$PART: \"%s\"",
-                 TO_UTF8( module->m_Reference->m_Text ) );
+        sprintf( cmd, "$PART: \"%s\"", TO_UTF8( module->m_Reference->m_Text ) );
         break;
 
     case TYPE_PAD:
@@ -177,6 +174,7 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
         #define VALUE     1
         module   = (MODULE*) objectToSync->GetParent();
         text_mod = (TEXTE_MODULE*) objectToSync;
+
         if( text_mod->m_Type == REFERENCE )
             text_key = "$REF:";
         else if( text_mod->m_Type == VALUE )

@@ -1,14 +1,22 @@
-/**********************************************************************/
-/* Import functions to import footprints from a gpcb (Newlib) library */
-/**********************************************************************/
+/**
+ * @file gpcb_exchange.cpp
+ * @brief Import functions to import footprints from a gpcb (Newlib) library.
+ */
 
 #include "fctsys.h"
 #include "wxstruct.h"
 #include "kicad_string.h"
-#include "pcbnew.h"
 #include "trigo.h"
 #include "richio.h"
 #include "filter_reader.h"
+#include "macros.h"
+
+#include "class_pad.h"
+#include "class_module.h"
+#include "class_edge_mod.h"
+
+#include "pcbnew.h"
+
 
 /* read parameters from a line, and return all params in a wxArrayString
  * each param is in one wxString, and double quotes removed if exists
@@ -323,7 +331,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         }
 
         if( params[0].CmpNoCase( wxT( "Pad" ) ) == 0 )      // Pad with no hole (smd pad)
-        {                                                   //	format: Pad [x1 y1 x2 y2 thickness clearance mask "name" "pad_number" flags]
+        {                                                   //  format: Pad [x1 y1 x2 y2 thickness clearance mask "name" "pad_number" flags]
             Pad = new D_PAD( this );
             Pad->m_PadShape     = PAD_RECT;
             Pad->m_layerMask = LAYER_FRONT | SOLDERMASK_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT;
@@ -444,7 +452,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
 /* Read a text line and extract params and tokens.
  * special chars are:
- * [ ] ( )	Begin and end of parameter list and units indicator
+ * [ ] ( )  Begin and end of parameter list and units indicator
  * " is a string delimiter
  * space is the param separator
  * The first word is the keyword

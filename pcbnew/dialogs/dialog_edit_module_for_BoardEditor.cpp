@@ -3,6 +3,7 @@
  ******************************************************************************/
 
 #include "fctsys.h"
+#include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "pcbnew.h"
@@ -11,6 +12,10 @@
 #include "3d_struct.h"
 #include "3d_viewer.h"
 #include "wxPcbStruct.h"
+
+#include "class_module.h"
+#include "class_text_mod.h"
+
 #include "dialog_edit_module_for_BoardEditor.h"
 
 

@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_mask_clearance.cpp
 // Author:      jean-pierre Charras
 // Modified by:
@@ -12,6 +11,8 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
+
+#include "class_board.h"
 
 #include "dialog_mask_clearance.h"
 

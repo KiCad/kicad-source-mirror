@@ -14,6 +14,7 @@ class PCB_EDIT_FRAME;
 class BOARD;
 class D_PAD;
 class RATSNEST_ITEM;
+class TRACK;
 
 
 int Propagation( PCB_EDIT_FRAME* frame );

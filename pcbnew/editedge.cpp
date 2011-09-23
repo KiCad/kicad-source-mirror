@@ -5,12 +5,15 @@
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "wxPcbStruct.h"
+#include "gr_basic.h"
+#include "pcbcommon.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
-
 #include "protos.h"
+
+#include "class_board.h"
+#include "class_drawsegment.h"
 
 
 static void Abort_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC );
