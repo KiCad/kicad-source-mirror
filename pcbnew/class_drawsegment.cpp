@@ -290,7 +290,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
         EndAngle = StAngle + m_Angle;
 
-        if ( ! panel->m_PrintIsMirrored)
+        if( !panel->m_PrintIsMirrored )
         {
             if( StAngle > EndAngle )
                 EXCHG( StAngle, EndAngle );
@@ -435,7 +435,10 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 
     case S_ARC:
     {
-        bbox.Inflate( GetRadius() + 1 );
+        bbox.Merge( m_End );
+        wxPoint end = m_End;
+        RotatePoint( &end, m_Start, -m_Angle );
+        bbox.Merge( end );
     }
     break;
 
@@ -463,7 +466,7 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
             p_end.y   = MAX( p_end.y, pt.y );
         }
 
-        bbox.SetEnd(p_end);
+        bbox.SetEnd( p_end );
         bbox.Inflate( 1 );
         break;
     }
@@ -492,18 +495,18 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aRefPos )
             if( m_Shape == S_CIRCLE )
                 return true;
 
-            int mouseAngle = ArcTangente( relPos.y, relPos.x );
-            int stAngle    = ArcTangente( m_End.y - m_Start.y, m_End.x - m_Start.x );
-            int endAngle   = stAngle + m_Angle;
+            wxPoint startVec = wxPoint( m_End.x - m_Start.x, m_End.y - m_Start.y );
+            wxPoint endVec = m_End - m_Start;
+            RotatePoint( &endVec, -m_Angle );
 
-            if( endAngle > 3600 )
-            {
-                stAngle  -= 3600;
-                endAngle -= 3600;
-            }
+            // Check dot products
+            if( (long long)relPos.x*startVec.x + (long long)relPos.y*startVec.y < 0 )
+                return false;
 
-            if( mouseAngle >= stAngle && mouseAngle <= endAngle )
-                return true;
+            if( (long long)relPos.x*endVec.x + (long long)relPos.y*endVec.y < 0 )
+                return false;
+
+            return true;
         }
     }
     break;

@@ -856,7 +856,7 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
     // Check segments, dimensions, texts, and fiducials
     for( BOARD_ITEM* item = m_Drawings; item != NULL; item = item->Next() )
     {
-        if( aBoardEdgesOnly && item->Type() != TYPE_DRAWSEGMENT && item->GetLayer() != EDGE_N )
+        if( aBoardEdgesOnly && (item->Type() != TYPE_DRAWSEGMENT || item->GetLayer() != EDGE_N ) )
             continue;
 
         if( !hasItems )
