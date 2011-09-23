@@ -2,15 +2,24 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "drawtxt.h"
 #include "trigo.h"
 #include "appl_wxstruct.h"
 #include "3d_struct.h"
+#include "macros.h"
+
+#include "pcbnew.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_edge_mod.h"
+#include "class_pcb_text.h"
 
 #include <vector>
 #include <cmath>
+
 
 /* helper function:
  * some characters cannot be used in names,

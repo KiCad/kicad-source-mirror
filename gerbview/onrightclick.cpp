@@ -5,6 +5,7 @@
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "id.h"
 
 #include "gerbview.h"
 
@@ -16,8 +17,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
     BOARD_ITEM* DrawStruct = GetScreen()->GetCurItem();
     wxString    msg;
-    bool        BlockActive =
-        (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
+    bool        BlockActive = (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
 
     // Do not initiate a start block validation on menu.
     DrawPanel->m_CanStartBlock = -1;

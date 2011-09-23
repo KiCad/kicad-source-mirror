@@ -7,12 +7,15 @@
 #define _PAD_H_
 
 
+#include "class_board_item.h"
 #include "pad_shapes.h"
 #include "PolyLine.h"
-#include "richio.h"
 
 
+class LINE_READER;
 class EDA_3D_CANVAS;
+class EDA_DRAW_PANEL;
+class MODULE;
 
 
 /* Default layers used for pads, according to the pad type.
@@ -405,12 +408,6 @@ public:
 
 #endif
 };
-
-typedef class D_PAD* LISTE_PAD;
-
-
-/*  LocalWords:  eeschema vout
- */
 
 
 #endif     // _PAD_H_

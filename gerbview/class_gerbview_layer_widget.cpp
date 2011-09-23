@@ -32,6 +32,9 @@
 #include "common.h"
 #include "class_drawpanel.h"
 #include "pcbstruct.h"
+#include "macros.h"
+#include "class_layer_box_selector.h"
+
 #include "gerbview.h"
 #include "class_GERBER.h"
 #include "layer_widget.h"
@@ -46,7 +49,8 @@
  */
 
 
-GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFocusOwner, int aPointSize ) :
+GERBER_LAYER_WIDGET::GERBER_LAYER_WIDGET( GERBVIEW_FRAME* aParent, wxWindow* aFocusOwner,
+                                          int aPointSize ) :
     LAYER_WIDGET( aParent, aFocusOwner, aPointSize ),
     myframe( aParent )
 {
@@ -257,8 +261,10 @@ bool GERBER_LAYER_WIDGET::useAlternateBitmap(int aRow)
 {
     bool inUse = false;
     GERBER_IMAGE* gerber = g_GERBER_List[aRow];
+
     if( gerber != NULL && gerber->m_InUse )
         inUse = true;
+
     return inUse;
 }
 

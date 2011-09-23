@@ -6,12 +6,13 @@
 #ifndef DIMENSION_H
 #define DIMENSION_H
 
+
 #include "class_board_item.h"
 
 
-class EDA_RECT;
-class READER;
+class LINE_READER;
 class EDA_DRAW_PANEL;
+class TEXTE_PCB;
 
 
 class DIMENSION : public BOARD_ITEM

@@ -4,12 +4,13 @@
 /****************************************************************/
 
 #include "fctsys.h"
-
 #include "common.h"
+#include "trigo.h"
+#include "class_pcb_screen.h"
 #include "pcbnew.h"
 #include "class_board_design_settings.h"
+#include "layers_id_colors_and_visibility.h"
 
-#include "trigo.h"
 #include "pcbnew_id.h"
 
 
@@ -20,7 +21,8 @@
  * The last 2 values is  handy when somebody uses a library import of a module
  * (or foreign data) which has a bad coordinate
  * Also useful in Gerbview for this reason.
- * Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic functions )
+ * Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
+ * functions )
  */
 static const double PcbZoomList[] =
 {
@@ -84,23 +86,19 @@ PCB_SCREEN::PCB_SCREEN() : BASE_SCREEN( TYPE_SCREEN )
 }
 
 
-/***************************/
 PCB_SCREEN::~PCB_SCREEN()
-/***************************/
 {
     ClearUndoRedoList();
 }
 
 
-/*************************/
 void PCB_SCREEN::Init()
-/*************************/
 {
     InitDatas();
     m_Active_Layer       = LAYER_N_BACK;      /* default active layer = bottom layer */
-    m_Route_Layer_TOP    = LAYER_N_FRONT;                /* default layers pair for vias (bottom to top) */
+    m_Route_Layer_TOP    = LAYER_N_FRONT;     /* default layers pair for vias (bottom to top) */
     m_Route_Layer_BOTTOM = LAYER_N_BACK;
-    m_Zoom = 150;                               /* a default value for zoom */
+    m_Zoom = 150;                             /* a default value for zoom */
 }
 
 

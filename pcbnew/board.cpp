@@ -5,10 +5,18 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "pcbcommon.h"
 
 #include "pcbnew.h"
 #include "cell.h"
 #include "ar_protos.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_drawsegment.h"
+#include "class_edge_mod.h"
+#include "class_pcb_text.h"
 
 
 /*

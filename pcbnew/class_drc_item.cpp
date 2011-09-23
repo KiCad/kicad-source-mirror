@@ -31,6 +31,8 @@
 
 #include "pcbnew.h"
 #include "drc_stuff.h"
+#include "class_drc_item.h"
+
 
 wxString DRC_ITEM::GetErrorText() const
 {

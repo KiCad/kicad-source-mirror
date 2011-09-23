@@ -1,12 +1,22 @@
-/***************************************************/
-/* class_text_module.h : texts module description  */
-/***************************************************/
+/**
+ * @file class_text_mod.h
+ * @brief Footprint text class description.
+ */
 
 
 #ifndef TEXT_MODULE_H
 #define TEXT_MODULE_H
 
-#include "richio.h"
+
+#include "class_board_item.h"
+
+
+class LINE_READER;
+class EDA_RECT;
+class EDA_DRAW_PANEL;
+class EDA_DRAW_FRAME;
+class MODULE;
+
 
 #define TEXT_is_REFERENCE 0
 #define TEXT_is_VALUE     1
@@ -21,16 +31,18 @@ class TEXTE_MODULE : public BOARD_ITEM, public EDA_TEXT
  * Physical orient is m_Orient + m_Parent->m_Orient
  */
 public:
-    wxPoint m_Pos0;         // text coordinates relatives to the footprint
-                            // anchor, orient 0
+    wxPoint m_Pos0;         // text coordinates relatives to the footprint anchor, orient 0
                             // Text coordinate ref point is the text centre
     char    m_Type;         // 0: ref,1: val, others = 2..255
     bool    m_NoShow;       // true = invisible
 
-public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
+public:
+    TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
+
     ~TEXTE_MODULE();
 
     TEXTE_MODULE* Next() const { return (TEXTE_MODULE*) Pnext; }
+
     TEXTE_MODULE* Back() const { return (TEXTE_MODULE*) Pback; }
 
     /**
@@ -45,11 +57,11 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
     }
 
 
-    void     Copy( TEXTE_MODULE* source ); // copy structure
+    void Copy( TEXTE_MODULE* source ); // copy structure
 
-    int      GetLength() const;        /* text length */
+    int GetLength() const;        /* text length */
 
-    int      GetDrawRotation() const;  // Return text rotation for drawings and plotting
+    int GetDrawRotation() const;  // Return text rotation for drawings and plotting
 
     /**
      * Function GetTextRect
@@ -65,9 +77,9 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
      */
     EDA_RECT GetBoundingBox() const;
 
-    void     SetDrawCoord();        // Set absolute coordinates.
+    void SetDrawCoord();        // Set absolute coordinates.
 
-    void     SetLocalCoord();       // Set relative coordinates.
+    void SetLocalCoord();       // Set relative coordinates.
 
     /**
      * Function Save
@@ -76,7 +88,7 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool     Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Function ReadDescr
@@ -84,13 +96,13 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
      * @param aReader is a pointer to a LINE_READER to read from.
      * @return int - > 0 if success reading else 0.
      */
-    int      ReadDescr( LINE_READER* aReader );
+    int ReadDescr( LINE_READER* aReader );
 
     /* drawing functions */
-    void     Draw( EDA_DRAW_PANEL* panel,
-                   wxDC*           DC,
-                   int             aDrawMode,
-                   const wxPoint&  offset = ZeroOffset );
+    void Draw( EDA_DRAW_PANEL* panel,
+               wxDC*           DC,
+               int             aDrawMode,
+               const wxPoint&  offset = ZeroOffset );
 
     /**
      * Function DrawUmbilical
@@ -101,10 +113,10 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
      * @param aDrawMode = drawing mode, typically GR_XOR
      * @param aOffset = offset for TEXTE_MODULE
      */
-    void     DrawUmbilical( EDA_DRAW_PANEL* aPanel,
-                            wxDC*           aDC,
-                            int             aDrawMode,
-                            const wxPoint&  aOffset = ZeroOffset );
+    void DrawUmbilical( EDA_DRAW_PANEL* aPanel,
+                        wxDC*           aDC,
+                        int             aDrawMode,
+                        const wxPoint&  aOffset = ZeroOffset );
 
     /**
      * Function DisplayInfo
@@ -168,7 +180,7 @@ public: TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
      * Function Show
      * is used to output the object tree, currently for debugging only.
      * @param nestLevel An aid to prettier tree indenting, and is the level
-     *          of nesting of this object within the overall tree.
+     *                  of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );

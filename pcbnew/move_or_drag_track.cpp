@@ -1,20 +1,23 @@
-/****************************************************/
-/*              Track editing                       */
-/* routines to move and drag track segments or node */
-/****************************************************/
+/**
+ * @file move_or_drag_track.cpp
+ * @brief Track editing routines to move and drag track segments or node.
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
-#include "drc_stuff.h"
+#include "macros.h"
+#include "gr_basic.h"
+#include "pcbcommon.h"
 
+#include "class_board.h"
+
+#include "pcbnew.h"
+#include "drc_stuff.h"
 #include "drag.h"
 #include "pcbnew_id.h"
-
 #include "protos.h"
 
 

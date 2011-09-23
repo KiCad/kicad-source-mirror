@@ -4,12 +4,14 @@
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
+#include "wxPcbStruct.h"
+
+#include "class_board.h"
+#include "class_module.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "module_editor_frame.h"
-
 #include "protos.h"
+#include "module_editor_frame.h"
 
 
 void FOOTPRINT_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,

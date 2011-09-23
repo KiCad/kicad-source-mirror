@@ -33,6 +33,7 @@
 #include <boost/ptr_container/ptr_set.hpp>
 
 #include "fctsys.h"
+#include "macros.h"              // MAX definition.
 
 #include "specctra_lexer.h"
 
@@ -40,6 +41,11 @@
 
 
 class TYPE_COLLECTOR;           // outside the DSN namespace
+class BOARD;
+class TRACK;
+class SEGVIA;
+class NETCLASS;
+
 
 typedef DSN::T            DSN_T;
 using namespace DSN;

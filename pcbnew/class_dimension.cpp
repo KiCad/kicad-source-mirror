@@ -3,16 +3,20 @@
  */
 
 #include "fctsys.h"
+#include "macros.h"
 #include "gr_basic.h"
-#include "pcbnew.h"
+#include "pcbcommon.h"
 #include "trigo.h"
 #include "wxstruct.h"
-#include "class_board_design_settings.h"
 #include "class_drawpanel.h"
 #include "colors_selection.h"
 #include "kicad_string.h"
 #include "protos.h"
 #include "richio.h"
+
+#include "class_board.h"
+#include "class_pcb_text.h"
+#include "class_dimension.h"
 
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :

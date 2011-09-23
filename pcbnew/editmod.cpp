@@ -12,6 +12,10 @@
 #include "trigo.h"
 #include "3d_viewer.h"
 
+#include "class_module.h"
+#include "class_pad.h"
+#include "class_edge_mod.h"
+
 #include "dialog_edit_module_for_BoardEditor.h"
 
 

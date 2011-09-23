@@ -1,15 +1,19 @@
-/****************************/
-/* hotkeys_board_editor.cpp */
-/****************************/
+/**
+ * @file hotkeys_board_editor.cpp
+ */
 
 #include "fctsys.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "pcbnew_id.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "class_board_design_settings.h"
+#include "pcbcommon.h"
 
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+
+#include "pcbnew.h"
+#include "pcbnew_id.h"
 #include "hotkeys.h"
 #include "protos.h"
 

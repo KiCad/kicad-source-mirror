@@ -1,5 +1,5 @@
 /**********************/
-/* CVPCB: autosel.cpp  */
+/* CVPCB: autosel.cpp */
 /**********************/
 
 /* Routines for automatic selection of modules. */
@@ -10,6 +10,7 @@
 #include "gestfich.h"
 #include "appl_wxstruct.h"
 #include "kicad_string.h"
+#include "macros.h"
 
 #include "cvpcb.h"
 #include "cvpcb_mainframe.h"

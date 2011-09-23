@@ -9,7 +9,17 @@
 #include "macros.h"
 #include "drawtxt.h"
 #include "confirm.h"
+#include "layers_id_colors_and_visibility.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_edge_mod.h"
+#include "class_zone.h"
+#include "class_drawsegment.h"
+#include "class_pcb_text.h"
 #include "class_board_design_settings.h"
+#include "class_marker_pcb.h"
 #include "colors_selection.h"
 
 #include "3d_viewer.h"

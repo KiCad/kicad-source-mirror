@@ -1,7 +1,6 @@
-/////////////////////////////////////////////////////////////////////////////
-
-// Name:        zones_functions_for_undo_redo.cpp
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file zones_functions_for_undo_redo.cpp
+ */
 
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
@@ -46,8 +45,12 @@
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
+
+#include "class_board.h"
+#include "class_zone.h"
+
+#include "pcbnew.h"
 #include "zones.h"
 #include "zones_functions_for_undo_redo.h"
 
@@ -63,29 +66,37 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     // compare basic parameters:
     if( GetLayer() != aZoneToCompare.GetLayer() )
         return false;
+
     if( m_Netname != aZoneToCompare.m_Netname )
         return false;
 
     // Compare zone specfic parameters
     if(  m_ZoneClearance != aZoneToCompare.m_ZoneClearance )
         return false;
+
     if(  m_ZoneMinThickness != aZoneToCompare.m_ZoneMinThickness )
         return false;
+
     if(  m_FillMode != aZoneToCompare.m_FillMode )
         return false;
+
     if(  m_ArcToSegmentsCount != aZoneToCompare.m_ArcToSegmentsCount )
         return false;
+
     if(  m_PadOption != aZoneToCompare.m_PadOption )
         return false;
+
     if(  m_ThermalReliefGapValue != aZoneToCompare.m_ThermalReliefGapValue )
         return false;
+
     if(  m_ThermalReliefCopperBridgeValue != aZoneToCompare.m_ThermalReliefCopperBridgeValue )
         return false;
 
     // Compare outlines
-    wxASSERT( m_Poly );                                         // m_Poly == NULL Should never happen
+    wxASSERT( m_Poly );                                      // m_Poly == NULL Should never happen
     wxASSERT( aZoneToCompare.m_Poly );
-    if( m_Poly->corner != aZoneToCompare.m_Poly->corner )       // Compare vector
+
+    if( m_Poly->corner != aZoneToCompare.m_Poly->corner )    // Compare vector
         return false;
 
     return true;
@@ -111,12 +122,16 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, in
     for( unsigned ii = 0; ; ii++ )
     {
         ZONE_CONTAINER* zone = aPcb->GetArea( ii );
+
         if( zone == NULL )      // End of list
             break;
+
         if( aNetCode >= 0 && aNetCode != zone->GetNet() )
             continue;
+
         if( aLayer >= 0 && aLayer != zone->GetLayer() )
             continue;
+
         ZONE_CONTAINER* zoneDup = new ZONE_CONTAINER( aPcb );
         zoneDup->Copy( zone );
         ITEM_PICKER     picker( zone, UR_CHANGED );
@@ -167,9 +182,11 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
         UNDO_REDO_T  status = aPickList.GetPickedItemStatus( kk );
 
         ZONE_CONTAINER* ref = (ZONE_CONTAINER*) aPickList.GetPickedItem( kk );
+
         for( unsigned ii = 0; ; ii++ )  // analyse the main picked list
         {
             ZONE_CONTAINER* zone = aPcb->GetArea( ii );
+
             if( zone == NULL )
             {
                 /* End of list: the stored item is not found:
@@ -188,16 +205,19 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                 {
                     ZONE_CONTAINER* zcopy = (ZONE_CONTAINER*) aPickList.GetPickedItemLink( kk );
                     aPickList.SetPickedItemStatus( UR_DELETED, kk );
+
                     if( zcopy )
                         ref->Copy( zcopy );
                     else
                         wxMessageBox( wxT( "UpdateCopyOfZonesList() error: link = NULL" ) );
+
                     aPickList.SetPickedItemLink( NULL, kk );    // the copy was deleted; the link does not exists now
                     delete zcopy;
                 }
 
                 // Remove this item from aAuxiliaryList, mainly for tests purpose
                 bool notfound = true;
+
                 for( unsigned nn = 0; nn < aAuxiliaryList.GetCount(); nn++ )
                 {
                     if( aAuxiliaryList.GetPickedItem( nn ) == ref )
@@ -209,8 +229,8 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                 }
 
                 if( notfound )
-                    wxMessageBox( wxT(
-                                     "UpdateCopyOfZonesList() error: item not found in aAuxiliaryList" ) );
+                    wxMessageBox( wxT( "UpdateCopyOfZonesList() error: item not found in aAuxiliaryList" ) );
+
                 break;
             }
             if( zone == ref )      // picked zone found
@@ -218,6 +238,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                 if( aPickList.GetPickedItemStatus( kk ) != UR_NEW )
                 {
                     ZONE_CONTAINER* zcopy = (ZONE_CONTAINER*) aPickList.GetPickedItemLink( kk );
+
                     if( zone->IsSame( *zcopy ) )    // Remove picked, because no changes
                     {
                         delete zcopy;               // Delete copy
@@ -225,6 +246,7 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                         kk--;
                     }
                 }
+
                 break;
             }
         }
@@ -247,11 +269,11 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
     if( aAuxiliaryList.GetCount()> 0 )
     {
         wxString msg;
-        msg.Printf( wxT(
-                       "UpdateCopyOfZonesList() error: aAuxiliaryList not void: %d item left (status %d)" ),
-                   aAuxiliaryList.GetCount(), aAuxiliaryList.GetPickedItemStatus( 0 ) );
+        msg.Printf( wxT( "UpdateCopyOfZonesList() error: aAuxiliaryList not void: %d item left (status %d)" ),
+                    aAuxiliaryList.GetCount(), aAuxiliaryList.GetPickedItemStatus( 0 ) );
         wxMessageBox( msg );
-        while( aAuxiliaryList.GetCount()> 0 )
+
+        while( aAuxiliaryList.GetCount() > 0 )
         {
             delete aAuxiliaryList.GetPickedItemLink( 0 );
             aAuxiliaryList.RemovePicker( 0 );

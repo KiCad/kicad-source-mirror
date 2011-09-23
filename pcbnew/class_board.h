@@ -1,22 +1,30 @@
-/*************************************************/
-/* class_board.h - Class BOARD to handle a board */
-/*************************************************/
+/**
+ * @file class_board.h
+ * @brief Class BOARD to handle a board.
+ */
 
 #ifndef CLASS_BOARD_H
 #define CLASS_BOARD_H
 
+
 #include "dlist.h"
+
+#include "layers_id_colors_and_visibility.h"
 #include "class_netinfo.h"
 #include "class_pad.h"
 #include "class_colors_design_settings.h"
 #include "class_board_design_settings.h"
 
 
+class PCB_BASE_FRAME;
+class PCB_EDIT_FRAME;
+class PICKED_ITEMS_LIST;
 class BOARD;
 class ZONE_CONTAINER;
 class SEGZONE;
 class TRACK;
-class PCB_EDIT_FRAME;
+class D_PAD;
+class MARKER_PCB;
 
 
 // buffer of item candidates when search for items on the same track.
@@ -1159,7 +1167,7 @@ public:
      * @param aLayerMask A layer or layers to mask the hit test.
      * @return A D_PAD object pointer to the connected pad.
      */
-    D_PAD* GetPad( LISTE_PAD* aPad, const wxPoint& aPosition, int aLayerMask );
+    D_PAD* GetPad( D_PAD** aPad, const wxPoint& aPosition, int aLayerMask );
 
     /**
      * Function GetSortedPadListByXCoord

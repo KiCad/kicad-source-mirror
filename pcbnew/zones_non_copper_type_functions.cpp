@@ -1,18 +1,20 @@
+/**
+ * @file zones_non_copper_type_functions.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "gr_basic.h"
 #include "confirm.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 
+#include "class_board.h"
+#include "class_zone.h"
+
+#include "pcbnew.h"
 #include "zones.h"
 
 #include "dialog_non_copper_zones_properties_base.h"
 
-/* Local functions */
-
-/* Local variables */
 
 /* Class DialogNonCopperZonesEditor
  * Dialog editor for non copper zones properties

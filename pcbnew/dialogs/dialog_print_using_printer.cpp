@@ -9,14 +9,16 @@
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "wxPcbStruct.h"
+
+#include "printout_controler.h"
+#include "pcbnew.h"
+#include "pcbplot.h"
+
+#include "class_board.h"
 
 #include "dialog_print_using_printer_base.h"
-#include "printout_controler.h"
 
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "pcbplot.h"
-#include "class_board_design_settings.h"
 
 #define WIDTH_MAX_VALUE           1000
 #define WIDTH_MIN_VALUE           1

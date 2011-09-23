@@ -1,12 +1,17 @@
-/*************/
-/* Edit pads */
-/*************/
+/**
+ * @file globaleditpad.cpp
+ */
 
 #include "fctsys.h"
-
 #include "common.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "wxBasePcbFrame.h"
+#include "pcbcommon.h"
+
+#include "class_board.h"
+#include "class_module.h"
+
 #include "pcbnew.h"
 #include "dialog_global_pads_edition_base.h"
 

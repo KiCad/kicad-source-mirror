@@ -1,12 +1,16 @@
-/*****************/
-/** setvisu.cpp **/
-/*****************/
+/**
+ * @file setvisu.cpp
+ */
 
 #include "fctsys.h"
 #include "common.h"
+#include "gr_basic.h"
 #include "class_drawpanel.h"
-
 #include "bitmaps.h"
+
+#include "class_board.h"
+#include "class_module.h"
+
 #include "cvpcb.h"
 #include "cvpcb_mainframe.h"
 #include "cvstruct.h"

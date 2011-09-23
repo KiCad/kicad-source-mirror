@@ -6,9 +6,13 @@
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 
+#include "class_board.h"
+#include "class_zone.h"
+#include "class_pcb_text.h"
+
+#include "pcbnew.h"
 #include "pcbnew_id.h"
 
 
@@ -170,7 +174,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_PCB_MIRE_BUTT:
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            SetCurItem( CreateTarget( aDC ) );
+            SetCurItem( (BOARD_ITEM*) CreateTarget( aDC ) );
             DrawPanel->MoveCursorToCrossHair();
         }
         else if( DrawStruct->Type() == PCB_TARGET_T )
@@ -204,7 +208,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            DrawStruct = Begin_DrawSegment( NULL, shape, aDC );
+            DrawStruct = (BOARD_ITEM*) Begin_DrawSegment( NULL, shape, aDC );
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = true;
         }
@@ -212,7 +216,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                && (DrawStruct->Type() == TYPE_DRAWSEGMENT)
                && DrawStruct->IsNew() )
         {
-            DrawStruct = Begin_DrawSegment( (DRAWSEGMENT*) DrawStruct, shape, aDC );
+            DrawStruct = (BOARD_ITEM*) Begin_DrawSegment( (DRAWSEGMENT*) DrawStruct, shape, aDC );
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = true;
         }
@@ -228,7 +232,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            DrawStruct = Begin_Route( NULL, aDC );
+            DrawStruct = (BOARD_ITEM*) Begin_Route( NULL, aDC );
             SetCurItem( DrawStruct );
 
             if( DrawStruct )
@@ -241,7 +245,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             // SetCurItem() must not write to the msg panel
             // because a track info is displayed while moving the mouse cursor
             if( track )  // A new segment was created
-                SetCurItem( DrawStruct = track, false );
+                SetCurItem( DrawStruct = (BOARD_ITEM*) track, false );
 
             DrawPanel->m_AutoPAN_Request = true;
         }
@@ -321,7 +325,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
             DrawPanel->MoveCursorToCrossHair();
-            DrawStruct = Load_Module_From_Library( wxEmptyString, aDC );
+            DrawStruct = (BOARD_ITEM*) Load_Module_From_Library( wxEmptyString, aDC );
             SetCurItem( DrawStruct );
 
             if( DrawStruct )
@@ -348,13 +352,13 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
         if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
         {
-            DrawStruct = EditDimension( NULL, aDC );
+            DrawStruct = (BOARD_ITEM*) EditDimension( NULL, aDC );
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = true;
         }
         else if( DrawStruct && (DrawStruct->Type() == TYPE_DIMENSION) && DrawStruct->IsNew() )
         {
-            DrawStruct = EditDimension( (DIMENSION*) DrawStruct, aDC );
+            DrawStruct = (BOARD_ITEM*) EditDimension( (DIMENSION*) DrawStruct, aDC );
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = true;
         }

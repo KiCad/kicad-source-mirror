@@ -32,13 +32,19 @@
 /****************************/
 
 #include "fctsys.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
 
+#include "pcbnew.h"
 #include "protos.h"
-
 #include "drc_stuff.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_zone.h"
+#include "class_marker_pcb.h"
+
 
 /* compare 2 trapezoids (can be rectangle) and return true if distance > aDist
  * i.e if for each edge of the first polygon distance from each edge of the other polygon
@@ -404,7 +410,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             if( checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
                 continue;
 
-            m_currentMarker = fillMarker( aRefSeg, track, DRCE_TRACK_NEAR_VIA, m_currentMarker );
+            m_currentMarker = fillMarker( aRefSeg, track,
+                                          DRCE_TRACK_NEAR_VIA, m_currentMarker );
             return false;
         }
 

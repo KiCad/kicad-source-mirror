@@ -11,12 +11,21 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
-
 #include "dcsvg.h"
+#include "wxBasePcbFrame.h"
+#include "class_pcb_screen.h"
+#include "macros.h"
 
 #include "pcbnew.h"
 #include "pcbplot.h"
 #include "printout_controler.h"
+
+#include "class_board.h"
+#include "class_edge_mod.h"
+#include "class_mire.h"
+#include "class_pcb_text.h"
+#include "class_dimension.h"
+#include "class_zone.h"
 
 #include "dialog_SVG_print.h"
 

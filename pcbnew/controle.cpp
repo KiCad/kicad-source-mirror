@@ -1,14 +1,20 @@
-/****************/
-/* controle.cpp */
-/****************/
+/**
+ * @file pcbnew/controle.cpp
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "protos.h"
+#include "pcbcommon.h"
+#include "macros.h"
+
 #include "pcbnew_id.h"
 
+#include "class_board.h"
+#include "class_module.h"
+
+#include "pcbnew.h"
+#include "protos.h"
 #include "collectors.h"
 
 //external functions used here:
@@ -333,7 +339,7 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
             // If there's no intrusion and DRC is active, we pass the cursor
             // "as is", and let ShowNewTrackWhenMovingCursor figure out what to do.
             if( !Drc_On || !g_CurrentTrackSegment
-                || g_CurrentTrackSegment != this->GetCurItem()
+              || (BOARD_ITEM*)g_CurrentTrackSegment != this->GetCurItem()
                 || !LocateIntrusion( m_Pcb->m_Track, g_CurrentTrackSegment,
                                      GetScreen()->m_Active_Layer, GetScreen()->RefPos( true ) ) )
             {

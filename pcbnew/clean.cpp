@@ -6,10 +6,16 @@
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
+#include "gr_basic.h"
+#include "pcbcommon.h"
+#include "wxPcbStruct.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
 #include "protos.h"
+
+#include "class_board.h"
+#include "class_track.h"
+
 
 /* local functions : */
 static void      clean_segments( PCB_EDIT_FRAME* frame );

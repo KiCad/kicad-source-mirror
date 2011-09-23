@@ -1,16 +1,20 @@
-/*******************/
-/**** Plot HPGL ****/
-/*******************/
+/**
+ * @file plothpgl.cpp
+ */
 
 #include "fctsys.h"
 #include "common.h"
 #include "plot_common.h"
 #include "confirm.h"
-#include "pcbnew.h"
-#include "pcbplot.h"
 #include "trigo.h"
+#include "wxBasePcbFrame.h"
+#include "macros.h"
 
+#include "class_board.h"
+
+#include "pcbnew.h"
 #include "protos.h"
+#include "pcbplot.h"
 
 
 bool PCB_BASE_FRAME::Genere_HPGL( const wxString& FullFileName, int Layer, GRTraceMode trace_mode )

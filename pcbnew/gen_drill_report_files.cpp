@@ -3,9 +3,6 @@
 /************************************************************************/
 
 #include "fctsys.h"
-
-#include <vector>
-
 #include "common.h"
 #include "plot_common.h"
 #include "base_struct.h"
@@ -13,10 +10,12 @@
 #include "drawtxt.h"
 #include "confirm.h"
 #include "kicad_string.h"
+#include "macros.h"
+
+#include "class_board.h"
+
 #include "pcbnew.h"
 #include "pcbplot.h"
-#include "macros.h"
-#include "class_board_design_settings.h"
 #include "gendrill.h"
 
 

@@ -1,23 +1,25 @@
-/****************/
-/* tracepcb.cpp */
-/****************/
-
-/*
- * Functions to redraw the current board ...
+/**
+ * @file tracepcb.cpp
+ * @brief Functions to redraw the current board.
  */
 
-#include <vector>
-
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "class_drawpanel.h"
+#include "wxPcbStruct.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_zone.h"
+#include "class_marker_pcb.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
 #include "module_editor_frame.h"
 #include "pcbplot.h"
 #include "protos.h"
+
 #include <wx/overlay.h>
+
 
 extern int g_DrawDefaultLineThickness; // Default line thickness, used to draw Frame references
 

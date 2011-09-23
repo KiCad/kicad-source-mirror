@@ -1,15 +1,14 @@
-/************************************/
-/* set_grid.cpp - manage user grid. */
-/************************************/
+/**
+ * @file set_grid.cpp
+ * @brief Manage user grid.
+ */
 
 #include "fctsys.h"
 #include "common.h"
 #include "class_drawpanel.h"
+#include "wxBasePcbFrame.h"
 
 #include "pcbnew.h"
-
-//#include "protos.h"
-
 #include "pcbnew_id.h"
 #include "dialog_set_grid_base.h"
 

@@ -10,6 +10,8 @@
 #include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "pcbstruct.h"
+#include "pcbcommon.h"
 
 #include "pcbnew_id.h"
 

@@ -7,9 +7,13 @@
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
+#include "gr_basic.h"
+#include "wxBasePcbFrame.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+
+#include "class_board.h"
+
 #include "pcbnew.h"
 #include "protos.h"
 

@@ -1,6 +1,6 @@
-/*********************************/
-/* magnetic_tracks_functions.cpp */
-/*********************************/
+/**
+ * @file magnetic_tracks_functions.cpp
+ */
 
 /* functions used to control the cursor position, when creating a track
  * and when the "magnetic tracks" option is on
@@ -11,7 +11,12 @@
 #include "fctsys.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
+#include "macros.h"
+#include "pcbcommon.h"
+
+#include "class_board.h"
+#include "class_track.h"
+
 #include "protos.h"
 #include "pcbnew_id.h"
 

@@ -34,7 +34,7 @@
 #include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "pcbstruct.h"      // enum PCB_VISIBLE
+#include "pcbcommon.h"      // enum PCB_VISIBLE
 #include "collectors.h"
 #include "build_version.h"
 #include "protos.h"

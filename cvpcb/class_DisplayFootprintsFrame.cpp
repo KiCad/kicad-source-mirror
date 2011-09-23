@@ -8,9 +8,11 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "macros.h"
+#include "bitmaps.h"
+
+#include "class_board.h"
 
 #include "cvpcb.h"
-#include "bitmaps.h"
 #include "cvpcb_mainframe.h"
 #include "class_DisplayFootprintsFrame.h"
 #include "cvpcb_id.h"

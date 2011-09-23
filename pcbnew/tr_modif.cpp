@@ -1,13 +1,18 @@
-/******************/
-/* Trace editing. */
-/******************/
+/**
+ * @file tr_modif.cpp
+ * @brief Trace editing.
+ */
 
 #include "fctsys.h"
-
-#include "pcbnew.h"
+#include "gr_basic.h"
 #include "wxPcbStruct.h"
 
+#include "class_board.h"
+#include "class_track.h"
+
+#include "pcbnew.h"
 #include "protos.h"
+
 
 static void ListSetState( EDA_ITEM* Start, int NbItem, int State, int onoff );
 

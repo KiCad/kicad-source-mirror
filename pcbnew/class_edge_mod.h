@@ -6,10 +6,13 @@
 #ifndef _CLASS_EDGE_MOD_H_
 #define _CLASS_EDGE_MOD_H_
 
-#include "class_drawsegment.h"
-#include "richio.h"
 
+#include "class_drawsegment.h"
+
+
+class LINE_READER;
 class EDA_3D_CANVAS;
+class EDA_DRAW_FRAME;
 
 
 class EDGE_MODULE : public DRAWSEGMENT

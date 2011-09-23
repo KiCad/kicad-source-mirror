@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
-
 // Name:        dialog_copper_zones.cpp
 // Author:      jean-pierre Charras
 // Created:     09/oct/2008
-/// Licence:     GNU License
+// Licence:     GNU License
 /////////////////////////////////////////////////////////////////////////////
 
 #include <wx/wx.h>
@@ -19,6 +18,8 @@
 
 #include "dialog_copper_zones.h"
 #include "class_zone_setting.h"
+#include "class_board.h"
+
 
 #define LAYER_BITMAP_SIZE_X 20
 #define LAYER_BITMAP_SIZE_Y 10

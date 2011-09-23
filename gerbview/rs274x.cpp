@@ -1,9 +1,10 @@
-/**************/
-/* rs274x.cpp */
-/**************/
+/**
+ * @file rs274x.cpp
+ */
 
 #include "fctsys.h"
 #include "common.h"
+#include "macros.h"
 
 #include "gerbview.h"
 #include "class_GERBER.h"
@@ -22,8 +23,9 @@ extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 //      But we can have A = Y, B = X and/or offset, mirror, scale;
 // Also:
 //  Image is what you must plot (the entire data of the file).
-//  Layer is just a set of data blocks with their parameters. An image can have more than one layer
-//  So a gerber layer is not like a board layer or the graphic layers used in Gerbview to show a file.
+//  Layer is just a set of data blocks with their parameters. An image can have more than one
+//   layer so a gerber layer is not like a board layer or the graphic layers used in Gerbview
+//   to show a file.
 enum RS274X_PARAMETERS {
     // Directive parameters: single usage recommended
     // Must be at the beginning of the file
@@ -919,6 +921,7 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
         AM_PRIMITIVE prim( m_GerbMetric );
         prim.primitive_id = (AM_PRIMITIVE_ID) primitive_type;
         int i;
+
         for( i = 0; i < paramCount && *text && *text != '*'; ++i )
         {
             prim.params.push_back( AM_PARAM() );
@@ -926,8 +929,10 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
             AM_PARAM& param = prim.params.back();
 
             text = GetNextLine(  buff, text, gerber_file );
+
             if( text == NULL)   // End of File
                 return false;
+
             param.ReadParam( text );
         }
 
@@ -958,8 +963,10 @@ bool GERBER_IMAGE::ReadApertureMacro( char buff[GERBER_BUFZ],
                 AM_PARAM& param = prim.params.back();
 
                 text = GetNextLine(  buff, text, gerber_file );
+
                 if( text == NULL )  // End of File
                     return false;
+
                 param.ReadParam( text );
             }
         }

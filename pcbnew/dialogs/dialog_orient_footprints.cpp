@@ -34,6 +34,9 @@
 #include "wxPcbStruct.h"
 #include "macros.h"
 
+#include "class_board.h"
+#include "class_module.h"
+
 #include "dialog_orient_footprints_base.h"
 
 

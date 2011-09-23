@@ -1,12 +1,21 @@
-/***********/
-/* protos.h */
-/***********/
+/**
+ * @file pcbnew/protos.h
+ */
 
 #ifndef PROTO_H
 #define PROTO_H
 
 
 #include <vector>
+
+
+class wxDC;
+class wxPoint;
+class EDA_DRAW_PANEL;
+class BOARD_ITEM;
+class D_PAD;
+class TRACK;
+class MODULE;
 
 
 /**
@@ -20,12 +29,6 @@
 void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage );
 
 
-/*******************/
-/* PAD_CONNECT.CPP */
-/*******************/
-
-class D_PAD;
-
 
 /***************/
 /* TRPISTE.CPP */
@@ -35,10 +38,13 @@ class D_PAD;
  * Function DrawTraces
  * Draws n consecutive track segments in list.
  * Useful to show a track when it is a chain of segments
- * (fir instance when creating a new track)
- * @param aTrackList = First segment
- * @param nbsegment = number of segments in list
- * @param Mode_color = mode (GRXOR, GROR ..)
+ * (for instance when creating a new track)
+ *
+ * @param panel A EDA_DRAW_ITEM pointer to the canvas.
+ * @param DC A wxDC pointer of the device context used for drawing.
+ * @param aStartTrace First segment
+ * @param nbsegment Number of segments in list
+ * @param mode_color Drawing mode (GRXOR, GROR ..)
  */
 void DrawTraces( EDA_DRAW_PANEL* panel,
                  wxDC*           DC,

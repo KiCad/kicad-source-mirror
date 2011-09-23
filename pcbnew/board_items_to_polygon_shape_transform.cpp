@@ -11,6 +11,13 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
+#include "macros.h"
+
+#include "class_pad.h"
+#include "class_track.h"
+#include "class_drawsegment.h"
+#include "class_pcb_text.h"
+
 
 /* Exported functions */
 

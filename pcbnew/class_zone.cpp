@@ -1,27 +1,27 @@
-/**********************************/
-/* classes to handle copper zones */
-/**********************************/
+/**
+ * @file class_zone.cpp
+ * @brief Implementation of class to handle copper zones.
+ */
 
 #include "fctsys.h"
 #include "wxstruct.h"
-#include "gr_basic.h"
 #include "trigo.h"
+#include "class_pcb_screen.h"
 #include "class_drawpanel.h"
 #include "kicad_string.h"
-
-#include "PolyLine.h"
-#include "pcbnew.h"
-#include "zones.h"
-#include "class_board_design_settings.h"
+#include "pcbcommon.h"
 #include "colors_selection.h"
+#include "richio.h"
+#include "macros.h"
+#include "wxBasePcbFrame.h"
 
 #include "protos.h"
-#include "richio.h"
-#include "class_zone_setting.h"
+#include "class_board.h"
+#include "class_zone.h"
 
-/************************/
-/* class ZONE_CONTAINER */
-/************************/
+#include "pcbnew.h"
+#include "zones.h"
+
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     BOARD_CONNECTED_ITEM( parent, TYPE_ZONE_CONTAINER )

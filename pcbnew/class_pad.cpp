@@ -1,18 +1,24 @@
-/***********************************************/
-/* class_pad.cpp : D_PAD class implementation. */
-/***********************************************/
+/**
+ * @file class_pad.cpp
+ * D_PAD class implementation.
+ */
 
 #include "fctsys.h"
 #include "PolyLine.h"
 #include "common.h"
 #include "confirm.h"
 #include "kicad_string.h"
+#include "trigo.h"
+#include "richio.h"
+#include "wxstruct.h"
+#include "macros.h"
 
 #include "pcbnew.h"
-#include "trigo.h"
 #include "pcbnew_id.h"                      // ID_TRACK_BUTT
-#include "class_board_design_settings.h"
-#include "richio.h"
+
+#include "class_board.h"
+#include "class_module.h"
+
 
 // Due to a bug in previous versions ( m_LengthDie not initialized in D_PAD ctor)
 // m_LengthDie is no more read from .brd files
@@ -35,11 +41,9 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
         m_Pos = ( (MODULE*) m_Parent )->GetPosition();
     }
 
-    m_PadShape = PAD_CIRCLE;                        // Shape: PAD_CIRCLE,
-                                                    // PAD_RECT PAD_OVAL
+    m_PadShape = PAD_CIRCLE;                        // Shape: PAD_CIRCLE, PAD_RECT PAD_OVAL
                                                     // PAD_TRAPEZOID
-    m_Attribut = PAD_STANDARD;                      // Type: NORMAL, PAD_SMD,
-                                                    // PAD_CONN
+    m_Attribut = PAD_STANDARD;                      // Type: NORMAL, PAD_SMD, PAD_CONN
     m_DrillShape     = PAD_CIRCLE;                  // Drill shape = circle
     m_LocalClearance = 0;
     m_LocalSolderMaskMargin  = 0;
@@ -48,8 +52,7 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
     m_layerMask = PAD_STANDARD_DEFAULT_LAYERS;      // set layers mask to
                                                     // default for a standard pad
 
-    SetSubRatsnest( 0 );                            // used in ratsnest
-                                                    // calculations
+    SetSubRatsnest( 0 );                            // used in ratsnest calculations
     ComputeShapeMaxRadius();
 }
 

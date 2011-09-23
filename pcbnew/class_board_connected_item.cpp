@@ -1,9 +1,13 @@
-/*************************************************************************/
-/* class_board_connected_item.cpp : BOARD_CONNECTED_ITEM class functions */
-/*************************************************************************/
+/**
+ * @file class_board_connected_item.cpp
+ * @brief BOARD_CONNECTED_ITEM class functions.
+ */
 
 #include "fctsys.h"
 #include "pcbnew.h"
+
+#include "class_board.h"
+#include "class_board_item.h"
 
 
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :

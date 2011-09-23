@@ -33,6 +33,7 @@
 #include "trigo.h"
 #include "class_drawpanel.h"
 #include "drawtxt.h"
+#include "macros.h"
 
 #include "gerbview.h"
 #include "class_board_design_settings.h"

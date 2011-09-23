@@ -9,6 +9,8 @@
 
 #include <vector>
 #include "gr_basic.h"
+#include "class_board_item.h"
+#include "layers_id_colors_and_visibility.h"
 #include "PolyLine.h"
 #include "class_zone_setting.h"
 
@@ -19,7 +21,6 @@ class EDA_DRAW_FRAME;
 class EDA_DRAW_PANEL;
 class PCB_EDIT_FRAME;
 class BOARD;
-class BOARD_CONNECTED_ITEM;
 class ZONE_CONTAINER;
 
 

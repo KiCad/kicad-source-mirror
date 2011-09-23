@@ -1,7 +1,7 @@
-
-/*********************************************************/
-/****Function to plot a board in GERBER RS274X format ****/
-/*********************************************************/
+/**
+ * @file plotgerb.cpp
+ * @brief Functions to plot a board in GERBER RS274X format.
+ */
 
 /* Creates the output files, one per board layer:
  * filenames are like xxxc.PHO and use the RS274X format
@@ -14,16 +14,14 @@
 #include "common.h"
 #include "plot_common.h"
 #include "confirm.h"
-#include "pcbnew.h"
 #include "pcbplot.h"
 #include "trigo.h"
+#include "wxBasePcbFrame.h"
+#include "layers_id_colors_and_visibility.h"
 
+#include "pcbnew.h"
 #include "protos.h"
 
-/********************************************************************************/
-bool PCB_BASE_FRAME::Genere_GERBER( const wxString& FullFileName, int Layer,
-                                    bool PlotOriginIsAuxAxis, GRTraceMode trace_mode )
-/********************************************************************************/
 
 /* Creates the output files, one per board layer:
  * filenames are like xxxc.PHO and use the RS274X format
@@ -31,8 +29,11 @@ bool PCB_BASE_FRAME::Genere_GERBER( const wxString& FullFileName, int Layer,
  * format 3.4, Leading zero omitted, Abs format
  * format 3.4 uses the native pcbnew units (1/10000 inch).
  */
+bool PCB_BASE_FRAME::Genere_GERBER( const wxString& FullFileName, int Layer,
+                                    bool PlotOriginIsAuxAxis, GRTraceMode trace_mode )
 {
     FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
+
     if( output_file == NULL )
     {
         return false;
@@ -44,7 +45,9 @@ bool PCB_BASE_FRAME::Genere_GERBER( const wxString& FullFileName, int Layer,
     double scale = g_PcbPlotOptions.m_PlotScale;
 
     if( PlotOriginIsAuxAxis )
+    {
         offset = m_Auxiliary_Axis_Position;
+    }
     else
     {
         offset.x = 0;
@@ -65,6 +68,7 @@ bool PCB_BASE_FRAME::Genere_GERBER( const wxString& FullFileName, int Layer,
         // ( only if hole size == pad size ):
         if( (Layer >= LAYER_N_BACK) && (Layer <= LAYER_N_FRONT) )
             g_PcbPlotOptions.m_SkipNPTH_Pads = true;
+
         // Sheet refs on gerber CAN be useful... and they're always 1:1
         if( g_PcbPlotOptions.m_PlotFrameRef )
             PlotWorkSheet( plotter, GetScreen() );
@@ -74,11 +78,11 @@ bool PCB_BASE_FRAME::Genere_GERBER( const wxString& FullFileName, int Layer,
 
         g_PcbPlotOptions.m_SkipNPTH_Pads = false;
     }
-
     else    // error in start_plot( ): failed opening a temporary file
     {
         wxMessageBox( _("Error when creating %s file: unable to create a temporary file"));
     }
+
     delete plotter;
     SetLocaleTo_Default();
 

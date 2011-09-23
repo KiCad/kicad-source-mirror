@@ -10,11 +10,14 @@
 #include "kicad_string.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "kicad_device_context.h"
+
 #include "autorout.h"
 #include "cell.h"
 #include "pcbnew_id.h"
+#include "class_board.h"
+#include "class_module.h"
 
-#include "kicad_device_context.h"
 
 typedef enum {
     FIXE_MODULE,

@@ -13,9 +13,12 @@
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "class_board_design_settings.h"
-#include "dialog_general_options.h"
+#include "pcbcommon.h"
 
 #include "pcbnew_id.h"
+#include "class_board.h"
+
+#include "dialog_general_options.h"
 
 
 Dialog_GeneralOptions::Dialog_GeneralOptions( PCB_EDIT_FRAME* parent ) :

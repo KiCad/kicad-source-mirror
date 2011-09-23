@@ -26,14 +26,16 @@
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
+#include "macros.h"
 
 #include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
 
+#include "class_board.h"
+
 #include "dialog_layers_setup_base.h"
 
-#include "class_board_design_settings.h"
 
 // some define to choose how copper layers widgets are shown
 

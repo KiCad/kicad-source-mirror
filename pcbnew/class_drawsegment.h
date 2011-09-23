@@ -1,12 +1,19 @@
-/*************************************/
-/* class to handle a graphic segment */
-/**************************************/
+/**
+ * @file class_drawsegment.h
+ * @brief Class to handle a graphic segment.
+ */
 
 #ifndef CLASS_DRAWSEGMENT_H
 #define CLASS_DRAWSEGMENT_H
 
+
+#include "class_board_item.h"
 #include "PolyLine.h"
-#include "richio.h"
+
+
+class LINE_READER;
+class EDA_DRAW_FRAME;
+class MODULE;
 
 
 class DRAWSEGMENT : public BOARD_ITEM

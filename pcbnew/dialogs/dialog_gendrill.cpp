@@ -33,6 +33,10 @@
 #include "pcbplot.h"
 #include "gendrill.h"
 
+#include "class_board.h"
+#include "class_track.h"
+#include "class_module.h"
+
 #include "dialog_gendrill.h"
 
 

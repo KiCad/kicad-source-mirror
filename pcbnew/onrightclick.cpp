@@ -1,16 +1,21 @@
-/**************************************************/
-/* onrightclick.cpp: Right mouse button functions */
-/**************************************************/
+/**
+ * @file pcbnew/onrightclick.cpp
+ * @brief Right mouse button functions.
+ */
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "macros.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_pcb_text.h"
+#include "class_zone.h"
 
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
-
 #include "pcbnew_id.h"
 #include "hotkeys.h"
 #include "collectors.h"

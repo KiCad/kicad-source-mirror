@@ -4,10 +4,14 @@
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
+#include "gr_basic.h"
+#include "wxPcbStruct.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
 #include "protos.h"
+
+#include "class_track.h"
+#include "class_board.h"
 
 
 /* Attribute change for 1 track segment.

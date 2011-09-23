@@ -9,11 +9,23 @@
 #include "base_struct.h"
 #include "drawtxt.h"
 #include "confirm.h"
+#include "trigo.h"
+#include "wxBasePcbFrame.h"
+#include "pcbcommon.h"
+#include "macros.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_edge_mod.h"
+#include "class_pcb_text.h"
+#include "class_zone.h"
+#include "class_drawsegment.h"
+#include "class_mire.h"
+#include "class_dimension.h"
+
 #include "pcbnew.h"
 #include "pcbplot.h"
-#include "trigo.h"
-#include "class_board_design_settings.h"
-
 
 static void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask,
                                 GRTraceMode trace_mode );

@@ -1,11 +1,14 @@
-/*******************/
-/* gerberframe.cpp */
-/*******************/
+/**
+ * @file gerbview_frame.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "wxstruct.h"
 #include "class_drawpanel.h"
+#include "build_version.h"
+#include "macros.h"
+#include "class_layer_box_selector.h"
 
 #include "gerbview.h"
 #include "class_gerber_draw_item.h"
@@ -15,13 +18,14 @@
 #include "class_GERBER.h"
 #include "dialog_helpers.h"
 #include "class_DCodeSelectionbox.h"
+#include "class_gerbview_layer_widget.h"
 
-#include "build_version.h"
 
 
 // Config keywords
 const wxString GerbviewShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
 const wxString GerbviewShowDCodes( wxT( "ShowDCodesOpt" ) );
+
 
 /****************************************/
 /* class GERBVIEW_FRAME for GerbView*/

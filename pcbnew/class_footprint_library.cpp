@@ -9,6 +9,8 @@
 #include "wxPcbStruct.h"
 #include "richio.h"
 #include "filter_reader.h"
+#include "macros.h"
+#include "pcbstruct.h"
 
 #include "class_footprint_library.h"
 

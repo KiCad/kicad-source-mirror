@@ -1,6 +1,7 @@
-/****************************************************/
-/* class_module.cpp : EDGE_MODULE class definition. */
-/****************************************************/
+/**
+ * @file class_edge_mod.cpp
+ * @brief EDGE_MODULE class definition.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -10,13 +11,20 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "colors_selection.h"
+#include "richio.h"
+#include "macros.h"
+#include "wxBasePcbFrame.h"
+#include "pcbcommon.h"
 
 #include "pcbnew.h"
-#include "class_board_design_settings.h"
-#include "richio.h"
 
-#define MAX_WIDTH 10000     /* Thickness (in 1 / 10000 ") of maximum reasonable
-                             * features, text... */
+#include "class_board.h"
+#include "class_module.h"
+#include "class_edge_mod.h"
+
+
+#define MAX_WIDTH 10000  /* Thickness (in 1 / 10000 ") of maximum reasonable features, text... */
+
 
 /*********************/
 /* class EDGE_MODULE */

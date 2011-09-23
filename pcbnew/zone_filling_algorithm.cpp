@@ -1,26 +1,25 @@
-/* filling_zone_algorithm:
- * Algos used to fill a zone defined by a polygon and a filling starting point
+/**
+ * @file zone_filling_algorithm.cpp:
+ * Algorithms used to fill a zone defined by a polygon and a filling starting point.
  */
 
 
 #include <algorithm> // sort
 
 #include "fctsys.h"
+#include "trigo.h"
+#include "wxPcbStruct.h"
+
+#include "class_zone.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
 #include "zones.h"
-#include "trigo.h"
 #include "protos.h"
 
 /* Local functions */
 
 /* Local variables */
 
-
-/***********************************************************/
-int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb )
-/***********************************************************/
 
 /**
  * Function BuildFilledPolysListData
@@ -32,11 +31,13 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb )
  * This function does not add holes for pads and tracks but calls
  * AddClearanceAreasPolygonsToPolysList() to do that for copper layers
  */
+int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb )
 {
     m_FilledPolysList.clear();
 
     /* convert outlines + holes to outlines without holes (adding extra segments if necessary)
-     * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building this zone
+     * m_Poly data is expected normalized, i.e. NormalizeAreaOutlines was used after building
+     * this zone
      */
 
     if( GetNumCorners() <= 2 )  // malformed zone. Kbool does not like it ...
@@ -102,6 +103,7 @@ static bool SortByXValues( const int& a, const int &b)
 {
     return a < b;
 }
+
 
 /**
  * Function Fill_Zone_Areas_With_Segments
@@ -202,8 +204,11 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments()
                     error = true;
                 }
 
-                if ( error ) break;
+                if ( error )
+                    break;
+
                 int iimax = x_coordinates.size()-1;
+
                 for (int ii = 0; ii < iimax; ii +=2 )
                 {
                     wxPoint  seg_start, seg_end;
@@ -216,10 +221,15 @@ int ZONE_CONTAINER::Fill_Zone_Areas_With_Segments()
                     m_FillSegmList.push_back( segment );
                 }
             }   //End examine segments in one area
-            if ( error ) break;
+
+            if ( error )
+                break;
+
             istart = iend + 1;  // istart points the first corner of the next area
         }   // End find one end of outline
-        if ( error ) break;
+
+        if ( error )
+            break;
     }   // End examine all areas
 
     return count;

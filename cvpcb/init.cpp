@@ -1,6 +1,6 @@
-/**************/
-/*  init.cpp  */
-/**************/
+/**
+ * @file init.cpp
+ */
 
 #include "fctsys.h"
 #include "common.h"
@@ -8,12 +8,12 @@
 #include "gr_basic.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
+#include "macros.h"
+#include "build_version.h"
 
 #include "cvpcb.h"
 #include "cvpcb_mainframe.h"
 #include "cvstruct.h"
-
-#include "build_version.h"
 
 
 void CVPCB_MAINFRAME::SetNewPkg( const wxString& package )

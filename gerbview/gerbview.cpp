@@ -7,6 +7,7 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "gestfich.h"
+#include "gr_basic.h"
 
 #include "gerbview.h"
 #include "gerbview_id.h"
@@ -90,10 +91,8 @@ bool EDA_APP::OnInit()
     frame->SetTitle( GetTitle() + wxT( " " ) + GetBuildVersion() );
 
     // Initialize some display options
-    DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning
-                                            // here
-    DisplayOpt.ShowTrackClearanceMode = 0;  // tracks and vias clearance has no
-                                            // meaning here
+    DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here
+    DisplayOpt.ShowTrackClearanceMode = 0;  // tracks and vias clearance has no meaning here
 
     SetTopWindow( frame );                  // Set GerbView mainframe on top
     frame->Show( true );                    // Show GerbView mainframe

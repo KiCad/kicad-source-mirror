@@ -8,13 +8,20 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
-#include "module_editor_frame.h"
 #include "dialog_helpers.h"
 #include "richio.h"
 #include "filter_reader.h"
+#include "pcbcommon.h"
+#include "macros.h"
+
+#include "class_board.h"
+#include "class_module.h"
+
+#include "pcbnew.h"
 #include "class_footprint_library.h"
+#include "module_editor_frame.h"
+
 
 /*
  * Module library header format:

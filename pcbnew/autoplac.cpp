@@ -8,13 +8,20 @@
 #include "confirm.h"
 #include "pcbnew.h"
 #include "wxPcbStruct.h"
+#include "gr_basic.h"
+#include "macros.h"
+#include "pcbcommon.h"
 
 #include "protos.h"
 #include "ar_protos.h"
 #include "autorout.h"
 #include "cell.h"
-#include "class_board_design_settings.h"
 #include "colors_selection.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+#include "class_drawsegment.h"
 
 
 #define GAIN            16

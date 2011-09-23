@@ -10,12 +10,17 @@
 
 #include "fctsys.h"
 #include "trigo.h"
+#include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
+#include "wxPcbStruct.h"
+
+#include "module_editor_frame.h"
+#include "class_board.h"
+#include "class_module.h"
+#include "class_edge_mod.h"
 
 #include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "module_editor_frame.h"
 
 
 static void ShowNewEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,

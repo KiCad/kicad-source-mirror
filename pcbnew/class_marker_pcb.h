@@ -1,12 +1,15 @@
-/***************************************/
-/* Markers: used to show a drc problem */
-/***************************************/
+/**
+ * @file class_marker_pcb.h
+ * @brief Markers used to show a drc problem on boards.
+ */
 
 #ifndef CLASS_MARKER_PCB_H
 #define CLASS_MARKER_PCB_H
 
-#include "base_struct.h"
+
+#include "class_board_item.h"
 #include "class_marker_base.h"
+
 
 class MARKER_PCB : public BOARD_ITEM, public MARKER_BASE
 {

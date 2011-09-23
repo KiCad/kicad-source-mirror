@@ -1,21 +1,27 @@
-/***************************************************/
-/* class and functions to handle a graphic segment */
-/****************************************************/
+/**
+ * @file class_drawsegment.cpp
+ * @brief Class and functions to handle a graphic segments.
+ */
 
 #include "fctsys.h"
+#include "macros.h"
 #include "wxstruct.h"
 #include "gr_basic.h"
 #include "bezier_curves.h"
 #include "class_drawpanel.h"
 #include "kicad_string.h"
 #include "colors_selection.h"
+#include "trigo.h"
+#include "richio.h"
+#include "pcbcommon.h"
 
 #include "pcbnew.h"
-#include "class_board_design_settings.h"
-
-#include "trigo.h"
 #include "protos.h"
-#include "richio.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_drawsegment.h"
+
 
 DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype )

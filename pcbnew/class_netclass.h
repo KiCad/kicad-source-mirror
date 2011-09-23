@@ -32,6 +32,10 @@
 #include <map>
 #include "richio.h"
 
+
+class BOARD;
+
+
 /**
  * Class NETCLASS
  * handles a collection of nets and the parameters used to route or

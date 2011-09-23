@@ -6,10 +6,16 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "gr_basic.h"
 #include "class_drawpanel.h"
-#include "pcbnew.h"
+#include "wxBasePcbFrame.h"
 
 #include "drag.h"
+#include "pcbnew.h"
+
+#include "class_module.h"
+#include "class_board.h"
+
 
 /* a list of DRAG_SEGM items used to move or drag tracks */
 std::vector<DRAG_SEGM> g_DragSegmentList;

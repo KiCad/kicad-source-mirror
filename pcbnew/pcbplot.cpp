@@ -1,20 +1,23 @@
-/***************/
-/* pcbplot.cpp */
-/***************/
+/**
+ * @file pcbnew/pcbplot.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "plot_common.h"
 #include "confirm.h"
 #include "gestfich.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "pcbplot.h"
 #include "worksheet.h"
+#include "pcbstruct.h"
+#include "macros.h"
+
+#include "class_board.h"
+
+#include "pcbnew.h"
 #include "pcbnew_id.h"
 #include "protos.h"
-#include "pcbstruct.h"
-#include "class_board_design_settings.h"
 #include "dialog_plot_base.h"
 #include "pcb_plot_params.h"
 

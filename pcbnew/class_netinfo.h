@@ -1,6 +1,6 @@
-/************************/
-/* file class_netinfo.h */
-/************************/
+/**
+ * @file class_netinfo.h
+ */
 
 /*
  *  Classes to handle info on nets
@@ -10,29 +10,32 @@
 #define __CLASSES_NETINFO__
 
 #include "class_netclass.h"
-#include "richio.h"
 
+
+class LINE_READER;
+class EDA_DRAW_PANEL;
+class EDA_DRAW_FRAME;
 class NETINFO_ITEM;
+class D_PAD;
+class BOARD;
+class BOARD_ITEM;
 
 
-/* Class RATSNEST_ITEM: describes a ratsnest line: a straight line connecting
- * 2 pads */
+/* Class RATSNEST_ITEM: describes a ratsnest line: a straight line connecting 2 pads */
 
 /*****************************/
 /* flags for a RATSNEST_ITEM */
 /*****************************/
-#define CH_VISIBLE          1   /* Visible */
-#define CH_UNROUTABLE       2   /* Don't use autorouter. */
-#define CH_ROUTE_REQ        4   /* Must be routed by the autorouter. */
-#define CH_ACTIF            8   /* Not routed. */
-#define LOCAL_RATSNEST_ITEM 0x8000    /* Line between two pads of a single
-                                       * module. */
+#define CH_VISIBLE          1        /* Visible */
+#define CH_UNROUTABLE       2        /* Don't use autorouter. */
+#define CH_ROUTE_REQ        4        /* Must be routed by the autorouter. */
+#define CH_ACTIF            8        /* Not routed. */
+#define LOCAL_RATSNEST_ITEM 0x8000   /* Line between two pads of a single module. */
 
 class RATSNEST_ITEM
 {
 private:
-    int m_NetCode;      // netcode ( = 1.. n ,  0 is the value used for not
-                        // connected items)
+    int m_NetCode;      // netcode ( = 1.. n ,  0 is the value used for not connected items)
 
 public:
     int    m_Status;    // State: see previous defines (CH_ ...)
@@ -64,21 +67,19 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const wxPoint& offset );
 };
 
+
 /***************************************************************/
 /******************* class NETINFO *****************************/
 /***************************************************************/
-
 
 class NETINFO_LIST
 {
 private:
     BOARD* m_Parent;
-    std::vector<NETINFO_ITEM*> m_NetBuffer;     // nets buffer list (name,
-                                                // design constraints ..
+    std::vector<NETINFO_ITEM*> m_NetBuffer;     // nets buffer list (name, design constraints ..
 
 public:
-    std::vector<D_PAD*>        m_PadsFullList;  // Entry for a sorted pad
-                                                // list (used in ratsnest
+    std::vector<D_PAD*>        m_PadsFullList;  // Entry for a sorted pad list (used in ratsnest
                                                 // calculations)
 
 public: NETINFO_LIST( BOARD* aParent );
@@ -88,7 +89,7 @@ public: NETINFO_LIST( BOARD* aParent );
      * Function GetItem
      * @param aNetcode = netcode to identify a given NETINFO_ITEM
      * @return a NETINFO_ITEM pointer to the selected NETINFO_ITEM by its
-     * netcode, or NULL if not found
+     *         netcode, or NULL if not found
      */
     NETINFO_ITEM* GetNetItem( int aNetcode );
 
@@ -122,7 +123,7 @@ public: NETINFO_LIST( BOARD* aParent );
      * Function GetPadsCount
      * @return the number of pads in board
      */
-    unsigned     GetPadsCount()
+    unsigned GetPadsCount()
     {
         return m_PadsFullList.size();
     }
@@ -180,19 +181,18 @@ private:
 
 
 public:
-    int m_NbNodes;                      // Pads count for this net
-    int m_NbLink;                       // Ratsnets count for this net
-    int m_NbNoconn;                     // Ratsnets remaining to route count
-    int m_Flag;                         // used in some calculations. Had no
-                                        // special meaning
+    int m_NbNodes;                     // Pads count for this net
+    int m_NbLink;                      // Ratsnets count for this net
+    int m_NbNoconn;                    // Ratsnets remaining to route count
+    int m_Flag;                        // used in some calculations. Had no
+                                       // special meaning
 
-    std::vector <D_PAD*> m_ListPad;     // List of pads connected to this net
+    std::vector <D_PAD*> m_ListPad;    // List of pads connected to this net
 
-    unsigned             m_RatsnestStartIdx; /* Starting point of ratsnests of
-                                              * this
-                                       * net (included) in a general buffer of
-                                       * ratsnest (a vector<RATSNEST_ITEM*>
-                                       * buffer) */
+    unsigned m_RatsnestStartIdx;       /* Starting point of ratsnests of this
+                                        * net (included) in a general buffer of
+                                        * ratsnest (a vector<RATSNEST_ITEM*>
+                                        * buffer) */
 
     unsigned m_RatsnestEndIdx;         // Ending point of ratsnests of this net
                                        // (excluded) in this buffer
@@ -207,6 +207,7 @@ public:
     void SetClass( const NETCLASS* aNetClass )
     {
         m_NetClass = (NETCLASS*) aNetClass;
+
         if( aNetClass )
             m_NetClassName = aNetClass->GetName();
         else
@@ -340,6 +341,7 @@ public:
      * @return int - the netcode
      */
     int GetNet() const { return m_NetCode; }
+
     void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
 
     int GetNodesCount() const { return m_ListPad.size(); }
@@ -385,10 +387,10 @@ public:
 
 /* Status bit (OR'ed bits) for class BOARD member .m_Status_Pcb */
 enum StatusPcbFlags {
-    LISTE_PAD_OK = 1,                       /* Pad list is Ok */
-    LISTE_RATSNEST_ITEM_OK = 2,             /* General Ratsnest is Ok */
-    RATSNEST_ITEM_LOCAL_OK = 4,             /* current MODULE ratsnest is Ok */
-    CONNEXION_OK = 8,                       /* List of connections exists. */
+    LISTE_PAD_OK = 1,                    /* Pad list is Ok */
+    LISTE_RATSNEST_ITEM_OK = 2,          /* General Ratsnest is Ok */
+    RATSNEST_ITEM_LOCAL_OK = 4,          /* current MODULE ratsnest is Ok */
+    CONNEXION_OK = 8,                    /* List of connections exists. */
     NET_CODES_OK = 0x10,                 /* Bit indicating that Netcode is OK,
                                           * do not change net name.  */
     DO_NOT_SHOW_GENERAL_RASTNEST = 0x20  /* Do not display the general

@@ -1,13 +1,17 @@
-/********************************/
-/* TEXTE_PCB class definition. */
-/********************************/
+/**
+ * @file class_pcb_text.h
+ * @brief TEXTE_PCB class definition.
+ */
 
 #ifndef CLASS_PCB_TEXT_H
 #define CLASS_PCB_TEXT_H
 
-#include "base_struct.h"
+#include "class_board_item.h"
 #include "PolyLine.h"
-#include "richio.h"
+
+
+class LINE_READER;
+class EDA_DRAW_PANEL;
 
 
 class TEXTE_PCB : public BOARD_ITEM, public EDA_TEXT
@@ -20,8 +24,7 @@ public:
     /**
      * Function GetPosition
      * returns the position of this object.
-     * @return wxPoint& - The position of this object, non-const so it
-     *                    can be changed
+     * @return wxPoint& - The position of this object, non-const so it can be changed
      */
     wxPoint& GetPosition()
     {
@@ -56,7 +59,7 @@ public:
     /* duplicate structure */
     void Copy( TEXTE_PCB* source );
 
-    void Draw( EDA_DRAW_PANEL * panel, wxDC* DC, int aDrawMode,
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
                const wxPoint& offset = ZeroOffset );
 
     // File Operations:
@@ -64,8 +67,7 @@ public:
 
     /**
      * Function Save
-     * writes the data structures for this object out to a FILE in "*.brd"
-     * format.
+     * writes the data structures for this object out to a FILE in "*.brd" format.
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
@@ -78,7 +80,7 @@ public:
      * Is virtual from EDA_ITEM.
      * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void    DisplayInfo( EDA_DRAW_FRAME* frame );
+    void DisplayInfo( EDA_DRAW_FRAME* frame );
 
 
     /**
@@ -87,19 +89,19 @@ public:
      * @param refPos A wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( const wxPoint& refPos )
+    bool HitTest( const wxPoint& refPos )
     {
         return TextHitTest( refPos );
     }
 
 
     /**
-     * Function HitTest (overlaid)
+     * Function HitTest (overloaded)
      * tests if the given EDA_RECT intersect this object.
      * @param refArea the given EDA_RECT to test
      * @return bool - true if a hit, else false
      */
-    bool    HitTest( EDA_RECT& refArea )
+    bool HitTest( EDA_RECT& refArea )
     {
         return TextHitTest( refArea );
     }
@@ -142,7 +144,7 @@ public:
      * Function Show
      * is used to output the object tree, currently for debugging only.
      * @param nestLevel An aid to prettier tree indenting, and is the level
-     *          of nesting of this object within the overall tree.
+     *                  of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );

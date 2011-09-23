@@ -1,20 +1,19 @@
-/***********************************************/
-/* zones_convert_to_polygons_aux_functions.cpp */
-/***********************************************/
-/* auxiliary functions used to calculare filled copper zones areas
-*/
-
-#include <vector>
+/**
+ * @file zones_convert_to_polygons_aux_functions.cpp
+ */
 
 #include "fctsys.h"
 #include "polygons_defs.h"
-
-#include "pcbnew.h"
+#include "PolyLine.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
 
+#include "class_board.h"
+#include "class_module.h"
+#include "class_zone.h"
+
+#include "pcbnew.h"
 #include "zones.h"
-#include "PolyLine.h"
 
 
 /**
@@ -29,10 +28,10 @@
  */
 
 void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffer,
-                                               BOARD*                aPcb,
-                                               ZONE_CONTAINER*       aZone,
-                                                double aArcCorrection,
-                                                int aRoundPadThermalRotation)
+                                              BOARD*                aPcb,
+                                              ZONE_CONTAINER*       aZone,
+                                              double                aArcCorrection,
+                                              int                   aRoundPadThermalRotation )
 {
     std::vector<wxPoint> corners_buffer;    // a local polygon buffer to store one stub
     corners_buffer.reserve( 4 );

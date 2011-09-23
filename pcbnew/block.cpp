@@ -1,20 +1,28 @@
-/*************/
-/* block.cpp */
-/*************/
+/**
+ * @file pcbnew/block.cpp
+ */
 
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "block_commande.h"
-
-#include "pcbnew.h"
+#include "pcbcommon.h"
 #include "wxPcbStruct.h"
 #include "trigo.h"
 
+#include "class_board.h"
+#include "class_track.h"
+#include "class_drawsegment.h"
+#include "class_pcb_text.h"
+#include "class_mire.h"
+#include "class_module.h"
+#include "class_dimension.h"
+#include "class_zone.h"
+
 #include "dialog_block_options_base.h"
 
+#include "pcbnew.h"
 #include "protos.h"
 
 #define BLOCK_OUTLINE_COLOR YELLOW
@@ -412,7 +420,8 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         {
             if( pt_segm->HitTest( GetScreen()->m_BlockLocate ) )
             {
-                if( blockIncludeItemsOnInvisibleLayers || m_Pcb->IsLayerVisible( pt_segm->GetLayer() ) )
+                if( blockIncludeItemsOnInvisibleLayers
+                  || m_Pcb->IsLayerVisible( pt_segm->GetLayer() ) )
                 {
                     picker.m_PickedItem     = pt_segm;
                     picker.m_PickedItemType = pt_segm->Type();
@@ -444,6 +453,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
+
             select_me = true; // This item is in bloc: select it
             break;
 
@@ -453,6 +463,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
                 break;
+
             select_me = true; // This item is in bloc: select it
             break;
 
@@ -497,7 +508,8 @@ void PCB_EDIT_FRAME::Block_SelectItems()
 
             if( area->HitTest( GetScreen()->m_BlockLocate ) )
             {
-                if( blockIncludeItemsOnInvisibleLayers || m_Pcb->IsLayerVisible( area->GetLayer() ) )
+                if( blockIncludeItemsOnInvisibleLayers
+                  || m_Pcb->IsLayerVisible( area->GetLayer() ) )
                 {
                     BOARD_ITEM* zone_c = (BOARD_ITEM*) area;
                     picker.m_PickedItem     = zone_c;
@@ -563,6 +575,7 @@ static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
         {
             screen->m_BlockLocate.Draw( aPanel, aDC, screen->m_BlockLocate.m_MoveVector,
                                         GR_XOR, BLOCK_OUTLINE_COLOR );
+
             if( blockDrawItems )
                 drawPickedItems( aPanel, aDC, screen->m_BlockLocate.m_MoveVector );
         }
@@ -574,11 +587,11 @@ static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
                                              screen->m_BlockLocate.m_BlockLastCursorPosition;
     }
 
-    if( screen->m_BlockLocate.m_MoveVector.x
-        || screen->m_BlockLocate.m_MoveVector.y )
+    if( screen->m_BlockLocate.m_MoveVector.x || screen->m_BlockLocate.m_MoveVector.y )
     {
         screen->m_BlockLocate.Draw( aPanel, aDC, screen->m_BlockLocate.m_MoveVector,
                                     GR_XOR, BLOCK_OUTLINE_COLOR );
+
         if( blockDrawItems )
             drawPickedItems( aPanel, aDC, screen->m_BlockLocate.m_MoveVector );
     }

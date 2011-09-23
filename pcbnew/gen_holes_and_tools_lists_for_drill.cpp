@@ -2,16 +2,19 @@
 /* Functions to create drill data used to create files and report  files */
 /*************************************************************************/
 
-#include "fctsys.h"
-
 #include <algorithm> // sort
-#include <vector>
 
+#include "fctsys.h"
 #include "common.h"
 #include "plot_common.h"
+#include "macros.h"
+
+#include "class_board.h"
+#include "class_module.h"
+#include "class_track.h"
+
 #include "pcbnew.h"
 #include "pcbplot.h"
-#include "macros.h"
 #include "gendrill.h"
 
 
@@ -24,8 +27,10 @@ static bool CmpHoleDiameterValue( const HOLE_INFO& a, const HOLE_INFO& b )
 {
     if( a.m_Hole_Diameter != b.m_Hole_Diameter )
         return a.m_Hole_Diameter < b.m_Hole_Diameter;
+
     if( a.m_Hole_Pos.x != b.m_Hole_Pos.x )
         return a.m_Hole_Pos.x < b.m_Hole_Pos.x;
+
     return a.m_Hole_Pos.y < b.m_Hole_Pos.y;
 }
 
@@ -38,7 +43,7 @@ static bool CmpHoleDiameterValue( const HOLE_INFO& a, const HOLE_INFO& b )
  * param aPcb : the given board
  * param aHoleListBuffer : the std::vector<HOLE_INFO> to fill with pcb holes info
  * param aToolListBuffer : the std::vector<DRILL_TOOL> to fill with tools to use
- * param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored	(used to creates report file)
+ * param aFirstLayer = first layer to consider. if < 0 aFirstLayer is ignored   (used to creates report file)
  * param aLastLayer = last layer to consider. if < 0 aLastLayer is ignored
  * param aExcludeThroughHoles : if true, exclude through holes ( pads and vias through )
  * param aGenerateNPTH_list :
@@ -135,10 +140,11 @@ void Build_Holes_List( BOARD* aPcb,
     sort( aHoleListBuffer.begin(), aHoleListBuffer.end(), CmpHoleDiameterValue );
 
     // build the tool list
-    int        LastHole = -1; /* Set to not initialised
-                               * (this is a value not used for aHoleListBuffer[ii].m_Hole_Diameter) */
+    int        LastHole = -1; /* Set to not initialised (this is a value not used
+                               * for aHoleListBuffer[ii].m_Hole_Diameter) */
     DRILL_TOOL new_tool( 0 );
     unsigned   jj;
+
     for( unsigned ii = 0; ii < aHoleListBuffer.size(); ii++ )
     {
         if( aHoleListBuffer[ii].m_Hole_Diameter != LastHole )
@@ -149,12 +155,14 @@ void Build_Holes_List( BOARD* aPcb,
         }
 
         jj = aToolListBuffer.size();
+
         if( jj == 0 )
             continue;                                       // Should not occurs
 
         aHoleListBuffer[ii].m_Tool_Reference = jj;          // Tool value Initialized (value >= 1)
 
         aToolListBuffer.back().m_TotalCount++;
+
         if( aHoleListBuffer[ii].m_Hole_Shape )
             aToolListBuffer.back().m_OvalCount++;
     }

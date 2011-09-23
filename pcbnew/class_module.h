@@ -8,11 +8,19 @@
 #define _MODULE_H_
 
 
-#include "richio.h"
+#include "dlist.h"
+#include "layers_id_colors_and_visibility.h"       // ALL_LAYERS definition.
+#include "class_board_item.h"
+
+#include "class_text_mod.h"
 
 
+class LINE_READER;
 class EDA_3D_CANVAS;
 class S3D_MASTER;
+class EDA_DRAW_PANEL;
+class D_PAD;
+class BOARD;
 
 
 enum Mod_Attribut       /* Attributes used for modules */
@@ -29,6 +37,7 @@ enum Mod_Attribut       /* Attributes used for modules */
 #define MODULE_is_LOCKED 0x01  /* module LOCKED: no autoplace allowed */
 #define MODULE_is_PLACED 0x02  /* In autoplace: module automatically placed */
 #define MODULE_to_PLACE  0x04  /* In autoplace: module waiting for autoplace */
+
 
 class MODULE : public BOARD_ITEM
 {
@@ -60,7 +69,7 @@ public:
     int           m_CntRot180;          /* Automatic placement : cost ( 0..10 )
                                          * for 180 degrees rotation (UP <->Down) */
     wxSize        m_Ext;                /* Automatic placement margin around the module */
-    double         m_Surface;           // Bounding box area
+    double        m_Surface;            // Bounding box area
 
     unsigned long m_Link;               /* Temporary variable ( used in editions, ...) */
     long          m_LastEdit_Time;
