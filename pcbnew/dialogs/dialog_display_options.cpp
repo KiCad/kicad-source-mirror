@@ -37,29 +37,30 @@ DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( PCB_EDIT_FRAME* parent ) :
     GetSizer()->SetSizeHints( this );
 }
 
-/****************************************************************/
 void DIALOG_DISPLAY_OPTIONS::init()
-/****************************************************************/
 {
     SetFocus();
 
     if ( DisplayOpt.DisplayPcbTrackFill )
-        m_OptDisplayTracks->SetSelection(1);
+        m_OptDisplayTracks->SetSelection( 1 );
     else
-        m_OptDisplayTracks->SetSelection(0);
+        m_OptDisplayTracks->SetSelection( 0 );
 
     switch ( DisplayOpt.ShowTrackClearanceMode )
     {
         case DO_NOT_SHOW_CLEARANCE:
-            m_OptDisplayTracksClearance->SetSelection(0);
+            m_OptDisplayTracksClearance->SetSelection( 0 );
             break;
+
         case SHOW_CLEARANCE_NEW_TRACKS:
-            m_OptDisplayTracksClearance->SetSelection(1);
+            m_OptDisplayTracksClearance->SetSelection( 1 );
             break;
+
         default:
         case SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
             m_OptDisplayTracksClearance->SetSelection(2);
             break;
+
         case SHOW_CLEARANCE_ALWAYS:
             m_OptDisplayTracksClearance->SetSelection(3);
             break;
@@ -71,65 +72,67 @@ void DIALOG_DISPLAY_OPTIONS::init()
         m_OptDisplayPads->SetSelection(0);
 
     if ( DisplayOpt.DisplayViaFill )
-        m_OptDisplayVias->SetSelection(1);
+        m_OptDisplayVias->SetSelection( 1 );
     else
-        m_OptDisplayVias->SetSelection(0);
+        m_OptDisplayVias->SetSelection( 0 );
 
-    m_Show_Page_Limits->SetSelection( g_ShowPageLimits ? 0 : 1);
+    m_Show_Page_Limits->SetSelection( g_ShowPageLimits ? 0 : 1 );
 
     m_OptDisplayViaHole->SetSelection( DisplayOpt.m_DisplayViaMode );
     m_OptDisplayModTexts->SetSelection( DisplayOpt.DisplayModText );
     m_OptDisplayModEdges->SetSelection( DisplayOpt.DisplayModEdge );
     m_OptDisplayPadClearence->SetValue( DisplayOpt.DisplayPadIsol );
     m_OptDisplayPadNumber->SetValue( DisplayOpt.DisplayPadNum );
-    m_OptDisplayPadNoConn->SetValue( m_Parent->IsElementVisible( PCB_VISIBLE(NO_CONNECTS_VISIBLE) ) );
+    m_OptDisplayPadNoConn->SetValue( m_Parent->IsElementVisible( PCB_VISIBLE( NO_CONNECTS_VISIBLE ) ) );
     m_OptDisplayDrawings->SetSelection( DisplayOpt.DisplayDrawItems );
-    m_ShowNetNamesOption->SetSelection( DisplayOpt.DisplayNetNamesMode);
+    m_ShowNetNamesOption->SetSelection( DisplayOpt.DisplayNetNamesMode );
 }
 
-/*****************************************************************/
+
 void DIALOG_DISPLAY_OPTIONS::OnCancelClick( wxCommandEvent& event )
-/*****************************************************************/
 {
-    EndModal(0);
+    EndModal( 0 );
 }
 
-/*************************************************************************/
-void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
-/*************************************************************************/
+
 /* Update variables with new options
 */
+void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
 {
-    if ( m_Show_Page_Limits->GetSelection() == 0 ) g_ShowPageLimits = true;
-    else g_ShowPageLimits = FALSE;
+    if ( m_Show_Page_Limits->GetSelection() == 0 )
+        g_ShowPageLimits = true;
+    else
+        g_ShowPageLimits = FALSE;
 
-    if ( m_OptDisplayTracks->GetSelection() == 1)
+    if ( m_OptDisplayTracks->GetSelection() == 1 )
         DisplayOpt.DisplayPcbTrackFill = true;
-    else DisplayOpt.DisplayPcbTrackFill = FALSE;
+    else
+        DisplayOpt.DisplayPcbTrackFill = FALSE;
 
     m_Parent->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-    DisplayOpt.m_DisplayViaMode = m_OptDisplayViaHole->GetSelection();
+    DisplayOpt.m_DisplayViaMode = (VIA_DISPLAY_MODE_T) m_OptDisplayViaHole->GetSelection();
 
     switch ( m_OptDisplayTracksClearance->GetSelection() )
     {
         case 0:
             DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
             break;
+
         case 1:
             DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_TRACKS;
             break;
+
         case 2:
             DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
             break;
+
         case 3:
             DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
             break;
     }
 
-    m_Parent->m_DisplayModText = DisplayOpt.DisplayModText =
-            m_OptDisplayModTexts->GetSelection();
-    m_Parent->m_DisplayModEdge = DisplayOpt.DisplayModEdge =
-            m_OptDisplayModEdges->GetSelection();
+    m_Parent->m_DisplayModText = DisplayOpt.DisplayModText = m_OptDisplayModTexts->GetSelection();
+    m_Parent->m_DisplayModEdge = DisplayOpt.DisplayModEdge = m_OptDisplayModEdges->GetSelection();
 
     if (m_OptDisplayPads->GetSelection() == 1 )
         DisplayOpt.DisplayPadFill = true;
@@ -149,12 +152,12 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     m_Parent->m_DisplayPadNum = DisplayOpt.DisplayPadNum = m_OptDisplayPadNumber->GetValue();
 
     m_Parent->SetElementVisibility( PCB_VISIBLE(NO_CONNECTS_VISIBLE),
-                                    m_OptDisplayPadNoConn->GetValue());
+                                    m_OptDisplayPadNoConn->GetValue() );
 
     DisplayOpt.DisplayDrawItems = m_OptDisplayDrawings->GetSelection();
     DisplayOpt.DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
 
     m_Parent->DrawPanel->Refresh();
 
-    EndModal(1);
+    EndModal( 1 );
 }

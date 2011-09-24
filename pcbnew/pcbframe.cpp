@@ -310,7 +310,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     SetIcon( icon );
 
     m_InternalUnits = PCB_INTERNAL_UNIT;    // Unites internes = 1/10000 inch
-    SetScreen( ScreenPcb );
+    SetScreen( new PCB_SCREEN() );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
@@ -402,6 +402,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
     m_RecordingMacros = -1;
+
     for( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
 
@@ -438,7 +439,7 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     DrawPanel->m_AbortRequest = true;
 
-    if( ScreenPcb->IsModify() )
+    if( GetScreen()->IsModify() )
     {
         unsigned        ii;
         wxMessageDialog dialog( this, _( "Board modified, Save before exit ?" ),
@@ -480,6 +481,7 @@ void PCB_EDIT_FRAME::Show3D_Frame( wxCommandEvent& event )
         // This should work on any platform.
         if( m_Draw3DFrame->IsIconized() )
              m_Draw3DFrame->Iconize( false );
+
         m_Draw3DFrame->Raise();
 
         // Raising the window does not set the focus on Linux.  This should work on any platform.
@@ -516,9 +518,7 @@ void PCB_EDIT_FRAME::LoadSettings()
     if( config == NULL )
         return;
 
-    /* The configuration setting that used to be mixed in with the project
-     * file settings.
-     */
+    // The configuration setting that used to be mixed in with the project file settings.
     wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
 
     PCB_BASE_FRAME::LoadSettings();
@@ -546,9 +546,7 @@ void PCB_EDIT_FRAME::SaveSettings()
     if( config == NULL )
         return;
 
-    /* The configuration setting that used to be mixed in with the project
-     * file settings.
-     */
+    // The configuration setting that used to be mixed in with the project file settings.
     wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
 
     PCB_BASE_FRAME::SaveSettings();

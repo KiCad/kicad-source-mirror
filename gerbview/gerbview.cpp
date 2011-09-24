@@ -1,6 +1,7 @@
-/************************************************/
-/*			GERBVIEW		 main file			*/
-/************************************************/
+/**
+ * @file gerbview.cpp
+ * @brief GERBVIEW main file.
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -71,9 +72,6 @@ bool EDA_APP::OnInit()
             return false;
     }
 
-    ScreenPcb = new PCB_SCREEN();
-    ScreenPcb->m_CurrentSheetDesc = &g_Sheet_GERBER;
-
     // read current setup and reopen last directory if no filename to open in
     // command line
     bool reopenLastUsedDirectory = argc == 1;
@@ -92,7 +90,9 @@ bool EDA_APP::OnInit()
 
     // Initialize some display options
     DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here
-    DisplayOpt.ShowTrackClearanceMode = 0;  // tracks and vias clearance has no meaning here
+
+    // Track and via clearance has no meaning here.
+    DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
 
     SetTopWindow( frame );                  // Set GerbView mainframe on top
     frame->Show( true );                    // Show GerbView mainframe

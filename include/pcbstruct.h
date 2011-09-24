@@ -8,12 +8,12 @@
 
 
 // Definitions relatives aux libraries
-#define ENTETE_LIBRAIRIE        "PCBNEW-LibModule-V1"
-#define L_ENTETE_LIB            18
+#define FOOTPRINT_LIBRARY_HEADER       "PCBNEW-LibModule-V1"
+#define FOOTPRINT_LIBRARY_HEADER_CNT   18
 
 
 // Values for m_DisplayViaMode member:
-enum DisplayViaMode {
+enum VIA_DISPLAY_MODE_T {
     VIA_HOLE_NOT_SHOW = 0,
     VIA_SPECIAL_HOLE_SHOW,
     ALL_VIA_HOLE_SHOW,
@@ -24,7 +24,7 @@ enum DisplayViaMode {
 /* Values for DISPLAY_OPTIONS.ShowTrackClearanceMode parameter option
  * This parameter controls how to show tracks and vias clearance area
  */
-enum ShowTrackClearanceModeList {
+enum TRACE_CLEARANCE_DISPLAY_MODE_T {
     DO_NOT_SHOW_CLEARANCE = 0,                // Do not show clearance areas
     SHOW_CLEARANCE_NEW_TRACKS,                /* Show clearance areas only for new track
                                                * during track creation. */
@@ -50,18 +50,13 @@ public:
     int  DisplayModEdge;
     int  DisplayModText;
     bool DisplayPcbTrackFill;     /* FALSE = sketch , TRUE = filled */
-    int  ShowTrackClearanceMode;  /* = 0 , 1 or 2
-                                   *  0 = do not show clearance
-                                   *  1 = show track clearance
-                                   *  2 = show clearance + via area
-                                   *  (useful to know what clearance area is
-                                   * needed if we want to put a via on
-                                   * terminal track point)
-                                   */
 
-    int m_DisplayViaMode;       /* 0 do not show via hole,
-                                 * 1 show via hole for non default value
-                                 * 2 show all via hole */
+    /// How trace clearances are displayed.  @see TRACE_CLEARANCE_DISPLAY_MODE_T.
+    TRACE_CLEARANCE_DISPLAY_MODE_T  ShowTrackClearanceMode;
+
+    VIA_DISPLAY_MODE_T m_DisplayViaMode;  /* 0 do not show via hole,
+                                           * 1 show via hole for non default value
+                                           * 2 show all via hole */
 
     bool DisplayPolarCood;
     int  DisplayZonesMode;
@@ -77,5 +72,6 @@ public:
 public:
     DISPLAY_OPTIONS();
 };
+
 
 #endif // PCBSTRUCT_H

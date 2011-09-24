@@ -122,7 +122,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
             typeaff = SKETCH;
     }
 
-    if( DC->LogicalToDeviceXRel( m_Width ) < L_MIN_DESSIN )
+    if( DC->LogicalToDeviceXRel( m_Width ) < MIN_DRAW_WIDTH )
         typeaff = FILAIRE;
 
     switch( type_trace )

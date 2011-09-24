@@ -1,6 +1,7 @@
-/***************************************************************/
-/* EDITEUR de PCB: AUTOROUTAGE: routine de calcul de distances */
-/***************************************************************/
+/**
+ * @file dist.cpp
+ * @brief Routines to calculate PCB editor auto routing distances.
+ */
 
 #include "fctsys.h"
 #include "macros.h"
@@ -10,10 +11,10 @@
 #include "cell.h"
 
 
-/* Les tables de distances et penalites sont etablies sur la base du pas
-de routage de 50 unites(le pas entre les cellules est 50 unites)
-La distance vraie est calculee par un facteur d'echelle
-*/
+/* The tables of distances and keep out areas are established on the basis of not
+ * routing of 50 units (the pitch between the cells is 50 units)  The true distance
+ * is computed by a scaling factor
+ */
 
  /* calculate approximate distance
  */
@@ -160,5 +161,3 @@ int CalcDist(int x,int y,int z ,int side )
 
     return ldist * 10;
 }
-
-

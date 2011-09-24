@@ -14,7 +14,6 @@
 
 #include "protos.h"
 #include "ar_protos.h"
-#include "autorout.h"
 #include "cell.h"
 #include "colors_selection.h"
 

@@ -16,7 +16,6 @@
 #include "pcbnew.h"
 #include "protos.h"
 #include "ar_protos.h"
-#include "autorout.h"
 #include "cell.h"
 
 

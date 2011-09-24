@@ -9,9 +9,14 @@
 #ifndef __CLASSES_NETINFO__
 #define __CLASSES_NETINFO__
 
+
+#include <vector>
+
 #include "class_netclass.h"
 
 
+class wxDC;
+class wxPoint;
 class LINE_READER;
 class EDA_DRAW_PANEL;
 class EDA_DRAW_FRAME;

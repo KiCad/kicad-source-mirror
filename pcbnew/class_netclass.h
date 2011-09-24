@@ -1,3 +1,6 @@
+/**
+ * @file class_netclass.h
+ */
 
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
@@ -30,9 +33,11 @@
 
 #include <set>
 #include <map>
-#include "richio.h"
+
+#include <wx/string.h>
 
 
+class LINE_READER;
 class BOARD;
 
 

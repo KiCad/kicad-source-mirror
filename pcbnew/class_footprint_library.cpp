@@ -52,7 +52,7 @@ int FOOTPRINT_LIBRARY::IsLibrary( )
 
     StrPurge( line );
 
-    if( strnicmp( line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) == 0 )
+    if( strnicmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) == 0 )
         return 1;
 
     return 0;
@@ -167,8 +167,8 @@ bool FOOTPRINT_LIBRARY::ReadSectionIndex()
 bool FOOTPRINT_LIBRARY::WriteHeader()
 {
     char line[256];
-    fprintf( m_file, "%s  %s\n", ENTETE_LIBRAIRIE, DateAndTime( line ) );
-    fprintf( m_file, "# encoding utf-8\n");
+    fprintf( m_file, "%s  %s\n", FOOTPRINT_LIBRARY_HEADER, DateAndTime( line ) );
+    fprintf( m_file, "# encoding utf-8\n" );
     return true;
 }
 
