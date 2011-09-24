@@ -74,8 +74,9 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
 
     // Initialize some display options
     DisplayOpt.DisplayPadIsol = false;      // Pad clearance has no meaning here
-    DisplayOpt.ShowTrackClearanceMode = 0;  /* tracks and vias clearance has
-                                             * no meaning here. */
+
+    // Track and via clearance has no meaning here.
+    DisplayOpt.ShowTrackClearanceMode = DO_NOT_SHOW_CLEARANCE;
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
     ReCreateHToolbar();
@@ -83,7 +84,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     ReCreateOptToolbar();
 
     m_auimgr.SetManagedWindow( this );
-
 
     EDA_PANEINFO horiz;
     horiz.HorizontalToolbarPane();

@@ -90,6 +90,7 @@ int SetWork( int            r1,
         p->Cost     = GetCost( r1, c1, r2, c2 );
         p->Priority = pri;
         p->Next     = NULL;
+
         if( Head )  /* attach at end */
 
             Tail->Next = p;

@@ -112,10 +112,7 @@ class BOARD_DESIGN_SETTINGS g_DesignSettings;
  */
 DLIST<TRACK> g_CurrentTrackList;
 
-PCB_SCREEN* ScreenPcb = NULL;
 BOARD* g_ModuleEditor_Pcb = NULL;
-
-int g_GridRoutingSize = 250;
 
 bool g_Zone_45_Only = FALSE;
 

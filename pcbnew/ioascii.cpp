@@ -387,7 +387,9 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             m_Auxiliary_Axis_Position.y = gy;
             continue;
         }
+
 #ifdef PCBNEW
+
         if( stricmp( Line, "Layers" ) == 0 )
         {
             int tmp;
@@ -621,6 +623,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             continue;
         }
 #endif
+
     }
 
     /* Ensure tracks and vias sizes lists are ok:
@@ -653,7 +656,8 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
 
 #ifdef PCBNEW
-static int WriteSetup( FILE* aFile, PCB_BASE_FRAME* aFrame, BOARD* aBoard )
+
+static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
 {
     NETCLASS* netclass_default = aBoard->m_NetClasses.GetDefault();
     char      text[1024];
@@ -1017,10 +1021,12 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 
         if( TESTLINE( "TRACK" ) )
         {
+
 #ifdef PCBNEW
             TRACK* insertBeforeMe = Append ? NULL : board->m_Track.GetFirst();
             ReadListeSegmentDescr( aReader, insertBeforeMe, TYPE_TRACK, NbTrack );
 #endif
+
             continue;
         }
 
@@ -1074,11 +1080,13 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 
         if( TESTLINE( "ZONE" ) )
         {
+
 #ifdef PCBNEW
             SEGZONE* insertBeforeMe = Append ? NULL : board->m_Zone.GetFirst();
 
             ReadListeSegmentDescr( aReader, insertBeforeMe, TYPE_ZONE, NbZone );
 #endif
+
             continue;
         }
 

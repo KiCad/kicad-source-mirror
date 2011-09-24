@@ -74,7 +74,7 @@ found in the default search paths." ),
         Line = reader.Line();
         StrPurge( Line );
 
-        if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
+        if( strnicmp( Line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) != 0 )
         {
             msg.Printf( _( "<%s> is not a valid Kicad PCB foot print library." ),
                         GetChars( tmp ) );

@@ -1,23 +1,23 @@
-/*************/
-/* queue.cpp */
-/*************/
+/**
+ * @file queue.cpp
+ */
 
 #include "fctsys.h"
-
 #include "common.h"
+
 #include "pcbnew.h"
 #include "autorout.h"
-
 #include "cell.h"
+
 
 struct PcbQueue /* search queue structure */
 {
     struct PcbQueue* Next;
-    int              Row;       /* current row					*/
-    int              Col;       /* current column				*/
-    int              Side;      /* 0=top, 1=bottom				*/
-    int              Dist;      /* path distance to this cell so far		*/
-    int              ApxDist;   /* approximate distance to target from here	*/
+    int              Row;       /* current row                  */
+    int              Col;       /* current column               */
+    int              Side;      /* 0=top, 1=bottom              */
+    int              Dist;      /* path distance to this cell so far        */
+    int              ApxDist;   /* approximate distance to target from here */
 };
 
 static long             qlen = 0;   /* current queue length */
@@ -38,6 +38,7 @@ void FreeQueue()
     struct PcbQueue* p;
 
     InitQueue();
+
     while( (p = Save) != NULL )
     {
         Save = p->Next; MyFree( p );
@@ -71,6 +72,7 @@ void GetQueue( int* r, int* c, int* s, int* d, int* a )
         *r = p->Row; *c = p->Col;
         *s = p->Side;
         *d = p->Dist; *a = p->ApxDist;
+
         if( (Head = p->Next) == NULL )
             Tail = NULL;
 
@@ -86,9 +88,9 @@ void GetQueue( int* r, int* c, int* s, int* d, int* a )
 
 
 /* add a search node to the list
- *	Return:
- *		1 - OK
- *		0 - Failed to allocate memory.
+ *  Return:
+ *      1 - OK
+ *      0 - Failed to allocate memory.
  */
 int SetQueue( int r, int c, int side, int d, int a, int r2, int c2 )
 {
@@ -102,13 +104,16 @@ int SetQueue( int r, int c, int side, int d, int a, int r2, int c2 )
         Save = p->Next;
     }
     else if( ( p = (struct PcbQueue*) MyMalloc( sizeof(PcbQueue) ) ) == NULL )
+    {
         return 0;
+    }
 
     p->Row  = r;
     p->Col  = c;
     p->Side = side;
     i = (p->Dist = d) + (p->ApxDist = a);
     p->Next = NULL;
+
     if( (q = Head) != NULL ) /* insert in proper position in list */
     {
         if( q->Dist + q->ApxDist > i ) /* insert at head */
@@ -117,8 +122,7 @@ int SetQueue( int r, int c, int side, int d, int a, int r2, int c2 )
         }
         else   /* search for proper position */
         {
-            for( t = q, q = q->Next; q && i > ( j = q->Dist + q->ApxDist );
-                 t = q, q = q->Next )
+            for( t = q, q = q->Next; q && i > ( j = q->Dist + q->ApxDist ); t = q, q = q->Next )
                 ;
 
             if( q && i == j && q->Row == r2 && q->Col == c2 )
@@ -126,21 +130,28 @@ int SetQueue( int r, int c, int side, int d, int a, int r2, int c2 )
                 /* insert after q, which is a goal node */
                 if( ( p->Next = q->Next ) == NULL )
                     Tail = p;
+
                 q->Next = p;
             }
             else  /* insert in front of q */
             {
                 if( ( p->Next = q ) == NULL )
                     Tail = p;
+
                 t->Next = p;
             }
         }
     }
     else /* empty search list */
+    {
         Head = Tail = p;
+    }
+
     OpenNodes++;
+
     if( ++qlen > MaxNodes )
         MaxNodes = qlen;
+
     return 1;
 }
 
@@ -162,7 +173,10 @@ void ReSetQueue( int r, int c, int s, int d, int a, int r2, int c2 )
                     Tail = q;
             }
             else if( ( Head = p->Next ) == NULL )
+            {
                 Tail = NULL;
+            }
+
             p->Next = Save;
             Save = p;
             OpenNodes--;
@@ -174,6 +188,7 @@ void ReSetQueue( int r, int c, int s, int d, int a, int r2, int c2 )
 
     if( !p )            /* not found, it has already been closed once */
         ClosNodes--;    /* we will close it again, but just count once */
+
     /* if it was there, it's gone now; insert it at the proper position */
     SetQueue( r, c, s, d, a, r2, c2 );
 }

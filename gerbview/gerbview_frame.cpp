@@ -48,7 +48,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     m_SelLayerBox   = NULL;
     m_DCodeSelector = NULL;
     m_displayMode   = 0;
-    m_drillFileHistory.SetBaseId(ID_GERBVIEW_DRILL_FILE1);
+    m_drillFileHistory.SetBaseId( ID_GERBVIEW_DRILL_FILE1 );
 
     if( DrawPanel )
         DrawPanel->m_Block_Enable = true;
@@ -58,7 +58,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     icon.CopyFromBitmap( KiBitmap( icon_gerbview_xpm ) );
     SetIcon( icon );
 
-    SetScreen( ScreenPcb );
+    SetScreen( new PCB_SCREEN() );
+    GetScreen()->m_CurrentSheetDesc = &g_Sheet_GERBER;
 
     SetBoard( new BOARD( NULL, this ) );
     GetBoard()->SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
@@ -133,7 +134,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
 
 GERBVIEW_FRAME::~GERBVIEW_FRAME()
 {
-    SetScreen( ScreenPcb );
     wxGetApp().SaveCurrentSetupValues( m_configSettings );
 }
 

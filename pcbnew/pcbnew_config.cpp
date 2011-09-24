@@ -273,13 +273,14 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
         return m_configSettings;
 
     // Units used in dialogs and toolbars
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ), (int*)&g_UserUnit, MILLIMETRES ) );
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "Units" ),
+                                                   (int*)&g_UserUnit, MILLIMETRES ) );
 
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "DisplayPolarCoords" ),
                                                     &DisplayOpt.DisplayPolarCood, false ) );
     // Display options and modes:
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ViaHoleDisplayMode" ),
-                                                   &DisplayOpt.m_DisplayViaMode,
+                                                   (int*) &DisplayOpt.m_DisplayViaMode,
                                                    VIA_SPECIAL_HOLE_SHOW, VIA_HOLE_NOT_SHOW,
                                                    OPT_VIA_HOLE_END - 1 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "ShowNetNamesMode" ),
@@ -287,7 +288,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "DisplayTrackFilled" ),
                                                     &DisplayOpt.DisplayPcbTrackFill, true ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "TrackDisplayClearance" ),
-                                                   &DisplayOpt.ShowTrackClearanceMode,
+                                                   (int*) &DisplayOpt.ShowTrackClearanceMode,
                                                    SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL( true, wxT( "PadFill" ),
                                                     &DisplayOpt.DisplayPadFill, true ) );

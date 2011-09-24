@@ -1,6 +1,6 @@
-/****************/
-/* Edit traces. */
-/****************/
+/**
+ * @file editrack.cpp
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
@@ -639,7 +639,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
 
     bool      Track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
     DisplayOpt.DisplayPcbTrackFill = true;
-    int       showTrackClearanceMode = DisplayOpt.ShowTrackClearanceMode;
+    TRACE_CLEARANCE_DISPLAY_MODE_T showTrackClearanceMode = DisplayOpt.ShowTrackClearanceMode;
 
     if ( g_FirstTrackSegment == NULL )
         return;

@@ -88,7 +88,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     reader.ReadLine();
     Line = reader.Line();
 
-    if( strnicmp( Line, ENTETE_LIBRAIRIE, L_ENTETE_LIB ) != 0 )
+    if( strnicmp( Line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) != 0 )
     {
         if( strnicmp( Line, "Element", 7 ) == 0 )
         {

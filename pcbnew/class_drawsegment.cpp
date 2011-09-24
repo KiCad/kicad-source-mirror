@@ -260,7 +260,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     if( m_Flags & FORCE_SKETCH )
         mode = SKETCH;
 
-    if( l_trace < DC->DeviceToLogicalXRel( L_MIN_DESSIN ) )
+    if( l_trace < DC->DeviceToLogicalXRel( MIN_DRAW_WIDTH ) )
         mode = FILAIRE;
 
     switch( m_Shape )

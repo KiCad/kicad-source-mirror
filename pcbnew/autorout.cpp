@@ -9,7 +9,6 @@
 #include "gr_basic.h"
 
 #include "pcbnew.h"
-#include "autorout.h"
 #include "cell.h"
 #include "zones.h"
 #include "ar_protos.h"

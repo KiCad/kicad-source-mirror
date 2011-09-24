@@ -635,7 +635,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
         radius = (int) hypot( (double) ( m_End.x - m_Start.x ),
                               (double) ( m_End.y - m_Start.y ) );
 
-        if( DC->LogicalToDeviceXRel( l_trace ) < L_MIN_DESSIN )
+        if( DC->LogicalToDeviceXRel( l_trace ) < MIN_DRAW_WIDTH )
         {
             GRCircle( &panel->m_ClipBox, DC, m_Start.x + aOffset.x,
                       m_Start.y + aOffset.y, radius, color );
@@ -665,7 +665,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
         return;
     }
 
-    if( DC->LogicalToDeviceXRel( l_trace ) < L_MIN_DESSIN )
+    if( DC->LogicalToDeviceXRel( l_trace ) < MIN_DRAW_WIDTH )
     {
         GRLine( &panel->m_ClipBox, DC, m_Start + aOffset, m_End + aOffset, 0, color );
         return;

@@ -44,7 +44,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
     GetBoard()->m_NbNodes     = 0;
     GetBoard()->m_NbNoconnect = 0;
 
-    SetScreen( ScreenPcb );
+    SetScreen( new PCB_SCREEN() );
     GetScreen()->Init();
     setActiveLayer(FIRST_COPPER_LAYER);
     m_LayersManager->UpdateLayerIcons();
@@ -59,6 +59,7 @@ void GERBVIEW_FRAME::Erase_Current_Layer( bool query )
     wxString msg;
 
     msg.Printf( _( "Clear layer %d?" ), layer + 1 );
+
     if( query && !IsOK( this, msg ) )
         return;
 
@@ -66,12 +67,15 @@ void GERBVIEW_FRAME::Erase_Current_Layer( bool query )
 
     BOARD_ITEM* item = GetBoard()->m_Drawings;
     BOARD_ITEM * next;
+
     for( ; item; item = next )
     {
         next = item->Next();
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+
         if( gerb_item->GetLayer() != layer )
             continue;
+
         gerb_item->DeleteStructure();
     }
 
@@ -81,7 +85,7 @@ void GERBVIEW_FRAME::Erase_Current_Layer( bool query )
         g_GERBER_List[layer]->ResetDefaultValues();
     }
 
-    ScreenPcb->SetModify();
+    GetScreen()->SetModify();
     DrawPanel->Refresh();
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
