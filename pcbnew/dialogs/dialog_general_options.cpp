@@ -24,7 +24,6 @@
 Dialog_GeneralOptions::Dialog_GeneralOptions( PCB_EDIT_FRAME* parent ) :
     DialogGeneralOptionsBoardEditor_base( parent )
 {
-    m_Parent = parent;
     init();
 
     m_buttonOK->SetDefault();
@@ -37,12 +36,12 @@ void Dialog_GeneralOptions::init()
 {
     SetFocus();
 
-    m_Board = m_Parent->GetBoard();
+    m_Board = GetParent()->GetBoard();
 
     /* Set display options */
     m_PolarDisplay->SetSelection( DisplayOpt.DisplayPolarCood ? 1 : 0 );
     m_UnitsSelection->SetSelection( g_UserUnit ? 1 : 0 );
-    m_CursorShape->SetSelection( m_Parent->m_CursorShape ? 1 : 0 );
+    m_CursorShape->SetSelection( GetParent()->m_CursorShape ? 1 : 0 );
 
 
     switch( g_RotationAngle )
@@ -50,22 +49,23 @@ void Dialog_GeneralOptions::init()
     case 450:
         m_RotationAngle->SetSelection( 0 );
         break;
+
     default:
         m_RotationAngle->SetSelection( 1 );
     }
 
     wxString timevalue;
-    timevalue << g_TimeOut / 60;
+    timevalue << GetParent()->GetAutoSaveTimeInterval() / 60;
     m_SaveTime->SetValue( timevalue );
     m_MaxShowLinks->SetValue( g_MaxLinksShowed );
 
     m_DrcOn->SetValue( Drc_On );
     m_ShowModuleRatsnest->SetValue( g_Show_Module_Ratsnest );
-    m_ShowGlobalRatsnest->SetValue( m_Board->IsElementVisible(RATSNEST_VISIBLE) );
+    m_ShowGlobalRatsnest->SetValue( m_Board->IsElementVisible( RATSNEST_VISIBLE ) );
     m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
-    m_AutoPANOpt->SetValue( m_Parent->DrawPanel->m_AutoPAN_Enable );
+    m_AutoPANOpt->SetValue( GetParent()->DrawPanel->m_AutoPAN_Enable );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
     m_Track_DoubleSegm_Ctrl->SetValue( g_TwoSegmentTrackBuild );
 
@@ -90,11 +90,10 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     g_UserUnit = ( m_UnitsSelection->GetSelection() == 0 )  ? INCHES : MILLIMETRES;
 
     if( ii != g_UserUnit )
-        m_Parent->ReCreateAuxiliaryToolbar();
+        GetParent()->ReCreateAuxiliaryToolbar();
 
-    m_Parent->m_CursorShape = m_CursorShape->GetSelection();
-    g_TimeOut = 60 * m_SaveTime->GetValue();
-
+    GetParent()->m_CursorShape = m_CursorShape->GetSelection();
+    GetParent()->SetAutoSaveTimeInterval( 60 * m_SaveTime->GetValue() );
 
     g_RotationAngle = 10 * wxAtoi( m_RotationAngle->GetStringSelection() );
 
@@ -104,15 +103,15 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 
     if( m_Board->IsElementVisible(RATSNEST_VISIBLE) != m_ShowGlobalRatsnest->GetValue() )
     {
-        m_Parent->SetElementVisibility(RATSNEST_VISIBLE, m_ShowGlobalRatsnest->GetValue() );
-        m_Parent->DrawPanel->Refresh( );
+        GetParent()->SetElementVisibility(RATSNEST_VISIBLE, m_ShowGlobalRatsnest->GetValue() );
+        GetParent()->DrawPanel->Refresh( );
     }
 
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
     Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
     g_Track_45_Only_Allowed    = m_Track_45_Only_Ctrl->GetValue();
-    m_Parent->DrawPanel->m_AutoPAN_Enable = m_AutoPANOpt->GetValue();
+    GetParent()->DrawPanel->m_AutoPAN_Enable = m_AutoPANOpt->GetValue();
     g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();
 
     g_MagneticPadOption   = m_MagneticPadOptCtrl->GetSelection();
@@ -134,6 +133,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     {
     case ID_TB_OPTIONS_DRC_OFF:
         Drc_On = !state;
+
         if( GetToolId() == ID_TRACK_BUTT )
         {
             if( Drc_On )
@@ -141,14 +141,17 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
             else
                 DrawPanel->SetCursor( wxCURSOR_QUESTION_ARROW );
         }
+
         break;
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
         SetElementVisibility( RATSNEST_VISIBLE, state );
+
         if( state && (GetBoard()->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         {
             Compile_Ratsnest( NULL, true );
         }
+
         DrawPanel->Refresh();
         break;
 
@@ -204,7 +207,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
         GetMenuBar()->SetLabel( ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
                                 m_show_layer_manager_tools ?
-                                _("Hide &Layers Manager" ) : _("Show &Layers Manager" ) );
+                                _( "Hide &Layers Manager" ) : _( "Show &Layers Manager" ) );
         break;
 
     default:

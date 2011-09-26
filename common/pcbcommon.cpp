@@ -73,8 +73,6 @@ wxString g_ViaType_Name[4] = {
 };
 
 
-wxArrayString g_LibName_List;    // library list to load
-
 DISPLAY_OPTIONS DisplayOpt;      /* Display options for board items */
 
 /* PCB file name extension definitions. */
@@ -90,8 +88,6 @@ const wxString ModuleFileWildcard( _( "Kicad footprint library files (*.mod)|*.m
 int g_CurrentVersionPCB = 1;
 
 int    g_RotationAngle;
-int    g_TimeOut;            // Timer for automatic saving
-int    g_SaveTime;           // Time for next saving
 
 int    g_AnchorColor        = BLUE;
 int    g_ModuleTextCMPColor = LIGHTGRAY;

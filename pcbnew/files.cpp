@@ -285,7 +285,7 @@ this file again." ) );
     GetBoard()->DisplayInfo( this );
 
     /* reset the auto save timer */
-    g_SaveTime = time( NULL );
+    m_lastSaveTime = time( NULL );
 
     // Refresh the 3D view, if any
     if( m_Draw3DFrame )
@@ -407,7 +407,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName )
     ClearMsgPanel();
     AppendMsgPanel( upperTxt, lowerTxt, CYAN );
 
-    g_SaveTime = time( NULL );    /* Reset timer for the automatic saving */
+    m_lastSaveTime = time( NULL );    /* Reset timer for the automatic saving */
 
     GetScreen()->ClrModify();
     return true;

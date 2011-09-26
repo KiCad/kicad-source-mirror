@@ -1,6 +1,7 @@
-/*************************/
-/* PCBNEW: main program  */
-/*************************/
+/**
+ * @file pcbnew.cpp
+ * @file PCBNEW: main program.
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -48,7 +49,7 @@ int            g_MaxLinksShowed;
 int            g_MagneticPadOption   = capture_cursor_in_track_tool;
 int            g_MagneticTrackOption = capture_cursor_in_track_tool;
 
-wxPoint        g_Offset_Module;     /* Offset de trace du modul en depl */
+wxPoint        g_Offset_Module;     /* Distance to offset module trace when moving. */
 
 // Wildcard for footprint libraries filesnames
 const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*.mod)|*.mod" ) );
@@ -61,6 +62,7 @@ const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*
 wxString g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
 
 IMPLEMENT_APP( EDA_APP )
+
 
 /* MacOSX: Needed for file association
  * http://wiki.wxwidgets.org/WxMac-specific_topics
@@ -82,11 +84,11 @@ bool EDA_APP::OnInit()
     wxFileName      fn;
     PCB_EDIT_FRAME* frame = NULL;
 
-    InitEDA_Appl( wxT( "PCBnew" ), APP_PCBNEW_T );
+    InitEDA_Appl( wxT( "PCBNew" ), APP_PCBNEW_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
-        if( !IsOK( NULL, _( "PCBnew is already running, Continue?" ) ) )
+        if( !IsOK( NULL, _( "PCBNew is already running, Continue?" ) ) )
             return false;
     }
 
@@ -113,7 +115,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
 
     /* Must be called before creating the main frame in order to
      * display the real hotkeys in menus or tool tips */
-    ReadHotkeyConfig( wxT("PcbFrame"), g_Board_Editor_Hokeys_Descr );
+    ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
 
     frame = new PCB_EDIT_FRAME( NULL, wxT( "PCBNew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
     frame->UpdateTitle();
@@ -147,7 +149,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
             frame->UpdateTitle();
             frame->UpdateFileHistory( frame->GetScreen()->GetFileName() );
             frame->OnModify();          // Ready to save the new empty board
-            g_SaveTime = time( NULL );  // Init the time out to save the board
+            frame->ResetAutoSaveTimeOut();
 
             wxString msg;
             msg.Printf( _( "File <%s> does not exist.\nThis is normal for a new project" ),
@@ -157,6 +159,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     }
 
     frame->LoadProjectSettings( fn.GetFullPath() );
+
     // update the layer names in the listbox
     frame->ReCreateLayerBox( NULL );
 

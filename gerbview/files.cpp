@@ -1,6 +1,6 @@
-/*************/
-/* files.cpp */
-/*************/
+/**
+ * @file gerbview/files.cpp
+ */
 
 #include "fctsys.h"
 #include "common.h"
@@ -13,9 +13,6 @@
 #include "class_gerbview_layer_widget.h"
 
 
-/* Load a Gerber file selected from history list on current layer
- * Previous data is deleted
- */
 void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
 {
     wxString fn;
@@ -29,9 +26,7 @@ void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
     }
 }
 
-/* Load a Drll (Excellon) file selected from history list on current layer
- * Previous data is deleted
- */
+
 void GERBVIEW_FRAME::OnDrlFileHistory( wxCommandEvent& event )
 {
     wxString fn;
@@ -180,7 +175,6 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     }
 
     Zoom_Automatique( false );
-    g_SaveTime = time( NULL );
 
     // Synchronize layers tools with actual active layer:
     setActiveLayer( getActiveLayer() );
@@ -265,7 +259,6 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
     }
 
     Zoom_Automatique( false );
-    g_SaveTime = time( NULL );
 
     // Synchronize layers tools with actual active layer:
     setActiveLayer( getActiveLayer() );
@@ -276,14 +269,6 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
 }
 
 
-/*
- * Read a DCode file (not used with RX274X files , just with RS274D old files).
- * Note: there is no standard for DCode files.
- * Just read a file format created by early versions of Pcbnew.
- * Returns:
- *   false if file not read (cancellation of order ...)
- *   true if OK
- */
 bool GERBVIEW_FRAME::LoadDCodeFile( const wxString& aFullFileName )
 {
     wxString   wildcard;

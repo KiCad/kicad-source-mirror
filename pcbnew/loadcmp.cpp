@@ -193,13 +193,15 @@ MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryFullFilename,
     FILE*      file = NULL;
     unsigned   ii;
     bool       one_lib = aLibraryFullFilename.IsEmpty() ? false : true;
+    PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
 
-    for( ii = 0; ii < g_LibName_List.GetCount(); ii++ )
+    for( ii = 0; ii < parent->GetFootprintLibraryNames().GetCount(); ii++ )
     {
         if( one_lib )
             fn = aLibraryFullFilename;
         else
-            fn = wxFileName( wxEmptyString, g_LibName_List[ii], ModuleFileExtension );
+            fn = wxFileName( wxEmptyString, parent->GetFootprintLibraryNames()[ii],
+                             ModuleFileExtension );
 
         tmp = wxGetApp().FindLibraryPath( fn );
 
@@ -300,9 +302,10 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
     wxString        CmpName;
     wxString        msg;
     wxArrayString   libnames_list;
+    PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
 
     if( aLibraryFullFilename.IsEmpty() )
-        libnames_list = g_LibName_List;
+        libnames_list = parent->GetFootprintLibraryNames();
     else
         libnames_list.Add( aLibraryFullFilename );
 

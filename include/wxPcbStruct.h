@@ -42,13 +42,11 @@ class BOARD_ITEM;
 
 
 /**
- * See also class PCB_BASE_FRAME(): Basic class for pcbnew and gerbview.
+ * class PCB_EDIT_FRAME
+ * the main frame for PCBNew
+ *
+ * See also class PCB_BASE_FRAME(): Basic class for PCBNew and Gerbview.
  */
-
-
-/*****************************************************/
-/* class PCB_EDIT_FRAME: the main frame for Pcbnew  */
-/*****************************************************/
 class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 {
     friend class PCB_LAYER_WIDGET;
@@ -58,6 +56,10 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
     int             m_RecordingMacros;
     MACROS_RECORDED m_Macros[10];
+
+    int m_saveInterval;                 ///< Time interval in seconds for automatic saving.
+    int m_lastSaveTime;                 ///< Last save time.
+    wxArrayString m_libraryNames;       ///< List of footprint library names to load.
 
 protected:
 
@@ -227,11 +229,31 @@ public:
      */
     virtual void SetGridColor(int aColor);
 
+    void ResetAutoSaveTimeOut() { m_lastSaveTime = time( NULL ); }
+
+    int GetAutoSaveTimeInterval() { return m_saveInterval; }
+
+    void SetAutoSaveTimeInterval( int aInterval ) { m_saveInterval = aInterval; }
+
+    wxArrayString& GetFootprintLibraryNames() { return m_libraryNames; }
+
     // Configurations:
     void InstallConfigFrame();
     void Process_Config( wxCommandEvent& event );
 
+    /**
+     * Function GetProjectFileParameters
+     * returns the project file parameter list for PCBNew.
+     * <p>
+     * Populate the project file parameter array specific to PCBNew if it hasn't
+     * already been populated and return a reference to the array to the caller.
+     * Creating the parameter list at run time has the advantage of being able
+     * to define local variables.  The old method of statically building the array
+     * at compile time requiring global variable definitions by design.
+     * </p>
+     */
     PARAM_CFG_ARRAY& GetProjectFileParameters();
+
     void SaveProjectSettings();
 
     /**
@@ -244,14 +266,28 @@ public:
     bool LoadProjectSettings( const wxString& aProjectFileName );
 
     /**
-     * Get the list of application specific settings.
+     * Function GetConfigurationSettings
+     * returns the PCBNew applications settings list.
      *
+     * This replaces the old statically define list that had the project
+     * file settings and the application settings mixed together.  This
+     * was confusing and caused some settings to get saved and loaded
+     * incorrectly.  Currently, only the settings that are needed at start
+     * up by the main window are defined here.  There are other locally used
+     * settings are scattered throughout the PCBNew source code.  If you need
+     * to define a configuration setting that need to be loaded at run time,
+     * this is the place to define it.
+     *
+     * @todo: Define the configuration variables as member variables instead of
+     *        global variables or move them to the object class where they are
+     *        used.
      * @return - Reference to the list of applications settings.
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings();
 
     /**
-     * Load applications settings specific to PCBNew.
+     * Function LoadSettings
+     * loads applications settings specific to PCBNew.
      *
      * This overrides the base class PCB_BASE_FRAME::LoadSettings() to
      * handle settings specific common to the PCB layout application.  It
@@ -262,7 +298,8 @@ public:
     virtual void LoadSettings();
 
     /**
-     * Save applications settings common to PCBNew.
+     * Function SaveSettings
+     * saves applications settings common to PCBNew.
      *
      * This overrides the base class PCB_BASE_FRAME::SaveSettings() to
      * save settings specific to the PCB layout application main window.  It
@@ -335,7 +372,7 @@ public:
      * An item can be placed only if there is this item currently edited
      * Only a footprint, a pad or a track can be placed
      * @param aDC = current device context
-     * @return true if an item was placedd
+     * @return true if an item was placed
      */
     bool OnHotkeyPlaceItem( wxDC* aDC );
 

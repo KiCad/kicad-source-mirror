@@ -12,8 +12,7 @@
 class DIALOG_PCBNEW_CONFIG_LIBS : public DIALOG_PCBNEW_CONFIG_LIBS_FBP
 {
 private:
-    PCB_EDIT_FRAME* m_Parent;
-    wxConfig * m_Config;
+    wxConfig* m_Config;
     bool m_LibListChanged;
     bool m_LibPathChanged;
     wxString m_UserLibDirBufferImg;         // Copy of original g_UserLibDirBuffer
@@ -38,6 +37,8 @@ private:
 public:
     DIALOG_PCBNEW_CONFIG_LIBS( PCB_EDIT_FRAME * parent );
     ~DIALOG_PCBNEW_CONFIG_LIBS() {};
+
+    PCB_EDIT_FRAME* GetParent() { return (PCB_EDIT_FRAME*) wxDialog::GetParent(); }
 };
 
 #endif  // _DIALOG_PCBNEW_CONFIG_LIBS_H_

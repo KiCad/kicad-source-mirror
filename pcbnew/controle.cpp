@@ -247,10 +247,10 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     if( !GetScreen()->IsModify() || GetScreen()->IsSave() )
     {
         /* If no change, reset the time out */
-        g_SaveTime = CurrentTime;
+        m_lastSaveTime = CurrentTime;
     }
 
-    if( (CurrentTime - g_SaveTime) > g_TimeOut )
+    if( (CurrentTime - m_lastSaveTime) > m_saveInterval )
     {
         wxString tmpFileName = GetScreen()->GetFileName();
         wxFileName fn = wxFileName( wxEmptyString, g_SaveFileName, PcbFileExtension );
