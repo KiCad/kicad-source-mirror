@@ -29,8 +29,6 @@ extern int g_TabOneLayerMask[LAYER_COUNT];
 /* Look up Table for conversion copper layer count -> general copper layer mask: */
 extern int g_TabAllCopperLayerMask[NB_COPPER_LAYERS];
 
-
-extern wxArrayString   g_LibName_List;    // library list to load
 extern DISPLAY_OPTIONS DisplayOpt;
 
 extern wxString g_SaveFileName;
@@ -44,10 +42,7 @@ extern wxString g_ViaType_Name[4];
 
 extern int g_CurrentVersionPCB;
 
-
-extern int    g_RotationAngle;
-extern int    g_TimeOut;            // Timer for automatic saving
-extern int    g_SaveTime;           // Time for next saving
+extern int g_RotationAngle;
 
 /// List of segments of the trace currently being drawn.
 extern DLIST<TRACK> g_CurrentTrackList;
@@ -56,10 +51,10 @@ extern DLIST<TRACK> g_CurrentTrackList;
 
 #define g_FirstTrackSegment   g_CurrentTrackList.GetFirst()   ///< first segment created
 
-extern BOARD*      g_ModuleEditor_Pcb;
+extern BOARD* g_ModuleEditor_Pcb;
 
 /* Pad editing */
-extern D_PAD    g_Pad_Master;
+extern D_PAD g_Pad_Master;
 
 
 #endif  /*  __PCBCOMMON_H__ */

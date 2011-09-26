@@ -3,13 +3,10 @@
 
 #include "dialog_general_options_BoardEditor_base.h"
 
-/***********************************************************************/
 class Dialog_GeneralOptions : public DialogGeneralOptionsBoardEditor_base
-/***********************************************************************/
 {
 private:
-    PCB_EDIT_FRAME* m_Parent;
-    BOARD * m_Board;
+    BOARD* m_Board;
 
     void init();
 
@@ -18,6 +15,8 @@ public:
     ~Dialog_GeneralOptions() {};
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
+
+    PCB_EDIT_FRAME* GetParent() { return (PCB_EDIT_FRAME*) wxDialog::GetParent(); }
 };
 
 

@@ -1,8 +1,7 @@
-
-/*****************************************************/
-/* class FOOTPRINT_EDIT_FRAME: public EDA_DRAW_FRAME */
-/* Class for the footprint editor                    */
-/*****************************************************/
+/**
+ * @file module_editor_frame.h
+ * @brief Definition of class FOOTPRINT_EDIT_FRAME.
+ */
 
 #ifndef _MODULE_EDITOR_FRAME_H_
 #define _MODULE_EDITOR_FRAME_H_
@@ -21,36 +20,36 @@ public:
 
     ~FOOTPRINT_EDIT_FRAME();
 
-    void         InstallOptionsFrame( const wxPoint& pos );
+    void InstallOptionsFrame( const wxPoint& pos );
 
-    void         OnCloseWindow( wxCloseEvent& Event );
-    void         CloseModuleEditor( wxCommandEvent& Event );
+    void OnCloseWindow( wxCloseEvent& Event );
+    void CloseModuleEditor( wxCommandEvent& Event );
 
-    void         Process_Special_Functions( wxCommandEvent& event );
+    void Process_Special_Functions( wxCommandEvent& event );
 
     /**
      * Function RedrawActiveWindoow
-     * daws the footprint editor BOARD, and others elements such as axis and grid.
+     * draws the footprint editor BOARD, and others elements such as axis and grid.
      */
-    void         RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
     /**
      * Function ReCreateHToolbar
      * create the main horizontal toolbar for the footprint editor
      */
-    void         ReCreateHToolbar();
+    void ReCreateHToolbar();
 
-    void         ReCreateVToolbar();
-    void         ReCreateOptToolbar();
-    void         ReCreateAuxiliaryToolbar();
-    void         OnLeftClick( wxDC* DC, const wxPoint& MousePos );
+    void ReCreateVToolbar();
+    void ReCreateOptToolbar();
+    void ReCreateAuxiliaryToolbar();
+    void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
 
     /**
      * Function OnLeftDClick
      * handles the double click in the footprint editor:
      * If the double clicked item is editable: call the corresponding editor.
      */
-    void         OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
+    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
     /**
      * Function OnRightClick
@@ -58,15 +57,15 @@ public:
      * Create the pop up menu
      * After this menu is built, the standard ZOOM menu is added
      */
-    bool         OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
 
     /**
      * @brief (Re)Create the menubar for the module editor frame
      */
-    void         ReCreateMenuBar();
+    void ReCreateMenuBar();
 
-    void         ToolOnRightClick( wxCommandEvent& event );
-    void         OnSelectOptionToolbar( wxCommandEvent& event );
+    void ToolOnRightClick( wxCommandEvent& event );
+    void OnSelectOptionToolbar( wxCommandEvent& event );
 
     /**
      * Function OnHotKey
@@ -76,36 +75,35 @@ public:
      * case insensitive
      * </p>
      */
-    void         OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
-                           EDA_ITEM* aItem = NULL );
+    void OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
-    bool         OnHotkeyEditItem( int aIdCommand );
-    bool         OnHotkeyDeleteItem( int aIdCommand );
-    bool         OnHotkeyMoveItem( int aIdCommand );
-    bool         OnHotkeyRotateItem( int aIdCommand );
+    bool OnHotkeyEditItem( int aIdCommand );
+    bool OnHotkeyDeleteItem( int aIdCommand );
+    bool OnHotkeyMoveItem( int aIdCommand );
+    bool OnHotkeyRotateItem( int aIdCommand );
 
     /**
      * Function Show3D_Frame
      * displays 3D view of the footprint (module) being edited.
      */
-    void         Show3D_Frame( wxCommandEvent& event );
+    void Show3D_Frame( wxCommandEvent& event );
 
-    void         GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
-    void         OnVerticalToolbar( wxCommandEvent& aEvent );
+    void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+    void OnVerticalToolbar( wxCommandEvent& aEvent );
 
-    void         OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
-    void         OnUpdateLibSelected( wxUpdateUIEvent& aEvent );
-    void         OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
-    void         OnUpdateLibAndModuleSelected( wxUpdateUIEvent& aEvent );
-    void         OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );
-    void         OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
-    void         OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent );
+    void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
+    void OnUpdateLibSelected( wxUpdateUIEvent& aEvent );
+    void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
+    void OnUpdateLibAndModuleSelected( wxUpdateUIEvent& aEvent );
+    void OnUpdateLoadModuleFromBoard( wxUpdateUIEvent& aEvent );
+    void OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent );
+    void OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent );
 
     /**
      * Function LoadModuleFromBoard
      * called from the main toolbar to load a footprint from board mainly to edit it.
      */
-    void         LoadModuleFromBoard( wxCommandEvent& event );
+    void LoadModuleFromBoard( wxCommandEvent& event );
 
     /**
      * Virtual Function OnModify()
@@ -120,7 +118,7 @@ public:
      * Function ToPrinter
      * Install the print dialog
      */
-    void         ToPrinter( wxCommandEvent& event );
+    void ToPrinter( wxCommandEvent& event );
 
     /**
      * Virtual function PrintPage
@@ -141,10 +139,10 @@ public:
      * delete all and reinitialize the current board
      * @param aQuery = true to prompt user for confirmation, false to initialize silently
      */
-    bool         Clear_Pcb( bool aQuery );
+    bool Clear_Pcb( bool aQuery );
 
     /* handlers for block commands */
-    virtual int  ReturnBlockCommand( int key );
+    virtual int ReturnBlockCommand( int key );
 
     /**
      * Function HandleBlockPlace
@@ -167,7 +165,7 @@ public:
      */
     virtual bool HandleBlockEnd( wxDC* DC );
 
-    BOARD_ITEM*  ModeditLocateAndDisplay( int aHotKeyCode = 0 );
+    BOARD_ITEM* ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 
     /* Undo and redo functions */
 public:
@@ -207,7 +205,7 @@ private:
      *  - Place the current edited library component in Redo list
      *  - Get old version of the current edited library component
      */
-    void         GetComponentFromUndoList( wxCommandEvent& event );
+    void GetComponentFromUndoList( wxCommandEvent& event );
 
     /**
      * Fucntion GetComponentFromRedoList
@@ -215,25 +213,25 @@ private:
      *  - Place the current edited library component in undo list
      *  - Get old version of the current edited library component
      */
-    void         GetComponentFromRedoList( wxCommandEvent& event );
+    void GetComponentFromRedoList( wxCommandEvent& event );
 
     /**
      * Function UpdateTitle
      * updates window title according to m_CurrentLib.
      */
-    void         UpdateTitle();
+    void UpdateTitle();
 
 public:
 
     // Footprint edition
-    void         Place_Ancre( MODULE* module );
-    void         RemoveStruct( EDA_ITEM* Item );
+    void Place_Ancre( MODULE* module );
+    void RemoveStruct( EDA_ITEM* Item );
 
     /**
      * Function Transform
      * performs a geometric transform on the current footprint.
      */
-    void         Transform( MODULE* module, int transform );
+    void Transform( MODULE* module, int transform );
 
     // importing / exporting Footprint
     /**
@@ -248,7 +246,7 @@ public:
      * @param aCreateSysLib : true = use default lib path to create lib
      *                    false = use current path or last used path to export the footprint
      */
-    void         Export_Module( MODULE* aModule, bool aCreateSysLib );
+    void Export_Module( MODULE* aModule, bool aCreateSysLib );
 
     /**
      * Function Import_Module
@@ -263,11 +261,11 @@ public:
 
     /**
      * Function Load_Module_From_BOARD
-     * load in Modedit a footfrint from the main board
+     * load in Modedit a footprint from the main board
      * @param Module = the module to load. If NULL, a module reference will we asked to user
      * @return true if a module isloaded, false otherwise.
      */
-    bool         Load_Module_From_BOARD( MODULE* Module );
+    bool Load_Module_From_BOARD( MODULE* Module );
 
     /**
      * Function Select_1_Module_From_BOARD
@@ -275,7 +273,7 @@ public:
      * @return a pointer to a module if this module is selected or NULL otherwise
      * @param aPcb = the board from modules can be loaded
      */
-    MODULE*      Select_1_Module_From_BOARD( BOARD* aPcb );
+    MODULE* Select_1_Module_From_BOARD( BOARD* aPcb );
 
     // functions to edit footprint edges
 
@@ -286,7 +284,7 @@ public:
      * @param aEdge = edge to edit, or NULL.  If aEdge == NULL change
      *               the width of all footprint's edges
      */
-    void         Edit_Edge_Width( EDGE_MODULE* aEdge );
+    void Edit_Edge_Width( EDGE_MODULE* aEdge );
 
     /**
      * Function Edit_Edge_Layer
@@ -294,14 +292,14 @@ public:
      * if Edge == NULL change the layer of the entire footprint edges
      * @param Edge = edge to edit, or NULL
      */
-    void         Edit_Edge_Layer( EDGE_MODULE* Edge );
+    void Edit_Edge_Layer( EDGE_MODULE* Edge );
 
     /**
      * Function Delete_Edge_Module
      * deletes EDGE_MODULE Edge
      * @param Edge = edge to delete
      */
-    void         Delete_Edge_Module( EDGE_MODULE* Edge );
+    void Delete_Edge_Module( EDGE_MODULE* Edge );
 
     /**
      * Function Begin_Edge_Module
@@ -318,7 +316,7 @@ public:
      * Function End_Edge_Module
      * terminates a move or create edge function
      */
-    void         End_Edge_Module( EDGE_MODULE* Edge );
+    void End_Edge_Module( EDGE_MODULE* Edge );
 
     /**
      * Function Enter_Edge_Width
@@ -328,23 +326,24 @@ public:
      * @param aEdge = edge to edit, or NULL
      * changes ModuleSegmentWidth (global) = new width
      */
-    void         Enter_Edge_Width( EDGE_MODULE* aEdge );
+    void Enter_Edge_Width( EDGE_MODULE* aEdge );
 
-    /* Function to initialise the move function params of a graphic item type DRAWSEGMENT */
-    void         Start_Move_EdgeMod( EDGE_MODULE* drawitem, wxDC* DC );
+    /* Function to initialize the move function params of a graphic item type DRAWSEGMENT */
+    void Start_Move_EdgeMod( EDGE_MODULE* drawitem, wxDC* DC );
 
     /* Function to place a graphic item type EDGE_MODULE currently moved */
-    void         Place_EdgeMod( EDGE_MODULE* drawitem );
+    void Place_EdgeMod( EDGE_MODULE* drawitem );
 
     // handlers for libraries:
-    void         Delete_Module_In_Library( const wxString& libname );
-    int          Create_Librairie( const wxString& LibName );
-    void         Select_Active_Library();
+    void Delete_Module_In_Library( const wxString& libname );
 
-    wxString     GetCurrentLib() const { return m_CurrentLib; };
+    int CreateLibrary( const wxString& LibName );
+
+    void Select_Active_Library();
+
+    wxString GetCurrentLib() const { return m_CurrentLib; };
 
     DECLARE_EVENT_TABLE()
 };
 
 #endif      // #define _MODULE_EDITOR_FRAME_H_
-

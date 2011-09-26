@@ -1,6 +1,7 @@
-/****************************************/
-/* Manage module (footprint) libraries. */
-/****************************************/
+/**
+ * @file librairi.cpp
+ * @brief Manage module (footprint) libraries.
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -238,7 +239,8 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
     {
         fclose( lib_module );
         wxString msg;
-        msg.Printf( _( "%s is not a Library file" ), GetChars(oldFileName.GetFullPath()) );
+        msg.Printf( _( "%s is not a valid footprint library file" ),
+                    GetChars( oldFileName.GetFullPath() ) );
         DisplayError( this, msg );
         return;
     }
@@ -324,14 +326,16 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
 
     if( !wxRenameFile( oldFileName.GetFullPath(), backupFileName.GetFullPath() ) )
     {
-        DisplayError( this, wxT( "Librairi.cpp: rename .bak err" ) );
+        DisplayError( this, _( "Could not create library back up file <" ) +
+                      backupFileName.GetFullName() + wxT( ">." ) );
         return;
     }
 
     /* The temporary file is renamed as the previous library. */
     if( !wxRenameFile( newFileName.GetFullPath(), oldFileName.GetFullPath() ) )
     {
-        DisplayError( this, wxT( "Librairi.cpp: rename err 2" ) );
+        DisplayError( this, _( "Could not create temporary library file <" ) +
+                      oldFileName.GetFullName() + wxT( ">." ) );
         return;
     }
 
@@ -349,7 +353,7 @@ void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOn
 
     if( GetBoard()->m_Modules == NULL )
     {
-        DisplayInfoMessage( this, _( " No modules to archive!" ) );
+        DisplayInfoMessage( this, _( "No modules to archive!" ) );
         return;
     }
 
@@ -498,7 +502,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     if( ! input_lib.IsLibrary() )
     {
         fclose( lib_module );
-        msg.Printf( _( "File %s is not a eeschema library" ), GetChars( aLibName ) );
+        msg.Printf( _( "File %s is not an EESchema library" ), GetChars( aLibName ) );
         DisplayError( this, msg );
         return false;
     }
@@ -616,12 +620,14 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         wxRemoveFile( oldFileName.GetFullPath() );
 
     if( !wxRenameFile( aLibName, oldFileName.GetFullPath() ) )
-        DisplayError( this, wxT( "Librairi.cpp: rename .bak err" ) );
+        DisplayError( this, _( "Could not create library back up file <" ) +
+                      oldFileName.GetFullName() + wxT( ">." ) );
 
     /* The new library file is renamed */
     if( !wxRenameFile( newFileName.GetFullPath(), aLibName ) )
     {
-        DisplayError( this, wxT( "Librairi.cpp: rename NewLib err" ) );
+        DisplayError( this, _( "Could not create temporary library file <" ) +
+                      aLibName + wxT( ">." ) );
         return false;
     }
 
@@ -656,6 +662,7 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
 
         moduleName = dlg.GetValue();
     }
+
     moduleName.Trim( true );
     moduleName.Trim( false );
 
@@ -698,11 +705,13 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
 void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
 {
     wxString msg;
+    PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
 
-    if( g_LibName_List.GetCount() == 0 )
+    if( parent->GetFootprintLibraryNames().GetCount() == 0 || parent == NULL )
         return;
 
-    EDA_LIST_DIALOG dlg( this, _( "Select Active Library:" ), g_LibName_List, m_CurrentLib );
+    EDA_LIST_DIALOG dlg( this, _( "Select Active Library:" ),
+                         parent->GetFootprintLibraryNames(), m_CurrentLib );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -726,7 +735,7 @@ void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
 }
 
 
-int FOOTPRINT_EDIT_FRAME::Create_Librairie( const wxString& aLibName )
+int FOOTPRINT_EDIT_FRAME::CreateLibrary( const wxString& aLibName )
 {
     FILE*    lib_module;
     wxString msg;

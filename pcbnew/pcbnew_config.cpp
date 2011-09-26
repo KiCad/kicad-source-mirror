@@ -135,14 +135,6 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 }
 
 
-/**
- * Read the project configuration file settings.
- *
- * @param aProjectFileName = The project file name to load.  If aProjectFileName
- *                           is not found load the default project file kicad.pro
- *                           and initialize setting to their default value.
- * @return Always returns true.
- */
 bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
 {
     wxFileName fn = aProjectFileName;
@@ -153,17 +145,16 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     wxGetApp().RemoveLibraryPath( g_UserLibDirBuffer );
 
     /* Initialize default values. */
-    g_LibName_List.Clear();
+    m_libraryNames.Clear();
 
     wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
 
     /* User library path takes precedent over default library search paths. */
     wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
 
-    /* Reset the items visibility flag when loading a new config
-     *  Because it could creates SERIOUS mistakes for the user,
-     * if board items are not visible after loading a board...
-     * Grid and ratsnest can be left to their previous state
+    /* Reset the items visibility flag when loading a new configuration because it could
+     * create SERIOUS mistakes for the user f board items are not visible after loading
+     * a board.  Grid and ratsnest can be left to their previous state.
      */
     bool showGrid = IsElementVisible( GRID_VISIBLE );
     bool showRats = IsElementVisible( RATSNEST_VISIBLE );
@@ -191,15 +182,6 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
 }
 
 
-/**
- * Return project file parameter list for PCBNew.
- *
- * Populate the project file parameter array specific to PCBNew if it hasn't
- * already been populated and return a reference to the array to the caller.
- * Creating the parameter list at run time has the advantage of being able
- * to define local variables.  The old method of statically building the array
- * at compile time requiring global variable definitions by design.
- */
 PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
 {
     if( !m_projectFileParams.empty() )
@@ -207,7 +189,8 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
 
     m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),&g_UserLibDirBuffer,
                                                            GROUPLIB ) );
-    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ), &g_LibName_List,
+    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
+                                                               &m_libraryNames,
                                                                GROUPLIB ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "PadDrlX" ), &g_Pad_Master.m_Drill.x,
                                                       320, 0, 0x7FFF ) );
@@ -251,22 +234,6 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
 
 
 
-/*
- * Return the PCBNew applications settings list.
- *
- * This replaces the old statically define list that had the project
- * file settings and the application settings mixed together.  This
- * was confusing and caused some settings to get saved and loaded
- * incorrectly.  Currently, only the settings that are needed at start
- * up by the main window are defined here.  There are other locally used
- * settings are scattered throughout the PCBNew source code.  If you need
- * to define a configuration setting that need to be loaded at run time,
- * this is the place to define it.
- *
- * @todo: Define the configuration variables as member variables instead of
- *        global variables or move them to the object class where they are
- *        used.
- */
 PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
 {
     if( !m_configSettings.empty() )
@@ -401,7 +368,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
     // Miscellaneous:
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "RotationAngle" ), &g_RotationAngle,
                                                    900, 450, 900 ) );
-    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "TimeOut" ), &g_TimeOut,
+    m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "TimeOut" ), &m_saveInterval,
                                                    600, 0, 60000 ) );
     m_configSettings.push_back( new PARAM_CFG_INT( true, wxT( "MaxLnkS" ), &g_MaxLinksShowed,
                                                    3, 0, 15 ) );
@@ -415,8 +382,6 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
 }
 
 
-/**
- */
 void PCB_EDIT_FRAME::SaveMacros()
 {
     wxFileName fn;
@@ -462,13 +427,11 @@ void PCB_EDIT_FRAME::SaveMacros()
         }
     }
 
-    xml.SetFileEncoding( wxT("UTF-8") );
+    xml.SetFileEncoding( wxT( "UTF-8" ) );
     xml.Save( dlg.GetFilename() );
 }
 
 
-/**
- */
 void PCB_EDIT_FRAME::ReadMacros()
 {
     wxString str;

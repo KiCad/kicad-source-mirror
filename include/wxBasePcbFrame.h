@@ -19,7 +19,7 @@
 #endif
 
 
-/*  Forward declarations of classes. */
+/* Forward declarations of classes. */
 class FOOTPRINT_EDIT_FRAME;
 class BOARD;
 class MODULE;
@@ -31,10 +31,10 @@ class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
 
 
-/******************************************************************/
-/* class PCB_BASE_FRAME: Basic class for pcbnew and gerbview */
-/******************************************************************/
-
+/**
+ * class PCB_BASE_FRAME
+ * basic PCB main window class for PCBNew, Gerbview, and CvPcb footprint viewer.
+ */
 class PCB_BASE_FRAME : public EDA_DRAW_FRAME
 {
 public:
@@ -83,7 +83,6 @@ public:
         wxASSERT( m_Pcb );  // phasing out m_Pcb for gerbview
         return m_Pcb;
     }
-
 
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;

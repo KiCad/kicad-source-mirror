@@ -412,7 +412,19 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
                         GRTraceMode trace_mode );
 
     void Files_io( wxCommandEvent& event );
+
+    /**
+     * Function OnGbrFileHistory
+     * deletes the current data and loads a Gerber file selected from history list on
+     * current layer.
+     */
     void OnGbrFileHistory( wxCommandEvent& event );
+
+    /**
+     * Function OnDrlFileHistory
+     * deletes the current data and load a drill file in Excellon format selected from
+     * history list on current layer.
+     */
     void OnDrlFileHistory( wxCommandEvent& event );
 
     /**
