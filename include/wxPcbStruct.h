@@ -59,7 +59,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
     int m_saveInterval;                 ///< Time interval in seconds for automatic saving.
     int m_lastSaveTime;                 ///< Last save time.
-    wxArrayString m_libraryNames;       ///< List of footprint library names to load.
 
 protected:
 
@@ -234,8 +233,6 @@ public:
     int GetAutoSaveTimeInterval() { return m_saveInterval; }
 
     void SetAutoSaveTimeInterval( int aInterval ) { m_saveInterval = aInterval; }
-
-    wxArrayString& GetFootprintLibraryNames() { return m_libraryNames; }
 
     // Configurations:
     void InstallConfigFrame();

@@ -55,7 +55,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::Init()
     m_LibPathChanged = false;
     m_UserLibDirBufferImg = g_UserLibDirBuffer;  // Save the original lib path
 
-    m_ListLibr->InsertItems( GetParent()->GetFootprintLibraryNames(), 0 );
+    m_ListLibr->InsertItems( g_LibraryNames, 0 );
 
     // Display current modules doc file:
     m_Config->Read( wxT( "module_doc_file" ), g_DocModulesFileName );
@@ -122,10 +122,10 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnOkClick( wxCommandEvent& event )
     if( m_LibListChanged || m_LibPathChanged )
     {
         // Recreate lib list
-        GetParent()->GetFootprintLibraryNames().Clear();
+        g_LibraryNames.Clear();
 
         for ( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii ++ )
-            GetParent()->GetFootprintLibraryNames().Add( m_ListLibr->GetString(ii) );
+            g_LibraryNames.Add( m_ListLibr->GetString(ii) );
     }
 
     GetParent()->SaveProjectSettings();
