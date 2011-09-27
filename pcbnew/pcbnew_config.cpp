@@ -145,7 +145,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
     wxGetApp().RemoveLibraryPath( g_UserLibDirBuffer );
 
     /* Initialize default values. */
-    m_libraryNames.Clear();
+    g_LibraryNames.Clear();
 
     wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
 
@@ -190,7 +190,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
     m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),&g_UserLibDirBuffer,
                                                            GROUPLIB ) );
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
-                                                               &m_libraryNames,
+                                                               &g_LibraryNames,
                                                                GROUPLIB ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "PadDrlX" ), &g_Pad_Master.m_Drill.x,
                                                       320, 0, 0x7FFF ) );

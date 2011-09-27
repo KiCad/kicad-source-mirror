@@ -61,6 +61,9 @@ const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*
  */
 wxString g_DocModulesFileName = wxT( "footprints_doc/footprints.pdf" );
 
+wxArrayString g_LibraryNames;
+
+
 IMPLEMENT_APP( EDA_APP )
 
 

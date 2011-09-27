@@ -74,6 +74,7 @@ extern int         g_MagneticTrackOption;
 
 extern wxPoint     g_Offset_Module;         /* Offset trace when moving footprint. */
 
+extern wxArrayString g_LibraryNames;       ///< List of footprint library file names to load.
 
 enum MagneticPadOptionValues {
     no_effect,

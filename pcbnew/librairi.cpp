@@ -705,13 +705,11 @@ MODULE* PCB_BASE_FRAME::Create_1_Module( const wxString& aModuleName )
 void FOOTPRINT_EDIT_FRAME::Select_Active_Library()
 {
     wxString msg;
-    PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
 
-    if( parent->GetFootprintLibraryNames().GetCount() == 0 || parent == NULL )
+    if( g_LibraryNames.GetCount() == 0 )
         return;
 
-    EDA_LIST_DIALOG dlg( this, _( "Select Active Library:" ),
-                         parent->GetFootprintLibraryNames(), m_CurrentLib );
+    EDA_LIST_DIALOG dlg( this, _( "Select Active Library:" ), g_LibraryNames, m_CurrentLib );
 
     if( dlg.ShowModal() != wxID_OK )
         return;

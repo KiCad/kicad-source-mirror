@@ -195,13 +195,12 @@ MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryFullFilename,
     bool       one_lib = aLibraryFullFilename.IsEmpty() ? false : true;
     PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
 
-    for( ii = 0; ii < parent->GetFootprintLibraryNames().GetCount(); ii++ )
+    for( ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
     {
         if( one_lib )
             fn = aLibraryFullFilename;
         else
-            fn = wxFileName( wxEmptyString, parent->GetFootprintLibraryNames()[ii],
-                             ModuleFileExtension );
+            fn = wxFileName( wxEmptyString, g_LibraryNames[ii], ModuleFileExtension );
 
         tmp = wxGetApp().FindLibraryPath( fn );
 
@@ -252,6 +251,7 @@ MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryFullFilename,
         if( found  )
         {
             fileReader.Rewind();
+
             while( reader.ReadLine() )
             {
                 char * line = reader.Line();
@@ -302,10 +302,9 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
     wxString        CmpName;
     wxString        msg;
     wxArrayString   libnames_list;
-    PCB_EDIT_FRAME* parent = (PCB_EDIT_FRAME*) GetParent();
 
     if( aLibraryFullFilename.IsEmpty() )
-        libnames_list = parent->GetFootprintLibraryNames();
+        libnames_list = g_LibraryNames;
     else
         libnames_list.Add( aLibraryFullFilename );
 
@@ -351,7 +350,7 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
     }
     else
     {
-        DisplayError( aWindow, _("No footprint found") );
+        DisplayError( aWindow, _( "No footprint found" ) );
         CmpName.Empty();
     }
 
