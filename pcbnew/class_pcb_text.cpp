@@ -305,10 +305,7 @@ void TEXTE_PCB::Rotate(const wxPoint& aRotCentre, int aAngle)
 {
     RotatePoint( &m_Pos, aRotCentre, aAngle );
     m_Orient += aAngle;
-    while( m_Orient >= 3600 )
-        m_Orient -= 3600;
-    while( m_Orient < -3600 )
-        m_Orient += 3600;
+    NORMALIZE_ANGLE_360( m_Orient );
 }
 
 
@@ -320,7 +317,7 @@ void TEXTE_PCB::Rotate(const wxPoint& aRotCentre, int aAngle)
 void TEXTE_PCB::Flip(const wxPoint& aCentre )
 {
     m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );
-    NEGATE( m_Orient );
+//    NEGATE( m_Orient );   not needed: m_Mirror handles this
     if( ( GetLayer() == LAYER_N_BACK ) || ( GetLayer() == LAYER_N_FRONT ) )
     {
         m_Mirror = not m_Mirror;      /* inverse mirror */
