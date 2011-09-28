@@ -22,7 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -41,16 +41,19 @@
      showgrid="true"
      inkscape:snap-grids="false"
      inkscape:snap-to-guides="false"
-     inkscape:zoom="6.9532167"
-     inkscape:cx="15.44375"
-     inkscape:cy="38.882208"
+     inkscape:zoom="4.9166668"
+     inkscape:cx="53.730959"
+     inkscape:cy="-7.1623682"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2">
+     inkscape:current-layer="svg2"
+     inkscape:showpageshadow="false"
+     showborder="true"
+     borderlayer="true">
     <inkscape:grid
        type="xygrid"
-       id="grid2915"
+       id="grid2848"
        empspacing="5"
        visible="true"
        enabled="true"
@@ -117,13 +120,13 @@
     </radialGradient>
   </defs>
   <rect
-     style="opacity:0.8048782;fill:#b0d6f3;fill-opacity:1;fill-rule:nonzero;stroke:#7a96aa;stroke-width:0.96595198;stroke-opacity:1"
+     style="opacity:0.80487819999999999;fill:none;stroke:#c06105;stroke-width:0.96729129999999997;stroke-opacity:0.95294118;fill-opacity:0.95294118000000005"
      id="rect2962"
-     width="25.050997"
-     height="24.949303"
-     x="0.49145061"
-     y="0.50839972"
-     ry="2.2390399" />
+     width="25.049658"
+     height="25.019873"
+     x="0.49212027"
+     y="0.50906938"
+     ry="2.245373" />
   <rect
      style="color:#000000;stroke:#000000;stroke-width:0.7119"
      height="0.72042"
@@ -136,11 +139,11 @@
      transform="matrix(1.9432484e-4,0.99999998,-1,8.5970186e-5,0,0)"
      height="20.5259"
      width="13.806578"
-     y="-26.342199"
-     x="13.502939"
+     y="-26.240503"
+     x="13.50293"
      id="image25" />
   <g
-     transform="matrix(0.21232212,0.05352384,-0.05756893,0.18523668,3.4444559,-2.880894)"
+     transform="matrix(0.16344244,0.04941705,-0.0443157,0.17102382,3.5851631,-1.5167667)"
      id="g27">
     <g
        transform="matrix(-0.84925,-0.56427,0.49404,-0.84925,117.62,338.15)"
@@ -225,21 +228,21 @@
        id="tspan67"
        style="font-size:4.82404613px;stroke:#000000;stroke-width:0.14831169">G</tspan></text>
   <text
-     style="font-size:2.52929091px;font-weight:bold;text-align:center;line-height:125%;text-anchor:middle;opacity:0.70702999;fill:#000000;stroke:#000000;stroke-width:0.14726183;font-family:Bitstream Vera Sans"
+     style="font-size:2.42543864px;font-weight:bold;text-align:center;line-height:125%;text-anchor:middle;opacity:0.70702999;fill:#000000;stroke:#000000;stroke-width:0.14121528;font-family:Bitstream Vera Sans"
      font-weight="bold"
      xml:space="preserve"
-     transform="scale(0.92220993,1.0843518)"
+     transform="scale(0.8829342,1.1325872)"
      line-height="125%"
      font-size="10.082px"
-     y="4.5640497"
-     x="22.275242"
+     y="4.3723416"
+     x="23.130247"
      id="text69"
      sodipodi:linespacing="125%"><tspan
        font-size="19.093px"
-       y="4.5640497"
-       x="22.275242"
+       y="4.3723416"
+       x="23.130247"
        id="tspan71"
-       style="font-size:4.78989792px;stroke:#000000;stroke-width:0.14726183">D</tspan></text>
+       style="font-size:4.59322548px;stroke:#000000;stroke-width:0.14121528">D</tspan></text>
   <text
      style="font-size:2.6916604px;font-weight:bold;text-align:center;line-height:125%;text-anchor:middle;opacity:0.70702999;fill:#000000;stroke:#000000;stroke-width:0.15671541;font-family:Bitstream Vera Sans"
      font-weight="bold"
