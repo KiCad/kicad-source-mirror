@@ -595,13 +595,15 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         case SCH_FIELD_T:
             cmd.SetId( ID_POPUP_SCH_ROTATE_FIELD );
             wxPostEvent( this, cmd );
+            break;
 
         case SCH_BITMAP_T:
             cmd.SetId( ID_POPUP_SCH_ROTATE_IMAGE );
             wxPostEvent( this, cmd );
+            break;
 
         default:
-            ;
+            break;
         }
 
         break;
