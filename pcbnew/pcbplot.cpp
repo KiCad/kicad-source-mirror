@@ -49,6 +49,7 @@ static bool setDouble( double* aDouble, double aValue, double aMin, double aMax 
     return true;
 }
 
+
 /*******************************/
 /* Dialog box for plot control */
 /*******************************/
@@ -63,8 +64,10 @@ private:
     double           m_YScaleAdjust;
     static wxPoint   prevPosition;      // Dialog position & size
     static wxSize    prevSize;
+
 public:
     DIALOG_PLOT( PCB_EDIT_FRAME* parent );
+
 private:
     void Init_Dialog();
     void Plot( wxCommandEvent& event );
@@ -76,6 +79,7 @@ private:
     void applyPlotSettings();
     void CreateDrillFile( wxCommandEvent& event );
 };
+
 
 wxPoint DIALOG_PLOT::prevPosition( -1, -1 );
 wxSize DIALOG_PLOT::prevSize;
@@ -95,8 +99,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* parent ) :
     GetSizer()->SetSizeHints( this );
 
     if( prevPosition.x != -1 )
-        SetSize( prevPosition.x, prevPosition.y,
-                 prevSize.x, prevSize.y );
+        SetSize( prevPosition.x, prevPosition.y, prevSize.x, prevSize.y );
     else
         Center();
 }
@@ -153,6 +156,7 @@ void DIALOG_PLOT::Init_Dialog()
     // (Front or Top to Back or Bottom)
     DECLARE_LAYERS_ORDER_LIST( layersOrder );
     int layerIndex, checkIndex, layer;
+
     for( layerIndex = 0; layerIndex < NB_LAYERS; layerIndex++ )
     {
         layer = layersOrder[layerIndex];
@@ -265,6 +269,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
     // to preselect it when opening the dialog.
     wxFileName fn( m_outputDirectoryName->GetValue() );
     wxString path;
+
     if( fn.IsRelative() )
         path = wxGetCwd() + fn.GetPathSeparator() + m_outputDirectoryName->GetValue();
     else
@@ -495,6 +500,7 @@ void DIALOG_PLOT::applyPlotSettings()
         msg.Printf( wxT( "X scale constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
+
     m_Config->Write( CONFIG_XFINESCALE_ADJ, m_XScaleAdjust );
 
     // Y scale
@@ -508,6 +514,7 @@ void DIALOG_PLOT::applyPlotSettings()
         msg.Printf( wxT( "Y scale constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
+
     m_Config->Write( CONFIG_YFINESCALE_ADJ, m_YScaleAdjust );
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
@@ -516,13 +523,14 @@ void DIALOG_PLOT::applyPlotSettings()
 
     long selectedLayers = 0;
     unsigned int i;
+
     for( i = 0; i < layerList.size(); i++ )
     {
         if( m_layerCheckListBox->IsChecked( i ) )
             selectedLayers |= (1 << layerList[i]);
     }
-    tempOptions.SetLayerSelection( selectedLayers );
 
+    tempOptions.SetLayerSelection( selectedLayers );
     tempOptions.m_PlotPSNegative = m_plotPSNegativeOpt->GetValue();
     tempOptions.SetPsA4Output( m_forcePSA4OutputOpt->GetValue() );
 
@@ -581,6 +589,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     g_PcbPlotOptions.m_AutoScale = false;
     g_PcbPlotOptions.m_PlotScale = 1;
+
     switch( g_PcbPlotOptions.GetScaleSelection() )
     {
     default:
@@ -610,6 +619,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
      */
     if( m_fineAdjustXscaleOpt->IsEnabled()  && m_XScaleAdjust != 0.0 )
         g_PcbPlotOptions.m_FineScaleAdjustX = m_XScaleAdjust;
+
     if( m_fineAdjustYscaleOpt->IsEnabled() && m_YScaleAdjust != 0.0 )
         g_PcbPlotOptions.m_FineScaleAdjustY = m_YScaleAdjust;
 
@@ -637,15 +647,18 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     // Test for a reasonable scale value
     if( g_PcbPlotOptions.m_PlotScale < MIN_SCALE )
         DisplayInfoMessage( this,
-                           _( "Warning: Scale option set to a very small value" ) );
+                            _( "Warning: Scale option set to a very small value" ) );
+
     if( g_PcbPlotOptions.m_PlotScale > MAX_SCALE )
         DisplayInfoMessage( this,
-                           _( "Warning: Scale option set to a very large value" ) );
+                            _( "Warning: Scale option set to a very large value" ) );
 
     long layerMask = 1;
+
     for( layer = 0; layer < NB_LAYERS; layer++, layerMask <<= 1 )
     {
         bool success = false;
+
         if( g_PcbPlotOptions.GetLayerSelection() & layerMask )
         {
             fn = m_Parent->GetScreen()->GetFileName();
@@ -742,42 +755,43 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
             switch( g_PcbPlotOptions.GetPlotFormat() )
             {
             case PLOT_FORMAT_POST:
-                success = m_Parent->Genere_PS( fn.GetFullPath(), layer,
-                                               g_PcbPlotOptions.GetPsA4Output(),
-                                               g_PcbPlotOptions.m_PlotMode );
+                success = m_Parent->ExportToPostScriptFile( fn.GetFullPath(), layer,
+                                                            g_PcbPlotOptions.GetPsA4Output(),
+                                                            g_PcbPlotOptions.m_PlotMode );
                 break;
 
             case PLOT_FORMAT_GERBER:
-                success = m_Parent->Genere_GERBER( fn.GetFullPath(), layer,
-                                                   g_PcbPlotOptions.GetUseAuxOrigin(),
-                                                   g_PcbPlotOptions.m_PlotMode );
+                success = m_Parent->ExportToGerberFile( fn.GetFullPath(), layer,
+                                                        g_PcbPlotOptions.GetUseAuxOrigin(),
+                                                        g_PcbPlotOptions.m_PlotMode );
                 break;
 
             case PLOT_FORMAT_HPGL:
-                success = m_Parent->Genere_HPGL( fn.GetFullPath(), layer,
-                                                 g_PcbPlotOptions.m_PlotMode );
+                success = m_Parent->ExportToHpglFile( fn.GetFullPath(), layer,
+                                                      g_PcbPlotOptions.m_PlotMode );
                 break;
 
             case PLOT_FORMAT_DXF:
-                success = m_Parent->Genere_DXF( fn.GetFullPath(), layer,
-                                                g_PcbPlotOptions.m_PlotMode );
+                success = m_Parent->ExportToDxfFile( fn.GetFullPath(), layer,
+                                                     g_PcbPlotOptions.m_PlotMode );
                 break;
             }
 
             // Print diags in messages box:
             wxString msg;
+
             if( success )
                 msg.Printf( _( "Plot file <%s> created" ), GetChars( fn.GetFullPath() ) );
             else
                 msg.Printf( _( "Unable to create <%s>" ), GetChars( fn.GetFullPath() ) );
+
             msg << wxT( "\n" );
             m_messagesBox->AppendText( msg );
         }
     }
 
     // If no layer selected, we have nothing plotted.
-    // Prompt user if it happens
-    // because he could think there is a bug in pcbnew:
+    // Prompt user if it happens because he could think there is a bug in pcbnew.
     if( !g_PcbPlotOptions.GetLayerSelection() )
         DisplayError( this, _( "No layer selected" ) );
 }

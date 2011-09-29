@@ -205,38 +205,6 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-/**
- * Function Copie_Module
- * Copy an existing  footprint. The new footprint is added in module list
- * @param module = footprint to copy
- * @return a pointer on the new footprint (the copy of the existing footprint)
- */
-MODULE* PCB_BASE_FRAME::Copie_Module( MODULE* module )
-{
-    MODULE* newmodule;
-
-    if( module == NULL )
-        return NULL;
-
-    OnModify();
-
-    /* Duplicate module */
-    GetBoard()->m_Status_Pcb = 0;
-    newmodule = new MODULE( GetBoard() );
-    newmodule->Copy( module );
-
-    GetBoard()->Add( newmodule, ADD_APPEND );
-
-    newmodule->m_Flags = IS_NEW;
-
-    GetBoard()->m_NetInfo->BuildListOfNets();
-
-    newmodule->DisplayInfo( this );
-    GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
-    return newmodule;
-}
-
-
 /* Redraw the footprint when moving the mouse.
  */
 void MoveFootprint( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )

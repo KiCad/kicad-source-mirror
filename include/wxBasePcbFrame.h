@@ -44,8 +44,7 @@ public:
 
     int  m_DisplayModEdge;          // How to display module drawings (line/ filled / sketch)
     int  m_DisplayModText;          // How to display module texts (line/ filled / sketch)
-    bool m_DisplayPcbTrackFill;     /* FALSE : tracks are show in sketch mode,
-                                     * TRUE = filled */
+    bool m_DisplayPcbTrackFill;     // FALSE : tracks are show in sketch mode, TRUE = filled.
     EDA_UNITS_T m_UserGridUnit;
     wxRealPoint m_UserGridSize;
 
@@ -160,21 +159,11 @@ public:
 
     /**
      * Function CursorGoto
-     * positions the cursor at a given coordinate and reframes the drawing if
-     *the
+     * positions the cursor at a given coordinate and reframes the drawing if the
      * requested point is out of view.
      * @param aPos The point to go to.
      */
-    void CursorGoto(  const wxPoint& aPos );
-
-    void place_marqueur( wxDC*          DC,
-                         const wxPoint& pos,
-                         char*          pt_bitmap,
-                         int            DrawMode,
-                         int            color,
-                         int            type );
-
-    MODULE* Copie_Module( MODULE* module );
+    void CursorGoto( const wxPoint& aPos );
 
     /**
      * Function Save_Module_In_Library
@@ -211,7 +200,7 @@ public:
      * do not forget to call this basic OnModify function to update info
      * in derived OnModify functions
      */
-    virtual void OnModify( );
+    virtual void OnModify();
 
     // Modules (footprints)
     /**
@@ -424,20 +413,33 @@ public:
      * Return true if OK, false if the file is not created (or has a problem)
      */
 
-    bool Genere_GERBER( const wxString& FullFileName,
-                        int             Layer,
-                        bool            PlotOriginIsAuxAxis,
-                        GRTraceMode     trace_mode );
-    bool Genere_HPGL( const wxString& FullFileName,
-                      int             Layer,
-                      GRTraceMode     trace_mode );
-    bool Genere_PS( const wxString& FullFileName,
-                    int             Layer,
-                    bool            useA4,
-                    GRTraceMode     trace_mode );
-    bool Genere_DXF( const wxString& FullFileName,
-                     int             Layer,
-                     GRTraceMode     trace_mode );
+    /**
+     * Function ExportToGerberFile
+     * create one output files one per board layer in the RS274X format.
+     * <p>
+     * The units are in inches and in the format 3.4 with the leading zeros omitted.
+     * Coordinates are absolute value.  The 3.4 format is used because the native PCBNew
+     * units are 1/10000 inch.
+     * </p>
+     */
+    bool ExportToGerberFile( const wxString& aFullFileName,
+                             int             aLayer,
+                             bool            aPlotOriginIsAuxAxis,
+                             GRTraceMode     aTraceMode );
+
+    bool ExportToHpglFile( const wxString& aFullFileName,
+                           int             aLayer,
+                           GRTraceMode     aTraceMode );
+
+    bool ExportToPostScriptFile( const wxString& aFullFileName,
+                                 int             aLayer,
+                                 bool            aUseA4,
+                                 GRTraceMode     aTraceMode );
+
+    bool ExportToDxfFile( const wxString& aFullFileName,
+                          int             aLayer,
+                          GRTraceMode     aTraceMode );
+
     void Plot_Layer( PLOTTER*    plotter,
                      int         Layer,
                      GRTraceMode trace_mode );

@@ -1,6 +1,7 @@
-/*
-dialog_hotkeys_editor.cpp
-*/
+/**
+ * @file dialog_hotkeys_editor.cpp
+ */
+
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
@@ -32,8 +33,7 @@ dialog_hotkeys_editor.cpp
 
 #include "dialog_hotkeys_editor.h"
 
-void InstallHotkeyFrame( EDA_DRAW_FRAME*                 parent,
-                         Ki_HotkeyInfoSectionDescriptor* hotkeys )
+void InstallHotkeyFrame( EDA_DRAW_FRAME* parent, EDA_HOTKEY_CONFIG* hotkeys )
 {
     HOTKEYS_EDITOR_DIALOG dialog( parent, hotkeys );
 
@@ -46,8 +46,8 @@ void InstallHotkeyFrame( EDA_DRAW_FRAME*                 parent,
 }
 
 
-HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_DRAW_FRAME*                 parent,
-                                              Ki_HotkeyInfoSectionDescriptor* hotkeys ) :
+HOTKEYS_EDITOR_DIALOG::HOTKEYS_EDITOR_DIALOG( EDA_DRAW_FRAME*    parent,
+                                              EDA_HOTKEY_CONFIG* hotkeys ) :
     HOTKEYS_EDITOR_DIALOG_BASE( parent )
 {
     m_parent  = parent;
@@ -78,18 +78,21 @@ void HOTKEYS_EDITOR_DIALOG::OnOKClicked( wxCommandEvent& event )
     /* edit the live hotkey table */
     HotkeyGridTable::hotkey_spec_vector& hotkey_vec = m_table->getHotkeys();
 
-    Ki_HotkeyInfoSectionDescriptor*      section;
+    EDA_HOTKEY_CONFIG*      section;
 
     for( section = m_hotkeys; section->m_HK_InfoList; section++ )
     {
-        wxString        sectionTag = *section->m_SectionTag;
+        wxString     sectionTag = *section->m_SectionTag;
 
-        Ki_HotkeyInfo** info_ptr;
+        EDA_HOTKEY** info_ptr;
+
         for( info_ptr = section->m_HK_InfoList; *info_ptr; info_ptr++ )
         {
-            Ki_HotkeyInfo* info = *info_ptr;
+            EDA_HOTKEY* info = *info_ptr;
+
             /* find the corresponding hotkey */
             HotkeyGridTable::hotkey_spec_vector::iterator i;
+
             for( i = hotkey_vec.begin(); i != hotkey_vec.end(); ++i )
             {
                 if( i->first == sectionTag
@@ -122,6 +125,7 @@ void HOTKEYS_EDITOR_DIALOG::UndoClicked( wxCommandEvent& event )
 {
     m_table->RestoreFrom( m_hotkeys );
     m_curEditingRow = -1;
+
     for( int i = 0; i < m_hotkeyGrid->GetNumberRows(); ++i )
         SetHotkeyCellState( i, false );
 
@@ -153,6 +157,7 @@ void HOTKEYS_EDITOR_DIALOG::OnClickOnCell( wxGridEvent& event )
         SetHotkeyCellState( m_curEditingRow, false );
 
     int newRow = event.GetRow();
+
     if( ( event.GetCol() != 1 ) || ( m_table->isHeader( newRow ) ) )
     {
         m_curEditingRow = -1;
@@ -165,6 +170,7 @@ void HOTKEYS_EDITOR_DIALOG::OnClickOnCell( wxGridEvent& event )
     m_hotkeyGrid->Refresh();
     Update();
 }
+
 
 /** OnRightClickOnCell
  * If a cell is selected, display a list of keys for selection
@@ -194,17 +200,18 @@ void HOTKEYS_EDITOR_DIALOG::OnRightClickOnCell( wxGridEvent& event )
         wxT("Alt+Space"),
     };
 
-    wxString keyname = wxGetSingleChoice(
-        _("Special keys only. For others keys, use keyboard"),
-        _("Select a key"), C_COUNT, choices, this);
+    wxString keyname = wxGetSingleChoice( _( "Special keys only. For others keys, use keyboard" ),
+                                          _( "Select a key" ), C_COUNT, choices, this );
     int key = ReturnKeyCodeFromKeyName( keyname );
 
     if( key == 0 )
         return;
+
     m_table->SetKeyCode( m_curEditingRow, key );
     m_hotkeyGrid->Refresh();
     Update();
 }
+
 
 void HOTKEYS_EDITOR_DIALOG::OnKeyPressed( wxKeyEvent& event )
 {
@@ -222,8 +229,10 @@ void HOTKEYS_EDITOR_DIALOG::OnKeyPressed( wxKeyEvent& event )
         default:
             if( event.ControlDown() )
                 key |= GR_KB_CTRL;
+
             if( event.AltDown() )
                 key |= GR_KB_ALT;
+
             if( event.ShiftDown() && (key > 256) )
                 key |= GR_KB_SHIFT;
 
@@ -243,12 +252,16 @@ void HOTKEYS_EDITOR_DIALOG::OnKeyPressed( wxKeyEvent& event )
             // See if this key code is handled in hotkeys names list
             bool exists;
             ReturnKeyNameFromKeyCode( key, &exists );
+
             if( !exists )   // not handled, see hotkeys_basic.cpp
-                wxMessageBox( _("Hotkey code not handled" ) );
+            {
+                wxMessageBox( _( "Hotkey code not handled" ) );
+            }
             else
             {
                 m_table->SetKeyCode( m_curEditingRow, key );
             }
+
             break;
         }
     }

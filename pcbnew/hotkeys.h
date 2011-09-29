@@ -79,24 +79,26 @@ enum hotkey_id_commnand {
     HK_CALL_MACROS_9
 };
 
-// Full list of hotkey descriptors for borad editor and footprint editor
-extern struct Ki_HotkeyInfoSectionDescriptor g_Pcbnew_Editor_Hokeys_Descr[];
+// Full list of hotkey descriptors for board editor and footprint editor
+extern struct EDA_HOTKEY_CONFIG g_Pcbnew_Editor_Hokeys_Descr[];
 
 // List of hotkey descriptors for the board editor only
-extern struct Ki_HotkeyInfoSectionDescriptor g_Board_Editor_Hokeys_Descr[];
+extern struct EDA_HOTKEY_CONFIG g_Board_Editor_Hokeys_Descr[];
 
 // List of hotkey descriptors for the footprint editor only
-extern struct Ki_HotkeyInfoSectionDescriptor g_Module_Editor_Hokeys_Descr[];
+extern struct EDA_HOTKEY_CONFIG g_Module_Editor_Hokeys_Descr[];
 
 // List of common hotkey descriptors
 // used in hotkeys_board_editor.cpp and hotkeys_module_editor.cpp
-extern Ki_HotkeyInfo* common_Hotkey_List[];
+extern EDA_HOTKEY* common_Hotkey_List[];
+
 // List of hotkey descriptors for pcbnew
 // used in hotkeys_board_editor.cpp
-extern Ki_HotkeyInfo* board_edit_Hotkey_List[];
+extern EDA_HOTKEY* board_edit_Hotkey_List[];
+
 // List of hotkey descriptors for the module editor
 // used in hotkeys_module_editor.cpp
-extern Ki_HotkeyInfo* module_edit_Hotkey_List[];
+extern EDA_HOTKEY* module_edit_Hotkey_List[];
 
 
 #endif /* _PCBNEW_HOTKEYS_H_ */

@@ -1,6 +1,6 @@
 /**
  * @file pcbnew.cpp
- * @file PCBNEW: main program.
+ * @brief PCBNEW: main program.
  */
 
 #include "fctsys.h"

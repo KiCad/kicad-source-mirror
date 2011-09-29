@@ -22,8 +22,8 @@
 /* How to add a new hotkey:
  * add a new id in the enum hotkey_id_command like MY_NEW_ID_FUNCTION (see
  * hotkeys.h).
- * add a new Ki_HotkeyInfo entry like:
- *  static Ki_HotkeyInfo HkMyNewEntry(wxT("Command Label"), MY_NEW_ID_FUNCTION,
+ * add a new EDA_HOTKEY entry like:
+ *  static EDA_HOTKEY HkMyNewEntry(wxT("Command Label"), MY_NEW_ID_FUNCTION,
  *                                    default key value);
  * wxT("Command Label") is the name used in hotkey list display, and the
  * identifier in the hotkey list file
@@ -58,104 +58,104 @@
 
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
-static Ki_HotkeyInfo HkZoomAuto( wxT( "Fit on Screen" ), HK_ZOOM_AUTO, WXK_HOME );
+static EDA_HOTKEY HkZoomAuto( wxT( "Fit on Screen" ), HK_ZOOM_AUTO, WXK_HOME );
 #else
-static Ki_HotkeyInfo HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, GR_KB_CTRL + '0' );
+static EDA_HOTKEY HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, GR_KB_CTRL + '0' );
 #endif
 
-static Ki_HotkeyInfo HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
+static EDA_HOTKEY HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
 
 /* Refresh Screen */
 #if !defined( __WXMAC__ )
-static Ki_HotkeyInfo HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
+static EDA_HOTKEY HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
 #else
-static Ki_HotkeyInfo HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, GR_KB_CTRL + 'R' );
+static EDA_HOTKEY HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, GR_KB_CTRL + 'R' );
 #endif
 
 /* Zoom In */
 #if !defined( __WXMAC__ )
-static Ki_HotkeyInfo HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+static EDA_HOTKEY HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
 #else
-static Ki_HotkeyInfo HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, GR_KB_CTRL + '+' );
+static EDA_HOTKEY HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, GR_KB_CTRL + '+' );
 #endif
 
 /* Zoom Out */
 #if !defined( __WXMAC__ )
-static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
+static EDA_HOTKEY HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 #else
-static Ki_HotkeyInfo HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-' );
+static EDA_HOTKEY HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-' );
 #endif
 
-static Ki_HotkeyInfo HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
-static Ki_HotkeyInfo HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
+static EDA_HOTKEY HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
+static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
                                         HK_RESET_LOCAL_COORD, ' ' );
 
 /* Undo */
-static Ki_HotkeyInfo HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
+static EDA_HOTKEY HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
 
 /* Redo */
 #if !defined( __WXMAC__ )
-static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
+static EDA_HOTKEY HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
 #else
-static Ki_HotkeyInfo HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 'Z',
+static EDA_HOTKEY HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 'Z',
                              (int) wxID_REDO );
 #endif
 
 // Schematic editor
-static Ki_HotkeyInfo HkAddLabel( wxT( "add Label" ), HK_ADD_LABEL, 'L' );
-static Ki_HotkeyInfo HkAddHierarchicalLabel( wxT( "Add Hierarchical Label" ), HK_ADD_HLABEL, 'H' );
-static Ki_HotkeyInfo HkAddGlobalLabel( wxT( "Add Global Label" ), HK_ADD_GLABEL, GR_KB_CTRL + 'L' );
-static Ki_HotkeyInfo HkAddJunction( wxT( "Add Junction" ), HK_ADD_JUNCTION, 'J' );
-static Ki_HotkeyInfo HkBeginWire( wxT( "Draw Wire" ), HK_BEGIN_WIRE, 'W' );
-static Ki_HotkeyInfo HkBeginBus( wxT( "Draw Bus" ), HK_BEGIN_BUS, 'B' );
-static Ki_HotkeyInfo HkAddComponent( wxT( "Add Component" ), HK_ADD_NEW_COMPONENT, 'A' );
-static Ki_HotkeyInfo HkAddPower( wxT( "Add Power" ), HK_ADD_NEW_POWER, 'P' );
-static Ki_HotkeyInfo HkAddNoConn( wxT( "Add NoConnected Flag" ), HK_ADD_NOCONN_FLAG, 'Q' );
-static Ki_HotkeyInfo HkAddHierSheet( wxT( "Add Sheet" ), HK_ADD_HIER_SHEET, 'S' );
-static Ki_HotkeyInfo HkAddBusEntry( wxT( "Add Bus Entry" ), HK_ADD_BUS_ENTRY, '/' );
-static Ki_HotkeyInfo HkAddWireEntry( wxT( "Add Wire Entry" ), HK_ADD_WIRE_ENTRY, 'Z' );
-static Ki_HotkeyInfo HkAddGraphicPolyLine( wxT( "Add Graphic PolyLine" ), HK_ADD_GRAPHIC_POLYLINE, 'I' );
-static Ki_HotkeyInfo HkAddGraphicText( wxT( "Add Graphic Text" ), HK_ADD_GRAPHIC_TEXT, 'T' );
-static Ki_HotkeyInfo HkMirrorYComponent( wxT( "Mirror Y Component" ), HK_MIRROR_Y_COMPONENT, 'Y' );
-static Ki_HotkeyInfo HkMirrorXComponent( wxT( "Mirror X Component" ), HK_MIRROR_X_COMPONENT, 'X' );
-static Ki_HotkeyInfo HkOrientNormalComponent( wxT( "Orient Normal Component" ),
+static EDA_HOTKEY HkAddLabel( wxT( "add Label" ), HK_ADD_LABEL, 'L' );
+static EDA_HOTKEY HkAddHierarchicalLabel( wxT( "Add Hierarchical Label" ), HK_ADD_HLABEL, 'H' );
+static EDA_HOTKEY HkAddGlobalLabel( wxT( "Add Global Label" ), HK_ADD_GLABEL, GR_KB_CTRL + 'L' );
+static EDA_HOTKEY HkAddJunction( wxT( "Add Junction" ), HK_ADD_JUNCTION, 'J' );
+static EDA_HOTKEY HkBeginWire( wxT( "Draw Wire" ), HK_BEGIN_WIRE, 'W' );
+static EDA_HOTKEY HkBeginBus( wxT( "Draw Bus" ), HK_BEGIN_BUS, 'B' );
+static EDA_HOTKEY HkAddComponent( wxT( "Add Component" ), HK_ADD_NEW_COMPONENT, 'A' );
+static EDA_HOTKEY HkAddPower( wxT( "Add Power" ), HK_ADD_NEW_POWER, 'P' );
+static EDA_HOTKEY HkAddNoConn( wxT( "Add NoConnected Flag" ), HK_ADD_NOCONN_FLAG, 'Q' );
+static EDA_HOTKEY HkAddHierSheet( wxT( "Add Sheet" ), HK_ADD_HIER_SHEET, 'S' );
+static EDA_HOTKEY HkAddBusEntry( wxT( "Add Bus Entry" ), HK_ADD_BUS_ENTRY, '/' );
+static EDA_HOTKEY HkAddWireEntry( wxT( "Add Wire Entry" ), HK_ADD_WIRE_ENTRY, 'Z' );
+static EDA_HOTKEY HkAddGraphicPolyLine( wxT( "Add Graphic PolyLine" ), HK_ADD_GRAPHIC_POLYLINE, 'I' );
+static EDA_HOTKEY HkAddGraphicText( wxT( "Add Graphic Text" ), HK_ADD_GRAPHIC_TEXT, 'T' );
+static EDA_HOTKEY HkMirrorYComponent( wxT( "Mirror Y Component" ), HK_MIRROR_Y_COMPONENT, 'Y' );
+static EDA_HOTKEY HkMirrorXComponent( wxT( "Mirror X Component" ), HK_MIRROR_X_COMPONENT, 'X' );
+static EDA_HOTKEY HkOrientNormalComponent( wxT( "Orient Normal Component" ),
                                               HK_ORIENT_NORMAL_COMPONENT, 'N' );
-static Ki_HotkeyInfo HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R' );
-static Ki_HotkeyInfo HkEdit( wxT( "Edit Schematic Item" ), HK_EDIT, 'E' );
-static Ki_HotkeyInfo HkEditComponentValue( wxT( "Edit Component Value" ),
+static EDA_HOTKEY HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R' );
+static EDA_HOTKEY HkEdit( wxT( "Edit Schematic Item" ), HK_EDIT, 'E' );
+static EDA_HOTKEY HkEditComponentValue( wxT( "Edit Component Value" ),
                                            HK_EDIT_COMPONENT_VALUE, 'V',
                                            ID_POPUP_SCH_EDIT_VALUE_CMP );
-static Ki_HotkeyInfo HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
+static EDA_HOTKEY HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
                                                HK_EDIT_COMPONENT_FOOTPRINT, 'F',
                                                ID_POPUP_SCH_EDIT_FOOTPRINT_CMP );
-static Ki_HotkeyInfo HkMove( wxT( "Move Schematic Item" ),
+static EDA_HOTKEY HkMove( wxT( "Move Schematic Item" ),
                              HK_MOVE_COMPONENT_OR_ITEM, 'M',
                              ID_POPUP_SCH_MOVE_ITEM );
 
-static Ki_HotkeyInfo HkCopyComponentOrText( wxT( "Copy Component or Label" ),
+static EDA_HOTKEY HkCopyComponentOrText( wxT( "Copy Component or Label" ),
                                             HK_COPY_COMPONENT_OR_LABEL, 'C',
                                             ID_POPUP_SCH_COPY_ITEM );
 
-static Ki_HotkeyInfo HkDrag( wxT( "Drag Schematic Item" ), HK_DRAG, 'G',
+static EDA_HOTKEY HkDrag( wxT( "Drag Schematic Item" ), HK_DRAG, 'G',
                              ID_POPUP_SCH_DRAG_CMP_REQUEST );
-static Ki_HotkeyInfo HkMove2Drag( wxT( "Move Block -> Drag Block" ),
+static EDA_HOTKEY HkMove2Drag( wxT( "Move Block -> Drag Block" ),
                                   HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
-static Ki_HotkeyInfo HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
-static Ki_HotkeyInfo HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
+static EDA_HOTKEY HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
+static EDA_HOTKEY HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
-static Ki_HotkeyInfo HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
-static Ki_HotkeyInfo HkFindNextItem( wxT( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5 );
-static Ki_HotkeyInfo HkFindNextDrcMarker( wxT( "Find Next DRC Marker" ), HK_FIND_NEXT_DRC_MARKER,
+static EDA_HOTKEY HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
+static EDA_HOTKEY HkFindNextItem( wxT( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5 );
+static EDA_HOTKEY HkFindNextDrcMarker( wxT( "Find Next DRC Marker" ), HK_FIND_NEXT_DRC_MARKER,
                                           WXK_F5 + GR_KB_SHIFT );
 
 // Special keys for library editor:
-static Ki_HotkeyInfo HkCreatePin( wxT( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
-static Ki_HotkeyInfo HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
-static Ki_HotkeyInfo HkMoveLibItem( wxT( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
+static EDA_HOTKEY HkCreatePin( wxT( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
+static EDA_HOTKEY HkInsertPin( wxT( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
+static EDA_HOTKEY HkMoveLibItem( wxT( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
 
 
 // List of common hotkey descriptors
-Ki_HotkeyInfo* s_Common_Hotkey_List[] =
+EDA_HOTKEY* s_Common_Hotkey_List[] =
 {
     &HkHelp,
     &HkZoomIn,
@@ -170,7 +170,7 @@ Ki_HotkeyInfo* s_Common_Hotkey_List[] =
 };
 
 // List of hotkey descriptors for schematic
-Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
+EDA_HOTKEY* s_Schematic_Hotkey_List[] =
 {
     &HkFindItem,
     &HkFindNextItem,
@@ -206,7 +206,7 @@ Ki_HotkeyInfo* s_Schematic_Hotkey_List[] =
 };
 
 // List of hotkey descriptors for library editor
-Ki_HotkeyInfo* s_LibEdit_Hotkey_List[] =
+EDA_HOTKEY* s_LibEdit_Hotkey_List[] =
 {
     &HkCreatePin,
     &HkInsertPin,
@@ -220,7 +220,7 @@ Ki_HotkeyInfo* s_LibEdit_Hotkey_List[] =
 
 // list of sections and corresponding hotkey list for eeschema (used to create
 // an hotkey config file)
-struct Ki_HotkeyInfoSectionDescriptor s_Eeschema_Hokeys_Descr[] =
+struct EDA_HOTKEY_CONFIG s_Eeschema_Hokeys_Descr[] =
 {
     { &g_CommonSectionTag,    s_Common_Hotkey_List,    L"Common keys"           },
     { &g_SchematicSectionTag, s_Schematic_Hotkey_List, L"Schematic editor keys" },
@@ -230,7 +230,7 @@ struct Ki_HotkeyInfoSectionDescriptor s_Eeschema_Hokeys_Descr[] =
 
 // list of sections and corresponding hotkey list for the schematic editor
 // (used to list current hotkeys)
-struct Ki_HotkeyInfoSectionDescriptor s_Schematic_Hokeys_Descr[] =
+struct EDA_HOTKEY_CONFIG s_Schematic_Hokeys_Descr[] =
 {
     { &g_CommonSectionTag,    s_Common_Hotkey_List,    NULL },
     { &g_SchematicSectionTag, s_Schematic_Hotkey_List, NULL },
@@ -239,7 +239,7 @@ struct Ki_HotkeyInfoSectionDescriptor s_Schematic_Hokeys_Descr[] =
 
 // list of sections and corresponding hotkey list for the component editor
 // (used to list current hotkeys)
-struct Ki_HotkeyInfoSectionDescriptor s_Libedit_Hokeys_Descr[] =
+struct EDA_HOTKEY_CONFIG s_Libedit_Hokeys_Descr[] =
 {
     { &g_CommonSectionTag,  s_Common_Hotkey_List,  NULL },
     { &g_LibEditSectionTag, s_LibEdit_Hotkey_List, NULL },
@@ -248,7 +248,7 @@ struct Ki_HotkeyInfoSectionDescriptor s_Libedit_Hokeys_Descr[] =
 
 // list of sections and corresponding hotkey list for the component browser
 // (used to list current hotkeys)
-struct Ki_HotkeyInfoSectionDescriptor s_Viewlib_Hokeys_Descr[] =
+struct EDA_HOTKEY_CONFIG s_Viewlib_Hokeys_Descr[] =
 {
     { &g_CommonSectionTag, s_Common_Hotkey_List, NULL },
     { NULL,                NULL,                 NULL }
@@ -282,7 +282,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         aHotKey += 'A' - 'a';
 
     // Search command from key :
-    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( aHotKey, s_Common_Hotkey_List );
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromHotkey( aHotKey, s_Common_Hotkey_List );
 
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( aHotKey, s_Schematic_Hotkey_List );
@@ -864,7 +864,7 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     if( (aHotKey >= 'a') && (aHotKey <= 'z') )
         aHotKey += 'A' - 'a';
 
-    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( aHotKey, s_Common_Hotkey_List );
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromHotkey( aHotKey, s_Common_Hotkey_List );
 
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( aHotKey, s_LibEdit_Hotkey_List );
