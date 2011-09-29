@@ -43,7 +43,6 @@ class BASE_SCREEN;
 class EDA_TOOLBAR;
 class PARAM_CFG_BASE;
 class Ki_PageDescr;
-class Ki_HotkeyInfo;
 class PLOTTER;
 
 enum id_librarytype {
@@ -139,7 +138,7 @@ public:
      * Read configuration data and fill the current hotkey list with hotkeys
      * @param aDescList = current hotkey list descr. to initialize.
      */
-    int ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList );
+    int ReadHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList );
 
     /**
      * Function WriteHotkeyConfig
@@ -152,8 +151,7 @@ public:
      * the output format is: shortcut  "key"  "function"
      * lines starting with # are comments
      */
-    int WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList,
-                           wxString* aFullFileName = NULL);
+    int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL);
 
     /**
      * Function ReadHotkeyConfigFile
@@ -162,22 +160,21 @@ public:
      * @param aFilename = file name to read.
      * @param aDescList = current hotkey list descr. to initialize.
      */
-    int ReadHotkeyConfigFile( const wxString& aFilename,
-                              struct Ki_HotkeyInfoSectionDescriptor* aDescList );
+    int ReadHotkeyConfigFile( const wxString& aFilename, struct EDA_HOTKEY_CONFIG* aDescList );
 
     /**
      * Function ImportHotkeyConfigFromFile
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialize.
      */
-    void ImportHotkeyConfigFromFile( struct Ki_HotkeyInfoSectionDescriptor* aDescList );
+    void ImportHotkeyConfigFromFile( struct EDA_HOTKEY_CONFIG* aDescList );
 
     /**
      * Function ExportHotkeyConfigToFile
      * Prompt the user for an old hotkey file to read, and read it.
      * @param aDescList = current hotkey list descr. to initialize.
      */
-    void ExportHotkeyConfigToFile( struct Ki_HotkeyInfoSectionDescriptor* aDescList );
+    void ExportHotkeyConfigToFile( struct EDA_HOTKEY_CONFIG* aDescList );
 
     /**
      * Function SetLanguage
@@ -284,7 +281,7 @@ public:
     wxPoint      m_Auxiliary_Axis_Position; // position of the auxiliary axis
 
 protected:
-    Ki_HotkeyInfoSectionDescriptor * m_HotkeysZoomAndGridList;
+    EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
     int          m_LastGridSizeId;
     bool         m_DrawGrid;                // hide/Show grid
     int          m_GridColor;               // Grid color

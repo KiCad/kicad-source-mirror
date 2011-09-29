@@ -1,6 +1,7 @@
-/***************/
-/* hotkeys.h */
-/***************/
+/**
+ * gerbview/hotkeys.h
+ */
+
 #ifndef KOTKEYS_H
 #define KOTKEYS_H
 
@@ -17,6 +18,6 @@ enum hotkey_id_commnand {
 };
 
 // List of hotkey descriptors for pcbnew
-extern struct Ki_HotkeyInfoSectionDescriptor s_Gerbview_Hokeys_Descr[];
+extern struct EDA_HOTKEY_CONFIG s_Gerbview_Hokeys_Descr[];
 
 #endif		// KOTKEYS_H

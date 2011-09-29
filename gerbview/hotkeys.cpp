@@ -14,8 +14,8 @@
 
 /* How to add a new hotkey:
  *  add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION.
- *  add a new Ki_HotkeyInfo entry like:
- *  static Ki_HotkeyInfo HkMyNewEntry(wxT("Command Label"), MY_NEW_ID_FUNCTION, default key value);
+ *  add a new EDA_HOTKEY entry like:
+ *  static EDA_HOTKEY HkMyNewEntry(wxT("Command Label"), MY_NEW_ID_FUNCTION, default key value);
  *      "Command Label" is the name used in hotkey list display, and the identifier in the
  *      hotkey list file MY_NEW_ID_FUNCTION is an equivalent id function used in the switch
  *      in OnHotKey() function.   default key value is the default hotkey for this command.
@@ -33,25 +33,25 @@
 
 /* local variables */
 /* Hotkey list: */
-static Ki_HotkeyInfo    HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
-                                           HK_RESET_LOCAL_COORD, ' ' );
-static Ki_HotkeyInfo    HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
-static Ki_HotkeyInfo    HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
-static Ki_HotkeyInfo    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
-static Ki_HotkeyInfo    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
-static Ki_HotkeyInfo    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
-static Ki_HotkeyInfo    HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
-static Ki_HotkeyInfo    HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
-static Ki_HotkeyInfo    HkTrackDisplayMode( wxT( "Track Display Mode" ),
-                                            HK_SWITCH_GBR_ITEMS_DISPLAY_MODE, 'F' );
+static EDA_HOTKEY    HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
+                                        HK_RESET_LOCAL_COORD, ' ' );
+static EDA_HOTKEY    HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
+static EDA_HOTKEY    HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
+static EDA_HOTKEY    HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
+static EDA_HOTKEY    HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
+static EDA_HOTKEY    HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+static EDA_HOTKEY    HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
+static EDA_HOTKEY    HkSwitchUnits( wxT( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
+static EDA_HOTKEY    HkTrackDisplayMode( wxT( "Track Display Mode" ),
+                                         HK_SWITCH_GBR_ITEMS_DISPLAY_MODE, 'F' );
 
-static Ki_HotkeyInfo    HkSwitch2NextCopperLayer( wxT( "Switch to Next Layer" ),
-                                                  HK_SWITCH_LAYER_TO_NEXT, '+' );
-static Ki_HotkeyInfo    HkSwitch2PreviousCopperLayer( wxT( "Switch to Previous Layer" ),
-                                                      HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
+static EDA_HOTKEY    HkSwitch2NextCopperLayer( wxT( "Switch to Next Layer" ),
+                                               HK_SWITCH_LAYER_TO_NEXT, '+' );
+static EDA_HOTKEY    HkSwitch2PreviousCopperLayer( wxT( "Switch to Previous Layer" ),
+                                                   HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
 // List of common hotkey descriptors
-Ki_HotkeyInfo* s_Gerbview_Hotkey_List[] = {
+EDA_HOTKEY* s_Gerbview_Hotkey_List[] = {
     &HkHelp,
     &HkZoomIn,                     &HkZoomOut,         &HkZoomRedraw, &HkZoomCenter,
     &HkZoomAuto,  &HkSwitchUnits,  &HkResetLocalCoord,
@@ -63,7 +63,7 @@ Ki_HotkeyInfo* s_Gerbview_Hotkey_List[] = {
 
 
 // list of sections and corresponding hotkey list for pcbnew (used to create an hotkey config file)
-struct Ki_HotkeyInfoSectionDescriptor s_Gerbview_Hokeys_Descr[] =
+struct EDA_HOTKEY_CONFIG s_Gerbview_Hokeys_Descr[] =
 {
     { &g_CommonSectionTag, s_Gerbview_Hotkey_List, NULL  },
     { NULL,                NULL,                   NULL  }
@@ -86,8 +86,10 @@ void GERBVIEW_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
     if( (hotkey >= 'a') && (hotkey <= 'z') )
         hotkey += 'A' - 'a';
 
-    Ki_HotkeyInfo * HK_Descr = GetDescriptorFromHotkey( hotkey, s_Gerbview_Hotkey_List );
-    if( HK_Descr == NULL ) return;
+    EDA_HOTKEY * HK_Descr = GetDescriptorFromHotkey( hotkey, s_Gerbview_Hotkey_List );
+
+    if( HK_Descr == NULL )
+        return;
 
     switch( HK_Descr->m_Idcommand )
     {

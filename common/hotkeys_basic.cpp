@@ -1,6 +1,6 @@
-/*********************/
-/* hotkeys_basic.cpp */
-/*********************/
+/**
+ * @file hotkeys_basic.cpp
+ */
 
 /* Some functions to handle hotkeys in kicad
  */
@@ -34,8 +34,7 @@ wxString g_ModuleEditSectionTag( wxT( "[footprinteditor]" ) );
  * file.
  */
 
-Ki_HotkeyInfo::Ki_HotkeyInfo( const wxChar* infomsg, int idcommand,
-                              int keycode, int idmenuevent )
+EDA_HOTKEY::EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent )
 {
     m_KeyCode = keycode;            // Key code (ascii value for ascii keys
     // or wxWidgets code for function key
@@ -47,7 +46,7 @@ Ki_HotkeyInfo::Ki_HotkeyInfo( const wxChar* infomsg, int idcommand,
 }
 
 
-Ki_HotkeyInfo::Ki_HotkeyInfo( const Ki_HotkeyInfo* base )
+EDA_HOTKEY::EDA_HOTKEY( const EDA_HOTKEY* base )
 {
     m_KeyCode     = base->m_KeyCode;
     m_InfoMsg     = base->m_InfoMsg;
@@ -154,6 +153,7 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
                 keyname = wxT( "<unknown>" );
                 break;
             }
+
             if( s_Hotkey_Name_List[ii].m_KeyCode == aKeycode )
             {
                 keyname = s_Hotkey_Name_List[ii].m_Name;
@@ -173,8 +173,8 @@ wxString ReturnKeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 
 /*
  * helper function use in AddHotkeyName to calculate an accelerator string
- * In some menus, accelerators do not perform exactely the same action as
- * the hotkey that perfoms a similar action.
+ * In some menus, accelerators do not perform exactly the same action as
+ * the hotkey that perform a similar action.
  * this is usually the case when this action uses the current mouse position
  * for instance zoom action is ran from the F1 key or the Zoom menu.
  * a zoom uses the mouse position from a hot key and not from the menu
@@ -199,14 +199,14 @@ static void AddModifierToKey( wxString& aFullKey, const wxString & aKey )
 /* AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  *  aText = a wxString. returns aText + key name
- *  aList = pointer to a Ki_HotkeyInfo list of commands
+ *  aList = pointer to a EDA_HOTKEY list of commands
  *  aCommandId = Command Id value
  *  aShortCutType = IS_HOTKEY to add <tab><keyname> (shortcuts in menus, same as hotkeys)
  *                  IS_ACCELERATOR to add <tab><Shift+keyname> (accelerators in menus, not hotkeys)
- *                  IS_COMMENT to add <spaces><(keyname)> mainly in tooltips
+ *                  IS_COMMENT to add <spaces><(keyname)> mainly in tool tips
  *  Return a wxString (aTest + key name) if key found or aText without modification
  */
-wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
+wxString AddHotkeyName( const wxString& aText, EDA_HOTKEY** aList,
                         int aCommandId, HOTKEY_ACTION_TYPE aShortCutType )
 {
     wxString msg = aText;
@@ -222,9 +222,11 @@ wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
             case IS_HOTKEY:
                 msg << wxT( "\t" ) << keyname;
                 break;
+
             case IS_ACCELERATOR:
                 AddModifierToKey( msg, keyname );
                 break;
+
             case IS_COMMENT:
                 msg << wxT( " (" ) << keyname << wxT( ")" );
                 break;
@@ -238,21 +240,21 @@ wxString AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
 /* AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  *  aText = a wxString. returns aText + key name
- *  aList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
+ *  aList = pointer to a EDA_HOTKEY_CONFIG DescrList of commands
  *  aCommandId = Command Id value
  *  aShortCutType = IS_HOTKEY to add <tab><keyname> (active shortcuts in menus)
  *                  IS_ACCELERATOR to add <tab><Shift+keyname> (active accelerators in menus)
  *                  IS_COMMENT to add <spaces><(keyname)>
  * Return a wxString (aText + key name) if key found or aText without modification
  */
-wxString AddHotkeyName( const wxString&                        aText,
-                        struct Ki_HotkeyInfoSectionDescriptor* aDescList,
-                        int                                    aCommandId,
-                        HOTKEY_ACTION_TYPE                     aShortCutType )
+wxString AddHotkeyName( const wxString&           aText,
+                        struct EDA_HOTKEY_CONFIG* aDescList,
+                        int                       aCommandId,
+                        HOTKEY_ACTION_TYPE        aShortCutType )
 {
-    wxString        msg = aText;
-    wxString        keyname;
-    Ki_HotkeyInfo** List;
+    wxString     msg = aText;
+    wxString     keyname;
+    EDA_HOTKEY** List;
 
     if( aDescList )
     {
@@ -268,9 +270,11 @@ wxString AddHotkeyName( const wxString&                        aText,
                     case IS_HOTKEY:
                         msg << wxT( "\t" ) << keyname;
                         break;
+
                     case IS_ACCELERATOR:
                         AddModifierToKey( msg, keyname );
                         break;
+
                     case IS_COMMENT:
                         msg << wxT( " (" ) << keyname << wxT( ")" );
                         break;
@@ -287,17 +291,17 @@ wxString AddHotkeyName( const wxString&                        aText,
 /**
  * Function ReturnKeyNameFromCommandId
  * return the key name from the Command id value ( m_Idcommand member value)
- * @param aList = pointer to a Ki_HotkeyInfo list of commands
+ * @param aList = pointer to a EDA_HOTKEY list of commands
  * @param aCommandId = Command Id value
  * @return the key name in a wxString
  */
-wxString ReturnKeyNameFromCommandId( Ki_HotkeyInfo** aList, int aCommandId )
+wxString ReturnKeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId )
 {
     wxString keyname;
 
     for( ; *aList != NULL; aList++ )
     {
-        Ki_HotkeyInfo* hk_decr = *aList;
+        EDA_HOTKEY* hk_decr = *aList;
 
         if( hk_decr->m_Idcommand == aCommandId )
         {
@@ -373,15 +377,14 @@ int ReturnKeyCodeFromKeyName( const wxString& keyname )
 
 /* DisplayHotkeyList
  * Displays the current hotkey list
- * aList = a Ki_HotkeyInfoSectionDescriptor list(Null terminated)
+ * aList = a EDA_HOTKEY_CONFIG list(Null terminated)
  */
-void DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
-                        struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+void DisplayHotkeyList( EDA_DRAW_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescList )
 {
-    wxString        keyname;
-    Ki_HotkeyInfo** List;
+    wxString     keyname;
+    EDA_HOTKEY** List;
 
-    wxString        msg = wxT( "<html><body bgcolor=\"#E2E2E2\">" );
+    wxString     msg = wxT( "<html><body bgcolor=\"#E2E2E2\">" );
 
     msg += wxT( "<H3>");
     msg += _("Hotkeys List");
@@ -393,7 +396,8 @@ void DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
 
         for( ; *List != NULL; List++ )
         {
-            Ki_HotkeyInfo* hk_decr = *List;
+            EDA_HOTKEY* hk_decr = *List;
+
             if( !hk_decr->m_InfoMsg.Contains( wxT( "Macros" ) ) )
             {
                 keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
@@ -410,16 +414,17 @@ void DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
 
 /**
  * Function GetDescriptorFromHotkey
- * Return a Ki_HotkeyInfo * pointer fron a key code for OnHotKey() function
+ * Return a EDA_HOTKEY * pointer from a key code for OnHotKey() function
  * @param aKey = key code (ascii value, or wxWidgets value for function keys
- * @param aList = pointer to a Ki_HotkeyInfo list of commands
- * @return the corresponding Ki_HotkeyInfo pointer from the Ki_HotkeyInfo List
+ * @param aList = pointer to a EDA_HOTKEY list of commands
+ * @return the corresponding EDA_HOTKEY pointer from the EDA_HOTKEY List
  */
-Ki_HotkeyInfo* GetDescriptorFromHotkey( int aKey, Ki_HotkeyInfo** aList )
+EDA_HOTKEY* GetDescriptorFromHotkey( int aKey, EDA_HOTKEY** aList )
 {
     for( ; *aList != NULL; aList++ )
     {
-        Ki_HotkeyInfo* hk_decr = *aList;
+        EDA_HOTKEY* hk_decr = *aList;
+
         if( hk_decr->m_KeyCode == aKey )
             return hk_decr;
     }
@@ -434,13 +439,13 @@ Ki_HotkeyInfo* GetDescriptorFromHotkey( int aKey, Ki_HotkeyInfo** aList )
  * It is stored using the standard wxConfig mechanism or a file.
  *
  * @param aDescList = pointer to the current hotkey list.
- * @param aFullFileName = a wxString pointer to a fuill file name.
+ * @param aFullFileName = a wxString pointer to a full file name.
  *  if NULL, use the standard wxConfig mechanism (default)
  * the output format is: shortcut  "key"  "function"
  * lines starting with # are comments
  */
-int EDA_BASE_FRAME::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList,
-                                       wxString*                              aFullFileName )
+int EDA_BASE_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
+                                       wxString*                 aFullFileName )
 {
     wxString msg;
     wxString keyname, infokey;
@@ -448,7 +453,7 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aD
     msg = wxT( "$hotkey list\n" );
 
     /* Print the current hotkey list */
-    Ki_HotkeyInfo** List;
+    EDA_HOTKEY** List;
 
     for( ; aDescList->m_HK_InfoList != NULL; aDescList++ )
     {
@@ -466,7 +471,7 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aD
 
         for( ; *List != NULL; List++ )
         {
-            Ki_HotkeyInfo* hk_decr = *List;
+            EDA_HOTKEY* hk_decr = *List;
             msg    += wxT( "shortcut   " );
             keyname = ReturnKeyNameFromKeyCode( hk_decr->m_KeyCode );
             AddDelimiterString( keyname );
@@ -509,8 +514,8 @@ int EDA_BASE_FRAME::WriteHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aD
  * @param aFilename = file name to read.
  * @param aDescList = current hotkey list descr. to initialise.
  */
-int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&                        aFilename,
-                                          struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&           aFilename,
+                                          struct EDA_HOTKEY_CONFIG* aDescList )
 {
     wxFile cfgfile( aFilename );
 
@@ -534,8 +539,7 @@ int EDA_BASE_FRAME::ReadHotkeyConfigFile( const wxString&                       
     return 1;
 }
 
-void ReadHotkeyConfig( const wxString&                        Appname,
-                       struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescList )
 {
     wxConfig config( Appname );
 
@@ -553,9 +557,9 @@ void ReadHotkeyConfig( const wxString&                        Appname,
 
 /* Function ReadHotkeyConfig
  * Read configuration data and fill the current hotkey list with hotkeys
- * aDescList is the current hotkey list descr. to initialise.
+ * aDescList is the current hotkey list descr. to initialize.
  */
-int EDA_BASE_FRAME::ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+int EDA_BASE_FRAME::ReadHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList )
 {
     ::ReadHotkeyConfig( m_FrameName, aDescList );
     return 1;
@@ -567,12 +571,12 @@ int EDA_BASE_FRAME::ReadHotkeyConfig( struct Ki_HotkeyInfoSectionDescriptor* aDe
  * lines starting by # are ignored (comments)
  * lines like [xxx] are tags (example: [common] or [libedit] which identify sections
  */
-void ParseHotkeyConfig( const wxString&                        data,
-                        struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+void ParseHotkeyConfig( const wxString&           data,
+                        struct EDA_HOTKEY_CONFIG* aDescList )
 {
     /* Read the config */
     wxStringTokenizer tokenizer( data, L"\r\n", wxTOKEN_STRTOK );
-    Ki_HotkeyInfo**   CurrentHotkeyList = 0;
+    EDA_HOTKEY**      CurrentHotkeyList = 0;
 
     while( tokenizer.HasMoreTokens() )
     {
@@ -580,13 +584,14 @@ void ParseHotkeyConfig( const wxString&                        data,
         wxStringTokenizer lineTokenizer( line );
 
         wxString          line_type = lineTokenizer.GetNextToken();
+
         if( line_type[0]  == '#' ) //comment
             continue;
 
         if( line_type[0]  == '[' ) // A tag is found. search infos in list
         {
             CurrentHotkeyList = 0;
-            Ki_HotkeyInfoSectionDescriptor* DList = aDescList;
+            EDA_HOTKEY_CONFIG* DList = aDescList;
 
             for( ; DList->m_HK_InfoList; DList++ )
             {
@@ -619,9 +624,10 @@ void ParseHotkeyConfig( const wxString&                        data,
         wxString fctname = remainder.AfterFirst( '\"' ).BeforeFirst( '\"' );
 
         /* search the hotkey in current hotkey list */
-        for( Ki_HotkeyInfo** List = CurrentHotkeyList; *List != NULL; List++ )
+        for( EDA_HOTKEY** List = CurrentHotkeyList; *List != NULL; List++ )
         {
-            Ki_HotkeyInfo* hk_decr = *List;
+            EDA_HOTKEY* hk_decr = *List;
+
             if( hk_decr->m_InfoMsg == fctname )
             {
                 int code = ReturnKeyCodeFromKeyName( keyname );
@@ -639,9 +645,9 @@ void ParseHotkeyConfig( const wxString&                        data,
 /**
  * Function ImportHotkeyConfigFromFile
  * Prompt the user for an old hotkey file to read, and read it.
- * @param aDescList = current hotkey list descr. to initialise.
+ * @param aDescList = current hotkey list descr. to initialize.
  */
-void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( struct EDA_HOTKEY_CONFIG* aDescList )
 {
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;
@@ -667,9 +673,9 @@ void EDA_BASE_FRAME::ImportHotkeyConfigFromFile( struct Ki_HotkeyInfoSectionDesc
 /**
  * Function ExportHotkeyConfigToFile
  * Prompt the user for an old hotkey file to read, and read it.
- * @param aDescList = current hotkey list descr. to initialise.
+ * @param aDescList = current hotkey list descr. to initialize.
  */
-void EDA_BASE_FRAME::ExportHotkeyConfigToFile( struct Ki_HotkeyInfoSectionDescriptor* aDescList )
+void EDA_BASE_FRAME::ExportHotkeyConfigToFile( struct EDA_HOTKEY_CONFIG* aDescList )
 {
     wxString ext  = DEFAULT_HOTKEY_FILENAME_EXT;
     wxString mask = wxT( "*." ) + ext;

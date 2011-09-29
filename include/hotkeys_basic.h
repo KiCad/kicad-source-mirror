@@ -1,6 +1,6 @@
-/*******************/
-/* hotkeys_basic.h */
-/*******************/
+/**
+ * @file hotkeys_basic.h
+ */
 
 /* Some functions to handle hotkeys in kicad
  */
@@ -17,39 +17,42 @@ class EDA_DRAW_FRAME;
 /* Class to handle hotkey commands. hotkeys have a default value
  *  This class allows the real key code changed by user(from a key code list file)
  */
-class Ki_HotkeyInfo
+class EDA_HOTKEY
 {
 public:
-    int      m_KeyCode;             // Key code (ascii value for ascii keys or wxWidgets code for function key
-    wxString m_InfoMsg;             // info message.
-    int      m_Idcommand;           // internal id for the corresponding command (see hotkey_id_commnand list)
-    int      m_IdMenuEvent;         // id to call the corresponding event (if any) (see id.h)
+    int      m_KeyCode;      // Key code (ascii value for ascii keys or wxWidgets code for function key
+    wxString m_InfoMsg;      // info message.
+    int      m_Idcommand;    // internal id for the corresponding command (see hotkey_id_commnand list)
+    int      m_IdMenuEvent;  // id to call the corresponding event (if any) (see id.h)
 
 public:
-    Ki_HotkeyInfo( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent = 0 );
-    Ki_HotkeyInfo( const Ki_HotkeyInfo* base);
+    EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent = 0 );
+    EDA_HOTKEY( const EDA_HOTKEY* base);
 };
 
-/* handle a Section name and the corresponding list of hotkeys (Ki_HotkeyInfo list)
+
+/**
+ * Structure EDA_HOTKEY_CONFIG
+ * contains the information required to save hot key information to a configuration file.
+ * a Section name and the corresponding list of hotkeys (EDA_HOTKEY list)
  * hotkeys are grouped by section.
- * a section is a list of hotkey infos ( a Ki_HotkeyInfo list).
- * A full list of hoteys can used one or many sections
+ * a section is a list of hotkey infos ( a EDA_HOTKEY list).
+ * A full list of hotkeys can used one or many sections
  * for instance:
  *    the schematic editor uses a common section (zoom hotkeys list ..) and a specific section
  *    the library editor uses the same common section and a specific section
  * this feature avoid duplications and made hotkey file config easier to understand and edit
  */
-struct Ki_HotkeyInfoSectionDescriptor
+struct EDA_HOTKEY_CONFIG
 {
 public:
-    wxString*       m_SectionTag;           // The section name
-    Ki_HotkeyInfo** m_HK_InfoList;          // List of Ki_HotkeyInfo pointers
-    const wchar_t*      m_Comment;             // comment: will be printed in the config file
-                                            // Info usage only
+    wxString*       m_SectionTag;     // The configuration file section name.
+    EDA_HOTKEY**    m_HK_InfoList;    // List of EDA_HOTKEY pointers
+    const wchar_t*  m_Comment;        // Will be printed in the config file only.
 };
 
 /* Identifiers (tags) in key code configuration file (or section names)
- *  .m_SectionTag member of a Ki_HotkeyInfoSectionDescriptor
+ *  .m_SectionTag member of a EDA_HOTKEY_CONFIG
  */
 extern wxString g_CommonSectionTag;
 extern wxString g_SchematicSectionTag;
@@ -77,11 +80,11 @@ wxString        ReturnKeyNameFromKeyCode( int aKeycode, bool * aIsFound = NULL )
 /**
  * Function ReturnKeyNameFromCommandId
  * return the key name from the Command id value ( m_Idcommand member value)
- * @param aList = pointer to a Ki_HotkeyInfo list of commands
+ * @param aList = pointer to a EDA_HOTKEY list of commands
  * @param aCommandId = Command Id value
  * @return the key name in a wxString
  */
-wxString        ReturnKeyNameFromCommandId( Ki_HotkeyInfo** aList, int aCommandId );
+wxString        ReturnKeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId );
 
 /**
  * Function ReturnKeyCodeFromKeyName
@@ -98,7 +101,7 @@ int ReturnKeyCodeFromKeyName( const wxString& keyname );
  * Hot keys can perform actions using the current mouse cursor position
  * Accelerators performs the same action as the associated menu
  * A comment is used in tool tips for some tools (zoom ..)
- *    to show the hot key that perfoms this action
+ *    to show the hot key that performs this action
  */
 enum HOTKEY_ACTION_TYPE
 {
@@ -111,48 +114,44 @@ enum HOTKEY_ACTION_TYPE
  * Function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  * @param aText = a wxString. returns aText + key name
- * @param aList = pointer to a Ki_HotkeyInfo list of commands
+ * @param aList = pointer to a EDA_HOTKEY list of commands
  * @param aCommandId = Command Id value
- * @param aIsShortCut = true to add &lttab&gt&ltkeyname&gt (active shortcuts in menus)
- *                    = false to add &ltspaces&gt&lt(keyname)&gt
+ * @param aShortCutType The #HOTKEY_ACTION_TYPE of the shortcut.
  * @return a wxString (aTest + key name) if key found or aText without modification
  */
-wxString        AddHotkeyName( const wxString& aText, Ki_HotkeyInfo** aList,
-                               int  aCommandId,
-                               HOTKEY_ACTION_TYPE aShortCutType = IS_HOTKEY);
+wxString AddHotkeyName( const wxString& aText, EDA_HOTKEY** aList, int aCommandId,
+                        HOTKEY_ACTION_TYPE aShortCutType = IS_HOTKEY);
 
 /**
  * Function AddHotkeyName
  * Add the key name from the Command id value ( m_Idcommand member value)
  * @param aText = a wxString. returns aText + key name
- * @param aDescrList = pointer to a Ki_HotkeyInfoSectionDescriptor DescrList of commands
+ * @param aDescrList = pointer to a EDA_HOTKEY_CONFIG DescrList of commands
  * @param aCommandId = Command Id value
- * @param aIsShortCut = true to add &lttab&gt&ltkeyname&gt (active shortcuts in menus)
- *                    = false to add &ltspaces&gt&lt(keyname)&gt
+ * @param aShortCutType The #HOTKEY_ACTION_TYPE of the shortcut.
  * @return a wxString (aTest + key name) if key found or aText without modification
  */
-wxString        AddHotkeyName( const wxString&                        aText,
-                               struct Ki_HotkeyInfoSectionDescriptor* aDescrList,
-                               int                                    aCommandId,
-                               HOTKEY_ACTION_TYPE           aShortCutType = IS_HOTKEY );
+wxString AddHotkeyName( const wxString&           aText,
+                        struct EDA_HOTKEY_CONFIG* aDescrList,
+                        int                       aCommandId,
+                        HOTKEY_ACTION_TYPE        aShortCutType = IS_HOTKEY );
 
 /**
  * Function DisplayHotkeyList
  * Displays the current hotkey list
  * @param aFrame = current active frame
- * @param aList = pointer to a Ki_HotkeyInfoSectionDescriptor list (Null terminated)
+ * @param aList = pointer to a EDA_HOTKEY_CONFIG list (Null terminated)
  */
-void            DisplayHotkeyList( EDA_DRAW_FRAME*                        aFrame,
-                                   struct Ki_HotkeyInfoSectionDescriptor* aList );
+void DisplayHotkeyList( EDA_DRAW_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aList );
 
 /**
  * Function GetDescriptorFromHotkey
- * Return a Ki_HotkeyInfo * pointer fron a key code for OnHotKey() function
+ * Return a EDA_HOTKEY * pointer from a key code for OnHotKey() function
  * @param aKey = key code (ascii value, or wxWidgets value for function keys
- * @param aList = pointer to a Ki_HotkeyInfo list of commands
- * @return the corresponding Ki_HotkeyInfo pointer from the Ki_HotkeyInfo List
+ * @param aList = pointer to a EDA_HOTKEY list of commands
+ * @return the corresponding EDA_HOTKEY pointer from the EDA_HOTKEY List
  */
-Ki_HotkeyInfo*  GetDescriptorFromHotkey( int aKey, Ki_HotkeyInfo** aList );
+EDA_HOTKEY*  GetDescriptorFromHotkey( int aKey, EDA_HOTKEY** aList );
 
 /**
  * Function ReadHotkeyConfig
@@ -161,11 +160,9 @@ Ki_HotkeyInfo*  GetDescriptorFromHotkey( int aKey, Ki_HotkeyInfo** aList );
  * @param Appname = the value of the app's m_FrameName
  * @param aDescList = the hotkey data
 */
-void            ReadHotkeyConfig( const wxString&                        Appname,
-                                  struct Ki_HotkeyInfoSectionDescriptor* aDescList );
+void ReadHotkeyConfig( const wxString& Appname, struct EDA_HOTKEY_CONFIG* aDescList );
 
-void            ParseHotkeyConfig( const wxString&                        data,
-                                   struct Ki_HotkeyInfoSectionDescriptor* aDescList );
+void ParseHotkeyConfig( const wxString& data, struct EDA_HOTKEY_CONFIG* aDescList );
 
 
 // common hotkeys event id

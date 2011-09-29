@@ -43,7 +43,7 @@ public:
     bool SetLayersOrdered(bool value);
     bool SetLayersHotkeys(bool value);
     // Hotkey Info
-    struct Ki_HotkeyInfoSectionDescriptor* m_hotkeys;
+    struct EDA_HOTKEY_CONFIG* m_hotkeys;
 };
 
 #define DECLARE_LAYERS_HOTKEY(list) int list[LAYER_COUNT] = \

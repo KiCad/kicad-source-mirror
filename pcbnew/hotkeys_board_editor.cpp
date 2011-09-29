@@ -22,52 +22,39 @@
  */
 
 
-/**
- * Function RecordMacros.
- * Record sequence hotkeys and cursor position to macros.
- * @param aDC = current device context
- * @param aNumber The current number macros.
- */
 void PCB_EDIT_FRAME::RecordMacros(wxDC* aDC, int aNumber)
 {
-    assert(aNumber >= 0);
-    assert(aNumber < 10);
+    assert( aNumber >= 0 );
+    assert( aNumber < 10 );
     wxString msg, tmp;
 
     if( m_RecordingMacros < 0 )
     {
         m_RecordingMacros = aNumber;
-        m_Macros[aNumber].m_StartPosition = GetScreen()->GetCrossHairPosition(false);
+        m_Macros[aNumber].m_StartPosition = GetScreen()->GetCrossHairPosition( false );
         m_Macros[aNumber].m_Record.clear();
 
-        msg.Printf( wxT("%s %d"), _( "Recording macros" ), aNumber);
-        SetStatusText(msg);
+        msg.Printf( wxT( "%s %d" ), _( "Recording macros" ), aNumber );
+        SetStatusText( msg );
     }
     else
     {
         m_RecordingMacros = -1;
 
-        msg.Printf( wxT("%s %d %s"), _( "Macros" ), aNumber, _( "recorded" ));
-        SetStatusText(msg);
+        msg.Printf( wxT( "%s %d %s" ), _( "Macros" ), aNumber, _( "recorded" ) );
+        SetStatusText( msg );
     }
 }
 
 
-/**
- * Function CallMacros
- * play hotkeys and cursor position from recorded macros.
- * @param aDC = current device context
- * @param aPosition The current cursor position in logical (drawing) units.
- * @param aNumber The current number macros.
-*/
-void PCB_EDIT_FRAME::CallMacros(wxDC* aDC, const wxPoint& aPosition, int aNumber)
+void PCB_EDIT_FRAME::CallMacros( wxDC* aDC, const wxPoint& aPosition, int aNumber )
 {
     PCB_SCREEN* screen = GetScreen();
     wxPoint tPosition;
 
     wxString msg;
 
-    msg.Printf( wxT("%s %d"), _( "Call macros"), aNumber);
+    msg.Printf( wxT( "%s %d" ), _( "Call macros" ), aNumber );
     SetStatusText( msg );
 
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
@@ -97,15 +84,6 @@ void PCB_EDIT_FRAME::CallMacros(wxDC* aDC, const wxPoint& aPosition, int aNumber
 }
 
 
-/**
- * Function OnHotKey.
- *  ** Commands are case insensitive **
- * Some commands are relatives to the item under the mouse cursor
- * @param aDC = current device context
- * @param aHotkeyCode = hotkey code (ascii or wxWidget code for special keys)
- * @param aPosition The current cursor position in logical (drawing) units.
- * @param aItem = NULL or pointer on a EDA_ITEM under the mouse cursor
- */
 void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition,
                                EDA_ITEM* aItem )
 {
@@ -124,7 +102,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     if( (aHotkeyCode >= 'a') && (aHotkeyCode <= 'z') )
         aHotkeyCode += 'A' - 'a';
 
-    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, common_Hotkey_List );
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, common_Hotkey_List );
 
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, board_edit_Hotkey_List );
@@ -646,18 +624,6 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 }
 
 
-/**
- * Function OnHotkeyDeleteItem
- * Delete the item found under the mouse cursor
- *  Depending on the current active tool::
- *      Tool track
- *          if a track is in progress: Delete the last segment
- *          else delete the entire track
- *      Tool module (footprint):
- *          Delete the module.
- * @param aDC = current device context
- * @return true if an item was deleted
- */
 bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
 {
     BOARD_ITEM* item = GetCurItem();
@@ -823,14 +789,7 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
     return false;
 }
 
-/**
- * Function OnHotkeyMoveItem
- * Move or drag the item (footprint, track, text .. ) found under the mouse cursor
- * An item can be moved (or dragged) only if there is no item currently edited
- * Only a footprint, a pad or a track can be dragged
- * @param aIdCommand = the hotkey command id
- * @return true if an item was moved
- */
+
 bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();

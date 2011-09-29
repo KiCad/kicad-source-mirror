@@ -17,7 +17,8 @@
 #include "pcbplot.h"
 
 
-bool PCB_BASE_FRAME::Genere_HPGL( const wxString& FullFileName, int Layer, GRTraceMode trace_mode )
+bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer,
+                                       GRTraceMode aTraceMode )
 {
     wxSize        SheetSize;
     wxSize        BoardSize;
@@ -27,7 +28,7 @@ bool PCB_BASE_FRAME::Genere_HPGL( const wxString& FullFileName, int Layer, GRTra
     double        scale;
     wxPoint       offset;
 
-    FILE* output_file = wxFopen( FullFileName, wxT( "wt" ) );
+    FILE* output_file = wxFopen( aFullFileName, wxT( "wt" ) );
 
     if( output_file == NULL )
     {
@@ -40,8 +41,7 @@ bool PCB_BASE_FRAME::Genere_HPGL( const wxString& FullFileName, int Layer, GRTra
     int pen_diam = wxRound( (g_PcbPlotOptions.m_HPGLPenDiam * U_PCB) /
                             g_PcbPlotOptions.m_PlotScale );
 
-    // compute pen_overlay (from g_m_HPGLPenOvr in mils)
-    // with plot scale
+    // compute pen_overlay (from g_m_HPGLPenOvr in mils) with plot scale
     if( g_PcbPlotOptions.m_HPGLPenOvr < 0 )
         g_PcbPlotOptions.m_HPGLPenOvr = 0;
 
@@ -100,19 +100,18 @@ bool PCB_BASE_FRAME::Genere_HPGL( const wxString& FullFileName, int Layer, GRTra
     plotter->set_viewport( offset, scale, g_PcbPlotOptions.m_PlotMirror );
     plotter->set_default_line_width( g_PcbPlotOptions.m_PlotLineWidth );
     plotter->set_creator( wxT( "PCBNEW-HPGL" ) );
-    plotter->set_filename( FullFileName );
+    plotter->set_filename( aFullFileName );
     plotter->set_pen_speed( g_PcbPlotOptions.m_HPGLPenSpeed );
     plotter->set_pen_number( g_PcbPlotOptions.m_HPGLPenNum );
     plotter->set_pen_overlap( pen_overlay );
     plotter->set_pen_diameter( pen_diam );
     plotter->start_plot( output_file );
 
-    /* The worksheet is not significant with scale!=1... It is with
-     * paperscale!=1, anyway */
+    /* The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway */
     if( g_PcbPlotOptions.m_PlotFrameRef && !Center )
         PlotWorkSheet( plotter, GetScreen() );
 
-    Plot_Layer( plotter, Layer, trace_mode );
+    Plot_Layer( plotter, aLayer, aTraceMode );
     plotter->end_plot();
     delete plotter;
     SetLocaleTo_Default();

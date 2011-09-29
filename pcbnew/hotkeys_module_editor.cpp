@@ -1,6 +1,6 @@
-/*****************************/
-/* hotkeys_module_editor.cpp */
-/*****************************/
+/**
+ * @file hotkeys_module_editor.cpp
+ */
 
 #include "fctsys.h"
 #include "pcbnew.h"
@@ -36,7 +36,7 @@ void FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
     if( (aHotKey >= 'a') && (aHotKey <= 'z') )
         aHotKey += 'A' - 'a';
 
-    Ki_HotkeyInfo* HK_Descr = GetDescriptorFromHotkey( aHotKey, common_Hotkey_List );
+    EDA_HOTKEY* HK_Descr = GetDescriptorFromHotkey( aHotKey, common_Hotkey_List );
 
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( aHotKey, module_edit_Hotkey_List );

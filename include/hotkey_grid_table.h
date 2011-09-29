@@ -18,10 +18,10 @@ class HotkeyGridTable : public wxGridTableBase
 {
 
 public:
-    typedef std::pair< wxString, Ki_HotkeyInfo* > hotkey_spec;
+    typedef std::pair< wxString, EDA_HOTKEY* > hotkey_spec;
     typedef std::vector< hotkey_spec > hotkey_spec_vector;
 
-    HotkeyGridTable( struct Ki_HotkeyInfoSectionDescriptor* origin );
+    HotkeyGridTable( struct EDA_HOTKEY_CONFIG* origin );
     virtual ~HotkeyGridTable();
     hotkey_spec_vector& getHotkeys();
 
@@ -47,7 +47,7 @@ private:
 public:
     virtual bool isHeader( int row );
     virtual void SetKeyCode( int row, long key );
-    virtual void RestoreFrom( struct Ki_HotkeyInfoSectionDescriptor* origin );
+    virtual void RestoreFrom( struct EDA_HOTKEY_CONFIG* origin );
 
 protected:
    std::vector< hotkey_spec > m_hotkeys;

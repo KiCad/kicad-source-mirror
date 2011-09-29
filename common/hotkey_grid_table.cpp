@@ -4,24 +4,23 @@
  *  Reads the hotkey table from its stored format into a format suitable
  *  for a wxGrid.
  */
-HotkeyGridTable::HotkeyGridTable( struct
-                                  Ki_HotkeyInfoSectionDescriptor* origin ) :
+HotkeyGridTable::HotkeyGridTable( struct EDA_HOTKEY_CONFIG* origin ) :
     wxGridTableBase(),
     m_hotkeys()
 {
-    Ki_HotkeyInfoSectionDescriptor* section;
+    EDA_HOTKEY_CONFIG* section;
 
     for( section = origin; section->m_HK_InfoList; section++ )
     {
-        hotkey_spec     spec( *section->m_SectionTag, new Ki_HotkeyInfo( NULL, 0, 0 ) );
+        hotkey_spec     spec( *section->m_SectionTag, new EDA_HOTKEY( NULL, 0, 0 ) );
         m_hotkeys.push_back( spec );
 
-        Ki_HotkeyInfo** info_ptr;
+        EDA_HOTKEY** info_ptr;
+
         for( info_ptr = section->m_HK_InfoList; *info_ptr; info_ptr++ )
         {
-            Ki_HotkeyInfo* info = *info_ptr;
-            hotkey_spec    spec( *section->m_SectionTag,
-                                new Ki_HotkeyInfo( info ) );
+            EDA_HOTKEY* info = *info_ptr;
+            hotkey_spec    spec( *section->m_SectionTag, new EDA_HOTKEY( info ) );
             m_hotkeys.push_back( spec );
         }
     }
@@ -165,19 +164,19 @@ void HotkeyGridTable::SetKeyCode( int row, long key )
 }
 
 
-void HotkeyGridTable::RestoreFrom( struct
-                                   Ki_HotkeyInfoSectionDescriptor* origin )
+void HotkeyGridTable::RestoreFrom( struct EDA_HOTKEY_CONFIG* origin )
 {
     int row = 0;
-    Ki_HotkeyInfoSectionDescriptor* section;
+    EDA_HOTKEY_CONFIG* section;
 
     for( section = origin; section->m_HK_InfoList; section++ )
     {
         ++row;
-        Ki_HotkeyInfo** info_ptr;
+        EDA_HOTKEY** info_ptr;
+
         for( info_ptr = section->m_HK_InfoList; *info_ptr; info_ptr++ )
         {
-            Ki_HotkeyInfo* info = *info_ptr;
+            EDA_HOTKEY* info = *info_ptr;
             m_hotkeys[row++].second->m_KeyCode = info->m_KeyCode;
         }
     }

@@ -173,16 +173,21 @@ public:
     void OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent );
 
     /**
-     * Function RecordMacros
-     * record sequence hotkeys and cursor position to macros.
+     * Function RecordMacros.
+     * records sequence of hotkeys and cursor positions to a macro.
+     * @param aDC = current device context
+     * @param aNumber The current number macros.
      */
-    void RecordMacros(wxDC* aDC, int aNumber);
+    void RecordMacros( wxDC* aDC, int aNumber );
 
     /**
      * Function CallMacros
-     * play hotkeys and cursor position from recorded macros.
+     * play hotkeys and cursor position from a recorded macro.
+     * @param aDC = current device context
+     * @param aPosition The current cursor position in logical (drawing) units.
+     * @param aNumber The current number macros.
      */
-    void CallMacros(wxDC* aDC, const wxPoint& aPosition, int aNumber);
+    void CallMacros( wxDC* aDC, const wxPoint& aPosition, int aNumber );
 
     void SaveMacros();
 
