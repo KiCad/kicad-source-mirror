@@ -1,6 +1,7 @@
-/************************************************************/
-/*  eeschema: undo and redo functions for schematic editor  */
-/************************************************************/
+/**
+ * @file schematic_undo_redo.cpp
+ * @brief Eeschema undo and redo functions for schematic editor.
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"

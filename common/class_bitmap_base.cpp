@@ -1,12 +1,12 @@
-/********************/
-/* sch_bitmap.cpp */
-/********************/
+/**
+ * @file sch_bitmap.cpp
+ */
 
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -1,6 +1,7 @@
-/*************************/
-/** class LIB_CIRCLE **/
-/*************************/
+/**
+ * @file lib_circle.cpp
+ * @brief LIB_CIRCLE class definition
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -72,7 +73,7 @@ bool LIB_CIRCLE::Load( char* aLine, wxString& aErrorMsg )
 /**
  * Function HitTest
  * tests if the given wxPoint is within the bounds of this object.
- * @param aPosRef A wxPoint to test in eeschema space
+ * @param aPosRef A wxPoint to test in Eeschema space
  * @return - true if a hit, else false
  */
 bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )

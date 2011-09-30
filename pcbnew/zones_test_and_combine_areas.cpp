@@ -260,7 +260,7 @@ int BOARD::TestAreaPolygon( ZONE_CONTAINER* CurrArea )
  * @param aCurrArea = the zone to process
  * @param bMessageBoxInt == true, shows message when clipping occurs.
  * @param  bMessageBoxArc == true, shows message when clipping can't be done due to arcs.
- * @param bRetainArcs = true to handle arcs (not really used in kicad)
+ * @param bRetainArcs = true to handle arcs (not really used in KiCad)
  * @return:
  *  -1 if arcs intersect other sides, so polygon can't be clipped
  *   0 if no intersecting sides

@@ -46,7 +46,7 @@ void CreateKeyFile()
         fprintf( kdebugFile, "LASTACC {%s}; # last access time\n",sDate_Time );
 
         fprintf( kdebugFile, "LIBNAME trial;\n" );
-        fprintf( kdebugFile, "UNITS;\n# Internal pcbnew units are in 0.0001 inch\n" );
+        fprintf( kdebugFile, "UNITS;\n# Internal Pcbnew units are in 0.0001 inch\n" );
         fprintf( kdebugFile, "USERUNITS 1; PHYSUNITS 1;\n\n" );
     }
     else

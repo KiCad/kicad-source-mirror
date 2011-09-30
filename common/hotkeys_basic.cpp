@@ -1,8 +1,6 @@
 /**
  * @file hotkeys_basic.cpp
- */
-
-/* Some functions to handle hotkeys in kicad
+ * @brief Some functions to handle hotkeys in KiCad
  */
 
 #include "fctsys.h"

@@ -1,6 +1,7 @@
-/****************************/
-/*  EESchema - libedit.cpp  */
-/****************************/
+/**
+ * @file libedit.cpp
+ * @brief Eeschema component library editor.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"

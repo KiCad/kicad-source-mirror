@@ -158,7 +158,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     #define OLD_GPCB_UNIT_CONV 10
     #define NEW_GPCB_UNIT_CONV 0.1
     FILE*         cmpfile;
-    double        conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and pcbnew 0.1
+    double        conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and Pcbnew 0.1
     // Old version unit = 1 mil, so conv_unit is 10 or 0.1
     bool          success = true;
     char*         Line;
@@ -291,7 +291,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
         if( params[0].CmpNoCase( wxT( "ElementArc" ) ) == 0 )       // Arc descr
         {                                                           // format: ElementArc [X Y Width Height StartAngle DeltaAngle Thickness]
-            // pcbnew does know ellipse so we must have Width = Height
+            // Pcbnew does know ellipse so we must have Width = Height
             DrawSegm = new EDGE_MODULE( this );
             DrawSegm->SetLayer( SILKSCREEN_N_FRONT );
             DrawSegm->m_Shape = S_ARC;
@@ -312,14 +312,14 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                     ibuf[ii] = 0;
             }
 
-            int     radius = (ibuf[2] + ibuf[3]) / 4; // for and arc: ibuf[3] = ibuf[4]. pcbnew does not know ellipses
+            int     radius = (ibuf[2] + ibuf[3]) / 4; // for and arc: ibuf[3] = ibuf[4]. Pcbnew does not know ellipses
             wxPoint centre;
             centre.x = wxRound( ibuf[0] * conv_unit );
             centre.y = wxRound( ibuf[1] * conv_unit );
             DrawSegm->m_Start0 = centre;
             int start_angle = ibuf[4] * 10;     // Pcbnew uses 0.1 degrees as units
             start_angle       -= 1800;          // Use normal X axis  as reference
-            DrawSegm->m_Angle  = ibuf[5] * 10;  // Angle value is clockwise in gpcb and pcbnew
+            DrawSegm->m_Angle  = ibuf[5] * 10;  // Angle value is clockwise in gpcb and Pcbnew
             DrawSegm->m_End0.x = wxRound( radius * conv_unit );
             DrawSegm->m_End0.y = 0;
             RotatePoint( &DrawSegm->m_End0, -start_angle );// Calculate start point coordinate of arc

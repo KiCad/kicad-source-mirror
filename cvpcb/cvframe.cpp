@@ -26,7 +26,7 @@
 #define FRAME_MIN_SIZE_Y 300
 
 
-// option key to close cvpcb after saving files
+// option key to close CvPcb after saving files
 static const wxString KeepCvpcbOpenEntry( wxT( "KeepCvpcbOpen" ) );
 static const wxString FootprintDocFileEntry( wxT( "footprints_doc_file" ) );
 

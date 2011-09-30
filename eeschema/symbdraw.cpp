@@ -1,8 +1,7 @@
-/*********************************************************************/
-/*          EESchema - symbdraw.cpp                                  */
-/* Create, move .. graphic shapes used to build and draw a component */
-/* (lines, arcs ..                                                   */
-/*********************************************************************/
+/**
+ * @file symbdraw.cpp
+ * @brief Create, move .. graphic shapes used to build and draw a component (lines, arcs ..)
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"

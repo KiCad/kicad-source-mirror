@@ -73,7 +73,7 @@ enum ANNOTATE_OPTION_T {
 
 
 /**
- * Schematic editor (EESchema) main window.
+ * Schematic editor (Eeschema) main window.
  */
 class SCH_EDIT_FRAME : public EDA_DRAW_FRAME
 {
@@ -145,10 +145,10 @@ public:
 
     /**
      * Function GetProjectFileParameters
-     * returns the project file parameter list for EESchema.
+     * returns the project file parameter list for Eeschema.
      *
      *<p?
-     * Populate the project file parameter array specific to EESchema if it hasn't
+     * Populate the project file parameter array specific to Eeschema if it hasn't
      * already been populated and return a reference to the array to the caller.
      * Creating the parameter list at run time has the advantage of being able to
      * define local variables.  The old method of statically building the array at
@@ -165,7 +165,7 @@ public:
 
     /**
      * Function LoadProjectFile
-     * soads the Kicad project file (*.pro) settings specific to EESchema.
+     * soads the KiCad project file (*.pro) settings specific to Eeschema.
      *
      * @param aFileName The project file name to load.
      * @param aForceReread Force the project file to be reread if true.
@@ -234,7 +234,7 @@ public:
      * the application settings mixed together.  This was confusing and caused some settings
      * to get saved and loaded incorrectly.  Currently, only the settings that are needed at
      * start up by the main window are defined here.  There are other locally used settings
-     * scattered throughout the EESchema source code.  If you need to define a configuration
+     * scattered throughout the Eeschema source code.  If you need to define a configuration
      * setting that need to be loaded at run time, this is the place to define it.
      * </p>
      */
@@ -282,7 +282,7 @@ public:
      * <p>
      * The search is first performed at the nearest grid position to \a aPosition.  If no
      * item if found on grid, then \a aPosition is tested for any items.  If the item found
-     * can be cross probed, a message is send to PCBNew and the selected item is highlighted
+     * can be cross probed, a message is send to Pcbnew and the selected item is highlighted
      * in PCB editor.
      * </p>
      * @param aPosition The wxPoint on the schematic to search.
@@ -332,7 +332,7 @@ public:
                                            const wxString& text_to_find,
                                            bool            mouseWarp );
 
-    /* Cross probing with pcbnew */
+    /* Cross probing with Pcbnew */
     void         SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*  LibItem );
 
     /* netlist generation */
@@ -533,7 +533,7 @@ public:
      * Function ProcessStuffFile
      * gets footprint info from each line in the Stuff File by Ref Desg
      *
-     * Read a "stuff" file created by cvpcb.
+     * Read a "stuff" file created by CvPcb.
      * That file has lines like:
      * comp = "C1" module = "CP6"
      * comp = "C2" module = "C1"

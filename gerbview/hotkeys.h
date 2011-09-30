@@ -17,7 +17,7 @@ enum hotkey_id_commnand {
     HK_SWITCH_LAYER_TO_PREVIOUS
 };
 
-// List of hotkey descriptors for pcbnew
+// List of hotkey descriptors for GerbView.
 extern struct EDA_HOTKEY_CONFIG s_Gerbview_Hokeys_Descr[];
 
 #endif		// KOTKEYS_H

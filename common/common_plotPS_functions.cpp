@@ -1,6 +1,7 @@
-/******************************************/
-/* Kicad: Common plot Postscript Routines */
-/******************************************/
+/**
+ * @file common_plotPS_functions.cpp
+ * @brief Kicad: Common plot Postscript Routines
+ */
 
 #include "fctsys.h"
 #include "trigo.h"

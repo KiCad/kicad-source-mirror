@@ -1,13 +1,10 @@
-/*
-*  annotate_dialog.cpp
-*/
-/*
- * annotate_dialog.cpp
- * Annotation dialog functions.
+/**
+ * @file annotate_dialog.cpp
+ * @brief Annotation dialog functions.
  */
 
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
   * Copyright (C) 1992-2011 Kicad Developers, see change_log.txt for contributors.

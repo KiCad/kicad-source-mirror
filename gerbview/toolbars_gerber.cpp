@@ -161,7 +161,7 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
                                KiBitmap( show_dcodenumber_xpm ),
                                _( "Show dcode number" ), wxITEM_CHECK );
 
-    // tools to select draw mode in gerbview
+    // tools to select draw mode in GerbView
     m_OptionsToolBar->AddSeparator();
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_0, wxEmptyString,
                                KiBitmap( gbr_select_mode0_xpm ),

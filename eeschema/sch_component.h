@@ -1,6 +1,7 @@
-/******************************************************/
-/* Definitions for the Component classes for EESchema */
-/******************************************************/
+/**
+ * @file sch_component.h
+ * @brief Definition the SCH_COMPONENT class for Eeschema.
+ */
 
 #ifndef COMPONENT_CLASS_H
 #define COMPONENT_CLASS_H

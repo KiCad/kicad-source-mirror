@@ -1,6 +1,7 @@
-/****************************************/
-/*  Module to load/save EESchema files. */
-/****************************************/
+/**
+ * @file load_one_schematic_file.cpp
+ * @brief Code to load and save Eeschema files.
+ */
 
 #include "fctsys.h"
 #include "confirm.h"
@@ -66,7 +67,7 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     if( !reader.ReadLine()
         || strncmp( (char*)reader + 9, SCHEMATIC_HEAD_STRING, sizeof(SCHEMATIC_HEAD_STRING) - 1 ) != 0 )
     {
-        MsgDiag = aFullFileName + _( " is NOT an EESchema file!" );
+        MsgDiag = aFullFileName + _( " is NOT an Eeschema file!" );
         DisplayError( this, MsgDiag );
         return FALSE;
     }
@@ -85,16 +86,16 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     if( version > EESCHEMA_VERSION )
     {
         MsgDiag = aFullFileName + _( " was created by a more recent \
-version of EESchema and may not load correctly. Please consider updating!" );
+version of Eeschema and may not load correctly. Please consider updating!" );
         DisplayInfoMessage( this, MsgDiag );
     }
 
 #if 0
-    // Compile it if the new version is unreadable by previous eeschema versions
+    // Compile it if the new version is unreadable by previous Eeschema versions
     else if( version < EESCHEMA_VERSION )
     {
         MsgDiag = aFullFileName + _( " was created by an older version of \
-EESchema. It will be stored in the new file format when you save this file \
+Eeschema. It will be stored in the new file format when you save this file \
 again." );
 
         DisplayInfoMessage( this, MsgDiag );
@@ -103,7 +104,7 @@ again." );
 
     if( !reader.ReadLine() || strncmp( reader, "LIBS:", 5 ) != 0 )
     {
-        MsgDiag = aFullFileName + _( " is NOT an EESchema file!" );
+        MsgDiag = aFullFileName + _( " is NOT an Eeschema file!" );
         DisplayError( this, MsgDiag );
         return FALSE;
     }
@@ -165,7 +166,7 @@ again." );
         case 'T':                       // It is a text item.
             if( sscanf( sline, "%s", Name1 ) != 1 )
             {
-                MsgDiag.Printf( wxT( "EESchema file text load error at line %d" ),
+                MsgDiag.Printf( wxT( "Eeschema file text load error at line %d" ),
                                 reader.LineNumber() );
                 itemLoaded = false;
             }
@@ -181,7 +182,7 @@ again." );
 
         default:
             itemLoaded = false;
-            MsgDiag.Printf( wxT( "EESchema file undefined object at line %d, aborted" ),
+            MsgDiag.Printf( wxT( "Eeschema file undefined object at line %d, aborted" ),
                             reader.LineNumber() );
             MsgDiag << wxT( "\n" ) << FROM_UTF8( line );
         }
@@ -306,7 +307,7 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* aScre
 
     if( SheetFormatList[ii] == NULL )
     {
-        aMsgDiag.Printf( wxT( "EESchema file dimension definition error \
+        aMsgDiag.Printf( wxT( "Eeschema file dimension definition error \
 line %d, \aAbort reading file.\n" ),
                          aLine->LineNumber() );
         aMsgDiag << FROM_UTF8( line );

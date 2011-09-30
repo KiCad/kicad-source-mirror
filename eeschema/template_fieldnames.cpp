@@ -13,7 +13,7 @@ wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx )
     static const wxString fixedNames[] = {
         _( "Reference" ),   // The component reference, R1, C1, etc.
         _( "Value" ),       // The component value + name
-        _( "Footprint" ),   // The footprint for use with PCBNEW
+        _( "Footprint" ),   // The footprint for use with Pcbnew
         _( "Datasheet" ),   // Link to a datasheet for component
     };
 

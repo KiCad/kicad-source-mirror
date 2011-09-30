@@ -237,7 +237,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( helpMenu,
                  wxID_HELP,
                  _( "&Contents" ),
-                 _( "Open the eeschema manual" ),
+                 _( "Open the Eeschema manual" ),
                  KiBitmap( online_help_xpm ) );
     AddMenuItem( helpMenu,
                  wxID_INDEX,
@@ -245,12 +245,12 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
-    // About EESchema
+    // About Eeschema
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
-                 _( "&About EESchema" ),
-                 _( "About EESchema schematic designer" ),
+                 _( "&About Eeschema" ),
+                 _( "About Eeschema schematic designer" ),
                  KiBitmap( info_xpm ) );
 
     // Create the menubar and append all submenus

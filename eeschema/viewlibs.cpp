@@ -1,6 +1,6 @@
-/****************************/
-/*  EESchema - viewlibs.cpp */
-/****************************/
+/**
+ * @file viewlibs.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"

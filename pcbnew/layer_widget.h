@@ -1,8 +1,8 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,7 @@ protected:
      * @return true if bitmaps shown in Render layer list
      * are alternate bitmaps, or false if they are "normal" bitmaps
      * This is a virtual function because Pcbnew uses normal bitmaps
-     * but Gerbview uses both bitmaps
+     * but GerbView uses both bitmaps
      * (alternate bitmaps to show layers in use, normal fo others)
      */
     virtual bool useAlternateBitmap(int aRow) { return false; }

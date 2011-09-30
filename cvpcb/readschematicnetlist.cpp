@@ -136,7 +136,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
         return -3;
     }
 
-    SetStatusText( _( "Netlist Format: EESchema" ), 0 );
+    SetStatusText( _( "Netlist Format: Eeschema" ), 0 );
 
 
     /* Read the netlist */

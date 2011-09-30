@@ -52,7 +52,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
         return NULL;
     }
 
-    /* Cross probing to pcbnew if a pin or a component is found */
+    /* Cross probing to Pcbnew if a pin or a component is found */
     switch( item->Type() )
     {
     case SCH_FIELD_T:
@@ -84,7 +84,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
             AppendMsgPanel( LibItem->GetRef( GetSheet() ),
                             LibItem->GetField( VALUE )->m_Text, DARKCYAN );
 
-        // Cross probing:2 - pin found, and send a locate pin command to pcbnew (highlight net)
+        // Cross probing:2 - pin found, and send a locate pin command to Pcbnew (highlight net)
         SendMessageToPCBNEW( Pin, LibItem );
     }
 

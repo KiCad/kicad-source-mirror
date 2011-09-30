@@ -81,7 +81,7 @@ bool BOARD_PRINTOUT_CONTROLER::OnPrintPage( int page )
     if( m_PrintParams.m_PrintMaskLayer == 0 )
         return false;
 
-    // In pcbnew we can want the layer EDGE always printed
+    // In Pcbnew we can want the layer EDGE always printed
     if( m_PrintParams.m_Flags == 1 )
         m_PrintParams.m_PrintMaskLayer |= EDGE_LAYER;
 

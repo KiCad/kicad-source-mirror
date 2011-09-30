@@ -1,6 +1,7 @@
-/********************************************/
-/* Definitions for the EESchema program:    */
-/********************************************/
+/**
+ * @file sch_text.h
+ * @brief Definitions of the SCH_TEXT class and derivatives for Eeschema.
+ */
 
 #ifndef CLASS_TEXT_LABEL_H
 #define CLASS_TEXT_LABEL_H

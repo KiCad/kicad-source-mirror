@@ -1,6 +1,6 @@
 /**
  * @file events_called_functions.cpp
- * @brief Gerbview command event functions.
+ * @brief GerbView command event functions.
  */
 
 #include "fctsys.h"

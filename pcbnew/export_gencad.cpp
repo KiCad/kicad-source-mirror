@@ -893,15 +893,19 @@ void FootprintWriteShape( FILE* file, MODULE* module )
             {   // Arcs are defined counter clockwise (positive trigonometric)
                 // from the start point to the end point (0 to 360 degrees)
                 wxPoint arcStart, arcEnd;
+
                 // edge->m_Start0 is the arc center relative to the shape position
                 // edge->m_End0 is the arc start point relative to the shape position
                 arcStart = edge->m_End0;
-                // calculate arcEnd arc end point relative to the shape position, in pcbnew
+
+                // calculate arcEnd arc end point relative to the shape position, in Pcbnew
                 // coordinates
                 arcEnd = arcStart;
                 RotatePoint( &arcEnd, edge->m_Start0, -edge->m_Angle );
-                // due to difference between pcbnew and gencad, swap arc start and arc end
+
+                // due to difference between Pcbnew and gencad, swap arc start and arc end
                 EXCHG(arcEnd, arcStart);
+
                 // print arc shape:
                 fprintf( file, "ARC %d %d %d %d %d %d\n",
                          arcStart.x, y_axis_sign * arcStart.y,   // Start point

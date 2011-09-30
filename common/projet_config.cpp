@@ -36,7 +36,7 @@ bool EDA_APP::ReCreatePrjConfig( const wxString& fileName,
         m_ProjectConfig = NULL;
     }
 
-    /* Check the file name does not a kicad project extension.
+    /* Check the file name does not a KiCad project extension.
      * This allows the user to enter a filename without extension
      * or use an existing name to create te project file
      */
@@ -67,7 +67,7 @@ bool EDA_APP::ReCreatePrjConfig( const wxString& fileName,
          * project file.
          *
          * TODO: Push the version test up the stack so that when one of the
-         *       Kicad application version changes, the other applications
+         *       KiCad application version changes, the other applications
          *       settings do not get updated.  Practically, this can go away.
          *       It isn't used anywhere as far as I know (WLS).
          */

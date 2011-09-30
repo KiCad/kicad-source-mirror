@@ -88,12 +88,12 @@ extern StructColors ColorRefs[NBCOLOR];
 
 /**
  * Function MakeColour
- * returns a wxWidgets wxColor from a KICAD color index with alpha value.
+ * returns a wxWidgets wxColor from a KiCad color index with alpha value.
  * Note that alpha support is not available on every wxWidgets platform.  On
  * such platform the behavior is the same as for wxALPHA_OPAQUE and that
  * means the alpha value has no effect and will be ignored.  wxGtk 2.8.4 is
  * not supporting alpha.
- * @return wxColour - given a KICAD color index with alpha value
+ * @return wxColour - given a KiCad color index with alpha value
  */
 static inline wxColour MakeColour( int aColor )
 {

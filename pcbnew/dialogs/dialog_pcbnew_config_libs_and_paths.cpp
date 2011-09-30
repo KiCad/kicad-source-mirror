@@ -5,7 +5,7 @@
 // Licence:     GPL
 /////////////////////////////////////////////////////////////////////////////
 
-/* Handle the pcbnew library config (library list, and default lib path)
+/* Handle the Pcbnew library config (library list, and default lib path)
  */
 
 #include "fctsys.h"

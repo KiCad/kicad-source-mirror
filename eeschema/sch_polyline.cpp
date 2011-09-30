@@ -98,7 +98,7 @@ bool SCH_POLYLINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( sscanf( line, "%s %s %d", Name1, Name2, &ii ) != 3 )
     {
-        aErrorMsg.Printf( wxT( "EESchema file polyline struct error at line %d, aborted" ),
+        aErrorMsg.Printf( wxT( "Eeschema file polyline struct error at line %d, aborted" ),
                           aLine.LineNumber() );
         aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
         return false;
@@ -118,7 +118,7 @@ bool SCH_POLYLINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
         if( !aLine.ReadLine() || sscanf( ((char*) aLine), "%d %d", &pt.x, &pt.y ) != 2 )
         {
-            aErrorMsg.Printf( wxT( "EESchema file polyline struct error at line %d, aborted" ),
+            aErrorMsg.Printf( wxT( "Eeschema file polyline struct error at line %d, aborted" ),
                               aLine.LineNumber() );
             aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
             return false;

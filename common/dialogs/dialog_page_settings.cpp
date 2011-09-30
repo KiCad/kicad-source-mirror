@@ -1,10 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_page_settings.cpp
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file dialog_page_settings.cpp
+ */
 
 /* The "Page Settings" dialog box created by this file (and setpage.h)
  * contains seven checkboxes which *are* shown when that dialog box is
- * invoked in EESchema, but which are *not* shown when that dialog box is
+ * invoked in Eeschema, but which are *not* shown when that dialog box is
  * invoked in Pcbnew instead.
  */
 

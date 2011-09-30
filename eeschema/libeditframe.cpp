@@ -1,8 +1,7 @@
 /**
-*  EESchema - libeditframe.cpp
-* class LIB_EDIT_FRAME: the component editor frame
-*
-*/
+ * @file libeditframe.cpp
+ * @brief LIB_EDIT_FRAME class is the component library editor frame.
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"

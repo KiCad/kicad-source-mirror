@@ -58,7 +58,7 @@ END_EVENT_TABLE()
 
 
 /*
- * This emulates the zoom menu entries found in the other Kicad applications.
+ * This emulates the zoom menu entries found in the other KiCad applications.
  * The library viewer does not have any menus so add an accelerator table to
  * the main frame.
  */

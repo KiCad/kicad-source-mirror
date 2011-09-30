@@ -60,7 +60,7 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_CVPCB_CREATE_STUFF_FILE, wxEmptyString,
                          KiBitmap( export_footprint_names_xpm ),
                         _( "Create export file (component/footprint list, \
-used by eeschema to fill the footprint field of components)" ) );
+used by Eeschema to fill the footprint field of components)" ) );
 
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( ID_PCB_DISPLAY_FOOTPRINT_DOC, wxEmptyString,

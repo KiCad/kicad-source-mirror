@@ -45,7 +45,7 @@ wxString EDA_FileSelector( const wxString& Title,
 
 /* Return file name without path or extension.
  *
- * If the path is in the default kicad path, ./ is prepended to the
+ * If the path is in the default KiCad path, ./ is prepended to the
  * file name.  If the file name has the default extension, the file
  * name is returned without an extension.
  */
@@ -65,11 +65,11 @@ void           AddDelimiterString( wxString& string );
 wxString       FindKicadHelpPath();
 
 
-/* Return the kicad common data path. */
+/* Return the KiCad common data path. */
 wxString       ReturnKicadDatasPath();
 
 
-/* Search the executable file shortname in kicad binary path and return
+/* Search the executable file shortname in KiCad binary path and return
  * full file name if found or shortname */
 wxString       FindKicadFile( const wxString& shortname );
 

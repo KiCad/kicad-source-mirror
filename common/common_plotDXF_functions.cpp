@@ -1,6 +1,7 @@
-/***********************************/
-/* Kicad: Common plot DXF Routines */
-/***********************************/
+/**
+ * @file common_plotDXF_functions.cpp
+ * @brief KiCad: Common plot DXF Routines.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"

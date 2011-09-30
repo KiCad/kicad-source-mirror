@@ -1,6 +1,6 @@
 /**
  * @file wxBasePcbFrame.h
- * @brief Classes used in pcbnew, cvpcb and gerbview.
+ * @brief Classes used in Pcbnew, CvPcb and GerbView.
  */
 
 #ifndef  WX_BASE_PCB_FRAME_H
@@ -33,7 +33,7 @@ class GENERAL_COLLECTORS_GUIDE;
 
 /**
  * class PCB_BASE_FRAME
- * basic PCB main window class for PCBNew, Gerbview, and CvPcb footprint viewer.
+ * basic PCB main window class for Pcbnew, Gerbview, and CvPcb footprint viewer.
  */
 class PCB_BASE_FRAME : public EDA_DRAW_FRAME
 {
@@ -79,7 +79,7 @@ public:
 
     BOARD* GetBoard()
     {
-        wxASSERT( m_Pcb );  // phasing out m_Pcb for gerbview
+        wxASSERT( m_Pcb );  // phasing out m_Pcb for GerbView
         return m_Pcb;
     }
 
@@ -418,7 +418,7 @@ public:
      * create one output files one per board layer in the RS274X format.
      * <p>
      * The units are in inches and in the format 3.4 with the leading zeros omitted.
-     * Coordinates are absolute value.  The 3.4 format is used because the native PCBNew
+     * Coordinates are absolute value.  The 3.4 format is used because the native Pcbnew
      * units are 1/10000 inch.
      * </p>
      */

@@ -1,7 +1,7 @@
-/****************************************************/
-/*  class_colors_design_settings.cpp                  */
-/*  handle colors used to draw  all items or layers */
-/****************************************************/
+/**
+ * @file class_colors_design_settings.cpp
+ * @brief Handle colors used to draw all items or layers.
+ */
 #include "fctsys.h"
 #include "colors.h"
 #include "macros.h"
@@ -9,10 +9,10 @@
 #include "class_colors_design_settings.h"
 
 /* Class for handle list of color settings for designs
- * in Eeschema, Pcbnew and gerbview
+ * in Eeschema, Pcbnew and GerbView
  */
 
-/* Initial colors values: optimized for pcbnew, but are also Ok for eeschema
+/* Initial colors values: optimized for Pcbnew, but are also Ok for Eeschema
  * these values are superseded by config reading
  */
 static const int default_layer_color[LAYERSCOLORSBUFFERSIZE] =

@@ -58,7 +58,7 @@ static void RemoveDuplicatePins( COMPONENT& component )
 
 
 /**
- * Create Kicad net list file.
+ * Create KiCad net list file.
  *
  * @todo: None of the printf() call return values are checked for failure,
  *        a value less than zero.  Check all printf() return values and

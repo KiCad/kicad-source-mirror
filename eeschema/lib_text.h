@@ -71,7 +71,7 @@ public:
     virtual bool HitTest( const wxPoint& aPosition );
 
      /**
-      * @param aPosition = a wxPoint to test, in eeschema coordinates
+      * @param aPosition = a wxPoint to test, in Eeschema coordinates
       * @param aThreshold = max distance to a segment
       * @param aTransform = the transform matrix
       * @return true if the point \a aPosition is near a segment

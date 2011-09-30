@@ -1,8 +1,8 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,17 +140,17 @@ namespace DSN {
 
 /**
  * Function scale
- * converts a session file distance to Kicad units of deci-mils.
+ * converts a session file distance to KiCad units of deci-mils.
  * @param distance The session file length to convert.
  * @param aResolution The session UNIT_RES which holds the engineering unit
  *  specifier
- * @return int - The Kicad length in deci-mils
+ * @return int - The KiCad length in deci-mils
  */
 static int scale( double distance, UNIT_RES* aResolution )
 {
     double  resValue = aResolution->GetValue();
 
-    double  factor;     // multiply this times session value to get mils for Kicad.
+    double  factor;     // multiply this times session value to get mils for KiCad.
 
     switch( aResolution->GetEngUnits() )
     {
@@ -173,7 +173,7 @@ static int scale( double distance, UNIT_RES* aResolution )
     }
 
     // the factor of 10.0 is used to convert mils to deci-mils, the units
-    // used within Kicad.
+    // used within KiCad.
     factor *= 10.0;
 
     int ret = wxRound( factor * distance / resValue );
@@ -184,10 +184,10 @@ static int scale( double distance, UNIT_RES* aResolution )
 /**
  * Function mapPt
  * translates a point from the Specctra Session format coordinate system
- * to the Kicad coordinate system.
+ * to the KiCad coordinate system.
  * @param aPoint The session point to translate
  * @param aResolution - The amount to scale the point.
- * @return wxPoint - The Kicad coordinate system point.
+ * @return wxPoint - The KiCad coordinate system point.
  */
 static wxPoint mapPt( const POINT& aPoint, UNIT_RES* aResolution )
 {
@@ -231,7 +231,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
     int     copperLayerCount = sessionBoard->GetCopperLayerCount();
 
 
-    // The drill diameter is encoded in the padstack name if PCBNEW did the DSN export.
+    // The drill diameter is encoded in the padstack name if Pcbnew did the DSN export.
     // It is in mils and is after the colon and before the last '_'
     int     drillStartNdx = aPadstack->padstack_id.find( ':' );
 
@@ -411,7 +411,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
 
             if( place->side == T_front )
             {
-                // convert from degrees to tenths of degrees used in Kicad.
+                // convert from degrees to tenths of degrees used in KiCad.
                 int orientation = (int) (place->rotation * 10.0);
                 if( module->GetLayer() != LAYER_N_FRONT )
                 {

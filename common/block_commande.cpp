@@ -1,7 +1,7 @@
-/********************************************/
-/* Routines for managing on block commands. */
-/* (Common section Eeschema / pcbnew ...    */
-/********************************************/
+/**
+ * @file block_commande.cpp
+ * @brief Common routines for managing on block commands.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"

@@ -142,7 +142,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
         currentPath = filename.GetPath();
     }
 
-    // Read gerber files: each file is loaded on a new gerbview layer
+    // Read gerber files: each file is loaded on a new GerbView layer
     int layer = getActiveLayer();
 
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )
@@ -225,7 +225,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
         currentPath = filename.GetPath();
     }
 
-    // Read gerber files: each file is loaded on a new gerbview layer
+    // Read gerber files: each file is loaded on a new GerbView layer
     int layer = getActiveLayer();
 
     for( unsigned ii = 0; ii < filenamesList.GetCount(); ii++ )

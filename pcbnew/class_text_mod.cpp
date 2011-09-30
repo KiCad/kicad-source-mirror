@@ -75,7 +75,7 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
     MODULE* parent = (MODULE*) GetParent();
     int     orient = m_Orient;
 
-    // Due to the pcbnew history, m_Orient is saved in screen value
+    // Due to the Pcbnew history, m_Orient is saved in screen value
     // but it is handled as relative to its parent footprint
     if( parent )
         orient += parent->m_Orient;
@@ -130,7 +130,7 @@ int TEXTE_MODULE::ReadDescr( LINE_READER* aReader )
 
     m_Type = type;
 
-    // Due to the pcbnew history, .m_Orient is saved in screen value
+    // Due to the Pcbnew history, .m_Orient is saved in screen value
     // but it is handled as relative to its parent footprint
     m_Orient -= ( (MODULE*) m_Parent )->m_Orient;
 

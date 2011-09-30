@@ -74,7 +74,7 @@ bool CVPCB_MAINFRAME::ReadNetList()
 
     if( error_level < 0 )
     {
-        msg.Printf( _( "File <%s> does not appear to be a valid Kicad net list file." ),
+        msg.Printf( _( "File <%s> does not appear to be a valid KiCad net list file." ),
                     GetChars( m_NetlistFileName.GetFullPath() ) );
         ::wxMessageBox( msg, _( "File Error" ), wxOK | wxICON_ERROR, this );
         m_NetlistFileName.Clear();

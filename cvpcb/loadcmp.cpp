@@ -76,7 +76,7 @@ found in the default search paths." ),
 
         if( strnicmp( Line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) != 0 )
         {
-            msg.Printf( _( "<%s> is not a valid Kicad PCB foot print library." ),
+            msg.Printf( _( "<%s> is not a valid KiCad PCB foot print library." ),
                         GetChars( tmp ) );
             wxMessageBox( msg, titleLibLoadError, wxOK | wxICON_ERROR, this );
             fclose( file );

@@ -1,6 +1,7 @@
-/*************************************************************/
-/* Definitions for the component fields classes for EESchema */
-/*************************************************************/
+/**
+ * @file sch_field.h
+ * @brief Definition of the SCH_FIELD class for Eeschema.
+ */
 
 #ifndef CLASS_SCH_FIELD_H
 #define CLASS_SCH_FIELD_H

@@ -1,9 +1,9 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2010 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2010 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@
  * Class GERBER_LAYER_WIDGET
  * is here to implement the abtract functions of LAYER_WIDGET so they
  * may be tied into the GERBVIEW_FRAME's data and so we can add a popup
- * menu which is specific to PCBNEW's needs.
+ * menu which is specific to Pcbnew's needs.
  */
 class GERBER_LAYER_WIDGET : public LAYER_WIDGET
 {

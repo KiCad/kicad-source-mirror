@@ -237,7 +237,7 @@ MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryFullFilename,
 
         if( !curr_lib.IsLibrary() )
         {
-            msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library file." ),
+            msg.Printf( _( "<%s> is not a valid KiCad PCB footprint library file." ),
                         GetChars( tmp ) );
             wxMessageBox( msg, _( "Library Load Error" ), wxOK | wxICON_ERROR, this );
             return NULL;

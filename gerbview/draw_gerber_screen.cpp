@@ -109,7 +109,7 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
 
 /*
- * Redraw All gerbview layers, using a buffered mode or not
+ * Redraw All GerbView layers, using a buffered mode or not
  */
 void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset )
 {
@@ -218,7 +218,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
                 else if( aDrawMode == GR_OR )
                 {
                     // On Linux with a large screen, this version is much faster and without
-                    // flicker, but gives a PCBNEW look where layer colors blend together.
+                    // flicker, but gives a Pcbnew look where layer colors blend together.
                     // Plus it works only because the background color is black.  But it may
                     // be more useable for some.  The difference is due in part because of
                     // the cpu cycles needed to create the monochromatic bitmap above, and
@@ -404,7 +404,7 @@ void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
 
 /* Virtual fonction needed by the PCB_SCREEN class derived from BASE_SCREEN
  * this is a virtual pure function in BASE_SCREEN
- * do nothing in gerbview
+ * do nothing in GerbView
  * could be removed later
  */
 void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
@@ -415,8 +415,8 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
 /* dummy_functions
  *
  *  These functions are used in some classes.
- *  they are useful in pcbnew, but have no meaning or are never used
- *  in cvpcb or gerbview.
+ *  they are useful in Pcbnew, but have no meaning or are never used
+ *  in CvPcb or GerbView.
  *  but they must exist because they appear in some classes, and here, no nothing.
  */
 

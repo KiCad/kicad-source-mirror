@@ -574,7 +574,7 @@ void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
 /**
  * Function RecreateBOMFileFromBoard
  * Recreates a .cmp file from the current loaded board
- * this is the same as created by cvpcb.
+ * this is the same as created by CvPcb.
  * can be used if this file is lost
  */
 void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )

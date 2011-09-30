@@ -1,6 +1,6 @@
-/***********************************/
-/* eeschema.cpp - module principal */
-/***********************************/
+/**
+ * @file eeschema.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -43,8 +43,8 @@ wxString       g_NetCmpExtBuffer( wxT( "cmp" ) );
 const wxString SymbolFileExtension( wxT( "sym" ) );
 const wxString CompLibFileExtension( wxT( "lib" ) );
 
-const wxString SymbolFileWildcard( wxT( "Kicad drawing symbol file (*.sym)|*.sym" ) );
-const wxString CompLibFileWildcard( wxT( "Kicad component library file (*.lib)|*.lib" ) );
+const wxString SymbolFileWildcard( wxT( "KiCad drawing symbol file (*.sym)|*.sym" ) );
+const wxString CompLibFileWildcard( wxT( "KiCad component library file (*.lib)|*.lib" ) );
 
 LayerStruct g_LayerDescr;            /* layer colors. */
 
@@ -53,7 +53,7 @@ bool        g_EditPinByPinIsOn = false; /* true to do not synchronize pins
                                          * same location */
 
 int         g_DrawDefaultLineThickness = 6; /* Default line thickness in
-                                             * EESCHEMA units used to
+                                             * Eeschema units used to
                                              * draw/plot items having a
                                              * default thickness line value
                                              * (i.e. = 0 ). 0 = single pixel
@@ -62,8 +62,8 @@ int         g_DrawDefaultLineThickness = 6; /* Default line thickness in
 // Color to draw selected items
 int g_ItemSelectetColor = BROWN;
 
-// Color to draw items flagged invisible, in libedit (they are insisible
-// in eeschema
+// Color to draw items flagged invisible, in libedit (they are invisible
+// in Eeschema
 int g_InvisibleItemColor = DARKGRAY;
 
 TRANSFORM DefaultTransform = TRANSFORM( 1, 0, 0, -1 );
@@ -103,7 +103,7 @@ bool EDA_APP::OnInit()
     wxFileName      filename;
     SCH_EDIT_FRAME* frame = NULL;
 
-    InitEDA_Appl( wxT( "EESchema" ), APP_EESCHEMA_T );
+    InitEDA_Appl( wxT( "Eeschema" ), APP_EESCHEMA_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
@@ -114,7 +114,7 @@ bool EDA_APP::OnInit()
     if( argc > 1 )
         filename = argv[1];
 
-    // Init EESchema
+    // Init Eeschema
     SeedLayers();
 
     // read current setup and reopen last directory if no filename to open in
@@ -127,15 +127,14 @@ bool EDA_APP::OnInit()
     ReadHotkeyConfig( wxT("SchematicFrame"), s_Eeschema_Hokeys_Descr );
 
     // Create main frame (schematic frame) :
-    frame = new SCH_EDIT_FRAME( NULL, wxT( "EESchema" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
+    frame = new SCH_EDIT_FRAME( NULL, wxT( "Eeschema" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
 
     SetTopWindow( frame );
     frame->Show( true );
 
     if( CreateServer( frame, KICAD_SCH_PORT_SERVICE_NUMBER ) )
     {
-        // RemoteCommand is in controle.cpp and is called when PCBNEW
-        // sends EESCHEMA a command
+        // RemoteCommand is in controle.cpp and is called when Pcbnew sends Eeschema a command.
         SetupServerFunction( RemoteCommand );
     }
 

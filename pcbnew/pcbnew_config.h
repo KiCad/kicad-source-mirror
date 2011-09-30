@@ -1,6 +1,7 @@
-/************************************************************/
-/** pcbnew_config.h : configuration parameters for PCBNew  **/
-/************************************************************/
+/**
+ * @file pcbnew_config.h
+ * @brief Cconfiguration parameters for Pcbnew.
+ */
 
 #ifndef _PCBNEW_CONFIG_H_
 #define _PCBNEW_CONFIG_H_

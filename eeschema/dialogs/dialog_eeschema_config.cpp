@@ -3,7 +3,7 @@
 // Purpose:
 // Author:      jean-pierre Charras
 // Created:     17/02/2006 21:14:46
-// Copyright:   Kicad Team
+// Copyright:   KiCad Team
 // Licence:     GPL
 /////////////////////////////////////////////////////////////////////////////
 

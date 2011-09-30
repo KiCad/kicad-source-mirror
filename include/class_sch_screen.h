@@ -1,6 +1,7 @@
-/********************************************/
-/* Definitions for the EESchema program:	*/
-/********************************************/
+/**
+ * @file class_sch_screen.h
+ * @brief Definitions for the Eeschema program SCH_SCREEN class.
+ */
 
 #ifndef CLASS_SCREEN_H
 #define CLASS_SCREEN_H

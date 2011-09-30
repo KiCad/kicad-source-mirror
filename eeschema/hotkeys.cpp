@@ -1,6 +1,6 @@
-/***************/
-/* hotkeys.cpp */
-/***************/
+/**
+ * @file eeschema/hotkeys.cpp
+ */
 
 #include "fctsys.h"
 #include "eeschema_id.h"
@@ -33,7 +33,7 @@
  * by the user hotkey list file
  * add the HkMyNewEntry pointer in the s_Schematic_Hotkey_List list or the
  * s_LibEdit_Hotkey_List list or s_Common_Hotkey_List if the same command is
- * added both in eeschema and libedit)
+ * added both in Eeschema and libedit)
  * Add the new code in the switch in OnHotKey() function.
  * when the variable itemInEdit is true, an item is currently edited.
  * This can be useful if the new function cannot be executed while an item is
@@ -218,7 +218,7 @@ EDA_HOTKEY* s_LibEdit_Hotkey_List[] =
     NULL
 };
 
-// list of sections and corresponding hotkey list for eeschema (used to create
+// list of sections and corresponding hotkey list for Eeschema (used to create
 // an hotkey config file)
 struct EDA_HOTKEY_CONFIG s_Eeschema_Hokeys_Descr[] =
 {

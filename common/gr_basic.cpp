@@ -26,14 +26,14 @@
  * coordinates overflow 16 bits values:
  * http://trac.wxwidgets.org/ticket/10446
  * Problems can be found under Windows **and** Linux (mainly when drawing arcs)
- * (mainly at low zoom values (2, 1 or 0.5), in pcbnew)
+ * (mainly at low zoom values (2, 1 or 0.5), in Pcbnew)
  * some of these problems could be now fixed in recent distributions.
  *
  * Currently (feb 2009) there are overflow problems when drawing solid (filled)
  * polygons under linux without clipping
  *
  * So before removing clipping functions, be aware these bug (they are not in
- * kicad or wxWidgets) are fixed by testing how are drawn complex lines arcs
+ * KiCad or wxWidgets) are fixed by testing how are drawn complex lines arcs
  * and solid polygons under Windows and Linux and remember users can have old
  * versions with bugs
  */

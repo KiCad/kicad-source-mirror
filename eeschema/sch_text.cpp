@@ -459,14 +459,14 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( ii < 4 )
     {
-        aErrorMsg.Printf( wxT( "EESchema file text load error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file text load error at line %d" ),
                           aLine.LineNumber() );
         return false;
     }
 
     if( !aLine.ReadLine() )
     {
-        aErrorMsg.Printf( wxT( "EESchema file text load error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file text load error at line %d" ),
                           aLine.LineNumber() );
         return false;
     }
@@ -478,7 +478,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( text == NULL )
     {
-        aErrorMsg.Printf( wxT( "EESchema file text load error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file text load error at line %d" ),
                           aLine.LineNumber() );
         return false;
     }
@@ -811,14 +811,14 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( ii < 4 )
     {
-        aErrorMsg.Printf( wxT( "EESchema file label load error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file label load error at line %d" ),
                           aLine.LineNumber() );
         return false;
     }
 
     if( !aLine.ReadLine() )
     {
-        aErrorMsg.Printf( wxT( "EESchema file label load error atline %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file label load error atline %d" ),
                           aLine.LineNumber() );
         return false;
     }
@@ -830,7 +830,7 @@ bool SCH_LABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( text == NULL )
     {
-        aErrorMsg.Printf( wxT( "EESchema file label load error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file label load error at line %d" ),
                           aLine.LineNumber() );
         return false;
     }
@@ -984,14 +984,14 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( ii < 4 )
     {
-        aErrorMsg.Printf( wxT( "EESchema file global label load error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file global label load error at line %d" ),
                           aLine.LineNumber() );
         return false;
     }
 
     if( !aLine.ReadLine() )
     {
-        aErrorMsg.Printf( wxT( "EESchema file global label load  error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file global label load  error at line %d" ),
                           aLine.LineNumber() );
         return false;
     }
@@ -1003,7 +1003,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( text == NULL )
     {
-        aErrorMsg.Printf( wxT( "EESchema file global label load error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file global label load error at line %d" ),
                           aLine.LineNumber() );
         return false;
     }
@@ -1416,14 +1416,14 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( ii < 4 )
     {
-        aErrorMsg.Printf( wxT( "EESchema file hierarchical label load error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file hierarchical label load error at line %d" ),
                           aLine.LineNumber() );
         return false;
     }
 
     if( !aLine.ReadLine() )
     {
-        aErrorMsg.Printf( wxT( "EESchema file hierarchical label load  error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file hierarchical label load  error at line %d" ),
                           aLine.LineNumber() );
         return false;
     }
@@ -1435,7 +1435,7 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( text == NULL )
     {
-        aErrorMsg.Printf( wxT( "EESchema file hierarchical label load error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file hierarchical label load error at line %d" ),
                           aLine.LineNumber() );
         return false;
     }

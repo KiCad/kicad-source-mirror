@@ -1,7 +1,7 @@
-/******************************************/
-/* File:    gestfich.cpp                  */
-/* Purpose: Functions for file management */
-/******************************************/
+/**
+ * @file gestfich.cpp
+ * @brief Functions for file management
+ */
 
 // For compilers that support precompilation, includes "wx.h".
 #include "fctsys.h"
@@ -16,39 +16,39 @@
 #include "wx/filename.h"
 
 
-/* List of default paths used to locate help files and kicad library files.
+/* List of default paths used to locate help files and KiCad library files.
  *
- * Under windows, kicad search its files from the binary path file (first
+ * Under windows, KiCad search its files from the binary path file (first
  * argument when running "main")   So for a standard install, default paths
  * are not mandatory, but they exist, just in case.
- * kicad is often installed in c:/Program Files/kicad or c:/kicad (or d: or
+ * KiCad is often installed in c:/Program Files/kicad or c:/kicad (or d: or
  * e: ... ) and the directory "share" has no meaning under windows.
  *
  * Under linux, the problem is more complex.
  * In fact there are 3 cases:
  * 1 - When released in a distribution:
- * binaries are in /usr/bin, kicad libs in /usr/share/kicad/ and doc in
+ * binaries are in /usr/bin, KiCad libs in /usr/share/kicad/ and doc in
  * /usr/share/doc/kicad/
  * 2 - When compiled by an user:
- * binaries also can be  in /usr/local/bin, kicad libs in
+ * binaries also can be  in /usr/local/bin, KiCad libs in
  * /usr/local/share/kicad/ and doc in /usr/local/share/doc/kicad/
  * 3 - When in an "universal tarball" or build for a server:
  * all files are in /usr/local/kicad
- * This is mandatory when kicad is installed on a server (in a school for
+ * This is mandatory when KiCad is installed on a server (in a school for
  * instance) because one can export /usr/local/kicad and obviously the others
  * paths cannot be used (cannot be mounted by the client, because they are
  * already used).
  *
- * in cases 1 and 2 kicad files cannot be found from the binary path.
- * in case 3 kicad files can be found from the binary path only if this is
- * a kicad binary file which is launched.
+ * in cases 1 and 2 KiCad files cannot be found from the binary path.
+ * in case 3 KiCad files can be found from the binary path only if this is
+ * a KiCad binary file which is launched.
  * But if an user creates a symbolic link to the actual binary file to run
- * kicad, the binary path is not good and the defaults paths must be used
+ * KiCad, the binary path is not good and the defaults paths must be used
  *
  * Note:
- * kicad uses first the bin path lo locate kicad tree.
- * if not found kicad uses the environment variable KICAD to find its files
- * and at last kicad uses the default paths.
+ * KiCad uses first the bin path lo locate KiCad tree.
+ * if not found KiCad uses the environment variable KICAD to find its files
+ * and at last KiCad uses the default paths.
  * So we can export (linux and windows) the variable KICAD:
  *  like export KICAD=/my_path/kicad if /my_path/kicad is not a default path
  */
@@ -74,7 +74,7 @@ static wxString    s_HelpPathList[] = {
 };
 
 
-// Path list for kicad data files
+// Path list for KiCad data files
 static wxString    s_KicadDataPathList[] = {
 #ifdef __WINDOWS__
     wxT( "c:/kicad/share/" ),
@@ -98,7 +98,7 @@ static wxString    s_KicadDataPathList[] = {
     wxT( "end_list" )                   // End of list symbol, do not change
 };
 
-// Path list for kicad binary files
+// Path list for KiCad binary files
 static wxString    s_KicadBinaryPathList[] = {
 #ifdef __WINDOWS__
     wxT( "c:/kicad/bin/" ),
@@ -378,7 +378,7 @@ wxString FindKicadHelpPath()
 }
 
 
-/* Search the executable file shortname in kicad binary path
+/* Search the executable file shortname in KiCad binary path
  *  and return full file name if found or shortname
  *  kicad binary path is
  *  kicad/bin
@@ -394,7 +394,7 @@ wxString FindKicadFile( const wxString& shortname )
     wxString FullFileName;
 
     /* Test the presence of the file in the directory shortname of
-     * the kicad binary path.
+     * the KiCad binary path.
      */
     FullFileName = wxGetApp().m_BinDir + shortname;
     if( wxFileExists( FullFileName ) )
@@ -452,7 +452,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile,
 }
 
 
-/* Return data path common kicad.
+/* Return data path common KiCad.
  * If environment variable defined KiCAD (KiCAD = path to kicad)
  * Returns <KICAD> /;
  * Otherwise returns <path of binaries> / (if "kicad" is in the path name)
@@ -489,7 +489,7 @@ wxString ReturnKicadDatasPath()
             data_path  = tmp.BeforeLast( '/' ); // id cd ../
             data_path += UNIX_STRING_DIR_SEP;
 
-            // Old versions of kicad use kicad/ as default for data
+            // Old versions of KiCad use kicad/ as default for data
             // and last versions kicad/share/
             // So we search for kicad/share/ first
             wxString old_path = data_path;
@@ -504,7 +504,7 @@ wxString ReturnKicadDatasPath()
         }
     }
 
-    /* find kicad from default path list:
+    /* find KiCad from default path list:
      *  /usr/local/kicad/ or c:/kicad/
      *  (see s_KicadDataPathList) */
     int ii = 0;

@@ -30,7 +30,7 @@ void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
 {
     wxString fn;
 
-    fn = GetFileFromHistory( event.GetId(), _( "Kicad project file" ) );
+    fn = GetFileFromHistory( event.GetId(), _( "KiCad project file" ) );
 
     if( fn != wxEmptyString )
     {

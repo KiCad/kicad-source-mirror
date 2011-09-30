@@ -39,7 +39,7 @@
 
 const wxString        ModExportFileExtension( wxT( "emp" ) );
 
-static const wxString ModExportFileWildcard( _( "Kicad foot print export files (*.emp)|*.emp" ) );
+static const wxString ModExportFileWildcard( _( "KiCad foot print export files (*.emp)|*.emp" ) );
 
 
 MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
@@ -502,7 +502,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     if( ! input_lib.IsLibrary() )
     {
         fclose( lib_module );
-        msg.Printf( _( "File %s is not an EESchema library" ), GetChars( aLibName ) );
+        msg.Printf( _( "File %s is not an Eeschema library" ), GetChars( aLibName ) );
         DisplayError( this, msg );
         return false;
     }

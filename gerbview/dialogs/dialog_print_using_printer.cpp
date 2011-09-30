@@ -400,7 +400,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     SetLayerMaskFromListSelection();
 
     // If no layer selected, we have no plot. prompt user if it happens
-    // because he could think there is a bug in pcbnew:
+    // because he could think there is a bug in Pcbnew:
     if( s_Parameters.m_PrintMaskLayer == 0 )
     {
         DisplayError( this, _( "No layer selected" ) );
@@ -430,7 +430,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     SetPrintParameters( );
 
     // If no layer selected, we have no plot. prompt user if it happens
-    // because he could think there is a bug in pcbnew:
+    // because he could think there is a bug in Pcbnew:
     if( s_Parameters.m_PrintMaskLayer == 0 )
     {
         DisplayError( this, _( "No layer selected" ) );

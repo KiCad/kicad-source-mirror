@@ -449,7 +449,7 @@ void GERBVIEW_FRAME::Liste_D_Codes()
 /*
  * Function UpdateTitleAndInfo
  * displays the short filename (if exists) of the selected layer
- *  on the caption of the main gerbview window
+ *  on the caption of the main GerbView window
  * displays image name and the last layer name (found in the gerber file: LN <name> command)
  *  in the status bar
  * Note layer name can change when reading a gerber file, and the layer name is the last found.

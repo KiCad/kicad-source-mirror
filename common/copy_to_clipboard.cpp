@@ -37,7 +37,7 @@ void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
 
 /* copy the current page or block to the clipboard ,
  * to export drawings to other applications (word processing ...)
- * This is not suitable for copy command within eeschema or pcbnew
+ * This is not suitable for copy command within Eeschema or Pcbnew
  */
 bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
 {

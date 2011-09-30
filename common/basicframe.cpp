@@ -261,7 +261,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
      * or the the full specific doc
      * if event id is wxID_INDEX, we want the document for beginners.
      * else the specific doc file (its name is in wxGetApp().m_HelpFileName)
-     * The document for beginners is the same for all kicad utilities
+     * The document for beginners is the same for all KiCad utilities
      */
     if( event.GetId() == wxID_INDEX )
     {
@@ -318,7 +318,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 
 /*
  * Function OnSelectPreferredEditor
- * Open a dialog to select the preferred editor that will be used in Kicad
+ * Open a dialog to select the preferred editor that will be used in KiCad
  * to edit or display files (reports ... )
  * The full filename editor is saved in configuration (global params)
  */

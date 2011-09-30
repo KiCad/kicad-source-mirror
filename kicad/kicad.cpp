@@ -1,6 +1,6 @@
 /**
  * @file kicad.cpp
- * @brief Main kicad library manager file
+ * @brief Main KiCad library manager file
  */
 
 #include "fctsys.h"

@@ -675,14 +675,14 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
      * Converting from inches to mm can give some coordinates due to
      * float point precision rounding errors, like 1.999 or 2.001 so
      * round to the nearest drawing precision required by the application.
-    */
+     */
     if ( g_UserUnit == MILLIMETRES )
     {
         dXpos = RoundTo0( dXpos, (double)( m_InternalUnits / 10 ) );
         dYpos = RoundTo0( dYpos, (double)( m_InternalUnits / 10 ) );
     }
 
-    /* The following sadly is an if eeschema/if pcbnew */
+    /* The following sadly is an if Eeschema/if Pcbnew */
     wxString absformatter;
     wxString locformatter;
     switch( g_UserUnit )

@@ -1,7 +1,8 @@
-/****************************************************************/
-/* member functions of classes used in pcbnew (see pcbstruct.h) */
-/* except for tracks (see class_track.cpp)                      */
-/****************************************************************/
+/**
+ * @file classpcb.cpp
+ * @brief Member functions of classes used in Pcbnew (see pcbstruct.h)
+ *        except for tracks (see class_track.cpp).
+ */
 
 #include "fctsys.h"
 #include "common.h"
@@ -14,13 +15,13 @@
 #include "pcbnew_id.h"
 
 
-/* Default pcbnew zoom values.
+/* Default Pcbnew zoom values.
  * Limited to 19 values to keep a decent size to menus
  * 15 it better but does not allow a sufficient number of values
  * roughtly a 1.5 progression.
  * The last 2 values is  handy when somebody uses a library import of a module
  * (or foreign data) which has a bad coordinate
- * Also useful in Gerbview for this reason.
+ * Also useful in GerbView for this reason.
  * Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
  * functions )
  */

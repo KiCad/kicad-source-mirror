@@ -1,14 +1,13 @@
-/****************************/
-/* class_aperture_macro.cpp */
-/****************************/
-
+/**
+ * @file class_aperture_macro.cpp
+ */
 
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +48,7 @@ extern int     scale( double aCoord, bool isMetric );       // defined it rs274d
  * Function mapPt
  * translates a point from the aperture macro coordinate system to our
  * deci-mils coordinate system.
- * @return wxPoint - The gerbview coordinate system vector.
+ * @return wxPoint - The GerbView coordinate system vector.
  */
 static wxPoint mapPt( double x, double y, bool isMetric )
 {

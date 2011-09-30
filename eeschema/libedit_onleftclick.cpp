@@ -1,8 +1,6 @@
-/*****************************************/
-/*  EESchema - libedit_onleftclick.cpp  */
-/*****************************************/
-
-/* Library editor commands created by a mouse left button simple or double click
+/**
+ * @file libedit_onleftclick.cpp
+ * @brief Eeschema library editor event handler for a mouse left button single or double click.
  */
 
 #include "fctsys.h"

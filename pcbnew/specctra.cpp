@@ -1,9 +1,9 @@
 
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
 {
     // specctra wants top physical layer first, then going down to the
     // bottom most physical layer in physical sequence.
-    // @question : why does Kicad not display layers in that order?
+    // @question : why does KiCad not display layers in that order?
     int layerCount = aBoard->GetCopperLayerCount();
 
     layerIds.clear();
@@ -86,7 +86,7 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
     {
         int kilayer = kiNdx>0 && kiNdx==layerCount-1 ? LAYER_N_FRONT : kiNdx;
 
-        // establish bi-directional mapping between kicad's BOARD layer and PCB layer
+        // establish bi-directional mapping between KiCad's BOARD layer and PCB layer
         pcbLayer2kicad[pcbNdx]  = kilayer;
         kicadLayer2pcb[kilayer] = pcbNdx;
 
@@ -3601,7 +3601,7 @@ PARSER::PARSER( ELEM* aParent ) :
     via_rotate_first = true;
     generated_by_freeroute = false;
 
-    host_cad = "Kicad's PCBNEW";
+    host_cad = "KiCad's Pcbnew";
     wxString msg = GetBuildVersion();
     host_version = TO_UTF8(msg);
 }

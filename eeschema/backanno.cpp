@@ -1,7 +1,7 @@
-/****************************************************************
- * EESchema: backanno.cpp
- *  (functions for backannotating Footprint info
- ****************************************************************/
+/**
+ * @file backanno.cpp
+ * @brief Functions for backannotating footprint information.
+ */
 
 #include "fctsys.h"
 #include "confirm.h"
@@ -17,7 +17,7 @@
 #include "netlist.h"
 
 
-const wxString BackAnnotateFileWildcard( wxT( "EESchema Back Annotation File (*.stf)|*.stf" ) );
+const wxString BackAnnotateFileWildcard( wxT( "Eeschema Back Annotation File (*.stf)|*.stf" ) );
 
 
 bool SCH_EDIT_FRAME::ProcessStuffFile( FILE* aFile, bool aSetFieldAttributeToVisible  )

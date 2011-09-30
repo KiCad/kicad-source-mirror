@@ -106,7 +106,7 @@ int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
 
     // use this scheme because a pad is a higher priority than a track in the
     // search, and finding a pad, instead of a track on a pad,
-    // allows us to fire a message to eeschema.
+    // allows us to fire a message to Eeschema.
 
     GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
 

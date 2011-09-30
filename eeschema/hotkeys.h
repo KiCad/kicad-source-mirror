@@ -45,7 +45,7 @@ enum hotkey_id_commnand {
     HK_ADD_NOCONN_FLAG
 };
 
-// List of hotkey descriptors for eeschema
+// List of hotkey descriptors for Eeschema
 extern struct EDA_HOTKEY_CONFIG s_Eeschema_Hokeys_Descr[];
 
 // List of hotkey descriptors for the schematic editor only

@@ -1,8 +1,8 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ using namespace DSN;
 
 // Add .1 mil to the requested clearances as a safety margin.
 // There has been disagreement about interpretation of clearance in the past
-// between Kicad and Freerouter, so keep this safetyMargin until the
+// between KiCad and Freerouter, so keep this safetyMargin until the
 // disagreement is resolved and stable.  Freerouter seems to be moving
 // (protected) traces upon loading the DSN file, and even though it seems to sometimes
 // add its own 0.1 to the clearances, I believe this is happening after
@@ -105,7 +105,7 @@ void PCB_EDIT_FRAME::ExportToSpecctra( wxCommandEvent& event )
 
     SetLocaleTo_C_standard( );    // Switch the locale to standard C
 
-    //  DSN Images (=Kicad MODULES and pads) must be presented from the
+    //  DSN Images (=KiCad MODULES and pads) must be presented from the
     //  top view.  So we temporarily flip any modules which are on the back
     //  side of the board to the front, and record this in the MODULE's flag field.
     db.FlipMODULEs( GetBoard() );
@@ -160,7 +160,7 @@ const KICAD_T SPECCTRA_DB::scanPADs[] = { TYPE_PAD, EOT };
 
 /**
  * Function scale
- * converts a distance from kicad units to our reported specctra dsn units:
+ * converts a distance from KiCad units to our reported specctra dsn units:
  * 1/10000 inches (deci-mils) to mils.  So the factor of 10 comes in.
  */
 static inline double scale( int kicadDist )
@@ -181,7 +181,7 @@ static inline double mapY( int y )
 
 /**
  * Function mapPt
- * converts a Kicad point into a DSN file point.  Kicad's BOARD coordinates
+ * converts a KiCad point into a DSN file point.  Kicad's BOARD coordinates
  * are in deci-mils  (i.e. 1/10,000th of an inch) and we are exporting in units
  * of mils, so we have to divide by 10.
  */
@@ -639,7 +639,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
                 path->SetAperture( scale( graphic->m_Width ) );
                 path->SetLayerId( "signal" );
 
-                // Do the math using Kicad units, that way we stay out of the
+                // Do the math using KiCad units, that way we stay out of the
                 // scientific notation range of floating point numbers in the
                 // DSN file.   We do not parse scientific notation in our own
                 // lexer/beautifier, and the spec is not clear that this is
@@ -956,7 +956,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
     {
         // specctra wants top physical layer first, then going down to the
         // bottom most physical layer in physical sequence.
-        // @question : why does Kicad not display layers in that order?
+        // @question : why does KiCad not display layers in that order?
 
         buildLayerMaps( aBoard );
 
@@ -1578,7 +1578,7 @@ void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
     if( !modulesAreFlipped )
         return;
 
-    //  DSN Images (=Kicad MODULES and pads) must be presented from the
+    //  DSN Images (=KiCad MODULES and pads) must be presented from the
     //  top view.  Restore those that were flipped.
     for( MODULE* module = aBoard->m_Modules;  module;  module = module->Next() )
     {

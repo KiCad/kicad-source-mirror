@@ -173,7 +173,7 @@ private:
     // Used for fast comparisons in ratsnest and DRC computations.
 
     wxString  m_Netname;        // Full net name like /mysheet/mysubsheet/vout
-                                // used by eeschema
+                                // used by Eeschema
 
     wxString  m_ShortNetname;   // short net name, like vout from
                                 // /mysheet/mysubsheet/vout

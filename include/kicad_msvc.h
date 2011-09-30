@@ -1,6 +1,7 @@
-/******************************************************************/
-/* kicad_msvc.h : used to compile kicad with Microsoft Visual C++ */
-/******************************************************************/
+/**
+ * @file kicad_msvc.h
+ * @brief Code used to compile KiCad with Microsoft Visual C++
+ */
 
 // __MSVC__ must be defined
 

@@ -77,7 +77,7 @@ enum id_toolbar {
 
 /**
  * Class EDA_BASE_FRAME
- * is the base frame for deriving all Kicad main window classes.  This class is not
+ * is the base frame for deriving all KiCad main window classes.  This class is not
  * intended to be used directly.
  */
 class EDA_BASE_FRAME : public wxFrame
@@ -125,7 +125,7 @@ public:
 
     /**
      * Function OnSelectPreferredEditor
-     * Open a dialog to select the editor that will used in Kicad
+     * Open a dialog to select the editor that will used in KiCad
      * to edit or display files (reports ... )
      * The full filename editor is saved in configuration (global params)
      */
@@ -236,8 +236,8 @@ public:
 
 /**
  * Class EDA_DRAW_FRAME
- * is the base class for create windows for drawing purpose.  The eeschema, pcbnew and
- * gerbview main windows are just a few examples of classes derived from EDA_DRAW_FRAME.
+ * is the base class for create windows for drawing purpose.  The Eeschema, Pcbnew and
+ * GerbView main windows are just a few examples of classes derived from EDA_DRAW_FRAME.
  */
 class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 {
@@ -251,7 +251,7 @@ public:
     EDA_TOOLBAR*      m_AuxVToolBar;        // Auxiliary Vertical (right side)
                                             // Toolbar
     EDA_TOOLBAR*      m_OptionsToolBar;     // Options Toolbar (left side)
-    EDA_TOOLBAR*      m_AuxiliaryToolBar;   // Auxiliary Toolbar used in pcbnew
+    EDA_TOOLBAR*      m_AuxiliaryToolBar;   // Auxiliary Toolbar used in Pcbnew
 
     wxComboBox*       m_SelGridBox;         // Choice box to choose the grid size
     wxComboBox*       m_SelZoomBox;         // Choice box to choose the zoom value
@@ -264,8 +264,8 @@ public:
                                             // horizontal toolbar
 
     int          m_InternalUnits;           // Internal units count in 1 inch
-                                            // = 1000 for eeschema, = 10000
-                                            // for PCBnew and Gerbview
+                                            // = 1000 for Eeschema, = 10000
+                                            // for Pcbnew and GerbView
 
     bool         m_Draw_Axis;               // TRUE to show X and Y axis
     bool         m_Draw_Grid_Axis;          // TRUE to show grid axis.
@@ -273,7 +273,7 @@ public:
 
     bool         m_Print_Sheet_Ref;         // TRUE to print frame references
     bool         m_Draw_Auxiliary_Axis;     /* TRUE to show auxiliary axis.
-                                             * Used in pcbnew: the auxiliary
+                                             * Used in Pcbnew: the auxiliary
                                              * axis is the origin of
                                              * coordinates for drill, gerber
                                              * and component position files
@@ -367,7 +367,7 @@ public:
 
     /* These 4 functions provide a basic way to show/hide grid
      * and /get/set grid color.
-     * These parameters are saved in kicad config for each main frame
+     * These parameters are saved in KiCad config for each main frame
      */
     /**
      * Function IsGridVisible() , virtual
@@ -580,7 +580,7 @@ public:
      *
      * @param textUpper - The message upper text.
      * @param textLower - The message lower text.
-     * @param color - A color ID from the Kicad color list (see colors.h).
+     * @param color - A color ID from the KiCad color list (see colors.h).
      * @param pad - Number of spaces to pad between messages (default = 4).
      */
     void AppendMsgPanel( const wxString& textUpper, const wxString& textLower,
@@ -717,7 +717,7 @@ public:
      *
      * @param textUpper - The message upper text.
      * @param textLower - The message lower text.
-     * @param color - A color ID from the Kicad color list (see colors.h).
+     * @param color - A color ID from the KiCad color list (see colors.h).
      * @param pad - Number of spaces to pad between messages (default = 4).
      */
     void AppendMessage( const wxString& textUpper, const wxString& textLower,
@@ -729,7 +729,7 @@ public:
 
 /**
  * Class EDA_TOOLBAR
- * is the base class for deriving Kicad tool bars.
+ * is the base class for deriving KiCad tool bars.
  */
 class EDA_TOOLBAR : public wxAuiToolBar
 {
@@ -910,10 +910,10 @@ static inline void AddMenuItem( wxMenu*         aMenu,
 
 
 /**
- * Specialization of the wxAuiPaneInfo class for Kicad panels.
+ * Specialization of the wxAuiPaneInfo class for KiCad panels.
  *
  * Documentation for wxAui is poor at this time. The following notes spring from errors made in
- * previous kicad implementations:
+ * previous KiCad implementations:
  *
  * wxAuiPaneInfo.ToolbarPane() and .Defaults() are used to clear and then prepare the objects so
  * only use them once at the beginning of configuration..
@@ -938,7 +938,7 @@ public:
 
     /**
      * Function HorizontalToolbarPane
-     * Change *this to a horizontal toolbar for kicad.
+     * Change *this to a horizontal toolbar for KiCad.
      */
     EDA_PANEINFO& HorizontalToolbarPane()
     {
@@ -956,7 +956,7 @@ public:
 
     /**
      * Function VerticalToolbarPane
-     * Change *this to a vertical toolbar for kicad.
+     * Change *this to a vertical toolbar for KiCad.
      */
     EDA_PANEINFO& VerticalToolbarPane()
     {
@@ -974,7 +974,7 @@ public:
 
     /**
      * Function MessageToolbarPane
-     * Change *this to a message pane for kicad.
+     * Change *this to a message pane for KiCad.
      *
      */
     EDA_PANEINFO& MessageToolbarPane()
@@ -990,7 +990,7 @@ public:
 
     /**
      * Function LayersToolbarPane
-     * Change *this to a layers toolbar for kicad.
+     * Change *this to a layers toolbar for KiCad.
      */
     EDA_PANEINFO& LayersToolbarPane()
     {
@@ -1000,10 +1000,10 @@ public:
 
     /**
      * Function InfoToolbarPane
-     * Change *this to a information panel for for kicad.
+     * Change *this to a information panel for for KiCad.
      *
      * Info panes are used for vertical display of information next to the center pane.
-     * Used in cvpcb and libviewer primarily
+     * Used in CvPcb and the library viewer primarily.
      */
     EDA_PANEINFO& InfoToolbarPane()
     {

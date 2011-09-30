@@ -1,9 +1,6 @@
-/************************/
-/*   File options.cpp   */
-/************************/
-
-/*
- * Set some general options of Gerbview
+/**
+ * @file options.cpp
+ * @brief Set some general options of GerbView.
  */
 
 

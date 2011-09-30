@@ -339,9 +339,9 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     SetAlpha( &color, 170 );
 
     /* Get the pad clearance. This has a meaning only for Pcbnew.
-     *  for Cvpcb (and Gerbview) GetClearance() creates debug errors because
+     *  for CvPcb (and GerbView) GetClearance() creates debug errors because
      *  there is no net classes so a call to GetClearance() is made only when
-     *   needed (never needed in Cvpcb nor in Gerbview)
+     *   needed (never needed in CvPcb nor in GerbView)
      */
     drawInfo.m_PadClearance = DisplayIsol ? GetClearance() : 0;
 

@@ -1,6 +1,6 @@
 /**
  * @file menubar_pcbframe.cpp
- * PCBNew editor menu bar
+ * Pcbnew editor menu bar
  */
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -13,7 +13,7 @@
 #include "help_common_strings.h"
 
 /**
- * PCBNew mainframe menubar
+ * Pcbnew mainframe menubar
  */
 void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
@@ -67,10 +67,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( open_project_xpm ) );
 
 
-    // PCBNew Board
+    // Pcbnew Board
     item = new wxMenuItem( filesMenu, ID_APPEND_FILE,
-               _( "&Append Board" ),
-               _( "Append another PCBNew board to the current loaded board" ) );
+                           _( "&Append Board" ),
+                           _( "Append another Pcbnew board to the current loaded board" ) );
     SET_BITMAP( KiBitmap( import_xpm ) );
     filesMenu->Append( item );
 
@@ -248,7 +248,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     /* Quit */
     filesMenu->AppendSeparator();
-    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ), _( "Quit PCBNew" ) );
+    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ), _( "Quit Pcbnew" ) );
     SET_BITMAP( KiBitmap( exit_xpm ) );
     filesMenu->Append( item );
 
@@ -495,7 +495,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 #else
     item = new wxMenuItem( configmenu, wxID_PREFERENCES,
                            _( "&General" ),
-                           _( "Select general options for PCBnew" ) );
+                           _( "Select general options for Pcbnew" ) );
 
     SET_BITMAP( KiBitmap( preference_xpm ) );
     configmenu->Append( item );
@@ -657,7 +657,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Contents
     AddMenuItem( helpMenu, wxID_HELP,
                  _( "&Contents" ),
-                 _( "Open the PCBNew handbook" ),
+                 _( "Open the pcbnew handbook" ),
                  KiBitmap( online_help_xpm ) );
     AddMenuItem( helpMenu, wxID_INDEX,
                  _( "&Getting Started in KiCad" ),
@@ -667,8 +667,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // About
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About PCBNew" ),
-                 _( "About PCBnew printed circuit board designer" ),
+                 _( "&About Pcbnew" ),
+                 _( "About Pcbnew printed circuit board designer" ),
                  KiBitmap( info_xpm ) );
 
     /**

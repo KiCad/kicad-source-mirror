@@ -62,13 +62,13 @@ const wxString PdfFileExtension( wxT( "pdf" ) );
 const wxString MacrosFileExtension( wxT( "mcr" ) );
 
 /* Proper wxFileDialog wild card definitions. */
-const wxString ProjectFileWildcard( _( "Kicad project files (*.pro)|*.pro" ) );
-const wxString SchematicFileWildcard( _( "Kicad schematic files (*.sch)|*.sch" ) );
-const wxString NetlistFileWildcard( _( "Kicad netlist files (*.net)|*.net" ) );
+const wxString ProjectFileWildcard( _( "KiCad project files (*.pro)|*.pro" ) );
+const wxString SchematicFileWildcard( _( "KiCad schematic files (*.sch)|*.sch" ) );
+const wxString NetlistFileWildcard( _( "KiCad netlist files (*.net)|*.net" ) );
 const wxString GerberFileWildcard( _( "Gerber files (*.pho)|*.pho" ) );
-const wxString PcbFileWildcard( _( "Kicad printed circuit board files (*.brd)|*.brd" ) );
+const wxString PcbFileWildcard( _( "KiCad printed circuit board files (*.brd)|*.brd" ) );
 const wxString PdfFileWildcard( _( "Portable document format files (*.pdf)|*.pdf" ) );
-const wxString MacrosFileWildcard( _( "Kicad recorded macros (*.mcr)|*.mcr" ) );
+const wxString MacrosFileWildcard( _( "KiCad recorded macros (*.mcr)|*.mcr" ) );
 const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 
 
@@ -87,7 +87,7 @@ int            g_GhostColor;
 
 /* predefined colors used in kicad.
  * Please: if you change a value, remember these values are carefully chosen
- * to have good results in pcbnew, that uses the ORed value of basic colors
+ * to have good results in Pcbnew, that uses the ORed value of basic colors
  * when displaying superimposed objects
  * This list must have exactly NBCOLOR items
  */
@@ -133,7 +133,7 @@ bool g_DisableFloatingPointLocalNotation = false;
 
 /**
  * Function SetLocaleTo_C_standard
- * because kicad is internationalized, switch internalization to "C" standard
+ * because KiCad is internationalized, switch internalization to "C" standard
  * i.e. uses the . (dot) as separator in print/read float numbers
  * (some countries (France, Germany ..) use , (comma) as separator)
  * This function must be called before read or write ascii files using float
@@ -141,7 +141,7 @@ bool g_DisableFloatingPointLocalNotation = false;
  * reading or writing the file
  *
  * This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
- * but could make more easier an optional use of locale in kicad
+ * but could make more easier an optional use of locale in KiCad
  */
 void SetLocaleTo_C_standard( void )
 {
@@ -151,13 +151,13 @@ void SetLocaleTo_C_standard( void )
 
 /**
  * Function SetLocaleTo_Default
- * because kicad is internationalized, switch internalization to default
+ * because KiCad is internationalized, switch internalization to default
  * to use the default separator in print/read float numbers
  * (. (dot) but some countries (France, Germany ..) use , (comma) as separator)
  * This function must be called after a call to SetLocaleTo_C_standard
  *
  * This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
- * but could make more easier an optional use of locale in kicad
+ * but could make more easier an optional use of locale in KiCad
  */
 void SetLocaleTo_Default( void )
 {
@@ -355,7 +355,7 @@ wxString ReturnStringFromValue( EDA_UNITS_T aUnit, int aValue, int aInternal_Uni
     double   value_to_print;
 
     value_to_print = To_User_Unit( aUnit, aValue, aInternal_Unit );
-    /* Yet another 'if pcbnew' :( */
+    /* Yet another 'if Pcbnew' :( */
     StringValue.Printf( ( aInternal_Unit > 1000 ) ? wxT( "%.4f" ) :
                         wxT( "%.3f" ),
                         value_to_print );

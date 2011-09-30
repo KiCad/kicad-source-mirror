@@ -202,12 +202,12 @@ the changes?" ) ) )
     if ( ver > g_CurrentVersionPCB )
     {
         DisplayInfoMessage( this, _( "This file was created by a more recent \
-version of PCBnew and may not load correctly. Please consider updating!" ) );
+version of Pcbnew and may not load correctly. Please consider updating!" ) );
     }
     else if ( ver < g_CurrentVersionPCB )
     {
         DisplayInfoMessage( this, _( "This file was created by an older \
-version of PCBnew. It will be stored in the new file format when you save \
+version of Pcbnew. It will be stored in the new file format when you save \
 this file again." ) );
     }
 
@@ -292,11 +292,11 @@ this file again." ) );
         m_Draw3DFrame->NewDisplay();
 
 #if 0 && defined(DEBUG)
-    // note this freezes up pcbnew when run under the kicad project
-    // manager.  runs fine from command prompt.  This is because the kicad
-    // project manager redirects stdout of the child pcbnew process to itself,
+    // note this freezes up Pcbnew when run under the KiCad project
+    // manager.  runs fine from command prompt.  This is because the KiCad
+    // project manager redirects stdout of the child Pcbnew process to itself,
     // but never reads from that pipe, and that in turn eventually blocks
-    // the pcbnew program when the pipe it is writing to gets full.
+    // the Pcbnew program when the pipe it is writing to gets full.
 
     // Output the board object tree to stdout, but please run from command prompt:
     GetBoard()->Show( 0, std::cout );

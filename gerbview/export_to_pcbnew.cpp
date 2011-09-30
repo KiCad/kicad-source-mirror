@@ -1,6 +1,6 @@
 /**
  * @file export_to_pcbnew.cpp
- * @brief Export the layers to pcbnew.
+ * @brief Export the layers to Pcbnew.
  */
 
 #include "fctsys.h"
@@ -60,7 +60,7 @@ GBR_TO_PCB_EXPORTER::~GBR_TO_PCB_EXPORTER()
 
 
 
-/* Export data in pcbnew format
+/* Export data in Pcbnew format
  * remember Pcbnew uses a Y reversed axis, so we must negate all Y coordinates
  */
 void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
@@ -101,7 +101,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
         return;
 
     /* Install a dialog frame to choose the mapping
-     * between gerber layers and pcbnew layers
+     * between gerber layers and Pcbnew layers
      */
     LAYERS_MAP_DIALOG* dlg = new LAYERS_MAP_DIALOG( this );
     int ok = dlg->ShowModal();
@@ -196,7 +196,7 @@ bool GBR_TO_PCB_EXPORTER::WriteGeneralDescrPcb( )
 /* Routine to save the board
  * @param frame = pointer to the main frame
  * @param File = FILE * pointer to an already opened file
- * @param LayerLookUpTable = look up table: pcbnew layer for each gerber layer
+ * @param LayerLookUpTable = look up table: Pcbnew layer for each gerber layer
  * @return 1 if OK, 0 if fail
  */
 bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )

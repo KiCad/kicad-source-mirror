@@ -1,6 +1,6 @@
 /**
  * @file gerbview_config.cpp
- * @brief Gerbview configuration.
+ * @brief GerbView configuration.
 */
 
 #include "fctsys.h"
@@ -39,7 +39,7 @@ void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
 
-        // Display current hotkey list for eeschema.
+        // Display current hotkey list for GerbView.
         DisplayHotkeyList( this, s_Gerbview_Hokeys_Descr );
         break;
 
@@ -51,15 +51,15 @@ void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
 
 
 /*
- * Return the Gerbview applications settings list.
- * (list of parameters that must be saved in Gerbview parameters)
+ * Return the GerbView applications settings list.
+ * (list of parameters that must be saved in GerbView parameters)
  *
  * This replaces the old statically define list that had the project
  * file settings and the application settings mixed together.  This
  * was confusing and caused some settings to get saved and loaded
  * incorrectly.  Currently, only the settings that are needed at start
  * up by the main window are defined here.  There are other locally used
- * settings scattered thoughout the EESchema source code.  If you need
+ * settings scattered thoughout the GerbView source code.  If you need
  * to define a configuration setting that need to be loaded at run time,
  * this is the place to define it.
  *

@@ -1,6 +1,6 @@
 /*
  * file polygons_defs.h
- * definitions to use boost::polygon in Kicad
+ * definitions to use boost::polygon in KiCad.
  */
 
 #ifndef _POLYGONS_DEFS_H_

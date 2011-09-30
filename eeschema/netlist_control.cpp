@@ -1,10 +1,11 @@
-/**********************************/
-/* Dialog box for netlist outputs */
-/**********************************/
+/**
+ * @file netlist_control.cpp
+ * @brief Dialog box for creating netlists.
+ */
 
-/* Functions relatives to the dialog creating the netlist for pcbnew.
+/* Functions relative to the dialog creating the netlist for Pcbnew.
  * The dialog is a notebook with 4 fixed netlist format:
- * PCBNEW ORCADPCB2 CADSTAR and SPICE
+ * Pcbnew ORCADPCB2 CADSTAR and SPICE
  * and up to CUSTOMPANEL_COUNTMAX (see netlist.h) user programmable format
  * calling an external converter with convert an intermediate format to the
  * user specific format.

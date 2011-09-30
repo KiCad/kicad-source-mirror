@@ -1,6 +1,7 @@
-/******************************************/
-/* Kicad: Common plot Postscript Routines */
-/******************************************/
+/**
+ * @file common_plot_functions.cpp
+ * @brief Kicad: Common plot Postscript Routines
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -28,7 +29,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     EDA_Colors    color;
 
     /* Scale to convert dimension in 1/1000 in into internal units
-     * (1/1000 inc for EESchema, 1/10000 for pcbnew. */
+     * (1/1000 inc for Eeschema, 1/10000 for Pcbnew. */
     int      conv_unit = screen->GetInternalUnits() / 1000;
     wxString msg;
     wxSize   text_size;

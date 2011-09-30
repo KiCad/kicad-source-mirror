@@ -474,7 +474,7 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
 #if 0   // Note for developers:
         // Not sure this warning is very useful: old designs *must* be always loadable
             wxLogWarning( wxT( "The component library <%s> header version \
-number is invalid.\n\nIn future versions of EESchema this library may not \
+number is invalid.\n\nIn future versions of Eeschema this library may not \
 load correctly.  To resolve this problem open the library in the library \
 editor and save it.  If this library is the project cache library, save \
 the current schematic." ),

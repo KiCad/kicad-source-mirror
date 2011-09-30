@@ -135,8 +135,8 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
 /* dummy_functions:
  *
  *  These functions are used in some classes.
- *  they are useful in pcbnew, but have no meaning or are never used
- *  in cvpcb or gerbview.
+ *  they are useful in Pcbnew, but have no meaning or are never used
+ *  in CvPcb or GerbView.
  *  but they must exist because they appear in some classes.
  *  Do nothing in CvPcb.
  */

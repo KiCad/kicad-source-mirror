@@ -1,6 +1,7 @@
-/********************************************/
-/* Definitions for the EESchema program:    */
-/********************************************/
+/**
+ * @file sch_sheet.h
+ * @brief Definition of the SCH_SHEET class for Eeschema.
+ */
 
 #ifndef CLASS_DRAWSHEET_H
 #define CLASS_DRAWSHEET_H

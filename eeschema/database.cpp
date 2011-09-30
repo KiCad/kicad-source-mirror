@@ -1,6 +1,6 @@
-/****************************/
-/*  EESchema - database.cpp */
-/****************************/
+/**
+ * @file database.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"

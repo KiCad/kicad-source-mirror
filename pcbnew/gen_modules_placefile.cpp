@@ -221,7 +221,7 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
         fputs( line, fpBack );
 
     Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
-    sprintf( line, "### Printed by PcbNew version %s\n", TO_UTF8( Title ) );
+    sprintf( line, "### Printed by Pcbnew version %s\n", TO_UTF8( Title ) );
     fputs( line, fpFront );
 
     if( doBoardBack )
@@ -365,7 +365,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
     fputs( line, rptfile );
 
     wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
-    sprintf( line, "## Created by PcbNew version %s\n", TO_UTF8( Title ) );
+    sprintf( line, "## Created by Pcbnew version %s\n", TO_UTF8( Title ) );
     fputs( line, rptfile );
     fputs( "## Unit = inches, Angle = deg.\n", rptfile );
 

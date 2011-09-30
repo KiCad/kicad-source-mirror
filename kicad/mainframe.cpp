@@ -1,6 +1,7 @@
-/***************************************************************/
-/* mainframe.cpp - KICAD_MANAGER_FRAME is the kicad main frame */
-/***************************************************************/
+/**
+ * @file kicad/mainframe.cpp
+ * @brief KICAD_MANAGER_FRAME is the KiCad main frame.
+ */
 
 #ifdef __GNUG__
 #pragma implementation

@@ -72,14 +72,14 @@ void BOARD_DESIGN_SETTINGS::SetVisibleAlls()
 
 void BOARD_DESIGN_SETTINGS::SetVisibleLayers( int aMask )
 {
-    // Although Pcbnew uses only 29, Gerbview uses all 32 layers
+    // Although Pcbnew uses only 29, GerbView uses all 32 layers
     m_VisibleLayers = aMask & m_EnabledLayers & FULL_LAYERS;
 }
 
 
 void BOARD_DESIGN_SETTINGS::SetLayerVisibility( int aLayerIndex, bool aNewState )
 {
-    // Altough Pcbnew uses only 29, Gerbview uses all 32 layers
+    // Altough Pcbnew uses only 29, GerbView uses all 32 layers
     if( aLayerIndex < 0 || aLayerIndex >= 32 )
         return;
 

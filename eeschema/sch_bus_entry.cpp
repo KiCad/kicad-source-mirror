@@ -93,7 +93,7 @@ bool SCH_BUS_ENTRY::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( sscanf( line, "%s %s", Name1, Name2 ) != 2  )
     {
-        aErrorMsg.Printf( wxT( "EESchema file bus entry load error at line %d" ),
+        aErrorMsg.Printf( wxT( "Eeschema file bus entry load error at line %d" ),
                           aLine.LineNumber() );
         aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
         return false;
