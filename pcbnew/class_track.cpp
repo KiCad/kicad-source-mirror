@@ -30,9 +30,13 @@
 static bool ShowClearance( const TRACK* aTrack )
 {
     // maybe return true for tracks and vias, not for zone segments
-    return DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS
-           &&  aTrack->GetLayer() <= LAST_COPPER_LAYER
-           && ( aTrack->Type() == TYPE_TRACK || aTrack->Type() == TYPE_VIA );
+    return aTrack->GetLayer() <= LAST_COPPER_LAYER
+           && ( aTrack->Type() == TYPE_TRACK || aTrack->Type() == TYPE_VIA )
+           && ( ( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
+            && ( aTrack->m_Flags & IS_DRAGGED || aTrack->m_Flags & IS_MOVED || aTrack->m_Flags & IS_NEW ) )
+            || ( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS )
+            );
+
 }
 
 

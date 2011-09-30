@@ -129,6 +129,8 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     EraseDragList();
     Panel->SetMouseCapture( NULL, NULL );
+
+    Panel->Refresh();
 }
 
 
@@ -1035,6 +1037,8 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
 
     OnModify();
     DrawPanel->SetMouseCapture( NULL, NULL );
+
+    DrawPanel->Refresh();
 
     if( current_net_code > 0 )
         TestNetConnection( DC, current_net_code );

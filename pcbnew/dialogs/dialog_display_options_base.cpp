@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Sep  6 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -54,10 +54,10 @@ DIALOG_DISPLAY_OPTIONS_BASE::DIALOG_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWi
 	
 	sbMiddleLeftSizer->Add( m_ShowNetNamesOption, 0, wxALL, 5 );
 	
-	wxString m_OptDisplayTracksClearanceChoices[] = { _("Never"), _("New track"), _("New track with via area"), _("Always") };
+	wxString m_OptDisplayTracksClearanceChoices[] = { _("Never"), _("New track"), _("New track with via area"), _("New and edited tracks with via area"), _("Always") };
 	int m_OptDisplayTracksClearanceNChoices = sizeof( m_OptDisplayTracksClearanceChoices ) / sizeof( wxString );
 	m_OptDisplayTracksClearance = new wxRadioBox( this, ID_SHOW_CLEARANCE, _("Show Tracks Clearance:"), wxDefaultPosition, wxDefaultSize, m_OptDisplayTracksClearanceNChoices, m_OptDisplayTracksClearanceChoices, 1, wxRA_SPECIFY_COLS );
-	m_OptDisplayTracksClearance->SetSelection( 0 );
+	m_OptDisplayTracksClearance->SetSelection( 3 );
 	m_OptDisplayTracksClearance->SetToolTip( _("Show( or not) tracks clearance area.\nIf New track is selected,  track clearance area is shown only when creating the track.") );
 	
 	sbMiddleLeftSizer->Add( m_OptDisplayTracksClearance, 0, wxALL|wxEXPAND, 5 );

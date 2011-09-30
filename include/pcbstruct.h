@@ -33,6 +33,10 @@ enum TRACE_CLEARANCE_DISPLAY_MODE_T {
                                                * clearance area at end of current new
                                                * segment (guide to place a new via
                                                */
+    SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS,
+                                                /* Show clearance for new, moving and
+                                                 * dragging tracks and vias
+                                                 */
     SHOW_CLEARANCE_ALWAYS                      /* Show Always clearance areas
                                                 * for track and vias
                                                 */
