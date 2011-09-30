@@ -56,20 +56,24 @@ void DIALOG_DISPLAY_OPTIONS::init()
             m_OptDisplayTracksClearance->SetSelection( 1 );
             break;
 
+        case SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
+            m_OptDisplayTracksClearance->SetSelection( 3 );
+            break;
+
         default:
         case SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
-            m_OptDisplayTracksClearance->SetSelection(2);
+            m_OptDisplayTracksClearance->SetSelection( 2 );
             break;
 
         case SHOW_CLEARANCE_ALWAYS:
-            m_OptDisplayTracksClearance->SetSelection(3);
+            m_OptDisplayTracksClearance->SetSelection( 4 );
             break;
     }
 
     if ( DisplayOpt.DisplayPadFill )
-        m_OptDisplayPads->SetSelection(1);
+        m_OptDisplayPads->SetSelection( 1 );
     else
-        m_OptDisplayPads->SetSelection(0);
+        m_OptDisplayPads->SetSelection( 0 );
 
     if ( DisplayOpt.DisplayViaFill )
         m_OptDisplayVias->SetSelection( 1 );
@@ -127,6 +131,10 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
             break;
 
         case 3:
+            DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS;
+            break;
+
+        case 4:
             DisplayOpt.ShowTrackClearanceMode = SHOW_CLEARANCE_ALWAYS;
             break;
     }
