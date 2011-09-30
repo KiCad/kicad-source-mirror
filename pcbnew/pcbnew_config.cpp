@@ -116,7 +116,7 @@ void PCB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-        // Display current hotkey list for eeschema.
+        // Display current hotkey list for Pcbnew.
         DisplayHotkeyList( this, g_Board_Editor_Hokeys_Descr );
         break;
 

@@ -1,8 +1,8 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1887,7 +1887,7 @@ class PIN : public ELEM
     std::string     pin_id;
     POINT           vertex;
 
-    int             kiNetCode;      ///< kicad netcode
+    int             kiNetCode;      ///< KiCad netcode
 
 
 public:
@@ -3602,7 +3602,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     /**
      * Function buildLayerMaps
      * creates a few data translation structures for layer name and number
-     * mapping between the DSN::PCB structure and the kicad BOARD structure.
+     * mapping between the DSN::PCB structure and the KiCad BOARD structure.
      * @param aBoard The BOARD to create the maps for.
      */
     void buildLayerMaps( BOARD* aBoard );
@@ -3733,7 +3733,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
 
     /**
      * Function makeVia
-     * makes a round through hole PADSTACK using the given Kicad diameter in deci-mils.
+     * makes a round through hole PADSTACK using the given KiCad diameter in deci-mils.
      * @param aCopperDiameter The diameter of the copper pad.
      * @param aDrillDiameter The drill diameter, used on re-import of the session file.
      * @param aTopLayer The DSN::PCB top most layer index.
@@ -3746,7 +3746,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
 
     /**
      * Function makeVia
-     * makes any kind of PADSTACK using the given Kicad SEGVIA.
+     * makes any kind of PADSTACK using the given KiCad SEGVIA.
      * @param aVia The SEGVIA to build the padstack from.
      * @return PADSTACK* - The padstack, which is on the heap only, user must save
      *  or delete it.
@@ -3787,7 +3787,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
 
     /**
      * Function makeVIA
-     * instantiates a Kicad SEGVIA on the heap and initializes it with internal
+     * instantiates a KiCad SEGVIA on the heap and initializes it with internal
      * values consistent with the given PADSTACK, POINT, and netcode.
      */
     SEGVIA* makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNetCode ) throw( IO_ERROR );
@@ -3862,7 +3862,7 @@ public:
      * Function LoadSESSION
      * is a recursive descent parser for a SPECCTRA DSN "session" file.
      * A session file is a file that is fed back from the router to the layout
-     * tool (PCBNEW) and should be used to update a BOARD object with the new
+     * tool (Pcbnew) and should be used to update a BOARD object with the new
      * tracks, vias, and component locations.
      *
      * @param filename The name of the dsn file to load.

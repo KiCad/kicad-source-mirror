@@ -57,7 +57,7 @@ const wxChar* s_AllowedExtensionsToList[] =
 
 
 /* TODO: Check if these file extension and wildcard definitions are used
- *       in any of the other Kicad programs and move them into the common
+ *       in any of the other KiCad programs and move them into the common
  *       library as required. */
 
 /* File extension definitions. */
@@ -118,7 +118,7 @@ TREE_PROJECT_FRAME::TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent ) :
         m_Filters.push_back( s_AllowedExtensionsToList[ii] );
     }
 
-    m_Filters.push_back( wxT( "^no kicad files found" ) );
+    m_Filters.push_back( wxT( "^no KiCad files found" ) );
 
     for( int i = 0; i < TREE_MAX; i++ )
         m_ContextMenus.push_back( new wxMenu() );
@@ -542,7 +542,7 @@ bool TREE_PROJECT_FRAME::AddFile( const wxString& aName,
         if( !addFile )
             return false;
 
-        // only show the schematic if it is a top level schematic.  eeschema
+        // only show the schematic if it is a top level schematic.  Eeschema
         // cannot open a schematic and display it properly unless it starts
         // at the top of the hierarchy.  The schematic is top level only if
         // there is a line in the header saying:

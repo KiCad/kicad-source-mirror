@@ -1,6 +1,6 @@
 /**
  * @file pcbstruct.h
- * @brief Classes and definitions used in pcbnew.
+ * @brief Classes and definitions used in Pcbnew.
  */
 
 #ifndef PCBSTRUCT_H

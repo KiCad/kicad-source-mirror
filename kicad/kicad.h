@@ -23,11 +23,11 @@ class TREE_PROJECT_FRAME;
 
 
 /**
- * Command IDs for Kicad.
+ * Command IDs for KiCad.
  *
  * Please add IDs that are unique to Kicad  here and not in the global id.h
  * file.  This will prevent the entire project from being rebuilt when adding
- * new commands to Kicad.
+ * new commands to KiCad.
  */
 
 enum id_kicad_frm {
@@ -56,7 +56,7 @@ enum id_kicad_frm {
 
 
 /* class KICAD_MANAGER_FRAME
- * This is the main kicad frame
+ * This is the main KiCad frame
  */
 class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME
 {
@@ -133,7 +133,7 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
 
     /**
      * Function LoadSettings
-     * loads the Kicad main frame specific configuration settings.
+     * loads the KiCad main frame specific configuration settings.
      *
      * Don't forget to call this base method from any derived classes or the
      * settings will not get loaded.
@@ -142,7 +142,7 @@ public: KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& title,
 
     /**
      * Function SaveSettings
-     * saves the Kicad main frame specific configuration settings.
+     * saves the KiCad main frame specific configuration settings.
      *
      * Don't forget to call this base method from any derived classes or the
      * settings will not get saved.
@@ -174,7 +174,7 @@ class RIGHT_KM_FRAME : public wxSashLayoutWindow
 public:
     wxTextCtrl*          m_MessagesBox;
 private:
-    KICAD_MANAGER_FRAME* m_Parent;          // a wxTextCtrl to displays messages frm Kicad
+    KICAD_MANAGER_FRAME* m_Parent;          // a wxTextCtrl to displays messages frm KiCad
     int m_ButtonsPanelHeight;
     wxPanel*             m_ButtPanel;
     int     m_ButtonSeparation;             // button distance in pixels

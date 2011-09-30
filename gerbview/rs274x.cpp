@@ -24,7 +24,7 @@ extern double ReadDouble( char*& text, bool aSkipSeparator = true );
 // Also:
 //  Image is what you must plot (the entire data of the file).
 //  Layer is just a set of data blocks with their parameters. An image can have more than one
-//   layer so a gerber layer is not like a board layer or the graphic layers used in Gerbview
+//   layer so a gerber layer is not like a board layer or the graphic layers used in GerbView
 //   to show a file.
 enum RS274X_PARAMETERS {
     // Directive parameters: single usage recommended
@@ -454,7 +454,7 @@ bool GERBER_IMAGE::ExecuteRS274XCommand( int       command,
 
     case KNOCKOUT:
         m_Iterpolation = GERB_INTERPOL_LINEAR_1X;       // Start a new Gerber layer
-        msg = _( "RS274X: Command KNOCKOUT ignored by Gerbview" ) ;
+        msg = _( "RS274X: Command KNOCKOUT ignored by GerbView" ) ;
         ReportMessage( msg );
         break;
 

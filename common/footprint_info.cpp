@@ -83,7 +83,7 @@ bool FOOTPRINT_LIST::ReadFootprintFiles( wxArrayString & aFootprintsLibNames )
         if( strnicmp( line, FOOTPRINT_LIBRARY_HEADER, FOOTPRINT_LIBRARY_HEADER_CNT ) != 0 )
         {
             wxString msg;
-            msg.Printf( _( "<%s> is not a valid Kicad PCB footprint library." ),
+            msg.Printf( _( "<%s> is not a valid KiCad PCB footprint library." ),
                         GetChars( libname ) );
             m_filesInvalid << msg << wxT("\n");
             continue;

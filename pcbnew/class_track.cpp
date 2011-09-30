@@ -984,7 +984,7 @@ void TRACK::DisplayInfo( EDA_DRAW_FRAME* frame )
     // Display basic infos
     DisplayInfoBase( frame );
 
-    // Display full track length (in pcbnew)
+    // Display full track length (in Pcbnew)
     if( frame->m_Ident == PCB_FRAME )
     {
         int trackLen = 0;
@@ -1050,7 +1050,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
 
     frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
 
-    // Display Net Name (in pcbnew)
+    // Display Net Name (in Pcbnew)
     if( frame->m_Ident == PCB_FRAME )
     {
         NETINFO_ITEM* net = board->FindNet( GetNet() );

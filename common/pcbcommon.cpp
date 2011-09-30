@@ -1,8 +1,8 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2008 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2008 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 
 /*
  * This file contains the global constants and variables used in the PCB
- * applications PCBNEW, CvPcb, and GervView.  The goal of this was to
+ * applications Pcbnew, CvPcb, and GervView.  The goal of this was to
  * unobfuscate the original header file design that made it very difficult
  * to figure out where these variables lived.  Ideally, they should be pushed
  * back into the application layer.
@@ -83,7 +83,7 @@ wxString g_Shapes3DExtBuffer( wxT( "wrl" ) );
 const wxString ModuleFileExtension( wxT( "mod" ) );
 
 /* PCB file name wild card definitions. */
-const wxString ModuleFileWildcard( _( "Kicad footprint library files (*.mod)|*.mod" ) );
+const wxString ModuleFileWildcard( _( "KiCad footprint library files (*.mod)|*.mod" ) );
 
 int g_CurrentVersionPCB = 1;
 

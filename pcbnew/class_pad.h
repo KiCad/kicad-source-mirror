@@ -66,7 +66,7 @@ public:
 class D_PAD : public BOARD_CONNECTED_ITEM
 {
 private:
-    wxString m_Netname;         // Full net name like /mysheet/mysubsheet/vout used by eeschema
+    wxString m_Netname;         // Full net name like /mysheet/mysubsheet/vout used by Eeschema
     wxString m_ShortNetname;    // short net name, like vout from /mysheet/mysubsheet/vout
 
 

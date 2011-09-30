@@ -301,7 +301,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
         ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->m_InternalUnits );
 
     // Test if this is a reasonnable value for this parameter
-    // A too large value can hang pcbnew
+    // A too large value can hang Pcbnew
     #define CLEARANCE_MAX_VALUE 5000    // in 1/10000 inch
     if( m_Zone_Setting->m_ZoneClearance > CLEARANCE_MAX_VALUE )
     {

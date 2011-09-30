@@ -1,8 +1,7 @@
-/**********************************/
-/* Basic classes for Kicad:       */
-/*      EDA_ITEM                  */
-/*      EDA_TEXT                  */
-/**********************************/
+/**
+ * @file base_struct.cpp
+ * @brief Implementation of EDA_ITEM and EDA_TEXT base classes for KiCad.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"

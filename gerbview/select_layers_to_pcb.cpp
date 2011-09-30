@@ -137,16 +137,16 @@ void LAYERS_MAP_DIALOG::initDialog()
     {
         // Each Gerber layer has an associated static text string (to
         // identify that layer), a button (for invoking a child dialog
-        // box to change which pcbnew layer that the Gerber layer is
+        // box to change which Pcbnew layer that the Gerber layer is
         // mapped to), and a second static text string (to depict which
-        // pcbnew layer that the Gerber layer has been mapped to). Each
+        // Pcbnew layer that the Gerber layer has been mapped to). Each
         // of those items are placed into the left hand column, middle
         // column, and right hand column (respectively) of the Flexgrid
         // sizer, and the color of the second text string is set to
         // fuchsia or blue (to respectively indicate whether the Gerber
-        // layer has been mapped to a pcbnew layer or is not being
+        // layer has been mapped to a Pcbnew layer or is not being
         // exported at all).  (Experimentation has shown that if a text
-        // control is used to depict which pcbnew layer that each Gerber
+        // control is used to depict which Pcbnew layer that each Gerber
         // layer is mapped to (instead of a static text string), then
         // those controls do not behave in a fully satisfactory manner
         // in the Linux version. Even when the read-only attribute is
@@ -188,9 +188,9 @@ void LAYERS_MAP_DIALOG::initDialog()
         flexColumnBoxSizer->Add( Button, 0,
                                  wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL );
 
-        // Provide another text string to specify which pcbnew layer that this
+        // Provide another text string to specify which Pcbnew layer that this
         // Gerber layer is initially mapped to, and set the initial text to
-        // specify the appropriate pcbnew layer, and set the foreground color
+        // specify the appropriate Pcbnew layer, and set the foreground color
         // of the text to fuchsia (to indicate that the layer is being exported).
         item_ID = ID_TEXT_0 + ii;
 
@@ -199,7 +199,7 @@ void LAYERS_MAP_DIALOG::initDialog()
         // without it being truncated. Then specify that size as the minimum
         // size for all of these text strings. (If this minimum size is not
         // determined in this fashion, then it is possible for the display of
-        // one or more of these strings to be truncated after different pcbnew
+        // one or more of these strings to be truncated after different Pcbnew
         // layers are selected.)
         if( ii == 0 )
         {

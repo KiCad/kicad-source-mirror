@@ -1,10 +1,7 @@
-/*****************************/
-/* EESchema - lib_export.cpp */
-/*****************************/
-
-/* Library maintenance routines.
- * Backup modified libraries.
- * Create, edit, and delete components.
+/**
+ * @file lib_export.cpp
+ * @brief Eeschema library maintenance routines to backup modified libraries and
+ *        create, edit, and delete components.
  */
 
 #include "fctsys.h"
@@ -135,7 +132,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
         {
             msg = fn.GetFullPath() + _( " - OK" );
             DisplayInfoMessage( this, _( "This library will not be available \
-until it is loaded by EESchema.\n\nModify the EESchema library configuration \
+until it is loaded by Eeschema.\n\nModify the Eeschema library configuration \
 if you want to include it as part of this project." ) );
         }
         else

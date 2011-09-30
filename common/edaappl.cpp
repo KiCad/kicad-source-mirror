@@ -278,7 +278,7 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
     m_Id = aId;
     m_Checker = new wxSingleInstanceChecker( aName.Lower() + wxT( "-" ) + wxGetUserId() );
 
-    /* Init kicad environment
+    /* Init KiCad environment
      * the environment variable KICAD (if exists) gives the kicad path:
      * something like set KICAD=d:\kicad
      */
@@ -303,7 +303,7 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
 #endif
 
     /* Init parameters for configuration */
-    SetVendorName( wxT( "kicad" ) );
+    SetVendorName( wxT( "KiCad" ) );
     SetAppName( aName.Lower() );
     SetTitle( aName );
     m_EDA_Config = new wxConfig();
@@ -363,7 +363,7 @@ void EDA_APP::InitOnLineHelp()
                                                wxHF_PRINT | wxHF_OPEN_FILES
                                                /*| wxHF_SEARCH */ );
         m_HtmlCtrl->UseConfig( m_EDA_CommonConfig );
-        m_HtmlCtrl->SetTitleFormat( wxT( "Kicad Help" ) );
+        m_HtmlCtrl->SetTitleFormat( wxT( "KiCad Help" ) );
         m_HtmlCtrl->AddBook( fullfilename );
     }
 
@@ -597,7 +597,7 @@ void EDA_APP::SetDefaultSearchPaths( void )
                 fn.RemoveLastDir(); // point to <kicad path>
             }
 
-            /* Add kicad template file path to search path list. */
+            /* Add KiCad template file path to search path list. */
             fn.AppendDir( wxT( "template" ) );
 
             if( fn.IsDirReadable() )
@@ -784,7 +784,7 @@ void EDA_APP::SetLanguagePath( void )
         {
             wxFileName fn( m_searchPaths[i], wxEmptyString );
 
-            // Append path for Windows and unix kicad pack install
+            // Append path for Windows and unix KiCad pack install
             fn.AppendDir( wxT( "share" ) );
             fn.AppendDir( wxT( "internat" ) );
 
@@ -897,7 +897,7 @@ wxString EDA_APP::GetHelpFile( void )
 
     // Partially fixed, but must be enhanced
 
-    // Create subdir tree for "standard" linux distributions, when kicad comes
+    // Create subdir tree for "standard" linux distributions, when KiCad comes
     // from a distribution files are in /usr/share/doc/kicad/help and binaries
     // in /usr/bin or /usr/local/bin
     subdirs.Add( wxT( "share" ) );
@@ -905,9 +905,9 @@ wxString EDA_APP::GetHelpFile( void )
     subdirs.Add( wxT( "kicad" ) );
     subdirs.Add( _T( "help" ) );
 
-    // Create subdir tree for linux and Windows kicad pack.
+    // Create subdir tree for linux and Windows KiCad pack.
     // Note  the pack form under linux is also useful if a user wants to
-    // install kicad to a server because there is only one path to mount
+    // install KiCad to a server because there is only one path to mount
     // or export (something like /usr/local/kicad).
     // files are in <install dir>/kicad/doc/help
     // (often /usr/local/kicad/kicad/doc/help)

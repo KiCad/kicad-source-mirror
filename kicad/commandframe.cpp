@@ -20,11 +20,11 @@ RIGHT_KM_FRAME::RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent ) :
     m_ButtonsListPosition.y = m_ButtonSeparation;
     m_ButtonLastPosition    = m_ButtonsListPosition;
 
-    // Add bitmap buttons to launch Kicad utilities:
+    // Add bitmap buttons to launch KiCad utilities:
     CreateCommandToolbar();
     m_ButtonsPanelHeight    = m_ButtonsListPosition.y + m_bitmapButtons_maxHeigth + 10;
 
-    // Add the wxTextCtrl showaing all messages from Kicad:
+    // Add the wxTextCtrl showaing all messages from KiCad:
     m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
                                   wxDefaultPosition, wxDefaultSize,
                                   wxTE_MULTILINE | wxSUNKEN_BORDER | wxTE_READONLY );
@@ -63,20 +63,20 @@ END_EVENT_TABLE()
 
 /**
  * Function CreateCommandToolbar
- * create the buttons to call eescheman cvpcb, pcbnew and gerbview
+ * create the buttons to call Eeschema CvPcb, Pcbnew and GerbView
  */
 void RIGHT_KM_FRAME::CreateCommandToolbar( void )
 {
     wxBitmapButton* btn;
 
     btn = AddBitmapButton( ID_TO_EESCHEMA, KiBitmap( icon_eeschema_xpm ) );
-    btn->SetToolTip( _( "EESchema (Schematic editor)" ) );
+    btn->SetToolTip( _( "Eeschema (Schematic editor)" ) );
 
     btn = AddBitmapButton( ID_TO_CVPCB, KiBitmap( icon_cvpcb_xpm ) );
-    btn->SetToolTip( _( "CVpcb (Components to modules)" ) );
+    btn->SetToolTip( _( "CvPcb (Components to modules)" ) );
 
     btn = AddBitmapButton( ID_TO_PCB, KiBitmap( icon_pcbnew_xpm ) );
-    btn->SetToolTip( _( "PCBnew (PCB editor)" ) );
+    btn->SetToolTip( _( "Pcbnew (PCB editor)" ) );
 
     btn = AddBitmapButton( ID_TO_GERBVIEW, KiBitmap( icon_gerbview_xpm ) );
     btn->SetToolTip( _( "GerbView (Gerber viewer)" ) );

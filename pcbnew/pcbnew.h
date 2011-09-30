@@ -12,7 +12,7 @@
 
 #define U_PCB (PCB_INTERNAL_UNIT / EESCHEMA_INTERNAL_UNIT)
 
-// Arcs are approximated by segments: define the number of segments per 360 deg (kicad use 0.1
+// Arcs are approximated by segments: define the number of segments per 360 deg (KiCad uses 0.1
 // deg approximation).  Be aware 3600 / ARC_APPROX_SEGMENTS_COUNT_LOW_DEF is an integer.
 #define ARC_APPROX_SEGMENTS_COUNT_LOW_DEF 16
 #define ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF 32
@@ -33,9 +33,9 @@
 #define DIM_ANCRE_MODULE 3       /* Anchor size (footprint center) */
 #define DIM_ANCRE_TEXTE  2       /* Anchor size (Text center) */
 
-#define TEXTS_MIN_SIZE  50       // Minimum text size in pcbnew units value (50 * 0.0001 mils)
-#define TEXTS_MAX_SIZE  10000    // Maximum text size in pcbnew units value (1 inch) )
-#define TEXTS_MAX_WIDTH 5000     // Maximum text width in pcbnew units value (0.5 inches)
+#define TEXTS_MIN_SIZE  50       // Minimum text size in Pcbnew units value (50 * 0.0001 mils)
+#define TEXTS_MAX_SIZE  10000    // Maximum text size in Pcbnew units value (1 inch) )
+#define TEXTS_MAX_WIDTH 5000     // Maximum text width in Pcbnew units value (0.5 inches)
 
 /* Flag to force the SKETCH mode to display items (.m_Flags member) */
 #define FORCE_SKETCH ( IS_DRAGGED | IN_EDIT )

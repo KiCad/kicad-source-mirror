@@ -20,7 +20,7 @@
 #include "class_marker_pcb.h"
 
 
-/* This is an odd place for this, but cvpcb won't link if it is
+/* This is an odd place for this, but CvPcb won't link if it is
  *  in class_board_item.cpp like I first tried it.
  */
 wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
@@ -326,7 +326,7 @@ wxString BOARD::GetDefaultLayerName( int aLayerNumber )
 {
     const wxChar* txt;
 
-    // These are only default layer names.  For PCBNEW, the copper names
+    // These are only default layer names.  For Pcbnew the copper names
     // may be over-ridden in the BOARD (*.brd) file.
 
     // Use a switch to explicitly show the mapping more clearly

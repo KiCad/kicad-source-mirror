@@ -10,9 +10,7 @@
 #include "gerbview_id.h"
 #include "hotkeys.h"
 
-/**
- * @brief (Re)Create the menubar for the gerbview frame
- */
+
 void GERBVIEW_FRAME::ReCreateMenuBar( void )
 {
     // Create and try to get the current menubar
@@ -98,11 +96,11 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     // Separator
     fileMenu->AppendSeparator();
 
-    // Export to pcbnew
+    // Export to Pcbnew
     AddMenuItem( fileMenu,
                  ID_GERBVIEW_EXPORT_TO_PCBNEW,
                  _( "Export to &Pcbnew" ),
-                 _( "Export data in pcbnew format" ),
+                 _( "Export data in Pcbnew format" ),
                  KiBitmap( export_xpm ) );
 
     // Separator
@@ -204,11 +202,11 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
                  _( "Open the Gerbview handbook" ),
                  KiBitmap( help_xpm ) );
 
-    // About gerbview
+    // About GerbView
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
                  _( "&About GerbView" ),
-                 _( "About gerbview gerber and drill viewer" ),
+                 _( "About GerbView gerber and drill viewer" ),
                  KiBitmap( online_help_xpm ) );
 
     // Append menus to the menubar

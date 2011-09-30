@@ -420,11 +420,12 @@ void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
 }
 
 
-/* Virtual function needed by the PCB_SCREEN class derived from BASE_SCREEN
-* this is a virtual pure function in BASE_SCREEN
-* do nothing in cvpcb
-* could be removed later
-*/
+/**
+ * Virtual function needed by the PCB_SCREEN class derived from BASE_SCREEN
+ * this is a virtual pure function in BASE_SCREEN
+ * do nothing in Cvpcb
+ * could be removed later
+ */
 void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER&, int )
 {
 }

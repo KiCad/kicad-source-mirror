@@ -43,9 +43,9 @@ class BOARD_ITEM;
 
 /**
  * class PCB_EDIT_FRAME
- * the main frame for PCBNew
+ * the main frame for Pcbnew
  *
- * See also class PCB_BASE_FRAME(): Basic class for PCBNew and Gerbview.
+ * See also class PCB_BASE_FRAME(): Basic class for Pcbnew and GerbView.
  */
 class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 {
@@ -66,8 +66,8 @@ protected:
 
     DRC* m_drc;                              ///< the DRC controller, see drc.cpp
 
-    PARAM_CFG_ARRAY   m_projectFileParams;   ///< List of PCBNew project file settings.
-    PARAM_CFG_ARRAY   m_configSettings;      ///< List of PCBNew configuration settings.
+    PARAM_CFG_ARRAY   m_projectFileParams;   ///< List of Pcbnew project file settings.
+    PARAM_CFG_ARRAY   m_configSettings;      ///< List of Pcbnew configuration settings.
 
     wxString          m_lastNetListRead;     ///< Last net list read with relative path.
 
@@ -245,9 +245,9 @@ public:
 
     /**
      * Function GetProjectFileParameters
-     * returns the project file parameter list for PCBNew.
+     * returns the project file parameter list for Pcbnew.
      * <p>
-     * Populate the project file parameter array specific to PCBNew if it hasn't
+     * Populate the project file parameter array specific to Pcbnew if it hasn't
      * already been populated and return a reference to the array to the caller.
      * Creating the parameter list at run time has the advantage of being able
      * to define local variables.  The old method of statically building the array
@@ -269,14 +269,14 @@ public:
 
     /**
      * Function GetConfigurationSettings
-     * returns the PCBNew applications settings list.
+     * returns the Pcbnew applications settings list.
      *
      * This replaces the old statically define list that had the project
      * file settings and the application settings mixed together.  This
      * was confusing and caused some settings to get saved and loaded
      * incorrectly.  Currently, only the settings that are needed at start
      * up by the main window are defined here.  There are other locally used
-     * settings are scattered throughout the PCBNew source code.  If you need
+     * settings are scattered throughout the Pcbnew source code.  If you need
      * to define a configuration setting that need to be loaded at run time,
      * this is the place to define it.
      *
@@ -289,24 +289,24 @@ public:
 
     /**
      * Function LoadSettings
-     * loads applications settings specific to PCBNew.
+     * loads applications settings specific to Pcbnew.
      *
      * This overrides the base class PCB_BASE_FRAME::LoadSettings() to
      * handle settings specific common to the PCB layout application.  It
      * calls down to the base class to load settings common to all PCB type
-     * drawing frames.  Please put your application settings for PCBNew here
+     * drawing frames.  Please put your application settings for Pcbnew here
      * to avoid having application settings loaded all over the place.
      */
     virtual void LoadSettings();
 
     /**
      * Function SaveSettings
-     * saves applications settings common to PCBNew.
+     * saves applications settings common to Pcbnew.
      *
      * This overrides the base class PCB_BASE_FRAME::SaveSettings() to
      * save settings specific to the PCB layout application main window.  It
      * calls down to the base class to save settings common to all PCB type
-     * drawing frames.  Please put your application settings for PCBNew here
+     * drawing frames.  Please put your application settings for Pcbnew here
      * to avoid having application settings saved all over the place.
      */
     virtual void SaveSettings();
@@ -654,7 +654,7 @@ public:
 
     /**
      * Function LoadOnePcbFile
-     * loads a Kicad board (.brd) from \a aFileName.
+     * loads a KiCad board (.brd) from \a aFileName.
      *
      *  @param aFileName - File name including path. If empty, a file dialog will
      *                     be displayed.
@@ -710,7 +710,7 @@ public:
     /**
      * Function RecreateBOMFileFromBoard
      * Recreates a .cmp file from the current loaded board
-     * this is the same as created by cvpcb.
+     * this is the same as created by CvPcb.
      * can be used if this file is lost
      */
     void RecreateCmpFileFromBoard( wxCommandEvent& aEvent );
@@ -1312,8 +1312,7 @@ public:
      * Function SendMessageToEESCHEMA
      * sends a message to the schematic editor so that it may move its cursor
      * to a part with the same reference as the objectToSync
-     * @param objectToSync The object whose reference is used to synchronize
-     *                     eeschema.
+     * @param objectToSync The object whose reference is used to synchronize Eeschema.
      */
     void SendMessageToEESCHEMA( BOARD_ITEM* objectToSync );
 

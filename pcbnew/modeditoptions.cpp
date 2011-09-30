@@ -1,6 +1,7 @@
-/***********************************************/
-/* PCBNEW - Footprint (module) editor options. */
-/***********************************************/
+/**
+ * @file modeditoptions.cpp
+ * @brief Pcbnew footprint (module) editor options.
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"

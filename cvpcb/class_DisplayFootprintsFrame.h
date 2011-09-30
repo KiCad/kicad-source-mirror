@@ -64,7 +64,7 @@ public:
     void    Show3D_Frame( wxCommandEvent& event );
 
     /* SaveCopyInUndoList() virtual
-     * currently: do nothing in cvpcb.
+     * currently: do nothing in CvPcb.
      * but but be defined because it is a pure virtual in PCB_BASE_FRAME
      */
     virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
@@ -87,7 +87,7 @@ public:
                                      UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
     {
-        // currently: do nothing in cvpcb.
+        // currently: do nothing in CvPcb.
     }
 
 

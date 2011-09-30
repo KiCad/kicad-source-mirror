@@ -303,7 +303,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( helpMenu,
                  wxID_HELP,
                  _( "&Contents" ),
-                 _( "Open the PCBNew handbook" ),
+                 _( "Open the Pcbnew handbook" ),
                  KiBitmap( online_help_xpm ) );
     AddMenuItem( helpMenu,
                  wxID_INDEX,
@@ -311,11 +311,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
-    // About PCBNew
+    // About Pcbnew
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About PCBNew" ),
-                 _( "About PCBNew PCB designer" ),
+                 _( "&About Pcbnew" ),
+                 _( "About Pcbnew PCB designer" ),
                  KiBitmap( info_xpm ) );
 
     // Append menus to the menubar

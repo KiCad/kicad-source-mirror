@@ -30,11 +30,11 @@ class D_CODE;
  *  Some parameters can change along a file and are not layer specific: they are stored
  *  in GERBER_ITEM items, when instancied.
  *
- *  In Gerbview, to handle these parameters, there are 2 classes:
+ *  In GerbView, to handle these parameters, there are 2 classes:
  *  GERBER_IMAGE : the main class containing most of parameters and data to plot a graphic layer
  *  Some of them can change along the file
  *  There is one GERBER_IMAGE per file and one graphic layer per file or GERBER_IMAGE
- *  Gerbview does not read and merge 2 gerber file in one graphic layer:
+ *  GerbView does not read and merge 2 gerber file in one graphic layer:
  *  I believe this is not possible due to the constraints in Image parameters.
  *  GERBER_LAYER : containing the subset of parameters that is layer speficic
  *  A GERBER_IMAGE must include one GERBER_LAYER to define all parameters to plot a file.

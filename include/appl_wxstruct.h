@@ -1,6 +1,6 @@
 /**
  * @file appl_wxstruct.h
- * @brief Base class implementation for all Kicad applications.
+ * @brief Base class implementation for all KiCad applications.
  */
 
 #ifndef  APPL_WXSTRUCT_H
@@ -30,7 +30,7 @@ class wxHtmlHelpController;
 
 /**
  * Class EDA_APP
- * is the base class representing all of Kicad applications.
+ * is the base class representing all of KiCad applications.
  */
 class EDA_APP : public wxApp
 {
@@ -51,7 +51,7 @@ public:
     wxString                 m_CurrentOptionFile;
     wxString                 m_CurrentOptionFileDateAndTime;
 
-    wxString                 m_BinDir;      /* Kicad executable path.*/
+    wxString                 m_BinDir;      /* KiCad executable path.*/
     wxString                 m_KicadEnv;    /* environment variable KICAD */
     bool                     m_Env_Defined; // TRUE if environment KICAD is defined.
 
@@ -138,9 +138,9 @@ public: EDA_APP();
     /**
      * Function SetLanguageIdentifier
      * sets in .m_LanguageId member the wxWidgets language identifier Id  from
-     * the kicad menu id (internal menu identifier).
+     * the KiCad menu id (internal menu identifier).
      *
-     * @param menu_id The kicad menuitem id (returned by Menu Event, when
+     * @param menu_id The KiCad menuitem id (returned by Menu Event, when
      *                clicking on a menu item)
      */
     void SetLanguageIdentifier( int menu_id );
@@ -149,7 +149,7 @@ public: EDA_APP();
 
     /**
      * Function InitOnLineHelp
-     * initializes Kicad's online help.
+     * initializes KiCad's online help.
      */
     void InitOnLineHelp();
 
@@ -224,7 +224,7 @@ public: EDA_APP();
                             bool             Load_Only_if_New );
 
     /**
-     * Creates or recreates the kicad project file. (filename.pro)
+     * Creates or recreates the KiCad project file. (filename.pro)
      * Initialize:
      * G_Prj_Config
      * G_Prj_Config_LocalFilename
@@ -251,7 +251,7 @@ public: EDA_APP();
      * Function GetHelpFile
      * get the help file path.
      * <p>
-     * Return the Kicad help file with path.  The base paths defined in
+     * Return the KiCad help file with path.  The base paths defined in
      * m_searchPaths are tested for a valid file.  The path returned can
      * be relative depending on the paths added to m_searchPaths.  See the
      * documentation for wxPathList for more information. If the help file
@@ -281,7 +281,7 @@ public: EDA_APP();
 
     /**
      * Function FindLibraryPath
-     * Kicad saves user defined library files that are not in the standard
+     * KiCad saves user defined library files that are not in the standard
      * library search path list with the full file path.  Calling the library
      * search path list with a user library file will fail.  This helper method
      * solves that problem.

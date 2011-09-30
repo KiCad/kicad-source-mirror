@@ -6,9 +6,9 @@
 /**
  * Command IDs for the printed circuit board editor.
  *
- * Please add IDs that are unique to the printed circuit board editor (PCBNew)
+ * Please add IDs that are unique to the printed circuit board editor (Pcbnew)
  * here and not in the global id.h file.  This will prevent the entire project
- * from being rebuilt when adding new commands to the PCBNew.
+ * from being rebuilt when adding new commands to the Pcbnew.
  */
 
 enum pcbnew_ids

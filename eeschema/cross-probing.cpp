@@ -1,6 +1,6 @@
-/*********************/
-/* cross-probing.cpp */
-/*********************/
+/**
+ * @file eeschema/cross-probing.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -16,22 +16,20 @@
 #include "sch_component.h"
 
 
-/***************************************************************/
-void RemoteCommand( const char* cmdline )
-/***************************************************************/
-
-/** Read a remote command sent by pcbnew (via a socket connection) ,
- * so when user selects a module or pin in pcbnew,
- * eeschema shows that same component or pin.
+/**
+ * Read a remote command sent by Pcbnew (via a socket connection) ,
+ * so when user selects a module or pin in Pcbnew,
+ * Deschema shows that same component or pin.
  * The cursor is put on the item
  *  port KICAD_SCH_PORT_SERVICE_NUMBER (currently 4243)
- * @param cmdline = received command from pcbnew
+ * @param cmdline = received command from Pcbnew
  * commands are:
  * $PART: "reference"   put cursor on component
  * $PART: "reference" $REF: "ref"  put cursor on reference component
  * $PART: "reference" $VAL: "value" put cursor on value component
  * $PART: "reference" $PAD: "pin name"  put cursor on the component pin
  */
+void RemoteCommand( const char* cmdline )
 {
     char     line[1024];
     char*    idcmd;
@@ -87,7 +85,7 @@ void RemoteCommand( const char* cmdline )
 }
 
 
-/** Send a remote command to eeschema via a socket,
+/** Send a remote command to Eeschema via a socket,
  * @param objectToSync = item to be located on board (footprint, pad or text)
  * @param LibItem = component in lib if objectToSync is a sub item of a component
  * Commands are
@@ -102,7 +100,7 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*
     LIB_PIN* Pin = NULL;
     char     Line[1024];
 
-    /* Cross probing to pcbnew if a pin or a component is found */
+    /* Cross probing to Pcbnew if a pin or a component is found */
     switch( objectToSync->Type() )
     {
     case SCH_FIELD_T:

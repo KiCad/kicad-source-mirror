@@ -1,6 +1,7 @@
-/****************************************************************/
-/* EESchema: find.cpp (functions for searching a schematic item */
-/****************************************************************/
+/**
+ * @file eeschema/find.cpp
+ * @brief Functions for searching for a schematic item.
+ */
 
 /*
  *  Search a text (text, value, reference) within a component or

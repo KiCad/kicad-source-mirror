@@ -189,7 +189,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
                   &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Size.y ) != 4 )
         || ( ((char*)aLine)[0] != 'S' ) )
     {
-        aErrorMsg.Printf( wxT( " ** EESchema file sheet struct error at line %d, aborted\n" ),
+        aErrorMsg.Printf( wxT( " ** Eeschema file sheet struct error at line %d, aborted\n" ),
                           aLine.LineNumber() );
 
         aErrorMsg << FROM_UTF8( ((char*)aLine) );
@@ -226,7 +226,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
         if( *ptcar != '"' )
         {
-            aErrorMsg.Printf( wxT( "EESchema file sheet label F%d at line %d, aborted\n" ),
+            aErrorMsg.Printf( wxT( "Eeschema file sheet label F%d at line %d, aborted\n" ),
                               fieldNdx, aLine.LineNumber() );
             aErrorMsg << FROM_UTF8( (char*) aLine );
             return false;
@@ -237,7 +237,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
         if( *ptcar == 0 )
         {
-            aErrorMsg.Printf( wxT( "EESchema file sheet field F at line %d, aborted\n" ),
+            aErrorMsg.Printf( wxT( "Eeschema file sheet field F at line %d, aborted\n" ),
                               aLine.LineNumber() );
             aErrorMsg << FROM_UTF8( (char*) aLine );
             return false;
@@ -247,7 +247,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
         {
             if( sscanf( ptcar, "%d", &size ) != 1 )
             {
-                aErrorMsg.Printf( wxT( "EESchema file sheet Label error line %d, aborted\n" ),
+                aErrorMsg.Printf( wxT( "Eeschema file sheet Label error line %d, aborted\n" ),
                                   aLine.LineNumber() );
 
                 aErrorMsg << FROM_UTF8( (char*) aLine );
@@ -284,7 +284,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( strnicmp( "$End", ((char*)aLine), 4 ) != 0 )
     {
-        aErrorMsg.Printf( wxT( "**EESchema file end_sheet struct error at line %d, aborted\n" ),
+        aErrorMsg.Printf( wxT( "**Eeschema file end_sheet struct error at line %d, aborted\n" ),
                           aLine.LineNumber() );
         aErrorMsg << FROM_UTF8( ((char*)aLine) );
         return false;

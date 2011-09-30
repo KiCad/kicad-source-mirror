@@ -1,9 +1,9 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2009 jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -658,8 +658,9 @@ XNODE* EXPORT_HELP::makeGenericDesignHeader()
 
     xdesign->AddChild( node( wxT( "date" ), FROM_UTF8( date )) );
 
-    // which eeschema tool
-    xdesign->AddChild( node( wxT( "tool" ), wxGetApp().GetAppName() + wxChar(' ') + GetBuildVersion() ) );
+    // which Eeschema tool
+    xdesign->AddChild( node( wxT( "tool" ), wxGetApp().GetAppName() + wxChar(' ') +
+                             GetBuildVersion() ) );
 
     /*  @todo might do a list of schematic pages
 

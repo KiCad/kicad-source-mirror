@@ -1,8 +1,6 @@
 /**
  * @file hotkeys_basic.h
- */
-
-/* Some functions to handle hotkeys in kicad
+ * @brief Some functions to handle hotkeys in KiCad
  */
 
 #ifndef  HOTKEYS_BASIC_H

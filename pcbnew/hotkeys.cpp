@@ -200,7 +200,7 @@ EDA_HOTKEY* common_Hotkey_List[] =
     NULL
 };
 
-// List of hotkey descriptors for pcbnew
+// List of hotkey descriptors for Pcbnew
 EDA_HOTKEY* board_edit_Hotkey_List[] =
 {
     &HkTrackDisplayMode,       &HkDelete,
@@ -234,7 +234,7 @@ EDA_HOTKEY* module_edit_Hotkey_List[] = {
     NULL
  };
 
-// list of sections and corresponding hotkey list for pcbnew
+// list of sections and corresponding hotkey list for Pcbnew
  // (used to create an hotkey config file, and edit hotkeys )
 struct EDA_HOTKEY_CONFIG g_Pcbnew_Editor_Hokeys_Descr[] = {
     { &g_CommonSectionTag, common_Hotkey_List, L"Common keys" },

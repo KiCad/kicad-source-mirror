@@ -807,7 +807,7 @@ void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
 void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 {
     /* Used to inhibit a response to a mouse left button release, after a double click
-     * (when releasing the left button at the end of the second click.  Used in eeschema
+     * (when releasing the left button at the end of the second click.  Used in Eeschema
      * to inhibit a mouse left release command when switching between hierarchical sheets
      * on a double click.
      */

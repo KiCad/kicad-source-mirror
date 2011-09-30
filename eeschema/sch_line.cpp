@@ -154,7 +154,7 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( sscanf( line, "%s %s", Name1, Name2 ) != 2  )
     {
-        aErrorMsg.Printf( wxT( "EESchema file segment error at line %d, aborted" ),
+        aErrorMsg.Printf( wxT( "Eeschema file segment error at line %d, aborted" ),
                           aLine.LineNumber() );
         aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
         return false;
@@ -171,7 +171,7 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
     if( !aLine.ReadLine() || sscanf( (char*) aLine, "%d %d %d %d ",
                                       &m_Start.x, &m_Start.y, &m_End.x, &m_End.y ) != 4 )
     {
-        aErrorMsg.Printf( wxT( "EESchema file Segment struct error at line %d, aborted" ),
+        aErrorMsg.Printf( wxT( "Eeschema file Segment struct error at line %d, aborted" ),
                           aLine.LineNumber() );
         aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
         return false;

@@ -1,6 +1,6 @@
-/***********************/
-/* PCBNEW: netlist.cpp */
-/***********************/
+/**
+ * @file pcbnew/netlist.cpp
+ */
 
 /*
  *  Functions to read a netlist. They are:
@@ -80,7 +80,7 @@ public: MODULE_INFO( const wxString& libname,
 class NETLIST_READER
 {
 private:
-    PCB_EDIT_FRAME*            m_pcbframe;          // the main pcbnew frame
+    PCB_EDIT_FRAME*            m_pcbframe;          // the main Pcbnew frame
     wxTextCtrl*                m_messageWindow;     // a textctrl to show messages (can be NULL)
     wxString                   m_netlistFullName;   // The full netlist filename
     wxString                   m_cmplistFullName;   // The full component/footprint association filename

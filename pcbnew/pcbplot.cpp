@@ -791,7 +791,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     }
 
     // If no layer selected, we have nothing plotted.
-    // Prompt user if it happens because he could think there is a bug in pcbnew.
+    // Prompt user if it happens because he could think there is a bug in Pcbnew.
     if( !g_PcbPlotOptions.GetLayerSelection() )
         DisplayError( this, _( "No layer selected" ) );
 }

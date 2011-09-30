@@ -35,7 +35,7 @@
  *      see rs274xrevd_e.pdf pages 47 and 48
  *      Unfortunately page 47 said G74 disable G02 or G03
  *      and page 48 said G01 must be used to disable G02 or G03.
- *      Currently Gerbview disable G02 or G03 after a G74 command (tests using 2 gerber files).
+ *      Currently GerbView disable G02 or G03 after a G74 command (tests using 2 gerber files).
  * G75 enable 360 degrees circular interpolation
  * G90 mode absolute coordinates
  *

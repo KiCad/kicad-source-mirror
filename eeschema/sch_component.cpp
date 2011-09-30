@@ -993,7 +993,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     /* If this is a complex hierarchy; save hierarchical references.
      * but for simple hierarchies it is not necessary.
      * the reference inf is already saved
-     * this is useful for old eeschema version compatibility
+     * this is useful for old Eeschema version compatibility
      */
     if( m_PathsAndReferences.GetCount() > 1 )
     {
@@ -1089,7 +1089,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
     if( sscanf( &line[1], "%s %s", name1, name2 ) != 2 )
     {
-        aErrorMsg.Printf( wxT( "EESchema Component descr error at line %d, aborted" ),
+        aErrorMsg.Printf( wxT( "Eeschema component description error at line %d, aborted" ),
                           aLine.LineNumber() );
         aErrorMsg << wxT( "\n" ) << FROM_UTF8( line );
         return false;
@@ -1239,7 +1239,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
             if( *ptcar != '"' )
             {
-                aErrorMsg.Printf( wxT( "EESchema file lib field F at line %d, aborted" ),
+                aErrorMsg.Printf( wxT( "Eeschema file library field F at line %d, aborted" ),
                                   aLine.LineNumber() );
                 return false;
             }

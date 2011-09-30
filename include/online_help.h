@@ -1,12 +1,13 @@
-/******************************************************/
-/* definitions relatives to the online help for kicad */
-/******************************************************/
+/**
+ * @file online_help.h
+ * @brief Definitions for online help for KiCad.
+ */
 
 #ifndef ONLINE_HELP_H
 #define ONLINE_HELP_H
 
 /*
- * Kicad uses HTML or PDF file format in the online help (help command)
+ * KiCad uses HTML or PDF file format in the online help (help command)
  * Comment one of these 2 lines
  */
 

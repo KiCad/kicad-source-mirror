@@ -7,7 +7,7 @@
  * filenames are like xxxc.PHO and use the RS274X format
  * Units = inches
  * format 3.4, Leading zero omitted, Abs format
- * format 3.4 uses the native pcbnew units (1/10000 inch).
+ * format 3.4 uses the native Pcbnew units (1/10000 inch).
  */
 
 #include "fctsys.h"
@@ -35,7 +35,7 @@ bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLay
 
     wxPoint offset;
 
-    /* Calculate scaling from pcbnew units (in 0.1 mil or 0.0001 inch) to gerber units */
+    /* Calculate scaling from Pcbnew units (in 0.1 mil or 0.0001 inch) to gerber units */
     double scale = g_PcbPlotOptions.m_PlotScale;
 
     if( aPlotOriginIsAuxAxis )

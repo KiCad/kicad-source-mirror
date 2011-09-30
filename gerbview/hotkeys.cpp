@@ -62,7 +62,8 @@ EDA_HOTKEY* s_Gerbview_Hotkey_List[] = {
 };
 
 
-// list of sections and corresponding hotkey list for pcbnew (used to create an hotkey config file)
+// list of sections and corresponding hotkey list for GerbView (used to create an hotkey
+// config file)
 struct EDA_HOTKEY_CONFIG s_Gerbview_Hokeys_Descr[] =
 {
     { &g_CommonSectionTag, s_Gerbview_Hotkey_List, NULL  },

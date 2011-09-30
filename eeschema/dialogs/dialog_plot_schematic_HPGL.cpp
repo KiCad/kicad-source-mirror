@@ -2,10 +2,10 @@
  */
 
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 1992-2010 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -327,7 +327,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll, int HPGL_Sh
         else
             PlotSheet = screen->m_CurrentSheetDesc;
 
-        /* 10x because eeschema works in mils, not decimals */
+        /* 10x because Eeschema works in mils, not decimals */
         double plot_scale = 10 * (double) PlotSheet->m_Size.x / (double) SheetSize.x;
 
         /* Calculate offsets */

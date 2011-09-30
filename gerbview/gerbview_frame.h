@@ -23,7 +23,7 @@ class GERBER_DRAW_ITEM;
 
 /**
  * Class GERBVIEW_FRAME
- * is the main window used in gerbview.
+ * is the main window used in GerbView.
  */
 
 class GERBVIEW_FRAME : public PCB_BASE_FRAME
@@ -238,7 +238,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     /**
      * Function UpdateTitleAndInfo
      * displays the short filename (if exists) of the selected layer
-     * on the caption of the main gerbview window
+     * on the caption of the main GerbView window
      * and some other parameters
      *    Name of the layer (found in the gerber file: LN &ltname&gt command) in the status bar
      *    Name of the Image (found in the gerber file: IN &ltname&gt command) in the status bar
@@ -248,23 +248,23 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
 
     /**
      * Function GetConfigurationSettings
-     * Populates the Gerbview applications settings list.
-     * (list of parameters that must be saved in Gerbview parameters)
+     * Populates the GerbView applications settings list.
+     * (list of parameters that must be saved in GerbView parameters)
      * Currently, only the settings that are needed at start
      * up by the main window are defined here.  There are other locally used
-     * settings scattered thoughout the Gerbview source code (mainle in dialogs).
+     * settings scattered thoughout the GerbView source code (mainle in dialogs).
      * If you need to define a configuration setting that need to be loaded at run time,
      * this is the place to define it.
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings( void );
 
     /**
-     * Load applications settings specific to the PCBNew.
+     * Load applications settings specific to the Pcbnew.
      *
      * This overrides the base class PCB_BASE_FRAME::LoadSettings() to
      * handle settings specific common to the PCB layout application.  It
      * calls down to the base class to load settings common to all PCB type
-     * drawing frames.  Please put your application settings for PCBNew here
+     * drawing frames.  Please put your application settings for Pcbnew here
      * to avoid having application settings loaded all over the place.
      */
     virtual void LoadSettings();
@@ -275,7 +275,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * This overrides the base class PCB_BASE_FRAME::SaveSettings() to
      * save settings specific to the PCB layout application main window.  It
      * calls down to the base class to save settings common to all PCB type
-     * drawing frames.  Please put your application settings for PCBNew here
+     * drawing frames.  Please put your application settings for Pcbnew here
      * to avoid having application settings saved all over the place.
      */
     virtual void SaveSettings();
@@ -357,7 +357,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     /**
      * Function Block_Delete
      * deletes all tracks and segments within the selected block.
-     * Defined separately in pcbnew and gerbview
+     * Defined separately in Pcbnew and GerbView
      *
      * @param DC A device context to draw on.
      */
@@ -368,7 +368,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * moves all tracks and segments within the selected block.
      * New location is determined by the current offset from the selected
      * block's original location.
-     * Defined separately in pcbnew and gerbview
+     * Defined separately in Pcbnew and GerbView
      *
      * @param DC A device context to draw on.
      */
@@ -379,7 +379,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * copies-and-moves all tracks and segments within the selected block.
      * New location is determined by the current offset from the selected
      * block's original location.
-     * Defined separately in pcbnew and gerbview
+     * Defined separately in Pcbnew and GerbView
      *
      * @param DC A device context to draw on.
      */
@@ -499,7 +499,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     void ExportDataInPcbnewFormat( wxCommandEvent& event );
 
     /* SaveCopyInUndoList() virtual
-     * currently: do nothing in gerbview.
+     * currently: do nothing in GerbView.
      * but must be defined because it is a pure virtual in PCB_BASE_FRAME
      */
     virtual void SaveCopyInUndoList( BOARD_ITEM* aItemToCopy,
@@ -519,7 +519,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
                                      UNDO_REDO_T aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) )
     {
-        // currently: do nothing in gerbview.
+        // currently: do nothing in GerbView.
     }
 
     /** Virtual function PrintPage

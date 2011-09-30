@@ -105,7 +105,7 @@ public:
 
     /**
      * Function DrawAuxiliaryAxis
-     * Draw the Auxiliary Axis, used in pcbnew which as origin coordinates
+     * Draw the Auxiliary Axis, used in Pcbnew which as origin coordinates
      * for gerber and excellon files
      * @param aDC = current Device Context
      * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
@@ -114,7 +114,7 @@ public:
 
     /**
      * Function DrawGridAxis
-     * Draw on auxiliary axis, used in pcbnew to show grid origin, when
+     * Draw on auxiliary axis, used in Pcbnew to show grid origin, when
      * the grid origin is set by user, and is not (0,0)
      * @param aDC = current Device Context
      * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)

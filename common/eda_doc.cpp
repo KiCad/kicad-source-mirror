@@ -52,14 +52,14 @@ static const wxFileTypeInfo EDAfallbacks[] =
     wxFileTypeInfo( wxT( "text/html" ),
                     wxT( "wxhtml %s" ),
                     wxT( "wxhtml %s" ),
-                    wxT( "html document (from Kicad)" ),
+                    wxT( "html document (from KiCad)" ),
                     wxT( "htm" ),
                     wxT( "html" ),wxNullPtr ),
 
     wxFileTypeInfo( wxT( "application/sch" ),
                     wxT( "eeschema %s" ),
                     wxT( "eeschema -p %s" ),
-                    wxT( "sch document (from Kicad)" ),
+                    wxT( "sch document (from KiCad)" ),
                     wxT( "sch" ),
                     wxT( "SCH" ), wxNullPtr ),
 

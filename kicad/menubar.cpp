@@ -228,7 +228,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     AddMenuItem( helpMenu,
                  wxID_HELP,
                  _( "&Contents" ),
-                 _( "Open the Kicad handbook" ),
+                 _( "Open the KiCad handbook" ),
                  KiBitmap( online_help_xpm ) );
 
     AddMenuItem( helpMenu,
@@ -244,7 +244,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
                  _( "&About KiCad" ),
-                 _( "About kicad project manager" ),
+                 _( "About KiCad project manager" ),
                  KiBitmap( info_xpm ) );
 
     // Create the menubar and append all submenus

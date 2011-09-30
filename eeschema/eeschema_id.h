@@ -16,9 +16,9 @@
 /**
  * Command IDs for the schematic editor.
  *
- * Please add IDs that are unique to the schematic editor (EESchema) here and
+ * Please add IDs that are unique to the schematic editor (Eeschema) here and
  * not in the global id.h file.  This will prevent the entire project from
- * being rebuilt when adding new command to EESchema.
+ * being rebuilt when adding new command to Eeschema.
  */
 
 enum id_eeschema_frm

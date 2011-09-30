@@ -1,10 +1,10 @@
 
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2007 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@
  */
 
 /**
- * a helper to handle the real device context used in kicad
+ * a helper to handle the real device context used in KiCad
  * @file kicad_device_context.h
  */
 
@@ -139,7 +139,7 @@ private:
     #include <wx/dcgraph.h>
 #endif
 
-// Macro used to declare a device context in kicad:
+// Macro used to declare a device context in KiCad:
 #if USE_WX_GRAPHICS_CONTEXT
 //#pragma message( "INSTALL_DC is wxClientDC with wxGCDC" )
 #define INSTALL_DC( name, parent )                       \

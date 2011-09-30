@@ -131,10 +131,10 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
 
     m_HToolBar->AddTool( ID_TO_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
-                         _( "Run CVPcb - Associate components and footprints" ) );
+                         _( "Run CvPcb to associate components and footprints" ) );
 
     m_HToolBar->AddTool( ID_TO_PCB, wxEmptyString, KiBitmap( pcbnew_xpm ),
-                         _( "Run PCBNew - Layout printed circuit board" ) );
+                         _( "Run Pcbnew to layout printed circuit board" ) );
 
     m_HToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString, KiBitmap( import_footprint_names_xpm ),
                          _( "Back annotate component foot prints" ) );

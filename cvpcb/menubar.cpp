@@ -1,6 +1,6 @@
 /**
  * @file cvpcb/menubar.cpp
- * @brief (Re)Create the menubar for cvpcb
+ * @brief (Re)Create the menubar for CvPcb
  */
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -13,7 +13,7 @@
 
 
 /**
- * @brief (Re)Create the menubar for the cvpcb mainframe
+ * @brief (Re)Create the menubar for the CvPcb mainframe
  */
 void CVPCB_MAINFRAME::ReCreateMenuBar()
 {

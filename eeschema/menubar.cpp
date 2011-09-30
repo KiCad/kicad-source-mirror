@@ -164,7 +164,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu,
                 wxID_EXIT,
                 _( "&Quit" ),
-                _( "Quit EESchema" ),
+                _( "Quit Eeschema" ),
                 KiBitmap( exit_xpm ) );
 
     // Menu Edit:
@@ -399,7 +399,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( preferencesMenu,
                 wxID_PREFERENCES,
                 _( "&Options" ),
-                _( "EESchema preferences" ),
+                _( "Eeschema preferences" ),
                 KiBitmap( preference_xpm ) );
 #endif // __WXMAC__
 
@@ -479,18 +479,18 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Separator
     toolsMenu->AppendSeparator();
 
-    //Run CVPcb
+    //Run CvPcb
     AddMenuItem( toolsMenu,
                 ID_TO_CVPCB,
                 _( "A&ssign Component Footprints" ),
-                _( "Run CVPcb" ),
+                _( "Run CvPcb" ),
                 KiBitmap( cvpcb_xpm ) );
 
-    // Run PCBNew
+    // Run Pcbnew
     AddMenuItem( toolsMenu,
                 ID_TO_PCB,
                 _( "&Layout Printed Circuit Board" ),
-                _( "Run PCBNew" ),
+                _( "Run Pcbnew" ),
                 KiBitmap( pcbnew_xpm ) );
 
 
@@ -516,8 +516,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu,
                 wxID_ABOUT,
-                _( "&About EESchema" ),
-                _( "About EESchema schematic designer" ),
+                _( "&About Eeschema" ),
+                _( "About Eeschema schematic designer" ),
                 KiBitmap( info_xpm ) );
 
     // Create the menubar and append all submenus

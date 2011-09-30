@@ -56,7 +56,7 @@ class LIB_ALIAS : public EDA_ITEM
      * @note - Do not delete the root component.  The root component is actually shared by
      *         all of the aliases associated with it.  The component pointer will be delete
      *         in the destructor of the last alias that shares this component is deleted.
-     *         Deleting the root component will likely cause EESchema to crash.
+     *         Deleting the root component will likely cause Eeschema to crash.
      */
     LIB_COMPONENT*   root;
 

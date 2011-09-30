@@ -1,6 +1,7 @@
-/********************************************/
-/* PCBNEW - Find dialog box implementation. */
-/********************************************/
+/**
+ * @file pcbnew/find.cpp
+ * @brief Pcbnew find dialog box implementation.
+ */
 
 
 #include "fctsys.h"

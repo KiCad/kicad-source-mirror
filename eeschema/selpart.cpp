@@ -1,6 +1,6 @@
-/**************************/
-/* EESchema - selpart.cpp */
-/**************************/
+/**
+ * @file selpart.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"

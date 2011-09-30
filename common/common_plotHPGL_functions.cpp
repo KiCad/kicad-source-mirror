@@ -1,6 +1,7 @@
-/************************************/
-/* Kicad: Common plot HPGL Routines */
-/************************************/
+/**
+ * @file common_plotHPGL_functions.cpp
+ * @brief KiCad: Common plot HPGL Routines
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"

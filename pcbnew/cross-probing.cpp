@@ -1,13 +1,12 @@
-/*****************************************************************/
-/* Cross probing function: handle communication to/from eeschema */
-/*****************************************************************/
+/**
+ * @file pcbnew/cross-probing.cpp
+ * @brief Cross probing functions to handle communication to andfrom Eeschema.
+ */
 
-/* cross-probing.cpp */
-
-/** Handle messages between pcbnew and eeschema via a socket,
- *  the port number is
- * KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242) (eeschema to pcbnew)
- * KICAD_SCH_PORT_SERVICE_NUMBER (currently 4243) (pcbnew to eeschema)
+/**
+ * Handle messages between Pcbnew and Eeschema via a socket, the port numbers are
+ * KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242) (Eeschema to Pcbnew)
+ * KICAD_SCH_PORT_SERVICE_NUMBER (currently 4243) (Pcbnew to Eeschema)
  * Note: these ports must be enabled for firewall protection
  */
 
@@ -26,9 +25,10 @@
 #include "protos.h"
 
 
-/** Read a remote command send by eeschema via a socket,
- *  port KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242)
- * @param cmdline = received command from eeschema
+/**
+ * Read a remote command send by Eeschema via a socket,
+ * port KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242)
+ * @param cmdline = received command from Eeschema
  * Commands are
  * $PART: "reference"   put cursor on component
  * $PIN: "pin name"  $PART: "reference" put cursor on the footprint pin
@@ -133,7 +133,8 @@ void RemoteCommand( const char* cmdline )
 }
 
 
-/** Send a remote command to eeschema via a socket,
+/**
+ * Send a remote command to Eeschema via a socket,
  * @param objectToSync = item to be located on schematic (module, pin or text)
  * Commands are
  * $PART: "reference"   put cursor on component anchor

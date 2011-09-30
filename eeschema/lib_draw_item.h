@@ -94,7 +94,7 @@ protected:
     /**
      * Shape identification for alternate body styles.  Set 0 if the item
      * is common to all body styles.  This is commonly referred to as
-     * DeMorgan style and this is typically how it is used in Kicad.
+     * DeMorgan style and this is typically how it is used in KiCad.
      */
     int      m_Convert;
 

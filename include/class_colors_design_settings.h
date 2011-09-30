@@ -1,7 +1,7 @@
-/****************************************************/
-/*  class_colors_design_settings.h                  */
-/*  handle colors used to draw  all items or layers */
-/****************************************************/
+/**
+ * @file class_colors_design_settings.h
+ * @brief Handle colors used to draw all items or layers.
+ */
 
 #ifndef _COLORS_DESIGN_SETTING_H
 #define _COLORS_DESIGN_SETTING_H
@@ -9,15 +9,14 @@
 #define LAYERSCOLORSBUFFERSIZE 32
 #define ITEMSCOLORSBUFFERSIZE 32
 
-/* Class for handle list of color settings for designs
-* in Eeschema, Pcbnew and gerbview
-*/
+/* Class for handle list of color settings for designs in Eeschema, Pcbnew and GerbView
+ */
 class COLORS_DESIGN_SETTINGS
 {
 public:
     // Color options for screen display of the Printed Board and schematic:
 
-    // Common to Eeschema, Pcbnew, Gerbview
+    // Common to Eeschema, Pcbnew, GerbView
     int m_LayersColors[LAYERSCOLORSBUFFERSIZE];          ///< Layer colors (tracks and graphic items)
 
     // Common to Eeschema, Pcbnew

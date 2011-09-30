@@ -218,7 +218,7 @@ void DIALOG_BUILD_BOM::SavePreferences()
 
     // Determine current settings of "List items" and "Options" checkboxes
     // (NOTE: These 6 settings are restored when the dialog box is next
-    // invoked, but are *not* still saved after EESchema is next shut down.)
+    // invoked, but are *not* still saved after Eeschema is next shut down.)
     s_ListByRef = m_ListCmpbyRefItems->GetValue();
     s_ListWithSubCmponents = m_ListSubCmpItems->GetValue();
     s_ListByValue = m_ListCmpbyValItems->GetValue();

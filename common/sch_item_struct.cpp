@@ -45,7 +45,7 @@ SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
 SCH_ITEM::~SCH_ITEM()
 {
     // Do not let the connections container go out of scope with any objects or they
-    // will be deleted by the container will cause the EESchema to crash.  These objects
+    // will be deleted by the container will cause the Eeschema to crash.  These objects
     // are owned by the sheet object container.
     if( !m_connections.empty() )
         m_connections.clear();

@@ -1,6 +1,7 @@
-/***************************/
-/*  EESchema - PinEdit.cpp */
-/***************************/
+/**
+ * @file pinedit.cpp
+ * @brief Eeschema pin edit code.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"

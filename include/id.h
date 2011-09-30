@@ -5,7 +5,7 @@
 #define MAX_ITEMS_IN_PICKER     15  ///< max no. items in the popup menu for item selection
 
 /**
- * Common command IDs shared by more than one of the kicad applications.
+ * Common command IDs shared by more than one of the KiCad applications.
  *
  * Only place command IDs used in base window class event tables or shared
  * across multple applications such as the zoom, grid, and language IDs.
@@ -196,7 +196,7 @@ enum main_id
     ID_EDA_SOCKET_EVENT_SERV,
     ID_EDA_SOCKET_EVENT,
 
-    /* Command IDs common to PCBNew and cvpcb. */
+    /* Command IDs common to Pcbnew and CvPcb. */
     ID_PCB_DISPLAY_FOOTPRINT_DOC,
 
     // Common to all
@@ -206,7 +206,7 @@ enum main_id
     ID_TB_OPTIONS_SHOW_POLAR_COORD,
     ID_TB_OPTIONS_SHOW_GRID,
 
-    // Common to pcbnew, cvpcb
+    // Common to Pcbnew and CvPcb
     ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
     ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
     ID_TB_OPTIONS_SHOW_PADS_SKETCH,

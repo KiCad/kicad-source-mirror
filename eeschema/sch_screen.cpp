@@ -27,7 +27,7 @@
 #include <boost/foreach.hpp>
 
 
-/* Default EESchema zoom values. Limited to 17 values to keep a decent size
+/* Default Eeschema zoom values. Limited to 17 values to keep a decent size
  * to menus
  */
 /* Please, note: wxMSW before version 2.9 seems have

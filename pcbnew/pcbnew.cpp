@@ -1,6 +1,6 @@
 /**
  * @file pcbnew.cpp
- * @brief PCBNEW: main program.
+ * @brief Pcbnew main program.
  */
 
 #include "fctsys.h"
@@ -24,10 +24,10 @@
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings;
-int g_DrawDefaultLineThickness = 60; /* Default line thickness in PCBNEW units used to
-                                      * draw/plot items having a
-                                      * default thickness line value (Frame references)
-                                      * (i.e. = 0 ). 0 = single pixel line width */
+int g_DrawDefaultLineThickness = 60; /* Default line thickness in PCnew units used to draw
+                                      * or plot items having a default thickness line value
+                                      * (Frame references) (i.e. = 0 ). 0 = single pixel line
+                                      * width */
 
 bool           Drc_On = true;
 bool           g_AutoDeleteOldTrack = true;
@@ -52,7 +52,7 @@ int            g_MagneticTrackOption = capture_cursor_in_track_tool;
 wxPoint        g_Offset_Module;     /* Distance to offset module trace when moving. */
 
 // Wildcard for footprint libraries filesnames
-const wxString g_FootprintLibFileWildcard( wxT( "Kicad footprint library file (*.mod)|*.mod" ) );
+const wxString g_FootprintLibFileWildcard( _( "KiCad footprint library file (*.mod)|*.mod" ) );
 
 /* Name of the document footprint list
  * usually located in share/modules/footprints_doc
@@ -87,11 +87,11 @@ bool EDA_APP::OnInit()
     wxFileName      fn;
     PCB_EDIT_FRAME* frame = NULL;
 
-    InitEDA_Appl( wxT( "PCBNew" ), APP_PCBNEW_T );
+    InitEDA_Appl( wxT( "Pcbnew" ), APP_PCBNEW_T );
 
     if( m_Checker && m_Checker->IsAnotherRunning() )
     {
-        if( !IsOK( NULL, _( "PCBNew is already running, Continue?" ) ) )
+        if( !IsOK( NULL, _( "Pcbnew is already running, Continue?" ) ) )
             return false;
     }
 
@@ -105,7 +105,7 @@ bool EDA_APP::OnInit()
 
         if( fn.GetExt() != PcbFileExtension )
         {
-            wxLogDebug( wxT( "PCBNew file <%s> has the wrong extension.  \
+            wxLogDebug( wxT( "Pcbnew file <%s> has the wrong extension.  \
 Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
             fn.SetExt( PcbFileExtension );
         }
@@ -120,7 +120,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
      * display the real hotkeys in menus or tool tips */
     ReadHotkeyConfig( wxT( "PcbFrame" ), g_Board_Editor_Hokeys_Descr );
 
-    frame = new PCB_EDIT_FRAME( NULL, wxT( "PCBNew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
+    frame = new PCB_EDIT_FRAME( NULL, wxT( "Pcbnew" ), wxPoint( 0, 0 ), wxSize( 600, 400 ) );
     frame->UpdateTitle();
 
     SetTopWindow( frame );
@@ -137,9 +137,8 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     /* Load file specified in the command line. */
     if( fn.IsOk() )
     {
-        /* Note the first time PCBnew is called after creating a new project
-         * the board file may not exists
-         * So we load settings only
+        /* Note the first time Pcbnew is called after creating a new project
+         * the board file may not exist so we load settings only.
          */
         if( fn.FileExists() )
         {

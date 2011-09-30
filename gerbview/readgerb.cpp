@@ -18,13 +18,13 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
                                            const wxString& D_Code_FullFileName )
 {
     int      G_command = 0;        // command number for G commands like G04
-    int      D_commande = 0;        // command number for D commands like D02
+    int      D_commande = 0;       // command number for D commands like D02
 
     char     line[GERBER_BUFZ];
 
     wxString msg;
     char*    text;
-    int      layer;         /* current layer used in gerbview */
+    int      layer;         /* current layer used in GerbView */
 
     layer = getActiveLayer();
 

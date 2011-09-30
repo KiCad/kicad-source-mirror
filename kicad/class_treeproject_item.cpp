@@ -1,8 +1,8 @@
-/*
- * file class_treeproject_item.cpp
+/**
+ * @file class_treeproject_item.cpp
  *
  * Class TREEPROJECT_ITEM is a derived  class from wxTreeItemData that
- * store info about a file or directory shown in the Kicad tree project files
+ * store info about a file or directory shown in the KiCad tree project files
  */
 
 #include "fctsys.h"

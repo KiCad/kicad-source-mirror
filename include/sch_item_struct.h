@@ -67,7 +67,7 @@ public:
  * is a base class for any item which can be embedded within the SCHEMATIC
  * container class, and therefore instances of derived classes should only be
  * found in EESCHEMA or other programs that use class SCHEMATIC and its contents.
- * The corresponding class in PCBNEW is BOARD_ITEM.
+ * The corresponding class in Pcbnew is BOARD_ITEM.
  */
 class SCH_ITEM : public EDA_ITEM
 {
@@ -175,7 +175,7 @@ public:
      * SCH_ITEM do not have any text to search.
      *
      * @todo - This should probably be pushed down to EDA_ITEM so that
-     *         searches can be done on all of the Kicad applications that use
+     *         searches can be done on all of the KiCad applications that use
      *         objects derived from EDA_ITEM.
      *
      * @param aSearchData - The search criteria.

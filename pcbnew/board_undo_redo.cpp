@@ -81,9 +81,9 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem );
  * This is a function unsed by PutDataInPreviousState to be sure an item was not deleted
  * since an undo or redo.
  * This could be possible:
- *   - if a call to SaveCopyInUndoList was forgotten in pcbnew
+ *   - if a call to SaveCopyInUndoList was forgotten in Pcbnew
  *   - in zones outlines, when a change in one zone merges this zone with an other
- * This function avoids a pcbnew crash
+ * This function avoids a Pcbnew crash
  * @param aPcb = board to test
  * @param aItem = item to find
  */

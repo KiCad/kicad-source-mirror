@@ -1,6 +1,6 @@
 /**
  * @file  base_struct.h
- * @brief Basic classes for most kicad items.
+ * @brief Basic classes for most KiCad items.
  */
 
 #ifndef BASE_STRUCT_H
@@ -48,7 +48,7 @@ enum KICAD_T {
     TYPE_BOARD_ITEM_LIST,   // a list of board items
 
     // Schematic draw Items.  The order of these items effects the sort order.
-    // It is currenlty ordered to mimic the old EESchema locate behavior where
+    // It is currenlty ordered to mimic the old Eeschema locate behavior where
     // the smallest item is the selected item.
     SCH_MARKER_T,
     SCH_JUNCTION_T,
@@ -95,7 +95,7 @@ enum KICAD_T {
     LIB_FIELD_T,
 
     /*
-     * For Gerbview: items type:
+     * For GerbView: items type:
      */
     TYPE_GERBER_DRAW_ITEM,
 
@@ -151,8 +151,8 @@ public:
  * Class EDA_RECT
  * handles the component boundary box.
  * This class is similar to wxRect, but some wxRect functions are very curious,
- * and are working only if dimensions are >= 0 (not always the case in kicad)
- * and also kicad needs some specific method.
+ * and are working only if dimensions are >= 0 (not always the case in KiCad)
+ * and also KiCad needs some specific method.
  * so I prefer this more suitable class
  */
 class EDA_RECT
@@ -296,7 +296,7 @@ class DHEAD;
 
 /**
  * Class EDA_ITEM
- * is a base class for most all the kicad significant classes, used in
+ * is a base class for most all the KiCad significant classes, used in
  * schematics and boards.
  */
 

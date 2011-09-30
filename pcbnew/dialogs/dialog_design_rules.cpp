@@ -1,13 +1,13 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_design_rules.cpp
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file dialog_design_rules.cpp
+ */
 
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2009 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2009 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

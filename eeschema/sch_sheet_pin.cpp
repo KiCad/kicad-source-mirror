@@ -327,7 +327,7 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
     int r = sscanf( cp, "%d %d %d", &m_Pos.x, &m_Pos.y, &size );
     if( r != 3 )
     {
-        aErrorMsg.Printf( wxT( "EESchema file sheet hierarchical label error at line %d.\n" ),
+        aErrorMsg.Printf( wxT( "Eeschema file sheet hierarchical label error at line %d.\n" ),
                           aLine.LineNumber() );
 
         aErrorMsg << FROM_UTF8( line );

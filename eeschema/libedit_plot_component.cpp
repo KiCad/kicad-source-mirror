@@ -1,6 +1,6 @@
-/*******************************************/
-/*  EESchema - libedit_plot_component.cpp  */
-/*******************************************/
+/**
+ * @file libedit_plot_component.cpp
+ */
 
 #include "fctsys.h"
 

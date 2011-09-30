@@ -1,15 +1,15 @@
 /**
  * @file excellon_read_drill_file.cpp
- *  Functions to read drill files (EXCELLON format) created by PcbNew
+ *  Functions to read drill files (EXCELLON format) created by Pcbnew
  *  These files use only a subset of EXCELLON commands.
  */
 
 
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
- * Copyright (C) 1992-2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
  */
 
 /*
- *  Here is a sample of drill files created by pcbnew, in decimal format:
+ *  Here is a sample of drill files created by Pcbnew, in decimal format:
  * (Note: coordinates formats are same as Gerber, and T commands are near Gerber D commands).
  *  M48
  *  ;DRILL file {PCBnew (2011-03-14 BZR 2894)-testing} date 15/03/2011 14:23:22
@@ -152,7 +152,7 @@ static EXCELLON_CMD excellon_G_CmdList[] =
 bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
 {
     wxString msg;
-    int      layer = getActiveLayer();      // current layer used in gerbview
+    int      layer = getActiveLayer();      // current layer used in GerbView
 
     if( g_GERBER_List[layer] == NULL )
     {

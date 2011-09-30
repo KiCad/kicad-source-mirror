@@ -15,7 +15,7 @@
 
 static const wxString GeneralGroupName( wxT( "/general" ) );
 
-/* Kicad project file entry names. */
+/* KiCad project file entry names. */
 static const wxString SchematicRootNameEntry( wxT( "RootSch" ) );
 static const wxString BoardFileNameEntry( wxT( "BoardNm" ) );
 
@@ -98,7 +98,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
         }
     }
 
-    wxLogDebug( wxT( "Loading Kicad project file: " ) + m_ProjectFileName.GetFullPath() );
+    wxLogDebug( wxT( "Loading KiCad project file: " ) + m_ProjectFileName.GetFullPath() );
 
     /* Check if project file exists and if it is not noname.pro */
     wxString filename = m_ProjectFileName.GetFullName();
@@ -108,7 +108,7 @@ void KICAD_MANAGER_FRAME::OnLoadProject( wxCommandEvent& event )
 
     if( !m_ProjectFileName.FileExists() && !filename.IsSameAs( nameless_prj ) )
     {
-        DisplayError( this, _( "Kicad project file <" ) +
+        DisplayError( this, _( "KiCad project file <" ) +
                       m_ProjectFileName.GetFullPath() + _( "> not found" ) );
         return;
     }

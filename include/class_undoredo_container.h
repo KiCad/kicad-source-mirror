@@ -1,9 +1,9 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 jean-pierre.charras@gipsa-lab.inpg.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2009 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ class PICKED_ITEMS_LIST;
  *      New item
  *      Deleted item
  *      Modified item
- * there is also a specific case in eeschema, when wires are modified
+ * there is also a specific case in Eeschema, when wires are modified
  * If an item is modified, a copy of the "old" item parameters value is held.
  * When an item is deleted or added (new item) the pointer points the item, and there is
  * no other copy.
@@ -68,7 +68,7 @@ enum UNDO_REDO_T {
     UR_ROTATED,             // Rotated item (counterclockwise), undo by rotating it
     UR_ROTATED_CLOCKWISE,   // Rotated item (clockwise), undo by rotating it
     UR_FLIPPED,             // flipped (board items only), undo by flipping it
-    UR_WIRE_IMAGE,          // Specific to eeschema: handle wires changes
+    UR_WIRE_IMAGE,          // Specific to Eeschema for handling wires changes.
     UR_MODEDIT,             // Specific to the module editor (modedit creates a full copy of
                             // the current module when changed)
     UR_LIBEDIT,             // Specific to the component editor (libedit creates a full copy

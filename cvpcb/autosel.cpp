@@ -1,6 +1,6 @@
-/**********************/
-/* CVPCB: autosel.cpp */
-/**********************/
+/**
+ * @file autosel.cpp
+ */
 
 /* Routines for automatic selection of modules. */
 

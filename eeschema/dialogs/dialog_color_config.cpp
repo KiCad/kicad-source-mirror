@@ -1,5 +1,5 @@
 
-/* Set up color Layers for EESchema
+/* Set up color Layers for Eeschema
  */
 
 #include "fctsys.h"

@@ -1,12 +1,18 @@
 
-** General UI Guidelines for KICAD Development
+** General UI Guidelines for KiCad Development
 
 
 Capitalization:
 
-    For any visible text used within Kicad, follow recommendations here:
+    For any visible text used within KiCad, follow recommendations here:
     http://library.gnome.org/devel/hig-book/2.20/design-text-labels.html.en#layout-capitalization
     This applies to all Menus, Titles, Labels, Tooltips, Buttons, etc.
+
+    The capitalization for the application names is KiCad, Eeschema, CvPcb,
+    GerbView, and Pcbnew.  All strings that have application names that are
+    visible to the user should be capitalized this way.  It's also a good
+    idea use this capitalization in source code comments as well to prevent
+    confusion of new contributors.
 
 
 Dialogs:

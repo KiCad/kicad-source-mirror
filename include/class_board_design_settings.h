@@ -71,7 +71,7 @@ public:
      */
     bool IsLayerVisible( int aLayerIndex ) const
     {
-        // @@IMB: Altough Pcbnew uses only 29, Gerbview uses all 32 layers
+        // @@IMB: Altough Pcbnew uses only 29, GerbView uses all 32 layers
         if( aLayerIndex < 0 || aLayerIndex >= 32 )
             return false;
 

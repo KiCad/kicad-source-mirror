@@ -32,8 +32,8 @@ enum Track_Shapes {
  * Class BOARD_ITEM
  * is a base class for any item which can be embedded within the BOARD
  * container class, and therefore instances of derived classes should only be
- * found in PCBNEW or other programs that use class BOARD and its contents.
- * The corresponding class in EESCHEMA is SCH_ITEM.
+ * found in Pcbnew or other programs that use class BOARD and its contents.
+ * The corresponding class in Eeschema is SCH_ITEM.
  */
 class BOARD_ITEM : public EDA_ITEM
 {

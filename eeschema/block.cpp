@@ -285,7 +285,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             block->m_State = STATE_BLOCK_MOVE;
             break;
 
-        case BLOCK_FLIP: /* pcbnew only! */
+        case BLOCK_FLIP: /* Pcbnew only! */
             break;
 
         case BLOCK_ZOOM: /* Window Zoom */

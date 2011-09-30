@@ -1,6 +1,7 @@
-/********************************************/
-/* Definitions for the EESchema program:    */
-/********************************************/
+/**
+ * @file sch_sheet_path.h
+ * @brief Definition of the SCH_SHEET_PATH and SCH_SHEET_LIST classes for Eeschema.
+ */
 
 #ifndef CLASS_DRAWSHEET_PATH_H
 #define CLASS_DRAWSHEET_PATH_H
@@ -25,10 +26,10 @@
  * 2 sheets share the same SCH_SCREEN (the same drawings) if they have the
  * same filename.
  *
- * In Kicad each component and sheet receives (when created) an unique
+ * In KiCad each component and sheet receives (when created) an unique
  * identification called Time Stamp.  So each sheet has 2 ids: its time stamp
  * (that cannot change) and its name ( that can be edited and therefore is
- * not reliable for strong identification).  Kicad uses Time Stamp ( a unique
+ * not reliable for strong identification).  KiCad uses Time Stamp ( a unique
  * 32 bit id), to identify sheets in hierarchies.
  * A given sheet in a hierarchy is fully labeled by its path (or sheet path)
  * that is the list of time stamp found to access it through the hierarchy

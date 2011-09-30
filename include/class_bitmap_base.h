@@ -4,10 +4,10 @@
  */
 
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@
 #include "sch_item_struct.h"
 
 /**
- * This class handle bitmap images in kicad.
+ * This class handle bitmap images in KiCad.
  * It is not intended to be used alone, but inside an other class,
  * so all methods are protected ( or private )
  * It is used in SCH_BITMAP class  (and other in futute)
@@ -52,7 +52,7 @@ private:
     wxBitmap* m_bitmap;             // the bitmap used to draw/plot image
     double    m_pixelScaleFactor;   // The scaling factor of the bitmap
                                     // to convert the bitmap size (in pixels)
-                                    // to internal Kicad units
+                                    // to internal KiCad units
                                     // Usually does not change
 
 

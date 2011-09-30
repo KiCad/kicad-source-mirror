@@ -1,6 +1,7 @@
-/**************************************************************/
-/*  pcbstruct.h :  some classes and definitions used in pcbnew */
-/**************************************************************/
+/**
+ * @file layers_id_colors_and_visibility.h
+ * @brief Classes and definitions used in Pcbnew.
+ */
 
 #ifndef _LAYERS_ID_AND_VISIBILITY_H_
 #define _LAYERS_ID_AND_VISIBILITY_H_

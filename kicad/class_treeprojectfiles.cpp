@@ -1,6 +1,6 @@
-/*
- * file class_treeprojectfiles.cpp
- * this is the wxTreeCtrl that shows a Kicad tree project files
+/**
+ * @file class_treeprojectfiles.cpp
+ * this is the wxTreeCtrl that shows a KiCad tree project files
  */
 
 #include "fctsys.h"

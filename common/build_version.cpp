@@ -1,4 +1,4 @@
-/* Date for kicad build version */
+/* Date for KiCad build version */
 #include "fctsys.h"
 
 #ifdef HAVE_SVN_VERSION

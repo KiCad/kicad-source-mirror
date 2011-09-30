@@ -152,7 +152,7 @@ extern bool           g_EditPinByPinIsOn;   /* True to prevent displacing
                                              * pins, when they are at the
                                              * same position. */
 
-extern int            g_DrawDefaultLineThickness; /* Default line (in EESCHEMA
+extern int            g_DrawDefaultLineThickness; /* Default line (in Eeschema
                                                    * units) thickness used to
                                                    * draw/plot items having a
                                                    * default thickness line
@@ -163,8 +163,7 @@ extern int            g_DrawDefaultLineThickness; /* Default line (in EESCHEMA
 // Color to draw selected items
 extern int g_ItemSelectetColor;
 
-// Color to draw items flagged invisible, in libedit (they are invisible in
-// eeschema
+// Color to draw items flagged invisible, in libedit (they are invisible in Eeschema
 extern int g_InvisibleItemColor;
 
 /* Global Variables */

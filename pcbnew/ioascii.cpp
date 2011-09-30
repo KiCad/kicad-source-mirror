@@ -1,6 +1,6 @@
  /**
  * @file ioascii.cpp
- * @brief Routines for reading and saving of structures in ASCII file common to Pcbnew and CVPCB.
+ * @brief Routines for reading and saving of structures in ASCII file common to Pcbnew and CvPcb.
  */
 
 #include "fctsys.h"
@@ -680,7 +680,7 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
         }
     }
 
-    // Save current default track width, for compatibility with older pcbnew version;
+    // Save current default track width, for compatibility with older Pcbnew version;
     fprintf( aFile, "TrackWidth %d\n", aBoard->GetCurrentTrackWidth() );
 
     // Save custom tracks width list (the first is not saved here: this is the netclass value
@@ -695,7 +695,7 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
     fprintf( aFile, "DrawSegmWidth %d\n", aBoard->GetBoardDesignSettings()->m_DrawSegmentWidth );
     fprintf( aFile, "EdgeSegmWidth %d\n", aBoard->GetBoardDesignSettings()->m_EdgeSegmentWidth );
 
-    // Save current default via size, for compatibility with older pcbnew version;
+    // Save current default via size, for compatibility with older Pcbnew version;
     fprintf( aFile, "ViaSize %d\n", netclass_default->GetViaDiameter() );
     fprintf( aFile, "ViaDrill %d\n", netclass_default->GetViaDrill() );
     fprintf( aFile, "ViaMinSize %d\n", aBoard->GetBoardDesignSettings()->m_ViasMinSize );

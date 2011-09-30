@@ -1,7 +1,9 @@
-/**********************************************************************************
-* class MARKER_BASE; markers are used to show something (usually a drc/erc problem)
-* Markers in pcbnew and eeschema are derived from this basic class
-**********************************************************************************/
+/**
+ * @file class_marker_base.cpp
+ * @brief Implementation of MARKER_BASE class.
+ * Markers are used to show something (usually a drc/erc problem).
+ * Markers in Pcbnew and Eeschema are derived from this base class.
+ */
 
 /* file class_marker_base.cpp
  */

@@ -79,7 +79,7 @@ bool CVPCB_MAINFRAME::LoadComponentFile( const wxString& aFileName )
     /* Identification of the type of file CmpMod */
     if( fgets( Line, 79, source ) == 0 )
     {
-        msg.Printf( _( " <%s> does not appear to be a valid Kicad component library." ),
+        msg.Printf( _( " <%s> does not appear to be a valid KiCad component library." ),
                     GetChars( fn.GetFullPath() ) );
         wxMessageBox( msg, titleComponentLibErr, wxOK | wxICON_ERROR );
         fclose( source );
