@@ -32,7 +32,7 @@ Dialogs:
 
     Configure the sizers so that as the dialog window is expanded, the most
     sensible use of the increased dialog window occurs automatically by the
-    sizers. For example, in the DRC dialog of PCBNEW, sizers should be used to
+    sizers. For example, in the DRC dialog of Pcbnew, sizers should be used to
     expand the text control to use the full available free window area, so that
     the user's view of the items in the text control is maximized as he/she
     expands the dialog window, making it easier to read more DRC error messages.

@@ -304,7 +304,7 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
     uy1 = pt_segm->m_End.y - Pcb->m_BoundaryBox.m_Pos.y;
 
     /* Test if VIA (filled circle was drawn) */
-    if( pt_segm->Type() == TYPE_VIA )
+    if( pt_segm->Type() == PCB_VIA_T )
     {
         int mask_layer = 0;
 

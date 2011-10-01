@@ -196,7 +196,7 @@ void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
 
             // If a connected via is found at location aRefPos,
             // collect also tracks connected by this via.
-            if( track->Type() == TYPE_VIA )
+            if( track->Type() == PCB_VIA_T )
                 Collect_TrackSegmentsToDrag( panel, DC, aRefPos, track->ReturnMaskLayer(),
                                              net_code );
         }

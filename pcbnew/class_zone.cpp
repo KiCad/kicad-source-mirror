@@ -24,7 +24,7 @@
 
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
-    BOARD_CONNECTED_ITEM( parent, TYPE_ZONE_CONTAINER )
+    BOARD_CONNECTED_ITEM( parent, PCB_ZONE_AREA_T )
 {
     m_NetCode = -1;                             // Net number for fast comparisons
     m_CornerSelection = -1;

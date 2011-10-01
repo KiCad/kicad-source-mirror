@@ -136,19 +136,22 @@ bool FOOTPRINT_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 
     switch( item->Type() )
     {
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_MODULE;
+
         break;
 
-    case TYPE_PAD:
+    case PCB_PAD_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_PAD;
+
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_TEXTMODULE;
+
         break;
 
     default:
@@ -188,19 +191,22 @@ bool FOOTPRINT_EDIT_FRAME::OnHotkeyDeleteItem( int aIdCommand )
 
     switch( item->Type() )
     {
-    case TYPE_PAD:
+    case PCB_PAD_T:
         if( aIdCommand == HK_DELETE )
             evt_type = ID_POPUP_PCB_DELETE_PAD;
+
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         if( aIdCommand == HK_DELETE )
             evt_type = ID_POPUP_PCB_DELETE_TEXTMODULE;
+
         break;
 
-    case TYPE_EDGE_MODULE:
+    case PCB_MODULE_EDGE_T:
         if( aIdCommand == HK_DELETE )
             evt_type = ID_POPUP_PCB_DELETE_EDGE;
+
         break;
 
     default:
@@ -240,19 +246,22 @@ bool FOOTPRINT_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 
     switch( item->Type() )
     {
-    case TYPE_PAD:
+    case PCB_PAD_T:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_PAD_REQUEST;
+
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST;
+
         break;
 
-    case TYPE_EDGE_MODULE:
+    case PCB_MODULE_EDGE_T:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_EDGE;
+
         break;
 
     default:
@@ -292,9 +301,10 @@ bool FOOTPRINT_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
 
     switch( item->Type() )
     {
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
             evt_type = ID_POPUP_PCB_ROTATE_TEXTMODULE;
+
         break;
 
     default:

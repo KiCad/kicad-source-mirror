@@ -31,7 +31,7 @@ static bool ShowClearance( const TRACK* aTrack )
 {
     // maybe return true for tracks and vias, not for zone segments
     return aTrack->GetLayer() <= LAST_COPPER_LAYER
-           && ( aTrack->Type() == TYPE_TRACK || aTrack->Type() == TYPE_VIA )
+           && ( aTrack->Type() == PCB_TRACE_T || aTrack->Type() == PCB_VIA_T )
            && ( ( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
             && ( aTrack->m_Flags & IS_DRAGGED || aTrack->m_Flags & IS_MOVED || aTrack->m_Flags & IS_NEW ) )
             || ( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS )
@@ -116,7 +116,7 @@ wxString TRACK::ShowWidth() const
 
 
 SEGZONE::SEGZONE( BOARD_ITEM* aParent ) :
-    TRACK( aParent, TYPE_ZONE )
+    TRACK( aParent, PCB_ZONE_T )
 {
 }
 
@@ -148,7 +148,7 @@ wxString SEGZONE::GetSelectMenuText() const
 
 
 SEGVIA::SEGVIA( BOARD_ITEM* aParent ) :
-    TRACK( aParent, TYPE_VIA )
+    TRACK( aParent, PCB_VIA_T )
 {
 }
 
@@ -218,13 +218,13 @@ TRACK::TRACK( const TRACK& Source ) :
 
 TRACK* TRACK::Copy() const
 {
-    if( Type() == TYPE_TRACK )
+    if( Type() == PCB_TRACE_T )
         return new TRACK( *this );
 
-    if( Type() == TYPE_VIA )
+    if( Type() == PCB_VIA_T )
         return new SEGVIA( (const SEGVIA &) * this );
 
-    if( Type() == TYPE_ZONE )
+    if( Type() == PCB_ZONE_T )
         return new SEGZONE( (const SEGZONE &) * this );
 
     return NULL;    // should never happen
@@ -241,7 +241,7 @@ int TRACK::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 
 int TRACK::GetDrillValue() const
 {
-    if( Type() != TYPE_VIA )
+    if( Type() != PCB_VIA_T )
         return 0;
 
     if( m_Drill > 0 )      // Use the specific value.
@@ -259,7 +259,7 @@ int TRACK::GetDrillValue() const
 
 bool TRACK::IsNull()
 {
-    if( ( Type() != TYPE_VIA ) && ( m_Start == m_End ) )
+    if( ( Type() != PCB_VIA_T ) && ( m_Start == m_End ) )
         return true;
     else
         return false;
@@ -320,7 +320,7 @@ EDA_RECT TRACK::GetBoundingBox() const
     int ymin;
     int xmin;
 
-    if( Type() == TYPE_VIA )
+    if( Type() == PCB_VIA_T )
     {
         // Because vias are sometimes drawn larger than their m_Width would
         // provide, erasing them using a dirty rect must also compensate for this
@@ -377,7 +377,7 @@ void TRACK::Flip( const wxPoint& aCentre )
     m_Start.y = aCentre.y - (m_Start.y - aCentre.y);
     m_End.y   = aCentre.y - (m_End.y - aCentre.y);
 
-    if( Type() == TYPE_VIA )
+    if( Type() == PCB_VIA_T )
     {
         // Huh?  Wouldn't it be better to us Type() != VIA and get rid of these brackets?
     }
@@ -424,7 +424,7 @@ bool SEGVIA::IsOnLayer( int layer_number ) const
 
 int TRACK::ReturnMaskLayer()
 {
-    if( Type() == TYPE_VIA )
+    if( Type() == PCB_VIA_T )
     {
         int via_type = Shape();
 
@@ -495,7 +495,7 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
 {
     TRACK* track;
 
-    if( Type() == TYPE_ZONE )
+    if( Type() == PCB_ZONE_T )
         track = aPcb->m_Zone;
     else
         track = aPcb->m_Track;
@@ -577,7 +577,7 @@ bool TRACK::Save( FILE* aFile ) const
 {
     int type = 0;
 
-    if( Type() == TYPE_VIA )
+    if( Type() == PCB_VIA_T )
         type = 1;
 
     fprintf( aFile, "Po %d %d %d %d %d %d %d\n", m_Shape,
@@ -598,7 +598,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
     int radius;
     int curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
 
-    if( Type() == TYPE_ZONE && DisplayOpt.DisplayZonesMode != 0 )
+    if( Type() == PCB_ZONE_T && DisplayOpt.DisplayZonesMode != 0 )
         return;
 
     BOARD * brd =  GetBoard( );
@@ -702,7 +702,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
      *  - only  tracks with a length > 10 * thickness are eligible
      * and, of course, if we are not printing the board
      */
-    if( Type() == TYPE_ZONE )
+    if( Type() == PCB_ZONE_T )
         return;
 
     if( DisplayOpt.DisplayNetNamesMode == 0 || DisplayOpt.DisplayNetNamesMode == 1 )
@@ -1033,19 +1033,21 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
 
     switch( Type() )
     {
-    case TYPE_VIA:
+    case PCB_VIA_T:
         msg = g_ViaType_Name[Shape()];
         break;
 
-    case TYPE_TRACK:
+    case PCB_TRACE_T:
         msg = _( "Track" );
         break;
 
-    case TYPE_ZONE:
-        msg = _( "Zone" ); break;
+    case PCB_ZONE_T:
+        msg = _( "Zone" );
+        break;
 
     default:
-        msg = wxT( "????" ); break;
+        msg = wxT( "????" );
+        break;
     }
 
     frame->AppendMsgPanel( _( "Type" ), msg, DARKCYAN );
@@ -1106,7 +1108,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
     frame->AppendMsgPanel( _( "Status" ), msg, MAGENTA );
 
     /* Display layer or layer pair) */
-    if( Type() == TYPE_VIA )
+    if( Type() == PCB_VIA_T )
     {
         SEGVIA* Via = (SEGVIA*) this;
         int     top_layer, bottom_layer;
@@ -1124,7 +1126,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
     /* Display width */
     msg = frame->CoordinateToString( (unsigned) m_Width );
 
-    if( Type() == TYPE_VIA )      // Display Diam and Drill values
+    if( Type() == PCB_VIA_T )      // Display Diam and Drill values
     {
         // Display diameter value:
         frame->AppendMsgPanel( _( "Diam" ), msg, DARKCYAN );
@@ -1150,7 +1152,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
     }
 
     // Display segment length
-    if( Type() != TYPE_VIA )      // Display Diam and Drill values
+    if( Type() != PCB_VIA_T )      // Display Diam and Drill values
     {
         msg = frame->CoordinateToString( wxRound( GetLength() ) );
         frame->AppendMsgPanel( _( "Segment Length" ), msg, DARKCYAN );
@@ -1170,7 +1172,7 @@ bool TRACK::HitTest( const wxPoint& refPos )
     int spot_cX = refPos.x - m_Start.x;
     int spot_cY = refPos.y - m_Start.y;
 
-    if( Type() == TYPE_VIA )
+    if( Type() == PCB_VIA_T )
     {
         return (double) spot_cX * spot_cX + (double) spot_cY * spot_cY <= (double) radius * radius;
     }
@@ -1202,7 +1204,7 @@ TRACK* TRACK::GetVia( const wxPoint& aPosition, int aLayerMask )
 
     for( track = this;   track;  track = track->Next() )
     {
-        if( track->Type() != TYPE_VIA )
+        if( track->Type() != PCB_VIA_T )
             continue;
 
         if( !track->HitTest( aPosition ) )
@@ -1228,7 +1230,7 @@ TRACK* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, int aLayerMask
 
     for( trace = this; trace != NULL; trace = trace->Next() )
     {
-        if( trace->Type() == TYPE_VIA )
+        if( trace->Type() == PCB_VIA_T )
         {
             if( aPosition == trace->m_Start )
             {
@@ -1340,7 +1342,7 @@ suite:
 suite1:
             if( previousSegment == aStartTrace )
                 previousSegment = NULL;
-            else if( previousSegment->Type() != TYPE_PCB )
+            else if( previousSegment->Type() != PCB_T )
                 previousSegment =  previousSegment->Back();
             else
                 previousSegment = NULL;
@@ -1417,7 +1419,7 @@ int TRACK::GetEndSegments( int aCount, TRACK** aStartTrace, TRACK** aEndTrace )
 
     for( ; ( Track != NULL ) && ( ii < aCount ); ii++, Track = Track->Next() )
     {
-        if( Track->Type() == TYPE_VIA )
+        if( Track->Type() == PCB_VIA_T )
             continue;
 
         layerMask = Track->ReturnMaskLayer();

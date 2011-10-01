@@ -163,14 +163,20 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     count  = 0;
     Struct = ( (PCB_BASE_FRAME*) frame )->GetBoard()->m_Track;
+
     for( ; Struct != NULL; Struct = Struct->Next() )
     {
-        if( Struct->Type() == TYPE_VIA )
+        if( Struct->Type() == PCB_VIA_T )
+        {
             if( ( (SEGVIA*) Struct )->GetNet() == GetNet() )
                 count++;
-        if( Struct->Type() == TYPE_TRACK )
+        }
+
+        if( Struct->Type() == PCB_TRACE_T )
+        {
             if( ( (TRACK*) Struct )->GetNet() == GetNet() )
                 lengthnet += ( (TRACK*) Struct )->GetLength();
+        }
     }
 
     txt.Printf( wxT( "%d" ), count );

@@ -41,7 +41,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 
     for( TRACK* segm = g_FirstTrackSegment;  segm;  segm = segm->Next() )
     {
-        if( segm->Type() == TYPE_VIA && g_CurrentTrackSegment->m_End == segm->m_Start )
+        if( segm->Type() == PCB_VIA_T && g_CurrentTrackSegment->m_End == segm->m_Start )
             return false;
     }
 
@@ -218,7 +218,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
 
     if( item )
     {
-        if( item->Type() == TYPE_PAD )
+        if( item->Type() == PCB_PAD_T )
         {
             pt_pad = (D_PAD*) item;
             Module = (MODULE*) pt_pad->GetParent();
@@ -248,12 +248,12 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
         }
         else
         {
-            if( item->Type() == TYPE_TEXTE_MODULE )
+            if( item->Type() == PCB_MODULE_TEXT_T )
             {
-                if( item->GetParent() && ( item->GetParent()->Type() == TYPE_MODULE ) )
+                if( item->GetParent() && ( item->GetParent()->Type() == PCB_MODULE_T ) )
                     Module = (MODULE*) item->GetParent();
             }
-            else if( item->Type() == TYPE_MODULE )
+            else if( item->Type() == PCB_MODULE_T )
             {
                 Module = (MODULE*) item;
             }

@@ -138,8 +138,9 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     }
 
     // Swap layers:
-    if( aItem->Type() != TYPE_MODULE && aItem->Type() != TYPE_ZONE_CONTAINER )     // these items have a global swap function
+    if( aItem->Type() != PCB_MODULE_T && aItem->Type() != PCB_ZONE_AREA_T )
     {
+        // These items have a global swap function.
         int layer, layerimg;
         layer    = aItem->GetLayer();
         layerimg = aImage->GetLayer();
@@ -149,7 +150,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 
     switch( aItem->Type() )
     {
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
     {
         MODULE* tmp = (MODULE*) DuplicateStruct( aImage );
         ( (MODULE*) aImage )->Copy( (MODULE*) aItem );
@@ -158,7 +159,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     }
     break;
 
-    case TYPE_ZONE_CONTAINER:
+    case PCB_ZONE_AREA_T:
     {
         ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) DuplicateStruct( aImage );
         ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) aItem );
@@ -167,15 +168,15 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     }
     break;
 
-    case TYPE_DRAWSEGMENT:
+    case PCB_LINE_T:
         EXCHG( ( (DRAWSEGMENT*) aItem )->m_Start, ( (DRAWSEGMENT*) aImage )->m_Start );
         EXCHG( ( (DRAWSEGMENT*) aItem )->m_End, ( (DRAWSEGMENT*) aImage )->m_End );
         EXCHG( ( (DRAWSEGMENT*) aItem )->m_Width, ( (DRAWSEGMENT*) aImage )->m_Width );
         EXCHG( ( (DRAWSEGMENT*) aItem )->m_Shape, ( (DRAWSEGMENT*) aImage )->m_Shape );
         break;
 
-    case TYPE_TRACK:
-    case TYPE_VIA:
+    case PCB_TRACE_T:
+    case PCB_VIA_T:
     {
         TRACK* track = (TRACK*) aItem;
         TRACK* image = (TRACK*) aImage;
@@ -207,7 +208,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     }
         break;
 
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
         EXCHG( ( (TEXTE_PCB*) aItem )->m_Mirror, ( (TEXTE_PCB*) aImage )->m_Mirror );
         EXCHG( ( (TEXTE_PCB*) aItem )->m_Size, ( (TEXTE_PCB*) aImage )->m_Size );
         EXCHG( ( (TEXTE_PCB*) aItem )->m_Pos, ( (TEXTE_PCB*) aImage )->m_Pos );
@@ -227,7 +228,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         EXCHG( ( (PCB_TARGET*) aItem )->m_Shape, ( (PCB_TARGET*) aImage )->m_Shape );
         break;
 
-    case TYPE_DIMENSION:
+    case PCB_DIMENSION_T:
     {
         wxString txt = ( (DIMENSION*) aItem )->GetText();
         ( (DIMENSION*) aItem )->SetText( ( (DIMENSION*) aImage )->GetText() );
@@ -241,7 +242,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     }
     break;
 
-    case TYPE_ZONE:
+    case PCB_ZONE_T:
     default:
         wxMessageBox( wxT( "SwapData() error: unexpected type" ) );
         break;
@@ -262,7 +263,7 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
 
     switch( aItem->Type() )
     {
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
     {
         MODULE* new_module;
         new_module = new MODULE( (BOARD*) aItem->GetParent() );
@@ -270,32 +271,32 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
         return new_module;
     }
 
-    case TYPE_TRACK:
+    case PCB_TRACE_T:
     {
         TRACK* new_track = ( (TRACK*) aItem )->Copy();
         return new_track;
     }
 
-    case TYPE_VIA:
+    case PCB_VIA_T:
     {
         SEGVIA* new_via = (SEGVIA*)( (SEGVIA*) aItem )->Copy();
         return new_via;
     }
 
-    case TYPE_ZONE:
+    case PCB_ZONE_T:
     {
         SEGZONE* new_segzone = (SEGZONE*)( (SEGZONE*) aItem )->Copy();
         return new_segzone;
     }
 
-    case TYPE_ZONE_CONTAINER:
+    case PCB_ZONE_AREA_T:
     {
         ZONE_CONTAINER* new_zone = new ZONE_CONTAINER( (BOARD*) aItem->GetParent() );
         new_zone->Copy( (ZONE_CONTAINER*) aItem );
         return new_zone;
     }
 
-    case TYPE_DRAWSEGMENT:
+    case PCB_LINE_T:
     {
         DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( aItem->GetParent() );
         new_drawsegment->Copy( (DRAWSEGMENT*) aItem );
@@ -303,7 +304,7 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
     }
     break;
 
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
     {
         TEXTE_PCB* new_pcbtext = new TEXTE_PCB( aItem->GetParent() );
         new_pcbtext->Copy( (TEXTE_PCB*) aItem );
@@ -319,7 +320,7 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
     }
     break;
 
-    case TYPE_DIMENSION:
+    case PCB_DIMENSION_T:
     {
         DIMENSION* new_cotation = new DIMENSION( aItem->GetParent() );
         new_cotation->Copy( (DIMENSION*) aItem );
@@ -525,10 +526,10 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         // see if we must rebuild ratsnets and pointers lists
         switch( item->Type() )
         {
-        case TYPE_MODULE:
-        case TYPE_ZONE_CONTAINER:
-        case TYPE_TRACK:
-        case TYPE_VIA:
+        case PCB_MODULE_T:
+        case PCB_ZONE_AREA_T:
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
             reBuild_ratsnest = true;
             break;
 

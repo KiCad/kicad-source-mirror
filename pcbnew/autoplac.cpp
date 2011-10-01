@@ -454,7 +454,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
 
         switch( PtStruct->Type() )
         {
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             DrawSegm = (DRAWSEGMENT*) PtStruct;
 
             if( DrawSegm->GetLayer() != EDGE_N )
@@ -469,7 +469,7 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
                              Board.m_GridRouting, WRITE_CELL );
             break;
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
         default:
             break;
         }

@@ -243,7 +243,7 @@ void MODULE::Flip(const wxPoint& aCentre )
     {
         switch( PtStruct->Type() )
         {
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
             pt_edgmod = (EDGE_MODULE*) PtStruct;
             pt_edgmod->m_Start.y -= m_Pos.y;
             pt_edgmod->m_Start.y  = -pt_edgmod->m_Start.y;
@@ -261,7 +261,7 @@ void MODULE::Flip(const wxPoint& aCentre )
             pt_edgmod->SetLayer( ChangeSideNumLayer( pt_edgmod->GetLayer() ) );
             break;
 
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             /* Reverse mirror position and mirror. */
             pt_texte = (TEXTE_MODULE*) PtStruct;
             pt_texte->m_Pos.y -= m_Pos.y;
@@ -317,14 +317,14 @@ void MODULE::SetPosition( const wxPoint& newpos )
     {
         switch( PtStruct->Type() )
         {
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
         {
             EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) PtStruct;
             pt_edgmod->SetDrawCoord();
             break;
         }
 
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
         {
             TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) PtStruct;
             pt_texte->m_Pos += delta;
@@ -370,13 +370,13 @@ void MODULE::SetOrientation( int newangle )
     /* Displace contours and text of the footprint. */
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
-        if( item->Type() == TYPE_EDGE_MODULE )
+        if( item->Type() == PCB_MODULE_EDGE_T )
         {
             EDGE_MODULE* pt_edgmod = (EDGE_MODULE*) item;
             pt_edgmod->SetDrawCoord();
         }
 
-        if( item->Type() == TYPE_TEXTE_MODULE )
+        if( item->Type() == PCB_MODULE_TEXT_T )
         {
             TEXTE_MODULE* pt_texte = (TEXTE_MODULE*) item;
             pt_texte->SetDrawCoord();

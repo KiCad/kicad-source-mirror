@@ -98,7 +98,7 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         PtStruct = Segment->Back();
         Segment ->DeleteStructure();
 
-        if( PtStruct && (PtStruct->Type() == TYPE_DRAWSEGMENT ) )
+        if( PtStruct && (PtStruct->Type() == PCB_LINE_T ) )
             Segment = (DRAWSEGMENT*) PtStruct;
 
         DisplayOpt.DisplayDrawItems = track_fill_copy;
@@ -139,9 +139,9 @@ void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( int aLayer )
 
         switch( item->Type() )
         {
-        case TYPE_DRAWSEGMENT:
-        case TYPE_TEXTE:
-        case TYPE_DIMENSION:
+        case PCB_LINE_T:
+        case PCB_TEXT_T:
+        case PCB_DIMENSION_T:
         case PCB_TARGET_T:
             if( item->GetLayer() == aLayer )
             {

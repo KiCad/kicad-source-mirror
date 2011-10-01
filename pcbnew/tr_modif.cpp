@@ -40,7 +40,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
      * the following segment as a reference because a  via is often a hub of
      * segments, and does not characterize track.
      */
-    if( aNewTrack->Type() == TYPE_VIA && ( aNewTrackSegmentsCount > 1 ) )
+    if( aNewTrack->Type() == PCB_VIA_T && ( aNewTrackSegmentsCount > 1 ) )
         aNewTrack = aNewTrack->Next();
 
     aNewTrack = GetBoard()->MarkTrace( aNewTrack, &aNewTrackSegmentsCount, NULL, NULL, true );
@@ -103,7 +103,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     if( pt_segm )
         startmasklayer |= pt_segm->ReturnMaskLayer();
 
-    if( StartTrack->start && ( StartTrack->start->Type() == TYPE_PAD ) )
+    if( StartTrack->start && ( StartTrack->start->Type() == PCB_PAD_T ) )
     {
         /* Start on pad. */
         D_PAD* pt_pad = (D_PAD*)(StartTrack->start);
@@ -115,7 +115,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     if( pt_segm )
         endmasklayer |= pt_segm->ReturnMaskLayer();
 
-    if( EndTrack->end && ( EndTrack->end->Type() == TYPE_PAD ) )
+    if( EndTrack->end && ( EndTrack->end->Type() == PCB_PAD_T ) )
     {
         D_PAD* pt_pad = (D_PAD*)(EndTrack->end);
         endmasklayer |= pt_pad->m_layerMask;
@@ -147,7 +147,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
         if( pt_segm == NULL )
             break;
 
-        if( pt_segm->Type() != TYPE_VIA )
+        if( pt_segm->Type() != PCB_VIA_T )
         {
             if( pt_segm->GetState( IS_LINKED ) == 0 )
             {

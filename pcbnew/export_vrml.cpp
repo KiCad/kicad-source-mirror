@@ -711,11 +711,11 @@ static void export_vrml_drawings( BOARD* pcb ) /*{{{*/
     {
         switch( drawing->Type() )
         {
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             export_vrml_drawsegment( (DRAWSEGMENT*) drawing );
             break;
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
             export_vrml_pcbtext( (TEXTE_PCB*) drawing );
             break;
 
@@ -766,7 +766,7 @@ static void export_vrml_tracks( BOARD* pcb ) /*{{{*/
 {
     for( TRACK* track = pcb->m_Track; track != NULL; track = track->Next() )
     {
-        if( track->Type() == TYPE_VIA )
+        if( track->Type() == PCB_VIA_T )
             export_vrml_via( pcb, (SEGVIA*) track );
         else
             export_vrml_line( track->GetLayer(), track->m_Start.x, track->m_Start.y,
@@ -784,7 +784,7 @@ static void export_vrml_zones( BOARD* pcb )
         segzone = segzone->Next() )
     {
         // Fill tracks are exported with low subdivisions
-        if( segzone->Type() == TYPE_ZONE )
+        if( segzone->Type() == PCB_ZONE_T )
             export_vrml_line( segzone->GetLayer(), segzone->m_Start.x, segzone->m_Start.y,
                               segzone->m_End.x, segzone->m_End.y, segzone->m_Width, 1 );
     }
@@ -1026,11 +1026,11 @@ static void export_vrml_module( BOARD* aPcb, MODULE* aModule,
     {
         switch( item->Type() )
         {
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             export_vrml_text_module( dynamic_cast<TEXTE_MODULE*>(item) );
             break;
 
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
             export_vrml_edge_module( dynamic_cast<EDGE_MODULE*>(item) );
             break;
 

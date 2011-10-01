@@ -1062,14 +1062,14 @@ void PCB_BASE_FRAME::build_ratsnest_pad( BOARD_ITEM* ref, const wxPoint& refpos,
 
         switch( ref->Type() )
         {
-        case TYPE_PAD:
+        case PCB_PAD_T:
             pad_ref = (D_PAD*) ref;
             current_net_code = pad_ref->GetNet();
             conn_number = pad_ref->GetSubNet();
             break;
 
-        case TYPE_TRACK:
-        case TYPE_VIA:
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
         {
             TRACK* track_ref = (TRACK*) ref;
             current_net_code = track_ref->GetNet();

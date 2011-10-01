@@ -54,7 +54,7 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
 
         ListPointsCandidates.push_back( track->m_Start );
 
-        if( track->Type() != TYPE_VIA )
+        if( track->Type() != PCB_VIA_T )
             ListPointsCandidates.push_back( track->m_End );
     }
 

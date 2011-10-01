@@ -235,10 +235,11 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
                   0.0F );
 
     glNormal3f( 0.0, 0.0, 1.0 ); // Normal is Z axis
+
     /* draw tracks and vias : */
     for( track = pcb->m_Track; track != NULL; track = track->Next() )
     {
-        if( track->Type() == TYPE_VIA )
+        if( track->Type() == PCB_VIA_T )
             Draw3D_Via( (SEGVIA*) track );
         else
             Draw3D_Track( track );
@@ -249,7 +250,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
         // Draw segments used to fill copper areas. outdated!
         for( segzone = pcb->m_Zone; segzone != NULL; segzone = segzone->Next() )
         {
-            if( segzone->Type() == TYPE_ZONE )
+            if( segzone->Type() == PCB_ZONE_T )
                 Draw3D_Track( segzone );
         }
 
@@ -350,11 +351,11 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     {
         switch( PtStruct->Type() )
         {
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             Draw3D_DrawSegment( (DRAWSEGMENT*) PtStruct );
             break;
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
             Draw3D_DrawText( (TEXTE_PCB*) PtStruct );
             break;
 
@@ -733,10 +734,10 @@ void MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     {
         switch( Struct->Type() )
         {
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             break;
 
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
         {
             EDGE_MODULE* edge = (EDGE_MODULE*) Struct;
 

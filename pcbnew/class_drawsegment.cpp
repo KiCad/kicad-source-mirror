@@ -223,7 +223,7 @@ wxPoint DRAWSEGMENT::GetEnd() const
 
 MODULE* DRAWSEGMENT::GetParentModule() const
 {
-    if( m_Parent->Type() != TYPE_MODULE )
+    if( m_Parent->Type() != PCB_MODULE_T )
         return NULL;
 
     return (MODULE*) m_Parent;

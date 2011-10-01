@@ -122,15 +122,15 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     {
         switch( PtStruct->Type() )
         {
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             PlotDrawSegment( plotter, (DRAWSEGMENT*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
             PlotTextePcb( plotter, (TEXTE_PCB*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
-        case TYPE_DIMENSION:
+        case PCB_DIMENSION_T:
             PlotDimension( plotter, (DIMENSION*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
@@ -138,7 +138,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
             PlotPcbTarget( plotter, (PCB_TARGET*) PtStruct, EDGE_LAYER, FILLED );
             break;
 
-        case TYPE_MARKER_PCB:     // do not draw
+        case PCB_MARKER_T:     // do not draw
             break;
 
         default:

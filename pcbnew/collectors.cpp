@@ -39,91 +39,91 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     // there are some restrictions on the order of items in the general case.
     // all items in m_Drawings for instance should be contiguous.
     //  *** all items in a same list (shown here) must be contiguous ****
-    TYPE_MARKER_PCB,             // in m_markers
-    TYPE_TEXTE,                  // in m_Drawings
-    TYPE_DRAWSEGMENT,            // in m_Drawings
-    TYPE_DIMENSION,              // in m_Drawings
+    PCB_MARKER_T,                // in m_markers
+    PCB_TEXT_T,                  // in m_Drawings
+    PCB_LINE_T,                  // in m_Drawings
+    PCB_DIMENSION_T,             // in m_Drawings
     PCB_TARGET_T,                // in m_Drawings
-    TYPE_VIA,                    // in m_Tracks
-    TYPE_TRACK,                  // in m_Tracks
-    TYPE_PAD,                    // in modules
-    TYPE_TEXTE_MODULE,           // in modules
-    TYPE_MODULE,                 // in m_Modules
-    TYPE_ZONE,                   // in m_Zones
-    TYPE_ZONE_CONTAINER,         // in m_ZoneDescriptorList
+    PCB_VIA_T,                   // in m_Tracks
+    PCB_TRACE_T,                 // in m_Tracks
+    PCB_PAD_T,                   // in modules
+    PCB_MODULE_TEXT_T,           // in modules
+    PCB_MODULE_T,                // in m_Modules
+    PCB_ZONE_T,                  // in m_Zones
+    PCB_ZONE_AREA_T,             // in m_ZoneDescriptorList
     EOT
 };
 
 
 /*
   * const KICAD_T GENERAL_COLLECTOR::PrimaryItems[] = {
-  * TYPE_TEXTE,
-  * TYPE_DRAWSEGMENT,
-  * TYPE_DIMENSION,
-  * TYPE_VIA,
-  * TYPE_TRACK,
-  * TYPE_MODULE,
+  * PCB_TEXT_T,
+  * PCB_LINE_T,
+  * PCB_DIMENSION_T,
+  * PCB_VIA_T,
+  * PCB_TRACE_T,
+  * PCB_MODULE_T,
   * EOT
   * };
  */
 
 
 const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
-    TYPE_MARKER_PCB,
-    TYPE_TEXTE,
-    TYPE_DRAWSEGMENT,
-    TYPE_DIMENSION,
+    PCB_MARKER_T,
+    PCB_TEXT_T,
+    PCB_LINE_T,
+    PCB_DIMENSION_T,
     PCB_TARGET_T,
-    TYPE_VIA,
-    TYPE_TRACK,
-    TYPE_PAD,
-    TYPE_TEXTE_MODULE,
-    TYPE_MODULE,
-    TYPE_ZONE_CONTAINER,         // if it is visible on screen, it should be selectable
+    PCB_VIA_T,
+    PCB_TRACE_T,
+    PCB_PAD_T,
+    PCB_MODULE_TEXT_T,
+    PCB_MODULE_T,
+    PCB_ZONE_AREA_T,         // if it is visible on screen, it should be selectable
     EOT
 };
 
 
 const KICAD_T GENERAL_COLLECTOR::ModuleItems[] = {
-    TYPE_MODULE,
+    PCB_MODULE_T,
     EOT
 };
 
 
 const KICAD_T GENERAL_COLLECTOR::PadsOrModules[] = {
-    TYPE_PAD,
-    TYPE_MODULE,
+    PCB_PAD_T,
+    PCB_MODULE_T,
     EOT
 };
 
 
 const KICAD_T GENERAL_COLLECTOR::PadsTracksOrZones[] = {
-    TYPE_PAD,
-    TYPE_VIA,
-    TYPE_TRACK,
-    TYPE_ZONE,
-    TYPE_ZONE_CONTAINER,
+    PCB_PAD_T,
+    PCB_VIA_T,
+    PCB_TRACE_T,
+    PCB_ZONE_T,
+    PCB_ZONE_AREA_T,
     EOT
 };
 
 
 const KICAD_T GENERAL_COLLECTOR::ModulesAndTheirItems[] = {
-    TYPE_TEXTE_MODULE,
-    TYPE_EDGE_MODULE,
-    TYPE_PAD,
-    TYPE_MODULE,
+    PCB_MODULE_TEXT_T,
+    PCB_MODULE_EDGE_T,
+    PCB_PAD_T,
+    PCB_MODULE_T,
     EOT
 };
 
 
 const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
-    TYPE_TRACK,
-    TYPE_VIA,
+    PCB_TRACE_T,
+    PCB_VIA_T,
     EOT
 };
 
 const KICAD_T GENERAL_COLLECTOR::Zones[] = {
-    TYPE_ZONE_CONTAINER,
+    PCB_ZONE_AREA_T,
     EOT
 };
 
@@ -153,7 +153,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
     switch( item->Type() )
     {
-    case TYPE_PAD:
+    case PCB_PAD_T:
     {
         MODULE* m = (MODULE*) item->GetParent();
 
@@ -164,31 +164,31 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     }
         break;
 
-    case TYPE_VIA:
+    case PCB_VIA_T:
         breakhere++;
         break;
 
-    case TYPE_TRACK:
+    case PCB_TRACE_T:
         breakhere++;
         break;
 
-    case TYPE_ZONE:
+    case PCB_ZONE_T:
         breakhere++;
         break;
 
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
         breakhere++;
         break;
 
-    case TYPE_DRAWSEGMENT:
+    case PCB_LINE_T:
         breakhere++;
         break;
 
-    case TYPE_DIMENSION:
+    case PCB_DIMENSION_T:
         breakhere++;
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
     {
         TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
 
@@ -199,7 +199,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     }
         break;
 
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
     {
         MODULE* m = (MODULE*) item;
 
@@ -220,7 +220,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
     switch( item->Type() )
     {
-    case TYPE_PAD:
+    case PCB_PAD_T:
         // there are pad specific visibility controls.
         // Criterias to select a pad is:
         // for smd pads: the module parent must be seen, and pads on the corresponding
@@ -243,31 +243,31 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
         break;
 
-    case TYPE_VIA:
+    case PCB_VIA_T:
         break;
 
-    case TYPE_TRACK:
+    case PCB_TRACE_T:
         break;
 
-    case TYPE_ZONE:
+    case PCB_ZONE_T:
         break;
 
-    case TYPE_ZONE_CONTAINER:
+    case PCB_ZONE_AREA_T:
         break;
 
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
         break;
 
-    case TYPE_DRAWSEGMENT:
+    case PCB_LINE_T:
         break;
 
-    case TYPE_DIMENSION:
+    case PCB_DIMENSION_T:
         break;
 
     case PCB_TARGET_T:
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         module = (MODULE*) item->GetParent();
 
         if( m_Guide->IgnoreMTextsMarkedNoShow() && ( (TEXTE_MODULE*) item )->m_NoShow )
@@ -283,7 +283,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
         }
         break;
 
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
         module = (MODULE*) item;
         break;
 
@@ -293,7 +293,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
     // common tests:
 
-    if( module )    // true from case TYPE_PAD, TYPE_TEXTE_MODULE, or TYPE_MODULE
+    if( module )    // true from case PCB_PAD_T, PCB_MODULE_TEXT_T, or PCB_MODULE_T
     {
         if( m_Guide->IgnoreModulesOnCu() && module->GetLayer()==LAYER_N_BACK )
             goto exit;

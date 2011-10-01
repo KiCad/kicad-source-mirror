@@ -44,7 +44,7 @@ static int sortPadsByXCoord( const void* pt_ref, const void* pt_comp )
 
 
 BOARD::BOARD( EDA_ITEM* parent, PCB_BASE_FRAME* frame ) :
-    BOARD_ITEM( (BOARD_ITEM*)parent, TYPE_PCB ),
+    BOARD_ITEM( (BOARD_ITEM*)parent, PCB_T ),
     m_NetClasses( this )
 {
     m_PcbFrame = frame;
@@ -674,33 +674,34 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
     switch( aBoardItem->Type() )
     {
     // this one uses a vector
-    case TYPE_MARKER_PCB:
+    case PCB_MARKER_T:
         aBoardItem->SetParent( this );
         m_markers.push_back( (MARKER_PCB*) aBoardItem );
         break;
 
     // this one uses a vector
-    case TYPE_ZONE_CONTAINER:
+    case PCB_ZONE_AREA_T:
         aBoardItem->SetParent( this );
         m_ZoneDescriptorList.push_back( (ZONE_CONTAINER*) aBoardItem );
         break;
 
-    case TYPE_TRACK:
-    case TYPE_VIA:
+    case PCB_TRACE_T:
+    case PCB_VIA_T:
         TRACK* insertAid;
         insertAid = ( (TRACK*) aBoardItem )->GetBestInsertPoint( this );
         m_Track.Insert( (TRACK*) aBoardItem, insertAid );
         break;
 
-    case TYPE_ZONE:
+    case PCB_ZONE_T:
         if( aControl & ADD_APPEND )
             m_Zone.PushBack( (SEGZONE*) aBoardItem );
         else
             m_Zone.PushFront( (SEGZONE*) aBoardItem );
+
         aBoardItem->SetParent( this );
         break;
 
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
         if( aControl & ADD_APPEND )
             m_Modules.PushBack( (MODULE*) aBoardItem );
         else
@@ -713,10 +714,10 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
         m_Status_Pcb = 0;
         break;
 
-    case TYPE_DIMENSION:
-    case TYPE_DRAWSEGMENT:
-    case TYPE_TEXTE:
-    case TYPE_EDGE_MODULE:
+    case PCB_DIMENSION_T:
+    case PCB_LINE_T:
+    case PCB_TEXT_T:
+    case PCB_MODULE_EDGE_T:
     case PCB_TARGET_T:
         if( aControl & ADD_APPEND )
             m_Drawings.PushBack( aBoardItem );
@@ -746,7 +747,7 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
 
     switch( aBoardItem->Type() )
     {
-    case TYPE_MARKER_PCB:
+    case PCB_MARKER_T:
 
         // find the item in the vector, then remove it
         for( unsigned i = 0; i<m_markers.size(); ++i )
@@ -760,7 +761,7 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
 
         break;
 
-    case TYPE_ZONE_CONTAINER:    // this one uses a vector
+    case PCB_ZONE_AREA_T:    // this one uses a vector
         // find the item in the vector, then delete then erase it.
         for( unsigned i = 0; i<m_ZoneDescriptorList.size(); ++i )
         {
@@ -773,23 +774,23 @@ BOARD_ITEM* BOARD::Remove( BOARD_ITEM* aBoardItem )
 
         break;
 
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
         m_Modules.Remove( (MODULE*) aBoardItem );
         break;
 
-    case TYPE_TRACK:
-    case TYPE_VIA:
+    case PCB_TRACE_T:
+    case PCB_VIA_T:
         m_Track.Remove( (TRACK*) aBoardItem );
         break;
 
-    case TYPE_ZONE:
+    case PCB_ZONE_T:
         m_Zone.Remove( (SEGZONE*) aBoardItem );
         break;
 
-    case TYPE_DIMENSION:
-    case TYPE_DRAWSEGMENT:
-    case TYPE_TEXTE:
-    case TYPE_EDGE_MODULE:
+    case PCB_DIMENSION_T:
+    case PCB_LINE_T:
+    case PCB_TEXT_T:
+    case PCB_MODULE_EDGE_T:
     case PCB_TARGET_T:
         m_Drawings.Remove( aBoardItem );
         break;
@@ -856,7 +857,7 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
     // Check segments, dimensions, texts, and fiducials
     for( BOARD_ITEM* item = m_Drawings; item != NULL; item = item->Next() )
     {
-        if( aBoardEdgesOnly && (item->Type() != TYPE_DRAWSEGMENT || item->GetLayer() != EDGE_N ) )
+        if( aBoardEdgesOnly && (item->Type() != PCB_LINE_T || item->GetLayer() != EDGE_N ) )
             continue;
 
         if( !hasItems )
@@ -952,7 +953,7 @@ void BOARD::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     for( BOARD_ITEM* item = m_Track; item; item = item->Next() )
     {
-        if( item->Type() == TYPE_VIA )
+        if( item->Type() == PCB_VIA_T )
             viasCount++;
         else
             trackSegmentsCount++;
@@ -1009,7 +1010,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 
         switch( stype )
         {
-        case TYPE_PCB:
+        case PCB_T:
             result = inspector->Inspect( this, testData );  // inspect me
             // skip over any types handled in the above call.
             ++p;
@@ -1022,10 +1023,10 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
          *   IterateForward( m_Modules, ... ) call.
          */
 
-        case TYPE_MODULE:
-        case TYPE_PAD:
-        case TYPE_TEXTE_MODULE:
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_T:
+        case PCB_PAD_T:
+        case PCB_MODULE_TEXT_T:
+        case PCB_MODULE_EDGE_T:
 
             // this calls MODULE::Visit() on each module.
             result = IterateForward( m_Modules, inspector, testData, p );
@@ -1035,10 +1036,10 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             {
                 switch( stype = *++p )
                 {
-                case TYPE_MODULE:
-                case TYPE_PAD:
-                case TYPE_TEXTE_MODULE:
-                case TYPE_EDGE_MODULE:
+                case PCB_MODULE_T:
+                case PCB_PAD_T:
+                case PCB_MODULE_TEXT_T:
+                case PCB_MODULE_EDGE_T:
                     continue;
 
                 default:
@@ -1050,9 +1051,9 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 
             break;
 
-        case TYPE_DRAWSEGMENT:
-        case TYPE_TEXTE:
-        case TYPE_DIMENSION:
+        case PCB_LINE_T:
+        case PCB_TEXT_T:
+        case PCB_DIMENSION_T:
         case PCB_TARGET_T:
             result = IterateForward( m_Drawings, inspector, testData, p );
 
@@ -1061,9 +1062,9 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             {
                 switch( stype = *++p )
                 {
-                case TYPE_DRAWSEGMENT:
-                case TYPE_TEXTE:
-                case TYPE_DIMENSION:
+                case PCB_LINE_T:
+                case PCB_TEXT_T:
+                case PCB_DIMENSION_T:
                 case PCB_TARGET_T:
                     continue;
 
@@ -1094,8 +1095,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
         // found.
         // If not found (and only in this case) an exhaustive (and time
         // consuming) search is made, but this case is statistically rare.
-        case TYPE_VIA:
-        case TYPE_TRACK:
+        case PCB_VIA_T:
+        case PCB_TRACE_T:
             result = IterateForward( m_Track, inspector, testData, p );
 
             // skip over any types handled in the above call.
@@ -1103,8 +1104,8 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             {
                 switch( stype = *++p )
                 {
-                case TYPE_VIA:
-                case TYPE_TRACK:
+                case PCB_VIA_T:
+                case PCB_TRACE_T:
                     continue;
 
                 default:
@@ -1117,18 +1118,18 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             break;
 
 #else
-        case TYPE_VIA:
+        case PCB_VIA_T:
             result = IterateForward( m_Track, inspector, testData, p );
             ++p;
             break;
 
-        case TYPE_TRACK:
+        case PCB_TRACE_T:
             result = IterateForward( m_Track, inspector, testData, p );
             ++p;
             break;
 #endif
 
-        case TYPE_MARKER_PCB:
+        case PCB_MARKER_T:
 
             // MARKER_PCBS are in the m_markers std::vector
             for( unsigned i = 0; i<m_markers.size(); ++i )
@@ -1142,9 +1143,9 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             ++p;
             break;
 
-        case TYPE_ZONE_CONTAINER:
+        case PCB_ZONE_AREA_T:
 
-            // TYPE_ZONE_CONTAINER are in the m_ZoneDescriptorList std::vector
+            // PCB_ZONE_AREA_T are in the m_ZoneDescriptorList std::vector
             for( unsigned i = 0; i< m_ZoneDescriptorList.size(); ++i )
             {
                 result = m_ZoneDescriptorList[i]->Visit( inspector, testData, p );
@@ -1156,7 +1157,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
             ++p;
             break;
 
-        case TYPE_ZONE:
+        case PCB_ZONE_T:
             result = IterateForward( m_Zone, inspector, testData, p );
             ++p;
             break;
@@ -1196,7 +1197,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
  *           BOARD_ITEM*     item   = (BOARD_ITEM*) testItem;
  *           const wxPoint&  refPos = *(const wxPoint*) testData;
  *
- *           if( item->Type() == TYPE_PAD )
+ *           if( item->Type() == PCB_PAD_T )
  *           {
  *               D_PAD*  pad = (D_PAD*) item;
  *               if( pad->HitTest( refPos ) )
@@ -1215,7 +1216,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
  *               }
  *           }
  *
- *           else if( item->Type() == TYPE_MODULE )
+ *           else if( item->Type() == PCB_MODULE_T )
  *           {
  *               MODULE* module = (MODULE*) item;
  *
@@ -1244,7 +1245,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
  *   PadOrModule inspector( layer );
  *
  *   // search only for PADs first, then MODULES, and preferably a layer match
- *   static const KICAD_T scanTypes[] = { TYPE_PAD, TYPE_MODULE, EOT };
+ *   static const KICAD_T scanTypes[] = { PCB_PAD_T, PCB_MODULE_T, EOT };
  *
  *   // visit this BOARD with the above inspector
  *   Visit( &inspector, &refPos, scanTypes );
@@ -1378,7 +1379,7 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
     } inspector;
 
     // search only for MODULES
-    static const KICAD_T scanTypes[] = { TYPE_MODULE, EOT };
+    static const KICAD_T scanTypes[] = { PCB_MODULE_T, EOT };
 
     // visit this BOARD with the above inspector
     BOARD* nonconstMe = (BOARD*) this;
@@ -1444,10 +1445,10 @@ bool BOARD::Save( FILE* aFile ) const
     {
         switch( item->Type() )
         {
-        case TYPE_TEXTE:
-        case TYPE_DRAWSEGMENT:
+        case PCB_TEXT_T:
+        case PCB_LINE_T:
         case PCB_TARGET_T:
-        case TYPE_DIMENSION:
+        case PCB_DIMENSION_T:
             if( !item->Save( aFile ) )
                 goto out;
 
@@ -1605,7 +1606,7 @@ TRACK* BOARD::GetViaByPosition( const wxPoint& aPosition, int aLayerMask )
 
     for( track = m_Track;  track; track = track->Next() )
     {
-        if( track->Type() != TYPE_VIA )
+        if( track->Type() != PCB_VIA_T )
             continue;
 
         if( track->m_Start != aPosition )
@@ -1789,7 +1790,7 @@ TRACK* BOARD::GetTrace( TRACK* aTrace, const wxPoint& aPosition, int aLayerMask 
         if( GetBoardDesignSettings()->IsLayerVisible( layer ) == false )
             continue;
 
-        if( track->Type() == TYPE_VIA )    /* VIA encountered. */
+        if( track->Type() == PCB_VIA_T )    /* VIA encountered. */
         {
             if( track->HitTest( aPosition ) )
                 return track;
@@ -1845,7 +1846,7 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
      *  segment) and this via and these 2 segments are a part of a track.
      *  If > 2 only this via is flagged (the track has only this via)
      */
-    if( aTrace->Type() == TYPE_VIA )
+    if( aTrace->Type() == PCB_VIA_T )
     {
         TRACK* Segm1, * Segm2 = NULL, * Segm3 = NULL;
         Segm1 = ::GetTrace( m_Track, NULL, aTrace->m_Start, layerMask );
@@ -1895,7 +1896,7 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
     {
         TRACK* via = trackList[i];
 
-        if( via->Type() != TYPE_VIA )
+        if( via->Type() != PCB_VIA_T )
             continue;
 
         if( via == aTrace )
@@ -2154,7 +2155,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
         return NULL;
 
     /* A via is a good lock point */
-    if( aSegment->Type() == TYPE_VIA )
+    if( aSegment->Type() == PCB_VIA_T )
     {
         aPosition = aSegment->m_Start;
         return aSegment;

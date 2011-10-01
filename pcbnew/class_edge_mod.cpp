@@ -31,7 +31,7 @@
 /*********************/
 
 EDGE_MODULE::EDGE_MODULE( MODULE* parent ) :
-    DRAWSEGMENT( parent, TYPE_EDGE_MODULE )
+    DRAWSEGMENT( parent, PCB_MODULE_EDGE_T )
 {
     m_Shape = S_SEGMENT;
     m_Angle = 0;

@@ -120,7 +120,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
 
     // D( printf( "currTrack=%p currItem=%p currTrack->Type()=%d currItem->Type()=%d\n",  currTrack, currItem, currTrack ? currTrack->Type() : 0, currItem ? currItem->Type() : 0 ); )
 
-    if( !currTrack && currItem && currItem->Type()==TYPE_VIA && currItem->m_Flags )
+    if( !currTrack && currItem && currItem->Type()==PCB_VIA_T && currItem->m_Flags )
     {
         // moving a VIA
         currTrack = (TRACK*) currItem;
@@ -200,7 +200,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
 
             TRACK* track = m_Pcb->GetTrace( m_Pcb->m_Track, pos, layer_mask );
 
-            if( !track || track->Type() != TYPE_TRACK )
+            if( !track || track->Type() != PCB_TRACE_T )
             {
                 // D(printf("!currTrack and track=%p not found, layer_mask=0x%X\n", track, layer_mask );)
                 return false;
@@ -225,7 +225,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
 
         for( TRACK* track = m_Pcb->m_Track;  track;  track = track->Next() )
         {
-            if( track->Type() != TYPE_TRACK )
+            if( track->Type() != PCB_TRACE_T )
                 continue;
 
             if( doCheckNet && currTrack && currTrack->GetNet() != track->GetNet() )
@@ -262,7 +262,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
                                           double( curpos->y - track->m_End.y ));
 
                 // if track not via, or if its a via dragging but not with its adjacent track
-                if( currTrack->Type() != TYPE_VIA
+                if( currTrack->Type() != PCB_VIA_T
                   || ( currTrack->m_Start != track->m_Start && currTrack->m_Start != track->m_End ))
                 {
                     if( distStart <= currTrack->m_Width/2 )

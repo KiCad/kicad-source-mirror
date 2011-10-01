@@ -447,7 +447,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         bool select_me = false;
         switch( PtStruct->Type() )
         {
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             if( (g_TabOneLayerMask[PtStruct->GetLayer()] & layerMask) == 0  )
                 break;
 
@@ -457,7 +457,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             select_me = true; // This item is in bloc: select it
             break;
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
             if( !blockIncludePcbTexts )
                 break;
 
@@ -477,7 +477,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             select_me = true; // This item is in bloc: select it
             break;
 
-        case TYPE_DIMENSION:
+        case PCB_DIMENSION_T:
             if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & layerMask ) == 0 )
                 break;
 
@@ -535,22 +535,22 @@ static void drawPickedItems( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint aOffset 
 
         switch( item->Type() )
         {
-        case TYPE_MODULE:
+        case PCB_MODULE_T:
             frame->GetBoard()->m_Status_Pcb &= ~RATSNEST_ITEM_LOCAL_OK;
             DrawModuleOutlines( aPanel, aDC, (MODULE*) item );
             break;
 
-        case TYPE_DRAWSEGMENT:
-        case TYPE_TEXTE:
-        case TYPE_TRACK:
-        case TYPE_VIA:
+        case PCB_LINE_T:
+        case PCB_TEXT_T:
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
         case PCB_TARGET_T:
-        case TYPE_DIMENSION:    // Currently markers are not affected by block commands
-        case TYPE_MARKER_PCB:
+        case PCB_DIMENSION_T:    // Currently markers are not affected by block commands
+        case PCB_MARKER_T:
             item->Draw( aPanel, aDC, GR_XOR, aOffset );
             break;
 
-        case TYPE_ZONE_CONTAINER:
+        case PCB_ZONE_AREA_T:
             item->Draw( aPanel, aDC, GR_XOR, aOffset );
             ((ZONE_CONTAINER*) item)->DrawFilledArea( aPanel, aDC, GR_XOR, aOffset );
             break;
@@ -617,7 +617,7 @@ void PCB_EDIT_FRAME::Block_Delete()
 
         switch( item->Type() )
         {
-        case TYPE_MODULE:
+        case PCB_MODULE_T:
         {
             MODULE* module = (MODULE*) item;
             module->m_Flags = 0;
@@ -626,22 +626,22 @@ void PCB_EDIT_FRAME::Block_Delete()
         }
         break;
 
-        case TYPE_ZONE_CONTAINER:   // a zone area
+        case PCB_ZONE_AREA_T:     // a zone area
             m_Pcb->Remove( item );
             break;
 
-        case TYPE_DRAWSEGMENT:      // a segment not on copper layers
-        case TYPE_TEXTE:            // a text on a layer
-        case TYPE_TRACK:            // a track segment (segment on a copper layer)
-        case TYPE_VIA:              // a via (like atrack segment on a copper layer)
-        case TYPE_DIMENSION:        // a dimension (graphic item)
-        case PCB_TARGET_T:             // a target (graphic item)
+        case PCB_LINE_T:          // a segment not on copper layers
+        case PCB_TEXT_T:          // a text on a layer
+        case PCB_TRACE_T:         // a track segment (segment on a copper layer)
+        case PCB_VIA_T:           // a via (like atrack segment on a copper layer)
+        case PCB_DIMENSION_T:     // a dimension (graphic item)
+        case PCB_TARGET_T:        // a target (graphic item)
             item->UnLink();
             break;
 
         // These items are deleted, but not put in undo list
-        case TYPE_MARKER_PCB:               // a marker used to show something
-        case TYPE_ZONE:                     // SEG_ZONE items are now deprecated
+        case PCB_MARKER_T:                  // a marker used to show something
+        case PCB_ZONE_T:                     // SEG_ZONE items are now deprecated
             item->UnLink();
             itemsList->RemovePicker( ii );
             ii--;
@@ -689,26 +689,26 @@ void PCB_EDIT_FRAME::Block_Rotate()
 
         switch( item->Type() )
         {
-        case TYPE_MODULE:
+        case PCB_MODULE_T:
             ( (MODULE*) item )->m_Flags = 0;
             m_Pcb->m_Status_Pcb = 0;
             break;
 
         /* Move and rotate the track segments */
-        case TYPE_TRACK:        // a track segment (segment on a copper layer)
-        case TYPE_VIA:          // a via (like atrack segment on a copper layer)
+        case PCB_TRACE_T:       // a track segment (segment on a copper layer)
+        case PCB_VIA_T:         // a via (like atrack segment on a copper layer)
             m_Pcb->m_Status_Pcb = 0;
             break;
 
-        case TYPE_ZONE_CONTAINER:
-        case TYPE_DRAWSEGMENT:
-        case TYPE_TEXTE:
+        case PCB_ZONE_AREA_T:
+        case PCB_LINE_T:
+        case PCB_TEXT_T:
         case PCB_TARGET_T:
-        case TYPE_DIMENSION:
+        case PCB_DIMENSION_T:
             break;
 
         // This item is not put in undo list
-        case TYPE_ZONE:         // SEG_ZONE items are now deprecated
+        case PCB_ZONE_T:         // SEG_ZONE items are now deprecated
             itemsList->RemovePicker( ii );
             ii--;
             break;
@@ -755,26 +755,26 @@ void PCB_EDIT_FRAME::Block_Flip()
 
         switch( item->Type() )
         {
-        case TYPE_MODULE:
+        case PCB_MODULE_T:
             item->m_Flags = 0;
             m_Pcb->m_Status_Pcb = 0;
             break;
 
         /* Move and rotate the track segments */
-        case TYPE_TRACK:        // a track segment (segment on a copper layer)
-        case TYPE_VIA:          // a via (like atrack segment on a copper layer)
+        case PCB_TRACE_T:       // a track segment (segment on a copper layer)
+        case PCB_VIA_T:         // a via (like atrack segment on a copper layer)
             m_Pcb->m_Status_Pcb = 0;
             break;
 
-        case TYPE_ZONE_CONTAINER:
-        case TYPE_DRAWSEGMENT:
-        case TYPE_TEXTE:
+        case PCB_ZONE_AREA_T:
+        case PCB_LINE_T:
+        case PCB_TEXT_T:
         case PCB_TARGET_T:
-        case TYPE_DIMENSION:
+        case PCB_DIMENSION_T:
             break;
 
         // This item is not put in undo list
-        case TYPE_ZONE:         // SEG_ZONE items are now deprecated
+        case PCB_ZONE_T:         // SEG_ZONE items are now deprecated
             itemsList->RemovePicker( ii );
             ii--;
             break;
@@ -815,26 +815,26 @@ void PCB_EDIT_FRAME::Block_Move()
 
         switch( item->Type() )
         {
-        case TYPE_MODULE:
+        case PCB_MODULE_T:
             m_Pcb->m_Status_Pcb = 0;
             item->m_Flags = 0;
             break;
 
         /* Move track segments */
-        case TYPE_TRACK:        // a track segment (segment on a copper layer)
-        case TYPE_VIA:          // a via (like a track segment on a copper layer)
+        case PCB_TRACE_T:       // a track segment (segment on a copper layer)
+        case PCB_VIA_T:         // a via (like a track segment on a copper layer)
             m_Pcb->m_Status_Pcb = 0;
             break;
 
-        case TYPE_ZONE_CONTAINER:
-        case TYPE_DRAWSEGMENT:
-        case TYPE_TEXTE:
+        case PCB_ZONE_AREA_T:
+        case PCB_LINE_T:
+        case PCB_TEXT_T:
         case PCB_TARGET_T:
-        case TYPE_DIMENSION:
+        case PCB_DIMENSION_T:
             break;
 
         // This item is not put in undo list
-        case TYPE_ZONE:        // SEG_ZONE items are now deprecated
+        case PCB_ZONE_T:        // SEG_ZONE items are now deprecated
             itemsList->RemovePicker( ii );
             ii--;
             break;
@@ -878,7 +878,7 @@ void PCB_EDIT_FRAME::Block_Duplicate()
         newitem = NULL;
         switch( item->Type() )
         {
-        case TYPE_MODULE:
+        case PCB_MODULE_T:
             {
                 MODULE* module = (MODULE*) item;
                 MODULE* new_module;
@@ -891,8 +891,8 @@ void PCB_EDIT_FRAME::Block_Duplicate()
             }
             break;
 
-        case TYPE_TRACK:
-        case TYPE_VIA:
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
             {
                 TRACK* track = (TRACK*) item;
                 m_Pcb->m_Status_Pcb = 0;
@@ -902,10 +902,10 @@ void PCB_EDIT_FRAME::Block_Duplicate()
             }
             break;
 
-        case TYPE_ZONE:                  // SEG_ZONE items are now deprecated
+        case PCB_ZONE_T:                  // SEG_ZONE items are now deprecated
             break;
 
-        case TYPE_ZONE_CONTAINER:
+        case PCB_ZONE_AREA_T:
             {
                 ZONE_CONTAINER* new_zone = new ZONE_CONTAINER( (BOARD*) item->GetParent() );
                 new_zone->Copy( (ZONE_CONTAINER*) item );
@@ -915,7 +915,7 @@ void PCB_EDIT_FRAME::Block_Duplicate()
             }
             break;
 
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             {
                 DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( m_Pcb );
                 new_drawsegment->Copy( (DRAWSEGMENT*) item );
@@ -924,7 +924,7 @@ void PCB_EDIT_FRAME::Block_Duplicate()
             }
             break;
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
         {
             TEXTE_PCB* new_pcbtext = new TEXTE_PCB( m_Pcb );
             new_pcbtext->Copy( (TEXTE_PCB*) item );
@@ -942,7 +942,7 @@ void PCB_EDIT_FRAME::Block_Duplicate()
             }
             break;
 
-        case TYPE_DIMENSION:
+        case PCB_DIMENSION_T:
             {
                 DIMENSION* new_cotation = new DIMENSION( m_Pcb );
                 new_cotation->Copy( (DIMENSION*) item );

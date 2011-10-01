@@ -34,7 +34,7 @@ protected:
     std::vector<wxPoint> m_PolyPoints;
 
 public:
-    DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype = TYPE_DRAWSEGMENT );
+    DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype = PCB_LINE_T );
     ~DRAWSEGMENT();
 
     DRAWSEGMENT* Next() const { return (DRAWSEGMENT*) Pnext; }

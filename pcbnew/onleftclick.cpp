@@ -35,42 +35,46 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
             switch( DrawStruct->Type() )
             {
-            case TYPE_ZONE_CONTAINER:
+            case PCB_ZONE_AREA_T:
                 if( DrawStruct->IsNew() )
                 {
                     DrawPanel->m_AutoPAN_Request = true;
                     Begin_Zone( aDC );
                 }
                 else
+                {
                     End_Move_Zone_Corner_Or_Outlines( aDC, (ZONE_CONTAINER*) DrawStruct );
+                }
+
                 exit = true;
                 break;
 
-            case TYPE_TRACK:
-            case TYPE_VIA:
+            case PCB_TRACE_T:
+            case PCB_VIA_T:
                 if( DrawStruct->m_Flags & IS_DRAGGED )
                 {
                     PlaceDraggedOrMovedTrackSegment( (TRACK*) DrawStruct, aDC );
                     exit = true;
                 }
+
                 break;
 
-            case TYPE_TEXTE:
+            case PCB_TEXT_T:
                 Place_Texte_Pcb( (TEXTE_PCB*) DrawStruct, aDC );
                 exit = true;
                 break;
 
-            case TYPE_TEXTE_MODULE:
+            case PCB_MODULE_TEXT_T:
                 PlaceTexteModule( (TEXTE_MODULE*) DrawStruct, aDC );
                 exit = true;
                 break;
 
-            case TYPE_PAD:
+            case PCB_PAD_T:
                 PlacePad( (D_PAD*) DrawStruct, aDC );
                 exit = true;
                 break;
 
-            case TYPE_MODULE:
+            case PCB_MODULE_T:
                 PlaceModule( (MODULE*) DrawStruct, aDC );
                 exit = true;
                 break;
@@ -80,15 +84,16 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 exit = true;
                 break;
 
-            case TYPE_DRAWSEGMENT:
+            case PCB_LINE_T:
                 if( no_tool )   // when no tools: existing item moving.
                 {
                     Place_DrawItem( (DRAWSEGMENT*) DrawStruct, aDC );
                     exit = true;
                 }
+
                 break;
 
-            case TYPE_DIMENSION:
+            case PCB_DIMENSION_T:
                 // see above.
                 break;
 
@@ -120,10 +125,10 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     {
         switch( DrawStruct->Type() )
         {
-        case TYPE_ZONE_CONTAINER:
-        case TYPE_TRACK:
-        case TYPE_VIA:
-        case TYPE_PAD:
+        case PCB_ZONE_AREA_T:
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
+        case PCB_PAD_T:
             GetBoard()->SetCurrentNetClass(
                 ((BOARD_CONNECTED_ITEM*)DrawStruct)->GetNetClassName() );
             updateTraceWidthSelectBox();
@@ -213,7 +218,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             DrawPanel->m_AutoPAN_Request = true;
         }
         else if( DrawStruct
-               && (DrawStruct->Type() == TYPE_DRAWSEGMENT)
+               && (DrawStruct->Type() == PCB_LINE_T)
                && DrawStruct->IsNew() )
         {
             DrawStruct = (BOARD_ITEM*) Begin_DrawSegment( (DRAWSEGMENT*) DrawStruct, shape, aDC );
@@ -264,7 +269,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             DrawStruct = PcbGeneralLocateAndDisplay();
             bool hit_on_corner = false;
 
-            if( DrawStruct && (DrawStruct->Type() == TYPE_ZONE_CONTAINER) )
+            if( DrawStruct && (DrawStruct->Type() == PCB_ZONE_AREA_T) )
             {
                 // We have a hit under mouse (a zone outline corner or segment)
                 // test for a corner only because want to move corners only.
@@ -288,7 +293,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 GetScreen()->SetCurItem( DrawStruct );
             }
         }
-        else if( DrawStruct && (DrawStruct->Type() == TYPE_ZONE_CONTAINER) && DrawStruct->IsNew() )
+        else if( DrawStruct && (DrawStruct->Type() == PCB_ZONE_AREA_T) && DrawStruct->IsNew() )
         {   // Add a new corner to the current outline being created:
             DrawPanel->m_AutoPAN_Request = true;
             Begin_Zone( aDC );
@@ -309,14 +314,14 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             DrawPanel->MoveCursorToCrossHair();
             DrawPanel->m_AutoPAN_Request = true;
         }
-        else if( DrawStruct->Type() == TYPE_TEXTE )
+        else if( DrawStruct->Type() == PCB_TEXT_T )
         {
             Place_Texte_Pcb( (TEXTE_PCB*) DrawStruct, aDC );
             DrawPanel->m_AutoPAN_Request = false;
         }
         else
         {
-            DisplayError( this, wxT( "Internal err: Struct not TYPE_TEXTE" ) );
+            DisplayError( this, wxT( "Internal err: Struct not PCB_TEXT_T" ) );
         }
 
         break;
@@ -331,14 +336,14 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             if( DrawStruct )
                 StartMove_Module( (MODULE*) DrawStruct, aDC );
         }
-        else if( DrawStruct->Type() == TYPE_MODULE )
+        else if( DrawStruct->Type() == PCB_MODULE_T )
         {
             PlaceModule( (MODULE*) DrawStruct, aDC );
             DrawPanel->m_AutoPAN_Request = false;
         }
         else
         {
-            DisplayError( this, wxT( "Internal err: Struct not TYPE_MODULE" ) );
+            DisplayError( this, wxT( "Internal err: Struct not PCB_MODULE_T" ) );
         }
 
         break;
@@ -356,7 +361,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             SetCurItem( DrawStruct );
             DrawPanel->m_AutoPAN_Request = true;
         }
-        else if( DrawStruct && (DrawStruct->Type() == TYPE_DIMENSION) && DrawStruct->IsNew() )
+        else if( DrawStruct && (DrawStruct->Type() == PCB_DIMENSION_T) && DrawStruct->IsNew() )
         {
             DrawStruct = (BOARD_ITEM*) EditDimension( (DIMENSION*) DrawStruct, aDC );
             SetCurItem( DrawStruct );
@@ -429,8 +434,8 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
         switch( DrawStruct->Type() )
         {
-        case TYPE_TRACK:
-        case TYPE_VIA:
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
             if( DrawStruct->IsNew() )
             {
                 if( End_Route( (TRACK*) DrawStruct, aDC ) )
@@ -443,21 +448,21 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
             break;
 
-        case TYPE_TEXTE:
-        case TYPE_PAD:
-        case TYPE_MODULE:
+        case PCB_TEXT_T:
+        case PCB_PAD_T:
+        case PCB_MODULE_T:
         case PCB_TARGET_T:
-        case TYPE_DIMENSION:
-        case TYPE_TEXTE_MODULE:
+        case PCB_DIMENSION_T:
+        case PCB_MODULE_TEXT_T:
             OnEditItemRequest( aDC, DrawStruct );
             DrawPanel->MoveCursorToCrossHair();
             break;
 
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             OnEditItemRequest( aDC, DrawStruct );
             break;
 
-        case TYPE_ZONE_CONTAINER:
+        case PCB_ZONE_AREA_T:
             if( DrawStruct->m_Flags )
                 break;
             OnEditItemRequest( aDC, DrawStruct );
@@ -493,7 +498,7 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
         if( DrawStruct == NULL )
             break;
 
-        if( DrawStruct->Type() != TYPE_DRAWSEGMENT )
+        if( DrawStruct->Type() != PCB_LINE_T )
         {
             DisplayError( this, wxT( "DrawStruct Type error" ) );
             DrawPanel->m_AutoPAN_Request = false;
@@ -516,20 +521,20 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
 {
     switch( aItem->Type() )
     {
-    case TYPE_TRACK:
-    case TYPE_VIA:
+    case PCB_TRACE_T:
+    case PCB_VIA_T:
         Edit_TrackSegm_Width( aDC, (TRACK*) aItem );
         break;
 
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
         InstallTextPCBOptionsFrame( (TEXTE_PCB*) aItem, aDC );
         break;
 
-    case TYPE_PAD:
+    case PCB_PAD_T:
         InstallPadOptionsFrame( (D_PAD*) aItem );
         break;
 
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
         InstallModuleOptionsFrame( (MODULE*) aItem, aDC );
         break;
 
@@ -537,19 +542,19 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         ShowTargetOptionsDialog( (PCB_TARGET*) aItem, aDC );
         break;
 
-    case TYPE_DIMENSION:
+    case PCB_DIMENSION_T:
         ShowDimensionPropertyDialog( (DIMENSION*) aItem, aDC );
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         InstallTextModOptionsFrame( (TEXTE_MODULE*) aItem, aDC );
         break;
 
-    case TYPE_DRAWSEGMENT:
+    case PCB_LINE_T:
         InstallGraphicItemPropertiesDialog( (DRAWSEGMENT*) aItem, aDC );
         break;
 
-    case TYPE_ZONE_CONTAINER:
+    case PCB_ZONE_AREA_T:
         Edit_Zone_Params( aDC, (ZONE_CONTAINER*) aItem );
         break;
 

@@ -172,7 +172,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     net_code_ref = aRefSeg->GetNet();
 
     // Phase 0 : Test vias
-    if( aRefSeg->Type() == TYPE_VIA )
+    if( aRefSeg->Type() == PCB_VIA_T )
     {
         // test if the via size is smaller than minimum
         if( aRefSeg->Shape() == VIA_MICROVIA )
@@ -358,14 +358,14 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         w_dist += (aRefSeg->m_Width + track->m_Width) / 2;
 
         // If the reference segment is a via, we test it here
-        if( aRefSeg->Type() == TYPE_VIA )
+        if( aRefSeg->Type() == PCB_VIA_T )
         {
             int angle = 0;  // angle du segment a tester;
 
             delta = track->m_End - track->m_Start;
             segStartPoint = aRefSeg->m_Start - track->m_Start;
 
-            if( track->Type() == TYPE_VIA )
+            if( track->Type() == PCB_VIA_T )
             {
                 // Test distance between two vias, i.e. two circles, trivial case
                 if( (int) hypot( segStartPoint.x, segStartPoint.y ) < w_dist )
@@ -405,7 +405,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         RotatePoint( &segStartPoint, m_segmAngle );
         RotatePoint( &segEndPoint, m_segmAngle );
 
-        if( track->Type() == TYPE_VIA )
+        if( track->Type() == PCB_VIA_T )
         {
             if( checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )
                 continue;

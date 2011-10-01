@@ -92,14 +92,14 @@ void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* pt_mod )
     {
         switch( PtStruct->Type() )
         {
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
                 #undef STRUCT
                 #define STRUCT ( (EDGE_MODULE*) PtStruct )
             STRUCT->m_Start0 += moveVector;
             STRUCT->m_End0   += moveVector;
             break;
 
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
                 #undef STRUCT
                 #define STRUCT ( (TEXTE_MODULE*) PtStruct )
             STRUCT->m_Pos0 += moveVector;
@@ -121,11 +121,11 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
 
     switch( Item->Type() )
     {
-    case TYPE_PAD:
+    case PCB_PAD_T:
         DeletePad( (D_PAD*) Item, false );
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
     {
         TEXTE_MODULE* text = (TEXTE_MODULE*) Item;
 
@@ -145,12 +145,12 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
     }
     break;
 
-    case TYPE_EDGE_MODULE:
+    case PCB_MODULE_EDGE_T:
         Delete_Edge_Module( (EDGE_MODULE*) Item );
         DrawPanel->Refresh();
         break;
 
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
         break;
 
     default:

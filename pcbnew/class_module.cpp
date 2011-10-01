@@ -28,7 +28,7 @@
 
 
 MODULE::MODULE( BOARD* parent ) :
-    BOARD_ITEM( (BOARD_ITEM*) parent, TYPE_MODULE )
+    BOARD_ITEM( (BOARD_ITEM*) parent, PCB_MODULE_T )
 {
     m_Attributs    = MOD_DEFAULT;
     m_Layer        = LAYER_N_FRONT;
@@ -128,14 +128,14 @@ void MODULE::Copy( MODULE* aModule )
     {
         switch( item->Type() )
         {
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             TEXTE_MODULE * textm;
             textm = new TEXTE_MODULE( this );
             textm->Copy( (TEXTE_MODULE*) item );
             m_Drawings.PushBack( textm );
             break;
 
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
             EDGE_MODULE * edge;
             edge = new EDGE_MODULE( this );
             edge->Copy( (EDGE_MODULE*) item );
@@ -224,8 +224,8 @@ void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoi
 
         switch( item->Type() )
         {
-        case TYPE_TEXTE_MODULE:
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_TEXT_T:
+        case PCB_MODULE_EDGE_T:
             item->Draw( aPanel, aDC, aDrawMode, aOffset );
             break;
 
@@ -250,7 +250,7 @@ void MODULE::DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offs
     {
         switch( item->Type() )
         {
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
             item->Draw( panel, DC, draw_mode, offset );
             break;
 
@@ -341,8 +341,8 @@ bool MODULE::Save( FILE* aFile ) const
     {
         switch( item->Type() )
         {
-        case TYPE_TEXTE_MODULE:
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_TEXT_T:
+        case PCB_MODULE_EDGE_T:
             if( !item->Save( aFile ) )
                 goto out;
 
@@ -667,7 +667,7 @@ EDA_RECT MODULE::GetFootPrintRect() const
     area.Inflate( 500 );       // Give a min size
 
     for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge; edge = edge->Next() )
-        if( edge->Type() == TYPE_EDGE_MODULE )
+        if( edge->Type() == PCB_MODULE_EDGE_T )
             area.Merge( edge->GetBoundingBox() );
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
@@ -854,17 +854,17 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 
         switch( stype )
         {
-        case TYPE_MODULE:
+        case PCB_MODULE_T:
             result = inspector->Inspect( this, testData );  // inspect me
             ++p;
             break;
 
-        case TYPE_PAD:
+        case PCB_PAD_T:
             result = IterateForward( m_Pads, inspector, testData, p );
             ++p;
             break;
 
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             result = inspector->Inspect( m_Reference, testData );
 
             if( result == SEARCH_QUIT )
@@ -877,7 +877,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
 
         // m_Drawings can hold TYPETEXTMODULE also, so fall thru
 
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
             result = IterateForward( m_Drawings, inspector, testData, p );
 
             // skip over any types handled in the above call.
@@ -885,8 +885,8 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR* inspector, const void* testData,
             {
                 switch( stype = *++p )
                 {
-                case TYPE_TEXTE_MODULE:
-                case TYPE_EDGE_MODULE:
+                case PCB_MODULE_TEXT_T:
+                case PCB_MODULE_EDGE_T:
                     continue;
 
                 default:

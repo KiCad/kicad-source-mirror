@@ -111,6 +111,7 @@ void DIALOG_GENDRILL::initDialog()
         Config->Read( UnitDrillInchKey, &DIALOG_GENDRILL::m_UnitDrillIsInch );
         Config->Read( DrillOriginIsAuxAxisKey, &DIALOG_GENDRILL::m_DrillOriginIsAuxAxis );
     }
+
     InitDisplayParams();
 }
 
@@ -124,6 +125,7 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
     m_Choice_Unit->SetSelection( m_UnitDrillIsInch ? 1 : 0 );
     m_Choice_Precision->SetSelection( m_PrecisionFormat );
     m_Choice_Zeros_Format->SetSelection( m_ZerosFormat );
+
     if( m_ZerosFormat == EXCELLON_WRITER::DECIMAL_FORMAT )
         m_Choice_Precision->Enable( false );
 
@@ -156,11 +158,12 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
     m_throughViasCount = 0;
     m_microViasCount   = 0;
     m_blindOrBuriedViasCount = 0;
-    for( TRACK* track = m_Parent->GetBoard()->m_Track; track != NULL;
-        track = track->Next() )
+
+    for( TRACK* track = m_Parent->GetBoard()->m_Track; track != NULL; track = track->Next() )
     {
-        if( track->Type() != TYPE_VIA )
+        if( track->Type() != PCB_VIA_T )
             continue;
+
         if( track->Shape() == VIA_THROUGH )
             m_throughViasCount++;
         else if( track->Shape() == VIA_MICROVIA )
@@ -175,8 +178,8 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
      */
     m_platedPadsHoleCount    = 0;
     m_notplatedPadsHoleCount = 0;
-    for( MODULE* module = m_Parent->GetBoard()->m_Modules;
-        module != NULL; module = module->Next() )
+
+    for( MODULE* module = m_Parent->GetBoard()->m_Modules; module != NULL; module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
         {
@@ -191,6 +194,7 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
                 }
             }
             else
+            {
                 if( MIN( pad->m_Drill.x, pad->m_Drill.y ) != 0 )
                 {
                     if( pad->m_Attribut == PAD_HOLE_NOT_PLATED )
@@ -198,6 +202,7 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
                     else
                         m_platedPadsHoleCount++;
                 }
+            }
         }
     }
 
@@ -299,6 +304,7 @@ void DIALOG_GENDRILL::UpdatePrecisionOptions()
         m_Choice_Precision->SetString( 0, precisionListForMetric[0].GetPrecisionString() );
         m_Choice_Precision->SetString( 1, precisionListForMetric[1].GetPrecisionString() );
     }
+
     if( m_Choice_Zeros_Format->GetSelection() == EXCELLON_WRITER::DECIMAL_FORMAT )
         m_Choice_Precision->Enable( false );
     else
@@ -322,12 +328,15 @@ void DIALOG_GENDRILL::SetParams( void )
     m_PrecisionFormat = m_Choice_Precision->GetSelection();
 
     msg = m_PenSpeed->GetValue();
+
     if( msg.ToLong( &ltmp ) )
         g_PcbPlotOptions.m_HPGLPenSpeed = ltmp;
+
     msg = m_PenNum->GetValue();
 
     if( msg.ToLong( &ltmp ) )
         g_PcbPlotOptions.m_HPGLPenNum = ltmp;
+
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_FileDrillOffset = wxPoint( 0, 0 );
     else
@@ -335,6 +344,7 @@ void DIALOG_GENDRILL::SetParams( void )
 
     // get precision
     int idx = m_Choice_Precision->GetSelection();
+
     if( m_UnitDrillIsInch )
         m_Precision = precisionListForInches[idx];
     else

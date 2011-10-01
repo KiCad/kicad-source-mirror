@@ -210,9 +210,9 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     {
         switch( item->Type() )
         {
-        case TYPE_DRAWSEGMENT:
-        case TYPE_DIMENSION:
-        case TYPE_TEXTE:
+        case PCB_LINE_T:
+        case PCB_DIMENSION_T:
+        case PCB_TEXT_T:
         case PCB_TARGET_T:
             if( ( ( 1 << item->GetLayer() ) & aPrintMaskLayer ) == 0 )
                 break;
@@ -220,7 +220,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             item->Draw( DrawPanel, aDC, drawmode );
             break;
 
-        case TYPE_MARKER_PCB:
+        case PCB_MARKER_T:
         default:
             break;
         }
@@ -234,7 +234,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )
             continue;
 
-        if( pt_trace->Type() == TYPE_VIA ) /* VIA encountered. */
+        if( pt_trace->Type() == PCB_VIA_T ) /* VIA encountered. */
         {
             int radius = pt_trace->m_Width >> 1;
             int color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + pt_trace->m_Shape );
@@ -300,7 +300,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )
                 continue;
 
-            if( pt_trace->Type() == TYPE_VIA ) /* VIA encountered. */
+            if( pt_trace->Type() == PCB_VIA_T ) /* VIA encountered. */
             {
                 int diameter;
 
@@ -393,7 +393,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
     {
         switch( PtStruct->Type() )
         {
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             if( ( mlayer & aMasklayer ) == 0 )
                 break;
 
@@ -401,7 +401,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
             TextMod->Draw( aPanel, aDC, aDraw_mode );
             break;
 
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
         {
             EDGE_MODULE* edge = (EDGE_MODULE*) PtStruct;
 

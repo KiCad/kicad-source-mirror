@@ -34,7 +34,7 @@ static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aColle
 
     for( int i = 0; i<count;  ++i )
     {
-        if( (*aCollector)[i]->Type() != TYPE_MODULE )
+        if( (*aCollector)[i]->Type() != PCB_MODULE_T )
             return NULL;
     }
 
@@ -138,7 +138,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     {
         item = (*m_Collector)[ii];
 
-        if( item->Type() != TYPE_ZONE )
+        if( item->Type() != PCB_ZONE_T )
             continue;
 
         /* Found a TYPE ZONE */
@@ -162,9 +162,9 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     // If the count is 2, and first item is a pad or module text, and the 2nd item is its
     // parent module:
     else if( m_Collector->GetCount() == 2
-             && ( (*m_Collector)[0]->Type() == TYPE_PAD || (*m_Collector)[0]->Type() ==
-                 TYPE_TEXTE_MODULE )
-             && (*m_Collector)[1]->Type() == TYPE_MODULE && (*m_Collector)[0]->GetParent()==
+             && ( (*m_Collector)[0]->Type() == PCB_PAD_T || (*m_Collector)[0]->Type() ==
+                 PCB_MODULE_TEXT_T )
+             && (*m_Collector)[1]->Type() == PCB_MODULE_T && (*m_Collector)[0]->GetParent()==
              (*m_Collector)[1] )
     {
         item = (*m_Collector)[0];

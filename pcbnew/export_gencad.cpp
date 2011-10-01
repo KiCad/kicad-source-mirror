@@ -617,19 +617,20 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
 
     for( track = pcb->m_Zone; track != NULL; track = track->Next() )
     {
-        if( track->Type() == TYPE_ZONE )
+        if( track->Type() == PCB_ZONE_T )
             nbitems++;
     }
 
     tracklist = (TRACK**) MyMalloc( (nbitems + 1) * sizeof(TRACK*) );
 
     nbitems = 0;
+
     for( track = pcb->m_Track; track != NULL; track = track->Next() )
         tracklist[nbitems++] = track;
 
     for( track = pcb->m_Zone; track != NULL; track = track->Next() )
     {
-        if( track->Type() == TYPE_ZONE )
+        if( track->Type() == PCB_ZONE_T )
             tracklist[nbitems++] = track;
     }
 
@@ -644,6 +645,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
     for( ii = 0; ii < nbitems; ii++ )
     {
         track = tracklist[ii];
+
         if( old_netcode != track->GetNet() )
         {
             old_netcode = track->GetNet();
@@ -664,7 +666,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
             fprintf( file, "TRACK TRACK%d\n", track->m_Width );
         }
 
-        if( (track->Type() == TYPE_TRACK) || (track->Type() == TYPE_ZONE) )
+        if( (track->Type() == PCB_TRACE_T) || (track->Type() == PCB_ZONE_T) )
         {
             if( old_layer != track->GetLayer() )
             {
@@ -677,7 +679,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
                      mapXto( track->m_Start.x ), mapYto( track->m_Start.y ),
                      mapXto( track->m_End.x ), mapYto( track->m_End.y ) );
         }
-        if( track->Type() == TYPE_VIA )
+        if( track->Type() == PCB_VIA_T )
         {
             fprintf( file, "VIA viapad%d %d %d ALL %d via%d\n",
                      track->m_Width,
@@ -866,10 +868,10 @@ void FootprintWriteShape( FILE* file, MODULE* module )
     {
         switch( item->Type() )
         {
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             break;
 
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
             edge = (EDGE_MODULE*) item;
 
             switch( edge->m_Shape )

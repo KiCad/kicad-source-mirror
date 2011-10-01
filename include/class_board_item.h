@@ -125,7 +125,7 @@ public:
      */
     bool IsTrack() const
     {
-        return ( Type() == TYPE_TRACK ) || ( Type() == TYPE_VIA );
+        return ( Type() == PCB_TRACE_T ) || ( Type() == PCB_VIA_T );
     }
 
     /**
@@ -301,7 +301,7 @@ class BOARD_ITEM_LIST : public BOARD_ITEM
     ITEM_ARRAY   myItems;
 
     BOARD_ITEM_LIST( const BOARD_ITEM_LIST& other ) :
-        BOARD_ITEM( NULL, TYPE_BOARD_ITEM_LIST )
+        BOARD_ITEM( NULL, PCB_ITEM_LIST_T )
     {
         // copy constructor is not supported, is private to cause compiler error
     }
@@ -309,7 +309,7 @@ class BOARD_ITEM_LIST : public BOARD_ITEM
 public:
 
     BOARD_ITEM_LIST( BOARD_ITEM* aParent = NULL ) :
-        BOARD_ITEM( aParent, TYPE_BOARD_ITEM_LIST )
+        BOARD_ITEM( aParent, PCB_ITEM_LIST_T )
     {}
 
     //-----< satisfy some virtual functions >------------------------------
