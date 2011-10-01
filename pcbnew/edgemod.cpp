@@ -140,7 +140,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
 
         for( ; aEdge != NULL; aEdge = aEdge->Next() )
         {
-            if( aEdge->Type() != TYPE_EDGE_MODULE )
+            if( aEdge->Type() != PCB_MODULE_EDGE_T )
                 continue;
 
             aEdge->m_Width = g_ModuleSegmentWidth;
@@ -188,7 +188,7 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Layer( EDGE_MODULE* Edge )
 
         for( ; Edge != NULL; Edge = Edge->Next() )
         {
-            if( Edge->Type() != TYPE_EDGE_MODULE )
+            if( Edge->Type() != PCB_MODULE_EDGE_T )
                 continue;
 
             Edge->SetLayer( new_layer );
@@ -235,9 +235,9 @@ void FOOTPRINT_EDIT_FRAME::Delete_Edge_Module( EDGE_MODULE* Edge )
     if( Edge == NULL )
         return;
 
-    if( Edge->Type() != TYPE_EDGE_MODULE )
+    if( Edge->Type() != PCB_MODULE_EDGE_T )
     {
-        DisplayError( this, wxT( "StructType error: TYPE_EDGE_MODULE expected" ) );
+        DisplayError( this, wxT( "StructType error: PCB_MODULE_EDGE_T expected" ) );
         return;
     }
 
@@ -259,7 +259,7 @@ static void Abort_Move_ModuleOutline( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     Panel->SetMouseCapture( NULL, NULL );
 
-    if( Edge && ( Edge->Type() == TYPE_EDGE_MODULE ) )
+    if( Edge && ( Edge->Type() == PCB_MODULE_EDGE_T ) )
     {
         if( Edge->IsNew() )   // On aborting, delete new outline.
         {

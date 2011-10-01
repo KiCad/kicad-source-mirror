@@ -279,7 +279,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
         int type = GetCurItem()->Type();
 
-        if( type == TYPE_TRACK || type == TYPE_VIA )
+        if( type == PCB_TRACE_T || type == PCB_VIA_T )
         {
             BOARD_CONNECTED_ITEM*item = (BOARD_CONNECTED_ITEM*) GetCurItem();
             DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS dlg( this, item->GetNet() );
@@ -510,7 +510,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_CURRENT_ZONE:
-        if( ( GetCurItem() )->Type() == TYPE_ZONE_CONTAINER )
+        if( ( GetCurItem() )->Type() == PCB_ZONE_AREA_T )
         {
             ZONE_CONTAINER* zone_container = (ZONE_CONTAINER*) GetCurItem();
             zone_container->UnFill();
@@ -561,10 +561,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
 
         // If the current Item is a pad, text module ...: Get its parent
-        if( GetCurItem()->Type() != TYPE_MODULE )
+        if( GetCurItem()->Type() != PCB_MODULE_T )
             SetCurItem( GetCurItem()->GetParent() );
 
-        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
         {
             g_Drag_Pistes_On = false;
             break;
@@ -610,10 +610,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MoveCursorToCrossHair();
 
         // If the current Item is a pad, text module ...: Get its parent
-        if( GetCurItem()->Type() != TYPE_MODULE )
+        if( GetCurItem()->Type() != PCB_MODULE_T )
             SetCurItem( GetCurItem()->GetParent() );
 
-        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
             break;
 
         module = (MODULE*) GetCurItem();
@@ -638,10 +638,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MoveCursorToCrossHair();
 
         // If the current Item is a pad, text module ...: Get its parent
-        if( GetCurItem()->Type() != TYPE_MODULE )
+        if( GetCurItem()->Type() != PCB_MODULE_T )
             SetCurItem( GetCurItem()->GetParent() );
 
-        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
             break;
 
         module = (MODULE*) GetCurItem();
@@ -666,10 +666,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MoveCursorToCrossHair();
 
         // If the current Item is a pad, text module ...: Get its parent
-        if( GetCurItem()->Type() != TYPE_MODULE )
+        if( GetCurItem()->Type() != PCB_MODULE_T )
             SetCurItem( GetCurItem()->GetParent() );
 
-        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
             break;
 
         module = (MODULE*) GetCurItem();
@@ -695,10 +695,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MoveCursorToCrossHair();
 
         // If the current Item is a pad, text module ...: Get its parent
-        if( GetCurItem()->Type() != TYPE_MODULE )
+        if( GetCurItem()->Type() != PCB_MODULE_T )
             SetCurItem( GetCurItem()->GetParent() );
 
-        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
             break;
 
         module = (MODULE*) GetCurItem();
@@ -722,10 +722,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_EDIT_MODULE:
 
         // If the current Item is a pad, text module ...: Get its parent
-        if( GetCurItem()->Type() != TYPE_MODULE )
+        if( GetCurItem()->Type() != PCB_MODULE_T )
             SetCurItem( GetCurItem()->GetParent() );
 
-        if( !GetCurItem() || GetCurItem()->Type() != TYPE_MODULE )
+        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
             break;
 
         InstallModuleOptionsFrame( (MODULE*) GetCurItem(), &dc );
@@ -735,7 +735,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_DRAG_PAD_REQUEST:
         module = (MODULE*) GetCurItem()->GetParent();
 
-        if( !module || module->Type() != TYPE_MODULE )
+        if( !module || module->Type() != PCB_MODULE_T )
             break;
 
         if( module->IsLocked() )
@@ -755,7 +755,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_MOVE_PAD_REQUEST:
         module = (MODULE*) GetCurItem()->GetParent();
 
-        if( !module || module->Type() != TYPE_MODULE )
+        if( !module || module->Type() != PCB_MODULE_T )
             break;
 
         if( module->IsLocked() )
@@ -922,7 +922,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_GETINFO_MARKER:
-        if( GetCurItem() && GetCurItem()->Type() == TYPE_MARKER_PCB )
+        if( GetCurItem() && GetCurItem()->Type() == PCB_MARKER_T )
             ( (MARKER_PCB*) GetCurItem() )->DisplayMarkerInfo( this );
 
         DrawPanel->MoveCursorToCrossHair();
@@ -1071,7 +1071,7 @@ static void Process_Move_Item( PCB_EDIT_FRAME* frame, EDA_ITEM* DrawStruct, wxDC
 
     switch( DrawStruct->Type() )
     {
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
         frame->StartMoveTextePcb( (TEXTE_PCB*) DrawStruct, DC );
         break;
 
@@ -1092,11 +1092,11 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 
     switch( Item->Type() )
     {
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
         Delete_Module( (MODULE*) Item, DC, true );
         break;
 
-    case TYPE_DIMENSION:
+    case PCB_DIMENSION_T:
         DeleteDimension( (DIMENSION*) Item, DC );
         break;
 
@@ -1104,32 +1104,32 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         DeleteTarget( (PCB_TARGET*) Item, DC );
         break;
 
-    case TYPE_DRAWSEGMENT:
+    case PCB_LINE_T:
         Delete_Segment_Edge( (DRAWSEGMENT*) Item, DC );
         break;
 
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
         Delete_Texte_Pcb( (TEXTE_PCB*) Item, DC );
         break;
 
-    case TYPE_TRACK:
+    case PCB_TRACE_T:
         Delete_Track( DC, (TRACK*) Item );
         break;
 
-    case TYPE_VIA:
+    case PCB_VIA_T:
         Delete_Segment( DC, (TRACK*) Item );
         break;
 
-    case TYPE_ZONE:
+    case PCB_ZONE_T:
         Delete_OldZone_Fill( (SEGZONE*) Item );
         break;
 
-    case TYPE_ZONE_EDGE_CORNER:
+    case PCB_ZONE_EDGE_T:
         Remove_Zone_Corner( DC, (ZONE_CONTAINER*) Item );
         SetCurItem( NULL );
         break;
 
-    case TYPE_ZONE_CONTAINER:
+    case PCB_ZONE_AREA_T:
     {
         SetCurItem( NULL );
         int netcode = ( (ZONE_CONTAINER*) Item )->GetNet();
@@ -1137,9 +1137,10 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         TestNetConnection( NULL, netcode );
         GetBoard()->DisplayInfo( this );
     }
+
     break;
 
-    case TYPE_MARKER_PCB:
+    case PCB_MARKER_T:
         if( Item == GetCurItem() )
             SetCurItem( NULL );
 
@@ -1149,13 +1150,13 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         GetBoard()->Delete( Item );
         break;
 
-    case TYPE_PAD:
-    case TYPE_TEXTE_MODULE:
-    case TYPE_EDGE_MODULE:
+    case PCB_PAD_T:
+    case PCB_MODULE_TEXT_T:
+    case PCB_MODULE_EDGE_T:
         break;
 
     case TYPE_NOT_INIT:
-    case TYPE_PCB:
+    case PCB_T:
     default:
     {
         wxString Line;
@@ -1217,7 +1218,7 @@ void PCB_EDIT_FRAME::SwitchLayer( wxDC* DC, int layer )
         // See if we are drawing a segment; if so, add a via?
         if( GetToolId() == ID_TRACK_BUTT && current != NULL )
         {
-            if( current->Type() == TYPE_TRACK && ( current->IsNew() ) )
+            if( current->Type() == PCB_TRACE_T && ( current->IsNew() ) )
             {
                 // Want to set the routing layers so that it switches properly -
                 // see the implementation of Other_Layer_Route - the working

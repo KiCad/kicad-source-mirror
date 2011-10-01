@@ -284,14 +284,14 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
 
     switch( aItem->Type() )
     {
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
         newSize = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
         newThickness = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
         pcbText = (TEXTE_PCB*) aItem;
         text = (EDA_TEXT*) pcbText;
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         newSize = g_ModuleTextSize;
         newThickness = g_ModuleTextWidth;
         moduleText = (TEXTE_MODULE*) aItem;
@@ -311,11 +311,11 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
     // Push item to undo list
     switch( aItem->Type() )
     {
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
         SaveCopyInUndoList( pcbText, UR_CHANGED );
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         SaveCopyInUndoList( moduleText->GetParent(), UR_CHANGED );
         break;
 
@@ -342,7 +342,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
     PICKED_ITEMS_LIST undoItemList;
     unsigned int ii;
 
-    itemWrapper.m_PickedItemType = TYPE_MODULE;
+    itemWrapper.m_PickedItemType = PCB_MODULE_T;
 
     module = GetBoard()->m_Modules;
 
@@ -373,7 +373,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
             // Go through all other module text fields
             for( boardItem = module->m_Drawings; boardItem; boardItem = boardItem->Next() )
             {
-                if( boardItem->Type() == TYPE_TEXTE_MODULE )
+                if( boardItem->Type() == PCB_MODULE_TEXT_T )
                 {
                     item = (TEXTE_MODULE*) boardItem;
 
@@ -420,7 +420,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
         case TEXT_is_DIVERS:
             for( boardItem = module->m_Drawings; boardItem; boardItem = boardItem->Next() )
             {
-                if( boardItem->Type() == TYPE_TEXTE_MODULE )
+                if( boardItem->Type() == PCB_MODULE_TEXT_T )
                 {
                     item = (TEXTE_MODULE*) boardItem;
                     item->SetThickness( g_ModuleTextWidth );

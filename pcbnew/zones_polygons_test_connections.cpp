@@ -109,15 +109,15 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 
                     wxPoint pos1, pos2;
 
-                    if( item->Type() == TYPE_PAD )
+                    if( item->Type() == PCB_PAD_T )
                     {
                         pos1 = pos2 = ( (D_PAD*) item )->m_Pos;
                     }
-                    else if( item->Type() == TYPE_VIA )
+                    else if( item->Type() == PCB_VIA_T )
                     {
                         pos1 = pos2 = ( (SEGVIA*) item )->m_Start;
                     }
-                    else if( item->Type() == TYPE_TRACK )
+                    else if( item->Type() == PCB_TRACE_T )
                     {
                         pos1 = ( (TRACK*) item )->m_Start;
                         pos2 = ( (TRACK*) item )->m_End;

@@ -23,7 +23,7 @@
 
 
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
-    BOARD_ITEM( parent, TYPE_TEXTE_MODULE ), EDA_TEXT()
+    BOARD_ITEM( parent, PCB_MODULE_TEXT_T ), EDA_TEXT()
 {
     MODULE* Module = (MODULE*) m_Parent;
 
@@ -36,7 +36,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
     m_Thickness  = 120;   /* Set default dimension to a reasonable value. */
 
     SetLayer( SILKSCREEN_N_FRONT );
-    if( Module && ( Module->Type() == TYPE_MODULE ) )
+    if( Module && ( Module->Type() == PCB_MODULE_T ) )
     {
         m_Pos = Module->m_Pos;
 

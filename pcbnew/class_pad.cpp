@@ -28,7 +28,7 @@
 int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode
 
 
-D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
+D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
 {
     m_NumPadName = 0;
 
@@ -36,7 +36,7 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, TYPE_PAD )
     m_Orient = 0;                       // Pad rotation in 1/10 degrees
     m_LengthDie = 0;
 
-    if( m_Parent && (m_Parent->Type()  == TYPE_MODULE) )
+    if( m_Parent && (m_Parent->Type()  == PCB_MODULE_T) )
     {
         m_Pos = ( (MODULE*) m_Parent )->GetPosition();
     }

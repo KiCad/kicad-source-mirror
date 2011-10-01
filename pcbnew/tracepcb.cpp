@@ -141,10 +141,10 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
 
         switch( item->Type() )
         {
-        case TYPE_DIMENSION:
-        case TYPE_TEXTE:
+        case PCB_DIMENSION_T:
+        case PCB_TEXT_T:
         case PCB_TARGET_T:
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             item->Draw( aPanel, DC, aDrawMode );
             break;
 

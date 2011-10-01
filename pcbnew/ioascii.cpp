@@ -125,9 +125,9 @@ int PCB_BASE_FRAME::ReadListeSegmentDescr( LINE_READER* aReader,
                                 &drill );
 
         // Read the 2nd line to determine the exact type, one of:
-        // TYPE_TRACK, TYPE_VIA, or TYPE_ZONE.  The type field in 2nd line
-        // differentiates between TYPE_TRACK and TYPE_VIA.  With virtual
-        // functions in use, it is critical to instantiate the TYPE_VIA
+        // PCB_TRACE_T, PCB_VIA_T, or PCB_ZONE_T.  The type field in 2nd line
+        // differentiates between PCB_TRACE_T and PCB_VIA_T.  With virtual
+        // functions in use, it is critical to instantiate the PCB_VIA_T
         // exactly.
         if( !aReader->ReadLine() )
             break;
@@ -141,25 +141,25 @@ int PCB_BASE_FRAME::ReadListeSegmentDescr( LINE_READER* aReader,
         sscanf( line + 2, " %d %d %d %lX %X", &layer, &type, &net_code,
                 &timeStamp, &flags );
 
-        if( StructType==TYPE_TRACK && type==1 )
-            makeType = TYPE_VIA;
+        if( StructType==PCB_TRACE_T && type==1 )
+            makeType = PCB_VIA_T;
         else
             makeType = StructType;
 
         switch( makeType )
         {
         default:
-        case TYPE_TRACK:
+        case PCB_TRACE_T:
             newTrack = new TRACK( GetBoard() );
             GetBoard()->m_Track.Insert( newTrack, insertBeforeMe );
             break;
 
-        case TYPE_VIA:
+        case PCB_VIA_T:
             newTrack = new SEGVIA( GetBoard() );
             GetBoard()->m_Track.Insert( newTrack, insertBeforeMe );
             break;
 
-        case TYPE_ZONE:     // this is now deprecated, but exits in old boards
+        case PCB_ZONE_T:     // this is now deprecated, but exits in old boards
             newTrack = new SEGZONE( GetBoard() );
             GetBoard()->m_Zone.Insert( (SEGZONE*) newTrack, (SEGZONE*) insertBeforeMe );
             break;
@@ -182,7 +182,7 @@ int PCB_BASE_FRAME::ReadListeSegmentDescr( LINE_READER* aReader,
 
         newTrack->SetLayer( layer );
 
-        if( makeType == TYPE_VIA ) // Ensure layers are OK when possible:
+        if( makeType == PCB_VIA_T ) // Ensure layers are OK when possible:
         {
             if( newTrack->Shape() == VIA_THROUGH )
                 ( (SEGVIA*) newTrack )->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
@@ -1024,7 +1024,7 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 
 #ifdef PCBNEW
             TRACK* insertBeforeMe = Append ? NULL : board->m_Track.GetFirst();
-            ReadListeSegmentDescr( aReader, insertBeforeMe, TYPE_TRACK, NbTrack );
+            ReadListeSegmentDescr( aReader, insertBeforeMe, PCB_TRACE_T, NbTrack );
 #endif
 
             continue;
@@ -1084,7 +1084,7 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 #ifdef PCBNEW
             SEGZONE* insertBeforeMe = Append ? NULL : board->m_Zone.GetFirst();
 
-            ReadListeSegmentDescr( aReader, insertBeforeMe, TYPE_ZONE, NbZone );
+            ReadListeSegmentDescr( aReader, insertBeforeMe, PCB_ZONE_T, NbZone );
 #endif
 
             continue;

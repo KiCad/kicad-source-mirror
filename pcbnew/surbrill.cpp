@@ -121,20 +121,20 @@ int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
     {
         switch( item->Type() )
         {
-        case TYPE_PAD:
+        case PCB_PAD_T:
             netcode = ( (D_PAD*) item )->GetNet();
             SendMessageToEESCHEMA( item );
             break;
 
-        case TYPE_TRACK:
-        case TYPE_VIA:
-        case TYPE_ZONE:
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
+        case PCB_ZONE_T:
             // since these classes are all derived from TRACK, use a common
             // GetNet() function:
             netcode = ( (TRACK*) item )->GetNet();
             break;
 
-        case TYPE_ZONE_CONTAINER:
+        case PCB_ZONE_AREA_T:
             netcode = ( (ZONE_CONTAINER*) item )->GetNet();
             break;
 

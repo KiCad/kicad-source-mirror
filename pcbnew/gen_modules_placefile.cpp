@@ -486,7 +486,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
 
     for( PtStruct = GetBoard()->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->Type() != TYPE_DRAWSEGMENT )
+        if( PtStruct->Type() != PCB_LINE_T )
             continue;
 
         if( ( (DRAWSEGMENT*) PtStruct )->GetLayer() != EDGE_N )

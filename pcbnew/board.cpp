@@ -200,7 +200,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
         {
             switch( item->Type() )
             {
-            case TYPE_EDGE_MODULE:
+            case PCB_MODULE_EDGE_T:
             {
                 EDGE_MODULE* edge = (EDGE_MODULE*) item;
 
@@ -232,7 +232,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
     {
         switch( item->Type() )
         {
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
         {
             DRAWSEGMENT* DrawSegm;
 
@@ -257,7 +257,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
         }
         break;
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
         {
             TEXTE_PCB* PtText;
             PtText = (TEXTE_PCB*) item;

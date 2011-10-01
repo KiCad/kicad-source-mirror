@@ -72,7 +72,7 @@ static GRID_TYPE PcbGridList[] =
 /*******************************************************************/
 /* Class PCB_SCREEN: class to handle parametres to display a board */
 /********************************************************************/
-PCB_SCREEN::PCB_SCREEN() : BASE_SCREEN( TYPE_SCREEN )
+PCB_SCREEN::PCB_SCREEN() : BASE_SCREEN( SCREEN_T )
 {
     size_t i;
 

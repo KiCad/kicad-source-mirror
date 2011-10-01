@@ -69,7 +69,7 @@ static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_
         nb_change++;
         pt_conn->SetSubNet( new_val );
 
-        if( pt_conn->start && ( pt_conn->start->Type() == TYPE_PAD) )
+        if( pt_conn->start && ( pt_conn->start->Type() == PCB_PAD_T) )
         {
             pt_pad = (D_PAD*) (pt_conn->start);
 
@@ -77,7 +77,7 @@ static int Merge_Two_SubNets( TRACK* pt_start_conn, TRACK* pt_end_conn, int old_
                 pt_pad->SetSubNet( pt_conn->GetSubNet() );
         }
 
-        if( pt_conn->end && (pt_conn->end->Type() == TYPE_PAD) )
+        if( pt_conn->end && (pt_conn->end->Type() == PCB_PAD_T) )
         {
             pt_pad = (D_PAD*) (pt_conn->end);
 
@@ -124,12 +124,12 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
         pt_conn->SetSubNet( 0 );
         PtStruct = pt_conn->start;
 
-        if( PtStruct && (PtStruct->Type() == TYPE_PAD) )
+        if( PtStruct && (PtStruct->Type() == PCB_PAD_T) )
             ( (D_PAD*) PtStruct )->SetSubNet( 0 );
 
         PtStruct = pt_conn->end;
 
-        if( PtStruct && (PtStruct->Type() == TYPE_PAD) )
+        if( PtStruct && (PtStruct->Type() == PCB_PAD_T) )
             ( (D_PAD*) PtStruct )->SetSubNet( 0 );
 
         if( pt_conn == pt_end_conn )
@@ -148,7 +148,7 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
         PtStruct = pt_conn->start;
 
         /* The segment starts on a pad */
-        if( PtStruct && (PtStruct->Type() == TYPE_PAD) )
+        if( PtStruct && (PtStruct->Type() == PCB_PAD_T) )
         {
             pt_pad = (D_PAD*) PtStruct;
 
@@ -188,7 +188,7 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
         PtStruct = pt_conn->end;
 
         /* The segment end on a pad */
-        if( PtStruct && (PtStruct->Type() == TYPE_PAD) )
+        if( PtStruct && (PtStruct->Type() == PCB_PAD_T) )
         {
             pt_pad = (D_PAD*) PtStruct;
 
@@ -223,7 +223,7 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
         /* Test connections between segments */
         PtStruct = pt_conn->start;
 
-        if( PtStruct && (PtStruct->Type() != TYPE_PAD) )
+        if( PtStruct && (PtStruct->Type() != PCB_PAD_T) )
         {
             /* The segment starts on an other track */
             pt_other_trace = (TRACK*) PtStruct;
@@ -266,7 +266,7 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn )
 
         PtStruct = pt_conn->end;    // Do the same calculations for the segment end point
 
-        if( PtStruct && (PtStruct->Type() != TYPE_PAD) )
+        if( PtStruct && (PtStruct->Type() != PCB_PAD_T) )
         {
             pt_other_trace = (TRACK*) PtStruct;
 
@@ -426,7 +426,7 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
     /* Update connections type track to track */
     for( Track = pt_start_conn; Track != NULL; Track = Track->Next() )
     {
-        if( Track->Type() == TYPE_VIA )
+        if( Track->Type() == PCB_VIA_T )
         {
             // A via can connect many tracks, we must search for all track segments in this net
             TRACK* pt_segm;
@@ -618,7 +618,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         /* look for vias which could be connect many tracks */
         for( TRACK* via = m_Pcb->m_Track; via != NULL; via = via->Next() )
         {
-            if( via->Type() != TYPE_VIA )
+            if( via->Type() != PCB_VIA_T )
                 continue;
 
             if( via->GetNet() > 0 )
@@ -661,7 +661,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
             /* look for the connection to the current segment starting point */
             PtStruct = (BOARD_ITEM*) pt_trace->start;
 
-            if( PtStruct && (PtStruct->Type() != TYPE_PAD) )
+            if( PtStruct && (PtStruct->Type() != PCB_PAD_T) )
             {
                 // Begin on an other track segment
                 pt_next = (TRACK*) PtStruct;
@@ -690,7 +690,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
             /* look for the connection to the current segment ending point */
             PtStruct = pt_trace->end;
 
-            if( PtStruct && (PtStruct->Type() != TYPE_PAD) )
+            if( PtStruct && (PtStruct->Type() != PCB_PAD_T) )
             {
                 pt_next = (TRACK*) PtStruct;
 

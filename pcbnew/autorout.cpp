@@ -57,7 +57,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
         {
             switch( GetScreen()->GetCurItem()->Type() )
             {
-            case TYPE_PAD:
+            case PCB_PAD_T:
                 Pad = (D_PAD*) GetScreen()->GetCurItem();
                 autoroute_net_code = Pad->GetNet();
                 break;
@@ -74,7 +74,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
 
     case ROUTE_MODULE:
         Module = (MODULE*) GetScreen()->GetCurItem();
-        if( (Module == NULL) || (Module->Type() != TYPE_MODULE) )
+        if( (Module == NULL) || (Module->Type() != PCB_MODULE_T) )
         {
             wxMessageBox( _( "Module not selected" ) );
             return;
@@ -84,7 +84,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     case ROUTE_PAD:
         Pad = (D_PAD*) GetScreen()->GetCurItem();
 
-        if( (Pad == NULL)  || (Pad->Type() != TYPE_PAD) )
+        if( (Pad == NULL)  || (Pad->Type() != PCB_PAD_T) )
         {
             wxMessageBox( _( "Pad not selected" ) );
             return;

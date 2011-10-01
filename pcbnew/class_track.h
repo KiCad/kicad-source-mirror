@@ -70,7 +70,7 @@ protected:
     TRACK( const TRACK& track );    // protected so Copy() is used instead.
 
 public:
-    TRACK( BOARD_ITEM* aParent, KICAD_T idtype = TYPE_TRACK );
+    TRACK( BOARD_ITEM* aParent, KICAD_T idtype = PCB_TRACE_T );
 
     /**
      * Function Copy

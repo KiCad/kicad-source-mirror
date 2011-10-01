@@ -490,7 +490,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( !itemCurrentlyEdited )                         // no track in progress: nothing to do
             break;
 
-        if( GetCurItem()->Type() != TYPE_TRACK )           // Should not occur
+        if( GetCurItem()->Type() != PCB_TRACE_T )           // Should not occur
             return;
 
         if( !GetCurItem()->IsNew() )
@@ -512,7 +512,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( GetToolId() != ID_TRACK_BUTT )
             return;
 
-        if( GetCurItem()->Type() != TYPE_TRACK )
+        if( GetCurItem()->Type() != PCB_TRACE_T )
             return;
 
         if( !GetCurItem()->IsNew() )
@@ -583,7 +583,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             pos = screen->RefPos( true );
             module = GetBoard()->GetFootprint( pos, screen->m_Active_Layer, true );
         }
-        else if( GetCurItem()->Type() == TYPE_MODULE )
+        else if( GetCurItem()->Type() == PCB_MODULE_T )
         {
             module = (MODULE*) GetCurItem();
         }
@@ -681,7 +681,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
             if( item == NULL )
                 return false;
 
-            if( (item->Type() == TYPE_MODULE) && !IsOK( this, _( "Delete module?" ) ) )
+            if( (item->Type() == PCB_MODULE_T) && !IsOK( this, _( "Delete module?" ) ) )
                 return false;
 
             RemoveStruct( item, aDC );
@@ -714,26 +714,26 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 
     switch( item->Type() )
     {
-    case TYPE_TRACK:
-    case TYPE_VIA:
+    case PCB_TRACE_T:
+    case PCB_VIA_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_TRACKSEG;
 
         break;
 
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_TEXTEPCB;
 
         break;
 
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_MODULE;
 
         break;
 
-    case TYPE_PAD:
+    case PCB_PAD_T:
         // Post a EDIT_MODULE event here to prevent pads
         // from being edited by hotkeys.
         // Process_Special_Functions takes care of finding
@@ -749,25 +749,25 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 
         break;
 
-    case TYPE_DIMENSION:
+    case PCB_DIMENSION_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_DIMENSION;
 
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_TEXTMODULE;
 
         break;
 
-    case TYPE_DRAWSEGMENT:
+    case PCB_LINE_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_DRAWING;
 
         break;
 
-    case TYPE_ZONE_CONTAINER:
+    case PCB_ZONE_AREA_T:
         if( aIdCommand == HK_EDIT_ITEM )
             evt_type = ID_POPUP_PCB_EDIT_ZONE_PARAMS;
 
@@ -809,8 +809,8 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 
     switch( item->Type() )
     {
-    case TYPE_TRACK:
-    case TYPE_VIA:
+    case PCB_TRACE_T:
+    case PCB_VIA_T:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_TRACK_NODE;
 
@@ -822,7 +822,7 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 
         break;
 
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
     {
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_MODULE_REQUEST;
@@ -832,7 +832,7 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
     }
     break;
 
-    case TYPE_PAD:
+    case PCB_PAD_T:
         // Post MODULE_REQUEST events here to prevent pads
         // from being moved or dragged by hotkeys.
         // Process_Special_Functions takes care of finding
@@ -845,7 +845,7 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 
         break;
 
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST;
 
@@ -857,7 +857,7 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 
         break;
 
-    case TYPE_ZONE_CONTAINER:
+    case PCB_ZONE_AREA_T:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_ZONE_OUTLINES;
 
@@ -866,13 +866,13 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST;
 
         break;
 
-    case TYPE_DRAWSEGMENT:
+    case PCB_LINE_T:
         if( aIdCommand == HK_MOVE_ITEM )
             evt_type = ID_POPUP_PCB_MOVE_DRAWING_REQUEST;
 
@@ -910,26 +910,26 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
 
         switch( item->Type() )
         {
-        case TYPE_TRACK:
-        case TYPE_VIA:
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
             if( item->m_Flags & IS_DRAGGED )
                 PlaceDraggedOrMovedTrackSegment( (TRACK*) item, aDC );
 
             break;
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
             Place_Texte_Pcb( (TEXTE_PCB*) item, aDC );
             break;
 
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             PlaceTexteModule( (TEXTE_MODULE*) item, aDC );
             break;
 
-        case TYPE_PAD:
+        case PCB_PAD_T:
             PlacePad( (D_PAD*) item, aDC );
             break;
 
-        case TYPE_MODULE:
+        case PCB_MODULE_T:
             PlaceModule( (MODULE*) item, aDC );
             break;
 
@@ -937,7 +937,7 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
             PlaceTarget( (PCB_TARGET*) item, aDC );
             break;
 
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             if( no_tool )   // when no tools: existing item moving.
                 Place_DrawItem( (DRAWSEGMENT*) item, aDC );
 
@@ -973,7 +973,7 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
 
     switch( item->Type() )
     {
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
     {
         if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
             evt_type = ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE;
@@ -983,13 +983,13 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
     }
         break;
 
-    case TYPE_TEXTE:
+    case PCB_TEXT_T:
         if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
             evt_type = ID_POPUP_PCB_ROTATE_TEXTEPCB;
 
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         if( aIdCommand == HK_ROTATE_ITEM )                      // Rotation
             evt_type = ID_POPUP_PCB_ROTATE_TEXTMODULE;
 

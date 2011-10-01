@@ -33,16 +33,16 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             switch( item->Type() )
             {
-            case TYPE_TEXTE_MODULE:
+            case PCB_MODULE_TEXT_T:
                 PlaceTexteModule( (TEXTE_MODULE*) item, DC );
                 break;
 
-            case TYPE_EDGE_MODULE:
+            case PCB_MODULE_EDGE_T:
                 SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
                 Place_EdgeMod( (EDGE_MODULE*) item );
                 break;
 
-            case TYPE_PAD:
+            case PCB_PAD_T:
                 PlacePad( (D_PAD*) item, DC );
                 break;
 
@@ -120,7 +120,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             (item->m_Flags != 0) )    // Item in edit, cannot delete it
             break;
 
-        if( item->Type() != TYPE_MODULE ) // Cannot delete the module itself
+        if( item->Type() != PCB_MODULE_T ) // Cannot delete the module itself
         {
             SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
             RemoveStruct( item );
@@ -250,7 +250,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
 
     switch( item->Type() )
     {
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
     {
         wxMenu* transform_choice = new wxMenu;
         AddMenuItem( transform_choice, ID_MODEDIT_MODULE_ROTATE, _( "Rotate" ),
@@ -263,7 +263,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         break;
     }
 
-    case TYPE_PAD:
+    case PCB_PAD_T:
         if( !flags )
         {
             msg = AddHotkeyName( _("Move Pad" ), g_Module_Editor_Hokeys_Descr, HK_MOVE_ITEM );
@@ -288,12 +288,13 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
 
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         if( !flags )
         {
             msg = AddHotkeyName( _("Move Text Mod." ), g_Module_Editor_Hokeys_Descr,
                                  HK_MOVE_ITEM );
-            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST, msg, KiBitmap( move_field_xpm ) );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST, msg,
+                         KiBitmap( move_field_xpm ) );
         }
 
         msg = AddHotkeyName( _("Rotate Text Mod." ), g_Module_Editor_Hokeys_Descr,
@@ -310,15 +311,17 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             {
                 msg = AddHotkeyName( _("Delete Text Mod." ), g_Module_Editor_Hokeys_Descr,
                                      HK_DELETE );
-                AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_TEXTMODULE, msg, KiBitmap( delete_text_xpm ) );
+                AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_TEXTMODULE, msg,
+                             KiBitmap( delete_text_xpm ) );
             }
         }
         break;
 
-    case TYPE_EDGE_MODULE:
+    case PCB_MODULE_EDGE_T:
     {
         if( (flags & IS_NEW) )
-            AddMenuItem( PopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING, _( "End edge" ), KiBitmap( apply_xpm ) );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING, _( "End edge" ),
+                         KiBitmap( apply_xpm ) );
 
         if( !flags )
         {
@@ -327,7 +330,8 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         }
 
         if( ( flags & (IS_NEW | IS_MOVED) ) == IS_MOVED )
-            AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_EDGE, _( "Place edge" ), KiBitmap( apply_xpm ) );
+            AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_EDGE, _( "Place edge" ),
+                         KiBitmap( apply_xpm ) );
 
         wxMenu* edit_mnu = new wxMenu;
         AddMenuItem( PopMenu, edit_mnu, ID_POPUP_PCB_EDIT_EDGE, _( "Edit" ), KiBitmap( edit_xpm ) );
@@ -346,19 +350,19 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
     }
     break;
 
-    case TYPE_DRAWSEGMENT:
-    case TYPE_TEXTE:
-    case TYPE_VIA:
-    case TYPE_TRACK:
-    case TYPE_ZONE:
-    case TYPE_MARKER_PCB:
-    case TYPE_DIMENSION:
+    case PCB_LINE_T:
+    case PCB_TEXT_T:
+    case PCB_VIA_T:
+    case PCB_TRACE_T:
+    case PCB_ZONE_T:
+    case PCB_MARKER_T:
+    case PCB_DIMENSION_T:
     case PCB_TARGET_T:
         break;
 
-    case TYPE_SCREEN:
+    case SCREEN_T:
     case TYPE_NOT_INIT:
-    case TYPE_PCB:
+    case PCB_T:
         msg.Printf( wxT( "FOOTPRINT_EDIT_FRAME::OnRightClick Error: illegal DrawType %d" ),
                     item->Type() );
         DisplayError( this, msg );
@@ -407,12 +411,12 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 
         switch( item->Type() )
         {
-        case TYPE_PAD:
+        case PCB_PAD_T:
             InstallPadOptionsFrame( (D_PAD*) item );
             DrawPanel->MoveCursorToCrossHair();
             break;
 
-        case TYPE_MODULE:
+        case PCB_MODULE_T:
         {
             DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) item );
             int ret = dialog.ShowModal();
@@ -424,7 +428,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         }
         break;
 
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             InstallTextModOptionsFrame( (TEXTE_MODULE*) item, DC );
             DrawPanel->MoveCursorToCrossHair();
             break;

@@ -61,7 +61,7 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
         {
             item = (*m_Collector)[ii];
 
-            if( item->Type() != TYPE_MODULE )
+            if( item->Type() != PCB_MODULE_T )
                 continue;
 
             m_Collector->Remove( ii );
@@ -572,7 +572,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
         EDGE_MODULE* edge = NULL;
         if( GetScreen()->GetCurItem()
-          && ( GetScreen()->GetCurItem()->Type() == TYPE_EDGE_MODULE ) )
+          && ( GetScreen()->GetCurItem()->Type() == PCB_MODULE_EDGE_T ) )
         {
             edge = (EDGE_MODULE*) GetScreen()->GetCurItem();
         }
@@ -633,7 +633,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( item )
         {
-            if( item->Type() != TYPE_PAD )
+            if( item->Type() != PCB_PAD_T )
                 item = NULL;
         }
 
@@ -729,14 +729,14 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 
         for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
         {
-            if( PtStruct->Type() == TYPE_EDGE_MODULE )
+            if( PtStruct->Type() == PCB_MODULE_EDGE_T )
             {
                 edgemod = (EDGE_MODULE*) PtStruct;
                 edgemod->m_Start0 = edgemod->m_Start;
                 edgemod->m_End0   = edgemod->m_End;
             }
 
-            if( PtStruct->Type() == TYPE_TEXTE_MODULE )
+            if( PtStruct->Type() == PCB_MODULE_TEXT_T )
             {
                 textmod = (TEXTE_MODULE*) PtStruct;
                 textmod->m_Pos0 = textmod->m_Pos;
@@ -781,7 +781,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
         {
             switch( PtStruct->Type() )
             {
-            case TYPE_EDGE_MODULE:
+            case PCB_MODULE_EDGE_T:
                 edgemod = (EDGE_MODULE*) PtStruct;
                 NEGATE( edgemod->m_Start.y );
                 NEGATE( edgemod->m_End.y );
@@ -791,7 +791,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
                 NEGATE( edgemod->m_Angle );
                 break;
 
-            case TYPE_TEXTE_MODULE:
+            case PCB_MODULE_TEXT_T:
                 /* Reverse mirror position and mirror. */
                 textmod = (TEXTE_MODULE*) PtStruct;
                 NEGATE( textmod->m_Pos.y );

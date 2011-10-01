@@ -57,13 +57,15 @@ MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, M
         textB = aItem->GetSelectMenuText();
         posB  = aItem->GetPosition();
 
-        if( aItem->Type() == TYPE_PAD )
+        if( aItem->Type() == PCB_PAD_T )
+        {
             position = aItem->GetPosition();
-
-        else if( aItem->Type() == TYPE_VIA )
+        }
+        else if( aItem->Type() == PCB_VIA_T )
+        {
             position = aItem->GetPosition();
-
-        else if( aItem->Type() == TYPE_TRACK )
+        }
+        else if( aItem->Type() == PCB_TRACE_T )
         {
             TRACK*  track  = (TRACK*) aItem;
             wxPoint endPos = track->m_End;

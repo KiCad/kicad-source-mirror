@@ -116,7 +116,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     {
         switch( item->Type() )
         {
-        case TYPE_MODULE:
+        case PCB_MODULE_T:
             createPopUpMenuForFootprints( (MODULE*) item, aPopMenu );
 
             if( m_HTOOL_current_state == ID_TOOLBARH_PCB_MODE_MODULE )
@@ -150,15 +150,15 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
             }
             break;
 
-        case TYPE_PAD:
+        case PCB_PAD_T:
             createPopUpMenuForFpPads( (D_PAD*) item, aPopMenu );
             break;
 
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             createPopUpMenuForFpTexts( (TEXTE_MODULE*) item, aPopMenu );
             break;
 
-        case TYPE_DRAWSEGMENT:  // Some graphic items on technical layers
+        case PCB_LINE_T:  // Some graphic items on technical layers
             if( (flags & IS_NEW) )
             {
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_STOP_CURRENT_DRAWING,
@@ -171,7 +171,8 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                                      HK_MOVE_ITEM );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_MOVE_DRAWING_REQUEST,
                              msg, KiBitmap( move_xpm ) );
-                AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_DRAWING, _( "Edit Drawing" ), KiBitmap( edit_xpm ) );
+                AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_DRAWING, _( "Edit Drawing" ),
+                             KiBitmap( edit_xpm ) );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DRAWING,
                              _( "Delete Drawing" ), KiBitmap( delete_xpm ) );
 
@@ -182,12 +183,12 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
             break;
 
-        case TYPE_ZONE:      // Item used to fill a zone
+        case PCB_ZONE_T:      // Item used to fill a zone
             AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_ZONE,
                          _( "Delete Zone Filling" ), KiBitmap( delete_xpm ) );
             break;
 
-        case TYPE_ZONE_CONTAINER:    // Item used to handle a zone area (outlines, holes ...)
+        case PCB_ZONE_AREA_T:    // Item used to handle a zone area (outlines, holes ...)
             if( flags & IS_NEW )
             {
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_STOP_CURRENT_EDGE_ZONE,
@@ -202,21 +203,21 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
             break;
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
             createPopUpMenuForTexts( (TEXTE_PCB*) item, aPopMenu );
             break;
 
-        case TYPE_TRACK:
-        case TYPE_VIA:
+        case PCB_TRACE_T:
+        case PCB_VIA_T:
             locate_track = true;
             createPopupMenuForTracks( (TRACK*) item, aPopMenu );
             break;
 
-        case TYPE_MARKER_PCB:
+        case PCB_MARKER_T:
             createPopUpMenuForMarkers( (MARKER_PCB*) item, aPopMenu );
             break;
 
-        case TYPE_DIMENSION:
+        case PCB_DIMENSION_T:
             if( !flags )
             {
                 msg = AddHotkeyName( _( "Edit Dimension" ), g_Board_Editor_Hokeys_Descr,
@@ -243,10 +244,10 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
             break;
 
-        case TYPE_EDGE_MODULE:
-        case TYPE_SCREEN:
+        case PCB_MODULE_EDGE_T:
+        case SCREEN_T:
         case TYPE_NOT_INIT:
-        case TYPE_PCB:
+        case PCB_T:
             msg.Printf( wxT( "PCB_EDIT_FRAME::OnRightClick() Error: unexpected DrawType %d" ),
                         item->Type() );
             DisplayError( this, msg );
@@ -407,7 +408,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 
     if( flags == 0 )
     {
-        if( Track->Type() == TYPE_VIA )
+        if( Track->Type() == PCB_VIA_T )
         {
             AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_TRACK_NODE, _( "Drag Via" ), KiBitmap( move_xpm ) );
         }
@@ -467,7 +468,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     // track Width control :
     if( !flags )
     {
-        if( Track->Type() == TYPE_VIA )
+        if( Track->Type() == PCB_VIA_T )
         {
             msg = AddHotkeyName( _( "Change Via Size and Drill" ), g_Board_Editor_Hokeys_Descr,
                                  HK_EDIT_ITEM );
@@ -490,9 +491,10 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     // Delete control:
     PopMenu->AppendSeparator();
     wxMenu* track_mnu = new wxMenu;
-    AddMenuItem( PopMenu, track_mnu, ID_POPUP_PCB_DELETE_TRACK_MNU, _( "Delete" ), KiBitmap( delete_xpm ) );
+    AddMenuItem( PopMenu, track_mnu, ID_POPUP_PCB_DELETE_TRACK_MNU, _( "Delete" ),
+                 KiBitmap( delete_xpm ) );
 
-    msg = AddHotkeyName( Track->Type()==TYPE_VIA ?
+    msg = AddHotkeyName( Track->Type()==PCB_VIA_T ?
                         _( "Delete Via" ) : _( "Delete Segment" ),
                          g_Board_Editor_Hokeys_Descr, HK_BACK_SPACE );
 
@@ -502,7 +504,8 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     {
         msg = AddHotkeyName( _( "Delete Track" ), g_Board_Editor_Hokeys_Descr, HK_DELETE );
         AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACK, msg, KiBitmap( delete_track_xpm ) );
-        AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET, _( "Delete Net" ), KiBitmap( delete_net_xpm ) );
+        AddMenuItem( track_mnu, ID_POPUP_PCB_DELETE_TRACKNET, _( "Delete Net" ),
+                     KiBitmap( delete_net_xpm ) );
     }
 
     // Add global edition command

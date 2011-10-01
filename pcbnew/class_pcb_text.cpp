@@ -23,7 +23,7 @@
 
 
 TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :
-    BOARD_ITEM( parent, TYPE_TEXTE ),
+    BOARD_ITEM( parent, PCB_TEXT_T ),
     EDA_TEXT()
 {
     m_MultilineAllowed = true;
@@ -260,7 +260,7 @@ void TEXTE_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     wxASSERT( parent );
 
-    if( parent->Type() == TYPE_DIMENSION )
+    if( parent->Type() == PCB_DIMENSION_T )
         board = (BOARD*) parent->GetParent();
     else
         board = (BOARD*) parent;
@@ -268,7 +268,7 @@ void TEXTE_PCB::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     frame->ClearMsgPanel();
 
-    if( m_Parent && m_Parent->Type() == TYPE_DIMENSION )
+    if( m_Parent && m_Parent->Type() == PCB_DIMENSION_T )
         frame->AppendMsgPanel( _( "DIMENSION" ), m_Text, DARKGREEN );
     else
         frame->AppendMsgPanel( _( "PCB Text" ), m_Text, DARKGREEN );

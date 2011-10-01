@@ -156,12 +156,12 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
 
     switch( objectToSync->Type() )
     {
-    case TYPE_MODULE:
+    case PCB_MODULE_T:
         module = (MODULE*) objectToSync;
         sprintf( cmd, "$PART: \"%s\"", TO_UTF8( module->m_Reference->m_Text ) );
         break;
 
-    case TYPE_PAD:
+    case PCB_PAD_T:
         module = (MODULE*) objectToSync->GetParent();
         pad    = (D_PAD*) objectToSync;
         msg    = pad->ReturnStringPadName();
@@ -170,7 +170,7 @@ void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* objectToSync )
                  TO_UTF8( msg ) );
         break;
 
-    case TYPE_TEXTE_MODULE:
+    case PCB_MODULE_TEXT_T:
         #define REFERENCE 0
         #define VALUE     1
         module   = (MODULE*) objectToSync->GetParent();

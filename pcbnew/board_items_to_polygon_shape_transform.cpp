@@ -197,7 +197,7 @@ void TRACK:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
 
     switch( Type() )
     {
-    case TYPE_VIA:
+    case PCB_VIA_T:
         dx = (int) ( dx * aCorrectionFactor );
 
         for( ii = 0; ii < aCircleToSegmentsCount; ii++ )

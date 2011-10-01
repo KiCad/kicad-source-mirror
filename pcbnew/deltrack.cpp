@@ -49,18 +49,18 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
                 // not a via, and the one previous to that is a via, then
                 // delete up to the via.
                 if( g_CurrentTrackList.GetCount() >= 2
-                    && g_CurrentTrackSegment->Type() != TYPE_VIA
-                    && g_CurrentTrackSegment->Back()->Type() == TYPE_VIA )
+                    && g_CurrentTrackSegment->Type() != PCB_VIA_T
+                    && g_CurrentTrackSegment->Back()->Type() == PCB_VIA_T )
                 {
                     delete g_CurrentTrackList.PopBack();
                 }
             }
 
-            while( g_CurrentTrackSegment && g_CurrentTrackSegment->Type() == TYPE_VIA )
+            while( g_CurrentTrackSegment && g_CurrentTrackSegment->Type() == PCB_VIA_T )
             {
                 delete g_CurrentTrackList.PopBack();
 
-                if( g_CurrentTrackSegment && g_CurrentTrackSegment->Type() != TYPE_VIA )
+                if( g_CurrentTrackSegment && g_CurrentTrackSegment->Type() != PCB_VIA_T )
                     previous_layer = g_CurrentTrackSegment->GetLayer();
             }
 
@@ -73,7 +73,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             if( g_TwoSegmentTrackBuild )   // We must have 2 segments or more, or 0
             {
                 if( g_CurrentTrackList.GetCount() == 1
-                    && g_CurrentTrackSegment->Type() != TYPE_VIA )
+                    && g_CurrentTrackSegment->Type() != PCB_VIA_T )
                 {
                     delete g_CurrentTrackList.PopBack();
                 }

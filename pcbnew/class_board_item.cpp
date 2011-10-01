@@ -37,7 +37,7 @@ void BOARD_ITEM::UnLink()
 
 BOARD* BOARD_ITEM::GetBoard() const
 {
-    if( Type() == TYPE_PCB )
+    if( Type() == PCB_T )
         return (BOARD*) this;
 
     BOARD_ITEM* parent = GetParent();

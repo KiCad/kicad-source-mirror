@@ -20,7 +20,7 @@
 
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
-    BOARD_ITEM( aParent, TYPE_DIMENSION )
+    BOARD_ITEM( aParent, PCB_DIMENSION_T )
 {
     m_Layer = DRAW_LAYER;
     m_Width = 50;

@@ -29,18 +29,14 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent )
 }
 
 
-/********************************************************************/
 void PCB_EDIT_FRAME::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
-/********************************************************************/
 {
     DIALOG_GLOBAL_DELETION dlg( this );
     dlg.ShowModal();
 }
 
 
-/***********************************************************************/
 void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
-/***********************************************************************/
 {
     bool gen_rastnest = false;
 
@@ -79,6 +75,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         }
 
         int masque_layer = 0;
+
         if( m_DelDrawings->GetValue() )
             masque_layer = (~EDGE_LAYER) & 0x1FFF0000;
 
@@ -89,8 +86,10 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         {
             nextitem = item->Next();
             bool removeme = (g_TabOneLayerMask[ item->GetLayer()] & masque_layer) != 0;
-            if( ( item->Type() == TYPE_TEXTE ) && m_DelTexts->GetValue() )
+
+            if( ( item->Type() == PCB_TEXT_T ) && m_DelTexts->GetValue() )
                 removeme = true;
+
             if( removeme )
             {
                 itemPicker.m_PickedItem = item;
@@ -102,6 +101,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         if( m_DelModules->GetValue() )
         {
             gen_rastnest = true;
+
             for( item = pcb->m_Modules; item; item = nextitem )
             {
                 nextitem = item->Next();
@@ -114,15 +114,20 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         if( m_DelTracks->GetValue() )
         {
             int track_mask_filter = 0;
+
             if( !m_TrackFilterLocked->GetValue() )
                 track_mask_filter |= TRACK_LOCKED;
+
             if( !m_TrackFilterAR->GetValue() )
                 track_mask_filter |= TRACK_AR;
+
             for( item = pcb->m_Track; item != NULL; item = nextitem )
             {
                 nextitem = item->Next();
+
                 if( (item->GetState( TRACK_LOCKED | TRACK_AR ) & track_mask_filter) != 0 )
                     continue;
+
                 itemPicker.m_PickedItem = item;
                 pickersList.PushItem( itemPicker );
                 item->UnLink();

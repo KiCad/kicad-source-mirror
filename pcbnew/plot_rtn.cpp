@@ -47,15 +47,15 @@ void PCB_BASE_FRAME::PlotSilkScreen( PLOTTER* plotter, int aLayerMask, GRTraceMo
     {
         switch( PtStruct->Type() )
         {
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             PlotDrawSegment( plotter, (DRAWSEGMENT*) PtStruct, aLayerMask, trace_mode );
             break;
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
             PlotTextePcb( plotter, (TEXTE_PCB*) PtStruct, aLayerMask, trace_mode );
             break;
 
-        case TYPE_DIMENSION:
+        case PCB_DIMENSION_T:
             PlotDimension( plotter, (DIMENSION*) PtStruct, aLayerMask, trace_mode );
             break;
 
@@ -63,7 +63,7 @@ void PCB_BASE_FRAME::PlotSilkScreen( PLOTTER* plotter, int aLayerMask, GRTraceMo
             PlotPcbTarget( plotter, (PCB_TARGET*) PtStruct, aLayerMask, trace_mode );
             break;
 
-        case TYPE_MARKER_PCB:
+        case PCB_MARKER_T:
             break;
 
         default:
@@ -179,7 +179,7 @@ module\n %s's \"value\" text." ),
              pt_texte != NULL;
              pt_texte = pt_texte->Next() )
         {
-            if( pt_texte->Type() != TYPE_TEXTE_MODULE )
+            if( pt_texte->Type() != PCB_MODULE_TEXT_T )
                 continue;
 
             if( !g_PcbPlotOptions.m_PlotTextOther )
@@ -386,7 +386,7 @@ void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask, GRTraceMo
              edge;
              edge = edge->Next() )
         {
-            if( edge->Type() != TYPE_EDGE_MODULE )
+            if( edge->Type() != PCB_MODULE_EDGE_T )
                 continue;
 
             if( ( g_TabOneLayerMask[edge->GetLayer()] & aLayerMask ) == 0 )
@@ -407,7 +407,7 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge, GRTraceMode trace
     int     StAngle, EndAngle;
     wxPoint pos, end;
 
-    if( PtEdge->Type() != TYPE_EDGE_MODULE )
+    if( PtEdge->Type() != PCB_MODULE_EDGE_T )
         return;
 
     type_trace = PtEdge->m_Shape;
@@ -764,15 +764,15 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
     {
         switch( item->Type() )
         {
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             PlotDrawSegment( aPlotter, (DRAWSEGMENT*) item, aLayerMask, aPlotMode );
             break;
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
             PlotTextePcb( aPlotter, (TEXTE_PCB*) item, aLayerMask, aPlotMode );
             break;
 
-        case TYPE_DIMENSION:
+        case PCB_DIMENSION_T:
             PlotDimension( aPlotter, (DIMENSION*) item, aLayerMask, aPlotMode );
             break;
 
@@ -780,7 +780,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
             PlotPcbTarget( aPlotter, (PCB_TARGET*) item, aLayerMask, aPlotMode );
             break;
 
-        case TYPE_MARKER_PCB:
+        case PCB_MARKER_T:
             break;
 
         default:
@@ -796,7 +796,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
         {
             switch( item->Type() )
             {
-            case TYPE_EDGE_MODULE:
+            case PCB_MODULE_EDGE_T:
                 if( aLayerMask & g_TabOneLayerMask[ item->GetLayer() ] )
                     Plot_1_EdgeModule( aPlotter, (EDGE_MODULE*) item, aPlotMode );
 
@@ -888,7 +888,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
     {
         for( TRACK* track = m_Pcb->m_Track; track; track = track->Next() )
         {
-            if( track->Type() != TYPE_VIA )
+            if( track->Type() != PCB_VIA_T )
                 continue;
 
             SEGVIA* Via = (SEGVIA*) track;
@@ -930,7 +930,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
     {
         wxPoint end;
 
-        if( track->Type() == TYPE_VIA )
+        if( track->Type() == PCB_VIA_T )
             continue;
 
         if( (g_TabOneLayerMask[track->GetLayer()] & aLayerMask) == 0 )
@@ -999,7 +999,7 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*    aPlotter,
 
     for( pts = m_Pcb->m_Track; pts != NULL; pts = pts->Next() )
     {
-        if( pts->Type() != TYPE_VIA )
+        if( pts->Type() != PCB_VIA_T )
             continue;
 
         pos = pts->m_Start;

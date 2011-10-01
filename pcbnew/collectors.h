@@ -128,7 +128,7 @@ public:
      * Function IgnoreZones
      * @return bool - true if should ignore zones.
     virtual     bool IgnoreZones() const = 0;
-     can simply omit from scanTypes[] TYPE_ZONE */
+     can simply omit from scanTypes[] PCB_ZONE_T */
 
     /**
      * Function IgnoreMTextsOnCu

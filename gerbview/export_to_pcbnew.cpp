@@ -241,7 +241,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )
 
 void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
-    DRAWSEGMENT* drawitem = new DRAWSEGMENT( m_pcb, TYPE_DRAWSEGMENT );
+    DRAWSEGMENT* drawitem = new DRAWSEGMENT( m_pcb, PCB_LINE_T );
 
     drawitem->SetLayer( aLayer );
     drawitem->m_Start = aGbrItem->m_Start;
@@ -253,11 +253,12 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, in
         double a  = atan2( (double)( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y),
                            (double)( aGbrItem->m_Start.x - aGbrItem->m_ArcCentre.x ) );
         double b  = atan2( (double)( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
-                            (double)( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
+                           (double)( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
 
         drawitem->m_Shape   = S_ARC;
         drawitem->m_Angle   = wxRound( (a - b) / M_PI * 1800.0 );
         drawitem->m_Start = aGbrItem->m_ArcCentre;
+
         if( drawitem->m_Angle < 0 )
         {
             NEGATE( drawitem->m_Angle );

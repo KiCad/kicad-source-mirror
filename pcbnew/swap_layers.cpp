@@ -367,7 +367,7 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
     {
         OnModify();
 
-        if( pt_segm->Type() == TYPE_VIA )
+        if( pt_segm->Type() == PCB_VIA_T )
         {
             SEGVIA* Via = (SEGVIA*) pt_segm;
 
@@ -410,7 +410,7 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
 
     for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
-        if( PtStruct->Type() == TYPE_DRAWSEGMENT )
+        if( PtStruct->Type() == PCB_LINE_T )
         {
             OnModify();
             pt_drawsegm = (DRAWSEGMENT*) PtStruct;

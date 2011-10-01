@@ -193,7 +193,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
     {
         next = segment->Next();
 
-        if( segment->Type() == TYPE_VIA )
+        if( segment->Type() == PCB_VIA_T )
         {
             if( segment->m_Start != segment->m_End )
                 segment->m_End = segment->m_Start;
@@ -255,7 +255,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
 
             if( other == NULL )     // Test a connection to zones
             {
-                if( segment->Type() != TYPE_VIA )
+                if( segment->Type() != PCB_VIA_T )
                 {
                     zone = frame->GetBoard()->HitTestForAnyFilledArea( segment->m_Start,
                                                                        segment->GetLayer() );
@@ -277,7 +277,8 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
                 segment->start = other;
                 // If a via is connected to this end, test if this via has a second item connected
                 // if no, remove it with the current segment
-                if( other && other->Type() == TYPE_VIA )
+
+                if( other && other->Type() == PCB_VIA_T )
                 {
                     // search for another segment following the via
 
@@ -309,7 +310,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
 
             if( other == NULL )     // Test a connection to zones
             {
-                if( segment->Type() != TYPE_VIA )
+                if( segment->Type() != PCB_VIA_T )
                 {
                     zone = frame->GetBoard()->HitTestForAnyFilledArea( segment->m_End,
                                                                        segment->GetLayer() );
@@ -332,7 +333,8 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
 
                 // If a via is connected to this end, test if this via has a second item connected
                 // if no, remove it with the current segment
-                if( other && other->Type() == TYPE_VIA )
+
+                if( other && other->Type() == PCB_VIA_T )
                 {
                     // search for another segment following the via
 
@@ -456,7 +458,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
         if( frame->DrawPanel->m_AbortRequest )
             return;
 
-        if( segment->Type() != TYPE_TRACK )
+        if( segment->Type() != PCB_TRACE_T )
             continue;
 
         flag = no_inc = 0;
@@ -473,7 +475,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
                     break;
 
                 // it cannot be a via
-                if( segStart->Type() != TYPE_TRACK )
+                if( segStart->Type() != PCB_TRACE_T )
                     break;
 
                 /* We must have only one segment connected */
@@ -510,7 +512,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
                 if( segment->m_Width != segEnd->m_Width )
                     break;
 
-                if( segEnd->Type() != TYPE_TRACK )
+                if( segEnd->Type() != PCB_TRACE_T )
                     break;
 
                 /* We must have only one segment connected */
@@ -661,7 +663,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks( wxDC* aDC )
         // find the netcode for segment using anything connected to the "start" of "segment"
         net_code_s = -1;
 
-        if( segment->start  &&  segment->start->Type()==TYPE_PAD )
+        if( segment->start  &&  segment->start->Type()==PCB_PAD_T )
         {
             // get the netcode of the pad to propagate.
             net_code_s = ((D_PAD*)(segment->start))->GetNet();
@@ -680,7 +682,7 @@ bool PCB_EDIT_FRAME::RemoveMisConnectedTracks( wxDC* aDC )
         // find the netcode for segment using anything connected to the "end" of "segment"
         net_code_e = -1;
 
-        if( segment->end  &&  segment->end->Type()==TYPE_PAD )
+        if( segment->end  &&  segment->end->Type()==PCB_PAD_T )
         {
             net_code_e = ((D_PAD*)(segment->end))->GetNet();
         }
@@ -741,7 +743,7 @@ static void ConnectDanglingEndToVia( BOARD* pcb )
     {
         SEGVIA* via;
 
-        if( track->Type()!=TYPE_VIA  || (via = (SEGVIA*)track)->GetNet()!=0 )
+        if( track->Type()!=PCB_VIA_T  || (via = (SEGVIA*)track)->GetNet()!=0 )
             continue;
 
         for( TRACK* other = pcb->m_Track;  other;  other = other->Next() )

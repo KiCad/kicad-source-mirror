@@ -319,7 +319,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
      */
     Module = m_Parent->GetBoard()->m_Modules.GetLast();
 
-    for( ; Module && ( Module->Type() == TYPE_MODULE ); Module = PtBack )
+    for( ; Module && ( Module->Type() == PCB_MODULE_T ); Module = PtBack )
     {
         PtBack = Module->Back();
 
@@ -381,7 +381,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
      */
     Module = m_Parent->GetBoard()->m_Modules.GetLast();
 
-    for( ; Module && ( Module->Type() == TYPE_MODULE ); Module = PtBack )
+    for( ; Module && ( Module->Type() == PCB_MODULE_T ); Module = PtBack )
     {
         PtBack = Module->Back();
 
@@ -479,7 +479,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     wxPoint oldpos;
     D_PAD*  pad, * old_pad;
 
-    if( ( aOldModule->Type() != TYPE_MODULE ) || ( aNewModule->Type() != TYPE_MODULE ) )
+    if( ( aOldModule->Type() != PCB_MODULE_T ) || ( aNewModule->Type() != PCB_MODULE_T ) )
     {
         wxMessageBox( wxT( "PCB_EDIT_FRAME::Exchange_Module() StuctType error" ) );
         return;

@@ -303,8 +303,8 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
                 switch( item->Type() )
                 {
-                case TYPE_TEXTE_MODULE:
-                case TYPE_EDGE_MODULE:
+                case PCB_MODULE_TEXT_T:
+                case PCB_MODULE_EDGE_T:
                     item->Draw( aPanel, aDC, g_XorMode, move_offset );
                     break;
 
@@ -342,8 +342,8 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
             switch( item->Type() )
             {
-            case TYPE_TEXTE_MODULE:
-            case TYPE_EDGE_MODULE:
+            case PCB_MODULE_TEXT_T:
+            case PCB_MODULE_EDGE_T:
                 item->Draw( aPanel, aDC, g_XorMode, move_offset );
                 break;
 
@@ -393,7 +393,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
 
         switch( item->Type() )
         {
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             TEXTE_MODULE * textm;
             textm = new TEXTE_MODULE( module );
             textm->Copy( (TEXTE_MODULE*) item );
@@ -401,7 +401,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
             module->m_Drawings.PushFront( textm );
             break;
 
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
             EDGE_MODULE * edge;
             edge = new EDGE_MODULE( module );
             edge->Copy( (EDGE_MODULE*) item );
@@ -448,12 +448,12 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
 
         switch( item->Type() )
         {
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             ( (TEXTE_MODULE*) item )->m_Pos += offset;
             ( (TEXTE_MODULE*) item )->m_Pos0 += offset;
             break;
 
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
             ( (EDGE_MODULE*) item )->m_Start += offset;
             ( (EDGE_MODULE*) item )->m_End += offset;
 
@@ -542,7 +542,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
 
         switch( item->Type() )
         {
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
         {
             EDGE_MODULE * edge =  (EDGE_MODULE*) item;
             SETMIRROR( edge->m_Start.x );
@@ -553,7 +553,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
         }
             break;
 
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             SETMIRROR( ( (TEXTE_MODULE*) item )->GetPosition().x );
             ( (TEXTE_MODULE*) item )->m_Pos0.x = ( (TEXTE_MODULE*) item )->GetPosition().x;
             break;
@@ -600,14 +600,14 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
 
         switch( item->Type() )
         {
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
             ROTATE( ( (EDGE_MODULE*) item )->m_Start );
             ( (EDGE_MODULE*) item )->m_Start0 = ( (EDGE_MODULE*) item )->m_Start;
             ROTATE( ( (EDGE_MODULE*) item )->m_End );
             ( (EDGE_MODULE*) item )->m_End0 = ( (EDGE_MODULE*) item )->m_End;
             break;
 
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             ROTATE( ( (TEXTE_MODULE*) item )->GetPosition() );
             ( (TEXTE_MODULE*) item )->m_Pos0 = ( (TEXTE_MODULE*) item )->GetPosition();
             ( (TEXTE_MODULE*) item )->m_Orient += 900;
@@ -676,7 +676,7 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
 
         switch( item->Type() )
         {
-        case TYPE_EDGE_MODULE:
+        case PCB_MODULE_EDGE_T:
             if( ((EDGE_MODULE*)item )->HitTest( Rect ) )
             {
                 item->m_Selected = IS_SELECTED;
@@ -685,7 +685,7 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
 
             break;
 
-        case TYPE_TEXTE_MODULE:
+        case PCB_MODULE_TEXT_T:
             pos = ( (TEXTE_MODULE*) item )->GetPosition();
 
             if( Rect.Contains( pos ) )

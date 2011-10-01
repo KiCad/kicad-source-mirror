@@ -26,26 +26,26 @@ enum KICAD_T {
     EOT = 0,                // search types array terminator (End Of Types)
 
     TYPE_NOT_INIT = 0,
-    TYPE_PCB,
-    TYPE_SCREEN,            // not really an item, used to identify a screen
+    PCB_T,
+    SCREEN_T,               // not really an item, used to identify a screen
 
     // Items in pcb
-    TYPE_MODULE,            // a footprint
-    TYPE_PAD,               // a pad in a footprint
-    TYPE_DRAWSEGMENT,       // a segment not on copper layers
-    TYPE_TEXTE,             // a text on a layer
-    TYPE_TEXTE_MODULE,      // a text in a footprint
-    TYPE_EDGE_MODULE,       // a footprint edge
-    TYPE_TRACK,             // a track segment (segment on a copper layer)
-    TYPE_VIA,               // a via (like atrack segment on a copper layer)
-    TYPE_ZONE,              // a segment used to fill a zone area (segment on a
+    PCB_MODULE_T,           // a footprint
+    PCB_PAD_T,              // a pad in a footprint
+    PCB_LINE_T,             // a segment not on copper layers
+    PCB_TEXT_T,             // a text on a layer
+    PCB_MODULE_TEXT_T,      // a text in a footprint
+    PCB_MODULE_EDGE_T,      // a footprint edge
+    PCB_TRACE_T,            // a track segment (segment on a copper layer)
+    PCB_VIA_T,              // a via (like atrack segment on a copper layer)
+    PCB_ZONE_T,             // a segment used to fill a zone area (segment on a
                             // copper layer)
-    TYPE_MARKER_PCB,        // a marker used to show something
-    TYPE_DIMENSION,         // a dimension (graphic item)
+    PCB_MARKER_T,           // a marker used to show something
+    PCB_DIMENSION_T,        // a dimension (graphic item)
     PCB_TARGET_T,           // a target (graphic item)
-    TYPE_ZONE_EDGE_CORNER,  // in zone outline: a point to define an outline
-    TYPE_ZONE_CONTAINER,    // a zone area
-    TYPE_BOARD_ITEM_LIST,   // a list of board items
+    PCB_ZONE_EDGE_T,        // in zone outline: a point to define an outline
+    PCB_ZONE_AREA_T,        // a zone area
+    PCB_ITEM_LIST_T,        // a list of board items
 
     // Schematic draw Items.  The order of these items effects the sort order.
     // It is currenlty ordered to mimic the old Eeschema locate behavior where

@@ -36,7 +36,7 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
     BOARD * pcb = frame->GetBoard();
     TRACK*          track = (TRACK*) frame->GetCurItem();
 
-    if( track && ( track->Type()==TYPE_VIA || track->Type()==TYPE_TRACK ) )
+    if( track && ( track->Type()==PCB_VIA_T || track->Type()==PCB_TRACE_T ) )
     {
         /* Erase the current drawing */
         ShowNewTrackWhenMovingCursor( Panel, DC, wxDefaultPosition, false );
@@ -95,7 +95,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         if( LockPoint ) // An item (pad or track) is found
         {
-            if( LockPoint->Type() == TYPE_PAD )
+            if( LockPoint->Type() == PCB_PAD_T )
             {
                 pt_pad = (D_PAD*) LockPoint;
 
@@ -139,7 +139,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         if( GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
         {
-            if( TrackOnStartPoint && TrackOnStartPoint->Type() == TYPE_TRACK )
+            if( TrackOnStartPoint && TrackOnStartPoint->Type() == PCB_TRACE_T )
                 g_CurrentTrackSegment->m_Width = TrackOnStartPoint->m_Width;
         }
 
@@ -279,7 +279,7 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
     TRACK* prevTrack = curTrack->Back();
 
     // Test if we have 2 consecutive track segments ( not via ) to connect.
-    if( curTrack->Type() != TYPE_TRACK || prevTrack->Type() != TYPE_TRACK )
+    if( curTrack->Type() != PCB_TRACE_T || prevTrack->Type() != PCB_TRACE_T )
     {
         return false;
     }
@@ -426,7 +426,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
 
     if( LockPoint ) /* End of trace is on a pad. */
     {
-        if( LockPoint->Type() ==  TYPE_PAD )
+        if( LockPoint->Type() ==  PCB_PAD_T )
         {
             EnsureEndTrackOnPad( (D_PAD*) LockPoint );
         }
@@ -519,7 +519,7 @@ TRACK* LocateIntrusion( TRACK* listStart, TRACK* aTrack, int aLayer, const wxPoi
 
     for( TRACK* track = listStart; track; track = track->Next() )
     {
-        if( track->Type() == TYPE_TRACK )    // skip vias
+        if( track->Type() == PCB_TRACE_T )    // skip vias
         {
             if( track->GetState( BUSY | IS_DELETED ) )
                 continue;
@@ -682,7 +682,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     {
         TRACK* previous_track = g_CurrentTrackSegment->Back();
 
-        if( previous_track  &&  previous_track->Type()==TYPE_TRACK )
+        if( previous_track  &&  previous_track->Type()==PCB_TRACE_T )
         {
             previous_track->SetLayer( screen->m_Active_Layer );
 
@@ -1009,7 +1009,7 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
 
     firsttrack->start = LockPoint;
 
-    if( LockPoint &&  LockPoint->Type()==TYPE_PAD )
+    if( LockPoint &&  LockPoint->Type()==PCB_PAD_T )
         firsttrack->SetState( BEGIN_ONPAD, ON );
 
     track = firsttrack;

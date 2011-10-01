@@ -328,7 +328,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             if( !item->IsOnLayer( GetLayer() ) )
                 continue;
 
-            if( item->Type() != TYPE_EDGE_MODULE )
+            if( item->Type() != PCB_MODULE_EDGE_T )
                 continue;
 
             item_boundingbox = item->GetBoundingBox();
@@ -350,7 +350,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
         switch( item->Type() )
         {
-        case TYPE_DRAWSEGMENT:
+        case PCB_LINE_T:
             ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
                 cornerBufferPolysToSubstract,
                 zone_clearance,
@@ -359,7 +359,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
             break;
 
 
-        case TYPE_TEXTE:
+        case PCB_TEXT_T:
             ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygon(
                 cornerBufferPolysToSubstract,
                 zone_clearance,

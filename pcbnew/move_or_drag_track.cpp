@@ -668,7 +668,7 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
 
     PosInit = GetScreen()->GetCrossHairPosition();
 
-    if( aTrack->Type() == TYPE_VIA )     // For a via: always drag it
+    if( aTrack->Type() == PCB_VIA_T )     // For a via: always drag it
     {
         aTrack->m_Flags = IS_DRAGGED | STARTPOINT | ENDPOINT;
 
@@ -848,7 +848,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
 
     s_StartSegmentPresent = s_EndSegmentPresent = true;
 
-    if( ( track->start == NULL ) || ( track->start->Type() == TYPE_TRACK ) )
+    if( ( track->start == NULL ) || ( track->start->Type() == PCB_TRACE_T ) )
         TrackToStartPoint = track->GetTrace( GetBoard()->m_Track, NULL, START );
 
     //  Test if more than one segment is connected to this point
@@ -856,14 +856,14 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     {
         TrackToStartPoint->SetState( BUSY, ON );
 
-        if( ( TrackToStartPoint->Type() == TYPE_VIA )
+        if( ( TrackToStartPoint->Type() == PCB_VIA_T )
            || track->GetTrace( GetBoard()->m_Track, NULL, START ) )
             error = true;
 
         TrackToStartPoint->SetState( BUSY, OFF );
     }
 
-    if( ( track->end == NULL ) || ( track->end->Type() == TYPE_TRACK ) )
+    if( ( track->end == NULL ) || ( track->end->Type() == PCB_TRACE_T ) )
         TrackToEndPoint = track->GetTrace( GetBoard()->m_Track, NULL, END );
 
     //  Test if more than one segment is connected to this point
@@ -871,7 +871,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     {
         TrackToEndPoint->SetState( BUSY, ON );
 
-        if( (TrackToEndPoint->Type() == TYPE_VIA)
+        if( (TrackToEndPoint->Type() == PCB_VIA_T)
            || track->GetTrace( GetBoard()->m_Track, NULL, END ) )
             error = true;
 
@@ -885,10 +885,10 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
         return;
     }
 
-    if( !TrackToStartPoint || ( TrackToStartPoint->Type() != TYPE_TRACK ) )
+    if( !TrackToStartPoint || ( TrackToStartPoint->Type() != PCB_TRACE_T ) )
         s_StartSegmentPresent = false;
 
-    if( !TrackToEndPoint || ( TrackToEndPoint->Type() != TYPE_TRACK ) )
+    if( !TrackToEndPoint || ( TrackToEndPoint->Type() != PCB_TRACE_T ) )
         s_EndSegmentPresent = false;
 
     /* Change high light net: the new one will be highlighted */
