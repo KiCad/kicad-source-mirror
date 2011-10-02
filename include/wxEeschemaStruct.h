@@ -1,6 +1,6 @@
-/***********************************************************/
-/*              wxEeschemaStruct.h:                        */
-/***********************************************************/
+/**
+ * @file wxEeschemaStruct.h
+ */
 
 #ifndef  WX_EESCHEMA_STRUCT_H
 #define  WX_EESCHEMA_STRUCT_H
@@ -938,10 +938,10 @@ public:
      */
     void SaveUndoItemInUndoList( SCH_ITEM* aItem );
 
-    // ERC:
-
     /**
-     * Load component libraries defined in project file.
+     * Function LoadLibraries
+     *
+     * Clear all libraries currently loaded and load all of the project libraries.
      */
     void LoadLibraries( void );
 

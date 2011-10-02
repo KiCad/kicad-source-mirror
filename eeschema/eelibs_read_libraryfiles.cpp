@@ -1,6 +1,7 @@
-/*****************************************************************/
-/*  Functions to handle component library files : read functions */
-/*****************************************************************/
+/**
+ * @file eelibs_read_libraryfiles.cpp
+ * @brief Functions to handle reading component library files.
+ */
 
 #include "fctsys.h"
 #include "confirm.h"
@@ -14,11 +15,6 @@
 #include "html_messagebox.h"
 
 
-/**
- * Function LoadLibraries
- *
- * Clear all already loaded libraries and load all of the project libraries.
- */
 void SCH_EDIT_FRAME::LoadLibraries( void )
 {
     size_t         ii;
@@ -47,7 +43,8 @@ void SCH_EDIT_FRAME::LoadLibraries( void )
     /* Load missing libraries. */
     for( ii = 0; ii < m_ComponentLibFiles.GetCount(); ii++ )
     {
-        fn = m_ComponentLibFiles[ii];
+        fn.Clear();
+        fn.SetName( m_ComponentLibFiles[ii] );
         fn.SetExt( CompLibFileExtension );
 
         /* Skip if the file name is not valid.. */
@@ -57,6 +54,7 @@ void SCH_EDIT_FRAME::LoadLibraries( void )
         if( !fn.FileExists() )
         {
             tmp = wxGetApp().FindLibraryPath( fn );
+
             if( !tmp )
             {
                 libraries_not_found += fn.GetName() + _( "\n" );
@@ -109,13 +107,14 @@ void SCH_EDIT_FRAME::LoadLibraries( void )
     wxLogDebug( wxT( "LoadLibraries() requested component library sort order:" ) );
 
     for( size_t i = 0; i < sortOrder.GetCount(); i++ )
-        wxLogDebug( wxT( "    " ) + sortOrder[i] );
+         wxLogDebug( wxT( "    " ) + sortOrder[i] );
 
     wxLogDebug( wxT( "Real component library sort order:" ) );
 
     for ( i = CMP_LIBRARY::GetLibraryList().begin();
           i < CMP_LIBRARY::GetLibraryList().end(); i++ )
         wxLogDebug( wxT( "    " ) + i->GetName() );
+
     wxLogDebug( wxT( "end LoadLibraries ()" ) );
 #endif
 }
