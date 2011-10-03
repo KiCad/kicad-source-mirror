@@ -66,7 +66,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     AddMenuItem( filesMenu,
                  wxID_SAVE,
                  _( "&Save\tCtrl+S" ),
-                 _( "Save net list and footprint list files" ),
+                 _( "Save net list and footprint files" ),
                  KiBitmap( save_xpm ) );
 
     // Save as
