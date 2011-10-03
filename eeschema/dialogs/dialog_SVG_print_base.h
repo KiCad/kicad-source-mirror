@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_SVG_print_base__
-#define __dialog_SVG_print_base__
+#ifndef __DIALOG_SVG_PRINT_BASE_H__
+#define __DIALOG_SVG_PRINT_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -53,18 +54,19 @@ class DIALOG_SVG_PRINT_base : public wxDialog
 		wxTextCtrl* m_MessagesBox;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
-		virtual void OnInitDialog( wxInitDialogEvent& event ){ event.Skip(); }
-		virtual void OnSetColorModeSelected( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonPlotCurrentClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonPlotAllClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnInitDialog( wxInitDialogEvent& event ) { event.Skip(); }
+		virtual void OnSetColorModeSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonPlotCurrentClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonPlotAllClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Create SVG file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,446 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Create SVG file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 550,446 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SVG_PRINT_base();
 	
 };
 
-#endif //__dialog_SVG_print_base__
+#endif //__DIALOG_SVG_PRINT_BASE_H__

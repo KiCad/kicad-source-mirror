@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -35,12 +35,11 @@ DIALOG_SVG_PRINT_base::DIALOG_SVG_PRINT_base( wxWindow* parent, wxWindowID id, c
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
 	m_ModeColorOption = new wxRadioBox( this, wxID_ANY, _("Print mode"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_ModeColorOption->SetSelection( 1 );
-	m_ModeColorOption->SetToolTip( _("Choose if you wand to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
+	m_ModeColorOption->SetToolTip( _("Choose if you want to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
 	
 	sbOptionsSizer->Add( m_ModeColorOption, 0, wxALL|wxEXPAND, 5 );
 	
 	m_Print_Sheet_Ref = new wxCheckBox( this, wxID_ANY, _("Print Frame Ref"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_Print_Sheet_Ref->SetToolTip( _("Print (or not) the Frame references.") );
 	
 	sbOptionsSizer->Add( m_Print_Sheet_Ref, 0, wxALL, 5 );
@@ -104,4 +103,5 @@ DIALOG_SVG_PRINT_base::~DIALOG_SVG_PRINT_base()
 	m_buttonPlotCurrent->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SVG_PRINT_base::OnButtonPlotCurrentClick ), NULL, this );
 	m_buttonPlotAll->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SVG_PRINT_base::OnButtonPlotAllClick ), NULL, this );
 	m_buttonQuit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SVG_PRINT_base::OnButtonCancelClick ), NULL, this );
+	
 }

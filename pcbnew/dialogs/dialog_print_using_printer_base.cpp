@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -33,7 +33,6 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	sbLayersSizer->Add( bleftSizer, 1, wxEXPAND, 5 );
 	
 	m_Exclude_Edges_Pcb = new wxCheckBox( this, wxID_ANY, _("Exclude Edges_Pcb Layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_Exclude_Edges_Pcb->SetToolTip( _("Exclude contents of Edges_Pcb layer from all other layers") );
 	
 	sbLayersSizer->Add( m_Exclude_Edges_Pcb, 0, wxALL|wxEXPAND, 5 );
@@ -85,14 +84,12 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	sbOptionsSizer->Add( m_DialogPenWidth, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	m_Print_Sheet_Ref = new wxCheckBox( this, wxID_FRAME_SEL, _("Print frame ref"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Print_Sheet_Ref->SetValue(true);
-	
+	m_Print_Sheet_Ref->SetValue(true); 
 	m_Print_Sheet_Ref->SetToolTip( _("Print (or not) the Frame references.") );
 	
 	sbOptionsSizer->Add( m_Print_Sheet_Ref, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_Print_Mirror = new wxCheckBox( this, wxID_ANY, _("Mirror"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	sbOptionsSizer->Add( m_Print_Mirror, 0, wxALL, 5 );
 	
 	bmiddleRightSizer->Add( sbOptionsSizer, 0, wxEXPAND|wxALL, 5 );
@@ -107,7 +104,7 @@ DIALOG_PRINT_USING_PRINTER_base::DIALOG_PRINT_USING_PRINTER_base( wxWindow* pare
 	int m_ModeColorOptionNChoices = sizeof( m_ModeColorOptionChoices ) / sizeof( wxString );
 	m_ModeColorOption = new wxRadioBox( this, wxID_PRINT_MODE, _("Print Mode"), wxDefaultPosition, wxDefaultSize, m_ModeColorOptionNChoices, m_ModeColorOptionChoices, 1, wxRA_SPECIFY_COLS );
 	m_ModeColorOption->SetSelection( 1 );
-	m_ModeColorOption->SetToolTip( _("Choose if you wand to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
+	m_ModeColorOption->SetToolTip( _("Choose if you want to draw the sheet like it appears on screen,\nor in black and white mode, better to print it when using  black and white printers") );
 	
 	bmiddleRightSizer->Add( m_ModeColorOption, 0, wxALL|wxEXPAND, 5 );
 	
@@ -164,4 +161,5 @@ DIALOG_PRINT_USING_PRINTER_base::~DIALOG_PRINT_USING_PRINTER_base()
 	m_buttonPreview->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnPrintPreview ), NULL, this );
 	m_buttonPrint->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnPrintButtonClick ), NULL, this );
 	m_buttonQuit->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PRINT_USING_PRINTER_base::OnButtonCancelClick ), NULL, this );
+	
 }

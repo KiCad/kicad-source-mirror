@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_print_using_printer_base__
-#define __dialog_print_using_printer_base__
+#ifndef __DIALOG_PRINT_USING_PRINTER_BASE_H__
+#define __DIALOG_PRINT_USING_PRINTER_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -58,26 +59,25 @@ class DIALOG_PRINT_USING_PRINTER_base : public wxDialog
 		wxRadioBox* m_Drill_Shape_Opt;
 		wxRadioBox* m_ModeColorOption;
 		wxRadioBox* m_PagesOption;
-		
 		wxButton* m_buttonOption;
 		wxButton* m_buttonPreview;
 		wxButton* m_buttonPrint;
 		wxButton* m_buttonQuit;
 		
-		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
-		virtual void OnScaleSelectionClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnPageSetup( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnPrintPreview( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnPrintButtonClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnButtonCancelClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnScaleSelectionClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPageSetup( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPrintPreview( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPrintButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,315 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_PRINT_USING_PRINTER_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,315 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PRINT_USING_PRINTER_base();
 	
 };
 
-#endif //__dialog_print_using_printer_base__
+#endif //__DIALOG_PRINT_USING_PRINTER_BASE_H__
