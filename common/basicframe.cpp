@@ -440,7 +440,45 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
         << FROM_UTF8( KICAD_BUILD_OPTIONS_SIGNATURE() ) << wxT( "\n" )
         << wxT( "Platform: " ) << wxGetOsDescription() << wxT( ", " )
         << info.GetArchName() << wxT( ", " ) << info.GetEndiannessName() << wxT( ", " )
-        << info.GetPortIdName();
+        << info.GetPortIdName() << wxT( "\n" );
+
+    tmp << wxT( "Options: " );
+
+    tmp << wxT( "USE_PNG_BITMAPS=" );
+#ifdef USE_PNG_BITMAPS
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
+
+    tmp << wxT( "         KICAD_GOST=" );
+#ifdef KICAD_GOST
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
+
+    tmp << wxT( "         USE_WX_GRAPHICS_CONTEXT=" );
+#ifdef USE_WX_GRAPHICS_CONTEXT
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
+
+    tmp << wxT( "         USE_WX_OVERLAY=" );
+#ifdef USE_WX_OVERLAY
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
+
+    tmp << wxT( "         USE_BOOST_POLYGON_LIBRARY=" );
+#ifdef USE_BOOST_POLYGON_LIBRARY
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
+
     wxTheClipboard->SetData( new wxTextDataObject( tmp ) );
     wxTheClipboard->Close();
 }

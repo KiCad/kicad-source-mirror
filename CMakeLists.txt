@@ -12,6 +12,14 @@ endif(WIN32)
 # Path to local CMake modules.
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 
+#
+# KiCad build options go here.
+#
+# If you add a new build option, please add it's state to the CopyVersionInfoToClipboard()
+# function in common/basicframe.cpp so that build option settings can be includeed in bug
+# reports.
+#
+
 option(USE_PNG_BITMAPS "use PNG bitmaps instead of XPM (default ON)" ON)
 
 # Russian GOST patch
