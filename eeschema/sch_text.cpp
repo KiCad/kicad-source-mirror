@@ -415,18 +415,26 @@ bool SCH_TEXT::Save( FILE* aFile ) const
     if( m_Italic )
         shape = "Italic";
 
+    // For compatibility reason, the text must be saved in only one text line
+    // so we replace all E.O.L. by \\n
     wxString text = m_Text;
 
-    for( ; ; )
+    text.Replace( wxT("\n"), wxT( "\\n" ) );
+
+    // Here we should have no CR or LF character in line
+    // This is not always the case if a multiline text was copied (using a copy/paste function)
+    // from a text that uses E.O.L characters that differs from the current EOL format
+    // This is mainly the case under Linux using LF symbol when copying a text from
+    // Windows (using CRLF symbol)
+    // So we must just remove the extra CR left (or LF left under MacOSX)
+    for( unsigned ii = 0; ii < text.Len();  )
     {
-        int i = text.find( '\n' );
-
-        if( i == wxNOT_FOUND )
-            break;
-
-        text.erase( i, 1 );
-        text.insert( i, wxT( "\\n" ) );
+        if( text[ii] == 0x0A || text[ii] == 0x0D )
+            text.erase( ii, 1 );
+        else
+            ii++;
     }
+
 
     if( fprintf( aFile, "Text Notes %-4d %-4d %-4d %-4d %s %d\n%s\n",
                  m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,

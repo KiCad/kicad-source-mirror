@@ -22,6 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -40,9 +41,9 @@
      showgrid="true"
      inkscape:snap-grids="false"
      inkscape:snap-to-guides="false"
-     inkscape:zoom="1.6666667"
-     inkscape:cx="-40.660327"
-     inkscape:cy="94.528601"
+     inkscape:zoom="6.6666668"
+     inkscape:cx="7.4854788"
+     inkscape:cy="4.8205635"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
@@ -57,13 +58,6 @@
   </sodipodi:namedview>
   <defs
      id="defs4">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 13 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="26 : 13 : 1"
-       inkscape:persp3d-origin="13 : 8.6666667 : 1"
-       id="perspective55" />
     <linearGradient
        id="linearGradient7612">
       <stop
@@ -322,15 +316,15 @@
      width="12.0375" />
   <text
      xml:space="preserve"
-     style="font-size:18.68961334000000107px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#c17116;fill-opacity:1;stroke:none;font-family:Sans"
-     x="-0.58988637"
-     y="14.533866"
+     style="font-size:19.04494285999999903px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#168dc1;fill-opacity:1;stroke:#fdf8f1;stroke-width:1.01899998999999997;stroke-opacity:1;font-family:Sans;stroke-miterlimit:4;stroke-dasharray:none"
+     x="-1.1046221"
+     y="14.35789"
      id="text3097"
      sodipodi:linespacing="125%"
-     transform="scale(0.88929316,1.1244886)"><tspan
+     transform="scale(0.87103774,1.1480559)"><tspan
        sodipodi:role="line"
        id="tspan3099"
-       x="-0.58988637"
-       y="14.533866"
-       style="font-weight:bold;stroke:none;-inkscape-font-specification:Sans Bold;fill:#c17116;fill-opacity:1">P</tspan></text>
+       x="-1.1046221"
+       y="14.35789"
+       style="font-weight:bold;fill:#168dc1;fill-opacity:1;stroke:#fdf8f1;stroke-width:1.01899998999999997;stroke-opacity:1;-inkscape-font-specification:Sans Bold;stroke-miterlimit:4;stroke-dasharray:none">P</tspan></text>
 </svg>

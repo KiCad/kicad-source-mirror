@@ -13,7 +13,7 @@
    version="1.1"
    id="svg2"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="icon_cvpcb.svg">
+   sodipodi:docname="icon_cvpcb_small.svg">
   <metadata
      id="metadata107">
     <rdf:RDF>
@@ -41,9 +41,9 @@
      showgrid="true"
      inkscape:snap-grids="false"
      inkscape:snap-to-guides="false"
-     inkscape:zoom="4.9166668"
-     inkscape:cx="53.730959"
-     inkscape:cy="-7.1623682"
+     inkscape:zoom="13.906434"
+     inkscape:cx="10.431619"
+     inkscape:cy="4.4129107"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
@@ -120,7 +120,7 @@
     </radialGradient>
   </defs>
   <rect
-     style="opacity:0.80487819999999999;fill:none;stroke:#c06105;stroke-width:0.96729129999999997;stroke-opacity:0.95294118;fill-opacity:0.95294118000000005"
+     style="opacity:0.80487819999999999;fill:none;stroke:#f4972b;stroke-width:0.96729129999999997;stroke-opacity:0.98431373;fill-opacity:0.95294118000000005"
      id="rect2962"
      width="25.049658"
      height="25.019873"
