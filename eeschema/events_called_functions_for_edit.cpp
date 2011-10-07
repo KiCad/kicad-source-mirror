@@ -1,6 +1,5 @@
 /*
- *  events_called_functions.cpp
- *  some events functions
+ * @file events_called_functions.cpp
  */
 
 #include "fctsys.h"
@@ -8,7 +7,6 @@
 #include "class_drawpanel.h"
 #include "general.h"
 #include "kicad_device_context.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "protos.h"

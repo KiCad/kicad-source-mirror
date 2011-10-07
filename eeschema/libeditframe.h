@@ -1,7 +1,7 @@
-
-/************************/
-/* class LIB_EDIT_FRAME */
-/************************/
+/**
+ * @file libeditframe.h
+ * @brief Definition of class LIB_EDIT_FRAME
+ */
 
 #ifndef __LIBEDITFRM_H__
 #define __LIBEDITFRM_H__
@@ -42,7 +42,7 @@ public:
 
     ~LIB_EDIT_FRAME();
 
-    void        ReCreateMenuBar();
+    void ReCreateMenuBar();
 
     /**
      * Function EnsureActiveLibExists
@@ -55,19 +55,37 @@ public:
      * Function SetLanguage
      * is called on a language menu selection
      */
-    void        SetLanguage( wxCommandEvent& event );
+    void SetLanguage( wxCommandEvent& event );
 
-    void        InstallConfigFrame( wxCommandEvent& event );
-    void        InstallDimensionsDialog( wxCommandEvent& event );
-    void        OnColorConfig( wxCommandEvent& aEvent );
-    void        Process_Config( wxCommandEvent& event );
-    void        OnPlotCurrentComponent( wxCommandEvent& event );
-    void        Process_Special_Functions( wxCommandEvent& event );
-    void        OnSelectTool( wxCommandEvent& aEvent );
-    void        OnImportPart( wxCommandEvent& event );
-    void        OnExportPart( wxCommandEvent& event );
-    void        OnSelectAlias( wxCommandEvent& event );
-    void        OnSelectPart( wxCommandEvent& event );
+    void InstallConfigFrame( wxCommandEvent& event );
+    void InstallDimensionsDialog( wxCommandEvent& event );
+    void OnColorConfig( wxCommandEvent& aEvent );
+    void Process_Config( wxCommandEvent& event );
+
+    /**
+     * Function OnPlotCurrentComponent
+     * plot the current component in SVG or PNG format.
+     */
+    void OnPlotCurrentComponent( wxCommandEvent& event );
+    void Process_Special_Functions( wxCommandEvent& event );
+    void OnSelectTool( wxCommandEvent& aEvent );
+
+    /**
+     * Routine to read one part.
+     * The format is that of libraries, but it loads only 1 component.
+     * Or 1 component if there are several.
+     * If the first component is an alias, it will load the corresponding root.
+     */
+    void OnImportPart( wxCommandEvent& event );
+
+    /**
+     * Function OnExportPart
+     * creates a new library and backup the current component in this library or export
+     * the component of the current library.
+     */
+    void OnExportPart( wxCommandEvent& event );
+    void OnSelectAlias( wxCommandEvent& event );
+    void OnSelectPart( wxCommandEvent& event );
 
     /**
      * Function DeleteOnePart
@@ -92,9 +110,9 @@ public:
      */
     void CreateNewLibraryPart( wxCommandEvent& event );
 
-    void        OnCreateNewPartFromExisting( wxCommandEvent& event );
-    void        OnEditComponentProperties( wxCommandEvent& event );
-    void        InstallFieldsEditorDialog(  wxCommandEvent& event );
+    void OnCreateNewPartFromExisting( wxCommandEvent& event );
+    void OnEditComponentProperties( wxCommandEvent& event );
+    void InstallFieldsEditorDialog(  wxCommandEvent& event );
 
     /**
      * Function LoadOneLibraryPart
@@ -106,27 +124,27 @@ public:
      */
     void LoadOneLibraryPart( wxCommandEvent& event );
 
-    void        OnViewEntryDoc( wxCommandEvent& event );
-    void        OnCheckComponent( wxCommandEvent& event );
-    void        OnSelectBodyStyle( wxCommandEvent& event );
-    void        OnEditPin( wxCommandEvent& event );
+    void OnViewEntryDoc( wxCommandEvent& event );
+    void OnCheckComponent( wxCommandEvent& event );
+    void OnSelectBodyStyle( wxCommandEvent& event );
+    void OnEditPin( wxCommandEvent& event );
     void OnSelectItem( wxCommandEvent& aEvent );
 
-    void        OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
-    void        OnUpdateEditingPart( wxUpdateUIEvent& event );
-    void        OnUpdateNotEditingPart( wxUpdateUIEvent& event );
-    void        OnUpdateUndo( wxUpdateUIEvent& event );
-    void        OnUpdateRedo( wxUpdateUIEvent& event );
-    void        OnUpdateSaveCurrentLib( wxUpdateUIEvent& event );
-    void        OnUpdateViewDoc( wxUpdateUIEvent& event );
-    void        OnUpdatePinByPin( wxUpdateUIEvent& event );
-    void        OnUpdatePartNumber( wxUpdateUIEvent& event );
-    void        OnUpdateDeMorganNormal( wxUpdateUIEvent& event );
-    void        OnUpdateDeMorganConvert( wxUpdateUIEvent& event );
-    void        OnUpdateSelectAlias( wxUpdateUIEvent& event );
+    void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
+    void OnUpdateEditingPart( wxUpdateUIEvent& event );
+    void OnUpdateNotEditingPart( wxUpdateUIEvent& event );
+    void OnUpdateUndo( wxUpdateUIEvent& event );
+    void OnUpdateRedo( wxUpdateUIEvent& event );
+    void OnUpdateSaveCurrentLib( wxUpdateUIEvent& event );
+    void OnUpdateViewDoc( wxUpdateUIEvent& event );
+    void OnUpdatePinByPin( wxUpdateUIEvent& event );
+    void OnUpdatePartNumber( wxUpdateUIEvent& event );
+    void OnUpdateDeMorganNormal( wxUpdateUIEvent& event );
+    void OnUpdateDeMorganConvert( wxUpdateUIEvent& event );
+    void OnUpdateSelectAlias( wxUpdateUIEvent& event );
 
-    void        UpdateAliasSelectList();
-    void        UpdatePartSelectList();
+    void UpdateAliasSelectList();
+    void UpdatePartSelectList();
 
     /**
      * Function DisplayLibInfos
@@ -135,15 +153,15 @@ public:
      */
     void DisplayLibInfos();
 
-    void        RedrawActiveWindow( wxDC* DC, bool EraseBg );
-    void        OnCloseWindow( wxCloseEvent& Event );
-    void        ReCreateHToolbar();
-    void        ReCreateVToolbar();
-    void        CreateOptionToolbar();
-    void        OnLeftClick( wxDC* DC, const wxPoint& MousePos );
-    bool        OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
-    double      BestZoom();         // Returns the best zoom
-    void        OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void OnCloseWindow( wxCloseEvent& Event );
+    void ReCreateHToolbar();
+    void ReCreateVToolbar();
+    void CreateOptionToolbar();
+    void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
+    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
+    double BestZoom();         // Returns the best zoom
+    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
 
     SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
 
@@ -200,18 +218,18 @@ public:
 
     wxString& GetAliasName( void ) { return m_aliasName; }
 
-    int                GetUnit( void ) { return m_unit; }
+    int GetUnit( void ) { return m_unit; }
 
-    void               SetUnit( int unit )
+    void SetUnit( int unit )
     {
         wxASSERT( unit >= 1 );
         m_unit = unit;
     }
 
 
-    int                GetConvert( void ) { return m_convert; }
+    int GetConvert( void ) { return m_convert; }
 
-    void               SetConvert( int convert )
+    void SetConvert( int convert )
     {
         wxASSERT( convert >= 0 );
         m_convert = convert;
@@ -230,11 +248,11 @@ public:
 
     void SetDrawItem( LIB_ITEM* drawItem );
 
-    bool           GetShowDeMorgan( void ) { return m_showDeMorgan; }
+    bool GetShowDeMorgan( void ) { return m_showDeMorgan; }
 
-    void           SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
+    void SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
 
-    FILL_T         GetFillStyle( void ) { return m_drawFillStyle; }
+    FILL_T GetFillStyle( void ) { return m_drawFillStyle; }
 
     /**
      * Function TempCopyComponent
@@ -272,7 +290,7 @@ private:
      * The library list can be changed by the schematic editor after reloading a new schematic
      * and the current m_library can point a non existent lib.
      */
-    virtual void   OnActivate( wxActivateEvent& event );
+    virtual void OnActivate( wxActivateEvent& event );
 
     // General:
 
@@ -343,32 +361,56 @@ private:
 
     // General editing
 public:
-    void           SaveCopyInUndoList( EDA_ITEM* ItemToCopy, int flag_type_command = 0 );
+    void SaveCopyInUndoList( EDA_ITEM* ItemToCopy, int flag_type_command = 0 );
 
 private:
-    void           GetComponentFromUndoList( wxCommandEvent& event );
-    void           GetComponentFromRedoList( wxCommandEvent& event );
+    void GetComponentFromUndoList( wxCommandEvent& event );
+    void GetComponentFromRedoList( wxCommandEvent& event );
 
     // Editing pins
-    void           CreatePin( wxDC* DC );
-    void           StartMovePin( wxDC* DC );
+    void CreatePin( wxDC* DC );
+    void StartMovePin( wxDC* DC );
 
-    // Editing anchor
-    void           PlaceAncre();
+    /**
+     * Function PlaceAnchor
+     * places an  anchor reference coordinate for the current component.
+     * <p>
+     * All object coordinates are offset to the current cursor position.
+     * </p>
+     */
+    void PlaceAnchor();
 
     // Editing graphic items
     LIB_ITEM* CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC );
-    void           GraphicItemBeginDraw( wxDC* DC );
-    void           StartMoveDrawSymbol( wxDC* DC );
-    void           StartModifyDrawSymbol( wxDC* DC ); //<! Modify the item, adjust size etc.
-    void           EndDrawGraphicItem( wxDC* DC );
-    void           LoadOneSymbol();
-    void           SaveOneSymbol();
-    void           EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem );
-    void           EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem );
+    void GraphicItemBeginDraw( wxDC* DC );
+    void StartMoveDrawSymbol( wxDC* DC );
+    void StartModifyDrawSymbol( wxDC* DC ); //<! Modify the item, adjust size etc.
+    void EndDrawGraphicItem( wxDC* DC );
+
+    /**
+     * Function LoadOneSymbol
+     * read a component symbol file (*.sym ) and add graphic items to the current component.
+     * <p>
+     * A symbol file *.sym has the same format as a library, and contains only
+     * one symbol.
+     * </p>
+     */
+    void LoadOneSymbol();
+
+    /**
+     * Function SaveOneSymbol
+     * saves the current component to a symbol file.
+     * <p>
+     * The symbol file format is similar to the standard component library file format, but
+     * there is only one symbol.  Invisible pins are not saved.
+     */
+    void SaveOneSymbol();
+
+    void EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem );
+    void EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem );
     LIB_ITEM* LocateItemUsingCursor( const wxPoint& aPosition,
                                      const KICAD_T aFilterList[] = LIB_COLLECTOR::AllItems );
-    void           EditField( wxDC* DC, LIB_FIELD* Field );
+    void EditField( wxDC* DC, LIB_FIELD* Field );
 
 public:
     /**
@@ -382,12 +424,12 @@ public:
     bool LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, CMP_LIBRARY* aLibrary );
 
     /* Block commands: */
-    virtual int    ReturnBlockCommand( int aKey );
-    virtual void   HandleBlockPlace( wxDC* DC );
-    virtual bool   HandleBlockEnd( wxDC* DC );
+    virtual int ReturnBlockCommand( int aKey );
+    virtual void HandleBlockPlace( wxDC* DC );
+    virtual bool HandleBlockEnd( wxDC* DC );
 
-    void           PlacePin( wxDC* DC );
-    void           GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id );
+    void PlacePin( wxDC* DC );
+    void GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id );
 
     // Automatic placement of pins
     void           RepeatPinItem( wxDC* DC, LIB_PIN* Pin );
@@ -398,7 +440,7 @@ protected:
     wxString m_LastLibExportPath;
 
     /** Convert of the item currently being drawn. */
-    bool     m_drawSpecificConvert;
+    bool m_drawSpecificConvert;
 
     /**
      * Specify which component parts the current draw item applies to.
@@ -406,25 +448,25 @@ protected:
      * If true, the item being drawn or edited applies only to the selected
      * part.  Otherwise it applies to all parts in the component.
      */
-    bool                  m_drawSpecificUnit;
+    bool m_drawSpecificUnit;
 
     /** The current draw or edit graphic item fill style. */
-    static FILL_T         m_drawFillStyle;
+    static FILL_T m_drawFillStyle;
 
     /** Default line width for drawing or editing graphic items. */
-    static int            m_drawLineWidth;
+    static int m_drawLineWidth;
 
     /** The current active library. NULL if no active library is selected. */
-    static CMP_LIBRARY*   m_library;
+    static CMP_LIBRARY* m_library;
     /** The current component being edited.  NULL if no component is selected. */
     static LIB_COMPONENT* m_component;
 
-    static LIB_ITEM*      m_lastDrawItem;
-    static LIB_ITEM*      m_drawItem;
-    static wxString       m_aliasName;
+    static LIB_ITEM* m_lastDrawItem;
+    static LIB_ITEM* m_drawItem;
+    static wxString m_aliasName;
 
     // The unit number to edit and show
-    static int            m_unit;
+    static int m_unit;
 
     // Show the normal shape ( m_convert <= 1 ) or the converted shape
     // ( m_convert > 1 )
@@ -435,13 +477,13 @@ protected:
     // Graphic items for converted shape
     // But under some circumstances (New component created)
     // these tools must left enable
-    static bool   m_showDeMorgan;
+    static bool m_showDeMorgan;
 
     /// The current text size setting.
-    static int    m_textSize;
+    static int m_textSize;
 
     /// Current text orientation setting.
-    static int    m_textOrientation;
+    static int m_textOrientation;
 
     static wxSize m_clientSize;
 
@@ -449,14 +491,14 @@ protected:
 
     /**
      * Function CreatePNGorJPEGFile
-     * Create an image (screenshot) of the current component.
-     *  Output file format is png or jpeg
+     * creates an image (screenshot) of the current component in PNG or JPEG format.
      * @param aFileName = the full filename
      * @param aFmt_jpeg = true to use JPEG ffile format, false to use PNG file format
      */
-    void         CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg );
+    void CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg );
 
-    /** Virtual function PrintPage
+    /**
+     * Virtual function PrintPage
      * used to print a page
      * @param aDC = wxDC given by the calling print function
      * @param aPrintMask = not used here

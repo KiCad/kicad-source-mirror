@@ -1,6 +1,6 @@
-/*****************/
-/*  schedit.cpp  */
-/*****************/
+/**
+ * @file schedit.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -9,7 +9,6 @@
 #include "confirm.h"
 #include "eda_doc.h"
 #include "wxEeschemaStruct.h"
-#include "class_sch_screen.h"
 #include "kicad_device_context.h"
 
 #include "general.h"

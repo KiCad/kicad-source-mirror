@@ -9,7 +9,6 @@
 #include "gestfich.h"
 #include "eda_dde.h"
 #include "id.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"
@@ -22,15 +21,13 @@
 
 
 // Global variables
-bool      g_OptNetListUseNames; /* TRUE to use names rather than net
+bool      g_OptNetListUseNames; /* true to use names rather than net
                                  * The numbers (PSPICE netlist only) */
 wxSize    g_RepeatStep;
 int       g_RepeatDeltaLabel;
 
 bool                     g_HVLines = true;      // Bool: force H or V
                                                 // directions (Wires, Bus ..)
-
-struct EESchemaVariables g_EESchemaVar;
 
 int g_DefaultTextLabelSize = DEFAULT_SIZE_TEXT;
 

@@ -1,12 +1,11 @@
-/****************************************************/
-/*          block_libedit.cpp                       */
-/****************************************************/
+/**
+ * @file block_libedit.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "block_commande.h"
 
 #include "general.h"
 #include "class_library.h"

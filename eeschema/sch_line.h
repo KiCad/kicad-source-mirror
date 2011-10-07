@@ -18,7 +18,7 @@
 class SCH_LINE : public SCH_ITEM
 {
     bool    m_StartIsDangling;
-    bool    m_EndIsDangling;    // TRUE if not connected  (wires, tracks...)
+    bool    m_EndIsDangling;    // true if not connected  (wires, tracks...)
 
 public:
     int     m_Width;            // 0 = line, > 0 = tracks, bus ...

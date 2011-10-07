@@ -1,6 +1,7 @@
-/**************************************/
-/* annotate.cpp: component annotation */
-/**************************************/
+/**
+ * @file annotate.cpp
+ * @brief Component annotation.
+ */
 
 #include <algorithm> // to use sort vector
 #include <vector>
@@ -8,8 +9,6 @@
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "wxstruct.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "netlist.h"

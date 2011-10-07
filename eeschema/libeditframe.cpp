@@ -9,7 +9,6 @@
 #include "confirm.h"
 #include "eda_doc.h"
 #include "gr_basic.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"

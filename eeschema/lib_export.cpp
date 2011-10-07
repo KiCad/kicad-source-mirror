@@ -22,11 +22,6 @@
 extern int ExportPartId;
 
 
-/* Routine to read one part.
- * The format is that of libraries, but it loads only 1 component.
- * Or 1 component if there are several.
- * If the first component is an alias, it will load the corresponding root.
- */
 void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 {
     wxString     errMsg;
@@ -74,18 +69,6 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 }
 
 
-/* Routine to create a new library and backup the current component in this
- * library or export the component of the current library.
- * createLib == TRUE if we are creating a new library.
- * If not: export the library component.
- * Basically these 2 options do the same thing, but for user's convenience
- * > When creating a new lib, the user is prompted to add the new lib to
- * current eeschema config library list
- * > When exporting there is no message (it is expected the user does not want to add the
- * new created lib
- *
- * The file format is created in all cases the same.
- */
 void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 {
     wxFileName   fn;

@@ -1,13 +1,13 @@
-/*****************************************************/
-/* Code to handle manipulation on bus entry objects. */
-/*****************************************************/
+/**
+ * @file busentry.cpp
+ * @brief Code to handle manipulation of bus entry objects.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "eeschema_id.h"
 #include "confirm.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"

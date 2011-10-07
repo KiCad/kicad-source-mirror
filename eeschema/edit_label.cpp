@@ -1,6 +1,7 @@
-/*********************************************************************/
-/* edit_label.cpp: label, global label and text creation or edition  */
-/*********************************************************************/
+/**
+ * @file edit_label.cpp
+ * @brief Label, global label and text creation and editing.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -8,7 +9,6 @@
 #include "drawtxt.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 #include "kicad_device_context.h"
 

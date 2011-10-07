@@ -96,7 +96,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 
     case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
         SaveCopyInUndoList( m_component );
-        PlaceAncre();
+        PlaceAnchor();
         SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 

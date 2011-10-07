@@ -23,19 +23,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/*****************************/
-/* Net list generation code. */
-/*****************************/
-
+/**
+ * @file netform.cpp
+ * @brief Net list generation code.
+ */
 
 #include "fctsys.h"
-
-
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "appl_wxstruct.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"
@@ -47,7 +44,7 @@
 #include "sch_component.h"
 #include "sch_text.h"
 #include "sch_sheet.h"
-#include "template_fieldnames.h"
+
 #include <wx/tokenzr.h>
 
 

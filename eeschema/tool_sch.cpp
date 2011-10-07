@@ -1,6 +1,6 @@
-/******************/
-/*  tool_sch.cpp  */
-/******************/
+/**
+ * @file tool_sch.cpp
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
@@ -21,7 +21,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
         return;
 
     wxString msg;
-    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
 
     // Set up toolbar
     m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, KiBitmap( new_xpm ),

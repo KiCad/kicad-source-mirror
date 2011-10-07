@@ -1,6 +1,6 @@
 /*
- * component_references_lister.cpp: creates a flat list of components.
- * Needed for annotation and BOM.
+ * @file component_references_lister.cpp
+ * @brief Code for creating a flat list of components needed for annotation and BOM.
  */
 
 /*
@@ -36,7 +36,6 @@
 #include "kicad_string.h"
 #include "wxEeschemaStruct.h"
 #include "netlist.h"
-#include "class_sch_screen.h"
 #include "sch_component.h"
 
 

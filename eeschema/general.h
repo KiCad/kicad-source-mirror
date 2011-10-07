@@ -1,6 +1,6 @@
-/***************/
-/*  GENERAL.H  */
-/***************/
+/**
+ * @file general.h
+ */
 
 #ifndef _GENERAL_H_
 #define _GENERAL_H_
@@ -115,14 +115,6 @@ extern int g_RepeatDeltaLabel;
 // Management options.
 extern bool g_HVLines;
 
-// Management variables, option ... to be stored.  Reset to 0 during a
-// project reload.
-struct EESchemaVariables
-{
-    int NbErrorErc;
-    int NbWarningErc;
-};
-
 extern struct EESchemaVariables g_EESchemaVar;
 
 extern int      g_DefaultTextLabelSize;
@@ -170,7 +162,7 @@ extern int g_InvisibleItemColor;
 
 extern NETLIST_OBJECT_LIST g_NetObjectslist;
 
-extern bool g_OptNetListUseNames;   /* TRUE to use names rather than
+extern bool g_OptNetListUseNames;   /* true to use names rather than
                                      * net numbers. SPICE netlist only
                                      */
 

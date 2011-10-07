@@ -1,8 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jea-Pierre.Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2009 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2009-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +21,10 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file erc.h
  */
 
 #ifndef _ERC_H
@@ -58,16 +63,44 @@ enum errortype
 #define NOC    0  // initial state of a net: no connection
 
 
-extern bool WriteDiagnosticERC( const wxString& FullFileName );
+/**
+ * Function WriteDiagnosticERC
+ * save the ERC errors to \a aFullFileName.
+ *
+ * @param aFullFileName A wxString object containing the file name and path.
+ */
+extern bool WriteDiagnosticERC( const wxString& aFullFileName );
 
-extern void Diagnose( EDA_DRAW_PANEL* panel, NETLIST_OBJECT* NetItemRef,
-                      NETLIST_OBJECT* NetItemTst, int MinConnexion, int Diag );
+/**
+ * Performs ERC testing and creates an ERC marker to show the ERC problem for aNetItemRef
+ * or between aNetItemRef and aNetItemTst.
+ *  if MinConn < 0: this is an error on labels
+ */
+extern void Diagnose( NETLIST_OBJECT* NetItemRef, NETLIST_OBJECT* NetItemTst,
+                      int MinConnexion, int Diag );
 
-extern void TestOthersItems( EDA_DRAW_PANEL* panel, unsigned NetItemRef, unsigned NetStart,
+/**
+ * Perform ERC testing for electrical conflicts between \a NetItemRef and other items
+ * on the same net.
+ */
+extern void TestOthersItems( unsigned NetItemRef, unsigned NetStart,
                              int* NetNbItems, int* MinConnexion );
 
-extern void TestLabel( EDA_DRAW_PANEL* panel, unsigned NetItemRef, unsigned StartNet );
+/**
+ * Function TestLabel
+ * performs an ERC on a sheet labels to verify that it is connected to a corresponding
+ * sub sheet global label.
+ */
+extern void TestLabel( unsigned NetItemRef, unsigned StartNet );
 
+/**
+ * Function TestDuplicateSheetNames( )
+ * inside a given sheet, one cannot have sheets with duplicate names (file
+ * names can be duplicated).
+ * @return the error count
+ * @param aCreateMarker: true = create error markers in schematic,
+ *                       false = calculate error count only
+ */
 extern int TestDuplicateSheetNames( bool aCreateMarker );
 
 

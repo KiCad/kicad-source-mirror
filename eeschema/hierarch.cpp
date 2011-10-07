@@ -1,11 +1,10 @@
-/******************/
-/*  hierarch.cpp  */
-/******************/
+/**
+ * @file hierarch.cpp
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"
@@ -61,7 +60,7 @@ HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
     m_Parent = parent;
 
     // Make an image list containing small icons
-    imageList = new wxImageList( 16, 15, TRUE, 2 );
+    imageList = new wxImageList( 16, 15, true, 2 );
 
     imageList->Add( KiBitmap( tree_nosel_xpm ) );
     imageList->Add( KiBitmap( tree_sel_xpm ) );
@@ -122,7 +121,7 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* parent, wxDC* DC, cons
     m_nbsheets = 1;
 
     cellule = m_Tree->AddRoot( _( "Root" ), 0, 1 );
-    m_Tree->SetItemBold( cellule, TRUE );
+    m_Tree->SetItemBold( cellule, true );
     SCH_SHEET_PATH list;
     list.Push( g_RootSheet );
     m_Tree->SetItemData( cellule, new TreeItemData( list ) );

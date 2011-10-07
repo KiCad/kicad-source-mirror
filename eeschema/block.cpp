@@ -1,6 +1,6 @@
-/****************************************************/
-/*  BLOCK.CPP                                       */
-/****************************************************/
+/**
+ * @file eeschema/block.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -8,7 +8,6 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "wxEeschemaStruct.h"
-#include "class_sch_screen.h"
 
 #include "general.h"
 #include "class_library.h"

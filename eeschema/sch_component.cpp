@@ -1,6 +1,7 @@
-/*******************************************************/
-/* sch_component.cpp : handle the class SCH_COMPONENT  */
-/*******************************************************/
+/**
+ * @file sch_component.cpp
+ * @brief Implementation of the class SCH_COMPONENT.
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -20,7 +21,6 @@
 #include "sch_component.h"
 #include "sch_sheet.h"
 #include "sch_sheet_path.h"
-#include "template_fieldnames.h"
 
 #include "dialogs/dialog_schematic_find.h"
 
@@ -274,7 +274,7 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset
     if( Entry == NULL )
     {
         /* Create a dummy component if the actual component can not be found. */
-        dummy = TRUE;
+        dummy = true;
 
         if( DummyCmp == NULL )
             CreateDummyCmp();
@@ -779,7 +779,7 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
         temp.x1   = 1;
         temp.y2   = -1;
         temp.y1   = temp.x2 = 0;
-        transform = TRUE;
+        transform = true;
         break;
 
     case CMP_ORIENT_90:
@@ -1082,7 +1082,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
         newfmt = 1;
 
         if( !aLine.ReadLine() )
-            return TRUE;
+            return true;
 
         line = aLine.Line();
     }

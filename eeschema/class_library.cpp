@@ -1,6 +1,6 @@
-/**********************************************************/
-/*  libclass.cpp                                          */
-/**********************************************************/
+/**
+ * @file class_library.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -232,18 +232,6 @@ bool CMP_LIBRARY::AddAlias( LIB_ALIAS* aAlias )
 }
 
 
-/**
- * Add \a aComponent entry to library.
- * Note a component can have an alias list,
- * so these alias will be added in library.
- * Conflicts can happen if aliases are already existing.
- * User is asked to choose what alias is removed (existing, or new)
- * a special case is the library cache:
- *   user is not asked, and old aliases removed.
- *   this is not perfect, but sufficient to create a library cache project
- * @param aComponent - Component to add.
- * @return Added component if successful.
- */
 LIB_COMPONENT* CMP_LIBRARY::AddComponent( LIB_COMPONENT* aComponent )
 {
     if( aComponent == NULL )
@@ -323,13 +311,6 @@ LIB_ALIAS* CMP_LIBRARY::RemoveEntry( LIB_ALIAS* aEntry )
 }
 
 
-/**
- * Replace an existing component entry in the library.
- *
- * @param aOldComponent - The component to replace.
- * @param aNewComponent - The new component.
- * the new component and the old component are expected having the same name.
- */
 LIB_COMPONENT* CMP_LIBRARY::ReplaceComponent( LIB_COMPONENT* aOldComponent,
                                               LIB_COMPONENT* aNewComponent )
 {
@@ -569,10 +550,12 @@ bool CMP_LIBRARY::LoadHeader( FILE* libfile, int* LineNum )
     {
         text = strtok( Line, " \t\r\n" );
         data = strtok( NULL, " \t\r\n" );
+
         if( stricmp( text, "TimeStamp" ) == 0 )
             timeStamp = atol( data );
+
         if( stricmp( text, "$ENDHEADER" ) == 0 )
-            return TRUE;
+            return true;
     }
 
     return FALSE;

@@ -1,6 +1,7 @@
-/***********************************************/
-/* sch_field.cpp : handle the class SCH_FIELD  */
-/***********************************************/
+/**
+ * @file sch_field.cpp
+ * @brief Implementation of the SCH_FIELD class.
+ */
 
 /* Fields are texts attached to a component, having a special meaning
  * Fields 0 and 1 are very important: reference and value
@@ -17,7 +18,6 @@
 #include "drawtxt.h"
 #include "macros.h"
 #include "trigo.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 #include "plot_common.h"
 
@@ -26,8 +26,8 @@
 #include "class_library.h"
 #include "sch_component.h"
 #include "sch_field.h"
-#include "template_fieldnames.h"
 #include "kicad_string.h"
+
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent, wxString aName ) :
     SCH_ITEM( aParent, SCH_FIELD_T ),

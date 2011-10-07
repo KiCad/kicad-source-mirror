@@ -1,13 +1,13 @@
-/**********************************************************/
-/*	sheetlab.cpp  create and edit the SCH_SHEET_PIN items */
-/**********************************************************/
+/**
+ * @file sheetlab.cpp
+ * @brief Create and edit the SCH_SHEET_PIN items.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "macros.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"

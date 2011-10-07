@@ -1,13 +1,13 @@
-/*************************************************/
-/*  Module to handle Get & Place Library Part    */
-/*************************************************/
+/**
+ * @file getpart.cpp
+ * @brief Cod to handle get & place library component.
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 #include "kicad_device_context.h"
 

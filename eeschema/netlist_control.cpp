@@ -18,7 +18,6 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "wxEeschemaStruct.h"
-#include "class_sch_screen.h"
 
 #include "general.h"
 #include "netlist.h"

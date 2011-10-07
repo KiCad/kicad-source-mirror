@@ -185,8 +185,6 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
     SetStatusText( wxEmptyString );
     ClearMsgPanel();
 
-    memset( &g_EESchemaVar, 0, sizeof(g_EESchemaVar) );
-
     screen->ClrModify();
 
     if( aIsNew )

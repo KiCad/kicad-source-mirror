@@ -1,10 +1,11 @@
-/***********************************************************************/
-/* Class NETLIST_OBJECT to handle 1 item connected (in netlist and erc */
-/* calculations)                                                       */
-/***********************************************************************/
+/**
+ * @file class_netlist_object.h
+ * @brief Definition of the NETLIST_OBJECT class.
+ */
 
 #ifndef _CLASS_NETLIST_OBJECT_H_
 #define _CLASS_NETLIST_OBJECT_H_
+
 
 #include "sch_sheet_path.h"
 
@@ -16,7 +17,7 @@ enum NetObjetType {
     NET_ITEM_UNSPECIFIED,           // only for not yet initialized instances
     NET_SEGMENT,                    // connection by wire
     NET_BUS,                        // connection by bus
-    NET_JONCTION,                   // connection by junction: can connect to
+    NET_JUNCTION,                   // connection by junction: can connect to
                                     // or more crossing wires
     NET_LABEL,                      // this is a local label
     NET_GLOBLABEL,                  // this is a global label that connect all
@@ -60,7 +61,7 @@ class NETLIST_OBJECT
 public:
     NetObjetType    m_Type;             /* Type of item (see NetObjetType
                                          * enum) */
-    EDA_ITEM      * m_Comp;             /* Pointer on the library item that
+    EDA_ITEM*       m_Comp;             /* Pointer on the library item that
                                          * created this net object (the parent)
                                          */
     SCH_ITEM*       m_Link;             /* For SCH_SHEET_PIN:
@@ -101,8 +102,8 @@ public:
 
 #if defined(DEBUG)
     void Show( std::ostream& out, int ndx );
-
 #endif
+
     NETLIST_OBJECT();
     NETLIST_OBJECT( NETLIST_OBJECT& aSource );       // Copy constructor
 
@@ -114,14 +115,26 @@ public:
     /**
      * Function GetPinNum
      * returns a pin number in wxString form.  Pin numbers are not always
-     * numbers.  "A23" would be a valid pin number.
+     * numbers.  \"A23\" would be a valid pin number.
      */
     wxString GetPinNumText()
     {
         // hide the ugliness in here, but do it inline.
         return  LIB_PIN::ReturnPinStringNum( m_PinNum );
     }
+
+    /**
+     * Function IsLabelConnected
+     * tests if the net list object is a hierarchical label or sheet label and is
+     * connected to an associated hierarchical label or sheet label of \a aNetItem.
+     *
+     * @param aNetItem A pointer to a NETLIST_OBJECT to test against.
+     * @return A bool value of true if there is a connection with \a aNetItem or false
+     *         if no connection to \a aNetItem.
+     */
+    bool IsLabelConnected( NETLIST_OBJECT* aNetItem );
 };
+
 
 // Buffer to build the list of items used in netlist and erc calculations
 typedef std::vector <NETLIST_OBJECT*> NETLIST_OBJECT_LIST;

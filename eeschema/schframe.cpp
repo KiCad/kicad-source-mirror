@@ -1,6 +1,6 @@
-/******************/
-/*  schframe.cpp  */
-/******************/
+/**
+ * @file schframe.cpp
+ */
 
 #ifdef __GNUG__
 #pragma implementation
@@ -19,7 +19,6 @@
 #include "lib_pin.h"
 #include "class_library.h"
 #include "wxEeschemaStruct.h"
-#include "class_sch_screen.h"
 #include "sch_component.h"
 
 #include "dialog_helpers.h"
@@ -157,8 +156,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     EDA_DRAW_FRAME( father, SCHEMATIC_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "SchematicFrame" );
-    m_Draw_Axis = FALSE;                // TRUE to show axis
-    m_Draw_Sheet_Ref = TRUE;            // TRUE to show sheet references
+    m_Draw_Axis = FALSE;                // true to show axis
+    m_Draw_Sheet_Ref = true;            // true to show sheet references
     m_CurrentSheet   = new SCH_SHEET_PATH();
     m_Multiflag     = 0;
     m_TextFieldSize = DEFAULT_SIZE_TEXT;
@@ -196,7 +195,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     if( DrawPanel )
-        DrawPanel->m_Block_Enable = TRUE;
+        DrawPanel->m_Block_Enable = true;
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -597,7 +596,7 @@ void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& event )
     wxASSERT_MSG( m_findReplaceData != NULL,
                   wxT( "Forgot to create find/replace data.  Bad Programmer!" ) );
 
-    this->DrawPanel->m_IgnoreMouseEvents = TRUE;
+    this->DrawPanel->m_IgnoreMouseEvents = true;
 
     if( m_dlgFindReplace )
     {
