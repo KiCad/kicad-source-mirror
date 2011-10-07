@@ -1,13 +1,13 @@
-/***************************************************************/
-/* Code for handling creation of buses, wires, and junctions. */
-/***************************************************************/
+/**
+ * @file bus-wire-junction.cpp
+ * @brief Code for editing buses, wires, and junctions.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "wxEeschemaStruct.h"
-#include "class_sch_screen.h"
 
 #include "lib_draw_item.h"
 #include "lib_pin.h"

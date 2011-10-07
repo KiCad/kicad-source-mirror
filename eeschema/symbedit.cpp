@@ -1,9 +1,7 @@
-/*************************************************/
-/* Functions to Load from file and save to file  */
-/* the graphic shapes used to draw a component   */
-/* When using the import/export symbol options   */
-/* files are the *.sym files                     */
-/*************************************************/
+/**
+ * @file symbedit.cpp
+ * @brief Functions to load from and save to file component libraries and symbols.
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -23,14 +21,7 @@
 #include <wx/ffile.h>
 
 
-/*
- * Read a component shape file (symbol file *.sym ) and add data (graphic
- * items) to the current component.
- *
- * A symbol file *.sym has the same format as a library, and contains only
- * one symbol
- */
-void LIB_EDIT_FRAME::LoadOneSymbol( void )
+void LIB_EDIT_FRAME::LoadOneSymbol()
 {
     LIB_COMPONENT* Component;
     wxString       msg, err;
@@ -40,7 +31,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol( void )
     if( m_component == NULL || ( m_drawItem && m_drawItem->m_Flags ) )
         return;
 
-    DrawPanel->m_IgnoreMouseEvents = TRUE;
+    DrawPanel->m_IgnoreMouseEvents = true;
 
     wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
 
@@ -113,14 +104,6 @@ void LIB_EDIT_FRAME::LoadOneSymbol( void )
 }
 
 
-/*
- * Save the current symbol to a file.
- *
- * The symbol file format is like the standard libraries, but there is only
- * one symbol.
- *
- * Invisible pins are not saved
- */
 void LIB_EDIT_FRAME::SaveOneSymbol()
 {
     wxString msg;
@@ -218,12 +201,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 }
 
 
-/*
- * Place anchor reference coordinators for current component
- *
- * All coordinates of the object are offset to the cursor position.
- */
-void LIB_EDIT_FRAME::PlaceAncre()
+void LIB_EDIT_FRAME::PlaceAnchor()
 {
     if( m_component == NULL )
         return;

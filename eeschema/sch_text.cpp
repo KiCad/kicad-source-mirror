@@ -1,6 +1,7 @@
-/*********************************************/
-/* Code for handling schematic sheet labels. */
-/*********************************************/
+/**
+ * @file sch_text.cpp
+ * @brief Code for handling schematic sheet labels.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -729,7 +730,7 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
 {
     m_Layer = LAYER_LOCLABEL;
     m_Shape = NET_INPUT;
-    m_IsDangling = TRUE;
+    m_IsDangling = true;
     m_MultilineAllowed = false;
 }
 
@@ -937,7 +938,7 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
 {
     m_Layer = LAYER_GLOBLABEL;
     m_Shape = NET_BIDI;
-    m_IsDangling = TRUE;
+    m_IsDangling = true;
     m_MultilineAllowed = false;
 }
 
@@ -1369,7 +1370,7 @@ SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T 
 {
     m_Layer = LAYER_HIERLABEL;
     m_Shape = NET_INPUT;
-    m_IsDangling = TRUE;
+    m_IsDangling = true;
     m_MultilineAllowed = false;
 }
 

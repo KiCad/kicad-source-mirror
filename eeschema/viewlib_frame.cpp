@@ -1,12 +1,11 @@
-/***********************/
-/*  viewlib_frame.cpp  */
-/***********************/
+/**
+ * @file viewlib_frame.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "eeschema_id.h"
 #include "class_drawpanel.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"
@@ -134,7 +133,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
                                     wxT( "LibWindow" ) );
         m_LibListWindow->SetOrientation( wxLAYOUT_VERTICAL );
         m_LibListWindow->SetAlignment( wxLAYOUT_LEFT );
-        m_LibListWindow->SetSashVisible( wxSASH_RIGHT, TRUE );
+        m_LibListWindow->SetSashVisible( wxSASH_RIGHT, true );
         m_LibListWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
         m_LibList = new wxListBox( m_LibListWindow, ID_LIBVIEW_LIB_LIST,
                                    wxPoint( 0, 0 ), wxDefaultSize,
@@ -158,7 +157,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
                                               wxT( "CmpWindow" ) );
     m_CmpListWindow->SetOrientation( wxLAYOUT_VERTICAL );
 
-    m_CmpListWindow->SetSashVisible( wxSASH_RIGHT, TRUE );
+    m_CmpListWindow->SetSashVisible( wxSASH_RIGHT, true );
     m_CmpListWindow->SetExtraBorderSize( EXTRA_BORDER_SIZE );
     m_CmpList = new wxListBox( m_CmpListWindow, ID_LIBVIEW_CMP_LIST,
                                wxPoint( 0, 0 ), wxDefaultSize,
@@ -489,7 +488,7 @@ void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
     else
         m_exportToEeschemaCmpName.Empty();
 
-    Close( TRUE );
+    Close( true );
 }
 
 

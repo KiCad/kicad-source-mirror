@@ -5,7 +5,6 @@
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"

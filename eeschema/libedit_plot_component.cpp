@@ -17,10 +17,6 @@
 #include "class_library.h"
 
 
-/**
- * Function OnPlotCurrentComponent
- * plot in SVG or PNG format the curren component
- */
 void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
 {
     LIB_COMPONENT* cmp = GetComponent();
@@ -47,7 +43,7 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
 
         FullFileName = EDA_FileSelector( _( "Filename:" ), wxGetCwd(),
                                          fn.GetFullName(), file_ext, mask, this,
-                                         wxFD_SAVE, TRUE );
+                                         wxFD_SAVE, true );
 
         if( FullFileName.IsEmpty() )
             return;
@@ -67,7 +63,7 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
         fn.SetExt( file_ext );
         FullFileName = EDA_FileSelector( _( "Filename:" ), wxGetCwd(),
                                          fn.GetFullName(), file_ext, mask, this,
-                                         wxFD_SAVE, TRUE );
+                                         wxFD_SAVE, true );
 
         if( FullFileName.IsEmpty() )
             return;
@@ -90,13 +86,6 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
 }
 
 
-/**
- * Function CreatePNGorJPEGFile
- * Create an image (screenshot) of the current component.
- *  Output file format is png or jpeg
- * @param aFileName = the full filename
- * @param aFmt_jpeg = true to use JPEG file format, false to use PNG file format
- */
 void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg )
 {
     wxSize     image_size = DrawPanel->GetClientSize();
@@ -121,16 +110,8 @@ void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_j
     image.Destroy();
 }
 
-/**
- * Function PrintPage (virtual)
- * used to print a page.
- * @param aDC = wxDC given by the calling print function
- * @param aPrintMask = not used here
- * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
- * @param aData = a pointer on an auxiliary data (not used here)
- */
-void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask,
-                                bool aPrintMirrorMode, void* aData)
+
+void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData)
 {
     if( ! m_component )
         return;

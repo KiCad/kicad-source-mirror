@@ -1,12 +1,12 @@
-/********************************/
-/* Schematic component edition */
-/********************************/
+/**
+ * @file edit_component_in_schematic.cpp
+ * @brief Schematic component editing code.
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"

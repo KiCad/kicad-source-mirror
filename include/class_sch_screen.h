@@ -434,9 +434,10 @@ public:
 };
 
 
-/********************************************************/
-/* Class to handle the list of *screens* in a hierarchy */
-/********************************************************/
+/**
+ * Class SCH_SCREENS
+ * is a class to handle the list of *screens* in a hierarchy.
+ */
 
 // screens are unique, and correspond to .sch files.
 class SCH_SCREENS
@@ -489,6 +490,16 @@ public:
      * @param aMarkerType Type of markers to be deleted.
      */
     void DeleteAllMarkers( int aMarkerType );
+
+    /**
+     * Function GetMarkerCount
+     * returns the number of ERC markers of \a aMarkerType from all of the screens in the list.
+     *
+     * @param aMarkerType Indicates the type of marker to count.  A value less then zero
+     *                    indicates all markers are counted.
+     * @return int count of the markers found.
+     */
+    int GetMarkerCount( int aMarkerType = -1 );
 
 private:
     void AddScreenToList( SCH_SCREEN* aScreen );

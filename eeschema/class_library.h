@@ -1,6 +1,7 @@
-/*********************************************/
-/*  Headers for component library definition */
-/*********************************************/
+/**
+ * @file class_library.h
+ * @brief Definition for component library class.
+ */
 
 #ifndef CLASS_LIBRARY_H
 #define CLASS_LIBRARY_H

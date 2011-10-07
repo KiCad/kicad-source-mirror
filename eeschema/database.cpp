@@ -25,7 +25,7 @@
  * BufName mask (with * and?)
  *
  * Returns
- * TRUE if the selected component
+ * true if the selected component
  * FALSE canceled order
  * Place the name of the component has loaded, select from a list in
  * BufName

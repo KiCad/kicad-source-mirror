@@ -1,7 +1,8 @@
-/*****************************************************/
-/*                  libarch.cpp                      */
-/* Module for generation of component archive files. */
-/*****************************************************/
+/**
+ * @file libarch.cpp
+ * @brief Module for generation of component archive files.
+ */
+
 #include "fctsys.h"
 #include "confirm.h"
 #include "class_sch_screen.h"

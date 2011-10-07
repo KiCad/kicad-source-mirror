@@ -1,7 +1,7 @@
-/*************************************************************************************/
-/* Class NETLIST_OBJECT to handle 1 item connected (in netlist and erc calculations) */
-/*************************************************************************************/
-
+/**
+ * @file class_netlist_object.cpp
+ * @brief Class NETLIST_OBJECT to handle 1 item connected (in netlist and erc calculations)
+ */
 
 #include "fctsys.h"
 #include "macros.h"
@@ -9,9 +9,9 @@
 
 #include "general.h"
 #include "sch_component.h"
-#include "class_netlist_object.h"
 
 #if defined(DEBUG)
+
 #include <iostream>
 const char* ShowType( NetObjetType aType )
 {
@@ -25,7 +25,7 @@ const char* ShowType( NetObjetType aType )
     case NET_BUS:
         ret = "bus";                break;
 
-    case NET_JONCTION:
+    case NET_JUNCTION:
         ret = "junction";           break;
 
     case NET_LABEL:
@@ -89,10 +89,12 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx )
     switch( m_Type )
     {
     case NET_PIN:
-        out << " <refOfComp>" << ((SCH_COMPONENT*)m_Link)->GetRef(&m_SheetList).mb_str() << "</refOfComp>\n";
+        out << " <refOfComp>" << ((SCH_COMPONENT*)m_Link)->GetRef(&m_SheetList).mb_str()
+            << "</refOfComp>\n";
 
         if( m_Comp )
             m_Comp->Show( 1, out );
+
         break;
 
     default:
@@ -109,7 +111,6 @@ void NETLIST_OBJECT::Show( std::ostream& out, int ndx )
 
     out << "</netItem>\n";
 }
-
 
 #endif
 
@@ -153,3 +154,23 @@ NETLIST_OBJECT::~NETLIST_OBJECT()
 {
 }
 
+
+bool NETLIST_OBJECT::IsLabelConnected( NETLIST_OBJECT* aNetItem )
+{
+    if( aNetItem == this )   // Don't compare the same net list object.
+        return false;
+
+    int at = m_Type;
+    int bt = aNetItem->m_Type;
+
+    if(  ( at == NET_HIERLABEL || at == NET_HIERBUSLABELMEMBER )
+      && ( bt == NET_SHEETLABEL || bt == NET_SHEETBUSLABELMEMBER ) )
+    {
+        if( m_SheetList == aNetItem->m_SheetListInclude )
+        {
+            return true; //connected!
+        }
+    }
+
+    return false; //these two are unconnected
+}

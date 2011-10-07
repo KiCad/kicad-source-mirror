@@ -14,7 +14,6 @@
 #include "class_drawpanel.h"
 #include "confirm.h"
 #include "wxEeschemaStruct.h"
-#include "class_sch_screen.h"
 
 #include "general.h"
 #include "sch_sheet.h"

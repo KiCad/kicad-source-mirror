@@ -1,13 +1,12 @@
-/***************************************************
- *  operations_on_item_lists.cpp
- * functions used in block commands, or undo/redo,
- * to move, mirror, delete, copy ... lists of schematic items
+/**
+ * @file operations_on_items_lists.cpp
+ * @brief Functions used in block commands, or undo/redo, to move, mirror, delete, copy ...
+ *        lists of schematic items.
  */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"

@@ -1,12 +1,33 @@
-/////////////////////////////////////////////////////////////////////////////
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
-// Name:        dialog_erc.cpp
-// Purpose:
-// Author:      jean-pierre Charras
-// Modified by:
-// Created:     02/07/2000
-// License:     GPL
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * @file dialog_erc.cpp
+ * @brief Electrical Rules Check dialog implementation.
+ */
+
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "kicad_string.h"
@@ -31,10 +52,12 @@ bool DIALOG_ERC::m_writeErcFile = false;
 
 
 BEGIN_EVENT_TABLE( DIALOG_ERC, DIALOG_ERC_BASE )
-EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( PIN_NMAX * PIN_NMAX ) - 1,
-                   wxEVT_COMMAND_BUTTON_CLICKED,
-                   DIALOG_ERC::ChangeErrorLevel )
-END_EVENT_TABLE() DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
+    EVT_COMMAND_RANGE( ID_MATRIX_0, ID_MATRIX_0 + ( PIN_NMAX * PIN_NMAX ) - 1,
+                       wxEVT_COMMAND_BUTTON_CLICKED, DIALOG_ERC::ChangeErrorLevel )
+END_EVENT_TABLE()
+
+
+DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
     DIALOG_ERC_BASE( parent )
 {
     m_Parent = parent;
@@ -49,7 +72,7 @@ void DIALOG_ERC::Init()
 {
     SetFocus();
 
-    m_Initialized = FALSE;
+    m_Initialized = false;
 
     for( int ii = 0; ii < PIN_NMAX; ii++ )
         for( int jj = 0; jj < PIN_NMAX; jj++ )
@@ -57,14 +80,18 @@ void DIALOG_ERC::Init()
 
     m_WriteResultOpt->SetValue( m_writeErcFile );
 
+    SCH_SCREENS screens;
+    int markers = screens.GetMarkerCount();
+    int warnings = screens.GetMarkerCount( WAR );
+
     wxString num;
-    num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc );
+    num.Printf( wxT( "%d" ), markers );
     m_TotalErrCount->SetLabel( num );
 
-    num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc - g_EESchemaVar.NbWarningErc );
+    num.Printf( wxT( "%d" ), markers - warnings );
     m_LastErrCount->SetLabel( num );
 
-    num.Printf( wxT( "%d" ), g_EESchemaVar.NbWarningErc );
+    num.Printf( wxT( "%d" ), warnings );
     m_LastWarningCount->SetLabel( num );
 
     DisplayERC_MarkersList();
@@ -78,10 +105,10 @@ void DIALOG_ERC::Init()
 
 
 /* wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_ERASE_DRC_MARKERS */
-void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
-{
 /* Delete the old ERC markers, over the whole hierarchy
  */
+void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
+{
     SCH_SCREENS ScreenList;
 
     ScreenList.DeleteAllMarkers( MARK_ERC );
@@ -113,6 +140,7 @@ void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
     wxSafeYield();      // m_MarkersList must be redraw
     wxArrayString messageList;
     TestErc( &messageList );
+
     for( unsigned ii = 0; ii < messageList.GetCount(); ii++ )
         m_MessagesList->AppendText( messageList[ii] );
 }
@@ -139,20 +167,21 @@ void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
 
     SCH_SHEET_LIST  SheetList;
 
-    NotFound = TRUE;
+    NotFound = true;
+
     /* Search for the selected marker */
-    for( sheet = SheetList.GetFirst();
-        sheet != NULL;
-        sheet = SheetList.GetNext() )
+    for( sheet = SheetList.GetFirst(); sheet != NULL; sheet = SheetList.GetNext() )
     {
         SCH_ITEM* item = (SCH_ITEM*) sheet->LastDrawList();
+
         while( item && NotFound )
         {
             if( item == marker )
             {
-                NotFound = FALSE;
+                NotFound = false;
                 break;
             }
+
             item = item->Next();
         }
 
@@ -190,14 +219,14 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 
     // Try to know the size of bitmap button used in drc matrix
     wxBitmapButton * dummy = new wxBitmapButton( m_PanelERCOptions, wxID_ANY,
-                                              KiBitmap( ercerr_xpm ) );
+                                                 KiBitmap( ercerr_xpm ) );
     wxSize bitmap_size = dummy->GetSize();
     delete dummy;
 
     if( !DiagErcTableInit )
     {
         memcpy( DiagErc, DefaultDiagErc, sizeof(DefaultDiagErc) );
-        DiagErcTableInit = TRUE;
+        DiagErcTableInit = true;
     }
 
     // Get the current text size: this is a dummy text.
@@ -222,14 +251,14 @@ void DIALOG_ERC::ReBuildMatrixPanel()
 
     pos.y += text_height;
 
-    if( m_Initialized == FALSE )
+    if( m_Initialized == false )
     {
         // Print row labels
         for( ii = 0; ii < PIN_NMAX; ii++ )
         {
             int y = pos.y + (ii * bitmap_size.y);
             text = new wxStaticText( m_PanelERCOptions, -1, CommentERC_H[ii],
-                                    wxPoint( 5, y + ( bitmap_size.y / 2) - (text_height / 2) ) );
+                                     wxPoint( 5, y + ( bitmap_size.y / 2) - (text_height / 2) ) );
 
             int x = text->GetRect().GetRight();
             pos.x = MAX( pos.x, x );
@@ -238,16 +267,20 @@ void DIALOG_ERC::ReBuildMatrixPanel()
         pos.x += 5;
     }
     else
+    {
         pos = m_ButtonList[0][0]->GetPosition();
+    }
 
     for( ii = 0; ii < PIN_NMAX; ii++ )
     {
         int y = pos.y + (ii * bitmap_size.y);
+
         for( jj = 0; jj <= ii; jj++ )
         {
             // Add column labels (only once)
             int diag = DiagErc[ii][jj];
             int x    = pos.x + (jj * bitmap_size.x);
+
             if( (ii == jj) && !m_Initialized )
             {
                 wxPoint txtpos;
@@ -258,9 +291,9 @@ void DIALOG_ERC::ReBuildMatrixPanel()
                                              CommentERC_V[ii],
                                              txtpos );
 
-                BoxMatrixMinSize.x = MAX( BoxMatrixMinSize.x,
-                                         text->GetRect().GetRight() );
+                BoxMatrixMinSize.x = MAX( BoxMatrixMinSize.x, text->GetRect().GetRight() );
             }
+
             event_id = ID_MATRIX_0 + ii + ( jj * PIN_NMAX );
             delete m_ButtonList[ii][jj];
 
@@ -269,25 +302,25 @@ void DIALOG_ERC::ReBuildMatrixPanel()
             {
             case OK:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
-                                                          event_id,
-                                                          KiBitmap( erc_green_xpm ),
-                                                          wxPoint( x, y ) );
+                                                           event_id,
+                                                           KiBitmap( erc_green_xpm ),
+                                                           wxPoint( x, y ) );
 
                 break;
 
             case WAR:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
-                                                          event_id,
-                                                          KiBitmap( ercwarn_xpm ),
-                                                          wxPoint( x, y ) );
+                                                           event_id,
+                                                           KiBitmap( ercwarn_xpm ),
+                                                           wxPoint( x, y ) );
 
                 break;
 
             case ERR:
                 m_ButtonList[ii][jj] = new wxBitmapButton( m_PanelERCOptions,
-                                                          event_id,
-                                                          KiBitmap( ercerr_xpm ),
-                                                          wxPoint( x, y ) );
+                                                           event_id,
+                                                           KiBitmap( ercerr_xpm ),
+                                                           wxPoint( x, y ) );
 
                 break;
             }
@@ -301,7 +334,8 @@ void DIALOG_ERC::ReBuildMatrixPanel()
         BoxMatrixMinSize.y += BoxMatrixPosition.y;
         m_PanelMatrixSizer->SetMinSize( BoxMatrixMinSize );
     }
-    m_Initialized = TRUE;
+
+    m_Initialized = true;
 }
 
 
@@ -315,17 +349,17 @@ void DIALOG_ERC::DisplayERC_MarkersList()
 
     m_MarkersList->ClearList();
 
-    for( SCH_SHEET_PATH* Sheet = SheetList.GetFirst();
-        Sheet != NULL;
-        Sheet = SheetList.GetNext() )
+    for( SCH_SHEET_PATH* Sheet = SheetList.GetFirst(); Sheet != NULL; Sheet = SheetList.GetNext() )
     {
         SCH_ITEM* DrawStruct = Sheet->LastDrawList();
+
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
             if( DrawStruct->Type() != SCH_MARKER_T )
                 continue;
 
             SCH_MARKER* Marker = (SCH_MARKER*) DrawStruct;
+
             if( Marker->GetMarkerType() != MARK_ERC )
                 continue;
 
@@ -397,16 +431,16 @@ void DIALOG_ERC::ChangeErrorLevel( wxCommandEvent& event )
 void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 {
     wxFileName fn;
-    unsigned   NetItemRef;
-    unsigned   OldItem;
-    unsigned   StartNet;
+    unsigned   net;
+    unsigned   lastNet;
+    unsigned   nextNet;
 
     int        NetNbItems, MinConn;
 
     if( !DiagErcTableInit )
     {
         memcpy( DiagErc, DefaultDiagErc, sizeof(DefaultDiagErc) );
-        DiagErcTableInit = TRUE;
+        DiagErcTableInit = true;
     }
 
     m_writeErcFile = m_WriteResultOpt->GetValue();
@@ -423,70 +457,61 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
             msg += wxT( "\n" );
             aMessagesList->Add( msg );
         }
+
         return;
     }
 
-    /* Erase all DRC markers */
-    SCH_SCREENS ScreenList;
+    SCH_SCREENS screens;
 
-    ScreenList.DeleteAllMarkers( MARK_ERC );
+    // Erase all previous DRC markers.
+    screens.DeleteAllMarkers( MARK_ERC );
 
-    g_EESchemaVar.NbErrorErc   = 0;
-    g_EESchemaVar.NbWarningErc = 0;
-
-    for( SCH_SCREEN* Screen = ScreenList.GetFirst();
-        Screen != NULL;
-        Screen = ScreenList.GetNext() )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
     {
-        bool ModifyWires;
-        ModifyWires = Screen->SchematicCleanUp( NULL );
-
-        /* if wire list has changed, delete Undo Redo list to avoid
-         *  pointers on deleted data problems */
-        if( ModifyWires )
-            Screen->ClearUndoRedoList();
+        /* Ff wire list has changed, delete Undo Redo list to avoid pointers on deleted
+         * data problems.
+         */
+        if( screen->SchematicCleanUp( NULL ) )
+            screen->ClearUndoRedoList();
     }
 
-    /* Test duplicate sheet names
-     * inside a given sheet, one cannot have sheets with duplicate names (file
-     * names can be duplicated).
+    /* Test duplicate sheet names inside a given sheet, one cannot have sheets with
+     * duplicate names (file names can be duplicated).
      */
-    int errcnt = TestDuplicateSheetNames( true );
-    g_EESchemaVar.NbErrorErc += errcnt;
+    TestDuplicateSheetNames( true );
 
     m_Parent->BuildNetListBase();
 
-    /* Reset the flag m_FlagOfConnection, that will be used next, in
-     * calculations */
+    /* Reset the flag m_FlagOfConnection, that will be used next, in calculations */
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
         g_NetObjectslist[ii]->m_FlagOfConnection = UNCONNECTED;
 
-    StartNet   = OldItem = 0;
+    nextNet   = lastNet = 0;
     NetNbItems = 0;
     MinConn    = NOC;
 
-    for( NetItemRef = 0; NetItemRef < g_NetObjectslist.size(); NetItemRef++ )
+    for( net = 0; net < g_NetObjectslist.size(); net++ )
     {
-        if( g_NetObjectslist[OldItem]->GetNet() != g_NetObjectslist[NetItemRef]->GetNet() ) // New net found:
+        if( g_NetObjectslist[lastNet]->GetNet() != g_NetObjectslist[net]->GetNet() )
         {
+            // New net found:
             MinConn    = NOC;
             NetNbItems = 0;
-            StartNet   = NetItemRef;
+            nextNet   = net;
         }
 
-        switch( g_NetObjectslist[NetItemRef]->m_Type )
+        switch( g_NetObjectslist[net]->m_Type )
         {
+        // These items do not create erc problems
         case NET_ITEM_UNSPECIFIED:
         case NET_SEGMENT:
         case NET_BUS:
-        case NET_JONCTION:
+        case NET_JUNCTION:
         case NET_LABEL:
         case NET_BUSLABELMEMBER:
         case NET_PINLABEL:
         case NET_GLOBLABEL:
         case NET_GLOBBUSLABELMEMBER:
-
-            // These items do not create erc problems
             break;
 
         case NET_HIERLABEL:
@@ -497,37 +522,41 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
             // ERC problems when pin sheets do not match hierarchical labels.
             // Each pin sheet must match a hierarchical label
             // Each hierarchical label must match a pin sheet
-            TestLabel( m_Parent->DrawPanel, NetItemRef, StartNet );
+            TestLabel( net, nextNet );
             break;
 
         case NET_NOCONNECT:
 
-            // ERC problems when a noconnect symbol is connected to more than
-            // one pin.
+            // ERC problems when a noconnect symbol is connected to more than one pin.
             MinConn = NET_NC;
+
             if( NetNbItems != 0 )
-                Diagnose( m_Parent->DrawPanel, g_NetObjectslist[NetItemRef], NULL, MinConn, UNC );
+                Diagnose( g_NetObjectslist[net], NULL, MinConn, UNC );
+
             break;
 
         case NET_PIN:
 
             // Look for ERC problems between pins:
-            TestOthersItems( m_Parent->DrawPanel, NetItemRef, StartNet, &NetNbItems, &MinConn );
+            TestOthersItems( net, nextNet, &NetNbItems, &MinConn );
             break;
         }
 
-        OldItem = NetItemRef;
+        lastNet = net;
     }
 
     // Displays global results:
     wxString num;
-    num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc );
+    int markers = screens.GetMarkerCount();
+    int warnings = screens.GetMarkerCount( WAR );
+
+    num.Printf( wxT( "%d" ), markers );
     m_TotalErrCount->SetLabel( num );
 
-    num.Printf( wxT( "%d" ), g_EESchemaVar.NbErrorErc - g_EESchemaVar.NbWarningErc );
+    num.Printf( wxT( "%d" ), markers - warnings );
     m_LastErrCount->SetLabel( num );
 
-    num.Printf( wxT( "%d" ), g_EESchemaVar.NbWarningErc );
+    num.Printf( wxT( "%d" ), warnings );
     m_LastWarningCount->SetLabel( num );
 
     // Display diags:
@@ -550,7 +579,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
 
         if( WriteDiagnosticERC( dlg.GetPath() ) )
         {
-            Close( TRUE );
+            Close( true );
             ExecuteFile( this, wxGetApp().GetEditorName(), QuoteFullPath( fn ) );
         }
     }

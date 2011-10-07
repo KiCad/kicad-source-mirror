@@ -7,7 +7,6 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "wxEeschemaStruct.h"
-#include "class_sch_screen.h"
 #include "richio.h"
 
 #include "general.h"
@@ -318,7 +317,7 @@ line %d, \aAbort reading file.\n" ),
     for( ; ; )
     {
         if( !aLine->ReadLine() )
-            return TRUE;
+            return true;
 
         line = aLine->Line();
 

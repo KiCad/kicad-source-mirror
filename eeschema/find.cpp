@@ -14,7 +14,6 @@
 #include "confirm.h"
 #include "kicad_string.h"
 #include "gestfich.h"
-#include "class_sch_screen.h"
 #include "wxEeschemaStruct.h"
 
 #include "general.h"

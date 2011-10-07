@@ -13,7 +13,7 @@ endif(WIN32)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 
 #
-# KiCad build options go here.
+# KiCad build options should be added below.
 #
 # If you add a new build option, please add it's state to the CopyVersionInfoToClipboard()
 # function in common/basicframe.cpp so that build option settings can be includeed in bug

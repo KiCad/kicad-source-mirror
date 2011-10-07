@@ -1,12 +1,11 @@
-/*********************/
-/* dangling_ends.cpp */
-/*********************/
+/**
+ * @file dangling_ends.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "sch_item_struct.h"
 #include "wxEeschemaStruct.h"
-#include "class_sch_screen.h"
 
 #include "general.h"
 #include "protos.h"
