@@ -1,6 +1,31 @@
-/********************/
-/* sch_junction.cpp */
-/********************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file sch_junction.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -14,11 +39,8 @@
 #include "general.h"
 #include "protos.h"
 #include "sch_junction.h"
+#include "class_netlist_object.h"
 
-
-/**********************/
-/* class SCH_JUNCTION */
-/**********************/
 
 SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_JUNCTION_T )
@@ -152,6 +174,21 @@ bool SCH_JUNCTION::IsSelectStateChanged( const wxRect& aRect )
 void SCH_JUNCTION::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 {
     aPoints.push_back( m_Pos );
+}
+
+
+void SCH_JUNCTION::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
+                                   SCH_SHEET_PATH*          aSheetPath )
+{
+    NETLIST_OBJECT* item = new NETLIST_OBJECT();
+
+    item->m_SheetList = *aSheetPath;
+    item->m_SheetListInclude = *aSheetPath;
+    item->m_Comp = (SCH_ITEM*) this;
+    item->m_Type = NET_JUNCTION;
+    item->m_Start = item->m_End = m_Pos;
+
+    aNetListItems.push_back( item );
 }
 
 

@@ -1,6 +1,32 @@
-/******************/
-/* Class SCH_LINE */
-/******************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file sch_line.cpp
+ * @brief Class SCH_LINE implementation
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -13,6 +39,7 @@
 #include "general.h"
 #include "protos.h"
 #include "sch_line.h"
+#include "class_netlist_object.h"
 
 #include <boost/foreach.hpp>
 
@@ -23,7 +50,7 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     m_Start = pos;
     m_End   = pos;
     m_Width = 0;        // Default thickness used
-    m_StartIsDangling = m_EndIsDangling = FALSE;
+    m_StartIsDangling = m_EndIsDangling = false;
 
     switch( layer )
     {
@@ -421,6 +448,7 @@ void SCH_LINE::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 wxString SCH_LINE::GetSelectMenuText() const
 {
     wxString menuText, txtfmt, orient;
+
     if( m_Start.x == m_End.x )
         orient = _("Vert.");
     else if( m_Start.y == m_End.y )
@@ -462,6 +490,33 @@ BITMAP_DEF SCH_LINE::GetMenuImage() const
         return add_line_xpm;
 
     return add_bus_xpm;
+}
+
+
+void SCH_LINE::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
+                               SCH_SHEET_PATH*          aSheetPath )
+{
+    // Net list item not required for graphic lines.
+    if( (GetLayer() != LAYER_BUS) && (GetLayer() != LAYER_WIRE) )
+        return;
+
+    NETLIST_OBJECT* item = new NETLIST_OBJECT();
+    item->m_SheetList = *aSheetPath;
+    item->m_SheetListInclude = *aSheetPath;
+    item->m_Comp = (SCH_ITEM*) this;
+    item->m_Start = m_Start;
+    item->m_End = m_End;
+
+    if( GetLayer() == LAYER_BUS )
+    {
+        item->m_Type = NET_BUS;
+    }
+    else            /* WIRE */
+    {
+        item->m_Type = NET_SEGMENT;
+    }
+
+    aNetListItems.push_back( item );
 }
 
 
