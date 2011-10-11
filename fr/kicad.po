@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-08 14:34+0100\n"
-"PO-Revision-Date: 2011-10-08 14:41+0100\n"
+"POT-Creation-Date: 2011-10-11 19:48+0100\n"
+"PO-Revision-Date: 2011-10-11 19:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -7778,11 +7778,11 @@ msgstr "Eeschema est en cours d'exécution. Continuer ?"
 
 #: eeschema/erc.cpp:88
 msgid "Input Pin.........."
-msgstr ""
+msgstr "Pin d'Entrée........"
 
 #: eeschema/erc.cpp:89
 msgid "Output Pin........."
-msgstr ""
+msgstr "Pin de Sortie........"
 
 #: eeschema/erc.cpp:90
 msgid "Bidirectional Pin.."
@@ -7794,7 +7794,7 @@ msgstr "Pin 3 états..."
 
 #: eeschema/erc.cpp:92
 msgid "Passive Pin........"
-msgstr ""
+msgstr "Pin Passive........"
 
 #: eeschema/erc.cpp:93
 msgid "Unspecified Pin...."
@@ -7881,7 +7881,7 @@ msgstr "tLabel de feuille %s non connecté à un label hiérarchique"
 #: eeschema/erc.cpp:288
 #, c-format
 msgid "Pin %s (%s) of component %s is unconnected."
-msgstr ""
+msgstr "La pin %s (%s) du composant %s est non connectée."
 
 #: eeschema/erc.cpp:303
 #, c-format
@@ -8211,29 +8211,29 @@ msgstr "Champ%d"
 msgid "Field %s %s"
 msgstr "Champ %s %s"
 
-#: eeschema/netlist.cpp:91
+#: eeschema/netlist.cpp:116
 msgid "Building net list:"
 msgstr "Construction de la netliste:"
 
-#: eeschema/netlist.cpp:109
+#: eeschema/netlist.cpp:131
 msgid "net count ="
 msgstr "Nbnets ="
 
-#: eeschema/netlist.cpp:116
+#: eeschema/netlist.cpp:138
 msgid "connections"
 msgstr "Connexions"
 
-#: eeschema/netlist.cpp:224
-#: eeschema/netlist.cpp:269
+#: eeschema/netlist.cpp:246
 #: eeschema/netlist.cpp:291
+#: eeschema/netlist.cpp:313
 msgid "done"
 msgstr "fini"
 
-#: eeschema/netlist.cpp:230
+#: eeschema/netlist.cpp:252
 msgid "bus labels"
 msgstr "labels de bus"
 
-#: eeschema/netlist.cpp:273
+#: eeschema/netlist.cpp:295
 msgid "hierarchy..."
 msgstr "hiérarchie..."
 
@@ -8885,6 +8885,34 @@ msgstr "le texte a seulement %d paramètres sur les 8 requis"
 msgid "Graphic Text %s"
 msgstr "Texte graphique %s"
 
+#: eeschema/sch_line.cpp:453
+msgid "Vert."
+msgstr "Vert."
+
+#: eeschema/sch_line.cpp:455
+msgid "Horiz."
+msgstr "Horiz."
+
+#: eeschema/sch_line.cpp:460
+#, c-format
+msgid "%s Graphic Line from (%s,%s) to (%s,%s) "
+msgstr "Ligne Graphique %s de (%s,%s) à (%s,%s)"
+
+#: eeschema/sch_line.cpp:464
+#, c-format
+msgid "%s Wire from (%s,%s) to (%s,%s)"
+msgstr "Fil %s de (%s,%s) à (%s,%s)"
+
+#: eeschema/sch_line.cpp:468
+#, c-format
+msgid "%s Bus from (%s,%s) to (%s,%s)"
+msgstr "Bus %s de  (%s,%s) à (%s,%s)"
+
+#: eeschema/sch_line.cpp:472
+#, c-format
+msgid "%s Line on Unknown Layer from (%s,%s) to (%s,%s)"
+msgstr "Ligne %s sur Couche Inconnue de (%s,%s) à (%s,%s)"
+
 #: eeschema/sch_text.cpp:925
 #, c-format
 msgid "Label %s"
@@ -9533,7 +9561,6 @@ msgid "HV orientation for wires and bus"
 msgstr "Force direction H, V  pour les fils et bus"
 
 #: eeschema/viewlib_frame.cpp:80
-#: eeschema/viewlibs.cpp:106
 msgid "Library Browser"
 msgstr "Visualisateur de Librairies"
 
@@ -9980,6 +10007,7 @@ msgid "Wire to Bus Entry"
 msgstr "Entrées de Bus (Fil vers Bus)"
 
 #: eeschema/menubar.cpp:289
+#: eeschema/sch_bus_entry.cpp:233
 msgid "Bus to Bus Entry"
 msgstr "Entrée de Bus (Bus vers Bus)"
 
@@ -10230,34 +10258,6 @@ msgstr "Pas de  pins doublées ou hors grille trouvées"
 #: eeschema/sch_bus_entry.cpp:231
 msgid "Bus to Wire Entry"
 msgstr "Entrée de Bus (Bus vers Fil)"
-
-#: eeschema/sch_line.cpp:425
-msgid "Vert."
-msgstr "Vert."
-
-#: eeschema/sch_line.cpp:427
-msgid "Horiz."
-msgstr "Horiz."
-
-#: eeschema/sch_line.cpp:432
-#, c-format
-msgid "%s Graphic Line from (%s,%s) to (%s,%s) "
-msgstr "Ligne Graphique %s de (%s,%s) à (%s,%s)"
-
-#: eeschema/sch_line.cpp:436
-#, c-format
-msgid "%s Wire from (%s,%s) to (%s,%s)"
-msgstr "Fil %s de (%s,%s) à (%s,%s)"
-
-#: eeschema/sch_line.cpp:440
-#, c-format
-msgid "%s Bus from (%s,%s) to (%s,%s)"
-msgstr "Bus %s de  (%s,%s) à (%s,%s)"
-
-#: eeschema/sch_line.cpp:444
-#, c-format
-msgid "%s Line on Unknown Layer from (%s,%s) to (%s,%s)"
-msgstr "Ligne %s sur Couche Inconnue de (%s,%s) à (%s,%s)"
 
 #: eeschema/sch_polyline.cpp:215
 #, c-format
@@ -11113,7 +11113,7 @@ msgstr "Epaisseur Texte"
 
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.cpp:60
 msgid "Connection type:"
-msgstr "Type de onnexion:"
+msgstr "Type de Connexion:"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:22
 msgid "Print sheet &reference and title block"
@@ -14237,13 +14237,13 @@ msgstr "Ajouter des arcs au composant"
 msgid "Add lines and polygons to the component body"
 msgstr "Addition de lignes ou polygones graphiques au composant"
 
+#: eeschema/sch_no_connect.h:121
+msgid "No Connect"
+msgstr "Non Connection"
+
 #: eeschema/sch_marker.h:100
 msgid "ERC Marker"
 msgstr "Marqueur ERC"
-
-#: eeschema/sch_no_connect.h:97
-msgid "No Connect"
-msgstr "Non Connection"
 
 #: eeschema/dialogs/dialog_color_config.h:61
 msgid "EESchema Colors"
