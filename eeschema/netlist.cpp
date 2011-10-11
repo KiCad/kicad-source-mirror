@@ -55,7 +55,7 @@ static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus );
 static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel );
 static void AddConnectedObjects( SCH_SHEET_PATH*      sheetlist,
                                  NETLIST_OBJECT_LIST& aNetItemBuffer );
-static int  ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer, NETLIST_OBJECT& ObjNet );
+static void ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer, NETLIST_OBJECT& ObjNet );
 static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus, int start );
 static void SegmentToPointConnect( NETLIST_OBJECT* Jonction, int IsBus, int start );
 static void LabelConnect( NETLIST_OBJECT* Label );
@@ -70,7 +70,6 @@ static bool SortItemsbyNetcode( const NETLIST_OBJECT* Objet1, const NETLIST_OBJE
 static bool SortItemsBySheet( const NETLIST_OBJECT* Objet1, const NETLIST_OBJECT* Objet2 );
 
 // Local variables
-static int FirstNumWireBus, LastNumWireBus, RootBusNameLength;
 static int LastNetCode, LastBusNetCode;
 
 
@@ -423,7 +422,8 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
 
     int priority_order[NET_PRIO_MAX+1] = {
         NET_ITEM_UNSPECIFIED,
-        NET_LABEL, NET_HIERLABEL,
+        NET_LABEL,
+        NET_HIERLABEL,
         NET_PINLABEL,
         NET_GLOBLABEL };
 
@@ -548,11 +548,8 @@ static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel )
 static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
                                  std::vector<NETLIST_OBJECT*>& aNetItemBuffer )
 {
-    int             ii;
     SCH_ITEM*       item;
     NETLIST_OBJECT* new_item;
-    SCH_COMPONENT*  DrawLibItem;
-    LIB_COMPONENT*  Entry;
     SCH_SHEET_PATH  list;
 
     item = sheetlist->LastScreen()->GetDrawItems();
@@ -568,6 +565,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
         case SCH_LINE_T:
         case SCH_JUNCTION_T:
         case SCH_NO_CONNECT_T:
+        case SCH_COMPONENT_T:
             item->GetNetListItem( aNetItemBuffer, sheetlist );
             break;
 
@@ -576,7 +574,6 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
         case SCH_HIERARCHICAL_LABEL_T:
             #undef STRUCT
             #define STRUCT ( (SCH_LABEL*) item )
-            ii = IsBusLabel( STRUCT->m_Text );
             new_item = new NETLIST_OBJECT();
             new_item->m_SheetList = *sheetlist;
             new_item->m_SheetListInclude = *sheetlist;
@@ -596,64 +593,10 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             aNetItemBuffer.push_back( new_item );
 
             /* If a bus connects to label */
-            if( ii )
+            if( IsBusLabel( STRUCT->m_Text ) )
                 ConvertBusToMembers( aNetItemBuffer, *new_item );
 
 
-            break;
-
-        case SCH_COMPONENT_T:
-            DrawLibItem = (SCH_COMPONENT*) item;
-
-            Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
-
-            if( Entry == NULL )
-                break;
-
-            for( LIB_PIN* pin = Entry->GetNextPin();  pin;  pin = Entry->GetNextPin( pin ) )
-            {
-                wxASSERT( pin->Type() == LIB_PIN_T );
-
-                if( pin->GetUnit() &&
-                    ( pin->GetUnit() != DrawLibItem->GetUnitSelection( sheetlist ) ) )
-                    continue;
-
-                if( pin->GetConvert() && ( pin->GetConvert() != DrawLibItem->GetConvert() ) )
-                    continue;
-
-                wxPoint pos2;
-
-                pos2 = DrawLibItem->GetTransform().TransformCoordinate( pin->GetPosition() ) +
-                    DrawLibItem->m_Pos;
-
-                new_item = new NETLIST_OBJECT();
-                new_item->m_SheetListInclude = *sheetlist;
-                new_item->m_Comp = pin;
-                new_item->m_SheetList = *sheetlist;
-                new_item->m_Type = NET_PIN;
-                new_item->m_Link = DrawLibItem;
-                new_item->m_ElectricalType = pin->GetType();
-                new_item->m_PinNum = pin->GetNumber();
-                new_item->m_Label  = pin->GetName();
-                new_item->m_Start  = new_item->m_End = pos2;
-
-                aNetItemBuffer.push_back( new_item );
-
-                if( ( (int) pin->GetType() == (int) PIN_POWER_IN ) && !pin->IsVisible() )
-                {
-                    /* There is an associated PIN_LABEL. */
-                    new_item = new NETLIST_OBJECT();
-                    new_item->m_SheetListInclude = *sheetlist;
-                    new_item->m_Comp = NULL;
-                    new_item->m_SheetList = *sheetlist;
-                    new_item->m_Type  = NET_PINLABEL;
-                    new_item->m_Label = pin->GetName();
-                    new_item->m_Start = pos2;
-                    new_item->m_End   = new_item->m_Start;
-
-                    aNetItemBuffer.push_back( new_item );
-                }
-            }
             break;
 
         case SCH_SHEET_T:
@@ -666,10 +609,8 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
 
             BOOST_FOREACH( SCH_SHEET_PIN pin, sheet->GetPins() )
             {
-                ii = IsBusLabel( pin.m_Text );
                 new_item = new NETLIST_OBJECT();
                 new_item->m_SheetList = *sheetlist;
-                new_item->m_SheetListInclude = *sheetlist;
                 new_item->m_SheetListInclude = list;
                 new_item->m_Comp = &pin;
                 new_item->m_Link = item;
@@ -679,7 +620,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
                 new_item->m_Start = new_item->m_End = pin.m_Pos;
                 aNetItemBuffer.push_back( new_item );
 
-                if( ii )
+                if( IsBusLabel( pin.m_Text ) )
                     ConvertBusToMembers( aNetItemBuffer, *new_item );
             }
 
@@ -746,62 +687,10 @@ static void ConnectBusLabels( NETLIST_OBJECT_LIST& aNetItemBuffer )
 }
 
 
-/* Check if the Label has a bus notation.
- * Returns 0 if not
- * Number of members if yes
- * Updates FirstNumWireBus, LastNumWireBus and RootBusNameLength
- */
-int IsBusLabel( const wxString& LabelDrawList )
+bool IsBusLabel( const wxString& aLabel )
 {
-    unsigned Num;
-    int ii;
-    wxString BufLine;
-    long tmp;
-
     /* Search for  '[' because a bus label is like "busname[nn..mm]" */
-    ii = LabelDrawList.Find( '[' );
-    if( ii < 0 )
-        return 0;
-
-    Num = (unsigned) ii;
-
-    FirstNumWireBus   = LastNumWireBus = 9;
-    RootBusNameLength = Num;
-    Num++;
-
-    while( LabelDrawList[Num] != '.' && Num < LabelDrawList.Len() )
-    {
-        BufLine.Append( LabelDrawList[Num] );
-        Num++;
-    }
-
-    BufLine.ToLong( &tmp );
-    FirstNumWireBus = tmp;
-
-    while( LabelDrawList[Num] == '.' && Num < LabelDrawList.Len() )
-        Num++;
-
-    BufLine.Empty();
-
-    while( LabelDrawList[Num] != ']' && Num < LabelDrawList.Len() )
-    {
-        BufLine.Append( LabelDrawList[Num] );
-        Num++;
-    }
-
-    BufLine.ToLong( &tmp );
-    LastNumWireBus = tmp;
-
-    if( FirstNumWireBus < 0 )
-        FirstNumWireBus = 0;
-
-    if( LastNumWireBus < 0 )
-        LastNumWireBus = 0;
-
-    if( FirstNumWireBus > LastNumWireBus )
-        EXCHG( FirstNumWireBus, LastNumWireBus );
-
-    return LastNumWireBus - FirstNumWireBus + 1;
+    return aLabel.Find( '[' ) != wxNOT_FOUND;
 }
 
 
@@ -817,46 +706,79 @@ int IsBusLabel( const wxString& LabelDrawList )
  * M_Label must be deallocated by the user (only for a NET_GLOBBUSLABELMEMBER,
  * NET_BUSLABELMEMBER gold NET_SHEETBUSLABELMEMBER object type)
  */
-static int ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer,
-                                NETLIST_OBJECT&      BusLabel )
+static void ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer,
+                                 NETLIST_OBJECT&      aBusLabel )
 {
-    int NumItem, BusMember;
-    wxString BufLine;
+    wxCHECK_RET( IsBusLabel( aBusLabel.m_Label ),
+                 wxT( "<" ) + aBusLabel.m_Label + wxT( "> is not a valid bus label." ) );
 
-    if( BusLabel.m_Type == NET_HIERLABEL )
-        BusLabel.m_Type = NET_HIERBUSLABELMEMBER;
-    else if( BusLabel.m_Type == NET_GLOBLABEL )
-        BusLabel.m_Type = NET_GLOBBUSLABELMEMBER;
-    else if( BusLabel.m_Type == NET_SHEETLABEL )
-        BusLabel.m_Type = NET_SHEETBUSLABELMEMBER;
+    if( aBusLabel.m_Type == NET_HIERLABEL )
+        aBusLabel.m_Type = NET_HIERBUSLABELMEMBER;
+    else if( aBusLabel.m_Type == NET_GLOBLABEL )
+        aBusLabel.m_Type = NET_GLOBBUSLABELMEMBER;
+    else if( aBusLabel.m_Type == NET_SHEETLABEL )
+        aBusLabel.m_Type = NET_SHEETBUSLABELMEMBER;
     else
-        BusLabel.m_Type = NET_BUSLABELMEMBER;
+        aBusLabel.m_Type = NET_BUSLABELMEMBER;
 
-    /* Conversion of BusLabel to the root Label name + the member id like mybus0, mybus1 ... */
-    BufLine = BusLabel.m_Label.Left( RootBusNameLength );
+    unsigned i;
+    wxString tmp, busName;
+    long begin, end, member;
 
-    BusMember = FirstNumWireBus;
-    BufLine << BusMember;
-    BusLabel.m_Label = BufLine;
+    /* Search for  '[' because a bus label is like "busname[nn..mm]" */
+    i = aBusLabel.m_Label.Find( '[' );
 
-    BusLabel.m_Member = BusMember;
-    NumItem = 1;
+    busName = aBusLabel.m_Label.Left( i );
+    i++;
 
-    for( BusMember++; BusMember <= LastNumWireBus; BusMember++ )
+    while( aBusLabel.m_Label[i] != '.' && i < aBusLabel.m_Label.Len() )
     {
-        NETLIST_OBJECT* new_label = new NETLIST_OBJECT( BusLabel );
-        NumItem++;
-
-        /* Conversion of BusLabel to the root name + the current member id.*/
-        BufLine = BusLabel.m_Label.Left( RootBusNameLength );
-        BufLine << BusMember;
-        new_label->m_Label = BufLine;
-
-        new_label->m_Member = BusMember;
-        aNetItemBuffer.push_back( new_label );
+        tmp.Append( aBusLabel.m_Label[i] );
+        i++;
     }
 
-    return NumItem;
+    tmp.ToLong( &begin );
+
+    while( aBusLabel.m_Label[i] == '.' && i < aBusLabel.m_Label.Len() )
+        i++;
+
+    tmp.Empty();
+
+    while( aBusLabel.m_Label[i] != ']' && i < aBusLabel.m_Label.Len() )
+    {
+        tmp.Append( aBusLabel.m_Label[i] );
+        i++;
+    }
+
+    tmp.ToLong( &end );
+
+    if( begin < 0 )
+        begin = 0;
+
+    if( end < 0 )
+        end = 0;
+
+    if( begin > end )
+        EXCHG( begin, end );
+
+    member = begin;
+    tmp = busName;
+    tmp << member;
+    aBusLabel.m_Label = tmp;
+    aBusLabel.m_Member = member;
+
+    for( member++; member <= end; member++ )
+    {
+        NETLIST_OBJECT* item = new NETLIST_OBJECT( aBusLabel );
+
+        /* Conversion of BusLabel to the root name + the current member id.*/
+        tmp = busName;
+        tmp << member;
+        item->m_Label = tmp;
+        item->m_Member = member;
+
+        aNetItemBuffer.push_back( item );
+    }
 }
 
 

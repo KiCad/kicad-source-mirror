@@ -61,7 +61,7 @@ EDA_Colors ReturnLayerColor( int Layer );
 /***************/
 /* NETLIST.CPP */
 /***************/
-int IsBusLabel( const wxString& LabelDrawList );
+bool IsBusLabel( const wxString& aLabel );
 
 
 /***************/
