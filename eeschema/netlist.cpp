@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 Kicad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file eeschema/netlist.cpp
  */
@@ -94,13 +119,10 @@ void SCH_EDIT_FRAME::BuildNetListBase()
     FreeNetObjectsList( g_NetObjectslist );
 
     /* Build the sheet (not screen) list (flattened)*/
-    SCH_SHEET_LIST SheetListList;
+    SCH_SHEET_LIST sheets;
 
     /* Fill g_NetObjectslist with items used in connectivity calculation */
-
-    sheet = SheetListList.GetFirst();
-
-    for( ; sheet != NULL; sheet = SheetListList.GetNext() )
+    for( sheet = sheets.GetFirst(); sheet != NULL; sheet = sheets.GetNext() )
         AddConnectedObjects( sheet, g_NetObjectslist );
 
     if( g_NetObjectslist.size() == 0 )
@@ -409,6 +431,7 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
 
     // Calculate item priority (initial priority)
     int item_priority = 0;
+
     for( unsigned ii = 0; ii <= NET_PRIO_MAX; ii++ )
     {
         if ( item->m_Type == priority_order[ii]  )
@@ -433,6 +456,7 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
                 break;
             }
         }
+
         if( candidate_priority > item_priority )
         {
             item = candidate;
@@ -474,6 +498,7 @@ static NETLIST_OBJECT* FindBestNetName( NETLIST_OBJECT_LIST& aLabelItemBuffer )
     return item;
 }
 
+
 /*
  * Connect sheets by sheetLabels
  */
@@ -489,11 +514,11 @@ static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel )
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
     {
         NETLIST_OBJECT* ObjetNet = g_NetObjectslist[ii];
+
         if( ObjetNet->m_SheetList != SheetLabel->m_SheetListInclude )
             continue;  //use SheetInclude, not the sheet!!
 
-        if( (ObjetNet->m_Type != NET_HIERLABEL )
-           && (ObjetNet->m_Type != NET_HIERBUSLABELMEMBER ) )
+        if( (ObjetNet->m_Type != NET_HIERLABEL ) && (ObjetNet->m_Type != NET_HIERBUSLABELMEMBER ) )
             continue;
 
         if( ObjetNet->GetNet() == SheetLabel->GetNet() )
@@ -524,105 +549,33 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
                                  std::vector<NETLIST_OBJECT*>& aNetItemBuffer )
 {
     int             ii;
-    SCH_ITEM*       DrawList;
+    SCH_ITEM*       item;
     NETLIST_OBJECT* new_item;
     SCH_COMPONENT*  DrawLibItem;
     LIB_COMPONENT*  Entry;
     SCH_SHEET_PATH  list;
 
-    DrawList = sheetlist->LastScreen()->GetDrawItems();
+    item = sheetlist->LastScreen()->GetDrawItems();
 
-    for( ; DrawList; DrawList = DrawList->Next() )
+    for( ; item; item = item->Next() )
     {
-        switch( DrawList->Type() )
+        switch( item->Type() )
         {
+        case SCH_POLYLINE_T:
+        case SCH_BUS_ENTRY_T:
+        case SCH_MARKER_T:
+        case SCH_TEXT_T:
         case SCH_LINE_T:
-            #undef STRUCT
-            #define STRUCT ( (SCH_LINE*) DrawList )
-
-            if( (STRUCT->GetLayer() != LAYER_BUS) && (STRUCT->GetLayer() != LAYER_WIRE) )
-                break;
-
-            new_item = new NETLIST_OBJECT();
-            new_item->m_SheetList = *sheetlist;
-            new_item->m_SheetListInclude = *sheetlist;
-            new_item->m_Comp  = STRUCT;
-            new_item->m_Start = STRUCT->m_Start;
-            new_item->m_End   = STRUCT->m_End;
-
-            if( STRUCT->GetLayer() == LAYER_BUS )
-            {
-                new_item->m_Type = NET_BUS;
-            }
-            else            /* WIRE */
-            {
-                new_item->m_Type = NET_SEGMENT;
-            }
-
-            aNetItemBuffer.push_back( new_item );
-            break;
-
         case SCH_JUNCTION_T:
-            #undef STRUCT
-            #define STRUCT ( (SCH_JUNCTION*) DrawList )
-            new_item = new NETLIST_OBJECT();
-
-            new_item->m_SheetList = *sheetlist;
-            new_item->m_SheetListInclude = *sheetlist;
-            new_item->m_Comp  = STRUCT;
-            new_item->m_Type  = NET_JUNCTION;
-            new_item->m_Start = new_item->m_End = STRUCT->m_Pos;
-
-            aNetItemBuffer.push_back( new_item );
-            break;
-
         case SCH_NO_CONNECT_T:
-            #undef STRUCT
-            #define STRUCT ( (SCH_NO_CONNECT*) DrawList )
-            new_item = new NETLIST_OBJECT();
-
-            new_item->m_SheetList = *sheetlist;
-            new_item->m_SheetListInclude = *sheetlist;
-            new_item->m_Comp  = STRUCT;
-            new_item->m_Type  = NET_NOCONNECT;
-            new_item->m_Start = new_item->m_End = STRUCT->m_Pos;
-
-            aNetItemBuffer.push_back( new_item );
+            item->GetNetListItem( aNetItemBuffer, sheetlist );
             break;
 
         case SCH_LABEL_T:
-            #undef STRUCT
-            #define STRUCT ( (SCH_LABEL*) DrawList )
-            ii = IsBusLabel( STRUCT->m_Text );
-
-            new_item = new NETLIST_OBJECT();
-            new_item->m_SheetList = *sheetlist;
-            new_item->m_SheetListInclude = *sheetlist;
-            new_item->m_Comp = STRUCT;
-            new_item->m_Type = NET_LABEL;
-
-            if( STRUCT->GetLayer() ==  LAYER_GLOBLABEL )
-                new_item->m_Type = NET_GLOBLABEL;
-
-            if( STRUCT->GetLayer() ==  LAYER_HIERLABEL )
-                new_item->m_Type = NET_HIERLABEL;
-
-            new_item->m_Label = STRUCT->m_Text;
-            new_item->m_Start = new_item->m_End = STRUCT->m_Pos;
-
-            aNetItemBuffer.push_back( new_item );
-
-            /* If a bus connects to label */
-            if( ii )
-                ConvertBusToMembers( aNetItemBuffer, *new_item );
-
-
-            break;
-
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIERARCHICAL_LABEL_T:
             #undef STRUCT
-            #define STRUCT ( (SCH_LABEL*) DrawList )
+            #define STRUCT ( (SCH_LABEL*) item )
             ii = IsBusLabel( STRUCT->m_Text );
             new_item = new NETLIST_OBJECT();
             new_item->m_SheetList = *sheetlist;
@@ -650,7 +603,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             break;
 
         case SCH_COMPONENT_T:
-            DrawLibItem = (SCH_COMPONENT*) DrawList;
+            DrawLibItem = (SCH_COMPONENT*) item;
 
             Entry = CMP_LIBRARY::FindLibraryComponent( DrawLibItem->GetLibName() );
 
@@ -703,32 +656,26 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
             }
             break;
 
-        case SCH_POLYLINE_T:
-        case SCH_BUS_ENTRY_T:
-        case SCH_MARKER_T:
-        case SCH_TEXT_T:
-            break;
-
         case SCH_SHEET_T:
         {
             #undef STRUCT
-            #define STRUCT ( (SCH_SHEET*) DrawList )
+            #define STRUCT ( (SCH_SHEET*) item )
             list = *sheetlist;
             list.Push( STRUCT );
-            SCH_SHEET* sheet = (SCH_SHEET*) DrawList;
+            SCH_SHEET* sheet = (SCH_SHEET*) item;
 
             BOOST_FOREACH( SCH_SHEET_PIN pin, sheet->GetPins() )
             {
                 ii = IsBusLabel( pin.m_Text );
                 new_item = new NETLIST_OBJECT();
-                new_item->m_SheetListInclude = *sheetlist;
-                new_item->m_Comp = &pin;
                 new_item->m_SheetList = *sheetlist;
-                new_item->m_Link = DrawList;
+                new_item->m_SheetListInclude = *sheetlist;
+                new_item->m_SheetListInclude = list;
+                new_item->m_Comp = &pin;
+                new_item->m_Link = item;
                 new_item->m_Type = NET_SHEETLABEL;
                 new_item->m_ElectricalType = pin.m_Shape;
                 new_item->m_Label = pin.m_Text;
-                new_item->m_SheetListInclude = list;
                 new_item->m_Start = new_item->m_End = pin.m_Pos;
                 aNetItemBuffer.push_back( new_item );
 
@@ -743,7 +690,7 @@ static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
         default:
         {
             wxString msg;
-            msg.Printf( wxT( "Netlist: unexpected struct type %d" ), DrawList->Type() );
+            msg.Printf( wxT( "Netlist: unexpected struct type %d" ), item->Type() );
             wxMessageBox( msg );
             break;
         }
@@ -1172,8 +1119,7 @@ void LabelConnect( NETLIST_OBJECT* LabelRef )
 /* Comparison routine for sorting by increasing Netcode
  * table of elements connected (TabPinSort) by qsort ()
  */
-bool SortItemsbyNetcode( const NETLIST_OBJECT* Objet1,
-                         const NETLIST_OBJECT* Objet2 )
+bool SortItemsbyNetcode( const NETLIST_OBJECT* Objet1, const NETLIST_OBJECT* Objet2 )
 {
     return Objet1->GetNet() < Objet2->GetNet();
 }
@@ -1182,8 +1128,7 @@ bool SortItemsbyNetcode( const NETLIST_OBJECT* Objet1,
 /* Comparison routine for sorting items by Sheet Number ( used by qsort )
  */
 
-bool SortItemsBySheet( const NETLIST_OBJECT* Objet1,
-                       const NETLIST_OBJECT* Objet2 )
+bool SortItemsBySheet( const NETLIST_OBJECT* Objet1, const NETLIST_OBJECT* Objet2 )
 {
     return Objet1->m_SheetList.Cmp( Objet2->m_SheetList ) < 0;
 }

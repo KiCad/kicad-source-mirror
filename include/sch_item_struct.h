@@ -1,6 +1,7 @@
-/*****************************************************************************/
-/*  sch_item_struct.h :  Basic classes for most eeschema items descriptions  */
-/*****************************************************************************/
+/**
+ * @file sch_item_struct.h
+ * @brief Base schematic object class definition.
+ */
 
 #ifndef SCH_ITEM_STRUCT_H
 #define SCH_ITEM_STRUCT_H
@@ -12,10 +13,12 @@ using namespace std;
 
 
 class SCH_ITEM;
+class SCH_SHEET_PATH;
 class LINE_READER;
 class SCH_EDIT_FRAME;
 class wxFindReplaceData;
 class PLOTTER;
+class NETLIST_OBJECT;
 
 
 typedef boost::ptr_vector< SCH_ITEM > SCH_ITEMS;
@@ -305,6 +308,18 @@ public:
     virtual bool CanIncrementLabel() const { return false; }
 
     void Plot( PLOTTER* aPlotter ) { doPlot( aPlotter ); }
+
+    /**
+     * Function GetNetListItem
+     * creates a new #NETLIST_OBJECT for the schematic object and adds it to
+     * \a aNetListItems.
+     * <p>
+     * Not all schematic objects have net list items associated with them.  This
+     * method only needs to be overridden for those schematic objects that have
+     * net list objects associated with them.
+     */
+    virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
+                                 SCH_SHEET_PATH*          aSheetPath ) { }
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 
