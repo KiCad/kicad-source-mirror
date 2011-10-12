@@ -61,6 +61,13 @@ EDA_Colors ReturnLayerColor( int Layer );
 /***************/
 /* NETLIST.CPP */
 /***************/
+/**
+ * Function IsBusLabel
+ * test if the \a aLabel has a bus notation.
+ *
+ * @param aLabel A wxString object containing the label to test.
+ * @return false if text is not a bus notattion otherwise true is returned.
+ */
 bool IsBusLabel( const wxString& aLabel );
 
 

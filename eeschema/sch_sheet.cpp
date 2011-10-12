@@ -37,13 +37,17 @@
 #include "richio.h"
 #include "wxEeschemaStruct.h"
 #include "plot_common.h"
+#include "kicad_string.h"
 
 #include "general.h"
 #include "protos.h"
 #include "sch_sheet.h"
 #include "sch_sheet_path.h"
 #include "sch_component.h"
-#include "kicad_string.h"
+#include "class_netlist_object.h"
+
+
+extern void ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer, NETLIST_OBJECT& aBusLabel );
 
 
 SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
@@ -1091,6 +1095,31 @@ bool SCH_SHEET::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 wxPoint SCH_SHEET::GetResizePosition() const
 {
     return wxPoint( m_Pos.x + m_Size.GetWidth(), m_Pos.y + m_Size.GetHeight() );
+}
+
+
+void SCH_SHEET::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
+                                SCH_SHEET_PATH*          aSheetPath )
+{
+    SCH_SHEET_PATH sheetPath = *aSheetPath;
+    sheetPath.Push( this );
+
+    for( size_t i = 0;  i < m_pins.size();  i++ )
+    {
+        NETLIST_OBJECT* item = new NETLIST_OBJECT();
+        item->m_SheetListInclude = sheetPath;
+        item->m_SheetList = *aSheetPath;
+        item->m_Comp = &m_pins[i];
+        item->m_Link = this;
+        item->m_Type = NET_SHEETLABEL;
+        item->m_ElectricalType = m_pins[i].m_Shape;
+        item->m_Label = m_pins[i].m_Text;
+        item->m_Start = item->m_End = m_pins[i].m_Pos;
+        aNetListItems.push_back( item );
+
+        if( IsBusLabel( m_pins[i].m_Text ) )
+            ConvertBusToMembers( aNetListItems, *item );
+    }
 }
 
 

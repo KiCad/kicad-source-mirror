@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,9 +53,6 @@ NETLIST_OBJECT_LIST g_NetObjectslist;
 
 static void PropageNetCode( int OldNetCode, int NewNetCode, int IsBus );
 static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel );
-static void AddConnectedObjects( SCH_SHEET_PATH*      sheetlist,
-                                 NETLIST_OBJECT_LIST& aNetItemBuffer );
-static void ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer, NETLIST_OBJECT& ObjNet );
 static void PointToPointConnect( NETLIST_OBJECT* Ref, int IsBus, int start );
 static void SegmentToPointConnect( NETLIST_OBJECT* Jonction, int IsBus, int start );
 static void LabelConnect( NETLIST_OBJECT* Label );
@@ -122,7 +119,12 @@ void SCH_EDIT_FRAME::BuildNetListBase()
 
     /* Fill g_NetObjectslist with items used in connectivity calculation */
     for( sheet = sheets.GetFirst(); sheet != NULL; sheet = sheets.GetNext() )
-        AddConnectedObjects( sheet, g_NetObjectslist );
+    {
+        for( SCH_ITEM* item = sheet->LastScreen()->GetDrawItems(); item; item = item->Next() )
+        {
+            item->GetNetListItem( g_NetObjectslist, sheet );
+        }
+    }
 
     if( g_NetObjectslist.size() == 0 )
         return;  // no objects
@@ -396,6 +398,7 @@ void FindBestNetNameForEachNet( NETLIST_OBJECT_LIST& aNetItemBuffer )
     }
 }
 
+
 /**
  * Function FindBestNetName
  * @return a reference to the "best" label that can be used to give a name
@@ -537,177 +540,15 @@ static void SheetLabelConnect( NETLIST_OBJECT* SheetLabel )
 
 
 /**
- * Function AddConnectedObjects
- * Creates the list of objects related to connections (pins of components,
- * wires, labels, junctions ...)
+ * Function ConvertBusToMembers
+ * breaks the text of a bus label type in as many members as it contains and
+ * creates a #NETLIST_OBJECT for each label.
  *
- * @param sheetlist: pointer to a sheetlist.
- * @param aNetItemBuffer: a std::vector to store pointer on NETLIST_OBJECT
- *                        created
+ * @param aNetListItems A reference to vector of #NETLIST_OBJECT pointers to add
+ *                      the bus label NETLIST_OBJECTs.
+ * @param aBusLabel A reference to the base bus label #NETLIST_OBJECT.
  */
-static void AddConnectedObjects( SCH_SHEET_PATH*               sheetlist,
-                                 std::vector<NETLIST_OBJECT*>& aNetItemBuffer )
-{
-    SCH_ITEM*       item;
-    NETLIST_OBJECT* new_item;
-    SCH_SHEET_PATH  list;
-
-    item = sheetlist->LastScreen()->GetDrawItems();
-
-    for( ; item; item = item->Next() )
-    {
-        switch( item->Type() )
-        {
-        case SCH_POLYLINE_T:
-        case SCH_BUS_ENTRY_T:
-        case SCH_MARKER_T:
-        case SCH_TEXT_T:
-        case SCH_LINE_T:
-        case SCH_JUNCTION_T:
-        case SCH_NO_CONNECT_T:
-        case SCH_COMPONENT_T:
-            item->GetNetListItem( aNetItemBuffer, sheetlist );
-            break;
-
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIERARCHICAL_LABEL_T:
-            #undef STRUCT
-            #define STRUCT ( (SCH_LABEL*) item )
-            new_item = new NETLIST_OBJECT();
-            new_item->m_SheetList = *sheetlist;
-            new_item->m_SheetListInclude = *sheetlist;
-            new_item->m_Comp = STRUCT;
-            new_item->m_Type = NET_LABEL;
-
-            // this is not the simplest way of doing it
-            // (look at the case statement above).
-            if( STRUCT->GetLayer() ==  LAYER_GLOBLABEL )
-                new_item->m_Type = NET_GLOBLABEL;
-
-            if( STRUCT->GetLayer() ==  LAYER_HIERLABEL )
-                new_item->m_Type = NET_HIERLABEL;
-
-            new_item->m_Label = STRUCT->m_Text;
-            new_item->m_Start = new_item->m_End = STRUCT->m_Pos;
-            aNetItemBuffer.push_back( new_item );
-
-            /* If a bus connects to label */
-            if( IsBusLabel( STRUCT->m_Text ) )
-                ConvertBusToMembers( aNetItemBuffer, *new_item );
-
-
-            break;
-
-        case SCH_SHEET_T:
-        {
-            #undef STRUCT
-            #define STRUCT ( (SCH_SHEET*) item )
-            list = *sheetlist;
-            list.Push( STRUCT );
-            SCH_SHEET* sheet = (SCH_SHEET*) item;
-
-            BOOST_FOREACH( SCH_SHEET_PIN pin, sheet->GetPins() )
-            {
-                new_item = new NETLIST_OBJECT();
-                new_item->m_SheetList = *sheetlist;
-                new_item->m_SheetListInclude = list;
-                new_item->m_Comp = &pin;
-                new_item->m_Link = item;
-                new_item->m_Type = NET_SHEETLABEL;
-                new_item->m_ElectricalType = pin.m_Shape;
-                new_item->m_Label = pin.m_Text;
-                new_item->m_Start = new_item->m_End = pin.m_Pos;
-                aNetItemBuffer.push_back( new_item );
-
-                if( IsBusLabel( pin.m_Text ) )
-                    ConvertBusToMembers( aNetItemBuffer, *new_item );
-            }
-
-            break;
-        }
-
-        case SCH_SHEET_PIN_T:
-        default:
-        {
-            wxString msg;
-            msg.Printf( wxT( "Netlist: unexpected struct type %d" ), item->Type() );
-            wxMessageBox( msg );
-            break;
-        }
-        }
-    }
-}
-
-
-/*
- * Routine that analyzes the type labels xxBUSLABELMEMBER
- * Propagate Netcode between the corresponding labels (ie when
- * Their member number is the same) when they are connected
- * Generally by their BusNetCode
- * Uses and updates the variable LastNetCode
- */
-static void ConnectBusLabels( NETLIST_OBJECT_LIST& aNetItemBuffer )
-{
-    for( unsigned ii = 0; ii < aNetItemBuffer.size(); ii++ )
-    {
-        NETLIST_OBJECT* Label = aNetItemBuffer[ii];
-
-        if(  (Label->m_Type == NET_SHEETBUSLABELMEMBER)
-          || (Label->m_Type == NET_BUSLABELMEMBER)
-          || (Label->m_Type == NET_HIERBUSLABELMEMBER) )
-        {
-            if( Label->GetNet() == 0 )
-            {
-                Label->SetNet( LastNetCode );
-                LastNetCode++;
-            }
-
-            for( unsigned jj = ii + 1; jj < aNetItemBuffer.size(); jj++ )
-            {
-                NETLIST_OBJECT* LabelInTst = aNetItemBuffer[jj];
-                if( (LabelInTst->m_Type == NET_SHEETBUSLABELMEMBER)
-                   || (LabelInTst->m_Type == NET_BUSLABELMEMBER)
-                   || (LabelInTst->m_Type == NET_HIERBUSLABELMEMBER) )
-                {
-                    if( LabelInTst->m_BusNetCode != Label->m_BusNetCode )
-                        continue;
-
-                    if( LabelInTst->m_Member != Label->m_Member )
-                        continue;
-
-                    if( LabelInTst->GetNet() == 0 )
-                        LabelInTst->SetNet( Label->GetNet() );
-                    else
-                        PropageNetCode( LabelInTst->GetNet(), Label->GetNet(), 0 );
-                }
-            }
-        }
-    }
-}
-
-
-bool IsBusLabel( const wxString& aLabel )
-{
-    /* Search for  '[' because a bus label is like "busname[nn..mm]" */
-    return aLabel.Find( '[' ) != wxNOT_FOUND;
-}
-
-
-/*
- * Routine which breaks a seal Bus type Label in as many members it contains,
- * And creates structures with type NET_GLOBBUSLABELMEMBER, NET_BUSLABELMEMBER
- * Or NET_SHEETBUSLABELMEMBER
- * Entry = pointer to NETLIST_OBJECT initializes the corresp buslabel
- * Assumes that FirstNumWireBus, LastNumWireBus and RootBusNameLength are up
- * to date
- * Amends NETLIST_OBJECT base and meets the following
- * M_Label is a pointer to a new wxString
- * M_Label must be deallocated by the user (only for a NET_GLOBBUSLABELMEMBER,
- * NET_BUSLABELMEMBER gold NET_SHEETBUSLABELMEMBER object type)
- */
-static void ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer,
-                                 NETLIST_OBJECT&      aBusLabel )
+void ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetListItems, NETLIST_OBJECT& aBusLabel )
 {
     wxCHECK_RET( IsBusLabel( aBusLabel.m_Label ),
                  wxT( "<" ) + aBusLabel.m_Label + wxT( "> is not a valid bus label." ) );
@@ -718,8 +559,10 @@ static void ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer,
         aBusLabel.m_Type = NET_GLOBBUSLABELMEMBER;
     else if( aBusLabel.m_Type == NET_SHEETLABEL )
         aBusLabel.m_Type = NET_SHEETBUSLABELMEMBER;
-    else
+    else if( aBusLabel.m_Type == NET_LABEL )
         aBusLabel.m_Type = NET_BUSLABELMEMBER;
+    else
+        wxCHECK_RET( false, wxT( "Net object type is not valid." ) );
 
     unsigned i;
     wxString tmp, busName;
@@ -777,8 +620,62 @@ static void ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer,
         item->m_Label = tmp;
         item->m_Member = member;
 
-        aNetItemBuffer.push_back( item );
+        aNetListItems.push_back( item );
     }
+}
+
+
+/*
+ * Routine that analyzes the type labels xxBUSLABELMEMBER
+ * Propagate Netcode between the corresponding labels (ie when
+ * Their member number is the same) when they are connected
+ * Generally by their BusNetCode
+ * Uses and updates the variable LastNetCode
+ */
+static void ConnectBusLabels( NETLIST_OBJECT_LIST& aNetItemBuffer )
+{
+    for( unsigned ii = 0; ii < aNetItemBuffer.size(); ii++ )
+    {
+        NETLIST_OBJECT* Label = aNetItemBuffer[ii];
+
+        if(  (Label->m_Type == NET_SHEETBUSLABELMEMBER)
+          || (Label->m_Type == NET_BUSLABELMEMBER)
+          || (Label->m_Type == NET_HIERBUSLABELMEMBER) )
+        {
+            if( Label->GetNet() == 0 )
+            {
+                Label->SetNet( LastNetCode );
+                LastNetCode++;
+            }
+
+            for( unsigned jj = ii + 1; jj < aNetItemBuffer.size(); jj++ )
+            {
+                NETLIST_OBJECT* LabelInTst = aNetItemBuffer[jj];
+                if( (LabelInTst->m_Type == NET_SHEETBUSLABELMEMBER)
+                   || (LabelInTst->m_Type == NET_BUSLABELMEMBER)
+                   || (LabelInTst->m_Type == NET_HIERBUSLABELMEMBER) )
+                {
+                    if( LabelInTst->m_BusNetCode != Label->m_BusNetCode )
+                        continue;
+
+                    if( LabelInTst->m_Member != Label->m_Member )
+                        continue;
+
+                    if( LabelInTst->GetNet() == 0 )
+                        LabelInTst->SetNet( Label->GetNet() );
+                    else
+                        PropageNetCode( LabelInTst->GetNet(), Label->GetNet(), 0 );
+                }
+            }
+        }
+    }
+}
+
+
+bool IsBusLabel( const wxString& aLabel )
+{
+    /* Search for  '[' because a bus label is like "busname[nn..mm]" */
+    return aLabel.Find( '[' ) != wxNOT_FOUND;
 }
 
 
