@@ -47,9 +47,6 @@
 #include "class_netlist_object.h"
 
 
-extern void ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer, NETLIST_OBJECT& aBusLabel );
-
-
 SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_SHEET_T )
 {
@@ -1118,7 +1115,7 @@ void SCH_SHEET::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
         aNetListItems.push_back( item );
 
         if( IsBusLabel( m_pins[i].m_Text ) )
-            ConvertBusToMembers( aNetListItems, *item );
+            item->ConvertBusToNetListItems( aNetListItems );
     }
 }
 

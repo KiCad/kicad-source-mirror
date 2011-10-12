@@ -45,7 +45,6 @@
 
 
 extern void IncrementLabelMember( wxString& name );
-extern void ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer, NETLIST_OBJECT& aBusLabel );
 
 
 /* Names of sheet label types. */
@@ -696,7 +695,7 @@ void SCH_TEXT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
 
     /* If a bus connects to label */
     if( IsBusLabel( m_Text ) )
-        ConvertBusToMembers( aNetListItems, *item );
+        item->ConvertBusToNetListItems( aNetListItems );
 }
 
 
