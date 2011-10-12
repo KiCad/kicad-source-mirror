@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file sch_text.cpp
  * @brief Code for handling schematic sheet labels.
@@ -16,16 +41,12 @@
 #include "general.h"
 #include "protos.h"
 #include "sch_text.h"
+#include "class_netlist_object.h"
+
 
 extern void IncrementLabelMember( wxString& name );
+extern void ConvertBusToMembers( NETLIST_OBJECT_LIST& aNetItemBuffer, NETLIST_OBJECT& aBusLabel );
 
-
-/************************/
-/* class SCH_TEXT */
-/* class SCH_LABEL */
-/* class SCH_GLOBALLABEL */
-/* class SCH_HIERLABEL */
-/************************/
 
 /* Names of sheet label types. */
 const char* SheetLabelType[] =
@@ -150,8 +171,10 @@ bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint 
     if( SCH_ITEM::Matches( m_Text, aSearchData ) )
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
+
         if( aFindLocation )
             *aFindLocation = BoundaryBox.Centre();
+
         return true;
     }
 
@@ -337,7 +360,7 @@ void SCH_TEXT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
         SCH_ITEM* undoItem = frame->GetUndoItem();
 
         wxCHECK_RET( undoItem != NULL && undoItem->Type() == Type(),
-                    wxT( "Invalid text undo item." ) );
+                     wxT( "Invalid text undo item." ) );
 
         undoItem->ClearFlags();
         picker.SetLink( undoItem );
@@ -345,7 +368,7 @@ void SCH_TEXT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
         frame->SetUndoItem( NULL );
 
         pickList.PushItem( picker );
-        frame->SaveCopyInUndoList( pickList, UR_CHANGED); //UR_EXCHANGE_T );
+        frame->SaveCopyInUndoList( pickList, UR_CHANGED ); //UR_EXCHANGE_T );
     }
 
     SCH_ITEM::Place( frame, DC );
@@ -389,6 +412,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     EXCHG( linewidth, m_Thickness );            // Set the minimum width
     EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
+
     if( m_IsDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
 
@@ -645,6 +669,34 @@ wxString SCH_TEXT::GetSelectMenuText() const
     wxString msg;
     msg.Printf( _( "Graphic Text %s" ), GetChars( tmp ) );
     return msg;
+}
+
+
+void SCH_TEXT::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
+                               SCH_SHEET_PATH*          aSheetPath )
+{
+    if( GetLayer() == LAYER_NOTES || GetLayer() == LAYER_SHEETLABEL )
+        return;
+
+    NETLIST_OBJECT* item = new NETLIST_OBJECT();
+    item->m_SheetList = *aSheetPath;
+    item->m_SheetListInclude = *aSheetPath;
+    item->m_Comp = (SCH_ITEM*) this;
+    item->m_Type = NET_LABEL;
+
+    if( GetLayer() == LAYER_GLOBLABEL )
+        item->m_Type = NET_GLOBLABEL;
+    else if( GetLayer() == LAYER_HIERLABEL )
+        item->m_Type = NET_HIERLABEL;
+
+    item->m_Label = m_Text;
+    item->m_Start = item->m_End = m_Pos;
+
+    aNetListItems.push_back( item );
+
+    /* If a bus connects to label */
+    if( IsBusLabel( m_Text ) )
+        ConvertBusToMembers( aNetListItems, *item );
 }
 
 
@@ -1416,6 +1468,7 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
 
     char*     sline = (char*) aLine;
+
     while( (*sline != ' ' ) && *sline )
         sline++;
 
