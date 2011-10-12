@@ -233,6 +233,14 @@ public:
      */
     void UpdateTitle();
 
+    /**
+     * Function SendMessageToEESCHEMA
+ 	 * Send a remote command to Eeschema via a socket,
+ 	 * Commands are
+ 	 * $PART: "reference"   put cursor on component anchor
+     */
+	void SendMessageToEESCHEMA();
+
     DECLARE_EVENT_TABLE()
 };
 

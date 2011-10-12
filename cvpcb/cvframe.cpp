@@ -7,6 +7,7 @@
 #include "macros.h"
 #include "confirm.h"
 #include "eda_doc.h"
+#include "eda_dde.h"
 #include "gestfich.h"
 #include "param_config.h"
 #include "bitmaps.h"
@@ -316,6 +317,7 @@ void CVPCB_MAINFRAME::ToFirstNA( wxCommandEvent& event )
         if( component.m_Module.IsEmpty() && ii > selection )
         {
             m_ListCmp->SetSelection( ii );
+            SendMessageToEESCHEMA();
             return;
         }
 
@@ -345,6 +347,7 @@ void CVPCB_MAINFRAME::ToPreviousNA( wxCommandEvent& event )
         if( component.m_Module.IsEmpty() && ii < selection )
         {
             m_ListCmp->SetSelection( ii );
+            SendMessageToEESCHEMA();
             return;
         }
 
@@ -500,6 +503,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     }
 
     m_FootprintList->SetFootprintFilteredList( &m_components[ selection ], m_footprints );
+    SendMessageToEESCHEMA();
     DisplayStatus();
 }
 
@@ -616,4 +620,34 @@ void CVPCB_MAINFRAME::UpdateTitle()
     }
 
     SetTitle( title );
+}
+
+/**
+ * Send a remote command to Eeschema via a socket,
+ * Commands are
+ * $PART: "reference"   put cursor on component anchor
+ */
+void CVPCB_MAINFRAME::SendMessageToEESCHEMA()
+{
+    char          cmd[1024];
+    int           selection;
+    COMPONENT*    Component;
+
+    if( m_components.empty() )
+        return;
+
+    selection = m_ListCmp->GetSelection();
+
+	if ( selection < 0 )
+		selection = 0;
+
+    if( &m_components[ selection ] == NULL )
+    	return;
+
+	Component = &m_components[ selection ];
+
+    sprintf( cmd, "$PART: \"%s\"", TO_UTF8( Component->m_Reference ) );
+
+    SendCommand( MSG_TO_SCH, cmd );
+
 }
