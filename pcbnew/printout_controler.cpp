@@ -1,6 +1,30 @@
-/**************************/
-/* printout_controler.cpp */
-/**************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * printout_controler.cpp
+ */
 
 // Set this to 1 if you want to test PostScript printing under MSW.
 #define wxTEST_POSTSCRIPT_IN_MSW 1
@@ -50,13 +74,11 @@ BOARD_PRINTOUT_CONTROLER::BOARD_PRINTOUT_CONTROLER( const PRINT_PARAMETERS& prin
 }
 
 
-/*****************************************************/
 bool BOARD_PRINTOUT_CONTROLER::OnPrintPage( int page )
-/*****************************************************/
 {
     int layers_count = NB_LAYERS;
 
-    if( m_Parent->m_Ident == GERBER_FRAME )
+    if( m_Parent->IsType( GERBER_FRAME ) )
         layers_count = 32;
 
     int mask_layer = m_PrintParams.m_PrintMaskLayer;
@@ -65,15 +87,18 @@ bool BOARD_PRINTOUT_CONTROLER::OnPrintPage( int page )
     if( m_PrintParams.m_OptionPrintPage == 0 )  // One page per layer
     {
         int ii, jj, mask = 1;
+
         for( ii = 0, jj = 0; ii < layers_count; ii++ )
         {
             if( mask_layer & mask )
                 jj++;
+
             if( jj == page )
             {
                 m_PrintParams.m_PrintMaskLayer = mask;
                 break;
             }
+
             mask <<= 1;
         }
     }
@@ -148,7 +173,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     // In module editor, the module is located at 0,0 but for printing
     // it is moved to SheetSize.x/2, SheetSize.y/2.
     // So the equivalent board must be moved:
-    if( m_Parent->m_Ident == MODULE_EDITOR_FRAME )
+    if( m_Parent->IsType( MODULE_EDITOR_FRAME ) )
     {
         wxPoint mv_offset;
         mv_offset.x = SheetSize.x / 2;

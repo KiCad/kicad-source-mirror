@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004-2010 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file pcbnew/files.cpp
  * @brief Read and write board files.
@@ -14,6 +39,7 @@
 #include "3d_viewer.h"
 #include "richio.h"
 #include "filter_reader.h"
+#include "appl_wxstruct.h"
 
 #include "pcbnew.h"
 #include "protos.h"
@@ -169,11 +195,58 @@ the changes?" ) ) )
     if( !aAppend )
         Clear_Pcb( false );     // pass false since we prompted above for a modified board
 
+    // Check for board auto save file.
+    wxFileName autoSaveFileName = fileName;
+
+    autoSaveFileName.SetName( wxT( "$" ) + autoSaveFileName.GetName() );
+
+    if( autoSaveFileName.FileExists() )
+    {
+        int response = wxMessageBox( _( "Well this is embarrassing!  It appears that the last \
+time you were editing this board the file was not save properly.  Do you wish to restore the \
+last edits you made?" ), wxGetApp().GetAppName(), wxYES_NO | wxICON_QUESTION, this );
+
+        // Make a backup of the current board file, delete the board file, and copy
+        // the auto save file to the board file name.
+        if( response == wxYES )
+        {
+            /* Get the backup file name */
+            wxFileName backupFileName = fileName;
+            backupFileName.SetExt( BACKUP_FILE_EXT );
+
+            /* If an old backup file exists, delete it.  If an old board file exists, rename
+             * it to the backup file name
+            */
+            if( fileName.FileExists() )
+            {
+                /* rename the "old" file" from xxx.brd to xxx.000 */
+                if( backupFileName.FileExists() )    /* Remove the old file xxx.000 (if exists) */
+                    wxRemoveFile( backupFileName.GetFullPath() );
+
+                if( !wxRenameFile( fileName.GetFullPath(), backupFileName.GetFullPath() ) )
+                {
+                    msg = _( "Could not create backup file " ) + backupFileName.GetFullPath();
+                    DisplayError( this, msg );
+                }
+            }
+
+            if( !wxRenameFile( autoSaveFileName.GetFullPath(), fileName.GetFullPath() ) )
+            {
+                wxMessageBox( _( "The auto save file could not be renamed to the board file \
+name." ),
+                              wxGetApp().GetAppName(), wxOK | wxICON_EXCLAMATION, this );
+            }
+        }
+        else
+        {
+            // Remove the auto save file when using the board file as is.
+            wxRemoveFile( autoSaveFileName.GetFullPath() );
+        }
+    }
+
     GetScreen()->SetFileName( fileName.GetFullPath() );
 
-    /* Start read PCB file
-    */
-
+    // Start read PCB file
     source = wxFopen( GetScreen()->GetFileName(), wxT( "rt" ) );
 
     if( source == NULL )
@@ -284,9 +357,6 @@ this file again." ) );
     Compile_Ratsnest( NULL, true );
     GetBoard()->DisplayInfo( this );
 
-    /* reset the auto save timer */
-    m_lastSaveTime = time( NULL );
-
     // Refresh the 3D view, if any
     if( m_Draw3DFrame )
         m_Draw3DFrame->NewDisplay();
@@ -306,7 +376,7 @@ this file again." ) );
 }
 
 
-bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName )
+bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupFile )
 {
     wxFileName  backupFileName;
     wxFileName  pcbFileName;
@@ -344,30 +414,34 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName )
     if( !IsWritable( pcbFileName ) )
         return false;
 
-    /* Get the backup file name */
-    backupFileName = pcbFileName;
-    backupFileName.SetExt( BACKUP_FILE_EXT );
-
-    /* If an old backup file exists, delete it.
-    if an old board file exists, rename it to the backup file name
-    */
-    if( pcbFileName.FileExists() )
+    if( aCreateBackupFile )
     {
-        /* rename the "old" file" from xxx.brd to xxx.000 */
-        if( backupFileName.FileExists() )    /* Remove the old file xxx.000 (if exists) */
-            wxRemoveFile( backupFileName.GetFullPath() );
+        /* Get the backup file name */
+        backupFileName = pcbFileName;
+        backupFileName.SetExt( BACKUP_FILE_EXT );
 
-        if( !wxRenameFile( pcbFileName.GetFullPath(), backupFileName.GetFullPath() ) )
+        /* If an old backup file exists, delete it.  If an old board file exists, rename
+         * it to the backup file name
+         */
+        if( pcbFileName.FileExists() )
         {
-            msg = _( "Warning: unable to create backup file " ) + backupFileName.GetFullPath();
-            DisplayError( this, msg );
+            // Remove the old file xxx.000 if it exists.
+            if( backupFileName.FileExists() )
+                wxRemoveFile( backupFileName.GetFullPath() );
+
+            // Rename the "old" file" from xxx.brd to xxx.000
+            if( !wxRenameFile( pcbFileName.GetFullPath(), backupFileName.GetFullPath() ) )
+            {
+                msg = _( "Warning: unable to create backup file " ) + backupFileName.GetFullPath();
+                DisplayError( this, msg );
+                saveok = false;
+            }
+        }
+        else
+        {
+            backupFileName.Clear();
             saveok = false;
         }
-    }
-    else
-    {
-        backupFileName.Clear();
-        saveok = false;
     }
 
     /* Create the file */
@@ -394,6 +468,13 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName )
 
     if( saveok )
     {
+        // Delete auto save file on successful save.
+        wxFileName autoSaveFileName = pcbFileName;
+        autoSaveFileName.SetName( wxT( "$" ) + pcbFileName.GetName() );
+
+        if( autoSaveFileName.FileExists() )
+            wxRemoveFile( autoSaveFileName.GetFullPath() );
+
         upperTxt = _( "Backup file: " ) + backupFileName.GetFullPath();
     }
 
@@ -407,8 +488,29 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName )
     ClearMsgPanel();
     AppendMsgPanel( upperTxt, lowerTxt, CYAN );
 
-    m_lastSaveTime = time( NULL );    /* Reset timer for the automatic saving */
-
     GetScreen()->ClrModify();
     return true;
+}
+
+
+bool PCB_EDIT_FRAME::doAutoSave()
+{
+    wxFileName tmpFileName = GetScreen()->GetFileName();
+    wxFileName fn = tmpFileName;
+
+    // Auto save file name is the normal file name prepended with $.
+    fn.SetName( wxT( "$" ) + fn.GetName() );
+
+    if( SavePcbFile( fn.GetFullPath(), NO_BACKUP_FILE ) )
+    {
+        OnModify();
+        GetScreen()->SetSave();      // Set the flags m_FlagSave cleared by SetModify()
+        GetScreen()->SetFileName( tmpFileName.GetFullPath() );
+        UpdateTitle();
+        return true;
+    }
+
+    GetScreen()->SetFileName( tmpFileName.GetFullPath() );
+
+    return false;
 }

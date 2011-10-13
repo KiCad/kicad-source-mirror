@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2004-2010 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2010 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -23,25 +24,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-/******************************************/
-/* pcbframe.cpp - PCB editor main window. */
-/******************************************/
+/**
+ * @file pcbframe.cpp
+ * @brief PCB editor main window implementation.
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
 #include "class_drawpanel.h"
 #include "confirm.h"
-#include "pcbnew.h"
 #include "wxPcbStruct.h"
 #include "pcbcommon.h"      // enum PCB_VISIBLE
 #include "collectors.h"
 #include "build_version.h"
+#include "macros.h"
+#include "3d_viewer.h"
+
+#include "pcbnew.h"
 #include "protos.h"
 #include "pcbnew_id.h"
 #include "drc_stuff.h"
-#include "3d_viewer.h"
-#include "kbool/include/kbool/booleng.h"
 #include "layer_widget.h"
 #include "dialog_design_rules.h"
 #include "class_pcb_layer_widget.h"
@@ -275,8 +277,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_show_microwave_tools = false;
     m_show_layer_manager_tools = true;
     m_HotkeysZoomAndGridList = g_Board_Editor_Hokeys_Descr;
-
+    m_hasAutoSave = true;
     m_RecordingMacros = -1;
+
     for ( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
 
@@ -410,6 +413,12 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 }
 
 
+bool PCB_EDIT_FRAME::isModified() const
+{
+    return GetScreen()->IsModify();
+}
+
+
 void PCB_EDIT_FRAME::ReFillLayerWidget()
 {
     m_Layers->ReFill();
@@ -462,6 +471,23 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             SavePcbFile( GetScreen()->GetFileName() );
             break;
         }
+    }
+
+    // Delete the auto save file if it exists.
+    wxFileName fn = GetScreen()->GetFileName();
+
+    // Auto save file name is the normal file name prefixed with a '$'.
+    fn.SetName( wxT( "$" ) + fn.GetName() );
+
+    // Remove the auto save file on a normal close of Pcbnew.
+    if( fn.FileExists() && !wxRemoveFile( fn.GetFullPath() ) )
+    {
+        wxString msg;
+
+        msg.Printf( _( "The auto save file <%s> could not be removed!" ),
+                    GetChars( fn.GetFullPath() ) );
+
+        wxMessageBox( msg, wxGetApp().GetAppName(), wxOK | wxICON_ERROR, this );
     }
 
     SaveSettings();

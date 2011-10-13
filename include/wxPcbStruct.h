@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file wxPcbStruct.h
  */
@@ -16,6 +41,10 @@
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000
 #endif
+
+
+#define CREATE_BACKUP_FILE    true
+#define NO_BACKUP_FILE        false
 
 
 /*  Forward declarations of classes. */
@@ -56,9 +85,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
 
     int             m_RecordingMacros;
     MACROS_RECORDED m_Macros[10];
-
-    int m_saveInterval;                 ///< Time interval in seconds for automatic saving.
-    int m_lastSaveTime;                 ///< Last save time.
 
 protected:
 
@@ -115,6 +141,21 @@ protected:
     void syncLayerWidget();
 
     virtual void unitsChangeRefresh();
+
+    /**
+     * Function doAutoSave
+     * performs auto save when the board has been modified and not saved within the
+     * auto save interval.
+     *
+     * @return true if the auto save was successful.
+     */
+    virtual bool doAutoSave();
+
+    /**
+     * Function isModified
+     * returns true if the board has been modified.
+     */
+    virtual bool isModified() const;
 
 public:
     LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
@@ -232,12 +273,6 @@ public:
      * @param aColor = the new color of the grid
      */
     virtual void SetGridColor(int aColor);
-
-    void ResetAutoSaveTimeOut() { m_lastSaveTime = time( NULL ); }
-
-    int GetAutoSaveTimeInterval() { return m_saveInterval; }
-
-    void SetAutoSaveTimeInterval( int aInterval ) { m_saveInterval = aInterval; }
 
     // Configurations:
     void InstallConfigFrame();
@@ -684,9 +719,12 @@ public:
      *
      * @param aFileName The file name to write or wxEmptyString to prompt user for
      *                  file name.
+     * @param aCreateBackupFile Creates a back of \a aFileName if true.  Helper
+     *                          definitions #CREATE_BACKUP_FILE and #NO_BACKUP_FILE
+     *                          are defined for improved code readability.
      * @return True if file was saved successfully.
      */
-    bool SavePcbFile( const wxString& aFileName );
+    bool SavePcbFile( const wxString& aFileName, bool aCreateBackupFile = CREATE_BACKUP_FILE );
 
     int SavePcbFormatAscii( FILE* File );
     bool WriteGeneralDescrPcb( FILE* File );

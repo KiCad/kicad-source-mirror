@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file wxstruct.h
  * @brief Base window classes and related definitions.
@@ -82,7 +107,7 @@ enum id_toolbar {
  */
 class EDA_BASE_FRAME : public wxFrame
 {
-public:
+protected:
     int          m_Ident;        // Id Type (pcb, schematic, library..)
     wxPoint      m_FramePos;
     wxSize       m_FrameSize;
@@ -96,13 +121,67 @@ public:
 
     wxAuiManager m_auimgr;
 
+    /// Flag to indicate if this frame supports auto save.
+    bool         m_hasAutoSave;
+
+    /// Flag to indicate the last auto save state.
+    bool         m_autoSaveState;
+
+    /// The auto save interval time in seconds.
+    int          m_autoSaveInterval;
+
+    /// The timer used to implement the auto save feature;
+    wxTimer*     m_autoSaveTimer;
+
+    /**
+     * Function onAutoSaveTimer
+     * handles the auto save timer event.
+     */
+    void onAutoSaveTimer( wxTimerEvent& aEvent );
+
+    /**
+     * Function isModified
+     * returns the modification status of the application.  Override this function if
+     * your derived frame supports automatic file saving.
+     */
+    virtual bool isModified() const { return false; }
+
+    /**
+     * Function doAutoSave
+     * should be overridden by the derived class to handle the auto save feature.
+     *
+     * @return true if the auto save was successful otherwise false.
+     */
+    virtual bool doAutoSave();
+
 public:
     EDA_BASE_FRAME( wxWindow* father, int idtype, const wxString& title,
                     const wxPoint& pos, const wxSize& size,
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+
     ~EDA_BASE_FRAME();
 
+    /**
+     * Function ProcessEvent
+     * overrides the default process event handler to implement the auto save feature.
+     *
+     * @warning If you override this function in a derived class, make sure you call
+     *          down to this or the auto save feature will be disabled.
+     */
+    virtual bool ProcessEvent( wxEvent& aEvent );
+
+    void SetAutoSaveInterval( int aInterval ) { m_autoSaveInterval = aInterval; }
+
+    int GetAutoSaveInterval() const { return m_autoSaveInterval; }
+
+    wxString GetName() const { return m_FrameName; }
+
+    bool IsActive() const { return m_FrameIsActive; }
+
+    bool IsType( int aType ) const { return m_Ident == aType; }
+
     void GetKicadHelp( wxCommandEvent& event );
+
     void GetKicadAbout( wxCommandEvent& event );
 
     /**
@@ -120,7 +199,22 @@ public:
      */
     void AddHelpVersionInfoMenuEntry( wxMenu* aMenu );
 
+    /**
+     * Load common frame parameters from configuration.
+     *
+     * The method is virtual so you can override it to load frame specific
+     * parameters.  Don't forget to call the base method or your frames won't
+     * remember their positions and sizes.
+     */
     virtual void LoadSettings();
+
+    /**
+     * Save common frame parameters from configuration.
+     *
+     * The method is virtual so you can override it to save frame specific
+     * parameters.  Don't forget to call the base method or your frames won't
+     * remember their positions and sizes.
+     */
     virtual void SaveSettings();
 
     /**
@@ -209,6 +303,9 @@ public:
      */
     void UpdateFileHistory( const wxString& FullFileName, wxFileHistory * aFileHistory = NULL );
 
+    /*
+     * Display a bargraph (0 to 50 point length) for a PerCent value from 0 to 100
+     */
     void DisplayActivity( int PerCent, const wxString& Text );
 
     /**
