@@ -56,6 +56,9 @@
 
 // use one of the following __LOC__ defs, depending on whether your
 // compiler supports __func__ or not, and how it handles __LINE__
+#if defined ( _MSC_VER )
+#define __func__ __FUNCTION__
+#endif
 #define __LOC__         ((std::string(__func__) + "() : line ") + TOSTRING(__LINE__)).c_str()
 //#define __LOC__         TOSTRING(__LINE__)
 
