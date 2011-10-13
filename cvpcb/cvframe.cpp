@@ -1,18 +1,40 @@
-/*********************/
-/* File: cvframe.cpp */
-/*********************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file cvframe.cpp
+ */
+
 #include "fctsys.h"
 #include "appl_wxstruct.h"
-#include "common.h"
 #include "macros.h"
 #include "confirm.h"
 #include "eda_doc.h"
 #include "eda_dde.h"
 #include "gestfich.h"
-#include "param_config.h"
-#include "bitmaps.h"
 
-#include "cvpcb.h"
 #include "cvpcb_mainframe.h"
 #include "cvstruct.h"
 #include "dialog_cvpcb_config.h"
@@ -182,7 +204,7 @@ void CVPCB_MAINFRAME::LoadSettings()
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
     EDA_BASE_FRAME::LoadSettings();
-    cfg->Read( KeepCvpcbOpenEntry, &m_KeepCvpcbOpen, false );
+    cfg->Read( KeepCvpcbOpenEntry, &m_KeepCvpcbOpen, true );
     cfg->Read( FootprintDocFileEntry, &m_DocModulesFileName,
                DEFAULT_FOOTPRINTS_LIST_FILENAME );
 }
