@@ -40,6 +40,7 @@
 const wxString        ModExportFileExtension( wxT( "emp" ) );
 
 static const wxString ModExportFileWildcard( _( "KiCad foot print export files (*.emp)|*.emp" ) );
+static const wxString ModImportFileWildcard( _( "GPcb foot print files (*)|*" ) );
 
 
 MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
@@ -55,9 +56,10 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     if( Config )
         Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &LastOpenedPathForLoading );
 
+    wxString importWildCard = ModExportFileWildcard + wxT("|") + ModImportFileWildcard;
     wxFileDialog dlg( this, _( "Import Footprint Module" ),
                       LastOpenedPathForLoading, wxEmptyString,
-                      ModExportFileWildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+                      importWildCard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return NULL;

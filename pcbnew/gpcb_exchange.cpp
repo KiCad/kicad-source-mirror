@@ -331,7 +331,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         }
 
         if( params[0].CmpNoCase( wxT( "Pad" ) ) == 0 )      // Pad with no hole (smd pad)
-        {                                                   //  format: Pad [x1 y1 x2 y2 thickness clearance mask "name" "pad_number" flags]
+        {   //  format: Pad [x1 y1 x2 y2 thickness clearance mask "name" "pad_number" flags]
             Pad = new D_PAD( this );
             Pad->m_PadShape     = PAD_RECT;
             Pad->m_layerMask = LAYER_FRONT | SOLDERMASK_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT;
@@ -361,9 +361,13 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             // Currently unused
 
             // Read pad number:
-            if( params.GetCount() > 10 )
+            if( params[1] == wxT( "(" ) )
             {
-                strncpy( Pad->m_Padname, TO_UTF8( params[10] ), 4 );
+                Pad->SetPadName( params[8] );
+            }
+            else
+            {
+                Pad->SetPadName( params[10] );
             }
             Pad->m_Pos.x  = (ibuf[0] + ibuf[2]) / 2;
             Pad->m_Pos.y  = (ibuf[1] + ibuf[3]) / 2;
@@ -385,7 +389,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         }
 
         if( params[0].CmpNoCase( wxT( "Pin" ) ) == 0 )      // Pad with hole (trough pad)
-        {                                                   // format: Pin[x y Thickness Clearance Mask DrillHole Name Number Flags]
+        {   // format: Pin[x y Thickness Clearance Mask DrillHole Name Number Flags]
             Pad = new D_PAD( this );
             Pad->m_PadShape     = PAD_ROUND;
             Pad->m_layerMask = ALL_CU_LAYERS |
@@ -415,9 +419,13 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             // Currently unused
 
             // Read pad number:
-            if( params.GetCount() > 9 )
+            if( params[1] == wxT( "(" ) )
             {
-                strncpy( Pad->m_Padname, TO_UTF8( params[9] ), 4 );
+                Pad->SetPadName( params[7] );
+            }
+            else
+            {
+                Pad->SetPadName( params[9] );
             }
 
             Pad->m_Pos.x   = ibuf[0];
