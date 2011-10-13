@@ -1,6 +1,31 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
- * EDA_BASE_FRAME Class Functions
  * @file basicframe.cpp
+ * @brief EDA_BASE_FRAME class implementation.
  */
 
 #include <wx/aboutdlg.h>
@@ -20,9 +45,13 @@
 #include "macros.h"
 
 
-/*
- * Class constructor for EDA_BASE_FRAME general options
- */
+/// The default auto save interval is 10 minutes.
+#define DEFAULT_AUTO_SAVE_INTERVAL 600
+
+
+static const wxChar* entryAutoSaveInterval = wxT( "AutoSaveInterval" );
+
+
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* father,
                                 int idtype,
                                 const wxString& title,
@@ -33,9 +62,13 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* father,
 {
     wxSize minsize;
 
-    m_Ident          = idtype;
-    m_HToolBar       = NULL;
-    m_FrameIsActive  = TRUE;
+    m_Ident = idtype;
+    m_HToolBar = NULL;
+    m_FrameIsActive = true;
+    m_hasAutoSave = false;
+    m_autoSaveState = false;
+    m_autoSaveInterval = -1;
+    m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
 
     m_MsgFrameHeight = EDA_MSG_PANEL::GetRequiredHeight();
 
@@ -48,15 +81,17 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* father,
         SetSize( 0, 0, minsize.x, minsize.y );
 
     // Create child subwindows.
-    GetClientSize( &m_FrameSize.x, &m_FrameSize.y ); /* dimensions of the user
-                                                      * area of the main
+    GetClientSize( &m_FrameSize.x, &m_FrameSize.y ); /* dimensions of the user area of the main
                                                       * window */
-    m_FramePos.x   = m_FramePos.y = 0;
+    m_FramePos.x = m_FramePos.y = 0;
     m_FrameSize.y -= m_MsgFrameHeight;
 
     Connect( ID_HELP_COPY_VERSION_STRING,
              wxEVT_COMMAND_MENU_SELECTED,
              wxCommandEventHandler( EDA_BASE_FRAME::CopyVersionInfoToClipboard ) );
+
+    Connect( ID_AUTO_SAVE_TIMER, wxEVT_TIMER,
+             wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
 }
 
 
@@ -64,7 +99,10 @@ EDA_BASE_FRAME::~EDA_BASE_FRAME()
 {
     if( wxGetApp().m_HtmlCtrl )
         delete wxGetApp().m_HtmlCtrl;
+
     wxGetApp().m_HtmlCtrl = NULL;
+
+    delete m_autoSaveTimer;
 
     /* This needed for OSX: avoids further OnDraw processing after this
      * destructor and before the native window is destroyed
@@ -73,19 +111,47 @@ EDA_BASE_FRAME::~EDA_BASE_FRAME()
 }
 
 
-/*
- * Virtual function
- */
-void EDA_BASE_FRAME::ReCreateMenuBar()
+bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
 {
+    if( !wxFrame::ProcessEvent( aEvent ) )
+        return false;
 
+    if( m_hasAutoSave && (m_autoSaveState != isModified()) && (m_autoSaveInterval > 0) )
+    {
+        if( !m_autoSaveState )
+        {
+            m_autoSaveTimer->Start( m_autoSaveInterval * 1000, wxTIMER_ONE_SHOT );
+            m_autoSaveState = true;
+        }
+        else
+        {
+            m_autoSaveTimer->Stop();
+            m_autoSaveState = false;
+        }
+    }
+
+    return true;
 }
 
-/**
- * Function SetLanguage (virtual)
- * called on a language menu selection
- * when using a derived function, do not forget to call this one
- */
+
+void EDA_BASE_FRAME::onAutoSaveTimer( wxTimerEvent& aEvent )
+{
+    if( !doAutoSave() )
+        m_autoSaveTimer->Start( m_autoSaveInterval * 1000, wxTIMER_ONE_SHOT );
+}
+
+
+bool EDA_BASE_FRAME::doAutoSave()
+{
+    wxCHECK_MSG( false, true, wxT( "Auto save timer function not overridden.  Bad programmer!" ) );
+}
+
+
+void EDA_BASE_FRAME::ReCreateMenuBar()
+{
+}
+
+
 void EDA_BASE_FRAME::SetLanguage( wxCommandEvent& event )
 {
     int id = event.GetId();
@@ -97,13 +163,6 @@ void EDA_BASE_FRAME::SetLanguage( wxCommandEvent& event )
 }
 
 
-/**
- * Load common frame parameters from configuration.
- *
- * The method is virtual so you can override it to load frame specific
- * parameters.  Don't forget to call the base method or your frames won't
- * remember their positions and sizes.
- */
 void EDA_BASE_FRAME::LoadSettings()
 {
     wxString  text;
@@ -113,6 +172,7 @@ void EDA_BASE_FRAME::LoadSettings()
     config = wxGetApp().m_EDA_Config;
 
     int maximized = 0;
+
     if( config )
     {
         text = m_FrameName + wxT( "Pos_x" );
@@ -125,6 +185,12 @@ void EDA_BASE_FRAME::LoadSettings()
         config->Read( text, &m_FrameSize.y, 400 );
         text = m_FrameName + wxT( "Maximized" );
         config->Read( text, &maximized, 0 );
+
+        if( m_hasAutoSave )
+        {
+            text = m_FrameName + entryAutoSaveInterval;
+            config->Read( text, &m_autoSaveInterval, DEFAULT_AUTO_SAVE_INTERVAL );
+        }
     }
 
     // Ensure Window title bar is visible
@@ -143,13 +209,6 @@ void EDA_BASE_FRAME::LoadSettings()
 }
 
 
-/**
- * Save common frame parameters from configuration.
- *
- * The method is virtual so you can override it to save frame specific
- * parameters.  Don't forget to call the base method or your frames won't
- * remember their positions and sizes.
- */
 void EDA_BASE_FRAME::SaveSettings()
 {
     wxString text;
@@ -173,6 +232,12 @@ void EDA_BASE_FRAME::SaveSettings()
     config->Write( text, (long) m_FrameSize.y );
     text = m_FrameName + wxT( "Maximized" );
     config->Write( text, IsMaximized() );
+
+    if( m_hasAutoSave )
+    {
+        text = m_FrameName + entryAutoSaveInterval;
+        config->Write( text, m_autoSaveInterval );
+    }
 }
 
 
@@ -182,9 +247,6 @@ void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 }
 
 
-/*
- * Display a bargraph (0 to 50 point length) for a PerCent value from 0 to 100
- */
 void EDA_BASE_FRAME::DisplayActivity( int PerCent, const wxString& Text )
 {
     wxString Line;
@@ -194,6 +256,7 @@ void EDA_BASE_FRAME::DisplayActivity( int PerCent, const wxString& Text )
     PerCent  = (PerCent < 0) ? 0 : PerCent;
     PerCent  = (PerCent > 100) ? 100 : PerCent;
     PerCent /= 2;   // Bargraph is 0 .. 50 points from 0% to 100%
+
     if( PerCent )
         Line.Pad( PerCent, '*' );
 
@@ -201,13 +264,11 @@ void EDA_BASE_FRAME::DisplayActivity( int PerCent, const wxString& Text )
 }
 
 
-/*
- * Update the list of recent opened files.
- */
 void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName,
-                                     wxFileHistory * aFileHistory )
+                                        wxFileHistory * aFileHistory )
 {
     wxFileHistory * fileHistory = aFileHistory;
+
     if( fileHistory == NULL )
         fileHistory = & wxGetApp().m_fileHistory;
 
@@ -215,28 +276,26 @@ void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName,
 }
 
 
-/*
- * Fetch the file name from the file history list.
- */
 wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
                                              wxFileHistory * aFileHistory )
 {
     wxString fn, msg;
     size_t   i;
     wxFileHistory * fileHistory = aFileHistory;
+
     if( fileHistory == NULL )
         fileHistory = & wxGetApp().m_fileHistory;
 
-    int      baseId = fileHistory->GetBaseId();
+    int baseId = fileHistory->GetBaseId();
 
-    wxASSERT( cmdId >= baseId
-              && cmdId < baseId + ( int )fileHistory->GetCount() );
+    wxASSERT( cmdId >= baseId && cmdId < baseId + ( int )fileHistory->GetCount() );
 
     i = ( size_t )( cmdId - baseId );
 
     if( i < fileHistory->GetCount() )
     {
         fn = fileHistory->GetHistoryFile( i );
+
         if( !wxFileName::FileExists( fn ) )
         {
             msg = type + _( " file <" ) + fn + _( "> was not found." );
@@ -250,9 +309,6 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
 }
 
 
-/*
- *
- */
 void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 {
     wxString msg;
@@ -269,6 +325,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
         wxString tmp = wxGetApp().m_HelpFileName;
         wxGetApp().m_HelpFileName = wxT( "Getting_Started_in_KiCad.pdf" );
         wxString helpFile = wxGetApp().GetHelpFile();
+
         if( !helpFile )
         {
             msg.Printf( _( "Help file %s could not be found." ),
@@ -276,7 +333,10 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
             DisplayError( this, msg );
         }
         else
+        {
             GetAssociatedDocument( this, helpFile );
+        }
+
         wxGetApp().m_HelpFileName = tmp;
         return;
     }
@@ -302,6 +362,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 
 #elif defined ONLINE_HELP_FILES_FORMAT_IS_PDF
     wxString helpFile = wxGetApp().GetHelpFile();
+
     if( !helpFile )
     {
         msg.Printf( _( "Help file %s could not be found." ),
@@ -309,19 +370,16 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
         DisplayError( this, msg );
     }
     else
+    {
         GetAssociatedDocument( this, helpFile );
+    }
 
 #else
 #   error Help files format not defined
 #endif
 }
 
-/*
- * Function OnSelectPreferredEditor
- * Open a dialog to select the preferred editor that will be used in KiCad
- * to edit or display files (reports ... )
- * The full filename editor is saved in configuration (global params)
- */
+
 void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
 {
     wxFileName fn = wxGetApp().m_EditorName;
@@ -333,7 +391,7 @@ void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
 
     wildcard = _( "Executable file (" ) + wildcard + wxT( ")|" ) + wildcard;
 
-    wxFileDialog dlg( this, _( "Select Prefered Editor" ), fn.GetPath(),
+    wxFileDialog dlg( this, _( "Select Preferred Editor" ), fn.GetPath(),
                       fn.GetFullName(), wildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
@@ -348,9 +406,6 @@ void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
 }
 
 
-/*
- *
- */
 void EDA_BASE_FRAME::GetKicadAbout( wxCommandEvent& event )
 {
     bool ShowAboutDialog(wxWindow * parent);
