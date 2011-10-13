@@ -24,7 +24,7 @@
  */
 
 /**
- * @file dialog_SVG_print.cpp
+ * @file eeschema/dialogs/dialog_SVG_print.cpp
  */
 
 #include "fctsys.h"
