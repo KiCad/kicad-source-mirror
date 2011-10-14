@@ -146,10 +146,14 @@ void FOOTPRINTS_LISTBOX::SetFootprintFilteredList( COMPONENT*      Component,
     for( unsigned ii = 0; ii < list.GetCount(); ii++ )
     {
         FOOTPRINT_INFO& footprint = list.GetItem(ii);
-        /* Search for matching footprints */
+        // Search for matching footprints
+        // The search is case insensitive
+        wxString module = footprint.m_Module.Upper();
+        wxString candidate;
         for( jj = 0; jj < Component->m_FootprintFilter.GetCount(); jj++ )
         {
-            if( !footprint.m_Module.Matches( Component->m_FootprintFilter[jj] ) )
+            candidate = Component->m_FootprintFilter[jj].Upper();
+            if( !module.Matches( candidate ) )
                 continue;
             msg.Printf( wxT( "%3d %s" ), m_FilteredFootprintList.GetCount() + 1,
                        footprint.m_Module.GetData() );
