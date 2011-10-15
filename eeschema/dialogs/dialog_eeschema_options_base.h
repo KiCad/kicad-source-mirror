@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -44,6 +44,11 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public wxDialog
 		
 	
 	protected:
+		enum
+		{
+			ID_M_SPINAUTOSAVEINTERVAL = 1000,
+		};
+		
 		wxNotebook* m_notebook1;
 		wxPanel* m_panel1;
 		wxStaticText* m_staticText2;
@@ -67,6 +72,9 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public wxDialog
 		wxStaticText* m_staticText16;
 		wxSpinCtrl* m_spinRepeatLabel;
 		
+		wxStaticText* m_staticText221;
+		wxSpinCtrl* m_spinAutoSaveInterval;
+		wxStaticText* m_staticText23;
 		wxCheckBox* m_checkShowGrid;
 		wxCheckBox* m_checkShowHiddenPins;
 		wxCheckBox* m_checkAutoPan;
@@ -101,7 +109,7 @@ class DIALOG_EESCHEMA_OPTIONS_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Schematic Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_EESCHEMA_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Schematic Editor Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_EESCHEMA_OPTIONS_BASE();
 	
 };

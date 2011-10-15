@@ -1,6 +1,31 @@
-/********************/
-/* basepcbframe.cpp */
-/********************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file basepcbframe.cpp
+ */
 
 #ifdef __GNUG__
 #pragma implementation
@@ -35,10 +60,6 @@ static const wxString DisplayModuleTextEntry( wxT( "DiModTx" ) );
 static const wxString FastGrid1Entry( wxT( "FastGrid1" ) );
 static const wxString FastGrid2Entry( wxT( "FastGrid2" ) );
 
-
-/****************************/
-/* class PCB_BASE_FRAME */
-/****************************/
 
 BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
@@ -459,12 +480,6 @@ void PCB_BASE_FRAME::unitsChangeRefresh()
 }
 
 
-/**
- * Load PCB base frame specific configuration settings.
- *
- * Don't forget to call this base method from any derived classes or the
- * settings will not get loaded.
- */
 void PCB_BASE_FRAME::LoadSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
@@ -509,12 +524,6 @@ void PCB_BASE_FRAME::LoadSettings()
 }
 
 
-/**
- * Save PCB base frame specific configuration settings.
- *
- * Don't forget to call this base method from any derived classes or the
- * settings will not get saved.
- */
 void PCB_BASE_FRAME::SaveSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
@@ -535,20 +544,11 @@ void PCB_BASE_FRAME::SaveSettings()
 }
 
 
-/**
- * Function OnModify
- * Must be called after a schematic change
- * in order to set the "modify" flag of the current screen
- * and update the date in frame reference
- * do not forget to call this basic OnModify function to update info
- * in derived OnModify functions
- */
 void PCB_BASE_FRAME::OnModify( )
 {
-    GetScreen()->SetModify( );
-
-    wxString       date = GenDate();
-    GetScreen()->m_Date = date;
+    GetScreen()->SetModify();
+    GetScreen()->SetSave();
+    GetScreen()->m_Date = GenDate();
 }
 
 

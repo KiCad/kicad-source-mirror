@@ -90,9 +90,6 @@ public:
     wxString              m_UserLibraryPath;
     wxArrayString         m_ComponentLibFiles;
 
-protected:
-    TEMPLATES             m_TemplateFieldNames;
-
 private:
     wxString              m_DefaultSchematicFileName;
     int m_TextFieldSize;
@@ -126,6 +123,23 @@ private:
     static wxPoint        m_lastSheetPinPosition;  ///< Last sheet pin position.
     static int            m_lastSheetPinEdge;      ///< Last sheet edge a sheet pin was placed.
 
+protected:
+    TEMPLATES             m_TemplateFieldNames;
+
+    /**
+     * Function doAutoSave
+     * saves the schematic files that have been modified and not yet saved.
+     *
+     * @return true if the auto save was successful otherwise false.
+     */
+    virtual bool doAutoSave();
+
+    /**
+     * Function autoSaveRequired
+     * returns true if the schematic has been modified.
+     */
+    virtual bool isAutoSaveRequired() const;
+
 
 public:
     SCH_EDIT_FRAME( wxWindow* father,
@@ -135,13 +149,13 @@ public:
 
     ~SCH_EDIT_FRAME();
 
-    void             OnCloseWindow( wxCloseEvent& Event );
-    void             Process_Special_Functions( wxCommandEvent& event );
-    void             OnColorConfig( wxCommandEvent& aEvent );
-    void             Process_Config( wxCommandEvent& event );
-    void             OnSelectTool( wxCommandEvent& aEvent );
+    void OnCloseWindow( wxCloseEvent& Event );
+    void Process_Special_Functions( wxCommandEvent& event );
+    void OnColorConfig( wxCommandEvent& aEvent );
+    void Process_Config( wxCommandEvent& event );
+    void OnSelectTool( wxCommandEvent& aEvent );
 
-    void             GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
+    void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
     /**
      * Function GetProjectFileParameters
@@ -240,18 +254,17 @@ public:
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings( void );
 
-    void             LoadSettings();
-    void             SaveSettings();
+    void LoadSettings();
+    void SaveSettings();
 
-    void             RedrawActiveWindow( wxDC* DC, bool EraseBg );
+    void RedrawActiveWindow( wxDC* DC, bool EraseBg );
 
-    void             CreateScreens();
-    void             ReCreateHToolbar();
-    void             ReCreateVToolbar();
-    void             ReCreateOptToolbar();
-    void             ReCreateMenuBar();
-    void             OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
-                               EDA_ITEM* aItem = NULL );
+    void CreateScreens();
+    void ReCreateHToolbar();
+    void ReCreateVToolbar();
+    void ReCreateOptToolbar();
+    void ReCreateMenuBar();
+    void OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
     /**
      * Function OnModify
@@ -259,21 +272,21 @@ public:
      * in order to set the "modify" flag of the current screen
      * and update the date in frame reference
      */
-    void             OnModify();
+    void OnModify();
 
-    SCH_SHEET_PATH*  GetSheet();
+    SCH_SHEET_PATH* GetSheet();
 
-    SCH_SCREEN*      GetScreen() const;
+    SCH_SCREEN* GetScreen() const;
 
     virtual wxString GetScreenDesc();
 
-    void             InstallConfigFrame( wxCommandEvent& event );
+    void InstallConfigFrame( wxCommandEvent& event );
 
-    void             OnLeftClick( wxDC* aDC, const wxPoint& aPosition );
-    void             OnLeftDClick( wxDC* aDC, const wxPoint& aPosition );
-    bool             OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu );
-    void             OnSelectOptionToolbar( wxCommandEvent& event );
-    double           BestZoom();
+    void OnLeftClick( wxDC* aDC, const wxPoint& aPosition );
+    void OnLeftDClick( wxDC* aDC, const wxPoint& aPosition );
+    bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu );
+    void OnSelectOptionToolbar( wxCommandEvent& event );
+    double BestZoom();
 
     /**
      * Function LocateAndShowItem
@@ -326,17 +339,17 @@ public:
      */
     bool DeleteItemAtCrossHair( wxDC* aDC );
 
-    SCH_ITEM*        FindComponentAndItem( const wxString& component_reference,
-                                           bool            Find_in_hierarchy,
-                                           int             SearchType,
-                                           const wxString& text_to_find,
-                                           bool            mouseWarp );
+    SCH_ITEM* FindComponentAndItem( const wxString& component_reference,
+                                    bool            Find_in_hierarchy,
+                                    int             SearchType,
+                                    const wxString& text_to_find,
+                                    bool            mouseWarp );
 
     /* Cross probing with Pcbnew */
-    void         SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*  LibItem );
+    void SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*  LibItem );
 
     /* netlist generation */
-    void         BuildNetListBase();
+    void BuildNetListBase();
 
     /**
      * Function CreateNetlist
@@ -352,10 +365,10 @@ public:
      * @param aUsePrefix Prefix reference designator with an 'X' for spice output.
      * @return true if success.
      */
-    bool         CreateNetlist( int             aFormat,
-                                const wxString& aFullFileName,
-                                bool            aUse_netnames,
-                                bool            aUsePrefix );
+    bool CreateNetlist( int             aFormat,
+                        const wxString& aFullFileName,
+                        bool            aUse_netnames,
+                        bool            aUsePrefix );
 
     /**
      * Function  WriteNetListFile
@@ -367,10 +380,10 @@ public:
      *   bool aUse_netnames is used only for Spice netlist
      * @return true if success.
      */
-    bool         WriteNetListFile( int             aFormat,
-                                   const wxString& aFullFileName,
-                                   bool            aUse_netnames,
-                                   bool aUsePrefix );
+    bool WriteNetListFile( int             aFormat,
+                           const wxString& aFullFileName,
+                           bool            aUse_netnames,
+                           bool aUsePrefix );
 
     /**
      * Function DeleteAnnotation
@@ -432,7 +445,7 @@ public:
      * Function DisplayCurrentSheet
      * draws the current sheet on the display.
      */
-    void         DisplayCurrentSheet();
+    void DisplayCurrentSheet();
 
     /**
      * Function GetUniqueFilenameForCurrentSheet
@@ -445,7 +458,7 @@ public:
      * Name is &ltroot sheet filename&gt-&ltsheet path&gt and has no extension.
      * However if filename is too long name is &ltsheet filename&gt-&ltsheet number&gt
      */
-    wxString     GetUniqueFilenameForCurrentSheet();
+    wxString GetUniqueFilenameForCurrentSheet();
 
     /**
      * Function SetSheetNumberAndCount
@@ -453,41 +466,41 @@ public:
      * must be called after a delete or add sheet command, and when entering
      * a sheet
      */
-    void         SetSheetNumberAndCount();
+    void SetSheetNumberAndCount();
 
     /**
      * Show the print dialog
      */
-    void         OnPrint( wxCommandEvent& event );
+    void OnPrint( wxCommandEvent& event );
 
     wxPageSetupDialogData& GetPageSetupData() { return m_pageSetupData; }
 
-    void             SetPreviewPosition( const wxPoint& aPoint ) { m_previewPosition = aPoint; }
-    void             SetPreviewSize( const wxSize& aSize ) { m_previewSize = aSize; }
+    void SetPreviewPosition( const wxPoint& aPoint ) { m_previewPosition = aPoint; }
+    void SetPreviewSize( const wxSize& aSize ) { m_previewSize = aSize; }
     const wxPoint& GetPreviewPosition() { return m_previewPosition; }
-    const wxSize&  GetPreviewSize() { return m_previewSize; }
+    const wxSize& GetPreviewSize() { return m_previewSize; }
 
-    void             SetPrintDialogPosition( const wxPoint& aPoint )
+    void SetPrintDialogPosition( const wxPoint& aPoint )
     {
         m_printDialogPosition = aPoint;
     }
 
 
-    void             SetPrintDialogSize( const wxSize& aSize ) { m_printDialogSize = aSize; }
+    void SetPrintDialogSize( const wxSize& aSize ) { m_printDialogSize = aSize; }
     const wxPoint& GetPrintDialogPosition() { return m_printDialogPosition; }
-    const wxSize&  GetPrintDialogSize() { return m_printDialogSize; }
+    const wxSize& GetPrintDialogSize() { return m_printDialogSize; }
 
-    bool             GetPrintMonochrome() { return m_printMonochrome; }
-    void             SetPrintMonochrome( bool aMonochrome ) { m_printMonochrome = aMonochrome; }
-    bool             GetPrintSheetReference() { return m_printSheetReference; }
-    void             SetPrintSheetReference( bool aShow ) { m_printSheetReference = aShow; }
-    void             SVG_Print( wxCommandEvent& event );
+    bool GetPrintMonochrome() { return m_printMonochrome; }
+    void SetPrintMonochrome( bool aMonochrome ) { m_printMonochrome = aMonochrome; }
+    bool GetPrintSheetReference() { return m_printSheetReference; }
+    void SetPrintSheetReference( bool aShow ) { m_printSheetReference = aShow; }
+    void SVG_Print( wxCommandEvent& event );
 
     // Plot functions:
-    void            ToPlot_PS( wxCommandEvent& event );
-    void            ToPlot_HPGL( wxCommandEvent& event );
-    void            ToPlot_DXF( wxCommandEvent& event );
-    void            ToPostProcess( wxCommandEvent& event );
+    void ToPlot_PS( wxCommandEvent& event );
+    void ToPlot_HPGL( wxCommandEvent& event );
+    void ToPlot_DXF( wxCommandEvent& event );
+    void ToPostProcess( wxCommandEvent& event );
 
     // read and save files
     void Save_File( wxCommandEvent& event );
@@ -527,7 +540,7 @@ public:
      */
     bool LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFileName );
 
-    bool            ReadInputStuffFile();
+    bool ReadInputStuffFile();
 
     /**
      * Function ProcessStuffFile
@@ -545,7 +558,7 @@ public:
      * @param aSetFieldsAttributeToVisible = true to set the footprint field flag to visible
      * @return bool - true if success, else true.
      */
-    bool            ProcessStuffFile( FILE* aFilename, bool  aSetFieldsAttributeToVisible );
+    bool ProcessStuffFile( FILE* aFilename, bool  aSetFieldsAttributeToVisible );
 
     /**
      * Function SaveEEFile
@@ -554,61 +567,63 @@ public:
      * @param aScreen A pointer to the SCH_SCREEN object to save.  A NULL pointer saves
      *                the current screen.
      * @param aSaveType Controls how the file is to be saved.
+     * @param aCreateBackupFile Creates a back of the file associated with \a aScreen
+     *                          if true.  Helper definitions #CREATE_BACKUP_FILE and
+     *                          #NO_BACKUP_FILE are defined for improved code readability.
      * @return True if the file has been saved.
      */
-    bool SaveEEFile( SCH_SCREEN* aScreen, int aSaveType );
+    bool SaveEEFile( SCH_SCREEN* aScreen,
+                     int         aSaveType,
+                     bool        aCreateBackupFile = CREATE_BACKUP_FILE );
 
     // General search:
 
 private:
-    void            OnMoveItem( wxCommandEvent& aEvent );
-    void            OnExit( wxCommandEvent& event );
-    void            OnAnnotate( wxCommandEvent& event );
-    void            OnErc( wxCommandEvent& event );
-    void            OnCreateNetlist( wxCommandEvent& event );
-    void            OnCreateBillOfMaterials( wxCommandEvent& event );
-    void            OnFindItems( wxCommandEvent& event );
-    void            OnFindDialogClose( wxFindDialogEvent& event );
-    void            OnFindDrcMarker( wxFindDialogEvent& event );
-    void            OnFindCompnentInLib( wxFindDialogEvent& event );
-    void            OnFindSchematicItem( wxFindDialogEvent& event );
-    void            OnLoadFile( wxCommandEvent& event );
-    void            OnLoadStuffFile( wxCommandEvent& event );
-    void            OnNewProject( wxCommandEvent& event );
-    void            OnLoadProject( wxCommandEvent& event );
-    void            OnOpenPcbnew( wxCommandEvent& event );
-    void            OnOpenCvpcb( wxCommandEvent& event );
-    void            OnOpenLibraryViewer( wxCommandEvent& event );
-    void            OnOpenLibraryEditor( wxCommandEvent& event );
-    void            OnSetOptions( wxCommandEvent& event );
-    void            OnCancelCurrentCommand( wxCommandEvent& aEvent );
+    void OnMoveItem( wxCommandEvent& aEvent );
+    void OnExit( wxCommandEvent& event );
+    void OnAnnotate( wxCommandEvent& event );
+    void OnErc( wxCommandEvent& event );
+    void OnCreateNetlist( wxCommandEvent& event );
+    void OnCreateBillOfMaterials( wxCommandEvent& event );
+    void OnFindItems( wxCommandEvent& event );
+    void OnFindDialogClose( wxFindDialogEvent& event );
+    void OnFindDrcMarker( wxFindDialogEvent& event );
+    void OnFindCompnentInLib( wxFindDialogEvent& event );
+    void OnFindSchematicItem( wxFindDialogEvent& event );
+    void OnLoadFile( wxCommandEvent& event );
+    void OnLoadStuffFile( wxCommandEvent& event );
+    void OnNewProject( wxCommandEvent& event );
+    void OnLoadProject( wxCommandEvent& event );
+    void OnOpenPcbnew( wxCommandEvent& event );
+    void OnOpenCvpcb( wxCommandEvent& event );
+    void OnOpenLibraryViewer( wxCommandEvent& event );
+    void OnOpenLibraryEditor( wxCommandEvent& event );
+    void OnSetOptions( wxCommandEvent& event );
+    void OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
     void OnSelectItem( wxCommandEvent& aEvent );
 
     /* edition events functions */
-    void            OnCopySchematicItemRequest( wxCommandEvent& event );
+    void OnCopySchematicItemRequest( wxCommandEvent& event );
 
     /* User interface update event handlers. */
-    void            OnUpdateBlockSelected( wxUpdateUIEvent& event );
-    void            OnUpdatePaste( wxUpdateUIEvent& event );
-    void            OnUpdateHiddenPins( wxUpdateUIEvent& event );
-    void            OnUpdateBusOrientation( wxUpdateUIEvent& event );
-    void            OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
+    void OnUpdateBlockSelected( wxUpdateUIEvent& event );
+    void OnUpdatePaste( wxUpdateUIEvent& event );
+    void OnUpdateHiddenPins( wxUpdateUIEvent& event );
+    void OnUpdateBusOrientation( wxUpdateUIEvent& event );
+    void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
 
     /**
      * Function SetLanguage
      * called on a language menu selection
      */
-    void            SetLanguage( wxCommandEvent& event );
+    void SetLanguage( wxCommandEvent& event );
 
     // Bus Entry
-    SCH_BUS_ENTRY*  CreateBusEntry( wxDC* DC, int entry_type );
-    void            SetBusEntryShape( wxDC*          DC,
-                                      SCH_BUS_ENTRY* BusEntry,
-                                      int            entry_type );
-    int             GetBusEntryShape( SCH_BUS_ENTRY* BusEntry );
-    void            StartMoveBusEntry( SCH_BUS_ENTRY* DrawLibItem,
-                                       wxDC*          DC );
+    SCH_BUS_ENTRY* CreateBusEntry( wxDC* DC, int entry_type );
+    void SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int entry_type );
+    int GetBusEntryShape( SCH_BUS_ENTRY* BusEntry );
+    void StartMoveBusEntry( SCH_BUS_ENTRY* DrawLibItem, wxDC* DC );
 
     /**
      * Function AddNoConnect
@@ -620,13 +635,13 @@ private:
     SCH_NO_CONNECT* AddNoConnect( wxDC* aDC, const wxPoint& aPosition );
 
     // Junction
-    SCH_JUNCTION*   AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = FALSE );
+    SCH_JUNCTION* AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = FALSE );
 
     // Text, label, glabel
-    SCH_TEXT*       CreateNewText( wxDC* aDC, int aType );
-    void            EditSchematicText( SCH_TEXT* TextStruct );
-    void            ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC );
-    void            MoveText( SCH_TEXT* aTextItem, wxDC* aDC );
+    SCH_TEXT* CreateNewText( wxDC* aDC, int aType );
+    void EditSchematicText( SCH_TEXT* TextStruct );
+    void ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC );
+    void MoveText( SCH_TEXT* aTextItem, wxDC* aDC );
 
     /**
      * Function OnCovertTextType
@@ -637,21 +652,21 @@ private:
     void OnConvertTextType( wxCommandEvent& aEvent );
 
     // Wire, Bus
-    void            BeginSegment( wxDC* DC, int type );
-    void            EndSegment( wxDC* DC );
-    void            DeleteCurrentSegment( wxDC* DC );
-    void            DeleteConnection( bool DeleteFullConnection );
+    void BeginSegment( wxDC* DC, int type );
+    void EndSegment( wxDC* DC );
+    void DeleteCurrentSegment( wxDC* DC );
+    void DeleteConnection( bool DeleteFullConnection );
 
     // graphic lines
-    void            Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void            Drawing_SetNewWidth( DRAWSEGMENT* DrawSegm, wxDC* DC );
-    void            Delete_Drawings_All_Layer( DRAWSEGMENT* Segment, wxDC* DC );
-    DRAWSEGMENT*    Begin_Edge( DRAWSEGMENT* Segment, wxDC* DC );
+    void Edge( DRAWSEGMENT* Segment, wxDC* DC );
+    void SetNewWidth( DRAWSEGMENT* DrawSegm, wxDC* DC );
+    void Layer( DRAWSEGMENT* Segment, wxDC* DC );
+    DRAWSEGMENT* Begin_Edge( DRAWSEGMENT* Segment, wxDC* DC );
 
     // Images:
-    SCH_BITMAP*     CreateNewImage( wxDC* aDC );
-    void            MoveImage( SCH_BITMAP* aItem, wxDC* aDC );
-    void            RotateImage( SCH_BITMAP* aItem );
+    SCH_BITMAP* CreateNewImage( wxDC* aDC );
+    void MoveImage( SCH_BITMAP* aItem, wxDC* aDC );
+    void RotateImage( SCH_BITMAP* aItem );
     /**
      * Function MirrorImage
      * Mirror a bitmap
@@ -659,18 +674,18 @@ private:
      * @param Is_X_axis = true to mirror relative to Horizontal axis
      *                      false to mirror relative to vertical axis
      */
-    void            MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis );
-    void            EditImage( SCH_BITMAP* aItem );
+    void MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis );
+    void EditImage( SCH_BITMAP* aItem );
 
     // Hierarchical Sheet & PinSheet
-    void            InstallHierarchyFrame( wxDC* DC, wxPoint& pos );
-    SCH_SHEET*      CreateSheet( wxDC* DC );
-    void            ReSizeSheet( SCH_SHEET* Sheet, wxDC* DC );
+    void InstallHierarchyFrame( wxDC* DC, wxPoint& pos );
+    SCH_SHEET* CreateSheet( wxDC* DC );
+    void ReSizeSheet( SCH_SHEET* Sheet, wxDC* DC );
 
     /**
      * Use the component viewer to select component to import into schematic.
      */
-    wxString        SelectFromLibBrowser( void );
+    wxString SelectFromLibBrowser( void );
 
 public:
     /**
@@ -703,7 +718,7 @@ public:
     int GetLastSheetPinEdge() const { return m_lastSheetPinEdge; }
 
 private:
-    void            StartMoveSheet( SCH_SHEET* sheet, wxDC* DC );
+    void StartMoveSheet( SCH_SHEET* sheet, wxDC* DC );
 
     /**
      * Function CreateSheetPin
@@ -758,7 +773,7 @@ private:
                                    const wxString& libname,
                                    wxArrayString&  List,
                                    bool            UseLibBrowser );
-    void           StartMovePart( SCH_COMPONENT* DrawLibItem, wxDC* DC );
+    void StartMovePart( SCH_COMPONENT* DrawLibItem, wxDC* DC );
 
     /**
      * Function EditComponent
@@ -772,15 +787,15 @@ public:
     void OnChangeComponentOrientation( wxCommandEvent& aEvent );
 
 private:
-    void           OnSelectUnit( wxCommandEvent& aEvent );
-    void           ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC );
-    void           SetInitCmp( SCH_COMPONENT* DrawComponent, wxDC* DC );
+    void OnSelectUnit( wxCommandEvent& aEvent );
+    void ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC );
+    void SetInitCmp( SCH_COMPONENT* DrawComponent, wxDC* DC );
 
     void MoveField( SCH_FIELD* aField, wxDC* aDC );
     void EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC );
     void RotateField( SCH_FIELD* aField, wxDC* aDC );
 
-    void           PasteListOfItems( wxDC* DC );
+    void PasteListOfItems( wxDC* DC );
 
     /* Undo - redo */
 public:
@@ -848,7 +863,7 @@ private:
      *  - Get an old version of the schematic from Redo list
      *  @return none
      */
-    void     GetSchematicFromRedoList( wxCommandEvent& event );
+    void GetSchematicFromRedoList( wxCommandEvent& event );
 
     /**
      * Function GetSchematicFromUndoList
@@ -856,7 +871,7 @@ private:
      *  - Save the current schematic in Redo list
      *  - Get an old version of the schematic from Undo list
      */
-    void     GetSchematicFromUndoList( wxCommandEvent& event );
+    void GetSchematicFromUndoList( wxCommandEvent& event );
 
     /**
      * Function copyBlockItems
@@ -875,11 +890,11 @@ private:
     void addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunction );
 
 public:
-    void     Key( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
+    void Key( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
     /* Block operations. */
-    void     InitBlockPasteInfos();
-    void     HandleBlockEndByPopUp( int Command, wxDC* DC );
+    void InitBlockPasteInfos();
+    void HandleBlockEndByPopUp( int Command, wxDC* DC );
 
     /**
      * Function ReturnBlockCommand
@@ -912,7 +927,7 @@ public:
      */
     virtual bool HandleBlockEnd( wxDC* DC );
 
-    void     RepeatDrawItem( wxDC* DC );
+    void RepeatDrawItem( wxDC* DC );
 
     void SetRepeatItem( SCH_ITEM* aItem ) { m_itemToRepeat = aItem; }
 

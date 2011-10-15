@@ -189,6 +189,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetRepeatHorizontal( g_RepeatStep.x );
     dlg.SetRepeatVertical( g_RepeatStep.y );
     dlg.SetRepeatLabel( g_RepeatDeltaLabel );
+    dlg.SetAutoSaveInterval( GetAutoSaveInterval() / 60 );
     dlg.SetShowGrid( IsGridVisible() );
     dlg.SetShowHiddenPins( m_ShowAllPins );
     dlg.SetEnableAutoPan( DrawPanel->m_AutoPAN_Enable );
@@ -219,6 +220,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     g_RepeatStep.x = dlg.GetRepeatHorizontal();
     g_RepeatStep.y = dlg.GetRepeatVertical();
     g_RepeatDeltaLabel = dlg.GetRepeatLabel();
+    SetAutoSaveInterval( dlg.GetAutoSaveInterval() * 60 );
     SetGridVisibility( dlg.GetShowGrid() );
     m_ShowAllPins = dlg.GetShowHiddenPins();
     DrawPanel->m_AutoPAN_Enable = dlg.GetEnableAutoPan();

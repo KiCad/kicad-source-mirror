@@ -1,10 +1,32 @@
-/********************************************************/
-/* base_screen.cpp - BASE_SCREEN object implementation. */
-/********************************************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
+/**
+ * @file base_screen.cpp
+ * @brief BASE_SCREEN object implementation.
+ */
 
 #include "fctsys.h"
 #include "common.h"
@@ -19,12 +41,11 @@
 BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_ITEM( aType )
 {
     m_drawList         = NULL;   /* Draw items list */
-    m_UndoRedoCountMax = 10;     /* undo/Redo command Max depth, 10 is a
-                                  * reasonable value */
+    m_UndoRedoCountMax = 10;     /* undo/Redo command Max depth, 10 is a reasonable value */
     m_FirstRedraw      = TRUE;
     m_ScreenNumber     = 1;
     m_NumberOfScreen   = 1;  /* Hierarchy: Root: ScreenNumber = 1 */
-     m_Zoom            = 32.0;
+    m_Zoom             = 32.0;
     m_Grid.m_Size      = wxRealPoint( 50, 50 );   /* Default grid size */
     m_Grid.m_Id        = ID_POPUP_GRID_LEVEL_50;
     m_Center           = true;
@@ -61,8 +82,8 @@ void BASE_SCREEN::InitDatas()
 
     SetCurItem( NULL );
 
-    m_FlagModified   = 0;   // Set when any change is made on broad
-    m_FlagSave = 1;         // Used in auto save: set when an auto save is made
+    m_FlagModified = false;   // Set when any change is made on broad.
+    m_FlagSave = false;       // Used in auto save set when an auto save is required.
 }
 
 
@@ -450,8 +471,6 @@ void BASE_SCREEN::SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGr
 }
 
 
-/* free the undo and the redo lists
- */
 void BASE_SCREEN::ClearUndoRedoList()
 {
     ClearUndoORRedoList( m_UndoList );
@@ -459,9 +478,6 @@ void BASE_SCREEN::ClearUndoRedoList()
 }
 
 
-/* Put aNewitem in top of undo list
- *  Deletes old items if > count max.
- */
 void BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
 {
     m_UndoList.PushCommand( aNewitem );
@@ -515,13 +531,7 @@ void BASE_SCREEN::InsertItem( EDA_ITEMS::iterator aIter, EDA_ITEM* aItem )
 
 
 #if defined(DEBUG)
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
+
 void BASE_SCREEN::Show( int nestLevel, std::ostream& os )
 {
     EDA_ITEM* item = m_drawList;
@@ -536,4 +546,5 @@ void BASE_SCREEN::Show( int nestLevel, std::ostream& os )
 
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
+
 #endif

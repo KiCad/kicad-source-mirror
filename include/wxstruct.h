@@ -60,6 +60,12 @@
 
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
 
+
+// Readability helper definitions for creating backup files.
+#define CREATE_BACKUP_FILE    true
+#define NO_BACKUP_FILE        false
+
+
 class EDA_ITEM;
 class EDA_RECT;
 class EDA_DRAW_PANEL;
@@ -98,6 +104,10 @@ enum id_toolbar {
     TOOLBAR_OPTION,         // Left vertical Toolbar (option toolbar
     TOOLBAR_AUX             // Secondary horizontal Toolbar
 };
+
+
+/// Custom trace mask to enable and disable auto save tracing.
+extern const wxChar* traceAutoSave;
 
 
 /**
@@ -140,11 +150,11 @@ protected:
     void onAutoSaveTimer( wxTimerEvent& aEvent );
 
     /**
-     * Function isModified
-     * returns the modification status of the application.  Override this function if
+     * Function autoSaveRequired
+     * returns the auto save status of the application.  Override this function if
      * your derived frame supports automatic file saving.
      */
-    virtual bool isModified() const { return false; }
+    virtual bool isAutoSaveRequired() const { return false; }
 
     /**
      * Function doAutoSave
@@ -328,6 +338,24 @@ public:
      * @return False if \a aFileName cannot be written.
      */
     bool IsWritable( const wxFileName& aFileName );
+
+    /**
+     * Function CheckForAutoSaveFile
+     * checks if an auto save file exists for \a aFileName and takes the appropriate
+     * action depending on the user input.
+     * <p>
+     * If an auto save file exists for \a aFileName, the user is prompted if they wish
+     * to replace file \a aFileName with the auto saved file.  If the user chooses to
+     * replace the file, the backup file of \a aFileName is removed, \a aFileName is
+     * renamed to the backup file name, and the auto save file is renamed to \a aFileName.
+     * If user chooses to keep the existing version of \a aFileName, the auto save file
+     * is removed.
+     * </p>
+     * @param aFileName A wxFileName object containing the file name to check.
+     * @param aBackupFileExtension A wxString object containing the backup file extension
+     *                             used to create the backup file name.
+     */
+    void CheckForAutoSaveFile( const wxFileName& aFileName, const wxString& aBackupFileExtension );
 };
 
 

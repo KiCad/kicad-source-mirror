@@ -1,6 +1,31 @@
-/****************************/
-/*  EESCHEMA - files-io.cpp */
-/****************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file files-io.cpp
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
@@ -16,7 +41,7 @@
 #include "sch_sheet.h"
 
 
-bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType )
+bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreateBackupFile )
 {
     wxString msg;
     wxFileName schematicFileName, backupFileName;
@@ -33,23 +58,28 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType )
     {
     case FILE_SAVE_AS:
         schematicFileName = aScreen->GetFileName();
-        backupFileName = schematicFileName;
 
-        if( !IsWritable( schematicFileName ) )
-            return false;
-
-        /* Rename the old file to a '.bak' one: */
-        if( schematicFileName.FileExists() )
+        if( aCreateBackupFile )
         {
-            backupFileName.SetExt( wxT( "bak" ) );
-            wxRemoveFile( backupFileName.GetFullPath() );
+            backupFileName = schematicFileName;
 
-            if( !wxRenameFile( schematicFileName.GetFullPath(), backupFileName.GetFullPath() ) )
+            if( !IsWritable( schematicFileName ) )
+                return false;
+
+            /* Rename the old file to a '.bak' one: */
+            if( schematicFileName.FileExists() )
             {
-                DisplayError( this, _( "Could not save backup of file <" ) +
-                              schematicFileName.GetFullPath() + wxT( ">." ) );
+                backupFileName.SetExt( g_SchematicBackupFileExtension );
+                wxRemoveFile( backupFileName.GetFullPath() );
+
+                if( !wxRenameFile( schematicFileName.GetFullPath(), backupFileName.GetFullPath() ) )
+                {
+                    DisplayError( this, _( "Could not save backup of file <" ) +
+                                  schematicFileName.GetFullPath() + wxT( ">." ) );
+                }
             }
         }
+
         break;
 
     case FILE_SAVE_NEW:
@@ -76,6 +106,9 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType )
         break;
     }
 
+    wxLogTrace( traceAutoSave,
+                wxT( "Saving file <" ) + schematicFileName.GetFullPath() + wxT( ">" ) );
+
     if( ( f = wxFopen( schematicFileName.GetFullPath(), wxT( "wt" ) ) ) == NULL )
     {
         msg = _( "Failed to create file " ) + schematicFileName.GetFullPath();
@@ -94,6 +127,20 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType )
     }
     else
     {
+        // Delete auto save file on successful save.
+        wxFileName autoSaveFileName = schematicFileName;
+        autoSaveFileName.SetName( wxT( "$" ) + schematicFileName.GetName() );
+
+        if( autoSaveFileName.FileExists() )
+        {
+            wxLogTrace( traceAutoSave,
+                        wxT( "Removing auto save file <" ) + autoSaveFileName.GetFullPath() +
+                        wxT( ">" ) );
+
+            wxRemoveFile( autoSaveFileName.GetFullPath() );
+        }
+
+        aScreen->ClrSave();
         aScreen->ClrModify();
         wxString msg;
         msg.Printf( _( "File %s saved" ), GetChars( aScreen->GetFileName() ) );
@@ -284,7 +331,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
         Zoom_Automatique( false );
         msg.Printf( _( "File <%s> not found." ),
                     GetChars( g_RootSheet->GetScreen()->GetFileName() ) );
-        DisplayInfoMessage( this, msg, 0 );
+        DisplayInfoMessage( this, msg );
         return false;
     }
 
@@ -319,7 +366,6 @@ void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
 
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
-        D( printf( "SaveEEFile, %s\n", TO_UTF8( screen->GetFileName() ) ); )
         SaveEEFile( screen, FILE_SAVE_AS );
     }
 
@@ -327,4 +373,49 @@ void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
     fn.SetName( cachename );
     fn.SetExt( CompLibFileExtension );
     LibArchive( this, fn.GetFullPath() );
+}
+
+
+bool SCH_EDIT_FRAME::doAutoSave()
+{
+    wxFileName tmpFileName = g_RootSheet->GetFileName();
+    wxFileName fn = tmpFileName;
+    wxFileName  tmp;
+    SCH_SCREENS screens;
+    bool autoSaveOk = true;
+
+    tmp.AssignDir( fn.GetPath() );
+
+    if( !IsWritable( tmp ) )
+        return false;
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    {
+        // Only create auto save files for the schematics that have been modified.
+        if( !screen->IsSave() )
+            continue;
+
+        tmpFileName = fn = screen->GetFileName();
+
+        // Auto save file name is the normal file name prefixed with $.
+        fn.SetName( wxT( "$" ) + fn.GetName() );
+
+        screen->SetFileName( fn.GetFullPath() );
+
+        if( SaveEEFile( screen, FILE_SAVE_AS, NO_BACKUP_FILE ) )
+        {
+            screen->SetModify();
+        }
+        else
+        {
+            autoSaveOk = false;
+        }
+
+        screen->SetFileName( tmpFileName.GetFullPath() );
+    }
+
+    if( autoSaveOk )
+        m_autoSaveState = false;
+
+    return autoSaveOk;
 }

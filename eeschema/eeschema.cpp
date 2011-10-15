@@ -39,6 +39,7 @@ wxString       g_NetCmpExtBuffer( wxT( "cmp" ) );
 
 const wxString SymbolFileExtension( wxT( "sym" ) );
 const wxString CompLibFileExtension( wxT( "lib" ) );
+const wxString g_SchematicBackupFileExtension( wxT( "bak" ) );
 
 const wxString SymbolFileWildcard( wxT( "KiCad drawing symbol file (*.sym)|*.sym" ) );
 const wxString CompLibFileWildcard( wxT( "KiCad component library file (*.lib)|*.lib" ) );

@@ -48,7 +48,7 @@
 #include "class_board.h"
 
 
-#define BACKUP_FILE_EXT wxT( "000" )
+static const wxString pcbBackupFileExtension(  wxT( "000" ) );
 
 
 void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
@@ -96,7 +96,7 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
         else
         {
             fn = GetScreen()->GetFileName();
-            fn.SetExt( BACKUP_FILE_EXT );
+            fn.SetExt( pcbBackupFileExtension );
         }
 
         if( !fn.FileExists() )
@@ -195,54 +195,7 @@ the changes?" ) ) )
     if( !aAppend )
         Clear_Pcb( false );     // pass false since we prompted above for a modified board
 
-    // Check for board auto save file.
-    wxFileName autoSaveFileName = fileName;
-
-    autoSaveFileName.SetName( wxT( "$" ) + autoSaveFileName.GetName() );
-
-    if( autoSaveFileName.FileExists() )
-    {
-        int response = wxMessageBox( _( "Well this is embarrassing!  It appears that the last \
-time you were editing this board the file was not save properly.  Do you wish to restore the \
-last edits you made?" ), wxGetApp().GetAppName(), wxYES_NO | wxICON_QUESTION, this );
-
-        // Make a backup of the current board file, delete the board file, and copy
-        // the auto save file to the board file name.
-        if( response == wxYES )
-        {
-            /* Get the backup file name */
-            wxFileName backupFileName = fileName;
-            backupFileName.SetExt( BACKUP_FILE_EXT );
-
-            /* If an old backup file exists, delete it.  If an old board file exists, rename
-             * it to the backup file name
-            */
-            if( fileName.FileExists() )
-            {
-                /* rename the "old" file" from xxx.brd to xxx.000 */
-                if( backupFileName.FileExists() )    /* Remove the old file xxx.000 (if exists) */
-                    wxRemoveFile( backupFileName.GetFullPath() );
-
-                if( !wxRenameFile( fileName.GetFullPath(), backupFileName.GetFullPath() ) )
-                {
-                    msg = _( "Could not create backup file " ) + backupFileName.GetFullPath();
-                    DisplayError( this, msg );
-                }
-            }
-
-            if( !wxRenameFile( autoSaveFileName.GetFullPath(), fileName.GetFullPath() ) )
-            {
-                wxMessageBox( _( "The auto save file could not be renamed to the board file \
-name." ),
-                              wxGetApp().GetAppName(), wxOK | wxICON_EXCLAMATION, this );
-            }
-        }
-        else
-        {
-            // Remove the auto save file when using the board file as is.
-            wxRemoveFile( autoSaveFileName.GetFullPath() );
-        }
-    }
+    CheckForAutoSaveFile( fileName, pcbBackupFileExtension );
 
     GetScreen()->SetFileName( fileName.GetFullPath() );
 
@@ -418,7 +371,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     {
         /* Get the backup file name */
         backupFileName = pcbFileName;
-        backupFileName.SetExt( BACKUP_FILE_EXT );
+        backupFileName.SetExt( pcbBackupFileExtension );
 
         /* If an old backup file exists, delete it.  If an old board file exists, rename
          * it to the backup file name
@@ -488,6 +441,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     ClearMsgPanel();
     AppendMsgPanel( upperTxt, lowerTxt, CYAN );
 
+    GetScreen()->ClrSave();
     GetScreen()->ClrModify();
     return true;
 }
@@ -501,12 +455,15 @@ bool PCB_EDIT_FRAME::doAutoSave()
     // Auto save file name is the normal file name prepended with $.
     fn.SetName( wxT( "$" ) + fn.GetName() );
 
+    wxLogTrace( traceAutoSave,
+                wxT( "Creating auto save file <" + fn.GetFullPath() ) + wxT( ">" ) );
+
     if( SavePcbFile( fn.GetFullPath(), NO_BACKUP_FILE ) )
     {
-        OnModify();
-        GetScreen()->SetSave();      // Set the flags m_FlagSave cleared by SetModify()
+        GetScreen()->SetModify();
         GetScreen()->SetFileName( tmpFileName.GetFullPath() );
         UpdateTitle();
+        m_autoSaveState = false;
         return true;
     }
 
