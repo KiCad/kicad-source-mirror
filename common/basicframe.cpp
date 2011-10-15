@@ -49,6 +49,9 @@
 #define DEFAULT_AUTO_SAVE_INTERVAL 600
 
 
+const wxChar* traceAutoSave = wxT( "KicadAutoSave" );
+
+/// Configuration file entry name for auto save interval.
 static const wxChar* entryAutoSaveInterval = wxT( "AutoSaveInterval" );
 
 
@@ -116,15 +119,17 @@ bool EDA_BASE_FRAME::ProcessEvent( wxEvent& aEvent )
     if( !wxFrame::ProcessEvent( aEvent ) )
         return false;
 
-    if( m_hasAutoSave && (m_autoSaveState != isModified()) && (m_autoSaveInterval > 0) )
+    if( m_hasAutoSave && (m_autoSaveState != isAutoSaveRequired()) && (m_autoSaveInterval > 0) )
     {
         if( !m_autoSaveState )
         {
+            wxLogTrace( traceAutoSave, wxT( "Starting auto save timer." ) );
             m_autoSaveTimer->Start( m_autoSaveInterval * 1000, wxTIMER_ONE_SHOT );
             m_autoSaveState = true;
         }
-        else
+        else if( m_autoSaveTimer->IsRunning() )
         {
+            wxLogTrace( traceAutoSave, wxT( "Stopping auto save timer." ) );
             m_autoSaveTimer->Stop();
             m_autoSaveState = false;
         }
@@ -568,4 +573,71 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
     }
 
     return true;
+}
+
+
+void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName,
+                                           const wxString&   aBackupFileExtension )
+{
+    wxCHECK_RET( aFileName.IsOk(), wxT( "Invalid file name!" ) );
+    wxCHECK_RET( !aBackupFileExtension.IsEmpty(), wxT( "Invalid backup file extension!" ) );
+
+    wxFileName autoSaveFileName = aFileName;
+
+    // Check for auto save file.
+    autoSaveFileName.SetName( wxT( "$" ) + aFileName.GetName() );
+
+    wxLogTrace( traceAutoSave,
+                wxT( "Checking for auto save file " ) + autoSaveFileName.GetFullPath() );
+
+    if( !autoSaveFileName.FileExists() )
+        return;
+
+    wxString msg;
+
+    msg.Printf( _( "Well this is potentially embarrassing!  It appears that the last time \
+you were editing the file <%s> it was not saved properly.  Do you wish to restore the last \
+edits you made?" ),
+                GetChars( aFileName.GetFullName() ) );
+
+    int response = wxMessageBox( msg, wxGetApp().GetAppName(), wxYES_NO | wxICON_QUESTION, this );
+
+    // Make a backup of the current file, delete the file, and rename the auto save file to
+    // the file name.
+    if( response == wxYES )
+    {
+        // Get the backup file name.
+        wxFileName backupFileName = aFileName;
+        backupFileName.SetExt( aBackupFileExtension );
+
+        // If an old backup file exists, delete it.  If an old copy of the file exists, rename
+        // it to the backup file name
+        if( aFileName.FileExists() )
+        {
+            // Remove the old file backup file.
+            if( backupFileName.FileExists() )
+                wxRemoveFile( backupFileName.GetFullPath() );
+
+            // Rename the old file to the backup file name.
+            if( !wxRenameFile( aFileName.GetFullPath(), backupFileName.GetFullPath() ) )
+            {
+                msg = _( "Could not create backup file " ) + backupFileName.GetFullPath();
+                DisplayError( this, msg );
+            }
+        }
+
+        if( !wxRenameFile( autoSaveFileName.GetFullPath(), aFileName.GetFullPath() ) )
+        {
+            wxMessageBox( _( "The auto save file could not be renamed to the board file name." ),
+                          wxGetApp().GetAppName(), wxOK | wxICON_EXCLAMATION, this );
+        }
+    }
+    else
+    {
+        wxLogTrace( traceAutoSave,
+                    wxT( "Removing auto save file " ) + autoSaveFileName.GetFullPath() );
+
+        // Remove the auto save file when using the previous file as is.
+        wxRemoveFile( autoSaveFileName.GetFullPath() );
+    }
 }

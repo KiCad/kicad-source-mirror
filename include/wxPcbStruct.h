@@ -43,10 +43,6 @@
 #endif
 
 
-#define CREATE_BACKUP_FILE    true
-#define NO_BACKUP_FILE        false
-
-
 /*  Forward declarations of classes. */
 class PCB_SCREEN;
 class BOARD;
@@ -152,10 +148,10 @@ protected:
     virtual bool doAutoSave();
 
     /**
-     * Function isModified
+     * Function isautoSaveRequired
      * returns true if the board has been modified.
      */
-    virtual bool isModified() const;
+    virtual bool isAutoSaveRequired() const;
 
 public:
     LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer

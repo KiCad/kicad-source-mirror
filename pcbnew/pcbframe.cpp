@@ -413,9 +413,9 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 }
 
 
-bool PCB_EDIT_FRAME::isModified() const
+bool PCB_EDIT_FRAME::isAutoSaveRequired() const
 {
-    return GetScreen()->IsModify();
+    return GetScreen()->IsSave();
 }
 
 

@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file schframe.cpp
  */
@@ -174,6 +199,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     m_dlgFindReplace = NULL;
     m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
     m_undoItem = NULL;
+    m_hasAutoSave = true;
 
     CreateScreens();
 
@@ -261,12 +287,6 @@ SCH_SHEET_PATH* SCH_EDIT_FRAME::GetSheet()
 }
 
 
-/**
- * Function SetSheetNumberAndCount
- * Set the m_ScreenNumber and m_NumberOfScreen members for screens
- * must be called after a delete or add sheet command, and when entering a
- * sheet
- */
 void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 {
     SCH_SCREEN* screen = GetScreen();
@@ -412,6 +432,20 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
+    SCH_SCREENS screens;
+    wxFileName fn;
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    {
+        fn = screen->GetFileName();
+
+        // Auto save file name is the normal file name prepended with $.
+        fn.SetName( wxT( "$" ) + fn.GetName() );
+
+        if( fn.FileExists() && fn.IsFileWritable() )
+            wxRemoveFile( fn.GetFullPath() );
+    }
+
     SheetList.ClearModifyStatus();
 
     if( !g_RootSheet->GetScreen()->GetFileName().IsEmpty()
@@ -482,15 +516,11 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
     return filename;
 }
 
-/**
- * Function OnModify
- * Must be called after a schematic change
- * in order to set the "modify" flag of the current screen
- * and update the date in frame reference
- */
+
 void SCH_EDIT_FRAME::OnModify( )
 {
     GetScreen()->SetModify();
+    GetScreen()->SetSave();
 
     wxString    date = GenDate();
     SCH_SCREENS s_list;
@@ -788,15 +818,7 @@ void SCH_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
     frame.ShowModal();
 }
 
-/*
- * Function PrintPage (virtual)
- * Previously used to print a page,
- * but now only used to plot/print the current sheet to the clipboard
- * @param aDC = wxDC given by the calling print function
- * @param aPrintMask = not used here
- * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
- * @param aData = a pointer on an auxiliary data (not used here)
- */
+
 void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData )
 {
     GetScreen()->Draw( DrawPanel, aDC, GR_DEFAULT_DRAWMODE );
@@ -816,4 +838,12 @@ void SCH_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
         DrawPanel->m_AbortRequest = false;
         GetScreen()->SetCurItem( item );
     }
+}
+
+
+bool SCH_EDIT_FRAME::isAutoSaveRequired() const
+{
+    SCH_SHEET_LIST SheetList;
+
+    return SheetList.IsAutoSaveRequired();
 }

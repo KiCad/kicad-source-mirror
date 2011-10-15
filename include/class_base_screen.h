@@ -1,9 +1,31 @@
-/**********************
-* class_base_screen.h
-**********************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
-/* define :
- *  class BASE_SCREEN to handle how to draw a screen (a board, a schematic ...)
+/**
+ * @file class_base_screen.h
+ * @brief BASE_SCREEN class implementation.
  */
 
 #ifndef  __CLASS_BASE_SCREEN_H__
@@ -48,9 +70,10 @@ public:
 typedef std::vector< GRID_TYPE > GRIDS;
 
 
-/*******************************************************************/
-/* Class to handle how to draw a screen (a board, a schematic ...) */
-/*******************************************************************/
+/**
+ * Class BASE_SCREEN
+ * handle how to draw a screen (a board, a schematic ...)
+ */
 class BASE_SCREEN : public EDA_ITEM
 {
     EDA_ITEMS m_items;          ///< The drawing items associated with this screen.
@@ -58,8 +81,8 @@ class BASE_SCREEN : public EDA_ITEM
     EDA_ITEM* m_drawList;       ///< Object list for the screen.
     wxString  m_fileName;       ///< File used to load the screen.
     char      m_FlagRefreshReq; ///< Indicates that the screen should be redrawn.
-    char      m_FlagModified;   ///< Indicates current drawing has been modified.
-    char      m_FlagSave;       ///< Indicates automatic file save.
+    bool      m_FlagModified;   ///< Indicates current drawing has been modified.
+    bool      m_FlagSave;       ///< Indicates automatic file save.
     EDA_ITEM* m_CurrentItem;    ///< Currently selected object
     GRID_TYPE m_Grid;           ///< Current grid selection.
     wxPoint   m_scrollCenter;   ///< Current scroll center point in logical units.
@@ -248,12 +271,12 @@ public:
     }
 
 
-    void    SetModify() { m_FlagModified = 1; m_FlagSave = 0; }
-    void    ClrModify() { m_FlagModified = 0; m_FlagSave = 1; }
-    void    SetSave() { m_FlagSave = 1; }
-    void    ClrSave() { m_FlagSave = 0; }
-    int     IsModify() { return m_FlagModified & 1;  }
-    int     IsSave() { return m_FlagSave & 1;  }
+    void    SetModify() { m_FlagModified = true; }
+    void    ClrModify() { m_FlagModified = false;; }
+    void    SetSave() { m_FlagSave = true; }
+    void    ClrSave() { m_FlagSave = false; }
+    int     IsModify() { return m_FlagModified;  }
+    int     IsSave() { return m_FlagSave;  }
 
 
     //----<zoom stuff>---------------------------------------------------------

@@ -138,6 +138,8 @@ extern const wxString SymbolFileWildcard;
 extern const wxString CompLibFileExtension;
 extern const wxString CompLibFileWildcard;
 
+extern const wxString g_SchematicBackupFileExtension;
+
 extern LayerStruct    g_LayerDescr;
 
 extern bool           g_EditPinByPinIsOn;   /* True to prevent displacing
