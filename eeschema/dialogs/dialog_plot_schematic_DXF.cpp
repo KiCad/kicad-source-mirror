@@ -231,7 +231,7 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString& FileName,
     plotter->set_color_mode( m_plotColorOpt );
 
     /* Init : */
-    plotter->set_creator( wxT( "EESchema-DXF" ) );
+    plotter->set_creator( wxT( "Eeschema-DXF" ) );
     plotter->set_filename( FileName );
     plotter->start_plot( output_file );
 

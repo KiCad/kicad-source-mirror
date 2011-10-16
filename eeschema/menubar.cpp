@@ -512,7 +512,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                 _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
                 KiBitmap( help_xpm ) );
 
-    // About EESchema
+    // About Eeschema
     helpMenu->AppendSeparator();
     AddMenuItem( helpMenu,
                 wxID_ABOUT,

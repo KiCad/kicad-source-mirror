@@ -228,8 +228,8 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
     if( ( lib_module = wxFopen( oldFileName.GetFullPath(), wxT( "rt" ) ) )  == NULL )
     {
         wxString msg;
-        msg.Printf( _( "Library %s not found" ), GetChars(oldFileName.GetFullPath() ) );
-        DisplayError( this, msg );
+        msg.Printf( _( "Library <%s> not found" ), GetChars(oldFileName.GetFullPath() ) );
+        DisplayError( NULL, msg );
         return;
     }
 
@@ -241,9 +241,9 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
     {
         fclose( lib_module );
         wxString msg;
-        msg.Printf( _( "%s is not a valid footprint library file" ),
+        msg.Printf( _( "<%s> is not a valid footprint library file" ),
                     GetChars( oldFileName.GetFullPath() ) );
-        DisplayError( this, msg );
+        DisplayError( NULL, msg );
         return;
     }
 
@@ -255,7 +255,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
     {
         fclose( lib_module );
         msg.Printf( _( "Module [%s] not found" ), GetChars( CmpName ) );
-        DisplayError( this, msg );
+        DisplayError( NULL, msg );
         return;
     }
 
@@ -266,9 +266,8 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
     if( ( out_file = wxFopen( newFileName.GetFullPath(), wxT( "wt" ) ) ) == NULL )
     {
         fclose( lib_module );
-        wxString msg;
-        msg = _( "Unable to create " ) + newFileName.GetFullPath();
-        DisplayError( this, msg );
+        msg.Printf( _( "Unable to create %s" ), GetChars( newFileName.GetFullPath() ) );
+        DisplayError( NULL, msg );
         return;
     }
 
@@ -328,16 +327,18 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
 
     if( !wxRenameFile( oldFileName.GetFullPath(), backupFileName.GetFullPath() ) )
     {
-        DisplayError( this, _( "Could not create library back up file <" ) +
-                      backupFileName.GetFullName() + wxT( ">." ) );
+        msg.Printf( _( "Could not create library back up file <%s>." ),
+                    GetChars( backupFileName.GetFullName() ) );
+        DisplayError( this, msg );
         return;
     }
 
     /* The temporary file is renamed as the previous library. */
     if( !wxRenameFile( newFileName.GetFullPath(), oldFileName.GetFullPath() ) )
     {
-        DisplayError( this, _( "Could not create temporary library file <" ) +
-                      oldFileName.GetFullName() + wxT( ">." ) );
+        msg.Printf( _("Could not create temporary library file <%s>."),
+                    GetChars( oldFileName.GetFullName() ) );
+        DisplayError( this, msg );
         return;
     }
 
@@ -395,7 +396,8 @@ void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOn
 
         if( ( lib_module = wxFopen( fileName, wxT( "w+t" ) ) )  == NULL )
         {
-            wxString msg = _( "Unable to create " ) + fileName;
+            wxString msg;
+            msg.Printf( _( "Unable to create <%s>" ), GetChars(fileName) );
             DisplayError( this, msg );
             return;
         }
@@ -456,7 +458,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
 
     if( !newFileName.FileExists( aLibName ) )
     {
-        msg.Printf( _( "Library %s not found." ), GetChars( aLibName ) );
+        msg.Printf( _( "Library <%s> not found." ), GetChars( aLibName ) );
         DisplayError( this, msg );
         return false;
     }
@@ -493,7 +495,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
 
     if( ( lib_module = wxFopen( aLibName, wxT( "rt" ) ) ) == NULL )
     {
-        msg.Printf( _( "Unable to open %s" ), GetChars( aLibName ) );
+        msg.Printf( _( "Unable to open <%s>" ), GetChars( aLibName ) );
         DisplayError( this, msg );
         return false;
     }
@@ -504,7 +506,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     if( ! input_lib.IsLibrary() )
     {
         fclose( lib_module );
-        msg.Printf( _( "File %s is not an Eeschema library" ), GetChars( aLibName ) );
+        msg.Printf( _( "File <%s> is not an Eeschema library" ), GetChars( aLibName ) );
         DisplayError( this, msg );
         return false;
     }
@@ -537,7 +539,7 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     if( ( dest = wxFopen( newFileName.GetFullPath(), wxT( "w+t" ) ) )  == NULL )
     {
         fclose( lib_module );
-        msg = _( "Unable to create " ) + newFileName.GetFullPath();
+        msg.Printf( _( "Unable to create <%s>" ), GetChars( newFileName.GetFullPath() ) );
         DisplayError( this, msg );
         return false;
     }
@@ -622,22 +624,27 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
         wxRemoveFile( oldFileName.GetFullPath() );
 
     if( !wxRenameFile( aLibName, oldFileName.GetFullPath() ) )
-        DisplayError( this, _( "Could not create library back up file <" ) +
-                      oldFileName.GetFullName() + wxT( ">." ) );
+    {
+        msg.Printf( _( "Could not create library back up file <%s>." ),
+                      GetChars( oldFileName.GetFullName() ) );
+        DisplayError( this, msg );
+    }
 
     /* The new library file is renamed */
     if( !wxRenameFile( newFileName.GetFullPath(), aLibName ) )
     {
-        DisplayError( this, _( "Could not create temporary library file <" ) +
-                      aLibName + wxT( ">." ) );
+        msg.Printf( _( "Could not create temporary library file <%s>." ),
+                      GetChars( aLibName ) );
+        DisplayError( this, msg );
         return false;
     }
 
     if( aDisplayDialog )
     {
-        msg  = _( "Component " ); msg += Name_Cmp;
-        msg += module_exists ? _( " replaced in " ) : _( " added in " );
-        msg += aLibName;
+        wxString fmt = module_exists ?
+            _( "Component [%s] replaced in <%s>" ) :
+            _( "Component [%s] added in  <%s>" );
+        msg.Printf( fmt, GetChars( Name_Cmp ), GetChars( aLibName ) );
         SetStatusText( msg );
     }
 
@@ -753,7 +760,7 @@ int FOOTPRINT_EDIT_FRAME::CreateLibrary( const wxString& aLibName )
 
     if( ( lib_module = wxFopen( fileName.GetFullPath(), wxT( "wt" ) ) )  == NULL )
     {
-        msg = _( "Unable to create " ) + fileName.GetFullPath();
+        msg.Printf( _( "Unable to create library <%s>" ), GetChars( fileName.GetFullPath() ) );
         DisplayError( this, msg );
         return -1;
     }

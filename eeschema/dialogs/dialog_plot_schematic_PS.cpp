@@ -282,7 +282,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::plotOneSheetPS( const wxString& FileName,
     plotter->set_color_mode( m_plotColorOpt );
 
     /* Init : */
-    plotter->set_creator( wxT( "EESchema-PS" ) );
+    plotter->set_creator( wxT( "Eeschema-PS" ) );
     plotter->set_filename( FileName );
     plotter->start_plot( output_file );
 

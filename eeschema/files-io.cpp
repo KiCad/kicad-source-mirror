@@ -74,8 +74,9 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreat
 
                 if( !wxRenameFile( schematicFileName.GetFullPath(), backupFileName.GetFullPath() ) )
                 {
-                    DisplayError( this, _( "Could not save backup of file <" ) +
-                                  schematicFileName.GetFullPath() + wxT( ">." ) );
+                    msg.Printf(_( "Could not save backup of file <%s>" ),
+                                GetChars( schematicFileName.GetFullPath() ) );
+                    DisplayError( this, msg );
                 }
             }
         }
@@ -111,7 +112,8 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreat
 
     if( ( f = wxFopen( schematicFileName.GetFullPath(), wxT( "wt" ) ) ) == NULL )
     {
-        msg = _( "Failed to create file " ) + schematicFileName.GetFullPath();
+        msg.Printf( _( "Failed to create file <%s>" ),
+                    GetChars( schematicFileName.GetFullPath() ) );
         DisplayError( this, msg );
         return false;
     }

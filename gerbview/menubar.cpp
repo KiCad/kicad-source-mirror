@@ -120,7 +120,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     AddMenuItem( fileMenu,
                  wxID_EXIT,
                  _( "E&xit" ),
-                 _( "Quit Gerbview" ),
+                 _( "Quit GerbView" ),
                  KiBitmap( exit_xpm ) );
 
     // Menu for configuration and preferences
@@ -199,7 +199,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     AddMenuItem( helpMenu,
                  wxID_HELP,
                  _( "&Contents" ),
-                 _( "Open the Gerbview handbook" ),
+                 _( "Open the GerbView handbook" ),
                  KiBitmap( help_xpm ) );
 
     // About GerbView

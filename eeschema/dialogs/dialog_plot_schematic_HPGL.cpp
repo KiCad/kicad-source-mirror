@@ -378,7 +378,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_1_Page_HPGL( const wxString& FileName,
     plotter->set_viewport( offset, plot_scale, 0 );
     plotter->set_default_line_width( g_DrawDefaultLineThickness );
     /* Init : */
-    plotter->set_creator( wxT( "EESchema-HPGL" ) );
+    plotter->set_creator( wxT( "Eeschema-HPGL" ) );
     plotter->set_filename( FileName );
     plotter->set_pen_speed( g_HPGL_Pen_Descr.m_Pen_Speed );
     plotter->set_pen_number( g_HPGL_Pen_Descr.m_Pen_Num );
