@@ -1,6 +1,6 @@
-/*
- * file gerbview_dialog_display_options_frame.cpp
- * Set the display options for GerbView
+/**
+ * @file gerbview_dialog_display_options_frame.cpp
+ * Set some display options for GerbView
  */
 
 

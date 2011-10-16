@@ -657,7 +657,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Contents
     AddMenuItem( helpMenu, wxID_HELP,
                  _( "&Contents" ),
-                 _( "Open the pcbnew handbook" ),
+                 _( "Open the Pcbnew handbook" ),
                  KiBitmap( online_help_xpm ) );
     AddMenuItem( helpMenu, wxID_INDEX,
                  _( "&Getting Started in KiCad" ),

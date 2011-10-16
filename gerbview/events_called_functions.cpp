@@ -17,6 +17,7 @@
 #include "dialog_helpers.h"
 #include "class_DCodeSelectionbox.h"
 #include "class_gerbview_layer_widget.h"
+#include "dialog_show_page_borders.h"
 
 
 // Event table:
@@ -30,6 +31,7 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_GERBVIEW_LOAD_DRILL_FILE, GERBVIEW_FRAME::Files_io )
     EVT_TOOL( ID_GERBVIEW_LOAD_DCODE_FILE, GERBVIEW_FRAME::Files_io )
     EVT_TOOL( ID_NEW_BOARD, GERBVIEW_FRAME::Files_io )
+    EVT_TOOL( ID_GERBVIEW_SET_PAGE_BORDER, GERBVIEW_FRAME::Process_Special_Functions )
 
     // Menu Files:
     EVT_MENU( wxID_FILE, GERBVIEW_FRAME::Files_io )
@@ -150,6 +152,14 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )
     {
+    case ID_GERBVIEW_SET_PAGE_BORDER:
+        {
+        DIALOG_PAGE_SHOW_PAGE_BORDERS dlg( this );
+        if (dlg.ShowModal() == wxID_OK )
+            DrawPanel->Refresh();
+        }
+        break;
+
     case ID_GERBVIEW_GLOBAL_DELETE:
         Erase_Current_Layer( true );
         ClearMsgPanel();

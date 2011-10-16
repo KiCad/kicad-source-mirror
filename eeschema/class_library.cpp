@@ -425,7 +425,7 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
         if( !tkn.HasMoreTokens()
             || !tkn.GetNextToken().Upper().StartsWith(wxT( "EESCHEMA-LIB" ) ) )
         {
-            aErrorMsg = _( "The file is NOT an EESCHEMA library!" );
+            aErrorMsg = _( "The file is NOT an Eeschema library!" );
             fclose( file );
             return false;
         }

@@ -89,15 +89,10 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;
 
-    // Options (Preferences on WXMAC)
-    AddMenuItem( preferencesMenu,
-                 wxID_PREFERENCES,
-#ifdef __WXMAC__
-                 _( "&Preferences..." ),
-#else
-                 _( "&Options" ),
-#endif // __WXMAC__
-                 _( "Set libraries and library search paths" ),
+    // Libraries to load
+    AddMenuItem( preferencesMenu, wxID_PREFERENCES,
+                 _( "&Libraries" ),
+                 _( "Set footprint libraries lo load and library search paths" ),
                  KiBitmap( config_xpm ) );
 
     // Language submenu
