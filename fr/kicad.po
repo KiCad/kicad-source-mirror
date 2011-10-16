@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-16 09:56+0100\n"
-"PO-Revision-Date: 2011-10-16 10:00+0100\n"
+"POT-Creation-Date: 2011-10-16 11:06+0100\n"
+"PO-Revision-Date: 2011-10-16 11:09+0100\n"
 "Last-Translator: \n"
 "Language-Team: kicad team <jean-pierre.charras@ujf-grenoble.fr>\n"
 "MIME-Version: 1.0\n"
@@ -13713,7 +13713,7 @@ msgstr "Vous n'avez pas la permission d'écriture pour sauver le fichier <%s>."
 #: common/basicframe.cpp:598
 #, c-format
 msgid "Well this is potentially embarrassing!  It appears that the last time you were editing the file <%s> it was not saved properly.  Do you wish to restore the last edits you made?"
-msgstr ""
+msgstr "Bien, ceci est potentiellement génant! Il semble que la derniere fois où vous avez edité le fichier <%s> il n'a pas été sauvé correctement. Voulez vous restorer la derniere édition que vous avez faite?"
 
 #: common/basicframe.cpp:624
 msgid "Could not create backup file "
