@@ -130,7 +130,8 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     AddMenuItem( configMenu,
                  ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
                  _( "Hide &Layers Manager" ),
-                 _( "Show/hide the layers manager toolbar" ),
+                 m_show_layer_manager_tools ?
+                           _( "Hide &Layers Manager" ) : _("Show &Layers Manager" ),
                  KiBitmap( layers_manager_xpm ) );
 
     // Options (Preferences on WXMAC)
