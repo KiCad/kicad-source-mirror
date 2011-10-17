@@ -78,6 +78,9 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         m_show_layer_manager_tools = state;
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
         m_auimgr.Update();
+        GetMenuBar()->SetLabel( ID_MENU_GERBVIEW_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+                                m_show_layer_manager_tools ?
+                                _("Hide &Layers Manager" ) : _("Show &Layers Manager" ));
         break;
 
     default:
