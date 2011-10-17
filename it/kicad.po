@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-09 23:26+0100\n"
-"PO-Revision-Date: 2011-08-09 23:44+0100\n"
+"PO-Revision-Date: 2011-09-27 23:24+0100\n"
 "Last-Translator: Ciocemax <ciocemax@alice.it>\n"
 "Language-Team: Ciocemax <ciocemax@alice.it>\n"
 "MIME-Version: 1.0\n"
@@ -13982,7 +13982,7 @@ msgstr "Inserisci giunzione"
 
 #: eeschema/help_common_strings.h:45
 msgid "Create a hierarchical sheet"
-msgstr "Inserisci foglio gerarchico"
+msgstr "Aggiungi foglio alla gerarchia dello schema"
 
 #: eeschema/help_common_strings.h:47
 msgid "Place a hierarchical pin imported from the corresponding hierarchical label in sheet"
