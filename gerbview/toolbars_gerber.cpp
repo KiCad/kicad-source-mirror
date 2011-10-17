@@ -1,6 +1,32 @@
-/*************************************/
-/*  tool_gerber.cpp: Build tool bars */
-/*************************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file toolbars_gerber.cpp
+ * @brief Build tool bars
+ */
 
 #include "fctsys.h"
 
@@ -23,7 +49,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
     if( m_HToolBar != NULL )
         return;
 
-    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
 
     // Set up toolbar
     m_HToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString,
@@ -98,10 +124,6 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
 }
 
 
-/**
- * Create or update the right vertical toolbar
- * Current no used
- */
 void GERBVIEW_FRAME::ReCreateVToolbar( void )
 {
     if( m_VToolBar )
@@ -117,9 +139,6 @@ void GERBVIEW_FRAME::ReCreateVToolbar( void )
 }
 
 
-/**
- * Create or update the left vertical toolbar (option toolbar
- */
 void GERBVIEW_FRAME::ReCreateOptToolbar( void )
 {
     if( m_OptionsToolBar )
@@ -175,12 +194,12 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_1, wxEmptyString,
                                KiBitmap( gbr_select_mode1_xpm ),
                                _( "Show layers in stacked mode \
-(show negative items without artefact, sometimes slow)" ),
+(show negative items without artifacts, sometimes slow)" ),
                                wxITEM_CHECK );
     m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_2, wxEmptyString,
                                KiBitmap( gbr_select_mode2_xpm ),
-                               _( "Show layers in tranparency mode \
-(show negative items without artefact, sometimes slow)" ),
+                               _( "Show layers in transparency mode \
+(show negative items without artifacts, sometimes slow)" ),
                                wxITEM_CHECK );
 
     // Tools to show/hide toolbars:

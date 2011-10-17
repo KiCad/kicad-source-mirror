@@ -1,10 +1,3 @@
-/**
- * @file class_gerber_draw_item.h
- */
-
-#ifndef CLASS_GERBER_DRAW_ITEM_H
-#define CLASS_GERBER_DRAW_ITEM_H
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -29,9 +22,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file class_gerber_draw_item.h
+ */
+
+#ifndef CLASS_GERBER_DRAW_ITEM_H
+#define CLASS_GERBER_DRAW_ITEM_H
+
 #include "base_struct.h"
 #include "class_board_item.h"
+
+
 class GERBER_IMAGE;
+
 
 /* Shapes id for basic shapes ( .m_Shape member ) */
 enum Gbr_Basic_Shapes {
@@ -42,7 +45,7 @@ enum Gbr_Basic_Shapes {
     GBR_SPOT_CIRCLE,        // flashed shape: round shape (can have hole)
     GBR_SPOT_RECT,          // flashed shape: rectangular shape can have hole)
     GBR_SPOT_OVAL,          // flashed shape: oval shape
-    GBR_SPOT_POLY,          // flashed shape: regulat polygon, 3 to 12 edges
+    GBR_SPOT_POLY,          // flashed shape: regular polygon, 3 to 12 edges
     GBR_SPOT_MACRO,         // complex shape described by a macro
     GBR_LAST                // last value for this list
 };
@@ -59,8 +62,8 @@ private:
 
 
 public:
-    bool    m_UnitsMetric;                  /* store here the gerber units (inch/mm).
-                                             *  Used only to calculate aperture macros shapes sizes  */
+    bool    m_UnitsMetric;                  /* store here the gerber units (inch/mm).  Used
+                                             * only to calculate aperture macros shapes sizes */
     int     m_Shape;                        // Shape and type of this gerber item
     wxPoint m_Start;                        // Line or arc start point or position of the shape
                                             // for flashed items
@@ -77,16 +80,16 @@ public:
                                             // values 0 to 9 can be used for special purposes
     GERBER_IMAGE* m_imageParams;            /* main GERBER info for this item
                                              * Note: some params stored in this class are common
-                                             * to the whole gerber file (i.e) the whole graphic layer
-                                             * and some can change when reaging the file, so they
-                                             * are stored inside this item
-                                             * there is no redundancy for these parameters
+                                             * to the whole gerber file (i.e) the whole graphic
+                                             * layer and some can change when reaging the file,
+                                             * so they are stored inside this item there is no
+                                             * redundancy for these parameters
                                              */
 private:
     // These values are used to draw this item, according to gerber layers parameters
-    // Because they can change inside a gerber image, thery are stored here
+    // Because they can change inside a gerber image, they are stored here
     // for each item
-    bool        m_LayerNegative;            // TRUE = item in negative Layer
+    bool        m_LayerNegative;            // true = item in negative Layer
     bool        m_swapAxis;                 // false if A = X, B = Y; true if A =Y, B = Y
     bool        m_mirrorA;                  // true: mirror / axe A
     bool        m_mirrorB;                  // true: mirror / axe B
@@ -137,7 +140,7 @@ public:
      *   m_MirrorA, m_MirrorB,
      *   m_DrawScale, m_DrawOffset
      */
-    void SetLayerParameters( );
+    void SetLayerParameters();
 
     void SetLayerPolarity( bool aNegative)
     {
@@ -194,15 +197,15 @@ public:
      * returns the GetDcodeDescr of this object, or NULL.
      * @return D_CODE* - a pointer to the DCode description (for flashed items).
      */
-    D_CODE*  GetDcodeDescr();
+    D_CODE* GetDcodeDescr();
 
     EDA_RECT GetBoundingBox() const;
 
     /* Display on screen: */
-    void     Draw( EDA_DRAW_PANEL* aPanel,
-                   wxDC*           aDC,
-                   int             aDrawMode,
-                   const wxPoint&  aOffset = ZeroOffset );
+    void Draw( EDA_DRAW_PANEL*         aPanel,
+               wxDC*                   aDC,
+               int                     aDrawMode,
+               const wxPoint&aOffset = ZeroOffset );
 
     /**
      * Function ConvertSegmentToPolygon
@@ -210,7 +213,7 @@ public:
      * Useful when a line is plotted using a rectangular pen.
      * In this case, the usual segment plot function cannot be used
      */
-    void ConvertSegmentToPolygon( );
+    void ConvertSegmentToPolygon();
 
     /**
      * Function DrawGbrPoly
@@ -231,7 +234,7 @@ public:
      * Display info about this GERBER item
      * @param frame A EDA_DRAW_FRAME in which to print status information.
      */
-    void     DisplayInfo( EDA_DRAW_FRAME* frame );
+    void DisplayInfo( EDA_DRAW_FRAME* frame );
 
     wxString ShowGBRShape();
 
@@ -241,16 +244,16 @@ public:
      * @param aRefPos a wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool     HitTest( const wxPoint& aRefPos );
+    bool HitTest( const wxPoint& aRefPos );
 
     /**
-     * Function HitTest (overlayed)
+     * Function HitTest (overloaded)
      * tests if the given wxRect intersect this object.
      * For now, an ending point must be inside this rect.
      * @param aRefArea a wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool     HitTest( EDA_RECT& aRefArea );
+    bool HitTest( EDA_RECT& aRefArea );
 
     /**
      * Function GetClass
@@ -263,7 +266,12 @@ public:
     }
 
 
-    bool         Save( FILE* aFile ) const;
+    /**
+     * Function Save.
+     * currently: no nothing, but must be defined to meet requirements
+     * of the basic class
+     */
+    bool Save( FILE* aFile ) const;
 
 #if defined(DEBUG)
 
@@ -271,7 +279,7 @@ public:
      * Function Show
      * is used to output the object tree, currently for debugging only.
      * @param nestLevel An aid to prettier tree indenting, and is the level
-     *          of nesting of this object within the overall tree.
+     *                  of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os );

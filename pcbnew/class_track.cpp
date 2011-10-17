@@ -641,7 +641,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
         }
     }
 
-    if( draw_mode & GR_SURBRILL )
+    if( draw_mode & GR_HIGHLIGHT )
     {
         if( draw_mode & GR_AND )
             color &= ~HIGHLIGHT_FLAG;
@@ -815,7 +815,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
         }
     }
 
-    if( draw_mode & GR_SURBRILL )
+    if( draw_mode & GR_HIGHLIGHT )
     {
         if( draw_mode & GR_AND )
             color &= ~HIGHLIGHT_FLAG;
@@ -1275,18 +1275,6 @@ TRACK* TRACK::GetVia( TRACK* aEndTrace, const wxPoint& aPosition, int aLayerMask
 }
 
 
-/*
- * GetTrace is a helper function to locate a trace segment having an end point at aPosition
- * on aLayerMask starting at aStartTrace and end at aEndTrace.
- * The segments of track that are flagged as deleted or busy are ignored.
- * To speed up the search, this search is made:
- *   first on the previous and next neightbour (NEIGHTBOUR_COUNT_MAX size)
- *   of this.
- *   After, only if no track found, on aStartTrace to aEndTrace
- * Because tracks are grouped when entered in list, most of time the first search
- * find the connection.
- * The speedup is *very* large
- */
 TRACK* TRACK::GetTrace( TRACK* aStartTrace, TRACK* aEndTrace, int aEndPoint )
 {
     const int NEIGHTBOUR_COUNT_MAX = 50;

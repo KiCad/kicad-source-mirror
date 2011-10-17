@@ -129,6 +129,7 @@ set(PCBNEW_SRCS
     globaleditpad.cpp
     gpcb_exchange.cpp
     graphpcb.cpp
+    highlight.cpp
     hotkeys.cpp
     hotkeys_board_editor.cpp
     hotkeys_module_editor.cpp
@@ -174,7 +175,6 @@ set(PCBNEW_SRCS
     specctra_export.cpp
     specctra_import.cpp
     specctra_keywords.cpp
-    surbrill.cpp
     swap_layers.cpp
     tool_modedit.cpp
     tool_onrightclick.cpp

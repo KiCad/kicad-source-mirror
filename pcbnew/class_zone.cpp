@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file class_zone.cpp
  * @brief Implementation of class to handle copper zones.
@@ -46,12 +71,7 @@ ZONE_CONTAINER::~ZONE_CONTAINER()
     m_Poly = NULL;
 }
 
-/**
- * Function UnFill
- * Removes the zone filling
- * @return true if a previous filling is removed, false if no change
- * (when no filling found)
- */
+
 bool ZONE_CONTAINER::UnFill()
 {
     bool change = ( m_FilledPolysList.size() > 0 ) || ( m_FillSegmList.size() > 0 );
@@ -63,10 +83,7 @@ bool ZONE_CONTAINER::UnFill()
     return change;
 }
 
-/**
- * Function GetPosition (virtual)
- * @return a wxPoint, position of the first point of the outline
- */
+
 wxPoint& ZONE_CONTAINER::GetPosition()
 {
     static wxPoint pos;
@@ -82,23 +99,18 @@ wxPoint& ZONE_CONTAINER::GetPosition()
 }
 
 
-/**
- * Set the netcode and the netname
- * if netcode >= 0, set the netname
- * if netcode < 0: keep old netname (used to set an necode error flag)
- */
-void ZONE_CONTAINER::SetNet( int anet_code )
+void ZONE_CONTAINER::SetNet( int aNetCode )
 {
-    m_NetCode = anet_code;
+    m_NetCode = aNetCode;
 
-    if( anet_code < 0 )
+    if( aNetCode < 0 )
         return;
 
     BOARD* board = GetBoard();
 
     if( board )
     {
-        NETINFO_ITEM* net = board->FindNet( anet_code );
+        NETINFO_ITEM* net = board->FindNet( aNetCode );
 
         if( net )
             m_Netname = net->GetNetname();
@@ -541,7 +553,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const
         }
     }
 
-    if( aDrawMode & GR_SURBRILL )
+    if( aDrawMode & GR_HIGHLIGHT )
     {
         if( aDrawMode & GR_AND )
             color &= ~HIGHLIGHT_FLAG;
@@ -597,14 +609,6 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const
 }
 
 
-/**
- * Function DrawDrawFilledArea
- * Draws the filled areas for this zone (polygon list .m_FilledPolysList)
- * @param panel = current Draw Panel
- * @param DC = current Device Context
- * @param offset = Draw offset (usually wxPoint(0,0))
- * @param aDrawMode = GR_OR, GR_XOR, GR_COPY ..
- */
 void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
                                      wxDC* DC, int aDrawMode, const wxPoint& offset )
 {
@@ -642,7 +646,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
         }
     }
 
-    if( aDrawMode & GR_SURBRILL )
+    if( aDrawMode & GR_HIGHLIGHT )
     {
         if( aDrawMode & GR_AND )
             color &= ~HIGHLIGHT_FLAG;
@@ -763,16 +767,6 @@ EDA_RECT ZONE_CONTAINER::GetBoundingBox() const
 }
 
 
-/**
- * Function DrawWhileCreateOutline
- * Draws the zone outline when ir is created.
- * The moving edges (last segment and the closing edge segment) are in XOR graphic mode,
- * old segment in OR graphic mode
- * The closing edge has its own shape
- * @param panel = current Draw Panel
- * @param DC = current Device Context
- * @param draw_mode = draw mode: OR, XOR ..
- */
 void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode )
 {
     int     current_gr_mode  = draw_mode;
@@ -838,13 +832,6 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, in
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param refPos A wxPoint to test
- * @return bool - true if a hit, else false
- * return true if refPos is near a corner or an edge
- */
 bool ZONE_CONTAINER::HitTest( const wxPoint& refPos )
 {
     if( HitTestForCorner( refPos ) )
@@ -857,20 +844,13 @@ bool ZONE_CONTAINER::HitTest( const wxPoint& refPos )
 }
 
 
-/**
- * Function HitTestForCorner
- * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
- * Choose the nearest corner
- * "near" means grid size (or CORNER_MIN_DIST if grid is not known)
- * Set m_CornerSelection to corner index in .m_Poly-&gtcorner or -1 if no corner found
- * @return true if a corner found
- * @param refPos : A wxPoint to test
- */
 bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 {
     m_CornerSelection = -1;         // Set to not found
 
-    #define CORNER_MIN_DIST 100     // distance (in internal units) to detect a corner in a zone outline
+    // distance (in internal units) to detect a corner in a zone outline.
+    #define CORNER_MIN_DIST 100
+
     int min_dist = CORNER_MIN_DIST + 1;
 
     if( GetBoard() && GetBoard()->m_PcbFrame )
@@ -901,16 +881,6 @@ bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
 }
 
 
-/**
- * Function HitTestForEdge
- * tests if the given wxPoint near a corner, or near the segment define by 2 corners.
- * choose the nearest segment
- * "near" means  grid size (or EDGE_MIN_DIST if grid is not known)
- * Set m_CornerSelection to -1 if nothing found, or index of the starting corner of edge
- * in .m_Poly-&gtcorner
- * @return true if found
- * @param refPos : A wxPoint to test
- */
 bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 {
     unsigned lim = m_Poly->corner.size();
@@ -963,12 +933,6 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
 }
 
 
-/**
- * Function HitTest (overlayed)
- * tests if the given EDA_RECT contains the bounds of this object.
- * @param refArea : the given EDA_RECT
- * @return bool - true if a hit, else false
- */
 bool ZONE_CONTAINER::HitTest( EDA_RECT& refArea )
 {
     bool  is_out_of_box = false;
@@ -1018,12 +982,6 @@ int ZONE_CONTAINER::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
 }
 
 
-/**
- * Function HitTestFilledArea
- * tests if the given wxPoint is within the bounds of a filled area of this zone.
- * @param aRefPos A wxPoint to test
- * @return bool - true if a hit, else false
- */
 bool ZONE_CONTAINER::HitTestFilledArea( const wxPoint& aRefPos )
 {
     unsigned indexstart = 0, indexend;
@@ -1124,11 +1082,6 @@ void ZONE_CONTAINER::DisplayInfo( EDA_DRAW_FRAME* frame )
 
 /* Geometric transforms: */
 
-/**
- * Function Move
- * Move the outlines
- * @param offset = moving vector
- */
 void ZONE_CONTAINER::Move( const wxPoint& offset )
 {
     /* move outlines */
@@ -1155,11 +1108,6 @@ void ZONE_CONTAINER::Move( const wxPoint& offset )
 }
 
 
-/**
- * Function MoveEdge
- * Move the outline Edge. m_CornerSelection is the start point of the outline edge
- * @param offset = moving vector
- */
 void ZONE_CONTAINER::MoveEdge( const wxPoint& offset )
 {
     int ii = m_CornerSelection;
@@ -1184,12 +1132,6 @@ void ZONE_CONTAINER::MoveEdge( const wxPoint& offset )
 }
 
 
-/**
- * Function Rotate
- * Move the outlines
- * @param centre = rot centre
- * @param angle = in 0.1 degree
- */
 void ZONE_CONTAINER::Rotate( const wxPoint& centre, int angle )
 {
     wxPoint pos;
@@ -1224,12 +1166,6 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, int angle )
 }
 
 
-/**
- * Function Flip
- * Flip this object, i.e. change the board side for this object
- * (like Mirror() but changes layer)
- * @param aCentre - the rotation point.
- */
 void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 {
     Mirror( aCentre );
@@ -1237,11 +1173,6 @@ void ZONE_CONTAINER::Flip( const wxPoint& aCentre )
 }
 
 
-/**
- * Function Mirror
- * flip the outlines , relative to a given horizontal axis
- * @param mirror_ref = vertical axis position
- */
 void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 {
     for( unsigned ii = 0; ii < m_Poly->corner.size(); ii++ )
@@ -1274,11 +1205,6 @@ void ZONE_CONTAINER::Mirror( const wxPoint& mirror_ref )
 }
 
 
-/**
- * Function copy
- * copy useful data from the source.
- * flags and linked list pointers are NOT copied
- */
 void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
 {
     m_Parent = src->m_Parent;
@@ -1304,11 +1230,6 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
 }
 
 
-/**
- * Function SetNetNameFromNetCode
- * Find the net name corresponding to the net code.
- * @return bool - true if net found, else false
- */
 bool ZONE_CONTAINER::SetNetNameFromNetCode( void )
 {
     NETINFO_ITEM* net;

@@ -1,10 +1,32 @@
-/****************/
-/* tracepcb.cpp */
-/****************/
-
 /*
- *  Redraw the screen.
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+/**
+ * @file draw_gerber_screen.cpp
+ */
+
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -19,19 +41,10 @@
 #include "class_GERBER.h"
 
 
-/**
- * Function PrintPage (virtual)
- * Used to print the board (on printer, or when creating SVF files).
- * Print the board, but only layers allowed by aPrintMaskLayer
- * @param aDC = the print device context
- * @param aPrintMasklayer = a 32 bits mask: bit n = 1 -> layer n is printed
- * @param aPrintMirrorMode = true to plot mirrored
- * @param aData = a pointer to an optional data (not used here: can be NULL)
- */
 void GERBVIEW_FRAME::PrintPage( wxDC* aDC, int aPrintMasklayer,
                                 bool aPrintMirrorMode, void* aData )
 {
-    // Save current draw options, because print mode has specfic options:
+    // Save current draw options, because print mode has specific options:
     int             DisplayPolygonsModeImg = g_DisplayPolygonsModeSketch;
     int             visiblemask = GetBoard()->GetVisibleLayers();
     DISPLAY_OPTIONS save_opt    = DisplayOpt;
@@ -56,8 +69,6 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, int aPrintMasklayer,
 }
 
 
-/* Redraws the full screen, including axis and grid
- */
 void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     PCB_SCREEN* screen = (PCB_SCREEN*) GetScreen();
@@ -88,7 +99,7 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     GetBoard()->Draw( DrawPanel, DC, drawMode, wxPoint( 0, 0 ) );
 
     // Draw the "background" now, i.e. grid and axis after gerber layers
-    // because most of time the actual background is erased by succesive drawings of each gerber
+    // because most of time the actual background is erased by successive drawings of each gerber
     // layer mainly in COPY mode
     DrawPanel->DrawBackGround( DC );
 
@@ -115,10 +126,10 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
 {
     // Because Images can be negative (i.e with background filled in color) items are drawn
     // graphic layer per graphic layer, after the background is filled
-    // to a temporary biumap
+    // to a temporary bitmap
     // at least when aDrawMode = GR_COPY or aDrawMode = GR_OR
     // If aDrawMode = -1, items are drawn to the main screen, and therefore
-    // arfefacts can happen with negative items or negative images
+    // artifacts can happen with negative items or negative images
 
     wxColour bgColor = MakeColour( g_DrawBgColor );
     wxBrush  bgBrush( bgColor, wxSOLID );
@@ -136,9 +147,10 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
     // When each image must be drawn using GR_OR (transparency mode)
     // or GR_COPY (stacked mode) we must use a temporary bitmap
     // to draw gerber images.
-    // this is due to negative objects (drawn using background color) that create artefacct
+    // this is due to negative objects (drawn using background color) that create artifacts
     // on other images when drawn on screen
     bool useBufferBitmap = false;
+
     if( (aDrawMode == GR_COPY) || ( aDrawMode == GR_OR ) )
         useBufferBitmap = true;
 
@@ -170,12 +182,14 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
         plotDC = &layerDC;
     }
 
-    bool doBlit = false; // this flag requests an image transfert to actual screen when true.
+    bool doBlit = false; // this flag requests an image transfer to actual screen when true.
 
     bool end = false;
+
     for( int layer = 0; !end; layer++ )
     {
         int active_layer = ( (GERBVIEW_FRAME*) m_PcbFrame )->getActiveLayer();
+
         if( layer == active_layer ) // active layer will be drawn after other layers
             continue;
 
@@ -199,12 +213,13 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
             // layers are drawn in background color.
             if( gerber->HasNegativeItems() &&  doBlit )
             {
-                // Set Device orgin, logical origin and scale to default values
+                // Set Device origin, logical origin and scale to default values
                 // This is needed by Blit function when using a mask.
                 // Beside, for Blit call, both layerDC and screenDc must have the same settings
                 layerDC.SetDeviceOrigin(0,0);
                 layerDC.SetLogicalOrigin( 0, 0 );
                 layerDC.SetUserScale( 1, 1 );
+
                 if( aDrawMode == GR_COPY )
                 {
                     // Use the layer bitmap itself as a mask when blitting.  The bitmap
@@ -212,22 +227,20 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
                     layerDC.SelectObject( wxNullBitmap );
                     layerBitmap->SetMask( new wxMask( *layerBitmap, bgColor ) );
                     layerDC.SelectObject( *layerBitmap );
-                    screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight,
-                                   &layerDC, 0, 0, wxCOPY, true );
+                    screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxCOPY, true );
                 }
                 else if( aDrawMode == GR_OR )
                 {
                     // On Linux with a large screen, this version is much faster and without
                     // flicker, but gives a Pcbnew look where layer colors blend together.
                     // Plus it works only because the background color is black.  But it may
-                    // be more useable for some.  The difference is due in part because of
+                    // be more usable for some.  The difference is due in part because of
                     // the cpu cycles needed to create the monochromatic bitmap above, and
                     // the extra time needed to do bit indexing into the monochromatic bitmap
                     // on the blit above.
-                    screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight,
-                                   &layerDC, 0, 0, wxOR );
+                    screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxOR );
                 }
-                // Restore actual values and clear bitmpap for next drawing
+                // Restore actual values and clear bitmap for next drawing
                 layerDC.SetDeviceOrigin( dev_org.x, dev_org.y );
                 layerDC.SetLogicalOrigin( logical_org.x, logical_org.y );
                 layerDC.SetUserScale( scale, scale );
@@ -276,7 +289,8 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
             int drawMode = layerdrawMode;
 
             if( dcode_highlight && dcode_highlight == gerb_item->m_DCode )
-                drawMode |= GR_SURBRILL;
+                drawMode |= GR_HIGHLIGHT;
+
             gerb_item->Draw( aPanel, plotDC, drawMode );
             doBlit = true;
         }
@@ -285,40 +299,38 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
     if( doBlit && useBufferBitmap )     // Blit is used only if aDrawMode >= 0
     {
         // For this Blit call, layerDC and screenDC must have the same settings
-        // So we set device orgin, logical origin and scale to default values
+        // So we set device origin, logical origin and scale to default values
         // in layerDC
         layerDC.SetDeviceOrigin(0,0);
         layerDC.SetLogicalOrigin( 0, 0 );
         layerDC.SetUserScale( 1, 1 );
-        // this is the last transfert to screenDC.  If there are no negative items, this is
+
+        // this is the last transfer to screenDC.  If there are no negative items, this is
         // the only one
         if( aDrawMode == GR_COPY )
         {
             layerDC.SelectObject( wxNullBitmap );
             layerBitmap->SetMask( new wxMask( *layerBitmap, bgColor ) );
             layerDC.SelectObject( *layerBitmap );
-            screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight,
-                           &layerDC, 0, 0, wxCOPY, true );
+            screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxCOPY, true );
 
         }
         else if( aDrawMode == GR_OR )
         {
-            screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight,
-                           &layerDC, 0, 0, wxOR );
+            screenDC.Blit( 0, 0, bitmapWidth, bitmapHeight, &layerDC, 0, 0, wxOR );
         }
     }
 
     if( useBufferBitmap )
     {
         // For this Blit call, aDC and screenDC must have the same settings
-        // So we set device orgin, logical origin and scale to default values
+        // So we set device origin, logical origin and scale to default values
         // in aDC
         aDC->SetDeviceOrigin( 0, 0);
         aDC->SetLogicalOrigin( 0, 0 );
         aDC->SetUserScale( 1, 1 );
 
-        aDC->Blit( 0, 0, bitmapWidth, bitmapHeight,
-                   &screenDC, 0, 0, wxCOPY );
+        aDC->Blit( 0, 0, bitmapWidth, bitmapHeight, &screenDC, 0, 0, wxCOPY );
 
         // Restore aDC values
         aDC->SetDeviceOrigin(dev_org.x, dev_org.y);
@@ -333,10 +345,6 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
 }
 
 
-/* Function DrawItemsDCodeID
- * Draw the DCode value (if exists) corresponding to gerber item
- * Polygons do not have a DCode
- */
 void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
 {
     wxPoint     pos;
@@ -357,7 +365,9 @@ void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
             continue;
 
         if( gerb_item->m_Flashed || gerb_item->m_Shape == GBR_ARC )
+        {
             pos = gerb_item->m_Start;
+        }
         else
         {
             pos.x = (gerb_item->m_Start.x + gerb_item->m_End.x) / 2;
@@ -377,7 +387,7 @@ void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
 
         if( gerb_item->m_Flashed )
         {
-            // A reasonnable size for text is width/3 because most of time this text has 3 chars.
+            // A reasonable size for text is width/3 because most of time this text has 3 chars.
             width /= 3;
         }
         else        // this item is a line
@@ -387,7 +397,7 @@ void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
             if( abs( delta.x ) < abs( delta.y ) )
                 orient = TEXT_ORIENT_VERT;
 
-            // A reasonnable size for text is width/2 because text needs margin below and above it.
+            // A reasonable size for text is width/2 because text needs margin below and above it.
             // a margin = width/4 seems good
             width /= 2;
         }
@@ -402,7 +412,7 @@ void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
 }
 
 
-/* Virtual fonction needed by the PCB_SCREEN class derived from BASE_SCREEN
+/* Virtual function needed by the PCB_SCREEN class derived from BASE_SCREEN
  * this is a virtual pure function in BASE_SCREEN
  * do nothing in GerbView
  * could be removed later

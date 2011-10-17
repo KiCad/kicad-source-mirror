@@ -202,7 +202,15 @@ public:
         return ( GetLayer() < FIRST_NO_COPPER_LAYER ) ? true : false;
     }
 
-    virtual void SetNet( int anet_code );
+    /**
+     * Functio SetNet
+     * set the netcode and the netname.
+     *
+     * @param aNetCode The net code of the zone container if greater than or equal to
+     *                 zero.  Otherwise the current net code is kept and set the net
+     *                 code error flag.
+     */
+    virtual void SetNet( int aNetCode );
 
     /**
      * Function SetNetNameFromNetCode

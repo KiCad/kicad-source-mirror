@@ -887,12 +887,20 @@ public:
      */
     void OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem );
 
-    // Highlight functions:
-    int Select_High_Light( wxDC* DC );
-    void High_Light( wxDC* DC );
+    /**
+     * Locate track or pad and highlight the corresponding net.
+     * @return The Netcode, or -1 if no net located.
+     */
+    int SelectHighLight( wxDC* DC );
+
+    /**
+     * Function HighLight.
+     * highlights the net at the current cursor position.
+     */
+    void HighLight( wxDC* DC );
 
     // Track and via edition:
-    void   Via_Edit_Control( wxCommandEvent& event );
+    void Via_Edit_Control( wxCommandEvent& event );
 
     /**
      * Function IsMicroViaAcceptable
@@ -928,9 +936,24 @@ public:
      */
     void DisplayNetStatus( wxDC* DC );
 
+    /**
+     * Function Delete_Segment
+     * removes 1 segment of track.
+     * 2 cases:
+     * If There is evidence of new track: delete new segment.
+     * Otherwise, delete segment under the cursor.
+     */
     TRACK* Delete_Segment( wxDC* DC, TRACK* Track );
+
     void Delete_Track( wxDC* DC, TRACK* Track );
     void Delete_net( wxDC* DC, TRACK* Track );
+
+    /**
+     * Function Remove_One_Track
+     * removes 1 track/
+     * The leading segment is removed and all adjacent segments
+     * until a pad or a junction point of more than 2 segments is found
+     */
     void Remove_One_Track( wxDC* DC, TRACK* pt_segm );
 
     /**
@@ -1087,12 +1110,17 @@ public:
      * Remove and delete the current outline segment in progress
      * @return 0 if no corner in list, or corner number
      */
-    int  Delete_LastCreatedCorner( wxDC* DC );
+    int Delete_LastCreatedCorner( wxDC* DC );
 
     /**
      * Function Begin_Zone
-     * initiates a zone edge creation process,
-     * or terminates the current zone edge and creates a new zone edge stub
+     * either initializes the first segment of a new zone, or adds an
+     * intermediate segment.
+     * A new zone can be:
+     * created from scratch: the user will be prompted to define parameters (layer, clearence ...)
+     * created from a similar zone (s_CurrentZone is used): parameters are copied from
+     * s_CurrentZone
+     * created as a cutout (an hole) inside s_CurrentZone
      */
     int Begin_Zone( wxDC* DC );
 
@@ -1114,7 +1142,7 @@ public:
      * @param verbose = true to show error messages
      * @return error level (0 = no error)
      */
-    int Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose = TRUE );
+    int Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose = true );
 
     /**
      * Function Fill_All_Zones
@@ -1123,7 +1151,7 @@ public:
      * @param verbose = true to show error messages
      * @return error level (0 = no error)
      */
-    int Fill_All_Zones( bool verbose = TRUE );
+    int Fill_All_Zones( bool verbose = true );
 
 
     /**

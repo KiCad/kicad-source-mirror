@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Sep  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -77,7 +77,7 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	bUserListSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_listUserPaths = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	m_listUserPaths->SetToolTip( _("Additional paths used in this project. The priority is highter than default Kicad paths.") );
+	m_listUserPaths->SetToolTip( _("Additional paths used in this project. The priority is higher than default KiCad paths.") );
 	
 	bUserListSizer->Add( m_listUserPaths, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
@@ -108,7 +108,7 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::DIALOG_PCBNEW_CONFIG_LIBS_FBP( wxWindow* parent, 
 	sbLibPathSizer->Add( bUserLibPathSizer, 1, wxEXPAND, 5 );
 	
 	m_DefaultLibraryPathslistBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_NEEDED_SB ); 
-	m_DefaultLibraryPathslistBox->SetToolTip( _("Paths  (system paths and user paths) used to search and load libraries files and component doc files.\nSorted by decreasing priority order.") );
+	m_DefaultLibraryPathslistBox->SetToolTip( _("System and user paths used to search and load library files and component doc files.\nSorted by decreasing priority order.") );
 	m_DefaultLibraryPathslistBox->SetMinSize( wxSize( -1,70 ) );
 	
 	sbLibPathSizer->Add( m_DefaultLibraryPathslistBox, 0, wxALL|wxEXPAND, 5 );
@@ -162,4 +162,5 @@ DIALOG_PCBNEW_CONFIG_LIBS_FBP::~DIALOG_PCBNEW_CONFIG_LIBS_FBP()
 	m_buttonRemovePath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnRemoveUserPath ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PCBNEW_CONFIG_LIBS_FBP::OnOkClick ), NULL, this );
+	
 }

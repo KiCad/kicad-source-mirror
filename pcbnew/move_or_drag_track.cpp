@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file move_or_drag_track.cpp
  * @brief Track editing routines to move and drag track segments or node.
@@ -143,7 +168,7 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     TRACK*       Track;
     BASE_SCREEN* screen = aPanel->GetScreen();
     int          track_fill_copy = DisplayOpt.DisplayPcbTrackFill;
-    int          draw_mode = GR_XOR | GR_SURBRILL;
+    int          draw_mode = GR_XOR | GR_HIGHLIGHT;
 
     DisplayOpt.DisplayPcbTrackFill = false;
 
@@ -286,7 +311,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
         }
     }
 
-    int draw_mode = GR_XOR | GR_SURBRILL;
+    int draw_mode = GR_XOR | GR_HIGHLIGHT;
 
     /* Undraw the current moved track segments before modification*/
 
@@ -664,7 +689,7 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
     GetBoard()->PushHighLight();
 
     if( GetBoard()->IsHighLightNetON() )
-        High_Light( aDC );
+        HighLight( aDC );
 
     PosInit = GetScreen()->GetCrossHairPosition();
 
@@ -895,7 +920,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     GetBoard()->PushHighLight();
 
     if( GetBoard()->IsHighLightNetON() )
-        High_Light( DC );
+        HighLight( DC );
 
     EraseDragList();
 
@@ -988,7 +1013,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
         }
     }
 
-    int draw_mode = GR_OR | GR_SURBRILL;
+    int draw_mode = GR_OR | GR_HIGHLIGHT;
 
     // DRC Ok: place track segments
     Track->m_Flags = 0;
@@ -1028,7 +1053,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
 
     if( GetBoard()->IsHighLightNetON() )
-        High_Light( DC );
+        HighLight( DC );
 
     GetBoard()->PopHighLight();
 

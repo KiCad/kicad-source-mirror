@@ -1,5 +1,29 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
- * @file surbrill.cpp
+ * @file highlight.cpp
  * @brief Highlight nets.
  */
 
@@ -21,12 +45,6 @@
 #define Pad_fill ( Pad_Fill_Item.State == RUN )
 
 
-/**
- * Function ListNetsAndSelect
- * called by a command event
- * displays the sorted list of nets in a dialog frame
- * If a net is selected, it is highlighted
- */
 void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
 {
     NETINFO_ITEM* net;
@@ -86,23 +104,20 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
         INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
         if( GetBoard()->IsHighLightNetON() )
-            High_Light( &dc );
+            HighLight( &dc );
 
         GetBoard()->SetHighLightNet( netcode );
-        High_Light( &dc );
+        HighLight( &dc );
     }
 }
 
 
-/* Locate track or pad and highlight the corresponding net
- * Returns the Netcode, or -1 if no net located.
- */
-int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
+int PCB_EDIT_FRAME::SelectHighLight( wxDC* DC )
 {
     int netcode = -1;
 
     if( GetBoard()->IsHighLightNetON() )
-        High_Light( DC );
+        HighLight( DC );
 
     // use this scheme because a pad is a higher priority than a track in the
     // search, and finding a pad, instead of a track on a pad,
@@ -147,7 +162,7 @@ int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
     if( netcode >= 0 )
     {
         GetBoard()->SetHighLightNet( netcode );
-        High_Light( DC );
+        HighLight( DC );
     }
 
 
@@ -155,12 +170,7 @@ int PCB_EDIT_FRAME::Select_High_Light( wxDC* DC )
 }
 
 
-/*
- * Highlight command.
- *
- * Show or removes the net at the current cursor position.
- */
-void PCB_EDIT_FRAME::High_Light( wxDC* DC )
+void PCB_EDIT_FRAME::HighLight( wxDC* DC )
 {
     if( GetBoard()->IsHighLightNetON() )
         GetBoard()->HighLightOFF();
