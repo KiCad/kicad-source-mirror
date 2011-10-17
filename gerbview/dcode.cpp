@@ -1,6 +1,32 @@
-/***************************/
-/**** class D_CODE ****/
-/***************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file dcode.cpp
+ * @brief D_CODE class implementation
+ */
 
 #include "fctsys.h"
 #include "common.h"
@@ -27,7 +53,7 @@
  *      D02 = light extinction (pen up) while moving
  *      D03 = Flash
  *      D04 to D09 = non used
- *   D10 ... D999 = Indentification Tool (Shape id)
+ *   D10 ... D999 = Identification Tool (Shape id)
  *
  * For tools defining a shape):
  * DCode min = D10
@@ -96,16 +122,6 @@ const wxChar* D_CODE::ShowApertureType( APERTURE_T aType )
     return ret;
 }
 
-/** GetShapeDim
- * Calculate a value that can be used to evaluate the size of text
- * when displaying the D-Code of an item
- * due to the complexity of some shapes,
- * one cannot calculate the "size" of a shape (only a bounding box)
- * but here, the "dimension" of the shape is the diameter of the primitive
- * or for lines the width of the line if the shape is a line
- * @param aParent = the parent GERBER_DRAW_ITEM which is actually drawn
- * @return a dimension, or -1 if no dim to calculate
- */
 int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 {
     int dim = -1;
@@ -137,17 +153,6 @@ int D_CODE::GetShapeDim( GERBER_DRAW_ITEM* aParent )
 }
 
 
-/*
- * Function ReadDCodeDefinitionFile
- * Can be useful only with old RS274D Gerber file format.
- * Is not needed with RS274X files format.
- * These files need an auxiliary DCode file description. There is no defined file format for this.
- * This function read a file format I needed a long time ago.
- * reads in a dcode file assuming ALSPCB file format with ';' indicating comments.
- * Format is like CSV but with optional ';' delineated comments:
- * tool,     Horiz,       Vert,   drill, speed, accel. ,Type ; [DCODE (commentaire)]
- * ex:     1,         12,       12,     0,        0,     0,   3 ; D10
- */
 int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName )
 {
     int      current_Dcode, ii, dcode_scale;
@@ -200,11 +205,12 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
         /* Determine of the type of file from D_Code. */
         ptcar = line;
         ii    = 0;
+
         while( *ptcar )
             if( *(ptcar++) == ',' )
                 ii++;
 
-        if( ii >= 6 )   /* valeurs en mils */
+        if( ii >= 6 )   /* value in mils */
         {
             sscanf( line, "%d,%d,%d,%d,%d,%d,%d", &ii,
                     &dimH, &dimV, &drill, &dummy, &dummy, &type_outil );
@@ -212,8 +218,10 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
             dimH  = wxRound( dimH * dcode_scale );
             dimV  = wxRound( dimV * dcode_scale );
             drill = wxRound( drill * dcode_scale );
+
             if( ii < 1 )
                 ii = 1;
+
             current_Dcode = ii - 1 + FIRST_DCODE;
         }
         else        /* Values in inches are converted to mils. */
@@ -223,6 +231,7 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
 
             sscanf( line, "%f,%f,%1s", &fdimV, &fdimH, c_type_outil );
             ptcar = line;
+
             while( *ptcar )
             {
                 if( *ptcar == 'D' )
@@ -231,7 +240,9 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
                     break;
                 }
                 else
+                {
                     ptcar++;
+                }
             }
 
             dimH  = wxRound( fdimH * dcode_scale * 1000 );
@@ -239,7 +250,9 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
             drill = wxRound( fdrill * dcode_scale * 1000 );
 
             if( strchr( "CLROP", c_type_outil[0] ) )
+            {
                 type_outil = (APERTURE_T) c_type_outil[0];
+            }
             else
             {
                 fclose( dest );
@@ -247,7 +260,7 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
             }
         }
 
-        /* Update the list of d_codes if consistant. */
+        /* Update the list of d_codes if consistent. */
         if( current_Dcode < FIRST_DCODE )
             continue;
 
@@ -259,7 +272,7 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
         dcode->m_Size.y  = dimV;
         dcode->m_Shape   = (APERTURE_T) type_outil;
         dcode->m_Drill.x = dcode->m_Drill.y = drill;
-        dcode->m_Defined = TRUE;
+        dcode->m_Defined = true;
     }
 
     fclose( dest );
@@ -268,8 +281,6 @@ int GERBVIEW_FRAME::ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName
 }
 
 
-/* Set Size Items (Lines, Flashes) from DCodes List
- */
 void GERBVIEW_FRAME::CopyDCodesSizeToItems()
 {
     static D_CODE dummy( 999 );   //Used if D_CODE not found in list
@@ -284,9 +295,10 @@ void GERBVIEW_FRAME::CopyDCodesSizeToItems()
         if( dcode == NULL )
             dcode = &dummy;
 
-        dcode->m_InUse = TRUE;
+        dcode->m_InUse = true;
 
         gerb_item->m_Size = dcode->m_Size;
+
         if(                                             // Line Item
             (gerb_item->m_Shape == GBR_SEGMENT )        /* rectilinear segment */
             || (gerb_item->m_Shape == GBR_ARC )         /* segment arc (rounded tips) */
@@ -327,11 +339,6 @@ void GERBVIEW_FRAME::CopyDCodesSizeToItems()
 }
 
 
-/*
- * Function DrawFlashedShape
- * Draw the dcode shape for flashed items.
- * When an item is flashed, the DCode shape is the shape of the item
- */
 void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
                                 EDA_RECT* aClipBox, wxDC* aDC, int aColor, int aAltColor,
                                 wxPoint aShapePos, bool aFilledShape )
@@ -348,12 +355,13 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
     case APT_CIRCLE:
         radius = m_Size.x >> 1;
         if( !aFilledShape )
-            GRCircle( aClipBox, aDC, aParent->GetABPosition(aShapePos),
-                      radius, 0, aColor );
+            GRCircle( aClipBox, aDC, aParent->GetABPosition(aShapePos), radius, 0, aColor );
         else
             if( m_DrillShape == APT_DEF_NO_HOLE )
+            {
                 GRFilledCircle( aClipBox, aDC, aParent->GetABPosition(aShapePos),
                                 radius, aColor );
+            }
             else if( APT_DEF_ROUND_HOLE == 1 )    // round hole in shape
             {
                 int width = (m_Size.x - m_Drill.x ) / 2;
@@ -364,6 +372,7 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
             {
                 if( m_PolyCorners.size() == 0 )
                     ConvertShapeToPolygon();
+
                 DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
             }
         break;
@@ -376,20 +385,20 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
         wxPoint end = start + m_Size;
         start = aParent->GetABPosition( start );
         end = aParent->GetABPosition( end );
+
         if( !aFilledShape )
         {
-            GRRect( aClipBox, aDC, start.x, start.y, end.x, end.y,
-                    0, aColor );
+            GRRect( aClipBox, aDC, start.x, start.y, end.x, end.y, 0, aColor );
         }
         else if( m_DrillShape == APT_DEF_NO_HOLE )
         {
-            GRFilledRect( aClipBox, aDC, start.x, start.y, end.x, end.y,
-                          0, aColor, aColor );
+            GRFilledRect( aClipBox, aDC, start.x, start.y, end.x, end.y, 0, aColor, aColor );
         }
         else
         {
             if( m_PolyCorners.size() == 0 )
                 ConvertShapeToPolygon();
+
             DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
         }
     }
@@ -399,6 +408,7 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
     {
         wxPoint start = aShapePos;
         wxPoint end   = aShapePos;
+
         if( m_Size.x > m_Size.y )   // horizontal oval
         {
             int delta = (m_Size.x - m_Size.y) / 2;
@@ -413,22 +423,23 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
             end.y   += delta;
             radius   = m_Size.x;
         }
+
         start = aParent->GetABPosition( start );
         end = aParent->GetABPosition( end );
+
         if( !aFilledShape )
         {
-            GRCSegm( aClipBox, aDC, start.x, start.y,
-                     end.x, end.y, radius, aColor );
+            GRCSegm( aClipBox, aDC, start.x, start.y, end.x, end.y, radius, aColor );
         }
         else if( m_DrillShape == APT_DEF_NO_HOLE )
         {
-            GRFillCSegm( aClipBox, aDC, start.x,
-                         start.y, end.x, end.y, radius, aColor );
+            GRFillCSegm( aClipBox, aDC, start.x, start.y, end.x, end.y, radius, aColor );
         }
         else
         {
             if( m_PolyCorners.size() == 0 )
                 ConvertShapeToPolygon();
+
             DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
         }
     }
@@ -437,19 +448,13 @@ void D_CODE::DrawFlashedShape(  GERBER_DRAW_ITEM* aParent,
     case APT_POLYGON:
         if( m_PolyCorners.size() == 0 )
             ConvertShapeToPolygon();
+
         DrawFlashedPolygon( aParent, aClipBox, aDC, aColor, aFilledShape, aShapePos );
         break;
     }
 }
 
 
-/*
- * Function DrawFlashedPolygon
- * a helper function used id ::Draw to draw the polygon stored ion m_PolyCorners
- * Draw some Apertures shapes when they are defined as filled polygons.
- * APT_POLYGON is always a polygon, but some complex shapes are also converted to
- * polygons (shapes with holes)
- */
 void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
                                  EDA_RECT* aClipBox, wxDC* aDC,
                                  int aColor, bool aFilled,
@@ -460,6 +465,7 @@ void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
 
     std::vector<wxPoint> points;
     points = m_PolyCorners;
+
     for( unsigned ii = 0; ii < points.size(); ii++ )
     {
         points[ii] += aPosition;
@@ -472,20 +478,14 @@ void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
 
 #define SEGS_CNT 32     // number of segments to approximate a circle
 
-// A helper function for D_CODE::ConvertShapeToPolygon().
-// Add a hole to a polygon
+
+// A helper function for D_CODE::ConvertShapeToPolygon().   Add a hole to a polygon
 static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
                               APERTURE_DEF_HOLETYPE aHoleShape,
                               wxSize                aSize,
                               wxPoint               aAnchorPos );
 
-/**
- * Function ConvertShapeToPolygon
- * convert a shape to an equivalent polygon.
- * Arcs and circles are approximated by segments
- * Useful when a shape is not a graphic primitive (shape with hole,
- * Rotated shape ... ) and cannot be easily drawn.
- */
+
 void D_CODE::ConvertShapeToPolygon()
 {
     wxPoint initialpos;
@@ -498,6 +498,7 @@ void D_CODE::ConvertShapeToPolygon()
     case APT_CIRCLE:        // creates only a circle with rectangular hole
         currpos.x  = m_Size.x >> 1;
         initialpos = currpos;
+
         for( unsigned ii = 0; ii <= SEGS_CNT; ii++ )
         {
             currpos = initialpos;
@@ -540,12 +541,14 @@ void D_CODE::ConvertShapeToPolygon()
             delta  = (m_Size.y - m_Size.x) / 2;
             radius = m_Size.x / 2;
         }
+
         currpos.y  = radius;
         initialpos = currpos;
         m_PolyCorners.push_back( currpos );
 
         // build the right arc of the shape
         unsigned ii = 0;
+
         for( ; ii <= SEGS_CNT / 2; ii++ )
         {
             currpos = initialpos;
@@ -564,6 +567,7 @@ void D_CODE::ConvertShapeToPolygon()
         }
 
         m_PolyCorners.push_back( initialpos );      // close outline
+
         if( m_Size.y > m_Size.x )                   // vertical oval, rotate polygon.
         {
             for( unsigned jj = 0; jj < m_PolyCorners.size(); jj++ )
@@ -581,8 +585,10 @@ void D_CODE::ConvertShapeToPolygon()
         // rs274x said: m_EdgesCount = 3 ... 12
         if( m_EdgesCount < 3 )
             m_EdgesCount = 3;
+
         if( m_EdgesCount > 12 )
             m_EdgesCount = 12;
+
         for( int ii = 0; ii <= m_EdgesCount; ii++ )
         {
             currpos = initialpos;
@@ -591,14 +597,17 @@ void D_CODE::ConvertShapeToPolygon()
         }
 
         addHoleToPolygon( m_PolyCorners, m_DrillShape, m_Drill, initialpos );
+
         if( m_Rotation )                   // vertical oval, rotate polygon.
         {
             int angle = wxRound( m_Rotation * 10 );
+
             for( unsigned jj = 0; jj < m_PolyCorners.size(); jj++ )
             {
                 RotatePoint( &m_PolyCorners[jj], -angle );
             }
         }
+
         break;
 
     case APT_MACRO:
@@ -618,23 +627,24 @@ static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
 {
     wxPoint currpos;
 
-    if( aHoleShape == APT_DEF_ROUND_HOLE )                     // build a round hole
+    if( aHoleShape == APT_DEF_ROUND_HOLE )      // build a round hole
     {
         for( int ii = 0; ii <= SEGS_CNT; ii++ )
         {
             currpos.x = 0;
-            currpos.y = aSize.x / 2;      // aSize.x / 2 is the radius of the hole
+            currpos.y = aSize.x / 2;            // aSize.x / 2 is the radius of the hole
             RotatePoint( &currpos, ii * 3600 / SEGS_CNT );
             aBuffer.push_back( currpos );
         }
 
         aBuffer.push_back( aAnchorPos );        // link to outline
     }
+
     if( aHoleShape == APT_DEF_RECT_HOLE )       // Create rectangular hole
     {
         currpos.x = aSize.x / 2;
         currpos.y = aSize.y / 2;
-        aBuffer.push_back( currpos );     // link to hole and begin hole
+        aBuffer.push_back( currpos );           // link to hole and begin hole
         currpos.x -= aSize.x;
         aBuffer.push_back( currpos );
         currpos.y -= aSize.y;
@@ -642,7 +652,7 @@ static void addHoleToPolygon( std::vector<wxPoint>& aBuffer,
         currpos.x += aSize.x;
         aBuffer.push_back( currpos );
         currpos.y += aSize.y;
-        aBuffer.push_back( currpos );       // close hole
-        aBuffer.push_back( aAnchorPos );    // link to outline
+        aBuffer.push_back( currpos );           // close hole
+        aBuffer.push_back( aAnchorPos );        // link to outline
     }
 }

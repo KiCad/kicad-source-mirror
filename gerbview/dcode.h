@@ -1,7 +1,3 @@
-/**
- * @file dcode.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,14 +23,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file dcode.h
+ */
+
 #ifndef _DCODE_H_
 #define _DCODE_H_
 
 #include <vector>
-//#include <set>
 
 #include "base_struct.h"
+
+
 class GERBER_DRAW_ITEM;
+
 
 /**
  * Enum APERTURE_T
@@ -51,7 +53,7 @@ enum APERTURE_T {
 };
 
 // In aperture definition, round, oval and rectangular flashed shapes
-// can have a hole (ropund or rectangular)
+// can have a hole (round or rectangular)
 // this option is stored in .m_DrillShape D_CODE member
 enum APERTURE_DEF_HOLETYPE {
     APT_DEF_NO_HOLE = 0,
@@ -60,7 +62,7 @@ enum APERTURE_DEF_HOLETYPE {
 };
 
 /* define min and max values for D Codes values.
- * note: values >= 0 and > FIRST_DCODE can be used for specila purposes
+ * note: values >= 0 and > FIRST_DCODE can be used for special purposes
  */
 #define FIRST_DCODE     10
 #define LAST_DCODE      999
@@ -163,13 +165,14 @@ public:
      * @param aClipBox = DC clip box (NULL is no clip)
      * @param aDC = device context
      * @param aColor = the normal color to use
-     * @param aAltColor = the color used to draw with "reverse" exposure mode (used in aperture macros only)
+     * @param aAltColor = the color used to draw with "reverse" exposure mode (used in
+     *                    aperture macros only)
      * @param aShapePos = the actual shape position
-     * @param aFilledShape = true to draw in filled mode, false to draw in skecth mode
+     * @param aFilledShape = true to draw in filled mode, false to draw in sketch mode
      */
-    void                 DrawFlashedShape(  GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox,
-                                            wxDC* aDC, int aColor, int aAltColor,
-                                            wxPoint aShapePos, bool aFilledShape );
+    void DrawFlashedShape( GERBER_DRAW_ITEM* aParent, EDA_RECT* aClipBox,
+                           wxDC* aDC, int aColor, int aAltColor,
+                           wxPoint aShapePos, bool aFilledShape );
 
     /**
      * Function DrawFlashedPolygon
@@ -181,12 +184,12 @@ public:
      * @param aClipBox = DC clip box (NULL is no clip)
      * @param aDC = device context
      * @param aColor = the normal color to use
-     * @param aFilled = true to draw in filled mode, false to draw in skecth mode
+     * @param aFilled = true to draw in filled mode, false to draw in sketch mode
      * @param aPosition = the actual shape position
-    */
-    void                 DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
-                                             EDA_RECT* aClipBox, wxDC* aDC, int aColor,
-                                             bool aFilled, const wxPoint& aPosition );
+     */
+    void DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
+                             EDA_RECT* aClipBox, wxDC* aDC, int aColor,
+                             bool aFilled, const wxPoint& aPosition );
 
     /**
      * Function ConvertShapeToPolygon
@@ -195,10 +198,11 @@ public:
      * Useful when a shape is not a graphic primitive (shape with hole,
      * rotated shape ... ) and cannot be easily drawn.
      */
-    void                 ConvertShapeToPolygon();
+    void ConvertShapeToPolygon();
 
-    /** GetShapeDim
-     * Calculate a value that can be used to evaluate the size of text
+    /**
+     * Function GetShapeDim
+     * calculates a value that can be used to evaluate the size of text
      * when displaying the D-Code of an item
      * due to the complexity of some shapes,
      * one cannot calculate the "size" of a shape (only a bounding box)

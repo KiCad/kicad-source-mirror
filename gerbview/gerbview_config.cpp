@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file gerbview_config.cpp
  * @brief GerbView configuration.
@@ -9,12 +34,18 @@
 #include "class_drawpanel.h"
 #include "gestfich.h"
 #include "pcbcommon.h"
+#include "param_config.h"
+#include "colors_selection.h"
 
 #include "gerbview.h"
 #include "hotkeys.h"
 #include "class_board_design_settings.h"
-#include "gerbview_config.h"
 #include "dialog_hotkeys_editor.h"
+
+
+#define GROUP wxT("/gerbview")
+
+#define INSETUP true
 
 
 void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
@@ -49,24 +80,6 @@ void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
     }
 }
 
-
-/*
- * Return the GerbView applications settings list.
- * (list of parameters that must be saved in GerbView parameters)
- *
- * This replaces the old statically define list that had the project
- * file settings and the application settings mixed together.  This
- * was confusing and caused some settings to get saved and loaded
- * incorrectly.  Currently, only the settings that are needed at start
- * up by the main window are defined here.  There are other locally used
- * settings scattered thoughout the GerbView source code.  If you need
- * to define a configuration setting that need to be loaded at run time,
- * this is the place to define it.
- *
- * TODO: Define the configuration variables as member variables instead of
- *       global variables or move them to the object class where they are
- *       used.
- */
 
 PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings( void )
 {

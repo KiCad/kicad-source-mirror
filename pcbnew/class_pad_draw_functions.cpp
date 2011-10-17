@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file class_pad_draw_functions.cpp
  */
@@ -49,19 +74,14 @@ PAD_DRAWINFO::PAD_DRAWINFO()
 }
 
 
-/** Draw a pad:
- *  @param aPanel = the EDA_DRAW_PANEL panel
- *  @param aDraw_mode = mode: GR_OR, GR_XOR, GR_AND...
- *  @param aOffset = draw offset
- */
 void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoint& aOffset )
 {
     int    color = 0;
     wxSize mask_margin;   // margin (clearance) used for some non copper layers
 
 #ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
-    int    showActualMaskSize = 0;  /* == layer number if the actual pad size on mask layer can be displayed
-                                     * i.e. if only one layer is shown for this pad
+    int    showActualMaskSize = 0;  /* Layer number if the actual pad size on mask layer can
+                                     * be displayed i.e. if only one layer is shown for this pad
                                      * and this layer is a mask (solder mask or sloder paste
                                      */
 #endif
@@ -133,8 +153,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
 
     if( color == 0 ) /* Not on copper layer */
     {
-        // If the pad in on only one tech layer, use the layer color
-        // else use DARKGRAY
+        // If the pad in on only one tech layer, use the layer color else use DARKGRAY
         int mask_non_copper_layers = m_layerMask & ~ALL_CU_LAYERS;
 #ifdef SHOW_PADMASK_REAL_SIZE_AND_COLOR
         mask_non_copper_layers &= brd->GetVisibleLayers();
@@ -311,7 +330,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     }
 
 
-    if( aDraw_mode & GR_SURBRILL )
+    if( aDraw_mode & GR_HIGHLIGHT )
     {
         if( aDraw_mode & GR_AND )
             color &= ~HIGHLIGHT_FLAG;
@@ -361,13 +380,6 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
 }
 
 
-/**
- * Function DrawShape
- * basic function to draw a pad.
- * used by D_PAD::Draw after calculation of parameters (color, final orientation ...)
- * this function can be called to draw a pad on a panel
- * even if this panel is not a EDA_DRAW_PANEL (for instance on a wxPanel inside the pad editor)
- */
 void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 {
     wxPoint coord[4];
@@ -553,10 +565,9 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     if( !aDrawInfo.m_Display_padnum && !aDrawInfo.m_Display_netname )
         return;
 
-    wxPoint tpos0 = shape_pos;              // Position of the centre of text
+    wxPoint tpos0 = shape_pos;     // Position of the centre of text
     wxPoint tpos  = tpos0;
-    wxSize  AreaSize;                       // size of text area, normalized to
-                                            // AreaSize.y < AreaSize.x
+    wxSize  AreaSize;              // size of text area, normalized to AreaSize.y < AreaSize.x
     int     shortname_len = m_ShortNetname.Len();
 
     if( !aDrawInfo.m_Display_netname )
@@ -682,15 +693,6 @@ int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int a
 }
 
 
-/**
- * Function BuildPadPolygon
- * Has meaning only for polygonal pads (trapeziod and rectangular)
- * Build the Corner list of the polygonal shape,
- * depending on shape, extra size (clearance ...) and orientation
- * @param aCoord = a buffer to fill.
- * @param aInflateValue = wxSize: the clearance or margin value. value > 0: inflate, < 0 deflate
- * @param aRotation = full rotation of the polygon, usually m_Orient
- */
 void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotation ) const
 {
     if( (GetShape() != PAD_RECT) && (GetShape() != PAD_TRAPEZOID) )

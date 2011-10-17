@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file gerbview_frame.h
  */
@@ -73,8 +98,20 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     // Virtual basic functions:
     void RedrawActiveWindow( wxDC* DC, bool EraseBg );
     void ReCreateHToolbar();
+
+    /**
+     * Function ReCreateVToolbar
+     * creates or updates the right vertical toolbar.
+     *
+     * @note This is currently not used.
+     */
     void ReCreateVToolbar();
+
+    /**
+     * Create or update the left vertical toolbar (option toolbar
+     */
     void ReCreateOptToolbar();
+
     void ReCreateMenuBar();
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos );
     void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
@@ -250,11 +287,10 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * Function GetConfigurationSettings
      * Populates the GerbView applications settings list.
      * (list of parameters that must be saved in GerbView parameters)
-     * Currently, only the settings that are needed at start
-     * up by the main window are defined here.  There are other locally used
-     * settings scattered thoughout the GerbView source code (mainle in dialogs).
-     * If you need to define a configuration setting that need to be loaded at run time,
-     * this is the place to define it.
+     * Currently, only the settings that are needed at start up by the main window are
+     * defined here.  There are other locally used settings scattered throughout the
+     * GerbView source code (mainly in dialogs).  If you need to define a configuration
+     * setting that need to be loaded at run time, this is the place to define it.
      */
     PARAM_CFG_ARRAY& GetConfigurationSettings( void );
 
@@ -292,7 +328,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     /**
      * Function OnSelectActiveDCode
      * Selects the active DCode for the current active layer.
-     * Items using this DCode are hightlighted
+     * Items using this DCode are highlighted.
      */
     void OnSelectActiveDCode( wxCommandEvent& event );
 
@@ -488,6 +524,10 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      *                  1 = read OK<br>
      */
     int ReadDCodeDefinitionFile( const wxString& D_Code_FullFileName );
+
+    /**
+     * Set Size Items (Lines, Flashes) from DCodes List
+     */
     void CopyDCodesSizeToItems();
     void Liste_D_Codes();
 
@@ -536,7 +576,7 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
      * Function DrawItemsDCodeID
      * Draw the DCode value (if exists) corresponding to gerber item
      * (polygons do not have a DCode)
-     * @param aDC = the current device contect
+     * @param aDC = the current device context
      * @param aDrawMode = GR_COPY, GR_OR ...
      */
     void DrawItemsDCodeID( wxDC* aDC, int aDrawMode );

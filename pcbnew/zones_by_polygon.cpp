@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file zones_by_polygon.cpp
  */
@@ -35,7 +60,7 @@ static void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* aPanel
 /* Local variables */
 static wxPoint         s_CornerInitialPosition;     // Used to abort a move corner command
 static bool            s_CornerIsNew;               // Used to abort a move corner command (if it is a new corner, it must be deleted)
-static bool            s_AddCutoutToCurrentZone;    // if true, the next outline will be addes to s_CurrentZone
+static bool            s_AddCutoutToCurrentZone;    // if true, the next outline will be added to s_CurrentZone
 static ZONE_CONTAINER* s_CurrentZone;               // if != NULL, these ZONE_CONTAINER params will be used for the next zone
 static wxPoint         s_CursorLastPosition;        // in move zone outline, last cursor position. Used to calculate the move vector
 static PICKED_ITEMS_LIST s_PickedList;              // a picked list to save zones for undo/redo command
@@ -44,17 +69,11 @@ static PICKED_ITEMS_LIST _AuxiliaryList;            // a picked list to store zo
 #include "dialog_copper_zones.h"
 
 
-/**
- * Function Add_Similar_Zone
- * Add a zone to a given zone outline.
- * if the zones are overlappeing they will be merged
- * @param DC = current Device Context
- * @param zone_container = parent zone outline
- */
 void PCB_EDIT_FRAME::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container )
 {
     if ( zone_container == NULL )
         return;
+
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = zone_container;
 
@@ -68,12 +87,6 @@ void PCB_EDIT_FRAME::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* zone_container 
 }
 
 
-/**
- * Function Add_Zone_Cutout
- * Add a cutout zone to a given zone outline
- * @param DC = current Device Context
- * @param zone_container = parent zone outline
- */
 void PCB_EDIT_FRAME::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container )
 {
     if ( zone_container == NULL )
@@ -92,11 +105,6 @@ void PCB_EDIT_FRAME::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* zone_container )
 }
 
 
-/** Used **only** while creating a new zone outline
- * Remove and delete the current outline segment in progress
- * @return 0 if no corner in list, or corner number
- * if no corner in list, close the outline creation
- */
 int PCB_EDIT_FRAME::Delete_LastCreatedCorner( wxDC* DC )
 {
     ZONE_CONTAINER* zone = GetBoard()->m_CurrentZoneContour;
@@ -151,11 +159,6 @@ static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-/**
- * Function Start_Move_Zone_Corner
- * Initialise parametres to move an existing corner of a zone.
- * if IsNewCorner is true, the Abort_Zone_Move_Corner_Or_Outlines will remove this corner, if called
- */
 void PCB_EDIT_FRAME::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container,
                                              int corner_id, bool IsNewCorner )
 {
@@ -163,14 +166,14 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_cont
     {
         if( GetBoard()->IsHighLightNetON() && DC )
         {
-            High_Light( DC );  // Remove old hightlight selection
+            HighLight( DC );  // Remove old highlight selection
         }
 
         g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
         GetBoard()->SetHighLightNet( zone_container->GetNet() );
 
         if( DC )
-            High_Light( DC );
+            HighLight( DC );
     }
 
 
@@ -201,10 +204,6 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_cont
 }
 
 
-/**
- * Function Start_Move_Zone_Drag_Outline_Edge
- * Prepares a drag edge for an existing zone outline,
- */
 void PCB_EDIT_FRAME::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
                                                         ZONE_CONTAINER* zone_container,
                                                         int             corner_id )
@@ -224,10 +223,6 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
 }
 
 
-/**
- * Function Start_Move_Zone_Outlines
- * Initialise parametres to move an existing zone outlines.
- */
 void PCB_EDIT_FRAME::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container )
 {
     /* Show the Net */
@@ -235,12 +230,12 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_co
     {
         if( GetBoard()->IsHighLightNetON() )
         {
-            High_Light( DC );  // Remove old hightlight selection
+            HighLight( DC );  // Remove old highlight selection
         }
 
         g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
         GetBoard()->SetHighLightNet( zone_container->GetNet() );
-        High_Light( DC );
+        HighLight( DC );
     }
 
     s_PickedList.ClearListAndDeleteItems();
@@ -258,12 +253,6 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_co
 }
 
 
-/**
- * Function End_Move_Zone_Corner_Or_Outlines
- * Terminates a move corner in a zone outline, or a move zone outlines
- * @param DC = current Device Context (can be NULL)
- * @param zone_container: the given zone
- */
 void PCB_EDIT_FRAME::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container )
 {
     zone_container->m_Flags  = 0;
@@ -302,14 +291,6 @@ void PCB_EDIT_FRAME::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER*
 }
 
 
-/**
- * Function Remove_Zone_Corner
- * Remove the currently selected corner in a zone outline
- * the .m_CornerSelection is used as corner selection
- * @param DC = Current device context (can be NULL )
- * @param zone_container = the zone that contains the selected corner
- *  the member .m_CornerSelection is used as selected corner
- */
 void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_container )
 {
     OnModify();
@@ -358,7 +339,7 @@ void PCB_EDIT_FRAME::Remove_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_containe
     int ii = GetBoard()->GetAreaIndex( zone_container );     // test if zone_container exists
 
     if( ii < 0 )
-        zone_container = NULL;   // zone_container does not exist anymaore, after combining zones
+        zone_container = NULL;   // zone_container does not exist anymore, after combining zones
 
     int error_count = GetBoard()->Test_Drc_Areas_Outlines_To_Areas_Outlines( zone_container, true );
 
@@ -453,15 +434,7 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC*
 }
 
 
-/**
- * Function Begin_Zone
- * either initializes the first segment of a new zone, or adds an
- * intermediate segment.
- * A new zone can be:
- * created from scratch: the user will be prompted to define parameters (layer, clearence ...)
- * created from a similar zone (s_CurrentZone is used): parameters are copied from s_CurrentZone
- * created as a cutout (an hole) inside s_CurrentZone
- */
+
 int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
 {
     // verify if s_CurrentZone exists (could be deleted since last selection) :
@@ -479,7 +452,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         s_CurrentZone = NULL;
     }
 
-    // If no zone contour in progress, a new zone is beeing created:
+    // If no zone contour in progress, a new zone is being created:
     if( GetBoard()->m_CurrentZoneContour == NULL )
         GetBoard()->m_CurrentZoneContour = new ZONE_CONTAINER( GetBoard() );
 
@@ -490,7 +463,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
         if( s_CurrentZone == NULL )     // A new outline is created, from scratch
         {
             int diag;
-            // Init zone params to reasonnable values
+            // Init zone params to reasonable values
             zone->SetLayer( getActiveLayer() );
 
             // Prompt user for parameters:
@@ -528,7 +501,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             if( diag ==  ZONE_ABORT )
                 return 0;
 
-            // Switch active layer to the selectec zonz layer
+            // Switch active layer to the selected zone layer
             setActiveLayer( g_Zone_Default_Setting.m_CurrentZone_Layer );
         }
         else  // Start a new contour: init zone params (net and layer) from an existing
@@ -546,11 +519,11 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
 
             if( GetBoard()->IsHighLightNetON() )
             {
-                High_Light( DC ); // Remove old hightlight selection
+                HighLight( DC ); // Remove old highlight selection
             }
 
             GetBoard()->SetHighLightNet( g_Zone_Default_Setting.m_NetcodeSelection );
-            High_Light( DC );
+            HighLight( DC );
         }
 
         if( !s_AddCutoutToCurrentZone )
@@ -605,14 +578,6 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
 }
 
 
-/**
- * Function End_Zone
- * Terminates a zone outline creation
- * terminates (if no DRC error ) the zone edge creation process
- * @param DC = current Device Context
- * @return true if Ok, false if DRC error
- * if ok, put it in the main list GetBoard()->m_ZoneDescriptorList (a vector<ZONE_CONTAINER*>)
- */
 bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
 {
     ZONE_CONTAINER* zone = GetBoard()->m_CurrentZoneContour;
@@ -684,7 +649,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
 
-    GetScreen()->SetCurItem( NULL );       // This outine can be deleted when merging outlines
+    GetScreen()->SetCurItem( NULL );       // This outline can be deleted when merging outlines
 
     // Combine zones if possible :
     GetBoard()->AreaPolygonModified( &_AuxiliaryList, zone, true, s_Verbose );
@@ -736,7 +701,7 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         zone->DrawWhileCreateOutline( aPanel, aDC );
     }
 
-    /* Redraw the curent edge in its new position */
+    /* Redraw the current edge in its new position */
     if( g_Zone_45_Only )
     {
         // calculate the new position as allowed
@@ -750,10 +715,6 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 }
 
 
-/**
- * Function Edit_Zone_Params
- * Edit params (layer, clearance, ...) for a zone outline
- */
 void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container )
 {
     int diag;
@@ -823,16 +784,6 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container 
 }
 
 
-/**
- * Function Delete_Zone_Contour
- * Remove the zone which include the segment aZone, or the zone which have the given time stamp.
- *  A zone is a group of segments which have the same TimeStamp
- * @param DC = current Device Context (can be NULL)
- * @param zone_container = zone to modify
- *  the member .m_CornerSelection is used to find the outline to remove.
- * if the outline is the main outline, all the zone_container is removed (deleted)
- * otherwise, the hole is deleted
- */
 void PCB_EDIT_FRAME::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_container )
 {
     int      ncont = zone_container->m_Poly->GetContour( zone_container->m_CornerSelection );

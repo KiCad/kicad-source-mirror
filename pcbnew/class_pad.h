@@ -254,7 +254,7 @@ public:
      * Draw a pad:
      * @param aPanel = the EDA_DRAW_PANEL panel
      * @param aDC = the current device context
-     * @param aDraw_mode = mode: GR_OR, GR_XOR, GR_AND...
+     * @param aDrawMode = mode: GR_OR, GR_XOR, GR_AND...
      * @param aOffset = draw offset
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
@@ -265,7 +265,12 @@ public:
     /**
      * Function DrawShape
      * basic function to draw a pad.
-     * used by Draw after calculation of parameters (color, ) final orientation ...
+     * <p>
+     * This function is used by Draw after calculation of parameters (color, ) final
+     * orientation transforms are set. It can also be called to draw a pad on any panel
+     * even if this panel is not a EDA_DRAW_PANEL for instance on a wxPanel inside the
+     * pad editor.
+     * </p>
      */
     void DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo );
 

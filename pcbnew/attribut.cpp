@@ -1,6 +1,32 @@
-/******************************************/
-/* Track editing: attribute flags editing */
-/******************************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file attribut.cpp
+ * @brief Track attribute flags editing.
+ */
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
@@ -27,7 +53,7 @@ void PCB_EDIT_FRAME::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
     OnModify();
     DrawPanel->CrossHairOff( DC );   // Erase cursor shape
     track->SetState( TRACK_LOCKED, Flag_On );
-    track->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
+    track->Draw( DrawPanel, DC, GR_OR | GR_HIGHLIGHT );
     DrawPanel->CrossHairOn( DC );    // Display cursor shape
     track->DisplayInfo( this );
 }
@@ -44,7 +70,7 @@ void PCB_EDIT_FRAME::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
 
     DrawPanel->CrossHairOff( DC );   // Erase cursor shape
     Track = GetBoard()->MarkTrace( track, &nb_segm, NULL, NULL, true );
-    DrawTraces( DrawPanel, DC, Track, nb_segm, GR_OR | GR_SURBRILL );
+    DrawTraces( DrawPanel, DC, Track, nb_segm, GR_OR | GR_HIGHLIGHT );
 
     for( ; (Track != NULL) && (nb_segm > 0); nb_segm-- )
     {
@@ -86,7 +112,7 @@ void PCB_EDIT_FRAME::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
 
         OnModify();
         Track->SetState( TRACK_LOCKED, Flag_On );
-        Track->Draw( DrawPanel, DC, GR_OR | GR_SURBRILL );
+        Track->Draw( DrawPanel, DC, GR_OR | GR_HIGHLIGHT );
         Track = Track->Next();
     }
 

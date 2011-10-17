@@ -24,7 +24,7 @@
  */
 
 /**
- * @file files-io.cpp
+ * @file eeschema/files-io.cpp
  */
 
 #include "fctsys.h"
