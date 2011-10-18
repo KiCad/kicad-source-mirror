@@ -125,6 +125,7 @@ void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
     int pinOrient = LIB_PIN::GetOrientationCode( GetOrientation() );
     int pinLength = ReturnValueFromString( g_UserUnit, GetLength(), units );
     int pinShape = LIB_PIN::GetStyleCode( GetStyle() );
+    int pinType = GetElectricalType();
 
     m_dummyPin->SetName( GetName() );
     m_dummyPin->SetNameTextSize( pinNameSize );
@@ -134,6 +135,7 @@ void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
     m_dummyPin->SetLength( pinLength );
     m_dummyPin->SetShape( pinShape );
     m_dummyPin->SetVisible( GetVisible() );
+    m_dummyPin->SetType( pinType );
 
     m_panelShowPin->Refresh();
 }
