@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-18 15:43+0100\n"
-"PO-Revision-Date: 2011-10-18 19:58+0100\n"
+"POT-Creation-Date: 2011-10-18 20:04+0100\n"
+"PO-Revision-Date: 2011-10-18 20:04+0100\n"
 "Last-Translator: \n"
 "Language-Team: Benno Achermann <bennoachermann@bluewin.ch>\n"
 "MIME-Version: 1.0\n"
@@ -8531,192 +8531,193 @@ msgstr "Bauteile [%d Elemente]"
 msgid "No footprint found"
 msgstr "Kein Footprint gefunden."
 
-#: pcbnew/menubar_modedit.cpp:39
+#: pcbnew/menubar_modedit.cpp:37
 msgid "New Module"
 msgstr "Neues Bauteil"
 
-#: pcbnew/menubar_modedit.cpp:40
+#: pcbnew/menubar_modedit.cpp:37
 msgid "Create new module"
 msgstr "Erstelle ein neues Bauteil"
 
-#: pcbnew/menubar_modedit.cpp:50
+#: pcbnew/menubar_modedit.cpp:45
 msgid "Load from File (Import)"
 msgstr "aus einer Datei (Import)"
 
-#: pcbnew/menubar_modedit.cpp:51
+#: pcbnew/menubar_modedit.cpp:46
 msgid "Import a footprint from an existing file"
 msgstr "Importiere Bauteilfootprint aus einer bestehenden Datei"
 
-#: pcbnew/menubar_modedit.cpp:58
+#: pcbnew/menubar_modedit.cpp:51
 msgid "Load from Library"
 msgstr "aus einer Bibliothek"
 
-#: pcbnew/menubar_modedit.cpp:59
+#: pcbnew/menubar_modedit.cpp:52
 msgid "Open a footprint module from a Library"
 msgstr "Bauteilfootprint aus einer Bibliothek öffnen"
 
-#: pcbnew/menubar_modedit.cpp:66
+#: pcbnew/menubar_modedit.cpp:57
 msgid "Load from Current Board"
 msgstr "Von aktueller Platine einlesen"
 
-#: pcbnew/menubar_modedit.cpp:67
+#: pcbnew/menubar_modedit.cpp:58
 msgid "Load a footprint module from the current loaded board"
 msgstr "Lade Bauteilfootprint von aktueller Plaine"
 
-#: pcbnew/menubar_modedit.cpp:73
+#: pcbnew/menubar_modedit.cpp:63
 msgid "&Load Module"
 msgstr "Bauteil &öffnen"
 
-#: pcbnew/menubar_modedit.cpp:74
+#: pcbnew/menubar_modedit.cpp:64
 msgid "Load a footprint module"
 msgstr "Lade Footprint Bauteil"
 
-#: pcbnew/menubar_modedit.cpp:80
+#: pcbnew/menubar_modedit.cpp:69
 msgid "&Save Module in Active Library"
 msgstr "&Speichere Bauteil in aktiver Bibliothek"
 
-#: pcbnew/menubar_modedit.cpp:81
+#: pcbnew/menubar_modedit.cpp:70
 msgid "Save module in active library"
 msgstr "Speichere Bauteil in aktiver Bibliothek"
 
-#: pcbnew/menubar_modedit.cpp:88
+#: pcbnew/menubar_modedit.cpp:75
 msgid "&Save Module in a New Lib"
 msgstr "&Speichere Bauteil in einer neuen Bibliothek"
 
-#: pcbnew/menubar_modedit.cpp:89
+#: pcbnew/menubar_modedit.cpp:76
 msgid "Create new library and save current module"
 msgstr "Erstelle neue Bibliothek und speichere aktuelles Bauteil"
 
-#: pcbnew/menubar_modedit.cpp:96
+#: pcbnew/menubar_modedit.cpp:81
 msgid "&Export Module"
 msgstr "&Exportiere Bauteil"
 
-#: pcbnew/menubar_modedit.cpp:97
+#: pcbnew/menubar_modedit.cpp:82
 msgid "Save the current loaded module to a file"
 msgstr "Speichere gegenwärtiges Bauteil"
 
-#: pcbnew/menubar_modedit.cpp:107
-msgid "&Print\tCtrl+P"
-msgstr "&Drucken\tStrg+P"
+#: pcbnew/menubar_modedit.cpp:90
+#: pcbnew/menubar_pcbframe.cpp:189
+msgid "&Print"
+msgstr "&Drucken"
 
-#: pcbnew/menubar_modedit.cpp:108
+#: pcbnew/menubar_modedit.cpp:91
 msgid "Print the current module"
 msgstr "Drucke gegenwärtiges Bauteil"
 
-#: pcbnew/menubar_modedit.cpp:119
+#: pcbnew/menubar_modedit.cpp:100
 msgid "Close the footprint editor"
 msgstr "Schließe den Footprinteditor"
 
-#: pcbnew/menubar_modedit.cpp:130
+#: pcbnew/menubar_modedit.cpp:108
 msgid "Undo last edit"
 msgstr "Letzte Änderung rückgängig machen"
 
-#: pcbnew/menubar_modedit.cpp:138
+#: pcbnew/menubar_modedit.cpp:113
 msgid "Redo the last undo action"
 msgstr "Wiederherstellen des letzten Rückgängigmachens"
 
-#: pcbnew/menubar_modedit.cpp:146
+#: pcbnew/menubar_modedit.cpp:118
 msgid "Delete objects with the eraser"
 msgstr "Elemente Entfernen"
 
-#: pcbnew/menubar_modedit.cpp:156
+#: pcbnew/menubar_modedit.cpp:126
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: pcbnew/menubar_modedit.cpp:157
+#: pcbnew/menubar_modedit.cpp:127
 msgid "Edit module properties"
 msgstr "Bauteileigenschaften editieren"
 
-#: pcbnew/menubar_modedit.cpp:167
+#: pcbnew/menubar_modedit.cpp:135
 msgid "Sizes and Widths"
 msgstr "Längen und Breiten"
 
-#: pcbnew/menubar_modedit.cpp:168
+#: pcbnew/menubar_modedit.cpp:136
 msgid "Adjust width for texts and drawings"
 msgstr "Anpassen der Breite für Text und Zeichnungen"
 
-#: pcbnew/menubar_modedit.cpp:175
+#: pcbnew/menubar_modedit.cpp:141
 msgid "Pad Settings"
 msgstr "Pad Einstellungen"
 
-#: pcbnew/menubar_modedit.cpp:176
+#: pcbnew/menubar_modedit.cpp:141
 msgid "Edit the settings for new pads"
 msgstr "Editiere Einstellungen für neues Pad"
 
-#: pcbnew/menubar_modedit.cpp:183
+#: pcbnew/menubar_modedit.cpp:146
 msgid "User Grid Size"
 msgstr "Raster Einstellungen"
 
-#: pcbnew/menubar_modedit.cpp:184
+#: pcbnew/menubar_modedit.cpp:146
 msgid "Adjust user grid"
 msgstr "Anpassen des Rasters"
 
-#: pcbnew/menubar_modedit.cpp:191
+#: pcbnew/menubar_modedit.cpp:152
 msgid "&Dimensions"
 msgstr "&Abmessungen"
 
-#: pcbnew/menubar_modedit.cpp:192
+#: pcbnew/menubar_modedit.cpp:153
 msgid "Edit dimensions preferences"
 msgstr "Einstellungen der Abmessungen editieren"
 
-#: pcbnew/menubar_modedit.cpp:202
+#: pcbnew/menubar_modedit.cpp:161
 msgid "Zoom in on the module"
 msgstr "Hineinzoomen"
 
-#: pcbnew/menubar_modedit.cpp:210
+#: pcbnew/menubar_modedit.cpp:166
 msgid "Zoom out on the module"
 msgstr "Herauszoomen"
 
-#: pcbnew/menubar_modedit.cpp:218
+#: pcbnew/menubar_modedit.cpp:172
 msgid "Zoom and fit the module in the window"
 msgstr "Darstellung des Bauteils an den Bildschirm anpassen"
 
-#: pcbnew/menubar_modedit.cpp:229
+#: pcbnew/menubar_modedit.cpp:179
 msgid "Redraw the window's viewport"
 msgstr "Bauteildarstellung neu zeichnen"
 
-#: pcbnew/menubar_modedit.cpp:236
+#: pcbnew/menubar_modedit.cpp:184
 msgid "3D View"
 msgstr "3D Betrachter"
 
-#: pcbnew/menubar_modedit.cpp:237
+#: pcbnew/menubar_modedit.cpp:185
 #: pcbnew/menubar_pcbframe.cpp:330
 msgid "Show board in 3D viewer"
 msgstr "Zeige Platine im 3D Betrachter"
 
-#: pcbnew/menubar_modedit.cpp:248
+#: pcbnew/menubar_modedit.cpp:193
 #: pcbnew/modedit.cpp:861
 msgid "Add pad"
 msgstr "Pad hinzufügen"
 
-#: pcbnew/menubar_modedit.cpp:267
+#: pcbnew/menubar_modedit.cpp:206
 #: pcbnew/menubar_pcbframe.cpp:374
 msgid "Add graphic line or polygon"
 msgstr "Grafische Linie oder Polygon hinzufügen"
 
-#: pcbnew/menubar_modedit.cpp:283
+#: pcbnew/menubar_modedit.cpp:216
 msgid "Add graphic text"
 msgstr "Grafische Texte hinzufügen"
 
-#: pcbnew/menubar_modedit.cpp:291
+#: pcbnew/menubar_modedit.cpp:222
 msgid "Anchor"
 msgstr "Anker"
 
-#: pcbnew/menubar_modedit.cpp:292
+#: pcbnew/menubar_modedit.cpp:223
 msgid "Place the footprint module reference anchor"
 msgstr "Referenzpunkt für Bauteilfootprint setzen"
 
-#: pcbnew/menubar_modedit.cpp:306
+#: pcbnew/menubar_modedit.cpp:235
 #: pcbnew/menubar_pcbframe.cpp:561
 msgid "Open the Pcbnew handbook"
 msgstr "Öffne das Pcbnew-Benutzerhandbuch"
 
-#: pcbnew/menubar_modedit.cpp:317
+#: pcbnew/menubar_modedit.cpp:245
 #: pcbnew/menubar_pcbframe.cpp:571
 msgid "&About Pcbnew"
 msgstr "&Über Pcbnew"
 
-#: pcbnew/menubar_modedit.cpp:318
+#: pcbnew/menubar_modedit.cpp:246
 msgid "About Pcbnew PCB designer"
 msgstr "Über Pcbnew Platinendesigner"
 
@@ -8876,10 +8877,6 @@ msgstr "Seite &einrichten..."
 #: pcbnew/menubar_pcbframe.cpp:184
 msgid "Page settings for paper size and texts"
 msgstr "Einstellungen für Seitengrösse und dargestellte Texte"
-
-#: pcbnew/menubar_pcbframe.cpp:189
-msgid "&Print"
-msgstr "&Drucken"
 
 #: pcbnew/menubar_pcbframe.cpp:189
 msgid "Print board"
@@ -11667,7 +11664,7 @@ msgstr "Footprintname in Bibliothek"
 msgid "inch"
 msgstr "Zoll"
 
-#: pcbnew/dialogs/dialog_edit_module_text.cpp:110
+#: pcbnew/dialogs/dialog_edit_module_text.cpp:112
 msgid "Value:"
 msgstr "Wert:"
 
@@ -12365,29 +12362,29 @@ msgstr ""
 "Stiftgrösse, um Elemente darzustellen, verwendet obwohl keine Stiftgrösse spezifiziert wurde.\n"
 "Wird hauptsächlich verwendet, um Elemente im Umriss-Modus darzustellen."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:94
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:103
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:95
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:104
 msgid "Center X"
 msgstr "Mittelpunk X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:95
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:104
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:96
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:105
 msgid "Center Y"
 msgstr "Mittelpunkt Y"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:96
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:97
 msgid "Point X"
 msgstr "Punkt X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:97
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:98
 msgid "Point Y"
 msgstr "Punkt Y"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:105
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:106
 msgid "Start Point X"
 msgstr "Startpunkt X"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:106
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:107
 msgid "Start Point Y"
 msgstr "Startpunkt Y"
 
@@ -14512,6 +14509,9 @@ msgstr "Seitenbegrenzung"
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.h:58
 msgid "Gerbview Options"
 msgstr "GerbView Optionen"
+
+#~ msgid "&Print\tCtrl+P"
+#~ msgstr "&Drucken\tStrg+P"
 
 #~ msgid "&Preferences..."
 #~ msgstr "&Einstellungen..."
@@ -16948,8 +16948,8 @@ msgstr "GerbView Optionen"
 
 #~ msgid "Grid ID %d not in grid list, falling back to grid size( %g, %g )."
 #~ msgstr ""
-#~ "Raster Id %d nicht in Rasterliste vorhanden. Greife auf Rastergrösse ( %g, "
-#~ "%g ) zurück."
+#~ "Raster Id %d nicht in Rasterliste vorhanden. Greife auf Rastergrösse ( %"
+#~ "g, %g ) zurück."
 
 #~ msgid ""
 #~ "ReCreatePrjConfig() called with project file <%s> which does not have the "
