@@ -289,6 +289,7 @@ set( BMAPS_MID
     load_module_lib
     local_ratsnest
     locked
+    macros_record
     mirepcb
     mirror_h
     mirror_v
