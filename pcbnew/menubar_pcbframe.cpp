@@ -18,7 +18,6 @@
 void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
     wxString    text;
-    wxMenuItem* item;
     wxMenuBar*  menuBar = GetMenuBar();
 
     if( ! menuBar )
@@ -37,11 +36,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* filesMenu = new wxMenu;
 
     // New
-    item = new wxMenuItem( filesMenu, ID_NEW_BOARD,
+    AddMenuItem( filesMenu, ID_NEW_BOARD,
                           _( "&New" ),
-                          _( "Clear current board and initialize a new one" ) );
-    SET_BITMAP( KiBitmap( new_xpm ) );
-    filesMenu->Append( item );
+                          _( "Clear current board and initialize a new one" ),
+                          KiBitmap( new_xpm ) );
 
     // Open
     text = AddHotkeyName( _( "&Open" ), g_Board_Editor_Hokeys_Descr,
@@ -68,11 +66,10 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
 
     // Pcbnew Board
-    item = new wxMenuItem( filesMenu, ID_APPEND_FILE,
+    AddMenuItem( filesMenu, ID_APPEND_FILE,
                            _( "&Append Board" ),
-                           _( "Append another Pcbnew board to the current loaded board" ) );
-    SET_BITMAP( KiBitmap( import_xpm ) );
-    filesMenu->Append( item );
+                           _( "Append another Pcbnew board to the current loaded board" ),
+                            KiBitmap( import_xpm ) );
 
     // Separator
     filesMenu->AppendSeparator();
@@ -81,59 +78,52 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     text = AddHotkeyName( _( "&Save" ), g_Board_Editor_Hokeys_Descr,
                           HK_SAVE_BOARD );
     AddMenuItem( filesMenu, ID_SAVE_BOARD, text,
-                _( "Save current board" ),
-                KiBitmap( save_xpm ) );
+                 _( "Save current board" ),
+                 KiBitmap( save_xpm ) );
 
     // Save As
-    item = new wxMenuItem( filesMenu, ID_SAVE_BOARD_AS,
+    AddMenuItem( filesMenu, ID_SAVE_BOARD_AS,
                           _( "Save as..." ),
-                          _( "Save the current board as.." ) );
-    SET_BITMAP( KiBitmap( save_as_xpm ) );
-    filesMenu->Append( item );
+                          _( "Save the current board as.." ),
+                          KiBitmap( save_as_xpm ) );
     filesMenu->AppendSeparator();
 
     // Revert
-    item = new wxMenuItem( filesMenu, ID_MENU_READ_LAST_SAVED_VERSION_BOARD,
+    AddMenuItem( filesMenu, ID_MENU_READ_LAST_SAVED_VERSION_BOARD,
                            _( "&Revert" ),
-                           _( "Clear board and get previous saved version of board" ) );
-    SET_BITMAP( KiBitmap( jigsaw_xpm ) );
-    filesMenu->Append( item );
+                           _( "Clear board and get previous saved version of board" ),
+                           KiBitmap( jigsaw_xpm ) );
 
     // Rescue
-    item = new wxMenuItem( filesMenu, ID_MENU_RECOVER_BOARD, _( "&Rescue" ),
-                           _( "Clear old board and get last rescue file" ) );
-    SET_BITMAP( KiBitmap( hammer_xpm ) );
-    filesMenu->Append( item );
+    AddMenuItem( filesMenu, ID_MENU_RECOVER_BOARD, _( "&Rescue" ),
+                           _( "Clear old board and get last rescue file" ),
+                           KiBitmap( hammer_xpm ) );
     filesMenu->AppendSeparator();
 
 
     /* Fabrication Outputs submenu */
     wxMenu* fabricationOutputsMenu = new wxMenu;
-    item = new wxMenuItem( fabricationOutputsMenu, ID_PCB_GEN_POS_MODULES_FILE,
+    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_POS_MODULES_FILE,
                            _( "&Modules Position File" ),
-                           _( "Generate modules position file for pick and place" ) );
-    SET_BITMAP( KiBitmap( post_compo_xpm ) );
-    fabricationOutputsMenu->Append( item );
+                           _( "Generate modules position file for pick and place" ),
+                           KiBitmap( post_compo_xpm ) );
 
-    item = new wxMenuItem( fabricationOutputsMenu, ID_PCB_GEN_DRILL_FILE,
+    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_DRILL_FILE,
                            _( "&Drill File" ),
-                           _( "Generate excellon2 drill file" ) );
-    SET_BITMAP( KiBitmap( post_drill_xpm ) );
-    fabricationOutputsMenu->Append( item );
+                           _( "Generate excellon2 drill file" ),
+                           KiBitmap( post_drill_xpm ) );
 
     // Component File
-    item = new wxMenuItem( fabricationOutputsMenu, ID_PCB_GEN_CMP_FILE,
+    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_CMP_FILE,
                            _( "&Component File" ),
-                           _( "(Re)create components file (*.cmp) for CvPcb" ) );
-    SET_BITMAP( KiBitmap( create_cmp_file_xpm ) );
-    fabricationOutputsMenu->Append( item );
+                           _( "(Re)create components file (*.cmp) for CvPcb" ),
+                           KiBitmap( create_cmp_file_xpm ) );
 
     // BOM File
-    item = new wxMenuItem( fabricationOutputsMenu, ID_PCB_GEN_BOM_FILE_FROM_BOARD,
+    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_BOM_FILE_FROM_BOARD,
                            _( "&BOM File" ),
-                           _( "Create a bill of materials from schematic" ) );
-    SET_BITMAP( KiBitmap( tools_xpm ) );
-    fabricationOutputsMenu->Append( item );
+                           _( "Create a bill of materials from schematic" ),
+                           KiBitmap( tools_xpm ) );
 
     // Fabrications Outputs submenu append
     AddMenuItem( filesMenu, fabricationOutputsMenu,
@@ -142,52 +132,45 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( fabrication_xpm ) );
 
 
-
     /** Import submenu **/
     wxMenu* submenuImport = new wxMenu();
 
     // Specctra Session
-    item = new wxMenuItem( submenuImport, ID_GEN_IMPORT_SPECCTRA_SESSION,
+    AddMenuItem( submenuImport, ID_GEN_IMPORT_SPECCTRA_SESSION,
                            _( "&Specctra Session" ),
-                           _( "Import a routed \"Specctra Session\" (*.ses) file" ) );
-    SET_BITMAP( KiBitmap( import_xpm ) );    // @todo need better bitmap
-    submenuImport->Append( item );
+                           _( "Import a routed \"Specctra Session\" (*.ses) file" ),
+                           KiBitmap( import_xpm ) );
 
     AddMenuItem( filesMenu, submenuImport,
                  ID_GEN_IMPORT_FILE, _( "Import" ),
                  _( "Import files" ), KiBitmap( import_xpm ) );
 
 
-
     /** Export submenu **/
     wxMenu* submenuexport = new wxMenu();
 
     // Specctra DSN
-    item = new wxMenuItem( submenuexport, ID_GEN_EXPORT_SPECCTRA,
+    AddMenuItem( submenuexport, ID_GEN_EXPORT_SPECCTRA,
                            _( "&Specctra DSN" ),
-                           _( "Export the current board to a \"Specctra DSN\" file" ) );
-    SET_BITMAP( KiBitmap( export_xpm ) );
-    submenuexport->Append( item );
+                           _( "Export the current board to a \"Specctra DSN\" file" ),
+                           KiBitmap( export_xpm ) );
 
     // GenCAD
-    item = new wxMenuItem( submenuexport, ID_GEN_EXPORT_FILE_GENCADFORMAT,
-                           _( "&GenCAD" ), _( "Export GenCAD format" ) );
-    SET_BITMAP( KiBitmap( export_xpm ) );
-    submenuexport->Append( item );
+    AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_GENCADFORMAT,
+                           _( "&GenCAD" ), _( "Export GenCAD format" ),
+                           KiBitmap( export_xpm ) );
 
     // Module Report
-    item = new wxMenuItem( submenuexport, ID_GEN_EXPORT_FILE_MODULE_REPORT,
+    AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_MODULE_REPORT,
                            _( "&Module Report" ),
-                           _( "Create a report of all modules on the current board" ) );
-    SET_BITMAP( KiBitmap( tools_xpm ) );
-    submenuexport->Append( item );
+                           _( "Create a report of all modules on the current board" ),
+                           KiBitmap( tools_xpm ) );
 
     // VRML
-    item = new wxMenuItem( submenuexport, ID_GEN_EXPORT_FILE_VRML,
+    AddMenuItem( submenuexport, ID_GEN_EXPORT_FILE_VRML,
                            _( "&VRML" ),
-                           _( "Export a VRML board representation" ) );
-    SET_BITMAP( KiBitmap( three_d_xpm ) );
-    submenuexport->Append( item );
+                           _( "Export a VRML board representation" ),
+                           KiBitmap( three_d_xpm ) );
 
     AddMenuItem( filesMenu, submenuexport,
                  ID_GEN_EXPORT_FILE, _( "&Export" ),
@@ -196,49 +179,43 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     filesMenu->AppendSeparator();
 
     // Page settings
-    item = new wxMenuItem( filesMenu, ID_SHEET_SET,
+    AddMenuItem( filesMenu, ID_SHEET_SET,
                            _( "&Page settings" ),
-                           _( "Page settings for paper size and texts" ) );
-    SET_BITMAP( KiBitmap( sheetset_xpm ) );
-    filesMenu->Append( item );
+                           _( "Page settings for paper size and texts" ),
+                           KiBitmap( sheetset_xpm ) );
 
     // Print
-    item = new wxMenuItem( filesMenu, wxID_PRINT,
-                           _( "&Print" ),
-                           _( "Print board" ) );
-    SET_BITMAP( KiBitmap( print_button_xpm ) );
-    filesMenu->Append( item );
+    AddMenuItem( filesMenu, wxID_PRINT,
+                 _( "&Print" ), _( "Print board" ),
+                 KiBitmap( print_button_xpm ) );
 
     // Create SVG file
-    item = new wxMenuItem( filesMenu, ID_GEN_PLOT_SVG,
+    AddMenuItem( filesMenu, ID_GEN_PLOT_SVG,
                            _( "Print S&VG" ),
-                           _( "Plot board in Scalable Vector Graphics format" ) );
-    SET_BITMAP( KiBitmap( print_button_xpm ) );
-    filesMenu->Append( item );
+                           _( "Plot board in Scalable Vector Graphics format" ),
+                           KiBitmap( print_button_xpm ) );
 
     // Plot
-    item = new wxMenuItem( filesMenu, ID_GEN_PLOT,
-              _( "&Plot" ),
-              _( "Plot board in HPGL, PostScript or Gerber RS-274X format)" ) );
-    SET_BITMAP( KiBitmap( plot_xpm ) );
-    filesMenu->Append( item );
-   filesMenu->AppendSeparator();
+    AddMenuItem( filesMenu, ID_GEN_PLOT,
+                 _( "&Plot" ),
+                 _( "Plot board in HPGL, PostScript or Gerber RS-274X format)" ),
+                 KiBitmap( plot_xpm ) );
+
+    filesMenu->AppendSeparator();
 
     wxMenu* submenuarchive = new wxMenu();
 
     // Archive New Footprints
-    item = new wxMenuItem( submenuarchive, ID_MENU_ARCHIVE_NEW_MODULES,
-                           _( "Archive New Footprints" ),
-                           _( "Archive new footprints only in a library (keep other footprints in this lib)" ) );
-    SET_BITMAP( KiBitmap( library_update_xpm ) );
-    submenuarchive->Append( item );
+    AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_NEW_MODULES,
+                 _( "Archive New Footprints" ),
+                 _( "Archive new footprints only in a library (keep other footprints in this lib)" ),
+                 KiBitmap( library_update_xpm ) );
 
     // Create FootPrint Archive
-    item = new wxMenuItem( submenuarchive, ID_MENU_ARCHIVE_ALL_MODULES,
-                           _( "Create Footprint Archive" ),
-                           _( "Archive all footprints in a library (old library will be deleted)" ) );
-    SET_BITMAP( KiBitmap( library_xpm ) );
-    submenuarchive->Append( item );
+    AddMenuItem( submenuarchive, ID_MENU_ARCHIVE_ALL_MODULES,
+                 _( "Create Footprint Archive" ),
+                 _( "Archive all footprints in a library (old library will be deleted)" ),
+                 KiBitmap( library_xpm ) );
 
     AddMenuItem( filesMenu, submenuarchive,
                  ID_MENU_ARCHIVE_MODULES,
@@ -248,56 +225,47 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     /* Quit */
     filesMenu->AppendSeparator();
-    item = new wxMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ), _( "Quit Pcbnew" ) );
-    SET_BITMAP( KiBitmap( exit_xpm ) );
-    filesMenu->Append( item );
+    AddMenuItem( filesMenu, wxID_EXIT, _( "&Quit" ), _( "Quit Pcbnew" ),
+                 KiBitmap( exit_xpm ) );
 
     /** Create Edit menu **/
     wxMenu* editMenu = new wxMenu;
 
     // Undo
     text  = AddHotkeyName( _( "Undo" ), g_Pcbnew_Editor_Hokeys_Descr, HK_UNDO );
-    item = new wxMenuItem( editMenu, wxID_UNDO, text,
-                           HELP_UNDO, wxITEM_NORMAL );
-    SET_BITMAP( KiBitmap( undo_xpm ) );
-    editMenu->Append( item );
+    AddMenuItem( editMenu, wxID_UNDO, text,
+                           HELP_UNDO, KiBitmap( undo_xpm ) );
 
     // Redo
     text  = AddHotkeyName( _( "Redo" ), g_Pcbnew_Editor_Hokeys_Descr, HK_REDO );
-    item = new wxMenuItem( editMenu, wxID_REDO, text,
-                           HELP_REDO, wxITEM_NORMAL );
-    SET_BITMAP( KiBitmap( redo_xpm ) );
-    editMenu->Append( item );
+    AddMenuItem( editMenu, wxID_REDO, text,
+                           HELP_REDO, KiBitmap( redo_xpm ) );
 
     // Delete
-    item = new wxMenuItem( editMenu, ID_PCB_DELETE_ITEM_BUTT,
-                           _( "Delete" ),
-                           _( "Delete items" ) );
-    SET_BITMAP( KiBitmap( delete_body_xpm ) );
-    editMenu->Append( item );
+    AddMenuItem( editMenu, ID_PCB_DELETE_ITEM_BUTT,
+                           _( "Delete" ), _( "Delete items" ),
+                           KiBitmap( delete_body_xpm ) );
+
     editMenu->AppendSeparator();
 
     // Find
     text = AddHotkeyName( _( "&Find" ), g_Pcbnew_Editor_Hokeys_Descr, HK_FIND_ITEM );
-    item = new wxMenuItem( editMenu, ID_FIND_ITEMS,
-                           text, HELP_FIND );
-    SET_BITMAP( KiBitmap( find_xpm ) );
-    editMenu->Append( item );
+    AddMenuItem( editMenu, ID_FIND_ITEMS,
+                 text, HELP_FIND , KiBitmap( find_xpm ) );
+
     editMenu->AppendSeparator();
 
     // Global Deletions
-    item = new wxMenuItem( editMenu, ID_PCB_GLOBAL_DELETE,
-                           _( "Global &Deletions" ),
-                           _( "Delete tracks, modules, texts... on board" ) );
-    SET_BITMAP( KiBitmap( general_deletions_xpm ) );
-    editMenu->Append( item );
+    AddMenuItem( editMenu, ID_PCB_GLOBAL_DELETE,
+                 _( "Global &Deletions" ),
+                 _( "Delete tracks, modules, texts... on board" ),
+                 KiBitmap( general_deletions_xpm ) );
 
     // Cleanup Tracks and Vias
-    item = new wxMenuItem( editMenu, ID_MENU_PCB_CLEAN,
-                           _( "&Cleanup Tracks and Vias" ),
-                           _( "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias" ) );
-    SET_BITMAP( KiBitmap( delete_body_xpm ) );
-    editMenu->Append( item );
+    AddMenuItem( editMenu, ID_MENU_PCB_CLEAN,
+                 _( "&Cleanup Tracks and Vias" ),
+                 _( "Clean stubs, vias, delete break points, or connect dangling tracks to pads and vias" ),
+                 KiBitmap( delete_body_xpm ) );
 
     // Swap Layers
     AddMenuItem( editMenu, ID_MENU_PCB_SWAP_LAYERS,
@@ -306,20 +274,16 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( swap_layer_xpm ) );
 
     // Reset module reference sizes
-    item = new wxMenuItem( editMenu,
-                           ID_MENU_PCB_RESET_TEXTMODULE_REFERENCE_SIZES,
-                           _( "Reset Module &Reference Sizes" ),
-                           _( "Reset text size and width of all module references to current defaults" ) );
-    SET_BITMAP( KiBitmap( reset_text_xpm ) );
-    editMenu->Append( item );
+    AddMenuItem( editMenu, ID_MENU_PCB_RESET_TEXTMODULE_REFERENCE_SIZES,
+                 _( "Reset Module &Reference Sizes" ),
+                 _( "Reset text size and width of all module references to current defaults" ),
+                 KiBitmap( reset_text_xpm ) );
 
     // Reset module value sizes
-    item = new wxMenuItem( editMenu,
-                           ID_MENU_PCB_RESET_TEXTMODULE_VALUE_SIZES,
-                           _( "Reset Module &Value Sizes" ),
-                           _( "Reset text size and width of all module values to current defaults" ) );
-    SET_BITMAP( KiBitmap( reset_text_xpm ) );
-    editMenu->Append( item );
+    AddMenuItem( editMenu, ID_MENU_PCB_RESET_TEXTMODULE_VALUE_SIZES,
+                 _( "Reset Module &Value Sizes" ),
+                 _( "Reset text size and width of all module values to current defaults" ),
+                 KiBitmap( reset_text_xpm ) );
 
     /** Create View menu **/
     wxMenu* viewMenu = new wxMenu;
@@ -338,215 +302,164 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Zoom In
     text = AddHotkeyName( _( "Zoom In" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_ZOOM_IN, IS_ACCELERATOR );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, wxITEM_NORMAL );
-    SET_BITMAP( KiBitmap( zoom_in_xpm ) );
-    viewMenu->Append( item );
+    AddMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
 
     // Zoom Out
     text = AddHotkeyName( _( "Zoom Out" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_ZOOM_OUT, IS_ACCELERATOR );
-    item = new wxMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, wxITEM_NORMAL );
-
-    SET_BITMAP( KiBitmap( zoom_out_xpm ) );
-    viewMenu->Append( item );
+    AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
     // Fit on Screen
     text = AddHotkeyName( _( "Fit on Screen" ), g_Pcbnew_Editor_Hokeys_Descr,
                           HK_ZOOM_AUTO );
 
-    item = new wxMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, wxITEM_NORMAL );
-    SET_BITMAP( KiBitmap( zoom_fit_in_page_xpm ) );
-    viewMenu->Append( item );
+    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT,
+                 KiBitmap( zoom_fit_in_page_xpm ) );
 
     viewMenu->AppendSeparator();
 
     // Redraw
     text = AddHotkeyName( _( "Redraw" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ZOOM_REDRAW );
 
-    item = new wxMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
-                           HELP_ZOOM_REDRAW, wxITEM_NORMAL );
-    SET_BITMAP( KiBitmap( zoom_redraw_xpm ) );
-    viewMenu->Append( item );
+    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
+                 HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
     viewMenu->AppendSeparator();
 
     // 3D Display
-    item = new wxMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,
-                           _( "3D Display" ),
-                           _( "Show board in 3D viewer" ) );
-    SET_BITMAP( KiBitmap( three_d_xpm ) );
-    viewMenu->Append( item );
+    AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,
+                 _( "3D Display" ),_( "Show board in 3D viewer" ),
+                 KiBitmap( three_d_xpm ) );
 
     // List Nets
-    item = new wxMenuItem( viewMenu, ID_MENU_LIST_NETS,
-                           _( "&List Nets" ),
-                           _( "View a list of nets with names and id's" ) );
-    SET_BITMAP( KiBitmap( tools_xpm ) );
-    viewMenu->Append( item );
-
-
+    AddMenuItem( viewMenu, ID_MENU_LIST_NETS,
+                 _( "&List Nets" ), _( "View a list of nets with names and id's" ),
+                 KiBitmap( tools_xpm ) );
 
     /** Create Place Menu **/
     wxMenu* placeMenu = new wxMenu;
 
     // Module
-    text = AddHotkeyName( _( "Module" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ADD_MODULE, IS_ACCELERATOR );
-    item = new wxMenuItem( placeMenu, ID_PCB_MODULE_BUTT, text,
-                           _( "Add modules" ), wxITEM_NORMAL );
-
-    SET_BITMAP( KiBitmap( module_xpm ) );
-    placeMenu->Append( item );
+    text = AddHotkeyName( _( "Module" ), g_Pcbnew_Editor_Hokeys_Descr,
+                          HK_ADD_MODULE, IS_ACCELERATOR );
+    AddMenuItem( placeMenu, ID_PCB_MODULE_BUTT, text,
+                 _( "Add modules" ), KiBitmap( module_xpm ) );
 
     // Track
-    text = AddHotkeyName( _( "Track" ), g_Pcbnew_Editor_Hokeys_Descr, HK_ADD_NEW_TRACK, IS_ACCELERATOR );
-    item = new wxMenuItem( placeMenu, ID_TRACK_BUTT, text,
-                           _( "Add tracks and vias" ), wxITEM_NORMAL );
-
-    SET_BITMAP( KiBitmap( add_tracks_xpm ) );
-    placeMenu->Append( item );
+    text = AddHotkeyName( _( "Track" ), g_Pcbnew_Editor_Hokeys_Descr,
+                          HK_ADD_NEW_TRACK, IS_ACCELERATOR );
+    AddMenuItem( placeMenu, ID_TRACK_BUTT, text,
+                 _( "Add tracks and vias" ), KiBitmap( add_tracks_xpm ) );
 
     // Zone
-    item = new wxMenuItem( placeMenu, ID_PCB_ZONES_BUTT,
-                         _( "Zone" ),
-                         _( "Add filled zones" ));
-    SET_BITMAP( KiBitmap( add_zone_xpm ) );
-    placeMenu->Append( item );
+    AddMenuItem( placeMenu, ID_PCB_ZONES_BUTT,
+                 _( "Zone" ), _( "Add filled zones" ), KiBitmap( add_zone_xpm ) );
 
     // Text
-    item = new wxMenuItem( placeMenu, ID_PCB_ADD_TEXT_BUTT,
-                           _( "Text" ),
-                           _( "Add text on copper layers or graphic text" ) );
-    SET_BITMAP( KiBitmap( add_text_xpm ) );
-    placeMenu->Append( item );
+    AddMenuItem( placeMenu, ID_PCB_ADD_TEXT_BUTT,
+                  _( "Text" ), _( "Add text on copper layers or graphic text" ),
+                  KiBitmap( add_text_xpm ) );
 
     // Graphic Arc
-    item = new wxMenuItem( placeMenu, ID_PCB_ARC_BUTT,
-                         _( "Arc" ),
-                         _( "Add graphic arc" ) );
-    SET_BITMAP( KiBitmap( add_arc_xpm ) );
-    placeMenu->Append( item );
+    AddMenuItem( placeMenu, ID_PCB_ARC_BUTT,
+                 _( "Arc" ), _( "Add graphic arc" ),KiBitmap( add_arc_xpm ) );
 
     // Graphic Circle
-    item = new wxMenuItem( placeMenu, ID_PCB_CIRCLE_BUTT,
-                         _( "Circle" ),
-                         _( "Add graphic circle" ));
-    SET_BITMAP( KiBitmap( add_circle_xpm ) );
-    placeMenu->Append( item );
+    AddMenuItem( placeMenu, ID_PCB_CIRCLE_BUTT,
+                 _( "Circle" ), _( "Add graphic circle" ),
+                 KiBitmap( add_circle_xpm ) );
 
     // Line or Polygon
-    item = new wxMenuItem( placeMenu, ID_PCB_ADD_LINE_BUTT,
-                           _( "Line or Polygon" ),
-                           _( "Add graphic line or polygon" ));
-    SET_BITMAP( KiBitmap( add_dashed_line_xpm ) );
-    placeMenu->Append( item );
+    AddMenuItem( placeMenu, ID_PCB_ADD_LINE_BUTT,
+                 _( "Line or Polygon" ),
+                 _( "Add graphic line or polygon" ),
+                 KiBitmap( add_dashed_line_xpm ) );
+
     placeMenu->AppendSeparator();
 
     // Dimension
-    item = new wxMenuItem( placeMenu, ID_PCB_DIMENSION_BUTT,
-                           _( "Dimension" ),
-                           _( "Add dimension" ) );
-    SET_BITMAP( KiBitmap( add_dimension_xpm ) );
-    placeMenu->Append( item );
+    AddMenuItem( placeMenu, ID_PCB_DIMENSION_BUTT,
+                 _( "Dimension" ), _( "Add dimension" ),
+                 KiBitmap( add_dimension_xpm ) );
 
     // Layer alignment target
-    item = new wxMenuItem( placeMenu, ID_PCB_MIRE_BUTT,
-                           _( "Layer alignment target" ),
-                           _( "Add layer alignment target" ));
-    SET_BITMAP( KiBitmap( add_mires_xpm ) );
-    placeMenu->Append( item );
+    AddMenuItem( placeMenu, ID_PCB_MIRE_BUTT,
+                 _( "Layer alignment target" ), _( "Add layer alignment target" ),
+                 KiBitmap( add_mires_xpm ) );
+
     placeMenu->AppendSeparator();
 
     // Drill & Place Offset
-    item = new wxMenuItem( placeMenu, ID_PCB_PLACE_OFFSET_COORD_BUTT,
-                           _( "Drill and Place Offset" ),
-                           _( "Place the origin point for drill and place files" ));
-    SET_BITMAP( KiBitmap( pcb_offset_xpm ) );
-    placeMenu->Append( item );
+    AddMenuItem( placeMenu, ID_PCB_PLACE_OFFSET_COORD_BUTT,
+                 _( "Drill and Place Offset" ),
+                 _( "Place the origin point for drill and place files" ),
+                 KiBitmap( pcb_offset_xpm ) );
 
     // Grid Origin
-    item = new wxMenuItem( placeMenu, ID_PCB_PLACE_GRID_COORD_BUTT,
+    AddMenuItem( placeMenu, ID_PCB_PLACE_GRID_COORD_BUTT,
                            _( "Grid Origin" ),
-                           _( "Set the origin point for the grid" ));
-    SET_BITMAP( KiBitmap( grid_select_axis_xpm ) );
-    placeMenu->Append( item );
+                           _( "Set the origin point for the grid" ),
+                           KiBitmap( grid_select_axis_xpm ) );
 
-
-
-    /** Create Preferences and configuration menu **/
+    /* Create Preferences and configuration menu */
     wxMenu* configmenu = new wxMenu;
 
     // Library
-    item = new wxMenuItem( configmenu, ID_CONFIG_REQ,
-                           _( "&Library" ),
-                           _( "Setting libraries, directories and others..." ) );
-    SET_BITMAP( KiBitmap( library_xpm ) );
-    configmenu->Append( item );
+    AddMenuItem( configmenu, ID_CONFIG_REQ,
+                 _( "&Library" ), _( "Setting libraries, directories and others..." ),
+                 KiBitmap( library_xpm ) );
 
     // Colors and Visibility are also handled by the layers manager toolbar
-    item = new wxMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
+    AddMenuItem( configmenu, ID_MENU_PCB_SHOW_HIDE_LAYERS_MANAGER_DIALOG,
                            m_show_layer_manager_tools ?
                            _( "Hide &Layers Manager" ) : _("Show &Layers Manager" ),
-                           HELP_SHOW_HIDE_LAYERMANAGER );
-    SET_BITMAP( KiBitmap( layers_manager_xpm ) );
-    configmenu->Append( item );
+                           HELP_SHOW_HIDE_LAYERMANAGER,
+                           KiBitmap( layers_manager_xpm ) );
 
     // General
 #ifdef __WXMAC__
     configmenu->Append(wxID_PREFERENCES);
 #else
-    item = new wxMenuItem( configmenu, wxID_PREFERENCES,
-                           _( "&General" ),
-                           _( "Select general options for Pcbnew" ) );
-
-    SET_BITMAP( KiBitmap( preference_xpm ) );
-    configmenu->Append( item );
+    AddMenuItem( configmenu, wxID_PREFERENCES,
+                 _( "&General" ), _( "Select general options for Pcbnew" ),
+                  KiBitmap( preference_xpm ) );
 #endif
 
     // Display
-    item = new wxMenuItem( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP,
-                           _( "&Display" ),
-                           _( "Select how items (pads, tracks texts ... ) are displayed" ) );
-    SET_BITMAP( KiBitmap( display_options_xpm ) );
-    configmenu->Append( item );
+    AddMenuItem( configmenu, ID_PCB_DISPLAY_OPTIONS_SETUP,
+                 _( "&Display" ),
+                 _( "Select how items (pads, tracks texts ... ) are displayed" ),
+                 KiBitmap( display_options_xpm ) );
 
     // Create Dimensions submenu
     wxMenu* dimensionsMenu = new wxMenu;
 
     // Grid
-    item = new wxMenuItem( dimensionsMenu, ID_PCB_USER_GRID_SETUP,
-                           _( "Grid" ),
-                           _( "Adjust user grid dimensions" ) );
-    SET_BITMAP( KiBitmap( grid_xpm ) );
-    dimensionsMenu->Append( item );
+    AddMenuItem( dimensionsMenu, ID_PCB_USER_GRID_SETUP,
+                 _( "Grid" ),_( "Adjust user grid dimensions" ),
+                 KiBitmap( grid_xpm ) );
 
     // Text and Drawings
-    item = new wxMenuItem( dimensionsMenu, ID_PCB_DRAWINGS_WIDTHS_SETUP,
-                           _( "Texts and Drawings" ),
-                           _( "Adjust dimensions for texts and drawings" ) );
-    SET_BITMAP( KiBitmap( options_text_xpm ) );
-    dimensionsMenu->Append( item );
+    AddMenuItem( dimensionsMenu, ID_PCB_DRAWINGS_WIDTHS_SETUP,
+                 _( "Texts and Drawings" ),
+                 _( "Adjust dimensions for texts and drawings" ),
+                 KiBitmap( options_text_xpm ) );
 
     // Pads
-    item = new wxMenuItem( dimensionsMenu, ID_PCB_PAD_SETUP,
-                           _( "Pads" ),
-                           _( "Adjust default pad characteristics" ) );
-    SET_BITMAP( KiBitmap( pad_xpm ) );
-    dimensionsMenu->Append( item );
+    AddMenuItem( dimensionsMenu, ID_PCB_PAD_SETUP,
+                 _( "Pads" ),  _( "Adjust default pad characteristics" ),
+                 KiBitmap( pad_xpm ) );
 
     // Pads Mask Clearance
-    item = new wxMenuItem( dimensionsMenu, ID_PCB_MASK_CLEARANCE,
-                           _( "Pads Mask Clearance" ),
-                           _( "Adjust the global clearance between pads and the solder resist mask" ) );
-    SET_BITMAP( KiBitmap( pads_mask_layers_xpm ) );
-    dimensionsMenu->Append( item );
-
+    AddMenuItem( dimensionsMenu, ID_PCB_MASK_CLEARANCE,
+                 _( "Pads Mask Clearance" ),
+                 _( "Adjust the global clearance between pads and the solder resist mask" ),
+                 KiBitmap( pads_mask_layers_xpm ) );
 
     // Save dimension preferences
     dimensionsMenu->AppendSeparator();
-    item = new wxMenuItem( dimensionsMenu, ID_CONFIG_SAVE,
-                           _( "&Save" ),
-                           _( "Save dimension preferences" ) );
-    SET_BITMAP( KiBitmap( save_xpm ) );
-    dimensionsMenu->Append( item );
+    AddMenuItem( dimensionsMenu, ID_CONFIG_SAVE,
+                 _( "&Save" ), _( "Save dimension preferences" ),
+                 KiBitmap( save_xpm ) );
 
     // Append dimension menu to config menu
     AddMenuItem( configmenu, dimensionsMenu,
@@ -564,15 +477,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     // Macros submenu
     wxMenu* macrosMenu = new wxMenu;
 
-    item = new wxMenuItem( macrosMenu, ID_PREFRENCES_MACROS_SAVE,
+    AddMenuItem( macrosMenu, ID_PREFRENCES_MACROS_SAVE,
                            _( "Save macros" ),
                            _( "Save macros to file" ) );
-    macrosMenu->Append( item );
 
-    item = new wxMenuItem( macrosMenu, ID_PREFRENCES_MACROS_READ,
+    AddMenuItem( macrosMenu, ID_PREFRENCES_MACROS_READ,
                            _( "Read macros" ),
                            _( "Read macros from file" ) );
-    macrosMenu->Append( item );
 
     // Append macros menu to config menu
     AddMenuItem( configmenu, macrosMenu,
@@ -583,18 +494,16 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     configmenu->AppendSeparator();
 
     // Save Preferences
-    item = new wxMenuItem( configmenu, ID_CONFIG_SAVE,
-                           _( "&Save Preferences" ),
-                           _( "Save application preferences" ) );
-    SET_BITMAP( KiBitmap( save_setup_xpm ) );
-    configmenu->Append( item );
+    AddMenuItem( configmenu, ID_CONFIG_SAVE,
+                 _( "&Save Preferences" ),
+                 _( "Save application preferences" ),
+                 KiBitmap( save_setup_xpm ) );
 
     // Read Preferences
-    item = new wxMenuItem( configmenu, ID_CONFIG_READ,
-                           _( "&Read Preferences" ),
-                           _( "Read application preferences" ) );
-    SET_BITMAP( KiBitmap( read_setup_xpm ) );
-    configmenu->Append( item );
+    AddMenuItem( configmenu, ID_CONFIG_READ,
+                 _( "&Read Preferences" ),
+                 _( "Read application preferences" ),
+                 KiBitmap( read_setup_xpm ) );
 
     /**
      * Tools menu
@@ -602,50 +511,40 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* toolsMenu = new wxMenu;
 
     /* Netlist */
-    item = new wxMenuItem( toolsMenu, ID_GET_NETLIST,
-                           _( "Netlist" ),
-                           _( "Read the netlist and update board connectivity" ) );
-    SET_BITMAP( KiBitmap( netlist_xpm ) );
-    toolsMenu->Append( item );
+    AddMenuItem( toolsMenu, ID_GET_NETLIST,
+                 _( "Netlist" ),
+                 _( "Read the netlist and update board connectivity" ),
+                 KiBitmap( netlist_xpm ) );
 
     /* Layer pair */
     AddMenuItem( toolsMenu, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
-                           _( "Layer Pair" ),
-                           _( "Change the active layer pair" ),
-                           KiBitmap( select_layer_pair_xpm ) );
+                 _( "Layer Pair" ), _( "Change the active layer pair" ),
+                 KiBitmap( select_layer_pair_xpm ) );
 
     /* DRC */
-    item = new wxMenuItem( toolsMenu, ID_DRC_CONTROL,
-                           _( "DRC" ),
-                           _( "Perform design rules check" ) );
-    SET_BITMAP( KiBitmap( erc_xpm ) );
-    toolsMenu->Append( item );
+    AddMenuItem( toolsMenu, ID_DRC_CONTROL,
+                 _( "DRC" ),
+                 _( "Perform design rules check" ), KiBitmap( erc_xpm ) );
 
     /* FreeRoute */
-    item = new wxMenuItem( toolsMenu, ID_TOOLBARH_PCB_FREEROUTE_ACCESS,
-                           _( "FreeRoute" ),
-                           _( "Fast access to the Web Based FreeROUTE advanced router" ) );
-    SET_BITMAP( KiBitmap( web_support_xpm ) );
-    toolsMenu->Append( item );
+    AddMenuItem( toolsMenu, ID_TOOLBARH_PCB_FREEROUTE_ACCESS,
+                 _( "FreeRoute" ),
+                 _( "Fast access to the Web Based FreeROUTE advanced router" ),
+                 KiBitmap( web_support_xpm ) );
 
-    /**
-     * Design Rules menu
+    /* Design Rules menu
      */
     wxMenu* designRulesMenu = new wxMenu;
 
     // Design Rules
-    item = new wxMenuItem( designRulesMenu, ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG,
+    AddMenuItem( designRulesMenu, ID_MENU_PCB_SHOW_DESIGN_RULES_DIALOG,
                            _( "Design Rules" ),
-                           _( "Open the design rules editor" ) );
-    SET_BITMAP( KiBitmap( hammer_xpm ) );
-    designRulesMenu->Append( item );
+                           _( "Open the design rules editor" ), KiBitmap( hammer_xpm ) );
 
     // Layers Setup
-    item = new wxMenuItem( configmenu, ID_PCB_LAYERS_SETUP,
-                           _( "&Layers Setup" ),
-                           _( "Enable and set layer properties" ) );
-    SET_BITMAP( KiBitmap( copper_layers_setup_xpm ) );
-    designRulesMenu->Append( item );
+    AddMenuItem( configmenu, ID_PCB_LAYERS_SETUP,
+                 _( "&Layers Setup" ),  _( "Enable and set layer properties" ),
+                 KiBitmap( copper_layers_setup_xpm ) );
 
     /**
      * Help menu
