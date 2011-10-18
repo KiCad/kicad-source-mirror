@@ -72,17 +72,40 @@ option( MAINTAIN_PNGS
 
 
 # Plan for three sizes of bitmaps:
-# SMALL - for menus
+# SMALL - for listboxes or comboboxes and perhaps menus
 # MID   - for toolbars  26 x 26
 # BIG   - for program icons  48 x 48
 # which are given on three basename lists: BMAPS_SMALL, BMAPS_MID,a nd BMAPS_BIG
 # respectively.  The basename is without file extension and without path.
 # A corresponding ${basename}.svg file must exist in 'sources' dir below here.
 
-
+# small icons (16x16) needed in listboxes
 set( BMAPS_SMALL
+    pinorient_right
+    pinorient_left
+    pinorient_up
+    pinorient_down
+    pinshape_normal
+    pinshape_invert
+    pinshape_clock_normal
+    pinshape_clock_invert
+    pinshape_active_low_input
+    pinshape_clock_active_low
+    pinshape_active_low_output
+    pinshape_clock_fall
+    pinshape_nonlogic
+    pintype_input
+    pintype_output
+    pintype_bidi
+    pintype_3states
+    pintype_passive
+    pintype_notspecif
+    pintype_powerinput
+    pintype_poweroutput
+    pintype_opencoll
+    pintype_openemit
+    pintype_noconnect
     )
-
 
 # image basenames that go into the toolbar sized destinations, i.e. 26x26
 set( BMAPS_MID
@@ -379,30 +402,6 @@ set( BMAPS_MID
     pin_name_to
     pin_number_to
     pin_size_to
-    pinorient_right
-    pinorient_left
-    pinorient_up
-    pinorient_down
-    pinshape_normal
-    pinshape_invert
-    pinshape_clock_normal
-    pinshape_clock_invert
-    pinshape_active_low_input
-    pinshape_clock_active_low
-    pinshape_active_low_output
-    pinshape_clock_fall
-    pinshape_nonlogic
-    pintype_input
-    pintype_output
-    pintype_bidi
-    pintype_3states
-    pintype_passive
-    pintype_notspecif
-    pintype_powerinput
-    pintype_poweroutput
-    pintype_opencoll
-    pintype_openemit
-    pintype_noconnect
     pin_to
     pin
     plot_hpg
@@ -635,7 +634,9 @@ if( MAINTAIN_PNGS )
         endif( NOT pngcrush_EXECUTABLE )
     endif( NOT pngcrush_FOUND )
 
-    # these 2 cmake commands for each desired bitmap size set, repeat as needed:
+    # these 3 cmake commands for each desired bitmap size set, repeat as needed:
+    bitmap_dir( 16 16 "${BMAPS_SMALL}" )
+
     bitmap_dir( 26 26 "${BMAPS_MID}" )
 
     bitmap_dir( 48 48 "${BMAPS_BIG}" )
@@ -648,6 +649,11 @@ if( MAINTAIN_PNGS )
 endif( MAINTAIN_PNGS )
 
 set( CPP_LIST "" )
+
+foreach( bmn ${BMAPS_SMALL} )
+    #message( "library add cpp_16/${bmn}.cpp" )
+    list( APPEND CPP_LIST cpp_16/${bmn}.cpp )
+endforeach()
 
 foreach( bmn ${BMAPS_MID} )
     #message( "library add cpp_26/${bmn}.cpp" )
