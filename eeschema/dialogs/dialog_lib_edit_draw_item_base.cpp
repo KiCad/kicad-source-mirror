@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -47,14 +47,19 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	
 	dlgBorderSizer->Add( bSizer3, 0, wxALL|wxEXPAND, 0 );
 	
+	m_staticTextSharing = new wxStaticText( this, ID_M_STATICTEXTSHARING, _("Sharing"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSharing->Wrap( -1 );
+	m_staticTextSharing->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	dlgBorderSizer->Add( m_staticTextSharing, 0, wxTOP|wxBOTTOM, 5 );
+	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 	
 	
 	bSizer4->Add( 12, 0, 0, wxEXPAND, 3 );
 	
-	m_checkApplyToAllUnits = new wxCheckBox( this, wxID_ANY, _("Apply changes to all &parts in component"), wxDefaultPosition, wxDefaultSize, 0 );
-	
+	m_checkApplyToAllUnits = new wxCheckBox( this, wxID_ANY, _("Shared by all &parts in component"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer4->Add( m_checkApplyToAllUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	dlgBorderSizer->Add( bSizer4, 0, wxALL|wxEXPAND, 0 );
@@ -65,8 +70,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM_BASE::DIALOG_LIB_EDIT_DRAW_ITEM_BASE( wxWindow* parent
 	
 	bSizer5->Add( 12, 0, 0, wxEXPAND, 3 );
 	
-	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Apply changes to all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	
+	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Shared by all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	dlgBorderSizer->Add( bSizer5, 0, wxEXPAND, 3 );

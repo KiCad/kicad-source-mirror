@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_lib_edit_pin_base__
-#define __dialog_lib_edit_pin_base__
+#ifndef __DIALOG_LIB_EDIT_PIN_BASE_H__
+#define __DIALOG_LIB_EDIT_PIN_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 class wxBitmapComboBox;
 
 #include <wx/string.h>
@@ -92,9 +93,9 @@ class DIALOG_LIB_EDIT_PIN_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 499,372 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Pin Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 476,372 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_LIB_EDIT_PIN_BASE();
 	
 };
 
-#endif //__dialog_lib_edit_pin_base__
+#endif //__DIALOG_LIB_EDIT_PIN_BASE_H__

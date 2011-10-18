@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 17 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -75,13 +75,12 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	boarderSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxStaticBoxSizer* sbSizerPinSharing;
-	sbSizerPinSharing = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Pin Sharing") ), wxVERTICAL );
+	sbSizerPinSharing = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Sharing") ), wxVERTICAL );
 	
-	m_checkApplyToAllParts = new wxCheckBox( this, wxID_ANY, _("Add to all &parts in package"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkApplyToAllParts = new wxCheckBox( this, wxID_ANY, _("Shared by all &parts in component"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerPinSharing->Add( m_checkApplyToAllParts, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
-	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Add to all alternate &body styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkApplyToAllConversions->SetValue(true); 
+	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Shared by all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerPinSharing->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
 	
 	boarderSizer->Add( sbSizerPinSharing, 0, wxEXPAND|wxALL, 5 );
