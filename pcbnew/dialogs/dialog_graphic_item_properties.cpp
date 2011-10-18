@@ -40,7 +40,7 @@ public:
     ~DialogGraphicItemProperties() {};
 
 private:
-    void Init( );
+    void initDlg( );
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
     void OnLayerChoice( wxCommandEvent& event );
@@ -54,9 +54,10 @@ DialogGraphicItemProperties::DialogGraphicItemProperties( PCB_EDIT_FRAME* aParen
     m_DC = aDC;
     m_Item = aItem;
     m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
-    Init();
+    initDlg();
     Layout();
     GetSizer()->SetSizeHints( this );
+    Centre();
 }
 
 
@@ -78,7 +79,7 @@ void PCB_EDIT_FRAME::InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxD
 }
 
 /**************************************************************************/
-void DialogGraphicItemProperties::Init( )
+void DialogGraphicItemProperties::initDlg( )
 /**************************************************************************/
 /* Initialize messages and values in text control,
  * according to the item parameters values
