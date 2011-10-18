@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-18 15:43+0100\n"
-"PO-Revision-Date: 2011-10-18 17:02+0100\n"
+"PO-Revision-Date: 2011-10-18 19:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: Benno Achermann <bennoachermann@bluewin.ch>\n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgstr "Aktualisieren"
 
 #: 3d-viewer/3d_toolbar.cpp:73
 msgid "Fit in page"
-msgstr "Darstellung an Bildschirmgröße anpassen"
+msgstr "Darstellung an Bildschirmgrösse anpassen"
 
 #: 3d-viewer/3d_toolbar.cpp:78
 msgid "Rotate X <-"
@@ -2458,7 +2458,7 @@ msgstr ""
 #: eeschema/libeditframe.cpp:419
 #, c-format
 msgid "Part %c"
-msgstr "Gatter %c"
+msgstr "Bauteil %c"
 
 #: eeschema/libeditframe.cpp:990
 msgid "Add pin"
@@ -2630,27 +2630,27 @@ msgstr "Global"
 
 #: eeschema/libedit_onrightclick.cpp:266
 msgid "Pin Size to selected pins"
-msgstr "Pingrösse den selektierten Pins zuweisen"
+msgstr "Grösse des Pins den selektierten Pins zuweisen"
 
 #: eeschema/libedit_onrightclick.cpp:267
 msgid "Pin Size to Others"
-msgstr "Pingrösse allen anderen zuweisen"
+msgstr "Grösse des Pins allen anderen Pins zuweisen"
 
 #: eeschema/libedit_onrightclick.cpp:270
 msgid "Pin Name Size to selected pin"
-msgstr "Pin-Namensgrösse dem selektierten Pin zuweisen"
+msgstr "Grösse des Pinnamens dem selektierten Pin zuweisen"
 
 #: eeschema/libedit_onrightclick.cpp:271
 msgid "Pin Name Size to Others"
-msgstr "Pin-Namensgrösse allen anderen zuweisen"
+msgstr "Grösse des Pinnamens allen anderen Pins zuweisen"
 
 #: eeschema/libedit_onrightclick.cpp:274
 msgid "Pin Num Size to selected pin"
-msgstr "Pin-Nummerngrösse dem selektierten Pin zuweisen"
+msgstr "Grösse der Pinnummer dem selektierten Pin zuweisen"
 
 #: eeschema/libedit_onrightclick.cpp:275
 msgid "Pin Num Size to Others"
-msgstr "Pin-Nummerngrösse allen anderen zuweisen"
+msgstr "Grösse der Pinnummer allen anderen Pins zuweisen"
 
 #: eeschema/libedit_onrightclick.cpp:283
 msgid "Cancel Block"
@@ -2783,12 +2783,13 @@ msgstr "Der Kreisbogen hatte nur %d Parameter von den benötigten 8"
 msgid "Line width"
 msgstr "Linienbreite"
 
+# Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: eeschema/lib_arc.cpp:502
 #: eeschema/lib_bezier.cpp:409
 #: eeschema/lib_circle.cpp:280
 #: eeschema/lib_polyline.cpp:411
 msgid "Bounding box"
-msgstr "Rahmen"
+msgstr "Darstellungsbereich"
 
 #: eeschema/lib_arc.cpp:508
 #, c-format
@@ -3197,7 +3198,7 @@ msgstr "S&eite einrichten"
 
 #: eeschema/menubar.cpp:104
 msgid "Settigns for page size and information"
-msgstr "Seitengröße einrichten und Informationen setzen"
+msgstr "Seitengrösse einrichten und Informationen setzen"
 
 #: eeschema/menubar.cpp:110
 msgid "P&rint"
@@ -4007,7 +4008,7 @@ msgstr "Schaltplan editieren"
 
 #: eeschema/onrightclick.cpp:599
 msgid "Resize Sheet"
-msgstr "Schaltplangröße ändern"
+msgstr "Schaltplangrösse ändern"
 
 #: eeschema/onrightclick.cpp:602
 msgid "Import Sheet Pins"
@@ -4096,7 +4097,7 @@ msgstr "<b>Pin-Duplikat %s</b> \"%s\" an Position <b>(%.3f, %.3f)</b> steht in K
 #: eeschema/pinedit.cpp:676
 #, c-format
 msgid " in part %c"
-msgstr " von Gatter %c"
+msgstr " in Bauteil %c"
 
 #: eeschema/pinedit.cpp:644
 #: eeschema/pinedit.cpp:683
@@ -4525,7 +4526,7 @@ msgstr "Wiederherstellen des letzten Rückgängigmachens"
 
 #: eeschema/tool_lib.cpp:126
 msgid "Edit component properties"
-msgstr "Editiere Bauteil-Eigenschaften"
+msgstr "Editiere Eigenschaften des Bauteils"
 
 #: eeschema/tool_lib.cpp:129
 msgid "Add and remove fields and edit field properties"
@@ -4819,12 +4820,12 @@ msgstr ""
 #: eeschema/dialogs/dialog_build_BOM.cpp:658
 #: eeschema/dialogs/dialog_build_BOM.cpp:974
 msgid " (with SubCmp)"
-msgstr "(mit Gatter)"
+msgstr "(mit Subkomponenten)"
 
 #: eeschema/dialogs/dialog_build_BOM.cpp:793
 #: eeschema/dialogs/dialog_build_BOM.cpp:1034
 msgid "#End Cmp\n"
-msgstr "#Ende Cmp\n"
+msgstr "#Ende der Komponente\n"
 
 #: eeschema/dialogs/dialog_build_BOM.cpp:971
 msgid ""
@@ -4832,7 +4833,7 @@ msgid ""
 "#Cmp ( order = Value )"
 msgstr ""
 "\n"
-"#Cmp ( Sortiert nach Wert )"
+"#Komponenten ( Sortiert nach Wert )"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:23
 msgid "List items:"
@@ -4840,15 +4841,15 @@ msgstr "Auflistung:"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:25
 msgid "Components by reference"
-msgstr "Bauteile nach Referenz"
+msgstr "Komponenten nach Referenz"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:29
 msgid "Sub components (i.e. U2A, U2B ...)"
-msgstr "Gatter (z.B. U2A, U2B, ...)"
+msgstr "Subkomponenten (z.B. U2A, U2B, ...)"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:33
 msgid "Components by value"
-msgstr "Bauteile nach Wert"
+msgstr "Komponenten nach Wert"
 
 #: eeschema/dialogs/dialog_build_BOM_base.cpp:37
 msgid "Hierarchy pins by name"
@@ -5119,7 +5120,7 @@ msgid ""
 "Check this option for components that have a De Morgan representation.\n"
 "This is usual for gates."
 msgstr ""
-"Wähle diese Option für Bauteile, welche eine 'De Morgan' Darstellung besitzen.\n"
+"Wähle diese Option für Komponenten, welche eine 'De Morgan' Darstellung besitzen.\n"
 "Dies ist üblicherweise bei Gattern der Fall."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:35
@@ -5152,15 +5153,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:64
 msgid "Number of Units:"
-msgstr "Anzahl der Gatter:"
+msgstr "Anzahl der Bauteile:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:66
 msgid ""
 "This is the number of parts in this component package.\n"
 "A 74LS00 gate has 4 parts per packages."
 msgstr ""
-"Dies ist die Anzahl von Gattern innerhalb dieses Bauteile Packages.\n"
-"Ein 74LS00 hat 4 Gatter pro Package."
+"Die Anzahl von Bauteilen dieser Komponente innerhalb des Package.\n"
+"Ein 74LS00 Baustein besteht z.B. aus 4 Bauteilen pro Package."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:78
 msgid "Skew:"
@@ -5472,7 +5473,7 @@ msgid ""
 "Use the alternate shape of this component.\n"
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
-"Verwende die alternative Form dieses Bauteils.\n"
+"Verwende die alternative Form dieser Komponente.\n"
 "Für Gatter erfolgt die Umsetzung nach \"De Morgan\"."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:82
@@ -5609,7 +5610,7 @@ msgstr "Grösse(\")"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:201
 msgid "The size of the currently selected field's text in the schematic"
-msgstr "Die Textgröße des aktuell ausgewählten Feldes im Schaltplan"
+msgstr "Die Textgrösse des aktuell ausgewählten Feldes im Schaltplan"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_fbp.cpp:213
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:145
@@ -5707,7 +5708,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_libentry_fields_in_lib_base.cpp:133
 msgid "The vertical height of the currently selected field's text in the schematic"
-msgstr "Die Textgröße des aktuell ausgewählten Feldes im Schaltplan"
+msgstr "Die Textgrösse des aktuell ausgewählten Feldes im Schaltplan"
 
 #: eeschema/dialogs/dialog_eeschema_config.cpp:37
 msgid "from "
@@ -5744,7 +5745,7 @@ msgstr "Maß&einheit:"
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:56
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:33
 msgid "&Grid size:"
-msgstr "&Rastergröße:"
+msgstr "&Rastergrösse:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:65
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:76
@@ -5768,7 +5769,7 @@ msgstr "Voreinstellung für &Linienbreite:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:80
 msgid "Default text &size:"
-msgstr "Voreinstellung für &Textgröße:"
+msgstr "Voreinstellung für &Textgrösse:"
 
 #: eeschema/dialogs/dialog_eeschema_options_base.cpp:91
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:69
@@ -5938,7 +5939,7 @@ msgstr "Gegenwärtige &Linienbreite:"
 
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:58
 msgid "Current graphic text &size:"
-msgstr "Gegenwärtige &Textgröße:"
+msgstr "Gegenwärtige &Textgrösse:"
 
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:97
 msgid "Current &pin lenght:"
@@ -5946,11 +5947,11 @@ msgstr "Gegenwärtige Pin&länge:"
 
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:108
 msgid "Current pin name size:"
-msgstr "Gegenwärtige Größe von Pin&namen:"
+msgstr "Gegenwärtige Grösse von Pin&namen:"
 
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:119
 msgid "Current pin number size:"
-msgstr "Gegenwärtige Größe von &Pinnummern:"
+msgstr "Gegenwärtige Grösse von &Pinnummern:"
 
 #: eeschema/dialogs/dialog_libedit_dimensions_base.cpp:130
 msgid "&Repeat pin number increment:"
@@ -5972,7 +5973,7 @@ msgstr "Gemeinsame Nutzung"
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:62
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:80
 msgid "Shared by all &parts in component"
-msgstr "Gemeinsam genutzt von allen &Bestandteilen des Bauteils"
+msgstr "Gemeinsam genutzt von allen &Bauteilen der Komponente"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:73
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:83
@@ -6037,7 +6038,7 @@ msgstr "Grösse der &Beschriftung:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:121
 msgid "Number te&xt size:"
-msgstr "Größe der &Nummerierung:"
+msgstr "Grösse der &Nummerierung:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:132
 msgid "&Length:"
@@ -6057,11 +6058,11 @@ msgstr "Vertikal"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:65
 msgid "Common to Units"
-msgstr "Übliche Einheiten"
+msgstr "Für alle Bauteile"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:68
 msgid "Common to convert"
-msgstr "Übliche Umformung"
+msgstr "Für alle Darstellungsformen"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:75
 msgid "Text Shape:"
@@ -6130,7 +6131,7 @@ msgstr "Erzeuge Bauteil als Spannungquelle &Symbol"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:131
 msgid "Parts in package locked (cannot be swapped)"
-msgstr "Komponenten dieses Packages sind gelocked und können nicht getauscht werden"
+msgstr "Bauteile in diesem Package sind gesperrt und können nicht getauscht werden"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:142
 msgid "Global Pin Settings"
@@ -6201,7 +6202,7 @@ msgstr "Meldungen :"
 #: eeschema/dialogs/dialog_plot_schematic_HPGL_base.cpp:25
 #: eeschema/dialogs/dialog_plot_schematic_PS_base.cpp:22
 msgid "Schematic size"
-msgstr "Schaltplangröße"
+msgstr "Schaltplangrösse"
 
 #: eeschema/dialogs/dialog_plot_schematic_HPGL_base.cpp:25
 msgid "Page size A4"
@@ -7251,11 +7252,11 @@ msgstr "Zu kleine Leiterbahnbreite"
 
 #: pcbnew/class_drc_item.cpp:86
 msgid "Too small via size"
-msgstr "Zu kleine Größe für Durchkontaktierung"
+msgstr "Zu kleine Grösse für Durchkontaktierung"
 
 #: pcbnew/class_drc_item.cpp:88
 msgid "Too small micro via size"
-msgstr "Zu kleine Größe für Micro Durchkontaktierung"
+msgstr "Zu kleine Grösse für Micro Durchkontaktierung"
 
 #: pcbnew/class_drc_item.cpp:92
 msgid "NetClass Track Width &lt; global limit"
@@ -7741,7 +7742,7 @@ msgstr "NC Breite"
 
 #: pcbnew/class_track.cpp:1042
 msgid "NC Via Size"
-msgstr "NC DuKo Größe"
+msgstr "NC DuKo Grösse"
 
 #: pcbnew/class_track.cpp:1045
 msgid "NC Via Drill"
@@ -7892,7 +7893,7 @@ msgstr "Lage:"
 
 #: pcbnew/dimension.cpp:184
 msgid "The text thickness is too large for the text size. It will be clamped"
-msgstr "Die Textstärke ist für diese Textgröße zu groß. Text wird eingeklemmt."
+msgstr "Die Textstärke ist für diese Textgrösse zu groß. Text wird eingeklemmt."
 
 #: pcbnew/drc.cpp:182
 msgid "Compile ratsnest...\n"
@@ -8954,19 +8955,19 @@ msgstr "Tausche Leiterbahnen auf Kupferlagen oder Zeichnungen auf anderen Lagen"
 
 #: pcbnew/menubar_pcbframe.cpp:278
 msgid "Reset Module &Reference Sizes"
-msgstr "Rücksetzen der Größe von Modul&referenzen"
+msgstr "Rücksetzen der Grösse von Modul&referenzen"
 
 #: pcbnew/menubar_pcbframe.cpp:279
 msgid "Reset text size and width of all module references to current defaults"
-msgstr "Rücksetzen der Textgröße und -breite aller Modulreferenzen zu gegenwärtiger Standardeinstellung"
+msgstr "Rücksetzen der Textgrösse und -breite aller Modulreferenzen zu gegenwärtiger Standardeinstellung"
 
 #: pcbnew/menubar_pcbframe.cpp:284
 msgid "Reset Module &Value Sizes"
-msgstr "Rücksetzen der Größe von Modul&werten"
+msgstr "Rücksetzen der Grösse von Modul&werten"
 
 #: pcbnew/menubar_pcbframe.cpp:285
 msgid "Reset text size and width of all module values to current defaults"
-msgstr "Rücksetzen von Textgröße und -breite aller Modulewerte zu gegenwärtiger Standardeinstellung"
+msgstr "Rücksetzen von Textgrösse und -breite aller Modulewerte zu gegenwärtiger Standardeinstellung"
 
 #: pcbnew/menubar_pcbframe.cpp:335
 msgid "&List Nets"
@@ -9042,7 +9043,7 @@ msgstr "Wähle wie Elemente (Pads, Leiterbahnentext, ...) dargestellt werden"
 
 #: pcbnew/menubar_pcbframe.cpp:438
 msgid "Adjust user grid dimensions"
-msgstr "Anpassen der Rastergröße"
+msgstr "Anpassen der Rastergrösse"
 
 #: pcbnew/menubar_pcbframe.cpp:443
 msgid "Texts and Drawings"
@@ -9050,7 +9051,7 @@ msgstr "Texte und Zeichnungen"
 
 #: pcbnew/menubar_pcbframe.cpp:444
 msgid "Adjust dimensions for texts and drawings"
-msgstr "Anpassen der Größe für Texte und Zeichnungen"
+msgstr "Anpassen der Grösse für Texte und Zeichnungen"
 
 #: pcbnew/menubar_pcbframe.cpp:449
 msgid "Adjust default pad characteristics"
@@ -9744,7 +9745,7 @@ msgstr "Micro Durchkontaktierung platzieren"
 
 #: pcbnew/onrightclick.cpp:473
 msgid "Change Via Size and Drill"
-msgstr "Größe von Durchkontaktierung und Bohrung ändern"
+msgstr "Grösse von Durchkontaktierung und Bohrung ändern"
 
 #: pcbnew/onrightclick.cpp:479
 msgid "Change Segment Width"
@@ -9885,7 +9886,7 @@ msgstr "Entferne Bauteil"
 #: pcbnew/onrightclick.cpp:693
 #: pcbnew/onrightclick.cpp:798
 msgid "Reset Size"
-msgstr "Größe rücksetzen"
+msgstr "Grösse rücksetzen"
 
 #: pcbnew/onrightclick.cpp:743
 msgid "Copy Current Settings to this Pad"
@@ -9925,7 +9926,7 @@ msgstr "Verwende Werte der Netznklasse"
 
 #: pcbnew/onrightclick.cpp:837
 msgid "Use track and via sizes from their Netclass values"
-msgstr "Verwende Leiterbahn- und DuKo-Größe aus ihrer Netzklasse"
+msgstr "Verwende Leiterbahn- und DuKo-Grösse aus ihrer Netzklasse"
 
 #: pcbnew/onrightclick.cpp:844
 #, c-format
@@ -10526,7 +10527,7 @@ msgid ""
 "you must choose a copper min thickness value bigger than 0.001 inch (or 0.0254 mm)"
 msgstr ""
 "Fehler :\n"
-"Es muß eine Kupfermindeststärke gewählt werden, die größer ist als 0.001 Zoll (oder 0.0254 mm)"
+"Es muß eine Kupfermindeststärke gewählt werden, die grösser ist als 0.001 Zoll (oder 0.0254 mm)"
 
 #: pcbnew/zones_non_copper_type_functions.cpp:171
 msgid "Error : you must choose a layer"
@@ -10612,11 +10613,11 @@ msgstr "Abstandsfläche muss kleiner sein als 0.5\" / 12.7 mm."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:318
 msgid "Minimum width must be larger than 0.001\" / 0.0254 mm."
-msgstr "Mindestbreite muss größer sein als 0.001\" / 0.0254 mm."
+msgstr "Mindestbreite muss grösser sein als 0.001\" / 0.0254 mm."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:346
 msgid "Thermal relief spoke width is larger than the minimum width."
-msgstr "Breite der Wärmeabführungsspeiche ist größer als die Mindestbreite."
+msgstr "Breite der Wärmeabführungsspeiche ist grösser als die Mindestbreite."
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:359
 msgid "No layer selected."
@@ -10847,7 +10848,7 @@ msgstr "Die \"Default\"-Netzklasse kann nicht entfernt werden."
 #: pcbnew/dialogs/dialog_design_rules.cpp:1015
 #, c-format
 msgid "%s: <b>Track Size</b> &lt; <b>Min Track Size</b><br>"
-msgstr "%s: <b>Leiterbahngröße</b> &lt; <b>Mindest Leiterbahngröße</b><br>"
+msgstr "%s: <b>Leiterbahngrösse</b> &lt; <b>Mindest Leiterbahngrösse</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1029
 #, c-format
@@ -10882,27 +10883,27 @@ msgstr "%s: <b>Micro Durchkontaktierungs Bohrdurchmesser</b> &lt; <b>Micro Durch
 #: pcbnew/dialogs/dialog_design_rules.cpp:1106
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
-msgstr "<b>Extra Leiterbahn %d Größe</b> %s &lt; <b>Mindest Leiterbahngröße</b><br>"
+msgstr "<b>Extra Leiterbahn %d Grösse</b> %s &lt; <b>Mindest Leiterbahngrösse</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1114
 #, c-format
 msgid "<b>Extra Track %d Size</b> %s &gt; <b>1 inch!</b><br>"
-msgstr "<b>Extra Leiterbahn %d Größe</b> %s &gt; <b>1 Zoll !</b><br>"
+msgstr "<b>Extra Leiterbahn %d Grösse</b> %s &gt; <b>1 Zoll !</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1138
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
-msgstr "<b>Extra Durchkontaktierung %d Größe</b> %s &lt; <b>Mindest Durchkontaktierungsgröße</b><br>"
+msgstr "<b>Extra Durchkontaktierung %d Grösse</b> %s &lt; <b>Mindest Durchkontaktierungsgrösse</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1147
 #, c-format
 msgid "<b>Extra Via %d Size</b> %s &le; <b> Drill Size</b> %s<br>"
-msgstr "<b>Extra Durchkontaktierung %d Größe</b> %s &le; <b>Bohrlochgröße</b> %s<br>"
+msgstr "<b>Extra Durchkontaktierung %d Grösse</b> %s &le; <b>Bohrlochgrösse</b> %s<br>"
 
 #: pcbnew/dialogs/dialog_design_rules.cpp:1157
 #, c-format
 msgid "<b>Extra Via %d Size</b>%s &gt; <b>1 inch!</b><br>"
-msgstr "<b>Extra Durchkontaktierung %d Größe</b>%s &gt; <b>1 Zoll !</b><br>"
+msgstr "<b>Extra Durchkontaktierung %d Grösse</b>%s &gt; <b>1 Zoll !</b><br>"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:27
 msgid "Net Classes:"
@@ -11079,7 +11080,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:244
 msgid "Custom Via Sizes:"
-msgstr "Benutzerdefinierte DuKo-Größen:"
+msgstr "Benutzerdefinierte DuKo-Grössen:"
 
 #: pcbnew/dialogs/dialog_design_rules_base.cpp:246
 msgid "Drill value: a blank or 0 => default Netclass value"
@@ -11194,7 +11195,7 @@ msgid ""
 msgstr ""
 "Zeige (oder auch nicht) Bohrung für Durchkontaktierungen.\n"
 "Wenn 'Definierte Bohrdurchmesser' ausgewählt wurde,\n"
-"werden nur Bohrungen ohne Größenvoreinstellung angezeigt."
+"werden nur Bohrungen ohne Grössenvoreinstellung angezeigt."
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:47
 msgid "Routing help:"
@@ -11318,7 +11319,7 @@ msgstr "Gebe zulässigen Mindestwert für Leiterbahnbreite an"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:54
 msgid "Min via size"
-msgstr "Mindest-DuKo-Größe"
+msgstr "Mindest-DuKo-Grösse"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:56
 msgid "Enter the minimum acceptable diameter for a standard via"
@@ -11326,7 +11327,7 @@ msgstr "Gebe den zulässigen Mindestdurchmesser für eine Standard-Durchkontakti
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:63
 msgid "Min uVia size"
-msgstr "Mindest-MicroDuKo-Größe"
+msgstr "Mindest-MicroDuKo-Grösse"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:65
 msgid "Enter the minimum acceptable diameter for a micro via"
@@ -11596,7 +11597,7 @@ msgstr ""
 "für diesen Footprint.\n"
 "Dieser Wert kann durch den lokalen Wert eines Pads ersetzt werden.\n"
 "Das endgültige Abstandsmaß ist die Summe aus diesem Wert und dem Abstandsmaßverhältnis.\n"
-"Ein negativer Wert bedeutet, dass die Maskengröße kleiner als die Padgröße ist."
+"Ein negativer Wert bedeutet, dass die Maskengrösse kleiner als die Padgrösse ist."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:204
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:187
@@ -11615,10 +11616,10 @@ msgid ""
 msgstr ""
 "Dies ist das lokale Abstandsverhältnis in Prozent zwischen Pads und Lötpaste\n"
 "für diesen Footprint.\n"
-"Ein Wert von 10 bedeutet, dass das Abstandsmaß 10 Prozent der Padgröße entspricht.\n"
+"Ein Wert von 10 bedeutet, dass das Abstandsmaß 10 Prozent der Padgrösse entspricht.\n"
 "Dieser Wert kann durch den lokalen Wert eines Pads ersetzt werden.\n"
 "Das endgültige Abstandsmaß ist die Summe aus diesem Wert und dem Abstandsmaß.\n"
-"Ein negativer Wert bedeutet, dass die Maskengröße kleiner als die Padgröße ist."
+"Ein negativer Wert bedeutet, dass die Maskengrösse kleiner als die Padgrösse ist."
 
 #: pcbnew/dialogs/dialog_edit_module_for_BoardEditor_base.cpp:213
 #: pcbnew/dialogs/dialog_edit_module_for_Modedit_base.cpp:196
@@ -12007,7 +12008,7 @@ msgstr "Cursor"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:42
 msgid "Main cursor shape selection (small cross or large cursor)"
-msgstr "Auswahl der Mauszeigerform (kleines Kreuz oder großes Kreuz in Bildschirmgröße)."
+msgstr "Auswahl der Mauszeigerform (kleines Kreuz oder großes Kreuz in Bildschirmgrösse)."
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:51
 msgid "Max Links:"
@@ -12188,11 +12189,11 @@ msgstr "Inklusive gesperrter Leiterbahnen"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:155
 msgid "Set current Net tracks and vias sizes and drill to the current values?"
-msgstr "DuKo-, Leiterbahngröße und Bohrdurchmesser innerhalb des gegenwärtigen Netzes auf aktuellen Wert setzen ?"
+msgstr "DuKo-, Leiterbahngrösse und Bohrdurchmesser innerhalb des gegenwärtigen Netzes auf aktuellen Wert setzen ?"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:166
 msgid "Set current Net tracks and vias sizes and drill to the Netclass default value?"
-msgstr "DuKo-, Leiterbahngrößen und Bohrdurchmesser des gegenwärtigen Netzes als Defaultwert für Netzklasse setzen ?"
+msgstr "DuKo-, Leiterbahngrössen und Bohrdurchmesser des gegenwärtigen Netzes als Defaultwert für Netzklasse setzen ?"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:175
 msgid "Set All Tracks and Vias to Netclass value"
@@ -12224,7 +12225,7 @@ msgstr "Netzklassenname:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:81
 msgid "Track size"
-msgstr "Leiterbahngröße"
+msgstr "Leiterbahngrösse"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:82
 msgid "Via diameter"
@@ -12361,7 +12362,7 @@ msgid ""
 "Pen size used to draw items that have no pen size specified.\n"
 "Used mainly to draw items in sketch mode."
 msgstr ""
-"Stiftgröße, um Elemente darzustellen, verwendet obwohl keine Stiftgröße spezifiziert wurde.\n"
+"Stiftgrösse, um Elemente darzustellen, verwendet obwohl keine Stiftgrösse spezifiziert wurde.\n"
 "Wird hauptsächlich verwendet, um Elemente im Umriss-Modus darzustellen."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:94
@@ -12715,7 +12716,7 @@ msgid ""
 "- a negative value means a mask smaller than a pad\n"
 msgstr ""
 "Beachte:\n"
-"- Ein positiver Wert bedeutet, dass die Maske größer als das Pad ist\n"
+"- Ein positiver Wert bedeutet, dass die Maske grösser als das Pad ist\n"
 "- Ein negativer Wert bedeutet, dass die Maske kleiner als das Pad ist\n"
 
 #: pcbnew/dialogs/dialog_mask_clearance_base.cpp:44
@@ -12744,7 +12745,7 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value"
 msgstr ""
 "Dies ist das globale Abstandsverhältnis in Prozent zwischen Pads und der Lötpaste.\n"
-"Ein Wert von 10 bedeutet, dass das Abstandsmaß 10 Prozent der Padgröße entspricht.\n"
+"Ein Wert von 10 bedeutet, dass das Abstandsmaß 10 Prozent der Padgrösse entspricht.\n"
 "Dieser Wert kann durch lokale Werte eines Footprints oder Pads ersetzt werden.\n"
 "Das endgültige Abstandsmaß ist die Summe aus diesem Wert und dem Abstandsverhältnis."
 
@@ -12942,7 +12943,7 @@ msgstr "Unbekannter Netzname. Keine Änderung durchgeführt."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:881
 msgid "Incorrect value for pad drill: pad drill bigger than pad size"
-msgstr "Inkorrekter Wert für Pad Bohrdurchmesser. Bohrdurchmesser ist größer als Pad."
+msgstr "Inkorrekter Wert für Pad Bohrdurchmesser. Bohrdurchmesser ist grösser als Pad."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:890
 msgid "Error: pad is not on a copper layer and has a hole"
@@ -12953,7 +12954,7 @@ msgid ""
 "For NPTH pad, set pad drill value to pad size value,\n"
 "if you do not want this pad plotted in gerber files"
 msgstr ""
-"Setze für ein NPTH-Pad den Bohrdurchmesser auf die Padgröße,\n"
+"Setze für ein NPTH-Pad den Bohrdurchmesser auf die Padgrösse,\n"
 "wenn dieses Pad nicht in Gerberdateien geplottet werden soll."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:905
@@ -12994,11 +12995,11 @@ msgstr "Padbohrung Y"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:109
 msgid "Shape size X"
-msgstr "Formgröße X"
+msgstr "Formgrösse X"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:120
 msgid "Shape size Y"
-msgstr "Formgröße Y"
+msgstr "Formgrösse Y"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:131
 msgid "Shape offset X"
@@ -13124,7 +13125,7 @@ msgstr ""
 "Dies ist das lokale Abstandsmaß zwischen diesem Pad und der Lötpaste.\n"
 "Wenn 0, wird der lokale Wert des Footprints oder der globale Wert verwendet.\n"
 "Das endgültige Abstandsmaß ist die Summe aus diesem Wert und dem Abstandsverhältnis.\n"
-"Ein negativer Wert bedeutet, dass die Maskengröße kleiner als die Padgröße ist."
+"Ein negativer Wert bedeutet, dass die Maskengrösse kleiner als die Padgrösse ist."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:358
 msgid ""
@@ -13135,10 +13136,10 @@ msgid ""
 "A negative value means a smaller mask size than pad size."
 msgstr ""
 "Dies ist das lokale Abstandsverhältnis in Prozent zwischen diesem Pad und der Lötpaste.\n"
-"Ein Wert von 10 bedeutet, dass das Abstandsmaß 10 Prozent der Padgröße entspricht.\n"
+"Ein Wert von 10 bedeutet, dass das Abstandsmaß 10 Prozent der Padgrösse entspricht.\n"
 "Wenn 0, wird der lokale Footprintwert oder der globale Wert verwendet.\n"
 "Das endgültige Abstandsmaß ist die Summe aus diesem Wert und dem Abstandsmaß.\n"
-"Ein negativer Wert bedeutet, dass die Maskengröße kleiner als die Padgröße ist."
+"Ein negativer Wert bedeutet, dass die Maskengrösse kleiner als die Padgrösse ist."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:378
 msgid "Standard"
@@ -13344,7 +13345,7 @@ msgstr "Klein"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:126
 msgid "Actual size"
-msgstr "Gegenwärtige Größe"
+msgstr "Gegenwärtige Grösse"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:132
 msgid "Scaling:"
@@ -14082,7 +14083,7 @@ msgstr "Füge eine neue Excellonbohrdatei der aktuellen Lage hinzu. Vorhergehend
 
 #: gerbview/toolbars_gerber.cpp:68
 msgid "Show/hide frame reference and select paper size for printing"
-msgstr "Ein-/Ausblenden der Rahmenreferenz und Auswahl der Papiergröße für einen Ausdruck"
+msgstr "Ein-/Ausblenden der Rahmenreferenz und Auswahl der Papiergrösse für einen Ausdruck"
 
 #: gerbview/toolbars_gerber.cpp:72
 msgid "Print layers"
@@ -14204,7 +14205,7 @@ msgstr "Wähle, ob der Schaltplan in farbe oder schwarz weiss gedruckt werden so
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:74
 msgid "Full size. Do not show page limits"
-msgstr "Volle Größe. Zeige keine Seitenränder."
+msgstr "Volle Grösse. Zeige keine Seitenränder."
 
 #: gerbview/dialogs/dialog_show_page_borders_base.cpp:25
 #: gerbview/dialogs/gerbview_dialog_display_options_frame_base.cpp:74
@@ -14418,7 +14419,7 @@ msgstr "Pin Eigenschaften"
 
 #: eeschema/dialogs/dialog_lib_edit_text_base.h:60
 msgid "Library Text Properties"
-msgstr "Bibliotheks-Texteigenschaften"
+msgstr "Bauteilebibliothek - Texteigenschaften"
 
 #: eeschema/dialogs/dialog_sch_edit_sheet_pin_base.h:55
 msgid "Sheet Pin Properties"
@@ -14502,7 +14503,7 @@ msgstr "Pad Eigenschaften"
 
 #: pcbnew/dialogs/dialog_set_grid_base.h:67
 msgid "Grid Origin and User Grid Size"
-msgstr "Rasterursprung und benutzerdefinierte Rastergröße"
+msgstr "Rasterursprung und benutzerdefinierte Rastergrösse"
 
 #: gerbview/dialogs/dialog_show_page_borders_base.h:49
 msgid "Page Borders"
@@ -14866,7 +14867,7 @@ msgstr "GerbView Optionen"
 #~ msgstr ""
 #~ "Fehler :\n"
 #~ "für die Wärmeabführung muß eine Kupferbrücke gewählt werden mit einem "
-#~ "Wert, der größer ist als die Mindeststärke der Fläche"
+#~ "Wert, der grösser ist als die Mindeststärke der Fläche"
 
 #~ msgid "Error : you must choose a net name"
 #~ msgstr "Fehler: Sie müssen einen Netznamen wählen"
@@ -14880,7 +14881,7 @@ msgstr "GerbView Optionen"
 #~ "sometimes polygons are better and sometimes segments are better."
 #~ msgstr ""
 #~ "Ausgefüllte Bereiche können solide Polygone oder Segmente verwenden.\n"
-#~ "Abhängig von der Komplexität und der Größe der Fläche,\n"
+#~ "Abhängig von der Komplexität und der Grösse der Fläche,\n"
 #~ "sind manchmal Polygone und manchmal Segmente besser."
 
 #~ msgid "32 segments / 360 deg"
@@ -15108,7 +15109,7 @@ msgstr "GerbView Optionen"
 #~ msgstr "bei Offset"
 
 #~ msgid "Thickness of graphic lines, texts sizes and others"
-#~ msgstr "Linienstärke, Textgröße und Anderes"
+#~ msgstr "Linienstärke, Textgrösse und Anderes"
 
 #~ msgid "Sort Components by &Value"
 #~ msgstr "Bauteile nach ihrem &Wert"
@@ -15668,7 +15669,7 @@ msgstr "GerbView Optionen"
 #~ msgstr "Filter"
 
 #~ msgid "Adjust size, shape, layers... for pads"
-#~ msgstr "Anpassen von Größe, Form, Lagen... für Pads"
+#~ msgstr "Anpassen von Grösse, Form, Lagen... für Pads"
 
 #~ msgid "Open the pcbnew manual"
 #~ msgstr "Öffne das PCBnew Handbuch"
@@ -16389,13 +16390,13 @@ msgstr "GerbView Optionen"
 #~ msgstr "Neue Leiterbahnbreite:"
 
 #~ msgid "Via Min Size"
-#~ msgstr "DuKo Mindestgröße"
+#~ msgstr "DuKo Mindestgrösse"
 
 #~ msgid "Track Min Width"
 #~ msgstr "Leiterbahnmindestbreite"
 
 #~ msgid "MicroVia Min Size"
-#~ msgstr "Micro DuKo-Mindestgröße"
+#~ msgstr "Micro DuKo-Mindestgrösse"
 
 #~ msgid "Edit Via Drill"
 #~ msgstr "Durchkontaktierung editieren"
@@ -16538,7 +16539,7 @@ msgstr "GerbView Optionen"
 #~ msgstr "Nicht sichtbaren Text einblenden"
 
 #~ msgid "Adjust size,shape,layers... for Pads"
-#~ msgstr "Anpassen von Größe, Form, Lage... für Pads"
+#~ msgstr "Anpassen von Grösse, Form, Lage... für Pads"
 
 #~ msgid "&New Board"
 #~ msgstr "&Neue Platine"
@@ -16942,12 +16943,12 @@ msgstr "GerbView Optionen"
 #~ msgid ""
 #~ "Grid size( %f, %f ) not in grid list, falling back to grid size( %f, %f )."
 #~ msgstr ""
-#~ "Rastergröße ( %f, %f ) nicht in Rasterliste vorhanden. Greife auf "
-#~ "Rastergröße ( %f, %f ) zurück."
+#~ "Rastergrösse ( %f, %f ) nicht in Rasterliste vorhanden. Greife auf "
+#~ "Rastergrösse ( %f, %f ) zurück."
 
 #~ msgid "Grid ID %d not in grid list, falling back to grid size( %g, %g )."
 #~ msgstr ""
-#~ "Raster Id %d nicht in Rasterliste vorhanden. Greife auf Rastergröße ( %g, "
+#~ "Raster Id %d nicht in Rasterliste vorhanden. Greife auf Rastergrösse ( %g, "
 #~ "%g ) zurück."
 
 #~ msgid ""
@@ -17402,7 +17403,7 @@ msgstr "GerbView Optionen"
 #~ msgstr "Kein Raster (Nur für Testzwecke !)"
 
 #~ msgid "Grid Size for Filling:"
-#~ msgstr "Rastergröße für das Füllen:"
+#~ msgstr "Rastergrösse für das Füllen:"
 
 #~ msgid "Zone clearance value (mm):"
 #~ msgstr "Flächenabstandsmaß (mm):"
