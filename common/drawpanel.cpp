@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2007-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -1161,8 +1161,8 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
     GetParent()->GeneralControl( &DC, pos, localkey );
 
-#if 0
-    event.Skip();   // Allow menu shortcut processing
+#ifdef __WINDOWS__
+    event.Skip();   // Allow menu shortcut processing on Windows.
 #endif
 }
 

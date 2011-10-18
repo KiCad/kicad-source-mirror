@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file eeschema/menubar_libedit.cpp
  * @brief (Re)Create the main menubar for the component editor frame (LibEdit)
@@ -46,7 +71,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Save current library as...
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_CURRENT_LIB_AS,
-                 _( "Save Current Library &as" ),
+                 _( "Save Current Library &As" ),
                  _( "Save current active library as..." ),
                  KiBitmap( save_as_xpm ) );
 
@@ -63,7 +88,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Export as SVG file
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_SVG_FILE,
-                 _( "&Create SVG File" ),
+                 _( "Create S&VG File" ),
                  _( "Create a SVG file from the current loaded component" ),
                  KiBitmap( plot_xpm ) );
 
@@ -81,7 +106,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* editMenu = new wxMenu;
 
     // Undo
-    text = AddHotkeyName( _( "Undo" ), s_Libedit_Hokeys_Descr, HK_UNDO );
+    text = AddHotkeyName( _( "&Undo" ), s_Libedit_Hokeys_Descr, HK_UNDO );
 
     AddMenuItem( editMenu,
                  wxID_UNDO,
@@ -90,7 +115,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( undo_xpm ) );
 
     // Redo
-    text = AddHotkeyName( _( "Redo" ), s_Libedit_Hokeys_Descr, HK_REDO );
+    text = AddHotkeyName( _( "&Redo" ), s_Libedit_Hokeys_Descr, HK_REDO );
     AddMenuItem( editMenu,
                  wxID_REDO,
                  text,
@@ -103,7 +128,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Delete
     AddMenuItem( editMenu,
                  ID_LIBEDIT_DELETE_ITEM_BUTT,
-                 _( "Delete" ),
+                 _( "&Delete" ),
                  HELP_DELETE_ITEMS,
                  KiBitmap( delete_body_xpm ) );
 
@@ -124,22 +149,22 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
      */
 
     // Zoom in
-    text = _( "Zoom In" );
+    text = _( "Zoom &In" );
     AddMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
 
     // Zoom out
-    text = _( "Zoom Out" );
+    text = _( "Zoom &Out" );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
     // Fit on screen
-    text = AddHotkeyName( _( "Fit on Screen" ), s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO );
+    text = AddHotkeyName( _( "&Fit on Screen" ), s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT, KiBitmap( zoom_fit_in_page_xpm ) );
 
     // Separator
     viewMenu->AppendSeparator();
 
     // Redraw
-    text = AddHotkeyName( _( "Redraw" ), s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
+    text = AddHotkeyName( _( "&Redraw" ), s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
 
     // Menu Place:
@@ -155,35 +180,35 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Graphic text
     AddMenuItem( placeMenu,
                  ID_LIBEDIT_BODY_TEXT_BUTT,
-                 _( "Graphic text" ),
+                 _( "Graphic &Text" ),
                  HELP_ADD_BODYTEXT,
                  KiBitmap( add_text_xpm ) );
 
     // Graphic rectangle
     AddMenuItem( placeMenu,
                  ID_LIBEDIT_BODY_RECT_BUTT,
-                 _( "Rectangle" ),
+                 _( "&Rectangle" ),
                  HELP_ADD_BODYRECT,
                  KiBitmap( add_rectangle_xpm ) );
 
     // Graphic Circle
     AddMenuItem( placeMenu,
                  ID_LIBEDIT_BODY_CIRCLE_BUTT,
-                 _( "Circle" ),
+                 _( "&Circle" ),
                  HELP_ADD_BODYCIRCLE,
                  KiBitmap( add_circle_xpm ) );
 
     // Graphic Arc
     AddMenuItem( placeMenu,
                  ID_LIBEDIT_BODY_ARC_BUTT,
-                 _( "Arc" ),
+                 _( "&Arc" ),
                  HELP_ADD_BODYARC,
                  KiBitmap( add_arc_xpm ) );
 
     // Graphic Line or Polygon
     AddMenuItem( placeMenu,
                  ID_LIBEDIT_BODY_LINE_BUTT,
-                 _( "Line or Polygon" ),
+                 _( "&Line or Polygon" ),
                  HELP_ADD_BODYPOLYGON,
                  KiBitmap( add_polygon_xpm ) );
 
@@ -239,6 +264,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "&Contents" ),
                  _( "Open the Eeschema manual" ),
                  KiBitmap( online_help_xpm ) );
+
     AddMenuItem( helpMenu,
                  wxID_INDEX,
                  _( "&Getting Started in KiCad" ),
@@ -247,6 +273,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     // About Eeschema
     helpMenu->AppendSeparator();
+
     AddMenuItem( helpMenu,
                  wxID_ABOUT,
                  _( "&About Eeschema" ),
@@ -258,7 +285,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
-    menuBar->Append( preferencesMenu, _( "&Preferences" ) );
+    menuBar->Append( preferencesMenu, _( "P&references" ) );
     menuBar->Append( helpMenu, _( "&Help" ) );
 
     menuBar->Thaw();

@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2010-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file hotkeys_basic.cpp
  * @brief Some functions to handle hotkeys in KiCad
@@ -708,13 +733,13 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
     /* List existing hotkey menu*/
     AddMenuItem( HotkeySubmenu,
                  ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 _( "List Current Keys" ),
+                 _( "&List Current Keys" ),
                  _( "Displays the current hotkeys list and corresponding commands" ),
                  KiBitmap( info_xpm ) );
 
     /* Call hotkeys editor*/
     AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_SHOW_EDITOR,
-                 _( "Edit Hotkeys" ),
+                 _( "&Edit Hotkeys" ),
                  _( "Call the hotkeys editor" ),
                  KiBitmap( editor_xpm ) );
 
@@ -722,19 +747,19 @@ void AddHotkeyConfigMenu( wxMenu* aMenu )
 
     /* create hotkey file to export current hotkeys config */
     AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_EXPORT_CONFIG,
-                 _( "Export Hotkeys Config" ),
-                 _( "Create a hotkey configuration file to export the current hotkey config" ),
+                 _( "E&xport Hotkeys" ),
+                 _( "Create a hotkey configuration file to export the current hotkeys" ),
                  KiBitmap( save_setup_xpm ) );
 
     /* Reload hotkey file */
     AddMenuItem( HotkeySubmenu, ID_PREFERENCES_HOTKEY_IMPORT_CONFIG,
-                 _( "Import Hotkeys Config" ),
+                 _( "&Import Hotkeys" ),
                  _( "Load an existing hotkey configuration file" ),
                  KiBitmap( reload_xpm ) );
 
     /* Append HotkeySubmenu to menu */
     AddMenuItem( aMenu, HotkeySubmenu,
-                 ID_PREFERENCES_HOTKEY_SUBMENU, _( "Hotkeys" ),
+                 ID_PREFERENCES_HOTKEY_SUBMENU, _( "&Hotkeys" ),
                  _( "Hotkeys configuration and preferences" ),
                  KiBitmap( hotkeys_xpm ) );
 }

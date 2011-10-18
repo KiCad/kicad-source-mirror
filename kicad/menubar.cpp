@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file kicad/menubar.cpp
  * @brief (Re)Create the project manager menubar for KiCad
@@ -30,7 +55,8 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU( ID_SELECT_PREFERED_EDITOR, EDA_BASE_FRAME::OnSelectPreferredEditor )
     EVT_MENU( ID_SELECT_DEFAULT_PDF_BROWSER, KICAD_MANAGER_FRAME::OnSelectDefaultPdfBrowser )
     EVT_MENU( ID_SELECT_PREFERED_PDF_BROWSER, KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser )
-    EVT_MENU( ID_SELECT_PREFERED_PDF_BROWSER_NAME, KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser )
+    EVT_MENU( ID_SELECT_PREFERED_PDF_BROWSER_NAME,
+              KICAD_MANAGER_FRAME::OnSelectPreferredPdfBrowser )
     EVT_MENU( ID_SAVE_AND_ZIP_FILES, KICAD_MANAGER_FRAME::OnArchiveFiles )
     EVT_MENU( ID_READ_ZIP_ARCHIVE, KICAD_MANAGER_FRAME::OnUnarchiveFiles )
     EVT_MENU( ID_PROJECT_TREE_REFRESH, KICAD_MANAGER_FRAME::OnRefresh )
@@ -52,7 +78,8 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_BUTTON( ID_TO_PCB_CALCULATOR, KICAD_MANAGER_FRAME::OnRunPcbCalculator )
 
     EVT_UPDATE_UI( ID_SELECT_DEFAULT_PDF_BROWSER, KICAD_MANAGER_FRAME::OnUpdateDefaultPdfBrowser )
-    EVT_UPDATE_UI( ID_SELECT_PREFERED_PDF_BROWSER, KICAD_MANAGER_FRAME::OnUpdatePreferredPdfBrowser )
+    EVT_UPDATE_UI( ID_SELECT_PREFERED_PDF_BROWSER,
+                   KICAD_MANAGER_FRAME::OnUpdatePreferredPdfBrowser )
 
 END_EVENT_TABLE()
 
@@ -176,7 +203,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Default
     item = new wxMenuItem( SubMenuPdfBrowserChoice,
                            ID_SELECT_DEFAULT_PDF_BROWSER,
-                           _( "Default" ),
+                           _( "&Default" ),
                            _( "Use system default PDF viewer used to browse datasheets" ),
                            wxITEM_CHECK );
 
@@ -189,7 +216,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Favourite
     item = new wxMenuItem( SubMenuPdfBrowserChoice,
                            ID_SELECT_PREFERED_PDF_BROWSER,
-                           _( "Favourite" ),
+                           _( "&Favourite" ),
                            _( "Use your favourite PDF viewer used to browse datasheets" ),
                            wxITEM_CHECK );
 
@@ -203,14 +230,14 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Append PDF Viewer submenu to preferences
     AddMenuItem( SubMenuPdfBrowserChoice,
                  ID_SELECT_PREFERED_PDF_BROWSER_NAME,
-                 _( "PDF Viewer" ),
+                 _( "&PDF Viewer" ),
                  _( "Select your favourite PDF viewer used to browse datasheets" ),
                  KiBitmap( datasheet_xpm ) );
 
     // PDF viewer submenu
     AddMenuItem( preferencesMenu,
                  SubMenuPdfBrowserChoice, -1,
-                 _( "PDF Viewer" ),
+                 _( "&PDF Viewer" ),
                  _( "PDF viewer preferences" ),
                  KiBitmap( datasheet_xpm ) );
 
