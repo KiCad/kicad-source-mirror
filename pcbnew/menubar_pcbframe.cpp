@@ -479,17 +479,19 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( macrosMenu, ID_PREFRENCES_MACROS_SAVE,
                            _( "Save macros" ),
-                           _( "Save macros to file" ) );
+                           _( "Save macros to file" ),
+                           KiBitmap( save_setup_xpm ) );
 
     AddMenuItem( macrosMenu, ID_PREFRENCES_MACROS_READ,
                            _( "Read macros" ),
-                           _( "Read macros from file" ) );
+                           _( "Read macros from file" ),
+                           KiBitmap( read_setup_xpm ) );
 
     // Append macros menu to config menu
     AddMenuItem( configmenu, macrosMenu,
                  -1, _( "Macros" ),
                  _( "Macros save/read operations" ),
-                 KiBitmap( add_dimension_xpm ) );
+                 KiBitmap( macros_record_xpm ) );
 
     configmenu->AppendSeparator();
 
