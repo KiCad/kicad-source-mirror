@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file edit_component_in_schematic.cpp
  * @brief Schematic component editing code.
@@ -38,7 +63,7 @@ static void moveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositi
         currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
     }
 
-    pos = ( (SCH_COMPONENT*) currentField->GetParent() )->m_Pos;
+    pos = ( (SCH_COMPONENT*) currentField->GetParent() )->GetPosition();
 
     // Actual positions are calculated by the rotation/mirror transform
     // But here we want the relative position of the moved field
@@ -47,7 +72,7 @@ static void moveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositi
     wxPoint pt( screen->GetCrossHairPosition() - pos );
 
     TRANSFORM itrsfm = component->GetTransform().InverseTransform();
-    currentField->m_Pos = pos + itrsfm.TransformCoordinate( pt );
+    currentField->SetPosition( pos + itrsfm.TransformCoordinate( pt ) );
 
     currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
@@ -84,7 +109,7 @@ void SCH_EDIT_FRAME::MoveField( SCH_FIELD* aField, wxDC* aDC )
     GetScreen()->SetCurItem( aField );
     SetUndoItem( comp );
 
-    pos = comp->m_Pos;
+    pos = comp->GetPosition();
 
     /* Positions are computed by the rotation/mirror transform. */
     newpos = aField->m_Pos - pos;
@@ -174,7 +199,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
     {
         if( aField->m_Text.IsEmpty() )  // Means the field was not already in use
         {
-            aField->m_Pos = component->m_Pos;
+            aField->m_Pos = component->GetPosition();
             aField->m_Size.x = aField->m_Size.y = m_TextFieldSize;
         }
 

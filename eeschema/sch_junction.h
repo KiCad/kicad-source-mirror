@@ -36,8 +36,9 @@
 
 class SCH_JUNCTION : public SCH_ITEM
 {
-public:
     wxPoint m_Pos;                  /* XY coordinates of connection. */
+
+public:
     wxSize  m_Size;
 
 public:
@@ -51,6 +52,8 @@ public:
     {
         return wxT( "SCH_JUNCTION" );
     }
+
+    virtual void SwapData( SCH_ITEM* aItem );
 
     /**
      * Function GetBoundingBox
@@ -130,6 +133,8 @@ private:
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
+    virtual wxPoint doGetPosition() const { return m_Pos; }
+    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 };
 
 

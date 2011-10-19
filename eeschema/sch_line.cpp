@@ -582,3 +582,10 @@ void SCH_LINE::doPlot( PLOTTER* aPlotter )
     if( m_Layer == LAYER_NOTES )
         aPlotter->set_dash( false );
 }
+
+
+void SCH_LINE::doSetPosition( const wxPoint& aPosition )
+{
+    m_End = m_End - ( m_Start - aPosition );
+    m_Start = aPosition;
+}

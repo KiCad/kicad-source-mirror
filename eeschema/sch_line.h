@@ -176,6 +176,8 @@ private:
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
+    virtual wxPoint doGetPosition() const { return m_Start; }
+    virtual void doSetPosition( const wxPoint& aPosition );
 };
 
 

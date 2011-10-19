@@ -1,8 +1,3 @@
-/**
- * @file sch_bitmap.h
- *
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,6 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file sch_bitmap.h
+ *
+ */
+
 #ifndef _SCH_BITMAP_H_
 #define _SCH_BITMAP_H_
 
@@ -37,12 +37,14 @@
 
 class SCH_BITMAP : public SCH_ITEM
 {
-public:
     wxPoint      m_Pos;                 // XY coordinates of center of the bitmap
+
+public:
     BITMAP_BASE* m_Image;               // the BITMAP_BASE item
 
 
-public: SCH_BITMAP( const wxPoint& pos = wxPoint( 0, 0 ) );
+public:
+    SCH_BITMAP( const wxPoint& pos = wxPoint( 0, 0 ) );
 
     SCH_BITMAP( const SCH_BITMAP& aSchBitmap );
 
@@ -101,8 +103,6 @@ public: SCH_BITMAP( const wxPoint& pos = wxPoint( 0, 0 ) );
 
     virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                        int aDrawMode, int aColor = -1 );
-
-    virtual void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     /**
      * Function ReadImageFile
@@ -166,9 +166,8 @@ public: SCH_BITMAP( const wxPoint& pos = wxPoint( 0, 0 ) );
 
     virtual BITMAP_DEF GetMenuImage() const { return image_xpm; }
 
-    #if defined(DEBUG)
+#if defined(DEBUG)
     void              Show( int nestLevel, std::ostream& os );
-
 #endif
 
 private:
@@ -177,6 +176,8 @@ private:
     virtual bool      doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void      doPlot( PLOTTER* aPlotter );
+    virtual wxPoint   doGetPosition() const { return m_Pos; }
+    virtual void      doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 };
 
 

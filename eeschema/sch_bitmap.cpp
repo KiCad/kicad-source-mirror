@@ -1,7 +1,3 @@
-/**
- * @file sch_bitmap.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -24,6 +20,10 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file sch_bitmap.cpp
  */
 
 #include "fctsys.h"
@@ -101,33 +101,6 @@ bool SCH_BITMAP::Save( FILE* aFile ) const
 }
 
 
-void SCH_BITMAP::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
-{
-    if( !IsNew() )
-    {
-        // save old bitmap in undo list
-        ClearFlags();
-        SCH_ITEM*         undoItem = frame->GetUndoItem();
-
-        wxCHECK_RET( undoItem != NULL && undoItem->Type() == Type(),
-            wxT( "Invalid bitmap undo item." ) );
-
-        undoItem->ClearFlags();
-        PICKED_ITEMS_LIST pickList;
-        ITEM_PICKER       picker( this, UR_CHANGED );
-        picker.SetLink( undoItem );
-
-        // the owner of undoItem is no more frame, this is picker:
-        frame->SetUndoItem( NULL );
-
-        pickList.PushItem( picker );
-        frame->SaveCopyInUndoList( pickList, UR_CHANGED );
-    }
-
-    SCH_ITEM::Place( frame, DC );   // For new items insert in draw list and in undo list
-}
-
-
 EDA_ITEM* SCH_BITMAP::doClone() const
 {
     return new SCH_BITMAP( *this );
@@ -137,8 +110,8 @@ EDA_ITEM* SCH_BITMAP::doClone() const
 void SCH_BITMAP::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem->Type() == SCH_BITMAP_T,
-                wxString::Format( wxT( "SCH_BITMAP object cannot swap data with %s object." ),
-                                 GetChars( aItem->GetClass() ) ) );
+                 wxString::Format( wxT( "SCH_BITMAP object cannot swap data with %s object." ),
+                                   GetChars( aItem->GetClass() ) ) );
 
     SCH_BITMAP* item = (SCH_BITMAP*) aItem;
     EXCHG( m_Pos, item->m_Pos );
@@ -153,7 +126,7 @@ bool SCH_BITMAP::Load( LINE_READER& aLine, wxString& aErrorMsg )
     if( strnicmp( line, "$Bitmap", 7 ) != 0 )
     {
         aErrorMsg.Printf( wxT( "Eeschema file bitmap image load error at line %d, aborted" ),
-                         aLine.LineNumber() );
+                          aLine.LineNumber() );
         aErrorMsg << wxT( "\n" ) << FROM_UTF8( (char*) aLine );
         return false;
     }

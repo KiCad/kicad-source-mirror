@@ -14,9 +14,6 @@
 #include "sch_text.h"
 
 
-/** Event function SCH_EDIT_FRAME::OnCopySchematicItemRequest
- * duplicate the current located item
- */
 void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
 {
     SCH_ITEM * curr_item = GetScreen()->GetCurItem();
@@ -35,7 +32,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
         newitem->m_TimeStamp = GetTimeStamp();
         newitem->ClearAnnotation( NULL );
         newitem->m_Flags = IS_NEW;
-        StartMovePart( newitem, &dc );
+        MoveItem( (SCH_ITEM*) newitem, &dc );
 
         /* Redraw the original part, because StartMovePart() erased
          * it from screen */
@@ -50,7 +47,8 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
     {
         SCH_TEXT* newitem = (SCH_TEXT*) curr_item->Clone();
         newitem->SetFlags( IS_NEW );
-        MoveText( newitem, &dc );
+        MoveItem( (SCH_ITEM*) newitem, &dc );
+
         /* Redraw the original part in XOR mode */
         curr_item->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode );
     }

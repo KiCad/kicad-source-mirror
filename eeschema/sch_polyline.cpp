@@ -267,3 +267,13 @@ bool SCH_POLYLINE::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 
     return rect.Intersects( GetBoundingBox() );
 }
+
+
+void SCH_POLYLINE::doSetPosition( const wxPoint& aPosition )
+{
+    wxPoint offset = m_PolyPoints[0] - aPosition;
+
+    for( size_t i = 0;  i < m_PolyPoints.size();  i++ )
+        m_PolyPoints[i] = m_PolyPoints[i] - offset;
+}
+

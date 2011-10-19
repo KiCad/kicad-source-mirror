@@ -67,7 +67,7 @@ static void abortMoveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
         // Never delete existing item, because it can be referenced by an undo/redo command
         // Just restore its data
-        item->SwapData(olditem);
+        item->SwapData( olditem );
     }
 
     screen->SetCurItem( item );
@@ -97,7 +97,7 @@ static void moveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosit
     }
 
     // Draw the bitmap at it's new position.
-    image->m_Pos = screen->GetCrossHairPosition();
+    image->SetPosition( screen->GetCrossHairPosition() );
     image->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 }
 
@@ -123,6 +123,7 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage( wxDC* aDC )
     wxPoint     pos = GetScreen()->GetCrossHairPosition();
 
     SCH_BITMAP* image = new SCH_BITMAP( pos );
+
     if( !image->ReadImageFile( fullFilename ) )
     {
         wxMessageBox( _( "Couldn't load image from <%s>" ), GetChars( fullFilename ) );
@@ -152,7 +153,7 @@ void SCH_EDIT_FRAME::MoveImage( SCH_BITMAP* aImageItem, wxDC* aDC )
     SetUndoItem( aImageItem );
 
     DrawPanel->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( aImageItem->m_Pos );
+    GetScreen()->SetCrossHairPosition( aImageItem->GetPosition() );
     DrawPanel->MoveCursorToCrossHair();
     DrawPanel->CrossHairOn( aDC );
 
@@ -162,9 +163,9 @@ void SCH_EDIT_FRAME::MoveImage( SCH_BITMAP* aImageItem, wxDC* aDC )
 void SCH_EDIT_FRAME::RotateImage( SCH_BITMAP* aItem )
 {
     if( aItem->GetFlags( ) == 0 )
-        SaveCopyInUndoList( aItem, UR_ROTATED, aItem->m_Pos );
+        SaveCopyInUndoList( aItem, UR_ROTATED, aItem->GetPosition() );
 
-    aItem->Rotate( aItem->m_Pos );
+    aItem->Rotate( aItem->GetPosition() );
     OnModify();
     DrawPanel->Refresh();
 }
@@ -175,9 +176,9 @@ void SCH_EDIT_FRAME::MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis )
         SaveCopyInUndoList( aItem, UR_CHANGED );
 
     if( Is_X_axis )
-        aItem->Mirror_X( aItem->m_Pos.y );
+        aItem->Mirror_X( aItem->GetPosition().y );
     else
-        aItem->Mirror_Y( aItem->m_Pos.x );
+        aItem->Mirror_Y( aItem->GetPosition().x );
 
     OnModify();
     DrawPanel->Refresh();
@@ -192,6 +193,7 @@ void SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )
 
     if( aItem->GetFlags( ) == 0 )
         SaveCopyInUndoList( aItem, UR_CHANGED );
+
     dlg.TransfertToImage(aItem->m_Image);
     OnModify();
     DrawPanel->Refresh();

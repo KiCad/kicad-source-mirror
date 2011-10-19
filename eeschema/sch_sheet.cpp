@@ -491,18 +491,11 @@ void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
             delete this;
             return;
         }
-    }
-    else    /* save old text in undo list */
-    {
-        frame->SaveUndoItemInUndoList( this );
+
+        frame->SetSheetNumberAndCount();
     }
 
     SCH_ITEM::Place( frame, DC ); //puts it on the GetDrawItems().
-
-    if( IsNew() )
-    {
-        frame->SetSheetNumberAndCount();
-    }
 }
 
 
@@ -1061,7 +1054,7 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR* aInspector, const void* aTestData,
 wxString SCH_SHEET::GetSelectMenuText() const
 {
     wxString tmp;
-    tmp.Printf( _( "Hierarchical Sheet " ), GetChars( m_SheetName ) );
+    tmp.Printf( _( "Hierarchical Sheet %s" ), GetChars( m_SheetName ) );
     return tmp;
 }
 

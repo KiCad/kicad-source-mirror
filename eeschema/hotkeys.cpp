@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file eeschema/hotkeys.cpp
  */
@@ -718,7 +743,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         break;
 
-    case HK_MOVE_COMPONENT_OR_ITEM:         // Start move component or other schematic item
+    case HK_MOVE_COMPONENT_OR_ITEM:         // Start move schematic item.
         if( itemInEdit )
             break;
 
@@ -731,47 +756,8 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                 break;
         }
 
-        if( aItem->GetFlags() == 0 )
-        {
-            switch( aItem->Type() )
-            {
-            // select the correct event for moving an schematic object
-            // and add it to the event queue
-            case SCH_SHEET_T:
-            case SCH_COMPONENT_T:
-            case SCH_LABEL_T:
-            case SCH_GLOBAL_LABEL_T:
-            case SCH_HIERARCHICAL_LABEL_T:
-            case SCH_TEXT_T:
-            case SCH_FIELD_T:
-            case SCH_BUS_ENTRY_T:
-            case SCH_BITMAP_T:
-                cmd.SetId( HK_Descr->m_IdMenuEvent );
-                wxPostEvent( this, cmd );
-                break;
-
-            case SCH_SHEET_PIN_T:
-                cmd.SetId( ID_POPUP_SCH_MOVE_SHEET_PIN );
-                wxPostEvent( this, cmd );
-                break;
-
-            case SCH_LINE_T:
-                /**
-                 * @todo Determine why moving bus lines are not handled here.
-                 */
-                if( ((SCH_ITEM*) aItem )->GetLayer() != LAYER_BUS )
-                {
-                    cmd.SetId( ID_POPUP_SCH_MOVE_ITEM );
-                    wxPostEvent( this, cmd );
-                }
-
-                break;
-
-            default:
-                ;
-            }
-        }
-
+        cmd.SetId( HK_Descr->m_IdMenuEvent );
+        wxPostEvent( this, cmd );
         break;
 
     case HK_EDIT:

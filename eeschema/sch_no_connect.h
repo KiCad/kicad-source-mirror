@@ -36,8 +36,9 @@
 
 class SCH_NO_CONNECT : public SCH_ITEM
 {
-public:
     wxPoint m_Pos;                      /* XY coordinates of NoConnect. */
+
+public:
     wxSize  m_Size;                     // size of this symbol
 
 public:
@@ -57,6 +58,8 @@ public:
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize() const;
+
+    virtual void SwapData( SCH_ITEM* aItem );
 
     virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                        int aDrawMode, int aColor = -1 );
@@ -131,6 +134,8 @@ private:
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
+    virtual wxPoint doGetPosition() const { return m_Pos; }
+    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 };
 
 

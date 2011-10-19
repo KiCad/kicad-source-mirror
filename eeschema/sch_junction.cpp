@@ -80,6 +80,17 @@ EDA_ITEM* SCH_JUNCTION::doClone() const
 }
 
 
+void SCH_JUNCTION::SwapData( SCH_ITEM* aItem )
+{
+    wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_JUNCTION_T),
+                 wxT( "Cannot swap junction data with invalid item." ) );
+
+    SCH_JUNCTION* item = (SCH_JUNCTION*) aItem;
+    EXCHG( m_Pos, item->m_Pos );
+    EXCHG( m_Size, item->m_Size );
+}
+
+
 bool SCH_JUNCTION::Load( LINE_READER& aLine, wxString& aErrorMsg )
 {
     char name[256];

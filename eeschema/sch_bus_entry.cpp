@@ -56,6 +56,18 @@ wxPoint SCH_BUS_ENTRY::m_End() const
 }
 
 
+void SCH_BUS_ENTRY::SwapData( SCH_ITEM* aItem )
+{
+    wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_BUS_ENTRY_T),
+                 wxT( "Cannot swap bus entry data with invalid item." ) );
+
+    SCH_BUS_ENTRY* item = (SCH_BUS_ENTRY*)aItem;
+    EXCHG( m_Pos, item->m_Pos );
+    EXCHG( m_Size, item->m_Size );
+    EXCHG( m_Width, item->m_Width );
+}
+
+
 bool SCH_BUS_ENTRY::Save( FILE* aFile ) const
 {
     bool        success = true;

@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file schedit.cpp
  */
@@ -52,7 +77,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_RESIZE_SHEET:
     case ID_POPUP_IMPORT_GLABEL:
     case ID_POPUP_SCH_EDIT_SHEET_PIN:
-    case ID_POPUP_SCH_MOVE_SHEET_PIN:
     case ID_POPUP_SCH_DRAG_CMP_REQUEST:
     case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
     case ID_POPUP_SCH_EDIT_CMP:
@@ -254,11 +278,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_EDIT_SHEET_PIN:
         EditSheetPin( (SCH_SHEET_PIN*) item, &dc );
-        break;
-
-    case ID_POPUP_SCH_MOVE_SHEET_PIN:
-        DrawPanel->MoveCursorToCrossHair();
-        MoveSheetPin( (SCH_SHEET_PIN*) item, &dc );
         break;
 
     case ID_POPUP_SCH_DRAG_CMP_REQUEST:
@@ -478,48 +497,39 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
 
     INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
-    DrawPanel->MoveCursorToCrossHair();
-
     switch( item->Type() )
     {
+    case SCH_LINE_T:
+        break;
+
     case SCH_JUNCTION_T:
-        break;
-
+    case SCH_NO_CONNECT_T:
     case SCH_BUS_ENTRY_T:
-        StartMoveBusEntry( (SCH_BUS_ENTRY*) item, &dc );
-        break;
-
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_TEXT_T:
-        MoveText( (SCH_TEXT*) item, &dc );
+    case SCH_COMPONENT_T:
+        MoveItem( item, &dc );
         break;
 
     case SCH_BITMAP_T:
         MoveImage( (SCH_BITMAP*) item, &dc );
         break;
 
-    case SCH_COMPONENT_T:
-        StartMovePart( (SCH_COMPONENT*) item, &dc );
-        break;
-
-    case SCH_LINE_T:
-        break;
-
     case SCH_SHEET_T:
         StartMoveSheet( (SCH_SHEET*) item, &dc );
-        break;
-
-    case SCH_NO_CONNECT_T:
         break;
 
     case SCH_FIELD_T:
         MoveField( (SCH_FIELD*) item, &dc );
         break;
 
-    case SCH_MARKER_T:
     case SCH_SHEET_PIN_T:
+        MoveSheetPin( (SCH_SHEET_PIN*) item, &dc );
+        break;
+
+    case SCH_MARKER_T:
     default:
         wxFAIL_MSG( wxString::Format( wxT( "Cannot move item type %s" ),
                                       GetChars( item->GetClass() ) ) );

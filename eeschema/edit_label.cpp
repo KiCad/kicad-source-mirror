@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file edit_label.cpp
  * @brief Label, global label and text creation and editing.
@@ -22,83 +47,6 @@ static int       lastGlobalLabelShape = (int) NET_INPUT;
 static int       lastTextOrientation = 0;
 static bool      lastTextBold = false;
 static bool      lastTextItalic = false;
-
-
-static void moveText( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
-{
-    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_TEXT* textItem = (SCH_TEXT*) screen->GetCurItem();
-
-    wxCHECK_RET( (textItem != NULL) && textItem->CanIncrementLabel(),
-                 wxT( "Cannot move invalid text type." ) );
-
-    // Erase the current text at its current position.
-    if( aErase )
-        textItem->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-
-    textItem->m_Pos = screen->GetCrossHairPosition();
-
-    // Draw the text item at it's new position.
-    textItem->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-}
-
-
-static void abortMoveText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
-{
-    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_TEXT* item = (SCH_TEXT*)screen->GetCurItem();
-    SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
-
-    parent->SetRepeatItem( NULL );
-    screen->SetCurItem( NULL );
-
-    if( item == NULL )  /* no current item */
-        return;
-
-    if( item->IsNew() )
-    {
-        delete item;
-        item = NULL;
-    }
-    else    // Move command on an existing text item, restore the values of the original.
-    {
-        SCH_TEXT* olditem = (SCH_TEXT* )parent->GetUndoItem();
-        screen->SetCurItem( item );
-
-        wxCHECK_RET( olditem != NULL && item->Type() == olditem->Type(),
-            wxT( "Cannot restore undefined or bad last text item." ) );
-        // Never delete existing item, because it can be referenced by an undo/redo command
-        // Just restore its data
-        item->SwapData(olditem);
-        item->ClearFlags();
-    }
-
-    aPanel->Refresh();
-}
-
-
-void SCH_EDIT_FRAME::MoveText( SCH_TEXT* aTextItem, wxDC* aDC )
-{
-    wxCHECK_RET( (aTextItem != NULL) && aTextItem->CanIncrementLabel(),
-                 wxT( "Cannot move invalid text item" ) );
-
-    m_itemToRepeat = NULL;
-
-    aTextItem->SetFlags( IS_MOVED );
-
-    SetUndoItem( aTextItem );
-
-    DrawPanel->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( aTextItem->m_Pos );
-    DrawPanel->MoveCursorToCrossHair();
-
-    OnModify();
-    DrawPanel->SetMouseCapture( moveText, abortMoveText );
-    GetScreen()->SetCurItem( aTextItem );
-    moveText( DrawPanel, aDC, wxDefaultPosition, true );
-
-    DrawPanel->CrossHairOn( aDC );
-}
 
 
 void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC )
@@ -177,11 +125,11 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
     }
 
     textItem->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    DrawPanel->SetMouseCapture( moveText, abortMoveText );
-    GetScreen()->SetCurItem( textItem );
+    MoveItem( (SCH_ITEM*) textItem, aDC );
 
     return textItem;
 }
+
 
 /*
  * OnConvertTextType is a command event handler to change a text type to an other one.
@@ -300,13 +248,16 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     // and replace text with newtext
     PICKED_ITEMS_LIST pickList;
     ITEM_PICKER picker( text, UR_CHANGED );
+
     if( text->GetFlags() )
     {
         // text is being edited, save initial text for undo command
         picker.SetLink( GetUndoItem() );
         pickList.PushItem( picker );
+
         // the owner of undoItem is no more "this", it is now "picker":
         SetUndoItem( NULL );
+
         // save current newtext copy for undo/abort current command
         SetUndoItem( newtext );
     }

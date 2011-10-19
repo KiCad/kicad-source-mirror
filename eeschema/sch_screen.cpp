@@ -382,7 +382,7 @@ void SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
         {
             SCH_JUNCTION* junction = (SCH_JUNCTION*) item;
 
-            if( aSegment->IsEndPoint( junction->m_Pos ) )
+            if( aSegment->IsEndPoint( junction->GetPosition() ) )
                 item->SetFlags( CANDIDATE );
 
             continue;
@@ -984,14 +984,14 @@ bool SCH_SCREEN::BreakSegmentsOnJunctions()
         {
             SCH_JUNCTION* junction = ( SCH_JUNCTION* ) item;
 
-            if( BreakSegment( junction->m_Pos ) )
+            if( BreakSegment( junction->GetPosition() ) )
                 brokenSegments = true;
         }
         else if( item->Type() == SCH_BUS_ENTRY_T )
         {
             SCH_BUS_ENTRY* busEntry = ( SCH_BUS_ENTRY* ) item;
 
-            if( BreakSegment( busEntry->m_Pos ) || BreakSegment( busEntry->m_End() ) )
+            if( BreakSegment( busEntry->GetPosition() ) || BreakSegment( busEntry->m_End() ) )
                 brokenSegments = true;
         }
     }
@@ -1112,7 +1112,7 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
              */
             SCH_FIELD * fpfield = component->GetField( FOOTPRINT );
             if( fpfield->m_Text.IsEmpty()
-                && ( fpfield->m_Pos == component->m_Pos ) )
+              && ( fpfield->m_Pos == component->GetPosition() ) )
             {
                 fpfield->m_Orient = component->GetField( VALUE )->m_Orient;
                 fpfield->m_Pos    = component->GetField( VALUE )->m_Pos;
@@ -1272,7 +1272,7 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
 
             SCH_JUNCTION* junction = (SCH_JUNCTION*) item;
 
-            if( CountConnectedItems( junction->m_Pos, false ) <= 2 )
+            if( CountConnectedItems( junction->GetPosition(), false ) <= 2 )
             {
                 item->SetFlags( STRUCT_DELETED );
 
@@ -1289,7 +1289,7 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
             if( item->Type() != SCH_LABEL_T )
                 continue;
 
-            tmp = GetWireOrBus( ( (SCH_TEXT*) item )->m_Pos );
+            tmp = GetWireOrBus( ( (SCH_TEXT*) item )->GetPosition() );
 
             if( tmp && tmp->GetFlags() & STRUCT_DELETED )
             {
