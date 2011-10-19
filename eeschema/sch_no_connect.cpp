@@ -69,6 +69,17 @@ EDA_ITEM* SCH_NO_CONNECT::doClone() const
 }
 
 
+void SCH_NO_CONNECT::SwapData( SCH_ITEM* aItem )
+{
+    wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_NO_CONNECT_T),
+                 wxT( "Cannot swap no connect data with invalid item." ) );
+
+    SCH_NO_CONNECT* item = (SCH_NO_CONNECT*)aItem;
+    EXCHG( m_Pos, item->m_Pos );
+    EXCHG( m_Size, item->m_Size );
+}
+
+
 EDA_RECT SCH_NO_CONNECT::GetBoundingBox() const
 {
     int      delta = ( GetPenSize() + m_Size.x ) / 2;

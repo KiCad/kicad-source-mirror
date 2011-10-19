@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file wxEeschemaStruct.h
  */
@@ -339,6 +364,21 @@ public:
      */
     bool DeleteItemAtCrossHair( wxDC* aDC );
 
+    /**
+     * Function FindComponentAndItem
+     * finds a Component in the schematic, and an item in this component.
+     * @param component_reference The component reference to find.
+     * @param text_to_find - The text to search for, either in value, reference
+     *                       or elsewhere.
+     * @param Find_in_hierarchy:  false => Search is made in current sheet
+     *                     true => the whole hierarchy
+     * @param SearchType:  0 => find component
+     *                     1 => find pin
+     *                     2 => find ref
+     *                     3 => find value
+     *                     >= 4 => unused (same as 0)
+     * @param mouseWarp If true, then move the mouse cursor to the item.
+     */
     SCH_ITEM* FindComponentAndItem( const wxString& component_reference,
                                     bool            Find_in_hierarchy,
                                     int             SearchType,
@@ -589,7 +629,15 @@ private:
     void OnFindDialogClose( wxFindDialogEvent& event );
     void OnFindDrcMarker( wxFindDialogEvent& event );
     void OnFindCompnentInLib( wxFindDialogEvent& event );
-    void OnFindSchematicItem( wxFindDialogEvent& event );
+
+    /**
+     * Function OnFindSchematicItem
+     * finds an item in the schematic matching the search criteria in \a aEvent.
+     *
+     * @param aEvent - Find dialog event containing the find parameters.
+     */
+    void OnFindSchematicItem( wxFindDialogEvent& aEvent );
+
     void OnLoadFile( wxCommandEvent& event );
     void OnLoadStuffFile( wxCommandEvent& event );
     void OnNewProject( wxCommandEvent& event );
@@ -603,7 +651,10 @@ private:
 
     void OnSelectItem( wxCommandEvent& aEvent );
 
-    /* edition events functions */
+    /**
+     * Function OnCopySchematicItemRequest
+     * is the command event handler for duplicating the item at the current location.
+     */
     void OnCopySchematicItemRequest( wxCommandEvent& event );
 
     /* User interface update event handlers. */
@@ -623,7 +674,6 @@ private:
     SCH_BUS_ENTRY* CreateBusEntry( wxDC* DC, int entry_type );
     void SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int entry_type );
     int GetBusEntryShape( SCH_BUS_ENTRY* BusEntry );
-    void StartMoveBusEntry( SCH_BUS_ENTRY* DrawLibItem, wxDC* DC );
 
     /**
      * Function AddNoConnect
@@ -637,11 +687,19 @@ private:
     // Junction
     SCH_JUNCTION* AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = FALSE );
 
+    /**
+     * Function MoveItem
+     * start moving \a aItem using the mouse.
+     *
+     * @param aItem A pointer to an SCH_ITEM to move.
+     * @param aDC The device context to draw \a aItem.
+     */
+    void MoveItem( SCH_ITEM* aItem, wxDC* aDC );
+
     // Text, label, glabel
     SCH_TEXT* CreateNewText( wxDC* aDC, int aType );
     void EditSchematicText( SCH_TEXT* TextStruct );
     void ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC );
-    void MoveText( SCH_TEXT* aTextItem, wxDC* aDC );
 
     /**
      * Function OnCovertTextType
@@ -773,7 +831,6 @@ private:
                                    const wxString& libname,
                                    wxArrayString&  List,
                                    bool            UseLibBrowser );
-    void StartMovePart( SCH_COMPONENT* DrawLibItem, wxDC* DC );
 
     /**
      * Function EditComponent

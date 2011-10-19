@@ -730,11 +730,11 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
                 {
 #if defined(KICAD_GOST)
                     strCur.Printf( wxT( "%c%s" ), s_ExportSeparatorSymbol, GetChars( msg ) );
-                    msg = m_Parent->GetXYSheetReferences( screen, comp->m_Pos );
+                    msg = m_Parent->GetXYSheetReferences( screen, comp->GetPosition() );
                     strCur.Printf( wxT( "%c%s)" ), s_ExportSeparatorSymbol, GetChars( msg ) );
 #else
                     fprintf( f, "%c%s", s_ExportSeparatorSymbol, TO_UTF8( msg ) );
-                    msg = m_Parent->GetXYSheetReferences( screen, comp->m_Pos );
+                    msg = m_Parent->GetXYSheetReferences( screen, comp->GetPosition() );
                     fprintf( f, "%c%s)", s_ExportSeparatorSymbol,
                              TO_UTF8( msg ) );
 #endif
@@ -742,7 +742,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
                 else
                 {
                     fprintf( f, "   (Sheet %s)", TO_UTF8( msg ) );
-                    msg = m_Parent->GetXYSheetReferences( screen, comp->m_Pos );
+                    msg = m_Parent->GetXYSheetReferences( screen, comp->GetPosition() );
                     fprintf( f, "   (loc %s)", TO_UTF8( msg ) );
                 }
             }
@@ -1017,7 +1017,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
             {
                 msg = aList[ii].GetSheetPath().PathHumanReadable();
                 fprintf( f, "   (Sheet %s)", TO_UTF8( msg ) );
-                msg = m_Parent->GetXYSheetReferences( screen, DrawLibItem->m_Pos );
+                msg = m_Parent->GetXYSheetReferences( screen, DrawLibItem->GetPosition() );
                 fprintf( f, "   (loc %s)", TO_UTF8( msg ) );
             }
         }

@@ -144,9 +144,7 @@ public:
         aPoints.clear();
     }
 
-    void SwapData( SCH_TEXT* copyitem );
-
-    void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
+    virtual void SwapData( SCH_ITEM* aItem );
 
     /**
      * Function GetBoundingBox
@@ -242,6 +240,8 @@ private:
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
+    virtual wxPoint doGetPosition() const { return m_Pos; }
+    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 };
 
 

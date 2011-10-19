@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file getpart.cpp
  * @brief Cod to handle get & place library component.
@@ -21,49 +46,6 @@
 #include "dialog_get_component.h"
 
 #include <boost/foreach.hpp>
-
-
-/**
- * Move a component.
- */
-static void moveComponent( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                           bool aErase )
-{
-    SCH_SCREEN*    screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_COMPONENT* component = (SCH_COMPONENT*) screen->GetCurItem();
-
-    if( aErase )
-    {
-        component->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
-    }
-
-    component->Move( screen->GetCrossHairPosition() - component->m_Pos );
-    component->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
-}
-
-
-/*
- * Abort a place component command in progress.
- */
-static void abortMoveComponent( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
-{
-    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
-    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_COMPONENT* component = (SCH_COMPONENT*) screen->GetCurItem();
-
-    if( component->IsNew() )
-    {
-        SAFE_DELETE( component );
-    }
-    else
-    {
-        component->SwapData( (SCH_COMPONENT*) frame->GetUndoItem() );
-        component->ClearFlags();
-    }
-
-    aPanel->Refresh( true );
-    screen->SetCurItem( NULL );
-}
 
 
 wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
@@ -93,7 +75,6 @@ wxString SCH_EDIT_FRAME::SelectFromLibBrowser( void )
 }
 
 
-
 /*
  * load from a library and place a component
  *  if libname != "", search in lib "libname"
@@ -108,7 +89,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     int             unit      = 1;
     int             convert   = 1;
     LIB_COMPONENT*  Entry     = NULL;
-    SCH_COMPONENT*  Component = NULL;
+    SCH_COMPONENT*  component = NULL;
     CMP_LIBRARY*    Library   = NULL;
     wxString        Name, keys, msg;
     bool            AllowWildSeach = true;
@@ -196,6 +177,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     {
         AllowWildSeach = false;
         Name = DataBaseGetName( this, keys, Name );
+
         if( Name.IsEmpty() )
         {
             DrawPanel->m_IgnoreMouseEvents = false;
@@ -236,21 +218,24 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
     lastCommponentName = Name;
     AddHistoryComponentName( HistoryList, Name );
-    DrawPanel->SetMouseCapture( moveComponent, abortMoveComponent );
 
-    Component = new SCH_COMPONENT( *Entry, GetSheet(), unit, convert,
+    component = new SCH_COMPONENT( *Entry, GetSheet(), unit, convert,
                                    GetScreen()->GetCrossHairPosition(), true );
+
     // Set the m_ChipName value, from component name in lib, for aliases
     // Note if Entry is found, and if Name is an alias of a component,
     // alias exists because its root component was found
-    Component->SetLibName( Name );
+    component->SetLibName( Name );
 
     // Set the component value that can differ from component name in lib, for aliases
-    Component->GetField( VALUE )->m_Text = Name;
-    Component->DisplayInfo( this );
-    Component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    component->GetField( VALUE )->m_Text = Name;
+    component->DisplayInfo( this );
+    component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    component->SetFlags( IS_NEW );
 
-    return Component;
+    MoveItem( (SCH_ITEM*) component, DC );
+
+    return component;
 }
 
 
@@ -434,46 +419,4 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
 
     GetScreen()->TestDanglingEnds( DrawPanel, DC );
     OnModify( );
-}
-
-
-void SCH_EDIT_FRAME::StartMovePart( SCH_COMPONENT* aComponent, wxDC* aDC )
-{
-    wxCHECK_RET( (aComponent != NULL) && (aComponent->Type() == SCH_COMPONENT_T),
-                 wxT( "Cannot move invalid component.  Bad Programmer!" ) );
-
-    if( aComponent->GetFlags() == 0 )
-        SetUndoItem( aComponent );
-
-    DrawPanel->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( aComponent->m_Pos );
-    DrawPanel->MoveCursorToCrossHair();
-
-    DrawPanel->SetMouseCapture( moveComponent, abortMoveComponent );
-    GetScreen()->SetCurItem( aComponent );
-
-#if 1
-
-    // switch from normal mode to xor mode for the duration of the move, first
-    // by erasing fully any "normal drawing mode" primitives with the
-    // RefreshDrawingRect(), then by drawing the first time in xor mode so that
-    // subsequent xor drawing modes will fully erase this first copy.
-
-    aComponent->SetFlags( IS_MOVED ); // omit redrawing the component, erase only
-    DrawPanel->RefreshDrawingRect( aComponent->GetBoundingBox() );
-
-    aComponent->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
-
-#else
-
-    aComponent->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-
-    aComponent->SetFlags( IS_MOVED );
-
-    moveComponent( DrawPanel, aDC, false );
-#endif
-
-    DrawPanel->m_AutoPAN_Request = true;
-
-    DrawPanel->CrossHairOn( aDC );
 }

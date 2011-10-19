@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file schematic_undo_redo.cpp
  * @brief Eeschema undo and redo functions for schematic editor.
@@ -82,118 +107,6 @@
  *  swap data between Item and its copy, pointed by its .m_Image member
  * swapped data is data modified by edition, so not all values are swapped
  */
-void SwapData( EDA_ITEM* aItem, EDA_ITEM* aImage )
-{
-    if( aItem == NULL || aImage == NULL )
-    {
-        wxMessageBox( wxT( "SwapData error: NULL pointer" ) );
-        return;
-    }
-
-    switch( aItem->Type() )
-    {
-    case SCH_POLYLINE_T:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (SCH_POLYLINE*) aItem )
-        #define DEST   ( (SCH_POLYLINE*) aImage )
-        break;
-
-    case SCH_JUNCTION_T:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (SCH_JUNCTION*) aItem )
-        #define DEST   ( (SCH_JUNCTION*) aImage )
-        EXCHG( SOURCE->m_Pos, DEST->m_Pos );
-        break;
-
-    case SCH_LABEL_T:
-    case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
-    case SCH_TEXT_T:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (SCH_TEXT*) aItem )
-        #define DEST   ( (SCH_TEXT*) aImage )
-        DEST->SwapData( SOURCE );
-        break;
-
-    case SCH_COMPONENT_T:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (SCH_COMPONENT*) aItem )
-        #define DEST   ( (SCH_COMPONENT*) aImage )
-        DEST->SwapData( SOURCE );
-        break;
-
-    case SCH_LINE_T:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (SCH_LINE*) aItem )
-        #define DEST   ( (SCH_LINE*) aImage )
-        EXCHG( SOURCE->m_Start, DEST->m_Start );
-        EXCHG( SOURCE->m_End, DEST->m_End );
-        break;
-
-    case SCH_BUS_ENTRY_T:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (SCH_BUS_ENTRY*) aItem )
-        #define DEST   ( (SCH_BUS_ENTRY*) aImage )
-        EXCHG( SOURCE->m_Pos, DEST->m_Pos );
-        EXCHG( SOURCE->m_Size, DEST->m_Size );
-        break;
-
-    case SCH_SHEET_T:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (SCH_SHEET*) aItem )
-        #define DEST   ( (SCH_SHEET*) aImage )
-        DEST->SwapData( SOURCE );
-        break;
-
-    case SCH_MARKER_T:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (SCH_MARKER*) aItem )
-        #define DEST   ( (SCH_MARKER*) aImage )
-        EXCHG( SOURCE->m_Pos, DEST->m_Pos );
-        break;
-
-    case SCH_SHEET_PIN_T:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (SCH_SHEET_PIN*) aItem )
-        #define DEST   ( (SCH_SHEET_PIN*) aImage )
-        DEST->SwapData( SOURCE );
-        break;
-
-    case SCH_NO_CONNECT_T:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (SCH_NO_CONNECT*) aItem )
-        #define DEST   ( (SCH_NO_CONNECT*) aImage )
-        EXCHG( SOURCE->m_Pos, DEST->m_Pos );
-        break;
-
-    case SCH_BITMAP_T:
-        #undef SOURCE
-        #undef DEST
-        #define SOURCE ( (SCH_BITMAP*) aItem )
-        #define DEST   ( (SCH_BITMAP*) aImage )
-        DEST->SwapData( SOURCE );
-        break;
-
-    case SCH_FIELD_T:
-        break;
-
-    // not directly used in schematic:
-    default:
-        wxMessageBox( wxT( "SwapData() error: unexpected type" ) );
-        break;
-    }
-}
-
 
 void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
                                          UNDO_REDO_T    aCommandType,
@@ -346,7 +259,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         switch( aList->GetPickedItemStatus( ii ) )
         {
         case UR_CHANGED: /* Exchange old and new data for each item */
-            SwapData( item, image );
+            item->SwapData( image );
             break;
 
         case UR_NEW:     /* new items are deleted */

@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file bus-wire-junction.cpp
  * @brief Code for editing buses, wires, and junctions.
@@ -436,6 +461,60 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
 }
 
 
+static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
+{
+    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
+    SCH_ITEM* item = screen->GetCurItem();
+
+    wxCHECK_RET( (item != NULL), wxT( "Cannot move invalid schematic item." ) );
+
+    // Erase the current item at its current position.
+    if( aErase )
+        item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+
+    item->SetPosition( screen->GetCrossHairPosition() );
+
+    // Draw the item item at it's new position.
+    item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+}
+
+
+static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
+{
+    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
+    SCH_ITEM* item = screen->GetCurItem();
+    SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
+
+    parent->SetRepeatItem( NULL );
+    screen->SetCurItem( NULL );
+
+    if( item == NULL )  /* no current item */
+        return;
+
+    if( item->IsNew() )
+    {
+        delete item;
+        item = NULL;
+    }
+    else    // Move command on an existing text item, restore the values of the original.
+    {
+        SCH_ITEM* olditem = parent->GetUndoItem();
+        screen->SetCurItem( item );
+
+        wxCHECK_RET( olditem != NULL && item->Type() == olditem->Type(),
+                     wxT( "Cannot restore undefined or bad last schematic item." ) );
+
+        // Never delete existing item, because it can be referenced by an undo/redo command
+        // Just restore its data
+
+        item->SwapData( olditem );
+        item->ClearFlags();
+    }
+
+    aPanel->Refresh();
+}
+
+
 /* Routine to create new connection struct.
  */
 SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
@@ -457,6 +536,29 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
         SaveCopyInUndoList( junction, UR_NEW );
 
     return junction;
+}
+
+
+void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
+{
+    wxCHECK_RET( aItem != NULL, wxT( "Cannot move invalid schematic item" ) );
+
+    m_itemToRepeat = NULL;
+
+    if( !aItem->IsNew() )
+        SetUndoItem( aItem );
+
+    aItem->SetFlags( IS_MOVED );
+
+    DrawPanel->CrossHairOff( aDC );
+    GetScreen()->SetCrossHairPosition( aItem->GetPosition() );
+    DrawPanel->MoveCursorToCrossHair();
+
+    OnModify();
+    DrawPanel->SetMouseCapture( moveItem, abortMoveItem );
+    GetScreen()->SetCurItem( aItem );
+    moveItem( DrawPanel, aDC, wxDefaultPosition, true );
+    DrawPanel->CrossHairOn( aDC );
 }
 
 
@@ -517,12 +619,12 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
     if( m_itemToRepeat->Type() == SCH_COMPONENT_T ) // If repeat component then put in move mode
     {
         wxPoint pos = GetScreen()->GetCrossHairPosition() -
-            ( (SCH_COMPONENT*) m_itemToRepeat )->m_Pos;
+                      ( (SCH_COMPONENT*) m_itemToRepeat )->GetPosition();
         m_itemToRepeat->SetFlags( IS_NEW );
         ( (SCH_COMPONENT*) m_itemToRepeat )->m_TimeStamp = GetTimeStamp();
         m_itemToRepeat->Move( pos );
         m_itemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
-        StartMovePart( (SCH_COMPONENT*) m_itemToRepeat, DC );
+        MoveItem( m_itemToRepeat, DC );
         return;
     }
 
@@ -541,4 +643,3 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         m_itemToRepeat->ClearFlags();
     }
 }
-

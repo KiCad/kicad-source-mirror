@@ -55,6 +55,7 @@ class SCH_COMPONENT : public SCH_ITEM
 {
     friend class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC;
 
+    wxPoint m_Pos;
     wxString m_ChipName;    ///< Name to look for in the library, i.e. "74LS00".
     int      m_unit;        ///< The unit for multiple part per package components.
     int      m_convert;     ///< The alternate body style for components that have more than
@@ -74,11 +75,6 @@ class SCH_COMPONENT : public SCH_ITEM
      * A single / denotes the root sheet.
      */
     wxArrayString m_PathsAndReferences;
-
-public:
-    wxPoint m_Pos;
-
-private:
 
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
 
@@ -290,8 +286,6 @@ public:
 
     virtual void SwapData( SCH_ITEM* aItem );
 
-    void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
-
     // returns a unique ID, in the form of a path.
     wxString GetPath( SCH_SHEET_PATH* sheet );
 
@@ -433,6 +427,8 @@ private:
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
+    virtual wxPoint doGetPosition() const { return m_Pos; }
+    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 };
 
 

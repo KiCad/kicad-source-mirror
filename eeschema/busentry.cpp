@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file busentry.cpp
  * @brief Code to handle manipulation of bus entry objects.
@@ -16,55 +41,6 @@
 
 
 static int     s_LastShape = '\\';
-static wxPoint ItemInitialPosition;
-
-
-static void ExitBusEntry( EDA_DRAW_PANEL* Panel, wxDC* DC )
-{
-    /* Exit bus entry mode. */
-    SCH_BUS_ENTRY* BusEntry = (SCH_BUS_ENTRY*) Panel->GetScreen()->GetCurItem();
-
-    if( BusEntry )
-    {
-        BusEntry->Draw( Panel, DC, wxPoint( 0, 0 ), g_XorMode );
-
-        if( BusEntry->IsNew() )
-        {
-            delete BusEntry;
-            Panel->GetScreen()->SetCurItem( NULL );
-        }
-        else
-        {
-            BusEntry->m_Pos = ItemInitialPosition;
-            BusEntry->Draw( Panel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-            BusEntry->m_Flags = 0;
-        }
-    }
-
-    SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) Panel->GetParent();
-
-    parent->SetRepeatItem( NULL );
-}
-
-
-static void ShowWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                             bool aErase )
-{
-    // Draws the bus entry while moving the cursor
-    BASE_SCREEN*   screen   = aPanel->GetScreen();
-    SCH_BUS_ENTRY* BusEntry = (SCH_BUS_ENTRY*) screen->GetCurItem();
-
-    if( BusEntry == NULL )
-        return;
-
-    /* Erase the last segment position. */
-    if( aErase )
-        BusEntry->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-
-    /* Redraw at the new position. */
-    BusEntry->m_Pos = screen->GetCrossHairPosition();
-    BusEntry->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-}
 
 
 SCH_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusEntry( wxDC* DC, int entry_type )
@@ -76,30 +52,6 @@ SCH_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusEntry( wxDC* DC, int entry_type )
     BusEntry->Place( this, DC );
     OnModify();
     return BusEntry;
-}
-
-
-void SCH_EDIT_FRAME::StartMoveBusEntry( SCH_BUS_ENTRY* BusEntry, wxDC* DC )
-{
-    if( BusEntry == NULL )
-        return;
-
-    if( !BusEntry->IsNew() )    // not already in edit, save shape
-        SetUndoItem( BusEntry );
-
-    BusEntry->SetFlags( IS_MOVED );
-
-    ItemInitialPosition = BusEntry->m_Pos;
-
-    DrawPanel->CrossHairOff( DC );
-    GetScreen()->SetCrossHairPosition( BusEntry->m_Pos );
-    DrawPanel->MoveCursorToCrossHair();
-
-    GetScreen()->SetCurItem( BusEntry );
-    DrawPanel->m_mouseCaptureCallback = ShowWhileMoving;
-    DrawPanel->m_endMouseCaptureCallback = ExitBusEntry;
-
-    DrawPanel->CrossHairOn( DC );
 }
 
 
@@ -147,5 +99,6 @@ int SCH_EDIT_FRAME::GetBusEntryShape( SCH_BUS_ENTRY* BusEntry )
 
     if( BusEntry->m_Size.y < 0 )
         entry_shape = '/';
+
     return entry_shape;
 }

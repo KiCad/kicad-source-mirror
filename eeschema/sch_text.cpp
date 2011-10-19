@@ -331,46 +331,22 @@ void SCH_TEXT::SetOrientation( int aOrientation )
 }
 
 
-void SCH_TEXT::SwapData( SCH_TEXT* copyitem )
+void SCH_TEXT::SwapData( SCH_ITEM* aItem )
 {
-    EXCHG( m_Text, copyitem->m_Text );
-    EXCHG( m_Pos, copyitem->m_Pos );
-    EXCHG( m_Size, copyitem->m_Size );
-    EXCHG( m_Thickness, copyitem->m_Thickness );
-    EXCHG( m_Shape, copyitem->m_Shape );
-    EXCHG( m_Orient, copyitem->m_Orient );
+    SCH_TEXT* item = (SCH_TEXT*) aItem;
 
-    EXCHG( m_Layer, copyitem->m_Layer );
-    EXCHG( m_HJustify, copyitem->m_HJustify );
-    EXCHG( m_VJustify, copyitem->m_VJustify );
-    EXCHG( m_IsDangling, copyitem->m_IsDangling );
-    EXCHG( m_SchematicOrientation, copyitem->m_SchematicOrientation );
-}
+    EXCHG( m_Text, item->m_Text );
+    EXCHG( m_Pos, item->m_Pos );
+    EXCHG( m_Size, item->m_Size );
+    EXCHG( m_Thickness, item->m_Thickness );
+    EXCHG( m_Shape, item->m_Shape );
+    EXCHG( m_Orient, item->m_Orient );
 
-
-void SCH_TEXT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
-{
-    if( !IsNew() )
-    {
-        // For existing (not new texts: save in undo list the old text:
-        ClearFlags();
-        PICKED_ITEMS_LIST pickList;
-        ITEM_PICKER picker( this, UR_CHANGED); //UR_EXCHANGE_T );
-        SCH_ITEM* undoItem = frame->GetUndoItem();
-
-        wxCHECK_RET( undoItem != NULL && undoItem->Type() == Type(),
-                     wxT( "Invalid text undo item." ) );
-
-        undoItem->ClearFlags();
-        picker.SetLink( undoItem );
-        // the owner of undoItem is no more frame, this is picker:
-        frame->SetUndoItem( NULL );
-
-        pickList.PushItem( picker );
-        frame->SaveCopyInUndoList( pickList, UR_CHANGED ); //UR_EXCHANGE_T );
-    }
-
-    SCH_ITEM::Place( frame, DC );
+    EXCHG( m_Layer, item->m_Layer );
+    EXCHG( m_HJustify, item->m_HJustify );
+    EXCHG( m_VJustify, item->m_VJustify );
+    EXCHG( m_IsDangling, item->m_IsDangling );
+    EXCHG( m_SchematicOrientation, item->m_SchematicOrientation );
 }
 
 

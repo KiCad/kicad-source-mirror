@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file eeschema/find.cpp
  * @brief Functions for searching for a schematic item.
@@ -64,14 +89,16 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
             m_CurrentSheet->UpdateAllScreenReferences();
         }
 
-        sheetFoundIn->LastScreen()->SetCrossHairPosition( lastMarker->m_Pos );
+        sheetFoundIn->LastScreen()->SetCrossHairPosition( lastMarker->GetPosition() );
 
-        RedrawScreen( lastMarker->m_Pos, warpCursor );
+        RedrawScreen( lastMarker->GetPosition(), warpCursor );
 
         wxString path = sheetFoundIn->Path();
         wxString units = GetAbbreviatedUnitsLabel();
-        double x = To_User_Unit( g_UserUnit, (double) lastMarker->m_Pos.x, m_InternalUnits );
-        double y = To_User_Unit( g_UserUnit, (double) lastMarker->m_Pos.y, m_InternalUnits );
+        double x = To_User_Unit( g_UserUnit, (double) lastMarker->GetPosition().x,
+                                 m_InternalUnits );
+        double y = To_User_Unit( g_UserUnit, (double) lastMarker->GetPosition().y,
+                                 m_InternalUnits );
         msg.Printf( _( "Design rule check marker found in sheet %s at %0.3f%s, %0.3f%s" ),
                     GetChars( path ), x, GetChars( units ), y, GetChars( units) );
         SetStatusText( msg );
@@ -83,21 +110,6 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
 }
 
 
-/**
- * Function FindComponentAndItem
- * finds a Component in the schematic, and an item in this component.
- * @param component_reference The component reference to find.
- * @param text_to_find - The text to search for, either in value, reference
- *                       or elsewhere.
- * @param Find_in_hierarchy:  false => Search is made in current sheet
- *                     true => the whole hierarchy
- * @param SearchType:  0 => find component
- *                     1 => find pin
- *                     2 => find ref
- *                     3 => find value
- *                     >= 4 => unused (same as 0)
- * @param mouseWarp If true, then move the mouse cursor to the item.
- */
 SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_reference,
                                                 bool Find_in_hierarchy,
                                                 int SearchType,
@@ -141,11 +153,11 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
                 default:
                 case 0:             // Find component only
                     NotFound = false;
-                    pos = pSch->m_Pos;
+                    pos = pSch->GetPosition();
                     break;
 
                 case 1:                 // find a pin
-                    pos = pSch->m_Pos;  /* temporary: will be changed if the pin is found */
+                    pos = pSch->GetPosition();  // temporary: will be changed if the pin is found.
                     pin = pSch->GetPin( text_to_find );
 
                     if( pin == NULL )
@@ -157,17 +169,17 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
 
                 case 2:     // find reference
                     NotFound = false;
-                    pos = pSch->GetField( REFERENCE )->m_Pos;
+                    pos = pSch->GetField( REFERENCE )->GetPosition();
                     break;
 
                 case 3:     // find value
-                    pos = pSch->m_Pos;
+                    pos = pSch->GetPosition();
 
                     if( text_to_find.CmpNoCase( pSch->GetField( VALUE )->m_Text ) != 0 )
                         break;
 
                     NotFound = false;
-                    pos = pSch->GetField( VALUE )->m_Pos;
+                    pos = pSch->GetField( VALUE )->GetPosition();
                     break;
                 }
             }
@@ -189,9 +201,9 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
         }
 
         wxPoint delta;
-        pos  -= Component->m_Pos;
+        pos  -= Component->GetPosition();
         delta = Component->GetTransform().TransformCoordinate( pos );
-        pos   = delta + Component->m_Pos;
+        pos   = delta + Component->GetPosition();
 
 
         /* There may be need to reframe the drawing */
@@ -279,12 +291,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
 }
 
 
-/**
- * Finds an item in the schematic matching the search string.
- *
- * @param event - Find dialog event containing the find parameters.
- */
-void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& event )
+void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 {
     static SCH_ITEM*  lastItem = NULL;  /* last item found when searching a match
                                          * note: the actual matched item can be a
@@ -296,18 +303,18 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& event )
     wxString          msg;
     SCH_SHEET_PATH*   sheetFoundIn = NULL;
     wxFindReplaceData searchCriteria;
-    bool              warpCursor = !( event.GetFlags() & FR_NO_WARP_CURSOR );
+    bool              warpCursor = !( aEvent.GetFlags() & FR_NO_WARP_CURSOR );
 
-    searchCriteria.SetFlags( event.GetFlags() );
-    searchCriteria.SetFindString( event.GetFindString() );
-    searchCriteria.SetReplaceString( event.GetReplaceString() );
+    searchCriteria.SetFlags( aEvent.GetFlags() );
+    searchCriteria.SetFindString( aEvent.GetFindString() );
+    searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
 
-    if( event.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
+    if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
     {
         sheetFoundIn = m_CurrentSheet;
         warpCursor = true;
     }
-    else if( event.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
+    else if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
     {
         sheetFoundIn = m_CurrentSheet;
         lastItem = m_CurrentSheet->MatchNextItem( searchCriteria, lastItem, &lastItemPosition );
@@ -331,12 +338,12 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& event )
 
         RedrawScreen( lastItemPosition, warpCursor );
 
-        msg = event.GetFindString() + _( " found in " ) + sheetFoundIn->PathHumanReadable();
+        msg = aEvent.GetFindString() + _( " found in " ) + sheetFoundIn->PathHumanReadable();
         SetStatusText( msg );
     }
     else
     {
-        msg.Printf( _( "No item found matching %s." ), GetChars( event.GetFindString() ) );
+        msg.Printf( _( "No item found matching %s." ), GetChars( aEvent.GetFindString() ) );
         SetStatusText( msg );
     }
 }

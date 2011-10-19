@@ -681,16 +681,6 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 }
 
 
-void SCH_COMPONENT::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
-{
-    /* save old text in undo list */
-    if( !IsNew() )
-        frame->SaveUndoItemInUndoList( this );
-
-    SCH_ITEM::Place( frame, DC );
-}
-
-
 void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 {
     bool           keepMulti = false;

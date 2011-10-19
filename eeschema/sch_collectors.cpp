@@ -90,7 +90,7 @@ const KICAD_T SCH_COLLECTOR::EditableItems[] = {
 
 const KICAD_T SCH_COLLECTOR::MovableItems[] = {
     SCH_MARKER_T,
-//    SCH_JUNCTION_T,
+    SCH_JUNCTION_T,
     SCH_NO_CONNECT_T,
     SCH_BUS_ENTRY_T,
 //    SCH_LINE_T,
@@ -188,7 +188,7 @@ SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestData )
         // schematic.  The hit test position must be converted to library coordinates.
         SCH_COMPONENT* component = (SCH_COMPONENT*) aTestData;
         TRANSFORM transform = component->GetTransform().InverseTransform();
-        wxPoint position = transform.TransformCoordinate( m_RefPos - component->m_Pos );
+        wxPoint position = transform.TransformCoordinate( m_RefPos - component->GetPosition() );
 
         position.y *= -1;   // Y axis polarity in schematic is inverted from library.
 
