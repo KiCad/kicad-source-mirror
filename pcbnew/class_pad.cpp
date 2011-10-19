@@ -20,11 +20,6 @@
 #include "class_module.h"
 
 
-// Due to a bug in previous versions ( m_LengthDie not initialized in D_PAD ctor)
-// m_LengthDie is no more read from .brd files
-// Uncomment this next line to read m_LengthDie from .brd files
-#define READ_PAD_LENGTH_DIE
-
 int D_PAD::m_PadSketchModePenSize = 0;      // Pen size used to draw pads in sketch mode
 
 
@@ -501,11 +496,9 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
             break;
 
         case 'L':
-#ifdef READ_PAD_LENGTH_DIE
     	    int lengthdie;
             nn    = sscanf( PtLine, "%d", &lengthdie );
             m_LengthDie = lengthdie;
-#endif
             break;
 
         case '.':    /* Read specific data */
