@@ -428,7 +428,7 @@ private:
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
     virtual wxPoint doGetPosition() const { return m_Pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+    virtual void doSetPosition( const wxPoint& aPosition ) { Move( aPosition - m_Pos ); }
 };
 
 

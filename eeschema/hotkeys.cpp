@@ -83,37 +83,40 @@
 
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
-static EDA_HOTKEY HkZoomAuto( wxT( "Fit on Screen" ), HK_ZOOM_AUTO, WXK_HOME );
+static EDA_HOTKEY HkZoomAuto( wxT( "Fit on Screen" ), HK_ZOOM_AUTO, WXK_HOME, ID_ZOOM_PAGE );
 #else
-static EDA_HOTKEY HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, GR_KB_CTRL + '0' );
+static EDA_HOTKEY HkZoomAuto( wxT( "Zoom Auto" ), HK_ZOOM_AUTO, GR_KB_CTRL + '0',
+                              ID_ZOOM_PAGE );
 #endif
 
-static EDA_HOTKEY HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
+static EDA_HOTKEY HkZoomCenter( wxT( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4,
+                                ID_POPUP_ZOOM_CENTER );
 
 /* Refresh Screen */
 #if !defined( __WXMAC__ )
-static EDA_HOTKEY HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
+static EDA_HOTKEY HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3, ID_ZOOM_REDRAW );
 #else
-static EDA_HOTKEY HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, GR_KB_CTRL + 'R' );
+static EDA_HOTKEY HkZoomRedraw( wxT( "Zoom Redraw" ), HK_ZOOM_REDRAW, GR_KB_CTRL + 'R',
+                                ID_ZOOM_REDRAW );
 #endif
 
 /* Zoom In */
 #if !defined( __WXMAC__ )
-static EDA_HOTKEY HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
+static EDA_HOTKEY HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, WXK_F1, ID_POPUP_ZOOM_IN );
 #else
-static EDA_HOTKEY HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, GR_KB_CTRL + '+' );
+static EDA_HOTKEY HkZoomIn( wxT( "Zoom In" ), HK_ZOOM_IN, GR_KB_CTRL + '+', ID_POPUP_ZOOM_IN );
 #endif
 
 /* Zoom Out */
 #if !defined( __WXMAC__ )
-static EDA_HOTKEY HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
+static EDA_HOTKEY HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2, ID_POPUP_ZOOM_OUT );
 #else
-static EDA_HOTKEY HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-' );
+static EDA_HOTKEY HkZoomOut( wxT( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-', ID_POPUP_ZOOM_OUT );
 #endif
 
 static EDA_HOTKEY HkHelp( wxT( "Help (this window)" ), HK_HELP, '?' );
 static EDA_HOTKEY HkResetLocalCoord( wxT( "Reset Local Coordinates" ),
-                                        HK_RESET_LOCAL_COORD, ' ' );
+                                     HK_RESET_LOCAL_COORD, ' ' );
 
 /* Undo */
 static EDA_HOTKEY HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
@@ -307,15 +310,15 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         aHotKey += 'A' - 'a';
 
     // Search command from key :
-    EDA_HOTKEY* HK_Descr = GetDescriptorFromHotkey( aHotKey, s_Common_Hotkey_List );
+    EDA_HOTKEY* hotKey = GetDescriptorFromHotkey( aHotKey, s_Common_Hotkey_List );
 
-    if( HK_Descr == NULL )
-        HK_Descr = GetDescriptorFromHotkey( aHotKey, s_Schematic_Hotkey_List );
+    if( hotKey == NULL )
+        hotKey = GetDescriptorFromHotkey( aHotKey, s_Schematic_Hotkey_List );
 
-    if( HK_Descr == NULL )
+    if( hotKey == NULL )
         return;
 
-    switch( HK_Descr->m_Idcommand )
+    switch( hotKey->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:
@@ -330,27 +333,11 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_ZOOM_IN:
-        cmd.SetId( ID_POPUP_ZOOM_IN );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
     case HK_ZOOM_OUT:
-        cmd.SetId( ID_POPUP_ZOOM_OUT );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
     case HK_ZOOM_REDRAW:
-        cmd.SetId( ID_ZOOM_REDRAW );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
     case HK_ZOOM_CENTER:
-        cmd.SetId( ID_POPUP_ZOOM_CENTER );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
     case HK_ZOOM_AUTO:
-        cmd.SetId( ID_ZOOM_PAGE );
+        cmd.SetId( hotKey->m_IdMenuEvent );
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
@@ -358,7 +345,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_REDO:
         if( notBusy )
         {
-            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, HK_Descr->m_IdMenuEvent );
+            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, hotKey->m_IdMenuEvent );
             wxPostEvent( this, event );
         }
         break;
@@ -694,7 +681,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                 break;
         }
 
-        cmd.SetId( HK_Descr->m_IdMenuEvent );
+        cmd.SetId( hotKey->m_IdMenuEvent );
         wxPostEvent( this, cmd );
         break;
 
@@ -705,7 +692,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         if( aItem == NULL )
         {
             aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::DraggableItems,
-                                       HK_Descr->m_Idcommand );
+                                       hotKey->m_Idcommand );
 
             if( aItem == NULL )
                 break;
@@ -721,7 +708,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             case SCH_GLOBAL_LABEL_T:
             case SCH_HIERARCHICAL_LABEL_T:
             case SCH_SHEET_T:
-                cmd.SetId( HK_Descr->m_IdMenuEvent );
+                cmd.SetId( hotKey->m_IdMenuEvent );
                 wxPostEvent( this, cmd );
                 break;
 
@@ -750,13 +737,13 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         if( aItem == NULL )
         {
             aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::MovableItems,
-                                       HK_Descr->m_Idcommand );
+                                       hotKey->m_Idcommand );
 
             if( aItem == NULL )
                 break;
         }
 
-        cmd.SetId( HK_Descr->m_IdMenuEvent );
+        cmd.SetId( hotKey->m_IdMenuEvent );
         wxPostEvent( this, cmd );
         break;
 
@@ -820,7 +807,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( aItem )
         {
-            cmd.SetId( HK_Descr->m_IdMenuEvent );
+            cmd.SetId( hotKey->m_IdMenuEvent );
             wxPostEvent( this, cmd );
         }
 
@@ -850,15 +837,15 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     if( (aHotKey >= 'a') && (aHotKey <= 'z') )
         aHotKey += 'A' - 'a';
 
-    EDA_HOTKEY* HK_Descr = GetDescriptorFromHotkey( aHotKey, s_Common_Hotkey_List );
+    EDA_HOTKEY* hotKey = GetDescriptorFromHotkey( aHotKey, s_Common_Hotkey_List );
 
-    if( HK_Descr == NULL )
-        HK_Descr = GetDescriptorFromHotkey( aHotKey, s_LibEdit_Hotkey_List );
+    if( hotKey == NULL )
+        hotKey = GetDescriptorFromHotkey( aHotKey, s_LibEdit_Hotkey_List );
 
-    if( HK_Descr == NULL )
+    if( hotKey == NULL )
         return;
 
-    switch( HK_Descr->m_Idcommand )
+    switch( hotKey->m_Idcommand )
     {
     default:
     case HK_NOT_FOUND:
@@ -873,27 +860,11 @@ void LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_ZOOM_IN:
-        cmd.SetId( ID_POPUP_ZOOM_IN );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
     case HK_ZOOM_OUT:
-        cmd.SetId( ID_POPUP_ZOOM_OUT );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
     case HK_ZOOM_REDRAW:
-        cmd.SetId( ID_ZOOM_REDRAW );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
     case HK_ZOOM_CENTER:
-        cmd.SetId( ID_POPUP_ZOOM_CENTER );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
     case HK_ZOOM_AUTO:
-        cmd.SetId( ID_ZOOM_PAGE );
+        cmd.SetId( hotKey->m_IdMenuEvent );
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
