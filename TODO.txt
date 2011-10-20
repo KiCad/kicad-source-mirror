@@ -19,6 +19,11 @@ Common
 * Push file open semantics down to one of the base frame classes ( likely candidate is
   WinEDA_BasicFrame ) so that file open behavior is consistent across all applications.
 
+* Look over Brian's python BOM generation scripts, which are now in
+  scripts/python/ky and sort them out, and get something into the installation as well.
+  Code came from Brian in this posting's attachment, which is ky2.zip:
+  https://lists.launchpad.net/kicad-developers/msg06763.html
+  but is now in scripts/python/ky temporarily.
 
 
 CvPCB
@@ -48,6 +53,4 @@ E6)  Start initial work for changing component library file format to use Dick's
 PCBNew
 ------
 
-Dick:
 
-*   Use BOARD_ITEM::MenuIcon() in the onrightclick.cpp
