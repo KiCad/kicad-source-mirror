@@ -88,8 +88,9 @@
  * $Endmodule
  */
 
+static int NbDraw, NbTrack, NbZone, NbMod, NbNets;
 
-int NbDraw, NbTrack, NbZone, NbMod, NbNets;
+static const char delims[] = " =\n\r";
 
 
 /** Read a list of segments (Tracks, zones)
@@ -104,19 +105,18 @@ int PCB_BASE_FRAME::ReadListeSegmentDescr( LINE_READER* aReader,
     int    tempStartX, tempStartY;
     int    tempEndX, tempEndY;
     int    ii = 0;
-    char*  line;
 
     TRACK* newTrack;
 
     while( aReader->ReadLine() )
     {
-        line = aReader->Line();
-        int           makeType;
-        unsigned long timeStamp;
+        char*           line = aReader->Line();
+        int             makeType;
+        unsigned long   timeStamp;
 
         if( line[0] == '$' )
         {
-            return ii;      /* end of segmentlist: OK */
+            return ii;      // end of segmentlist: OK
         }
 
         int arg_count = sscanf( line + 2, " %d %d %d %d %d %d %d", &shape,
@@ -159,7 +159,7 @@ int PCB_BASE_FRAME::ReadListeSegmentDescr( LINE_READER* aReader,
             GetBoard()->m_Track.Insert( newTrack, insertBeforeMe );
             break;
 
-        case PCB_ZONE_T:     // this is now deprecated, but exits in old boards
+        case PCB_ZONE_T:     // this is now deprecated, but exist in old boards
             newTrack = new SEGZONE( GetBoard() );
             GetBoard()->m_Zone.Insert( (SEGZONE*) newTrack, (SEGZONE*) insertBeforeMe );
             break;
@@ -199,12 +199,10 @@ int PCB_BASE_FRAME::ReadListeSegmentDescr( LINE_READER* aReader,
 
 int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
 {
-    char* Line, * data;
-
-    while(  aReader->ReadLine() )
+    while( aReader->ReadLine() )
     {
-        Line = aReader->Line();
-        data = strtok( Line, " =\n\r" );
+        char* line = aReader->Line();
+        char* data = strtok( line, delims );
 
         if( strnicmp( data, "$EndGENERAL", 10 ) == 0 )
             break;
@@ -212,7 +210,8 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
         if( stricmp( data, "EnabledLayers" ) == 0 )
         {
             int EnabledLayers = 0;
-            data = strtok( NULL, " =\n\r" );
+
+            data = strtok( NULL, delims );
             sscanf( data, "%X", &EnabledLayers );
 
             // Setup layer visibility
@@ -224,7 +223,8 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
         if( strncmp( data, "Ly", 2 ) == 0 )    // Old format for Layer count
         {
             int Masque_Layer = 1, ii;
-            data = strtok( NULL, " =\n\r" );
+
+            data = strtok( NULL, delims );
             sscanf( data, "%X", &Masque_Layer );
 
             // Setup layer count
@@ -245,7 +245,7 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
 
         if( stricmp( data, "BoardThickness" ) == 0 )
         {
-            data = strtok( NULL, " =\n\r" );
+            data = strtok( NULL, delims );
             GetBoard()->GetBoardDesignSettings()->m_BoardThickness = atoi( data );
             continue;
         }
@@ -258,7 +258,7 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
 
         if( strnicmp( data, "NoConn", 6 ) == 0 )
         {
-            data = strtok( NULL, " =\n\r" );
+            data = strtok( NULL, delims );
             GetBoard()->m_NbNoconnect = atoi( data );
             continue;
         }
@@ -266,49 +266,54 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
         if( strnicmp( data, "Di", 2 ) == 0 )
         {
             wxSize pcbsize, screensize;
-            data = strtok( NULL, " =\n\r" );
+
+            data = strtok( NULL, delims );
             GetBoard()->m_BoundaryBox.SetX( atoi( data ) );
-            data = strtok( NULL, " =\n\r" );
+
+            data = strtok( NULL, delims );
             GetBoard()->m_BoundaryBox.SetY( atoi( data ) );
-            data = strtok( NULL, " =\n\r" );
+
+            data = strtok( NULL, delims );
             GetBoard()->m_BoundaryBox.SetWidth( atoi( data ) - GetBoard()->m_BoundaryBox.GetX() );
-            data = strtok( NULL, " =\n\r" );
+
+            data = strtok( NULL, delims );
             GetBoard()->m_BoundaryBox.SetHeight( atoi( data ) - GetBoard()->m_BoundaryBox.GetY() );
+
             continue;
         }
 
-        /* Reading the number of segments of type DRAW, TRACK, ZONE */
+        // Read the number of segments of type DRAW, TRACK, ZONE
         if( stricmp( data, "Ndraw" ) == 0 )
         {
-            data   = strtok( NULL, " =\n\r" );
+            data   = strtok( NULL, delims );
             NbDraw = atoi( data );
             continue;
         }
 
         if( stricmp( data, "Ntrack" ) == 0 )
         {
-            data    = strtok( NULL, " =\n\r" );
+            data    = strtok( NULL, delims );
             NbTrack = atoi( data );
             continue;
         }
 
         if( stricmp( data, "Nzone" ) == 0 )
         {
-            data   = strtok( NULL, " =\n\r" );
+            data   = strtok( NULL, delims );
             NbZone = atoi( data );
             continue;
         }
 
         if( stricmp( data, "Nmodule" ) == 0 )
         {
-            data  = strtok( NULL, " =\n\r" );
+            data  = strtok( NULL, delims );
             NbMod = atoi( data );
             continue;
         }
 
         if( stricmp( data, "Nnets" ) == 0 )
         {
-            data   = strtok( NULL, " =\n\r" );
+            data   = strtok( NULL, delims );
             NbNets = atoi( data );
             continue;
         }
@@ -320,18 +325,17 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
 
 int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 {
-    char*     Line;
     char*     data;
 
     NETCLASS* netclass_default = GetBoard()->m_NetClasses.GetDefault();
 
-    while(  aReader->ReadLine() )
+    while( aReader->ReadLine() )
     {
-        Line = aReader->Line();
+        char* line = aReader->Line();
 
-        if( strnicmp( Line, "PcbPlotParams", 13 ) == 0 )
+        if( strnicmp( line, "PcbPlotParams", 13 ) == 0 )
         {
-            PCB_PLOT_PARAMS_PARSER parser( &Line[13], aReader->GetSource() );
+            PCB_PLOT_PARAMS_PARSER parser( &line[13], aReader->GetSource() );
 
             try
             {
@@ -349,10 +353,10 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             continue;
         }
 
-        strtok( Line, " =\n\r" );
-        data = strtok( NULL, " =\n\r" );
+        strtok( line, delims );
+        data = strtok( NULL, delims );
 
-        if( stricmp( Line, "$EndSETUP" ) == 0 )
+        if( stricmp( line, "$EndSETUP" ) == 0 )
         {
             // Until such time as the *.brd file does not have the
             // global parameters:
@@ -374,11 +378,11 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             return 0;
         }
 
-        if( stricmp( Line, "AuxiliaryAxisOrg" ) == 0 )
+        if( stricmp( line, "AuxiliaryAxisOrg" ) == 0 )
         {
             int gx = 0, gy = 0;
             gx   = atoi( data );
-            data = strtok( NULL, " =\n\r" );
+            data = strtok( NULL, delims );
 
             if( data )
                 gy = atoi( data );
@@ -390,7 +394,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
 #ifdef PCBNEW
 
-        if( stricmp( Line, "Layers" ) == 0 )
+        if( stricmp( line, "Layers" ) == 0 )
         {
             int tmp;
             sscanf( data, "%d", &tmp );
@@ -400,12 +404,12 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         const int LAYERKEYZ = sizeof("Layer[") - 1;
 
-        if( strncmp( Line, "Layer[", LAYERKEYZ ) == 0 )
+        if( strncmp( line, "Layer[", LAYERKEYZ ) == 0 )
         {
             // parse:
             // Layer[n]  <a_Layer_name_with_no_spaces> <LAYER_T>
 
-            char* cp    = Line + LAYERKEYZ;
+            char* cp    = line + LAYERKEYZ;
             int   layer = atoi( cp );
 
             if( data )
@@ -425,71 +429,71 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             continue;
         }
 
-        if( stricmp( Line, "TrackWidth" ) == 0 )    // no more used
+        if( stricmp( line, "TrackWidth" ) == 0 )    // no more used
         {
             continue;
         }
 
-        if( stricmp( Line, "TrackWidthList" ) == 0 )
+        if( stricmp( line, "TrackWidthList" ) == 0 )
         {
             int tmp = atoi( data );
             GetBoard()->m_TrackWidthList.push_back( tmp );
             continue;
         }
 
-        if( stricmp( Line, "TrackClearence" ) == 0 )
+        if( stricmp( line, "TrackClearence" ) == 0 )
         {
             netclass_default->SetClearance( atoi( data ) );
             continue;
         }
 
-        if( stricmp( Line, "TrackMinWidth" ) == 0 )
+        if( stricmp( line, "TrackMinWidth" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_TrackMinWidth = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "ZoneClearence" ) == 0 )
+        if( stricmp( line, "ZoneClearence" ) == 0 )
         {
             g_Zone_Default_Setting.m_ZoneClearance = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "DrawSegmWidth" ) == 0 )
+        if( stricmp( line, "DrawSegmWidth" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_DrawSegmentWidth = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "EdgeSegmWidth" ) == 0 )
+        if( stricmp( line, "EdgeSegmWidth" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_EdgeSegmentWidth = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "ViaSize" ) == 0 )    // no more used
+        if( stricmp( line, "ViaSize" ) == 0 )    // no more used
         {
             continue;
         }
 
-        if( stricmp( Line, "ViaMinSize" ) == 0 )
+        if( stricmp( line, "ViaMinSize" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_ViasMinSize = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "MicroViaSize" ) == 0 )  // Not used
+        if( stricmp( line, "MicroViaSize" ) == 0 )  // Not used
         {
             continue;
         }
 
-        if( stricmp( Line, "MicroViaMinSize" ) == 0 )
+        if( stricmp( line, "MicroViaMinSize" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_MicroViasMinSize = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "ViaSizeList" ) == 0 )
+        if( stricmp( line, "ViaSizeList" ) == 0 )
         {
             int           tmp = atoi( data );
             VIA_DIMENSION via_dim;
@@ -506,113 +510,113 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             continue;
         }
 
-        if( stricmp( Line, "ViaDrill" ) == 0 )
+        if( stricmp( line, "ViaDrill" ) == 0 )
         {
             int diameter = atoi( data );
             netclass_default->SetViaDrill( diameter );
             continue;
         }
 
-        if( stricmp( Line, "ViaMinDrill" ) == 0 )
+        if( stricmp( line, "ViaMinDrill" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_ViasMinDrill = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "MicroViaDrill" ) == 0 )
+        if( stricmp( line, "MicroViaDrill" ) == 0 )
         {
             int diameter = atoi( data );
             netclass_default->SetuViaDrill( diameter );
             continue;
         }
 
-        if( stricmp( Line, "MicroViaMinDrill" ) == 0 )
+        if( stricmp( line, "MicroViaMinDrill" ) == 0 )
         {
             int diameter = atoi( data );
             GetBoard()->GetBoardDesignSettings()->m_MicroViasMinDrill = diameter;
             continue;
         }
 
-        if( stricmp( Line, "MicroViasAllowed" ) == 0 )
+        if( stricmp( line, "MicroViasAllowed" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_MicroViasAllowed = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "TextPcbWidth" ) == 0 )
+        if( stricmp( line, "TextPcbWidth" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "TextPcbSize" ) == 0 )
+        if( stricmp( line, "TextPcbSize" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_PcbTextSize.x = atoi( data );
-            data = strtok( NULL, " =\n\r" );
+            data = strtok( NULL, delims );
             GetBoard()->GetBoardDesignSettings()->m_PcbTextSize.y = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "EdgeModWidth" ) == 0 )
+        if( stricmp( line, "EdgeModWidth" ) == 0 )
         {
             g_ModuleSegmentWidth = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "TextModWidth" ) == 0 )
+        if( stricmp( line, "TextModWidth" ) == 0 )
         {
             g_ModuleTextWidth = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "TextModSize" ) == 0 )
+        if( stricmp( line, "TextModSize" ) == 0 )
         {
             g_ModuleTextSize.x = atoi( data );
-            data = strtok( NULL, " =\n\r" );
+            data = strtok( NULL, delims );
             g_ModuleTextSize.y = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "PadSize" ) == 0 )
+        if( stricmp( line, "PadSize" ) == 0 )
         {
             g_Pad_Master.m_Size.x = atoi( data );
-            data = strtok( NULL, " =\n\r" );
+            data = strtok( NULL, delims );
             g_Pad_Master.m_Size.y = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "PadDrill" ) == 0 )
+        if( stricmp( line, "PadDrill" ) == 0 )
         {
             g_Pad_Master.m_Drill.x = atoi( data );
             g_Pad_Master.m_Drill.y = g_Pad_Master.m_Drill.x;
             continue;
         }
 
-        if( stricmp( Line, "Pad2MaskClearance" ) == 0 )
+        if( stricmp( line, "Pad2MaskClearance" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_SolderMaskMargin = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "Pad2PasteClearance" ) == 0 )
+        if( stricmp( line, "Pad2PasteClearance" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_SolderPasteMargin = atoi( data );
             continue;
         }
 
-        if( stricmp( Line, "Pad2PasteClearanceRatio" ) == 0 )
+        if( stricmp( line, "Pad2PasteClearanceRatio" ) == 0 )
         {
             GetBoard()->GetBoardDesignSettings()->m_SolderPasteMarginRatio = atof( data );
             continue;
         }
 
-        if( stricmp( Line, "GridOrigin" ) == 0 )
+        if( stricmp( line, "GridOrigin" ) == 0 )
         {
             int Ox = 0;
             int Oy = 0;
 
             Ox = atoi( data );
-            data = strtok( NULL, " =\n\r" );
+            data = strtok( NULL, delims );
 
             if ( data )
                 Oy = atoi( data );
@@ -853,18 +857,19 @@ bool WriteSheetDescr( BASE_SCREEN* screen, FILE* File )
 
 static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
 {
-    char* Line, buf[1024], * text;
+    char    buf[1024];
+    char*   text;
 
-    while(  aReader->ReadLine() )
+    while( aReader->ReadLine() )
     {
-        Line = aReader->Line();
+        char* line = aReader->Line();
 
-        if( strnicmp( Line, "$End", 4 ) == 0 )
+        if( strnicmp( line, "$End", 4 ) == 0 )
             return true;
 
-        if( strnicmp( Line, "Sheet", 4 ) == 0 )
+        if( strnicmp( line, "Sheet", 4 ) == 0 )
         {
-            text = strtok( Line, " \t\n\r" );
+            text = strtok( line, " \t\n\r" );
             text = strtok( NULL, " \t\n\r" );
             Ki_PageDescr* sheet = g_SheetSizeList[0];
             int           ii;
@@ -895,58 +900,58 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
             continue;
         }
 
-        if( strnicmp( Line, "Title", 2 ) == 0 )
+        if( strnicmp( line, "Title", 2 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             screen->m_Title = FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Date", 2 ) == 0 )
+        if( strnicmp( line, "Date", 2 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             screen->m_Date = FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Rev", 2 ) == 0 )
+        if( strnicmp( line, "Rev", 2 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             screen->m_Revision = FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Comp", 4 ) == 0 )
+        if( strnicmp( line, "Comp", 4 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             screen->m_Company = FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Comment1", 8 ) == 0 )
+        if( strnicmp( line, "Comment1", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             screen->m_Commentaire1 = FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Comment2", 8 ) == 0 )
+        if( strnicmp( line, "Comment2", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             screen->m_Commentaire2 = FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Comment3", 8 ) == 0 )
+        if( strnicmp( line, "Comment3", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             screen->m_Commentaire3 = FROM_UTF8( buf );
             continue;
         }
 
-        if( strnicmp( Line, "Comment4", 8 ) == 0 )
+        if( strnicmp( line, "Comment4", 8 ) == 0 )
         {
-            ReadDelimitedText( buf, Line, 256 );
+            ReadDelimitedText( buf, line, 256 );
             screen->m_Commentaire4 = FROM_UTF8( buf );
             continue;
         }
@@ -958,8 +963,6 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
 
 int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 {
-    char*        Line;
-
     wxBusyCursor dummy;
 
     // Switch the locale to standard C (needed to read floating point numbers
@@ -976,30 +979,27 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
     // Put a dollar sign in front, and test for a specific length of characters
     // The -1 is to omit the trailing \0 which is included in sizeof() on a
     // string.
-#define TESTLINE( x ) (strncmp( Line, "$" x, sizeof("$" x) - 1 ) == 0)
+#define TESTLINE( x ) (strncmp( line, "$" x, sizeof("$" x) - 1 ) == 0)
 
     while( aReader->ReadLine() )
     {
-        Line = aReader->Line();
+        char* line = aReader->Line();
+
         // put the more frequent ones at the top
 
         if( TESTLINE( "MODULE" ) )
         {
-            MODULE* Module = new MODULE( board );
-
-            if( Module == NULL )
-                continue;
-
-            board->Add( Module, ADD_APPEND );
-            Module->ReadDescr( aReader );
+            MODULE* module = new MODULE( board );
+            board->Add( module, ADD_APPEND );
+            module->ReadDescr( aReader );
             continue;
         }
 
         if( TESTLINE( "DRAWSEGMENT" ) )
         {
-            DRAWSEGMENT* DrawSegm = new DRAWSEGMENT( board );
-            board->Add( DrawSegm, ADD_APPEND );
-            DrawSegm->ReadDrawSegmentDescr( aReader );
+            DRAWSEGMENT* dseg = new DRAWSEGMENT( board );
+            board->Add( dseg, ADD_APPEND );
+            dseg->ReadDrawSegmentDescr( aReader );
             continue;
         }
 
@@ -1064,29 +1064,27 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 
         if( TESTLINE( "COTATION" ) )
         {
-            DIMENSION* Dimension = new DIMENSION( board );
-            board->Add( Dimension, ADD_APPEND );
-            Dimension->ReadDimensionDescr( aReader );
+            DIMENSION* dim = new DIMENSION( board );
+            board->Add( dim, ADD_APPEND );
+            dim->ReadDimensionDescr( aReader );
             continue;
         }
 
         if( TESTLINE( "PCB_TARGET" ) )
         {
-            PCB_TARGET* Mire = new PCB_TARGET( board );
-            board->Add( Mire, ADD_APPEND );
-            Mire->ReadMirePcbDescr( aReader );
+            PCB_TARGET* t = new PCB_TARGET( board );
+            board->Add( t, ADD_APPEND );
+            t->ReadMirePcbDescr( aReader );
             continue;
         }
 
         if( TESTLINE( "ZONE" ) )
         {
-
 #ifdef PCBNEW
             SEGZONE* insertBeforeMe = Append ? NULL : board->m_Zone.GetFirst();
 
             ReadListeSegmentDescr( aReader, insertBeforeMe, PCB_ZONE_T, NbZone );
 #endif
-
             continue;
         }
 
@@ -1112,7 +1110,7 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
             {
                 while( aReader->ReadLine() )
                 {
-                    Line = aReader->Line();
+                    line = aReader->Line();
 
                     if( TESTLINE( "EndSETUP" ) )
                         break;
