@@ -128,6 +128,7 @@ found in the default search paths." ),
 
     BOOST_FOREACH( COMPONENT& component, m_components )
     {
+        bool found = false;
         m_ListCmp->SetSelection( ii++, true );
 
         if( !component.m_Module.IsEmpty() )
@@ -135,7 +136,6 @@ found in the default search paths." ),
 
         BOOST_FOREACH( FOOTPRINT_ALIAS& alias, aliases )
         {
-            bool found = false;
 
             if( alias.m_Name.CmpNoCase( component.m_Value ) != 0 )
                 continue;
@@ -169,6 +169,15 @@ any of the project footprint libraries." ),
                 break;
             }
 
+        }
+        /* obviously the last chance: there's only one filter matching one footprint */
+        if( !found && 1 == component.m_FootprintFilter.GetCount() ) {
+            /* we do not need to analyse wildcards: single footprint do not contain them */
+            /* and if there are wildcards it just will not match any */
+            FOOTPRINT_INFO *module = m_footprints.GetModuleInfo( component.m_FootprintFilter[0] );
+            if( module ) {
+                SetNewPkg( component.m_FootprintFilter[0] );
+            }
         }
     }
 }
