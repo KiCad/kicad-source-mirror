@@ -1,12 +1,37 @@
 
-set( STAND_ALONE true )
+#  This program source code file is part of KICAD, a free EDA CAD application.
+#
+# Copyright (C) 2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+# Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors#.
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, you may find one here:
+#  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+#  or you may search the http://www.gnu.org website for the version 2 license,
+#  or you may write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+#
 
-if( STAND_ALONE )
+# for now, this is a stand alone project
+if( 1 )
+
     project(kicad-new)
 
     cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
 
     set( PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ )
+
+    # message( "PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}" )
 
     # Path to local CMake modules.
     set( CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules )
@@ -24,8 +49,24 @@ if( STAND_ALONE )
 
     check_find_package_result( wxWidgets_FOUND "wxWidgets" )
 
+    find_library( gal_LIBRARY "libgal.a"
+        PATHS
+            "${CMAKE_CURRENT_SOURCE_DIR}/../../kicad-gal/build"
+            "${CMAKE_CURRENT_SOURCE_DIR}/../../../kicad-gal/build"
+        DOC
+            "Where is the static GAL library"
+        )
+
+    find_path( gal_ROOT NAMES "README.txt"
+        PATHS
+            "${CMAKE_CURRENT_SOURCE_DIR}/../../kicad-gal"
+            "${CMAKE_CURRENT_SOURCE_DIR}/../../../kicad-gal"
+        DOC
+            "Where is the base include directory for the GAL library"
+        )
+
     # make config.h
-    include(PerformFeatureChecks)
+    include( PerformFeatureChecks )
     perform_feature_checks()
 
     # Include wxWidgets macros.
@@ -47,7 +88,6 @@ if( STAND_ALONE )
     include(Functions)
 
 endif()
-
 
 
 #================================================
@@ -127,6 +167,40 @@ if( MINGW )
     )
 endif()
 target_link_libraries( test_sch_lib_table sweet )
+
+
+include_directories ("${gal_ROOT}/gal/cairo")
+include_directories( "${gal_ROOT}/gal/common" )
+include_directories ("${gal_ROOT}/gal/font")
+include_directories ("${gal_ROOT}/gal/opengl")
+include_directories ("${gal_ROOT}/math")
+
+# Find pkg-config in order find cairo.
+find_package( PkgConfig REQUIRED )
+
+# Find cairo.
+pkg_search_module( CAIRO REQUIRED cairo>=1.8.1 )
+include_directories( ${CAIRO_INCLUDE_DIRS} )
+
+# Find the OpenGL libraries (gl and glu)
+find_package( OpenGL )
+
+# Find GLEW
+pkg_search_module( GLEW REQUIRED glew>=1.5.0 )
+include_directories( ${GLEW_INCLUDE_DIRS} )
+
+
+include_directories( ${gal_ROOT} )
+
+add_executable( sweet_edit sweet_edit.cpp  sweet_editor_panel.cpp )
+
+target_link_libraries( sweet_edit
+  ${OPENGL_LIBRARIES}
+  ${gal_LIBRARY}
+  ${wxWidgets_LIBRARIES}
+  ${GLEW_LIBRARIES}
+  ${GDI_PLUS_LIBRARIES}
+  )
 
 
 #=====<USE_SWIG>============================================================
