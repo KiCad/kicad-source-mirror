@@ -35,6 +35,7 @@
 #include "eda_doc.h"
 #include "wxEeschemaStruct.h"
 #include "kicad_device_context.h"
+#include "hotkeys_basic.h"
 
 #include "general.h"
 #include "eeschema_id.h"
@@ -492,8 +493,28 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM* item = screen->GetCurItem();
 
+    wxLogDebug( wxT( "Command member m_commandInt = %d." ), aEvent.GetInt() );
+
     if( item == NULL )
-        return;
+    {
+        // If we didn't get here by a hot key, then something has gone wrong.
+        if( aEvent.GetInt() == 0 )
+            return;
+
+        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientData();
+
+        wxCHECK_RET( data != NULL, wxT( "Invalid hot key client data." ) );
+
+        item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::MovableItems,
+                                  aEvent.GetInt() );
+
+        aEvent.SetClientData( NULL );
+        delete data;
+
+        // Exit if no item found at the current location or the item is already being edited.
+        if( (item == NULL) || (item->GetFlags() != 0) )
+            return;
+    }
 
     INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 
@@ -510,6 +531,7 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_TEXT_T:
     case SCH_COMPONENT_T:
+    case SCH_SHEET_PIN_T:
         MoveItem( item, &dc );
         break;
 
@@ -523,10 +545,6 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
 
     case SCH_FIELD_T:
         MoveField( (SCH_FIELD*) item, &dc );
-        break;
-
-    case SCH_SHEET_PIN_T:
-        MoveSheetPin( (SCH_SHEET_PIN*) item, &dc );
         break;
 
     case SCH_MARKER_T:

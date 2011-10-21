@@ -146,7 +146,6 @@ private:
     static int            m_lastSheetPinType;      ///< Last sheet pin type.
     static wxSize         m_lastSheetPinTextSize;  ///< Last sheet pin text size.
     static wxPoint        m_lastSheetPinPosition;  ///< Last sheet pin position.
-    static int            m_lastSheetPinEdge;      ///< Last sheet edge a sheet pin was placed.
 
 protected:
     TEMPLATES             m_TemplateFieldNames;
@@ -773,8 +772,6 @@ public:
 
     wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
 
-    int GetLastSheetPinEdge() const { return m_lastSheetPinEdge; }
-
 private:
     void StartMoveSheet( SCH_SHEET* sheet, wxDC* DC );
 
@@ -795,14 +792,6 @@ private:
      * @return The user response from the edit dialog.
      */
     int EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC );
-
-    /**
-     * Function MoveSheetPin
-     * moves \a aSheetPin within it's parent sheet object.
-     * @param aSheetPin The sheet pin item to move.
-     * @param aDC The device context to draw on.
-     */
-    void MoveSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC );
 
     /**
      * Function ImportSheetPin

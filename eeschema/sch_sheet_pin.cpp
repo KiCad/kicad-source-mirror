@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,14 +43,14 @@
 #include "kicad_string.h"
 
 
-/* m_Edge define on which edge the pin is positionned:
+/* m_Edge define on which edge the pin is positioned:
  *
  *        0: pin on left side
  *        1: pin on right side
  *        2: pin on top side
  *        3: pin on bottom side
  *  for compatibility reasons, this does not follow same values as text
- *  ortientation.
+ *  orientation.
  */
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :
@@ -60,10 +60,12 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
     wxASSERT( parent );
     m_Layer = LAYER_SHEETLABEL;
     m_Pos   = pos;
+
     if( parent->IsVerticalOrientation() )
         SetEdge( 2 );
     else
         SetEdge( 0 );
+
     m_Shape = NET_INPUT;
     m_IsDangling = true;
     m_Number     = 2;
@@ -141,26 +143,20 @@ void SCH_SHEET_PIN::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
     wxCHECK_RET( (sheet != NULL) && (sheet->Type() == SCH_SHEET_T),
                  wxT( "Cannot place sheet pin in invalid schematic sheet object." ) );
 
-    int flags = m_Flags;
-    m_Flags = 0;
-
-    if( flags & IS_NEW )
+    if( IsNew() )
     {
         aFrame->SaveCopyInUndoList( sheet, UR_CHANGED );
         sheet->AddPin( this );
     }
-    else    // pin sheet was existing and only moved
+    else    // Sheet pin already existed and was only moved.
     {
-        wxPoint tmp = m_Pos;
-        m_Pos = aFrame->GetLastSheetPinPosition();
-        SetEdge( aFrame->GetLastSheetPinEdge() );
-        aFrame->SaveCopyInUndoList( sheet, UR_CHANGED );
-        m_Pos = tmp;
+        aFrame->SaveUndoItemInUndoList( sheet );
     }
 
-    ConstraintOnEdge( aFrame->GetScreen()->GetCrossHairPosition() );
-
+    ClearFlags();
     sheet->Draw( aFrame->DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+
+    // Make sure we don't call the abort move function.
     aFrame->DrawPanel->SetMouseCapture( NULL, NULL );
     aFrame->DrawPanel->EndMouseCapture();
 }
@@ -205,7 +201,7 @@ int SCH_SHEET_PIN::GetEdge() const
 }
 
 
-void SCH_SHEET_PIN::ConstraintOnEdge( wxPoint Pos )
+void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 {
     SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();
 
@@ -224,8 +220,10 @@ void SCH_SHEET_PIN::ConstraintOnEdge( wxPoint Pos )
         }
 
         m_Pos.y = Pos.y;
+
         if( m_Pos.y < Sheet->m_Pos.y )
             m_Pos.y = Sheet->m_Pos.y;
+
         if( m_Pos.y > (Sheet->m_Pos.y + Sheet->m_Size.y) )
             m_Pos.y = Sheet->m_Pos.y + Sheet->m_Size.y;
     }

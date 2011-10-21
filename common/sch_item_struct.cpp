@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2011 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,7 +97,7 @@ void SCH_ITEM::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
     m_Flags = 0;
     screen->SetModify();
     screen->SetCurItem( NULL );
-    aFrame->DrawPanel->SetMouseCapture( NULL, NULL );
+    aFrame->DrawPanel->EndMouseCapture();
 
     if( aDC )
     {

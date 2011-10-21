@@ -132,11 +132,11 @@ public:
     int GetEdge() const;
 
     /**
-     * Function ConstraintOnEdge
+     * Function ConstrainOnEdge
      * is used to adjust label position to edge based on proximity to vertical / horizontal edge
      * of the parent sheet.
      */
-    void ConstraintOnEdge( wxPoint Pos );
+    void ConstrainOnEdge( wxPoint Pos );
 
     /**
      * Get the parent sheet object of this sheet pin.
@@ -221,6 +221,12 @@ public:
     virtual wxString GetSelectMenuText() const;
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_hierar_pin_xpm; }
+
+private:
+    virtual void doSetPosition( const wxPoint& aPosition )
+    {
+        ConstrainOnEdge( aPosition );
+    }
 };
 
 
