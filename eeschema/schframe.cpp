@@ -184,7 +184,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     m_Draw_Axis = FALSE;                // true to show axis
     m_Draw_Sheet_Ref = true;            // true to show sheet references
     m_CurrentSheet   = new SCH_SHEET_PATH();
-    m_Multiflag     = 0;
     m_TextFieldSize = DEFAULT_SIZE_TEXT;
     m_LibeditFrame  = NULL;         // Component editor frame.
     m_ViewlibFrame  = NULL;         // Frame for browsing component libraries

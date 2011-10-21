@@ -315,16 +315,7 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset
 
     if( field->IsVisible() && !( field->m_Flags & IS_MOVED ) )
     {
-        if( Entry->GetPartCount() > 1 )
-        {
-            field->m_AddExtraText = true;
-            field->Draw( panel, DC, offset, DrawMode );
-        }
-        else
-        {
-            field->m_AddExtraText = false;
-            field->Draw( panel, DC, offset, DrawMode );
-        }
+        field->Draw( panel, DC, offset, DrawMode );
     }
 
     for( int ii = VALUE; ii < GetFieldCount(); ii++ )
@@ -1547,11 +1538,6 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
     // in multi parts per package
     // the .m_AddExtraText of the field must be set to add this identifier:
     LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
-
-    if( Entry && Entry->GetPartCount() > 1 )
-        GetField( REFERENCE )->m_AddExtraText = true;
-    else
-        GetField( REFERENCE )->m_AddExtraText = false;
 
     if( GetField( REFERENCE )->Matches( aSearchData, aAuxData, aFindLocation ) )
         return true;

@@ -105,7 +105,6 @@ class SCH_EDIT_FRAME : public EDA_DRAW_FRAME
 public:
     wxComboBox*           m_SelPartBox;
     SCH_SHEET_PATH*       m_CurrentSheet;    ///< which sheet we are presently working on.
-    int m_Multiflag;
     int m_NetlistFormat;
     int m_AddSubPrefix;
     bool                  m_ShowAllPins;

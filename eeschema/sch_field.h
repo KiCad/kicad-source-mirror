@@ -60,9 +60,6 @@ public:
 
     wxString m_Name;
 
-    bool     m_AddExtraText;    /**< for REFERENCE, add extra info
-                                 * (for REFERENCE: add part selection text */
-
 public:
     SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent,
                wxString aName = wxEmptyString );
@@ -74,7 +71,7 @@ public:
     virtual wxString GetClass() const
     {
         return wxT( "SCH_FIELD" );
-    }
+   }
 
     /**
      * Function GetName
@@ -85,6 +82,15 @@ public:
     wxString GetName() const;
 
     int GetId() const { return m_FieldId; }
+
+    /**
+     * Function GetText
+     * overrides the default implementation to allow for the part suffix to be added
+     * to the reference designator field if the component has multiple parts.
+     *
+     * @return a wxString object containing the field's string.
+     */
+    virtual wxString GetText() const;
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
@@ -208,8 +214,8 @@ private:
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_Pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+    virtual wxPoint doGetPosition() const;
+    virtual void doSetPosition( const wxPoint& aPosition );
 };
 
 

@@ -839,13 +839,23 @@ public:
 
     /**
      * Function GetTextStyleName
-     * @return a wwString withe the style name( Normal, Italic, Bold, Bold+Italic)
+     * @return a wxString with the style name( Normal, Italic, Bold, Bold+Italic)
      */
     wxString GetTextStyleName();
 
     void SetText( const wxString& aText ) { m_Text = aText; }
 
-    wxString GetText() const { return m_Text; }
+    /**
+     * Function GetText
+     * returns the string associated with the text object.
+     * <p>
+     * This function is virtual to allow derived classes to override getting the
+     * string to provide a way for modifying the base string by adding a suffix or
+     * prefix to the base string.
+     * </p>
+     * @return a wxString object containing the string of the item.
+     */
+    virtual wxString GetText() const { return m_Text; }
 
     GRTextHorizJustifyType GetHorizJustify() const { return m_HJustify; };
     GRTextVertJustifyType GetVertJustify() const { return m_VJustify; };
