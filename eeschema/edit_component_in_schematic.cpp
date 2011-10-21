@@ -45,34 +45,18 @@
  */
 static void moveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
-    wxPoint pos;
-
-    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
     SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
     SCH_FIELD* currentField = (SCH_FIELD*)screen->GetCurItem();
 
     if( (currentField == NULL) || (currentField->Type() != SCH_FIELD_T) )
         return;
 
-    SCH_COMPONENT* component = (SCH_COMPONENT*) currentField->GetParent();
-
-    currentField->m_AddExtraText = frame->m_Multiflag;
-
     if( aErase )
     {
         currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
     }
 
-    pos = ( (SCH_COMPONENT*) currentField->GetParent() )->GetPosition();
-
-    // Actual positions are calculated by the rotation/mirror transform
-    // But here we want the relative position of the moved field
-    // and we know the actual position.
-    // So we are using the inverse rotation/mirror transform.
-    wxPoint pt( screen->GetCrossHairPosition() - pos );
-
-    TRANSFORM itrsfm = component->GetTransform().InverseTransform();
-    currentField->SetPosition( pos + itrsfm.TransformCoordinate( pt ) );
+    currentField->SetPosition( screen->GetCrossHairPosition() );
 
     currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 }
@@ -86,7 +70,6 @@ static void abortMoveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
     if( currentField )
     {
-        currentField->m_AddExtraText = frame->m_Multiflag;
         currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
         currentField->ClearFlags();
         currentField->m_Pos = frame->m_OldPos;
@@ -102,34 +85,16 @@ void SCH_EDIT_FRAME::MoveField( SCH_FIELD* aField, wxDC* aDC )
     wxCHECK_RET( aField && (aField->Type() == SCH_FIELD_T) && !aField->GetText().IsEmpty(),
                  wxT( "Cannot move invalid component field." ) );
 
-    LIB_COMPONENT* libEntry;
-    wxPoint        pos, newpos;
     SCH_COMPONENT* comp = (SCH_COMPONENT*) aField->GetParent();
 
     GetScreen()->SetCurItem( aField );
     SetUndoItem( comp );
 
-    pos = comp->GetPosition();
-
-    /* Positions are computed by the rotation/mirror transform. */
-    newpos = aField->m_Pos - pos;
-
-    newpos = comp->GetTransform().TransformCoordinate( newpos ) + pos;
-
     DrawPanel->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( newpos );
+    GetScreen()->SetCrossHairPosition( aField->GetPosition() );
     DrawPanel->MoveCursorToCrossHair();
 
     m_OldPos = aField->m_Pos;
-    m_Multiflag = 0;
-
-    if( aField->GetId() == REFERENCE )
-    {
-        libEntry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
-
-        if( (libEntry != NULL) && (libEntry->GetPartCount() > 1) )
-            m_Multiflag = 1;
-    }
 
     DrawPanel->SetMouseCapture( moveField, abortMoveField );
     aField->SetFlags( IS_MOVED );
@@ -143,7 +108,7 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC )
     wxCHECK_RET( aField != NULL && aField->Type() == SCH_FIELD_T,
                  wxT( "Cannot edit invalid schematic field." ) );
 
-    int            fieldNdx, flag;
+    int            fieldNdx;
     SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
 
     wxCHECK_RET( component != NULL && component->Type() == SCH_COMPONENT_T,
@@ -165,15 +130,12 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
         return;
     }
 
-    flag = 0;
-
-    if( fieldNdx == REFERENCE && entry->GetPartCount() > 1 )
-        flag = 1;
-
     // Save old component in undo list if not already in edit, or moving.
     if( aField->GetFlags() == 0 )
         SaveCopyInUndoList( component, UR_CHANGED );
 
+    // Don't use GetText() here.  If the field is the reference designator and it's parent
+    // component has multiple parts, we don't want the part suffix added to the field.
     wxString newtext = aField->m_Text;
     DrawPanel->m_IgnoreMouseEvents = true;
 
@@ -192,7 +154,6 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
     if ( response != wxID_OK || newtext == aField->GetText() )
         return;  // canceled by user
 
-    aField->m_AddExtraText = flag;
     aField->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     if( !newtext.IsEmpty() )
@@ -217,7 +178,9 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
             }
         }
         else
+        {
             aField->m_Text = newtext;
+        }
     }
     else
     {
@@ -246,23 +209,12 @@ void SCH_EDIT_FRAME::RotateField( SCH_FIELD* aField, wxDC* aDC )
     wxCHECK_RET( aField != NULL && aField->Type() == SCH_FIELD_T && !aField->GetText().IsEmpty(),
                  wxT( "Cannot rotate invalid schematic field." ) );
 
-    int            flag = 0;
-    LIB_COMPONENT* libEntry;
     SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
-
-    if( aField->GetId() == REFERENCE )
-    {
-        libEntry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
-
-        if( (libEntry != NULL) && (libEntry->GetPartCount() > 1) )
-            flag = 1;
-    }
 
     // Save old component in undo list if not already in edit, or moving.
     if( aField->GetFlags() == 0 )
         SaveCopyInUndoList( component, UR_CHANGED );
 
-    aField->m_AddExtraText = flag;
     aField->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     if( aField->m_Orient == TEXT_ORIENT_HORIZ )

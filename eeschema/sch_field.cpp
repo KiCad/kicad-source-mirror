@@ -60,7 +60,6 @@ SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent,
 {
     m_Pos     = aPos;
     m_FieldId = aFieldId;
-    m_AddExtraText = false;
     m_Attributs    = TEXT_NO_VISIBLE;
     m_Name = aName;
 
@@ -74,7 +73,6 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
 {
     m_FieldId = aField.m_FieldId;
     m_Name = aField.m_Name;
-    m_AddExtraText = aField.m_AddExtraText;
 }
 
 
@@ -86,6 +84,26 @@ SCH_FIELD::~SCH_FIELD()
 EDA_ITEM* SCH_FIELD::doClone() const
 {
     return new SCH_FIELD( *this );
+}
+
+
+wxString SCH_FIELD::GetText() const
+{
+    wxString text = m_Text;
+
+    /* For more than one part per package, we must add the part selection
+     * A, B, ... or 1, 2, .. to the reference. */
+    if( m_FieldId == REFERENCE )
+    {
+        SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
+
+        wxCHECK_MSG( component != NULL, text,
+                     wxT( "No component associated with field" ) + text );
+
+        text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
+    }
+
+    return text;
 }
 
 
@@ -168,21 +186,8 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     else
         color = ReturnLayerColor( LAYER_FIELDS );
 
-    if( !m_AddExtraText || ( m_FieldId != REFERENCE ) )
-    {
-        DrawGraphicText( panel, DC, textpos, color, m_Text, orient, m_Size, hjustify, vjustify,
-                         LineWidth, m_Italic, m_Bold );
-    }
-    else
-    {
-        /* For more than one part per package, we must add the part selection
-         * A, B, ... or 1, 2, .. to the reference. */
-        wxString fulltext = m_Text;
-        fulltext << LIB_COMPONENT::ReturnSubReference( parentComponent->GetUnit() );
-
-        DrawGraphicText( panel, DC, textpos, color, fulltext, orient, m_Size, hjustify, vjustify,
-                         LineWidth, m_Italic, m_Bold );
-    }
+    DrawGraphicText( panel, DC, textpos, color, GetText(), orient, m_Size, hjustify, vjustify,
+                     LineWidth, m_Italic, m_Bold );
 
     /* Enable this to draw the bounding box around the text field to validate
      * the bounding box calculations.
@@ -393,29 +398,12 @@ bool SCH_FIELD::Save( FILE* aFile ) const
 
 void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
-    int            fieldNdx;
-    LIB_COMPONENT* Entry;
-
     frame->DrawPanel->SetMouseCapture( NULL, NULL );
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
 
     // save old cmp in undo list
     frame->SaveUndoItemInUndoList( component );
-
-    fieldNdx = m_FieldId;
-    m_AddExtraText = 0;
-
-    if( fieldNdx == REFERENCE )
-    {
-        Entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
-
-        if( Entry != NULL )
-        {
-            if( Entry->GetPartCount() > 1 )
-                m_AddExtraText = 1;
-        }
-    }
 
     Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     ClearFlags();
@@ -428,28 +416,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
 {
     bool match;
 
-    if( aAuxData && m_FieldId == REFERENCE )
-    {
-        // reference is a special field because:
-        // >> a part identifier is added in multi parts per package
-        //      (the .m_AddExtraText of the field is set in this case )
-        // >> In complex hierarchies, the actual reference depend on the sheet path.
-        SCH_COMPONENT*  pSch     = (SCH_COMPONENT*) m_Parent;
-        SCH_SHEET_PATH* sheet    = (SCH_SHEET_PATH*) aAuxData;
-        wxString        fulltext = pSch->GetRef( sheet );
-
-        if( m_AddExtraText )
-        {
-            /* For more than one part per package, we must add the part selection
-             * A, B, ... or 1, 2, .. to the reference. */
-            int part_id = pSch->GetUnitSelection( sheet );
-            fulltext << LIB_COMPONENT::ReturnSubReference( part_id );
-        }
-
-        match = SCH_ITEM::Matches( fulltext, aSearchData );
-    }
-    else
-        match = SCH_ITEM::Matches( m_Text, aSearchData );
+    match = SCH_ITEM::Matches( GetText(), aSearchData );
 
     if( match )
     {
@@ -602,4 +569,30 @@ void SCH_FIELD::doPlot( PLOTTER* aPlotter )
         aPlotter->text( textpos, color, Text, orient, m_Size, hjustify, vjustify,
                         thickness, m_Italic, m_Bold );
     }
+}
+
+
+void SCH_FIELD::doSetPosition( const wxPoint& aPosition )
+{
+    SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
+
+    wxPoint pos = ( (SCH_COMPONENT*) GetParent() )->GetPosition();
+
+    // Actual positions are calculated by the rotation/mirror transform of the
+    // parent component of the field.  The inverse transfrom is used to calculate
+    // the position relative to the parent component.
+    wxPoint pt = aPosition - pos;
+
+    m_Pos = pos + component->GetTransform().InverseTransform().TransformCoordinate( pt );
+}
+
+
+wxPoint SCH_FIELD::doGetPosition() const
+{
+
+    SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
+
+    wxPoint pos = m_Pos - component->GetPosition();
+
+    return component->GetTransform().TransformCoordinate( pos ) + component->GetPosition();
 }

@@ -97,6 +97,7 @@ void SCH_ITEM::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
     m_Flags = 0;
     screen->SetModify();
     screen->SetCurItem( NULL );
+    aFrame->DrawPanel->SetMouseCapture( NULL, NULL );
     aFrame->DrawPanel->EndMouseCapture();
 
     if( aDC )
