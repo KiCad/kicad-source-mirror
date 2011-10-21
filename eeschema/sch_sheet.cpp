@@ -920,7 +920,7 @@ void SCH_SHEET::Resize( const wxSize& aSize )
     /* Move the sheet labels according to the new sheet size. */
     BOOST_FOREACH( SCH_SHEET_PIN& label, m_pins )
     {
-        label.ConstraintOnEdge( label.m_Pos );
+        label.ConstrainOnEdge( label.m_Pos );
     }
 }
 

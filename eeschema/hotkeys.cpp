@@ -572,7 +572,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ROTATE:       // Component or other schematic item rotation
         if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK )//allows bloc operation on hotkey
         {
-            HandleBlockEndByPopUp(BLOCK_ROTATE, aDC );
+            HandleBlockEndByPopUp( BLOCK_ROTATE, aDC );
             break;
         }
 
@@ -731,18 +731,8 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_MOVE_COMPONENT_OR_ITEM:         // Start move schematic item.
-        if( itemInEdit )
-            break;
-
-        if( aItem == NULL )
-        {
-            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::MovableItems,
-                                       hotKey->m_Idcommand );
-
-            if( aItem == NULL )
-                break;
-        }
-
+        cmd.SetInt( aHotKey );
+        cmd.SetClientData( new EDA_HOTKEY_CLIENT_DATA( aPosition ) );
         cmd.SetId( hotKey->m_IdMenuEvent );
         wxPostEvent( this, cmd );
         break;

@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file sheetlab.cpp
  * @brief Create and edit the SCH_SHEET_PIN items.
@@ -21,71 +46,6 @@
 int SCH_EDIT_FRAME::m_lastSheetPinType = NET_INPUT;
 wxSize SCH_EDIT_FRAME::m_lastSheetPinTextSize( DEFAULT_SIZE_TEXT, DEFAULT_SIZE_TEXT );
 wxPoint SCH_EDIT_FRAME::m_lastSheetPinPosition;
-int SCH_EDIT_FRAME::m_lastSheetPinEdge;
-
-
-/* Called when aborting a move pinsheet label
- * delete a new pin sheet label, or restire its old position
- */
-static void abortSheetPinMove( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
-{
-    wxCHECK_RET( (aPanel != NULL) && (aDC != NULL), wxT( "Invalid panel or device context." ) );
-
-    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
-    SCH_SHEET_PIN* sheetPin = (SCH_SHEET_PIN*) aPanel->GetScreen()->GetCurItem();
-
-    wxCHECK_RET( (frame != NULL) && (sheetPin != NULL) && (sheetPin->Type() == SCH_SHEET_PIN_T),
-                 wxT( "Invalid frame or sheet pin." ) );
-
-    sheetPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-
-    if( sheetPin->IsNew() )
-    {
-        SAFE_DELETE( sheetPin );
-    }
-    else
-    {
-        // Restore edge position:
-        sheetPin->m_Pos = frame->GetLastSheetPinPosition();
-        sheetPin->SetEdge( frame->GetLastSheetPinEdge() );
-        sheetPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        sheetPin->ClearFlags();
-    }
-
-    aPanel->GetScreen()->SetCurItem( NULL );
-}
-
-
-static void moveSheetPin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                          bool aErase )
-{
-    SCH_SHEET_PIN* sheetPin = (SCH_SHEET_PIN*) aPanel->GetScreen()->GetCurItem();
-
-    if( sheetPin == NULL || sheetPin->Type() != SCH_SHEET_PIN_T )
-        return;
-
-    if( aErase )
-        sheetPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-
-    sheetPin->ConstraintOnEdge( aPanel->GetScreen()->GetCrossHairPosition() );
-    sheetPin->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-}
-
-
-void SCH_EDIT_FRAME::MoveSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
-{
-    wxCHECK_RET( (aSheetPin != NULL) && (aSheetPin->Type() == SCH_SHEET_PIN_T),
-                 wxT( "Cannot move invalid schematic sheet pin object." ) );
-
-    m_lastSheetPinTextSize = aSheetPin->m_Size;
-    m_lastSheetPinType     = aSheetPin->m_Shape;
-    m_lastSheetPinPosition = aSheetPin->m_Pos;
-    m_lastSheetPinEdge     = aSheetPin->GetEdge();
-    aSheetPin->SetFlags( IS_MOVED );
-
-    DrawPanel->SetMouseCapture( moveSheetPin, abortSheetPinMove );
-    moveSheetPin( DrawPanel, aDC, wxDefaultPosition, true );
-}
 
 
 int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
@@ -117,6 +77,12 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
     if( aDC )
         aSheetPin->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
+    if( !aSheetPin->IsNew() )
+    {
+        SaveCopyInUndoList( (SCH_ITEM*) aSheetPin->GetParent(), UR_CHANGED );
+        GetScreen()->SetCurItem( NULL );
+    }
+
     aSheetPin->m_Text = dlg.GetLabelName();
     aSheetPin->m_Size.y = ReturnValueFromString( g_UserUnit, dlg.GetTextHeight(), m_InternalUnits );
     aSheetPin->m_Size.x = ReturnValueFromString( g_UserUnit, dlg.GetTextWidth(), m_InternalUnits );
@@ -147,12 +113,10 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
         return NULL;
     }
 
-    GetScreen()->SetCurItem( sheetPin );
     m_lastSheetPinType = sheetPin->m_Shape;
     m_lastSheetPinTextSize = sheetPin->m_Size;
 
-    DrawPanel->SetMouseCapture( moveSheetPin, abortSheetPinMove );
-    moveSheetPin( DrawPanel, aDC, wxDefaultPosition, false );
+    MoveItem( (SCH_ITEM*) sheetPin, aDC );
 
     OnModify();
     return sheetPin;
@@ -190,17 +154,12 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
         return NULL;
     }
 
-    OnModify();
-    SaveCopyInUndoList( aSheet, UR_CHANGED );
-
     sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), label->m_Text );
     sheetPin->SetFlags( IS_NEW );
     sheetPin->m_Size   = m_lastSheetPinTextSize;
     m_lastSheetPinType = sheetPin->m_Shape = label->m_Shape;
 
-    GetScreen()->SetCurItem( sheetPin );
-    DrawPanel->SetMouseCapture( moveSheetPin, abortSheetPinMove );
-    moveSheetPin( DrawPanel, aDC, wxDefaultPosition, false );
+    MoveItem( (SCH_ITEM*) sheetPin, aDC );
 
     return sheetPin;
 }

@@ -1,3 +1,26 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file hotkeys_basic.h
  * @brief Some functions to handle hotkeys in KiCad
@@ -12,8 +35,20 @@
 class EDA_DRAW_FRAME;
 
 
-/* Class to handle hotkey commands. hotkeys have a default value
- *  This class allows the real key code changed by user(from a key code list file)
+/* Identifiers (tags) in key code configuration file (or section names)
+ *  .m_SectionTag member of a EDA_HOTKEY_CONFIG
+ */
+extern wxString g_CommonSectionTag;
+extern wxString g_SchematicSectionTag;
+extern wxString g_LibEditSectionTag;
+extern wxString g_BoardEditorSectionTag;
+extern wxString g_ModuleEditSectionTag;
+
+
+/**
+ * class EDA_HOTKEY
+ * is a class to handle hot key commands.  Hot keys have a default value.
+ * This class allows the real key code changed by user(from a key code list file)
  */
 class EDA_HOTKEY
 {
@@ -49,31 +84,42 @@ public:
     const wchar_t*  m_Comment;        // Will be printed in the config file only.
 };
 
-/* Identifiers (tags) in key code configuration file (or section names)
- *  .m_SectionTag member of a EDA_HOTKEY_CONFIG
+
+/**
+ * Class EDA_HOTKEY_CLIENT_DATA
+ * provides client data member for hotkeys to include in command events generated
+ * by the hot key.
  */
-extern wxString g_CommonSectionTag;
-extern wxString g_SchematicSectionTag;
-extern wxString g_LibEditSectionTag;
-extern wxString g_BoardEditorSectionTag;
-extern wxString g_ModuleEditSectionTag;
+class EDA_HOTKEY_CLIENT_DATA : public wxClientData
+{
+    //< Logical position of the mouse cursor when the hot key was pressed.
+    wxPoint m_position;
+
+public:
+    EDA_HOTKEY_CLIENT_DATA( const wxPoint& aPosition = wxDefaultPosition ) :
+        m_position( aPosition ) {}
+
+    void SetPosition( const wxPoint& aPosition ) { m_position = aPosition; }
+
+    wxPoint GetPosition() { return m_position; }
+};
 
 
 /* Functions:
  */
-void            AddHotkeyConfigMenu( wxMenu* menu );
-void            HandleHotkeyConfigMenuSelection( EDA_DRAW_FRAME* frame, int id );
+void AddHotkeyConfigMenu( wxMenu* menu );
+void HandleHotkeyConfigMenuSelection( EDA_DRAW_FRAME* frame, int id );
 
 /**
  * Function ReturnKeyNameFromKeyCode
  * return the key name from the key code
- * Only some wxWidgets key values are handled for function key ( see
+ * * Only some wxWidgets key values are handled for function key ( see
  * s_Hotkey_Name_List[] )
  * @param aKeycode = key code (ascii value, or wxWidgets value for function keys)
  * @param aIsFound = a pointer to a bool to return true if found, or false. an be NULL default)
  * @return the key name in a wxString
  */
-wxString        ReturnKeyNameFromKeyCode( int aKeycode, bool * aIsFound = NULL );
+wxString ReturnKeyNameFromKeyCode( int aKeycode, bool * aIsFound = NULL );
 
 /**
  * Function ReturnKeyNameFromCommandId
@@ -82,9 +128,10 @@ wxString        ReturnKeyNameFromKeyCode( int aKeycode, bool * aIsFound = NULL )
  * @param aCommandId = Command Id value
  * @return the key name in a wxString
  */
-wxString        ReturnKeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId );
+wxString ReturnKeyNameFromCommandId( EDA_HOTKEY** aList, int aCommandId );
 
 /**
+
  * Function ReturnKeyCodeFromKeyName
  * return the key code from its key name
  * Only some wxWidgets key values are handled for function key

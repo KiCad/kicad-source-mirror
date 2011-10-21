@@ -496,19 +496,32 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
         delete item;
         item = NULL;
     }
-    else    // Move command on an existing text item, restore the values of the original.
+    else
     {
-        SCH_ITEM* olditem = parent->GetUndoItem();
-        screen->SetCurItem( item );
+        SCH_ITEM* oldItem = parent->GetUndoItem();
 
-        wxCHECK_RET( olditem != NULL && item->Type() == olditem->Type(),
+        SCH_ITEM* currentItem;
+
+        // Items that are children of other objects are undone by swapping the contents
+        // of the parent items.
+        if( item->Type() == SCH_SHEET_PIN_T )
+        {
+            currentItem = (SCH_ITEM*) item->GetParent();
+        }
+        else
+        {
+            currentItem = item;
+        }
+
+        screen->SetCurItem( currentItem );
+
+        wxCHECK_RET( oldItem != NULL && currentItem->Type() == oldItem->Type(),
                      wxT( "Cannot restore undefined or bad last schematic item." ) );
 
         // Never delete existing item, because it can be referenced by an undo/redo command
         // Just restore its data
-
-        item->SwapData( olditem );
-        item->ClearFlags();
+        currentItem->SwapData( oldItem );
+        currentItem->ClearFlags();
     }
 
     aPanel->Refresh();
@@ -546,12 +559,20 @@ void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
     m_itemToRepeat = NULL;
 
     if( !aItem->IsNew() )
-        SetUndoItem( aItem );
+    {
+        if( (aItem->Type() == SCH_SHEET_PIN_T) )
+            SetUndoItem( (SCH_ITEM*) aItem->GetParent() );
+        else
+            SetUndoItem( aItem );
+    }
 
     aItem->SetFlags( IS_MOVED );
 
     DrawPanel->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( aItem->GetPosition() );
+
+    if( (aItem->Type() != SCH_SHEET_PIN_T) )
+        GetScreen()->SetCrossHairPosition( aItem->GetPosition() );
+
     DrawPanel->MoveCursorToCrossHair();
 
     OnModify();
