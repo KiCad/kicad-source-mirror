@@ -461,73 +461,6 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
 }
 
 
-static void moveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
-{
-    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
-
-    wxCHECK_RET( (item != NULL), wxT( "Cannot move invalid schematic item." ) );
-
-    // Erase the current item at its current position.
-    if( aErase )
-        item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-
-    item->SetPosition( screen->GetCrossHairPosition() );
-
-    // Draw the item item at it's new position.
-    item->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-}
-
-
-static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
-{
-    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
-    SCH_EDIT_FRAME* parent = ( SCH_EDIT_FRAME* ) aPanel->GetParent();
-
-    parent->SetRepeatItem( NULL );
-    screen->SetCurItem( NULL );
-
-    if( item == NULL )  /* no current item */
-        return;
-
-    if( item->IsNew() )
-    {
-        delete item;
-        item = NULL;
-    }
-    else
-    {
-        SCH_ITEM* oldItem = parent->GetUndoItem();
-
-        SCH_ITEM* currentItem;
-
-        // Items that are children of other objects are undone by swapping the contents
-        // of the parent items.
-        if( item->Type() == SCH_SHEET_PIN_T )
-        {
-            currentItem = (SCH_ITEM*) item->GetParent();
-        }
-        else
-        {
-            currentItem = item;
-        }
-
-        screen->SetCurItem( currentItem );
-
-        wxCHECK_RET( oldItem != NULL && currentItem->Type() == oldItem->Type(),
-                     wxT( "Cannot restore undefined or bad last schematic item." ) );
-
-        // Never delete existing item, because it can be referenced by an undo/redo command
-        // Just restore its data
-        currentItem->SwapData( oldItem );
-        currentItem->ClearFlags();
-    }
-
-    aPanel->Refresh();
-}
-
-
 /* Routine to create new connection struct.
  */
 SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
@@ -549,37 +482,6 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
         SaveCopyInUndoList( junction, UR_NEW );
 
     return junction;
-}
-
-
-void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
-{
-    wxCHECK_RET( aItem != NULL, wxT( "Cannot move invalid schematic item" ) );
-
-    m_itemToRepeat = NULL;
-
-    if( !aItem->IsNew() )
-    {
-        if( (aItem->Type() == SCH_SHEET_PIN_T) )
-            SetUndoItem( (SCH_ITEM*) aItem->GetParent() );
-        else
-            SetUndoItem( aItem );
-    }
-
-    aItem->SetFlags( IS_MOVED );
-
-    DrawPanel->CrossHairOff( aDC );
-
-    if( (aItem->Type() != SCH_SHEET_PIN_T) )
-        GetScreen()->SetCrossHairPosition( aItem->GetPosition() );
-
-    DrawPanel->MoveCursorToCrossHair();
-
-    OnModify();
-    DrawPanel->SetMouseCapture( moveItem, abortMoveItem );
-    GetScreen()->SetCurItem( aItem );
-    moveItem( DrawPanel, aDC, wxDefaultPosition, true );
-    DrawPanel->CrossHairOn( aDC );
 }
 
 

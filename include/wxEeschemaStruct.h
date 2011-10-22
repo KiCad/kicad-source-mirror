@@ -836,7 +836,6 @@ private:
     void ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC );
     void SetInitCmp( SCH_COMPONENT* DrawComponent, wxDC* DC );
 
-    void MoveField( SCH_FIELD* aField, wxDC* aDC );
     void EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC );
     void RotateField( SCH_FIELD* aField, wxDC* aDC );
 
