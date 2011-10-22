@@ -932,20 +932,22 @@ wxString D_PAD::ShowPadAttr() const
 wxString D_PAD::GetSelectMenuText() const
 {
     wxString text;
+    wxString padlayers;
     BOARD * board = GetBoard();
 
-    text << _( "Pad" ) << wxT( " \"" ) << ReturnStringPadName() << wxT( "\" (" );
 
     if ( (m_layerMask & ALL_CU_LAYERS) == ALL_CU_LAYERS )
-        text << _("all copper layers");
+        padlayers = _("all copper layers");
     else if( (m_layerMask & LAYER_BACK ) == LAYER_BACK )
-        text << board->GetLayerName(LAYER_N_BACK);
+        padlayers = board->GetLayerName(LAYER_N_BACK);
     else if( (m_layerMask & LAYER_FRONT) == LAYER_FRONT )
-        text << board->GetLayerName(LAYER_N_FRONT);
+        padlayers = board->GetLayerName(LAYER_N_FRONT);
     else
-        text << _( "???" );
+        padlayers = _( "???" );
 
-    text << _( ") of " ) << ( (MODULE*) GetParent() )->GetReference();
+    text.Printf( _( "Pad [%s] (%s) of %s" ),
+                 GetChars(ReturnStringPadName() ), GetChars( padlayers ),
+                 GetChars(( (MODULE*) GetParent() )->GetReference() ) );
 
     return text;
 }
