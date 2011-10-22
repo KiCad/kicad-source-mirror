@@ -40,69 +40,6 @@
 #include "sch_component.h"
 
 
-/*
- * Move standard text field.  This routine is normally attached to the cursor.
- */
-static void moveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
-{
-    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_FIELD* currentField = (SCH_FIELD*)screen->GetCurItem();
-
-    if( (currentField == NULL) || (currentField->Type() != SCH_FIELD_T) )
-        return;
-
-    if( aErase )
-    {
-        currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-    }
-
-    currentField->SetPosition( screen->GetCrossHairPosition() );
-
-    currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-}
-
-
-static void abortMoveField( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
-{
-    SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
-    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_FIELD* currentField = (SCH_FIELD*) screen->GetCurItem();
-
-    if( currentField )
-    {
-        currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-        currentField->ClearFlags();
-        currentField->m_Pos = frame->m_OldPos;
-        currentField->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    }
-
-    screen->SetCurItem( NULL );
-}
-
-
-void SCH_EDIT_FRAME::MoveField( SCH_FIELD* aField, wxDC* aDC )
-{
-    wxCHECK_RET( aField && (aField->Type() == SCH_FIELD_T) && !aField->GetText().IsEmpty(),
-                 wxT( "Cannot move invalid component field." ) );
-
-    SCH_COMPONENT* comp = (SCH_COMPONENT*) aField->GetParent();
-
-    GetScreen()->SetCurItem( aField );
-    SetUndoItem( comp );
-
-    DrawPanel->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( aField->GetPosition() );
-    DrawPanel->MoveCursorToCrossHair();
-
-    m_OldPos = aField->m_Pos;
-
-    DrawPanel->SetMouseCapture( moveField, abortMoveField );
-    aField->SetFlags( IS_MOVED );
-
-    DrawPanel->CrossHairOn( aDC );
-}
-
-
 void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC )
 {
     wxCHECK_RET( aField != NULL && aField->Type() == SCH_FIELD_T,
