@@ -11,6 +11,7 @@
 #include "pcbcommon.h"
 #include "colors_selection.h"
 #include "trigo.h"
+#include "macros.h"
 #include "protos.h"
 #include "richio.h"
 
@@ -245,8 +246,8 @@ wxString PCB_TARGET::GetSelectMenuText() const
 
     valeur_param( m_Size, msg );
 
-    text << _( "Target" ) << _( " on " ) << GetLayerName() << wxT( " " ) << _( "size" )
-         << wxT( " " ) << msg;
+    text.Printf( _( "Target on %s size %s" ),
+                 GetChars( GetLayerName() ), GetChars( msg ) );
 
     return text;
 }
