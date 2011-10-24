@@ -99,8 +99,8 @@ wxString SCH_FIELD::GetText() const
 
         wxCHECK_MSG( component != NULL, text,
                      wxT( "No component associated with field" ) + text );
-
-        text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
+        if( component->GetPartCount() > 1 )
+            text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
     }
 
     return text;

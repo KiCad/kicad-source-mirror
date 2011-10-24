@@ -165,7 +165,7 @@ static EDA_HOTKEY HkCopyComponentOrText( wxT( "Copy Component or Label" ),
                                             ID_POPUP_SCH_COPY_ITEM );
 
 static EDA_HOTKEY HkDrag( wxT( "Drag Schematic Item" ), HK_DRAG, 'G',
-                             ID_POPUP_SCH_DRAG_CMP_REQUEST );
+                             ID_POPUP_SCH_DRAG_ITEM_REQUEST );
 static EDA_HOTKEY HkMove2Drag( wxT( "Move Block -> Drag Block" ),
                                   HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
 static EDA_HOTKEY HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
@@ -717,7 +717,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             case SCH_JUNCTION_T:
                 if( ((SCH_ITEM*) aItem )->GetLayer() != LAYER_BUS )
                 {
-                    cmd.SetId( ID_POPUP_SCH_DRAG_WIRE_REQUEST );
+                    cmd.SetId( hotKey->m_IdMenuEvent );
                     wxPostEvent( this, cmd );
                 }
 
