@@ -606,9 +606,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         }
 
-        GetScreen()->SetCrossHairPosition( ((MODULE*) GetCurItem())->m_Pos );
+        SendMessageToEESCHEMA( module );
+        GetScreen()->SetCrossHairPosition( module->m_Pos );
         DrawPanel->MoveCursorToCrossHair();
-        StartMove_Module( (MODULE*) GetCurItem(), &dc );
+        StartMove_Module( module, &dc );
         break;
 
     case ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST:      /* get module by name and move it */
@@ -627,6 +628,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
         }
 
+        SendMessageToEESCHEMA( module );
         DrawPanel->MoveCursorToCrossHair();
         StartMove_Module( module, &dc );
         break;
