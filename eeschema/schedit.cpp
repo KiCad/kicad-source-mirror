@@ -666,6 +666,20 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     default:
         m_itemToRepeat = NULL;
     }
+
+    // Simulate left click event if we got here from a hot key.
+    if( aEvent.GetClientData() != NULL )
+    {
+        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientData();
+
+        wxPoint pos = data->GetPosition();
+
+        aEvent.SetClientData( NULL );
+        delete data;
+
+        INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+        OnLeftClick( &dc, pos );
+    }
 }
 
 

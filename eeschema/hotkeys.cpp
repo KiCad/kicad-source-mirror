@@ -126,55 +126,65 @@ static EDA_HOTKEY HkUndo( wxT( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_U
 static EDA_HOTKEY HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
 #else
 static EDA_HOTKEY HkRedo( wxT( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 'Z',
-                             (int) wxID_REDO );
+                          (int) wxID_REDO );
 #endif
 
 // Schematic editor
-static EDA_HOTKEY HkAddLabel( wxT( "add Label" ), HK_ADD_LABEL, 'L' );
-static EDA_HOTKEY HkAddHierarchicalLabel( wxT( "Add Hierarchical Label" ), HK_ADD_HLABEL, 'H' );
-static EDA_HOTKEY HkAddGlobalLabel( wxT( "Add Global Label" ), HK_ADD_GLABEL, GR_KB_CTRL + 'L' );
-static EDA_HOTKEY HkAddJunction( wxT( "Add Junction" ), HK_ADD_JUNCTION, 'J' );
-static EDA_HOTKEY HkBeginWire( wxT( "Draw Wire" ), HK_BEGIN_WIRE, 'W' );
-static EDA_HOTKEY HkBeginBus( wxT( "Draw Bus" ), HK_BEGIN_BUS, 'B' );
-static EDA_HOTKEY HkAddComponent( wxT( "Add Component" ), HK_ADD_NEW_COMPONENT, 'A' );
-static EDA_HOTKEY HkAddPower( wxT( "Add Power" ), HK_ADD_NEW_POWER, 'P' );
-static EDA_HOTKEY HkAddNoConn( wxT( "Add NoConnected Flag" ), HK_ADD_NOCONN_FLAG, 'Q' );
-static EDA_HOTKEY HkAddHierSheet( wxT( "Add Sheet" ), HK_ADD_HIER_SHEET, 'S' );
-static EDA_HOTKEY HkAddBusEntry( wxT( "Add Bus Entry" ), HK_ADD_BUS_ENTRY, '/' );
-static EDA_HOTKEY HkAddWireEntry( wxT( "Add Wire Entry" ), HK_ADD_WIRE_ENTRY, 'Z' );
-static EDA_HOTKEY HkAddGraphicPolyLine( wxT( "Add Graphic PolyLine" ), HK_ADD_GRAPHIC_POLYLINE, 'I' );
-static EDA_HOTKEY HkAddGraphicText( wxT( "Add Graphic Text" ), HK_ADD_GRAPHIC_TEXT, 'T' );
+static EDA_HOTKEY HkAddLabel( wxT( "Add Label" ), HK_ADD_LABEL, 'L', ID_LABEL_BUTT );
+static EDA_HOTKEY HkAddHierarchicalLabel( wxT( "Add Hierarchical Label" ), HK_ADD_HLABEL, 'H',
+                                          ID_HIERLABEL_BUTT );
+static EDA_HOTKEY HkAddGlobalLabel( wxT( "Add Global Label" ), HK_ADD_GLABEL, GR_KB_CTRL + 'L',
+                                    ID_GLABEL_BUTT );
+static EDA_HOTKEY HkAddJunction( wxT( "Add Junction" ), HK_ADD_JUNCTION, 'J', ID_JUNCTION_BUTT );
+static EDA_HOTKEY HkBeginWire( wxT( "Draw Wire" ), HK_BEGIN_WIRE, 'W', ID_WIRE_BUTT );
+static EDA_HOTKEY HkBeginBus( wxT( "Draw Bus" ), HK_BEGIN_BUS, 'B', ID_BUS_BUTT );
+static EDA_HOTKEY HkAddComponent( wxT( "Add Component" ), HK_ADD_NEW_COMPONENT, 'A',
+                                  ID_SCH_PLACE_COMPONENT );
+static EDA_HOTKEY HkAddPower( wxT( "Add Power" ), HK_ADD_NEW_POWER, 'P',
+                              ID_PLACE_POWER_BUTT );
+static EDA_HOTKEY HkAddNoConn( wxT( "Add NoConnected Flag" ), HK_ADD_NOCONN_FLAG, 'Q',
+                               ID_NOCONN_BUTT );
+static EDA_HOTKEY HkAddHierSheet( wxT( "Add Sheet" ), HK_ADD_HIER_SHEET, 'S',
+                                  ID_SHEET_SYMBOL_BUTT );
+static EDA_HOTKEY HkAddBusEntry( wxT( "Add Bus Entry" ), HK_ADD_BUS_ENTRY, '/',
+                                 ID_BUSTOBUS_ENTRY_BUTT );
+static EDA_HOTKEY HkAddWireEntry( wxT( "Add Wire Entry" ), HK_ADD_WIRE_ENTRY, 'Z',
+                                  ID_WIRETOBUS_ENTRY_BUTT );
+static EDA_HOTKEY HkAddGraphicPolyLine( wxT( "Add Graphic PolyLine" ), HK_ADD_GRAPHIC_POLYLINE,
+                                        'I', ID_LINE_COMMENT_BUTT );
+static EDA_HOTKEY HkAddGraphicText( wxT( "Add Graphic Text" ), HK_ADD_GRAPHIC_TEXT, 'T',
+                                    ID_TEXT_COMMENT_BUTT );
 static EDA_HOTKEY HkMirrorYComponent( wxT( "Mirror Y Component" ), HK_MIRROR_Y_COMPONENT, 'Y' );
 static EDA_HOTKEY HkMirrorXComponent( wxT( "Mirror X Component" ), HK_MIRROR_X_COMPONENT, 'X' );
 static EDA_HOTKEY HkOrientNormalComponent( wxT( "Orient Normal Component" ),
-                                              HK_ORIENT_NORMAL_COMPONENT, 'N' );
+                                           HK_ORIENT_NORMAL_COMPONENT, 'N' );
 static EDA_HOTKEY HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R' );
 static EDA_HOTKEY HkEdit( wxT( "Edit Schematic Item" ), HK_EDIT, 'E' );
 static EDA_HOTKEY HkEditComponentValue( wxT( "Edit Component Value" ),
-                                           HK_EDIT_COMPONENT_VALUE, 'V',
-                                           ID_POPUP_SCH_EDIT_VALUE_CMP );
+                                        HK_EDIT_COMPONENT_VALUE, 'V',
+                                        ID_POPUP_SCH_EDIT_VALUE_CMP );
 static EDA_HOTKEY HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
-                                               HK_EDIT_COMPONENT_FOOTPRINT, 'F',
-                                               ID_POPUP_SCH_EDIT_FOOTPRINT_CMP );
+                                            HK_EDIT_COMPONENT_FOOTPRINT, 'F',
+                                            ID_POPUP_SCH_EDIT_FOOTPRINT_CMP );
 static EDA_HOTKEY HkMove( wxT( "Move Schematic Item" ),
-                             HK_MOVE_COMPONENT_OR_ITEM, 'M',
-                             ID_POPUP_SCH_MOVE_ITEM );
+                          HK_MOVE_COMPONENT_OR_ITEM, 'M',
+                          ID_POPUP_SCH_MOVE_ITEM );
 
 static EDA_HOTKEY HkCopyComponentOrText( wxT( "Copy Component or Label" ),
-                                            HK_COPY_COMPONENT_OR_LABEL, 'C',
-                                            ID_POPUP_SCH_COPY_ITEM );
+                                         HK_COPY_COMPONENT_OR_LABEL, 'C',
+                                         ID_POPUP_SCH_COPY_ITEM );
 
 static EDA_HOTKEY HkDrag( wxT( "Drag Schematic Item" ), HK_DRAG, 'G',
-                             ID_POPUP_SCH_DRAG_ITEM_REQUEST );
+                          ID_POPUP_SCH_DRAG_ITEM_REQUEST );
 static EDA_HOTKEY HkMove2Drag( wxT( "Move Block -> Drag Block" ),
-                                  HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
+                               HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
 static EDA_HOTKEY HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
 static EDA_HOTKEY HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
 static EDA_HOTKEY HkFindNextItem( wxT( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5 );
 static EDA_HOTKEY HkFindNextDrcMarker( wxT( "Find Next DRC Marker" ), HK_FIND_NEXT_DRC_MARKER,
-                                          WXK_F5 + GR_KB_SHIFT );
+                                       WXK_F5 + GR_KB_SHIFT );
 
 // Special keys for library editor:
 static EDA_HOTKEY HkCreatePin( wxT( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
@@ -253,7 +263,7 @@ struct EDA_HOTKEY_CONFIG s_Eeschema_Hokeys_Descr[] =
     { &g_CommonSectionTag,    s_Common_Hotkey_List,    L"Common keys"           },
     { &g_SchematicSectionTag, s_Schematic_Hotkey_List, L"Schematic editor keys" },
     { &g_LibEditSectionTag,   s_LibEdit_Hotkey_List,   L"library editor keys"   },
-    { NULL,                   NULL,                    NULL                    }
+    { NULL,                   NULL,                    NULL                     }
 };
 
 // list of sections and corresponding hotkey list for the schematic editor
@@ -397,129 +407,30 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_ADD_NEW_COMPONENT:      // Add component
-        if( !itemInEdit )
-        {
-            if( GetToolId() != ID_SCH_PLACE_COMPONENT )
-                SetToolID( ID_SCH_PLACE_COMPONENT, wxCURSOR_PENCIL, _( "Add Component" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
-    case HK_ADD_NEW_POWER:      // Add power component
-        if( !itemInEdit )
-        {
-            if( GetToolId() != ID_PLACE_POWER_BUTT )
-                SetToolID( ID_PLACE_POWER_BUTT, wxCURSOR_PENCIL, _( "Add Power" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
+    case HK_ADD_NEW_POWER:          // Add power component
     case HK_ADD_LABEL:
-        if( notBusy )
-        {
-            if( GetToolId() != ID_LABEL_BUTT )
-                SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add Label" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
     case HK_ADD_HLABEL:
-        if( notBusy )
-        {
-            if( GetToolId() != ID_HIERLABEL_BUTT )
-                SetToolID( ID_HIERLABEL_BUTT, wxCURSOR_PENCIL, _( "Add Hierarchical Label" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
     case HK_ADD_GLABEL:
-        if( notBusy )
-        {
-            if( GetToolId() != ID_GLABEL_BUTT )
-                SetToolID( ID_GLABEL_BUTT, wxCURSOR_PENCIL, _( "Add Global Label" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
     case HK_ADD_JUNCTION:
-        if( notBusy )
-        {
-            if( GetToolId() != ID_JUNCTION_BUTT )
-                SetToolID( ID_JUNCTION_BUTT, wxCURSOR_PENCIL, _( "Add Junction" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
     case HK_ADD_WIRE_ENTRY:
-        if( notBusy )
-        {
-            if( GetToolId() != ID_WIRETOBUS_ENTRY_BUTT )
-                SetToolID( ID_WIRETOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add Wire to Bus Entry" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
     case HK_ADD_BUS_ENTRY:
-        if( notBusy )
-        {
-            if( GetToolId() != ID_BUSTOBUS_ENTRY_BUTT )
-                SetToolID( ID_BUSTOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add Bus to Bus Entry" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
     case HK_ADD_HIER_SHEET:
-        if( notBusy )
-        {
-            if( GetToolId() != ID_SHEET_SYMBOL_BUTT )
-                SetToolID( ID_SHEET_SYMBOL_BUTT, wxCURSOR_PENCIL, _( "Add Sheet" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
     case HK_ADD_GRAPHIC_TEXT:
-        if( notBusy )
-        {
-            if( GetToolId() != ID_TEXT_COMMENT_BUTT )
-                SetToolID( ID_TEXT_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add Text" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
     case HK_ADD_GRAPHIC_POLYLINE:
-        if( notBusy )
-        {
-            if( GetToolId() != ID_LINE_COMMENT_BUTT )
-                SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add Lines" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
+    case HK_ADD_NOCONN_FLAG:        // Add a no connected flag
     case HK_BEGIN_BUS:
-        // An item can be selected. If not a Bus, a begin command is not possible
+    case HK_BEGIN_WIRE:
         if( notBusy )
         {
-            if( GetToolId() != ID_BUS_BUTT )
-                SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add Bus" ) );
-
-            OnLeftClick( aDC, aPosition );
-            break;
+            cmd.SetInt( aHotKey );
+            cmd.SetClientData( new EDA_HOTKEY_CLIENT_DATA( aPosition ) );
+            cmd.SetId( hotKey->m_IdMenuEvent );
+            wxPostEvent( this, cmd );
         }
-
-        if( aItem && aItem->IsNew() && ( GetToolId() == ID_BUS_BUTT ) )
+        else if( aItem && aItem->IsNew() )
         {
-            if( aItem->Type() == SCH_LINE_T )
+            // If the item is a bus or a wire, a begin command is not possible.
+            if( (GetToolId() == ID_BUS_BUTT) && (aItem->Type() == SCH_LINE_T) )
             {
                 SCH_LINE* segment = (SCH_LINE*) aItem;
 
@@ -529,24 +440,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                 // Bus in progress:
                 OnLeftClick( aDC, aPosition );
             }
-        }
-
-        break;
-
-    case HK_BEGIN_WIRE:
-        // An item can be selected. If not a wire, a begin command is not possible
-        if( notBusy )
-        {
-            if( GetToolId() != ID_WIRE_BUTT )
-                SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add Wire" ) );
-
-            OnLeftClick( aDC, aPosition );
-            break;
-        }
-
-        if( aItem && aItem->IsNew() && ( GetToolId() == ID_WIRE_BUTT ) )
-        {
-            if( aItem->Type() == SCH_LINE_T )
+            else if( (GetToolId() == ID_WIRE_BUTT ) && (aItem->Type() == SCH_LINE_T) )
             {
                 SCH_LINE* segment = (SCH_LINE*) aItem;
 
@@ -557,16 +451,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                 OnLeftClick( aDC, aPosition );
             }
         }
-        break;
 
-    case HK_ADD_NOCONN_FLAG:      // Add a no connected flag
-        if( notBusy )
-        {
-            if( GetToolId() != ID_NOCONN_BUTT )
-                SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add \"No Connect\" Flag" ) );
-
-            OnLeftClick( aDC, aPosition );
-        }
         break;
 
     case HK_ROTATE:       // Component or other schematic item rotation
