@@ -78,8 +78,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_RESIZE_SHEET:
     case ID_POPUP_IMPORT_GLABEL:
     case ID_POPUP_SCH_EDIT_SHEET_PIN:
-    case ID_POPUP_SCH_DRAG_CMP_REQUEST:
-    case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
+    case ID_POPUP_SCH_DRAG_ITEM_REQUEST:
     case ID_POPUP_SCH_EDIT_CMP:
     case ID_POPUP_SCH_INIT_CMP:
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
@@ -281,8 +280,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         EditSheetPin( (SCH_SHEET_PIN*) item, &dc );
         break;
 
-    case ID_POPUP_SCH_DRAG_CMP_REQUEST:
-    case ID_POPUP_SCH_DRAG_WIRE_REQUEST:
+    case ID_POPUP_SCH_DRAG_ITEM_REQUEST:
         DrawPanel->MoveCursorToCrossHair();
 
         // The easiest way to handle a drag component or sheet command
