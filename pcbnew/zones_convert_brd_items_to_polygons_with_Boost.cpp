@@ -125,14 +125,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
      */
     s_Correction = 1.0 / cos( 3.14159265 / s_CircleToSegmentsCount );
 
-    /* Uses a kbool engine to add holes in the m_FilledPolysList polygon.
-     * Because this function is called just after creating the m_FilledPolysList,
-     * only one polygon is in list.
-     * (initial holes in zones are linked into outer contours by double overlapping segments).
-     * because after adding holes, many polygons could be exist in this list.
-     */
-
-    // This polygon set is the area(s) to fill, with m_ZoneMinThickness/2
+    // This KPolygonSet is the area(s) to fill, with m_ZoneMinThickness/2
     KPolygonSet polyset_zone_solid_areas;
     int         margin = m_ZoneMinThickness / 2;
 

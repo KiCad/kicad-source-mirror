@@ -659,13 +659,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
         corners_buffer.push_back( corner );
 
         // Now, add the 4 holes ( each is the pattern, rotated by 0, 90, 180 and 270  deg
-        // WARNING: problems with kbool if angle = 0 (in fact when angle < 200):
-        // bad filled polygon on some cases, when pads are on a same vertical line
-        // this seems a bug in kbool polygon (exists in 2.0 kbool version)
-        // aThermalRot = 450 (45.0 degrees orientation) seems work fine.
-        // aThermalRot = 0 with thermal shapes without angle < 90 deg has problems in rare
-        // circumstances.
-        // Note: with the 2 step build ( thermal shapes added after areas are built), 0 seems work
+        // aThermalRot = 450 (45.0 degrees orientation) work fine.
         int angle_pad = aPad.m_Orient;              // Pad orientation
         int th_angle  = aThermalRot;
 

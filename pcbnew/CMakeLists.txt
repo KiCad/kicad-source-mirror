@@ -13,14 +13,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 ###
 # Sources
 #
-# NOTE: Many of the commented out ones are nested in *.cpp files for dialogs
-###
-if( USE_BOOST_POLYGON_LIBRARY )
-    set(PCBNEW_SRC_FILL_ZONE zones_convert_brd_items_to_polygons_with_Boost.cpp)
-else( USE_BOOST_POLYGON_LIBRARY )
-    set(PCBNEW_SRC_FILL_ZONE zones_convert_brd_items_to_polygons_with_Kbool.cpp)
-endif( USE_BOOST_POLYGON_LIBRARY )
-
 set(PCBNEW_DIALOGS
     dialogs/dialog_block_options_base.cpp
     dialogs/dialog_cleaning_options_base.cpp
@@ -100,7 +92,6 @@ set(PCBNEW_SRCS
     controle.cpp
     dimension.cpp
     cross-probing.cpp
-    debug_kbool_key_file_fct.cpp
     deltrack.cpp
     ${PCBNEW_DIALOGS}
     dist.cpp
@@ -185,7 +176,7 @@ set(PCBNEW_SRCS
     trpiste.cpp
     work.cpp
     xchgmod.cpp
-    ${PCBNEW_SRC_FILL_ZONE}
+    zones_convert_brd_items_to_polygons_with_Boost.cpp
     zones_convert_to_polygons_aux_functions.cpp
     zones_by_polygon.cpp
     zones_by_polygon_fill_functions.cpp
