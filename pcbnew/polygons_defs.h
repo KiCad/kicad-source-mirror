@@ -6,8 +6,6 @@
 #ifndef _POLYGONS_DEFS_H_
 #define _POLYGONS_DEFS_H_
 
-#ifdef USE_BOOST_POLYGON_LIBRARY
-
 #include "boost/polygon/polygon.hpp"
 
 // Define some types used here from boost::polygon
@@ -20,6 +18,4 @@ typedef bpl::polygon_data<int> KPolygon;
 typedef std::vector<KPolygon>  KPolygonSet;
 
 typedef bpl::point_data<int>   KPolyPoint;
-#endif          // USE_BOOST_POLYGON_LIBRARY
-
 #endif          // #ifndef _POLYGONS_DEFS_H_

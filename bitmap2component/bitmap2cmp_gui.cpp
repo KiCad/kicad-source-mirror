@@ -333,7 +333,7 @@ void BM2CMP_FRAME::OnExportPcbnew( wxCommandEvent& event )
     if( path.IsEmpty() || !wxDirExists(path) )
         path = ::wxGetCwd();
 
-    wxString     msg = _( "Footprint file (*.mod)|*.mod" );
+    wxString     msg = _( "Footprint file (*.mod;*.emp)|*.mod;*.emp" );
     wxFileDialog FileDlg( this, _( "Create a footprint file for PcbNew" ),
                           path, wxEmptyString,
                           msg,

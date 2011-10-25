@@ -35,10 +35,6 @@ option(USE_WX_GRAPHICS_CONTEXT
 option(USE_WX_OVERLAY
        "Use wxOverlay: Always ON for MAC (default OFF). Warning, this is experimental")
 
-option(USE_BOOST_POLYGON_LIBRARY
-       "Use boost polygon library instead of Kbool to calculate filled areas in zones (default ON)."
-       ON )
-
 #One of these 2 option *must* be set to ON:
 option(KICAD_STABLE_VERSION
        "set this option to ON to build the stable version of KICAD. mainly used to set version ID (default OFF)"
@@ -111,11 +107,6 @@ endif(USE_WX_OVERLAY OR APPLE)
 if(USE_WX_GRAPHICS_CONTEXT)
     add_definitions(-DUSE_WX_GRAPHICS_CONTEXT)
 endif(USE_WX_GRAPHICS_CONTEXT)
-
-if(USE_BOOST_POLYGON_LIBRARY)
-    set( USE_BOOST_POLYGON_LIBRARY ON )
-    add_definitions(-DUSE_BOOST_POLYGON_LIBRARY)
-endif(USE_BOOST_POLYGON_LIBRARY)
 
 # Allow user to override the default settings for adding images to menu items.  By default
 # images in menu items are enabled on all plaforms except OSX.  This can be over ridden by
