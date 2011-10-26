@@ -71,20 +71,53 @@ static void bm_free( potrace_bitmap_t* bm )
 }
 
 
-/* Helper class th handle useful info to convert a bitmpa to
+/* Helper class to handle useful info to convert a bitmap image to
  *  a polygonal object description
  */
 class BITMAPCONV_INFO
 {
 public:
-    enum output_format m_Format;
+    enum output_format m_Format;    // File format
     int m_PixmapWidth;
     int m_PixmapHeight;             // the bitmap size in pixels
     double             m_ScaleX;
     double             m_ScaleY;    // the conversion scale
     potrace_path_t*    m_Paths;     // the list of paths, from potrace (list of lines and bezier curves)
-    FILE* m_Outfile;
-public: BITMAPCONV_INFO();
+    FILE* m_Outfile;                // File to create
+    const char * m_CmpName;                 // The string used as cmp/footprint name
+
+public:
+    BITMAPCONV_INFO();
+
+    /**
+     * Function CreateOutputFile
+     * Creates the output file specified by m_Outfile,
+     * depending on file format given by m_Format
+     */
+    void CreateOutputFile();
+
+
+private:
+    /**
+     * Function OuputFileHeader
+     * write to file the header depending on file format
+     */
+    void OuputFileHeader();
+
+    /**
+     * Function OuputFileEnd
+     * write to file the last strings depending on file format
+     */
+    void OuputFileEnd();
+
+
+    /**
+     * Function OuputOnePolygon
+     * write one polygon to output file.
+     * Polygon coordinates are expected scaled by the polugon extraction function
+     */
+    void OuputOnePolygon( KPolygon & aPolygon );
+
 };
 
 static void BezierToPolyline( std::vector <potrace_dpoint_t>& aCornersBuffer,
@@ -92,10 +125,6 @@ static void BezierToPolyline( std::vector <potrace_dpoint_t>& aCornersBuffer,
                               potrace_dpoint_t                p2,
                               potrace_dpoint_t                p3,
                               potrace_dpoint_t                p4 );
-
-static void CreateOutputFile( BITMAPCONV_INFO& aInfo );
-
-static const char* CmpName = "LOGO";
 
 
 BITMAPCONV_INFO::BITMAPCONV_INFO()
@@ -107,6 +136,7 @@ BITMAPCONV_INFO::BITMAPCONV_INFO()
     m_ScaleY  = 1.0;
     m_Paths   = NULL;
     m_Outfile = NULL;
+    m_CmpName = "LOGO";
 }
 
 
@@ -116,7 +146,7 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile, int aFo
     potrace_state_t* st;
 
 
-    /* set tracing parameters, starting from defaults */
+    // set tracing parameters, starting from defaults
     param = potrace_param_default();
     if( !param )
     {
@@ -144,22 +174,22 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile, int aFo
     case 2:
         info.m_Format = POSTSCRIPT_FMT;
         info.m_ScaleX = info.m_ScaleY = 1.0;        // the conversion scale
-        /* output vector data, e.g. as a rudimentary EPS file */
-        CreateOutputFile( info );
+        // output vector data, e.g. as a rudimentary EPS file (mainly for tests)
+        info.CreateOutputFile();
         break;
 
     case 1:
         info.m_Format = EESCHEMA_FMT;
         info.m_ScaleX = 1000.0 / 300;       // the conversion scale
         info.m_ScaleY = -info.m_ScaleX;     // Y axis is bottom to Top for components in libs
-        CreateOutputFile( info );
+        info.CreateOutputFile();
         break;
 
     case 0:
         info.m_Format = PCBNEW_FMT;
         info.m_ScaleX = 10000.0 / 300;          // the conversion scale
         info.m_ScaleY = info.m_ScaleX;          // Y axis is top to bottom in modedit
-        CreateOutputFile( info );
+        info.CreateOutputFile();
         break;
 
     default:
@@ -175,75 +205,75 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile, int aFo
 }
 
 
-static void OuputHeader( BITMAPCONV_INFO& aInfo )
+void BITMAPCONV_INFO::OuputFileHeader()
 {
-    int Ypos = (int) ( aInfo.m_PixmapHeight / 2 * aInfo.m_ScaleY );
+    int Ypos = (int) ( m_PixmapHeight / 2 * m_ScaleY );
     int fieldSize;             // fields text size = 60 mils
 
-    switch( aInfo.m_Format )
+    switch( m_Format )
     {
     case POSTSCRIPT_FMT:
         /* output vector data, e.g. as a rudimentary EPS file */
-        fprintf( aInfo.m_Outfile, "%%!PS-Adobe-3.0 EPSF-3.0\n" );
-        fprintf( aInfo.m_Outfile, "%%%%BoundingBox: 0 0 %d %d\n",
-                 aInfo.m_PixmapWidth, aInfo.m_PixmapHeight );
-        fprintf( aInfo.m_Outfile, "gsave\n" );
+        fprintf( m_Outfile, "%%!PS-Adobe-3.0 EPSF-3.0\n" );
+        fprintf( m_Outfile, "%%%%BoundingBox: 0 0 %d %d\n",
+                 m_PixmapWidth, m_PixmapHeight );
+        fprintf( m_Outfile, "gsave\n" );
         break;
 
     case PCBNEW_FMT:
         #define FIELD_LAYER 21
         fieldSize = 600;             // fields text size = 60 mils
         Ypos += fieldSize / 2;
-        fprintf( aInfo.m_Outfile, "PCBNEW-LibModule-V1\n" );
-        fprintf( aInfo.m_Outfile, "$INDEX\n%s\n$EndINDEX\n", CmpName );
+        fprintf( m_Outfile, "PCBNEW-LibModule-V1\n" );
+        fprintf( m_Outfile, "$INDEX\n%s\n$EndINDEX\n", m_CmpName );
 
-        fprintf( aInfo.m_Outfile, "#\n# %s\n", CmpName );
-        fprintf( aInfo.m_Outfile, "# pixmap w = %d, h = %d\n#\n",
-                 aInfo.m_PixmapWidth, aInfo.m_PixmapHeight );
-        fprintf( aInfo.m_Outfile, "$MODULE %s\n", CmpName );
-        fprintf( aInfo.m_Outfile, "Po 0 0 0 15 00000000 00000000 ~~\n" );
-        fprintf( aInfo.m_Outfile, "Li %s\n", CmpName );
-        fprintf( aInfo.m_Outfile, "T0 0 %d %d %d 0 %d N I %d \"G***\"\n",
+        fprintf( m_Outfile, "#\n# %s\n", m_CmpName );
+        fprintf( m_Outfile, "# pixmap w = %d, h = %d\n#\n",
+                 m_PixmapWidth, m_PixmapHeight );
+        fprintf( m_Outfile, "$MODULE %s\n", m_CmpName );
+        fprintf( m_Outfile, "Po 0 0 0 15 00000000 00000000 ~~\n" );
+        fprintf( m_Outfile, "Li %s\n", m_CmpName );
+        fprintf( m_Outfile, "T0 0 %d %d %d 0 %d N I %d \"G***\"\n",
                  Ypos, fieldSize, fieldSize, fieldSize / 5, FIELD_LAYER );
-        fprintf( aInfo.m_Outfile, "T1 0 %d %d %d 0 %d N I %d \"%s\"\n",
-                 -Ypos, fieldSize, fieldSize, fieldSize / 5, FIELD_LAYER, CmpName );
+        fprintf( m_Outfile, "T1 0 %d %d %d 0 %d N I %d \"%s\"\n",
+                 -Ypos, fieldSize, fieldSize, fieldSize / 5, FIELD_LAYER, m_CmpName );
         break;
 
     case EESCHEMA_FMT:
-        fprintf( aInfo.m_Outfile, "EESchema-LIBRARY Version 2.3\n" );
-        fprintf( aInfo.m_Outfile, "#\n# %s\n", CmpName );
-        fprintf( aInfo.m_Outfile, "# pixmap size w = %d, h = %d\n#\n",
-                 aInfo.m_PixmapWidth, aInfo.m_PixmapHeight );
+        fprintf( m_Outfile, "EESchema-LIBRARY Version 2.3\n" );
+        fprintf( m_Outfile, "#\n# %s\n", m_CmpName );
+        fprintf( m_Outfile, "# pixmap size w = %d, h = %d\n#\n",
+                 m_PixmapWidth, m_PixmapHeight );
 
         // print reference and value
         fieldSize = 60;             // fields text size = 60 mils
         Ypos += fieldSize / 2;
-        fprintf( aInfo.m_Outfile, "DEF %s G 0 40 Y Y 1 F N\n", CmpName );
-        fprintf( aInfo.m_Outfile, "F0 \"#G\" 0 %d %d H I C CNN\n", Ypos, fieldSize );
-        fprintf( aInfo.m_Outfile, "F1 \"%s\" 0 %d %d H I C CNN\n", CmpName, -Ypos, fieldSize );
-        fprintf( aInfo.m_Outfile, "DRAW\n" );
+        fprintf( m_Outfile, "DEF %s G 0 40 Y Y 1 F N\n", m_CmpName );
+        fprintf( m_Outfile, "F0 \"#G\" 0 %d %d H I C CNN\n", Ypos, fieldSize );
+        fprintf( m_Outfile, "F1 \"%s\" 0 %d %d H I C CNN\n", m_CmpName, -Ypos, fieldSize );
+        fprintf( m_Outfile, "DRAW\n" );
         break;
     }
 }
 
 
-static void OuputEnd( BITMAPCONV_INFO& aInfo )
+void BITMAPCONV_INFO::OuputFileEnd()
 {
-    switch( aInfo.m_Format )
+    switch( m_Format )
     {
     case POSTSCRIPT_FMT:
-        fprintf( aInfo.m_Outfile, "grestore\n" );
-        fprintf( aInfo.m_Outfile, "%%EOF\n" );
+        fprintf( m_Outfile, "grestore\n" );
+        fprintf( m_Outfile, "%%EOF\n" );
         break;
 
     case PCBNEW_FMT:
-        fprintf( aInfo.m_Outfile, "$EndMODULE %s\n", CmpName );
-        fprintf( aInfo.m_Outfile, "$EndLIBRARY\n" );
+        fprintf( m_Outfile, "$EndMODULE %s\n", m_CmpName );
+        fprintf( m_Outfile, "$EndLIBRARY\n" );
         break;
 
     case EESCHEMA_FMT:
-        fprintf( aInfo.m_Outfile, "ENDDRAW\n" );
-        fprintf( aInfo.m_Outfile, "ENDDEF\n" );
+        fprintf( m_Outfile, "ENDDRAW\n" );
+        fprintf( m_Outfile, "ENDDEF\n" );
         break;
     }
 }
@@ -253,29 +283,29 @@ static void OuputEnd( BITMAPCONV_INFO& aInfo )
  * write one polygon to output file.
  * Polygon coordinates are expected scaled by the polugon extraction function
  */
-static void OuputOnePolygon( BITMAPCONV_INFO&  aInfo, KPolygon & aPolygon )
+void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
 {
     unsigned ii;
     KPolyPoint currpoint;
 
-    int   offsetX = (int)( aInfo.m_PixmapWidth / 2 * aInfo.m_ScaleX );
-    int   offsetY = (int)( aInfo.m_PixmapHeight / 2 * aInfo.m_ScaleY );
+    int   offsetX = (int)( m_PixmapWidth / 2 * m_ScaleX );
+    int   offsetY = (int)( m_PixmapHeight / 2 * m_ScaleY );
 
     KPolyPoint startpoint = *aPolygon.begin();
 
-    switch( aInfo.m_Format )
+    switch( m_Format )
     {
     case POSTSCRIPT_FMT:
-        fprintf( aInfo.m_Outfile, "%d %d moveto\n",
+        fprintf( m_Outfile, "%d %d moveto\n",
                  startpoint.x(), startpoint.y() );
         for( ii = 1; ii < aPolygon.size(); ii++ )
         {
             currpoint = *(aPolygon.begin() + ii);
-            fprintf( aInfo.m_Outfile, "%d %d lineto\n",
+            fprintf( m_Outfile, "%d %d lineto\n",
                      currpoint.x(), currpoint.y() );
         }
 
-        fprintf( aInfo.m_Outfile, "0 setgray fill\n" );
+        fprintf( m_Outfile, "0 setgray fill\n" );
         break;
 
     case PCBNEW_FMT:
@@ -283,43 +313,43 @@ static void OuputOnePolygon( BITMAPCONV_INFO&  aInfo, KPolygon & aPolygon )
         #define SILKSCREEN_N_FRONT 21
         int layer = SILKSCREEN_N_FRONT;
         int width = 1;
-        fprintf( aInfo.m_Outfile, "DP %d %d %d %d %d %d %d\n",
+        fprintf( m_Outfile, "DP %d %d %d %d %d %d %d\n",
                  0, 0, 0, 0,
                  aPolygon.size() + 1, width, layer );
 
         for( ii = 0; ii < aPolygon.size(); ii++ )
         {
             currpoint = *( aPolygon.begin() + ii );
-            fprintf( aInfo.m_Outfile, "Dl %d %d\n",
+            fprintf( m_Outfile, "Dl %d %d\n",
                     currpoint.x() - offsetX, currpoint.y() - offsetY );
         }
 
         // Close polygon
-        fprintf( aInfo.m_Outfile, "Dl %d %d\n",
+        fprintf( m_Outfile, "Dl %d %d\n",
                  startpoint.x() - offsetX, startpoint.y() - offsetY );
     }
     break;
 
     case EESCHEMA_FMT:
-        fprintf( aInfo.m_Outfile, "P %d 0 0 1", aPolygon.size() + 1 );
+        fprintf( m_Outfile, "P %d 0 0 1", aPolygon.size() + 1 );
         for( ii = 0; ii < aPolygon.size(); ii++ )
         {
             currpoint = *(aPolygon.begin() + ii);
-            fprintf( aInfo.m_Outfile, " %d %d",
+            fprintf( m_Outfile, " %d %d",
                      currpoint.x() - offsetX, currpoint.y() - offsetY );
         }
 
         // Close polygon
-        fprintf( aInfo.m_Outfile, " %d %d",
+        fprintf( m_Outfile, " %d %d",
                  startpoint.x() - offsetX, startpoint.y() - offsetY );
 
-        fprintf( aInfo.m_Outfile, " F\n" );
+        fprintf( m_Outfile, " F\n" );
         break;
     }
 }
 
 
-static void CreateOutputFile( BITMAPCONV_INFO& aInfo )
+void BITMAPCONV_INFO::CreateOutputFile()
 {
     KPolyPoint currpoint;
 
@@ -333,14 +363,14 @@ static void CreateOutputFile( BITMAPCONV_INFO& aInfo )
     KPolygonSet polyset_holes;
 
     potrace_dpoint_t( *c )[3];
-    OuputHeader( aInfo );
+    OuputFileHeader();
 
     bool main_outline = true;
 
     /* draw each as a polygon with no hole.
      * Bezier curves are approximated by a polyline
      */
-    potrace_path_t* paths = aInfo.m_Paths;    // the list of paths
+    potrace_path_t* paths = m_Paths;    // the list of paths
     while( paths != NULL )
     {
         int cnt  = paths->curve.n;
@@ -373,8 +403,8 @@ static void CreateOutputFile( BITMAPCONV_INFO& aInfo )
             std::vector<KPolyPoint> cornerslist; // a simple boost polygon
             for( unsigned int i = 0; i < cornersBuffer.size(); i++ )
             {
-                currpoint.x( (coordinate_type) (cornersBuffer[i].x * aInfo.m_ScaleX) );
-                currpoint.y( (coordinate_type) (cornersBuffer[i].y * aInfo.m_ScaleY) );
+                currpoint.x( (coordinate_type) (cornersBuffer[i].x * m_ScaleX) );
+                currpoint.y( (coordinate_type) (cornersBuffer[i].y * m_ScaleY) );
                 cornerslist.push_back( currpoint );
             }
 
@@ -388,8 +418,8 @@ static void CreateOutputFile( BITMAPCONV_INFO& aInfo )
             std::vector<KPolyPoint> cornerslist; // a simple boost polygon
             for( unsigned int i = 0; i < cornersBuffer.size(); i++ )
             {
-                currpoint.x( (coordinate_type) (cornersBuffer[i].x * aInfo.m_ScaleX) );
-                currpoint.y( (coordinate_type) (cornersBuffer[i].y * aInfo.m_ScaleY) );
+                currpoint.x( (coordinate_type) (cornersBuffer[i].x * m_ScaleX) );
+                currpoint.y( (coordinate_type) (cornersBuffer[i].y * m_ScaleY) );
                 cornerslist.push_back( currpoint );
             }
 
@@ -410,7 +440,7 @@ static void CreateOutputFile( BITMAPCONV_INFO& aInfo )
             for( unsigned ii = 0; ii < polyset_areas.size(); ii++ )
             {
                 KPolygon& poly = polyset_areas[ii];
-                OuputOnePolygon( aInfo, poly );
+                OuputOnePolygon(poly );
             }
 
             polyset_areas.clear();
@@ -420,7 +450,7 @@ static void CreateOutputFile( BITMAPCONV_INFO& aInfo )
         paths = paths->next;
     }
 
-    OuputEnd( aInfo );
+    OuputFileEnd();
 }
 
 
