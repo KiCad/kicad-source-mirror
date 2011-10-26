@@ -618,6 +618,13 @@ public:
 
 private:
     void OnMoveItem( wxCommandEvent& aEvent );
+
+    /**
+     * Function OnRotate
+     * handles the #ID_SCH_ROTATE_ITEM event used to rotates schematic itams and blocks.
+     */
+    void OnRotate( wxCommandEvent& aEvent );
+
     void OnExit( wxCommandEvent& event );
     void OnAnnotate( wxCommandEvent& event );
     void OnErc( wxCommandEvent& event );

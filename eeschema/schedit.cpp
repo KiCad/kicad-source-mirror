@@ -71,7 +71,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_END_LINE:
     case ID_POPUP_SCH_EDIT_TEXT:
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
-    case ID_POPUP_SCH_ROTATE_TEXT:
     case ID_POPUP_SCH_EDIT_SHEET:
     case ID_POPUP_SCH_CLEANUP_SHEET:
     case ID_POPUP_SCH_END_SHEET:
@@ -86,7 +85,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_EDIT_REF_CMP:
     case ID_POPUP_SCH_EDIT_FOOTPRINT_CMP:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-    case ID_POPUP_SCH_ROTATE_FIELD:
     case ID_POPUP_SCH_EDIT_FIELD:
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
@@ -103,7 +101,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_ADD_JUNCTION:
     case ID_POPUP_SCH_ADD_LABEL:
     case ID_POPUP_SCH_GETINFO_MARKER:
-    case ID_POPUP_SCH_ROTATE_IMAGE:
     case ID_POPUP_SCH_MIRROR_X_IMAGE:
     case ID_POPUP_SCH_MIRROR_Y_IMAGE:
 
@@ -178,19 +175,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         EditSchematicText( (SCH_TEXT*) item );
         break;
 
-    case ID_POPUP_SCH_ROTATE_TEXT:
-        DrawPanel->MoveCursorToCrossHair();
-        ChangeTextOrient( (SCH_TEXT*) item, &dc );
-        break;
-
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
 
         // Not used
-        break;
-
-    case ID_POPUP_SCH_ROTATE_FIELD:
-        DrawPanel->MoveCursorToCrossHair();
-        RotateField( (SCH_FIELD*) item, &dc );
         break;
 
     case ID_POPUP_SCH_EDIT_FIELD:
@@ -459,11 +446,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             EditImage( (SCH_BITMAP*) item );
         break;
 
-    case ID_POPUP_SCH_ROTATE_IMAGE:
-        if( item )
-            RotateImage( (SCH_BITMAP*) item );
-        break;
-
     case ID_POPUP_SCH_MIRROR_X_IMAGE:
         if( item )
             MirrorImage( (SCH_BITMAP*) item, true );
@@ -497,15 +479,12 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
         if( aEvent.GetInt() == 0 )
             return;
 
-        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientData();
+        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
 
-        wxCHECK_RET( data != NULL, wxT( "Invalid hot key client data." ) );
+        wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
 
         item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::MovableItems,
                                   aEvent.GetInt() );
-
-        aEvent.SetClientData( NULL );
-        delete data;
 
         // Exit if no item found at the current location or the item is already being edited.
         if( (item == NULL) || (item->GetFlags() != 0) )
@@ -668,14 +647,11 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     }
 
     // Simulate left click event if we got here from a hot key.
-    if( aEvent.GetClientData() != NULL )
+    if( aEvent.GetClientObject() != NULL )
     {
-        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientData();
+        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
 
         wxPoint pos = data->GetPosition();
-
-        aEvent.SetClientData( NULL );
-        delete data;
 
         INSTALL_UNBUFFERED_DC( dc, DrawPanel );
         OnLeftClick( &dc, pos );
@@ -823,4 +799,70 @@ void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
     GetScreen()->SetCurItem( aItem );
     moveItem( DrawPanel, aDC, wxDefaultPosition, true );
     DrawPanel->CrossHairOn( aDC );
+}
+
+
+void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
+{
+    SCH_SCREEN* screen = GetScreen();
+    SCH_ITEM* item = screen->GetCurItem();
+
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+
+    if( item == NULL )
+    {
+        // If we didn't get here by a hot key, then something has gone wrong.
+        if( aEvent.GetInt() == 0 )
+            return;
+
+        // Allows block rotate operation on hot key.
+        if( screen->m_BlockLocate.m_State != STATE_NO_BLOCK )
+        {
+            HandleBlockEndByPopUp( BLOCK_ROTATE, &dc );
+            return;
+        }
+
+        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
+
+        wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
+
+        item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::RotatableItems,
+                                  aEvent.GetInt() );
+
+        // Exit if no item found at the current location or the item is already being edited.
+        if( (item == NULL) || (item->GetFlags() != 0) )
+            return;
+    }
+
+    switch( item->Type() )
+    {
+    case SCH_COMPONENT_T:
+        aEvent.SetId( ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE );
+        wxPostEvent( this, aEvent );
+        return;
+
+    case SCH_TEXT_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+        DrawPanel->MoveCursorToCrossHair();
+        ChangeTextOrient( (SCH_TEXT*) item, &dc );
+        break;
+
+    case SCH_FIELD_T:
+        DrawPanel->MoveCursorToCrossHair();
+        RotateField( (SCH_FIELD*) item, &dc );
+        break;
+
+    case SCH_BITMAP_T:
+        RotateImage( (SCH_BITMAP*) item );
+        break;
+
+    case SCH_SHEET_T:           /// @todo allow sheet rotate on hotkey
+    default:
+        break;
+    }
+
+    if( item->GetFlags() == 0 )
+        screen->SetCurItem( NULL );
 }
