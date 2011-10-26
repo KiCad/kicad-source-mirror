@@ -280,7 +280,10 @@ void SCH_EDIT_FRAME::OnChangeComponentOrientation( wxCommandEvent& aEvent )
     DrawPanel->MoveCursorToCrossHair();
 
     if( component->GetFlags() == 0 )
+    {
         SaveCopyInUndoList( item, UR_CHANGED );
+        GetScreen()->SetCurItem( NULL );
+    }
 
     INSTALL_UNBUFFERED_DC( dc, DrawPanel );
 

@@ -99,6 +99,8 @@ public:
     EDA_HOTKEY_CLIENT_DATA( const wxPoint& aPosition = wxDefaultPosition ) :
         m_position( aPosition ) {}
 
+    ~EDA_HOTKEY_CLIENT_DATA();
+
     void SetPosition( const wxPoint& aPosition ) { m_position = aPosition; }
 
     wxPoint GetPosition() { return m_position; }

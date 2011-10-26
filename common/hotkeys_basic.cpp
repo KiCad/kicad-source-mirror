@@ -78,6 +78,11 @@ EDA_HOTKEY::EDA_HOTKEY( const EDA_HOTKEY* base )
 }
 
 
+EDA_HOTKEY_CLIENT_DATA::~EDA_HOTKEY_CLIENT_DATA()
+{
+}
+
+
 /* class to handle the printable name and the keycode
  */
 struct hotkey_name_descr

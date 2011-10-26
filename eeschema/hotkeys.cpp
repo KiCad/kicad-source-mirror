@@ -158,7 +158,7 @@ static EDA_HOTKEY HkMirrorYComponent( wxT( "Mirror Y Component" ), HK_MIRROR_Y_C
 static EDA_HOTKEY HkMirrorXComponent( wxT( "Mirror X Component" ), HK_MIRROR_X_COMPONENT, 'X' );
 static EDA_HOTKEY HkOrientNormalComponent( wxT( "Orient Normal Component" ),
                                            HK_ORIENT_NORMAL_COMPONENT, 'N' );
-static EDA_HOTKEY HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R' );
+static EDA_HOTKEY HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R', ID_SCH_ROTATE_ITEM );
 static EDA_HOTKEY HkEdit( wxT( "Edit Schematic Item" ), HK_EDIT, 'E' );
 static EDA_HOTKEY HkEditComponentValue( wxT( "Edit Component Value" ),
                                         HK_EDIT_COMPONENT_VALUE, 'V',
@@ -182,9 +182,10 @@ static EDA_HOTKEY HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSER
 static EDA_HOTKEY HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
 static EDA_HOTKEY HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
-static EDA_HOTKEY HkFindNextItem( wxT( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5 );
+static EDA_HOTKEY HkFindNextItem( wxT( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5,
+                                  wxEVT_COMMAND_FIND );
 static EDA_HOTKEY HkFindNextDrcMarker( wxT( "Find Next DRC Marker" ), HK_FIND_NEXT_DRC_MARKER,
-                                       WXK_F5 + GR_KB_SHIFT );
+                                       WXK_F5 + GR_KB_SHIFT, EVT_COMMAND_FIND_DRC_MARKER );
 
 // Special keys for library editor:
 static EDA_HOTKEY HkCreatePin( wxT( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
@@ -385,25 +386,16 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_FIND_NEXT_ITEM:
-        if( notBusy )
-        {
-            wxFindDialogEvent event( wxEVT_COMMAND_FIND, GetId() );
-            event.SetEventObject( this );
-            event.SetFlags( m_findReplaceData->GetFlags() );
-            event.SetFindString( m_findReplaceData->GetFindString() );
-            GetEventHandler()->ProcessEvent( event );
-        }
-        break;
-
     case HK_FIND_NEXT_DRC_MARKER:
         if( notBusy )
         {
-            wxFindDialogEvent event( EVT_COMMAND_FIND_DRC_MARKER, GetId() );
+            wxFindDialogEvent event( hotKey->m_IdMenuEvent, GetId() );
             event.SetEventObject( this );
             event.SetFlags( m_findReplaceData->GetFlags() );
             event.SetFindString( m_findReplaceData->GetFindString() );
             GetEventHandler()->ProcessEvent( event );
         }
+
         break;
 
     case HK_ADD_NEW_COMPONENT:      // Add component
@@ -422,10 +414,11 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_BEGIN_WIRE:
         if( notBusy )
         {
+            EDA_HOTKEY_CLIENT_DATA data( aPosition );
             cmd.SetInt( aHotKey );
-            cmd.SetClientData( new EDA_HOTKEY_CLIENT_DATA( aPosition ) );
+            cmd.SetClientObject( &data );
             cmd.SetId( hotKey->m_IdMenuEvent );
-            wxPostEvent( this, cmd );
+            GetEventHandler()->ProcessEvent( cmd );
         }
         else if( aItem && aItem->IsNew() )
         {
@@ -450,57 +443,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
                 // Wire in progress:
                 OnLeftClick( aDC, aPosition );
             }
-        }
-
-        break;
-
-    case HK_ROTATE:       // Component or other schematic item rotation
-        if ( screen->m_BlockLocate.m_State != STATE_NO_BLOCK )//allows bloc operation on hotkey
-        {
-            HandleBlockEndByPopUp( BLOCK_ROTATE, aDC );
-            break;
-        }
-
-        if( aItem == NULL )
-        {
-            // Find the schematic object to rotate under the cursor
-            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::RotatableItems );
-
-            if( aItem == NULL )
-                break;
-        }
-
-        switch( aItem->Type() )
-        {
-        case SCH_SHEET_T: //TODO allow sheet rotate on hotkey
-            //wxPostEvent( this, eventRotateSheet );
-            break;
-
-        case SCH_COMPONENT_T:
-            cmd.SetId( ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE );
-            wxPostEvent( this, cmd );
-            break;
-
-        case SCH_TEXT_T:
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIERARCHICAL_LABEL_T:
-            cmd.SetId( ID_POPUP_SCH_ROTATE_TEXT );
-            wxPostEvent( this, cmd );
-            break;
-
-        case SCH_FIELD_T:
-            cmd.SetId( ID_POPUP_SCH_ROTATE_FIELD );
-            wxPostEvent( this, cmd );
-            break;
-
-        case SCH_BITMAP_T:
-            cmd.SetId( ID_POPUP_SCH_ROTATE_IMAGE );
-            wxPostEvent( this, cmd );
-            break;
-
-        default:
-            break;
         }
 
         break;
@@ -615,12 +557,16 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         break;
 
+    case HK_ROTATE:                         // Component or other schematic item rotation.
     case HK_MOVE_COMPONENT_OR_ITEM:         // Start move schematic item.
+    {
+        EDA_HOTKEY_CLIENT_DATA data( aPosition );
         cmd.SetInt( aHotKey );
-        cmd.SetClientData( new EDA_HOTKEY_CLIENT_DATA( aPosition ) );
+        cmd.SetClientObject( &data );
         cmd.SetId( hotKey->m_IdMenuEvent );
-        wxPostEvent( this, cmd );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
+    }
 
     case HK_EDIT:
 
