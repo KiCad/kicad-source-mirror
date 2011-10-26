@@ -45,6 +45,8 @@
 #define KEYWORD_FRAME_SIZEY wxT( "Bmconverter_Size_y" )
 #define KEYWORD_LAST_INPUT_FILE wxT( "Last_input" )
 #define KEYWORD_LAST_OUTPUT_FILE wxT( "Last_output" )
+#define KEYWORD_BINARY_THRESHOLD wxT( "Threshold" )
+#define KEYWORD_BW_NEGATIVE wxT( "Negative_choice" )
 
 extern int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile, int aFormat );
 
@@ -88,6 +90,7 @@ private:
 
 BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
 {
+    int tmp;
     m_Config = new wxConfig();
     m_Config->Read( KEYWORD_FRAME_POSX, & m_FramePos.x, -1 );
     m_Config->Read( KEYWORD_FRAME_POSY, & m_FramePos.y, -1 );
@@ -95,6 +98,11 @@ BM2CMP_FRAME::BM2CMP_FRAME() : BM2CMP_FRAME_BASE( NULL )
     m_Config->Read( KEYWORD_FRAME_SIZEY, & m_FrameSize.y, -1 );
     m_Config->Read( KEYWORD_LAST_INPUT_FILE, &m_BitmapFileName );
     m_Config->Read( KEYWORD_LAST_OUTPUT_FILE, &m_ConvertedFileName );
+    if( m_Config->Read( KEYWORD_BINARY_THRESHOLD, &tmp ) )
+        m_sliderThreshold->SetValue( tmp );
+    if( m_Config->Read( KEYWORD_BW_NEGATIVE, &tmp ) )
+        m_rbOptions->SetSelection( tmp  ? 1 : 0 );
+
 
     // Give an icon
     wxIcon icon;
@@ -127,6 +135,8 @@ BM2CMP_FRAME::~BM2CMP_FRAME()
     m_Config->Write( KEYWORD_FRAME_SIZEY, (long) m_FrameSize.y );
     m_Config->Write( KEYWORD_LAST_INPUT_FILE, m_BitmapFileName );
     m_Config->Write( KEYWORD_LAST_OUTPUT_FILE, m_ConvertedFileName );
+    m_Config->Write( KEYWORD_BINARY_THRESHOLD, m_sliderThreshold->GetValue() );
+    m_Config->Write( KEYWORD_BW_NEGATIVE, m_rbOptions->GetSelection() );
 
     delete m_Config;
 
@@ -390,16 +400,12 @@ void BM2CMP_FRAME::ExportFile( FILE* aOutfile, int aFormat )
 }
 
 
-// BM_TO_CMP_APP
-
-void EDA_APP::MacOpenFile(const wxString &fileName)
-{
-}
+// EDA_APP
 
 IMPLEMENT_APP( EDA_APP )
 
 ///-----------------------------------------------------------------------------
-// BM_TO_CMP_APP
+// EDA_APP
 // main program
 //-----------------------------------------------------------------------------
 
@@ -414,4 +420,9 @@ bool EDA_APP::OnInit()
     frame->Show( true );
 
     return true;
+}
+
+
+void EDA_APP::MacOpenFile(const wxString &fileName)
+{
 }

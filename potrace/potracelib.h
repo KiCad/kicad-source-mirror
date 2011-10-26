@@ -77,10 +77,11 @@ typedef struct potrace_dpoint_s potrace_dpoint_t;
 /* closed curve segment */
 struct potrace_curve_s
 {
-    int  n;                 /* number of segments */
-    int* tag;               /* tag[n]: POTRACE_CURVETO or POTRACE_CORNER */
-         potrace_dpoint_t( * c )[3]; /* c[n][3]: control points.
-                             *  c[n][0] is unused for tag[n]=POTRACE_CORNER */
+    int  n;                 // number of segments
+    int* tag;               // tag[n]: POTRACE_CURVETO or POTRACE_CORNER
+    potrace_dpoint_t( * c )[3]; /* c[n][3]: control points.
+                                 *  c[n][0] is unused for tag[n]=POTRACE_CORNER
+                                 */
 };
 typedef struct potrace_curve_s potrace_curve_t;
 
