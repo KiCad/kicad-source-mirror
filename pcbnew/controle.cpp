@@ -55,7 +55,8 @@ extern bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame,
  */
 static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aCollector )
 {
-    int count = aCollector->GetCount();
+    int count = aCollector->GetPrimaryCount();     // try to use preferred layer
+    if( 0 == count ) count = aCollector->GetCount();
 
     for( int i = 0; i<count;  ++i )
     {
@@ -77,7 +78,7 @@ static BOARD_ITEM* AllAreModulesAndReturnSmallestIfSo( GENERAL_COLLECTOR* aColle
 
         int     lmin = MIN( lx, ly );
 
-        if( lmin <= minDim )
+        if( lmin < minDim )
         {
             minDim = lmin;
             minNdx = i;
