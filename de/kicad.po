@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-25 19:30+0100\n"
-"PO-Revision-Date: 2011-10-26 19:59+0100\n"
+"PO-Revision-Date: 2011-10-27 16:41+0100\n"
 "Last-Translator: \n"
 "Language-Team: Benno Achermann <bennoachermann@bluewin.ch>\n"
 "MIME-Version: 1.0\n"
@@ -624,12 +624,12 @@ msgstr "Konnte PDF-Betrachter nicht finden für"
 #: common/hotkeys_basic.cpp:413
 #: common/hotkeys_basic.cpp:434
 msgid "Hotkeys List"
-msgstr "Tastenbelegung"
+msgstr "Tastaturbefehle"
 
 #: common/hotkeys_basic.cpp:680
 #: common/hotkeys_basic.cpp:708
 msgid "Read Hotkey Configuration File:"
-msgstr "Tastenbelegung einlesen:"
+msgstr "Tastaturbefehle einlesen:"
 
 #: common/hotkeys_basic.cpp:736
 msgid "&List Current Keys"
@@ -645,7 +645,7 @@ msgstr "Tastaturbefehle &editieren"
 
 #: common/hotkeys_basic.cpp:743
 msgid "Call the hotkeys editor"
-msgstr "Tastenbelegungseditor aufrufen"
+msgstr "Editor für Tastaturbefehle aufrufen"
 
 #: common/hotkeys_basic.cpp:750
 msgid "E&xport Hotkeys"
@@ -653,7 +653,7 @@ msgstr "Tastaturbefehle e&xportieren"
 
 #: common/hotkeys_basic.cpp:751
 msgid "Create a hotkey configuration file to export the current hotkeys"
-msgstr "Erstelle eine Datei mit den gegenwärtigen Tastaturbefehlen"
+msgstr "Datei mit den gegenwärtigen Tastaturbefehlen erstellen"
 
 #: common/hotkeys_basic.cpp:756
 msgid "&Import Hotkeys"
@@ -677,7 +677,7 @@ msgstr "Aktion"
 
 #: common/hotkey_grid_table.cpp:151
 msgid "Hotkey"
-msgstr "Tastaturbefehl"
+msgstr "Taste(n)"
 
 #: common/pcbcommon.cpp:67
 msgid "??? Via"
@@ -1705,7 +1705,7 @@ msgstr "keine"
 #: eeschema/class_libentry.cpp:423
 #, c-format
 msgid "An attempt was made to remove the %s field from component %s in library %s."
-msgstr "Es wurde versucht das %s Feld von Bauteil %s in Bibliothek %s zu entfernen."
+msgstr "Es wurde versucht das Feld <%s> von Bauteil <%s> in Bibliothek <%s> zu entfernen."
 
 #: eeschema/class_library.cpp:25
 #, c-format
@@ -2256,7 +2256,7 @@ msgstr "Bibliotheksdatei \""
 
 #: eeschema/libedit.cpp:306
 msgid "Document file \""
-msgstr "Dokumentdatei \""
+msgstr "Dokumentationsdatei \""
 
 #: eeschema/libedit.cpp:324
 msgid "Part"
@@ -2273,7 +2273,7 @@ msgstr "Alias"
 #: eeschema/libedit.cpp:340
 #: eeschema/lib_draw_item.cpp:67
 msgid "Unit"
-msgstr "Einheit"
+msgstr "Komponente"
 
 #: eeschema/libedit.cpp:343
 #: eeschema/lib_draw_item.cpp:77
@@ -2286,11 +2286,11 @@ msgstr "Gehäuse"
 
 #: eeschema/libedit.cpp:350
 msgid "Power Symbol"
-msgstr "Spannungsquelle Symbol"
+msgstr "Spannungsquellensymbol"
 
 #: eeschema/libedit.cpp:352
 msgid "Component"
-msgstr "Bestückungsseite"
+msgstr "Komponente"
 
 #: eeschema/libedit.cpp:354
 #: eeschema/lib_draw_item.cpp:61
@@ -2331,7 +2331,7 @@ msgstr ""
 
 #: eeschema/libedit.cpp:397
 msgid "Delete Component"
-msgstr "Bauteil entfernen"
+msgstr "Komponente entfernen"
 
 #: eeschema/libedit.cpp:406
 #, c-format
@@ -2402,7 +2402,7 @@ msgstr ""
 #: eeschema/libeditframe.cpp:419
 #, c-format
 msgid "Part %c"
-msgstr "Bauteil %c"
+msgstr "Komponente %c"
 
 #: eeschema/libeditframe.cpp:990
 msgid "Add pin"
@@ -2610,7 +2610,7 @@ msgstr "Gruppe platzieren"
 
 #: eeschema/libedit_onrightclick.cpp:296
 msgid "Select Items"
-msgstr "Selektiere Elemente"
+msgstr "Elemente auswählen"
 
 #: eeschema/libedit_onrightclick.cpp:297
 msgid "Copy Block"
@@ -4562,7 +4562,7 @@ msgstr "Schaltplanprojekt speichern"
 
 #: eeschema/tool_sch.cpp:41
 msgid "Page settings"
-msgstr "Seite einrichten..."
+msgstr "Seite einrichten"
 
 #: eeschema/tool_sch.cpp:55
 msgid "Cut selected item"
@@ -5154,7 +5154,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:64
 msgid "Number of Units:"
-msgstr "Anzahl der Bauteile:"
+msgstr "Anzahl der Komponenten:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:66
 msgid ""
@@ -5979,12 +5979,12 @@ msgstr "Gemeinsame Nutzung"
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:62
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:80
 msgid "Shared by all &parts in component"
-msgstr "Gemeinsam genutzt von allen &Bauteilen der Komponente"
+msgstr "Gemeinsam genutzt von allen &Komponenten des Bauteils"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:73
 #: eeschema/dialogs/dialog_lib_edit_pin_base.cpp:83
 msgid "Shared by all body &styles (DeMorgan)"
-msgstr "Gemeinsam genutzt von allen &Gehäusenformen (DeMorgan)"
+msgstr "Gemeinsam genutzt von allen &Gehäusedarstellungen (DeMorgan)"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:81
 msgid "Fill Style"
@@ -5992,7 +5992,7 @@ msgstr "Füllart"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:96
 msgid "Do &not fill"
-msgstr "Nicht gefüllt"
+msgstr "Nicht ge&füllt"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:100
 msgid "Fill &foreground"
@@ -6133,7 +6133,7 @@ msgstr "Bauteil mit Sysmbol für &alternative Darstellungsform (De Morgan) erste
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:117
 msgid "Create component as power &symbol"
-msgstr "Bauteil als Spannungquellen &Symbol erstellen"
+msgstr "Bauteil als Spannungsquellen&symbol erstellen"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:131
 msgid "Parts in package locked (cannot be swapped)"
@@ -6981,59 +6981,59 @@ msgstr "Vorderseite"
 
 #: pcbnew/class_board.cpp:336
 msgid "Inner2"
-msgstr "Innen 2"
+msgstr "Innen2"
 
 #: pcbnew/class_board.cpp:337
 msgid "Inner3"
-msgstr "Innen 3"
+msgstr "Innen3"
 
 #: pcbnew/class_board.cpp:338
 msgid "Inner4"
-msgstr "Innen 4"
+msgstr "Innen4"
 
 #: pcbnew/class_board.cpp:339
 msgid "Inner5"
-msgstr "Innen 5"
+msgstr "Innen5"
 
 #: pcbnew/class_board.cpp:340
 msgid "Inner6"
-msgstr "Innen 6"
+msgstr "Innen6"
 
 #: pcbnew/class_board.cpp:341
 msgid "Inner7"
-msgstr "Innen 7"
+msgstr "Innen7"
 
 #: pcbnew/class_board.cpp:342
 msgid "Inner8"
-msgstr "Innen 8"
+msgstr "Innen8"
 
 #: pcbnew/class_board.cpp:343
 msgid "Inner9"
-msgstr "Innen 9"
+msgstr "Innen9"
 
 #: pcbnew/class_board.cpp:344
 msgid "Inner10"
-msgstr "Innen 10"
+msgstr "Innen10"
 
 #: pcbnew/class_board.cpp:345
 msgid "Inner11"
-msgstr "Innen 11"
+msgstr "Innen11"
 
 #: pcbnew/class_board.cpp:346
 msgid "Inner12"
-msgstr "Innen 12"
+msgstr "Innen12"
 
 #: pcbnew/class_board.cpp:347
 msgid "Inner13"
-msgstr "Innen 13"
+msgstr "Innen13"
 
 #: pcbnew/class_board.cpp:348
 msgid "Inner14"
-msgstr "Innen 14"
+msgstr "Innen14"
 
 #: pcbnew/class_board.cpp:349
 msgid "Inner15"
-msgstr "Innen 5"
+msgstr "Innen5"
 
 #: pcbnew/class_board.cpp:350
 msgid "Back"
@@ -7905,7 +7905,7 @@ msgstr "Die Textstärke ist für diese Textgrösse zu groß. Text wird eingeklem
 
 #: pcbnew/drc.cpp:182
 msgid "Compile ratsnest...\n"
-msgstr "Netzlinien zusammenstellen ...\n"
+msgstr "Stelle Netzlinien zusammen ...\n"
 
 #: pcbnew/drc.cpp:198
 msgid "Aborting\n"
@@ -7913,23 +7913,23 @@ msgstr "Abbruch\n"
 
 #: pcbnew/drc.cpp:211
 msgid "Pad clearances...\n"
-msgstr "Abstandsmaske für Pad...\n"
+msgstr "Prüfe Padabstandsflächen...\n"
 
 #: pcbnew/drc.cpp:221
 msgid "Track clearances...\n"
-msgstr "Abstandsmaske für Leiterbahn...\n"
+msgstr "Prüfe Leiterbahnabstandsflächen...\n"
 
 #: pcbnew/drc.cpp:231
 msgid "Fill zones...\n"
-msgstr "Flächen füllen...\n"
+msgstr "Fülle Flächen...\n"
 
 #: pcbnew/drc.cpp:240
 msgid "Test zones...\n"
-msgstr "Flächen testen...\n"
+msgstr "Prüfe Flächenabstände...\n"
 
 #: pcbnew/drc.cpp:251
 msgid "Unconnected pads...\n"
-msgstr "Nicht verbundene Pads...\n"
+msgstr "Prüfe nicht angeschlossene Pads...\n"
 
 #: pcbnew/drc.cpp:265
 msgid "Finished"
@@ -7969,7 +7969,7 @@ msgstr "NETZKLASSE: '%s' hat uDuKo-Bohrdurchmesser: %s, welcher kleiner ist als 
 msgid "The graphic item will be on a copper layer.  It is very dangerous. Are you sure?"
 msgstr ""
 "Das grafische Element wird auf einer Kupferlage sein. Dies ist sehr gefährlich.\n"
-"Sind Sie sich dessen sicher?"
+"Sind Sie sich sicher?"
 
 #: pcbnew/edgemod.cpp:214
 msgid "New Width:"
@@ -8430,7 +8430,9 @@ msgstr "Keine Bauteile zum Archivieren!"
 #: pcbnew/librairi.cpp:384
 #, c-format
 msgid "File %s exists, OK to replace ?"
-msgstr "Datei <%s> existiert bereits, überschreiben?"
+msgstr ""
+"Datei <%s> existiert bereits.\n"
+"Möchten Sie diese überschreiben?"
 
 #: pcbnew/librairi.cpp:461
 #, c-format
@@ -11242,7 +11244,7 @@ msgstr "Wähle Darstellung von Leiterbahnen"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:32
 msgid "Via Shapes:"
-msgstr "DuKo Formen:"
+msgstr "Durchkontaktierungen:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:36
 #: pcbnew/dialogs/dialog_display_options_base.cpp:57
@@ -11260,7 +11262,7 @@ msgstr "Immer"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:38
 msgid "Show Via Holes:"
-msgstr "Zeige Bohrung für Durchkontaktierungen:"
+msgstr "Durchkontaktierungsbohrungen:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:40
 msgid ""
@@ -11293,7 +11295,7 @@ msgstr "An Pads und Leiterbahnen"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:51
 msgid "Show Net Names:"
-msgstr "Zeige Netznamen:"
+msgstr "Netznamen:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:53
 msgid "Show or not net names on pads and/or tracks"
@@ -11301,19 +11303,19 @@ msgstr "Zeige (oder auch nicht) Netznamen an Pads und/oder Leiterbahnen"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:57
 msgid "New track"
-msgstr "Neue Leiterbahn"
+msgstr "Bei neuen Leiterbahnen"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:57
 msgid "New track with via area"
-msgstr "Neue Leiterbahn mit DuKo-Bereich"
+msgstr "Bei neuen Leiterbahnen mit DuKo-Bereich"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:57
 msgid "New and edited tracks with via area"
-msgstr "Neue und editierte Leiterbahnen mit DuKo-Bereich"
+msgstr "Bei neuen und editierten Leiterbahnen mit DuKo-Bereich"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:59
 msgid "Show Tracks Clearance:"
-msgstr "Zeige Leiterbahnenabstände:"
+msgstr "Anzeige von Leiterbahnabstandsflächen:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:61
 msgid ""
@@ -11334,19 +11336,19 @@ msgstr "Bauteilumriss:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:88
 msgid "Pad Options:"
-msgstr "Pad Optionen:"
+msgstr "Padoptionen:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:92
 msgid "Pad Shapes:"
-msgstr "Pad Formen:"
+msgstr "Padformen:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:96
 msgid "Show pad clearance"
-msgstr "Zeige Abstand zu Pads"
+msgstr "Zeige Padabstandsflächen"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:99
 msgid "Show pad number"
-msgstr "Zeige Nummerierung von Pads"
+msgstr "Zeige Padnummerierungen"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:103
 msgid "Show pad NoConnect"
@@ -11354,15 +11356,15 @@ msgstr "Zeige 'Keine-Verbindung' Pads"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:115
 msgid "Others:"
-msgstr "Weiteres:"
+msgstr "Verschiedenes:"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:119
 msgid "Display other items:"
-msgstr "Zeige weitere Elemente"
+msgstr "Anzeige weiterer Elemente"
 
 #: pcbnew/dialogs/dialog_display_options_base.cpp:125
 msgid "Show page limits"
-msgstr "Zeige Seitenränder"
+msgstr "Anzeige von Seitenrändern"
 
 #: pcbnew/dialogs/dialog_drc.cpp:175
 #: pcbnew/dialogs/dialog_drc.cpp:249
@@ -11373,7 +11375,7 @@ msgstr "Protokolldatei \"%s\" erstellt"
 #: pcbnew/dialogs/dialog_drc.cpp:177
 #: pcbnew/dialogs/dialog_drc.cpp:250
 msgid "Disk File Report Completed"
-msgstr "Disk Dateibericht fertiggestellt"
+msgstr "Erstellung der Protokolldatei durchgeführt"
 
 #: pcbnew/dialogs/dialog_drc.cpp:270
 msgid "DRC report files (.rpt)|*.rpt"
@@ -11409,7 +11411,7 @@ msgstr "Gebe den zulässigen Mindestdurchmesser für eine Micro-Durchkontaktieru
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:75
 msgid "Create Report File"
-msgstr "Erstelle Protokoll"
+msgstr "Erstelle Protokolldatei"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:79
 msgid "Enable writing report to this file"
@@ -12182,7 +12184,7 @@ msgstr "Wenn aktiviert, wird eine Segmentausrichtung nach H, V oder 45 Grad erzw
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:115
 msgid "Auto PAN"
-msgstr "Auto Schwenk"
+msgstr "Automatischer Bildschwenk"
 
 #: pcbnew/dialogs/dialog_general_options_BoardEditor_base.cpp:116
 msgid "Allows auto pan when creating a track, or moving an item."
@@ -12419,23 +12421,23 @@ msgstr "Bauteile: "
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:65
 msgid "Edges Module Width"
-msgstr "Bauteil Umrissbreite"
+msgstr "Umrissbreite"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:72
 msgid "Text Module Width"
-msgstr "Bauteil Textbreite"
+msgstr "Textbreite"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:79
 msgid "Text Module Size V"
-msgstr "Bauteil Textgrösse V"
+msgstr "Textgrösse V"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:86
 msgid "Text Module Size H"
-msgstr "Bauteil Textgrösse H"
+msgstr "Textgrösse H"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:96
 msgid "General:"
-msgstr "Generell:"
+msgstr "Allgemein:"
 
 #: pcbnew/dialogs/dialog_graphic_items_options_base.cpp:98
 msgid "Default pen size"
@@ -12452,7 +12454,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:95
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:104
 msgid "Center X"
-msgstr "Mittelpunk X"
+msgstr "Mittelpunkt X"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:96
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:105
@@ -12481,11 +12483,11 @@ msgstr "Aktiviert"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:667
 msgid "Layer name may not be empty"
-msgstr "Lagenname sollte gesetzt sein"
+msgstr "Für jede Lage sollte ein eindeutiger Name vergeben sein"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:674
 msgid "Layer name has an illegal character, one of: '"
-msgstr "Der Name einer Lage besitzt das folgende unzulässige Zeichen: '"
+msgstr "Der Name einer Lage besitzt eines der folgenden unzulässigen Zeichen: '"
 
 #: pcbnew/dialogs/dialog_layers_setup.cpp:681
 msgid "'signal' is a reserved layer name"
@@ -13093,7 +13095,7 @@ msgstr "Formoffset Y"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:153
 msgid "Shape delta dim"
-msgstr "Form Delta-Abm."
+msgstr "Formdelta Abm."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:164
 msgid "Trap. direction"
@@ -14323,7 +14325,7 @@ msgstr "Bildeditor"
 
 #: common/dialogs/dialog_page_settings_base.h:92
 msgid "Page Settings"
-msgstr "Seite einrichten..."
+msgstr "Seite einrichten"
 
 #: common/dialog_about/dialog_about_base.h:56
 msgid "About..."
