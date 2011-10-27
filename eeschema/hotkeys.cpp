@@ -174,8 +174,7 @@ static EDA_HOTKEY HkCopyComponentOrText( wxT( "Copy Component or Label" ),
                                          HK_COPY_COMPONENT_OR_LABEL, 'C',
                                          ID_POPUP_SCH_COPY_ITEM );
 
-static EDA_HOTKEY HkDrag( wxT( "Drag Schematic Item" ), HK_DRAG, 'G',
-                          ID_POPUP_SCH_DRAG_ITEM_REQUEST );
+static EDA_HOTKEY HkDrag( wxT( "Drag Schematic Item" ), HK_DRAG, 'G', ID_SCH_DRAG_ITEM );
 static EDA_HOTKEY HkMove2Drag( wxT( "Move Block -> Drag Block" ),
                                HK_MOVEBLOCK_TO_DRAGBLOCK, '\t' );
 static EDA_HOTKEY HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
@@ -507,50 +506,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         break;
 
     case HK_DRAG:                           // Start drag
-        if( itemInEdit )
-            break;
-
-        if( aItem == NULL )
-        {
-            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::DraggableItems,
-                                       hotKey->m_Idcommand );
-
-            if( aItem == NULL )
-                break;
-        }
-
-        if( aItem->GetFlags() == 0 )
-        {
-            switch( aItem->Type() )
-            {
-            // select the correct event for moving an schematic object
-            // and add it to the event queue
-            case SCH_COMPONENT_T:
-            case SCH_GLOBAL_LABEL_T:
-            case SCH_HIERARCHICAL_LABEL_T:
-            case SCH_SHEET_T:
-                cmd.SetId( hotKey->m_IdMenuEvent );
-                wxPostEvent( this, cmd );
-                break;
-
-            case SCH_BUS_ENTRY_T:
-            case SCH_LINE_T:
-            case SCH_JUNCTION_T:
-                if( ((SCH_ITEM*) aItem )->GetLayer() != LAYER_BUS )
-                {
-                    cmd.SetId( hotKey->m_IdMenuEvent );
-                    wxPostEvent( this, cmd );
-                }
-
-                break;
-
-            default:
-                ;
-            }
-        }
-
-        break;
-
     case HK_ROTATE:                         // Rotate schematic item or block.
     case HK_MOVE_COMPONENT_OR_ITEM:         // Start move schematic item.
     case HK_EDIT:                           // Edit schematic item.
@@ -558,7 +513,7 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
     {
         EDA_HOTKEY_CLIENT_DATA data( aPosition );
-        cmd.SetInt( aHotKey );
+        cmd.SetInt( hotKey->m_Idcommand );
         cmd.SetClientObject( &data );
         cmd.SetId( hotKey->m_IdMenuEvent );
         GetEventHandler()->ProcessEvent( cmd );

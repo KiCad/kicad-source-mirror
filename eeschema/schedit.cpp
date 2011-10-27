@@ -74,7 +74,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_END_SHEET:
     case ID_POPUP_SCH_RESIZE_SHEET:
     case ID_POPUP_IMPORT_GLABEL:
-    case ID_POPUP_SCH_DRAG_ITEM_REQUEST:
     case ID_POPUP_SCH_INIT_CMP:
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
@@ -155,7 +154,10 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
         }
         else
+        {
             SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        }
+
         break;
 
     case ID_POPUP_END_LINE:
@@ -242,23 +244,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_POPUP_SCH_DRAG_ITEM_REQUEST:
-        DrawPanel->MoveCursorToCrossHair();
-
-        // The easiest way to handle a drag component or sheet command
-        // is to simulate a block drag command
-        if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
-        {
-            if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->GetCrossHairPosition() ) )
-                break;
-
-            // Give a non null size to the search block:
-            screen->m_BlockLocate.Inflate( 1 );
-            HandleBlockEnd( &dc );
-        }
-
-        break;
-
     case ID_POPUP_SCH_INIT_CMP:
         DrawPanel->MoveCursorToCrossHair();
         break;
@@ -303,10 +288,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_LEAVE_SHEET:
         m_CurrentSheet->Pop();
         DisplayCurrentSheet();
-        break;
-
-    case ID_POPUP_CLOSE_CURRENT_TOOL:
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         break;
 
     case wxID_COPY:         // really this is a Save block for paste
@@ -388,7 +369,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:        // Log error:
-        DisplayError( this, wxT( "SCH_EDIT_FRAME::Process_Special_Functions error" ) );
+        wxFAIL_MSG( wxString::Format( wxT( "Cannot process command event ID %d" ),
+                                      event.GetId() ) );
         break;
     }
 
@@ -885,4 +867,68 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
 
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );
+}
+
+
+void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
+{
+    SCH_SCREEN* screen = GetScreen();
+    SCH_ITEM* item = screen->GetCurItem();
+
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+
+    if( item == NULL )
+    {
+        // If we didn't get here by a hot key, then something has gone wrong.
+        if( aEvent.GetInt() == 0 )
+            return;
+
+        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
+
+        wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
+
+        item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::DraggableItems,
+                                  aEvent.GetInt() );
+
+        // Exit if no item found at the current location or the item is already being edited.
+        if( (item == NULL) || (item->GetFlags() != 0) )
+            return;
+    }
+
+    switch( item->Type() )
+    {
+    case SCH_BUS_ENTRY_T:
+    case SCH_LINE_T:
+    case SCH_JUNCTION_T:
+        if( item->GetLayer() == LAYER_BUS )
+            break;
+
+        // Fall thru if item is not on bus layer.
+    case SCH_COMPONENT_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_SHEET_T:
+        DrawPanel->MoveCursorToCrossHair();
+
+        // The easiest way to handle a drag component or sheet command
+        // is to simulate a block drag command
+        if( screen->m_BlockLocate.m_State == STATE_NO_BLOCK )
+        {
+            if( !HandleBlockBegin( &dc, BLOCK_DRAG, screen->GetCrossHairPosition() ) )
+                break;
+
+            // Give a non null size to the search block:
+            screen->m_BlockLocate.Inflate( 1 );
+            HandleBlockEnd( &dc );
+        }
+
+        break;
+
+    default:
+        wxFAIL_MSG( wxString::Format( wxT( "Cannot drag schematic item type %s." ),
+                                      GetChars( item->GetClass() ) ) );
+    }
+
+    // Since the drag is actually a block command, clear the current item.
+    screen->SetCurItem( NULL );
 }

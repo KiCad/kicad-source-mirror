@@ -280,7 +280,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component )
         msg = AddHotkeyName( msg, s_Schematic_Hokeys_Descr, HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
         msg = AddHotkeyName( _( "Drag Component" ), s_Schematic_Hokeys_Descr, HK_DRAG );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DRAG_ITEM_REQUEST, msg, KiBitmap( move_xpm ) );
+        AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( move_xpm ) );
     }
 
     wxMenu* orientmenu = new wxMenu;
@@ -377,7 +377,7 @@ void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
         AddMenuItem( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, KiBitmap( move_text_xpm ) );
         msg = AddHotkeyName( _( "Drag Global Label" ), s_Schematic_Hokeys_Descr,
                              HK_DRAG );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DRAG_ITEM_REQUEST, msg, KiBitmap( move_text_xpm ) );
+        AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( move_text_xpm ) );
         msg = AddHotkeyName( _( "Copy Global Label" ), s_Schematic_Hokeys_Descr,
                              HK_COPY_COMPONENT_OR_LABEL );
         AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( copy_button_xpm ) );
@@ -413,7 +413,7 @@ void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
                              HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, KiBitmap( move_text_xpm ) );
         msg = AddHotkeyName( _( "Drag Hierarchical Label" ), s_Schematic_Hokeys_Descr, HK_DRAG );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DRAG_ITEM_REQUEST, msg, KiBitmap( move_text_xpm ) );
+        AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( move_text_xpm ) );
         msg = AddHotkeyName( _( "Copy Hierarchical Label" ), s_Schematic_Hokeys_Descr,
                              HK_COPY_COMPONENT_OR_LABEL );
         AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( copy_button_xpm ) );
@@ -449,7 +449,7 @@ void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
                              HK_MOVE_COMPONENT_OR_ITEM );
         AddMenuItem( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, KiBitmap( move_text_xpm ) );
         msg = AddHotkeyName( _( "Drag Label" ), s_Schematic_Hokeys_Descr, HK_DRAG );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DRAG_ITEM_REQUEST, msg, KiBitmap( move_text_xpm ) );
+        AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( move_text_xpm ) );
         msg = AddHotkeyName( _( "Copy Label" ), s_Schematic_Hokeys_Descr,
                              HK_COPY_COMPONENT_OR_LABEL );
         AddMenuItem( PopMenu, ID_POPUP_SCH_COPY_ITEM, msg, KiBitmap( copy_button_xpm ) );
@@ -524,8 +524,7 @@ void SCH_EDIT_FRAME::addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunct
     if( !aJunction->IsNew() )
     {
         if( m_collectedItems.IsDraggableJunction() )
-            AddMenuItem( aMenu, ID_POPUP_SCH_DRAG_ITEM_REQUEST, _( "Drag Junction" ),
-                         KiBitmap( move_xpm ) );
+            AddMenuItem( aMenu, ID_SCH_DRAG_ITEM, _( "Drag Junction" ), KiBitmap( move_xpm ) );
 
         if( screen->GetWire( aJunction->GetPosition(), EXCLUDE_END_POINTS_T ) )
             AddMenuItem( aMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ),
@@ -556,7 +555,7 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
     }
 
     msg = AddHotkeyName( _( "Drag Wire" ), s_Schematic_Hokeys_Descr, HK_DRAG );
-    AddMenuItem( PopMenu, ID_POPUP_SCH_DRAG_ITEM_REQUEST, msg, KiBitmap( move_track_xpm ) );
+    AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( move_track_xpm ) );
     PopMenu->AppendSeparator();
     msg = AddHotkeyName( _( "Delete Wire" ), s_Schematic_Hokeys_Descr, HK_DELETE );
     AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE, msg, KiBitmap( delete_xpm ) );
@@ -629,7 +628,7 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         AddMenuItem( PopMenu, ID_POPUP_SCH_MOVE_ITEM, msg, KiBitmap( move_sheet_xpm ) );
 
         msg = AddHotkeyName( _( "Drag Sheet" ), s_Schematic_Hokeys_Descr, HK_DRAG );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DRAG_ITEM_REQUEST, msg, KiBitmap( move_sheet_xpm ) );
+        AddMenuItem( PopMenu, ID_SCH_DRAG_ITEM, msg, KiBitmap( move_sheet_xpm ) );
     }
 
     if( Sheet->GetFlags() )

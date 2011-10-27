@@ -635,6 +635,12 @@ private:
      */
     void OnEditItem( wxCommandEvent& aEvent );
 
+    /**
+     * Function OnDragItem
+     * handles the #ID_SCH_DRAG_ITEM event used to drag schematic itams.
+     */
+    void OnDragItem( wxCommandEvent& aEvent );
+
     void OnExit( wxCommandEvent& event );
     void OnAnnotate( wxCommandEvent& event );
     void OnErc( wxCommandEvent& event );

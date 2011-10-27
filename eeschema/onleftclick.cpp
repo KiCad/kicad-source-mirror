@@ -179,10 +179,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
         DeleteItemAtCrossHair( aDC );
-        OnModify();
-        GetScreen()->SetCurItem( NULL );
-        GetScreen()->TestDanglingEnds();
-        DrawPanel->Refresh( true );
         break;
 
     case ID_WIRE_BUTT:
