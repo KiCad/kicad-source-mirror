@@ -88,7 +88,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
                           wxAuiPaneInfo(info).Name( wxT( "m_LeftWin" ) ).Left().
                           BestSize( m_LeftWin_Width, clientsize.y ).
                           Layer( 1 ) );
-        
+
     m_auimgr.Update();
 }
 

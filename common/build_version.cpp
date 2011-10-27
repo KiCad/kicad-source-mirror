@@ -7,9 +7,9 @@
 
 #ifndef KICAD_BUILD_VERSION
 #if defined KICAD_GOST
-#   define KICAD_BUILD_VERSION "(2011-oct-15 GOST)"
+#   define KICAD_BUILD_VERSION "(2011-oct-27 GOST)"
 #else
-#   define KICAD_BUILD_VERSION "(2011-oct-15)"
+#   define KICAD_BUILD_VERSION "(2011-oct-27)"
 #endif
 #endif
 
