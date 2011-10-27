@@ -617,13 +617,23 @@ public:
     // General search:
 
 private:
+    /**
+     * Function OnMoveItem
+     * handles the #ID_SCH_MOVE_ITEM event used to move schematic itams.
+     */
     void OnMoveItem( wxCommandEvent& aEvent );
 
     /**
      * Function OnRotate
-     * handles the #ID_SCH_ROTATE_ITEM event used to rotates schematic itams and blocks.
+     * handles the #ID_SCH_ROTATE_ITEM event used to rotate schematic itams and blocks.
      */
     void OnRotate( wxCommandEvent& aEvent );
+
+    /**
+     * Function OnEditItem
+     * handles the #ID_SCH_EDIT_ITEM event used to edit schematic itams.
+     */
+    void OnEditItem( wxCommandEvent& aEvent );
 
     void OnExit( wxCommandEvent& event );
     void OnAnnotate( wxCommandEvent& event );

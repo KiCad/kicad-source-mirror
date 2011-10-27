@@ -137,6 +137,8 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_SCH_ROTATE_ITEM, SCH_EDIT_FRAME::OnRotate )
     EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
                     SCH_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU_RANGE( ID_SCH_EDIT_ITEM, ID_SCH_EDIT_COMPONENT_FOOTPRINT,
+                    SCH_EDIT_FRAME::OnEditItem )
 
     // Tools and buttons options toolbar
     EVT_TOOL( ID_TB_OPTIONS_HIDDEN_PINS, SCH_EDIT_FRAME::OnSelectOptionToolbar )

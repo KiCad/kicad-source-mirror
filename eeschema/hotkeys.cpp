@@ -159,13 +159,13 @@ static EDA_HOTKEY HkMirrorXComponent( wxT( "Mirror X Component" ), HK_MIRROR_X_C
 static EDA_HOTKEY HkOrientNormalComponent( wxT( "Orient Normal Component" ),
                                            HK_ORIENT_NORMAL_COMPONENT, 'N' );
 static EDA_HOTKEY HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R', ID_SCH_ROTATE_ITEM );
-static EDA_HOTKEY HkEdit( wxT( "Edit Schematic Item" ), HK_EDIT, 'E' );
+static EDA_HOTKEY HkEdit( wxT( "Edit Schematic Item" ), HK_EDIT, 'E', ID_SCH_EDIT_ITEM );
 static EDA_HOTKEY HkEditComponentValue( wxT( "Edit Component Value" ),
                                         HK_EDIT_COMPONENT_VALUE, 'V',
-                                        ID_POPUP_SCH_EDIT_VALUE_CMP );
+                                        ID_SCH_EDIT_COMPONENT_VALUE );
 static EDA_HOTKEY HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
                                             HK_EDIT_COMPONENT_FOOTPRINT, 'F',
-                                            ID_POPUP_SCH_EDIT_FOOTPRINT_CMP );
+                                            ID_SCH_EDIT_COMPONENT_FOOTPRINT );
 static EDA_HOTKEY HkMove( wxT( "Move Schematic Item" ),
                           HK_MOVE_COMPONENT_OR_ITEM, 'M',
                           ID_POPUP_SCH_MOVE_ITEM );
@@ -181,7 +181,7 @@ static EDA_HOTKEY HkMove2Drag( wxT( "Move Block -> Drag Block" ),
 static EDA_HOTKEY HkInsert( wxT( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkDelete( wxT( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
-static EDA_HOTKEY HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
+static EDA_HOTKEY HkFindItem( wxT( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL, ID_FIND_ITEMS );
 static EDA_HOTKEY HkFindNextItem( wxT( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5,
                                   wxEVT_COMMAND_FIND );
 static EDA_HOTKEY HkFindNextDrcMarker( wxT( "Find Next DRC Marker" ), HK_FIND_NEXT_DRC_MARKER,
@@ -352,15 +352,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
-    case HK_UNDO:
-    case HK_REDO:
-        if( notBusy )
-        {
-            wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, hotKey->m_IdMenuEvent );
-            wxPostEvent( this, event );
-        }
-        break;
-
     case HK_MOVEBLOCK_TO_DRAGBLOCK:   // Switch to drag mode, when block moving
         HandleBlockEndByPopUp( BLOCK_DRAG, aDC );
         break;
@@ -374,15 +365,18 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_REPEAT_LAST:
         if( notBusy && m_itemToRepeat && ( m_itemToRepeat->GetFlags() == 0 ) )
             RepeatDrawItem( aDC );
+
         break;
 
+    case HK_UNDO:
+    case HK_REDO:
     case HK_FIND_ITEM:
         if( notBusy )
         {
-            wxCommandEvent evt;
-            evt.SetId( ID_FIND_ITEMS );
-            Process_Special_Functions( evt );
+            cmd.SetId( hotKey->m_IdMenuEvent );
+            GetEventHandler()->ProcessEvent( cmd );
         }
+
         break;
 
     case HK_FIND_NEXT_ITEM:
@@ -557,8 +551,11 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         break;
 
-    case HK_ROTATE:                         // Component or other schematic item rotation.
+    case HK_ROTATE:                         // Rotate schematic item or block.
     case HK_MOVE_COMPONENT_OR_ITEM:         // Start move schematic item.
+    case HK_EDIT:                           // Edit schematic item.
+    case HK_EDIT_COMPONENT_VALUE:           // Edit component value field.
+    case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
     {
         EDA_HOTKEY_CLIENT_DATA data( aPosition );
         cmd.SetInt( aHotKey );
@@ -567,72 +564,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         GetEventHandler()->ProcessEvent( cmd );
         break;
     }
-
-    case HK_EDIT:
-
-        if( itemInEdit )
-            break;
-
-        if( aItem == NULL )
-        {
-            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::EditableItems );
-
-            if( aItem == NULL )
-                break;
-        }
-
-        switch( aItem->Type() )
-        {
-        case SCH_COMPONENT_T:
-            EditComponent( (SCH_COMPONENT*) aItem );
-            break;
-
-        case SCH_SHEET_T:
-            cmd.SetId( ID_POPUP_SCH_EDIT_SHEET );
-            wxPostEvent( this, cmd );
-            break;
-
-        case SCH_SHEET_PIN_T:
-            cmd.SetId( ID_POPUP_SCH_EDIT_SHEET_PIN );
-            wxPostEvent( this, cmd );
-            break;
-
-        case SCH_TEXT_T:
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIERARCHICAL_LABEL_T:
-            EditSchematicText( (SCH_TEXT*) aItem );
-            break;
-
-        case SCH_FIELD_T:
-            EditComponentFieldText( (SCH_FIELD*) aItem, aDC );
-            break;
-
-        case SCH_BITMAP_T:
-            EditImage( (SCH_BITMAP*) aItem );
-            break;
-        default:
-            ;
-        }
-
-        break;
-
-    case HK_EDIT_COMPONENT_VALUE:
-    case HK_EDIT_COMPONENT_FOOTPRINT:
-
-        if( itemInEdit )
-            break;
-
-        if( aItem == NULL )
-            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
-
-        if( aItem )
-        {
-            cmd.SetId( hotKey->m_IdMenuEvent );
-            wxPostEvent( this, cmd );
-        }
-
-        break;
     }
 }
 
