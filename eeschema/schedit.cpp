@@ -69,29 +69,20 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
     case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
     case ID_POPUP_END_LINE:
-    case ID_POPUP_SCH_EDIT_TEXT:
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
-    case ID_POPUP_SCH_EDIT_SHEET:
     case ID_POPUP_SCH_CLEANUP_SHEET:
     case ID_POPUP_SCH_END_SHEET:
     case ID_POPUP_SCH_RESIZE_SHEET:
     case ID_POPUP_IMPORT_GLABEL:
-    case ID_POPUP_SCH_EDIT_SHEET_PIN:
     case ID_POPUP_SCH_DRAG_ITEM_REQUEST:
-    case ID_POPUP_SCH_EDIT_CMP:
     case ID_POPUP_SCH_INIT_CMP:
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
-    case ID_POPUP_SCH_EDIT_VALUE_CMP:
-    case ID_POPUP_SCH_EDIT_REF_CMP:
-    case ID_POPUP_SCH_EDIT_FOOTPRINT_CMP:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-    case ID_POPUP_SCH_EDIT_FIELD:
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
     case ID_POPUP_DRAG_BLOCK:
     case ID_POPUP_COPY_BLOCK:
-    case ID_POPUP_ROTATE_BLOCK:
     case ID_POPUP_MIRROR_X_BLOCK:
     case ID_POPUP_MIRROR_Y_BLOCK:
     case ID_POPUP_SCH_DELETE_NODE:
@@ -137,6 +128,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case wxID_CUT:
         if( screen->m_BlockLocate.m_Command != BLOCK_MOVE )
             break;
+
         HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
         m_itemToRepeat = NULL;
         SetSheetNumberAndCount();
@@ -171,17 +163,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         EndSegment( &dc );
         break;
 
-    case ID_POPUP_SCH_EDIT_TEXT:
-        EditSchematicText( (SCH_TEXT*) item );
-        break;
-
     case ID_POPUP_SCH_SET_SHAPE_TEXT:
 
         // Not used
-        break;
-
-    case ID_POPUP_SCH_EDIT_FIELD:
-        EditComponentFieldText( (SCH_FIELD*) item, &dc );
         break;
 
     case ID_POPUP_SCH_DELETE_NODE:
@@ -230,11 +214,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         screen->TestDanglingEnds( DrawPanel, &dc );
         break;
 
-    case ID_POPUP_SCH_EDIT_SHEET:
-        if( EditSheet( (SCH_SHEET*) item, &dc ) )
-            OnModify();
-        break;
-
     case ID_POPUP_IMPORT_GLABEL:
         if( item != NULL && item->Type() == SCH_SHEET_T )
             screen->SetCurItem( ImportSheetPin( (SCH_SHEET*) item, &dc ) );
@@ -263,10 +242,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_POPUP_SCH_EDIT_SHEET_PIN:
-        EditSheetPin( (SCH_SHEET_PIN*) item, &dc );
-        break;
-
     case ID_POPUP_SCH_DRAG_ITEM_REQUEST:
         DrawPanel->MoveCursorToCrossHair();
 
@@ -284,43 +259,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         break;
 
-    case ID_POPUP_SCH_EDIT_CMP:
-        // Ensure the struct is a component (could be a struct of a
-        // component, like Field, text..)
-        if( item && item->Type() == SCH_COMPONENT_T )
-            EditComponent( (SCH_COMPONENT*) item );
-
-        break;
-
     case ID_POPUP_SCH_INIT_CMP:
         DrawPanel->MoveCursorToCrossHair();
         break;
-
-    case ID_POPUP_SCH_EDIT_VALUE_CMP:
-
-        // Ensure the struct is a component (could be a struct of a
-        // component, like Field, text..)
-        if( item != NULL && item->Type() == SCH_COMPONENT_T )
-            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( VALUE ), &dc );
-
-        break;
-
-    case ID_POPUP_SCH_EDIT_REF_CMP:
-
-        // Ensure the struct is a component (could be a struct of a component, like Field, text..)
-        if( item != NULL && item->Type() == SCH_COMPONENT_T )
-            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( REFERENCE ), &dc );
-
-        break;
-
-    case ID_POPUP_SCH_EDIT_FOOTPRINT_CMP:
-
-        // Ensure the struct is a component (could be a struct of a component, like Field, text..)
-        if( item && item->Type() == SCH_COMPONENT_T )
-            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( FOOTPRINT ), &dc );
-
-        break;
-
 
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
 
@@ -388,11 +329,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetSheetNumberAndCount();
         break;
 
-    case ID_POPUP_ROTATE_BLOCK:
-        DrawPanel->MoveCursorToCrossHair();
-        HandleBlockEndByPopUp( BLOCK_ROTATE, &dc );
-        break;
-
     case ID_POPUP_MIRROR_X_BLOCK:
         DrawPanel->MoveCursorToCrossHair();
         HandleBlockEndByPopUp( BLOCK_MIRROR_X, &dc );
@@ -439,11 +375,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( item && item->Type() == SCH_MARKER_T )
             ( (SCH_MARKER*) item )->DisplayMarkerInfo( this );
 
-        break;
-
-    case ID_POPUP_SCH_EDIT_IMAGE:
-        if( item && item->GetFlags() == 0 )
-            EditImage( (SCH_BITMAP*) item );
         break;
 
     case ID_POPUP_SCH_MIRROR_X_IMAGE:
@@ -860,7 +791,96 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 
     case SCH_SHEET_T:           /// @todo allow sheet rotate on hotkey
     default:
+        wxFAIL_MSG( wxString::Format( wxT( "Cannot rotate schematic item type %s." ),
+                                      GetChars( item->GetClass() ) ) );
+    }
+
+    if( item->GetFlags() == 0 )
+        screen->SetCurItem( NULL );
+}
+
+
+void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
+{
+    SCH_SCREEN* screen = GetScreen();
+    SCH_ITEM* item = screen->GetCurItem();
+
+    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+
+    if( item == NULL )
+    {
+        // If we didn't get here by a hot key, then something has gone wrong.
+        if( aEvent.GetInt() == 0 )
+            return;
+
+        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
+
+        wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
+
+        item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::EditableItems,
+                                  aEvent.GetInt() );
+
+        // Exit if no item found at the current location or the item is already being edited.
+        if( (item == NULL) || (item->GetFlags() != 0) )
+            return;
+    }
+
+    switch( item->Type() )
+    {
+    case SCH_COMPONENT_T:
+    {
+        switch( aEvent.GetId() )
+        {
+        case ID_SCH_EDIT_COMPONENT_REFERENCE:
+            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( REFERENCE ), &dc );
+            break;
+
+        case ID_SCH_EDIT_COMPONENT_VALUE:
+            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( VALUE ), &dc );
+            break;
+
+        case ID_SCH_EDIT_COMPONENT_FOOTPRINT:
+            EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( FOOTPRINT ), &dc );
+            break;
+
+        case ID_SCH_EDIT_ITEM:
+            EditComponent( (SCH_COMPONENT*) item );
+            break;
+
+        default:
+            wxFAIL_MSG( wxString::Format( wxT( "Invalid schematic component edit command ID %d" ),
+                                          aEvent.GetId() ) );
+        }
+
         break;
+    }
+
+    case SCH_SHEET_T:
+        EditSheet( (SCH_SHEET*) item, &dc );
+        break;
+
+    case SCH_SHEET_PIN_T:
+        EditSheetPin( (SCH_SHEET_PIN*) item, &dc );
+        break;
+
+    case SCH_TEXT_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+        EditSchematicText( (SCH_TEXT*) item );
+        break;
+
+    case SCH_FIELD_T:
+        EditComponentFieldText( (SCH_FIELD*) item, &dc );
+        break;
+
+    case SCH_BITMAP_T:
+        EditImage( (SCH_BITMAP*) item );
+        break;
+
+    default:
+        wxFAIL_MSG( wxString::Format( wxT( "Cannot edit schematic item type %s." ),
+                                      GetChars( item->GetClass() ) ) );
     }
 
     if( item->GetFlags() == 0 )
