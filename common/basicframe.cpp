@@ -550,10 +550,18 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
         msg.Printf( _( "You do not have write permissions to folder <%s>." ),
                     GetChars( aFileName.GetPath() ) );
     }
-    else if( !aFileName.FileExists() && !aFileName.IsDirWritable() )
+    else if( !aFileName.FileExists() )
     {
-        msg.Printf( _( "You do not have write permissions to save file <%s> to folder <%s>." ),
-                    GetChars( aFileName.GetFullName() ), GetChars( aFileName.GetPath() ) );
+        // Extract filename path, and if void, uses the CWD
+        // because IsDirWritable does not like void path
+        wxString filedir = aFileName.GetPath();
+        if( filedir.IsEmpty() )
+            filedir = wxGetCwd();
+        if( !aFileName.IsDirWritable(filedir) )
+        {
+            msg.Printf( _( "You do not have write permissions to save file <%s> to folder <%s>." ),
+                        GetChars( aFileName.GetFullName() ), GetChars( filedir ) );
+        }
     }
     else if( aFileName.FileExists() && !aFileName.IsFileWritable() )
     {
