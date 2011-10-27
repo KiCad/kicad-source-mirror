@@ -80,13 +80,9 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
 #else
         << wxT( " Ansi " );
 #endif
-    libVersion << wxT( "and " )
 
-#if USE_BOOST_POLYGON_LIBRARY
-        << wxT( "boost::polygon" );
-#else
-        << wxT( "kbool library" );
-#endif
+    libVersion << wxT( "and boost C++ libraries" );
+
     libVersion << wxT( "\n" );
 
     /* Operating System Information */

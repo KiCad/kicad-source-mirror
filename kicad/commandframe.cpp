@@ -1,6 +1,7 @@
-/*****************************************************/
-/*  commandframe.cpp: window handling comman buttons */
-/*****************************************************/
+/**
+ * @file commandframe.cpp
+ * @brief Frame showing fast launch buttons and messages box
+ */
 
 #include "fctsys.h"
 #include "macros.h"
@@ -24,7 +25,7 @@ RIGHT_KM_FRAME::RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent ) :
     CreateCommandToolbar();
     m_ButtonsPanelHeight    = m_ButtonsListPosition.y + m_bitmapButtons_maxHeigth + 10;
 
-    // Add the wxTextCtrl showaing all messages from KiCad:
+    // Add the wxTextCtrl showing all messages from KiCad:
     m_MessagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
                                   wxDefaultPosition, wxDefaultSize,
                                   wxTE_MULTILINE | wxSUNKEN_BORDER | wxTE_READONLY );
@@ -87,7 +88,7 @@ void RIGHT_KM_FRAME::CreateCommandToolbar( void )
 Creates a component (for Eeschema) or a footprint (for Pcbnew) that shows a B&W picture"                                                                                     ) );
 
     btn = AddBitmapButton( ID_TO_PCB_CALCULATOR, KiBitmap( icon_pcbcalculator_xpm ) );
-    btn->SetToolTip( _( "Pcb calculator" ) );
+    btn->SetToolTip( _( "Pcb calculator, the Suiss army knife..." ) );
 }
 
 
