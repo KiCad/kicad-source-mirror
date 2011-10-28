@@ -59,6 +59,11 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreat
     case FILE_SAVE_AS:
         schematicFileName = aScreen->GetFileName();
 
+        // Sheet file names are relative to the root sheet path which is the current
+        // working directory.  The IsWritable funtion expects the path to be set.
+        if( schematicFileName.GetPath().IsEmpty() )
+            schematicFileName.Assign( wxFileName::GetCwd(), schematicFileName.GetFullName() );
+
         if( aCreateBackupFile )
         {
             backupFileName = schematicFileName;
@@ -74,7 +79,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreat
 
                 if( !wxRenameFile( schematicFileName.GetFullPath(), backupFileName.GetFullPath() ) )
                 {
-                    msg.Printf(_( "Could not save backup of file <%s>" ),
+                    msg.Printf( _( "Could not save backup of file <%s>" ),
                                 GetChars( schematicFileName.GetFullPath() ) );
                     DisplayError( this, msg );
                 }

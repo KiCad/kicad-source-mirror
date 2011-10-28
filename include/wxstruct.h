@@ -329,11 +329,16 @@ public:
      * Function IsWritable
      * checks if \a aFileName can be written.
      * <p>
-     * The function performs a number of tests on \a aFileName to verify that it can
-     * be saved.  The file name is tested for validity and if the user has write
-     * permissions.
+     * The function performs a number of tests on \a aFileName to verify that it
+     * can be saved.  If \a aFileName defines a path with no file name, them the
+     * path is tested for user write permission.  If \a aFileName defines a file
+     * name that does not exist in the path, the path is tested for user write
+     * permission.  If \a aFileName defines a file that already exits, the file
+     * name is tested for user write permissions.
      * </p>
      *
+     * @note The file name path must be set or an assertion will be raised on debug
+     *       builds and return false on release builds.
      * @param aFileName The full path and/or file name of the file to test.
      * @return False if \a aFileName cannot be written.
      */

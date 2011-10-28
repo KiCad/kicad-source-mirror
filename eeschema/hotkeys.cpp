@@ -154,11 +154,13 @@ static EDA_HOTKEY HkAddGraphicPolyLine( wxT( "Add Graphic PolyLine" ), HK_ADD_GR
                                         'I', ID_LINE_COMMENT_BUTT );
 static EDA_HOTKEY HkAddGraphicText( wxT( "Add Graphic Text" ), HK_ADD_GRAPHIC_TEXT, 'T',
                                     ID_TEXT_COMMENT_BUTT );
-static EDA_HOTKEY HkMirrorYComponent( wxT( "Mirror Y Component" ), HK_MIRROR_Y_COMPONENT, 'Y' );
-static EDA_HOTKEY HkMirrorXComponent( wxT( "Mirror X Component" ), HK_MIRROR_X_COMPONENT, 'X' );
+static EDA_HOTKEY HkMirrorY( wxT( "Mirror Y Component" ), HK_MIRROR_Y_COMPONENT, 'Y',
+                             ID_SCH_MIRROR_Y );
+static EDA_HOTKEY HkMirrorX( wxT( "Mirror X Component" ), HK_MIRROR_X_COMPONENT, 'X',
+                             ID_SCH_MIRROR_X );
 static EDA_HOTKEY HkOrientNormalComponent( wxT( "Orient Normal Component" ),
-                                           HK_ORIENT_NORMAL_COMPONENT, 'N' );
-static EDA_HOTKEY HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R', ID_SCH_ROTATE_ITEM );
+                                           HK_ORIENT_NORMAL_COMPONENT, 'N', ID_SCH_ORIENT_NORMAL );
+static EDA_HOTKEY HkRotate( wxT( "Rotate Item" ), HK_ROTATE, 'R', ID_SCH_ROTATE_CLOCKWISE );
 static EDA_HOTKEY HkEdit( wxT( "Edit Schematic Item" ), HK_EDIT, 'E', ID_SCH_EDIT_ITEM );
 static EDA_HOTKEY HkEditComponentValue( wxT( "Edit Component Value" ),
                                         HK_EDIT_COMPONENT_VALUE, 'V',
@@ -168,7 +170,7 @@ static EDA_HOTKEY HkEditComponentFootprint( wxT( "Edit Component Footprint" ),
                                             ID_SCH_EDIT_COMPONENT_FOOTPRINT );
 static EDA_HOTKEY HkMove( wxT( "Move Schematic Item" ),
                           HK_MOVE_COMPONENT_OR_ITEM, 'M',
-                          ID_POPUP_SCH_MOVE_ITEM );
+                          ID_SCH_MOVE_ITEM );
 
 static EDA_HOTKEY HkCopyComponentOrText( wxT( "Copy Component or Label" ),
                                          HK_COPY_COMPONENT_OR_LABEL, 'C',
@@ -222,8 +224,8 @@ EDA_HOTKEY* s_Schematic_Hotkey_List[] =
     &HkAddComponent,
     &HkAddPower,
     &HkRotate,
-    &HkMirrorXComponent,
-    &HkMirrorYComponent,
+    &HkMirrorX,
+    &HkMirrorY,
     &HkOrientNormalComponent,
     &HkEdit,
     &HkEditComponentValue,
@@ -440,55 +442,6 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         break;
 
-    case HK_MIRROR_Y_COMPONENT:     // Mirror Y (Component)
-        if( screen->m_BlockLocate.m_State != STATE_NO_BLOCK )
-        {
-            HandleBlockEndByPopUp( BLOCK_MIRROR_Y, aDC );
-            break;
-        }
-
-        if( aItem == NULL )
-            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
-
-        if( aItem )
-        {
-            screen->SetCurItem( (SCH_ITEM*) aItem );
-            cmd.SetId( ID_POPUP_SCH_MIRROR_Y_CMP );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-        break;
-
-    case HK_MIRROR_X_COMPONENT:     // Mirror X (Component)
-        if( screen->m_BlockLocate.m_State != STATE_NO_BLOCK ) //allows bloc operation on hotkey
-		{
-            HandleBlockEndByPopUp( BLOCK_MIRROR_X, aDC );
-            break;
-		}
-
-        if( aItem == NULL )
-            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
-
-        if( aItem )
-        {
-            screen->SetCurItem( (SCH_ITEM*) aItem );
-            cmd.SetId( ID_POPUP_SCH_MIRROR_X_CMP );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-        break;
-
-    case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
-        if( aItem == NULL )
-            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::ComponentsOnly );
-
-        if( aItem )
-        {
-            screen->SetCurItem( (SCH_ITEM*) aItem );
-            cmd.SetId( ID_POPUP_SCH_ORIENT_NORMAL_CMP );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-
-        break;
-
     case HK_COPY_COMPONENT_OR_LABEL:        // Duplicate component or text/label
         if( itemInEdit )
             break;
@@ -505,6 +458,9 @@ void SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         wxPostEvent( this, cmd );
         break;
 
+    case HK_MIRROR_Y_COMPONENT:             // Mirror Y
+    case HK_MIRROR_X_COMPONENT:             // Mirror X
+    case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
     case HK_DRAG:                           // Start drag
     case HK_ROTATE:                         // Rotate schematic item or block.
     case HK_MOVE_COMPONENT_OR_ITEM:         // Start move schematic item.

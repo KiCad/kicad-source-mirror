@@ -543,25 +543,21 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
 {
     wxString msg;
 
-    wxCHECK_MSG( aFileName.IsOk(), false, wxT( "Invalid file name object.  Bad programmer!" ) );
+    wxCHECK_MSG( aFileName.IsOk(), false,
+                 wxT( "File name object is invalid.  Bad programmer!" ) );
+    wxCHECK_MSG( !aFileName.GetPath().IsEmpty(), false,
+                 wxT( "File name object path <" ) + aFileName.GetFullPath() +
+                 wxT( "> is not set.  Bad programmer!" ) );
 
     if( aFileName.IsDir() && !aFileName.IsDirWritable() )
     {
         msg.Printf( _( "You do not have write permissions to folder <%s>." ),
                     GetChars( aFileName.GetPath() ) );
     }
-    else if( !aFileName.FileExists() )
+    else if( !aFileName.FileExists() && !aFileName.IsDirWritable() )
     {
-        // Extract filename path, and if void, uses the CWD
-        // because IsDirWritable does not like void path
-        wxString filedir = aFileName.GetPath();
-        if( filedir.IsEmpty() )
-            filedir = wxGetCwd();
-        if( !aFileName.IsDirWritable(filedir) )
-        {
-            msg.Printf( _( "You do not have write permissions to save file <%s> to folder <%s>." ),
-                        GetChars( aFileName.GetFullName() ), GetChars( filedir ) );
-        }
+        msg.Printf( _( "You do not have write permissions to save file <%s> to folder <%s>." ),
+                    GetChars( aFileName.GetFullName() ), GetChars( aFileName.GetPath() ) );
     }
     else if( aFileName.FileExists() && !aFileName.IsFileWritable() )
     {

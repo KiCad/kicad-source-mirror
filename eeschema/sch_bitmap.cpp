@@ -237,11 +237,6 @@ void SCH_BITMAP::Rotate( wxPoint rotationPoint )
 }
 
 
-void SCH_BITMAP::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
-{
-}
-
-
 bool SCH_BITMAP::IsSelectStateChanged( const wxRect& aRect )
 {
     bool previousState = IsSelected();
@@ -252,11 +247,6 @@ bool SCH_BITMAP::IsSelectStateChanged( const wxRect& aRect )
         m_Flags &= ~SELECTED;
 
     return previousState != IsSelected();
-}
-
-
-void SCH_BITMAP::GetConnectionPoints( vector<wxPoint>& aPoints ) const
-{
 }
 
 
