@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file libeditframe.h
  * @brief Definition of class LIB_EDIT_FRAME
@@ -61,6 +86,14 @@ public:
     void InstallDimensionsDialog( wxCommandEvent& event );
     void OnColorConfig( wxCommandEvent& aEvent );
     void Process_Config( wxCommandEvent& event );
+
+    /**
+     * Function SycnronizePins
+     * @return True if the edit pins per part or convert is false and the current
+     *         component has multiple parts or body styles.  Otherwise false is
+     *         returned.
+     */
+    bool SynchronizePins() const;
 
     /**
      * Function OnPlotCurrentComponent
@@ -372,6 +405,19 @@ private:
     void StartMovePin( wxDC* DC );
 
     /**
+     * Function CreateImagePins
+     * adds copies of \a aPin for \a aUnit in components with multiple parts and
+     * \a aConvert for components that have multiple body styles.
+     *
+     * @param aPin The pin to copy.
+     * @param aUnit The unit to add a copy of \a aPin to.
+     * @param aConvert The alternate body style to add a copy of \a aPin to.
+     * @param aDeMorgan Flag to indicate if \a aPin should be created for the
+     *                  alternate body style.
+     */
+    void CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bool aDeMorgan );
+
+    /**
      * Function PlaceAnchor
      * places an  anchor reference coordinate for the current component.
      * <p>
@@ -432,7 +478,7 @@ public:
     void GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id );
 
     // Automatic placement of pins
-    void           RepeatPinItem( wxDC* DC, LIB_PIN* Pin );
+    void RepeatPinItem( wxDC* DC, LIB_PIN* Pin );
 
 protected:
     wxString m_ConfigPath;
@@ -449,6 +495,15 @@ protected:
      * part.  Otherwise it applies to all parts in the component.
      */
     bool m_drawSpecificUnit;
+
+    /**
+     * Set to true to not synchronize pins at the same position when editing
+     * components with multiple parts or multiple body styles.  Setting this
+     * to false allows editing each pin per part or body style individually.
+     * This requires the user to open each part or body style to make changes
+     * to the pin at the same location.
+     */
+    bool m_editPinsPerPartOrConvert;
 
     /** The current draw or edit graphic item fill style. */
     static FILL_T m_drawFillStyle;
@@ -493,7 +548,7 @@ protected:
      * Function CreatePNGorJPEGFile
      * creates an image (screenshot) of the current component in PNG or JPEG format.
      * @param aFileName = the full filename
-     * @param aFmt_jpeg = true to use JPEG ffile format, false to use PNG file format
+     * @param aFmt_jpeg = true to use JPEG file format, false to use PNG file format
      */
     void CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg );
 
