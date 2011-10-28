@@ -172,6 +172,13 @@ const KICAD_T SCH_COLLECTOR::SheetsAndSheetLabels[] = {
 };
 
 
+const KICAD_T SCH_COLLECTOR::OrientableItems[] = {
+    SCH_COMPONENT_T,
+    SCH_BITMAP_T,
+    EOT
+};
+
+
 SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestData )
 {
     if( aItem->Type() != LIB_PIN_T && !aItem->HitTest( m_RefPos ) )

@@ -87,7 +87,7 @@ public:
      * Function GetSize
      * @returns the actual size (in user units, not in pixels) of the image
      */
-    wxSize       GetSize() const;
+    wxSize GetSize() const;
 
     /**
      * Function GetBoundingBox
@@ -97,7 +97,7 @@ public:
      * schematic coordinate system.  It is OK to overestimate the size
      * by a few counts.
      */
-    EDA_RECT     GetBoundingBox() const;
+    EDA_RECT GetBoundingBox() const;
 
     virtual void SwapData( SCH_ITEM* aItem );
 
@@ -111,7 +111,7 @@ public:
      * @param aFullFilename The full filename of the image file to read.
      * @return bool - true if success reading else false.
      */
-    bool         ReadImageFile( const wxString& aFullFilename );
+    bool ReadImageFile( const wxString& aFullFilename );
 
     /**
      * Function Save
@@ -120,7 +120,7 @@ public:
      * @param aFile The FILE to write to.
      * @return bool - true if success writing else false.
      */
-    bool         Save( FILE* aFile ) const;
+    bool Save( FILE* aFile ) const;
 
     /**
      * Load schematic junction entry from \a aLine in a .sch file.
@@ -154,30 +154,24 @@ public:
 
     virtual void Rotate( wxPoint rotationPoint );
 
-    virtual void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList );
-
     virtual bool IsSelectStateChanged( const wxRect& aRect );
-
-    virtual bool IsConnectable() const { return false; }
-
-    virtual void GetConnectionPoints( vector<wxPoint>& aPoints ) const;
 
     virtual wxString GetSelectMenuText() const { return wxString( _( "Image" ) ); }
 
     virtual BITMAP_DEF GetMenuImage() const { return image_xpm; }
 
 #if defined(DEBUG)
-    void              Show( int nestLevel, std::ostream& os );
+    void Show( int nestLevel, std::ostream& os );
 #endif
 
 private:
-    virtual bool      doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
-    virtual bool      doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
-    virtual bool      doIsConnected( const wxPoint& aPosition ) const;
+    virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
+    virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
+    virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
-    virtual void      doPlot( PLOTTER* aPlotter );
-    virtual wxPoint   doGetPosition() const { return m_Pos; }
-    virtual void      doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+    virtual void doPlot( PLOTTER* aPlotter );
+    virtual wxPoint doGetPosition() const { return m_Pos; }
+    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 };
 
 

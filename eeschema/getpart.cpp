@@ -242,7 +242,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 /*
  * Routine to rotate and mirror a component.
  */
-void SCH_EDIT_FRAME::OnChangeComponentOrientation( wxCommandEvent& aEvent )
+void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 {
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM* item = screen->GetCurItem();
@@ -251,31 +251,6 @@ void SCH_EDIT_FRAME::OnChangeComponentOrientation( wxCommandEvent& aEvent )
                  wxT( "Cannot change orientation of invalid schematic item." ) );
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-
-    int orientation;
-
-    switch( aEvent.GetId() )
-    {
-    case ID_POPUP_SCH_MIRROR_X_CMP:
-        orientation = CMP_MIRROR_X;
-        break;
-
-    case ID_POPUP_SCH_MIRROR_Y_CMP:
-        orientation = CMP_MIRROR_Y;
-        break;
-
-    case ID_POPUP_SCH_ROTATE_CMP_COUNTERCLOCKWISE:
-        orientation = CMP_ROTATE_COUNTERCLOCKWISE;
-        break;
-
-    case ID_POPUP_SCH_ROTATE_CMP_CLOCKWISE:
-        orientation = CMP_ROTATE_CLOCKWISE;
-        break;
-
-    case ID_POPUP_SCH_ORIENT_NORMAL_CMP:
-    default:
-        orientation = CMP_NORMAL;
-    }
 
     DrawPanel->MoveCursorToCrossHair();
 
@@ -296,7 +271,7 @@ void SCH_EDIT_FRAME::OnChangeComponentOrientation( wxCommandEvent& aEvent )
     else
         DrawPanel->RefreshDrawingRect( component->GetBoundingBox() );
 
-    component->SetOrientation( orientation );
+    component->SetOrientation( aOrientation );
 
     /* Redraw the component in the new position. */
     if( component->GetFlags() )

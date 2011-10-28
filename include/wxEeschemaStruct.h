@@ -65,7 +65,7 @@ class wxFindReplaceData;
 
 
 /* enum used in RotationMiroir() */
-enum fl_rot_cmp {
+enum COMPONENT_ORIENTATION_T {
     CMP_NORMAL,                     // Normal orientation, no rotation or mirror
     CMP_ROTATE_CLOCKWISE,           // Rotate -90
     CMP_ROTATE_COUNTERCLOCKWISE,    // Rotate +90
@@ -625,7 +625,8 @@ private:
 
     /**
      * Function OnRotate
-     * handles the #ID_SCH_ROTATE_ITEM event used to rotate schematic itams and blocks.
+     * handles the #ID_SCH_ROTATE_CLOCKWISE and #ID_SCH_ROTATE_COUNTERCLOCKWISE events
+     * used to rotate schematic itams and blocks.
      */
     void OnRotate( wxCommandEvent& aEvent );
 
@@ -640,6 +641,13 @@ private:
      * handles the #ID_SCH_DRAG_ITEM event used to drag schematic itams.
      */
     void OnDragItem( wxCommandEvent& aEvent );
+
+    /**
+     * Function OnOrient
+     * handles the #ID_SCH_MIRROR_X, #ID_SCH_MIRROR_Y, and #ID_SCH_ORIENT_NORMAL events
+     * used to orient schematic itams and blocks.
+     */
+    void OnOrient( wxCommandEvent& aEvent );
 
     void OnExit( wxCommandEvent& event );
     void OnAnnotate( wxCommandEvent& event );
@@ -852,7 +860,7 @@ private:
     void EditComponent( SCH_COMPONENT* aComponent );
 
 public:
-    void OnChangeComponentOrientation( wxCommandEvent& aEvent );
+    void OrientComponent( COMPONENT_ORIENTATION_T aOrientation = CMP_NORMAL );
 
 private:
     void OnSelectUnit( wxCommandEvent& aEvent );

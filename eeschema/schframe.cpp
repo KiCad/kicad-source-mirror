@@ -121,25 +121,26 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_GET_TOOLS, SCH_EDIT_FRAME::OnCreateBillOfMaterials )
     EVT_TOOL( ID_FIND_ITEMS, SCH_EDIT_FRAME::OnFindItems )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadStuffFile )
-    EVT_TOOL( ID_POPUP_SCH_MOVE_ITEM, SCH_EDIT_FRAME::OnMoveItem )
+    EVT_TOOL( ID_SCH_MOVE_ITEM, SCH_EDIT_FRAME::OnMoveItem )
 
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( wxID_INDEX, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
 
     // Tools and buttons for vertical toolbar.
-    EVT_TOOL( ID_CANCEL_CURRENT_COMMAND, SCH_EDIT_FRAME::OnCancelCurrentCommand )
     EVT_TOOL( ID_NO_TOOL_SELECTED, SCH_EDIT_FRAME::OnSelectTool )
     EVT_TOOL_RANGE( ID_SCHEMATIC_VERTICAL_TOOLBAR_START, ID_SCHEMATIC_VERTICAL_TOOLBAR_END,
                     SCH_EDIT_FRAME::OnSelectTool )
 
     EVT_MENU( ID_CANCEL_CURRENT_COMMAND, SCH_EDIT_FRAME::OnCancelCurrentCommand )
-    EVT_MENU( ID_SCH_ROTATE_ITEM, SCH_EDIT_FRAME::OnRotate )
     EVT_MENU( ID_SCH_DRAG_ITEM, SCH_EDIT_FRAME::OnDragItem )
-    EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
-                    SCH_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU_RANGE( ID_SCH_ROTATE_CLOCKWISE, ID_SCH_ROTATE_COUNTERCLOCKWISE,
+                    SCH_EDIT_FRAME::OnRotate )
     EVT_MENU_RANGE( ID_SCH_EDIT_ITEM, ID_SCH_EDIT_COMPONENT_FOOTPRINT,
                     SCH_EDIT_FRAME::OnEditItem )
+    EVT_MENU_RANGE( ID_SCH_MIRROR_X, ID_SCH_ORIENT_NORMAL, SCH_EDIT_FRAME::OnOrient )
+    EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
+                    SCH_EDIT_FRAME::Process_Special_Functions )
 
     // Tools and buttons options toolbar
     EVT_TOOL( ID_TB_OPTIONS_HIDDEN_PINS, SCH_EDIT_FRAME::OnSelectOptionToolbar )
@@ -151,8 +152,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
                     SCH_EDIT_FRAME::OnSelectUnit )
     EVT_MENU_RANGE( ID_POPUP_SCH_CHANGE_TYPE_TEXT, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
                     SCH_EDIT_FRAME::OnConvertTextType )
-    EVT_MENU_RANGE( ID_POPUP_SCH_MIRROR_X_CMP, ID_POPUP_SCH_ORIENT_NORMAL_CMP,
-                    SCH_EDIT_FRAME::OnChangeComponentOrientation )
 
     // Multple item selection context menu commands.
     EVT_MENU_RANGE( ID_SELECT_ITEM_START, ID_SELECT_ITEM_END, SCH_EDIT_FRAME::OnSelectItem )
@@ -518,7 +517,7 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
 }
 
 
-void SCH_EDIT_FRAME::OnModify( )
+void SCH_EDIT_FRAME::OnModify()
 {
     GetScreen()->SetModify();
     GetScreen()->SetSave();
@@ -707,7 +706,9 @@ void SCH_EDIT_FRAME::OnOpenPcbnew( wxCommandEvent& event )
         ExecuteFile( this, PCBNEW_EXE, filename );
     }
     else
+    {
         ExecuteFile( this, PCBNEW_EXE );
+    }
 }
 
 
@@ -722,7 +723,9 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
         ExecuteFile( this, CVPCB_EXE, QuoteFullPath( fn ) );
     }
     else
+    {
         ExecuteFile( this, CVPCB_EXE );
+    }
 }
 
 
@@ -745,8 +748,8 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
     if( event.GetId() == ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP )
     {
         SCH_ITEM* item = GetScreen()->GetCurItem();
-        if( (item == NULL) || (item->GetFlags() != 0) ||
-            ( item->Type() != SCH_COMPONENT_T ) )
+
+        if( (item == NULL) || (item->GetFlags() != 0) || ( item->Type() != SCH_COMPONENT_T ) )
         {
             wxMessageBox( _("Error: not a component or no component" ) );
             return;
@@ -759,18 +762,24 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
     {
         if( m_LibeditFrame->IsIconized() )
              m_LibeditFrame->Iconize( false );
+
         m_LibeditFrame->Raise();
     }
     else
+    {
         m_LibeditFrame = new LIB_EDIT_FRAME( this,
                                              wxT( "Library Editor" ),
                                              wxPoint( -1, -1 ),
                                              wxSize( 600, 400 ) );
+    }
+
     if( component )
     {
         LIB_ALIAS* entry = CMP_LIBRARY::FindLibraryEntry( component->GetLibName() );
+
         if( entry == NULL )     // Should not occur
             return;
+
         CMP_LIBRARY* library = entry->GetLibrary();
         m_LibeditFrame->LoadComponentAndSelectLib( entry, library );
     }

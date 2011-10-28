@@ -92,6 +92,11 @@ public:
     static const KICAD_T SheetsAndSheetLabels[];
 
     /**
+     * A scan list for schematic items that can be mirrored.
+     */
+    static const KICAD_T OrientableItems[];
+
+    /**
      * Constructor SCH_COLLECTOR
      */
     SCH_COLLECTOR( const KICAD_T* aScanTypes = SCH_COLLECTOR::AllItems )
