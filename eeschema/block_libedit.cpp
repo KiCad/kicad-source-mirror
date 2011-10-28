@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file block_libedit.cpp
  */
@@ -31,7 +56,7 @@ int LIB_EDIT_FRAME::ReturnBlockCommand( int key )
         cmd = key & 0x255;
         break;
 
-    case - 1:
+    case -1:
         cmd = BLOCK_PRESELECT_MOVE;
         break;
 
@@ -99,7 +124,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         if ( m_component )
             ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
                                                   m_unit, m_convert,
-                                                  g_EditPinByPinIsOn );
+                                                  m_editPinsPerPartOrConvert );
         if( ItemCount )
         {
             nextCmd = true;
@@ -126,9 +151,10 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         if ( m_component )
             ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
                                                   m_unit, m_convert,
-                                                  g_EditPinByPinIsOn );
+                                                  m_editPinsPerPartOrConvert );
         if( ItemCount )
             SaveCopyInUndoList( m_component );
+
         if ( m_component )
         {
             m_component->DeleteSelectedItems();
@@ -148,15 +174,18 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         if ( m_component )
             ItemCount = m_component->SelectItems( GetScreen()->m_BlockLocate,
                                                   m_unit, m_convert,
-                                                  g_EditPinByPinIsOn );
+                                                  m_editPinsPerPartOrConvert );
         if( ItemCount )
             SaveCopyInUndoList( m_component );
+
         pt = GetScreen()->m_BlockLocate.Centre();
         pt.y *= -1;
+
         if ( m_component )
         {
             OnModify();
             int block_cmd = GetScreen()->m_BlockLocate.m_Command;
+
             if( block_cmd == BLOCK_MIRROR_Y)
                 m_component->MirrorSelectedItemsH( pt );
             else if( block_cmd == BLOCK_MIRROR_X)
@@ -164,6 +193,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             else if( block_cmd == BLOCK_ROTATE)
                 m_component->RotateSelectedItems( pt );
         }
+
         break;
 
     case BLOCK_ZOOM:     /* Window Zoom */
@@ -221,23 +251,31 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         GetScreen()->m_BlockLocate.ClearItemsList();
+
         if ( m_component )
             SaveCopyInUndoList( m_component );
+
         pt = GetScreen()->m_BlockLocate.m_MoveVector;
         pt.y *= -1;
+
         if ( m_component )
             m_component->MoveSelectedItems( pt );
+
         DrawPanel->Refresh( true );
         break;
 
     case BLOCK_COPY:     /* Copy */
         GetScreen()->m_BlockLocate.ClearItemsList();
+
         if ( m_component )
             SaveCopyInUndoList( m_component );
+
         pt = GetScreen()->m_BlockLocate.m_MoveVector;
         pt.y *= -1;
+
         if ( m_component )
             m_component->CopySelectedItems( pt );
+
         break;
 
     case BLOCK_PASTE:     /* Paste (recopy the last block saved) */
@@ -249,11 +287,14 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_MIRROR_Y:    // Invert by popup menu, from block move
         if ( m_component )
             SaveCopyInUndoList( m_component );
+
         pt = GetScreen()->m_BlockLocate.Centre();
         pt.y *= -1;
+
         if ( m_component )
         {
             int block_cmd = GetScreen()->m_BlockLocate.m_Command;
+
             if( block_cmd == BLOCK_MIRROR_Y)
                 m_component->MirrorSelectedItemsH( pt );
             else if( block_cmd == BLOCK_MIRROR_X)
@@ -261,6 +302,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             else if( block_cmd == BLOCK_ROTATE )
                 m_component->RotateSelectedItems( pt );
         }
+
         break;
 
     case BLOCK_ZOOM:        // Handled by HandleBlockEnd

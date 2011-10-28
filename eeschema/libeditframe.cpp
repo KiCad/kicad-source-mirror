@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file libeditframe.cpp
  * @brief LIB_EDIT_FRAME class is the component library editor frame.
@@ -66,9 +91,6 @@ int LIB_EDIT_FRAME::           m_drawLineWidth   = 0;
 FILL_T LIB_EDIT_FRAME::        m_drawFillStyle   = NO_FILL;
 
 
-/************************/
-/* class LIB_EDIT_FRAME */
-/************************/
 BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_CLOSE( LIB_EDIT_FRAME::OnCloseWindow )
     EVT_SIZE( LIB_EDIT_FRAME::OnSize )
@@ -120,7 +142,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_COLORS_SETUP, LIB_EDIT_FRAME::Process_Config )
     EVT_MENU( ID_LIBEDIT_DIMENSIONS, LIB_EDIT_FRAME::InstallDimensionsDialog )
 
-    // Multple item selection context menu commands.
+    // Multiple item selection context menu commands.
     EVT_MENU_RANGE( ID_SELECT_ITEM_START, ID_SELECT_ITEM_END, LIB_EDIT_FRAME::OnSelectItem )
 
     EVT_MENU_RANGE( ID_PREFERENCES_HOTKEY_START, ID_PREFERENCES_HOTKEY_END,
@@ -179,6 +201,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     m_drawSpecificUnit    = false;
     m_tempCopyComponent   = NULL;
     m_HotkeysZoomAndGridList = s_Libedit_Hokeys_Descr;
+    m_editPinsPerPartOrConvert = false;
 
     wxIcon icon;
 
@@ -192,7 +215,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
 
     LoadSettings();
 
-    // Initilialize grid id to a default value if not found in config or bad:
+    // Initialize grid id to a default value if not found in config or bad:
     if( (m_LastGridSizeId <= 0)
        || ( m_LastGridSizeId < (ID_POPUP_GRID_USER - ID_POPUP_GRID_LEVEL_1000) ) )
         m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
@@ -215,7 +238,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
 
     m_auimgr.SetManagedWindow( this );
 
-
     EDA_PANEINFO horiz;
     horiz.HorizontalToolbarPane();
 
@@ -224,8 +246,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
 
     EDA_PANEINFO mesg;
     mesg.MessageToolbarPane();
-
-
 
     m_auimgr.AddPane( m_HToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
@@ -310,7 +330,9 @@ void LIB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
             return;
         }
         else
+        {
             GetScreen()->ClrModify();
+        }
     }
 
     BOOST_FOREACH( const CMP_LIBRARY &lib, CMP_LIBRARY::GetLibraryList() )
@@ -351,8 +373,7 @@ double LIB_EDIT_FRAME::BestZoom()
         BoundaryBox = m_component->GetBoundingBox( m_unit, m_convert );
         dx = BoundaryBox.GetWidth();
         dy = BoundaryBox.GetHeight();
-        GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 )
-        );
+        GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
     }
     else
     {
@@ -365,7 +386,7 @@ double LIB_EDIT_FRAME::BestZoom()
 
     // Reserve a 10% margin around component bounding box.
     double margin_scale_factor = 0.8;
-    double zx =(double) dx / (margin_scale_factor * (double)size.x );
+    double zx =(double) dx / ( margin_scale_factor * (double)size.x );
     double zy = (double) dy / ( margin_scale_factor * (double)size.y );
 
     double bestzoom = MAX( zx, zy );
@@ -483,7 +504,7 @@ void LIB_EDIT_FRAME::OnUpdatePinByPin( wxUpdateUIEvent& event )
     event.Enable( ( m_component != NULL )
                  && ( ( m_component->GetPartCount() > 1 ) || m_showDeMorgan ) );
 
-    event.Check( g_EditPinByPinIsOn );
+    event.Check( m_editPinsPerPartOrConvert );
 }
 
 
@@ -653,7 +674,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBEDIT_EDIT_PIN_BY_PIN:
-        g_EditPinByPinIsOn = m_HToolBar->GetToolState( ID_LIBEDIT_EDIT_PIN_BY_PIN );
+        m_editPinsPerPartOrConvert = m_HToolBar->GetToolState( ID_LIBEDIT_EDIT_PIN_BY_PIN );
         break;
 
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
@@ -848,6 +869,7 @@ void LIB_EDIT_FRAME::EnsureActiveLibExists()
         return;
 
     bool exists = CMP_LIBRARY::LibraryExists( m_library );
+
     if( exists )
         return;
     else
@@ -936,8 +958,9 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
 
     if( partLocked != GetComponent()->UnitsLocked() )
     {
-        // g_EditPinByPinIsOn is set to the better value, if m_UnitSelectionLocked has changed
-        g_EditPinByPinIsOn = GetComponent()->UnitsLocked() ? true : false;
+        // m_editPinsPerPartOrConvert is set to the better value, if m_UnitSelectionLocked
+        // has changed
+        m_editPinsPerPartOrConvert = GetComponent()->UnitsLocked() ? true : false;
     }
 
     UpdateAliasSelectList();
@@ -959,7 +982,7 @@ void LIB_EDIT_FRAME::InstallDimensionsDialog( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnCreateNewPartFromExisting( wxCommandEvent& event )
 {
     wxCHECK_RET( m_component != NULL,
-                 wxT( "Cannot create new part from non-existant current part." ) );
+                 wxT( "Cannot create new part from non-existent current part." ) );
 
     INSTALL_UNBUFFERED_DC( dc, DrawPanel );
     DrawPanel->CrossHairOff( &dc );
@@ -1167,7 +1190,7 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
 
         m_component->RemoveDrawItem( (LIB_ITEM*) pin, DrawPanel, aDC );
 
-        if( g_EditPinByPinIsOn == false )
+        if( SynchronizePins() )
         {
             LIB_PIN* tmp = m_component->GetNextPin();
 
@@ -1182,13 +1205,20 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
                 m_component->RemoveDrawItem( (LIB_ITEM*) pin );
             }
         }
+
+        DrawPanel->Refresh();
     }
     else
     {
         if( DrawPanel->IsMouseCaptured() )
+        {
             DrawPanel->m_endMouseCaptureCallback( DrawPanel, aDC );
+        }
         else
+        {
             m_component->RemoveDrawItem( m_drawItem, DrawPanel, aDC );
+            DrawPanel->Refresh();
+        }
     }
 
     m_drawItem = NULL;
@@ -1210,4 +1240,11 @@ void LIB_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
         DrawPanel->m_AbortRequest = false;
         m_drawItem = item;
     }
+}
+
+
+bool LIB_EDIT_FRAME::SynchronizePins() const
+{
+    return !m_editPinsPerPartOrConvert && ( m_component && ( m_component->HasConversion() ||
+                                                             m_component->IsMulti()) );
 }

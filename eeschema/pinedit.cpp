@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file pinedit.cpp
  * @brief Eeschema pin edit code.
@@ -23,7 +48,6 @@
 extern void IncrementLabelMember( wxString& name );
 
 
-static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorgan );
 static void AbortPinMove( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPositon, bool aErase );
 
@@ -108,7 +132,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     LastPinCommonUnit = dlg.GetAddToAllParts();
     LastPinVisible = dlg.GetVisible();
 
-    pin->EnableEditMode( true, g_EditPinByPinIsOn );
+    pin->EnableEditMode( true, m_editPinsPerPartOrConvert );
     pin->SetName( dlg.GetName() );
     pin->SetNameTextSize( LastPinNameSize );
     pin->SetNumber( dlg.GetPadName() );
@@ -131,7 +155,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
         DrawPanel->Refresh();
     }
 
-    pin->EnableEditMode( false, g_EditPinByPinIsOn );
+    pin->EnableEditMode( false, m_editPinsPerPartOrConvert );
 
     // Restore pin flags, that can be changed by the dialog editor
     pin->m_Flags = item_flags;
@@ -193,7 +217,7 @@ void LIB_EDIT_FRAME::PlacePin( wxDC* DC )
         if( Pin == CurrentPin || newpos != Pin->GetPosition() || Pin->m_Flags )
             continue;
 
-        if( ask_for_pin && !g_EditPinByPinIsOn )
+        if( ask_for_pin && SynchronizePins() )
         {
             DrawPanel->m_IgnoreMouseEvents = true;
             status =
@@ -226,7 +250,7 @@ another pin. Continue?" ) );
         LastPinType   = CurrentPin->GetType();
         LastPinShape  = CurrentPin->GetShape();
 
-        if( !g_EditPinByPinIsOn )
+        if( SynchronizePins() )
             CreateImagePins( CurrentPin, m_unit, m_convert, m_showDeMorgan );
 
         m_lastDrawItem = CurrentPin;
@@ -279,7 +303,7 @@ void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
 
         if( ( Pin->GetPosition() == CurrentPin->GetPosition() )
             && ( Pin->GetOrientation() == CurrentPin->GetOrientation() )
-            && ( g_EditPinByPinIsOn == false ) )
+            && SynchronizePins() )
             Pin->m_Flags |= IS_LINKED | IS_MOVED;
     }
 
@@ -359,7 +383,7 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     pin->SetConvert( m_convert );
 
     /* Flag pins to consider */
-    if( g_EditPinByPinIsOn == false )
+    if( SynchronizePins() )
         pin->m_Flags |= IS_LINKED;
 
     pin->SetPosition( GetScreen()->GetCrossHairPosition( true ) );
@@ -372,8 +396,6 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     pin->SetConvert( LastPinCommonConvert ? 0 : m_convert );
     pin->SetUnit( LastPinCommonUnit ? 0 : m_unit );
     pin->SetVisible( LastPinVisible );
-//PlacePin( DC );
-//m_drawItem = pin;
     PinPreviousPos = pin->GetPosition();
     DrawPanel->m_IgnoreMouseEvents = true;
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
@@ -399,55 +421,50 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
 }
 
 
-static void CreateImagePins( LIB_PIN* Pin, int unit, int convert, bool asDeMorgan )
+void LIB_EDIT_FRAME::CreateImagePins( LIB_PIN* aPin, int aUnit, int aConvert, bool aDeMorgan )
 {
     int      ii;
     LIB_PIN* NewPin;
-    bool     CreateConv = false;
 
-
-    if( g_EditPinByPinIsOn )
+    if( !SynchronizePins() )
         return;
 
-    if( asDeMorgan && ( Pin->GetConvert() != 0 ) )
-        CreateConv = true;
-
     /* Create "convert" pin at the current position. */
-    if( CreateConv == true )
+    if( aDeMorgan && ( aPin->GetConvert() != 0 ) )
     {
-        NewPin = (LIB_PIN*) Pin->Clone();
+        NewPin = (LIB_PIN*) aPin->Clone();
 
-        if( Pin->GetConvert() > 1 )
+        if( aPin->GetConvert() > 1 )
             NewPin->SetConvert( 1 );
         else
             NewPin->SetConvert( 2 );
 
-        Pin->GetParent()->AddDrawItem( NewPin );
+        aPin->GetParent()->AddDrawItem( NewPin );
     }
 
-    for( ii = 1; ii <= Pin->GetParent()->GetPartCount(); ii++ )
+    for( ii = 1; ii <= aPin->GetParent()->GetPartCount(); ii++ )
     {
-        if( ii == unit || Pin->GetUnit() == 0 )
+        if( ii == aUnit || aPin->GetUnit() == 0 )
             continue;                       /* Pin common to all units. */
 
-        NewPin = (LIB_PIN*) Pin->Clone();
+        NewPin = (LIB_PIN*) aPin->Clone();
 
-        if( convert != 0 )
+        if( aConvert != 0 )
             NewPin->SetConvert( 1 );
 
         NewPin->SetUnit( ii );
-        Pin->GetParent()->AddDrawItem( NewPin );
+        aPin->GetParent()->AddDrawItem( NewPin );
 
-        if( CreateConv == false )
+        if( !( aDeMorgan && ( aPin->GetConvert() != 0 ) ) )
             continue;
 
-        NewPin = (LIB_PIN*) Pin->Clone();
+        NewPin = (LIB_PIN*) aPin->Clone();
         NewPin->SetConvert( 2 );
 
-        if( Pin->GetUnit() != 0 )
+        if( aPin->GetUnit() != 0 )
             NewPin->SetUnit( ii );
 
-        Pin->GetParent()->AddDrawItem( NewPin );
+        aPin->GetParent()->AddDrawItem( NewPin );
     }
 }
 
@@ -530,7 +547,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
 
     m_drawItem = Pin;
 
-    if( g_EditPinByPinIsOn == false )
+    if( SynchronizePins() )
         Pin->m_Flags |= IS_LINKED;
 
     wxPoint savepos = GetScreen()->GetCrossHairPosition();
