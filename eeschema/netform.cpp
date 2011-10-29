@@ -424,7 +424,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
             // build full command line from user's format string, e.g.:
             // "xsltproc -o %O /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl %I"
             // becomes, after the user selects /tmp/s1.net as the output file from the file dialog:
-            // "xsltproc -o /tmp/s1.net /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl /tmp/s1.tmp"
+            // "xsltproc -o /tmp/s1.net /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl /tmp/s1.xml"
             wxString commandLine = EXPORT_HELP::MakeCommandLine( m_netListerCommand,
                                                                  tmpFile.GetFullPath(),
                                                                  aFullFileName );

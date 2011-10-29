@@ -258,6 +258,12 @@ void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoi
             break;
         }
     }
+
+    // Enable these line to draw m_BoundaryBox (debug tests purposes only)
+#if 0
+    GRRect( &aPanel->m_ClipBox, aDC, m_BoundaryBox, 0, BROWN );
+#endif
+
 }
 
 
@@ -689,7 +695,7 @@ EDA_RECT MODULE::GetFootPrintRect() const
 
     area.m_Pos = m_Pos;
     area.SetEnd( m_Pos );
-    area.Inflate( 500 );       // Give a min size
+    area.Inflate( 50 );       // Give a min size
 
     for( EDGE_MODULE* edge = (EDGE_MODULE*) m_Drawings.GetFirst(); edge; edge = edge->Next() )
         if( edge->Type() == PCB_MODULE_EDGE_T )
