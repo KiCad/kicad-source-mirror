@@ -42,9 +42,9 @@ if( 1 )
 
     # On Apple only wxwidgets 2.9 or higher doesn't need to find aui part of base
     if(APPLE)
-        find_package(wxWidgets COMPONENTS gl adv html core net base xml QUIET)
+        find_package(wxWidgets COMPONENTS gl adv html core net base xml QUIET )
     else()
-        find_package(wxWidgets COMPONENTS gl aui adv html core net base xml QUIET)
+        find_package(wxWidgets COMPONENTS gl adv html core net base xml aui QUIET )
     endif()
 
     check_find_package_result( wxWidgets_FOUND "wxWidgets" )
@@ -168,12 +168,7 @@ if( MINGW )
 endif()
 target_link_libraries( test_sch_lib_table sweet )
 
-
-include_directories ("${gal_ROOT}/gal/cairo")
-include_directories( "${gal_ROOT}/gal/common" )
-include_directories ("${gal_ROOT}/gal/font")
-include_directories ("${gal_ROOT}/gal/opengl")
-include_directories ("${gal_ROOT}/math")
+include_directories ( "${gal_ROOT}" )
 
 # Find pkg-config in order find cairo.
 find_package( PkgConfig REQUIRED )
@@ -192,7 +187,7 @@ include_directories( ${GLEW_INCLUDE_DIRS} )
 
 include_directories( ${gal_ROOT} )
 
-add_executable( sweet_edit sweet_edit.cpp  sweet_editor_panel.cpp )
+add_executable( sweet_edit sweet_edit.cpp  sweet_editor_panel.cpp sch_canvas.cpp )
 
 target_link_libraries( sweet_edit
   ${OPENGL_LIBRARIES}

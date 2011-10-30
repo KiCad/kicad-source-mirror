@@ -19,7 +19,7 @@
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/scrolwin.h>
-#include <opengl_gal.h>
+#include <sch_canvas.h>
 #include <wx/splitter.h>
 #include <wx/panel.h>
 #include <wx/html/htmlwin.h>
@@ -41,7 +41,7 @@ class SWEET_EDITOR_PANEL : public wxPanel
 		wxScrolledWindow* m_scrolledTextWindow;
 		wxTextCtrl* m_sweet_scroll_window;
 		wxScrolledWindow* m_gal_scrolled_window;
-		OPENGL_GAL* m_gal;
+		SCH::CANVAS* m_gal;
 		wxScrolledWindow* m_scrolledWindow3;
 		wxHtmlWindow* m_htmlWin2;
 	

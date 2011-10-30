@@ -992,7 +992,7 @@ void SWEET_PARSER::parsePropertyDel( PART* me )
 
     wxString propertyName = FromUTF8();
 
-    if( !me->PropertyDelete( propertyName ) )
+    if( !me->PropDelete( propertyName ) )
     {
         wxString    msg;
         msg.Printf( _( "Unable to find property: %s" ), propertyName.GetData() );

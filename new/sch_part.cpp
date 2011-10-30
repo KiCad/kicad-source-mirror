@@ -293,7 +293,7 @@ void PART::Parse( SWEET_PARSER* aParser , LIB_TABLE* aTable ) throw( IO_ERROR, P
 }
 
 
-bool PART::PropertyDelete( const wxString& aPropertyName )
+bool PART::PropDelete( const wxString& aPropertyName )
 {
     PROPERTIES::iterator it = propertyFind( aPropertyName );
     if( it != properties.end() )
