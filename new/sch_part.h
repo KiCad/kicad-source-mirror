@@ -729,11 +729,11 @@ public:
         throw( IO_ERROR );
 
     /**
-     * Function PropertyDelete
+     * Function PropDelete
      * deletes the property with aPropertyName if found and returns true, else false
      * if not found.
      */
-    bool PropertyDelete( const wxString& aPropertyName );
+    bool PropDelete( const wxString& aPropertyName );
 
     /**
      * Function Field
