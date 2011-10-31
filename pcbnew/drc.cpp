@@ -180,7 +180,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         if( aMessages )
         {
             aMessages->AppendText( _( "Compile ratsnest...\n" ) );
-            wxSafeYield();
+            aMessages->Refresh();
         }
 
         m_mainWindow->Compile_Ratsnest( NULL, true );
@@ -209,7 +209,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         if( aMessages )
         {
             aMessages->AppendText( _( "Pad clearances...\n" ) );
-            wxSafeYield();
+            aMessages->Refresh();
         }
 
         testPad2Pad();
@@ -219,9 +219,8 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     if( aMessages )
     {
         aMessages->AppendText( _( "Track clearances...\n" ) );
-        wxSafeYield();
+        aMessages->Refresh();
     }
-
     testTracks();
 
     // Before testing segments and unconnected, refill all zones:
@@ -229,7 +228,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     if( aMessages )
     {
         aMessages->AppendText( _( "Fill zones...\n" ) );
-        wxSafeYield();
+        aMessages->Refresh();
     }
 
     m_mainWindow->Fill_All_Zones( false );
@@ -238,7 +237,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     if( aMessages && m_doZonesTest )
     {
         aMessages->AppendText( _( "Test zones...\n" ) );
-        wxSafeYield();
+        aMessages->Refresh();
     }
 
     testZones( m_doZonesTest );
@@ -249,7 +248,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         if( aMessages )
         {
             aMessages->AppendText( _( "Unconnected pads...\n" ) );
-            wxSafeYield();
+            aMessages->Refresh();
         }
 
         testUnconnected();
