@@ -225,7 +225,7 @@ public:
      * TRACK segment or SEGVIA physically resides.
      * @return int - a layer mask, see pcbstruct.h's LAYER_BACK, etc.
      */
-    int ReturnMaskLayer();
+    int ReturnMaskLayer() const;
 
     /**
      * Function IsPointOnEnds

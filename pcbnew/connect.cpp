@@ -4,7 +4,6 @@
  */
 
 #include "fctsys.h"
-#include "gr_basic.h"
 #include "common.h"
 #include "pcbcommon.h"
 #include "macros.h"
@@ -14,7 +13,6 @@
 #include "class_board.h"
 
 #include "pcbnew.h"
-#include "protos.h"
 
 
 extern void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb );
@@ -25,7 +23,225 @@ static void Propagate_SubNet( TRACK* pt_start_conn, TRACK* pt_end_conn );
 static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* pt_end_conn );
 static void RebuildTrackChain( BOARD* pcb );
 
-/*..*/
+
+// A helper class to handle connection points
+class CONNECTED_POINT
+{
+public:
+    TRACK * m_Track;      // a link to the connected item (track or via)
+    wxPoint m_Point;      // the connection point
+
+    CONNECTED_POINT( TRACK * aTrack, wxPoint & aPoint)
+    {
+        m_Track = aTrack;
+        m_Point = aPoint;
+    }
+};
+
+// A helper class to handle connection calculations:
+class CONNECTIONS
+{
+public:
+    std::vector <TRACK*> m_Connected;           // List of connected tracks/vias
+                                                // to a given track or via
+    std::vector <CONNECTED_POINT> m_Candidates; // List of points to test
+                                                // (end points of tracks or vias location )
+
+private:
+    BOARD * m_brd;                              // the master board.
+
+public:
+    CONNECTIONS( BOARD * aBrd );
+    ~CONNECTIONS() {};
+
+    /** Function BuildCandidatesList
+     * Fills m_Candidates with all connecting points (track ends or via location)
+     * with tracks from aBegin to aEnd.
+     * if aBegin == NULL, use first track in brd list
+     * if aEnd == NULL, uses all tracks from aBegin in brd list
+     */
+    void BuildCandidatesList( TRACK * aBegin = NULL, TRACK * aEnd = NULL);
+
+    /**
+     * function SearchConnectedTracks
+     * Fills m_Connected with tracks/vias connected to aTrack
+     * @param aTrack = track or via to use as reference
+     */
+    int SearchConnectedTracks( const TRACK * aTrack );
+
+private:
+    /**
+     * function searchEntryPoint
+     * Search an item in m_Connected connected to aPoint
+     * note m_Connected containts usually more than one candidate
+     * and searchEntryPoint returns an index to one of these candidates
+     * Others are neightbor of the indexed item.
+     * @param aPoint is the reference coordinates
+     * @return the index of item found or -1 if no candidate
+     */
+    int searchEntryPoint( const wxPoint & aPoint);
+};
+
+/* sort function used to sort .m_Connected by X the Y values
+ * items are sorted by X coordinate value,
+ * and for same X value, by Y coordinate value.
+ */
+static bool sortConnectedPointByXthenYCoordinates( const CONNECTED_POINT & aRef,
+                                                   const CONNECTED_POINT & aTst )
+{
+    if( aRef.m_Point.x == aTst.m_Point.x )
+        return aRef.m_Point.y < aTst.m_Point.y;
+    return aRef.m_Point.x < aTst.m_Point.x;
+}
+
+CONNECTIONS::CONNECTIONS( BOARD * aBrd )
+{
+    m_brd = aBrd;
+}
+
+void CONNECTIONS::BuildCandidatesList( TRACK * aBegin, TRACK * aEnd)
+{
+    m_Connected.clear();
+
+    if( aBegin == NULL )
+        aBegin = m_brd->m_Track;
+
+    unsigned ii = 0;
+    // Count candidates ( i.e. end points )
+    for( const TRACK* track = aBegin; track; track = track->Next() )
+    {
+        if( track->Type() == PCB_VIA_T )
+            ii++;
+        else
+            ii += 2;
+
+        if( track == aEnd )
+            break;
+    }
+    // Build candidate list
+    m_Connected.reserve( ii );
+    for( TRACK* track = aBegin; track != aEnd; track = track->Next() )
+    {
+        CONNECTED_POINT candidate( track, track->m_Start);
+        m_Candidates.push_back( candidate );
+        if( track->Type() != PCB_VIA_T )
+        {
+            candidate.m_Track = track;
+            candidate.m_Point = track->m_End;
+            m_Candidates.push_back( candidate );
+        }
+
+        if( track == aEnd )
+            break;
+    }
+
+    // Sort list by increasing X coordinate,
+    // and for increasing Y coordinate when items have the same X coordinate
+    // So candidates to the same location are consecutive in list.
+    sort( m_Candidates.begin(), m_Candidates.end(), sortConnectedPointByXthenYCoordinates );
+}
+
+int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
+{
+    int count = 0;
+    m_Connected.clear();
+
+    int layerMask = aTrack->ReturnMaskLayer();
+
+    // Search for connections to starting point:
+    wxPoint position = aTrack->m_Start;
+    for( int kk = 0; kk < 2; kk++ )
+    {
+        int idx = searchEntryPoint( position );
+        if ( idx >= 0 )
+        {
+            // search after:
+            for ( unsigned ii = idx; ii < m_Candidates.size(); ii ++ )
+            {
+                if( m_Candidates[ii].m_Track == aTrack )
+                    continue;
+                if( m_Candidates[ii].m_Point != position )
+                    break;
+                if( (m_Candidates[ii].m_Track->ReturnMaskLayer() & layerMask ) != 0 )
+                    m_Connected.push_back( m_Candidates[ii].m_Track );
+            }
+            // search before:
+            for ( unsigned ii = idx-1; ii >= 0; ii -- )
+            {
+                if( m_Candidates[ii].m_Track == aTrack )
+                    continue;
+                if( m_Candidates[ii].m_Point != position )
+                    break;
+                if( (m_Candidates[ii].m_Track->ReturnMaskLayer() & layerMask ) != 0 )
+                    m_Connected.push_back( m_Candidates[ii].m_Track );
+            }
+        }
+
+        // Search for connections to ending point:
+        if( aTrack->Type() == PCB_VIA_T )
+            break;
+
+        position = aTrack->m_End;
+    }
+
+    return count;
+}
+
+int CONNECTIONS::searchEntryPoint( const wxPoint & aPoint)
+{
+    // Search the aPoint coordinates in m_Candidates
+    // m_Candidates is sorted by X then Y values, and a fast binary search is used
+    int idxmax = m_Candidates.size()-1;
+
+    int delta = m_Candidates.size();
+    if( delta & 1 && delta > 1 )
+        delta += 1;
+    delta /= 2;
+    int idx = delta;        // Starting index is the middle of list
+    while( delta )
+    {
+        if( (delta & 1) && ( delta > 1 ) )
+            delta++;
+        delta /= 2;
+
+        CONNECTED_POINT & candidate = m_Candidates[idx];
+        if( candidate.m_Point == aPoint )   // candidate found
+        {
+            return idx;
+        }
+
+        // Not found: test the middle of the remaining sub list
+        if( candidate.m_Point.x == aPoint.x )   // Must search considering Y coordinate
+        {
+            if(candidate.m_Point.y < aPoint.y)  // Must search after this item
+            {
+                idx += delta;
+                if( idx > idxmax )
+                    idx = idxmax;
+            }
+            else // Must search before this item
+            {
+                idx -= delta;
+                if( idx < 0 )
+                    idx = 0;
+            }
+        }
+        else if( candidate.m_Point.x < aPoint.x ) // Must search after this item
+        {
+            idx += delta;
+            if( idx > idxmax )
+                idx = idxmax;
+        }
+        else // Must search before this item
+        {
+            idx -= delta;
+            if( idx < 0 )
+                idx = 0;
+        }
+    }
+
+    return -1;
+}
 
 
 /**
@@ -331,7 +547,7 @@ void PCB_BASE_FRAME::TestConnections( wxDC* aDC )
         track = pt_end_conn->Next();    // this is now the first segment of the next net
     }
 
-    Merge_SubNets_Connected_By_CopperAreas( m_Pcb );
+     Merge_SubNets_Connected_By_CopperAreas( m_Pcb );
 
     return;
 }
@@ -472,9 +688,6 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
 }
 
 
-#define POS_AFF_CHREF 62
-
-
 void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 {
     TRACK*              pt_trace;
@@ -507,7 +720,8 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     /**************************************************************/
     /* Pass 1: search the connections between track ends and pads */
     /**************************************************************/
-    m_Pcb->GetSortedPadListByXCoord( sortedPads );
+
+    m_Pcb->GetSortedPadListByXthenYCoord( sortedPads );
 
     /* Reset variables and flags used in computation */
     pt_trace = m_Pcb->m_Track;
@@ -529,7 +743,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         layerMask = g_TabOneLayerMask[pt_trace->GetLayer()];
 
         /* Search for a pad on the segment starting point */
-        pt_trace->start = m_Pcb->GetPad( &sortedPads[0], pt_trace->m_Start, layerMask );
+        pt_trace->start = m_Pcb->GetPad( sortedPads, pt_trace->m_Start, layerMask );
 
         if( pt_trace->start != NULL )
         {
@@ -538,7 +752,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         }
 
         /* Search for a pad on the segment ending point */
-        pt_trace->end = m_Pcb->GetPad( &sortedPads[0], pt_trace->m_End, layerMask );
+        pt_trace->end = m_Pcb->GetPad( sortedPads, pt_trace->m_End, layerMask );
 
         if( pt_trace->end != NULL )
         {
@@ -547,17 +761,16 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         }
     }
 
-
     /*****************************************************/
     /* Pass 2: search the connections between track ends */
     /*****************************************************/
 
     /*  the .start and .end member pointers are updated, only if NULLs
-     * (if not nuls, the end is already connected to a pad).
+     * (if not null, the end is already connected to a pad).
      * the connection (if found) is between segments
      * when a track has a net code and the other has a null net code, the null net code is changed
      */
-#if 1
+#if 0
     for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
     {
         if( pt_trace->start == NULL )
@@ -569,43 +782,46 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
         {
             pt_trace->end = pt_trace->GetTrace( m_Pcb->m_Track, NULL, END );
         }
-   }
+    }
 #else
+
+    CONNECTIONS connections( m_Pcb );
+    connections.BuildCandidatesList();
     for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
     {
-        if( pt_trace->start != NULL )
+        if( pt_trace->start != NULL && pt_trace->end != NULL )
             continue;
 
-        TRACK * candidate = pt_trace->GetTrace( m_Pcb->m_Track, NULL, START );
-        if( candidate == NULL )
-            continue;
-        if( candidate->start == pt_trace || candidate->end == pt_trace )
+        connections.SearchConnectedTracks( pt_trace );
+        for( unsigned ii = 0; ii < connections.m_Connected.size(); ii ++ )
         {
-            candidate->SetState( BUSY, ON );
-            pt_trace->start = pt_trace->GetTrace( m_Pcb->m_Track, NULL, START );
-            candidate->SetState( BUSY, OFF );
-        }
-        else
-            pt_trace->start = candidate;
-   }
-    for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
-    {
-        if( pt_trace->end != NULL )
-            continue;
+            TRACK * candidate = connections.m_Connected[ii];
 
-        TRACK * candidate = pt_trace->GetTrace( m_Pcb->m_Track, NULL, END );
-        if( candidate == NULL )
-            continue;
-        if( candidate->start == pt_trace || candidate->end == pt_trace )
-        {
-            candidate->SetState( BUSY, ON );
-            pt_trace->end = pt_trace->GetTrace( m_Pcb->m_Track, NULL, END );
-            candidate->SetState( BUSY, OFF );
+            // Do not create a link to an other track already linked
+            // to avoid loops when we have 4 and more ends at the same location
+            // like this case for 4 tracks named A, B, C ,D:
+            // A links B; B links A and C links D; D links C, but never C or D links A or B
+            // Try to find a not already linked track:
+            if( candidate->start == pt_trace || candidate->end == pt_trace )
+                continue;
+
+            // A link is found:
+            if( pt_trace->start == NULL )
+            {
+                if( ( pt_trace->m_Start == candidate->m_Start ) ||
+                    ( pt_trace->m_Start == candidate->m_End ) )
+                    pt_trace->start = candidate;
+            }
+            if( pt_trace->end == NULL )
+            {
+                if( ( pt_trace->m_End == candidate->m_Start ) ||
+                    ( pt_trace->m_End == candidate->m_End ) )
+                    pt_trace->end = candidate;
+            }
         }
-        else
-            pt_trace->end = candidate;
-   }
+    }
 #endif
+
     /**********************************************************/
     /* Propagate net codes from a segment to an other segment */
     /**********************************************************/

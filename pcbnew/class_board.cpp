@@ -4,6 +4,7 @@
  */
 
 #include <limits.h>
+#include <algorithm>
 
 #include "fctsys.h"
 #include "common.h"
@@ -29,18 +30,6 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 // Current design settings (used also to read configs):
 BOARD_DESIGN_SETTINGS boardDesignSettings;
 
-
-/**
- * Function SortPadsByXCoord
- * is used to Sort a pad list by x coordinate value.
- */
-static int sortPadsByXCoord( const void* pt_ref, const void* pt_comp )
-{
-    D_PAD* ref  = *(D_PAD**) pt_ref;
-    D_PAD* comp = *(D_PAD**) pt_comp;
-
-    return ref->m_Pos.x - comp->m_Pos.x;
-}
 
 
 BOARD::BOARD( EDA_ITEM* parent, PCB_BASE_FRAME* frame ) :
@@ -1688,80 +1677,83 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, int aLayerMask )
 }
 
 
-D_PAD* BOARD::GetPad( D_PAD** aPad, const wxPoint& aPosition, int aLayerMask )
+D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, int aLayerMask )
 {
-    D_PAD*  pad;
-    int     ii;
+    // Search the aPoint coordinates in aPadList
+    // aPadList is sorted by X then Y values, and a fast binary search is used
+    int idxmax = aPadList.size()-1;
 
-    int     nb_pad  = GetPadsCount();
-    D_PAD** ptr_pad = aPad;
-    D_PAD** lim = aPad + nb_pad - 1;
-
-    ptr_pad = aPad;
-
-    while( nb_pad )
+    int delta = aPadList.size();
+    if( delta & 1 && delta > 1 )
+        delta += 1;
+    delta /= 2;
+    int idx = delta;        // Starting index is the middle of list
+    while( delta )
     {
-        pad      = *ptr_pad;
-        ii       = nb_pad;
-        nb_pad >>= 1;
+        if( (delta & 1) && ( delta > 1 ) )
+            delta++;
+        delta /= 2;
 
-        if( (ii & 1) && ( ii > 1 ) )
-            nb_pad++;
+        D_PAD* pad = aPadList[idx];
 
-        if( pad->m_Pos.x < aPosition.x ) /* Must search after this item */
+        if( pad->m_Pos == aPosition )       // candidate found
         {
-            ptr_pad += nb_pad;
+            // The pad must match the layer mask:
+            if( (aLayerMask & pad->m_layerMask) != 0 )
+                return pad;
 
-            if( ptr_pad > lim )
-                ptr_pad = lim;
+            // More than one pad can be at aPosition
+            // search for a pad at aPosition that matched this mask
 
-            continue;
-        }
-
-        if( pad->m_Pos.x > aPosition.x ) /* Must search before this item */
-        {
-            ptr_pad -= nb_pad;
-
-            if( ptr_pad < aPad )
-                ptr_pad = aPad;
-
-            continue;
-        }
-
-        /* A suitable block is found (X coordinate matches the px reference: but we
-         * must matches the Y coordinate */
-        if( pad->m_Pos.x == aPosition.x )
-        {
-            /* Search the beginning of the block */
-            while( ptr_pad >= aPad )
+            // search next
+            for( int ii = idx+1; ii <= idxmax; ii++ )
             {
-                pad = *ptr_pad;
-
-                if( pad->m_Pos.x == aPosition.x )
-                    ptr_pad--;
-                else
+                pad = aPadList[ii];
+                if( pad->m_Pos != aPosition )
                     break;
-            }
-
-            ptr_pad++;  /* ptr_pad = first pad which have pad->m_Pos.x = px */
-
-            for( ; ; ptr_pad++ )
-            {
-                if( ptr_pad > lim )
-                    return NULL; /* outside suitable block */
-
-                pad = *ptr_pad;
-
-                if( pad->m_Pos.x != aPosition.x )
-                    return NULL; /* outside suitable block */
-
-                if( pad->m_Pos.y != aPosition.y )
-                    continue;
-
-                /* A Pad if found here: but it must mach the layer */
-                if( pad->m_layerMask & aLayerMask )  // Matches layer => a connected pad is found!
+                if( (aLayerMask & pad->m_layerMask) != 0 )
                     return pad;
             }
+            // search previous
+            for(  int ii = idx-1 ;ii >=0; ii-- )
+            {
+                pad = aPadList[ii];
+                if( pad->m_Pos != aPosition )
+                    break;
+                if( (aLayerMask & pad->m_layerMask) != 0 )
+                    return pad;
+            }
+
+            // Not found:
+            return 0;
+        }
+
+        if( pad->m_Pos.x == aPosition.x )   // Must search considering Y coordinate
+        {
+            if(pad->m_Pos.y < aPosition.y)  // Must search after this item
+            {
+                idx += delta;
+                if( idx > idxmax )
+                    idx = idxmax;
+            }
+            else // Must search before this item
+            {
+                idx -= delta;
+                if( idx < 0 )
+                    idx = 0;
+            }
+        }
+        else if( pad->m_Pos.x < aPosition.x ) // Must search after this item
+        {
+            idx += delta;
+            if( idx > idxmax )
+                idx = idxmax;
+        }
+        else // Must search before this item
+        {
+            idx -= delta;
+            if( idx < 0 )
+                idx = 0;
         }
     }
 
@@ -1769,12 +1761,24 @@ D_PAD* BOARD::GetPad( D_PAD** aPad, const wxPoint& aPosition, int aLayerMask )
 }
 
 
-void BOARD::GetSortedPadListByXCoord( std::vector<D_PAD*>& aVector )
+/**
+ * Function SortPadsByXCoord
+ * is used by GetSortedPadListByXCoord to Sort a pad list by x coordinate value.
+ */
+static bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
+{
+    if( ref->m_Pos.x == comp->m_Pos.x )
+        return ref->m_Pos.y < comp->m_Pos.y;
+    return ref->m_Pos.x < comp->m_Pos.x;
+}
+
+
+void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector )
 {
     aVector.insert( aVector.end(), m_NetInfo->m_PadsFullList.begin(),
                     m_NetInfo->m_PadsFullList.end() );
 
-    qsort( &aVector[0], GetPadsCount(), sizeof( D_PAD*), sortPadsByXCoord );
+    sort( aVector.begin(), aVector.end(), sortPadsByXthenYCoord );
 }
 
 

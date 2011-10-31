@@ -1162,22 +1162,23 @@ public:
      * function.
      * </p>
      * @note The normal pad list is sorted by increasing netcodes.
-     * @param aPad A D_PAD object pointer the first pad in the list to begin searching.
+     * @param aPadList = the list of pads candidates (a std::vector<D_PAD*>)
      * @param aPosition A wxPoint object containing the position to test.
      * @param aLayerMask A layer or layers to mask the hit test.
-     * @return A D_PAD object pointer to the connected pad.
+     * @return a D_PAD object pointer to the connected pad.
      */
-    D_PAD* GetPad( D_PAD** aPad, const wxPoint& aPosition, int aLayerMask );
+    D_PAD* GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, int aLayerMask );
 
     /**
-     * Function GetSortedPadListByXCoord
+     * Function GetSortedPadListByXthenYCoord
      * first empties then fills the vector with all pads and sorts them by
-     * increasing x coordinate.  The vector only holds pointers to the pads and
+     * increasing x coordinate, and for increasing y coordinate for same values of x coordinates.
+     * The vector only holds pointers to the pads and
      * those pointers are only references to pads which are owned by the BOARD
      * through other links.
      * @param aVector Where to put the pad pointers.
      */
-    void GetSortedPadListByXCoord( std::vector<D_PAD*>& aVector );
+    void GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector );
 
 
     /**
