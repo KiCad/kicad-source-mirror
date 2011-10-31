@@ -414,12 +414,12 @@ void DRC::testPad2Pad()
 {
     std::vector<D_PAD*> sortedPads;
 
-    m_pcb->GetSortedPadListByXCoord( sortedPads );
+    m_pcb->GetSortedPadListByXthenYCoord( sortedPads );
 
     // find the max size of the pads (used to stop the test)
     int max_size = 0;
 
-    for( unsigned i = 0;  i<sortedPads.size();  ++i )
+    for( unsigned i = 0; i < sortedPads.size(); ++i )
     {
         D_PAD* pad = sortedPads[i];
 
@@ -431,7 +431,7 @@ void DRC::testPad2Pad()
     // Test the pads
     D_PAD** listEnd = &sortedPads[ sortedPads.size() ];
 
-    for( unsigned i = 0;  i<sortedPads.size();  ++i )
+    for( unsigned i = 0; i< sortedPads.size(); ++i )
     {
         D_PAD* pad = sortedPads[i];
 

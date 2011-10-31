@@ -447,7 +447,7 @@ bool SEGVIA::IsOnLayer( int layer_number ) const
 }
 
 
-int TRACK::ReturnMaskLayer()
+int TRACK::ReturnMaskLayer() const
 {
     if( Type() == PCB_VIA_T )
     {
