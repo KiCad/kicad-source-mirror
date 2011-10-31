@@ -1,6 +1,31 @@
-/*******************/
-/** class LIB_ARC **/
-/*******************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file lib_arc.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -9,6 +34,7 @@
 #include "plot_common.h"
 #include "trigo.h"
 #include "wxstruct.h"
+#include "richio.h"
 
 #include "general.h"
 #include "protos.h"
@@ -79,11 +105,6 @@ LIB_ARC::LIB_ARC( const LIB_ARC& aArc ) : LIB_ITEM( aArc )
 }
 
 
-/**
- * format:
- *  A centre_posx centre_posy rayon start_angle end_angle unit convert
- *  fill('N', 'F' ou 'f') startx starty endx endy
- */
 bool LIB_ARC::Save( FILE* aFile )
 {
     int x1 = m_t1;
@@ -106,12 +127,13 @@ bool LIB_ARC::Save( FILE* aFile )
 }
 
 
-bool LIB_ARC::Load( char* aLine, wxString& aErrorMsg )
+bool LIB_ARC::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
-    int  startx, starty, endx, endy, cnt;
+    int startx, starty, endx, endy, cnt;
     char tmp[256];
+    char* line = (char*) aLineReader;
 
-    cnt = sscanf( &aLine[2], "%d %d %d %d %d %d %d %d %s %d %d %d %d",
+    cnt = sscanf( line + 2, "%d %d %d %d %d %d %d %d %s %d %d %d %d",
                   &m_Pos.x, &m_Pos.y, &m_Radius, &m_t1, &m_t2, &m_Unit,
                   &m_Convert, &m_Width, tmp, &startx, &starty, &endx, &endy );
     if( cnt < 8 )
@@ -122,6 +144,7 @@ bool LIB_ARC::Load( char* aLine, wxString& aErrorMsg )
 
     if( tmp[0] == 'F' )
         m_Fill = FILLED_SHAPE;
+
     if( tmp[0] == 'f' )
         m_Fill = FILLED_WITH_BG_BODYCOLOR;
 
@@ -326,10 +349,6 @@ void LIB_ARC::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 }
 
 
-/**
- * Function GetPenSize
- * @return the size of the "pen" that be used to draw or plot this item
- */
 int LIB_ARC::GetPenSize() const
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
@@ -383,6 +402,7 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
     int  pt1  = m_t1;
     int  pt2  = m_t2;
     bool swap = aTransform.MapAngles( &pt1, &pt2 );
+
     if( swap )
     {
         EXCHG( pos1.x, pos2.x );
@@ -392,6 +412,7 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
     GRSetDrawMode( aDC, aDrawMode );
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
+
     if( aColor >= 0 )
         fill = NO_FILL;
 
@@ -470,10 +491,13 @@ start(%d, %d), end(%d, %d), radius %d" ),
 
     if( angleStart <= 900 && angleEnd >= 900 )          /* 90 deg */
         maxY = centerPos.y + m_Radius;
+
     if( angleStart <= 1800 && angleEnd >= 1800 )        /* 180 deg */
         minX = centerPos.x - m_Radius;
+
     if( angleStart <= 2700 && angleEnd >= 2700 )        /* 270 deg */
         minY = centerPos.y - m_Radius;
+
     if( angleStart <= 3600 && angleEnd >= 3600 )        /* 0 deg   */
         maxX = centerPos.x + m_Radius;
 
@@ -552,7 +576,9 @@ void LIB_ARC::BeginEdit( int aEditMode, const wxPoint aPosition )
             m_editSelectPoint = END;
         }
         else
+        {
             m_editSelectPoint = OUTLINE;
+        }
 
         m_editState = 0;
         SetEraseLastDrawItem();

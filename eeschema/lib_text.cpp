@@ -1,11 +1,31 @@
-/***************************/
-/* lib_text.cpp */
-/***************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
 /**
-* class LIB_TEXT : describes a graphic text used to draw component shapes
-* This is only a graphic item
-*/
+ * @file lib_text.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -15,6 +35,7 @@
 #include "drawtxt.h"
 #include "trigo.h"
 #include "wxstruct.h"
+#include "richio.h"
 
 #include "lib_draw_item.h"
 #include "general.h"
@@ -54,17 +75,20 @@ bool LIB_TEXT::Save( FILE* ExportFile )
     if( fprintf( ExportFile, "T %d %d %d %d %d %d %d %s ", m_Orient, m_Pos.x, m_Pos.y,
                  m_Size.x, m_Attributs, m_Unit, m_Convert, TO_UTF8( text ) ) < 0 )
         return false;
+
     if( fprintf( ExportFile, " %s %d", m_Italic ? "Italic" : "Normal",
                  ( m_Bold > 0 ) ? 1 : 0 ) < 0 )
         return false;
 
     char hjustify = 'C';
+
     if( m_HJustify == GR_TEXT_HJUSTIFY_LEFT )
         hjustify = 'L';
     else if( m_HJustify == GR_TEXT_HJUSTIFY_RIGHT )
         hjustify = 'R';
 
     char vjustify = 'C';
+
     if( m_VJustify == GR_TEXT_VJUSTIFY_BOTTOM )
         vjustify = 'B';
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
@@ -77,34 +101,35 @@ bool LIB_TEXT::Save( FILE* ExportFile )
 }
 
 
-bool LIB_TEXT::Load( char* line, wxString& errorMsg )
+bool LIB_TEXT::Load( LINE_READER& aLineReader, wxString& errorMsg )
 {
     int  cnt, thickness;
     char hjustify = 'C', vjustify = 'C';
     char buf[256];
     char tmp[256];
+    char* line = (char*) aLineReader;
 
     buf[0] = 0;
     tmp[0] = 0;         // For italic option, Not in old versions
 
-    cnt = sscanf( &line[2], "%d %d %d %d %d %d %d \"%[^\"]\" %s %d %c %c",
+    cnt = sscanf( line + 2, "%d %d %d %d %d %d %d \"%[^\"]\" %s %d %c %c",
                   &m_Orient, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
                   &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify,
                   &vjustify );
 
-
-    if( cnt >= 8 ) // if quoted loadng failed, load as not quoted
+    if( cnt >= 8 ) // if quoted loading failed, load as not quoted
     {
         m_Text = FROM_UTF8( buf );
+
         // convert two apostrophes back to double quote
         m_Text.Replace( wxT( "''" ), wxT( "\"" ) );
     }
     else
     {
-    cnt = sscanf( &line[2], "%d %d %d %d %d %d %d %s %s %d %c %c",
-                  &m_Orient, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
-                  &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify,
-                  &vjustify );
+        cnt = sscanf( line + 2, "%d %d %d %d %d %d %d %s %s %d %c %c",
+                      &m_Orient, &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Attributs,
+                      &m_Unit, &m_Convert, buf, tmp, &thickness, &hjustify,
+                      &vjustify );
 
         if( cnt < 8 )
         {
@@ -116,10 +141,12 @@ bool LIB_TEXT::Load( char* line, wxString& errorMsg )
         m_Text = FROM_UTF8( buf );
         m_Text.Replace( wxT( "~" ), wxT( " " ) );
     }
+
     m_Size.y = m_Size.x;
 
     if( strnicmp( tmp, "Italic", 6 ) == 0 )
         m_Italic = true;
+
     if( thickness > 0 )
     {
         m_Bold = true;
@@ -247,7 +274,7 @@ bool LIB_TEXT::DoTestInside( EDA_RECT& rect ) const
 {
     /*
      * FIXME: This should calculate the text size and justification and
-     *        use rectangle instect.
+     *        use rectangle intersect.
      */
     return rect.Contains( m_Pos.x, -m_Pos.y );
 }
@@ -299,11 +326,7 @@ void LIB_TEXT::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 }
 
 
-/**
- * Function GetPenSize
- * @return the size of the "pen" that be used to draw or plot this item
- */
-int LIB_TEXT::GetPenSize( ) const
+int LIB_TEXT::GetPenSize() const
 {
     int     pensize = m_Thickness;
 
@@ -314,6 +337,7 @@ int LIB_TEXT::GetPenSize( ) const
         else
             pensize = g_DrawDefaultLineThickness;
     }
+
     // Clip pen size for small texts:
     pensize = Clamp_Text_PenSize( pensize, m_Size, m_Bold );
     return pensize;
@@ -333,7 +357,9 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
             color = g_ItemSelectetColor;
     }
     else
+    {
         color = aColor;
+    }
 
     pos1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
 
@@ -343,6 +369,7 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
      * orientation/mirror (needed when draw text in schematic)
      */
     int orient = m_Orient;
+
     if( aTransform.y1 )  // Rotate component 90 degrees.
     {
         if( orient == TEXT_ORIENT_HORIZ )
@@ -404,9 +431,6 @@ void LIB_TEXT::DisplayInfo( EDA_DRAW_FRAME* frame )
 }
 
 
-/**
- * @return the boundary box for this, in schematic coordinates
- */
 EDA_RECT LIB_TEXT::GetBoundingBox() const
 {
     /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when

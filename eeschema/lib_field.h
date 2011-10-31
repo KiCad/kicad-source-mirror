@@ -1,6 +1,31 @@
-/*************************************************************/
-/* Lib component definitions (libentry) definition of fields */
-/*************************************************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file lib_field.h
+ */
 
 #ifndef CLASS_LIBENTRY_FIELDS_H
 #define CLASS_LIBENTRY_FIELDS_H
@@ -13,6 +38,20 @@
  * is used in symbol libraries.  At least MANDATORY_FIELDS are always present
  * in a ram resident library symbol.  All constructors must ensure this because
  * the component property editor assumes it.
+ * <p>
+ * A field is a string linked to a component.  Unlike purely graphical text, fields can
+ * be used in netlist generation and other tools (BOM).
+ *
+ *  The first 4 fields have a special meaning:
+ *
+ *  0 = REFERENCE
+ *  1 = VALUE
+ *  2 = FOOTPRINT (default Footprint)
+ *  3 = DOCUMENTATION (user doc link)
+ *
+ *  others = free fields
+ * </p>
+ *
  * @see enum NumFieldType
  */
 class LIB_FIELD : public LIB_ITEM, public EDA_TEXT
@@ -26,6 +65,10 @@ class LIB_FIELD : public LIB_ITEM, public EDA_TEXT
 
     /**
      * Draw the field.
+     * <p>
+     * If \a aData not NULL, \a aData must point a wxString which is used instead of
+     * the m_Text
+     * </p>
      */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
@@ -63,7 +106,7 @@ public:
      *
      * @param aTranslate = true to return translated field name (default)
      *                     false to return the english name
-     *                     (usefull when the name is used as keyword in netlists ...)
+     *                     (useful when the name is used as keyword in netlists ...)
      * @return Name of the field.
      */
     wxString GetName(bool aTranslate = true) const;
@@ -98,16 +141,17 @@ public:
      * @return True if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* line, wxString& errorMsg );
+
+    virtual bool Load( LINE_READER& aLineReader, wxString& errorMsg );
 
     /**
      * Copy parameters of this field to another field. Pointers are not copied.
      *
      * @param aTarget = Target field to copy values to.
      */
-    void          Copy( LIB_FIELD* aTarget ) const;
+    void Copy( LIB_FIELD* aTarget ) const;
 
-    void          SetFields( const std::vector <LIB_FIELD> aFields );
+    void SetFields( const std::vector <LIB_FIELD> aFields );
 
     /**
      * Function IsVoid
@@ -136,7 +180,7 @@ public:
     /**
      * Displays info (type, part  convert filed name and value)
      * in msg panel
-     * @param aFrame = main frame where the message manel info is.
+     * @param aFrame = main frame where the message panel info is.
      */
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
@@ -182,6 +226,8 @@ public:
      * create a pseudo reference text.  If the base reference field is U,
      * the string U?A will be returned for unit = 1.
      *
+     * @todo This should be handled by the field object.
+     *
      * @param unit - The package unit number.  Only effects reference field.
      * @return Field text.
      */
@@ -209,7 +255,7 @@ public:
     /**
      * Sets the field text to \a aText.
      *
-     * This method does more than juat set the set the field text.  There are special
+     * This method does more than just set the set the field text.  There are special
      * cases when changing the text string alone is not enough.  If the field is the
      * value field, the parent component's name is changed as well.  If the field is
      * being moved, the name change must be delayed until the next redraw to prevent

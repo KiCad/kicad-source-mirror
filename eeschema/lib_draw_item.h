@@ -1,9 +1,33 @@
-/****************************************************************/
-/*  Headers for library definition and lib component definitions */
-/****************************************************************/
-
-/* Definitions of graphic items used to create shapes in component libraries.
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
+/**
+ * @file class_libentry.h
+ * @brief Class LIB_ITEM definition.
+ */
+
 #ifndef _LIB_ITEM_H_
 #define _LIB_ITEM_H_
 
@@ -13,6 +37,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 
+class LINE_READER;
 class LIB_COMPONENT;
 class PLOTTER;
 class LIB_ITEM;
@@ -35,7 +60,7 @@ typedef boost::ptr_vector< LIB_ITEM > LIB_ITEMS;
 
 /**
  * Helper for defining a list of pin object pointers.  The list does not
- * use a Boost pointer class so the object pointers do not accidently get
+ * use a Boost pointer class so the object pointers do not accidentally get
  * deleted when the container is deleted.
  */
 typedef std::vector< LIB_PIN* > LIB_PINS;
@@ -194,7 +219,7 @@ public:
      * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile ) = 0;
-    virtual bool Load( char* aLine, wxString& aErrorMsg ) = 0;
+    virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg ) = 0;
 
     LIB_COMPONENT* GetParent()
     {
@@ -232,9 +257,15 @@ public:
     virtual EDA_RECT GetBoundingBox() const { return EDA_ITEM::GetBoundingBox(); }
 
     /**
-     * Displays basic info (type, part and convert) about item
-     * in msg panel
-     * @param aFrame = main frame where the message manel info is.
+     * Function DisplayInfo
+     * displays basic info (type, part and convert) about the current item
+     * in message panel.
+     * <p>
+     * This base function is used to display the information common to the
+     * all library items.  Call the base class from the derived class or the
+     * common information will not be updated in the message panel.
+     * </p>
+     * @param aFrame A pointer to EDA_DRAW_FRAME window where the message panel resides.
      */
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 

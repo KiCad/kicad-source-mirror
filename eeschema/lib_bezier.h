@@ -1,9 +1,39 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file lib_bezier.h
+ */
 
 #ifndef _LIB_BEZIER_H_
 #define _LIB_BEZIER_H_
 
-
 #include "lib_draw_item.h"
+
+
+class LINE_READER;
 
 
 /**************************************************/
@@ -39,7 +69,8 @@ public:
      * @return true if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* aLine, wxString& aErrorMsg );
+
+    virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
     void         AddPoint( const wxPoint& aPoint );
 
@@ -65,11 +96,13 @@ public:
     virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
     /**
+     * Function GetBoundingBox
      * @return the boundary box for this, in library coordinates
      */
     virtual EDA_RECT GetBoundingBox() const;
 
     /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( ) const;

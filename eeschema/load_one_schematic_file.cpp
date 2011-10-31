@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -94,7 +94,8 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     PrintMsg( MsgDiag );
 
     if( !reader.ReadLine()
-        || strncmp( (char*)reader + 9, SCHEMATIC_HEAD_STRING, sizeof(SCHEMATIC_HEAD_STRING) - 1 ) != 0 )
+        || strncmp( (char*)reader + 9, SCHEMATIC_HEAD_STRING,
+                    sizeof( SCHEMATIC_HEAD_STRING ) - 1 ) != 0 )
     {
         MsgDiag = aFullFileName + _( " is NOT an Eeschema file!" );
         DisplayError( this, MsgDiag );
@@ -104,13 +105,13 @@ bool SCH_EDIT_FRAME::LoadOneEEFile( SCH_SCREEN* aScreen, const wxString& aFullFi
     line = reader.Line();
 
     // get the file version here.
-    char *strversion = line + 9 + sizeof(SCHEMATIC_HEAD_STRING);
+    char *strversion = line + 9 + sizeof( SCHEMATIC_HEAD_STRING );
 
     // Skip blanks
     while( *strversion && *strversion < '0' )
         strversion++;
 
-    int  version = atoi(strversion);
+    int  version = atoi( strversion );
 
     if( version > EESCHEMA_VERSION )
     {
@@ -147,6 +148,7 @@ again." );
         item = NULL;
 
         char* sline = line;
+
         while( (*sline != ' ' ) && *sline )
             sline++;
 
@@ -274,6 +276,7 @@ static void LoadLayers( LINE_READER* aLine )
     aLine->ReadLine();
 
     sscanf( *aLine, "%s %d %d", Name, &Number, &g_LayerDescr.CurrentLayer );
+
     if( strcmp( Name, "EELAYER" ) !=0 )
     {
         /* error : init par default */
@@ -282,6 +285,7 @@ static void LoadLayers( LINE_READER* aLine )
 
     if( Number <= 0 )
         Number = MAX_LAYER;
+
     if( Number > MAX_LAYER )
         Number = MAX_LAYER;
 

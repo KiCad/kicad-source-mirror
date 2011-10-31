@@ -1,6 +1,31 @@
-/*************************/
-/** class LIB_RECTANGLE **/
-/*************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file lib_rectangle.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -9,6 +34,7 @@
 #include "plot_common.h"
 #include "trigo.h"
 #include "wxstruct.h"
+#include "richio.h"
 
 #include "general.h"
 #include "protos.h"
@@ -49,12 +75,13 @@ bool LIB_RECTANGLE::Save( FILE* aFile )
 }
 
 
-bool LIB_RECTANGLE::Load( char* aLine, wxString& aErrorMsg )
+bool LIB_RECTANGLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     int  cnt;
     char tmp[256];
+    char* line = (char*)aLineReader;
 
-    cnt = sscanf( &aLine[2], "%d %d %d %d %d %d %d %s", &m_Pos.x, &m_Pos.y,
+    cnt = sscanf( line + 2, "%d %d %d %d %d %d %d %s", &m_Pos.x, &m_Pos.y,
                   &m_End.x, &m_End.y, &m_Unit, &m_Convert, &m_Width, tmp );
 
     if( cnt < 7 )
@@ -65,6 +92,7 @@ bool LIB_RECTANGLE::Load( char* aLine, wxString& aErrorMsg )
 
     if( tmp[0] == 'F' )
         m_Fill = FILLED_SHAPE;
+
     if( tmp[0] == 'f' )
         m_Fill = FILLED_WITH_BG_BODYCOLOR;
 
@@ -131,6 +159,7 @@ void LIB_RECTANGLE::DoMirrorHorizontal( const wxPoint& aCenter )
     m_End.x += aCenter.x;
 }
 
+
 void LIB_RECTANGLE::DoMirrorVertical( const wxPoint& aCenter )
 {
     m_Pos.y -= aCenter.y;
@@ -140,6 +169,7 @@ void LIB_RECTANGLE::DoMirrorVertical( const wxPoint& aCenter )
     m_End.y *= -1;
     m_End.y += aCenter.y;
 }
+
 
 void LIB_RECTANGLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 {
@@ -169,14 +199,11 @@ void LIB_RECTANGLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFil
 }
 
 
-/**
- * Function GetPenSize
- * @return the size of the "pen" that be used to draw or plot this item
- */
 int LIB_RECTANGLE::GetPenSize() const
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
+
 
 void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                  const wxPoint& aOffset, int aColor, int aDrawMode,
@@ -192,12 +219,15 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
             color = g_ItemSelectetColor;
     }
     else
+    {
         color = aColor;
+    }
 
     pos1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
     pos2 = aTransform.TransformCoordinate( m_End ) + aOffset;
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
+
     if( aColor >= 0 )
         fill = NO_FILL;
 
@@ -273,18 +303,21 @@ bool LIB_RECTANGLE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM&
     start = actualStart;
     end.x = actualEnd.x;
     end.y = actualStart.y;
+
     if( TestSegmentHit( aPosition, start, end, aThreshold ) )
         return true;
 
     // locate right segment
     start.x = actualEnd.x;
     end.y   = actualEnd.y;
+
     if( TestSegmentHit( aPosition, start, end, aThreshold ) )
         return true;
 
     // locate upper segment
     start.y = actualEnd.y;
     end.x   = actualStart.x;
+
     if( TestSegmentHit( aPosition, start, end, aThreshold ) )
         return true;
 
@@ -292,6 +325,7 @@ bool LIB_RECTANGLE::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM&
     start = actualStart;
     end.x = actualStart.x;
     end.y = actualEnd.y;
+
     if( TestSegmentHit( aPosition, start, end, aThreshold ) )
         return true;
 
