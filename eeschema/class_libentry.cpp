@@ -1,6 +1,31 @@
-/*************************/
-/*  class_libentry.cpp   */
-/*************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file class_libentry.cpp
+ */
 
 #include "fctsys.h"
 #include "macros.h"
@@ -9,6 +34,7 @@
 #include "plot_common.h"
 #include "gr_basic.h"
 #include "class_sch_screen.h"
+#include "richio.h"
 
 #include "general.h"
 #include "protos.h"
@@ -27,7 +53,7 @@
 #include <boost/foreach.hpp>
 
 
-// Set this to 1 to print debugging ouput in alias and component destructors to verify
+// Set this to 1 to print debugging output in alias and component destructors to verify
 // objects get cleaned up properly.
 #if defined( TRACE_DESTRUCTOR )
 #undef TRACE_DESTRUCTOR
@@ -35,19 +61,6 @@
 
 #define TRACE_DESTRUCTOR 0
 
-
-/*******************************/
-/* class LIB_ALIAS */
-/*******************************/
-
-/* Class to define an alias of a component
- *  An alias uses the component definition (graphic, pins...)
- *  but has its own name, keywords and documentation.
- *  Therefore, when the component is modified, alias of this component are
- *   modified.
- *  This is a simple method to create components with differs very few
- *  (like 74LS00, 74HC00 ... and many op amps )
- */
 
 LIB_ALIAS::LIB_ALIAS( const wxString& aName, LIB_COMPONENT* aRootComponent ):
     EDA_ITEM( LIB_ALIAS_T )
@@ -71,7 +84,7 @@ LIB_ALIAS::LIB_ALIAS( const LIB_ALIAS& aAlias, LIB_COMPONENT* aRootComponent ) :
 LIB_ALIAS::~LIB_ALIAS()
 {
 #if TRACE_DESTRUCTOR
-    wxLogDebug( wxT( "Destroying alias \"%s\" of component \"%s\" with alais list count %d." ),
+    wxLogDebug( wxT( "Destroying alias \"%s\" of component \"%s\" with alias list count %d." ),
                 GetChars( name ), GetChars( root->GetName() ), root->m_aliases.size() );
 #endif
 }
@@ -97,14 +110,6 @@ CMP_LIBRARY* LIB_ALIAS::GetLibrary()
 }
 
 
-/**
- * Function SaveDoc
- * writes the doc info out to a FILE in "*.dcm" format.
- * Only non empty fields are written.
- * If all fields are empty, does not write anything
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
 bool LIB_ALIAS::SaveDoc( FILE* aFile )
 {
     if( description.IsEmpty() && keyWords.IsEmpty() && docFileName.IsEmpty() )
@@ -150,17 +155,6 @@ int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2 )
 }
 
 
-/***********************/
-/* class LIB_COMPONENT */
-/***********************/
-
-/**
- * Library component object definition.
- *
- * A library component object is typically saved and loaded
- * in a component library file (.lib).
- * Library components are different from schematic components.
- */
 LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
     EDA_ITEM( LIB_COMPONENT_T )
 {
@@ -174,7 +168,7 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
     m_showPinNumbers      = true;
     m_showPinNames        = true;
 
-    // Create the default alias if the name paremeter is not empty.
+    // Create the default alias if the name parameter is not empty.
     if( !aName.IsEmpty() )
         m_aliases.push_back( new LIB_ALIAS( aName, this ) );
 
@@ -256,12 +250,6 @@ wxString LIB_COMPONENT::GetLibraryName()
 }
 
 
-/**
- * Function ReturnSubReference
- * @return the sub reference for component having multiple parts per package.
- * The sub reference identify the part (or unit)
- * @param aUnit = the part identifier ( 1 to 26)
- */
 wxString LIB_COMPONENT::ReturnSubReference( int aUnit )
 {
     wxString subRef;
@@ -397,6 +385,7 @@ void LIB_COMPONENT::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
     {
         if( aUnit && item.m_Unit && ( item.m_Unit != aUnit ) )
             continue;
+
         if( aConvert && item.m_Convert && ( item.m_Convert != aConvert ) )
             continue;
 
@@ -467,6 +456,7 @@ LIB_ITEM* LIB_COMPONENT::GetNextDrawItem( LIB_ITEM* aItem, KICAD_T aType )
 
     // Search for last item
     size_t idx = 0;
+
     if( aItem )
     {
         for( ; idx < drawings.size(); idx++ )
@@ -612,6 +602,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
         if( !fields[i].m_Text.IsEmpty() )
         {
             fields[i].SetId( fieldId++ );
+
             if( !fields[i].Save( aFile ) )
                 return false;
         }
@@ -681,21 +672,25 @@ bool LIB_COMPONENT::Save( FILE* aFile )
 }
 
 
-bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aErrorMsg )
+bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     int      unused;
     char*    p;
     char*    componentName;
     char*    prefix = NULL;
+    char*    line;
 
     bool     Res;
     wxString Msg;
 
-    p = strtok( aLine, " \t\r\n" );
+    line = aLineReader.Line();
+
+    p = strtok( line, " \t\r\n" );
 
     if( strcmp( p, "DEF" ) != 0 )
     {
-        aErrorMsg.Printf( wxT( "DEF command expected in line %d, aborted." ), *aLineNum );
+        aErrorMsg.Printf( wxT( "DEF command expected in line %d, aborted." ),
+                          aLineReader.LineNumber() );
         return false;
     }
 
@@ -716,10 +711,15 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aEr
         || ( p = strtok( NULL, " \t\n" ) ) == NULL           /* m_unitCount: */
         || sscanf( p, "%d", &m_unitCount ) != 1 )
     {
-        aErrorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ), *aLineNum );
-        while( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) )
+        aErrorMsg.Printf( wxT( "Wrong DEF format in line %d, skipped." ),
+                          aLineReader.LineNumber() );
+
+        while( aLineReader.ReadLine() )
         {
-            p = strtok( aLine, " \t\n" );
+            line = aLineReader.Line();
+
+            p = strtok( line, " \t\n" );
+
             if( stricmp( p, "ENDDEF" ) == 0 )
                 break;
         }
@@ -738,6 +738,7 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aEr
     LIB_FIELD& value = GetValueField();
 
     strupper( componentName );
+
     if( componentName[0] != '~' )
     {
         m_name = value.m_Text = FROM_UTF8( componentName );
@@ -766,41 +767,45 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aEr
     // Copy optional infos
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL && *p == 'L' )
         m_unitsLocked = true;
+
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL  && *p == 'P' )
         m_options = ENTRY_POWER;
 
     /* Read next lines */
-    while( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) )
+    while( aLineReader.ReadLine() )
     {
-        p = strtok( aLine, " \t\n" );
+        line = aLineReader.Line();
+
+        p = strtok( line, " \t\r\n" );
 
         /* This is the error flag ( if an error occurs, Res = FALSE) */
         Res = true;
 
-        if( (aLine[0] == 'T') && (aLine[1] == 'i') )
-            Res = LoadDateAndTime( aLine );
-        else if( aLine[0] == 'F' )
-            Res = LoadField( aLine, Msg );
+        if( (*line == 'T') && (*(line + 1) == 'i') )
+            Res = LoadDateAndTime( aLineReader );
+        else if( *line == 'F' )
+            Res = LoadField( aLineReader, Msg );
         else if( strcmp( p, "ENDDEF" ) == 0 )
             break;
         else if( strcmp( p, "DRAW" ) == 0 )
-            Res = LoadDrawEntries( aFile, aLine, aLineNum, Msg );
+            Res = LoadDrawEntries( aLineReader, Msg );
         else if( strncmp( p, "ALIAS", 5 ) == 0 )
         {
             p = strtok( NULL, "\r\n" );
             Res = LoadAliases( p, aErrorMsg );
         }
         else if( strncmp( p, "$FPLIST", 5 ) == 0 )
-            Res = LoadFootprints( aFile, aLine, aLineNum, Msg );
+            Res = LoadFootprints( aLineReader, Msg );
 
         /* End line or block analysis: test for an error */
         if( !Res )
         {
             if( Msg.IsEmpty() )
-                aErrorMsg.Printf( wxT( "error occurred at line %d " ), *aLineNum );
+                aErrorMsg.Printf( wxT( "error occurred at line %d " ), aLineReader.LineNumber() );
             else
                 aErrorMsg.Printf( wxT( "error <%s> occurred at line %d " ),
-                                  GetChars( Msg ), *aLineNum );
+                                  GetChars( Msg ), aLineReader.LineNumber() );
+
             return false;
         }
     }
@@ -812,25 +817,27 @@ bool LIB_COMPONENT::Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aEr
 }
 
 
-bool LIB_COMPONENT::LoadDrawEntries( FILE* aFile, char* aLine,
-                                     int* aLineNum, wxString& aErrorMsg )
+bool LIB_COMPONENT::LoadDrawEntries( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
+    char* line;
     LIB_ITEM* newEntry = NULL;
 
     while( true )
     {
-        if( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) == NULL )
+        if( !aLineReader.ReadLine() )
         {
             aErrorMsg = wxT( "file ended prematurely loading component draw element" );
             return false;
         }
 
-        if( strncmp( aLine, "ENDDRAW", 7 ) == 0 )
+        line = aLineReader.Line();
+
+        if( strncmp( line, "ENDDRAW", 7 ) == 0 )
             break;
 
         newEntry = NULL;
 
-        switch( aLine[0] )
+        switch( line[0] )
         {
         case 'A':    /* Arc */
             newEntry = ( LIB_ITEM* ) new LIB_ARC( this );
@@ -861,26 +868,26 @@ bool LIB_COMPONENT::LoadDrawEntries( FILE* aFile, char* aLine,
             break;
 
         default:
-            aErrorMsg.Printf( wxT( "undefined DRAW command %c" ), aLine[0] );
+            aErrorMsg.Printf( wxT( "undefined DRAW command %c" ), line[0] );
             return false;
         }
 
-        if( !newEntry->Load( aLine, aErrorMsg ) )
+        if( !newEntry->Load( aLineReader, aErrorMsg ) )
         {
             aErrorMsg.Printf( wxT( "error <%s> in DRAW command %c" ),
-                              GetChars( aErrorMsg ), aLine[0] );
+                              GetChars( aErrorMsg ), line[0] );
             SAFE_DELETE( newEntry );
 
             /* Flush till end of draw section */
             do
             {
-                if( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) == NULL )
+                if( !aLineReader.ReadLine() )
                 {
                     aErrorMsg = wxT( "file ended prematurely while attempting \
 to flush to end of drawing section." );
                     return false;
                 }
-            } while( strncmp( aLine, "ENDDRAW", 7 ) != 0 );
+            } while( strncmp( line, "ENDDRAW", 7 ) != 0 );
 
             return false;
         }
@@ -908,11 +915,11 @@ bool LIB_COMPONENT::LoadAliases( char* aLine, wxString& aErrorMsg )
 }
 
 
-bool LIB_COMPONENT::LoadField( char* aLine, wxString& aErrorMsg )
+bool LIB_COMPONENT::LoadField( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     LIB_FIELD* field = new LIB_FIELD( this );
 
-    if( !field->Load( aLine, aErrorMsg ) )
+    if( !field->Load( aLineReader, aErrorMsg ) )
     {
         SAFE_DELETE( field );
         return false;
@@ -943,33 +950,32 @@ bool LIB_COMPONENT::LoadField( char* aLine, wxString& aErrorMsg )
 }
 
 
-bool LIB_COMPONENT::LoadFootprints( FILE* aFile, char* aLine,
-                                    int* aLineNum, wxString& aErrorMsg )
+bool LIB_COMPONENT::LoadFootprints( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
+    char* line;
+    char* p;
+
     while( true )
     {
-        if( GetLine( aFile, aLine, aLineNum, LINE_BUFFER_LEN_LARGE ) == NULL )
+        if( !aLineReader.ReadLine() )
         {
             aErrorMsg = wxT( "file ended prematurely while loading footprints" );
             return false;
         }
 
-        if( stricmp( aLine, "$ENDFPLIST" ) == 0 )
+        line = aLineReader.Line();
+        p = strtok( line, " \t\r\n" );
+
+        if( stricmp( p, "$ENDFPLIST" ) == 0 )
             break;
 
-        m_FootprintList.Add( FROM_UTF8( aLine + 1 ) );
+        m_FootprintList.Add( FROM_UTF8( p ) );
     }
 
     return true;
 }
 
-/* Return the component boundary box ( in user coordinates )
- * aUnit = unit selection = 0, or 1..n
- * aConvert = 0, 1 or 2
- *  If aUnit == 0, unit is not used
- *  if aConvert == 0 Convert is non used
- *  Invisible fields are not taken in account
- **/
+
 EDA_RECT LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
@@ -993,13 +999,6 @@ EDA_RECT LIB_COMPONENT::GetBoundingBox( int aUnit, int aConvert ) const
 }
 
 
-/* Return the component boundary box ( in user coordinates )
- * aUnit = unit selection = 0, or 1..n
- * aConvert = 0, 1 or 2
- *  If aUnit == 0, unit is not used
- *  if aConvert == 0 Convert is non used
- *  Fields are not take in account
- **/
 EDA_RECT LIB_COMPONENT::GetBodyBoundingBox( int aUnit, int aConvert ) const
 {
     EDA_RECT bBox( wxPoint( 0, 0 ), wxSize( 0, 0 ) );
@@ -1085,6 +1084,7 @@ void LIB_COMPONENT::GetFields( LIB_FIELDS& aList )
             continue;
 
         field = ( LIB_FIELD* ) &item;
+
         if( (unsigned) field->GetId() < MANDATORY_FIELDS )
             continue;  // was added above
 
@@ -1143,10 +1143,6 @@ LIB_FIELD& LIB_COMPONENT::GetReferenceField()
 }
 
 
-/*
- * Read date and time of component in the format:
- *  "Ti yy/mm/jj hh:mm:ss"
- */
 bool LIB_COMPONENT::SaveDateAndTime( FILE* aFile )
 {
     int year, mon, day, hour, min, sec;
@@ -1167,9 +1163,6 @@ bool LIB_COMPONENT::SaveDateAndTime( FILE* aFile )
     return true;
 }
 
-/* lit date et time de modif composant sous le format:
- *  "Ti yy/mm/jj hh:mm:ss"
- */
 bool LIB_COMPONENT::LoadDateAndTime( char* aLine )
 {
     int   year, mon, day, hour, min, sec;
@@ -1178,12 +1171,12 @@ bool LIB_COMPONENT::LoadDateAndTime( char* aLine )
     strtok( aLine, " \r\t\n" );
     strtok( NULL, " \r\t\n" );
 
-    if (sscanf( aLine, "%d/%d/%d %d:%d:%d", &year, &mon, &day, &hour, &min, &sec ) != 6 )
+    if( sscanf( aLine, "%d/%d/%d %d:%d:%d", &year, &mon, &day, &hour, &min, &sec ) != 6 )
         return false;
 
     m_dateModified = ( sec & 63 ) + ( ( min & 63 ) << 6 ) +
-        ( ( hour & 31 ) << 12 ) + ( ( day & 31 ) << 17 ) +
-        ( ( mon & 15 ) << 22 ) + ( ( year - 1990 ) << 26 );
+                     ( ( hour & 31 ) << 12 ) + ( ( day & 31 ) << 17 ) +
+                     ( ( mon & 15 ) << 22 ) + ( ( year - 1990 ) << 26 );
 
     return true;
 }
@@ -1316,6 +1309,7 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
      * a memory reallocation can happen and will break pointers
      */
     unsigned icnt = drawings.size();
+
     for( unsigned ii = 0; ii < icnt; ii++  )
     {
         LIB_ITEM& item = drawings[ii];
@@ -1448,6 +1442,7 @@ void LIB_COMPONENT::SetPartCount( int aCount )
         // the buffer can be reallocated, that change the previous value of
         // .begin() and .end() iterators and invalidate others iterators
         unsigned imax = drawings.size();
+
         for( unsigned ii = 0; ii < imax; ii++ )
         {
             if( drawings[ii].m_Unit != 1 )
@@ -1476,12 +1471,12 @@ void LIB_COMPONENT::SetConversion( bool aSetConvert )
     // Duplicate items to create the converted shape
     if( aSetConvert )
     {
-
         BOOST_FOREACH( LIB_ITEM& item, drawings )
         {
             /* Only pins are duplicated. */
             if( item.Type() != LIB_PIN_T )
                 continue;
+
             if( item.m_Convert == 1 )
             {
                 LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();

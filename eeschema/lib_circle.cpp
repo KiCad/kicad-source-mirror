@@ -1,6 +1,31 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file lib_circle.cpp
- * @brief LIB_CIRCLE class definition
+ * @brief LIB_CIRCLE class implementation.
  */
 
 #include "fctsys.h"
@@ -10,6 +35,7 @@
 #include "plot_common.h"
 #include "trigo.h"
 #include "wxstruct.h"
+#include "richio.h"
 
 #include "general.h"
 #include "protos.h"
@@ -48,11 +74,12 @@ bool LIB_CIRCLE::Save( FILE* aFile )
 }
 
 
-bool LIB_CIRCLE::Load( char* aLine, wxString& aErrorMsg )
+bool LIB_CIRCLE::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     char tmp[256];
+    char* line = (char*) aLineReader;
 
-    int  cnt = sscanf( &aLine[2], "%d %d %d %d %d %d %s", &m_Pos.x, &m_Pos.y,
+    int  cnt = sscanf( line + 2, "%d %d %d %d %d %d %s", &m_Pos.x, &m_Pos.y,
                        &m_Radius, &m_Unit, &m_Convert, &m_Width, tmp );
 
     if( cnt < 6 )
@@ -63,6 +90,7 @@ bool LIB_CIRCLE::Load( char* aLine, wxString& aErrorMsg )
 
     if( tmp[0] == 'F' )
         m_Fill = FILLED_SHAPE;
+
     if( tmp[0] == 'f' )
         m_Fill = FILLED_WITH_BG_BODYCOLOR;
 
@@ -70,12 +98,6 @@ bool LIB_CIRCLE::Load( char* aLine, wxString& aErrorMsg )
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param aPosRef A wxPoint to test in Eeschema space
- * @return - true if a hit, else false
- */
 bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
 {
     int mindist = GetPenSize() / 2;
@@ -88,13 +110,6 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef )
 }
 
 
-/**
- * Function HitTest
- * @return true if the point aPosRef is near this object
- * @param aPosRef = a wxPoint to test
- * @param aThreshold = max distance to this object (usually the half thickness of a line)
- * @param aTransform = the transform matrix
- */
 bool LIB_CIRCLE::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {
     if( aThreshold < 0 )
@@ -165,12 +180,14 @@ void LIB_CIRCLE::DoMirrorHorizontal( const wxPoint& aCenter )
     m_Pos.x += aCenter.x;
 }
 
+
 void LIB_CIRCLE::DoMirrorVertical( const wxPoint& aCenter )
 {
     m_Pos.y -= aCenter.y;
     m_Pos.y *= -1;
     m_Pos.y += aCenter.y;
 }
+
 
 void LIB_CIRCLE::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
 {
@@ -197,10 +214,6 @@ void LIB_CIRCLE::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 }
 
 
-/**
- * Function GetPenSize
- * @return the size of the "pen" that be used to draw or plot this item
- */
 int LIB_CIRCLE::GetPenSize() const
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
@@ -220,7 +233,9 @@ void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
             color = g_ItemSelectetColor;
     }
     else
+    {
         color = aColor;
+    }
 
     pos1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
     GRSetDrawMode( aDC, aDrawMode );

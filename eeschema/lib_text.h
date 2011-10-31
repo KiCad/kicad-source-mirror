@@ -1,9 +1,39 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file lib_text.h
+ */
 
 #ifndef _LIB_TEXT_H_
 #define _LIB_TEXT_H_
 
-
 #include "lib_draw_item.h"
+
+
+class LINE_READER;
 
 
 /*********************************************/
@@ -25,7 +55,7 @@ class LIB_TEXT : public LIB_ITEM, public EDA_TEXT
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
 
     /**
-     * Calculate the text attributes ralative to \a aPosition while editing.
+     * Calculate the text attributes relative to \a aPosition while editing.
      *
      * @param aPosition - Edit position in drawing units.
      */
@@ -44,7 +74,7 @@ public:
     /**
      * Sets the text item string to \a aText.
      *
-     * This method does more than juat set the set the text string.  There are special
+     * This method does more than just set the set the text string.  There are special
      * cases when changing the text string alone is not enough.  If the text item is
      * being moved, the name change must be delayed until the next redraw to prevent
      * drawing artifacts.
@@ -60,7 +90,8 @@ public:
      * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* aLine, wxString& aErrorMsg );
+
+    virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
     /**
      * Test if the given point is within the bounds of this object.
@@ -92,12 +123,16 @@ public:
     }
 
     /**
+     * Function GetPenSize
      * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize( ) const;
 
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
+    /**
+     * @return the boundary box for this, in schematic coordinates
+     */
     virtual EDA_RECT GetBoundingBox() const;
 
     void Rotate();

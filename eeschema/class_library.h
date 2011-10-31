@@ -6,10 +6,12 @@
 #ifndef CLASS_LIBRARY_H
 #define CLASS_LIBRARY_H
 
-
 #include <wx/filename.h>
 
 #include "class_libentry.h"
+
+
+class LINE_READER;
 
 
 /*
@@ -130,7 +132,7 @@ public:
 private:
     bool SaveHeader( FILE* aFile );
 
-    bool LoadHeader( FILE* aFile, int* aLineNum );
+    bool LoadHeader( LINE_READER& aLineReader );
     void LoadAliases( LIB_COMPONENT* aComponent );
 
 public:

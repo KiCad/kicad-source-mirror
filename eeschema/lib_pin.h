@@ -1,8 +1,31 @@
-/****************************************************************/
-/*  Headers for pins in lib component definitions */
-/****************************************************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
-/* Definitions of class LIB_PIN used in component libraries.
+/**
+ * @file class_libentry.h
+ * @brief Class LIB_PIN definition.
  */
 #ifndef CLASS_PIN_H
 #define CLASS_PIN_H
@@ -10,9 +33,10 @@
 #include "lib_draw_item.h"
 
 class SCH_COMPONENT;
+class LINE_READER;
 
 
-#define TARGET_PIN_RADIUS     12  /* Circle diameter drawn at the active end of pins */
+#define TARGET_PIN_RADIUS   12  /* Circle diameter drawn at the active end of pins */
 
 #define DEFAULT_TEXT_SIZE   50  /* Default size for field texts */
 #define PART_NAME_LEN       15  /* Maximum length of part name. */
@@ -126,7 +150,6 @@ public:
     void Show( int nestLevel, std::ostream& os );   // virtual override
 #endif
 
-
     /**
      * Write pin object to a FILE in "*.lib" format.
      *
@@ -134,7 +157,8 @@ public:
      * @return - true if success writing else false.
      */
     virtual bool Save( FILE* aFile );
-    virtual bool Load( char* aLine, wxString& aErrorMsg );
+
+    virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 
     /**
      * Function HitTest
@@ -157,10 +181,25 @@ public:
      */
     virtual bool HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform );
 
-    virtual void DisplayInfo( EDA_DRAW_FRAME* frame );
+    /**
+     * Function DisplayInfo
+     * displays the pin information in the message panel attached to \a aFrame.
+     */
+    virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
+    /**
+     * Function GetBoundingBox
+     * @return the boundary box for the pin in schematic coordinates.
+     *
+     * Uses DefaultTransform as transform matrix
+     */
     virtual EDA_RECT GetBoundingBox() const;
 
+    /**
+     * Function ReturnPinEndPoint
+     *
+     * @return The pin end position for a component in the normal orientation.
+     */
     wxPoint ReturnPinEndPoint() const;
 
     /**
@@ -194,6 +233,10 @@ public:
      */
     static wxString ReturnPinStringNum( long aPinNum );
 
+    /**
+     * Function SetPinNumFromString
+     * fill the pin number buffer with \a aBuffer.
+     */
     void SetPinNumFromString( wxString& aBuffer );
 
     wxString GetName() const { return m_name; }
@@ -332,7 +375,7 @@ public:
      * Enable or clear pin editing mode.
      *
      * The pin editing mode marks or unmarks all pins common to this
-     * pin object for further editing.  If any of the pin modifcation
+     * pin object for further editing.  If any of the pin modification
      * methods are called after enabling the editing mode, all pins
      * marked for editing will have the same attribute changed.  The
      * only case were this is not true making this pin common to all
@@ -353,17 +396,42 @@ public:
     bool IsVisible() { return ( m_attributes & PIN_INVISIBLE ) == 0; }
 
     /**
-     * @return the size of the "pen" that be used to draw or plot this item.
+     * Function GetPenSize
+     * @return the size of the "pen" that be used to draw or plot this item
      */
     virtual int GetPenSize() const;
 
+    /**
+     * Function DrawPinSymbol
+     * Draw the pin symbol without text.
+     * If \a aColor != 0, draw with \a aColor, else with the normal pin color.
+     */
     void DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                         int aOrientation, int aDrawMode, int aColor = -1 );
 
+    /**
+     * Function DrawPinTexts
+     * puts the pin number and pin text info, given the pin line coordinates.
+     * The line must be vertical or horizontal.  If PinText == NULL nothing is printed.
+     * If PinNum = 0 no number is printed.  The current zoom factor is taken into account.
+     * If TextInside then the text is been put inside,otherwise all is drawn outside.
+     * Pin Name:    substring between '~' is negated
+     * DrawMode = GR_OR, XOR ...
+     */
     void DrawPinTexts( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint& aPosition,
                        int aOrientation, int TextInside, bool DrawPinNum, bool DrawPinName,
                        int aColor, int aDrawMode );
 
+    /**
+     * Function PlotPinTexts
+     * plots the pin number and pin text info, given the pin line coordinates.
+     * Same as DrawPinTexts((), but output is the plotter
+     * The line must be vertical or horizontal.
+     * If PinNext == NULL nothing is printed.
+     * Current Zoom factor is taken into account.
+     * If TextInside then the text is been put inside (moving from x1, y1 in
+     * the opposite direction to x2,y2), otherwise all is drawn outside.
+     */
     void PlotPinTexts( PLOTTER *aPlotter,
                        wxPoint& aPosition,
                        int      aOrientation,

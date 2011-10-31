@@ -1,6 +1,31 @@
-/**********************************************************/
-/*  libclass.cpp                                          */
-/**********************************************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file lib_field.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -21,24 +46,6 @@
 #include "template_fieldnames.h"
 
 
-/*******************/
-/* class LIB_FIELD */
-/*******************/
-
-/**
- * a Field is a string linked to a component.
- *  Unlike a pure graphic text, fields can be used in netlist generation
- *  and other tools (BOM).
- *
- *  The first 4 fields have a special meaning:
- *
- *  0 = REFERENCE
- *  1 = VALUE
- *  2 = FOOTPRINT (default Footprint)
- *  3 = DOCUMENTATION (user doc link)
- *
- *  others = free fields
- */
 LIB_FIELD::LIB_FIELD(LIB_COMPONENT * aParent, int idfield ) :
     LIB_ITEM( LIB_FIELD_T, aParent )
 {
@@ -143,13 +150,14 @@ bool LIB_FIELD::Save( FILE* ExportFile )
 }
 
 
-bool LIB_FIELD::Load( char* line, wxString& errorMsg )
+bool LIB_FIELD::Load( LINE_READER& aLineReader, wxString& errorMsg )
 {
     int   cnt;
     char  textOrient;
     char  textVisible;
     char  textHJustify;
     char  textVJustify[256];
+    char* line = (char*) aLineReader;
 
     if( sscanf( line + 1, "%d", &m_id ) != 1 || m_id < 0 )
     {
@@ -267,20 +275,12 @@ bool LIB_FIELD::Load( char* line, wxString& errorMsg )
 }
 
 
-/**
- * Function GetPenSize
- * @return the size of the "pen" that be used to draw or plot this item
- */
 int LIB_FIELD::GetPenSize() const
 {
     return ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
 }
 
 
-/*
- * if aData not NULL, aData must point a wxString which is used instead of
- * the m_Text
- */
 void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                              int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
@@ -458,7 +458,7 @@ void LIB_FIELD::DoOffset( const wxPoint& offset )
 bool LIB_FIELD::DoTestInside( EDA_RECT& rect ) const
 {
     /*
-     * FIXME: This fails to take into acount the size and/or orientation of
+     * FIXME: This fails to take into account the size and/or orientation of
      *        the text.
      */
     return rect.Contains( m_Pos.x, -m_Pos.y );
@@ -499,12 +499,6 @@ void LIB_FIELD::DoPlot( PLOTTER* plotter, const wxPoint& offset, bool fill,
 }
 
 
-/*
- * If the field is the reference, return reference like schematic,
- * i.e U -> U? or U?A or the field text for others
- *
- * @fixme This should be handled by the field object.
- */
 wxString LIB_FIELD::GetFullText( int unit )
 {
     if( m_id != REFERENCE )

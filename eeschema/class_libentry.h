@@ -1,6 +1,31 @@
-/******************************************/
-/*  Library component object definitions. */
-/******************************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file class_libentry.h
+ */
 
 #ifndef CLASS_LIBENTRY_H
 #define CLASS_LIBENTRY_H
@@ -12,6 +37,7 @@
 #include <map>
 
 
+class LINE_READER;
 class CMP_LIBRARY;
 class LIB_ALIAS;
 class LIB_COMPONENT;
@@ -45,8 +71,11 @@ enum  LibrEntryOptions
 /**
  * Component library alias object definition.
  *
- * Component aliases are not really components.  They are references
- * to an actual component object.
+ * Component aliases are not really components.  An alias uses the component definition
+ * (graphic, pins...)  but has its own name, keywords and documentation.  Therefore, when
+ * the component is modified, alias of this component are modified.  This is a simple
+ * method to create components that have the same physical layout with different names
+ * such as 74LS00, 74HC00 ... and many op amps.
  */
 class LIB_ALIAS : public EDA_ITEM
 {
@@ -144,7 +173,8 @@ extern int LibraryEntryCompare( const LIB_ALIAS* aItem1, const LIB_ALIAS* aItem2
 
 
 /**
- * Library component object definition.
+ * Class LIB_COMPONENT
+ * defines a library component object.
  *
  * A library component object is typically saved and loaded in a component library file (.lib).
  * Library components are different from schematic components.
@@ -207,7 +237,7 @@ public:
      * Add an alias \a aName to the component.
      *
      * Duplicate alias names are not added to the alias list.  Debug builds will raise an
-     * assertion.  Release builds will fail silenetly.
+     * assertion.  Release builds will fail silently.
      *
      * @param aName - Name of alias to add.
      */
@@ -255,7 +285,16 @@ public:
      **/
     EDA_RECT GetBodyBoundingBox( int aUnit, int aConvert ) const;
 
+    /**
+     * Function SaveDateAndTime
+     * write the date and time of component to \a aFile in the format:
+     * "Ti yy/mm/jj hh:mm:ss"
+     *
+     * @param aFile A point to a FILE object containing the file to write to.
+     * @return True if the date and time were successfully written to \a aFile.
+     */
     bool SaveDateAndTime( FILE* aFile );
+
     bool LoadDateAndTime( char* aLine );
 
     /**
@@ -267,19 +306,17 @@ public:
     bool Save( FILE* aFile );
 
     /**
-     * Load component definition from \a aFile.
+     * Load component definition from \a aReader.
      *
-     * @param aFile - File descriptor of file to load form.
-     * @param aLine - The first line of the component definition.
-     * @param aLineNum - The current line number in the file.
+     * @param aReader A LINE_READER object to load file from.
      * @param aErrorMsg - Description of error on load failure.
      * @return True if the load was successful, false if there was an error.
      */
-    bool Load( FILE* aFile, char* aLine, int* aLineNum, wxString& aErrorMsg );
-    bool LoadField( char* aLine, wxString& aErrorMsg );
-    bool LoadDrawEntries( FILE* aFile, char* aLine, int* aLineNum, wxString& aErrorMsg );
+    bool Load( LINE_READER& aReader, wxString& aErrorMsg );
+    bool LoadField( LINE_READER& aReader, wxString& aErrorMsg );
+    bool LoadDrawEntries( LINE_READER& aReader, wxString& aErrorMsg );
     bool LoadAliases( char* aLine, wxString& aErrorMsg );
-    bool LoadFootprints( FILE* aFile, char* aLine, int* aLineNum, wxString& aErrorMsg );
+    bool LoadFootprints( LINE_READER& aReader, wxString& aErrorMsg );
 
     bool IsPower() { return m_options == ENTRY_POWER; }
     bool IsNormal() { return m_options == ENTRY_NORMAL; }

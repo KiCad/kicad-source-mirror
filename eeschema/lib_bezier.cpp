@@ -1,6 +1,31 @@
-/**********************/
-/** class LIB_BEZIER **/
-/**********************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file lib_bezier.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -10,6 +35,7 @@
 #include "trigo.h"
 #include "wxstruct.h"
 #include "bezier_curves.h"
+#include "richio.h"
 
 #include "general.h"
 #include "protos.h"
@@ -56,26 +82,28 @@ bool LIB_BEZIER::Save( FILE* aFile )
 }
 
 
-bool LIB_BEZIER::Load( char* aLine, wxString& aErrorMsg )
+bool LIB_BEZIER::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 {
     char*   p;
     int     i, ccount = 0;
     wxPoint pt;
+    char*   line = (char*) aLineReader;
 
-    i = sscanf( &aLine[2], "%d %d %d %d", &ccount, &m_Unit, &m_Convert, &m_Width );
+    i = sscanf( line + 2, "%d %d %d %d", &ccount, &m_Unit, &m_Convert, &m_Width );
 
     if( i !=4 )
     {
         aErrorMsg.Printf( _( "Bezier only had %d parameters of the required 4" ), i );
         return false;
     }
+
     if( ccount <= 0 )
     {
         aErrorMsg.Printf( _( "Bezier count parameter %d is invalid" ), ccount );
         return false;
     }
 
-    p = strtok( &aLine[2], " \t\n" );
+    p = strtok( line + 2, " \t\n" );
     p = strtok( NULL, " \t\n" );
     p = strtok( NULL, " \t\n" );
     p = strtok( NULL, " \t\n" );
@@ -84,17 +112,21 @@ bool LIB_BEZIER::Load( char* aLine, wxString& aErrorMsg )
     {
         wxPoint point;
         p = strtok( NULL, " \t\n" );
+
         if( sscanf( p, "%d", &pt.x ) != 1 )
         {
             aErrorMsg.Printf( _( "Bezier point %d X position not defined" ), i );
             return false;
         }
+
         p = strtok( NULL, " \t\n" );
+
         if( sscanf( p, "%d", &pt.y ) != 1 )
         {
             aErrorMsg.Printf( _( "Bezier point %d Y position not defined" ), i );
             return false;
         }
+
         m_BezierPoints.push_back( pt );
     }
 
@@ -104,6 +136,7 @@ bool LIB_BEZIER::Load( char* aLine, wxString& aErrorMsg )
     {
         if( p[0] == 'F' )
             m_Fill = FILLED_SHAPE;
+
         if( p[0] == 'f' )
             m_Fill = FILLED_WITH_BG_BODYCOLOR;
     }
@@ -131,6 +164,7 @@ int LIB_BEZIER::DoCompare( const LIB_ITEM& aOther ) const
     {
         if( m_BezierPoints[i].x != tmp->m_BezierPoints[i].x )
             return m_BezierPoints[i].x - tmp->m_BezierPoints[i].x;
+
         if( m_BezierPoints[i].y != tmp->m_BezierPoints[i].y )
             return m_BezierPoints[i].y - tmp->m_BezierPoints[i].y;
     }
@@ -181,6 +215,7 @@ void LIB_BEZIER::DoMirrorHorizontal( const wxPoint& aCenter )
     }
 
     imax = m_BezierPoints.size();
+
     for( i = 0; i < imax; i++ )
     {
         m_BezierPoints[i].x -= aCenter.x;
@@ -201,6 +236,7 @@ void LIB_BEZIER::DoMirrorVertical( const wxPoint& aCenter )
     }
 
     imax = m_BezierPoints.size();
+
     for( i = 0; i < imax; i++ )
     {
         m_BezierPoints[i].y -= aCenter.y;
@@ -214,12 +250,14 @@ void LIB_BEZIER::DoRotate( const wxPoint& aCenter, bool aRotateCCW )
     int rot_angle = aRotateCCW ? -900 : 900;
 
     size_t i, imax = m_PolyPoints.size();
+
     for( i = 0; i < imax; i++ )
     {
         RotatePoint( &m_PolyPoints[i], aCenter, rot_angle );
     }
 
     imax = m_BezierPoints.size();
+
     for( i = 0; i < imax; i++ )
     {
         RotatePoint( &m_BezierPoints[i], aCenter, rot_angle );
@@ -254,14 +292,11 @@ void LIB_BEZIER::DoPlot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 }
 
 
-/**
- * Function GetPenSize
- * @return the size of the "pen" that be used to draw or plot this item
- */
 int LIB_BEZIER::GetPenSize() const
 {
     return ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
 }
+
 
 void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                               int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
@@ -288,9 +323,12 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
             color = g_ItemSelectetColor;
     }
     else
+    {
         color = aColor;
+    }
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
+
     if( aColor >= 0 )
         fill = NO_FILL;
 
@@ -319,28 +357,18 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 }
 
 
-/**
- * Function HitTest
- * tests if the given wxPoint is within the bounds of this object.
- * @param aRefPos A wxPoint to test
- * @return true if a hit, else false
- */
 bool LIB_BEZIER::HitTest( const wxPoint& aRefPos )
 {
     int mindist = GetPenSize() / 2;
+
     // Have a minimal tolerance for hit test
     if ( mindist < MINIMUM_SELECTION_DISTANCE )
         mindist = MINIMUM_SELECTION_DISTANCE;
+
     return HitTest( aRefPos, mindist, DefaultTransform );
 }
 
-/**
- * Function HitTest
- * @return if the point aPosRef is near a segment
- * @param aPosRef = a wxPoint to test
- * @param aThreshold = max distance to a segment
- * @param aTransform = the transform matrix
- */
+
 bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTransform )
 {
     wxPoint ref, start, end;
@@ -361,10 +389,6 @@ bool LIB_BEZIER::HitTest( wxPoint aPosRef, int aThreshold, const TRANSFORM& aTra
 }
 
 
-/**
- * Function GetBoundingBox
- * @return the boundary box for this, in library coordinates
- */
 EDA_RECT LIB_BEZIER::GetBoundingBox() const
 {
     EDA_RECT rect;

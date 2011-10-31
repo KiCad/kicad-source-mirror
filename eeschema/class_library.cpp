@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file class_library.cpp
  */
@@ -10,6 +35,7 @@
 #include "gestfich.h"
 #include "eda_doc.h"
 #include "wxstruct.h"
+#include "richio.h"
 
 #include "general.h"
 #include "protos.h"
@@ -129,6 +155,7 @@ void CMP_LIBRARY::SearchEntryNames( wxArrayString& aNames,
     {
         if( !aKeySearch.IsEmpty() && KeyWordOk( aKeySearch, (*it).second->GetKeyWords() ) )
             aNames.Add( (*it).first );
+
         if( !aNameSearch.IsEmpty() && WildCompareString( aNameSearch,
                                                          (*it).second->GetName(), false ) )
             aNames.Add( (*it).first );
@@ -186,10 +213,6 @@ LIB_ALIAS* CMP_LIBRARY::FindEntry( const wxChar* aName )
 }
 
 
-/**
- * Return the first entry in the library.
- * @return The first entry or NULL if the library has no entries.
- */
 LIB_ALIAS* CMP_LIBRARY::GetFirstEntry()
 {
     if( aliases.size() )
@@ -197,6 +220,7 @@ LIB_ALIAS* CMP_LIBRARY::GetFirstEntry()
     else
         return NULL;
 }
+
 
 LIB_COMPONENT* CMP_LIBRARY::FindComponent( const wxChar* aName )
 {
@@ -279,7 +303,7 @@ LIB_ALIAS* CMP_LIBRARY::RemoveEntry( LIB_ALIAS* aEntry )
         return NULL;
 
     // If the entry pointer doesn't match the name it is mapped to in the library, we
-    // have done someething terribly wrong.
+    // have done something terribly wrong.
     wxCHECK_MSG( (*it).second == aEntry, NULL,
                  wxT( "Pointer mismatch while attempting to remove entry <" ) +
                  aEntry->GetName() + wxT( "> from library <" ) + GetName() + wxT( ">." ) );
@@ -380,8 +404,7 @@ LIB_ALIAS* CMP_LIBRARY::GetPreviousEntry( const wxChar* aName )
 bool CMP_LIBRARY::Load( wxString& aErrorMsg )
 {
     FILE*          file;
-    int            lineNumber = 0;
-    char           line[LINE_BUFFER_LEN_LARGE];  // Use a very large buffer to load data
+    char*          line;
     LIB_COMPONENT* libEntry;
     wxString       msg;
 
@@ -399,10 +422,11 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
         return false;
     }
 
-    if( GetLine( file, line, &lineNumber, sizeof( line ) ) == NULL )
+    FILE_LINE_READER reader( file, fileName.GetFullPath() );
+
+    if( !reader.ReadLine() )
     {
         aErrorMsg = _( "The file is empty!" );
-        fclose( file );
         return false;
     }
 
@@ -410,6 +434,8 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
     if( type == LIBRARY_TYPE_EESCHEMA )
     {
         wxString tmp;
+
+        line = reader.Line();
 
         header = FROM_UTF8( line );
 
@@ -426,21 +452,18 @@ bool CMP_LIBRARY::Load( wxString& aErrorMsg )
             || !tkn.GetNextToken().Upper().StartsWith(wxT( "EESCHEMA-LIB" ) ) )
         {
             aErrorMsg = _( "The file is NOT an Eeschema library!" );
-            fclose( file );
             return false;
         }
 
         if( !tkn.HasMoreTokens() )
         {
             aErrorMsg = _( "The file header is missing version and time stamp information." );
-            fclose( file );
             return false;
         }
 
         if( tkn.GetNextToken() != wxT( "Version" ) || !tkn.HasMoreTokens() )
         {
             aErrorMsg = wxT( "The file header version information is invalid." );
-            fclose( file );
             return false;
         }
 
@@ -466,19 +489,18 @@ the current schematic." ),
         {
             versionMajor = (int) major;
             versionMinor = (int) minor;
-//            wxLogDebug( wxT( "Component library <%s> is version %d.%d." ),
-//                        GetChars( GetName() ), versionMajor, versionMinor );
         }
     }
 
-    while( GetLine( file, line, &lineNumber, sizeof( line ) ) )
+    while( reader.ReadLine() )
     {
+        line = reader.Line();
+
         if( type == LIBRARY_TYPE_EESCHEMA && strnicmp( line, "$HEADER", 7 ) == 0 )
         {
-            if( !LoadHeader( file, &lineNumber ) )
+            if( !LoadHeader( reader ) )
             {
                 aErrorMsg = _( "An error occurred attempting to read the header." );
-                fclose( file );
                 return false;
             }
 
@@ -490,7 +512,7 @@ the current schematic." ),
             /* Read one DEF/ENDDEF part entry from library: */
             libEntry = new LIB_COMPONENT( wxEmptyString, this );
 
-            if( libEntry->Load( file, line, &lineNumber, msg ) )
+            if( libEntry->Load( reader, msg ) )
             {
                 /* Check for duplicate entry names and warn the user about
                  * the potential conflict.
@@ -516,8 +538,6 @@ the current schematic." ),
         }
     }
 
-    fclose( file );
-
     return true;
 }
 
@@ -542,13 +562,15 @@ void CMP_LIBRARY::LoadAliases( LIB_COMPONENT* component )
 }
 
 
-bool CMP_LIBRARY::LoadHeader( FILE* libfile, int* LineNum )
+bool CMP_LIBRARY::LoadHeader( LINE_READER& aLineReader )
 {
-    char Line[LINE_BUFFER_LEN], * text, * data;
+    char* line, * text, * data;
 
-    while( GetLine( libfile, Line, LineNum, sizeof(Line) ) )
+    while( aLineReader.ReadLine() )
     {
-        text = strtok( Line, " \t\r\n" );
+        line = (char*) aLineReader;
+
+        text = strtok( line, " \t\r\n" );
         data = strtok( NULL, " \t\r\n" );
 
         if( stricmp( text, "TimeStamp" ) == 0 )
@@ -558,7 +580,7 @@ bool CMP_LIBRARY::LoadHeader( FILE* libfile, int* LineNum )
             return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -618,6 +640,7 @@ bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
         {
             if( strncmp( line, "$ENDCMP", 7 ) == 0 )
                 break;
+
             text = strtok( line + 2, "\n\r" );
 
             if( entry )
@@ -662,7 +685,7 @@ bool CMP_LIBRARY::Save( const wxString& aFullFileName, bool aOldDocFormat )
         {
             libFileName.MakeAbsolute();
             msg = wxT( "Failed to rename old component library file " ) +
-                backupFileName.GetFullPath();
+                  backupFileName.GetFullPath();
             DisplayError( NULL, msg );
         }
     }
@@ -680,6 +703,7 @@ bool CMP_LIBRARY::Save( const wxString& aFullFileName, bool aOldDocFormat )
     isModified = false;
 
     timeStamp = GetTimeStamp();
+
     if( !SaveHeader( libfile ) )
     {
         fclose( libfile );
@@ -728,7 +752,7 @@ bool CMP_LIBRARY::SaveDocFile( const wxString& aFullFileName )
         if( !wxRenameFile( docFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
             msg = wxT( "Failed to save old library document file " ) +
-                backupFileName.GetFullPath();
+                  backupFileName.GetFullPath();
             DisplayError( NULL, msg );
         }
     }
@@ -739,12 +763,13 @@ bool CMP_LIBRARY::SaveDocFile( const wxString& aFullFileName )
     {
         docFileName.MakeAbsolute();
         msg = wxT( "Failed to create component document library file " ) +
-            docFileName.GetFullPath();
+              docFileName.GetFullPath();
         DisplayError( NULL, msg );
         return false;
     }
 
     char line[256];
+
     if( fprintf( docfile, "%s  Date: %s\n", DOCFILE_IDENT, DateAndTime( line ) ) < 0 )
     {
         fclose( docfile );
@@ -774,6 +799,7 @@ bool CMP_LIBRARY::SaveHeader( FILE* aFile )
     bool succes = true;
 
     DateAndTime( BufLine );
+
     if( fprintf( aFile, "%s %d.%d  Date: %s\n", LIBFILE_IDENT,
                  LIB_VERSION_MAJOR, LIB_VERSION_MINOR, BufLine ) < 0 )
         succes = false;
@@ -884,11 +910,6 @@ void CMP_LIBRARY::RemoveLibrary( const wxString& aName )
 }
 
 
- /**
- * Test for an existing library.
- * @param aLibptr - aLibptr.
- * @return true found.  false if not found.
- */
 bool CMP_LIBRARY::LibraryExists( const CMP_LIBRARY* aLibptr )
 {
     BOOST_FOREACH( CMP_LIBRARY& lib, libraryList )
