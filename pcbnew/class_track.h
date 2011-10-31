@@ -63,6 +63,7 @@ protected:
 public:
     BOARD_ITEM* start;              // pointers to a connected item (pad or track)
     BOARD_ITEM* end;
+    std::vector<TRACK*> m_TracksConnected;   // list of other tracks connected to me
 
     int         m_Param;            // Auxiliary variable ( used in some computations )
 
