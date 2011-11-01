@@ -336,69 +336,58 @@ void EDA_3D_CANVAS::OnRightClick( wxMouseEvent& event )
     wxPoint     pos;
     wxMenu      PopUpMenu;
 
-    pos.x = event.GetX(); pos.y = event.GetY();
-    wxMenuItem* item = new wxMenuItem( &PopUpMenu, ID_POPUP_ZOOMIN,
-                                      _( "Zoom +" ) );
+    pos.x = event.GetX();
+    pos.y = event.GetY();
+
+    wxMenuItem* item = new wxMenuItem( &PopUpMenu, ID_POPUP_ZOOMIN, _( "Zoom +" ) );
     item->SetBitmap( KiBitmap( zoom_in_xpm ));
     PopUpMenu.Append( item );
 
-    item = new wxMenuItem( &PopUpMenu, ID_POPUP_ZOOMOUT,
-                          _( "Zoom -" ) );
+    item = new wxMenuItem( &PopUpMenu, ID_POPUP_ZOOMOUT, _( "Zoom -" ) );
     item->SetBitmap( KiBitmap( zoom_out_xpm ));
     PopUpMenu.Append( item );
 
     PopUpMenu.AppendSeparator();
-    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZPOS,
-                          _( "Top View" ) );
+    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZPOS, _( "Top View" ) );
     item->SetBitmap( KiBitmap( axis3d_top_xpm ));
     PopUpMenu.Append( item );
 
-    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZNEG,
-                          _( "Bottom View" ) );
+    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZNEG, _( "Bottom View" ) );
     item->SetBitmap( KiBitmap( axis3d_bottom_xpm ));
     PopUpMenu.Append( item );
 
     PopUpMenu.AppendSeparator();
-    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_XPOS,
-                          _( "Right View" ) );
+    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_XPOS, _( "Right View" ) );
     item->SetBitmap( KiBitmap( axis3d_right_xpm ));
     PopUpMenu.Append( item );
 
-    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_XNEG,
-                          _( "Left View" ) );
+    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_XNEG, _( "Left View" ) );
     item->SetBitmap( KiBitmap( axis3d_left_xpm ));
     PopUpMenu.Append( item );
 
-
     PopUpMenu.AppendSeparator();
-    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_YPOS,
-                          _( "Front View" ) );
+    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_YPOS, _( "Front View" ) );
     item->SetBitmap( KiBitmap( axis3d_front_xpm ));
     PopUpMenu.Append( item );
 
-    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_YNEG,
-                          _( "Back View" ) );
+    item = new wxMenuItem( &PopUpMenu, ID_POPUP_VIEW_YNEG, _( "Back View" ) );
     item->SetBitmap( KiBitmap( axis3d_back_xpm ));
     PopUpMenu.Append( item );
 
     PopUpMenu.AppendSeparator();
-    item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_LEFT,
-                          _( "Move left <-" ) );
+    item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_LEFT, _( "Move left <-" ) );
     item->SetBitmap( KiBitmap( left_xpm ));
     PopUpMenu.Append( item );
 
-    item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_RIGHT,
-                          _( "Move right ->" ) );
+    item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_RIGHT, _( "Move right ->" ) );
     item->SetBitmap( KiBitmap( right_xpm ));
     PopUpMenu.Append( item );
 
-    item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_UP,
-                          _( "Move Up ^" ) );
+    item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_UP, _( "Move Up ^" ) );
     item->SetBitmap( KiBitmap( up_xpm ));
     PopUpMenu.Append( item );
 
-    item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_DOWN,
-                          _( "Move Down" ) );
+    item = new wxMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_DOWN, _( "Move Down" ) );
     item->SetBitmap( KiBitmap( down_xpm ));
     PopUpMenu.Append( item );
 

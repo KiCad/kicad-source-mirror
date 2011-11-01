@@ -315,7 +315,7 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
         int width = 1;
         fprintf( m_Outfile, "DP %d %d %d %d %d %d %d\n",
                  0, 0, 0, 0,
-                 aPolygon.size() + 1, width, layer );
+                 (int) aPolygon.size() + 1, width, layer );
 
         for( ii = 0; ii < aPolygon.size(); ii++ )
         {
@@ -331,7 +331,7 @@ void BITMAPCONV_INFO::OuputOnePolygon( KPolygon & aPolygon )
     break;
 
     case EESCHEMA_FMT:
-        fprintf( m_Outfile, "P %d 0 0 1", aPolygon.size() + 1 );
+        fprintf( m_Outfile, "P %d 0 0 1", (int) aPolygon.size() + 1 );
         for( ii = 0; ii < aPolygon.size(); ii++ )
         {
             currpoint = *(aPolygon.begin() + ii);
