@@ -62,21 +62,18 @@ LIB_POLYLINE::LIB_POLYLINE( const LIB_POLYLINE& polyline ) :
 }
 
 
-bool LIB_POLYLINE::Save( FILE* aFile )
+bool LIB_POLYLINE::Save( OUTPUTFORMATTER& aFormatter )
 {
     int ccount = GetCornerCount();
 
-    if( fprintf( aFile, "P %d %d %d %d", ccount, m_Unit, m_Convert, m_Width ) < 0 )
-        return false;
+    aFormatter.Print( 0, "P %d %d %d %d", ccount, m_Unit, m_Convert, m_Width );
 
     for( unsigned i = 0; i < GetCornerCount(); i++ )
     {
-        if( fprintf( aFile, "  %d %d", m_PolyPoints[i].x, m_PolyPoints[i].y ) < 0 )
-            return false;
+        aFormatter.Print( 0, "  %d %d", m_PolyPoints[i].x, m_PolyPoints[i].y );
     }
 
-    if( fprintf( aFile, " %c\n", fill_tab[m_Fill] ) < 0 )
-        return false;
+    aFormatter.Print( 0, " %c\n", fill_tab[m_Fill] );
 
     return true;
 }

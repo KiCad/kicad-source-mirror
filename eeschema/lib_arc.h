@@ -30,12 +30,10 @@
 #ifndef _LIB_ARC_H_
 #define _LIB_ARC_H_
 
-
 #include "lib_draw_item.h"
 
 
 class TRANSFORM;
-class LINE_READER;
 
 
 class LIB_ARC : public LIB_ITEM
@@ -99,10 +97,11 @@ public:
     /**
      * Save arc object to a FILE in "*.lib" format.
      *
-     * @param aFile The FILE to write to.
-     * @return - True if success writing else false.
+     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
+     *                   arc to.
+     * @return True if success writing else false.
      */
-    virtual bool Save( FILE* aFile );
+    virtual bool Save( OUTPUTFORMATTER& aFormatter );
 
     virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 

@@ -105,7 +105,7 @@ LIB_ARC::LIB_ARC( const LIB_ARC& aArc ) : LIB_ITEM( aArc )
 }
 
 
-bool LIB_ARC::Save( FILE* aFile )
+bool LIB_ARC::Save( OUTPUTFORMATTER& aFormatter )
 {
     int x1 = m_t1;
 
@@ -117,11 +117,10 @@ bool LIB_ARC::Save( FILE* aFile )
     if( x2 > 1800 )
         x2 -= 3600;
 
-    if( fprintf( aFile, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
-                 m_Pos.x, m_Pos.y, m_Radius, x1, x2, m_Unit, m_Convert, m_Width,
-                 fill_tab[m_Fill], m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x,
-                 m_ArcEnd.y ) < 0 )
-        return false;
+    aFormatter.Print( 0, "A %d %d %d %d %d %d %d %d %c %d %d %d %d\n",
+                      m_Pos.x, m_Pos.y, m_Radius, x1, x2, m_Unit, m_Convert, m_Width,
+                      fill_tab[m_Fill], m_ArcStart.x, m_ArcStart.y, m_ArcEnd.x,
+                      m_ArcEnd.y );
 
     return true;
 }

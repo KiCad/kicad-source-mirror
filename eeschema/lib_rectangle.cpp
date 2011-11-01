@@ -65,11 +65,10 @@ LIB_RECTANGLE::LIB_RECTANGLE( const LIB_RECTANGLE& aRect ) :
 }
 
 
-bool LIB_RECTANGLE::Save( FILE* aFile )
+bool LIB_RECTANGLE::Save( OUTPUTFORMATTER& aFormatter )
 {
-    if( fprintf( aFile, "S %d %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
-                 m_End.x, m_End.y, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] ) < 0 )
-        return false;
+    aFormatter.Print( 0, "S %d %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
+                      m_End.x, m_End.y, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] );
 
     return true;
 }

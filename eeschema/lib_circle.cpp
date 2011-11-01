@@ -64,11 +64,10 @@ LIB_CIRCLE::LIB_CIRCLE( const LIB_CIRCLE& aCircle ) :
 }
 
 
-bool LIB_CIRCLE::Save( FILE* aFile )
+bool LIB_CIRCLE::Save( OUTPUTFORMATTER& aFormatter )
 {
-    if( fprintf( aFile, "C %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
-                 m_Radius, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] ) < 0 )
-        return false;
+    aFormatter.Print( 0, "C %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
+                      m_Radius, m_Unit, m_Convert, m_Width, fill_tab[m_Fill] );
 
     return true;
 }

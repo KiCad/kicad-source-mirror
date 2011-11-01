@@ -45,6 +45,7 @@
 
 #include <wx/tokenzr.h>
 #include <wx/regex.h>
+#include <wx/wfstream.h>
 
 
 static const wxChar* duplicate_name_msg =
@@ -69,6 +70,7 @@ bool operator<( const CMP_LIBRARY& aItem1, const CMP_LIBRARY& aItem2 )
     /* The cache library always is sorted to the end of the library list. */
     if( aItem2.IsCache() )
         return true;
+
     if( aItem1.IsCache() )
         return false;
 
@@ -670,7 +672,6 @@ bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
 
 bool CMP_LIBRARY::Save( const wxString& aFullFileName, bool aOldDocFormat )
 {
-    FILE* libfile;
     wxString msg;
     wxFileName libFileName = aFullFileName;
     wxFileName backupFileName = aFullFileName;
@@ -690,9 +691,9 @@ bool CMP_LIBRARY::Save( const wxString& aFullFileName, bool aOldDocFormat )
         }
     }
 
-    libfile = wxFopen( libFileName.GetFullPath(), wxT( "wt" ) );
+    wxFFileOutputStream os( libFileName.GetFullPath(), wxT( "wt" ) );
 
-    if( libfile == NULL )
+    if( !os.IsOk() )
     {
         libFileName.MakeAbsolute();
         msg = wxT( "Failed to create component library file " ) + libFileName.GetFullPath();
@@ -700,31 +701,34 @@ bool CMP_LIBRARY::Save( const wxString& aFullFileName, bool aOldDocFormat )
         return false;
     }
 
-    isModified = false;
+    STREAM_OUTPUTFORMATTER formatter( os );
 
-    timeStamp = GetTimeStamp();
-
-    if( !SaveHeader( libfile ) )
+    if( isModified )
     {
-        fclose( libfile );
-        return false;
+        timeStamp = GetTimeStamp();
+        isModified = false;
     }
 
     bool success = true;
 
-    for( LIB_ALIAS_MAP::iterator it=aliases.begin();  it!=aliases.end();  it++ )
+    try
     {
-        if( !(*it).second->IsRoot() )
-            continue;
+        SaveHeader( formatter );
 
-        if ( !(*it).second->GetComponent()->Save( libfile ) )
-            success = false;
+        for( LIB_ALIAS_MAP::iterator it=aliases.begin();  it!=aliases.end();  it++ )
+        {
+            if( !(*it).second->IsRoot() )
+                continue;
+
+            (*it).second->GetComponent()->Save( formatter );
+        }
+
+        formatter.Print( 0, "#\n#End Library\n" );
     }
-
-    if( fprintf( libfile, "#\n#End Library\n" ) < 0 )
+    catch( IO_ERROR ioe )
+    {
         success = false;
-
-    fclose( libfile );
+    }
 
     if( USE_OLD_DOC_FILE_FORMAT( versionMajor, versionMinor ) && aOldDocFormat )
         success = SaveDocFile( aFullFileName );
@@ -793,28 +797,25 @@ bool CMP_LIBRARY::SaveDocFile( const wxString& aFullFileName )
 }
 
 
-bool CMP_LIBRARY::SaveHeader( FILE* aFile )
+bool CMP_LIBRARY::SaveHeader( OUTPUTFORMATTER& aFormatter )
 {
     char BufLine[1024];
-    bool succes = true;
 
     DateAndTime( BufLine );
 
-    if( fprintf( aFile, "%s %d.%d  Date: %s\n", LIBFILE_IDENT,
-                 LIB_VERSION_MAJOR, LIB_VERSION_MINOR, BufLine ) < 0 )
-        succes = false;
+    aFormatter.Print( 0, "%s %d.%d  Date: %s\n", LIBFILE_IDENT,
+                      LIB_VERSION_MAJOR, LIB_VERSION_MINOR, BufLine );
 
-    if( fprintf( aFile, "#encoding utf-8\n") < 0 )
-        succes = false;
+    aFormatter.Print( 0, "#encoding utf-8\n");
 
 #if 0
-    if( ( fprintf( aFile, "$HEADER\n" ) < 0 )
-        || ( fprintf( aFile, "TimeStamp %8.8lX\n", m_TimeStamp ) < 0 )
-        || ( fprintf( aFile, "Parts %d\n", aliases.size() ) != 2 )
-        || ( fprintf( aFile, "$ENDHEADER\n" ) != 1 ) )
-        succes = false;
+    aFormatter.Print( 0, "$HEADER\n" );
+    aFormatter.Print( 0, "TimeStamp %8.8lX\n", m_TimeStamp );
+    aFormatter.Print( 0, "Parts %d\n", aliases.size() );
+    aFormatter.Print( 0, "$ENDHEADER\n" ) != 1 );
 #endif
-    return succes;
+
+    return true;
 }
 
 

@@ -527,52 +527,45 @@ LIB_PIN* LIB_COMPONENT::GetPin( const wxString& aNumber, int aUnit, int aConvert
 }
 
 
-bool LIB_COMPONENT::Save( FILE* aFile )
+bool LIB_COMPONENT::Save( OUTPUTFORMATTER& aFormatter )
 {
     size_t      i;
     LIB_FIELD&  value = GetValueField();
 
     /* First line: it s a comment (component name for readers) */
-    if( fprintf( aFile, "#\n# %s\n#\n", TO_UTF8( value.m_Text ) ) < 0 )
-        return false;
+    aFormatter.Print( 0, "#\n# %s\n#\n", TO_UTF8( value.m_Text ) );
 
     /* Save data */
-    if( fprintf( aFile, "DEF" ) < 0 )
-        return false;
+    aFormatter.Print( 0, "DEF" );
 
     if( value.IsVisible() )
     {
-        if( fprintf( aFile, " %s", TO_UTF8( value.m_Text ) ) < 0 )
-            return false;
+        aFormatter.Print( 0, " %s", TO_UTF8( value.m_Text ) );
     }
     else
     {
-        if( fprintf( aFile, " ~%s", TO_UTF8( value.m_Text ) ) < 0 )
-            return false;
+        aFormatter.Print( 0, " ~%s", TO_UTF8( value.m_Text ) );
     }
 
     LIB_FIELD& reference = GetReferenceField();
 
     if( !reference.m_Text.IsEmpty() )
     {
-        if( fprintf( aFile, " %s", TO_UTF8( reference.m_Text ) ) < 0 )
-            return false;
+        aFormatter.Print( 0, " %s", TO_UTF8( reference.m_Text ) );
     }
     else
     {
-        if( fprintf( aFile, " ~" ) < 0 )
-            return false;
+        aFormatter.Print( 0, " ~" );
     }
 
-    if( fprintf( aFile, " %d %d %c %c %d %c %c\n",
-                 0, m_pinNameOffset,
-                 m_showPinNumbers ? 'Y' : 'N',
-                 m_showPinNames ? 'Y' : 'N',
-                 m_unitCount, m_unitsLocked ? 'L' : 'F',
-                 m_options == ENTRY_POWER ? 'P' : 'N' ) < 0 )
-        return false;
+    aFormatter.Print( 0, " %d %d %c %c %d %c %c\n",
+                      0, m_pinNameOffset,
+                      m_showPinNumbers ? 'Y' : 'N',
+                      m_showPinNames ? 'Y' : 'N',
+                      m_unitCount, m_unitsLocked ? 'L' : 'F',
+                      m_options == ENTRY_POWER ? 'P' : 'N' );
 
-    if( !SaveDateAndTime( aFile ) )
+    if( !SaveDateAndTime( aFormatter ) )
         return false;
 
     LIB_FIELDS fields;
@@ -584,7 +577,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
     {
         if( !fields[i].m_Text.IsEmpty() )
         {
-            if( !fields[i].Save( aFile ) )
+            if( !fields[i].Save( aFormatter ) )
                 return false;
         }
     }
@@ -603,7 +596,7 @@ bool LIB_COMPONENT::Save( FILE* aFile )
         {
             fields[i].SetId( fieldId++ );
 
-            if( !fields[i].Save( aFile ) )
+            if( !fields[i].Save( aFormatter ) )
                 return false;
         }
     }
@@ -613,33 +606,27 @@ bool LIB_COMPONENT::Save( FILE* aFile )
     // alias does not get added to the alias list.
     if( m_aliases.size() > 1 )
     {
-        if( fprintf( aFile, "ALIAS" ) < 0 )
-            return false;
+        aFormatter.Print( 0, "ALIAS" );
 
         for( i = 1; i < m_aliases.size(); i++ )
         {
-            if( fprintf( aFile, " %s", TO_UTF8( m_aliases[i]->GetName() ) ) < 0 )
-                return false;
+            aFormatter.Print( 0, " %s", TO_UTF8( m_aliases[i]->GetName() ) );
         }
 
-        if( fprintf( aFile, "\n" ) < 0 )
-            return false;
+        aFormatter.Print( 0, "\n" );
     }
 
     /* Write the footprint filter list */
     if( m_FootprintList.GetCount() != 0 )
     {
-        if( fprintf( aFile, "$FPLIST\n" ) < 0 )
-            return false;
+        aFormatter.Print( 0, "$FPLIST\n" );
 
         for( i = 0; i < m_FootprintList.GetCount(); i++ )
         {
-            if( fprintf( aFile, " %s\n", TO_UTF8( m_FootprintList[i] ) ) < 0 )
-                return false;
+            aFormatter.Print( 0, " %s\n", TO_UTF8( m_FootprintList[i] ) );
         }
 
-        if( fprintf( aFile, "$ENDFPLIST\n" ) < 0 )
-            return false;
+        aFormatter.Print( 0, "$ENDFPLIST\n" );
     }
 
     /* Save graphics items (including pins) */
@@ -649,24 +636,21 @@ bool LIB_COMPONENT::Save( FILE* aFile )
          *  when a file editing "by hand" is made */
         drawings.sort();
 
-        if( fprintf( aFile, "DRAW\n" ) < 0 )
-            return false;
+        aFormatter.Print( 0, "DRAW\n" );
 
         BOOST_FOREACH( LIB_ITEM& item, drawings )
         {
             if( item.Type() == LIB_FIELD_T )
                 continue;
 
-            if( !item.Save( aFile ) )
+            if( !item.Save( aFormatter ) )
                 return false;
         }
 
-        if( fprintf( aFile, "ENDDRAW\n" ) < 0 )
-            return false;
+        aFormatter.Print( 0, "ENDDRAW\n" );
     }
 
-    if( fprintf( aFile, "ENDDEF\n" ) < 0 )
-        return false;
+    aFormatter.Print( 0, "ENDDEF\n" );
 
     return true;
 }
@@ -1143,7 +1127,7 @@ LIB_FIELD& LIB_COMPONENT::GetReferenceField()
 }
 
 
-bool LIB_COMPONENT::SaveDateAndTime( FILE* aFile )
+bool LIB_COMPONENT::SaveDateAndTime( OUTPUTFORMATTER& aFormatter )
 {
     int year, mon, day, hour, min, sec;
 
@@ -1157,11 +1141,11 @@ bool LIB_COMPONENT::SaveDateAndTime( FILE* aFile )
     mon  = ( m_dateModified >> 22 ) & 15;
     year = ( m_dateModified >> 26 ) + 1990;
 
-    if ( fprintf( aFile, "Ti %d/%d/%d %d:%d:%d\n", year, mon, day, hour, min, sec ) < 0 )
-        return false;
+    aFormatter.Print( 0, "Ti %d/%d/%d %d:%d:%d\n", year, mon, day, hour, min, sec );
 
     return true;
 }
+
 
 bool LIB_COMPONENT::LoadDateAndTime( char* aLine )
 {

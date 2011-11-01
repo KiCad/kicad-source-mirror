@@ -33,12 +33,10 @@
 #include "lib_draw_item.h"
 
 
-class LINE_READER;
-
-
-/**************************************************/
-/* Graphic Body Item: Bezier Curve (set of lines) */
-/**************************************************/
+/**
+ * Class LIB_BEZIER
+ * defines bezier curve graphic body item.
+ */
 class LIB_BEZIER : public LIB_ITEM
 {
     int m_Width;                           // Line width
@@ -65,10 +63,11 @@ public:
     /**
      * Write bezier curve object out to a FILE in "*.lib" format.
      *
-     * @param aFile - The FILE to write to.
-     * @return true if success writing else false.
+     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
+     *                   bezier curve to.
+     * @return True if success writing else false.
      */
-    virtual bool Save( FILE* aFile );
+    virtual bool Save( OUTPUTFORMATTER& aFormatter );
 
     virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 

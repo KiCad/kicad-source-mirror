@@ -33,15 +33,14 @@
 #include "lib_draw_item.h"
 
 
-class LINE_READER;
-
-
-/*********************************************/
-/* Graphic Body Item: Text                   */
-/* This is only a graphic text.              */
-/* Fields like Ref , value... are not Text,  */
-/* they are a separate class                 */
-/*********************************************/
+/**
+ * Class LIB_TEXT
+ * defines a component library graphical text item.
+ * <p>
+ * This is only a graphical text item.  Field text like the reference designator,
+ * component value, etc. are not LIB_TEXT items.  See the #LIB_FIELD class for the
+ * field item definition.
+ */
 class LIB_TEXT : public LIB_ITEM, public EDA_TEXT
 {
     wxString m_savedText;         ///< Temporary storage for the string when edition.
@@ -86,10 +85,11 @@ public:
     /**
      * Write text object out to a FILE in "*.lib" format.
      *
-     * @param aFile - The FILE to write to.
-     * @return - true if success writing else false.
+     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
+     *                   text to.
+     * @return True if success writing else false.
      */
-    virtual bool Save( FILE* aFile );
+    virtual bool Save( OUTPUTFORMATTER& aFormatter );
 
     virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 

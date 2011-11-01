@@ -12,6 +12,7 @@
 
 
 class LINE_READER;
+class OUTPUTFORMATTER;
 
 
 /*
@@ -130,7 +131,7 @@ public:
     bool LoadDocs( wxString& aErrorMsg );
 
 private:
-    bool SaveHeader( FILE* aFile );
+    bool SaveHeader( OUTPUTFORMATTER& aFormatter );
 
     bool LoadHeader( LINE_READER& aLineReader );
     void LoadAliases( LIB_COMPONENT* aComponent );

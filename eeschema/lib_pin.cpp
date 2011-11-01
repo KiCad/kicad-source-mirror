@@ -568,7 +568,7 @@ bool LIB_PIN::HitTest( wxPoint aPosition, int aThreshold, const TRANSFORM& aTran
 }
 
 
-bool LIB_PIN::Save( FILE* ExportFile )
+bool LIB_PIN::Save( OUTPUTFORMATTER& aFormatter )
 {
     wxString StringPinNum;
     int      Etype;
@@ -628,48 +628,49 @@ bool LIB_PIN::Save( FILE* ExportFile )
 
     if( !m_name.IsEmpty() )
     {
-        if( fprintf( ExportFile, "X %s", TO_UTF8( m_name ) ) < 0 )
+        if( aFormatter.Print( 0, "X %s", TO_UTF8( m_name ) ) < 0 )
             return false;
     }
     else
     {
-        if( fprintf( ExportFile, "X ~" ) < 0 )
+        if( aFormatter.Print( 0, "X ~" ) < 0 )
             return false;
     }
 
-    if( fprintf( ExportFile, " %s %d %d %d %c %d %d %d %d %c",
-                 TO_UTF8( StringPinNum ), m_position.x, m_position.y,
-                 (int) m_length, (int) m_orientation, m_PinNumSize, m_PinNameSize,
-                 m_Unit, m_Convert, Etype ) < 0 )
+    if( aFormatter.Print( 0, " %s %d %d %d %c %d %d %d %d %c",
+                          TO_UTF8( StringPinNum ), m_position.x, m_position.y,
+                          (int) m_length, (int) m_orientation, m_PinNumSize, m_PinNameSize,
+                          m_Unit, m_Convert, Etype ) < 0 )
         return false;
 
     if( m_shape || !IsVisible() )
     {
-        if( fprintf( ExportFile, " " ) < 0 )
+        if( aFormatter.Print( 0, " " ) < 0 )
             return false;
     }
-    if( !IsVisible() && fprintf( ExportFile, "N" ) < 0 )
-        return false;
-    if( m_shape & INVERT
-        && fprintf( ExportFile, "I" ) < 0 )
-        return false;
-    if( m_shape & CLOCK
-        && fprintf( ExportFile, "C" ) < 0 )
-        return false;
-    if( m_shape & LOWLEVEL_IN
-        && fprintf( ExportFile, "L" ) < 0 )
-        return false;
-    if( m_shape & LOWLEVEL_OUT
-        && fprintf( ExportFile, "V" ) < 0 )
-        return false;
-    if( m_shape & CLOCK_FALL
-        && fprintf( ExportFile, "F" ) < 0 )
-        return false;
-    if( m_shape & NONLOGIC
-        && fprintf( ExportFile, "X" ) < 0 )
+
+    if( !IsVisible() && aFormatter.Print( 0, "N" ) < 0 )
         return false;
 
-    if( fprintf( ExportFile, "\n" ) < 0 )
+    if( m_shape & INVERT && aFormatter.Print( 0, "I" ) < 0 )
+        return false;
+
+    if( m_shape & CLOCK && aFormatter.Print( 0, "C" ) < 0 )
+        return false;
+
+    if( m_shape & LOWLEVEL_IN && aFormatter.Print( 0, "L" ) < 0 )
+        return false;
+
+    if( m_shape & LOWLEVEL_OUT && aFormatter.Print( 0, "V" ) < 0 )
+        return false;
+
+    if( m_shape & CLOCK_FALL && aFormatter.Print( 0, "F" ) < 0 )
+        return false;
+
+    if( m_shape & NONLOGIC && aFormatter.Print( 0, "X" ) < 0 )
+        return false;
+
+    if( aFormatter.Print( 0, "\n" ) < 0 )
         return false;
 
     m_Flags &= ~IS_CHANGED;
