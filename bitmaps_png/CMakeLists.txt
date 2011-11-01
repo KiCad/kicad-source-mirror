@@ -368,6 +368,7 @@ set( BMAPS_MID
     noconn
     normal
     online_help
+    open_brd_file
     open_library
     open_project
     open_document

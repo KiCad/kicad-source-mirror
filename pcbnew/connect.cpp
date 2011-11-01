@@ -3,6 +3,30 @@
  * @brief Functions to handle existing tracks in ratsnest calculations.
  */
 
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2011 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #include "fctsys.h"
 #include "common.h"
 #include "pcbcommon.h"
@@ -38,7 +62,7 @@ public:
     }
 };
 
-// A helper class to handle connection calculations:
+// A helper class to handle connections calculations:
 class CONNECTIONS
 {
 public:
@@ -166,7 +190,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
                     m_Connected.push_back( m_Candidates[ii].m_Track );
             }
             // search before:
-            for ( unsigned ii = idx-1; ii >= 0; ii -- )
+            for ( int ii = idx-1; ii >= 0; ii -- )
             {
                 if( m_Candidates[ii].m_Track == aTrack )
                     continue;
@@ -690,28 +714,22 @@ static void Build_Pads_Info_Connections_By_Tracks( TRACK* pt_start_conn, TRACK* 
 
 void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 {
-    TRACK*              pt_trace;
-    TRACK*              pt_next;
-    char                new_passe_request = 1;
-
+    TRACK*              curr_track;
     std::vector<D_PAD*> sortedPads;
-    BOARD_ITEM*         PtStruct;
-    int                 layerMask;
-    wxString            msg;
 
     // Build the net info list
     GetBoard()->m_NetInfo->BuildListOfNets();
 
     if( m_Pcb->GetPadsCount() == 0 ) // If no pad, reset pointers and netcode, and do nothing else
     {
-        pt_trace = m_Pcb->m_Track;
+        curr_track = m_Pcb->m_Track;
 
-        for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
+        for( ; curr_track != NULL; curr_track = curr_track->Next() )
         {
-            pt_trace->start = NULL;
-            pt_trace->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
-            pt_trace->SetNet( 0 );
-            pt_trace->end = NULL;
+            curr_track->start = NULL;
+            curr_track->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
+            curr_track->SetNet( 0 );
+            curr_track->end = NULL;
         }
 
         return;
@@ -724,40 +742,41 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     m_Pcb->GetSortedPadListByXthenYCoord( sortedPads );
 
     /* Reset variables and flags used in computation */
-    pt_trace = m_Pcb->m_Track;
+    curr_track = m_Pcb->m_Track;
 
-    for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
+    for( ; curr_track != NULL; curr_track = curr_track->Next() )
     {
-        pt_trace->SetState( BUSY | IN_EDIT | BEGIN_ONPAD | END_ONPAD, OFF );
-        pt_trace->SetZoneSubNet( 0 );
-        pt_trace->SetNet( 0 );  // net code = 0 means not connected
+        curr_track->m_TracksConnected.clear();
+        curr_track->SetState( BUSY | IN_EDIT | BEGIN_ONPAD | END_ONPAD, OFF );
+        curr_track->SetZoneSubNet( 0 );
+        curr_track->SetNet( 0 );  // net code = 0 means not connected
     }
 
     /* First pass: search connection between a track segment and a pad.
      * if found, set the track net code to the pad netcode
      */
-    pt_trace = m_Pcb->m_Track;
+    curr_track = m_Pcb->m_Track;
 
-    for( ; pt_trace != NULL; pt_trace = pt_trace->Next() )
+    for( ; curr_track != NULL; curr_track = curr_track->Next() )
     {
-        layerMask = g_TabOneLayerMask[pt_trace->GetLayer()];
+        int layerMask = g_TabOneLayerMask[curr_track->GetLayer()];
 
         /* Search for a pad on the segment starting point */
-        pt_trace->start = m_Pcb->GetPad( sortedPads, pt_trace->m_Start, layerMask );
+        curr_track->start = m_Pcb->GetPad( sortedPads, curr_track->m_Start, layerMask );
 
-        if( pt_trace->start != NULL )
+        if( curr_track->start != NULL )
         {
-            pt_trace->SetState( BEGIN_ONPAD, ON );
-            pt_trace->SetNet( ( (D_PAD*) (pt_trace->start) )->GetNet() );
+            curr_track->SetState( BEGIN_ONPAD, ON );
+            curr_track->SetNet( ( (D_PAD*) (curr_track->start) )->GetNet() );
         }
 
         /* Search for a pad on the segment ending point */
-        pt_trace->end = m_Pcb->GetPad( sortedPads, pt_trace->m_End, layerMask );
+        curr_track->end = m_Pcb->GetPad( sortedPads, curr_track->m_End, layerMask );
 
-        if( pt_trace->end != NULL )
+        if( curr_track->end != NULL )
         {
-            pt_trace->SetState( END_ONPAD, ON );
-            pt_trace->SetNet( ( (D_PAD*) (pt_trace->end) )->GetNet() );
+            curr_track->SetState( END_ONPAD, ON );
+            curr_track->SetNet( ( (D_PAD*) (curr_track->end) )->GetNet() );
         }
     }
 
@@ -765,166 +784,57 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     /* Pass 2: search the connections between track ends */
     /*****************************************************/
 
-    /*  the .start and .end member pointers are updated, only if NULLs
-     * (if not null, the end is already connected to a pad).
-     * the connection (if found) is between segments
-     * when a track has a net code and the other has a null net code, the null net code is changed
+    /* the .start and .end member pointers are updated, and point on connected pads
+     * or are null for tracks whitch are not connection to pads
+     * Now build connections lists to tracks
      */
-#if 0
-    for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
-    {
-        if( pt_trace->start == NULL )
-        {
-            pt_trace->start = pt_trace->GetTrace( m_Pcb->m_Track, NULL, START );
-        }
-
-        if( pt_trace->end == NULL )
-        {
-            pt_trace->end = pt_trace->GetTrace( m_Pcb->m_Track, NULL, END );
-        }
-    }
-#else
 
     CONNECTIONS connections( m_Pcb );
     connections.BuildCandidatesList();
-    for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
+    for( curr_track = m_Pcb->m_Track; curr_track != NULL; curr_track = curr_track->Next() )
     {
-        if( pt_trace->start != NULL && pt_trace->end != NULL )
+
+        if( curr_track->start != NULL && curr_track->end != NULL )
             continue;
 
-        connections.SearchConnectedTracks( pt_trace );
-        for( unsigned ii = 0; ii < connections.m_Connected.size(); ii ++ )
-        {
-            TRACK * candidate = connections.m_Connected[ii];
-
-            // Do not create a link to an other track already linked
-            // to avoid loops when we have 4 and more ends at the same location
-            // like this case for 4 tracks named A, B, C ,D:
-            // A links B; B links A and C links D; D links C, but never C or D links A or B
-            // Try to find a not already linked track:
-            if( candidate->start == pt_trace || candidate->end == pt_trace )
-                continue;
-
-            // A link is found:
-            if( pt_trace->start == NULL )
-            {
-                if( ( pt_trace->m_Start == candidate->m_Start ) ||
-                    ( pt_trace->m_Start == candidate->m_End ) )
-                    pt_trace->start = candidate;
-            }
-            if( pt_trace->end == NULL )
-            {
-                if( ( pt_trace->m_End == candidate->m_Start ) ||
-                    ( pt_trace->m_End == candidate->m_End ) )
-                    pt_trace->end = candidate;
-            }
-        }
+        connections.SearchConnectedTracks( curr_track );
+        curr_track->m_TracksConnected = connections.m_Connected;
     }
-#endif
 
-    /**********************************************************/
-    /* Propagate net codes from a segment to an other segment */
-    /**********************************************************/
-
-    while( new_passe_request )
+    // Propagate net codes from a segment to other connected segments
+    bool new_pass_request = true;   // is true if a track has its netcode changes from 0
+                                    // to a known netcode to re-evaluate netcodes
+                                    // of connected items
+    while( new_pass_request )
     {
-        bool reset_flag = false;
-        new_passe_request = 0;
+        new_pass_request = false;
 
-        /* look for vias which could be connect many tracks */
-        for( TRACK* via = m_Pcb->m_Track; via != NULL; via = via->Next() )
+        for( curr_track = m_Pcb->m_Track; curr_track; curr_track = curr_track->Next() )
         {
-            if( via->Type() != PCB_VIA_T )
-                continue;
-
-            if( via->GetNet() > 0 )
-                continue; // Netcode already known
-
-            // Lock for a connection to a track with a known netcode
-            pt_next = m_Pcb->m_Track;
-
-            while( ( pt_next = via->GetTrace( pt_next, NULL, START ) ) != NULL )
-            {
-                if( pt_next->GetNet() )
+            int netcode = curr_track->GetNet();
+            if( netcode == 0 )
+            {   // try to find a connected item having a netcode
+                for( unsigned kk = 0; kk < curr_track->m_TracksConnected.size(); kk++ )
                 {
-                    via->SetNet( pt_next->GetNet() );
-                    break;
-                }
-
-                pt_next->SetState( BUSY, ON );
-                reset_flag = true;
-            }
-        }
-
-        if( reset_flag )
-        {
-            for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
-            {
-                pt_trace->SetState( BUSY, OFF );
-            }
-        }
-
-        /* set the netcode of connected tracks: if at track is connected to a pad, its net
-         * code is already set.
-         * if the current track is connected to an other track:
-         * if a track has a net code, it is used for the other track.
-         * Thus there is a propagation of the netcode from a track to an other.
-         * if none of the 2 track has a net code we do nothing
-         * the iteration is stopped when no new change occurs
-         */
-        for( pt_trace = m_Pcb->m_Track; pt_trace != NULL; pt_trace = pt_trace->Next() )
-        {
-            /* look for the connection to the current segment starting point */
-            PtStruct = (BOARD_ITEM*) pt_trace->start;
-
-            if( PtStruct && (PtStruct->Type() != PCB_PAD_T) )
-            {
-                // Begin on an other track segment
-                pt_next = (TRACK*) PtStruct;
-
-                if( pt_trace->GetNet() )
-                {
-                    if( pt_next->GetNet() == 0 )
+                    int altnetcode = curr_track->m_TracksConnected[kk]->GetNet();
+                    if( altnetcode )
                     {
-                        // the current track has a netcode, we use it for the other track
-                        // A change is made: a new iteration is requested.
-                        new_passe_request = 1;
-                        pt_next->SetNet( pt_trace->GetNet() );
-                    }
-                }
-                else
-                {
-                    if( pt_next->GetNet() != 0 )
-                    {
-                        // the other track has a netcode, we use it for the current track
-                        pt_trace->SetNet( pt_next->GetNet() );
-                        new_passe_request = 1;
+                        new_pass_request = true;
+                        netcode = altnetcode;
+                        curr_track->SetNet(netcode);
+                        break;
                     }
                 }
             }
-
-            /* look for the connection to the current segment ending point */
-            PtStruct = pt_trace->end;
-
-            if( PtStruct && (PtStruct->Type() != PCB_PAD_T) )
-            {
-                pt_next = (TRACK*) PtStruct;
-
-                // End on an other track: propagate netcode if possible
-                if( pt_trace->GetNet() )
+            if( netcode )    // this track has a netcode
+            {   // propagate this netcode to connected tracks having no netcode
+                for( unsigned kk = 0; kk < curr_track->m_TracksConnected.size(); kk++ )
                 {
-                    if( pt_next->GetNet() == 0 )
+                    int altnetcode = curr_track->m_TracksConnected[kk]->GetNet();
+                    if( altnetcode == 0 )
                     {
-                        new_passe_request = 1;
-                        pt_next->SetNet( pt_trace->GetNet() );
-                    }
-                }
-                else
-                {
-                    if( pt_next->GetNet() != 0 )
-                    {
-                        pt_trace->SetNet( pt_next->GetNet() );
-                        new_passe_request = 1;
+                        curr_track->m_TracksConnected[kk]->SetNet(netcode);
+                        new_pass_request = true;
                     }
                 }
             }
@@ -936,21 +846,15 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 }
 
 
-/**
- * Function Sort_By_NetCode
- * sorts track segments used in RebuildTrackChain() (for the qsort C function)
- * The sorting is made by net code.
+
+/*
+ * Function SortTracksByNetCode used in RebuildTrackChain()
+ * to sort track segments by net code.
  */
-static int Sort_By_NetCode( const void* left, const void* right )
+static bool SortTracksByNetCode( const TRACK* const & ref, const TRACK* const & compare )
 {
-    TRACK* pt_ref     = *(TRACK**) left;
-    TRACK* pt_compare = *(TRACK**) right;
-
-    int    ret = pt_ref->GetNet() - pt_compare->GetNet();
-
-    return ret;
+    return ref->GetNet() < compare->GetNet();
 }
-
 
 /**
  * Function RebuildTrackChain
@@ -963,26 +867,22 @@ static void RebuildTrackChain( BOARD* pcb )
     if( pcb->m_Track == NULL )
         return;
 
-    int     nbsegm = pcb->m_Track.GetCount();
+    int item_count = pcb->m_Track.GetCount();
 
-    TRACK** array = (TRACK**) MyZMalloc( nbsegm * sizeof(TRACK*) );
+    std::vector<TRACK*> trackList;
+    trackList.reserve( item_count );
 
-    for( int i = 0;  i<nbsegm;  ++i )
-    {
-        array[i] = pcb->m_Track.PopFront();
-        wxASSERT( array[i] );
-    }
+    for( int i = 0; i<item_count;  ++i )
+        trackList.push_back( pcb->m_Track.PopFront() );
 
     // the list is empty now
     wxASSERT( pcb->m_Track == NULL && pcb->m_Track.GetCount()==0 );
 
-    qsort( array, nbsegm, sizeof(TRACK*), Sort_By_NetCode );
+    sort( trackList.begin(), trackList.end(), SortTracksByNetCode );
 
     // add them back to the list
-    for( int i = 0;  i<nbsegm;  ++i )
+    for( int i = 0; i < item_count;  ++i )
     {
-        pcb->m_Track.PushBack( array[i] );
+        pcb->m_Track.PushBack( trackList[i] );
     }
-
-    MyFree( array );
 }

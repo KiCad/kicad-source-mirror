@@ -64,13 +64,13 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( filesMenu, ID_NEW_BOARD,
                  _( "&New" ),
                  _( "Clear current board and initialize a new one" ),
-                 KiBitmap( new_xpm ) );
+                 KiBitmap( new_pcb_xpm ) );
 
     // Open
     text = AddHotkeyName( _( "&Open" ), g_Board_Editor_Hokeys_Descr, HK_LOAD_BOARD );
     AddMenuItem( filesMenu, ID_LOAD_FILE, text,
                  _( "Delete current board and load new board" ),
-                 KiBitmap( open_document_xpm ) );
+                 KiBitmap( open_brd_file_xpm ) );
 
     // Load Recent submenu
     static wxMenu* openRecentMenu;

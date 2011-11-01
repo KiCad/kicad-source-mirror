@@ -221,7 +221,6 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         aMessages->AppendText( _( "Track clearances...\n" ) );
         wxSafeYield();
     }
-
     testTracks();
 
     // Before testing segments and unconnected, refill all zones:
@@ -233,6 +232,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     }
 
     m_mainWindow->Fill_All_Zones( false );
+    wxSafeYield();
 
     // test zone clearances to other zones, pads, tracks, and vias
     if( aMessages && m_doZonesTest )
@@ -249,7 +249,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         if( aMessages )
         {
             aMessages->AppendText( _( "Unconnected pads...\n" ) );
-            wxSafeYield();
+            aMessages->Refresh();
         }
 
         testUnconnected();
