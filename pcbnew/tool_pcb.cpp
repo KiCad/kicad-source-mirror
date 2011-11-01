@@ -189,9 +189,9 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->SetRows( 1 );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiBitmap( new_xpm ),
+    m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiBitmap( new_pcb_xpm ),
                          _( "New board" ) );
-    m_HToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiBitmap( open_document_xpm ),
+    m_HToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiBitmap( open_brd_file_xpm ),
                          _( "Open existing board" ) );
     m_HToolBar->AddTool( ID_SAVE_BOARD, wxEmptyString, KiBitmap( save_xpm ),
                          _( "Save board" ) );
