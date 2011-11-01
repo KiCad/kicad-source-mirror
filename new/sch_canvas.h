@@ -38,15 +38,10 @@ class CANVAS : public OPENGL_GAL
 protected:
     PART*   part;           ///< which PART to draw
 
+    void    onRedraw( wxCommandEvent& event );
 
 public:
     CANVAS( wxWindow* aParent );
-
-    /**
-     * Function Paint (overloaded)
-     * redraws the entire window, overloads OPENGL_GAL::Paint()
-     */
-    void Paint();
 
     /**
      * Function SetPart
@@ -58,6 +53,8 @@ public:
         part = aPart;
         return ret;
     }
+
+    void PaintScene();
 };
 
 

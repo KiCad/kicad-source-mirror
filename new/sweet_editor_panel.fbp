@@ -462,7 +462,7 @@
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
                                                     <event name="OnUpdateUI"></event>
-                                                    <object class="wxStaticBoxSizer" expanded="1">
+                                                    <object class="wxStaticBoxSizer" expanded="0">
                                                         <property name="id">wxID_ANY</property>
                                                         <property name="label">Sweet</property>
                                                         <property name="minimum_size"></property>
@@ -470,11 +470,11 @@
                                                         <property name="orient">wxVERTICAL</property>
                                                         <property name="permission">none</property>
                                                         <event name="OnUpdateUI"></event>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
                                                             <property name="flag">wxALL|wxEXPAND</property>
                                                             <property name="proportion">1</property>
-                                                            <object class="wxTextCtrl" expanded="1">
+                                                            <object class="wxTextCtrl" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
                                                                 <property name="RightDockable">1</property>
@@ -564,8 +564,8 @@
                                                     </object>
                                                 </object>
                                             </object>
-                                            <object class="splitteritem" expanded="1">
-                                                <object class="wxScrolledWindow" expanded="1">
+                                            <object class="splitteritem" expanded="0">
+                                                <object class="wxScrolledWindow" expanded="0">
                                                     <property name="BottomDockable">1</property>
                                                     <property name="LeftDockable">1</property>
                                                     <property name="RightDockable">1</property>
@@ -621,7 +621,7 @@
                                                     <property name="validator_variable"></property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
-                                                    <property name="window_style">wxHSCROLL|wxVSCROLL</property>
+                                                    <property name="window_style">wxFULL_REPAINT_ON_RESIZE|wxHSCROLL|wxVSCROLL</property>
                                                     <event name="OnChar"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
@@ -645,7 +645,7 @@
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
                                                     <event name="OnUpdateUI"></event>
-                                                    <object class="wxStaticBoxSizer" expanded="1">
+                                                    <object class="wxStaticBoxSizer" expanded="0">
                                                         <property name="id">wxID_ANY</property>
                                                         <property name="label">Visual Part</property>
                                                         <property name="minimum_size"></property>
@@ -653,11 +653,11 @@
                                                         <property name="orient">wxVERTICAL</property>
                                                         <property name="permission">none</property>
                                                         <event name="OnUpdateUI"></event>
-                                                        <object class="sizeritem" expanded="1">
+                                                        <object class="sizeritem" expanded="0">
                                                             <property name="border">5</property>
-                                                            <property name="flag">wxALL</property>
-                                                            <property name="proportion">0</property>
-                                                            <object class="CustomControl" expanded="1">
+                                                            <property name="flag">wxEXPAND</property>
+                                                            <property name="proportion">1</property>
+                                                            <object class="CustomControl" expanded="0">
                                                                 <property name="BottomDockable">1</property>
                                                                 <property name="LeftDockable">1</property>
                                                                 <property name="RightDockable">1</property>
@@ -672,7 +672,7 @@
                                                                 <property name="close_button">1</property>
                                                                 <property name="construction">m_gal = new SCH::CANVAS( m_gal_scrolled_window );</property>
                                                                 <property name="context_help"></property>
-                                                                <property name="context_menu">1</property>
+                                                                <property name="context_menu">0</property>
                                                                 <property name="declaration">SCH::CANVAS* m_gal;</property>
                                                                 <property name="default_pane">0</property>
                                                                 <property name="dock">Dock</property>
@@ -716,7 +716,7 @@
                                                                 <property name="validator_variable"></property>
                                                                 <property name="window_extra_style"></property>
                                                                 <property name="window_name"></property>
-                                                                <property name="window_style"></property>
+                                                                <property name="window_style">wxFULL_REPAINT_ON_RESIZE</property>
                                                                 <event name="OnChar"></event>
                                                                 <event name="OnEnterWindow"></event>
                                                                 <event name="OnEraseBackground"></event>

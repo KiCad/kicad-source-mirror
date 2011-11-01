@@ -68,30 +68,27 @@ private:
     bool m_isReady;
     bool m_isPanning;
 
-    GRAPHICS_ABSTRACTION_LAYER* m_gal;
+    SCH::CANVAS*    m_gal;
 
     wxSize          m_screenSize;
     VECTOR2D        m_worldSize;
+    VECTOR2D        m_startMousePoint;
+    VECTOR2D        m_startLookAtPoint;
 
     /*
     double          m_alpha;
 
-    VECTOR2D        m_startMousePoint;
-    VECTOR2D        m_startLookAtPoint;
     MATRIX3x3D      m_startMatrix;
 
     STROKE_FONT     m_font;
     */
 
     // Event handlers
-    /*
-    void OnTimerEvent( wxTimerEvent &event );
     void OnMotion( wxMouseEvent& event );
     void OnMouseWheel( wxMouseEvent& event );
-    void OnRedraw( wxCommandEvent& event );
     void OnRightDown( wxMouseEvent& event );
     void OnRightUp( wxMouseEvent& event );
-    */
+//    void OnRedraw( wxCommandEvent& event );
 };
 
 
@@ -100,17 +97,24 @@ SWEET_FRAME::SWEET_FRAME( wxWindow* parent, wxWindowID id, const wxString& title
     wxFrame( parent, id, title, pos, size ),
     m_screenSize( size.x, size.y )
 {
-    new SWEET_EDITOR_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), wxSize( -1, -1 ), 0 );
+    m_isPanning = false;
 
-    // Connect( wxEVT_TIMER, wxTimerEventHandler( SWEET_FRAME::OnTimerEvent ) );
+    SWEET_EDITOR_PANEL* panel =
+        new SWEET_EDITOR_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), wxSize( -1, -1 ), 0 );
 
-    /*
-    Connect( EVT_GAL_REDRAW, wxCommandEventHandler( SWEET_FRAME::OnRedraw ) );
+    m_gal = (SCH::CANVAS*) panel->FindWindowByName( wxT( "GLCanvas" ), panel );
+
+    wxASSERT( m_gal );
+
+    m_gal->SetMouseListener( this );
+
     Connect( wxEVT_MOTION, wxMouseEventHandler( SWEET_FRAME::OnMotion ) );
     Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( SWEET_FRAME::OnMouseWheel ) );
     Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( SWEET_FRAME::OnRightDown ) );
     Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( SWEET_FRAME::OnRightUp ) );
-*/
+
+//    Connect( EVT_GAL_REDRAW, wxCommandEventHandler( SWEET_FRAME::OnRedraw ) );
+
 
 /*
     // Set the world unit length
@@ -140,8 +144,50 @@ SWEET_FRAME::~SWEET_FRAME()
 }
 
 
+void SWEET_FRAME::OnMotion( wxMouseEvent& event )
+{
+    VECTOR2D mousePoint( event.GetX(), event.GetY() );
 
- //   void            PaintScene();
+    if( event.Dragging() )
+    {
+        if( m_isPanning )
+        {
+            MATRIX3x3D  matrix = m_gal->GetWorldScreenMatrix().Inverse();
+            VECTOR2D    delta  = matrix.GetScale().x * ( m_startMousePoint - mousePoint );
+
+            m_gal->SetLookAtPoint( m_startLookAtPoint + delta );
+
+            m_gal->PaintScene();
+        }
+    }
+    else
+    {
+        m_gal->DrawCursor( mousePoint );
+    }
+}
+
+
+void SWEET_FRAME::OnMouseWheel( wxMouseEvent& event )
+{
+    double zoomScale = ( event.GetWheelRotation() > 0.0 ) ? 1.1 : 0.9;
+
+    m_gal->SetZoomFactor( m_gal->GetZoomFactor() * zoomScale );
+    m_gal->PaintScene();
+}
+
+
+void SWEET_FRAME::OnRightDown( wxMouseEvent& event )
+{
+    m_isPanning = true;
+    m_startMousePoint = VECTOR2D( event.GetX(), event.GetY() );
+    m_startLookAtPoint = m_gal->GetLookAtPoint();
+}
+
+
+void SWEET_FRAME::OnRightUp( wxMouseEvent& event )
+{
+    m_isPanning = false;
+}
 
 
 static const wxCmdLineEntryDesc g_cmdLineDesc[] = {

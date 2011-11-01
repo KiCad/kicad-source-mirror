@@ -27,7 +27,7 @@ if( 1 )
 
     project(kicad-new)
 
-    cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
+    cmake_minimum_required( VERSION 2.8 FATAL_ERROR )
 
     set( PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 
@@ -48,22 +48,6 @@ if( 1 )
     endif()
 
     check_find_package_result( wxWidgets_FOUND "wxWidgets" )
-
-    find_library( gal_LIBRARY "libgal.a"
-        PATHS
-            "${CMAKE_CURRENT_SOURCE_DIR}/../../kicad-gal/build"
-            "${CMAKE_CURRENT_SOURCE_DIR}/../../../kicad-gal/build"
-        DOC
-            "Where is the static GAL library"
-        )
-
-    find_path( gal_ROOT NAMES "README.txt"
-        PATHS
-            "${CMAKE_CURRENT_SOURCE_DIR}/../../kicad-gal"
-            "${CMAKE_CURRENT_SOURCE_DIR}/../../../kicad-gal"
-        DOC
-            "Where is the base include directory for the GAL library"
-        )
 
     # make config.h
     include( PerformFeatureChecks )
@@ -168,7 +152,46 @@ if( MINGW )
 endif()
 target_link_libraries( test_sch_lib_table sweet )
 
-include_directories ( "${gal_ROOT}" )
+
+if( 1 )
+
+    find_library( gal_LIBRARY "libgal.a"
+        PATHS
+            "${CMAKE_CURRENT_SOURCE_DIR}/../../kicad-gal/build"
+            "${CMAKE_CURRENT_SOURCE_DIR}/../../../kicad-gal/build"
+        DOC
+            "Where is the static GAL library"
+        )
+    find_path( gal_ROOT NAMES "README.txt"
+        PATHS
+            "${CMAKE_CURRENT_SOURCE_DIR}/../../kicad-gal"
+            "${CMAKE_CURRENT_SOURCE_DIR}/../../../kicad-gal"
+        DOC
+            "Where is the base include directory for the GAL library"
+        )
+
+else()
+
+    # we build the GAL library, therefore we know where it is, no need to find_library() it.
+    set( gal_ROOT    "${CMAKE_CURRENT_BINARY_DIR}/gal-src" )
+    set( gal_LIBRARY "${CMAKE_CURRENT_BINARY_DIR}/gal-src/libgal.a" )
+
+
+    include( ExternalProject )
+    ExternalProject_Add( ki_gal
+        # skip the install step, build in source, use from source
+        SOURCE_DIR "${gal_ROOT}"
+        STAMP_DIR  "${CMAKE_CURRENT_BINARY_DIR}/gal-stamps"
+        TIMEOUT 120
+        DOWNLOAD_COMMAND bzr export ${gal_ROOT} lp:~kicad-testing-committers/kicad/kicad-gal
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${gal_ROOT}
+        BUILD_IN_SOURCE 1
+        BUILD_COMMAND make
+        INSTALL_COMMAND ""
+        )
+endif()
+
+include_directories( "${gal_ROOT}" )
 
 # Find pkg-config in order find cairo.
 find_package( PkgConfig REQUIRED )
