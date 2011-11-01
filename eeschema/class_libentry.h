@@ -38,6 +38,7 @@
 
 
 class LINE_READER;
+class OUTPUTFORMATTER;
 class CMP_LIBRARY;
 class LIB_ALIAS;
 class LIB_COMPONENT;
@@ -290,20 +291,23 @@ public:
      * write the date and time of component to \a aFile in the format:
      * "Ti yy/mm/jj hh:mm:ss"
      *
-     * @param aFile A point to a FILE object containing the file to write to.
-     * @return True if the date and time were successfully written to \a aFile.
+     * @param aFormatter A reference to an OUTPUT_FORMATER object containing the
+     *                   output format to write to.
+     * @return True if the date and time were successfully written to \a aFormatter.
      */
-    bool SaveDateAndTime( FILE* aFile );
+    bool SaveDateAndTime( OUTPUTFORMATTER& aFormatter );
 
     bool LoadDateAndTime( char* aLine );
 
     /**
-     * Write the data structures out to a FILE in "*.lib" format.
+     * Function Save
+     * writes the data structures out to \a aFormatter in the component library "*.lib"
+     * format.
      *
-     * @param aFile - The FILE to write to.
+     * @param aFormatter A reference to an OUTPUTFORMATTER to write to.
      * @return True if success writing else false.
      */
-    bool Save( FILE* aFile );
+    bool Save( OUTPUTFORMATTER& aFormatter );
 
     /**
      * Load component definition from \a aReader.

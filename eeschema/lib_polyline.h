@@ -32,8 +32,6 @@
 
 #include "lib_draw_item.h"
 
-class LINE_READER;
-
 
 class LIB_POLYLINE : public LIB_ITEM
 {
@@ -69,10 +67,11 @@ public:
     /**
      * Write polyline object out to a FILE in "*.lib" format.
      *
-     * @param aFile - The FILE to write to.
-     * @return - true if success writing else false.
+     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
+     *                   polyline to.
+     * @return True if success writing else false.
      */
-    virtual bool Save( FILE* aFile );
+    virtual bool Save( OUTPUTFORMATTER& aFormatter );
 
     virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 

@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file symbedit.cpp
  * @brief Functions to load from and save to file component libraries and symbols.
@@ -11,6 +36,7 @@
 #include "kicad_string.h"
 #include "gestfich.h"
 #include "class_sch_screen.h"
+#include "richio.h"
 
 #include "general.h"
 #include "protos.h"
@@ -18,7 +44,7 @@
 #include "class_library.h"
 
 #include <boost/foreach.hpp>
-#include <wx/ffile.h>
+#include <wx/wfstream.h>
 
 
 void LIB_EDIT_FRAME::LoadOneSymbol()
@@ -82,10 +108,13 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     {
         if( item.Type() == LIB_FIELD_T )
             continue;
+
         if( item.GetUnit() )
             item.SetUnit( m_unit );
+
         if( item.GetConvert() )
             item.SetConvert( m_convert );
+
         item.m_Flags    = IS_NEW;
         item.m_Selected = IS_SELECTED;
 
@@ -129,12 +158,11 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
 
-    wxFFile file( fn.GetFullPath(), wxT( "wt" ) );
+    wxFile file( fn.GetFullPath(), wxFile::write );
 
     if( !file.IsOpened() )
     {
-        msg.Printf( _( "Unable to create file <%s>" ),
-                    GetChars( fn.GetFullPath() ) );
+        msg.Printf( _( "Unable to create file <%s>" ), GetChars( fn.GetFullPath() ) );
         DisplayError( this, msg );
         return;
     }
@@ -142,6 +170,8 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     msg.Printf( _( "Saving symbol in [%s]" ), GetChars( fn.GetPath() ) );
     SetStatusText( msg );
 
+    wxFileOutputStream os( file );
+    STREAM_OUTPUTFORMATTER formatter( os );
     wxString line;
 
     /* File header */
@@ -172,32 +202,39 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
     line << wxT( "1 0 N\n" );
 
-    if( !file.Write( line )
-        || !m_component->GetReferenceField().Save( file.fp() )
-        || !m_component->GetValueField().Save( file.fp() )
-        || !file.Write( wxT( "DRAW\n" ) ) )
-        return;
-
-    LIB_ITEMS& drawList = m_component->GetDrawItemList();
-
-    BOOST_FOREACH( LIB_ITEM& item, drawList )
+    try
     {
-        if( item.Type() == LIB_FIELD_T )
-            continue;
+        formatter.Print( 0, TO_UTF8( line ) );
+        m_component->GetReferenceField().Save( formatter );
+        m_component->GetValueField().Save( formatter );
+        formatter.Print( 0, "DRAW\n" );
 
-        /* Don't save unused parts or alternate body styles. */
-        if( m_unit && item.GetUnit() && ( item.GetUnit() != m_unit ) )
-            continue;
+        LIB_ITEMS& drawList = m_component->GetDrawItemList();
 
-        if( m_convert && item.GetConvert() && ( item.GetConvert() != m_convert ) )
-            continue;
+        BOOST_FOREACH( LIB_ITEM& item, drawList )
+        {
+            if( item.Type() == LIB_FIELD_T )
+                continue;
 
-        if( !item.Save( file.fp() ) )
-            return;
+            /* Don't save unused parts or alternate body styles. */
+            if( m_unit && item.GetUnit() && ( item.GetUnit() != m_unit ) )
+                continue;
+
+            if( m_convert && item.GetConvert() && ( item.GetConvert() != m_convert ) )
+                continue;
+
+            item.Save( formatter );
+        }
+
+        formatter.Print( 0, "ENDDRAW\n" );
+        formatter.Print( 0, "ENDDEF\n" );
     }
-
-    if( !file.Write( wxT( "ENDDRAW\n" ) ) || !file.Write( wxT( "ENDDEF\n" ) ) )
-        return;
+    catch( IO_ERROR ioe )
+    {
+        msg.Printf( _( "An error occurred attempting to save symbol file <%s>" ),
+                    GetChars( fn.GetFullPath() ) );
+        DisplayError( this, msg );
+    }
 }
 
 

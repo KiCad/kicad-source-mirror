@@ -38,6 +38,7 @@
 
 
 class LINE_READER;
+class OUTPUTFORMATTER;
 class LIB_COMPONENT;
 class PLOTTER;
 class LIB_ITEM;
@@ -213,12 +214,15 @@ public:
     virtual int GetPenSize() const = 0;
 
     /**
-     * Write draw item object to \a aFile in "*.lib" format.
+     * Function Save
+     * writes draw item object to \a aFormatter in component library "*.lib" format.
      *
-     * @param aFile - The file to write to.
-     * @return - true if success writing else false.
+     * @param aFormatter A referenct to an #OUTPUTFORMATTER object to write the
+     *                   component library item to.
+     * @return True if success writing else false.
      */
-    virtual bool Save( FILE* aFile ) = 0;
+    virtual bool Save( OUTPUTFORMATTER& aFormatter ) = 0;
+
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg ) = 0;
 
     LIB_COMPONENT* GetParent()

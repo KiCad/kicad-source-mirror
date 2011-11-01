@@ -62,21 +62,18 @@ LIB_BEZIER::LIB_BEZIER( const LIB_BEZIER& aBezier ) : LIB_ITEM( aBezier )
 }
 
 
-bool LIB_BEZIER::Save( FILE* aFile )
+bool LIB_BEZIER::Save( OUTPUTFORMATTER& aFormatter )
 {
     int ccount = GetCornerCount();
 
-    if( fprintf( aFile, "B %d %d %d %d", ccount, m_Unit, m_Convert, m_Width ) < 0 )
-        return false;
+    aFormatter.Print( 0, "B %d %d %d %d", ccount, m_Unit, m_Convert, m_Width );
 
     for( unsigned i = 0; i < GetCornerCount(); i++ )
     {
-        if( fprintf( aFile, "  %d %d", m_BezierPoints[i].x, m_BezierPoints[i].y ) < 0 )
-            return false;
+        aFormatter.Print( 0, "  %d %d", m_BezierPoints[i].x, m_BezierPoints[i].y );
     }
 
-    if( fprintf( aFile, " %c\n", fill_tab[m_Fill] ) < 0 )
-        return false;
+    aFormatter.Print( 0, " %c\n", fill_tab[m_Fill] );
 
     return true;
 }

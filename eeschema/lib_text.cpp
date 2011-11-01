@@ -55,7 +55,7 @@ LIB_TEXT::LIB_TEXT(LIB_COMPONENT * aParent) :
 }
 
 
-bool LIB_TEXT::Save( FILE* ExportFile )
+bool LIB_TEXT::Save( OUTPUTFORMATTER& aFormatter )
 {
     wxString text = m_Text;
 
@@ -72,13 +72,10 @@ bool LIB_TEXT::Save( FILE* ExportFile )
         text.Replace( wxT( " " ), wxT( "~" ) );
     }
 
-    if( fprintf( ExportFile, "T %d %d %d %d %d %d %d %s ", m_Orient, m_Pos.x, m_Pos.y,
-                 m_Size.x, m_Attributs, m_Unit, m_Convert, TO_UTF8( text ) ) < 0 )
-        return false;
+    aFormatter.Print( 0, "T %d %d %d %d %d %d %d %s ", m_Orient, m_Pos.x, m_Pos.y,
+                      m_Size.x, m_Attributs, m_Unit, m_Convert, TO_UTF8( text ) );
 
-    if( fprintf( ExportFile, " %s %d", m_Italic ? "Italic" : "Normal",
-                 ( m_Bold > 0 ) ? 1 : 0 ) < 0 )
-        return false;
+    aFormatter.Print( 0, " %s %d", m_Italic ? "Italic" : "Normal", ( m_Bold > 0 ) ? 1 : 0 );
 
     char hjustify = 'C';
 
@@ -94,8 +91,7 @@ bool LIB_TEXT::Save( FILE* ExportFile )
     else if( m_VJustify == GR_TEXT_VJUSTIFY_TOP )
         vjustify = 'T';
 
-    if( fprintf( ExportFile, " %c %c\n", hjustify, vjustify ) < 0 )
-        return false;
+    aFormatter.Print( 0, " %c %c\n", hjustify, vjustify );
 
     return true;
 }

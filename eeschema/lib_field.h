@@ -137,10 +137,11 @@ public:
     /**
      * Writes field object out to a FILE in "*.lib" format.
      *
-     * @param aFile The FILE to write to.
+     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
+     *                   field to.
      * @return True if success writing else false.
      */
-    virtual bool Save( FILE* aFile );
+    virtual bool Save( OUTPUTFORMATTER& aFormatter );
 
     virtual bool Load( LINE_READER& aLineReader, wxString& errorMsg );
 

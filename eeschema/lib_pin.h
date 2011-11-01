@@ -32,9 +32,6 @@
 
 #include "lib_draw_item.h"
 
-class SCH_COMPONENT;
-class LINE_READER;
-
 
 #define TARGET_PIN_RADIUS   12  /* Circle diameter drawn at the active end of pins */
 
@@ -153,10 +150,11 @@ public:
     /**
      * Write pin object to a FILE in "*.lib" format.
      *
-     * @param aFile The FILE to write to.
-     * @return - true if success writing else false.
+     * @param aFormatter A reference to an OUTPUTFORMATTER to write the component library
+     *                   pin to.
+     * @return True if success writing else false.
      */
-    virtual bool Save( FILE* aFile );
+    virtual bool Save( OUTPUTFORMATTER& aFormatter );
 
     virtual bool Load( LINE_READER& aLineReader, wxString& aErrorMsg );
 

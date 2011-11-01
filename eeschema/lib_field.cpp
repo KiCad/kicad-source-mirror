@@ -97,7 +97,7 @@ void LIB_FIELD::Init( int id )
 }
 
 
-bool LIB_FIELD::Save( FILE* ExportFile )
+bool LIB_FIELD::Save( OUTPUTFORMATTER& aFormatter )
 {
     int      hjustify, vjustify;
     wxString text = m_Text;
@@ -119,16 +119,15 @@ bool LIB_FIELD::Save( FILE* ExportFile )
     if( text.IsEmpty() )
         text = wxT( "~" );
 
-    if( fprintf( ExportFile, "F%d %s %d %d %d %c %c %c %c%c%c",
-                 m_id,
-                 EscapedUTF8( text ).c_str(),       // wraps in quotes
-                 m_Pos.x, m_Pos.y, m_Size.x,
-                 m_Orient == 0 ? 'H' : 'V',
-                 (m_Attributs & TEXT_NO_VISIBLE ) ? 'I' : 'V',
-                 hjustify, vjustify,
-                 m_Italic ? 'I' : 'N',
-                 m_Bold ? 'B' : 'N' ) < 0 )
-        return false;
+    aFormatter.Print( 0, "F%d %s %d %d %d %c %c %c %c%c%c",
+                      m_id,
+                      EscapedUTF8( text ).c_str(),       // wraps in quotes
+                      m_Pos.x, m_Pos.y, m_Size.x,
+                      m_Orient == 0 ? 'H' : 'V',
+                      (m_Attributs & TEXT_NO_VISIBLE ) ? 'I' : 'V',
+                      hjustify, vjustify,
+                      m_Italic ? 'I' : 'N',
+                      m_Bold ? 'B' : 'N' );
 
     /* Save field name, if necessary
      * Field name is saved only if it is not the default name.
@@ -137,14 +136,10 @@ bool LIB_FIELD::Save( FILE* ExportFile )
      */
     wxString defName = TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
 
-    if( m_id >= FIELD1 && !m_name.IsEmpty() && m_name != defName
-        && fprintf( ExportFile, " %s", EscapedUTF8( m_name ).c_str() ) < 0 )
-    {
-        return false;
-    }
+    if( m_id >= FIELD1 && !m_name.IsEmpty() && m_name != defName )
+        aFormatter.Print( 0, " %s", EscapedUTF8( m_name ).c_str() );
 
-    if( fprintf( ExportFile, "\n" ) < 0 )
-        return false;
+    aFormatter.Print( 0, "\n" );
 
     return true;
 }
