@@ -31,8 +31,10 @@ namespace SCH {
 
 
 CANVAS::CANVAS( wxWindow* aParent ) :
-    OPENGL_GAL( aParent, wxDefaultSize )
+    OPENGL_GAL( aParent, NULL, this )       // I am my own PaintListener
 {
+    Connect( EVT_GAL_REDRAW, wxCommandEventHandler( CANVAS::onRedraw ) );
+
     // Set the world unit length
     SetWorldUnitLength( 0.01 );
 
@@ -63,9 +65,18 @@ CANVAS::CANVAS( wxWindow* aParent ) :
 }
 
 
-void CANVAS::Paint()
+void CANVAS::onRedraw( wxCommandEvent& event )
 {
-/*
+    D(printf( "%s:\n", __FUNCTION__ );)
+
+    PaintScene();
+}
+
+
+void CANVAS::PaintScene()
+{
+    D(printf("%s:\n", __FUNCTION__ );)
+
     BeginDrawing();
 
     SetBackgroundColor( COLOR4D( 0, 0, 0, 1.0 ) );
@@ -80,7 +91,6 @@ void CANVAS::Paint()
 
     Flush();
     EndDrawing();
-*/
 }
 
 

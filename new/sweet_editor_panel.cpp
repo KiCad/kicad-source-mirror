@@ -36,13 +36,13 @@ SWEET_EDITOR_PANEL::SWEET_EDITOR_PANEL( wxWindow* parent, wxWindowID id, const w
 	m_scrolledTextWindow->SetSizer( m_scrolledTextSizer );
 	m_scrolledTextWindow->Layout();
 	m_scrolledTextSizer->Fit( m_scrolledTextWindow );
-	m_gal_scrolled_window = new wxScrolledWindow( m_splitter3, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxVSCROLL );
+	m_gal_scrolled_window = new wxScrolledWindow( m_splitter3, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxHSCROLL|wxVSCROLL );
 	m_gal_scrolled_window->SetScrollRate( 5, 5 );
 	wxStaticBoxSizer* m_gal_sizer;
 	m_gal_sizer = new wxStaticBoxSizer( new wxStaticBox( m_gal_scrolled_window, wxID_ANY, _("Visual Part") ), wxVERTICAL );
 	
 	m_gal = new SCH::CANVAS( m_gal_scrolled_window );
-	m_gal_sizer->Add( m_gal, 0, wxALL, 5 );
+	m_gal_sizer->Add( m_gal, 1, wxEXPAND, 5 );
 	
 	m_gal_scrolled_window->SetSizer( m_gal_sizer );
 	m_gal_scrolled_window->Layout();
