@@ -61,8 +61,8 @@ protected:
     int         m_Drill;            // for vias: via drill (- 1 for default value)
 
 public:
-    BOARD_ITEM* start;              // pointers to a connected item (pad or track)
-    BOARD_ITEM* end;
+    BOARD_CONNECTED_ITEM* start;    // pointers to a connected item (pad or track)
+    BOARD_CONNECTED_ITEM* end;
     std::vector<TRACK*> m_TracksConnected;   // list of other tracks connected to me
 
     int         m_Param;            // Auxiliary variable ( used in some computations )

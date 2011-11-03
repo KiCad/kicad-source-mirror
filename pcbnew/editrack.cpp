@@ -994,7 +994,7 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
     TRACK*      firsttrack = track;
     TRACK*      oldtrack;
 
-    BOARD_ITEM* LockPoint = track->start;
+    BOARD_CONNECTED_ITEM* LockPoint = track->start;
 
     while( track != NULL )
     {
