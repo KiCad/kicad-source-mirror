@@ -28,11 +28,11 @@ typedef std::deque<STRING>  STRINGS;
  * Type STR_UTF
  * holds a UTF8 encoded sequence of 8 bit bytes that represent a sequence
  * of variable multi-byte international characters.  UTF8 is the chosen encoding
- * for all Kicad data files so that they can be transported from one nation to another
- * without ambiguity. Data files are those where Kicad controls the content.
+ * for all KiCad data files so that they can be transported from one nation to another
+ * without ambiguity. Data files are those where KiCad controls the content.
  * This is not the same thing as filenames, which are not file content.
  * Filenames may be encoded on disk using an encoding chosen by the host operating
- * system.  Nonetheless, Kicad data file _content_ is always UTF8 encoded, regardless
+ * system.  Nonetheless, KiCad data file _content_ is always UTF8 encoded, regardless
  * of host operating system.
  * STR_UTF is UTF8 encoded, by definition.
  */
