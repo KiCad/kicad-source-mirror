@@ -1,8 +1,8 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,8 +24,8 @@
 
 
 #include "sch_canvas.h"
-
 #include "sch_part.h"
+#include <gal/font/newstroke_font.h>
 
 namespace SCH {
 
@@ -40,28 +40,18 @@ CANVAS::CANVAS( wxWindow* aParent ) :
 
     SetScreenDPI( 100 );
 
-    // SetLookAtPoint( VECTOR2D( size.x / 2, size.y / 2 ) );
-
     ComputeWorldScreenMatrix();
 
-/*
-    // Compute the world size
-    m_worldSize = VECTOR2D( m_screenSize.x, m_screenSize.y );
-
-    m_isReady   = true;
-    m_isPanning = false;
-    m_isGroupStarted = true;
-
-    m_offset = 0.333;
+    // Set the world unit length
+    // SetLookAtPoint( VECTOR2D( size.x / 2, size.y / 2 ) );
 
     // Load Font
     if( !m_font.LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize ) )
     {
-        cout << "Loading of the font failed." << endl;
+        printf( "Loading of the font failed.\n" );
     }
 
     m_font.SetGraphicsAbstractionLayer( this );
-*/
 }
 
 

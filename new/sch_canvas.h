@@ -1,8 +1,8 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@
 #define SCH_CANVAS_H_
 
 #include <gal/opengl/opengl_gal.h>
+#include <gal/common/stroke_font.h>
 
 
 namespace SCH {
@@ -36,7 +37,9 @@ class CANVAS : public OPENGL_GAL
 {
 
 protected:
-    PART*   part;           ///< which PART to draw
+    PART*       m_part;           ///< which PART to draw
+    STROKE_FONT m_font;
+
 
     void    onRedraw( wxCommandEvent& event );
 
@@ -47,10 +50,10 @@ public:
      * Function SetPart
      * sets the PART to draw, returns the previous PART.
      */
-    PART*   SetPart( PART* aPart )
+    PART* SetPart( PART* aPart )
     {
-        PART* ret = part;
-        part = aPart;
+        PART* ret = m_part;
+        m_part = aPart;
         return ret;
     }
 

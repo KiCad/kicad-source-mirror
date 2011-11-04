@@ -3,7 +3,7 @@ namespace SCH {
 
 /** @mainpage
 
-This file describes the design of a new Distributed Library System for Kicad's
+This file describes the design of a new Distributed Library System for KiCad's
 EESCHEMA. Many of the concepts can be adapted with modest modification to PCBNEW
 also, in the future.
 
@@ -32,15 +32,15 @@ speed up the pace at which new parts are found and used.
 
 <p> Electronic component manufacturers need and look for ways to differentiate
 their products from their competitors. With this Distributed Library System
-facility in Kicad, one way for manufacturers to differentiate themselves and
+facility in KiCad, one way for manufacturers to differentiate themselves and
 their parts is to publish a part library on the Internet and save their
-customers the work of doing the data entry of the part into the Kicad design
+customers the work of doing the data entry of the part into the KiCad design
 system.
 
 <p> Maintaining a comprehensive part library is a fairly labor intensive
 activity. New parts come into the market everyday. By being able to publish a
 superior library on the Internet, it may be possible to make a for profit
-business out of doing this.  The Kicad eco-system would benefit should this
+business out of doing this.  The KiCad eco-system would benefit should this
 happen, and there could even be competition between such businesses.  Or there
 can be library specializations or niches.
 
@@ -52,9 +52,9 @@ an existing part without completely re-designing it. It is sometimes easier to
 modify an existing part than it is to create the new part entirely from scratch.
 
 <p> This Distributed Library System design will have the capability to
-significantly benefit the Kicad eco-system, and that should mean expanding the
+significantly benefit the KiCad eco-system, and that should mean expanding the
 numbers of users and contributors to the project, and hopefully making for a
-better Kicad tool-set for all.
+better KiCad tool-set for all.
 
 
 @section definitions Definitions
@@ -172,7 +172,7 @@ logical library names duplicately defined. (Or we will simply ask that any remot
 <p> Eventually there will be an external publicly available internet based
 logical library table also, but this will need to be glued down at a hard coded
 URL that we have control over. The internet based library table allows us to
-advertise remote libraries without having to issue an update to Kicad.</dd>
+advertise remote libraries without having to issue an update to KiCad.</dd>
 
 <dt>Query Language</dt><dd>This is a means of searching for something that is
 contained within a container. Since some library sources are remote, it is
@@ -218,8 +218,8 @@ ever get done, the boundary of the plug-in interface will remain the C++ library
 API as given here (mostly in class LIB_SOURCE). The only reason to introduce a
 plug-in design is to allow proprietary closed source library implementations,
 and this could eventually come about if a part vendor wanted to provide one for
-the Kicad project. If a Texas Instruments type of company wants to maintain a
-Kicad library, we will be positioned to accommodate them. Until then, the
+the KiCad project. If a Texas Instruments type of company wants to maintain a
+KiCad library, we will be positioned to accommodate them. Until then, the
 LIB_SOURCE implementations can be statically linked into EESCHEMA and there is
 no conceptual disruption either way.
 
@@ -247,9 +247,9 @@ conversion program can simplify things by simply putting all schematic parts
 into a parts list within each schematic.
 
 <li> An Internet connection is required to use some of the library sources. It
-will be possible to omit these library sources and run Kicad by doing a
+will be possible to omit these library sources and run KiCad by doing a
 configuration change. Eventually, some library sources will spring up and will
-not technically be part of the Kicad project, so they will remain remote, but
+not technically be part of the KiCad project, so they will remain remote, but
 fully usable to those with an internet connection and permission from the
 library source's owner.
 
@@ -297,7 +297,7 @@ SCH for EESCHEMA, and PCB for PCBNEW.
 
 <p> Since most if not all the APIs deal with file or non-volatile storage, only
 8 bit string types are used. For international strings, UTF-8 is used, and
-that is what is currently in use within the Kicad file storage formats.
+that is what is currently in use within the KiCad file storage formats.
 
 <p> The typedef <b>STRINGS</b> is used frequently as a holder for multiple
 std::strings. After some research, I chose std::dequeue<STRING> to hold a list of

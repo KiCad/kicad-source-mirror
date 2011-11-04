@@ -1,8 +1,8 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,29 +112,6 @@ SWEET_FRAME::SWEET_FRAME( wxWindow* parent, wxWindowID id, const wxString& title
     Connect( wxEVT_MOUSEWHEEL, wxMouseEventHandler( SWEET_FRAME::OnMouseWheel ) );
     Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( SWEET_FRAME::OnRightDown ) );
     Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( SWEET_FRAME::OnRightUp ) );
-
-//    Connect( EVT_GAL_REDRAW, wxCommandEventHandler( SWEET_FRAME::OnRedraw ) );
-
-
-/*
-    // Set the world unit length
-    m_gal->SetWorldUnitLength( 0.01 );
-    m_gal->SetScreenDPI( 100 );
-    m_gal->SetLookAtPoint( VECTOR2D( size.x / 2, size.y / 2 ) );
-    m_gal->ComputeWorldScreenMatrix();
-
-    // Compute the world size
-    m_worldSize = VECTOR2D( m_screenSize.x, m_screenSize.y );
-
-    // Load Font
-    if( !m_font.LoadNewStrokeFont( newstroke_font, newstroke_font_bufsize ) )
-    {
-        cout << "Loading of the font failed." << endl;
-    }
-
-    m_font.SetGraphicsAbstractionLayer( m_gal );
-*/
-
 }
 
 
