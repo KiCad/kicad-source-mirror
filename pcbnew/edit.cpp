@@ -66,7 +66,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     int         itmp;
     INSTALL_UNBUFFERED_DC( dc, DrawPanel );
-    BOARD_ITEM* DrawStruct = GetCurItem();
     MODULE* module;
 
     DrawPanel->CrossHairOff( &dc );
@@ -1080,8 +1079,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     default:
         wxString msg;
-        msg.Printf( wxT( "PCB_EDIT_FRAME::Process_Special_Functions() id %d error" ),
-                    DrawStruct->Type() );
+        msg.Printf( wxT( "PCB_EDIT_FRAME::Process_Special_Functions() unknown event id %d" ),
+                    id );
         DisplayError( this, msg );
         break;
     }

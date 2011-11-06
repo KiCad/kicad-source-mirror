@@ -132,6 +132,7 @@ set(PCBNEW_SRCS
     magnetic_tracks_functions.cpp
     menubar_modedit.cpp
     menubar_pcbframe.cpp
+    minumun_spanning_tree.cpp
     mirepcb.cpp
     modedit.cpp
     modedit_onclick.cpp

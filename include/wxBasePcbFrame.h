@@ -352,7 +352,11 @@ public:
      */
     void TraceModuleRatsNest( wxDC* aDC );
 
-    void Build_Board_Ratsnest( wxDC* DC );
+    /**
+     * Function Build_Board_Ratsnest.
+     * Calculates the full ratsnest depending only on pads.
+     */
+    void Build_Board_Ratsnest();
 
     /**
      *  function Displays the general ratsnest
