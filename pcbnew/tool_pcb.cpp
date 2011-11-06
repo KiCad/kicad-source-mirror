@@ -204,11 +204,12 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString, KiBitmap( modedit_xpm ),
                          _( "Open module editor" ) );
 
+#if 0
+    // Not yet existing commands
     m_HToolBar->AddSeparator();
     m_HToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
                          _( "Cut selected item" ) );
 
-#if 0
     m_HToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button_xpm ),
                          _( "Copy selected item" ) );
 
