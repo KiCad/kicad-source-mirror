@@ -1,5 +1,5 @@
 /**
- * @file minumun_spanning_tree.cpp
+ * @file minimun_spanning_tree.cpp
  */
 
 /*
@@ -31,7 +31,7 @@
 
 #include <limits.h>
 
-#include "minumun_spanning_tree.h"
+#include "minimun_spanning_tree.h"
 #include "class_pad.h"
 
 /*
