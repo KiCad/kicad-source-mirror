@@ -1,5 +1,5 @@
 /**
- * @file minumun_spanning_tree.h
+ * @file minimun_spanning_tree.h
  */
 
 #include <vector>

@@ -17,12 +17,7 @@
 
 #include "pcbnew.h"
 
-#include "minumun_spanning_tree.h"
-
-static std::vector <D_PAD*> s_localPadBuffer;   // for local ratsnest
-                                                // calculations when moving a
-                                                // footprint: buffer of pads to
-                                                // consider
+#include "minimun_spanning_tree.h"
 
 /**
  * @brief class MIN_SPAN_TREE_PADS (derived from MIN_SPAN_TREE) specialize
@@ -190,8 +185,7 @@ static bool sortByNetcode( const D_PAD* const & ref, const D_PAD* const & item )
 
 /**
  * Function to compute the full ratsnest
- *  In the functions tracks are not considered
- *  This is only the "basic" ratsnest depending only on pads.
+ * This is the "basic" ratsnest depending only on pads.
  *
  * Create the sorted pad list (if necessary)
  * The active pads (i.e included in a net ) are called nodes
@@ -201,8 +195,7 @@ static bool sortByNetcode( const D_PAD* const & ref, const D_PAD* const & item )
  * Update :
  *      nb_nodes = Active pads count for the board
  *      nb_links = link count for the board (logical connection count)
- *      (there are n-1 links for a connection which have n active pads) .
- *
+ *      (there are n-1 links in a net which counting n active pads) .
  */
 void PCB_BASE_FRAME::Build_Board_Ratsnest()
 {
@@ -265,10 +258,10 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest()
 
 
 /**
- *  function Displays the general ratsnest
- *  Only ratsnest with the status bit CH_VISIBLE is set are displayed
+ *  function DrawGeneralRatsnest
+ *  Only ratsnest items with the status bit CH_VISIBLE set are displayed
  * @param aDC = the current device context (can be NULL)
- * @param aNetcode if > 0, Display only the ratsnest relative to the
+ * @param aNetcode: if > 0, Display only the ratsnest relative to the
  * corresponding net_code
  */
 void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
@@ -282,7 +275,7 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
     if( aDC == NULL )
         return;
 
-    int state = CH_VISIBLE | CH_ACTIF;
+    const int state = CH_VISIBLE | CH_ACTIF;
 
     for( unsigned ii = 0; ii < m_Pcb->GetRatsnestsCount(); ii++ )
     {
@@ -363,12 +356,10 @@ static int tst_rats_block_to_block( NETINFO_ITEM*          net,
 
 /**
  * Function used by TestRatsNest_general
- *  The general ratsnest list must exists
- *  Activates the ratsnest between 2 pads ( assumes the same net )
- *  The function links 1 pad not already connected an other pad and activate
- *  some blocks linked by a ratsnest
- *  It tests only the existing ratsnest and activate some ratsnest (status bit
- * CH_ACTIF set)
+ *  The general ratsnest list must exists because this function explore this ratsnest
+ *  Activates (set the CH_ACTIF flag) the ratsnest links between 2 pads when needed
+ *  The function links 1 pad not already connected to an other pad (SubRatsnest = 0)
+ *  and active the correspondint link
  *
  * @param   start_rat_list = starting address for the ratsnest list
  * @param   end_rat_list   = ending address for the ratsnest list
@@ -419,7 +410,23 @@ static int tst_rats_pad_to_pad( int            current_num_block,
     return current_num_block;
 }
 
-
+/* function TestRatsNest
+ * determine the active links inside the full ratsnest
+ *
+ * I used an  derived from the "lee algorithm".
+ * The algorithm explore the existing full ratnest
+ * This is a 2 steps algorithm (executed for each net).
+ * - First:
+ *   Initialise for each pad the subratsnest id to its subnet value
+ *   explore the full ratnest (relative to the net) and active a link each time at least one pad of
+ *   the given link is not connected to an other pad by a track ( subratsnest = 0)
+ *   If the 2 pads linked have both the subratsnest id = 0, a new subratsnest value is created
+ * -  Second:
+ *   explore the full ratnest (relative to the net) and find a link that links
+ *   2 pads having different subratsnest values
+ *   Active the link and merge the 2 subratsnest value.
+ *
+ */
 void PCB_BASE_FRAME::TestRatsNest( wxDC* aDC, int aNetCode )
 {
     RATSNEST_ITEM* rats;
@@ -492,6 +499,11 @@ int PCB_BASE_FRAME::TestOneRatsNest( wxDC* aDC, int aNetCode )
 
 void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
 {
+    // for local ratsnest calculation when moving a footprint:
+    // list of pads to use for this local ratsnets:
+    // this is the list of connected pads of the current module,
+    // and all pads connected to these pads:
+    static std::vector <D_PAD*> localPadList;
     static unsigned pads_module_count;  // node count (node = pad with a net
                                         // code) for the footprint being moved
     static unsigned internalRatsCount;  // number of internal links (links
@@ -514,121 +526,115 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
      * footprints which are "connected" to
      *  a pad in the current footprint
      */
-    if( (m_Pcb->m_Status_Pcb & RATSNEST_ITEM_LOCAL_OK) != 0 )
-        goto CalculateExternalRatsnest;
-
-    /* Compute the "internal" ratsnest, i.e the links between the current
-     * footprint pads
-     */
-    s_localPadBuffer.clear();
-    m_Pcb->m_LocalRatsnest.clear();
-
-    for( pad_ref = aModule->m_Pads; pad_ref != NULL; pad_ref = pad_ref->Next() )
+    if( (m_Pcb->m_Status_Pcb & RATSNEST_ITEM_LOCAL_OK) == 0 )
     {
-        if( pad_ref->GetNet() == 0 )
-            continue;
+        /* Compute the "internal" ratsnest, i.e the links between the current
+         * footprint pads
+         */
+        localPadList.clear();
+        m_Pcb->m_LocalRatsnest.clear();
 
-        s_localPadBuffer.push_back( pad_ref );
-        pad_ref->SetSubRatsnest( 0 );
-        pad_ref->SetSubNet( 0 );
-    }
-
-    pads_module_count = s_localPadBuffer.size();
-
-    if( pads_module_count == 0 )
-        return;  /* no connection! */
-
-    sort( s_localPadBuffer.begin(), s_localPadBuffer.end(), sortByNetcode );
-
-    /* Build the list of pads linked to the current footprint pads */
-    current_net_code = 0;
-
-    for( unsigned ii = 0; ii < pads_module_count; ii++ )
-    {
-        pad_ref = s_localPadBuffer[ii];
-
-        if( pad_ref->GetNet() == current_net_code )
-            continue;
-
-        // A new net was found, load all pads of others modules members of this net:
-        NETINFO_ITEM* net = m_Pcb->FindNet( pad_ref->GetNet() );
-
-        if( net == NULL )       //Should not occur
+        // collect active pads of the module:
+        for( pad_ref = aModule->m_Pads; pad_ref != NULL; pad_ref = pad_ref->Next() )
         {
-            wxMessageBox( wxT( "build_ratsnest_module() error: net not found" ) );
-            return;
-        }
-
-        for( unsigned jj = 0; jj < net->m_ListPad.size(); jj++ )
-        {
-            pad_externe = net->m_ListPad[jj];
-
-            if( pad_externe->GetParent() == aModule )
+            if( pad_ref->GetNet() == 0 )
                 continue;
 
-            pad_externe->SetSubRatsnest( 0 );
-            pad_externe->SetSubNet( 0 );
-
-            s_localPadBuffer.push_back( pad_externe );
+            localPadList.push_back( pad_ref );
+            pad_ref->SetSubRatsnest( 0 );
+            pad_ref->SetSubNet( 0 );
         }
-    }
 
-    /* Sort the pad list by net_code */
-    sort( s_localPadBuffer.begin() + pads_module_count, s_localPadBuffer.end(),
-           sortByNetcode );
+        pads_module_count = localPadList.size();
 
-    /* Compute the internal rats nest:
-     *  this is the same as general ratsnest, but considers only the current
-     * footprint pads it is therefore not time consuming, and it is made only
-     * once
-     */
-    current_net_code = s_localPadBuffer[0]->GetNet();
+        if( pads_module_count == 0 )
+            return;  /* no connection! */
 
-    {
-    MIN_SPAN_TREE_PADS min_spanning_tree;
-    std::vector<D_PAD*> padsBuffer;
-    for( unsigned ii = 0; ii < pads_module_count; ii++ )
-    {
-        /* Search the end of pad list relative to the current net */
-        unsigned jj = ii + 1;
+        sort( localPadList.begin(), localPadList.end(), sortByNetcode );
 
-        for( ; jj <= pads_module_count; jj++ )
+        /* Build the list of pads linked to the current footprint pads */
+        current_net_code = 0;
+
+        for( unsigned ii = 0; ii < pads_module_count; ii++ )
         {
-            if( jj >= pads_module_count )
-                break;
+            pad_ref = localPadList[ii];
 
-            if( s_localPadBuffer[jj]->GetNet() != current_net_code )
-                break;
+            if( pad_ref->GetNet() == current_net_code )
+                continue;
+
+            // A new net was found, load all pads of others modules members of this net:
+            NETINFO_ITEM* net = m_Pcb->FindNet( pad_ref->GetNet() );
+
+            if( net == NULL )       //Should not occur
+            {
+                wxMessageBox( wxT( "build_ratsnest_module() error: net not found" ) );
+                return;
+            }
+
+            for( unsigned jj = 0; jj < net->m_ListPad.size(); jj++ )
+            {
+                pad_externe = net->m_ListPad[jj];
+
+                if( pad_externe->GetParent() == aModule )
+                    continue;
+
+                pad_externe->SetSubRatsnest( 0 );
+                pad_externe->SetSubNet( 0 );
+
+                localPadList.push_back( pad_externe );
+            }
         }
 
-        for(unsigned kk = ii; kk < jj; kk++ )
-            padsBuffer.push_back( s_localPadBuffer[kk] );
-        min_spanning_tree.MSP_Init( &padsBuffer );
-        min_spanning_tree.BuildTree();
-        min_spanning_tree.AddItemsToRatsnest( m_Pcb->m_LocalRatsnest );
-        padsBuffer.clear();
-        ii = jj;
-        if( ii < s_localPadBuffer.size() )
-            current_net_code = s_localPadBuffer[ii]->GetNet();
-    }
-    }
+        /* Sort the pad list by net_code */
+        sort( localPadList.begin() + pads_module_count, localPadList.end(),
+               sortByNetcode );
 
-    internalRatsCount = m_Pcb->m_LocalRatsnest.size();
+        /* Compute the internal rats nest:
+         *  this is the same as general ratsnest, but considers only the current
+         * footprint pads it is therefore not time consuming, and it is made only
+         * once
+         */
+        current_net_code = localPadList[0]->GetNet();
 
-    /* set the ratsnest status, flag LOCAL_RATSNEST_ITEM */
-    for( unsigned ii = 0; ii < m_Pcb->m_LocalRatsnest.size(); ii++ )
-    {
-        m_Pcb->m_LocalRatsnest[ii].m_Status = LOCAL_RATSNEST_ITEM;
-    }
+        MIN_SPAN_TREE_PADS min_spanning_tree;
+        std::vector<D_PAD*> padsBuffer;     // contains pads of only one net
+        for( unsigned ii = 0; ii < pads_module_count; ii++ )
+        {
+            /* Search the end of pad list relative to the current net */
+            unsigned jj = ii + 1;
 
-    m_Pcb->m_Status_Pcb |= RATSNEST_ITEM_LOCAL_OK;
+            for( ; jj <= pads_module_count; jj++ )
+            {
+                if( jj >= pads_module_count )
+                    break;
 
-    /* This section computes the "external" ratsnest: must be done when the
+                if( localPadList[jj]->GetNet() != current_net_code )
+                    break;
+            }
+
+            for(unsigned kk = ii; kk < jj; kk++ )
+                padsBuffer.push_back( localPadList[kk] );
+            min_spanning_tree.MSP_Init( &padsBuffer );
+            min_spanning_tree.BuildTree();
+            min_spanning_tree.AddItemsToRatsnest( m_Pcb->m_LocalRatsnest );
+            padsBuffer.clear();
+            ii = jj;
+            if( ii < localPadList.size() )
+                current_net_code = localPadList[ii]->GetNet();
+        }
+        internalRatsCount = m_Pcb->m_LocalRatsnest.size();
+
+        // set the flag LOCAL_RATSNEST_ITEM of the ratsnest status:
+        for( unsigned ii = 0; ii < m_Pcb->m_LocalRatsnest.size(); ii++ )
+            m_Pcb->m_LocalRatsnest[ii].m_Status = LOCAL_RATSNEST_ITEM;
+
+        m_Pcb->m_Status_Pcb |= RATSNEST_ITEM_LOCAL_OK;
+    }   // End of internal ratsnest build
+
+    /* This section computes the "external" ratsnest: it is done when the
      * footprint position changes
-     */
-CalculateExternalRatsnest:
-
-    /* This section search:
+     *
+     * This section search:
      *  for each current module pad the nearest neighbor external pad (of
      * course for the same net code).
      *  For each current footprint cluster of pad (pads having the same net
@@ -637,19 +643,20 @@ CalculateExternalRatsnest:
      *  so, for each net, only one rats nest item is created
      */
     RATSNEST_ITEM local_rats;
-    local_rats.m_Lenght = 0x7FFFFFFF;
+    local_rats.m_Lenght = INT_MAX;
     local_rats.m_Status = 0;
     bool addRats = false;
 
+    // Erase external ratsnest items:
     if( internalRatsCount < m_Pcb->m_LocalRatsnest.size() )
         m_Pcb->m_LocalRatsnest.erase( m_Pcb->m_LocalRatsnest.begin() + internalRatsCount,
                                       m_Pcb->m_LocalRatsnest.end() );
 
-    current_net_code = s_localPadBuffer[0]->GetNet();
+    current_net_code = localPadList[0]->GetNet();
 
     for( unsigned ii = 0; ii < pads_module_count; ii++ )
     {
-        pad_ref = s_localPadBuffer[ii];
+        pad_ref = localPadList[ii];
 
         if( pad_ref->GetNet() != current_net_code )
         {
@@ -661,15 +668,15 @@ CalculateExternalRatsnest:
 
             addRats = false;
             current_net_code    = pad_ref->GetNet();
-            local_rats.m_Lenght = 0x7FFFFFFF;
+            local_rats.m_Lenght = INT_MAX;
         }
 
         pad_pos = pad_ref->m_Pos - g_Offset_Module;
 
         // Search the nearest external pad of this current pad
-        for( unsigned jj = pads_module_count; jj < s_localPadBuffer.size(); jj++ )
+        for( unsigned jj = pads_module_count; jj < localPadList.size(); jj++ )
         {
-            pad_externe = s_localPadBuffer[jj];
+            pad_externe = localPadList[jj];
 
             /* we search pads having the same net code */
             if( pad_externe->GetNet() < pad_ref->GetNet() )
