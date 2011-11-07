@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file viewlib_frame.cpp
  */
@@ -24,13 +49,11 @@ wxString LIB_VIEW_FRAME::m_entryName;
 int LIB_VIEW_FRAME::m_unit = 1;
 int LIB_VIEW_FRAME::m_convert = 1;
 
-// When the viewer is used to select a component in schematic, the selected component is here.
+
+/// When the viewer is used to select a component in schematic, the selected component is here.
 wxString LIB_VIEW_FRAME::m_exportToEeschemaCmpName;
 
 
-/*****************************/
-/* class WinEDA_ViewlibFrame */
-/*****************************/
 BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     /* Window events */
     EVT_CLOSE( LIB_VIEW_FRAME::OnCloseWindow )
@@ -212,8 +235,8 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
                       wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     /* Now the minimum windows are fixed, set library list
-    and component list of the previous values from last viewlib use
-    */
+     * and component list of the previous values from last viewlib use
+     */
     if( m_LibListWindow )
     {
         wxAuiPaneInfo& pane = m_auimgr.GetPane(m_LibListWindow);
@@ -253,15 +276,13 @@ void LIB_VIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
         // This window will be destroyed by the calling function,
         // to avoid side effects
     }
-
     else
+    {
         Destroy();
+    }
 }
 
 
-/*
- * Resize sub windows when dragging a sash window border
- */
 void LIB_VIEW_FRAME::OnSashDrag( wxSashEvent& event )
 {
     if( event.GetDragStatus() == wxSASH_STATUS_OUT_OF_RANGE )
@@ -340,9 +361,9 @@ double LIB_VIEW_FRAME::BestZoom()
     // Reserve a 10% margin around component bounding box.
     double margin_scale_factor = 0.8;
     double zx =(double) BoundaryBox.GetWidth() /
-                    ( margin_scale_factor * (double)size.x );
+               ( margin_scale_factor * (double)size.x );
     double zy = (double) BoundaryBox.GetHeight() /
-                    ( margin_scale_factor * (double)size.y);
+                ( margin_scale_factor * (double)size.y);
 
     // Calculates the best zoom
     bestzoom = MAX( zx, zy );
@@ -358,12 +379,6 @@ double LIB_VIEW_FRAME::BestZoom()
 }
 
 
-/**
- * Function ReCreateListLib
- *
- * Creates or recreates the list of current loaded libraries.
- * This list is sorted, with the library cache always at end of the list
- */
 void LIB_VIEW_FRAME::ReCreateListLib()
 {
     if( m_LibList == NULL )
@@ -475,10 +490,6 @@ void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
 }
 
 
-
-/*
- * Export the current component to schematic and close the library browser
- */
 void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
 {
     int ii = m_CmpList->GetSelection();
@@ -496,12 +507,6 @@ void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
 #define CMPLIST_WIDTH_KEY wxT( "Cmplist_width" )
 
 
-/**
- * Load library viewer frame specific configuration settings.
- *
- * Don't forget to call this base method from any derived classes or the
- * settings will not get loaded.
- */
 void LIB_VIEW_FRAME::LoadSettings( )
 {
     wxConfig* cfg ;
@@ -526,12 +531,6 @@ void LIB_VIEW_FRAME::LoadSettings( )
 }
 
 
-/**
- * Save library viewer frame specific configuration settings.
- *
- * Don't forget to call this base method from any derived classes or the
- * settings will not get saved.
- */
 void LIB_VIEW_FRAME::SaveSettings()
 {
     wxConfig* cfg;
@@ -547,9 +546,7 @@ void LIB_VIEW_FRAME::SaveSettings()
     cfg->Write( CMPLIST_WIDTH_KEY, m_CmpListSize.x );
 }
 
-/** Called on activate the frame.
- * Reload the libraries lists that can be changed by the schematic editor or the library editor
- */
+
 void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
 {
     EDA_DRAW_FRAME::OnActivate( event );
