@@ -557,6 +557,14 @@ public:
      *                grid size combobox on the toolbar.
      */
     virtual void OnSelectGrid( wxCommandEvent& event );
+
+    /**
+     * Functions OnSelectZoom
+     * sets the zoom factor when selected by the zoom list box in the main tool bar.
+     * @note List position 0 is fit to page
+     *       List position >= 1 = zoom (1 to zoom max)
+     *       Last list position is custom zoom not in zoom list.
+     */
     virtual void OnSelectZoom( wxCommandEvent& event );
 
     // Command event handlers shared by all applications derived from EDA_DRAW_FRAME.
@@ -585,7 +593,12 @@ public:
      */
     virtual void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 ) { }
 
+    /**
+     * Function OnSize
+     * recalculates the size of toolbars and display panel when the frame size changes.
+     */
     virtual void OnSize( wxSizeEvent& event );
+
     void OnEraseBackground( wxEraseEvent& SizeEvent );
 
     virtual void OnZoom( wxCommandEvent& event );
@@ -608,7 +621,10 @@ public:
     /* Return the zoom level which displays the full page on screen */
     virtual double BestZoom() = 0;
 
-    /* Return the current zoom level */
+    /**
+     * Function GetZoom
+     * @return The current zoom level.
+     */
     double GetZoom( void );
 
     void TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width );
@@ -655,6 +671,10 @@ public:
      */
     virtual void UpdateStatusBar();
 
+    /**
+     * Function DisplayUnitsMsg
+     * displays current unit pane on the status bar.
+     */
     void DisplayUnitsMsg();
 
     /* Handlers for block commands */
@@ -698,7 +718,22 @@ public:
     void OnSockRequest( wxSocketEvent& evt );
     void OnSockRequestServer( wxSocketEvent& evt );
 
+    /**
+     * Function LoadSettings
+     * loads the draw frame specific configuration settings.
+     *
+     * Don't forget to call this base method from any derived classes or the
+     * settings common to the draw frame will not get loaded.
+     */
     virtual void LoadSettings();
+
+    /**
+     * Funxtion SaveSettings
+     * saves the draw frame specific configuration settings.
+     *
+     * Don't forget to call this base method from any derived classes or the
+     * settings common to the draw frame will not get saved.
+     */
     virtual void SaveSettings();
 
     /**
@@ -1056,7 +1091,7 @@ static inline void AddMenuItem( wxMenu*         aMenu,
  * Each panel has rows, starting at 0. Each row has positions starting at 0. Each item in a panel
  * can have it's row and position set.
  *
- * Eventually panels will be moveable. Each initialization function sets up the panel for this,
+ * Eventually panels will be movable. Each initialization function sets up the panel for this,
  * then after a //==// break has additional calls to anchor toolbars in a way that matches
  * present functionality.
  */
@@ -1076,7 +1111,7 @@ public:
         CloseButton( false );
         LeftDockable( false );
         RightDockable( false );
-        //====================  Remove calls below here for moveable toolbars //
+        //====================  Remove calls below here for movable toolbars //
         Gripper( false );
         DockFixed( true );
         Movable( false );
@@ -1094,7 +1129,7 @@ public:
         CloseButton( false );
         TopDockable( false );
         BottomDockable( false );
-        //====================  Remove calls below here for moveable toolbars //
+        //====================  Remove calls below here for movable toolbars //
         Gripper( false );
         DockFixed( true );
         Movable( false );

@@ -87,13 +87,6 @@ void BASE_SCREEN::InitDatas()
 }
 
 
-/**
- * Get screen units scalar.
- *
- * Default implementation returns scalar used for schematic screen.  The
- * internal units used by the schematic screen is 1 mil (0.001").  Override
- * this in derived classes that require internal units other than 1 mil.
- */
 int BASE_SCREEN::GetInternalUnits( void )
 {
     return EESCHEMA_INTERNAL_UNIT;
@@ -119,23 +112,13 @@ void BASE_SCREEN::SetPageSize( wxSize& aPageSize )
 }
 
 
-/**
- * Function GetScalingFactor
- * @return the the current scale used to draw items on screen
- * draw coordinates are user coordinates * GetScalingFactor( )
- */
 double BASE_SCREEN::GetScalingFactor() const
 {
     double scale = 1.0 / GetZoom();
     return scale;
 }
 
-/**
- * Function SetScalingFactor
- * calculates the .m_Zoom member to have a given scaling factor
- * @param aScale - the the current scale used to draw items on screen
- * draw coordinates are user coordinates * GetScalingFactor()
- */
+
 void BASE_SCREEN::SetScalingFactor(double aScale )
 {
     double zoom = aScale;
@@ -151,6 +134,7 @@ void BASE_SCREEN::SetScalingFactor(double aScale )
 
     SetZoom( zoom );
 }
+
 
 void BASE_SCREEN::SetZoomList( const wxArrayDouble& zoomlist )
 {
@@ -293,7 +277,6 @@ void BASE_SCREEN::SetGrid( const wxRealPoint& size )
 }
 
 
-/* Set grid size from command ID. */
 void BASE_SCREEN::SetGrid( int id  )
 {
     wxASSERT( !m_grids.empty() );
@@ -461,6 +444,7 @@ wxPoint BASE_SCREEN::GetCrossHairScreenPosition() const
 
     return pos;
 }
+
 
 void BASE_SCREEN::SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid )
 {

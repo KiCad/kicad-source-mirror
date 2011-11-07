@@ -171,15 +171,24 @@ public:
 
     virtual void SetDrawItems( EDA_ITEM* aItem ) { m_drawList = aItem; }
 
-    void         InitDatas();
+    void InitDatas();
 
-    void         SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
+    void SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
 
-    wxString     GetFileName() const { return m_fileName; }
+    wxString GetFileName() const { return m_fileName; }
 
-    void         SetPageSize( wxSize& aPageSize );
-    wxSize       ReturnPageSize( void );
-    virtual int  GetInternalUnits( void );
+    void SetPageSize( wxSize& aPageSize );
+    wxSize ReturnPageSize( void );
+
+    /**
+     * Function GetInternalUnits
+     * @return the screen units scalar.
+     *
+     * Default implementation returns scalar used for schematic screen.  The
+     * internal units used by the schematic screen is 1 mil (0.001").  Override
+     * this in derived classes that require internal units other than 1 mil.
+     */
+    virtual int GetInternalUnits( void );
 
     /**
      * Function GetCrossHairPosition
@@ -227,7 +236,7 @@ public:
      * picked items are deleted by ClearUndoORRedoList() according to their
      * status
      */
-    virtual void               ClearUndoRedoList();
+    virtual void ClearUndoRedoList();
 
     /**
      * Function PushCommandToUndoList
@@ -236,7 +245,7 @@ public:
      * reached
      * ( using ClearUndoORRedoList)
      */
-    virtual void               PushCommandToUndoList( PICKED_ITEMS_LIST* aItem );
+    virtual void PushCommandToUndoList( PICKED_ITEMS_LIST* aItem );
 
     /**
      * Function PushCommandToRedoList
@@ -245,7 +254,7 @@ public:
      * reached
      * ( using ClearUndoORRedoList)
      */
-    virtual void               PushCommandToRedoList( PICKED_ITEMS_LIST* aItem );
+    virtual void PushCommandToRedoList( PICKED_ITEMS_LIST* aItem );
 
     /** PopCommandFromUndoList
      * return the last command to undo and remove it from list
@@ -271,12 +280,12 @@ public:
     }
 
 
-    void    SetModify() { m_FlagModified = true; }
-    void    ClrModify() { m_FlagModified = false;; }
-    void    SetSave() { m_FlagSave = true; }
-    void    ClrSave() { m_FlagSave = false; }
-    int     IsModify() { return m_FlagModified;  }
-    int     IsSave() { return m_FlagSave;  }
+    void SetModify() { m_FlagModified = true; }
+    void ClrModify() { m_FlagModified = false;; }
+    void SetSave() { m_FlagSave = true; }
+    void ClrSave() { m_FlagSave = false; }
+    int IsModify() { return m_FlagModified;  }
+    int IsSave() { return m_FlagSave;  }
 
 
     //----<zoom stuff>---------------------------------------------------------
@@ -284,16 +293,16 @@ public:
     /**
      * Function GetScalingFactor
      * @return the the current scale used to draw items on screen
-     * draw coordinates are user coordinates * GetScalingFactor( )
+     * draw coordinates are user coordinates * GetScalingFactor()
      */
-    double  GetScalingFactor() const;
+    double GetScalingFactor() const;
 
     /**
      * Function SetScalingFactor
      * @param aScale = the the current scale used to draw items on screen
-     * draw coordinates are user coordinates * GetScalingFactor( )
+     * draw coordinates are user coordinates * GetScalingFactor()
      */
-    void        SetScalingFactor( double aScale );
+    void SetScalingFactor( double aScale );
 
     /**
      * Function GetZoom
@@ -301,26 +310,26 @@ public:
      * Note: the zoom factor is NOT the scaling factor
      *       the scaling factor is m_ZoomScalar * GetZoom()
      */
-    double      GetZoom() const;
+    double GetZoom() const;
 
     /**
      * Function SetZoom
      * adjusts the current zoom factor
      * @param coeff - Zoom coefficient.
      */
-    bool        SetZoom( double coeff );
+    bool SetZoom( double coeff );
 
     /**
      * Function SetZoomList
      * sets the list of zoom factors.
      * @param aZoomList An array of zoom factors in ascending order, zero terminated
      */
-    void        SetZoomList( const wxArrayDouble& aZoomList );
+    void SetZoomList( const wxArrayDouble& aZoomList );
 
-    bool        SetNextZoom();
-    bool        SetPreviousZoom();
-    bool        SetFirstZoom();
-    bool        SetLastZoom();
+    bool SetNextZoom();
+    bool SetPreviousZoom();
+    bool SetFirstZoom();
+    bool SetLastZoom();
 
     //----<grid stuff>----------------------------------------------------------
 
@@ -329,7 +338,7 @@ public:
      *
      * @return int - Currently selected grid command ID.
      */
-    int         GetGridId();
+    int GetGridId();
 
     /**
      * Return the grid size of the currently selected grid.
@@ -343,15 +352,20 @@ public:
      *
      * @return GRID_TYPE - The currently selected grid.
      */
-    GRID_TYPE   GetGrid();
+    GRID_TYPE GetGrid();
 
     const wxPoint& GetGridOrigin();
-    void        SetGrid( const wxRealPoint& size );
-    void        SetGrid( int id );
-    void        SetGridList( GRIDS& sizelist );
-    void        AddGrid( const GRID_TYPE& grid );
-    void        AddGrid( const wxRealPoint& size, int id );
-    void        AddGrid( const wxRealPoint& size, EDA_UNITS_T aUnit, int id );
+    void SetGrid( const wxRealPoint& size );
+
+    /**
+     * Function SetGrid
+     * sets the grid size from command ID.
+     */
+    void SetGrid( int id );
+    void SetGridList( GRIDS& sizelist );
+    void AddGrid( const GRID_TYPE& grid );
+    void AddGrid( const wxRealPoint& size, int id );
+    void AddGrid( const wxRealPoint& size, EDA_UNITS_T aUnit, int id );
 
     /**
      * Function GetGridCount().
@@ -359,7 +373,7 @@ public:
      *
      * @returns - The size of the grid list.
      */
-    size_t      GetGridCount() const { return m_grids.size(); }
+    size_t GetGridCount() const { return m_grids.size(); }
 
     /**
      * Function GetGrid()
@@ -368,7 +382,7 @@ public:
      * @param aIndex - The grid list index.
      * @return - The grid object at \a aIndex or the current grid if the grid list is empty.
      */
-    GRID_TYPE&  GetGrid( size_t aIndex );
+    GRID_TYPE& GetGrid( size_t aIndex );
 
     /**
      * Function GetGrids().
@@ -376,7 +390,7 @@ public:
      *
      * @param aList - List to copy to.
      */
-    void         GetGrids( GRIDS& aList );
+    void GetGrids( GRIDS& aList );
 
     void SetMousePosition( const wxPoint& aPosition ) { m_MousePosition = aPosition; }
 

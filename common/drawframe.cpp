@@ -1,10 +1,31 @@
-/*****************/
-/* drawframe.cpp */
-/*****************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
-#ifdef __GNUG__
-#pragma implementation
-#endif
+/**
+ * @file drawframe.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -23,10 +44,11 @@
 #include <wx/fontdlg.h>
 
 
-/* Definitions for enabling and disabling extra debugging output.  Please
- * remember to set these to 0 before committing changes to SVN.
+/**
+ * Definition for enabling and disabling scroll bar setting trace output.  See the
+ * wxWidgets documentation on useing the WXTRACE environment variable.
  */
-#define DEBUG_DUMP_SCROLLBAR_SETTINGS 0   // Set to 1 to print scroll bar settings.
+static const wxString traceScrollSettings( wxT( "KicadScrollSettings" ) );
 
 
 /* Configuration entry names. */
@@ -83,7 +105,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_Draw_Axis           = FALSE;  // TRUE to draw axis.
     m_Draw_Sheet_Ref      = FALSE;  // TRUE to display reference sheet.
     m_Print_Sheet_Ref     = TRUE;   // TRUE to print reference sheet.
-    m_Draw_Auxiliary_Axis = FALSE;  // TRUE draw auxilary axis.
+    m_Draw_Auxiliary_Axis = FALSE;  // TRUE draw auxiliary axis.
     m_Draw_Grid_Axis      = FALSE;  // TRUE to draw the grid axis
     m_CursorShape         = 0;
     m_LastGridSizeId      = 0;
@@ -253,44 +275,32 @@ void EDA_DRAW_FRAME::OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent )
 }
 
 
-// Virtual function
 void EDA_DRAW_FRAME::ReCreateAuxiliaryToolbar()
 {
 }
 
 
-// Virtual function
 void EDA_DRAW_FRAME::ReCreateMenuBar()
 {
 }
 
 
-// Virtual function
 void EDA_DRAW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
 }
 
 
-// Virtual function
 void EDA_DRAW_FRAME::ToolOnRightClick( wxCommandEvent& event )
 {
 }
 
 
-/**
- * Function PrintPage (virtual)
- * used to print a page
- * this basic function must be derived to be used for printing
- * because EDA_DRAW_FRAME does not know how to print a page
- * This is the reason it is a virtual function
- */
 void EDA_DRAW_FRAME::PrintPage( wxDC* aDC,int aPrintMask, bool aPrintMirrorMode, void* aData )
 {
     wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error") );
 }
 
 
-// Virtual function
 void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 {
     int* clientData;
@@ -352,14 +362,6 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 }
 
 
-/**
- * Set the zoom when selected by the Zoom List Box
- *  Note:
- *      position 0 = Fit in Page
- *      position >= 1 = zoom (1 to zoom max)
- *      last position : special zoom
- *      virtual function
- */
 void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 {
     if( m_SelZoomBox == NULL )
@@ -388,7 +390,6 @@ void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 }
 
 
-/* Return the current zoom level */
 double EDA_DRAW_FRAME::GetZoom( void )
 {
     return GetScreen()->GetZoom();
@@ -401,7 +402,6 @@ void EDA_DRAW_FRAME::OnMouseEvent( wxMouseEvent& event )
 }
 
 
-// Virtual
 void EDA_DRAW_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
 {
 }
@@ -413,8 +413,6 @@ void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 }
 
 
-/* Display current unit Selection on Statusbar
- */
 void EDA_DRAW_FRAME::DisplayUnitsMsg()
 {
     wxString msg;
@@ -439,8 +437,6 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 
 
 
-/* Recalculate the size of toolbars and display panel.
- */
 void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
 {
     m_FrameSize = GetClientSize( );
@@ -469,10 +465,6 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     m_toolId = aId;
 }
 
-
-/*****************************/
-/* default virtual functions */
-/*****************************/
 
 void EDA_DRAW_FRAME::OnGrid( int grid_type )
 {
@@ -517,41 +509,134 @@ bool EDA_DRAW_FRAME::HandleBlockEnd( wxDC* DC )
 void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
 {
     int     unitsX, unitsY, posX, posY;
-    wxSize  drawingSize, clientSize;
+    wxSize  clientSize, logicalClientSize, virtualSize;
     BASE_SCREEN* screen = GetScreen();
     bool noRefresh = true;
 
     if( screen == NULL || DrawPanel == NULL )
         return;
 
-    // The drawing size is twice the current page size.
-    drawingSize = screen->ReturnPageSize() * 2;
+    double scalar = screen->GetScalingFactor();
+
+    wxLogTrace( traceScrollSettings, wxT( "Center Position = ( %d, %d ), scalar = %0.5f." ),
+                aCenterPosition.x, aCenterPosition.y, scalar );
 
     // Calculate the portion of the drawing that can be displayed in the
     // client area at the current zoom level.
     clientSize = DrawPanel->GetClientSize();
 
-    double scalar = screen->GetScalingFactor();
-    clientSize.x = wxRound( (double) clientSize.x / scalar );
-    clientSize.y = wxRound( (double) clientSize.y / scalar );
+    // The logical size of the client window.
+    logicalClientSize.x = wxRound( (double) clientSize.x / scalar );
+    logicalClientSize.y = wxRound( (double) clientSize.y / scalar );
 
-    /* Adjust drawing size when zooming way out to prevent centering around
-     * cursor problems. */
-    if( clientSize.x > drawingSize.x || clientSize.y > drawingSize.y )
-        drawingSize = clientSize;
+    // The upper left corner of the drawing in device units.
+    int w = screen->ReturnPageSize().x;
+    int h = screen->ReturnPageSize().y;
 
-    drawingSize.x += wxRound( (double) clientSize.x / 2.0 );
-    drawingSize.y += wxRound( (double) clientSize.y / 2.0 );
+    // The drawing rectangle logical units
+    wxRect drawingRect( wxPoint( 0, 0 ),  wxSize( w, h ) );
 
+    wxLogTrace( traceScrollSettings, wxT( "Logical drawing rect = ( %d, %d, %d, %d )." ),
+                drawingRect.x, drawingRect.y, drawingRect.width, drawingRect.height );
+    wxLogTrace( traceScrollSettings, wxT( "   left %d, right %d, top %d, bottome %d" ),
+                drawingRect.GetLeft(), drawingRect.GetRight(),
+                drawingRect.GetTop(), drawingRect.GetBottom() );
+
+    // The size of the client rectangle in logical units.
+    int x = wxRound( (double) aCenterPosition.x - ( (double) logicalClientSize.x / 2.0 ) );
+    int y = wxRound( (double) aCenterPosition.y - ( (double) logicalClientSize.y / 2.0 ) );
+
+    // If drawn around the center, adjust the client rectangle accordingly.
     if( screen->m_Center )
     {
-        screen->m_DrawOrg.x = -wxRound( (double) drawingSize.x / 2.0 );
-        screen->m_DrawOrg.y = -wxRound( (double) drawingSize.y / 2.0 );
+        x += wxRound( (double) drawingRect.width / 2.0 );
+        y += wxRound( (double) drawingRect.height / 2.0 );
+    }
+
+    wxRect logicalClientRect( wxPoint( x, y ), logicalClientSize );
+
+    wxLogTrace( traceScrollSettings, wxT( "Logical client rect = ( %d, %d, %d, %d )." ),
+                logicalClientRect.x, logicalClientRect.y,
+                logicalClientRect.width, logicalClientRect.height );
+    wxLogTrace( traceScrollSettings, wxT( "   left %d, right %d, top %d, bottome %d" ),
+                logicalClientRect.GetLeft(), logicalClientRect.GetRight(),
+                logicalClientRect.GetTop(), logicalClientRect.GetBottom() );
+
+    if( drawingRect == logicalClientRect )
+    {
+        virtualSize = drawingRect.GetSize();
+    }
+    else if( drawingRect.Contains( logicalClientRect ) )
+    {
+        virtualSize = drawingRect.GetSize();
     }
     else
     {
-        screen->m_DrawOrg.x = -wxRound( (double) clientSize.x / 2.0 );
-        screen->m_DrawOrg.y = -wxRound( (double) clientSize.y / 2.0 );
+        int drawingCenterX = drawingRect.x + ( drawingRect.width / 2 );
+        int clientCenterX = logicalClientRect.x + ( logicalClientRect.width / 2 );
+        int drawingCenterY = drawingRect.y + ( drawingRect.height / 2 );
+        int clientCenterY = logicalClientRect.y + ( logicalClientRect.height / 2 );
+
+        if( logicalClientRect.width > drawingRect.width )
+        {
+            if( drawingCenterX > clientCenterX )
+                virtualSize.x = ( drawingCenterX - logicalClientRect.GetLeft() ) * 2;
+            else if( drawingCenterX < clientCenterX )
+                virtualSize.x = ( logicalClientRect.GetRight() - drawingCenterX ) * 2;
+            else
+                virtualSize.x = logicalClientRect.width;
+        }
+        else if( logicalClientRect.width < drawingRect.width )
+        {
+            if( drawingCenterX > clientCenterX )
+                virtualSize.x = drawingRect.width +
+                                ( (drawingRect.GetLeft() - logicalClientRect.GetLeft() ) * 2 );
+            else if( drawingCenterX < clientCenterX )
+                virtualSize.x = drawingRect.width +
+                                ( (logicalClientRect.GetRight() - drawingRect.GetRight() ) * 2 );
+            else
+                virtualSize.x = drawingRect.width;
+        }
+        else
+        {
+            virtualSize.x = drawingRect.width;
+        }
+
+        if( logicalClientRect.height > drawingRect.height )
+        {
+            if( drawingCenterY > clientCenterY )
+                virtualSize.y = ( drawingCenterY - logicalClientRect.GetTop() ) * 2;
+            else if( drawingCenterY < clientCenterY )
+                virtualSize.y = ( logicalClientRect.GetBottom() - drawingCenterY ) * 2;
+            else
+                virtualSize.y = logicalClientRect.height;
+        }
+        else if( logicalClientRect.height < drawingRect.height )
+        {
+            if( drawingCenterY > clientCenterY )
+                virtualSize.y = drawingRect.height +
+                                ( ( drawingRect.GetTop() - logicalClientRect.GetTop() ) * 2 );
+            else if( drawingCenterY < clientCenterY )
+                virtualSize.y = drawingRect.height +
+                                ( ( logicalClientRect.GetBottom() - drawingRect.GetBottom() ) * 2 );
+            else
+                virtualSize.y = drawingRect.height;
+        }
+        else
+        {
+            virtualSize.y = drawingRect.height;
+        }
+    }
+
+    if( screen->m_Center )
+    {
+        screen->m_DrawOrg.x = -( wxRound( (double) virtualSize.x / 2.0 ) );
+        screen->m_DrawOrg.y = -( wxRound( (double) virtualSize.y / 2.0 ) );
+    }
+    else
+    {
+        screen->m_DrawOrg.x = -( wxRound( (double) (virtualSize.x - drawingRect.width) / 2.0 ) );
+        screen->m_DrawOrg.y = -( wxRound( (double) (virtualSize.y - drawingRect.height) / 2.0 ) );
     }
 
     /* Always set scrollbar pixels per unit to 1 unless you want the zoom
@@ -562,36 +647,57 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
      */
     screen->m_ScrollPixelsPerUnitX = screen->m_ScrollPixelsPerUnitY = 1;
 
-    // Calculate the number of scroll bar units for the given zoom level. */
-    unitsX = wxRound( (double) drawingSize.x * scalar );
-    unitsY = wxRound( (double) drawingSize.y * scalar );
+    // Calculate the number of scroll bar units for the given zoom level in device units.
+    unitsX = wxRound( (double) virtualSize.x * scalar );
+    unitsY = wxRound( (double) virtualSize.y * scalar );
 
-    // Calculate the position, place the cursor at the center of screen.
+    // Calculate the scroll bar position in logical units to place the center position at
+    // the center of client rectangle.
     screen->SetScrollCenterPosition( aCenterPosition );
-    posX = aCenterPosition.x - screen->m_DrawOrg.x;
-    posY = aCenterPosition.y - screen->m_DrawOrg.y;
+    posX = aCenterPosition.x - wxRound( (double) logicalClientRect.width / 2.0 ) -
+           screen->m_DrawOrg.x;
+    posY = aCenterPosition.y - wxRound( (double) logicalClientRect.height / 2.0 ) -
+           screen->m_DrawOrg.y;
 
-    posX -= wxRound( (double) clientSize.x / 2.0 );
-    posY -= wxRound( (double) clientSize.y / 2.0 );
-
-    if( posX < 0 )
-        posX = 0;
-
-    if( posY < 0 )
-        posY = 0;
-
+    // Convert scroll bar position to device units.
     posX = wxRound( (double) posX * scalar );
     posY = wxRound( (double) posY * scalar );
+
+    if( posX < 0 )
+    {
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %d" ), posX );
+        posX = 0;
+    }
+
+    if( posX > unitsX )
+    {
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar X position %d" ), posX );
+        posX = unitsX;
+    }
+
+    if( posY < 0 )
+    {
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %d" ), posY );
+        posY = 0;
+    }
+
+    if( posY > unitsY )
+    {
+        wxLogTrace( traceScrollSettings, wxT( "Required scroll bar Y position %d" ), posY );
+        posY = unitsY;
+    }
 
     screen->m_ScrollbarPos = wxPoint( posX, posY );
     screen->m_ScrollbarNumber = wxSize( unitsX, unitsY );
 
-#if DEBUG_DUMP_SCROLLBAR_SETTINGS
-    wxLogDebug( wxT( "SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
+    wxLogTrace( traceScrollSettings,
+                wxT( "Drawing = (%d, %d), Client = (%d, %d), Offset = (%d, %d), \
+SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
+                virtualSize.x, virtualSize.y, logicalClientSize.x, logicalClientSize.y,
+                screen->m_DrawOrg.x, screen->m_DrawOrg.y,
                 screen->m_ScrollPixelsPerUnitX, screen->m_ScrollPixelsPerUnitY,
                 screen->m_ScrollbarNumber.x, screen->m_ScrollbarNumber.y,
                 screen->m_ScrollbarPos.x, screen->m_ScrollbarPos.y );
-#endif
 
     DrawPanel->SetScrollbars( screen->m_ScrollPixelsPerUnitX,
                               screen->m_ScrollPixelsPerUnitY,
@@ -602,11 +708,6 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
 }
 
 
-/**
- * Function SetLanguage
- * called on a language menu selection
- * when using a derived function, do not forget to call this one
- */
 void EDA_DRAW_FRAME::SetLanguage( wxCommandEvent& event )
 {
     EDA_BASE_FRAME::SetLanguage( event );
@@ -644,15 +745,6 @@ double RoundTo0( double x, double precision )
 }
 
 
-/**
- * Function UpdateStatusBar
- * Displays in the bottom of the main window a stust:
- *  - Absolute Cursor coordinates
- *  - Relative Cursor coordinates (relative to the last coordinate stored
- *     when actiavte the space bar)
- * ( in this status is also displayed the zoom level, but this is not made
- *   by this function )
- */
 void EDA_DRAW_FRAME::UpdateStatusBar()
 {
     wxString        Line;
@@ -740,12 +832,6 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
 }
 
 
-/**
- * Load draw frame specific configuration settings.
- *
- * Don't forget to call this base method from any derived classes or the
- * settings will not get loaded.
- */
 void EDA_DRAW_FRAME::LoadSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );
@@ -768,12 +854,6 @@ void EDA_DRAW_FRAME::LoadSettings()
 }
 
 
-/**
- * Save draw frame specific configuration settings.
- *
- * Don't forget to call this base method from any derived classes or the
- * settings will not get saved.
- */
 void EDA_DRAW_FRAME::SaveSettings()
 {
     wxASSERT( wxGetApp().m_EDA_Config != NULL );

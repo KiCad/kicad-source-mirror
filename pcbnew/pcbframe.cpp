@@ -314,6 +314,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
 
     m_InternalUnits = PCB_INTERNAL_UNIT;    // Unites internes = 1/10000 inch
     SetScreen( new PCB_SCREEN() );
+    GetScreen()->m_Center = false;          // PCB drawings start in the upper left corner.
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager

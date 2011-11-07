@@ -122,9 +122,6 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 }
 
 
-/**
- * Return the "best" zoom, i.e. the zoom which shows the entire board on screen
- */
 double PCB_BASE_FRAME::BestZoom( void )
 {
     int    dx, dy;
@@ -151,6 +148,7 @@ double PCB_BASE_FRAME::BestZoom( void )
         jj = 32.0;
 
     double bestzoom = MAX( ii, jj );
+
     GetScreen()->SetScrollCenterPosition( m_Pcb->m_BoundaryBox.Centre() );
 
     return bestzoom ;

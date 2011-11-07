@@ -156,7 +156,6 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
     }
 
     frame->Zoom_Automatique( true );
-    frame->GetScreen()->m_FirstRedraw = false;
 
     /* Load file specified in the command line. */
     if( fn.IsOk() )
