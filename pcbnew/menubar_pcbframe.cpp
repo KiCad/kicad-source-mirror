@@ -564,7 +564,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Open the design rules editor" ), KiBitmap( hammer_xpm ) );
 
     // Layers Setup
-    AddMenuItem( configmenu, ID_PCB_LAYERS_SETUP,
+    AddMenuItem( designRulesMenu, ID_PCB_LAYERS_SETUP,
                  _( "&Layers Setup" ),  _( "Enable and set layer properties" ),
                  KiBitmap( copper_layers_setup_xpm ) );
 
