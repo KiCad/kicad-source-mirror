@@ -151,7 +151,7 @@ of the base part as having most if not all the graphical lines for any
 derivatives. But we do not need to use the term symbol to describe that
 relationship, the term "part" is sufficient.</dd>
 
-<dt>LPID</dt><dd>This stand for "Logical Part ID", and is a reference to any
+<dt>LPID</dt><dd>This stands for "Logical Part ID", and is a reference to any
 part within any known library. The term "logical" is used because the contained
 library name is logical, not a full library name. The LPID consists of 3 main
 portions: logical library name, part name, and revision number.</dd>

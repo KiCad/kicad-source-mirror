@@ -204,7 +204,7 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
 
     try
     {
-        formatter.Print( 0, TO_UTF8( line ) );
+        formatter.Print( 0, "%s", TO_UTF8( line ) );
         m_component->GetReferenceField().Save( formatter );
         m_component->GetValueField().Save( formatter );
         formatter.Print( 0, "DRAW\n" );

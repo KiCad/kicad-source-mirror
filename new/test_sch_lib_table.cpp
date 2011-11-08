@@ -30,7 +30,6 @@
 using namespace SCH;
 
 
-
 // If LIB_TABLE::Test() is conditioned on DEBUG being defined, build with
 // CMAKE_BUILD_TYPE=Debug, otherwise don't worry about it, because it will work
 // on any CMAKE_BUILD_TYPE, including Release.
