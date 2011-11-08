@@ -2133,7 +2133,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, int aActiveLayer,
 }
 
 
-BOARD_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, int aLayerMask )
+BOARD_CONNECTED_ITEM* BOARD::GetLockPoint( const wxPoint& aPosition, int aLayerMask )
 {
     for( MODULE* module = m_Modules; module; module = module->Next() )
     {

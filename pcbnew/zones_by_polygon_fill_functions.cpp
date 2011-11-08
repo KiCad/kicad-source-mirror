@@ -174,7 +174,7 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
     TestConnections( NULL );
 
     // Recalculate the active ratsnest, i.e. the unconnected links
-    TestRatsNest( NULL, 0 );
+    TestForActiveLinksInRatsnest( 0 );
     DrawPanel->Refresh( true );
 
     return errorLevel;
