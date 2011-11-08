@@ -721,11 +721,10 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     /* Copy part name and prefix. */
     LIB_FIELD& value = GetValueField();
 
-    strupper( componentName );
-
     if( componentName[0] != '~' )
     {
         m_name = value.m_Text = FROM_UTF8( componentName );
+        m_name = value.m_Text = m_name.MakeUpper();
     }
     else
     {

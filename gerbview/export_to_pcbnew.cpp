@@ -46,6 +46,7 @@ private:
     void cleanBoard();
 };
 
+
 GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME * aFrame, FILE * aFile )
 {
     m_gerbview_frame = aFrame;
@@ -53,11 +54,11 @@ GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME * aFrame, FILE * aFile 
     m_pcb = new BOARD( NULL, m_gerbview_frame );
 }
 
+
 GBR_TO_PCB_EXPORTER::~GBR_TO_PCB_EXPORTER()
 {
     delete m_pcb;
 }
-
 
 
 /* Export data in Pcbnew format
@@ -73,13 +74,14 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
     {
         if( g_GERBER_List[ii] != NULL )
             no_used_layers = false;
+
         ii++;
     }
 
     if( no_used_layers )
     {
         DisplayInfoMessage( this,
-                           _( "None of the Gerber layers contain any data" ) );
+                            _( "None of the Gerber layers contain any data" ) );
         return;
     }
 
@@ -106,6 +108,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
     LAYERS_MAP_DIALOG* dlg = new LAYERS_MAP_DIALOG( this );
     int ok = dlg->ShowModal();
     dlg->Destroy();
+
     if( ok != wxID_OK )
         return;
 
@@ -116,16 +119,19 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
     }
 
     FILE * file = wxFopen( FullFileName, wxT( "wt" ) );
+
     if( file == NULL )
     {
         msg = _( "Unable to create " ) + FullFileName;
         DisplayError( this, msg );
         return;
     }
+
     GBR_TO_PCB_EXPORTER gbr_exporter( this, file );
     gbr_exporter.ExportPcb( dlg->GetLayersLookUpTable() );
     fclose( file );
 }
+
 
 void GBR_TO_PCB_EXPORTER::cleanBoard()
 {
@@ -138,9 +144,11 @@ void GBR_TO_PCB_EXPORTER::cleanBoard()
         // Search and delete others vias
         TRACK* next_track;
         TRACK* alt_track = track->Next();
+
         for( ; alt_track; alt_track = next_track )
         {
             next_track = alt_track->Next();
+
             if( alt_track->m_Shape != VIA_THROUGH )
                 continue;
 
@@ -153,6 +161,7 @@ void GBR_TO_PCB_EXPORTER::cleanBoard()
         }
     }
 }
+
 
 bool GBR_TO_PCB_EXPORTER::WriteSetup( )
 {
@@ -172,11 +181,13 @@ bool GBR_TO_PCB_EXPORTER::WriteGeneralDescrPcb( )
 
     /* Print the copper layer count */
     nbLayers = m_pcb->GetCopperLayerCount();
+
     if( nbLayers <= 1 )  // Minimal layers count in Pcbnew is 2
     {
         nbLayers = 2;
         m_pcb->SetCopperLayerCount(2);
     }
+
     fprintf( m_file, "$GENERAL\n" );
     fprintf( m_file, "encoding utf-8\n");
     fprintf( m_file, "LayerCount %d\n", nbLayers );
@@ -201,22 +212,22 @@ bool GBR_TO_PCB_EXPORTER::WriteGeneralDescrPcb( )
  */
 bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )
 {
-    char   line[256];
     BOARD* gerberPcb = m_gerbview_frame->GetBoard();
 
     // create an image of gerber data
     BOARD_ITEM* item = gerberPcb->m_Drawings;
+
     for( ; item; item = item->Next() )
     {
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
         int layer = gerb_item->GetLayer();
         int pcb_layer_number = LayerLookUpTable[layer];
+
         if( pcb_layer_number < 0 || pcb_layer_number > LAST_NO_COPPER_LAYER )
             continue;
 
         if( pcb_layer_number > LAST_COPPER_LAYER )
             export_non_copper_item( gerb_item, pcb_layer_number );
-
         else
             export_copper_item( gerb_item, pcb_layer_number );
     }
@@ -228,7 +239,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )
 
     // write PCB header
     fprintf( m_file, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
-            DateAndTime( line ) );
+             TO_UTF8( DateAndTime() ) );
     WriteGeneralDescrPcb( );
     WriteSetup( );
 
@@ -273,6 +284,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, in
     m_pcb->Add( drawitem );
 }
 
+
 void GBR_TO_PCB_EXPORTER::export_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     switch( aGbrItem->m_Shape )
@@ -294,6 +306,7 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aL
     }
 }
 
+
 void GBR_TO_PCB_EXPORTER::export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     TRACK * newtrack = new TRACK( m_pcb );
@@ -309,6 +322,7 @@ void GBR_TO_PCB_EXPORTER::export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem
     m_pcb->Add( newtrack );
 }
 
+
 void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
     double a  = atan2( (double)( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y ),
@@ -323,12 +337,15 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
      * approximate arc by segments (16 segment per 360 deg)
      */
     #define DELTA 3600/16
+
     if( arc_angle < 0 )
     {
         NEGATE( arc_angle );
         EXCHG( start, end );
     }
+
     wxPoint curr_start = start;
+
     for( int rot = DELTA; rot < (arc_angle - DELTA); rot += DELTA )
     {
         TRACK * newtrack = new TRACK( m_pcb );
@@ -344,6 +361,7 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
         m_pcb->Add( newtrack );
         curr_start = curr_end;
     }
+
     if( end != curr_start )
     {
         TRACK * newtrack = new TRACK( m_pcb );

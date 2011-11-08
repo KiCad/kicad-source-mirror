@@ -113,10 +113,10 @@ public:
                                  * view position (upper left corner of device)
                                  */
 
-    bool   m_Center;             /* Center on screen.  If TRUE (0.0) is centered
+    bool   m_Center;             /* Center on screen.  If true (0.0) is centered
                                   * on screen coordinates can be < 0 and
                                   * > 0 except for schematics.
-                                  * FALSE: when coordinates can only be >= 0
+                                  * false: when coordinates can only be >= 0
                                   * Schematic */
     bool m_FirstRedraw;
 

@@ -140,9 +140,9 @@ public:
     int   m_Default;        ///<  The default value of the parameter
 
 public: PARAM_CFG_BOOL( const wxChar* ident, bool* ptparam,
-                        int default_val = FALSE, const wxChar* group = NULL );
+                        int default_val = false, const wxChar* group = NULL );
     PARAM_CFG_BOOL( bool Insetup, const wxChar* ident, bool* ptparam,
-                    int default_val = FALSE, const wxChar* group = NULL );
+                    int default_val = false, const wxChar* group = NULL );
 
     virtual void ReadParam( wxConfigBase* aConfig );
     virtual void SaveParam( wxConfigBase* aConfig );

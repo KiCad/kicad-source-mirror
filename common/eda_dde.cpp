@@ -1,6 +1,6 @@
-///////////////////////
-// Name: eda_dde.cpp //
-///////////////////////
+/**
+ * @file eda_dde.cpp
+ */
 
 #include "fctsys.h"
 #include "eda_dde.h"
@@ -43,11 +43,12 @@ WinEDA_Server* CreateServer( wxWindow* window, int service )
     addr.Service( service );
 
     server = new wxServer( addr );
+
     if( server )
     {
         server->SetNotify( wxSOCKET_CONNECTION_FLAG );
         server->SetEventHandler( *window, ID_EDA_SOCKET_EVENT_SERV );
-        server->Notify( TRUE );
+        server->Notify( true );
     }
 
     return server;
@@ -65,14 +66,17 @@ void EDA_DRAW_FRAME::OnSockRequest( wxSocketEvent& evt )
     {
     case wxSOCKET_INPUT:
         sock->Read( client_ipc_buffer, 1 );
+
         if( sock->LastCount() == 0 )
             break;                    // No data, occurs on opening connection
 
         sock->Read( client_ipc_buffer + 1, IPC_BUF_SIZE - 2 );
         len = 1 + sock->LastCount();
         client_ipc_buffer[len] = 0;
+
         if( RemoteFct )
             RemoteFct( client_ipc_buffer );
+
         break;
 
     case wxSOCKET_LOST:
@@ -94,10 +98,11 @@ void EDA_DRAW_FRAME::OnSockRequestServer( wxSocketEvent& evt )
     wxSocketServer* server = (wxSocketServer*) evt.GetSocket();
 
     sock2 = server->Accept();
+
     if( sock2 == NULL )
         return;
 
-    sock2->Notify( TRUE );
+    sock2->Notify( true );
     sock2->SetEventHandler( *this, ID_EDA_SOCKET_EVENT );
     sock2->SetNotify( wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG );
 }
@@ -117,7 +122,7 @@ void EDA_DRAW_FRAME::OnSockRequestServer( wxSocketEvent& evt )
 bool SendCommand( int service, const char* cmdline )
 {
     wxSocketClient* sock_client;
-    bool            success = FALSE;
+    bool            success = false;
     wxIPV4address   addr;
 
     // Create a connexion
@@ -176,12 +181,12 @@ bool SendCommand( int service, const char* cmdline )
 
     sock_client = new wxSocketClient();
     sock_client->SetTimeout( 2 ); // Time out in Seconds
-    sock_client->Connect( addr, FALSE );
+    sock_client->Connect( addr, false );
     sock_client->WaitOnConnect( 0, 100 );
 
     if( sock_client->Ok() && sock_client->IsConnected() )
     {
-        success = TRUE;
+        success = true;
         sock_client->SetFlags( wxSOCKET_NOWAIT /*wxSOCKET_WAITALL*/ );
         sock_client->Write( cmdline, strlen( cmdline ) );
     }

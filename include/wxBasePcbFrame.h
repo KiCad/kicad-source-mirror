@@ -69,7 +69,7 @@ public:
 
     int  m_DisplayModEdge;          // How to display module drawings (line/ filled / sketch)
     int  m_DisplayModText;          // How to display module texts (line/ filled / sketch)
-    bool m_DisplayPcbTrackFill;     // FALSE : tracks are show in sketch mode, TRUE = filled.
+    bool m_DisplayPcbTrackFill;     // false : tracks are show in sketch mode, true = filled.
     EDA_UNITS_T m_UserGridUnit;
     wxRealPoint m_UserGridSize;
 

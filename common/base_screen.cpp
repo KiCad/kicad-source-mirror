@@ -42,9 +42,9 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_ITEM( aType )
 {
     m_drawList         = NULL;   /* Draw items list */
     m_UndoRedoCountMax = 10;     /* undo/Redo command Max depth, 10 is a reasonable value */
-    m_FirstRedraw      = TRUE;
+    m_FirstRedraw      = true;
     m_ScreenNumber     = 1;
-    m_NumberOfScreen   = 1;  /* Hierarchy: Root: ScreenNumber = 1 */
+    m_NumberOfScreen   = 1;      /* Hierarchy: Root: ScreenNumber = 1 */
     m_Zoom             = 32.0;
     m_Grid.m_Size      = wxRealPoint( 50, 50 );   /* Default grid size */
     m_Grid.m_Id        = ID_POPUP_GRID_LEVEL_50;

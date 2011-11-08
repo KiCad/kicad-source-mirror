@@ -44,8 +44,6 @@ void GERBER_PLOTTER::set_viewport( wxPoint aOffset, double aScale, bool aMirror 
  */
 bool GERBER_PLOTTER::start_plot( FILE* aFile )
 {
-    char Line[1024];
-
     wxASSERT( !output_file );
     final_file  = aFile;
 
@@ -59,9 +57,9 @@ bool GERBER_PLOTTER::start_plot( FILE* aFile )
     if( output_file == NULL )
         return false;
 
-    DateAndTime( Line );
     wxString Title = creator + wxT( " " ) + GetBuildVersion();
-    fprintf( output_file, "G04 (created by %s) date %s*\n", TO_UTF8( Title ), Line );
+    fprintf( output_file, "G04 (created by %s) date %s*\n",
+             TO_UTF8( Title ), TO_UTF8( DateAndTime() ) );
 
     // Specify linear interpol (G01), unit = INCH (G70), abs format (G90):
     fputs( "G01*\nG70*\nG90*\n", output_file );

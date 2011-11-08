@@ -772,9 +772,7 @@ bool CMP_LIBRARY::SaveDocFile( const wxString& aFullFileName )
         return false;
     }
 
-    char line[256];
-
-    if( fprintf( docfile, "%s  Date: %s\n", DOCFILE_IDENT, DateAndTime( line ) ) < 0 )
+    if( fprintf( docfile, "%s  Date: %s\n", DOCFILE_IDENT, TO_UTF8( DateAndTime() ) ) < 0 )
     {
         fclose( docfile );
         return false;
@@ -799,12 +797,8 @@ bool CMP_LIBRARY::SaveDocFile( const wxString& aFullFileName )
 
 bool CMP_LIBRARY::SaveHeader( OUTPUTFORMATTER& aFormatter )
 {
-    char BufLine[1024];
-
-    DateAndTime( BufLine );
-
     aFormatter.Print( 0, "%s %d.%d  Date: %s\n", LIBFILE_IDENT,
-                      LIB_VERSION_MAJOR, LIB_VERSION_MINOR, BufLine );
+                      LIB_VERSION_MAJOR, LIB_VERSION_MINOR, TO_UTF8( DateAndTime() ) );
 
     aFormatter.Print( 0, "#encoding utf-8\n");
 

@@ -18,9 +18,6 @@
 static bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame );
 
 
-/* calls the function to copy the current page or the current bock to
- * the clipboard
- */
 void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
 {
     DrawPageOnClipboard( this );
@@ -41,7 +38,7 @@ void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
  */
 bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
 {
-    bool    success = TRUE;
+    bool    success = true;
 
 #ifdef __WINDOWS__
     int     tmpzoom;
@@ -58,7 +55,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
 
     if( screen->IsBlockActive() )
     {
-        DrawBlock = TRUE;
+        DrawBlock = true;
         DrawArea.SetX( screen->m_BlockLocate.GetX() );
         DrawArea.SetY( screen->m_BlockLocate.GetY() );
         DrawArea.SetWidth( screen->m_BlockLocate.GetWidth() );

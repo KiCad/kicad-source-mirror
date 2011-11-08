@@ -460,7 +460,6 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
 {
     FILE*    f;
     int      itemCount;
-    char     Line[1024];
     wxString msg;
 
     if( ( f = wxFopen( aFullFileName, wxT( "wt" ) ) ) == NULL )
@@ -481,11 +480,9 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
     if( itemCount )
     {
         // creates the list file
-        DateAndTime( Line );
-
         wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
 
-        fprintf( f, "%s  >> Creation date: %s\n", TO_UTF8( Title ), Line );
+        fprintf( f, "%s  >> Creation date: %s\n", TO_UTF8( Title ), TO_UTF8( DateAndTime() ) );
 
         // sort component list
         cmplist.SortByReferenceOnly();

@@ -137,7 +137,7 @@ extern wxString       g_ProductName;
 /* Default user lib path can be left void, if the standard lib path is used */
 extern wxString       g_UserLibDirBuffer;
 
-extern bool           g_ShowPageLimits; // TRUE to display the page limits
+extern bool           g_ShowPageLimits; // true to display the page limits
 
 /* File name extension definitions. */
 extern const wxString ProjectFileExtension;

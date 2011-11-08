@@ -646,14 +646,11 @@ static XNODE* node( const wxString& aName, const wxString& aTextualContent = wxE
 XNODE* EXPORT_HELP::makeGenericDesignHeader()
 {
     XNODE*  xdesign = node( wxT("design") );
-    char    date[128];
-
-    DateAndTime( date );
 
     // the root sheet is a special sheet, call it source
     xdesign->AddChild( node( wxT( "source" ), g_RootSheet->GetScreen()->GetFileName() ) );
 
-    xdesign->AddChild( node( wxT( "date" ), FROM_UTF8( date )) );
+    xdesign->AddChild( node( wxT( "date" ), DateAndTime() ) );
 
     // which Eeschema tool
     xdesign->AddChild( node( wxT( "tool" ), wxGetApp().GetAppName() + wxChar(' ') +
@@ -1193,7 +1190,6 @@ bool EXPORT_HELP::WriteGENERICNetList( const wxString& aOutFileName )
 bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames, bool aUsePrefix )
 {
     int                 ret = 0;
-    char                line[1024];
     int                 nbitems;
     wxString            text;
     wxArrayString       spiceCommandAtBeginFile;
@@ -1208,9 +1204,8 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames, bool aUsePrefi
     wxString            delimeters = wxT( "{:,; }" );
     wxString            disableStr = wxT( "N" );
 
-    DateAndTime( line );
-
-    ret |= fprintf( f, "* %s (Spice format) creation date: %s\n\n", NETLIST_HEAD_STRING, line );
+    ret |= fprintf( f, "* %s (Spice format) creation date: %s\n\n",
+                    NETLIST_HEAD_STRING, TO_UTF8( DateAndTime() ) );
 
     // Prepare list of nets generation (not used here, but...
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
@@ -1236,16 +1231,19 @@ bool EXPORT_HELP::WriteNetListPspice( FILE* f, bool use_netnames, bool aUsePrefi
             SCH_TEXT*   drawText = (SCH_TEXT*) item;
 
             text = drawText->m_Text;
+
             if( text.IsEmpty() )
                 continue;
 
             ident = text.GetChar( 0 );
+
             if( ident != '.' && ident != '-' && ident != '+' )
                 continue;
 
             text.Remove( 0, 1 );    // Remove the first char.
             text.Remove( 6 );       // text contains 6 char.
             text.MakeLower();
+
             if( ( text == wxT( "pspice" ) ) || ( text == wxT( "gnucap" ) ) )
             {
                 // Put the Y position as an ascii string, for sort by vertical
@@ -1484,18 +1482,17 @@ bool EXPORT_HELP::WriteNetListPCBNEW( FILE* f, bool with_pcbnew )
 {
     wxString    field;
     wxString    footprint;
-    char        dateBuf[256];
     int         ret = 0;        // zero now, OR in the sign bit on error
     wxString    netName;
 
     std::vector< SCH_REFERENCE > cmpList;
 
-    DateAndTime( dateBuf );
-
     if( with_pcbnew )
-        ret |= fprintf( f, "# %s created  %s\n(\n", NETLIST_HEAD_STRING, dateBuf );
+        ret |= fprintf( f, "# %s created  %s\n(\n",
+                        NETLIST_HEAD_STRING, TO_UTF8( DateAndTime() ) );
     else
-        ret |= fprintf( f, "( { %s created  %s }\n", NETLIST_HEAD_STRING, dateBuf );
+        ret |= fprintf( f, "( { %s created  %s }\n",
+                        NETLIST_HEAD_STRING, TO_UTF8( DateAndTime() ) );
 
     // Prepare list of nets generation
     for( unsigned ii = 0; ii < g_NetObjectslist.size(); ii++ )
@@ -1860,15 +1857,13 @@ void EXPORT_HELP::WriteNetListCADSTAR( FILE* f )
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
     wxString footprint;
-    char Line[1024];
     SCH_SHEET_PATH* sheet;
     EDA_ITEM* DrawList;
     SCH_COMPONENT* Component;
     wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
 
     fprintf( f, "%sHEA\n", TO_UTF8( StartLine ) );
-    DateAndTime( Line );
-    fprintf( f, "%sTIM %s\n", TO_UTF8( StartLine ), Line );
+    fprintf( f, "%sTIM %s\n", TO_UTF8( StartLine ), TO_UTF8( DateAndTime() ) );
     fprintf( f, "%sAPP ", TO_UTF8( StartLine ) );
     fprintf( f, "\"%s\"\n", TO_UTF8( Title ) );
     fprintf( f, "\n" );
@@ -1887,6 +1882,7 @@ void EXPORT_HELP::WriteNetListCADSTAR( FILE* f )
         for( DrawList = sheet->LastDrawList(); DrawList != NULL; DrawList = DrawList->Next() )
         {
             DrawList = Component = findNextComponentAndCreatePinList( DrawList, sheet );
+
             if( Component == NULL )
                 break;
 

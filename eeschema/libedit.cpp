@@ -103,9 +103,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( LIB_ALIAS* aLibEntry )
 
     GetScreen()->ClearUndoRedoList();
     Zoom_Automatique( false );
-    DrawPanel->Refresh();
     SetShowDeMorgan( m_component->HasConversion() );
-    m_HToolBar->Refresh();
 
     return true;
 }

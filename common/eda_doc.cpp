@@ -1,6 +1,6 @@
-/***************/
-/* eda_doc.cpp */
-/***************/
+/**
+ * @file eda_doc.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -14,24 +14,18 @@
 #include "macros.h"
 
 
-/* Read from Common config the Pdf browser choice
- */
 void EDA_APP::ReadPdfBrowserInfos()
 {
     wxASSERT( m_EDA_CommonConfig != NULL );
 
-    m_PdfBrowserIsDefault =
-        m_EDA_CommonConfig->Read( wxT( "PdfBrowserIsDefault" ), true );
-    m_PdfBrowser = m_EDA_CommonConfig->Read( wxT( "PdfBrowserName" ),
-                                             wxEmptyString );
+    m_PdfBrowserIsDefault = m_EDA_CommonConfig->Read( wxT( "PdfBrowserIsDefault" ), true );
+    m_PdfBrowser = m_EDA_CommonConfig->Read( wxT( "PdfBrowserName" ), wxEmptyString );
 
     if( m_PdfBrowser.IsEmpty() )
         m_PdfBrowserIsDefault = true;
 }
 
 
-/* Write into Common config the Pdf browser choice
- */
 void EDA_APP::WritePdfBrowserInfos()
 {
     wxASSERT( m_EDA_CommonConfig != NULL );
@@ -39,8 +33,7 @@ void EDA_APP::WritePdfBrowserInfos()
     if( m_PdfBrowser.IsEmpty() )
         m_PdfBrowserIsDefault = true;
 
-    m_EDA_CommonConfig->Write( wxT( "PdfBrowserIsDefault" ),
-                               m_PdfBrowserIsDefault );
+    m_EDA_CommonConfig->Write( wxT( "PdfBrowserIsDefault" ), m_PdfBrowserIsDefault );
     m_EDA_CommonConfig->Write( wxT( "PdfBrowserName" ), m_PdfBrowser );
 }
 
@@ -68,41 +61,31 @@ static const wxFileTypeInfo EDAfallbacks[] =
 };
 
 
-/**
- * Function GetAssociatedDocument
- * open a document (file) with the suitable browser
- * @param aFrame = main frame
- * if DocName is starting by http: or ftp: or www. the default internet
- * browser is launched
- * @param aDocName = filename of file to open (Full filename or short filename)
- * @param aPaths = a wxPathList to explore.
- *                 if NULL or aDocName is a full filename, aPath is not used.
- */
-bool    GetAssociatedDocument( wxFrame* aFrame,
-                               const wxString& aDocName,
-                               const wxPathList* aPaths)
+bool GetAssociatedDocument( wxFrame* aFrame,
+                            const wxString& aDocName,
+                            const wxPathList* aPaths)
 
 {
     wxString docname, fullfilename, file_ext;
     wxString msg;
     wxString command;
-    bool     success = FALSE;
+    bool     success = false;
 
     // Is an internet url
-    static const wxString url_header[3] = { wxT( "http:" ), wxT( "ftp:" ),
-                                            wxT( "www." ) };
+    static const wxString url_header[3] = { wxT( "http:" ), wxT( "ftp:" ), wxT( "www." ) };
 
     for( int ii = 0; ii < 3; ii++ )
     {
         if( aDocName.First( url_header[ii] ) == 0 )   //. seems an internet url
         {
             wxLaunchDefaultBrowser( aDocName );
-            return TRUE;
+            return true;
         }
     }
 
     docname = aDocName;
-    #ifdef __WINDOWS__
+
+#ifdef __WINDOWS__
     docname.Replace( UNIX_STRING_DIR_SEP, WIN_STRING_DIR_SEP );
 #else
     docname.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
@@ -139,10 +122,10 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
                                          mask,
                                          aFrame,
                                          wxFD_OPEN,
-                                         TRUE,
+                                         true,
                                          wxPoint( -1, -1 ) );
         if( fullfilename.IsEmpty() )
-            return FALSE;
+            return false;
     }
 
     if( !wxFileExists( fullfilename ) )
@@ -150,11 +133,12 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
         msg = _( "Doc File " );
         msg << wxT("\"") << aDocName << wxT("\"") << _( " not found" );
         DisplayError( aFrame, msg );
-        return FALSE;
+        return false;
     }
 
     wxFileName CurrentFileName( fullfilename );
     file_ext = CurrentFileName.GetExt();
+
     if( file_ext == wxT( "pdf" ) )
     {
         success = OpenPDF( fullfilename );
@@ -182,14 +166,14 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
 
         success = filetype->GetOpenCommand( &command, params );
         delete filetype;
+
         if( success )
             success = ProcessExecute( command );
     }
 
     if( !success )
     {
-        msg.Printf( _( "Unknown MIME type for doc file <%s>" ),
-            GetChars( fullfilename ) );
+        msg.Printf( _( "Unknown MIME type for doc file <%s>" ), GetChars( fullfilename ) );
         DisplayError( aFrame, msg );
     }
 
@@ -197,13 +181,6 @@ bool    GetAssociatedDocument( wxFrame* aFrame,
 }
 
 
-/* Search if the text Database found all the words in the KeyList.
- * Give articles in keylist (keylist = Following Keywords
- * Separated by spaces
- * Returns:
- * 0 if no keyword found
- * 1 if keyword found
- */
 int KeyWordOk( const wxString& KeyList, const wxString& Database )
 {
     wxString KeysCopy, DataList;
@@ -226,6 +203,7 @@ int KeyWordOk( const wxString& KeyList, const wxString& Database )
         while( Data.HasMoreTokens() )
         {
             wxString word = Data.GetNextToken();
+
             if( word == Key )
                 return 1; // Key found !
         }
