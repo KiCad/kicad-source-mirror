@@ -94,7 +94,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
     D_PAD*      pt_pad = NULL;
     TRACK*      TrackOnStartPoint = NULL;
     int         layerMask = g_TabOneLayerMask[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
-    BOARD_ITEM* LockPoint;
+    BOARD_CONNECTED_ITEM* LockPoint;
     wxPoint     pos = GetScreen()->GetCrossHairPosition();
 
     if( aTrack == NULL )  /* Starting a new track  */
@@ -148,7 +148,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-        build_ratsnest_pad( LockPoint, wxPoint( 0, 0 ), true );
+        BuildAirWiresTargetsList( LockPoint, wxPoint( 0, 0 ), true );
 
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
@@ -428,7 +428,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
 
     ShowNewTrackWhenMovingCursor( DrawPanel, aDC, wxDefaultPosition, true );
     ShowNewTrackWhenMovingCursor( DrawPanel, aDC, wxDefaultPosition, false );
-    trace_ratsnest_pad( aDC );
+    TraceAirWiresToTargets( aDC );
 
     /* cleanup
      *  if( g_CurrentTrackSegment->Next() != NULL )
@@ -447,7 +447,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
      * This helps to reduce the computing time */
 
     /* Attaching the end of the track. */
-    BOARD_ITEM* LockPoint = GetBoard()->GetLockPoint( pos, layerMask );
+    BOARD_CONNECTED_ITEM* LockPoint = GetBoard()->GetLockPoint( pos, layerMask );
 
     if( LockPoint ) /* End of trace is on a pad. */
     {
@@ -489,7 +489,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
             GetBoard()->m_Track.Insert( track, insertBeforeMe );
         }
 
-        trace_ratsnest_pad( aDC );
+        TraceAirWiresToTargets( aDC );
 
         DrawTraces( DrawPanel, aDC, firstTrack, newCount, GR_OR );
 
@@ -680,7 +680,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     {
         DrawTraces( aPanel, aDC, g_FirstTrackSegment, g_CurrentTrackList.GetCount(), GR_XOR );
 
-        frame->trace_ratsnest_pad( aDC );
+        frame->TraceAirWiresToTargets( aDC );
 
         if( showTrackClearanceMode >= SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS )
         {
@@ -807,8 +807,8 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     DisplayOpt.ShowTrackClearanceMode = showTrackClearanceMode;
     DisplayOpt.DisplayPcbTrackFill    = Track_fill_copy;
 
-    frame->build_ratsnest_pad( NULL, g_CurrentTrackSegment->m_End, false );
-    frame->trace_ratsnest_pad( aDC );
+    frame->BuildAirWiresTargetsList( NULL, g_CurrentTrackSegment->m_End, false );
+    frame->TraceAirWiresToTargets( aDC );
 }
 
 

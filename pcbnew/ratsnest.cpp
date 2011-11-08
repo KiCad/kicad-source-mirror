@@ -49,12 +49,12 @@ public:
     }
 
     /**
-     * Function AddItemsToRatsnest
+     * Function AddTreeToRatsnest
      * Adds the current minimum spanning tree as ratsnest items
      * to the main ratsnest list
      * @param aRatsnestList = the main ratsnest list
      */
-    void AddItemsToRatsnest( std::vector<RATSNEST_ITEM> &aRatsnestList );
+    void AddTreeToRatsnest( std::vector<RATSNEST_ITEM> &aRatsnestList );
 
     /**
      * Function GetWeight
@@ -68,7 +68,7 @@ public:
 };
 
 
-void MIN_SPAN_TREE_PADS::AddItemsToRatsnest( std::vector<RATSNEST_ITEM> &aRatsnestList )
+void MIN_SPAN_TREE_PADS::AddTreeToRatsnest( std::vector<RATSNEST_ITEM> &aRatsnestList )
 {
     std::vector<D_PAD*> & padsBuffer = *m_PadsList;
     int netcode = padsBuffer[0]->GetNet();
@@ -163,7 +163,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
 
     /* Compute the active ratsnest, i.e. the unconnected links
      */
-    TestRatsNest( aDC, 0 );
+    TestForActiveLinksInRatsnest( 0 );
 
     // Redraw the active ratsnest ( if enabled )
     if( GetBoard()->IsElementVisible(RATSNEST_VISIBLE) && aDC )
@@ -241,7 +241,7 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest()
 
         min_spanning_tree.MSP_Init( &net->m_ListPad );
         min_spanning_tree.BuildTree();
-        min_spanning_tree.AddItemsToRatsnest( m_Pcb->m_FullRatsnest );
+        min_spanning_tree.AddTreeToRatsnest( m_Pcb->m_FullRatsnest );
         net->m_RatsnestEndIdx = m_Pcb->GetRatsnestsCount();
     }
 
@@ -293,7 +293,7 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 
 
 /**
- * Function used by TestRatsNest
+ * Function used by TestForActiveLinksInRatsnest
  *  Function testing the ratsnest between 2 blocks ( same net )
  *  The search is made between pads in block 1 and the others blocks
  *  The block n ( n > 1 ) is merged with block 1 by the smallest ratsnest
@@ -301,52 +301,57 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
  *  The function activate the smallest ratsnest between block 1 and the block n
  *  (activate a logical connexion)
  *  @param  aRatsnestBuffer = the buffer to store NETINFO_ITEM* items
- *  @param  net = the current NETINFO_ITEM for the current net
+ *  @param  aNetinfo = the current NETINFO_ITEM for the current net
  *      output:
  *          .state member of the ratsnest
  *  @return    blocks not connected count
  */
-static int tst_rats_block_to_block( NETINFO_ITEM*          net,
+static int tst_rats_block_to_block( NETINFO_ITEM*          aNetinfo,
                                     vector<RATSNEST_ITEM>& aRatsnestBuffer )
 {
     int            current_num_block, min_block;
-    RATSNEST_ITEM* rats, * min_rats;
+    RATSNEST_ITEM* link, * best_link;
 
     /* Search a link from a block to an other block */
-    min_rats = NULL;
+    best_link = NULL;
 
-    for( unsigned ii = net->m_RatsnestStartIdx; ii < net->m_RatsnestEndIdx; ii++ )
+    for( unsigned ii = aNetinfo->m_RatsnestStartIdx; ii < aNetinfo->m_RatsnestEndIdx; ii++ )
     {
-        rats = &aRatsnestBuffer[ii];
+        link = &aRatsnestBuffer[ii];
 
-        if( rats->m_PadStart->GetSubRatsnest() == rats->m_PadEnd->GetSubRatsnest() ) // Same block
+        // If this link joints 2 pads inside the same block, do nothing
+        // (these pads are already connected)
+        if( link->m_PadStart->GetSubRatsnest() == link->m_PadEnd->GetSubRatsnest() )
             continue;
 
-        if( min_rats == NULL )
-            min_rats = rats;
-        else if( min_rats->m_Lenght > rats->m_Lenght )
-            min_rats = rats;
+        // This link joints 2 pads of different blocks: this is a candidate,
+        // but we want to select the shorter link, so use it only if it is shorter
+        // than the previous candidate:
+        if( best_link == NULL )  // no candidate
+            best_link = link;
+        else if( best_link->m_Lenght > link->m_Lenght )  // It is a better candidate.
+            best_link = link;
     }
 
-    if( min_rats == NULL )
+    if( best_link == NULL )
         return 1;
 
-    /* At this point we have found a link between 2 different blocks (clusters)
+    /* At this point we have found a link between 2 different blocks (subratsnest)
      * we must set its status to ACTIVE and merge the 2 blocks
      */
-    min_rats->m_Status |= CH_ACTIF;
-    current_num_block   = min_rats->m_PadStart->GetSubRatsnest();
-    min_block = min_rats->m_PadEnd->GetSubRatsnest();
+    best_link->m_Status |= CH_ACTIF;
+    current_num_block   = best_link->m_PadStart->GetSubRatsnest();
+    min_block = best_link->m_PadEnd->GetSubRatsnest();
 
     if( min_block > current_num_block )
         EXCHG( min_block, current_num_block );
 
-    /* Merging the 2 blocks in one cluster */
-    for( unsigned ii = 0; ii < net->m_ListPad.size(); ii++ )
+    // Merge the 2 blocks in one sub ratsnest:
+    for( unsigned ii = 0; ii < aNetinfo->m_ListPad.size(); ii++ )
     {
-        if( net->m_ListPad[ii]->GetSubRatsnest() == current_num_block )
+        if( aNetinfo->m_ListPad[ii]->GetSubRatsnest() == current_num_block )
         {
-            net->m_ListPad[ii]->SetSubRatsnest( min_block );
+            aNetinfo->m_ListPad[ii]->SetSubRatsnest( min_block );
         }
     }
 
@@ -355,46 +360,46 @@ static int tst_rats_block_to_block( NETINFO_ITEM*          net,
 
 
 /**
- * Function used by TestRatsNest_general
- *  The general ratsnest list must exists because this function explore this ratsnest
- *  Activates (set the CH_ACTIF flag) the ratsnest links between 2 pads when needed
+ * Function used by TestForActiveLinksInRatsnest_general
+ *  The general ratsnest list must exists because this function explores this ratsnest
+ *  Activates (i.e. set the CH_ACTIF flag) the ratsnest links between 2 pads when needed
  *  The function links 1 pad not already connected to an other pad (SubRatsnest = 0)
  *  and active the correspondint link
  *
- * @param   start_rat_list = starting address for the ratsnest list
- * @param   end_rat_list   = ending address for the ratsnest list
- * @param   current_num_block =  last block number (computed from the track
+ * @param   aFirstItem = starting address for the ratsnest list
+ * @param   aLastItem   = ending address for the ratsnest list
+ * @param   aCurrSubRatsnestId =  last block number (computed from the track
  * analysis)
  *
  *      output:
- *          ratsnest list (status member set)
- *          and pad list (m_SubRatsnest set)
+ *          ratsnest list (status member bit CH_ACTIF set)
+ *          and pads linked (m_SubRatsnest value set)
  *
  * @return new block number
  */
-static int tst_rats_pad_to_pad( int            current_num_block,
-                                RATSNEST_ITEM* start_rat_list,
-                                RATSNEST_ITEM* end_rat_list )
+static int tst_rats_pad_to_pad( int            aCurrSubRatsnestId,
+                                RATSNEST_ITEM* aFirstItem,
+                                RATSNEST_ITEM* aLastItem )
 {
-    D_PAD*         pad_start, * pad_end;
-    RATSNEST_ITEM* item;
-
-    for( item = start_rat_list; item < end_rat_list; item++ )
+    for( RATSNEST_ITEM* item = aFirstItem; item < aLastItem; item++ )
     {
-        pad_start = item->m_PadStart;
-        pad_end   = item->m_PadEnd;
+        D_PAD* pad_start = item->m_PadStart;
+        D_PAD* pad_end   = item->m_PadEnd;
 
-        /* Update the block if the 2 pads are not connected : a new block is created
+        /* Update the current SubRatsnest if the 2 pads are not connected :
+         * a new cluster is created and the link activated
          */
         if( (pad_start->GetSubRatsnest() == 0) && (pad_end->GetSubRatsnest() == 0) )
         {
-            current_num_block++;
-            pad_start->SetSubRatsnest( current_num_block );
-            pad_end->SetSubRatsnest( current_num_block );
+            aCurrSubRatsnestId++;
+            pad_start->SetSubRatsnest( aCurrSubRatsnestId );
+            pad_end->SetSubRatsnest( aCurrSubRatsnestId );
             item->m_Status |= CH_ACTIF;
         }
 
-        /* If a pad is already connected : the other is merged in the current block */
+        /* If a pad is already connected to a subratsnest: activate the link
+         * the pad other is merged in the existing subratsnest
+         */
         else if( pad_start->GetSubRatsnest() == 0 )
         {
             pad_start->SetSubRatsnest( pad_end->GetSubRatsnest() );
@@ -407,13 +412,17 @@ static int tst_rats_pad_to_pad( int            current_num_block,
         }
     }
 
-    return current_num_block;
+    return aCurrSubRatsnestId;
 }
 
-/* function TestRatsNest
+/* function TestForActiveLinksInRatsnest
  * determine the active links inside the full ratsnest
  *
- * I used an  derived from the "lee algorithm".
+ * I used an algorithm inspired by the "Lee algorithm".
+ * The idea is all pads must be connected by a physical track or a logical track
+ * a physical track is the existing track on copper layers.
+ * a logical track is the link that must be activated (visible) if
+ * no track found between 2 pads.
  * The algorithm explore the existing full ratnest
  * This is a 2 steps algorithm (executed for each net).
  * - First:
@@ -426,8 +435,10 @@ static int tst_rats_pad_to_pad( int            current_num_block,
  *   2 pads having different subratsnest values
  *   Active the link and merge the 2 subratsnest value.
  *
+ * This is usually fast because the ratsnest is not built here: it is just explored
+ * to see what link must be activated
  */
-void PCB_BASE_FRAME::TestRatsNest( wxDC* aDC, int aNetCode )
+void PCB_BASE_FRAME::TestForActiveLinksInRatsnest( int aNetCode )
 {
     RATSNEST_ITEM* rats;
     D_PAD*         pad;
@@ -449,8 +460,8 @@ void PCB_BASE_FRAME::TestRatsNest( wxDC* aDC, int aNetCode )
         if( aNetCode && (net_code != aNetCode) )
             continue;
 
+        // Create subratsnests id from subnets created by existing tracks:
         int num_block = 0;
-
         for( unsigned ip = 0; ip < net->m_ListPad.size(); ip++ )
         {
             pad = net->m_ListPad[ip];
@@ -464,13 +475,13 @@ void PCB_BASE_FRAME::TestRatsNest( wxDC* aDC, int aNetCode )
             m_Pcb->m_FullRatsnest[ii].m_Status &= ~CH_ACTIF;
         }
 
-        /* a - test connection between pads */
+        // First pass - activate links for not connected pads pads
         rats = &m_Pcb->m_FullRatsnest[0];
         int icnt = tst_rats_pad_to_pad( num_block,
                                         rats + net->m_RatsnestStartIdx,
                                         rats + net->m_RatsnestEndIdx );
 
-        /* b - test connection between blocks (Iteration) */
+        // Second pass activate links between blocks (Iteration)
         while( icnt > 1 )
         {
             icnt = tst_rats_block_to_block( net, m_Pcb->m_FullRatsnest );
@@ -490,7 +501,7 @@ void PCB_BASE_FRAME::TestRatsNest( wxDC* aDC, int aNetCode )
 int PCB_BASE_FRAME::TestOneRatsNest( wxDC* aDC, int aNetCode )
 {
     DrawGeneralRatsnest( aDC, aNetCode );
-    TestRatsNest( aDC, aNetCode );
+    TestForActiveLinksInRatsnest( aNetCode );
     DrawGeneralRatsnest( aDC, aNetCode );
 
     return m_Pcb->GetRatsnestsCount();
@@ -616,7 +627,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
                 padsBuffer.push_back( localPadList[kk] );
             min_spanning_tree.MSP_Init( &padsBuffer );
             min_spanning_tree.BuildTree();
-            min_spanning_tree.AddItemsToRatsnest( m_Pcb->m_LocalRatsnest );
+            min_spanning_tree.AddTreeToRatsnest( m_Pcb->m_LocalRatsnest );
             padsBuffer.clear();
             ii = jj;
             if( ii < localPadList.size() )
@@ -757,120 +768,137 @@ void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
  *  and when the mouse is moved, the g_MaxLinksShowed links to neighbors are
  * drawn
  */
-static std::vector <wxPoint> s_RatsnestMouseToPads;
+static std::vector <wxPoint> s_TargetsLocations;
 static wxPoint s_CursorPos; // Coordinate of the moving point (mouse cursor and
                             // end of current track segment)
 
-/* Used by build_ratsnest_pad(): sort function by link length (manhattan
- * distance)
+/* Used by BuildAirWiresTargetsList(): sort function by link length
+ * (rectilinear distance between s_CursorPos and item pos)
  */
-static bool sort_by_localnetlength( const wxPoint& ref, const wxPoint& compare )
+static bool sort_by_distance( const wxPoint& ref, const wxPoint& compare )
 {
-    wxPoint deltaref = ref - s_CursorPos;
-    wxPoint deltacmp = compare - s_CursorPos;
+    wxPoint deltaref = ref - s_CursorPos;       // relative coordinate of ref
+    wxPoint deltacmp = compare - s_CursorPos;   // relative coordinate of compare
 
-    // = distance between ref coordinate and pad ref
+    // rectilinear distance between ref and s_CursorPos:
     int     lengthref = abs( deltaref.x ) + abs( deltaref.y );
 
-    // distance between ref coordinate and the other pad
+    // rectilinear distance between compare and s_CursorPos:
     int     lengthcmp = abs( deltacmp.x ) + abs( deltacmp.y );
 
     return lengthref < lengthcmp;
 }
-
-
-void PCB_BASE_FRAME::build_ratsnest_pad( BOARD_ITEM* ref, const wxPoint& refpos, bool init )
+static bool sort_by_point( const wxPoint& ref, const wxPoint& compare )
 {
-    int    current_net_code = 0, conn_number = 0;
-    D_PAD* pad_ref = NULL;
+    if( ref.x == compare.x )
+        return ref.y < compare.y;
 
+    return ref.x < compare.x;
+}
+
+/* Function BuildAirWiresTargetsList
+ * Build a list of candidates that can be a coonection point
+ * when a track is started.
+ * This functions prepares data to show airwires to nearest connecting points (pads)
+ * from the current new track to candidates during track creation
+ */
+void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
+                                               const wxPoint& aPosition, bool aInit )
+{
     if( ( ( m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK ) == 0 )
        || ( ( m_Pcb->m_Status_Pcb & LISTE_PAD_OK ) == 0 )
        || ( ( m_Pcb->m_Status_Pcb & NET_CODES_OK ) == 0 ) )
     {
-        s_RatsnestMouseToPads.clear();
+        s_TargetsLocations.clear();
         return;
     }
 
-    s_CursorPos = refpos;
+    s_CursorPos = aPosition;    // needed for sort_by_distance
 
-    if( init )
+    if( aInit )
     {
-        s_RatsnestMouseToPads.clear();
+        s_TargetsLocations.clear();
 
-        if( ref == NULL )
+        if( aItemRef == NULL )
             return;
 
-        switch( ref->Type() )
-        {
-        case PCB_PAD_T:
-            pad_ref = (D_PAD*) ref;
-            current_net_code = pad_ref->GetNet();
-            conn_number = pad_ref->GetSubNet();
-            break;
+        int net_code = aItemRef->GetNet();
+        int subnet = aItemRef->GetSubNet();
 
-        case PCB_TRACE_T:
-        case PCB_VIA_T:
-        {
-            TRACK* track_ref = (TRACK*) ref;
-            current_net_code = track_ref->GetNet();
-            conn_number = track_ref->GetSubNet();
-            break;
-        }
-
-        default:
-            ;
-        }
-
-        if( current_net_code <= 0 )
+        if( net_code <= 0 )
             return;
 
-        NETINFO_ITEM* net = m_Pcb->FindNet( current_net_code );
+        NETINFO_ITEM* net = m_Pcb->FindNet( net_code );
 
         if( net == NULL )        // Should not occur
         {
-            wxMessageBox( wxT( "build_ratsnest_pad() error: net not found" ) );
+            wxMessageBox( wxT( "BuildAirWiresTargetsList() error: net not found" ) );
             return;
         }
 
         // Create a list of pads candidates ( pads not already connected to the
-        // current track:
+        // current track ):
         for( unsigned ii = 0; ii < net->m_ListPad.size(); ii++ )
         {
             D_PAD* pad = net->m_ListPad[ii];
 
-            if( pad == pad_ref )
+            if( pad == aItemRef )
                 continue;
 
-            if( !pad->GetSubNet() || (pad->GetSubNet() != conn_number) )
-                s_RatsnestMouseToPads.push_back( pad->m_Pos );
+            if( !pad->GetSubNet() || (pad->GetSubNet() != subnet) )
+                s_TargetsLocations.push_back( pad->m_Pos );
         }
+
+        // Create a list of tracks ends candidates, not already connected to the
+        // current track:
+        for( TRACK* track = m_Pcb->m_Track; track; track = track->Next() )
+        {
+            if( track->GetNet() < net_code )
+                continue;
+            if( track->GetNet() > net_code )
+                break;;
+
+            if( !track->GetSubNet() || (track->GetSubNet() != subnet) )
+            {
+                if( aPosition != track->m_Start )
+                    s_TargetsLocations.push_back( track->m_Start );
+                if( aPosition != track->m_End )
+                    s_TargetsLocations.push_back( track->m_End );
+            }
+        }
+
+        // Remove duplicate targets, using the C++ unique algorithm
+        sort( s_TargetsLocations.begin(), s_TargetsLocations.end(), sort_by_point );
+        std::vector< wxPoint >::iterator it = unique( s_TargetsLocations.begin(), s_TargetsLocations.end() );
+        // Using the C++ unique algorithm only moves the duplicate entries to the end of
+        // of the array.  This removes the duplicate entries from the array.
+        s_TargetsLocations.resize( it - s_TargetsLocations.begin() );
     }   /* end if Init */
 
-    if( s_RatsnestMouseToPads.size() > 1 )
-        sort( s_RatsnestMouseToPads.begin(), s_RatsnestMouseToPads.end(), sort_by_localnetlength );
+    // in all cases, sort by distances:
+    sort( s_TargetsLocations.begin(), s_TargetsLocations.end(), sort_by_distance );
 }
 
 
-/*
- *  Displays a "ratsnest" during track creation
+/* Function TraceAirWiresToTargets
+ * This functions shows airwires to nearest connecting points (pads)
+ * from the current new track end during track creation
  */
-void PCB_BASE_FRAME::trace_ratsnest_pad( wxDC* DC )
+void PCB_BASE_FRAME::TraceAirWiresToTargets( wxDC* DC )
 {
     if( DC == NULL )
         return;
 
-    if( s_RatsnestMouseToPads.size() == 0 )
+    if( s_TargetsLocations.size() == 0 )
         return;
-
 
     GRSetDrawMode( DC, GR_XOR );
 
-    for( int ii = 0; ii < (int) s_RatsnestMouseToPads.size(); ii++ )
+    for( int ii = 0; ii < (int) s_TargetsLocations.size(); ii++ )
     {
         if( ii >= g_MaxLinksShowed )
             break;
 
-        GRLine( &DrawPanel->m_ClipBox, DC, s_CursorPos, s_RatsnestMouseToPads[ii], 0, YELLOW );
+        GRLine( &DrawPanel->m_ClipBox, DC, s_CursorPos, s_TargetsLocations[ii], 0, YELLOW );
     }
 }

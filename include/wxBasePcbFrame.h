@@ -397,17 +397,39 @@ public:
      */
     void DrawGeneralRatsnest( wxDC* aDC, int aNetcode = 0 );
 
-    void trace_ratsnest_pad( wxDC* DC );
-    void build_ratsnest_pad( BOARD_ITEM* ref, const wxPoint& refpos, bool init );
+    /**
+     * Function TraceAirWiresToTargets
+     * This functions shows airwires to nearest connecting points (pads)
+     * from the current new track end during track creation
+     * Uses data prepared by BuildAirWiresTargetsList()
+     * @param aDC = the current device context
+     */
+    void TraceAirWiresToTargets( wxDC* DC );
 
     /**
-     * Fucntion TestRatsNest
-     * computes the active rats nest
-     * The general rats nest list must exist.
-     * Compute the ACTIVE rats nest in the general rats nest list
-     * if aNetCode == 0, test all nets, else test only aNetCode
+     * Function BuildAirWiresTargetsList
+     * Build a list of candidates that can be a coonection point
+     * when a track is started.
+     * This functions prepares data to show airwires to nearest connecting points (pads)
+     * from the current new track to candidates during track creation
+     * @param aItemRef = the item connected to the starting point of the new track (track or pad)
+     * @param aPosition = the position of the new track end (usually the mouse cursor on grid)
+     * @param aInit = true to build full candidate list or false to update data
+     * When aInit = false, aItemRef is not used (can be NULL)
      */
-    void TestRatsNest( wxDC* aDC, int aNetCode );
+    void BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
+                                   const wxPoint& aPosition, bool aInit );
+
+    /**
+     * Function TestForActiveLinksInRatsnest
+     * Explores the full rats nest list (which must exist) to determine
+     * the ACTIVE links in the full rats nest list
+     * When tracks exist between pads, a link can connect 2 pads already connected by a track
+     * and the link is said inactive.
+     * When a link connects 2 pads not already connected by a track, the link is said active.
+     * @param aNetCode = net code to test. If 0, test all nets
+     */
+    void TestForActiveLinksInRatsnest( int aNetCode );
 
     /**
      * Function TestConnections

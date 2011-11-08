@@ -1251,7 +1251,7 @@ public:
      *                   layer mask.
      * @return A pointer to a BOARD_ITEM object if found otherwise NULL.
      */
-    BOARD_ITEM* GetLockPoint( const wxPoint& aPosition, int aLayerMask );
+    BOARD_CONNECTED_ITEM* GetLockPoint( const wxPoint& aPosition, int aLayerMask );
 
     /**
      * Function CreateLockPoint
