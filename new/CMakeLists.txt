@@ -176,7 +176,6 @@ else()
     set( gal_ROOT    "${CMAKE_CURRENT_BINARY_DIR}/gal-src" )
     set( gal_LIBRARY "${CMAKE_CURRENT_BINARY_DIR}/gal-src/libgal.a" )
 
-
     include( ExternalProject )
     ExternalProject_Add( ki_gal
         # skip the install step, build in source, use from source
@@ -197,11 +196,13 @@ include_directories( "${gal_ROOT}" )
 find_package( PkgConfig REQUIRED )
 
 # Find cairo.
-pkg_search_module( CAIRO REQUIRED cairo>=1.8.1 )
-include_directories( ${CAIRO_INCLUDE_DIRS} )
+#pkg_search_module( CAIRO REQUIRED cairo>=1.8.1 )
+#include_directories( ${CAIRO_INCLUDE_DIRS} )
+
 
 # Find the OpenGL libraries (gl and glu)
 find_package( OpenGL )
+
 
 # Find GLEW
 pkg_search_module( GLEW REQUIRED glew>=1.5.0 )
@@ -213,12 +214,13 @@ include_directories( ${gal_ROOT} )
 add_executable( sweet_edit sweet_edit.cpp  sweet_editor_panel.cpp sch_canvas.cpp )
 
 target_link_libraries( sweet_edit
-  ${OPENGL_LIBRARIES}
-  ${gal_LIBRARY}
-  ${wxWidgets_LIBRARIES}
-  ${GLEW_LIBRARIES}
-  ${GDI_PLUS_LIBRARIES}
-  )
+    sweet
+    ${OPENGL_LIBRARIES}
+    ${gal_LIBRARY}
+    ${wxWidgets_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    )
 
 
 #=====<USE_SWIG>============================================================

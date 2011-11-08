@@ -33,11 +33,10 @@
 // Graphics Abstraction Layer imports
 #include <gal/common/definitions.h>
 #include <gal/common/graphics_abstraction_layer.h>
-#include <gal/cairo/cairo_gal.h>
 #include <gal/opengl/opengl_gal.h>
 #include <gal/common/stroke_font.h>
 #include <gal/common/color4d.h>
-#include "gal/font/newstroke_font.h"
+#include <gal/font/newstroke_font.h>
 
 #include <math/vector2d.h>
 #include <math/matrix3x3.h>

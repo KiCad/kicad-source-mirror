@@ -37,13 +37,13 @@ class CANVAS : public OPENGL_GAL
 {
 
 protected:
-    PART*       m_part;           ///< which PART to draw
-    STROKE_FONT m_font;
-
+    PART*           m_part;           ///< which PART to draw
+    STROKE_FONT     m_font;
 
     void    onRedraw( wxCommandEvent& event );
 
 public:
+
     CANVAS( wxWindow* aParent );
 
     /**
@@ -58,6 +58,8 @@ public:
     }
 
     void PaintScene();
+
+    void PaintRectangle();
 };
 
 
