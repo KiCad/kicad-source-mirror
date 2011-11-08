@@ -102,11 +102,11 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_toolId              = ID_NO_TOOL_SELECTED;
     m_ID_last_state       = ID_NO_TOOL_SELECTED;
     m_HTOOL_current_state = 0;
-    m_Draw_Axis           = FALSE;  // TRUE to draw axis.
-    m_Draw_Sheet_Ref      = FALSE;  // TRUE to display reference sheet.
-    m_Print_Sheet_Ref     = TRUE;   // TRUE to print reference sheet.
-    m_Draw_Auxiliary_Axis = FALSE;  // TRUE draw auxiliary axis.
-    m_Draw_Grid_Axis      = FALSE;  // TRUE to draw the grid axis
+    m_Draw_Axis           = false;  // true to draw axis.
+    m_Draw_Sheet_Ref      = false;  // true to display reference sheet.
+    m_Print_Sheet_Ref     = true;   // true to print reference sheet.
+    m_Draw_Auxiliary_Axis = false;  // true draw auxiliary axis.
+    m_Draw_Grid_Axis      = false;  // true to draw the grid axis
     m_CursorShape         = 0;
     m_LastGridSizeId      = 0;
     m_DrawGrid            = true;   // hide/Show grid. default = show

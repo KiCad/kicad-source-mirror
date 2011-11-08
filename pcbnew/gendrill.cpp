@@ -502,18 +502,14 @@ void EXCELLON_WRITER::WriteCoordinates( char* aLine, double aCoordX, double aCoo
  */
 void EXCELLON_WRITER::WriteHeader()
 {
-    char Line[256];
-
     fputs( "M48\n", m_file );    // The beginning of a header
 
     if( !m_minimalHeader )
     {
-        DateAndTime( Line );
-
         // The next 2 lines in EXCELLON files are comments:
         wxString msg = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion();
         fprintf( m_file, ";DRILL file {%s} date %s\n", TO_UTF8( msg ),
-                 Line );
+                 TO_UTF8( DateAndTime() ) );
         msg = wxT( ";FORMAT={" );
 
         // Print precision:
@@ -532,6 +528,7 @@ void EXCELLON_WRITER::WriteHeader()
          * be added here
          */
         msg << wxT( " / " );
+
         const wxString zero_fmt[4] =
         {
             wxT( "decimal" ),

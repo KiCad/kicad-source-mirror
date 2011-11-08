@@ -26,7 +26,6 @@ int CVPCB_MAINFRAME::SaveComponentList( const wxString& aFullFileName )
 {
     FILE*       dest;
     wxFileName  fn( aFullFileName );
-    char        Line[1024];
     wxString    Title = wxGetApp().GetTitle() + wxT( " " ) + GetBuildVersion();
 
     fn.SetExt( ComponentFileExtension );
@@ -38,7 +37,7 @@ int CVPCB_MAINFRAME::SaveComponentList( const wxString& aFullFileName )
 
     fprintf( dest, "%s", EnteteCmpMod );
     fprintf( dest, " Created by %s", TO_UTF8( Title ) );
-    fprintf( dest, " date = %s\n", DateAndTime( Line ) );
+    fprintf( dest, " date = %s\n", TO_UTF8( DateAndTime() ) );
 
     BOOST_FOREACH( COMPONENT& component, m_components )
     {

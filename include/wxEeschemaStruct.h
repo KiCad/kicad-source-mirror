@@ -714,7 +714,7 @@ private:
     SCH_NO_CONNECT* AddNoConnect( wxDC* aDC, const wxPoint& aPosition );
 
     // Junction
-    SCH_JUNCTION* AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = FALSE );
+    SCH_JUNCTION* AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = false );
 
     /**
      * Function MoveItem

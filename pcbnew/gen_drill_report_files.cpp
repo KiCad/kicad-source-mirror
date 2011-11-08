@@ -298,7 +298,7 @@ void GenDrillReportFile( FILE* aFile, BOARD* aPcb,
 
 
     fprintf( aFile, "Drill report for %s\n", TO_UTF8( aBoardFilename ) );
-    fprintf( aFile, "Created on %s\n", DateAndTime( line ) );
+    fprintf( aFile, "Created on %s\n", TO_UTF8( DateAndTime() ) );
 
     // List which Drill Unit option had been selected for the associated
     // drill aFile.

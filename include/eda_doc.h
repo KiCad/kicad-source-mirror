@@ -8,22 +8,20 @@
 #define __INCLUDE__EDA_DOC_H__ 1
 
 
-/* Search the text Database for found all the key words in the KeyList.
+/**
+ * Function KeyWordOk
+ * searches \a aKeyList for any words found in \a aDatabase.
  *
- * Returns:
- * 0 if no keyword is found
- * 1 if keyword found.
+ * @return 0 if no keyword is found or 1 if keyword is found.
  */
-int  KeyWordOk( const wxString& KeyList,
-                const wxString& Database );
+int KeyWordOk( const wxString& aKeyList, const wxString& aDatabase );
 
 /**
  * Function GetAssociatedDocument
  * open a document (file) with the suitable browser
  * @param aFrame = main frame
  * @param aDocName = filename of file to open (Full filename or short filename)
- * if DocName is starting by http: or ftp: or www. the default internet
- * browser is launched
+ * if \a aDocName begins with http: or ftp: or www. the default internet browser is launched
  * @param aPaths = a wxPathList to explore.
  *              if NULL or aDocName is a full filename, aPath is not used.
 */

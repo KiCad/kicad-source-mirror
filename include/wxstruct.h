@@ -397,12 +397,12 @@ public:
                                             // = 1000 for Eeschema, = 10000
                                             // for Pcbnew and GerbView
 
-    bool         m_Draw_Axis;               // TRUE to show X and Y axis
-    bool         m_Draw_Grid_Axis;          // TRUE to show grid axis.
-    bool         m_Draw_Sheet_Ref;          // TRUE to show frame references
+    bool         m_Draw_Axis;               // true to show X and Y axis
+    bool         m_Draw_Grid_Axis;          // true to show grid axis.
+    bool         m_Draw_Sheet_Ref;          // true to show frame references
 
-    bool         m_Print_Sheet_Ref;         // TRUE to print frame references
-    bool         m_Draw_Auxiliary_Axis;     /* TRUE to show auxiliary axis.
+    bool         m_Print_Sheet_Ref;         // true to print frame references
+    bool         m_Draw_Auxiliary_Axis;     /* true to show auxiliary axis.
                                              * Used in Pcbnew: the auxiliary
                                              * axis is the origin of
                                              * coordinates for drill, gerber
@@ -712,6 +712,10 @@ public:
      */
     virtual bool HandleBlockEnd( wxDC* DC );
 
+    /**
+     * Function CopyToClipboard
+     * copies the current page or the current block to the clipboard.
+     */
     void CopyToClipboard( wxCommandEvent& event );
 
     /* interprocess communication */

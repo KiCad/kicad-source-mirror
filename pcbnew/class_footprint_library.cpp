@@ -166,8 +166,7 @@ bool FOOTPRINT_LIBRARY::ReadSectionIndex()
 
 bool FOOTPRINT_LIBRARY::WriteHeader()
 {
-    char line[256];
-    fprintf( m_file, "%s  %s\n", FOOTPRINT_LIBRARY_HEADER, DateAndTime( line ) );
+    fprintf( m_file, "%s  %s\n", FOOTPRINT_LIBRARY_HEADER, TO_UTF8( DateAndTime() ) );
     fprintf( m_file, "# encoding utf-8\n" );
     return true;
 }

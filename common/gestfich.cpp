@@ -114,20 +114,6 @@ static wxString    s_KicadBinaryPathList[] = {
 };
 
 
-/**
- * Function MakeReducedFileName
- * Calculate the "reduced" filename from
- * @param  fullfilename = full filename
- * @param  default_path = default path
- * @param  default_ext = default extension
- *
- * @return  the "reduced" filename, i.e.:
- *  without path if it is default_path
- *  with ./ if the path is the current path
- *  without extension if extension is default_ext
- *
- *  the new flename is in unix like notation ('/' as path separator)
- */
 wxString MakeReducedFileName( const wxString& fullfilename,
                               const wxString& default_path,
                               const wxString& default_ext )
@@ -140,8 +126,10 @@ wxString MakeReducedFileName( const wxString& fullfilename,
     path = wxPathOnly( reduced_filename ) + UNIX_STRING_DIR_SEP;
     reduced_filename.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
     Cwd.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+
     if( Cwd.Last() != '/' )
         Cwd += UNIX_STRING_DIR_SEP;
+
     path.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
 #ifdef __WINDOWS__
@@ -154,6 +142,7 @@ wxString MakeReducedFileName( const wxString& fullfilename,
 
     // if the path is "default_path" -> remove it
     wxString root_path = path.Left( Cwd.Length() );
+
     if( root_path == Cwd )
     {
         reduced_filename.Remove( 0, Cwd.Length() );
@@ -165,6 +154,7 @@ wxString MakeReducedFileName( const wxString& fullfilename,
         Cwd.MakeLower();
 #endif
         Cwd.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
+
         if( path == Cwd )
         {   // the path is the current path -> path = "./"
             reduced_filename.Remove( 0, Cwd.Length() );
@@ -181,27 +171,21 @@ wxString MakeReducedFileName( const wxString& fullfilename,
 }
 
 
-/**
- * Function AddDelimiterString
- * Add un " to the start and the end of string (if not already done).
- * @param string = string to modify
- */
 void AddDelimiterString( wxString& string )
 {
     wxString text;
 
     if( !string.StartsWith( wxT( "\"" ) ) )
         text = wxT( "\"" );
+
     text += string;
+
     if( (text.Last() != '"' ) || (text.length() <= 1) )
         text += wxT( "\"" );
+
     string = text;
 }
 
-
-/***********************************/
-/* Selection Directory dialog box: */
-/***********************************/
 
 bool EDA_DirectorySelector( const wxString& Title,
                             wxString&       Path,
@@ -210,7 +194,7 @@ bool EDA_DirectorySelector( const wxString& Title,
                             const wxPoint&  Pos )
 {
     int          ii;
-    bool         selected = FALSE;
+    bool         selected = false;
 
     wxDirDialog* DirFrame = new wxDirDialog( Frame,
                                              wxString( Title ),
@@ -219,10 +203,11 @@ bool EDA_DirectorySelector( const wxString& Title,
                                              Pos );
 
     ii = DirFrame->ShowModal();
+
     if( ii == wxID_OK )
     {
         Path     = DirFrame->GetPath();
-        selected = TRUE;
+        selected = true;
     }
 
     DirFrame->Destroy();
@@ -230,16 +215,6 @@ bool EDA_DirectorySelector( const wxString& Title,
 }
 
 
-/* Selection file dialog box:
- * Dialog title
- * Default path
- * default filename
- * default filename extension
- * filter for filename list
- * parent frame
- * wxFD_SAVE, wxFD_OPEN ..
- * true = keep the current path
- */
 wxString EDA_FileSelector( const wxString& Title,
                            const wxString& Path,
                            const wxString& FileName,
@@ -258,6 +233,7 @@ wxString EDA_FileSelector( const wxString& Title,
 
     defaultname.Replace( wxT( "/" ), STRING_DIR_SEP );
     defaultpath.Replace( wxT( "/" ), STRING_DIR_SEP );
+
     if( defaultpath.IsEmpty() )
         defaultpath = wxGetCwd();
 
@@ -289,37 +265,18 @@ wxString EDA_FileSelector( const wxString& Title,
 }
 
 
-/**
- * Function FindKicadHelpPath
- * Find an absolute path for KiCad "help" (or "help/&ltlanguage&gt")
- *  Find path kicad/doc/help/xx/ or kicad/doc/help/:
- *  from BinDir
- *  else from environment variable KICAD
- *  else from one of s_HelpPathList
- *  typically c:/kicad/doc/help or /usr/share/kicad/help
- *            or /usr/local/share/kicad/help
- *  (must have kicad in path name)
- *
- *  xx = iso639-1 language id (2 letters (generic) or 4 letters):
- *  fr = french (or fr_FR)
- *  en = English (or en_GB or en_US ...)
- *  de = deutch
- *  es = spanish
- *  pt = portuguese (or pt_BR ...)
- *
- *  default = en (if not found = fr)
- *
- */
 wxString FindKicadHelpPath()
 {
     wxString FullPath, LangFullPath, tmp;
     wxString LocaleString;
-    bool     PathFound = FALSE;
+    bool     PathFound = false;
 
     /* find kicad/help/ */
     tmp = wxGetApp().m_BinDir;
+
     if( tmp.Last() == '/' )
         tmp.RemoveLast();
+
     FullPath     = tmp.BeforeLast( '/' ); // cd ..
     FullPath    += wxT( "/doc/help/" );
     LocaleString = wxGetApp().m_Locale->GetCanonicalName();
@@ -331,44 +288,54 @@ wxString FindKicadHelpPath()
     if( path_tmp.Contains( wxT( "kicad" ) ) )
     {
         if( wxDirExists( FullPath ) )
-            PathFound = TRUE;
+            PathFound = true;
     }
 
     /* find kicad/help/ from environment variable  KICAD */
     if( !PathFound && wxGetApp().m_Env_Defined )
     {
         FullPath = wxGetApp().m_KicadEnv + wxT( "/doc/help/" );
+
         if( wxDirExists( FullPath ) )
-            PathFound = TRUE;
+            PathFound = true;
     }
 
     /* find kicad/help/ from "s_HelpPathList" */
     int ii = 0;
+
     while( !PathFound )
     {
         FullPath = s_HelpPathList[ii++];
+
         if( FullPath == wxT( "end_list" ) )
             break;
+
         if( wxDirExists( FullPath ) )
-            PathFound = TRUE;
+            PathFound = true;
     }
 
     if( PathFound )
     {
         LangFullPath = FullPath + LocaleString + UNIX_STRING_DIR_SEP;
+
         if( wxDirExists( LangFullPath ) )
             return LangFullPath;
 
         LangFullPath = FullPath + LocaleString.Left( 2 ) + UNIX_STRING_DIR_SEP;
+
         if( wxDirExists( LangFullPath ) )
             return LangFullPath;
 
         LangFullPath = FullPath + wxT( "en/" );
+
         if( wxDirExists( LangFullPath ) )
+        {
             return LangFullPath;
+        }
         else
         {
             LangFullPath = FullPath + wxT( "fr/" );
+
             if( wxDirExists( LangFullPath ) )
                 return LangFullPath;
         }
@@ -378,17 +345,6 @@ wxString FindKicadHelpPath()
 }
 
 
-/* Search the executable file shortname in KiCad binary path
- *  and return full file name if found or shortname
- *  kicad binary path is
- *  kicad/bin
- *
- *  kicad binary path is found from:
- *  BinDir
- *  or environment variable KICAD
- *  or (default) c:\kicad or /usr/local/kicad
- *  or default binary path
- */
 wxString FindKicadFile( const wxString& shortname )
 {
     wxString FullFileName;
@@ -397,15 +353,17 @@ wxString FindKicadFile( const wxString& shortname )
      * the KiCad binary path.
      */
     FullFileName = wxGetApp().m_BinDir + shortname;
+
     if( wxFileExists( FullFileName ) )
         return FullFileName;
 
     /* Test the presence of the file in the directory shortname
-     * defined by the environment variable KiCAD.
+     * defined by the environment variable KiCad.
      */
     if( wxGetApp().m_Env_Defined )
     {
         FullFileName = wxGetApp().m_KicadEnv + shortname;
+
         if( wxFileExists( FullFileName ) )
             return FullFileName;
     }
@@ -414,11 +372,14 @@ wxString FindKicadFile( const wxString& shortname )
      *  /usr/local/kicad/linux or c:/kicad/winexe
      *  (see s_KicadDataPathList) */
     int ii = 0;
+
     while( 1 )
     {
         if( s_KicadBinaryPathList[ii] == wxT( "end_list" ) )
             break;
+
         FullFileName = s_KicadBinaryPathList[ii++] + shortname;
+
         if( wxFileExists( FullFileName ) )
             return FullFileName;
     }
@@ -427,10 +388,7 @@ wxString FindKicadFile( const wxString& shortname )
 }
 
 
-/* Call the executable file "ExecFile", with params "param"
- */
-int ExecuteFile( wxWindow* frame, const wxString& ExecFile,
-                 const wxString& param )
+int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& param )
 {
     wxString FullFileName;
 
@@ -441,6 +399,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile,
     {
         if( !param.IsEmpty() )
             FullFileName += wxT( " " ) + param;
+
         ProcessExecute( FullFileName );
         return 0;
     }
@@ -452,26 +411,16 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile,
 }
 
 
-/* Return data path common KiCad.
- * If environment variable defined KiCAD (KiCAD = path to kicad)
- * Returns <KICAD> /;
- * Otherwise returns <path of binaries> / (if "kicad" is in the path name)
- * Otherwise returns / usr / share / kicad /
- *
- * Note:
- * The \ are replaced by / (a la Unix)
- */
 wxString ReturnKicadDatasPath()
 {
-    bool     PathFound = FALSE;
+    bool     PathFound = false;
     wxString data_path;
 
-    if( wxGetApp().m_Env_Defined )  // Path defined by the KICAD environment
-                                    // variable.
+    if( wxGetApp().m_Env_Defined )  // Path defined by the KICAD environment variable.
 
     {
         data_path = wxGetApp().m_KicadEnv;
-        PathFound = TRUE;
+        PathFound = true;
     }
     else    // Path of executables.
     {
@@ -486,6 +435,7 @@ wxString ReturnKicadDatasPath()
 #endif
             if( tmp.Last() == '/' )
                 tmp.RemoveLast();
+
             data_path  = tmp.BeforeLast( '/' ); // id cd ../
             data_path += UNIX_STRING_DIR_SEP;
 
@@ -494,12 +444,15 @@ wxString ReturnKicadDatasPath()
             // So we search for kicad/share/ first
             wxString old_path = data_path;
             data_path += wxT( "share/" );
+
             if( wxDirExists( data_path ) )
-                PathFound = TRUE;
+            {
+                PathFound = true;
+            }
             else if( wxDirExists( old_path ) )
             {
                 data_path = old_path;
-                PathFound = TRUE;
+                PathFound = true;
             }
         }
     }
@@ -508,13 +461,16 @@ wxString ReturnKicadDatasPath()
      *  /usr/local/kicad/ or c:/kicad/
      *  (see s_KicadDataPathList) */
     int ii = 0;
+
     while( !PathFound )
     {
         if( s_KicadDataPathList[ii] == wxT( "end_list" ) )
             break;
+
         data_path = s_KicadDataPathList[ii++];
+
         if( wxDirExists( data_path ) )
-            PathFound = TRUE;
+            PathFound = true;
     }
 
     if( PathFound )
@@ -574,12 +530,6 @@ wxString& EDA_APP::GetEditorName()
 }
 
 
-/**
- * Function OpenPDF
- * run the PDF viewer and display a PDF file
- * @param file = PDF file to open
- * @return true is success, false if no PDF viewer found
- */
 bool OpenPDF( const wxString& file )
 {
     wxString command;
@@ -588,6 +538,7 @@ bool OpenPDF( const wxString& file )
     bool     success = false;
 
     wxGetApp().ReadPdfBrowserInfos();
+
     if( !wxGetApp().m_PdfBrowserIsDefault )    //  Run the preferred PDF Browser
     {
         AddDelimiterString( filename );
@@ -598,8 +549,10 @@ bool OpenPDF( const wxString& file )
         wxFileType* filetype = NULL;
         wxFileType::MessageParameters params( filename, type );
         filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( wxT( "pdf" ) );
+
         if( filetype )
             success = filetype->GetOpenCommand( &command, params );
+
         delete filetype;
 #ifndef __WINDOWS__
 
@@ -611,6 +564,7 @@ bool OpenPDF( const wxString& file )
         if( success && !command.IsEmpty() )
         {
             success = ProcessExecute( command );
+
             if( success )
                 return success;
         }
@@ -654,6 +608,7 @@ bool OpenPDF( const wxString& file )
     if( !command.IsEmpty() )
     {
         success = ProcessExecute( command );
+
         if( !success )
         {
             wxString msg = _( "Problem while running the PDF viewer" );
@@ -682,14 +637,15 @@ void OpenFile( const wxString& file )
     wxString    ext, type;
 
     ext = CurrentFileName.GetExt();
-    wxFileType* filetype =
-        wxTheMimeTypesManager->GetFileTypeFromExtension( ext );
+    wxFileType* filetype = wxTheMimeTypesManager->GetFileTypeFromExtension( ext );
 
     bool        success = false;
 
     wxFileType::MessageParameters params( filename, type );
+
     if( filetype )
         success = filetype->GetOpenCommand( &command, params );
+
     delete filetype;
 
     if( success && !command.IsEmpty() )

@@ -41,10 +41,10 @@ static void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile );
 /* Sort function use by GenereModulesPosition() */
 static int ListeModCmp( const void* o1, const void* o2 )
 {
-    LIST_MOD*   ref = (LIST_MOD*) o1;
-    LIST_MOD*   cmp = (LIST_MOD*) o2;
+    LIST_MOD* ref = (LIST_MOD*) o1;
+    LIST_MOD* cmp = (LIST_MOD*) o2;
 
-    return StrLenNumCmp( ref->m_Reference, cmp->m_Reference, 16 );
+    return StrNumCmp( ref->m_Reference, cmp->m_Reference, 16 );
 }
 
 
@@ -79,7 +79,6 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
     MODULE*     module;
     LIST_MOD*   Liste = 0;
     char        line[1024];
-    char        Buff[80];
     wxFileName  fnFront;
     wxFileName  fnBack;
     wxString    msg;
@@ -214,7 +213,7 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
     qsort( Liste, moduleCount, sizeof(LIST_MOD), ListeModCmp );
 
     // Write file header
-    sprintf( line, "### Module positions - created on %s ###\n", DateAndTime( Buff ) );
+    sprintf( line, "### Module positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
     fputs( line, fpFront );
 
     if( doBoardBack )
@@ -325,7 +324,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
     double   conv_unit;
     MODULE*  Module;
     D_PAD*   pad;
-    char     line[1024], Buff[80];
+    char     line[1024];
     wxFileName fn;
     wxString fnFront, msg;
     FILE*    rptfile;
@@ -361,7 +360,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
     SetLocaleTo_C_standard();
 
     /* Generate header file comments.) */
-    sprintf( line, "## Module report - date %s\n", DateAndTime( Buff ) );
+    sprintf( line, "## Module report - date %s\n", TO_UTF8( DateAndTime() ) );
     fputs( line, rptfile );
 
     wxString Title = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();

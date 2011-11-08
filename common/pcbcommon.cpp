@@ -110,7 +110,7 @@ DLIST<TRACK> g_CurrentTrackList;
 
 BOARD* g_ModuleEditor_Pcb = NULL;
 
-bool g_Zone_45_Only = FALSE;
+bool g_Zone_45_Only = false;
 
 // Default setting used when creating a new zone
 ZONE_SETTING g_Zone_Default_Setting;

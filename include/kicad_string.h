@@ -11,9 +11,6 @@
 
 #include <wx/string.h>
 
-char*    strupper( char* Text );
-char*    strlower( char* Text );
-
 
 /**
  * Function ReadDelimitedText
@@ -28,7 +25,7 @@ char*    strlower( char* Text );
  *   the number copied, due to escaping of double quotes and the escape byte itself.
  * @deprecated should use the one which fetches a wxString, below.
  */
-int  ReadDelimitedText( char* aDest, const char* aSource, int aDestSize );
+int ReadDelimitedText( char* aDest, const char* aSource, int aDestSize );
 
 /**
  * Function ReadDelimitedText
@@ -52,63 +49,62 @@ int ReadDelimitedText( wxString* aDest, const char* aSource );
  */
 std::string EscapedUTF8( const wxString& aString );
 
-
-/* Read one line line from a file.
- * Returns the first useful line read by eliminating blank lines and comments.
+/**
+ * Function GetLine
+ * reads one line line from \a aFile.
+ * @return A pointer the first useful line read by eliminating blank lines and comments.
  */
-char*    GetLine( FILE* File,
-                  char* Line,
-                  int*  LineNum = NULL,
-                  int   SizeLine = 255 );
+char* GetLine( FILE* aFile, char* Line, int* LineNum = NULL, int SizeLine = 255 );
 
-/* Remove leading and trailing whitespace.
+/**
+ * Funxtion StrPurge
+ * removes leading and training spaces, tabs and end of line chars in \a text
+ * return a pointer on the first n char in text
  */
-char*    StrPurge( char* text );
+char* StrPurge( char* text );
 
-
-/*Return a string giving the current date and time.
-*/
-char*    DateAndTime( char* line );
+/**
+ * Function DateAndTime
+ * @return a string giving the current date and time.
+ */
 wxString DateAndTime();
 
-
-/*
- * Routine (compatible with qsort ()) to sort by alphabetical order.
- * Equivalent to strncmp () but the numbers are compared by their integer
- * value not by their ASCII code.
+/**
+ * Function StrLenNumCmp
+ * is a routine compatible with qsort() to sort by alphabetical order.
+ *
+ * This function is equivalent to strncmp() or strnicmp() if \a aIgnoreCase is true
+ * except that strings containing numbers are compared by their integer value not
+ * by their ASCII code.
+ *
+ * @param aString1 A wxChar pointer to the reference string.
+ * @param aString2 A wxChar pointer to the comparison string.
+ * @param aLength The numbere of characters to compare.  Set to -1 to compare
+ *                the entire string.
+ * @param aIgnoreCase Use true to make the comparison case insensitive.
+ * @return An integer value of -1 if \a aString1 is less than \a aString2, 0 if
+ *         \a aString1 is equal to \a aString2, or 1 if \a aString1 is greater
+ *         than \a aString2.
  */
-int      StrLenNumCmp( const wxChar* str1,
-                       const wxChar* str2,
-                       int           NbMax );
+int StrNumCmp( const wxChar* aString1, const wxChar* aString2, int aLength = INT_MAX,
+               bool aIgnoreCase = false );
 
-/*
- * Routine (compatible with qsort ()) to sort by case insensitive alphabetical
- * order.
- * Equivalent to strnicmp () but the numbers are compared by their integer
- * value not by their ASCII code.
+/**
+ * Function WildCompareString
+ * compares a string against wild card (* and ?) pattern using the usual rules.
+ * @return true if pattern matched otherwise false.
  */
-int      StrNumICmp( const wxChar* str1,
-                     const wxChar* str2 );
+bool WildCompareString( const wxString& pattern,
+                        const wxString& string_to_tst,
+                        bool            case_sensitive = true );
 
-
-int      StrLenNumICmp( const wxChar* str1,
-                        const wxChar* str2,
-                        int           NbMax );
-
-/* Compare string against wild card pattern using the usual rules.
- * (Wildcards *,?).
- * The reference string is "pattern"
- * If case_sensitive == TRUE (default), exact comparison
- * Returns TRUE if pattern matched otherwise FALSE.
+/**
+ * Function to_point
+ * converts a string used to compensate for internalization of printf().  It generates
+ * floating point numbers with a comma instead of point.
+ * @deprecated Use SetLocaleTo_C_standard instead.
  */
-
-bool     WildCompareString( const wxString& pattern,
-                            const wxString& string_to_tst,
-                            bool            case_sensitive = TRUE );
-
-/* Replaces decimal point with commas to generated international numbers.
- */
-char*    to_point( char* Text );
+char* to_point( char* Text );
 
 /**
  * Function RefDesStringCompare
@@ -118,7 +114,7 @@ char*    to_point( char* Text );
  * return 0 if the strings are equal
  * return 1 if the first string is greater than the second
  */
-int  RefDesStringCompare( const wxString& lhs, const wxString& rhs );
+int RefDesStringCompare( const wxString& lhs, const wxString& rhs );
 
 /**
  * Function SplitString

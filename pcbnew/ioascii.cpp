@@ -1149,7 +1149,6 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
 {
     bool rc;
-    char line[256];
 
     GetBoard()->m_Status_Pcb &= ~CONNEXION_OK;
 
@@ -1161,7 +1160,7 @@ int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
 
     /* Writing file header. */
     fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
-             DateAndTime( line ) );
+             TO_UTF8( DateAndTime() ) );
     fprintf( aFile, "# Created by Pcbnew%s\n\n", TO_UTF8( GetBuildVersion() ) );
 
     GetBoard()->SynchronizeNetsAndNetClasses();

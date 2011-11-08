@@ -1,7 +1,7 @@
-/******************************
- *  drawpanel.h:
- *  define class EDA_DRAW_PANEL
- *************************************/
+/**
+ * @file class_drawpanel.h:
+ * @brief EDA_DRAW_PANEL class definition.
+ */
 
 #ifndef  PANEL_WXSTRUCT_H
 #define  PANEL_WXSTRUCT_H
@@ -30,7 +30,7 @@ typedef void ( *END_MOUSE_CAPTURE_CALLBACK )( EDA_DRAW_PANEL* aPanel, wxDC* aDC 
 class EDA_DRAW_PANEL : public wxScrolledWindow
 {
 private:
-    int m_currentCursor;                 ///< Current mouse cursor shape id.
+    int m_currentCursor;          ///< Current mouse cursor shape id.
     int m_defaultCursor;          ///< The default mouse cursor shape id.
     bool m_showCrossHair;         ///< Indicate if cross hair is to be shown.
     int m_cursorLevel;            ///< Index for cursor redraw in XOR mode.
@@ -43,13 +43,13 @@ public:
     int m_scrollIncrementY;       // Y axis scroll increment in pixels per unit.
 
     bool m_AbortRequest;          // Flag to abort long commands
-    bool m_AbortEnable;           // TRUE if abort button or menu to be displayed
+    bool m_AbortEnable;           // true if abort button or menu to be displayed
 
-    bool m_AutoPAN_Enable;        // TRUE to allow auto pan
-    bool m_AutoPAN_Request;       // TRUE to request an auto pan (will be made only if
+    bool m_AutoPAN_Enable;        // true to allow auto pan
+    bool m_AutoPAN_Request;       // true to request an auto pan (will be made only if
                                   // m_AutoPAN_Enable = true)
     int m_IgnoreMouseEvents;      // when non-zero (true), then ignore mouse events
-    bool m_Block_Enable;          // TRUE to accept Block Commands
+    bool m_Block_Enable;          // true to accept Block Commands
 
     // useful to avoid false start block in certain cases
     // (like switch from a sheet to an other sheet

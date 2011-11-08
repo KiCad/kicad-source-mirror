@@ -67,14 +67,11 @@ static void RemoveDuplicatePins( COMPONENT& component )
 int CVPCB_MAINFRAME::GenNetlistPcbnew( FILE* file,bool isEESchemaNetlist )
 {
 #define NETLIST_HEAD_STRING "EESchema Netlist Version 1.1"
-    char       Line[1024];
-
-    DateAndTime( Line );
 
     if( isEESchemaNetlist )
-        fprintf( file, "# %s created  %s\n(\n", NETLIST_HEAD_STRING, Line );
+        fprintf( file, "# %s created  %s\n(\n", NETLIST_HEAD_STRING, TO_UTF8( DateAndTime() ) );
     else
-        fprintf( file, "( { netlist created  %s }\n", Line );
+        fprintf( file, "( { netlist created  %s }\n", TO_UTF8( DateAndTime() ) );
 
 
     BOOST_FOREACH( COMPONENT& component, m_components )
@@ -83,7 +80,6 @@ int CVPCB_MAINFRAME::GenNetlistPcbnew( FILE* file,bool isEESchemaNetlist )
 
         if( !component.m_Module.IsEmpty() )
             fprintf( file, "%s", TO_UTF8( component.m_Module ) );
-
         else
             fprintf( file, "$noname$" );
 
@@ -97,9 +93,7 @@ int CVPCB_MAINFRAME::GenNetlistPcbnew( FILE* file,bool isEESchemaNetlist )
         BOOST_FOREACH( PIN& pin, component.m_Pins )
         {
             if( !pin.m_Net.IsEmpty() )
-                fprintf( file, "  ( %s %s )\n",
-                         TO_UTF8( pin.m_Number ),
-                         TO_UTF8( pin.m_Net ) );
+                fprintf( file, "  ( %s %s )\n", TO_UTF8( pin.m_Number ), TO_UTF8( pin.m_Net ) );
             else
                 fprintf( file, "  ( %s ? )\n", TO_UTF8( pin.m_Number ) );
         }

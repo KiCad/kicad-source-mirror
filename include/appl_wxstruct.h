@@ -53,7 +53,7 @@ public:
 
     wxString                 m_BinDir;      /* KiCad executable path.*/
     wxString                 m_KicadEnv;    /* environment variable KICAD */
-    bool                     m_Env_Defined; // TRUE if environment KICAD is defined.
+    bool                     m_Env_Defined; // true if environment KICAD is defined.
 
     wxLocale*                m_Locale;      // The current locale.
     int                      m_LanguageId;  // The current language setting.
@@ -169,7 +169,7 @@ public: EDA_APP();
 
     /**
      * Function WriteProjectConfig
-     *  Save the current "projet" parameters
+     *  Save the current "project" parameters
      *  saved parameters are parameters that have the .m_Setup member set to false
      *  saving file is the .pro file project
      */
@@ -202,7 +202,7 @@ public: EDA_APP();
 
     /**
      * Function ReadProjectConfig
-     *  Read the current "projet" parameters
+     *  Read the current "project" parameters
      *  Parameters are parameters that have the .m_Setup member set to false
      *  read file is the .pro file project
      *
@@ -237,7 +237,15 @@ public: EDA_APP();
                             const wxString& GroupName,
                             bool            ForceUseLocalConfig );
 
+    /**
+     * Function ReadPdfBrowserInfos
+     * read the PDF browser choice from the common configuration.
+     */
     void ReadPdfBrowserInfos();
+
+    /* Function WritePdfBrowserInfos
+     * save the PDF browser choice to the common configuration.
+     */
     void WritePdfBrowserInfos();
 
     /**

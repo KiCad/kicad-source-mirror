@@ -82,7 +82,8 @@ public:
 
     /**
      * Function ReadFootprintFiles
-     * Read the list of libraries (*.mod files) and populates m_List ( list of availaible modules in libs ).
+     * Read the list of libraries (*.mod files) and populates m_List ( list of availaible
+     * modules in libs ).
      * for each module, are stored
      *      the module name
      *      documentation string
@@ -104,8 +105,7 @@ public:
 /* FOOTPRINT object list sort function. */
 inline bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 )
 {
-    return ( StrNumICmp( item1.m_Module.GetData(),
-                         item2.m_Module.GetData() ) < 0 );
+    return StrNumCmp( item1.m_Module, item2.m_Module, INT_MAX, true ) < 0;
 }
 
 #endif  // _FOOTPRINT_INFO_H_

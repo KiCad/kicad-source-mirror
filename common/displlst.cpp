@@ -1,6 +1,6 @@
-/****************/
-/* displlst.cpp */
-/****************/
+/**
+ * @file displlst.cpp
+ */
 
 #include "fctsys.h"
 #include "wxstruct.h"
@@ -27,16 +27,6 @@ BEGIN_EVENT_TABLE( EDA_LIST_DIALOG, wxDialog )
 END_EVENT_TABLE()
 
 
-/**
- * Used to display a list of elements for selection, and display comment of info lines
- * about the selected item.
- * @param aParent = apointeur to the parent window
- * @param aTitle = the title shown on top.
- * @param aItemList = a wxArrayString: the list of elements.
- * @param aRefText = an item name if an item must be preselected.
- * @param aCallBackFunction callback function to display comments
- * @param aPos = position of the dialog.
- */
 EDA_LIST_DIALOG::EDA_LIST_DIALOG( EDA_DRAW_FRAME* aParent, const wxString& aTitle,
                                   const wxArrayString& aItemList, const wxString& aRefText,
                                   void(* aCallBackFunction)(wxString& Text), wxPoint aPos ) :
@@ -155,39 +145,24 @@ void EDA_LIST_DIALOG::OnClose( wxCloseEvent& event )
 
 /* Sort alphabetically, case insensitive.
  */
-static int SortItems( const wxString** ptr1, const wxString** ptr2 )
+static int SortItems( const wxString& item1, const wxString& item2 )
 {
-    return StrNumICmp( (*ptr1)->GetData(), (*ptr2)->GetData() );
+    return StrNumCmp( item1, item2, INT_MAX, true );
 }
 
 
-void EDA_LIST_DIALOG:: SortList()
+void EDA_LIST_DIALOG::SortList()
 {
-    int ii, NbItems = m_listBox->GetCount();
-    const wxString** BufList;
+    wxArrayString list = m_listBox->GetStrings();
 
-    if( NbItems <= 0 )
+    if( list.IsEmpty() <= 0 )
         return;
 
-    BufList = (const wxString**) MyZMalloc( 100 * NbItems * sizeof(wxString*) );
-
-    for( ii = 0; ii < NbItems; ii++ )
-    {
-        BufList[ii] = new wxString( m_listBox->GetString( ii ) );
-    }
-
-    qsort( BufList, NbItems, sizeof(wxString*),
-           ( int( * ) ( const void*, const void* ) )SortItems );
+    list.Sort( SortItems );
 
     m_listBox->Clear();
 
-    for( ii = 0; ii < NbItems; ii++ )
-    {
-        m_listBox->Append( *BufList[ii] );
-        delete BufList[ii];
-    }
-
-    free( BufList );
+    m_listBox->Append( list );
 }
 
 

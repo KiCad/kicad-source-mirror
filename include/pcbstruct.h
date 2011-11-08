@@ -53,7 +53,7 @@ public:
 
     int  DisplayModEdge;
     int  DisplayModText;
-    bool DisplayPcbTrackFill;     /* FALSE = sketch , TRUE = filled */
+    bool DisplayPcbTrackFill;     /* false = sketch , true = filled */
 
     /// How trace clearances are displayed.  @see TRACE_CLEARANCE_DISPLAY_MODE_T.
     TRACE_CLEARANCE_DISPLAY_MODE_T  ShowTrackClearanceMode;

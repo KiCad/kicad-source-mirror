@@ -1,6 +1,6 @@
-/*******************/
-/* class_cvpcb.cpp */
-/*******************/
+/**
+ * @file class_cvpcb.cpp
+ */
 
 #include "fctsys.h"
 #include "kicad_string.h"
@@ -15,16 +15,18 @@ PIN::PIN()
     m_Type = 0;          /* Electrical type. */
 }
 
+
 bool operator<( const PIN& item1, const PIN& item2 )
 {
-    return ( StrLenNumICmp( item1.m_Number.GetData(),
-                            item2.m_Number.GetData(), 4 ) < 0 );
+    return StrNumCmp( item1.m_Number, item2.m_Number, 4, true ) < 0;
 }
+
 
 bool operator==( const PIN& item1, const PIN& item2 )
 {
     return ( item1.m_Number == item2.m_Number );
 }
+
 
 bool same_pin_number( const PIN* item1, const PIN* item2 )
 {
@@ -32,6 +34,7 @@ bool same_pin_number( const PIN* item1, const PIN* item2 )
 
     return ( item1->m_Number == item2->m_Number );
 }
+
 
 bool same_pin_net( const PIN* item1, const PIN* item2 )
 {
@@ -47,13 +50,13 @@ COMPONENT::COMPONENT()
     m_Multi = 0;
 }
 
+
 COMPONENT::~COMPONENT()
 {
 }
 
+
 bool operator<( const COMPONENT& item1, const COMPONENT& item2 )
 {
-    return ( StrNumICmp( item1.m_Reference.GetData(),
-                         item2.m_Reference.GetData() ) < 0 );
+    return StrNumCmp( item1.m_Reference, item2.m_Reference, INT_MAX, true ) < 0;
 }
-
