@@ -38,6 +38,8 @@ static LENGTH_PCB_DBL from_legacy_lu_dbl( double x ) {
 #define FROM_LEGACY_LU( x )     ( from_legacy_lu( x ) )
 #define FROM_LEGACY_LU_DBL( x ) ( from_legacy_lu_dbl( x ) )
 
+#define ZERO_LENGTH ( LENGTH_PCB::zero() )
+
 
 #else
 
@@ -51,6 +53,8 @@ typedef double LENGTH_PCB_DBL;
 
 #define FROM_LEGACY_LU( x )             ( x )
 #define FROM_LEGACY_LU_DBL( x ) ( double( x ) )
+
+#define ZERO_LENGTH 0
 
 #endif
 

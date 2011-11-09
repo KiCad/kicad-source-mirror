@@ -20,6 +20,8 @@
 #include "class_zone.h"
 #include "class_marker_pcb.h"
 
+#include "lengthpcb.h"
+
 
 /* This is an odd place for this, but CvPcb won't link if it is
  *  in class_board_item.cpp like I first tried it.
@@ -237,21 +239,22 @@ bool BOARD::SetCurrentNetClass( const wxString& aNetClassName )
     if( m_TrackWidthList.size() == 0 )
     {
         lists_sizes_modified = true;
-        m_TrackWidthList.push_back( 0 );
+        m_TrackWidthList.push_back( ZERO_LENGTH );
     }
 
     /* note the m_ViasDimensionsList[0] and m_TrackWidthList[0] values
      * are always the Netclass values
      */
-    if( m_ViasDimensionsList[0].m_Diameter != netClass->GetViaDiameter() )
+    if( TO_LEGACY_LU( m_ViasDimensionsList[0].m_Diameter ) != netClass->GetViaDiameter() )
         lists_sizes_modified = true;
 
-    m_ViasDimensionsList[0].m_Diameter = netClass->GetViaDiameter();
+    m_ViasDimensionsList[0].m_Diameter = FROM_LEGACY_LU( netClass->GetViaDiameter() );
 
-    if( m_TrackWidthList[0] != netClass->GetTrackWidth() )
+    /* NOTE: equality comparison on real values is bad... */
+    if( TO_LEGACY_LU( m_TrackWidthList[0] ) != netClass->GetTrackWidth() )
         lists_sizes_modified = true;
 
-    m_TrackWidthList[0] = netClass->GetTrackWidth();
+    m_TrackWidthList[0] = FROM_LEGACY_LU( netClass->GetTrackWidth() );
 
     if( m_ViaSizeSelector >= m_ViasDimensionsList.size() )
         m_ViaSizeSelector = m_ViasDimensionsList.size();

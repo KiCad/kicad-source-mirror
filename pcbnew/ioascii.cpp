@@ -436,8 +436,8 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "TrackWidthList" ) == 0 )
         {
-            int tmp = atoi( data );
-            GetBoard()->m_TrackWidthList.push_back( tmp );
+            double tmp = atof( data );
+            GetBoard()->m_TrackWidthList.push_back( FROM_LEGACY_LU( tmp ) );
             continue;
         }
 
@@ -498,15 +498,15 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "ViaSizeList" ) == 0 )
         {
-            int           tmp = atoi( data );
+            double tmp = atof( data );
             VIA_DIMENSION via_dim;
-            via_dim.m_Diameter = tmp;
+            via_dim.m_Diameter = FROM_LEGACY_LU( tmp );
             data = strtok( NULL, " \n\r" );
 
             if( data )
             {
-                tmp = atoi( data );
-                via_dim.m_Drill = tmp > 0 ? tmp : 0;
+                tmp = atof( data );
+                via_dim.m_Drill = FROM_LEGACY_LU( tmp > 0 ? tmp : 0 );
             }
 
             GetBoard()->m_ViasDimensionsList.push_back( via_dim );
@@ -693,7 +693,7 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
 
     // Save custom tracks width list (the first is not saved here: this is the netclass value
     for( unsigned ii = 1; ii < aBoard->m_TrackWidthList.size(); ii++ )
-        fprintf( aFile, "TrackWidthList %d\n", aBoard->m_TrackWidthList[ii] );
+        fprintf( aFile, "TrackWidthList %f\n", TO_LEGACY_LU_DBL( aBoard->m_TrackWidthList[ii] ) );
 
 
     fprintf( aFile, "TrackClearence %d\n", netclass_default->GetClearance() );
@@ -718,9 +718,9 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
     for( unsigned ii = 1; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
-        fprintf( aFile, "ViaSizeList %d %d\n",
-                 aBoard->m_ViasDimensionsList[ii].m_Diameter,
-                 aBoard->m_ViasDimensionsList[ii].m_Drill );
+        fprintf( aFile, "ViaSizeList %f %f\n",
+                 TO_LEGACY_LU_DBL( aBoard->m_ViasDimensionsList[ii].m_Diameter ),
+                 TO_LEGACY_LU_DBL( aBoard->m_ViasDimensionsList[ii].m_Drill ) );
 
     // for old versions compatibility:
     fprintf( aFile, "MicroViaSize %d\n", netclass_default->GetuViaDiameter() );
