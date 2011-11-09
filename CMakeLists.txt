@@ -29,6 +29,9 @@ option(KICAD_GOST "enable/disable building using GOST notation for multiple gate
 #for those who bored with uppercase
 option(KICAD_KEEPCASE "turn-off automatic component name conversion to uppercase if selected")
 
+#highly experimetnal option
+option(KICAD_NANOMETRE "set length quantum to 1 nm for PCB")
+
 option(USE_WX_GRAPHICS_CONTEXT
        "Use wxGraphicsContext for rendering (default OFF). Warning, this is experimental")
 
@@ -98,6 +101,10 @@ endif(KICAD_GOST)
 if(KICAD_KEEPCASE)
     add_definitions(-DKICAD_KEEPCASE)
 endif(KICAD_KEEPCASE)
+
+if(KICAD_NANOMETRE)
+    add_definitions(-DKICAD_NANOMETRE)
+endif(KICAD_NANOMETRE)
 
 if(USE_WX_OVERLAY OR APPLE)
     add_definitions(-DUSE_WX_OVERLAY)

@@ -32,11 +32,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
     m_EdgeSegmentWidth = 100;                   // current graphic line width (EDGE layer only)
     m_PcbTextWidth     = 100;                   // current Pcb (not module) Text width
     m_PcbTextSize       = wxSize( 500, 500 );   // current Pcb (not module) Text size
-    m_TrackMinWidth     = 80;                   // track min value for width ((min copper size value
-    m_ViasMinSize       = 350;                  // vias (not micro vias) min diameter
-    m_ViasMinDrill      = 200;                  // vias (not micro vias) min drill diameter
-    m_MicroViasMinSize  = 200;                  // micro vias (not vias) min diameter
-    m_MicroViasMinDrill = 50;                   // micro vias (not vias) min drill diameter
+    m_TrackMinWidth     = FROM_LEGACY_LU( 80 );  // track min value for width ((min copper size value
+    m_ViasMinSize       = FROM_LEGACY_LU( 350 ); // vias (not micro vias) min diameter
+    m_ViasMinDrill      = FROM_LEGACY_LU( 200 ); // vias (not micro vias) min drill diameter
+    m_MicroViasMinSize  = FROM_LEGACY_LU( 200 ); // micro vias (not vias) min diameter
+    m_MicroViasMinDrill = FROM_LEGACY_LU( 50 );  // micro vias (not vias) min drill diameter
 
     // Global mask margins:
     m_SolderMaskMargin  = 150;                  // Solder mask margin

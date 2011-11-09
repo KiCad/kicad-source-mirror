@@ -7,6 +7,8 @@
 
 #include "pcbstruct.h"      // NB_COLORS
 
+#include "lengthpcb.h"
+
 // Class for handle current printed board design settings
 class BOARD_DESIGN_SETTINGS
 {
@@ -22,11 +24,11 @@ public:
     int    m_EdgeSegmentWidth;            // current graphic line width (EDGE layer only)
     int    m_PcbTextWidth;                // current Pcb (not module) Text width
     wxSize m_PcbTextSize;                 // current Pcb (not module) Text size
-    int    m_TrackMinWidth;               // track min value for width ((min copper size value
-    int    m_ViasMinSize;                 // vias (not micro vias) min diameter
-    int    m_ViasMinDrill;                // vias (not micro vias) min drill diameter
-    int    m_MicroViasMinSize;            // micro vias (not vias) min diameter
-    int    m_MicroViasMinDrill;           // micro vias (not vias) min drill diameter
+    LENGTH_PCB m_TrackMinWidth;               // track min value for width ((min copper size value
+    LENGTH_PCB m_ViasMinSize;                 // vias (not micro vias) min diameter
+    LENGTH_PCB m_ViasMinDrill;                // vias (not micro vias) min drill diameter
+    LENGTH_PCB m_MicroViasMinSize;            // micro vias (not vias) min diameter
+    LENGTH_PCB m_MicroViasMinDrill;           // micro vias (not vias) min drill diameter
 
     // Global mask margins:
     int    m_SolderMaskMargin;            // Solder mask margin

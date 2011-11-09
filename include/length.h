@@ -1,18 +1,20 @@
 /**
- * The physical length library. Made for nanometer scale.
  * @file length.h
+ * @brief The physical length library. Made for nanometer scale.
  */
 
-/* sorry it is not styled correctly, i'll work on it further */
+/* sorry if it is not styled correctly, i'll work on it further */
 
 #ifndef LENGTH_H_INCLUDED
 #define LENGTH_H_INCLUDED 1
 
+#include "limited_int.h"
+
 /* type to be used by length units by default */
-typedef int DEF_LENGTH_VALUE;
+typedef LIMITED_INT< int > DEF_LENGTH_VALUE;
 
 /**
- * Length template class
+ * Length template class.
  * @param T actual type holding a value (be aware of precision and range!)
  * @param P power of length unit: 1 - length, 2 - area, 3 - volume, -1 - lin. density etc...
  * This class check length dimension in compile time. In runtime it behaves
@@ -47,6 +49,8 @@ typedef int DEF_LENGTH_VALUE;
 
 template < typename T = DEF_LENGTH_VALUE, int P = 1 > class LENGTH;
 
+typedef LENGTH<DEF_LENGTH_VALUE, 1> LENGTH_DEF;
+
 /**
  * Length units contained in this class
  */
@@ -59,6 +63,38 @@ template <typename T> class LENGTH_UNITS;
 template < typename T, int P > struct LENGTH_TRAITS
 {
     typedef LENGTH<T, P> flat;
+};
+
+template < typename T > struct LENGTH_CASTS
+{
+     template< typename X > static T cast( const X x )
+     {
+         return T( x );
+     }
+};
+
+template <> struct LENGTH_CASTS < int >
+{
+     static int cast( const double x )
+     {
+         return floor( x + 0.5 );
+     }
+};
+
+template <> struct LENGTH_CASTS < long >
+{
+     static long cast( const double x )
+     {
+         return floor( x + 0.5 );
+     }
+};
+
+template < typename T > struct LENGTH_CASTS < LIMITED_INT< T > >
+{
+     static LIMITED_INT< T > cast( const double x )
+     {
+         return LIMITED_INT< T > ( floor( x + 0.5 ) );
+     }
 };
 
 template < typename T > struct LENGTH_TRAITS< T, 0 >
@@ -92,7 +128,8 @@ public:
     {
         dimension = P
     };
-    LENGTH( const LENGTH <T, P> &orig ) : m_U( orig.m_U )
+    template< typename U > LENGTH( const LENGTH< U, P > &orig )
+    : m_U( LENGTH_CASTS < T >::cast( orig.m_U ) )
     {
     }
     LENGTH( void ) : m_U()
@@ -104,14 +141,20 @@ public:
         return T(0);
     }
 
+    /* Do not use this, please */
+    static LENGTH<T, P> quantum ( void )
+    {
+        return T(1);
+    }
+
     LENGTH<T, P> & operator = ( const LENGTH<T, P> & y )
     {
         this->m_U = y.m_U;
         return *this;
     }
-    template<typename Y> operator LENGTH< Y, P > ( void )
+    template< typename Y > operator LENGTH< Y, P > ( void )
     {
-        return this->m_U;
+        return LENGTH< Y, P >( this->m_U );
     }
     /*************************/
     /* comparisons and tests */
@@ -231,6 +274,9 @@ public:
  * to get numeric value of length in specific units you should use a division
  * length/LENGTH_UNITS::metre() gives number of metres in length
  * legnth/LENGTH_UNITS::foot() gives number of feet in length
+ *
+ * Really these units are used in NEWPCB and printing routines, as EESCHEMA
+ * is going to use relative units.
  */
 
 template < typename T = DEF_LENGTH_VALUE > class LENGTH_UNITS {
@@ -275,4 +321,4 @@ template < typename T, int D > class LENGTH_UNITS< LENGTH< T, D > >: public LENG
 {
 };
 
-#endif
+#endif /* def LENGTH_H_INCLUDED */

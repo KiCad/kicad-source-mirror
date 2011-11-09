@@ -441,6 +441,133 @@ int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue,
 }
 
 
+#ifdef KICAD_NANOMETRE
+
+/*
+ *New common length functions
+ */
+
+const LENGTH_UNIT_DESC g_MillimetreDesc =
+{
+    LENGTH_UNITS<LENGTH_DEF>::millimetre(),
+    _(" mm"),
+    wxT("mm"),
+    6
+};
+const LENGTH_UNIT_DESC g_InchDesc =
+{
+    LENGTH_UNITS<LENGTH_DEF>::inch(),
+    _(" \""),
+    wxT("in"),
+    7
+};
+const LENGTH_UNIT_DESC g_MilDesc =
+{
+    LENGTH_UNITS<LENGTH_DEF>::mil(),
+    _(" mil"),
+    wxT("mil"),
+    5
+};
+const LENGTH_UNIT_DESC g_UnscaledDesc = /* stub */
+{
+    LENGTH_DEF::quantum(),
+    wxT(""),
+    wxT(""),
+    4
+};
+
+const LENGTH_UNIT_DESC *UnitDescription( EDA_UNITS_T aUnit ) {
+    switch(aUnit) {
+        case INCHES:
+            return &g_InchDesc;
+        case MILLIMETRES:
+            return &g_MillimetreDesc;
+        default:
+            return &g_UnscaledDesc; /* should not be reached */
+    }
+}
+
+wxString LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_DEF aValue,
+                         bool aAdd_unit_symbol ) {
+    wxString StringValue;
+    double   value_to_print;
+    value_to_print = LENGTH<double>(aValue) / LENGTH<double>(aUnit->m_Value);
+    StringValue.Printf( wxT( "%.*f" ), aUnit->m_Precision, value_to_print);
+    if( aAdd_unit_symbol ) {
+        StringValue += aUnit->m_Postfix;
+    }
+    return StringValue;
+}
+LENGTH_DEF StringToLength( const LENGTH_UNIT_DESC *aUnit, const wxString& TextValue )
+{
+
+    LENGTH_DEF    Value;
+    double dtmp = 0;
+
+    /* Acquire the 'right' decimal point separator */
+    const struct lconv* lc = localeconv();
+    wxChar decimal_point = lc->decimal_point[0];
+    wxString            buf( TextValue.Strip( wxString::both ) );
+
+    /* Convert the period in decimal point */
+    buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
+    // An ugly fix needed by WxWidgets 2.9.1 that sometimes
+    // back to a point as separator, although the separator is the comma
+    // TODO: remove this line if WxWidgets 2.9.2 fixes this issue
+    buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
+
+    /* Find the end of the numeric part */
+    unsigned brk_point = 0;
+    while( brk_point < buf.Len() )
+    {
+        wxChar ch = buf[brk_point];
+        if( !( (ch >= '0' && ch <='9') || (ch == decimal_point)
+             || (ch == '-') || (ch == '+') ) )
+        {
+            break;
+        }
+        ++brk_point;
+    }
+
+    /* Extract the numeric part */
+    buf.Left( brk_point ).ToDouble( &dtmp );
+
+    /* Check the optional unit designator (2 ch significant) */
+    wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
+    if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
+    {
+        aUnit = &g_InchDesc;
+    }
+    else if( unit == wxT( "mm" ) )
+    {
+        aUnit = &g_MillimetreDesc;
+    }
+    else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) /* Mils or thous */
+    {
+        aUnit = &g_MilDesc;
+    }
+    Value = LENGTH_DEF( dtmp * LENGTH< double, 1 >( aUnit->m_Value ) );
+
+    return Value;
+}
+
+void LengthToTextCtrl( wxTextCtrl& TextCtr, LENGTH_DEF Value ) {
+    wxString msg = LengthToString( UnitDescription( g_UserUnit ), Value );
+
+    TextCtr.SetValue( msg );
+}
+LENGTH_DEF LengthFromTextCtrl( const wxTextCtrl& TextCtr )
+{
+    LENGTH_DEF value;
+    wxString msg = TextCtr.GetValue();
+
+    value = StringToLength( UnitDescription( g_UserUnit ), msg );
+
+    return value;
+}
+
+#endif
+
 /**
  * Function wxStringSplit
  * Split a String to a String List when founding 'splitter'

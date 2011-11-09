@@ -75,9 +75,9 @@ void NETCLASS::SetParams( const NETCLASS* defaults )
         // TODO: see how change that.
         const BOARD_DESIGN_SETTINGS& g = boardDesignSettings;
 
-        SetTrackWidth(  g.m_TrackMinWidth );
-        SetViaDiameter( g.m_ViasMinSize );
-        SetuViaDiameter(g.m_MicroViasMinSize );
+        SetTrackWidth(  TO_LEGACY_LU( g.m_TrackMinWidth ) );
+        SetViaDiameter( TO_LEGACY_LU( g.m_ViasMinSize ) );
+        SetuViaDiameter( TO_LEGACY_LU( g.m_MicroViasMinSize ) );
         // Use default values for next parameters:
         SetClearance( DEFAULT_CLEARANCE );
         SetViaDrill( DEFAULT_VIA_DRILL );
@@ -412,27 +412,27 @@ bool NETCLASS::ReadDescr( LINE_READER* aReader )
 
 int NETCLASS::GetTrackMinWidth() const
 {
-    return m_Parent->GetBoardDesignSettings()->m_TrackMinWidth;
+    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_TrackMinWidth );
 }
 
 int NETCLASS::GetViaMinDiameter() const
 {
-    return m_Parent->GetBoardDesignSettings()->m_ViasMinSize;
+    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_ViasMinSize );
 }
 
 int NETCLASS::GetViaMinDrill() const
 {
-    return m_Parent->GetBoardDesignSettings()->m_ViasMinDrill;
+    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_ViasMinDrill );
 }
 
 int NETCLASS::GetuViaMinDiameter() const
 {
-    return m_Parent->GetBoardDesignSettings()->m_MicroViasMinSize;
+    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_MicroViasMinSize );
 }
 
 int NETCLASS::GetuViaMinDrill() const
 {
-    return m_Parent->GetBoardDesignSettings()->m_MicroViasMinDrill;
+    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_MicroViasMinDrill );
 }
 
 
