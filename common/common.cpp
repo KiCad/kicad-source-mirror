@@ -450,29 +450,25 @@ int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue,
 const LENGTH_UNIT_DESC g_MillimetreDesc =
 {
     LENGTH_UNITS<LENGTH_DEF>::millimetre(),
-    _(" mm"),
-    wxT("mm"),
+    wxT( "mm" ),
     6
 };
 const LENGTH_UNIT_DESC g_InchDesc =
 {
     LENGTH_UNITS<LENGTH_DEF>::inch(),
-    _(" \""),
-    wxT("in"),
+    wxT( "\"" ),
     7
 };
 const LENGTH_UNIT_DESC g_MilDesc =
 {
     LENGTH_UNITS<LENGTH_DEF>::mil(),
-    _(" mil"),
-    wxT("mil"),
+    wxT( "mil" ),
     5
 };
 const LENGTH_UNIT_DESC g_UnscaledDesc = /* stub */
 {
     LENGTH_DEF::quantum(),
-    wxT(""),
-    wxT(""),
+    wxT( "" ),
     4
 };
 
@@ -487,14 +483,23 @@ const LENGTH_UNIT_DESC *UnitDescription( EDA_UNITS_T aUnit ) {
     }
 }
 
+/* TODO: localisation */
 wxString LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_DEF aValue,
                          bool aAdd_unit_symbol ) {
     wxString StringValue;
     double   value_to_print;
     value_to_print = LENGTH<double>(aValue) / LENGTH<double>(aUnit->m_Value);
     StringValue.Printf( wxT( "%.*f" ), aUnit->m_Precision, value_to_print);
-    if( aAdd_unit_symbol ) {
-        StringValue += aUnit->m_Postfix;
+    size_t zero_tail = StringValue.find_last_not_of( wxT( "0" ) );
+    if( zero_tail != std::string::npos ) {
+	    //fprintf( stderr, "pos : %d", (int) zero_tail );
+	    size_t delim_pos = StringValue.Length() - aUnit->m_Precision;
+	    if( zero_tail < delim_pos) zero_tail = delim_pos;
+	    StringValue.Truncate( zero_tail + 1 );
+    }
+    if( aAdd_unit_symbol && aUnit->m_Symbol != wxT( "" ) ) {
+        StringValue += wxT( " " );
+	StringValue += wxGetTranslation( aUnit->m_Symbol );
     }
     return StringValue;
 }

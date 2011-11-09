@@ -344,10 +344,9 @@ int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
 
 struct LENGTH_UNIT_DESC
 {
-    LENGTH_DEF m_Value;
-    wxString   m_Postfix;
-    wxString   m_IntlSymbol;
-    int        m_Precision;
+    LENGTH_DEF     m_Value;
+    const wxString m_Symbol;
+    int            m_Precision;
 };
 extern const LENGTH_UNIT_DESC g_MillimetreDesc, g_InchDesc, g_MilDesc;
 

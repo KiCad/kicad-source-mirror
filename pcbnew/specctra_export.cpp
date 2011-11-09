@@ -1309,8 +1309,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard ) throw( IO_ERROR )
         // using LookupVia().
         for( unsigned i=0; i < aBoard->m_ViasDimensionsList.size(); ++i )
         {
-            int viaSize  = aBoard->m_ViasDimensionsList[i].m_Diameter;
-            int viaDrill = aBoard->m_ViasDimensionsList[i].m_Drill;
+            int viaSize  = TO_LEGACY_LU( aBoard->m_ViasDimensionsList[i].m_Diameter );
+            int viaDrill = TO_LEGACY_LU( aBoard->m_ViasDimensionsList[i].m_Drill );
 
             via = makeVia( viaSize, viaDrill,
                            0, aBoard->GetCopperLayerCount()-1 );

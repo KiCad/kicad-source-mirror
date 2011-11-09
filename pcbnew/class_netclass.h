@@ -36,6 +36,9 @@
 
 #include <wx/string.h>
 
+#include "lengthpcb.h"
+
+#include "class_via_dimension.h"
 
 class LINE_READER;
 class BOARD;
@@ -67,14 +70,12 @@ protected:
 
     /// The units on these parameters is 1/10000 of an inch, see define #PCB_INTERNAL_UNIT
 
-    int         m_Clearance;            ///< clearance when routing
+    LENGTH_PCB  m_Clearance;            ///< clearance when routing
 
-    int         m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
-    int         m_ViaDia;               ///< via diameter
-    int         m_ViaDrill;             ///< via drill hole diameter
-
-    int         m_uViaDia;              ///< microvia diameter
-    int         m_uViaDrill;            ///< microvia drill hole diameter
+    LENGTH_PCB  m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
+    
+    VIA_DIMENSION m_Via;                ///< Specific normal via
+    VIA_DIMENSION m_uVia;               ///< Specific microvia
 
 public:
 
@@ -171,28 +172,28 @@ public:
     const wxString& GetDescription() const  { return m_Description; }
     void    SetDescription( const wxString& aDesc ) { m_Description = aDesc; }
 
-    int     GetClearance() const            { return m_Clearance; }
-    void    SetClearance( int aClearance )  { m_Clearance = aClearance; }
+    int     GetClearance() const            { return TO_LEGACY_LU( m_Clearance ); }
+    void    SetClearance( int aClearance )  { m_Clearance = FROM_LEGACY_LU( aClearance ); }
 
-    int     GetTrackWidth() const           { return m_TrackWidth; }
+    int     GetTrackWidth() const           { return TO_LEGACY_LU( m_TrackWidth ); }
     int     GetTrackMinWidth() const;
-    void    SetTrackWidth( int aWidth )     { m_TrackWidth = aWidth; }
+    void    SetTrackWidth( int aWidth )     { m_TrackWidth = FROM_LEGACY_LU( aWidth ); }
 
-    int     GetViaDiameter() const          { return m_ViaDia; }
+    int     GetViaDiameter() const          { return TO_LEGACY_LU( m_Via.m_Diameter ); }
     int     GetViaMinDiameter() const;
-    void    SetViaDiameter( int aDia )      { m_ViaDia = aDia; }
+    void    SetViaDiameter( int aDia )      { m_Via.m_Diameter = FROM_LEGACY_LU( aDia ); }
 
-    int     GetViaDrill() const             { return m_ViaDrill; }
+    int     GetViaDrill() const             { return TO_LEGACY_LU( m_Via.m_Drill ); }
     int     GetViaMinDrill() const;
-    void    SetViaDrill( int aSize )        { m_ViaDrill = aSize; }
+    void    SetViaDrill( int aSize )        { m_Via.m_Drill = FROM_LEGACY_LU( aSize ); }
 
-    int     GetuViaDiameter() const         { return m_uViaDia; }
+    int     GetuViaDiameter() const         { return TO_LEGACY_LU( m_uVia.m_Diameter ); }
     int     GetuViaMinDiameter() const;
-    void    SetuViaDiameter( int aSize )    { m_uViaDia = aSize; }
+    void    SetuViaDiameter( int aSize )    { m_uVia.m_Diameter = FROM_LEGACY_LU( aSize ); }
 
-    int     GetuViaDrill() const            { return m_uViaDrill; }
+    int     GetuViaDrill() const            { return TO_LEGACY_LU( m_uVia.m_Drill ); }
     int     GetuViaMinDrill() const;
-    void    SetuViaDrill( int aSize )       { m_uViaDrill = aSize; }
+    void    SetuViaDrill( int aSize )       { m_uVia.m_Drill = FROM_LEGACY_LU( aSize ); }
 
 
     /**
