@@ -130,12 +130,21 @@ void DIALOG_DRC_CONTROL::InitValues()
 */
 void DIALOG_DRC_CONTROL::SetDrcParmeters( )
 {
-     m_BrdSettings->m_TrackMinWidth =
+#ifdef KICAD_NANOMETRE
+    m_BrdSettings->m_TrackMinWidth =
+        LengthFromTextCtrl( *m_SetTrackMinWidthCtrl );
+    m_BrdSettings->m_ViasMinSize =
+        LengthFromTextCtrl( *m_SetViaMinSizeCtrl );
+    m_BrdSettings->m_MicroViasMinSize =
+        LengthFromTextCtrl( *m_SetMicroViakMinSizeCtrl );
+#else
+    m_BrdSettings->m_TrackMinWidth =
         ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
-     m_BrdSettings->m_ViasMinSize =
+    m_BrdSettings->m_ViasMinSize =
         ReturnValueFromTextCtrl( *m_SetViaMinSizeCtrl, m_Parent->m_InternalUnits );
-     m_BrdSettings->m_MicroViasMinSize =
+    m_BrdSettings->m_MicroViasMinSize =
         ReturnValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl, m_Parent->m_InternalUnits );
+#endif
 }
 
 

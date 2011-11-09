@@ -10,6 +10,11 @@
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
 
+
+#ifdef KICAD_NANOMETRE
+#include "length.h"
+#endif
+
 class wxAboutDialogInfo;
 class BASE_SCREEN;
 class EDA_DRAW_FRAME;
@@ -321,6 +326,7 @@ wxString        ReturnStringFromValue( EDA_UNITS_T aUnit,
                                        int  aInternal_Unit,
                                        bool aAdd_unit_symbol = false );
 
+
 void            AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
 
 /* Add string "  (mm):" or " ("):" to the static text Stext.
@@ -333,6 +339,27 @@ void            PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value,
  **/
 int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
                                          int               Internal_Unit );
+
+#ifdef KICAD_NANOMETRE
+
+struct LENGTH_UNIT_DESC
+{
+    LENGTH_DEF m_Value;
+    wxString   m_Postfix;
+    wxString   m_IntlSymbol;
+    int        m_Precision;
+};
+extern const LENGTH_UNIT_DESC g_MillimetreDesc, g_InchDesc, g_MilDesc;
+
+const LENGTH_UNIT_DESC *UnitDescription( EDA_UNITS_T aUnit );
+
+LENGTH_DEF       StringToLength( const LENGTH_UNIT_DESC *aUnit, const wxString& TextValue );
+wxString         LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_DEF aValue,
+                                 bool aAdd_unit_symbol = false );
+
+void             LengthToTextCtrl( wxTextCtrl& TextCtr, LENGTH_DEF Value );
+LENGTH_DEF       LengthFromTextCtrl( const wxTextCtrl& TextCtr );
+#endif
 
 /* return a String List from a string, with a specific splitter*/
 wxArrayString*  wxStringSplit( wxString txt, wxChar splitter );

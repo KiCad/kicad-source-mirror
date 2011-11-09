@@ -213,18 +213,21 @@ void DIALOG_DESIGN_RULES::PrintCurrentSettings()
 
     // Display min values:
     value = ReturnStringFromValue( g_UserUnit,
-                                   m_BrdSettings->m_TrackMinWidth,
+                                   TO_LEGACY_LU( m_BrdSettings->m_TrackMinWidth ),
                                    internal_units,
                                    true );
     msg.Printf( _( "Minimum value for tracks width: <b>%s</b><br>\n" ), GetChars( value ) );
     m_MessagesList->AppendToPage( msg );
 
-    value = ReturnStringFromValue( g_UserUnit, m_BrdSettings->m_ViasMinSize, internal_units, true );
+    value = ReturnStringFromValue( g_UserUnit,
+                                   TO_LEGACY_LU( m_BrdSettings->m_ViasMinSize ),
+                                   internal_units,
+                                   true );
     msg.Printf( _( "Minimum value for vias diameter: <b>%s</b><br>\n" ), GetChars( value ) );
     m_MessagesList->AppendToPage( msg );
 
     value = ReturnStringFromValue( g_UserUnit,
-                                   m_BrdSettings->m_MicroViasMinSize,
+                                   TO_LEGACY_LU( m_BrdSettings->m_MicroViasMinSize ),
                                    internal_units,
                                    true );
     msg.Printf( _( "Minimum value for microvias diameter: <b>%s</b><br>\n" ), GetChars( value ) );
@@ -291,21 +294,35 @@ void DIALOG_DESIGN_RULES::InitGlobalRules()
     AddUnitSymbol( *m_TrackMinWidthTitle );
 
     int Internal_Unit = m_Parent->m_InternalUnits;
-    PutValueInLocalUnits( *m_SetViasMinSizeCtrl, m_BrdSettings->m_ViasMinSize, Internal_Unit );
+#ifdef KICAD_NANOMETRE
+    LengthToTextCtrl( *m_SetViasMinSizeCtrl, m_BrdSettings->m_ViasMinSize );
+    LengthToTextCtrl( *m_SetViasMinDrillCtrl, m_BrdSettings->m_ViasMinDrill );
+#else
+    PutValueInLocalUnits( *m_SetViasMinSizeCtrl,
+                          m_BrdSettings->m_ViasMinSize,
+                          Internal_Unit );
     PutValueInLocalUnits( *m_SetViasMinDrillCtrl, m_BrdSettings->m_ViasMinDrill, Internal_Unit );
+#endif
 
     if(  m_BrdSettings->m_CurrentViaType != VIA_THROUGH )
         m_OptViaType->SetSelection( 1 );
 
     m_AllowMicroViaCtrl->SetSelection(  m_BrdSettings->m_MicroViasAllowed ? 1 : 0 );
+#ifdef KICAD_NANOMETRE
+    LengthToTextCtrl( *m_SetMicroViasMinSizeCtrl, m_BrdSettings->m_MicroViasMinSize );
+    LengthToTextCtrl( *m_SetMicroViasMinDrillCtrl, m_BrdSettings->m_MicroViasMinDrill );
+    LengthToTextCtrl( *m_SetTrackMinWidthCtrl, m_BrdSettings->m_TrackMinWidth );
+#else
     PutValueInLocalUnits( *m_SetMicroViasMinSizeCtrl,
                           m_BrdSettings->m_MicroViasMinSize,
                           Internal_Unit );
     PutValueInLocalUnits( *m_SetMicroViasMinDrillCtrl,
-                          m_BrdSettings->m_MicroViasMinDrill,
+                          TO_LEGACY_LU( m_BrdSettings->m_MicroViasMinDrill ),
                           Internal_Unit );
-
-    PutValueInLocalUnits( *m_SetTrackMinWidthCtrl, m_BrdSettings->m_TrackMinWidth, Internal_Unit );
+    PutValueInLocalUnits( *m_SetTrackMinWidthCtrl,
+                          m_BrdSettings->m_TrackMinWidth,
+                          Internal_Unit );
+#endif
 
     // Initialize Vias and Tracks sizes lists.
     // note we display only extra values, never the current netclass value.
@@ -609,23 +626,40 @@ void DIALOG_DESIGN_RULES::CopyGlobalRulesToBoard()
     if( m_OptViaType->GetSelection() > 0 )
         m_BrdSettings->m_CurrentViaType = VIA_BLIND_BURIED;
 
+    m_BrdSettings->m_MicroViasAllowed = m_AllowMicroViaCtrl->GetSelection() == 1;
+
+#ifdef KICAD_NANOMETRE
+    // Update vias minimum values for DRC
+    m_BrdSettings->m_ViasMinSize =
+        LengthFromTextCtrl( *m_SetViasMinSizeCtrl );
+    m_BrdSettings->m_ViasMinDrill =
+        LengthFromTextCtrl( *m_SetViasMinDrillCtrl );
+
+    // Update microvias minimum values for DRC
+    m_BrdSettings->m_MicroViasMinSize =
+        LengthFromTextCtrl( *m_SetMicroViasMinSizeCtrl );
+    m_BrdSettings->m_MicroViasMinDrill =
+        LengthFromTextCtrl( *m_SetMicroViasMinDrillCtrl );
+
+    // Update tracks minimum values for DRC
+    m_BrdSettings->m_TrackMinWidth =
+        LengthFromTextCtrl( *m_SetTrackMinWidthCtrl );
+#else
     // Update vias minimum values for DRC
     m_BrdSettings->m_ViasMinSize =
         ReturnValueFromTextCtrl( *m_SetViasMinSizeCtrl, m_Parent->m_InternalUnits );
     m_BrdSettings->m_ViasMinDrill =
         ReturnValueFromTextCtrl( *m_SetViasMinDrillCtrl, m_Parent->m_InternalUnits );
 
-    m_BrdSettings->m_MicroViasAllowed = m_AllowMicroViaCtrl->GetSelection() == 1;
-
     // Update microvias minimum values for DRC
     m_BrdSettings->m_MicroViasMinSize =
         ReturnValueFromTextCtrl( *m_SetMicroViasMinSizeCtrl, m_Parent->m_InternalUnits );
     m_BrdSettings->m_MicroViasMinDrill =
         ReturnValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl, m_Parent->m_InternalUnits );
-
     // Update tracks minimum values for DRC
     m_BrdSettings->m_TrackMinWidth =
         ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
+#endif
 }
 
 
