@@ -159,7 +159,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
     Build_Board_Ratsnest();
 
     /* Compute the pad connections due to the existing tracks (physical connections) */
-    TestConnections( aDC );
+    TestConnections();
 
     /* Compute the active ratsnest, i.e. the unconnected links
      */
@@ -294,22 +294,19 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 
 /**
  * Function used by TestForActiveLinksInRatsnest
- *  Function testing the ratsnest between 2 blocks ( same net )
+ *  Function testing the ratsnest between 2 blocks ( of the same net )
  *  The search is made between pads in block 1 and the others blocks
- *  The block n ( n > 1 ) is merged with block 1 by the smallest ratsnest
- *  The analysis uses the general ratsnest list.
- *  The function activate the smallest ratsnest between block 1 and the block n
- *  (activate a logical connexion)
+ *  The block n ( n > 1 ) is merged with block 1 and linked by the smallest ratsnest
+ *  between block 1 and the block n (activate the logical connection)
  *  @param  aRatsnestBuffer = the buffer to store NETINFO_ITEM* items
  *  @param  aNetinfo = the current NETINFO_ITEM for the current net
- *      output:
- *          .state member of the ratsnest
- *  @return    blocks not connected count
+ *  output: .state member, bit CH_ACTIF of the ratsnest item
+ *  @return  last subratsnest id in use
  */
-static int tst_rats_block_to_block( NETINFO_ITEM*          aNetinfo,
+static int tst_links_between_blocks( NETINFO_ITEM*          aNetinfo,
                                     vector<RATSNEST_ITEM>& aRatsnestBuffer )
 {
-    int            current_num_block, min_block;
+    int            subratsnest_id, min_id;
     RATSNEST_ITEM* link, * best_link;
 
     /* Search a link from a block to an other block */
@@ -340,35 +337,35 @@ static int tst_rats_block_to_block( NETINFO_ITEM*          aNetinfo,
      * we must set its status to ACTIVE and merge the 2 blocks
      */
     best_link->m_Status |= CH_ACTIF;
-    current_num_block   = best_link->m_PadStart->GetSubRatsnest();
-    min_block = best_link->m_PadEnd->GetSubRatsnest();
+    subratsnest_id   = best_link->m_PadStart->GetSubRatsnest();
+    min_id = best_link->m_PadEnd->GetSubRatsnest();
 
-    if( min_block > current_num_block )
-        EXCHG( min_block, current_num_block );
+    if( min_id > subratsnest_id )
+        EXCHG( min_id, subratsnest_id );
 
     // Merge the 2 blocks in one sub ratsnest:
     for( unsigned ii = 0; ii < aNetinfo->m_ListPad.size(); ii++ )
     {
-        if( aNetinfo->m_ListPad[ii]->GetSubRatsnest() == current_num_block )
+        if( aNetinfo->m_ListPad[ii]->GetSubRatsnest() == subratsnest_id )
         {
-            aNetinfo->m_ListPad[ii]->SetSubRatsnest( min_block );
+            aNetinfo->m_ListPad[ii]->SetSubRatsnest( min_id );
         }
     }
 
-    return current_num_block;
+    return subratsnest_id;
 }
 
 
 /**
  * Function used by TestForActiveLinksInRatsnest_general
  *  The general ratsnest list must exists because this function explores this ratsnest
- *  Activates (i.e. set the CH_ACTIF flag) the ratsnest links between 2 pads when needed
- *  The function links 1 pad not already connected to an other pad (SubRatsnest = 0)
- *  and active the correspondint link
+ *  Activates (i.e. set the CH_ACTIF flag) the ratsnest links between 2 pads when
+ *  at least one pad not already connected (SubRatsnest = 0)
+ *  and actives the corresponding link
  *
  * @param   aFirstItem = starting address for the ratsnest list
  * @param   aLastItem   = ending address for the ratsnest list
- * @param   aCurrSubRatsnestId =  last block number (computed from the track
+ * @param   aCurrSubRatsnestId =  last sub ratsnest id in use (computed from the track
  * analysis)
  *
  *      output:
@@ -377,7 +374,7 @@ static int tst_rats_block_to_block( NETINFO_ITEM*          aNetinfo,
  *
  * @return new block number
  */
-static int tst_rats_pad_to_pad( int            aCurrSubRatsnestId,
+static void tst_links_between_pads( int &      aCurrSubRatsnestId,
                                 RATSNEST_ITEM* aFirstItem,
                                 RATSNEST_ITEM* aLastItem )
 {
@@ -411,8 +408,6 @@ static int tst_rats_pad_to_pad( int            aCurrSubRatsnestId,
             item->m_Status |= CH_ACTIF;
         }
     }
-
-    return aCurrSubRatsnestId;
 }
 
 /* function TestForActiveLinksInRatsnest
@@ -461,13 +456,13 @@ void PCB_BASE_FRAME::TestForActiveLinksInRatsnest( int aNetCode )
             continue;
 
         // Create subratsnests id from subnets created by existing tracks:
-        int num_block = 0;
+        int subratsnest = 0;
         for( unsigned ip = 0; ip < net->m_ListPad.size(); ip++ )
         {
             pad = net->m_ListPad[ip];
             int subnet = pad->GetSubNet();
             pad->SetSubRatsnest( subnet );
-            num_block = MAX( num_block, subnet );
+            subratsnest = MAX( subratsnest, subnet );
         }
 
         for( unsigned ii = net->m_RatsnestStartIdx; ii < net->m_RatsnestEndIdx; ii++ )
@@ -475,16 +470,16 @@ void PCB_BASE_FRAME::TestForActiveLinksInRatsnest( int aNetCode )
             m_Pcb->m_FullRatsnest[ii].m_Status &= ~CH_ACTIF;
         }
 
-        // First pass - activate links for not connected pads pads
+        // First pass - activate links for not connected pads
         rats = &m_Pcb->m_FullRatsnest[0];
-        int icnt = tst_rats_pad_to_pad( num_block,
-                                        rats + net->m_RatsnestStartIdx,
-                                        rats + net->m_RatsnestEndIdx );
+        tst_links_between_pads( subratsnest,
+                                rats + net->m_RatsnestStartIdx,
+                                rats + net->m_RatsnestEndIdx );
 
         // Second pass activate links between blocks (Iteration)
-        while( icnt > 1 )
+        while( subratsnest > 1 )
         {
-            icnt = tst_rats_block_to_block( net, m_Pcb->m_FullRatsnest );
+            subratsnest = tst_links_between_blocks( net, m_Pcb->m_FullRatsnest );
         }
     }
 
@@ -751,16 +746,12 @@ void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
 
 
 /*
- * Construction of the list mode display for quick calculation
- * in real time the net of a pad in the paths of a track starting
- * on the pad.
- *
- * Parameters:
- * Pad_ref (if null: 0 has put the number of ratsnest)
- * Ox, oy = coord of extremity of the track record
- * Init (flag)
- * = 0: update of the ratsnest.
- * <> 0: Creating a list
+ * PCB_BASE_FRAME::BuildAirWiresTargetsList and
+ * PCB_BASE_FRAME::TraceAirWiresToTargets
+ * are 2 function to show the near connecting points when
+ * a new track is created, by displaying g_MaxLinksShowed airwires
+ * between the on grid mouse cursor and these connecting points
+ * during the creation of a track
  */
 
 /* Buffer to store pads coordinates when creating a track.

@@ -529,7 +529,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         DrawPanel->MoveCursorToCrossHair();
-        Fill_All_Zones();
+        Fill_All_Zones( this );
+        DrawPanel->Refresh();
         GetBoard()->DisplayInfo( this );
         break;
 
@@ -557,7 +558,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         SetCurItem( NULL );        // CurItem might be deleted by this command, clear the pointer
-        TestConnections( NULL );
+        TestConnections();
         TestForActiveLinksInRatsnest( 0 );   // Recalculate the active ratsnest, i.e. the unconnected links
         OnModify();
         GetBoard()->DisplayInfo( this );

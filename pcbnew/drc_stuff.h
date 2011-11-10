@@ -263,13 +263,20 @@ private:
      */
     bool testNetClasses();
 
-    void testTracks();
+    /**
+     * Function testTracks
+     * performs the DRC on all tracks.
+     * because this test can take a while, a progrsse bar can be displayed
+     * @param aShowProgressBar = true to show a progrsse bar
+     * (Note: it is shown only if there are many tracks
+     */
+    void testTracks( bool aShowProgressBar );
 
     void testPad2Pad();
 
     void testUnconnected();
 
-    void testZones( bool adoTestFillSegments );
+    void testZones();
 
 
     //-----<single "item" tests>-----------------------------------------

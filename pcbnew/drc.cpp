@@ -230,7 +230,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         aMessages->AppendText( _( "Track clearances...\n" ) );
         wxSafeYield();
     }
-    testTracks();
+    testTracks( true );
 
     // Before testing segments and unconnected, refill all zones:
     // this is a good caution, because filled areas can be outdated.
@@ -240,17 +240,16 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         wxSafeYield();
     }
 
-    m_mainWindow->Fill_All_Zones( false );
-    wxSafeYield();
+    m_mainWindow->Fill_All_Zones( aMessages->GetParent(), false );
 
-    // test zone clearances to other zones, pads, tracks, and vias
-    if( aMessages && m_doZonesTest )
+    // test zone clearances to other zones
+    if( aMessages )
     {
         aMessages->AppendText( _( "Test zones...\n" ) );
         wxSafeYield();
     }
 
-    testZones( m_doZonesTest );
+    testZones();
 
     // find and gather unconnected pads.
     if( m_doUnconnectedTest )
@@ -457,10 +456,44 @@ void DRC::testPad2Pad()
 }
 
 
-void DRC::testTracks()
+#include <wx/progdlg.h>
+/* Function testTracks
+ * performs the DRC on all tracks.
+ * because this test can take a while, a progrsse bar can be displayed
+ * (Note: it is shown only if there are many tracks
+ */
+void DRC::testTracks( bool aShowProgressBar )
 {
-    for( TRACK* segm = m_pcb->m_Track;  segm && segm->Next();  segm = segm->Next() )
+    wxProgressDialog * progressDialog = NULL;
+    const int delta = 500;  // This is the number of tests between 2 calls to the
+                            // progress bar
+    int count = 0;
+    for( TRACK* segm = m_pcb->m_Track; segm && segm->Next(); segm = segm->Next() )
+        count++;
+
+    int deltamax = count/delta;
+    if( aShowProgressBar && deltamax > 3 )
     {
+        progressDialog = new wxProgressDialog( _( "Track clearances" ), wxEmptyString,
+                                     deltamax, m_mainWindow,
+                                     wxPD_AUTO_HIDE | wxPD_CAN_ABORT );
+        progressDialog->Update( 0, wxEmptyString );
+    }
+
+    int ii = 0;
+    count = 0;
+    for( TRACK* segm = m_pcb->m_Track; segm && segm->Next(); segm = segm->Next() )
+    {
+        if ( ii++ > delta )
+        {
+            ii = 0;
+            count++;
+            if( progressDialog )
+            {
+                if( !progressDialog->Update( count, wxEmptyString ) )
+                    break;  // Aborted by user
+            }
+        }
         if( !doTrackDrc( segm, segm->Next(), true ) )
         {
             wxASSERT( m_currentMarker );
@@ -468,6 +501,8 @@ void DRC::testTracks()
             m_currentMarker = 0;
         }
     }
+    if( progressDialog )
+        progressDialog->Destroy();
 }
 
 
@@ -484,13 +519,13 @@ void DRC::testUnconnected()
 
     for( unsigned ii = 0; ii < m_pcb->GetRatsnestsCount();  ++ii )
     {
-        RATSNEST_ITEM* rat = &m_pcb->m_FullRatsnest[ii];
+        RATSNEST_ITEM& rat = m_pcb->m_FullRatsnest[ii];
 
-        if( (rat->m_Status & CH_ACTIF) == 0 )
+        if( (rat.m_Status & CH_ACTIF) == 0 )
             continue;
 
-        D_PAD*    padStart = rat->m_PadStart;
-        D_PAD*    padEnd   = rat->m_PadEnd;
+        D_PAD*    padStart = rat.m_PadStart;
+        D_PAD*    padEnd   = rat.m_PadEnd;
 
         DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_PADS,
                                           padStart->GetSelectMenuText(),
@@ -502,7 +537,7 @@ void DRC::testUnconnected()
 }
 
 
-void DRC::testZones( bool adoTestFillSegments )
+void DRC::testZones()
 {
     // Test copper areas for valid netcodes
     // if a netcode is < 0 the netname was not found when reading a netlist
@@ -526,35 +561,6 @@ void DRC::testZones( bool adoTestFillSegments )
 
     // Test copper areas outlines, and create markers when needed
     m_pcb->Test_Drc_Areas_Outlines_To_Areas_Outlines( NULL, true );
-
-    TRACK* zoneSeg;
-
-    if( !adoTestFillSegments )
-        return;
-
-    // m_pcb->m_Zone is fully obsolete. Keep this test for compatibility
-    // with old designs. Will be removed on day
-    for( zoneSeg = m_pcb->m_Zone;  zoneSeg && zoneSeg->Next(); zoneSeg = zoneSeg->Next() )
-    {
-        // Test zoneSeg with other zone segments and with all pads
-        if( !doTrackDrc( zoneSeg, zoneSeg->Next(), true ) )
-        {
-            wxASSERT( m_currentMarker );
-            m_pcb->Add( m_currentMarker );
-            m_currentMarker = 0;
-        }
-
-        // Pads already tested: disable pad test
-
-        bool rc = doTrackDrc( zoneSeg, m_pcb->m_Track, false );
-
-        if( !rc )
-        {
-            wxASSERT( m_currentMarker );
-            m_pcb->Add( m_currentMarker );
-            m_currentMarker = 0;
-        }
-    }
 }
 
 

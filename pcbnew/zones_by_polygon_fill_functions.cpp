@@ -89,26 +89,18 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, long aTimestamp )
  *  The zone outline is a frontier, and can be complex (with holes)
  *  The filling starts from starting points like pads, tracks.
  * If exists, the old filling is removed
- * @param zone_container = zone to fill
- * @param verbose = true to show error messages
+ * @param aZone = zone to fill
  * @return error level (0 = no error)
  */
-int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
+int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* aZone )
 {
     wxString msg;
 
     ClearMsgPanel();
 
-    if( GetBoard()->ComputeBoundingBox() == false )
-    {
-        if( verbose )
-            wxMessageBox( wxT( "Board is empty!" ) );
-        return -1;
-    }
-
     // Shows the net
-    g_Zone_Default_Setting.m_NetcodeSelection = zone_container->GetNet();
-    msg = zone_container->GetNetName();
+    g_Zone_Default_Setting.m_NetcodeSelection = aZone->GetNet();
+    msg = aZone->GetNetName();
 
     if( msg.IsEmpty() )
         msg = wxT( "No net" );
@@ -117,9 +109,9 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
 
     wxBusyCursor dummy;     // Shows an hourglass cursor (removed by its destructor)
 
-    zone_container->m_FilledPolysList.clear();
-    zone_container->UnFill();
-    zone_container->BuildFilledPolysListData( GetBoard() );
+    aZone->m_FilledPolysList.clear();
+    aZone->UnFill();
+    aZone->BuildFilledPolysListData( GetBoard() );
 
     OnModify();
 
@@ -127,29 +119,34 @@ int PCB_EDIT_FRAME::Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose )
 }
 
 
-/**
+/*
  * Function Fill_All_Zones
  *  Fill all zones on the board
  * The old fillings are removed
- * @param verbose = true to show error messages
- * @return error level (0 = no error)
+ * aActiveWindow = the current active window, if a progress bar is shown
+ *                      = NULL to do not display a progress bar
+ * aVerbose = true to show error messages
+ * return error level (0 = no error)
  */
-int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
+int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose )
 {
     int errorLevel = 0;
     int areaCount = GetBoard()->GetAreaCount();
     wxBusyCursor dummyCursor;
     wxString msg;
     #define FORMAT_STRING _( "Filling zone %d out of %d (net %s)..." )
+    wxProgressDialog * progressDialog = NULL;
 
     // Create a message with a long net name, and build a wxProgressDialog
     // with a correct size to show this long net name
     msg.Printf( FORMAT_STRING, 000, areaCount, wxT("XXXXXXXXXXXXXXXXX" ) );
-    wxProgressDialog progressDialog( _( "Fill All Zones" ), msg,
-                                     areaCount+2, this,
-                                     wxPD_AUTO_HIDE | wxPD_APP_MODAL | wxPD_CAN_ABORT );
+    if( aActiveWindow )
+        progressDialog = new wxProgressDialog( _( "Fill All Zones" ), msg,
+                                     areaCount+2, aActiveWindow,
+                                     wxPD_AUTO_HIDE | wxPD_CAN_ABORT );
     // Display the actual message
-    progressDialog.Update( 0, _( "Starting zone fill..." ) );
+    if( progressDialog )
+        progressDialog->Update( 0, _( "Starting zone fill..." ) );
 
     // Remove segment zones
     GetBoard()->m_Zone.DeleteAll();
@@ -161,21 +158,25 @@ int PCB_EDIT_FRAME::Fill_All_Zones( bool verbose )
         ZONE_CONTAINER* zoneContainer = GetBoard()->GetArea( ii );
         msg.Printf( FORMAT_STRING, ii+1, areaCount, GetChars( zoneContainer->GetNetName() ) );
 
-        if( !progressDialog.Update( ii+1, msg ) )
-            break;
+        if( progressDialog )
+        {
+            if( !progressDialog->Update( ii+1, msg ) )
+                break;  // Aborted by user
+        }
 
-        errorLevel = Fill_Zone( zoneContainer, verbose );
+        errorLevel = Fill_Zone( zoneContainer );
 
-        if( errorLevel && !verbose )
+        if( errorLevel && !aVerbose )
             break;
     }
 
-    progressDialog.Update( ii+2, _( "Updating ratsnest..." ) );
-    TestConnections( NULL );
+    if( progressDialog )
+        progressDialog->Update( ii+2, _( "Updating ratsnest..." ) );
+    TestConnections();
 
     // Recalculate the active ratsnest, i.e. the unconnected links
     TestForActiveLinksInRatsnest( 0 );
-    DrawPanel->Refresh( true );
-
+    if( progressDialog )
+        progressDialog->Destroy();
     return errorLevel;
 }
