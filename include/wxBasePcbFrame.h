@@ -404,7 +404,7 @@ public:
      * Uses data prepared by BuildAirWiresTargetsList()
      * @param aDC = the current device context
      */
-    void TraceAirWiresToTargets( wxDC* DC );
+    void TraceAirWiresToTargets( wxDC* aDC );
 
     /**
      * Function BuildAirWiresTargetsList

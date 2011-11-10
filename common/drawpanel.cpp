@@ -1127,7 +1127,7 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
         m_AbortRequest = true;
 
         if( IsMouseCaptured() )
-            EndMouseCapture( );
+            EndMouseCapture();
         else
             EndMouseCapture( ID_NO_TOOL_SELECTED, m_defaultCursor, wxEmptyString );
 
@@ -1237,9 +1237,10 @@ void EDA_DRAW_PANEL::OnPan( wxCommandEvent& event )
 }
 
 
-void EDA_DRAW_PANEL::EndMouseCapture( int id, int cursor, const wxString& title )
+void EDA_DRAW_PANEL::EndMouseCapture( int id, int cursor, const wxString& title,
+                                      bool aCallEndFunc )
 {
-    if( m_mouseCaptureCallback && m_endMouseCaptureCallback )
+    if( m_mouseCaptureCallback && m_endMouseCaptureCallback && aCallEndFunc )
     {
         INSTALL_UNBUFFERED_DC( dc, this );
         m_endMouseCaptureCallback( this, &dc );

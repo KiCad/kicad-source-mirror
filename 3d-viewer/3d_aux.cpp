@@ -1,6 +1,31 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        3d_aux.cpp
-/////////////////////////////////////////////////////////////////////////////
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file 3d_aux.cpp
+ */
 
 #include "fctsys.h"
 
@@ -23,54 +48,53 @@
 #include "trackball.h"
 
 
-void S3D_MASTER::Set_Object_Coords( S3D_Vertex* coord, int nbcoord )
+void S3D_MASTER::Set_Object_Coords( std::vector< S3D_Vertex >& aVertices )
 {
-    int ii;
-
+    unsigned ii;
 
     /* adjust object scale, rotation and offset position */
-    for( ii = 0; ii < nbcoord; ii++ )
+    for( ii = 0; ii < aVertices.size(); ii++ )
     {
-        coord[ii].x *= m_MatScale.x;
-        coord[ii].y *= m_MatScale.y;
-        coord[ii].z *= m_MatScale.z;
+        aVertices[ii].x *= m_MatScale.x;
+        aVertices[ii].y *= m_MatScale.y;
+        aVertices[ii].z *= m_MatScale.z;
 
         /* adjust rotation */
         if( m_MatRotation.x )
-            RotatePoint( &coord[ii].y, &coord[ii].z, (int) (m_MatRotation.x * 10) );
+            RotatePoint( &aVertices[ii].y, &aVertices[ii].z, (int) (m_MatRotation.x * 10) );
 
         if( m_MatRotation.y )
-            RotatePoint( &coord[ii].z, &coord[ii].x, (int) (m_MatRotation.y * 10) );
+            RotatePoint( &aVertices[ii].z, &aVertices[ii].x, (int) (m_MatRotation.y * 10) );
 
         if( m_MatRotation.z )
-            RotatePoint( &coord[ii].x, &coord[ii].y, (int) (m_MatRotation.z * 10) );
+            RotatePoint( &aVertices[ii].x, &aVertices[ii].y, (int) (m_MatRotation.z * 10) );
 
         /* adjust offset position (offset is given in UNIT 3D (0.1 inch) */
 #define SCALE_3D_CONV (PCB_INTERNAL_UNIT / UNITS3D_TO_UNITSPCB)
-        coord[ii].x += m_MatPosition.x * SCALE_3D_CONV;
-        coord[ii].y += m_MatPosition.y * SCALE_3D_CONV;
-        coord[ii].z += m_MatPosition.z * SCALE_3D_CONV;
+        aVertices[ii].x += m_MatPosition.x * SCALE_3D_CONV;
+        aVertices[ii].y += m_MatPosition.y * SCALE_3D_CONV;
+        aVertices[ii].z += m_MatPosition.z * SCALE_3D_CONV;
     }
 }
 
 
-void Set_Object_Data( const S3D_Vertex* coord, int nbcoord )
+void Set_Object_Data( std::vector< S3D_Vertex >& aVertices )
 {
-    int     ii;
+    unsigned ii;
     GLfloat ax, ay, az, bx, by, bz, nx, ny, nz, r;
 
     /* ignore faces with less than 3 points */
-    if( nbcoord < 3 )
+    if( aVertices.size() < 3 )
         return;
 
     /* calculate normal direction */
-    ax = coord[1].x - coord[0].x;
-    ay = coord[1].y - coord[0].y;
-    az = coord[1].z - coord[0].z;
+    ax = aVertices[1].x - aVertices[0].x;
+    ay = aVertices[1].y - aVertices[0].y;
+    az = aVertices[1].z - aVertices[0].z;
 
-    bx = coord[nbcoord - 1].x - coord[0].x;
-    by = coord[nbcoord - 1].y - coord[0].y;
-    bz = coord[nbcoord - 1].z - coord[0].z;
+    bx = aVertices[aVertices.size() - 1].x - aVertices[0].x;
+    by = aVertices[aVertices.size() - 1].y - aVertices[0].y;
+    bz = aVertices[aVertices.size() - 1].z - aVertices[0].z;
 
     nx = ay * bz - az * by;
     ny = az * bx - ax * bz;
@@ -80,12 +104,14 @@ void Set_Object_Data( const S3D_Vertex* coord, int nbcoord )
 
     if( r >= 0.000001 ) /* avoid division by zero */
     {
-        nx /= r; ny /= r; nz /= r;
+        nx /= r;
+        ny /= r;
+        nz /= r;
         glNormal3f( nx, ny, nz );
     }
 
     /* glBegin/glEnd */
-    switch( nbcoord )
+    switch( aVertices.size() )
     {
     case 3:
         glBegin( GL_TRIANGLES );
@@ -101,11 +127,11 @@ void Set_Object_Data( const S3D_Vertex* coord, int nbcoord )
     }
 
     /* draw polygon/triangle/quad */
-    for( ii = 0; ii < nbcoord; ii++ )
+    for( ii = 0; ii < aVertices.size(); ii++ )
     {
-        glVertex3f( coord[ii].x * DataScale3D,
-                    coord[ii].y * DataScale3D,
-                    coord[ii].z * DataScale3D );
+        glVertex3f( aVertices[ii].x * DataScale3D,
+                    aVertices[ii].y * DataScale3D,
+                    aVertices[ii].z * DataScale3D );
     }
 
     glEnd();
@@ -150,10 +176,6 @@ GLuint EDA_3D_CANVAS::DisplayCubeforTest()
 }
 
 
-/**********************/
-/* class Info_3D_Visu */
-/**********************/
-
 Info_3D_Visu::Info_3D_Visu()
 {
     int ii;
@@ -182,8 +204,6 @@ Info_3D_Visu::~Info_3D_Visu()
 }
 
 
-/* Display and edit a Vertex (triplet of values) in INCHES or MM or without
- * units */
 WinEDA_VertexCtrl::WinEDA_VertexCtrl( wxWindow* parent, const wxString& title,
                                       wxBoxSizer* BoxSizer,
                                       EDA_UNITS_T units, int internal_unit )
@@ -262,7 +282,6 @@ WinEDA_VertexCtrl::~WinEDA_VertexCtrl()
 }
 
 
-/* Returns (in internal units) to coordinate between (in user units) */
 S3D_Vertex WinEDA_VertexCtrl::GetValue()
 {
     S3D_Vertex value;

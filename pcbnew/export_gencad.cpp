@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file export_gencad.cpp
  * @brief Export GenCAD 1.4 format.
@@ -53,6 +78,7 @@ static const wxString GenCAD_Layer_Name[32] =
 int    offsetX, offsetY;
 D_PAD* PadList;
 
+
 /* 2 helper functions to calculate coordinates of modules in gencad values (
  * GenCAD Y axis from bottom to top)
  */
@@ -68,9 +94,6 @@ static int mapYto( int y )
 }
 
 
-/*
- *  Creates an Export file (format GenCAD 1.4) from the current board.
- */
 void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& event )
 {
     wxFileName fn = GetScreen()->GetFileName();
@@ -612,6 +635,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
 
     // Count items
     nbitems = 0;
+
     for( track = pcb->m_Track; track != NULL; track = track->Next() )
         nbitems++;
 
@@ -621,7 +645,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
             nbitems++;
     }
 
-    tracklist = (TRACK**) MyMalloc( (nbitems + 1) * sizeof(TRACK*) );
+    tracklist = (TRACK**) operator new( (nbitems + 1) * sizeof( TRACK* ) );
 
     nbitems = 0;
 
@@ -690,7 +714,7 @@ void CreateRoutesSection( FILE* file, BOARD* pcb )
 
     fputs( "$ENDROUTES\n\n", file );
 
-    free( tracklist );
+    delete tracklist;
 }
 
 
@@ -926,6 +950,5 @@ void FootprintWriteShape( FILE* file, MODULE* module )
         default:
             break;
         }  /* End switch Items type */
-
     }
 }

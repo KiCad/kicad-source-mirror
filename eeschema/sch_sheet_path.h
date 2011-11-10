@@ -317,7 +317,7 @@ public:
     ~SCH_SHEET_LIST()
     {
         if( m_List )
-            free( m_List );
+            delete[] m_List;
 
         m_List = NULL;
     }
@@ -460,10 +460,11 @@ private:
     /**
      * Function BuildSheetList
      * builds the list of sheets and their sheet path from \a aSheet.
-     * If aSheet = g_RootSheet, the full sheet path and sheet list is built
+     * If \a aSheet is the root sheet, the full sheet path and sheet list are built.
      *
-     * @param aSheet is the starting sheet from which the list is built,
-     *   or NULL indicating that g_RootSheet should be used.
+     * @param aSheet is the starting sheet from which the list is built, or NULL
+     *               indicating that g_RootSheet should be used.
+     * @throw std::bad_alloc if the memory for the sheet path list could not be allocated.
      */
     void BuildSheetList( SCH_SHEET* aSheet );
 };

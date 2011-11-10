@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file pcbnew/block.cpp
  */
@@ -57,6 +82,7 @@ static bool blockIncludeBoardOutlineLayer = true;
 static bool blockIncludePcbTexts   = true;
 static bool blockDrawItems = true;
 static bool blockIncludeItemsOnInvisibleLayers = false;
+
 
 /************************************/
 /* class DIALOG_BLOCK_OPTIONS */
@@ -149,14 +175,6 @@ void DIALOG_BLOCK_OPTIONS::ExecuteCommand( wxCommandEvent& event )
 }
 
 
-/**
- * Function ReturnBlockCommand
- * Returns the block command internat code (BLOCK_MOVE, BLOCK_COPY...)
- * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
- * block command is started by dragging the mouse.
- * @param aKey = the key modifiers (Alt, Shift ...)
- * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
- */
 int PCB_EDIT_FRAME::ReturnBlockCommand( int aKey )
 {
     int cmd = 0;
@@ -196,13 +214,6 @@ int PCB_EDIT_FRAME::ReturnBlockCommand( int aKey )
 }
 
 
-/**
- * Function HandleBlockPlace( )
- * Called after HandleBlockEnd, when a block command needs to be
- * executed after the block is moved to its new place
- * (bloc move, drag, copy .. )
- * Parameters must be initialized in GetScreen()->m_BlockLocate
- */
 void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
     if( !DrawPanel->IsMouseCaptured() )
@@ -245,7 +256,7 @@ void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     OnModify();
 
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString, false );
     GetScreen()->ClearBlockCommand();
 
     if( GetScreen()->m_BlockLocate.GetCount() )
@@ -253,22 +264,9 @@ void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         DisplayError( this, wxT( "Error in HandleBlockPLace some items left in list" ) );
         GetScreen()->m_BlockLocate.ClearItemsList();
     }
-
-    DisplayToolMsg( wxEmptyString );
-    DrawPanel->SetCursor( DrawPanel->GetCurrentCursor() );
 }
 
 
-/**
- * Function HandleBlockEnd( )
- * Handle the "end"  of a block command,
- * i.e. is called at the end of the definition of the area of a block.
- * depending on the current block command, this command is executed
- * or parameters are initialized to prepare a call to HandleBlockPlace
- * in GetScreen()->m_BlockLocate
- * @return false if no item selected, or command finished,
- * true if some items found and HandleBlockPlace must be called later
- */
 bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 {
     bool nextcmd = false;       // Will be set to true if a block place is needed
@@ -277,9 +275,9 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     // If coming here after cancel block, clean up and exit
     if( GetScreen()->m_BlockLocate.m_State == STATE_NO_BLOCK )
     {
-        DrawPanel->SetMouseCapture( NULL, NULL );
+        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
+                                    false );
         GetScreen()->ClearBlockCommand();
-        DisplayToolMsg( wxEmptyString );
         return false;
     }
 
@@ -368,22 +366,14 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     if( ! nextcmd )
     {
         GetScreen()->ClearBlockCommand();
-        DrawPanel->SetMouseCapture( NULL, NULL );
-        DisplayToolMsg( wxEmptyString );
+        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
+                                    false );
     }
 
     return nextcmd;
 }
 
 
-/* Block operations: */
-
-/*
- * Function Block_SelectItems
- * Uses GetScreen()->m_BlockLocate
- * select items within the selected block.
- * selected items are put in the pick list
- */
 void PCB_EDIT_FRAME::Block_SelectItems()
 {
     int layerMask;
@@ -598,9 +588,6 @@ static void drawMovingBlock( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 }
 
 
-/*
- * Erase selected block.
- */
 void PCB_EDIT_FRAME::Block_Delete()
 {
     OnModify();
@@ -633,7 +620,7 @@ void PCB_EDIT_FRAME::Block_Delete()
         case PCB_LINE_T:          // a segment not on copper layers
         case PCB_TEXT_T:          // a text on a layer
         case PCB_TRACE_T:         // a track segment (segment on a copper layer)
-        case PCB_VIA_T:           // a via (like atrack segment on a copper layer)
+        case PCB_VIA_T:           // a via (like track segment on a copper layer)
         case PCB_DIMENSION_T:     // a dimension (graphic item)
         case PCB_TARGET_T:        // a target (graphic item)
             item->UnLink();
@@ -661,11 +648,6 @@ void PCB_EDIT_FRAME::Block_Delete()
 }
 
 
-/*
- * Function Block_Rotate
- * Rotate all items within the selected block.
- * The rotation center is the center of the block
- */
 void PCB_EDIT_FRAME::Block_Rotate()
 {
     wxPoint oldpos;
@@ -696,7 +678,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
 
         /* Move and rotate the track segments */
         case PCB_TRACE_T:       // a track segment (segment on a copper layer)
-        case PCB_VIA_T:         // a via (like atrack segment on a copper layer)
+        case PCB_VIA_T:         // a via (like track segment on a copper layer)
             m_Pcb->m_Status_Pcb = 0;
             break;
 
@@ -726,11 +708,6 @@ void PCB_EDIT_FRAME::Block_Rotate()
 }
 
 
-/**
- * Function Block_Flip
- * flips items within the selected block.
- * The flip center is the center of the block
- */
 void PCB_EDIT_FRAME::Block_Flip()
 {
 #define INVERT( pos ) (pos) = center.y - ( (pos) - center.y )
@@ -762,7 +739,7 @@ void PCB_EDIT_FRAME::Block_Flip()
 
         /* Move and rotate the track segments */
         case PCB_TRACE_T:       // a track segment (segment on a copper layer)
-        case PCB_VIA_T:         // a via (like atrack segment on a copper layer)
+        case PCB_VIA_T:         // a via (like track segment on a copper layer)
             m_Pcb->m_Status_Pcb = 0;
             break;
 
@@ -792,12 +769,6 @@ void PCB_EDIT_FRAME::Block_Flip()
 }
 
 
-/*
- * Function Block_Move
- * moves all tracks and segments within the selected block.
- * New location is determined by the current offset from the selected block's
- * original location.
- */
 void PCB_EDIT_FRAME::Block_Move()
 {
     OnModify();
@@ -852,12 +823,6 @@ void PCB_EDIT_FRAME::Block_Move()
 }
 
 
-/*
- * Function Block_Duplicate
- * duplicates all items within the selected block.
- * New location is determined by the current offset from the selected block's
- * original location.
- */
 void PCB_EDIT_FRAME::Block_Duplicate()
 {
     wxPoint MoveVector = GetScreen()->m_BlockLocate.m_MoveVector;

@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file board.cpp
  * @brief Functions for autorouting
@@ -19,10 +44,6 @@
 #include "class_pcb_text.h"
 
 
-/*
- * Calculates nrows and ncols, dimensions of the matrix representation of BOARD
- * for routing and automatic calculation of area.
- */
 bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb )
 {
     aPcb->ComputeBoundingBox();
@@ -51,8 +72,6 @@ bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb )
 }
 
 
-/* class MATRIX_ROUTING_HEAD
- */
 MATRIX_ROUTING_HEAD::MATRIX_ROUTING_HEAD()
 {
     m_BoardSide[0]  = m_BoardSide[1] = NULL;
@@ -70,9 +89,6 @@ MATRIX_ROUTING_HEAD::~MATRIX_ROUTING_HEAD()
 }
 
 
-/* initialize the data structures
- *  returns the RAM size used, or -1 if default
- */
 int MATRIX_ROUTING_HEAD::InitBoard()
 {
     int ii, kk;
@@ -93,19 +109,19 @@ int MATRIX_ROUTING_HEAD::InitBoard()
         m_DirSide[kk]   = NULL;
 
         /* allocate Board & initialize everything to empty */
-        m_BoardSide[kk] = (MATRIX_CELL*) MyZMalloc( ii * sizeof(MATRIX_CELL) );
+        m_BoardSide[kk] = (MATRIX_CELL*) operator new( ii * sizeof(MATRIX_CELL) );
 
         if( m_BoardSide[kk] == NULL )
             return -1;
 
         /***** allocate Distances *****/
-        m_DistSide[kk] = (DIST_CELL*) MyZMalloc( ii * sizeof(DIST_CELL) );
+        m_DistSide[kk] = (DIST_CELL*) operator new( ii * sizeof(DIST_CELL) );
 
         if( m_DistSide[kk] == NULL )
             return -1;
 
         /***** allocate Dir (chars) *****/
-        m_DirSide[kk] = (char*) MyZMalloc( ii );
+        m_DirSide[kk] = (char*) operator new( ii );
 
         if( m_DirSide[kk] == NULL )
             return -1;
@@ -128,21 +144,21 @@ void MATRIX_ROUTING_HEAD::UnInitBoard()
         /***** de-allocate Dir matrix *****/
         if( m_DirSide[ii] )
         {
-            MyFree( m_DirSide[ii] );
+            delete m_DirSide[ii];
             m_DirSide[ii] = NULL;
         }
 
         /***** de-allocate Distances matrix *****/
         if( m_DistSide[ii] )
         {
-            MyFree( m_DistSide[ii] );
+            delete m_DistSide[ii];
             m_DistSide[ii] = NULL;
         }
 
         /**** de-allocate cells matrix *****/
         if( m_BoardSide[ii] )
         {
-            MyFree( m_BoardSide[ii] );
+            delete m_BoardSide[ii];
             m_BoardSide[ii] = NULL;
         }
     }
@@ -151,10 +167,11 @@ void MATRIX_ROUTING_HEAD::UnInitBoard()
 }
 
 
-/* Initialize the cell board is set and VIA_IMPOSSIBLE HOLE according to
- * the setbacks
- * The elements of net_code = net_code will not be occupied as places
- * but only VIA_IMPOSSIBLE
+/**
+ * Function PlaceCells
+ * initializes the cell board is set and VIA_IMPOSSIBLE HOLE according to the setbacks.
+ * The elements of net_code = net_code will not be occupied as places but only
+ * VIA_IMPOSSIBLE
  * For single-sided Routing 1:
  * BOTTOM side is used and Route_Layer_BOTTOM = Route_Layer_TOP
  *

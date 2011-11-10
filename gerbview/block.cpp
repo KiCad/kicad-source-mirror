@@ -1,8 +1,3 @@
-/**
- * @file gerbview/block.cpp
- * @brief Block operations: displacement.
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,6 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file gerbview/block.cpp
+ * @brief Block operations: displacement.
+ */
+
 
 #include "fctsys.h"
 #include "common.h"
@@ -45,10 +45,7 @@
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool erase );
 
-/* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
- *  the key (ALT, SHIFT ALT ..)
- * Currently, only block move and block zoom is supported
- */
+
 int GERBVIEW_FRAME::ReturnBlockCommand( int key )
 {
     int cmd = 0;
@@ -78,7 +75,6 @@ int GERBVIEW_FRAME::ReturnBlockCommand( int key )
 }
 
 
-/* Routine to handle the BLOCK PLACE command */
 void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
 {
     wxASSERT( DrawPanel->IsMouseCaptured() );
@@ -120,9 +116,7 @@ void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
         break;
     }
 
-    DrawPanel->SetMouseCapture( NULL, NULL );
-    DrawPanel->EndMouseCapture( );
-    SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
+    DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString, false );
     GetScreen()->SetModify();
     GetScreen()->ClearBlockCommand();
 
@@ -132,16 +126,6 @@ void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
 }
 
 
-/**
- * Function HandleBlockEnd( )
- * Handle the "end"  of a block command,
- * i.e. is called at the end of the definition of the area of a block.
- * depending on the current block command, this command is executed
- * or parameters are initialized to prepare a call to HandleBlockPlace
- * in GetScreen()->m_BlockLocate
- * @return false if no item selected, or command finished,
- * true if some items found and HandleBlockPlace must be called later
- */
 bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
 {
     bool nextcmd  = false;
@@ -188,10 +172,8 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
     if( ! nextcmd )
     {
         GetScreen()->ClearBlockCommand();
-        DrawPanel->SetMouseCapture( NULL, NULL );
-        DrawPanel->EndMouseCapture( );
-        SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
-        DisplayToolMsg( wxEmptyString );
+        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
+                                    false );
     }
 
     if( zoom_command )
@@ -246,9 +228,6 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 }
 
 
-/*
- * Erase the selected block.
- */
 void GERBVIEW_FRAME::Block_Delete( wxDC* DC )
 {
     if( !IsOK( this, _( "Ok to delete block ?" ) ) )
@@ -272,9 +251,6 @@ void GERBVIEW_FRAME::Block_Delete( wxDC* DC )
 }
 
 
-/*
- *  Function to move items in the current selected block
- */
 void GERBVIEW_FRAME::Block_Move( wxDC* DC )
 {
     wxPoint delta;
@@ -304,9 +280,6 @@ void GERBVIEW_FRAME::Block_Move( wxDC* DC )
 }
 
 
-/*
- *  Function to duplicate items in the current selected block
- */
 void GERBVIEW_FRAME::Block_Duplicate( wxDC* DC )
 {
     wxPoint delta;
@@ -338,4 +311,3 @@ void GERBVIEW_FRAME::Block_Duplicate( wxDC* DC )
 
     DrawPanel->Refresh();
 }
-

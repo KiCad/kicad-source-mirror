@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file muonde.cpp
  * @brief Microwave pcb layout code.
@@ -26,8 +51,8 @@
 
 
 #define COEFF_COUNT 6
-static double* PolyEdges;
-static int     PolyEdgesCount;
+
+static std::vector< double > PolyEdges;
 static double  ShapeScaleX, ShapeScaleY;
 static wxSize  ShapeSize;
 static int     PolyShapeType;
@@ -148,40 +173,6 @@ void PCB_EDIT_FRAME::Begin_Self( wxDC* DC )
 }
 
 
-/* Create a self-shaped coil
- * - Length Mself.lng
- * - Extremities Mself.m_Start and Mself.m_End
- *
- * We must determine:
- * Mself.nbrin = number of segments perpendicular to the direction
- * (The coil nbrin will demicercles + 1 + 2 1 / 4 circle)
- * Mself.lbrin = length of a strand
- * Mself.radius = radius of rounded parts of the coil
- * Mself.delta = segments extremities connection between him and the coil even
- *
- * The equations are
- * Mself.m_Size.x = 2 * Mself.radius + Mself.lbrin
- * Mself.m_Size.y * Mself.delta = 2 + 2 * Mself.nbrin * Mself.radius
- * Mself.lng = 2 * Mself.delta / / connections to the coil
- + (Mself.nbrin-2) * Mself.lbrin / / length of the strands except 1st and last
- + (Mself.nbrin 1) * (PI * Mself.radius) / / length of rounded
- * Mself.lbrin + / 2 - Melf.radius * 2) / / length of 1st and last bit
- *
- * The constraints are:
- * Nbrin >= 2
- * Mself.radius < Mself.m_Size.x
- * Mself.m_Size.y = Mself.radius * 4 + 2 * Mself.raccord
- * Mself.lbrin> Mself.radius * 2
- *
- * The calculation is conducted in the following way:
- * Initially:
- * Nbrin = 2
- * Radius = 4 * m_Size.x (arbitrarily fixed value)
- * Then:
- * Increasing the number of segments to the desired length
- * (Radius decreases if necessary)
- *
- */
 MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
 {
     D_PAD*   PtPad;
@@ -210,7 +201,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     wxTextEntryDialog dlg( this, _( "Length:" ), _( "Length" ), msg );
 
     if( dlg.ShowModal() != wxID_OK )
-        return NULL; // cancelled by user
+        return NULL; // canceled by user
 
     msg = dlg.GetValue();
     Mself.lng = ReturnValueFromString( g_UserUnit, msg, GetScreen()->GetInternalUnits() );
@@ -306,8 +297,9 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
 }
 
 
-/** gen_arc
- * Generate an arc using arc approximation by lines:
+/**
+ * Function  gen_arc
+ * generates an arc using arc approximation by lines:
  * Center aCenter
  * Angle "angle" (in 0.1 deg)
  * @param  aBuffer = a buffer to store points.
@@ -395,7 +387,7 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     // the arc to segment approximation.
     // because we use SEGM_COUNT_PER_360DEG segment to approximate a circle,
     // the trace len must be corrected when calculated using arcs
-    // this factor adjust calculations and must be canged if SEGM_COUNT_PER_360DEG is modified
+    // this factor adjust calculations and must be changed if SEGM_COUNT_PER_360DEG is modified
     // because trace using segment is shorter the corresponding arc
     // ADJUST_SIZE is the ratio between tline len and the arc len for an arc
     // of 360/ADJUST_SIZE angle
@@ -528,10 +520,6 @@ int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
 }
 
 
-/* Create a footprint with pad_count pads for micro wave applications
- *  This footprint has pad_count pads:
- *  PAD_SMD, rectangular, H size = V size = current track width.
- */
 MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_count )
 {
     MODULE*  Module;
@@ -578,12 +566,6 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
 }
 
 
-/* Create a module "GAP" or "STUB"
- *  This a "gap" or  "stub" used in micro wave designs
- *  This module has 2 pads:
- *  PAD_SMD, rectangular, H size = V size = current track width.
- *  the "gap" is isolation created between this 2 pads
- */
 MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
 {
     int      oX;
@@ -759,6 +741,23 @@ public: WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent, const wxPoint& pos );
 private:
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
+
+    /**
+     * Function ReadDataShapeDescr
+     * read a description shape file
+     *  File format is
+     *  Unit=MM
+     *  XScale=271.501
+     *  YScale=1.00133
+     *
+     *  $COORD
+     *  0                      0.6112600148417837
+     *  0.001851851851851852   0.6104800531118608
+     *  ....
+     *  $ENDCOORD
+     *
+     *  Each line is the X Y coord (normalized units from 0 to 1)
+     */
     void ReadDataShapeDescr( wxCommandEvent& event );
     void AcceptOptions( wxCommandEvent& event );
 
@@ -779,11 +778,7 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent,
 {
     m_Parent = parent;
 
-    if( PolyEdges )
-        free( PolyEdges );
-
-    PolyEdges = NULL;
-    PolyEdgesCount = 0;
+    PolyEdges.clear();
 
     wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
     SetSizer( MainBoxSizer );
@@ -825,11 +820,7 @@ WinEDA_SetParamShapeFrame::WinEDA_SetParamShapeFrame( PCB_EDIT_FRAME* parent,
 
 void WinEDA_SetParamShapeFrame::OnCancelClick( wxCommandEvent& event )
 {
-    if( PolyEdges )
-        free( PolyEdges );
-
-    PolyEdges = NULL;
-    PolyEdgesCount = 0;
+    PolyEdges.clear();
     EndModal( -1 );
 }
 
@@ -842,20 +833,6 @@ void WinEDA_SetParamShapeFrame::OnOkClick( wxCommandEvent& event )
 }
 
 
-/* Read a description shape file
- *  File format is
- *  Unit=MM
- *  XScale=271.501
- *  YScale=1.00133
- *
- *  $COORD
- *  0                      0.6112600148417837
- *  0.001851851851851852   0.6104800531118608
- *  ....
- *  $ENDCOORD
- *
- *  Each line is the X Y coord (normalized units from 0 to 1)
- */
 void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
 {
     wxString FullFileName;
@@ -864,8 +841,6 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
     char*    Line;
     double   unitconv = 10000;
     char*    param1, * param2;
-    int      bufsize;
-    double*  ptbuf;
 
     ext  = wxT( ".txt" );
     mask = wxT( "*" ) + ext;
@@ -891,9 +866,6 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
     FILE_LINE_READER fileReader( File, FullFileName );
 
     FILTER_READER reader( fileReader );
-
-    bufsize = 100;
-    ptbuf   = PolyEdges = (double*) MyZMalloc( bufsize * 2 * sizeof(double) );
 
     SetLocaleTo_C_standard();
 
@@ -926,20 +898,8 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
                 if( strnicmp( param1, "$ENDCOORD", 8 ) == 0 )
                     break;
 
-                if( bufsize <= PolyEdgesCount )
-                {
-                    int index = ptbuf - PolyEdges;
-                    bufsize *= 2;
-                    ptbuf    = PolyEdges = (double*) realloc( PolyEdges, bufsize * 2 *
-                                                              sizeof(double) );
-                    ptbuf += index;
-                }
-
-                *ptbuf = atof( param1 );
-                ptbuf++;
-                *ptbuf = atof( param2 );
-                ptbuf++;
-                PolyEdgesCount++;
+                PolyEdges.push_back( atof( param1 ) );
+                PolyEdges.push_back( atof( param2 ) );
             }
         }
 
@@ -952,12 +912,6 @@ void WinEDA_SetParamShapeFrame::ReadDataShapeDescr( wxCommandEvent& event )
         {
             ShapeScaleY = atof( param2 );
         }
-    }
-
-    if( PolyEdgesCount == 0 )
-    {
-        free( PolyEdges );
-        PolyEdges = NULL;
     }
 
     SetLocaleTo_Default();       // revert to the current locale
@@ -988,12 +942,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
 
     if( ok != 1 )
     {
-        if( PolyEdges )
-            free( PolyEdges );
-
-        PolyEdges = NULL;
-        PolyEdgesCount = 0;
-        return NULL;
+        PolyEdges.clear();
     }
 
     if( PolyShapeType == 2 )  // mirrored
@@ -1008,7 +957,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
         return NULL;
     }
 
-    if( PolyEdgesCount == 0 )
+    if( PolyEdges.size() == 0 )
     {
         DisplayError( this, _( "Shape has no points!" ) );
         return NULL;
@@ -1032,21 +981,20 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
 
     edge->m_Shape = S_POLYGON;
     edge->SetLayer( LAYER_N_FRONT );
-    npoints = PolyEdgesCount;
+    npoints = PolyEdges.size();
 
     std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
-    polyPoints.reserve( 2 * PolyEdgesCount + 2 );
+    polyPoints.reserve( 2 * PolyEdges.size() + 2 );
 
     // Init start point coord:
     polyPoints.push_back( wxPoint( pad1->m_Pos0.x, 0 ) );
 
-    double* dptr = PolyEdges;
     wxPoint first_coordinate, last_coordinate;
 
-    for( ii = 0; ii < npoints; ii++ )  // Copy points
+    for( ii = 0; ii < PolyEdges.size(); ii++ )  // Copy points
     {
-        last_coordinate.x = wxRound( *dptr++ *ShapeScaleX ) + pad1->m_Pos0.x;
-        last_coordinate.y = -wxRound( *dptr++ *ShapeScaleY );
+        last_coordinate.x = wxRound( PolyEdges[ii] * ShapeScaleX ) + pad1->m_Pos0.x;
+        last_coordinate.y = -wxRound( PolyEdges[ii] * ShapeScaleY );
         polyPoints.push_back( last_coordinate );
     }
 
@@ -1083,10 +1031,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
         break;
     }
 
-    free( PolyEdges );
-    PolyEdgesCount = 0;
-    PolyEdges = NULL;
-
+    PolyEdges.clear();
     Module->CalculateBoundingBox();
     GetBoard()->m_Status_Pcb = 0;
     OnModify();
@@ -1094,10 +1039,6 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
 }
 
 
-/*
- * Edit the GAP module, if it has changed the position and/or size
- * Pads that form the gap to get a new value of the gap.
- */
 void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* Module )
 {
     int      gap_size, oX;

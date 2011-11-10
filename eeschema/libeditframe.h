@@ -470,8 +470,26 @@ public:
     bool LoadComponentAndSelectLib( LIB_ALIAS* aLibEntry, CMP_LIBRARY* aLibrary );
 
     /* Block commands: */
+
+    /**
+     * Function ReturnBlockCommand
+     * returns the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
+     * the \a aKey (ALT, SHIFT ALT ..)
+     */
     virtual int ReturnBlockCommand( int aKey );
+
+    /**
+     * Function HandleBlockPlace
+     * handles the block place command.
+     */
     virtual void HandleBlockPlace( wxDC* DC );
+
+    /**
+     * Function HandleBlockEnd
+     * performs a block end command.
+     * @return If command finished (zoom, delete ...) false is returned otherwise true
+     *         is returned indicating more processing is required.
+     */
     virtual bool HandleBlockEnd( wxDC* DC );
 
     void PlacePin( wxDC* DC );

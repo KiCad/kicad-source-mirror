@@ -71,13 +71,11 @@ static bool HasNonSMDPins( MODULE* aModule )
 #endif
 
 
-/* Generate the module positions, used component placement.
- */
 void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
 {
     bool        doBoardBack = false;
     MODULE*     module;
-    LIST_MOD*   Liste = 0;
+    LIST_MOD*   list = NULL;
     char        line[1024];
     wxFileName  fnFront;
     wxFileName  fnBack;
@@ -192,7 +190,7 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
     AppendMsgPanel( _( "Module count" ), msg, RED );
 
     // Sort the list of modules alphabetically
-    Liste = (LIST_MOD*) MyZMalloc( moduleCount * sizeof(LIST_MOD) );
+    list = new LIST_MOD[moduleCount];
 
     module = GetBoard()->m_Modules;
 
@@ -204,13 +202,13 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
         if( (module->m_Attributs & MOD_CMS)  == 0 )
             continue;
 
-        Liste[ii].m_Module    = module;
-        Liste[ii].m_Reference = module->m_Reference->m_Text;
-        Liste[ii].m_Value     = module->m_Value->m_Text;
+        list[ii].m_Module    = module;
+        list[ii].m_Reference = module->m_Reference->m_Text;
+        list[ii].m_Value     = module->m_Value->m_Text;
         ii++;
     }
 
-    qsort( Liste, moduleCount, sizeof(LIST_MOD), ListeModCmp );
+    qsort( list, moduleCount, sizeof(LIST_MOD), ListeModCmp );
 
     // Write file header
     sprintf( line, "### Module positions - created on %s ###\n", TO_UTF8( DateAndTime() ) );
@@ -251,11 +249,11 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
     for( int ii = 0; ii < moduleCount; ii++ )
     {
         wxPoint  module_pos;
-        wxString ref = Liste[ii].m_Reference;
-        wxString val = Liste[ii].m_Value;
+        wxString ref = list[ii].m_Reference;
+        wxString val = list[ii].m_Value;
         sprintf( line, "%-8.8s %-16.16s ", TO_UTF8( ref ), TO_UTF8( val ) );
 
-        module_pos    = Liste[ii].m_Module->m_Pos;
+        module_pos    = list[ii].m_Module->m_Pos;
         module_pos.x -= File_Place_Offset.x;
         module_pos.y -= File_Place_Offset.y;
 
@@ -263,9 +261,9 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
         sprintf( text, " %9.4f  %9.4f  %8.1f    ",
                  module_pos.x * conv_unit,
                  module_pos.y * conv_unit,
-                 double(Liste[ii].m_Module->m_Orient) / 10 );
+                 double(list[ii].m_Module->m_Orient) / 10 );
 
-        int layer = Liste[ii].m_Module->GetLayer();
+        int layer = list[ii].m_Module->GetLayer();
 
         wxASSERT( layer==LAYER_N_FRONT || layer==LAYER_N_BACK );
 
@@ -303,8 +301,8 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
 
 exit:   // the only safe way out of here, no returns please.
 
-    if( Liste )
-        MyFree( Liste );
+    if( list )
+        delete[] list;
 
     if( switchedLocale )
         SetLocaleTo_Default( );      // revert to the current locale

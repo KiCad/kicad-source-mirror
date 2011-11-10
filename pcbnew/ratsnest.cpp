@@ -871,25 +871,21 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
 }
 
 
-/* Function TraceAirWiresToTargets
- * This functions shows airwires to nearest connecting points (pads)
- * from the current new track end during track creation
- */
-void PCB_BASE_FRAME::TraceAirWiresToTargets( wxDC* DC )
+void PCB_BASE_FRAME::TraceAirWiresToTargets( wxDC* aDC )
 {
-    if( DC == NULL )
+    if( aDC == NULL )
         return;
 
     if( s_TargetsLocations.size() == 0 )
         return;
 
-    GRSetDrawMode( DC, GR_XOR );
+    GRSetDrawMode( aDC, GR_XOR );
 
     for( int ii = 0; ii < (int) s_TargetsLocations.size(); ii++ )
     {
         if( ii >= g_MaxLinksShowed )
             break;
 
-        GRLine( &DrawPanel->m_ClipBox, DC, s_CursorPos, s_TargetsLocations[ii], 0, YELLOW );
+        GRLine( &DrawPanel->m_ClipBox, aDC, s_CursorPos, s_TargetsLocations[ii], 0, YELLOW );
     }
 }

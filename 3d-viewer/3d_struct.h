@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file 3d_struct.h
  */
@@ -32,7 +57,9 @@ class S3D_Vertex    /*  3D coordinate (3 float numbers: x,y,z coordinates)*/
 {
 public:
     double x, y, z;
-public: S3D_Vertex();
+
+public:
+    S3D_Vertex();
 };
 
 class S3D_MATERIAL : public EDA_ITEM       /* openGL "material" data*/
@@ -46,7 +73,8 @@ public:
     float      m_Transparency;
     float      m_Shininess;
 
-public: S3D_MATERIAL( S3D_MASTER* father, const wxString& name );
+public:
+    S3D_MATERIAL( S3D_MASTER* father, const wxString& name );
 
     S3D_MATERIAL* Next() const { return (S3D_MATERIAL*) Pnext; }
     S3D_MATERIAL* Back() const { return (S3D_MATERIAL*) Pback; }
@@ -66,7 +94,8 @@ public:
     Struct3D_Shape* m_3D_Drawings;
     S3D_MATERIAL*   m_Materials;
 
-public: S3D_MASTER( EDA_ITEM* aParent );
+public:
+    S3D_MASTER( EDA_ITEM* aParent );
     ~S3D_MASTER();
 
     S3D_MASTER* Next() const { return (S3D_MASTER*) Pnext; }
@@ -81,12 +110,27 @@ public: S3D_MASTER( EDA_ITEM* aParent );
 
     void Copy( S3D_MASTER* pattern );
     int  ReadData();
+
+    /**
+     * Function ReadMaterial
+     * read the description of a 3D material definition in the form:
+     * DEF yellow material Material (
+     * DiffuseColor 1.00000 1.00000 0.00000e 0
+     * EmissiveColor 0.00000e 0 0.00000e 0 0.00000e 0
+     * SpecularColor 1.00000 1.00000 1.00000
+     * AmbientIntensity 1.00000
+     * Transparency 0.00000e 0
+     * Shininess 1.00000
+     *)
+     * Or type:
+     * USE yellow material
+     */
     int  ReadMaterial( FILE* file, int* LineNum );
     int  ReadChildren( FILE* file, int* LineNum );
     int  ReadShape( FILE* file, int* LineNum );
     int  ReadAppearance( FILE* file, int* LineNum );
     int  ReadGeometry( FILE* file, int* LineNum );
-    void Set_Object_Coords( S3D_Vertex* coord, int nbcoord );
+    void Set_Object_Coords( std::vector< S3D_Vertex >& aVertices );
 };
 
 
@@ -98,7 +142,8 @@ public:
     int*        m_3D_CoordIndex;
     int         m_3D_Points;
 
-public: Struct3D_Shape( EDA_ITEM* aParent );
+public:
+    Struct3D_Shape( EDA_ITEM* aParent );
     ~Struct3D_Shape();
 
     Struct3D_Shape* Next() const { return (Struct3D_Shape*) Pnext; }
@@ -108,11 +153,13 @@ public: Struct3D_Shape( EDA_ITEM* aParent );
 };
 
 
-/* Display and edit a Vertex (triplet of values) in INCHES or MM or without
- * units.
- * internal_unit is the internal unit number by inch:
- * - 1000 for EESchema
- * - 10000 for PcbNew
+/**
+ * Class WinEDA_VertexCtrl
+ * displays a vertex for editing.  A vertex is a triplet of values in INCHES, MM,
+ * or without units.
+ *
+ * Internal_units are the internal units by inch which is  1000 for Eeschema and
+ * 10000 for Pcbnew
  */
 class WinEDA_VertexCtrl
 {
@@ -128,6 +175,10 @@ public:
 
     ~WinEDA_VertexCtrl();
 
+    /**
+     * Function GetValue
+     * @return the vertex in internal units.
+     */
     S3D_Vertex GetValue();
     void       SetValue( S3D_Vertex vertex );
     void       Enable( bool enbl );

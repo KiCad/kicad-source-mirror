@@ -295,9 +295,11 @@ public:
      *                  current cursor.
      * @param aTitle The tool message to display in the status bar or wxEmptyString to clear
      *               the message.
+     * @param aCallEndFunc Call the abort mouse capture callback if true.
      */
     void EndMouseCapture( int aId = -1, int aCursorId = -1,
-                          const wxString& aTitle = wxEmptyString );
+                          const wxString& aTitle = wxEmptyString,
+                          bool aCallEndFunc = true );
 
     inline bool IsMouseCaptured() const { return m_mouseCaptureCallback != NULL; }
 

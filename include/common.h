@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * The common library
  * @file common.h
@@ -144,7 +169,12 @@ extern wxString       g_UserLibDirBuffer;
 
 extern bool           g_ShowPageLimits; // true to display the page limits
 
-/* File name extension definitions. */
+/**
+ * File extension definitions.  Please do not changes these.  If a different
+ * file extension is needed, create a new definition in the application.
+ * Please note, just because they are defined as const doesn't guarantee
+ * that they cannot be changed.
+ */
 extern const wxString ProjectFileExtension;
 extern const wxString SchematicFileExtension;
 extern const wxString NetlistFileExtension;
@@ -153,6 +183,7 @@ extern const wxString PcbFileExtension;
 extern const wxString PdfFileExtension;
 extern const wxString MacrosFileExtension;
 
+/// Proper wxFileDialog wild card definitions.
 extern const wxString ProjectFileWildcard;
 extern const wxString SchematicFileWildcard;
 extern const wxString BoardFileWildcard;
@@ -172,7 +203,7 @@ extern wxString     g_Prj_Config_LocalFilename;
 
 extern EDA_UNITS_T  g_UserUnit;     ///< display units
 
-/* Draw color for moving objects: */
+/// Draw color for moving objects.
 extern int          g_GhostColor;
 
 
@@ -190,7 +221,7 @@ extern int          g_GhostColor;
  *  This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
  *  but could make more easier an optional use of locale in KiCad
  */
-void               SetLocaleTo_C_standard( void );
+void SetLocaleTo_C_standard( void );
 
 /**
  * Function SetLocaleTo_Default
@@ -203,7 +234,7 @@ void               SetLocaleTo_C_standard( void );
  *  This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
  *  but could make more easier an optional use of locale in KiCad
  */
-void               SetLocaleTo_Default( void );
+void SetLocaleTo_Default( void );
 
 
 /**
@@ -219,8 +250,7 @@ void               SetLocaleTo_Default( void );
  *   the text already within the control is used.
  * @return bool - true if the \a aCtrl had its size changed, else false.
  */
-bool               EnsureTextCtrlWidth( wxTextCtrl*     aCtrl,
-                                        const wxString* aString = NULL );
+bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = NULL );
 
 
 /**
@@ -292,8 +322,8 @@ wxString CoordinateToString( int aValue, int aInternalUnits, bool aConvertToMils
  *                        the format string must contain the %s format specifier.
  * @return The formatted units symbol.
  */
-wxString        ReturnUnitSymbol( EDA_UNITS_T aUnits = g_UserUnit,
-                                  const wxString& aFormatString = _( " (%s):" ) );
+wxString ReturnUnitSymbol( EDA_UNITS_T aUnits = g_UserUnit,
+                           const wxString& aFormatString = _( " (%s):" ) );
 
 /**
  * Get a human readable units string.
@@ -304,11 +334,18 @@ wxString        ReturnUnitSymbol( EDA_UNITS_T aUnits = g_UserUnit,
  * @param aUnits - The units text to return.
  * @return The human readable units string.
  */
-wxString        GetUnitsLabel( EDA_UNITS_T aUnits );
-wxString        GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit = g_UserUnit );
+wxString GetUnitsLabel( EDA_UNITS_T aUnits );
+wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit = g_UserUnit );
 
-int             ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue,
-                                       int Internal_Unit );
+/**
+ * Function ReturnValueFromeString
+ * @return The string from Value, according to units (inch, mm ...) for display,
+ *  and the initial unit for value
+ *  Unit = display units (INCH, MM ..)
+ *  Value = text
+ *  Internal_Unit = units per inch for computed value
+ */
+int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Internal_Unit );
 
 /**
  * Function ReturnStringFromValue
@@ -321,24 +358,28 @@ int             ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextVa
  * @return a wxString what contains value and optionally the symbol unit (like
  *         2.000 mm)
  */
-wxString        ReturnStringFromValue( EDA_UNITS_T aUnit,
-                                       int  aValue,
-                                       int  aInternal_Unit,
-                                       bool aAdd_unit_symbol = false );
+wxString ReturnStringFromValue( EDA_UNITS_T aUnit,
+                                int  aValue,
+                                int  aInternal_Unit,
+                                bool aAdd_unit_symbol = false );
 
 
-void            AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
+/**
+ * Function AddUnitSymbol
+ * adds string "  (mm):" or " ("):" to the static text Stext.
+ * Used in dialog boxes for entering values depending on selected units
+ */
+void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
 
 /* Add string "  (mm):" or " ("):" to the static text Stext.
  *  Used in dialog boxes for entering values depending on selected units */
-void            PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value,
-                                      int Internal_Unit );
+void PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value, int Internal_Unit );
 
-/* Convert the number Value in a string according to the internal units
+/**
+ * Convert the number Value in a string according to the internal units
  *  and the selected unit (g_UserUnit) and put it in the wxTextCtrl TextCtrl
- **/
-int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
-                                         int               Internal_Unit );
+ */
+int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit );
 
 #ifdef KICAD_NANOMETRE
 
@@ -348,6 +389,7 @@ struct LENGTH_UNIT_DESC
     const wxString m_Symbol;
     int            m_Precision;
 };
+
 extern const LENGTH_UNIT_DESC g_MillimetreDesc, g_InchDesc, g_MilDesc;
 
 const LENGTH_UNIT_DESC *UnitDescription( EDA_UNITS_T aUnit );
@@ -358,10 +400,17 @@ wxString         LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_DEF aValu
 
 void             LengthToTextCtrl( wxTextCtrl& TextCtr, LENGTH_DEF Value );
 LENGTH_DEF       LengthFromTextCtrl( const wxTextCtrl& TextCtr );
+
 #endif
 
-/* return a String List from a string, with a specific splitter*/
-wxArrayString*  wxStringSplit( wxString txt, wxChar splitter );
+/**
+ * Function wxStringSplit
+ * splita \a aString to a string list when split by \a aSplitter.
+ * @return the list
+ * @param aString : wxString : a String text
+ * @param aSplitter : wxChar : the 'split' character
+ */
+wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter );
 
 /**
  * Function To_User_Unit
@@ -371,16 +420,18 @@ wxArrayString*  wxStringSplit( wxString txt, wxChar splitter );
  * @param val : double : the given value
  * @param internal_unit_value = internal units per inch
  */
-double          To_User_Unit( EDA_UNITS_T aUnit,
-                              double val,
-                              int    internal_unit_value );
+double To_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value );
 
-int             From_User_Unit( EDA_UNITS_T aUnit,
-                                double val,
-                                int    internal_unit_value );
-wxString        GenDate();
-void            MyFree( void* pt_mem );
-void*           MyZMalloc( size_t nb_octets );
-void*           MyMalloc( size_t nb_octets );
+/*
+ * Return in internal units the value "val" given in inch or mm
+ */
+int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value );
+
+/**
+ * Function GenDate
+ * @return A wsString object containg the date in the format "day month year" like
+ *         "23 jun 2005".
+ */
+wxString GenDate();
 
 #endif  // __INCLUDE__COMMON_H__

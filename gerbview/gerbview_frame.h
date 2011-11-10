@@ -383,12 +383,31 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     void OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
 
-    /* handlers for block commands */
+    /**
+     * Function ReturnBlockCommand
+     * returns the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
+     * the \a aKey (ALT, SHIFT ALT ..)
+     */
     virtual int ReturnBlockCommand( int key );
-    virtual void HandleBlockPlace( wxDC* DC );
-    virtual bool HandleBlockEnd( wxDC* DC );
 
-    /* Block operations: */
+    /**
+     * Function HandleBlockPlace
+     * handles the block place command.
+     */
+    virtual void HandleBlockPlace( wxDC* DC );
+
+    /**
+     * Function HandleBlockEnd( )
+     * handles the end of a block command,
+     * It is called at the end of the definition of the area of a block.
+     * Depending on the current block command, this command is executed
+     * or parameters are initialized to prepare a call to HandleBlockPlace
+     * in GetScreen()->m_BlockLocate
+     *
+     * @return false if no item selected, or command finished,
+     *         true if some items found and HandleBlockPlace must be called later.
+     */
+    virtual bool HandleBlockEnd( wxDC* DC );
 
     /**
      * Function Block_Delete
