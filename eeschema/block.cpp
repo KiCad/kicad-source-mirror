@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2009-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file eeschema/block.cpp
  */
@@ -39,9 +64,6 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                      const wxPoint& aPosition, bool aErase );
 
 
-/* Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
- *  the key (ALT, SHIFT ALT ..)
- */
 int SCH_EDIT_FRAME::ReturnBlockCommand( int key )
 {
     int cmd;
@@ -78,8 +100,6 @@ int SCH_EDIT_FRAME::ReturnBlockCommand( int key )
 }
 
 
-/* Init the parameters used by the block paste command
- */
 void SCH_EDIT_FRAME::InitBlockPasteInfos()
 {
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
@@ -89,11 +109,6 @@ void SCH_EDIT_FRAME::InitBlockPasteInfos()
 }
 
 
-/* Routine to handle the BLOCK PLACE command
- *  Last routine for block operation for:
- *  - block move & drag
- *  - block copy & paste
- */
 void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
@@ -175,22 +190,11 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         block->ClearItemsList();
     }
 
-    DrawPanel->SetMouseCapture( NULL, NULL );
-    SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
+    DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString, false );
     DrawPanel->Refresh();
 }
 
 
-/**
- * Function HandleBlockEnd( )
- * Handle the "end"  of a block command,
- * i.e. is called at the end of the definition of the area of a block.
- * depending on the current block command, this command is executed
- * or parameters are initialized to prepare a call to HandleBlockPlace
- * in GetScreen()->m_BlockLocate
- * @return false if no item selected, or command finished,
- * true if some items found and HandleBlockPlace must be called later
- */
 bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 {
     bool            nextcmd = false;
@@ -309,8 +313,8 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         block->m_State   = STATE_NO_BLOCK;
         block->m_Command = BLOCK_IDLE;
         GetScreen()->SetCurItem( NULL );
-        DrawPanel->SetMouseCapture( NULL, NULL );
-        SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
+        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
+                                    false );
     }
 
     if( zoom_command )
@@ -320,15 +324,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 }
 
 
-/* Manage end block command from context menu.
- * Can be called only :
- *      after HandleBlockEnd
- *      and if the current command is block move.
- * Execute a command other than block move from the current block move selected items list.
- * Due to (minor) problems in undo/redo or/and display block,
- * a mirror/rotate command is immediately executed and multiple block commands
- * are not allowed (multiple commands are tricky to undo/redo in one time)
- */
 void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 {
     bool blockCmdFinished = true;   /* set to false for block command which
@@ -474,8 +469,8 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
     {
         block->Clear();
         GetScreen()->SetCurItem( NULL );
-        DrawPanel->SetMouseCapture( NULL, NULL );
-        SetToolID( GetToolId(), DrawPanel->GetDefaultCursor(), wxEmptyString );
+        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
+                                    false );
     }
 }
 
@@ -536,10 +531,6 @@ void SCH_EDIT_FRAME::copyBlockItems( PICKED_ITEMS_LIST& aItemsList )
 }
 
 
-/*****************************************************************************
-* Routine to paste a structure from the m_blockItems stack.
-*   This routine is the same as undelete but original list is NOT removed.
-*****************************************************************************/
 void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 {
     SCH_ITEM* Struct;

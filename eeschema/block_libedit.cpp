@@ -42,10 +42,6 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
                                      bool aErase );
 
 
-/*
- * Return the block command (BLOCK_MOVE, BLOCK_COPY...) corresponding to
- *  the key (ALT, SHIFT ALT ..)
- */
 int LIB_EDIT_FRAME::ReturnBlockCommand( int key )
 {
     int cmd;
@@ -86,13 +82,6 @@ int LIB_EDIT_FRAME::ReturnBlockCommand( int key )
 }
 
 
-/*
- * Command BLOCK END (end of block sizing)
- *  return :
- *  0 if command finished (zoom, delete ...)
- *  1 if HandleBlockPlace must follow (items found, and a block place
- * command must follow)
- */
 bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 {
     int ItemCount = 0;
@@ -216,8 +205,8 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
         GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
         GetScreen()->SetCurItem( NULL );
-        DrawPanel->SetMouseCapture( NULL, NULL );
-        SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
+        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
+                                    false );
         DrawPanel->Refresh( true );
     }
 
@@ -225,12 +214,6 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 }
 
 
-/*
- * Routine to handle the BLOCK PLACE command
- *  Last routine for block operation for:
- *  - block move & drag
- *  - block copy & paste
- */
 void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
     wxPoint pt;
@@ -319,9 +302,8 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
     GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
     GetScreen()->SetCurItem( NULL );
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString, false );
     DrawPanel->Refresh( true );
-    SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
 }
 
 

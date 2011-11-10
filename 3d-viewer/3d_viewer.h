@@ -1,6 +1,32 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file 3d_viewer.h
  */
+
 #ifndef __3D_VIEWER_H__
 #define __3D_VIEWER_H__
 
@@ -130,7 +156,7 @@ public:
     double    m_BoardScale;     /* Normalization scale for coordinates:
                                  * when scaled between -1.0 and +1.0 */
     double    m_LayerZcoord[32];
-    double	  m_ActZpos;
+    double    m_ActZpos;
 
 public: Info_3D_Visu();
     ~Info_3D_Visu();
@@ -175,6 +201,11 @@ public:
     void   OnEnterWindow( wxMouseEvent& event );
 
     void   Render();
+
+    /**
+     * Function CreateDrawGL_List
+     * creates the OpenGL draw list items.
+     */
     GLuint CreateDrawGL_List();
     void   InitGL();
     void   SetLights();
@@ -194,11 +225,28 @@ public:
      * @param aZpos = the z position in 3D units
     */
     void   Draw3D_Polygon( std::vector<wxPoint>& aCornersList, double aZpos );
+
+    /**
+     * Function Draw3D_Via
+     * draws 3D via as a cylinder and filled circles.
+     */
     void   Draw3D_Via( SEGVIA* via );
     void   Draw3D_DrawSegment( DRAWSEGMENT* segment );
+
+    /**
+     * Function Draw3D_DrawText
+     * draws 3D segments to create text objects.
+     * When DrawGraphicText is called to draw a text to an OpenGL DC
+     * it calls Draw3dTextSegm to each segment to draw.
+     * 2 parameters used by Draw3D_FilledSegment are not handled by DrawGraphicText
+     * but are used in Draw3D_FilledSegment().
+     * they are 2 local variables. This is an ugly, but trivial code.
+     * Using DrawGraphicText to draw all texts ensure texts have the same shape
+     * in all contexts
+     */
     void   Draw3D_DrawText( TEXTE_PCB* text );
 
-    /// Toggles ortographic projection on and off
+    /// Toggles orthographic projection on and off
     void ToggleOrtho(){ m_ortho = !m_ortho ; Refresh(true);};
 
     /// Returns the orthographic projection flag
@@ -277,8 +325,8 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-void     SetGLColor( int color );
-void     Set_Object_Data( const S3D_Vertex* coord, int nbcoord );
+void SetGLColor( int color );
+void Set_Object_Data( std::vector< S3D_Vertex >& aVertices );
 
 extern Info_3D_Visu g_Parm_3D_Visu;
 extern double       g_Draw3d_dx, g_Draw3d_dy;

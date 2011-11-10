@@ -713,7 +713,10 @@ private:
      */
     SCH_NO_CONNECT* AddNoConnect( wxDC* aDC, const wxPoint& aPosition );
 
-    // Junction
+    /**
+     * Function AddJunction
+     * adds a new junction at \a aPosition.
+     */
     SCH_JUNCTION* AddJunction( wxDC* aDC, const wxPoint& aPosition, bool aPutInUndoList = false );
 
     /**
@@ -738,9 +741,26 @@ private:
      */
     void OnConvertTextType( wxCommandEvent& aEvent );
 
-    // Wire, Bus
+    /**
+     * Function BeginSegment
+     * creates a new segment ( WIRE, BUS ) or terminates the current segment in progress.
+     *
+     * If the end of the current segment is on an other segment, place a junction if needed
+     * and terminates the command.  If the end of the current segment is on a pin, terminate
+     * the command.  In all other cases starts a new segment.
+     */
     void BeginSegment( wxDC* DC, int type );
+
+    /**
+     * Function EndSegment
+     * called to terminate a bus, wire, or line creation
+     */
     void EndSegment( wxDC* DC );
+
+    /**
+     * Function DeleteCurrentSegment
+     * erases the last segment at the current mouse position.
+     */
     void DeleteCurrentSegment( wxDC* DC );
     void DeleteConnection( bool DeleteFullConnection );
 
@@ -870,6 +890,10 @@ private:
     void EditComponentFieldText( SCH_FIELD* aField, wxDC* aDC );
     void RotateField( SCH_FIELD* aField, wxDC* aDC );
 
+    /**
+     * Function PastListOfItems
+     * pastes a list of items from the block stack.
+     */
     void PasteListOfItems( wxDC* DC );
 
     /* Undo - redo */
@@ -967,8 +991,21 @@ private:
 public:
     void Key( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct );
 
-    /* Block operations. */
+    /**
+     * Function InitBlockPasteInfos
+     * initializes the parameters used by the block paste command.
+     */
     void InitBlockPasteInfos();
+
+    /* Function HandleBlockEndByPopUp
+     * performs an end block command from context menu.
+     *
+     * This can be called only after HandleBlockEnd and the current command is block
+     * move.  Execute a command other than block move from the current block move
+     * selected items list.  Due to (minor) problems in undo/redo or/and display block,
+     * a mirror/rotate command is immediately executed and multiple block commands are
+     * not allowed (multiple commands are tricky to undo/redo in one time)
+     */
     void HandleBlockEndByPopUp( int Command, wxDC* DC );
 
     /**
@@ -979,7 +1016,7 @@ public:
      * @param aKey = the key modifiers (Alt, Shift ...)
      * @return the block command id (BLOCK_MOVE, BLOCK_COPY...)
      */
-    virtual int  ReturnBlockCommand( int aKey );
+    virtual int ReturnBlockCommand( int aKey );
 
     /**
      * Function HandleBlockPlace
@@ -1002,6 +1039,13 @@ public:
      */
     virtual bool HandleBlockEnd( wxDC* DC );
 
+    /**
+     * Function RepeatDrawItem
+     * repeats the last item placement if the last item was a bus, bus entry,
+     * label, or component.
+     *
+     * Labels that end with a number will be incremented.
+     */
     void RepeatDrawItem( wxDC* DC );
 
     void SetRepeatItem( SCH_ITEM* aItem ) { m_itemToRepeat = aItem; }

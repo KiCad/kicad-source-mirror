@@ -276,12 +276,9 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
                                 int aColor, int aDrawMode, void* aData,
                                 const TRANSFORM& aTransform )
 {
-    wxPoint         pos1;
-    int             color = ReturnLayerColor( LAYER_DEVICE );
-
-    // Buffer used to store current corners coordinates for drawings
-    static wxPoint* Buf_Poly_Drawings = NULL;
-    static unsigned Buf_Poly_Size     = 0;
+    wxPoint  pos1;
+    int      color = ReturnLayerColor( LAYER_DEVICE );
+    wxPoint* buffer = NULL;
 
     if( aColor < 0 )                // Used normal color or selected color
     {
@@ -293,29 +290,11 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
         color = aColor;
     }
 
-    // Set the size of the buffer of coordinates
-    if( Buf_Poly_Drawings == NULL )
-    {
-        Buf_Poly_Size     = m_PolyPoints.size();
-        Buf_Poly_Drawings = (wxPoint*) MyMalloc( sizeof(wxPoint) * Buf_Poly_Size );
-    }
-    else if( Buf_Poly_Size < m_PolyPoints.size() )
-    {
-        Buf_Poly_Size     = m_PolyPoints.size();
-        Buf_Poly_Drawings = (wxPoint*) realloc( Buf_Poly_Drawings,
-                                                sizeof(wxPoint) * Buf_Poly_Size );
-    }
-
-    // This should probably throw an exception instead of displaying a warning message.
-    if( Buf_Poly_Drawings == NULL )
-    {
-        wxLogWarning( wxT( "Cannot allocate memory to draw polylines." ) );
-        return;
-    }
+    buffer = new wxPoint[ m_PolyPoints.size() ];
 
     for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
     {
-        Buf_Poly_Drawings[ii] = aTransform.TransformCoordinate( m_PolyPoints[ii] ) + aOffset;
+        buffer[ii] = aTransform.TransformCoordinate( m_PolyPoints[ii] ) + aOffset;
     }
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
@@ -326,16 +305,17 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
     GRSetDrawMode( aDC, aDrawMode );
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                Buf_Poly_Drawings, 1, GetPenSize(),
+        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
                 (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
                 ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
-        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                Buf_Poly_Drawings, 1, GetPenSize(), color, color );
+        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
+                color, color );
     else
-        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
-                Buf_Poly_Drawings, 0, GetPenSize(), color, color );
+        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(), buffer, 0, GetPenSize(),
+                color, color );
+
+    delete[] buffer;
 
     /* Set to one (1) to draw bounding box around polyline to validate
      * bounding box calculation. */

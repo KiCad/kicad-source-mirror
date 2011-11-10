@@ -537,13 +537,7 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet )
         int count = aSheet->CountSheets();
         m_count = count;
         m_index = 0;
-        count  *= sizeof(SCH_SHEET_PATH);
-
-        /* @bug - MyZMalloc() can return a NULL pointer if there is not enough
-         *        memory.  This code continues on it's merry way with out
-         *        checking to see if the memory was actually allocated.
-         */
-        m_List  = (SCH_SHEET_PATH*) MyZMalloc( count );
+        m_List = new SCH_SHEET_PATH[ count ];
         m_currList.Clear();
     }
 

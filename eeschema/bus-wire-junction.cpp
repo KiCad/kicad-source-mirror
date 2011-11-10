@@ -102,13 +102,6 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
 }
 
 
-/* Creates a new segment ( WIRE, BUS ),
- * or terminates the current segment
- * If the end of the current segment is on an other segment, place a junction
- * if needed and terminates the command
- * If the end of the current segment is on a pin, terminates the command
- * In others cases starts a new segment
- */
 void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
 {
     SCH_LINE* oldsegment, * newsegment, * nextsegment;
@@ -240,8 +233,6 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
 }
 
 
-/* Called to terminate a bus, wire, or line creation
- */
 void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
 {
     SCH_LINE* firstsegment = (SCH_LINE*) GetScreen()->GetCurItem();
@@ -291,7 +282,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
         GetScreen()->SetDrawItems( lastsegment );
     }
 
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    DrawPanel->EndMouseCapture( -1, -1, wxEmptyString, false );
     GetScreen()->SetCurItem( NULL );
 
     wxPoint end_point, alt_end_point;
@@ -369,55 +360,53 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
 }
 
 
-/* compute the middle coordinate for 2 segments, from the start point to
- * new_pos
- *  with the 2 segments kept H or V only
+/**
+ * Function ComputeBreakPoint
+ * computes the middle coordinate for 2 segments from the start point to \a aPosition
+ * with the segments kept in the horizontal or vertical axis only.
  */
-static void ComputeBreakPoint( SCH_LINE* segment, const wxPoint& new_pos )
+static void ComputeBreakPoint( SCH_LINE* aSegment, const wxPoint& aPosition )
 {
-    SCH_LINE* nextsegment     = segment->Next();
-    wxPoint   middle_position = new_pos;
+    SCH_LINE* nextsegment     = aSegment->Next();
+    wxPoint   middle_position = aPosition;
 
     if( nextsegment == NULL )
         return;
 #if 0
-    if( ABS( middle_position.x - segment->m_Start.x ) <
-        ABS( middle_position.y - segment->m_Start.y ) )
-        middle_position.x = segment->m_Start.x;
+    if( ABS( middle_position.x - aSegment->m_Start.x ) <
+        ABS( middle_position.y - aSegment->m_Start.y ) )
+        middle_position.x = aSegment->m_Start.x;
     else
-        middle_position.y = segment->m_Start.y;
+        middle_position.y = aSegment->m_Start.y;
 #else
-    int iDx = segment->m_End.x - segment->m_Start.x;
-    int iDy = segment->m_End.y - segment->m_Start.y;
+    int iDx = aSegment->m_End.x - aSegment->m_Start.x;
+    int iDy = aSegment->m_End.y - aSegment->m_Start.y;
 
     if( iDy != 0 )         // keep the first segment orientation (currently horizontal)
     {
-        middle_position.x = segment->m_Start.x;
+        middle_position.x = aSegment->m_Start.x;
     }
     else if( iDx != 0 )    // keep the first segment orientation (currently vertical)
     {
-        middle_position.y = segment->m_Start.y;
+        middle_position.y = aSegment->m_Start.y;
     }
     else
     {
-        if( ABS( middle_position.x - segment->m_Start.x ) <
-            ABS( middle_position.y - segment->m_Start.y ) )
-            middle_position.x = segment->m_Start.x;
+        if( ABS( middle_position.x - aSegment->m_Start.x ) <
+            ABS( middle_position.y - aSegment->m_Start.y ) )
+            middle_position.x = aSegment->m_Start.x;
         else
-            middle_position.y = segment->m_Start.y;
+            middle_position.y = aSegment->m_Start.y;
     }
 #endif
 
-    segment->m_End = middle_position;
+    aSegment->m_End = middle_position;
 
     nextsegment->m_Start = middle_position;
-    nextsegment->m_End   = new_pos;
+    nextsegment->m_End   = aPosition;
 }
 
 
-/*
- *  Erase the last trace or the element at the current mouse position.
- */
 void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
 {
     SCH_SCREEN* screen = GetScreen();
@@ -461,8 +450,6 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
 }
 
 
-/* Routine to create new connection struct.
- */
 SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
                                            bool aPutInUndoList )
 {
@@ -528,10 +515,6 @@ static void AbortCreateNewLine( EDA_DRAW_PANEL* Panel, wxDC* DC )
 }
 
 
-/* Repeat the last item placement.
- * Bus lines, text, labels
- * Labels that end with a number will be incremented.
- */
 void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
 {
     if( m_itemToRepeat == NULL )

@@ -755,6 +755,10 @@ public:
      */
     void RecreateBOMFileFromBoard( wxCommandEvent& aEvent );
 
+    /**
+     * Function ExportToGenCAD
+     * creates a file in  GenCAD 1.4 format from the current board.
+     */
     void ExportToGenCAD( wxCommandEvent& event );
 
     /**
@@ -1311,6 +1315,13 @@ public:
                                   bool include_fixe );
     void LockModule( MODULE* aModule, bool aLocked );
     void AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb );
+
+    /**
+     * Function AutoPlaceModule
+     * automatically places footprints within the confines of the PCB edges.
+     * The components with the FIXED status are not moved.  If the menu is
+     * calling the placement of 1 module, it will be replaced.
+     */
     void AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC );
 
     /**
@@ -1324,6 +1335,15 @@ public:
     int GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC );
 
     void GenModuleOnBoard( MODULE* Module );
+
+    /**
+     * Function Compute_Ratsnest_PlaceModule
+     * displays the module's ratsnest during displacement, and assess the "cost"
+     * of the position.
+     *
+     * The cost is the longest ratsnest distance with penalty for connections
+     * approaching 45 degrees.
+     */
     float Compute_Ratsnest_PlaceModule( wxDC* DC );
 
     /**
@@ -1378,12 +1398,70 @@ public:
      */
     void SendMessageToEESCHEMA( BOARD_ITEM* objectToSync );
 
-    /* Micro waves functions */
+    /**
+     * Function Edit_Gap
+     * edits the GAP module if it has changed the position and/or size of the pads that
+     * form the gap get a new value.
+     */
     void Edit_Gap( wxDC* DC, MODULE* Module );
+
+    /**
+     * Function Create_MuWaveBasicShape
+     * create a footprint with pad_count pads for micro wave applications.
+     * This footprint has pad_count pads:
+     *  PAD_SMD, rectangular, H size = V size = current track width.
+     */
     MODULE* Create_MuWaveBasicShape( const wxString& name, int pad_count );
+
+    /**
+     * Create_MuWaveComponent
+     * creates a module "GAP" or "STUB" used in micro wave designs.
+     *  This module has 2 pads:
+     *  PAD_SMD, rectangular, H size = V size = current track width.
+     *  the "gap" is isolation created between this 2 pads
+     */
     MODULE* Create_MuWaveComponent( int shape_type );
+
     MODULE* Create_MuWavePolygonShape();
+
     void Begin_Self( wxDC* DC );
+
+    /**
+     * Function Genre_Self
+     * creates a self-shaped coil for microwave applications.
+     * - Length Mself.lng
+     * - Extremities Mself.m_Start and Mself.m_End
+     *
+     * We must determine:
+     * Mself.nbrin = number of segments perpendicular to the direction
+     * (The coil nbrin will demicercles + 1 + 2 1 / 4 circle)
+     * Mself.lbrin = length of a strand
+     * Mself.radius = radius of rounded parts of the coil
+     * Mself.delta = segments extremities connection between him and the coil even
+     *
+     * The equations are
+     * Mself.m_Size.x = 2 * Mself.radius + Mself.lbrin
+     * Mself.m_Size.y * Mself.delta = 2 + 2 * Mself.nbrin * Mself.radius
+     * Mself.lng = 2 * Mself.delta / / connections to the coil
+     + (Mself.nbrin-2) * Mself.lbrin / / length of the strands except 1st and last
+     + (Mself.nbrin 1) * (PI * Mself.radius) / / length of rounded
+     * Mself.lbrin + / 2 - Melf.radius * 2) / / length of 1st and last bit
+     *
+     * The constraints are:
+     * Nbrin >= 2
+     * Mself.radius < Mself.m_Size.x
+     * Mself.m_Size.y = Mself.radius * 4 + 2 * Mself.raccord
+     * Mself.lbrin> Mself.radius * 2
+     *
+     * The calculation is conducted in the following way:
+     * Initially:
+     * Nbrin = 2
+     * Radius = 4 * m_Size.x (arbitrarily fixed value)
+     * Then:
+     * Increasing the number of segments to the desired length
+     * (Radius decreases if necessary)
+     *
+     */
     MODULE* Genere_Self( wxDC* DC );
 
     /**

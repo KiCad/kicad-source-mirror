@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file autoplac.cpp
  * @brief Routiness to automatically place MODULES on a board.
@@ -69,10 +94,6 @@ static void CreateKeepOutRectangle( BOARD* Pcb,
 static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC );
 
 
-/* Routine to automatically place components in the contour of the PCB
- * The components with the FIXED status are not moved.  If the menu is
- * calling the placement of 1 module, it will be replaced.
- */
 void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
 {
     int      ii, activ;
@@ -867,12 +888,6 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
 }
 
 
-/*
- * Display the module's ratsnest during displacement, and
- * assess the "cost" of the position.
- * The cost is the longest ratsnest distance with penalty for connections
- * approaching 45 degrees.
- */
 float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 {
     double cout, icout;
@@ -930,11 +945,9 @@ float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 }
 
 
-/***********************************/
-/* Draw keep out area of a module. */
-/***********************************/
-
-/* Build the cost map.
+/**
+ * Function CreateKeepOutRectangle
+ * builds the cost map.
  * Cells ( in Dist mao ) inside the rect x0,y0 a x1,y1 are
  *  incremented by value aKeepOut
  *  Cell outside this rectangle, but inside the rectangle
@@ -1066,8 +1079,10 @@ static bool Tri_RatsModules( MODULE* ref, MODULE* compare )
 }
 
 
-/* Find the "best" module place
- * The criteria of choice are:
+/**
+ * Function PickModule
+ * find the "best" module place
+ * The criteria are:
  * - Maximum ratsnest with modules already placed
  * - Max size, and number of pads max
  */
@@ -1165,9 +1180,9 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
  */
 int Propagation( PCB_EDIT_FRAME* frame )
 {
-    int       row, col, nn;
+    int       row, col;
     long      current_cell, old_cell_H;
-    int long* pt_cell_V;
+    std::vector< long > pt_cell_V;
     int       nbpoints = 0;
 
 #define NO_CELL_ZONE (HOLE | CELL_is_EDGE | CELL_is_ZONE)
@@ -1176,13 +1191,10 @@ int Propagation( PCB_EDIT_FRAME* frame )
     frame->MsgPanel->SetMessage( 57, wxT( "Detect" ), msg, CYAN );
     frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "1" ), CYAN );
 
-    // Alloc memory to handle 1 line or 1 column on the routing matrix
-    nn = MAX( Nrows, Ncols ) * sizeof(*pt_cell_V);
-    pt_cell_V = (long*) MyMalloc( nn );
+    pt_cell_V.reserve( MAX( Nrows, Ncols ) );
+    fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
-    /* search 1 : from left to right and top to bottom */
-    memset( pt_cell_V, 0, nn );
-
+    // Search from left to right and top to bottom.
     for( row = 0; row < Nrows; row++ )
     {
         old_cell_H = 0;
@@ -1205,13 +1217,14 @@ int Propagation( PCB_EDIT_FRAME* frame )
         }
     }
 
-    /* search 2 : from right to left and top to bottom */
+    // Search from right to left and top to bottom/
     frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "2" ), CYAN );
-    memset( pt_cell_V, 0, nn );
+    fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
     for( row = 0; row < Nrows; row++ )
     {
         old_cell_H = 0;
+
         for( col = Ncols - 1; col >= 0; col-- )
         {
             current_cell = GetCell( row, col, BOTTOM ) & NO_CELL_ZONE;
@@ -1230,9 +1243,9 @@ int Propagation( PCB_EDIT_FRAME* frame )
         }
     }
 
-    /* search 3 : from bottom to top and right to left balayage */
+    // Search from bottom to top and right to left.
     frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "3" ), CYAN );
-    memset( pt_cell_V, 0, nn );
+    fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
     for( col = Ncols - 1; col >= 0; col-- )
     {
@@ -1256,9 +1269,9 @@ int Propagation( PCB_EDIT_FRAME* frame )
         }
     }
 
-    /* search 4 : from bottom to top and left to right */
+    // Search from bottom to top and left to right.
     frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "4" ), CYAN );
-    memset( pt_cell_V, 0, nn );
+    fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
     for( col = 0; col < Ncols; col++ )
     {
@@ -1281,8 +1294,6 @@ int Propagation( PCB_EDIT_FRAME* frame )
             pt_cell_V[row] = old_cell_H = current_cell;
         }
     }
-
-    MyFree( pt_cell_V );
 
     return nbpoints;
 }

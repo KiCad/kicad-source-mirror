@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file 3d_draw.cpp
 */
@@ -62,6 +87,7 @@ static void CALLBACK tessErrorCB( GLenum errorCode );
 static void CALLBACK tessCPolyPt2Vertex( const GLvoid* data );
 static void CALLBACK tesswxPoint2Vertex( const GLvoid* data );
 
+
 void EDA_3D_CANVAS::Redraw( bool finish )
 {
     /* SwapBuffer requires the window to be shown before calling */
@@ -118,8 +144,6 @@ void EDA_3D_CANVAS::Redraw( bool finish )
 }
 
 
-/* Create the draw list items
- */
 GLuint EDA_3D_CANVAS::CreateDrawGL_List()
 {
     PCB_BASE_FRAME* pcbframe = m_Parent->m_Parent;
@@ -410,11 +434,6 @@ void EDA_3D_CANVAS::Draw3D_Track( TRACK* track )
 }
 
 
-/**
- * Function Draw3D_SolidPolygonsInZones
- * draw all solid polygons used as filles areas in a zone
- * @param aZone = the zone to draw
- */
 void EDA_3D_CANVAS::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone )
 {
     double zpos;
@@ -474,8 +493,6 @@ void EDA_3D_CANVAS::Draw3D_SolidPolygonsInZones( ZONE_CONTAINER* aZone )
 }
 
 
-/* 3D drawing for a VIA (cylinder + filled circles)
- */
 void EDA_3D_CANVAS::Draw3D_Via( SEGVIA* via )
 {
     double x, y, r, hole;
@@ -603,15 +620,6 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 }
 
 
-/* function to draw 3D segments, called by DrawGraphicText
- * When DrawGraphicText is called to draw a text to an OpenGL DC
- * it calls Draw3dTextSegm to each segment to draw.
- * 2 parameters used by Draw3D_FilledSegment are not handled by DrawGraphicText
- * but are used in Draw3D_FilledSegment().
- * they are 2 local variables. This is an ugly, but trivial code.
- * Using DrawGraphicText to draw all texts ensure texts have the same shape
- * in all contexts
- */
 static double s_Text3DWidth, s_Text3DZPos;
 static void Draw3dTextSegm( int x0, int y0, int xf, int yf )
 {
@@ -1152,7 +1160,9 @@ static void Draw3D_FilledCylinder( double posx, double posy, double rayon,
     double     x, y;
 
 #define NB_SEGM 12
-    S3D_Vertex coords[4];
+    std::vector< S3D_Vertex > coords;
+    coords.resize( 4 );
+
     double     tmp = DataScale3D;
 
     DataScale3D = 1.0; // Coordinate is already in range for Set_Object_Data();
@@ -1168,7 +1178,7 @@ static void Draw3D_FilledCylinder( double posx, double posy, double rayon,
         RotatePoint( &x, &y, ii * (3600 / NB_SEGM) );
         coords[2].x = coords[3].x = posx + x;
         coords[2].y = coords[3].y = posy + y;
-        Set_Object_Data( coords, 4 );
+        Set_Object_Data( coords );
         coords[0].x = coords[2].x;
         coords[0].y = coords[2].y;
         coords[1].x = coords[3].x;
@@ -1377,12 +1387,6 @@ static void Draw3D_CircleSegment( double startx, double starty, double endx,
 }
 
 
-/**
- * Function Draw3D_Polygon
- * draw one solid polygon
- * @param aCornersList = a std::vector<wxPoint> list of corners, in physical coordinates
- * @param aZpos = the z position in 3D units
- */
 void EDA_3D_CANVAS::Draw3D_Polygon( std::vector<wxPoint>& aCornersList, double aZpos )
 {
     g_Parm_3D_Visu.m_ActZpos = aZpos;
