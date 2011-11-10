@@ -338,12 +338,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     // At this point the reference segment is the X axis
 
     // Test the reference segment with other track segments
-    for( track = aStart;  track;  track = track->Next() )
+    wxPoint segStartPoint;
+    wxPoint segEndPoint;
+    for( track = aStart; track; track = track->Next() )
     {
-        // coord des extremites du segment teste dans le repere modifie
-        wxPoint segStartPoint;
-        wxPoint segEndPoint;
-
         // No problem if segments have the same net code:
         if( net_code_ref == track->GetNet() )
             continue;
@@ -401,10 +399,8 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
          */
         segStartPoint = track->m_Start - origin;
         segEndPoint   = track->m_End - origin;
-
         RotatePoint( &segStartPoint, m_segmAngle );
         RotatePoint( &segEndPoint, m_segmAngle );
-
         if( track->Type() == PCB_VIA_T )
         {
             if( checkMarginToCircle( segStartPoint, w_dist, m_segmLength ) )

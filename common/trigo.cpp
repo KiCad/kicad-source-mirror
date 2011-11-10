@@ -249,8 +249,10 @@ void RotatePoint( int* pX, int* pY, int angle )
     else
     {
         double fangle = DEG2RAD( (double) angle / 10.0 );
-        double fpx = (*pY * sin( fangle ) ) + (*pX * cos( fangle ) );
-        double fpy = (*pY * cos( fangle ) ) - (*pX * sin( fangle ) );
+        double sinus = sin( fangle );
+        double cosinus = cos( fangle );
+        double fpx = (*pY * sinus ) + (*pX * cosinus );
+        double fpy = (*pY * cosinus ) - (*pX * sinus );
         *pX = wxRound( fpx );
         *pY = wxRound( fpy );
     }
@@ -345,9 +347,11 @@ void RotatePoint( double* pX, double* pY, int angle )
     else
     {
         double fangle = DEG2RAD( (double) angle / 10.0 );
+        double sinus = sin( fangle );
+        double cosinus = cos( fangle );
 
-        double fpx = (*pY * sin( fangle ) ) + (*pX * cos( fangle ) );
-        double fpy = (*pY * cos( fangle ) ) - (*pX * sin( fangle ) );
+        double fpx = (*pY * sinus ) + (*pX * cosinus );
+        double fpy = (*pY * cosinus ) - (*pX * sinus );
         *pX = fpx;
         *pY = fpy;
     }

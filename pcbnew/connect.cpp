@@ -511,7 +511,7 @@ void CONNECTIONS::Propagate_SubNets()
     }
 }
 
-void PCB_BASE_FRAME::TestConnections( wxDC* aDC )
+void PCB_BASE_FRAME::TestConnections()
 {
     // Clear the cluster identifier for all pads
     for( unsigned i = 0;  i< m_Pcb->GetPadsCount();  ++i )

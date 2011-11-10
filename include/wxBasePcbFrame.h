@@ -441,15 +441,14 @@ public:
      * according to its net code. and when nets are changed (when a new netlist is read)
      * tracks are sorted before using this function.
      * </p>
-     * @param aDC = current Device Context
      */
-    void TestConnections( wxDC* aDC );
+    void TestConnections();
 
     /**
      * Function TestNetConnection
      * tests the connections relative to \a aNetCode.  Track segments are assumed to be
      * sorted by net codes.
-     * @param aDC Cyrrent Device Context
+     * @param aDC Current Device Context
      * @param aNetCode The net code to test
      */
     void TestNetConnection( wxDC* aDC, int aNetCode );
@@ -458,10 +457,6 @@ public:
      * Function RecalculateAllTracksNetcode
      * search connections between tracks and pads and propagate pad net codes to the track
      * segments.
-     * <p>
-     * This is a 2 pass computation.  First we search a connection between a track segment
-     * and a pad.  If the connection is found, the segment netcode is set to the pad netcode.
-     * </p>
      */
     void RecalculateAllTracksNetcode();
 

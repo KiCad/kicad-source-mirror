@@ -1138,20 +1138,20 @@ public:
      *  The zone outline is a frontier, and can be complex (with holes)
      *  The filling starts from starting points like pads, tracks.
      * If exists the old filling is removed
-     * @param zone_container = zone to fill
-     * @param verbose = true to show error messages
+     * @param aZone = zone to fill
      * @return error level (0 = no error)
      */
-    int Fill_Zone( ZONE_CONTAINER* zone_container, bool verbose = true );
+    int Fill_Zone( ZONE_CONTAINER* aZone );
 
     /**
      * Function Fill_All_Zones
      *  Fill all zones on the board
      * The old fillings are removed
-     * @param verbose = true to show error messages
-     * @return error level (0 = no error)
+     * @param aActiveWindow = the current active window, if a progress bar is shown
+     *                      = NULL to do not display a progress bar
+     * @param aVerbose = true to show error messages
      */
-    int Fill_All_Zones( bool verbose = true );
+    int Fill_All_Zones( wxWindow * aActiveWindow, bool aVerbose = true );
 
 
     /**
