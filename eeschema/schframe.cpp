@@ -61,6 +61,8 @@
 #include "dialogs/dialog_schematic_find.h"
 #include "dialogs/dialog_SVG_print.h"
 
+#include <wx/display.h>
+
 
 BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_SOCKET( ID_EDA_SOCKET_EVENT_SERV, EDA_DRAW_FRAME::OnSockRequestServer )
@@ -432,6 +434,17 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
+    // Close the find dialog and perserve it's setting if it is displayed.
+    if( m_dlgFindReplace )
+    {
+        m_findDialogPosition = m_dlgFindReplace->GetPosition();
+        m_findDialogSize = m_dlgFindReplace->GetSize();
+        m_findStringHistoryList = m_dlgFindReplace->GetFindEntries();
+        m_replaceStringHistoryList = m_dlgFindReplace->GetReplaceEntries();
+        m_dlgFindReplace->Destroy();
+        m_dlgFindReplace = NULL;
+    }
+
     SCH_SCREENS screens;
     wxFileName fn;
 
@@ -634,8 +647,21 @@ void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& event )
         m_dlgFindReplace = NULL;
     }
 
-    m_dlgFindReplace = new DIALOG_SCH_FIND( this, m_findReplaceData, m_findDialogPosition,
-                                            m_findDialogSize );
+    // Verify the find dialog is not drawn off the visible display area in case the
+    // display configuration has changed since the last time the dialog position was
+    // saved.
+    wxRect displayRect = wxDisplay().GetGeometry();
+    wxRect dialogRect = wxRect( m_findDialogPosition, m_findDialogSize );
+
+    wxPoint position = m_findDialogPosition;
+
+    if( !displayRect.Contains( dialogRect ) )
+    {
+        position = wxDefaultPosition;
+    }
+
+    m_dlgFindReplace = new DIALOG_SCH_FIND( this, m_findReplaceData, position, m_findDialogSize );
+
     m_dlgFindReplace->SetFindEntries( m_findStringHistoryList );
     m_dlgFindReplace->SetReplaceEntries( m_replaceStringHistoryList );
     m_dlgFindReplace->SetMinSize( m_dlgFindReplace->GetBestSize() );
