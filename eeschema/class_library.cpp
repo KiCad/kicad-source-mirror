@@ -31,7 +31,6 @@
 #include "gr_basic.h"
 #include "macros.h"
 #include "kicad_string.h"
-#include "confirm.h"
 #include "gestfich.h"
 #include "eda_doc.h"
 #include "wxstruct.h"
@@ -670,39 +669,8 @@ bool CMP_LIBRARY::LoadDocs( wxString& aErrorMsg )
 }
 
 
-bool CMP_LIBRARY::Save( const wxString& aFullFileName, bool aOldDocFormat )
+bool CMP_LIBRARY::Save( OUTPUTFORMATTER& aFormatter )
 {
-    wxString msg;
-    wxFileName libFileName = aFullFileName;
-    wxFileName backupFileName = aFullFileName;
-
-    /* the old .lib file is renamed .bak */
-    if( libFileName.FileExists() )
-    {
-        backupFileName.SetExt( wxT( "bak" ) );
-        wxRemoveFile( backupFileName.GetFullPath() );
-
-        if( !wxRenameFile( libFileName.GetFullPath(), backupFileName.GetFullPath() ) )
-        {
-            libFileName.MakeAbsolute();
-            msg = wxT( "Failed to rename old component library file " ) +
-                  backupFileName.GetFullPath();
-            DisplayError( NULL, msg );
-        }
-    }
-
-    wxFFileOutputStream os( libFileName.GetFullPath(), wxT( "wt" ) );
-
-    if( !os.IsOk() )
-    {
-        libFileName.MakeAbsolute();
-        msg = wxT( "Failed to create component library file " ) + libFileName.GetFullPath();
-        DisplayError( NULL, msg );
-        return false;
-    }
-
-    STREAM_OUTPUTFORMATTER formatter( os );
-
     if( isModified )
     {
         timeStamp = GetTimeStamp();
@@ -713,83 +681,47 @@ bool CMP_LIBRARY::Save( const wxString& aFullFileName, bool aOldDocFormat )
 
     try
     {
-        SaveHeader( formatter );
+        SaveHeader( aFormatter );
 
         for( LIB_ALIAS_MAP::iterator it=aliases.begin();  it!=aliases.end();  it++ )
         {
             if( !(*it).second->IsRoot() )
                 continue;
 
-            (*it).second->GetComponent()->Save( formatter );
+            (*it).second->GetComponent()->Save( aFormatter );
         }
 
-        formatter.Print( 0, "#\n#End Library\n" );
+        aFormatter.Print( 0, "#\n#End Library\n" );
     }
     catch( IO_ERROR ioe )
     {
         success = false;
     }
 
-    if( USE_OLD_DOC_FILE_FORMAT( versionMajor, versionMinor ) && aOldDocFormat )
-        success = SaveDocFile( aFullFileName );
-
     return success;
 }
 
 
-bool CMP_LIBRARY::SaveDocFile( const wxString& aFullFileName )
+bool CMP_LIBRARY::SaveDocs( OUTPUTFORMATTER& aFormatter )
 {
-    FILE* docfile;
-    wxString msg;
-    wxFileName backupFileName = aFullFileName;
-    wxFileName docFileName = aFullFileName;
-
-    docFileName.SetExt( DOC_EXT );
-
-    /* Save current doc file as .bck */
-    if( docFileName.FileExists() )
-    {
-        backupFileName = docFileName;
-        backupFileName.SetExt( wxT( "bck" ) );
-        wxRemoveFile( backupFileName.GetFullPath() );
-
-        if( !wxRenameFile( docFileName.GetFullPath(), backupFileName.GetFullPath() ) )
-        {
-            msg = wxT( "Failed to save old library document file " ) +
-                  backupFileName.GetFullPath();
-            DisplayError( NULL, msg );
-        }
-    }
-
-    docfile = wxFopen( docFileName.GetFullPath(), wxT( "wt" ) );
-
-    if( docfile == NULL )
-    {
-        docFileName.MakeAbsolute();
-        msg = wxT( "Failed to create component document library file " ) +
-              docFileName.GetFullPath();
-        DisplayError( NULL, msg );
-        return false;
-    }
-
-    if( fprintf( docfile, "%s  Date: %s\n", DOCFILE_IDENT, TO_UTF8( DateAndTime() ) ) < 0 )
-    {
-        fclose( docfile );
-        return false;
-    }
-
     bool success = true;
 
-    for( LIB_ALIAS_MAP::iterator it=aliases.begin();  it!=aliases.end();  it++ )
+    try
     {
-        if ( !(*it).second->SaveDoc( docfile ) )
-            success = false;
+        aFormatter.Print( 0, "%s  Date: %s\n", DOCFILE_IDENT, TO_UTF8( DateAndTime() ) );
+
+        for( LIB_ALIAS_MAP::iterator it=aliases.begin();  it!=aliases.end();  it++ )
+        {
+            if ( !(*it).second->SaveDoc( aFormatter ) )
+                success = false;
+        }
+
+        aFormatter.Print( 0, "#\n#End Doc Library\n" );
     }
-
-    if ( fprintf( docfile, "#\n#End Doc Library\n" ) < 0 )
+    catch( IO_ERROR ioe )
+    {
         success = false;
-
-    fclose( docfile );
+    }
 
     return success;
 }

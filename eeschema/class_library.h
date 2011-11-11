@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file class_library.h
  * @brief Definition for component library class.
@@ -90,35 +115,21 @@ public:
 
     /**
      * Function Save
-     * saves library to a file.
-     * <p>
-     * Prior to component library version 3.0, two files were created.  The
-     * component objects are were as component library (*.lib) files.  The
-     * library entry object document strings were save in library document
-     * definition (*.dcm) files.  After version component library version 3.0,
-     * the document string information is saved as part of the library file.
-     * Saving separate document is maintained for backwards compatibility.
-     * Please note that this behavior may change in the future.  If the
-     * component library already exists, it is backup up in file *.bak.
+     * writes library to \a aFormatter.
      *
-     * @param aFullFileName - The library filename with path.
-     * @param aOldDocFormat - Save the document information in a separate
-     *                        file if true.  The default is to save as the
-     *                        current library file format.
-     * @return True if success writing else false.
+     * @param aFormatter An #OUTPUTFORMATTER object to write the library to.
+     * @return True if success writing to \a aFormatter.
      */
-    bool Save( const wxString& aFullFileName, bool aOldDocFormat = false );
+    bool Save( OUTPUTFORMATTER& aFormatter );
 
     /**
-     * Save library document information to file.
+     * Function SaveDocs
+     * write the library document information to \a aFormatter.
      *
-     * If the document definition file* already exists, it is backed up in
-     * file *.bck.
-     *
-     * @param aFullFileName - The library filename with path.
-     * @return True if success writing else false.
+     * @param aFormatter An #OUTPUTFORMATTER object to write the library documentation to.
+     * @return True if success writing to \a aFormatter.
      */
-    bool SaveDocFile( const wxString& aFullFileName );
+    bool SaveDocs( OUTPUTFORMATTER& aFormatter );
 
     /**
      * Load library from file.

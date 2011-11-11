@@ -149,12 +149,13 @@ public:
     wxString GetDocFileName() const { return docFileName; }
 
     /**
-     * Write the entry document information to a FILE in "*.dcm" format.
+     * Function SaveDocs
+     * rrite the entry document information to \a aFormatter in "*.dcm" format.
      *
-     * @param aFile The FILE to write to.
+     * @param aFormatter The #OUTPUTFORMATTER to write the alias documents to.
      * @return True if success writing else false.
      */
-    bool SaveDoc( FILE* aFile );
+    bool SaveDoc( OUTPUTFORMATTER& aFormatter );
 
     /**
      * Case insensitive comparison of the component entry name.
@@ -291,7 +292,7 @@ public:
      * write the date and time of component to \a aFile in the format:
      * "Ti yy/mm/jj hh:mm:ss"
      *
-     * @param aFormatter A reference to an OUTPUT_FORMATER object containing the
+     * @param aFormatter A reference to an #OUTPUTFORMATTER object containing the
      *                   output format to write to.
      * @return True if the date and time were successfully written to \a aFormatter.
      */

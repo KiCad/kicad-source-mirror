@@ -46,6 +46,8 @@
 
 #include "dialogs/dialog_lib_new_component.h"
 
+#include <wx/wfstream.h>
+
 
 void LIB_EDIT_FRAME::DisplayLibInfos()
 {
@@ -311,23 +313,90 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
     if( !IsWritable( fn ) )
         return;
 
-    bool success = m_library->Save( fn.GetFullPath(), true );
-
     ClearMsgPanel();
 
-    if( !success )
+    wxFileName libFileName = fn;
+    wxFileName backupFileName = fn;
+
+    // Rename the old .lib file to .bak.
+    if( libFileName.FileExists() )
     {
-        msg = _( "Error while saving library file \"" ) + fn.GetFullPath() + _( "\"." );
+        backupFileName.SetExt( wxT( "bak" ) );
+        wxRemoveFile( backupFileName.GetFullPath() );
+
+        if( !wxRenameFile( libFileName.GetFullPath(), backupFileName.GetFullPath() ) )
+        {
+            libFileName.MakeAbsolute();
+            msg = wxT( "Failed to rename old component library file " ) +
+                  backupFileName.GetFullPath();
+            DisplayError( this, msg );
+        }
+    }
+
+    wxFFileOutputStream libStream( libFileName.GetFullPath(), wxT( "wt" ) );
+
+    if( !libStream.IsOk() )
+    {
+        libFileName.MakeAbsolute();
+        msg = wxT( "Failed to create component library file " ) + libFileName.GetFullPath();
+        DisplayError( this, msg );
+        return;
+    }
+
+    STREAM_OUTPUTFORMATTER libFormatter( libStream );
+
+    if( !m_library->Save( libFormatter ) )
+    {
+        msg = _( "Error occurred while saving library file \"" ) + fn.GetFullPath() + _( "\"." );
         AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
         DisplayError( this, msg );
+        return;
     }
-    else
+
+    wxFileName docFileName = libFileName;
+
+    docFileName.SetExt( DOC_EXT );
+
+    // Rename .doc file to .bck.
+    if( docFileName.FileExists() )
     {
-        msg = _( "Library file \"" ) + fn.GetFullName() + wxT( "\" Ok" );
-        fn.SetExt( DOC_EXT );
-        wxString msg1 = _( "Document file \"" ) + fn.GetFullPath() + wxT( "\" Ok" );
-        AppendMsgPanel( msg, msg1, BLUE );
+        backupFileName.SetExt( wxT( "bck" ) );
+        wxRemoveFile( backupFileName.GetFullPath() );
+
+        if( !wxRenameFile( docFileName.GetFullPath(), backupFileName.GetFullPath() ) )
+        {
+            msg = wxT( "Failed to save old library document file " ) +
+                  backupFileName.GetFullPath();
+            DisplayError( this, msg );
+        }
     }
+
+    wxFFileOutputStream docStream( docFileName.GetFullPath(), wxT( "wt" ) );
+
+    if( !docStream.IsOk() )
+    {
+        docFileName.MakeAbsolute();
+        msg = wxT( "Failed to create component document library file " ) +
+              docFileName.GetFullPath();
+        DisplayError( this, msg );
+        return;
+    }
+
+    STREAM_OUTPUTFORMATTER docFormatter( docStream );
+
+    if( !m_library->SaveDocs( docFormatter ) )
+    {
+        msg = _( "Error occurred while saving library document file \"" ) +
+              docFileName.GetFullPath() + _( "\"." );
+        AppendMsgPanel( _( "*** ERROR: ***" ), msg, RED );
+        DisplayError( this, msg );
+        return;
+    }
+
+    msg = _( "Library file \"" ) + fn.GetFullName() + wxT( "\" Ok" );
+    fn.SetExt( DOC_EXT );
+    wxString msg1 = _( "Document file \"" ) + fn.GetFullPath() + wxT( "\" Ok" );
+    AppendMsgPanel( msg, msg1, BLUE );
 }
 
 

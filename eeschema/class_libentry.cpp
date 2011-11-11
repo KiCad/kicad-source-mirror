@@ -110,28 +110,30 @@ CMP_LIBRARY* LIB_ALIAS::GetLibrary()
 }
 
 
-bool LIB_ALIAS::SaveDoc( FILE* aFile )
+bool LIB_ALIAS::SaveDoc( OUTPUTFORMATTER& aFormatter )
 {
     if( description.IsEmpty() && keyWords.IsEmpty() && docFileName.IsEmpty() )
         return true;
 
-    if( fprintf( aFile, "#\n$CMP %s\n", TO_UTF8( name ) ) < 0 )
-        return false;
+    try
+    {
+        aFormatter.Print( 0, "#\n$CMP %s\n", TO_UTF8( name ) );
 
-    if( ! description.IsEmpty()
-        && fprintf( aFile, "D %s\n", TO_UTF8( description ) ) < 0 )
-        return false;
+        if( !description.IsEmpty() )
+            aFormatter.Print( 0, "D %s\n", TO_UTF8( description ) );
 
-    if( ! keyWords.IsEmpty()
-        && fprintf( aFile, "K %s\n", TO_UTF8( keyWords ) ) < 0 )
-        return false;
+        if( !keyWords.IsEmpty() )
+            aFormatter.Print( 0, "K %s\n", TO_UTF8( keyWords ) );
 
-    if( ! docFileName.IsEmpty()
-        && fprintf( aFile, "F %s\n", TO_UTF8( docFileName ) ) < 0 )
-        return false;
+        if( !docFileName.IsEmpty() )
+            aFormatter.Print( 0, "F %s\n", TO_UTF8( docFileName ) );
 
-    if( fprintf( aFile, "$ENDCMP\n" ) < 0 )
+        aFormatter.Print( 0, "$ENDCMP\n" );
+    }
+    catch( IO_ERROR ioe )
+    {
         return false;
+    }
 
     return true;
 }

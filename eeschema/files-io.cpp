@@ -379,7 +379,7 @@ void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
     wxString cachename = fn.GetName() + wxT( "-cache" );
     fn.SetName( cachename );
     fn.SetExt( CompLibFileExtension );
-    LibArchive( this, fn.GetFullPath() );
+    CreateArchiveLibrary( fn.GetFullPath() );
 }
 
 
