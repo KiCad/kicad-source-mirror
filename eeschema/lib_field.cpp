@@ -320,12 +320,12 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     /* Set to one (1) to draw bounding box around field text to validate
      * bounding box calculation. */
 #if 0
-    wxString tmp = m_Text;
-    m_Text = *text;
     EDA_RECT bBox = GetBoundingBox();
-    m_Text = tmp;
-    bBox.Inflate( 1, 1 );
-    GRRect( &aPanel->m_ClipBox, aDC, bBox, 0, LIGHTMAGENTA );
+    EDA_RECT grBox;
+    grBox.SetOrigin( aTransform.TransformCoordinate( bBox.GetOrigin() ) );
+    grBox.SetEnd( aTransform.TransformCoordinate( bBox.GetEnd() ) );
+    grBox.Move( aOffset );
+    GRRect( &aPanel->m_ClipBox, aDC, grBox, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -511,18 +511,21 @@ wxString LIB_FIELD::GetFullText( int unit )
 
 EDA_RECT LIB_FIELD::GetBoundingBox() const
 {
-    EDA_RECT rect = GetTextBox();
-    rect.m_Pos.y *= -1;
-    rect.m_Pos.y -= rect.GetHeight();
+    /* Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position when
+     * calling GetTextBox() that works using top to bottom Y axis orientation.
+     */
+    EDA_RECT rect = GetTextBox( -1, -1, true );
 
     wxPoint orig = rect.GetOrigin();
     wxPoint end = rect.GetEnd();
-    wxPoint center = rect.Centre();
+    NEGATE( orig.y);
+    NEGATE( end.y);
 
-    RotatePoint( &orig, center, m_Orient );
-    RotatePoint( &end, center, m_Orient );
+    RotatePoint( &orig, m_Pos, -m_Orient );
+    RotatePoint( &end, m_Pos, -m_Orient );
     rect.SetOrigin( orig );
     rect.SetEnd( end );
+    rect.Normalize();
 
     return rect;
 }

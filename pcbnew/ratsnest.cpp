@@ -487,19 +487,9 @@ void PCB_BASE_FRAME::TestForActiveLinksInRatsnest( int aNetCode )
 
     for( unsigned ii = 0; ii < m_Pcb->GetRatsnestsCount(); ii++ )
     {
-        if( m_Pcb->m_FullRatsnest[ii].m_Status & CH_ACTIF )
+        if( m_Pcb->m_FullRatsnest[ii].IsActive() )
             m_Pcb->m_NbNoconnect++;
     }
-}
-
-
-int PCB_BASE_FRAME::TestOneRatsNest( wxDC* aDC, int aNetCode )
-{
-    DrawGeneralRatsnest( aDC, aNetCode );
-    TestForActiveLinksInRatsnest( aNetCode );
-    DrawGeneralRatsnest( aDC, aNetCode );
-
-    return m_Pcb->GetRatsnestsCount();
 }
 
 
@@ -853,7 +843,7 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
             {
                 if( aPosition != track->m_Start )
                     s_TargetsLocations.push_back( track->m_Start );
-                if( aPosition != track->m_End )
+                if( aPosition != track->m_End && track->m_Start != track->m_End )
                     s_TargetsLocations.push_back( track->m_End );
             }
         }

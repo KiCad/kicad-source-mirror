@@ -215,8 +215,6 @@ One of these 2 option *must* be set to ON:
 
  CMAKE_INSTALL_PREFIX (OPTIONAL)
 
- KICAD_MINIZIP ON/OFF
-
  USE_WX_GRAPHICS_CONTEXT ON/OFF (OPTIONAL)
    *Experimental* advanced drawing library code using wxGraphicsContext (for tests only).
    Under Windows, a very recent version of mingw is needed.

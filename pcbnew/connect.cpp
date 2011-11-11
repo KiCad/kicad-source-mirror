@@ -593,13 +593,22 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
 
     Merge_SubNets_Connected_By_CopperAreas( m_Pcb, aNetCode );
 
-    /* Test the ratsnest for this net */
-    int nb_net_noconnect = TestOneRatsNest( aDC, aNetCode );
+    /* rebuild the active ratsnest for this net */
+    DrawGeneralRatsnest( aDC, aNetCode );
+    TestForActiveLinksInRatsnest( aNetCode );
+    DrawGeneralRatsnest( aDC, aNetCode );
 
     /* Display results */
+    int net_notconnected_count = 0;
+    NETINFO_ITEM* net = m_Pcb->FindNet( aNetCode );
+    for( unsigned ii = net->m_RatsnestStartIdx; ii < net->m_RatsnestEndIdx; ii++ )
+    {
+        if( m_Pcb->m_FullRatsnest[ii].IsActive() )
+            net_notconnected_count++;
+    }
     msg.Printf( wxT( "links %d nc %d  net:nc %d" ),
                 m_Pcb->GetRatsnestsCount(), m_Pcb->GetNoconnectCount(),
-                nb_net_noconnect );
+                net_notconnected_count );
 
     SetStatusText( msg );
     return;

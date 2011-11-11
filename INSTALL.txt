@@ -105,10 +105,10 @@ Mac OS X KiCad tree
 
 System wide files
 
-/Library/Application Support/kicad/demos 
-/Library/Application Support/kicad/internat 
+/Library/Application Support/kicad/demos
+/Library/Application Support/kicad/internat
 /Library/Application Support/kicad/library
-/Library/Application Support/kicad/modules 
+/Library/Application Support/kicad/modules
 /Library/Application Support/kicad/modules/packages3d
 
 User files can be the same as the system wide files but only inside the users home directory.
@@ -116,8 +116,8 @@ User files can be the same as the system wide files but only inside the users ho
 $HOME/Library/Application Support/kicad
 
 Warning:
-These paths are hardcoded into KiCad, if you put them somewhere else KiCad will not find them when a new 
-project is created. 
+These paths are hardcoded into KiCad, if you put them somewhere else KiCad will not find them when a new
+project is created.
 
 Installation from source code
 -----------------------------
@@ -177,9 +177,6 @@ configured and builded with "--enable-monolithic --disable-shared" parameters.
 -DwxWidgets_USE_STATIC=OFF
 For building dinamically linked executables. Can be used only if wxWidgets
 configured and builded with "--disable-monolithic --enable-shared" parameters.
-
--DKICAD_MINIZIP=ON
-Build the "minizip" executable. Use OFF to disable it building.
 
 -DwxUSE_UNICODE=ON
 Require on locale utf8 for build the KiCad with cyrillic fonts support.

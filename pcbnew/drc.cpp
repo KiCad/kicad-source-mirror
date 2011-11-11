@@ -459,8 +459,8 @@ void DRC::testPad2Pad()
 #include <wx/progdlg.h>
 /* Function testTracks
  * performs the DRC on all tracks.
- * because this test can take a while, a progrsse bar can be displayed
- * (Note: it is shown only if there are many tracks
+ * because this test can take a while, a progress bar can be displayed
+ * (Note: it is shown only if there are many tracks)
  */
 void DRC::testTracks( bool aShowProgressBar )
 {

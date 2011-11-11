@@ -343,8 +343,6 @@ int LIB_TEXT::GetPenSize() const
 void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                             int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform )
 {
-    wxPoint pos1, pos2;
-
     int     color = GetDefaultColor();
 
     if( aColor < 0 )       // Used normal color or selected color
@@ -356,8 +354,6 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
     {
         color = aColor;
     }
-
-    pos1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
 
     GRSetDrawMode( aDC, aDrawMode );
 
@@ -386,15 +382,12 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
      * and use GetBoundaryBox to know the text coordinate considered as centered
     */
     EDA_RECT bBox = GetBoundingBox();
-    pos1 = bBox.Centre();   // this is the coordinates of the graphic text relative to the
-                            // component position in schematic Y axis orientation.
+    wxPoint txtpos = bBox.Centre();
 
-    /* convert y coordinate from schematic to library Y axis orientation
-     * because we want to call TransformCoordinate to calculate real coordinates
-     */
-    NEGATE( pos1.y );
-    pos1 = aTransform.TransformCoordinate( pos1 ) + aOffset;
-    DrawGraphicText( aPanel, aDC, pos1, (EDA_Colors) color, m_Text, orient, m_Size,
+    // Calculate pos accordint to mirror/rotation.
+    txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
+
+    DrawGraphicText( aPanel, aDC, txtpos, (EDA_Colors) color, m_Text, orient, m_Size,
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, GetPenSize(),
                      m_Italic, m_Bold );
 
@@ -404,13 +397,10 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
      */
 #if 0
     EDA_RECT grBox;
-    bBox.SetY( -bBox.GetY() );
-    bBox.SetHeight( -bBox.GetHeight());
     grBox.SetOrigin( aTransform.TransformCoordinate( bBox.GetOrigin() ) );
     grBox.SetEnd( aTransform.TransformCoordinate( bBox.GetEnd() ) );
     grBox.Move( aOffset );
-    GRRect( &aPanel->m_ClipBox, aDC, grBox.GetOrigin().x, grBox.GetOrigin().y,
-            grBox.GetEnd().x, grBox.GetEnd().y, 0, LIGHTMAGENTA );
+    GRRect( &aPanel->m_ClipBox, aDC, grBox, 0, LIGHTMAGENTA );
 #endif
 }
 
@@ -436,13 +426,15 @@ EDA_RECT LIB_TEXT::GetBoundingBox() const
 
     wxPoint orig = rect.GetOrigin();
     wxPoint end = rect.GetEnd();
-    wxPoint center = rect.Centre();
+    NEGATE( orig.y);
+    NEGATE( end.y);
 
-    RotatePoint( &orig, center, m_Orient );
-    RotatePoint( &end, center, m_Orient );
+    RotatePoint( &orig, m_Pos, -m_Orient );
+    RotatePoint( &end, m_Pos, -m_Orient );
     rect.SetOrigin( orig );
     rect.SetEnd( end );
     rect.Normalize();
+
     return rect;
 }
 
