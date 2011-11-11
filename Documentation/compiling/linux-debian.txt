@@ -33,7 +33,7 @@ dpatch cat-all >>patch-stampT
 mv -f patch-stampT patch-stamp
 mkdir -p /home/david/Desktop/KICAD_SVN/build/kicad
 mkdir -p /home/david/Desktop/KICAD_SVN/build/bitmaps
-cd /home/david/Desktop/KICAD_SVN/build/kicad && cmake -DKICAD_MINIZIP=0 \
+cd /home/david/Desktop/KICAD_SVN/build/kicad && cmake \
 
 -DKICAD_DEMOS=/home/david/Desktop/KICAD_SVN/debian/kicad-common/usr/share/doc/ki\
 cad/demos ../../kicad \

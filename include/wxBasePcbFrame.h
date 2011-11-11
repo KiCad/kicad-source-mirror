@@ -358,14 +358,6 @@ public:
     void Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus );
 
     /**
-     * Function TestOneRatsNest
-     * Compute the ratsnest relative to the net "net_code"
-     * @param aDC - Device context to draw on.
-     * @param aNetCode = netcode used to compute the ratsnest.
-     */
-    int TestOneRatsNest( wxDC* aDC, int aNetCode );
-
-    /**
      * Function build_ratsnest_module
      * Build a ratsnest relative to one footprint. This is a simplified computation
      * used only in move footprint. It is not optimal, but it is fast and sufficient

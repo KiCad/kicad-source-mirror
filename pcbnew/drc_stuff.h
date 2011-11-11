@@ -266,9 +266,9 @@ private:
     /**
      * Function testTracks
      * performs the DRC on all tracks.
-     * because this test can take a while, a progrsse bar can be displayed
+     * because this test can take a while, a progress bar can be displayed
      * @param aShowProgressBar = true to show a progrsse bar
-     * (Note: it is shown only if there are many tracks
+     * (Note: it is shown only if there are many tracks)
      */
     void testTracks( bool aShowProgressBar );
 

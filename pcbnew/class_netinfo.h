@@ -65,6 +65,20 @@ public:
         m_NetCode = aNetCode;
     }
 
+    bool IsVisible()
+    {
+        return (m_Status & CH_VISIBLE) != 0;
+    }
+
+    bool IsActive()
+    {
+        return (m_Status & CH_ACTIF) != 0;
+    }
+
+    bool IsLocal()
+    {
+        return (m_Status & LOCAL_RATSNEST_ITEM) != 0;
+    }
 
     /**
      * Function Draw
