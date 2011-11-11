@@ -148,7 +148,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     aPad->m_Orient = g_Pad_Master.m_Orient +
                      ( (MODULE*) aPad->GetParent() )->m_Orient;
     aPad->m_Size = g_Pad_Master.m_Size;
-    aPad->m_DeltaSize  = wxSize( 0, 0 );
+    aPad->m_DeltaSize  = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH );//wxSize( 0, 0 );
     aPad->m_Offset     = g_Pad_Master.m_Offset;
     aPad->m_Drill      = g_Pad_Master.m_Drill;
     aPad->m_DrillShape = g_Pad_Master.m_DrillShape;
@@ -168,9 +168,8 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     {
     case PAD_SMD:
     case PAD_CONN:
-        aPad->m_Drill    = wxSize( 0, 0 );
-        aPad->m_Offset.x = 0;
-        aPad->m_Offset.y = 0;
+        aPad->m_Drill    = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH ); //wxSize( 0, 0 );
+        aPad->m_Offset   = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH );
     }
 
     aPad->ComputeShapeMaxRadius();

@@ -185,7 +185,7 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
         {
             if( pad->m_DrillShape == PAD_CIRCLE )
             {
-                if( pad->m_Drill.x != 0 )
+                if( pad->m_Drill.x != ZERO_LENGTH )
                 {
                     if( pad->m_Attribut == PAD_HOLE_NOT_PLATED )
                         m_notplatedPadsHoleCount++;
@@ -195,7 +195,7 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
             }
             else
             {
-                if( MIN( pad->m_Drill.x, pad->m_Drill.y ) != 0 )
+                if( MIN( TO_LEGACY_LU( pad->m_Drill.x ), TO_LEGACY_LU( pad->m_Drill.y ) ) != 0 )
                 {
                     if( pad->m_Attribut == PAD_HOLE_NOT_PLATED )
                         m_notplatedPadsHoleCount++;

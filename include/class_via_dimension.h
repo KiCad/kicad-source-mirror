@@ -22,6 +22,11 @@ public:
         m_Drill    = FROM_LEGACY_LU( 0 );
     }
 
+    VIA_DIMENSION( LENGTH_PCB diam, LENGTH_PCB drill )
+    {
+        m_Diameter = diam;
+        m_Drill    = drill;
+    }
 
     bool operator ==( const VIA_DIMENSION& other ) const
     {

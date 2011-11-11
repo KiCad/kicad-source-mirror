@@ -11,6 +11,8 @@
 #include "pad_shapes.h"
 #include "PolyLine.h"
 
+#include "lengthpcb.h"
+
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -85,14 +87,17 @@ public:
                                     // 2..14 = internal layers
                                     // 16 .. 31 = technical layers
 
-    int    m_PadShape;              // Shape: PAD_CIRCLE, PAD_RECT, PAD_OVAL, PAD_TRAPEZOID
-    int    m_DrillShape;            // Shape PAD_CIRCLE, PAD_OVAL
+    int    m_PadShape;              ///< Shape: PAD_CIRCLE, PAD_RECT, PAD_OVAL, PAD_TRAPEZOID
+    int    m_DrillShape;            ///< Shape PAD_CIRCLE, PAD_OVAL
+                                    /// @TODO: as m_DrillShape is eqv. to m_Drill.x==.y
+                                    /// it would be relatively easy to remove
+                                    /// this redundant flag.
 
-    wxSize m_Drill;                 // Drill diam (drill shape = PAD_CIRCLE) or drill size
-                                    // (shape = OVAL) for drill shape = PAD_CIRCLE, drill
-                                    // diam = m_Drill.x
+    VECTOR_PCB m_Drill;             ///< Drill diam (drill shape = PAD_CIRCLE) or drill size
+                                    /// (shape = OVAL) for drill shape = PAD_CIRCLE, drill
+                                    /// diam = m_Drill.x
 
-    wxSize m_Offset;    /* This parameter is useful only for oblong pads (it can be used for other
+    VECTOR_PCB m_Offset;    /* This parameter is useful only for oblong pads (it can be used for other
                          * shapes, but without any interest).
                          * this is the offset between the pad hole and the pad shape (you must
                          * understand here pad shape = copper area around the hole)
@@ -105,9 +110,9 @@ public:
                          * D_PAD::ReturnShapePos() returns the physical shape position according to
                          * the offset and the pad rotation.*/
 
-    wxSize  m_Size;                 // X and Y size ( relative to orient 0)
+    VECTOR_PCB m_Size;                 // X and Y size ( relative to orient 0)
 
-    wxSize  m_DeltaSize;            // delta on rectangular shapes
+    VECTOR_PCB m_DeltaSize;            // delta on rectangular shapes
 
     wxPoint m_Pos0;                 // Initial Pad position (i.e. pas position relative to the
                                     // module anchor, orientation 0

@@ -27,7 +27,8 @@ D_PAD::D_PAD( MODULE* parent ) : BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
 {
     m_NumPadName = 0;
 
-    m_Size.x = m_Size.y = 500;          // give it a reasonable size
+    m_Size.x = m_Size.y = FROM_LEGACY_LU( 500 );          // give it a reasonable size
+    /// TODO: remove hardcoded constant
     m_Orient = 0;                       // Pad rotation in 1/10 degrees
     m_LengthDie = 0;
 
@@ -67,21 +68,23 @@ int D_PAD::GetMaxRadius() const
     switch( m_PadShape & 0x7F )
     {
     case PAD_CIRCLE:
-        radius = m_Size.x / 2;
+        radius = TO_LEGACY_LU( m_Size.x / 2 );
         break;
 
     case PAD_OVAL:
-        radius = MAX( m_Size.x, m_Size.y ) / 2;
+        radius = TO_LEGACY_LU( MAX( m_Size.x, m_Size.y ) / 2 );
         break;
 
     case PAD_RECT:
-        radius = 1 + (int) ( sqrt( (double) m_Size.y * m_Size.y
-                                   + (double) m_Size.x * m_Size.x ) / 2 );
+        x = TO_LEGACY_LU( m_Size.x );
+        y = TO_LEGACY_LU( m_Size.y );
+        radius = 1 + (int) ( sqrt( (double) y * y
+                                   + (double) x * x ) / 2 );
         break;
 
     case PAD_TRAPEZOID:
-        x = m_Size.x + ABS( m_DeltaSize.y );   // Remember: m_DeltaSize.y is the m_Size.x change
-        y = m_Size.y + ABS( m_DeltaSize.x );   // Remember: m_DeltaSize.x is the m_Size.y change
+        x = TO_LEGACY_LU( m_Size.x + ABS( m_DeltaSize.y ) );   // Remember: m_DeltaSize.y is the m_Size.x change
+        y = TO_LEGACY_LU( m_Size.y + ABS( m_DeltaSize.x ) );   // Remember: m_DeltaSize.x is the m_Size.y change
         radius = 1 + (int) ( sqrt( (double) y * y + (double) x * x ) / 2 );
         break;
 
@@ -121,14 +124,14 @@ EDA_RECT D_PAD::GetBoundingBox() const
 // Returns the position of the pad.
 const wxPoint D_PAD::ReturnShapePos()
 {
-    if( m_Offset.x == 0 && m_Offset.y == 0 )
+    if( m_Offset.x == ZERO_LENGTH && m_Offset.y == ZERO_LENGTH )
         return m_Pos;
 
     wxPoint shape_pos;
     int     dX, dY;
 
-    dX = m_Offset.x;
-    dY = m_Offset.y;
+    dX = TO_LEGACY_LU( m_Offset.x );
+    dY = TO_LEGACY_LU( m_Offset.y );
 
     RotatePoint( &dX, &dY, m_Orient );
 
@@ -300,7 +303,7 @@ int D_PAD::GetSolderMaskMargin()
     // ensure mask have a size always >= 0
     if( margin < 0 )
     {
-        int minsize = -MIN( m_Size.x, m_Size.y ) / 2;
+        int minsize = TO_LEGACY_LU( -MIN( m_Size.x, m_Size.y ) / 2 );
 
         if( margin < minsize )
             minsize = minsize;
@@ -345,15 +348,15 @@ wxSize D_PAD::GetSolderPasteMargin()
     }
 
     wxSize pad_margin;
-    pad_margin.x = margin + wxRound( m_Size.x * mratio );
-    pad_margin.y = margin + wxRound( m_Size.y * mratio );
+    pad_margin.x = margin + wxRound( TO_LEGACY_LU_DBL( m_Size.x ) * mratio );
+    pad_margin.y = margin + wxRound( TO_LEGACY_LU_DBL( m_Size.y ) * mratio );
 
     // ensure mask have a size always >= 0
-    if( pad_margin.x < -m_Size.x / 2 )
-        pad_margin.x = -m_Size.x / 2;
+    if( pad_margin.x < TO_LEGACY_LU( -m_Size.x / 2 ) )
+        pad_margin.x = TO_LEGACY_LU( -m_Size.x / 2 );
 
-    if( pad_margin.y < -m_Size.y / 2 )
-        pad_margin.y = -m_Size.y / 2;
+    if( pad_margin.y < TO_LEGACY_LU( -m_Size.y / 2 ) )
+        pad_margin.y = TO_LEGACY_LU( -m_Size.y / 2 );
 
     return pad_margin;
 }
@@ -375,7 +378,8 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
     char* Line;
     char  BufLine[1024], BufCar[256];
     char* PtLine;
-    int   nn, ll, dx, dy;
+    int   nn, ll;
+    double sx, sy, ox, oy, dr, dx, dy;
 
     while( aReader->ReadLine() )
     {
@@ -417,11 +421,14 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
             if( *PtLine == '"' )
                 PtLine++;
 
-            nn = sscanf( PtLine, " %s %d %d %d %d %d",
-                         BufCar, &m_Size.x, &m_Size.y,
-                         &m_DeltaSize.x, &m_DeltaSize.y,
+            nn = sscanf( PtLine, " %s %lf %lf %lf %lf %d",
+                         BufCar, &sx, &sy,
+                         &dx, &dy,
                          &m_Orient );
-
+            m_Size.x = FROM_LEGACY_LU( sx );
+            m_Size.y = FROM_LEGACY_LU( sy );
+            m_DeltaSize.x = FROM_LEGACY_LU( dx );
+            m_DeltaSize.y = FROM_LEGACY_LU( dy );
             ll = 0xFF & BufCar[0];
 
             /* Read pad shape */
@@ -447,16 +454,19 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
 
         case 'D':
             BufCar[0] = 0;
-            nn = sscanf( PtLine, "%d %d %d %s %d %d", &m_Drill.x,
-                         &m_Offset.x, &m_Offset.y, BufCar, &dx, &dy );
-            m_Drill.y    = m_Drill.x;
+            nn = sscanf( PtLine, "%lf %lf %lf %s %lf %lf", &dr,
+                         &ox, &oy, BufCar, &dx, &dy );
+            m_Offset.x    = FROM_LEGACY_LU( ox );
+            m_Offset.y    = FROM_LEGACY_LU( oy );
+            m_Drill.y    = m_Drill.x = FROM_LEGACY_LU( dr );
             m_DrillShape = PAD_CIRCLE;
 
             if( nn >= 6 )       // Drill shape = OVAL ?
             {
                 if( BufCar[0] == 'O' )
                 {
-                    m_Drill.x    = dx; m_Drill.y = dy;
+                    m_Drill.x    = FROM_LEGACY_LU( dx );
+                    m_Drill.y    = FROM_LEGACY_LU( dy );
                     m_DrillShape = PAD_OVAL;
                 }
             }
@@ -551,15 +561,15 @@ bool D_PAD::Save( FILE* aFile ) const
         break;
     }
 
-    fprintf( aFile, "Sh \"%.4s\" %c %d %d %d %d %d\n",
-             m_Padname, cshape, m_Size.x, m_Size.y,
-             m_DeltaSize.x, m_DeltaSize.y, m_Orient );
+    fprintf( aFile, "Sh \"%.4s\" %c %d %d %d %d %d\n", // TODO: pad name length limit!
+             m_Padname, cshape, TO_LEGACY_LU( m_Size.x ), TO_LEGACY_LU( m_Size.y ),
+             TO_LEGACY_LU( m_DeltaSize.x ), TO_LEGACY_LU( m_DeltaSize.y ), m_Orient );
 
-    fprintf( aFile, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
+    fprintf( aFile, "Dr %d %d %d", TO_LEGACY_LU( m_Drill.x ), TO_LEGACY_LU( m_Offset.x ), TO_LEGACY_LU( m_Offset.y ) );
 
     if( m_DrillShape == PAD_OVAL )
     {
-        fprintf( aFile, " %c %d %d", 'O', m_Drill.x, m_Drill.y );
+        fprintf( aFile, " %c %d %d", 'O', TO_LEGACY_LU( m_Drill.x ), TO_LEGACY_LU( m_Drill.y ) );
     }
 
     fprintf( aFile, "\n" );
@@ -744,13 +754,13 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     frame->AppendMsgPanel( ShowPadShape(), ShowPadAttr(), DARKGREEN );
 
-    valeur_param( m_Size.x, Line );
+    valeur_param( TO_LEGACY_LU( m_Size.x ), Line );
     frame->AppendMsgPanel( _( "H Size" ), Line, RED );
 
-    valeur_param( m_Size.y, Line );
+    valeur_param( TO_LEGACY_LU( m_Size.y ), Line );
     frame->AppendMsgPanel( _( "V Size" ), Line, RED );
 
-    valeur_param( (unsigned) m_Drill.x, Line );
+    valeur_param( (unsigned)(int) TO_LEGACY_LU( m_Drill.x ), Line );
 
     if( m_DrillShape == PAD_CIRCLE )
     {
@@ -758,9 +768,9 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     }
     else
     {
-        valeur_param( (unsigned) m_Drill.x, Line );
+        valeur_param( (unsigned) TO_LEGACY_LU( m_Drill.x ), Line );
         wxString msg;
-        valeur_param( (unsigned) m_Drill.y, msg );
+        valeur_param( (unsigned) TO_LEGACY_LU( m_Drill.y ), msg );
         Line += wxT( " / " ) + msg;
         frame->AppendMsgPanel( _( "Drill X / Y" ), Line, RED );
     }
@@ -816,8 +826,8 @@ bool D_PAD::HitTest( const wxPoint& refPos )
     if( ( abs( delta.x ) > m_ShapeMaxRadius ) || ( abs( delta.y ) > m_ShapeMaxRadius ) )
         return false;
 
-    dx = m_Size.x >> 1; // dx also is the radius for rounded pads
-    dy = m_Size.y >> 1;
+    dx = TO_LEGACY_LU( m_Size.x / 2 ); // dx also is the radius for rounded pads
+    dy = TO_LEGACY_LU( m_Size.y / 2 );
 
     switch( m_PadShape & 0x7F )
     {
@@ -854,25 +864,25 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 {
     int diff;
 
-    if( (diff = padref->m_PadShape - padcmp->m_PadShape) )
+    if( ( diff = padref->m_PadShape - padcmp->m_PadShape) )
         return diff;
 
-    if( (diff = padref->m_Size.x - padcmp->m_Size.x) )
+    if( ( diff = TO_LEGACY_LU( padref->m_Size.x - padcmp->m_Size.x ) ) )
         return diff;
 
-    if( (diff = padref->m_Size.y - padcmp->m_Size.y) )
+    if( ( diff = TO_LEGACY_LU( padref->m_Size.y - padcmp->m_Size.y ) ) )
         return diff;
 
-    if( (diff = padref->m_Offset.x - padcmp->m_Offset.x) )
+    if( ( diff = TO_LEGACY_LU( padref->m_Offset.x - padcmp->m_Offset.x ) ) )
         return diff;
 
-    if( (diff = padref->m_Offset.y - padcmp->m_Offset.y) )
+    if( ( diff = TO_LEGACY_LU( padref->m_Offset.y - padcmp->m_Offset.y ) ) )
         return diff;
 
-    if( (diff = padref->m_DeltaSize.x - padcmp->m_DeltaSize.x) )
+    if( ( diff = TO_LEGACY_LU( padref->m_DeltaSize.x - padcmp->m_DeltaSize.x ) ) )
         return diff;
 
-    if( (diff = padref->m_DeltaSize.y - padcmp->m_DeltaSize.y) )
+    if( ( diff = TO_LEGACY_LU( padref->m_DeltaSize.y - padcmp->m_DeltaSize.y ) ) )
         return diff;
 
     // @todo check if export_gencad still works:
