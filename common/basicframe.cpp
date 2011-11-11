@@ -542,27 +542,35 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
 bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
 {
     wxString msg;
+    wxFileName fn = aFileName;
 
-    wxCHECK_MSG( aFileName.IsOk(), false,
+    // Check for absence of a file path with a file name.  Unfortunately KiCad
+    // uses paths relative to the current project path without the ./ part which
+    // confuses wxFileName. Making the file name path absolute may be less than
+    // elegant but it solves the problem.
+    if( fn.GetPath().IsEmpty() && fn.HasName() )
+        fn.MakeAbsolute();
+
+    wxCHECK_MSG( fn.IsOk(), false,
                  wxT( "File name object is invalid.  Bad programmer!" ) );
-    wxCHECK_MSG( !aFileName.GetPath().IsEmpty(), false,
-                 wxT( "File name object path <" ) + aFileName.GetFullPath() +
+    wxCHECK_MSG( !fn.GetPath().IsEmpty(), false,
+                 wxT( "File name object path <" ) + fn.GetFullPath() +
                  wxT( "> is not set.  Bad programmer!" ) );
 
-    if( aFileName.IsDir() && !aFileName.IsDirWritable() )
+    if( fn.IsDir() && !fn.IsDirWritable() )
     {
         msg.Printf( _( "You do not have write permissions to folder <%s>." ),
-                    GetChars( aFileName.GetPath() ) );
+                    GetChars( fn.GetPath() ) );
     }
-    else if( !aFileName.FileExists() && !aFileName.IsDirWritable() )
+    else if( !fn.FileExists() && !fn.IsDirWritable() )
     {
         msg.Printf( _( "You do not have write permissions to save file <%s> to folder <%s>." ),
-                    GetChars( aFileName.GetFullName() ), GetChars( aFileName.GetPath() ) );
+                    GetChars( fn.GetFullName() ), GetChars( fn.GetPath() ) );
     }
-    else if( aFileName.FileExists() && !aFileName.IsFileWritable() )
+    else if( fn.FileExists() && !fn.IsFileWritable() )
     {
         msg.Printf( _( "You do not have write permissions to save file <%s>." ),
-                    GetChars( aFileName.GetFullPath() ) );
+                    GetChars( fn.GetFullPath() ) );
     }
 
     if( !msg.IsEmpty() )
