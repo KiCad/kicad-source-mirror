@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file libarch.cpp
  * @brief Module for generation of component archive files.
@@ -8,6 +33,7 @@
 #include "class_sch_screen.h"
 #include "wxstruct.h"
 #include "sch_item_struct.h"
+#include "wxEeschemaStruct.h"
 
 #include "general.h"
 #include "netlist.h"
@@ -15,51 +41,59 @@
 #include "class_library.h"
 #include "sch_component.h"
 
+#include <wx/wfstream.h>
 
-/*
- *  Creates a library that contains all components used in the schematic.
- *
- *  return  true if success
- */
-bool LibArchive( wxWindow* frame, const wxString& ArchFullFileName )
+
+bool SCH_EDIT_FRAME::CreateArchiveLibrary( const wxString& aFileName )
 {
-    wxString   msg;
-    LIB_COMPONENT* Entry;
+    wxString msg;
+    LIB_COMPONENT* libComponent;
     CMP_LIBRARY* libCache;
-    SCH_SCREENS ScreenList;
+    SCH_SCREENS screens;
 
-    libCache = new CMP_LIBRARY( LIBRARY_TYPE_EESCHEMA, ArchFullFileName );
+    libCache = new CMP_LIBRARY( LIBRARY_TYPE_EESCHEMA, aFileName );
     libCache->SetCache();
 
     /* examine all screens (not sheets) used and build the list of components
      * found in lib complex hierarchies are not a problem because we just want
      * to know used components in libraries
      */
-    for( SCH_SCREEN* screen = ScreenList.GetFirst(); screen != NULL;
-         screen = ScreenList.GetNext() )
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
     {
-        for( SCH_ITEM* SchItem = screen->GetDrawItems(); SchItem; SchItem = SchItem->Next() )
+        for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
         {
-            if( SchItem->Type() != SCH_COMPONENT_T )
+            if( item->Type() != SCH_COMPONENT_T )
                 continue;
 
-            SCH_COMPONENT* component = (SCH_COMPONENT*) SchItem;
+            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
             // If not already saved in the new cache, put it:
+
             if( libCache->FindEntry( component->GetLibName()) == NULL )
             {
-                Entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
+                libComponent = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
 
-                if( Entry )    // if NULL : component not found, cannot be stored
-                    libCache->AddComponent( Entry );
+                if( libComponent )    // if NULL : component not found, cannot be stored
+                    libCache->AddComponent( libComponent );
             }
         }
     }
 
-    if( !libCache->Save( ArchFullFileName ) )
+    wxFFileOutputStream os( aFileName, wxT( "wt" ) );
+
+    if( !os.IsOk() )
+    {
+        msg = wxT( "Failed to create component library file " ) + aFileName;
+        DisplayError( this, msg );
+        return false;
+    }
+
+    STREAM_OUTPUTFORMATTER formatter( os );
+
+    if( !libCache->Save( formatter ) )
     {
         msg.Printf( _( "An error occurred attempting to save component \
-library <%s>." ), GetChars( ArchFullFileName ) );
-        DisplayError( frame, msg );
+library <%s>." ), GetChars( aFileName ) );
+        DisplayError( this, msg );
         return false;
     }
 

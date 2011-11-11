@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file lib_export.cpp
  * @brief Eeschema library maintenance routines to backup modified libraries and
@@ -10,6 +35,7 @@
 #include "confirm.h"
 #include "gestfich.h"
 #include "eeschema_id.h"
+#include "richio.h"
 
 #include "general.h"
 #include "protos.h"
@@ -17,6 +43,7 @@
 #include "class_library.h"
 
 #include <wx/filename.h>
+#include <wx/wfstream.h>
 
 
 extern int ExportPartId;
@@ -101,7 +128,19 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
 
     SaveOnePartInMemory();
 
-    bool success = m_library->Save( fn.GetFullPath() );
+    wxFFileOutputStream os( fn.GetFullPath(), wxT( "wt" ) );
+
+    if( !os.IsOk() )
+    {
+        fn.MakeAbsolute();
+        msg = wxT( "Failed to create component library file " ) + fn.GetFullPath();
+        DisplayError( this, msg );
+        return;
+    }
+
+    STREAM_OUTPUTFORMATTER formatter( os );
+
+    bool success = m_library->Save( formatter );
 
     if( success )
         m_LastLibExportPath = fn.GetPath();
@@ -119,9 +158,14 @@ until it is loaded by Eeschema.\n\nModify the Eeschema library configuration \
 if you want to include it as part of this project." ) );
         }
         else
+        {
             msg = fn.GetFullPath() + _( " - Export OK" );
+        }
     }   // Error
     else
+    {
         msg = _( "Error creating " ) + fn.GetFullName();
+    }
+
     SetStatusText( msg );
 }

@@ -1080,6 +1080,15 @@ public:
     void LoadLibraries( void );
 
     /**
+     * Function CreateArchiveLibrary
+     * creates a library \a aFileName that contains all components used in the current schematic.
+     *
+     * @param aFileName The full path and file name of the archive library.
+     * @return True if \a aFileName was written successfully.
+     */
+    bool CreateArchiveLibrary( const wxString& aFileName );
+
+    /**
      * Function PrintPage
      * plots or prints the current sheet to the clipboard.
      * @param aDC = wxDC given by the calling print function
