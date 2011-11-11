@@ -262,7 +262,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     PtPad->SetPadName( wxT( "1" ) );
     PtPad->m_Pos    = Mself.m_End;
     PtPad->m_Pos0   = PtPad->m_Pos - Module->m_Pos;
-    PtPad->m_Size.x = PtPad->m_Size.y = Mself.m_Width;
+    PtPad->m_Size.x = PtPad->m_Size.y = FROM_LEGACY_LU( Mself.m_Width );
     PtPad->m_layerMask = g_TabOneLayerMask[Module->GetLayer()];
     PtPad->m_Attribut     = PAD_SMD;
     PtPad->m_PadShape     = PAD_CIRCLE;
@@ -552,7 +552,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
 
         Module->m_Pads.PushFront( pad );
 
-        pad->m_Size.x    = pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();
+        pad->m_Size.x    = pad->m_Size.y = FROM_LEGACY_LU( GetBoard()->GetCurrentTrackWidth() );
         pad->m_Pos       = Module->m_Pos;
         pad->m_PadShape  = PAD_RECT;
         pad->m_Attribut  = PAD_SMD;
@@ -656,18 +656,18 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
     switch( shape_type )
     {
     case 0:     //Gap :
-        oX = pad->m_Pos0.x = -( gap_size + pad->m_Size.x ) / 2;
+        oX = pad->m_Pos0.x = -( gap_size + TO_LEGACY_LU( pad->m_Size.x ) ) / 2;
         pad->m_Pos.x += pad->m_Pos0.x;
         pad = pad->Next();
-        pad->m_Pos0.x = oX + gap_size + pad->m_Size.x;
+        pad->m_Pos0.x = oX + gap_size + TO_LEGACY_LU( pad->m_Size.x );
         pad->m_Pos.x += pad->m_Pos0.x;
         break;
 
     case 1:     //Stub :
         pad->SetPadName( wxT( "1" ) );
         pad = pad->Next();
-        pad->m_Pos0.y = -( gap_size + pad->m_Size.y ) / 2;
-        pad->m_Size.y = gap_size;
+        pad->m_Pos0.y = -( gap_size + TO_LEGACY_LU( pad->m_Size.y ) ) / 2;
+        pad->m_Size.y = FROM_LEGACY_LU( gap_size );
         pad->m_Pos.y += pad->m_Pos0.y;
         break;
 
@@ -683,7 +683,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
         std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
         polyPoints.reserve( numPoints );
 
-        edge->m_Start0.y = -pad->m_Size.y / 2;
+        edge->m_Start0.y = TO_LEGACY_LU( -pad->m_Size.y / 2 );
 
         polyPoints.push_back( wxPoint( 0, 0 ) );
 
@@ -1008,8 +1008,8 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
         pad2->m_Pos0.x = last_coordinate.x;
         polyPoints.push_back( wxPoint( last_coordinate.x, 0 ) );
 
-        pad1->m_Size.x = pad1->m_Size.y = ABS( first_coordinate.y );
-        pad2->m_Size.x = pad2->m_Size.y = ABS( last_coordinate.y );
+        pad1->m_Size.x = pad1->m_Size.y = FROM_LEGACY_LU( ABS( first_coordinate.y ) );
+        pad2->m_Size.x = pad2->m_Size.y = FROM_LEGACY_LU( ABS( last_coordinate.y ) );
         pad1->m_Pos0.y = first_coordinate.y / 2;
         pad2->m_Pos0.y = last_coordinate.y / 2;
         pad1->m_Pos.y  = pad1->m_Pos0.y + Module->m_Pos.y;
@@ -1026,8 +1026,8 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
             polyPoints.push_back( pt );
         }
 
-        pad1->m_Size.x = pad1->m_Size.y = 2 * ABS( first_coordinate.y );
-        pad2->m_Size.x = pad2->m_Size.y = 2 * ABS( last_coordinate.y );
+        pad1->m_Size.x = pad1->m_Size.y = FROM_LEGACY_LU( 2 * ABS( first_coordinate.y ) );
+        pad2->m_Size.x = pad2->m_Size.y = FROM_LEGACY_LU( 2 * ABS( last_coordinate.y ) );
         break;
     }
 
@@ -1073,7 +1073,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* Module )
     Module->Draw( DrawPanel, DC, GR_XOR );
 
     /* Calculate the current dimension. */
-    gap_size = next_pad->m_Pos0.x - pad->m_Pos0.x - pad->m_Size.x;
+    gap_size = next_pad->m_Pos0.x - pad->m_Pos0.x - TO_LEGACY_LU( pad->m_Size.x );
 
     /* Entrer the desired length of the gap. */
     msg = ReturnStringFromValue( g_UserUnit, gap_size, GetScreen()->GetInternalUnits() );
@@ -1086,17 +1086,17 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* Module )
     gap_size = ReturnValueFromString( g_UserUnit, msg, GetScreen()->GetInternalUnits() );
 
     /* Updating sizes of pads forming the gap. */
-    pad->m_Size.x = pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();
+    pad->m_Size.x = pad->m_Size.y = FROM_LEGACY_LU( GetBoard()->GetCurrentTrackWidth() );
     pad->m_Pos0.y = 0;
-    oX = pad->m_Pos0.x = -( (gap_size + pad->m_Size.x) / 2 );
+    oX = pad->m_Pos0.x = -( ( gap_size + TO_LEGACY_LU( pad->m_Size.x ) ) / 2 );
     pad->m_Pos.x = pad->m_Pos0.x + Module->m_Pos.x;
     pad->m_Pos.y = pad->m_Pos0.y + Module->m_Pos.y;
     RotatePoint( &pad->m_Pos.x, &pad->m_Pos.y,
                  Module->m_Pos.x, Module->m_Pos.y, Module->m_Orient );
 
-    next_pad->m_Size.x = next_pad->m_Size.y = GetBoard()->GetCurrentTrackWidth();
+    next_pad->m_Size.x = next_pad->m_Size.y = FROM_LEGACY_LU( GetBoard()->GetCurrentTrackWidth() );
     next_pad->m_Pos0.y = 0;
-    next_pad->m_Pos0.x = oX + gap_size + next_pad->m_Size.x;
+    next_pad->m_Pos0.x = oX + gap_size + TO_LEGACY_LU( next_pad->m_Size.x );
     next_pad->m_Pos.x  = next_pad->m_Pos0.x + Module->m_Pos.x;
     next_pad->m_Pos.y  = next_pad->m_Pos0.y + Module->m_Pos.y;
     RotatePoint( &next_pad->m_Pos.x, &next_pad->m_Pos.y,

@@ -692,7 +692,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->Refresh();
 }
 
-
+// TODO: this should be refactored in the name of good programming style
 void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 {
     D_PAD*        pad = module->m_Pads;
@@ -710,9 +710,16 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
         {
             pad->m_Pos0    = pad->m_Pos;
             pad->m_Orient -= angle;
-            RotatePoint( &pad->m_Offset.x, &pad->m_Offset.y, angle );
+            wxPoint of;
+            of.x = TO_LEGACY_LU( pad->m_Offset.x );
+            of.y = TO_LEGACY_LU( pad->m_Offset.y );
+            RotatePoint( &of.x, &of.y, angle );
+            pad->m_Offset.x = FROM_LEGACY_LU( of.x );
+            pad->m_Offset.y = FROM_LEGACY_LU( of.y );
             EXCHG( pad->m_Size.x, pad->m_Size.y );
-            RotatePoint( &pad->m_DeltaSize.x, &pad->m_DeltaSize.y, -angle );
+	    wxSize delta = TO_LEGACY_LU_WXS( pad->m_DeltaSize );
+            RotatePoint( &delta.x, &delta.y, -angle );
+	    pad->m_DeltaSize = VECTOR_PCB( FROM_LEGACY_LU( delta.x ), FROM_LEGACY_LU( delta.y ) );
         }
 
         module->m_Reference->m_Pos0    = module->m_Reference->m_Pos;

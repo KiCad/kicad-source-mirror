@@ -230,6 +230,33 @@ public:
         return y / x.m_U;
     }
 
+    /*************************/
+    /* assignment arithmetic */
+    /*************************/
+    LENGTH< T, P >& operator -= ( const LENGTH< T, P > y )
+    {
+        m_U -= y.m_U;
+        return *this;
+    }
+    LENGTH< T, P >& operator += ( const LENGTH< T, P > y )
+    {
+        m_U += y.m_U;
+        return *this;
+    }
+    LENGTH< T, P >& operator *= ( const T y )
+    {
+        m_U *= y;
+        return *this;
+    }
+    LENGTH< T, P >& operator /= ( const T y )
+    {
+        m_U /= y;
+        return *this;
+    }
+    
+    /*************************/
+    /* more functions        */
+    /*************************/
     friend LENGTH< T, P > sqrt( LENGTH< T, P*2 > y )
     {
         return sqrt( y.m_U );
@@ -238,28 +265,15 @@ public:
     {
         return cbrt( y.m_U );
     }
-    /*************************/
-    /* assignment arithmetic */
-    /*************************/
-    LENGTH< T, P >& operator -= ( const LENGTH< T, P > y )
+    friend LENGTH< T, P > hypot( LENGTH< T, P > x, LENGTH< T, P > y )
     {
-        return m_U -= y.m_U;
+        return hypot( x.m_U, y.m_U );
     }
-    LENGTH< T, P >& operator += ( const LENGTH< T, P > y )
+    friend double atan2( LENGTH< T, P > x, LENGTH< T, P > y )
     {
-        return m_U += y.m_U;
+        return atan2( double ( x.m_U ), double( y.m_U ) );
     }
-    LENGTH< T, P >& operator *= ( const T y )
-    {
-        return m_U *= y;
-    }
-    LENGTH< T, P >& operator /= ( const T y )
-    {
-        return m_U /= y;
-    }
-    /*************************/
-    /* more arithmetic       */
-    /*************************/
+
 };
 
 /**
