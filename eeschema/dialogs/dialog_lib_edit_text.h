@@ -21,7 +21,7 @@ public:
     ~DIALOG_LIB_EDIT_TEXT() {};
 
 private:
-    void InitDialog( );
+    void initDlg( );
     void OnOkClick( wxCommandEvent& aEvent );
     void OnCancelClick( wxCommandEvent& aEvent );
 };
