@@ -191,7 +191,7 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     /* Enable this to draw the bounding box around the text field to validate
      * the bounding box calculations.
      */
-#if 1
+#if 0
 
     // Draw boundary box:
     GRRect( &panel->m_ClipBox, DC, boundaryBox, 0, BROWN );
