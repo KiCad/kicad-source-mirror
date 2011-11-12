@@ -174,10 +174,8 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
      * so the more easily way is to use no justifications ( Centered text )
      * and use GetBoundaryBox to know the text coordinate considered as centered
      */
-    EDA_RECT BoundaryBox = GetBoundingBox();
-    GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
-    GRTextVertJustifyType  vjustify = GR_TEXT_VJUSTIFY_CENTER;
-    textpos = BoundaryBox.Centre();
+    EDA_RECT boundaryBox = GetBoundingBox();
+    textpos = boundaryBox.Centre();
 
     if( m_FieldId == REFERENCE )
         color = ReturnLayerColor( LAYER_REFERENCEPART );
@@ -186,20 +184,17 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     else
         color = ReturnLayerColor( LAYER_FIELDS );
 
-    DrawGraphicText( panel, DC, textpos, color, GetText(), orient, m_Size, hjustify, vjustify,
+    DrawGraphicText( panel, DC, textpos, color, GetText(), orient, m_Size,
+                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                      LineWidth, m_Italic, m_Bold );
 
     /* Enable this to draw the bounding box around the text field to validate
      * the bounding box calculations.
      */
-#if 0
+#if 1
 
     // Draw boundary box:
-    int x1 = BoundaryBox.GetX();
-    int y1 = BoundaryBox.GetY();
-    int x2 = BoundaryBox.GetRight();
-    int y2 = BoundaryBox.GetBottom();
-    GRRect( &panel->m_ClipBox, DC, x1, y1, x2, y2, BROWN );
+    GRRect( &panel->m_ClipBox, DC, boundaryBox, 0, BROWN );
 
     // Draw the text anchor point
 
@@ -208,11 +203,11 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     textpos  = m_Pos - parentComponent->GetPosition();
     textpos  = parentComponent->GetScreenCoord( textpos );
     textpos += parentComponent->GetPosition();
-    x1 = textpos.x;
-    y1 = textpos.y;
-    int len = 10;
-    GRLine( &panel->m_ClipBox, DC, x1 - len, y1, x1 + len, y1, 0, BLUE );
-    GRLine( &panel->m_ClipBox, DC, x1, y1 - len, x1, y1 + len, 0, BLUE );
+    const int len = 10;
+    GRLine( &panel->m_ClipBox, DC,
+            textpos.x - len, textpos.y, textpos.x + len, textpos.y, 0, BLUE );
+    GRLine( &panel->m_ClipBox, DC,
+            textpos.x, textpos.y - len, textpos.x, textpos.y + len, 0, BLUE );
 #endif
 }
 
@@ -255,96 +250,39 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 
 EDA_RECT SCH_FIELD::GetBoundingBox() const
 {
-    EDA_RECT       BoundaryBox;
-    int            hjustify, vjustify;
-    int            orient;
-    wxSize         size;
-    wxPoint        pos1, pos2;
-
     SCH_COMPONENT* parentComponent = (SCH_COMPONENT*) m_Parent;
-
-    orient = m_Orient;
-    wxPoint        pos = parentComponent->GetPosition();
-    pos1 = m_Pos - pos;
-
-    size.x   = LenSize( m_Text );
-    size.y   = m_Size.y;
-    hjustify = m_HJustify;
-    vjustify = m_VJustify;
-
-    pos2 = pos + parentComponent->GetTransform().TransformCoordinate( pos1 );
-
-    // Calculate the text orientation, according to the component orientation/mirror.
-    if( parentComponent->GetTransform().y1 )
-    {
-        if( orient == TEXT_ORIENT_HORIZ )
-            orient = TEXT_ORIENT_VERT;
-        else
-            orient = TEXT_ORIENT_HORIZ;
-    }
-
-    // Calculate the text justification, according to the component orientation/mirror.
-    if( parentComponent->GetTransform().y1 )
-    {
-        /* is it mirrored (for text justify)*/
-        EXCHG( hjustify, vjustify );
-
-        if( parentComponent->GetTransform().x2 < 0 )
-            NEGATE( vjustify );
-
-        if( parentComponent->GetTransform().y1 > 0 )
-            NEGATE( hjustify );
-    }
-    else    /* component horizontal: is it mirrored (for text justify)*/
-    {
-        if( parentComponent->GetTransform().x1 < 0 )
-            NEGATE( hjustify );
-
-        if( parentComponent->GetTransform().y2 > 0 )
-            NEGATE( vjustify );
-    }
-
-    if( orient == TEXT_ORIENT_VERT )
-        EXCHG( size.x, size.y );
-
-    switch( hjustify )
-    {
-    case GR_TEXT_HJUSTIFY_CENTER:
-        pos1.x = pos2.x - (size.x / 2);
-        break;
-
-    case GR_TEXT_HJUSTIFY_RIGHT:
-        pos1.x = pos2.x - size.x;
-        break;
-
-    default:
-        pos1.x = pos2.x;
-        break;
-    }
-
-    switch( vjustify )
-    {
-    case GR_TEXT_VJUSTIFY_CENTER:
-        pos1.y = pos2.y - (size.y / 2);
-        break;
-
-    case GR_TEXT_VJUSTIFY_BOTTOM:
-        pos1.y = pos2.y - size.y;
-        break;
-
-    default:
-        pos1.y = pos2.y;
-        break;
-    }
-
-    BoundaryBox.SetOrigin( pos1 );
-    BoundaryBox.SetSize( size );
-
-    // Take thickness in account:
     int linewidth = ( m_Thickness == 0 ) ? g_DrawDefaultLineThickness : m_Thickness;
-    BoundaryBox.Inflate( linewidth, linewidth );
 
-    return BoundaryBox;
+    // We must pass the effective text thickness to GetTextBox
+    // when calculating the bounding box
+    linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
+
+    // Calculate the text bounding box:
+    EDA_RECT rect = GetTextBox( -1, linewidth );
+
+    // Calculate the bounding box position relative to the component:
+    wxPoint origin = parentComponent->GetPosition();
+    wxPoint pos = m_Pos - origin;
+    wxPoint begin = rect.GetOrigin() - origin;
+    wxPoint end = rect.GetEnd() - origin;
+    RotatePoint( &begin, pos, m_Orient );
+    RotatePoint( &end, pos, m_Orient );
+    // Due to the Y axis direction, we must mirror the bounding box,
+    // relative to the text position:
+    begin.y -= pos.y;
+    end.y -= pos.y;
+    NEGATE( begin.y );
+    NEGATE( end.y );
+    begin.y += pos.y;
+    end.y += pos.y;
+    // Now, apply the component transform (mirror/rot)
+    begin = parentComponent->GetTransform().TransformCoordinate( begin );
+    end = parentComponent->GetTransform().TransformCoordinate( end );
+    rect.SetOrigin( begin);
+    rect.SetEnd( end);
+    rect.Move( origin );
+    rect.Normalize();
+    return rect;
 }
 
 
