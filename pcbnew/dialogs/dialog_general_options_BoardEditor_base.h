@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  6 2011)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_general_options_BoardEditor_base__
-#define __dialog_general_options_BoardEditor_base__
+#ifndef __DIALOG_GENERAL_OPTIONS_BOARDEDITOR_BASE_H__
+#define __DIALOG_GENERAL_OPTIONS_BOARDEDITOR_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
 #include <wx/radiobox.h>
 #include <wx/gdicmn.h>
@@ -79,9 +80,9 @@ class DialogGeneralOptionsBoardEditor_base : public wxDialog
 	
 	public:
 		
-		DialogGeneralOptionsBoardEditor_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("General settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 585,280 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DialogGeneralOptionsBoardEditor_base( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("General settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 585,280 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DialogGeneralOptionsBoardEditor_base();
 	
 };
 
-#endif //__dialog_general_options_BoardEditor_base__
+#endif //__DIALOG_GENERAL_OPTIONS_BOARDEDITOR_BASE_H__

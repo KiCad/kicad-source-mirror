@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  6 2011)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -68,12 +68,14 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 	
 	m_staticTextRotationAngle = new wxStaticText( this, wxID_ANY, _("Rotation Angle"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRotationAngle->Wrap( -1 );
-	bMiddleLeftSizer->Add( m_staticTextRotationAngle, 0, wxALL, 5 );
+	bMiddleLeftSizer->Add( m_staticTextRotationAngle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxString m_RotationAngleChoices[] = { _("45"), _("90") };
 	int m_RotationAngleNChoices = sizeof( m_RotationAngleChoices ) / sizeof( wxString );
 	m_RotationAngle = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_RotationAngleNChoices, m_RotationAngleChoices, 0 );
 	m_RotationAngle->SetSelection( 0 );
+	m_RotationAngle->SetToolTip( _("Footprints rotation increment, for rotate menu or hot key.") );
+	
 	bMiddleLeftSizer->Add( m_RotationAngle, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	bMainSizer->Add( bMiddleLeftSizer, 1, wxEXPAND, 5 );
@@ -82,7 +84,7 @@ DialogGeneralOptionsBoardEditor_base::DialogGeneralOptionsBoardEditor_base( wxWi
 	bMiddleRightBoxSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options:") ), wxVERTICAL );
 	
 	m_DrcOn = new wxCheckBox( this, wxID_DRC_ONOFF, _("Drc ON"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DrcOn->SetValue(true);
+	m_DrcOn->SetValue(true); 
 	m_DrcOn->SetToolTip( _("Enable/disable the DRC control.\nWhen DRC is disable, all connections are allowed.") );
 	
 	bMiddleRightBoxSizer->Add( m_DrcOn, 0, wxALL|wxEXPAND, 5 );
