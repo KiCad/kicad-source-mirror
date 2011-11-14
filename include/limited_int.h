@@ -164,6 +164,11 @@ public:
         return x + double( y.m_Value );
     }
 
+    LIMITED_INT< T > operator - ( void ) const
+    {
+        assert( -std::numeric_limits< T >::max() <= m_Value );
+        return -m_Value;
+    }
     LIMITED_INT< T > operator - ( const LIMITED_INT< T > &y ) const
     {
         assert( !( 0 < m_Value ) || m_Value - std::numeric_limits< T >::max() <= y.m_Value );

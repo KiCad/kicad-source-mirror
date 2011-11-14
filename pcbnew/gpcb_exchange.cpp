@@ -371,8 +371,8 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             }
             Pad->m_Pos.x  = (ibuf[0] + ibuf[2]) / 2;
             Pad->m_Pos.y  = (ibuf[1] + ibuf[3]) / 2;
-            Pad->m_Size.x = ibuf[4] + abs( ibuf[0] - ibuf[2] );
-            Pad->m_Size.y = ibuf[4] + abs( ibuf[1] - ibuf[3] );
+            Pad->m_Size.x = FROM_LEGACY_LU( ibuf[4] + abs( ibuf[0] - ibuf[2] ) );
+            Pad->m_Size.y = FROM_LEGACY_LU( ibuf[4] + abs( ibuf[1] - ibuf[3] ) );
             Pad->m_Pos.x += m_Pos.x;
             Pad->m_Pos.y += m_Pos.y;
 
@@ -430,8 +430,8 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
             Pad->m_Pos.x   = ibuf[0];
             Pad->m_Pos.y   = ibuf[1];
-            Pad->m_Drill.x = Pad->m_Drill.y = ibuf[5];
-            Pad->m_Size.x  = Pad->m_Size.y = ibuf[3] + Pad->m_Drill.x;
+            Pad->m_Drill.x = Pad->m_Drill.y = FROM_LEGACY_LU( (int) ibuf[5] );
+            Pad->m_Size.x  = Pad->m_Size.y = FROM_LEGACY_LU( ibuf[3] ) + Pad->m_Drill.x;
             Pad->m_Pos.x  += m_Pos.x;
             Pad->m_Pos.y  += m_Pos.y;
 

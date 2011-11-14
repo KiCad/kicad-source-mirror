@@ -201,7 +201,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                  * inside the board (in fact inside the hole. Some photo diodes and Leds are
                  * like this)
                  */
-                if( (pad->m_Drill.x == 0) && (pad->m_Drill.y == 0) )
+                if( (pad->m_Drill.x == ZERO_LENGTH) && (pad->m_Drill.y == ZERO_LENGTH) )
                     continue;
 
                 // Use a dummy pad to calculate a hole shape that have the same dimension as

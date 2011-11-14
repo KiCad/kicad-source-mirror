@@ -153,7 +153,7 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
             if( pad->GetNet() == GetNet() )
             {
                 count++;
-                lengthdie += pad->m_LengthDie;
+                lengthdie += TO_LEGACY_LU_DBL( pad->m_LengthDie );
             }
         }
     }

@@ -42,8 +42,8 @@ extern BOARD_DESIGN_SETTINGS boardDesignSettings;
 const wxString NETCLASS::Default = wxT("Default");
 // Initial values for netclass initialization
 int NETCLASS::DEFAULT_CLEARANCE = 100;                  // track to track and track to pads clearance
-int NETCLASS::DEFAULT_VIA_DRILL = 250;                  // default via drill
-int NETCLASS::DEFAULT_UVIA_DRILL = 50;                  // micro via drill
+int NETCLASS::DEFAULT_VIA_DRILL = 250;                  // default via drill (TODO: should be gone on refactoring)
+int NETCLASS::DEFAULT_UVIA_DRILL = 50;                  // micro via drill (TODO: --"--)
 
 
 NETCLASS::NETCLASS( BOARD* aParent, const wxString& aName, const NETCLASS* initialParameters ) :
@@ -55,36 +55,39 @@ NETCLASS::NETCLASS( BOARD* aParent, const wxString& aName, const NETCLASS* initi
     SetParams( initialParameters );
 }
 
-
 void NETCLASS::SetParams( const NETCLASS* defaults )
 {
     if( defaults )
     {
         SetClearance( defaults->GetClearance() );
         SetTrackWidth( defaults->GetTrackWidth() );
-        SetViaDiameter( defaults->GetViaDiameter() );
-        SetViaDrill( defaults->GetViaDrill() );
-        SetuViaDiameter( defaults->GetuViaDiameter() );
-        SetuViaDrill( defaults->GetuViaDrill() );
+        Via( defaults->Via() );
+        MicroVia( defaults->MicroVia() );
     }
     else
-    {   // We should use m_Parent->GetBoardDesignSettings()
-        // But when the NETCLASSES constructor is called
-        // (it call NETCLASS constructor), the m_Parent constructor (see BOARD::BOARD)
-        // is not run, and GetBoardDesignSettings() return a bad value
-        // TODO: see how change that.
-        const BOARD_DESIGN_SETTINGS& g = boardDesignSettings;
-
-        SetTrackWidth(  TO_LEGACY_LU( g.m_TrackMinWidth ) );
-        SetViaDiameter( TO_LEGACY_LU( g.m_ViasMinSize ) );
-        SetuViaDiameter( TO_LEGACY_LU( g.m_MicroViasMinSize ) );
-        // Use default values for next parameters:
-        SetClearance( DEFAULT_CLEARANCE );
-        SetViaDrill( DEFAULT_VIA_DRILL );
-        SetuViaDrill( DEFAULT_UVIA_DRILL );
+    {   
+        SetToDefault();
     }
 }
 
+void NETCLASS::SetToDefault()
+{
+    // We should use m_Parent->GetBoardDesignSettings()
+    // But when the NETCLASSES constructor is called
+    // (it call NETCLASS constructor), the m_Parent constructor (see BOARD::BOARD)
+    // is not run, and GetBoardDesignSettings() return a bad value
+    // TODO: see how change that.
+    const BOARD_DESIGN_SETTINGS& g = boardDesignSettings;
+
+    TrackWidth( g.m_TrackMinWidth );
+
+    //SetViaDrill( TO_LEGACY_LU( g.m_ViasMinDrill ) ); // was DEFAULT_VIA_DRILL
+    //SetuViaDrill( TO_LEGACY_LU( g.m_MicroViasMinDrill ) ); // DEFAULT_UVIA_DRILL
+    Via( g.m_MinVia );
+    MicroVia( g.m_MinMicroVia );
+    // Use default values for next parameters:
+    Clearance( FROM_LEGACY_LU( DEFAULT_CLEARANCE ) );
+}
 
 NETCLASS::~NETCLASS()
 {
@@ -294,14 +297,14 @@ bool NETCLASS::Save( FILE* aFile ) const
 
     // Write parameters
 
-    fprintf( aFile, "Clearance %d\n",       GetClearance() );
-    fprintf( aFile, "TrackWidth %d\n",      GetTrackWidth() );
+    fprintf( aFile, "Clearance %f\n",       TO_LEGACY_LU_DBL( Clearance() ) );
+    fprintf( aFile, "TrackWidth %f\n",      TO_LEGACY_LU_DBL( TrackWidth() ) );
 
-    fprintf( aFile, "ViaDia %d\n",          GetViaDiameter() );
-    fprintf( aFile, "ViaDrill %d\n",        GetViaDrill() );
+    fprintf( aFile, "ViaDia %f\n",          TO_LEGACY_LU_DBL( Via().m_Diameter ) );
+    fprintf( aFile, "ViaDrill %f\n",        TO_LEGACY_LU_DBL( Via().m_Drill ) );
 
-    fprintf( aFile, "uViaDia %d\n",         GetuViaDiameter() );
-    fprintf( aFile, "uViaDrill %d\n",       GetuViaDrill() );
+    fprintf( aFile, "uViaDia %f\n",         TO_LEGACY_LU_DBL( MicroVia().m_Diameter ) );
+    fprintf( aFile, "uViaDrill %f\n",       TO_LEGACY_LU_DBL( MicroVia().m_Drill ) );
 
     // Write members:
     for( const_iterator i = begin();  i!=end();  ++i )
@@ -342,6 +345,8 @@ bool NETCLASS::ReadDescr( LINE_READER* aReader )
     char*       Line;
     char        Buffer[1024];
     wxString    netname;
+    VIA_DIMENSION  via = Via();
+    VIA_DIMENSION uvia = MicroVia();
 
     while( aReader->ReadLine() )
     {
@@ -362,33 +367,37 @@ bool NETCLASS::ReadDescr( LINE_READER* aReader )
 
         if( strnicmp( Line, "Clearance", 9 ) == 0 )
         {
-            SetClearance( atoi( Line + 9 ) );
+            Clearance( FROM_LEGACY_LU( atof( Line + 9 ) ) );
             continue;
         }
         if( strnicmp( Line, "TrackWidth", 10 ) == 0 )
         {
-            SetTrackWidth( atoi( Line + 10 ) );
+            TrackWidth( FROM_LEGACY_LU( atof( Line + 10 ) ) );
             continue;
         }
         if( strnicmp( Line, "ViaDia", 6 ) == 0 )
         {
-            SetViaDiameter( atoi( Line + 6 ) );
+            via.m_Diameter = FROM_LEGACY_LU( atof( Line + 6 ) );
+            Via(via);
             continue;
         }
         if( strnicmp( Line, "ViaDrill", 8 ) == 0 )
         {
-            SetViaDrill( atoi( Line + 8 ) );
+            via.m_Drill = FROM_LEGACY_LU( atof( Line + 8 ) );
+            Via(via);
             continue;
         }
 
         if( strnicmp( Line, "uViaDia", 7 ) == 0 )
         {
-            SetuViaDiameter( atoi( Line + 7 ) );
+            uvia.m_Diameter = FROM_LEGACY_LU( atof( Line + 7 ) );
+            MicroVia(uvia);
             continue;
         }
         if( strnicmp( Line, "uViaDrill", 9 ) == 0 )
         {
-            SetuViaDrill( atoi( Line + 9 ) );
+            uvia.m_Drill = FROM_LEGACY_LU( atof( Line + 9 ) );
+            MicroVia(uvia);
             continue;
         }
 
@@ -417,22 +426,22 @@ int NETCLASS::GetTrackMinWidth() const
 
 int NETCLASS::GetViaMinDiameter() const
 {
-    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_ViasMinSize );
+    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_MinVia.m_Diameter );
 }
 
 int NETCLASS::GetViaMinDrill() const
 {
-    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_ViasMinDrill );
+    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_MinVia.m_Drill );
 }
 
 int NETCLASS::GetuViaMinDiameter() const
 {
-    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_MicroViasMinSize );
+    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_MinMicroVia.m_Diameter );
 }
 
 int NETCLASS::GetuViaMinDrill() const
 {
-    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_MicroViasMinDrill );
+    return TO_LEGACY_LU( m_Parent->GetBoardDesignSettings()->m_MinMicroVia.m_Drill );
 }
 
 

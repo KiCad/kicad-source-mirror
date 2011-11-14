@@ -212,42 +212,21 @@ void DIALOG_DESIGN_RULES::PrintCurrentSettings()
     m_MessagesList->AppendToPage( _( "<b>Current general settings:</b><br>" ) );
 
     // Display min values:
-#ifdef KICAD_NANOMETRE
-    value = LengthToString( UnitDescription( g_UserUnit ),
-                          m_BrdSettings->m_TrackMinWidth,
-                          true );
-#else
-    value = ReturnStringFromValue( g_UserUnit,
-                                   TO_LEGACY_LU( m_BrdSettings->m_TrackMinWidth ),
-                                   internal_units,
-                                   true );
-#endif
+    value = LENGTH_TO_STR_SYM( g_UserUnit,
+        m_BrdSettings->m_TrackMinWidth,
+        internal_units );
     msg.Printf( _( "Minimum value for tracks width: <b>%s</b><br>\n" ), GetChars( value ) );
     m_MessagesList->AppendToPage( msg );
 
-#ifdef KICAD_NANOMETRE
-    value = LengthToString( UnitDescription( g_UserUnit ),
-                          m_BrdSettings->m_ViasMinSize,
-                          true );
-#else
-    value = ReturnStringFromValue( g_UserUnit,
-                                   TO_LEGACY_LU( m_BrdSettings->m_ViasMinSize ),
-                                   internal_units,
-                                   true );
-#endif
+    value = LENGTH_TO_STR_SYM( g_UserUnit,
+        m_BrdSettings->m_MinVia.m_Diameter,
+        internal_units );
     msg.Printf( _( "Minimum value for vias diameter: <b>%s</b><br>\n" ), GetChars( value ) );
     m_MessagesList->AppendToPage( msg );
 
-#ifdef KICAD_NANOMETRE
-    value = LengthToString( UnitDescription( g_UserUnit ),
-                          m_BrdSettings->m_MicroViasMinSize,
-                          true );
-#else
-    value = ReturnStringFromValue( g_UserUnit,
-                                   TO_LEGACY_LU( m_BrdSettings->m_MicroViasMinSize ),
-                                   internal_units,
-                                   true );
-#endif
+    value = LENGTH_TO_STR_SYM( g_UserUnit,
+        m_BrdSettings->m_MinMicroVia.m_Diameter,
+        internal_units );
     msg.Printf( _( "Minimum value for microvias diameter: <b>%s</b><br>\n" ), GetChars( value ) );
     m_MessagesList->AppendToPage( msg );
 }
@@ -312,35 +291,26 @@ void DIALOG_DESIGN_RULES::InitGlobalRules()
     AddUnitSymbol( *m_TrackMinWidthTitle );
 
     int Internal_Unit = m_Parent->m_InternalUnits;
-#ifdef KICAD_NANOMETRE
-    LengthToTextCtrl( *m_SetViasMinSizeCtrl, m_BrdSettings->m_ViasMinSize );
-    LengthToTextCtrl( *m_SetViasMinDrillCtrl, m_BrdSettings->m_ViasMinDrill );
-#else
-    PutValueInLocalUnits( *m_SetViasMinSizeCtrl,
-                          m_BrdSettings->m_ViasMinSize,
-                          Internal_Unit );
-    PutValueInLocalUnits( *m_SetViasMinDrillCtrl, m_BrdSettings->m_ViasMinDrill, Internal_Unit );
-#endif
-
     if(  m_BrdSettings->m_CurrentViaType != VIA_THROUGH )
         m_OptViaType->SetSelection( 1 );
 
     m_AllowMicroViaCtrl->SetSelection(  m_BrdSettings->m_MicroViasAllowed ? 1 : 0 );
-#ifdef KICAD_NANOMETRE
-    LengthToTextCtrl( *m_SetMicroViasMinSizeCtrl, m_BrdSettings->m_MicroViasMinSize );
-    LengthToTextCtrl( *m_SetMicroViasMinDrillCtrl, m_BrdSettings->m_MicroViasMinDrill );
-    LengthToTextCtrl( *m_SetTrackMinWidthCtrl, m_BrdSettings->m_TrackMinWidth );
-#else
-    PutValueInLocalUnits( *m_SetMicroViasMinSizeCtrl,
-                          m_BrdSettings->m_MicroViasMinSize,
-                          Internal_Unit );
-    PutValueInLocalUnits( *m_SetMicroViasMinDrillCtrl,
-                          TO_LEGACY_LU( m_BrdSettings->m_MicroViasMinDrill ),
-                          Internal_Unit );
-    PutValueInLocalUnits( *m_SetTrackMinWidthCtrl,
-                          m_BrdSettings->m_TrackMinWidth,
-                          Internal_Unit );
-#endif
+
+    CTR_PUT_LENGTH( *m_SetViasMinSizeCtrl,
+        m_BrdSettings->m_MinVia.m_Diameter,
+        Internal_Unit );
+    CTR_PUT_LENGTH( *m_SetViasMinDrillCtrl,
+        m_BrdSettings->m_MinVia.m_Drill,
+        Internal_Unit );
+    CTR_PUT_LENGTH( *m_SetMicroViasMinSizeCtrl,
+        m_BrdSettings->m_MinMicroVia.m_Diameter,
+        Internal_Unit );
+    CTR_PUT_LENGTH( *m_SetMicroViasMinDrillCtrl,
+        m_BrdSettings->m_MinMicroVia.m_Drill,
+        Internal_Unit );
+    CTR_PUT_LENGTH( *m_SetTrackMinWidthCtrl,
+        m_BrdSettings->m_TrackMinWidth,
+        Internal_Unit );
 
     // Initialize Vias and Tracks sizes lists.
     // note we display only extra values, never the current netclass value.
@@ -382,39 +352,21 @@ void DIALOG_DESIGN_RULES::InitDimensionsLists()
 
     for( unsigned ii = 0; ii < m_TracksWidthList.size(); ii++ )
     {
-#ifdef KICAD_NANOMETRE
-        msg = LengthToString( UnitDescription( g_UserUnit ),
-                              m_TracksWidthList[ii],
-                              false );
-#else
-        msg = ReturnStringFromValue( g_UserUnit, m_TracksWidthList[ii], Internal_Unit, false );
-#endif
+        msg = LENGTH_TO_STR( g_UserUnit, m_TracksWidthList[ii], Internal_Unit);
         m_gridTrackWidthList->SetCellValue( ii, 0, msg  );
     }
 
     for( unsigned ii = 0; ii < m_ViasDimensionsList.size(); ii++ )
     {
-#ifdef KICAD_NANOMETRE
-        msg = LengthToString( UnitDescription( g_UserUnit ),
-                              m_ViasDimensionsList[ii].m_Diameter,
-                              false );
-#else
-        msg = ReturnStringFromValue( g_UserUnit,
-                                     TO_LEGACY_LU( m_ViasDimensionsList[ii].m_Diameter ),
-                                     Internal_Unit, false );
-#endif
+        msg = LENGTH_TO_STR( g_UserUnit,
+            m_ViasDimensionsList[ii].m_Diameter,
+            Internal_Unit );
         m_gridViaSizeList->SetCellValue( ii, 0, msg );
         if( m_ViasDimensionsList[ii].m_Drill > ZERO_LENGTH )
         {
-#ifdef KICAD_NANOMETRE
-            msg = LengthToString( UnitDescription( g_UserUnit ),
-                                  m_ViasDimensionsList[ii].m_Drill,
-                                  false );
-#else
-            msg = ReturnStringFromValue( g_UserUnit,
-                                         TO_LEGACY_LU( m_ViasDimensionsList[ii].m_Drill ),
-                                         Internal_Unit, false );
-#endif
+            msg = LENGTH_TO_STR( g_UserUnit,
+                m_ViasDimensionsList[ii].m_Drill,
+                Internal_Unit );
             m_gridViaSizeList->SetCellValue( ii, 1, msg );
         }
     }
@@ -550,23 +502,12 @@ static void class2gridRow( wxGrid* grid, int row, NETCLASS* nc, int units )
     // label is netclass name
     grid->SetRowLabelValue( row, nc->GetName() );
 
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetClearance(), units );
-    grid->SetCellValue( row, GRID_CLEARANCE, msg );
-
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetTrackWidth(), units );
-    grid->SetCellValue( row, GRID_TRACKSIZE, msg );
-
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetViaDiameter(), units );
-    grid->SetCellValue( row, GRID_VIASIZE, msg );
-
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetViaDrill(), units );
-    grid->SetCellValue( row, GRID_VIADRILL, msg );
-
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetuViaDiameter(), units );
-    grid->SetCellValue( row, GRID_uVIASIZE, msg );
-
-    msg = ReturnStringFromValue( g_UserUnit, nc->GetuViaDrill(), units );
-    grid->SetCellValue( row, GRID_uVIADRILL, msg );
+    grid->SetCellValue( row, GRID_CLEARANCE, LENGTH_TO_STR( g_UserUnit, nc->Clearance(), units ) );
+    grid->SetCellValue( row, GRID_TRACKSIZE, LENGTH_TO_STR( g_UserUnit, nc->TrackWidth(), units ) );
+    grid->SetCellValue( row, GRID_VIASIZE, LENGTH_TO_STR( g_UserUnit, nc->Via().m_Diameter, units ) );
+    grid->SetCellValue( row, GRID_VIADRILL, LENGTH_TO_STR( g_UserUnit, nc->Via().m_Drill, units ) );
+    grid->SetCellValue( row, GRID_uVIASIZE, LENGTH_TO_STR( g_UserUnit, nc->MicroVia().m_Diameter, units ) );
+    grid->SetCellValue( row, GRID_uVIADRILL, LENGTH_TO_STR( g_UserUnit, nc->MicroVia().m_Drill, units ) );
 }
 
 
@@ -600,15 +541,16 @@ void DIALOG_DESIGN_RULES::InitRulesList()
 
 static void gridRow2class( wxGrid* grid, int row, NETCLASS* nc, int units )
 {
-#define MYCELL( col )   \
-    ReturnValueFromString( g_UserUnit, grid->GetCellValue( row, col ), units )
-
-    nc->SetClearance( MYCELL( GRID_CLEARANCE ) );
-    nc->SetTrackWidth( MYCELL( GRID_TRACKSIZE ) );
-    nc->SetViaDiameter( MYCELL( GRID_VIASIZE ) );
-    nc->SetViaDrill( MYCELL( GRID_VIADRILL ) );
-    nc->SetuViaDiameter( MYCELL( GRID_uVIASIZE ) );
-    nc->SetuViaDrill( MYCELL( GRID_uVIADRILL ) );
+    nc->Clearance(
+        STR_TO_LENGTH( g_UserUnit, grid->GetCellValue( row, GRID_CLEARANCE ), units ) );
+    nc->TrackWidth(
+        STR_TO_LENGTH( g_UserUnit, grid->GetCellValue( row, GRID_TRACKSIZE ), units ) );
+    nc->Via( VIA_DIMENSION(
+        STR_TO_LENGTH( g_UserUnit, grid->GetCellValue( row, GRID_VIASIZE ), units ),
+        STR_TO_LENGTH( g_UserUnit, grid->GetCellValue( row, GRID_VIADRILL ), units ) ) );
+    nc->MicroVia( VIA_DIMENSION(
+        STR_TO_LENGTH( g_UserUnit, grid->GetCellValue( row, GRID_uVIASIZE ), units ),
+        STR_TO_LENGTH( g_UserUnit, grid->GetCellValue( row, GRID_uVIADRILL ), units ) ) );
 }
 
 
@@ -666,38 +608,20 @@ void DIALOG_DESIGN_RULES::CopyGlobalRulesToBoard()
 
     m_BrdSettings->m_MicroViasAllowed = m_AllowMicroViaCtrl->GetSelection() == 1;
 
-#ifdef KICAD_NANOMETRE
     // Update vias minimum values for DRC
-    m_BrdSettings->m_ViasMinSize =
-        LengthFromTextCtrl( *m_SetViasMinSizeCtrl );
-    m_BrdSettings->m_ViasMinDrill =
-        LengthFromTextCtrl( *m_SetViasMinDrillCtrl );
+    m_BrdSettings->m_MinVia.m_Diameter =
+        CTR_GET_LENGTH( *m_SetViasMinSizeCtrl, m_Parent->m_InternalUnits );
+    m_BrdSettings->m_MinVia.m_Drill =
+        CTR_GET_LENGTH( *m_SetViasMinDrillCtrl, m_Parent->m_InternalUnits );
 
     // Update microvias minimum values for DRC
-    m_BrdSettings->m_MicroViasMinSize =
-        LengthFromTextCtrl( *m_SetMicroViasMinSizeCtrl );
-    m_BrdSettings->m_MicroViasMinDrill =
-        LengthFromTextCtrl( *m_SetMicroViasMinDrillCtrl );
-
+    m_BrdSettings->m_MinMicroVia.m_Diameter =
+        CTR_GET_LENGTH( *m_SetMicroViasMinSizeCtrl, m_Parent->m_InternalUnits );
+    m_BrdSettings->m_MinMicroVia.m_Drill =
+        CTR_GET_LENGTH( *m_SetMicroViasMinDrillCtrl, m_Parent->m_InternalUnits );
     // Update tracks minimum values for DRC
     m_BrdSettings->m_TrackMinWidth =
-        LengthFromTextCtrl( *m_SetTrackMinWidthCtrl );
-#else
-    // Update vias minimum values for DRC
-    m_BrdSettings->m_ViasMinSize =
-        ReturnValueFromTextCtrl( *m_SetViasMinSizeCtrl, m_Parent->m_InternalUnits );
-    m_BrdSettings->m_ViasMinDrill =
-        ReturnValueFromTextCtrl( *m_SetViasMinDrillCtrl, m_Parent->m_InternalUnits );
-
-    // Update microvias minimum values for DRC
-    m_BrdSettings->m_MicroViasMinSize =
-        ReturnValueFromTextCtrl( *m_SetMicroViasMinSizeCtrl, m_Parent->m_InternalUnits );
-    m_BrdSettings->m_MicroViasMinDrill =
-        ReturnValueFromTextCtrl( *m_SetMicroViasMinDrillCtrl, m_Parent->m_InternalUnits );
-    // Update tracks minimum values for DRC
-    m_BrdSettings->m_TrackMinWidth =
-        ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
-#endif
+        CTR_GET_LENGTH( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
 }
 
 
@@ -714,12 +638,7 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard()
         msg = m_gridTrackWidthList->GetCellValue( row, 0 );
         if( msg.IsEmpty() )
             continue;
-#ifdef KICAD_NANOMETRE
-        m_TracksWidthList.push_back( StringToLength( UnitDescription( g_UserUnit ), msg ) );
-#else
-        int value = ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits );
-        m_TracksWidthList.push_back( value );
-#endif
+        m_TracksWidthList.push_back( STR_TO_LENGTH( g_UserUnit, msg, m_Parent->m_InternalUnits ) );
     }
 
     // Sort new list by by increasing value
@@ -733,21 +652,11 @@ void DIALOG_DESIGN_RULES::CopyDimensionsListsToBoard()
         if( msg.IsEmpty() )
             continue;
         VIA_DIMENSION via_dim;
-#ifdef KICAD_NANOMETRE
-        via_dim.m_Diameter = StringToLength( UnitDescription( g_UserUnit ), msg );
-#else
-        int           value = ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits );
-        via_dim.m_Diameter = FROM_LEGACY_LU( value );
-#endif
+        via_dim.m_Diameter = STR_TO_LENGTH( g_UserUnit, msg, m_Parent->m_InternalUnits );
         msg = m_gridViaSizeList->GetCellValue( row, 1 );
         if( !msg.IsEmpty() )
         {
-#ifdef KICAD_NANOMETRE
-            via_dim.m_Drill = StringToLength( UnitDescription( g_UserUnit ), msg );
-#else
-            value = ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits );
-            via_dim.m_Drill = FROM_LEGACY_LU( value );
-#endif
+            via_dim.m_Drill = STR_TO_LENGTH( g_UserUnit, msg, m_Parent->m_InternalUnits );
         }
         m_ViasDimensionsList.push_back( via_dim );
     }

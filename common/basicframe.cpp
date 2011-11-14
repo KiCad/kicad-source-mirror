@@ -518,6 +518,20 @@ void EDA_BASE_FRAME::CopyVersionInfoToClipboard( wxCommandEvent&  event )
     tmp << wxT( "OFF\n" );
 #endif
 
+    tmp << wxT( "         KICAD_NANOMETRE=" );
+#ifdef KICAD_NANOMETRE
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
+
+    tmp << wxT( "         KICAD_KEEPCASE=" );
+#ifdef KICAD_KEEPCASE
+    tmp << wxT( "ON\n" );
+#else
+    tmp << wxT( "OFF\n" );
+#endif
+
     tmp << wxT( "         USE_WX_GRAPHICS_CONTEXT=" );
 #ifdef USE_WX_GRAPHICS_CONTEXT
     tmp << wxT( "ON\n" );

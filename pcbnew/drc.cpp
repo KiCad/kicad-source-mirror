@@ -58,18 +58,18 @@ void DRC::ShowDialog()
         LengthToTextCtrl( *m_ui->m_SetTrackMinWidthCtrl,
                           m_pcb->GetBoardDesignSettings()->m_TrackMinWidth );
         LengthToTextCtrl( *m_ui->m_SetViaMinSizeCtrl,
-                          m_pcb->GetBoardDesignSettings()->m_ViasMinSize );
+                          m_pcb->GetBoardDesignSettings()->m_MinVia.m_Diameter );
         LengthToTextCtrl( *m_ui->m_SetMicroViakMinSizeCtrl,
-                          m_pcb->GetBoardDesignSettings()->m_MicroViasMinSize );
+                          m_pcb->GetBoardDesignSettings()->m_MinMicroVia.m_Diameter );
 #else
         PutValueInLocalUnits( *m_ui->m_SetTrackMinWidthCtrl,
                               TO_LEGACY_LU( m_pcb->GetBoardDesignSettings()->m_TrackMinWidth ),
                               m_mainWindow->m_InternalUnits );
         PutValueInLocalUnits( *m_ui->m_SetViaMinSizeCtrl,
-                              TO_LEGACY_LU( m_pcb->GetBoardDesignSettings()->m_ViasMinSize ),
+                              TO_LEGACY_LU( m_pcb->GetBoardDesignSettings()->m_MinVia.m_Diameter ),
                               m_mainWindow->m_InternalUnits );
         PutValueInLocalUnits( *m_ui->m_SetMicroViakMinSizeCtrl,
-                              TO_LEGACY_LU( m_pcb->GetBoardDesignSettings()->m_MicroViasMinSize ),
+                              TO_LEGACY_LU( m_pcb->GetBoardDesignSettings()->m_MinMicroVia.m_Diameter ),
                               m_mainWindow->m_InternalUnits );
 #endif
 
@@ -335,12 +335,12 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
         ret = false;
     }
 
-    if( nc->GetViaDiameter() < TO_LEGACY_LU( g.m_ViasMinSize ) )
+    if( nc->GetViaDiameter() < TO_LEGACY_LU( g.m_MinVia.m_Diameter ) )
     {
         msg.Printf( _( "NETCLASS: '%s' has Via Dia:%s which is less than global:%s" ),
                     GetChars( nc->GetName() ),
                     FmtVal( nc->GetViaDiameter() ),
-                    FmtVal( TO_LEGACY_LU( g.m_ViasMinSize ) )
+                    FmtVal( TO_LEGACY_LU( g.m_MinVia.m_Diameter ) )
                     );
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_VIASIZE, msg, m_currentMarker );
@@ -349,12 +349,12 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
         ret = false;
     }
 
-    if( nc->GetViaDrill() < TO_LEGACY_LU( g.m_ViasMinDrill ) )
+    if( nc->GetViaDrill() < TO_LEGACY_LU( g.m_MinVia.m_Drill ) )
     {
         msg.Printf( _( "NETCLASS: '%s' has Via Drill:%s which is less than global:%s" ),
                     GetChars( nc->GetName() ),
                     FmtVal( nc->GetViaDrill() ),
-                    FmtVal( TO_LEGACY_LU( g.m_ViasMinDrill ) )
+                    FmtVal( TO_LEGACY_LU( g.m_MinVia.m_Drill ) )
                     );
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_VIADRILLSIZE, msg, m_currentMarker );
@@ -363,12 +363,12 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
         ret = false;
     }
 
-    if( nc->GetuViaDiameter() < TO_LEGACY_LU( g.m_MicroViasMinSize ) )
+    if( nc->GetuViaDiameter() < TO_LEGACY_LU( g.m_MinMicroVia.m_Diameter ) )
     {
         msg.Printf( _( "NETCLASS: '%s' has uVia Dia:%s which is less than global:%s" ),
                     GetChars( nc->GetName() ),
                     FmtVal( nc->GetuViaDiameter() ),
-                    FmtVal( TO_LEGACY_LU( g.m_MicroViasMinSize ) )
+                    FmtVal( TO_LEGACY_LU( g.m_MinMicroVia.m_Diameter ) )
                     );
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_uVIASIZE, msg, m_currentMarker );
@@ -377,12 +377,12 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
         ret = false;
     }
 
-    if( nc->GetuViaDrill() < TO_LEGACY_LU( g.m_MicroViasMinDrill ) )
+    if( nc->GetuViaDrill() < TO_LEGACY_LU( g.m_MinMicroVia.m_Drill ) )
     {
         msg.Printf( _( "NETCLASS: '%s' has uVia Drill:%s which is less than global:%s" ),
                     GetChars( nc->GetName() ),
                     FmtVal( nc->GetuViaDrill() ),
-                    FmtVal( TO_LEGACY_LU( g.m_MicroViasMinDrill ) )
+                    FmtVal( TO_LEGACY_LU( g.m_MinMicroVia.m_Drill ) )
                     );
 
         m_currentMarker = fillMarker( DRCE_NETCLASS_uVIADRILLSIZE, msg, m_currentMarker );
@@ -577,7 +577,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
     MODULE dummymodule( m_pcb );    // Creates a dummy parent
     D_PAD dummypad( &dummymodule );
     dummypad.m_layerMask   |= ALL_CU_LAYERS;  // Ensure the hole is on all copper layers
-    dummypad.m_LocalClearance = 1;   /* Use the minimal local clearance value for the dummy pad
+    dummypad.m_LocalClearance = FROM_LEGACY_LU( 1 );   /* Use the minimal local clearance value for the dummy pad
                                       *  the clearance of the active pad will be used
                                       *  as minimum distance to a hole
                                       *  (a value = 0 means use netclass value)
@@ -617,7 +617,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
             /* Here, we must test clearance between holes and pads
              * dummy pad size and shape is adjusted to pad drill size and shape
              */
-            if( pad->m_Drill.x )
+            if( pad->m_Drill.x != ZERO_LENGTH )
             {
                 // pad under testing has a hole, test this hole against pad reference
                 dummypad.SetPosition( pad->GetPosition() );
@@ -637,7 +637,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                 }
             }
 
-            if( aRefPad->m_Drill.x ) // pad reference has a hole
+            if( aRefPad->m_Drill.x != ZERO_LENGTH ) // pad reference has a hole
             {
                 dummypad.SetPosition( aRefPad->GetPosition() );
                 dummypad.m_Size     = aRefPad->m_Drill;
