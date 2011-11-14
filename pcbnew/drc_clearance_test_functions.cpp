@@ -290,10 +290,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
                  * checkClearanceSegmToPad(),a pseudo pad is used, with a shape and a
                  * size like the hole
                  */
-                if( pad->m_Drill.x == 0 )
+                if( pad->m_Drill.x == ZERO_LENGTH )
                     continue;
 
-                dummypad.m_Size = pad->m_Drill;
+                dummypad.m_Size     = pad->m_Drill;
                 dummypad.SetPosition( pad->GetPosition() );
                 dummypad.m_PadShape = pad->m_DrillShape;
                 dummypad.m_Orient   = pad->m_Orient;
@@ -633,7 +633,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
         m_segmEnd.x = m_segmEnd.y = 0;
 
         m_padToTestPos = relativePadPos;
-        diag = checkClearanceSegmToPad( aPad, aRefPad->m_Size.x, dist_min );
+        diag = checkClearanceSegmToPad( aPad, TO_LEGACY_LU( aRefPad->m_Size.x ), dist_min );
         break;
 
     case PAD_RECT:
@@ -644,7 +644,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 
         if( aPad->m_PadShape == PAD_RECT )
         {
-            wxSize size = aPad->m_Size;
+            wxSize size = TO_LEGACY_LU_WXS( aPad->m_Size );
 
             // The trivial case is if both rects are rotated by multiple of 90 deg
             // Most of time this is the case, and the test is fast
@@ -664,10 +664,10 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
                 relativePadPos.x = ABS( relativePadPos.x );
                 relativePadPos.y = ABS( relativePadPos.y );
 
-                if( ( relativePadPos.x - ( (size.x + aRefPad->m_Size.x) / 2 ) ) >= dist_min )
+                if( ( relativePadPos.x - ( (size.x + TO_LEGACY_LU( aRefPad->m_Size.x ) ) / 2 ) ) >= dist_min )
                     diag = true;
 
-                if( ( relativePadPos.y - ( (size.y + aRefPad->m_Size.y) / 2 ) ) >= dist_min )
+                if( ( relativePadPos.y - ( (size.y + TO_LEGACY_LU( aRefPad->m_Size.y) ) / 2 ) ) >= dist_min )
                     diag = true;
             }
             else    // at least one pad has any other orient. Test is more tricky
@@ -718,13 +718,13 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
 
         if( aRefPad->m_Size.y < aRefPad->m_Size.x )     // Build an horizontal equiv segment
         {
-            segm_width   = aRefPad->m_Size.y;
-            m_segmLength = aRefPad->m_Size.x - aRefPad->m_Size.y;
+            segm_width   = TO_LEGACY_LU( aRefPad->m_Size.y );
+            m_segmLength = TO_LEGACY_LU( aRefPad->m_Size.x - aRefPad->m_Size.y );
         }
         else        // Vertical oval: build an horizontal equiv segment and rotate 90.0 deg
         {
-            segm_width   = aRefPad->m_Size.x;
-            m_segmLength = aRefPad->m_Size.y - aRefPad->m_Size.x;
+            segm_width   = TO_LEGACY_LU( aRefPad->m_Size.x );
+            m_segmLength = TO_LEGACY_LU( aRefPad->m_Size.y - aRefPad->m_Size.x );
             m_segmAngle += 900;
         }
 
@@ -796,13 +796,13 @@ bool DRC::checkClearanceSegmToPad( const D_PAD* aPad, int aSegmentWidth, int aMi
     int     segmHalfWidth = aSegmentWidth / 2;
 
     seuil = segmHalfWidth + aMinDist;
-    padHalfsize.x = aPad->m_Size.x >> 1;
-    padHalfsize.y = aPad->m_Size.y >> 1;
+    padHalfsize.x = TO_LEGACY_LU( aPad->m_Size.x / 2 );
+    padHalfsize.y = TO_LEGACY_LU( aPad->m_Size.y / 2 );
 
     if( aPad->m_PadShape == PAD_TRAPEZOID ) // The size is bigger, due to m_DeltaSize extra size
     {
-        padHalfsize.x += ABS(aPad->m_DeltaSize.y) / 2;   // Remember: m_DeltaSize.y is the m_Size.x change
-        padHalfsize.y += ABS(aPad->m_DeltaSize.x) / 2;   // Remember: m_DeltaSize.x is the m_Size.y change
+        padHalfsize.x += TO_LEGACY_LU( ABS(aPad->m_DeltaSize.y) / 2 );   // Remember: m_DeltaSize.y is the m_Size.x change
+        padHalfsize.y += TO_LEGACY_LU( ABS(aPad->m_DeltaSize.x) / 2 );   // Remember: m_DeltaSize.x is the m_Size.y change
     }
 
     if( aPad->m_PadShape == PAD_CIRCLE )

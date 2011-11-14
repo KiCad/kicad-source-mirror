@@ -390,7 +390,7 @@ struct LENGTH_UNIT_DESC
     int            m_Precision;
 };
 
-extern const LENGTH_UNIT_DESC g_MillimetreDesc, g_InchDesc, g_MilDesc;
+extern const LENGTH_UNIT_DESC MillimetreDesc, InchDesc, MilDesc;
 
 const LENGTH_UNIT_DESC *UnitDescription( EDA_UNITS_T aUnit );
 
@@ -400,6 +400,37 @@ wxString         LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_DEF aValu
 
 void             LengthToTextCtrl( wxTextCtrl& TextCtr, LENGTH_DEF Value );
 LENGTH_DEF       LengthFromTextCtrl( const wxTextCtrl& TextCtr );
+
+/* transition macros */
+#define STR_TO_LENGTH( unit, str, iu ) \
+    ( StringToLength( UnitDescription( ( unit ) ), ( str ) ) )
+
+#define LENGTH_TO_STR( unit, l, iu ) \
+    ( LengthToString( UnitDescription( ( unit ) ), ( l ) ) )
+#define LENGTH_TO_STR_SYM( unit, l, iu ) \
+    ( LengthToString( UnitDescription( ( unit ) ), ( l ), true ) )
+
+#define CTR_GET_LENGTH( ctr, iu ) \
+    ( StringToLength( UnitDescription( g_UserUnit ), ( ctr ).GetValue() ) )
+
+#define CTR_PUT_LENGTH( ctr, l, iu ) \
+    ( ( ctr ).SetValue( LengthToString( UnitDescription( g_UserUnit ), ( l ) ) ) )
+
+#else
+
+#define STR_TO_LENGTH( unit, str, iu ) \
+    ReturnValueFromString( ( unit ), ( str ), ( iu ) )
+
+#define LENGTH_TO_STR( unit, l, iu ) \
+    ( ReturnStringFromValue( ( unit ), ( l ), ( iu ) ) )
+#define LENGTH_TO_STR_SYM( unit, l, iu ) \
+    ( ReturnStringFromValue( ( unit ), ( l ), ( iu ), true ) )
+
+#define CTR_GET_LENGTH( ctr, iu ) \
+    ReturnValueFromString( g_UserUnit, ( ctr ).GetValue(), ( iu ) )
+
+#define CTR_PUT_LENGTH( ctr, l, iu ) \
+    ( ( ctr ).SetValue( ReturnStringFromValue( g_UserUnit, ( l ), ( iu ) ) ) )
 
 #endif
 

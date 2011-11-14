@@ -436,21 +436,21 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "TrackWidthList" ) == 0 )
         {
-            double tmp = atof( data );
-            GetBoard()->m_TrackWidthList.push_back( FROM_LEGACY_LU( tmp ) );
+            //double tmp = atof( data );
+            GetBoard()->m_TrackWidthList.push_back( LENGTH_LOAD_STR( data ) );
             continue;
         }
 
         if( stricmp( line, "TrackClearence" ) == 0 )
         {
-            netclass_default->SetClearance( atoi( data ) );
+            netclass_default->Clearance( LENGTH_LOAD_STR( data ) );
             continue;
         }
 
         if( stricmp( line, "TrackMinWidth" ) == 0 )
         {
-            double width = atof( data );
-            GetBoard()->GetBoardDesignSettings()->m_TrackMinWidth = FROM_LEGACY_LU( width );
+            //double width = atof( data );
+            GetBoard()->GetBoardDesignSettings()->m_TrackMinWidth = LENGTH_LOAD_STR( data );
             continue;
         }
 
@@ -479,8 +479,8 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "ViaMinSize" ) == 0 )
         {
-            double diameter = atof( data );
-            GetBoard()->GetBoardDesignSettings()->m_ViasMinSize = FROM_LEGACY_LU( diameter );
+            //double diameter = atof( data );
+            GetBoard()->GetBoardDesignSettings()->m_MinVia.m_Diameter = LENGTH_LOAD_STR( data );
             continue;
         }
 
@@ -491,22 +491,23 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "MicroViaMinSize" ) == 0 )
         {
-            double diameter = atof( data );
-            GetBoard()->GetBoardDesignSettings()->m_MicroViasMinSize = FROM_LEGACY_LU( diameter );
+            //double diameter = atof( data );
+            GetBoard()->GetBoardDesignSettings()->m_MinMicroVia.m_Diameter = LENGTH_LOAD_STR( data );
             continue;
         }
 
         if( stricmp( line, "ViaSizeList" ) == 0 )
         {
-            double tmp = atof( data );
+            //double tmp = atof( data );
             VIA_DIMENSION via_dim;
-            via_dim.m_Diameter = FROM_LEGACY_LU( tmp );
+            via_dim.m_Diameter = LENGTH_LOAD_STR( data );
             data = strtok( NULL, " \n\r" );
 
             if( data )
             {
-                tmp = atof( data );
-                via_dim.m_Drill = FROM_LEGACY_LU( tmp > 0 ? tmp : 0 );
+                //tmp = atof( data );
+		LENGTH_PCB tmp = LENGTH_LOAD_STR( data );
+                via_dim.m_Drill = tmp > ZERO_LENGTH ? tmp : ZERO_LENGTH;
             }
 
             GetBoard()->m_ViasDimensionsList.push_back( via_dim );
@@ -515,29 +516,31 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "ViaDrill" ) == 0 )
         {
-            int diameter = atoi( data );
-            netclass_default->SetViaDrill( diameter );
+            VIA_DIMENSION via = netclass_default->Via();
+            via.m_Drill = LENGTH_LOAD_STR( data );
+            netclass_default->Via( via );
             continue;
         }
 
         if( stricmp( line, "ViaMinDrill" ) == 0 )
         {
-            double diameter = atof( data );
-            GetBoard()->GetBoardDesignSettings()->m_ViasMinDrill = FROM_LEGACY_LU( diameter );
+            //double diameter = atof( data );
+            GetBoard()->GetBoardDesignSettings()->m_MinVia.m_Drill = LENGTH_LOAD_STR( data );
             continue;
         }
 
         if( stricmp( line, "MicroViaDrill" ) == 0 )
         {
-            int diameter = atoi( data );
-            netclass_default->SetuViaDrill( diameter );
+            VIA_DIMENSION via = netclass_default->MicroVia();
+            via.m_Drill = LENGTH_LOAD_STR( data );
+            netclass_default->MicroVia( via );
             continue;
         }
 
         if( stricmp( line, "MicroViaMinDrill" ) == 0 )
         {
-            double diameter = atof( data );
-            GetBoard()->GetBoardDesignSettings()->m_MicroViasMinDrill = FROM_LEGACY_LU( diameter );
+            //double diameter = atof( data );
+            GetBoard()->GetBoardDesignSettings()->m_MinMicroVia.m_Drill = LENGTH_LOAD_STR( data );
             continue;
         }
 
@@ -583,15 +586,15 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "PadSize" ) == 0 )
         {
-            g_Pad_Master.m_Size.x = atoi( data );
+            g_Pad_Master.m_Size.x = LENGTH_LOAD_STR( data );
             data = strtok( NULL, delims );
-            g_Pad_Master.m_Size.y = atoi( data );
+            g_Pad_Master.m_Size.y = LENGTH_LOAD_STR( data );
             continue;
         }
 
         if( stricmp( line, "PadDrill" ) == 0 )
         {
-            g_Pad_Master.m_Drill.x = atoi( data );
+            g_Pad_Master.m_Drill.x = LENGTH_LOAD_STR( data );
             g_Pad_Master.m_Drill.y = g_Pad_Master.m_Drill.x;
             continue;
         }
@@ -693,47 +696,57 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
 
     // Save custom tracks width list (the first is not saved here: this is the netclass value
     for( unsigned ii = 1; ii < aBoard->m_TrackWidthList.size(); ii++ )
-        fprintf( aFile, "TrackWidthList %f\n", TO_LEGACY_LU_DBL( aBoard->m_TrackWidthList[ii] ) );
+        fprintf( aFile, "TrackWidthList "FM_LENSV"\n", ARG_LENSV( aBoard->m_TrackWidthList[ii] ) );
 
 
-    fprintf( aFile, "TrackClearence %d\n", netclass_default->GetClearance() );
+    fprintf( aFile,
+             "TrackClearence "FM_LENSV"\n",
+             ARG_LENSV( netclass_default->Clearance() ) );
     fprintf( aFile, "ZoneClearence %d\n", g_Zone_Default_Setting.m_ZoneClearance );
     fprintf( aFile,
-             "TrackMinWidth %f\n",
-             TO_LEGACY_LU_DBL( aBoard->GetBoardDesignSettings()->m_TrackMinWidth ) );
+             "TrackMinWidth "FM_LENSV"\n",
+             ARG_LENSV( aBoard->GetBoardDesignSettings()->m_TrackMinWidth ) );
 
     fprintf( aFile, "DrawSegmWidth %d\n", aBoard->GetBoardDesignSettings()->m_DrawSegmentWidth );
     fprintf( aFile, "EdgeSegmWidth %d\n", aBoard->GetBoardDesignSettings()->m_EdgeSegmentWidth );
 
     // Save current default via size, for compatibility with older Pcbnew version;
-    fprintf( aFile, "ViaSize %d\n", netclass_default->GetViaDiameter() );
-    fprintf( aFile, "ViaDrill %d\n", netclass_default->GetViaDrill() );
     fprintf( aFile,
-             "ViaMinSize %f\n",
-             TO_LEGACY_LU_DBL( aBoard->GetBoardDesignSettings()->m_ViasMinSize ) );
+             "ViaSize "FM_LENSV"\n",
+             ARG_LENSV( netclass_default->Via().m_Diameter ) );
     fprintf( aFile,
-             "ViaMinDrill %f\n",
-             TO_LEGACY_LU_DBL( aBoard->GetBoardDesignSettings()->m_ViasMinDrill ) );
+             "ViaDrill "FM_LENSV"\n",
+             ARG_LENSV( netclass_default->Via().m_Drill ) );
+    fprintf( aFile,
+             "ViaMinSize "FM_LENSV"\n",
+             ARG_LENSV( aBoard->GetBoardDesignSettings()->m_MinVia.m_Diameter ) );
+    fprintf( aFile,
+             "ViaMinDrill "FM_LENSV"\n",
+             ARG_LENSV( aBoard->GetBoardDesignSettings()->m_MinVia.m_Drill ) );
 
     // Save custom vias diameters list (the first is not saved here: this is
     // the netclass value
     for( unsigned ii = 1; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
-        fprintf( aFile, "ViaSizeList %f %f\n",
-                 TO_LEGACY_LU_DBL( aBoard->m_ViasDimensionsList[ii].m_Diameter ),
-                 TO_LEGACY_LU_DBL( aBoard->m_ViasDimensionsList[ii].m_Drill ) );
+        fprintf( aFile, "ViaSizeList "FM_LENSV" "FM_LENSV"\n",
+                 ARG_LENSV( aBoard->m_ViasDimensionsList[ii].m_Diameter ),
+                 ARG_LENSV( aBoard->m_ViasDimensionsList[ii].m_Drill ) );
 
     // for old versions compatibility:
-    fprintf( aFile, "MicroViaSize %d\n", netclass_default->GetuViaDiameter() );
-    fprintf( aFile, "MicroViaDrill %d\n", netclass_default->GetuViaDrill() );
+    fprintf( aFile,
+             "MicroViaSize "FM_LENSV"\n",
+             ARG_LENSV( netclass_default->MicroVia().m_Diameter ) );
+    fprintf( aFile,
+             "MicroViaDrill "FM_LENSV"\n",
+             ARG_LENSV( netclass_default->MicroVia().m_Drill ) );
     fprintf( aFile,
              "MicroViasAllowed %d\n",
              aBoard->GetBoardDesignSettings()->m_MicroViasAllowed );
     fprintf( aFile,
-             "MicroViaMinSize %f\n",
-             TO_LEGACY_LU_DBL( aBoard->GetBoardDesignSettings()->m_MicroViasMinSize ) );
+             "MicroViaMinSize "FM_LENSV"\n",
+             ARG_LENSV( aBoard->GetBoardDesignSettings()->m_MinMicroVia.m_Diameter ) );
     fprintf( aFile,
-             "MicroViaMinDrill %f\n",
-             TO_LEGACY_LU_DBL( aBoard->GetBoardDesignSettings()->m_MicroViasMinDrill ) );
+             "MicroViaMinDrill "FM_LENSV"\n",
+             ARG_LENSV( aBoard->GetBoardDesignSettings()->m_MinMicroVia.m_Drill ) );
 
     fprintf( aFile, "TextPcbWidth %d\n", aBoard->GetBoardDesignSettings()->m_PcbTextWidth );
     fprintf( aFile,
@@ -744,8 +757,8 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
     fprintf( aFile, "EdgeModWidth %d\n", g_ModuleSegmentWidth );
     fprintf( aFile, "TextModSize %d %d\n", g_ModuleTextSize.x, g_ModuleTextSize.y );
     fprintf( aFile, "TextModWidth %d\n", g_ModuleTextWidth );
-    fprintf( aFile, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
-    fprintf( aFile, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
+    fprintf( aFile, "PadSize "FM_LENSV" "FM_LENSV"\n", ARG_LENSV( g_Pad_Master.m_Size.x ), ARG_LENSV( g_Pad_Master.m_Size.y ) );
+    fprintf( aFile, "PadDrill "FM_LENSV"\n", ARG_LENSV( g_Pad_Master.m_Drill.x ) );
     fprintf( aFile,
              "Pad2MaskClearance %d\n",
              aBoard->GetBoardDesignSettings()->m_SolderMaskMargin );

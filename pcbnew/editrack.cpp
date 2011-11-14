@@ -783,7 +783,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     if( g_FirstTrackSegment->GetState( BEGIN_ONPAD ) )
     {
         D_PAD * pad = (D_PAD *) g_FirstTrackSegment->start;
-        lenDie = (double) pad->m_LengthDie;
+        lenDie = TO_LEGACY_LU_DBL( pad->m_LengthDie );
     }
 
     // calculate track len on board:

@@ -254,8 +254,8 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 
             if( pt_pad->m_PadShape != PAD_TRAPEZOID )
             {
-                pt_pad->m_DeltaSize.x = 0;
-                pt_pad->m_DeltaSize.y = 0;
+                pt_pad->m_DeltaSize.x = ZERO_LENGTH;
+                pt_pad->m_DeltaSize.y = ZERO_LENGTH;
             }
             if( pt_pad->m_PadShape == PAD_CIRCLE )
                 pt_pad->m_Size.y = pt_pad->m_Size.x;
@@ -264,9 +264,9 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
             {
             case PAD_SMD:
             case PAD_CONN:
-                pt_pad->m_Drill    = wxSize( 0, 0 );
-                pt_pad->m_Offset.x = 0;
-                pt_pad->m_Offset.y = 0;
+                pt_pad->m_Drill    = VECTOR_PCB(ZERO_LENGTH, ZERO_LENGTH);//wxSize( 0, 0 );
+                pt_pad->m_Offset.x = ZERO_LENGTH;
+                pt_pad->m_Offset.y = ZERO_LENGTH;
                 break;
 
             default:

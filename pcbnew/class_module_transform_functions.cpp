@@ -352,8 +352,8 @@ void MODULE::SetOrientation( int newangle )
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        px = pad->m_Pos0.x;
-        py = pad->m_Pos0.y;
+        px = TO_LEGACY_LU( pad->m_Pos0.x );
+        py = TO_LEGACY_LU( pad->m_Pos0.y );
 
         pad->m_Orient += newangle; /* change m_Orientation */
         NORMALIZE_ANGLE_POS( pad->m_Orient );

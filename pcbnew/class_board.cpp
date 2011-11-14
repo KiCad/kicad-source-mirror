@@ -2003,13 +2003,13 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
                     if( track->GetState( BEGIN_ONPAD ) )
                     {
                         D_PAD * pad = (D_PAD *) track->start;
-                        lenDie += (double) pad->m_LengthDie;
+                        lenDie += TO_LEGACY_LU_DBL( pad->m_LengthDie );
                     }
 
                     if( track->GetState( END_ONPAD ) )
                     {
                         D_PAD * pad = (D_PAD *) track->end;
-                        lenDie += (double) pad->m_LengthDie;
+                        lenDie += TO_LEGACY_LU_DBL( pad->m_LengthDie );
                     }
                 }
             }
@@ -2033,13 +2033,13 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
                 if( track->GetState( BEGIN_ONPAD ) )
                 {
                     D_PAD * pad = (D_PAD *) track->start;
-                    lenDie += (double) pad->m_LengthDie;
+                    lenDie += TO_LEGACY_LU_DBL( pad->m_LengthDie );
                 }
 
                 if( track->GetState( END_ONPAD ) )
                 {
                     D_PAD * pad = (D_PAD *) track->end;
-                    lenDie += (double) pad->m_LengthDie;
+                    lenDie += TO_LEGACY_LU_DBL( pad->m_LengthDie );
                 }
             }
         }

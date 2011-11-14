@@ -148,7 +148,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     aPad->m_Orient = g_Pad_Master.m_Orient +
                      ( (MODULE*) aPad->GetParent() )->m_Orient;
     aPad->m_Size = g_Pad_Master.m_Size;
-    aPad->m_DeltaSize  = wxSize( 0, 0 );
+    aPad->m_DeltaSize  = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH );//wxSize( 0, 0 );
     aPad->m_Offset     = g_Pad_Master.m_Offset;
     aPad->m_Drill      = g_Pad_Master.m_Drill;
     aPad->m_DrillShape = g_Pad_Master.m_DrillShape;
@@ -168,9 +168,8 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     {
     case PAD_SMD:
     case PAD_CONN:
-        aPad->m_Drill    = wxSize( 0, 0 );
-        aPad->m_Offset.x = 0;
-        aPad->m_Offset.y = 0;
+        aPad->m_Drill    = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH ); //wxSize( 0, 0 );
+        aPad->m_Offset   = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH );
     }
 
     aPad->ComputeShapeMaxRadius();
@@ -205,8 +204,10 @@ void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
 
     // Set the relative pad position
     // ( pad position for module orient, 0, and relative to the module position)
-    Pad->m_Pos0 = Pad->m_Pos - Module->m_Pos;
-    RotatePoint( &Pad->m_Pos0, -Module->m_Orient );
+    Pad->m_Pos0 = FROM_LEGACY_LU_VEC( Pad->m_Pos - Module->m_Pos );
+    wxPoint p = TO_LEGACY_LU_WXP( Pad->m_Pos0 );
+    RotatePoint( &p, -Module->m_Orient );
+    Pad->m_Pos0 = FROM_LEGACY_LU_VEC( p );
 
     /* Automatically increment the current pad number. */
     long num    = 0;
@@ -365,8 +366,8 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
     dY = Pad->m_Pos.y - Pad_OldPos.y;
     RotatePoint( &dX, &dY, -Module->m_Orient );
 
-    Pad->m_Pos0.x += dX;
-    s_CurrentSelectedPad->m_Pos0.y += dY;
+    Pad->m_Pos0.x += FROM_LEGACY_LU( dX );
+    s_CurrentSelectedPad->m_Pos0.y += FROM_LEGACY_LU( dY ); /// @BUG???
 
     Pad->m_Flags = 0;
 

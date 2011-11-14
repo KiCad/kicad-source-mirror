@@ -460,7 +460,7 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
             continue;
 
         pad->SetPosition( pad->GetPosition() + offset );
-        pad->m_Pos0 += offset;
+        pad->m_Pos0 += FROM_LEGACY_LU_VEC( offset );
     }
 
     item = module->m_Drawings;
@@ -550,7 +550,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
             continue;
 
         SETMIRROR( pad->GetPosition().x );
-        pad->m_Pos0.x = pad->GetPosition().x;
+        pad->m_Pos0.x = FROM_LEGACY_LU( pad->GetPosition().x );
         NEGATE( pad->m_Offset.x );
         NEGATE( pad->m_DeltaSize.x );
         pad->m_Orient      = 1800 - pad->m_Orient;
@@ -610,7 +610,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
             continue;
 
         ROTATE( pad->GetPosition() );
-        pad->m_Pos0    = pad->GetPosition();
+        pad->m_Pos0    = FROM_LEGACY_LU_VEC( pad->GetPosition() );
         pad->m_Orient += 900;
         NORMALIZE_ANGLE_POS( pad->m_Orient );
     }

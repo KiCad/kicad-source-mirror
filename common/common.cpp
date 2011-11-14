@@ -416,7 +416,7 @@ int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Int
  *New common length functions
  */
 
-const LENGTH_UNIT_DESC g_MillimetreDesc =
+const LENGTH_UNIT_DESC MillimetreDesc =
 {
     LENGTH_UNITS<LENGTH_DEF>::millimetre(),
     wxT( "mm" ),
@@ -424,7 +424,7 @@ const LENGTH_UNIT_DESC g_MillimetreDesc =
 };
 
 
-const LENGTH_UNIT_DESC g_InchDesc =
+const LENGTH_UNIT_DESC InchDesc =
 {
     LENGTH_UNITS<LENGTH_DEF>::inch(),
     wxT( "\"" ),
@@ -432,7 +432,7 @@ const LENGTH_UNIT_DESC g_InchDesc =
 };
 
 
-const LENGTH_UNIT_DESC g_MilDesc =
+const LENGTH_UNIT_DESC MilDesc =
 {
     LENGTH_UNITS<LENGTH_DEF>::mil(),
     wxT( "mil" ),
@@ -440,7 +440,7 @@ const LENGTH_UNIT_DESC g_MilDesc =
 };
 
 
-const LENGTH_UNIT_DESC g_UnscaledDesc = /* stub */
+const LENGTH_UNIT_DESC UnscaledDesc = /* stub */
 {
     LENGTH_DEF::quantum(),
     wxT( "" ),
@@ -451,11 +451,11 @@ const LENGTH_UNIT_DESC g_UnscaledDesc = /* stub */
 const LENGTH_UNIT_DESC *UnitDescription( EDA_UNITS_T aUnit ) {
     switch(aUnit) {
         case INCHES:
-            return &g_InchDesc;
+            return &InchDesc;
         case MILLIMETRES:
-            return &g_MillimetreDesc;
+            return &MillimetreDesc;
         default:
-            return &g_UnscaledDesc; /* should not be reached */
+            return &UnscaledDesc; /* should not be reached */
     }
 }
 
@@ -533,15 +533,15 @@ LENGTH_DEF StringToLength( const LENGTH_UNIT_DESC *aUnit, const wxString& TextVa
 
     if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
     {
-        aUnit = &g_InchDesc;
+        aUnit = &InchDesc;
     }
     else if( unit == wxT( "mm" ) )
     {
-        aUnit = &g_MillimetreDesc;
+        aUnit = &MillimetreDesc;
     }
     else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) /* Mils or thous */
     {
-        aUnit = &g_MilDesc;
+        aUnit = &MilDesc;
     }
 
     Value = LENGTH_DEF( dtmp * LENGTH< double, 1 >( aUnit->m_Value ) );

@@ -68,15 +68,15 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
             // Thermal bridges are like a segment from a starting point inside the pad
             // to an ending point outside the pad
             wxPoint startpoint, endpoint;
-            endpoint.x = ( pad->m_Size.x / 2 ) + aZone->m_ThermalReliefGapValue;
-            endpoint.y = ( pad->m_Size.y / 2 ) + aZone->m_ThermalReliefGapValue;
+            endpoint.x = ( TO_LEGACY_LU( pad->m_Size.x / 2 ) ) + aZone->m_ThermalReliefGapValue;
+            endpoint.y = ( TO_LEGACY_LU( pad->m_Size.y / 2 ) ) + aZone->m_ThermalReliefGapValue;
 
             int copperThickness = aZone->m_ThermalReliefCopperBridgeValue - aZone->m_ZoneMinThickness;
             if( copperThickness < 0 )
                 copperThickness = 0;
 
-            startpoint.x = min( pad->m_Size.x, copperThickness );
-            startpoint.y = min( pad->m_Size.y, copperThickness );
+            startpoint.x = min( TO_LEGACY_LU( pad->m_Size.x ), copperThickness );
+            startpoint.y = min( TO_LEGACY_LU( pad->m_Size.y ), copperThickness );
             startpoint.x /= 2;
             startpoint.y /= 2;
 

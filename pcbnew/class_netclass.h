@@ -178,7 +178,7 @@ public:
     int     GetTrackWidth() const           { return TO_LEGACY_LU( m_TrackWidth ); }
     int     GetTrackMinWidth() const;
     void    SetTrackWidth( int aWidth )     { m_TrackWidth = FROM_LEGACY_LU( aWidth ); }
-
+    
     int     GetViaDiameter() const          { return TO_LEGACY_LU( m_Via.m_Diameter ); }
     int     GetViaMinDiameter() const;
     void    SetViaDiameter( int aDia )      { m_Via.m_Diameter = FROM_LEGACY_LU( aDia ); }
@@ -195,6 +195,17 @@ public:
     int     GetuViaMinDrill() const;
     void    SetuViaDrill( int aSize )       { m_uVia.m_Drill = FROM_LEGACY_LU( aSize ); }
 
+    LENGTH_PCB Clearance() const                    { return m_Clearance; }
+    LENGTH_PCB Clearance( const LENGTH_PCB a )      { return m_Clearance = a; }
+
+    LENGTH_PCB TrackWidth() const                   { return m_TrackWidth; }
+    LENGTH_PCB TrackWidth( const LENGTH_PCB a )     { return m_TrackWidth = a; }
+
+    VIA_DIMENSION Via() const                       { return m_Via; }
+    VIA_DIMENSION Via( const VIA_DIMENSION a )      { return m_Via = a; }
+
+    VIA_DIMENSION MicroVia() const                  { return m_uVia; }
+    VIA_DIMENSION MicroVia( const VIA_DIMENSION a ) { return m_uVia = a; }
 
     /**
      * Function SetParams
@@ -204,6 +215,11 @@ public:
      *  from global preferences instead.
      */
     void    SetParams( const NETCLASS* defaults = NULL );
+
+    /**
+     * Sets Parameters to their default state.
+     */
+    void    SetToDefault();
 
     /**
      * Function Save
