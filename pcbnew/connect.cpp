@@ -627,34 +627,24 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     // Build the net info list
     GetBoard()->m_NetInfo->BuildListOfNets();
 
-    if( m_Pcb->GetPadsCount() == 0 ) // If no pad, reset pointers and netcode, and do nothing else
-    {
-        curr_track = m_Pcb->m_Track;
-
-        for( ; curr_track != NULL; curr_track = curr_track->Next() )
-        {
-            curr_track->start = NULL;
-            curr_track->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
-            curr_track->SetNet( 0 );
-            curr_track->end = NULL;
-        }
-
-        return;
-    }
-
-    // Prepare connections calculations between tracks and pads */
-    m_Pcb->GetSortedPadListByXthenYCoord( sortedPads );
-
     // Reset variables and flags used in computation
     curr_track = m_Pcb->m_Track;
-
     for( ; curr_track != NULL; curr_track = curr_track->Next() )
     {
         curr_track->m_TracksConnected.clear();
+        curr_track->start = NULL;
+        curr_track->end = NULL;
         curr_track->SetState( BUSY | IN_EDIT | BEGIN_ONPAD | END_ONPAD, OFF );
         curr_track->SetZoneSubNet( 0 );
-        curr_track->SetNet( 0 );  // net code = 0 means not connected
+        curr_track->SetNet( 0 );    // net code = 0 means not connected
     }
+
+    // If no pad, reset pointers and netcode, and do nothing else
+    if( m_Pcb->GetPadsCount() == 0 )
+        return;
+
+    // Prepare connections calculations between tracks and pads */
+    m_Pcb->GetSortedPadListByXthenYCoord( sortedPads );
 
     /* First pass: search connection between a track segment and a pad.
      * if found, set the track net code to the pad netcode

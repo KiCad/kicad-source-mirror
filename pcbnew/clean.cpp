@@ -6,23 +6,24 @@
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
-#include "gr_basic.h"
+//#include "gr_basic.h"
 #include "pcbcommon.h"
 #include "wxPcbStruct.h"
 
 #include "pcbnew.h"
-#include "protos.h"
+//#include "protos.h"
 
 #include "class_board.h"
 #include "class_track.h"
 
+typedef long long int64;
 
 /* local functions : */
-static void      clean_segments( PCB_EDIT_FRAME* frame );
-static void      clean_vias( BOARD* aPcb );
-static void     DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC );
-static TRACK*   AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extremite );
-static void Clean_Pcb_Items( PCB_EDIT_FRAME* frame, wxDC* DC,
+static void     clean_segments( PCB_EDIT_FRAME* frame );
+static void     clean_vias( BOARD* aPcb );
+static void     DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame );
+static TRACK*   MergeColinearSegmentIfPossible( BOARD* aPcb, TRACK* aTrackRef, TRACK* aCandidate, int aEndType );
+static void     CleanupTracks( PCB_EDIT_FRAME* frame,
                              bool aCleanVias, bool aMergeSegments,
                              bool aDeleteUnconnectedSegm, bool aConnectToPads );
 
@@ -31,7 +32,7 @@ static void Clean_Pcb_Items( PCB_EDIT_FRAME* frame, wxDC* DC,
 #define CONN2PAD_ENBL
 
 #ifdef CONN2PAD_ENBL
-static void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC );
+static void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame );
 static void ConnectDanglingEndToVia( BOARD* pcb );
 #endif
 
@@ -44,7 +45,7 @@ void PCB_EDIT_FRAME::Clean_Pcb( wxDC* DC )
     DIALOG_CLEANING_OPTIONS dlg( this );
 
     if( dlg.ShowModal() == wxID_OK )
-        Clean_Pcb_Items( this, DC, dlg.cleanVias, dlg.mergeSegments,
+        CleanupTracks( this, dlg.cleanVias, dlg.mergeSegments,
                          dlg.deleteUnconnectedSegm, dlg.connectToPads );
 
     DrawPanel->Refresh( true );
@@ -60,7 +61,7 @@ void PCB_EDIT_FRAME::Clean_Pcb( wxDC* DC )
  *  Create segments when track ends are incorrectly connected:
  *  i.e. when a track end covers a pad or a via but is not exactly on the pad or the via center
  */
-void Clean_Pcb_Items( PCB_EDIT_FRAME* frame, wxDC* DC,
+void CleanupTracks( PCB_EDIT_FRAME* frame,
                       bool aCleanVias, bool aMergeSegments,
                       bool aDeleteUnconnectedSegm, bool aConnectToPads )
 {
@@ -71,6 +72,7 @@ void Clean_Pcb_Items( PCB_EDIT_FRAME* frame, wxDC* DC,
 
     // Clear undo and redo lists to avoid inconsistencies between lists
     frame->GetScreen()->ClearUndoRedoList();
+    frame->SetCurItem( NULL );
 
     /* Rebuild the pad infos (pad list and netcodes) to ensure an up to date info */
     frame->GetBoard()->m_Status_Pcb = 0;
@@ -90,7 +92,7 @@ void Clean_Pcb_Items( PCB_EDIT_FRAME* frame, wxDC* DC,
         frame->SetStatusText( _( "Reconnect pads" ) );
 
         /* Create missing segments when a track end covers a pad, but is not on the pad center */
-        ConnectDanglingEndToPad( frame, DC );
+        ConnectDanglingEndToPad( frame );
 
         /* Create missing segments when a track end covers a via, but is not on the via center */
         ConnectDanglingEndToVia( frame->GetBoard() );
@@ -108,12 +110,12 @@ void Clean_Pcb_Items( PCB_EDIT_FRAME* frame, wxDC* DC,
     if( aDeleteUnconnectedSegm )
     {
         frame->SetStatusText( _( "Delete unconnected tracks" ) );
-        DeleteUnconnectedTracks( frame, DC );
+        DeleteUnconnectedTracks( frame );
     }
 
     frame->SetStatusText( _( "Cleanup finished" ) );
 
-    frame->Compile_Ratsnest( DC, true );
+    frame->Compile_Ratsnest( NULL, true );
 
     frame->OnModify();
 }
@@ -173,7 +175,7 @@ void clean_vias( BOARD * aPcb )
  *  Vias:
  *  If a via is only connected to a dangling track, it also will be removed
  */
-static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
+static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame )
 {
     TRACK*          segment;
     TRACK*          other;
@@ -372,8 +374,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame, wxDC* DC )
                 next = startNetcode;
             }
 
-            // remove segment from screen and board
-            segment->Draw( frame->DrawPanel, DC, GR_XOR );
+            // remove segment from board
             segment->DeleteStructure();
 
             if( next == NULL )
@@ -493,7 +494,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
 
         if( flag )   // We have the starting point of the segment is connected to an other segment
         {
-            segDelete = AlignSegment( frame->GetBoard(), segment, segStart, START );
+            segDelete = MergeColinearSegmentIfPossible( frame->GetBoard(), segment, segStart, START );
 
             if( segDelete )
             {
@@ -533,7 +534,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
 
         if( flag & 2 )  // We have the ending point of the segment is connected to an other segment
         {
-            segDelete = AlignSegment( frame->GetBoard(), segment, segEnd, END );
+            segDelete = MergeColinearSegmentIfPossible( frame->GetBoard(), segment, segEnd, END );
 
             if( segDelete )
             {
@@ -551,25 +552,42 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
 
 
 /* Function used by clean_segments.
- *  Test alignment of pt_segm and pt_ref (which must have a common end).
+ *  Test alignment of aTrackRef and aCandidate (which must have a common end).
  *  and see if the common point is not on a pad (i.e. if this common point can be removed).
- *  the ending point of pt_ref is the start point (extremite == START)
- *  or the end point (extremite == FIN)
- *  if the common end can be deleted, this function
- *    change the common point coordinate of the pt_ref segm
+ *  the ending point of pt_ref is the start point (aEndType == START)
+ *  or the end point (aEndType != START)
+ *  if the common point can be deleted, this function
+ *    change the common point coordinate of the aTrackRef segm
  *   (and therefore connect the 2 other ending points)
- *    and return pt_segm (which can be deleted).
+ *    and return aCandidate (which can be deleted).
  *  else return NULL
  */
-static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extremite )
+TRACK* MergeColinearSegmentIfPossible( BOARD* aPcb,
+                                              TRACK* aTrackRef, TRACK* aCandidate,
+                                              int aEndType )
 {
-    int flag = 0;
+    if( aTrackRef->m_Width != aCandidate->m_Width )
+        return NULL;
 
-    int refdx = pt_ref->m_End.x - pt_ref->m_Start.x;
-    int refdy = pt_ref->m_End.y - pt_ref->m_Start.y;
+    bool is_colinear = false;
 
-    int segmdx = pt_segm->m_End.x - pt_segm->m_Start.x;
-    int segmdy = pt_segm->m_End.y - pt_segm->m_Start.y;
+    // Trivial case: superimposed tracks ( tracks, not vias ):
+    if( aTrackRef->Type() == PCB_TRACE_T && aCandidate->Type() == PCB_TRACE_T )
+    {
+        if( aTrackRef->m_Start == aCandidate->m_Start )
+            if( aTrackRef->m_End == aCandidate->m_End )
+                return aCandidate;
+
+        if( aTrackRef->m_Start == aCandidate->m_End )
+            if( aTrackRef->m_End == aCandidate->m_Start )
+                return aCandidate;
+    }
+
+    int refdx = aTrackRef->m_End.x - aTrackRef->m_Start.x;
+    int refdy = aTrackRef->m_End.y - aTrackRef->m_Start.y;
+
+    int segmdx = aCandidate->m_End.x - aCandidate->m_Start.x;
+    int segmdy = aCandidate->m_End.y - aCandidate->m_Start.y;
 
     // test for vertical alignment (easy to handle)
     if( refdx == 0 )
@@ -577,7 +595,7 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
         if( segmdx != 0 )
             return NULL;
         else
-            flag = 1;
+            is_colinear = true;
     }
 
     // test for horizontal alignment (easy to handle)
@@ -586,18 +604,18 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
         if( segmdy != 0 )
             return NULL;
         else
-            flag = 2;
+            is_colinear = true;
     }
 
     /* test if alignment in other cases
      *  We must have refdy/refdx == (+/-)segmdy/segmdx, (i.e. same orientation) */
-    if( flag == 0 )
+    if( is_colinear == false )
     {
-        if( (refdy * segmdx !=  refdx * segmdy)
-         && (refdy * segmdx != -refdx * segmdy) )
+        if( ( (int64)refdy * segmdx !=  (int64)refdx * segmdy )
+         && ( (int64)refdy * segmdx != -(int64)refdx * segmdy ) )
             return NULL;
 
-        flag = 4;
+        is_colinear = true;
     }
 
     /* Here we have 2 aligned segments:
@@ -605,42 +623,42 @@ static TRACK* AlignSegment( BOARD* Pcb, TRACK* pt_ref, TRACK* pt_segm, int extre
      * (this function) is called when there is only 2 connected segments,
      *and if this point is not on a pad, it can be removed and the 2 segments will be merged
      */
-    if( extremite == START )
+    if( aEndType == START )
     {
-        /* We do not have a pad */
-        if( Pcb->GetPadFast( pt_ref->m_Start, g_TabOneLayerMask[pt_ref->GetLayer()] ) )
+        // We must not have a pad, which is a always terminal point for a track
+        if( aPcb->GetPadFast( aTrackRef->m_Start, g_TabOneLayerMask[aTrackRef->GetLayer()] ) )
             return NULL;
 
         /* change the common point coordinate of pt_segm to use the other point
          * of pt_segm (pt_segm will be removed later) */
-        if( pt_ref->m_Start == pt_segm->m_Start )
+        if( aTrackRef->m_Start == aCandidate->m_Start )
         {
-            pt_ref->m_Start = pt_segm->m_End;
-            return pt_segm;
+            aTrackRef->m_Start = aCandidate->m_End;
+            return aCandidate;
         }
         else
         {
-            pt_ref->m_Start = pt_segm->m_Start;
-            return pt_segm;
+            aTrackRef->m_Start = aCandidate->m_Start;
+            return aCandidate;
         }
     }
-    else    /* extremite == END */
+    else    // aEndType == END
     {
-        /* We do not have a pad */
-        if( Pcb->GetPadFast( pt_ref->m_End, g_TabOneLayerMask[pt_ref->GetLayer()] ) )
+        // We must not have a pad, which is a always terminal point for a track
+        if( aPcb->GetPadFast( aTrackRef->m_End, g_TabOneLayerMask[aTrackRef->GetLayer()] ) )
             return NULL;
 
         /* change the common point coordinate of pt_segm to use the other point
          * of pt_segm (pt_segm will be removed later) */
-        if( pt_ref->m_End == pt_segm->m_Start )
+        if( aTrackRef->m_End == aCandidate->m_Start )
         {
-            pt_ref->m_End = pt_segm->m_End;
-            return pt_segm;
+            aTrackRef->m_End = aCandidate->m_End;
+            return aCandidate;
         }
         else
         {
-            pt_ref->m_End = pt_segm->m_Start;
-            return pt_segm;
+            aTrackRef->m_End = aCandidate->m_Start;
+            return aCandidate;
         }
     }
 
@@ -812,7 +830,7 @@ static void ConnectDanglingEndToVia( BOARD* pcb )
  * connected into the center of the pad.  This allows faster control of
  * connections.
  */
-void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC )
+void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame )
 {
     TRACK*          segment;
     int             nb_new_trace = 0;
@@ -831,7 +849,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC )
 
         if( pad )
         {
-            // test if the track is not precisely starting on the found pad
+            // test if the track start point is not exactly starting on the pad
             if( segment->m_Start != pad->m_Pos )
             {
                 if( segment->GetTrace( frame->GetBoard()->m_Track, NULL, START ) == NULL )
@@ -845,8 +863,6 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC )
                     newTrack->end   = pad;
 
                     nb_new_trace++;
-
-                    newTrack->Draw( frame->DrawPanel, DC, GR_OR );
                 }
             }
         }
@@ -855,7 +871,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame, wxDC* DC )
 
         if( pad )
         {
-            // test if the track is not precisely ending on the found pad
+            // test if the track end point is not exactly on the pad
             if( segment->m_End != pad->m_Pos )
             {
                 if( segment->GetTrace( frame->GetBoard()->m_Track, NULL, END ) == NULL )
