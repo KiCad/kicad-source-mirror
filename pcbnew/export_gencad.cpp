@@ -252,70 +252,70 @@ void CreatePadsShapesSection( FILE* file, BOARD* pcb )
 
         fprintf( file, "PAD PAD%d", pad->GetSubRatsnest() );
 
-        int dx = TO_LEGACY_LU( pad->m_Size.x / 2 );
-        int dy = TO_LEGACY_LU( pad->m_Size.y / 2 );
+        int dx = TO_LEGACY_LU( pad->m_Size.x() / 2 );
+        int dy = TO_LEGACY_LU( pad->m_Size.y() / 2 );
 
         switch( pad->m_PadShape )
         {
         default:
         case PAD_CIRCLE:
             pad_type = "ROUND";                   // how about oval holes?
-            fprintf( file, " %s %d\n", pad_type, ( int )TO_LEGACY_LU( pad->m_Drill.x ) );
+            fprintf( file, " %s %d\n", pad_type, ( int )TO_LEGACY_LU( pad->m_Drill.x() ) );
             fprintf( file, "CIRCLE %d %d %d\n",
-                     TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ), dx );
+                     TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ), dx );
             break;
 
         case PAD_RECT:
             pad_type = "RECTANGULAR";
-            fprintf( file, " %s %d\n", pad_type, ( int )TO_LEGACY_LU( pad->m_Drill.x ) );
+            fprintf( file, " %s %d\n", pad_type, ( int )TO_LEGACY_LU( pad->m_Drill.x() ) );
             fprintf( file, "RECTANGLE %d %d %d %d\n",
-                     TO_LEGACY_LU( pad->m_Offset.x ) - dx, -TO_LEGACY_LU( pad->m_Offset.y ) - dy,
-                     TO_LEGACY_LU( pad->m_Size.x ), TO_LEGACY_LU( pad->m_Size.y ) );
+                     TO_LEGACY_LU( pad->m_Offset.x() ) - dx, -TO_LEGACY_LU( pad->m_Offset.y() ) - dy,
+                     TO_LEGACY_LU( pad->m_Size.x() ), TO_LEGACY_LU( pad->m_Size.y() ) );
             break;
 
         case PAD_OVAL:     /* Create outline by 2 lines and 2 arcs */
         {
             pad_type = "FINGER";
-            fprintf( file, " %s %d\n", pad_type, ( int )TO_LEGACY_LU( pad->m_Drill.x ) );
+            fprintf( file, " %s %d\n", pad_type, ( int )TO_LEGACY_LU( pad->m_Drill.x() ) );
             int dr = dx - dy;
             if( dr >= 0 )       // Horizontal oval
             {
                 int radius = dy;
                 fprintf( file, "LINE %d %d %d %d\n",
-                         -dr + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) - radius,
-                         dr + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) - radius );
+                         -dr + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) - radius,
+                         dr + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) - radius );
                 fprintf( file, "ARC %d %d %d %d %d %d\n",
-                         dr + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) - radius,
-                         dr + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) + radius,
-                         dr + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) );
+                         dr + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) - radius,
+                         dr + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) + radius,
+                         dr + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) );
 
                 fprintf( file, "LINE %d %d %d %d\n",
-                         dr + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) + radius,
-                         -dr + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) + radius );
+                         dr + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) + radius,
+                         -dr + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) + radius );
                 fprintf( file, "ARC %d %d %d %d %d %d\n",
-                         -dr + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) + radius,
-                         -dr + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) - radius,
-                         -dr + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) );
+                         -dr + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) + radius,
+                         -dr + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) - radius,
+                         -dr + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) );
             }
             else        // Vertical oval
             {
                 dr = -dr;
                 int radius = dx;
                 fprintf( file, "LINE %d %d %d %d\n",
-                         -radius + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) - dr,
-                         -radius + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) + dr );
+                         -radius + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) - dr,
+                         -radius + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) + dr );
                 fprintf( file, "ARC %d %d %d %d %d %d\n",
-                         -radius + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) + dr,
-                         radius + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) + dr,
-                         TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) + dr );
+                         -radius + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) + dr,
+                         radius + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) + dr,
+                         TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) + dr );
 
                 fprintf( file, "LINE %d %d %d %d\n",
-                         radius + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) + dr,
-                         radius + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) - dr );
+                         radius + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) + dr,
+                         radius + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) - dr );
                 fprintf( file, "ARC %d %d %d %d %d %d\n",
-                         radius + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) - dr,
-                         -radius + TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) - dr,
-                         TO_LEGACY_LU( pad->m_Offset.x ), -TO_LEGACY_LU( pad->m_Offset.y ) - dr );
+                         radius + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) - dr,
+                         -radius + TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) - dr,
+                         TO_LEGACY_LU( pad->m_Offset.x() ), -TO_LEGACY_LU( pad->m_Offset.y() ) - dr );
             }
             break;
         }
@@ -410,7 +410,7 @@ void CreateShapesSection( FILE* file, BOARD* pcb )
             NORMALIZE_ANGLE_POS( orient );
             fprintf( file, "PIN %s PAD%d %d %d %s %d %s",
                      TO_UTF8( pinname ), pad->GetSubRatsnest(),
-                     TO_LEGACY_LU( pad->m_Pos0.x ), TO_LEGACY_LU( -pad->m_Pos0.y ),
+                     TO_LEGACY_LU( pad->m_Pos0.x() ), TO_LEGACY_LU( -pad->m_Pos0.y() ),
                      layer, orient / 10, mirror );
 
             if( orient % 10 )

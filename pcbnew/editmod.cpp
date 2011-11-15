@@ -82,7 +82,7 @@ void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* pt_mod )
 
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
-        pt_pad->m_Pos0 += VECTOR_PCB( FROM_LEGACY_LU( moveVector.x ), FROM_LEGACY_LU( moveVector.y ) );
+        pt_pad->m_Pos0 += VECTOR_PCB::fromXY( FROM_LEGACY_LU( moveVector.x ), FROM_LEGACY_LU( moveVector.y ) );
     }
 
     /* Update the draw element coordinates. */

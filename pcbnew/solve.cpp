@@ -464,8 +464,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
                  + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.x;
         int cY = ( Board.m_GridRouting * row_source )
                  + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.y;
-        int dx = TO_LEGACY_LU( pt_cur_ch->m_PadStart->m_Size.x / 2 );
-        int dy = TO_LEGACY_LU( pt_cur_ch->m_PadStart->m_Size.y / 2 );
+        int dx = TO_LEGACY_LU( pt_cur_ch->m_PadStart->m_Size.x() / 2 );
+        int dy = TO_LEGACY_LU( pt_cur_ch->m_PadStart->m_Size.y() / 2 );
         int px = pt_cur_ch->m_PadStart->GetPosition().x;
         int py = pt_cur_ch->m_PadStart->GetPosition().y;
 
@@ -479,8 +479,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
              + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.x;
         cY = ( Board.m_GridRouting * row_target )
              + pcbframe->GetBoard()->m_BoundaryBox.m_Pos.y;
-        dx = TO_LEGACY_LU( pt_cur_ch->m_PadEnd->m_Size.x / 2 );
-        dy = TO_LEGACY_LU( pt_cur_ch->m_PadEnd->m_Size.y / 2 );
+        dx = TO_LEGACY_LU( pt_cur_ch->m_PadEnd->m_Size.x() / 2 );
+        dy = TO_LEGACY_LU( pt_cur_ch->m_PadEnd->m_Size.y() / 2 );
         px = pt_cur_ch->m_PadEnd->GetPosition().x;
         py = pt_cur_ch->m_PadEnd->GetPosition().y;
 

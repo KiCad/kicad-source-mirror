@@ -617,7 +617,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
             /* Here, we must test clearance between holes and pads
              * dummy pad size and shape is adjusted to pad drill size and shape
              */
-            if( pad->m_Drill.x != ZERO_LENGTH )
+            if( pad->m_Drill.x() != ZERO_LENGTH )
             {
                 // pad under testing has a hole, test this hole against pad reference
                 dummypad.SetPosition( pad->GetPosition() );
@@ -637,7 +637,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
                 }
             }
 
-            if( aRefPad->m_Drill.x != ZERO_LENGTH ) // pad reference has a hole
+            if( aRefPad->m_Drill.x() != ZERO_LENGTH ) // pad reference has a hole
             {
                 dummypad.SetPosition( aRefPad->GetPosition() );
                 dummypad.m_Size     = aRefPad->m_Drill;

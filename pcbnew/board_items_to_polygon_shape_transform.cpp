@@ -328,8 +328,8 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
 {
     wxPoint corner_position;
     int     ii, angle;
-    int     dx = TO_LEGACY_LU( m_Size.x / 2 ) + aClearanceValue;
-    int     dy = TO_LEGACY_LU( m_Size.y / 2 ) + aClearanceValue;
+    int     dx = TO_LEGACY_LU( m_Size.x() / 2 ) + aClearanceValue;
+    int     dy = TO_LEGACY_LU( m_Size.y() / 2 ) + aClearanceValue;
 
     int     delta = 3600 / aCircleToSegmentsCount;  // rot angle in 0.1 degree
     wxPoint PadShapePos = ReturnShapePos();         /* Note: for pad having a shape offset,
@@ -437,8 +437,8 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
 
     default:
     case PAD_TRAPEZOID:
-        psize.x += TO_LEGACY_LU( ABS( m_DeltaSize.y ) );
-        psize.y += TO_LEGACY_LU( ABS( m_DeltaSize.x ) );
+        psize.x += TO_LEGACY_LU( abs( m_DeltaSize.y() ) );
+        psize.y += TO_LEGACY_LU( abs( m_DeltaSize.x() ) );
 
     // fall through
     case PAD_RECT:
@@ -572,8 +572,8 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
     wxPoint PadShapePos = aPad.ReturnShapePos();    /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
     wxSize  copper_thickness;
-    int     dx = TO_LEGACY_LU( aPad.m_Size.x / 2 );
-    int     dy = TO_LEGACY_LU( aPad.m_Size.y / 2 );
+    int     dx = TO_LEGACY_LU( aPad.m_Size.x() / 2 );
+    int     dy = TO_LEGACY_LU( aPad.m_Size.y() / 2 );
 
     int     delta = 3600 / aCircleToSegmentsCount; // rot angle in 0.1 degree
 
@@ -684,8 +684,8 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
         // Oval pad support along the lines of round and rectangular pads
         std::vector <wxPoint> corners_buffer;               // Polygon buffer as vector
 
-        int     dx = TO_LEGACY_LU( aPad.m_Size.x / 2 ) + aThermalGap;     // Cutout radius x
-        int     dy = TO_LEGACY_LU( aPad.m_Size.y / 2 ) + aThermalGap;     // Cutout radius y
+        int     dx = TO_LEGACY_LU( aPad.m_Size.x() / 2 ) + aThermalGap;     // Cutout radius x
+        int     dy = TO_LEGACY_LU( aPad.m_Size.y() / 2 ) + aThermalGap;     // Cutout radius y
 
         wxPoint shape_offset;
 
@@ -839,8 +839,8 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
 
         std::vector <wxPoint> corners_buffer;               // Polygon buffer as vector
 
-        int dx = TO_LEGACY_LU( aPad.m_Size.x / 2 ) + aThermalGap;         // Cutout radius x
-        int dy = TO_LEGACY_LU( aPad.m_Size.y / 2 ) + aThermalGap;         // Cutout radius y
+        int dx = TO_LEGACY_LU( aPad.m_Size.x() / 2 ) + aThermalGap;         // Cutout radius x
+        int dy = TO_LEGACY_LU( aPad.m_Size.y() / 2 ) + aThermalGap;         // Cutout radius y
 
         // The first point of polygon buffer is left lower corner, second the crosspoint of
         // thermal spoke sides, the third is upper right corner and the rest are rounding

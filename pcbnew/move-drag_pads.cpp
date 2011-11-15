@@ -148,7 +148,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     aPad->m_Orient = g_Pad_Master.m_Orient +
                      ( (MODULE*) aPad->GetParent() )->m_Orient;
     aPad->m_Size = g_Pad_Master.m_Size;
-    aPad->m_DeltaSize  = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH );//wxSize( 0, 0 );
+    aPad->m_DeltaSize  = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH );//wxSize( 0, 0 );
     aPad->m_Offset     = g_Pad_Master.m_Offset;
     aPad->m_Drill      = g_Pad_Master.m_Drill;
     aPad->m_DrillShape = g_Pad_Master.m_DrillShape;
@@ -160,7 +160,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         break;
 
     case PAD_CIRCLE:
-        aPad->m_Size.y = aPad->m_Size.x;
+        aPad->m_Size.y() = aPad->m_Size.x();
         break;
     }
 
@@ -168,8 +168,8 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     {
     case PAD_SMD:
     case PAD_CONN:
-        aPad->m_Drill    = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH ); //wxSize( 0, 0 );
-        aPad->m_Offset   = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH );
+        aPad->m_Drill    = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH ); //wxSize( 0, 0 );
+        aPad->m_Offset   = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH );
     }
 
     aPad->ComputeShapeMaxRadius();
@@ -366,8 +366,8 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
     dY = Pad->m_Pos.y - Pad_OldPos.y;
     RotatePoint( &dX, &dY, -Module->m_Orient );
 
-    Pad->m_Pos0.x += FROM_LEGACY_LU( dX );
-    s_CurrentSelectedPad->m_Pos0.y += FROM_LEGACY_LU( dY ); /// @BUG???
+    Pad->m_Pos0.x() += FROM_LEGACY_LU( dX );
+    s_CurrentSelectedPad->m_Pos0.y() += FROM_LEGACY_LU( dY ); /// @BUG???
 
     Pad->m_Flags = 0;
 
@@ -402,13 +402,13 @@ void PCB_BASE_FRAME::RotatePad( D_PAD* Pad, wxDC* DC )
     if( DC )
         Module->Draw( DrawPanel, DC, GR_XOR );
 
-    EXCHG( Pad->m_Size.x, Pad->m_Size.y );
-    EXCHG( Pad->m_Drill.x, Pad->m_Drill.y );
-    EXCHG( Pad->m_Offset.x, Pad->m_Offset.y );
-    Pad->m_Offset.y = -Pad->m_Offset.y;
+    EXCHG( Pad->m_Size.x(), Pad->m_Size.y() );
+    EXCHG( Pad->m_Drill.x(), Pad->m_Drill.y() );
+    EXCHG( Pad->m_Offset.x(), Pad->m_Offset.y() );
+    Pad->m_Offset.y() = -Pad->m_Offset.y();
 
-    EXCHG( Pad->m_DeltaSize.x, Pad->m_DeltaSize.y );
-    Pad->m_DeltaSize.x = -Pad->m_DeltaSize.x;
+    EXCHG( Pad->m_DeltaSize.x(), Pad->m_DeltaSize.y() );
+    Pad->m_DeltaSize.x() = -Pad->m_DeltaSize.x();
     Module->CalculateBoundingBox();
     Pad->DisplayInfo( this );
 

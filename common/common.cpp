@@ -418,7 +418,7 @@ int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Int
 
 const LENGTH_UNIT_DESC MillimetreDesc =
 {
-    LENGTH_UNITS<LENGTH_DEF>::millimetre(),
+    LENGTH_UNITS<LENGTH_PCB>::millimetre(),
     wxT( "mm" ),
     6
 };
@@ -426,7 +426,7 @@ const LENGTH_UNIT_DESC MillimetreDesc =
 
 const LENGTH_UNIT_DESC InchDesc =
 {
-    LENGTH_UNITS<LENGTH_DEF>::inch(),
+    LENGTH_UNITS<LENGTH_PCB>::inch(),
     wxT( "\"" ),
     7
 };
@@ -434,7 +434,7 @@ const LENGTH_UNIT_DESC InchDesc =
 
 const LENGTH_UNIT_DESC MilDesc =
 {
-    LENGTH_UNITS<LENGTH_DEF>::mil(),
+    LENGTH_UNITS<LENGTH_PCB>::mil(),
     wxT( "mil" ),
     5
 };
@@ -442,7 +442,7 @@ const LENGTH_UNIT_DESC MilDesc =
 
 const LENGTH_UNIT_DESC UnscaledDesc = /* stub */
 {
-    LENGTH_DEF::quantum(),
+    LENGTH_PCB::quantum(),
     wxT( "" ),
     4
 };
@@ -461,7 +461,7 @@ const LENGTH_UNIT_DESC *UnitDescription( EDA_UNITS_T aUnit ) {
 
 
 /* TODO: localisation */
-wxString LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_DEF aValue,
+wxString LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_PCB aValue,
                          bool aAdd_unit_symbol ) {
     wxString StringValue;
     double   value_to_print;
@@ -490,11 +490,11 @@ wxString LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_DEF aValue,
     return StringValue;
 }
 
-LENGTH_DEF StringToLength( const LENGTH_UNIT_DESC *aUnit, const wxString& TextValue )
+LENGTH_PCB StringToLength( const LENGTH_UNIT_DESC *aUnit, const wxString& TextValue )
 {
 
-    LENGTH_DEF    Value;
-    double dtmp = 0;
+    LENGTH_PCB  Value;
+    double      dtmp = 0;
 
     /* Acquire the 'right' decimal point separator */
     const struct lconv* lc = localeconv();
@@ -544,21 +544,21 @@ LENGTH_DEF StringToLength( const LENGTH_UNIT_DESC *aUnit, const wxString& TextVa
         aUnit = &MilDesc;
     }
 
-    Value = LENGTH_DEF( dtmp * LENGTH< double, 1 >( aUnit->m_Value ) );
+    Value = LENGTH_PCB( dtmp * LENGTH< double, 1 >( aUnit->m_Value ) );
 
     return Value;
 }
 
-void LengthToTextCtrl( wxTextCtrl& TextCtr, LENGTH_DEF Value )
+void LengthToTextCtrl( wxTextCtrl& TextCtr, LENGTH_PCB Value )
 {
     wxString msg = LengthToString( UnitDescription( g_UserUnit ), Value );
 
     TextCtr.SetValue( msg );
 }
 
-LENGTH_DEF LengthFromTextCtrl( const wxTextCtrl& TextCtr )
+LENGTH_PCB LengthFromTextCtrl( const wxTextCtrl& TextCtr )
 {
-    LENGTH_DEF value;
+    LENGTH_PCB value;
     wxString msg = TextCtr.GetValue();
 
     value = StringToLength( UnitDescription( g_UserUnit ), msg );
