@@ -186,9 +186,9 @@ void MODULE::Flip(const wxPoint& aCentre )
         pt_pad->m_Pos.y      -= m_Pos.y;
         pt_pad->m_Pos.y       = -pt_pad->m_Pos.y;
         pt_pad->m_Pos.y      += m_Pos.y;
-        NEGATE( pt_pad->m_Pos0.y );
-        NEGATE( pt_pad->m_Offset.y );
-        NEGATE( pt_pad->m_DeltaSize.y );
+        NEGATE( pt_pad->m_Pos0.y() );
+        NEGATE( pt_pad->m_Offset.y() );
+        NEGATE( pt_pad->m_DeltaSize.y() );
         NEGATE_AND_NORMALIZE_ANGLE_POS( pt_pad->m_Orient );
 
         /* flip pads layers*/
@@ -352,8 +352,8 @@ void MODULE::SetOrientation( int newangle )
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        px = TO_LEGACY_LU( pad->m_Pos0.x );
-        py = TO_LEGACY_LU( pad->m_Pos0.y );
+        px = TO_LEGACY_LU( pad->m_Pos0.x() );
+        py = TO_LEGACY_LU( pad->m_Pos0.y() );
 
         pad->m_Orient += newangle; /* change m_Orientation */
         NORMALIZE_ANGLE_POS( pad->m_Orient );

@@ -8,6 +8,7 @@
 
 #ifdef KICAD_NANOMETRE
 #include "length.h"
+#include "limited_int.h"
 
 /* switched type! */
 typedef LENGTH< LIMITED_INT< int >, 1 > LENGTH_PCB;
@@ -82,53 +83,126 @@ typedef double LENGTH_PCB_DBL;
 
 
 /// @TODO: nice template and refiling for it
-struct VECTOR_PCB
+class VECTOR_PCB
 {
-    LENGTH_PCB x, y;
-    VECTOR_PCB()
+public:
+    LENGTH_PCB data[2];
+
+    /** A vector from pair of coords. Constructor is avoided in favor to POD.
+     */
+    static VECTOR_PCB fromXY( LENGTH_PCB x, LENGTH_PCB y )
     {
+        VECTOR_PCB z = { x, y };
+        return z;
     }
-    VECTOR_PCB( LENGTH_PCB ax, LENGTH_PCB ay ): x( ax ), y( ay )
+    
+    LENGTH_PCB &operator[]( int i )
     {
+        return data[i];
     }
-    bool operator == ( const VECTOR_PCB &a ) const {
-        return x == a.x && y == a.y;
+
+    const LENGTH_PCB &operator[]( int i ) const
+    {
+        return data[i];
     }
-    bool operator != ( const VECTOR_PCB &a ) const {
-        return x != a.x || y != a.y;
+    
+    LENGTH_PCB & x()
+    {
+        return data[0];
     }
-    VECTOR_PCB & operator = (const VECTOR_PCB &a ) {
-        x = a.x;
-        y = a.y;
+
+    const LENGTH_PCB & x() const
+    {
+        return data[0];
+    }
+    
+    LENGTH_PCB & y()
+    {
+        return data[1];
+    }
+
+    const LENGTH_PCB & y() const
+    {
+        return data[1];
+    }
+
+    //LENGTH_PCB x, y;
+    bool operator == ( const VECTOR_PCB &b ) const
+    {
+        return data[0] == b.data[0] && data[1] == b.data[1];
+    }
+    
+    bool operator != ( const VECTOR_PCB &b ) const
+    {
+        return !(*this == b);
+    }
+    
+    VECTOR_PCB & operator -= ( const VECTOR_PCB &b )
+    {
+        data[0] -= b.data[0];
+        data[1] -= b.data[1];
         return *this;
     }
-    VECTOR_PCB & operator += (const VECTOR_PCB &a ) {
-        x += a.x;
-        y += a.y;
+    
+    VECTOR_PCB operator - ( const VECTOR_PCB &b ) const
+    {
+        VECTOR_PCB z = *this;
+        z -= b;
+        return z;
+    }
+    
+    VECTOR_PCB & operator += ( const VECTOR_PCB &b )
+    {
+        data[0] += b.data[0];
+        data[1] += b.data[1];
         return *this;
     }
-    VECTOR_PCB & operator -= (const VECTOR_PCB &a ) {
-        x -= a.x;
-        y -= a.y;
+    
+    VECTOR_PCB operator + ( VECTOR_PCB b ) const
+    {
+        VECTOR_PCB z = *this;
+        z += b;
+        return z;
+    }
+    
+    VECTOR_PCB & operator *= ( int b )
+    {
+        data[0] *= b;
+        data[1] *= b;
         return *this;
     }
-    VECTOR_PCB operator + (VECTOR_PCB add) const {
-        return VECTOR_PCB(x + add.x, y + add.y);
+    
+    VECTOR_PCB operator * ( int b ) const
+    {
+        VECTOR_PCB z = *this;
+        z *= b;
+        return z;
     }
-    VECTOR_PCB operator - (VECTOR_PCB add) const {
-        return VECTOR_PCB(x - add.x, y - add.y);
+    
+    VECTOR_PCB & operator /= ( int b )
+    {
+        data[0] /= b;
+        data[1] /= b;
+        return *this;
     }
-    VECTOR_PCB operator * (int factor) const {
-        return VECTOR_PCB(x * factor, y * factor);
-    }
-    VECTOR_PCB operator / (int factor) const {
-        return VECTOR_PCB(x / factor, y / factor);
+    
+    VECTOR_PCB operator / ( int b ) const
+    {
+        VECTOR_PCB z = *this;
+        z /= b;
+        return z;
     }
 };
 
-#define TO_LEGACY_LU_WXP( p ) ( wxPoint( TO_LEGACY_LU( ( p ).x ), TO_LEGACY_LU( ( p ).y ) ) )
-#define TO_LEGACY_LU_WXS( p ) ( wxSize( TO_LEGACY_LU( ( p ).x ), TO_LEGACY_LU( ( p ).y ) ) )
-#define FROM_LEGACY_LU_VEC( p ) ( VECTOR_PCB( FROM_LEGACY_LU( ( p ).x ), FROM_LEGACY_LU( ( p ).y ) ) )
+#define TO_LEGACY_LU_WXP( p ) ( wxPoint( \
+    TO_LEGACY_LU( ( p )[0] ), \
+    TO_LEGACY_LU( ( p )[1] ) ) )
+#define TO_LEGACY_LU_WXS( p ) ( wxSize( \
+    TO_LEGACY_LU( ( p )[0] ), \
+    TO_LEGACY_LU( ( p )[1] ) ) )
+#define FROM_LEGACY_LU_VEC( p ) ( VECTOR_PCB::fromXY( \
+    FROM_LEGACY_LU( ( p ).x ), \
+    FROM_LEGACY_LU( ( p ).y ) ) )
 
 
 #endif /* def LENGTHPCB_H_INCLUDED */
