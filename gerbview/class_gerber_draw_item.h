@@ -167,7 +167,7 @@ public:
      * @return const wxPoint& - The position of this object.
      * This function exists mainly to satisfy the virtual GetPosition() in parent class
      */
-    wxPoint& GetPosition()
+    wxPoint GetPosition() const
     {
         return m_Start;  // it had to be start or end.
     }

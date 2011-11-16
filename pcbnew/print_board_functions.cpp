@@ -352,17 +352,17 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
 
         // Manage hole according to the print drill option
         wxSize drill_tmp;
-        drill_tmp.x = TO_LEGACY_LU( pt_pad->m_Drill.x );
-        drill_tmp.y = TO_LEGACY_LU( pt_pad->m_Drill.y );
+        drill_tmp.x = TO_LEGACY_LU( pt_pad->m_Drill.x() );
+        drill_tmp.y = TO_LEGACY_LU( pt_pad->m_Drill.y() );
 
         switch ( aDrillShapeOpt )
         {
             case PRINT_PARAMETERS::NO_DRILL_SHAPE:
-                pt_pad->m_Drill = VECTOR_PCB(ZERO_LENGTH, ZERO_LENGTH); //wxSize(0,0);
+                pt_pad->m_Drill = VECTOR_PCB::fromXY(ZERO_LENGTH, ZERO_LENGTH); //wxSize(0,0);
                 break;
             case PRINT_PARAMETERS::SMALL_DRILL_SHAPE:
-                pt_pad->m_Drill.x = MIN(FROM_LEGACY_LU( SMALL_DRILL ),pt_pad->m_Drill.x );
-                pt_pad->m_Drill.y = MIN(FROM_LEGACY_LU( SMALL_DRILL ),pt_pad->m_Drill.y );
+                pt_pad->m_Drill.x() = min( FROM_LEGACY_LU( SMALL_DRILL ),pt_pad->m_Drill.x() );
+                pt_pad->m_Drill.y() = min( FROM_LEGACY_LU( SMALL_DRILL ),pt_pad->m_Drill.y() );
                 break;
             case PRINT_PARAMETERS::FULL_DRILL_SHAPE:
                 // Do nothing
@@ -370,8 +370,8 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
         }
 
         pt_pad->Draw( aPanel, aDC, aDraw_mode );
-        pt_pad->m_Drill.x = FROM_LEGACY_LU( drill_tmp.x );
-        pt_pad->m_Drill.y = FROM_LEGACY_LU( drill_tmp.y );
+        pt_pad->m_Drill.x() = FROM_LEGACY_LU( drill_tmp.x );
+        pt_pad->m_Drill.y() = FROM_LEGACY_LU( drill_tmp.y );
     }
 
     /* Print footprint graphic shapes */

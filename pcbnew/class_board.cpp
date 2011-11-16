@@ -647,11 +647,9 @@ bool BOARD::IsModuleLayerVisible( int layer )
 
 
 
-wxPoint& BOARD::GetPosition()
+wxPoint BOARD::GetPosition() const
 {
-    static wxPoint dummy( 0, 0 );
-
-    return dummy;   // a reference
+    return wxPoint ( 0, 0 );   // a reference
 }
 
 
@@ -1668,7 +1666,7 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, int aLayerMask )
     {
         D_PAD* pad = m_NetInfo->GetPad(i);
 
-        if( pad->m_Pos != aPosition )
+        if( TO_LEGACY_LU_WXP( pad->m_Pos ) != aPosition )
             continue;
 
         /* Pad found, it must be on the correct layer */
@@ -1699,7 +1697,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
 
         D_PAD* pad = aPadList[idx];
 
-        if( pad->m_Pos == aPosition )       // candidate found
+        if( TO_LEGACY_LU_WXP( pad->m_Pos ) == aPosition )       // candidate found
         {
             // The pad must match the layer mask:
             if( (aLayerMask & pad->m_layerMask) != 0 )
@@ -1712,7 +1710,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
             for( int ii = idx+1; ii <= idxmax; ii++ )
             {
                 pad = aPadList[ii];
-                if( pad->m_Pos != aPosition )
+                if( TO_LEGACY_LU_WXP( pad->m_Pos ) != aPosition )
                     break;
                 if( (aLayerMask & pad->m_layerMask) != 0 )
                     return pad;
@@ -1721,7 +1719,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
             for(  int ii = idx-1 ;ii >=0; ii-- )
             {
                 pad = aPadList[ii];
-                if( pad->m_Pos != aPosition )
+                if( TO_LEGACY_LU_WXP( pad->m_Pos ) != aPosition )
                     break;
                 if( (aLayerMask & pad->m_layerMask) != 0 )
                     return pad;
@@ -1731,9 +1729,9 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
             return 0;
         }
 
-        if( pad->m_Pos.x == aPosition.x )   // Must search considering Y coordinate
+        if( TO_LEGACY_LU( pad->m_Pos.x() ) == aPosition.x )   // Must search considering Y coordinate
         {
-            if(pad->m_Pos.y < aPosition.y)  // Must search after this item
+            if( TO_LEGACY_LU( pad->m_Pos.y() ) < aPosition.y )  // Must search after this item
             {
                 idx += delta;
                 if( idx > idxmax )
@@ -1746,7 +1744,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
                     idx = 0;
             }
         }
-        else if( pad->m_Pos.x < aPosition.x ) // Must search after this item
+        else if( TO_LEGACY_LU( pad->m_Pos.x() ) < aPosition.x ) // Must search after this item
         {
             idx += delta;
             if( idx > idxmax )
@@ -1770,9 +1768,9 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
  */
 static bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
 {
-    if( ref->m_Pos.x == comp->m_Pos.x )
-        return ref->m_Pos.y < comp->m_Pos.y;
-    return ref->m_Pos.x < comp->m_Pos.x;
+    if( ref->m_Pos.x() == comp->m_Pos.x() )
+        return ref->m_Pos.y() < comp->m_Pos.y();
+    return ref->m_Pos.x() < comp->m_Pos.x();
 }
 
 

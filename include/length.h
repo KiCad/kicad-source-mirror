@@ -8,12 +8,9 @@
 #ifndef LENGTH_H_INCLUDED
 #define LENGTH_H_INCLUDED 1
 
-#include "limited_int.h"
+#include <math.h>
 
-/* type to be used by length units by default */
-typedef LIMITED_INT< int > DEF_LENGTH_VALUE;
-
-/**
+/*!
  * Length template class.
  * @param T actual type holding a value (be aware of precision and range!)
  * @param P power of length unit: 1 - length, 2 - area, 3 - volume, -1 - lin. density etc...
@@ -47,26 +44,34 @@ typedef LIMITED_INT< int > DEF_LENGTH_VALUE;
  *
  */
 
-template < typename T = DEF_LENGTH_VALUE, int P = 1 > class LENGTH;
+template < typename T = double, int P = 1 > class LENGTH;
 
-typedef LENGTH<DEF_LENGTH_VALUE, 1> LENGTH_DEF;
-
-/**
- * Length units contained in this class
+/*!
+ * Length units.
  */
 
 template <typename T> class LENGTH_UNITS;
 
-/**
- * For internal needs
+/*!
+ * The template that "inflate" LENGTH< T, 0 > class to T. Used with (*) and (/).
  */
 template < typename T, int P > struct LENGTH_TRAITS
 {
     typedef LENGTH<T, P> flat;
 };
 
+template < typename T > struct LENGTH_TRAITS< T, 0 >
+{
+    /* length dimension to power 0 is just a number, so LENGTH<T, 0> should be automatically converted to T */
+    typedef T flat;
+};
+
+/*!
+ * The template for value type conversions
+ */
 template < typename T > struct LENGTH_CASTS
 {
+     /*! This function to convert length value to given type T. */
      template< typename X > static T cast( const X x )
      {
          return T( x );
@@ -89,18 +94,15 @@ template <> struct LENGTH_CASTS < long >
      }
 };
 
+/** Forward declaration for LIMITED_INT to use with casts. */
+template < typename T > class LIMITED_INT;
+
 template < typename T > struct LENGTH_CASTS < LIMITED_INT< T > >
 {
      static LIMITED_INT< T > cast( const double x )
      {
          return LIMITED_INT< T > ( floor( x + 0.5 ) );
      }
-};
-
-template < typename T > struct LENGTH_TRAITS< T, 0 >
-{
-    /* length dimension to power 0 is just a number, so LENGTH<T, 0> should be automatically converted to T */
-    typedef T flat;
 };
 
 template< typename T, int P > class LENGTH
@@ -110,29 +112,36 @@ template< typename T, int P > class LENGTH
     template < typename Y, int R > friend class LENGTH;
 protected:
 
-    T m_U;
-    LENGTH( T units ) : m_U( units )
+    T u;
+    
+    LENGTH( T units ) : u( units )
     {
     }
+    
     static T RawValue( const LENGTH<T, P> &x )
     {
-        return x.m_U;
+        return x.u;
     }
+    
     static T RawValue( const T& x )
     {
         return x;
     }
+    
 public:
     typedef T value_type;
+    
     enum
     {
         dimension = P
     };
+    
     template< typename U > LENGTH( const LENGTH< U, P > &orig )
-    : m_U( LENGTH_CASTS < T >::cast( orig.m_U ) )
+    : u( LENGTH_CASTS < T >::cast( orig.u ) )
     {
     }
-    LENGTH( void ) : m_U()
+    
+    LENGTH( void ) : u()
     {
     }
     
@@ -149,134 +158,181 @@ public:
 
     LENGTH<T, P> & operator = ( const LENGTH<T, P> & y )
     {
-        this->m_U = y.m_U;
+        this->u = y.u;
         return *this;
     }
+    
     template< typename Y > operator LENGTH< Y, P > ( void )
     {
-        return LENGTH< Y, P >( this->m_U );
+        return LENGTH< Y, P >( this->u );
     }
+    
     /*************************/
     /* comparisons and tests */
     /*************************/
     bool operator ==( const LENGTH < T, P > y ) const
     {
-        return m_U == y.m_U;
+        return u == y.u;
     }
+    
     bool operator !=( const LENGTH < T, P > y ) const
     {
-        return m_U != y.m_U;
+        return u != y.u;
     }
+    
     bool operator <( const LENGTH < T, P > y ) const
     {
-        return m_U < y.m_U;
+        return u < y.u;
     }
+    
     bool operator >=( const LENGTH < T, P > y ) const
     {
-        return m_U >= y.m_U;
+        return u >= y.u;
     }
+    
     bool operator >( const LENGTH < T, P > y ) const
     {
-        return m_U > y.m_U;
+        return u > y.u;
     }
+    
     bool operator <=( const LENGTH < T, P > y ) const
     {
-        return m_U <= y.m_U;
+        return u <= y.u;
     }
+    
     bool operator !( void ) const
     {
-        return !m_U;
+        return !u;
     }
+    
     /*************************/
     /* basic arithmetic      */
     /*************************/
     LENGTH< T, P > operator - ( void ) const
     {
-        return LENGTH<T, P>(-this->m_U);
+        LENGTH< T, P > z;
+        z.u = -u;
+        return z;
     }
-    LENGTH< T, P > operator - ( const LENGTH< T, P > y ) const
+    
+    LENGTH< T, P >& operator -= ( const LENGTH< T, P > y )
     {
-        return m_U - y.m_U;
+        u -= y.u;
+        return *this;
     }
-    LENGTH< T, P > operator + ( const LENGTH< T, P > y ) const
+
+    friend LENGTH< T, P > operator - ( const LENGTH< T, P > x, const LENGTH< T, P > y )
     {
-        return m_U + y.m_U;
+        LENGTH< T, P > z = x;
+        z -= y;
+        return z;
     }
+    
+    LENGTH< T, P >& operator += ( const LENGTH< T, P > y )
+    {
+        u += y.u;
+        return *this;
+    }
+
+    friend LENGTH< T, P > operator + ( const LENGTH< T, P > x, const LENGTH< T, P > y )
+    {
+        LENGTH< T, P > z = x;
+	z += y;
+        return z;
+    }
+    
+    LENGTH< T, P >& operator *= ( const T y )
+    {
+        u *= y;
+        return *this;
+    }
+
+    LENGTH< T, P > operator * ( const T & y) const
+    {
+        LENGTH< T, P > z = *this;
+        z *= y;
+        return z;
+    }
+
     template < int R >
     typename LENGTH_TRAITS< T, P + R >::flat operator * ( const LENGTH<T, R> &y ) const
     {
-        return m_U * y.m_U;
-    }
-    LENGTH< T, P > operator * ( const T & y) const
-    {
-        return m_U * y;
-    }
-    LENGTH< T, P > friend operator * ( const T &y, const LENGTH<T, P> &x )
-    {
-        return x.m_U * y;
+        LENGTH< T, P > z;
+        z.u = u * y.u;
+        return z;
     }
     
+    LENGTH< T, P > friend operator * ( const T &y, const LENGTH<T, P> &x )
+    {
+        return x.u * y;
+    }
+    
+    LENGTH< T, P >& operator /= ( const T y )
+    {
+        u /= y;
+        return *this;
+    }
+    
+    LENGTH< T, P > operator / ( const T &y ) const
+    {
+        return u / y;
+    }
+
     template < int R >
     typename LENGTH_TRAITS< T, P - R >::flat operator / ( const LENGTH<T, R> &y ) const
     {
-        return m_U / y.m_U;
-    }
-    LENGTH< T, P > operator / ( const T &y ) const
-    {
-        return m_U / y;
-    }
-    LENGTH< T, -P > friend operator / ( const T &y, const LENGTH< T, P > &x )
-    {
-        return y / x.m_U;
-    }
-
-    /*************************/
-    /* assignment arithmetic */
-    /*************************/
-    LENGTH< T, P >& operator -= ( const LENGTH< T, P > y )
-    {
-        m_U -= y.m_U;
-        return *this;
-    }
-    LENGTH< T, P >& operator += ( const LENGTH< T, P > y )
-    {
-        m_U += y.m_U;
-        return *this;
-    }
-    LENGTH< T, P >& operator *= ( const T y )
-    {
-        m_U *= y;
-        return *this;
-    }
-    LENGTH< T, P >& operator /= ( const T y )
-    {
-        m_U /= y;
-        return *this;
+        return u / y.u;
     }
     
-    /*************************/
-    /* more functions        */
-    /*************************/
+    LENGTH< T, -P > friend operator / ( const T &y, const LENGTH< T, P > &x )
+    {
+        return y / x.u;
+    }
+
+    /******************************/
+    /* algebraic functions        */
+    /******************************/
+    friend LENGTH< T, P > abs( LENGTH< T, P > y )
+    {
+        return 0 < y.u? y : -y;
+    }
+    
+    friend LENGTH< T, P > max( LENGTH< T, P > x, LENGTH< T, P > y )
+    {
+        LENGTH< T, P > z;
+        z.u = hypot( x.u, y.u );
+        return z;
+    }
+
     friend LENGTH< T, P > sqrt( LENGTH< T, P*2 > y )
     {
-        return sqrt( y.m_U );
+        LENGTH< T, P > z;
+        z.u = sqrt( y.u );
+        return z;
     }
+    
     friend LENGTH< T, P > cbrt( LENGTH< T, P*3 > y )
     {
-        return cbrt( y.m_U );
+        LENGTH< T, P > z;
+        z.u = cbrt( y.u );
+        return z;
     }
+    
     friend LENGTH< T, P > hypot( LENGTH< T, P > x, LENGTH< T, P > y )
     {
-        return hypot( x.m_U, y.m_U );
+        LENGTH< T, P > z;
+        z.u = hypot( x.u, y.u );
+        return z;
     }
+    
     friend double atan2( LENGTH< T, P > x, LENGTH< T, P > y )
     {
-        return atan2( double ( x.m_U ), double( y.m_U ) );
+        return atan2( double ( x.u ), double( y.u ) );
     }
 
 };
 
-/**
+/*!
  * Units of length
  *
  * How to use them:
@@ -293,43 +349,61 @@ public:
  * is going to use relative units.
  */
 
-template < typename T = DEF_LENGTH_VALUE > class LENGTH_UNITS {
+template < typename T > class LENGTH_UNITS {
 protected:
     enum
     {
-        METRE = 1000000000, /* The ONLY constant connecting length to the real world */
+        METRE = 1000000000, /*!< The ONLY constant connecting length to the real world */
         
         INCH = METRE / 10000 * 254
     };
-    public:
-    static LENGTH< T, 1 > metre( void ) {
+    
+public:
+    /*! One metre. */
+    static LENGTH< T, 1 > metre( void ) 
+    {
         return T( METRE );
     }
-    static LENGTH< T, 1 > decimetre( void ) {
+    
+    /*! One decimetre. */
+    static LENGTH< T, 1 > decimetre( void ) 
+    {
         return T( METRE / 10 );
     }
-    static LENGTH< T, 1 > centimetre( void ) {
+    
+    static LENGTH< T, 1 > centimetre( void ) 
+    {
         return T( METRE / 100 );
     }
-    static LENGTH< T, 1 > millimetre( void ) {
+    
+    static LENGTH< T, 1 > millimetre( void ) 
+    {
         return T( METRE / 1000 );
     }
-    static LENGTH< T, 1 > micrometre( void ) {
+    
+    static LENGTH< T, 1 > micrometre( void ) 
+    {
         return T( METRE / 1000000 );
     }
-    static LENGTH< T, 1 > foot( void ) { /* do not think this will ever need */
+    
+    static LENGTH< T, 1 > foot( void ) 
+    {
         return T( INCH * 12 );
     }
-    static LENGTH< T, 1 > inch( void ) {
+    
+    static LENGTH< T, 1 > inch( void ) 
+    {
         return T( INCH );
     }
-    static LENGTH< T, 1 > mil( void ) {
+    
+    static LENGTH< T, 1 > mil( void ) 
+    {
         return T( INCH / 1000 );
     }
 };
 
 /**
-  * shortcut to get units of given length type
+  * Shortcut to get units of given length type
   */
 template < typename T, int D > class LENGTH_UNITS< LENGTH< T, D > >: public LENGTH_UNITS< T >
 {

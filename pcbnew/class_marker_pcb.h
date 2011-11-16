@@ -81,7 +81,7 @@ public:
      * Function GetPosition
      * returns the position of this MARKER_PCB.
      */
-    wxPoint& GetPosition()
+    wxPoint GetPosition() const
     {
         return (wxPoint&) m_Pos;
     }

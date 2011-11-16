@@ -30,7 +30,7 @@ public:
     PCB_TARGET* Next() const { return (PCB_TARGET*) Pnext; }
     PCB_TARGET* Back() const { return (PCB_TARGET*) Pnext; }
 
-    wxPoint& GetPosition()
+    wxPoint GetPosition() const
     {
         return m_Pos;
     }

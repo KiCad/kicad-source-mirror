@@ -52,7 +52,7 @@ void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC )
 
         if( pt_pad )
         {
-            pos = pt_pad->m_Pos - g_Offset_Module;
+            pos = TO_LEGACY_LU_WXP( pt_pad->m_Pos ) - g_Offset_Module;
             Track->m_Start = pos;
         }
 
@@ -60,7 +60,7 @@ void DrawSegmentWhileMovingFootprint( EDA_DRAW_PANEL* panel, wxDC* DC )
 
         if( pt_pad )
         {
-            pos = pt_pad->m_Pos - g_Offset_Module;
+            pos = TO_LEGACY_LU_WXP( pt_pad->m_Pos ) - g_Offset_Module;
             Track->m_End = pos;
         }
 
@@ -105,7 +105,7 @@ void Build_1_Pad_SegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC, D_PAD* PtPad )
 
     Track = pcb->m_Track->GetStartNetCode( net_code );
 
-    pos = PtPad->m_Pos;
+    pos = TO_LEGACY_LU_WXP( PtPad->m_Pos );
     LayerMask = PtPad->m_layerMask;
 
     for( ; Track; Track = Track->Next() )

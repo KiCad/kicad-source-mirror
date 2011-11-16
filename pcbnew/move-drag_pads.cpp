@@ -23,7 +23,7 @@
 
 
 static D_PAD*  s_CurrentSelectedPad;
-static wxPoint Pad_OldPos;
+static VECTOR_PCB Pad_OldPos;
 
 
 /* Cancel move pad command.
@@ -76,7 +76,7 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
     if( aErase )
         pad->Draw( aPanel, aDC, GR_XOR );
 
-    pad->m_Pos = screen->GetCrossHairPosition();
+    pad->m_Pos = FROM_LEGACY_LU_VEC( screen->GetCrossHairPosition() );
     pad->Draw( aPanel, aDC, GR_XOR );
 
     if( !g_Drag_Pistes_On )
@@ -91,12 +91,12 @@ static void Show_Pad_Move( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
 
         if( g_DragSegmentList[ii].m_Pad_Start )
         {
-            Track->m_Start = pad->m_Pos;
+            Track->m_Start = TO_LEGACY_LU_WXP( pad->m_Pos );
         }
 
         if( g_DragSegmentList[ii].m_Pad_End )
         {
-            Track->m_End = pad->m_Pos;
+            Track->m_End = TO_LEGACY_LU_WXP( pad->m_Pos );
         }
 
         Track->Draw( aPanel, aDC, GR_XOR );
@@ -148,7 +148,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     aPad->m_Orient = g_Pad_Master.m_Orient +
                      ( (MODULE*) aPad->GetParent() )->m_Orient;
     aPad->m_Size = g_Pad_Master.m_Size;
-    aPad->m_DeltaSize  = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH );//wxSize( 0, 0 );
+    aPad->m_DeltaSize  = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH );//wxSize( 0, 0 );
     aPad->m_Offset     = g_Pad_Master.m_Offset;
     aPad->m_Drill      = g_Pad_Master.m_Drill;
     aPad->m_DrillShape = g_Pad_Master.m_DrillShape;
@@ -160,7 +160,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         break;
 
     case PAD_CIRCLE:
-        aPad->m_Size.y = aPad->m_Size.x;
+        aPad->m_Size.y() = aPad->m_Size.x();
         break;
     }
 
@@ -168,8 +168,8 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     {
     case PAD_SMD:
     case PAD_CONN:
-        aPad->m_Drill    = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH ); //wxSize( 0, 0 );
-        aPad->m_Offset   = VECTOR_PCB( ZERO_LENGTH, ZERO_LENGTH );
+        aPad->m_Drill    = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH ); //wxSize( 0, 0 );
+        aPad->m_Offset   = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH );
     }
 
     aPad->ComputeShapeMaxRadius();
@@ -200,11 +200,11 @@ void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
     Import_Pad_Settings( Pad, false );
     Pad->SetNetname( wxEmptyString );
 
-    Pad->m_Pos = GetScreen()->GetCrossHairPosition();
+    Pad->m_Pos = FROM_LEGACY_LU_VEC( GetScreen()->GetCrossHairPosition() );
 
     // Set the relative pad position
     // ( pad position for module orient, 0, and relative to the module position)
-    Pad->m_Pos0 = FROM_LEGACY_LU_VEC( Pad->m_Pos - Module->m_Pos );
+    Pad->m_Pos0 = Pad->m_Pos - FROM_LEGACY_LU_VEC( Module->m_Pos );
     wxPoint p = TO_LEGACY_LU_WXP( Pad->m_Pos0 );
     RotatePoint( &p, -Module->m_Orient );
     Pad->m_Pos0 = FROM_LEGACY_LU_VEC( p );
@@ -317,17 +317,17 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
 
         // Set the old state
         if( g_DragSegmentList[ii].m_Pad_Start )
-            Track->m_Start = Pad_OldPos;
+            Track->m_Start = TO_LEGACY_LU_WXP( Pad_OldPos );
 
         if( g_DragSegmentList[ii].m_Pad_End )
-            Track->m_End = Pad_OldPos;
+            Track->m_End = TO_LEGACY_LU_WXP( Pad_OldPos );
 
         picker.m_PickedItem = Track;
         pickList.PushItem( picker );
     }
 
     /* Save old module and old items values */
-    wxPoint pad_curr_position = Pad->m_Pos;
+    wxPoint pad_curr_position = TO_LEGACY_LU_WXP( Pad->m_Pos );
 
     Pad->m_Pos = Pad_OldPos;
 
@@ -340,7 +340,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
         SaveCopyInUndoList( pickList, UR_CHANGED );
     }
 
-    Pad->m_Pos = pad_curr_position;
+    Pad->m_Pos = FROM_LEGACY_LU_VEC( pad_curr_position );
     Pad->Draw( DrawPanel, DC, GR_XOR );
 
     /* Redraw dragged track segments */
@@ -350,10 +350,10 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
 
         // Set the new state
         if( g_DragSegmentList[ii].m_Pad_Start )
-            Track->m_Start = Pad->m_Pos;
+            Track->m_Start = TO_LEGACY_LU_WXP( Pad->m_Pos );
 
         if( g_DragSegmentList[ii].m_Pad_End )
-            Track->m_End = Pad->m_Pos;
+            Track->m_End = TO_LEGACY_LU_WXP( Pad->m_Pos );
 
         Track->SetState( IN_EDIT, OFF );
 
@@ -362,12 +362,12 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
     }
 
     /* Compute local coordinates (i.e refer to Module position and for Module orient = 0) */
-    dX = Pad->m_Pos.x - Pad_OldPos.x;
-    dY = Pad->m_Pos.y - Pad_OldPos.y;
+    dX = TO_LEGACY_LU( Pad->m_Pos.x() - Pad_OldPos.x() );
+    dY = TO_LEGACY_LU( Pad->m_Pos.y() - Pad_OldPos.y() );
     RotatePoint( &dX, &dY, -Module->m_Orient );
 
-    Pad->m_Pos0.x += FROM_LEGACY_LU( dX );
-    s_CurrentSelectedPad->m_Pos0.y += FROM_LEGACY_LU( dY ); /// @BUG???
+    Pad->m_Pos0.x() += FROM_LEGACY_LU( dX );
+    s_CurrentSelectedPad->m_Pos0.y() += FROM_LEGACY_LU( dY ); /// @BUG???
 
     Pad->m_Flags = 0;
 
@@ -402,13 +402,13 @@ void PCB_BASE_FRAME::RotatePad( D_PAD* Pad, wxDC* DC )
     if( DC )
         Module->Draw( DrawPanel, DC, GR_XOR );
 
-    EXCHG( Pad->m_Size.x, Pad->m_Size.y );
-    EXCHG( Pad->m_Drill.x, Pad->m_Drill.y );
-    EXCHG( Pad->m_Offset.x, Pad->m_Offset.y );
-    Pad->m_Offset.y = -Pad->m_Offset.y;
+    EXCHG( Pad->m_Size.x(), Pad->m_Size.y() );
+    EXCHG( Pad->m_Drill.x(), Pad->m_Drill.y() );
+    EXCHG( Pad->m_Offset.x(), Pad->m_Offset.y() );
+    Pad->m_Offset.y() = -Pad->m_Offset.y();
 
-    EXCHG( Pad->m_DeltaSize.x, Pad->m_DeltaSize.y );
-    Pad->m_DeltaSize.x = -Pad->m_DeltaSize.x;
+    EXCHG( Pad->m_DeltaSize.x(), Pad->m_DeltaSize.y() );
+    Pad->m_DeltaSize.x() = -Pad->m_DeltaSize.x();
     Module->CalculateBoundingBox();
     Pad->DisplayInfo( this );
 
