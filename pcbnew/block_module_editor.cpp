@@ -550,9 +550,9 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
             continue;
 
         SETMIRROR( pad->GetPosition().x );
-        pad->m_Pos0.x = FROM_LEGACY_LU( pad->GetPosition().x );
-        NEGATE( pad->m_Offset.x );
-        NEGATE( pad->m_DeltaSize.x );
+        pad->m_Pos0.x() = FROM_LEGACY_LU( pad->GetPosition().x );
+        NEGATE( pad->m_Offset.x() );
+        NEGATE( pad->m_DeltaSize.x() );
         pad->m_Orient      = 1800 - pad->m_Orient;
         NORMALIZE_ANGLE_POS( pad->m_Orient );
     }
@@ -608,8 +608,9 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
     {
         if( pad->m_Selected == 0 )
             continue;
-
-        ROTATE( pad->GetPosition() );
+        wxPoint pos = pad->GetPosition();
+        ROTATE( pos );
+        pad->SetPosition( pos );
         pad->m_Pos0    = FROM_LEGACY_LU_VEC( pad->GetPosition() );
         pad->m_Orient += 900;
         NORMALIZE_ANGLE_POS( pad->m_Orient );
@@ -632,7 +633,11 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
             break;
 
         case PCB_MODULE_TEXT_T:
-            ROTATE( ( (TEXTE_MODULE*) item )->GetPosition() );
+            {
+                wxPoint pos = ( (TEXTE_MODULE*) item )->m_Pos;
+                ROTATE( pos );
+                ( (TEXTE_MODULE*) item )->m_Pos = pos;
+            }
             ( (TEXTE_MODULE*) item )->m_Pos0 = ( (TEXTE_MODULE*) item )->GetPosition();
             ( (TEXTE_MODULE*) item )->m_Orient += 900;
             break;

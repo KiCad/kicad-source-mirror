@@ -26,7 +26,7 @@ public:
      * returns the position of this object.
      * @return wxPoint& - The position of this object, non-const so it can be changed
      */
-    wxPoint& GetPosition()
+    wxPoint GetPosition() const
     {
         return m_Pos;   // within EDA_TEXT
     }

@@ -97,7 +97,7 @@ void PCB_BASE_FRAME::PlotSilkScreen( PLOTTER* plotter, int aLayerMask, GRTraceMo
                 switch( pad->m_PadShape & 0x7F )
                 {
                 case PAD_CIRCLE:
-                    plotter->flash_pad_circle( shape_pos, TO_LEGACY_LU( pad->m_Size.x ), FILAIRE );
+                    plotter->flash_pad_circle( shape_pos, TO_LEGACY_LU( pad->m_Size.x() ), FILAIRE );
                     break;
 
                 case PAD_OVAL:
@@ -840,8 +840,8 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
                 break;
             }
 
-            size.x = TO_LEGACY_LU( pad->m_Size.x ) + ( 2 * margin.x );
-            size.y = TO_LEGACY_LU( pad->m_Size.y ) + ( 2 * margin.y );
+            size.x = TO_LEGACY_LU( pad->m_Size.x() ) + ( 2 * margin.x );
+            size.y = TO_LEGACY_LU( pad->m_Size.y() ) + ( 2 * margin.y );
 
             /* Don't draw a null size item : */
             if( size.x <= 0 || size.y <= 0 )
@@ -851,8 +851,8 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
             {
             case PAD_CIRCLE:
                 if( aSkipNPTH_Pads &&
-                    ( pad->m_Size.x == pad->m_Drill.x ) &&
-                    ( pad->m_Size.y == pad->m_Drill.y ) &&
+                    ( pad->m_Size.x() == pad->m_Drill.x() ) &&
+                    ( pad->m_Size.y() == pad->m_Drill.y() ) &&
                     (pad->m_Attribut == PAD_HOLE_NOT_PLATED) )
                     break;
 
@@ -861,8 +861,8 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
 
             case PAD_OVAL:
                 if( aSkipNPTH_Pads &&
-                    (pad->m_Size.x == pad->m_Drill.x ) &&
-                    (pad->m_Size.y == pad->m_Drill.y ) &&
+                    (pad->m_Size.x() == pad->m_Drill.x() ) &&
+                    (pad->m_Size.y() == pad->m_Drill.y() ) &&
                     (pad->m_Attribut == PAD_HOLE_NOT_PLATED) )
                     break;
 
@@ -1018,21 +1018,21 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*    aPlotter,
     {
         for( PtPad = Module->m_Pads; PtPad != NULL; PtPad = PtPad->Next() )
         {
-            if( PtPad->m_Drill.x == ZERO_LENGTH )
+            if( PtPad->m_Drill.x() == ZERO_LENGTH )
                 continue;
 
             // Output hole shapes:
-            pos = PtPad->m_Pos;
+            pos = TO_LEGACY_LU_WXP( PtPad->m_Pos );
 
             if( PtPad->m_DrillShape == PAD_OVAL )
             {
-                diam.x = TO_LEGACY_LU( PtPad->m_Drill.x );
-                diam.y = TO_LEGACY_LU( PtPad->m_Drill.y );
+                diam.x = TO_LEGACY_LU( PtPad->m_Drill.x() );
+                diam.y = TO_LEGACY_LU( PtPad->m_Drill.y() );
                 aPlotter->flash_pad_oval( pos, diam, PtPad->m_Orient, aTraceMode );
             }
             else
             {
-                diam.x = aSmallDrillShape ? SMALL_DRILL : TO_LEGACY_LU( PtPad->m_Drill.x );
+                diam.x = aSmallDrillShape ? SMALL_DRILL : TO_LEGACY_LU( PtPad->m_Drill.x() );
                 aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
             }
         }

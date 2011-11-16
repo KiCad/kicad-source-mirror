@@ -122,7 +122,7 @@ public:
      * returns the position of this object.
      * @return const wxPoint& - The position of this object.
      */
-    wxPoint& GetPosition()
+    wxPoint GetPosition() const
     {
         return m_Start;  // it had to be start or end.
     }
@@ -470,7 +470,7 @@ public:
      * returns the position of this object.
      * @return const wxPoint& - The position of this object.
      */
-    wxPoint& GetPosition()
+    wxPoint GetPosition() const
     {
         return m_Start;
     }

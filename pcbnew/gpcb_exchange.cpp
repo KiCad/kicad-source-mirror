@@ -369,16 +369,16 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             {
                 Pad->SetPadName( params[10] );
             }
-            Pad->m_Pos.x  = (ibuf[0] + ibuf[2]) / 2;
-            Pad->m_Pos.y  = (ibuf[1] + ibuf[3]) / 2;
-            Pad->m_Size.x = FROM_LEGACY_LU( ibuf[4] + abs( ibuf[0] - ibuf[2] ) );
-            Pad->m_Size.y = FROM_LEGACY_LU( ibuf[4] + abs( ibuf[1] - ibuf[3] ) );
-            Pad->m_Pos.x += m_Pos.x;
-            Pad->m_Pos.y += m_Pos.y;
+            Pad->m_Pos.x()  = FROM_LEGACY_LU( (ibuf[0] + ibuf[2]) / 2 );
+            Pad->m_Pos.y()  = FROM_LEGACY_LU( (ibuf[1] + ibuf[3]) / 2 );
+            Pad->m_Size.x() = FROM_LEGACY_LU( ibuf[4] + abs( ibuf[0] - ibuf[2] ) );
+            Pad->m_Size.y() = FROM_LEGACY_LU( ibuf[4] + abs( ibuf[1] - ibuf[3] ) );
+            Pad->m_Pos.x()  += FROM_LEGACY_LU( m_Pos.x );
+            Pad->m_Pos.y()  += FROM_LEGACY_LU( m_Pos.y );
 
             if( !TestFlags( params[iflgidx], 0x0100, wxT( "square" ) ) )
             {
-                if( Pad->m_Size.x == Pad->m_Size.y )
+                if( Pad->m_Size.x() == Pad->m_Size.y() )
                     Pad->m_PadShape = PAD_ROUND;
                 else
                     Pad->m_PadShape = PAD_OVAL;
@@ -428,14 +428,15 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                 Pad->SetPadName( params[9] );
             }
 
-            Pad->m_Pos.x   = ibuf[0];
-            Pad->m_Pos.y   = ibuf[1];
-            Pad->m_Drill.x = Pad->m_Drill.y = FROM_LEGACY_LU( (int) ibuf[5] );
-            Pad->m_Size.x  = Pad->m_Size.y = FROM_LEGACY_LU( ibuf[3] ) + Pad->m_Drill.x;
-            Pad->m_Pos.x  += m_Pos.x;
-            Pad->m_Pos.y  += m_Pos.y;
+            Pad->m_Pos.x()   = FROM_LEGACY_LU( ibuf[0] );
+            Pad->m_Pos.y()   = FROM_LEGACY_LU( ibuf[1] );
+            Pad->m_Drill.x() = Pad->m_Drill.y() = FROM_LEGACY_LU( (int) ibuf[5] );
+            Pad->m_Size.x()  = Pad->m_Size.y()  =
+                                FROM_LEGACY_LU( ibuf[3] ) + Pad->m_Drill.x();
+            Pad->m_Pos.x()  += FROM_LEGACY_LU( m_Pos.x );
+            Pad->m_Pos.y()  += FROM_LEGACY_LU( m_Pos.y );
 
-            if( (Pad->m_PadShape == PAD_ROUND) && (Pad->m_Size.x != Pad->m_Size.y) )
+            if( (Pad->m_PadShape == PAD_ROUND) && (Pad->m_Size.x() != Pad->m_Size.y()) )
                 Pad->m_PadShape = PAD_OVAL;
 
             m_Pads.PushBack( Pad );

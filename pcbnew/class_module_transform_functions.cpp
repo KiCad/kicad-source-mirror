@@ -183,12 +183,12 @@ void MODULE::Flip(const wxPoint& aCentre )
 
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
-        pt_pad->m_Pos.y      -= m_Pos.y;
-        pt_pad->m_Pos.y       = -pt_pad->m_Pos.y;
-        pt_pad->m_Pos.y      += m_Pos.y;
-        NEGATE( pt_pad->m_Pos0.y );
-        NEGATE( pt_pad->m_Offset.y );
-        NEGATE( pt_pad->m_DeltaSize.y );
+        pt_pad->m_Pos.y()      -= FROM_LEGACY_LU( m_Pos.y );
+        pt_pad->m_Pos.y()       = -pt_pad->m_Pos.y();
+        pt_pad->m_Pos.y()      += FROM_LEGACY_LU( m_Pos.y );
+        NEGATE( pt_pad->m_Pos0.y() );
+        NEGATE( pt_pad->m_Offset.y() );
+        NEGATE( pt_pad->m_DeltaSize.y() );
         NEGATE_AND_NORMALIZE_ANGLE_POS( pt_pad->m_Orient );
 
         /* flip pads layers*/
@@ -308,7 +308,7 @@ void MODULE::SetPosition( const wxPoint& newpos )
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        pad->m_Pos += delta;
+        pad->m_Pos += FROM_LEGACY_LU_VEC( delta );
     }
 
     EDA_ITEM* PtStruct = m_Drawings;
@@ -352,15 +352,15 @@ void MODULE::SetOrientation( int newangle )
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        px = TO_LEGACY_LU( pad->m_Pos0.x );
-        py = TO_LEGACY_LU( pad->m_Pos0.y );
+        px = TO_LEGACY_LU( pad->m_Pos0.x() );
+        py = TO_LEGACY_LU( pad->m_Pos0.y() );
 
         pad->m_Orient += newangle; /* change m_Orientation */
         NORMALIZE_ANGLE_POS( pad->m_Orient );
 
         RotatePoint( &px, &py, m_Orient );
-        pad->m_Pos.x = m_Pos.x + px;
-        pad->m_Pos.y = m_Pos.y + py;
+        pad->m_Pos.x() = FROM_LEGACY_LU( m_Pos.x + px );
+        pad->m_Pos.y() = FROM_LEGACY_LU( m_Pos.y + py );
     }
 
     /* Update of the reference and value. */

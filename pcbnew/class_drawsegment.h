@@ -46,7 +46,7 @@ public:
      * Required by pure virtual BOARD_ITEM::GetPosition()
      * @return const wxPoint& - The position of this object.
      */
-    wxPoint& GetPosition()
+    wxPoint GetPosition() const
     {
         return m_Start;
     }

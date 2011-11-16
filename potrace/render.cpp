@@ -278,7 +278,7 @@ void render_curveto( render_t* rm,
      *  occur at an endpoint. */
     dd0     = sq( x1 - 2 * x2 + x3 ) + sq( y1 - 2 * y2 + y3 );
     dd1     = sq( x2 - 2 * x3 + x4 ) + sq( y2 - 2 * y3 + y4 );
-    dd      = 6 * sqrt( max( dd0, dd1 ) );
+    dd      = 6 * sqrt( fmax( dd0, dd1 ) );
     e2      = 8 * delta <= dd ? 8 * delta / dd : 1;
     epsilon = sqrt( e2 ); /* necessary interval size */
 

@@ -534,9 +534,11 @@ int MODULE::ReadDescr( LINE_READER* aReader )
             {
                 D_PAD* pad = new D_PAD( this );
                 pad->ReadDescr( aReader );
-                RotatePoint( &pad->m_Pos, m_Orient );
-                pad->m_Pos.x += m_Pos.x;
-                pad->m_Pos.y += m_Pos.y;
+                wxPoint pos = TO_LEGACY_LU_WXP( pad->m_Pos );
+                RotatePoint( &pos, m_Orient );
+                pad->m_Pos = FROM_LEGACY_LU_VEC( pos );
+                pad->m_Pos.x() += FROM_LEGACY_LU( m_Pos.x );
+                pad->m_Pos.y() += FROM_LEGACY_LU( m_Pos.y );
 
                 m_Pads.PushBack( pad );
                 continue;
