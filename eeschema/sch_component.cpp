@@ -1545,13 +1545,13 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
     if( GetField( VALUE )->Matches( aSearchData, aAuxData, aFindLocation ) )
         return true;
 
-    if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS ) )
-        return false;
-
-    for( size_t i = VALUE + 1; i < m_Fields.size(); i++ )
+    if( aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS )
     {
-        if( GetField( i )->Matches( aSearchData, aAuxData, aFindLocation ) )
-            return true;
+        for( size_t i = VALUE + 1; i < m_Fields.size(); i++ )
+        {
+            if( GetField( i )->Matches( aSearchData, aAuxData, aFindLocation ) )
+                return true;
+        }
     }
 
     // Search for a match in pin name or pin number.
@@ -1564,7 +1564,13 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
     if( Entry )
     {
         LIB_PINS pinList;
-        Entry->GetPins( pinList, m_unit, m_convert );
+
+        int unit = m_unit;
+
+        if( aAuxData != NULL )
+            unit = GetUnitSelection( (SCH_SHEET_PATH*) aAuxData );
+
+        Entry->GetPins( pinList, unit, m_convert );
 
         // Search for a match in pinList
         for( unsigned ii = 0; ii < pinList.size(); ii ++ )
@@ -1573,8 +1579,8 @@ bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
             wxString pinNum;
             pin->ReturnPinStringNum( pinNum );
 
-            if( SCH_ITEM::Matches( pin->GetName(), aSearchData ) ||
-                SCH_ITEM::Matches( pinNum, aSearchData ) )
+            if( SCH_ITEM::Matches( pin->GetName(), aSearchData )
+             || SCH_ITEM::Matches( pinNum, aSearchData ) )
             {
                 if( aFindLocation )
                 {

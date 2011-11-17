@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file eeschema/cross-probing.cpp
  */
@@ -17,17 +42,20 @@
 
 
 /**
- * Read a remote command sent by Pcbnew (via a socket connection) ,
- * so when user selects a module or pin in Pcbnew,
- * Deschema shows that same component or pin.
- * The cursor is put on the item
- *  port KICAD_SCH_PORT_SERVICE_NUMBER (currently 4243)
+ * Function RemoteCommand
+ * read a remote command sent by Pcbnew via a socket connection.
+ * <p>
+ * When user selects a module or pin in Pcbnew, Eeschema shows that same
+ * component or pin and moves cursor on the item.  The socket port used
+ * is #KICAD_SCH_PORT_SERVICE_NUMBER which defaults to 4243.
+ *
+ * Valid commands are:
+ * \li \c \$PART: \c "reference" Put cursor on component.
+ * \li \c \$PART: \c "reference" \c \$REF: \c "ref" Put cursor on component reference.
+ * \li \c \$PART: \c "reference" \c \$VAL: \c "value" Put cursor on component value.
+ * \li \c \$PART: \c "reference" \c \$PAD: \c "pin name" Put cursor on the component pin.
+ * <p>
  * @param cmdline = received command from Pcbnew
- * commands are:
- * $PART: "reference"   put cursor on component
- * $PART: "reference" $REF: "ref"  put cursor on reference component
- * $PART: "reference" $VAL: "value" put cursor on value component
- * $PART: "reference" $PAD: "pin name"  put cursor on the component pin
  */
 void RemoteCommand( const char* cmdline )
 {
@@ -57,7 +85,7 @@ void RemoteCommand( const char* cmdline )
 
     if( idcmd == NULL )    // component only
     {
-        frame->FindComponentAndItem( part_ref, true, 0, wxEmptyString, false );
+        frame->FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
         return;
     }
 
@@ -70,29 +98,24 @@ void RemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$REF:" ) == 0 )
     {
-        frame->FindComponentAndItem( part_ref, true, 2, msg, false );
+        frame->FindComponentAndItem( part_ref, true, FIND_REFERENCE, msg, false );
     }
     else if( strcmp( idcmd, "$VAL:" ) == 0 )
     {
-        frame->FindComponentAndItem( part_ref, true, 3, msg, false );
+        frame->FindComponentAndItem( part_ref, true, FIND_VALUE, msg, false );
     }
     else if( strcmp( idcmd, "$PAD:" ) == 0 )
     {
-        frame->FindComponentAndItem( part_ref, true, 1, msg, false );
+        frame->FindComponentAndItem( part_ref, true, FIND_PIN, msg, false );
     }
     else
-        frame->FindComponentAndItem( part_ref, true, 0, wxEmptyString, false );
+    {
+        frame->FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString, false );
+    }
 }
 
 
-/** Send a remote command to Eeschema via a socket,
- * @param objectToSync = item to be located on board (footprint, pad or text)
- * @param LibItem = component in lib if objectToSync is a sub item of a component
- * Commands are
- * $PART: reference   put cursor on footprint anchor
- * $PIN: number $PART: reference put cursor on the footprint pad
- */
-void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*  LibItem )
+void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT* LibItem )
 {
     if( objectToSync == NULL )
         return;
