@@ -25,25 +25,33 @@ typedef LENGTH< double, 1 > LENGTH_PCB_DBL;
 #define TO_LEGACY_LU_DBL( x )  \
   ( (double) ( LENGTH_PCB_DBL( x ) / PCB_LEGACY_UNIT( LENGTH_PCB_DBL ) ) )
 
-static LENGTH_PCB from_legacy_lu( int x )
+#ifdef __GNUC__
+#define NOT_USED __attribute__ ((unused))
+#else
+#define NOT_USED
+#endif
+
+static LENGTH_PCB NOT_USED from_legacy_lu( int x )
 {
     return x * PCB_LEGACY_UNIT( LENGTH_PCB );
 }
 
-static LENGTH_PCB from_legacy_lu( long x )
+static LENGTH_PCB NOT_USED from_legacy_lu( long x )
 {
     return x * PCB_LEGACY_UNIT( LENGTH_PCB );
 }
 
-static LENGTH_PCB from_legacy_lu( double x )
+static LENGTH_PCB NOT_USED from_legacy_lu( double x )
 {
     return LENGTH_PCB( x * PCB_LEGACY_UNIT( LENGTH_PCB_DBL ) );
 }
 
-static LENGTH_PCB_DBL from_legacy_lu_dbl( double x )
+static LENGTH_PCB_DBL NOT_USED from_legacy_lu_dbl( double x )
 {
     return x * LENGTH_UNITS< LENGTH_PCB_DBL >::inch() / PCB_LEGACY_INCH_SCALE;
 }
+
+#undef NOT_USED
 
 #define FROM_LEGACY_LU( x )     ( from_legacy_lu( x ) )
 #define FROM_LEGACY_LU_DBL( x ) ( from_legacy_lu_dbl( x ) )
