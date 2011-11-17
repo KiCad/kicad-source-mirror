@@ -586,16 +586,16 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
 
         if( stricmp( line, "PadSize" ) == 0 )
         {
-            g_Pad_Master.m_Size.x = LENGTH_LOAD_STR( data );
+            g_Pad_Master.m_Size.x( LENGTH_LOAD_STR( data ) );
             data = strtok( NULL, delims );
-            g_Pad_Master.m_Size.y = LENGTH_LOAD_STR( data );
+            g_Pad_Master.m_Size.y( LENGTH_LOAD_STR( data ) );
             continue;
         }
 
         if( stricmp( line, "PadDrill" ) == 0 )
         {
-            g_Pad_Master.m_Drill.x = LENGTH_LOAD_STR( data );
-            g_Pad_Master.m_Drill.y = g_Pad_Master.m_Drill.x;
+            g_Pad_Master.m_Drill.x( LENGTH_LOAD_STR( data ) );
+            g_Pad_Master.m_Drill.y( g_Pad_Master.m_Drill.x() );
             continue;
         }
 
@@ -757,8 +757,8 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
     fprintf( aFile, "EdgeModWidth %d\n", g_ModuleSegmentWidth );
     fprintf( aFile, "TextModSize %d %d\n", g_ModuleTextSize.x, g_ModuleTextSize.y );
     fprintf( aFile, "TextModWidth %d\n", g_ModuleTextWidth );
-    fprintf( aFile, "PadSize "FM_LENSV" "FM_LENSV"\n", ARG_LENSV( g_Pad_Master.m_Size.x ), ARG_LENSV( g_Pad_Master.m_Size.y ) );
-    fprintf( aFile, "PadDrill "FM_LENSV"\n", ARG_LENSV( g_Pad_Master.m_Drill.x ) );
+    fprintf( aFile, "PadSize "FM_LENSV" "FM_LENSV"\n", ARG_LENSV( g_Pad_Master.m_Size.x() ), ARG_LENSV( g_Pad_Master.m_Size.y() ) );
+    fprintf( aFile, "PadDrill "FM_LENSV"\n", ARG_LENSV( g_Pad_Master.m_Drill.x() ) );
     fprintf( aFile,
              "Pad2MaskClearance %d\n",
              aBoard->GetBoardDesignSettings()->m_SolderMaskMargin );

@@ -438,19 +438,20 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
         {
             fprintf( rptfile, "$PAD \"%.4s\"\n", pad->m_Padname );
             sprintf( line, "position %9.6f %9.6f\n",
-                     TO_LEGACY_LU_DBL( pad->m_Pos0.x ) * conv_unit,
-                     TO_LEGACY_LU_DBL( pad->m_Pos0.y ) * conv_unit );
+                     TO_LEGACY_LU_DBL( pad->m_Pos0.x() ) * conv_unit,
+                     TO_LEGACY_LU_DBL( pad->m_Pos0.y() ) * conv_unit );
             fputs( line, rptfile );
 
             sprintf( line, "size %9.6f %9.6f\n",
-                     TO_LEGACY_LU_DBL( pad->m_Size.x ) * conv_unit,
-                     TO_LEGACY_LU_DBL( pad->m_Size.y ) * conv_unit );
+                     TO_LEGACY_LU_DBL( pad->m_Size.x() ) * conv_unit,
+                     TO_LEGACY_LU_DBL( pad->m_Size.y() ) * conv_unit );
             fputs( line, rptfile );
-            sprintf( line, "drill %9.6f\n", TO_LEGACY_LU_DBL( pad->m_Drill.x ) * conv_unit );
+            sprintf( line, "drill %9.6f\n",
+                     TO_LEGACY_LU_DBL( pad->m_Drill.x() ) * conv_unit );
             fputs( line, rptfile );
             sprintf( line, "shape_offset %9.6f %9.6f\n",
-                     TO_LEGACY_LU_DBL( pad->m_Offset.x ) * conv_unit,
-                     TO_LEGACY_LU_DBL( pad->m_Offset.y ) * conv_unit );
+                     TO_LEGACY_LU_DBL( pad->m_Offset.x() ) * conv_unit,
+                     TO_LEGACY_LU_DBL( pad->m_Offset.y() ) * conv_unit );
             fputs( line, rptfile );
 
             sprintf( line, "orientation  %.2f\n",

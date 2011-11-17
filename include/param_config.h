@@ -10,6 +10,7 @@
 #include "wx/fileconf.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include "lengthpcb.h"
 
 /** Type of parameter in the configuration file */
 enum paramcfg_id {
@@ -85,6 +86,35 @@ public: PARAM_CFG_INT( const wxChar* ident, int* ptparam,
     virtual void SaveParam( wxConfigBase* aConfig );
 };
 
+/**
+ * Configuration parameter - Length PCB Class
+ *
+ */
+class PARAM_CFG_LENGTH_PCB      : public PARAM_CFG_BASE
+{
+public:
+    LENGTH_PCB * m_Pt_param;    ///<  Pointer to the parameter value
+    LENGTH_PCB   m_Min, m_Max;  ///<  Minimum and maximum values of the param type
+    LENGTH_PCB   m_Default;     ///<  The default value of the parameter
+
+public:
+    PARAM_CFG_LENGTH_PCB( const wxChar* ident, /// @TODO: remove hardcoded constants
+                          LENGTH_PCB* ptparam,
+                          LENGTH_PCB default_val = ZERO_LENGTH,
+                          LENGTH_PCB min = -LENGTH_MAX_CONFIG,
+                          LENGTH_PCB max =  LENGTH_MAX_CONFIG,
+                          const wxChar* group = NULL );
+    PARAM_CFG_LENGTH_PCB( bool Insetup,
+                          const wxChar* ident,
+                          LENGTH_PCB* ptparam,
+                          LENGTH_PCB default_val = ZERO_LENGTH,
+                          LENGTH_PCB min = -LENGTH_MAX_CONFIG,
+                          LENGTH_PCB max =  LENGTH_MAX_CONFIG,
+                          const wxChar* group = NULL );
+
+    virtual void ReadParam( wxConfigBase* aConfig );
+    virtual void SaveParam( wxConfigBase* aConfig );
+};
 
 /**
  * Configuration parameter - SetColor Class

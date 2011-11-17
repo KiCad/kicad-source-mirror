@@ -226,7 +226,9 @@ public:
      * is a dummy.
      * @return const wxPoint& of (0,0)
      */
-    wxPoint& GetPosition();
+    const wxPoint GetPosition() const;
+
+    void SetPosition( const wxPoint& pos );
 
     /**
      * Function Add

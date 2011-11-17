@@ -73,6 +73,8 @@ static inline int floordiv( int a, int n )
 
 
 /* Note: the following work for integers and other numeric types. */
+/* those are bad programming practice because of several issues with
+overloading and integer limits
 #undef sign
 #undef abs
 #undef min
@@ -84,6 +86,79 @@ static inline int floordiv( int a, int n )
 #define min( a, b ) ( (a)<(b) ? (a) : (b) )
 #define max( a, b ) ( (a)>(b) ? (a) : (b) )
 #define sq( a )     ( (a) * (a) )
-#define cu( a )     ( (a) * (a) * (a) )
+#define cu( a )     ( (a) * (a) * (a) )*/
+
+// these functions better than macros because they do not cause double evaluation.
+static inline int sign( int x )
+{
+    return (0 < x) - (x < 0);
+}
+
+static inline int sign( long x )
+{
+    return (0 < x) - (x < 0);
+}
+
+static inline int sign( double x )
+{
+    return (0.0 < x) - (x < 0.0);
+}
+
+/*static inline int abs( int x ) is not required because exist in stdlib.h */
+
+static inline long abs( long x )
+{
+    return x < 0? -x : x;
+}
+
+static inline int max( int x, int y )
+{
+    return x < y? y : x;
+}
+
+static inline long max( long x, long y )
+{
+    return x < y? y : x;
+}
+
+static inline int min( int x, int y )
+{
+    return x < y? x : y;
+}
+
+static inline long min( long x, long y )
+{
+    return x < y? x : y;
+}
+
+static inline int sq( int x )
+{
+    return x * x;
+}
+
+static inline long sq( long x )
+{
+    return x * x;
+}
+
+static inline double sq( double x )
+{
+    return x * x;
+}
+
+static inline int cu( int x )
+{
+    return x * x * x;
+}
+
+static inline long cu( long x )
+{
+    return x * x * x;
+}
+
+static inline double cu( double x )
+{
+    return x * x * x;
+}
 
 #endif /* AUXILIARY_H */

@@ -37,7 +37,7 @@
 
 
 #ifdef KICAD_NANOMETRE
-#include "length.h"
+#include "lengthpcb.h"
 #endif
 
 class wxAboutDialogInfo;
@@ -385,21 +385,21 @@ int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit );
 
 struct LENGTH_UNIT_DESC
 {
-    LENGTH_DEF     m_Value;
-    const wxString m_Symbol;
-    int            m_Precision;
+    LENGTH_PCB       m_Value;
+    const wxString   m_Symbol;
+    int              m_Precision;
 };
 
 extern const LENGTH_UNIT_DESC MillimetreDesc, InchDesc, MilDesc;
 
 const LENGTH_UNIT_DESC *UnitDescription( EDA_UNITS_T aUnit );
 
-LENGTH_DEF       StringToLength( const LENGTH_UNIT_DESC *aUnit, const wxString& TextValue );
-wxString         LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_DEF aValue,
+LENGTH_PCB       StringToLength( const LENGTH_UNIT_DESC *aUnit, const wxString& TextValue );
+wxString         LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_PCB aValue,
                                  bool aAdd_unit_symbol = false );
 
-void             LengthToTextCtrl( wxTextCtrl& TextCtr, LENGTH_DEF Value );
-LENGTH_DEF       LengthFromTextCtrl( const wxTextCtrl& TextCtr );
+void             LengthToTextCtrl( wxTextCtrl& TextCtr, LENGTH_PCB Value );
+LENGTH_PCB       LengthFromTextCtrl( const wxTextCtrl& TextCtr );
 
 /* transition macros */
 #define STR_TO_LENGTH( unit, str, iu ) \

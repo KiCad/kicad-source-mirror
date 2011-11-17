@@ -118,8 +118,8 @@ public:
      * Function GetPosition
      * @return a wxPoint, position of the first point of the outline
      */
-    wxPoint& GetPosition();
-
+    const wxPoint GetPosition() const;
+    void SetPosition( const wxPoint& pos );
     /**
      * Function copy
      * copy useful data from the source.

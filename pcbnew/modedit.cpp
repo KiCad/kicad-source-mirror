@@ -708,18 +708,18 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 
         for( ; pad != NULL; pad = (D_PAD*) pad->Next() )
         {
-            pad->m_Pos0    = FROM_LEGACY_LU_VEC( pad->m_Pos );
+            pad->m_Pos0    = pad->m_Pos;
             pad->m_Orient -= angle;
             wxPoint of;
-            of.x = TO_LEGACY_LU( pad->m_Offset.x );
-            of.y = TO_LEGACY_LU( pad->m_Offset.y );
+            of.x = TO_LEGACY_LU( pad->m_Offset.x() );
+            of.y = TO_LEGACY_LU( pad->m_Offset.y() );
             RotatePoint( &of.x, &of.y, angle );
-            pad->m_Offset.x = FROM_LEGACY_LU( of.x );
-            pad->m_Offset.y = FROM_LEGACY_LU( of.y );
-            EXCHG( pad->m_Size.x, pad->m_Size.y );
+            pad->m_Offset.x( FROM_LEGACY_LU( of.x ) );
+            pad->m_Offset.y( FROM_LEGACY_LU( of.y ) );
+            EXCHG( pad->m_Size[0], pad->m_Size[1] ); /// @TODO: make it using geom. transform
 	    wxSize delta = TO_LEGACY_LU_WXS( pad->m_DeltaSize );
             RotatePoint( &delta.x, &delta.y, -angle );
-	    pad->m_DeltaSize = VECTOR_PCB( FROM_LEGACY_LU( delta.x ), FROM_LEGACY_LU( delta.y ) );
+	    pad->m_DeltaSize = VECTOR_PCB::fromXY( FROM_LEGACY_LU( delta.x ), FROM_LEGACY_LU( delta.y ) );
         }
 
         module->m_Reference->m_Pos0    = module->m_Reference->m_Pos;
@@ -756,10 +756,10 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
     case ID_MODEDIT_MODULE_MIRROR:
         for( ; pad != NULL; pad = (D_PAD*) pad->Next() )
         {
-            NEGATE( pad->m_Pos.y );
-            NEGATE( pad->m_Pos0.y );
-            NEGATE( pad->m_Offset.y );
-            NEGATE( pad->m_DeltaSize.y );
+            pad->m_Pos.y( -pad->m_Pos.y() );
+            pad->m_Pos0.y( -pad->m_Pos0.y() );
+            pad->m_Offset.y( -pad->m_Offset.y() );
+            pad->m_DeltaSize.y( -pad->m_DeltaSize.y() );
 
             if( pad->m_Orient )
                 pad->m_Orient = 3600 - pad->m_Orient;

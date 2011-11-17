@@ -125,7 +125,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
                 pt_pad = (D_PAD*) LockPoint;
 
                 /* A pad is found: put the starting point on pad center */
-                pos = pt_pad->m_Pos;
+                pos = TO_LEGACY_LU_WXP( pt_pad->m_Pos );
                 GetBoard()->SetHighLightNet( pt_pad->GetNet() );
             }
             else /* A track segment is found */
@@ -1067,7 +1067,7 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
  */
 void EnsureEndTrackOnPad( D_PAD* Pad )
 {
-    if( g_CurrentTrackSegment->m_End == Pad->m_Pos ) // Ok !
+    if( g_CurrentTrackSegment->m_End == TO_LEGACY_LU_WXP( Pad->m_Pos ) ) // Ok !
     {
         g_CurrentTrackSegment->end = Pad;
         g_CurrentTrackSegment->SetState( END_ONPAD, ON );
@@ -1084,7 +1084,7 @@ void EnsureEndTrackOnPad( D_PAD* Pad )
         lasttrack->end = g_CurrentTrackSegment;
     }
 
-    g_CurrentTrackSegment->m_End = Pad->m_Pos;
+    g_CurrentTrackSegment->m_End = TO_LEGACY_LU_WXP( Pad->m_Pos );
     g_CurrentTrackSegment->SetState( END_ONPAD, OFF );
 
     g_CurrentTrackSegment->end = Pad;

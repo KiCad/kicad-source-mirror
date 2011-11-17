@@ -76,9 +76,19 @@ public:
     /**
      * Function GetPosition
      * returns the position of this object.
-     * @return wxPoint& - The position of this object, non-const so it can be changed
+     * @return wxPoint - The position of this object
+     * It seems this function could not return modifiable reference as this
+     * contradict good design practice: as the class could be able
+     * doing internal recalculations on reposition.
+     * @TODO: Check all the GetPosition calls for position assignments.
      */
-    virtual wxPoint& GetPosition() = 0;
+    virtual const wxPoint GetPosition() const = 0;
+
+    /**
+     * Sets the position of this object.
+     * @param pos The position of this object
+     */
+    virtual void SetPosition( const wxPoint& pos ) = 0;
 
     /**
      * Function GetLayer
@@ -313,10 +323,9 @@ public:
     {}
 
     //-----< satisfy some virtual functions >------------------------------
-    wxPoint& GetPosition()
+    const wxPoint GetPosition() const
     {
-        static wxPoint dummy;
-        return dummy;
+        return wxPoint(0, 0);
     }
 
     void Draw( EDA_DRAW_PANEL* DrawPanel, wxDC* DC,

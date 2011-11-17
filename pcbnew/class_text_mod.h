@@ -51,11 +51,14 @@ public:
      * Required by pure virtual BOARD_ITEM::GetPosition()
      * @return const wxPoint& - The position of this object.
      */
-    wxPoint& GetPosition()
+    const wxPoint GetPosition() const
     {
         return m_Pos;
     }
 
+    void SetPosition( const wxPoint& pos ) {
+        m_Pos = pos;
+    }
 
     void Copy( TEXTE_MODULE* source ); // copy structure
 
