@@ -479,7 +479,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
                 polygon->AppendPoint( lowerRight );
             }
 
-            D(printf( "m_DeltaSize: %d,%d\n", TO_LEGACY_LU( aPad->m_DeltaSize.x ), TO_LEGACY_LU( aPad->m_DeltaSize.y ) );)
+            D(printf( "m_DeltaSize: %d,%d\n", TO_LEGACY_LU( aPad->m_DeltaSize.x() ), TO_LEGACY_LU( aPad->m_DeltaSize.y() ) );)
 
             // this string _must_ be unique for a given physical shape
             snprintf( name, sizeof(name), "Trapz%sPad_%.6gx%.6g_%c%.6gx%c%.6g_mil",
