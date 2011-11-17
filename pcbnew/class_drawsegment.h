@@ -44,11 +44,15 @@ public:
      * Function GetPosition
      * returns the position of this object.
      * Required by pure virtual BOARD_ITEM::GetPosition()
-     * @return const wxPoint& - The position of this object.
+     * @return const wxPoint - The position of this object.
      */
-    wxPoint& GetPosition()
+    const wxPoint GetPosition() const
     {
         return m_Start;
+    }
+
+    void SetPosition( const wxPoint& pos ) {
+        m_Start = pos;
     }
 
     /**

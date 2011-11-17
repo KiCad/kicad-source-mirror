@@ -37,9 +37,13 @@ public:
     DIMENSION( BOARD_ITEM* aParent );
     ~DIMENSION();
 
-    wxPoint& GetPosition()
+    const wxPoint GetPosition() const
     {
         return m_Pos;
+    }
+
+    void SetPosition( const wxPoint& pos ) {
+        m_Pos = pos;
     }
 
     /**

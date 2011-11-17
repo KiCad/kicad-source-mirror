@@ -12,7 +12,7 @@
 #include "PolyLine.h"
 
 #include "lengthpcb.h"
-
+#include "vectorpcb.h"
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -72,8 +72,9 @@ private:
     wxString m_ShortNetname;    // short net name, like vout from /mysheet/mysubsheet/vout
 
 
-public:
-    wxPoint m_Pos;                  // pad Position on board
+public: /** TODO: that's not so good if parameters are easily modifiable outside
+    (e. g. m_Pos, which could be coherent with m_Pos and module orient/pos ) */
+    VECTOR_PCB m_Pos;                  // pad Position on board
 
     union
     {
@@ -114,7 +115,7 @@ public:
 
     VECTOR_PCB m_DeltaSize;            // delta on rectangular shapes
 
-    VECTOR_PCB m_Pos0;                 // Initial Pad position (i.e. pas position relative to the
+    VECTOR_PCB m_Pos0;                 // Initial Pad position (i.e. pad position relative to the
                                     // module anchor, orientation 0
 
     int     m_ShapeMaxRadius;       // radius of the circle containing the pad shape
@@ -177,16 +178,17 @@ public:
      * Function GetPosition
      * returns the position of this object.
      * @return const wxPoint& - The position of this object.
+     * @TODO: could move virtual method to .c file
      */
-    wxPoint& GetPosition()
+    const wxPoint GetPosition() const
     {
-        return m_Pos;
+        return TO_LEGACY_LU_WXP( m_Pos );
     }
 
 
     void SetPosition( const wxPoint& aPos )
     {
-        m_Pos = aPos;
+        m_Pos = FROM_LEGACY_LU_VEC( aPos );
     }
 
     /**
@@ -385,7 +387,7 @@ public:
      */
     virtual void Move( const wxPoint& aMoveVector )
     {
-        m_Pos += aMoveVector;
+        m_Pos += FROM_LEGACY_LU_VEC( aMoveVector );
     }
 
 

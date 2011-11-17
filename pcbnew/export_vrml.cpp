@@ -881,11 +881,11 @@ static void export_vrml_edge_module( EDGE_MODULE* module ) /*{{{*/
 
 static void export_vrml_pad( BOARD* pcb, D_PAD* pad ) /*{{{*/
 {
-    double hole_drill_w = (double) TO_LEGACY_LU_DBL( pad->m_Drill.x / 2 );
-    double hole_drill_h = (double) TO_LEGACY_LU_DBL( pad->m_Drill.y / 2 );
+    double hole_drill_w = (double) TO_LEGACY_LU_DBL( pad->m_Drill.x() / 2 );
+    double hole_drill_h = (double) TO_LEGACY_LU_DBL( pad->m_Drill.y() / 2 );
     double hole_drill   = MIN( hole_drill_w, hole_drill_h );
-    double hole_x = pad->m_Pos.x;
-    double hole_y = pad->m_Pos.y;
+    double hole_x = TO_LEGACY_LU_DBL( pad->m_Pos.x() );
+    double hole_y = TO_LEGACY_LU_DBL( pad->m_Pos.y() );
 
     /* Export the hole on the edge layer */
     if( hole_drill > 0 )
@@ -916,8 +916,8 @@ static void export_vrml_pad( BOARD* pcb, D_PAD* pad ) /*{{{*/
     wxSize        pad_delta = TO_LEGACY_LU_WXS( pad->m_DeltaSize );
     double        pad_dx    = pad_delta.x / 2;
     double        pad_dy    = pad_delta.y / 2;
-    double        pad_w     = TO_LEGACY_LU_DBL( pad->m_Size.x / 2 );
-    double        pad_h     = TO_LEGACY_LU_DBL( pad->m_Size.y / 2 );
+    double        pad_w     = TO_LEGACY_LU_DBL( pad->m_Size.x() / 2 );
+    double        pad_h     = TO_LEGACY_LU_DBL( pad->m_Size.y() / 2 );
 
     for( int layer = FIRST_COPPER_LAYER; layer < copper_layers; layer++ )
     {
