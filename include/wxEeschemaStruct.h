@@ -97,6 +97,16 @@ enum ANNOTATE_OPTION_T {
 };
 
 
+/// Schematic search type used by the socket link with Pcbnew
+enum SCH_SEARCH_T {
+    FIND_COMPONENT_ONLY,    ///< Find a component in the schematic.
+    FIND_PIN,               ///< Find a component pin in the schematic.
+    FIND_REFERENCE,         ///< Find an item by it's reference designator.
+    FIND_VALUE,             ///< Find an item by it's value field.
+    FIND_FIELD              ///< Find a component field.
+};
+
+
 /**
  * Schematic editor (Eeschema) main window.
  */
@@ -202,7 +212,7 @@ public:
 
     /**
      * Function LoadProjectFile
-     * soads the KiCad project file (*.pro) settings specific to Eeschema.
+     * loads the KiCad project file (*.pro) settings specific to Eeschema.
      *
      * @param aFileName The project file name to load.
      * @param aForceReread Force the project file to be reread if true.
@@ -265,7 +275,7 @@ public:
 
     /**
      * Function GetConfigurationSettings
-     * returns the EESchema applications settings.
+     * returns the Eeschema applications settings.
      * <p>
      * This replaces the old statically define list that had the project file settings and
      * the application settings mixed together.  This was confusing and caused some settings
@@ -364,26 +374,31 @@ public:
 
     /**
      * Function FindComponentAndItem
-     * finds a Component in the schematic, and an item in this component.
-     * @param component_reference The component reference to find.
-     * @param text_to_find - The text to search for, either in value, reference
-     *                       or elsewhere.
-     * @param Find_in_hierarchy:  false => Search is made in current sheet
-     *                     true => the whole hierarchy
-     * @param SearchType:  0 => find component
-     *                     1 => find pin
-     *                     2 => find ref
-     *                     3 => find value
-     *                     >= 4 => unused (same as 0)
-     * @param mouseWarp If true, then move the mouse cursor to the item.
+     * finds a component in the schematic and an item in this component.
+     * @param aReference The component reference designator to find.
+     * @param aSearchHierarchy If false, search the current sheet only.  Otherwise,
+     *                         the entire hierarchy
+     * @param aSearchType A #SCH_SEARCH_T value used to determine what to search for.
+     * @param aSearchText The text to search for, either in value, reference or elsewhere.
+     * @param aWarpMouse If true, then move the mouse cursor to the item.
      */
-    SCH_ITEM* FindComponentAndItem( const wxString& component_reference,
-                                    bool            Find_in_hierarchy,
-                                    int             SearchType,
-                                    const wxString& text_to_find,
-                                    bool            mouseWarp );
+    SCH_ITEM* FindComponentAndItem( const wxString& aReference,
+                                    bool            aSearchHierarchy,
+                                    SCH_SEARCH_T    aSearchType,
+                                    const wxString& aSearchText,
+                                    bool            aWarpMouse );
 
-    /* Cross probing with Pcbnew */
+    /**
+     * Function SendMessageToPcbnew
+     * send a remote to Pcbnew via a socket connection.
+     * @param objectToSync Item to be located on board (footprint, pad or text)
+     * @param LibItem Component in library if objectToSync is a sub item of a component
+     * <p>
+     * Commands are
+     * $PART: reference   put cursor on footprint anchor
+     * $PIN: number $PART: reference put cursor on the footprint pad
+     * </p>
+     */
     void SendMessageToPCBNEW( EDA_ITEM* objectToSync, SCH_COMPONENT*  LibItem );
 
     /* netlist generation */
@@ -421,7 +436,7 @@ public:
     bool WriteNetListFile( int             aFormat,
                            const wxString& aFullFileName,
                            bool            aUse_netnames,
-                           bool aUsePrefix );
+                           bool            aUsePrefix );
 
     /**
      * Function DeleteAnnotation
@@ -666,6 +681,15 @@ private:
      * @param aEvent - Find dialog event containing the find parameters.
      */
     void OnFindSchematicItem( wxFindDialogEvent& aEvent );
+
+    /**
+     * Function OnReplace
+     * performs a search and replace of text in an item in the schematic matching the
+     * search and replace criteria in \a aEvent.
+     *
+     * @param aEvent - Find dialog event containing the search and replace parameters.
+     */
+    void OnFindReplace( wxFindDialogEvent& aEvent );
 
     void OnLoadFile( wxCommandEvent& event );
     void OnLoadStuffFile( wxCommandEvent& event );

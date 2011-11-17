@@ -110,10 +110,13 @@ enum SEARCH_RESULT {
 };
 
 
+class wxFindReplaceData;
 class EDA_ITEM;
 class EDA_DRAW_FRAME;
 class EDA_RECT;
 class EDA_DRAW_PANEL;
+class DHEAD;
+
 
 /**
  * Class INSPECTOR
@@ -288,17 +291,6 @@ public:
 };
 
 
-/******************************************************/
-/* Basic Classes : used classes are derived from them */
-/******************************************************/
-
-class DHEAD;
-
-/**
- * Class EDA_ITEM
- * is a base class for most all the KiCad significant classes, used in
- * schematics and boards.
- */
 
 // These define are used for the .m_Flags and .m_UndoRedoStatus member of the
 // class EDA_ITEM
@@ -332,6 +324,11 @@ class DHEAD;
 #define EDA_ITEM_ALL_FLAGS -1
 
 
+/**
+ * Class EDA_ITEM
+ * is a base class for most all the KiCad significant classes, used in
+ * schematics and boards.
+ */
 class EDA_ITEM
 {
 private:
@@ -576,6 +573,49 @@ public:
      * @return The menu image associated with the item.
      */
     virtual BITMAP_DEF GetMenuImage() const { return right_xpm; }
+
+    /**
+     * Function Matches
+     * compares the item against the search criteria in \a aSearchData.
+     *
+     * The base class returns false since many of the objects derived from EDA_ITEM
+     * do not have any text to search.
+     *
+     * @param aSearchData A reference to a wxFindReplaceData object containin the
+     *                    search criteria.
+     * @param aAuxData A pointer to optional data required for the search or NULL
+     *                 if not used.
+     * @param aFindLocation A pointer to a wxPoint object to store the location of
+     *                      matched item.  The pointer can be NULL is not used.
+     * @return True if this schematic text item matches the search criteria in
+     *         \a aSearchData.
+     */
+    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
+    {
+        return false;
+    }
+
+    /**
+     * Function Matches
+     * compares \a aText against search criteria in \a aSearchData.
+     *
+     * @param aText A referenc to a wxString object containing the string to test.
+     * @param aSearchData The criteria to search against.
+     * @return True if \a aText matches the search criteria in \a aSearchData.
+     */
+    bool Matches( const wxString& aText, wxFindReplaceData& aSearchData );
+
+    /**
+     * Function IsReplaceable
+     * <p>
+     * Override this method in any derived object that supports test find and
+     * replace.
+     * </p>
+     *
+     * @return True if the item has replaceable text that can be modified using
+     *         the find and replace dialog.
+     */
+    virtual bool IsReplaceable() const { return false; }
 
     /**
      * Test if another item is less than this object.

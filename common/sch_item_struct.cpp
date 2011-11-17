@@ -108,29 +108,6 @@ void SCH_ITEM::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
 }
 
 
-bool SCH_ITEM::Matches( const wxString& aText, wxFindReplaceData& aSearchData )
-{
-    wxString text = aText;
-    wxString searchText = aSearchData.GetFindString();
-
-    if( aSearchData.GetFlags() & wxFR_WHOLEWORD )
-        return aText.IsSameAs( searchText, aSearchData.GetFlags() & wxFR_MATCHCASE );
-
-    if( aSearchData.GetFlags() & FR_MATCH_WILDCARD )
-    {
-        if( aSearchData.GetFlags() & wxFR_MATCHCASE )
-            return text.Matches( searchText );
-
-        return text.MakeUpper().Matches( searchText.MakeUpper() );
-    }
-
-    if( aSearchData.GetFlags() & wxFR_MATCHCASE )
-        return aText.Find( searchText ) != wxNOT_FOUND;
-
-    return text.MakeUpper().Find( searchText.MakeUpper() ) != wxNOT_FOUND;
-}
-
-
 bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
 {
     if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )

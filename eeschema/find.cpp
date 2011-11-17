@@ -110,94 +110,95 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
 }
 
 
-SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_reference,
-                                                bool Find_in_hierarchy,
-                                                int SearchType,
-                                                const wxString& text_to_find,
-                                                bool mouseWarp )
+SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
+                                                bool            aSearchHierarchy,
+                                                SCH_SEARCH_T    aSearchType,
+                                                const wxString& aSearchText,
+                                                bool            aWarpMouse )
 {
     SCH_SHEET_PATH* sheet;
     SCH_SHEET_PATH* sheetWithComponentFound = NULL;
-    SCH_ITEM*       DrawList     = NULL;
-    SCH_COMPONENT*  Component    = NULL;
+    SCH_ITEM*       item = NULL;
+    SCH_COMPONENT*  Component = NULL;
     wxPoint         pos, curpos;
-    bool            DoCenterAndRedraw = false;
-    bool            NotFound = true;
+    bool            centerAndRedraw = false;
+    bool            notFound = true;
     wxString        msg;
     LIB_PIN*        pin;
-    SCH_SHEET_LIST  SheetList;
+    SCH_SHEET_LIST  sheetList;
 
-    sheet = SheetList.GetFirst();
+    sheet = sheetList.GetFirst();
 
-    if( !Find_in_hierarchy )
+    if( !aSearchHierarchy )
         sheet = m_CurrentSheet;
 
-    for( ; sheet != NULL; sheet = SheetList.GetNext() )
+    for( ; sheet != NULL; sheet = sheetList.GetNext() )
     {
-        DrawList = (SCH_ITEM*) sheet->LastDrawList();
+        item = (SCH_ITEM*) sheet->LastDrawList();
 
-        for( ; ( DrawList != NULL ) && ( NotFound == true ); DrawList = DrawList->Next() )
+        for( ; ( item != NULL ) && ( notFound == true ); item = item->Next() )
         {
-            if( DrawList->Type() != SCH_COMPONENT_T )
+            if( item->Type() != SCH_COMPONENT_T )
                 continue;
 
-            SCH_COMPONENT* pSch = (SCH_COMPONENT*) DrawList;
+            SCH_COMPONENT* pSch = (SCH_COMPONENT*) item;
 
-            if( component_reference.CmpNoCase( pSch->GetRef( sheet ) ) == 0 )
+            if( aReference.CmpNoCase( pSch->GetRef( sheet ) ) == 0 )
             {
                 Component = pSch;
                 sheetWithComponentFound = sheet;
 
-                switch( SearchType )
+                switch( aSearchType )
                 {
                 default:
-                case 0:             // Find component only
-                    NotFound = false;
+                case FIND_COMPONENT_ONLY:    // Find component only
+                    notFound = false;
                     pos = pSch->GetPosition();
                     break;
 
-                case 1:                 // find a pin
+                case FIND_PIN:               // find a pin
                     pos = pSch->GetPosition();  // temporary: will be changed if the pin is found.
-                    pin = pSch->GetPin( text_to_find );
+                    pin = pSch->GetPin( aSearchText );
 
                     if( pin == NULL )
                         break;
 
-                    NotFound = false;
+                    notFound = false;
                     pos += pin->GetPosition();
                     break;
 
-                case 2:     // find reference
-                    NotFound = false;
+                case FIND_REFERENCE:         // find reference
+                    notFound = false;
                     pos = pSch->GetField( REFERENCE )->GetPosition();
                     break;
 
-                case 3:     // find value
+                case FIND_VALUE:             // find value
                     pos = pSch->GetPosition();
 
-                    if( text_to_find.CmpNoCase( pSch->GetField( VALUE )->m_Text ) != 0 )
+                    if( aSearchText.CmpNoCase( pSch->GetField( VALUE )->m_Text ) != 0 )
                         break;
 
-                    NotFound = false;
+                    notFound = false;
                     pos = pSch->GetField( VALUE )->GetPosition();
                     break;
                 }
             }
         }
 
-        if( (Find_in_hierarchy == false) || (NotFound == false) )
+        if( (aSearchHierarchy == false) || (notFound == false) )
             break;
     }
 
     if( Component )
     {
         sheet = sheetWithComponentFound;
+
         if( *sheet != *GetSheet() )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
             m_CurrentSheet->UpdateAllScreenReferences();
-            DoCenterAndRedraw = true;
+            centerAndRedraw = true;
         }
 
         wxPoint delta;
@@ -209,13 +210,13 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
         /* There may be need to reframe the drawing */
         if( ! DrawPanel->IsPointOnDisplay( pos ) )
         {
-            DoCenterAndRedraw = true;
+            centerAndRedraw = true;
         }
 
-        if( DoCenterAndRedraw )
+        if( centerAndRedraw )
         {
             GetScreen()->SetCrossHairPosition(pos);
-            RedrawScreen( pos, mouseWarp );
+            RedrawScreen( pos, aWarpMouse );
         }
 
         else
@@ -224,7 +225,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
 
             DrawPanel->CrossHairOff( &dc );
 
-            if( mouseWarp )
+            if( aWarpMouse )
                 DrawPanel->MoveCursor( pos );
 
             GetScreen()->SetCrossHairPosition(pos);
@@ -236,42 +237,44 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
 
     /* Print diag */
     wxString msg_item;
-    msg = component_reference;
+    msg = aReference;
 
-    switch( SearchType )
+    switch( aSearchType )
     {
     default:
-    case 0:
-        break;      // Find component only
-
-    case 1:         // find a pin
-        msg_item = _( "Pin " ) + text_to_find;
+    case FIND_COMPONENT_ONLY:      // Find component only
         break;
 
-    case 2:     // find reference
-        msg_item = _( "Ref " ) + text_to_find;
+    case FIND_PIN:                 // find a pin
+        msg_item = _( "Pin " ) + aSearchText;
         break;
 
-    case 3:     // find value
-        msg_item = _( "Value " ) + text_to_find;
+    case FIND_REFERENCE:           // find reference
+        msg_item = _( "Ref " ) + aSearchText;
         break;
 
-    case 4:     // find field. todo
-        msg_item = _( "Field " ) + text_to_find;
+    case FIND_VALUE:               // find value
+        msg_item = _( "Value " ) + aSearchText;
+        break;
+
+    case FIND_FIELD:               // find field. todo
+        msg_item = _( "Field " ) + aSearchText;
         break;
     }
 
     if( Component )
     {
-        if( !NotFound )
+        if( !notFound )
         {
             if( !msg_item.IsEmpty() )
                 msg += wxT( " " ) + msg_item;
+
             msg += _( " found" );
         }
         else
         {
             msg += _( " found" );
+
             if( !msg_item.IsEmpty() )
             {
                 msg += wxT( " but " ) + msg_item + _( " not found" );
@@ -282,12 +285,13 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& component_refere
     {
         if( !msg_item.IsEmpty() )
             msg += wxT( " " ) + msg_item;
+
         msg += _( " not found" );
     }
 
     SetStatusText( msg );
 
-    return DrawList;
+    return item;
 }
 
 
@@ -297,11 +301,11 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
                                          * note: the actual matched item can be a
                                          * part of lastItem (for instance a field in a component
                                          */
+    static wxString   sheetFoundIn;
     static wxPoint    lastItemPosition; // the actual position of the matched sub item
 
     SCH_SHEET_LIST    schematic;
     wxString          msg;
-    SCH_SHEET_PATH*   sheetFoundIn = NULL;
     wxFindReplaceData searchCriteria;
     bool              warpCursor = !( aEvent.GetFlags() & FR_NO_WARP_CURSOR );
 
@@ -311,39 +315,49 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 
     if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
     {
-        sheetFoundIn = m_CurrentSheet;
+        sheetFoundIn = m_CurrentSheet->PathHumanReadable();
         warpCursor = true;
     }
     else if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
     {
-        sheetFoundIn = m_CurrentSheet;
+        sheetFoundIn = m_CurrentSheet->PathHumanReadable();
         lastItem = m_CurrentSheet->MatchNextItem( searchCriteria, lastItem, &lastItemPosition );
     }
     else
     {
-        lastItem = schematic.MatchNextItem( searchCriteria, &sheetFoundIn, lastItem,
+        lastItem = schematic.MatchNextItem( searchCriteria, sheetFoundIn, lastItem,
                                             &lastItemPosition );
     }
 
     if( lastItem != NULL )
     {
-        if( sheetFoundIn != GetSheet() )
+        SCH_SHEET_PATH* sheet = schematic.GetSheet( sheetFoundIn );
+
+        wxCHECK_RET( sheet != NULL, wxT( "Could not find sheet path " + sheetFoundIn ) );
+
+        if( sheet != GetSheet() )
         {
-            sheetFoundIn->LastScreen()->SetZoom( GetScreen()->GetZoom() );
-            *m_CurrentSheet = *sheetFoundIn;
+            sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
+            *m_CurrentSheet = *sheet;
             m_CurrentSheet->UpdateAllScreenReferences();
         }
 
-        sheetFoundIn->LastScreen()->SetCrossHairPosition( lastItemPosition );
+        sheet->LastScreen()->SetCrossHairPosition( lastItemPosition );
 
         RedrawScreen( lastItemPosition, warpCursor );
 
-        msg = aEvent.GetFindString() + _( " found in " ) + sheetFoundIn->PathHumanReadable();
-        SetStatusText( msg );
+        msg = lastItem->GetSelectMenuText() + _( " found in sheet " ) + sheetFoundIn;
     }
     else
     {
+        sheetFoundIn = wxEmptyString;
         msg.Printf( _( "No item found matching %s." ), GetChars( aEvent.GetFindString() ) );
-        SetStatusText( msg );
     }
+
+    SetStatusText( msg );
+}
+
+
+void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
+{
 }

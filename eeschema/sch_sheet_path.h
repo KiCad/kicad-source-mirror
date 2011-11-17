@@ -175,7 +175,7 @@ public:
      * sheet parameters
      * a path is something like / (root) or /34005677 or /34005677/00AE4523
      */
-    wxString Path();
+    wxString Path() const;
 
     /**
      * Function PathHumanReadable
@@ -361,11 +361,24 @@ public:
 
     /**
      * Function GetSheet
-     * @return the item (sheet) in aIndex position in m_List or NULL if less
-     * than index items
-     * @param aIndex = index in sheet list to get the sheet
+     *
+     * @param aIndex A index in sheet list to get the sheet.
+     * @return the sheet at \a aIndex position in m_List or NULL if \a aIndex is
+     *         outside the bounds of the index list.
      */
     SCH_SHEET_PATH* GetSheet( int aIndex );
+
+    /**
+     * Function GetSheet
+     * returns a sheet matching the path name in \a aPath.
+     *
+     * @param aPath A wxString object containing path of the sheet to get.
+     * @param aHumanReadable True uses the human readable path for comparison.
+     *                       False uses the timestamp generated path.
+     * @return The sheet that matches \a aPath or NULL if no sheet matching
+     *         \a aPath is found.
+     */
+    SCH_SHEET_PATH* GetSheet( const wxString aPath, bool aHumanReadable = true );
 
     /**
      * Function IsModified
@@ -377,7 +390,7 @@ public:
     /**
      * Function IsAutoSaveRequired
      * checks the entire hierarchy for any modifications that require auto save.
-     * @returns True if the hierarchy is modified otherwise false.
+     * @return True if the hierarchy is modified otherwise false.
      */
     bool IsAutoSaveRequired();
 
@@ -430,15 +443,18 @@ public:
      * Function MatchNextItem
      * searches the entire schematic for the next item that matches the search criteria.
      *
-     * @param aSearchData - Criteria to search item against.
-     * @param aSheetFound - The sheet the item was found in.  NULL if the next item
-     *                      is not found.
-     * @param aLastItem - Find next item after aLastItem if not NULL.
-     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
-     * @return If found, Returns the next schematic item.  Otherwise, returns NULL.
+     * @param aSearchData Criteria to search item against.
+     * @param aSheetFoundIn A reference to the sheet path the last item was found in.  Use
+     *                      wxEmptyString to search from the beginning of the sheet list.
+     *                      This will be set to the human readable sheet path if an item
+     *                      is found.
+     * @param aLastItem Find next item after aLastItem if not NULL.
+     * @param aFindLocation A pointer to a wxPoint object to put the location of matched
+     *                      item into.  It can be NULL.
+     * @return A SCH_ITEM pointer the next schematic item if found.  Otherwise, returns NULL.
      */
     SCH_ITEM* MatchNextItem( wxFindReplaceData& aSearchData,
-                             SCH_SHEET_PATH**   aSheetFound,
+                             wxString&          aSheetFoundIn,
                              SCH_ITEM*          aLastItem,
                              wxPoint*           aFindLocation );
 

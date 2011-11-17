@@ -17,31 +17,39 @@
 #include <wx/fdrepdlg.h>          // Use the wxFindReplaceDialog events, data, and enums.
 
 
-/* Define schematic specific find and replace dialog flags based on the enum entries
+/**
+ * Define schematic specific find and replace dialog flags based on the enum entries
  * in wxFindReplaceFlags.   These flags are intended to be used as bit masks in the
  * wxFindReplaceData::m_Flags member variable.  The varialble is defined as a wxUint32.
  */
 enum SchematicFindReplaceFlags
 {
-    /* The last wxFindReplaceFlag enum is wxFR_MATCHCASE. */
+    // The last wxFindReplaceFlag enum is wxFR_MATCHCASE.
 
-    /* Search the current sheet only. */
+    /// Search the current sheet only.
     FR_CURRENT_SHEET_ONLY    = wxFR_MATCHCASE << 1,
 
-    /* Search all fields in component, not just the value and reference fields. */
+    /// Search all fields in component, not just the value and reference fields.
     FR_SEARCH_ALL_FIELDS     = wxFR_MATCHCASE << 2,
 
-    /* Search texts (name and number (a 4 letters text) )in pins. */
-    FR_SEARCH_ALL_PINS     = wxFR_MATCHCASE << 3,
+    /// Search texts (name and number (a 4 letters text) )in pins.
+    FR_SEARCH_ALL_PINS       = wxFR_MATCHCASE << 3,
 
-    /* Perform search using simple wild card matching (* & ?). */
+    /// Perform search using simple wild card matching (* & ?).
     FR_MATCH_WILDCARD        = wxFR_MATCHCASE << 4,
 
-    /* Wrap around the beginning or end of search list. */
+    /// Wrap around the beginning or end of search list.
     FR_SEARCH_WRAP           = wxFR_MATCHCASE << 5,
 
-    /* Don't warp cursor to found item until the dialog is closed. */
-    FR_NO_WARP_CURSOR        = wxFR_MATCHCASE << 6
+    /// Don't warp cursor to found item until the dialog is closed.
+    FR_NO_WARP_CURSOR        = wxFR_MATCHCASE << 6,
+
+    /// Perform a search for a item that has repaceable text.
+    FR_SEARCH_REPLACE        = wxFR_MATCHCASE << 7,
+
+    /// Used by the search event handler to let the dialog know that a replaceable
+    /// item has been found.
+    FR_REPLACE_ITEM_FOUND    = wxFR_MATCHCASE << 8
 };
 
 

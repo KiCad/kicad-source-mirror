@@ -202,36 +202,6 @@ public:
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg ) { return false; }
 
     /**
-     * Function Matches
-     * compares the schematic item against search \a aSearchData.
-     *
-     * The base class returns false since many of the objects derived from
-     * SCH_ITEM do not have any text to search.
-     *
-     * @todo - This should probably be pushed down to EDA_ITEM so that
-     *         searches can be done on all of the KiCad applications that use
-     *         objects derived from EDA_ITEM.
-     *
-     * @param aSearchData - The search criteria.
-     * @param aAuxData - a pointer on auxiliary data, if needed (NULL if not used).
-     *        When searching string in REFERENCE field we must know the sheet path
-     *          This param is used in such cases
-     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
-     * @return True if this schematic text item matches the search criteria.
-     */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
-        { return false; }
-
-    /**
-     * Compare schematic item against search string.
-     *
-     * @param aText - String test.
-     * @param aSearchData - The criteria to search against.
-     * @return True if this item matches the search criteria.
-     */
-    bool Matches( const wxString& aText, wxFindReplaceData& aSearchData );
-
-    /**
      * Function GetEndPoints
      * adds the schematic item end points to \a aItemList if the item has end points.
      *

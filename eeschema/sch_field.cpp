@@ -99,6 +99,7 @@ wxString SCH_FIELD::GetText() const
 
         wxCHECK_MSG( component != NULL, text,
                      wxT( "No component associated with field" ) + text );
+
         if( component->GetPartCount() > 1 )
             text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
     }
@@ -267,6 +268,7 @@ EDA_RECT SCH_FIELD::GetBoundingBox() const
     wxPoint end = rect.GetEnd() - origin;
     RotatePoint( &begin, pos, m_Orient );
     RotatePoint( &end, pos, m_Orient );
+
     // Due to the Y axis direction, we must mirror the bounding box,
     // relative to the text position:
     begin.y -= pos.y;
@@ -275,6 +277,7 @@ EDA_RECT SCH_FIELD::GetBoundingBox() const
     NEGATE( end.y );
     begin.y += pos.y;
     end.y += pos.y;
+
     // Now, apply the component transform (mirror/rot)
     begin = parentComponent->GetTransform().TransformCoordinate( begin );
     end = parentComponent->GetTransform().TransformCoordinate( end );
@@ -350,11 +353,27 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 }
 
 
-bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint * aFindLocation )
+bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
 {
     bool match;
+    wxString text = GetText();
 
-    match = SCH_ITEM::Matches( GetText(), aSearchData );
+    // Take sheet path into account which effects the reference field and the unit for
+    // components with multiple parts.
+    if( m_FieldId == REFERENCE && aAuxData != NULL )
+    {
+        SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
+
+        wxCHECK_MSG( component != NULL, false,
+                     wxT( "No component associated with field" ) + text );
+
+        text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
+
+        if( component->GetPartCount() > 1 )
+            text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
+    }
+
+    match = SCH_ITEM::Matches( text, aSearchData );
 
     if( match )
     {
