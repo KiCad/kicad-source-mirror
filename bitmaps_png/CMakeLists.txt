@@ -230,6 +230,7 @@ set( BMAPS_MID
     file_footprint
     fill_zone
     find
+    find_replace
     flag
     fonts
     footprint_text
