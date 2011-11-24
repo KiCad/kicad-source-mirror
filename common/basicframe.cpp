@@ -336,7 +336,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
         if( !helpFile )
         {   // Try to find "Getting_Started_in_KiCad.pdf"
             wxGetApp().m_HelpFileName = wxT( "Getting_Started_in_KiCad.pdf" );
-            wxString helpFile = wxGetApp().GetHelpFile();
+            helpFile = wxGetApp().GetHelpFile();
         }
 
         if( !helpFile )
