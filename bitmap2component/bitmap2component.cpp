@@ -37,6 +37,13 @@
 #include "auxiliary.h"
 
 
+#ifndef max
+    #define max( a, b ) ( ( (a) > (b) ) ? (a) : (b) )
+#endif
+#ifndef min
+    #define min( a, b ) ( ( (a) < (b) ) ? (a) : (b) )
+#endif
+
 // Define some types used here from boost::polygon
 namespace bpl = boost::polygon;         // bpl = boost polygon library
 using namespace bpl::operators;         // +, -, =, ...
@@ -469,7 +476,7 @@ void BezierToPolyline( std::vector <potrace_dpoint_t>& aCornersBuffer,
      *  occur at an endpoint. */
     dd0     = sq( p1.x - 2 * p2.x + p3.x ) + sq( p1.y - 2 * p2.y + p3.y );
     dd1     = sq( p2.x - 2 * p3.x + p4.x ) + sq( p2.y - 2 * p3.y + p4.y );
-    dd      = 6 * sqrt( fmax( dd0, dd1 ) );
+    dd      = 6 * sqrt( max( dd0, dd1 ) );
     e2      = 8 * delta <= dd ? 8 * delta / dd : 1;
     epsilon = sqrt( e2 ); /* necessary interval size */
 

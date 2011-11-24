@@ -217,25 +217,12 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
                                                                &g_LibraryNames,
                                                                GROUPLIB ) );
-//#ifdef KICAD_NANOMETRE
-/* TODO: something should be done here!!! */
-//#else
-    m_projectFileParams.push_back( new PARAM_CFG_LENGTH_PCB( wxT( "PadDrlX" ),
-                                                             &g_Pad_Master.m_Drill[0],
-                                                             FROM_LEGACY_LU( 320 ),
-                                                             ZERO_LENGTH,
-                                                             FROM_LEGACY_LU( 0x7FFF ) ) );
-    m_projectFileParams.push_back( new PARAM_CFG_LENGTH_PCB( wxT( "PadDimH" ),
-                                                             &g_Pad_Master.m_Size[0],
-                                                             FROM_LEGACY_LU( 550 ),
-                                                             ZERO_LENGTH,
-                                                             FROM_LEGACY_LU( 0x7FFF ) ) );
-    m_projectFileParams.push_back( new PARAM_CFG_LENGTH_PCB( wxT( "PadDimV" ),
-                                                             &g_Pad_Master.m_Size[1],
-                                                             FROM_LEGACY_LU( 550 ),
-                                                             ZERO_LENGTH,
-                                                             FROM_LEGACY_LU( 0x7FFF ) ) );
-//#endif
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "PadDrlX" ), &g_Pad_Master.m_Drill.x,
+                                                      320, 0, 0x7FFF ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "PadDimH" ), &g_Pad_Master.m_Size.x,
+                                                      550, 0, 0x7FFF ) );
+    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "PadDimV" ), &g_Pad_Master.m_Size.y,
+                                                      550, 0, 0x7FFF ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "BoardThickness" ),
                                                       &boardDesignSettings.m_BoardThickness,
                                                       630, 0, 0xFFFF ) );

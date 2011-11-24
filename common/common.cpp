@@ -410,193 +410,50 @@ int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Int
 }
 
 
-#ifdef KICAD_NANOMETRE
-
-/*
- *New common length functions
+/**
+ * Function wxStringSplit
+ * Split a String to a String List when founding 'splitter'
+ * @return the list
+ * @param txt : wxString : a String text
+ * @param splitter : wxChar : the 'split' character
  */
-
-const LENGTH_UNIT_DESC MillimetreDesc =
-{
-    LENGTH_UNITS<LENGTH_PCB>::millimetre(),
-    wxT( "mm" ),
-    6
-};
-
-
-const LENGTH_UNIT_DESC InchDesc =
-{
-    LENGTH_UNITS<LENGTH_PCB>::inch(),
-    wxT( "\"" ),
-    7
-};
-
-
-const LENGTH_UNIT_DESC MilDesc =
-{
-    LENGTH_UNITS<LENGTH_PCB>::mil(),
-    wxT( "mil" ),
-    5
-};
-
-
-const LENGTH_UNIT_DESC UnscaledDesc = /* stub */
-{
-    LENGTH_PCB::quantum(),
-    wxT( "" ),
-    4
-};
-
-
-const LENGTH_UNIT_DESC *UnitDescription( EDA_UNITS_T aUnit ) {
-    switch(aUnit) {
-        case INCHES:
-            return &InchDesc;
-        case MILLIMETRES:
-            return &MillimetreDesc;
-        default:
-            return &UnscaledDesc; /* should not be reached */
-    }
-}
-
-
-/* TODO: localisation */
-wxString LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_PCB aValue,
-                         bool aAdd_unit_symbol ) {
-    wxString StringValue;
-    double   value_to_print;
-    value_to_print = LENGTH<double>(aValue) / LENGTH<double>(aUnit->m_Value);
-    StringValue.Printf( wxT( "%.*f" ), aUnit->m_Precision, value_to_print);
-    size_t zero_tail = StringValue.find_last_not_of( wxT( "0" ) );
-
-    if( zero_tail != std::string::npos )
-    {
-	    //fprintf( stderr, "pos : %d", (int) zero_tail );
-	    size_t delim_pos = StringValue.Length() - aUnit->m_Precision;
-
-	    if( zero_tail < delim_pos)
-            zero_tail = delim_pos;
-
-	    StringValue.Truncate( zero_tail + 1 );
-    }
-
-    if( aAdd_unit_symbol && aUnit->m_Symbol != wxT( "" ) )
-    {
-        StringValue += wxT( " " );
-
-        StringValue += wxGetTranslation( aUnit->m_Symbol );
-    }
-
-    return StringValue;
-}
-
-LENGTH_PCB StringToLength( const LENGTH_UNIT_DESC *aUnit, const wxString& TextValue )
-{
-
-    LENGTH_PCB  Value;
-    double      dtmp = 0;
-
-    /* Acquire the 'right' decimal point separator */
-    const struct lconv* lc = localeconv();
-    wxChar decimal_point = lc->decimal_point[0];
-    wxString            buf( TextValue.Strip( wxString::both ) );
-
-    /* Convert the period in decimal point */
-    buf.Replace( wxT( "." ), wxString( decimal_point, 1 ) );
-
-    // An ugly fix needed by WxWidgets 2.9.1 that sometimes
-    // back to a point as separator, although the separator is the comma
-    // TODO: remove this line if WxWidgets 2.9.2 fixes this issue
-    buf.Replace( wxT( "," ), wxString( decimal_point, 1 ) );
-
-    /* Find the end of the numeric part */
-    unsigned brk_point = 0;
-
-    while( brk_point < buf.Len() )
-    {
-        wxChar ch = buf[brk_point];
-
-        if( !( (ch >= '0' && ch <='9') || (ch == decimal_point)
-             || (ch == '-') || (ch == '+') ) )
-        {
-            break;
-        }
-
-        ++brk_point;
-    }
-
-    /* Extract the numeric part */
-    buf.Left( brk_point ).ToDouble( &dtmp );
-
-    /* Check the optional unit designator (2 ch significant) */
-    wxString unit( buf.Mid( brk_point ).Strip( wxString::leading ).Left( 2 ).Lower() );
-
-    if( unit == wxT( "in" ) || unit == wxT( "\"" ) )
-    {
-        aUnit = &InchDesc;
-    }
-    else if( unit == wxT( "mm" ) )
-    {
-        aUnit = &MillimetreDesc;
-    }
-    else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) /* Mils or thous */
-    {
-        aUnit = &MilDesc;
-    }
-
-    Value = LENGTH_PCB( dtmp * LENGTH< double, 1 >( aUnit->m_Value ) );
-
-    return Value;
-}
-
-void LengthToTextCtrl( wxTextCtrl& TextCtr, LENGTH_PCB Value )
-{
-    wxString msg = LengthToString( UnitDescription( g_UserUnit ), Value );
-
-    TextCtr.SetValue( msg );
-}
-
-LENGTH_PCB LengthFromTextCtrl( const wxTextCtrl& TextCtr )
-{
-    LENGTH_PCB value;
-    wxString msg = TextCtr.GetValue();
-
-    value = StringToLength( UnitDescription( g_UserUnit ), msg );
-
-    return value;
-}
-
-#endif
-
-
-wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter )
+wxArrayString* wxStringSplit( wxString txt, wxChar splitter )
 {
     wxArrayString* list = new wxArrayString();
 
     while( 1 )
     {
-        int index = aString.Find( aSplitter );
-
+        int index = txt.Find( splitter );
         if( index == wxNOT_FOUND )
             break;
 
         wxString tmp;
-        tmp = aString.Mid( 0, index );
-        aString = aString.Mid( index + 1, aString.size() - index );
+        tmp = txt.Mid( 0, index );
+        txt = txt.Mid( index + 1, txt.size() - index );
         list->Add( tmp );
     }
 
-    if( !aString.IsEmpty() )
+    if( !txt.IsEmpty() )
     {
-        list->Add( aString );
+        list->Add( txt );
     }
 
     return list;
 }
 
 
+
+/**
+ * Function To_User_Unit
+ * Convert in inch or mm the variable "val" (double)given in internal units
+ * @return the converted value, in double
+ * @param aUnit : user measure unit
+ * @param val : double : the given value
+ * @param internal_unit_value = internal units per inch
+ */
 double To_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value )
 {
+
     switch( aUnit )
     {
     case MILLIMETRES:
@@ -611,6 +468,9 @@ double To_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value )
 }
 
 
+/*
+ * Return in internal units the value "val" given in inch or mm
+ */
 int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value )
 {
     double value;
@@ -627,6 +487,7 @@ int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value )
 
     default:
     case UNSCALED_UNITS:
+
         value = val;
     }
 
@@ -634,6 +495,9 @@ int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value )
 }
 
 
+/*
+ * Return the string date "day month year" like "23 jun 2005"
+ */
 wxString GenDate()
 {
     static const wxString mois[12] =
@@ -647,6 +511,7 @@ wxString GenDate()
     wxString   string_date;
 
     time( &buftime );
+
     Date = gmtime( &buftime );
     string_date.Printf( wxT( "%d %s %d" ), Date->tm_mday,
                         GetChars( mois[Date->tm_mon] ),

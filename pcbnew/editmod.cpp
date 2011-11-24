@@ -82,7 +82,7 @@ void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* pt_mod )
 
     for( ; pt_pad != NULL; pt_pad = pt_pad->Next() )
     {
-        pt_pad->m_Pos0 += VECTOR_PCB::fromXY( FROM_LEGACY_LU( moveVector.x ), FROM_LEGACY_LU( moveVector.y ) );
+        pt_pad->m_Pos0 += moveVector;
     }
 
     /* Update the draw element coordinates. */
@@ -93,7 +93,7 @@ void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* pt_mod )
         switch( PtStruct->Type() )
         {
         case PCB_MODULE_EDGE_T:
-                #undef STRUCT /// @BUG: unsafe type cast
+                #undef STRUCT
                 #define STRUCT ( (EDGE_MODULE*) PtStruct )
             STRUCT->m_Start0 += moveVector;
             STRUCT->m_End0   += moveVector;

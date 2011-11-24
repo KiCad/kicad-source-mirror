@@ -89,7 +89,7 @@ void PlacePad( BOARD* Pcb, D_PAD* pt_pad, int color, int marge, int op_logic )
     int     dx, dy;
     wxPoint shape_pos = pt_pad->ReturnShapePos();
 
-    dx = TO_LEGACY_LU( pt_pad->m_Size.x() / 2 );
+    dx = pt_pad->m_Size.x / 2;
     dx += marge;
 
     if( pt_pad->m_PadShape == PAD_CIRCLE )
@@ -100,13 +100,13 @@ void PlacePad( BOARD* Pcb, D_PAD* pt_pad, int color, int marge, int op_logic )
     }
 
 
-    dy = TO_LEGACY_LU( pt_pad->m_Size.y() / 2 );
+    dy = pt_pad->m_Size.y / 2;
     dy += marge;
 
     if( pt_pad->m_PadShape == PAD_TRAPEZOID )
     {
-        dx += TO_LEGACY_LU( abs( pt_pad->m_DeltaSize.y() ) / 2 );
-        dy += TO_LEGACY_LU( abs( pt_pad->m_DeltaSize.x() ) / 2 );
+        dx += abs( pt_pad->m_DeltaSize.y ) / 2;
+        dy += abs( pt_pad->m_DeltaSize.x ) / 2;
     }
 
     if( ( pt_pad->m_Orient % 900 ) == 0 ) /* The pad is a rectangle

@@ -84,13 +84,20 @@ bool ZONE_CONTAINER::UnFill()
 }
 
 
-const wxPoint ZONE_CONTAINER::GetPosition() const
+wxPoint& ZONE_CONTAINER::GetPosition()
 {
-    return m_Poly? GetCornerPosition( 0 ) : wxPoint( 0, 0 );
+    static wxPoint pos;
+
+    if( m_Poly )
+    {
+        pos = GetCornerPosition( 0 );
+    }
+    else
+        pos = wxPoint( 0, 0 );
+
+    return pos;
 }
 
-void ZONE_CONTAINER::SetPosition( const wxPoint& pos ) {
-}
 
 void ZONE_CONTAINER::SetNet( int aNetCode )
 {

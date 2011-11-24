@@ -392,9 +392,9 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     // calculate pad shape position :
     wxPoint shape_pos = ReturnShapePos() - aDrawInfo.m_Offset;
 
-    wxSize  halfsize = TO_LEGACY_LU_WXS( m_Size );
-    halfsize.x /= 2;
-    halfsize.y /= 2;
+    wxSize  halfsize = m_Size;
+    halfsize.x >>= 1;
+    halfsize.y >>= 1;
 
     switch( GetShape() )
     {
@@ -475,8 +475,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     }
 
     /* Draw the pad hole */
-    wxPoint holepos = TO_LEGACY_LU_WXP( m_Pos ) - aDrawInfo.m_Offset;
-    int     hole    = TO_LEGACY_LU( m_Drill.x() ) / 2;
+    wxPoint holepos = m_Pos - aDrawInfo.m_Offset;
+    int     hole    = m_Drill.x >> 1;
 
     bool drawhole = hole > 0;
 
@@ -513,20 +513,20 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             break;
 
         case PAD_OVAL:
-            halfsize.x = TO_LEGACY_LU( m_Drill.x() ) / 2;
-            halfsize.y = TO_LEGACY_LU( m_Drill.y() ) / 2;
+            halfsize.x = m_Drill.x >> 1;
+            halfsize.y = m_Drill.y >> 1;
 
-            if( m_Drill.x() > m_Drill.y() )  /* horizontal */
+            if( m_Drill.x > m_Drill.y )  /* horizontal */
             {
                 delta_cx = halfsize.x - halfsize.y;
                 delta_cy = 0;
-                seg_width    = TO_LEGACY_LU( m_Drill.y() );
+                seg_width    = m_Drill.y;
             }
             else                         /* vertical */
             {
                 delta_cx = 0;
                 delta_cy = halfsize.y - halfsize.x;
-                seg_width    = TO_LEGACY_LU( m_Drill.x() );
+                seg_width    = m_Drill.x;
             }
 
             RotatePoint( &delta_cx, &delta_cy, angle );
@@ -576,13 +576,13 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     if( GetShape() == PAD_CIRCLE )
         angle = 0;
 
-    AreaSize = TO_LEGACY_LU_WXS( m_Size );
+    AreaSize = m_Size;
 
-    if( m_Size.y() > m_Size.x() )
+    if( m_Size.y > m_Size.x )
     {
         angle += 900;
-        AreaSize.x = TO_LEGACY_LU( m_Size.y() );
-        AreaSize.y = TO_LEGACY_LU( m_Size.x() );
+        AreaSize.x = m_Size.y;
+        AreaSize.y = m_Size.x;
     }
 
     if( shortname_len > 0 )       // if there is a netname, provides room to display this netname
@@ -664,23 +664,23 @@ int D_PAD::BuildSegmentFromOvalShape(wxPoint& aSegStart, wxPoint& aSegEnd, int a
 {
     int width;
 
-    if( m_Size.y() < m_Size.x() )     // Build an horizontal equiv segment
+    if( m_Size.y < m_Size.x )     // Build an horizontal equiv segment
     {
-        int delta   = TO_LEGACY_LU( ( m_Size.x() - m_Size.y() ) / 2 );
+        int delta   = ( m_Size.x - m_Size.y ) / 2;
         aSegStart.x = -delta;
         aSegStart.y = 0;
         aSegEnd.x = delta;
         aSegEnd.y = 0;
-        width = TO_LEGACY_LU( m_Size.y() );
+        width = m_Size.y;
     }
     else        // Vertical oval: build a vertical equiv segment
     {
-        int delta   = TO_LEGACY_LU( ( m_Size.y() -m_Size.x() ) / 2 );
+        int delta   = ( m_Size.y -m_Size.x ) / 2;
         aSegStart.x = 0;
         aSegStart.y = -delta;
         aSegEnd.x = 0;
         aSegEnd.y = delta;
-        width = TO_LEGACY_LU( m_Size.x() );
+        width = m_Size.x;
     }
 
     if( aRotation )
@@ -701,8 +701,8 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
     wxSize delta;
     wxSize halfsize;
 
-    halfsize.x = TO_LEGACY_LU( m_Size.x() / 2 );
-    halfsize.y = TO_LEGACY_LU( m_Size.y() / 2 );
+    halfsize.x = m_Size.x >> 1;
+    halfsize.y = m_Size.y >> 1;
 
     /* For rectangular shapes, inflate is easy
      */
@@ -721,8 +721,8 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
     else
     {
         // Trapezoidal pad: verify delta values
-        delta.x = TO_LEGACY_LU( m_DeltaSize.x() / 2 );
-        delta.y = TO_LEGACY_LU( m_DeltaSize.y() / 2 );
+        delta.x = ( m_DeltaSize.x >> 1 );
+        delta.y = ( m_DeltaSize.y >> 1 );
 
         // be sure delta values are not to large
         if( (delta.x < 0) && (delta.x <= -halfsize.y) )
@@ -762,7 +762,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
         if( delta.y )    // lower and upper segment is horizontal
         {
             // Calculate angle of left (or right) segment with vertical axis
-            angle = atan2( m_DeltaSize.y(), m_Size.y() );
+            angle = atan2( double( m_DeltaSize.y ), double( m_Size.y ) );
 
             // left and right sides are moved by aInflateValue.x in their perpendicular direction
             // We must calculate the corresponding displacement on the horizontal axis
@@ -778,7 +778,7 @@ void D_PAD::BuildPadPolygon( wxPoint aCoord[4], wxSize aInflateValue, int aRotat
         else if( delta.x )          // left and right segment is vertical
         {
             // Calculate angle of lower (or upper) segment with horizontal axis
-            angle = atan2( m_DeltaSize.x(), m_Size.x() );
+            angle = atan2( double( m_DeltaSize.x ), double( m_Size.x ) );
 
             // lower and upper sides are moved by aInflateValue.x in their perpendicular direction
             // We must calculate the corresponding displacement on the vertical axis

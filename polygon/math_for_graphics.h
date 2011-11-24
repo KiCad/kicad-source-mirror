@@ -1,8 +1,8 @@
 // math stuff for graphics, from FreePCB
 
-/*#ifndef abs
+#ifndef abs
 #define abs(x) (((x) >=0) ? (x) : (-(x)))
-#endif*/
+#endif
 
 
 typedef struct PointTag

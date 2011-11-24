@@ -884,7 +884,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
     }
 }
 
-/** @TODO: move D_PAD method to appropriate file */
+
 /* Draw 3D pads. */
 void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
 {
@@ -903,8 +903,8 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
     int     color;
 
     scale = g_Parm_3D_Visu.m_BoardScale;
-    holeX = (double) TO_LEGACY_LU_DBL( m_Drill.x() ) * scale / 2;
-    holeY = (double) TO_LEGACY_LU_DBL( m_Drill.y() ) * scale / 2;
+    holeX = (double) m_Drill.x * scale / 2;
+    holeY = (double) m_Drill.y * scale / 2;
     hole  = MIN( holeX, holeY );
 
     /* Calculate the center of the pad. */
@@ -914,12 +914,12 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
     xc  = ux0;
     yc  = uy0;
 
-    dx = dx0 = TO_LEGACY_LU( m_Size.x() ) >> 1;
-    dy = dy0 = TO_LEGACY_LU( m_Size.y() ) >> 1;
+    dx = dx0 = m_Size.x >> 1;
+    dy = dy0 = m_Size.y >> 1;
 
     angle  = m_Orient;
-    drillx = TO_LEGACY_LU( m_Pos.x() ) * scale;
-    drilly = TO_LEGACY_LU( m_Pos.y() ) * scale;
+    drillx = m_Pos.x * scale;
+    drilly = m_Pos.y * scale;
 
     /* Draw the pad hole (TODO: draw OBLONG hole) */
     if( holeX && holeY )
@@ -980,13 +980,13 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
         {
             delta_cx = dx - dy;
             delta_cy = 0;
-            w = TO_LEGACY_LU( m_Size.y() ) * scale;
+            w = m_Size.y * scale;
         }
         else /* Vertical ellipse */
         {
             delta_cx = 0;
             delta_cy = dy - dx;
-            w = TO_LEGACY_LU( m_Size.x() ) * scale;
+            w = m_Size.x * scale;
         }
 
         RotatePoint( &delta_cx, &delta_cy, angle );

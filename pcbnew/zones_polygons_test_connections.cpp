@@ -111,7 +111,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 
                     if( item->Type() == PCB_PAD_T )
                     {
-                        pos1 = pos2 = TO_LEGACY_LU_WXP( ( (D_PAD*) item )->m_Pos ); /// @BUG Unsafe type conversion
+                        pos1 = pos2 = ( (D_PAD*) item )->m_Pos;
                     }
                     else if( item->Type() == PCB_VIA_T )
                     {

@@ -40,7 +40,7 @@ void ZONE_CONTAINER::Test_For_Copper_Island_And_Remove_Insulated_Islands( BOARD 
             if( pad->GetNet() != GetNet() )
                 continue;
 
-            ListPointsCandidates.push_back( TO_LEGACY_LU_WXP( pad->m_Pos ) );
+            ListPointsCandidates.push_back( pad->m_Pos );
         }
     }
 

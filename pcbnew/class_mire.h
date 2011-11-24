@@ -30,14 +30,11 @@ public:
     PCB_TARGET* Next() const { return (PCB_TARGET*) Pnext; }
     PCB_TARGET* Back() const { return (PCB_TARGET*) Pnext; }
 
-    const wxPoint GetPosition() const
+    wxPoint& GetPosition()
     {
         return m_Pos;
     }
 
-    void SetPosition( const wxPoint& pos ) {
-        m_Pos = pos;
-    }
 
     /**
      * Function Move

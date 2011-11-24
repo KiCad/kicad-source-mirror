@@ -9,14 +9,12 @@
 
 #include "dlist.h"
 
-#include "lengthpcb.h"
-
 #include "layers_id_colors_and_visibility.h"
 #include "class_netinfo.h"
 #include "class_pad.h"
 #include "class_colors_design_settings.h"
 #include "class_board_design_settings.h"
-#include "class_via_dimension.h"
+
 
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
@@ -82,6 +80,35 @@ struct LAYER
 };
 
 
+/** a small helper class to handle a stock of specific vias diameter and drill pair
+ * in the BOARD class
+ */
+class VIA_DIMENSION
+{
+public:
+    int m_Diameter;     // <= 0 means use Netclass via diameter
+    int m_Drill;        // <= 0 means use Netclass via drill
+
+    VIA_DIMENSION()
+    {
+        m_Diameter = 0; m_Drill = 0;
+    }
+
+
+    bool operator ==( const VIA_DIMENSION& other ) const
+    {
+        return (m_Diameter == other.m_Diameter) && (m_Drill == other.m_Drill);
+    }
+
+
+    bool operator <( const VIA_DIMENSION& other ) const
+    {
+        if( m_Diameter != other.m_Diameter )
+            return m_Diameter < other.m_Diameter;
+
+        return m_Drill < other.m_Drill;
+    }
+};
 
 
 // Helper class to handle high light nets
@@ -179,7 +206,7 @@ public:
     // The first value is the current netclass via size
     // tracks widths (max count = HISTORY_MAX_COUNT)
     // The first value is the current netclass track width
-    std::vector <LENGTH_PCB>    m_TrackWidthList;
+    std::vector <int>           m_TrackWidthList;
 
     /// Index for m_ViaSizeList to select the value.
     /// 0 is the index selection of the default value Netclass
@@ -226,9 +253,7 @@ public:
      * is a dummy.
      * @return const wxPoint& of (0,0)
      */
-    const wxPoint GetPosition() const;
-
-    void SetPosition( const wxPoint& pos );
+    wxPoint& GetPosition();
 
     /**
      * Function Add
@@ -743,7 +768,7 @@ public:
      */
     int GetCurrentTrackWidth()
     {
-        return TO_LEGACY_LU( m_TrackWidthList[m_TrackWidthSelector] );
+        return m_TrackWidthList[m_TrackWidthSelector];
     }
 
 
@@ -755,7 +780,7 @@ public:
      */
     int GetCurrentViaSize()
     {
-        return TO_LEGACY_LU( m_ViasDimensionsList[m_ViaSizeSelector].m_Diameter );
+        return m_ViasDimensionsList[m_ViaSizeSelector].m_Diameter;
     }
 
 
@@ -767,8 +792,8 @@ public:
      */
     int GetCurrentViaDrill()
     {
-        int drill = TO_LEGACY_LU( m_ViasDimensionsList[m_ViaSizeSelector].m_Drill );
-        return drill > 0 ? drill : -1;
+        return m_ViasDimensionsList[m_ViaSizeSelector].m_Drill > 0 ?
+               m_ViasDimensionsList[m_ViaSizeSelector].m_Drill : -1;
     }
 
 
