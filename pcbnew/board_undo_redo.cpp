@@ -235,6 +235,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         ( (DIMENSION*) aImage )->SetText( txt );
         EXCHG( ( (DIMENSION*) aItem )->m_Width, ( (DIMENSION*) aImage )->m_Width );
         EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Size, ( (DIMENSION*) aImage )->m_Text->m_Size );
+        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Pos, ( (DIMENSION*) aImage )->m_Text->m_Pos );
         EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Thickness,
                ( (DIMENSION*) aImage )->m_Text->m_Thickness );
         EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Mirror,

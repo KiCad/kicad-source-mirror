@@ -586,6 +586,7 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
 
     if( GetBoard()->m_TrackWidthSelector >= GetBoard()->m_TrackWidthList.size() )
         GetBoard()->m_TrackWidthSelector = 0;
+    m_SelTrackWidthBox->SetSelection( GetBoard()->m_TrackWidthSelector );
 }
 
 
@@ -615,6 +616,7 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
 
     if( GetBoard()->m_ViaSizeSelector >= GetBoard()->m_ViasDimensionsList.size() )
         GetBoard()->m_ViaSizeSelector = 0;
+    m_SelViaSizeBox->SetSelection( GetBoard()->m_ViaSizeSelector );
 }
 
 

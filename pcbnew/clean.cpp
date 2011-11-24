@@ -1,29 +1,23 @@
 /**
  * @file clean.cpp
- * functions to clean tracks: remove null and redundant segments
+ * @brief functions to clean tracks: remove null lenght and redundant segments
  */
 
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
-//#include "gr_basic.h"
 #include "pcbcommon.h"
 #include "wxPcbStruct.h"
-
 #include "pcbnew.h"
-//#include "protos.h"
-
 #include "class_board.h"
 #include "class_track.h"
 
-typedef long long int64;
-
 /* local functions : */
-static void     clean_segments( PCB_EDIT_FRAME* frame );
+static void     clean_segments( PCB_EDIT_FRAME* aFrame );
 static void     clean_vias( BOARD* aPcb );
-static void     DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame );
+static void     DeleteUnconnectedTracks( PCB_EDIT_FRAME* aFrame );
 static TRACK*   MergeColinearSegmentIfPossible( BOARD* aPcb, TRACK* aTrackRef, TRACK* aCandidate, int aEndType );
-static void     CleanupTracks( PCB_EDIT_FRAME* frame,
+static void     CleanupTracks( PCB_EDIT_FRAME* aFrame,
                              bool aCleanVias, bool aMergeSegments,
                              bool aDeleteUnconnectedSegm, bool aConnectToPads );
 
@@ -56,32 +50,31 @@ void PCB_EDIT_FRAME::Clean_Pcb( wxDC* DC )
  *  Delete
  * - Redundant points on tracks (merge aligned segments)
  * - vias on pad
- * - null segments
- * - Redundant segments
+ * - null lenght segments
  *  Create segments when track ends are incorrectly connected:
  *  i.e. when a track end covers a pad or a via but is not exactly on the pad or the via center
  */
-void CleanupTracks( PCB_EDIT_FRAME* frame,
+void CleanupTracks( PCB_EDIT_FRAME* aFrame,
                       bool aCleanVias, bool aMergeSegments,
                       bool aDeleteUnconnectedSegm, bool aConnectToPads )
 {
     wxBusyCursor( dummy );
 
-    frame->MsgPanel->EraseMsgBox();
-    frame->GetBoard()->GetNumSegmTrack();    // update the count
+    aFrame->MsgPanel->EraseMsgBox();
+    aFrame->GetBoard()->GetNumSegmTrack();    // update the count
 
     // Clear undo and redo lists to avoid inconsistencies between lists
-    frame->GetScreen()->ClearUndoRedoList();
-    frame->SetCurItem( NULL );
+    aFrame->GetScreen()->ClearUndoRedoList();
+    aFrame->SetCurItem( NULL );
 
     /* Rebuild the pad infos (pad list and netcodes) to ensure an up to date info */
-    frame->GetBoard()->m_Status_Pcb = 0;
-    frame->GetBoard()->m_NetInfo->BuildListOfNets();
+    aFrame->GetBoard()->m_Status_Pcb = 0;
+    aFrame->GetBoard()->m_NetInfo->BuildListOfNets();
 
     if( aCleanVias )       // delete redundant vias
     {
-        frame->SetStatusText( _( "Clean vias" ) );
-        clean_vias( frame->GetBoard() );
+        aFrame->SetStatusText( _( "Clean vias" ) );
+        clean_vias( aFrame->GetBoard() );
     }
 
 #ifdef CONN2PAD_ENBL
@@ -89,35 +82,35 @@ void CleanupTracks( PCB_EDIT_FRAME* frame,
      * but is not on the pad  or the via center */
     if( aConnectToPads )
     {
-        frame->SetStatusText( _( "Reconnect pads" ) );
+        aFrame->SetStatusText( _( "Reconnect pads" ) );
 
         /* Create missing segments when a track end covers a pad, but is not on the pad center */
-        ConnectDanglingEndToPad( frame );
+        ConnectDanglingEndToPad( aFrame );
 
         /* Create missing segments when a track end covers a via, but is not on the via center */
-        ConnectDanglingEndToVia( frame->GetBoard() );
+        ConnectDanglingEndToVia( aFrame->GetBoard() );
     }
 #endif
 
     /* Remove null segments and intermediate points on aligned segments */
     if( aMergeSegments )
     {
-        frame->SetStatusText( _( "Merge track segments" ) );
-        clean_segments( frame );
+        aFrame->SetStatusText( _( "Merge track segments" ) );
+        clean_segments( aFrame );
     }
 
     /* Delete dangling tracks */
     if( aDeleteUnconnectedSegm )
     {
-        frame->SetStatusText( _( "Delete unconnected tracks" ) );
-        DeleteUnconnectedTracks( frame );
+        aFrame->SetStatusText( _( "Delete unconnected tracks" ) );
+        DeleteUnconnectedTracks( aFrame );
     }
 
-    frame->SetStatusText( _( "Cleanup finished" ) );
+    aFrame->SetStatusText( _( "Cleanup finished" ) );
 
-    frame->Compile_Ratsnest( NULL, true );
+    aFrame->Compile_Ratsnest( NULL, true );
 
-    frame->OnModify();
+    aFrame->OnModify();
 }
 
 
@@ -175,7 +168,7 @@ void clean_vias( BOARD * aPcb )
  *  Vias:
  *  If a via is only connected to a dangling track, it also will be removed
  */
-static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame )
+static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* aFrame )
 {
     TRACK*          segment;
     TRACK*          other;
@@ -185,13 +178,13 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame )
     int             masklayer, oldnetcode;
     int             type_end, flag_erase;
 
-    if( frame->GetBoard()->m_Track == NULL )
+    if( aFrame->GetBoard()->m_Track == NULL )
         return;
 
-    frame->DrawPanel->m_AbortRequest = false;
+    aFrame->DrawPanel->m_AbortRequest = false;
 
     // correct via m_End defects
-    for( segment = frame->GetBoard()->m_Track;  segment;  segment = next )
+    for( segment = aFrame->GetBoard()->m_Track;  segment;  segment = next )
     {
         next = segment->Next();
 
@@ -205,14 +198,14 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame )
     }
 
     // removal of unconnected tracks
-    segment = startNetcode = frame->GetBoard()->m_Track;
+    segment = startNetcode = aFrame->GetBoard()->m_Track;
     oldnetcode = segment->GetNet();
 
     for( int ii = 0; segment ; segment = next, ii++ )
     {
         next = segment->Next();
 
-        if( frame->DrawPanel->m_AbortRequest )
+        if( aFrame->DrawPanel->m_AbortRequest )
             break;
 
         if( segment->GetNet() != oldnetcode )
@@ -230,7 +223,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame )
 
         D_PAD* pad;
 
-        pad = frame->GetBoard()->GetPadFast( segment->m_Start, masklayer );
+        pad = aFrame->GetBoard()->GetPadFast( segment->m_Start, masklayer );
 
         if( pad != NULL )
         {
@@ -238,7 +231,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame )
             type_end |= START_ON_PAD;
         }
 
-        pad = frame->GetBoard()->GetPadFast( segment->m_End, masklayer );
+        pad = aFrame->GetBoard()->GetPadFast( segment->m_End, masklayer );
 
         if( pad != NULL )
         {
@@ -253,19 +246,19 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame )
 
         if( (type_end & START_ON_PAD ) == 0 )
         {
-            other = segment->GetTrace( frame->GetBoard()->m_Track, NULL, START );
+            other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, START );
 
             if( other == NULL )     // Test a connection to zones
             {
                 if( segment->Type() != PCB_VIA_T )
                 {
-                    zone = frame->GetBoard()->HitTestForAnyFilledArea( segment->m_Start,
+                    zone = aFrame->GetBoard()->HitTestForAnyFilledArea( segment->m_Start,
                                                                        segment->GetLayer() );
                 }
                 else
                 {
                     ((SEGVIA*)segment)->ReturnLayerPair( &top_layer, &bottom_layer );
-                    zone = frame->GetBoard()->HitTestForAnyFilledArea( segment->m_Start,
+                    zone = aFrame->GetBoard()->HitTestForAnyFilledArea( segment->m_Start,
                                                                        top_layer, bottom_layer );
                 }
             }
@@ -287,12 +280,12 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame )
                     segment->SetState( BUSY, ON );
 
                     SEGVIA* via = (SEGVIA*) other;
-                    other = via->GetTrace( frame->GetBoard()->m_Track, NULL, START );
+                    other = via->GetTrace( aFrame->GetBoard()->m_Track, NULL, START );
 
                     if( other == NULL )
                     {
                         via->ReturnLayerPair( &top_layer, &bottom_layer );
-                        zone = frame->GetBoard()->HitTestForAnyFilledArea( via->m_Start,
+                        zone = aFrame->GetBoard()->HitTestForAnyFilledArea( via->m_Start,
                                                                            bottom_layer,
                                                                            top_layer );
                     }
@@ -308,19 +301,19 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame )
         // if not connected to a pad, test if segment's END is connected to another track
         if( (type_end & END_ON_PAD ) == 0 )
         {
-            other = segment->GetTrace( frame->GetBoard()->m_Track, NULL, END );
+            other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, END );
 
             if( other == NULL )     // Test a connection to zones
             {
                 if( segment->Type() != PCB_VIA_T )
                 {
-                    zone = frame->GetBoard()->HitTestForAnyFilledArea( segment->m_End,
+                    zone = aFrame->GetBoard()->HitTestForAnyFilledArea( segment->m_End,
                                                                        segment->GetLayer() );
                 }
                 else
                 {
                     ((SEGVIA*)segment)->ReturnLayerPair( &top_layer, &bottom_layer );
-                    zone = frame->GetBoard()->HitTestForAnyFilledArea( segment->m_End,
+                    zone = aFrame->GetBoard()->HitTestForAnyFilledArea( segment->m_End,
                                                                        top_layer, bottom_layer );
                 }
             }
@@ -343,12 +336,12 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame )
                     segment->SetState( BUSY, ON );
 
                     SEGVIA* via = (SEGVIA*) other;
-                    other = via->GetTrace( frame->GetBoard()->m_Track, NULL, END );
+                    other = via->GetTrace( aFrame->GetBoard()->m_Track, NULL, END );
 
                     if( other == NULL )
                     {
                         via->ReturnLayerPair( &top_layer, &bottom_layer );
-                        zone = frame->GetBoard()->HitTestForAnyFilledArea( via->m_End,
+                        zone = aFrame->GetBoard()->HitTestForAnyFilledArea( via->m_End,
                                                                            bottom_layer,
                                                                            top_layer );
                     }
@@ -385,7 +378,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* frame )
 
 
 /* Delete null length segments, and intermediate points .. */
-static void clean_segments( PCB_EDIT_FRAME* frame )
+static void clean_segments( PCB_EDIT_FRAME* aFrame )
 {
     TRACK*          segment, * nextsegment;
     TRACK*          other;
@@ -393,10 +386,10 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
     int             flag, no_inc;
     wxString        msg;
 
-    frame->DrawPanel->m_AbortRequest = false;
+    aFrame->DrawPanel->m_AbortRequest = false;
 
     // Delete null segments
-    for( segment = frame->GetBoard()->m_Track;  segment;  segment = nextsegment )
+    for( segment = aFrame->GetBoard()->m_Track;  segment;  segment = nextsegment )
     {
         nextsegment = segment->Next();
 
@@ -408,7 +401,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
     }
 
     /* Delete redundant segments */
-    for( segment  = frame->GetBoard()->m_Track, ii = 0;  segment;  segment = segment->Next(), ii++ )
+    for( segment  = aFrame->GetBoard()->m_Track, ii = 0;  segment;  segment = segment->Next(), ii++ )
     {
         for( other = segment->Next(); other; other = nextsegment )
         {
@@ -448,7 +441,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
     /* delete intermediate points  */
     ii = 0;
 
-    for( segment = frame->GetBoard()->m_Track;  segment;  segment = nextsegment )
+    for( segment = aFrame->GetBoard()->m_Track;  segment;  segment = nextsegment )
     {
         TRACK*  segStart;
         TRACK*  segEnd;
@@ -456,7 +449,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
 
         nextsegment = segment->Next();
 
-        if( frame->DrawPanel->m_AbortRequest )
+        if( aFrame->DrawPanel->m_AbortRequest )
             return;
 
         if( segment->Type() != PCB_TRACE_T )
@@ -481,7 +474,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
 
                 /* We must have only one segment connected */
                 segStart->SetState( BUSY, ON );
-                other = segment->GetTrace( frame->GetBoard()->m_Track, NULL, START );
+                other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, START );
                 segStart->SetState( BUSY, OFF );
 
                 if( other == NULL )
@@ -494,7 +487,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
 
         if( flag )   // We have the starting point of the segment is connected to an other segment
         {
-            segDelete = MergeColinearSegmentIfPossible( frame->GetBoard(), segment, segStart, START );
+            segDelete = MergeColinearSegmentIfPossible( aFrame->GetBoard(), segment, segStart, START );
 
             if( segDelete )
             {
@@ -518,7 +511,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
 
                 /* We must have only one segment connected */
                 segEnd->SetState( BUSY, ON );
-                other = segment->GetTrace( frame->GetBoard()->m_Track, NULL, END );
+                other = segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, END );
                 segEnd->SetState( BUSY, OFF );
 
                 if( other == NULL )
@@ -534,7 +527,7 @@ static void clean_segments( PCB_EDIT_FRAME* frame )
 
         if( flag & 2 )  // We have the ending point of the segment is connected to an other segment
         {
-            segDelete = MergeColinearSegmentIfPossible( frame->GetBoard(), segment, segEnd, END );
+            segDelete = MergeColinearSegmentIfPossible( aFrame->GetBoard(), segment, segEnd, END );
 
             if( segDelete )
             {
@@ -608,11 +601,12 @@ TRACK* MergeColinearSegmentIfPossible( BOARD* aPcb,
     }
 
     /* test if alignment in other cases
-     *  We must have refdy/refdx == (+/-)segmdy/segmdx, (i.e. same orientation) */
+     *  We must have refdy/refdx == segmdy/segmdx, (i.e. same slope)
+     *   or refdy * segmdx == segmdy * refdx
+     */
     if( is_colinear == false )
     {
-        if( ( (int64)refdy * segmdx !=  (int64)refdx * segmdy )
-         && ( (int64)refdy * segmdx != -(int64)refdx * segmdy ) )
+        if( ( double)refdy * segmdx != (double)refdx * segmdy )
             return NULL;
 
         is_colinear = true;
@@ -830,33 +824,33 @@ static void ConnectDanglingEndToVia( BOARD* pcb )
  * connected into the center of the pad.  This allows faster control of
  * connections.
  */
-void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame )
+void ConnectDanglingEndToPad( PCB_EDIT_FRAME* aFrame )
 {
     TRACK*          segment;
     int             nb_new_trace = 0;
     wxString        msg;
 
-    frame->DrawPanel->m_AbortRequest = false;
+    aFrame->DrawPanel->m_AbortRequest = false;
 
-    for( segment = frame->GetBoard()->m_Track;  segment;  segment = segment->Next() )
+    for( segment = aFrame->GetBoard()->m_Track;  segment;  segment = segment->Next() )
     {
         D_PAD*          pad;
 
-        if( frame->DrawPanel->m_AbortRequest )
+        if( aFrame->DrawPanel->m_AbortRequest )
             return;
 
-        pad = frame->GetBoard()->GetPad( segment, START );
+        pad = aFrame->GetBoard()->GetPad( segment, START );
 
         if( pad )
         {
             // test if the track start point is not exactly starting on the pad
             if( segment->m_Start != pad->m_Pos )
             {
-                if( segment->GetTrace( frame->GetBoard()->m_Track, NULL, START ) == NULL )
+                if( segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, START ) == NULL )
                 {
                     TRACK* newTrack = segment->Copy();
 
-                    frame->GetBoard()->m_Track.Insert( newTrack, segment->Next() );
+                    aFrame->GetBoard()->m_Track.Insert( newTrack, segment->Next() );
 
                     newTrack->m_End = pad->m_Pos;
                     newTrack->start = segment;
@@ -867,18 +861,18 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame )
             }
         }
 
-        pad = frame->GetBoard()->GetPad( segment, END );
+        pad = aFrame->GetBoard()->GetPad( segment, END );
 
         if( pad )
         {
             // test if the track end point is not exactly on the pad
             if( segment->m_End != pad->m_Pos )
             {
-                if( segment->GetTrace( frame->GetBoard()->m_Track, NULL, END ) == NULL )
+                if( segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, END ) == NULL )
                 {
                     TRACK* newTrack = segment->Copy();
 
-                    frame->GetBoard()->m_Track.Insert( newTrack, segment->Next() );
+                    aFrame->GetBoard()->m_Track.Insert( newTrack, segment->Next() );
 
                     newTrack->m_Start = pad->m_Pos;
 

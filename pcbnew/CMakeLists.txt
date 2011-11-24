@@ -21,6 +21,7 @@ set(PCBNEW_DIALOGS
     dialogs/dialog_copper_zones_base.cpp
     dialogs/dialog_design_rules.cpp
     dialogs/dialog_design_rules_base.cpp
+    dialogs/dialog_dimension_editor_base.cpp
     dialogs/dialog_display_options.cpp
     dialogs/dialog_display_options_base.cpp
     dialogs/dialog_drc_base.cpp

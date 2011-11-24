@@ -878,6 +878,11 @@ bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 
         break;
 
+    case PCB_DIMENSION_T:
+        if( aIdCommand == HK_MOVE_ITEM )
+            evt_type = ID_POPUP_PCB_MOVE_TEXT_DIMENSION_REQUEST;
+        break;
+
     default:
         break;
     }

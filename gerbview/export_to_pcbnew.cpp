@@ -66,19 +66,17 @@ GBR_TO_PCB_EXPORTER::~GBR_TO_PCB_EXPORTER()
  */
 void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
 {
-    int  ii = 0;
-    bool no_used_layers = true; // Changed to false if any used layer found
+    int layercount = 0;
 
-    // Check whether any of the Gerber layers are actually currently used
-    while( no_used_layers && ii < 32 )
+    // Count the Gerber layers which are actually currently used
+    for( int ii = 0; ii < 32; ii++ )
     {
         if( g_GERBER_List[ii] != NULL )
-            no_used_layers = false;
+            layercount++;
 
-        ii++;
     }
 
-    if( no_used_layers )
+    if( layercount == 0 )
     {
         DisplayInfoMessage( this,
                             _( "None of the Gerber layers contain any data" ) );
@@ -233,6 +231,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )
     }
 
     cleanBoard();
+    m_pcb->SetCopperLayerCount( LayerLookUpTable[32] );
 
     // Switch the locale to standard C (needed to print floating point numbers)
     SetLocaleTo_C_standard();
@@ -297,7 +296,7 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aL
             break;
 
         case GBR_ARC:
-//            export_segarc_copper_item( aGbrItem, aLayer );
+            export_segarc_copper_item( aGbrItem, aLayer );
             break;
 
         default:
@@ -325,6 +324,7 @@ void GBR_TO_PCB_EXPORTER::export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem
 
 void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
+#if 0       // TODO: does not work in all cases, so needs some work
     double a  = atan2( (double)( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y ),
                         (double)( aGbrItem->m_Start.x - aGbrItem->m_ArcCentre.x ) );
     double b  = atan2( (double)( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
@@ -374,6 +374,7 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
         NEGATE( newtrack->m_End.y );
         m_pcb->Add( newtrack );
     }
+#endif
 }
 
 
