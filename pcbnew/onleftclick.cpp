@@ -119,7 +119,11 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 break;
 
             case PCB_DIMENSION_T:
-                // see above.
+                if( ! DrawStruct->IsNew() )
+                {   // We are moving the text of an existing dimension. Place it
+                    PlaceDimensionText( (DIMENSION*) DrawStruct, aDC );
+                    exit = true;
+                }
                 break;
 
             default:

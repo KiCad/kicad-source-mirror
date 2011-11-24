@@ -5,7 +5,6 @@
 
 #include "fctsys.h"
 #include "class_drawpanel.h"
-#include "confirm.h"
 #include "macros.h"
 
 #include "class_board.h"
@@ -223,10 +222,14 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 msg = AddHotkeyName( _( "Edit Dimension" ), g_Board_Editor_Hokeys_Descr,
                                      HK_EDIT_ITEM );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_DIMENSION, msg, KiBitmap( edit_xpm ) );
+                msg = AddHotkeyName( _( "Move Dimension Text" ), g_Board_Editor_Hokeys_Descr,
+                                     HK_MOVE_ITEM );
+                AddMenuItem( aPopMenu, ID_POPUP_PCB_MOVE_TEXT_DIMENSION_REQUEST,
+                             msg, KiBitmap( move_text_xpm ) );
+                msg = AddHotkeyName( _( "Delete Dimension" ), g_Board_Editor_Hokeys_Descr, HK_DELETE );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_DIMENSION,
-                             _( "Delete Dimension" ), KiBitmap( delete_xpm ) );
+                             msg, KiBitmap( delete_xpm ) );
             }
-
             break;
 
         case PCB_TARGET_T:
@@ -238,8 +241,9 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                 msg = AddHotkeyName( _( "Edit Target" ), g_Board_Editor_Hokeys_Descr,
                                      HK_EDIT_ITEM );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_EDIT_MIRE, msg, KiBitmap( edit_xpm ) );
+                msg = AddHotkeyName( _( "Delete Target" ), g_Board_Editor_Hokeys_Descr, HK_DELETE );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_MIRE,
-                             _( "Delete Target" ), KiBitmap( delete_xpm ) );
+                             msg, KiBitmap( delete_xpm ) );
             }
 
             break;
@@ -250,14 +254,14 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         case PCB_T:
             msg.Printf( wxT( "PCB_EDIT_FRAME::OnRightClick() Error: unexpected DrawType %d" ),
                         item->Type() );
-            DisplayError( this, msg );
+            wxMessageBox( msg );
             SetCurItem( NULL );
             break;
 
         default:
             msg.Printf( wxT( "PCB_EDIT_FRAME::OnRightClick() Error: unknown DrawType %d" ),
                         item->Type() );
-            DisplayError( this, msg );
+            wxMessageBox( msg );
 
             // Attempt to clear error (but should no occurs )
             if( item->Type() >= MAX_STRUCT_TYPE_ID )
@@ -277,7 +281,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                      msg, KiBitmap( move_module_xpm ) );
     }
 
-    /* Display context sensitive comands: */
+    /* Display context sensitive commands: */
     switch(  GetToolId() )
     {
     case ID_PCB_ZONES_BUTT:
@@ -655,8 +659,9 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
         msg = AddHotkeyName( _( "Edit" ), g_Board_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_EDIT_MODULE, msg, KiBitmap( edit_module_xpm ) );
         sub_menu_footprint->AppendSeparator();
+        msg = AddHotkeyName( _( "Delete Module" ), g_Board_Editor_Hokeys_Descr, HK_DELETE );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_DELETE_MODULE,
-                     _( "Delete Module" ), KiBitmap( delete_module_xpm ) );
+                     msg, KiBitmap( delete_module_xpm ) );
     }
 }
 
@@ -724,9 +729,12 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
     if( flags )     // Currently in edit, no others commands possible
         return;
 
-    GetBoard()->SetCurrentNetClass( Pad->GetNetClassName() );
-    updateTraceWidthSelectBox();
-    updateViaSizeSelectBox();
+    if( GetBoard()->m_CurrentNetClassName != Pad->GetNetClassName() )
+    {
+        GetBoard()->SetCurrentNetClass( Pad->GetNetClassName() );
+        updateTraceWidthSelectBox();
+        updateViaSizeSelectBox();
+    }
 
     wxString msg = Pad->GetSelectMenuText();
 
@@ -798,7 +806,8 @@ void PCB_EDIT_FRAME::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
                  _( "Reset Size" ), KiBitmap( reset_text_xpm ) );
 
     sub_menu_Text->AppendSeparator();
-    AddMenuItem( sub_menu_Text, ID_POPUP_PCB_DELETE_TEXTEPCB, _( "Delete" ), KiBitmap( delete_text_xpm ) );
+    msg = AddHotkeyName( _( "Delete" ), g_Board_Editor_Hokeys_Descr, HK_DELETE );
+    AddMenuItem( sub_menu_Text, ID_POPUP_PCB_DELETE_TEXTEPCB, msg, KiBitmap( delete_text_xpm ) );
 }
 
 

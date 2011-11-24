@@ -94,7 +94,7 @@ void LAYERS_MAP_DIALOG::initDialog()
 
     // Ensure we have:
     //    at least 2 copper layers and NB_COPPER_LAYERS copper layers max
-    //    an even layers count because board *must* have even layers count
+    //    and even layers count because a board *must* have even layers count
     //    and maxi NB_COPPER_LAYERS copper layers count
     normalizeBrdLayersCount();
 
@@ -279,7 +279,7 @@ void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
 }
 
 
-/* Stores the current mayers selection in config
+/* Stores the current layers selection in config
  */
 void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
 {

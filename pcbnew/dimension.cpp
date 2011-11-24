@@ -10,17 +10,23 @@
 #include "wxPcbStruct.h"
 #include "drawtxt.h"
 #include "dialog_helpers.h"
+#include "macros.h"
 
 #include "class_board.h"
 #include "class_pcb_text.h"
 #include "class_dimension.h"
 
 #include "pcbnew.h"
-
+#include "dialog_dimension_editor_base.h"
 
 /* Local functions */
-static void MoveDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                            const wxPoint& aPosition, bool aErase );
+
+static void MoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+                               const wxPoint& aPosition, bool aErase );
+static void AbortMoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC );
+
 
 /* Local variables : */
 static int status_dimension; /* Used in dimension creation:
@@ -40,105 +46,70 @@ static int status_dimension; /* Used in dimension creation:
 
 
 /*********************************/
-/* class DIMENSION_EDITOR_DIALOG */
+/* class DIALOG_DIMENSION_EDITOR */
 /*********************************/
 
-class DIMENSION_EDITOR_DIALOG : public wxDialog
+class DIALOG_DIMENSION_EDITOR : public DIALOG_DIMENSION_EDITOR_BASE
 {
 private:
 
     PCB_EDIT_FRAME* m_Parent;
     wxDC*           m_DC;
     DIMENSION*      CurrentDimension;
-    wxTextCtrl*     m_Name;
-    EDA_SIZE_CTRL*  m_TxtSizeCtrl;
-    EDA_VALUE_CTRL* m_TxtWidthCtrl;
-    wxRadioBox*     m_Mirror;
-    wxComboBox*     m_SelLayerBox;
 
 public:
 
     // Constructor and destructor
-    DIMENSION_EDITOR_DIALOG( PCB_EDIT_FRAME* aParent, DIMENSION* aDimension, wxDC* aDC );
-    ~DIMENSION_EDITOR_DIALOG()
+    DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent, DIMENSION* aDimension, wxDC* aDC );
+    ~DIALOG_DIMENSION_EDITOR()
     {
     }
 
 
 private:
     void OnCancelClick( wxCommandEvent& event );
-    void OnOkClick( wxCommandEvent& event );
-
-    DECLARE_EVENT_TABLE()
+    void OnOKClick( wxCommandEvent& event );
 };
 
-BEGIN_EVENT_TABLE( DIMENSION_EDITOR_DIALOG, wxDialog )
-    EVT_BUTTON( wxID_OK, DIMENSION_EDITOR_DIALOG::OnOkClick )
-    EVT_BUTTON( wxID_CANCEL, DIMENSION_EDITOR_DIALOG::OnCancelClick )
-END_EVENT_TABLE()
 
-
-DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( PCB_EDIT_FRAME* aParent,
+DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
                                                   DIMENSION* aDimension, wxDC* aDC ) :
-    wxDialog( aParent, -1, wxString( _( "Dimension Properties" ) ) )
+    DIALOG_DIMENSION_EDITOR_BASE( aParent )
 {
     SetFocus();
-    wxButton* Button;
 
     m_Parent = aParent;
     m_DC = aDC;
 
     CurrentDimension = aDimension;
 
-    wxBoxSizer* MainBoxSizer = new wxBoxSizer( wxHORIZONTAL );
-    SetSizer( MainBoxSizer );
-    wxBoxSizer* LeftBoxSizer  = new wxBoxSizer( wxVERTICAL );
-    wxBoxSizer* RightBoxSizer = new wxBoxSizer( wxVERTICAL );
-    MainBoxSizer->Add( LeftBoxSizer, 0, wxGROW | wxALL, 5 );
-    MainBoxSizer->Add( RightBoxSizer, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
-
-    /* Create command buttons. */
-    Button = new wxButton( this, wxID_OK, _( "OK" ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    Button = new wxButton( this, wxID_CANCEL, _( "Cancel" ) );
-    RightBoxSizer->Add( Button, 0, wxGROW | wxALL, 5 );
-
-    wxString display_msg[2] = { _( "Normal" ), _( "Mirror" ) };
-    m_Mirror = new wxRadioBox( this, -1, _( "Display" ),
-                               wxDefaultPosition, wxSize( -1, -1 ), 2, display_msg,
-                               1, wxRA_SPECIFY_COLS );
-
     if( aDimension->m_Text->m_Mirror )
-        m_Mirror->SetSelection( 1 );
+        m_rbMirror->SetSelection( 1 );
+    else
+        m_rbMirror->SetSelection( 0 );
 
-    RightBoxSizer->Add( m_Mirror, 0, wxGROW | wxALL, 5 );
+    m_Name->SetValue( aDimension->m_Text->m_Text );
 
-    LeftBoxSizer->Add( new wxStaticText( this, -1, _( "Text:" ) ),
-                       0, wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE, 5 );
+    // Enter size value in dialog
+    PutValueInLocalUnits( *m_TxtSizeXCtrl, aDimension->m_Text->m_Size.x,
+                          m_Parent->m_InternalUnits );
+    AddUnitSymbol( *m_staticTextSizeX );
+    PutValueInLocalUnits( *m_TxtSizeYCtrl, aDimension->m_Text->m_Size.y,
+                          m_Parent->m_InternalUnits );
+    AddUnitSymbol( *m_staticTextSizeY );
 
-    m_Name = new wxTextCtrl( this, -1, aDimension->m_Text->m_Text,
-                             wxDefaultPosition, wxSize( 200, -1 ) );
+    // Enter lines thickness value in dialog
+    PutValueInLocalUnits( *m_TxtWidthCtrl, aDimension->m_Width,
+                          m_Parent->m_InternalUnits );
+    AddUnitSymbol( *m_staticTextWidth );
 
-    m_Name->SetInsertionPoint( 1 );
-
-    LeftBoxSizer->Add( m_Name,
-                       0,
-                       wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT | wxBOTTOM,
-                       5 );
-
-    m_TxtSizeCtrl = new EDA_SIZE_CTRL( this, _( "Size" ), aDimension->m_Text->m_Size,
-                                       g_UserUnit, LeftBoxSizer, m_Parent->m_InternalUnits );
-
-    m_TxtWidthCtrl = new EDA_VALUE_CTRL( this, _( "Width" ), aDimension->m_Width,
-                                         g_UserUnit, LeftBoxSizer, m_Parent->m_InternalUnits );
-
-    wxStaticText* text = new wxStaticText( this, -1, _( "Layer:" ) );
-    LeftBoxSizer->Add( text, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 5 );
-    m_SelLayerBox = new wxComboBox( this, wxID_ANY, wxEmptyString,
-                                    wxDefaultPosition, wxDefaultSize,
-                                    0, NULL, wxCB_READONLY );
-    LeftBoxSizer->Add( m_SelLayerBox, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+    // Enter position value in dialog
+    PutValueInLocalUnits( *m_textCtrlPosX, aDimension->m_Text->m_Pos.x,
+                          m_Parent->m_InternalUnits );
+    AddUnitSymbol( *m_staticTextPosX );
+    PutValueInLocalUnits( *m_textCtrlPosY, aDimension->m_Text->m_Pos.y,
+                          m_Parent->m_InternalUnits );
+    AddUnitSymbol( *m_staticTextPosY );
 
     for( int layer = FIRST_NO_COPPER_LAYER;  layer<NB_LAYERS;  layer++ )
     {
@@ -153,13 +124,13 @@ DIMENSION_EDITOR_DIALOG::DIMENSION_EDITOR_DIALOG( PCB_EDIT_FRAME* aParent,
 }
 
 
-void DIMENSION_EDITOR_DIALOG::OnCancelClick( wxCommandEvent& event )
+void DIALOG_DIMENSION_EDITOR::OnCancelClick( wxCommandEvent& event )
 {
     EndModal( -1 );
 }
 
 
-void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
+void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 {
     if( m_DC )     // Delete old text.
     {
@@ -173,9 +144,29 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
         CurrentDimension->SetText( m_Name->GetValue() );
     }
 
-    CurrentDimension->m_Text->m_Size  = m_TxtSizeCtrl->GetValue();
+    wxString msg;
 
-    int width = m_TxtWidthCtrl->GetValue();
+    // Get new size value:
+    msg = m_TxtSizeXCtrl->GetValue();
+    CurrentDimension->m_Text->m_Size.x = ReturnValueFromString( g_UserUnit, msg,
+                                                                m_Parent->m_InternalUnits );
+    msg = m_TxtSizeYCtrl->GetValue();
+    CurrentDimension->m_Text->m_Size.y = ReturnValueFromString( g_UserUnit, msg,
+                                                                m_Parent->m_InternalUnits );
+
+    // Get new position value:
+    // It will be copied later in dimension, because
+    msg = m_textCtrlPosX->GetValue();
+    CurrentDimension->m_Text->m_Pos.x = ReturnValueFromString( g_UserUnit, msg,
+                                                               m_Parent->m_InternalUnits );
+    msg = m_textCtrlPosY->GetValue();
+    CurrentDimension->m_Text->m_Pos.y = ReturnValueFromString( g_UserUnit, msg,
+                                                               m_Parent->m_InternalUnits );
+
+    // Get new line thickness value:
+    msg = m_TxtWidthCtrl->GetValue();
+    int width = ReturnValueFromString( g_UserUnit, msg,
+                                       m_Parent->m_InternalUnits );
     int maxthickness = Clamp_Text_PenSize( width, CurrentDimension->m_Text->m_Size );
 
     if( width > maxthickness )
@@ -187,11 +178,9 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
 
     CurrentDimension->m_Text->m_Thickness = CurrentDimension->m_Width = width ;
 
-    CurrentDimension->m_Text->m_Mirror = ( m_Mirror->GetSelection() == 1 ) ? true : false;
+    CurrentDimension->m_Text->m_Mirror = ( m_rbMirror->GetSelection() == 1 ) ? true : false;
 
     CurrentDimension->SetLayer( m_SelLayerBox->GetCurrentSelection() + FIRST_NO_COPPER_LAYER );
-
-    CurrentDimension->AdjustDimensionDetails( true );
 
     if( m_DC )     // Display new text
     {
@@ -203,7 +192,7 @@ void DIMENSION_EDITOR_DIALOG::OnOkClick( wxCommandEvent& event )
 }
 
 
-static void AbortMoveDimension( EDA_DRAW_PANEL* Panel, wxDC* aDC )
+static void AbortBuildDimension( EDA_DRAW_PANEL* Panel, wxDC* aDC )
 {
     DIMENSION* Dimension = (DIMENSION*) Panel->GetScreen()->GetCurItem();
 
@@ -275,7 +264,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
 
         aDimension->Draw( DrawPanel, aDC, GR_XOR );
 
-        DrawPanel->SetMouseCapture( MoveDimension, AbortMoveDimension );
+        DrawPanel->SetMouseCapture( BuildDimension, AbortBuildDimension );
         return aDimension;
     }
 
@@ -302,7 +291,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
 }
 
 
-static void MoveDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
+static void BuildDimension( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                            const wxPoint& aPosition, bool aErase )
 {
     PCB_SCREEN* screen   = (PCB_SCREEN*) aPanel->GetScreen();
@@ -360,7 +349,7 @@ void PCB_EDIT_FRAME::ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* a
     if( aDimension == NULL )
         return;
 
-    DIMENSION_EDITOR_DIALOG* frame = new DIMENSION_EDITOR_DIALOG( this, aDimension, aDC );
+    DIALOG_DIMENSION_EDITOR* frame = new DIALOG_DIMENSION_EDITOR( this, aDimension, aDC );
     frame->ShowModal();
     frame->Destroy();
 }
@@ -377,4 +366,87 @@ void PCB_EDIT_FRAME::DeleteDimension( DIMENSION* aDimension, wxDC* aDC )
     SaveCopyInUndoList( aDimension, UR_DELETED );
     aDimension->UnLink();
     OnModify();
+}
+
+/* Initialize parameters to move a pcb text
+ */
+static wxPoint initialTextPosition;
+void PCB_EDIT_FRAME::BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC )
+{
+    if( aItem == NULL )
+        return;
+
+    // Store the initial position for undo/abort command
+    initialTextPosition = aItem->m_Text->m_Pos;
+
+    aItem->Draw( DrawPanel, DC, GR_XOR );
+    aItem->m_Flags |= IS_MOVED;
+    aItem->DisplayInfo( this );
+
+    GetScreen()->SetCrossHairPosition( aItem->m_Text->m_Pos );
+    DrawPanel->MoveCursorToCrossHair();
+
+    DrawPanel->SetMouseCapture( MoveDimensionText, AbortMoveDimensionText );
+    SetCurItem( aItem );
+    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+}
+
+
+/* Move dimension text following the cursor. */
+static void MoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
+                            bool aErase )
+{
+    DIMENSION* dimension = (DIMENSION*) aPanel->GetScreen()->GetCurItem();
+
+    if( dimension == NULL )
+        return;
+
+    if( aErase )
+        dimension->Draw( aPanel, aDC, GR_XOR );
+
+    dimension->m_Text->m_Pos = aPanel->GetScreen()->GetCrossHairPosition();
+
+    dimension->Draw( aPanel, aDC, GR_XOR );
+}
+
+/*
+ * Abort current text edit progress.
+ *
+ * If a text is selected, its initial coord are regenerated
+ */
+void AbortMoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
+{
+    DIMENSION* dimension = (DIMENSION*) aPanel->GetScreen()->GetCurItem();
+    ( (PCB_EDIT_FRAME*) aPanel->GetParent() )->SetCurItem( NULL );
+
+    aPanel->SetMouseCapture( NULL, NULL );
+
+    if( dimension == NULL )  // Should not occur
+        return;
+
+    dimension->Draw( aPanel, aDC, GR_XOR );
+    dimension->m_Text->m_Pos = initialTextPosition;
+    dimension->m_Flags = 0;
+    dimension->Draw( aPanel, aDC, GR_OR );
+}
+
+/*
+ *  Place the current dimension text being moving
+ */
+void PCB_EDIT_FRAME::PlaceDimensionText( DIMENSION* aItem, wxDC* DC )
+{
+    DrawPanel->SetMouseCapture( NULL, NULL );
+    SetCurItem( NULL );
+
+    if( aItem == NULL )
+        return;
+
+    aItem->Draw( DrawPanel, DC, GR_OR );
+    OnModify();
+
+    EXCHG( aItem->m_Text->m_Pos, initialTextPosition );
+    SaveCopyInUndoList( aItem, UR_CHANGED );
+    EXCHG( aItem->m_Text->m_Pos, initialTextPosition );
+
+    aItem->m_Flags = 0;
 }

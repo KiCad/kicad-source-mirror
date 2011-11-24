@@ -787,7 +787,7 @@ XNODE* EXPORT_HELP::makeGenericLibParts()
          * Common pins (VCC, GND) can also be found more than once.
          */
         sort( pinList.begin(), pinList.end(), sortPinsByNumber );
-        for( unsigned ii = 0; ii < pinList.size()-1; ii++ )
+        for( int ii = 0; ii < (int)pinList.size()-1; ii++ )
         {
             if( pinList[ii]->GetNumber() == pinList[ii+1]->GetNumber() )
             {   // 2 pins have the same number, remove the redundant pin at index i+1

@@ -1253,6 +1253,9 @@ public:
     void ShowDimensionPropertyDialog( DIMENSION* aDimension, wxDC* aDC );
     DIMENSION* EditDimension( DIMENSION* aDimension, wxDC* aDC );
     void DeleteDimension( DIMENSION* aDimension, wxDC* aDC );
+    void BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC );
+    void PlaceDimensionText( DIMENSION* aItem, wxDC* DC );
+
 
     // netlist  handling:
     void InstallNetlistFrame( wxDC* DC );

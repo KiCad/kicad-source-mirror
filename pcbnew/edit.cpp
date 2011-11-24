@@ -55,9 +55,6 @@
 // Uncomment following line to enable wxBell() command (which beeps speaker)
 // #include <wx/utils.h>
 
-static void Process_Move_Item( PCB_EDIT_FRAME* frame, EDA_ITEM* DrawStruct, wxDC* DC );
-
-
 /* Handles the selection of command events. */
 void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
@@ -142,6 +139,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_COPY_BLOCK:
     case ID_POPUP_PCB_EDIT_DRAWING:
     case ID_POPUP_PCB_GETINFO_MARKER:
+    case ID_POPUP_PCB_MOVE_TEXT_DIMENSION_REQUEST:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -574,7 +572,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST:
-        Process_Move_Item( this, GetCurItem(), &dc );
+        StartMoveTextePcb( (TEXTE_PCB*) GetCurItem(), &dc );
         DrawPanel->m_AutoPAN_Request = true;
         break;
 
@@ -938,6 +936,10 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DrawPanel->MoveCursorToCrossHair();
         break;
 
+    case ID_POPUP_PCB_MOVE_TEXT_DIMENSION_REQUEST:
+        BeginMoveDimensionText( (DIMENSION*) GetCurItem(), &dc );
+        break;
+
     case ID_POPUP_PCB_DELETE_DRAWING:
         Delete_Segment_Edge( (DRAWSEGMENT*) GetCurItem(), &dc );
         DrawPanel->MoveCursorToCrossHair();
@@ -1088,27 +1090,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     DrawPanel->CrossHairOn( &dc );
     DrawPanel->m_IgnoreMouseEvents = false;
-}
-
-
-static void Process_Move_Item( PCB_EDIT_FRAME* frame, EDA_ITEM* DrawStruct, wxDC* DC )
-{
-    if( DrawStruct == NULL )
-        return;
-
-    switch( DrawStruct->Type() )
-    {
-    case PCB_TEXT_T:
-        frame->StartMoveTextePcb( (TEXTE_PCB*) DrawStruct, DC );
-        break;
-
-    default:
-        wxString msg;
-        msg.Printf( wxT( "PCB_EDIT_FRAME::Move_Item Error: Bad DrawType %d" ),
-                    DrawStruct->Type() );
-        DisplayError( frame, msg );
-        break;
-    }
 }
 
 
