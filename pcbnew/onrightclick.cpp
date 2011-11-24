@@ -839,8 +839,7 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 
     for( unsigned ii = 0; ii < aBoard->m_TrackWidthList.size(); ii++ )
     {
-        value = ReturnStringFromValue( g_UserUnit,
-                                       TO_LEGACY_LU( aBoard->m_TrackWidthList[ii] ),
+        value = ReturnStringFromValue( g_UserUnit, aBoard->m_TrackWidthList[ii],
                                        PCB_INTERNAL_UNIT, true );
         msg.Printf( _( "Track %s" ), GetChars( value ) );
 
@@ -854,14 +853,13 @@ static wxMenu* Append_Track_Width_List( BOARD* aBoard )
 
     for( unsigned ii = 0; ii < aBoard->m_ViasDimensionsList.size(); ii++ )
     {
-        value = ReturnStringFromValue( g_UserUnit,
-                                       TO_LEGACY_LU( aBoard->m_ViasDimensionsList[ii].m_Diameter ),
+        value = ReturnStringFromValue( g_UserUnit, aBoard->m_ViasDimensionsList[ii].m_Diameter,
                                        PCB_INTERNAL_UNIT, true );
         wxString drill = ReturnStringFromValue( g_UserUnit,
-                                                TO_LEGACY_LU( aBoard->m_ViasDimensionsList[ii].m_Drill ),
+                                                aBoard->m_ViasDimensionsList[ii].m_Drill,
                                                 PCB_INTERNAL_UNIT,  true );
 
-        if( TO_LEGACY_LU( aBoard->m_ViasDimensionsList[ii].m_Drill ) <= 0 )
+        if( aBoard->m_ViasDimensionsList[ii].m_Drill <= 0 )
         {
             msg.Printf( _( "Via %s" ), GetChars( value ) );
         }

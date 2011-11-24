@@ -850,7 +850,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame )
         if( pad )
         {
             // test if the track start point is not exactly starting on the pad
-            if( segment->m_Start != TO_LEGACY_LU_WXP( pad->m_Pos ) )
+            if( segment->m_Start != pad->m_Pos )
             {
                 if( segment->GetTrace( frame->GetBoard()->m_Track, NULL, START ) == NULL )
                 {
@@ -858,7 +858,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame )
 
                     frame->GetBoard()->m_Track.Insert( newTrack, segment->Next() );
 
-                    newTrack->m_End = TO_LEGACY_LU_WXP( pad->m_Pos );
+                    newTrack->m_End = pad->m_Pos;
                     newTrack->start = segment;
                     newTrack->end   = pad;
 
@@ -872,7 +872,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame )
         if( pad )
         {
             // test if the track end point is not exactly on the pad
-            if( segment->m_End != TO_LEGACY_LU_WXP( pad->m_Pos ) )
+            if( segment->m_End != pad->m_Pos )
             {
                 if( segment->GetTrace( frame->GetBoard()->m_Track, NULL, END ) == NULL )
                 {
@@ -880,7 +880,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* frame )
 
                     frame->GetBoard()->m_Track.Insert( newTrack, segment->Next() );
 
-                    newTrack->m_Start = TO_LEGACY_LU_WXP( pad->m_Pos );
+                    newTrack->m_Start = pad->m_Pos;
 
                     newTrack->start = pad;
                     newTrack->end   = segment;

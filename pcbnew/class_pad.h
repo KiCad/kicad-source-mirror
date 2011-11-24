@@ -11,8 +11,6 @@
 #include "pad_shapes.h"
 #include "PolyLine.h"
 
-#include "lengthpcb.h"
-#include "vectorpcb.h"
 
 class LINE_READER;
 class EDA_3D_CANVAS;
@@ -72,9 +70,8 @@ private:
     wxString m_ShortNetname;    // short net name, like vout from /mysheet/mysubsheet/vout
 
 
-public: /** TODO: that's not so good if parameters are easily modifiable outside
-    (e. g. m_Pos, which could be coherent with m_Pos and module orient/pos ) */
-    VECTOR_PCB m_Pos;                  // pad Position on board
+public:
+    wxPoint m_Pos;                  // pad Position on board
 
     union
     {
@@ -88,17 +85,14 @@ public: /** TODO: that's not so good if parameters are easily modifiable outside
                                     // 2..14 = internal layers
                                     // 16 .. 31 = technical layers
 
-    int    m_PadShape;              ///< Shape: PAD_CIRCLE, PAD_RECT, PAD_OVAL, PAD_TRAPEZOID
-    int    m_DrillShape;            ///< Shape PAD_CIRCLE, PAD_OVAL
-                                    /// @TODO: as m_DrillShape is eqv. to m_Drill.x==.y
-                                    /// it would be relatively easy to remove
-                                    /// this redundant flag.
+    int    m_PadShape;              // Shape: PAD_CIRCLE, PAD_RECT, PAD_OVAL, PAD_TRAPEZOID
+    int    m_DrillShape;            // Shape PAD_CIRCLE, PAD_OVAL
 
-    VECTOR_PCB m_Drill;             ///< Drill diam (drill shape = PAD_CIRCLE) or drill size
-                                    /// (shape = OVAL) for drill shape = PAD_CIRCLE, drill
-                                    /// diam = m_Drill.x
+    wxSize m_Drill;                 // Drill diam (drill shape = PAD_CIRCLE) or drill size
+                                    // (shape = OVAL) for drill shape = PAD_CIRCLE, drill
+                                    // diam = m_Drill.x
 
-    VECTOR_PCB m_Offset;    /* This parameter is useful only for oblong pads (it can be used for other
+    wxSize m_Offset;    /* This parameter is useful only for oblong pads (it can be used for other
                          * shapes, but without any interest).
                          * this is the offset between the pad hole and the pad shape (you must
                          * understand here pad shape = copper area around the hole)
@@ -111,11 +105,11 @@ public: /** TODO: that's not so good if parameters are easily modifiable outside
                          * D_PAD::ReturnShapePos() returns the physical shape position according to
                          * the offset and the pad rotation.*/
 
-    VECTOR_PCB m_Size;                 // X and Y size ( relative to orient 0)
+    wxSize  m_Size;                 // X and Y size ( relative to orient 0)
 
-    VECTOR_PCB m_DeltaSize;            // delta on rectangular shapes
+    wxSize  m_DeltaSize;            // delta on rectangular shapes
 
-    VECTOR_PCB m_Pos0;                 // Initial Pad position (i.e. pad position relative to the
+    wxPoint m_Pos0;                 // Initial Pad position (i.e. pas position relative to the
                                     // module anchor, orientation 0
 
     int     m_ShapeMaxRadius;       // radius of the circle containing the pad shape
@@ -124,16 +118,16 @@ public: /** TODO: that's not so good if parameters are easily modifiable outside
     static int m_PadSketchModePenSize;      // Pen size used to draw pads in sketch mode
                                     // (mode used to print pads on silkscreen layer)
 
-    LENGTH_PCB m_LengthDie;            // Length net from pad to die on chip
+    int     m_LengthDie;            // Length net from pad to die on chip
 
     // Local clearance. When null, the module default value is used.
     // when the module default value is null, the netclass value is used
     // Usually the local clearance is null
-    LENGTH_PCB m_LocalClearance;
+    int    m_LocalClearance;
 
     // Local mask margins: when NULL, the parent footprint design values are used
-    LENGTH_PCB m_LocalSolderMaskMargin;            // Local solder mask margin
-    LENGTH_PCB m_LocalSolderPasteMargin;           // Local solder paste margin absolute value
+    int    m_LocalSolderMaskMargin;            // Local solder mask margin
+    int    m_LocalSolderPasteMargin;           // Local solder paste margin absolute value
     double m_LocalSolderPasteMarginRatio;      // Local solder mask margin ratio value of pad size
                                                // The final margin is the sum of these 2 values
 
@@ -178,17 +172,16 @@ public:
      * Function GetPosition
      * returns the position of this object.
      * @return const wxPoint& - The position of this object.
-     * @TODO: could move virtual method to .c file
      */
-    const wxPoint GetPosition() const
+    wxPoint& GetPosition()
     {
-        return TO_LEGACY_LU_WXP( m_Pos );
+        return m_Pos;
     }
 
 
     void SetPosition( const wxPoint& aPos )
     {
-        m_Pos = FROM_LEGACY_LU_VEC( aPos );
+        m_Pos = aPos;
     }
 
     /**
@@ -387,7 +380,7 @@ public:
      */
     virtual void Move( const wxPoint& aMoveVector )
     {
-        m_Pos += FROM_LEGACY_LU_VEC( aMoveVector );
+        m_Pos += aMoveVector;
     }
 
 

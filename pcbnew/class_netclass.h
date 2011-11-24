@@ -36,9 +36,6 @@
 
 #include <wx/string.h>
 
-#include "lengthpcb.h"
-
-#include "class_via_dimension.h"
 
 class LINE_READER;
 class BOARD;
@@ -70,12 +67,14 @@ protected:
 
     /// The units on these parameters is 1/10000 of an inch, see define #PCB_INTERNAL_UNIT
 
-    LENGTH_PCB  m_Clearance;            ///< clearance when routing
+    int         m_Clearance;            ///< clearance when routing
 
-    LENGTH_PCB  m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
-    
-    VIA_DIMENSION m_Via;                ///< Specific normal via
-    VIA_DIMENSION m_uVia;               ///< Specific microvia
+    int         m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
+    int         m_ViaDia;               ///< via diameter
+    int         m_ViaDrill;             ///< via drill hole diameter
+
+    int         m_uViaDia;              ///< microvia diameter
+    int         m_uViaDrill;            ///< microvia drill hole diameter
 
 public:
 
@@ -172,40 +171,29 @@ public:
     const wxString& GetDescription() const  { return m_Description; }
     void    SetDescription( const wxString& aDesc ) { m_Description = aDesc; }
 
-    int     GetClearance() const            { return TO_LEGACY_LU( m_Clearance ); }
-    void    SetClearance( int aClearance )  { m_Clearance = FROM_LEGACY_LU( aClearance ); }
+    int     GetClearance() const            { return m_Clearance; }
+    void    SetClearance( int aClearance )  { m_Clearance = aClearance; }
 
-    int     GetTrackWidth() const           { return TO_LEGACY_LU( m_TrackWidth ); }
+    int     GetTrackWidth() const           { return m_TrackWidth; }
     int     GetTrackMinWidth() const;
-    void    SetTrackWidth( int aWidth )     { m_TrackWidth = FROM_LEGACY_LU( aWidth ); }
-    
-    int     GetViaDiameter() const          { return TO_LEGACY_LU( m_Via.m_Diameter ); }
+    void    SetTrackWidth( int aWidth )     { m_TrackWidth = aWidth; }
+
+    int     GetViaDiameter() const          { return m_ViaDia; }
     int     GetViaMinDiameter() const;
-    void    SetViaDiameter( int aDia )      { m_Via.m_Diameter = FROM_LEGACY_LU( aDia ); }
+    void    SetViaDiameter( int aDia )      { m_ViaDia = aDia; }
 
-    int     GetViaDrill() const             { return TO_LEGACY_LU( m_Via.m_Drill ); }
+    int     GetViaDrill() const             { return m_ViaDrill; }
     int     GetViaMinDrill() const;
-    void    SetViaDrill( int aSize )        { m_Via.m_Drill = FROM_LEGACY_LU( aSize ); }
+    void    SetViaDrill( int aSize )        { m_ViaDrill = aSize; }
 
-    int     GetuViaDiameter() const         { return TO_LEGACY_LU( m_uVia.m_Diameter ); }
+    int     GetuViaDiameter() const         { return m_uViaDia; }
     int     GetuViaMinDiameter() const;
-    void    SetuViaDiameter( int aSize )    { m_uVia.m_Diameter = FROM_LEGACY_LU( aSize ); }
+    void    SetuViaDiameter( int aSize )    { m_uViaDia = aSize; }
 
-    int     GetuViaDrill() const            { return TO_LEGACY_LU( m_uVia.m_Drill ); }
+    int     GetuViaDrill() const            { return m_uViaDrill; }
     int     GetuViaMinDrill() const;
-    void    SetuViaDrill( int aSize )       { m_uVia.m_Drill = FROM_LEGACY_LU( aSize ); }
+    void    SetuViaDrill( int aSize )       { m_uViaDrill = aSize; }
 
-    LENGTH_PCB Clearance() const                    { return m_Clearance; }
-    LENGTH_PCB Clearance( const LENGTH_PCB a )      { return m_Clearance = a; }
-
-    LENGTH_PCB TrackWidth() const                   { return m_TrackWidth; }
-    LENGTH_PCB TrackWidth( const LENGTH_PCB a )     { return m_TrackWidth = a; }
-
-    VIA_DIMENSION Via() const                       { return m_Via; }
-    VIA_DIMENSION Via( const VIA_DIMENSION a )      { return m_Via = a; }
-
-    VIA_DIMENSION MicroVia() const                  { return m_uVia; }
-    VIA_DIMENSION MicroVia( const VIA_DIMENSION a ) { return m_uVia = a; }
 
     /**
      * Function SetParams
@@ -215,11 +203,6 @@ public:
      *  from global preferences instead.
      */
     void    SetParams( const NETCLASS* defaults = NULL );
-
-    /**
-     * Sets Parameters to their default state.
-     */
-    void    SetToDefault();
 
     /**
      * Function Save

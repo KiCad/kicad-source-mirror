@@ -107,8 +107,8 @@ int MIN_SPAN_TREE_PADS::GetWeight( int aItem1, int aItem2 )
 
     if( pad1 == pad2 )
         return 0;
-    int weight = TO_LEGACY_LU( abs( pad2->m_Pos.x() - pad1->m_Pos.x() ) +
-                 abs( pad2->m_Pos.y() - pad1->m_Pos.y() ) );
+    int weight = abs( pad2->m_Pos.x - pad1->m_Pos.x ) +
+                 abs( pad2->m_Pos.y - pad1->m_Pos.y );
     return weight + 1;
 }
 
@@ -667,7 +667,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
             local_rats.m_Lenght = INT_MAX;
         }
 
-        pad_pos = TO_LEGACY_LU_WXP( pad_ref->m_Pos ) - g_Offset_Module;
+        pad_pos = pad_ref->m_Pos - g_Offset_Module;
 
         // Search the nearest external pad of this current pad
         for( unsigned jj = pads_module_count; jj < localPadList.size(); jj++ )
@@ -681,8 +681,8 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
             if( pad_externe->GetNet() > pad_ref->GetNet() ) // pads are sorted by net code
                 break;
 
-            distance = abs( TO_LEGACY_LU( pad_externe->m_Pos.x() ) - pad_pos.x ) +
-                       abs( TO_LEGACY_LU( pad_externe->m_Pos.y() ) - pad_pos.y );
+            distance = abs( pad_externe->m_Pos.x - pad_pos.x ) +
+                       abs( pad_externe->m_Pos.y - pad_pos.y );
 
             if( distance < local_rats.m_Lenght )
             {
@@ -724,8 +724,8 @@ void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
         else
         {
             g_ColorsSettings.SetItemColor(RATSNEST_VISIBLE, tmpcolor);
-            VECTOR_PCB tmp = rats->m_PadStart->m_Pos;
-            rats->m_PadStart->m_Pos -= FROM_LEGACY_LU_VEC( g_Offset_Module );
+            wxPoint tmp = rats->m_PadStart->m_Pos;
+            rats->m_PadStart->m_Pos -= g_Offset_Module;
             rats->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
             rats->m_PadStart->m_Pos = tmp;
         }
@@ -827,7 +827,7 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
                 continue;
 
             if( !pad->GetSubNet() || (pad->GetSubNet() != subnet) )
-                s_TargetsLocations.push_back( TO_LEGACY_LU_WXP( pad->m_Pos ) );
+                s_TargetsLocations.push_back( pad->m_Pos );
         }
 
         // Create a list of tracks ends candidates, not already connected to the

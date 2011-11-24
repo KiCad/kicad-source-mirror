@@ -65,8 +65,7 @@ static inline const wxChar* GetChars( const wxString& s )
 #endif
 
 #ifndef ABS
-#define ABS( y ) ( MAX( ( y ), ( -y ) ) )
-// dirty trick: now this should work with LENGTH<> too
+#define ABS( y ) ( (y) >= 0 ? (y) : ( -(y) ) )
 #endif
 
 #define NEGATE( x ) (x = -x)

@@ -165,7 +165,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
             if( doCheckNet && currTrack && currTrack->GetNet() != pad->GetNet() )
                 return false;
 
-            *curpos = TO_LEGACY_LU_WXP( pad->m_Pos );
+            *curpos = pad->m_Pos;
             return true;
         }
     }

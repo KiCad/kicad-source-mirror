@@ -120,19 +120,11 @@ public:
     /**
      * Function GetPosition
      * returns the position of this object.
-     * @return const wxPoint - The position of this object.
+     * @return const wxPoint& - The position of this object.
      */
-    const wxPoint GetPosition() const
+    wxPoint& GetPosition()
     {
         return m_Start;  // it had to be start or end.
-    }
-
-    /**
-     * Sets the position of this object. Virtual function, needed by BOARD_ITEM
-     * @param pos The position of this object
-     */
-    void SetPosition( const wxPoint& pos ) {
-        m_Start = pos;
     }
 
     EDA_RECT GetBoundingBox() const;
@@ -478,10 +470,11 @@ public:
      * returns the position of this object.
      * @return const wxPoint& - The position of this object.
      */
-    const wxPoint GetPosition() const
+    wxPoint& GetPosition()
     {
         return m_Start;
     }
+
 
     void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }
 

@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -28,17 +29,12 @@
  * @file common.h
  */
 
-#ifndef __INCLUDE__COMMON_H__
-#define __INCLUDE__COMMON_H__ 1
+#ifndef INCLUDE__COMMON_H_
+#define INCLUDE__COMMON_H_
 
 #include "wx/wx.h"
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
-
-
-#ifdef KICAD_NANOMETRE
-#include "lengthpcb.h"
-#endif
 
 class wxAboutDialogInfo;
 class BASE_SCREEN;
@@ -358,90 +354,32 @@ int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Int
  * @return a wxString what contains value and optionally the symbol unit (like
  *         2.000 mm)
  */
-wxString ReturnStringFromValue( EDA_UNITS_T aUnit,
-                                int  aValue,
-                                int  aInternal_Unit,
-                                bool aAdd_unit_symbol = false );
+wxString        ReturnStringFromValue( EDA_UNITS_T aUnit,
+                                       int  aValue,
+                                       int  aInternal_Unit,
+                                       bool aAdd_unit_symbol = false );
 
-
-/**
- * Function AddUnitSymbol
- * adds string "  (mm):" or " ("):" to the static text Stext.
- * Used in dialog boxes for entering values depending on selected units
- */
-void AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
+void            AddUnitSymbol( wxStaticText& Stext, EDA_UNITS_T aUnit = g_UserUnit );
 
 /* Add string "  (mm):" or " ("):" to the static text Stext.
  *  Used in dialog boxes for entering values depending on selected units */
-void PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value, int Internal_Unit );
+void            PutValueInLocalUnits( wxTextCtrl& TextCtr, int Value,
+                                      int Internal_Unit );
 
-/**
- * Convert the number Value in a string according to the internal units
+/* Convert the number Value in a string according to the internal units
  *  and the selected unit (g_UserUnit) and put it in the wxTextCtrl TextCtrl
- */
-int ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr, int Internal_Unit );
-
-#ifdef KICAD_NANOMETRE
-
-struct LENGTH_UNIT_DESC
-{
-    LENGTH_PCB       m_Value;
-    const wxString   m_Symbol;
-    int              m_Precision;
-};
-
-extern const LENGTH_UNIT_DESC MillimetreDesc, InchDesc, MilDesc;
-
-const LENGTH_UNIT_DESC *UnitDescription( EDA_UNITS_T aUnit );
-
-LENGTH_PCB       StringToLength( const LENGTH_UNIT_DESC *aUnit, const wxString& TextValue );
-wxString         LengthToString( const LENGTH_UNIT_DESC *aUnit, LENGTH_PCB aValue,
-                                 bool aAdd_unit_symbol = false );
-
-void             LengthToTextCtrl( wxTextCtrl& TextCtr, LENGTH_PCB Value );
-LENGTH_PCB       LengthFromTextCtrl( const wxTextCtrl& TextCtr );
-
-/* transition macros */
-#define STR_TO_LENGTH( unit, str, iu ) \
-    ( StringToLength( UnitDescription( ( unit ) ), ( str ) ) )
-
-#define LENGTH_TO_STR( unit, l, iu ) \
-    ( LengthToString( UnitDescription( ( unit ) ), ( l ) ) )
-#define LENGTH_TO_STR_SYM( unit, l, iu ) \
-    ( LengthToString( UnitDescription( ( unit ) ), ( l ), true ) )
-
-#define CTR_GET_LENGTH( ctr, iu ) \
-    ( StringToLength( UnitDescription( g_UserUnit ), ( ctr ).GetValue() ) )
-
-#define CTR_PUT_LENGTH( ctr, l, iu ) \
-    ( ( ctr ).SetValue( LengthToString( UnitDescription( g_UserUnit ), ( l ) ) ) )
-
-#else
-
-#define STR_TO_LENGTH( unit, str, iu ) \
-    ReturnValueFromString( ( unit ), ( str ), ( iu ) )
-
-#define LENGTH_TO_STR( unit, l, iu ) \
-    ( ReturnStringFromValue( ( unit ), ( l ), ( iu ) ) )
-#define LENGTH_TO_STR_SYM( unit, l, iu ) \
-    ( ReturnStringFromValue( ( unit ), ( l ), ( iu ), true ) )
-
-#define CTR_GET_LENGTH( ctr, iu ) \
-    ReturnValueFromString( g_UserUnit, ( ctr ).GetValue(), ( iu ) )
-
-#define CTR_PUT_LENGTH( ctr, l, iu ) \
-    ( ( ctr ).SetValue( ReturnStringFromValue( g_UserUnit, ( l ), ( iu ) ) ) )
-
-#endif
+ **/
+int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
+                                         int               Internal_Unit );
 
 /**
  * Function wxStringSplit
- * splita \a aString to a string list when split by \a aSplitter.
+ * splits \a aString to a string list separated at \a aSplitter.
  * @return the list
- * @param aString : wxString : a String text
- * @param aSplitter : wxChar : the 'split' character
+ * @param aString is the text to split
+ * @param aSplitter is the 'split' character
  */
-wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter );
+wxArrayString*  wxStringSplit( wxString txt, wxChar aSplitter );
 
 /**
  * Function To_User_Unit
@@ -449,11 +387,12 @@ wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter );
  * @return the converted value, in double
  * @param aUnit : user unit to be converted to
  * @param val : double : the given value
+
  * @param internal_unit_value = internal units per inch
  */
 double To_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value );
 
-/*
+/**
  * Return in internal units the value "val" given in inch or mm
  */
 int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value );
@@ -465,4 +404,4 @@ int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value );
  */
 wxString GenDate();
 
-#endif  // __INCLUDE__COMMON_H__
+#endif  // INCLUDE__COMMON_H_

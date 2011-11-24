@@ -576,7 +576,7 @@ void PCB_EDIT_FRAME::updateTraceWidthSelectBox()
 
     for( unsigned ii = 0; ii < GetBoard()->m_TrackWidthList.size(); ii++ )
     {
-        msg = _( "Track " ) + CoordinateToString( TO_LEGACY_LU( GetBoard()->m_TrackWidthList[ii] ), true );
+        msg = _( "Track " ) + CoordinateToString( GetBoard()->m_TrackWidthList[ii], true );
 
         if( ii == 0 )
             msg << _( " *" );
@@ -601,11 +601,11 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
     for( unsigned ii = 0; ii < GetBoard()->m_ViasDimensionsList.size(); ii++ )
     {
         msg = _( "Via " );
-        msg << CoordinateToString( TO_LEGACY_LU( GetBoard()->m_ViasDimensionsList[ii].m_Diameter ), true );
+        msg << CoordinateToString( GetBoard()->m_ViasDimensionsList[ii].m_Diameter, true );
 
-        if( 0 != TO_LEGACY_LU( GetBoard()->m_ViasDimensionsList[ii].m_Drill ) )
+        if( GetBoard()->m_ViasDimensionsList[ii].m_Drill )
             msg  << wxT("/ ")
-                 << CoordinateToString( TO_LEGACY_LU( GetBoard()->m_ViasDimensionsList[ii].m_Drill ), true );
+                 << CoordinateToString( GetBoard()->m_ViasDimensionsList[ii].m_Drill, true );
 
         if( ii == 0 )
             msg << _( " *" );
@@ -625,7 +625,7 @@ LAYER_BOX_SELECTOR* PCB_EDIT_FRAME::ReCreateLayerBox( EDA_TOOLBAR* parent )
 
     m_SelLayerBox->m_hotkeys = g_Board_Editor_Hokeys_Descr;
     m_SelLayerBox->Resync();
-    m_SelLayerBox->SetToolTip( _( "+/- to switch" ) ); // TODO: actual hotkeys
+    m_SelLayerBox->SetToolTip( _( "+/- to switch" ) );
 
     return m_SelLayerBox;
 }

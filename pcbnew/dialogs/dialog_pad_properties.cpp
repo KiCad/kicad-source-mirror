@@ -117,26 +117,26 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     drawInfo.m_Color     = color;
     drawInfo.m_HoleColor = DARKGRAY;
-    drawInfo.m_Offset    = TO_LEGACY_LU_WXP( m_dummyPad->m_Pos );
+    drawInfo.m_Offset    = m_dummyPad->m_Pos;
     drawInfo.m_Display_padnum  = true;
     drawInfo.m_Display_netname = true;
     if( m_dummyPad->m_Attribut == PAD_HOLE_NOT_PLATED )
         drawInfo.m_ShowNotPlatedHole = true;
 
     // Shows the local pad clearance
-    drawInfo.m_PadClearance = TO_LEGACY_LU( m_dummyPad->m_LocalClearance );
+    drawInfo.m_PadClearance = m_dummyPad->m_LocalClearance;
 
     wxSize dc_size = dc.GetSize();
     dc.SetDeviceOrigin( dc_size.x / 2, dc_size.y / 2 );
 
     // Calculate a suitable scale to fit the available draw area
-    int dim = TO_LEGACY_LU( m_dummyPad->m_Size.x() + abs( m_dummyPad->m_DeltaSize.y() ) );
-    if( m_dummyPad->m_LocalClearance > ZERO_LENGTH )
-        dim += TO_LEGACY_LU( m_dummyPad->m_LocalClearance * 2 );
+    int dim = m_dummyPad->m_Size.x + ABS( m_dummyPad->m_DeltaSize.y);
+    if( m_dummyPad->m_LocalClearance > 0 )
+        dim += m_dummyPad->m_LocalClearance * 2;
     double scale    = (double) dc_size.x / dim;
-    dim = TO_LEGACY_LU( m_dummyPad->m_Size.y() + abs( m_dummyPad->m_DeltaSize.x() ) );
-    if( m_dummyPad->m_LocalClearance > ZERO_LENGTH )
-        dim += TO_LEGACY_LU( m_dummyPad->m_LocalClearance * 2 );
+    dim = m_dummyPad->m_Size.y + ABS( m_dummyPad->m_DeltaSize.x);
+    if( m_dummyPad->m_LocalClearance > 0 )
+        dim += m_dummyPad->m_LocalClearance * 2;
     double altscale = (double) dc_size.y / dim;
     scale = MIN( scale, altscale );
 
@@ -207,8 +207,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     if( m_isFlipped )
     {
-        m_dummyPad->m_Offset.y( -m_dummyPad->m_Offset.y() );
-        m_dummyPad->m_DeltaSize.y( -m_dummyPad->m_DeltaSize.y() );
+        NEGATE( m_dummyPad->m_Offset.y );
+        NEGATE( m_dummyPad->m_DeltaSize.y );
         /* flip pads layers*/
         m_dummyPad->m_layerMask = ChangeSideMaskLayer( m_dummyPad->m_layerMask );
     }
@@ -236,40 +236,41 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     // Display current pad parameters units:
-    CTR_PUT_LENGTH( *m_PadPosition_X_Ctrl, m_dummyPad->m_Pos.x(), internalUnits );
-    CTR_PUT_LENGTH( *m_PadPosition_Y_Ctrl, m_dummyPad->m_Pos.y(), internalUnits );
+    PutValueInLocalUnits( *m_PadPosition_X_Ctrl, m_dummyPad->m_Pos.x, internalUnits );
+    PutValueInLocalUnits( *m_PadPosition_Y_Ctrl, m_dummyPad->m_Pos.y, internalUnits );
 
-    CTR_PUT_LENGTH( *m_PadDrill_X_Ctrl, m_dummyPad->m_Drill.x(), internalUnits );
-    CTR_PUT_LENGTH( *m_PadDrill_Y_Ctrl, m_dummyPad->m_Drill.y(), internalUnits );
+    PutValueInLocalUnits( *m_PadDrill_X_Ctrl, m_dummyPad->m_Drill.x, internalUnits );
+    PutValueInLocalUnits( *m_PadDrill_Y_Ctrl, m_dummyPad->m_Drill.y, internalUnits );
 
-    CTR_PUT_LENGTH( *m_ShapeSize_X_Ctrl, m_dummyPad->m_Size.x(), internalUnits );
-    CTR_PUT_LENGTH( *m_ShapeSize_Y_Ctrl, m_dummyPad->m_Size.y(), internalUnits );
+    PutValueInLocalUnits( *m_ShapeSize_X_Ctrl, m_dummyPad->m_Size.x, internalUnits );
+    PutValueInLocalUnits( *m_ShapeSize_Y_Ctrl, m_dummyPad->m_Size.y, internalUnits );
 
-    CTR_PUT_LENGTH( *m_ShapeOffset_X_Ctrl, m_dummyPad->m_Offset.x(), internalUnits );
-    CTR_PUT_LENGTH( *m_ShapeOffset_Y_Ctrl, m_dummyPad->m_Offset.y(), internalUnits );
+    PutValueInLocalUnits( *m_ShapeOffset_X_Ctrl, m_dummyPad->m_Offset.x, internalUnits );
+    PutValueInLocalUnits( *m_ShapeOffset_Y_Ctrl, m_dummyPad->m_Offset.y, internalUnits );
 
-    if( m_dummyPad->m_DeltaSize.x() != ZERO_LENGTH )
+    if( m_dummyPad->m_DeltaSize.x )
     {
-        CTR_PUT_LENGTH( *m_ShapeDelta_Ctrl, m_dummyPad->m_DeltaSize.x(), internalUnits );
+        PutValueInLocalUnits( *m_ShapeDelta_Ctrl, m_dummyPad->m_DeltaSize.x, internalUnits );
         m_radioBtnDeltaXdir->SetValue(true);
     }
     else
     {
-        CTR_PUT_LENGTH( *m_ShapeDelta_Ctrl, m_dummyPad->m_DeltaSize.y(), internalUnits );
+        PutValueInLocalUnits( *m_ShapeDelta_Ctrl, m_dummyPad->m_DeltaSize.y, internalUnits );
         m_radioBtnDeltaYdir->SetValue(true);
     }
 
-    CTR_PUT_LENGTH( *m_LengthDieCtrl, m_dummyPad->m_LengthDie, internalUnits );
+    PutValueInLocalUnits( *m_LengthDieCtrl, m_dummyPad->m_LengthDie, internalUnits );
 
-    CTR_PUT_LENGTH( *m_NetClearanceValueCtrl,
-        m_dummyPad->m_LocalClearance, internalUnits );
-    CTR_PUT_LENGTH( *m_SolderMaskMarginCtrl,
-        m_dummyPad->m_LocalSolderMaskMargin, internalUnits );
+    PutValueInLocalUnits( *m_NetClearanceValueCtrl, m_dummyPad->m_LocalClearance, internalUnits );
+    PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
+                          m_dummyPad->m_LocalSolderMaskMargin,
+                          internalUnits );
 
     // These 2 parameters are usually < 0, so prepare entering a negative value, if current is 0
-    CTR_PUT_LENGTH( *m_SolderPasteMarginCtrl, m_dummyPad->m_LocalSolderPasteMargin,
+    PutValueInLocalUnits( *m_SolderPasteMarginCtrl,
+                          m_dummyPad->m_LocalSolderPasteMargin,
                           internalUnits );
-    if( m_dummyPad->m_LocalSolderPasteMargin == ZERO_LENGTH )
+    if( m_dummyPad->m_LocalSolderPasteMargin == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) + m_SolderPasteMarginCtrl->GetValue() );
     msg.Printf( wxT( "%.1f" ), m_dummyPad->m_LocalSolderPasteMarginRatio * 100.0 );
 
@@ -614,19 +615,17 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         /* compute the pos 0 value, i.e. pad position for module orient = 0 i.e.
          *  refer to module origin (module position) */
         m_CurrentPad->m_Pos0   = m_CurrentPad->m_Pos;
-        m_CurrentPad->m_Pos0  -= FROM_LEGACY_LU_VEC( Module->m_Pos );
+        m_CurrentPad->m_Pos0  -= Module->m_Pos;
         m_CurrentPad->m_Orient = (g_Pad_Master.m_Orient * isign) + Module->m_Orient;
-        wxPoint p = TO_LEGACY_LU_WXP( m_CurrentPad->m_Pos0 );
-        RotatePoint( &p.x, &p.y, -Module->m_Orient );
-	m_CurrentPad->m_Pos0 = FROM_LEGACY_LU_VEC( p );
+        RotatePoint( &m_CurrentPad->m_Pos0.x, &m_CurrentPad->m_Pos0.y, -Module->m_Orient );
 
         m_CurrentPad->m_Size = g_Pad_Master.m_Size;
-        m_CurrentPad->m_DeltaSize      = g_Pad_Master.m_DeltaSize;
-        m_CurrentPad->m_DeltaSize.y( m_CurrentPad->m_DeltaSize.y() * isign );
-        m_CurrentPad->m_Drill          = g_Pad_Master.m_Drill;
-        m_CurrentPad->m_DrillShape     = g_Pad_Master.m_DrillShape;
-        m_CurrentPad->m_Offset         = g_Pad_Master.m_Offset;
-        m_CurrentPad->m_Offset.y( m_CurrentPad->m_Offset.y() * isign );
+        m_CurrentPad->m_DeltaSize    = g_Pad_Master.m_DeltaSize;
+        m_CurrentPad->m_DeltaSize.y *= isign;
+        m_CurrentPad->m_Drill = g_Pad_Master.m_Drill;
+        m_CurrentPad->m_DrillShape = g_Pad_Master.m_DrillShape;
+        m_CurrentPad->m_Offset     = g_Pad_Master.m_Offset;
+        m_CurrentPad->m_Offset.y  *= isign;
 
         m_CurrentPad->m_LengthDie = g_Pad_Master.m_LengthDie;
 
@@ -696,9 +695,12 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
     aPad->m_PadShape = CodeShape[m_PadShape->GetSelection()];
 
     // Read pad clearances values:
-    aPad->m_LocalClearance = CTR_GET_LENGTH( *m_NetClearanceValueCtrl, internalUnits );
-    aPad->m_LocalSolderMaskMargin = CTR_GET_LENGTH( *m_SolderMaskMarginCtrl, internalUnits );
-    aPad->m_LocalSolderPasteMargin = CTR_GET_LENGTH( *m_SolderPasteMarginCtrl, internalUnits );
+    aPad->m_LocalClearance = ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl,
+                                                      internalUnits );
+    aPad->m_LocalSolderMaskMargin = ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl,
+                                                             internalUnits );
+    aPad->m_LocalSolderPasteMargin = ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl,
+                                                              internalUnits );
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
@@ -711,66 +713,66 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
     aPad->m_LocalSolderPasteMarginRatio = dtmp / 100;
 
     // Read pad position:
-    aPad->m_Pos.x( CTR_GET_LENGTH( *m_PadPosition_X_Ctrl, internalUnits ) );
-    aPad->m_Pos.y( CTR_GET_LENGTH( *m_PadPosition_Y_Ctrl, internalUnits ) );
+    aPad->m_Pos.x = ReturnValueFromTextCtrl( *m_PadPosition_X_Ctrl, internalUnits );
+    aPad->m_Pos.y = ReturnValueFromTextCtrl( *m_PadPosition_Y_Ctrl, internalUnits );
     aPad->m_Pos0  = aPad->m_Pos;
 
     // Read pad drill:
-    aPad->m_Drill.x( CTR_GET_LENGTH( *m_PadDrill_X_Ctrl, internalUnits ) );
-    aPad->m_Drill.y( CTR_GET_LENGTH( *m_PadDrill_Y_Ctrl, internalUnits ) );
+    aPad->m_Drill.x = ReturnValueFromTextCtrl( *m_PadDrill_X_Ctrl, internalUnits );
+    aPad->m_Drill.y = ReturnValueFromTextCtrl( *m_PadDrill_Y_Ctrl, internalUnits );
     if( m_DrillShapeCtrl->GetSelection() == 0 )
     {
         aPad->m_DrillShape = PAD_CIRCLE;
-        aPad->m_Drill.y( aPad->m_Drill.x() );
+        aPad->m_Drill.y    = aPad->m_Drill.x;
     }
     else
         aPad->m_DrillShape = PAD_OVAL;
 
     // Read pad shape size:
-    aPad->m_Size.x( CTR_GET_LENGTH( *m_ShapeSize_X_Ctrl, internalUnits ) );
-    aPad->m_Size.y( CTR_GET_LENGTH( *m_ShapeSize_Y_Ctrl, internalUnits ) );
+    aPad->m_Size.x = ReturnValueFromTextCtrl( *m_ShapeSize_X_Ctrl, internalUnits );
+    aPad->m_Size.y = ReturnValueFromTextCtrl( *m_ShapeSize_Y_Ctrl, internalUnits );
     if( aPad->m_PadShape == PAD_CIRCLE )
-        aPad->m_Size.y( aPad->m_Size.x() );
+        aPad->m_Size.y = aPad->m_Size.x;
 
     // Read pad shape delta size:
     // m_DeltaSize.x or m_DeltaSize.y must be NULL. for a trapezoid.
-    //wxSize delta;
-    LENGTH_PCB delta;
-    delta = CTR_GET_LENGTH( *m_ShapeDelta_Ctrl, internalUnits );
-    aPad->m_DeltaSize = m_radioBtnDeltaXdir->GetValue()?
-        VECTOR_PCB::fromXY( delta, ZERO_LENGTH ):
-        VECTOR_PCB::fromXY( ZERO_LENGTH, delta );
+    wxSize delta;
+    if( m_radioBtnDeltaXdir->GetValue() )
+        delta.x = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl, internalUnits );
+    else
+        delta.y = ReturnValueFromTextCtrl( *m_ShapeDelta_Ctrl, internalUnits );
+    aPad->m_DeltaSize = delta;
 
     // Read pad lenght die
-    aPad->m_LengthDie = CTR_GET_LENGTH( *m_LengthDieCtrl, internalUnits );
+    aPad->m_LengthDie = ReturnValueFromTextCtrl( *m_LengthDieCtrl, internalUnits );
 
     // Test bad values (be sure delta values are not to large)
-    // remember DeltaSize.x is the Y size variation TODO: this can be optimized
+    // remember DeltaSize.x is the Y size variation
     bool   error    = false;
-    if( (aPad->m_DeltaSize.x() < ZERO_LENGTH) && (aPad->m_DeltaSize.x() <= -aPad->m_Size.y() ) )
+    if( (aPad->m_DeltaSize.x < 0) && (aPad->m_DeltaSize.x <= -aPad->m_Size.y) )
     {
-        aPad->m_DeltaSize.x( -aPad->m_Size.y() + FROM_LEGACY_LU( 2 ) );
+        aPad->m_DeltaSize.x = -aPad->m_Size.y + 2;
         error = true;
     }
-    if( (aPad->m_DeltaSize.x() > ZERO_LENGTH) && (aPad->m_DeltaSize.x() >= aPad->m_Size.y() ) )
+    if( (aPad->m_DeltaSize.x > 0) && (aPad->m_DeltaSize.x >= aPad->m_Size.y) )
     {
-        aPad->m_DeltaSize.x( aPad->m_Size.y() - FROM_LEGACY_LU( 2 ) );
+        aPad->m_DeltaSize.x = aPad->m_Size.y - 2;
         error = true;
     }
-    if( (aPad->m_DeltaSize.y() < ZERO_LENGTH) && (aPad->m_DeltaSize.y() <= -aPad->m_Size.x() ) )
+    if( (aPad->m_DeltaSize.y < 0) && (aPad->m_DeltaSize.y <= -aPad->m_Size.x) )
     {
-        aPad->m_DeltaSize.y( -aPad->m_Size.x() + FROM_LEGACY_LU( 2 ) );
+        aPad->m_DeltaSize.y = -aPad->m_Size.x + 2;
         error = true;
     }
-    if( (aPad->m_DeltaSize.y() > ZERO_LENGTH) && (aPad->m_DeltaSize.y() >= aPad->m_Size.x() ) )
+    if( (aPad->m_DeltaSize.y > 0) && (aPad->m_DeltaSize.y >= aPad->m_Size.x) )
     {
-        aPad->m_DeltaSize.y( aPad->m_Size.x() - FROM_LEGACY_LU( 2 ) );
+        aPad->m_DeltaSize.y = aPad->m_Size.x - 2;
         error = true;
     }
 
     // Read pad shape offset:
-    aPad->m_Offset.x( CTR_GET_LENGTH( *m_ShapeOffset_X_Ctrl, internalUnits ) );
-    aPad->m_Offset.y( CTR_GET_LENGTH( *m_ShapeOffset_Y_Ctrl, internalUnits ) );
+    aPad->m_Offset.x = ReturnValueFromTextCtrl( *m_ShapeOffset_X_Ctrl, internalUnits );
+    aPad->m_Offset.y = ReturnValueFromTextCtrl( *m_ShapeOffset_Y_Ctrl, internalUnits );
 
     long orient_value = 0;
     msg = m_PadOrientCtrl->GetValue();
@@ -785,17 +787,17 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
     switch( aPad->m_PadShape )
     {
     case PAD_CIRCLE:
-        aPad->m_Offset    = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH ); // wxSize( 0, 0 );
-        aPad->m_DeltaSize = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH );
-        aPad->m_Size.y( aPad->m_Size.x() );
+        aPad->m_Offset    = wxSize( 0, 0 );
+        aPad->m_DeltaSize = wxSize( 0, 0 );
+        aPad->m_Size.y    = aPad->m_Size.x;
         break;
 
     case PAD_RECT:
-        aPad->m_DeltaSize = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH );
+        aPad->m_DeltaSize = wxSize( 0, 0 );
         break;
 
     case PAD_OVAL:
-        aPad->m_DeltaSize = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH );
+        aPad->m_DeltaSize = wxSize( 0, 0 );
         break;
 
     case PAD_TRAPEZOID:
@@ -809,14 +811,14 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
 
     case PAD_CONN:
     case PAD_SMD:
-        aPad->m_Offset = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH );
-        aPad->m_Drill  = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH );
+        aPad->m_Offset = wxSize( 0, 0 );
+        aPad->m_Drill  = wxSize( 0, 0 );
         break;
 
     case PAD_HOLE_NOT_PLATED:
         // Mechanical purpose only:
         // no offset, no net name, no pad name allowed
-        aPad->m_Offset = VECTOR_PCB::fromXY( ZERO_LENGTH, ZERO_LENGTH ); //wxSize( 0, 0 );
+        aPad->m_Offset = wxSize( 0, 0 );
         aPad->SetPadName( wxEmptyString );
         aPad->SetNetname( wxEmptyString );
         break;
@@ -873,8 +875,8 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
     /* Test for incorrect values */
     if( aPromptOnError )
     {
-        if( (aPad->m_Size.x() < aPad->m_Drill.x() )
-           || (aPad->m_Size.y() < aPad->m_Drill.y() ) )
+        if( (aPad->m_Size.x < aPad->m_Drill.x)
+           || (aPad->m_Size.y < aPad->m_Drill.y) )
         {
             DisplayError( NULL, _( "Incorrect value for pad drill: pad drill bigger than pad size" ) );
             return false;
@@ -883,7 +885,7 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
         int padlayers_mask = PadLayerMask & (LAYER_BACK | LAYER_FRONT);
         if( padlayers_mask == 0 )
         {
-            if( aPad->m_Drill.x() != ZERO_LENGTH || aPad->m_Drill.y() != ZERO_LENGTH )
+            if( aPad->m_Drill.x || aPad->m_Drill.y )
             {
                 msg = _( "Error: pad is not on a copper layer and has a hole" );
                 if( aPad->m_Attribut == PAD_HOLE_NOT_PLATED )
@@ -897,8 +899,8 @@ if you do not want this pad plotted in gerber files");
             }
         }
 
-        if( ( aPad->m_Size.x() / 2 <= abs( aPad->m_Offset.x() ) )
-           || ( aPad->m_Size.y() / 2 <= abs( aPad->m_Offset.y() ) ) )
+        if( ( aPad->m_Size.x / 2 <= ABS( aPad->m_Offset.x ) )
+           || ( aPad->m_Size.y / 2 <= ABS( aPad->m_Offset.y ) ) )
         {
             DisplayError( NULL, _( "Incorrect value for pad offset" ) );
             return false;

@@ -328,13 +328,13 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
 {
     wxPoint corner_position;
     int     ii, angle;
-    int     dx = TO_LEGACY_LU( m_Size.x() / 2 ) + aClearanceValue;
-    int     dy = TO_LEGACY_LU( m_Size.y() / 2 ) + aClearanceValue;
+    int     dx = (m_Size.x / 2) + aClearanceValue;
+    int     dy = (m_Size.y / 2) + aClearanceValue;
 
     int     delta = 3600 / aCircleToSegmentsCount;  // rot angle in 0.1 degree
     wxPoint PadShapePos = ReturnShapePos();         /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
-    wxSize  psize = TO_LEGACY_LU_WXS( m_Size );                         /* pad size unsed in RECT and TRAPEZOIDAL pads
+    wxSize  psize = m_Size;                         /* pad size unsed in RECT and TRAPEZOIDAL pads
                                                      * trapezoidal pads are considered as rect
                                                      * pad shape having they boudary box size */
 
@@ -437,8 +437,8 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
 
     default:
     case PAD_TRAPEZOID:
-        psize.x += TO_LEGACY_LU( abs( m_DeltaSize.y() ) );
-        psize.y += TO_LEGACY_LU( abs( m_DeltaSize.x() ) );
+        psize.x += ABS( m_DeltaSize.y );
+        psize.y += ABS( m_DeltaSize.x );
 
     // fall through
     case PAD_RECT:
@@ -572,8 +572,8 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
     wxPoint PadShapePos = aPad.ReturnShapePos();    /* Note: for pad having a shape offset,
                                                      * the pad position is NOT the shape position */
     wxSize  copper_thickness;
-    int     dx = TO_LEGACY_LU( aPad.m_Size.x() / 2 );
-    int     dy = TO_LEGACY_LU( aPad.m_Size.y() / 2 );
+    int     dx = aPad.m_Size.x / 2;
+    int     dy = aPad.m_Size.y / 2;
 
     int     delta = 3600 / aCircleToSegmentsCount; // rot angle in 0.1 degree
 
@@ -684,8 +684,8 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
         // Oval pad support along the lines of round and rectangular pads
         std::vector <wxPoint> corners_buffer;               // Polygon buffer as vector
 
-        int     dx = TO_LEGACY_LU( aPad.m_Size.x() / 2 ) + aThermalGap;     // Cutout radius x
-        int     dy = TO_LEGACY_LU( aPad.m_Size.y() / 2 ) + aThermalGap;     // Cutout radius y
+        int     dx = (aPad.m_Size.x / 2) + aThermalGap;     // Cutout radius x
+        int     dy = (aPad.m_Size.y / 2) + aThermalGap;     // Cutout radius y
 
         wxPoint shape_offset;
 
@@ -839,8 +839,8 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
 
         std::vector <wxPoint> corners_buffer;               // Polygon buffer as vector
 
-        int dx = TO_LEGACY_LU( aPad.m_Size.x() / 2 ) + aThermalGap;         // Cutout radius x
-        int dy = TO_LEGACY_LU( aPad.m_Size.y() / 2 ) + aThermalGap;         // Cutout radius y
+        int dx = (aPad.m_Size.x / 2) + aThermalGap;         // Cutout radius x
+        int dy = (aPad.m_Size.y / 2) + aThermalGap;         // Cutout radius y
 
         // The first point of polygon buffer is left lower corner, second the crosspoint of
         // thermal spoke sides, the third is upper right corner and the rest are rounding
@@ -861,7 +861,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
             RotatePoint( &corner_position, 1800 / aCircleToSegmentsCount );         // Start at half increment offset
             angle_pg = i * delta;
             RotatePoint( &corner_position, angle_pg );                              // Rounding vector rotation
-            corner_position -= TO_LEGACY_LU_WXS( aPad.m_Size / 2 );                                     // Rounding vector + Pad corner offset
+            corner_position -= aPad.m_Size / 2;                                     // Rounding vector + Pad corner offset
             corners_buffer.push_back( wxPoint( corner_position.x, corner_position.y ) );
         }
 

@@ -57,7 +57,7 @@ private:
 
     // List of values to "customize" some tracks and vias
     std::vector <VIA_DIMENSION> m_ViasDimensionsList;
-    std::vector <LENGTH_PCB> m_TracksWidthList;
+    std::vector <int> m_TracksWidthList;
 
 private:
     void OnNetClassesNameLeftClick( wxGridEvent& event ){ event.Skip(); }

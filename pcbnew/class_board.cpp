@@ -20,8 +20,6 @@
 #include "class_zone.h"
 #include "class_marker_pcb.h"
 
-#include "lengthpcb.h"
-
 
 /* This is an odd place for this, but CvPcb won't link if it is
  *  in class_board_item.cpp like I first tried it.
@@ -239,22 +237,21 @@ bool BOARD::SetCurrentNetClass( const wxString& aNetClassName )
     if( m_TrackWidthList.size() == 0 )
     {
         lists_sizes_modified = true;
-        m_TrackWidthList.push_back( ZERO_LENGTH );
+        m_TrackWidthList.push_back( 0 );
     }
 
     /* note the m_ViasDimensionsList[0] and m_TrackWidthList[0] values
      * are always the Netclass values
      */
-    if( TO_LEGACY_LU( m_ViasDimensionsList[0].m_Diameter ) != netClass->GetViaDiameter() )
+    if( m_ViasDimensionsList[0].m_Diameter != netClass->GetViaDiameter() )
         lists_sizes_modified = true;
 
-    m_ViasDimensionsList[0].m_Diameter = FROM_LEGACY_LU( netClass->GetViaDiameter() );
+    m_ViasDimensionsList[0].m_Diameter = netClass->GetViaDiameter();
 
-    /* NOTE: equality comparison on real values is bad... */
-    if( TO_LEGACY_LU( m_TrackWidthList[0] ) != netClass->GetTrackWidth() )
+    if( m_TrackWidthList[0] != netClass->GetTrackWidth() )
         lists_sizes_modified = true;
 
-    m_TrackWidthList[0] = FROM_LEGACY_LU( netClass->GetTrackWidth() );
+    m_TrackWidthList[0] = netClass->GetTrackWidth();
 
     if( m_ViaSizeSelector >= m_ViasDimensionsList.size() )
         m_ViaSizeSelector = m_ViasDimensionsList.size();
@@ -647,13 +644,13 @@ bool BOARD::IsModuleLayerVisible( int layer )
 
 
 
-const wxPoint BOARD::GetPosition() const
+wxPoint& BOARD::GetPosition()
 {
-    return wxPoint ( 0, 0 );
+    static wxPoint dummy( 0, 0 );
+
+    return dummy;   // a reference
 }
 
-void BOARD::SetPosition( const wxPoint& pos ) {
-}
 
 void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 {
@@ -1668,7 +1665,7 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, int aLayerMask )
     {
         D_PAD* pad = m_NetInfo->GetPad(i);
 
-        if( TO_LEGACY_LU_WXP( pad->m_Pos ) != aPosition )
+        if( pad->m_Pos != aPosition )
             continue;
 
         /* Pad found, it must be on the correct layer */
@@ -1699,7 +1696,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
 
         D_PAD* pad = aPadList[idx];
 
-        if( TO_LEGACY_LU_WXP( pad->m_Pos ) == aPosition )       // candidate found
+        if( pad->m_Pos == aPosition )       // candidate found
         {
             // The pad must match the layer mask:
             if( (aLayerMask & pad->m_layerMask) != 0 )
@@ -1712,7 +1709,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
             for( int ii = idx+1; ii <= idxmax; ii++ )
             {
                 pad = aPadList[ii];
-                if( TO_LEGACY_LU_WXP( pad->m_Pos ) != aPosition )
+                if( pad->m_Pos != aPosition )
                     break;
                 if( (aLayerMask & pad->m_layerMask) != 0 )
                     return pad;
@@ -1721,7 +1718,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
             for(  int ii = idx-1 ;ii >=0; ii-- )
             {
                 pad = aPadList[ii];
-                if( TO_LEGACY_LU_WXP( pad->m_Pos ) != aPosition )
+                if( pad->m_Pos != aPosition )
                     break;
                 if( (aLayerMask & pad->m_layerMask) != 0 )
                     return pad;
@@ -1731,9 +1728,9 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
             return 0;
         }
 
-        if( TO_LEGACY_LU( pad->m_Pos.x() ) == aPosition.x )   // Must search considering Y coordinate
+        if( pad->m_Pos.x == aPosition.x )   // Must search considering Y coordinate
         {
-            if( TO_LEGACY_LU( pad->m_Pos.y() ) < aPosition.y )  // Must search after this item
+            if(pad->m_Pos.y < aPosition.y)  // Must search after this item
             {
                 idx += delta;
                 if( idx > idxmax )
@@ -1746,7 +1743,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
                     idx = 0;
             }
         }
-        else if( TO_LEGACY_LU( pad->m_Pos.x() ) < aPosition.x ) // Must search after this item
+        else if( pad->m_Pos.x < aPosition.x ) // Must search after this item
         {
             idx += delta;
             if( idx > idxmax )
@@ -1770,9 +1767,9 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
  */
 static bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
 {
-    if( ref->m_Pos.x() == comp->m_Pos.x() )
-        return ref->m_Pos.y() < comp->m_Pos.y();
-    return ref->m_Pos.x() < comp->m_Pos.x();
+    if( ref->m_Pos.x == comp->m_Pos.x )
+        return ref->m_Pos.y < comp->m_Pos.y;
+    return ref->m_Pos.x < comp->m_Pos.x;
 }
 
 
@@ -2003,13 +2000,13 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
                     if( track->GetState( BEGIN_ONPAD ) )
                     {
                         D_PAD * pad = (D_PAD *) track->start;
-                        lenDie += TO_LEGACY_LU_DBL( pad->m_LengthDie );
+                        lenDie += (double) pad->m_LengthDie;
                     }
 
                     if( track->GetState( END_ONPAD ) )
                     {
                         D_PAD * pad = (D_PAD *) track->end;
-                        lenDie += TO_LEGACY_LU_DBL( pad->m_LengthDie );
+                        lenDie += (double) pad->m_LengthDie;
                     }
                 }
             }
@@ -2033,13 +2030,13 @@ TRACK* BOARD::MarkTrace( TRACK* aTrace,
                 if( track->GetState( BEGIN_ONPAD ) )
                 {
                     D_PAD * pad = (D_PAD *) track->start;
-                    lenDie += TO_LEGACY_LU_DBL( pad->m_LengthDie );
+                    lenDie += (double) pad->m_LengthDie;
                 }
 
                 if( track->GetState( END_ONPAD ) )
                 {
                     D_PAD * pad = (D_PAD *) track->end;
-                    lenDie += TO_LEGACY_LU_DBL( pad->m_LengthDie );
+                    lenDie += (double) pad->m_LengthDie;
                 }
             }
         }
