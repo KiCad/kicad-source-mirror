@@ -86,14 +86,14 @@ more.
 
 FMT_ENG stands for "format string for ENGineering units used out in the file". A
 define is needed simply to provide consistency across many sites of usage. BIUs
-will be scaled before being written to disk in every most every case, and since
+will be scaled before being written to disk in most every case, and since
 scaling is a multiplication, it means casting one of the factors to BFU, and
 then this product is output with a printf() style function using the FMT_ENG
 string segment.
 
 That is, the FMT_ENG will be suitable for use with a BFU type. When BFU is set
 to double, then FMT_ENG will be set to "%.6g". When BFU is set to long double
-then FMT_ENG will be set to "%.6lg". For example:
+then FMT_ENG will be set to "%.6Lg". For example:
 
 #if USE_DOUBLE_BFU
 typedef double          BFU;
