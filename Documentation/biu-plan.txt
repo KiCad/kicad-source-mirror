@@ -1,0 +1,125 @@
+Proposed Plan for adding Nano Meters into PCBNEW as the Board Internal Unit
+===========================================================================
+
+General:
+=======
+
+With nano meters as the Board Internal Unit (BIU), a 32 bit signed integer can
+only hold about 2 meters of positive length and 2 meters of negative length.
+Moreover, because most of the bits within a 32 bit integer can be "used up" to
+hold a typical length within a board, it is very likely that if pure 32 bit
+integer math is done, such as the multiplication of two integers in order to
+calculate a hypotenuse, then there will be an overflow within the 32 bit
+integer. Another way to think of the BIU acronym is "Board Integer Unit" instead
+of as Board Internal Unit.
+
+Therefore all intermediate products, quotients, trig, and exponential
+calculations should be done using some larger floating point type. Distances
+that do not have to be rounded back to integer can and should stay as floating
+point. The typedef name of this floating point type is BFU (Board Float Units).
+The engineering units on a BFU are the same as on a BIU. A typedef is nice so
+that we can toggle between double and "long double" for various compilations,
+and so that when performing casts, these are brief.
+
+There should be printf() style format strings for the BFU enclosed within
+a #define and its name should be FMT_BFU.  This format string will be used
+at least for saving BOARD and MODULE files, and perhaps more.  A define is needed
+in case we switch between double and long double.  BIUs will be scaled before
+being written to disk in every case that I can think of, and since scaling is
+a multiplication, it means casting one of the factors to BFU, and then this
+product is output with a printf() style function using the FMT_BFU.
+
+BIUs are only used when a BOARD or MODULE is in RAM. A BIU is equivalent to
+either a 1) deci-mil or 2) nanometer, depending on how the source code is
+compiled. Form 1) is needed only during the preparation phase of the source code
+transition to nanometers. After the transition, only nanometers will be used in
+the compilation. No runtime switching is needed or wanted. Again, BIUs can only
+be one or the other for a given compilation, and this will swing based on a
+single #define.
+
+We may want to actually use "BIU" as our integer type in source code. This would
+give us the ability to easily modify it. But it might also make the source code
+more readable, and keep the type information out of the variable name. This
+would mean having a point and/or size class based on BIU as the contained
+integer types.  I think this is a nice to have, but not immediately mandatory.
+
+There will be a number of places within the source code which will have to be
+doctored up to use the BFU casting. It will take some time to find all these
+sites. During this time it should be possible to continue using deci-mils as the
+BIU for source compilation.
+
+There are a quite a number of path ways in and out of BOARDs and MODULEs. Most
+everyone of these pathways involve conversion or scaling of BIUs. An example of
+a pathway in is a BOARD disk file loading function. An example of a pathway out
+of a BOARD is a disk file saving function. Likewise for MODULEs. We can
+characterize the load and save functions by their source and destination
+representations of lengths.
+
+BOARDs and MODULEs will soon have a new format, which is basically the existing
+format expressed in um or nm (TBD) rather than in deci-mils. For discussion, we
+will say this new format is in mm, even though it may end up being in um. In
+another year or two we will switch to s-expressions, or sooner if there is a
+volunteer.
+
+Here are the required immediate need BOARD load functions:
+
+1) Legacy to deci-mil loader. This loader uses a floating point scaling factor
+of unity, since destination is a RAM BOARD using deci-mils as its BIU.
+
+2) Legacy to nanometer loader. This loader uses a floating point scaling factor
+of ________, since destination is a RAM BOARD using nanometers as its BIU, and
+the source format is using deci-mils.
+
+3) mm to nanometer loader.  This loader uses a floating point scaling factor
+of 1000000, since the destination is a RAM BOARD using nanometers as its BIU.
+
+There is no need for a nm to deci-mil loader. (Once somebody saves a file in the
+new format, that format is used going forward, or its backup in the old format.)
+
+Now duplicate the above 3 loader types for MODULEs.
+
+Here are the required immediate need BOARD save functions:
+
+1) deci-mil to deci-mil, using a floating point scaling factor of unity. It
+should be possible to use trailing zero suppression on the deci-mils to get a
+BOARD that is identical to an old BOARD, and this can be used to test the new
+save function, using "diff" with whitespace ignore.  This saver is only in play
+when the BIU is compiled to be deci-mils.
+
+2) nanometer to mm, using a floating point scaling factor of 1/1000000. This
+saver is only in play when the BIU is compiled to be nanometers.
+
+Now duplicate the above 3 saver types for MODULEs.
+
+New BOARD and MODULE files will have a new field in them identifying the
+engineering units used, say mm.
+
+In actuality, the source code to all 3 loaders, and to all 3 savers can be the
+same source code with a single variable in each case for scaling.
+
+All 6 loaders and all 6 savers should be written in parallel with existing
+loaders and savers for this same purpose, so that we can toggle usage back and
+forth between the two for awhile. This means we do not gut existing savers and
+loaders until the new ones are debugged and stable.
+
+The new savers and loaders are to be done in the context of a plug-in
+architecture, described elsewhere.
+
+
+User Interface Changes:
+======================
+
+All these changes have to be done in a way where they hinge on one #ifdef.
+
+*) The grid dimension choices will have to be changed.
+
+*) The drawing routines will have to be changed to handle the case that BIU is
+compiled to be nm. Work towards getting legacy drawing code capable of handling
+a compile time #define to control a single scaling factor. Only the scaling
+factor should need be changed in the final state. Up until then, the work
+required is to inject the BFU casting where needed along with the scaling
+factor(s).
+
+8) Remove any funky imperial to metric conversion functions which tried to hide/mask
+problems with lack of BIU precision.
+
