@@ -24,7 +24,7 @@
  */
 
 /**
- * @file pcbnew/block.cpp
+ * @file block.cpp
  */
 
 
@@ -103,7 +103,10 @@ public:
 
 private:
     void ExecuteCommand( wxCommandEvent& event );
-    void OnCancel( wxCommandEvent& event ) { EndModal( -1 ); }
+    void OnCancel( wxCommandEvent& event )
+    {
+        EndModal( wxID_CANCEL );
+    }
     void checkBoxClicked( wxCommandEvent& aEvent )
     {
         if( m_Include_Modules->GetValue() )
@@ -116,19 +119,19 @@ private:
 
 static bool InstallBlockCmdFrame( PCB_BASE_FRAME* parent, const wxString& title )
 {
-    int     nocmd;
     wxPoint oldpos = parent->GetScreen()->GetCrossHairPosition();
 
     parent->DrawPanel->m_IgnoreMouseEvents = true;
-    DIALOG_BLOCK_OPTIONS dlg( parent, title );
+    DIALOG_BLOCK_OPTIONS * dlg = new DIALOG_BLOCK_OPTIONS( parent, title );
 
-    nocmd = dlg.ShowModal();
+    int cmd = dlg->ShowModal();
+    dlg->Destroy();
 
     parent->GetScreen()->SetCrossHairPosition( oldpos );
     parent->DrawPanel->MoveCursorToCrossHair();
     parent->DrawPanel->m_IgnoreMouseEvents = false;
 
-    return nocmd ? false : true;
+    return cmd == wxID_OK;
 }
 
 
@@ -171,7 +174,7 @@ void DIALOG_BLOCK_OPTIONS::ExecuteCommand( wxCommandEvent& event )
     blockDrawItems = m_DrawBlockItems->GetValue();
     blockIncludeItemsOnInvisibleLayers = m_checkBoxIncludeInvisible->GetValue();
 
-    EndModal( 0 );
+    EndModal( wxID_OK );
 }
 
 
@@ -285,7 +288,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     if( !GetScreen()->m_BlockLocate.GetCount()
         && GetScreen()->m_BlockLocate.m_Command != BLOCK_ZOOM )
     {
-        if( !InstallBlockCmdFrame( this, _( "Block Operation" ) ) )
+        if( InstallBlockCmdFrame( this, _( "Block Operation" ) ) == false )
         {
             cancelCmd = true;
 

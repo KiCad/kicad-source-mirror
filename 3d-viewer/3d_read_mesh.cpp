@@ -520,7 +520,7 @@ int S3D_MASTER::ReadGeometry( FILE* file, int* LineNum )
                         {
                             int kk = coordIndex[jj] * 3;
 
-                            if( (kk < 0) || ((kk + 3) > points.size()) )
+                            if( (kk < 0) || ((kk + 3) > (int)points.size()) )
                             {
                                 wxLogError( wxT( "3D geometry index read error <%s> at line %d." ),
                                             GetChars( FROM_UTF8( text ) ), *LineNum );
