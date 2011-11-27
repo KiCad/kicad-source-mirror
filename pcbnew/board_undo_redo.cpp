@@ -84,39 +84,73 @@ BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem );
  *   - if a call to SaveCopyInUndoList was forgotten in Pcbnew
  *   - in zones outlines, when a change in one zone merges this zone with an other
  * This function avoids a Pcbnew crash
+ * Before using this function to test existence of items,
+ * it must be called with aItem = NULL to prepare the list
  * @param aPcb = board to test
  * @param aItem = item to find
+ *              = NULL to build the list of existing items
  */
 static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
 {
-    BOARD_ITEM* item;
+    static std::vector<BOARD_ITEM*> itemsList;
 
-    // search in tracks:
-    for( item = aPcb->m_Track; item != NULL; item = item->Next() )
-        if( item == aItem )
-            return true;
+    if( aItem == NULL ) // Build list
+    {
+        // Count items to store in itemsList:
+        int icnt = 0;
+        BOARD_ITEM* item;
 
-    // search in modules:
-    for( item = aPcb->m_Modules; item != NULL; item = item->Next() )
-        if( item == aItem )
-            return true;
+        // Count tracks:
+        for( item = aPcb->m_Track; item != NULL; item = item->Next() )
+            icnt++;
 
-    // Search in drawings
-    for( item = aPcb->m_Drawings; item != NULL; item = item->Next() )
-        if( item == aItem )
-            return true;
+        // Count modules:
+        for( item = aPcb->m_Modules; item != NULL; item = item->Next() )
+            icnt++;
 
-    // Search in zones outlines
-    for( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
-        if( aPcb->GetArea( ii ) == aItem )
-            return true;
+        // Count drawings
+        for( item = aPcb->m_Drawings; item != NULL; item = item->Next() )
+            icnt++;
 
-    // search in zones segm:
-    for( item = aPcb->m_Zone; item != NULL; item = item->Next() )
-        if( item == aItem )
-            return true;
+        // Count zones outlines
+        icnt +=  aPcb->GetAreaCount();
 
-    return false;
+        // Count zones segm (now obsolete):
+        for( item = aPcb->m_Zone; item != NULL; item = item->Next() )
+             icnt++;
+
+        // Build candidate list:
+        itemsList.clear();
+        itemsList.reserve(icnt);
+
+        // Store items in list:
+        // Append tracks:
+        for( item = aPcb->m_Track; item != NULL; item = item->Next() )
+            itemsList.push_back( item );
+
+        // Append modules:
+        for( item = aPcb->m_Modules; item != NULL; item = item->Next() )
+            itemsList.push_back( item );
+
+        // Append drawings
+        for( item = aPcb->m_Drawings; item != NULL; item = item->Next() )
+            itemsList.push_back( item );
+
+        // Append zones outlines
+        for( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
+            itemsList.push_back( aPcb->GetArea( ii ) );
+
+        // Append zones segm:
+        for( item = aPcb->m_Zone; item != NULL; item = item->Next() )
+            itemsList.push_back( item );
+
+        // Sort list
+        std::sort( itemsList.begin(), itemsList.end() );
+        return false;
+    }
+
+    // search in list:
+    return std::binary_search( itemsList.begin(), itemsList.end(), aItem );
 }
 
 
@@ -504,11 +538,19 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
+
+    TestForExistingItem( GetBoard(), NULL ); // Build list of existing items, for integrity test
     for( int ii = aList->GetCount()-1; ii >= 0 ; ii--  )
     {
         item = (BOARD_ITEM*) aList->GetPickedItem( ii );
         wxASSERT( item );
-#if 1
+
+        /* Test for existence of item on board.
+         * It could be deleted, and no more on board:
+         *   - if a call to SaveCopyInUndoList was forgotten in Pcbnew
+         *   - in zones outlines, when a change in one zone merges this zone with an other
+         * This test avoids a Pcbnew crash
+         */
         if( aList->GetPickedItemStatus( ii ) != UR_DELETED )
         {
             if( !TestForExistingItem( GetBoard(), item ) )
@@ -516,12 +558,12 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 // Remove this non existant item
                 aList->RemovePicker( ii );
                 ii++;       // the current item was removed, ii points now the next item
-                            // whe must decrement it because it will be incremented
+                            // decrement it because it will be incremented later
                 not_found = true;
                 continue;
             }
         }
-#endif
+
         item->m_Flags = 0;
 
         // see if we must rebuild ratsnets and pointers lists
