@@ -283,7 +283,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     for ( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
 
-    SetBoard( new BOARD( NULL, this ) );
+    SetBoard( new BOARD( this ) );
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
 

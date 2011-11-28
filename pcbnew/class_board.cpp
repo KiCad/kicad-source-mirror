@@ -32,14 +32,14 @@ BOARD_DESIGN_SETTINGS boardDesignSettings;
 
 
 
-BOARD::BOARD( EDA_ITEM* parent, PCB_BASE_FRAME* frame ) :
-    BOARD_ITEM( (BOARD_ITEM*)parent, PCB_T ),
+BOARD::BOARD( PCB_BASE_FRAME* frame ) :
+    BOARD_ITEM( (BOARD_ITEM*) NULL, PCB_T ),
     m_NetClasses( this )
 {
     m_PcbFrame = frame;
     m_Status_Pcb    = 0;                    // Status word: bit 1 = calculate.
-    SetBoardDesignSettings(&boardDesignSettings);
-    SetColorsSettings(&g_ColorsSettings);
+    SetBoardDesignSettings( &boardDesignSettings );
+    SetColorsSettings( &g_ColorsSettings );
     m_NbNodes     = 0;                      // Number of connected pads.
     m_NbNoconnect = 0;                      // Number of unconnected nets.
 
