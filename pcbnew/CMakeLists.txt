@@ -126,7 +126,9 @@ set(PCBNEW_SRCS
     hotkeys_board_editor.cpp
     hotkeys_module_editor.cpp
     initpcb.cpp
+#    io_mgr.cpp
     ioascii.cpp
+#    kicad_plugin.cpp
     layer_widget.cpp
     librairi.cpp
     loadcmp.cpp

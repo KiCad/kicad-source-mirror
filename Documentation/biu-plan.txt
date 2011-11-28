@@ -33,14 +33,6 @@ in the BIU coordinate system. Points falling on the snap grid are evenly spaced
 in X and Y directions and are some integer multiple apart in this 2D space,
 greater than one BIU.
 
-*) Metric Board. This is a pcb board that has a great number of coordinates and
-distances that happen to be some multiple of the BIU that is also a multiple of
-a metric engineering unit such as micrometers.
-
-*) Imperial Board.  This is a pcb board that has a great number of coordinates and
-distances that happen to be some multiple of the BIU that is also a multiple of
-an imperial engineering unit such as mils or inches.
-
 Assumptions:
 ===========
 
@@ -97,10 +89,10 @@ then FMT_ENG will be set to "%.6Lg". For example:
 
 #if USE_DOUBLE_BFU
 typedef double          BFU;
-#define FMT_ENG         ".%6g"
+#define FMT_ENG         ".%10g"
 #else
 typedef long double     BFU;
-#define FMT_ENG         ".%6Lg"
+#define FMT_ENG         ".%10Lg"
 #endif
 
 A format string can then be built up using compile time concatenation of
@@ -158,7 +150,7 @@ Here are the required immediate need BOARD load functions:
 of unity, since destination is a RAM BOARD using deci-mils as its BIU.
 
 2) Legacy to nanometer loader. This loader uses a floating point scaling factor
-of ________, since destination is a RAM BOARD using nanometers as its BIU, and
+of 2540, since destination is a RAM BOARD using nanometers as its BIU, and
 the source format is using deci-mils.
 
 3) mm to nanometer loader.  This loader uses a floating point scaling factor

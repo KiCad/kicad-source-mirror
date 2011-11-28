@@ -4,6 +4,14 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2011-Nov-27 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+  PCBNew
+  * Add PLUGIN and IO_MGR classes.
+  * Remove one argument from BOARD constructor,
+  * add BOARD::SetWindowFrame()
+
 2011-sept-13 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================
   PCBNew locate code refactoring.

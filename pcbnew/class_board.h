@@ -161,6 +161,12 @@ private:
 
 public:
     PCB_BASE_FRAME*      m_PcbFrame;                   // Window of visualization
+
+    void SetWindowFrame( PCB_BASE_FRAME* aFrame )
+    {
+        m_PcbFrame = aFrame;
+    }
+
     EDA_RECT             m_BoundaryBox;                // Board size and position
 
     /// Flags used in ratsnest calculation and update.
@@ -231,7 +237,7 @@ private:
     void chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* aList );
 
 public:
-    BOARD( EDA_ITEM* aParent, PCB_BASE_FRAME* frame );
+    BOARD( PCB_BASE_FRAME* frame );
     ~BOARD();
 
     /**
