@@ -496,7 +496,7 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
             break;
 
         case 'L':
-    	    int lengthdie;
+            int lengthdie;
             nn    = sscanf( PtLine, "%d", &lengthdie );
             m_LengthDie = lengthdie;
             break;
@@ -765,7 +765,7 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
         frame->AppendMsgPanel( _( "Drill X / Y" ), Line, RED );
     }
 
-    int module_orient = module ? module->m_Orient : 0;
+    int module_orient = module ? module->GetOrientation() : 0;
 
     if( module_orient )
         Line.Printf( wxT( "%3.1f(+%3.1f)" ),

@@ -643,15 +643,6 @@ bool BOARD::IsModuleLayerVisible( int layer )
 }
 
 
-
-wxPoint& BOARD::GetPosition()
-{
-    static wxPoint dummy( 0, 0 );
-
-    return dummy;   // a reference
-}
-
-
 void BOARD::Add( BOARD_ITEM* aBoardItem, int aControl )
 {
     if( aBoardItem == NULL )

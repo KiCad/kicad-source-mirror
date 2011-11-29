@@ -21,14 +21,14 @@ public:
     TEXTE_PCB( TEXTE_PCB* textepcb );
     ~TEXTE_PCB();
 
-    /**
-     * Function GetPosition
-     * returns the position of this object.
-     * @return wxPoint& - The position of this object, non-const so it can be changed
-     */
-    wxPoint& GetPosition()
+    const wxPoint GetPosition() const           // is an overload
     {
         return m_Pos;   // within EDA_TEXT
+    }
+
+    void SetPosition( const wxPoint& aPos )     // is an overload
+    {
+        m_Pos = aPos;   // within EDA_TEXT
     }
 
     /**

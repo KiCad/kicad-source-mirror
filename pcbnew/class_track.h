@@ -127,6 +127,13 @@ public:
         return m_Start;  // it had to be start or end.
     }
 
+    const wxPoint GetPosition() const       // overload
+    {
+        return m_Start;  // it had to be start or end.
+    }
+
+    void SetPosition( const wxPoint& aPos ) {  m_Start = aPos; }    // overload
+
     EDA_RECT GetBoundingBox() const;
 
     /**
@@ -465,18 +472,12 @@ public:
      */
     void ReturnLayerPair( int* top_layer, int* bottom_layer ) const;
 
-    /**
-     * Function GetPosition
-     * returns the position of this object.
-     * @return const wxPoint& - The position of this object.
-     */
-    wxPoint& GetPosition()
+    const wxPoint GetPosition() const   // overload
     {
         return m_Start;
     }
 
-
-    void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }
+    void SetPosition( const wxPoint& aPoint ) { m_Start = aPoint;  m_End = aPoint; }    // overload
 
     /**
      * Function GetClass

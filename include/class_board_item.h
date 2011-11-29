@@ -76,9 +76,16 @@ public:
     /**
      * Function GetPosition
      * returns the position of this object.
-     * @return wxPoint& - The position of this object, non-const so it can be changed
+     * @return const wxPoint - The position of this object
      */
-    virtual wxPoint& GetPosition() = 0;
+    virtual const wxPoint GetPosition() const = 0;
+
+     /**
+      * Function SetPosition
+      * sets the position of this object.
+      * @param aPos is the new position of this object
+      */
+    virtual void SetPosition( const wxPoint& aPos ) = 0;
 
     /**
      * Function GetLayer
@@ -313,10 +320,9 @@ public:
     {}
 
     //-----< satisfy some virtual functions >------------------------------
-    wxPoint& GetPosition()
+    const wxPoint GetPosition()
     {
-        static wxPoint dummy;
-        return dummy;
+        return wxPoint(0, 0);   // dummy
     }
 
     void Draw( EDA_DRAW_PANEL* DrawPanel, wxDC* DC,

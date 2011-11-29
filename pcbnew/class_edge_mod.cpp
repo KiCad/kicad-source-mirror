@@ -60,17 +60,18 @@ void EDGE_MODULE::Copy( EDGE_MODULE* source )
 
 void EDGE_MODULE::SetDrawCoord()
 {
-    MODULE* Module = (MODULE*) m_Parent;
+    MODULE* module = (MODULE*) m_Parent;
 
     m_Start = m_Start0;
     m_End   = m_End0;
 
-    if( Module )
+    if( module )
     {
-        RotatePoint( &m_Start.x, &m_Start.y, Module->m_Orient );
-        RotatePoint( &m_End.x, &m_End.y, Module->m_Orient );
-        m_Start += Module->m_Pos;
-        m_End   += Module->m_Pos;
+        RotatePoint( &m_Start.x, &m_Start.y, module->GetOrientation() );
+        RotatePoint( &m_End.x,   &m_End.y,   module->GetOrientation() );
+
+        m_Start += module->m_Pos;
+        m_End   += module->m_Pos;
     }
 }
 
@@ -196,7 +197,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         {
             wxPoint& pt = points[ii];
 
-            RotatePoint( &pt.x, &pt.y, module->m_Orient );
+            RotatePoint( &pt.x, &pt.y, module->GetOrientation() );
             pt += module->m_Pos - offset;
         }
 

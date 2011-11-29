@@ -143,14 +143,18 @@ bool DIMENSION::ReadDimensionDescr( LINE_READER* aReader )
         if( Line[0] == 'P' )
         {
             int normal_display = 1;
+            int orientation;
+            int thickness;
             sscanf( Line + 2, " %d %d %d %d %d %d %d",
                     &m_Text->m_Pos.x, &m_Text->m_Pos.y,
                     &m_Text->m_Size.x, &m_Text->m_Size.y,
-                    &m_Text->m_Thickness, &m_Text->m_Orient,
+                    &thickness, &orientation,
                     &normal_display );
 
             m_Text->m_Mirror = normal_display ? false : true;
             m_Pos = m_Text->m_Pos;
+            m_Text->SetOrientation( orientation );
+            m_Text->SetThickness( thickness );
             continue;
         }
 
@@ -260,18 +264,21 @@ void DIMENSION::Move(const wxPoint& offset)
 }
 
 
-void DIMENSION::Rotate(const wxPoint& aRotCentre, int aAngle)
+void DIMENSION::Rotate( const wxPoint& aRotCentre, int aAngle )
 {
     RotatePoint( &m_Pos, aRotCentre, aAngle );
 
     RotatePoint( &m_Text->m_Pos, aRotCentre, aAngle );
-    m_Text->m_Orient += aAngle;
 
-    if( m_Text->m_Orient >= 3600 )
-        m_Text->m_Orient -= 3600;
+    int newAngle = m_Text->GetOrientation() + aAngle;
 
-    if( ( m_Text->m_Orient > 900 ) && ( m_Text->m_Orient <2700 ) )
-        m_Text->m_Orient -= 1800;
+    if( newAngle >= 3600 )
+        newAngle -= 3600;
+
+    if( newAngle > 900  &&  newAngle < 2700 )
+        newAngle -= 1800;
+
+    m_Text->SetOrientation( newAngle );
 
     RotatePoint( &m_crossBarOx, &m_crossBarOy, aRotCentre.x, aRotCentre.y, aAngle );
     RotatePoint( &m_crossBarFx, &m_crossBarFy, aRotCentre.x, aRotCentre.y, aAngle );
@@ -290,7 +297,7 @@ void DIMENSION::Rotate(const wxPoint& aRotCentre, int aAngle)
 }
 
 
-void DIMENSION::Flip(const wxPoint& aCentre )
+void DIMENSION::Flip( const wxPoint& aCentre )
 {
     Mirror( aCentre );
     SetLayer( ChangeSideNumLayer( GetLayer() ) );
@@ -300,16 +307,18 @@ void DIMENSION::Flip(const wxPoint& aCentre )
 void DIMENSION::Mirror(const wxPoint& axis_pos)
 {
 #define INVERT( pos )       (pos) = axis_pos.y - ( (pos) - axis_pos.y )
-#define INVERT_ANGLE( phi ) (phi) = -(phi)
     INVERT( m_Pos.y );
     INVERT( m_Text->m_Pos.y );
-    INVERT_ANGLE( m_Text->m_Orient );
 
-    if( m_Text->m_Orient >= 3600 )
-        m_Text->m_Orient -= 3600;
+    // invert angle
+    int newAngle = m_Text->GetOrientation();
+    if( newAngle >= 3600 )
+        newAngle -= 3600;
 
-    if( ( m_Text->m_Orient > 900 ) && ( m_Text->m_Orient < 2700 ) )
-        m_Text->m_Orient -= 1800;
+    if( newAngle > 900  &&  newAngle < 2700 )
+        newAngle -= 1800;
+
+    m_Text->SetOrientation( newAngle );
 
     INVERT( m_crossBarOy );
     INVERT( m_crossBarFy );
@@ -352,7 +361,7 @@ bool DIMENSION::Save( FILE* aFile ) const
     fprintf( aFile, "Po %d %d %d %d %d %d %d\n",
              m_Text->m_Pos.x, m_Text->m_Pos.y,
              m_Text->m_Size.x, m_Text->m_Size.y,
-             m_Text->m_Thickness, m_Text->m_Orient,
+             m_Text->GetThickness(), m_Text->GetOrientation(),
              m_Text->m_Mirror ? 0 : 1 );
 
     fprintf( aFile, "Sb %d %d %d %d %d %d\n", S_SEGMENT,
@@ -410,12 +419,12 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 
     /* calculate the size of the dimension (text + line above the text) */
     ii = m_Text->m_Size.y +
-         m_Text->m_Thickness + (m_Width * 3);
+         m_Text->GetThickness() + (m_Width * 3);
 
     deltax = m_featureLineDOx - m_featureLineGOx;
     deltay = m_featureLineDOy - m_featureLineGOy;
 
-    /* Calculate dimension value */
+    // Calculate dimension value
     mesure = wxRound(hypot( (double) deltax, (double) deltay ) );
 
     if( deltax || deltay )
@@ -423,10 +432,10 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     else
         angle = 0.0;
 
-    /* Calculation of parameters X and Y dimensions of the arrows and lines. */
+    // Calculation of parameters X and Y dimensions of the arrows and lines.
     hx = hy = ii;
 
-    /* Taking into account the slope of the side lines. */
+    // Taking into account the slope of the side lines.
     if( mesure )
     {
         hx = (abs) ( (int) ( ( (double) deltay * hx ) / mesure ) );
@@ -487,16 +496,17 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     m_Pos.x = m_Text->m_Pos.x = (m_crossBarFx + m_featureLineGFx) / 2;
     m_Pos.y = m_Text->m_Pos.y = (m_crossBarFy + m_featureLineGFy) / 2;
 
-    m_Text->m_Orient = -(int) (angle * 1800 / M_PI);
+    int newAngle = -(int) (angle * 1800 / M_PI);
+    if( newAngle < 0 )
+        newAngle += 3600;
 
-    if( m_Text->m_Orient < 0 )
-        m_Text->m_Orient += 3600;
+    if( newAngle >= 3600 )
+        newAngle -= 3600;
 
-    if( m_Text->m_Orient >= 3600 )
-        m_Text->m_Orient -= 3600;
+    if( newAngle > 900  &&  newAngle < 2700 )
+        newAngle -= 1800;
 
-    if( (m_Text->m_Orient > 900) && (m_Text->m_Orient <2700) )
-        m_Text->m_Orient -= 1800;
+    m_Text->SetOrientation( newAngle );
 
     if( !aDoNotChangeText )
     {
