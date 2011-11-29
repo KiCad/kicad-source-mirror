@@ -41,7 +41,9 @@ enum Mod_Attribut       /* Attributes used for modules */
 
 class MODULE : public BOARD_ITEM
 {
+
 public:
+    int                 m_Orient;      // orientation in 0.1 degrees
     wxPoint           m_Pos;           // Real coord on board
     DLIST<D_PAD>      m_Pads;          /* Pad list (linked list) */
     DLIST<BOARD_ITEM> m_Drawings;      /* Graphic items list (linked list) */
@@ -57,7 +59,6 @@ public:
                                               * reannotation of the schematic */
 
     int           m_Attributs;          /* Flag bits ( see Mod_Attribut ) */
-    int           m_Orient;             /* orientation in 0.1 degrees */
     int           flag;                 /* Use to trace ratsnest and auto routing. */
     int           m_ModuleStatus;       /* For autoplace: flags (LOCKED, AUTOPLACED) */
     EDA_RECT      m_BoundaryBox;        // Bounding box : coordinates on board, real orientation.
@@ -100,7 +101,6 @@ public:
 
     void Copy( MODULE* Module );        // Copy structure
 
-
     /*
      * Function Add
      * adds the given item to this MODULE and takes ownership of its memory.
@@ -131,21 +131,16 @@ public:
      */
     EDA_RECT GetBoundingBox() const;
 
-    /**
-     * Function GetPosition
-     * returns the position of this object.
-     * Required by pure virtual BOARD_ITEM::GetPosition()
-     * @return const wxPoint& - The position of this object.
-     */
-    wxPoint& GetPosition()
+    const wxPoint GetPosition() const   // overload
     {
         return m_Pos;
     }
 
-    // Moves
-    void SetPosition( const wxPoint& newpos );
+    void SetPosition( const wxPoint& aPos );  // overload
 
     void SetOrientation( int newangle );
+
+    int GetOrientation() const { return m_Orient; }
 
     /**
      * Function Move

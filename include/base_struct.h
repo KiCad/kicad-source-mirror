@@ -239,7 +239,6 @@ public:
         m_Size.x = pos.x - m_Pos.x; m_Size.y = pos.y - m_Pos.y;
     }
 
-
     /**
      * Function Intersects
      * @return bool - true if the argument rectangle intersects this rectangle.
@@ -729,12 +728,14 @@ enum FILL_T {
  */
 class EDA_TEXT
 {
+
 public:
+    int      m_Thickness;               /* pen size used to draw this text */
+    int      m_Orient;                  /* Orient in 0.1 degrees */
+
     wxString m_Text;                    /* text! */
     wxPoint  m_Pos;                     /* XY position of anchor text. */
     wxSize   m_Size;                    /* XY size of text */
-    int      m_Thickness;               /* pen size used to draw this text */
-    int      m_Orient;                  /* Orient in 0.1 degrees */
     bool     m_Mirror;                  /* Display Normal / mirror */
     int      m_Attributs;               /* flags (visible...) */
     bool     m_Italic;                  /* true to simulate (or use if exists)
@@ -766,6 +767,9 @@ public:
      */
     int GetThickness() const { return m_Thickness; };
 
+    void SetOrientation( int aOrientation ) { m_Orient = aOrientation; }
+    int  GetOrientation() const { return m_Orient; }
+
     /**
      * Function SetSize
      * sets text size.
@@ -779,6 +783,9 @@ public:
      * @return wxSize - text size.
      */
     wxSize GetSize() const { return m_Size; };
+
+    //void SetPosition( const wxPoint& aPoint ) { m_Pos = aPoint; }
+    //wxPoint GetPosition() const { return m_Pos; }
 
     int GetLength() const { return m_Text.Length(); };
 

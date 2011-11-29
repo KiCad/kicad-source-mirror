@@ -643,7 +643,7 @@ void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
 
     SetGLColor( color );
     s_Text3DZPos  = g_Parm_3D_Visu.m_LayerZcoord[layer];
-    s_Text3DWidth = text->m_Thickness * g_Parm_3D_Visu.m_BoardScale;
+    s_Text3DWidth = text->GetThickness() * g_Parm_3D_Visu.m_BoardScale;
     glNormal3f( 0.0, 0.0, Get3DLayerSide( layer ) );
     wxSize size = text->m_Size;
 
@@ -658,27 +658,27 @@ void EDA_3D_CANVAS::Draw3D_DrawText( TEXTE_PCB* text )
 
         offset.y = text->GetInterline();
 
-        RotatePoint( &offset, text->m_Orient );
+        RotatePoint( &offset, text->GetOrientation() );
 
         for( unsigned i = 0; i<list->Count(); i++ )
         {
             wxString txt = list->Item( i );
             DrawGraphicText( NULL, NULL, pos, (EDA_Colors) color,
-                             txt, text->m_Orient, size,
+                             txt, text->GetOrientation(), size,
                              text->m_HJustify, text->m_VJustify,
-                             text->m_Thickness, text->m_Italic,
+                             text->GetThickness(), text->m_Italic,
                              true, Draw3dTextSegm );
             pos += offset;
         }
 
-        delete (list);
+        delete list;
     }
     else
     {
         DrawGraphicText( NULL, NULL, text->m_Pos, (EDA_Colors) color,
-                         text->m_Text, text->m_Orient, size,
+                         text->m_Text, text->GetOrientation(), size,
                          text->m_HJustify, text->m_VJustify,
-                         text->m_Thickness, text->m_Italic,
+                         text->GetThickness(), text->m_Italic,
                          true,
                          Draw3dTextSegm );
     }
@@ -820,7 +820,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
                 {
                     wxPoint& pt = points[ii];
 
-                    RotatePoint( &pt.x, &pt.y, module->m_Orient );
+                    RotatePoint( &pt.x, &pt.y, module->GetOrientation() );
                     pt += module->m_Pos;
                 }
 
@@ -868,7 +868,7 @@ void EDGE_MODULE::Draw3D( EDA_3D_CANVAS* glcanvas )
             {
                 wxPoint& pt = points[ii];
 
-                RotatePoint( &pt.x, &pt.y, module->m_Orient );
+                RotatePoint( &pt.x, &pt.y, module->GetOrientation() );
                 pt += module->m_Pos;
             }
 

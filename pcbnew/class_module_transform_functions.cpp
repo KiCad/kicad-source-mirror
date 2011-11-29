@@ -159,7 +159,7 @@ void MODULE::Rotate(const wxPoint& aRotCentre, int aAngle)
  * Flip this object, i.e. change the board side for this object
  * @param aCentre - the rotation point.
  */
-void MODULE::Flip(const wxPoint& aCentre )
+void MODULE::Flip( const wxPoint& aCentre )
 {
     D_PAD*        pt_pad;
     TEXTE_MODULE* pt_texte;

@@ -259,13 +259,11 @@ public:
      */
     static wxString GetDefaultLayerName( int aLayerNumber );
 
-    /**
-     * Function GetPosition
-     * is here to satisfy BOARD_ITEM's requirements, but this implementation
-     * is a dummy.
-     * @return const wxPoint& of (0,0)
-     */
-    wxPoint& GetPosition();
+    const wxPoint GetPosition() const       // overload
+    {
+        return wxPoint( 0, 0 );     // dummy for pure virtual
+    }
+    void SetPosition( const wxPoint& aPos ) {}  // overload
 
     /**
      * Function Add

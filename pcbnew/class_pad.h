@@ -168,21 +168,12 @@ public:
      */
     int GetShape() const { return m_PadShape & 0xFF;  }
 
-    /**
-     * Function GetPosition
-     * returns the position of this object.
-     * @return const wxPoint& - The position of this object.
-     */
-    wxPoint& GetPosition()
+    const wxPoint GetPosition() const   // overload
     {
         return m_Pos;
     }
 
-
-    void SetPosition( const wxPoint& aPos )
-    {
-        m_Pos = aPos;
-    }
+    void SetPosition( const wxPoint& aPos ) { m_Pos = aPos; }   // overload
 
     /**
      * Function TransformShapeWithClearanceToPolygon

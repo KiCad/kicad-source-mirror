@@ -45,17 +45,15 @@ public:
 
     TEXTE_MODULE* Back() const { return (TEXTE_MODULE*) Pback; }
 
-    /**
-     * Function GetPosition
-     * returns the position of this object.
-     * Required by pure virtual BOARD_ITEM::GetPosition()
-     * @return const wxPoint& - The position of this object.
-     */
-    wxPoint& GetPosition()
+    const wxPoint GetPosition() const       // overload a base
     {
-        return m_Pos;
+        return m_Pos;       // from EDA_TEXT
     }
 
+    void SetPosition( const wxPoint& aPos ) // overload a base
+    {
+        m_Pos = aPos;       // in EDA_TEXT
+    }
 
     void Copy( TEXTE_MODULE* source ); // copy structure
 
