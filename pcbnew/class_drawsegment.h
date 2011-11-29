@@ -3,8 +3,8 @@
  * @brief Class to handle a graphic segment.
  */
 
-#ifndef CLASS_DRAWSEGMENT_H
-#define CLASS_DRAWSEGMENT_H
+#ifndef CLASS_DRAWSEGMENT_H_
+#define CLASS_DRAWSEGMENT_H_
 
 
 #include "class_board_item.h"
@@ -30,8 +30,8 @@ public:
     wxPoint m_BezierC2;         // Bezier Control Point 1
 
 protected:
-    std::vector<wxPoint> m_BezierPoints;
-    std::vector<wxPoint> m_PolyPoints;
+    std::vector<wxPoint>    m_BezierPoints;
+    std::vector<wxPoint>    m_PolyPoints;
 
 public:
     DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype = PCB_LINE_T );
@@ -39,6 +39,21 @@ public:
 
     DRAWSEGMENT* Next() const { return (DRAWSEGMENT*) Pnext; }
     DRAWSEGMENT* Back() const { return (DRAWSEGMENT*) Pback; }
+
+    void SetWidth( int aWidth ) { m_Width = aWidth; }
+
+    void SetStart( const wxPoint& aStart ) { m_Start = aStart; }
+
+    void SetEnd( const wxPoint& aEnd ) { m_End = aEnd; }
+
+    void SetAngle( double aAngle ) { m_Angle = (int) aAngle; }
+
+    void SetType( int aType ) { m_Type = aType; }
+
+    void SetShape( int aShape ) { m_Shape = aShape; }
+
+    void SetBezControl1( const wxPoint& aPoint ) { m_BezierC1 = aPoint; }
+    void SetBezControl2( const wxPoint& aPoint ) { m_BezierC2 = aPoint; }
 
     /**
      * Function GetPosition
@@ -83,7 +98,17 @@ public:
     MODULE* GetParentModule() const;
 
     std::vector<wxPoint>& GetBezierPoints() { return m_BezierPoints; };
-    std::vector<wxPoint>& GetPolyPoints() { return m_PolyPoints; };
+    std::vector<wxPoint>& GetPolyPoints()   { return m_PolyPoints; };
+
+    void SetBezierPoints( std::vector<wxPoint>& aPoints )
+    {
+        m_BezierPoints = aPoints;
+    }
+
+    void SetPolyPoints( std::vector<wxPoint>& aPoints )
+    {
+        m_PolyPoints = aPoints;
+    }
 
     /**
      * Function Save
@@ -158,7 +183,7 @@ public:
     {
         wxPoint delta = GetEnd() - GetStart();
 
-        return hypot( delta.x, delta.y );
+        return hypot( double( delta.x ), double( delta.y ) );
     }
 
 
@@ -212,9 +237,7 @@ public:
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os );
-
 #endif
 };
 
-
-#endif      // #ifndef CLASS_DRAWSEGMENT_H
+#endif  // CLASS_DRAWSEGMENT_H_

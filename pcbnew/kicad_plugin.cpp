@@ -29,18 +29,18 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include <errno.h>
 
 #include <kicad_plugin.h>   // I implement this
 
 #include <auto_ptr.h>
 #include <kicad_string.h>
-
+#include <macros.h>
 
 //#include <fctsys.h>
 //#include <confirm.h>
 //#include <build_version.h>
 //#include <wxPcbStruct.h">
-//#include <macros.h>
 //#include <pcbcommon.h>
 
 #include <zones.h>
@@ -58,13 +58,13 @@
 #include <class_drawsegment.h>
 #include <class_mire.h>
 #include <3d_struct.h>
+#include <pcb_plot_params.h>
 
 
 /*
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <autorout.h>
-#include <pcb_plot_params.h>
 */
 
 
@@ -121,92 +121,102 @@
 #define MM_PER_BIU      1e-6
 #define UM_PER_BIU      1e-3
 
+/// Test for a specific length of characters.
+/// The -1 is to omit the trailing \0 which is included in sizeof() on a
+/// string.
+#define TESTLINE( x )   (strncmp( line, x, sizeof(x) - 1 ) == 0)
 
-using namespace std;
+/// Get the length of a constant string, at compile time
+#define SZ( x )         (sizeof(x)-1)
+
+
+using namespace std;    // auto_ptr
 
 BOARD* KICAD_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties )
 {
+    LOCALE_IO   toggle;     // toggles on then off the C locale.
     wxString    msg;
-    BOARD*      board = aAppendToMe ? aAppendToMe : new BOARD( NULL );
 
-    // delete on exception, iff I own it, according to aAppendToMe
-    auto_ptr<BOARD> deleter( aAppendToMe ? NULL : board );
+    m_board = aAppendToMe ? aAppendToMe : new BOARD( NULL );
+
+    // delete on exception, iff I own m_board, according to aAppendToMe
+    auto_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
 
     FILE* fp = wxFopen( aFileName, wxT( "rt" ) );
     if( !fp )
     {
-        msg.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
-        THROW_IO_ERROR( msg );
+        m_error.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
+        THROW_IO_ERROR( m_error );
     }
 
     FILE_LINE_READER    reader( fp, aFileName );
 
     aReader = &reader;
 
-    init( board, aProperties );
+    init( aProperties );
 
-    // Put a dollar sign in front, and test for a specific length of characters
-    // The -1 is to omit the trailing \0 which is included in sizeof() on a
-    // string.
-#define TESTLINE( x ) (strncmp( line, "$" x, sizeof("$" x) - 1 ) == 0)
+    loadAllSections( bool( aAppendToMe ) );
+
+    deleter.release();
+    return m_board;
+}
+
+
+void KICAD_PLUGIN::loadAllSections( bool doAppend )
+{
+    // $GENERAL section is first
+
+    // $SHEETDESCR section is next
+
+    // $SETUP section is next
+
+    // Then follows $EQUIPOT and all the rest
 
     while( aReader->ReadLine() )
     {
         char* line = aReader->Line();
 
-        // put the more frequent ones at the top
+        // put the more frequent ones at the top, but realize TRACKs are loaded as a group
 
-        if( TESTLINE( "MODULE" ) )
+        if( TESTLINE( "$MODULE" ) )
         {
-            MODULE* module = new MODULE( board );
-            board->Add( module, ADD_APPEND );
-            load( module );
-            continue;
+            loadMODULE();
         }
 
-        if( TESTLINE( "DRAWSEGMENT" ) )
+        else if( TESTLINE( "$DRAWSEGMENT" ) )
         {
-            DRAWSEGMENT* dseg = new DRAWSEGMENT( board );
-            board->Add( dseg, ADD_APPEND );
-            load( dseg );
-            continue;
+            loadDRAWSEGMENT();
         }
 
-        if( TESTLINE( "EQUIPOT" ) )
+        else if( TESTLINE( "$EQUIPOT" ) )
         {
-            NETINFO_ITEM* net = new NETINFO_ITEM( board );
-            board->m_NetInfo->AppendNet( net );
-            load( net );
-            continue;
+            loadNETINFO_ITEM();
         }
 
-        if( TESTLINE( "TEXTPCB" ) )
+        else if( TESTLINE( "$TEXTPCB" ) )
         {
-            TEXTE_PCB* pcbtxt = new TEXTE_PCB( board );
-            board->Add( pcbtxt, ADD_APPEND );
-            load( pcbtxt );
-            continue;
+            loadPCB_TEXTE();
         }
 
-        if( TESTLINE( "TRACK" ) )
+#if 0
+        else if( TESTLINE( "$TRACK" ) )
         {
 #if 0 && defined(PCBNEW)
-            TRACK* insertBeforeMe = Append ? NULL : board->m_Track.GetFirst();
+            TRACK* insertBeforeMe = Append ? NULL : m_board->m_Track.GetFirst();
             ReadListeSegmentDescr( aReader, insertBeforeMe, PCB_TRACE_T, NbTrack );
 #endif
-            continue;
         }
 
-        if( TESTLINE( BRD_NETCLASS ) )
+        else if( TESTLINE( BRD_NETCLASS ) )
         {
 /*
             // create an empty NETCLASS without a name.
-            NETCLASS* netclass = new NETCLASS( board, wxEmptyString );
+            NETCLASS* netclass = new NETCLASS( m_board, wxEmptyString );
 
             // fill it from the *.brd file, and establish its name.
             netclass->ReadDescr( aReader );
 
-            if( !board->m_NetClasses.Add( netclass ) )
+            if( !m_board->m_NetClasses.Add( netclass ) )
             {
                 // Must have been a name conflict, this is a bad board file.
                 // User may have done a hand edit to the file.
@@ -216,66 +226,61 @@ BOARD* KICAD_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPER
                 // @todo: throw an exception here, this is a bad board file.
             }
 */
-            continue;
         }
 
-        if( TESTLINE( "CZONE_OUTLINE" ) )
+        else if( TESTLINE( "$CZONE_OUTLINE" ) )
         {
-            auto_ptr<ZONE_CONTAINER> zone_descr( new ZONE_CONTAINER( board ) );
+            auto_ptr<ZONE_CONTAINER> zone_descr( new ZONE_CONTAINER( m_board ) );
 
             load( zone_descr.get() );
 
             if( zone_descr->GetNumCorners() > 2 )       // should always occur
-                board->Add( zone_descr.release() );
+                m_board->Add( zone_descr.release() );
 
             // else delete zone_descr; done by auto_ptr
-
-            continue;
         }
 
-        if( TESTLINE( "COTATION" ) )
+        else if( TESTLINE( "$COTATION" ) )
         {
-            DIMENSION* dim = new DIMENSION( board );
-            board->Add( dim, ADD_APPEND );
+            DIMENSION* dim = new DIMENSION( m_board );
+            m_board->Add( dim, ADD_APPEND );
             load( dim );
-            continue;
+
         }
 
-        if( TESTLINE( "PCB_TARGET" ) )
+        else if( TESTLINE( "$PCB_TARGET" ) )
         {
-            PCB_TARGET* t = new PCB_TARGET( board );
-            board->Add( t, ADD_APPEND );
+            PCB_TARGET* t = new PCB_TARGET( m_board );
+            m_board->Add( t, ADD_APPEND );
             load( t );
-            continue;
+
         }
 
-        if( TESTLINE( "ZONE" ) )
+        else if( TESTLINE( "$ZONE" ) )
         {
 #if 0 && defined(PCBNEW)
-            SEGZONE* insertBeforeMe = Append ? NULL : board->m_Zone.GetFirst();
+            SEGZONE* insertBeforeMe = Append ? NULL : m_board->m_Zone.GetFirst();
 
             ReadListeSegmentDescr( aReader, insertBeforeMe, PCB_ZONE_T, NbZone );
 #endif
-            continue;
+        }
+#endif
+
+        else if( TESTLINE( "$GENERAL" ) )
+        {
+            loadGENERAL();
         }
 
-        if( TESTLINE( "GENERAL" ) )
+        else if( TESTLINE( "$SHEETDESCR" ) )
         {
-            loadGeneral( board );
-            continue;
+            loadSHEET();
         }
 
-        if( TESTLINE( "SHEETDESCR" ) )
+        else if( TESTLINE( "$SETUP" ) )
         {
-            loadSheet( board );
-            continue;
-        }
-
-        if( TESTLINE( "SETUP" ) )
-        {
-            if( !aAppendToMe )
+            if( !doAppend )
             {
-                loadSetup( board );
+                loadSETUP();
             }
             else
             {
@@ -283,34 +288,589 @@ BOARD* KICAD_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPER
                 {
                     line = aReader->Line();
 
-                    if( TESTLINE( "EndSETUP" ) )
+                    if( TESTLINE( "$EndSETUP" ) )
                         break;
                 }
+            }
+        }
+
+        else if( TESTLINE( "$EndPCB" ) )
+            break;
+    }
+}
+
+
+void KICAD_PLUGIN::loadGENERAL()
+{
+    static const char delims[] = " =\n\r";      // for this function only.
+
+    while( aReader->ReadLine() )
+    {
+        char*       line = aReader->Line();
+        const char* data;
+
+        if( TESTLINE( "$EndGENERAL" ) )
+            break;
+
+        if( TESTLINE( "Units" ) )
+        {
+            // what are the engineering units of the dimensions in the BOARD?
+            data = strtok( line + SZ("Units"), delims );
+
+            if( strcmp( data, "mm" ) == 0 )
+            {
+#if defined(KICAD_NANOMETRE)
+                diskToBiu = 1000000.0;
+#else
+                m_error = wxT( "May not load new *.brd file into 'PCBNew compiled for deci-mils'" );
+                THROW_IO_ERROR( m_error );
+#endif
+            }
+        }
+
+        else if( TESTLINE( "EnabledLayers" ) )
+        {
+            int enabledLayers = 0;
+
+            data = strtok( line + SZ( "EnabledLayers" ), delims );
+            sscanf( data, "%X", &enabledLayers );
+
+            // Setup layer visibility
+            m_board->SetEnabledLayers( enabledLayers );
+        }
+
+        else if( TESTLINE( "Ly" ) )    // Old format for Layer count
+        {
+            int layer_mask = 1;
+
+            data = strtok( line + SZ( "Ly" ), delims );
+            sscanf( data, "%X", &layer_mask );
+
+            int layer_count = 0;
+
+            for( int ii = 0;  ii < NB_COPPER_LAYERS && layer_mask;  ++ii, layer_mask >>= 1 )
+            {
+                if( layer_mask & 1 )
+                    layer_count++;
+            }
+
+            m_board->SetCopperLayerCount( layer_count );
+        }
+
+        else if( TESTLINE( "BoardThickness" ) )
+        {
+            data = strtok( line + SZ( "BoardThickness" ), delims );
+            m_board->GetBoardDesignSettings()->m_BoardThickness = atoi( data );
+        }
+
+        else if( TESTLINE( "Links" ) )
+        {
+            // Info only, do nothing, but only for a short while.
+        }
+
+        else if( TESTLINE( "NoConn" ) )
+        {
+            data = strtok( line + SZ( "NoConn" ), delims );
+            m_board->m_NbNoconnect = atoi( data );
+        }
+
+        else if( TESTLINE( "Di" ) )
+        {
+            // skip the first token "Di".
+            // no use of strtok() in this one, don't want the nuls
+            data = line + SZ( "Di" );
+
+            BIU x1 = biuParse( data, &data );
+            BIU y1 = biuParse( data, &data );
+            BIU x2 = biuParse( data, &data );
+            BIU y2 = biuParse( data );
+
+            m_board->m_BoundaryBox.SetX( x1 );
+            m_board->m_BoundaryBox.SetY( y1 );
+
+            m_board->m_BoundaryBox.SetWidth( x2 - x1 );
+            m_board->m_BoundaryBox.SetHeight( y2 - y1 );
+        }
+
+        // Read the number of segments of type DRAW, TRACK, ZONE
+        else if( TESTLINE( "Ndraw" ) )
+        {
+            data   = strtok( line + SZ( "Ndraw" ), delims );
+            NbDraw = atoi( data );
+        }
+
+        else if( TESTLINE( "Ntrack" ) )
+        {
+            data    = strtok( line + SZ( "Ntrack" ), delims );
+            NbTrack = atoi( data );
+        }
+
+        else if( TESTLINE( "Nzone" ) )
+        {
+            data   = strtok( line + SZ( "Nzone" ), delims );
+            NbZone = atoi( data );
+        }
+
+        else if( TESTLINE( "Nmodule" ) )
+        {
+            data  = strtok( line + SZ( "Nmodule" ), delims );
+            NbMod = atoi( data );
+        }
+
+        else if( TESTLINE( "Nnets" ) )
+        {
+            data   = strtok( line + SZ( "Nnets" ), delims );
+            NbNets = atoi( data );
+        }
+    }
+
+    m_error = wxT( "Missing '$EndGENERAL'" );
+    THROW_IO_ERROR( m_error );
+}
+
+
+void KICAD_PLUGIN::loadSHEET()
+{
+    char    buf[260];
+    char*   text;
+
+    static const char delims[] = " \t\n\r";      // for this function only.
+
+    while( aReader->ReadLine() )
+    {
+        char* line = aReader->Line();
+
+        if( TESTLINE( "$End" ) )
+            return;
+
+        else if( TESTLINE( "Sheet" ) )
+        {
+            text = strtok( line, delims );
+            text = strtok( NULL, delims );
+
+            Ki_PageDescr* sheet = g_SheetSizeList[0];
+            int           ii;
+
+            for( ii = 0; sheet != NULL; ii++, sheet = g_SheetSizeList[ii] )
+            {
+                if( stricmp( TO_UTF8( sheet->m_Name ), text ) == 0 )
+                {
+//                  screen->m_CurrentSheetDesc = sheet;
+
+                    if( sheet == &g_Sheet_user )
+                    {
+                        text = strtok( NULL, delims );
+
+                        if( text )
+                            sheet->m_Size.x = atoi( text );
+
+                        text = strtok( NULL, delims );
+
+                        if( text )
+                            sheet->m_Size.y = atoi( text );
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        else if( TESTLINE( "Title" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+
+#if 0   // @todo "screen" not available here
+            screen->m_Title = FROM_UTF8( buf );
+        }
+
+        else if( TESTLINE( "Date" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            screen->m_Date = FROM_UTF8( buf );
+        }
+
+        else if( TESTLINE( "Rev" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            screen->m_Revision = FROM_UTF8( buf );
+        }
+
+        else if( TESTLINE( "Comp" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            screen->m_Company = FROM_UTF8( buf );
+        }
+
+        else if( TESTLINE( "Comment1" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            screen->m_Commentaire1 = FROM_UTF8( buf );
+        }
+
+        else if( TESTLINE( "Comment2" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            screen->m_Commentaire2 = FROM_UTF8( buf );
+        }
+
+        else if( TESTLINE( "Comment3" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            screen->m_Commentaire3 = FROM_UTF8( buf );
+        }
+
+        else if( TESTLINE( "Comment4" ) )
+        {
+            ReadDelimitedText( buf, line, sizeof(buf) );
+            screen->m_Commentaire4 = FROM_UTF8( buf );
+#endif
+        }
+    }
+
+    m_error = wxT( "Missing '$EndSHEETDESCR'" );
+    THROW_IO_ERROR( m_error );
+}
+
+
+void KICAD_PLUGIN::loadSETUP()
+{
+    NETCLASS* netclass_default = m_board->m_NetClasses.GetDefault();
+
+    static const char delims[] = " =\n\r";      // this function only
+
+    while( aReader->ReadLine() )
+    {
+        char*       line = aReader->Line();
+        const char* data;
+
+        if( TESTLINE( "PcbPlotParams" ) )
+        {
+            PCB_PLOT_PARAMS_PARSER parser( &line[13], aReader->GetSource() );
+
+            try
+            {
+                g_PcbPlotOptions.Parse( &parser );
+            }
+            catch( IO_ERROR& e )
+            {
+                wxString msg;
+
+                msg.Printf( _( "Error reading PcbPlotParams from %s:\n%s" ),
+                            aReader->GetSource().GetData(),
+                            e.errorText.GetData() );
+                wxMessageBox( msg, _( "Open Board File" ), wxICON_ERROR );
             }
             continue;
         }
 
-        if( TESTLINE( "EndPCB" ) )
-            break;
+        strtok( line, delims );
+        data = strtok( NULL, delims );
+
+        if( TESTLINE( "$EndSETUP" ) )
+        {
+            // Until such time as the *.brd file does not have the
+            // global parameters:
+            // "TrackWidth", "TrackMinWidth", "ViaSize", "ViaDrill",
+            // "ViaMinSize", and "TrackClearence", put those same global
+            // values into the default NETCLASS until later board load
+            // code should override them.  *.brd files which have been
+            // saved with knowledge of NETCLASSes will override these
+            // defaults, old boards will not.
+            //
+            // @todo: I expect that at some point we can remove said global
+            //        parameters from the *.brd file since the ones in the
+            //        default netclass serve the same purpose.  If needed
+            //        at all, the global defaults should go into a preferences
+            //        file instead so they are there to start new board
+            //        projects.
+            m_board->m_NetClasses.GetDefault()->SetParams();
+
+            return;
+        }
+
+        else if( TESTLINE( "AuxiliaryAxisOrg" ) )
+        {
+            BIU gx = biuParse( data, &data );
+            BIU gy = biuParse( data );
+
+            /* @todo
+            m_Auxiliary_Axis_Position.x = gx;
+            m_Auxiliary_Axis_Position.y = gy;
+            */
+        }
+
+#if defined(PCBNEW)
+
+        else if( TESTLINE( "Layers" ) == 0 )
+        {
+            int tmp = atoi( data );
+            m_board->SetCopperLayerCount( tmp );
+        }
+
+        else if( TESTLINE( "Layer[" ) )
+        {
+            const int LAYERKEYZ = sizeof("Layer[") - 1;
+
+            // parse:
+            // Layer[n]  <a_Layer_name_with_no_spaces> <LAYER_T>
+
+            char* cp    = line + LAYERKEYZ;
+            int   layer = atoi( cp );
+
+            if( data )
+            {
+                wxString layerName = FROM_UTF8( data );
+                m_board->SetLayerName( layer, layerName );
+
+                data = strtok( NULL, delims );
+                if( data )  // optional in old board files
+                {
+                    LAYER_T type = LAYER::ParseType( data );
+                    m_board->SetLayerType( layer, type );
+                }
+            }
+        }
+
+        /* no more used
+        else if( TESTLINE( "TrackWidth" ) == 0 )
+        {
+        }
+        else if( TESTLINE( "ViaSize" ) )
+        {
+        }
+        else if( TESTLINE( "MicroViaSize" ) == 0 )
+        {
+        }
+        */
+
+        else if( TESTLINE( "TrackWidthList" ) )
+        {
+            BIU tmp = biuParse( data );
+            m_board->m_TrackWidthList.push_back( tmp );
+        }
+
+        else if( TESTLINE( "TrackClearence" ) )
+        {
+            BIU tmp = biuParse( data );
+            netclass_default->SetClearance( tmp );
+        }
+
+        else if( TESTLINE( "TrackMinWidth" ) )
+        {
+            BIU tmp = biuParse( data );
+            m_board->GetBoardDesignSettings()->m_TrackMinWidth = tmp;
+        }
+
+        else if( TESTLINE( "ZoneClearence" ) )
+        {
+            BIU tmp = biuParse( data );
+            g_Zone_Default_Setting.m_ZoneClearance = tmp;
+        }
+
+        else if( TESTLINE( "DrawSegmWidth" ) )
+        {
+            BIU tmp = biuParse( data );
+            m_board->GetBoardDesignSettings()->m_DrawSegmentWidth = tmp;
+        }
+
+        else if( TESTLINE( "EdgeSegmWidth" ) )
+        {
+            BIU tmp = biuParse( data );
+            m_board->GetBoardDesignSettings()->m_EdgeSegmentWidth = tmp;
+        }
+
+        else if( TESTLINE( "ViaMinSize" ) )
+        {
+            BIU tmp = biuParse( data );
+            m_board->GetBoardDesignSettings()->m_ViasMinSize = tmp;
+        }
+
+        else if( TESTLINE( "MicroViaMinSize" ) )
+        {
+            BIU tmp = biuParse( data );
+            m_board->GetBoardDesignSettings()->m_MicroViasMinSize = tmp;
+        }
+
+        else if( TESTLINE( "ViaSizeList" ) )
+        {
+            // e.g.  "ViaSizeList DIAMETER [DRILL]"
+
+            BIU drill    = 0;
+            BIU diameter = biuParse( data );
+
+            data = strtok( NULL, delims );
+
+            if( data )  // DRILL may not be present
+                drill = biuParse( data );
+
+            m_board->m_ViasDimensionsList.push_back( VIA_DIMENSION( diameter, drill ) );
+        }
+
+        else if( TESTLINE( "ViaDrill" ) )
+        {
+            BIU tmp = biuParse( data );
+            netclass_default->SetViaDrill( tmp );
+        }
+
+        else if( TESTLINE( "ViaMinDrill" ) )
+        {
+            BIU tmp = biuParse( data );
+            m_board->GetBoardDesignSettings()->m_ViasMinDrill = tmp;
+        }
+
+        else if( TESTLINE( "MicroViaDrill" ) )
+        {
+            BIU tmp = biuParse( data );
+            netclass_default->SetuViaDrill( tmp );
+        }
+
+        else if( TESTLINE( "MicroViaMinDrill" ) )
+        {
+            BIU tmp = biuParse( data );
+            m_board->GetBoardDesignSettings()->m_MicroViasMinDrill = tmp;
+        }
+
+        else if( TESTLINE( "MicroViasAllowed" ) )
+        {
+            m_board->GetBoardDesignSettings()->m_MicroViasAllowed = atoi( data );
+        }
+
+        else if( TESTLINE( "TextPcbWidth" ) )
+        {
+            BIU tmp = biuParse( data );
+            m_board->GetBoardDesignSettings()->m_PcbTextWidth = tmp;
+        }
+
+        else if( TESTLINE( "TextPcbSize" ) )
+        {
+            BIU x = biuParse( data, &data );
+            BIU y = biuParse( data );
+
+            m_board->GetBoardDesignSettings()->m_PcbTextSize = wxSize( x, y );
+        }
+
+        else if( TESTLINE( "EdgeModWidth" ) )
+        {
+            BIU tmp = biuParse( data );
+            /* @todo
+            g_ModuleSegmentWidth = tmp;
+            */
+        }
+
+        else if( TESTLINE( "TextModWidth" ) )
+        {
+            BIU tmp = biuParse( data );
+            /* @todo
+            g_ModuleTextWidth = tmp;
+            */
+        }
+
+        else if( TESTLINE( "TextModSize" ) )
+        {
+            BIU x = biuParse( data, &data );
+            BIU y = biuParse( data );
+            /* @todo
+            g_ModuleTextSize = wxSize( x, y );
+            */
+        }
+
+        else if( TESTLINE( "PadSize" ) )
+        {
+            BIU x = biuParse( data, &data );
+            BIU y = biuParse( data );
+            /* @todo
+            g_Pad_Master.m_Size = wxSize( x, y );
+            */
+        }
+
+        else if( TESTLINE( "PadDrill" ) )
+        {
+            BIU tmp = biuParse( data );
+            /* @todo
+            g_Pad_Master.m_Drill.x( tmp );
+            g_Pad_Master.m_Drill.y( tmp );
+            */
+        }
+
+        else if( TESTLINE( "Pad2MaskClearance" ) )
+        {
+            BIU tmp = biuParse( data );
+            m_board->GetBoardDesignSettings()->m_SolderMaskMargin = tmp;
+        }
+
+        else if( TESTLINE( "Pad2PasteClearance" ) )
+        {
+            BIU tmp = biuParse( data );
+            m_board->GetBoardDesignSettings()->m_SolderPasteMargin = tmp;
+        }
+
+        else if( TESTLINE( "Pad2PasteClearanceRatio" ) )
+        {
+            double ratio = atof( data );
+            m_board->GetBoardDesignSettings()->m_SolderPasteMarginRatio = ratio;
+        }
+
+        else if( TESTLINE( "GridOrigin" ) )
+        {
+            BIU gx = biuParse( data, &data );
+            BIU gy = biuParse( data );
+
+            /* @todo
+            GetScreen()->m_GridOrigin.x = Ox;
+            GetScreen()->m_GridOrigin.y = Oy;
+            */
+        }
+#endif
+
     }
 
-    deleter.release();  // no exceptions possible between here and return
-    return board;
+    // @todo: this code is currently unreachable, would need a goto, to get here.
+    // that may be better handled with an #ifdef
+
+    /* Ensure tracks and vias sizes lists are ok:
+     * Sort lists by by increasing value and remove duplicates
+     * (the first value is not tested, because it is the netclass value
+     */
+    sort( m_board->m_ViasDimensionsList.begin() + 1, m_board->m_ViasDimensionsList.end() );
+    sort( m_board->m_TrackWidthList.begin() + 1, m_board->m_TrackWidthList.end() );
+
+    for( unsigned ii = 1; ii < m_board->m_ViasDimensionsList.size() - 1; ii++ )
+    {
+        if( m_board->m_ViasDimensionsList[ii] == m_board->m_ViasDimensionsList[ii + 1] )
+        {
+            m_board->m_ViasDimensionsList.erase( m_board->m_ViasDimensionsList.begin() + ii );
+            ii--;
+        }
+    }
+
+    for( unsigned ii = 1; ii < m_board->m_TrackWidthList.size() - 1; ii++ )
+    {
+        if( m_board->m_TrackWidthList[ii] == m_board->m_TrackWidthList[ii + 1] )
+        {
+            m_board->m_TrackWidthList.erase( m_board->m_TrackWidthList.begin() + ii );
+            ii--;
+        }
+    }
 }
 
 
-void KICAD_PLUGIN::load( MODULE* me )
+void KICAD_PLUGIN::loadMODULE()
 {
+    MODULE* module = new MODULE( m_board );
+
+    // immediately save object in tree, so if exception, no memory leak
+    m_board->Add( module, ADD_APPEND );
+
     char*   line = aReader->Line();
     char*   text = line + 3;
 
-    S3D_MASTER* t3D = me->m_3D_Drawings;
+    S3D_MASTER* t3D = module->m_3D_Drawings;
 
     if( !t3D->m_Shape3DName.IsEmpty() )
     {
-        S3D_MASTER* n3D = new S3D_MASTER( me );
+        S3D_MASTER* n3D = new S3D_MASTER( module );
 
-        me->m_3D_Drawings.PushBack( n3D );
+        module->m_3D_Drawings.PushBack( n3D );
 
         t3D = n3D;
     }
@@ -324,18 +884,18 @@ void KICAD_PLUGIN::load( MODULE* me )
         case '$':
             if( line[1] == 'E' )
             {
-                return 0;
+                return;
             }
-            return 1;
+            goto out;   // error
 
         case 'N':       // Shape File Name
-        {
-            char    buf[512];
-            ReadDelimitedText( buf, text, 512 );
+            {
+                char    buf[512];
+                ReadDelimitedText( buf, text, 512 );
 
-            t3D->m_Shape3DName = FROM_UTF8( buf );
+                t3D->m_Shape3DName = FROM_UTF8( buf );
+            }
             break;
-        }
 
         case 'S':       // Scale
             sscanf( text, "%lf %lf %lf\n",
@@ -362,20 +922,282 @@ void KICAD_PLUGIN::load( MODULE* me )
             break;
         }
     }
+
+out:
+    m_error = wxT( "Missing '$EndMODULE'" );
+    THROW_IO_ERROR( m_error );
 }
 
 
+void KICAD_PLUGIN::loadDRAWSEGMENT()
+{
+    /* example:
+        $DRAWSEGMENT
+        Po 0 57500 -1000 57500 0 150
+        De 24 0 900 0 0
+        $EndDRAWSEGMENT
+    */
+
+    // immediately save object in tree, so if exception, no memory leak
+    DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
+    m_board->Add( dseg, ADD_APPEND );
+
+    while( aReader->ReadLine() )
+    {
+        char* line  = aReader->Line();
+
+        if( strnicmp( line, "$End", 4 ) == 0 )
+            return;     // Normal end matches here, because it's: $EndDRAWSEGMENT
+
+        if( line[0] == 'P' )
+        {
+            // sscanf( line + 2, " %d %d %d %d %d %d", &m_Shape, &m_Start.x, &m_Start.y, &m_End.x, &m_End.y, &m_Width );
+            const char* next = line + 2;
+
+            BIU shape   = biuParse( next, &next );
+            BIU start_x = biuParse( next, &next );
+            BIU start_y = biuParse( next, &next );
+            BIU end_x   = biuParse( next, &next );
+            BIU end_y   = biuParse( next, &next );
+            BIU width   = biuParse( next );
+
+            if( width < 0 )
+                width = 0;
+
+            dseg->SetShape( shape );
+            dseg->SetWidth( width );
+            dseg->SetStart( wxPoint( start_x, start_y ) );
+            dseg->SetEnd( wxPoint( end_x, end_y ) );
+        }
+
+        else if( line[0] == 'D' )
+        {
+            BIU     x = 0;
+            BIU     y = 0;
+            int     val;
+            char*   token = strtok( line, " " );    // "De", skip it
+
+            for( int i = 0;  (token = strtok( NULL," " )) != NULL;  ++i )
+            {
+                switch( i )
+                {
+                case 0:
+                    sscanf( token, "%d", &val );
+
+                    if( val < FIRST_NO_COPPER_LAYER )
+                        val = FIRST_NO_COPPER_LAYER;
+
+                    else if( val > LAST_NO_COPPER_LAYER )
+                        val = LAST_NO_COPPER_LAYER;
+
+                    dseg->SetLayer( val );
+                    break;
+                case 1:
+                    sscanf( token, "%d", &val );
+                    dseg->SetType( val );   // m_Type
+                    break;
+                case 2:
+                    sscanf( token, "%d", &val );
+                    dseg->SetAngle( val );  // m_Angle
+                    break;
+                case 3:
+                    sscanf( token, "%lX", &dseg->m_TimeStamp );
+                    break;
+                case 4:
+                    sscanf( token, "%X", &val );
+                    dseg->SetState( val, ON );
+                    break;
+
+                    // Bezier Control Points
+                case 5:
+                    x = biuParse( token );
+                    break;
+                case 6:
+                    y = biuParse( token );
+                    dseg->SetBezControl1( wxPoint( x, y ) );
+                    break;
+
+                case 7:
+                    x = biuParse( token );
+                    break;
+                case 8:
+                    y = biuParse( token );
+                    dseg->SetBezControl2( wxPoint( x, y ) );
+                    break;
+
+                default:
+                    break;
+                }
+            }
+        }
+    }
+
+    m_error = wxT( "Missing '$EndDRAWSEGMENT'" );
+    THROW_IO_ERROR( m_error );
+}
+
+
+void KICAD_PLUGIN::loadNETINFO_ITEM()
+{
+    char  buf[1024];
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
+    m_board->m_NetInfo->AppendNet( net );
+
+    while( aReader->ReadLine() )
+    {
+        char*   line = aReader->Line();
+
+        if( strnicmp( line, "$End", 4 ) == 0 )
+            return;     // preferred exit
+
+        if( strncmp( line, "Na", 2 ) == 0 )
+        {
+            int tmp = atoi( line + 2 );
+            net->SetNet( tmp );
+
+            // skips to the first quote char
+            ReadDelimitedText( buf, line + 2, sizeof(buf) );
+            net->SetNetname( FROM_UTF8( buf ) );
+        }
+    }
+
+    m_error = wxT( "Missing '$EndEQUIPOT'" );
+    THROW_IO_ERROR( m_error );
+}
+
+
+void KICAD_PLUGIN::loadPCB_TEXTE()
+{
+    /*
+        For a single line text:
+
+        $TEXTPCB
+        Te "Text example"
+        Po 66750 53450 600 800 150 0
+        From 24 1 0 Italic
+        $EndTEXTPCB
+
+        For a multi line text:
+
+        $TEXTPCB
+        Te "Text example"
+        Nl "Line 2"
+        Po 66750 53450 600 800 150 0
+        From 24 1 0 Italic
+        $EndTEXTPCB
+        Nl "line nn" is a line added to the current text
+    */
+
+    char  text[1024];
+    char  style[256];
+
+    TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
+    m_board->Add( pcbtxt, ADD_APPEND );
+
+    while( aReader->ReadLine() )
+    {
+        char* line = aReader->Line();
+
+        if( TESTLINE( "$EndTEXTPCB" ) )
+            return;     // preferred exit
+
+#if 0   // @todo
+        else if( TESTLINE( "Te" ) )     // Text line (first line for multi line texts)
+        {
+            ReadDelimitedText( text, line + 2, sizeof(text) );
+            m_Text = FROM_UTF8( text );
+        }
+
+        else if( TESTLINE( "nl" ) )     // next line of the current text
+        {
+            ReadDelimitedText( text, line + 2, sizeof(text) );
+            m_Text.Append( '\n' );
+            m_Text += FROM_UTF8( text );
+        }
+
+        else if( TESTLINE( "Po" ) )
+        {
+            sscanf( line + 2, " %d %d %d %d %d %d",
+                    &m_Pos.x, &m_Pos.y,
+                    &m_Size.x, &m_Size.y,
+                    &m_Thickness, &m_Orient );
+
+            // Ensure the text has minimal size to see this text on screen:
+            if( m_Size.x < 5 )
+                m_Size.x = 5;
+
+            if( m_Size.y < 5 )
+                m_Size.y = 5;
+        }
+
+        else if( TESTLINE( "De" ) )
+        {
+            style[0] = 0;
+
+            int     normal_display = 1;
+            char    hJustify = 'c';
+
+            sscanf( line + 2, " %d %d %lX %s %c\n", &m_Layer, &normal_display,
+                    &m_TimeStamp, style, &hJustify );
+
+            m_Mirror = normal_display ? false : true;
+
+            if( m_Layer < FIRST_COPPER_LAYER )
+                m_Layer = FIRST_COPPER_LAYER;
+
+            else if( m_Layer > LAST_NO_COPPER_LAYER )
+                m_Layer = LAST_NO_COPPER_LAYER;
+
+            if( strnicmp( style, "Italic", 6 ) == 0 )
+                m_Italic = 1;
+            else
+                m_Italic = 0;
+
+            switch( hJustify )
+            {
+            case 'l':
+            case 'L':
+                m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
+                break;
+            case 'c':
+            case 'C':
+                m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
+                break;
+            case 'r':
+            case 'R':
+                m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
+                break;
+            default:
+                m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
+                break;
+            }
+        }
+#endif
+    }
+
+    /* @todo: this is unreachable code, except for when the terminator is missing
+
+    // Set a reasonable width:
+    if( m_Thickness < 1 )
+        m_Thickness = 1;
+
+    m_Thickness = Clamp_Text_PenSize( m_Thickness, m_Size );
+    */
+
+    m_error = wxT( "Missing '$EndTEXTPCB'" );
+    THROW_IO_ERROR( m_error );
+}
+
 std::string KICAD_PLUGIN::biuFmt( BIU aValue )
 {
-    BFU     engUnits = biuToDiskUnits * aValue;
+    double  engUnits = biuToDisk * aValue;
     char    temp[48];
 
-    if( engUnits != 0.0 && fabsl( engUnits ) <= 0.0001 )
+    if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
     {
         // printf( "f: " );
-        sprintf( temp, "%.10f", engUnits );
-
-        int len = strlen( temp );
+        int len = sprintf( temp, "%.10f", engUnits );
 
         while( --len > 0 && temp[len] == '0' )
             temp[len] = '\0';
@@ -390,19 +1212,57 @@ std::string KICAD_PLUGIN::biuFmt( BIU aValue )
 }
 
 
-void KICAD_PLUGIN::init( BOARD* aBoard, PROPERTIES* aProperties )
+BIU KICAD_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
+{
+    char*   nptr;
+
+    errno = 0;
+
+    double fval = strtod( aValue, &nptr );
+
+    if( errno || aValue == nptr )
+    {
+        m_error.Printf( _( "invalid float number in file: '%s' line: %d" ),
+            aReader->GetSource().GetData(), aReader->LineNumber() );
+
+        THROW_IO_ERROR( m_error );
+    }
+
+    if( nptrptr )
+        *nptrptr = nptr;
+
+    // There should be no rounding issues here, since the values in the file initially
+    // came from integers via biuFmt(). In fact this product should be an integer, exactly.
+    return BIU( fval * diskToBiu );
+}
+
+
+void KICAD_PLUGIN::init( PROPERTIES* aProperties )
 {
     NbDraw = NbTrack = NbZone = NbMod = NbNets = -1;
 
-    aBoard->m_Status_Pcb = 0;
-    aBoard->m_NetClasses.Clear();
+#if defined(KICAD_NANOMETRE)
+    biuToDisk = 1/1000000.0;        // BIUs are nanometers
+#else
+    biuToDisk = 1.0;                // BIUs are deci-mils
+#endif
+
+    // start by assuming the board is in deci-mils.
+    // if we see "Units mm" in the $GENERAL section, switch to 1000000.0 then.
+
+#if defined(KICAD_NANOMETRE)
+    diskToBiu = 2540.0;             // BIUs are nanometers
+#else
+    diskToBiu = 1.0;                // BIUs are deci-mils
+#endif
+
+    m_board->m_Status_Pcb = 0;
+    m_board->m_NetClasses.Clear();
 }
 
 
 void KICAD_PLUGIN::Save( const wxString* aFileName, BOARD* aBoard, PROPERTIES* aProperties )
 {
-
-
-
+    LOCALE_IO   toggle;     // toggles on then off the C locale.
 }
 

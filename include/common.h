@@ -217,7 +217,7 @@ extern int          g_GhostColor;
  *  This is wrapper to the C setlocale( LC_NUMERIC, "C" ) function,
  *  but could make more easier an optional use of locale in KiCad
  */
-void SetLocaleTo_C_standard( void );
+void SetLocaleTo_C_standard();
 
 /**
  * Function SetLocaleTo_Default
@@ -230,8 +230,21 @@ void SetLocaleTo_C_standard( void );
  *  This is wrapper to the C setlocale( LC_NUMERIC, "" ) function,
  *  but could make more easier an optional use of locale in KiCad
  */
-void SetLocaleTo_Default( void );
+void SetLocaleTo_Default();
 
+/**
+ * Class LOCALE_IO
+ * is a class that can be instantiated within a scope in which you are expecting
+ * exceptions to be thrown.  Its constructor calls SetLocaleTo_C_Standard().
+ * Its destructor insures that the default locale is restored if an exception
+ * is thrown, or not.
+ */
+class LOCALE_IO
+{
+public:
+    LOCALE_IO()     { SetLocaleTo_C_standard(); }
+    ~LOCALE_IO()    { SetLocaleTo_Default(); }
+};
 
 /**
  * Function EnsureTextCtrlWidth

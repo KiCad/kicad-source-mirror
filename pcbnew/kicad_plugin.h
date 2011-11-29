@@ -28,7 +28,6 @@
 #include <string>
 
 typedef int     BIU;
-typedef double  BFU;
 
 class PCB_TARGET;
 class MODULE;
@@ -63,12 +62,13 @@ public:
 
 protected:
 
-    wxString        m_Error;        ///< for throwing exceptions
+    wxString        m_error;        ///< for throwing exceptions
+    BOARD*          m_board;        ///< which BOARD, no ownership here
 
-    LINE_READER*    m_Reader;       ///< no ownership here.
+    LINE_READER*    aReader;        ///< no ownership here.
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
-    void    init( BOARD* board, PROPERTIES* aProperties );
+    void    init( PROPERTIES* aProperties );
 
     int     NbDraw;
     int     NbTrack;
@@ -76,28 +76,47 @@ protected:
     int     NbMod;
     int     NbNets;
 
-    BFU     biuToDisk;      ///< convert from BIUs to disk engineering units with this scale factor
-    BFU     diskToBiu;      ///< convert from disk engineering units to BIUs with this scale factor
+    double  biuToDisk;      ///< convert from BIUs to disk engineering units with this scale factor
+    double  diskToBiu;      ///< convert from disk engineering units to BIUs with this scale factor
 
     /// convert a BIU to engineering units by scaling and formatting to ASCII.
     std::string biuFmt( BIU aValue );
 
+    /**
+     * Function biuParse
+     * parses an ASCII decimal floating point value and scales it into a BIU
+     * according to the current value of diskToBui.
+     *
+     * @param aValue is the ASCII value in C locale form.
+     *
+     * @param nptrptr may be NULL, but if not, then it tells where to put a
+     *  pointer to the next unconsumed input text. See man strtod() for more information.
+     *
+     * @return BIU - the converted Board Internal Unit.
+     */
+    BIU biuParse( const char* aValue, const char** nptrptr = NULL );
+
     // load / parse functions
 
-    void loadGeneral( BOARD* me );
-    void loadSetup( BOARD* me );
-    void loadSheet( BOARD* me );
+    void loadAllSections( bool doAppend );
 
+    void loadGENERAL();
+    void loadSETUP();
+    void loadSHEET();
+
+    void loadMODULE();
+    void loadDRAWSEGMENT();
+    void loadNETINFO_ITEM();
+    void loadPCB_TEXTE();
+
+/*
     void load( PCB_TARGET* me );
-    void load( MODULE* me );
-    void load( DRAWSEGMENT* me );
     void load( NETINFO* me );
-    void load( TEXTE_PCB* me );
     void load( TRACK* me );
     void load( NETCLASS* me );
     void load( ZONE_CONTAINER* me );
     void load( DIMENSION* me );
-    void load( NETINFO_ITEM* me );
+*/
 //    void load( SEGZONE* me );
 
 };

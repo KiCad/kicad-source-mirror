@@ -80,28 +80,34 @@ struct LAYER
 };
 
 
-/** a small helper class to handle a stock of specific vias diameter and drill pair
- * in the BOARD class
+/**
+ * Struct VIA_DIMENSION
+ * is a small helper container to handle a stock of specific vias each with
+ * unique diameter and drill sizes in the BOARD class.
  */
-class VIA_DIMENSION
+struct VIA_DIMENSION
 {
-public:
     int m_Diameter;     // <= 0 means use Netclass via diameter
     int m_Drill;        // <= 0 means use Netclass via drill
 
     VIA_DIMENSION()
     {
-        m_Diameter = 0; m_Drill = 0;
+        m_Diameter = 0;
+        m_Drill    = 0;
     }
 
+    VIA_DIMENSION( int aDiameter, int aDrill )
+    {
+        m_Diameter = aDiameter;
+        m_Drill    = aDrill;
+    }
 
-    bool operator ==( const VIA_DIMENSION& other ) const
+    bool operator == ( const VIA_DIMENSION& other ) const
     {
         return (m_Diameter == other.m_Diameter) && (m_Drill == other.m_Drill);
     }
 
-
-    bool operator <( const VIA_DIMENSION& other ) const
+    bool operator < ( const VIA_DIMENSION& other ) const
     {
         if( m_Diameter != other.m_Diameter )
             return m_Diameter < other.m_Diameter;
