@@ -146,11 +146,12 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
                                           const wxString& new_name,
                                           bool            ShowError )
 {
-    wxFileName fn;
-    wxFileName tmpFileName;
-    FILE*      FichCmp, * NewFile;
-    char       Line[1024];
-    wxString   msg;
+    wxFileName  fn;
+    wxFileName  tmpFileName;
+    FILE*       FichCmp, * NewFile;
+    char        line[1024];
+    wxString    msg;
+    char*       rs;
 
     if( old_name == new_name )
         return 0;
@@ -188,17 +189,18 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
         return 1;
     }
 
-    fgets( Line, sizeof(Line), FichCmp );
+    rs = fgets( line, sizeof(line), FichCmp );
+
     fprintf( NewFile, "Cmp-Mod V01 Genere par PcbNew le %s\n", TO_UTF8( DateAndTime() ) );
 
     bool start_descr = false;
 
-    while( fgets( Line, sizeof(Line), FichCmp ) != NULL )
+    while( fgets( line, sizeof(line), FichCmp ) != NULL )
     {
-        if( strnicmp( Line, "Reference = ", 9 ) == 0 )
+        if( strnicmp( line, "Reference = ", 9 ) == 0 )
         {
             char buf[1024];
-            strcpy( buf, Line + 12 );
+            strcpy( buf, line + 12 );
             strtok( buf, ";\n\r" );
 
             if( stricmp( buf, TO_UTF8( reference ) ) == 0 )
@@ -207,14 +209,14 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
             }
         }
 
-        if( (strnicmp( Line, "Begin", 5 ) == 0) || (strnicmp( Line, "End", 3 ) == 0) )
+        if( (strnicmp( line, "Begin", 5 ) == 0) || (strnicmp( line, "End", 3 ) == 0) )
         {
             start_descr = false;
         }
 
-        if( start_descr && strnicmp( Line, "IdModule", 8 ) == 0 )
+        if( start_descr && strnicmp( line, "IdModule", 8 ) == 0 )
         {
-            sprintf( Line + 8, "  = %s;\n", TO_UTF8( new_name ) );
+            sprintf( line + 8, "  = %s;\n", TO_UTF8( new_name ) );
 
             msg = wxT( " * in <" ) + fn.GetFullPath() + wxT( ">.\n" );
             m_WinMessages->AppendText( msg );
@@ -222,7 +224,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
             start_descr = false;
         }
 
-        fputs( Line, NewFile );
+        fputs( line, NewFile );
     }
 
     fclose( FichCmp );
@@ -422,7 +424,7 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
 {
     wxString namecmp, oldnamecmp;
     MODULE*  NewModule;
-    wxString Line;
+    wxString line;
 
     if( Module == NULL )
         return false;
@@ -434,10 +436,10 @@ bool DIALOG_EXCHANGE_MODULE::Change_1_Module( MODULE*            Module,
     namecmp    = new_module;
 
     /* Load module. */
-    Line.Printf( _( "Change module %s (%s)  " ),
+    line.Printf( _( "Change module %s (%s)  " ),
                  GetChars( Module->m_Reference->m_Text ),
                  GetChars( oldnamecmp ) );
-    m_WinMessages->AppendText( Line );
+    m_WinMessages->AppendText( line );
 
     namecmp.Trim( true );
     namecmp.Trim( false );
@@ -579,12 +581,13 @@ void DIALOG_EXCHANGE_MODULE::BrowseAndSelectFootprint( wxCommandEvent& event )
  */
 void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
 {
-    wxFileName fn;
-    FILE*      FichCmp;
-    char       Line[1024];
-    MODULE*    Module = GetBoard()->m_Modules;
-    wxString   msg;
-    wxString   wildcard;
+    wxFileName  fn;
+    FILE*       FichCmp;
+    char        line[1024];
+    MODULE*     Module = GetBoard()->m_Modules;
+    wxString    msg;
+    wxString    wildcard;
+    char*       rs;
 
     if( Module == NULL )
     {
@@ -615,7 +618,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         return;
     }
 
-    fgets( Line, sizeof(Line), FichCmp );
+    rs = fgets( line, sizeof(line), FichCmp );
     fprintf( FichCmp, "Cmp-Mod V01 Genere par PcbNew le %s\n", TO_UTF8( DateAndTime() ) );
 
     for( ; Module != NULL; Module = Module->Next() )

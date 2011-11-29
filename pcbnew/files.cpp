@@ -44,6 +44,7 @@
 #include "pcbnew.h"
 #include "protos.h"
 #include "pcbnew_id.h"
+#include "io_mgr.h"
 
 #include "class_board.h"
 
@@ -150,7 +151,6 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 bool PCB_EDIT_FRAME::LoadOnePcbFile( const wxString& aFileName, bool aAppend,
                                      bool aForceFileDialog )
 {
-    FILE*    source;
     wxString msg;
 
     if( GetScreen()->IsModify() && !aAppend )
@@ -199,8 +199,9 @@ the changes?" ) ) )
 
     GetScreen()->SetFileName( fileName.GetFullPath() );
 
+#if 1
     // Start read PCB file
-    source = wxFopen( GetScreen()->GetFileName(), wxT( "rt" ) );
+    FILE* source = wxFopen( GetScreen()->GetFileName(), wxT( "rt" ) );
 
     if( source == NULL )
     {
@@ -256,6 +257,41 @@ this file again." ) );
         ReadPcbFile( &reader, false );
         LoadProjectSettings( GetScreen()->GetFileName() );
     }
+
+#else
+
+    if( !aAppend )
+    {
+        // Update the option toolbar
+        m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
+        m_DisplayModText = DisplayOpt.DisplayModText;
+        m_DisplayModEdge = DisplayOpt.DisplayModEdge;
+        m_DisplayPadFill = DisplayOpt.DisplayPadFill;
+        m_DisplayViaFill = DisplayOpt.DisplayViaFill;
+    }
+
+    try
+    {
+        // load or append either:
+        BOARD* board = IO_MGR::Load( IO_MGR::KICAD, GetScreen()->GetFileName(),
+                            aAppend ? GetBoard() : NULL,
+                            NULL );
+
+        if( !aAppend )
+            SetBoard( board );
+    }
+    catch ( IO_ERROR ioe )
+    {
+        // @todo
+        printf( "Error loading board: %s\n", TO_UTF8( ioe.errorText ) );
+    }
+
+    if( !aAppend )
+    {
+        LoadProjectSettings( GetScreen()->GetFileName() );
+    }
+
+#endif
 
     GetScreen()->ClrModify();
 

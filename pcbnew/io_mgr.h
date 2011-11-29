@@ -117,16 +117,9 @@ public:
  * is a base class that BOARD loading and saving plugins should derive from.
  * Implementations can provide either Load() or Save() functions, or both.
  * PLUGINs throw exceptions, so it is best that you wrap your calls to these
- * functions in a try catch block, and also do the switching to stardard C locale
- * and back, outside the region in which an exception can be thrown.  This means
- * the PLUGINs do not deal with the locale, the caller does.
+ * functions in a try catch block.
  *
  * <pre>
- *
- *   // Switch the locale to standard C (needed to read floating point numbers
- *   // like 1.3)
- *
- *   SetLocaleTo_C_standard();
  *   try
  *   {
  *        pi->Load(...);
@@ -135,8 +128,6 @@ public:
  *   {
  *        // grab text from ioe, show in error window.
  *   }
- *   SetLocaleTo_Default();       // revert to the current locale
- *
  * </pre>
  */
 class PLUGIN
