@@ -279,6 +279,7 @@ set( BMAPS_MID
     label
     lang_catalan
     lang_chinese
+    lang_bg
     lang_cs
     lang_def
     lang_de

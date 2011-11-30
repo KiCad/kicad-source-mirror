@@ -233,7 +233,14 @@ static struct LANGUAGE_DESCR s_Language_List[] =
         ID_LANGUAGE_JAPANESE,
         lang_jp_xpm,
         _( "Japanese" )
-     }
+    },
+    // Bulgarian language
+    {
+        wxLANGUAGE_BULGARIAN,
+        ID_LANGUAGE_BULGARIAN,
+        lang_bg_xpm,
+        _( "Bulgarian" )
+    }
 };
 
 

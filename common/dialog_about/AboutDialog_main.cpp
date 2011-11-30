@@ -248,6 +248,8 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
                                         wxT( "Portuguese (PT)" ), KiBitmapNew( lang_pt_xpm ) ) );
     info.AddTranslator( new Contributor( wxT( "Igor Plyatov" ), wxT( "plyatov@gmail.com" ),
                                         wxT( "Russian (RU)" ), KiBitmapNew( lang_ru_xpm ) ) );
+    info.AddTranslator( new Contributor( wxT( "Andrey Fedorushkov" ), wxT( "<andrf@mail.ru>" ),
+                                        wxT( "Russian (RU)" ), KiBitmapNew( lang_ru_xpm ) ) );
     info.AddTranslator( new Contributor( wxT( "Pedro Martin del Valle" ), wxT( "pkicad@yahoo.es" ),
                                         wxT( "Spanish (ES)" ), KiBitmapNew( lang_es_xpm ) ) );
     info.AddTranslator( new Contributor( wxT( "Iñigo Zuluaga" ), wxT( "inigo_zuluaga@yahoo.es" ),
@@ -264,6 +266,9 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     info.AddTranslator( new Contributor( wxT( "Massimo Cioce" ),
                                         wxT( "ciocemax@alice.it" ), wxT( "Italian (IT)" ),
                                         KiBitmapNew( lang_it_xpm ) ) );
+    info.AddTranslator( new Contributor( wxT( "Evgeniy Ivanov" ),
+                                        wxT( "evgeniy_p_ivanov@yahoo.ca" ), wxT( "Bulgarian (BG)" ),
+                                        KiBitmapNew( lang_bg_xpm ) ) );
 
     /* TODO: are these all russian translators, placed them here now, or else align them below other language maintainer with mail adress */
     info.AddTranslator( new Contributor( wxT( "Remy Halvick" ), wxEmptyString, wxT( "Others" ) ) );

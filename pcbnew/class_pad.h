@@ -16,6 +16,7 @@ class LINE_READER;
 class EDA_3D_CANVAS;
 class EDA_DRAW_PANEL;
 class MODULE;
+class TRACK;
 
 
 /* Default layers used for pads, according to the pad type.
@@ -126,10 +127,11 @@ public:
     int    m_LocalClearance;
 
     // Local mask margins: when NULL, the parent footprint design values are used
-    int    m_LocalSolderMaskMargin;            // Local solder mask margin
-    int    m_LocalSolderPasteMargin;           // Local solder paste margin absolute value
-    double m_LocalSolderPasteMarginRatio;      // Local solder mask margin ratio value of pad size
-                                               // The final margin is the sum of these 2 values
+    int    m_LocalSolderMaskMargin;             // Local solder mask margin
+    int    m_LocalSolderPasteMargin;            // Local solder paste margin absolute value
+    double m_LocalSolderPasteMarginRatio;       // Local solder mask margin ratio value of pad size
+                                                // The final margin is the sum of these 2 values
+    std::vector<TRACK*> m_TracksConnected;      // list of other tracks connected to me
 
 private:
     int m_SubRatsnest;                  // variable used in rats nest computations
