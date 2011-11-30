@@ -52,7 +52,7 @@ public:
 
     void Save( const wxString* aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );
 
-    const wxString& Name()
+    const wxString& PluginName()
     {
         static const wxString name = wxT( "KiCad" );
         return name;
@@ -108,12 +108,19 @@ protected:
     void loadDRAWSEGMENT();
     void loadNETINFO_ITEM();
     void loadPCB_TEXTE();
+    void loadNETCLASS();
 
-/*
+    /**
+     * Function loadTrackList
+     * reads a list of segments (Tracks and Vias)
+     */
+    void loadTrackList( TRACK* aInsertBeforeMe, int aStructType, int aSegCount );
+
+
+/*  @todo
     void load( PCB_TARGET* me );
     void load( NETINFO* me );
     void load( TRACK* me );
-    void load( NETCLASS* me );
     void load( ZONE_CONTAINER* me );
     void load( DIMENSION* me );
 */

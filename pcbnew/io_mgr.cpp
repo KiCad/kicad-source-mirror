@@ -27,22 +27,26 @@
 #include <kicad_plugin.h>
 
 
-// some day plugins could be in separate DLL/DSOs, until then, use the simplest method:
+// Some day plugins might be in separate DLL/DSOs, simply because of numbers of them
+// and code size.  Until then, use the simplest method:
 
 // This implementation is one of two which could be done.
-// the other one would cater to DLL/DSO's.  But since it would be nearly
+// The other one would cater to DLL/DSO's.  But since it would be nearly
 // impossible to link a KICAD type DLL/DSO right now without pulling in all
-// ::Draw() functions, I forgo that option.
+// ::Draw() functions, I forgo that option temporarily.
 
-// Some day it may be possible to have some built in AND some DLL/DSO, but
-// only when we can keep things clean enough to link a DLL/DSO without
-// pulling in the world.
+// Some day it may be possible to have some built in AND some DLL/DSO
+// plugins coexisting.
 
-static KICAD_PLUGIN kicad_plugin;
+
+static KICAD_PLUGIN kicad_plugin;       // a secret
 //static EAGLE_PLUGIN eagle_plugin;
 
 PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
 {
+    // This implementation is subject to change, any magic is allowed here.
+    // The public IO_MGR API is the only pertinent public information.
+
     switch( aFileType )
     {
     case KICAD:     return &kicad_plugin;
@@ -104,7 +108,7 @@ BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* 
     wxString msg;
 
     msg.Printf( _( "Plugin %s does not implement the BOARD Load() function.\n" ),
-            Name().GetData() );
+            PluginName().GetData() );
 
     THROW_IO_ERROR( msg );
 }
@@ -118,7 +122,7 @@ void PLUGIN::Save( const wxString* aFileName, BOARD* aBoard, PROPERTIES* aProper
     wxString msg;
 
     msg.Printf( _( "Plugin %s does not implement the BOARD Save() function.\n" ),
-            Name().GetData() );
+            PluginName().GetData() );
 
     THROW_IO_ERROR( msg );
 }

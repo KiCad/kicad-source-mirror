@@ -117,22 +117,17 @@ public:
      */
     virtual void Flip( const wxPoint& aCentre );
 
-    /**
-     * Function GetPosition
-     * returns the position of this object.
-     * @return const wxPoint& - The position of this object.
-     */
-    wxPoint& GetPosition()
-    {
-        return m_Start;  // it had to be start or end.
-    }
-
     const wxPoint GetPosition() const       // overload
     {
         return m_Start;  // it had to be start or end.
     }
 
+    int GetWidth() const { return m_Width; }
+    void SetWidth( int aWidth ) { m_Width = aWidth; }
+
     void SetPosition( const wxPoint& aPos ) {  m_Start = aPos; }    // overload
+
+    void SetEnd( const wxPoint& aEnd ) { m_Start = aEnd; }
 
     EDA_RECT GetBoundingBox() const;
 
@@ -177,13 +172,13 @@ public:
         return hypot( dx, dy );
     }
 
-
     /* Display on screen: */
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
                const wxPoint& aOffset = ZeroOffset );
 
     /* divers */
     int Shape() const { return m_Shape & 0xFF; }
+    void SetShape( int aShape ) { m_Shape = aShape; }
 
     /**
      * Function TransformShapeWithClearanceToPolygon
@@ -488,7 +483,6 @@ public:
     {
         return wxT( "VIA" );
     }
-
 
     virtual wxString GetSelectMenuText() const;
 

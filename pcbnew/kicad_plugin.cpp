@@ -59,7 +59,7 @@
 #include <class_mire.h>
 #include <3d_struct.h>
 #include <pcb_plot_params.h>
-
+#include <drawtxt.h>
 
 /*
 #include <pcbnew.h>
@@ -198,36 +198,18 @@ void KICAD_PLUGIN::loadAllSections( bool doAppend )
             loadPCB_TEXTE();
         }
 
-#if 0
         else if( TESTLINE( "$TRACK" ) )
         {
-#if 0 && defined(PCBNEW)
-            TRACK* insertBeforeMe = Append ? NULL : m_board->m_Track.GetFirst();
-            ReadListeSegmentDescr( aReader, insertBeforeMe, PCB_TRACE_T, NbTrack );
-#endif
+            TRACK* insertBeforeMe = doAppend ? NULL : m_board->m_Track.GetFirst();
+            loadTrackList( insertBeforeMe, PCB_TRACE_T, NbTrack );
         }
 
-        else if( TESTLINE( BRD_NETCLASS ) )
+        else if( TESTLINE( "$" BRD_NETCLASS ) )
         {
-/*
-            // create an empty NETCLASS without a name.
-            NETCLASS* netclass = new NETCLASS( m_board, wxEmptyString );
-
-            // fill it from the *.brd file, and establish its name.
-            netclass->ReadDescr( aReader );
-
-            if( !m_board->m_NetClasses.Add( netclass ) )
-            {
-                // Must have been a name conflict, this is a bad board file.
-                // User may have done a hand edit to the file.
-                // Delete netclass if board could not take ownership of it.
-                delete netclass;
-
-                // @todo: throw an exception here, this is a bad board file.
-            }
-*/
+            loadNETCLASS();
         }
 
+#if 0
         else if( TESTLINE( "$CZONE_OUTLINE" ) )
         {
             auto_ptr<ZONE_CONTAINER> zone_descr( new ZONE_CONTAINER( m_board ) );
@@ -441,7 +423,7 @@ void KICAD_PLUGIN::loadSHEET()
         char* line = aReader->Line();
 
         if( TESTLINE( "$End" ) )
-            return;
+            return;             // preferred exit
 
         else if( TESTLINE( "Sheet" ) )
         {
@@ -527,8 +509,7 @@ void KICAD_PLUGIN::loadSHEET()
         }
     }
 
-    m_error = wxT( "Missing '$EndSHEETDESCR'" );
-    THROW_IO_ERROR( m_error );
+    THROW_IO_ERROR( wxT( "Missing '$EndSHEETDESCR'" ) );
 }
 
 
@@ -536,7 +517,7 @@ void KICAD_PLUGIN::loadSETUP()
 {
     NETCLASS* netclass_default = m_board->m_NetClasses.GetDefault();
 
-    static const char delims[] = " =\n\r";      // this function only
+    static const char delims[] = " =\n\r";      // for this function only
 
     while( aReader->ReadLine() )
     {
@@ -924,8 +905,7 @@ void KICAD_PLUGIN::loadMODULE()
     }
 
 out:
-    m_error = wxT( "Missing '$EndMODULE'" );
-    THROW_IO_ERROR( m_error );
+    THROW_IO_ERROR( wxT( "Missing '$EndMODULE'" ) );
 }
 
 
@@ -1032,8 +1012,7 @@ void KICAD_PLUGIN::loadDRAWSEGMENT()
         }
     }
 
-    m_error = wxT( "Missing '$EndDRAWSEGMENT'" );
-    THROW_IO_ERROR( m_error );
+    THROW_IO_ERROR( wxT( "Missing '$EndDRAWSEGMENT'" ) );
 }
 
 
@@ -1048,10 +1027,10 @@ void KICAD_PLUGIN::loadNETINFO_ITEM()
     {
         char*   line = aReader->Line();
 
-        if( strnicmp( line, "$End", 4 ) == 0 )
+        if( TESTLINE( "$End" ) )
             return;     // preferred exit
 
-        if( strncmp( line, "Na", 2 ) == 0 )
+        else if( TESTLINE( "Na" ) )
         {
             int tmp = atoi( line + 2 );
             net->SetNet( tmp );
@@ -1062,16 +1041,15 @@ void KICAD_PLUGIN::loadNETINFO_ITEM()
         }
     }
 
-    m_error = wxT( "Missing '$EndEQUIPOT'" );
-    THROW_IO_ERROR( m_error );
+    THROW_IO_ERROR( wxT( "Missing '$EndEQUIPOT'" ) );
 }
 
 
 void KICAD_PLUGIN::loadPCB_TEXTE()
 {
-    /*
+    /*  examples:
         For a single line text:
-
+        ----------------------
         $TEXTPCB
         Te "Text example"
         Po 66750 53450 600 800 150 0
@@ -1079,7 +1057,7 @@ void KICAD_PLUGIN::loadPCB_TEXTE()
         $EndTEXTPCB
 
         For a multi line text:
-
+        ---------------------
         $TEXTPCB
         Te "Text example"
         Nl "Line 2"
@@ -1089,9 +1067,9 @@ void KICAD_PLUGIN::loadPCB_TEXTE()
         Nl "line nn" is a line added to the current text
     */
 
-    char  text[1024];
-    char  style[256];
+    char    text[1024];
 
+    // maybe someday a constructor that takes all this data in one call?
     TEXTE_PCB* pcbtxt = new TEXTE_PCB( m_board );
     m_board->Add( pcbtxt, ADD_APPEND );
 
@@ -1100,94 +1078,326 @@ void KICAD_PLUGIN::loadPCB_TEXTE()
         char* line = aReader->Line();
 
         if( TESTLINE( "$EndTEXTPCB" ) )
+        {
             return;     // preferred exit
+        }
 
-#if 0   // @todo
-        else if( TESTLINE( "Te" ) )     // Text line (first line for multi line texts)
+        else if( TESTLINE( "Te" ) )     // Text line (or first line for multi line texts)
         {
             ReadDelimitedText( text, line + 2, sizeof(text) );
-            m_Text = FROM_UTF8( text );
+            pcbtxt->SetText( FROM_UTF8( text ) );
         }
 
         else if( TESTLINE( "nl" ) )     // next line of the current text
         {
             ReadDelimitedText( text, line + 2, sizeof(text) );
-            m_Text.Append( '\n' );
-            m_Text += FROM_UTF8( text );
+            pcbtxt->SetText( pcbtxt->GetText() + '\n' +  FROM_UTF8( text ) );
         }
 
         else if( TESTLINE( "Po" ) )
         {
-            sscanf( line + 2, " %d %d %d %d %d %d",
-                    &m_Pos.x, &m_Pos.y,
-                    &m_Size.x, &m_Size.y,
-                    &m_Thickness, &m_Orient );
+            // sscanf( line + 2, " %d %d %d %d %d %d", &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Size.y, &m_Thickness, &m_Orient );
+            const char* data = line + SZ( "Po" );
+
+            wxSize  sz;
+
+            BIU pos_x   = biuParse( data, &data );
+            BIU pos_y   = biuParse( data, &data );
+
+            sz.x        = biuParse( data, &data );
+            sz.y        = biuParse( data, &data );
+
+            BIU thickn  = biuParse( data, &data );
+            int orient  = atoi( data );
 
             // Ensure the text has minimal size to see this text on screen:
-            if( m_Size.x < 5 )
-                m_Size.x = 5;
 
-            if( m_Size.y < 5 )
-                m_Size.y = 5;
+            /* @todo wait until we are firmly in the nanometer world
+            if( sz.x < 5 )
+                sz.x = 5;
+
+            if( sz.y < 5 )
+                sz.y = 5;
+            */
+
+            // Set a reasonable width:
+            if( thickn < 1 )
+                thickn = 1;
+
+            thickn = Clamp_Text_PenSize( thickn, sz );
+
+            pcbtxt->SetThickness( thickn );
+            pcbtxt->SetOrientation( orient );
+
+            pcbtxt->m_Pos  = wxPoint( pos_x, pos_y );
+            pcbtxt->SetSize( sz );
         }
 
         else if( TESTLINE( "De" ) )
         {
+            char  style[256];
+
             style[0] = 0;
 
             int     normal_display = 1;
             char    hJustify = 'c';
+            int     layer = FIRST_COPPER_LAYER;
+            long    timestamp = 0;
+            bool    italic = false;
 
-            sscanf( line + 2, " %d %d %lX %s %c\n", &m_Layer, &normal_display,
-                    &m_TimeStamp, style, &hJustify );
+            // sscanf( line + 2, " %d %d %lX %s %c\n", &m_Layer, &normal_display, &m_TimeStamp, style, &hJustify );
 
-            m_Mirror = normal_display ? false : true;
+            sscanf( line + 2, " %d %d %lX %s %c\n", &layer, &normal_display, &timestamp, style, &hJustify );
 
-            if( m_Layer < FIRST_COPPER_LAYER )
-                m_Layer = FIRST_COPPER_LAYER;
+            normal_display = normal_display ? false : true;
 
-            else if( m_Layer > LAST_NO_COPPER_LAYER )
-                m_Layer = LAST_NO_COPPER_LAYER;
+            if( layer < FIRST_COPPER_LAYER )
+                layer = FIRST_COPPER_LAYER;
+
+            else if( layer > LAST_NO_COPPER_LAYER )
+                layer = LAST_NO_COPPER_LAYER;
 
             if( strnicmp( style, "Italic", 6 ) == 0 )
-                m_Italic = 1;
-            else
-                m_Italic = 0;
+                italic = true;
 
             switch( hJustify )
             {
             case 'l':
             case 'L':
-                m_HJustify = GR_TEXT_HJUSTIFY_LEFT;
+                hJustify = GR_TEXT_HJUSTIFY_LEFT;
                 break;
             case 'c':
             case 'C':
-                m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
+                hJustify = GR_TEXT_HJUSTIFY_CENTER;
                 break;
             case 'r':
             case 'R':
-                m_HJustify = GR_TEXT_HJUSTIFY_RIGHT;
+                hJustify = GR_TEXT_HJUSTIFY_RIGHT;
                 break;
             default:
-                m_HJustify = GR_TEXT_HJUSTIFY_CENTER;
+                hJustify = GR_TEXT_HJUSTIFY_CENTER;
                 break;
             }
+
+            pcbtxt->SetHorizJustify( GRTextHorizJustifyType( hJustify ) );
+            pcbtxt->SetLayer( layer );
+            pcbtxt->SetItalic( italic );
+            pcbtxt->SetTimeStamp( timestamp );
         }
-#endif
     }
 
-    /* @todo: this is unreachable code, except for when the terminator is missing
-
-    // Set a reasonable width:
-    if( m_Thickness < 1 )
-        m_Thickness = 1;
-
-    m_Thickness = Clamp_Text_PenSize( m_Thickness, m_Size );
-    */
-
-    m_error = wxT( "Missing '$EndTEXTPCB'" );
-    THROW_IO_ERROR( m_error );
+    THROW_IO_ERROR( wxT( "Missing '$EndTEXTPCB'" ) );
 }
+
+
+void KICAD_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType, int aSegCount )
+{
+    static const char delims[] = " \t\n\r";      // for this function only.
+
+    while( aReader->ReadLine() )
+    {
+        // read two lines per loop iteration, each loop is one TRACK or VIA
+        // example first line:
+        // "Po 0 23994 28800 24400 28800 150 -1\r\n"
+
+        char*       line = aReader->Line();
+        BIU         drill = -1;     // SetDefault() if -1
+        TRACK*      newTrack;
+
+        if( line[0] == '$' )    // $EndTRACK
+            return;             // preferred exit
+
+        // int arg_count = sscanf( line + 2, " %d %d %d %d %d %d %d", &shape, &tempStartX, &tempStartY, &tempEndX, &tempEndY, &width, &drill );
+
+        const char* data = line + SZ( "Po" );
+
+        int shape   = (int) strtol( data, (char**) &data, 10 );
+        BIU startX  = biuParse( data, &data );
+        BIU startY  = biuParse( data, &data );
+        BIU endX    = biuParse( data, &data );
+        BIU endY    = biuParse( data, &data );
+        BIU width   = biuParse( data, &data );
+
+        // optional 7th drill parameter (must be optional in an old format?)
+        data = strtok( (char*) data, delims );
+        if( data )
+        {
+            drill = biuParse( data );
+        }
+
+        // Read the 2nd line to determine the exact type, one of:
+        // PCB_TRACE_T, PCB_VIA_T, or PCB_ZONE_T.  The type field in 2nd line
+        // differentiates between PCB_TRACE_T and PCB_VIA_T.  With virtual
+        // functions in use, it is critical to instantiate the PCB_VIA_T
+        // exactly.
+        if( !aReader->ReadLine() )
+            break;
+
+        line = aReader->Line();
+
+        // example second line:
+        // "De 0 0 463 0 800000\r\n"
+
+        if( line[0] == '$' )
+        {
+            // mandatory 2nd line is missing
+            THROW_IO_ERROR( wxT( "Missing 2nd line of a TRACK def" ) );
+        }
+
+        int         makeType;
+        long        timeStamp;
+        int         layer, type, flags, net_code;
+
+        // parse the 2nd line to determine the type of object
+        sscanf( line + SZ( "De" ), " %d %d %d %lX %X", &layer, &type, &net_code, &timeStamp, &flags );
+
+        if( aStructType==PCB_TRACE_T && type==1 )
+            makeType = PCB_VIA_T;
+        else
+            makeType = aStructType;
+
+        switch( makeType )
+        {
+        default:
+        case PCB_TRACE_T:
+            newTrack = new TRACK( m_board );
+            m_board->m_Track.Insert( newTrack, aInsertBeforeMe );
+            break;
+
+        case PCB_VIA_T:
+            newTrack = new SEGVIA( m_board );
+            m_board->m_Track.Insert( newTrack, aInsertBeforeMe );
+            break;
+
+        case PCB_ZONE_T:     // this is now deprecated, but exist in old boards
+            newTrack = new SEGZONE( m_board );
+            m_board->m_Zone.Insert( (SEGZONE*) newTrack, (SEGZONE*) aInsertBeforeMe );
+            break;
+        }
+
+        newTrack->SetTimeStamp( timeStamp );
+
+        newTrack->SetPosition( wxPoint( startX, startY ) );
+        newTrack->SetEnd( wxPoint( endX, endY ) );
+
+        newTrack->SetWidth( width );
+        newTrack->SetShape( shape );
+
+        if( drill <= 0 )
+            newTrack->SetDrillDefault();
+        else
+            newTrack->SetDrillValue( drill );
+
+        newTrack->SetLayer( layer );
+
+        if( makeType == PCB_VIA_T )     // Ensure layers are OK when possible:
+        {
+            if( newTrack->Shape() == VIA_THROUGH )
+                ( (SEGVIA*) newTrack )->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
+        }
+
+        newTrack->SetNet( net_code );
+        newTrack->SetState( flags, ON );
+    }
+
+    THROW_IO_ERROR( wxT( "Missing '$EndTRACK'" ) );
+}
+
+
+void KICAD_PLUGIN::loadNETCLASS()
+{
+    char        buf[1024];
+    wxString    netname;
+
+    // create an empty NETCLASS without a name, but do not add it to the BOARD
+    // yet since that would bypass duplicate netclass name checking within the BOARD.
+    // store it temporarily in an auto_ptr until successfully inserted into the BOARD
+    // just before returning.
+    auto_ptr<NETCLASS> netclass( new NETCLASS( m_board, wxEmptyString ) );
+
+    while( aReader->ReadLine() )
+    {
+        char* line = aReader->Line();
+
+        if( TESTLINE( "AddNet" ) )
+        {
+            ReadDelimitedText( buf, line + SZ( "AddNet" ), sizeof(buf) );
+            netname = FROM_UTF8( buf );
+            netclass->Add( netname );
+        }
+
+        else if( TESTLINE( "$end" BRD_NETCLASS ) )
+        {
+            if( m_board->m_NetClasses.Add( netclass.get() ) )
+            {
+                netclass.release();
+            }
+            else
+            {
+                // Must have been a name conflict, this is a bad board file.
+                // User may have done a hand edit to the file.
+
+                // auto_ptr will delete netclass on this code path
+
+                m_error.Printf( _( "duplicate NETCLASS name '%s'" ), netclass->GetName().GetData() );
+                THROW_IO_ERROR( m_error );
+            }
+
+            return;             // prefered exit
+        }
+
+        else if( TESTLINE( "Clearance" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "Clearance" ) );
+            netclass->SetClearance( tmp );
+        }
+
+        else if( TESTLINE( "TrackWidth" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "TrackWidth" ) );
+            netclass->SetTrackWidth( tmp );
+        }
+
+        else if( TESTLINE( "ViaDia" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "ViaDia" ) );
+            netclass->SetViaDiameter( tmp );
+        }
+
+        else if( TESTLINE( "ViaDrill" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "ViaDrill" ) );
+            netclass->SetViaDrill( tmp );
+        }
+
+        else if( TESTLINE( "uViaDia" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "uViaDia" ) );
+            netclass->SetuViaDiameter( tmp );
+        }
+
+        else if( TESTLINE( "uViaDrill" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "uViaDrill" ) );
+            netclass->SetuViaDrill( tmp );
+        }
+
+        else if( TESTLINE( "Name" ) )
+        {
+            ReadDelimitedText( buf, line + SZ( "Name" ), sizeof(buf) );
+            netclass->SetName( FROM_UTF8( buf ) );
+        }
+
+        else if( TESTLINE( "Desc" ) )
+        {
+            ReadDelimitedText( buf, line + SZ( "Desc" ), sizeof(buf) );
+            netclass->SetDescription( FROM_UTF8( buf ) );
+        }
+    }
+
+    THROW_IO_ERROR( wxT( "Missing '$End" BRD_NETCLASS ) );
+}
+
 
 std::string KICAD_PLUGIN::biuFmt( BIU aValue )
 {

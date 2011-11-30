@@ -82,7 +82,6 @@ public:
      */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-
     /**
      * Function HitTest
      * tests if the given wxPoint is within the bounds of this object.
@@ -93,7 +92,6 @@ public:
     {
         return TextHitTest( refPos );
     }
-
 
     /**
      * Function HitTest (overloaded)
@@ -149,7 +147,6 @@ public:
      */
     virtual void Show( int nestLevel, std::ostream& os );
 #endif
-
 };
 
 #endif  // #define CLASS_PCB_TEXT_H
