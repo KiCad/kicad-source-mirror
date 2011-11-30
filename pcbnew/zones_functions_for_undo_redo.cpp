@@ -86,10 +86,10 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
     if(  m_PadOption != aZoneToCompare.m_PadOption )
         return false;
 
-    if(  m_ThermalReliefGapValue != aZoneToCompare.m_ThermalReliefGapValue )
+    if(  m_ThermalReliefGap != aZoneToCompare.m_ThermalReliefGap )
         return false;
 
-    if(  m_ThermalReliefCopperBridgeValue != aZoneToCompare.m_ThermalReliefCopperBridgeValue )
+    if(  m_ThermalReliefCopperBridge != aZoneToCompare.m_ThermalReliefCopperBridge )
         return false;
 
     // Compare outlines

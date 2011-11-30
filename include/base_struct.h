@@ -3,8 +3,8 @@
  * @brief Basic classes for most KiCad items.
  */
 
-#ifndef BASE_STRUCT_H
-#define BASE_STRUCT_H
+#ifndef BASE_STRUCT_H_
+#define BASE_STRUCT_H_
 
 #include "colors.h"
 #include "bitmaps.h"
@@ -725,8 +725,8 @@ enum FILL_T {
 /**
  * Class EDA_TEXT
  * is a basic class to handle texts (labels, texts on components or footprints
- * ..) not used directly.
- * The text classes are derived from EDA_ITEM and EDA_TEXT
+ * ..) not used directly. The "used" text classes are derived from EDA_ITEM and
+ * EDA_TEXT using multiple inheritance.
  */
 class EDA_TEXT
 {
@@ -772,24 +772,25 @@ public:
     int  GetOrientation() const { return m_Orient; }
 
     void SetItalic( bool isItalic ) { m_Italic = isItalic; }
-    bool GetItalic() const { return m_Italic; }
+    bool IsItalic() const { return m_Italic; }
 
     /**
      * Function SetSize
      * sets text size.
      * @param aNewSize is the new text size.
      */
-    void SetSize( wxSize aNewSize ) { m_Size = aNewSize; };
+    void SetSize( const wxSize& aNewSize ) { m_Size = aNewSize; };
 
     /**
      * Function GetSize
      * returns text size.
      * @return wxSize - text size.
      */
-    wxSize GetSize() const { return m_Size; };
+    const wxSize GetSize() const { return m_Size; };
 
-    //void SetPosition( const wxPoint& aPoint ) { m_Pos = aPoint; }
-    //wxPoint GetPosition() const { return m_Pos; }
+    /// named differently than the ones using multiple inheritance and including this class
+    void SetPos( const wxPoint& aPoint ) { m_Pos = aPoint; }
+    const wxPoint GetPos() const { return m_Pos; }
 
     int GetLength() const { return m_Text.Length(); };
 
@@ -904,9 +905,9 @@ public:
      * string to provide a way for modifying the base string by adding a suffix or
      * prefix to the base string.
      * </p>
-     * @return a wxString object containing the string of the item.
+     * @return a const wxString object containing the string of the item.
      */
-    virtual wxString GetText() const { return m_Text; }
+    virtual const wxString GetText() const { return m_Text; }
 
     GRTextHorizJustifyType GetHorizJustify() const { return m_HJustify; };
     GRTextVertJustifyType GetVertJustify() const { return m_VJustify; };
@@ -914,4 +915,4 @@ public:
     void SetVertJustify( GRTextVertJustifyType aType ) { m_VJustify = aType; };
 };
 
-#endif /* BASE_STRUCT_H */
+#endif // BASE_STRUCT_H_

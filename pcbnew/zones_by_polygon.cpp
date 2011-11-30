@@ -480,9 +480,9 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                 }
 
                 wxGetApp().m_EDA_Config->Read( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
-                                               &g_Zone_Default_Setting.m_ThermalReliefGapValue );
+                                               &g_Zone_Default_Setting.m_ThermalReliefGap );
                 wxGetApp().m_EDA_Config->Read( ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
-                                               &g_Zone_Default_Setting.m_ThermalReliefCopperBridgeValue );
+                                               &g_Zone_Default_Setting.m_ThermalReliefCopperBridge );
 
                 g_Zone_Default_Setting.m_CurrentZone_Layer = zone->GetLayer();
                 DIALOG_COPPER_ZONE* frame = new DIALOG_COPPER_ZONE( this, &g_Zone_Default_Setting  );

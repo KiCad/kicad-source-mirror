@@ -1030,7 +1030,7 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
             continue;
         }
 
-        if( TESTLINE( BRD_NETCLASS ) )
+        if( TESTLINE( "NCLASS" ) )
         {
             // create an empty NETCLASS without a name.
             NETCLASS* netclass = new NETCLASS( board, wxEmptyString );

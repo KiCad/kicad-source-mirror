@@ -81,16 +81,6 @@ public:
     static const wxString Default;      ///< the name of the default NETCLASS
 
     /**
-     * Name of identifier within BOARD file.
-     * 08-Sept-2009: changed the name from "NETCLASS" to this so we can
-     * toss any previous NETCLASSes in migratory BOARD files which will not have
-     * the proper parameters in the default netclass
-     * (from m_Parent->m_designSettings) in them.
-     * Spare the user from having to enter those defaults manually.
-     */
-#define BRD_NETCLASS  "NCLASS"
-
-    /**
      * Constructor
      * stuffs a NETCLASS instance with aParent, aName, and optionally the initialParameters
      * @param aParent = the parent board

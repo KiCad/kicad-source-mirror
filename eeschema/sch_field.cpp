@@ -87,7 +87,7 @@ EDA_ITEM* SCH_FIELD::doClone() const
 }
 
 
-wxString SCH_FIELD::GetText() const
+const wxString SCH_FIELD::GetText() const
 {
     wxString text = m_Text;
 

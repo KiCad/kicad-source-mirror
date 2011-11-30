@@ -342,13 +342,13 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
                 if( pad->GetNet() != GetNet() )
                     continue;
                 item_boundingbox = pad->GetBoundingBox();
-                item_boundingbox.Inflate( m_ThermalReliefGapValue, m_ThermalReliefGapValue );
+                item_boundingbox.Inflate( m_ThermalReliefGap, m_ThermalReliefGap );
 
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                 {
                     CreateThermalReliefPadPolygon( cornerBufferPolysToSubstract,
-                                                   *pad, m_ThermalReliefGapValue,
-                                                   m_ThermalReliefCopperBridgeValue,
+                                                   *pad, m_ThermalReliefGap,
+                                                   m_ThermalReliefCopperBridge,
                                                    m_ZoneMinThickness,
                                                    s_CircleToSegmentsCount,
                                                    s_Correction, s_thermalRot );

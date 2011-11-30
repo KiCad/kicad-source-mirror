@@ -41,8 +41,8 @@ public:
     // Option to select number of segments to approximate a circle 16 or 32 segments.
     int  m_ArcToSegmentsCount;
 
-    long m_ThermalReliefGapValue;            // thickness of the gap in thermal reliefs
-    long m_ThermalReliefCopperBridgeValue;   // thickness of the copper bridge in thermal reliefs
+    long m_ThermalReliefGap;            // thickness of the gap in thermal reliefs
+    long m_ThermalReliefCopperBridge;   // thickness of the copper bridge in thermal reliefs
     int  m_Zone_Pad_Options;                 // How pads are covered by copper in zone
 
 private:

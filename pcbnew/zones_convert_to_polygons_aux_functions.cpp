@@ -49,7 +49,7 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
     int pen_radius = aZone->m_ZoneMinThickness / 2;
 
     // Calculate thermal bridge half width
-    int thermbridgeWidth = aZone->m_ThermalReliefCopperBridgeValue / 2;
+    int thermbridgeWidth = aZone->m_ThermalReliefCopperBridge / 2;
     for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
@@ -61,17 +61,17 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
                 continue;
 
             item_boundingbox = pad->GetBoundingBox();
-            item_boundingbox.Inflate( aZone->m_ThermalReliefGapValue );
+            item_boundingbox.Inflate( aZone->m_ThermalReliefGap );
             if( !( item_boundingbox.Intersects( zone_boundingbox ) ) )
                 continue;
 
             // Thermal bridges are like a segment from a starting point inside the pad
             // to an ending point outside the pad
             wxPoint startpoint, endpoint;
-            endpoint.x = ( pad->m_Size.x / 2 ) + aZone->m_ThermalReliefGapValue;
-            endpoint.y = ( pad->m_Size.y / 2 ) + aZone->m_ThermalReliefGapValue;
+            endpoint.x = ( pad->m_Size.x / 2 ) + aZone->m_ThermalReliefGap;
+            endpoint.y = ( pad->m_Size.y / 2 ) + aZone->m_ThermalReliefGap;
 
-            int copperThickness = aZone->m_ThermalReliefCopperBridgeValue - aZone->m_ZoneMinThickness;
+            int copperThickness = aZone->m_ThermalReliefCopperBridge - aZone->m_ZoneMinThickness;
             if( copperThickness < 0 )
                 copperThickness = 0;
 

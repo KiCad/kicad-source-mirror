@@ -97,7 +97,7 @@ void EDA_GRAPHIC_TEXT_CTRL::SetValue( int textSize )
 }
 
 
-wxString EDA_GRAPHIC_TEXT_CTRL::GetText()
+const wxString EDA_GRAPHIC_TEXT_CTRL::GetText() const
 {
     wxString text = m_FrameText->GetValue();
     return text;
