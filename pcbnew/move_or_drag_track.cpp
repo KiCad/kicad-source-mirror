@@ -222,7 +222,10 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
 
     // Display track length
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) aPanel->GetParent();
-    Track->DisplayInfo( frame );
+    if( Track == NULL )     // can happen if g_DragSegmentList is empty
+        Track = NewTrack;   // try to use main item
+    if( Track )
+        Track->DisplayInfo( frame );
 }
 
 
