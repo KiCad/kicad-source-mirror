@@ -17,7 +17,7 @@
 
 ; General Product Description Definitions
 !define PRODUCT_NAME "KiCad"
-!define PRODUCT_VERSION "2011.11.26"
+!define PRODUCT_VERSION "2011.11.30"
 !define PRODUCT_WEB_SITE "http://iut-tice.ujf-grenoble.fr/kicad/"
 !define SOURCEFORGE_WEB_SITE "http://kicad.sourceforge.net/"
 !define COMPANY_NAME ""
@@ -116,8 +116,7 @@ Section $(TITLE_SEC01) SEC01
   SetOverwrite try
   SetOutPath "$INSTDIR"
   File /nonfatal "..\AUTHORS.txt"
-  File /nonfatal "..\copyright.txt"
-  File /nonfatal "..\gpl.txt"
+  File /nonfatal "..\COPYRIGHT.txt"
   File /nonfatal "..\licendoc.txt"
   SetOutPath "$INSTDIR\share\template"
   File /nonfatal /r "..\share\template\*"

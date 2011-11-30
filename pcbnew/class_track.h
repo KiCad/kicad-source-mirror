@@ -12,7 +12,7 @@
 
 
 class TRACK;
-
+class D_PAD;
 
 // Via attributes (m_Shape parameter)
 #define VIA_THROUGH             3           /* Always a through hole via */
@@ -63,7 +63,8 @@ protected:
 public:
     BOARD_CONNECTED_ITEM* start;    // pointers to a connected item (pad or track)
     BOARD_CONNECTED_ITEM* end;
-    std::vector<TRACK*> m_TracksConnected;   // list of other tracks connected to me
+    std::vector<TRACK*> m_TracksConnected;  // list of other tracks connected to me
+    std::vector<D_PAD*> m_PadsConnected;    // list of pads connected to me
 
     int         m_Param;            // Auxiliary variable ( used in some computations )
 
