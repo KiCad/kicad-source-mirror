@@ -390,6 +390,8 @@ public:
      */
     KICAD_T Type()  const { return m_StructType; }
 
+    void SetTimeStamp( unsigned long aNewTimeStamp ) { m_TimeStamp = aNewTimeStamp; }
+    unsigned long GetTimeStamp() const { return m_TimeStamp; }
 
     EDA_ITEM* Next() const { return (EDA_ITEM*) Pnext; }
     EDA_ITEM* Back() const { return (EDA_ITEM*) Pback; }
@@ -728,7 +730,6 @@ enum FILL_T {
  */
 class EDA_TEXT
 {
-
 public:
     int      m_Thickness;               /* pen size used to draw this text */
     int      m_Orient;                  /* Orient in 0.1 degrees */
@@ -769,6 +770,9 @@ public:
 
     void SetOrientation( int aOrientation ) { m_Orient = aOrientation; }
     int  GetOrientation() const { return m_Orient; }
+
+    void SetItalic( bool isItalic ) { m_Italic = isItalic; }
+    bool GetItalic() const { return m_Italic; }
 
     /**
      * Function SetSize

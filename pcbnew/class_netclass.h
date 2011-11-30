@@ -112,6 +112,8 @@ public:
         return m_Name;
     }
 
+    void SetName( const wxString& aName ) { m_Name = aName; }
+
     /**
      * Function GetCount
      * returns the number of nets in this NETCLASS, i.e. using these rules.

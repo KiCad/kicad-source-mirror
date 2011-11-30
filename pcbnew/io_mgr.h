@@ -40,7 +40,7 @@ class PLUGIN;
 
 /**
  * Class IO_MGR
- * is factory which returns an instance of a PLUGIN DSO/DLL.
+ * is a factory which returns an instance of a PLUGIN.
  */
 class IO_MGR
 {
@@ -63,7 +63,8 @@ public:
      * Function PluginFind
      * returns a PLUGIN which the caller can use to import, export, save, or load
      * design documents.  The returned PLUGIN, may be reference counted, so please
-     * call PluginRelease() when you are done using the returned PLUGIN.
+     * call PluginRelease() when you are done using the returned PLUGIN.  It may or
+     * may not be code running from a DLL/DSO.
      *
      * @param aFileType is from PCB_FILE_T and tells which plugin to find.
      *
@@ -88,21 +89,21 @@ public:
 
     /**
      * Function Load
-     * finds the requested plugin and loads a BOARD, or throws an exception trying.
+     * finds the requested PLUGIN and loads a BOARD, or throws an exception trying.
      *
-     * @param aFileType is the type of file to load.
+     * @param aFileType is the PCB_FILE_T of file to load.
      *
      * @param aFileName is the name of the file to load.
      *
      * @param aAppendToMe is an existing BOARD to append to, use NULL if fresh
-     *  board load wanted.
+     *  board load is wanted.
      *
      * @param aProperties is an associative array that allows the caller to
-     *  pass additional tuning parameters to the plugin.
+     *  pass additional tuning parameters to the PLUGIN.
      *
      * @return BOARD* - caller owns it, never NULL because exception thrown if error.
      *
-     * @throw IO_ERROR if the pluging cannot be found, file cannot be found,
+     * @throw IO_ERROR if the PLUGIN cannot be found, file cannot be found,
      *  or file cannot be loaded.
      */
     static BOARD* Load( PCB_FILE_T aFileType, const wxString& aFileName,
@@ -168,7 +169,12 @@ public:
         }
     };
 
-    virtual const wxString& Name() = 0;
+
+    /**
+     * Function PluginName
+     * returns a brief hard coded name for this PLUGIN.
+     */
+    virtual const wxString& PluginName() = 0;
 
     //-----<BOARD STUFF>----------------------------------------------------
 
@@ -192,7 +198,7 @@ public:
      * @throw IO_ERROR if there is a problem loading, and its contents should
      *  say what went wrong.
      */
-    virtual BOARD*  Load( const wxString& aFileName, BOARD* aAppendToMe,
+    virtual BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
                         PROPERTIES* aProperties = NULL );
 
     /**
@@ -255,4 +261,3 @@ public:
 };
 
 #endif // IO_MGR_H_
-
