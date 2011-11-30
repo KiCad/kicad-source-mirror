@@ -718,7 +718,8 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_
         Plot_Standard_Layer( plotter, layer_mask, false, trace_mode );
         break;
 
-    default:
+    case SILKSCREEN_N_FRONT:
+    case SILKSCREEN_N_BACK:
         PlotSilkScreen( plotter, layer_mask, trace_mode );
 
         // Gerber: Subtract soldermask from silkscreen if enabled
@@ -741,6 +742,10 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_
                                  trace_mode );
         }
 
+        break;
+
+    default:
+        PlotSilkScreen( plotter, layer_mask, trace_mode );
         break;
     }
 }
