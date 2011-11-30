@@ -196,8 +196,8 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
                    m_FillMode,
                    m_ArcToSegmentsCount,
                    m_IsFilled ? 'S' : 'F',
-                   m_ThermalReliefGapValue,
-                   m_ThermalReliefCopperBridgeValue );
+                   m_ThermalReliefGap,
+                   m_ThermalReliefCopperBridge );
 
     if( ret < 3 )
         return false;
@@ -398,7 +398,7 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
             char fillstate = 'F';
             text = Line + 8;
             ret  = sscanf( text, "%d %d %c %d %d", &fillmode, &arcsegmentcount, &fillstate,
-                           &m_ThermalReliefGapValue, &m_ThermalReliefCopperBridgeValue );
+                           &m_ThermalReliefGap, &m_ThermalReliefCopperBridge );
 
             if( ret < 1 )  // Must find 1 or more args.
                 return false;
@@ -1213,8 +1213,8 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_FillMode = src->m_FillMode;               // Filling mode (segments/polygons)
     m_ArcToSegmentsCount = src->m_ArcToSegmentsCount;
     m_PadOption = src->m_PadOption;
-    m_ThermalReliefGapValue = src->m_ThermalReliefGapValue;
-    m_ThermalReliefCopperBridgeValue = src->m_ThermalReliefCopperBridgeValue;
+    m_ThermalReliefGap = src->m_ThermalReliefGap;
+    m_ThermalReliefCopperBridge = src->m_ThermalReliefCopperBridge;
     m_Poly->m_HatchStyle = src->m_Poly->GetHatchStyle();
     m_Poly->m_HatchLines = src->m_Poly->m_HatchLines;   // Copy vector <CSegment>
     m_FilledPolysList.clear();

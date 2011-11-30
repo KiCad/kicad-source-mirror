@@ -97,8 +97,9 @@ public:
 class CPolyPt
 {
 public:
-    CPolyPt( int qx = 0, int qy = 0, bool qf = false )
-    { x = qx; y = qy; end_contour = qf; utility = 0; };
+    CPolyPt( int qx = 0, int qy = 0, bool qf = false, int aUtility = 0 )
+    { x = qx; y = qy; end_contour = qf; utility = aUtility; };
+
     int  x;
     int  y;
     bool end_contour;

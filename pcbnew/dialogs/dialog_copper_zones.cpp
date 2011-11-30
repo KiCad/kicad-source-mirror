@@ -122,10 +122,10 @@ void DIALOG_COPPER_ZONE::initDialog()
     AddUnitSymbol( *m_AntipadSizeText, g_UserUnit );
     AddUnitSymbol( *m_CopperBridgeWidthText, g_UserUnit );
     PutValueInLocalUnits( *m_AntipadSizeValue,
-                          m_Zone_Setting->m_ThermalReliefGapValue,
+                          m_Zone_Setting->m_ThermalReliefGap,
                           PCB_INTERNAL_UNIT );
     PutValueInLocalUnits( *m_CopperWidthValue,
-                          m_Zone_Setting->m_ThermalReliefCopperBridgeValue,
+                          m_Zone_Setting->m_ThermalReliefCopperBridge,
                           PCB_INTERNAL_UNIT );
 
     m_cornerSmoothingChoice->SetSelection( m_Zone_Setting->GetCornerSmoothingType() );
@@ -328,19 +328,19 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     else
         g_Zone_45_Only = TRUE;
 
-    m_Zone_Setting->m_ThermalReliefGapValue = ReturnValueFromTextCtrl( *m_AntipadSizeValue,
+    m_Zone_Setting->m_ThermalReliefGap = ReturnValueFromTextCtrl( *m_AntipadSizeValue,
                                                                        PCB_INTERNAL_UNIT );
-    m_Zone_Setting->m_ThermalReliefCopperBridgeValue = ReturnValueFromTextCtrl(
+    m_Zone_Setting->m_ThermalReliefCopperBridge = ReturnValueFromTextCtrl(
         *m_CopperWidthValue,
         PCB_INTERNAL_UNIT );
 
     m_Config->Write( ZONE_THERMAL_RELIEF_GAP_STRING_KEY,
-                     (long) m_Zone_Setting->m_ThermalReliefGapValue );
+                     (long) m_Zone_Setting->m_ThermalReliefGap );
     m_Config->Write(
         ZONE_THERMAL_RELIEF_COPPER_WIDTH_STRING_KEY,
-        (long) m_Zone_Setting->m_ThermalReliefCopperBridgeValue );
+        (long) m_Zone_Setting->m_ThermalReliefCopperBridge );
 
-    if( m_Zone_Setting->m_ThermalReliefCopperBridgeValue <= m_Zone_Setting->m_ZoneMinThickness )
+    if( m_Zone_Setting->m_ThermalReliefCopperBridge <= m_Zone_Setting->m_ZoneMinThickness )
     {
         DisplayError( this,
                      _( "Thermal relief spoke width is larger than the minimum width." ) );

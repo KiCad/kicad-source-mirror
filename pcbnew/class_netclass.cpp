@@ -288,7 +288,7 @@ bool NETCLASS::Save( FILE* aFile ) const
 {
     bool result = true;
 
-    fprintf( aFile, "$" BRD_NETCLASS "\n" );
+    fprintf( aFile, "$NCLASS\n" );
     fprintf( aFile, "Name %s\n",        EscapedUTF8( m_Name ).c_str() );
     fprintf( aFile, "Desc %s\n",        EscapedUTF8( GetDescription() ).c_str() );
 
@@ -307,7 +307,7 @@ bool NETCLASS::Save( FILE* aFile ) const
     for( const_iterator i = begin();  i!=end();  ++i )
         fprintf( aFile, "AddNet %s\n", EscapedUTF8( *i ).c_str() );
 
-    fprintf( aFile, "$End" BRD_NETCLASS "\n" );
+    fprintf( aFile, "$EndNCLASS\n" );
 
     return result;
 }
@@ -334,74 +334,72 @@ void NETCLASS::Show( int nestLevel, std::ostream& os )
 
 #endif
 
-
-
 bool NETCLASS::ReadDescr( LINE_READER* aReader )
 {
     bool        result = false;
-    char*       Line;
-    char        Buffer[1024];
+    char*       line;
+    char        buf[1024];
     wxString    netname;
 
     while( aReader->ReadLine() )
     {
-        Line = aReader->Line();
-        if( strnicmp( Line, "AddNet", 6 ) == 0 )
+        line = aReader->Line();
+        if( strnicmp( line, "AddNet", 6 ) == 0 )
         {
-            ReadDelimitedText( Buffer, Line + 6, sizeof(Buffer) );
-            netname = FROM_UTF8( Buffer );
+            ReadDelimitedText( buf, line + 6, sizeof(buf) );
+            netname = FROM_UTF8( buf );
             Add( netname );
             continue;
         }
 
-        if( strnicmp( Line, "$end" BRD_NETCLASS, sizeof( "$end" BRD_NETCLASS)-1) == 0 )
+        if( strnicmp( line, "$endNCLASS", sizeof( "$endNCLASS" ) - 1 ) == 0 )
         {
             result = true;
             break;
         }
 
-        if( strnicmp( Line, "Clearance", 9 ) == 0 )
+        if( strnicmp( line, "Clearance", 9 ) == 0 )
         {
-            SetClearance( atoi( Line + 9 ) );
+            SetClearance( atoi( line + 9 ) );
             continue;
         }
-        if( strnicmp( Line, "TrackWidth", 10 ) == 0 )
+        if( strnicmp( line, "TrackWidth", 10 ) == 0 )
         {
-            SetTrackWidth( atoi( Line + 10 ) );
+            SetTrackWidth( atoi( line + 10 ) );
             continue;
         }
-        if( strnicmp( Line, "ViaDia", 6 ) == 0 )
+        if( strnicmp( line, "ViaDia", 6 ) == 0 )
         {
-            SetViaDiameter( atoi( Line + 6 ) );
+            SetViaDiameter( atoi( line + 6 ) );
             continue;
         }
-        if( strnicmp( Line, "ViaDrill", 8 ) == 0 )
+        if( strnicmp( line, "ViaDrill", 8 ) == 0 )
         {
-            SetViaDrill( atoi( Line + 8 ) );
-            continue;
-        }
-
-        if( strnicmp( Line, "uViaDia", 7 ) == 0 )
-        {
-            SetuViaDiameter( atoi( Line + 7 ) );
-            continue;
-        }
-        if( strnicmp( Line, "uViaDrill", 9 ) == 0 )
-        {
-            SetuViaDrill( atoi( Line + 9 ) );
+            SetViaDrill( atoi( line + 8 ) );
             continue;
         }
 
-        if( strnicmp( Line, "Name", 4 ) == 0 )
+        if( strnicmp( line, "uViaDia", 7 ) == 0 )
         {
-            ReadDelimitedText( Buffer, Line + 4, sizeof(Buffer) );
-            m_Name = FROM_UTF8( Buffer );
+            SetuViaDiameter( atoi( line + 7 ) );
             continue;
         }
-        if( strnicmp( Line, "Desc", 4 ) == 0 )
+        if( strnicmp( line, "uViaDrill", 9 ) == 0 )
         {
-            ReadDelimitedText( Buffer, Line + 4, sizeof(Buffer) );
-            SetDescription( FROM_UTF8( Buffer ) );
+            SetuViaDrill( atoi( line + 9 ) );
+            continue;
+        }
+
+        if( strnicmp( line, "Name", 4 ) == 0 )
+        {
+            ReadDelimitedText( buf, line + 4, sizeof(buf) );
+            m_Name = FROM_UTF8( buf );
+            continue;
+        }
+        if( strnicmp( line, "Desc", 4 ) == 0 )
+        {
+            ReadDelimitedText( buf, line + 4, sizeof(buf) );
+            SetDescription( FROM_UTF8( buf ) );
             continue;
         }
     }

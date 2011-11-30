@@ -37,19 +37,26 @@ DIMENSION::~DIMENSION()
 }
 
 
-void DIMENSION::SetText( const wxString& NewText )
+void DIMENSION::SetPosition( const wxPoint& aPos )
 {
-    m_Text->m_Text = NewText;
+    m_Pos = aPos;
+    m_Text->SetPos( aPos );
 }
 
 
-wxString DIMENSION::GetText( void ) const
+void DIMENSION::SetText( const wxString& aNewText )
 {
-    return m_Text->m_Text;
+    m_Text->SetText( aNewText );
 }
 
 
-void  DIMENSION::SetLayer( int aLayer )
+const wxString DIMENSION::GetText() const
+{
+    return m_Text->GetText();
+}
+
+
+void DIMENSION::SetLayer( int aLayer )
 {
     m_Layer = aLayer;
     m_Text->SetLayer( aLayer);

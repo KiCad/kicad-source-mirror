@@ -24,17 +24,18 @@ class BOARD;
 class ZONE_CONTAINER;
 
 
-/* a small class used when filling areas with segments */
-class SEGMENT
+/**
+ * Struct SEGMENT
+ * is a simple container used when filling areas with segments
+ */
+struct SEGMENT
 {
-public:
     wxPoint m_Start;        // starting point of a segment
     wxPoint m_End;          // ending point of a segment
 
-public:
     SEGMENT() {}
 
-    SEGMENT( const wxPoint& aStart, const wxPoint& aEnd)
+    SEGMENT( const wxPoint& aStart, const wxPoint& aEnd )
     {
         m_Start = aStart;
         m_End = aEnd;
@@ -69,10 +70,10 @@ public:
     int                   m_PadOption;
 
     // thickness of the gap in thermal reliefs.
-    int                   m_ThermalReliefGapValue;
+    int                   m_ThermalReliefGap;
 
     // thickness of the copper bridge in thermal reliefs
-    int                   m_ThermalReliefCopperBridgeValue;
+    int                   m_ThermalReliefCopperBridge;
     int                   utility, utility2;                // flags used in polygon calculations
 
     // true when a zone was filled, false after deleting the filled areas
@@ -167,7 +168,6 @@ public:
      */
     void DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode = GR_OR );
 
-
     /* Function GetBoundingBox
      * @return an EDA_RECT that is the bounding box of the zone outline
      */
@@ -204,8 +204,8 @@ public:
     }
 
     /**
-     * Functio SetNet
-     * set the netcode and the netname.
+     * Function SetNet
+     * sets the netcode and the netname.
      *
      * @param aNetCode The net code of the zone container if greater than or equal to
      *                 zero.  Otherwise the current net code is kept and set the net
@@ -226,6 +226,31 @@ public:
      * @return wxString - The net name.
      */
     wxString GetNetName() const { return m_Netname; };
+    void SetNetName( const wxString& aName ) { m_Netname = aName; }
+
+    void SetFillMode( int aFillMode ) { m_FillMode = aFillMode; }
+    int GetFillMode() const { return m_FillMode; }
+
+    void SetThermalReliefGap( int aThermalReliefGap ) { m_ThermalReliefGap = aThermalReliefGap; }
+    int GetThermalReliefGap() const { return m_ThermalReliefGap; }
+
+    void SetThermalReliefCopperBridge( int aThermalReliefCopperBridge ) { m_ThermalReliefCopperBridge = aThermalReliefCopperBridge; }
+    int GetThermalReliefCopperBridge() const { return m_ThermalReliefCopperBridge; }
+
+    void SetArcSegCount( int aArcSegCount ) { m_ArcToSegmentsCount = aArcSegCount; }
+    int GetArcSegCount() const { return m_ArcToSegmentsCount; }
+
+    bool IsFilled() const { return m_IsFilled; }
+    void SetIsFilled( bool isFilled ) { m_IsFilled = isFilled; }
+
+    int GetZoneClearance() const { return m_ZoneClearance; }
+    void SetZoneClearance( int aZoneClearance ) { m_ZoneClearance = aZoneClearance; }
+
+    int GetPadOption() const { return m_PadOption; }
+    void SetPadOption( int aPadOption ) { m_PadOption = aPadOption; }
+
+    int GetMinThickness() const { return m_ZoneMinThickness; }
+    void SetMinThickness( int aMinThickness ) { m_ZoneMinThickness = aMinThickness; }
 
     /**
      * Function HitTest
@@ -403,18 +428,15 @@ public:
         return m_Poly->GetNumCorners();
     }
 
-
     void RemoveAllContours( void )
     {
         m_Poly->RemoveAllContours();
     }
 
-
     wxPoint GetCornerPosition( int aCornerIndex ) const
     {
         return wxPoint( m_Poly->GetX( aCornerIndex ), m_Poly->GetY( aCornerIndex ) );
     }
-
 
     void SetCornerPosition( int aCornerIndex, wxPoint new_pos )
     {
@@ -422,12 +444,10 @@ public:
         m_Poly->SetY( aCornerIndex, new_pos.y );
     }
 
-
     void AppendCorner( wxPoint position )
     {
         m_Poly->AppendCorner( position.x, position.y );
     }
-
 
     int GetHatchStyle() const
     {
@@ -436,12 +456,12 @@ public:
 
     /**
      * Function IsSame
-     * test is 2 zones are equivalent:
+     * tests if 2 zones are equivalent:
      * 2 zones are equivalent if they have same parameters and same outlines
-     * info relative to filling is not take in account
+     * info, filling is not taken into account
      * @param aZoneToCompare = zone to compare with "this"
      */
-    bool IsSame( const ZONE_CONTAINER &aZoneToCompare);
+    bool IsSame( const ZONE_CONTAINER &aZoneToCompare );
 
     /**
      * Function GetSmoothedPoly

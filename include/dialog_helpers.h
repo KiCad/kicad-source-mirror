@@ -81,7 +81,7 @@ public:
 
     ~EDA_GRAPHIC_TEXT_CTRL();
 
-    wxString        GetText();
+    const wxString  GetText() const;
     int             GetTextSize();
     void            Enable( bool state );
     void            SetTitle( const wxString& title );

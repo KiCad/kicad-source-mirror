@@ -88,9 +88,9 @@ public:
      * overrides the default implementation to allow for the part suffix to be added
      * to the reference designator field if the component has multiple parts.
      *
-     * @return a wxString object containing the field's string.
+     * @return a const wxString object containing the field's string.
      */
-    virtual wxString GetText() const;
+    virtual const wxString GetText() const;
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 

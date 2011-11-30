@@ -37,12 +37,14 @@ public:
     DIMENSION( BOARD_ITEM* aParent );
     ~DIMENSION();
 
-    const wxPoint GetPosition() const
-    {
-        return m_Pos;
-    }
+    const wxPoint GetPosition() const { return m_Pos; }
 
-    void SetPosition( const wxPoint& aPos ) { m_Pos = aPos; }
+    void SetPosition( const wxPoint& aPos );    // override, sets m_Text's position too
+
+    void SetTextSize( const wxSize& aTextSize )
+    {
+        m_Text->SetSize( aTextSize );
+    }
 
     /**
      * Function SetLayer
@@ -69,7 +71,7 @@ public:
     bool Save( FILE* aFile ) const;
 
     void SetText( const wxString& NewText );
-    wxString GetText( void ) const;
+    const wxString GetText() const;
 
     void Copy( DIMENSION* source );
 
@@ -80,7 +82,7 @@ public:
      * Function Move
      * @param offset : moving vector
      */
-    void Move(const wxPoint& offset);
+    void Move( const wxPoint& offset );
 
     /**
      * Function Rotate
@@ -131,7 +133,6 @@ public:
      * @return bool - true if a hit, else false
      */
     bool HitTest( EDA_RECT& refArea );
-
 
     /**
      * Function GetClass
