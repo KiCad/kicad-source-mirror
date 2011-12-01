@@ -102,6 +102,19 @@ protected:
      */
     BIU biuParse( const char* aValue, const char** nptrptr = NULL );
 
+    /**
+     * Function dblParse
+     * parses an ASCII decimal floating point value without scaling into a double.
+     *
+     * @param aValue is the ASCII value in C locale form with possible leading whitespace
+     *
+     * @param nptrptr may be NULL, but if not, then it tells where to put a
+     *  pointer to the next unconsumed input text. See "man strtod" for more information.
+     *
+     * @return double - the string converted to a primitive double type
+     */
+    double dblParse( const char* aValue, const char** nptrptr = NULL );
+
     // load / parse functions
 
     void loadAllSections( bool doAppend );

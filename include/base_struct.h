@@ -761,7 +761,7 @@ public:
     wxString m_Text;                    /* text! */
     wxPoint  m_Pos;                     /* XY position of anchor text. */
     wxSize   m_Size;                    /* XY size of text */
-    bool     m_Mirror;                  /* Display Normal / mirror */
+    bool     m_Mirror;                  ///< true iff mirrored
     int      m_Attributs;               /* flags (visible...) */
     bool     m_Italic;                  /* true to simulate (or use if exists)
                                          * an italic font... */
@@ -797,6 +797,9 @@ public:
 
     void SetItalic( bool isItalic ) { m_Italic = isItalic; }
     bool IsItalic() const { return m_Italic; }
+
+    void SetMirrored( bool doMirror ) { m_Mirror = doMirror; }
+    bool IsMirrored() const { return m_Mirror; }
 
     /**
      * Function SetSize

@@ -16,15 +16,20 @@ class BOARD;
 class EDA_DRAW_PANEL;
 
 
-/* Shapes for segments (graphic segments and tracks) ( .m_Shape member ) */
-enum Track_Shapes {
-    S_SEGMENT = 0,  /* usual segment : line with rounded ends */
-    S_RECT,         /* segment with non rounded ends */
-    S_ARC,          /* Arcs (with rounded ends) */
-    S_CIRCLE,       /* ring */
-    S_POLYGON,      /* polygon (not yet used for tracks, but could be in microwave apps) */
-    S_CURVE,        /* Bezier Curve */
-    S_LAST          /* last value for this list */
+/**
+ * Enum STROKE_T
+ * is the set of shapes for segments (graphic segments and tracks) which are often
+ * in the .m_Shape member
+ */
+enum STROKE_T
+{
+    S_SEGMENT = 0,  ///< usual segment : line with rounded ends
+    S_RECT,         ///< segment with non rounded ends
+    S_ARC,          ///< Arcs (with rounded ends)
+    S_CIRCLE,       ///< ring
+    S_POLYGON,      ///< polygon (not yet used for tracks, but could be in microwave apps)
+    S_CURVE,        ///< Bezier Curve
+    S_LAST          ///< last value for this list
 };
 
 
@@ -165,9 +170,9 @@ public:
 
     /**
      * Function ShowShape
-     * converts the enum Track_Shapes integer value to a wxString.
+     * converts the enum STROKE_T integer value to a wxString.
      */
-    static wxString ShowShape( Track_Shapes aShape );
+    static wxString ShowShape( STROKE_T aShape );
 
     /**
      * Function Save
