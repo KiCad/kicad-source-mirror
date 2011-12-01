@@ -43,7 +43,7 @@ class MODULE : public BOARD_ITEM
 {
 
 public:
-    int                 m_Orient;      // orientation in 0.1 degrees
+    int               m_Orient;        // orientation in 0.1 degrees
     wxPoint           m_Pos;           // Real coord on board
     DLIST<D_PAD>      m_Pads;          /* Pad list (linked list) */
     DLIST<BOARD_ITEM> m_Drawings;      /* Graphic items list (linked list) */
@@ -174,7 +174,6 @@ public:
         return (m_ModuleStatus & MODULE_is_LOCKED) != 0;
     }
 
-
     /**
      * Function SetLocked
      * sets the MODULE_is_LOCKED bit in the m_ModuleStatus
@@ -188,6 +187,16 @@ public:
             m_ModuleStatus &= ~MODULE_is_LOCKED;
     }
 
+    bool IsPlaced() const   { return (m_ModuleStatus & MODULE_is_PLACED); }
+    void SetIsPlaced( bool isPlaced )
+    {
+        if( isPlaced )
+            m_ModuleStatus |= MODULE_is_PLACED;
+        else
+            m_ModuleStatus &= ~MODULE_is_PLACED;
+    }
+
+    void SetLastEditTime( long aTime ) { m_LastEdit_Time = aTime; }
 
     /* Reading and writing data on files */
 

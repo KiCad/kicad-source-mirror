@@ -110,7 +110,7 @@ public:
 
     wxSize  m_DeltaSize;            // delta on rectangular shapes
 
-    wxPoint m_Pos0;                 // Initial Pad position (i.e. pas position relative to the
+    wxPoint m_Pos0;                 // Initial Pad position (i.e. pad position relative to the
                                     // module anchor, orientation 0
 
     int     m_ShapeMaxRadius;       // radius of the circle containing the pad shape
@@ -169,13 +169,31 @@ public:
      * @return the shape of this pad.
      */
     int GetShape() const { return m_PadShape & 0xFF;  }
+    void SetShape( int aShape )             { m_PadShape = aShape; }
 
     const wxPoint GetPosition() const   // overload
     {
         return m_Pos;
     }
 
-    void SetPosition( const wxPoint& aPos ) { m_Pos = aPos; }   // overload
+    void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }   // overload
+
+    void SetPos0( const wxPoint& aPos )         { m_Pos0 = aPos; }
+    void SetSize( const wxSize& aSize )         { m_Size = aSize; }
+    void SetDelta( const wxSize& aSize )        { m_DeltaSize = aSize; }
+    void SetDrillSize( const wxSize& aSize )    { m_Drill = aSize; }
+    void SetOffset( const wxSize& aOffset )     { m_Offset = aOffset; }
+    void SetOrientation( int aAngle )           { m_Orient = aAngle; }
+    void SetDrillShape( int aDrillShape )       { m_DrillShape = aDrillShape; }
+    void SetLayerMask( int aLayerMask )         { m_layerMask = aLayerMask; }
+    void SetAttribute( int aAttribute )         { m_Attribut = aAttribute; }
+    void SetDieLength( int aLength )            { m_LengthDie = aLength; }
+    void SetSolderMaskMargin( int aLength )     { m_LocalSolderMaskMargin = aLength; }
+    void SetSolderPasteMargin( int aLength )    { m_LocalSolderPasteMargin = aLength; }
+    void SetSolderPasteRatio( double aRatio )   { m_LocalSolderPasteMarginRatio = aRatio; }
+
+    /// A local override of the Module's clearance
+    void SetPadClearance( int aLength )         { m_LocalClearance = aLength; }
 
     /**
      * Function TransformShapeWithClearanceToPolygon

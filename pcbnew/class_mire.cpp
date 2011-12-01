@@ -26,6 +26,17 @@ PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
     m_Size  = 5000;
 }
 
+PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent, int aShape, int aLayer,
+    const wxPoint& aPos, int aSize, int aWidth ) :
+    BOARD_ITEM( aParent, PCB_TARGET_T )
+{
+    m_Shape = aShape;
+    m_Layer = aLayer;
+    m_Pos   = aPos;
+    m_Size  = aSize;
+    m_Width = aWidth;
+}
+
 
 PCB_TARGET::~PCB_TARGET()
 {
