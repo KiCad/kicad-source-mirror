@@ -45,9 +45,6 @@
 #include "dialogs/dialog_schematic_find.h"
 
 
-static const wxString traceFindReplace( wxT( "KicadFindReplace" ) );
-
-
 SCH_SHEET_PATH::SCH_SHEET_PATH()
 {
     for( int i = 0; i<DSLSZ; i++ )
@@ -85,6 +82,7 @@ bool SCH_SHEET_PATH::BuildSheetPathInfoFromSheetPathValue( const wxString& aPath
 
             Pop();
         }
+
         schitem = schitem->Next();
     }
 
@@ -377,45 +375,6 @@ SCH_ITEM* SCH_SHEET_PATH::FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem, 
         {
             hasWrapped = true;
             drawItem = FirstDrawList();
-        }
-    }
-
-    return NULL;
-}
-
-
-SCH_ITEM* SCH_SHEET_PATH::MatchNextItem( wxFindReplaceData& aSearchData,
-                                         SCH_ITEM*          aLastItem,
-                                         wxPoint*           aFindLocation )
-{
-    bool hasWrapped = false;
-    bool firstItemFound = false;
-    bool wrap = ( aSearchData.GetFlags() & FR_SEARCH_WRAP ) != 0;
-    SCH_ITEM* drawItem = LastDrawList();
-
-    while( drawItem != NULL )
-    {
-        if( aLastItem && !firstItemFound )
-        {
-            firstItemFound = ( drawItem == aLastItem );
-        }
-        else
-        {
-            if( drawItem->Matches( aSearchData, this, aFindLocation ) )
-                return drawItem;
-        }
-
-        drawItem = drawItem->Next();
-
-        if( drawItem == NULL && aLastItem && firstItemFound && wrap && !hasWrapped )
-        {
-            hasWrapped = true;
-            drawItem = LastDrawList();
-        }
-        else if( hasWrapped && aLastItem && firstItemFound && (drawItem == aLastItem) )
-        {
-            // Exit when wrapped around to the first item found.
-            drawItem = NULL;
         }
     }
 
@@ -726,83 +685,6 @@ SCH_ITEM* SCH_SHEET_LIST::FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aShe
         {
             hasWrapped = true;
             sheet = GetLast();
-        }
-    }
-
-    return NULL;
-}
-
-
-SCH_ITEM* SCH_SHEET_LIST::MatchNextItem( wxFindReplaceData& aSearchData,
-                                         wxString&          aSheetFoundIn,
-                                         SCH_ITEM*          aLastItem,
-                                         wxPoint*           aFindLocation )
-{
-    bool firstItemFound = false;
-    bool hasWrapped = false;
-    bool wrap = ( aSearchData.GetFlags() & FR_SEARCH_WRAP ) != 0;
-    SCH_ITEM* drawItem = NULL;
-    SCH_SHEET_PATH* sheet = GetFirst();
-    SCH_SHEET_PATH* sheetFirstItemFoundIn = NULL;
-
-    wxLogTrace( traceFindReplace, wxT( "Searching schematic for " ) + aSearchData.GetFindString() );
-
-    while( sheet != NULL )
-    {
-        wxLogTrace( traceFindReplace, wxT( "Searching sheet " + sheet->PathHumanReadable() ) );
-
-        drawItem = sheet->LastDrawList();
-
-        while( drawItem != NULL )
-        {
-            if( aLastItem && !firstItemFound )
-            {
-                if( aSheetFoundIn.IsEmpty() )
-                    firstItemFound = (drawItem == aLastItem);
-                else
-                    firstItemFound = ( (drawItem == aLastItem) &&
-                                       (sheet->PathHumanReadable() == aSheetFoundIn) );
-
-                if( firstItemFound )
-                {
-                    sheetFirstItemFoundIn = sheet;
-
-                    wxLogTrace( traceFindReplace, wxT( "First item %p found in sheet %s" ),
-                                sheetFirstItemFoundIn,
-                                GetChars( sheetFirstItemFoundIn->PathHumanReadable() ) );
-                }
-            }
-            else
-            {
-                // Search has wrapped all the way around to the first item found so stop.
-                if( hasWrapped && aLastItem && (aLastItem == drawItem)
-                    && (sheet == sheetFirstItemFoundIn ) )
-                {
-                    wxLogTrace( traceFindReplace,
-                                wxT( "Wrapped around to item %p in sheet %s" ),
-                                sheetFirstItemFoundIn,
-                                GetChars( sheetFirstItemFoundIn->PathHumanReadable() ) );
-
-                    return NULL;
-                }
-
-                if( drawItem->Matches( aSearchData, sheet, aFindLocation ) )
-                {
-                    aSheetFoundIn = sheet->PathHumanReadable();
-
-                    return drawItem;
-                }
-            }
-
-            drawItem = drawItem->Next();
-        }
-
-        sheet = GetNext();
-
-        if( sheet == NULL && aLastItem && firstItemFound && wrap && !hasWrapped )
-        {
-            hasWrapped = true;
-            sheet = GetFirst();
         }
     }
 

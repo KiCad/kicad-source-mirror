@@ -410,37 +410,30 @@ int ReturnValueFromString( EDA_UNITS_T aUnit, const wxString& TextValue, int Int
 }
 
 
-/**
- * Function wxStringSplit
- * Split a String to a String List when founding 'splitter'
- * @return the list
- * @param txt : wxString : a String text
- * @param splitter : wxChar : the 'split' character
- */
-wxArrayString* wxStringSplit( wxString txt, wxChar splitter )
+wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter )
 {
     wxArrayString* list = new wxArrayString();
 
     while( 1 )
     {
-        int index = txt.Find( splitter );
+        int index = aString.Find( aSplitter );
+
         if( index == wxNOT_FOUND )
             break;
 
         wxString tmp;
-        tmp = txt.Mid( 0, index );
-        txt = txt.Mid( index + 1, txt.size() - index );
+        tmp = aString.Mid( 0, index );
+        aString = aString.Mid( index + 1, aString.size() - index );
         list->Add( tmp );
     }
 
-    if( !txt.IsEmpty() )
+    if( !aString.IsEmpty() )
     {
-        list->Add( txt );
+        list->Add( aString );
     }
 
     return list;
 }
-
 
 
 /**

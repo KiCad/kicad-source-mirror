@@ -16,8 +16,10 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData,
 
     if( aStyle & wxFR_REPLACEDIALOG )
     {
+        SetTitle( _( "Find and Replace" ) );
         m_staticReplace->Show( true );
         m_comboReplace->Show( true );
+        m_checkWildcardMatch->Show( false );  // Wildcard replace is not implemented.
     }
 
     int flags = m_findReplaceData->GetFlags();
@@ -55,6 +57,13 @@ void DIALOG_SCH_FIND::OnUpdateFindUI( wxUpdateUIEvent& aEvent )
 }
 
 
+void DIALOG_SCH_FIND::OnUpdateReplaceUI( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( HasFlag( wxFR_REPLACEDIALOG ) && !m_comboFind->GetValue().empty() &&
+                   (m_findReplaceData->GetFlags() | FR_REPLACE_ITEM_FOUND) );
+}
+
+
 void DIALOG_SCH_FIND::OnUpdateWholeWordUI( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( !m_checkWildcardMatch->GetValue() );
@@ -88,6 +97,27 @@ void DIALOG_SCH_FIND::OnFind( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_SCH_FIND::OnReplace( wxCommandEvent& aEvent )
+{
+    int index = m_comboReplace->FindString( m_comboReplace->GetValue(), true );
+
+    if( index == wxNOT_FOUND )
+    {
+        m_comboReplace->Insert( m_comboReplace->GetValue(), 0 );
+    }
+    else if( index != 0 )
+    {
+        /* Move the search string to the top of the list if it isn't already there. */
+        wxString tmp = m_comboReplace->GetValue();
+        m_comboReplace->Delete( index );
+        m_comboReplace->Insert( tmp, 0 );
+        m_comboReplace->SetSelection( 0 );
+    }
+
+    SendEvent( wxEVT_COMMAND_FIND );
+}
+
+
 void DIALOG_SCH_FIND::OnCancel( wxCommandEvent& aEvent )
 {
     SendEvent( wxEVT_COMMAND_FIND_CLOSE );
@@ -101,12 +131,13 @@ void DIALOG_SCH_FIND::SendEvent( const wxEventType& aEventType )
     event.SetEventObject( this );
     event.SetFindString( m_comboFind->GetValue() );
 
+    int flags = 0;
+
     if ( HasFlag( wxFR_REPLACEDIALOG ) )
     {
         event.SetReplaceString( m_comboReplace->GetValue() );
+        flags |= FR_SEARCH_REPLACE;
     }
-
-    int flags = 0;
 
     if( m_radioForward->GetValue() )
         flags |= wxFR_DOWN;
@@ -117,7 +148,7 @@ void DIALOG_SCH_FIND::SendEvent( const wxEventType& aEventType )
     if( m_checkWholeWord->GetValue() )
         flags |= wxFR_WHOLEWORD;
 
-    if( m_checkWildcardMatch->GetValue() )
+    if( m_checkWildcardMatch->IsShown() && m_checkWildcardMatch->GetValue() )
         flags |= FR_MATCH_WILDCARD;
 
     if( m_checkAllFields->GetValue() )
@@ -152,6 +183,9 @@ void DIALOG_SCH_FIND::SendEvent( const wxEventType& aEventType )
     {
         GetParent()->GetEventHandler()->ProcessEvent( event );
     }
+
+    if( event.GetFlags() != flags )
+        m_findReplaceData->SetFlags( event.GetFlags() );
 }
 
 

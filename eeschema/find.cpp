@@ -297,60 +297,88 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
 void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 {
-    static SCH_ITEM*  lastItem = NULL;  /* last item found when searching a match
-                                         * note: the actual matched item can be a
-                                         * part of lastItem (for instance a field in a component
-                                         */
-    static wxString   sheetFoundIn;
-    static wxPoint    lastItemPosition; // the actual position of the matched sub item
+    static wxPoint itemPosition;  // the actual position of the matched item.
 
-    SCH_SHEET_LIST    schematic;
-    wxString          msg;
-    wxFindReplaceData searchCriteria;
-    bool              warpCursor = !( aEvent.GetFlags() & FR_NO_WARP_CURSOR );
+    SCH_SHEET_LIST schematic;
+    wxString msg;
+    SCH_FIND_REPLACE_DATA searchCriteria;
+    bool warpCursor = !( aEvent.GetFlags() & FR_NO_WARP_CURSOR );
 
     searchCriteria.SetFlags( aEvent.GetFlags() );
     searchCriteria.SetFindString( aEvent.GetFindString() );
     searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
 
-    if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
+    if( searchCriteria != m_foundItems.GetFindReplaceData() )
     {
-        sheetFoundIn = m_CurrentSheet->PathHumanReadable();
-        warpCursor = true;
-    }
-    else if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
-    {
-        sheetFoundIn = m_CurrentSheet->PathHumanReadable();
-        lastItem = m_CurrentSheet->MatchNextItem( searchCriteria, lastItem, &lastItemPosition );
+        if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
+        {
+            warpCursor = true;
+        }
+        else if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
+        {
+            m_foundItemIndex = 0;
+            m_foundItems.Collect( searchCriteria, m_CurrentSheet );
+        }
+        else
+        {
+            m_foundItemIndex = 0;
+            m_foundItems.Collect( searchCriteria );
+        }
     }
     else
     {
-        lastItem = schematic.MatchNextItem( searchCriteria, sheetFoundIn, lastItem,
-                                            &lastItemPosition );
+        if( searchCriteria.GetFlags() & wxFR_DOWN )
+        {
+            if( !(searchCriteria.GetFlags() & FR_SEARCH_WRAP)
+                && (m_foundItemIndex == (m_foundItems.GetCount() - 1)) )
+                return;
+
+            m_foundItemIndex += 1;
+
+            if( (m_foundItemIndex >= m_foundItems.GetCount())
+                && (searchCriteria.GetFlags() & FR_SEARCH_WRAP) )
+                m_foundItemIndex = 0;
+        }
+        else
+        {
+            if( !(searchCriteria.GetFlags() & FR_SEARCH_WRAP) && (m_foundItemIndex == 0) )
+                return;
+
+            m_foundItemIndex -= 1;
+
+            if( (m_foundItemIndex < 0) && (searchCriteria.GetFlags() & FR_SEARCH_WRAP) )
+                m_foundItemIndex = m_foundItems.GetCount() - 1;
+        }
     }
 
-    if( lastItem != NULL )
+    if( m_foundItems.GetCount() != 0 )
     {
-        SCH_SHEET_PATH* sheet = schematic.GetSheet( sheetFoundIn );
+        SCH_FIND_COLLECTOR_DATA data = m_foundItems.GetFindData( m_foundItemIndex );
 
-        wxCHECK_RET( sheet != NULL, wxT( "Could not find sheet path " + sheetFoundIn ) );
+        wxLogTrace( traceFindReplace, wxT( "Found " ) + m_foundItems.GetText( m_foundItemIndex ) );
 
-        if( sheet != GetSheet() )
+        SCH_SHEET_PATH* sheet = schematic.GetSheet( data.GetSheetPath() );
+
+        wxCHECK_RET( sheet != NULL, wxT( "Could not find sheet path " ) +
+                     data.GetSheetPath() );
+
+        if( sheet->PathHumanReadable() != GetSheet()->PathHumanReadable() )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
             m_CurrentSheet->UpdateAllScreenReferences();
         }
 
-        sheet->LastScreen()->SetCrossHairPosition( lastItemPosition );
+        sheet->LastScreen()->SetCrossHairPosition( data.GetPosition() );
 
-        RedrawScreen( lastItemPosition, warpCursor );
+        RedrawScreen( data.GetPosition(), warpCursor );
 
-        msg = lastItem->GetSelectMenuText() + _( " found in sheet " ) + sheetFoundIn;
+        aEvent.SetFlags( aEvent.GetFlags() | FR_REPLACE_ITEM_FOUND );
+        msg = m_foundItems.GetText( m_foundItemIndex );
     }
     else
     {
-        sheetFoundIn = wxEmptyString;
+        aEvent.SetFlags( aEvent.GetFlags() & ~FR_REPLACE_ITEM_FOUND );
         msg.Printf( _( "No item found matching %s." ), GetChars( aEvent.GetFindString() ) );
     }
 
@@ -360,4 +388,23 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 {
+    wxCHECK_RET( m_foundItems.IsValidIndex( m_foundItemIndex ),
+                 wxT( "No last find item to replace text." ) );
+
+    SCH_FIND_COLLECTOR_DATA data = m_foundItems.GetFindData( m_foundItemIndex );
+
+    wxLogTrace( traceFindReplace, wxT( "Replacing %s with %s in item %s" ),
+                GetChars( aEvent.GetFindString() ), GetChars( aEvent.GetReplaceString() ),
+                GetChars( m_foundItems.GetText( m_foundItemIndex ) ) );
+
+    OnFindSchematicItem( aEvent );
+
+    if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_REPLACE_ALL )
+    {
+        wxLogTrace( traceFindReplace, wxT( "Replacing %s with %s in item %s" ),
+                    GetChars( aEvent.GetFindString() ), GetChars( aEvent.GetReplaceString() ),
+                    GetChars( m_foundItems.GetText( m_foundItemIndex ) ) );
+
+        OnFindSchematicItem( aEvent );
+    }
 }

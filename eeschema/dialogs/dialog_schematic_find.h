@@ -20,7 +20,7 @@
 /**
  * Define schematic specific find and replace dialog flags based on the enum entries
  * in wxFindReplaceFlags.   These flags are intended to be used as bit masks in the
- * wxFindReplaceData::m_Flags member variable.  The varialble is defined as a wxUint32.
+ * wxFindReplaceData::m_Flags member variable.  The variable is defined as a wxUint32.
  */
 enum SchematicFindReplaceFlags
 {
@@ -44,12 +44,46 @@ enum SchematicFindReplaceFlags
     /// Don't warp cursor to found item until the dialog is closed.
     FR_NO_WARP_CURSOR        = wxFR_MATCHCASE << 6,
 
-    /// Perform a search for a item that has repaceable text.
+    /// Perform a search for a item that has replaceable text.
     FR_SEARCH_REPLACE        = wxFR_MATCHCASE << 7,
 
     /// Used by the search event handler to let the dialog know that a replaceable
     /// item has been found.
     FR_REPLACE_ITEM_FOUND    = wxFR_MATCHCASE << 8
+};
+
+
+/**
+ * Class SCH_FIND_REPLACE_DATA
+ * adds missing useful comparison and assignment operators to the wxFindReplaceData object.
+ */
+class SCH_FIND_REPLACE_DATA : public wxFindReplaceData
+{
+public:
+
+    SCH_FIND_REPLACE_DATA& operator =( SCH_FIND_REPLACE_DATA& aFindReplaceData )
+    {
+        if( this == &aFindReplaceData )
+            return *this;
+
+        SetFlags( aFindReplaceData.GetFlags() );
+        SetFindString( aFindReplaceData.GetFindString() );
+        SetReplaceString( aFindReplaceData.GetReplaceString() );
+
+        return *this;
+    }
+
+    bool operator ==( SCH_FIND_REPLACE_DATA& aFindReplaceData )
+    {
+        return ( (GetFlags() == aFindReplaceData.GetFlags())
+                 && (GetFindString() == aFindReplaceData.GetFindString())
+                 && (GetReplaceString() == aFindReplaceData.GetReplaceString()) );
+    }
+
+    bool operator !=( SCH_FIND_REPLACE_DATA& aFindReplaceData )
+    {
+        return !( *this == aFindReplaceData );
+    }
 };
 
 
@@ -60,9 +94,12 @@ protected:
     // Handlers for DIALOG_SCH_FIND_BASE events.
     void OnClose( wxCloseEvent& aEvent );
     void OnUpdateFindUI( wxUpdateUIEvent& aEvent );
+    void OnUpdateReplaceUI( wxUpdateUIEvent& aEvent );
     void OnUpdateWholeWordUI( wxUpdateUIEvent& aEvent );
     void OnUpdateWildcardUI( wxUpdateUIEvent& aEvent );
+
     void OnFind( wxCommandEvent& aEvent );
+    void OnReplace( wxCommandEvent& aEvent );
     void OnCancel( wxCommandEvent& aEvent );
 
     void SendEvent( const wxEventType& aEventType );

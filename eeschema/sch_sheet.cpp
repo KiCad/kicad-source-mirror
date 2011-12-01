@@ -927,6 +927,8 @@ void SCH_SHEET::Resize( const wxSize& aSize )
 
 bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
 {
+    wxLogTrace( traceFindReplace, wxT( "  item " ) + GetSelectMenuText() );
+
     if( SCH_ITEM::Matches( m_FileName, aSearchData ) )
     {
         if( aFindLocation )
@@ -1033,15 +1035,15 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR* aInspector, const void* aTestData,
         // If caller wants to inspect my type
         if( stype == Type() )
         {
-            if( SEARCH_QUIT == aInspector->Inspect( this, aTestData ) )
+            if( SEARCH_QUIT == aInspector->Inspect( this, NULL ) )
                 return SEARCH_QUIT;
         }
         else if( stype == SCH_SHEET_PIN_T )
         {
-            // Test the bounding boxes of sheet labels.
+            // Test the sheet labels.
             for( size_t i = 0;  i < m_pins.size();  i++ )
             {
-                if( SEARCH_QUIT == aInspector->Inspect( &m_pins[ i ], aTestData ) )
+                if( SEARCH_QUIT == aInspector->Inspect( &m_pins[ i ], (void*) this ) )
                     return SEARCH_QUIT;
             }
         }

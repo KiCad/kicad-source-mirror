@@ -61,6 +61,8 @@ class DIALOG_SCH_FIND_BASE : public wxDialog
 		virtual void OnUpdateWildcardUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnFind( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateFindUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void OnReplace( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUpdateReplaceUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
 		
 	

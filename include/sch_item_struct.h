@@ -61,6 +61,10 @@ typedef vector< SCH_ITEMS_ITR > SCH_ITEMS_ITRS;
 #endif
 
 
+/// Flag to enable find and replace tracing using the WXTRACE environment variable.
+extern const wxString traceFindReplace;
+
+
 enum DANGLING_END_T {
     UNKNOWN = 0,
     WIRE_START_END,

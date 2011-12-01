@@ -24,7 +24,7 @@
  */
 
 /**
- * @file block.cpp
+ * @file pcbnew/block.cpp
  */
 
 

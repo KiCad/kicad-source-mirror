@@ -1,7 +1,3 @@
-/**
- * @file sch_collectors.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -24,6 +20,10 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file sch_collectors.cpp
  */
 
 #include "general.h"
@@ -313,4 +313,110 @@ bool SCH_COLLECTOR::IsDraggableJunction() const
 
     return (wireEndCount >= 3) || ((wireEndCount >= 1) && (wireMidPoint == 1))
         || ((wireMidPoint >= 2) && (junctionCount == 1));
+}
+
+
+SCH_FIND_COLLECTOR_DATA SCH_FIND_COLLECTOR::GetFindData( int aIndex )
+{
+    wxCHECK_MSG( (unsigned) aIndex < m_data.size(), SCH_FIND_COLLECTOR_DATA(),
+                 wxT( "Attempt to get find data outside of list boundary." ) );
+
+    return m_data[ aIndex ];
+}
+
+
+wxString SCH_FIND_COLLECTOR::GetText( int aIndex )
+{
+    wxCHECK_MSG( IsValidIndex( aIndex ), wxEmptyString,
+                 wxT( "Cannot get found item at invalid index." ) );
+
+    SCH_FIND_COLLECTOR_DATA data = m_data[ aIndex ];
+    EDA_ITEM* foundItem = m_List[ aIndex ];
+
+    wxCHECK_MSG( foundItem != NULL, wxEmptyString, wxT( "Inavalid found item pointer." ) );
+
+    wxString msg;
+
+    if( data.GetParent() )
+    {
+        msg = _( "Child item " ) + foundItem->GetSelectMenuText() +
+              _( " of parent item " ) + data.GetParent()->GetSelectMenuText() +
+              _( " found in sheet " ) + data.GetSheetPath();
+    }
+    else
+    {
+        msg = _( "Item " ) + foundItem->GetSelectMenuText() + _( " found in sheet " ) +
+              data.GetSheetPath();
+    }
+
+    return msg;
+}
+
+
+SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestData )
+{
+    wxPoint position;
+
+    if( aItem->Matches( m_findReplaceData, m_sheetPath, &position ) )
+    {
+        if( aItem->Type() == LIB_PIN_T )
+        {
+            wxCHECK_MSG( aTestData && ( (EDA_ITEM*) aTestData )->Type() == SCH_COMPONENT_T,
+                         SEARCH_CONTINUE, wxT( "Cannot inspect invalid data.  Bad programmer!" ) );
+
+            // Pin hit testing is relative to the components position and orientation in the
+            // schematic.  The hit test position must be converted to library coordinates.
+            SCH_COMPONENT* component = (SCH_COMPONENT*) aTestData;
+            TRANSFORM transform = component->GetTransform();
+            position.y = -position.y;
+            position = transform.TransformCoordinate( position ) + component->GetPosition();
+        }
+
+        Append( aItem );
+        m_data.push_back( SCH_FIND_COLLECTOR_DATA( position, m_sheetPath->PathHumanReadable(),
+                                                   (SCH_ITEM*) aTestData ) );
+    }
+
+    return SEARCH_CONTINUE;
+}
+
+
+void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
+                                  SCH_SHEET_PATH* aSheetPath )
+{
+    if( m_findReplaceData == aFindReplaceData )
+        return;
+
+    m_findReplaceData = aFindReplaceData;
+    Empty();                 // empty the collection just in case
+    m_data.clear();
+
+    if( aSheetPath )
+    {
+        m_sheetPath = aSheetPath;
+        EDA_ITEM::IterateForward( aSheetPath->LastDrawList(), this, NULL, m_ScanTypes );
+    }
+    else
+    {
+        SCH_SHEET_LIST schematic;
+        m_sheetPath = schematic.GetFirst();
+
+        while( m_sheetPath != NULL )
+        {
+            EDA_ITEM::IterateForward( m_sheetPath->LastDrawList(), this, NULL, m_ScanTypes );
+            m_sheetPath = schematic.GetNext();
+        }
+    }
+
+    if( m_List.size() != m_data.size() )
+    {
+        wxFAIL_MSG( wxT( "List size mismatch." ) );
+        m_List.clear();
+        m_data.clear();
+    }
+
+    for( unsigned i = 0;  i < m_List.size();  i++ )
+    {
+        wxLogTrace( traceFindReplace, GetText( i ) );
+    }
 }

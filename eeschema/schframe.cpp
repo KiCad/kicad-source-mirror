@@ -122,9 +122,9 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_GET_NETLIST, SCH_EDIT_FRAME::OnCreateNetlist )
     EVT_TOOL( ID_GET_TOOLS, SCH_EDIT_FRAME::OnCreateBillOfMaterials )
     EVT_TOOL( ID_FIND_ITEMS, SCH_EDIT_FRAME::OnFindItems )
+    EVT_TOOL( wxID_REPLACE, SCH_EDIT_FRAME::OnFindItems )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadStuffFile )
     EVT_TOOL( ID_SCH_MOVE_ITEM, SCH_EDIT_FRAME::OnMoveItem )
-
     EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( wxID_INDEX, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
@@ -173,6 +173,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_FIND_DRC_MARKER( wxID_ANY, SCH_EDIT_FRAME::OnFindDrcMarker )
     EVT_FIND( wxID_ANY, SCH_EDIT_FRAME::OnFindSchematicItem )
     EVT_FIND_REPLACE( wxID_ANY, SCH_EDIT_FRAME::OnFindReplace )
+    EVT_FIND_REPLACE_ALL( wxID_ANY, SCH_EDIT_FRAME::OnFindReplace )
 
 END_EVENT_TABLE()
 
@@ -185,12 +186,12 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     EDA_DRAW_FRAME( father, SCHEMATIC_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "SchematicFrame" );
-    m_Draw_Axis = FALSE;                // true to show axis
+    m_Draw_Axis = false;                // true to show axis
     m_Draw_Sheet_Ref = true;            // true to show sheet references
-    m_CurrentSheet   = new SCH_SHEET_PATH();
+    m_CurrentSheet = new SCH_SHEET_PATH();
     m_TextFieldSize = DEFAULT_SIZE_TEXT;
-    m_LibeditFrame  = NULL;         // Component editor frame.
-    m_ViewlibFrame  = NULL;         // Frame for browsing component libraries
+    m_LibeditFrame = NULL;         // Component editor frame.
+    m_ViewlibFrame = NULL;         // Frame for browsing component libraries
     m_DefaultSchematicFileName = NAMELESS_PROJECT;
     m_DefaultSchematicFileName += wxT( ".sch" );
     m_ShowAllPins = false;
@@ -203,6 +204,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
     m_undoItem = NULL;
     m_hasAutoSave = true;
+    m_foundItemIndex = 0;
 
     CreateScreens();
 
@@ -635,10 +637,10 @@ void SCH_EDIT_FRAME::OnCreateBillOfMaterials( wxCommandEvent& )
 }
 
 
-void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& event )
+void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& aEvent )
 {
-    wxASSERT_MSG( m_findReplaceData != NULL,
-                  wxT( "Forgot to create find/replace data.  Bad Programmer!" ) );
+    wxCHECK_RET( m_findReplaceData != NULL,
+                 wxT( "Forgot to create find/replace data.  Bad Programmer!" ) );
 
     this->DrawPanel->m_IgnoreMouseEvents = true;
 
@@ -661,7 +663,13 @@ void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& event )
         position = wxDefaultPosition;
     }
 
-    m_dlgFindReplace = new DIALOG_SCH_FIND( this, m_findReplaceData, position, m_findDialogSize );
+    int style = 0;
+
+    if( aEvent.GetId() == wxID_REPLACE )
+        style = wxFR_REPLACEDIALOG;
+
+    m_dlgFindReplace = new DIALOG_SCH_FIND( this, m_findReplaceData, position, m_findDialogSize,
+                                            style );
 
     m_dlgFindReplace->SetFindEntries( m_findStringHistoryList );
     m_dlgFindReplace->SetReplaceEntries( m_replaceStringHistoryList );

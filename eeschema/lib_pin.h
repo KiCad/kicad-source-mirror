@@ -134,7 +134,7 @@ public:
     char     m_PinNamePositionOpt;
 
 public:
-    LIB_PIN( LIB_COMPONENT * aParent );
+    LIB_PIN( LIB_COMPONENT* aParent );
     LIB_PIN( const LIB_PIN& aPin );
     ~LIB_PIN() { }
 
@@ -184,6 +184,11 @@ public:
      * displays the pin information in the message panel attached to \a aFrame.
      */
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
+
+    /**
+     * @copydoc EDA_ITEM::Matches()
+     */
+    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
     /**
      * Function GetBoundingBox

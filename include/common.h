@@ -392,7 +392,7 @@ int             ReturnValueFromTextCtrl( const wxTextCtrl& TextCtr,
  * @param aString is the text to split
  * @param aSplitter is the 'split' character
  */
-wxArrayString*  wxStringSplit( wxString txt, wxChar aSplitter );
+wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter );
 
 /**
  * Function To_User_Unit
