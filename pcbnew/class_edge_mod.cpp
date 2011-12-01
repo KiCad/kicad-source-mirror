@@ -30,10 +30,10 @@
 /* class EDGE_MODULE */
 /*********************/
 
-EDGE_MODULE::EDGE_MODULE( MODULE* parent ) :
+EDGE_MODULE::EDGE_MODULE( MODULE* parent, STROKE_T aShape ) :
     DRAWSEGMENT( parent, PCB_MODULE_EDGE_T )
 {
-    m_Shape = S_SEGMENT;
+    m_Shape = aShape;
     m_Angle = 0;
     m_Width = 120;
 }
@@ -422,7 +422,7 @@ wxString EDGE_MODULE::GetSelectMenuText() const
 {
     wxString text;
 
-    text << _( "Graphic" ) << wxT( " " ) << ShowShape( (Track_Shapes) m_Shape );
+    text << _( "Graphic" ) << wxT( " " ) << ShowShape( (STROKE_T) m_Shape );
     text << wxT( " (" ) << GetLayerName() << wxT( ")" );
     text << _( " of " ) << ( (MODULE*) GetParent() )->GetReference();
 
@@ -441,7 +441,7 @@ wxString EDGE_MODULE::GetSelectMenuText() const
  */
 void EDGE_MODULE::Show( int nestLevel, std::ostream& os )
 {
-    wxString shape = ShowShape( (Track_Shapes) m_Shape );
+    wxString shape = ShowShape( (STROKE_T) m_Shape );
 
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<

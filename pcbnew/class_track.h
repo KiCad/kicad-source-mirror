@@ -100,7 +100,7 @@ public:
     virtual void Move( const wxPoint& aMoveVector )
     {
         m_Start += aMoveVector;
-        m_End += aMoveVector;
+        m_End   += aMoveVector;
     }
 
     /**
@@ -128,7 +128,7 @@ public:
 
     void SetPosition( const wxPoint& aPos ) {  m_Start = aPos; }    // overload
 
-    void SetEnd( const wxPoint& aEnd ) { m_Start = aEnd; }
+    void SetEnd( const wxPoint& aEnd ) { m_End = aEnd; }
 
     EDA_RECT GetBoundingBox() const;
 
