@@ -10,7 +10,7 @@
 #include "class_board.h"
 
 
-wxString BOARD_ITEM::ShowShape( Track_Shapes aShape )
+wxString BOARD_ITEM::ShowShape( STROKE_T aShape )
 {
     switch( aShape )
     {
