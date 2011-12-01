@@ -22,7 +22,7 @@ public:
     wxPoint m_End0;         // End point, relative to module origin, orient 0.
 
 public:
-    EDGE_MODULE( MODULE* parent );
+    EDGE_MODULE( MODULE* parent, STROKE_T aShape = S_SEGMENT );
     EDGE_MODULE( EDGE_MODULE* edge );
     ~EDGE_MODULE();
 

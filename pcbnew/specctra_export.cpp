@@ -229,7 +229,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, TYPE_COLLECTOR* items )
         DRAWSEGMENT* graphic = (DRAWSEGMENT*) (*items)[i];
 
         printf( "type=%s, GetStart()=%d,%d  GetEnd()=%d,%d\n",
-                TO_UTF8( BOARD_ITEM::ShowShape( (Track_Shapes)graphic->m_Shape ) ),
+                TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->m_Shape ) ),
                 graphic->GetStart().x,
                 graphic->GetStart().y,
                 graphic->GetEnd().x,
@@ -667,7 +667,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         case S_ARC:
         default:
             D( printf("makeIMAGE(): unsupported shape %s\n",
-                      TO_UTF8( BOARD_ITEM::ShowShape( (Track_Shapes)graphic->m_Shape))  );)
+                      TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->m_Shape))  );)
             continue;
         }
     }
@@ -858,7 +858,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                     wxString error;
 
                     error.Printf( _("Unsupported DRAWSEGMENT type %s"),
-                        GetChars( BOARD_ITEM::ShowShape( (Track_Shapes) graphic->m_Shape ) ) );
+                        GetChars( BOARD_ITEM::ShowShape( (STROKE_T) graphic->m_Shape ) ) );
 
                     ThrowIOError( error );
                 }
