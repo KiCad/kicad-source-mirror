@@ -361,15 +361,19 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
     case 'I':
         m_Shape = NET_INPUT;
         break;
+
     case 'O':
         m_Shape = NET_OUTPUT;
         break;
+
     case 'B':
         m_Shape = NET_BIDI;
         break;
+
     case 'T':
         m_Shape = NET_TRISTATE;
         break;
+
     case 'U':
         m_Shape = NET_UNSPECIFIED;
         break;
@@ -380,12 +384,15 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
     case 'R' : /* pin on right side */
         SetEdge( 1 );
         break;
+
     case 'T' : /* pin on top side */
         SetEdge( 2 );
         break;
+
     case 'B' : /* pin on bottom side */
         SetEdge( 3 );
         break;
+
     case 'L' : /* pin on left side */
     default  :
         SetEdge( 0 );
@@ -397,12 +404,17 @@ bool SCH_SHEET_PIN::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 
 bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData,
-                             void* aAuxData, wxPoint * aFindLocation )
+                             void* aAuxData, wxPoint* aFindLocation )
 {
+    wxCHECK_MSG( GetParent() != NULL, false,
+                 wxT( "Sheet pin " ) + m_Text + wxT( " does not have a parent sheet!" ) );
+
+    wxLogTrace( traceFindReplace, wxT( "    child item " ) + GetSelectMenuText() );
+
     if( SCH_ITEM::Matches( m_Text, aSearchData ) )
     {
         if( aFindLocation )
-            *aFindLocation = m_Pos;
+            *aFindLocation = GetBoundingBox().Centre();
 
         return true;
     }

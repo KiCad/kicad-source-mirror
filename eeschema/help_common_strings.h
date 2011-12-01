@@ -25,7 +25,7 @@
 
 // Schematic editor:
 #define HELP_FIND _( "Find components and texts" )
-
+#define HELP_REPLACE _( "Find and replace text in schematic items" )
 #define HELP_PLACE_COMPONENTS     _( "Place a component" )
 #define HELP_PLACE_POWERPORT      _( "Place a power port" )
 #define HELP_PLACE_WIRE           _( "Place a wire" )

@@ -358,6 +358,11 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
     bool match;
     wxString text = GetText();
 
+    if( (m_FieldId > VALUE) && !(aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS) )
+        return false;
+
+    wxLogTrace( traceFindReplace, wxT( "    child item " ) + GetSelectMenuText() );
+
     // Take sheet path into account which effects the reference field and the unit for
     // components with multiple parts.
     if( m_FieldId == REFERENCE && aAuxData != NULL )

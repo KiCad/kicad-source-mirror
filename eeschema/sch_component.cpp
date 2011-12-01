@@ -382,6 +382,9 @@ void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath,
 
 wxString SCH_COMPONENT::GetPath( SCH_SHEET_PATH* sheet )
 {
+    wxCHECK_MSG( sheet != NULL, wxEmptyString,
+                 wxT( "Cannot get component path with invalid sheet object." ) );
+
     wxString str;
 
     str.Printf( wxT( "%8.8lX" ), m_TimeStamp );
@@ -1533,68 +1536,9 @@ void SCH_COMPONENT::Rotate( wxPoint rotationPoint )
 bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
                              wxPoint* aFindLocation )
 {
-    // Search reference.
-    // reference is a special field because a part identifier is added
-    // in multi parts per package
-    // the .m_AddExtraText of the field must be set to add this identifier:
-    LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
+    wxLogTrace( traceFindReplace, wxT( "  item " ) + GetSelectMenuText() );
 
-    if( GetField( REFERENCE )->Matches( aSearchData, aAuxData, aFindLocation ) )
-        return true;
-
-    if( GetField( VALUE )->Matches( aSearchData, aAuxData, aFindLocation ) )
-        return true;
-
-    if( aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS )
-    {
-        for( size_t i = VALUE + 1; i < m_Fields.size(); i++ )
-        {
-            if( GetField( i )->Matches( aSearchData, aAuxData, aFindLocation ) )
-                return true;
-        }
-    }
-
-    // Search for a match in pin name or pin number.
-    // @TODO: see if the Matches method must be made in LIB_PIN.
-    // when Matches method will be used in Libedit, this is the best
-    // Currently, Pins are tested here.
-    if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_PINS ) )
-        return false;
-
-    if( Entry )
-    {
-        LIB_PINS pinList;
-
-        int unit = m_unit;
-
-        if( aAuxData != NULL )
-            unit = GetUnitSelection( (SCH_SHEET_PATH*) aAuxData );
-
-        Entry->GetPins( pinList, unit, m_convert );
-
-        // Search for a match in pinList
-        for( unsigned ii = 0; ii < pinList.size(); ii ++ )
-        {
-            LIB_PIN* pin = pinList[ii];
-            wxString pinNum;
-            pin->ReturnPinStringNum( pinNum );
-
-            if( SCH_ITEM::Matches( pin->GetName(), aSearchData )
-             || SCH_ITEM::Matches( pinNum, aSearchData ) )
-            {
-                if( aFindLocation )
-                {
-                    wxPoint pinpos = pin->GetPosition();
-                    pinpos = m_transform.TransformCoordinate( pinpos );
-                    *aFindLocation = pinpos + m_Pos;
-                }
-
-                return true;
-            }
-
-        }
-    }
-
+    // Components are searchable via the child field and pin item text.
     return false;
 }
 
@@ -1716,7 +1660,7 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR* aInspector, const void* aTestData
             // Test the bounding boxes of fields if they are visible and not empty.
             for( int ii = 0; ii < GetFieldCount(); ii++ )
             {
-                if( SEARCH_QUIT == aInspector->Inspect( GetField( ii ), aTestData ) )
+                if( SEARCH_QUIT == aInspector->Inspect( GetField( ii ), (void*) this ) )
                     return SEARCH_QUIT;
             }
         }

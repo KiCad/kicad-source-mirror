@@ -33,6 +33,7 @@
 
 #include "base_struct.h"
 
+
 /** Info about complex hierarchies handling:
  * A hierarchical schematic uses sheets (hierarchical sheets) included in a
  * given sheet.  Each sheet corresponds to a schematic drawing handled by a
@@ -261,17 +262,6 @@ public:
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_ITEM* aLastItem = NULL, bool aWrap = false );
 
-    /**
-     * Search this sheet path for the next item that matches the search criteria.
-     *
-     * @param aSearchData - Criteria to search item against.
-     * @param aLastItem - Find next item after aLastItem if not NULL.
-     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
-     * @return If found, Returns the next schematic item.  Otherwise, returns NULL.
-     */
-    SCH_ITEM* MatchNextItem( wxFindReplaceData& aSearchData, SCH_ITEM* aLastItem,
-                             wxPoint * aFindLocation  );
-
     SCH_SHEET_PATH& operator=( const SCH_SHEET_PATH& d1 );
 
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
@@ -438,25 +428,6 @@ public:
      */
     SCH_ITEM* FindPreviousItem( KICAD_T aType, SCH_SHEET_PATH** aSheetFound = NULL,
                                 SCH_ITEM* aLastItem = NULL, bool aWrap = true );
-
-    /**
-     * Function MatchNextItem
-     * searches the entire schematic for the next item that matches the search criteria.
-     *
-     * @param aSearchData Criteria to search item against.
-     * @param aSheetFoundIn A reference to the sheet path the last item was found in.  Use
-     *                      wxEmptyString to search from the beginning of the sheet list.
-     *                      This will be set to the human readable sheet path if an item
-     *                      is found.
-     * @param aLastItem Find next item after aLastItem if not NULL.
-     * @param aFindLocation A pointer to a wxPoint object to put the location of matched
-     *                      item into.  It can be NULL.
-     * @return A SCH_ITEM pointer the next schematic item if found.  Otherwise, returns NULL.
-     */
-    SCH_ITEM* MatchNextItem( wxFindReplaceData& aSearchData,
-                             wxString&          aSheetFoundIn,
-                             SCH_ITEM*          aLastItem,
-                             wxPoint*           aFindLocation );
 
     /**
      * Function SetFootprintField

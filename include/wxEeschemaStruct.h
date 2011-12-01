@@ -146,11 +146,15 @@ private:
     SCH_ITEM*             m_itemToRepeat;       ///< Last item to insert by the repeat command.
     int                   m_repeatLabelDelta;   ///< Repeat label number increment step.
     SCH_COLLECTOR         m_collectedItems;     ///< List of collected items.
+    SCH_FIND_COLLECTOR    m_foundItems;         ///< List of find/replace items.
     SCH_ITEM*             m_undoItem;           ///< Copy of the current item being edited.
     wxString              m_simulatorCommand;   ///< Command line used to call the circuit
                                                 ///< simulator (gnucap, spice, ...)
     wxString              m_netListerCommand;   ///< Command line to call a custom net list
                                                 ///< generator.
+
+    /// An index to the last find item in the found items list #m_foundItems.
+    int m_foundItemIndex;
 
     static int            m_lastSheetPinType;      ///< Last sheet pin type.
     static wxSize         m_lastSheetPinTextSize;  ///< Last sheet pin text size.

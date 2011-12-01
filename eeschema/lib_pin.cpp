@@ -2142,6 +2142,29 @@ wxString LIB_PIN::GetSelectMenuText() const
 }
 
 
+bool LIB_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
+{
+    wxLogTrace( traceFindReplace, wxT( "  item " ) + GetSelectMenuText() );
+
+    if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_PINS )
+        && !( aSearchData.GetFlags() & FR_SEARCH_REPLACE ) )
+        return false;
+
+    wxLogTrace( traceFindReplace, wxT( "    child item " ) + GetSelectMenuText() );
+
+    if( EDA_ITEM::Matches( GetName(), aSearchData )
+        || EDA_ITEM::Matches( GetNumberString(), aSearchData ) )
+    {
+        if( aFindLocation )
+            *aFindLocation =  GetBoundingBox().Centre();
+
+        return true;
+    }
+
+    return false;
+}
+
+
 #if defined(DEBUG)
 
 void LIB_PIN::Show( int nestLevel, std::ostream& os )

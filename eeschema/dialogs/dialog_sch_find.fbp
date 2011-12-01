@@ -1059,7 +1059,7 @@
                                 <property name="fg"></property>
                                 <property name="font"></property>
                                 <property name="hidden">1</property>
-                                <property name="id">wxID_ANY</property>
+                                <property name="id">wxID_REPLACE</property>
                                 <property name="label">&amp;Replace</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
@@ -1077,7 +1077,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick"></event>
+                                <event name="OnButtonClick">OnReplace</event>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -1100,7 +1100,7 @@
                                 <event name="OnRightUp"></event>
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
-                                <event name="OnUpdateUI"></event>
+                                <event name="OnUpdateUI">OnUpdateReplaceUI</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
@@ -1116,7 +1116,7 @@
                                 <property name="fg"></property>
                                 <property name="font"></property>
                                 <property name="hidden">1</property>
-                                <property name="id">wxID_ANY</property>
+                                <property name="id">wxID_REPLACE_ALL</property>
                                 <property name="label">Replace &amp;All</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
@@ -1134,7 +1134,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
-                                <event name="OnButtonClick"></event>
+                                <event name="OnButtonClick">OnReplace</event>
                                 <event name="OnChar"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
@@ -1157,7 +1157,7 @@
                                 <event name="OnRightUp"></event>
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
-                                <event name="OnUpdateUI"></event>
+                                <event name="OnUpdateUI">OnUpdateReplaceUI</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">

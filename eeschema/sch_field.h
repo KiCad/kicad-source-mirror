@@ -209,6 +209,11 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const;
 
+    /**
+     * @copydoc EDA_ITEM::IsReplaceable()
+     */
+    virtual bool IsReplaceable() const { return true; }
+
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;

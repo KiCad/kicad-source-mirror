@@ -39,7 +39,8 @@
 #include "general.h"
 #include "protos.h"
 
-#include "../eeschema/dialogs/dialog_schematic_find.h"
+
+const wxString traceFindReplace( wxT( "KicadFindReplace" ) );
 
 
 bool sort_schematic_items( const SCH_ITEM* aItem1, const SCH_ITEM* aItem2 )

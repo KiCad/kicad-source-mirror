@@ -408,6 +408,11 @@ public:
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 
+    /**
+     * @copydoc EDA_ITEM::IsReplaceable()
+     */
+    virtual bool IsReplaceable() const { return true; }
+
 #if defined(DEBUG)
 
     /**

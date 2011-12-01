@@ -328,6 +328,11 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_line_label_xpm; }
 
+    /**
+     * @copydoc EDA_ITEM::IsReplaceable()
+     */
+    virtual bool IsReplaceable() const { return true; }
+
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doIsConnected( const wxPoint& aPosition ) const { return m_Pos == aPosition; }

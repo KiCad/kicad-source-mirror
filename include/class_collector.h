@@ -22,6 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file class_collector.h
+ * @brief COLLECTOR class definition.
+ */
+
 #ifndef COLLECTOR_H
 #define COLLECTOR_H
 
@@ -51,30 +56,45 @@ class COLLECTOR : public INSPECTOR
 {
 protected:
     /// Which object types to scan
-    const KICAD_T*  m_ScanTypes;
+    const KICAD_T* m_ScanTypes;
 
     /// A place to hold collected objects without taking ownership of their memory.
-    std::vector<EDA_ITEM*>    m_List;
+    std::vector<EDA_ITEM*> m_List;
 
-    /// A point to test against, andt that was used to make the collection.
-    wxPoint         m_RefPos;
+    /// A point to test against, and that was used to make the collection.
+    wxPoint m_RefPos;
 
     /// A bounding box to test against, and that was used to make the collection.
-    EDA_RECT        m_RefBox;
+    EDA_RECT m_RefBox;
 
     /// The time at which the collection was made.
-    int             m_TimeAtCollection;
+    int m_TimeAtCollection;
 
 
 public:
 
     COLLECTOR()
     {
-        m_ScanTypes      = 0;
+        m_ScanTypes = 0;
     }
+
 
     virtual ~COLLECTOR()
     {
+    }
+
+
+    /**
+     * Function IsValidIndex
+     * tests if \a aIndex is with the limits of the list of collected items.
+     *
+     * @param aIndex The index to test.
+     * @return True if \a aIndex is with the limits of the list of collected items,
+     *         otherwise false.
+     */
+    bool IsValidIndex( int aIndex )
+    {
+        return ( (unsigned) aIndex < m_List.size() );
     }
 
 
@@ -108,28 +128,32 @@ public:
         m_List.push_back( item );
     }
 
+
     /**
      * Function Remove
-     * removes the  item at item_position (first position is 0);
-     * @param ndx The index into the list.
+     * removes the item at \a aIndex (first position is 0);
+     * @param aIndex The index into the list.
      */
-    void Remove( int ndx )
+    void Remove( int aIndex )
     {
-        m_List.erase( m_List.begin() + ndx );
+        m_List.erase( m_List.begin() + aIndex );
     }
+
 
     /**
      * Function operator[int]
-     * is used for read only access and returns the object at index ndx.
-     * @param ndx The index into the list.
+     * is used for read only access and returns the object at \a aIndex.
+     * @param aIndex The index into the list.
      * @return EDA_ITEM* - or something derived from it, or NULL.
      */
-    EDA_ITEM* operator[]( int ndx ) const
+    EDA_ITEM* operator[]( int aIndex ) const
     {
-        if( (unsigned)ndx < (unsigned)GetCount() )  // (unsigned) excludes ndx<0 also
-            return m_List[ ndx ];
+        if( (unsigned)aIndex < (unsigned)GetCount() )  // (unsigned) excludes aIndex<0 also
+            return m_List[ aIndex ];
+
         return NULL;
     }
+
 
     /**
      * Function BasePtr
@@ -141,6 +165,7 @@ public:
     {
         return &m_List[0];
     }
+
 
     /**
      * Function HasItem
@@ -160,22 +185,25 @@ public:
         return false;
     }
 
+
     /**
      * Function SetScanTypes
      * records the list of KICAD_T types to consider for collection by
      * the Inspect() function.
      * @param scanTypes An array of KICAD_T, terminated by EOT.  No copy is
-     *  is made of this array (so cannot come from caller's stack).
+     *                  is made of this array (so cannot come from caller's stack).
      */
     void SetScanTypes( const KICAD_T* scanTypes )
     {
         m_ScanTypes = scanTypes;
     }
 
+
     void SetTimeNow()
     {
         m_TimeAtCollection = GetTimeStamp();
     }
+
 
     int GetTime()
     {
@@ -206,30 +234,11 @@ public:
         int dx = abs( aRefPos.x - m_RefPos.x );
         int dy = abs( aRefPos.y - m_RefPos.y );
 
-        if( dx <= distMax && dy <= distMax
-                && GetTimeStamp()-m_TimeAtCollection <= timeMax )
+        if( dx <= distMax && dy <= distMax && GetTimeStamp()-m_TimeAtCollection <= timeMax )
             return true;
         else
             return false;
     }
-
-
-    /**
-     * Function Inspect
-     * is the examining function within the INSPECTOR which is passed to the
-     * Iterate function.  It is used primarily for searching, but not limited to
-     * that.  It can also collect or modify the scanned objects.
-     *
-     * @param testItem An EDA_ITEM to examine.
-     * @param testData is arbitrary data needed by the inspector to determine
-     *   if the EDA_ITEM under test meets its match criteria.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *   else SCAN_CONTINUE;
-     *
-     * implement in derived class:
-    SEARCH_RESULT virtual Inspect( EDA_ITEM* testItem,
-        const void* testData ) = 0;
-     */
 
 
     /**
@@ -260,4 +269,3 @@ public:
 };
 
 #endif  // COLLECTOR_H
-

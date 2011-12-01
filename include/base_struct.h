@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file  base_struct.h
  * @brief Basic classes for most KiCad items.
@@ -37,7 +62,7 @@ enum KICAD_T {
     PCB_MODULE_TEXT_T,      // a text in a footprint
     PCB_MODULE_EDGE_T,      // a footprint edge
     PCB_TRACE_T,            // a track segment (segment on a copper layer)
-    PCB_VIA_T,              // a via (like atrack segment on a copper layer)
+    PCB_VIA_T,              // a via (like a track segment on a copper layer)
     PCB_ZONE_T,             // a segment used to fill a zone area (segment on a
                             // copper layer)
     PCB_MARKER_T,           // a marker used to show something
@@ -48,7 +73,7 @@ enum KICAD_T {
     PCB_ITEM_LIST_T,        // a list of board items
 
     // Schematic draw Items.  The order of these items effects the sort order.
-    // It is currenlty ordered to mimic the old Eeschema locate behavior where
+    // It is currently ordered to mimic the old Eeschema locate behavior where
     // the smallest item is the selected item.
     SCH_MARKER_T,
     SCH_JUNCTION_T,
@@ -143,8 +168,8 @@ public:
      * @param testItem An EDA_ITEM to examine.
      * @param testData is arbitrary data needed by the inspector to determine
      *                 if the EDA_ITEM under test meets its match criteria.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *   else SCAN_CONTINUE;
+     * @return SEARCH_RESULT SEARCH_QUIT if the Iterator is to stop the scan,
+     *                       else SCAN_CONTINUE;
      */
     SEARCH_RESULT virtual Inspect( EDA_ITEM* testItem, const void* testData ) = 0;
 };
@@ -187,7 +212,7 @@ public:
 
     /**
      * Function Normalize
-     * ensures thatthe height ant width are positive.
+     * ensures that the height ant width are positive.
      */
     void Normalize();
 
@@ -351,8 +376,7 @@ public:
     int           m_Flags;        // flags for editing and other uses.
 
     unsigned long m_TimeStamp;    // Time stamp used for logical links
-    int           m_Selected;     /* Used by block commands, and selective
-                                     * editing */
+    int           m_Selected;     /* Used by block commands, and selective editing */
 
     // member used in undo/redo function
     EDA_ITEM*     m_Image;        // Link to an image copy to save a copy of
@@ -513,15 +537,15 @@ public:
      *
      * @param listStart The first in a list of EDA_ITEMs to iterate over.
      * @param inspector Is an INSPECTOR to call on each object that is one of
-     *  the requested scanTypes.
-     * @param testData Is an aid to testFunc, and should be sufficient to
-     *  allow it to fully determine if an item meets the match criteria, but it
-     *  may also be used to collect output.
-     * @param scanTypes A KICAD_T array that is EOT
-     *  terminated, and provides both the order and interest level of of
-     *  the types of objects to be iterated over.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the called INSPECTOR returned
-     *  SEARCH_QUIT, else SCAN_CONTINUE;
+     *                  the requested scanTypes.
+     * @param testData Is an aid to testFunc, and should be sufficient to allow
+     *                 it to fully determine if an item meets the match criteria,
+     *                 but it may also be used to collect output.
+     * @param scanTypes A KICAD_T array that is EOT terminated, and provides both
+     *                  the order and interest level of of the types of objects to
+     *                   be iterated over.
+     * @return SEARCH_RESULT SEARCH_QUIT if the called INSPECTOR returned
+     *                       SEARCH_QUIT, else SCAN_CONTINUE;
      */
     static SEARCH_RESULT IterateForward( EDA_ITEM*     listStart,
                                          INSPECTOR*    inspector,
@@ -538,9 +562,9 @@ public:
      * @param inspector An INSPECTOR instance to use in the inspection.
      * @param testData Arbitrary data used by the inspector.
      * @param scanTypes Which KICAD_T types are of interest and the order
-     *  is significant too, terminated by EOT.
-     * @return SEARCH_RESULT - SEARCH_QUIT if the Iterator is to stop the scan,
-     *  else SCAN_CONTINUE, and determined by the inspector.
+     *                  is significant too, terminated by EOT.
+     * @return SEARCH_RESULT SEARCH_QUIT if the Iterator is to stop the scan,
+     *                       else SCAN_CONTINUE, and determined by the inspector.
      */
     virtual SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                                  const KICAD_T scanTypes[] );
@@ -569,7 +593,7 @@ public:
     /**
      * Function GetMenuImage
      * returns a pointer to an image to be used in menus.  The default version returns
-     * the right arrow image.  Overide this function to provide object specific menu
+     * the right arrow image.  Override this function to provide object specific menu
      * images.
      * @return The menu image associated with the item.
      */
@@ -582,7 +606,7 @@ public:
      * The base class returns false since many of the objects derived from EDA_ITEM
      * do not have any text to search.
      *
-     * @param aSearchData A reference to a wxFindReplaceData object containin the
+     * @param aSearchData A reference to a wxFindReplaceData object containing the
      *                    search criteria.
      * @param aAuxData A pointer to optional data required for the search or NULL
      *                 if not used.
@@ -600,7 +624,7 @@ public:
      * Function Matches
      * compares \a aText against search criteria in \a aSearchData.
      *
-     * @param aText A referenc to a wxString object containing the string to test.
+     * @param aText A reference to a wxString object containing the string to test.
      * @param aSearchData The criteria to search against.
      * @return True if \a aText matches the search criteria in \a aSearchData.
      */
@@ -643,7 +667,7 @@ public:
      * Function Show
      * is used to output the object tree, currently for debugging only.
      * @param nestLevel An aid to prettier tree indenting, and is the level
-     *          of nesting of this object within the overall tree.
+     *                  of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os ) const;
@@ -675,7 +699,7 @@ inline EDA_ITEM* new_clone( const EDA_ITEM& aItem ) { return aItem.Clone(); }
 /**
  * Define list of drawing items for screens.
  *
- * The standard C++ containter was choosen so the pointer can be removed  from a list without
+ * The standard C++ container was chosen so the pointer can be removed  from a list without
  * it being destroyed.
  */
 typedef std::vector< EDA_ITEM* > EDA_ITEMS;
@@ -700,7 +724,7 @@ enum GRTextVertJustifyType {
 enum GRTraceMode {
     FILAIRE = 0,        // segments are drawn as lines
     FILLED,             // normal mode: segments have thickness
-    SKETCH              // sketcg mode: segments have thickness, but are not
+    SKETCH              // sketch mode: segments have thickness, but are not
                         // filled
 };
 
@@ -796,14 +820,13 @@ public:
 
     /**
      * Function Draw
-     *  @param aPanel = the current DrawPanel
-     *  @param aDC = the current Device Context
-     *  @param aOffset = draw offset (usually (0,0))
-     *  @param aColor = text color
-     *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
-     *  @param aDisplay_mode = FILAIRE, FILLED or SKETCH
-     *  @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do
-     *                                    not draw anchor ).
+     * @param aPanel = the current DrawPanel
+     * @param aDC = the current Device Context
+     * @param aOffset = draw offset (usually (0,0))
+     * @param aColor = text color
+     * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
+     * @param aDisplay_mode = FILAIRE, FILLED or SKETCH
+     * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                const wxPoint& aOffset, EDA_Colors aColor,
@@ -816,16 +839,15 @@ private:
      * Function DrawOneLineOfText
      * Draw a single text line.
      * Used to draw each line of this EDA_TEXT, that can be multiline
-     *  @param aPanel = the current DrawPanel
-     *  @param aDC = the current Device Context
-     *  @param aOffset = draw offset (usually (0,0))
-     *  @param aColor = text color
-     *  @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
-     *  @param aFillMode = FILAIRE, FILLED or SKETCH
-     *  @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do
-     *    not draw anchor ).
-     *  @param aText = the single line of text to draw.
-     *  @param aPos = the position of this line ).
+     * @param aPanel = the current DrawPanel
+     * @param aDC = the current Device Context
+     * @param aOffset = draw offset (usually (0,0))
+     * @param aColor = text color
+     * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
+     * @param aFillMode = FILAIRE, FILLED or SKETCH
+     * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
+     * @param aText = the single line of text to draw.
+     * @param aPos = the position of this line ).
      */
     void DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                             const wxPoint& aOffset, EDA_Colors aColor,
@@ -868,14 +890,14 @@ public:
      * useful in multiline texts to calculate the full text or a line area (for
      * zones filling, locate functions....)
      * @return the rect containing the line of text (i.e. the position and the
-     *  size of one line)
-     * this rectangle is calculated for 0 orient text. if orient is not 0 the
-     * rect must be rotated to match the physical area
-     * @param aLine : the line of text to consider.
+     *         size of one line) this rectangle is calculated for 0 orient text.
+     *         If orientation is not 0 the rect must be rotated to match the
+     *         physical area
+     * @param aLine The line of text to consider.
      * for single line text, aLine is unused
      * If aLine == -1, the full area (considering all lines) is returned
-     * @param aThickness - Overrides the current thickness when greater than 0.
-     * @param aInvertY - Invert the Y axis when calculating bounding box.
+     * @param aThickness Overrides the current thickness when greater than 0.
+     * @param aInvertY Invert the Y axis when calculating bounding box.
      */
     EDA_RECT GetTextBox( int aLine = -1, int aThickness = -1, bool aInvertY = false ) const;
 

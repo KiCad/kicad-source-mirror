@@ -1,7 +1,3 @@
-/**
- * @file sch_collectors.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -26,12 +22,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file sch_collectors.h
+ */
+
 #ifndef _SCH_COLLECTORS_H_
 #define _SCH_COLLECTORS_H_
 
 
 #include "class_collector.h"
 #include "sch_item_struct.h"
+#include "dialogs/dialog_schematic_find.h"
 
 
 /**
@@ -120,14 +121,7 @@ public:
     }
 
     /**
-     * Function Inspect
-     * is the examining function within the INSPECTOR which is passed to the
-     * Iterate function.
-     *
-     * @param aItem An EDA_ITEM to examine.
-     * @param aTestData is not used in this class.
-     * @return SEARCH_RESULT #SEARCH_QUIT if the iterator is to stop the scan,
-     *                       else #SEARCH_CONTINUE;
+     * @copydoc INSPECTOR::Inspect()
      */
     SEARCH_RESULT Inspect( EDA_ITEM* aItem, const void* aTestData = NULL );
 
@@ -162,7 +156,7 @@ public:
      * Function IsDraggableJunction
      * tests to see if the collected items form a draggable junction.
      * <p>
-     * Daggable juntions are defined as:
+     * Daggable junctions are defined as:
      * <ul>
      * <li> The intersection of three or more wire end points. </li>
      * <li> The intersection of one or more wire end point and one wire mid point. </li>
@@ -172,6 +166,103 @@ public:
      * @return True if the collection is a draggable junction.
      */
     bool IsDraggableJunction() const;
+};
+
+
+/**
+ * Class SCH_FIND_COLLECTOR_DATA
+ * is used as a data container for the associated item found by the #SCH_FIND_COLLECTOR
+ * object.
+ */
+class SCH_FIND_COLLECTOR_DATA
+{
+    /// The position in drawing units of the found item.
+    wxPoint m_position;
+
+    /// The human readable sheet path @see SCH_SHEET_PATH::PathHumanReadable() of the found item.
+    wxString m_sheetPath;
+
+    /// The parent object if the item found is a child object.
+    SCH_ITEM* m_parent;
+
+public:
+    SCH_FIND_COLLECTOR_DATA( const wxPoint& aPosition = wxDefaultPosition,
+                             const wxString& aSheetPath = wxEmptyString,
+                             SCH_ITEM* aParent = NULL )
+        : m_position( aPosition )
+        , m_sheetPath( aSheetPath )
+        , m_parent( aParent )
+    { }
+
+    wxPoint GetPosition() const { return m_position; }
+
+    wxString GetSheetPath() const { return m_sheetPath; }
+
+    SCH_ITEM* GetParent() { return m_parent; }
+};
+
+
+/**
+ * Class SCH_FIND_COLLECTOR
+ * is used to iterate over all of the items in a schematic or sheet and collect all
+ * the items that match the given search criteria.
+ */
+class SCH_FIND_COLLECTOR : public COLLECTOR
+{
+    /// Data associated with each found item.
+    std::vector< SCH_FIND_COLLECTOR_DATA > m_data;
+
+    /// The criteria used to test for matching items.
+    SCH_FIND_REPLACE_DATA m_findReplaceData;
+
+    /// The path of the sheet currently being iterated over.
+    SCH_SHEET_PATH* m_sheetPath;
+
+public:
+
+    /**
+     * Constructor SCH_FIND_COLLECTOR
+     */
+    SCH_FIND_COLLECTOR( const KICAD_T* aScanTypes = SCH_COLLECTOR::AllItems )
+    {
+        SetScanTypes( aScanTypes );
+    }
+
+    /**
+     * Function GetFindData
+     * returns the data associated with the item found at \a aIndex.
+     *
+     * @param aIndex The list index of the data to return.
+     * @return The associated found item data at \a aIndex if \a aIndex is within the
+     *         list limits.  Otherwise an empty data item will be returned.
+     */
+    SCH_FIND_COLLECTOR_DATA GetFindData( int aIndex );
+
+    /**
+     * Function GetFindReplaceData
+     *
+     * @return A reference to a #SCH_FIND_REPLACE_DATA object containing the current
+     *         search criteria.
+     */
+    SCH_FIND_REPLACE_DATA& GetFindReplaceData() { return m_findReplaceData; }
+
+    wxString GetText( int aIndex );
+
+    /**
+     * @copydoc INSPECTOR::Inspect()
+     */
+    SEARCH_RESULT Inspect( EDA_ITEM* aItem, const void* aTestData = NULL );
+
+    /**
+     * Function Collect
+     * scans \a aSheetPath using this class's Inspector method for items matching
+     * \a aFindReplaceData.
+     *
+     * @param aFindReplaceData A #SCH_FIND_REPLACE_DATA object containing the search criteria.
+     * @param aSheetPath A pointer to a #SCH_SHEET_PATH object to test for matches.  A NULL
+     *                   value searches the entire schematic hierarchy.
+     */
+    void Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData, SCH_SHEET_PATH* aSheetPath = NULL );
 };
 
 
