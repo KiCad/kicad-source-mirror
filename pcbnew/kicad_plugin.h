@@ -39,18 +39,24 @@ class NETCLASS;
 class ZONE_CONTAINER;
 class DIMENSION;
 class NETINFO_ITEM;
+class TEXTE_MODULE;
 
 
+/**
+ * Class KICAD_PLUGIN
+ * is a PLUGIN derivation which could possibly be put into a DLL/DSO.
+ * It is not thread safe, but it is re-entrant multiple times in sequence.
+ */
 class KICAD_PLUGIN : public PLUGIN
 {
 
 public:
 
-    //-----<PLUGIN>---------------------------------------------------------------------
+    //-----<PLUGIN>-------------------------------------------------------------
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties = NULL );
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties = NULL );   // overload
 
-    void Save( const wxString* aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );
+    void Save( const wxString* aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );          // overload
 
     const wxString& PluginName()
     {
@@ -58,7 +64,7 @@ public:
         return name;
     }
 
-    //-----</PLUGIN>--------------------------------------------------------------------
+    //-----</PLUGIN>------------------------------------------------------------
 
 protected:
 
@@ -87,10 +93,10 @@ protected:
      * parses an ASCII decimal floating point value and scales it into a BIU
      * according to the current value of diskToBui.
      *
-     * @param aValue is the ASCII value in C locale form.
+     * @param aValue is the ASCII value in C locale form with possible leading whitespace
      *
      * @param nptrptr may be NULL, but if not, then it tells where to put a
-     *  pointer to the next unconsumed input text. See man strtod() for more information.
+     *  pointer to the next unconsumed input text. See "man strtod" for more information.
      *
      * @return BIU - the converted Board Internal Unit.
      */
@@ -105,6 +111,11 @@ protected:
     void loadSHEET();
 
     void loadMODULE();
+    void load3D( MODULE* aModule );
+    void loadPAD( MODULE* aModule );
+    void loadTEXTE_MODULE( TEXTE_MODULE* aText );
+    void loadEDGE_MODULE( MODULE* aModule );
+
     void loadDRAWSEGMENT();
     void loadNETINFO_ITEM();
     void loadPCB_TEXTE();
@@ -123,12 +134,11 @@ protected:
     void loadTrackList( TRACK* aInsertBeforeMe, int aStructType );
 
     void loadZONE_CONTAINER();      // "$CZONE_OUTLINE"
-
     void loadDIMENSION();           // "$COTATION"
+    void loadPCB_TARGET();          // "$PCB_TARGET"
 
 
 /*  @todo
-    void load( PCB_TARGET* me );
     void load( NETINFO* me );
     void load( TRACK* me );
 */

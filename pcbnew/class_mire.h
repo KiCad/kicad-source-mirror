@@ -25,6 +25,9 @@ public:
 
 public:
     PCB_TARGET( BOARD_ITEM* aParent );
+    PCB_TARGET( BOARD_ITEM* aParent, int aShape, int aLayer,
+                const wxPoint& aPos, int aSize, int aWidth );
+
     ~PCB_TARGET();
 
     PCB_TARGET* Next() const { return (PCB_TARGET*) Pnext; }

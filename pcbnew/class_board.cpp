@@ -69,7 +69,7 @@ BOARD::BOARD( PCB_BASE_FRAME* frame ) :
 
 BOARD::~BOARD()
 {
-    if( m_PcbFrame->GetScreen() )
+    if( m_PcbFrame && m_PcbFrame->GetScreen() )
         m_PcbFrame->GetScreen()->ClearUndoRedoList();
 
     while( m_ZoneDescriptorList.size() )
