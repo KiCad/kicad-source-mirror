@@ -854,31 +854,41 @@ int D_PAD::Compare( const D_PAD* padref, const D_PAD* padcmp )
 {
     int diff;
 
-    if( (diff = padref->m_PadShape - padcmp->m_PadShape) )
+    if( diff = padref->m_PadShape - padcmp->m_PadShape) 
         return diff;
 
-    if( (diff = padref->m_Size.x - padcmp->m_Size.x) )
+    if( diff = padref->m_DrillShape - padcmp->m_DrillShape) 
         return diff;
 
-    if( (diff = padref->m_Size.y - padcmp->m_Size.y) )
+    if( diff = padref->m_Drill.x - padcmp->m_Drill.x )
         return diff;
 
-    if( (diff = padref->m_Offset.x - padcmp->m_Offset.x) )
+    if( diff = padref->m_Drill.y - padcmp->m_Drill.y )
         return diff;
 
-    if( (diff = padref->m_Offset.y - padcmp->m_Offset.y) )
+    if( diff = padref->m_Size.x - padcmp->m_Size.x )
         return diff;
 
-    if( (diff = padref->m_DeltaSize.x - padcmp->m_DeltaSize.x) )
+    if( diff = padref->m_Size.y - padcmp->m_Size.y )
         return diff;
 
-    if( (diff = padref->m_DeltaSize.y - padcmp->m_DeltaSize.y) )
+    if( diff = padref->m_Offset.x - padcmp->m_Offset.x )
+        return diff;
+
+    if( diff = padref->m_Offset.y - padcmp->m_Offset.y )
+        return diff;
+
+    if( diff = padref->m_DeltaSize.x - padcmp->m_DeltaSize.x )
+        return diff;
+
+    if( diff = padref->m_DeltaSize.y - padcmp->m_DeltaSize.y ) 
         return diff;
 
     // @todo check if export_gencad still works:
-    // specctra_export needs this, but maybe export_gencad does not.  added on
-    // Jan 24 2008 by Dick.
-    if( ( diff = padref->m_layerMask - padcmp->m_layerMask ) )
+    // specctra_export needs this, but maybe export_gencad does not.
+    // Lorenzo: XXX no idea about specctra, but gencad need it to
+    // implement padstacks!
+    if( diff = padref->m_layerMask - padcmp->m_layerMask )
         return diff;
 
     return 0;
