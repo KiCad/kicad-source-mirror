@@ -116,21 +116,27 @@ public:
 
     /**
      * Function Save
-     * will write a full aBoard to a storage file in a format that this
+     * will write either a full aBoard to a storage file in a format that this
      * implementation knows about, or it can be used to write a portion of
      * aBoard to a special kind of export file.
      *
      * @param aFileName is the name of a file to save to on disk.
      * @param aBoard is the BOARD document (data tree) to save or export to disk.
      *
+     * @param aBoard is the in memory document tree from which to extract information
+     *  when writing to \a aFileName.  The caller continues to own the BOARD, and
+     *  the plugin should refrain from modifying the BOARD if possible.
+     *
      * @param aProperties is an associative array that can be used to tell the
      *  saver how to save the file, because it can take any number of
      *  additional named tuning arguments that the plugin is known to support.
+     *  The caller continues to own this object (plugin may not delete it), and
+     *  plugins should expect it to be optionally NULL.
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
     static void Save( PCB_FILE_T aFileType, const wxString& aFileName,
-            PROPERTIES* aProperties = NULL );
+            BOARD* aBoard, PROPERTIES* aProperties = NULL );
 };
 
 
@@ -237,7 +243,10 @@ public:
      * aBoard to a special kind of export file.
      *
      * @param aFileName is the name of a file to save to on disk.
-     * @param aBoard is the BOARD document (data tree) to save or export to disk.
+     *
+     * @param aBoard is the class BOARD in memory document tree from which to
+     *  extract information when writing to \a aFileName.  The caller continues to
+     *  own the BOARD, and the plugin should refrain from modifying the BOARD if possible.
      *
      * @param aProperties is an associative array that can be used to tell the
      *  saver how to save the file, because it can take any number of
@@ -247,7 +256,7 @@ public:
      *
      * @throw IO_ERROR if there is a problem saving or exporting.
      */
-    virtual void Save( const wxString* aFileName, BOARD* aBoard,
+    virtual void Save( const wxString& aFileName, BOARD* aBoard,
                     PROPERTIES* aProperties = NULL );
 
     //-----</PUBLIC PLUGIN API>------------------------------------------------

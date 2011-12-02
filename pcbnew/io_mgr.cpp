@@ -100,6 +100,25 @@ BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName,
 }
 
 
+void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+{
+    // release the PLUGIN even if an exception is thrown.
+    PLUGIN::RELEASER pi = PluginFind( aFileType );
+
+    if( (PLUGIN*) pi )  // test pi->plugin
+    {
+        pi->Save( aFileName, aBoard, aProperties );  // virtual
+        return;
+    }
+
+    wxString msg;
+
+    msg.Printf( _( "Plugin type '%s' is not found." ), ShowType( aFileType ).GetData() );
+
+    THROW_IO_ERROR( msg );
+}
+
+
 BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface,
@@ -107,21 +126,21 @@ BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* 
 
     wxString msg;
 
-    msg.Printf( _( "Plugin %s does not implement the BOARD Load() function.\n" ),
+    msg.Printf( _( "Plugin %s does not implement the BOARD Load() function." ),
             PluginName().GetData() );
 
     THROW_IO_ERROR( msg );
 }
 
 
-void PLUGIN::Save( const wxString* aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+void PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface,
     // e.g. Load() or Save() but not both.
 
     wxString msg;
 
-    msg.Printf( _( "Plugin %s does not implement the BOARD Save() function.\n" ),
+    msg.Printf( _( "Plugin %s does not implement the BOARD Save() function." ),
             PluginName().GetData() );
 
     THROW_IO_ERROR( msg );
