@@ -50,10 +50,18 @@ public:
         return m_Pos;       // from EDA_TEXT
     }
 
+    /// @deprecated it seems
+    void SetType( int aType )   { m_Type = aType; }
+
     void SetPosition( const wxPoint& aPos ) // overload a base
     {
         m_Pos = aPos;       // in EDA_TEXT
     }
+
+    void SetVisible( bool isVisible )   { m_NoShow = !isVisible; }
+    void SetInvisible( bool isHidden )  { m_NoShow = isHidden; }
+
+    void SetPos0( const wxPoint& aPos )  { m_Pos0 = aPos; }
 
     void Copy( TEXTE_MODULE* source ); // copy structure
 

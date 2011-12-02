@@ -58,7 +58,6 @@ public:
      */
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
-
     /**
      * Function GetClass
      * returns the class name.
