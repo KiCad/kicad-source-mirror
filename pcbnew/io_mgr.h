@@ -54,6 +54,8 @@ public:
     enum PCB_FILE_T
     {
         KICAD,
+        // add your type here.
+
         // EAGLE,
         // ALTIUM,
         // etc.
@@ -77,7 +79,8 @@ public:
      * Function PluginRelease
      * releases a PLUGIN back to the system, and may cause it to be unloaded from memory.
      *
-     * @param aPlugin is the one to be released, and which is no longer usable.
+     * @param aPlugin is the one to be released, and which is no longer usable
+     *  after calling this.
      */
     static void PluginRelease( PLUGIN* aPlugin );
 
@@ -89,7 +92,9 @@ public:
 
     /**
      * Function Load
-     * finds the requested PLUGIN and loads a BOARD, or throws an exception trying.
+     * finds the requested PLUGIN and if found, calls the PLUGIN->Load(..) funtion
+     * on it using the arguments passed to this function.  After the PLUGIN->Load()
+     * function returns, the PLUGIN is Released() as part of this call.
      *
      * @param aFileType is the PCB_FILE_T of file to load.
      *
@@ -109,7 +114,23 @@ public:
     static BOARD* Load( PCB_FILE_T aFileType, const wxString& aFileName,
             BOARD* aAppendToMe = NULL, PROPERTIES* aProperties = NULL );
 
-    // etc.
+    /**
+     * Function Save
+     * will write a full aBoard to a storage file in a format that this
+     * implementation knows about, or it can be used to write a portion of
+     * aBoard to a special kind of export file.
+     *
+     * @param aFileName is the name of a file to save to on disk.
+     * @param aBoard is the BOARD document (data tree) to save or export to disk.
+     *
+     * @param aProperties is an associative array that can be used to tell the
+     *  saver how to save the file, because it can take any number of
+     *  additional named tuning arguments that the plugin is known to support.
+     *
+     * @throw IO_ERROR if there is a problem saving or exporting.
+     */
+    static void Save( PCB_FILE_T aFileType, const wxString& aFileName,
+            PROPERTIES* aProperties = NULL );
 };
 
 
@@ -123,7 +144,9 @@ public:
  * <pre>
  *   try
  *   {
- *        pi->Load(...);
+ *        IO_MGR::Load(...);
+ *   or
+ *        IO_MGR::Save(...);
  *   }
  *   catch( IO_ERROR ioe )
  *   {
@@ -170,41 +193,47 @@ public:
     };
 
 
+    //-----<PUBLIC PLUGIN API>-------------------------------------------------
+
     /**
      * Function PluginName
      * returns a brief hard coded name for this PLUGIN.
      */
     virtual const wxString& PluginName() = 0;
 
-    //-----<BOARD STUFF>----------------------------------------------------
-
     /**
      * Function Load
-     * loads a board file from some input file format that this implementation
-     * knows about.
+     * loads a board file, or a portion of one, from some input file format
+     * that this PLUGIN implementation knows about. This may be used to load an
+     * entire new BOARD, or to augment an existing one if \a aAppendToMe is not NULL.
      *
-     * @param aFileName is the name of the file to load and may be foreign in
+     * @param aFileName is the name of the file to use as input and may be foreign in
      *  nature or native in nature.
      *
-     * @param aAppendToMe is an existing BOARD to append to but is often NULL
-     *  meaning do not append.
+     * @param aAppendToMe is an existing BOARD to append to, but if NULL then
+     *   this means "do not append, rather load anew".
      *
      * @param aProperties is an associative array that can be used to tell the
      *  loader how to load the file, because it can take any number of
-     *  additional named arguments that the plugin is known to support.
+     *  additional named arguments that the plugin is known to support. These are
+     *  tuning parameters for the import or load.  The caller continues to own
+     *  this object (plugin may not delete it), and plugins should expect it to
+     *  be optionally NULL.
      *
-     * @return BOARD* - the successfully loaded board, and caller owns it.
+     * @return BOARD* - the successfully loaded board, or the same one as aAppendToMe
+     *  if aAppendToMe was not NULL, and caller owns it.
      *
      * @throw IO_ERROR if there is a problem loading, and its contents should
-     *  say what went wrong.
+     *  say what went wrong, using line number and character offsets of the
+     *  input file if possible.
      */
     virtual BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
                         PROPERTIES* aProperties = NULL );
 
     /**
      * Function Save
-     * will write a full aBoard to a storage file in a format that only this
-     * implementation knows about.  Or it can be used to write a portion of
+     * will write a full aBoard to a storage file in a format that this
+     * PLUGIN implementation knows about, or it can be used to write a portion of
      * aBoard to a special kind of export file.
      *
      * @param aFileName is the name of a file to save to on disk.
@@ -212,19 +241,23 @@ public:
      *
      * @param aProperties is an associative array that can be used to tell the
      *  saver how to save the file, because it can take any number of
-     *  additional named arguments that the plugin is known to support.
+     *  additional named tuning arguments that the plugin is known to support.
+     *  The caller continues to own this object (plugin may not delete it),
+     *  and plugins should expect it to be optionally NULL.
      *
-     * @throw IO_ERROR if there is a problem loading.
+     * @throw IO_ERROR if there is a problem saving or exporting.
      */
     virtual void Save( const wxString* aFileName, BOARD* aBoard,
                     PROPERTIES* aProperties = NULL );
 
-    //-----</BOARD STUFF>---------------------------------------------------
+    //-----</PUBLIC PLUGIN API>------------------------------------------------
+};
+
+
 
 #if 0
-    ///--------- Should split into two PLUGIN base types here, rather than being combined like this
-
     //-----<SCHEMATIC STUFF>------------------------------------------------
+    // Should split into schematic specific PLUGIN base type
 
     /**
      * Function Load
@@ -242,7 +275,7 @@ public:
 
     /**
      * Function Save
-     * will write aBoard to a storage file in a format that only this
+     * will write aSchematic to a storage file in a format that only this
      * implementation knows about.
      *
      * @param aFileName is the name of a file to save to on disk.
@@ -258,6 +291,6 @@ public:
 
     //-----</SCHEMATIC STUFF>----------------------------------------------
 #endif
-};
+
 
 #endif // IO_MGR_H_
