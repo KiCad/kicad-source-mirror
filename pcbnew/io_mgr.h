@@ -34,7 +34,6 @@
 WX_DECLARE_STRING_HASH_MAP( wxString, PROPERTIES );
 
 class BOARD;
-class SCHEMATIC;
 class PLUGIN;
 
 
@@ -88,7 +87,7 @@ public:
      * Function ShowType
      * returns a brief name for a plugin, given aFileType enum.
      */
-    static const wxString& ShowType( PCB_FILE_T aFileType );
+    static const wxString ShowType( PCB_FILE_T aFileType );
 
     /**
      * Function Load
@@ -267,6 +266,8 @@ public:
 #if 0
     //-----<SCHEMATIC STUFF>------------------------------------------------
     // Should split into schematic specific PLUGIN base type
+
+class SCHEMATIC;
 
     /**
      * Function Load

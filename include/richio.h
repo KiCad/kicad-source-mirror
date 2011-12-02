@@ -46,8 +46,8 @@
  */
 
 
-#define IO_FORMAT       _( "IO_ERROR: %s\n from %s : %s" )
-#define PARSE_FORMAT    _( "PARSE_ERROR: %s in input/source \"%s\", line %d, offset %d\n from %s : %s" )
+#define IO_FORMAT       _( "IO_ERROR: %s\nfrom %s : %s" )
+#define PARSE_FORMAT    _( "PARSE_ERROR: %s in input/source \"%s\", line %d, offset %d\nfrom %s : %s" )
 
 // references:
 // http://stackoverflow.com/questions/2670816/how-can-i-use-the-compile-time-constant-line-in-a-string

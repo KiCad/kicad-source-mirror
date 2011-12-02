@@ -66,17 +66,15 @@ void IO_MGR::PluginRelease( PLUGIN* aPlugin )
 }
 
 
-const wxString& IO_MGR::ShowType( PCB_FILE_T aFileType )
+const wxString IO_MGR::ShowType( PCB_FILE_T aFileType )
 {
-    static const wxString kicad   = wxT( "KiCad" );
-    static const wxString unknown = _( "Unknown" );
-
     switch( aFileType )
     {
-    case KICAD:
-        return kicad;
     default:
-        return unknown;     // could Printf() the numeric value of aFileType
+        return wxString::Format( _( "Unknown PCB_FILE_T value: %d" ), aFileType );
+
+    case KICAD:
+        return wxString( wxT( "KiCad" ) );
     }
 }
 
@@ -92,11 +90,7 @@ BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName,
         return pi->Load( aFileName, aAppendToMe, aProperties );  // virtual
     }
 
-    wxString msg;
-
-    msg.Printf( _( "Plugin type '%s' is not found.\n" ), ShowType( aFileType ).GetData() );
-
-    THROW_IO_ERROR( msg );
+    THROW_IO_ERROR( wxString::Format( _( "Plugin type '%s' is not found." ), ShowType( aFileType ).GetData() ) );
 }
 
 
@@ -111,11 +105,7 @@ void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoar
         return;
     }
 
-    wxString msg;
-
-    msg.Printf( _( "Plugin type '%s' is not found." ), ShowType( aFileType ).GetData() );
-
-    THROW_IO_ERROR( msg );
+    THROW_IO_ERROR( wxString::Format( _( "Plugin type '%s' is not found." ), ShowType( aFileType ).GetData() ) );
 }
 
 
@@ -124,12 +114,8 @@ BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* 
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface,
     // e.g. Load() or Save() but not both.
 
-    wxString msg;
-
-    msg.Printf( _( "Plugin %s does not implement the BOARD Load() function." ),
-            PluginName().GetData() );
-
-    THROW_IO_ERROR( msg );
+    THROW_IO_ERROR( wxString::Format(
+        _( "Plugin %s does not implement the BOARD Load() function." ), PluginName().GetData() ) );
 }
 
 
@@ -138,11 +124,6 @@ void PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProper
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface,
     // e.g. Load() or Save() but not both.
 
-    wxString msg;
-
-    msg.Printf( _( "Plugin %s does not implement the BOARD Save() function." ),
-            PluginName().GetData() );
-
-    THROW_IO_ERROR( msg );
+    THROW_IO_ERROR( wxString::Format(
+        _( "Plugin %s does not implement the BOARD Save() function." ), PluginName().GetData() ) );
 }
-
