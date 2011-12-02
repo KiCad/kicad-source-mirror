@@ -56,7 +56,7 @@ public:
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties = NULL );   // overload
 
-    void Save( const wxString* aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );          // overload
+    void Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );          // overload
 
     const wxString& PluginName()
     {
@@ -103,8 +103,10 @@ protected:
     BIU biuParse( const char* aValue, const char** nptrptr = NULL );
 
     /**
-     * Function dblParse
-     * parses an ASCII decimal floating point value without scaling into a double.
+     * Function degParse
+     * parses an ASCII decimal floating point value which is certainy an angle.  This
+     * is a dedicated function for encapsulating support for the migration from
+     * tenths of degrees to degrees in floating point.
      *
      * @param aValue is the ASCII value in C locale form with possible leading whitespace
      *
@@ -113,7 +115,7 @@ protected:
      *
      * @return double - the string converted to a primitive double type
      */
-    double dblParse( const char* aValue, const char** nptrptr = NULL );
+    double degParse( const char* aValue, const char** nptrptr = NULL );
 
     // load / parse functions
 

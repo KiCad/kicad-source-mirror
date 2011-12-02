@@ -280,10 +280,12 @@ this file again." ) );
         if( !aAppend )
             SetBoard( board );
     }
-    catch ( IO_ERROR ioe )
+    catch( IO_ERROR ioe )
     {
-        // @todo
-        printf( "Error loading board: %s\n", TO_UTF8( ioe.errorText ) );
+        wxString msg = wxString::Format(  _( "Error loading board.\n%s" ),
+                            ioe.errorText.GetData() );
+
+        wxMessageBox( msg, _( "Open Board File" ), wxICON_ERROR );
     }
 
     if( !aAppend )

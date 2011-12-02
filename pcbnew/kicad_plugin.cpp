@@ -228,9 +228,10 @@ BOARD* KICAD_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPER
         THROW_IO_ERROR( m_error );
     }
 
+    // reader now owns fp, will close on exception or return
     FILE_LINE_READER    reader( fp, aFileName );
 
-    aReader = &reader;
+    aReader = &reader;          // member function accessibility
 
     init( aProperties );
 
@@ -331,7 +332,7 @@ void KICAD_PLUGIN::loadAllSections( bool doAppend )
             {
                 while( READLINE() )
                 {
-                    line = aReader->Line();     // gobble til $EndSetup
+                    line = aReader->Line();     // gobble until $EndSetup
 
                     if( TESTLINE( "$EndSETUP" ) )
                         break;
@@ -579,22 +580,7 @@ void KICAD_PLUGIN::loadSETUP()
         if( TESTLINE( "PcbPlotParams" ) )
         {
             PCB_PLOT_PARAMS_PARSER parser( line + SZ( "PcbPlotParams" ), aReader->GetSource() );
-
-//            try
-            {
-                g_PcbPlotOptions.Parse( &parser );
-            }
-/* move this higher up
-            catch( IO_ERROR& e )
-            {
-                wxString msg;
-
-                msg.Printf( _( "Error reading PcbPlotParams from %s:\n%s" ),
-                            aReader->GetSource().GetData(),
-                            e.errorText.GetData() );
-                wxMessageBox( msg, _( "Open Board File" ), wxICON_ERROR );
-            }
-*/
+            g_PcbPlotOptions.Parse( &parser );
         }
 
         else if( TESTLINE( "AuxiliaryAxisOrg" ) )
@@ -892,7 +878,7 @@ void KICAD_PLUGIN::loadMODULE()
 
         // most frequently encountered ones at the top
 
-        if( TESTLINE( "D" ) )          // read a drawing item
+        if( TESTLINE( "D" ) )          // read a drawing item, e.g. "DS"
         {
             loadEDGE_MODULE( module.get() );
             /*
@@ -1054,32 +1040,37 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
         if( TESTLINE( "Sh" ) )              // (Sh)ape and padname
         {
             // e.g. "Sh "A2" C 520 520 0 0 900"
-            //      "Sh "1" R 157 1378 0 0 900"
+            // or   "Sh "1" R 157 1378 0 0 900"
 
             char    padname[sizeof(pad->m_Padname)+1];
 
-            data = line + SZ( "Sh" );
+            data = line + SZ( "Sh" ) + 1;   // +1 skips trailing whitespace
 
-            data = data + ReadDelimitedText( padname, data, sizeof(padname) ) + 1;
+            data = data + ReadDelimitedText( padname, data, sizeof(padname) ) + 1;  // +1 trailing whitespace
 
             // sscanf( PtLine, " %s %d %d %d %d %d", BufCar, &m_Size.x, &m_Size.y, &m_DeltaSize.x, &m_DeltaSize.y, &m_Orient );
 
-            int padshape = *data++;
-            BIU size_x   = biuParse( data, &data );
-            BIU size_y   = biuParse( data, &data );
-            BIU delta_x  = biuParse( data, &data );
-            BIU delta_y  = biuParse( data, &data );
-            int orient   = intParse( data );
+            int     padshape = *data++;
+            BIU     size_x   = biuParse( data, &data );
+            BIU     size_y   = biuParse( data, &data );
+            BIU     delta_x  = biuParse( data, &data );
+            BIU     delta_y  = biuParse( data, &data );
+            double  orient   = degParse( data );
 
             switch( padshape )
             {
-            default:
             case 'C':   padshape = PAD_CIRCLE;      break;
             case 'R':   padshape = PAD_RECT;        break;
             case 'O':   padshape = PAD_OVAL;        break;
             case 'T':   padshape = PAD_TRAPEZOID;   break;
+            default:
+                m_error.Printf( _( "Unknown padshape '%s' on line:%d" ),
+                    FROM_UTF8( line ).GetData(), aReader->LineNumber() );
+                THROW_IO_ERROR( m_error );
             }
 
+            pad->SetPadName( padname );
+            pad->SetShape( padshape );
             pad->SetSize( wxSize( size_x, size_y ) );
             pad->SetDelta( wxSize( delta_x, delta_y ) );
             pad->SetOrientation( orient );
@@ -1249,14 +1240,12 @@ void KICAD_PLUGIN::loadEDGE_MODULE( MODULE* aModule )
             BIU     start0_y = biuParse( data, &data );
             BIU     end0_x   = biuParse( data, &data );
             BIU     end0_y   = biuParse( data, &data );
-            double  angle    = dblParse( data, &data );
+            double  angle    = degParse( data, &data );
 
             width   = biuParse( data, &data );
             layer   = intParse( data );
 
-            // @todo put in accessor
-            NORMALIZE_ANGLE_360( angle );
-
+            dwg->SetAngle( angle );
             dwg->m_Start0 = wxPoint( start0_x, start0_y );
             dwg->m_End0   = wxPoint( end0_x, end0_y );
         }
@@ -1282,40 +1271,47 @@ void KICAD_PLUGIN::loadEDGE_MODULE( MODULE* aModule )
         break;
 
     case S_POLYGON:
-#if 0 // @todo
         {
-            int pointCount;
-            sscanf( Line + 3, "%d %d %d %d %d %d %d", &m_Start0.x, &m_Start0.y, &m_End0.x, &m_End0.y, &pointCount, &m_Width, &m_Layer );
+            // e.g. "DP %d %d %d %d %d %d %d\n"
+            // sscanf( Line + 3, "%d %d %d %d %d %d %d", &m_Start0.x, &m_Start0.y, &m_End0.x, &m_End0.y, &pointCount, &m_Width, &m_Layer );
 
-            m_PolyPoints.clear();
-            m_PolyPoints.reserve( pointCount );
+            BIU start0_x = biuParse( line + SZ( "DP" ), &data );
+            BIU start0_y = biuParse( data, &data );
+            BIU end0_x   = biuParse( data, &data );
+            BIU end0_y   = biuParse( data, &data );
+            int ptCount  = intParse( data, &data );
 
-            for( ii = 0;  ii<pointCount;  ii++ )
+            width   = biuParse( data, &data );
+            layer   = intParse( data );
+
+            dwg->m_Start0 = wxPoint( start0_x, start0_y );
+            dwg->m_End0   = wxPoint( end0_x, end0_y );
+
+            std::vector<wxPoint>& pts = dwg->GetPolyPoints();
+            pts.reserve( ptCount );
+
+            for( int ii = 0;  ii<ptCount;  ++ii )
             {
-                if( READLINE() )
+                if( !READLINE() )
                 {
-                    Buf = aReader->Line();
-
-                    if( strncmp( Buf, "Dl", 2 ) != 0 )
-                    {
-                        error = 1;
-                        break;
-                    }
-
-                    int x;
-                    int y;
-                    sscanf( Buf + 3, "%d %d\n", &x, &y );
-
-                    m_PolyPoints.push_back( wxPoint( x, y ) );
+                    THROW_IO_ERROR( wxT( "S_POLGON point count mismatch." ) );
                 }
-                else
+
+                line = aReader->Line();
+
+                // e.g. "Dl 23 44\n"
+
+                if( !TESTLINE( "Dl" ) )
                 {
-                    error = 1;
-                    break;
+                    THROW_IO_ERROR( wxT( "Missing Dl point def" ) );
                 }
+
+                BIU x = biuParse( line + SZ( "Dl" ), &data );
+                BIU y = biuParse( data );
+
+                pts.push_back( wxPoint( x, y ) );
             }
         }
-#endif
         break;
 
     default:
@@ -1345,7 +1341,7 @@ void KICAD_PLUGIN::loadEDGE_MODULE( MODULE* aModule )
 
     EDGE_MODULE* em = dwg.release();
 
-    m_board->m_Drawings.PushBack( em );
+    aModule->m_Drawings.PushBack( em );
 
     // this had been done at the MODULE level before, presumably because it needs
     // to be already added to a module before this function will work.
@@ -1355,7 +1351,92 @@ void KICAD_PLUGIN::loadEDGE_MODULE( MODULE* aModule )
 
 void KICAD_PLUGIN::loadTEXTE_MODULE( TEXTE_MODULE* aText )
 {
-    // @todo
+    const char* data;
+    char* line = aReader->Line();     // current (old) line
+
+    // sscanf( line + 1, "%d %d %d %d %d %d %d %s %s %d %s", &type, &m_Pos0.x, &m_Pos0.y, &m_Size.y, &m_Size.x,
+    //     &m_Orient, &m_Thickness,               BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
+
+    // e.g. "T1 6940 -16220 350 300 900 60 M I 20 N "CFCARD"\r\n"
+
+    int     type    = intParse( line+1, &data );
+    BIU     pos0_x  = biuParse( data, &data );
+    BIU     pos0_y  = biuParse( data, &data );
+    BIU     size0_x = biuParse( data, &data );
+    BIU     size0_y = biuParse( data, &data );
+    double  orient  = degParse( data, &data );
+    BIU     thickn  = biuParse( data, &data );
+
+    // after switching to strtok, there's no easy coming back because of the
+    // embedded nul(s?) placed to the right of the current field.
+    char*   mirror  = strtok( (char*) data, delims );
+    char*   hide    = strtok( NULL, delims );
+    char*   tmp     = strtok( NULL, delims );
+    int     layer   = tmp ? intParse( tmp ) : SILKSCREEN_N_FRONT;
+    char*   italic  = strtok( NULL, delims );
+    char*   text    = strtok( NULL, delims );
+
+    if( type != TEXT_is_REFERENCE && type != TEXT_is_VALUE )
+        type = TEXT_is_DIVERS;
+
+    aText->SetType( type );
+
+    aText->SetPos0( wxPoint( pos0_x, pos0_y ) );
+
+    /* @todo move to accessor?  cannot reach these defines from here
+        pcbnew.h off limit because of globals in there
+    // Test for a reasonable size:
+    if( size0_x < TEXTS_MIN_SIZE )
+        size0_x = TEXTS_MIN_SIZE;
+    if( size0_y < TEXTS_MIN_SIZE )
+        size0_y = TEXTS_MIN_SIZE;
+    */
+
+    aText->SetSize( wxSize( size0_x, size0_y ) );
+
+    // Due to the Pcbnew history, .m_Orient is saved in screen value
+    // but it is handled as relative to its parent footprint
+
+    // @todo is there now an opportunity for a better way as we move to degrees and
+    // a new file format?
+    orient -= ( (MODULE*) aText->GetParent() )->GetOrientation();
+
+    aText->SetOrientation( orient );
+
+    // @todo put in accessors?
+    // Set a reasonable width:
+    if( thickn < 1 )
+        thickn = 1;
+
+    aText->SetThickness( Clamp_Text_PenSize( thickn, aText->GetSize() ) );
+
+    aText->SetMirrored( mirror && *mirror == 'M' );
+
+    aText->SetInvisible( hide && *hide == 'I' );
+
+    aText->SetItalic( italic && *italic == 'I' );
+
+    // @todo put in accessor?
+    // Test for a reasonable layer:
+    if( layer < 0 )
+        layer = 0;
+    if( layer > LAST_NO_COPPER_LAYER )
+        layer = LAST_NO_COPPER_LAYER;
+    if( layer == LAYER_N_BACK )
+        layer = SILKSCREEN_N_BACK;
+    else if( layer == LAYER_N_FRONT )
+        layer = SILKSCREEN_N_FRONT;
+
+    aText->SetLayer( layer );
+
+    // Calculate the actual position.
+    aText->SetDrawCoord();
+
+    // convert the "quoted, escaped, UTF8, text" to a wxString
+    wxString    wtext;
+    ReadDelimitedText( &wtext, text ? text : "" );
+
+    aText->SetText( wtext );
 }
 
 
@@ -1424,9 +1505,7 @@ void KICAD_PLUGIN::loadDRAWSEGMENT()
         $EndDRAWSEGMENT
     */
 
-    // immediately save object in tree, so if exception, no memory leak
-    DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
-    m_board->Add( dseg, ADD_APPEND );
+    auto_ptr<DRAWSEGMENT> dseg( new DRAWSEGMENT( m_board ) );
 
     while( READLINE() )
     {
@@ -1483,7 +1562,7 @@ void KICAD_PLUGIN::loadDRAWSEGMENT()
                     break;
                 case 2:
                     double angle;
-                    angle = dblParse( data );
+                    angle = degParse( data );
                     dseg->SetAngle( angle );    // m_Angle
                     break;
                 case 3:
@@ -1521,7 +1600,10 @@ void KICAD_PLUGIN::loadDRAWSEGMENT()
         }
 
         else if( TESTLINE( "$EndDRAWSEGMENT" ) )
+        {
+            m_board->Add( dseg.release(), ADD_APPEND );
             return;     // preferred exit
+        }
     }
 
     THROW_IO_ERROR( wxT( "Missing '$EndDRAWSEGMENT'" ) );
@@ -1808,7 +1890,7 @@ void KICAD_PLUGIN::loadNETCLASS()
     // yet since that would bypass duplicate netclass name checking within the BOARD.
     // store it temporarily in an auto_ptr until successfully inserted into the BOARD
     // just before returning.
-    auto_ptr<NETCLASS> netclass( new NETCLASS( m_board, wxEmptyString ) );
+    auto_ptr<NETCLASS> nc( new NETCLASS( m_board, wxEmptyString ) );
 
     while( READLINE() )
     {
@@ -1816,77 +1898,78 @@ void KICAD_PLUGIN::loadNETCLASS()
 
         if( TESTLINE( "AddNet" ) )      // most frequent type of line
         {
+            // e.g. "AddNet "V3.3D"\n"
             ReadDelimitedText( buf, line + SZ( "AddNet" ), sizeof(buf) );
             netname = FROM_UTF8( buf );
-            netclass->Add( netname );
+            nc->Add( netname );
+        }
+
+        else if( TESTLINE( "Clearance" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "Clearance" ) );
+            nc->SetClearance( tmp );
+        }
+
+        else if( TESTLINE( "TrackWidth" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "TrackWidth" ) );
+            nc->SetTrackWidth( tmp );
+        }
+
+        else if( TESTLINE( "ViaDia" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "ViaDia" ) );
+            nc->SetViaDiameter( tmp );
+        }
+
+        else if( TESTLINE( "ViaDrill" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "ViaDrill" ) );
+            nc->SetViaDrill( tmp );
+        }
+
+        else if( TESTLINE( "uViaDia" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "uViaDia" ) );
+            nc->SetuViaDiameter( tmp );
+        }
+
+        else if( TESTLINE( "uViaDrill" ) )
+        {
+            BIU tmp = biuParse( line + SZ( "uViaDrill" ) );
+            nc->SetuViaDrill( tmp );
+        }
+
+        else if( TESTLINE( "Name" ) )
+        {
+            ReadDelimitedText( buf, line + SZ( "Name" ), sizeof(buf) );
+            nc->SetName( FROM_UTF8( buf ) );
+        }
+
+        else if( TESTLINE( "Desc" ) )
+        {
+            ReadDelimitedText( buf, line + SZ( "Desc" ), sizeof(buf) );
+            nc->SetDescription( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "$EndNCLASS" ) )
         {
-            if( m_board->m_NetClasses.Add( netclass.get() ) )
+            if( m_board->m_NetClasses.Add( nc.get() ) )
             {
-                netclass.release();
+                nc.release();
             }
             else
             {
                 // Must have been a name conflict, this is a bad board file.
                 // User may have done a hand edit to the file.
 
-                // auto_ptr will delete netclass on this code path
+                // auto_ptr will delete nc on this code path
 
-                m_error.Printf( _( "duplicate NETCLASS name '%s'" ), netclass->GetName().GetData() );
+                m_error.Printf( _( "duplicate NETCLASS name '%s'" ), nc->GetName().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
-            return;             // preferred exit
-        }
-
-        else if( TESTLINE( "Clearance" ) )
-        {
-            BIU tmp = biuParse( line + SZ( "Clearance" ) );
-            netclass->SetClearance( tmp );
-        }
-
-        else if( TESTLINE( "TrackWidth" ) )
-        {
-            BIU tmp = biuParse( line + SZ( "TrackWidth" ) );
-            netclass->SetTrackWidth( tmp );
-        }
-
-        else if( TESTLINE( "ViaDia" ) )
-        {
-            BIU tmp = biuParse( line + SZ( "ViaDia" ) );
-            netclass->SetViaDiameter( tmp );
-        }
-
-        else if( TESTLINE( "ViaDrill" ) )
-        {
-            BIU tmp = biuParse( line + SZ( "ViaDrill" ) );
-            netclass->SetViaDrill( tmp );
-        }
-
-        else if( TESTLINE( "uViaDia" ) )
-        {
-            BIU tmp = biuParse( line + SZ( "uViaDia" ) );
-            netclass->SetuViaDiameter( tmp );
-        }
-
-        else if( TESTLINE( "uViaDrill" ) )
-        {
-            BIU tmp = biuParse( line + SZ( "uViaDrill" ) );
-            netclass->SetuViaDrill( tmp );
-        }
-
-        else if( TESTLINE( "Name" ) )
-        {
-            ReadDelimitedText( buf, line + SZ( "Name" ), sizeof(buf) );
-            netclass->SetName( FROM_UTF8( buf ) );
-        }
-
-        else if( TESTLINE( "Desc" ) )
-        {
-            ReadDelimitedText( buf, line + SZ( "Desc" ), sizeof(buf) );
-            netclass->SetDescription( FROM_UTF8( buf ) );
+            return;     // preferred exit
         }
     }
 
@@ -1900,24 +1983,22 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
 
     int     outline_hatch = CPolyLine::NO_HATCH;
     bool    sawCorner = false;
-    int     layer = 0;
+    char    buf[1024];
 
     while( READLINE() )
     {
+        const char* data;
         char* line = aReader->Line();
 
-        if( TESTLINE( "ZCorner" ) )     // new corner found
+        if( TESTLINE( "ZCorner" ) )         // new corner found
         {
             // e.g. "ZCorner 25650 49500 0"
-
-            const char* data = line + SZ( "ZCorner" );
-
-            BIU x    = biuParse( data, &data );
+            BIU x    = biuParse( line + SZ( "ZCorner" ), &data );
             BIU y    = biuParse( data, &data );
             int flag = atoi( data );
 
             if( !sawCorner )
-                zc->m_Poly->Start( layer, x, y, outline_hatch );
+                zc->m_Poly->Start( zc->GetLayer(), x, y, outline_hatch );
             else
                 zc->AppendCorner( wxPoint( x, y ) );
 
@@ -1930,11 +2011,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "ZInfo" ) )      // general info found
         {
             // e.g. 'ZInfo 479194B1 310 "COMMON"'
-
-            const char* data = line + SZ( "ZInfo" );
-
-            char    buf[1024];
-            long    timestamp = hexParse( data, &data );
+            long    timestamp = hexParse( line + SZ( "ZInfo" ), &data );
             int     netcode   = intParse( data, &data );
 
             if( ReadDelimitedText( buf, data, sizeof(buf) ) > (int) sizeof(buf) )
@@ -1949,44 +2026,34 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
 
         else if( TESTLINE( "ZLayer" ) )     // layer found
         {
-            char*   data = line + SZ( "ZLayer" );
-
-            layer = atoi( data );
+            int layer = intParse( line + SZ( "ZLayer" ) );
+            zc->SetLayer( layer );
         }
 
         else if( TESTLINE( "ZAux" ) )       // aux info found
         {
             // e.g. "ZAux 7 E"
+            int     ignore = intParse( line + SZ( "ZAux" ), &data );
+            char*   hopt   = strtok( (char*) data, delims );
 
-            char*   data = line + SZ( "ZAux" );
-            int     x;
-            char    hopt[10];
-            int     ret  = sscanf( data, "%d %c", &x, hopt );
-
-            if( ret < 2 )
+            if( !hopt )
             {
                 m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
-            switch( hopt[0] )   // upper case required
+            switch( *hopt )   // upper case required
             {
-            case 'N':
-                outline_hatch = CPolyLine::NO_HATCH;
-                break;
-
-            case 'E':
-                outline_hatch = CPolyLine::DIAGONAL_EDGE;
-                break;
-
-            case 'F':
-                outline_hatch = CPolyLine::DIAGONAL_FULL;
-                break;
+            case 'N':   outline_hatch = CPolyLine::NO_HATCH;        break;
+            case 'E':   outline_hatch = CPolyLine::DIAGONAL_EDGE;   break;
+            case 'F':   outline_hatch = CPolyLine::DIAGONAL_FULL;   break;
 
             default:
                 m_error.Printf( wxT( "Bad ZAux for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
                 THROW_IO_ERROR( m_error );
             }
+
+            (void) ignore;
 
             // Set hatch mode later, after reading corner outline data
         }
@@ -1994,10 +2061,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "ZSmoothing" ) )
         {
             // e.g. "ZSmoothing 0 0"
-
-            const char* data = line + SZ( "ZSmoothing" );
-
-            int     smoothing    = intParse( data, &data );
+            int     smoothing    = intParse( line + SZ( "ZSmoothing" ), &data );
             BIU     cornerRadius = biuParse( data );
 
             if( smoothing >= ZONE_SETTING::SMOOTHING_LAST || smoothing < 0 )
@@ -2013,10 +2077,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "ZOptions" ) )
         {
             // e.g. "ZOptions 0 32 F 200 200"
-
-            const char* data = line + SZ( "ZOptions" );
-
-            int     fillmode    = intParse( data, &data );
+            int     fillmode    = intParse( line + SZ( "ZOptions" ), &data );
             int     arcsegcount = intParse( data, &data );
             char    fillstate   = data[1];      // here e.g. " F"
             BIU     thermalReliefGap = biuParse( data += 2 , &data );  // +=2 for " F"
@@ -2036,41 +2097,29 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
         else if( TESTLINE( "ZClearance" ) )     // Clearance and pad options info found
         {
             // e.g. "ZClearance 40 I"
+            BIU     clearance = biuParse( line + SZ( "ZClearance" ), &data );
+            char*   padoption = strtok( (char*) data, delims );  // data: " I"
 
-            const char* data = line + SZ( "ZClearance" );
-
-            BIU     clearance = biuParse( data, &data );
-            int     padoption = data[1];            // e.g. " I"
-
-            zc->SetZoneClearance( clearance );
-
-            switch( padoption )
+            int     popt;
+            switch( *padoption )
             {
-            case 'I':
-                padoption = PAD_IN_ZONE;
-                break;
-
-            case 'T':
-                padoption = THERMAL_PAD;
-                break;
-
-            case 'X':
-                padoption = PAD_NOT_IN_ZONE;
-                break;
+            case 'I':   popt = PAD_IN_ZONE;        break;
+            case 'T':   popt = THERMAL_PAD;        break;
+            case 'X':   popt = PAD_NOT_IN_ZONE;    break;
 
             default:
-                m_error.Printf( wxT( "Bad ZClearance padoption for CZONE_CONTAINER '%s'" ), zc->GetNetName().GetData() );
+                m_error.Printf( wxT( "Bad ZClearance padoption for CZONE_CONTAINER '%s'" ),
+                    zc->GetNetName().GetData() );
                 THROW_IO_ERROR( m_error );
             }
 
-            zc->SetPadOption( padoption );
+            zc->SetZoneClearance( clearance );
+            zc->SetPadOption( popt );
         }
 
         else if( TESTLINE( "ZMinThickness" ) )
         {
-            char*   data = line + SZ( "ZMinThickness" );
-            BIU     thickness = biuParse( data );
-
+            BIU thickness = biuParse( line + SZ( "ZMinThickness" ) );
             zc->SetMinThickness( thickness );
         }
 
@@ -2086,14 +2135,11 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
                     break;
 
                 // e.g. "39610 43440 0 0"
+                BIU     x = biuParse( line, &data );
+                BIU     y = biuParse( data, &data );
 
-                const char* data = line;
-
-                BIU x = biuParse( data, &data );
-                BIU y = biuParse( data, &data );
-
-                bool    end_contour = (data[1] == '1');   // end_countour was a bool when file saved, so '0' or '1' here
-                int     utility = atoi( data + 3 );
+                bool    end_contour = intParse( data, &data );  // end_countour was a bool when file saved, so '0' or '1' here
+                int     utility     = intParse( data );
 
                 zc->m_FilledPolysList.push_back( CPolyPt( x, y, end_contour, utility ) );
             }
@@ -2108,9 +2154,8 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
                 if( TESTLINE( "$endFILLSEGMENTS" ) )
                     break;
 
-                const char* data = line;
-
-                BIU sx = biuParse( data, &data );
+                // e.g. ""%d %d %d %d\n"
+                BIU sx = biuParse( line, &data );
                 BIU sy = biuParse( data, &data );
                 BIU ex = biuParse( data, &data );
                 BIU ey = biuParse( data );
@@ -2134,7 +2179,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
                     zc->SetNet( 0 );
                 }
 
-                // Set hatch here, when outlines corners are read
+                // Set hatch here, after outlines corners are read
                 zc->m_Poly->SetHatch( outline_hatch );
 
                 m_board->Add( zc.release() );
@@ -2424,7 +2469,7 @@ BIU KICAD_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in file:'%s', line:%d, offset:%d" ),
+        m_error.Printf( _( "invalid float number in\nfile: '%s'\nline: %d\noffset: %d" ),
             aReader->GetSource().GetData(), aReader->LineNumber(), aValue - aReader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2432,7 +2477,7 @@ BIU KICAD_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in file:'%s', line:%d, offset:%d" ),
+        m_error.Printf( _( "missing float number in\nfile: '%s'\nline: %d\noffset: %d" ),
             aReader->GetSource().GetData(), aReader->LineNumber(), aValue - aReader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2447,7 +2492,7 @@ BIU KICAD_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
 }
 
 
-double KICAD_PLUGIN::dblParse( const char* aValue, const char** nptrptr )
+double KICAD_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 {
     char*   nptr;
 
@@ -2457,7 +2502,7 @@ double KICAD_PLUGIN::dblParse( const char* aValue, const char** nptrptr )
 
     if( errno )
     {
-        m_error.Printf( _( "invalid float number in file:'%s', line:%d, offset:%d" ),
+        m_error.Printf( _( "invalid float number in\nfile: '%s'\nline: %d\noffset: %d" ),
             aReader->GetSource().GetData(), aReader->LineNumber(), aValue - aReader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2465,7 +2510,7 @@ double KICAD_PLUGIN::dblParse( const char* aValue, const char** nptrptr )
 
     if( aValue == nptr )
     {
-        m_error.Printf( _( "missing float number in file:'%s', line:%d, offset:%d" ),
+        m_error.Printf( _( "missing float number in\nfile: '%s'\nline: %d\noffset: %d" ),
             aReader->GetSource().GetData(), aReader->LineNumber(), aValue - aReader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
@@ -2502,7 +2547,7 @@ void KICAD_PLUGIN::init( PROPERTIES* aProperties )
 }
 
 
-void KICAD_PLUGIN::Save( const wxString* aFileName, BOARD* aBoard, PROPERTIES* aProperties )
+void KICAD_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on then off the C locale.
 }
