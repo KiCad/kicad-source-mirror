@@ -183,7 +183,20 @@ public:
     void SetDelta( const wxSize& aSize )        { m_DeltaSize = aSize; }
     void SetDrillSize( const wxSize& aSize )    { m_Drill = aSize; }
     void SetOffset( const wxSize& aOffset )     { m_Offset = aOffset; }
-    void SetOrientation( int aAngle )           { m_Orient = aAngle; }
+
+    /**
+     * Function SetOrientation
+     * sets the rotation angle of the pad.
+     * @param aAngle is tenths of degrees, but will soon be degrees.
+     */
+    void SetOrientation( double aAngle )        { m_Orient = (int) aAngle; }    // manage migration to degrees
+
+    /**
+     * Function GetOrientation
+     * returns the rotation angle of the pad in tenths of degress, but soon degress.
+     */
+    double  GetOrientation() const { return m_Orient; }
+
     void SetDrillShape( int aDrillShape )       { m_DrillShape = aDrillShape; }
     void SetLayerMask( int aLayerMask )         { m_layerMask = aLayerMask; }
     void SetAttribute( int aAttribute )         { m_Attribut = aAttribute; }
@@ -313,6 +326,7 @@ public:
 
     // others
     void SetPadName( const wxString& name );    // Change pad name
+    void SetPadName( const char* aName );
 
     wxString ReturnStringPadName() const;           // Return pad name as string in a wxString
 

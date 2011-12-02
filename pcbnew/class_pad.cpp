@@ -185,6 +185,17 @@ void D_PAD::SetPadName( const wxString& name )
         m_Padname[ii] = 0;
 }
 
+void D_PAD::SetPadName( const char* aName )
+{
+    unsigned i;
+
+    for( i=0; i<sizeof(m_Padname) && *aName;  ++i )
+        m_Padname[i] = *aName++;
+
+    while( i < sizeof(m_Padname) )
+        m_Padname[i++] = 0;
+}
+
 
 /**
  * Function SetNetname

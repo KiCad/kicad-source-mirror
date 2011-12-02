@@ -221,6 +221,14 @@ wxPoint DRAWSEGMENT::GetEnd() const
 }
 
 
+void DRAWSEGMENT::SetAngle( double aAngle )
+{
+    NORMALIZE_ANGLE_360( aAngle );
+
+    m_Angle = (int) aAngle;
+}
+
+
 MODULE* DRAWSEGMENT::GetParentModule() const
 {
     if( m_Parent->Type() != PCB_MODULE_T )
