@@ -78,6 +78,7 @@ static bool TestFlags( const wxString& flg_string, long flg_mask, const wxChar* 
  * ElementArc [X Y Width Height StartAngle DeltaAngle Thickness]
  * ElementArc (X Y Width Height StartAngle DeltaAngle Thickness)
  *   (rotation in clockwise)
+ *   ( Note: Pad is a SMD Pad in Pcbnew, and Pin is a through hole Pad in Pcbnew )
  * Pad [rX1 rY1 rX2 rY2 Thickness Clearance Mask "Name" "Number" SFlags]
  * Pad (rX1 rY1 rX2 rY2 Thickness Clearance Mask "Name" "Number" NFlags)
  * Pad (aX1 aY1 aX2 aY2 Thickness "Name" "Number" NFlags)
@@ -333,7 +334,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
         if( params[0].CmpNoCase( wxT( "Pad" ) ) == 0 )      // Pad with no hole (smd pad)
         {   //  format: Pad [x1 y1 x2 y2 thickness clearance mask "name" "pad_number" flags]
             Pad = new D_PAD( this );
-            Pad->m_PadShape     = PAD_RECT;
+            Pad->m_PadShape  = PAD_RECT;
             Pad->m_layerMask = LAYER_FRONT | SOLDERMASK_LAYER_FRONT | SOLDERPASTE_LAYER_FRONT;
 
             // Set shape from flags
@@ -369,12 +370,26 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             {
                 Pad->SetPadName( params[10] );
             }
+            // Calculate the Pad parameters.
+            // In Pcb the shape is a segment
+            // ibuf[0], ibuf[1] is the start point of the segment
+            // ibuf[2], ibuf[3] is the end point of the segment
+            // and me must convert the segment to an oval ( or rectangular) pad
+            // Pad pos = middle of the segment
+            // Pad Orientation = angle of the segment
+            // Pad size = lenght and thickness of the segment
+            wxPoint delta;
+            delta.x = ibuf[2] - ibuf[0];
+            delta.y = ibuf[3] - ibuf[1];
+            double angle = atan2( (double)delta.y, (double)delta.x );
+            // Negate angle (due to Y reversed axis) and convert it to internal units
+            angle = - angle * 1800.0 / M_PI;
+            Pad->SetOrientation( wxRound( angle ) );
             Pad->m_Pos.x  = (ibuf[0] + ibuf[2]) / 2;
             Pad->m_Pos.y  = (ibuf[1] + ibuf[3]) / 2;
-            Pad->m_Size.x = ibuf[4] + abs( ibuf[0] - ibuf[2] );
-            Pad->m_Size.y = ibuf[4] + abs( ibuf[1] - ibuf[3] );
-            Pad->m_Pos.x += m_Pos.x;
-            Pad->m_Pos.y += m_Pos.y;
+            Pad->m_Size.x = wxRound( hypot( (double)delta.x, (double)delta.y ) );
+            Pad->m_Size.y = ibuf[4];
+            Pad->m_Pos += m_Pos;
 
             if( !TestFlags( params[iflgidx], 0x0100, wxT( "square" ) ) )
             {

@@ -620,7 +620,7 @@ TRACK* MergeColinearSegmentIfPossible( BOARD* aPcb,
     if( aEndType == START )
     {
         // We must not have a pad, which is a always terminal point for a track
-        if( aPcb->GetPadFast( aTrackRef->m_Start, g_TabOneLayerMask[aTrackRef->GetLayer()] ) )
+        if( aPcb->GetPadFast( aTrackRef->m_Start, aTrackRef->ReturnMaskLayer() ) )
             return NULL;
 
         /* change the common point coordinate of pt_segm to use the other point
@@ -639,7 +639,7 @@ TRACK* MergeColinearSegmentIfPossible( BOARD* aPcb,
     else    // aEndType == END
     {
         // We must not have a pad, which is a always terminal point for a track
-        if( aPcb->GetPadFast( aTrackRef->m_End, g_TabOneLayerMask[aTrackRef->GetLayer()] ) )
+        if( aPcb->GetPadFast( aTrackRef->m_End, aTrackRef->ReturnMaskLayer() ) )
             return NULL;
 
         /* change the common point coordinate of pt_segm to use the other point
