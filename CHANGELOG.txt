@@ -4,6 +4,16 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-Dec-04, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+Pcbnew:
+    Enhanced algorithms to calculate board connections:
+    Previously, a track was seen connected to a pad only if the track end is
+    exactly on the pad position.
+    Now a track is seen connected to a pad if the track end is inside the pad shape.
+    Algorithm to calculate pads connections to track is still very fast.
+    However some other functions (drag pads, track len calculation ...)
+    still need the track end exactly on the pad position.
 
 2011-Nov-27 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
@@ -40,7 +50,7 @@ Pcbnew:
 
 2011-Sept-01, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
-    Add Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com> in contribuotors list.
+    Add Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com> in contributors list.
 Eeschema:
     Graphic texts ans labels: fix fully broken undo/redo code relative to the way undo/redo command
     handles changes (maintly move) for labels

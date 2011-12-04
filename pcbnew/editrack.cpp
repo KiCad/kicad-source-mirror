@@ -53,13 +53,13 @@ static void EnsureEndTrackOnPad( D_PAD* Pad );
 static PICKED_ITEMS_LIST s_ItemsListPicker;
 
 
-/* Routine to cancel the route if a track is being drawn, or exit the application EDITRACK.
+/* Function called to abort a track creation
  */
 static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Panel->GetParent();
-    BOARD * pcb = frame->GetBoard();
-    TRACK*          track = (TRACK*) frame->GetCurItem();
+    BOARD* pcb = frame->GetBoard();
+    TRACK* track = (TRACK*) frame->GetCurItem();
 
     if( track && ( track->Type()==PCB_VIA_T || track->Type()==PCB_TRACE_T ) )
     {
@@ -88,16 +88,19 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
     frame->SetCurItem( NULL );
 }
 
-
+/*
+ * This function starts a new track segment.
+ * If a new track segment is in progress, ends this current new segment,
+ * and created a new one.
+ */
 TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 {
-    D_PAD*      pt_pad = NULL;
     TRACK*      TrackOnStartPoint = NULL;
     int         layerMask = g_TabOneLayerMask[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
     BOARD_CONNECTED_ITEM* LockPoint;
     wxPoint     pos = GetScreen()->GetCrossHairPosition();
 
-    if( aTrack == NULL )  /* Starting a new track  */
+    if( aTrack == NULL )  /* Starting a new track segment */
     {
         DrawPanel->SetMouseCapture( ShowNewTrackWhenMovingCursor, Abort_Create_Track );
 
@@ -118,15 +121,16 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         // Search for a starting point of the new track, a track or pad
         LockPoint = GetBoard()->GetLockPoint( pos, layerMask );
 
+        D_PAD* pad = NULL;
         if( LockPoint ) // An item (pad or track) is found
         {
             if( LockPoint->Type() == PCB_PAD_T )
             {
-                pt_pad = (D_PAD*) LockPoint;
+                pad = (D_PAD*) LockPoint;
 
                 /* A pad is found: put the starting point on pad center */
-                pos = pt_pad->m_Pos;
-                GetBoard()->SetHighLightNet( pt_pad->GetNet() );
+                pos = pad->m_Pos;
+                GetBoard()->SetHighLightNet( pad->GetNet() );
             }
             else /* A track segment is found */
             {
@@ -171,15 +175,8 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         g_CurrentTrackSegment->m_Start = pos;
         g_CurrentTrackSegment->m_End   = pos;
 
-        if( pt_pad )
-        {
-            g_CurrentTrackSegment->start = pt_pad;
-            g_CurrentTrackSegment->SetState( BEGIN_ONPAD, ON );
-        }
-        else
-        {
-            g_CurrentTrackSegment->start = TrackOnStartPoint;
-        }
+        if( pad )
+            g_CurrentTrackSegment->m_PadsConnected.push_back( pad );
 
         if( g_TwoSegmentTrackBuild )
         {
@@ -226,7 +223,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         /* Current track is Ok: current segment is kept, and a new one is
          * created unless the current segment is null, or 2 last are null
-         * if a 2 segments track build.
+         * if this is a 2 segments track build.
          */
         bool CanCreateNewSegment = true;
 
@@ -248,11 +245,9 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
             if( g_Raccord_45_Auto )
-            {
                 Add45DegreeSegment( aDC );
-            }
 
-            TRACK* oneBeforeLatest = g_CurrentTrackSegment;
+            TRACK* previousTrack = g_CurrentTrackSegment;
 
             TRACK* newTrack = g_CurrentTrackSegment->Copy();
             g_CurrentTrackList.PushBack( newTrack );
@@ -260,15 +255,15 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
             newTrack->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
 
-            oneBeforeLatest->end = GetBoard()->GetPad( oneBeforeLatest, END );
+            D_PAD* pad = GetBoard()->GetPad( previousTrack, END );
 
-            if( oneBeforeLatest->end )
+            if( pad )
             {
-                oneBeforeLatest->SetState( END_ONPAD, ON );
-                newTrack->SetState( BEGIN_ONPAD, ON );
+                newTrack->m_PadsConnected.push_back( pad );
+                previousTrack->m_PadsConnected.push_back( pad );
             }
 
-            newTrack->start = oneBeforeLatest->end;
+            newTrack->start = previousTrack->end;
 
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
@@ -277,9 +272,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             newTrack->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
 
             if( !GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
-            {
                 newTrack->m_Width = GetBoard()->GetCurrentTrackWidth();
-            }
 
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
@@ -441,37 +434,38 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
     D( g_CurrentTrackList.VerifyListIntegrity(); );
 
 
-    /* The track here is non chained to the list of track segments.
+    /* The track here is now chained to the list of track segments.
      * It must be seen in the area of net
      * As close as possible to the segment base (or end), because
      * This helps to reduce the computing time */
 
-    /* Attaching the end of the track. */
+    // Attaching the end point of the new track to a pad or a track
     BOARD_CONNECTED_ITEM* LockPoint = GetBoard()->GetLockPoint( pos, layerMask );
 
-    if( LockPoint ) /* End of trace is on a pad. */
+    if( LockPoint )
     {
-        if( LockPoint->Type() ==  PCB_PAD_T )
+        if( LockPoint->Type() ==  PCB_PAD_T )     // End of track is on a pad.
         {
             EnsureEndTrackOnPad( (D_PAD*) LockPoint );
         }
-        else        /* End of is on a different track, it will possibly create an anchor. */
+        else        // If end point of is on a different track,
+                    // creates a lock point if not exists
         {
             TRACK* adr_buf = (TRACK*) LockPoint;
             GetBoard()->SetHighLightNet( adr_buf->GetNet() );
 
-            /* Possible establishment of a hanging point. */
+            // Creates a lock point (if not already exists):
             LockPoint = GetBoard()->CreateLockPoint( g_CurrentTrackSegment->m_End,
                                                      adr_buf,
                                                      &s_ItemsListPicker );
         }
     }
 
-    // Delete Null segments:
+    // Delete null length segments:
     DeleteNullTrackSegments( GetBoard(), g_CurrentTrackList );
 
-    // Insert new segments if they exist.  This can be NULL on a double click
-    // on the start point
+    // Insert new segments if they exist.
+    // g_FirstTrackSegment can be NULL on a double click on the starting point
     if( g_FirstTrackSegment != NULL )
     {
         int    netcode    = g_FirstTrackSegment->GetNet();
@@ -491,17 +485,15 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
 
         TraceAirWiresToTargets( aDC );
 
-        DrawTraces( DrawPanel, aDC, firstTrack, newCount, GR_OR );
-
         int i = 0;
 
-        for( track = firstTrack; track && i<newCount; ++i, track = track->Next() )
+        for( track = firstTrack; track && i < newCount; ++i, track = track->Next() )
         {
             track->m_Flags = 0;
             track->SetState( BUSY, OFF );
         }
 
-        // erase the old track, if exists
+        // delete the old track, if it exists and is redundant
         if( g_AutoDeleteOldTrack )
         {
             EraseRedundantTrack( aDC, firstTrack, newCount, &s_ItemsListPicker );
@@ -510,10 +502,13 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
         SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
         s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
 
-        /* compute the new ratsnest */
+        // compute the new ratsnest
         TestNetConnection( aDC, netcode );
         OnModify();
         GetBoard()->DisplayInfo( this );
+
+        // Redraw the entire new track.
+        DrawTraces( DrawPanel, aDC, firstTrack, newCount, GR_OR );
     }
 
     wxASSERT( g_FirstTrackSegment == NULL );
@@ -982,7 +977,7 @@ void ComputeBreakPoint( TRACK* track, int SegmentCount, wxPoint end )
 }
 
 
-/* Delete track segments which have len = 0; after creating a new track
+/* Delete track segments which have len = 0 after creating a new track
  *  return a pointer on the first segment (start of track list)
  */
 void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
@@ -1034,7 +1029,7 @@ void DeleteNullTrackSegments( BOARD* pcb, DLIST<TRACK>& aTrackList )
 
     firsttrack->start = LockPoint;
 
-    if( LockPoint &&  LockPoint->Type()==PCB_PAD_T )
+    if( LockPoint && LockPoint->Type()==PCB_PAD_T )
         firsttrack->SetState( BEGIN_ONPAD, ON );
 
     track = firsttrack;
