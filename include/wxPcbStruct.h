@@ -934,18 +934,10 @@ public:
     void HighlightUnconnectedPads( wxDC* DC );
 
     /**
-     * Function DisplayNetStatus
-     * shows the status of the net at the current mouse position or the
-     * PCB status if no segment selected.
-     */
-    void DisplayNetStatus( wxDC* DC );
-
-    /**
      * Function Delete_Segment
-     * removes 1 segment of track.
-     * 2 cases:
-     * If There is evidence of new track: delete new segment.
-     * Otherwise, delete segment under the cursor.
+     * removes a track segment.
+     * If a new track is in progress: delete the current new segment.
+     * Otherwise, delete segment under the mouse cursor.
      */
     TRACK* Delete_Segment( wxDC* DC, TRACK* Track );
 

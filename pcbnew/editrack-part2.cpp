@@ -216,21 +216,6 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
 }
 
 
-void PCB_EDIT_FRAME::DisplayNetStatus( wxDC* DC )
-{
-    TRACK* pt_segm;
-    int    layerMask = (1 << getActiveLayer());
-    wxPoint pos = GetScreen()->RefPos( true );
-
-    pt_segm = GetBoard()->GetTrace( GetBoard()->m_Track, pos, layerMask );
-
-    if( pt_segm == NULL )
-        GetBoard()->DisplayInfo( this );
-    else
-        TestNetConnection( DC, pt_segm->GetNet() );
-}
-
-
 void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
 {
     D_PAD*   pt_pad = NULL;
