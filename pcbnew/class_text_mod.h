@@ -59,7 +59,7 @@ public:
     }
 
     void SetVisible( bool isVisible )   { m_NoShow = !isVisible; }
-    void SetInvisible( bool isHidden )  { m_NoShow = isHidden; }
+    bool IsVisible() const { return !m_NoShow; }
 
     void SetPos0( const wxPoint& aPos )  { m_Pos0 = aPos; }
 

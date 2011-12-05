@@ -12,4 +12,8 @@ class wxString;
  */
 wxString GetBuildVersion();
 
+/// The file format revision of the *.brd file created by this build
+#define BOARD_FILE_VERSION          1
+
+
 #endif	// KICAD_BUILD_VERSION_H

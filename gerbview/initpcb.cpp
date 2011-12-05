@@ -62,8 +62,8 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
         }
     }
 
-    GetBoard()->m_BoundaryBox.SetOrigin( 0, 0 );
-    GetBoard()->m_BoundaryBox.SetSize( 0, 0 );
+    GetBoard()->SetBoundingBox( EDA_RECT() );
+
     GetBoard()->m_Status_Pcb  = 0;
     GetBoard()->m_NbNodes     = 0;
     GetBoard()->m_NbNoconnect = 0;

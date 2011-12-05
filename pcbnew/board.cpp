@@ -48,19 +48,24 @@ bool MATRIX_ROUTING_HEAD::ComputeMatrixSize( BOARD* aPcb )
 {
     aPcb->ComputeBoundingBox();
 
-    /* The boundary box must have its start point on routing grid: */
-    aPcb->m_BoundaryBox.m_Pos.x -= aPcb->m_BoundaryBox.m_Pos.x % m_GridRouting;
-    aPcb->m_BoundaryBox.m_Pos.y -= aPcb->m_BoundaryBox.m_Pos.y % m_GridRouting;
-    m_BrdBox = aPcb->m_BoundaryBox;
+    // The boundary box must have its start point on routing grid:
+    m_BrdBox = aPcb->GetBoundingBox();
 
-    /* The boundary box must have its end point on routing grid: */
+    m_BrdBox.m_Pos.x -= m_BrdBox.m_Pos.x % m_GridRouting;
+    m_BrdBox.m_Pos.y -= m_BrdBox.m_Pos.y % m_GridRouting;
+
+    // The boundary box must have its end point on routing grid:
     wxPoint end = m_BrdBox.GetEnd();
+
     end.x -= end.x % m_GridRouting;
     end.x += m_GridRouting;
+
     end.y -= end.y % m_GridRouting;
     end.y += m_GridRouting;
-    aPcb->m_BoundaryBox.SetEnd( end );
+
     m_BrdBox.SetEnd(end);
+
+    aPcb->SetBoundingBox( m_BrdBox );
 
     m_Nrows = Nrows = m_BrdBox.m_Size.y / m_GridRouting;
     m_Ncols = Ncols = m_BrdBox.m_Size.x / m_GridRouting;
@@ -330,12 +335,14 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
 
 int Build_Work( BOARD* Pcb )
 {
-    RATSNEST_ITEM* pt_rats;
-    D_PAD*         pt_pad;
-    int            r1, r2, c1, c2, current_net_code;
-    RATSNEST_ITEM* pt_ch;
-    int            demi_pas = Board.m_GridRouting / 2;
-    wxString       msg;
+    RATSNEST_ITEM*  pt_rats;
+    D_PAD*          pt_pad;
+    int             r1, r2, c1, c2, current_net_code;
+    RATSNEST_ITEM*  pt_ch;
+    int             demi_pas = Board.m_GridRouting / 2;
+    wxString        msg;
+
+    EDA_RECT        bbbox = Pcb->GetBoundingBox();
 
     InitWork(); /* clear work list */
     Ntotal = 0;
@@ -361,48 +368,48 @@ int Build_Work( BOARD* Pcb )
         current_net_code = pt_pad->GetNet();
         pt_ch = pt_rats;
 
-        r1 = ( pt_pad->GetPosition().y - Pcb->m_BoundaryBox.m_Pos.y
+        r1 = ( pt_pad->GetPosition().y - bbbox.m_Pos.y
                + demi_pas ) / Board.m_GridRouting;
 
         if( r1 < 0 || r1 >= Nrows )
         {
             msg.Printf( wxT( "error : row = %d ( padY %d pcbY %d) " ), r1,
-                        pt_pad->GetPosition().y, Pcb->m_BoundaryBox.m_Pos.y );
+                        pt_pad->GetPosition().y, bbbox.m_Pos.y );
             wxMessageBox( msg );
             return 0;
         }
 
-        c1 = ( pt_pad->GetPosition().x - Pcb->m_BoundaryBox.m_Pos.x
+        c1 = ( pt_pad->GetPosition().x - bbbox.m_Pos.x
                + demi_pas ) / Board.m_GridRouting;
 
         if( c1 < 0 || c1 >= Ncols )
         {
             msg.Printf( wxT( "error : col = %d ( padX %d pcbX %d) " ), c1,
-                        pt_pad->GetPosition().x, Pcb->m_BoundaryBox.m_Pos.x );
+                        pt_pad->GetPosition().x, bbbox.m_Pos.x );
             wxMessageBox( msg );
             return 0;
         }
 
         pt_pad = pt_rats->m_PadEnd;
 
-        r2 = ( pt_pad->GetPosition().y - Pcb->m_BoundaryBox.m_Pos.y
+        r2 = ( pt_pad->GetPosition().y - bbbox.m_Pos.y
                + demi_pas ) / Board.m_GridRouting;
 
         if( r2 < 0 || r2 >= Nrows )
         {
             msg.Printf( wxT( "error : row = %d ( padY %d pcbY %d) " ), r2,
-                        pt_pad->GetPosition().y, Pcb->m_BoundaryBox.m_Pos.y );
+                        pt_pad->GetPosition().y, bbbox.m_Pos.y );
             wxMessageBox( msg );
             return 0;
         }
 
-        c2 = ( pt_pad->GetPosition().x - Pcb->m_BoundaryBox.m_Pos.x
+        c2 = ( pt_pad->GetPosition().x - bbbox.m_Pos.x
                + demi_pas ) / Board.m_GridRouting;
 
         if( c2 < 0 || c2 >= Ncols )
         {
             msg.Printf( wxT( "error : col = %d ( padX %d pcbX %d) " ), c2,
-                        pt_pad->GetPosition().x, Pcb->m_BoundaryBox.m_Pos.x );
+                        pt_pad->GetPosition().x, bbbox.m_Pos.x );
             wxMessageBox( msg );
             return 0;
         }

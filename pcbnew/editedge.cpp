@@ -209,11 +209,11 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape,
     int          s_large;
     DRAWSEGMENT* DrawItem;
 
-    s_large = GetBoard()->GetBoardDesignSettings()->m_DrawSegmentWidth;
+    s_large = GetBoard()->GetDesignSettings().m_DrawSegmentWidth;
 
     if( getActiveLayer() == EDGE_N )
     {
-        s_large = GetBoard()->GetBoardDesignSettings()->m_EdgeSegmentWidth;
+        s_large = GetBoard()->GetDesignSettings().m_EdgeSegmentWidth;
     }
 
     if( Segment == NULL )        /* Create new trace. */

@@ -134,6 +134,8 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
     wxColour bgColor = MakeColour( g_DrawBgColor );
     wxBrush  bgBrush( bgColor, wxSOLID );
 
+    GERBVIEW_FRAME* gerbFrame = (GERBVIEW_FRAME*) aPanel->GetParent();
+
     int      bitmapWidth, bitmapHeight;
     wxDC*    plotDC = aDC;
 
@@ -188,7 +190,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
 
     for( int layer = 0; !end; layer++ )
     {
-        int active_layer = ( (GERBVIEW_FRAME*) m_PcbFrame )->getActiveLayer();
+        int active_layer = gerbFrame->getActiveLayer();
 
         if( layer == active_layer ) // active layer will be drawn after other layers
             continue;
@@ -269,7 +271,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
 
         int dcode_highlight = 0;
 
-        if( layer == ( (GERBVIEW_FRAME*) m_PcbFrame )->getActiveLayer() )
+        if( layer == gerbFrame->getActiveLayer() )
             dcode_highlight = gerber->m_Selected_Tool;
 
         int layerdrawMode = GR_COPY;

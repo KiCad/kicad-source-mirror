@@ -88,7 +88,6 @@ protected:
 
     DRC* m_drc;                              ///< the DRC controller, see drc.cpp
 
-    PARAM_CFG_ARRAY   m_projectFileParams;   ///< List of Pcbnew project file settings.
     PARAM_CFG_ARRAY   m_configSettings;      ///< List of Pcbnew configuration settings.
 
     wxString          m_lastNetListRead;     ///< Last net list read with relative path.
@@ -276,16 +275,17 @@ public:
 
     /**
      * Function GetProjectFileParameters
-     * returns the project file parameter list for Pcbnew.
+     * returns a project file parameter list for Pcbnew.
      * <p>
-     * Populate the project file parameter array specific to Pcbnew if it hasn't
-     * already been populated and return a reference to the array to the caller.
+     * Populate a project file parameter array specific to Pcbnew.
      * Creating the parameter list at run time has the advantage of being able
      * to define local variables.  The old method of statically building the array
      * at compile time requiring global variable definitions by design.
      * </p>
+     * @return PARAM_CFG_ARRAY - it is only good until SetBoard() is called, so
+     *   don't keep it around past that event.
      */
-    PARAM_CFG_ARRAY& GetProjectFileParameters();
+    PARAM_CFG_ARRAY GetProjectFileParameters();
 
     void SaveProjectSettings();
 
@@ -302,13 +302,13 @@ public:
      * Function GetConfigurationSettings
      * returns the Pcbnew applications settings list.
      *
-     * This replaces the old statically define list that had the project
+     * This replaces the old statically defined list that had the project
      * file settings and the application settings mixed together.  This
      * was confusing and caused some settings to get saved and loaded
      * incorrectly.  Currently, only the settings that are needed at start
      * up by the main window are defined here.  There are other locally used
-     * settings are scattered throughout the Pcbnew source code.  If you need
-     * to define a configuration setting that need to be loaded at run time,
+     * settings that are scattered throughout the Pcbnew source code.  If you need
+     * to define a configuration setting that needs to be loaded at run time,
      * this is the place to define it.
      *
      * @todo: Define the configuration variables as member variables instead of

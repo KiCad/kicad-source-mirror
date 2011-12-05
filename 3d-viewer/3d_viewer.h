@@ -150,8 +150,10 @@ public:
     wxPoint   m_BoardPos;
     wxSize    m_BoardSize;
     int       m_Layers;
-    BOARD_DESIGN_SETTINGS* m_BoardSettings;   // Link to current board design settings
-    double    m_Epoxy_Width;                  // Epoxy thickness (normalized)
+
+    const BOARD_DESIGN_SETTINGS*    m_BoardSettings;   // Link to current board design settings
+
+    double    m_Epoxy_Width;    // Epoxy thickness (normalized)
 
     double    m_BoardScale;     /* Normalization scale for coordinates:
                                  * when scaled between -1.0 and +1.0 */

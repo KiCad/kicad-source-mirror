@@ -156,12 +156,15 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
 
     m_gllist = glGenLists( 1 );
 
-    pcb->ComputeBoundingBox();
-    g_Parm_3D_Visu.m_BoardSettings = pcb->GetBoardDesignSettings();
-    g_Parm_3D_Visu.m_BoardSize     = pcb->m_BoundaryBox.GetSize();
-    g_Parm_3D_Visu.m_BoardPos   = pcb->m_BoundaryBox.Centre();
-    g_Parm_3D_Visu.m_BoardPos.y = -g_Parm_3D_Visu.m_BoardPos.y;
-    g_Parm_3D_Visu.m_Layers     = pcb->GetCopperLayerCount();
+    EDA_RECT    bbbox = pcbframe->GetBoardBoundingBox();
+
+    g_Parm_3D_Visu.m_BoardSettings = &pcb->GetDesignSettings();
+
+    g_Parm_3D_Visu.m_BoardSize     = bbbox.GetSize();
+    g_Parm_3D_Visu.m_BoardPos      = bbbox.Centre();
+
+    g_Parm_3D_Visu.m_BoardPos.y    = -g_Parm_3D_Visu.m_BoardPos.y;
+    g_Parm_3D_Visu.m_Layers        = pcb->GetCopperLayerCount();
 
     // Ensure the board has 2 sides for 3D views, because it is hard to find
     // a *really* single side board in the true life...
@@ -175,7 +178,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     // because all boards thickness no not match with this setup:
     // double epoxy_width = 1.6;    // epoxy width in mm
 
-    g_Parm_3D_Visu.m_Epoxy_Width = pcb->GetBoardDesignSettings()->m_BoardThickness
+    g_Parm_3D_Visu.m_Epoxy_Width = pcb->GetDesignSettings().m_BoardThickness
                                    * g_Parm_3D_Visu.m_BoardScale;
 
     /* calculate z position for each layer */

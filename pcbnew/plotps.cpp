@@ -68,9 +68,10 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
         paperscale = 1;
     }
 
-    m_Pcb->ComputeBoundingBox();
-    BoardSize   = m_Pcb->m_BoundaryBox.GetSize();
-    BoardCenter = m_Pcb->m_BoundaryBox.Centre();
+    EDA_RECT bbbox = GetBoardBoundingBox();
+
+    BoardSize   = bbbox.GetSize();
+    BoardCenter = bbbox.Centre();
 
     if( g_PcbPlotOptions.m_AutoScale )       // Optimum scale
     {
@@ -119,10 +120,10 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
         int margin = 500;              // Add a 0.5 inch margin around the board
         plotter->set_negative( true );
         plotter->set_color( WHITE );   // Which will be plotted as black
-        plotter->rect( wxPoint( m_Pcb->m_BoundaryBox.GetX() - margin,
-                                m_Pcb->m_BoundaryBox.GetY() - margin ),
-                       wxPoint( m_Pcb->m_BoundaryBox.GetRight() + margin,
-                                m_Pcb->m_BoundaryBox.GetBottom() + margin ),
+        plotter->rect( wxPoint( bbbox.GetX() - margin,
+                                bbbox.GetY() - margin ),
+                       wxPoint( bbbox.GetRight() + margin,
+                                bbbox.GetBottom() + margin ),
                        FILLED_SHAPE );
         plotter->set_color( BLACK );
     }

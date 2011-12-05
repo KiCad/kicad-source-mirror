@@ -33,6 +33,12 @@ public:
 };
 
 
+#if 1
+static const double conv_unit = 0.0001;      // units = INCHES
+#else
+static const double conv_unit = 0.000254;    // units = mm
+#endif
+
 static wxPoint File_Place_Offset;  /* Offset coordinates for generated file. */
 
 static void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile );
@@ -86,11 +92,6 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
     FILE*       fpFront = 0;
     FILE*       fpBack = 0;
     bool        switchedLocale = false;
-
-    /* Calculate conversion scales. */
-    double conv_unit = 0.0001; /* unites = INCHES */
-
-//  if(IF_DRILL_METRIC) conv_unit = 0.000254; /* unites = mm */
 
     File_Place_Offset = m_Auxiliary_Axis_Position;
 
@@ -319,7 +320,6 @@ exit:   // the only safe way out of here, no returns please.
  */
 void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
 {
-    double   conv_unit;
     MODULE*  Module;
     D_PAD*   pad;
     char     line[1024];
@@ -327,10 +327,6 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
     wxString fnFront, msg;
     FILE*    rptfile;
     wxPoint  module_pos;
-
-    conv_unit = 0.0001; /* unites = INCHES */
-
-//  if(IF_DRILL_METRIC) conv_unit = 0.000254; /* unites = mm */
 
     File_Place_Offset = wxPoint( 0, 0 );
 
@@ -369,17 +365,20 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
     fputs( "##\n", rptfile );
     fputs( "\n$BeginDESCRIPTION\n", rptfile );
 
-    GetBoard()->ComputeBoundingBox();
+    EDA_RECT bbbox = GetBoard()->ComputeBoundingBox();
+
     fputs( "\n$BOARD\n", rptfile );
     fputs( "unit INCH\n", rptfile );
+
     sprintf( line, "upper_left_corner %9.6f %9.6f\n",
-             GetBoard()->m_BoundaryBox.GetX() * conv_unit,
-             GetBoard()->m_BoundaryBox.GetY() * conv_unit );
+             bbbox.GetX() * conv_unit,
+             bbbox.GetY() * conv_unit );
+
     fputs( line, rptfile );
 
     sprintf( line, "lower_right_corner %9.6f %9.6f\n",
-             GetBoard()->m_BoundaryBox.GetRight() * conv_unit,
-             GetBoard()->m_BoundaryBox.GetBottom() * conv_unit );
+             bbbox.GetRight()  * conv_unit,
+             bbbox.GetBottom() * conv_unit );
     fputs( line, rptfile );
 
     fputs( "$EndBOARD\n\n", rptfile );
@@ -512,11 +511,9 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
  */
 void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
 {
-    double conv_unit, ux0, uy0, dx, dy;
+    double ux0, uy0, dx, dy;
     double radius, width;
     char   line[1024];
-
-    conv_unit = 0.0001; /* units = INCHES */
 
     ux0 = PtDrawSegment->m_Start.x * conv_unit;
     uy0 = PtDrawSegment->m_Start.y * conv_unit;

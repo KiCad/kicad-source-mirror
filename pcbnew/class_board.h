@@ -152,28 +152,24 @@ private:
     typedef std::vector<MARKER_PCB*> MARKERS;
 
     /// MARKER_PCBs for clearance problems, owned by pointer.
-    MARKERS              m_markers;
+    MARKERS             m_markers;
 
     // @todo: switch to boost::ptr_vector, and change ~BOARD()
     typedef std::vector<ZONE_CONTAINER*> ZONE_CONTAINERS;
 
     /// edge zone descriptors, owned by pointer.
-    ZONE_CONTAINERS      m_ZoneDescriptorList;
+    ZONE_CONTAINERS     m_ZoneDescriptorList;
 
-    LAYER                m_Layer[NB_COPPER_LAYERS];
-                                                       // if true m_hightLight_NetCode is used
-    HIGH_LIGHT_INFO m_hightLight;                      // current high light data
-    HIGH_LIGHT_INFO m_hightLightPrevious;              // a previously stored high light data
+    LAYER               m_Layer[NB_COPPER_LAYERS];
+                                                        // if true m_hightLight_NetCode is used
+    HIGH_LIGHT_INFO     m_hightLight;                   // current high light data
+    HIGH_LIGHT_INFO     m_hightLightPrevious;           // a previously stored high light data
+
+    int                 m_fileFormatVersionAtLoad;      ///< the version in the *.brd header on first line
+
+    EDA_RECT            m_BoundingBox;
 
 public:
-    PCB_BASE_FRAME*      m_PcbFrame;                   // Window of visualization
-
-    void SetWindowFrame( PCB_BASE_FRAME* aFrame )
-    {
-        m_PcbFrame = aFrame;
-    }
-
-    EDA_RECT             m_BoundaryBox;                // Board size and position
 
     /// Flags used in ratsnest calculation and update.
     int m_Status_Pcb;
@@ -184,29 +180,29 @@ public:
     /// Active ratsnest count (ratsnests not already connected by tracks)
     int m_NbNoconnect;
 
-    DLIST<BOARD_ITEM>          m_Drawings;              // linked list of lines & texts
-    DLIST<MODULE>              m_Modules;               // linked list of MODULEs
-    DLIST<TRACK>               m_Track;                 // linked list of TRACKs and SEGVIAs
-    DLIST<SEGZONE>             m_Zone;                  // linked list of SEGZONEs
+    DLIST<BOARD_ITEM>           m_Drawings;              // linked list of lines & texts
+    DLIST<MODULE>               m_Modules;               // linked list of MODULEs
+    DLIST<TRACK>                m_Track;                 // linked list of TRACKs and SEGVIAs
+    DLIST<SEGZONE>              m_Zone;                  // linked list of SEGZONEs
 
     /// nets info list (name, design constraints ..
-    NETINFO_LIST*              m_NetInfo;
+    NETINFO_LIST*               m_NetInfo;
 
     /// Ratsnest list for the BOARD
-    std::vector<RATSNEST_ITEM> m_FullRatsnest;
+    std::vector<RATSNEST_ITEM>  m_FullRatsnest;
 
     /// Ratsnest list relative to a given footprint (used while moving a footprint).
-    std::vector<RATSNEST_ITEM> m_LocalRatsnest;
+    std::vector<RATSNEST_ITEM>  m_LocalRatsnest;
 
     /// zone contour currently in progress
-    ZONE_CONTAINER*            m_CurrentZoneContour;
+    ZONE_CONTAINER*             m_CurrentZoneContour;
 
     /// List of current netclasses. There is always the default netclass.
-    NETCLASSES m_NetClasses;
+    NETCLASSES                  m_NetClasses;
 
     /// Current net class name used to display netclass info.
     /// This is also the last used netclass after starting a track.
-    wxString   m_CurrentNetClassName;
+    wxString                    m_CurrentNetClassName;
 
     // handling of vias and tracks size:
     // the first value is always the value of the current NetClass
@@ -228,7 +224,7 @@ public:
     unsigned m_TrackWidthSelector;
 
 private:
-    BOARD_DESIGN_SETTINGS*  m_boardDesignSettings;  // Link to current design settings
+    BOARD_DESIGN_SETTINGS   m_designSettings;
     COLORS_DESIGN_SETTINGS* m_colorsSettings;       // Link to current colors settings
 
     /**
@@ -243,8 +239,12 @@ private:
     void chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* aList );
 
 public:
-    BOARD( PCB_BASE_FRAME* frame );
+    BOARD();
     ~BOARD();
+
+    void SetFileFormatVersionAtLoad( int aVersion ) { m_fileFormatVersionAtLoad = aVersion; }
+    int GetFileFormatVersionAtLoad()  const { return m_fileFormatVersionAtLoad; }
+
 
     /**
      * Function GetDefaultLayerName
@@ -274,7 +274,6 @@ public:
     void Add( BOARD_ITEM* aBoardItem, int aControl = 0 );
 
 #define ADD_APPEND 1        ///< aControl flag for Add( aControl ), appends not inserts
-
 
     /**
      * Function Delete
@@ -427,7 +426,7 @@ public:
      */
     bool IsLayerEnabled( int aLayer ) const
     {
-        return GetBoardDesignSettings()->IsLayerEnabled( aLayer );
+        return m_designSettings.IsLayerEnabled( aLayer );
     }
 
     /**
@@ -439,7 +438,7 @@ public:
      */
     bool IsLayerVisible( int aLayerIndex ) const
     {
-        return GetBoardDesignSettings()->IsLayerVisible( aLayerIndex );
+        return m_designSettings.IsLayerVisible( aLayerIndex );
     }
 
     /**
@@ -524,24 +523,20 @@ public:
     void SetVisibleElementColor( int aPCB_VISIBLE, int aColor );
 
     /**
-     * Function GetBoardDesignSettings
-     * @return the current BOARD_DESIGN_SETTINGS in use
+     * Function GetDesignSettings
+     * @return the BOARD_DESIGN_SETTINGS for this BOARD
      */
-    BOARD_DESIGN_SETTINGS* GetBoardDesignSettings() const
+    // const BOARD_DESIGN_SETTINGS& GetDesignSettings() const  want to use this one
+    BOARD_DESIGN_SETTINGS& GetDesignSettings()
     {
-        return m_boardDesignSettings;
+        return m_designSettings;
     }
-
 
     /**
-     * Function SetBoardDesignSettings
-     * @param aDesignSettings = the new BOARD_DESIGN_SETTINGS to use
+     * Function SetDesignSettings
+     * @param aDesignSettings the new BOARD_DESIGN_SETTINGS to use
      */
-    void SetBoardDesignSettings( BOARD_DESIGN_SETTINGS* aDesignSettings)
-    {
-        m_boardDesignSettings = aDesignSettings;
-    }
-
+    void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aDesignSettings );
 
     /**
      * Function SetBoardSettings
@@ -652,9 +647,20 @@ public:
      * Function ComputeBoundingBox
      * calculates the bounding box containing all board items (or board edge segments).
      * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
-     * @return bool - True if items (or board edge segments) were found.
+     * @return EDA_RECT - the board's bounding box
+     * @see PCB_BASE_FRAME::GetBoardBoundingBox() which calls this and doctors the result
      */
-    bool ComputeBoundingBox( bool aBoardEdgesOnly = false );
+    EDA_RECT ComputeBoundingBox( bool aBoardEdgesOnly = false );
+
+    /**
+     * Function GetBoundingBox
+     * may be called soon after ComputeBoundingBox() to return the same EDA_RECT,
+     * as long as the BOARD has not changed.  Remember, ComputeBoundingBox()'s
+     * aBoardEdgesOnly argument is considered in this return value also.
+     */
+    EDA_RECT GetBoundingBox() const { return m_BoundingBox; }   // override
+
+    void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
 
     /**
      * Function DisplayInfo

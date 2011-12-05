@@ -304,7 +304,7 @@ int D_PAD::GetSolderMaskMargin()
         if( margin == 0 )
         {
             BOARD * brd = GetBoard();
-            margin = brd->GetBoardDesignSettings()->m_SolderMaskMargin;
+            margin = brd->GetDesignSettings().m_SolderMaskMargin;
         }
     }
 
@@ -344,14 +344,14 @@ wxSize D_PAD::GetSolderPasteMargin()
         BOARD * brd = GetBoard();
 
         if( margin == 0  )
-            margin = brd->GetBoardDesignSettings()->m_SolderPasteMargin;
+            margin = brd->GetDesignSettings().m_SolderPasteMargin;
 
         if( mratio == 0.0 )
             mratio = module->m_LocalSolderPasteMarginRatio;
 
         if( mratio == 0.0 )
         {
-           mratio = brd->GetBoardDesignSettings()->m_SolderPasteMarginRatio;
+           mratio = brd->GetDesignSettings().m_SolderPasteMarginRatio;
         }
     }
 

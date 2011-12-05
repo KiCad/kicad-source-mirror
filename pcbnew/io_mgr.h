@@ -163,41 +163,6 @@ class PLUGIN
 {
 public:
 
-    virtual ~PLUGIN() {}
-
-    /**
-     * Class RELEASER
-     * releases a PLUGIN in the context of a potential thrown exception, through
-     * its destructor.
-     */
-    class RELEASER
-    {
-        PLUGIN* plugin;
-
-    public:
-        RELEASER( PLUGIN* aPlugin = NULL ) :
-            plugin( aPlugin )
-        {
-        }
-
-        ~RELEASER()
-        {
-            if( plugin )
-                IO_MGR::PluginRelease( plugin );
-        }
-
-        operator PLUGIN* ()
-        {
-            return plugin;
-        }
-
-        PLUGIN* operator -> ()
-        {
-            return plugin;
-        }
-    };
-
-
     //-----<PUBLIC PLUGIN API>-------------------------------------------------
 
     /**
@@ -259,6 +224,40 @@ public:
                     PROPERTIES* aProperties = NULL );
 
     //-----</PUBLIC PLUGIN API>------------------------------------------------
+
+    virtual ~PLUGIN() {}
+
+    /**
+     * Class RELEASER
+     * releases a PLUGIN in the context of a potential thrown exception, through
+     * its destructor.
+     */
+    class RELEASER
+    {
+        PLUGIN* plugin;
+
+    public:
+        RELEASER( PLUGIN* aPlugin = NULL ) :
+            plugin( aPlugin )
+        {
+        }
+
+        ~RELEASER()
+        {
+            if( plugin )
+                IO_MGR::PluginRelease( plugin );
+        }
+
+        operator PLUGIN* ()
+        {
+            return plugin;
+        }
+
+        PLUGIN* operator -> ()
+        {
+            return plugin;
+        }
+    };
 };
 
 

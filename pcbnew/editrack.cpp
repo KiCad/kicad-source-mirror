@@ -162,7 +162,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         g_CurrentTrackSegment->SetLayer( GetScreen()->m_Active_Layer );
         g_CurrentTrackSegment->m_Width = GetBoard()->GetCurrentTrackWidth();
 
-        if( GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
+        if( GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth )
         {
             if( TrackOnStartPoint && TrackOnStartPoint->Type() == PCB_TRACE_T )
                 g_CurrentTrackSegment->m_Width = TrackOnStartPoint->m_Width;
@@ -276,7 +276,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
             newTrack->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
 
-            if( !GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
+            if( !GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth )
             {
                 newTrack->m_Width = GetBoard()->GetCurrentTrackWidth();
             }
@@ -700,7 +700,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     // Set track parameters, that can be modified while creating the track
     g_CurrentTrackSegment->SetLayer( screen->m_Active_Layer );
 
-    if( !frame->GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
+    if( !frame->GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth )
         g_CurrentTrackSegment->m_Width = frame->GetBoard()->GetCurrentTrackWidth();
 
     if( g_TwoSegmentTrackBuild )
@@ -711,7 +711,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         {
             previous_track->SetLayer( screen->m_Active_Layer );
 
-            if( !frame->GetBoard()->GetBoardDesignSettings()->m_UseConnectedTrackWidth )
+            if( !frame->GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth )
                 previous_track->m_Width = frame->GetBoard()->GetCurrentTrackWidth();
         }
     }

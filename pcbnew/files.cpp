@@ -47,7 +47,7 @@
 #include "io_mgr.h"
 
 #include "class_board.h"
-
+#include "build_version.h"      // BOARD_FILE_VERSION
 
 static const wxString pcbBackupFileExtension(  wxT( "000" ) );
 
@@ -226,12 +226,12 @@ the changes?" ) ) )
     int ver;
     sscanf( reader.Line() , "PCBNEW-BOARD Version %d date", &ver );
 
-    if ( ver > g_CurrentVersionPCB )
+    if ( ver > BOARD_FILE_VERSION )
     {
         DisplayInfoMessage( this, _( "This file was created by a more recent \
 version of Pcbnew and may not load correctly. Please consider updating!" ) );
     }
-    else if ( ver < g_CurrentVersionPCB )
+    else if ( ver < BOARD_FILE_VERSION )
     {
         DisplayInfoMessage( this, _( "This file was created by an older \
 version of Pcbnew. It will be stored in the new file format when you save \
@@ -278,7 +278,16 @@ this file again." ) );
                             NULL );
 
         if( !aAppend )
+        {
+            if( board->GetFileFormatVersionAtLoad() < BOARD_FILE_VERSION )
+            {
+                DisplayInfoMessage( this, _( "This file was created by an older \
+version of Pcbnew. It will be stored in the new file format when you save \
+this file again." ) );
+            }
+
             SetBoard( board );
+        }
     }
     catch( IO_ERROR ioe )
     {

@@ -252,7 +252,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
 }
 
 
-PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters( void )
+PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
 {
     if( !m_projectFileParams.empty() )
         return m_projectFileParams;

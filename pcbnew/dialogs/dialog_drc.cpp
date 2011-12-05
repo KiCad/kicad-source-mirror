@@ -46,7 +46,7 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent ) :
 {
     m_tester = aTester;
     m_Parent = parent;
-    m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
+    m_BrdSettings = m_Parent->GetBoard()->GetDesignSettings();
 
     InitValues();
     if( GetSizer() )
@@ -130,12 +130,14 @@ void DIALOG_DRC_CONTROL::InitValues()
 */
 void DIALOG_DRC_CONTROL::SetDrcParmeters( )
 {
-     m_BrdSettings->m_TrackMinWidth =
+     m_BrdSettings.m_TrackMinWidth =
         ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
-     m_BrdSettings->m_ViasMinSize =
+     m_BrdSettings.m_ViasMinSize =
         ReturnValueFromTextCtrl( *m_SetViaMinSizeCtrl, m_Parent->m_InternalUnits );
-     m_BrdSettings->m_MicroViasMinSize =
+     m_BrdSettings.m_MicroViasMinSize =
         ReturnValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl, m_Parent->m_InternalUnits );
+
+     m_Parent->GetBoard()->SetDesignSettings( m_BrdSettings );
 }
 
 
@@ -160,7 +162,7 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
         reportName = m_RptFilenameCtrl->GetValue();
     }
 
-    SetDrcParmeters( );
+    SetDrcParmeters();
 
     m_tester->SetSettings( true,        // Pad to pad DRC test enabled
                           true,         // unconnected pdas DRC test enabled
@@ -238,7 +240,7 @@ void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
         reportName = m_RptFilenameCtrl->GetValue();
     }
 
-    SetDrcParmeters( );
+    SetDrcParmeters();
 
     m_tester->SetSettings( true,        // Pad to pad DRC test enabled
                           true,         // unconnected pdas DRC test enabled
@@ -311,7 +313,7 @@ void DIALOG_DRC_CONTROL::OnButtonBrowseRptFileClick( wxCommandEvent& event )
 void DIALOG_DRC_CONTROL::OnOkClick( wxCommandEvent& event )
 {
     SetReturnCode( wxID_OK );
-    SetDrcParmeters( );
+    SetDrcParmeters();
 
     m_tester->DestroyDialog( wxID_OK );
 }
