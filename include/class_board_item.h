@@ -48,7 +48,6 @@ class BOARD_ITEM : public EDA_ITEM
     void SetNext( EDA_ITEM* aNext )       { Pnext = aNext; }
     void SetBack( EDA_ITEM* aBack )       { Pback = aBack; }
 
-
 protected:
     int m_Layer;
 
@@ -60,14 +59,12 @@ public:
     {
     }
 
-
     BOARD_ITEM( const BOARD_ITEM& src ) :
         EDA_ITEM( src.m_Parent, src.Type() )
         , m_Layer( src.m_Layer )
     {
         m_Flags = src.m_Flags;
     }
-
 
     /**
      * A value of wxPoint(0,0) which can be passed to the Draw() functions.
@@ -107,14 +104,12 @@ public:
      */
     virtual void SetLayer( int aLayer )  { m_Layer = aLayer; }
 
-
     /**
      * Function Draw
      * BOARD_ITEMs have their own color information.
      */
     virtual void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                        int aDrawMode, const wxPoint& offset = ZeroOffset ) = 0;
-
 
     /**
      * Function IsOnLayer
@@ -213,7 +208,6 @@ public:
     {
         wxMessageBox( wxT( "virtual BOARD_ITEM::Flip used, should not occur" ), GetClass() );
     }
-
 
     /**
      * Function GetBoard

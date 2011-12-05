@@ -166,9 +166,9 @@ TEXTE_PCB* PCB_EDIT_FRAME::Create_Texte_Pcb( wxDC* DC )
     if( TextePcb->GetLayer() == LAYER_N_BACK )
         TextePcb->m_Mirror = true;
 
-    TextePcb->m_Size  = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
+    TextePcb->m_Size  = GetBoard()->GetDesignSettings().m_PcbTextSize;
     TextePcb->m_Pos   = GetScreen()->GetCrossHairPosition();
-    TextePcb->m_Thickness = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
+    TextePcb->m_Thickness = GetBoard()->GetDesignSettings().m_PcbTextWidth;
 
     InstallTextPCBOptionsFrame( TextePcb, DC );
 

@@ -85,8 +85,6 @@ const wxString ModuleFileExtension( wxT( "mod" ) );
 /* PCB file name wild card definitions. */
 const wxString ModuleFileWildcard( _( "KiCad footprint library files (*.mod)|*.mod" ) );
 
-int g_CurrentVersionPCB = 1;
-
 int    g_RotationAngle;
 
 int    g_AnchorColor        = BLUE;

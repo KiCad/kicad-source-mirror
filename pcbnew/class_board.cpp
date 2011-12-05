@@ -10,6 +10,7 @@
 #include "common.h"
 #include "pcbcommon.h"
 #include "wxBasePcbFrame.h"
+#include "build_version.h"      // BOARD_FILE_VERSION
 
 #include "pcbnew.h"
 #include "colors_selection.h"
@@ -27,18 +28,14 @@
 wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
 
-// Current design settings (used also to read configs):
-BOARD_DESIGN_SETTINGS boardDesignSettings;
-
-
-
-BOARD::BOARD( PCB_BASE_FRAME* frame ) :
+BOARD::BOARD() :
     BOARD_ITEM( (BOARD_ITEM*) NULL, PCB_T ),
     m_NetClasses( this )
 {
-    m_PcbFrame = frame;
+    // we have not loaded a board yet, assume latest until then.
+    m_fileFormatVersionAtLoad = BOARD_FILE_VERSION;
+
     m_Status_Pcb    = 0;                    // Status word: bit 1 = calculate.
-    SetBoardDesignSettings( &boardDesignSettings );
     SetColorsSettings( &g_ColorsSettings );
     m_NbNodes     = 0;                      // Number of connected pads.
     m_NbNoconnect = 0;                      // Number of unconnected nets.
@@ -69,8 +66,12 @@ BOARD::BOARD( PCB_BASE_FRAME* frame ) :
 
 BOARD::~BOARD()
 {
+    /*  @todo
+        NO!  this has nothing to do with a BOARD
+        Do this in the UI, not in the storage container please.
     if( m_PcbFrame && m_PcbFrame->GetScreen() )
         m_PcbFrame->GetScreen()->ClearUndoRedoList();
+    */
 
     while( m_ZoneDescriptorList.size() )
     {
@@ -89,6 +90,13 @@ BOARD::~BOARD()
     m_CurrentZoneContour = NULL;
 
     delete m_NetInfo;
+}
+
+
+void BOARD::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aDesignSettings )
+{
+    // copy all members.
+    m_designSettings = aDesignSettings;
 }
 
 
@@ -466,36 +474,36 @@ LAYER_T LAYER::ParseType( const char* aType )
 
 int BOARD::GetCopperLayerCount() const
 {
-    return GetBoardDesignSettings()->GetCopperLayerCount();
+    return m_designSettings.GetCopperLayerCount();
 }
 
 void BOARD::SetCopperLayerCount( int aCount )
 {
-    GetBoardDesignSettings()->SetCopperLayerCount( aCount );
+    m_designSettings.SetCopperLayerCount( aCount );
 }
 
 
 int BOARD::GetEnabledLayers() const
 {
-    return GetBoardDesignSettings()->GetEnabledLayers();
+    return m_designSettings.GetEnabledLayers();
 }
 
 
 int BOARD::GetVisibleLayers() const
 {
-    return GetBoardDesignSettings()->GetVisibleLayers();
+    return m_designSettings.GetVisibleLayers();
 }
 
 
 void BOARD::SetEnabledLayers( int aLayerMask )
 {
-    GetBoardDesignSettings()->SetEnabledLayers( aLayerMask );
+    m_designSettings.SetEnabledLayers( aLayerMask );
 }
 
 
 void BOARD::SetVisibleLayers( int aLayerMask )
 {
-    GetBoardDesignSettings()->SetVisibleLayers( aLayerMask );
+    m_designSettings.SetVisibleLayers( aLayerMask );
 }
 
 
@@ -529,13 +537,13 @@ void BOARD::SetVisibleAlls(  )
 
 int BOARD::GetVisibleElements() const
 {
-    return GetBoardDesignSettings()->GetVisibleElements();
+    return m_designSettings.GetVisibleElements();
 }
 
 
 bool BOARD::IsElementVisible( int aPCB_VISIBLE ) const
 {
-    return GetBoardDesignSettings()->IsElementVisible( aPCB_VISIBLE );
+    return m_designSettings.IsElementVisible( aPCB_VISIBLE );
 }
 
 
@@ -544,7 +552,7 @@ void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
     switch( aPCB_VISIBLE )
     {
     case RATSNEST_VISIBLE:
-        GetBoardDesignSettings()->SetElementVisibility( aPCB_VISIBLE, isEnabled );
+        m_designSettings.SetElementVisibility( aPCB_VISIBLE, isEnabled );
         // we must clear or set the CH_VISIBLE flags to hide/show ratsnet
         // because we have a tool to show hide ratsnest relative to a pad or a module
         // so the hide/show option is a per item selection
@@ -563,7 +571,7 @@ void BOARD::SetElementVisibility( int aPCB_VISIBLE, bool isEnabled )
 
 
     default:
-        GetBoardDesignSettings()->SetElementVisibility( aPCB_VISIBLE, isEnabled );
+        m_designSettings.SetElementVisibility( aPCB_VISIBLE, isEnabled );
     }
 }
 
@@ -829,7 +837,7 @@ unsigned BOARD::GetNodesCount()
 }
 
 
-bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
+EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
 {
     bool hasItems = false;
     EDA_RECT area;
@@ -898,26 +906,9 @@ bool BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
         }
     }
 
-    if( !hasItems && m_PcbFrame )
-    {
-        if( m_PcbFrame->m_Draw_Sheet_Ref )
-        {
-            area.SetOrigin( 0, 0 );
-            area.SetEnd( m_PcbFrame->GetScreen()->ReturnPageSize().x,
-                         m_PcbFrame->GetScreen()->ReturnPageSize().y );
-        }
-        else
-        {
-            area.SetOrigin( -m_PcbFrame->GetScreen()->ReturnPageSize().x / 2,
-                            -m_PcbFrame->GetScreen()->ReturnPageSize().y / 2 );
-            area.SetEnd( m_PcbFrame->GetScreen()->ReturnPageSize().x / 2,
-                         m_PcbFrame->GetScreen()->ReturnPageSize().y / 2 );
-        }
-    }
+    m_BoundingBox = area;   // save for BOARD::GetBoundingBox()
 
-    m_BoundaryBox = area;
-
-    return hasItems;
+    return area;
 }
 
 
@@ -1782,7 +1773,7 @@ TRACK* BOARD::GetTrace( TRACK* aTrace, const wxPoint& aPosition, int aLayerMask 
         if( track->GetState( BUSY | IS_DELETED ) )
             continue;
 
-        if( GetBoardDesignSettings()->IsLayerVisible( layer ) == false )
+        if( m_designSettings.IsLayerVisible( layer ) == false )
             continue;
 
         if( track->Type() == PCB_VIA_T )    /* VIA encountered. */

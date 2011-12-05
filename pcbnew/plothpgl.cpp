@@ -62,10 +62,11 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     SheetSize.x = currentsheet->m_Size.x * U_PCB;
     SheetSize.y = currentsheet->m_Size.y * U_PCB;
 
-    /* Calculate the center of the PCB. */
-    m_Pcb->ComputeBoundingBox();
-    BoardSize   = m_Pcb->m_BoundaryBox.GetSize();
-    BoardCenter = m_Pcb->m_BoundaryBox.Centre();
+    // Calculate the center of the PCB
+    EDA_RECT bbbox = GetBoardBoundingBox();
+
+    BoardSize   = bbbox.GetSize();
+    BoardCenter = bbbox.Centre();
 
     if( g_PcbPlotOptions.m_AutoScale )       // Optimum scale
     {

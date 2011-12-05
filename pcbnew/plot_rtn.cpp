@@ -917,7 +917,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
             // If the current layer is a solder mask, use the global mask
             // clearance for vias
             if( ( aLayerMask & ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT ) ) )
-                via_margin = GetBoard()->GetBoardDesignSettings()->m_SolderMaskMargin;
+                via_margin = GetBoard()->GetDesignSettings().m_SolderMaskMargin;
 
             pos    = Via->m_Start;
             size.x = size.y = Via->m_Width + 2 * via_margin;

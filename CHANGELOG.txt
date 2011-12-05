@@ -4,6 +4,36 @@ KiCad ChangeLog 2010
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2011-Dec-5 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++PCBNew
+  * Removed Pcb_Frame argument from BOARD() constructor, since it precludes
+    having a BOARD being edited by more than one editor, it was a bad design.
+    And this meant removing m_PcbFrame from BOARD.
+  * removed BOARD::SetWindowFrame(), since BOARD::m_PcbFrame gone.
+  * Removed the global BOARD_DESIGN_SETTINGS which was in class_board.cpp
+  * Added BOARD_DESIGN_SETTINGS to the BOARD class, a full instance
+  * A couple of dialogs now only change BOARD_DESIGN_SETTINGS when OK is pressed,
+    such as dialog_mask_clearance, dialog_drc, etc.
+  * Removed common/pcbcommon.cpp's int g_CurrentVersionPCB = 1 and replaced it
+    with build_version.h's #define BOARD_FILE_VERSION, although there may be a
+    better place for this constant.
+  * Made the public functions in PARAM_CFG_ARRAY be type const.
+    void SaveParam(..) const and void ReadParam(..) const
+  * PARAM_CFG_BASE now has virtual destructor since we have various ways of
+    destroying the derived classes and boost::ptr_vector must be told about this.
+  * Pass const PARAM_CFG_ARRAY& instead of PARAM_CFG_ARRAY so that we can use
+    an automatic PARAM_CFG_ARRAY which is on the stack.
+  * PCB_EDIT_FRAME::GetProjectFileParameters() may no longer cache the array,
+    since it has to access the current BOARD and the BOARD can change.
+    Remember BOARD_DESIGN_SETTINGS are now in the BOARD.
+  * Made the m_BoundingBox member private, this was a brutally hard task,
+    and indicative of the lack of commitment to accessors and object oriented
+    design on the part of KiCad developers.  We must do better.
+    Added BOARD::GetBoundingBox, SetBoundingBox(), ComputeBoundingBox().
+  * Added PCB_BASE_FRAME::GetBoardBoundingBox() which calls BOARD::ComputeBoundingBox()
+
+
 2011-Dec-04, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
 ================================================================================
 Pcbnew:
@@ -17,7 +47,7 @@ Pcbnew:
 
 2011-Nov-27 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
-  PCBNew
+++PCBNew
   * Add PLUGIN and IO_MGR classes.
   * Remove one argument from BOARD constructor,
   * add BOARD::SetWindowFrame()

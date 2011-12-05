@@ -53,4 +53,7 @@ E6)  Start initial work for changing component library file format to use Dick's
 PCBNew
 ------
 
+* Make the zone hit testing be done in screen coordinates, not internal units.
+  See the @todos in class_zone.cpp
+
 

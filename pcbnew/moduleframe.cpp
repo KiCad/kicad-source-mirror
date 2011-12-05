@@ -155,16 +155,15 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
     UpdateTitle();
 
     if( g_ModuleEditor_Pcb == NULL )
-        g_ModuleEditor_Pcb = new BOARD( this );
+        g_ModuleEditor_Pcb = new BOARD();
 
     SetBoard( g_ModuleEditor_Pcb );
-    GetBoard()->m_PcbFrame = this;
 
     if( s_screenModule == NULL )
         s_screenModule = new PCB_SCREEN();
 
     SetScreen( s_screenModule );
-    GetBoard()->SetBoardDesignSettings( &s_ModuleEditorDesignSetting );
+    GetBoard()->SetDesignSettings( s_ModuleEditorDesignSetting );
     GetScreen()->SetCurItem( NULL );
     LoadSettings();
 

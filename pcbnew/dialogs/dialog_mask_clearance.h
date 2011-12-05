@@ -20,7 +20,7 @@ class DIALOG_PADS_MASK_CLEARANCE : public DIALOG_PADS_MASK_CLEARANCE_BASE
 {
 private:
     PCB_EDIT_FRAME*  m_Parent;
-    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+    BOARD_DESIGN_SETTINGS  m_BrdSettings;
 
 public:
     DIALOG_PADS_MASK_CLEARANCE( PCB_EDIT_FRAME* parent );
