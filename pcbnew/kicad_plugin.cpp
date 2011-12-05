@@ -406,7 +406,7 @@ void KICAD_PLUGIN::loadGENERAL()
             BIU x2 = biuParse( data, &data );
             BIU y2 = biuParse( data );
 
-            EDA_RECT bbbox( wxPoint( x1, x2 ), wxSize( x2-x1, y2-y1 ) );
+            EDA_RECT bbbox( wxPoint( x1, y1 ), wxSize( x2-x1, y2-y1 ) );
 
             m_board->SetBoundingBox( bbbox );
         }
@@ -1339,8 +1339,8 @@ void KICAD_PLUGIN::loadTEXTE_MODULE( TEXTE_MODULE* aText )
     int     type    = intParse( line+1, &data );
     BIU     pos0_x  = biuParse( data, &data );
     BIU     pos0_y  = biuParse( data, &data );
+    BIU     size0_y = biuParse( data, &data );      // why y?
     BIU     size0_x = biuParse( data, &data );
-    BIU     size0_y = biuParse( data, &data );
     double  orient  = degParse( data, &data );
     BIU     thickn  = biuParse( data, &data );
 

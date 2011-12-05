@@ -225,6 +225,14 @@ public:
 
     //-----</PUBLIC PLUGIN API>------------------------------------------------
 
+    /*  The compiler writes the "zero argument" constructor for a PLUGIN
+        automatically if you do not provide one. If you decide you need to
+        provide a zero argument constructor of your own design, that is allowed,
+        but there can only be one constructor and it must be a "zero argument"
+        version. Normally you can do your initialization in a function like
+        KICAD_PLUGIN::init( PROPERTIES* aProperties ) instead.
+    */
+
     virtual ~PLUGIN() {}
 
     /**

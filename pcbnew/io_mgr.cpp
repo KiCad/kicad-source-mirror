@@ -39,7 +39,7 @@
 // plugins coexisting.
 
 
-static KICAD_PLUGIN kicad_plugin;       // a secret
+// static KICAD_PLUGIN kicad_plugin;       // a secret
 //static EAGLE_PLUGIN eagle_plugin;
 
 PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
@@ -49,9 +49,14 @@ PLUGIN* IO_MGR::PluginFind( PCB_FILE_T aFileType )
 
     switch( aFileType )
     {
-    case KICAD:     return &kicad_plugin;
+    case KICAD:
+        return new KICAD_PLUGIN();
 
-//    case EAGLE:     return &eagle_plugin;
+
+/*
+    case EAGLE:
+        return &eagle_plugin;
+*/
     }
 
     return NULL;
@@ -63,6 +68,8 @@ void IO_MGR::PluginRelease( PLUGIN* aPlugin )
     // This function is a place holder for a future point in time where
     // the plugin is a DLL/DSO.  It could do reference counting, and then
     // unload the DLL/DSO when count goes to zero.
+
+    delete aPlugin;
 }
 
 
