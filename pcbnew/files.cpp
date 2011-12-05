@@ -49,6 +49,7 @@
 #include "class_board.h"
 #include "build_version.h"      // BOARD_FILE_VERSION
 
+
 static const wxString pcbBackupFileExtension(  wxT( "000" ) );
 
 
@@ -200,6 +201,7 @@ the changes?" ) ) )
     GetScreen()->SetFileName( fileName.GetFullPath() );
 
 #if 1
+
     // Start read PCB file
     FILE* source = wxFopen( GetScreen()->GetFileName(), wxT( "rt" ) );
 

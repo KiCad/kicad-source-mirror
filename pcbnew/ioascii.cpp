@@ -277,7 +277,7 @@ int PCB_BASE_FRAME::ReadGeneralDescrPcb( LINE_READER* aReader )
             data = strtok( NULL, delims );
             int y2 = atoi( data );
 
-            EDA_RECT bbbox( wxPoint( x1, x2 ), wxSize( x2-x1, y2-y1 ) );
+            EDA_RECT bbbox( wxPoint( x1, y1 ), wxSize( x2-x1, y2-y1 ) );
 
             GetBoard()->SetBoundingBox( bbbox );
 
