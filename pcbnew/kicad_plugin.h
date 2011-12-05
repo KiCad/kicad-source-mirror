@@ -54,15 +54,15 @@ public:
 
     //-----<PLUGIN>-------------------------------------------------------------
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties = NULL );   // overload
-
-    void Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );          // overload
-
     const wxString& PluginName()
     {
         static const wxString name = wxT( "KiCad" );
         return name;
     }
+
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, PROPERTIES* aProperties = NULL );   // overload
+
+    void Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties = NULL );          // overload
 
     //-----</PLUGIN>------------------------------------------------------------
 
@@ -71,7 +71,9 @@ protected:
     wxString        m_error;        ///< for throwing exceptions
     BOARD*          m_board;        ///< which BOARD, no ownership here
 
-    LINE_READER*    aReader;        ///< no ownership here.
+    LINE_READER*    m_reader;       ///< no ownership here.
+
+    wxString        m_field;        ///< reused to stuff MODULE fields.
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
@@ -117,7 +119,9 @@ protected:
      */
     double degParse( const char* aValue, const char** nptrptr = NULL );
 
-    // load / parse functions
+    //-----<load/parse functions>-----------------------------------------------
+
+    void checkVersion();
 
     void loadAllSections( bool doAppend );
 
@@ -152,13 +156,7 @@ protected:
     void loadDIMENSION();           // "$COTATION"
     void loadPCB_TARGET();          // "$PCB_TARGET"
 
-
-/*  @todo
-    void load( NETINFO* me );
-    void load( TRACK* me );
-*/
-//    void load( SEGZONE* me );
-
+    //-----</ load/parse functions>---------------------------------------------
 };
 
 #endif  // KICAD_PLUGIN_H_

@@ -285,8 +285,8 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
     switch( aItem->Type() )
     {
     case PCB_TEXT_T:
-        newSize = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
-        newThickness = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
+        newSize = GetBoard()->GetDesignSettings().m_PcbTextSize;
+        newThickness = GetBoard()->GetDesignSettings().m_PcbTextWidth;
         pcbText = (TEXTE_PCB*) aItem;
         text = (EDA_TEXT*) pcbText;
         break;

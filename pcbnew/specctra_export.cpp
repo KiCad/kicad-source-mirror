@@ -890,7 +890,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
     }
     else
     {
-        aBoard->ComputeBoundingBox();
+        EDA_RECT bbbox = aBoard->ComputeBoundingBox();
 
         RECTANGLE*  rect = new RECTANGLE( boundary );
         boundary->rectangle = rect;
@@ -898,11 +898,9 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
         rect->layer_id = "pcb";
 
         // opposite corners
-        wxPoint bottomRight;
-        bottomRight.x = aBoard->m_BoundaryBox.GetRight();
-        bottomRight.y = aBoard->m_BoundaryBox.GetBottom();
+        wxPoint bottomRight( bbbox.GetRight(), bbbox.GetBottom() );
 
-        rect->SetCorners( mapPt( aBoard->m_BoundaryBox.GetOrigin() ),
+        rect->SetCorners( mapPt( bbbox.GetOrigin() ),
                           mapPt( bottomRight ) );
     }
 }

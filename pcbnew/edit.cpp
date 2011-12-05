@@ -352,14 +352,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         else
         {
-            int v_type = GetBoard()->GetBoardDesignSettings()->m_CurrentViaType;
+            int v_type = GetBoard()->GetDesignSettings().m_CurrentViaType;
 
              // place micro via and switch layer.
             if( id == ID_POPUP_PCB_PLACE_MICROVIA )
-                GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = VIA_MICROVIA;
+                GetBoard()->GetDesignSettings().m_CurrentViaType = VIA_MICROVIA;
 
             Other_Layer_Route( (TRACK*) GetCurItem(), &dc );
-            GetBoard()->GetBoardDesignSettings()->m_CurrentViaType = v_type;
+            GetBoard()->GetDesignSettings().m_CurrentViaType = v_type;
 
             if( DisplayOpt.ContrastModeDisplay )
                 DrawPanel->Refresh();

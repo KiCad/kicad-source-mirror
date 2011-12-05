@@ -283,7 +283,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     for ( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
 
-    SetBoard( new BOARD( this ) );
+    SetBoard( new BOARD() );
 
     // Create the PCB_LAYER_WIDGET *after* SetBoard():
 
@@ -617,7 +617,7 @@ bool PCB_EDIT_FRAME::IsMicroViaAcceptable( void )
     int copperlayercnt = GetBoard()->GetCopperLayerCount( );
     int currLayer = getActiveLayer();
 
-    if( !GetBoard()->GetBoardDesignSettings()->m_MicroViasAllowed )
+    if( !GetBoard()->GetDesignSettings().m_MicroViasAllowed )
         return false;   // Obvious..
 
     if( copperlayercnt < 4 )

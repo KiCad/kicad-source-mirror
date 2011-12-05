@@ -249,8 +249,8 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
         aDimension->m_arrowD2Ox = aDimension->m_arrowD2Fx = pos.x;
         aDimension->m_arrowD2Oy = aDimension->m_arrowD2Fy = pos.y;
 
-        aDimension->m_Text->m_Size   = GetBoard()->GetBoardDesignSettings()->m_PcbTextSize;
-        int width = GetBoard()->GetBoardDesignSettings()->m_PcbTextWidth;
+        aDimension->m_Text->m_Size   = GetBoard()->GetDesignSettings().m_PcbTextSize;
+        int width = GetBoard()->GetDesignSettings().m_PcbTextWidth;
         int maxthickness = Clamp_Text_PenSize(width, aDimension->m_Text->m_Size );
 
         if( width > maxthickness )

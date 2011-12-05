@@ -33,7 +33,7 @@ private:
     PCB_EDIT_FRAME* m_Parent;
     wxDC* m_DC;
     DRAWSEGMENT* m_Item;
-    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+    BOARD_DESIGN_SETTINGS  m_BrdSettings;
 
 public:
     DialogGraphicItemProperties( PCB_EDIT_FRAME* aParent, DRAWSEGMENT * aItem, wxDC * aDC);
@@ -53,7 +53,7 @@ DialogGraphicItemProperties::DialogGraphicItemProperties( PCB_EDIT_FRAME* aParen
     m_Parent = aParent;
     m_DC = aDC;
     m_Item = aItem;
-    m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
+    m_BrdSettings = m_Parent->GetBoard()->GetDesignSettings();
     initDlg();
     Layout();
     GetSizer()->SetSizeHints( this );
@@ -88,32 +88,34 @@ void DialogGraphicItemProperties::initDlg( )
     SetFocus();
 
     wxString msg;
+
     // Change texts according to the segment shape:
     switch ( m_Item->m_Shape )
     {
-        case S_CIRCLE:
-            m_Start_Center_XText->SetLabel(_("Center X"));
-            m_Start_Center_YText->SetLabel(_("Center Y"));
-            m_EndX_Radius_Text->SetLabel(_("Point X"));
-            m_EndY_Text->SetLabel(_("Point Y"));
-            m_Angle_Text->Show(false);
-            m_Angle_Ctrl->Show(false);
-            break;
+    case S_CIRCLE:
+        m_Start_Center_XText->SetLabel(_("Center X"));
+        m_Start_Center_YText->SetLabel(_("Center Y"));
+        m_EndX_Radius_Text->SetLabel(_("Point X"));
+        m_EndY_Text->SetLabel(_("Point Y"));
+        m_Angle_Text->Show(false);
+        m_Angle_Ctrl->Show(false);
+        break;
 
-        case S_ARC:
-            m_Start_Center_XText->SetLabel(_("Center X"));
-            m_Start_Center_YText->SetLabel(_("Center Y"));
-            m_EndX_Radius_Text->SetLabel(_("Start Point X"));
-            m_EndY_Text->SetLabel(_("Start Point Y"));
-            msg << m_Item->m_Angle;
-            m_Angle_Ctrl->SetValue(msg);
-            break;
+    case S_ARC:
+        m_Start_Center_XText->SetLabel(_("Center X"));
+        m_Start_Center_YText->SetLabel(_("Center Y"));
+        m_EndX_Radius_Text->SetLabel(_("Start Point X"));
+        m_EndY_Text->SetLabel(_("Start Point Y"));
+        msg << m_Item->m_Angle;
+        m_Angle_Ctrl->SetValue(msg);
+        break;
 
-        default:
-            m_Angle_Text->Show(false);
-            m_Angle_Ctrl->Show(false);
-            break;
+    default:
+        m_Angle_Text->Show(false);
+        m_Angle_Ctrl->Show(false);
+        break;
     }
+
     AddUnitSymbol( *m_Start_Center_XText );
 
     PutValueInLocalUnits( *m_Center_StartXCtrl, m_Item->m_Start.x,
@@ -136,11 +138,14 @@ void DialogGraphicItemProperties::initDlg( )
         m_Parent->m_InternalUnits );
 
     AddUnitSymbol( *m_DefaultThicknessText );
+
     int thickness;
+
     if( m_Item->GetLayer() == EDGE_N )
-        thickness =  m_BrdSettings->m_EdgeSegmentWidth;
+        thickness =  m_BrdSettings.m_EdgeSegmentWidth;
     else
-        thickness =  m_BrdSettings->m_DrawSegmentWidth;
+        thickness =  m_BrdSettings.m_DrawSegmentWidth;
+
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness,
         m_Parent->m_InternalUnits );
 
@@ -156,8 +161,6 @@ void DialogGraphicItemProperties::initDlg( )
     if ( layer > LAST_NO_COPPER_LAYER )
         layer = LAST_NO_COPPER_LAYER;
     m_LayerSelection->SetSelection( layer - FIRST_NO_COPPER_LAYER );
-
-
 }
 
 
@@ -166,10 +169,12 @@ void DialogGraphicItemProperties::OnLayerChoice( wxCommandEvent& event )
 /*******************************************************************/
 {
     int thickness;
+
     if( (m_LayerSelection->GetCurrentSelection() + FIRST_NO_COPPER_LAYER) == EDGE_N )
-        thickness =  m_BrdSettings->m_EdgeSegmentWidth;
+        thickness =  m_BrdSettings.m_EdgeSegmentWidth;
     else
-        thickness =  m_BrdSettings->m_DrawSegmentWidth;
+        thickness =  m_BrdSettings.m_DrawSegmentWidth;
+
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness,
         m_Parent->m_InternalUnits );
 }
@@ -183,7 +188,7 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
     m_Parent->SaveCopyInUndoList( m_Item, UR_CHANGED );
 
     wxString msg;
-    if ( m_DC )
+    if( m_DC )
         m_Item->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
 
     msg = m_Center_StartXCtrl->GetValue();
@@ -213,11 +218,11 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
     m_Item->SetLayer( m_LayerSelection->GetCurrentSelection() + FIRST_NO_COPPER_LAYER);
 
     if( m_Item->GetLayer() == EDGE_N )
-         m_BrdSettings->m_EdgeSegmentWidth = thickness;
+         m_BrdSettings.m_EdgeSegmentWidth = thickness;
     else
-         m_BrdSettings->m_DrawSegmentWidth = thickness;
+         m_BrdSettings.m_DrawSegmentWidth = thickness;
 
-    if ( m_Item->m_Shape == S_ARC )
+    if( m_Item->m_Shape == S_ARC )
     {
         long angle;
         m_Angle_Ctrl->GetValue().ToLong(&angle);
@@ -226,9 +231,11 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
     }
 
     m_Parent->OnModify();
-    if ( m_DC )
+    if( m_DC )
         m_Item->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
     m_Item->DisplayInfo( m_Parent );
+
+    m_Parent->GetBoard()->SetDesignSettings( m_BrdSettings );
 
     Close( TRUE );
 }

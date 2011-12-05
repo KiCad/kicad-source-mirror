@@ -97,7 +97,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     /* create the via */
     SEGVIA* via    = new SEGVIA( GetBoard() );
     via->m_Flags   = IS_NEW;
-    via->m_Shape   = GetBoard()->GetBoardDesignSettings()->m_CurrentViaType;
+    via->m_Shape   = GetBoard()->GetDesignSettings().m_CurrentViaType;
     via->m_Width   = GetBoard()->GetCurrentViaSize();
     via->SetNet( GetBoard()->GetHighLightNetCode() );
     via->m_Start   = via->m_End = g_CurrentTrackSegment->m_End;

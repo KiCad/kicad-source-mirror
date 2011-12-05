@@ -55,13 +55,13 @@ void DRC::ShowDialog()
         // copy data retained in this DRC object into the m_ui DrcPanel:
 
         PutValueInLocalUnits( *m_ui->m_SetTrackMinWidthCtrl,
-                              m_pcb->GetBoardDesignSettings()->m_TrackMinWidth,
+                              m_pcb->GetDesignSettings().m_TrackMinWidth,
                               m_mainWindow->m_InternalUnits );
         PutValueInLocalUnits( *m_ui->m_SetViaMinSizeCtrl,
-                              m_pcb->GetBoardDesignSettings()->m_ViasMinSize,
+                              m_pcb->GetDesignSettings().m_ViasMinSize,
                               m_mainWindow->m_InternalUnits );
         PutValueInLocalUnits( *m_ui->m_SetMicroViakMinSizeCtrl,
-                              m_pcb->GetBoardDesignSettings()->m_MicroViasMinSize,
+                              m_pcb->GetDesignSettings().m_MicroViasMinSize,
                               m_mainWindow->m_InternalUnits );
 
         m_ui->m_CreateRptCtrl->SetValue( m_doCreateRptFile );
@@ -292,7 +292,7 @@ bool DRC::doNetClass( NETCLASS* nc, wxString& msg )
 {
     bool ret = true;
 
-    const BOARD_DESIGN_SETTINGS& g = *m_pcb->GetBoardDesignSettings();
+    const BOARD_DESIGN_SETTINGS& g = m_pcb->GetDesignSettings();
 
 #define FmtVal( x ) GetChars( ReturnStringFromValue( g_UserUnit, x, PCB_INTERNAL_UNIT ) )
 

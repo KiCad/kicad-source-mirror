@@ -75,6 +75,9 @@ static const float OrientPenality[11] =
 #define OUT_OF_BOARD      -2
 #define OCCUPED_By_MODULE -1
 
+
+static EDA_RECT bbbox;              // boards bounding box
+
 static wxPoint CurrPosition; // Current position of the current module placement
 static bool    AutoPlaceShowAll = true;
 
@@ -182,7 +185,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
             if( Module->m_ModuleStatus & MODULE_is_LOCKED )
                 break;
 
-            if( !GetBoard()->m_BoundaryBox.Contains( Module->m_Pos ) )
+            if( !bbbox.Contains( Module->m_Pos ) )
                 Module->m_ModuleStatus |= MODULE_to_PLACE;
 
             break;
@@ -367,11 +370,11 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
 
     for( ii = 0; ii < Board.m_Nrows; ii++ )
     {
-        oy = GetBoard()->m_BoundaryBox.m_Pos.y + ( ii * Board.m_GridRouting );
+        oy = bbbox.m_Pos.y + ( ii * Board.m_GridRouting );
 
         for( jj = 0; jj < Board.m_Ncols; jj++ )
         {
-            ox = GetBoard()->m_BoundaryBox.m_Pos.x + (jj * Board.m_GridRouting);
+            ox = bbbox.m_Pos.x + (jj * Board.m_GridRouting);
             color = BLACK;
 
             top_state    = GetCell( ii, jj, TOP );
@@ -408,28 +411,28 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
 
     Board.UnInitBoard();
 
-    if( !GetBoard()->ComputeBoundingBox( true ) )
+    bbbox = GetBoard()->ComputeBoundingBox( true );
+
+    if( bbbox.GetWidth() == 0 && bbbox.GetHeight() == 0 )
     {
         DisplayError( this, _( "No PCB edge found, unknown board size!" ) );
         return 0;
     }
 
     /* The boundary box must have its start point on placing grid: */
-    GetBoard()->m_BoundaryBox.m_Pos.x -= GetBoard()->m_BoundaryBox.m_Pos.x %
-                                         Board.m_GridRouting;
-    GetBoard()->m_BoundaryBox.m_Pos.y -= GetBoard()->m_BoundaryBox.m_Pos.y %
-                                         Board.m_GridRouting;
+    bbbox.m_Pos.x -= bbbox.m_Pos.x % Board.m_GridRouting;
+    bbbox.m_Pos.y -= bbbox.m_Pos.y % Board.m_GridRouting;
 
     /* The boundary box must have its end point on placing grid: */
-    wxPoint end = GetBoard()->m_BoundaryBox.GetEnd();
+    wxPoint end = bbbox.GetEnd();
     end.x -= end.x % Board.m_GridRouting;
     end.x += Board.m_GridRouting;
     end.y -= end.y % Board.m_GridRouting;
     end.y += Board.m_GridRouting;
-    GetBoard()->m_BoundaryBox.SetEnd( end );
+    bbbox.SetEnd( end );
 
-    Nrows = GetBoard()->m_BoundaryBox.GetHeight() / Board.m_GridRouting;
-    Ncols = GetBoard()->m_BoundaryBox.GetWidth() / Board.m_GridRouting;
+    Nrows = bbbox.GetHeight() / Board.m_GridRouting;
+    Ncols = bbbox.GetWidth() / Board.m_GridRouting;
     /* get a small margin for memory allocation: */
     Ncols  += 2; Nrows += 2;
     NbCells = Ncols * Nrows;
@@ -533,29 +536,29 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     oy = Module->m_BoundaryBox.m_Pos.y - marge;
     fy = Module->m_BoundaryBox.GetBottom() + marge;
 
-    if( ox < GetBoard()->m_BoundaryBox.m_Pos.x )
-        ox = GetBoard()->m_BoundaryBox.m_Pos.x;
+    if( ox < bbbox.m_Pos.x )
+        ox = bbbox.m_Pos.x;
 
-    if( ox > GetBoard()->m_BoundaryBox.GetRight() )
-        ox = GetBoard()->m_BoundaryBox.GetRight();
+    if( ox > bbbox.GetRight() )
+        ox = bbbox.GetRight();
 
-    if( fx < GetBoard()->m_BoundaryBox.m_Pos.x )
-        fx = GetBoard()->m_BoundaryBox.m_Pos.x;
+    if( fx < bbbox.m_Pos.x )
+        fx = bbbox.m_Pos.x;
 
-    if( fx > GetBoard()->m_BoundaryBox.GetRight() )
-        fx = GetBoard()->m_BoundaryBox.GetRight();
+    if( fx > bbbox.GetRight() )
+        fx = bbbox.GetRight();
 
-    if( oy < GetBoard()->m_BoundaryBox.m_Pos.y )
-        oy = GetBoard()->m_BoundaryBox.m_Pos.y;
+    if( oy < bbbox.m_Pos.y )
+        oy = bbbox.m_Pos.y;
 
-    if( oy > GetBoard()->m_BoundaryBox.GetBottom() )
-        oy = GetBoard()->m_BoundaryBox.GetBottom();
+    if( oy > bbbox.GetBottom() )
+        oy = bbbox.GetBottom();
 
-    if( fy < GetBoard()->m_BoundaryBox.m_Pos.y )
-        fy = GetBoard()->m_BoundaryBox.m_Pos.y;
+    if( fy < bbbox.m_Pos.y )
+        fy = bbbox.m_Pos.y;
 
-    if( fy > GetBoard()->m_BoundaryBox.GetBottom() )
-        fy = GetBoard()->m_BoundaryBox.GetBottom();
+    if( fy > bbbox.GetBottom() )
+        fy = bbbox.GetBottom();
 
     layerMask = 0;
 
@@ -598,8 +601,8 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
 
     aModule->DisplayInfo( this );
 
-    LastPosOK.x = GetBoard()->m_BoundaryBox.m_Pos.x;
-    LastPosOK.y = GetBoard()->m_BoundaryBox.m_Pos.y;
+    LastPosOK.x = bbbox.m_Pos.x;
+    LastPosOK.y = bbbox.m_Pos.y;
 
     cx = aModule->m_Pos.x; cy = aModule->m_Pos.y;
     ox = aModule->m_BoundaryBox.m_Pos.x - cx;
@@ -607,8 +610,8 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     oy = aModule->m_BoundaryBox.m_Pos.y - cy;
     fy = aModule->m_BoundaryBox.m_Size.y + oy;
 
-    CurrPosition.x = GetBoard()->m_BoundaryBox.m_Pos.x - ox;
-    CurrPosition.y = GetBoard()->m_BoundaryBox.m_Pos.y - oy;
+    CurrPosition.x = bbbox.m_Pos.x - ox;
+    CurrPosition.y = bbbox.m_Pos.y - oy;
 
     /* Module placement on grid. */
     CurrPosition.x -= CurrPosition.x % Board.m_GridRouting;
@@ -647,7 +650,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     mincout = -1.0;
     SetStatusText( wxT( "Score ??, pos ??" ) );
 
-    for( ; CurrPosition.x < GetBoard()->m_BoundaryBox.GetRight() - fx;
+    for( ; CurrPosition.x < bbbox.GetRight() - fx;
          CurrPosition.x += Board.m_GridRouting )
     {
         wxYield();
@@ -667,14 +670,14 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         DrawModuleOutlines( DrawPanel, aDC, aModule );
 
         g_Offset_Module.x = cx - CurrPosition.x;
-        CurrPosition.y    = GetBoard()->m_BoundaryBox.m_Pos.y - oy;
+        CurrPosition.y    = bbbox.m_Pos.y - oy;
 
         /* Placement on grid. */
         CurrPosition.y -= CurrPosition.y % Board.m_GridRouting;
 
         DrawModuleOutlines( DrawPanel, aDC, aModule );
 
-        for( ; CurrPosition.y < GetBoard()->m_BoundaryBox.GetBottom() - fy;
+        for( ; CurrPosition.y < bbbox.GetBottom() - fy;
              CurrPosition.y += Board.m_GridRouting )
         {
             /* Erase traces. */
@@ -748,10 +751,10 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
     int          row_min, row_max, col_min, col_max;
     unsigned int data;
 
-    ux0 -= Pcb->m_BoundaryBox.m_Pos.x;
-    uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
-    ux1 -= Pcb->m_BoundaryBox.m_Pos.x;
-    uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux0 -= Pcb->GetBoundingBox().m_Pos.x;
+    uy0 -= Pcb->GetBoundingBox().m_Pos.y;
+    ux1 -= Pcb->GetBoundingBox().m_Pos.x;
+    uy1 -= Pcb->GetBoundingBox().m_Pos.y;
 
     row_max = uy1 / Board.m_GridRouting;
     col_max = ux1 / Board.m_GridRouting;
@@ -805,10 +808,10 @@ unsigned int CalculateKeepOutArea( BOARD* Pcb, int ux0, int uy0, int ux1, int uy
     int          row_min, row_max, col_min, col_max;
     unsigned int keepOut;
 
-    ux0 -= Pcb->m_BoundaryBox.m_Pos.x;
-    uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
-    ux1 -= Pcb->m_BoundaryBox.m_Pos.x;
-    uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux0 -= Pcb->GetBoundingBox().m_Pos.x;
+    uy0 -= Pcb->GetBoundingBox().m_Pos.y;
+    ux1 -= Pcb->GetBoundingBox().m_Pos.x;
+    uy1 -= Pcb->GetBoundingBox().m_Pos.y;
 
     row_max = uy1 / Board.m_GridRouting;
     col_max = ux1 / Board.m_GridRouting;
@@ -979,10 +982,10 @@ static void CreateKeepOutRectangle( BOARD* Pcb,
     if( trace == 0 )
         return;
 
-    ux0 -= Pcb->m_BoundaryBox.m_Pos.x;
-    uy0 -= Pcb->m_BoundaryBox.m_Pos.y;
-    ux1 -= Pcb->m_BoundaryBox.m_Pos.x;
-    uy1 -= Pcb->m_BoundaryBox.m_Pos.y;
+    ux0 -= Pcb->GetBoundingBox().m_Pos.x;
+    uy0 -= Pcb->GetBoundingBox().m_Pos.y;
+    ux1 -= Pcb->GetBoundingBox().m_Pos.x;
+    uy1 -= Pcb->GetBoundingBox().m_Pos.y;
 
     ux0 -= marge; ux1 += marge;
     uy0 -= marge; uy1 += marge;

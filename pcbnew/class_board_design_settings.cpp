@@ -17,7 +17,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
 {
     m_EnabledLayers = ALL_LAYERS;               // All layers enabled at first.
                                                 // SetCopperLayerCount() will adjust this.
-    SetVisibleAlls( );                          // All layers  and all elements visible at first.
+    SetVisibleAlls();                           // All layers  and all elements visible at first.
 
     SetCopperLayerCount( 2 );                   // Default design is a double sided board
 
@@ -47,7 +47,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
 
     // Layer thickness for 3D viewer
     m_BoardThickness = (int)(1.6 * PCB_INTERNAL_UNIT / 25.4);
-
 }
 
 

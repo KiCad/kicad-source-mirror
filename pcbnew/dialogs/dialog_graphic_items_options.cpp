@@ -40,7 +40,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS::DIALOG_GRAPHIC_ITEMS_OPTIONS( PCB_BASE_FRAME* pare
     : DIALOG_GRAPHIC_ITEMS_OPTIONS_BASE( parent )
 {
     m_Parent = parent;
-    m_BrdSettings = m_Parent->GetBoard()->GetBoardDesignSettings();
+    m_BrdSettings = m_Parent->GetBoard()->GetDesignSettings();
     initValues(  );
 
     m_sdbSizer1OK->SetDefault();
@@ -49,7 +49,7 @@ DIALOG_GRAPHIC_ITEMS_OPTIONS::DIALOG_GRAPHIC_ITEMS_OPTIONS( PCB_BASE_FRAME* pare
     Centre();
 }
 
-DIALOG_GRAPHIC_ITEMS_OPTIONS::~DIALOG_GRAPHIC_ITEMS_OPTIONS(  )
+DIALOG_GRAPHIC_ITEMS_OPTIONS::~DIALOG_GRAPHIC_ITEMS_OPTIONS()
 {
 }
 
@@ -61,26 +61,26 @@ void DIALOG_GRAPHIC_ITEMS_OPTIONS::initValues()
     /* Drawings width */
     AddUnitSymbol( *m_GraphicSegmWidthTitle );
     PutValueInLocalUnits( *m_OptPcbSegmWidth,
-                           m_BrdSettings->m_DrawSegmentWidth,
+                           m_BrdSettings.m_DrawSegmentWidth,
                           PCB_INTERNAL_UNIT );
     /* Edges width */
     AddUnitSymbol( *m_BoardEdgesWidthTitle );
     PutValueInLocalUnits( *m_OptPcbEdgesWidth,
-                           m_BrdSettings->m_EdgeSegmentWidth,
+                           m_BrdSettings.m_EdgeSegmentWidth,
                           PCB_INTERNAL_UNIT );
 
     /* Pcb Textes (Size & Width) */
     AddUnitSymbol( *m_CopperTextWidthTitle );
     PutValueInLocalUnits( *m_OptPcbTextWidth,
-                           m_BrdSettings->m_PcbTextWidth, PCB_INTERNAL_UNIT );
+                           m_BrdSettings.m_PcbTextWidth, PCB_INTERNAL_UNIT );
 
     AddUnitSymbol( *m_TextSizeVTitle );
     PutValueInLocalUnits( *m_OptPcbTextVSize,
-                           m_BrdSettings->m_PcbTextSize.y, PCB_INTERNAL_UNIT );
+                           m_BrdSettings.m_PcbTextSize.y, PCB_INTERNAL_UNIT );
 
     AddUnitSymbol( *m_TextSizeHTitle );
     PutValueInLocalUnits( *m_OptPcbTextHSize,
-                           m_BrdSettings->m_PcbTextSize.x, PCB_INTERNAL_UNIT );
+                           m_BrdSettings.m_PcbTextSize.x, PCB_INTERNAL_UNIT );
 
 
     /* Modules: Edges width */
@@ -109,16 +109,18 @@ void DIALOG_GRAPHIC_ITEMS_OPTIONS::initValues()
 
 void DIALOG_GRAPHIC_ITEMS_OPTIONS::OnOkClick( wxCommandEvent& event )
 {
-     m_BrdSettings->m_DrawSegmentWidth =
+    m_BrdSettings.m_DrawSegmentWidth =
         ReturnValueFromTextCtrl( *m_OptPcbSegmWidth, PCB_INTERNAL_UNIT );
-     m_BrdSettings->m_EdgeSegmentWidth =
+    m_BrdSettings.m_EdgeSegmentWidth =
         ReturnValueFromTextCtrl( *m_OptPcbEdgesWidth, PCB_INTERNAL_UNIT );
-     m_BrdSettings->m_PcbTextWidth =
+    m_BrdSettings.m_PcbTextWidth =
         ReturnValueFromTextCtrl( *m_OptPcbTextWidth, PCB_INTERNAL_UNIT );
-     m_BrdSettings->m_PcbTextSize.y =
+    m_BrdSettings.m_PcbTextSize.y =
         ReturnValueFromTextCtrl( *m_OptPcbTextVSize, PCB_INTERNAL_UNIT );
-     m_BrdSettings->m_PcbTextSize.x =
+    m_BrdSettings.m_PcbTextSize.x =
         ReturnValueFromTextCtrl( *m_OptPcbTextHSize, PCB_INTERNAL_UNIT );
+
+    m_Parent->GetBoard()->SetDesignSettings( m_BrdSettings );
 
     g_ModuleSegmentWidth =
         ReturnValueFromTextCtrl( *m_OptModuleEdgesWidth, PCB_INTERNAL_UNIT );
@@ -137,7 +139,6 @@ void DIALOG_GRAPHIC_ITEMS_OPTIONS::OnOkClick( wxCommandEvent& event )
 
     EndModal( wxID_OK );
 }
-
 
 
 /*!

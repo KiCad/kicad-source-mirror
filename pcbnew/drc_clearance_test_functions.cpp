@@ -221,7 +221,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             if( layer1 == LAYER_N_BACK && layer2 == LAYER_N_2 )
                 err = false;
 
-            if( layer1 == (m_pcb->GetBoardDesignSettings()->GetCopperLayerCount() - 2 )
+            if( layer1 == (m_pcb->GetDesignSettings().GetCopperLayerCount() - 2 )
                 && layer2 == LAYER_N_FRONT )
                 err = false;
 

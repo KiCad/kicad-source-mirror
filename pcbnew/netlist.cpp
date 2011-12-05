@@ -1114,9 +1114,11 @@ bool NETLIST_READER::loadNewModules()
     sort( m_newModulesList.begin(), m_newModulesList.end(), SortByLibName );
 
     // Calculate the footprint "best" position:
-    if( pcb->ComputeBoundingBox( true ) )
+    EDA_RECT bbbox = pcb->ComputeBoundingBox( true );
+
+    if( bbbox.GetWidth() || bbbox.GetHeight() )
     {
-        ModuleBestPosition = pcb->m_BoundaryBox.GetEnd();
+        ModuleBestPosition = bbbox.GetEnd();
         ModuleBestPosition.y += 5000;
     }
 
