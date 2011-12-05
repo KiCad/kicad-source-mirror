@@ -19,6 +19,7 @@
 #include "class_board_design_settings.h"
 #include "class_gerber_draw_item.h"
 #include "select_layers_to_pcb.h"
+#include "build_version.h"          // BOARD_FILE_VERSION
 
 
 /* A helper class to export a Gerber set of files to Pcbnew
@@ -51,7 +52,7 @@ GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME * aFrame, FILE * aFile 
 {
     m_gerbview_frame = aFrame;
     m_file = aFile;
-    m_pcb = new BOARD( m_gerbview_frame );
+    m_pcb = new BOARD();
 }
 
 
@@ -177,7 +178,7 @@ bool GBR_TO_PCB_EXPORTER::WriteGeneralDescrPcb( )
 {
     int nbLayers;
 
-    /* Print the copper layer count */
+    // Print the copper layer count
     nbLayers = m_pcb->GetCopperLayerCount();
 
     if( nbLayers <= 1 )  // Minimal layers count in Pcbnew is 2
@@ -190,12 +191,13 @@ bool GBR_TO_PCB_EXPORTER::WriteGeneralDescrPcb( )
     fprintf( m_file, "encoding utf-8\n");
     fprintf( m_file, "LayerCount %d\n", nbLayers );
 
-    /* Compute and print the board bounding box */
-    m_pcb->ComputeBoundingBox();
+    // Compute and print the board bounding box
+    EDA_RECT bbbox = m_pcb->ComputeBoundingBox();
+
     fprintf( m_file, "Di %d %d %d %d\n",
-            m_pcb->m_BoundaryBox.GetX(), m_pcb->m_BoundaryBox.GetY(),
-            m_pcb->m_BoundaryBox.GetRight(),
-            m_pcb->m_BoundaryBox.GetBottom() );
+            bbbox.GetX(), bbbox.GetY(),
+            bbbox.GetRight(),
+            bbbox.GetBottom() );
 
     fprintf( m_file, "$EndGENERAL\n\n" );
     return true;
@@ -237,7 +239,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( int* LayerLookUpTable )
     SetLocaleTo_C_standard();
 
     // write PCB header
-    fprintf( m_file, "PCBNEW-BOARD Version %d date %s\n\n", g_CurrentVersionPCB,
+    fprintf( m_file, "PCBNEW-BOARD Version %d date %s\n\n", BOARD_FILE_VERSION,
              TO_UTF8( DateAndTime() ) );
     WriteGeneralDescrPcb( );
     WriteSetup( );

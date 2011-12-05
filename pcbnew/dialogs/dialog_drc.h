@@ -44,7 +44,7 @@ class BOARD_DESIGN_SETTINGS;
 class DIALOG_DRC_CONTROL: public DIALOG_DRC_CONTROL_BASE
 {
 public:
-    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+    BOARD_DESIGN_SETTINGS  m_BrdSettings;
 
     /// Constructors
     DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* parent );

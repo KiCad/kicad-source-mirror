@@ -61,7 +61,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     SetScreen( new PCB_SCREEN() );
     GetScreen()->m_CurrentSheetDesc = &g_Sheet_GERBER;
 
-    SetBoard( new BOARD( this ) );
+    SetBoard( new BOARD() );
     GetBoard()->SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
     GetBoard()->SetVisibleLayers( FULL_LAYERS );     // All 32 layers visible.
 

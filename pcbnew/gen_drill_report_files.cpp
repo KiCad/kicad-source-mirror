@@ -41,11 +41,11 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     SetLocaleTo_C_standard();  // Use the standard notation for float numbers
 
     // Calculate dimensions and center of PCB
-    aPcb->ComputeBoundingBox();
+    EDA_RECT bbbox = aPcb->ComputeBoundingBox();
 
-    dX = aPcb->m_BoundaryBox.GetWidth();
-    dY = aPcb->m_BoundaryBox.GetHeight();
-    BoardCentre = aPcb->m_BoundaryBox.Centre();
+    dX = bbbox.GetWidth();
+    dY = bbbox.GetHeight();
+    BoardCentre = bbbox.Centre();
 
     // Calculate the scale for the format type, scale 1 in HPGL, drawing on
     // an A4 sheet in PS, + text description of symbols
@@ -163,8 +163,8 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     intervalle = (int) ( CharSize * CharScale ) + TextWidth;
 
     /* Trace information. */
-    plotX = (int) ( (double) aPcb->m_BoundaryBox.GetX() + 200.0 * CharScale );
-    plotY = aPcb->m_BoundaryBox.GetBottom() + intervalle;
+    plotX = (int) ( (double) bbbox.GetX() + 200.0 * CharScale );
+    plotY = bbbox.GetBottom() + intervalle;
 
     /* Plot title  "Info" */
     wxString Text = wxT( "Drill Map:" );

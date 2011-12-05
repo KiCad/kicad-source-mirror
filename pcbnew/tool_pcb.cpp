@@ -102,7 +102,7 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
         change = true;
     }
 
-    int via_type = GetBoard()->GetBoardDesignSettings()->m_CurrentViaType;
+    int via_type = GetBoard()->GetDesignSettings().m_CurrentViaType;
     via_color = GetBoard()->GetVisibleElementColor(VIAS_VISIBLE+via_type);
 
     if( previous_via_color != via_color )

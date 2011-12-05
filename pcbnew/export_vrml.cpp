@@ -369,7 +369,7 @@ static void compute_layer_Zs( BOARD* pcb ) /*{{{*/
     int    copper_layers = pcb->GetCopperLayerCount( );
 
     // We call it 'layer' thickness, but it's the whole board thickness!
-    double board_thickness = pcb->GetBoardDesignSettings()->m_BoardThickness;
+    double board_thickness = pcb->GetDesignSettings().m_BoardThickness;
     double half_thickness  = board_thickness / 2;
 
     /* Compute each layer's Z value, more or less like the 3d view */
@@ -1249,9 +1249,11 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString & aFullFileName,
     /* Define the translation to have the board centre to the 2D axis origin
      * more easy for rotations...
      */
-    pcb->ComputeBoundingBox();
-    double dx = board_scaling_factor * pcb->m_BoundaryBox.Centre().x * aScale;
-    double dy = board_scaling_factor * pcb->m_BoundaryBox.Centre().y * aScale;
+    EDA_RECT bbbox = pcb->ComputeBoundingBox();
+
+    double dx = board_scaling_factor * bbbox.Centre().x * aScale;
+    double dy = board_scaling_factor * bbbox.Centre().y * aScale;
+
     fprintf( output_file, "  translation %g %g 0.0\n", -dx, dy );
 
     fprintf( output_file, "  children [\n" );

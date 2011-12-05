@@ -169,12 +169,12 @@ bool PCB_EDIT_FRAME::LoadProjectSettings( const wxString& aProjectFileName )
 
     wxGetApp().RemoveLibraryPath( g_UserLibDirBuffer );
 
-    /* Initialize default values. */
+    // Initialize default values.
     g_LibraryNames.Clear();
 
     wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP, GetProjectFileParameters(), false );
 
-    /* User library path takes precedent over default library search paths. */
+    // User library path takes precedent over default library search paths.
     wxGetApp().InsertLibraryPath( g_UserLibDirBuffer, 1 );
 
     /* Reset the items visibility flag when loading a new configuration because it could
@@ -207,56 +207,62 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
 }
 
 
-PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
+PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
 {
-    if( !m_projectFileParams.empty() )
-        return m_projectFileParams;
+    PARAM_CFG_ARRAY         pca;
+    BOARD_DESIGN_SETTINGS&  bds = *GetDesignSettings();
 
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),&g_UserLibDirBuffer,
+    pca.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),&g_UserLibDirBuffer,
                                                            GROUPLIB ) );
-    m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
+    pca.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
                                                                &g_LibraryNames,
                                                                GROUPLIB ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "PadDrlX" ), &g_Pad_Master.m_Drill.x,
+    pca.push_back( new PARAM_CFG_INT( wxT( "PadDrlX" ), &g_Pad_Master.m_Drill.x,
                                                       320, 0, 0x7FFF ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "PadDimH" ), &g_Pad_Master.m_Size.x,
+    pca.push_back( new PARAM_CFG_INT( wxT( "PadDimH" ), &g_Pad_Master.m_Size.x,
                                                       550, 0, 0x7FFF ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "PadDimV" ), &g_Pad_Master.m_Size.y,
+    pca.push_back( new PARAM_CFG_INT( wxT( "PadDimV" ), &g_Pad_Master.m_Size.y,
                                                       550, 0, 0x7FFF ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "BoardThickness" ),
-                                                      &boardDesignSettings.m_BoardThickness,
-                                                      630, 0, 0xFFFF ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtPcbV" ),
-                                                      &boardDesignSettings.m_PcbTextSize.y,
-                                                      600, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtPcbH" ),
-                                                      &boardDesignSettings.m_PcbTextSize.x,
-                                                      600, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtModV" ), &g_ModuleTextSize.y,
-                                                      500, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtModH" ), &g_ModuleTextSize.x,
-                                                      500, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtModW" ), &g_ModuleTextWidth,
-                                                      100, 1, TEXTS_MAX_WIDTH ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "VEgarde" ),
-                                                      &boardDesignSettings.m_SolderMaskMargin,
-                                                      100, 0, 10000 ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "DrawLar" ),
-                                                      &boardDesignSettings.m_DrawSegmentWidth,
-                                                      120, 0, 0xFFFF ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "EdgeLar" ),
-                                                      &boardDesignSettings.m_EdgeSegmentWidth,
-                                                      120, 0, 0xFFFF ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "TxtLar" ),
-                                                      &boardDesignSettings.m_PcbTextWidth,
-                                                      120, 0, 0xFFFF ) );
-    m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "MSegLar" ), &g_ModuleSegmentWidth,
-                                                      120, 0, 0xFFFF ) );
-    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ),
-                                                           &m_lastNetListRead ) );
-    return m_projectFileParams;
-}
 
+    pca.push_back( new PARAM_CFG_INT( wxT( "BoardThickness" ),
+                                                      &bds.m_BoardThickness,
+                                                      630, 0, 0xFFFF ) );
+
+    pca.push_back( new PARAM_CFG_INT( wxT( "TxtPcbV" ),
+                                                      &bds.m_PcbTextSize.y,
+                                                      600, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
+
+    pca.push_back( new PARAM_CFG_INT( wxT( "TxtPcbH" ),
+                                                      &bds.m_PcbTextSize.x,
+                                                      600, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
+
+    pca.push_back( new PARAM_CFG_INT( wxT( "TxtModV" ), &g_ModuleTextSize.y,
+                                                      500, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
+    pca.push_back( new PARAM_CFG_INT( wxT( "TxtModH" ), &g_ModuleTextSize.x,
+                                                      500, TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) );
+    pca.push_back( new PARAM_CFG_INT( wxT( "TxtModW" ), &g_ModuleTextWidth,
+                                                      100, 1, TEXTS_MAX_WIDTH ) );
+
+    pca.push_back( new PARAM_CFG_INT( wxT( "VEgarde" ),
+                                                      &bds.m_SolderMaskMargin,
+                                                      100, 0, 10000 ) );
+
+    pca.push_back( new PARAM_CFG_INT( wxT( "DrawLar" ),
+                                                      &bds.m_DrawSegmentWidth,
+                                                      120, 0, 0xFFFF ) );
+
+    pca.push_back( new PARAM_CFG_INT( wxT( "EdgeLar" ),
+                                                      &bds.m_EdgeSegmentWidth,
+                                                      120, 0, 0xFFFF ) );
+    pca.push_back( new PARAM_CFG_INT( wxT( "TxtLar" ),
+                                                      &bds.m_PcbTextWidth,
+                                                      120, 0, 0xFFFF ) );
+    pca.push_back( new PARAM_CFG_INT( wxT( "MSegLar" ), &g_ModuleSegmentWidth,
+                                                      120, 0, 0xFFFF ) );
+    pca.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ),
+                                                           &m_lastNetListRead ) );
+    return pca;
+}
 
 
 PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()

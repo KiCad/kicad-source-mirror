@@ -110,6 +110,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
 PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
     delete m_Collector;
+
+//    delete m_Pcb;
 }
 
 
@@ -122,19 +124,55 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 }
 
 
+EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
+{
+    wxASSERT( m_Pcb );
+
+    EDA_RECT area = m_Pcb->ComputeBoundingBox( aBoardEdgesOnly );
+
+    if( area.GetWidth() == 0 && area.GetHeight() == 0 )
+    {
+        if( m_Draw_Sheet_Ref )
+        {
+            area.SetOrigin( 0, 0 );
+            area.SetEnd( GetScreen()->ReturnPageSize().x,
+                         GetScreen()->ReturnPageSize().y );
+        }
+        else
+        {
+            area.SetOrigin( -GetScreen()->ReturnPageSize().x / 2,
+                            -GetScreen()->ReturnPageSize().y / 2 );
+            area.SetEnd( GetScreen()->ReturnPageSize().x / 2,
+                         GetScreen()->ReturnPageSize().y / 2 );
+        }
+    }
+
+    return area;
+}
+
+
+BOARD_DESIGN_SETTINGS* PCB_BASE_FRAME::GetDesignSettings()
+{
+    wxASSERT( m_Pcb );
+    return m_Pcb ? &m_Pcb->GetDesignSettings() : NULL;
+}
+
+
 double PCB_BASE_FRAME::BestZoom( void )
 {
     int    dx, dy;
+
     double ii, jj;
     wxSize size;
 
     if( m_Pcb == NULL )
         return 32.0;
 
-    m_Pcb->ComputeBoundingBox();
+    EDA_RECT bbbox = GetBoardBoundingBox();
 
-    dx = m_Pcb->m_BoundaryBox.GetWidth();
-    dy = m_Pcb->m_BoundaryBox.GetHeight();
+    dx = bbbox.GetWidth();
+    dy = bbbox.GetHeight();
+
     size = DrawPanel->GetClientSize();
 
     if( size.x )
@@ -149,7 +187,7 @@ double PCB_BASE_FRAME::BestZoom( void )
 
     double bestzoom = MAX( ii, jj );
 
-    GetScreen()->SetScrollCenterPosition( m_Pcb->m_BoundaryBox.Centre() );
+    GetScreen()->SetScrollCenterPosition( bbbox.Centre() );
 
     return bestzoom ;
 }

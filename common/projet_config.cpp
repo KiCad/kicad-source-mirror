@@ -169,7 +169,7 @@ void EDA_APP::WriteProjectConfig( const wxString&  fileName,
 
 void EDA_APP::WriteProjectConfig( const wxString&  fileName,
                                   const wxString&  GroupName,
-                                  PARAM_CFG_ARRAY& params )
+                                  const PARAM_CFG_ARRAY& params )
 {
     ReCreatePrjConfig( fileName, GroupName, FORCE_LOCAL_CONFIG );
 
@@ -189,7 +189,7 @@ void EDA_APP::WriteProjectConfig( const wxString&  fileName,
     m_ProjectConfig->Write( wxT( "version" ), CONFIG_VERSION );
     m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
 
-    BOOST_FOREACH( PARAM_CFG_BASE& param, params )
+    BOOST_FOREACH( const PARAM_CFG_BASE& param, params )
     {
         if( param.m_Group )
             m_ProjectConfig->SetPath( param.m_Group );
@@ -248,12 +248,12 @@ void EDA_APP::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
 }
 
 
-void EDA_APP::SaveCurrentSetupValues( PARAM_CFG_ARRAY& List )
+void EDA_APP::SaveCurrentSetupValues( const PARAM_CFG_ARRAY& List )
 {
     if( m_EDA_Config == NULL )
         return;
 
-    BOOST_FOREACH( PARAM_CFG_BASE& param, List )
+    BOOST_FOREACH( const PARAM_CFG_BASE& param, List )
     {
         if( param.m_Setup == false )
             continue;
@@ -326,7 +326,7 @@ bool EDA_APP::ReadProjectConfig( const wxString&  local_config_filename,
 
 bool EDA_APP::ReadProjectConfig( const wxString&  local_config_filename,
                                  const wxString&  GroupName,
-                                 PARAM_CFG_ARRAY& params,
+                                 const PARAM_CFG_ARRAY& params,
                                  bool             Load_Only_if_New )
 {
     wxString        timestamp;
@@ -356,7 +356,7 @@ bool EDA_APP::ReadProjectConfig( const wxString&  local_config_filename,
             m_CurrentOptionFile = g_Prj_Config_LocalFilename;
     }
 
-    BOOST_FOREACH( PARAM_CFG_BASE& param, params )
+    BOOST_FOREACH( const PARAM_CFG_BASE& param, params )
     {
         if( param.m_Group )
             m_ProjectConfig->SetPath( param.m_Group );
@@ -392,9 +392,9 @@ void EDA_APP::ReadCurrentSetupValues( PARAM_CFG_BASE** aList )
 }
 
 
-void EDA_APP::ReadCurrentSetupValues( PARAM_CFG_ARRAY& List )
+void EDA_APP::ReadCurrentSetupValues( const PARAM_CFG_ARRAY& List )
 {
-    BOOST_FOREACH( PARAM_CFG_BASE& param, List )
+    BOOST_FOREACH( const PARAM_CFG_BASE& param, List )
     {
         if( param.m_Setup == false )
             continue;
@@ -443,7 +443,7 @@ PARAM_CFG_INT::PARAM_CFG_INT( bool Insetup, const wxChar* ident, int* ptparam,
  * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
-void PARAM_CFG_INT::ReadParam( wxConfigBase* aConfig )
+void PARAM_CFG_INT::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -461,7 +461,7 @@ void PARAM_CFG_INT::ReadParam( wxConfigBase* aConfig )
  * save the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that can store the parameter
  */
-void PARAM_CFG_INT::SaveParam( wxConfigBase* aConfig )
+void PARAM_CFG_INT::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -497,7 +497,7 @@ PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool          Insetup,
  * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
-void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig )
+void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -513,7 +513,7 @@ void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig )
  * save the the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that can store the parameter
  */
-void PARAM_CFG_SETCOLOR::SaveParam( wxConfigBase* aConfig )
+void PARAM_CFG_SETCOLOR::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -555,7 +555,7 @@ PARAM_CFG_DOUBLE::PARAM_CFG_DOUBLE( bool          Insetup,
  * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
-void PARAM_CFG_DOUBLE::ReadParam( wxConfigBase* aConfig )
+void PARAM_CFG_DOUBLE::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -584,7 +584,7 @@ void PARAM_CFG_DOUBLE::ReadParam( wxConfigBase* aConfig )
  * save the the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that can store the parameter
  */
-void PARAM_CFG_DOUBLE::SaveParam( wxConfigBase* aConfig )
+void PARAM_CFG_DOUBLE::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -619,7 +619,7 @@ PARAM_CFG_BOOL::PARAM_CFG_BOOL( bool          Insetup,
  * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
-void PARAM_CFG_BOOL::ReadParam( wxConfigBase* aConfig )
+void PARAM_CFG_BOOL::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -634,7 +634,7 @@ void PARAM_CFG_BOOL::ReadParam( wxConfigBase* aConfig )
  * save the the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that can store the parameter
  */
-void PARAM_CFG_BOOL::SaveParam( wxConfigBase* aConfig )
+void PARAM_CFG_BOOL::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -668,7 +668,7 @@ PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxChar* ident,
  * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
-void PARAM_CFG_WXSTRING::ReadParam( wxConfigBase* aConfig )
+void PARAM_CFG_WXSTRING::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -680,7 +680,7 @@ void PARAM_CFG_WXSTRING::ReadParam( wxConfigBase* aConfig )
  * save the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that can store the parameter
  */
-void PARAM_CFG_WXSTRING::SaveParam( wxConfigBase* aConfig )
+void PARAM_CFG_WXSTRING::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -703,7 +703,7 @@ PARAM_CFG_FILENAME::PARAM_CFG_FILENAME( const wxChar* ident,
  * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
-void PARAM_CFG_FILENAME::ReadParam( wxConfigBase* aConfig )
+void PARAM_CFG_FILENAME::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -722,7 +722,7 @@ void PARAM_CFG_FILENAME::ReadParam( wxConfigBase* aConfig )
  * save the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that can store the parameter
  */
-void PARAM_CFG_FILENAME::SaveParam( wxConfigBase* aConfig )
+void PARAM_CFG_FILENAME::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -747,7 +747,7 @@ PARAM_CFG_LIBNAME_LIST::PARAM_CFG_LIBNAME_LIST( const wxChar*  ident,
  * read the value of parameter this stored in aConfig
  * @param aConfig = the wxConfigBase that store the parameter
  */
-void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig )
+void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;
@@ -780,7 +780,7 @@ void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig )
  * save the value of parameter this in aConfig (list of parameters)
  * @param aConfig = the wxConfigBase that can store the parameter
  */
-void PARAM_CFG_LIBNAME_LIST::SaveParam( wxConfigBase* aConfig )
+void PARAM_CFG_LIBNAME_LIST::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
         return;

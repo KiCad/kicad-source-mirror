@@ -11,34 +11,33 @@
 class BOARD_DESIGN_SETTINGS
 {
 protected:
-    int    m_CopperLayerCount;            // Number of copper layers for this design
-public:
-    bool   m_MicroViasAllowed;            // true to allow micro vias
-    int    m_CurrentViaType;              // via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
+    int    m_CopperLayerCount;            ///< Number of copper layers for this design
+    int    m_EnabledLayers;               ///< Bit-mask for layer enabling
+    int    m_VisibleLayers;               ///< Bit-mask for layer visibility
+    int    m_VisibleElements;             ///< Bit-mask for element category visibility
 
-    // if true, when creating a new track starting on an existing track, use this track width
+public:
+    bool   m_MicroViasAllowed;            ///< true to allow micro vias
+    int    m_CurrentViaType;              ///< via type (VIA_BLIND_BURIED, VIA_TROUGHT VIA_MICROVIA)
+
+    /// if true, when creating a new track starting on an existing track, use this track width
     bool   m_UseConnectedTrackWidth;
-    int    m_DrawSegmentWidth;            // current graphic line width (not EDGE layer)
-    int    m_EdgeSegmentWidth;            // current graphic line width (EDGE layer only)
-    int    m_PcbTextWidth;                // current Pcb (not module) Text width
-    wxSize m_PcbTextSize;                 // current Pcb (not module) Text size
-    int    m_TrackMinWidth;               // track min value for width ((min copper size value
-    int    m_ViasMinSize;                 // vias (not micro vias) min diameter
-    int    m_ViasMinDrill;                // vias (not micro vias) min drill diameter
-    int    m_MicroViasMinSize;            // micro vias (not vias) min diameter
-    int    m_MicroViasMinDrill;           // micro vias (not vias) min drill diameter
+    int    m_DrawSegmentWidth;            ///< current graphic line width (not EDGE layer)
+    int    m_EdgeSegmentWidth;            ///< current graphic line width (EDGE layer only)
+    int    m_PcbTextWidth;                ///< current Pcb (not module) Text width
+    wxSize m_PcbTextSize;                 ///< current Pcb (not module) Text size
+    int    m_TrackMinWidth;               ///< track min value for width ((min copper size value
+    int    m_ViasMinSize;                 ///< vias (not micro vias) min diameter
+    int    m_ViasMinDrill;                ///< vias (not micro vias) min drill diameter
+    int    m_MicroViasMinSize;            ///< micro vias (not vias) min diameter
+    int    m_MicroViasMinDrill;           ///< micro vias (not vias) min drill diameter
 
     // Global mask margins:
-    int    m_SolderMaskMargin;            // Solder mask margin
-    int    m_SolderPasteMargin;           // Solder paste margin absolute value
-    double m_SolderPasteMarginRatio;      // Solder pask margin ratio value of pad size
-                                          // The final margin is the sum of these 2 values
-    int    m_BoardThickness;              // Board Thickness for 3D viewer
-
-protected:
-    int    m_EnabledLayers;               // Bit-mask for layer enabling
-    int    m_VisibleLayers;               // Bit-mask for layer visibility
-    int    m_VisibleElements;             // Bit-mask for element category visibility
+    int    m_SolderMaskMargin;            ///< Solder mask margin
+    int    m_SolderPasteMargin;           ///< Solder paste margin absolute value
+    double m_SolderPasteMarginRatio;      ///< Solder pask margin ratio value of pad size
+                                          ///< The final margin is the sum of these 2 values
+    int    m_BoardThickness;              ///< Board Thickness for 3D viewer
 
 public:
     BOARD_DESIGN_SETTINGS();
@@ -79,7 +78,6 @@ public:
         return (bool) ( m_VisibleLayers & m_EnabledLayers & (1 << aLayerIndex) );
     }
 
-
     /**
      * Function SetLayerVisibility
      * changes the visibility of a given layer
@@ -97,7 +95,6 @@ public:
     {
         return m_VisibleElements;
     }
-
 
     /**
      * Function SetVisibleElements
@@ -159,7 +156,6 @@ public:
         return bool( m_EnabledLayers & (1 << aLayerIndex) );
     }
 
-
     /**
      * Function GetCopperLayerCount
      * @return int - the number of neabled copper layers
@@ -168,7 +164,6 @@ public:
     {
         return m_CopperLayerCount;
     }
-
 
     /**
      * Function SetCopperLayerCount

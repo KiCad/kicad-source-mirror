@@ -176,9 +176,10 @@ public: EDA_APP();
     void WriteProjectConfig( const wxString&  local_config_filename,
                              const wxString&  GroupName,
                              PARAM_CFG_BASE** List );
+
     void WriteProjectConfig( const wxString&  fileName,
                              const wxString&  GroupName,
-                             PARAM_CFG_ARRAY& params );
+                             const PARAM_CFG_ARRAY& params );
 
     /**
      * Function SaveCurrentSetupValues
@@ -188,7 +189,7 @@ public: EDA_APP();
      * @param aList = array of PARAM_CFG_BASE pointers
      */
     void SaveCurrentSetupValues( PARAM_CFG_BASE** aList );
-    void SaveCurrentSetupValues( PARAM_CFG_ARRAY& List );
+    void SaveCurrentSetupValues( const PARAM_CFG_ARRAY& List );
 
     /**
      * Function ReadCurrentSetupValues
@@ -198,7 +199,7 @@ public: EDA_APP();
      * @param aList = array of PARAM_CFG_BASE pointers
      */
     void ReadCurrentSetupValues( PARAM_CFG_BASE** aList );
-    void ReadCurrentSetupValues( PARAM_CFG_ARRAY& List );
+    void ReadCurrentSetupValues( const PARAM_CFG_ARRAY& List );
 
     /**
      * Function ReadProjectConfig
@@ -220,7 +221,7 @@ public: EDA_APP();
                             bool             Load_Only_if_New );
     bool ReadProjectConfig( const wxString&  local_config_filename,
                             const wxString&  GroupName,
-                            PARAM_CFG_ARRAY& List,
+                            const PARAM_CFG_ARRAY& List,
                             bool             Load_Only_if_New );
 
     /**

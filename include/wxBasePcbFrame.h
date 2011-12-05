@@ -54,7 +54,7 @@ class TEXTE_MODULE;
 class EDA_3D_FRAME;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
-
+class BOARD_DESIGN_SETTINGS;
 
 /**
  * class PCB_BASE_FRAME
@@ -80,12 +80,16 @@ public:
     FOOTPRINT_EDIT_FRAME* m_ModuleEditFrame;
 
 protected:
-    BOARD* m_Pcb;
-    GENERAL_COLLECTOR* m_Collector;
+//    EDA_RECT            m_BoundaryBox;      // Board size and position
+    BOARD*              m_Pcb;
+    GENERAL_COLLECTOR*  m_Collector;
 
     void updateGridSelectBox();
     void updateZoomSelectBox();
     virtual void unitsChangeRefresh();
+
+
+
 
 public:
     PCB_BASE_FRAME( wxWindow* father, int idtype, const wxString& title,
@@ -93,6 +97,14 @@ public:
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~PCB_BASE_FRAME();
+
+    /**
+     * Function GetBoardBoundingBox
+     * calculates the bounding box containing all board items (or board edge segments).
+     * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
+     * @return EDA_RECT - the board's bounding box
+     */
+    EDA_RECT    GetBoardBoundingBox( bool aBoardEdgesOnly = false ) const;
 
     /**
      * Function SetBoard
@@ -107,6 +119,8 @@ public:
         wxASSERT( m_Pcb );  // phasing out m_Pcb for GerbView
         return m_Pcb;
     }
+
+    BOARD_DESIGN_SETTINGS* GetDesignSettings();
 
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;

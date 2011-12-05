@@ -2,7 +2,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2007-2011 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,10 +60,10 @@
 #include <auto_ptr.h>
 #include <kicad_string.h>
 #include <macros.h>
+#include <build_version.h>
 
 //#include <fctsys.h>
 //#include <confirm.h>
-//#include <build_version.h>
 //#include <wxPcbStruct.h">
 //#include <pcbcommon.h>
 
@@ -85,6 +88,8 @@
 
 #include <trigo.h>
 
+#define VERSION_ERROR_FORMAT _( "File '%s' is format version %d.\nI only support format version <= %d.\nPlease upgrade PCBNew to load this file." )
+
 /*
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -92,58 +97,6 @@
 */
 
 
-/* ASCII format of structures:
- *
- * Structure PAD:
- *
- * $PAD
- * Sh "name" form DIMVA dimH dV dH East: general form dV, dH = delta size
- * Dr. diam dV dH: drill: diameter drilling offsets
- * At Type S / N layers: standard, cms, conn, hole, meca.,
- *    Stack / Normal, 32-bit hexadecimal: occupation layers
- * Nm net_code netname
- * Po posrefX posrefy: reFX position, Y (0 = east position / anchor)
- * $EndPAD
- *
- * Module Structure
- *
- * $MODULE namelib
- * Po ax ay east layer masquelayer m_TimeCode
- *    ax ay ord = anchor (position module)
- *    east = east to 0.1 degree
- *    layer = layer number
- *    masquelayer = silkscreen layer for
- *    m_TimeCode internal use (groups)
- * Li <namelib>
- *
- * Cd <text> description of the component (Component Doc)
- * Kw <text> List of key words
- *
- * Sc schematic timestamp, reference schematic
- *
- * Op rot90 rot180 placement Options Auto (court rot 90, 180)
- *    rot90 is about 2x4-bit:
- *    lsb = cost rot 90, rot court msb = -90;
- *
- * Tn px py DIMVA dimh East thickness mirror visible "text"
- *    n = type (0 = ref, val = 1,> 1 = qcq
- *    Texts POS x, y / anchor and orient module 0
- *    DIMVA dimh East
- *    mirror thickness (Normal / Mirror)
- *    Visible V / I
- * DS ox oy fx fy w
- *    Edge: coord segment ox, oy has fx, fy, on
- *    was the anchor and orient 0
- *    thickness w
- * DC ox oy fx fy w descr circle (center, 1 point, thickness)
- * $PAD
- * $EndPAD section pads if available
- * $Endmodule
- */
-
-
-#define MM_PER_BIU      1e-6
-#define UM_PER_BIU      1e-3
 
 /// C string compare test for a specific length of characters.
 /// The -1 is to omit the trailing \0 which is included in sizeof() on a
@@ -155,7 +108,7 @@
 
 
 #if 1
-#define READLINE()     aReader->ReadLine()
+#define READLINE()     m_reader->ReadLine()
 
 #else
 /// The function and macro which follow comprise a shim which can be a
@@ -177,7 +130,7 @@ static inline unsigned ReadLine( LINE_READER* rdr, const char* caller )
 
     return ret;
 }
-#define READLINE()     ReadLine( aReader, __FUNCTION__ )
+#define READLINE()     ReadLine( m_reader, __FUNCTION__ )
 #endif
 
 static const char delims[] = " \t\r\n";
@@ -216,7 +169,7 @@ BOARD* KICAD_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPER
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
-    m_board = aAppendToMe ? aAppendToMe : new BOARD( NULL );
+    m_board = aAppendToMe ? aAppendToMe : new BOARD();
 
     // delete on exception, iff I own m_board, according to aAppendToMe
     auto_ptr<BOARD> deleter( aAppendToMe ? NULL : m_board );
@@ -231,9 +184,11 @@ BOARD* KICAD_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPER
     // reader now owns fp, will close on exception or return
     FILE_LINE_READER    reader( fp, aFileName );
 
-    aReader = &reader;          // member function accessibility
+    m_reader = &reader;          // member function accessibility
 
     init( aProperties );
+
+    checkVersion();
 
     loadAllSections( bool( aAppendToMe ) );
 
@@ -254,7 +209,7 @@ void KICAD_PLUGIN::loadAllSections( bool doAppend )
 
     while( READLINE() )
     {
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         // put the more frequent ones at the top, but realize TRACKs are loaded as a group
 
@@ -332,7 +287,7 @@ void KICAD_PLUGIN::loadAllSections( bool doAppend )
             {
                 while( READLINE() )
                 {
-                    line = aReader->Line();     // gobble until $EndSetup
+                    line = m_reader->Line();     // gobble until $EndSetup
 
                     if( TESTLINE( "$EndSETUP" ) )
                         break;
@@ -351,7 +306,32 @@ void KICAD_PLUGIN::loadAllSections( bool doAppend )
         */
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndBOARD'" ) );
+    THROW_IO_ERROR( "Missing '$EndBOARD'" );
+}
+
+
+void KICAD_PLUGIN::checkVersion()
+{
+    // Read first line and TEST if it is a PCB file format header like this:
+    // "PCBNEW-BOARD Version 1 ...."
+
+    m_reader->ReadLine();
+
+    char* line = m_reader->Line();
+
+    if( !TESTLINE( "PCBNEW-BOARD" ) )
+    {
+        THROW_IO_ERROR( "Unknown file type" );
+    }
+
+    int ver = 1;    // if sccanf fails
+    sscanf( line, "PCBNEW-BOARD Version %d", &ver );
+
+    if( ver > BOARD_FILE_VERSION )
+    {
+        m_error.Printf( VERSION_ERROR_FORMAT, ver );
+        THROW_IO_ERROR( m_error );
+    }
 }
 
 
@@ -359,7 +339,7 @@ void KICAD_PLUGIN::loadGENERAL()
 {
     while( READLINE() )
     {
-        char*       line = aReader->Line();
+        char*       line = m_reader->Line();
         const char* data;
 
         if( TESTLINE( "Units" ) )
@@ -403,7 +383,7 @@ void KICAD_PLUGIN::loadGENERAL()
         else if( TESTLINE( "BoardThickness" ) )
         {
             BIU thickn = biuParse( line + SZ( "BoardThickness" ) );
-            m_board->GetBoardDesignSettings()->m_BoardThickness = thickn;
+            m_board->GetDesignSettings().m_BoardThickness = thickn;
         }
 
         /*
@@ -426,11 +406,9 @@ void KICAD_PLUGIN::loadGENERAL()
             BIU x2 = biuParse( data, &data );
             BIU y2 = biuParse( data );
 
-            m_board->m_BoundaryBox.SetX( x1 );
-            m_board->m_BoundaryBox.SetY( y1 );
+            EDA_RECT bbbox( wxPoint( x1, x2 ), wxSize( x2-x1, y2-y1 ) );
 
-            m_board->m_BoundaryBox.SetWidth( x2 - x1 );
-            m_board->m_BoundaryBox.SetHeight( y2 - y1 );
+            m_board->SetBoundingBox( bbbox );
         }
 
         // Read the number of segments of type DRAW, TRACK, ZONE
@@ -463,7 +441,7 @@ void KICAD_PLUGIN::loadGENERAL()
             return;     // preferred exit
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndGENERAL'" ) );
+    THROW_IO_ERROR( "Missing '$EndGENERAL'" );
 }
 
 
@@ -474,7 +452,7 @@ void KICAD_PLUGIN::loadSHEET()
 
     while( READLINE() )
     {
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         if( TESTLINE( "Sheet" ) )
         {
@@ -563,7 +541,7 @@ void KICAD_PLUGIN::loadSHEET()
             return;             // preferred exit
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndSHEETDESCR'" ) );
+    THROW_IO_ERROR( "Missing '$EndSHEETDESCR'" );
 }
 
 
@@ -574,12 +552,11 @@ void KICAD_PLUGIN::loadSETUP()
     while( READLINE() )
     {
         const char* data;
-
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         if( TESTLINE( "PcbPlotParams" ) )
         {
-            PCB_PLOT_PARAMS_PARSER parser( line + SZ( "PcbPlotParams" ), aReader->GetSource() );
+            PCB_PLOT_PARAMS_PARSER parser( line + SZ( "PcbPlotParams" ), m_reader->GetSource() );
             g_PcbPlotOptions.Parse( &parser );
         }
 
@@ -650,7 +627,7 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "TrackMinWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "TrackMinWidth" ) );
-            m_board->GetBoardDesignSettings()->m_TrackMinWidth = tmp;
+            m_board->GetDesignSettings().m_TrackMinWidth = tmp;
         }
 
         else if( TESTLINE( "ZoneClearence" ) )
@@ -662,25 +639,25 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "DrawSegmWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "DrawSegmWidth" ) );
-            m_board->GetBoardDesignSettings()->m_DrawSegmentWidth = tmp;
+            m_board->GetDesignSettings().m_DrawSegmentWidth = tmp;
         }
 
         else if( TESTLINE( "EdgeSegmWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "EdgeSegmWidth" ) );
-            m_board->GetBoardDesignSettings()->m_EdgeSegmentWidth = tmp;
+            m_board->GetDesignSettings().m_EdgeSegmentWidth = tmp;
         }
 
         else if( TESTLINE( "ViaMinSize" ) )
         {
             BIU tmp = biuParse( line + SZ( "ViaMinSize" ) );
-            m_board->GetBoardDesignSettings()->m_ViasMinSize = tmp;
+            m_board->GetDesignSettings().m_ViasMinSize = tmp;
         }
 
         else if( TESTLINE( "MicroViaMinSize" ) )
         {
             BIU tmp = biuParse( line + SZ( "MicroViaMinSize" ) );
-            m_board->GetBoardDesignSettings()->m_MicroViasMinSize = tmp;
+            m_board->GetDesignSettings().m_MicroViasMinSize = tmp;
         }
 
         else if( TESTLINE( "ViaSizeList" ) )
@@ -706,7 +683,7 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "ViaMinDrill" ) )
         {
             BIU tmp = biuParse( line + SZ( "ViaMinDrill" ) );
-            m_board->GetBoardDesignSettings()->m_ViasMinDrill = tmp;
+            m_board->GetDesignSettings().m_ViasMinDrill = tmp;
         }
 
         else if( TESTLINE( "MicroViaDrill" ) )
@@ -718,19 +695,19 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "MicroViaMinDrill" ) )
         {
             BIU tmp = biuParse( line + SZ( "MicroViaMinDrill" ) );
-            m_board->GetBoardDesignSettings()->m_MicroViasMinDrill = tmp;
+            m_board->GetDesignSettings().m_MicroViasMinDrill = tmp;
         }
 
         else if( TESTLINE( "MicroViasAllowed" ) )
         {
             int tmp = atoi( line + SZ( "MicroViasAllowed" ) );
-            m_board->GetBoardDesignSettings()->m_MicroViasAllowed = tmp;
+            m_board->GetDesignSettings().m_MicroViasAllowed = tmp;
         }
 
         else if( TESTLINE( "TextPcbWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( "TextPcbWidth" ) );
-            m_board->GetBoardDesignSettings()->m_PcbTextWidth = tmp;
+            m_board->GetDesignSettings().m_PcbTextWidth = tmp;
         }
 
         else if( TESTLINE( "TextPcbSize" ) )
@@ -738,7 +715,7 @@ void KICAD_PLUGIN::loadSETUP()
             BIU x = biuParse( line + SZ( "TextPcbSize" ), &data );
             BIU y = biuParse( data );
 
-            m_board->GetBoardDesignSettings()->m_PcbTextSize = wxSize( x, y );
+            m_board->GetDesignSettings().m_PcbTextSize = wxSize( x, y );
         }
 
         else if( TESTLINE( "EdgeModWidth" ) )
@@ -787,19 +764,19 @@ void KICAD_PLUGIN::loadSETUP()
         else if( TESTLINE( "Pad2MaskClearance" ) )
         {
             BIU tmp = biuParse( line + SZ( "Pad2MaskClearance" ) );
-            m_board->GetBoardDesignSettings()->m_SolderMaskMargin = tmp;
+            m_board->GetDesignSettings().m_SolderMaskMargin = tmp;
         }
 
         else if( TESTLINE( "Pad2PasteClearance" ) )
         {
             BIU tmp = biuParse( line + SZ( "Pad2PasteClearance" ) );
-            m_board->GetBoardDesignSettings()->m_SolderPasteMargin = tmp;
+            m_board->GetDesignSettings().m_SolderPasteMargin = tmp;
         }
 
         else if( TESTLINE( "Pad2PasteClearanceRatio" ) )
         {
             double ratio = atof( line + SZ( "Pad2PasteClearanceRatio" ) );
-            m_board->GetBoardDesignSettings()->m_SolderPasteMarginRatio = ratio;
+            m_board->GetDesignSettings().m_SolderPasteMarginRatio = ratio;
         }
 
         else if( TESTLINE( "GridOrigin" ) )
@@ -874,7 +851,7 @@ void KICAD_PLUGIN::loadMODULE()
     while( READLINE() )
     {
         const char* data;
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         // most frequently encountered ones at the top
 
@@ -885,7 +862,7 @@ void KICAD_PLUGIN::loadMODULE()
             EDGE_MODULE * edge;
             edge = new EDGE_MODULE( this );
             m_Drawings.PushBack( edge );
-            edge->ReadDescr( aReader );
+            edge->ReadDescr( m_reader );
             edge->SetDrawCoord();
             */
         }
@@ -1024,7 +1001,7 @@ void KICAD_PLUGIN::loadMODULE()
         }
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndMODULE'" ) );
+    THROW_IO_ERROR( "Missing '$EndMODULE'" );
 }
 
 
@@ -1035,7 +1012,7 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
     while( READLINE() )
     {
         const char* data;
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         if( TESTLINE( "Sh" ) )              // (Sh)ape and padname
         {
@@ -1065,7 +1042,7 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
             case 'T':   padshape = PAD_TRAPEZOID;   break;
             default:
                 m_error.Printf( _( "Unknown padshape '%s' on line:%d" ),
-                    FROM_UTF8( line ).GetData(), aReader->LineNumber() );
+                    FROM_UTF8( line ).GetData(), m_reader->LineNumber() );
                 THROW_IO_ERROR( m_error );
             }
 
@@ -1203,14 +1180,14 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
         }
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndPAD'" ) );
+    THROW_IO_ERROR( "Missing '$EndPAD'" );
 }
 
 
 void KICAD_PLUGIN::loadEDGE_MODULE( MODULE* aModule )
 {
     STROKE_T shape;
-    char* line = aReader->Line();     // obtain current (old) line
+    char* line = m_reader->Line();     // obtain current (old) line
 
     switch( line[1] )
     {
@@ -1294,16 +1271,16 @@ void KICAD_PLUGIN::loadEDGE_MODULE( MODULE* aModule )
             {
                 if( !READLINE() )
                 {
-                    THROW_IO_ERROR( wxT( "S_POLGON point count mismatch." ) );
+                    THROW_IO_ERROR( "S_POLGON point count mismatch." );
                 }
 
-                line = aReader->Line();
+                line = m_reader->Line();
 
                 // e.g. "Dl 23 44\n"
 
                 if( !TESTLINE( "Dl" ) )
                 {
-                    THROW_IO_ERROR( wxT( "Missing Dl point def" ) );
+                    THROW_IO_ERROR( "Missing Dl point def" );
                 }
 
                 BIU x = biuParse( line + SZ( "Dl" ), &data );
@@ -1352,7 +1329,7 @@ void KICAD_PLUGIN::loadEDGE_MODULE( MODULE* aModule )
 void KICAD_PLUGIN::loadTEXTE_MODULE( TEXTE_MODULE* aText )
 {
     const char* data;
-    char* line = aReader->Line();     // current (old) line
+    char* line = m_reader->Line();     // current (old) line
 
     // sscanf( line + 1, "%d %d %d %d %d %d %d %s %s %d %s", &type, &m_Pos0.x, &m_Pos0.y, &m_Size.y, &m_Size.x,
     //     &m_Orient, &m_Thickness,               BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
@@ -1412,7 +1389,7 @@ void KICAD_PLUGIN::loadTEXTE_MODULE( TEXTE_MODULE* aText )
 
     aText->SetMirrored( mirror && *mirror == 'M' );
 
-    aText->SetInvisible( hide && *hide == 'I' );
+    aText->SetVisible( !(hide && *hide == 'I') );
 
     aText->SetItalic( italic && *italic == 'I' );
 
@@ -1433,10 +1410,9 @@ void KICAD_PLUGIN::loadTEXTE_MODULE( TEXTE_MODULE* aText )
     aText->SetDrawCoord();
 
     // convert the "quoted, escaped, UTF8, text" to a wxString
-    wxString    wtext;
-    ReadDelimitedText( &wtext, text ? text : "" );
+    ReadDelimitedText( &m_field, text ? text : "" );
 
-    aText->SetText( wtext );
+    aText->SetText( m_field );
 }
 
 
@@ -1455,7 +1431,7 @@ void KICAD_PLUGIN::load3D( MODULE* aModule )
 
     while( READLINE() )
     {
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         if( TESTLINE( "Na" ) )     // Shape File Name
         {
@@ -1492,7 +1468,7 @@ void KICAD_PLUGIN::load3D( MODULE* aModule )
             return;         // preferred exit
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndSHAPE3D'" ) );
+    THROW_IO_ERROR( "Missing '$EndSHAPE3D'" );
 }
 
 
@@ -1510,7 +1486,7 @@ void KICAD_PLUGIN::loadDRAWSEGMENT()
     while( READLINE() )
     {
         const char* data;
-        char* line  = aReader->Line();
+        char* line  = m_reader->Line();
 
         if( TESTLINE( "Po" ) )
         {
@@ -1606,7 +1582,7 @@ void KICAD_PLUGIN::loadDRAWSEGMENT()
         }
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndDRAWSEGMENT'" ) );
+    THROW_IO_ERROR( "Missing '$EndDRAWSEGMENT'" );
 }
 
 
@@ -1620,7 +1596,7 @@ void KICAD_PLUGIN::loadNETINFO_ITEM()
     while( READLINE() )
     {
         const char* data;
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         if( TESTLINE( "Na" ) )
         {
@@ -1637,7 +1613,7 @@ void KICAD_PLUGIN::loadNETINFO_ITEM()
             return;     // preferred exit
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndEQUIPOT'" ) );
+    THROW_IO_ERROR( "Missing '$EndEQUIPOT'" );
 }
 
 
@@ -1672,7 +1648,7 @@ void KICAD_PLUGIN::loadPCB_TEXTE()
     while( READLINE() )
     {
         const char* data;
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         if( TESTLINE( "Te" ) )          // Text line (or first line for multi line texts)
         {
@@ -1734,7 +1710,7 @@ void KICAD_PLUGIN::loadPCB_TEXTE()
 
             pcbtxt->SetMirrored( !notMirrored );
             pcbtxt->SetTimeStamp( timestamp );
-            pcbtxt->SetItalic( strncmp( style, "Italic", SZ( "Italic" ) )==0 );
+            pcbtxt->SetItalic( !strcmp( style, "Italic" ) );
 
             GRTextHorizJustifyType hj;
 
@@ -1750,9 +1726,9 @@ void KICAD_PLUGIN::loadPCB_TEXTE()
 
             if( layer < FIRST_COPPER_LAYER )
                 layer = FIRST_COPPER_LAYER;
-
             else if( layer > LAST_NO_COPPER_LAYER )
                 layer = LAST_NO_COPPER_LAYER;
+
             pcbtxt->SetLayer( layer );
 
         }
@@ -1763,7 +1739,7 @@ void KICAD_PLUGIN::loadPCB_TEXTE()
         }
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndTEXTPCB'" ) );
+    THROW_IO_ERROR( "Missing '$EndTEXTPCB'" );
 }
 
 
@@ -1775,8 +1751,7 @@ void KICAD_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         // example first line:
         // "Po 0 23994 28800 24400 28800 150 -1\r\n"
 
-        char*       line = aReader->Line();
-        BIU         drill = -1;     // SetDefault() if -1
+        char*       line = m_reader->Line();
 
         if( line[0] == '$' )    // $EndTRACK
             return;             // preferred exit
@@ -1796,10 +1771,8 @@ void KICAD_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
 
         // optional 7th drill parameter (must be optional in an old format?)
         data = strtok( (char*) data, delims );
-        if( data )
-        {
-            drill = biuParse( data );
-        }
+
+        BIU drill   = data ? biuParse( data ) : -1;     // SetDefault() if -1
 
         // Read the 2nd line to determine the exact type, one of:
         // PCB_TRACE_T, PCB_VIA_T, or PCB_ZONE_T.  The type field in 2nd line
@@ -1808,7 +1781,7 @@ void KICAD_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         // exactly.
         READLINE();
 
-        line = aReader->Line();
+        line = m_reader->Line();
 
         // example second line:
         // "De 0 0 463 0 800000\r\n"
@@ -1816,7 +1789,7 @@ void KICAD_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         if( !TESTLINE( "De" ) )
         {
             // mandatory 2nd line is missing
-            THROW_IO_ERROR( wxT( "Missing 2nd line of a TRACK def" ) );
+            THROW_IO_ERROR( "Missing 2nd line of a TRACK def" );
         }
 
         int         makeType;
@@ -1877,7 +1850,7 @@ void KICAD_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         newTrack->SetState( flags, ON );
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndTRACK'" ) );
+    THROW_IO_ERROR( "Missing '$EndTRACK'" );
 }
 
 
@@ -1894,7 +1867,7 @@ void KICAD_PLUGIN::loadNETCLASS()
 
     while( READLINE() )
     {
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         if( TESTLINE( "AddNet" ) )      // most frequent type of line
         {
@@ -1973,7 +1946,7 @@ void KICAD_PLUGIN::loadNETCLASS()
         }
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndNCLASS'" ) );
+    THROW_IO_ERROR( "Missing '$EndNCLASS'" );
 }
 
 
@@ -1988,7 +1961,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
     while( READLINE() )
     {
         const char* data;
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         if( TESTLINE( "ZCorner" ) )         // new corner found
         {
@@ -2016,7 +1989,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
 
             if( ReadDelimitedText( buf, data, sizeof(buf) ) > (int) sizeof(buf) )
             {
-                THROW_IO_ERROR( wxT( "ZInfo netname too long" ) );
+                THROW_IO_ERROR( "ZInfo netname too long" );
             }
 
             zc->SetTimeStamp( timestamp );
@@ -2129,7 +2102,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
 
             while( READLINE() )
             {
-                line = aReader->Line();
+                line = m_reader->Line();
 
                 if( TESTLINE( "$endPOLYSCORNERS" ) )
                     break;
@@ -2149,7 +2122,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
         {
             while( READLINE() )
             {
-                line = aReader->Line();
+                line = m_reader->Line();
 
                 if( TESTLINE( "$endFILLSEGMENTS" ) )
                     break;
@@ -2189,7 +2162,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
         }
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$endCZONE_OUTLINE'" ) );
+    THROW_IO_ERROR( "Missing '$endCZONE_OUTLINE'" );
 }
 
 
@@ -2200,7 +2173,7 @@ void KICAD_PLUGIN::loadDIMENSION()
     while( READLINE() )
     {
         const char*  data;
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         if( TESTLINE( "$EndDIMENSION" ) )
         {
@@ -2390,7 +2363,7 @@ void KICAD_PLUGIN::loadDIMENSION()
         }
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndDIMENSION'" ) );
+    THROW_IO_ERROR( "Missing '$EndDIMENSION'" );
 }
 
 
@@ -2398,7 +2371,7 @@ void KICAD_PLUGIN::loadPCB_TARGET()
 {
     while( READLINE() )
     {
-        char* line = aReader->Line();
+        char* line = m_reader->Line();
 
         if( TESTLINE( "$EndPCB_TARGET" ) )
         {
@@ -2432,7 +2405,7 @@ void KICAD_PLUGIN::loadPCB_TARGET()
         }
     }
 
-    THROW_IO_ERROR( wxT( "Missing '$EndDIMENSION'" ) );
+    THROW_IO_ERROR( "Missing '$EndDIMENSION'" );
 }
 
 
@@ -2470,7 +2443,7 @@ BIU KICAD_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
     if( errno )
     {
         m_error.Printf( _( "invalid float number in\nfile: '%s'\nline: %d\noffset: %d" ),
-            aReader->GetSource().GetData(), aReader->LineNumber(), aValue - aReader->Line() + 1 );
+            m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }
@@ -2478,7 +2451,7 @@ BIU KICAD_PLUGIN::biuParse( const char* aValue, const char** nptrptr )
     if( aValue == nptr )
     {
         m_error.Printf( _( "missing float number in\nfile: '%s'\nline: %d\noffset: %d" ),
-            aReader->GetSource().GetData(), aReader->LineNumber(), aValue - aReader->Line() + 1 );
+            m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }
@@ -2503,7 +2476,7 @@ double KICAD_PLUGIN::degParse( const char* aValue, const char** nptrptr )
     if( errno )
     {
         m_error.Printf( _( "invalid float number in\nfile: '%s'\nline: %d\noffset: %d" ),
-            aReader->GetSource().GetData(), aReader->LineNumber(), aValue - aReader->Line() + 1 );
+            m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }
@@ -2511,7 +2484,7 @@ double KICAD_PLUGIN::degParse( const char* aValue, const char** nptrptr )
     if( aValue == nptr )
     {
         m_error.Printf( _( "missing float number in\nfile: '%s'\nline: %d\noffset: %d" ),
-            aReader->GetSource().GetData(), aReader->LineNumber(), aValue - aReader->Line() + 1 );
+            m_reader->GetSource().GetData(), m_reader->LineNumber(), aValue - m_reader->Line() + 1 );
 
         THROW_IO_ERROR( m_error );
     }

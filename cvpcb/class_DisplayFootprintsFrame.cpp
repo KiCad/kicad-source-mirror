@@ -61,7 +61,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     icon.CopyFromBitmap( KiBitmap( icon_cvpcb_xpm ) );
     SetIcon( icon );
 
-    SetBoard( new BOARD( this ) );
+    SetBoard( new BOARD() );
     SetScreen( new PCB_SCREEN() );
 
     LoadSettings();

@@ -182,7 +182,6 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     wxPoint  start, current;
     int      Ymax_size, Xsize_allowed;
     int      pas_grille = (int) GetScreen()->GetGridSize().x;
-    bool     edgesExists;
     double   surface;
 
     if( GetBoard()->m_Modules == NULL )
@@ -195,9 +194,12 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     if( !IsOK( this, _( "Move modules?" ) ) )
         return;
 
-    edgesExists = GetBoard()->ComputeBoundingBox( true );
+    EDA_RECT bbbox = GetBoard()->ComputeBoundingBox( true );
 
-    if( PlaceModulesHorsPcb && !edgesExists )
+    bool     edgesExist = ( bbbox.GetWidth() || bbbox.GetHeight() );
+
+    // no edges exist
+    if( PlaceModulesHorsPcb && !edgesExist )
     {
         DisplayError( this,
                       _( "Could not automatically place modules. No board outlines detected." ) );
@@ -218,12 +220,12 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     /* to move modules outside the board, the cursor is placed below
      * the current board, to avoid placing components in board area.
      */
-    if( PlaceModulesHorsPcb && edgesExists )
+    if( PlaceModulesHorsPcb && edgesExist )
     {
-        if( GetScreen()->GetCrossHairPosition().y < (GetBoard()->m_BoundaryBox.GetBottom() + 2000) )
+        if( GetScreen()->GetCrossHairPosition().y < (bbbox.GetBottom() + 2000) )
         {
             wxPoint pos = GetScreen()->GetCrossHairPosition();
-            pos.y = GetBoard()->m_BoundaryBox.GetBottom() + 2000;
+            pos.y = bbbox.GetBottom() + 2000;
             GetScreen()->SetCrossHairPosition( pos );
         }
     }
@@ -235,9 +237,9 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     {
         Module = moduleList[ii];
 
-        if( PlaceModulesHorsPcb && edgesExists )
+        if( PlaceModulesHorsPcb && edgesExist )
         {
-            if( GetBoard()->m_BoundaryBox.Contains( Module->m_Pos ) )
+            if( bbbox.Contains( Module->m_Pos ) )
                 continue;
         }
 
@@ -256,9 +258,9 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
         if( Module->IsLocked() )
             continue;
 
-        if( PlaceModulesHorsPcb && edgesExists )
+        if( PlaceModulesHorsPcb && edgesExist )
         {
-            if( GetBoard()->m_BoundaryBox.Contains( Module->m_Pos ) )
+            if( bbbox.Contains( Module->m_Pos ) )
                 continue;
         }
 
