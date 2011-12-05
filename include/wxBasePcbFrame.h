@@ -80,7 +80,6 @@ public:
     FOOTPRINT_EDIT_FRAME* m_ModuleEditFrame;
 
 protected:
-//    EDA_RECT            m_BoundaryBox;      // Board size and position
     BOARD*              m_Pcb;
     GENERAL_COLLECTOR*  m_Collector;
 
