@@ -56,10 +56,7 @@
 
 // use one of the following __LOC__ defs, depending on whether your
 // compiler supports __func__ or not, and how it handles __LINE__
-#if defined ( _MSC_VER )
-#define __func__ __FUNCTION__
-#endif
-#define __LOC__         ((std::string(__func__) + "() : line ") + TOSTRING(__LINE__)).c_str()
+#define __LOC__         ((std::string(__FUNCTION__) + "() : line ") + TOSTRING(__LINE__)).c_str()
 //#define __LOC__         TOSTRING(__LINE__)
 
 /// macro which captures the "call site" values of __FILE_ & __LOC__
@@ -96,12 +93,19 @@ struct IO_ERROR // : std::exception
         init( aThrowersFile, aThrowersLoc, aMsg );
     }
 
+#if !wxCHECK_VERSION(2, 9, 0)
+    // 2.9.0 and greater provide a wxString() constructor taking "const char*" whereas
+    // 2.8 did not.  In 2.9.x this IO_ERROR() constructor uses that wxString( const char* )
+    // constructor making this here constructor ambiguous with the IO_ERROR()
+    // taking the wxString.
+
     IO_ERROR( const char* aThrowersFile,
               const char* aThrowersLoc,
               const std::string& aMsg )
     {
         init( aThrowersFile, aThrowersLoc, wxString::FromUTF8( aMsg.c_str() ) );
     }
+#endif
 
     /**
      * handles the case where _() is passed as aMsg.
