@@ -23,8 +23,12 @@ class BOARD;
 class DISPLAY_OPTIONS;
 
 
-/* Look up Table for conversion one layer number -> one bit layer mask: */
-extern int g_TabOneLayerMask[LAYER_COUNT];
+/**
+ * Function GetLayerMask
+ * @return a one bit layer mask from a layer number
+ * @param aLayerNumber = the layer number to convert (0 .. LAYER_COUNT-1)
+ */
+int GetLayerMask( int aLayerNumber );
 
 /* Look up Table for conversion copper layer count -> general copper layer mask: */
 extern int g_TabAllCopperLayerMask[NB_COPPER_LAYERS];

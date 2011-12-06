@@ -441,7 +441,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
         switch( PtStruct->Type() )
         {
         case PCB_LINE_T:
-            if( (g_TabOneLayerMask[PtStruct->GetLayer()] & layerMask) == 0  )
+            if( (GetLayerMask( PtStruct->GetLayer() ) & layerMask) == 0  )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
@@ -461,7 +461,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             break;
 
         case PCB_TARGET_T:
-            if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & layerMask ) == 0  )
+            if( ( GetLayerMask( PtStruct->GetLayer() ) & layerMask ) == 0  )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )
@@ -471,7 +471,7 @@ void PCB_EDIT_FRAME::Block_SelectItems()
             break;
 
         case PCB_DIMENSION_T:
-            if( ( g_TabOneLayerMask[PtStruct->GetLayer()] & layerMask ) == 0 )
+            if( ( GetLayerMask( PtStruct->GetLayer() ) & layerMask ) == 0 )
                 break;
 
             if( !PtStruct->HitTest( GetScreen()->m_BlockLocate ) )

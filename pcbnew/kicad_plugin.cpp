@@ -306,7 +306,7 @@ void KICAD_PLUGIN::loadAllSections( bool doAppend )
         */
     }
 
-    THROW_IO_ERROR( "Missing '$EndBOARD'" );
+    THROW_IO_ERROR( wxT("Missing '$EndBOARD'") );
 }
 
 

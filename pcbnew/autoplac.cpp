@@ -973,10 +973,10 @@ static void CreateKeepOutRectangle( BOARD* Pcb,
     DIST_CELL data, LocalKeepOut;
     int      lgain, cgain;
 
-    if( aLayerMask & g_TabOneLayerMask[Route_Layer_BOTTOM] )
+    if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
         trace = 1;     /* Trace on bottom layer. */
 
-    if( ( aLayerMask & g_TabOneLayerMask[Route_Layer_TOP] ) && Nb_Sides )
+    if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) && Nb_Sides )
         trace |= 2;    /* Trace on top layer. */
 
     if( trace == 0 )

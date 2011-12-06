@@ -263,7 +263,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     PtPad->m_Pos    = Mself.m_End;
     PtPad->m_Pos0   = PtPad->m_Pos - Module->m_Pos;
     PtPad->m_Size.x = PtPad->m_Size.y = Mself.m_Width;
-    PtPad->m_layerMask = g_TabOneLayerMask[Module->GetLayer()];
+    PtPad->m_layerMask = GetLayerMask( Module->GetLayer() );
     PtPad->m_Attribut     = PAD_SMD;
     PtPad->m_PadShape     = PAD_CIRCLE;
     PtPad->ComputeShapeMaxRadius();

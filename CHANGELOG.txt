@@ -1,4 +1,4 @@
-KiCad ChangeLog 2010
+KiCad ChangeLog 2011
 ====================
 
 Please add newer entries at the top, list the date and your name with
@@ -243,6 +243,9 @@ CvPcb:
   * Added the problemInputLine support to PARSE_ERROR, so UI can show the
     offending line of bytes.  Yes bytes, not even guaranteed to be characters.
 
+
+KiCad ChangeLog 2010
+====================
 
 2010-dec-31 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
 ================================================================================

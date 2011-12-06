@@ -467,14 +467,14 @@ int TRACK::ReturnMaskLayer() const
 
         while( bottom_layer <= top_layer )
         {
-            layermask |= g_TabOneLayerMask[bottom_layer++];
+            layermask |= GetLayerMask( bottom_layer++ );
         }
 
         return layermask;
     }
     else
     {
-        return g_TabOneLayerMask[m_Layer];
+        return GetLayerMask( m_Layer );
     }
 }
 
@@ -1059,7 +1059,27 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
     switch( Type() )
     {
     case PCB_VIA_T:
-        msg = g_ViaType_Name[Shape()];
+        switch( Shape() )
+        {
+            default:
+            case 0:
+                msg =  _( "??? Via" ); // Not used yet, does not exist currently
+                break;
+
+            case 1:
+                msg = _( "Micro Via" ); // from external layer (TOP or BOTTOM) from
+                                        // the near neighbor inner layer only
+                break;
+
+            case 2:
+                msg = _( "Blind/Buried Via" );  // from inner or external to inner
+                                                // or external layer (no restriction)
+                break;
+
+            case 3:
+                msg =  _( "Through Via" );  // Usual via (from TOP to BOTTOM layer only )
+                break;
+        }
         break;
 
     case PCB_TRACE_T:

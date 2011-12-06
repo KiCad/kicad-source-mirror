@@ -1618,7 +1618,7 @@ D_PAD* BOARD::GetPad( TRACK* aTrace, int aEndPoint )
     D_PAD*  pad = NULL;
     wxPoint aPosition;
 
-    int     aLayerMask = g_TabOneLayerMask[aTrace->GetLayer()];
+    int     aLayerMask = GetLayerMask( aTrace->GetLayer() );
 
     if( aEndPoint == START )
     {
@@ -1783,7 +1783,7 @@ TRACK* BOARD::GetTrace( TRACK* aTrace, const wxPoint& aPosition, int aLayerMask 
         }
         else
         {
-            if( (g_TabOneLayerMask[layer] & aLayerMask) == 0 )
+            if( (GetLayerMask( layer ) & aLayerMask) == 0 )
                 continue;   /* Segments on different layers. */
 
             if( track->HitTest( aPosition ) )

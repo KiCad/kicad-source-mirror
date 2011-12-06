@@ -96,7 +96,7 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
 TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 {
     TRACK*      TrackOnStartPoint = NULL;
-    int         layerMask = g_TabOneLayerMask[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
+    int         layerMask = GetLayerMask( GetScreen()->m_Active_Layer );
     BOARD_CONNECTED_ITEM* LockPoint;
     wxPoint     pos = GetScreen()->GetCrossHairPosition();
 
@@ -269,7 +269,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
             newTrack->m_Start = newTrack->m_End;
 
-            newTrack->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
+            newTrack->SetLayer( GetScreen()->m_Active_Layer );
 
             if( !GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth )
                 newTrack->m_Width = GetBoard()->GetCurrentTrackWidth();
@@ -403,7 +403,7 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
 
 bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
 {
-    int layerMask = g_TabOneLayerMask[( (PCB_SCREEN*) GetScreen() )->m_Active_Layer];
+    int layerMask = GetLayerMask( GetScreen()->m_Active_Layer );
 
     if( aTrack == NULL )
         return false;
