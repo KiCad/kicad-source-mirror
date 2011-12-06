@@ -115,18 +115,21 @@ int MATRIX_ROUTING_HEAD::InitBoard()
 
         /* allocate Board & initialize everything to empty */
         m_BoardSide[kk] = (MATRIX_CELL*) operator new( ii * sizeof(MATRIX_CELL) );
+        memset( m_BoardSide[kk], 0, ii * sizeof(MATRIX_CELL) );
 
         if( m_BoardSide[kk] == NULL )
             return -1;
 
         /***** allocate Distances *****/
         m_DistSide[kk] = (DIST_CELL*) operator new( ii * sizeof(DIST_CELL) );
+        memset( m_DistSide[kk], 0, ii * sizeof(DIST_CELL) );
 
         if( m_DistSide[kk] == NULL )
             return -1;
 
         /***** allocate Dir (chars) *****/
         m_DirSide[kk] = (char*) operator new( ii );
+        memset( m_DirSide[kk], 0, ii );
 
         if( m_DirSide[kk] == NULL )
             return -1;
