@@ -163,8 +163,7 @@ void SCH_JUNCTION::Rotate( wxPoint rotationPoint )
 
 void SCH_JUNCTION::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
-    DANGLING_END_ITEM item( JUNCTION_END, this );
-    item.m_Pos = m_Pos;
+    DANGLING_END_ITEM item( JUNCTION_END, this, m_Pos );
     aItemList.push_back( item );
 }
 

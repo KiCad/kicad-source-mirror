@@ -356,12 +356,12 @@ void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 
     if( ( GetLayer() == LAYER_BUS ) || ( GetLayer() == LAYER_WIRE ) )
     {
-        DANGLING_END_ITEM item( (GetLayer() == LAYER_BUS) ? BUS_START_END : WIRE_START_END, this );
-        item.m_Pos = m_Start;
-        DANGLING_END_ITEM item1( (GetLayer() == LAYER_BUS) ? BUS_END_END : WIRE_END_END, this );
-        item1.m_Pos = m_End;
-
+        DANGLING_END_ITEM item( (GetLayer() == LAYER_BUS) ? BUS_START_END : WIRE_START_END, this,
+                                m_Start );
         aItemList.push_back( item );
+
+        DANGLING_END_ITEM item1( (GetLayer() == LAYER_BUS) ? BUS_END_END : WIRE_END_END, this,
+                                 m_End );
         aItemList.push_back( item1 );
     }
 }
@@ -378,13 +378,13 @@ bool SCH_LINE::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
     {
         BOOST_FOREACH( DANGLING_END_ITEM item, aItemList )
         {
-            if( item.m_Item == this )
+            if( item.GetItem() == this )
                 continue;
 
-            if( m_Start == item.m_Pos )
+            if( m_Start == item.GetPosition() )
                 m_StartIsDangling = false;
 
-            if( m_End == item.m_Pos )
+            if( m_End == item.GetPosition() )
                 m_EndIsDangling = false;
 
             if( (m_StartIsDangling == false) && (m_EndIsDangling == false) )

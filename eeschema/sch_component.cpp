@@ -1560,8 +1560,7 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
         if( Pin->GetConvert() && m_convert && ( m_convert != Pin->GetConvert() ) )
             continue;
 
-        DANGLING_END_ITEM item( PIN_END, Pin );
-        item.m_Pos = GetPinPhysicalPosition( Pin );
+        DANGLING_END_ITEM item( PIN_END, Pin, GetPinPhysicalPosition( Pin ) );
         aItemList.push_back( item );
     }
 }
