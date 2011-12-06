@@ -303,7 +303,7 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
             ux0 -= dx;
             uy0 -= dy;
 
-            layerMask = g_TabOneLayerMask[PtText->GetLayer()];
+            layerMask = GetLayerMask( PtText->GetLayer() );
 
             TraceFilledRectangle( aPcb, ux0 - marge, uy0 - marge, ux1 + marge,
                                   uy1 + marge, (int) (PtText->m_Orient),

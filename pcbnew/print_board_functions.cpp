@@ -373,7 +373,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
 
     /* Print footprint graphic shapes */
     PtStruct = aModule->m_Drawings;
-    mlayer   = g_TabOneLayerMask[aModule->GetLayer()];
+    mlayer   = GetLayerMask( aModule->GetLayer() );
 
     if( aModule->GetLayer() == LAYER_N_BACK )
         mlayer = SILKSCREEN_LAYER_BACK;
@@ -405,7 +405,7 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
         {
             EDGE_MODULE* edge = (EDGE_MODULE*) PtStruct;
 
-            if( ( g_TabOneLayerMask[edge->GetLayer()] & aMasklayer ) == 0 )
+            if( ( GetLayerMask( edge->GetLayer() ) & aMasklayer ) == 0 )
                 break;
 
             edge->Draw( aPanel, aDC, aDraw_mode );

@@ -114,7 +114,7 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( PCB_BASE_FRAME* parent,
     {
         m_LayerId[ii] = 0;
 
-        if( g_TabOneLayerMask[ii] & Masque_Layer )
+        if( GetLayerMask( ii ) & Masque_Layer )
         {
             if( min_layer > ii )
                 continue;
@@ -270,7 +270,7 @@ SELECT_LAYERS_PAIR_DIALOG::SELECT_LAYERS_PAIR_DIALOG( PCB_BASE_FRAME* parent ) :
     {
         m_LayerId[ii] = 0;
 
-        if( (g_TabOneLayerMask[ii] & Masque_Layer) )
+        if( (GetLayerMask( ii ) & Masque_Layer) )
         {
             LayerList[LayerCount] = board->GetLayerName( ii );
 

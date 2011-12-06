@@ -163,10 +163,10 @@ void TraceFilledCircle( BOARD* Pcb,
     /* Single routing layer on bitmap and BOTTOM
      * Route_Layer_B = Route_Layer_A */
 
-    if( aLayerMask & g_TabOneLayerMask[Route_Layer_BOTTOM] )
+    if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
         trace = 1;       /* Trace on BOTTOM */
 
-    if( aLayerMask & g_TabOneLayerMask[Route_Layer_TOP] )
+    if( aLayerMask & GetLayerMask( Route_Layer_TOP ) )
         if( Nb_Sides )
             trace |= 2;  /* Trace on TOP */
 
@@ -525,10 +525,10 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
 
     void (* WriteCell)( int, int, int, MATRIX_CELL );
 
-    if( aLayerMask & g_TabOneLayerMask[Route_Layer_BOTTOM] )
+    if( ( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) ) )
         trace = 1;     /* Trace on BOTTOM */
 
-    if( ( aLayerMask & g_TabOneLayerMask[Route_Layer_TOP] ) && Nb_Sides )
+    if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) && Nb_Sides )
         trace |= 2;    /* Trace on TOP */
 
     if( trace == 0 )
@@ -614,10 +614,10 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
 
     void (* WriteCell)( int, int, int, MATRIX_CELL );
 
-    if( aLayerMask & g_TabOneLayerMask[Route_Layer_BOTTOM] )
+    if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
         trace = 1;     /* Trace on BOTTOM */
 
-    if( aLayerMask & g_TabOneLayerMask[Route_Layer_TOP] )
+    if( aLayerMask & GetLayerMask( Route_Layer_TOP ) )
     {
         if( Nb_Sides )
             trace |= 2;  /* Trace on TOP */

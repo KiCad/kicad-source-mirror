@@ -1034,7 +1034,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
         /* Test the connections modified by the move
          *  (only pad connection must be tested, track connection will be
          * tested by TestNetConnection() ) */
-        int layerMask = g_TabOneLayerMask[Track->GetLayer()];
+        int layerMask = GetLayerMask( Track->GetLayer() );
         Track->start = GetBoard()->GetPadFast( Track->m_Start, layerMask );
 
         if( Track->start )

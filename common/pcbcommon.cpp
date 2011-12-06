@@ -42,17 +42,27 @@
 class MODULE;
 
 
-/* Look up Table for conversion one layer number -> one bit layer mask: */
-int g_TabOneLayerMask[LAYER_COUNT] = {
-    0x00000001, 0x00000002, 0x00000004, 0x00000008,
-    0x00000010, 0x00000020, 0x00000040, 0x00000080,
-    0x00000100, 0x00000200, 0x00000400, 0x00000800,
-    0x00001000, 0x00002000, 0x00004000, 0x00008000,
-    0x00010000, 0x00020000, 0x00040000, 0x00080000,
-    0x00100000, 0x00200000, 0x00400000, 0x00800000,
-    0x01000000, 0x02000000, 0x04000000, 0x08000000,
-    0x10000000, 0x20000000, 0x40000000, 0x80000000
-};
+/* return a one bit layer mask from a layer number
+ * aLayerNumber = the layer number to convert (0 .. LAYER_COUNT-1)
+ */
+int GetLayerMask( int aLayerNumber )
+{
+    // Look up Table for conversion one layer number -> one bit layer mask:
+    static int tabOneLayerMask[LAYER_COUNT] =
+    {
+        0x00000001, 0x00000002, 0x00000004, 0x00000008,
+        0x00000010, 0x00000020, 0x00000040, 0x00000080,
+        0x00000100, 0x00000200, 0x00000400, 0x00000800,
+        0x00001000, 0x00002000, 0x00004000, 0x00008000,
+        0x00010000, 0x00020000, 0x00040000, 0x00080000,
+        0x00100000, 0x00200000, 0x00400000, 0x00800000,
+        0x01000000, 0x02000000, 0x04000000, 0x08000000,
+        0x10000000, 0x20000000, 0x40000000, 0x80000000
+    };
+
+    wxASSERT( aLayerNumber < LAYER_COUNT && aLayerNumber >= 0 );
+    return( tabOneLayerMask[aLayerNumber] );
+}
 
 /* Look up Table for conversion copper layer count -> general copper layer
  * mask: */
@@ -61,15 +71,6 @@ int g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
     0x800F, 0x801F, 0x803F, 0x807F,
     0x80FF, 0x81FF, 0x83FF, 0x87FF,
     0x8FFF, 0x9FFF, 0xCFFF, 0xFFFF
-};
-
-wxString g_ViaType_Name[4] = {
-    _( "??? Via" ),            // Not used yet, does not exist currently
-    _( "Micro Via" ),          // from external layer (TOP or BOTTOM) from
-                               // the near neighbor inner layer only
-    _( "Blind/Buried Via" ),   // from inner or external to inner or external
-                               // layer (no restriction)
-    _( "Through Via" )         // Usual via (from TOP to BOTTOM layer only )
 };
 
 

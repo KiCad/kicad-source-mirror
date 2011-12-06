@@ -271,7 +271,7 @@ void PlotDimension( PLOTTER* plotter, DIMENSION* Dimension, int aLayerMask,
 {
     DRAWSEGMENT* DrawTmp;
 
-    if( (g_TabOneLayerMask[Dimension->GetLayer()] & aLayerMask) == 0 )
+    if( (GetLayerMask( Dimension->GetLayer() ) & aLayerMask) == 0 )
         return;
 
     DrawTmp = new DRAWSEGMENT( NULL );
@@ -332,7 +332,7 @@ void PlotPcbTarget( PLOTTER* plotter, PCB_TARGET* Mire, int aLayerMask, GRTraceM
     DRAWSEGMENT* DrawTmp;
     int          dx1, dx2, dy1, dy2, radius;
 
-    if( (g_TabOneLayerMask[Mire->GetLayer()] & aLayerMask) == 0 )
+    if( (GetLayerMask( Mire->GetLayer() ) & aLayerMask) == 0 )
         return;
 
     DrawTmp = new DRAWSEGMENT( NULL );
@@ -389,7 +389,7 @@ void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask, GRTraceMo
             if( edge->Type() != PCB_MODULE_EDGE_T )
                 continue;
 
-            if( ( g_TabOneLayerMask[edge->GetLayer()] & aLayerMask ) == 0 )
+            if( ( GetLayerMask( edge->GetLayer() ) & aLayerMask ) == 0 )
                 continue;
 
             Plot_1_EdgeModule( plotter, edge, trace_mode );
@@ -485,7 +485,7 @@ void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int aLayerMask, GRTrac
     if( pt_texte->m_Text.IsEmpty() )
         return;
 
-    if( ( g_TabOneLayerMask[pt_texte->GetLayer()] & aLayerMask ) == 0 )
+    if( ( GetLayerMask( pt_texte->GetLayer() ) & aLayerMask ) == 0 )
         return;
 
     size = pt_texte->m_Size;
@@ -620,7 +620,7 @@ void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* pt_segm, int aLayerMask,
     int     thickness;
     int     radius = 0, StAngle = 0, EndAngle = 0;
 
-    if( (g_TabOneLayerMask[pt_segm->GetLayer()] & aLayerMask) == 0 )
+    if( (GetLayerMask( pt_segm->GetLayer() ) & aLayerMask) == 0 )
         return;
 
     if( trace_mode == FILAIRE )
@@ -670,7 +670,7 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_
 {
     // Specify that the contents of the "Edges Pcb" layer are to be plotted
     // in addition to the contents of the currently specified layer.
-    int layer_mask = g_TabOneLayerMask[Layer];
+    int layer_mask = GetLayerMask( Layer );
 
     if( !g_PcbPlotOptions.m_ExcludeEdgeLayer )
         layer_mask |= EDGE_LAYER;
@@ -728,11 +728,11 @@ void PCB_BASE_FRAME::Plot_Layer( PLOTTER* plotter, int Layer, GRTraceMode trace_
         {
             if( Layer == SILKSCREEN_N_FRONT )
             {
-                layer_mask = g_TabOneLayerMask[SOLDERMASK_N_FRONT];
+                layer_mask = GetLayerMask( SOLDERMASK_N_FRONT );
             }
             else
             {
-                layer_mask = g_TabOneLayerMask[SOLDERMASK_N_BACK];
+                layer_mask = GetLayerMask( SOLDERMASK_N_BACK );
             }
 
             // Set layer polarity to negative
@@ -802,7 +802,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
             switch( item->Type() )
             {
             case PCB_MODULE_EDGE_T:
-                if( aLayerMask & g_TabOneLayerMask[ item->GetLayer() ] )
+                if( aLayerMask & GetLayerMask(  item->GetLayer() ) )
                     Plot_1_EdgeModule( aPlotter, (EDGE_MODULE*) item, aPlotMode );
 
                 break;
@@ -938,7 +938,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
         if( track->Type() == PCB_VIA_T )
             continue;
 
-        if( (g_TabOneLayerMask[track->GetLayer()] & aLayerMask) == 0 )
+        if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
             continue;
 
         size.x = size.y = track->m_Width;
@@ -953,7 +953,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*    aPlotter,
     {
         wxPoint end;
 
-        if( (g_TabOneLayerMask[track->GetLayer()] & aLayerMask) == 0 )
+        if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
             continue;
 
         size.x = size.y = track->m_Width;

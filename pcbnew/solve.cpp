@@ -412,8 +412,8 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
     int          marge;
     int          padLayerMaskStart;    /* Mask layers belonging to the starting pad. */
     int          padLayerMaskEnd;      /* Mask layers belonging to the ending pad. */
-    int          topLayerMask = g_TabOneLayerMask[Route_Layer_TOP];
-    int          bottomLayerMask = g_TabOneLayerMask[Route_Layer_BOTTOM];
+    int          topLayerMask = GetLayerMask( Route_Layer_TOP );
+    int          bottomLayerMask = GetLayerMask( Route_Layer_BOTTOM );
     int          routeLayerMask;       /* Mask two layers for routing. */
     int          tab_mask[2];       /* Enables the calculation of the mask layer being
                                      * tested. (side = TOP or BOTTOM) */

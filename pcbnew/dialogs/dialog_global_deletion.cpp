@@ -85,7 +85,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         for( item = pcb->m_Drawings; item != NULL; item = nextitem )
         {
             nextitem = item->Next();
-            bool removeme = (g_TabOneLayerMask[ item->GetLayer()] & masque_layer) != 0;
+            bool removeme = (GetLayerMask( item->GetLayer() ) & masque_layer) != 0;
 
             if( ( item->Type() == PCB_TEXT_T ) && m_DelTexts->GetValue() )
                 removeme = true;
