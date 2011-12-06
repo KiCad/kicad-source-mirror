@@ -516,8 +516,7 @@ void SCH_SHEET_PIN::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wx
 
 void SCH_SHEET_PIN::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
-    DANGLING_END_ITEM item( SHEET_LABEL_END, this );
-    item.m_Pos  = m_Pos;
+    DANGLING_END_ITEM item( SHEET_LABEL_END, this, m_Pos );
     aItemList.push_back( item );
 }
 

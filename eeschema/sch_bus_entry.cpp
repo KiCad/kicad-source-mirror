@@ -205,12 +205,10 @@ void SCH_BUS_ENTRY::Rotate( wxPoint rotationPoint )
 
 void SCH_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
 {
-    DANGLING_END_ITEM item( ENTRY_END, this );
-    item.m_Pos = m_Pos;
-
-    DANGLING_END_ITEM item1( ENTRY_END, this );
-    item1.m_Pos = m_End();
+    DANGLING_END_ITEM item( ENTRY_END, this, m_Pos );
     aItemList.push_back( item );
+
+    DANGLING_END_ITEM item1( ENTRY_END, this, m_End() );
     aItemList.push_back( item1 );
 }
 

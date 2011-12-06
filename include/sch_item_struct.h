@@ -78,19 +78,34 @@ enum DANGLING_END_T {
     SHEET_LABEL_END
 };
 
-// A helper class to store a list of items that can be connected to something:
+
+/**
+ * Class DANLIGN_END_ITEM
+ * is a helper class used to store the state of schematic  items that can be connected to
+ * other schematic items.
+ */
 class DANGLING_END_ITEM
 {
-public:
-    const void*    m_Item;         // a pointer to the parent
-    wxPoint        m_Pos;          // the position of the connecting point
-    DANGLING_END_T m_Type;         // type of parent
+    /// A pointer to the connectable ojbect.
+    const void*    m_item;
 
-    DANGLING_END_ITEM( DANGLING_END_T type, const void* aItem )
+    /// The position of the connection point.
+    wxPoint        m_pos;
+
+    /// The type of connection of #m_item.
+    DANGLING_END_T m_type;
+
+public:
+    DANGLING_END_ITEM( DANGLING_END_T aType, const void* aItem, const wxPoint& aPosition )
     {
-        m_Item = aItem;
-        m_Type = type;
+        m_item = aItem;
+        m_type = aType;
+        m_pos = aPosition;
     }
+
+    wxPoint GetPosition() const { return m_pos; }
+    const void* GetItem() const { return m_item; }
+    DANGLING_END_T GetType() const { return m_type; }
 };
 
 

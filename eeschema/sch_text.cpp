@@ -529,8 +529,7 @@ void SCH_TEXT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
     if( Type() == SCH_TEXT_T )
         return;
 
-    DANGLING_END_ITEM item( LABEL_END, this );
-    item.m_Pos = m_Pos;
+    DANGLING_END_ITEM item( LABEL_END, this, m_Pos );
     aItemList.push_back( item );
 }
 
@@ -548,16 +547,17 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
     {
         DANGLING_END_ITEM& item = aItemList[ii];
 
-        if( item.m_Item == this )
+        if( item.GetItem() == this )
             continue;
 
-        switch( item.m_Type )
+        switch( item.GetType() )
         {
         case PIN_END:
         case LABEL_END:
         case SHEET_LABEL_END:
-            if( m_Pos == item.m_Pos )
+            if( m_Pos == item.GetPosition() )
                 m_IsDangling = false;
+
             break;
 
         case WIRE_START_END:
@@ -571,7 +571,7 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
                          wxT( "Dangling end type list overflow.  Bad programmer!" ) );
 
             DANGLING_END_ITEM & nextItem = aItemList[ii];
-            m_IsDangling = !SegmentIntersect( item.m_Pos, nextItem.m_Pos, m_Pos );
+            m_IsDangling = !SegmentIntersect( item.GetPosition(), nextItem.GetPosition(), m_Pos );
         }
             break;
 
