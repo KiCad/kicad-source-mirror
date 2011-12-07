@@ -88,6 +88,8 @@
 
 #include <trigo.h>
 
+#include <wx/ffile.h>
+
 #define VERSION_ERROR_FORMAT _( "File '%s' is format version %d.\nI only support format version <= %d.\nPlease upgrade PCBNew to load this file." )
 
 /*
@@ -2520,8 +2522,867 @@ void KICAD_PLUGIN::init( PROPERTIES* aProperties )
 }
 
 
+//-----<Save() Functions>-------------------------------------------------------
+
 void KICAD_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on then off the C locale.
+    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+
+    m_board = aBoard;
+
+    FILE* fp = wxFopen( aFileName, wxT( "wt" ) );
+    if( !fp )
+    {
+        m_error.Printf( _( "Unable to open file '%s'" ), aFileName.GetData() );
+        THROW_IO_ERROR( m_error );
+    }
+
+    // wxf now owns fp, will close on exception or return
+    wxFFile wxf( fp );
+
+    m_fp = fp;          // member function accessibility
+
+    init( aProperties );
+
+//    saveAllSections();
 }
+
+
+#if 0
+void KICAD_PLUGIN::saveAllSections() const
+{
+    // $GENERAL section is first
+
+    // $SHEETDESCR section is next
+
+    // $SETUP section is next
+
+    // Then follows $EQUIPOT and all the rest
+    saveBOARD();
+}
+
+
+void KICAD_PLUGIN::saveBOARD() const
+{
+    bool        rc = false;
+    BOARD_ITEM* item;
+
+    // save the nets
+    for( unsigned ii = 0; ii < m_NetInfo->GetCount(); ii++ )
+        if( !m_NetInfo->GetNetItem( ii )->Save( aFile ) )
+            goto out;
+
+    // Saved nets do not include netclass names, so save netclasses after nets.
+    m_NetClasses.Save( aFile );
+
+    // save the modules
+    for( item = m_Modules; item; item = item->Next() )
+        if( !item->Save( aFile ) )
+            goto out;
+
+    for( item = m_Drawings; item; item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_TEXT_T:
+        case PCB_LINE_T:
+        case PCB_TARGET_T:
+        case PCB_DIMENSION_T:
+            if( !item->Save( aFile ) )
+                goto out;
+
+            break;
+
+        default:
+
+            // future: throw exception here
+#if defined(DEBUG)
+            printf( "BOARD::Save() ignoring m_Drawings type %d\n", item->Type() );
+#endif
+            break;
+        }
+    }
+
+    // do not save MARKER_PCBs, they can be regenerated easily
+
+    // save the tracks & vias
+    fprintf( aFile, "$TRACK\n" );
+
+    for( item = m_Track; item; item = item->Next() )
+    {
+        if( !item->Save( aFile ) )
+            goto out;
+    }
+
+    fprintf( aFile, "$EndTRACK\n" );
+
+    // save the zones
+    fprintf( aFile, "$ZONE\n" );
+
+    for( item = m_Zone; item; item = item->Next() )
+    {
+        if( !item->Save( aFile ) )
+            goto out;
+    }
+
+    fprintf( aFile, "$EndZONE\n" );
+
+    // save the zone edges
+    for( unsigned ii = 0; ii < m_ZoneDescriptorList.size(); ii++ )
+    {
+        ZONE_CONTAINER* edge_zone = m_ZoneDescriptorList[ii];
+        edge_zone->Save( aFile );
+    }
+
+
+    if( fprintf( aFile, "$EndBOARD\n" ) != sizeof("$EndBOARD\n") - 1 )
+        goto out;
+
+    rc = true;  // wrote all OK
+
+out:
+    return rc;
+}
+
+
+bool DRAWSEGMENT::Save( FILE* aFile ) const
+{
+    if( fprintf( aFile, "$DRAWSEGMENT\n" ) != sizeof("$DRAWSEGMENT\n") - 1 )
+        return false;
+
+    fprintf( aFile, "Po %d %d %d %d %d %d\n",
+             m_Shape,
+             m_Start.x, m_Start.y,
+             m_End.x, m_End.y, m_Width );
+
+    if( m_Type != S_CURVE )
+    {
+        fprintf( aFile, "De %d %d %d %lX %X\n",
+                 m_Layer, m_Type, m_Angle,
+                 m_TimeStamp, ReturnStatus() );
+    }
+    else
+    {
+        fprintf( aFile, "De %d %d %d %lX %X %d %d %d %d\n",
+                 m_Layer, m_Type, m_Angle,
+                 m_TimeStamp, ReturnStatus(),
+                 m_BezierC1.x,m_BezierC1.y,
+                 m_BezierC2.x,m_BezierC2.y);
+    }
+
+    if( fprintf( aFile, "$EndDRAWSEGMENT\n" ) != sizeof("$EndDRAWSEGMENT\n") - 1 )
+        return false;
+
+    return true;
+}
+
+
+/** Note: the old name of class NETINFO_ITEM was EQUIPOT
+ * so in Save (and read) functions, for compatibility, we use EQUIPOT as
+ * keyword
+ */
+bool NETINFO_ITEM::Save( FILE* aFile ) const
+{
+    bool success = false;
+
+    fprintf( aFile, "$EQUIPOT\n" );
+    fprintf( aFile, "Na %d %s\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
+    fprintf( aFile, "St %s\n", "~" );
+
+    if( fprintf( aFile, "$EndEQUIPOT\n" ) != sizeof("$EndEQUIPOT\n") - 1 )
+        goto out;
+
+    success = true;
+
+out:
+    return success;
+}
+
+
+bool PCB_TARGET::Save( FILE* aFile ) const
+{
+    bool rc = false;
+
+    if( fprintf( aFile, "$PCB_TARGET\n" ) != sizeof("$PCB_TARGET\n")-1 )
+        goto out;
+
+    fprintf( aFile, "Po %X %d %d %d %d %d %8.8lX\n",
+             m_Shape, m_Layer,
+             m_Pos.x, m_Pos.y,
+             m_Size, m_Width, m_TimeStamp );
+
+    if( fprintf( aFile, "$EndPCB_TARGET\n" ) != sizeof("$EndPCB_TARGET\n")-1 )
+        goto out;
+
+    rc = true;
+
+out:
+    return rc;
+}
+
+
+bool ZONE_CONTAINER::Save( FILE* aFile ) const
+{
+    unsigned item_pos;
+    int      ret;
+    unsigned corners_count = m_Poly->corner.size();
+    int      outline_hatch;
+    char     padoption;
+
+    fprintf( aFile, "$CZONE_OUTLINE\n" );
+
+    // Save the outline main info
+    ret = fprintf( aFile, "ZInfo %8.8lX %d %s\n",
+                   m_TimeStamp, m_NetCode,
+                   EscapedUTF8( m_Netname ).c_str() );
+
+    if( ret < 3 )
+        return false;
+
+    // Save the outline layer info
+    ret = fprintf( aFile, "ZLayer %d\n", m_Layer );
+
+    if( ret < 1 )
+        return false;
+
+    // Save the outline aux info
+    switch( m_Poly->GetHatchStyle() )
+    {
+    default:
+    case CPolyLine::NO_HATCH:
+        outline_hatch = 'N';
+        break;
+
+    case CPolyLine::DIAGONAL_EDGE:
+        outline_hatch = 'E';
+        break;
+
+    case CPolyLine::DIAGONAL_FULL:
+        outline_hatch = 'F';
+        break;
+    }
+
+    ret = fprintf( aFile, "ZAux %d %c\n", corners_count, outline_hatch );
+
+    if( ret < 2 )
+        return false;
+
+    // Save pad option and clearance
+    switch( m_PadOption )
+    {
+    default:
+    case PAD_IN_ZONE:
+        padoption = 'I';
+        break;
+
+    case THERMAL_PAD:
+        padoption = 'T';
+        break;
+
+    case PAD_NOT_IN_ZONE:
+        padoption = 'X';
+        break;
+    }
+
+    ret = fprintf( aFile, "ZClearance %d %c\n", m_ZoneClearance, padoption );
+
+    if( ret < 2 )
+        return false;
+
+    ret = fprintf( aFile, "ZMinThickness %d\n", m_ZoneMinThickness );
+
+    if( ret < 1 )
+        return false;
+
+    ret = fprintf( aFile,
+                   "ZOptions %d %d %c %d %d\n",
+                   m_FillMode,
+                   m_ArcToSegmentsCount,
+                   m_IsFilled ? 'S' : 'F',
+                   m_ThermalReliefGap,
+                   m_ThermalReliefCopperBridge );
+
+    if( ret < 3 )
+        return false;
+
+    ret = fprintf( aFile,
+                   "ZSmoothing %d %d\n",
+                   cornerSmoothingType, cornerRadius );
+
+    if( ret < 2 )
+        return false;
+
+    // Save the corner list
+    for( item_pos = 0; item_pos < corners_count; item_pos++ )
+    {
+        ret = fprintf( aFile, "ZCorner %d %d %d\n",
+                       m_Poly->corner[item_pos].x, m_Poly->corner[item_pos].y,
+                       m_Poly->corner[item_pos].end_contour );
+
+        if( ret < 3 )
+            return false;
+    }
+
+    // Save the PolysList
+    if( m_FilledPolysList.size() )
+    {
+        fprintf( aFile, "$POLYSCORNERS\n" );
+
+        for( unsigned ii = 0; ii < m_FilledPolysList.size(); ii++ )
+        {
+            const CPolyPt* corner = &m_FilledPolysList[ii];
+            ret = fprintf( aFile,
+                           "%d %d %d %d\n",
+                           corner->x,
+                           corner->y,
+                           corner->end_contour,
+                           corner->utility );
+
+            if( ret < 4 )
+                return false;
+        }
+
+        fprintf( aFile, "$endPOLYSCORNERS\n" );
+    }
+
+    // Save the filling segments list
+    if( m_FillSegmList.size() )
+    {
+        fprintf( aFile, "$FILLSEGMENTS\n" );
+
+        for( unsigned ii = 0; ii < m_FillSegmList.size(); ii++ )
+        {
+            ret = fprintf( aFile, "%d %d %d %d\n",
+                           m_FillSegmList[ii].m_Start.x, m_FillSegmList[ii].m_Start.y,
+                           m_FillSegmList[ii].m_End.x, m_FillSegmList[ii].m_End.y );
+
+            if( ret < 4 )
+                return false;
+        }
+
+        fprintf( aFile, "$endFILLSEGMENTS\n" );
+    }
+
+    fprintf( aFile, "$endCZONE_OUTLINE\n" );
+
+    return true;
+}
+
+
+bool NETCLASSES::Save( FILE* aFile ) const
+{
+    bool result;
+
+    // save the default first.
+    result = m_Default.Save( aFile );
+
+    if( result )
+    {
+        // the rest will be alphabetical in the *.brd file.
+        for( const_iterator i = begin();  i!=end();  ++i )
+        {
+            NETCLASS*   netclass = i->second;
+
+            result = netclass->Save( aFile );
+            if( !result )
+                break;
+        }
+    }
+
+    return result;
+}
+
+
+bool NETCLASS::Save( FILE* aFile ) const
+{
+    bool result = true;
+
+    fprintf( aFile, "$NCLASS\n" );
+    fprintf( aFile, "Name %s\n",        EscapedUTF8( m_Name ).c_str() );
+    fprintf( aFile, "Desc %s\n",        EscapedUTF8( GetDescription() ).c_str() );
+
+    // Write parameters
+
+    fprintf( aFile, "Clearance %d\n",       GetClearance() );
+    fprintf( aFile, "TrackWidth %d\n",      GetTrackWidth() );
+
+    fprintf( aFile, "ViaDia %d\n",          GetViaDiameter() );
+    fprintf( aFile, "ViaDrill %d\n",        GetViaDrill() );
+
+    fprintf( aFile, "uViaDia %d\n",         GetuViaDiameter() );
+    fprintf( aFile, "uViaDrill %d\n",       GetuViaDrill() );
+
+    // Write members:
+    for( const_iterator i = begin();  i!=end();  ++i )
+        fprintf( aFile, "AddNet %s\n", EscapedUTF8( *i ).c_str() );
+
+    fprintf( aFile, "$EndNCLASS\n" );
+
+    return result;
+}
+
+
+bool TEXTE_PCB::Save( FILE* aFile ) const
+{
+    if( m_Text.IsEmpty() )
+        return true;
+
+    if( fprintf( aFile, "$TEXTPCB\n" ) != sizeof("$TEXTPCB\n") - 1 )
+        return false;
+
+    const char* style = m_Italic ? "Italic" : "Normal";
+
+    wxArrayString* list = wxStringSplit( m_Text, '\n' );
+
+    for( unsigned ii = 0; ii < list->Count(); ii++ )
+    {
+        wxString txt  = list->Item( ii );
+
+        if ( ii == 0 )
+            fprintf( aFile, "Te %s\n", EscapedUTF8( txt ).c_str() );
+        else
+            fprintf( aFile, "nl %s\n", EscapedUTF8( txt ).c_str() );
+    }
+
+    delete list;
+
+    fprintf( aFile, "Po %d %d %d %d %d %d\n",
+             m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Thickness, m_Orient );
+
+    char hJustify = 'L';
+    switch( m_HJustify )
+    {
+    case GR_TEXT_HJUSTIFY_LEFT:
+        hJustify = 'L';
+        break;
+    case GR_TEXT_HJUSTIFY_CENTER:
+        hJustify = 'C';
+        break;
+    case GR_TEXT_HJUSTIFY_RIGHT:
+        hJustify = 'R';
+        break;
+    default:
+        hJustify = 'C';
+        break;
+    }
+
+    fprintf( aFile, "De %d %d %lX %s %c\n", m_Layer,
+             m_Mirror ? 0 : 1,
+             m_TimeStamp, style, hJustify );
+
+    if( fprintf( aFile, "$EndTEXTPCB\n" ) != sizeof("$EndTEXTPCB\n") - 1 )
+        return false;
+
+    return true;
+}
+
+
+/**
+ * Function Save
+ * writes the data structures for this object out to a FILE in "*.brd" format.
+ * @param aFile The FILE to write to.
+ * @return bool - true if success writing else false.
+ */
+bool TEXTE_MODULE::Save( FILE* aFile ) const
+{
+    MODULE* parent = (MODULE*) GetParent();
+    int     orient = m_Orient;
+
+    // Due to the Pcbnew history, m_Orient is saved in screen value
+    // but it is handled as relative to its parent footprint
+    if( parent )
+        orient += parent->m_Orient;
+
+    int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d %c %s\n",
+                      m_Type,
+                      m_Pos0.x, m_Pos0.y,
+                      m_Size.y, m_Size.x,
+                      orient,
+                      m_Thickness,
+                      m_Mirror ? 'M' : 'N', m_NoShow ? 'I' : 'V',
+                      GetLayer(),
+                      m_Italic ? 'I' : 'N',
+                      EscapedUTF8( m_Text ).c_str()
+                      );
+
+    return ret > 20;
+}
+
+
+bool EDGE_MODULE::Save( FILE* aFile ) const
+{
+    int ret = -1;
+
+    switch( m_Shape )
+    {
+    case S_SEGMENT:
+        ret = fprintf( aFile, "DS %d %d %d %d %d %d\n",
+                       m_Start0.x, m_Start0.y,
+                       m_End0.x, m_End0.y,
+                       m_Width, m_Layer );
+        break;
+
+    case S_CIRCLE:
+        ret = fprintf( aFile, "DC %d %d %d %d %d %d\n",
+                       m_Start0.x, m_Start0.y,
+                       m_End0.x, m_End0.y,
+                       m_Width, m_Layer );
+        break;
+
+    case S_ARC:
+        ret = fprintf( aFile, "DA %d %d %d %d %d %d %d\n",
+                       m_Start0.x, m_Start0.y,
+                       m_End0.x, m_End0.y,
+                       m_Angle,
+                       m_Width, m_Layer );
+        break;
+
+    case S_POLYGON:
+        ret = fprintf( aFile, "DP %d %d %d %d %d %d %d\n",
+                       m_Start0.x, m_Start0.y,
+                       m_End0.x, m_End0.y,
+                       (int) m_PolyPoints.size(),
+                       m_Width, m_Layer );
+
+        for( unsigned i = 0;  i<m_PolyPoints.size();  ++i )
+            fprintf( aFile, "Dl %d %d\n", m_PolyPoints[i].x, m_PolyPoints[i].y );
+
+        break;
+
+    default:
+
+        // future: throw an exception here
+#if defined(DEBUG)
+        printf( "EDGE_MODULE::Save(): unexpected m_Shape: %d\n", m_Shape );
+#endif
+        break;
+    }
+
+    return ret > 5;
+}
+
+
+bool TRACK::Save( FILE* aFile ) const
+{
+    int type = 0;
+
+    if( Type() == PCB_VIA_T )
+        type = 1;
+
+    fprintf( aFile, "Po %d %d %d %d %d %d %d\n", m_Shape,
+             m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
+
+    fprintf( aFile, "De %d %d %d %lX %X\n",
+             m_Layer, type, GetNet(),
+             m_TimeStamp, ReturnStatus() );
+
+    return true;
+}
+
+
+bool DIMENSION::Save( FILE* aFile ) const
+{
+    bool rc = false;
+
+    // note: COTATION was the previous name of DIMENSION
+    // this old keyword is used here for compatibility
+    const char keyWordLine[] = "$COTATION\n";
+    const char keyWordLineEnd[] = "$endCOTATION\n";
+
+    if( fputs( keyWordLine, aFile ) == EOF )
+        goto out;
+
+    fprintf( aFile, "Ge %d %d %lX\n", m_Shape, m_Layer, m_TimeStamp );
+
+    fprintf( aFile, "Va %d\n", m_Value );
+
+    if( !m_Text->m_Text.IsEmpty() )
+        fprintf( aFile, "Te %s\n", EscapedUTF8( m_Text->m_Text ).c_str() );
+    else
+        fprintf( aFile, "Te \"?\"\n" );
+
+    fprintf( aFile, "Po %d %d %d %d %d %d %d\n",
+             m_Text->m_Pos.x, m_Text->m_Pos.y,
+             m_Text->m_Size.x, m_Text->m_Size.y,
+             m_Text->GetThickness(), m_Text->GetOrientation(),
+             m_Text->m_Mirror ? 0 : 1 );
+
+    fprintf( aFile, "Sb %d %d %d %d %d %d\n", S_SEGMENT,
+             m_crossBarOx, m_crossBarOy,
+             m_crossBarFx, m_crossBarFy, m_Width );
+
+    fprintf( aFile, "Sd %d %d %d %d %d %d\n", S_SEGMENT,
+             m_featureLineDOx, m_featureLineDOy,
+             m_featureLineDFx, m_featureLineDFy, m_Width );
+
+    fprintf( aFile, "Sg %d %d %d %d %d %d\n", S_SEGMENT,
+             m_featureLineGOx, m_featureLineGOy,
+             m_featureLineGFx, m_featureLineGFy, m_Width );
+
+    fprintf( aFile, "S1 %d %d %d %d %d %d\n", S_SEGMENT,
+             m_arrowD1Ox, m_arrowD1Oy,
+             m_arrowD1Fx, m_arrowD1Fy, m_Width );
+
+    fprintf( aFile, "S2 %d %d %d %d %d %d\n", S_SEGMENT,
+             m_arrowD2Ox, m_arrowD2Oy,
+             m_arrowD2Fx, m_arrowD2Fy, m_Width );
+
+
+    fprintf( aFile, "S3 %d %d %d %d %d %d\n", S_SEGMENT,
+             m_arrowG1Ox, m_arrowG1Oy,
+             m_arrowG1Fx, m_arrowG1Fy, m_Width );
+
+    fprintf( aFile, "S4 %d %d %d %d %d %d\n", S_SEGMENT,
+             m_arrowG2Ox, m_arrowG2Oy,
+             m_arrowG2Fx, m_arrowG2Fy, m_Width );
+
+    if( fputs( keyWordLineEnd, aFile ) == EOF )
+        goto out;
+
+    rc = true;
+
+out:
+    return rc;
+}
+
+
+bool D_PAD::Save( FILE* aFile ) const
+{
+    int         cshape;
+    const char* texttype;
+
+    // check the return values for first and last fprints() in this function
+    if( fprintf( aFile, "$PAD\n" ) != sizeof("$PAD\n") - 1 )
+        return false;
+
+    switch( m_PadShape )
+    {
+    case PAD_CIRCLE:
+        cshape = 'C'; break;
+
+    case PAD_RECT:
+        cshape = 'R'; break;
+
+    case PAD_OVAL:
+        cshape = 'O'; break;
+
+    case PAD_TRAPEZOID:
+        cshape = 'T'; break;
+
+    default:
+        cshape = 'C';
+        DisplayError( NULL, _( "Unknown pad shape" ) );
+        break;
+    }
+
+    fprintf( aFile, "Sh \"%.4s\" %c %d %d %d %d %d\n",
+             m_Padname, cshape, m_Size.x, m_Size.y,
+             m_DeltaSize.x, m_DeltaSize.y, m_Orient );
+
+    fprintf( aFile, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
+
+    if( m_DrillShape == PAD_OVAL )
+    {
+        fprintf( aFile, " %c %d %d", 'O', m_Drill.x, m_Drill.y );
+    }
+
+    fprintf( aFile, "\n" );
+
+    switch( m_Attribut )
+    {
+    case PAD_STANDARD:
+        texttype = "STD"; break;
+
+    case PAD_SMD:
+        texttype = "SMD"; break;
+
+    case PAD_CONN:
+        texttype = "CONN"; break;
+
+    case PAD_HOLE_NOT_PLATED:
+        texttype = "HOLE"; break;
+
+    default:
+        texttype = "STD";
+        DisplayError( NULL, wxT( "Invalid Pad attribute" ) );
+        break;
+    }
+
+    fprintf( aFile, "At %s N %8.8X\n", texttype, m_layerMask );
+
+    fprintf( aFile, "Ne %d %s\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
+
+    fprintf( aFile, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
+
+    if( m_LengthDie != 0 )
+        fprintf( aFile, "Le %d\n", m_LengthDie );
+
+    if( m_LocalSolderMaskMargin != 0 )
+        fprintf( aFile, ".SolderMask %d\n", m_LocalSolderMaskMargin );
+
+    if( m_LocalSolderPasteMargin != 0 )
+        fprintf( aFile, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
+
+    if( m_LocalSolderPasteMarginRatio != 0 )
+        fprintf( aFile, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
+
+    if( m_LocalClearance != 0 )
+        fprintf( aFile, ".LocalClearance %d\n", m_LocalClearance );
+
+    if( fprintf( aFile, "$EndPAD\n" ) != sizeof("$EndPAD\n") - 1 )
+        return false;
+
+    return true;
+}
+
+
+bool MODULE::Save( FILE* aFile ) const
+{
+    char        statusTxt[8];
+    BOARD_ITEM* item;
+
+    bool rc = false;
+
+    fprintf( aFile, "$MODULE %s\n", TO_UTF8( m_LibRef ) );
+
+    memset( statusTxt, 0, sizeof(statusTxt) );
+    if( IsLocked() )
+        statusTxt[0] = 'F';
+    else
+        statusTxt[0] = '~';
+
+    if( m_ModuleStatus & MODULE_is_PLACED )
+        statusTxt[1] = 'P';
+    else
+        statusTxt[1] = '~';
+
+    fprintf( aFile, "Po %d %d %d %d %8.8lX %8.8lX %s\n",
+             m_Pos.x, m_Pos.y,
+             m_Orient, m_Layer, m_LastEdit_Time,
+             m_TimeStamp, statusTxt );
+
+    fprintf( aFile, "Li %s\n", TO_UTF8( m_LibRef ) );
+
+    if( !m_Doc.IsEmpty() )
+    {
+        fprintf( aFile, "Cd %s\n", TO_UTF8( m_Doc ) );
+    }
+
+    if( !m_KeyWord.IsEmpty() )
+    {
+        fprintf( aFile, "Kw %s\n", TO_UTF8( m_KeyWord ) );
+    }
+
+    fprintf( aFile, "Sc %8.8lX\n", m_TimeStamp );
+    fprintf( aFile, "AR %s\n", TO_UTF8( m_Path ) );
+    fprintf( aFile, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
+
+    if( m_LocalSolderMaskMargin != 0 )
+        fprintf( aFile, ".SolderMask %d\n", m_LocalSolderMaskMargin );
+
+    if( m_LocalSolderPasteMargin != 0 )
+        fprintf( aFile, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
+
+    if( m_LocalSolderPasteMarginRatio != 0 )
+        fprintf( aFile, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
+
+    if( m_LocalClearance != 0 )
+        fprintf( aFile, ".LocalClearance %d\n", m_LocalClearance );
+
+    // attributes
+    if( m_Attributs != MOD_DEFAULT )
+    {
+        fprintf( aFile, "At " );
+
+        if( m_Attributs & MOD_CMS )
+            fprintf( aFile, "SMD " );
+
+        if( m_Attributs & MOD_VIRTUAL )
+            fprintf( aFile, "VIRTUAL " );
+
+        fprintf( aFile, "\n" );
+    }
+
+    // save reference
+    if( !m_Reference->Save( aFile ) )
+        goto out;
+
+    // save value
+    if( !m_Value->Save( aFile ) )
+        goto out;
+
+    // save drawing elements
+    for( item = m_Drawings;  item;  item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_MODULE_TEXT_T:
+        case PCB_MODULE_EDGE_T:
+            if( !item->Save( aFile ) )
+                goto out;
+
+            break;
+
+        default:
+#if defined(DEBUG)
+            printf( "MODULE::Save() ignoring type %d\n", item->Type() );
+#endif
+            break;
+        }
+    }
+
+    // save the pads
+    for( item = m_Pads;  item;  item = item->Next() )
+        if( !item->Save( aFile ) )
+            goto out;
+
+    Write_3D_Descr( aFile );
+
+    fprintf( aFile, "$EndMODULE  %s\n", TO_UTF8( m_LibRef ) );
+
+    rc = true;
+out:
+    return rc;
+}
+
+/* Save the description of 3D MODULE
+ */
+int MODULE::Write_3D_Descr( FILE* File ) const
+{
+    char buf[512];
+
+    for( S3D_MASTER* t3D = m_3D_Drawings;  t3D;  t3D = t3D->Next() )
+    {
+        if( !t3D->m_Shape3DName.IsEmpty() )
+        {
+            fprintf( File, "$SHAPE3D\n" );
+
+            fprintf( File, "Na %s\n", EscapedUTF8( t3D->m_Shape3DName ).c_str() );
+
+            sprintf( buf, "Sc %lf %lf %lf\n",
+                     t3D->m_MatScale.x,
+                     t3D->m_MatScale.y,
+                     t3D->m_MatScale.z );
+            fprintf( File, "%s", to_point( buf ) );
+
+            sprintf( buf, "Of %lf %lf %lf\n",
+                     t3D->m_MatPosition.x,
+                     t3D->m_MatPosition.y,
+                     t3D->m_MatPosition.z );
+            fprintf( File, "%s", to_point( buf ) );
+
+            sprintf( buf, "Ro %lf %lf %lf\n",
+                     t3D->m_MatRotation.x,
+                     t3D->m_MatRotation.y,
+                     t3D->m_MatRotation.z );
+            fprintf( File, "%s", to_point( buf ) );
+
+            fprintf( File, "$EndSHAPE3D\n" );
+        }
+    }
+
+    return 0;
+}
+
+#endif
 

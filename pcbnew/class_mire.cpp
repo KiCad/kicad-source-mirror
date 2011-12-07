@@ -54,62 +54,6 @@ void PCB_TARGET::Copy( PCB_TARGET* source )
 }
 
 
-/* Read the description from the PCB file.
- */
-bool PCB_TARGET::ReadMirePcbDescr( LINE_READER* aReader )
-{
-    char* Line;
-
-    while( aReader->ReadLine() )
-    {
-        Line = aReader->Line();
-
-        if( strnicmp( Line, "$End", 4 ) == 0 )
-            return true;
-
-        if( Line[0] == 'P' )
-        {
-            sscanf( Line + 2, " %X %d %d %d %d %d %lX",
-                    &m_Shape, &m_Layer,
-                    &m_Pos.x, &m_Pos.y,
-                    &m_Size, &m_Width, &m_TimeStamp );
-
-            if( m_Layer < FIRST_NO_COPPER_LAYER )
-                m_Layer = FIRST_NO_COPPER_LAYER;
-
-            if( m_Layer > LAST_NO_COPPER_LAYER )
-                m_Layer = LAST_NO_COPPER_LAYER;
-        }
-    }
-
-    return false;
-}
-
-
-bool PCB_TARGET::Save( FILE* aFile ) const
-{
-    bool rc = false;
-
-    if( fprintf( aFile, "$PCB_TARGET\n" ) != sizeof("$PCB_TARGET\n")-1 )
-        goto out;
-
-    fprintf( aFile, "Po %X %d %d %d %d %d %8.8lX\n",
-             m_Shape, m_Layer,
-             m_Pos.x, m_Pos.y,
-             m_Size, m_Width, m_TimeStamp );
-
-    if( fprintf( aFile, "$EndPCB_TARGET\n" ) != sizeof("$EndPCB_TARGET\n")-1 )
-        goto out;
-
-    rc = true;
-
-out:
-    return rc;
-}
-
-
-
-
 /* Draw PCB_TARGET object: 2 segments + 1 circle
  * The circle radius is half the radius of the target
  * 2 lines have length the diameter of the target

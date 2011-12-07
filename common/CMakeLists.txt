@@ -107,6 +107,14 @@ set(PCB_COMMON_SRCS
     ../pcbnew/sel_layer.cpp
 )
 
+
+if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
+    set( PCB_COMMON_SRCS ${PCB_COMMON_SRCS} ../pcbnew/item_io.cpp ../pcbnew/io_mgr.cpp ../pcbnew/kicad_plugin.cpp )
+else()
+    set( PCB_COMMON_SRCS ${PCB_COMMON_SRCS} ../pcbnew/item_io.cpp )
+endif()
+
+
 add_library(pcbcommon ${PCB_COMMON_SRCS})
 
 # auto-generate netlist_lexer.h and netlist_keywords.cpp

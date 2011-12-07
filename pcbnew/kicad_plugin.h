@@ -72,6 +72,7 @@ protected:
     BOARD*          m_board;        ///< which BOARD, no ownership here
 
     LINE_READER*    m_reader;       ///< no ownership here.
+    FILE*           m_fp;           ///< no ownership here.
 
     wxString        m_field;        ///< reused to stuff MODULE fields.
 
