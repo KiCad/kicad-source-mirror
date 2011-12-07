@@ -3,21 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleTypeExtensions</key>
-			<key>CFBundleTypeIconFile</key>
-			<string>pcb_calculator.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>pcb_calculator document</string>
-			<key>LSHandlerRank</key>
-			<string>Owner</string>
-		</dict>
-	</array>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
+	<array/>
 	<key>CFBundleExecutable</key>
 	<string>pcb_calculator</string>
 	<key>CFBundleGetInfoString</key>

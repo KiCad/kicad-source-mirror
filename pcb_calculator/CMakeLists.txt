@@ -48,6 +48,7 @@ if(APPLE)
                                 PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set(MACOSX_BUNDLE_ICON_FILE pcb_calculator.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad-eda.pcb_calculator)
+    set(MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
 
