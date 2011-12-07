@@ -673,7 +673,7 @@ bool CMP_LIBRARY::Save( OUTPUTFORMATTER& aFormatter )
 {
     if( isModified )
     {
-        timeStamp = GetTimeStamp();
+        timeStamp = GetNewTimeStamp();
         isModified = false;
     }
 

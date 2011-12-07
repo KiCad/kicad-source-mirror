@@ -10,6 +10,7 @@
 #include <vector>
 #include "gr_basic.h"
 #include "class_board_item.h"
+#include "class_board_connected_item.h"
 #include "layers_id_colors_and_visibility.h"
 #include "PolyLine.h"
 #include "class_zone_setting.h"

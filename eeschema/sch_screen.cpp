@@ -1460,14 +1460,14 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
             // for a component, update its Time stamp and its paths
             // (m_PathsAndReferences field)
             if( item->Type() == SCH_COMPONENT_T )
-                ( (SCH_COMPONENT*) item )->SetTimeStamp( GetTimeStamp() );
+                ( (SCH_COMPONENT*) item )->SetTimeStamp( GetNewTimeStamp() );
 
             // for a sheet, update only its time stamp (annotation of its
             // components will be lost)
             // @todo: see how to change sheet paths for its cmp list (can
             //        be possible in most cases)
             else
-                item->m_TimeStamp = GetTimeStamp();
+                item->m_TimeStamp = GetNewTimeStamp();
         }
     }
 

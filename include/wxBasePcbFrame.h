@@ -47,6 +47,7 @@
 /* Forward declarations of classes. */
 class FOOTPRINT_EDIT_FRAME;
 class BOARD;
+class BOARD_CONNECTED_ITEM;
 class MODULE;
 class TRACK;
 class D_PAD;

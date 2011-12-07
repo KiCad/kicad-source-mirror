@@ -393,7 +393,7 @@ void D_PAD::DisplayInfo( EDA_DRAW_FRAME* frame )
     /* For test and debug only: display m_physical_connexion and
      * m_logical_connexion */
 #if 1   // Used only to debug connectivity calculations
-    Line.Printf( wxT( "%d-%d-%d " ), GetSubRatsnest(), GetSubNet(), m_ZoneSubnet );
+    Line.Printf( wxT( "%d-%d-%d " ), GetSubRatsnest(), GetSubNet(), GetZoneSubNet() );
     frame->AppendMsgPanel( wxT( "L-P-Z" ), Line, DARKGREEN );
 #endif
 

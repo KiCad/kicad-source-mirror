@@ -336,7 +336,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             pcbframe->GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
             pcbframe->PlaceModule( newmodule, NULL );
             pcbframe->GetScreen()->SetCrossHairPosition( cursor_pos );
-            newmodule->m_TimeStamp = GetTimeStamp();
+            newmodule->m_TimeStamp = GetNewTimeStamp();
             pcbframe->SaveCopyInUndoList( newmodule, UR_NEW );
         }
 

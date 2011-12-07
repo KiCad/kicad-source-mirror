@@ -51,7 +51,7 @@
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
     BOARD_CONNECTED_ITEM( parent, PCB_ZONE_AREA_T )
 {
-    m_NetCode = -1;                             // Net number for fast comparisons
+    SetNet( -1 );                               // Net number for fast comparisons
     m_CornerSelection = -1;
     m_IsFilled = false;                         // fill status : true when the zone is filled
     m_FillMode = 0;                             // How to fill areas: 0 = use filled polygons, != 0 fill with segments
@@ -95,7 +95,7 @@ void ZONE_CONTAINER::SetPosition( const wxPoint& aPos ) {}
 
 void ZONE_CONTAINER::SetNet( int aNetCode )
 {
-    m_NetCode = aNetCode;
+    BOARD_CONNECTED_ITEM::SetNet( aNetCode );
 
     if( aNetCode < 0 )
         return;

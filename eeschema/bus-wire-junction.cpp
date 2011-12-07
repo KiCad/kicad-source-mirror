@@ -527,7 +527,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         wxPoint pos = GetScreen()->GetCrossHairPosition() -
                       ( (SCH_COMPONENT*) m_itemToRepeat )->GetPosition();
         m_itemToRepeat->SetFlags( IS_NEW );
-        ( (SCH_COMPONENT*) m_itemToRepeat )->m_TimeStamp = GetTimeStamp();
+        ( (SCH_COMPONENT*) m_itemToRepeat )->m_TimeStamp = GetNewTimeStamp();
         m_itemToRepeat->Move( pos );
         m_itemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
         MoveItem( m_itemToRepeat, DC );
