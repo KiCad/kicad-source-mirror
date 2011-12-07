@@ -36,10 +36,8 @@
 
 class SCH_NO_CONNECT : public SCH_ITEM
 {
-    wxPoint m_Pos;                      /* XY coordinates of NoConnect. */
-
-public:
-    wxSize  m_Size;                     // size of this symbol
+    wxPoint m_pos;                 ///< Position of the no connect object.
+    wxSize  m_size;                ///< Size of the no connect object.
 
 public:
     SCH_NO_CONNECT( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -101,7 +99,7 @@ public:
      */
     virtual void Move( const wxPoint& aMoveVector )
     {
-        m_Pos += aMoveVector;
+        m_pos += aMoveVector;
     }
 
     /**
@@ -134,8 +132,8 @@ private:
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_Pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+    virtual wxPoint doGetPosition() const { return m_pos; }
+    virtual void doSetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
 };
 
 

@@ -41,13 +41,11 @@
  */
 class SCH_LINE : public SCH_ITEM
 {
-    bool    m_StartIsDangling;
-    bool    m_EndIsDangling;    // true if not connected  (wires, tracks...)
-
-public:
-    int     m_Width;            // 0 = line, > 0 = tracks, bus ...
-    wxPoint m_Start;            // Line start point
-    wxPoint m_End;              // Line end point
+    bool    m_startIsDangling;  ///< True if start point is not connected.
+    bool    m_endIsDangling;    ///< True if end point is not connected.
+    int     m_width;            ///< Set to 0 for wires and greater than 0 for busses.
+    wxPoint m_start;            ///< Line start point
+    wxPoint m_end;              ///< Line end point
 
 public:
     SCH_LINE( const wxPoint& pos = wxPoint( 0, 0 ), int layer = LAYER_NOTES );
@@ -64,10 +62,18 @@ public:
 
     bool IsEndPoint( const wxPoint& aPoint ) const
     {
-        return aPoint == m_Start || aPoint == m_End;
+        return aPoint == m_start || aPoint == m_end;
     }
 
-    bool IsNull() const { return m_Start == m_End; }
+    bool IsNull() const { return m_start == m_end; }
+
+    wxPoint GetStartPoint() const { return m_start; }
+
+    void SetStartPoint( const wxPoint& aPosition ) { m_start = aPosition; }
+
+    wxPoint GetEndPoint() const { return m_end; }
+
+    void SetEndPoint( const wxPoint& aPosition ) { m_end = aPosition; }
 
     /**
      * Function GetBoundingBox
@@ -145,7 +151,7 @@ public:
 
     virtual bool IsDanglingStateChanged( vector< DANGLING_END_ITEM >& aItemList );
 
-    virtual bool IsDangling() const { return m_StartIsDangling || m_EndIsDangling; }
+    virtual bool IsDangling() const { return m_startIsDangling || m_endIsDangling; }
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
@@ -176,7 +182,7 @@ private:
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_Start; }
+    virtual wxPoint doGetPosition() const { return m_start; }
     virtual void doSetPosition( const wxPoint& aPosition );
 };
 

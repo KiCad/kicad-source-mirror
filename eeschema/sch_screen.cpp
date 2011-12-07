@@ -259,6 +259,7 @@ void SCH_SCREEN::AddToDrawList( SCH_ITEM* aItem )
 {
     if( aItem == NULL )
         return;
+
     aItem->SetNext( GetDrawItems() );
     SetDrawItems( aItem );
 }
@@ -393,13 +394,15 @@ void SCH_SCREEN::MarkConnections( SCH_LINE* aSegment )
 
         SCH_LINE* segment = (SCH_LINE*) item;
 
-        if( aSegment->IsEndPoint( segment->m_Start ) && !GetPin( segment->m_Start, NULL, true ) )
+        if( aSegment->IsEndPoint( segment->GetStartPoint() )
+            && !GetPin( segment->GetStartPoint(), NULL, true ) )
         {
             item->SetFlags( CANDIDATE );
             MarkConnections( segment );
         }
 
-        if( aSegment->IsEndPoint( segment->m_End ) && !GetPin( segment->m_End, NULL, true ) )
+        if( aSegment->IsEndPoint( segment->GetEndPoint() )
+            && !GetPin( segment->GetEndPoint(), NULL, true ) )
         {
             item->SetFlags( CANDIDATE );
             MarkConnections( segment );
@@ -671,17 +674,21 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
         {
             pin = NULL;
             LIB_COMPONENT* entry = CMP_LIBRARY::FindLibraryComponent( component->GetLibName() );
+
             if( entry == NULL )
                 continue;
+
             for( pin = entry->GetNextPin(); pin != NULL; pin = entry->GetNextPin( pin ) )
             {
                 // Skip items not used for this part.
                 if( component->GetUnit() && pin->GetUnit() &&
                     ( pin->GetUnit() != component->GetUnit() ) )
                     continue;
+
                 if( component->GetConvert() && pin->GetConvert() &&
                     ( pin->GetConvert() != component->GetConvert() ) )
                     continue;
+
                 if(component->GetPinPhysicalPosition( pin ) == aPosition )
                     break;
             }
@@ -691,6 +698,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
         else
         {
             pin = (LIB_PIN*) component->GetDrawItem( aPosition, LIB_PIN_T );
+
             if( pin )
                 break;
         }
@@ -879,9 +887,9 @@ void SCH_SCREEN::addConnectedItemsToBlock( const wxPoint& position )
 
             SCH_LINE* line = (SCH_LINE*) item;
 
-            if( line->m_Start == position )
+            if( line->GetStartPoint() == position )
                 item->ClearFlags( STARTPOINT );
-            else if( line->m_End == position )
+            else if( line->GetEndPoint() == position )
                 item->ClearFlags( ENDPOINT );
         }
         else
@@ -962,8 +970,8 @@ bool SCH_SCREEN::BreakSegment( const wxPoint& aPoint )
 
         // Break the segment at aPoint and create a new segment.
         newSegment = new SCH_LINE( *segment );
-        newSegment->m_Start = aPoint;
-        segment->m_End = newSegment->m_Start;
+        newSegment->GetStartPoint() = aPoint;
+        segment->GetEndPoint() = newSegment->GetStartPoint();
         newSegment->SetNext( segment->Next() );
         segment->SetNext( newSegment );
         item = newSegment;
@@ -991,7 +999,8 @@ bool SCH_SCREEN::BreakSegmentsOnJunctions()
         {
             SCH_BUS_ENTRY* busEntry = ( SCH_BUS_ENTRY* ) item;
 
-            if( BreakSegment( busEntry->GetPosition() ) || BreakSegment( busEntry->m_End() ) )
+            if( BreakSegment( busEntry->GetPosition() )
+                || BreakSegment( busEntry->m_End() ) )
                 brokenSegments = true;
         }
     }
@@ -1117,6 +1126,7 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
                 fpfield->m_Orient = component->GetField( VALUE )->m_Orient;
                 fpfield->m_Pos    = component->GetField( VALUE )->m_Pos;
                 fpfield->m_Size   = component->GetField( VALUE )->m_Size;
+
                 if( fpfield->m_Orient == 0 )
                     fpfield->m_Pos.y += 100;
                 else
@@ -1210,14 +1220,14 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
                 SCH_LINE* testSegment = (SCH_LINE*) tmp;
 
                // Test for segment connected to the previously deleted segment:
-                if( testSegment->IsEndPoint( segment->m_Start ) )
+                if( testSegment->IsEndPoint( segment->GetStartPoint() ) )
                     break;
             }
 
             // when tmp != NULL, segment is a new candidate:
             // put it in deleted list if
             // the start point is not connected to an other item (like pin)
-            if( tmp && !CountConnectedItems( segment->m_Start, true ) )
+            if( tmp && !CountConnectedItems( segment->GetStartPoint(), true ) )
                 noconnect = true;
 
             /* If the wire end point is connected to a wire that has already been found
@@ -1234,14 +1244,14 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
                 SCH_LINE* testSegment = (SCH_LINE*) tmp;
 
                 // Test for segment connected to the previously deleted segment:
-                if( testSegment->IsEndPoint( segment->m_End ) )
+                if( testSegment->IsEndPoint( segment->GetEndPoint() ) )
                     break;
             }
 
             // when tmp != NULL, segment is a new candidate:
             // put it in deleted list if
             // the end point is not connected to an other item (like pin)
-            if( tmp && !CountConnectedItems( segment->m_End, true ) )
+            if( tmp && !CountConnectedItems( segment->GetEndPoint(), true ) )
                 noconnect = true;
 
             item->ClearFlags( SKIP_STRUCT );
