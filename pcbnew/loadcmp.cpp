@@ -55,20 +55,20 @@ static void DisplayCmpDoc( wxString& Name );
 static FOOTPRINT_LIST MList;
 
 
-bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* Module )
+bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 {
-    MODULE* NewModule;
+    MODULE* newModule;
     PCB_BASE_FRAME* parent = (PCB_BASE_FRAME*) GetParent();
 
-    if( Module == NULL )
+    if( aModule == NULL )
     {
         if( ! parent->GetBoard() || ! parent->GetBoard()->m_Modules )
             return false;
 
-        Module = Select_1_Module_From_BOARD( parent->GetBoard() );
+        aModule = Select_1_Module_From_BOARD( parent->GetBoard() );
     }
 
-    if( Module == NULL )
+    if( aModule == NULL )
         return false;
 
     SetCurItem( NULL );
@@ -76,25 +76,25 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* Module )
     Clear_Pcb( false );
 
     GetBoard()->m_Status_Pcb = 0;
-    NewModule = new MODULE( GetBoard() );
-    NewModule->Copy( Module );
-    NewModule->m_Link = Module->m_TimeStamp;
+    newModule = new MODULE( GetBoard() );
+    newModule->Copy( aModule );
+    newModule->m_Link = aModule->m_TimeStamp;
 
-    Module = NewModule;
+    aModule = newModule;
 
-    GetBoard()->Add( Module );
+    GetBoard()->Add( aModule );
 
-    Module->m_Flags = 0;
+    aModule->m_Flags = 0;
 
     GetBoard()->m_NetInfo->BuildListOfNets();
 
     GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
-    PlaceModule( Module, NULL );
+    PlaceModule( aModule, NULL );
 
-    if( Module->GetLayer() != LAYER_N_FRONT )
-        Module->Flip( Module->m_Pos );
+    if( aModule->GetLayer() != LAYER_N_FRONT )
+        aModule->Flip( aModule->m_Pos );
 
-    Rotate_Module( NULL, Module, 0, false );
+    Rotate_Module( NULL, aModule, 0, false );
     GetScreen()->ClrModify();
     Zoom_Automatique( false );
 
@@ -104,12 +104,13 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* Module )
 
 MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC* DC )
 {
-    MODULE* module;
-    wxPoint curspos = GetScreen()->GetCrossHairPosition();
-    wxString             ModuleName, keys;
+    MODULE*     module;
+    wxPoint     curspos = GetScreen()->GetCrossHairPosition();
+    wxString    moduleName, keys;
+    bool        AllowWildSeach = true;
+
     static wxArrayString HistoryList;
     static wxString      lastCommponentName;
-    bool             AllowWildSeach = true;
 
     /* Ask for a component name or key words */
     DIALOG_GET_COMPONENT dlg( this, GetComponentDialogPosition(), HistoryList,
@@ -120,57 +121,57 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
     if( dlg.ShowModal() == wxID_CANCEL )
         return NULL;
 
-    ModuleName = dlg.GetComponentName();
+    moduleName = dlg.GetComponentName();
 
-    if( ModuleName.IsEmpty() )  /* Cancel command */
+    if( moduleName.IsEmpty() )  /* Cancel command */
     {
         DrawPanel->MoveCursorToCrossHair();
         return NULL;
     }
 
-    ModuleName.MakeUpper();
+    moduleName.MakeUpper();
 
-    if( ModuleName[0] == '=' )   // Selection by keywords
+    if( moduleName[0] == '=' )   // Selection by keywords
     {
         AllowWildSeach = false;
-        keys = ModuleName.AfterFirst( '=' );
-        ModuleName = Select_1_Module_From_List( this, library, wxEmptyString, keys );
+        keys = moduleName.AfterFirst( '=' );
+        moduleName = Select_1_Module_From_List( this, library, wxEmptyString, keys );
 
-        if( ModuleName.IsEmpty() )  /* Cancel command */
+        if( moduleName.IsEmpty() )  /* Cancel command */
         {
             DrawPanel->MoveCursorToCrossHair();
             return NULL;
         }
     }
-    else if( ( ModuleName.Contains( wxT( "?" ) ) )
-            || ( ModuleName.Contains( wxT( "*" ) ) ) )  // Selection wild card
+    else if( ( moduleName.Contains( wxT( "?" ) ) )
+            || ( moduleName.Contains( wxT( "*" ) ) ) )  // Selection wild card
     {
         AllowWildSeach = false;
-        ModuleName     = Select_1_Module_From_List( this, library, ModuleName, wxEmptyString );
-        if( ModuleName.IsEmpty() )
+        moduleName     = Select_1_Module_From_List( this, library, moduleName, wxEmptyString );
+        if( moduleName.IsEmpty() )
         {
             DrawPanel->MoveCursorToCrossHair();
             return NULL;    /* Cancel command. */
         }
     }
 
-    module = GetModuleLibrary( library, ModuleName, false );
+    module = GetModuleLibrary( library, moduleName, false );
 
     if( ( module == NULL ) && AllowWildSeach )    /* Search with wild card */
     {
         AllowWildSeach = false;
-        wxString wildname = wxChar( '*' ) + ModuleName + wxChar( '*' );
-        ModuleName = wildname;
-        ModuleName = Select_1_Module_From_List( this, library, ModuleName, wxEmptyString );
+        wxString wildname = wxChar( '*' ) + moduleName + wxChar( '*' );
+        moduleName = wildname;
+        moduleName = Select_1_Module_From_List( this, library, moduleName, wxEmptyString );
 
-        if( ModuleName.IsEmpty() )
+        if( moduleName.IsEmpty() )
         {
             DrawPanel->MoveCursorToCrossHair();
             return NULL;    /* Cancel command. */
         }
         else
         {
-            module = GetModuleLibrary( library, ModuleName, true );
+            module = GetModuleLibrary( library, moduleName, true );
         }
     }
 
@@ -179,8 +180,8 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
 
     if( module )
     {
-        lastCommponentName = ModuleName;
-        AddHistoryComponentName( HistoryList, ModuleName );
+        lastCommponentName = moduleName;
+        AddHistoryComponentName( HistoryList, moduleName );
 
         module->m_Flags     = IS_NEW;
         module->m_Link      = 0;
@@ -211,14 +212,13 @@ MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryFullFilename,
                                           bool            aDisplayMessageError )
 {
     wxFileName fn;
-    wxString   Name;
     wxString   msg, tmp;
-    MODULE*    NewModule;
+    MODULE*    newModule;
     FILE*      file = NULL;
-    unsigned   ii;
+
     bool       one_lib = aLibraryFullFilename.IsEmpty() ? false : true;
 
-    for( ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
+    for( unsigned ii = 0; ii < g_LibraryNames.GetCount(); ii++ )
     {
         if( one_lib )
             fn = aLibraryFullFilename;
@@ -266,38 +266,42 @@ MODULE* PCB_BASE_FRAME::GetModuleLibrary( const wxString& aLibraryFullFilename,
             return NULL;
         }
 
-        /* Reading the list of modules in the library. */
+        // Reading the list of modules in the library.
         curr_lib.ReadSectionIndex();
         bool found = curr_lib.FindInList( aModuleName );
 
-        /* Read library. */
+        // Read library.
         if( found  )
         {
+            wxString   name;
+
             fileReader.Rewind();
 
             while( reader.ReadLine() )
             {
-                char * line = reader.Line();
+                char* line = reader.Line();
+
                 StrPurge( line + 8 );
 
                 if( strnicmp( line, "$MODULE", 7 ) != 0 )
                     continue;
 
                 // Read module name.
-                Name = FROM_UTF8( line + 8 );
+                name = FROM_UTF8( line + 8 );
 
-                if( Name.CmpNoCase( aModuleName ) == 0 )
+                if( name.CmpNoCase( aModuleName ) == 0 )
                 {
-                    NewModule = new MODULE( GetBoard() );
+                    newModule = new MODULE( GetBoard() );
 
-                    // Switch the locale to standard C (needed to print
+                    // Temporarily switch the locale to standard C (needed to print
                     // floating point numbers like 1.3)
-                    SetLocaleTo_C_standard();
-                    NewModule->ReadDescr( &reader );
-                    SetLocaleTo_Default();         // revert to the current locale
-                    GetBoard()->Add( NewModule, ADD_APPEND );
+                    LOCALE_IO   toggle;
+
+                    newModule->ReadDescr( &reader );
+
+                    GetBoard()->Add( newModule, ADD_APPEND );
                     SetStatusText( wxEmptyString );
-                    return NewModule;
+                    return newModule;
                 }
             }
         }
@@ -405,16 +409,16 @@ static void DisplayCmpDoc( wxString& Name )
 
 MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
 {
-    MODULE*         Module;
+    MODULE*         module;
     static wxString OldName;       /* Save name of last module selected. */
     wxString        CmpName, msg;
 
     wxArrayString listnames;
 
-    Module = aPcb->m_Modules;
+    module = aPcb->m_Modules;
 
-    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
-        listnames.Add( Module->m_Reference->m_Text );
+    for( ; module != NULL; module = (MODULE*) module->Next() )
+        listnames.Add( module->m_Reference->m_Text );
 
     msg.Printf( _( "Modules [%d items]" ), listnames.GetCount() );
 
@@ -428,13 +432,13 @@ MODULE* FOOTPRINT_EDIT_FRAME::Select_1_Module_From_BOARD( BOARD* aPcb )
 
     OldName = CmpName;
 
-    Module = aPcb->m_Modules;
+    module = aPcb->m_Modules;
 
-    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
+    for( ; module != NULL; module = (MODULE*) module->Next() )
     {
-        if( CmpName == Module->m_Reference->m_Text )
+        if( CmpName == module->m_Reference->m_Text )
             break;
     }
 
-    return Module;
+    return module;
 }

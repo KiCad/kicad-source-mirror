@@ -54,4 +54,7 @@
 
 #cmakedefine USE_PNG_BITMAPS 1
 
+#cmakedefine USE_NEW_PCBNEW_LOAD
+#cmakedefine USE_NEW_PCBNEW_SAVE
+
 #endif  /* __CONFIG_H__ */

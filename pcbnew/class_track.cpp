@@ -598,24 +598,6 @@ TRACK* TRACK::GetEndNetCode( int NetCode )
 }
 
 
-bool TRACK::Save( FILE* aFile ) const
-{
-    int type = 0;
-
-    if( Type() == PCB_VIA_T )
-        type = 1;
-
-    fprintf( aFile, "Po %d %d %d %d %d %d %d\n", m_Shape,
-             m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
-
-    fprintf( aFile, "De %d %d %d %lX %X\n",
-             m_Layer, type, GetNet(),
-             m_TimeStamp, ReturnStatus() );
-
-    return true;
-}
-
-
 void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint& aOffset )
 {
     int l_trace;

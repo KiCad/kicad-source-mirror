@@ -45,59 +45,6 @@ NETINFO_ITEM::~NETINFO_ITEM()
 }
 
 
-/* Read NETINFO_ITEM from file.
- * Returns 0 if OK
- * 1 if incomplete reading
- */
-int NETINFO_ITEM::ReadDescr( LINE_READER* aReader )
-{
-    char* Line;
-    char  Ltmp[1024];
-    int   tmp;
-
-    while( aReader->ReadLine() )
-    {
-        Line = aReader->Line();
-        if( strnicmp( Line, "$End", 4 ) == 0 )
-            return 0;
-
-        if( strncmp( Line, "Na", 2 ) == 0 )
-        {
-            sscanf( Line + 2, " %d", &tmp );
-            SetNet( tmp );
-
-            ReadDelimitedText( Ltmp, Line + 2, sizeof(Ltmp) );
-            m_Netname = FROM_UTF8( Ltmp );
-            continue;
-        }
-    }
-
-    return 1;
-}
-
-
-/** Note: the old name of class NETINFO_ITEM was EQUIPOT
- * so in Save (and read) functions, for compatibility, we use EQUIPOT as
- * keyword
- */
-bool NETINFO_ITEM::Save( FILE* aFile ) const
-{
-    bool success = false;
-
-    fprintf( aFile, "$EQUIPOT\n" );
-    fprintf( aFile, "Na %d %s\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
-    fprintf( aFile, "St %s\n", "~" );
-
-    if( fprintf( aFile, "$EndEQUIPOT\n" ) != sizeof("$EndEQUIPOT\n") - 1 )
-        goto out;
-
-    success = true;
-
-out:
-    return success;
-}
-
-
 /**
  * Function SetNetname
  * @param aNetname : the new netname
