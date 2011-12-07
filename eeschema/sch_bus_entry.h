@@ -46,11 +46,9 @@
  */
 class SCH_BUS_ENTRY : public SCH_ITEM
 {
-    wxPoint m_Pos;
-
-public:
-    int     m_Width;
-    wxSize  m_Size;
+    wxPoint m_pos;
+    int     m_width;
+    wxSize  m_size;
 
 public:
     SCH_BUS_ENTRY( const wxPoint& pos = wxPoint( 0, 0 ), int shape = '\\', int id = WIRE_TO_BUS );
@@ -65,6 +63,14 @@ public:
     }
 
     wxPoint m_End() const;
+
+    int GetWidth() const { return m_width; }
+
+    void SetWidth( int aWidth ) { m_width = aWidth; }
+
+    wxSize GetSize() const { return m_size; }
+
+    void SetSize( const wxSize& aSize ) { m_size = aSize; }
 
     virtual void SwapData( SCH_ITEM* aItem );
 
@@ -113,7 +119,7 @@ public:
      */
     virtual void Move( const wxPoint& aMoveVector )
     {
-        m_Pos += aMoveVector;
+        m_pos += aMoveVector;
     }
 
     /**
@@ -131,6 +137,9 @@ public:
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
+    /**
+     * @copydoc SCH_ITEM::IsConnectable()
+     */
     virtual bool IsConnectable() const { return true; }
 
     virtual void GetConnectionPoints( vector< wxPoint >& aPoints ) const;
@@ -144,8 +153,8 @@ private:
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_Pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+    virtual wxPoint doGetPosition() const { return m_pos; }
+    virtual void doSetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
 };
 
 
