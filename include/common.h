@@ -294,7 +294,10 @@ void InitKiCadAbout( wxAboutDialogInfo& info );
 /* common.cpp */
 /**************/
 
-int GetTimeStamp();
+/**
+ * @return an unique time stamp that changes after each call
+ */
+unsigned long GetNewTimeStamp();
 
 int DisplayColorFrame( wxWindow* parent, int OldColor );
 int GetCommandOptions( const int argc, const char** argv,

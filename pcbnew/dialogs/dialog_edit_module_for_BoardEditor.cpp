@@ -146,7 +146,7 @@ void DIALOG_MODULE_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent& event )
     if( m_CurrentModule->m_TimeStamp == 0 )    // Module Editor needs a non
                                                // null timestamp
     {
-        m_CurrentModule->m_TimeStamp = GetTimeStamp();
+        m_CurrentModule->m_TimeStamp = GetNewTimeStamp();
         m_Parent->OnModify();
     }
 

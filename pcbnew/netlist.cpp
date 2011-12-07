@@ -1160,7 +1160,7 @@ bool NETLIST_READER::loadNewModules()
             /* Update schematic links : reference "Time Stamp" and schematic
              * hierarchical path */
             Module->m_Reference->m_Text = cmp->m_CmpName;
-            Module->m_TimeStamp = GetTimeStamp();
+            Module->m_TimeStamp = GetNewTimeStamp();
             Module->m_Path = cmp->m_TimeStampPath;
         }
         else
@@ -1176,7 +1176,7 @@ bool NETLIST_READER::loadNewModules()
 
             Module = newmodule;
             Module->m_Reference->m_Text = cmp->m_CmpName;
-            Module->m_TimeStamp = GetTimeStamp();
+            Module->m_TimeStamp = GetNewTimeStamp();
             Module->m_Path = cmp->m_TimeStampPath;
         }
     }

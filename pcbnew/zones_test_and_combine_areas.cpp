@@ -88,7 +88,7 @@ ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, int layer, int x, int
 
     new_area->SetNet( netcode );
     new_area->SetLayer( layer );
-    new_area->m_TimeStamp = GetTimeStamp();
+    new_area->m_TimeStamp = GetNewTimeStamp();
 
     if( iarea < (int) ( m_ZoneDescriptorList.size() - 1 ) )
         m_ZoneDescriptorList.insert( m_ZoneDescriptorList.begin() + iarea + 1, new_area );

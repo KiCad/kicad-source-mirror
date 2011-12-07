@@ -534,7 +534,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
     if(  zone->GetNumCorners() == 0 )
     {
         zone->m_Flags = IS_NEW;
-        zone->m_TimeStamp     = GetTimeStamp();
+        zone->m_TimeStamp     = GetNewTimeStamp();
         g_Zone_Default_Setting.ExportSetting( *zone );
         zone->m_Poly->Start( g_Zone_Default_Setting.m_CurrentZone_Layer,
                              GetScreen()->GetCrossHairPosition().x,

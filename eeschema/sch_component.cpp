@@ -130,7 +130,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet
     m_unit      = unit;
     m_convert   = convert;
     m_ChipName  = libComponent.GetName();
-    m_TimeStamp = GetTimeStamp();
+    m_TimeStamp = GetNewTimeStamp();
 
     if( setNewItemFlag )
         m_Flags = IS_NEW | IS_MOVED;

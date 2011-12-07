@@ -50,7 +50,7 @@ void PCB_TARGET::Copy( PCB_TARGET* source )
     m_Pos       = source->m_Pos;
     m_Shape     = source->m_Shape;
     m_Size      = source->m_Size;
-    m_TimeStamp = GetTimeStamp();
+    m_TimeStamp = GetNewTimeStamp();
 }
 
 

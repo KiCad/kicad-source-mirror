@@ -204,7 +204,7 @@ int TestDuplicateSheetNames( bool aCreateMarker )
                     {
                         /* Create a new marker type ERC error*/
                         SCH_MARKER* marker = new SCH_MARKER();
-                        marker->m_TimeStamp = GetTimeStamp();
+                        marker->m_TimeStamp = GetNewTimeStamp();
                         marker->SetData( ERCE_DUPLICATE_SHEET_NAME,
                                          ( (SCH_SHEET*) test_item )->m_Pos,
                                          _( "Duplicate sheet name" ),
@@ -237,7 +237,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
 
     /* Create new marker for ERC error. */
     marker = new SCH_MARKER();
-    marker->m_TimeStamp = GetTimeStamp();
+    marker->m_TimeStamp = GetNewTimeStamp();
 
     marker->SetMarkerType( MARK_ERC );
     marker->SetErrorLevel( WAR );

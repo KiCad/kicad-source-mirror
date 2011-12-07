@@ -185,7 +185,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
 
         module->m_Flags     = IS_NEW;
         module->m_Link      = 0;
-        module->m_TimeStamp = GetTimeStamp();
+        module->m_TimeStamp = GetNewTimeStamp();
         GetBoard()->m_Status_Pcb = 0;
         module->SetPosition( curspos );
 

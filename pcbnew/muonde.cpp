@@ -532,7 +532,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
         return NULL;
 
     #define DEFAULT_SIZE 30
-    Module->m_TimeStamp           = GetTimeStamp();
+    Module->m_TimeStamp           = GetNewTimeStamp();
     Module->m_Value->m_Size       = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
     Module->m_Value->m_Pos0.y     = -DEFAULT_SIZE;
     Module->m_Value->m_Pos.y     += Module->m_Value->m_Pos0.y;

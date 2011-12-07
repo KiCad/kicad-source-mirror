@@ -34,7 +34,7 @@
 
 #include "fctsys.h"
 #include "base_struct.h"    // SEARCH_RESULT
-#include "common.h"         // GetTimeStamp()
+#include "common.h"         // GetNewTimeStamp()
 
 
 class EDA_ITEM;
@@ -201,7 +201,7 @@ public:
 
     void SetTimeNow()
     {
-        m_TimeAtCollection = GetTimeStamp();
+        m_TimeAtCollection = GetNewTimeStamp();
     }
 
 
@@ -234,7 +234,8 @@ public:
         int dx = abs( aRefPos.x - m_RefPos.x );
         int dy = abs( aRefPos.y - m_RefPos.y );
 
-        if( dx <= distMax && dy <= distMax && GetTimeStamp()-m_TimeAtCollection <= timeMax )
+        if( dx <= distMax && dy <= distMax &&
+            (int)GetNewTimeStamp() - m_TimeAtCollection <= timeMax )
             return true;
         else
             return false;

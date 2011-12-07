@@ -225,7 +225,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
 
     // Save the outline main info
     ret = fprintf( aFile, "ZInfo %8.8lX %d %s\n",
-                   m_TimeStamp, m_NetCode,
+                   m_TimeStamp, GetNet(),
                    EscapedUTF8( m_Netname ).c_str() );
 
     if( ret < 3 )
@@ -1739,7 +1739,7 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
             else
             {
                 m_TimeStamp = ts;
-                m_NetCode   = netcode;
+                SetNet( netcode );
                 ReadDelimitedText( netname_buffer, netname_buffer, 1024 );
                 m_Netname = FROM_UTF8( netname_buffer );
             }

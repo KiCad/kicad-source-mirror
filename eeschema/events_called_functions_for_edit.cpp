@@ -29,7 +29,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
     {
         SCH_COMPONENT* newitem;
         newitem = new SCH_COMPONENT( *( (SCH_COMPONENT*) curr_item ) );
-        newitem->m_TimeStamp = GetTimeStamp();
+        newitem->m_TimeStamp = GetNewTimeStamp();
         newitem->ClearAnnotation( NULL );
         newitem->m_Flags = IS_NEW;
         MoveItem( (SCH_ITEM*) newitem, &dc );

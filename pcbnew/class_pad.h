@@ -8,6 +8,7 @@
 
 
 #include "class_board_item.h"
+#include "class_board_connected_item.h"
 #include "pad_shapes.h"
 #include "PolyLine.h"
 
@@ -131,7 +132,6 @@ public:
     int    m_LocalSolderPasteMargin;            // Local solder paste margin absolute value
     double m_LocalSolderPasteMarginRatio;       // Local solder mask margin ratio value of pad size
                                                 // The final margin is the sum of these 2 values
-    std::vector<TRACK*> m_TracksConnected;      // list of other tracks connected to me
 
 private:
     int m_SubRatsnest;                  // variable used in rats nest computations
