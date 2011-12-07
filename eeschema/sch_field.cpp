@@ -58,10 +58,10 @@ SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent,
     SCH_ITEM( aParent, SCH_FIELD_T ),
     EDA_TEXT()
 {
-    m_Pos     = aPos;
-    m_FieldId = aFieldId;
-    m_Attributs    = TEXT_NO_VISIBLE;
-    m_Name = aName;
+    m_Pos = aPos;
+    m_id = aFieldId;
+    m_Attributs = TEXT_NO_VISIBLE;
+    m_name = aName;
 
     SetLayer( LAYER_FIELDS );
 }
@@ -71,8 +71,8 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
     SCH_ITEM( aField ),
     EDA_TEXT( aField )
 {
-    m_FieldId = aField.m_FieldId;
-    m_Name = aField.m_Name;
+    m_id = aField.m_id;
+    m_name = aField.m_name;
 }
 
 
@@ -93,7 +93,7 @@ const wxString SCH_FIELD::GetText() const
 
     /* For more than one part per package, we must add the part selection
      * A, B, ... or 1, 2, .. to the reference. */
-    if( m_FieldId == REFERENCE )
+    if( m_id == REFERENCE )
     {
         SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
 
@@ -178,9 +178,9 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     EDA_RECT boundaryBox = GetBoundingBox();
     textpos = boundaryBox.Centre();
 
-    if( m_FieldId == REFERENCE )
+    if( m_id == REFERENCE )
         color = ReturnLayerColor( LAYER_REFERENCEPART );
-    else if( m_FieldId == VALUE )
+    else if( m_id == VALUE )
         color = ReturnLayerColor( LAYER_VALUEPART );
     else
         color = ReturnLayerColor( LAYER_FIELDS );
@@ -306,7 +306,7 @@ bool SCH_FIELD::Save( FILE* aFile ) const
         vjustify = 'T';
 
     if( fprintf( aFile, "F %d %s %c %-3d %-3d %-3d %4.4X %c %c%c%c",
-                 m_FieldId,
+                 m_id,
                  EscapedUTF8( m_Text ).c_str(),     // wraps in quotes too
                  m_Orient == TEXT_ORIENT_HORIZ ? 'H' : 'V',
                  m_Pos.x, m_Pos.y,
@@ -320,9 +320,9 @@ bool SCH_FIELD::Save( FILE* aFile ) const
     }
 
     // Save field name, if the name is user definable
-    if( m_FieldId >= FIELD1 )
+    if( m_id >= FIELD1 )
     {
-        if( fprintf( aFile, " %s", EscapedUTF8( m_Name ).c_str() ) == EOF )
+        if( fprintf( aFile, " %s", EscapedUTF8( m_name ).c_str() ) == EOF )
         {
             return false;
         }
@@ -358,14 +358,14 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
     bool match;
     wxString text = GetText();
 
-    if( (m_FieldId > VALUE) && !(aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS) )
+    if( (m_id > VALUE) && !(aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS) )
         return false;
 
     wxLogTrace( traceFindReplace, wxT( "    child item " ) + GetSelectMenuText() );
 
     // Take sheet path into account which effects the reference field and the unit for
     // components with multiple parts.
-    if( m_FieldId == REFERENCE && aAuxData != NULL )
+    if( m_id == REFERENCE && aAuxData != NULL )
     {
         SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
 
@@ -407,24 +407,26 @@ wxString SCH_FIELD::GetSelectMenuText() const
 }
 
 
-wxString SCH_FIELD::GetName() const
+wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 {
-    if( !m_Name.IsEmpty() )
-        return m_Name;
-    else
-        return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_FieldId );
+    if( !m_name.IsEmpty() )
+        return m_name;
+    else if( aUseDefaultName )
+        return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
+
+    return wxEmptyString;
 }
 
 
 BITMAP_DEF SCH_FIELD::GetMenuImage() const
 {
-    if( m_FieldId == REFERENCE )
+    if( m_id == REFERENCE )
         return edit_comp_ref_xpm;
 
-    if( m_FieldId == VALUE )
+    if( m_id == VALUE )
         return edit_comp_value_xpm;
 
-    if( m_FieldId == FOOTPRINT )
+    if( m_id == FOOTPRINT )
         return edit_comp_footprint_xpm;
 
     return edit_text_xpm;
@@ -462,15 +464,6 @@ bool SCH_FIELD::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
 }
 
 
-/* Plot field text.
- * Input:
- * DrawLibItem: pointer to the component
- * FieldNumber: Number Field
- * IsMulti: true flag if there are several parts per package.
- * Only useful for the field to add a reference to this one
- * The identification from (A, B ...)
- * DrawMode: trace mode
- */
 void SCH_FIELD::doPlot( PLOTTER* aPlotter )
 {
     SCH_COMPONENT* parent = ( SCH_COMPONENT* ) GetParent();
@@ -518,7 +511,7 @@ void SCH_FIELD::doPlot( PLOTTER* aPlotter )
 
     int      thickness = GetPenSize();
 
-    if( (parent->GetPartCount() <= 1) || (m_FieldId != REFERENCE) )
+    if( (parent->GetPartCount() <= 1) || (m_id != REFERENCE) )
     {
         aPlotter->text( textpos, color, m_Text, orient, m_Size, hjustify, vjustify,
                         thickness, m_Italic, m_Bold );

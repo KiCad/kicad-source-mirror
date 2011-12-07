@@ -77,7 +77,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
     DrawPanel->m_IgnoreMouseEvents = true;
 
     wxString title;
-    title.Printf( _( "Edit %s Field" ), GetChars( aField->m_Name ) );
+    title.Printf( _( "Edit %s Field" ), GetChars( aField->GetName() ) );
 
     wxTextEntryDialog dlg( this, wxEmptyString , title, newtext );
     int response = dlg.ShowModal();
@@ -95,7 +95,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
 
     if( !newtext.IsEmpty() )
     {
-        if( aField->m_Text.IsEmpty() )  // Means the field was not already in use
+        if( aField->GetText().IsEmpty() )  // Means the field was not already in use
         {
             aField->m_Pos = component->GetPosition();
             aField->m_Size.x = aField->m_Size.y = m_TextFieldSize;
@@ -107,7 +107,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
             if( SCH_COMPONENT::IsReferenceStringValid( newtext ) )
             {
                 component->SetRef( GetSheet(), newtext );
-                aField->m_Text = newtext;
+                aField->SetText( newtext );
             }
             else
             {

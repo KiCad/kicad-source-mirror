@@ -236,14 +236,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
     // Delete any fields with no name before we copy all of m_FieldsBuf back into the component.
     for( unsigned i = MANDATORY_FIELDS;  i<m_FieldsBuf.size(); )
     {
-        if( m_FieldsBuf[i].m_Name.IsEmpty() || m_FieldsBuf[i].m_Text.IsEmpty() )
+        if( m_FieldsBuf[i].GetName( false ).IsEmpty() || m_FieldsBuf[i].GetText().IsEmpty() )
         {
             // If a field has no value and is not it the field template list, warn the user
             // that it will be remove from the component.  This gives the user a chance to
             // correct the problem before removing the undefined fields.  It should also
             // resolve most of the bug reports and questions regarding missing fields.
-            if( !m_FieldsBuf[i].m_Name.IsEmpty() && m_FieldsBuf[i].m_Text.IsEmpty()
-                && !m_Parent->GetTemplates().HasFieldName( m_FieldsBuf[i].m_Name )
+            if( !m_FieldsBuf[i].GetName( false ).IsEmpty() && m_FieldsBuf[i].GetText().IsEmpty()
+                && !m_Parent->GetTemplates().HasFieldName( m_FieldsBuf[i].GetName( false ) )
                 && !removeRemainingFields )
             {
                 wxString msg;
@@ -251,7 +251,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnOKButtonClick( wxCommandEvent& event 
                 msg.Printf( _( "The field name <%s> does not have a value and is not defined in \
 the field template list.  Empty field values are invalid an will be removed from the component.  \
 Do you wish to remove this and all remaining undefined fields?" ),
-                            GetChars( m_FieldsBuf[i].m_Name ) );
+                            GetChars( m_FieldsBuf[i].GetName( false ) ) );
 
                 wxMessageDialog dlg( this, msg, _( "Remove Fields" ), wxYES_NO | wxNO_DEFAULT );
 
@@ -303,7 +303,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::addFieldButtonHandler( wxCommandEvent& 
     blank.m_Orient = m_FieldsBuf[REFERENCE].m_Orient;
 
     m_FieldsBuf.push_back( blank );
-    m_FieldsBuf[fieldNdx].m_Name = TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldNdx );
+    m_FieldsBuf[fieldNdx].SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldNdx ) );
 
     m_skipCopyFromPanel = true;
     setRowItem( fieldNdx, m_FieldsBuf[fieldNdx] );
@@ -361,7 +361,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::moveUpButtonHandler( wxCommandEvent& ev
     SCH_FIELD tmp = m_FieldsBuf[fieldNdx - 1];
 
     D( printf( "tmp.m_Text=\"%s\" tmp.m_Name=\"%s\"\n",
-               TO_UTF8( tmp.m_Text ), TO_UTF8( tmp.m_Name ) ); )
+               TO_UTF8( tmp.m_Text ), TO_UTF8( tmp.GetName( false ) ) ); )
 
     m_FieldsBuf[fieldNdx - 1] = m_FieldsBuf[fieldNdx];
     setRowItem( fieldNdx - 1, m_FieldsBuf[fieldNdx] );
@@ -408,7 +408,7 @@ SCH_FIELD* DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::findField( const wxString& aField
 {
     for( unsigned i=0;  i<m_FieldsBuf.size();  ++i )
     {
-        if( aFieldName == m_FieldsBuf[i].m_Name )
+        if( aFieldName == m_FieldsBuf[i].GetName( false ) )
             return &m_FieldsBuf[i];
     }
 
@@ -499,7 +499,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     for( unsigned i=MANDATORY_FIELDS;  i<aComponent->m_Fields.size();  ++i )
     {
         SCH_FIELD*  cmp = &aComponent->m_Fields[i];
-        SCH_FIELD*  buf = findField( cmp->m_Name );
+        SCH_FIELD*  buf = findField( cmp->GetName( false ) );
 
         if( !buf )
         {
@@ -516,7 +516,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {
         printf( "m_FieldsBuf[%d] (x=%-3d, y=%-3d) name:%s\n", i, m_FieldsBuf[i].m_Pos.x,
-                m_FieldsBuf[i].m_Pos.y, TO_UTF8(m_FieldsBuf[i].m_Name) );
+                m_FieldsBuf[i].m_Pos.y, TO_UTF8(m_FieldsBuf[i].GetName( false ) ) );
     }
 #endif
 
@@ -560,8 +560,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::setRowItem( int aFieldNdx, const SCH_FI
         fieldListCtrl->SetItem( ndx, 1, wxEmptyString );
     }
 
-    fieldListCtrl->SetItem( aFieldNdx, 0, aField.m_Name );
-    fieldListCtrl->SetItem( aFieldNdx, 1, aField.m_Text );
+    fieldListCtrl->SetItem( aFieldNdx, 0, aField.GetName( false ) );
+    fieldListCtrl->SetItem( aFieldNdx, 1, aField.GetText() );
 
     // recompute the column widths here, after setting texts
     fieldListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
@@ -608,7 +608,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copySelectedFieldToPanel()
         m_FieldVJustifyCtrl->SetSelection(1);
 
 
-    fieldNameTextCtrl->SetValue( field.m_Name );
+    fieldNameTextCtrl->SetValue( field.GetName( false ) );
 
     // the names of the fixed fields are not editable, others are.
     fieldNameTextCtrl->Enable(  fieldNdx >= MANDATORY_FIELDS );
@@ -698,7 +698,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     field.m_HJustify = hjustify[m_FieldHJustifyCtrl->GetSelection()];
     field.m_VJustify = vjustify[m_FieldVJustifyCtrl->GetSelection()];
 
-    field.m_Name = fieldNameTextCtrl->GetValue();
+    field.SetName( fieldNameTextCtrl->GetValue() );
 
     /* Void fields texts for REFERENCE and VALUE (value is the name of the
      * component in lib ! ) are not allowed
