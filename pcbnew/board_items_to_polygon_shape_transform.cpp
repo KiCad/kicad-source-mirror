@@ -615,8 +615,8 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
         // The pattern roughtly is a 90 deg arc pie
         std::vector <wxPoint> corners_buffer;
 
-        // Radius of outer arcs of the shape:
-        int outer_radius = dx + aThermalGap;     // The radius of the outer arc is pad radius + aThermalGap
+        // Radius of outer arcs of the shape corrected for arc approximation by lines
+        int outer_radius = (int) ( (dx + aThermalGap) * aCorrectionFactor );
 
         // Crosspoint of thermal spoke sides, the first point of polygon buffer
         corners_buffer.push_back( wxPoint( copper_thickness.x / 2, copper_thickness.y / 2 ) );
@@ -660,7 +660,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
 
         // Now, add the 4 holes ( each is the pattern, rotated by 0, 90, 180 and 270  deg
         // aThermalRot = 450 (45.0 degrees orientation) work fine.
-        int angle_pad = aPad.m_Orient;              // Pad orientation
+        int angle_pad = aPad.GetOrientation();              // Pad orientation
         int th_angle  = aThermalRot;
 
         for( unsigned ihole = 0; ihole < 4; ihole++ )
@@ -763,7 +763,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
 
         /* Create 2 holes, rotated by pad rotation.
          */
-        int angle = aPad.m_Orient + supp_angle;
+        int angle = aPad.GetOrientation() + supp_angle;
 
         for( int irect = 0; irect < 2; irect++ )
         {
@@ -791,7 +791,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
         }
 
         // Now add corner 4 and 2 (2 is the corner 4 rotated by 180 deg
-        angle = aPad.m_Orient + supp_angle;
+        angle = aPad.GetOrientation() + supp_angle;
 
         for( int irect = 0; irect < 2; irect++ )
         {
@@ -851,7 +851,7 @@ void    CreateThermalReliefPadPolygon( std::vector<CPolyPt>& aCornerBuffer,
         corners_buffer.push_back( wxPoint( -copper_thickness.x / 2, -(dy - aThermalGap / 4) ) );
         corners_buffer.push_back( wxPoint( -(aThermalGap / 4 + copper_thickness.x / 2), -dy ) );
 
-        int angle = aPad.m_Orient;
+        int angle = aPad.GetOrientation();
         int rounding_radius = (int) ( aThermalGap * aCorrectionFactor );            // Corner rounding radius
         int angle_pg;                                                               // Polygon increment angle
 
