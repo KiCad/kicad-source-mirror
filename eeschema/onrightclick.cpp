@@ -578,7 +578,7 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
     AddMenuItem( PopMenu, ID_POPUP_SCH_ADD_LABEL, msg, KiBitmap( add_line_label_xpm ) );
 
     // Add global label command only if the cursor is over one end of the wire.
-    if( ( pos == Wire->m_Start ) || ( pos == Wire->m_End ) )
+    if( Wire->IsEndPoint( pos ) )
         AddMenuItem( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add Global Label" ),
                      KiBitmap( add_glabel_xpm ) );
 }
@@ -608,7 +608,7 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
     AddMenuItem( PopMenu, ID_POPUP_SCH_ADD_LABEL, msg, KiBitmap( add_line_label_xpm ) );
 
     // Add global label command only if the cursor is over one end of the bus.
-    if( ( pos == Bus->m_Start ) || ( pos == Bus->m_End ) )
+    if( Bus->IsEndPoint( pos ) )
         AddMenuItem( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add Global Label" ),
                      KiBitmap( add_glabel_xpm ) );
 }

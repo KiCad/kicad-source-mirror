@@ -88,7 +88,7 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     if( g_HVLines ) /* Coerce the line to vertical or horizontal one: */
         ComputeBreakPoint( CurrentLine, endpos );
     else
-        CurrentLine->m_End = endpos;
+        CurrentLine->SetEndPoint( endpos );
 
     segment = CurrentLine;
 
@@ -201,7 +201,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         if( nextsegment )
         {
             newsegment = new SCH_LINE( *nextsegment );
-            nextsegment->m_Start = newsegment->m_End;
+            nextsegment->SetStartPoint( newsegment->GetEndPoint() );
             nextsegment->SetNext( NULL );
             nextsegment->SetBack( newsegment );
             newsegment->SetNext( nextsegment );
@@ -210,10 +210,10 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         else
         {
             newsegment = new SCH_LINE( *oldsegment );
-            newsegment->m_Start = oldsegment->m_End;
+            newsegment->SetStartPoint( oldsegment->GetEndPoint() );
         }
 
-        newsegment->m_End   = cursorpos;
+        newsegment->SetEndPoint( cursorpos );
         oldsegment->ClearFlags( IS_NEW );
         oldsegment->SetFlags( SELECTED );
         newsegment->SetFlags( IS_NEW );
@@ -224,7 +224,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
          * Create a junction if needed. Note: a junction can be needed later,
          * if the new segment is merged (after a cleanup) with an older one
          * (tested when the connection will be finished)*/
-        if( oldsegment->m_Start == s_ConnexionStartPoint )
+        if( oldsegment->GetStartPoint() == s_ConnexionStartPoint )
         {
             if( GetScreen()->IsJunctionNeeded( s_ConnexionStartPoint ) )
                 AddJunction( DC, s_ConnexionStartPoint );
@@ -288,14 +288,14 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     wxPoint end_point, alt_end_point;
 
     /* A junction can be needed to connect the last segment
-     *  usually to m_End coordinate.
+     *  usually to m_end coordinate.
      *  But if the last segment is removed by a cleanup, because of redundancy,
-     * a junction can be needed to connect the previous segment m_End
-     * coordinate with is also the lastsegment->m_Start coordinate */
+     * a junction can be needed to connect the previous segment m_end
+     * coordinate with is also the lastsegment->m_start coordinate */
     if( lastsegment )
     {
-        end_point     = lastsegment->m_End;
-        alt_end_point = lastsegment->m_Start;
+        end_point     = lastsegment->GetEndPoint();
+        alt_end_point = lastsegment->GetStartPoint();
     }
 
     GetScreen()->SchematicCleanUp( DrawPanel );
@@ -373,37 +373,36 @@ static void ComputeBreakPoint( SCH_LINE* aSegment, const wxPoint& aPosition )
     if( nextsegment == NULL )
         return;
 #if 0
-    if( ABS( middle_position.x - aSegment->m_Start.x ) <
-        ABS( middle_position.y - aSegment->m_Start.y ) )
-        middle_position.x = aSegment->m_Start.x;
+    if( ABS( middle_position.x - aSegment->GetStartPoint().x ) <
+        ABS( middle_position.y - aSegment->GetStartPoint().y ) )
+        middle_position.x = aSegment->GetStartPoint().x;
     else
-        middle_position.y = aSegment->m_Start.y;
+        middle_position.y = aSegment->GetStartPoint().y;
 #else
-    int iDx = aSegment->m_End.x - aSegment->m_Start.x;
-    int iDy = aSegment->m_End.y - aSegment->m_Start.y;
+    int iDx = aSegment->GetEndPoint().x - aSegment->GetStartPoint().x;
+    int iDy = aSegment->GetEndPoint().y - aSegment->GetStartPoint().y;
 
     if( iDy != 0 )         // keep the first segment orientation (currently horizontal)
     {
-        middle_position.x = aSegment->m_Start.x;
+        middle_position.x = aSegment->GetStartPoint().x;
     }
     else if( iDx != 0 )    // keep the first segment orientation (currently vertical)
     {
-        middle_position.y = aSegment->m_Start.y;
+        middle_position.y = aSegment->GetStartPoint().y;
     }
     else
     {
-        if( ABS( middle_position.x - aSegment->m_Start.x ) <
-            ABS( middle_position.y - aSegment->m_Start.y ) )
-            middle_position.x = aSegment->m_Start.x;
+        if( ABS( middle_position.x - aSegment->GetStartPoint().x ) <
+            ABS( middle_position.y - aSegment->GetStartPoint().y ) )
+            middle_position.x = aSegment->GetStartPoint().x;
         else
-            middle_position.y = aSegment->m_Start.y;
+            middle_position.y = aSegment->GetStartPoint().y;
     }
 #endif
 
-    aSegment->m_End = middle_position;
-
-    nextsegment->m_Start = middle_position;
-    nextsegment->m_End   = aPosition;
+    aSegment->SetEndPoint( middle_position );
+    nextsegment->SetStartPoint( middle_position );
+    nextsegment->SetEndPoint( aPosition );
 }
 
 

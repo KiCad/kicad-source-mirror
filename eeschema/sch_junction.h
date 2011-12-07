@@ -36,10 +36,8 @@
 
 class SCH_JUNCTION : public SCH_ITEM
 {
-    wxPoint m_Pos;                  /* XY coordinates of connection. */
-
-public:
-    wxSize  m_Size;
+    wxPoint m_pos;                  /* XY coordinates of connection. */
+    wxSize  m_size;
 
 public:
     SCH_JUNCTION( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -94,7 +92,7 @@ public:
      */
     virtual void Move( const wxPoint& aMoveVector )
     {
-        m_Pos += aMoveVector;
+        m_pos += aMoveVector;
     }
 
     /**
@@ -133,8 +131,8 @@ private:
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_Pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+    virtual wxPoint doGetPosition() const { return m_pos; }
+    virtual void doSetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
 };
 
 

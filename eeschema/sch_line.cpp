@@ -47,10 +47,10 @@
 SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
     SCH_ITEM( NULL, SCH_LINE_T )
 {
-    m_Start = pos;
-    m_End   = pos;
-    m_Width = 0;        // Default thickness used
-    m_StartIsDangling = m_EndIsDangling = false;
+    m_start = pos;
+    m_end   = pos;
+    m_width = 0;        // Default thickness used
+    m_startIsDangling = m_endIsDangling = false;
 
     switch( layer )
     {
@@ -72,10 +72,10 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
 SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
     SCH_ITEM( aLine )
 {
-    m_Start = aLine.m_Start;
-    m_End = aLine.m_End;
-    m_Width = aLine.m_Width;
-    m_StartIsDangling = m_EndIsDangling = false;
+    m_start = aLine.m_start;
+    m_end = aLine.m_end;
+    m_width = aLine.m_width;
+    m_startIsDangling = m_endIsDangling = false;
 }
 
 
@@ -89,13 +89,13 @@ void SCH_LINE::Move( const wxPoint& aOffset )
 {
     if( (m_Flags & STARTPOINT) == 0 && aOffset != wxPoint( 0, 0 ) )
     {
-        m_Start += aOffset;
+        m_start += aOffset;
         SetModified();
     }
 
     if( (m_Flags & ENDPOINT) == 0 && aOffset != wxPoint( 0, 0 ) )
     {
-        m_End += aOffset;
+        m_end += aOffset;
         SetModified();
     }
 }
@@ -107,12 +107,12 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
                                  << " layer=\"" << m_Layer << '"'
-                                 << " width=\"" << m_Width << '"'
-                                 << " startIsDangling=\"" << m_StartIsDangling
+                                 << " width=\"" << m_width << '"'
+                                 << " startIsDangling=\"" << m_startIsDangling
                                  << '"' << " endIsDangling=\""
-                                 << m_EndIsDangling << '"' << ">"
-                                 << " <start" << m_Start << "/>"
-                                 << " <end" << m_End << "/>" << "</"
+                                 << m_endIsDangling << '"' << ">"
+                                 << " <start" << m_start << "/>"
+                                 << " <end" << m_end << "/>" << "</"
                                  << GetClass().Lower().mb_str() << ">\n";
 }
 
@@ -123,11 +123,11 @@ EDA_RECT SCH_LINE::GetBoundingBox() const
 {
     int      width = 25;
 
-    int      xmin = MIN( m_Start.x, m_End.x ) - width;
-    int      ymin = MIN( m_Start.y, m_End.y ) - width;
+    int      xmin = MIN( m_start.x, m_end.x ) - width;
+    int      ymin = MIN( m_start.y, m_end.y ) - width;
 
-    int      xmax = MAX( m_Start.x, m_End.x ) + width;
-    int      ymax = MAX( m_Start.y, m_End.y ) + width;
+    int      xmax = MAX( m_start.x, m_end.x ) + width;
+    int      ymax = MAX( m_start.y, m_end.y ) + width;
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
     EDA_RECT ret( wxPoint( xmin, ymin ), wxSize( xmax - xmin + 1, ymax - ymin + 1 ) );
@@ -138,7 +138,7 @@ EDA_RECT SCH_LINE::GetBoundingBox() const
 
 double SCH_LINE::GetLength() const
 {
-    return GetLineLength( m_Start, m_End );
+    return GetLineLength( m_start, m_end );
 }
 
 
@@ -160,8 +160,8 @@ bool SCH_LINE::Save( FILE* aFile ) const
         success = false;
     }
 
-    if( fprintf( aFile, "\t%-4d %-4d %-4d %-4d\n", m_Start.x, m_Start.y,
-                 m_End.x, m_End.y ) == EOF )
+    if( fprintf( aFile, "\t%-4d %-4d %-4d %-4d\n", m_start.x, m_start.y,
+                 m_end.x, m_end.y ) == EOF )
     {
         success = false;
     }
@@ -196,7 +196,7 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
         m_Layer = LAYER_BUS;
 
     if( !aLine.ReadLine() || sscanf( (char*) aLine, "%d %d %d %d ",
-                                      &m_Start.x, &m_Start.y, &m_End.x, &m_End.y ) != 4 )
+                                      &m_start.x, &m_start.y, &m_end.x, &m_end.y ) != 4 )
     {
         aErrorMsg.Printf( wxT( "Eeschema file Segment struct error at line %d, aborted" ),
                           aLine.LineNumber() );
@@ -210,9 +210,9 @@ bool SCH_LINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 int SCH_LINE::GetPenSize() const
 {
-    int pensize = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+    int pensize = ( m_width == 0 ) ? g_DrawDefaultLineThickness : m_width;
 
-    if( m_Layer == LAYER_BUS && m_Width == 0 )
+    if( m_Layer == LAYER_BUS && m_width == 0 )
     {
         pensize = wxRound( g_DrawDefaultLineThickness * BUS_WIDTH_EXPAND );
         pensize = MAX( pensize, 3 );
@@ -235,8 +235,8 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 
     GRSetDrawMode( DC, DrawMode );
 
-    wxPoint start = m_Start;
-    wxPoint end = m_End;
+    wxPoint start = m_start;
+    wxPoint end = m_end;
 
     if( ( m_Flags & STARTPOINT ) == 0 )
         start += offset;
@@ -248,40 +248,40 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
     else
         GRLine( &panel->m_ClipBox, DC, start, end, width, color );
 
-    if( m_StartIsDangling )
+    if( m_startIsDangling )
         DrawDanglingSymbol( panel, DC, start, color );
 
-    if( m_EndIsDangling )
+    if( m_endIsDangling )
         DrawDanglingSymbol( panel, DC, end, color );
 }
 
 
 void SCH_LINE::Mirror_X( int aXaxis_position )
 {
-    m_Start.y -= aXaxis_position;
-    NEGATE(  m_Start.y );
-    m_Start.y += aXaxis_position;
-    m_End.y   -= aXaxis_position;
-    NEGATE(  m_End.y );
-    m_End.y += aXaxis_position;
+    m_start.y -= aXaxis_position;
+    NEGATE(  m_start.y );
+    m_start.y += aXaxis_position;
+    m_end.y   -= aXaxis_position;
+    NEGATE(  m_end.y );
+    m_end.y += aXaxis_position;
 }
 
 
 void SCH_LINE::Mirror_Y( int aYaxis_position )
 {
-    m_Start.x -= aYaxis_position;
-    NEGATE(  m_Start.x );
-    m_Start.x += aYaxis_position;
-    m_End.x   -= aYaxis_position;
-    NEGATE(  m_End.x );
-    m_End.x += aYaxis_position;
+    m_start.x -= aYaxis_position;
+    NEGATE(  m_start.x );
+    m_start.x += aYaxis_position;
+    m_end.x   -= aYaxis_position;
+    NEGATE(  m_end.x );
+    m_end.x += aYaxis_position;
 }
 
 
 void SCH_LINE::Rotate( wxPoint rotationPoint )
 {
-    RotatePoint( &m_Start, rotationPoint, 900 );
-    RotatePoint( &m_End, rotationPoint, 900 );
+    RotatePoint( &m_start, rotationPoint, 900 );
+    RotatePoint( &m_end, rotationPoint, 900 );
 }
 
 
@@ -293,54 +293,54 @@ bool SCH_LINE::MergeOverlap( SCH_LINE* aLine )
     if( this == aLine || GetLayer() != aLine->GetLayer() )
         return false;
 
-    // Search for a common end, and modify coordinates to ensure RefSegm->m_End
-    // == TstSegm->m_Start
-    if( m_Start == aLine->m_Start )
+    // Search for a common end, and modify coordinates to ensure RefSegm->m_end
+    // == TstSegm->m_start
+    if( m_start == aLine->m_start )
     {
-        if( m_End == aLine->m_End )
+        if( m_end == aLine->m_end )
             return true;
 
-        EXCHG( m_Start, m_End );
+        EXCHG( m_start, m_end );
     }
-    else if( m_Start == aLine->m_End )
+    else if( m_start == aLine->m_end )
     {
-        EXCHG( m_Start, m_End );
-        EXCHG( aLine->m_Start, aLine->m_End );
+        EXCHG( m_start, m_end );
+        EXCHG( aLine->m_start, aLine->m_end );
     }
-    else if( m_End == aLine->m_End )
+    else if( m_end == aLine->m_end )
     {
-        EXCHG( aLine->m_Start, aLine->m_End );
+        EXCHG( aLine->m_start, aLine->m_end );
     }
-    else if( m_End != aLine->m_Start )
+    else if( m_end != aLine->m_start )
     {
         // No common end point, segments cannot be merged.
         return false;
     }
 
     /* Test alignment: */
-    if( m_Start.y == m_End.y )       // Horizontal segment
+    if( m_start.y == m_end.y )       // Horizontal segment
     {
-        if( aLine->m_Start.y == aLine->m_End.y )
+        if( aLine->m_start.y == aLine->m_end.y )
         {
-            m_End = aLine->m_End;
+            m_end = aLine->m_end;
             return true;
         }
     }
-    else if( m_Start.x == m_End.x )  // Vertical segment
+    else if( m_start.x == m_end.x )  // Vertical segment
     {
-        if( aLine->m_Start.x == aLine->m_End.x )
+        if( aLine->m_start.x == aLine->m_end.x )
         {
-            m_End = aLine->m_End;
+            m_end = aLine->m_end;
             return true;
         }
     }
     else
     {
-        if( atan2( (double) ( m_Start.x - m_End.x ), (double) ( m_Start.y - m_End.y ) )
-            == atan2( (double) ( aLine->m_Start.x - aLine->m_End.x ),
-                      (double) ( aLine->m_Start.y - aLine->m_End.y ) ) )
+        if( atan2( (double) ( m_start.x - m_end.x ), (double) ( m_start.y - m_end.y ) )
+            == atan2( (double) ( aLine->m_start.x - aLine->m_end.x ),
+                      (double) ( aLine->m_start.y - aLine->m_end.y ) ) )
         {
-            m_End = aLine->m_End;
+            m_end = aLine->m_end;
             return true;
         }
     }
@@ -357,11 +357,11 @@ void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
     if( ( GetLayer() == LAYER_BUS ) || ( GetLayer() == LAYER_WIRE ) )
     {
         DANGLING_END_ITEM item( (GetLayer() == LAYER_BUS) ? BUS_START_END : WIRE_START_END, this,
-                                m_Start );
+                                m_start );
         aItemList.push_back( item );
 
         DANGLING_END_ITEM item1( (GetLayer() == LAYER_BUS) ? BUS_END_END : WIRE_END_END, this,
-                                 m_End );
+                                 m_end );
         aItemList.push_back( item1 );
     }
 }
@@ -369,10 +369,10 @@ void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 
 bool SCH_LINE::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList )
 {
-    bool previousStartState = m_StartIsDangling;
-    bool previousEndState = m_EndIsDangling;
+    bool previousStartState = m_startIsDangling;
+    bool previousEndState = m_endIsDangling;
 
-    m_StartIsDangling = m_EndIsDangling = true;
+    m_startIsDangling = m_endIsDangling = true;
 
     if( GetLayer() == LAYER_WIRE )
     {
@@ -381,23 +381,23 @@ bool SCH_LINE::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
             if( item.GetItem() == this )
                 continue;
 
-            if( m_Start == item.GetPosition() )
-                m_StartIsDangling = false;
+            if( m_start == item.GetPosition() )
+                m_startIsDangling = false;
 
-            if( m_End == item.GetPosition() )
-                m_EndIsDangling = false;
+            if( m_end == item.GetPosition() )
+                m_endIsDangling = false;
 
-            if( (m_StartIsDangling == false) && (m_EndIsDangling == false) )
+            if( (m_startIsDangling == false) && (m_endIsDangling == false) )
                 break;
         }
     }
     else if( GetLayer() == LAYER_BUS || GetLayer() == LAYER_NOTES )
     {
         // Lines on the notes layer and the bus layer cannot be tested for dangling ends.
-        previousStartState = previousEndState = m_StartIsDangling = m_EndIsDangling = false;
+        previousStartState = previousEndState = m_startIsDangling = m_endIsDangling = false;
     }
 
-    return ( previousStartState != m_StartIsDangling ) || ( previousEndState != m_EndIsDangling );
+    return ( previousStartState != m_startIsDangling ) || ( previousEndState != m_endIsDangling );
 }
 
 
@@ -405,17 +405,17 @@ bool SCH_LINE::IsSelectStateChanged( const wxRect& aRect )
 {
     bool previousState = IsSelected();
 
-    if( aRect.Contains( m_Start ) && aRect.Contains( m_End ) )
+    if( aRect.Contains( m_start ) && aRect.Contains( m_end ) )
     {
         m_Flags |= SELECTED;
         m_Flags &= ~(STARTPOINT | ENDPOINT);
     }
-    else if( aRect.Contains( m_Start ) )
+    else if( aRect.Contains( m_start ) )
     {
         m_Flags &= ~STARTPOINT;
         m_Flags |= ( SELECTED | ENDPOINT );
     }
-    else if( aRect.Contains( m_End ) )
+    else if( aRect.Contains( m_end ) )
     {
         m_Flags &= ~ENDPOINT;
         m_Flags |= ( SELECTED | STARTPOINT );
@@ -440,8 +440,8 @@ bool SCH_LINE::IsConnectable() const
 
 void SCH_LINE::GetConnectionPoints( vector< wxPoint >& aPoints ) const
 {
-    aPoints.push_back( m_Start );
-    aPoints.push_back( m_End );
+    aPoints.push_back( m_start );
+    aPoints.push_back( m_end );
 }
 
 
@@ -449,9 +449,9 @@ wxString SCH_LINE::GetSelectMenuText() const
 {
     wxString menuText, txtfmt, orient;
 
-    if( m_Start.x == m_End.x )
+    if( m_start.x == m_end.x )
         orient = _("Vert.");
-    else if( m_Start.y == m_End.y )
+    else if( m_start.y == m_end.y )
         orient = _("Horiz.");
 
     switch( m_Layer )
@@ -473,10 +473,10 @@ wxString SCH_LINE::GetSelectMenuText() const
     }
 
     menuText.Printf( txtfmt, GetChars( orient ),
-                    GetChars(CoordinateToString( m_Start.x, EESCHEMA_INTERNAL_UNIT )),
-                    GetChars(CoordinateToString( m_Start.y, EESCHEMA_INTERNAL_UNIT )),
-                    GetChars(CoordinateToString( m_End.x, EESCHEMA_INTERNAL_UNIT )),
-                    GetChars(CoordinateToString( m_End.y, EESCHEMA_INTERNAL_UNIT )) );
+                    GetChars(CoordinateToString( m_start.x, EESCHEMA_INTERNAL_UNIT )),
+                    GetChars(CoordinateToString( m_start.y, EESCHEMA_INTERNAL_UNIT )),
+                    GetChars(CoordinateToString( m_end.x, EESCHEMA_INTERNAL_UNIT )),
+                    GetChars(CoordinateToString( m_end.y, EESCHEMA_INTERNAL_UNIT )) );
 
     return menuText;
 }
@@ -504,8 +504,8 @@ void SCH_LINE::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
     item->m_SheetList = *aSheetPath;
     item->m_SheetListInclude = *aSheetPath;
     item->m_Comp = (SCH_ITEM*) this;
-    item->m_Start = m_Start;
-    item->m_End = m_End;
+    item->m_Start = m_start;
+    item->m_End = m_end;
 
     if( GetLayer() == LAYER_BUS )
     {
@@ -530,11 +530,11 @@ bool SCH_LINE::operator <( const SCH_ITEM& aItem ) const
     if( GetLength() != line->GetLength() )
         return GetLength() < line->GetLength();
 
-    if( m_Start.x != line->m_Start.x )
-        return m_Start.x < line->m_Start.x;
+    if( m_start.x != line->m_start.x )
+        return m_start.x < line->m_start.x;
 
-    if( m_Start.y != line->m_Start.y )
-        return m_Start.y < line->m_Start.y;
+    if( m_start.y != line->m_start.y )
+        return m_start.y < line->m_start.y;
 
     return false;
 }
@@ -542,7 +542,7 @@ bool SCH_LINE::operator <( const SCH_ITEM& aItem ) const
 
 bool SCH_LINE::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    return TestSegmentHit( aPoint, m_Start, m_End, aAccuracy );
+    return TestSegmentHit( aPoint, m_start, m_end, aAccuracy );
 }
 
 
@@ -576,8 +576,8 @@ void SCH_LINE::doPlot( PLOTTER* aPlotter )
     if( m_Layer == LAYER_NOTES )
         aPlotter->set_dash( true );
 
-    aPlotter->move_to( m_Start );
-    aPlotter->finish_to( m_End );
+    aPlotter->move_to( m_start );
+    aPlotter->finish_to( m_end );
 
     if( m_Layer == LAYER_NOTES )
         aPlotter->set_dash( false );
@@ -586,6 +586,6 @@ void SCH_LINE::doPlot( PLOTTER* aPlotter )
 
 void SCH_LINE::doSetPosition( const wxPoint& aPosition )
 {
-    m_End = m_End - ( m_Start - aPosition );
-    m_Start = aPosition;
+    m_end = m_end - ( m_start - aPosition );
+    m_start = aPosition;
 }
