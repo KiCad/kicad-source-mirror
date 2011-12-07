@@ -74,16 +74,20 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int en
 
     BusEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
 
+    wxSize size = BusEntry->GetSize();
+
     switch( entry_shape )
     {
     case '\\':
         s_LastShape = '\\';
-        BusEntry->m_Size.y = 100;
+        size.y = 100;
+        BusEntry->SetSize( size );
         break;
 
     case '/':
         s_LastShape = '/';
-        BusEntry->m_Size.y = -100;
+        size.y = -100;
+        BusEntry->SetSize( size );
         break;
     }
 
@@ -97,7 +101,7 @@ int SCH_EDIT_FRAME::GetBusEntryShape( SCH_BUS_ENTRY* BusEntry )
 {
     int entry_shape = '\\';
 
-    if( BusEntry->m_Size.y < 0 )
+    if( BusEntry->GetSize().y < 0 )
         entry_shape = '/';
 
     return entry_shape;
