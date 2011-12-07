@@ -55,10 +55,9 @@ class LIB_FIELD;
 
 class SCH_FIELD : public SCH_ITEM, public EDA_TEXT
 {
-public:
-    int      m_FieldId;         ///< Field index, @see enum NumFieldType
+    int      m_id;         ///< Field index, @see enum NumFieldType
 
-    wxString m_Name;
+    wxString m_name;
 
 public:
     SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent,
@@ -71,17 +70,23 @@ public:
     virtual wxString GetClass() const
     {
         return wxT( "SCH_FIELD" );
-   }
+    }
 
     /**
      * Function GetName
-     * returns the field name.  If the field name is empty, the default field name is
-     * returned.  Field names are VALUE, REFERENCE, etc.
-     * @return The name of the field.
+     * returns the field name.
+     *
+     * @param aUseDefaultName When true return the default field name if the field name is
+     *                        empty.  Otherwise the default field name is returned.
+     * @return A wxString object containing the name of the field.
      */
-    wxString GetName() const;
+    wxString GetName( bool aUseDefaultName = true ) const;
 
-    int GetId() const { return m_FieldId; }
+    void SetName( const wxString& aName ) { m_name = aName; }
+
+    int GetId() const { return m_id; }
+
+    void SetId( int aId ) { m_id = aId; }
 
     /**
      * Function GetText
@@ -109,7 +114,7 @@ public:
 
     /**
      * Function SwapData
-     * exchanges the date between the field and \a aField.
+     * exchanges the date between the field and \a aItem
      *
      * @param aItem The field to exchange data with.
      */
@@ -192,15 +197,7 @@ public:
     }
 
     /**
-     * Compare schematic field text against search string.
-     *
-     * @param aSearchData - Criteria to search against.
-     * @param aAuxData - a pointer on auxiliary data, if needed.
-     *              the sheet path is needed for REFERENCE field because m_Text
-     *              value is just the value displayed, and in complex hierarchies
-     *              this is only one of all references (one per sheet path)
-     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
-     * @return True if this field text matches the search criteria.
+     * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
      */
     virtual bool Matches( wxFindReplaceData& aSearchData,
                           void* aAuxData, wxPoint* aFindLocation );

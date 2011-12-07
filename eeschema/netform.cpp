@@ -1010,11 +1010,11 @@ XNODE* EXPORT_HELP::makeGenericComponents()
                     SCH_FIELD*  f = comp->GetField( fldNdx );
 
                     // only output a field if non empty
-                    if( !f->m_Text.IsEmpty() )
+                    if( !f->GetText().IsEmpty() )
                     {
                         XNODE*  xfield;
                         xfields->AddChild( xfield = node( sField, f->m_Text ) );
-                        xfield->AddAttribute( sName, f->m_Name );
+                        xfield->AddAttribute( sName, f->GetName() );
                     }
                 }
             }

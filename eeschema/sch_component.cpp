@@ -424,6 +424,7 @@ const wxString SCH_COMPONENT::GetRef( SCH_SHEET_PATH* sheet )
         SetRef( sheet, GetField( REFERENCE )->m_Text );
         return GetField( REFERENCE )->m_Text;
     }
+
     return m_prefix;
 }
 
@@ -440,8 +441,7 @@ bool SCH_COMPONENT::IsReferenceStringValid( const wxString & aReferenceString )
     bool ok = true;
 
     // Try to unannotate this reference
-    while( !text.IsEmpty() &&
-            ( text.Last() == '?' || isdigit( text.Last() ) ) )
+    while( !text.IsEmpty() && ( text.Last() == '?' || isdigit( text.Last() ) ) )
         text.RemoveLast();
 
     if( text.IsEmpty() )
@@ -502,13 +502,16 @@ void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
 
     // Reinit the m_prefix member if needed
     wxString prefix = ref;
+
     if( IsReferenceStringValid( prefix ) )
     {
         while( prefix.Last() == '?' || isdigit( prefix.Last() ) )
             prefix.RemoveLast();
     }
     else
+    {
         prefix = wxT("U");        // Set to default ref prefix
+    }
 
     if( m_prefix != prefix )
         m_prefix = prefix;
@@ -582,6 +585,7 @@ void SCH_COMPONENT::SetUnitSelection( SCH_SHEET_PATH* aSheet, int aUnitSelection
             h_ref += tokenizer.GetNextToken();      // Add reference
             h_ref += wxT( " " );
             h_ref << aUnitSelection;                // Add part selection
+
             // Ann the part selection
             m_PathsAndReferences[ii] = h_ref;
             notInArray = false;
@@ -622,7 +626,7 @@ SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName )
 {
     for( unsigned i = 0;  i<m_Fields.size();  ++i )
     {
-        if( aFieldName == m_Fields[i].m_Name )
+        if( aFieldName == m_Fields[i].GetName( false ) )
             return &m_Fields[i];
     }
 
@@ -690,6 +694,7 @@ void SCH_COMPONENT::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
     // Build a reference with no annotation,
     // i.e. a reference ended by only one '?'
     wxString defRef = m_prefix;
+
     if( IsReferenceStringValid( defRef ) )
     {
         while( defRef.Last() == '?' )
@@ -966,8 +971,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     //files backwards-compatible.
     if( m_PathsAndReferences.GetCount() > 0 )
     {
-        reference_fields = wxStringTokenize( m_PathsAndReferences[0],
-                                             delimiters );
+        reference_fields = wxStringTokenize( m_PathsAndReferences[0], delimiters );
 
         name1 = toUTFTildaText( reference_fields[1] );
     }
@@ -984,7 +988,9 @@ bool SCH_COMPONENT::Save( FILE* f ) const
         name2 = toUTFTildaText( m_ChipName );
     }
     else
+    {
         name2 = NULL_STRING;
+    }
 
     if( fprintf( f, "$Comp\n" ) == EOF )
         return false;
@@ -1031,7 +1037,7 @@ bool SCH_COMPONENT::Save( FILE* f ) const
     for( unsigned i = 0;  i<m_Fields.size();  ++i )
     {
         SCH_FIELD* fld = GetField( i );
-        fld->m_FieldId = i;  // we don't need field Ids, please be gone.
+        fld->SetId( i );  // we don't need field Ids, please be gone.
     }
 
     // Fixed fields:
@@ -1108,8 +1114,10 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     if( strcmp( name1, NULL_STRING ) != 0 )
     {
         for( ii = 0; ii < (int) strlen( name1 ); ii++ )
+        {
             if( name1[ii] == '~' )
                 name1[ii] = ' ';
+        }
 
         m_ChipName = FROM_UTF8( name1 );
 
@@ -1139,6 +1147,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                 isDigit   = true;
                 name1[ii] = 0;  //null-terminate.
             }
+
             if( !isDigit )
             {
                 name1[ii] = name2[ii];
@@ -1226,11 +1235,15 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
             // copy the multi, if exists
             ii = ReadDelimitedText( name1, ptcar, 255 );
+
             if( name1[0] == 0 )  // Nothing read, put a default value
                 sprintf( name1, "%d", m_unit );
+
             int multi = atoi( name1 );
+
             if( multi < 0 || multi > 25 )
                 multi = 1;
+
             AddHierarchicalReference( path, ref, multi );
             GetField( REFERENCE )->m_Text = ref;
         }
@@ -1255,6 +1268,7 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             }
 
             ptcar += ReadDelimitedText( &fieldText, ptcar );
+
             if( *ptcar == 0 )
             {
                 aErrorMsg.Printf( wxT( "Component field F at line %d, aborted" ),
@@ -1290,11 +1304,12 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             }
             else
             {
-                GetField( fieldNdx )->m_Name = fieldName;
+                GetField( fieldNdx )->SetName( fieldName );
             }
 
             GetField( fieldNdx )->m_Text = fieldText;
             memset( char3, 0, sizeof(char3) );
+
             if( ( ii = sscanf( ptcar, "%s %d %d %d %X %s %s", char1,
                                &GetField( fieldNdx )->m_Pos.x,
                                &GetField( fieldNdx )->m_Pos.y,
@@ -1322,14 +1337,17 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                     hjustify = GR_TEXT_HJUSTIFY_LEFT;
                 else if( *char2 == 'R' )
                     hjustify = GR_TEXT_HJUSTIFY_RIGHT;
+
                 if( char3[0] == 'B' )
                     vjustify = GR_TEXT_VJUSTIFY_BOTTOM;
                 else if( char3[0] == 'T' )
                     vjustify = GR_TEXT_VJUSTIFY_TOP;
+
                 if( char3[1] == 'I' )
                     GetField( fieldNdx )->m_Italic = true;
                 else
                     GetField( fieldNdx )->m_Italic = false;
+
                 if( char3[2] == 'B' )
                     GetField( fieldNdx )->m_Bold = true;
                 else
@@ -1344,7 +1362,9 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
                     GetField( fieldNdx )->m_Attributs |= TEXT_NO_VISIBLE;
         }
         else
+        {
             break;
+        }
     }
 
     if( sscanf( line, "%d %d %d", &m_unit, &m_Pos.x, &m_Pos.y ) != 3 )
