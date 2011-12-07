@@ -39,7 +39,8 @@ set(CVPCB_SRCS
     savecmp.cpp
     setvisu.cpp
     tool_cvpcb.cpp
-    writenetlistpcbnew.cpp)
+    writenetlistpcbnew.cpp
+    )
 
 ###
 # Windows resource file

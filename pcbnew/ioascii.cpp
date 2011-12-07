@@ -963,6 +963,8 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
 }
 
 
+#if !defined( USE_NEW_PCBNEW_LOAD )
+
 int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 {
     wxBusyCursor dummy;
@@ -1140,6 +1142,8 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
     return 1;
 }
 
+#endif
+
 
 #ifdef PCBNEW
 
@@ -1187,6 +1191,5 @@ int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
 
     return rc;
 }
-
 
 #endif

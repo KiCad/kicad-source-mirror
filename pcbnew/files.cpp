@@ -200,7 +200,7 @@ the changes?" ) ) )
 
     GetScreen()->SetFileName( fileName.GetFullPath() );
 
-#if 1
+#if !defined(USE_NEW_PCBNEW_LOAD)
 
     // Start read PCB file
     FILE* source = wxFopen( GetScreen()->GetFileName(), wxT( "rt" ) );
