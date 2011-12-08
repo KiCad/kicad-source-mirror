@@ -82,7 +82,7 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
 
     if( lastMarker != NULL )
     {
-        if( sheetFoundIn != GetSheet() )
+        if( *sheetFoundIn != *m_CurrentSheet )
         {
             sheetFoundIn->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheetFoundIn;
@@ -193,7 +193,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     {
         sheet = sheetWithComponentFound;
 
-        if( *sheet != *GetSheet() )
+        if( *sheet != *m_CurrentSheet )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
@@ -362,7 +362,7 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
         wxCHECK_RET( sheet != NULL, wxT( "Could not find sheet path " ) +
                      data.GetSheetPath() );
 
-        if( sheet->PathHumanReadable() != GetSheet()->PathHumanReadable() )
+        if( sheet->PathHumanReadable() != m_CurrentSheet->PathHumanReadable() )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;

@@ -114,24 +114,14 @@ class LIB_PIN : public LIB_ITEM
     long     m_number;       ///< Pin number defined as 4 ASCII characters like "12", "anod",
                              ///< "G6", or "12".  It is stored as "12\0\0" and does not
                              ///< depend on endian type.
+    int      m_numTextSize;
+    int      m_nameTextSize; /* Pin num and Pin name sizes */
 
     /**
      * Draw the pin.
      */
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                       int aColor, int aDrawMode, void* aData, const TRANSFORM& aTransform );
-
-public:
-    int      m_PinNumSize;
-    int      m_PinNameSize; /* Pin num and Pin name sizes */
-
-    /* (Currently Unused) Pin num and Pin name text options: italic/normal
-     * /bold, 0 = default */
-    char     m_PinNumShapeOpt;
-    char     m_PinNameShapeOpt;
-    // (Currently Unused) Pin num and Pin name text opt position, 0 = default:
-    char     m_PinNumPositionOpt;
-    char     m_PinNamePositionOpt;
 
 public:
     LIB_PIN( LIB_COMPONENT* aParent );
@@ -186,7 +176,7 @@ public:
     virtual void DisplayInfo( EDA_DRAW_FRAME* aFrame );
 
     /**
-     * @copydoc EDA_ITEM::Matches()
+     * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
      */
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
@@ -263,6 +253,8 @@ public:
      */
     void SetNameTextSize( int aSize );
 
+    int GetNameTextSize() const { return m_nameTextSize; }
+
     /**
      * Set the pin number.
      *
@@ -282,6 +274,8 @@ public:
      *                units ( mils ).
      */
     void SetNumberTextSize( int aSize );
+
+    int GetNumberTextSize() const { return m_numTextSize; }
 
     int GetOrientation() const { return m_orientation; }
 

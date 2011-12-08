@@ -59,7 +59,7 @@ bool SCH_SHEET_PATH::BuildSheetPathInfoFromSheetPathValue( const wxString& aPath
     if( aFound )
         return true;
 
-    if(  GetSheetsCount() == 0 )
+    if( GetSheetsCount() == 0 )
         Push( g_RootSheet );
 
     if( aPath == Path() )

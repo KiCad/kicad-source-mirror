@@ -275,7 +275,7 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
 {
     SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) wxGetApp().GetTopWindow();
 
-    frame->m_LibeditFrame = NULL;
+    frame->SetLibraryEditorWindow( NULL );
     m_drawItem = m_lastDrawItem = NULL;
 
     if ( m_tempCopyComponent )

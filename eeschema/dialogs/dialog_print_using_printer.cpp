@@ -231,17 +231,17 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
     parent->AppendMsgPanel( msg, wxEmptyString, CYAN );
 
     SCH_SCREEN*     screen       = parent->GetScreen();
-    SCH_SHEET_PATH* oldsheetpath = parent->GetSheet();
+    SCH_SHEET_PATH  oldsheetpath = parent->GetCurrentSheet();
     SCH_SHEET_PATH  list;
     SCH_SHEET_LIST  SheetList( NULL );
     SCH_SHEET_PATH* sheetpath = SheetList.GetSheet( page - 1 );
 
     if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
     {
-        parent->m_CurrentSheet = &list;
-        parent->m_CurrentSheet->UpdateAllScreenReferences();
+        parent->SetCurrentSheet( list );
+        parent->GetCurrentSheet().UpdateAllScreenReferences();
         parent->SetSheetNumberAndCount();
-        screen = parent->m_CurrentSheet->LastScreen();
+        screen = parent->GetCurrentSheet().LastScreen();
     }
     else
     {
@@ -252,8 +252,8 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
         return false;
 
     DrawPage( screen );
-    parent->m_CurrentSheet = oldsheetpath;
-    parent->m_CurrentSheet->UpdateAllScreenReferences();
+    parent->SetCurrentSheet( oldsheetpath );
+    parent->GetCurrentSheet().UpdateAllScreenReferences();
     parent->SetSheetNumberAndCount();
 
     return true;

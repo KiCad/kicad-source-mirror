@@ -167,7 +167,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToOptions()
     if( m_Cmp->GetUnit() )
     {
         int unit_selection = unitChoice->GetCurrentSelection() + 1;
-        m_Cmp->SetUnitSelection( m_Parent->GetSheet(), unit_selection );
+        m_Cmp->SetUnitSelection( &m_Parent->GetCurrentSheet(), unit_selection );
         m_Cmp->SetUnit( unit_selection );
     }
 
@@ -279,7 +279,7 @@ Do you wish to remove this and all remaining undefined fields?" ),
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given component, in a complex hierarchy, there are more than one
     // reference.
-    m_Cmp->SetRef( m_Parent->GetSheet(), m_FieldsBuf[REFERENCE].m_Text );
+    m_Cmp->SetRef( &m_Parent->GetCurrentSheet(), m_FieldsBuf[REFERENCE].m_Text );
 
     m_Parent->OnModify();
     m_Parent->GetScreen()->TestDanglingEnds();
@@ -520,7 +520,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::InitBuffers( SCH_COMPONENT* aComponent 
     }
 #endif
 
-    m_FieldsBuf[REFERENCE].m_Text = m_Cmp->GetRef( m_Parent->GetSheet() );
+    m_FieldsBuf[REFERENCE].m_Text = m_Cmp->GetRef( &m_Parent->GetCurrentSheet() );
 
     for( unsigned i = 0;  i<m_FieldsBuf.size();  ++i )
     {

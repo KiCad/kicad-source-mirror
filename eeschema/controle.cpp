@@ -106,7 +106,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
         Pin->DisplayInfo( this );
 
         if( LibItem )
-            AppendMsgPanel( LibItem->GetRef( GetSheet() ),
+            AppendMsgPanel( LibItem->GetRef( m_CurrentSheet ),
                             LibItem->GetField( VALUE )->m_Text, DARKCYAN );
 
         // Cross probing:2 - pin found, and send a locate pin command to Pcbnew (highlight net)
