@@ -85,12 +85,12 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     dlg.SetElectricalType( pin->GetType() );
     dlg.SetName( pin->GetName() );
     dlg.SetNameTextSize( ReturnStringFromValue( g_UserUnit,
-                                                pin->m_PinNameSize,
+                                                pin->GetNameTextSize(),
                                                 m_InternalUnits ) );
     dlg.SetNameTextSizeUnits( units );
     dlg.SetPadName( pin->GetNumberString() );
     dlg.SetPadNameTextSize( ReturnStringFromValue( g_UserUnit,
-                                                  pin->m_PinNumSize,
+                                                   pin->GetNumberTextSize(),
                                                   m_InternalUnits ) );
 
     dlg.SetPadNameTextSizeUnits( units );
@@ -391,8 +391,8 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     pin->SetOrientation( LastPinOrient );
     pin->SetType( LastPinType );
     pin->SetShape( LastPinShape );
-    pin->m_PinNameSize = LastPinNameSize;
-    pin->m_PinNumSize  = LastPinNumSize;
+    pin->SetNameTextSize( LastPinNameSize );
+    pin->SetNumberTextSize( LastPinNumSize );
     pin->SetConvert( LastPinCommonConvert ? 0 : m_convert );
     pin->SetUnit( LastPinCommonUnit ? 0 : m_unit );
     pin->SetVisible( LastPinVisible );
@@ -507,11 +507,11 @@ void LIB_EDIT_FRAME::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
         switch( id )
         {
         case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
-            Pin->m_PinNumSize = MasterPin->m_PinNumSize;
+            Pin->SetNumberTextSize( MasterPin->GetNumberTextSize() );
             break;
 
         case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
-            Pin->m_PinNameSize = MasterPin->m_PinNameSize;
+            Pin->SetNameTextSize( MasterPin->GetNameTextSize() );
             break;
 
         case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:

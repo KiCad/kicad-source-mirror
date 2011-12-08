@@ -84,7 +84,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     }
     else
     {
-        GetSheet()->GetComponents( references );
+        m_CurrentSheet->GetComponents( references );
     }
 
     /* Break full components reference in name (prefix) and number:
@@ -162,7 +162,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOn
     if( !aOneSheetOnly )
         SheetList.GetComponents( ComponentsList );
     else
-        GetSheet()->GetComponents( ComponentsList );
+        m_CurrentSheet->GetComponents( ComponentsList );
 
     return ComponentsList.CheckAnnotation( aMessageList );
 }

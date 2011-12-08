@@ -125,7 +125,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
     if( item == NULL )
     {
-        if( GetSheet()->Last() != g_RootSheet )
+        if( m_CurrentSheet->Last() != g_RootSheet )
             AddMenuItem( PopMenu, ID_POPUP_SCH_LEAVE_SHEET, _( "Leave Sheet" ),
                          KiBitmap( leave_sheet_xpm ) );
 

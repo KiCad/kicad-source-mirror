@@ -145,7 +145,8 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
 {
     SCH_EDIT_FRAME* schframe  = (SCH_EDIT_FRAME*) m_Parent;
     SCH_SCREEN*     screen    = schframe->GetScreen();
-    SCH_SHEET_PATH* sheetpath, * oldsheetpath = schframe->GetSheet();
+    SCH_SHEET_PATH* sheetpath;
+    SCH_SHEET_PATH  oldsheetpath = schframe->GetCurrentSheet();
     wxString        PlotFileName;
     Ki_PageDescr*   PlotSheet;
     wxPoint         plot_offset;
@@ -172,13 +173,15 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
 
             if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
             {
-                schframe->m_CurrentSheet = &list;
-                schframe->m_CurrentSheet->UpdateAllScreenReferences();
+                schframe->SetCurrentSheet( list );
+                schframe->GetCurrentSheet().UpdateAllScreenReferences();
                 schframe->SetSheetNumberAndCount();
-                screen = schframe->m_CurrentSheet->LastScreen();
+                screen = schframe->GetCurrentSheet().LastScreen();
             }
             else  // Should not happen
+            {
                 return;
+            }
 
             sheetpath = SheetList.GetNext();
         }
@@ -197,8 +200,8 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
             break;
     }
 
-    schframe->m_CurrentSheet = oldsheetpath;
-    schframe->m_CurrentSheet->UpdateAllScreenReferences();
+    schframe->SetCurrentSheet( oldsheetpath );
+    schframe->GetCurrentSheet().UpdateAllScreenReferences();
     schframe->SetSheetNumberAndCount();
 }
 

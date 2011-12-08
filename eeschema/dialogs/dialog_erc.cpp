@@ -196,11 +196,11 @@ void DIALOG_ERC::OnLeftDClickMarkersList( wxCommandEvent& event )
         return;
     }
 
-    if( sheet != m_Parent->GetSheet() )
+    if( *sheet != m_Parent->GetCurrentSheet() )
     {
         sheet->LastScreen()->SetZoom( m_Parent->GetScreen()->GetZoom() );
-        *m_Parent->m_CurrentSheet = *sheet;
-        m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
+        m_Parent->SetCurrentSheet( *sheet );
+        m_Parent->GetCurrentSheet().UpdateAllScreenReferences();
     }
 
     m_Parent->GetScreen()->SetCrossHairPosition( pos );

@@ -281,7 +281,8 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll, int HPGL_Sh
 {
     wxString               PlotFileName;
     SCH_SCREEN*            screen    = m_Parent->GetScreen();
-    SCH_SHEET_PATH*        sheetpath, * oldsheetpath = m_Parent->GetSheet();
+    SCH_SHEET_PATH*        sheetpath;
+    SCH_SHEET_PATH         oldsheetpath = m_Parent->GetCurrentSheet();
     Ki_PageDescr*          PlotSheet;
     wxSize                 SheetSize;
     wxPoint                SheetOffset, PlotOffset;
@@ -308,10 +309,10 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll, int HPGL_Sh
 
             if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
             {
-                m_Parent->m_CurrentSheet = &list;
-                m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
+                m_Parent->SetCurrentSheet( list );
+                m_Parent->GetCurrentSheet().UpdateAllScreenReferences();
                 m_Parent->SetSheetNumberAndCount();
-                screen = m_Parent->m_CurrentSheet->LastScreen();
+                screen = m_Parent->GetCurrentSheet().LastScreen();
             }
             else  // Should not happen
                 return;
@@ -344,8 +345,8 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll, int HPGL_Sh
             break;
     }
 
-    m_Parent->m_CurrentSheet = oldsheetpath;
-    m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
+    m_Parent->SetCurrentSheet( oldsheetpath );
+    m_Parent->GetCurrentSheet().UpdateAllScreenReferences();
     m_Parent->SetSheetNumberAndCount();
 }
 

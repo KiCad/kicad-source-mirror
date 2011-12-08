@@ -174,7 +174,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
 {
     SCH_SCREEN*     screen    = m_Parent->GetScreen();
     SCH_SHEET_PATH* sheetpath;
-    SCH_SHEET_PATH* oldsheetpath = m_Parent->GetSheet();        // sheetpath is saved here
+    SCH_SHEET_PATH  oldsheetpath = m_Parent->GetCurrentSheet(); // sheetpath is saved here
     wxString        plotFileName;
     Ki_PageDescr*   actualPage;                                 // page size selected in schematic
     Ki_PageDescr*   plotPage;                                   // page size selected to plot
@@ -202,10 +202,10 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
 
             if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
             {
-                m_Parent->m_CurrentSheet = &list;
-                m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
+                m_Parent->SetCurrentSheet( list );
+                m_Parent->GetCurrentSheet().UpdateAllScreenReferences();
                 m_Parent->SetSheetNumberAndCount();
-                screen = m_Parent->m_CurrentSheet->LastScreen();
+                screen = m_Parent->GetCurrentSheet().LastScreen();
             }
             else  // Should not happen
                 return;
@@ -246,8 +246,8 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
             break;
     }
 
-    m_Parent->m_CurrentSheet = oldsheetpath;
-    m_Parent->m_CurrentSheet->UpdateAllScreenReferences();
+    m_Parent->SetCurrentSheet( oldsheetpath );
+    m_Parent->GetCurrentSheet().UpdateAllScreenReferences();
     m_Parent->SetSheetNumberAndCount();
 }
 

@@ -188,37 +188,29 @@ LIB_PIN::LIB_PIN( LIB_COMPONENT* aParent ) :
     m_length = 300;                             /* default Pin len */
     m_orientation = PIN_RIGHT;                  /* Pin orient: Up, Down, Left, Right */
     m_shape = NONE;                             /* Pin shape, bitwise. */
-    m_type  = PIN_UNSPECIFIED;                  /* electrical type of pin */
-    m_attributes  = 0;                          /* bit 0 != 0: pin invisible */
-    m_number      = 0;                          /* pin number ( i.e. 4 codes ASCII ) */
-    m_PinNumSize  = 50;
-    m_PinNameSize = 50;                         /* Default size for pin name and num */
-    m_width    = 0;
+    m_type = PIN_UNSPECIFIED;                   /* electrical type of pin */
+    m_attributes = 0;                           /* bit 0 != 0: pin invisible */
+    m_number = 0;                               /* pin number ( i.e. 4 codes ASCII ) */
+    m_numTextSize = 50;
+    m_nameTextSize = 50;                        /* Default size for pin name and num */
+    m_width = 0;
     m_typeName = _( "Pin" );
-    m_PinNumShapeOpt     = 0;
-    m_PinNameShapeOpt    = 0;
-    m_PinNumPositionOpt  = 0;
-    m_PinNamePositionOpt = 0;
 }
 
 
 LIB_PIN::LIB_PIN( const LIB_PIN& pin ) : LIB_ITEM( pin )
 {
-    m_position    = pin.m_position;
-    m_length      = pin.m_length;
+    m_position = pin.m_position;
+    m_length = pin.m_length;
     m_orientation = pin.m_orientation;
     m_shape = pin.m_shape;
-    m_type  = pin.m_type;
-    m_attributes         = pin.m_attributes;
-    m_number             = pin.m_number;
-    m_PinNumSize         = pin.m_PinNumSize;
-    m_PinNameSize        = pin.m_PinNameSize;
-    m_PinNumShapeOpt     = pin.m_PinNumShapeOpt;
-    m_PinNameShapeOpt    = pin.m_PinNameShapeOpt;
-    m_PinNumPositionOpt  = pin.m_PinNumPositionOpt;
-    m_PinNamePositionOpt = pin.m_PinNamePositionOpt;
+    m_type = pin.m_type;
+    m_attributes = pin.m_attributes;
+    m_number = pin.m_number;
+    m_numTextSize = pin.m_numTextSize;
+    m_nameTextSize = pin.m_nameTextSize;
     m_width = pin.m_width;
-    m_name  = pin.m_name;
+    m_name = pin.m_name;
 }
 
 
@@ -253,9 +245,9 @@ void LIB_PIN::SetName( const wxString& aName )
 
 void LIB_PIN::SetNameTextSize( int size )
 {
-    if( size != m_PinNameSize )
+    if( size != m_nameTextSize )
     {
-        m_PinNameSize = size;
+        m_nameTextSize = size;
         SetModified();
     }
 
@@ -267,10 +259,10 @@ void LIB_PIN::SetNameTextSize( int size )
 
     for( size_t i = 0; i < pinList.size(); i++ )
     {
-        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0 || pinList[i]->m_PinNameSize == size )
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0 || pinList[i]->m_nameTextSize == size )
             continue;
 
-        pinList[i]->m_PinNameSize = size;
+        pinList[i]->m_nameTextSize = size;
         SetModified();
     }
 }
@@ -297,9 +289,9 @@ void LIB_PIN::SetNumber( const wxString& number )
 
 void LIB_PIN::SetNumberTextSize( int size )
 {
-    if( size != m_PinNumSize )
+    if( size != m_numTextSize )
     {
-        m_PinNumSize = size;
+        m_numTextSize = size;
         SetModified();
     }
 
@@ -311,10 +303,10 @@ void LIB_PIN::SetNumberTextSize( int size )
 
     for( size_t i = 0; i < pinList.size(); i++ )
     {
-        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0 || pinList[i]->m_PinNumSize == size )
+        if( ( pinList[i]->m_Flags & IS_LINKED ) == 0 || pinList[i]->m_numTextSize == size )
             continue;
 
-        pinList[i]->m_PinNumSize = size;
+        pinList[i]->m_numTextSize = size;
         SetModified();
     }
 }
@@ -639,7 +631,7 @@ bool LIB_PIN::Save( OUTPUTFORMATTER& aFormatter )
 
     if( aFormatter.Print( 0, " %s %d %d %d %c %d %d %d %d %c",
                           TO_UTF8( StringPinNum ), m_position.x, m_position.y,
-                          (int) m_length, (int) m_orientation, m_PinNumSize, m_PinNameSize,
+                          (int) m_length, (int) m_orientation, m_numTextSize, m_nameTextSize,
                           m_Unit, m_Convert, Etype ) < 0 )
         return false;
 
@@ -692,8 +684,8 @@ bool LIB_PIN::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     *pinAttrs = 0;
 
     i = sscanf( line + 2, "%s %s %d %d %d %s %d %d %d %d %s %s", pinName,
-                pinNum, &m_position.x, &m_position.y, &m_length, pinOrient, &m_PinNumSize,
-                &m_PinNameSize, &m_Unit, &m_Convert, pinType, pinAttrs );
+                pinNum, &m_position.x, &m_position.y, &m_length, pinOrient, &m_numTextSize,
+                &m_nameTextSize, &m_Unit, &m_Convert, pinType, pinAttrs );
 
     if( i < 11 )
     {
@@ -1099,14 +1091,14 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
     wxString   StringPinNum;
     EDA_Colors NameColor, NumColor;
 
-    wxSize     PinNameSize( m_PinNameSize, m_PinNameSize );
-    wxSize     PinNumSize( m_PinNumSize, m_PinNumSize );
+    wxSize     PinNameSize( m_nameTextSize, m_nameTextSize );
+    wxSize     PinNumSize( m_numTextSize, m_numTextSize );
 
     int        nameLineWidth = GetPenSize();
 
-    nameLineWidth = Clamp_Text_PenSize( nameLineWidth, m_PinNameSize, false );
+    nameLineWidth = Clamp_Text_PenSize( nameLineWidth, m_nameTextSize, false );
     int        numLineWidth = GetPenSize();
-    numLineWidth = Clamp_Text_PenSize( numLineWidth, m_PinNumSize, false );
+    numLineWidth = Clamp_Text_PenSize( numLineWidth, m_numTextSize, false );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -1406,8 +1398,8 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
     int        x, y, x1, y1;
     wxString   StringPinNum;
     EDA_Colors NameColor, NumColor;
-    wxSize     PinNameSize = wxSize( m_PinNameSize, m_PinNameSize );
-    wxSize     PinNumSize  = wxSize( m_PinNumSize, m_PinNumSize );
+    wxSize     PinNameSize = wxSize( m_nameTextSize, m_nameTextSize );
+    wxSize     PinNumSize  = wxSize( m_numTextSize, m_numTextSize );
 
     /* Get the num and name colors */
     NameColor = ReturnLayerColor( LAYER_PINNAM );
@@ -1909,10 +1901,10 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
     }
 
     // First, calculate boundary box corners position
-    int numberTextLength = showNum ? m_PinNumSize * GetNumberString().Len() : 0;
+    int numberTextLength = showNum ? m_numTextSize * GetNumberString().Len() : 0;
 
     // Actual text height is bigger than text size
-    int numberTextHeight  = showNum ? wxRound( m_PinNumSize * 1.1 ) : 0;
+    int numberTextHeight  = showNum ? wxRound( m_numTextSize * 1.1 ) : 0;
 
     if( m_shape & INVERT )
         minsizeV = MAX( TARGET_PIN_RADIUS, INVERT_PIN_RADIUS );
@@ -1934,9 +1926,10 @@ EDA_RECT LIB_PIN::GetBoundingBox() const
         if( m_name.Left( 1 ) == wxT( "~" ) )
             length -= 1;
 
-        nameTextLength = ( m_PinNameSize * length ) + nameTextOffset;
+        nameTextLength = ( m_nameTextSize * length ) + nameTextOffset;
+
         // Actual text height are bigger than text size
-        nameTextHeight = wxRound( m_PinNameSize * 1.1 ) + TXTMARGE;
+        nameTextHeight = wxRound( m_nameTextSize * 1.1 ) + TXTMARGE;
     }
 
     if( nameTextOffset )        // for values > 0, pin name is inside the body

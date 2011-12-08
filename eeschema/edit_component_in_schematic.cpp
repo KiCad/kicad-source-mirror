@@ -106,7 +106,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
             // Test is reference is acceptable:
             if( SCH_COMPONENT::IsReferenceStringValid( newtext ) )
             {
-                component->SetRef( GetSheet(), newtext );
+                component->SetRef( m_CurrentSheet, newtext );
                 aField->SetText( newtext );
             }
             else

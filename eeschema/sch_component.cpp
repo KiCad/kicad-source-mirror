@@ -1472,7 +1472,8 @@ void SCH_COMPONENT::DisplayInfo( EDA_DRAW_FRAME* frame )
 
     frame->ClearMsgPanel();
 
-    frame->AppendMsgPanel( _( "Reference" ), GetRef( ( (SCH_EDIT_FRAME*) frame )->GetSheet() ),
+    frame->AppendMsgPanel( _( "Reference" ),
+                           GetRef( &( ( (SCH_EDIT_FRAME*) frame )->GetCurrentSheet() ) ),
                            DARKCYAN );
 
     if( root_component->IsPower() )

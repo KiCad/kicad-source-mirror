@@ -113,18 +113,16 @@ enum SCH_SEARCH_T {
 class SCH_EDIT_FRAME : public EDA_DRAW_FRAME
 {
 public:
-    wxComboBox*           m_SelPartBox;
-    SCH_SHEET_PATH*       m_CurrentSheet;    ///< which sheet we are presently working on.
     int m_NetlistFormat;
     int m_AddSubPrefix;
     bool                  m_ShowAllPins;
-    wxPoint               m_OldPos;
-    LIB_EDIT_FRAME*       m_LibeditFrame;
-    LIB_VIEW_FRAME*       m_ViewlibFrame;
     wxString              m_UserLibraryPath;
     wxArrayString         m_ComponentLibFiles;
 
 private:
+    SCH_SHEET_PATH*       m_CurrentSheet;    ///< which sheet we are presently working on.
+    LIB_VIEW_FRAME*       m_ViewlibFrame;
+    LIB_EDIT_FRAME*       m_LibeditFrame;
     wxString              m_DefaultSchematicFileName;
     int m_TextFieldSize;
     PARAM_CFG_ARRAY       m_projectFileParams;
@@ -187,6 +185,11 @@ public:
     ~SCH_EDIT_FRAME();
 
     void OnCloseWindow( wxCloseEvent& Event );
+
+    void SetLibraryEditorWindow( LIB_EDIT_FRAME* aFrame ) { m_LibeditFrame = aFrame; }
+
+    void SetLibraryViewerWindow( LIB_VIEW_FRAME* aFrame ) { m_ViewlibFrame = aFrame; }
+
     void Process_Special_Functions( wxCommandEvent& event );
     void OnColorConfig( wxCommandEvent& aEvent );
     void Process_Config( wxCommandEvent& event );
@@ -310,8 +313,6 @@ public:
      * and update the date in frame reference
      */
     void OnModify();
-
-    SCH_SHEET_PATH* GetSheet();
 
     SCH_SCREEN* GetScreen() const;
 
@@ -498,6 +499,10 @@ public:
     int CheckAnnotate( wxArrayString* aMessageList, bool aOneSheetOnly );
 
     // Functions used for hierarchy handling
+    SCH_SHEET_PATH& GetCurrentSheet();
+
+    void SetCurrentSheet( const SCH_SHEET_PATH& aSheet );
+
     /**
      * Function DisplayCurrentSheet
      * draws the current sheet on the display.

@@ -125,7 +125,8 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
     if( aPrintAll && m_Parent->IsType( SCHEMATIC_FRAME ) )
     {
         SCH_EDIT_FRAME*  schframe = (SCH_EDIT_FRAME*) m_Parent;
-        SCH_SHEET_PATH*  sheetpath, * oldsheetpath = schframe->GetSheet();
+        SCH_SHEET_PATH*  sheetpath;
+        SCH_SHEET_PATH   oldsheetpath = schframe->GetCurrentSheet();
         SCH_SCREEN*      schscreen = schframe->GetScreen();
         SCH_SHEET_LIST   SheetList( NULL );
         sheetpath = SheetList.GetFirst();
@@ -135,14 +136,15 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
         {
             if( sheetpath == NULL )
                 break;
+
             list.Clear();
 
             if( list.BuildSheetPathInfoFromSheetPathValue( sheetpath->Path() ) )
             {
-                schframe->m_CurrentSheet = &list;
-                schframe->m_CurrentSheet->UpdateAllScreenReferences();
+                schframe->SetCurrentSheet( list );
+                schframe->GetCurrentSheet().UpdateAllScreenReferences();
                 schframe->SetSheetNumberAndCount();
-                schscreen      = schframe->m_CurrentSheet->LastScreen();
+                schscreen = schframe->GetCurrentSheet().LastScreen();
             }
             else  // Should not happen
                 return;
@@ -161,8 +163,8 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
             m_MessagesBox->AppendText( msg );
         }
 
-        schframe->m_CurrentSheet = oldsheetpath;
-        schframe->m_CurrentSheet->UpdateAllScreenReferences();
+        schframe->SetCurrentSheet( oldsheetpath );
+        schframe->GetCurrentSheet().UpdateAllScreenReferences();
         schframe->SetSheetNumberAndCount();
     }
     else

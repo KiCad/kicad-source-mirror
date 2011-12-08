@@ -286,12 +286,6 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 }
 
 
-SCH_SHEET_PATH* SCH_EDIT_FRAME::GetSheet()
-{
-    return m_CurrentSheet;
-}
-
-
 void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 {
     SCH_SCREEN* screen = GetScreen();
@@ -366,6 +360,20 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     GetScreen()->SetZoom( 32.0 );
     GetScreen()->m_UndoRedoCountMax = 10;
+}
+
+
+SCH_SHEET_PATH& SCH_EDIT_FRAME::GetCurrentSheet()
+{
+    wxASSERT_MSG( m_CurrentSheet != NULL, wxT( "SCH_EDIT_FRAME m_CurrentSheet member is NULL." ) );
+
+    return *m_CurrentSheet;
+}
+
+
+void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
+{
+    *m_CurrentSheet = aSheet;
 }
 
 

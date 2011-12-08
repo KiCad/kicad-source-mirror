@@ -219,7 +219,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     lastCommponentName = Name;
     AddHistoryComponentName( HistoryList, Name );
 
-    component = new SCH_COMPONENT( *Entry, GetSheet(), unit, convert,
+    component = new SCH_COMPONENT( *Entry, m_CurrentSheet, unit, convert,
                                    GetScreen()->GetCrossHairPosition(), true );
 
     // Set the m_ChipName value, from component name in lib, for aliases
@@ -335,7 +335,7 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
         component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode );
 
     /* Update the unit number. */
-    component->SetUnitSelection( GetSheet(), unit );
+    component->SetUnitSelection( m_CurrentSheet, unit );
     component->SetUnit( unit );
     component->ClearFlags();
     component->SetFlags( flags );   // Restore m_Flag modified by SetUnit()
