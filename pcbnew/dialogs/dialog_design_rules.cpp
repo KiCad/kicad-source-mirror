@@ -708,11 +708,11 @@ void DIALOG_DESIGN_RULES::OnOkButtonClick( wxCommandEvent& event )
         return;
     }
 
-    m_Pcb->SetDesignSettings( m_BrdSettings );
-
     CopyRulesListToBoard();
     CopyGlobalRulesToBoard();
     CopyDimensionsListsToBoard();
+
+    m_Pcb->SetDesignSettings( m_BrdSettings );
 
     // Save the dialog's position before finishing
     s_LastPos  = GetPosition();
