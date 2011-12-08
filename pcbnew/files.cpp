@@ -51,6 +51,7 @@
 
 
 static const wxString pcbBackupFileExtension(  wxT( "000" ) );
+static wxString saveFileName( wxT( "$savepcb" ) );
 
 
 void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
@@ -93,7 +94,7 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
 
         if( id == ID_MENU_RECOVER_BOARD )
         {
-            fn = wxFileName( wxEmptyString, g_SaveFileName, PcbFileExtension );
+            fn = wxFileName( wxEmptyString, saveFileName, PcbFileExtension );
         }
         else
         {

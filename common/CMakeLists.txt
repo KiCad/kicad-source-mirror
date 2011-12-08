@@ -105,6 +105,7 @@ set(PCB_COMMON_SRCS
     ../pcbnew/classpcb.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/sel_layer.cpp
+    pcb_plot_params_keywords.cpp
 )
 
 
@@ -124,6 +125,14 @@ make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/netlist_keywords.cpp
     NL_T
     )
+
+# auto-generate pcb_plot_params_lexer.h and pcb_plot_params_keywords.cpp
+make_lexer(
+   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params.keywords
+   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_lexer.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
+   PCBPLOTPARAMS_T
+   )
 
 # The dsntest may not build properly using MS Visual Studio.
 if(NOT MSVC)

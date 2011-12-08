@@ -1161,26 +1161,6 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
     GetParent()->GeneralControl( &DC, pos, localkey );
 
-#ifdef __WINDOWS__
-    // Disable the default scrolling command keys which break KiCad's zooming and
-    // panning.  This is also likely the reason skip was disabled for other platforms.
-    // There probably needs to be some more investigation done here.
-    switch( event.GetKeyCode() )
-    {
-    case WXK_HOME:
-    case WXK_END:
-    case WXK_PAGEUP:
-    case WXK_PAGEDOWN:
-    case WXK_UP:
-    case WXK_DOWN:
-    case WXK_LEFT:
-    case WXK_RIGHT:
-        break;
-
-    default:
-        event.Skip();   // Allow menu shortcut processing on Windows.
-    }
-#endif
 }
 
 
