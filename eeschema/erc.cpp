@@ -197,8 +197,8 @@ int TestDuplicateSheetNames( bool aCreateMarker )
                     continue;
 
                 // We have found a second sheet: compare names
-                if( ( (SCH_SHEET*) item )->m_SheetName.CmpNoCase(
-                        ( ( SCH_SHEET* ) test_item )-> m_SheetName ) == 0 )
+                if( ( (SCH_SHEET*) item )->GetName().CmpNoCase(
+                        ( ( SCH_SHEET* ) test_item )->GetName() ) == 0 )
                 {
                     if( aCreateMarker )
                     {
@@ -206,9 +206,9 @@ int TestDuplicateSheetNames( bool aCreateMarker )
                         SCH_MARKER* marker = new SCH_MARKER();
                         marker->m_TimeStamp = GetNewTimeStamp();
                         marker->SetData( ERCE_DUPLICATE_SHEET_NAME,
-                                         ( (SCH_SHEET*) test_item )->m_Pos,
+                                         ( (SCH_SHEET*) test_item )->GetPosition(),
                                          _( "Duplicate sheet name" ),
-                                         ( (SCH_SHEET*) test_item )->m_Pos );
+                                         ( (SCH_SHEET*) test_item )->GetPosition() );
                         marker->SetMarkerType( MARK_ERC );
                         marker->SetErrorLevel( ERR );
                         marker->SetNext( screen->GetDrawItems() );

@@ -37,9 +37,8 @@
 
 class SCH_POLYLINE : public SCH_ITEM
 {
-public:
-    int m_Width;                            /* Thickness */
-    std::vector<wxPoint> m_PolyPoints;      // list of points (>= 2)
+    int m_width;                            /* Thickness */
+    std::vector<wxPoint> m_points;      // list of points (>= 2)
 
 public:
     SCH_POLYLINE( int layer = LAYER_NOTES );
@@ -77,19 +76,36 @@ public:
 
     /**
      * Function AddPoint
-     * add a corner to m_PolyPoints
+     * add a corner to m_points
      */
     void AddPoint( const wxPoint& point )
     {
-        m_PolyPoints.push_back( point );
+        m_points.push_back( point );
     }
+
+
+    /**
+     * Function SetPoint
+     * sets the point at \a aIndex in the list to \a aPoint.
+     *
+     * @param aIndex The index in the point list.
+     * @param aPoint The new point value.
+     */
+    void SetPoint( int aIndex, const wxPoint& aPoint )
+    {
+        // (unsigned) excludes aIndex<0 also
+        wxCHECK_RET( (unsigned)aIndex < m_points.size(),
+                     wxT( "Invalid SCH_POLYLINE point list index." ) );
+
+        m_points[ aIndex ] = aPoint;
+    }
+
 
     /**
      * Function GetCornerCount
      * @return the number of corners
      */
-
-    unsigned GetCornerCount() const { return m_PolyPoints.size(); }
+    unsigned GetCornerCount() const { return m_points.size(); }
 
     /**
      * Function GetPenSize
@@ -105,7 +121,7 @@ public:
     virtual void Move( const wxPoint& aMoveVector )
     {
         for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
-            m_PolyPoints[ii] += aMoveVector;
+            m_points[ii] += aMoveVector;
     }
 
     /**
@@ -123,11 +139,26 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const;
 
+    /**
+     * Function operator[]
+     * is used for read only access and returns the point at \a aIndex.
+     * @param aIndex The index of the list of points to return.
+     * @return A wxPoint object containing the point at \a aIndex.
+     */
+    wxPoint operator[]( int aIndex ) const
+    {
+        // (unsigned) excludes aIndex<0 also
+        wxCHECK_MSG( (unsigned)aIndex < m_points.size(), wxDefaultPosition,
+                     wxT( "Invalid SCH_POLYLINE point list index." ) );
+
+        return m_points[ aIndex ];
+    }
+
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
-    virtual wxPoint doGetPosition() const { return m_PolyPoints[0]; }
+    virtual wxPoint doGetPosition() const { return m_points[0]; }
     virtual void doSetPosition( const wxPoint& aPosition );
 };
 

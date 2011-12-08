@@ -424,18 +424,18 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
         endpos = screen->GetCrossHairPosition();
 
         int idx = polyLine->GetCornerCount() - 1;
+        wxPoint pt = (*polyLine)[idx];
 
         if( g_HVLines )
         {
             /* Coerce the line to vertical or horizontal one: */
-            if( ABS( endpos.x - polyLine->m_PolyPoints[idx].x ) <
-                ABS( endpos.y - polyLine->m_PolyPoints[idx].y ) )
-                endpos.x = polyLine->m_PolyPoints[idx].x;
+            if( ABS( endpos.x - pt.x ) < ABS( endpos.y - pt.y ) )
+                endpos.x = pt.x;
             else
-                endpos.y = polyLine->m_PolyPoints[idx].y;
+                endpos.y = pt.y;
         }
 
-        polyLine->m_PolyPoints[idx] = endpos;
+        polyLine->SetPoint( idx, endpos );
         polyLine->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
     }
     else

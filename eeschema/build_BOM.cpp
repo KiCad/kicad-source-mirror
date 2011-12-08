@@ -1,8 +1,32 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:     build_BOM.cpp
-// Author:   jean-pierre Charras
-// License:  GPL license
-/////////////////////////////////////////////////////////////////////////////
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file build_BOM.cpp
+ * @brief Code used to generate bill of materials.
+ */
 
 #include <algorithm> // to use sort vector
 #include <vector>
@@ -159,7 +183,7 @@ int PrintListeGLabel( FILE* f, LABEL_OBJECT_LIST& aList )
         case SCH_SHEET_PIN_T:
         {
             pinsheet = (SCH_SHEET_PIN*) aList[ii].m_Label;
-            int jj = pinsheet->m_Shape;
+            int jj = pinsheet->GetShape();
 
             if( jj < 0 )
                 jj = NET_TMAX;

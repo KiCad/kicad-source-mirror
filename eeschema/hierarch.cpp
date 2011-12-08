@@ -197,7 +197,7 @@ void HIERARCHY_NAVIG_DLG::BuildSheetsTree( SCH_SHEET_PATH* list, wxTreeItemId*  
         {
             SCH_SHEET* sheet = (SCH_SHEET*) schitem;
             m_nbsheets++;
-            menu = m_Tree->AppendItem( *previousmenu, sheet->m_SheetName, 0, 1 );
+            menu = m_Tree->AppendItem( *previousmenu, sheet->GetName(), 0, 1 );
             list->Push( sheet );
             m_Tree->SetItemData( menu, new TreeItemData( *list ) );
             int ll = m_Tree->GetItemText( menu ).Len();

@@ -60,7 +60,7 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
     dlg.SetTextHeightUnits( GetUnitsLabel( g_UserUnit ) );
     dlg.SetTextWidth( ReturnStringFromValue( g_UserUnit, aSheetPin->m_Size.x, m_InternalUnits ) );
     dlg.SetTextWidthUnits( GetUnitsLabel( g_UserUnit ) );
-    dlg.SetConnectionType( aSheetPin->m_Shape );
+    dlg.SetConnectionType( aSheetPin->GetShape() );
 
     /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier versions for
      * the flex grid sizer in wxGTK that prevents the last column from being sized
@@ -86,7 +86,7 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
     aSheetPin->m_Text = dlg.GetLabelName();
     aSheetPin->m_Size.y = ReturnValueFromString( g_UserUnit, dlg.GetTextHeight(), m_InternalUnits );
     aSheetPin->m_Size.x = ReturnValueFromString( g_UserUnit, dlg.GetTextWidth(), m_InternalUnits );
-    aSheetPin->m_Shape = dlg.GetConnectionType();
+    aSheetPin->SetShape( dlg.GetConnectionType() );
 
     if( aDC )
         aSheetPin->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
@@ -103,7 +103,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
     sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), line );
     sheetPin->SetFlags( IS_NEW );
     sheetPin->m_Size  = m_lastSheetPinTextSize;
-    sheetPin->m_Shape = m_lastSheetPinType;
+    sheetPin->SetShape( m_lastSheetPinType );
 
     int response = EditSheetPin( sheetPin, NULL );
 
@@ -113,7 +113,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
         return NULL;
     }
 
-    m_lastSheetPinType = sheetPin->m_Shape;
+    m_lastSheetPinType = sheetPin->GetShape();
     m_lastSheetPinTextSize = sheetPin->m_Size;
 
     MoveItem( (SCH_ITEM*) sheetPin, aDC );
@@ -157,7 +157,8 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
     sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), label->m_Text );
     sheetPin->SetFlags( IS_NEW );
     sheetPin->m_Size   = m_lastSheetPinTextSize;
-    m_lastSheetPinType = sheetPin->m_Shape = label->m_Shape;
+    m_lastSheetPinType = label->GetShape();
+    sheetPin->SetShape( label->GetShape() );
 
     MoveItem( (SCH_ITEM*) sheetPin, aDC );
 
