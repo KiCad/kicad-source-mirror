@@ -77,7 +77,6 @@ int g_TabAllCopperLayerMask[NB_COPPER_LAYERS] = {
 DISPLAY_OPTIONS DisplayOpt;      /* Display options for board items */
 
 /* PCB file name extension definitions. */
-wxString g_SaveFileName( wxT( "$savepcb" ) );
 wxString NetExtBuffer( wxT( "net" ) );
 wxString NetCmpExtBuffer( wxT( "cmp" ) );
 wxString g_Shapes3DExtBuffer( wxT( "wrl" ) );
