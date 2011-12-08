@@ -1,10 +1,32 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_edit_label.cpp
-// Author:      jean-pierre Charras
-// Modified by:
-// Created:     18/12/2008 15:46:26
-// Licence: GPL
-/////////////////////////////////////////////////////////////////////////////
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2008 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file sch_text.h
+ * @brief Implementation of the label properties dialog.
+ */
 
 #include "fctsys.h"
 #include "wx/valgen.h"
@@ -98,6 +120,7 @@ void DialogLabelEditor::InitDialog()
     int MINTEXTWIDTH = 40;    // M's are big characters, a few establish a lot of width
 
     int max_len = 0;
+
     if ( !multiLine )
     {
         max_len =m_CurrentText->m_Text.Length();
@@ -108,6 +131,7 @@ void DialogLabelEditor::InitDialog()
         // we cannot use the length of the entire text that has no meaning
         int curr_len = MINTEXTWIDTH;
         int imax = m_CurrentText->m_Text.Len();
+
         for( int count = 0; count < imax; count++ )
         {
             if( m_CurrentText->m_Text[count] == '\n' ||
@@ -118,11 +142,13 @@ void DialogLabelEditor::InitDialog()
             else
             {
                 curr_len++;
+
                 if ( max_len < curr_len )
                     max_len = curr_len;
             }
         }
     }
+
     if( max_len < MINTEXTWIDTH )
         max_len = MINTEXTWIDTH;
 
@@ -132,11 +158,13 @@ void DialogLabelEditor::InitDialog()
 
     // Set validators
     m_TextOrient->SetSelection( m_CurrentText->GetOrientation() );
-    m_TextShape->SetSelection( m_CurrentText->m_Shape );
+    m_TextShape->SetSelection( m_CurrentText->GetShape() );
 
     int style = 0;
+
     if( m_CurrentText->m_Italic )
         style = 1;
+
     if( m_CurrentText->m_Bold )
         style += 2;
 
@@ -203,6 +231,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
     m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
 
     text = m_textLabel->GetValue();
+
     if( !text.IsEmpty() )
         m_CurrentText->m_Text = text;
     else if( (m_CurrentText->m_Flags & IS_NEW) == 0 )
@@ -212,10 +241,12 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
     text  = m_TextSize->GetValue();
     value = ReturnValueFromString( g_UserUnit, text, m_Parent->m_InternalUnits );
     m_CurrentText->m_Size.x = m_CurrentText->m_Size.y = value;
+
     if( m_TextShape )
-        m_CurrentText->m_Shape = m_TextShape->GetSelection();
+        m_CurrentText->SetShape( m_TextShape->GetSelection() );
 
     int style = m_TextStyle->GetSelection();
+
     if( ( style & 1 ) )
         m_CurrentText->m_Italic = 1;
     else

@@ -87,12 +87,12 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
 
     case LAYER_HIERLABEL:
         textItem = new SCH_HIERLABEL( GetScreen()->GetCrossHairPosition() );
-        textItem->m_Shape = lastGlobalLabelShape;
+        textItem->SetShape( lastGlobalLabelShape );
         break;
 
     case LAYER_GLOBLABEL:
         textItem = new SCH_GLOBALLABEL( GetScreen()->GetCrossHairPosition() );
-        textItem->m_Shape = lastGlobalLabelShape;
+        textItem->SetShape( lastGlobalLabelShape );
         break;
 
     default:
@@ -121,7 +121,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
 
     if( (aType == SCH_GLOBAL_LABEL_T) || (aType == SCH_HIERARCHICAL_LABEL_T) )
     {
-        lastGlobalLabelShape = textItem->m_Shape;
+        lastGlobalLabelShape = textItem->GetShape();
     }
 
     textItem->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
@@ -207,7 +207,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
      * text item type.
      */
     newtext->SetFlags( text->GetFlags() );
-    newtext->m_Shape = text->m_Shape;
+    newtext->SetShape( text->GetShape() );
     newtext->SetOrientation( text->GetOrientation() );
     newtext->m_Size = text->m_Size;
     newtext->m_Thickness = text->m_Thickness;

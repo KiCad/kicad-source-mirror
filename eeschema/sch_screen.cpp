@@ -720,7 +720,7 @@ SCH_SHEET* SCH_SCREEN::GetSheet( const wxString& aName )
 
         SCH_SHEET* sheet = (SCH_SHEET*) item;
 
-        if( aName.CmpNoCase( sheet->m_SheetName ) == 0 )
+        if( aName.CmpNoCase( sheet->GetName() ) == 0 )
             return sheet;
     }
 

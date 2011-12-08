@@ -28,8 +28,8 @@
  * @brief Definition of the SCH_SHEET class for Eeschema.
  */
 
-#ifndef CLASS_DRAWSHEET_H
-#define CLASS_DRAWSHEET_H
+#ifndef SCH_SHEEET_H
+#define SCH_SHEEET_H
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
@@ -50,7 +50,8 @@ class SCH_EDIT_FRAME;
 
 
 /**
- * Pin (label) used in sheets to create hierarchical schematics.
+ * Class SCH_SHEET_PIN
+ * defines a sheet pin (label) used in sheets to create hierarchical schematics.
  *
  * A SCH_SHEET_PIN is used to create a hierarchical sheet in the same way a
  * pin is used in a component.  It connects the objects in the sheet object
@@ -59,23 +60,24 @@ class SCH_EDIT_FRAME;
  * connected to a wire, bus, or label.  In the schematic page represented by
  * the sheet, it corresponds to a hierarchical label.
  */
-
 class SCH_SHEET_PIN : public SCH_HIERLABEL
 {
 private:
-    int m_Number;       ///< Label number use for saving sheet label to file.
+    int m_number;       ///< Label number use for saving sheet label to file.
                         ///< Sheet label numbering begins at 2.
                         ///< 0 is reserved for the sheet name.
                         ///< 1 is reserve for the sheet file name.
-    int m_Edge;         /* For pin labels only: sheet edge (0 to 3) of the pin
-                         * m_Edge define on which edge the pin is positioned:
-                         *        0: pin on left side
-                         *        1: pin on right side
-                         *        2: pin on top side
-                         *        3: pin on bottom side
-                         *  for compatibility reasons, this does not follow same values as text
-                         *  orientation.
-                         */
+
+    /**
+     * Defines the edge of the sheet that the sheet pin is positioned
+     * 0: pin on left side
+     * 1: pin on right side
+     * 2: pin on top side
+     * 3: pin on bottom side
+     *
+     * For compatibility reasons, this does not follow same values as text orientation.
+     */
+    int m_edge;
 
     virtual EDA_ITEM* doClone() const;
 
@@ -118,7 +120,7 @@ public:
      *
      * @return Number of the sheet label.
      */
-    int GetNumber() const { return m_Number; }
+    int GetNumber() const { return m_number; }
 
     /**
      * Set the sheet label number.
@@ -202,15 +204,7 @@ public:
     virtual void Mirror_X( int aXaxis_position );
 
     /**
-     * Function Matches
-     * Compare hierarchical pin name against search string.
-     *
-     * @param aSearchData - Criteria to search against.
-     * @param aAuxData - a pointer on auxiliary data, if needed.
-     *        When searching string in REFERENCE field we must know the sheet path
-     *          This param is used in this case
-     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
-     * @return True if this item matches the search criteria.
+     * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
      */
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
@@ -233,33 +227,40 @@ private:
 typedef boost::ptr_vector<SCH_SHEET_PIN> SCH_SHEET_PINS;
 
 
-/* class SCH_SHEET
- * This class is the sheet symbol placed in a schematic, and is the entry point
- * for a sub schematic
+/**
+ * Class SCH_SHEET
+ * is the sheet symbol placed in a schematic, and is the entry point for a sub schematic.
  */
-
 class SCH_SHEET : public SCH_ITEM
 {
-    SCH_SCREEN* m_AssociatedScreen;   ///< Screen that contains the physical data for
-                                      ///< the sheet.  In complex hierarchies multiple
-                                      ///< sheets can share a common screen.
-    SCH_SHEET_PINS m_pins;            ///< List of sheet connection points.
-    wxString m_FileName;              /* also in SCH_SCREEN (redundant),
-                                       * but need it here for loading after
-                                       * reading the sheet description from
-                                       * file. */
+    /// Screen that contains the physical data for the sheet.  In complex hierarchies
+    /// multiple sheets can share a common screen.
+    SCH_SCREEN* m_screen;
 
-public:
-    wxString m_SheetName;             /* this is equivalent to C101 for
-                                       * components: it is stored in F0 ...
-                                       * of the file. */
-public:
-    int         m_SheetNameSize;        /* Size (height) of the text, used to
-                                         * draw the sheet name */
-    int         m_FileNameSize;         /* Size (height) of the text, used to
-                                         * draw the file name */
-    wxPoint     m_Pos;
-    wxSize      m_Size;                 /* Position and Size of *sheet symbol */
+    /// The list of sheet connection points.
+    SCH_SHEET_PINS m_pins;
+
+    /// The file name is also in the #SCH_SCREEN object associated with the sheet.  It is
+    /// also needed here for loading after reading the sheet description from file.
+    wxString m_fileName;
+
+    /// This is equivalent to the reference designator for components and is stored in F0
+    /// sheet pin in the schematic file.
+    wxString m_name;
+
+    /// The height of the text used to draw the sheet name.
+    int m_sheetNameSize;
+
+    /// The height of the text used to draw the file name.
+    int m_fileNameSize;
+
+    /// The position of the sheet.
+    wxPoint m_pos;
+
+    /// The size of the sheet.
+    wxSize m_size;
+
+    friend class SCH_SHEET_PIN;
 
 public:
     SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -273,7 +274,24 @@ public:
         return wxT( "SCH_SHEET" );
     }
 
-    SCH_SCREEN* GetScreen() { return m_AssociatedScreen; }
+
+    wxString GetName() const { return m_name; }
+
+    void SetName( const wxString& aName ) { m_name = aName; }
+
+    int GetSheetNameSize() const { return m_sheetNameSize; }
+
+    void SetSheetNameSize( int aSize ) { m_sheetNameSize = aSize; }
+
+    int GetFileNameSize() const { return m_fileNameSize; }
+
+    void SetFileNameSize( int aSize ) { m_fileNameSize = aSize; }
+
+    SCH_SCREEN* GetScreen() { return m_screen; }
+
+    wxSize GetSize() { return m_size; }
+
+    void SetSize( const wxSize& aSize ) { m_size = aSize; }
 
     /**
      * Function SetScreen
@@ -462,9 +480,9 @@ public:
 
     /**
      * Function Load.
-     *  for the sheet: load the file m_FileName
+     *  for the sheet: load the file m_fileName
      *  if a screen already exists, the file is already read.
-     *  m_AssociatedScreen point on the screen, and its m_RefCount is
+     *  m_screen point on the screen, and its m_RefCount is
      * incremented
      *  else creates a new associated screen and load the data file.
      *  @param aFrame = a SCH_EDIT_FRAME pointer to the maim schematic frame
@@ -483,14 +501,14 @@ public:
 
     /**
      * Function LocatePathOfScreen
-     *  search the existing hierarchy for an instance of screen "FileName".
-     *  don't bother looking at the root sheet - it must be unique,
-     *  no other references to its m_AssociatedScreen otherwise there would be
-     *  loops
-     *  in the hierarchy.
-     *  @param  aScreen = the SCH_SCREEN* screen that we search for
-     *  @param aList = the SCH_SHEET_PATH*  that must be used
-     *  @return true if found
+     * search the existing hierarchy for an instance of screen "FileName".
+     * don't bother looking at the root sheet - it must be unique,
+     * no other references to its m_screen otherwise there would be
+     * loops in the hierarchy.
+     *
+     * @param aScreen = the SCH_SCREEN* screen that we search for
+     * @param aList = the SCH_SHEET_PATH*  that must be used
+     * @return true if found
      */
     bool LocatePathOfScreen( SCH_SCREEN* aScreen, SCH_SHEET_PATH* aList );
 
@@ -512,7 +530,7 @@ public:
     // Set a new filename without changing anything else
     void SetFileName( const wxString& aFilename )
     {
-        m_FileName = aFilename;
+        m_fileName = aFilename;
     }
 
     bool ChangeFileName( SCH_EDIT_FRAME* aFrame, const wxString& aFileName );
@@ -529,7 +547,7 @@ public:
      */
     virtual void Move( const wxPoint& aMoveVector )
     {
-        m_Pos += aMoveVector;
+        m_pos += aMoveVector;
 
         BOOST_FOREACH( SCH_SHEET_PIN& pin, m_pins )
         {
@@ -546,15 +564,7 @@ public:
     virtual void Rotate( wxPoint rotationPoint );
 
     /**
-     * Compare schematic sheet file and sheet name against search string.
-     *
-     * @param aSearchData - Criteria to search against.
-     * @param aAuxData - a pointer on auxiliary data, if needed.
-     *        When searching string in REFERENCE field we must know the sheet path
-     *          This param is used in this case
-     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
-     *
-     * @return True if this item matches the search criteria.
+     * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
      */
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
@@ -627,11 +637,11 @@ private:
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;
     virtual EDA_ITEM* doClone() const;
     virtual void doPlot( PLOTTER* aPlotter );
-    virtual wxPoint doGetPosition() const { return m_Pos; }
-    virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
+    virtual wxPoint doGetPosition() const { return m_pos; }
+    virtual void doSetPosition( const wxPoint& aPosition ) { m_pos = aPosition; }
 };
 
 
 typedef std::vector< SCH_SHEET* > SCH_SHEETS;
 
-#endif /* CLASS_DRAWSHEET_H */
+#endif /* SCH_SHEEET_H */

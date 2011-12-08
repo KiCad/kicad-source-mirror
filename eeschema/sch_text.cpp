@@ -104,10 +104,10 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
 {
     m_Layer = LAYER_NOTES;
     m_Pos = pos;
-    m_Shape = 0;
-    m_IsDangling = false;
+    m_shape = 0;
+    m_isDangling = false;
     m_MultilineAllowed = true;
-    m_SchematicOrientation = 0;
+    m_schematicOrientation = 0;
 }
 
 
@@ -116,10 +116,10 @@ SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
     EDA_TEXT( aText )
 {
     m_Pos = aText.m_Pos;
-    m_Shape = aText.m_Shape;
+    m_shape = aText.m_shape;
     m_MultilineAllowed = aText.m_MultilineAllowed;
-    m_SchematicOrientation = aText.m_SchematicOrientation;
-    m_IsDangling = false;
+    m_schematicOrientation = aText.m_schematicOrientation;
+    m_isDangling = false;
 }
 
 
@@ -141,7 +141,7 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
 
     // add a small offset (TXTMARGE) to x ( or y) position to allow a text to
     // be on a wire or a line and be readable
-    switch( m_SchematicOrientation )
+    switch( m_schematicOrientation )
     {
     default:
     case 0: /* Horiz Normal Orientation (left justified) */
@@ -301,9 +301,9 @@ void SCH_TEXT::Rotate( wxPoint rotationPoint )
 
 void SCH_TEXT::SetOrientation( int aOrientation )
 {
-    m_SchematicOrientation = aOrientation;
+    m_schematicOrientation = aOrientation;
 
-    switch( m_SchematicOrientation )
+    switch( m_schematicOrientation )
     {
     default:
     case 0: /* Horiz Normal Orientation (left justified) */
@@ -341,14 +341,14 @@ void SCH_TEXT::SwapData( SCH_ITEM* aItem )
     EXCHG( m_Pos, item->m_Pos );
     EXCHG( m_Size, item->m_Size );
     EXCHG( m_Thickness, item->m_Thickness );
-    EXCHG( m_Shape, item->m_Shape );
+    EXCHG( m_shape, item->m_shape );
     EXCHG( m_Orient, item->m_Orient );
 
     EXCHG( m_Layer, item->m_Layer );
     EXCHG( m_HJustify, item->m_HJustify );
     EXCHG( m_VJustify, item->m_VJustify );
-    EXCHG( m_IsDangling, item->m_IsDangling );
-    EXCHG( m_SchematicOrientation, item->m_SchematicOrientation );
+    EXCHG( m_isDangling, item->m_isDangling );
+    EXCHG( m_schematicOrientation, item->m_schematicOrientation );
 }
 
 
@@ -390,7 +390,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
     EDA_TEXT::Draw( panel, DC, text_offset, color, DrawMode, FILLED, UNSPECIFIED_COLOR );
     EXCHG( linewidth, m_Thickness );            // set initial value
 
-    if( m_IsDangling )
+    if( m_isDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
@@ -403,12 +403,6 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
 }
 
 
-/**
- * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
- * @param aFile The FILE to write to.
- * @return bool - true if success writing else false.
- */
 bool SCH_TEXT::Save( FILE* aFile ) const
 {
     bool        success = true;
@@ -439,7 +433,7 @@ bool SCH_TEXT::Save( FILE* aFile ) const
 
 
     if( fprintf( aFile, "Text Notes %-4d %-4d %-4d %-4d %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
+                 m_Pos.x, m_Pos.y, m_schematicOrientation, m_Size.x,
                  shape, m_Thickness, TO_UTF8( text ) ) == EOF )
     {
         success = false;
@@ -494,6 +488,7 @@ bool SCH_TEXT::Load( LINE_READER& aLine, wxString& aErrorMsg )
     }
 
     wxString val = FROM_UTF8( text );
+
     for( ; ; )
     {
         int i = val.find( wxT( "\\n" ) );
@@ -540,8 +535,8 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
     if( Type() == SCH_TEXT_T )
         return false;
 
-    bool previousState = m_IsDangling;
-    m_IsDangling = true;
+    bool previousState = m_isDangling;
+    m_isDangling = true;
 
     for( unsigned ii = 0; ii < aItemList.size(); ii++ )
     {
@@ -556,7 +551,7 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
         case LABEL_END:
         case SHEET_LABEL_END:
             if( m_Pos == item.GetPosition() )
-                m_IsDangling = false;
+                m_isDangling = false;
 
             break;
 
@@ -567,11 +562,11 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
             // a paranoid programmer, I'll check just in case.
             ii++;
 
-            wxCHECK_MSG( ii < aItemList.size(), previousState != m_IsDangling,
+            wxCHECK_MSG( ii < aItemList.size(), previousState != m_isDangling,
                          wxT( "Dangling end type list overflow.  Bad programmer!" ) );
 
             DANGLING_END_ITEM & nextItem = aItemList[ii];
-            m_IsDangling = !SegmentIntersect( item.GetPosition(), nextItem.GetPosition(), m_Pos );
+            m_isDangling = !SegmentIntersect( item.GetPosition(), nextItem.GetPosition(), m_Pos );
         }
             break;
 
@@ -579,11 +574,11 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
             break;
         }
 
-        if( m_IsDangling == false )
+        if( m_isDangling == false )
             break;
     }
 
-    return previousState != m_IsDangling;
+    return previousState != m_isDangling;
 }
 
 
@@ -744,8 +739,8 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os )
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
                                  << " layer=\"" << m_Layer << '"'
-                                 << " shape=\"" << m_Shape << '"'
-                                 << " dangling=\"" << m_IsDangling << '"'
+                                 << " shape=\"" << m_shape << '"'
+                                 << " dangling=\"" << m_isDangling << '"'
                                  << '>'
                                  << TO_UTF8( m_Text )
                                  << "</" << s.Lower().mb_str() << ">\n";
@@ -758,8 +753,8 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
     SCH_TEXT( pos, text, SCH_LABEL_T )
 {
     m_Layer = LAYER_LOCLABEL;
-    m_Shape = NET_INPUT;
-    m_IsDangling = true;
+    m_shape = NET_INPUT;
+    m_isDangling = true;
     m_MultilineAllowed = false;
 }
 
@@ -819,7 +814,7 @@ bool SCH_LABEL::Save( FILE* aFile ) const
         shape = "Italic";
 
     if( fprintf( aFile, "Text Label %-4d %-4d %-4d %-4d %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x, shape,
+                 m_Pos.x, m_Pos.y, m_schematicOrientation, m_Size.x, shape,
                  m_Thickness, TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
@@ -909,7 +904,7 @@ EDA_RECT SCH_LABEL::GetBoundingBox() const
     height = m_Size.y + width;
     dx     = dy = 0;
 
-    switch( m_SchematicOrientation )
+    switch( m_schematicOrientation )
     {
     case 0:             /* Horiz Normal Orientation (left justified) */
         dx = 2 * DANGLING_SYMBOL_SIZE + length;
@@ -966,8 +961,8 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
     SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
 {
     m_Layer = LAYER_GLOBLABEL;
-    m_Shape = NET_BIDI;
-    m_IsDangling = true;
+    m_shape = NET_BIDI;
+    m_isDangling = true;
     m_MultilineAllowed = false;
 }
 
@@ -993,8 +988,8 @@ bool SCH_GLOBALLABEL::Save( FILE* aFile ) const
         shape = "Italic";
 
     if( fprintf( aFile, "Text GLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
-                 SheetLabelType[m_Shape], shape, m_Thickness, TO_UTF8( m_Text ) ) == EOF )
+                 m_Pos.x, m_Pos.y, m_schematicOrientation, m_Size.x,
+                 SheetLabelType[m_shape], shape, m_Thickness, TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -1013,6 +1008,7 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     Name1[0] = 0; Name2[0] = 0; Name3[0] = 0;
 
     char*     sline = (char*) aLine;
+
     while( (*sline != ' ' ) && *sline )
         sline++;
 
@@ -1049,21 +1045,21 @@ bool SCH_GLOBALLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     m_Text = FROM_UTF8( text );
     m_Size.x = m_Size.y = size;
     SetOrientation( orient );
-    m_Shape  = NET_INPUT;
+    m_shape  = NET_INPUT;
     m_Bold = ( thickness != 0 );
     m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
 
     if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
-        m_Shape = NET_OUTPUT;
+        m_shape = NET_OUTPUT;
 
     if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
-        m_Shape = NET_BIDI;
+        m_shape = NET_BIDI;
 
     if( stricmp( Name2, SheetLabelType[NET_TRISTATE] ) == 0 )
-        m_Shape = NET_TRISTATE;
+        m_shape = NET_TRISTATE;
 
     if( stricmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
-        m_Shape = NET_UNSPECIFIED;
+        m_shape = NET_UNSPECIFIED;
 
     if( stricmp( Name3, "Italic" ) == 0 )
         m_Italic = 1;
@@ -1131,7 +1127,7 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
     int     HalfSize = m_Size.x / 2;
     int     offset   = width;
 
-    switch( m_Shape )
+    switch( m_shape )
     {
     case NET_INPUT:
     case NET_BIDI:
@@ -1148,7 +1144,7 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
         break;
     }
 
-    switch( m_SchematicOrientation )
+    switch( m_schematicOrientation )
     {
     case 0:             /* Orientation horiz normal */
         text_offset.x -= offset;
@@ -1173,9 +1169,9 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 
 void SCH_GLOBALLABEL::SetOrientation( int aOrientation )
 {
-    m_SchematicOrientation = aOrientation;
+    m_schematicOrientation = aOrientation;
 
-    switch( m_SchematicOrientation )
+    switch( m_schematicOrientation )
     {
     default:
     case 0: /* Horiz Normal Orientation */
@@ -1231,7 +1227,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     CreateGraphicShape( Poly, m_Pos + aOffset );
     GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
-    if( m_IsDangling )
+    if( m_isDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
@@ -1271,7 +1267,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     int x_offset = 0;
 
-    switch( m_Shape )
+    switch( m_shape )
     {
     case NET_INPUT:
         x_offset = -HalfSize;
@@ -1296,7 +1292,7 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     int angle = 0;
 
-    switch( m_SchematicOrientation )
+    switch( m_schematicOrientation )
     {
     case 0:             /* Orientation horiz normal */
         break;
@@ -1318,8 +1314,10 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
     for( unsigned ii = 0; ii < aPoints.size(); ii++ )
     {
         aPoints[ii].x += x_offset;
+
         if( angle )
             RotatePoint( &aPoints[ii], angle );
+
         aPoints[ii] += Pos;
     }
 
@@ -1341,7 +1339,7 @@ EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     // text X size add height for triangular shapes(bidirectional)
     length = LenSize( m_Text ) + height + DANGLING_SYMBOL_SIZE;
 
-    switch( m_SchematicOrientation )    // respect orientation
+    switch( m_schematicOrientation )    // respect orientation
     {
     case 0:                             /* Horiz Normal Orientation (left justified) */
         dx = -length;
@@ -1398,8 +1396,8 @@ SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T 
     SCH_TEXT( pos, text, aType )
 {
     m_Layer = LAYER_HIERLABEL;
-    m_Shape = NET_INPUT;
-    m_IsDangling = true;
+    m_shape = NET_INPUT;
+    m_isDangling = true;
     m_MultilineAllowed = false;
 }
 
@@ -1425,8 +1423,8 @@ bool SCH_HIERLABEL::Save( FILE* aFile ) const
         shape = "Italic";
 
     if( fprintf( aFile, "Text HLabel %-4d %-4d %-4d %-4d %s %s %d\n%s\n",
-                 m_Pos.x, m_Pos.y, m_SchematicOrientation, m_Size.x,
-                 SheetLabelType[m_Shape], shape, m_Thickness, TO_UTF8( m_Text ) ) == EOF )
+                 m_Pos.x, m_Pos.y, m_schematicOrientation, m_Size.x,
+                 SheetLabelType[m_shape], shape, m_Thickness, TO_UTF8( m_Text ) ) == EOF )
     {
         success = false;
     }
@@ -1482,21 +1480,21 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
     m_Text = FROM_UTF8( text );
     m_Size.x = m_Size.y = size;
     SetOrientation( orient );
-    m_Shape  = NET_INPUT;
+    m_shape  = NET_INPUT;
     m_Bold = ( thickness != 0 );
     m_Thickness = m_Bold ? GetPenSizeForBold( size ) : 0;
 
     if( stricmp( Name2, SheetLabelType[NET_OUTPUT] ) == 0 )
-        m_Shape = NET_OUTPUT;
+        m_shape = NET_OUTPUT;
 
     if( stricmp( Name2, SheetLabelType[NET_BIDI] ) == 0 )
-        m_Shape = NET_BIDI;
+        m_shape = NET_BIDI;
 
     if( stricmp( Name2, SheetLabelType[NET_TRISTATE] ) == 0 )
-        m_Shape = NET_TRISTATE;
+        m_shape = NET_TRISTATE;
 
     if( stricmp( Name2, SheetLabelType[NET_UNSPECIFIED] ) == 0 )
-        m_Shape = NET_UNSPECIFIED;
+        m_shape = NET_UNSPECIFIED;
 
     if( stricmp( Name3, "Italic" ) == 0 )
         m_Italic = 1;
@@ -1507,9 +1505,9 @@ bool SCH_HIERLABEL::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 void SCH_HIERLABEL::SetOrientation( int aOrientation )
 {
-    m_SchematicOrientation = aOrientation;
+    m_schematicOrientation = aOrientation;
 
-    switch( m_SchematicOrientation )
+    switch( m_schematicOrientation )
     {
     default:
     case 0: /* Horiz Normal Orientation */
@@ -1566,7 +1564,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
     CreateGraphicShape( Poly, m_Pos + offset );
     GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
-    if( m_IsDangling )
+    if( m_isDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
 
     // Enable these line to draw the bounding box (debug tests purposes only)
@@ -1581,7 +1579,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 
 void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wxPoint& Pos )
 {
-    int* Template = TemplateShape[m_Shape][m_SchematicOrientation];
+    int* Template = TemplateShape[m_shape][m_schematicOrientation];
     int  HalfSize = m_Size.x / 2;
 
     int  imax = *Template; Template++;
@@ -1616,10 +1614,9 @@ EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
              + height                 // add height for triangular shapes
              + 2 * DANGLING_SYMBOL_SIZE;
 
-    switch( m_SchematicOrientation )    // respect orientation
+    switch( m_schematicOrientation )    // respect orientation
     {
-    case 0:                             /* Horiz Normal Orientation (left
-                                         *justified) */
+    case 0:                             /* Horiz Normal Orientation (left justified) */
         dx = -length;
         dy = height;
         x += DANGLING_SYMBOL_SIZE;
@@ -1662,7 +1659,7 @@ wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
 
     int     ii = m_Size.x + TXTMARGE + width;
 
-    switch( m_SchematicOrientation )
+    switch( m_schematicOrientation )
     {
     case 0:             /* Orientation horiz normale */
         text_offset.x = -ii;

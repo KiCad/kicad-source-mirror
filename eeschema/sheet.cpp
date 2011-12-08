@@ -50,12 +50,12 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     wxString units = GetUnitsLabel( g_UserUnit );
     dlg.SetFileName( aSheet->GetFileName() );
     dlg.SetFileNameTextSize( ReturnStringFromValue( g_UserUnit,
-                                                    aSheet->m_FileNameSize,
+                                                    aSheet->GetFileNameSize(),
                                                     m_InternalUnits ) );
     dlg.SetFileNameTextSizeUnits( units );
-    dlg.SetSheetName( aSheet->m_SheetName );
+    dlg.SetSheetName( aSheet->GetName() );
     dlg.SetSheetNameTextSize( ReturnStringFromValue( g_UserUnit,
-                                                     aSheet->m_SheetNameSize,
+                                                     aSheet->GetSheetNameSize(),
                                                      m_InternalUnits ) );
     dlg.SetSheetNameTextSizeUnits( units );
 
@@ -192,16 +192,16 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     else if( loadFromFile )
         aSheet->Load( this );
 
-    aSheet->m_FileNameSize = ReturnValueFromString( g_UserUnit,
+    aSheet->SetFileNameSize( ReturnValueFromString( g_UserUnit,
                                                     dlg.GetFileNameTextSize(),
-                                                    m_InternalUnits );
-    aSheet->m_SheetName = dlg.GetSheetName();
-    aSheet->m_SheetNameSize = ReturnValueFromString( g_UserUnit,
+                                                    m_InternalUnits ) );
+    aSheet->SetName( dlg.GetSheetName() );
+    aSheet->SetSheetNameSize( ReturnValueFromString( g_UserUnit,
                                                      dlg.GetSheetNameTextSize(),
-                                                     m_InternalUnits );
+                                                     m_InternalUnits ) );
 
-    if( aSheet->m_SheetName.IsEmpty() )
-        aSheet->m_SheetName.Printf( wxT( "Sheet%8.8lX" ), aSheet->GetTimeStamp() );
+    if( aSheet->GetName().IsEmpty() )
+        aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ), aSheet->GetTimeStamp() ) );
 
     DrawPanel->MoveCursorToCrossHair();
     DrawPanel->m_IgnoreMouseEvents = false;
@@ -225,10 +225,12 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     if( aErase )
         sheet->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
 
+    wxPoint pos = sheet->GetPosition();
+
     if( sheet->IsResized() )
     {
-        int width = screen->GetCrossHairPosition().x - sheet->m_Pos.x;
-        int height = screen->GetCrossHairPosition().y - sheet->m_Pos.y;
+        int width = screen->GetCrossHairPosition().x - sheet->GetPosition().x;
+        int height = screen->GetCrossHairPosition().y - sheet->GetPosition().y;
 
         // If the sheet doesn't have any pins, clamp the minimum size to the default values.
         width = ( width < MIN_SHEET_WIDTH ) ? MIN_SHEET_WIDTH : width;
@@ -241,18 +243,17 @@ static void MoveOrResizeSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
             // If the sheet has pins, use the pin positions to clamp the minimum height.
             height = ( height < sheet->GetMinHeight() + gridSizeY ) ?
-                sheet->GetMinHeight() + gridSizeY : height;
+                     sheet->GetMinHeight() + gridSizeY : height;
             width = ( width < sheet->GetMinWidth() + gridSizeX ) ?
-                sheet->GetMinWidth() + gridSizeX : width;
+                    sheet->GetMinWidth() + gridSizeX : width;
         }
 
-        wxPoint grid = screen->GetNearestGridPosition( wxPoint( sheet->m_Pos.x + width,
-                                                                sheet->m_Pos.y + height ) );
-        sheet->Resize( wxSize( grid.x - sheet->m_Pos.x, grid.y - sheet->m_Pos.y ) );
+        wxPoint grid = screen->GetNearestGridPosition( wxPoint( pos.x + width, pos.y + height ) );
+        sheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
     }
     else if( sheet->IsMoving() )
     {
-        moveVector = screen->GetCrossHairPosition() - sheet->m_Pos;
+        moveVector = screen->GetCrossHairPosition() - pos;
         sheet->Move( moveVector );
     }
 
@@ -361,7 +362,7 @@ void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
         return;
 
     DrawPanel->CrossHairOff( aDC );
-    GetScreen()->SetCrossHairPosition( aSheet->m_Pos );
+    GetScreen()->SetCrossHairPosition( aSheet->GetPosition() );
     DrawPanel->MoveCursorToCrossHair();
 
     if( !aSheet->IsNew() )

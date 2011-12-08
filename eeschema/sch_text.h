@@ -56,27 +56,23 @@ extern const char* SheetLabelType[];    /* names of types of labels */
 
 class SCH_TEXT : public SCH_ITEM, public EDA_TEXT
 {
-public:
-    int  m_Shape;
-    bool m_IsDangling;          // true if not connected (used to draw the "not
-                                // connected" symbol
 protected:
-    int  m_SchematicOrientation;    /* orientation of texts (comments) and
-                                     * labels in schematic
-                                     *  0 = normal (horizontal, left
-                                     * justified).
-                                     *  1 = up (vertical)
-                                     *  2 =  (horizontal, right justified).
-                                     * This can be seen as the mirrored
-                                     * position of 0
-                                     *  3 = bottom . This can be seen as the
-                                     * mirrored position of up
-                                     *  this is perhaps a duplicate of m_Orient
-                                     * and m_HJustified or m_VJustified,
-                                     *  but is more easy to handle that 3
-                                     * parameters in editions, Reading and
-                                     * Saving file
-                                     */
+    int m_shape;
+
+    /// True if not connected to another object if the object derive from SCH_TEXT
+    /// supports connections.
+    bool m_isDangling;
+
+    /**
+     * The orientation of text and any associated drawing elements of derived objects.
+     * 0 is the horizontal and left justified.
+     * 1 is vertical and top justified.
+     * 2 is horizontal and right justified.  It is the equivalent of the mirrored 0 orentation.
+     * 3 is veritcal and bottom justifiend. It is the equivalent of the mirrored 1 orentation.
+     * This is a duplicattion of m_Orient, m_HJustified, and m_VJustified in #EDA_TEXT but is
+     * easier to handle that 3 parameters when editing and reading and saving files.
+     */
+    int m_schematicOrientation;
 
 public:
     SCH_TEXT( const wxPoint& pos = wxPoint( 0, 0 ),
@@ -100,10 +96,10 @@ public:
 
     /**
      * Function SetOrientation
-     * Set m_SchematicOrientation, and initialize
+     * Set m_schematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
-     * m_SchematicOrientation (for a text )
-     * must be called after changing m_SchematicOrientation
+     * m_schematicOrientation (for a text )
+     * must be called after changing m_schematicOrientation
      * @param aSchematicOrientation =
      *  0 = normal (horizontal, left justified).
      *  1 = up (vertical)
@@ -113,15 +109,18 @@ public:
      */
     virtual void SetOrientation( int aSchematicOrientation );
 
-    int GetOrientation() { return m_SchematicOrientation; }
+    int GetOrientation() { return m_schematicOrientation; }
+
+    int GetShape() const { return m_shape; }
+
+    void SetShape( int aShape ) { m_shape = aShape; }
 
     /**
      * Function GetSchematicTextOffset (virtual)
-     * @return the offset between the SCH_TEXT position and the text itself
-     * position
-     * This offset depend on orientation, and the type of text
-     * (room to draw an associated graphic symbol, or put the text above a
-     * wire)
+     * @return the offset between the SCH_TEXT position and the text itself position
+     *
+     * This offset depends on the orientation, the type of text, and the area required to
+     * draw the associated graphic symbol or to put the text above a wire.
      */
     virtual wxPoint GetSchematicTextOffset() const;
 
@@ -203,12 +202,7 @@ public:
     virtual void Mirror_X( int aXaxis_position );
 
     /**
-     * Compare schematic text entry against search string.
-     *
-     * @param aSearchData - Criterial to search against.
-     * @param aAuxData - a pointer on auxiliary data, if needed. Can be null
-     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
-     * @return True if this schematic text item matches the search criteria.
+     * @copydoc EDA_ITEM::Matches(wxFindReplaceData&,void*,wxPoint*)
      */
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
@@ -216,7 +210,7 @@ public:
 
     virtual bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList );
 
-    virtual bool IsDangling() const { return m_IsDangling; }
+    virtual bool IsDangling() const { return m_isDangling; }
 
     virtual bool IsSelectStateChanged( const wxRect& aRect );
 
@@ -267,10 +261,10 @@ public:
 
     /**
      * Function SetOrientation
-     * Set m_SchematicOrientation, and initialize
+     * Set m_schematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
-     * m_SchematicOrientation (for a label)
-     * must be called after changing m_SchematicOrientation
+     * m_schematicOrientation (for a label)
+     * must be called after changing m_schematicOrientation
      * @param aSchematicOrientation =
      *  0 = normal (horizontal, left justified).
      *  1 = up (vertical)
@@ -362,10 +356,10 @@ public:
 
     /**
      * Function SetOrientation
-     * Set m_SchematicOrientation, and initialize
+     * Set m_schematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
-     * m_SchematicOrientation
-     * must be called after changing m_SchematicOrientation
+     * m_schematicOrientation
+     * must be called after changing m_schematicOrientation
      * @param aSchematicOrientation =
      *  0 = normal (horizontal, left justified).
      *  1 = up (vertical)
@@ -468,10 +462,10 @@ public:
 
     /**
      * Function SetOrientation
-     * Set m_SchematicOrientation, and initialize
+     * Set m_schematicOrientation, and initialize
      * m_orient,m_HJustified and m_VJustified, according to the value of
-     * m_SchematicOrientation
-     * must be called after changing m_SchematicOrientation
+     * m_schematicOrientation
+     * must be called after changing m_schematicOrientation
      * @param aSchematicOrientation =
      *  0 = normal (horizontal, left justified).
      *  1 = up (vertical)

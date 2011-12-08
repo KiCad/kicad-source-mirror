@@ -1,6 +1,31 @@
-/**********************/
-/* Class SCH_POLYLINE */
-/**********************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file sch_polyline.cpp
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -18,7 +43,7 @@
 SCH_POLYLINE::SCH_POLYLINE( int layer ) :
     SCH_ITEM( NULL, SCH_POLYLINE_T )
 {
-    m_Width = 0;
+    m_width = 0;
 
     switch( layer )
     {
@@ -38,8 +63,8 @@ SCH_POLYLINE::SCH_POLYLINE( int layer ) :
 SCH_POLYLINE::SCH_POLYLINE( const SCH_POLYLINE& aPolyLine ) :
     SCH_ITEM( aPolyLine )
 {
-    m_Width = aPolyLine.m_Width;
-    m_PolyPoints = aPolyLine.m_PolyPoints;
+    m_width = aPolyLine.m_width;
+    m_points = aPolyLine.m_points;
 }
 
 
@@ -74,7 +99,7 @@ bool SCH_POLYLINE::Save( FILE* aFile ) const
 
     for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
     {
-        if( fprintf( aFile, "\t%-4d %-4d\n", m_PolyPoints[ii ].x, m_PolyPoints[ii].y ) == EOF )
+        if( fprintf( aFile, "\t%-4d %-4d\n", m_points[ii ].x, m_points[ii].y ) == EOF )
         {
             success = false;
             break;
@@ -133,7 +158,7 @@ bool SCH_POLYLINE::Load( LINE_READER& aLine, wxString& aErrorMsg )
 
 int SCH_POLYLINE::GetPenSize() const
 {
-    int pensize = ( m_Width == 0 ) ? g_DrawDefaultLineThickness : m_Width;
+    int pensize = ( m_width == 0 ) ? g_DrawDefaultLineThickness : m_width;
 
     return pensize;
 }
@@ -157,19 +182,19 @@ void SCH_POLYLINE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
         width *= 3;
     }
 
-    GRMoveTo( m_PolyPoints[0].x, m_PolyPoints[0].y );
+    GRMoveTo( m_points[0].x, m_points[0].y );
 
     if( m_Layer == LAYER_NOTES )
     {
         for( unsigned i = 1; i < GetCornerCount(); i++ )
-            GRDashedLineTo( &aPanel->m_ClipBox, aDC, m_PolyPoints[i].x + aOffset.x,
-                            m_PolyPoints[i].y + aOffset.y, width, color );
+            GRDashedLineTo( &aPanel->m_ClipBox, aDC, m_points[i].x + aOffset.x,
+                            m_points[i].y + aOffset.y, width, color );
     }
     else
     {
         for( unsigned i = 1; i < GetCornerCount(); i++ )
-            GRLineTo( &aPanel->m_ClipBox, aDC, m_PolyPoints[i].x + aOffset.x,
-                      m_PolyPoints[i].y + aOffset.y, width, color );
+            GRLineTo( &aPanel->m_ClipBox, aDC, m_points[i].x + aOffset.x,
+                      m_points[i].y + aOffset.y, width, color );
     }
 }
 
@@ -178,9 +203,9 @@ void SCH_POLYLINE::Mirror_X( int aXaxis_position )
 {
     for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
     {
-        m_PolyPoints[ii].y -= aXaxis_position;
-        NEGATE(  m_PolyPoints[ii].y );
-        m_PolyPoints[ii].y = aXaxis_position;
+        m_points[ii].y -= aXaxis_position;
+        NEGATE(  m_points[ii].y );
+        m_points[ii].y = aXaxis_position;
     }
 }
 
@@ -189,9 +214,9 @@ void SCH_POLYLINE::Mirror_Y( int aYaxis_position )
 {
     for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
     {
-        m_PolyPoints[ii].x -= aYaxis_position;
-        NEGATE(  m_PolyPoints[ii].x );
-        m_PolyPoints[ii].x = aYaxis_position;
+        m_points[ii].x -= aYaxis_position;
+        NEGATE(  m_points[ii].x );
+        m_points[ii].x = aYaxis_position;
     }
 }
 
@@ -200,7 +225,7 @@ void SCH_POLYLINE::Rotate( wxPoint rotationPoint )
 {
     for( unsigned ii = 0; ii < GetCornerCount(); ii++ )
     {
-        RotatePoint( &m_PolyPoints[ii], rotationPoint, 900 );
+        RotatePoint( &m_points[ii], rotationPoint, 900 );
     }
 }
 
@@ -227,7 +252,7 @@ wxString SCH_POLYLINE::GetSelectMenuText() const
         fmt = _( "Polyline on Unkown Layer with %d Points" );
     }
 
-    menuText.Printf( fmt, m_PolyPoints.size() );
+    menuText.Printf( fmt, m_points.size() );
 
     return menuText;
 }
@@ -246,9 +271,9 @@ BITMAP_DEF SCH_POLYLINE::GetMenuImage() const
 
 bool SCH_POLYLINE::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
-    for( size_t i = 0;  i < m_PolyPoints.size() - 1;  i++ )
+    for( size_t i = 0;  i < m_points.size() - 1;  i++ )
     {
-        if( TestSegmentHit( aPoint, m_PolyPoints[i], m_PolyPoints[i + 1], aAccuracy ) )
+        if( TestSegmentHit( aPoint, m_points[i], m_points[i + 1], aAccuracy ) )
             return true;
     }
 
@@ -271,9 +296,9 @@ bool SCH_POLYLINE::doHitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 
 void SCH_POLYLINE::doSetPosition( const wxPoint& aPosition )
 {
-    wxPoint offset = m_PolyPoints[0] - aPosition;
+    wxPoint offset = m_points[0] - aPosition;
 
-    for( size_t i = 0;  i < m_PolyPoints.size();  i++ )
-        m_PolyPoints[i] = m_PolyPoints[i] - offset;
+    for( size_t i = 0;  i < m_points.size();  i++ )
+        m_points[i] = m_points[i] - offset;
 }
 

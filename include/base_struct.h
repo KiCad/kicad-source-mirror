@@ -162,16 +162,16 @@ public:
     /**
      * Function Inspect
      * is the examining function within the INSPECTOR which is passed to the
-     * Iterate function.  It is used primarily for searching, but not limited
-     * to that.  It can also collect or modify the scanned objects.
+     * EDA_ITEM::Iterate() function.  It is used primarily for searching, but
+     * not limited to that.  It can also collect or modify the scanned objects.
      *
-     * @param testItem An EDA_ITEM to examine.
-     * @param testData is arbitrary data needed by the inspector to determine
-     *                 if the EDA_ITEM under test meets its match criteria.
-     * @return SEARCH_RESULT SEARCH_QUIT if the Iterator is to stop the scan,
-     *                       else SCAN_CONTINUE;
+     * @param aItem An EDA_ITEM to examine.
+     * @param aTestData is arbitrary data needed by the inspector to determine
+     *                  if the EDA_ITEM under test meets its match criteria.
+     * @return A #SEARCH_RESULT type #SEARCH_QUIT if the iterator function is to
+     *          stop the scan, else #SEARCH_CONTINUE;
      */
-    SEARCH_RESULT virtual Inspect( EDA_ITEM* testItem, const void* testData ) = 0;
+    SEARCH_RESULT virtual Inspect( EDA_ITEM* aItem, const void* aTestData ) = 0;
 };
 
 

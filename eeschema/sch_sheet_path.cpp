@@ -217,7 +217,7 @@ wxString SCH_SHEET_PATH::PathHumanReadable() const
     // start at 1 to avoid the root sheet, as above.
     for( unsigned i = 1; i< m_numSheets; i++ )
     {
-        s = s + m_sheets[i]->m_SheetName + wxT( "/" );
+        s = s + m_sheets[i]->GetName() + wxT( "/" );
     }
 
     return s;
