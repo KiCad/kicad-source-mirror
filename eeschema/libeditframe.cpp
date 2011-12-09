@@ -195,7 +195,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
 
     m_FrameName  = wxT( "LibeditFrame" );
     m_Draw_Axis  = true;            // true to draw axis
-    m_ConfigPath = wxT( "LibraryEditor" );
+    m_configPath = wxT( "LibraryEditor" );
     SetShowDeMorgan( false );
     m_drawSpecificConvert = true;
     m_drawSpecificUnit    = false;
@@ -291,11 +291,11 @@ void LIB_EDIT_FRAME::LoadSettings()
 
     EDA_DRAW_FRAME::LoadSettings();
 
-    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_ConfigPath );
+    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_configPath );
     cfg = wxGetApp().m_EDA_Config;
 
-    m_LastLibExportPath = cfg->Read( lastLibExportPathEntry, ::wxGetCwd() );
-    m_LastLibImportPath = cfg->Read( lastLibImportPathEntry, ::wxGetCwd() );
+    m_lastLibExportPath = cfg->Read( lastLibExportPathEntry, ::wxGetCwd() );
+    m_lastLibImportPath = cfg->Read( lastLibImportPathEntry, ::wxGetCwd() );
 }
 
 
@@ -312,11 +312,11 @@ void LIB_EDIT_FRAME::SaveSettings()
 
     EDA_DRAW_FRAME::SaveSettings();
 
-    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_ConfigPath );
+    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_configPath );
     cfg = wxGetApp().m_EDA_Config;
 
-    cfg->Write( lastLibExportPathEntry, m_LastLibExportPath );
-    cfg->Write( lastLibImportPathEntry, m_LastLibImportPath );
+    cfg->Write( lastLibExportPathEntry, m_lastLibExportPath );
+    cfg->Write( lastLibImportPathEntry, m_lastLibImportPath );
 }
 
 
@@ -402,35 +402,35 @@ double LIB_EDIT_FRAME::BestZoom()
 
 void LIB_EDIT_FRAME::UpdateAliasSelectList()
 {
-    if( m_SelAliasBox == NULL )
+    if( m_aliasSelectBox == NULL )
         return;
 
-    m_SelAliasBox->Clear();
+    m_aliasSelectBox->Clear();
 
     if( m_component == NULL )
         return;
 
-    m_SelAliasBox->Append( m_component->GetAliasNames() );
-    m_SelAliasBox->SetSelection( 0 );
+    m_aliasSelectBox->Append( m_component->GetAliasNames() );
+    m_aliasSelectBox->SetSelection( 0 );
 
-    int index = m_SelAliasBox->FindString( m_aliasName );
+    int index = m_aliasSelectBox->FindString( m_aliasName );
 
     if( index != wxNOT_FOUND )
-        m_SelAliasBox->SetSelection( index );
+        m_aliasSelectBox->SetSelection( index );
 }
 
 
 void LIB_EDIT_FRAME::UpdatePartSelectList()
 {
-    if( m_SelpartBox == NULL )
+    if( m_partSelectBox == NULL )
         return;
 
-    if( m_SelpartBox->GetCount() != 0 )
-        m_SelpartBox->Clear();
+    if( m_partSelectBox->GetCount() != 0 )
+        m_partSelectBox->Clear();
 
     if( m_component == NULL || m_component->GetPartCount() <= 1 )
     {
-        m_SelpartBox->Append( wxEmptyString );
+        m_partSelectBox->Append( wxEmptyString );
     }
     else
     {
@@ -438,11 +438,11 @@ void LIB_EDIT_FRAME::UpdatePartSelectList()
         {
             wxString msg;
             msg.Printf( _( "Part %c" ), 'A' + i );
-            m_SelpartBox->Append( msg );
+            m_partSelectBox->Append( msg );
         }
     }
 
-    m_SelpartBox->SetSelection( ( m_unit > 0 ) ? m_unit - 1 : 0 );
+    m_partSelectBox->SetSelection( ( m_unit > 0 ) ? m_unit - 1 : 0 );
 }
 
 
@@ -510,13 +510,13 @@ void LIB_EDIT_FRAME::OnUpdatePinByPin( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
 {
-    if( m_SelpartBox == NULL )
+    if( m_partSelectBox == NULL )
         return;
 
     /* Using the typical event.Enable() call doesn't seem to work with wxGTK
      * so use the pointer to alias combobox to directly enable or disable.
      */
-    m_SelpartBox->Enable( m_component && m_component->GetPartCount() > 1 );
+    m_partSelectBox->Enable( m_component && m_component->GetPartCount() > 1 );
 }
 
 
@@ -542,24 +542,24 @@ void LIB_EDIT_FRAME::OnUpdateDeMorganConvert( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdateSelectAlias( wxUpdateUIEvent& event )
 {
-    if( m_SelAliasBox == NULL )
+    if( m_aliasSelectBox == NULL )
         return;
 
     /* Using the typical event.Enable() call doesn't seem to work with wxGTK
      * so use the pointer to alias combobox to directly enable or disable.
      */
-    m_SelAliasBox->Enable( m_component != NULL && m_component->GetAliasCount() > 1 );
+    m_aliasSelectBox->Enable( m_component != NULL && m_component->GetAliasCount() > 1 );
 }
 
 
 void LIB_EDIT_FRAME::OnSelectAlias( wxCommandEvent& event )
 {
-    if( m_SelAliasBox == NULL
-        || ( m_SelAliasBox->GetStringSelection().CmpNoCase( m_aliasName ) == 0)  )
+    if( m_aliasSelectBox == NULL
+        || ( m_aliasSelectBox->GetStringSelection().CmpNoCase( m_aliasName ) == 0)  )
         return;
 
     m_lastDrawItem = NULL;
-    m_aliasName = m_SelAliasBox->GetStringSelection();
+    m_aliasName = m_aliasSelectBox->GetStringSelection();
 
     DisplayCmpDoc();
     DrawPanel->Refresh();

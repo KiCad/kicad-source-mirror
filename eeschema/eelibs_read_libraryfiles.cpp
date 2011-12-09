@@ -34,17 +34,17 @@ void SCH_EDIT_FRAME::LoadLibraries( void )
             continue;
         }
 
-        if( m_ComponentLibFiles.Index( i->GetName(), false ) == wxNOT_FOUND )
+        if( m_componentLibFiles.Index( i->GetName(), false ) == wxNOT_FOUND )
             i = CMP_LIBRARY::GetLibraryList().erase( i );
         else
             i++;
     }
 
     /* Load missing libraries. */
-    for( ii = 0; ii < m_ComponentLibFiles.GetCount(); ii++ )
+    for( ii = 0; ii < m_componentLibFiles.GetCount(); ii++ )
     {
         fn.Clear();
-        fn.SetName( m_ComponentLibFiles[ii] );
+        fn.SetName( m_componentLibFiles[ii] );
         fn.SetExt( CompLibFileExtension );
 
         /* Skip if the file name is not valid.. */

@@ -191,7 +191,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetRepeatLabel( g_RepeatDeltaLabel );
     dlg.SetAutoSaveInterval( GetAutoSaveInterval() / 60 );
     dlg.SetShowGrid( IsGridVisible() );
-    dlg.SetShowHiddenPins( m_ShowAllPins );
+    dlg.SetShowHiddenPins( m_showAllPins );
     dlg.SetEnableAutoPan( DrawPanel->m_AutoPAN_Enable );
     dlg.SetEnableHVBusOrientation( g_HVLines );
     dlg.SetShowPageLimits( g_ShowPageLimits );
@@ -222,7 +222,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     g_RepeatDeltaLabel = dlg.GetRepeatLabel();
     SetAutoSaveInterval( dlg.GetAutoSaveInterval() * 60 );
     SetGridVisibility( dlg.GetShowGrid() );
-    m_ShowAllPins = dlg.GetShowHiddenPins();
+    m_showAllPins = dlg.GetShowHiddenPins();
     DrawPanel->m_AutoPAN_Enable = dlg.GetEnableAutoPan();
     g_HVLines = dlg.GetEnableHVBusOrientation();
     g_ShowPageLimits = dlg.GetShowPageLimits();
@@ -258,12 +258,12 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
         return m_projectFileParams;
 
     m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),
-                                                           &m_UserLibraryPath ) );
+                                                           &m_userLibraryPath ) );
     m_projectFileParams.push_back( new PARAM_CFG_LIBNAME_LIST( wxT( "LibName" ),
-                                                               &m_ComponentLibFiles,
+                                                               &m_componentLibFiles,
                                                                GROUPLIB ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "NetFmt" ),
-                                                      &m_NetlistFormat,
+                                                      &m_netListFormat,
                                                       NET_TYPE_PCBNEW,
                                                       NET_TYPE_PCBNEW,
                                                       NET_TYPE_CUSTOM_MAX ) );
@@ -340,37 +340,37 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& aFileName, bool aForceRere
 {
     wxFileName              fn;
     bool                    IsRead = true;
-    wxArrayString           liblist_tmp = m_ComponentLibFiles;
+    wxArrayString           liblist_tmp = m_componentLibFiles;
 
     if( aFileName.IsEmpty() )
         fn = g_RootSheet->GetScreen()->GetFileName();
     else
         fn = aFileName;
 
-    m_ComponentLibFiles.Clear();
+    m_componentLibFiles.Clear();
 
     /* Change the schematic file extension (.sch) to the project file
      * extension (.pro). */
     fn.SetExt( ProjectFileExtension );
 
-    wxGetApp().RemoveLibraryPath( m_UserLibraryPath );
+    wxGetApp().RemoveLibraryPath( m_userLibraryPath );
 
     if( !wxGetApp().ReadProjectConfig( fn.GetFullPath(), GROUP,
                                        GetProjectFileParameters(),
                                        !aForceReread ) )
     {
-        m_ComponentLibFiles = liblist_tmp;
+        m_componentLibFiles = liblist_tmp;
         IsRead = false;
     }
 
     /* User library path takes precedent over default library search paths. */
-    wxGetApp().InsertLibraryPath( m_UserLibraryPath, 1 );
+    wxGetApp().InsertLibraryPath( m_userLibraryPath, 1 );
 
     /* If the list is void, force loading the library "power.lib" that is
      * the "standard" library for power symbols.
      */
-    if( m_ComponentLibFiles.GetCount() == 0 )
-        m_ComponentLibFiles.Add( wxT( "power" ) );
+    if( m_componentLibFiles.GetCount() == 0 )
+        m_componentLibFiles.Add( wxT( "power" ) );
 
     LoadLibraries();
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
@@ -526,7 +526,7 @@ void SCH_EDIT_FRAME::LoadSettings()
     m_GridColor = g_LayerDescr.LayerColor[LAYER_GRID];
 
     g_DrawDefaultLineThickness = cfg->Read( DefaultDrawLineWidthEntry,(long) 6 );
-    cfg->Read( ShowHiddenPinsEntry, &m_ShowAllPins, false );
+    cfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
     cfg->Read( HorzVertLinesOnlyEntry, &g_HVLines, true );
 
     /* Load print preview window session settings. */
@@ -617,7 +617,7 @@ void SCH_EDIT_FRAME::SaveSettings()
     wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
 
     cfg->Write( DefaultDrawLineWidthEntry, (long) g_DrawDefaultLineThickness );
-    cfg->Write( ShowHiddenPinsEntry, m_ShowAllPins );
+    cfg->Write( ShowHiddenPinsEntry, m_showAllPins );
     cfg->Write( HorzVertLinesOnlyEntry, g_HVLines );
 
     /* Save print preview window session settings. */

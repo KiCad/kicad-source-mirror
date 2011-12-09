@@ -194,7 +194,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     m_ViewlibFrame = NULL;         // Frame for browsing component libraries
     m_DefaultSchematicFileName = NAMELESS_PROJECT;
     m_DefaultSchematicFileName += wxT( ".sch" );
-    m_ShowAllPins = false;
+    m_showAllPins = false;
     m_previewPosition = wxDefaultPosition;
     m_previewSize = wxDefaultSize;
     m_printMonochrome = true;
@@ -592,10 +592,10 @@ void SCH_EDIT_FRAME::OnUpdateBusOrientation( wxUpdateUIEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnUpdateHiddenPins( wxUpdateUIEvent& aEvent )
 {
-    wxString tool_tip = m_ShowAllPins ? _( "Do not show hidden pins" ) :
+    wxString tool_tip = m_showAllPins ? _( "Do not show hidden pins" ) :
                         _( "Show hidden pins" );
 
-    aEvent.Check( m_ShowAllPins );
+    aEvent.Check( m_showAllPins );
     m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_HIDDEN_PINS, tool_tip );
 }
 
@@ -622,8 +622,8 @@ void SCH_EDIT_FRAME::OnCreateNetlist( wxCommandEvent& event )
 {
     int i;
 
-    if( m_NetlistFormat <  NET_TYPE_PCBNEW )
-        m_NetlistFormat = NET_TYPE_PCBNEW;
+    if( m_netListFormat <  NET_TYPE_PCBNEW )
+        m_netListFormat = NET_TYPE_PCBNEW;
 
     do
     {

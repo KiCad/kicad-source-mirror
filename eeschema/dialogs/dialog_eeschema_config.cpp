@@ -1,11 +1,30 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_eeschema_config.cpp
-// Purpose:
-// Author:      jean-pierre Charras
-// Created:     17/02/2006 21:14:46
-// Copyright:   KiCad Team
-// Licence:     GPL
-/////////////////////////////////////////////////////////////////////////////
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2006-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file dialog_eeschema_config.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -50,9 +69,9 @@ void DIALOG_EESCHEMA_CONFIG::Init()
 
     m_LibListChanged = false;
     m_LibPathChanged = false;
-    m_UserLibDirBufferImg = m_Parent->m_UserLibraryPath;
+    m_UserLibDirBufferImg = m_Parent->GetUserLibraryPath();
 
-    m_ListLibr->InsertItems( m_Parent->m_ComponentLibFiles, 0 );
+    m_ListLibr->InsertItems( m_Parent->GetComponentLibraries(), 0 );
 
     // Load user libs paths:
     wxStringTokenizer Token( m_UserLibDirBufferImg, wxT( ";\n\r" ) );
@@ -154,7 +173,8 @@ void DIALOG_EESCHEMA_CONFIG::OnCancelClick( wxCommandEvent& event )
     {
         for ( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii++ )
             wxGetApp().RemoveLibraryPath( m_listUserPaths->GetString(ii) );
-        wxGetApp().InsertLibraryPath( m_Parent->m_UserLibraryPath, 1);
+
+        wxGetApp().InsertLibraryPath( m_Parent->GetUserLibraryPath(), 1);
     }
 
     EndModal( wxID_CANCEL );
@@ -166,15 +186,17 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
     // Recreate the user lib path
     if ( m_LibPathChanged )
     {
-        m_Parent->m_UserLibraryPath.Empty();
+        wxString path;
 
         for ( unsigned ii = 0; ii < m_listUserPaths->GetCount(); ii++ )
         {
             if ( ii > 0 )
-                m_Parent->m_UserLibraryPath << wxT( ";" );
+                path << wxT( ";" );
 
-            m_Parent->m_UserLibraryPath << m_listUserPaths->GetString( ii );
+            path << m_listUserPaths->GetString( ii );
         }
+
+        m_Parent->SetUserLibraryPath( path );
     }
 
     /* Set new active library list if the lib list of if default path list
@@ -182,11 +204,13 @@ void DIALOG_EESCHEMA_CONFIG::OnOkClick( wxCommandEvent& event )
      */
     if( m_LibListChanged || m_LibPathChanged )
     {
-        // Recreate lib list
-        m_Parent->m_ComponentLibFiles.Clear();
+        wxArrayString list;
 
         for ( unsigned ii = 0; ii < m_ListLibr->GetCount(); ii ++ )
-            m_Parent->m_ComponentLibFiles.Add(m_ListLibr->GetString( ii ) );
+            list.Add( m_ListLibr->GetString( ii ) );
+
+        // Recreate lib list
+        m_Parent->SetComponentLibraries( list );
 
         // take new list in account
         m_Parent->LoadLibraries();
@@ -298,6 +322,7 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         if( m_ListLibr->FindString( libfilename, fn.IsCaseSensitive() ) == wxNOT_FOUND )
         {
             m_LibListChanged = TRUE;
+
             if( event.GetId() == ID_ADD_LIB )
                 m_ListLibr->Append( libfilename );
             else
@@ -306,7 +331,7 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         else
         {
             wxString msg = wxT( "<" ) + libfilename + wxT( "> : " ) +
-                _( "Library already in use" );
+                           _( "Library already in use" );
             DisplayError( this, msg );
         }
     }

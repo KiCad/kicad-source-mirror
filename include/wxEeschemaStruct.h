@@ -112,13 +112,6 @@ enum SCH_SEARCH_T {
  */
 class SCH_EDIT_FRAME : public EDA_DRAW_FRAME
 {
-public:
-    int m_NetlistFormat;
-    int m_AddSubPrefix;
-    bool                  m_ShowAllPins;
-    wxString              m_UserLibraryPath;
-    wxArrayString         m_ComponentLibFiles;
-
 private:
     SCH_SHEET_PATH*       m_CurrentSheet;    ///< which sheet we are presently working on.
     LIB_VIEW_FRAME*       m_ViewlibFrame;
@@ -153,6 +146,19 @@ private:
 
     /// An index to the last find item in the found items list #m_foundItems.
     int m_foundItemIndex;
+
+    /// Flag to indicate show hidden pins.
+    bool m_showAllPins;
+
+    /// The format to use when generating a net list.
+    int m_netListFormat;
+
+    /// Add X prefix to componen referencess when generating spice net lists.
+    bool m_addReferencPrefix;
+
+    wxString m_userLibraryPath;
+
+    wxArrayString m_componentLibFiles;
 
     static int            m_lastSheetPinType;      ///< Last sheet pin type.
     static wxSize         m_lastSheetPinTextSize;  ///< Last sheet pin text size.
@@ -189,6 +195,26 @@ public:
     void SetLibraryEditorWindow( LIB_EDIT_FRAME* aFrame ) { m_LibeditFrame = aFrame; }
 
     void SetLibraryViewerWindow( LIB_VIEW_FRAME* aFrame ) { m_ViewlibFrame = aFrame; }
+
+    bool GetShowAllPins() const { return m_showAllPins; }
+
+    void SetShowAllPins( bool aEnable ) { m_showAllPins = aEnable; }
+
+    int GetNetListFormat() const { return m_netListFormat; }
+
+    void SetNetListFormat( int aFormat ) { m_netListFormat = aFormat; }
+
+    bool GetAddReferencePrefix() const { return m_addReferencPrefix; }
+
+    void SetAddReferencePrefix( bool aEnable ) { m_addReferencPrefix = aEnable; }
+
+    wxString GetUserLibraryPath() const { return m_userLibraryPath; }
+
+    void SetUserLibraryPath( const wxString& aPath ) { m_userLibraryPath = aPath; }
+
+    const wxArrayString& GetComponentLibraries() const { return m_componentLibFiles; }
+
+    void SetComponentLibraries( const wxArrayString& aList ) { m_componentLibFiles = aList; }
 
     void Process_Special_Functions( wxCommandEvent& event );
     void OnColorConfig( wxCommandEvent& aEvent );
