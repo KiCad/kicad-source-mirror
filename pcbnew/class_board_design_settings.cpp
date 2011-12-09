@@ -32,7 +32,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()
     m_EdgeSegmentWidth = 100;                   // current graphic line width (EDGE layer only)
     m_PcbTextWidth     = 100;                   // current Pcb (not module) Text width
     m_PcbTextSize       = wxSize( 500, 500 );   // current Pcb (not module) Text size
-    m_TrackMinWidth     = 80;                   // track min value for width ((min copper size value
+    m_TrackMinWidth     = 100;                  // track min value for width ((min copper size value
     m_ViasMinSize       = 350;                  // vias (not micro vias) min diameter
     m_ViasMinDrill      = 200;                  // vias (not micro vias) min drill diameter
     m_MicroViasMinSize  = 200;                  // micro vias (not vias) min diameter
