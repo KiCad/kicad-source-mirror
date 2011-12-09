@@ -59,7 +59,8 @@ BOARD::BOARD() :
     m_ViaSizeSelector    = 0;
     m_TrackWidthSelector = 0;
 
-    // Initialize default values.
+    // Initialize default values in default netclass.
+    m_NetClasses.GetDefault()->SetParams();
     SetCurrentNetClass( m_NetClasses.GetDefault()->GetName() );
 }
 

@@ -66,12 +66,14 @@ void NETCLASS::SetParams( const NETCLASS* defaults )
         SetuViaDrill( defaults->GetuViaDrill() );
     }
     else
-    {   // We should use m_Parent->GetDesignSettings()
-        // But when the NETCLASSES constructor is called
-        // (it call NETCLASS constructor), the m_Parent constructor (see BOARD::BOARD)
-        // is not run, and GetDesignSettings() return a bad value
-        // TODO: see how change that.
-        const BOARD_DESIGN_SETTINGS& g = m_Parent->GetDesignSettings(); // like that?
+    {   // Note:
+        // We use m_Parent->GetDesignSettings() to get some default values
+        // But when this function is called when instantiating a BOARD class,
+        // by the NETCLASSES constructor that calls NETCLASS constructor,
+        // the BOARD constructor (see BOARD::BOARD) is not yet run,
+        // and BOARD::m_designSettings contains not yet initialized values.
+        // So inside the BOARD constructor itself, you SHOULD recall SetParams
+        const BOARD_DESIGN_SETTINGS& g = m_Parent->GetDesignSettings();
 
         SetTrackWidth(  g.m_TrackMinWidth );
         SetViaDiameter( g.m_ViasMinSize );
