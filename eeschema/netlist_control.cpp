@@ -193,7 +193,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
                                  NET_TYPE_PCBNEW,
                                  ID_CURRENT_FORMAT_IS_DEFAULT,
                                  ID_CREATE_NETLIST,
-                                 m_Parent->m_NetlistFormat == NET_TYPE_PCBNEW );
+                                 m_Parent->GetNetListFormat() == NET_TYPE_PCBNEW );
 
     // Add Panel FORMAT ORCADPCB2
     m_PanelNetType[PANELORCADPCB2] =
@@ -202,7 +202,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
                                  NET_TYPE_ORCADPCB2,
                                  ID_CURRENT_FORMAT_IS_DEFAULT,
                                  ID_CREATE_NETLIST,
-                                 m_Parent->m_NetlistFormat == NET_TYPE_ORCADPCB2 );
+                                 m_Parent->GetNetListFormat() == NET_TYPE_ORCADPCB2 );
 
     // Add Panel FORMAT CADSTAR
     m_PanelNetType[PANELCADSTAR] =
@@ -211,7 +211,7 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
                                  NET_TYPE_CADSTAR,
                                  ID_CURRENT_FORMAT_IS_DEFAULT,
                                  ID_CREATE_NETLIST,
-                                 m_Parent->m_NetlistFormat == NET_TYPE_CADSTAR );
+                                 m_Parent->GetNetListFormat() == NET_TYPE_CADSTAR );
 
     // Add Panel spice
     InstallPageSpice();
@@ -236,16 +236,16 @@ void NETLIST_DIALOG::InstallPageSpice()
                                  wxT( "Spice" ),
                                  NET_TYPE_SPICE,
                                  0, 0,
-                                 m_Parent->m_NetlistFormat == NET_TYPE_SPICE );
+                                 m_Parent->GetNetListFormat() == NET_TYPE_SPICE );
 
     page->m_IsCurrentFormat = new wxCheckBox( page, ID_CURRENT_FORMAT_IS_DEFAULT,
                                               _( "Default format" ) );
-    page->m_IsCurrentFormat->SetValue( m_Parent->m_NetlistFormat == NET_TYPE_SPICE );
+    page->m_IsCurrentFormat->SetValue( m_Parent->GetNetListFormat() == NET_TYPE_SPICE );
     page->m_LeftBoxSizer->Add( page->m_IsCurrentFormat, 1, wxGROW | wxALL, 5 );
 
     page->m_AddSubPrefix = new wxCheckBox( page, ID_ADD_SUBCIRCUIT_PREFIX,
                                            _( "Prefix references 'U' and 'IC' with 'X'" ) );
-    page->m_AddSubPrefix->SetValue( m_Parent->m_AddSubPrefix );
+    page->m_AddSubPrefix->SetValue( m_Parent->GetAddReferencePrefix() );
     page->m_LeftBoxSizer->Add( page->m_AddSubPrefix, 0, wxGROW | wxALL, 5 );
 
 
@@ -304,12 +304,13 @@ void NETLIST_DIALOG::InstallCustomPages()
         if( title.IsEmpty() && previoustitle.IsEmpty() )
             break; // No more panel to install
 
-        selected = m_Parent->m_NetlistFormat == ( NET_TYPE_CUSTOM1 + ii );
+        selected = m_Parent->GetNetListFormat() == ( NET_TYPE_CUSTOM1 + ii );
 
         /* Install the panel "Add Plugin" after
          * the last initialized panel */
 
         previoustitle = title;
+
         if( title.IsEmpty() )
             CurrPage =
                 m_PanelNetType[PANELCUSTOMBASE + ii] =
@@ -430,7 +431,7 @@ void NETLIST_DIALOG::SelectNetlistType( wxCommandEvent& event )
     if( CurrPage == NULL )
         return;
 
-    m_Parent->m_NetlistFormat = CurrPage->m_IdNetType;
+    m_Parent->SetNetListFormat( CurrPage->m_IdNetType );
     CurrPage->m_IsCurrentFormat->SetValue( true );
 }
 
@@ -449,10 +450,7 @@ void NETLIST_DIALOG::EnableSubcircuitPrefix( wxCommandEvent& event )
     if( CurrPage == NULL || CurrPage->m_AddSubPrefix == NULL )
         return;
 
-    if( CurrPage->m_AddSubPrefix->IsChecked() )
-        m_Parent->m_AddSubPrefix = true;
-    else
-        m_Parent->m_AddSubPrefix = false;
+    m_Parent->SetAddReferencePrefix( CurrPage->m_AddSubPrefix->IsChecked() );
 }
 
 void NETLIST_DIALOG::NetlistUpdateOpt()
@@ -460,7 +458,7 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
     int ii;
 
     m_Parent->SetSimulatorCommand( m_PanelNetType[PANELSPICE]->m_CommandStringCtrl->GetValue() );
-    m_Parent->m_NetlistFormat = NET_TYPE_PCBNEW;
+    m_Parent->SetNetListFormat( NET_TYPE_PCBNEW );
 
     for( ii = 0; ii < PANELCUSTOMBASE + CUSTOMPANEL_COUNTMAX; ii++ )
     {
@@ -468,7 +466,7 @@ void NETLIST_DIALOG::NetlistUpdateOpt()
             break;
 
         if( m_PanelNetType[ii]->m_IsCurrentFormat->GetValue() == true )
-            m_Parent->m_NetlistFormat = m_PanelNetType[ii]->m_IdNetType;
+            m_Parent->SetNetListFormat( m_PanelNetType[ii]->m_IdNetType );
     }
 
     g_OptNetListUseNames = true; // Used for pspice, gnucap

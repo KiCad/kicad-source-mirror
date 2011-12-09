@@ -812,16 +812,17 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
 {
     // Invisible pins are only drawn on request.
     // They are drawn in g_InvisibleItemColor.
-    // in schematic, they are drawn only if m_ShowAllPins is true.
+    // in schematic, they are drawn only if m_showAllPins is true.
     // In other windows, they are always drawn because we must see them.
     if( ! IsVisible() )
     {
         EDA_DRAW_FRAME* frame = NULL;
+
         if( aPanel && aPanel->GetParent() )
             frame = (EDA_DRAW_FRAME*)aPanel->GetParent();
 
         if( frame && frame->IsType( SCHEMATIC_FRAME ) &&
-            ! ((SCH_EDIT_FRAME*)frame)->m_ShowAllPins )
+            ! ((SCH_EDIT_FRAME*)frame)->GetShowAllPins() )
             return;
 
         aColor = g_InvisibleItemColor;

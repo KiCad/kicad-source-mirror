@@ -290,7 +290,7 @@ void SCH_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_HIDDEN_PINS:
-        m_ShowAllPins = m_OptionsToolBar->GetToolState( id );
+        m_showAllPins = m_OptionsToolBar->GetToolState( id );
         DrawPanel->Refresh( );
         break;
 

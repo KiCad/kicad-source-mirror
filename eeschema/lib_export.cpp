@@ -58,7 +58,7 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 
     m_lastDrawItem = NULL;
 
-    wxFileDialog dlg( this, _( "Import Component" ), m_LastLibImportPath,
+    wxFileDialog dlg( this, _( "Import Component" ), m_lastLibImportPath,
                       wxEmptyString, CompLibFileWildcard,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
@@ -86,7 +86,7 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
     if( LoadOneLibraryPartAux( LibEntry, LibTmp ) )
     {
         fn = dlg.GetPath();
-        m_LastLibImportPath = fn.GetPath();
+        m_lastLibImportPath = fn.GetPath();
         DisplayLibInfos();
         GetScreen()->ClearUndoRedoList();
         DrawPanel->Refresh();
@@ -143,7 +143,7 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     bool success = m_library->Save( formatter );
 
     if( success )
-        m_LastLibExportPath = fn.GetPath();
+        m_lastLibExportPath = fn.GetPath();
 
     delete m_library;
     m_library = CurLibTmp;

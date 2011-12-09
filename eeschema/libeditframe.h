@@ -53,12 +53,73 @@ class LIB_EDIT_FRAME : public EDA_DRAW_FRAME
 {
     LIB_COMPONENT* m_tempCopyComponent;  ///< Temporary copy of current component during edit.
     LIB_COLLECTOR m_collectedItems;      // Used for hit testing.
+    wxComboBox* m_partSelectBox;         // a Box to select a part to edit (if any)
+    wxComboBox* m_aliasSelectBox;        // a box to select the alias to edit (if any)
+
+    wxString m_configPath;
+    wxString m_lastLibImportPath;
+    wxString m_lastLibExportPath;
+
+    /** Convert of the item currently being drawn. */
+    bool m_drawSpecificConvert;
+
+    /**
+     * Specify which component parts the current draw item applies to.
+     *
+     * If true, the item being drawn or edited applies only to the selected
+     * part.  Otherwise it applies to all parts in the component.
+     */
+    bool m_drawSpecificUnit;
+
+    /**
+     * Set to true to not synchronize pins at the same position when editing
+     * components with multiple parts or multiple body styles.  Setting this
+     * to false allows editing each pin per part or body style individually.
+     * This requires the user to open each part or body style to make changes
+     * to the pin at the same location.
+     */
+    bool m_editPinsPerPartOrConvert;
+
+    /** The current draw or edit graphic item fill style. */
+    static FILL_T m_drawFillStyle;
+
+    /** Default line width for drawing or editing graphic items. */
+    static int m_drawLineWidth;
+
+    /** The current active library. NULL if no active library is selected. */
+    static CMP_LIBRARY* m_library;
+    /** The current component being edited.  NULL if no component is selected. */
+    static LIB_COMPONENT* m_component;
+
+    static LIB_ITEM* m_lastDrawItem;
+    static LIB_ITEM* m_drawItem;
+    static wxString m_aliasName;
+
+    // The unit number to edit and show
+    static int m_unit;
+
+    // Show the normal shape ( m_convert <= 1 ) or the converted shape
+    // ( m_convert > 1 )
+    static int m_convert;
+
+    // true to force DeMorgan/normal tools selection enabled.
+    // They are enabled when the loaded component has
+    // Graphic items for converted shape
+    // But under some circumstances (New component created)
+    // these tools must left enable
+    static bool m_showDeMorgan;
+
+    /// The current text size setting.
+    static int m_textSize;
+
+    /// Current text orientation setting.
+    static int m_textOrientation;
+
+    static wxSize m_clientSize;
+
+    friend class DIALOG_LIB_EDIT_TEXT;
 
     LIB_ITEM* locateItem( const wxPoint& aPosition, const KICAD_T aFilterList[] );
-
-public:
-    wxComboBox* m_SelpartBox;            // a Box to select a part to edit (if any)
-    wxComboBox* m_SelAliasBox;           // a box to select the alias to edit (if any)
 
 public:
     LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent, const wxString& title,
@@ -497,70 +558,6 @@ public:
 
     // Automatic placement of pins
     void RepeatPinItem( wxDC* DC, LIB_PIN* Pin );
-
-protected:
-    wxString m_ConfigPath;
-    wxString m_LastLibImportPath;
-    wxString m_LastLibExportPath;
-
-    /** Convert of the item currently being drawn. */
-    bool m_drawSpecificConvert;
-
-    /**
-     * Specify which component parts the current draw item applies to.
-     *
-     * If true, the item being drawn or edited applies only to the selected
-     * part.  Otherwise it applies to all parts in the component.
-     */
-    bool m_drawSpecificUnit;
-
-    /**
-     * Set to true to not synchronize pins at the same position when editing
-     * components with multiple parts or multiple body styles.  Setting this
-     * to false allows editing each pin per part or body style individually.
-     * This requires the user to open each part or body style to make changes
-     * to the pin at the same location.
-     */
-    bool m_editPinsPerPartOrConvert;
-
-    /** The current draw or edit graphic item fill style. */
-    static FILL_T m_drawFillStyle;
-
-    /** Default line width for drawing or editing graphic items. */
-    static int m_drawLineWidth;
-
-    /** The current active library. NULL if no active library is selected. */
-    static CMP_LIBRARY* m_library;
-    /** The current component being edited.  NULL if no component is selected. */
-    static LIB_COMPONENT* m_component;
-
-    static LIB_ITEM* m_lastDrawItem;
-    static LIB_ITEM* m_drawItem;
-    static wxString m_aliasName;
-
-    // The unit number to edit and show
-    static int m_unit;
-
-    // Show the normal shape ( m_convert <= 1 ) or the converted shape
-    // ( m_convert > 1 )
-    static int m_convert;
-
-    // true to force DeMorgan/normal tools selection enabled.
-    // They are enabled when the loaded component has
-    // Graphic items for converted shape
-    // But under some circumstances (New component created)
-    // these tools must left enable
-    static bool m_showDeMorgan;
-
-    /// The current text size setting.
-    static int m_textSize;
-
-    /// Current text orientation setting.
-    static int m_textOrientation;
-
-    static wxSize m_clientSize;
-
-    friend class DIALOG_LIB_EDIT_TEXT;
 
     /**
      * Function CreatePNGorJPEGFile

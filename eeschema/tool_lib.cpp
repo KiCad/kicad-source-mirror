@@ -121,7 +121,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     m_HToolBar->AddTool( ID_LIBEDIT_SELECT_PART, wxEmptyString,
                          KiBitmap( import_cmp_from_lib_xpm ),
-                         _( "Load component to edit from the current lib" ) );
+                         _( "Load component to edit from the current library" ) );
 
     m_HToolBar->AddTool( ID_LIBEDIT_NEW_PART_FROM_EXISTING, wxEmptyString,
                          KiBitmap( copycomponent_xpm ),
@@ -181,21 +181,21 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                          _( "Edit document file" ) );
 
     m_HToolBar->AddSeparator();
-    m_SelpartBox = new wxComboBox( m_HToolBar,
-                                   ID_LIBEDIT_SELECT_PART_NUMBER,
-                                   wxEmptyString,
-                                   wxDefaultPosition,
-                                   wxSize( LISTBOX_WIDTH, -1 ),
-                                   0, NULL, wxCB_READONLY );
-    m_HToolBar->AddControl( m_SelpartBox );
+    m_partSelectBox = new wxComboBox( m_HToolBar,
+                                      ID_LIBEDIT_SELECT_PART_NUMBER,
+                                      wxEmptyString,
+                                      wxDefaultPosition,
+                                      wxSize( LISTBOX_WIDTH, -1 ),
+                                      0, NULL, wxCB_READONLY );
+    m_HToolBar->AddControl( m_partSelectBox );
 
-    m_SelAliasBox = new wxComboBox( m_HToolBar,
-                                    ID_LIBEDIT_SELECT_ALIAS,
-                                    wxEmptyString,
-                                    wxDefaultPosition,
-                                    wxSize( LISTBOX_WIDTH, -1 ),
-                                    0, NULL, wxCB_READONLY );
-    m_HToolBar->AddControl( m_SelAliasBox );
+    m_aliasSelectBox = new wxComboBox( m_HToolBar,
+                                       ID_LIBEDIT_SELECT_ALIAS,
+                                       wxEmptyString,
+                                       wxDefaultPosition,
+                                       wxSize( LISTBOX_WIDTH, -1 ),
+                                       0, NULL, wxCB_READONLY );
+    m_HToolBar->AddControl( m_aliasSelectBox );
 
     m_HToolBar->AddSeparator();
     msg = _( "Edit pins per part or body style (Use carefully!)" );

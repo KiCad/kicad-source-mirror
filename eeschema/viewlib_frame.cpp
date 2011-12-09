@@ -106,7 +106,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
 
     m_FrameName = wxT( "ViewlibFrame" );
-    m_ConfigPath = wxT( "LibraryViewer" );
+    m_configPath = wxT( "LibraryViewer" );
 
     // Give an icon
     wxIcon  icon;
@@ -513,7 +513,7 @@ void LIB_VIEW_FRAME::LoadSettings( )
 
     EDA_DRAW_FRAME::LoadSettings();
 
-    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_ConfigPath );
+    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_configPath );
     cfg = wxGetApp().m_EDA_Config;
 
     m_LibListSize.x = 150; // default width of libs list
@@ -537,7 +537,7 @@ void LIB_VIEW_FRAME::SaveSettings()
 
     EDA_DRAW_FRAME::SaveSettings();
 
-    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_ConfigPath );
+    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_configPath );
     cfg = wxGetApp().m_EDA_Config;
 
     if ( m_LibListSize.x )
