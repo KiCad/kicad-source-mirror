@@ -218,35 +218,50 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     m_Value->m_Text = params[iprmcnt];
 
     // Read other infos
+    int idx = 2;    // index of the first param of the ref text in ibuf
+                    // can be 2 ( 0 and 1 = position of module (not handled by Pcbnew)
+                    // or 0 if no module position
     iprmcnt++;
-
-    for( int ii = 0; ii < 6; ii++ )
+    for( int ii = 0; ii < 20; ii++ )
+        ibuf[ii] = 0;
+    for( int ii = 0; ii <= 8; ii++, iprmcnt++ ) // upt to 6 params + terminal char.
     {
-        if( iprmcnt < icnt_max )
+        if( iprmcnt >= icnt_max )
         {
             success  = false;
-            ibuf[ii] = 0;
+            break;
         }
         else
         {
+            if( params[iprmcnt] == wxT( ")" ) ||
+                params[iprmcnt] == wxT( "]" ) )
+            {   // Terminal character found
+                if( ii <= 5 ) // no module position
+                    idx = 0;
+                break;
+             }
             params[iprmcnt].ToLong( &ibuf[ii] );
         }
-
-        iprmcnt++;
     }
-
-    m_Reference->m_Pos.x  = wxRound( ibuf[2] * conv_unit );
-    m_Reference->m_Pos.y  = wxRound( ibuf[3] * conv_unit );
-    m_Reference->m_Orient = ibuf[4] * 900;
+    wxPoint pos;
+    pos.x  = wxRound( ibuf[idx] * conv_unit );
+    pos.y  = wxRound( ibuf[idx+1] * conv_unit );
+    m_Reference->SetPos( pos );
+    m_Reference->SetPos0( pos );
+    m_Reference->m_Orient = ibuf[idx+2] ? 900 : 0;
 
     // Calculate size: default is 40 mils (400 pcb units)
-    // real size is:  default * ibuf[5] / 100 (size in gpcb is given in percent of defalut size
-    ibuf[5] *= TEXT_DEFAULT_SIZE; ibuf[5] /= 100;
-    m_Reference->m_Size.x = m_Reference->m_Size.y = MAX( 20, ibuf[5] );
-    m_Reference->m_Thickness  = m_Reference->m_Size.x / 10;
+    // real size is:  default * ibuf[idx+3] / 100 (size in gpcb is given in percent of default size
+    int tsize = ( ibuf[idx+3] * TEXT_DEFAULT_SIZE ) / 100;
+    int thickness = m_Reference->m_Size.x / 6;
+    m_Reference->m_Size.x = m_Reference->m_Size.y = MAX( 40, tsize );
+    m_Reference->m_Thickness  = thickness;
     m_Value->m_Orient = m_Reference->m_Orient;
     m_Value->m_Size   = m_Reference->m_Size;
     m_Value->m_Thickness  = m_Reference->m_Thickness;
+    pos.y += tsize + thickness;
+    m_Value->SetPos( pos );
+    m_Value->SetPos0( pos );
 
     while( reader.ReadLine() )
     {
