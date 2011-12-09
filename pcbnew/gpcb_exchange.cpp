@@ -402,7 +402,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             Pad->SetOrientation( wxRound( angle ) );
             Pad->m_Pos.x  = (ibuf[0] + ibuf[2]) / 2;
             Pad->m_Pos.y  = (ibuf[1] + ibuf[3]) / 2;
-            Pad->m_Size.x = wxRound( hypot( (double)delta.x, (double)delta.y ) );
+            Pad->m_Size.x = wxRound( hypot( (double)delta.x, (double)delta.y ) ) + ibuf[4];
             Pad->m_Size.y = ibuf[4];
             Pad->m_Pos += m_Pos;
 
