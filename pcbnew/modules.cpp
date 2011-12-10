@@ -170,7 +170,7 @@ void Abort_MoveOrCopyModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
             module->DeleteStructure();
             module = NULL;
             pcbframe->GetBoard()->m_Status_Pcb = 0;
-            pcbframe->GetBoard()->m_NetInfo->BuildListOfNets();
+            pcbframe->GetBoard()->BuildListOfNets();
         }
     }
 

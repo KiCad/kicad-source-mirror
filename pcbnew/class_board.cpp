@@ -30,6 +30,7 @@ wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
 BOARD::BOARD() :
     BOARD_ITEM( (BOARD_ITEM*) NULL, PCB_T ),
+    m_NetInfo( this ),
     m_NetClasses( this )
 {
     // we have not loaded a board yet, assume latest until then.
@@ -42,8 +43,8 @@ BOARD::BOARD() :
 
     m_CurrentZoneContour = NULL;            // This ZONE_CONTAINER handle the
                                             // zone contour currently in progress
-    m_NetInfo = new NETINFO_LIST( this );   // handle nets info list (name, design constraints ..
-    m_NetInfo->BuildListOfNets();           // prepare pads and nets lists containers.
+
+    BuildListOfNets();                      // prepare pad and netlist containers.
 
     for( int layer = 0; layer < NB_COPPER_LAYERS; ++layer )
     {
@@ -89,8 +90,6 @@ BOARD::~BOARD()
 
     delete m_CurrentZoneContour;
     m_CurrentZoneContour = NULL;
-
-    delete m_NetInfo;
 }
 
 
@@ -814,25 +813,25 @@ void BOARD::DeleteZONEOutlines()
 }
 
 
-int BOARD::GetNumSegmTrack()
+int BOARD::GetNumSegmTrack() const
 {
     return m_Track.GetCount();
 }
 
 
-int BOARD::GetNumSegmZone()
+int BOARD::GetNumSegmZone() const
 {
     return m_Zone.GetCount();
 }
 
 
-unsigned BOARD::GetNoconnectCount()
+unsigned BOARD::GetNoconnectCount() const
 {
     return m_NbNoconnect;
 }
 
 
-unsigned BOARD::GetNodesCount()
+unsigned BOARD::GetNodesCount() const
 {
     return m_NbNodes;
 }
@@ -844,7 +843,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly )
     EDA_RECT area;
 
     // Check segments, dimensions, texts, and fiducials
-    for( BOARD_ITEM* item = m_Drawings; item != NULL; item = item->Next() )
+    for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
         if( aBoardEdgesOnly && (item->Type() != PCB_LINE_T || item->GetLayer() != EDGE_N ) )
             continue;
@@ -931,7 +930,7 @@ void BOARD::DisplayInfo( EDA_DRAW_FRAME* frame )
             trackSegmentsCount++;
     }
 
-    txt.Printf( wxT( "%d" ), GetPadsCount() );
+    txt.Printf( wxT( "%d" ), GetPadCount() );
     frame->AppendMsgPanel( _( "Pads" ), txt, DARKGREEN );
 
     txt.Printf( wxT( "%d" ), viasCount );
@@ -943,7 +942,7 @@ void BOARD::DisplayInfo( EDA_DRAW_FRAME* frame )
     txt.Printf( wxT( "%d" ), GetNodesCount() );
     frame->AppendMsgPanel( _( "Nodes" ), txt, DARKCYAN );
 
-    txt.Printf( wxT( "%d" ), m_NetInfo->GetCount() );
+    txt.Printf( wxT( "%d" ), m_NetInfo.GetNetCount() );
     frame->AppendMsgPanel( _( "Nets" ), txt, RED );
 
     /* These parameters are known only if the full ratsnest is available,
@@ -1229,10 +1228,10 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR* inspector, const void* testData,
 
 NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
 {
-    // the first valid netcode is 1 and the last is m_NetInfo->GetCount()-1.
+    // the first valid netcode is 1 and the last is m_NetInfo.GetCount()-1.
     // zero is reserved for "no connection" and is not used.
     // NULL is returned for non valid netcodes
-    NETINFO_ITEM* net = m_NetInfo->GetNetItem( aNetcode );
+    NETINFO_ITEM* net = m_NetInfo.GetNetItem( aNetcode );
 
 #if defined(DEBUG)
     if( net )     // item can be NULL if anetcode is not valid
@@ -1256,7 +1255,7 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
     if( aNetname.IsEmpty() )
         return NULL;
 
-    int ncount = m_NetInfo->GetCount();
+    int ncount = m_NetInfo.GetNetCount();
 
     // Search for a netname = aNetname
 #if 0
@@ -1264,7 +1263,7 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
     // Use a sequential search: easy to understand, but slow
     for( int ii = 1; ii < ncount; ii++ )
     {
-        NETINFO_ITEM* item = m_NetInfo->GetNetItem( ii );
+        NETINFO_ITEM* item = m_NetInfo.GetNetItem( ii );
 
         if( item && item->GetNetname() == aNetname )
         {
@@ -1289,7 +1288,7 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
         if( (ii & 1) && ( ii > 1 ) )
             ncount++;
 
-        NETINFO_ITEM* item = m_NetInfo->GetNetItem( index );
+        NETINFO_ITEM* item = m_NetInfo.GetNetItem( index );
 
         if( item == NULL )
             return NULL;
@@ -1370,18 +1369,18 @@ static bool s_SortByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 
 int BOARD::ReturnSortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 {
-    if( m_NetInfo->GetCount() == 0 )
+    if( m_NetInfo.GetNetCount() == 0 )
         return 0;
 
     // Build the list
     std::vector <NETINFO_ITEM*> netBuffer;
 
-    netBuffer.reserve( m_NetInfo->GetCount() );
+    netBuffer.reserve( m_NetInfo.GetNetCount() );
 
-    for( unsigned ii = 1; ii < m_NetInfo->GetCount(); ii++ )
+    for( unsigned ii = 1; ii < m_NetInfo.GetNetCount(); ii++ )
     {
-        if( m_NetInfo->GetNetItem( ii )->GetNet() > 0 )
-            netBuffer.push_back( m_NetInfo->GetNetItem( ii ) );
+        if( m_NetInfo.GetNetItem( ii )->GetNet() > 0 )
+            netBuffer.push_back( m_NetInfo.GetNetItem( ii ) );
     }
 
     // sort the list
@@ -1561,9 +1560,9 @@ D_PAD* BOARD::GetPad( TRACK* aTrace, int aEndPoint )
 
 D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, int aLayerMask )
 {
-    for( unsigned i=0; i<GetPadsCount();  ++i )
+    for( unsigned i=0; i<GetPadCount();  ++i )
     {
-        D_PAD* pad = m_NetInfo->GetPad(i);
+        D_PAD* pad = m_NetInfo.GetPad(i);
 
         if( pad->m_Pos != aPosition )
             continue;
@@ -1675,8 +1674,8 @@ static bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
 
 void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector )
 {
-    aVector.insert( aVector.end(), m_NetInfo->m_PadsFullList.begin(),
-                    m_NetInfo->m_PadsFullList.end() );
+    aVector.insert( aVector.end(), m_NetInfo.m_PadsFullList.begin(),
+                    m_NetInfo.m_PadsFullList.end() );
 
     sort( aVector.begin(), aVector.end(), sortPadsByXthenYCoord );
 }

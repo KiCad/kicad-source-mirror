@@ -86,7 +86,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     aModule->m_Flags = 0;
 
-    GetBoard()->m_NetInfo->BuildListOfNets();
+    GetBoard()->BuildListOfNets();
 
     GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
     PlaceModule( aModule, NULL );
@@ -196,7 +196,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
          */
 
 
-//        GetBoard()->m_Pcb->m_NetInfo->BuildListOfNets();
+//        GetBoard()->m_Pcb->m_NetInfo.BuildListOfNets();
         RecalculateAllTracksNetcode();
 
         if( DC )

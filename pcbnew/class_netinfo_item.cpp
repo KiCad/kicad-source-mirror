@@ -140,7 +140,6 @@ void NETINFO_ITEM::DisplayInfo( EDA_DRAW_FRAME* frame )
     // Displays the net lenght of internal ICs connections (wires inside ICs):
     txt = frame->CoordinateToString( lengthdie );
     frame->AppendMsgPanel( _( "On Die" ), txt, RED );
-
 }
 
 
@@ -170,7 +169,9 @@ void RATSNEST_ITEM::Draw( EDA_DRAW_PANEL* panel,
                           const wxPoint&  aOffset )
 {
     GRSetDrawMode( DC, aDrawMode );
+
     int color = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
+
     GRLine( &panel->m_ClipBox, DC, m_PadStart->m_Pos - aOffset,
             m_PadEnd->m_Pos - aOffset, 0, color );
 }

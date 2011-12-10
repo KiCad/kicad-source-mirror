@@ -23,31 +23,13 @@ NETINFO_LIST::NETINFO_LIST( BOARD* aParent )
 
 NETINFO_LIST::~NETINFO_LIST()
 {
-    DeleteData();
+    clear();
 }
 
 
-/**
- * Function GetItem
- * @param aNetcode = netcode to identify a given NETINFO_ITEM
- * @return a NETINFO_ITEM pointer to the selected NETINFO_ITEM by its netcode, or NULL if not found
- */
-NETINFO_ITEM* NETINFO_LIST::GetNetItem( int aNetcode )
+void NETINFO_LIST::clear()
 {
-    if( aNetcode < 0 || ( aNetcode > (int) ( GetCount() - 1 ) ) )
-        return NULL;
-
-    return m_NetBuffer[aNetcode];
-}
-
-
-/**
- * Function DeleteData
- * delete the list of nets (and free memory)
- */
-void NETINFO_LIST::DeleteData()
-{
-    for( unsigned ii = 0; ii < GetCount(); ii++ )
+    for( unsigned ii = 0; ii < GetNetCount(); ii++ )
         delete m_NetBuffer[ii];
 
     m_NetBuffer.clear();
@@ -72,7 +54,7 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
  * and expects to have a nets list sorted by an alphabetic case sensitive sort
  */
 
-static bool PadlistSortByNetnames( const D_PAD* a, const D_PAD* b )
+static bool padlistSortByNetnames( const D_PAD* a, const D_PAD* b )
 {
     return ( a->GetNetname().Cmp( b->GetNetname() ) ) < 0;
 }
@@ -90,23 +72,23 @@ static bool PadlistSortByNetnames( const D_PAD* a, const D_PAD* b )
  * and expects to have a nets list sorted by an alphabetic case sensitive sort
  * So do not change Build_Pads_Full_List() taht build a sorted list of pads
  */
-void NETINFO_LIST::BuildListOfNets()
+void NETINFO_LIST::buildListOfNets()
 {
-    D_PAD* pad;
-    int nodes_count = 0;
-    NETINFO_ITEM* net_item;
+    D_PAD*          pad;
+    int             nodes_count = 0;
+    NETINFO_ITEM*   net_item;
 
-    DeleteData();        // Remove all nets info and free memory
+    clear();        // Remove all nets info and free memory
 
     // Create and add the "unconnected net", always existing,
     // used to handle pads and tracks that are not member of a "real" net
     net_item = new NETINFO_ITEM( (BOARD_ITEM*) m_Parent );
     AppendNet( net_item );
 
-    /* Build the PAD list, sorted by net */
-    Build_Pads_Full_List();
+    // Build the PAD list, sorted by net
+    buildPadsFullList();
 
-    /* Build netnames list, and create a netcode for each netname */
+    // Build netnames list, and create a netcode for each netname
     D_PAD* last_pad = NULL;
     int    netcode = 0;
 
@@ -158,21 +140,20 @@ void NETINFO_LIST::BuildListOfNets()
 }
 
 
-/**
- * Function Build_Pads_Full_List
- *  Create the pad list, sorted by net names (sorted by an alphabetic case sensitive sort)
- * initialise:
- *   m_Pads (list of pads)
- * set m_Status_Pcb = LISTE_PAD_OK;
- * also clear m_Pcb->m_FullRatsnest that could have bad data
- *   (m_Pcb->m_FullRatsnest uses pointer to pads)
- * Be aware NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname )
- * when search a net by its net name does a binary search
- * and expects to have a nets list sorted by an alphabetic case sensitive sort
- * So do not change the sort function used here
- */
-void NETINFO_LIST::Build_Pads_Full_List()
+void NETINFO_LIST::buildPadsFullList()
 {
+    /*
+     * initialize:
+     *   m_Pads (list of pads)
+     * set m_Status_Pcb = LISTE_PAD_OK;
+     * also clear m_Pcb->m_FullRatsnest that could have bad data
+     *   (m_Pcb->m_FullRatsnest uses pointer to pads)
+     * Be aware NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname )
+     * when search a net by its net name does a binary search
+     * and expects to have a nets list sorted by an alphabetic case sensitive sort
+     * So do not change the sort function used here
+     */
+
     if( m_Parent->m_Status_Pcb & LISTE_PAD_OK )
         return;
 
@@ -180,7 +161,7 @@ void NETINFO_LIST::Build_Pads_Full_List()
     m_PadsFullList.clear();
     m_Parent->m_FullRatsnest.clear();
 
-    /* Clear variables used in rastnest computation */
+    // Clear variables used in ratsnest computation
     for( MODULE* module = m_Parent->m_Modules;  module;  module = module->Next() )
     {
         for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
@@ -193,8 +174,7 @@ void NETINFO_LIST::Build_Pads_Full_List()
     }
 
     // Sort pad list per net
-    //
-    sort( m_PadsFullList.begin(), m_PadsFullList.end(), PadlistSortByNetnames );
+    sort( m_PadsFullList.begin(), m_PadsFullList.end(), padlistSortByNetnames );
 
     m_Parent->m_Status_Pcb = LISTE_PAD_OK;
 }

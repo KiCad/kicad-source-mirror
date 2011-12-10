@@ -195,7 +195,7 @@ void BOARD::SynchronizeNetsAndNetClasses()
     // set all NETs to the default NETCLASS, then later override some
     // as we go through the NETCLASSes.
 
-    int count = m_NetInfo->GetCount();
+    int count = m_NetInfo.GetNetCount();
     for( int i=0;  i<count;  ++i )
     {
         NETINFO_ITEM* net = FindNet( i );

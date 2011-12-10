@@ -4,6 +4,17 @@ KiCad ChangeLog 2011
 Please add newer entries at the top, list the date and your name with
 email address.
 
+
+2011-Dec-9 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++PCBNew
+  * added BOARD::GetPad(int), made BOARD::m_NetInfo private, and contained
+    within the BOARD, not dynamically allocated and owned via pointer.
+  * added BOARD::GetPadCount()
+  * changed NETINFO_LIST::GetCount() to GetNetCount()
+  * added BOARD::GetNetCount()
+  * more kicad_plugin work.
+
 2011-Dec-5 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++PCBNew

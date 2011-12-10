@@ -135,7 +135,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
 {
     wxString msg;
 
-    GetBoard()->m_Status_Pcb = 0;   /* we want a full ratsnest computation, from the scratch */
+    GetBoard()->m_Status_Pcb = 0;   // we want a full ratsnest computation, from the scratch
     ClearMsgPanel();
 
     // Rebuild the full pads and net info list
@@ -143,9 +143,9 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
 
     if( aDisplayStatus )
     {
-        msg.Printf( wxT( " %d" ), m_Pcb->GetPadsCount() );
+        msg.Printf( wxT( " %d" ), m_Pcb->GetPadCount() );
         AppendMsgPanel( wxT( "Pads" ), msg, RED );
-        msg.Printf( wxT( " %d" ), m_Pcb->m_NetInfo->GetCount() );
+        msg.Printf( wxT( " %d" ), m_Pcb->GetNetCount() );
         AppendMsgPanel( wxT( "Nets" ), msg, CYAN );
     }
 
@@ -158,7 +158,7 @@ void PCB_BASE_FRAME::Compile_Ratsnest( wxDC* aDC, bool aDisplayStatus )
      */
     Build_Board_Ratsnest();
 
-    /* Compute the pad connections due to the existing tracks (physical connections) */
+    // Compute the pad connections due to the existing tracks (physical connections)
     TestConnections();
 
     /* Compute the active ratsnest, i.e. the unconnected links
@@ -206,16 +206,16 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest()
 
     m_Pcb->m_FullRatsnest.clear();
 
-    if( m_Pcb->GetPadsCount() == 0 )
+    if( m_Pcb->GetPadCount() == 0 )
         return;
 
     /* Created pad list and the net_codes if needed */
     if( (m_Pcb->m_Status_Pcb & NET_CODES_OK) == 0 )
-        m_Pcb->m_NetInfo->BuildListOfNets();
+        m_Pcb->BuildListOfNets();
 
-    for( unsigned ii = 0; ii<m_Pcb->GetPadsCount(); ++ii )
+    for( unsigned ii = 0; ii<m_Pcb->GetPadCount(); ++ii )
     {
-        pad = m_Pcb->m_NetInfo->GetPad( ii );
+        pad = m_Pcb->GetPad( ii );
         pad->SetSubRatsnest( 0 );
     }
 
@@ -227,7 +227,7 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest()
                                         // (net_code = 0 -> no connect)
     noconn = 0;
     MIN_SPAN_TREE_PADS min_spanning_tree;
-    for( ; current_net_code < m_Pcb->m_NetInfo->GetCount(); current_net_code++ )
+    for( ; current_net_code < m_Pcb->GetNetCount(); current_net_code++ )
     {
         NETINFO_ITEM* net = m_Pcb->FindNet( current_net_code );
 
@@ -439,13 +439,13 @@ void PCB_BASE_FRAME::TestForActiveLinksInRatsnest( int aNetCode )
     D_PAD*         pad;
     NETINFO_ITEM*  net;
 
-    if( m_Pcb->GetPadsCount() == 0 )
+    if( m_Pcb->GetPadCount() == 0 )
         return;
 
     if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
         Build_Board_Ratsnest();
 
-    for( int net_code = 1; net_code < (int) m_Pcb->m_NetInfo->GetCount(); net_code++ )
+    for( int net_code = 1; net_code < (int) m_Pcb->GetNetCount(); net_code++ )
     {
         net = m_Pcb->FindNet( net_code );
 
@@ -514,7 +514,7 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
     if( (GetBoard()->m_Status_Pcb & LISTE_PAD_OK) == 0 )
     {
         GetBoard()->m_Status_Pcb = 0;
-        GetBoard()->m_NetInfo->BuildListOfNets();
+        GetBoard()->BuildListOfNets();
     }
 
     /* Compute the "local" ratsnest if needed (when this footprint starts move)
