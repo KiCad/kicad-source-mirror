@@ -824,7 +824,7 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
     fprintf( File, "Nzone %d\n", GetBoard()->GetNumSegmZone() );
     fprintf( File, "BoardThickness %d\n", GetBoard()->GetDesignSettings().m_BoardThickness );
     fprintf( File, "Nmodule %d\n", NbModules );
-    fprintf( File, "Nnets %d\n", GetBoard()->m_NetInfo->GetCount() );
+    fprintf( File, "Nnets %d\n", GetBoard()->GetNetCount() );
     fprintf( File, "$EndGENERAL\n\n" );
     return true;
 }
@@ -1010,7 +1010,7 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
         if( TESTLINE( "EQUIPOT" ) )
         {
             NETINFO_ITEM* net = new NETINFO_ITEM( board );
-            board->m_NetInfo->AppendNet( net );
+            board->m_NetInfo.AppendNet( net );
             net->ReadDescr( aReader );
             continue;
         }
@@ -1130,10 +1130,10 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 
     SetLocaleTo_Default();       // revert to the current  locale
 
-    GetBoard()->m_Status_Pcb = 0;
+    board->m_Status_Pcb = 0;
 
     // Build the net info list
-    GetBoard()->m_NetInfo->BuildListOfNets();
+    board->BuildListOfNets();
 
     board->SynchronizeNetsAndNetClasses();
 

@@ -63,9 +63,9 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
         return;
 
     wxString Line;
-    for( unsigned ii = 0; ii < GetBoard()->m_NetInfo->GetCount(); ii++ )
+    for( unsigned ii = 0; ii < GetBoard()->GetNetCount(); ii++ )
     {
-        net = GetBoard()->m_NetInfo->GetNetItem( ii );
+        net = GetBoard()->m_NetInfo.GetNetItem( ii );
 
         if( !WildCompareString( netFilter, net->GetNetname(), false ) )
             continue;
@@ -84,9 +84,9 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
     unsigned netcode = (unsigned) choiceDlg.GetSelection();
 
     // Search for the net selected.
-    for( unsigned ii = 0; ii < GetBoard()->m_NetInfo->GetCount(); ii++ )
+    for( unsigned ii = 0; ii < GetBoard()->GetNetCount(); ii++ )
     {
-        net = GetBoard()->m_NetInfo->GetNetItem( ii );
+        net = GetBoard()->FindNet( ii );
 
         if( !WildCompareString( netFilter, net->GetNetname(), false ) )
             continue;

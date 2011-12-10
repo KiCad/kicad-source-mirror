@@ -677,9 +677,9 @@ void CONNECTIONS::Propagate_SubNets()
 void PCB_BASE_FRAME::TestConnections()
 {
     // Clear the cluster identifier for all pads
-    for( unsigned i = 0;  i< m_Pcb->GetPadsCount();  ++i )
+    for( unsigned i = 0;  i< m_Pcb->GetPadCount();  ++i )
     {
-        D_PAD* pad = m_Pcb->m_NetInfo->GetPad(i);
+        D_PAD* pad = m_Pcb->GetPad(i);
 
         pad->SetZoneSubNet( 0 );
         pad->SetSubNet( 0 );
@@ -720,9 +720,9 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
         Compile_Ratsnest( aDC, true );
 
     // Clear the cluster identifier (subnet) of pads for this net
-    for( unsigned i = 0; i < m_Pcb->GetPadsCount(); ++i )
+    for( unsigned i = 0; i < m_Pcb->GetPadCount(); ++i )
     {
-        D_PAD* pad = m_Pcb->m_NetInfo->GetPad(i);
+        D_PAD* pad = m_Pcb->GetPad(i);
         int    pad_net_code = pad->GetNet();
 
         if( pad_net_code < aNetCode )
@@ -786,7 +786,8 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     TRACK*              curr_track;
 
     // Build the net info list
-    GetBoard()->m_NetInfo->BuildListOfNets();
+    GetBoard()->BuildListOfNets();
+
     // Reset variables and flags used in computation
     curr_track = m_Pcb->m_Track;
     for( ; curr_track != NULL; curr_track = curr_track->Next() )
@@ -801,7 +802,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
     }
 
     // If no pad, reset pointers and netcode, and do nothing else
-    if( m_Pcb->GetPadsCount() == 0 )
+    if( m_Pcb->GetPadCount() == 0 )
         return;
 
     CONNECTIONS connections( m_Pcb );

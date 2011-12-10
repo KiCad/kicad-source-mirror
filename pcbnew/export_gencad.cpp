@@ -262,12 +262,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     fputs( "$PADS\n", aFile );
 
     // Enumerate and sort the pads
-    if( aPcb->GetPadsCount() > 0 )
+    if( aPcb->GetPadCount() > 0 )
     {
-        pads.insert( pads.end(),
-                    aPcb->m_NetInfo->m_PadsFullList.begin(),
-                    aPcb->m_NetInfo->m_PadsFullList.end() );
-        qsort( &pads[0], aPcb->GetPadsCount(), sizeof( D_PAD* ),
+        pads = aPcb->GetPads();
+        qsort( &pads[0], aPcb->GetPadCount(), sizeof( D_PAD* ),
                PadListSortByShape );
     }
 
@@ -643,9 +641,9 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 
     fputs( "$SIGNALS\n", aFile );
 
-    for( unsigned ii = 0; ii < aPcb->m_NetInfo->GetCount(); ii++ )
+    for( unsigned ii = 0; ii < aPcb->GetNetCount(); ii++ )
     {
-        net = aPcb->m_NetInfo->GetNetItem( ii );
+        net = aPcb->FindNet( ii );
 
         if( net->GetNetname() == wxEmptyString ) // dummy netlist (no connection)
         {
