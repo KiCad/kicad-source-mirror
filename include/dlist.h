@@ -113,7 +113,7 @@ public:
      * Function GetCount
      * returns the number of elements in the list.
      */
-    unsigned GetCount() { return count; }
+    unsigned GetCount() const { return count; }
 
 #if defined(DEBUG)
     void VerifyListIntegrity();

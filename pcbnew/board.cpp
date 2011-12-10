@@ -203,9 +203,9 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
     via_marge = clearance + (viaSize / 2);
 
     // Place PADS on matrix routing:
-    for( unsigned i = 0; i < aPcb->GetPadsCount(); ++i )
+    for( unsigned i = 0; i < aPcb->GetPadCount(); ++i )
     {
-        D_PAD* pad = aPcb->m_NetInfo->GetPad( i );
+        D_PAD* pad = aPcb->GetPad( i );
 
         if( net_code != pad->GetNet() || (flag & FORCE_PADS) )
         {

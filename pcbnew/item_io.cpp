@@ -41,7 +41,6 @@
 #include "pcbnew.h"
 #include "pcbnew_id.h"
 #include "autorout.h"
-#include "pcb_plot_params.h"
 
 #include "3d_struct.h"
 #include "trigo.h"
@@ -60,8 +59,8 @@ bool BOARD::Save( FILE* aFile ) const
     BOARD_ITEM* item;
 
     // save the nets
-    for( unsigned ii = 0; ii < m_NetInfo->GetCount(); ii++ )
-        if( !m_NetInfo->GetNetItem( ii )->Save( aFile ) )
+    for( unsigned ii = 0; ii < GetNetCount(); ii++ )
+        if( !FindNet( ii )->Save( aFile ) )
             goto out;
 
     // Saved nets do not include netclass names, so save netclasses after nets.

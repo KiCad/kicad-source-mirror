@@ -38,7 +38,8 @@ typedef std::vector< TRACK* > TRACK_PTRS;
  * Enum LAYER_T
  * gives the allowed types of layers, same as Specctra DSN spec.
  */
-enum LAYER_T {
+enum LAYER_T
+{
     LT_SIGNAL,
     LT_POWER,
     LT_MIXED,
@@ -169,6 +170,23 @@ private:
 
     EDA_RECT            m_BoundingBox;
 
+    NETINFO_LIST        m_NetInfo;                      ///< net info list (name, design constraints ..
+
+    BOARD_DESIGN_SETTINGS   m_designSettings;
+    COLORS_DESIGN_SETTINGS* m_colorsSettings;       // Link to current colors settings
+
+    /**
+     * Function chainMarkedSegments
+     * is used by MarkTrace() to set the BUSY flag of connected segments of the trace
+     * segment located at \a aPosition on aLayerMask.
+     *  Vias are put in list but their flags BUSY is not set
+     * @param aPosition A wxPoint object containing the position of the starting search.
+     * @param aLayerMask The allowed layers for segments to search.
+     * @param aList The track list to fill with points of flagged segments.
+     */
+    void chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* aList );
+
+
 public:
 
     /// Flags used in ratsnest calculation and update.
@@ -184,9 +202,6 @@ public:
     DLIST<MODULE>               m_Modules;               // linked list of MODULEs
     DLIST<TRACK>                m_Track;                 // linked list of TRACKs and SEGVIAs
     DLIST<SEGZONE>              m_Zone;                  // linked list of SEGZONEs
-
-    /// nets info list (name, design constraints ..
-    NETINFO_LIST*               m_NetInfo;
 
     /// Ratsnest list for the BOARD
     std::vector<RATSNEST_ITEM>  m_FullRatsnest;
@@ -223,22 +238,7 @@ public:
     // Index for m_TrackWidthList to select the value.
     unsigned m_TrackWidthSelector;
 
-private:
-    BOARD_DESIGN_SETTINGS   m_designSettings;
-    COLORS_DESIGN_SETTINGS* m_colorsSettings;       // Link to current colors settings
 
-    /**
-     * Function chainMarkedSegments
-     * is used by MarkTrace() to set the BUSY flag of connected segments of the trace
-     * segment located at \a aPosition on aLayerMask.
-     *  Vias are put in list but their flags BUSY is not set
-     * @param aPosition A wxPoint object containing the position of the starting search.
-     * @param aLayerMask The allowed layers for segments to search.
-     * @param aList The track list to fill with points of flagged segments.
-     */
-    void chainMarkedSegments( wxPoint aPosition, int aLayerMask, TRACK_PTRS* aList );
-
-public:
     BOARD();
     ~BOARD();
 
@@ -310,7 +310,6 @@ public:
      */
     void DeleteZONEOutlines();
 
-
     /**
      * Function GetMARKER
      * returns the MARKER at a given index.
@@ -325,7 +324,6 @@ public:
         return NULL;
     }
 
-
     /**
      * Function GetMARKERCount
      * @return int - The number of MARKER_PCBS.
@@ -334,7 +332,6 @@ public:
     {
         return (int) m_markers.size();
     }
-
 
     /**
      * Function ResetHighLight
@@ -360,7 +357,6 @@ public:
     {
         m_hightLight.m_netCode = aNetCode;
     }
-
 
     /**
      * Function IsHighLightNetON
@@ -610,19 +606,19 @@ public:
      */
     int GetLayerColor( int aLayer );
 
-    /* Functions to get some items count */
-    int GetNumSegmTrack();
+    /** Functions to get some items count */
+    int GetNumSegmTrack() const;
 
-    /* Calculate the zone segment count */
-    int GetNumSegmZone();
+    /** Calculate the zone segment count */
+    int GetNumSegmZone() const;
 
-    unsigned GetNoconnectCount();        // Return the number of missing links.
+    unsigned GetNoconnectCount() const;    // Return the number of missing links.
 
     /**
      * Function GetNumRatsnests
      * @return int - The number of rats
      */
-    unsigned GetRatsnestsCount()
+    unsigned GetRatsnestsCount() const
     {
         return m_FullRatsnest.size();
     }
@@ -632,15 +628,71 @@ public:
      * Function GetNodesCount
      * @return the number of pads members of nets (i.e. with netcode > 0)
      */
-    unsigned GetNodesCount();
+    unsigned GetNodesCount() const;
 
     /**
-     * Function GetPadsCount
+     * Function GetPadCount
      * @return the number of pads in board
      */
-    unsigned GetPadsCount()
+    unsigned GetPadCount() const
     {
-        return m_NetInfo->GetPadsCount();
+        return m_NetInfo.GetPadCount();
+    }
+
+    /**
+     * Function GetPad
+     * @return D_PAD* - at the \a aIndex from m_NetInfo
+     */
+    D_PAD* GetPad( unsigned aIndex ) const
+    {
+        return m_NetInfo.GetPad( aIndex );
+    }
+
+    /**
+     * Function GetPads
+     * returns a list of all the pads by value.  The returned list is not
+     * sorted and contains pointers to PADS, but those pointers do not convey
+     * ownership of the respective PADs.
+     * @return std::vector<D_PAD*> - a full list of pads
+     */
+    std::vector<D_PAD*> GetPads()
+    {
+        return m_NetInfo.m_PadsFullList;
+    }
+
+    void BuildListOfNets()
+    {
+        m_NetInfo.buildListOfNets();
+    }
+
+    /**
+     * Function FindNet
+     * searches for a net with the given netcode.
+     * @param aNetcode A netcode to search for.
+     * @return NETINFO_ITEM_ITEM* - the net or NULL if not found.
+     */
+    NETINFO_ITEM* FindNet( int aNetcode ) const;
+
+    /**
+     * Function FindNet overloaded
+     * searches for a net with the given name.
+     * @param aNetname A Netname to search for.
+     * @return NETINFO_ITEM* - the net or NULL if not found.
+     */
+    NETINFO_ITEM* FindNet( const wxString& aNetname ) const;
+
+    void AppendNet( NETINFO_ITEM* aNewNet )
+    {
+        m_NetInfo.AppendNet( aNewNet );
+    }
+
+    /**
+     * Function GetNetCount
+     * @return the number of nets (NETINFO_ITEM)
+     */
+    unsigned GetNetCount() const
+    {
+        return m_NetInfo.GetNetCount();
     }
 
     /**
@@ -709,23 +761,6 @@ public:
     SEARCH_RESULT Visit( INSPECTOR* inspector, const void* testData,
                          const KICAD_T scanTypes[] );
 
-
-    /**
-     * Function FindNet
-     * searches for a net with the given netcode.
-     * @param aNetcode A netcode to search for.
-     * @return NETINFO_ITEM_ITEM* - the net or NULL if not found.
-     */
-    NETINFO_ITEM* FindNet( int aNetcode ) const;
-
-    /**
-     * Function FindNet overloaded
-     * searches for a net with the given name.
-     * @param aNetname A Netname to search for.
-     * @return NETINFO_ITEM* - the net or NULL if not found.
-     */
-    NETINFO_ITEM* FindNet( const wxString& aNetname ) const;
-
     /**
      * Function FindModuleByReference
      * searches for a MODULE within this board with the given
@@ -787,7 +822,6 @@ public:
         return m_TrackWidthList[m_TrackWidthSelector];
     }
 
-
     /**
      * Function GetCurrentViaSize
      * @return the current via size, according to the selected options
@@ -798,7 +832,6 @@ public:
     {
         return m_ViasDimensionsList[m_ViaSizeSelector].m_Diameter;
     }
-
 
     /**
      * Function GetCurrentViaDrill
@@ -837,7 +870,6 @@ public:
      */
     bool Save( FILE* aFile ) const;
 
-
     /**
      * Function GetClass
      * returns the class name.
@@ -847,7 +879,6 @@ public:
     {
         return wxT( "BOARD" );
     }
-
 
 #if defined(DEBUG)
 
@@ -922,7 +953,6 @@ public:
         return NULL;
     }
 
-
     /**
      * Function GetAreaIndex
      * returns the Area Index  for the given Zone Container.
@@ -940,7 +970,6 @@ public:
         return -1;
     }
 
-
     /**
      * Function GetAreaCount
      * @return int - The number of Areas or ZONE_CONTAINER.
@@ -949,7 +978,6 @@ public:
     {
         return (int) m_ZoneDescriptorList.size();
     }
-
 
     /* Functions used in test, merge and cut outlines */
 
@@ -1195,7 +1223,6 @@ public:
      * @param aVector Where to put the pad pointers.
      */
     void GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector );
-
 
     /**
      * Function GetTrace

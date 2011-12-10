@@ -276,9 +276,13 @@ add_subdirectory(template)
 #================================================
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
-    add_custom_target( doxygen-docs ${DOXYGEN_EXECUTABLE}
+    add_custom_target( doxygen-docs
+        ${CMAKE_COMMAND} -E remove_directory Documentation/doxygen
+        COMMAND ${DOXYGEN_EXECUTABLE}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        DEPENDS Doxyfile )
+        DEPENDS Doxyfile
+        COMMENT "building doxygen docs into directory Documentation/doxygen/html"
+        )
 else(DOXYGEN_FOUND)
     message( STATUS "WARNING: Doxygen not found - doxygen-docs (Source Docs) target not created" )
 endif()

@@ -232,7 +232,7 @@ void KICAD_PLUGIN::loadAllSections( bool doAppend )
 
         else if( TESTLINE( "$TEXTPCB" ) )
         {
-            loadPCB_TEXTE();
+            loadPCB_TEXT();
         }
 
         else if( TESTLINE( "$TRACK" ) )
@@ -362,8 +362,7 @@ void KICAD_PLUGIN::loadGENERAL()
 
         else if( TESTLINE( "Ly" ) )    // Old format for Layer count
         {
-            int layer_mask = hexParse( line + SZ( "Ly" ) );
-
+            int layer_mask  = hexParse( line + SZ( "Ly" ) );
             int layer_count = 0;
 
             for( int ii = 0;  ii < NB_COPPER_LAYERS && layer_mask;  ++ii, layer_mask >>= 1 )
@@ -566,7 +565,7 @@ void KICAD_PLUGIN::loadSETUP()
             */
         }
 
-#if defined(PCBNEW)
+#if 1 // defined(PCBNEW)
 
         else if( TESTLINE( "Layers" ) )
         {
@@ -853,13 +852,6 @@ void KICAD_PLUGIN::loadMODULE()
         if( TESTLINE( "D" ) )          // read a drawing item, e.g. "DS"
         {
             loadEDGE_MODULE( module.get() );
-            /*
-            EDGE_MODULE * edge;
-            edge = new EDGE_MODULE( this );
-            m_Drawings.PushBack( edge );
-            edge->ReadDescr( m_reader );
-            edge->SetDrawCoord();
-            */
         }
 
         else if( TESTLINE( "$PAD" ) )
@@ -886,7 +878,7 @@ void KICAD_PLUGIN::loadMODULE()
                 textm = new TEXTE_MODULE( module.get() );
                 module->m_Drawings.PushBack( textm );
             }
-            loadTEXTE_MODULE( textm );
+            loadMODULE_TEXT( textm );
         }
 
         else if( TESTLINE( "Po" ) )
@@ -1315,13 +1307,13 @@ void KICAD_PLUGIN::loadEDGE_MODULE( MODULE* aModule )
 
     aModule->m_Drawings.PushBack( em );
 
-    // this had been done at the MODULE level before, presumably because it needs
-    // to be already added to a module before this function will work.
+    // this had been done at the MODULE level before, presumably because the
+    // EDGE_MODULE needs to be already added to a module before this function will work.
     em->SetDrawCoord();
 }
 
 
-void KICAD_PLUGIN::loadTEXTE_MODULE( TEXTE_MODULE* aText )
+void KICAD_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 {
     const char* data;
     char* line = m_reader->Line();     // current (old) line
@@ -1334,7 +1326,7 @@ void KICAD_PLUGIN::loadTEXTE_MODULE( TEXTE_MODULE* aText )
     int     type    = intParse( line+1, &data );
     BIU     pos0_x  = biuParse( data, &data );
     BIU     pos0_y  = biuParse( data, &data );
-    BIU     size0_y = biuParse( data, &data );      // why y?
+    BIU     size0_y = biuParse( data, &data );
     BIU     size0_x = biuParse( data, &data );
     double  orient  = degParse( data, &data );
     BIU     thickn  = biuParse( data, &data );
@@ -1586,7 +1578,7 @@ void KICAD_PLUGIN::loadNETINFO_ITEM()
     char  buf[1024];
 
     NETINFO_ITEM* net = new NETINFO_ITEM( m_board );
-    m_board->m_NetInfo->AppendNet( net );
+    m_board->AppendNet( net );
 
     while( READLINE() )
     {
@@ -1612,7 +1604,7 @@ void KICAD_PLUGIN::loadNETINFO_ITEM()
 }
 
 
-void KICAD_PLUGIN::loadPCB_TEXTE()
+void KICAD_PLUGIN::loadPCB_TEXT()
 {
     /*  examples:
         For a single line text:
@@ -1746,7 +1738,8 @@ void KICAD_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         // example first line:
         // "Po 0 23994 28800 24400 28800 150 -1\r\n"
 
-        char*       line = m_reader->Line();
+        const char* data;
+        char* line = m_reader->Line();
 
         if( line[0] == '$' )    // $EndTRACK
             return;             // preferred exit
@@ -1755,9 +1748,7 @@ void KICAD_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
 
         assert( TESTLINE( "Po" ) );
 
-        const char* data = line + SZ( "Po" );
-
-        int shape   = intParse( data, &data );
+        int shape   = intParse( line + SZ( "Po" ), &data );
         BIU start_x = biuParse( data, &data );
         BIU start_y = biuParse( data, &data );
         BIU end_x   = biuParse( data, &data );
@@ -1781,11 +1772,15 @@ void KICAD_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         // example second line:
         // "De 0 0 463 0 800000\r\n"
 
+#if 1
+        assert( TESTLINE( "Po" ) );
+#else
         if( !TESTLINE( "De" ) )
         {
             // mandatory 2nd line is missing
             THROW_IO_ERROR( "Missing 2nd line of a TRACK def" );
         }
+#endif
 
         int         makeType;
         long        timeStamp;
@@ -2530,6 +2525,8 @@ void KICAD_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* a
         THROW_IO_ERROR( m_error );
     }
 
+    m_filename = aFileName;
+
     // wxf now owns fp, will close on exception or return
     wxFFile wxf( fp );
 
@@ -2537,174 +2534,214 @@ void KICAD_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* a
 
     init( aProperties );
 
-//    saveAllSections();
+    saveAllSections();
 }
 
 
-#if 0
+void KICAD_PLUGIN::checkWriteError( const char* aCaller ) const
+{
+    if( ferror( m_fp ) )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "error writing to file '%s' from function %s" ),
+                m_filename.GetData(), FROM_UTF8( aCaller ).GetData() ) );
+    }
+}
+
+
 void KICAD_PLUGIN::saveAllSections() const
 {
-    // $GENERAL section is first
+    saveGENERAL();
 
-    // $SHEETDESCR section is next
+    saveSHEET();
 
-    // $SETUP section is next
+    saveSETUP();
 
-    // Then follows $EQUIPOT and all the rest
     saveBOARD();
+}
+
+
+void KICAD_PLUGIN::saveGENERAL() const
+{
+
+}
+
+
+void KICAD_PLUGIN::saveSHEET() const
+{
+}
+
+
+void KICAD_PLUGIN::saveSETUP() const
+{
+
 }
 
 
 void KICAD_PLUGIN::saveBOARD() const
 {
-    bool        rc = false;
-    BOARD_ITEM* item;
-
+#if 0
     // save the nets
-    for( unsigned ii = 0; ii < m_NetInfo->GetCount(); ii++ )
-        if( !m_NetInfo->GetNetItem( ii )->Save( aFile ) )
-            goto out;
+    int netcount = m_board->GetNetCount();
+    for( int i = 0; i < netcount;  ++i )
+        saveNETINFO_ITEM( m_board->FindNet( i ) );
 
     // Saved nets do not include netclass names, so save netclasses after nets.
-    m_NetClasses.Save( aFile );
+    saveNETCLASSES();
 
     // save the modules
-    for( item = m_Modules; item; item = item->Next() )
-        if( !item->Save( aFile ) )
-            goto out;
+    for( MODULE* m = m_board->m_Modules;  m;  m = (MODULE*) m->Next() )
+        saveMODULE( m );
 
-    for( item = m_Drawings; item; item = item->Next() )
+    // save the graphics owned by the board (not owned by a module)
+    for( BOARD_ITEM* gr = m_board->m_Drawings;  gr;  gr = gr->Next() )
     {
-        switch( item->Type() )
+        switch( gr->Type() )
         {
         case PCB_TEXT_T:
+            savePCB_TEXT( (TEXTE_PCB*) gr );
+            break;
         case PCB_LINE_T:
+            saveEDGE_MODULE( (EDGE_MODULE*) gr );
+            break;
         case PCB_TARGET_T:
+            saveTARGET( (PCB_TARGET*) gr );
+            break;
         case PCB_DIMENSION_T:
-            if( !item->Save( aFile ) )
-                goto out;
-
+            saveDIMENTION( (DIMENSION*) gr );
             break;
-
         default:
-
-            // future: throw exception here
-#if defined(DEBUG)
-            printf( "BOARD::Save() ignoring m_Drawings type %d\n", item->Type() );
-#endif
-            break;
+            THROW_IO_ERROR( wxString::Format( _( "unknown graphic type %d"), gr->Type() ) );
         }
     }
 
     // do not save MARKER_PCBs, they can be regenerated easily
 
     // save the tracks & vias
-    fprintf( aFile, "$TRACK\n" );
-
-    for( item = m_Track; item; item = item->Next() )
-    {
-        if( !item->Save( aFile ) )
-            goto out;
-    }
-
-    fprintf( aFile, "$EndTRACK\n" );
+    fprintf( m_fp, "$TRACK\n" );
+    for( TRACK* track = m_board->m_Track;  track; track = track->Next() )
+        saveTRACK( (TRACK*) track );
+    fprintf( m_fp, "$EndTRACK\n" );
 
     // save the zones
-    fprintf( aFile, "$ZONE\n" );
+    fprintf( m_fp, "$ZONE\n" );
+    for( SEGZONE* zone = m_board->m_Zone;  zone;  zone = zone->Next() )
+        saveSEGZONE( zone );
+    fprintf( m_fp, "$EndZONE\n" );
 
-    for( item = m_Zone; item; item = item->Next() )
-    {
-        if( !item->Save( aFile ) )
-            goto out;
-    }
+    // save the polygon (which are the newer technology) zones
+    for( int i=0;  i < m_board->GetAreaCount();  ++i )
+        saveZONE_CONTAINER( m_board->GetArea( i ) );
 
-    fprintf( aFile, "$EndZONE\n" );
-
-    // save the zone edges
-    for( unsigned ii = 0; ii < m_ZoneDescriptorList.size(); ii++ )
-    {
-        ZONE_CONTAINER* edge_zone = m_ZoneDescriptorList[ii];
-        edge_zone->Save( aFile );
-    }
-
-
-    if( fprintf( aFile, "$EndBOARD\n" ) != sizeof("$EndBOARD\n") - 1 )
-        goto out;
-
-    rc = true;  // wrote all OK
-
-out:
-    return rc;
+    fprintf( m_fp, "$EndBOARD\n" );
+#endif
 }
 
 
-bool DRAWSEGMENT::Save( FILE* aFile ) const
+void KICAD_PLUGIN::saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const
 {
-    if( fprintf( aFile, "$DRAWSEGMENT\n" ) != sizeof("$DRAWSEGMENT\n") - 1 )
+    fprintf( m_fp, "$EQUIPOT\n" );
+    fprintf( m_fp, "Na %d %s\n", aNet->GetNet(), EscapedUTF8( aNet->GetNetname() ).c_str() );
+    fprintf( m_fp, "St %s\n", "~" );
+    fprintf( m_fp, "$EndEQUIPOT\n" );
+
+    checkWriteError( __FUNCTION__ );
+}
+
+
+void KICAD_PLUGIN::saveNETCLASSES() const
+{
+    // @todo make m_NetClasses private
+    NETCLASSES nc = m_board->m_NetClasses;
+
+    // save the default first.
+    saveNETCLASS( nc.GetDefault() );
+
+    // the rest will be alphabetical in the *.brd file.
+    for( NETCLASSES::const_iterator it = nc.begin();  it != nc.end();  ++it )
+    {
+        NETCLASS*   netclass = it->second;
+
+        saveNETCLASS( netclass );
+    }
+
+    checkWriteError( __FUNCTION__ );
+}
+
+
+void KICAD_PLUGIN::saveNETCLASS( const NETCLASS* nc ) const
+{
+    fprintf( m_fp, "$NCLASS\n" );
+    fprintf( m_fp, "Name %s\n",        EscapedUTF8( nc->GetName() ).c_str() );
+    fprintf( m_fp, "Desc %s\n",        EscapedUTF8( nc->GetDescription() ).c_str() );
+
+    // Write parameters
+
+    fprintf( m_fp, "Clearance %d\n",       nc->GetClearance() );
+    fprintf( m_fp, "TrackWidth %d\n",      nc->GetTrackWidth() );
+
+    fprintf( m_fp, "ViaDia %d\n",          nc->GetViaDiameter() );
+    fprintf( m_fp, "ViaDrill %d\n",        nc->GetViaDrill() );
+
+    fprintf( m_fp, "uViaDia %d\n",         nc->GetuViaDiameter() );
+    fprintf( m_fp, "uViaDrill %d\n",       nc->GetuViaDrill() );
+
+    // Write members:
+    for( NETCLASS::const_iterator it = nc->begin();  it!=nc->end();  ++it )
+        fprintf( m_fp, "AddNet %s\n", EscapedUTF8( *it ).c_str() );
+
+    fprintf( m_fp, "$EndNCLASS\n" );
+
+    checkWriteError( __FUNCTION__ );
+}
+
+
+#if 0
+
+bool DRAWSEGMENT::Save( FILE* m_fp ) const
+{
+    if( fprintf( m_fp, "$DRAWSEGMENT\n" ) != sizeof("$DRAWSEGMENT\n") - 1 )
         return false;
 
-    fprintf( aFile, "Po %d %d %d %d %d %d\n",
+    fprintf( m_fp, "Po %d %d %d %d %d %d\n",
              m_Shape,
              m_Start.x, m_Start.y,
              m_End.x, m_End.y, m_Width );
 
     if( m_Type != S_CURVE )
     {
-        fprintf( aFile, "De %d %d %d %lX %X\n",
+        fprintf( m_fp, "De %d %d %d %lX %X\n",
                  m_Layer, m_Type, m_Angle,
                  m_TimeStamp, ReturnStatus() );
     }
     else
     {
-        fprintf( aFile, "De %d %d %d %lX %X %d %d %d %d\n",
+        fprintf( m_fp, "De %d %d %d %lX %X %d %d %d %d\n",
                  m_Layer, m_Type, m_Angle,
                  m_TimeStamp, ReturnStatus(),
                  m_BezierC1.x,m_BezierC1.y,
                  m_BezierC2.x,m_BezierC2.y);
     }
 
-    if( fprintf( aFile, "$EndDRAWSEGMENT\n" ) != sizeof("$EndDRAWSEGMENT\n") - 1 )
+    if( fprintf( m_fp, "$EndDRAWSEGMENT\n" ) != sizeof("$EndDRAWSEGMENT\n") - 1 )
         return false;
 
     return true;
 }
 
 
-/** Note: the old name of class NETINFO_ITEM was EQUIPOT
- * so in Save (and read) functions, for compatibility, we use EQUIPOT as
- * keyword
- */
-bool NETINFO_ITEM::Save( FILE* aFile ) const
-{
-    bool success = false;
-
-    fprintf( aFile, "$EQUIPOT\n" );
-    fprintf( aFile, "Na %d %s\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
-    fprintf( aFile, "St %s\n", "~" );
-
-    if( fprintf( aFile, "$EndEQUIPOT\n" ) != sizeof("$EndEQUIPOT\n") - 1 )
-        goto out;
-
-    success = true;
-
-out:
-    return success;
-}
-
-
-bool PCB_TARGET::Save( FILE* aFile ) const
+bool PCB_TARGET::Save( FILE* m_fp ) const
 {
     bool rc = false;
 
-    if( fprintf( aFile, "$PCB_TARGET\n" ) != sizeof("$PCB_TARGET\n")-1 )
+    if( fprintf( m_fp, "$PCB_TARGET\n" ) != sizeof("$PCB_TARGET\n")-1 )
         goto out;
 
-    fprintf( aFile, "Po %X %d %d %d %d %d %8.8lX\n",
+    fprintf( m_fp, "Po %X %d %d %d %d %d %8.8lX\n",
              m_Shape, m_Layer,
              m_Pos.x, m_Pos.y,
              m_Size, m_Width, m_TimeStamp );
 
-    if( fprintf( aFile, "$EndPCB_TARGET\n" ) != sizeof("$EndPCB_TARGET\n")-1 )
+    if( fprintf( m_fp, "$EndPCB_TARGET\n" ) != sizeof("$EndPCB_TARGET\n")-1 )
         goto out;
 
     rc = true;
@@ -2714,7 +2751,7 @@ out:
 }
 
 
-bool ZONE_CONTAINER::Save( FILE* aFile ) const
+bool ZONE_CONTAINER::Save( FILE* m_fp ) const
 {
     unsigned item_pos;
     int      ret;
@@ -2722,10 +2759,10 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     int      outline_hatch;
     char     padoption;
 
-    fprintf( aFile, "$CZONE_OUTLINE\n" );
+    fprintf( m_fp, "$CZONE_OUTLINE\n" );
 
     // Save the outline main info
-    ret = fprintf( aFile, "ZInfo %8.8lX %d %s\n",
+    ret = fprintf( m_fp, "ZInfo %8.8lX %d %s\n",
                    m_TimeStamp, m_NetCode,
                    EscapedUTF8( m_Netname ).c_str() );
 
@@ -2733,7 +2770,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
         return false;
 
     // Save the outline layer info
-    ret = fprintf( aFile, "ZLayer %d\n", m_Layer );
+    ret = fprintf( m_fp, "ZLayer %d\n", m_Layer );
 
     if( ret < 1 )
         return false;
@@ -2755,7 +2792,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
         break;
     }
 
-    ret = fprintf( aFile, "ZAux %d %c\n", corners_count, outline_hatch );
+    ret = fprintf( m_fp, "ZAux %d %c\n", corners_count, outline_hatch );
 
     if( ret < 2 )
         return false;
@@ -2777,17 +2814,17 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
         break;
     }
 
-    ret = fprintf( aFile, "ZClearance %d %c\n", m_ZoneClearance, padoption );
+    ret = fprintf( m_fp, "ZClearance %d %c\n", m_ZoneClearance, padoption );
 
     if( ret < 2 )
         return false;
 
-    ret = fprintf( aFile, "ZMinThickness %d\n", m_ZoneMinThickness );
+    ret = fprintf( m_fp, "ZMinThickness %d\n", m_ZoneMinThickness );
 
     if( ret < 1 )
         return false;
 
-    ret = fprintf( aFile,
+    ret = fprintf( m_fp,
                    "ZOptions %d %d %c %d %d\n",
                    m_FillMode,
                    m_ArcToSegmentsCount,
@@ -2798,7 +2835,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     if( ret < 3 )
         return false;
 
-    ret = fprintf( aFile,
+    ret = fprintf( m_fp,
                    "ZSmoothing %d %d\n",
                    cornerSmoothingType, cornerRadius );
 
@@ -2808,7 +2845,7 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     // Save the corner list
     for( item_pos = 0; item_pos < corners_count; item_pos++ )
     {
-        ret = fprintf( aFile, "ZCorner %d %d %d\n",
+        ret = fprintf( m_fp, "ZCorner %d %d %d\n",
                        m_Poly->corner[item_pos].x, m_Poly->corner[item_pos].y,
                        m_Poly->corner[item_pos].end_contour );
 
@@ -2819,12 +2856,12 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
     // Save the PolysList
     if( m_FilledPolysList.size() )
     {
-        fprintf( aFile, "$POLYSCORNERS\n" );
+        fprintf( m_fp, "$POLYSCORNERS\n" );
 
         for( unsigned ii = 0; ii < m_FilledPolysList.size(); ii++ )
         {
             const CPolyPt* corner = &m_FilledPolysList[ii];
-            ret = fprintf( aFile,
+            ret = fprintf( m_fp,
                            "%d %d %d %d\n",
                            corner->x,
                            corner->y,
@@ -2835,17 +2872,17 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
                 return false;
         }
 
-        fprintf( aFile, "$endPOLYSCORNERS\n" );
+        fprintf( m_fp, "$endPOLYSCORNERS\n" );
     }
 
     // Save the filling segments list
     if( m_FillSegmList.size() )
     {
-        fprintf( aFile, "$FILLSEGMENTS\n" );
+        fprintf( m_fp, "$FILLSEGMENTS\n" );
 
         for( unsigned ii = 0; ii < m_FillSegmList.size(); ii++ )
         {
-            ret = fprintf( aFile, "%d %d %d %d\n",
+            ret = fprintf( m_fp, "%d %d %d %d\n",
                            m_FillSegmList[ii].m_Start.x, m_FillSegmList[ii].m_Start.y,
                            m_FillSegmList[ii].m_End.x, m_FillSegmList[ii].m_End.y );
 
@@ -2853,74 +2890,21 @@ bool ZONE_CONTAINER::Save( FILE* aFile ) const
                 return false;
         }
 
-        fprintf( aFile, "$endFILLSEGMENTS\n" );
+        fprintf( m_fp, "$endFILLSEGMENTS\n" );
     }
 
-    fprintf( aFile, "$endCZONE_OUTLINE\n" );
+    fprintf( m_fp, "$endCZONE_OUTLINE\n" );
 
     return true;
 }
 
 
-bool NETCLASSES::Save( FILE* aFile ) const
-{
-    bool result;
-
-    // save the default first.
-    result = m_Default.Save( aFile );
-
-    if( result )
-    {
-        // the rest will be alphabetical in the *.brd file.
-        for( const_iterator i = begin();  i!=end();  ++i )
-        {
-            NETCLASS*   netclass = i->second;
-
-            result = netclass->Save( aFile );
-            if( !result )
-                break;
-        }
-    }
-
-    return result;
-}
-
-
-bool NETCLASS::Save( FILE* aFile ) const
-{
-    bool result = true;
-
-    fprintf( aFile, "$NCLASS\n" );
-    fprintf( aFile, "Name %s\n",        EscapedUTF8( m_Name ).c_str() );
-    fprintf( aFile, "Desc %s\n",        EscapedUTF8( GetDescription() ).c_str() );
-
-    // Write parameters
-
-    fprintf( aFile, "Clearance %d\n",       GetClearance() );
-    fprintf( aFile, "TrackWidth %d\n",      GetTrackWidth() );
-
-    fprintf( aFile, "ViaDia %d\n",          GetViaDiameter() );
-    fprintf( aFile, "ViaDrill %d\n",        GetViaDrill() );
-
-    fprintf( aFile, "uViaDia %d\n",         GetuViaDiameter() );
-    fprintf( aFile, "uViaDrill %d\n",       GetuViaDrill() );
-
-    // Write members:
-    for( const_iterator i = begin();  i!=end();  ++i )
-        fprintf( aFile, "AddNet %s\n", EscapedUTF8( *i ).c_str() );
-
-    fprintf( aFile, "$EndNCLASS\n" );
-
-    return result;
-}
-
-
-bool TEXTE_PCB::Save( FILE* aFile ) const
+bool TEXTE_PCB::Save( FILE* m_fp ) const
 {
     if( m_Text.IsEmpty() )
         return true;
 
-    if( fprintf( aFile, "$TEXTPCB\n" ) != sizeof("$TEXTPCB\n") - 1 )
+    if( fprintf( m_fp, "$TEXTPCB\n" ) != sizeof("$TEXTPCB\n") - 1 )
         return false;
 
     const char* style = m_Italic ? "Italic" : "Normal";
@@ -2932,14 +2916,14 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
         wxString txt  = list->Item( ii );
 
         if ( ii == 0 )
-            fprintf( aFile, "Te %s\n", EscapedUTF8( txt ).c_str() );
+            fprintf( m_fp, "Te %s\n", EscapedUTF8( txt ).c_str() );
         else
-            fprintf( aFile, "nl %s\n", EscapedUTF8( txt ).c_str() );
+            fprintf( m_fp, "nl %s\n", EscapedUTF8( txt ).c_str() );
     }
 
     delete list;
 
-    fprintf( aFile, "Po %d %d %d %d %d %d\n",
+    fprintf( m_fp, "Po %d %d %d %d %d %d\n",
              m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Thickness, m_Orient );
 
     char hJustify = 'L';
@@ -2959,11 +2943,11 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
         break;
     }
 
-    fprintf( aFile, "De %d %d %lX %s %c\n", m_Layer,
+    fprintf( m_fp, "De %d %d %lX %s %c\n", m_Layer,
              m_Mirror ? 0 : 1,
              m_TimeStamp, style, hJustify );
 
-    if( fprintf( aFile, "$EndTEXTPCB\n" ) != sizeof("$EndTEXTPCB\n") - 1 )
+    if( fprintf( m_fp, "$EndTEXTPCB\n" ) != sizeof("$EndTEXTPCB\n") - 1 )
         return false;
 
     return true;
@@ -2973,10 +2957,10 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
 /**
  * Function Save
  * writes the data structures for this object out to a FILE in "*.brd" format.
- * @param aFile The FILE to write to.
+ * @param m_fp The FILE to write to.
  * @return bool - true if success writing else false.
  */
-bool TEXTE_MODULE::Save( FILE* aFile ) const
+bool TEXTE_MODULE::Save( FILE* m_fp ) const
 {
     MODULE* parent = (MODULE*) GetParent();
     int     orient = m_Orient;
@@ -2986,7 +2970,7 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
     if( parent )
         orient += parent->m_Orient;
 
-    int ret = fprintf( aFile, "T%d %d %d %d %d %d %d %c %c %d %c %s\n",
+    int ret = fprintf( m_fp, "T%d %d %d %d %d %d %d %c %c %d %c %s\n",
                       m_Type,
                       m_Pos0.x, m_Pos0.y,
                       m_Size.y, m_Size.x,
@@ -3002,28 +2986,28 @@ bool TEXTE_MODULE::Save( FILE* aFile ) const
 }
 
 
-bool EDGE_MODULE::Save( FILE* aFile ) const
+bool EDGE_MODULE::Save( FILE* m_fp ) const
 {
     int ret = -1;
 
     switch( m_Shape )
     {
     case S_SEGMENT:
-        ret = fprintf( aFile, "DS %d %d %d %d %d %d\n",
+        ret = fprintf( m_fp, "DS %d %d %d %d %d %d\n",
                        m_Start0.x, m_Start0.y,
                        m_End0.x, m_End0.y,
                        m_Width, m_Layer );
         break;
 
     case S_CIRCLE:
-        ret = fprintf( aFile, "DC %d %d %d %d %d %d\n",
+        ret = fprintf( m_fp, "DC %d %d %d %d %d %d\n",
                        m_Start0.x, m_Start0.y,
                        m_End0.x, m_End0.y,
                        m_Width, m_Layer );
         break;
 
     case S_ARC:
-        ret = fprintf( aFile, "DA %d %d %d %d %d %d %d\n",
+        ret = fprintf( m_fp, "DA %d %d %d %d %d %d %d\n",
                        m_Start0.x, m_Start0.y,
                        m_End0.x, m_End0.y,
                        m_Angle,
@@ -3031,14 +3015,14 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
         break;
 
     case S_POLYGON:
-        ret = fprintf( aFile, "DP %d %d %d %d %d %d %d\n",
+        ret = fprintf( m_fp, "DP %d %d %d %d %d %d %d\n",
                        m_Start0.x, m_Start0.y,
                        m_End0.x, m_End0.y,
                        (int) m_PolyPoints.size(),
                        m_Width, m_Layer );
 
         for( unsigned i = 0;  i<m_PolyPoints.size();  ++i )
-            fprintf( aFile, "Dl %d %d\n", m_PolyPoints[i].x, m_PolyPoints[i].y );
+            fprintf( m_fp, "Dl %d %d\n", m_PolyPoints[i].x, m_PolyPoints[i].y );
 
         break;
 
@@ -3055,17 +3039,17 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
 }
 
 
-bool TRACK::Save( FILE* aFile ) const
+bool TRACK::Save( FILE* m_fp ) const
 {
     int type = 0;
 
     if( Type() == PCB_VIA_T )
         type = 1;
 
-    fprintf( aFile, "Po %d %d %d %d %d %d %d\n", m_Shape,
+    fprintf( m_fp, "Po %d %d %d %d %d %d %d\n", m_Shape,
              m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
 
-    fprintf( aFile, "De %d %d %d %lX %X\n",
+    fprintf( m_fp, "De %d %d %d %lX %X\n",
              m_Layer, type, GetNet(),
              m_TimeStamp, ReturnStatus() );
 
@@ -3073,7 +3057,7 @@ bool TRACK::Save( FILE* aFile ) const
 }
 
 
-bool DIMENSION::Save( FILE* aFile ) const
+bool DIMENSION::Save( FILE* m_fp ) const
 {
     bool rc = false;
 
@@ -3082,54 +3066,54 @@ bool DIMENSION::Save( FILE* aFile ) const
     const char keyWordLine[] = "$COTATION\n";
     const char keyWordLineEnd[] = "$endCOTATION\n";
 
-    if( fputs( keyWordLine, aFile ) == EOF )
+    if( fputs( keyWordLine, m_fp ) == EOF )
         goto out;
 
-    fprintf( aFile, "Ge %d %d %lX\n", m_Shape, m_Layer, m_TimeStamp );
+    fprintf( m_fp, "Ge %d %d %lX\n", m_Shape, m_Layer, m_TimeStamp );
 
-    fprintf( aFile, "Va %d\n", m_Value );
+    fprintf( m_fp, "Va %d\n", m_Value );
 
     if( !m_Text->m_Text.IsEmpty() )
-        fprintf( aFile, "Te %s\n", EscapedUTF8( m_Text->m_Text ).c_str() );
+        fprintf( m_fp, "Te %s\n", EscapedUTF8( m_Text->m_Text ).c_str() );
     else
-        fprintf( aFile, "Te \"?\"\n" );
+        fprintf( m_fp, "Te \"?\"\n" );
 
-    fprintf( aFile, "Po %d %d %d %d %d %d %d\n",
+    fprintf( m_fp, "Po %d %d %d %d %d %d %d\n",
              m_Text->m_Pos.x, m_Text->m_Pos.y,
              m_Text->m_Size.x, m_Text->m_Size.y,
              m_Text->GetThickness(), m_Text->GetOrientation(),
              m_Text->m_Mirror ? 0 : 1 );
 
-    fprintf( aFile, "Sb %d %d %d %d %d %d\n", S_SEGMENT,
+    fprintf( m_fp, "Sb %d %d %d %d %d %d\n", S_SEGMENT,
              m_crossBarOx, m_crossBarOy,
              m_crossBarFx, m_crossBarFy, m_Width );
 
-    fprintf( aFile, "Sd %d %d %d %d %d %d\n", S_SEGMENT,
+    fprintf( m_fp, "Sd %d %d %d %d %d %d\n", S_SEGMENT,
              m_featureLineDOx, m_featureLineDOy,
              m_featureLineDFx, m_featureLineDFy, m_Width );
 
-    fprintf( aFile, "Sg %d %d %d %d %d %d\n", S_SEGMENT,
+    fprintf( m_fp, "Sg %d %d %d %d %d %d\n", S_SEGMENT,
              m_featureLineGOx, m_featureLineGOy,
              m_featureLineGFx, m_featureLineGFy, m_Width );
 
-    fprintf( aFile, "S1 %d %d %d %d %d %d\n", S_SEGMENT,
+    fprintf( m_fp, "S1 %d %d %d %d %d %d\n", S_SEGMENT,
              m_arrowD1Ox, m_arrowD1Oy,
              m_arrowD1Fx, m_arrowD1Fy, m_Width );
 
-    fprintf( aFile, "S2 %d %d %d %d %d %d\n", S_SEGMENT,
+    fprintf( m_fp, "S2 %d %d %d %d %d %d\n", S_SEGMENT,
              m_arrowD2Ox, m_arrowD2Oy,
              m_arrowD2Fx, m_arrowD2Fy, m_Width );
 
 
-    fprintf( aFile, "S3 %d %d %d %d %d %d\n", S_SEGMENT,
+    fprintf( m_fp, "S3 %d %d %d %d %d %d\n", S_SEGMENT,
              m_arrowG1Ox, m_arrowG1Oy,
              m_arrowG1Fx, m_arrowG1Fy, m_Width );
 
-    fprintf( aFile, "S4 %d %d %d %d %d %d\n", S_SEGMENT,
+    fprintf( m_fp, "S4 %d %d %d %d %d %d\n", S_SEGMENT,
              m_arrowG2Ox, m_arrowG2Oy,
              m_arrowG2Fx, m_arrowG2Fy, m_Width );
 
-    if( fputs( keyWordLineEnd, aFile ) == EOF )
+    if( fputs( keyWordLineEnd, m_fp ) == EOF )
         goto out;
 
     rc = true;
@@ -3139,13 +3123,13 @@ out:
 }
 
 
-bool D_PAD::Save( FILE* aFile ) const
+bool D_PAD::Save( FILE* m_fp ) const
 {
     int         cshape;
     const char* texttype;
 
     // check the return values for first and last fprints() in this function
-    if( fprintf( aFile, "$PAD\n" ) != sizeof("$PAD\n") - 1 )
+    if( fprintf( m_fp, "$PAD\n" ) != sizeof("$PAD\n") - 1 )
         return false;
 
     switch( m_PadShape )
@@ -3168,18 +3152,18 @@ bool D_PAD::Save( FILE* aFile ) const
         break;
     }
 
-    fprintf( aFile, "Sh \"%.4s\" %c %d %d %d %d %d\n",
+    fprintf( m_fp, "Sh \"%.4s\" %c %d %d %d %d %d\n",
              m_Padname, cshape, m_Size.x, m_Size.y,
              m_DeltaSize.x, m_DeltaSize.y, m_Orient );
 
-    fprintf( aFile, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
+    fprintf( m_fp, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
 
     if( m_DrillShape == PAD_OVAL )
     {
-        fprintf( aFile, " %c %d %d", 'O', m_Drill.x, m_Drill.y );
+        fprintf( m_fp, " %c %d %d", 'O', m_Drill.x, m_Drill.y );
     }
 
-    fprintf( aFile, "\n" );
+    fprintf( m_fp, "\n" );
 
     switch( m_Attribut )
     {
@@ -3201,42 +3185,42 @@ bool D_PAD::Save( FILE* aFile ) const
         break;
     }
 
-    fprintf( aFile, "At %s N %8.8X\n", texttype, m_layerMask );
+    fprintf( m_fp, "At %s N %8.8X\n", texttype, m_layerMask );
 
-    fprintf( aFile, "Ne %d %s\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
+    fprintf( m_fp, "Ne %d %s\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
 
-    fprintf( aFile, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
+    fprintf( m_fp, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
 
     if( m_LengthDie != 0 )
-        fprintf( aFile, "Le %d\n", m_LengthDie );
+        fprintf( m_fp, "Le %d\n", m_LengthDie );
 
     if( m_LocalSolderMaskMargin != 0 )
-        fprintf( aFile, ".SolderMask %d\n", m_LocalSolderMaskMargin );
+        fprintf( m_fp, ".SolderMask %d\n", m_LocalSolderMaskMargin );
 
     if( m_LocalSolderPasteMargin != 0 )
-        fprintf( aFile, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
+        fprintf( m_fp, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
 
     if( m_LocalSolderPasteMarginRatio != 0 )
-        fprintf( aFile, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
+        fprintf( m_fp, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
 
     if( m_LocalClearance != 0 )
-        fprintf( aFile, ".LocalClearance %d\n", m_LocalClearance );
+        fprintf( m_fp, ".LocalClearance %d\n", m_LocalClearance );
 
-    if( fprintf( aFile, "$EndPAD\n" ) != sizeof("$EndPAD\n") - 1 )
+    if( fprintf( m_fp, "$EndPAD\n" ) != sizeof("$EndPAD\n") - 1 )
         return false;
 
     return true;
 }
 
 
-bool MODULE::Save( FILE* aFile ) const
+bool MODULE::Save( FILE* m_fp ) const
 {
     char        statusTxt[8];
     BOARD_ITEM* item;
 
     bool rc = false;
 
-    fprintf( aFile, "$MODULE %s\n", TO_UTF8( m_LibRef ) );
+    fprintf( m_fp, "$MODULE %s\n", TO_UTF8( m_LibRef ) );
 
     memset( statusTxt, 0, sizeof(statusTxt) );
     if( IsLocked() )
@@ -3249,59 +3233,59 @@ bool MODULE::Save( FILE* aFile ) const
     else
         statusTxt[1] = '~';
 
-    fprintf( aFile, "Po %d %d %d %d %8.8lX %8.8lX %s\n",
+    fprintf( m_fp, "Po %d %d %d %d %8.8lX %8.8lX %s\n",
              m_Pos.x, m_Pos.y,
              m_Orient, m_Layer, m_LastEdit_Time,
              m_TimeStamp, statusTxt );
 
-    fprintf( aFile, "Li %s\n", TO_UTF8( m_LibRef ) );
+    fprintf( m_fp, "Li %s\n", TO_UTF8( m_LibRef ) );
 
     if( !m_Doc.IsEmpty() )
     {
-        fprintf( aFile, "Cd %s\n", TO_UTF8( m_Doc ) );
+        fprintf( m_fp, "Cd %s\n", TO_UTF8( m_Doc ) );
     }
 
     if( !m_KeyWord.IsEmpty() )
     {
-        fprintf( aFile, "Kw %s\n", TO_UTF8( m_KeyWord ) );
+        fprintf( m_fp, "Kw %s\n", TO_UTF8( m_KeyWord ) );
     }
 
-    fprintf( aFile, "Sc %8.8lX\n", m_TimeStamp );
-    fprintf( aFile, "AR %s\n", TO_UTF8( m_Path ) );
-    fprintf( aFile, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
+    fprintf( m_fp, "Sc %8.8lX\n", m_TimeStamp );
+    fprintf( m_fp, "AR %s\n", TO_UTF8( m_Path ) );
+    fprintf( m_fp, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
 
     if( m_LocalSolderMaskMargin != 0 )
-        fprintf( aFile, ".SolderMask %d\n", m_LocalSolderMaskMargin );
+        fprintf( m_fp, ".SolderMask %d\n", m_LocalSolderMaskMargin );
 
     if( m_LocalSolderPasteMargin != 0 )
-        fprintf( aFile, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
+        fprintf( m_fp, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
 
     if( m_LocalSolderPasteMarginRatio != 0 )
-        fprintf( aFile, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
+        fprintf( m_fp, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
 
     if( m_LocalClearance != 0 )
-        fprintf( aFile, ".LocalClearance %d\n", m_LocalClearance );
+        fprintf( m_fp, ".LocalClearance %d\n", m_LocalClearance );
 
     // attributes
     if( m_Attributs != MOD_DEFAULT )
     {
-        fprintf( aFile, "At " );
+        fprintf( m_fp, "At " );
 
         if( m_Attributs & MOD_CMS )
-            fprintf( aFile, "SMD " );
+            fprintf( m_fp, "SMD " );
 
         if( m_Attributs & MOD_VIRTUAL )
-            fprintf( aFile, "VIRTUAL " );
+            fprintf( m_fp, "VIRTUAL " );
 
-        fprintf( aFile, "\n" );
+        fprintf( m_fp, "\n" );
     }
 
     // save reference
-    if( !m_Reference->Save( aFile ) )
+    if( !m_Reference->Save( m_fp ) )
         goto out;
 
     // save value
-    if( !m_Value->Save( aFile ) )
+    if( !m_Value->Save( m_fp ) )
         goto out;
 
     // save drawing elements
@@ -3311,7 +3295,7 @@ bool MODULE::Save( FILE* aFile ) const
         {
         case PCB_MODULE_TEXT_T:
         case PCB_MODULE_EDGE_T:
-            if( !item->Save( aFile ) )
+            if( !item->Save( m_fp ) )
                 goto out;
 
             break;
@@ -3326,12 +3310,12 @@ bool MODULE::Save( FILE* aFile ) const
 
     // save the pads
     for( item = m_Pads;  item;  item = item->Next() )
-        if( !item->Save( aFile ) )
+        if( !item->Save( m_fp ) )
             goto out;
 
-    Write_3D_Descr( aFile );
+    Write_3D_Descr( m_fp );
 
-    fprintf( aFile, "$EndMODULE  %s\n", TO_UTF8( m_LibRef ) );
+    fprintf( m_fp, "$EndMODULE  %s\n", TO_UTF8( m_LibRef ) );
 
     rc = true;
 out:
