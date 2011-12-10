@@ -242,7 +242,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // Initialize data relative to nets and netclasses (for a new
             // module the defaults are used)
             // This is mandatory to handle and draw pads
-            GetBoard()->m_NetInfo->BuildListOfNets();
+            GetBoard()->BuildListOfNets();
             redraw = true;
             module->SetPosition( wxPoint( 0, 0 ) );
 

@@ -69,7 +69,7 @@ void CleanupTracks( PCB_EDIT_FRAME* aFrame,
 
     /* Rebuild the pad infos (pad list and netcodes) to ensure an up to date info */
     aFrame->GetBoard()->m_Status_Pcb = 0;
-    aFrame->GetBoard()->m_NetInfo->BuildListOfNets();
+    aFrame->GetBoard()->BuildListOfNets();
 
     if( aCleanVias )       // delete redundant vias
     {

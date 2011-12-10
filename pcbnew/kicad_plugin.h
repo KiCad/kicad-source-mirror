@@ -40,6 +40,9 @@ class ZONE_CONTAINER;
 class DIMENSION;
 class NETINFO_ITEM;
 class TEXTE_MODULE;
+class EDGE_MODULE;
+class TRACK;
+class SEGZONE;
 
 
 /**
@@ -73,6 +76,7 @@ protected:
 
     LINE_READER*    m_reader;       ///< no ownership here.
     FILE*           m_fp;           ///< no ownership here.
+    wxString        m_filename;     ///< for saves only, name is in m_reader for loads
 
     wxString        m_field;        ///< reused to stuff MODULE fields.
 
@@ -87,9 +91,6 @@ protected:
 
     double  biuToDisk;      ///< convert from BIUs to disk engineering units with this scale factor
     double  diskToBiu;      ///< convert from disk engineering units to BIUs with this scale factor
-
-    /// convert a BIU to engineering units by scaling and formatting to ASCII.
-    std::string biuFmt( BIU aValue );
 
     /**
      * Function biuParse
@@ -133,12 +134,12 @@ protected:
     void loadMODULE();
     void load3D( MODULE* aModule );
     void loadPAD( MODULE* aModule );
-    void loadTEXTE_MODULE( TEXTE_MODULE* aText );
+    void loadMODULE_TEXT( TEXTE_MODULE* aText );
     void loadEDGE_MODULE( MODULE* aModule );
 
     void loadDRAWSEGMENT();
     void loadNETINFO_ITEM();
-    void loadPCB_TEXTE();
+    void loadPCB_TEXT();
     void loadNETCLASS();
 
     /**
@@ -158,6 +159,50 @@ protected:
     void loadPCB_TARGET();          // "$PCB_TARGET"
 
     //-----</ load/parse functions>---------------------------------------------
+
+
+    //-----<save functions>-----------------------------------------------------
+
+    /**
+     * Function checkWriteError
+     * checks to see if there is an error on the output FILE, and its ability to
+     * continue saving to disk.
+     */
+    void checkWriteError( const char* aCaller ) const;
+
+    /// convert a BIU to engineering units by scaling and formatting to ASCII.
+    std::string biuFmt( BIU aValue );
+
+    void saveAllSections() const;
+    void saveGENERAL() const;
+    void saveSHEET() const;
+    void saveSETUP() const;
+    void saveBOARD() const;
+    void saveMODULE( const MODULE* aModule ) const;
+    void saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const;
+    void saveNETCLASSES() const;
+    void saveNETCLASS( const NETCLASS* aNetclass ) const;
+
+    void savePCB_TEXT( const TEXTE_PCB* aText ) const;
+    void saveEDGE_MODULE( const EDGE_MODULE* aEdge ) const;
+    void saveTARGET( const PCB_TARGET* aTarget ) const;
+    void saveDIMENTION( const DIMENSION* aDimension ) const;
+    void saveTRACK( const TRACK* aTrack ) const;
+
+    /**
+     * Function saveSEGZONE
+     * saves the oldschool zones, now outdated in favor of polygon zones.
+     */
+    void saveSEGZONE( const SEGZONE* aZone ) const;
+
+    /**
+     * Function saveZONE_CONTAINER
+     * saves the new polygon zones.
+     */
+    void saveZONE_CONTAINER( const ZONE_CONTAINER* aZone ) const;
+
+    //-----</save functions>----------------------------------------------------
+
 };
 
 #endif  // KICAD_PLUGIN_H_
