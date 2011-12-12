@@ -130,7 +130,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_COMPONENT& libComponent, SCH_SHEET_PATH* sheet
     m_unit      = unit;
     m_convert   = convert;
     m_ChipName  = libComponent.GetName();
-    m_TimeStamp = GetNewTimeStamp();
+    SetTimeStamp( GetNewTimeStamp() );
 
     if( setNewItemFlag )
         m_Flags = IS_NEW | IS_MOVED;
@@ -189,7 +189,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     m_unit = aComponent.m_unit;
     m_convert = aComponent.m_convert;
     m_ChipName = aComponent.m_ChipName;
-    m_TimeStamp = aComponent.m_TimeStamp;
+    SetTimeStamp( aComponent.m_TimeStamp );
     m_transform = aComponent.m_transform;
     m_prefix = aComponent.m_prefix;
     m_PathsAndReferences = aComponent.m_PathsAndReferences;
@@ -524,7 +524,7 @@ void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp )
 
     string_timestamp.Printf( wxT( "%8.8X" ), aNewTimeStamp );
     string_oldtimestamp.Printf( wxT( "%8.8X" ), m_TimeStamp );
-    m_TimeStamp = aNewTimeStamp;
+    SetTimeStamp( aNewTimeStamp );
 
     for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
     {

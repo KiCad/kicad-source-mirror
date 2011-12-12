@@ -214,7 +214,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     }
     m_staticTextWarningPadFlipped->Show(m_isFlipped);
 
-    m_PadNumCtrl->SetValue( m_dummyPad->ReturnStringPadName() );
+    m_PadNumCtrl->SetValue( m_dummyPad->GetPadName() );
     m_PadNetNameCtrl->SetValue( m_dummyPad->GetNetname() );
 
     // Display current unit name in dialog:
@@ -637,7 +637,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         if( m_isFlipped )
             m_CurrentPad->m_layerMask = ChangeSideMaskLayer( m_CurrentPad->m_layerMask );
 
-        m_CurrentPad->SetPadName( g_Pad_Master.ReturnStringPadName() );
+        m_CurrentPad->SetPadName( g_Pad_Master.GetPadName() );
 
         if( m_CurrentPad->GetNetname() != g_Pad_Master.GetNetname() )
         {

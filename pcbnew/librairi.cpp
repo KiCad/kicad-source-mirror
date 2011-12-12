@@ -604,9 +604,9 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     }
 
     /* Write the new footprint ( append it to the list of footprint ) */
-    tmp = aModule->m_TimeStamp; aModule->m_TimeStamp = 0;
+    tmp = aModule->GetTimeStamp(); aModule->SetTimeStamp( 0 );
     aModule->Save( dest );
-    aModule->m_TimeStamp = tmp;
+    aModule->SetTimeStamp( tmp );
 
     output_lib.WriteEndOfFile();
 

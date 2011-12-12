@@ -78,7 +78,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     GetBoard()->m_Status_Pcb = 0;
     newModule = new MODULE( GetBoard() );
     newModule->Copy( aModule );
-    newModule->m_Link = aModule->m_TimeStamp;
+    newModule->m_Link = aModule->GetTimeStamp();
 
     aModule = newModule;
 
@@ -185,7 +185,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
 
         module->m_Flags     = IS_NEW;
         module->m_Link      = 0;
-        module->m_TimeStamp = GetNewTimeStamp();
+        module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;
         module->SetPosition( curspos );
 

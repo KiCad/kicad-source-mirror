@@ -139,32 +139,33 @@ const wxPoint D_PAD::ReturnShapePos()
 }
 
 
-/* Return pad name as string in a wxString
- */
-wxString D_PAD::ReturnStringPadName() const
+const wxString D_PAD::GetPadName() const
 {
-    wxString name;
+    // Return pad name as wxString, assume it starts as a non-terminated
+    // utf8 character sequence
 
-    ReturnStringPadName( name );
-    return name;
+    char    temp[sizeof(m_Padname)+1];      // a place to terminate with '\0'
+
+    strncpy( temp, m_Padname, sizeof(m_Padname) );
+
+    temp[sizeof(m_Padname)] = 0;
+
+    return FROM_UTF8( temp );
 }
 
 
-/* Return pad name as string in a buffer
- */
 void D_PAD::ReturnStringPadName( wxString& text ) const
 {
-    int ii;
+    // Return pad name as wxString, assume it starts as a non-terminated
+    // utf8 character sequence
 
-    text.Empty();
+    char    temp[sizeof(m_Padname)+1];      // a place to terminate with '\0'
 
-    for( ii = 0; ii < 4; ii++ )
-    {
-        if( m_Padname[ii] == 0 )
-            break;
+    strncpy( temp, m_Padname, sizeof(m_Padname) );
 
-        text.Append( m_Padname[ii] );
-    }
+    temp[sizeof(m_Padname)] = 0;
+
+    text = FROM_UTF8( temp );
 }
 
 
@@ -712,7 +713,7 @@ wxString D_PAD::GetSelectMenuText() const
         padlayers = _( "???" );
 
     text.Printf( _( "Pad [%s] (%s) of %s" ),
-                 GetChars(ReturnStringPadName() ), GetChars( padlayers ),
+                 GetChars(GetPadName() ), GetChars( padlayers ),
                  GetChars(( (MODULE*) GetParent() )->GetReference() ) );
 
     return text;

@@ -516,7 +516,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     aNewModule->m_Value->m_Text     = aOldModule->m_Value->m_Text;
 
     /* Updating other parameters */
-    aNewModule->m_TimeStamp = aOldModule->m_TimeStamp;
+    aNewModule->SetTimeStamp( aOldModule->GetTimeStamp() );
     aNewModule->m_Path = aOldModule->m_Path;
 
     /* Update pad netnames ( when possible) */
@@ -624,7 +624,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     for( ; Module != NULL; Module = Module->Next() )
     {
         fprintf( FichCmp, "\nBeginCmp\n" );
-        fprintf( FichCmp, "TimeStamp = %8.8lX\n", Module->m_TimeStamp );
+        fprintf( FichCmp, "TimeStamp = %8.8lX\n", Module->GetTimeStamp() );
         fprintf( FichCmp, "Path = %s\n", TO_UTF8( Module->m_Path ) );
         fprintf( FichCmp, "Reference = %s;\n",
                  !Module->m_Reference->m_Text.IsEmpty() ?

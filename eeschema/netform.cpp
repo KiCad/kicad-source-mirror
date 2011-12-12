@@ -1035,7 +1035,7 @@ XNODE* EXPORT_HELP::makeGenericComponents()
             xsheetpath->AddAttribute( sNames, path->PathHumanReadable() );
             xsheetpath->AddAttribute( sTStamps, path->Path() );
 
-            timeStamp.Printf( sTSFmt, comp->m_TimeStamp );
+            timeStamp.Printf( sTSFmt, comp->GetTimeStamp() );
             xcomp->AddChild( node( sTStamp, timeStamp ) );
         }
     }

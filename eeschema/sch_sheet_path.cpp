@@ -101,10 +101,10 @@ int SCH_SHEET_PATH::Cmp( const SCH_SHEET_PATH& aSheetPathToTest ) const
     //otherwise, same number of sheets.
     for( unsigned i = 0; i<m_numSheets; i++ )
     {
-        if( m_sheets[i]->m_TimeStamp > aSheetPathToTest.m_sheets[i]->m_TimeStamp )
+        if( m_sheets[i]->GetTimeStamp() > aSheetPathToTest.m_sheets[i]->GetTimeStamp() )
             return 1;
 
-        if( m_sheets[i]->m_TimeStamp < aSheetPathToTest.m_sheets[i]->m_TimeStamp )
+        if( m_sheets[i]->GetTimeStamp() < aSheetPathToTest.m_sheets[i]->GetTimeStamp() )
             return -1;
     }
 
@@ -200,7 +200,7 @@ wxString SCH_SHEET_PATH::Path() const
     // it's timestamp changes anyway.
     for( unsigned i = 1; i < m_numSheets; i++ )
     {
-        t.Printf( _( "%8.8lX/" ), m_sheets[i]->m_TimeStamp );
+        t.Printf( _( "%8.8lX/" ), m_sheets[i]->GetTimeStamp() );
         s = s + t;
     }
 

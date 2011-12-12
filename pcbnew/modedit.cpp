@@ -284,7 +284,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             for( ; source_module != NULL; source_module = (MODULE*) source_module->Next() )
             {
-                if( module_in_edit->m_Link == source_module->m_TimeStamp )
+                if( module_in_edit->m_Link == source_module->GetTimeStamp() )
                     break;
             }
         }
@@ -325,7 +325,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // and the source_module (old module) is deleted
             PICKED_ITEMS_LIST pickList;
             pcbframe->Exchange_Module( source_module, newmodule, &pickList );
-            newmodule->m_TimeStamp = module_in_edit->m_Link;
+            newmodule->SetTimeStamp( module_in_edit->m_Link );
 
             if( pickList.GetCount() )
                 pcbframe->SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
@@ -336,7 +336,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             pcbframe->GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
             pcbframe->PlaceModule( newmodule, NULL );
             pcbframe->GetScreen()->SetCrossHairPosition( cursor_pos );
-            newmodule->m_TimeStamp = GetNewTimeStamp();
+            newmodule->SetTimeStamp( GetNewTimeStamp() );
             pcbframe->SaveCopyInUndoList( newmodule, UR_NEW );
         }
 
@@ -413,12 +413,12 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( val && ref )
             {
-                ref->m_Type = TEXT_is_REFERENCE;    // just in case ...
+                ref->SetType( TEXT_is_REFERENCE );    // just in case ...
 
                 if( ref->m_Text.Length() == 0 )
                     ref->m_Text = L"Ref**";
 
-                val->m_Type = TEXT_is_VALUE;        // just in case ...
+                val->SetType( TEXT_is_VALUE );        // just in case ...
 
                 if( val->m_Text.Length() == 0 )
                     val->m_Text = L"Val**";
@@ -708,20 +708,20 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 
         for( ; pad != NULL; pad = (D_PAD*) pad->Next() )
         {
-            pad->m_Pos0    = pad->m_Pos;
+            pad->SetPos0( pad->m_Pos );
             pad->m_Orient -= angle;
             RotatePoint( &pad->m_Offset.x, &pad->m_Offset.y, angle );
             EXCHG( pad->m_Size.x, pad->m_Size.y );
             RotatePoint( &pad->m_DeltaSize.x, &pad->m_DeltaSize.y, -angle );
         }
 
-        module->m_Reference->m_Pos0    = module->m_Reference->m_Pos;
+        module->m_Reference->SetPos0( module->m_Reference->m_Pos );
         module->m_Reference->m_Orient += angle;
 
         if( module->m_Reference->m_Orient >= 1800 )
             module->m_Reference->m_Orient -= 1800;
 
-        module->m_Value->m_Pos0    = module->m_Value->m_Pos;
+        module->m_Value->SetPos0( module->m_Value->m_Pos );
         module->m_Value->m_Orient += angle;
 
         if( module->m_Value->m_Orient >= 1800 )
@@ -739,7 +739,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
             if( PtStruct->Type() == PCB_MODULE_TEXT_T )
             {
                 textmod = (TEXTE_MODULE*) PtStruct;
-                textmod->m_Pos0 = textmod->m_Pos;
+                textmod->SetPos0( textmod->m_Pos );
             }
         }
 
@@ -747,7 +747,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
         break;
 
     case ID_MODEDIT_MODULE_MIRROR:
-        for( ; pad != NULL; pad = (D_PAD*) pad->Next() )
+        for( ;  pad;  pad = pad->Next() )
         {
             NEGATE( pad->m_Pos.y );
             NEGATE( pad->m_Pos0.y );

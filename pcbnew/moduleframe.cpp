@@ -300,7 +300,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateInsertModuleInBoard( wxUpdateUIEvent& aEvent 
         // search if the source module was not deleted:
         for( ; source_module != NULL; source_module = source_module->Next() )
         {
-            if( module_in_edit->m_Link == source_module->m_TimeStamp )
+            if( module_in_edit->m_Link == source_module->GetTimeStamp() )
                 break;
         }
 
@@ -326,7 +326,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateReplaceModuleInBoard( wxUpdateUIEvent& aEvent
         // search if the source module was not deleted:
         for( ; source_module != NULL; source_module = source_module->Next() )
         {
-            if( module_in_edit->m_Link == source_module->m_TimeStamp )
+            if( module_in_edit->m_Link == source_module->GetTimeStamp() )
                 break;
         }
 

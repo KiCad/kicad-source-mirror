@@ -834,7 +834,7 @@ static void export_vrml_zones( BOARD* pcb )
 
 static void export_vrml_text_module( TEXTE_MODULE* module ) /*{{{*/
 {
-    if( !module->m_NoShow )
+    if( module->IsVisible() )
     {
         wxSize size = module->m_Size;
 
