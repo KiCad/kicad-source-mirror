@@ -230,7 +230,7 @@ TRACK::TRACK( const TRACK& Source ) :
     SetNet( Source.GetNet() );
 
     m_Flags     = Source.m_Flags;
-    m_TimeStamp = Source.m_TimeStamp;
+    SetTimeStamp( Source.m_TimeStamp );
     SetStatus( Source.ReturnStatus() );
     m_Start = Source.m_Start;
     m_End   = Source.m_End;

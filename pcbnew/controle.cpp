@@ -168,14 +168,14 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             continue;
 
         /* Found a TYPE ZONE */
-        if( item->m_TimeStamp == timestampzone )    // Remove it, redundant, zone already found
+        if( item->GetTimeStamp() == timestampzone )    // Remove it, redundant, zone already found
         {
             m_Collector->Remove( ii );
             ii--;
         }
         else
         {
-            timestampzone = item->m_TimeStamp;
+            timestampzone = item->GetTimeStamp();
         }
     }
 

@@ -602,8 +602,8 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
                                               SILKSCREEN_N_BACK : SILKSCREEN_N_FRONT];
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
-                    textmod->m_Pos0.x / SCALE_FACTOR,
-                    -textmod->m_Pos0.y / SCALE_FACTOR,
+                    textmod->GetPos0().x / SCALE_FACTOR,
+                    -textmod->GetPos0().y / SCALE_FACTOR,
                     textmod->m_Size.x / SCALE_FACTOR,
                     orient / 10.0,
                     mirror,

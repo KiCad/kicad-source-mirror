@@ -1737,7 +1737,7 @@ int ZONE_CONTAINER::ReadDescr( LINE_READER* aReader )
             }
             else
             {
-                m_TimeStamp = ts;
+                SetTimeStamp( ts );
                 SetNet( netcode );
                 ReadDelimitedText( netname_buffer, netname_buffer, 1024 );
                 m_Netname = FROM_UTF8( netname_buffer );

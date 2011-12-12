@@ -48,7 +48,7 @@ void DRAWSEGMENT::Copy( DRAWSEGMENT* source )
     m_End          = source->m_End;
     m_Shape        = source->m_Shape;
     m_Angle        = source->m_Angle;
-    m_TimeStamp    = source->m_TimeStamp;
+    SetTimeStamp( source->m_TimeStamp );
     m_BezierC1     = source->m_BezierC1;
     m_BezierC2     = source->m_BezierC1;
     m_BezierPoints = source->m_BezierPoints;

@@ -43,7 +43,7 @@ class TEXTE_MODULE;
 class EDGE_MODULE;
 class TRACK;
 class SEGZONE;
-
+class D_PAD;
 
 /**
  * Class KICAD_PLUGIN
@@ -164,21 +164,43 @@ protected:
     //-----<save functions>-----------------------------------------------------
 
     /**
-     * Function checkWriteError
-     * checks to see if there is an error on the output FILE, and its ability to
-     * continue saving to disk.
+     * Function writeError
+     * returns an error message wxString containing the filename being
+     * currently written.
      */
-    void checkWriteError( const char* aCaller ) const;
+    wxString writeError() const;
+
+    int biuSprintf( char* buf, BIU aValue ) const;
 
     /// convert a BIU to engineering units by scaling and formatting to ASCII.
-    std::string biuFmt( BIU aValue );
+    std::string fmtBIU( BIU aValue ) const;
+
+    std::string fmtBIUPair( BIU first, BIU second ) const;
+
+    std::string fmtBIUPoint( const wxPoint& aPoint ) const
+    {
+        return fmtBIUPair( aPoint.x, aPoint.y );
+    }
+
+    std::string fmtBIUSize( const wxSize& aSize ) const
+    {
+        // unfortunately there is inconsistency in the order of saving wxSize,
+        // so sometimes we use fmtBIUPair() directly in the saveXXX() functions.
+        return fmtBIUPair( aSize.x, aSize.y );
+    }
 
     void saveAllSections() const;
     void saveGENERAL() const;
     void saveSHEET() const;
     void saveSETUP() const;
     void saveBOARD() const;
+
     void saveMODULE( const MODULE* aModule ) const;
+    void saveMODULE_TEXT( const TEXTE_MODULE* aText ) const;
+    void saveMODULE_EDGE( const EDGE_MODULE* aGraphic ) const;
+    void savePAD( const D_PAD* aPad ) const;
+    void save3D( const MODULE* aModule ) const;
+
     void saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const;
     void saveNETCLASSES() const;
     void saveNETCLASS( const NETCLASS* aNetclass ) const;

@@ -854,7 +854,7 @@ void PCB_EDIT_FRAME::Block_Duplicate()
                 module->m_Flags     = 0;
                 newitem = new_module = new MODULE( m_Pcb );
                 new_module->Copy( module );
-                new_module->m_TimeStamp = GetNewTimeStamp();
+                new_module->SetTimeStamp( GetNewTimeStamp() );
                 m_Pcb->m_Modules.PushFront( new_module );
             }
             break;
@@ -877,7 +877,7 @@ void PCB_EDIT_FRAME::Block_Duplicate()
             {
                 ZONE_CONTAINER* new_zone = new ZONE_CONTAINER( (BOARD*) item->GetParent() );
                 new_zone->Copy( (ZONE_CONTAINER*) item );
-                new_zone->m_TimeStamp = GetNewTimeStamp();
+                new_zone->SetTimeStamp( GetNewTimeStamp() );
                 newitem = new_zone;
                 m_Pcb->Add( new_zone );
             }

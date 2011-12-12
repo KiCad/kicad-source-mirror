@@ -143,10 +143,9 @@ void DIALOG_MODULE_BOARD_EDITOR::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_MODULE_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent& event )
 {
-    if( m_CurrentModule->m_TimeStamp == 0 )    // Module Editor needs a non
-                                               // null timestamp
+    if( m_CurrentModule->GetTimeStamp() == 0 )    // Module Editor needs a non null timestamp
     {
-        m_CurrentModule->m_TimeStamp = GetNewTimeStamp();
+        m_CurrentModule->SetTimeStamp( GetNewTimeStamp() );
         m_Parent->OnModify();
     }
 

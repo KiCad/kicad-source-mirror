@@ -312,7 +312,7 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
     SCH_SHEET* sheet = new SCH_SHEET( GetScreen()->GetCrossHairPosition() );
 
     sheet->SetFlags( IS_NEW | IS_RESIZED );
-    sheet->m_TimeStamp = GetNewTimeStamp();
+    sheet->SetTimeStamp( GetNewTimeStamp() );
     sheet->SetParent( GetScreen() );
     sheet->SetScreen( NULL );
 

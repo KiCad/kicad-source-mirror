@@ -117,8 +117,9 @@ public:
     int     m_ShapeMaxRadius;       // radius of the circle containing the pad shape
     int     m_Attribut;             // NORMAL, PAD_SMD, PAD_CONN, PAD_HOLE_NOT_PLATED
     int     m_Orient;               // in 1/10 degrees
-    static int m_PadSketchModePenSize;      // Pen size used to draw pads in sketch mode
-                                    // (mode used to print pads on silkscreen layer)
+
+    static int m_PadSketchModePenSize;  // Pen size used to draw pads in sketch mode
+                                        // (mode used to print pads on silkscreen layer)
 
     int     m_LengthDie;            // Length net from pad to die on chip
 
@@ -147,42 +148,50 @@ public:
     D_PAD* Next() { return (D_PAD*) Pnext; }
 
     /**
-     * Function GetNetname
-     * @return const wxString * , a pointer to the full netname
-     */
-    wxString GetNetname() const { return m_Netname; }
-
-    /**
-     * Function GetShortNetname
-     * @return const wxString * , a pointer to the short netname
-     */
-    wxString GetShortNetname() const { return m_ShortNetname; }
-
-    /**
      * Function SetNetname
      * @param aNetname: the new netname
      */
     void SetNetname( const wxString& aNetname );
 
     /**
+     * Function GetNetname
+     * @return const wxString& - the full netname
+     */
+    const wxString& GetNetname() const { return m_Netname; }
+
+    /**
+     * Function GetShortNetname
+     * @return const wxString& - the short netname
+     */
+    const wxString& GetShortNetname() const { return m_ShortNetname; }
+
+    /**
      * Function GetShape
      * @return the shape of this pad.
      */
     int GetShape() const { return m_PadShape & 0xFF;  }
-    void SetShape( int aShape )             { m_PadShape = aShape; }
+    void SetShape( int aShape )  { m_PadShape = aShape; }
 
+    void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }   // overload
     const wxPoint GetPosition() const   // overload
     {
         return m_Pos;
     }
 
-    void SetPosition( const wxPoint& aPos )     { m_Pos = aPos; }   // overload
-
     void SetPos0( const wxPoint& aPos )         { m_Pos0 = aPos; }
+    const wxPoint& GetPos0() const              { return m_Pos0; }
+
     void SetSize( const wxSize& aSize )         { m_Size = aSize; }
+    const wxSize& GetSize() const               { return m_Size; }
+
     void SetDelta( const wxSize& aSize )        { m_DeltaSize = aSize; }
+    const wxSize& GetDelta() const              { return m_DeltaSize; }
+
     void SetDrillSize( const wxSize& aSize )    { m_Drill = aSize; }
+    const wxSize& GetDrillSize() const          { return m_Drill; }
+
     void SetOffset( const wxSize& aOffset )     { m_Offset = aOffset; }
+    const wxSize& GetOffset() const             { return m_Offset; }
 
     /**
      * Function SetOrientation
@@ -198,15 +207,29 @@ public:
     double  GetOrientation() const { return m_Orient; }
 
     void SetDrillShape( int aDrillShape )       { m_DrillShape = aDrillShape; }
-    void SetLayerMask( int aLayerMask )         { m_layerMask = aLayerMask; }
-    void SetAttribute( int aAttribute )         { m_Attribut = aAttribute; }
-    void SetDieLength( int aLength )            { m_LengthDie = aLength; }
-    void SetSolderMaskMargin( int aLength )     { m_LocalSolderMaskMargin = aLength; }
-    void SetSolderPasteMargin( int aLength )    { m_LocalSolderPasteMargin = aLength; }
-    void SetSolderPasteRatio( double aRatio )   { m_LocalSolderPasteMarginRatio = aRatio; }
+    int GetDrillShape() const                   { return m_DrillShape; }
 
-    /// A local override of the Module's clearance
-    void SetPadClearance( int aLength )         { m_LocalClearance = aLength; }
+    void SetLayerMask( int aLayerMask )         { m_layerMask = aLayerMask; }
+    int GetLayerMask() const                    { return m_layerMask; }
+
+    void SetAttribute( int aAttribute )         { m_Attribut = aAttribute; }
+    int GetAttribute() const                    { return m_Attribut; }
+
+    void SetDieLength( int aLength )            { m_LengthDie = aLength; }
+    int GetDieLength() const                    { return m_LengthDie; }
+
+    int GetLocalSolderMaskMargin() const { return m_LocalSolderMaskMargin; }
+    void SetLocalSolderMaskMargin( int aMargin ) { m_LocalSolderMaskMargin = aMargin; }
+
+    int GetLocalClearance() const { return m_LocalClearance; }
+    void SetLocalClearance( int aClearance ) { m_LocalClearance = aClearance; }
+
+    int GetLocalSolderPasteMargin() const { return m_LocalSolderPasteMargin; }
+    void SetLocalSolderPasteMargin( int aMargin ) { m_LocalSolderPasteMargin = aMargin; }
+
+    double GetLocalSolderPasteMarginRatio() const { return m_LocalSolderPasteMarginRatio; }
+    void SetLocalSolderPasteMarginRatio( double aRatio ) { m_LocalSolderPasteMarginRatio = aRatio; }
+
 
     /**
      * Function TransformShapeWithClearanceToPolygon
@@ -324,11 +347,9 @@ public:
      */
     int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation ) const;
 
-    // others
     void SetPadName( const wxString& name );    // Change pad name
     void SetPadName( const char* aName );
-
-    wxString ReturnStringPadName() const;           // Return pad name as string in a wxString
+    const wxString GetPadName() const;
 
     void ReturnStringPadName( wxString& text ) const; // Return pad name as string in a buffer
 

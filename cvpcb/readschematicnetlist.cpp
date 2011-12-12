@@ -182,7 +182,7 @@ int CVPCB_MAINFRAME::ReadSchematicNetlist()
         while( Line[idx] != ' ' && Line[idx] )
             cbuffer[jj++] = Line[idx++];
         cbuffer[jj] = 0;
-        Cmp->m_TimeStamp = FROM_UTF8(cbuffer);
+        Cmp->m_TimeStamp = FROM_UTF8( cbuffer );
 
         /* search val/ref.lib */
         while( Line[idx] == ' ' )

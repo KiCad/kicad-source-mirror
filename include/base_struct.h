@@ -366,16 +366,17 @@ private:
     int           m_Status;
 
 protected:
-    EDA_ITEM*     Pnext;          /* Linked list: Link (next struct) */
-    EDA_ITEM*     Pback;          /* Linked list: Link (previous struct) */
+    EDA_ITEM*     Pnext;          ///< next in linked list
+    EDA_ITEM*     Pback;          ///< previous in linked list
+    DHEAD*        m_List;         ///< which DLIST I am on.
+
     EDA_ITEM*     m_Parent;       /* Linked list: Link (parent struct) */
     EDA_ITEM*     m_Son;          /* Linked list: Link (son struct) */
-    DHEAD*        m_List;         ///< which DLIST I am on.
+    unsigned long m_TimeStamp;    ///< Time stamp used for logical links
 
 public:
     int           m_Flags;        // flags for editing and other uses.
 
-    unsigned long m_TimeStamp;    // Time stamp used for logical links
     int           m_Selected;     /* Used by block commands, and selective editing */
 
     // member used in undo/redo function
@@ -385,7 +386,7 @@ private:
     void InitVars();
 
     /**
-     * @brief Function doClone
+     * Function doClone
      * is used by the derived class to actually implement the cloning.
      *
      * The default version will return NULL in release builds and likely crash the
@@ -520,15 +521,17 @@ public:
     }
 
     /**
-     * @brief Function Clone
+     * Function Clone
      * creates a duplicate of this item with linked list members set to NULL.
      *
      * The Clone() function only calls the private virtual doClone() which actually
      * does the cloning for the derived object.
      *
+     * @todo: use this instead of Copy() everywhere, then kill Copy().
+     *
      * @return A clone of the item.
      */
-    EDA_ITEM* Clone() const { return doClone(); }
+    EDA_ITEM* Clone() const;    // should not be inline, to save the ~ 6 bytes per call site.
 
     /**
      * Function IterateForward
@@ -755,20 +758,19 @@ enum FILL_T {
 class EDA_TEXT
 {
 public:
-    int      m_Thickness;               /* pen size used to draw this text */
-    int      m_Orient;                  /* Orient in 0.1 degrees */
-
-    wxString m_Text;                    /* text! */
-    wxPoint  m_Pos;                     /* XY position of anchor text. */
-    wxSize   m_Size;                    /* XY size of text */
+    wxString m_Text;
+    int      m_Thickness;               ///< pen size used to draw this text
+    int      m_Orient;                  ///< Orient in 0.1 degrees
+    wxPoint  m_Pos;                     ///< XY position of anchor text.
+    wxSize   m_Size;                    ///< XY size of text
     bool     m_Mirror;                  ///< true iff mirrored
-    int      m_Attributs;               /* flags (visible...) */
-    bool     m_Italic;                  /* true to simulate (or use if exists)
-                                         * an italic font... */
-    bool     m_Bold;                    /* true to simulate a bold font ... */
-    GRTextHorizJustifyType m_HJustify;  /* Horiz justification */
-    GRTextVertJustifyType m_VJustify;   /* Vertical justification */
-    bool     m_MultilineAllowed;        /* true to use multiline option, false
+    int      m_Attributs;               ///< bit flags such as visible, etc.
+    bool     m_Italic;                  ///< should be italic font (if available)
+    bool     m_Bold;                    ///< should be bold font (if available)
+    GRTextHorizJustifyType m_HJustify;  ///< horizontal justification
+    GRTextVertJustifyType  m_VJustify;  ///< vertical justification
+
+    bool     m_MultilineAllowed;        /**< true to use multiline option, false
                                          * to use only single line text
                                          * Single line is faster in
                                          * calculations than multiline */
@@ -798,7 +800,7 @@ public:
     void SetItalic( bool isItalic ) { m_Italic = isItalic; }
     bool IsItalic() const { return m_Italic; }
 
-    void SetMirrored( bool doMirror ) { m_Mirror = doMirror; }
+    void SetMirrored( bool isMirrored ) { m_Mirror = isMirrored; }
     bool IsMirrored() const { return m_Mirror; }
 
     /**

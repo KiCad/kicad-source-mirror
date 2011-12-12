@@ -1327,7 +1327,7 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
  */
 static bool SortByTimeStamp( const EDA_ITEM* item1, const EDA_ITEM* item2 )
 {
-    int ii = item1->m_TimeStamp - item2->m_TimeStamp;
+    int ii = item1->GetTimeStamp() - item2->GetTimeStamp();
 
     /* If the time stamps are the same, compare type in order to have component objects
      * before sheet object. This is done because changing the sheet time stamp
@@ -1463,7 +1463,7 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 
         SCH_ITEM* nextItem = (SCH_ITEM*)items[ii + 1];
 
-        if( item->m_TimeStamp == nextItem->m_TimeStamp )
+        if( item->GetTimeStamp() == nextItem->GetTimeStamp() )
         {
             count++;
 
@@ -1477,7 +1477,7 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
             // @todo: see how to change sheet paths for its cmp list (can
             //        be possible in most cases)
             else
-                item->m_TimeStamp = GetNewTimeStamp();
+                item->SetTimeStamp( GetNewTimeStamp() );
         }
     }
 

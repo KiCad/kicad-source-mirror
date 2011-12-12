@@ -223,7 +223,7 @@ void EDGE_MODULE::DisplayInfo( EDA_DRAW_FRAME* frame )
     frame->AppendMsgPanel( _( "Module" ), module->m_Reference->m_Text, DARKCYAN );
     frame->AppendMsgPanel( _( "Value" ), module->m_Value->m_Text, BLUE );
 
-    msg.Printf( wxT( "%8.8lX" ), module->m_TimeStamp );
+    msg.Printf( wxT( "%8.8lX" ), module->GetTimeStamp() );
     frame->AppendMsgPanel( _( "TimeStamp" ), msg, BROWN );
     frame->AppendMsgPanel( _( "Mod Layer" ), board->GetLayerName( module->GetLayer() ), RED );
     frame->AppendMsgPanel( _( "Seg Layer" ), board->GetLayerName( GetLayer() ), RED );

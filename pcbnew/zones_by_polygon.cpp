@@ -534,7 +534,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
     if(  zone->GetNumCorners() == 0 )
     {
         zone->m_Flags = IS_NEW;
-        zone->m_TimeStamp     = GetNewTimeStamp();
+        zone->SetTimeStamp( GetNewTimeStamp() );
         g_Zone_Default_Setting.ExportSetting( *zone );
         zone->m_Poly->Start( g_Zone_Default_Setting.m_CurrentZone_Layer,
                              GetScreen()->GetCrossHairPosition().x,
@@ -791,7 +791,7 @@ void PCB_EDIT_FRAME::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* zone_contain
     EDA_RECT dirty = zone_container->GetBoundingBox();
 
     // For compatibility with old boards: remove old SEGZONE fill segments
-    Delete_OldZone_Fill( NULL, zone_container->m_TimeStamp );
+    Delete_OldZone_Fill( NULL, zone_container->GetTimeStamp() );
 
     // Remove current filling:
     zone_container->UnFill();

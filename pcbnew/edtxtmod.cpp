@@ -36,7 +36,7 @@ static int     TextInitialOrientation;  // module text initial orientation for
 
 /* Add a new graphical text to the active module (footprint)
  *  Note there always are 2 texts: reference and value.
- *  New texts have the member TEXTE_MODULE.m_Type set to TEXT_is_DIVERS
+ *  New texts have the member TEXTE_MODULE.GetType() set to TEXT_is_DIVERS
  */
 TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
 {
@@ -118,7 +118,7 @@ void PCB_BASE_FRAME::DeleteTextModule( TEXTE_MODULE* Text )
 
     Module = (MODULE*) Text->GetParent();
 
-    if( Text->m_Type == TEXT_is_DIVERS )
+    if( Text->GetType() == TEXT_is_DIVERS )
     {
         DrawPanel->RefreshDrawingRect( Text->GetBoundingBox() );
         Text->DeleteStructure();
@@ -226,7 +226,7 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             Text->m_Pos = GetScreen()->GetCrossHairPosition();
             wxPoint textRelPos = Text->m_Pos - Module->m_Pos;
             RotatePoint( &textRelPos, -Module->m_Orient );
-            Text->m_Pos0    = textRelPos;
+            Text->SetPos0( textRelPos );
             Text->m_Flags   = 0;
             Module->m_Flags = 0;
             Module->m_LastEdit_Time = time( NULL );

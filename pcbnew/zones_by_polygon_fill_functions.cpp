@@ -59,7 +59,7 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, long aTimestamp )
     if( aZone == NULL )
         TimeStamp = aTimestamp;
     else
-        TimeStamp = aZone->m_TimeStamp; // Save reference time stamp (aZone will be deleted)
+        TimeStamp = aZone->GetTimeStamp(); // Save reference time stamp (aZone will be deleted)
 
     SEGZONE* next;
 
@@ -67,7 +67,7 @@ void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, long aTimestamp )
     {
         next = zone->Next();
 
-        if( zone->m_TimeStamp == TimeStamp )
+        if( zone->GetTimeStamp() == TimeStamp )
         {
             modify = true;
             /* remove item from linked list and free memory */
