@@ -152,7 +152,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     /* Calculated ncol and nrow, matrix size for routing. */
     Board.ComputeMatrixSize( GetBoard() );
 
-    MsgPanel->EraseMsgBox();
+    m_messagePanel->EraseMsgBox();
 
     /* Map the board */
     Nb_Sides = ONE_SIDE;

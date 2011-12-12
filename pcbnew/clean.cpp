@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004-2010 Jean-Pierre Charras, jean-pierre.charras@gpisa-lab.inpg.fr
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file clean.cpp
  * @brief functions to clean tracks: remove null lenght and redundant segments
@@ -16,7 +41,8 @@
 static void     clean_segments( PCB_EDIT_FRAME* aFrame );
 static void     clean_vias( BOARD* aPcb );
 static void     DeleteUnconnectedTracks( PCB_EDIT_FRAME* aFrame );
-static TRACK*   MergeColinearSegmentIfPossible( BOARD* aPcb, TRACK* aTrackRef, TRACK* aCandidate, int aEndType );
+static TRACK*   MergeColinearSegmentIfPossible( BOARD* aPcb, TRACK* aTrackRef,
+                                                TRACK* aCandidate, int aEndType );
 static void     CleanupTracks( PCB_EDIT_FRAME* aFrame,
                              bool aCleanVias, bool aMergeSegments,
                              bool aDeleteUnconnectedSegm, bool aConnectToPads );
@@ -40,7 +66,7 @@ void PCB_EDIT_FRAME::Clean_Pcb( wxDC* DC )
 
     if( dlg.ShowModal() == wxID_OK )
         CleanupTracks( this, dlg.cleanVias, dlg.mergeSegments,
-                         dlg.deleteUnconnectedSegm, dlg.connectToPads );
+                       dlg.deleteUnconnectedSegm, dlg.connectToPads );
 
     DrawPanel->Refresh( true );
 }
@@ -55,12 +81,12 @@ void PCB_EDIT_FRAME::Clean_Pcb( wxDC* DC )
  *  i.e. when a track end covers a pad or a via but is not exactly on the pad or the via center
  */
 void CleanupTracks( PCB_EDIT_FRAME* aFrame,
-                      bool aCleanVias, bool aMergeSegments,
-                      bool aDeleteUnconnectedSegm, bool aConnectToPads )
+                    bool aCleanVias, bool aMergeSegments,
+                    bool aDeleteUnconnectedSegm, bool aConnectToPads )
 {
     wxBusyCursor( dummy );
 
-    aFrame->MsgPanel->EraseMsgBox();
+    aFrame->ClearMsgPanel();
     aFrame->GetBoard()->GetNumSegmTrack();    // update the count
 
     // Clear undo and redo lists to avoid inconsistencies between lists
@@ -487,7 +513,8 @@ static void clean_segments( PCB_EDIT_FRAME* aFrame )
 
         if( flag )   // We have the starting point of the segment is connected to an other segment
         {
-            segDelete = MergeColinearSegmentIfPossible( aFrame->GetBoard(), segment, segStart, START );
+            segDelete = MergeColinearSegmentIfPossible( aFrame->GetBoard(), segment, segStart,
+                                                        START );
 
             if( segDelete )
             {
@@ -555,9 +582,8 @@ static void clean_segments( PCB_EDIT_FRAME* aFrame )
  *    and return aCandidate (which can be deleted).
  *  else return NULL
  */
-TRACK* MergeColinearSegmentIfPossible( BOARD* aPcb,
-                                              TRACK* aTrackRef, TRACK* aCandidate,
-                                              int aEndType )
+TRACK* MergeColinearSegmentIfPossible( BOARD* aPcb, TRACK* aTrackRef, TRACK* aCandidate,
+                                       int aEndType )
 {
     if( aTrackRef->m_Width != aCandidate->m_Width )
         return NULL;

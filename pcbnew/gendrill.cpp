@@ -120,7 +120,7 @@ void DIALOG_GENDRILL::GenDrillAndReportFiles()
 
     UpdateConfig(); // set params and Save drill options
 
-    m_Parent->MsgPanel->EraseMsgBox();
+    m_Parent->ClearMsgPanel();
 
     if( m_microViasCount || m_blindOrBuriedViasCount )
         hasBuriedVias = true;

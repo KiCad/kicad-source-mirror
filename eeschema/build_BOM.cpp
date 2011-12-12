@@ -41,13 +41,14 @@
 #include "template_fieldnames.h"
 #include "netlist.h"
 
+
 /* Fill aList  with labels
  */
-void GenListeGLabels( LABEL_OBJECT_LIST& aList )
+void GenListeGLabels( BOM_LABEL_LIST& aList )
 {
     // Build the sheet list
-    SCH_SHEET_LIST  sheetList;
-    LABEL_OBJECT    label;
+    SCH_SHEET_LIST sheetList;
+    BOM_LABEL      label;
 
     for( SCH_SHEET_PATH* path = sheetList.GetFirst(); path; path = sheetList.GetNext() )
     {
@@ -59,10 +60,7 @@ void GenListeGLabels( LABEL_OBJECT_LIST& aList )
             {
             case SCH_HIERARCHICAL_LABEL_T:
             case SCH_GLOBAL_LABEL_T:
-                label.m_LabelType = schItem->Type();
-                label.m_SheetPath = *path;
-                label.m_Label     = schItem;
-                aList.push_back( label );
+                aList.push_back( BOM_LABEL( schItem->Type(), schItem, *path ) );
                 break;
 
             case SCH_SHEET_T:
@@ -71,10 +69,7 @@ void GenListeGLabels( LABEL_OBJECT_LIST& aList )
 
                 BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, sheet->GetPins() )
                 {
-                    label.m_LabelType = SCH_SHEET_PIN_T;
-                    label.m_SheetPath = *path;
-                    label.m_Label     = &sheetPin;
-                    aList.push_back( label );
+                    aList.push_back( BOM_LABEL( SCH_SHEET_PIN_T, &sheetPin, *path ) );
                 }
             }
             break;
@@ -88,31 +83,21 @@ void GenListeGLabels( LABEL_OBJECT_LIST& aList )
     }
 }
 
+
 /* compare function for sorting labels
  * sort by
  *     value
  *     if same value: by sheet
  */
-bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
+bool SortLabelsByValue( const BOM_LABEL& obj1, const BOM_LABEL& obj2 )
 {
     int       ii;
-    wxString* Text1, * Text2;
 
-    if( obj1.m_LabelType == SCH_SHEET_PIN_T )
-        Text1 = &( (SCH_SHEET_PIN*)(obj1.m_Label) )->m_Text;
-    else
-        Text1 = &( (SCH_TEXT*)(obj1.m_Label) )->m_Text;
-
-    if( obj2.m_LabelType == SCH_SHEET_PIN_T )
-        Text2 = &( (SCH_SHEET_PIN*)(obj2.m_Label) )->m_Text;
-    else
-        Text2 = &( (SCH_TEXT*)(obj2.m_Label) )->m_Text;
-
-    ii = Text1->CmpNoCase( *Text2 );
+    ii = obj1.GetText().CmpNoCase( obj2.GetText() );
 
     if( ii == 0 )
     {
-        ii = obj1.m_SheetPath.Cmp( obj2.m_SheetPath );
+        ii = obj1.GetSheetPath().Cmp( obj2.GetSheetPath() );
     }
 
     return ii < 0;
@@ -123,33 +108,22 @@ bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
  *     by sheet
  *     in a sheet, by alphabetic order
  */
-bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 )
+bool SortLabelsBySheet( const BOM_LABEL& obj1, const BOM_LABEL& obj2 )
 {
     int      ii;
-    wxString Text1, Text2;
 
-    ii = obj1.m_SheetPath.Cmp( obj2.m_SheetPath );
+    ii = obj1.GetSheetPath().Cmp( obj2.GetSheetPath() );
 
     if( ii == 0 )
     {
-        if( obj1.m_LabelType == SCH_SHEET_PIN_T )
-            Text1 = ( (SCH_SHEET_PIN*) obj1.m_Label )->m_Text;
-        else
-            Text1 = ( (SCH_TEXT*) obj1.m_Label )->m_Text;
-
-        if( obj2.m_LabelType == SCH_SHEET_PIN_T )
-            Text2 = ( (SCH_SHEET_PIN*) obj2.m_Label )->m_Text;
-        else
-            Text2 = ( (SCH_TEXT*) obj2.m_Label )->m_Text;
-
-        ii = Text1.CmpNoCase( Text2 );
+        ii = obj1.GetText().CmpNoCase( obj2.GetText() );
     }
 
     return ii < 0;
 }
 
 
-int PrintListeGLabel( FILE* f, LABEL_OBJECT_LIST& aList )
+int PrintListeGLabel( FILE* f, BOM_LABEL_LIST& aList )
 {
     SCH_LABEL* label;
     SCH_SHEET_PIN* pinsheet;
@@ -158,20 +132,20 @@ int PrintListeGLabel( FILE* f, LABEL_OBJECT_LIST& aList )
 
     for( unsigned ii = 0; ii < aList.size(); ii++ )
     {
-        switch( aList[ii].m_LabelType )
+        switch( aList[ii].GetType() )
         {
         case SCH_HIERARCHICAL_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
-            label = (SCH_LABEL*)(aList[ii].m_Label);
+            label = (SCH_LABEL*)(aList[ii].GetLabel());
 
-            if( aList[ii].m_LabelType == SCH_HIERARCHICAL_LABEL_T )
+            if( aList[ii].GetType() == SCH_HIERARCHICAL_LABEL_T )
                 labeltype = wxT( "Hierarchical" );
             else
                 labeltype = wxT( "Global      " );
 
-            sheetpath = aList[ii].m_SheetPath.PathHumanReadable();
+            sheetpath = aList[ii].GetSheetPath().PathHumanReadable();
             msg.Printf( _( "> %-28.28s %s        (Sheet %s) pos: %3.3f, %3.3f\n" ),
-                        GetChars( label->m_Text ),
+                        GetChars( label->GetText() ),
                         GetChars( labeltype ),
                         GetChars( sheetpath ),
                         (float) label->m_Pos.x / 1000,
@@ -182,7 +156,7 @@ int PrintListeGLabel( FILE* f, LABEL_OBJECT_LIST& aList )
 
         case SCH_SHEET_PIN_T:
         {
-            pinsheet = (SCH_SHEET_PIN*) aList[ii].m_Label;
+            pinsheet = (SCH_SHEET_PIN*) aList[ii].GetLabel();
             int jj = pinsheet->GetShape();
 
             if( jj < 0 )
@@ -194,14 +168,15 @@ int PrintListeGLabel( FILE* f, LABEL_OBJECT_LIST& aList )
             wxString labtype = FROM_UTF8( SheetLabelType[jj] );
 
             msg.Printf( _( "> %-28.28s PinSheet %-7.7s (Sheet %s) pos: %3.3f, %3.3f\n" ),
-                        GetChars( pinsheet->m_Text ),
+                        GetChars( pinsheet->GetText() ),
                         GetChars( labtype ),
-                        GetChars( aList[ii].m_SheetPath.PathHumanReadable() ),
+                        GetChars( aList[ii].GetSheetPath().PathHumanReadable() ),
                         (float) pinsheet->m_Pos.x / 1000,
                         (float) pinsheet->m_Pos.y / 1000 );
 
             fputs( TO_UTF8( msg ), f );
         }
+
         break;
 
         default:
