@@ -287,8 +287,8 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
 
     Module->m_Reference->m_Pos.y -= Module->m_Reference->m_Size.y;
     Module->m_Value->m_Pos.y     += Module->m_Value->m_Size.y;
-    Module->m_Reference->m_Pos0   = Module->m_Reference->m_Pos - Module->m_Pos;
-    Module->m_Value->m_Pos0 = Module->m_Value->m_Pos - Module->m_Pos;
+    Module->m_Reference->SetPos0( Module->m_Reference->m_Pos - Module->m_Pos );
+    Module->m_Value->SetPos0( Module->m_Value->m_Pos - Module->m_Pos );
 
     Module->CalculateBoundingBox();
     Module->Draw( DrawPanel, DC, GR_OR );
@@ -532,14 +532,22 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveBasicShape( const wxString& name, int pad_c
         return NULL;
 
     #define DEFAULT_SIZE 30
-    Module->m_TimeStamp           = GetNewTimeStamp();
+    Module->SetTimeStamp( GetNewTimeStamp() );
+
     Module->m_Value->m_Size       = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
-    Module->m_Value->m_Pos0.y     = -DEFAULT_SIZE;
-    Module->m_Value->m_Pos.y     += Module->m_Value->m_Pos0.y;
-    Module->m_Value->m_Thickness      = DEFAULT_SIZE / 4;
+
+    Module->m_Value->SetPos0( wxPoint( 0, -DEFAULT_SIZE ) );
+
+    Module->m_Value->m_Pos.y     += Module->m_Value->GetPos0().y;
+
+    Module->m_Value->m_Thickness  = DEFAULT_SIZE / 4;
+
     Module->m_Reference->m_Size   = wxSize( DEFAULT_SIZE, DEFAULT_SIZE );
-    Module->m_Reference->m_Pos0.y = DEFAULT_SIZE;
-    Module->m_Reference->m_Pos.y += Module->m_Reference->m_Pos0.y;
+
+    Module->m_Reference->SetPos0( wxPoint( 0, DEFAULT_SIZE ) );
+
+    Module->m_Reference->m_Pos.y += Module->m_Reference->GetPos0().y;
+
     Module->m_Reference->m_Thickness  = DEFAULT_SIZE / 4;
 
     /* Create 2 pads used in gaps and stubs.

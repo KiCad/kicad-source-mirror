@@ -41,6 +41,7 @@ public:
     DRAWSEGMENT* Back() const { return (DRAWSEGMENT*) Pback; }
 
     void SetWidth( int aWidth ) { m_Width = aWidth; }
+    int GetWidth() const { return m_Width; }
 
     void SetStart( const wxPoint& aStart ) { m_Start = aStart; }
 
@@ -52,10 +53,12 @@ public:
      * @param aAngle is tenths of degrees, but will soon be degrees.
      */
     void SetAngle( double aAngle );     // encapsulates the transition to degrees
+    double GetAngle() const { return m_Angle; }
 
     void SetType( int aType ) { m_Type = aType; }
 
     void SetShape( int aShape ) { m_Shape = aShape; }
+    int GetShape() const { return m_Shape; }
 
     void SetBezControl1( const wxPoint& aPoint ) { m_BezierC1 = aPoint; }
     void SetBezControl2( const wxPoint& aPoint ) { m_BezierC2 = aPoint; }
@@ -104,8 +107,8 @@ public:
      */
     MODULE* GetParentModule() const;
 
-    std::vector<wxPoint>& GetBezierPoints() { return m_BezierPoints; };
-    std::vector<wxPoint>& GetPolyPoints()   { return m_PolyPoints; };
+    const std::vector<wxPoint>& GetBezierPoints() const { return m_BezierPoints; };
+    const std::vector<wxPoint>& GetPolyPoints() const { return m_PolyPoints; };
 
     void SetBezierPoints( std::vector<wxPoint>& aPoints )
     {

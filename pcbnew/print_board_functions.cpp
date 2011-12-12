@@ -382,10 +382,10 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
 
     if( mlayer & aMasklayer )
     {
-        if( !aModule->m_Reference->m_NoShow )
+        if( aModule->m_Reference->IsVisible() )
             aModule->m_Reference->Draw( aPanel, aDC, aDraw_mode );
 
-        if( !aModule->m_Value->m_NoShow )
+        if( aModule->m_Value->IsVisible() )
             aModule->m_Value->Draw( aPanel, aDC, aDraw_mode );
     }
 

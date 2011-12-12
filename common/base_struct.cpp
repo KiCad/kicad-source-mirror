@@ -68,7 +68,7 @@ EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
     m_Parent     = base.m_Parent;
     m_Son        = base.m_Son;
     m_Flags      = base.m_Flags;
-    m_TimeStamp  = base.m_TimeStamp;
+    SetTimeStamp( base.m_TimeStamp );
     m_Status     = base.m_Status;
     m_Selected   = base.m_Selected;
 }
@@ -84,7 +84,7 @@ void EDA_ITEM::InitVars()
     m_List      = NULL;     // I am not on any list yet
     m_Image     = NULL;     // Link to an image copy for undelete or abort command
     m_Flags     = 0;        // flags for editions and other
-    m_TimeStamp = 0;        // Time stamp used for logical links
+    SetTimeStamp( 0 );        // Time stamp used for logical links
     m_Status    = 0;
     m_Selected  = 0;        // Used by block commands, and selective editing
 }
@@ -104,6 +104,13 @@ EDA_ITEM* EDA_ITEM::doClone() const
 {
     wxCHECK_MSG( false, NULL, wxT( "doClone not implemented in derived class " ) + GetClass() +
                  wxT( ".  Bad programmer." ) );
+}
+
+
+EDA_ITEM* EDA_ITEM::Clone() const
+{
+    // save about 6 bytes per call by hiding the virtual function in this non-inline function.
+    return doClone();
 }
 
 

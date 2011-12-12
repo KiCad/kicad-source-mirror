@@ -88,7 +88,7 @@ ZONE_CONTAINER* BOARD::InsertArea( int netcode, int iarea, int layer, int x, int
 
     new_area->SetNet( netcode );
     new_area->SetLayer( layer );
-    new_area->m_TimeStamp = GetNewTimeStamp();
+    new_area->SetTimeStamp( GetNewTimeStamp() );
 
     if( iarea < (int) ( m_ZoneDescriptorList.size() - 1 ) )
         m_ZoneDescriptorList.insert( m_ZoneDescriptorList.begin() + iarea + 1, new_area );
@@ -284,7 +284,7 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
         {
             wxString str;
             str.Printf( wxT( "Area %8.8X of net \"%s\" has arcs intersecting other sides.\n" ),
-                        aCurrArea->m_TimeStamp, GetChars( aCurrArea->m_Netname ) );
+                        aCurrArea->GetTimeStamp(), GetChars( aCurrArea->m_Netname ) );
             str += wxT( "This may cause problems with other editing operations,\n" );
             str += wxT( "such as adding cutouts. It can't be fixed automatically.\n" );
             str += wxT( "Manual correction is recommended." );
@@ -307,7 +307,7 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
         {
             wxString str;
             str.Printf( wxT( "Area %8.8X of net \"%s\" is self-intersecting and will be clipped.\n" ),
-                        aCurrArea->m_TimeStamp, GetChars( aCurrArea->m_Netname ) );
+                        aCurrArea->GetTimeStamp(), GetChars( aCurrArea->m_Netname ) );
             str += wxT( "This may result in splitting the area.\n" );
             str += wxT( "If the area is complex, this may take a few seconds." );
             wxMessageBox( str );

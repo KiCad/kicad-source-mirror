@@ -187,7 +187,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
 {
     wxString lastPadName;   // Last used pad name (pad num)
-    lastPadName = g_Pad_Master.ReturnStringPadName();
+    lastPadName = g_Pad_Master.GetPadName();
 
     m_Pcb->m_Status_Pcb     = 0;
     Module->m_LastEdit_Time = time( NULL );

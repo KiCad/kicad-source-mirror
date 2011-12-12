@@ -71,7 +71,7 @@ void DIMENSION::Copy( DIMENSION* source )
     m_Pos       = source->m_Pos;
     m_Shape     = source->m_Shape;
     m_Unit      = source->m_Unit;
-    m_TimeStamp = GetNewTimeStamp();
+    SetTimeStamp( GetNewTimeStamp() );
     m_Text->Copy( source->m_Text );
 
     m_crossBarOx    = source->m_crossBarOx;

@@ -108,11 +108,11 @@ void DialogEditModuleText::initDlg( )
     m_ModuleInfoText->SetLabel( msg );
 
 
-    if( m_currentText->m_Type == TEXT_is_VALUE )
+    if( m_currentText->GetType() == TEXT_is_VALUE )
         m_TextDataTitle->SetLabel( _( "Value:" ) );
-    else if( m_currentText->m_Type == TEXT_is_DIVERS )
+    else if( m_currentText->GetType() == TEXT_is_DIVERS )
         m_TextDataTitle->SetLabel( _( "Text:" ) );
-    else if( m_currentText->m_Type != TEXT_is_REFERENCE )
+    else if( m_currentText->GetType() != TEXT_is_REFERENCE )
         m_TextDataTitle->SetLabel( wxT( "???" ) );
 
     m_Name->SetValue( m_currentText->m_Text );
@@ -128,11 +128,11 @@ void DialogEditModuleText::initDlg( )
         m_parent->m_InternalUnits );
 
     AddUnitSymbol( *m_PosXTitle );
-    PutValueInLocalUnits( *m_TxtPosCtrlX, m_currentText->m_Pos0.x,
+    PutValueInLocalUnits( *m_TxtPosCtrlX, m_currentText->GetPos0().x,
         m_parent->m_InternalUnits );
 
     AddUnitSymbol( *m_PosYTitle );
-    PutValueInLocalUnits( *m_TxtPosCtrlY, m_currentText->m_Pos0.y,
+    PutValueInLocalUnits( *m_TxtPosCtrlY, m_currentText->GetPos0().y,
         m_parent->m_InternalUnits );
 
     AddUnitSymbol( *m_WidthTitle );
@@ -144,9 +144,8 @@ void DialogEditModuleText::initDlg( )
     if( (text_orient != 0) )
         m_Orient->SetSelection( 1 );
 
-    if( m_currentText->m_NoShow )
+    if( !m_currentText->IsVisible() )
         m_Show->SetSelection( 1 );;
-
 }
 
 
@@ -167,13 +166,15 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
 
     m_currentText->m_Italic = m_Style->GetSelection() == 1 ? true : false;
 
+    wxPoint tmp;
 
     msg = m_TxtPosCtrlX->GetValue();
-    m_currentText->m_Pos0.x = ReturnValueFromString( g_UserUnit, msg,
-        m_parent->m_InternalUnits );
+    tmp.x = ReturnValueFromString( g_UserUnit, msg, m_parent->m_InternalUnits );
+
     msg = m_TxtPosCtrlY->GetValue();
-    m_currentText->m_Pos0.y = ReturnValueFromString( g_UserUnit, msg,
-        m_parent->m_InternalUnits );
+    tmp.y = ReturnValueFromString( g_UserUnit, msg, m_parent->m_InternalUnits );
+
+    m_currentText->SetPos0( tmp );
 
     msg = m_TxtSizeCtrlX->GetValue();
     m_currentText->m_Size.x = ReturnValueFromString( g_UserUnit, msg,
@@ -202,7 +203,8 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     }
     m_currentText->SetThickness( width );
 
-    m_currentText->m_NoShow = (m_Show->GetSelection() == 0) ? 0 : 1;
+    m_currentText->SetVisible( m_Show->GetSelection() == 0 );
+
     int text_orient = (m_Orient->GetSelection() == 0) ? 0 : 900;
     m_currentText->m_Orient = text_orient;
 

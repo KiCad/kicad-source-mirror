@@ -70,7 +70,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     m_Shape = aSource.m_Shape;
 
     m_Flags     = aSource.m_Flags;
-    m_TimeStamp = aSource.m_TimeStamp;
+    SetTimeStamp( aSource.m_TimeStamp );
 
     SetStatus( aSource.ReturnStatus() );
     m_Start         = aSource.m_Start;

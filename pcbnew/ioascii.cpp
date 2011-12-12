@@ -165,7 +165,7 @@ int PCB_BASE_FRAME::ReadListeSegmentDescr( LINE_READER* aReader,
             break;
         }
 
-        newTrack->m_TimeStamp = timeStamp;
+        newTrack->SetTimeStamp( timeStamp );
 
         newTrack->m_Start.x = tempStartX;
         newTrack->m_Start.y = tempStartY;

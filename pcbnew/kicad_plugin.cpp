@@ -90,7 +90,10 @@
 
 #include <wx/ffile.h>
 
-#define VERSION_ERROR_FORMAT _( "File '%s' is format version %d.\nI only support format version <= %d.\nPlease upgrade PCBNew to load this file." )
+#define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade PCBNew to load this file." )
+#define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
+#define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
+#define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
 
 /*
 #include <pcbnew.h>
@@ -389,7 +392,7 @@ void KICAD_PLUGIN::loadGENERAL()
 
         else if( TESTLINE( "NoConn" ) )
         {
-            int tmp = atoi( line + SZ( "NoConn" ) );
+            int tmp = intParse( line + SZ( "NoConn" ) );
             m_board->m_NbNoconnect = tmp;
         }
 
@@ -467,12 +470,12 @@ void KICAD_PLUGIN::loadSHEET()
                         text = strtok( NULL, delims );
 
                         if( text )
-                            sheet->m_Size.x = atoi( text );
+                            sheet->m_Size.x = intParse( text );
 
                         text = strtok( NULL, delims );
 
                         if( text )
-                            sheet->m_Size.y = atoi( text );
+                            sheet->m_Size.y = intParse( text );
                     }
 
                     break;
@@ -569,7 +572,7 @@ void KICAD_PLUGIN::loadSETUP()
 
         else if( TESTLINE( "Layers" ) )
         {
-            int tmp = atoi( line + SZ( "Layers" ) );
+            int tmp = intParse( line + SZ( "Layers" ) );
             m_board->SetCopperLayerCount( tmp );
         }
 
@@ -694,7 +697,7 @@ void KICAD_PLUGIN::loadSETUP()
 
         else if( TESTLINE( "MicroViasAllowed" ) )
         {
-            int tmp = atoi( line + SZ( "MicroViasAllowed" ) );
+            int tmp = intParse( line + SZ( "MicroViasAllowed" ) );
             m_board->GetDesignSettings().m_MicroViasAllowed = tmp;
         }
 
@@ -946,20 +949,24 @@ void KICAD_PLUGIN::loadMODULE()
 
         else if( TESTLINE( "At" ) )         // (At)tributes of module
         {
+            int attrs = MOD_DEFAULT;
+
             data = line + SZ( "At" );
 
             if( strstr( data, "SMD" ) )
-                module->m_Attributs |= MOD_CMS;
+                attrs |= MOD_CMS;
 
             if( strstr( data, "VIRTUAL" ) )
-                module->m_Attributs |= MOD_VIRTUAL;
+                attrs |= MOD_VIRTUAL;
+
+            module->SetAttributes( attrs );
         }
 
         else if( TESTLINE( "AR" ) )         // Alternate Reference
         {
             // e.g. "AR /47BA2624/45525076"
             data = strtok( line + SZ( "AR" ), delims );
-            module->m_Path = FROM_UTF8( data );
+            module->SetPath( FROM_UTF8( data ) );
         }
 
         else if( TESTLINE( "$SHAPE3D" ) )
@@ -976,6 +983,31 @@ void KICAD_PLUGIN::loadMODULE()
         else if( TESTLINE( "Kw" ) )         // Key words
         {
             module->m_KeyWord = FROM_UTF8( StrPurge( line + SZ( "Kw" ) ) );
+        }
+
+        // test this longer similar string before the shorter ".SolderPaste"
+        else if( TESTLINE( ".SolderPasteRatio" ) )
+        {
+            double tmp = atof( line + SZ( ".SolderPasteRatio" ) );
+            module->SetLocalSolderPasteMarginRatio( tmp );
+        }
+
+        else if( TESTLINE( ".SolderPaste" ) )
+        {
+            BIU tmp = biuParse( line + SZ( ".SolderPaste" ) );
+            module->SetLocalSolderPasteMargin( tmp );
+        }
+
+        else if( TESTLINE( ".SolderMask" ) )
+        {
+            BIU tmp = biuParse( line + SZ( ".SolderMask" ) );
+            module->SetLocalSolderMaskMargin( tmp );
+        }
+
+        else if( TESTLINE( ".LocalClearance" ) )
+        {
+            BIU tmp = biuParse( line + SZ( ".LocalClearance" ) );
+            module->SetLocalClearance( tmp );
         }
 
         else if( TESTLINE( "$EndMODULE" ) )
@@ -1135,25 +1167,26 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
         else if( TESTLINE( ".SolderMask" ) )
         {
             BIU tmp = biuParse( line + SZ( ".SolderMask" ) );
-            pad->SetSolderMaskMargin( tmp );
+            pad->SetLocalSolderMaskMargin( tmp );
+        }
+
+        // test this before the similar but shorter ".SolderPaste"
+        else if( TESTLINE( ".SolderPasteRatio" ) )
+        {
+            double tmp = atof( line + SZ( ".SolderPasteRatio" ) );
+            pad->SetLocalSolderPasteMarginRatio( tmp );
         }
 
         else if( TESTLINE( ".SolderPaste" ) )
         {
             BIU tmp = biuParse( line + SZ( ".SolderPaste" ) );
-            pad->SetSolderPasteMargin( tmp );
-        }
-
-        else if( TESTLINE( ".SolderPasteRatio" ) )
-        {
-            double tmp = atof( line + SZ( ".SolderPasteRatio" ) );
-            pad->SetSolderPasteRatio( tmp );
+            pad->SetLocalSolderPasteMargin( tmp );
         }
 
         else if( TESTLINE( ".LocalClearance" ) )
         {
             BIU tmp = biuParse( line + SZ( ".LocalClearance" ) );
-            pad->SetPadClearance( tmp );
+            pad->SetLocalClearance( tmp );
         }
 
         else if( TESTLINE( "$EndPAD" ) )
@@ -1251,7 +1284,7 @@ void KICAD_PLUGIN::loadEDGE_MODULE( MODULE* aModule )
             dwg->m_Start0 = wxPoint( start0_x, start0_y );
             dwg->m_End0   = wxPoint( end0_x, end0_y );
 
-            std::vector<wxPoint>& pts = dwg->GetPolyPoints();
+            std::vector<wxPoint> pts;
             pts.reserve( ptCount );
 
             for( int ii = 0;  ii<ptCount;  ++ii )
@@ -1275,6 +1308,8 @@ void KICAD_PLUGIN::loadEDGE_MODULE( MODULE* aModule )
 
                 pts.push_back( wxPoint( x, y ) );
             }
+
+            dwg->SetPolyPoints( pts );
         }
         break;
 
@@ -1958,7 +1993,7 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
             // e.g. "ZCorner 25650 49500 0"
             BIU x    = biuParse( line + SZ( "ZCorner" ), &data );
             BIU y    = biuParse( data, &data );
-            int flag = atoi( data );
+            int flag = intParse( data );
 
             if( !sawCorner )
                 zc->m_Poly->Start( zc->GetLayer(), x, y, outline_hatch );
@@ -2399,26 +2434,52 @@ void KICAD_PLUGIN::loadPCB_TARGET()
 }
 
 
-std::string KICAD_PLUGIN::biuFmt( BIU aValue )
+int KICAD_PLUGIN::biuSprintf( char* buf, BIU aValue ) const
 {
     double  engUnits = biuToDisk * aValue;
-    char    temp[48];
+    int     len;
 
     if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
     {
         // printf( "f: " );
-        int len = sprintf( temp, "%.10f", engUnits );
+        len = sprintf( buf, "%.10f", engUnits );
 
-        while( --len > 0 && temp[len] == '0' )
-            temp[len] = '\0';
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+        ++len;
     }
     else
     {
         // printf( "g: " );
-        sprintf( temp, "%.10g", engUnits );
+        len = sprintf( buf, "%.10g", engUnits );
     }
+    return len;
+}
 
-    return temp;
+
+std::string KICAD_PLUGIN::fmtBIU( BIU aValue ) const
+{
+    char    temp[50];
+
+    int len = biuSprintf( temp, aValue );
+
+    return std::string( temp, len );
+}
+
+
+std::string KICAD_PLUGIN::fmtBIUPair( BIU first, BIU second ) const
+{
+    char    temp[100];
+    char*   cp = temp;
+
+    cp += biuSprintf( cp, first );
+
+    *cp++ = ' ';
+
+    cp += biuSprintf( cp, second );
+
+    return std::string( temp, cp - temp );
 }
 
 
@@ -2538,14 +2599,18 @@ void KICAD_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* a
 }
 
 
-void KICAD_PLUGIN::checkWriteError( const char* aCaller ) const
+wxString KICAD_PLUGIN::writeError() const
 {
-    if( ferror( m_fp ) )
-    {
-        THROW_IO_ERROR( wxString::Format( _( "error writing to file '%s' from function %s" ),
-                m_filename.GetData(), FROM_UTF8( aCaller ).GetData() ) );
-    }
+    return wxString::Format( _( "error writing to file '%s'" ), m_filename.GetData() );
 }
+
+#define CHECK_WRITE_ERROR() \
+    do { \
+        if( ferror( m_fp ) ) \
+        { \
+            THROW_IO_ERROR( writeError() ); \
+        } \
+    } while(0)
 
 
 void KICAD_PLUGIN::saveAllSections() const
@@ -2579,7 +2644,7 @@ void KICAD_PLUGIN::saveSETUP() const
 
 void KICAD_PLUGIN::saveBOARD() const
 {
-#if 0
+#if 1
     // save the nets
     int netcount = m_board->GetNetCount();
     for( int i = 0; i < netcount;  ++i )
@@ -2610,7 +2675,7 @@ void KICAD_PLUGIN::saveBOARD() const
             saveDIMENTION( (DIMENSION*) gr );
             break;
         default:
-            THROW_IO_ERROR( wxString::Format( _( "unknown graphic type %d"), gr->Type() ) );
+            THROW_IO_ERROR( wxString::Format( UNKNOWN_GRAPHIC_FORMAT, gr->Type() ) );
         }
     }
 
@@ -2644,7 +2709,7 @@ void KICAD_PLUGIN::saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const
     fprintf( m_fp, "St %s\n", "~" );
     fprintf( m_fp, "$EndEQUIPOT\n" );
 
-    checkWriteError( __FUNCTION__ );
+    CHECK_WRITE_ERROR();
 }
 
 
@@ -2660,38 +2725,358 @@ void KICAD_PLUGIN::saveNETCLASSES() const
     for( NETCLASSES::const_iterator it = nc.begin();  it != nc.end();  ++it )
     {
         NETCLASS*   netclass = it->second;
-
         saveNETCLASS( netclass );
     }
 
-    checkWriteError( __FUNCTION__ );
+    CHECK_WRITE_ERROR();
 }
 
 
 void KICAD_PLUGIN::saveNETCLASS( const NETCLASS* nc ) const
 {
     fprintf( m_fp, "$NCLASS\n" );
-    fprintf( m_fp, "Name %s\n",        EscapedUTF8( nc->GetName() ).c_str() );
-    fprintf( m_fp, "Desc %s\n",        EscapedUTF8( nc->GetDescription() ).c_str() );
+    fprintf( m_fp, "Name %s\n", EscapedUTF8( nc->GetName() ).c_str() );
+    fprintf( m_fp, "Desc %s\n", EscapedUTF8( nc->GetDescription() ).c_str() );
 
-    // Write parameters
+    fprintf( m_fp, "Clearance %d\n",    nc->GetClearance() );
+    fprintf( m_fp, "TrackWidth %d\n",   nc->GetTrackWidth() );
 
-    fprintf( m_fp, "Clearance %d\n",       nc->GetClearance() );
-    fprintf( m_fp, "TrackWidth %d\n",      nc->GetTrackWidth() );
+    fprintf( m_fp, "ViaDia %d\n",       nc->GetViaDiameter() );
+    fprintf( m_fp, "ViaDrill %d\n",     nc->GetViaDrill() );
 
-    fprintf( m_fp, "ViaDia %d\n",          nc->GetViaDiameter() );
-    fprintf( m_fp, "ViaDrill %d\n",        nc->GetViaDrill() );
+    fprintf( m_fp, "uViaDia %d\n",      nc->GetuViaDiameter() );
+    fprintf( m_fp, "uViaDrill %d\n",    nc->GetuViaDrill() );
 
-    fprintf( m_fp, "uViaDia %d\n",         nc->GetuViaDiameter() );
-    fprintf( m_fp, "uViaDrill %d\n",       nc->GetuViaDrill() );
-
-    // Write members:
     for( NETCLASS::const_iterator it = nc->begin();  it!=nc->end();  ++it )
         fprintf( m_fp, "AddNet %s\n", EscapedUTF8( *it ).c_str() );
 
     fprintf( m_fp, "$EndNCLASS\n" );
 
-    checkWriteError( __FUNCTION__ );
+    CHECK_WRITE_ERROR();
+}
+
+
+void KICAD_PLUGIN::saveMODULE_TEXT( const TEXTE_MODULE* me ) const
+{
+    MODULE* parent = (MODULE*) me->GetParent();
+    double  orient = me->GetOrientation();
+
+    // Due to the Pcbnew history, m_Orient is saved in screen value
+    // but it is handled as relative to its parent footprint
+    if( parent )
+        orient += parent->GetOrientation();
+
+    fprintf( m_fp, "T%d %s %s %g %s %c %c %d %c %s\n",
+            me->GetType(),
+            fmtBIUPoint( me->GetPos0() ).c_str(),   // m_Pos0.x, m_Pos0.y,
+            fmtBIUSize( me->GetSize() ).c_str(),     // m_Size.y, m_Size.x,
+            orient,
+            fmtBIU( me->GetThickness() ).c_str(),   // m_Thickness,
+            me->IsMirrored() ? 'M' : 'N',
+            me->IsVisible() ? 'V' : 'I',
+            me->GetLayer(),
+            me->IsItalic() ? 'I' : 'N',
+            EscapedUTF8( me->GetText() ).c_str()
+            );
+
+    CHECK_WRITE_ERROR();
+}
+
+
+void KICAD_PLUGIN::saveMODULE_EDGE( const EDGE_MODULE* me ) const
+{
+    switch( me->GetShape() )
+    {
+    case S_SEGMENT:
+        fprintf(    m_fp, "DS %s %s %s %d\n",
+                    fmtBIUPoint( me->m_Start0 ).c_str(),
+                    fmtBIUPoint( me->m_End0 ).c_str(),
+                    fmtBIU( me->GetWidth() ).c_str(),
+                    me->GetLayer() );
+        break;
+
+    case S_CIRCLE:
+        fprintf(    m_fp, "DC %s %s %s %d\n",
+                    fmtBIUPoint( me->m_Start0 ).c_str(),
+                    fmtBIUPoint( me->m_End0 ).c_str(),
+                    fmtBIU( me->GetWidth() ).c_str(),
+                    me->GetLayer() );
+        break;
+
+    case S_ARC:
+        {
+            double angle = me->GetAngle();
+
+            fprintf(    m_fp, "DA %s %s %g %s %d\n",
+                        fmtBIUPoint( me->m_Start0 ).c_str(),
+                        fmtBIUPoint( me->m_End0 ).c_str(),
+                        angle,
+                        fmtBIU( me->GetWidth() ).c_str(),
+                        me->GetLayer() );
+        }
+        break;
+
+    case S_POLYGON:
+        {
+            const std::vector<wxPoint>& polyPoints = me->GetPolyPoints();
+
+            fprintf(    m_fp, "DP %s %s %d %s %d\n",
+                        fmtBIUPoint( me->m_Start0 ).c_str(),
+                        fmtBIUPoint( me->m_End0 ).c_str(),
+                        (int) polyPoints.size(),
+                        fmtBIU( me->GetWidth() ).c_str(),
+                        me->GetLayer() );
+
+            for( unsigned i = 0;  i<polyPoints.size();  ++i )
+                fprintf( m_fp, "Dl %s\n", fmtBIUPoint( polyPoints[i] ).c_str() );
+        }
+        break;
+
+    default:
+        THROW_IO_ERROR( wxString::Format( UNKNOWN_GRAPHIC_FORMAT, me->GetShape() ) );
+    }
+
+    CHECK_WRITE_ERROR();
+}
+
+
+void KICAD_PLUGIN::savePAD( const D_PAD* me ) const
+{
+    fprintf( m_fp, "$PAD\n" );
+
+    int cshape;
+
+    switch( me->GetShape() )
+    {
+    case PAD_CIRCLE:    cshape = 'C';   break;
+    case PAD_RECT:      cshape = 'R';   break;
+    case PAD_OVAL:      cshape = 'O';   break;
+    case PAD_TRAPEZOID: cshape = 'T';   break;
+
+    default:
+        THROW_IO_ERROR( wxString::Format( UNKNOWN_PAD_FORMAT, me->GetShape() ) );
+    }
+
+    fprintf(    m_fp, "Sh %s %c %s %s %g\n",
+                EscapedUTF8( me->GetPadName() ).c_str(),
+                cshape,
+                fmtBIUSize( me->GetSize() ).c_str(),
+                fmtBIUSize( me->GetDelta() ).c_str(),
+                me->GetOrientation() );
+
+    fprintf(    m_fp, "Dr %s %s",
+                fmtBIU( me->GetDrillSize().x ).c_str(),
+                fmtBIUSize( me->GetOffset() ).c_str()
+                );
+
+    if( me->GetDrillShape() == PAD_OVAL )
+    {
+        fprintf( m_fp, " %c %s", 'O', fmtBIUSize( me->GetDrillSize() ).c_str() );
+    }
+
+    fprintf( m_fp, "\n" );
+
+    const char* texttype;
+
+    switch( me->GetAttribute() )
+    {
+    case PAD_STANDARD:          texttype = "STD";       break;
+    case PAD_SMD:               texttype = "SMD";       break;
+    case PAD_CONN:              texttype = "CONN";      break;
+    case PAD_HOLE_NOT_PLATED:   texttype = "HOLE";      break;
+
+    default:
+        THROW_IO_ERROR( wxString::Format( UNKNOWN_PAD_ATTRIBUTE, me->GetAttribute() ) );
+    }
+
+    fprintf( m_fp, "At %s N %8.8X\n", texttype, me->GetLayerMask() );
+
+    fprintf( m_fp, "Ne %d %s\n", me->GetNet(), EscapedUTF8( me->GetNetname() ).c_str() );
+
+    fprintf( m_fp, "Po %s\n", fmtBIUPoint( me->GetPos0() ).c_str() );
+
+    if( me->GetDieLength() != 0 )
+        fprintf( m_fp, "Le %s\n", fmtBIU( me->GetDieLength() ).c_str() );
+
+    if( me->GetLocalSolderMaskMargin() != 0 )
+        fprintf( m_fp, ".SolderMask %s\n", fmtBIU( me->GetLocalSolderMaskMargin() ).c_str() );
+
+    if( me->GetLocalSolderPasteMargin() != 0 )
+        fprintf( m_fp, ".SolderPaste %s\n", fmtBIU( me->GetLocalSolderPasteMargin() ).c_str() );
+
+    if( me->GetLocalSolderPasteMarginRatio() != 0 )
+        fprintf( m_fp, ".SolderPasteRatio %g\n", me->GetLocalSolderPasteMarginRatio() );
+
+    if( me->GetLocalClearance() != 0 )
+        fprintf( m_fp, ".LocalClearance %s\n", fmtBIU( me->GetLocalClearance( ) ).c_str() );
+
+    fprintf( m_fp, "$EndPAD\n" );
+
+    CHECK_WRITE_ERROR();
+}
+
+
+void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
+{
+    char        statusTxt[3];
+    double      orient = me->GetOrientation();
+
+    fprintf( m_fp, "$MODULE %s\n", TO_UTF8( me->GetLibRef() ) );
+
+    if( me->IsLocked() )
+        statusTxt[0] = 'F';
+    else
+        statusTxt[0] = '~';
+
+    if( me->IsPlaced() )
+        statusTxt[1] = 'P';
+    else
+        statusTxt[1] = '~';
+
+    statusTxt[2] = '\0';
+
+    fprintf( m_fp, "Po %s %g %d %8.8lX %8.8lX %s\n",
+             fmtBIUPoint( me->GetPosition() ).c_str(),    // m_Pos.x, m_Pos.y,
+             orient,
+             me->GetLayer(),
+             me->GetLastEditTime(),
+             me->GetTimeStamp(),
+             statusTxt );
+
+    fprintf( m_fp, "Li %s\n", TO_UTF8( me->GetLibRef() ) );
+
+    if( !me->GetDescription().IsEmpty() )
+    {
+        fprintf( m_fp, "Cd %s\n", TO_UTF8( me->GetDescription() ) );
+    }
+
+    if( !me->GetKeywords().IsEmpty() )
+    {
+        fprintf( m_fp, "Kw %s\n", TO_UTF8( me->GetKeywords() ) );
+    }
+
+    fprintf( m_fp, "Sc %8.8lX\n", me->GetTimeStamp() );
+    fprintf( m_fp, "AR %s\n", TO_UTF8( me->GetPath() ) );
+    fprintf( m_fp, "Op %X %X 0\n", me->m_CntRot90, me->m_CntRot180 );
+
+    if( me->GetLocalSolderMaskMargin() != 0 )
+        fprintf( m_fp, ".SolderMask %s\n", fmtBIU( me->GetLocalSolderMaskMargin() ).c_str() );
+
+    if( me->GetLocalSolderPasteMargin() != 0 )
+        fprintf( m_fp, ".SolderPaste %s\n", fmtBIU( me->GetLocalSolderPasteMargin() ).c_str() );
+
+    if( me->GetLocalSolderPasteMarginRatio() != 0 )
+        fprintf( m_fp, ".SolderPasteRatio %g\n", me->GetLocalSolderPasteMarginRatio() );
+
+    if( me->GetLocalClearance() != 0 )
+        fprintf( m_fp, ".LocalClearance %s\n", fmtBIU( me->GetLocalClearance( ) ).c_str() );
+
+    // attributes
+    if( me->GetAttributes() != MOD_DEFAULT )
+    {
+        fprintf( m_fp, "At" );
+
+        if( me->GetAttributes() & MOD_CMS )
+            fprintf( m_fp, " SMD" );
+
+        if( me->GetAttributes() & MOD_VIRTUAL )
+            fprintf( m_fp, " VIRTUAL" );
+
+        fprintf( m_fp, "\n" );
+    }
+
+    saveMODULE_TEXT( (TEXTE_MODULE*) &me->m_Reference );
+
+    saveMODULE_TEXT( (TEXTE_MODULE*) &me->m_Value );
+
+    // save drawing elements
+    for( BOARD_ITEM* item = me->m_Drawings;  item;  item = item->Next() )
+    {
+        switch( item->Type() )
+        {
+        case PCB_MODULE_TEXT_T:
+            saveMODULE_TEXT( (TEXTE_MODULE*) item );
+            break;
+        case PCB_MODULE_EDGE_T:
+            saveMODULE_EDGE( (EDGE_MODULE*) item );
+            break;
+        default:
+            THROW_IO_ERROR( wxString::Format( UNKNOWN_GRAPHIC_FORMAT, item->Type() ) );
+        }
+    }
+
+    for( D_PAD* pad = me->m_Pads;  pad;  pad = pad->Next() )
+        savePAD( pad );
+
+    save3D( me );
+
+    fprintf( m_fp, "$EndMODULE  %s\n", TO_UTF8( me->GetLibRef() ) );
+}
+
+
+void KICAD_PLUGIN::save3D( const MODULE* me ) const
+{
+    for( S3D_MASTER* t3D = me->m_3D_Drawings;  t3D;  t3D = t3D->Next() )
+    {
+        if( !t3D->m_Shape3DName.IsEmpty() )
+        {
+            fprintf( m_fp, "$SHAPE3D\n" );
+
+            fprintf( m_fp, "Na %s\n", EscapedUTF8( t3D->m_Shape3DName ).c_str() );
+
+            fprintf( m_fp, "Sc %.16g %.16g %.16g\n",
+                     t3D->m_MatScale.x,
+                     t3D->m_MatScale.y,
+                     t3D->m_MatScale.z );
+
+            fprintf( m_fp, "Of %.16g %.16g %.16g\n",
+                     t3D->m_MatPosition.x,
+                     t3D->m_MatPosition.y,
+                     t3D->m_MatPosition.z );
+
+            fprintf( m_fp, "Ro %.16g %.16g %.16g\n",
+                     t3D->m_MatRotation.x,
+                     t3D->m_MatRotation.y,
+                     t3D->m_MatRotation.z );
+
+            fprintf( m_fp, "$EndSHAPE3D\n" );
+        }
+    }
+}
+
+
+void KICAD_PLUGIN::saveTARGET(PCB_TARGET const*) const
+{
+}
+
+
+void KICAD_PLUGIN::saveTRACK(TRACK const*) const
+{
+}
+
+
+void KICAD_PLUGIN::saveSEGZONE(SEGZONE const*) const
+{
+}
+
+
+void KICAD_PLUGIN::saveZONE_CONTAINER(ZONE_CONTAINER const*) const
+{
+}
+
+
+void KICAD_PLUGIN::saveDIMENTION(DIMENSION const*) const
+{
+}
+
+
+void KICAD_PLUGIN::savePCB_TEXT(TEXTE_PCB const*) const
+{
+}
+
+
+void KICAD_PLUGIN::saveEDGE_MODULE(EDGE_MODULE const*) const
+{
 }
 
 
@@ -2954,91 +3339,6 @@ bool TEXTE_PCB::Save( FILE* m_fp ) const
 }
 
 
-/**
- * Function Save
- * writes the data structures for this object out to a FILE in "*.brd" format.
- * @param m_fp The FILE to write to.
- * @return bool - true if success writing else false.
- */
-bool TEXTE_MODULE::Save( FILE* m_fp ) const
-{
-    MODULE* parent = (MODULE*) GetParent();
-    int     orient = m_Orient;
-
-    // Due to the Pcbnew history, m_Orient is saved in screen value
-    // but it is handled as relative to its parent footprint
-    if( parent )
-        orient += parent->m_Orient;
-
-    int ret = fprintf( m_fp, "T%d %d %d %d %d %d %d %c %c %d %c %s\n",
-                      m_Type,
-                      m_Pos0.x, m_Pos0.y,
-                      m_Size.y, m_Size.x,
-                      orient,
-                      m_Thickness,
-                      m_Mirror ? 'M' : 'N', m_NoShow ? 'I' : 'V',
-                      GetLayer(),
-                      m_Italic ? 'I' : 'N',
-                      EscapedUTF8( m_Text ).c_str()
-                      );
-
-    return ret > 20;
-}
-
-
-bool EDGE_MODULE::Save( FILE* m_fp ) const
-{
-    int ret = -1;
-
-    switch( m_Shape )
-    {
-    case S_SEGMENT:
-        ret = fprintf( m_fp, "DS %d %d %d %d %d %d\n",
-                       m_Start0.x, m_Start0.y,
-                       m_End0.x, m_End0.y,
-                       m_Width, m_Layer );
-        break;
-
-    case S_CIRCLE:
-        ret = fprintf( m_fp, "DC %d %d %d %d %d %d\n",
-                       m_Start0.x, m_Start0.y,
-                       m_End0.x, m_End0.y,
-                       m_Width, m_Layer );
-        break;
-
-    case S_ARC:
-        ret = fprintf( m_fp, "DA %d %d %d %d %d %d %d\n",
-                       m_Start0.x, m_Start0.y,
-                       m_End0.x, m_End0.y,
-                       m_Angle,
-                       m_Width, m_Layer );
-        break;
-
-    case S_POLYGON:
-        ret = fprintf( m_fp, "DP %d %d %d %d %d %d %d\n",
-                       m_Start0.x, m_Start0.y,
-                       m_End0.x, m_End0.y,
-                       (int) m_PolyPoints.size(),
-                       m_Width, m_Layer );
-
-        for( unsigned i = 0;  i<m_PolyPoints.size();  ++i )
-            fprintf( m_fp, "Dl %d %d\n", m_PolyPoints[i].x, m_PolyPoints[i].y );
-
-        break;
-
-    default:
-
-        // future: throw an exception here
-#if defined(DEBUG)
-        printf( "EDGE_MODULE::Save(): unexpected m_Shape: %d\n", m_Shape );
-#endif
-        break;
-    }
-
-    return ret > 5;
-}
-
-
 bool TRACK::Save( FILE* m_fp ) const
 {
     int type = 0;
@@ -3122,244 +3422,4 @@ out:
     return rc;
 }
 
-
-bool D_PAD::Save( FILE* m_fp ) const
-{
-    int         cshape;
-    const char* texttype;
-
-    // check the return values for first and last fprints() in this function
-    if( fprintf( m_fp, "$PAD\n" ) != sizeof("$PAD\n") - 1 )
-        return false;
-
-    switch( m_PadShape )
-    {
-    case PAD_CIRCLE:
-        cshape = 'C'; break;
-
-    case PAD_RECT:
-        cshape = 'R'; break;
-
-    case PAD_OVAL:
-        cshape = 'O'; break;
-
-    case PAD_TRAPEZOID:
-        cshape = 'T'; break;
-
-    default:
-        cshape = 'C';
-        DisplayError( NULL, _( "Unknown pad shape" ) );
-        break;
-    }
-
-    fprintf( m_fp, "Sh \"%.4s\" %c %d %d %d %d %d\n",
-             m_Padname, cshape, m_Size.x, m_Size.y,
-             m_DeltaSize.x, m_DeltaSize.y, m_Orient );
-
-    fprintf( m_fp, "Dr %d %d %d", m_Drill.x, m_Offset.x, m_Offset.y );
-
-    if( m_DrillShape == PAD_OVAL )
-    {
-        fprintf( m_fp, " %c %d %d", 'O', m_Drill.x, m_Drill.y );
-    }
-
-    fprintf( m_fp, "\n" );
-
-    switch( m_Attribut )
-    {
-    case PAD_STANDARD:
-        texttype = "STD"; break;
-
-    case PAD_SMD:
-        texttype = "SMD"; break;
-
-    case PAD_CONN:
-        texttype = "CONN"; break;
-
-    case PAD_HOLE_NOT_PLATED:
-        texttype = "HOLE"; break;
-
-    default:
-        texttype = "STD";
-        DisplayError( NULL, wxT( "Invalid Pad attribute" ) );
-        break;
-    }
-
-    fprintf( m_fp, "At %s N %8.8X\n", texttype, m_layerMask );
-
-    fprintf( m_fp, "Ne %d %s\n", GetNet(), EscapedUTF8( m_Netname ).c_str() );
-
-    fprintf( m_fp, "Po %d %d\n", m_Pos0.x, m_Pos0.y );
-
-    if( m_LengthDie != 0 )
-        fprintf( m_fp, "Le %d\n", m_LengthDie );
-
-    if( m_LocalSolderMaskMargin != 0 )
-        fprintf( m_fp, ".SolderMask %d\n", m_LocalSolderMaskMargin );
-
-    if( m_LocalSolderPasteMargin != 0 )
-        fprintf( m_fp, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
-
-    if( m_LocalSolderPasteMarginRatio != 0 )
-        fprintf( m_fp, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
-
-    if( m_LocalClearance != 0 )
-        fprintf( m_fp, ".LocalClearance %d\n", m_LocalClearance );
-
-    if( fprintf( m_fp, "$EndPAD\n" ) != sizeof("$EndPAD\n") - 1 )
-        return false;
-
-    return true;
-}
-
-
-bool MODULE::Save( FILE* m_fp ) const
-{
-    char        statusTxt[8];
-    BOARD_ITEM* item;
-
-    bool rc = false;
-
-    fprintf( m_fp, "$MODULE %s\n", TO_UTF8( m_LibRef ) );
-
-    memset( statusTxt, 0, sizeof(statusTxt) );
-    if( IsLocked() )
-        statusTxt[0] = 'F';
-    else
-        statusTxt[0] = '~';
-
-    if( m_ModuleStatus & MODULE_is_PLACED )
-        statusTxt[1] = 'P';
-    else
-        statusTxt[1] = '~';
-
-    fprintf( m_fp, "Po %d %d %d %d %8.8lX %8.8lX %s\n",
-             m_Pos.x, m_Pos.y,
-             m_Orient, m_Layer, m_LastEdit_Time,
-             m_TimeStamp, statusTxt );
-
-    fprintf( m_fp, "Li %s\n", TO_UTF8( m_LibRef ) );
-
-    if( !m_Doc.IsEmpty() )
-    {
-        fprintf( m_fp, "Cd %s\n", TO_UTF8( m_Doc ) );
-    }
-
-    if( !m_KeyWord.IsEmpty() )
-    {
-        fprintf( m_fp, "Kw %s\n", TO_UTF8( m_KeyWord ) );
-    }
-
-    fprintf( m_fp, "Sc %8.8lX\n", m_TimeStamp );
-    fprintf( m_fp, "AR %s\n", TO_UTF8( m_Path ) );
-    fprintf( m_fp, "Op %X %X 0\n", m_CntRot90, m_CntRot180 );
-
-    if( m_LocalSolderMaskMargin != 0 )
-        fprintf( m_fp, ".SolderMask %d\n", m_LocalSolderMaskMargin );
-
-    if( m_LocalSolderPasteMargin != 0 )
-        fprintf( m_fp, ".SolderPaste %d\n", m_LocalSolderPasteMargin );
-
-    if( m_LocalSolderPasteMarginRatio != 0 )
-        fprintf( m_fp, ".SolderPasteRatio %g\n", m_LocalSolderPasteMarginRatio );
-
-    if( m_LocalClearance != 0 )
-        fprintf( m_fp, ".LocalClearance %d\n", m_LocalClearance );
-
-    // attributes
-    if( m_Attributs != MOD_DEFAULT )
-    {
-        fprintf( m_fp, "At " );
-
-        if( m_Attributs & MOD_CMS )
-            fprintf( m_fp, "SMD " );
-
-        if( m_Attributs & MOD_VIRTUAL )
-            fprintf( m_fp, "VIRTUAL " );
-
-        fprintf( m_fp, "\n" );
-    }
-
-    // save reference
-    if( !m_Reference->Save( m_fp ) )
-        goto out;
-
-    // save value
-    if( !m_Value->Save( m_fp ) )
-        goto out;
-
-    // save drawing elements
-    for( item = m_Drawings;  item;  item = item->Next() )
-    {
-        switch( item->Type() )
-        {
-        case PCB_MODULE_TEXT_T:
-        case PCB_MODULE_EDGE_T:
-            if( !item->Save( m_fp ) )
-                goto out;
-
-            break;
-
-        default:
-#if defined(DEBUG)
-            printf( "MODULE::Save() ignoring type %d\n", item->Type() );
 #endif
-            break;
-        }
-    }
-
-    // save the pads
-    for( item = m_Pads;  item;  item = item->Next() )
-        if( !item->Save( m_fp ) )
-            goto out;
-
-    Write_3D_Descr( m_fp );
-
-    fprintf( m_fp, "$EndMODULE  %s\n", TO_UTF8( m_LibRef ) );
-
-    rc = true;
-out:
-    return rc;
-}
-
-/* Save the description of 3D MODULE
- */
-int MODULE::Write_3D_Descr( FILE* File ) const
-{
-    char buf[512];
-
-    for( S3D_MASTER* t3D = m_3D_Drawings;  t3D;  t3D = t3D->Next() )
-    {
-        if( !t3D->m_Shape3DName.IsEmpty() )
-        {
-            fprintf( File, "$SHAPE3D\n" );
-
-            fprintf( File, "Na %s\n", EscapedUTF8( t3D->m_Shape3DName ).c_str() );
-
-            sprintf( buf, "Sc %lf %lf %lf\n",
-                     t3D->m_MatScale.x,
-                     t3D->m_MatScale.y,
-                     t3D->m_MatScale.z );
-            fprintf( File, "%s", to_point( buf ) );
-
-            sprintf( buf, "Of %lf %lf %lf\n",
-                     t3D->m_MatPosition.x,
-                     t3D->m_MatPosition.y,
-                     t3D->m_MatPosition.z );
-            fprintf( File, "%s", to_point( buf ) );
-
-            sprintf( buf, "Ro %lf %lf %lf\n",
-                     t3D->m_MatRotation.x,
-                     t3D->m_MatRotation.y,
-                     t3D->m_MatRotation.z );
-            fprintf( File, "%s", to_point( buf ) );
-
-            fprintf( File, "$EndSHAPE3D\n" );
-        }
-    }
-
-    return 0;
-}
-
-#endif
-

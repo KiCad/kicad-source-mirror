@@ -668,7 +668,7 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_COMPONENT* aLibComp
     m_SheetPath = aSheetPath;
     m_IsNew     = false;
     m_Flag      = 0;
-    m_TimeStamp = aComponent->m_TimeStamp;
+    m_TimeStamp = aComponent->GetTimeStamp();
     m_CmpPos    = aComponent->GetPosition();
     m_SheetNum  = 0;
 
