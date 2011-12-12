@@ -46,6 +46,9 @@
 #include <boost/foreach.hpp>
 
 
+const SCH_SHEET_PATH BOM_LABEL::emptySheetPath;
+
+
 // Buffer to build the list of items used in netlist and erc calculations
 NETLIST_OBJECT_LIST g_NetObjectslist;
 
