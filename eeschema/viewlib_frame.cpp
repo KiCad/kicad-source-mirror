@@ -231,7 +231,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).Centre() );
 
     // Manage the message panel
-    m_auimgr.AddPane( MsgPanel,
+    m_auimgr.AddPane( m_messagePanel,
                       wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     /* Now the minimum windows are fixed, set library list

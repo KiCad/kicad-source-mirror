@@ -1,6 +1,31 @@
-/**********************/
-/** displayframe.cpp **/
-/**********************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2007-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file class_DisplayFootprintsFrame.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -106,7 +131,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     m_auimgr.AddPane( DrawPanel,
                       wxAuiPaneInfo().Name( wxT( "DisplayFrame" ) ).CentrePane() );
 
-    m_auimgr.AddPane( MsgPanel,
+    m_auimgr.AddPane( m_messagePanel,
                       wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     m_auimgr.AddPane( m_OptionsToolBar,
@@ -133,7 +158,8 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 void DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow( wxCloseEvent& event )
 {
     if( m_Draw3DFrame )
-        m_Draw3DFrame->Close(true);
+        m_Draw3DFrame->Close( true );
+
     SaveSettings();
     Destroy();
 }
@@ -406,6 +432,7 @@ void DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame( wxCommandEvent& event )
         // This should work on any platform.
         if( m_Draw3DFrame->IsIconized() )
              m_Draw3DFrame->Iconize( false );
+
         m_Draw3DFrame->Raise();
 
         // Raising the window does not set the focus on Linux.  This should work on any platform.

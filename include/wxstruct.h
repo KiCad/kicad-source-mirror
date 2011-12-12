@@ -371,12 +371,11 @@ public:
  */
 class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 {
-    int               m_toolId;             ///< Id of active button on the vertical toolbar.
+    ///< Id of active button on the vertical toolbar.
+    int m_toolId;
 
 public:
     EDA_DRAW_PANEL*   DrawPanel;            // Draw area
-    EDA_MSG_PANEL*    MsgPanel;             // Panel used to display some
-                                            //  info (bottom of the screen)
     EDA_TOOLBAR*      m_VToolBar;           // Vertical (right side) Toolbar
     EDA_TOOLBAR*      m_AuxVToolBar;        // Auxiliary Vertical (right side)
                                             // Toolbar
@@ -415,6 +414,9 @@ protected:
     int          m_LastGridSizeId;
     bool         m_DrawGrid;                // hide/Show grid
     int          m_GridColor;               // Grid color
+
+    /// Panel used to display information at the bottom of the main window.
+    EDA_MSG_PANEL* m_messagePanel;
 
 private:
     BASE_SCREEN* m_currentScreen;           ///< current used SCREEN

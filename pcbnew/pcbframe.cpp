@@ -391,8 +391,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
         m_auimgr.AddPane( DrawPanel,
                           wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
-    if( MsgPanel )
-        m_auimgr.AddPane( MsgPanel,
+    if( m_messagePanel )
+        m_auimgr.AddPane( m_messagePanel,
                           wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
     ReFillLayerWidget();        // this is near end because contents establish size

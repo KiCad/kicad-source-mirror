@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2011 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -437,25 +437,25 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     Ncols  += 2; Nrows += 2;
     NbCells = Ncols * Nrows;
 
-    MsgPanel->EraseMsgBox();
+    m_messagePanel->EraseMsgBox();
     msg.Printf( wxT( "%d" ), Ncols );
-    MsgPanel->SetMessage( 1, _( "Cols" ), msg, GREEN );
+    m_messagePanel->SetMessage( 1, _( "Cols" ), msg, GREEN );
     msg.Printf( wxT( "%d" ), Nrows );
-    MsgPanel->SetMessage( 7, _( "Lines" ), msg, GREEN );
+    m_messagePanel->SetMessage( 7, _( "Lines" ), msg, GREEN );
     msg.Printf( wxT( "%d" ), NbCells );
-    MsgPanel->SetMessage( 14, _( "Cells." ), msg, YELLOW );
+    m_messagePanel->SetMessage( 14, _( "Cells." ), msg, YELLOW );
 
     /* Choose the number of board sides. */
     Nb_Sides = TWO_SIDES;
 
-    MsgPanel->SetMessage( 22, wxT( "S" ), ( Nb_Sides == TWO_SIDES ) ? wxT( "2" ) : wxT( "1" ),
-                          WHITE );
+    m_messagePanel->SetMessage( 22, wxT( "S" ),
+                                ( Nb_Sides == TWO_SIDES ) ? wxT( "2" ) : wxT( "1" ), WHITE );
 
     Board.InitBoard();
 
     /* Display memory usage. */
     msg.Printf( wxT( "%d" ), Board.m_MemSize / 1024 );
-    MsgPanel->SetMessage( 24, wxT( "Mem(Kb)" ), msg, CYAN );
+    m_messagePanel->SetMessage( 24, wxT( "Mem(Kb)" ), msg, CYAN );
 
     Route_Layer_BOTTOM = LAYER_N_FRONT;
 
@@ -509,8 +509,8 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     while( ii )
     {
         msg.Printf( wxT( "%d" ), jj++ );
-        MsgPanel->SetMessage(  50, _( "Loop" ), msg, CYAN );
-        ii = Propagation( this );
+        m_messagePanel->SetMessage(  50, _( "Loop" ), msg, CYAN );
+        ii = propagate();
     }
 
     /* Initialize top layer. */
@@ -1157,31 +1157,7 @@ static MODULE* PickModule( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 }
 
 
-/**
- * Function Propagation
- * Used now only in autoplace calculations
- * Uses the routing matrix to fill the cells within the zone
- * Search and mark cells within the zone, and agree with DRC options.
- * Requirements:
- * Start from an initial point, to fill zone
- * The zone must have no "copper island"
- *  Algorithm:
- *  If the current cell has a neighbor flagged as "cell in the zone", it
- *  become a cell in the zone
- *  The first point in the zone is the starting point
- *  4 searches within the matrix are made:
- *          1 - Left to right and top to bottom
- *          2 - Right to left and top to bottom
- *          3 - bottom to top and Right to left
- *          4 - bottom to top and Left to right
- *  Given the current cell, for each search, we consider the 2 neighbor cells
- *  the previous cell on the same line and the previous cell on the same column.
- *
- *  This function can request some iterations
- *  Iterations are made until no cell is added to the zone.
- *  @return: added cells count (i.e. which the attribute CELL_is_ZONE is set)
- */
-int Propagation( PCB_EDIT_FRAME* frame )
+int PCB_EDIT_FRAME::propagate()
 {
     int       row, col;
     long      current_cell, old_cell_H;
@@ -1191,8 +1167,8 @@ int Propagation( PCB_EDIT_FRAME* frame )
 #define NO_CELL_ZONE (HOLE | CELL_is_EDGE | CELL_is_ZONE)
     wxString  msg;
 
-    frame->MsgPanel->SetMessage( 57, wxT( "Detect" ), msg, CYAN );
-    frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "1" ), CYAN );
+    m_messagePanel->SetMessage( 57, wxT( "Detect" ), msg, CYAN );
+    m_messagePanel->SetMessage( -1, wxEmptyString, wxT( "1" ), CYAN );
 
     pt_cell_V.reserve( MAX( Nrows, Ncols ) );
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
@@ -1221,7 +1197,7 @@ int Propagation( PCB_EDIT_FRAME* frame )
     }
 
     // Search from right to left and top to bottom/
-    frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "2" ), CYAN );
+    m_messagePanel->SetMessage( -1, wxEmptyString, wxT( "2" ), CYAN );
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
     for( row = 0; row < Nrows; row++ )
@@ -1247,7 +1223,7 @@ int Propagation( PCB_EDIT_FRAME* frame )
     }
 
     // Search from bottom to top and right to left.
-    frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "3" ), CYAN );
+    m_messagePanel->SetMessage( -1, wxEmptyString, wxT( "3" ), CYAN );
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
     for( col = Ncols - 1; col >= 0; col-- )
@@ -1273,7 +1249,7 @@ int Propagation( PCB_EDIT_FRAME* frame )
     }
 
     // Search from bottom to top and left to right.
-    frame->MsgPanel->SetMessage( -1, wxEmptyString, wxT( "4" ), CYAN );
+    m_messagePanel->SetMessage( -1, wxEmptyString, wxT( "4" ), CYAN );
     fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
 
     for( col = 0; col < Ncols; col++ )

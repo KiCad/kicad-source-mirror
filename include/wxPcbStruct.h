@@ -152,6 +152,32 @@ protected:
      */
     virtual bool isAutoSaveRequired() const;
 
+    /**
+     * Function propagate
+     * Used now only in autoplace calculations
+     * Uses the routing matrix to fill the cells within the zone
+     * Search and mark cells within the zone, and agree with DRC options.
+     * Requirements:
+     * Start from an initial point, to fill zone
+     * The zone must have no "copper island"
+     *  Algorithm:
+     *  If the current cell has a neighbor flagged as "cell in the zone", it
+     *  become a cell in the zone
+     *  The first point in the zone is the starting point
+     *  4 searches within the matrix are made:
+     *          1 - Left to right and top to bottom
+     *          2 - Right to left and top to bottom
+     *          3 - bottom to top and Right to left
+     *          4 - bottom to top and Left to right
+     *  Given the current cell, for each search, we consider the 2 neighbor cells
+     *  the previous cell on the same line and the previous cell on the same column.
+     *
+     *  This function can request some iterations
+     *  Iterations are made until no cell is added to the zone.
+     *  @return: added cells count (i.e. which the attribute CELL_is_ZONE is set)
+     */
+    int propagate();
+
 public:
     LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
     wxComboBox* m_SelTrackWidthBox;     // a combo box to display and select current track width

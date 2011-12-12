@@ -1,10 +1,30 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        dialog_build_BOM.cpp
-// Author:      jean-pierre Charras
-// Modified by:
-// Licence:     GPL
-/////////////////////////////////////////////////////////////////////////////
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2008 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
 
+/**
+ * @file dialog_build_BOM.cpp
+ */
 
 #include "fctsys.h"
 #include "appl_wxstruct.h"
@@ -29,10 +49,10 @@
 #include "protos.h"
 
 
-extern void GenListeGLabels( std::vector <LABEL_OBJECT>& aList );
-extern bool SortLabelsByValue( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
-extern bool SortLabelsBySheet( const LABEL_OBJECT& obj1, const LABEL_OBJECT& obj2 );
-extern int  PrintListeGLabel( FILE* f, std::vector <LABEL_OBJECT>& aList );
+extern void GenListeGLabels( std::vector <BOM_LABEL>& aList );
+extern bool SortLabelsByValue( const BOM_LABEL& obj1, const BOM_LABEL& obj2 );
+extern bool SortLabelsBySheet( const BOM_LABEL& obj1, const BOM_LABEL& obj2 );
+extern int  PrintListeGLabel( FILE* f, std::vector <BOM_LABEL>& aList );
 
 
 /* Local variables */
@@ -503,9 +523,10 @@ void DIALOG_BUILD_BOM::GenereListeOfItems( const wxString& aFullFileName,
     /*************************************************/
     /* Create list of global labels and pins sheets */
     /*************************************************/
-    std::vector <LABEL_OBJECT> listOfLabels;
+    std::vector <BOM_LABEL> listOfLabels;
 
     GenListeGLabels( listOfLabels );
+
     if( ( itemCount = listOfLabels.size() ) > 0 )
     {
         if( m_GenListLabelsbySheet->GetValue() )
@@ -610,10 +631,10 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 
 /* Print the B.O.M sorted by reference
  */
-int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
+int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*               f,
                                                 SCH_REFERENCE_LIST& aList,
-                                                bool                     CompactForm,
-                                                bool                     aIncludeSubComponents )
+                                                bool                CompactForm,
+                                                bool                aIncludeSubComponents )
 {
     wxString        msg;
 
@@ -659,6 +680,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
 
     std::string     CmpName;
     wxString        subRef;
+
 #if defined(KICAD_GOST)
     wxString        strCur;
     wxString        strPred;
@@ -683,6 +705,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
         bool isMulti = false;
 
         LIB_COMPONENT*  entry = CMP_LIBRARY::FindLibraryComponent( comp->GetLibName() );
+
         if( entry )
             isMulti = entry->IsMulti();
 
@@ -748,35 +771,46 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
 #if defined(KICAD_GOST)
         wxString tmpStr = PrintFieldData( comp, CompactForm );
         strCur += tmpStr;
+
         if ( CompactForm )
         {
-          if ( strPred.Len() == 0 )
-            CmpNameFirst = CmpName;
-          else
-          {
-            if ( !strCur.IsSameAs(strPred) )
+            if ( strPred.Len() == 0 )
             {
-              switch (amount)
-              {
-                case 1: fprintf( f, "%s%s%c%d\n", CmpNameFirst.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
-                        break;
-                case 2: fprintf( f, "%s,%s%s%c%d\n",CmpNameFirst.c_str(), CmpNameLast.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
-                        break;
-                default:fprintf( f, "%s..%s%s%c%d\n", CmpNameFirst.c_str(), CmpNameLast.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
-                        break;
-              }
-              CmpNameFirst = CmpName;
-              amount = 0;
+                CmpNameFirst = CmpName;
             }
-          }
-          strPred = strCur;
-          CmpNameLast = CmpName;
-          amount++;
+            else
+            {
+                if ( !strCur.IsSameAs(strPred) )
+                {
+                    switch (amount)
+                    {
+                    case 1:
+                        fprintf( f, "%s%s%c%d\n", CmpNameFirst.c_str(), TO_UTF8( strPred ),
+                                 s_ExportSeparatorSymbol, amount );
+                        break;
+
+                    case 2:
+                        fprintf( f, "%s,%s%s%c%d\n", CmpNameFirst.c_str(), CmpNameLast.c_str(),
+                                 TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
+                        break;
+
+                    default:
+                        fprintf( f, "%s..%s%s%c%d\n", CmpNameFirst.c_str(), CmpNameLast.c_str(),
+                                 TO_UTF8( strPred ), s_ExportSeparatorSymbol, amount );
+                        break;
+                    }
+                    CmpNameFirst = CmpName;
+                    amount = 0;
+                }
+            }
+            strPred = strCur;
+            CmpNameLast = CmpName;
+            amount++;
         }
         else
         {
-          fprintf( f, "%s", TO_UTF8( tmpStr ) );
-          fprintf( f, "\n" );
+            fprintf( f, "%s", TO_UTF8( tmpStr ) );
+            fprintf( f, "\n" );
         }
 #else
         PrintFieldData( f, comp, CompactForm );
@@ -796,12 +830,20 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*                    f,
     {
     	switch (amount)
       	{
-        	case 1: fprintf( f, "%s%s%c%d\n", CmpNameFirst.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
-                break;
-	        case 2: fprintf( f, "%s,%s%s%c%d\n", CmpNameFirst.c_str(), CmpNameLast.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
-                break;
-			default:fprintf( f, "%s..%s%s%c%d\n", CmpNameFirst.c_str(), CmpNameLast.c_str(), TO_UTF8(strPred), s_ExportSeparatorSymbol, amount );
-                break;
+        case 1:
+            fprintf( f, "%s%s%c%d\n", CmpNameFirst.c_str(), TO_UTF8( strPred ),
+                     s_ExportSeparatorSymbol, amount );
+            break;
+
+        case 2:
+            fprintf( f, "%s,%s%s%c%d\n", CmpNameFirst.c_str(), CmpNameLast.c_str(),
+                     TO_UTF8( strPred ), s_ExportSeparatorSymbol, amount );
+            break;
+
+        default:
+            fprintf( f, "%s..%s%s%c%d\n", CmpNameFirst.c_str(), CmpNameLast.c_str(),
+                     TO_UTF8( strPred ), s_ExportSeparatorSymbol, amount );
+            break;
       	}
 	}
 #endif
@@ -862,6 +904,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, SCH_REFERENCE_LIST& aL
 
         refName = aList[ii].GetRef();
         valName = currCmp->GetField( VALUE )->m_Text;
+
 #if defined(KICAD_GOST)
         footName = currCmp->GetField( FOOTPRINT )->m_Text;
         datsName = currCmp->GetField( DATASHEET )->m_Text;
@@ -931,8 +974,10 @@ int DIALOG_BUILD_BOM::PrintComponentsListByPart( FILE* f, SCH_REFERENCE_LIST& aL
         int last_nonempty_field_idx = 0;
 
         for( int jj = FOOTPRINT; jj < dummyCmp.GetFieldCount(); jj++ )
+        {
             if ( !dummyCmp.GetField( jj )->m_Text.IsEmpty() )
                 last_nonempty_field_idx = jj;
+        }
 
         for( int jj = FIELD1; jj <= last_nonempty_field_idx ; jj++ )
         {
@@ -1010,6 +1055,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
         if( aIncludeSubComponents )
         {
             BASE_SCREEN * screen = (BASE_SCREEN*) DrawLibItem->GetParent();
+
             if( screen )
             {
                 msg = aList[ii].GetSheetPath().PathHumanReadable();

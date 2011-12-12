@@ -467,7 +467,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     }
 
     /* Display the file names: */
-    MsgPanel->EraseMsgBox();
+    m_messagePanel->EraseMsgBox();
 
     if( saveok )
     {

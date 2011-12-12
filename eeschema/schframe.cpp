@@ -264,9 +264,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     if( DrawPanel )
         m_auimgr.AddPane( DrawPanel, wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
-    if( MsgPanel )
-        m_auimgr.AddPane( MsgPanel, wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().
-            Layer(10) );
+    if( m_messagePanel )
+        m_auimgr.AddPane( m_messagePanel, wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().
+                          Layer(10) );
 
     m_auimgr.Update();
 

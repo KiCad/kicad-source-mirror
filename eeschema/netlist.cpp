@@ -83,6 +83,14 @@ void dumpNetTable()
 #endif
 
 
+wxString BOM_LABEL::GetText() const
+{
+    const SCH_TEXT* tmp = (SCH_TEXT*) m_label;
+
+    return tmp->GetText();
+}
+
+
 /*
  * Routine to free memory used to calculate the netlist TabNetItems = pointer
  * to the main table (list items)

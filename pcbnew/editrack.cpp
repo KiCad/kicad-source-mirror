@@ -74,7 +74,7 @@ static void Abort_Create_Track( EDA_DRAW_PANEL* Panel, wxDC* DC )
         if( pcb->IsHighLightNetON() )
             pcb->DrawHighLight( Panel, DC, pcb->GetHighLightNetCode() );
 
-        frame->MsgPanel->EraseMsgBox();
+        frame->ClearMsgPanel();
 
         // Undo pending changes (mainly a lock point creation) and clear the
         // undo picker list:

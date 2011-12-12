@@ -97,7 +97,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_HotkeysZoomAndGridList = NULL;
 
     DrawPanel             = NULL;
-    MsgPanel              = NULL;
+    m_messagePanel        = NULL;
     m_currentScreen       = NULL;
     m_toolId              = ID_NO_TOOL_SELECTED;
     m_ID_last_state       = ID_NO_TOOL_SELECTED;
@@ -148,12 +148,12 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_FrameSize.y -= m_MsgFrameHeight;
 
     DrawPanel = new EDA_DRAW_PANEL( this, -1, wxPoint( 0, 0 ), m_FrameSize );
-    MsgPanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_FrameSize.y ),
-                                   wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
+    m_messagePanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_FrameSize.y ),
+                                         wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
 
-    MsgPanel->SetBackgroundColour( wxColour( ColorRefs[LIGHTGRAY].m_Red,
-                                             ColorRefs[LIGHTGRAY].m_Green,
-                                             ColorRefs[LIGHTGRAY].m_Blue ) );
+    m_messagePanel->SetBackgroundColour( wxColour( ColorRefs[LIGHTGRAY].m_Red,
+                                                   ColorRefs[LIGHTGRAY].m_Green,
+                                                   ColorRefs[LIGHTGRAY].m_Blue ) );
 }
 
 
@@ -178,8 +178,8 @@ void EDA_DRAW_FRAME::unitsChangeRefresh()
 
 void EDA_DRAW_FRAME::EraseMsgBox()
 {
-    if( MsgPanel )
-        MsgPanel->EraseMsgBox();
+    if( m_messagePanel )
+        m_messagePanel->EraseMsgBox();
 }
 
 
@@ -872,19 +872,19 @@ void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper,
                                      const wxString& textLower,
                                      int color, int pad )
 {
-    if( MsgPanel == NULL )
+    if( m_messagePanel == NULL )
         return;
 
-    MsgPanel->AppendMessage( textUpper, textLower, color, pad );
+    m_messagePanel->AppendMessage( textUpper, textLower, color, pad );
 }
 
 
 void EDA_DRAW_FRAME::ClearMsgPanel( void )
 {
-    if( MsgPanel == NULL )
+    if( m_messagePanel == NULL )
         return;
 
-    MsgPanel->EraseMsgBox();
+    m_messagePanel->EraseMsgBox();
 }
 
 
