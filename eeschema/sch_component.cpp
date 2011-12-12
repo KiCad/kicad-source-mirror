@@ -510,7 +510,7 @@ void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
     }
     else
     {
-        prefix = wxT("U");        // Set to default ref prefix
+        prefix = wxT( "U" );        // Set to default ref prefix
     }
 
     if( m_prefix != prefix )
@@ -524,7 +524,7 @@ void SCH_COMPONENT::SetTimeStamp( long aNewTimeStamp )
 
     string_timestamp.Printf( wxT( "%8.8X" ), aNewTimeStamp );
     string_oldtimestamp.Printf( wxT( "%8.8X" ), m_TimeStamp );
-    SetTimeStamp( aNewTimeStamp );
+    EDA_ITEM::SetTimeStamp( aNewTimeStamp );
 
     for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
     {
