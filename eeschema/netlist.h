@@ -485,11 +485,11 @@ class BOM_LABEL
     // have to store it here since the object references will be duplicated.
     SCH_SHEET_PATH m_sheetPath;  //composed of UIDs
 
-    static SCH_SHEET_PATH emptySheetPath;
+    static const SCH_SHEET_PATH emptySheetPath;
 
 public:
     BOM_LABEL( KICAD_T aType = TYPE_NOT_INIT, SCH_ITEM* aLabel = NULL,
-                  const SCH_SHEET_PATH& aSheetPath = emptySheetPath )
+               const SCH_SHEET_PATH& aSheetPath = emptySheetPath )
         : m_type( aType )
         , m_label( aLabel )
         , m_sheetPath( aSheetPath )
