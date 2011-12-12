@@ -53,7 +53,7 @@ SCH_SHEET::SCH_SHEET( const wxPoint& pos ) :
     m_Layer = LAYER_SHEET;
     m_pos = pos;
     m_size = wxSize( MIN_SHEET_WIDTH, MIN_SHEET_HEIGHT );
-    m_TimeStamp = GetNewTimeStamp();
+    SetTimeStamp( GetNewTimeStamp() );
     m_sheetNameSize = m_fileNameSize = 60;
     m_screen = NULL;
     m_name.Printf( wxT( "Sheet%8.8lX" ), m_TimeStamp );
@@ -67,7 +67,7 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
     m_pos = aSheet.m_pos;
     m_size = aSheet.m_size;
     m_Layer = aSheet.m_Layer;
-    m_TimeStamp = aSheet.m_TimeStamp;
+    SetTimeStamp( aSheet.m_TimeStamp );
     m_sheetNameSize = aSheet.m_sheetNameSize;
     m_fileNameSize = aSheet.m_fileNameSize;
     m_screen = aSheet.m_screen;
@@ -184,7 +184,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
     SCH_SHEET_PIN*   sheetPin;
     char*            ptcar;
 
-    m_TimeStamp = GetNewTimeStamp();
+    SetTimeStamp( GetNewTimeStamp() );
 
     // sheets are added to the GetDrawItems() like other schematic components.
     // however, in order to preserve the hierarchy (through m_Parent pointers),
@@ -224,7 +224,7 @@ bool SCH_SHEET::Load( LINE_READER& aLine, wxString& aErrorMsg )
         {
             sscanf( ((char*)aLine) + 1, "%lX", &m_TimeStamp );
             if( m_TimeStamp == 0 )  // zero is not unique!
-                m_TimeStamp = GetNewTimeStamp();
+                SetTimeStamp( GetNewTimeStamp() );
             continue;
         }
 

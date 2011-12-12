@@ -23,20 +23,20 @@ class D_PAD;
 class BOARD;
 
 
-enum Mod_Attribut       /* Attributes used for modules */
+/**
+ * Enum MODULE_ATTR_T
+ * is the set of attributes allowed within a MODULE, using MODULE::SetAttributes()
+ * and MODULE::GetAttributes().  These are to be ORed together when calling
+ * MODULE::SetAttrbute()
+ */
+enum MODULE_ATTR_T
 {
-    MOD_DEFAULT = 0,    /* Type default */
-    MOD_CMS = 1,        /* Set for modules listed in the automatic insertion list
-                         *  (usually SMD footprints) */
-    MOD_VIRTUAL = 2     /* Virtual component: when created by copper shapes on
-                         * board (Like edge card connectors, mounting hole...) */
+    MOD_DEFAULT = 0,    ///< default
+    MOD_CMS = 1,        ///< Set for modules listed in the automatic insertion list
+                        ///< (usually SMD footprints)
+    MOD_VIRTUAL = 2     ///< Virtual component: when created by copper shapes on
+                        ///<  board (Like edge card connectors, mounting hole...)
 };
-
-
-/* flags for autoplace and autoroute (.m_ModuleStatus member) */
-#define MODULE_is_LOCKED 0x01  /* module LOCKED: no autoplace allowed */
-#define MODULE_is_PLACED 0x02  /* In autoplace: module automatically placed */
-#define MODULE_to_PLACE  0x04  /* In autoplace: module waiting for autoplace */
 
 
 class MODULE : public BOARD_ITEM
@@ -53,22 +53,33 @@ public:
     wxString          m_LibRef;        /* Name of the module in library (and
                                         * the default value when loading a
                                         * module from the library) */
+
     wxString          m_AlternateReference;  /* Used when m_Reference cannot
                                               * be used to identify the
                                               * footprint ( after a full
                                               * reannotation of the schematic */
 
-    int           m_Attributs;          /* Flag bits ( see Mod_Attribut ) */
+    int           m_Attributs;          ///< Flag bits ( see Mod_Attribut )
     int           flag;                 /* Use to trace ratsnest and auto routing. */
-    int           m_ModuleStatus;       /* For autoplace: flags (LOCKED, AUTOPLACED) */
+
+    int           m_ModuleStatus;       ///< For autoplace: flags (LOCKED, AUTOPLACED)
+
+// m_ModuleStatus bits:
+#define MODULE_is_LOCKED    0x01        ///< module LOCKED: no autoplace allowed
+#define MODULE_is_PLACED    0x02        ///< In autoplace: module automatically placed
+#define MODULE_to_PLACE     0x04        ///< In autoplace: module waiting for autoplace
+
+
     EDA_RECT      m_BoundaryBox;        // Bounding box : coordinates on board, real orientation.
     int           m_PadNum;             // Pad count
     int           m_AltPadNum;          /* Pad with netcode > 0 (active pads) count */
 
-    int           m_CntRot90;           /* Automatic placement : cost ( 0..10 )
-                                         * for 90 degrees rotation (Horiz<->Vertical) */
-    int           m_CntRot180;          /* Automatic placement : cost ( 0..10 )
-                                         * for 180 degrees rotation (UP <->Down) */
+    int           m_CntRot90;           ///< Automatic placement : cost ( 0..10 )
+                                        ///< for 90 degrees rotation (Horiz<->Vertical)
+
+    int           m_CntRot180;          ///< Automatic placement : cost ( 0..10 )
+                                        ///< for 180 degrees rotation (UP <->Down)
+
     wxSize        m_Ext;                /* Automatic placement margin around the module */
     double        m_Surface;            // Bounding box area
 
@@ -79,16 +90,16 @@ public:
     wxString      m_Doc;                // Module Description (info for users)
     wxString      m_KeyWord;            // Keywords to select the module in lib
 
-    // Local clearance. When null, the netclasses values are used. Usually
-    // the local clearance is null
+    // Local tolerances. When zero, this means the corresponding netclass value
+    // is used. Usually theses local tolerances zero, in deference to the
+    // corresponding netclass values.
     int           m_LocalClearance;
+    int           m_LocalSolderMaskMargin;         ///< Solder mask margin
+    int           m_LocalSolderPasteMargin;        ///< Solder paste margin
+                                                   ///< absolute value
 
-    // Local mask margins: when NULL, the global design values are used
-    int           m_LocalSolderMaskMargin;         // Solder mask margin
-    int           m_LocalSolderPasteMargin;        /* Solder paste margin
-                                                    * absolute value */
-    double        m_LocalSolderPasteMarginRatio;   /* Solder mask margin ratio
-                                                    * value of pad size */
+    double        m_LocalSolderPasteMarginRatio;   ///< Solder mask margin ratio
+                                                   ///< value of pad size
     // The final margin is the sum of these 2 values
 
 public:
@@ -139,8 +150,34 @@ public:
     void SetPosition( const wxPoint& aPos );  // overload
 
     void SetOrientation( int newangle );
-
     int GetOrientation() const { return m_Orient; }
+
+    const wxString& GetLibRef() const { return m_LibRef; }
+    void SetLibRef( const wxString& aLibRef ) { m_LibRef = aLibRef; }
+
+    const wxString& GetDescription() const { return m_Doc; }
+    void SetDescription( const wxString& aDoc ) { m_Doc = aDoc; }
+
+    const wxString& GetKeywords() const { return m_KeyWord; }
+    void SetKeywords( const wxString& aKeywords ) { m_KeyWord = aKeywords; }
+
+    const wxString& GetPath() const { return m_Path; }
+    void SetPath( const wxString& aPath ) { m_Path = aPath; }
+
+    int GetLocalSolderMaskMargin() const { return m_LocalSolderMaskMargin; }
+    void SetLocalSolderMaskMargin( int aMargin ) { m_LocalSolderMaskMargin = aMargin; }
+
+    int GetLocalClearance() const { return m_LocalClearance; }
+    void SetLocalClearance( int aClearance ) { m_LocalClearance = aClearance; }
+
+    int GetLocalSolderPasteMargin() const { return m_LocalSolderPasteMargin; }
+    void SetLocalSolderPasteMargin( int aMargin ) { m_LocalSolderPasteMargin = aMargin; }
+
+    double GetLocalSolderPasteMarginRatio() const { return m_LocalSolderPasteMarginRatio; }
+    void SetLocalSolderPasteMarginRatio( double aRatio ) { m_LocalSolderPasteMarginRatio = aRatio; }
+
+    int GetAttributes() const { return m_Attributs; }
+    void SetAttributes( int aAttributes ) { m_Attributs = aAttributes; }
 
     /**
      * Function Move
@@ -177,11 +214,11 @@ public:
     /**
      * Function SetLocked
      * sets the MODULE_is_LOCKED bit in the m_ModuleStatus
-     * @param setLocked When true means turn on locked status, else unlock
+     * @param isLocked When true means turn on locked status, else unlock
      */
-    void SetLocked( bool setLocked )
+    void SetLocked( bool isLocked )
     {
-        if( setLocked )
+        if( isLocked )
             m_ModuleStatus |= MODULE_is_LOCKED;
         else
             m_ModuleStatus &= ~MODULE_is_LOCKED;
@@ -197,6 +234,7 @@ public:
     }
 
     void SetLastEditTime( long aTime ) { m_LastEdit_Time = aTime; }
+    long GetLastEditTime() const { return m_LastEdit_Time; }
 
     /* Reading and writing data on files */
 
@@ -340,7 +378,7 @@ public:
 
     virtual BITMAP_DEF GetMenuImage() const { return  module_xpm; }
 
- #if defined(DEBUG)
+#if defined(DEBUG)
 
     /**
      * Function Show

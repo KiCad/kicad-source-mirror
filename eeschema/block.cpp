@@ -554,7 +554,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
         // Clear annotation and init new time stamp for the new components:
         if( Struct->Type() == SCH_COMPONENT_T )
         {
-            ( (SCH_COMPONENT*) Struct )->m_TimeStamp = GetNewTimeStamp();
+            ( (SCH_COMPONENT*) Struct )->SetTimeStamp( GetNewTimeStamp() );
             ( (SCH_COMPONENT*) Struct )->ClearAnnotation( NULL );
         }
 

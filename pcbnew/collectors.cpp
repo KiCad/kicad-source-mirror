@@ -270,7 +270,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
     case PCB_MODULE_TEXT_T:
         module = (MODULE*) item->GetParent();
 
-        if( m_Guide->IgnoreMTextsMarkedNoShow() && ( (TEXTE_MODULE*) item )->m_NoShow )
+        if( m_Guide->IgnoreMTextsMarkedNoShow() && !( (TEXTE_MODULE*) item )->IsVisible() )
             goto exit;
 
         if( module )

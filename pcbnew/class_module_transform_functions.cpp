@@ -150,7 +150,7 @@ void MODULE::Rotate(const wxPoint& aRotCentre, int aAngle)
     wxPoint newpos = m_Pos;
     RotatePoint( &newpos, aRotCentre, aAngle );
     SetPosition( newpos );
-    SetOrientation( m_Orient + aAngle );
+    SetOrientation( GetOrientation() + aAngle );
 }
 
 

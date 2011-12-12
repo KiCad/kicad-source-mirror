@@ -307,7 +307,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                                  HK_EDIT_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_TEXTMODULE, msg, KiBitmap( edit_text_xpm ) );
 
-            if( ( (TEXTE_MODULE*) item )->m_Type == TEXT_is_DIVERS )
+            if( ( (TEXTE_MODULE*) item )->GetType() == TEXT_is_DIVERS )
             {
                 msg = AddHotkeyName( _("Delete Text Mod." ), g_Module_Editor_Hokeys_Descr,
                                      HK_DELETE );

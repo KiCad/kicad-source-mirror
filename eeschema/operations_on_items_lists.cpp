@@ -207,13 +207,13 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
             case SCH_SHEET_T:
             {
                 SCH_SHEET* sheet = (SCH_SHEET*) newitem;
-                sheet->m_TimeStamp = GetNewTimeStamp();
+                sheet->SetTimeStamp( GetNewTimeStamp() );
                 sheet->SetSon( NULL );
                 break;
             }
 
             case SCH_COMPONENT_T:
-                ( (SCH_COMPONENT*) newitem )->m_TimeStamp = GetNewTimeStamp();
+                ( (SCH_COMPONENT*) newitem )->SetTimeStamp( GetNewTimeStamp() );
                 ( (SCH_COMPONENT*) newitem )->ClearAnnotation( NULL );
                 break;
             }
@@ -246,7 +246,7 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
     SCH_ITEM* NewDrawStruct = aDrawStruct->Clone();
 
     if( aClone )
-        NewDrawStruct->m_TimeStamp = aDrawStruct->m_TimeStamp;
+        NewDrawStruct->SetTimeStamp( aDrawStruct->GetTimeStamp() );
 
     NewDrawStruct->m_Image = aDrawStruct;
 

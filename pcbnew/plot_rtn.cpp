@@ -145,7 +145,7 @@ module\n %s's \"reference\" text." ),
         if( ( ( 1 << textLayer ) & aLayerMask ) == 0 )
             trace_ref = false;
 
-        if( text->m_NoShow && !g_PcbPlotOptions.m_PlotInvisibleTexts )
+        if( !text->IsVisible() && !g_PcbPlotOptions.m_PlotInvisibleTexts )
             trace_ref = false;
 
         text = Module->m_Value;
@@ -165,7 +165,7 @@ module\n %s's \"value\" text." ),
         if( ( (1 << textLayer) & aLayerMask ) == 0 )
             trace_val = false;
 
-        if( text->m_NoShow && !g_PcbPlotOptions.m_PlotInvisibleTexts )
+        if( !text->IsVisible() && !g_PcbPlotOptions.m_PlotInvisibleTexts )
             trace_val = false;
 
         /* Plot text fields, if allowed */
@@ -185,7 +185,7 @@ module\n %s's \"value\" text." ),
             if( !g_PcbPlotOptions.m_PlotTextOther )
                 continue;
 
-            if( (pt_texte->m_NoShow) && !g_PcbPlotOptions.m_PlotInvisibleTexts )
+            if( !pt_texte->IsVisible() && !g_PcbPlotOptions.m_PlotInvisibleTexts )
                 continue;
 
             textLayer = pt_texte->GetLayer();

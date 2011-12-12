@@ -815,7 +815,7 @@ void ZONE_CONTAINER::Copy( ZONE_CONTAINER* src )
     m_Parent = src->m_Parent;
     m_Layer  = src->m_Layer;
     SetNet( src->GetNet() );
-    m_TimeStamp = src->m_TimeStamp;
+    SetTimeStamp( src->m_TimeStamp );
     m_Poly->RemoveAllContours();
     m_Poly->Copy( src->m_Poly );                // copy outlines
     m_CornerSelection  = -1;                    // For corner moving, corner index to drag, or -1 if no selection

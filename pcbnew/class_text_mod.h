@@ -27,14 +27,19 @@ class MODULE;
 
 class TEXTE_MODULE : public BOARD_ITEM, public EDA_TEXT
 {
-/* Note: orientation in 1/10 deg relative to the footprint
- * Physical orient is m_Orient + m_Parent->m_Orient
- */
-public:
-    wxPoint m_Pos0;         // text coordinates relatives to the footprint anchor, orient 0
-                            // Text coordinate ref point is the text centre
-    char    m_Type;         // 0: ref,1: val, others = 2..255
-    bool    m_NoShow;       // true = invisible
+    // @todo eliminate these friends, make them use accessors
+    friend class MODULE;
+    friend class FOOTPRINT_EDIT_FRAME;
+
+    /* Note: orientation in 1/10 deg relative to the footprint
+     * Physical orient is m_Orient + m_Parent->m_Orient
+     */
+
+    int     m_Type;         ///< 0=ref, 1=val, etc.
+    bool    m_NoShow;       ///< true = invisible
+
+    wxPoint m_Pos0;         ///< text coordinates relatives to the footprint anchor, orient 0.
+                            ///< text coordinate ref point is the text centre
 
 public:
     TEXTE_MODULE( MODULE* parent, int text_type = TEXT_is_DIVERS );
@@ -45,6 +50,11 @@ public:
 
     TEXTE_MODULE* Back() const { return (TEXTE_MODULE*) Pback; }
 
+    void SetPosition( const wxPoint& aPos ) // overload a base
+    {
+        m_Pos = aPos;       // in EDA_TEXT
+    }
+
     const wxPoint GetPosition() const       // overload a base
     {
         return m_Pos;       // from EDA_TEXT
@@ -52,16 +62,13 @@ public:
 
     /// @deprecated it seems
     void SetType( int aType )   { m_Type = aType; }
-
-    void SetPosition( const wxPoint& aPos ) // overload a base
-    {
-        m_Pos = aPos;       // in EDA_TEXT
-    }
+    int GetType() const { return m_Type; }
 
     void SetVisible( bool isVisible )   { m_NoShow = !isVisible; }
     bool IsVisible() const { return !m_NoShow; }
 
     void SetPos0( const wxPoint& aPos )  { m_Pos0 = aPos; }
+    const wxPoint& GetPos0() const { return m_Pos0; }
 
     void Copy( TEXTE_MODULE* source ); // copy structure
 

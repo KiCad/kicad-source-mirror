@@ -408,7 +408,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
         module->m_Pads.PushFront( NewPad );
     }
 
-    for( BOARD_ITEM* item = module->m_Drawings;  item; item = item->Next() )
+    for( BOARD_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
     {
         if( item->m_Selected == 0 )
             continue;
@@ -473,16 +473,21 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            ( (TEXTE_MODULE*) item )->m_Pos += offset;
-            ( (TEXTE_MODULE*) item )->m_Pos0 += offset;
+            {
+                TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
+                tm->m_Pos += offset;
+                tm->SetPos0( tm->GetPos0() + offset );
+            }
             break;
 
         case PCB_MODULE_EDGE_T:
-            ( (EDGE_MODULE*) item )->m_Start += offset;
-            ( (EDGE_MODULE*) item )->m_End += offset;
-
-            ( (EDGE_MODULE*) item )->m_Start0 += offset;
-            ( (EDGE_MODULE*) item )->m_End0 += offset;
+            {
+                EDGE_MODULE* em = (EDGE_MODULE*) item;
+                em->m_Start  += offset;
+                em->m_End    += offset;
+                em->m_Start0 += offset;
+                em->m_End0   += offset;
+            }
             break;
 
         default:
@@ -571,20 +576,25 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-            EDGE_MODULE * edge;
-            edge = (EDGE_MODULE*) item;
-            SETMIRROR( edge->m_Start.x );
-            edge->m_Start0.x = edge->m_Start.x;
-            SETMIRROR( edge->m_End.x );
-            edge->m_End0.x = edge->m_End.x;
-            NEGATE( edge->m_Angle );
+            {
+                EDGE_MODULE* em = (EDGE_MODULE*) item;
+                SETMIRROR( em->m_Start.x );
+                em->m_Start0.x = em->m_Start.x;
+                SETMIRROR( em->m_End.x );
+                em->m_End0.x = em->m_End.x;
+                NEGATE( em->m_Angle );
+            }
             break;
 
         case PCB_MODULE_TEXT_T:
-            tmp = ( (TEXTE_MODULE*) item )->GetPosition();
-            SETMIRROR( tmp.x );
-            ( (TEXTE_MODULE*) item )->SetPosition( tmp );
-            ( (TEXTE_MODULE*) item )->m_Pos0.x = ( (TEXTE_MODULE*) item )->GetPosition().x;
+            {
+                TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
+                tmp = tm->GetPosition();
+                SETMIRROR( tmp.x );
+                tm->SetPosition( tmp );
+                tmp.y = tm->GetPos0().y;
+                tm->SetPos0( tmp );
+            }
             break;
 
         default:
@@ -633,20 +643,24 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-            ROTATE( ( (EDGE_MODULE*) item )->m_Start );
-            ( (EDGE_MODULE*) item )->m_Start0 = ( (EDGE_MODULE*) item )->m_Start;
-            ROTATE( ( (EDGE_MODULE*) item )->m_End );
-            ( (EDGE_MODULE*) item )->m_End0 = ( (EDGE_MODULE*) item )->m_End;
+            {
+                EDGE_MODULE* em = (EDGE_MODULE*) item;
+                ROTATE( em->m_Start );
+                em->m_Start0 = em->m_Start;
+                ROTATE( em->m_End );
+                em->m_End0 = em->m_End;
+            }
             break;
 
         case PCB_MODULE_TEXT_T:
             {
-                wxPoint pos = ( (TEXTE_MODULE*) item )->GetPosition();
+                TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
+                wxPoint pos = tm->GetPosition();
                 ROTATE( pos );
-                ( (TEXTE_MODULE*) item )->SetPosition( pos );
+                tm->SetPosition( pos );
+                tm->SetPos0( tm->GetPosition() );
+                tm->SetOrientation( tm->GetOrientation() + 900 );
             }
-            ( (TEXTE_MODULE*) item )->m_Pos0 = ( (TEXTE_MODULE*) item )->GetPosition();
-            ( (TEXTE_MODULE*) item )->m_Orient += 900;
             break;
 
         default:

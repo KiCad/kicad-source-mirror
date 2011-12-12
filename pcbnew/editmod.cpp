@@ -102,7 +102,7 @@ void FOOTPRINT_EDIT_FRAME::Place_Ancre( MODULE* pt_mod )
         case PCB_MODULE_TEXT_T:
                 #undef STRUCT
                 #define STRUCT ( (TEXTE_MODULE*) PtStruct )
-            STRUCT->m_Pos0 += moveVector;
+            STRUCT->SetPos0( STRUCT->GetPos0() + moveVector );
             break;
 
         default:
@@ -129,13 +129,13 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
     {
         TEXTE_MODULE* text = (TEXTE_MODULE*) Item;
 
-        if( text->m_Type == TEXT_is_REFERENCE )
+        if( text->GetType() == TEXT_is_REFERENCE )
         {
             DisplayError( this, _( "Text is REFERENCE!" ) );
             break;
         }
 
-        if( text->m_Type == TEXT_is_VALUE )
+        if( text->GetType() == TEXT_is_VALUE )
         {
             DisplayError( this, _( "Text is VALUE!" ) );
             break;
