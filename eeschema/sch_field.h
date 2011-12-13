@@ -202,6 +202,14 @@ public:
     virtual bool Matches( wxFindReplaceData& aSearchData,
                           void* aAuxData, wxPoint* aFindLocation );
 
+    /**
+     * @copydoc EDA_ITEM::Replace(wxFindReplaceData&)
+     */
+    virtual bool Replace( wxFindReplaceData& aSearchData )
+    {
+        return EDA_ITEM::Replace( aSearchData, m_Text );
+    }
+
     virtual wxString GetSelectMenuText() const;
 
     virtual BITMAP_DEF GetMenuImage() const;

@@ -374,6 +374,9 @@ protected:
     EDA_ITEM*     m_Son;          /* Linked list: Link (son struct) */
     unsigned long m_TimeStamp;    ///< Time stamp used for logical links
 
+    /// Set to true to override the visibility setting of the item.
+    bool          m_forceVisible;
+
 public:
     int           m_Flags;        // flags for editing and other uses.
 
@@ -466,6 +469,16 @@ public:
     int GetFlags() const { return m_Flags; }
 
     /**
+     * Function SetForceVisible
+     * is used to set and cleag force visible flag used to force the item to be drawn
+     * even if it's draw attribute is set to not visible.
+     *
+     * @param aEnable True forces the item to be drawn.  False uses the item's visibility
+     *                setting to determine if the item is to be drawn.
+     */
+    void SetForceVisible( bool aEnable ) { m_forceVisible = aEnable; }
+
+    /**
      * Function DisplayInfo
      * has knowledge about the frame and how and where to put status
      * information about this object into the frame's message panel.
@@ -546,7 +559,7 @@ public:
      *                 but it may also be used to collect output.
      * @param scanTypes A KICAD_T array that is EOT terminated, and provides both
      *                  the order and interest level of of the types of objects to
-     *                   be iterated over.
+     *                  be iterated over.
      * @return SEARCH_RESULT SEARCH_QUIT if the called INSPECTOR returned
      *                       SEARCH_QUIT, else SCAN_CONTINUE;
      */
@@ -614,9 +627,8 @@ public:
      * @param aAuxData A pointer to optional data required for the search or NULL
      *                 if not used.
      * @param aFindLocation A pointer to a wxPoint object to store the location of
-     *                      matched item.  The pointer can be NULL is not used.
-     * @return True if this schematic text item matches the search criteria in
-     *         \a aSearchData.
+     *                      matched item.  The pointer can be NULL if it is not used.
+     * @return True if the item's text matches the search criteria in \a aSearchData.
      */
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
     {
@@ -632,6 +644,32 @@ public:
      * @return True if \a aText matches the search criteria in \a aSearchData.
      */
     bool Matches( const wxString& aText, wxFindReplaceData& aSearchData );
+
+    /**
+     * Function Replace
+     * performs a text replace on \a aText using the find and replace criteria in
+     * \a aSearchData on items that support text find and replace.
+     *
+     * @param aSearchData A reference to a wxFindReplaceData object containing the
+     *                    search and replace criteria.
+     * @param aText A reference to a wxString object containing the text to be
+     *              replaced.
+     * @return True if \a aText was modified, otherwise false.
+     */
+    bool Replace( wxFindReplaceData& aSearchData, wxString& aText );
+
+    /**
+     * Function Replace
+     * performs a text replace using the find and replace criteria in \a aSearchData
+     * on items that support text find and replace.
+     *
+     * This function must be overridden for items that support text replace.
+     *
+     * @param aSearchData A reference to a wxFindReplaceData object containing the
+     *                    search and replace criteria.
+     * @return True if the item text was modified, otherwise false.
+     */
+    virtual bool Replace( wxFindReplaceData& aSearchData ) { return false; }
 
     /**
      * Function IsReplaceable

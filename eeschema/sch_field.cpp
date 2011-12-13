@@ -147,13 +147,12 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     // Clip pen size for small texts:
     LineWidth = Clamp_Text_PenSize( LineWidth, m_Size, m_Bold );
 
-    if( ( m_Attributs & TEXT_NO_VISIBLE ) || IsVoid() )
+    if( ((m_Attributs & TEXT_NO_VISIBLE) && !m_forceVisible) || IsVoid() )
         return;
 
     GRSetDrawMode( DC, DrawMode );
 
-    /* Calculate the text orientation, according to the component
-     * orientation/mirror */
+    // Calculate the text orientation according to the component orientation.
     orient = m_Orient;
 
     if( parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
@@ -178,12 +177,19 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     EDA_RECT boundaryBox = GetBoundingBox();
     textpos = boundaryBox.Centre();
 
-    if( m_id == REFERENCE )
-        color = ReturnLayerColor( LAYER_REFERENCEPART );
-    else if( m_id == VALUE )
-        color = ReturnLayerColor( LAYER_VALUEPART );
+    if( m_forceVisible )
+    {
+        color = DARKGRAY;
+    }
     else
-        color = ReturnLayerColor( LAYER_FIELDS );
+    {
+        if( m_id == REFERENCE )
+            color = ReturnLayerColor( LAYER_REFERENCEPART );
+        else if( m_id == VALUE )
+            color = ReturnLayerColor( LAYER_VALUEPART );
+        else
+            color = ReturnLayerColor( LAYER_FIELDS );
+    }
 
     DrawGraphicText( panel, DC, textpos, color, GetText(), orient, m_Size,
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
@@ -361,7 +367,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
     if( (m_id > VALUE) && !(aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS) )
         return false;
 
-    wxLogTrace( traceFindReplace, wxT( "    child item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText() );
 
     // Take sheet path into account which effects the reference field and the unit for
     // components with multiple parts.

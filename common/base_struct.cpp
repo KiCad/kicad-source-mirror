@@ -194,6 +194,16 @@ bool EDA_ITEM::Matches( const wxString& aText, wxFindReplaceData& aSearchData )
 }
 
 
+bool EDA_ITEM::Replace( wxFindReplaceData& aSearchData, wxString& aText )
+{
+    wxCHECK_MSG( IsReplaceable(), false,
+                 wxT( "Attempt to replace text in <" ) + GetClass() + wxT( "> item." ) );
+
+    return aText.Replace( aSearchData.GetFindString(),
+                          aSearchData.GetReplaceString(), false ) != 0;
+}
+
+
 bool EDA_ITEM::operator<( const EDA_ITEM& aItem ) const
 {
     wxFAIL_MSG( wxString::Format( wxT( "Less than operator not defined for item type %s." ),

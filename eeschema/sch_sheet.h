@@ -208,6 +208,19 @@ public:
      */
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
+    /**
+     * @copydoc EDA_ITEM::Replace(wxFindReplaceData&)
+     */
+    virtual bool Replace( wxFindReplaceData& aSearchData )
+    {
+        return EDA_ITEM::Replace( aSearchData, m_Text );
+    }
+
+    /**
+     * @copydoc EDA_ITEM::IsReplaceable()
+     */
+    virtual bool IsReplaceable() const { return true; }
+
     virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList );
 
     virtual bool IsConnectable() const { return true; }
@@ -569,6 +582,16 @@ public:
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 
     /**
+     * @copydoc EDA_ITEM::Replace(wxFindReplaceData&)
+     */
+    virtual bool Replace( wxFindReplaceData& aSearchData );
+
+    /**
+     * @copydoc EDA_ITEM::IsReplaceable()
+     */
+    virtual bool IsReplaceable() const { return true; }
+
+    /**
      * Resize this sheet to aSize and adjust all of the labels accordingly.
      *
      * @param aSize - The new size for this sheet.
@@ -608,11 +631,6 @@ public:
 
     virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
                                  SCH_SHEET_PATH*          aSheetPath );
-
-    /**
-     * @copydoc EDA_ITEM::IsReplaceable()
-     */
-    virtual bool IsReplaceable() const { return true; }
 
 #if defined(DEBUG)
 

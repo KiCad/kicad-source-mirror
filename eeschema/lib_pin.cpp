@@ -2138,13 +2138,15 @@ wxString LIB_PIN::GetSelectMenuText() const
 
 bool LIB_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
 {
-    wxLogTrace( traceFindReplace, wxT( "  item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText() );
 
+    // Note: this will have to be modified if we add find and replace capability to the
+    // compoment library editor.  Otherwise, you wont be able to replace pin text.
     if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_PINS )
-        && !( aSearchData.GetFlags() & FR_SEARCH_REPLACE ) )
+        || ( aSearchData.GetFlags() & FR_SEARCH_REPLACE ) )
         return false;
 
-    wxLogTrace( traceFindReplace, wxT( "    child item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText() );
 
     if( EDA_ITEM::Matches( GetName(), aSearchData )
         || EDA_ITEM::Matches( GetNumberString(), aSearchData ) )

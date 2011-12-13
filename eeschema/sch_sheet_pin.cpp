@@ -399,7 +399,7 @@ bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData,
     wxCHECK_MSG( GetParent() != NULL, false,
                  wxT( "Sheet pin " ) + m_Text + wxT( " does not have a parent sheet!" ) );
 
-    wxLogTrace( traceFindReplace, wxT( "    child item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText() );
 
     if( SCH_ITEM::Matches( m_Text, aSearchData ) )
     {

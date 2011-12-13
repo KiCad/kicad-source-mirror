@@ -17,6 +17,8 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData,
     if( aStyle & wxFR_REPLACEDIALOG )
     {
         SetTitle( _( "Find and Replace" ) );
+        m_buttonReplace->Show( true );
+        m_buttonReplaceAll->Show( true );
         m_staticReplace->Show( true );
         m_comboReplace->Show( true );
         m_checkWildcardMatch->Show( false );  // Wildcard replace is not implemented.
@@ -60,7 +62,7 @@ void DIALOG_SCH_FIND::OnUpdateFindUI( wxUpdateUIEvent& aEvent )
 void DIALOG_SCH_FIND::OnUpdateReplaceUI( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( HasFlag( wxFR_REPLACEDIALOG ) && !m_comboFind->GetValue().empty() &&
-                   (m_findReplaceData->GetFlags() | FR_REPLACE_ITEM_FOUND) );
+                   (m_findReplaceData->GetFlags() & FR_REPLACE_ITEM_FOUND) );
 }
 
 
@@ -114,7 +116,10 @@ void DIALOG_SCH_FIND::OnReplace( wxCommandEvent& aEvent )
         m_comboReplace->SetSelection( 0 );
     }
 
-    SendEvent( wxEVT_COMMAND_FIND );
+    if( aEvent.GetId() == wxID_REPLACE )
+        SendEvent( wxEVT_COMMAND_FIND_REPLACE );
+    else if( aEvent.GetId() == wxID_REPLACE_ALL )
+        SendEvent( wxEVT_COMMAND_FIND_REPLACE_ALL );
 }
 
 

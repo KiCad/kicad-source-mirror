@@ -26,6 +26,8 @@
  * @file sch_collectors.cpp
  */
 
+#include "macros.h"
+
 #include "general.h"
 #include "transform.h"
 #include "sch_collectors.h"
@@ -316,6 +318,79 @@ bool SCH_COLLECTOR::IsDraggableJunction() const
 }
 
 
+bool SCH_FIND_COLLECTOR::atEnd() const
+{
+    bool retv = false;
+
+    wxUint32 flags = m_findReplaceData.GetFlags();
+
+    if( GetCount() == 0 )
+        return true;
+
+    if( !(flags & FR_SEARCH_WRAP) )
+    {
+        if( flags & wxFR_DOWN )
+        {
+            if( m_foundIndex >= (GetCount() - 1) )
+                retv = true;
+        }
+        else
+        {
+            if( m_foundIndex == 0 )
+                retv = true;
+        }
+    }
+
+    return retv;
+}
+
+
+#if defined(DEBUG)
+
+void SCH_FIND_COLLECTOR::dump()
+{
+    int tmp = m_foundIndex;
+
+    wxLogTrace( traceFindReplace, wxT( "%d items found to replace %s with %s." ),
+                GetCount(), GetChars( m_findReplaceData.GetFindString() ),
+                GetChars( m_findReplaceData.GetReplaceString() ) );
+
+    for( m_foundIndex = 0;  m_foundIndex < GetCount();  m_foundIndex++ )
+        wxLogTrace( traceFindReplace, wxT( "    " ) + GetText() );
+
+    m_foundIndex = tmp;
+}
+
+#endif
+
+
+void SCH_FIND_COLLECTOR::UpdateIndex()
+{
+    wxUint32 flags = m_findReplaceData.GetFlags();
+
+    if( flags & wxFR_DOWN )
+    {
+        if( !(flags & FR_SEARCH_WRAP) && (m_foundIndex == (GetCount() - 1)) )
+            return;
+
+        m_foundIndex += 1;
+
+        if( (m_foundIndex >= GetCount()) && (flags & FR_SEARCH_WRAP) )
+            m_foundIndex = 0;
+    }
+    else
+    {
+        if( !(flags & FR_SEARCH_WRAP) && (m_foundIndex == 0) )
+            return;
+
+        m_foundIndex -= 1;
+
+        if( (m_foundIndex < 0) && (flags & FR_SEARCH_WRAP) )
+            m_foundIndex = GetCount() - 1;
+    }
+}
+
+
 SCH_FIND_COLLECTOR_DATA SCH_FIND_COLLECTOR::GetFindData( int aIndex )
 {
     wxCHECK_MSG( (unsigned) aIndex < m_data.size(), SCH_FIND_COLLECTOR_DATA(),
@@ -325,13 +400,13 @@ SCH_FIND_COLLECTOR_DATA SCH_FIND_COLLECTOR::GetFindData( int aIndex )
 }
 
 
-wxString SCH_FIND_COLLECTOR::GetText( int aIndex )
+wxString SCH_FIND_COLLECTOR::GetText()
 {
-    wxCHECK_MSG( IsValidIndex( aIndex ), wxEmptyString,
+    wxCHECK_MSG( (GetCount() != 0) && IsValidIndex( m_foundIndex ), wxEmptyString,
                  wxT( "Cannot get found item at invalid index." ) );
 
-    SCH_FIND_COLLECTOR_DATA data = m_data[ aIndex ];
-    EDA_ITEM* foundItem = m_List[ aIndex ];
+    SCH_FIND_COLLECTOR_DATA data = m_data[ m_foundIndex ];
+    EDA_ITEM* foundItem = m_List[ m_foundIndex ];
 
     wxCHECK_MSG( foundItem != NULL, wxEmptyString, wxT( "Inavalid found item pointer." ) );
 
@@ -353,6 +428,40 @@ wxString SCH_FIND_COLLECTOR::GetText( int aIndex )
 }
 
 
+EDA_ITEM* SCH_FIND_COLLECTOR::GetItem( SCH_FIND_COLLECTOR_DATA& aData )
+{
+    if( atEnd() )
+        return NULL;
+
+    aData = m_data[ m_foundIndex ];
+    return m_List[ m_foundIndex ];
+}
+
+
+bool SCH_FIND_COLLECTOR::ReplaceItem()
+{
+    if( atEnd() )
+        return false;
+
+    wxCHECK_MSG( IsValidIndex( m_foundIndex ), false,
+                 wxT( "Invalid replace list index in SCH_FIND_COLLECTOR." ) );
+
+    EDA_ITEM* item = m_List[ m_foundIndex ];
+
+    bool replaced = item->Replace( m_findReplaceData );
+
+    // If the replace was successful, remove the item from the find list to prevent
+    // iterating back over it again.
+    if( replaced )
+    {
+        Remove( m_foundIndex );
+        m_data.erase( m_data.begin() + m_foundIndex );
+    }
+
+    return replaced;
+}
+
+
 SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestData )
 {
     wxPoint position;
@@ -364,8 +473,9 @@ SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestDat
             wxCHECK_MSG( aTestData && ( (EDA_ITEM*) aTestData )->Type() == SCH_COMPONENT_T,
                          SEARCH_CONTINUE, wxT( "Cannot inspect invalid data.  Bad programmer!" ) );
 
-            // Pin hit testing is relative to the components position and orientation in the
-            // schematic.  The hit test position must be converted to library coordinates.
+            // Pin positions are relative to their parent component's position and
+            // orientation in the schematic.  The pin's position must be converted
+            // schematic coordinates.
             SCH_COMPONENT* component = (SCH_COMPONENT*) aTestData;
             TRANSFORM transform = component->GetTransform();
             position.y = -position.y;
@@ -384,12 +494,13 @@ SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestDat
 void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
                                   SCH_SHEET_PATH* aSheetPath )
 {
-    if( m_findReplaceData == aFindReplaceData )
+    if( !m_findReplaceData.ChangesSearch( aFindReplaceData ) )
         return;
 
     m_findReplaceData = aFindReplaceData;
     Empty();                 // empty the collection just in case
     m_data.clear();
+    m_foundIndex = 0;
 
     if( aSheetPath )
     {
@@ -408,15 +519,14 @@ void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
         }
     }
 
+#if defined(DEBUG)
+    dump();
+#endif
+
     if( m_List.size() != m_data.size() )
     {
         wxFAIL_MSG( wxT( "List size mismatch." ) );
         m_List.clear();
         m_data.clear();
-    }
-
-    for( unsigned i = 0;  i < m_List.size();  i++ )
-    {
-        wxLogTrace( traceFindReplace, GetText( i ) );
     }
 }
