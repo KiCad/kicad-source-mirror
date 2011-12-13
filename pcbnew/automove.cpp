@@ -18,6 +18,7 @@
 #include "class_board.h"
 #include "class_module.h"
 
+extern BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem );
 
 typedef enum {
     FIXE_MODULE,
@@ -184,6 +185,11 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     int      pas_grille = (int) GetScreen()->GetGridSize().x;
     double   surface;
 
+    // Undo: init list
+    PICKED_ITEMS_LIST  newList;
+    newList.m_Status = UR_CHANGED;
+    ITEM_PICKER        picker( NULL, UR_CHANGED );
+
     if( GetBoard()->m_Modules == NULL )
     {
         DisplayError( this, _( "No modules found!" ) );
@@ -264,6 +270,10 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
                 continue;
         }
 
+        // Undo: add copy of old Module to undo
+        picker.m_Link           = DuplicateStruct( Module );
+        picker.m_PickedItemType = Module->Type();
+
         if( current.x > (Xsize_allowed + start.x) )
         {
             current.x  = start.x;
@@ -278,8 +288,16 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
 
         PlaceModule( Module, NULL, true );
 
+        // Undo: add new Module to undo
+        picker.m_PickedItem = Module;
+        newList.PushItem( picker );
+
         current.x += Module->m_BoundaryBox.GetWidth() + pas_grille;
     }
+
+    // Undo: commit
+    if( newList.GetCount() )
+        SaveCopyInUndoList( newList, UR_CHANGED );
 
     DrawPanel->Refresh();
 }

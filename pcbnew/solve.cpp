@@ -79,6 +79,8 @@ static RATSNEST_ITEM* pt_cur_ch;
 static int            Ncurrent;     /* measures of progress */
 static int            s_Clearance;  // Clearance value used in autorouter
 
+static PICKED_ITEMS_LIST s_ItemsListPicker;
+
 
 #define NOSUCCESS       0
 #define STOP_FROM_ESC   -1
@@ -272,6 +274,9 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
 
     Ncurrent = 0;
 
+    // Prepare the undo command info
+    s_ItemsListPicker.ClearListAndDeleteItems();  // Should not be necessary, but...
+
     /* go until no more work to do */
     GetWork( &row_source, &col_source, &current_net_code,
              &row_target, &col_target, &pt_cur_ch ); // First net to route.
@@ -374,6 +379,9 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
     }
 
     DrawPanel->m_AbortEnable = false;
+
+    SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
+    s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
 
     return SUCCESS;
 }
@@ -1323,6 +1331,8 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 
     while( ( track = g_CurrentTrackList.PopFront() ) != NULL )
     {
+        ITEM_PICKER picker( track, UR_NEW );
+        s_ItemsListPicker.PushItem( picker );
         pcbframe->GetBoard()->m_Track.Insert( track, insertBeforeMe );
     }
 
