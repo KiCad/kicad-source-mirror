@@ -218,6 +218,26 @@ class SCH_FIND_COLLECTOR : public COLLECTOR
     /// The path of the sheet currently being iterated over.
     SCH_SHEET_PATH* m_sheetPath;
 
+    /// The current found item list index.
+    int m_foundIndex;
+
+    /**
+     * Function atEnd
+     * tests if #m_foundIndex is at the end of the list give the current find/replace
+     * criterial in #m_findReplaceData.
+     *
+     * @return True if #m_foundIndex is at the end of the found item list.
+     */
+    bool atEnd() const;
+
+    /**
+     * Function dump
+     * is a helper to dump the items in the find list for debugging purposes.
+     */
+#if defined(DEBUG)
+    void dump();
+#endif
+
 public:
 
     /**
@@ -226,7 +246,14 @@ public:
     SCH_FIND_COLLECTOR( const KICAD_T* aScanTypes = SCH_COLLECTOR::AllItems )
     {
         SetScanTypes( aScanTypes );
+        m_foundIndex = 0;
     }
+
+    /**
+     * Function UpdateIndex
+     * updates the list index according to the current find and replace criteria.
+     */
+    void UpdateIndex();
 
     /**
      * Function GetFindData
@@ -246,7 +273,33 @@ public:
      */
     SCH_FIND_REPLACE_DATA& GetFindReplaceData() { return m_findReplaceData; }
 
-    wxString GetText( int aIndex );
+    /**
+     * Function GetText()
+     * @return A wxString object containing the description of the item found at the
+     *         current index or a wxEmptyString if the list is empty or the index is
+     *         invalid.
+     */
+    wxString GetText();
+
+    /**
+     * Function GetItem
+     * returns the item and associated data of the current index.
+     *
+     * @param aFindData A reference to a #SCH_FIND_COLLECTOR_DATA object to place the
+     *                  associated data for the current item into if the current item
+     *                  index is valid.
+     * @return A pointer to the current #EDA_ITEM in the list if the list index is valid
+     *         Otherwise NULL is returned and the \a aFindData object is not updated.
+     */
+    EDA_ITEM* GetItem( SCH_FIND_COLLECTOR_DATA& aFindData );
+
+    /**
+     * Function ReplaceItem
+     * performs a string replace of the item at the current index.
+     *
+     * @return True if the text replace occurred otherwise false.
+     */
+    bool ReplaceItem();
 
     /**
      * @copydoc INSPECTOR::Inspect()

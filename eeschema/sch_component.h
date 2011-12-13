@@ -365,14 +365,7 @@ public:
     virtual void Rotate( wxPoint rotationPoint );
 
     /**
-     * Function Matches
-     * compares component reference and value fields against \a aSearchData.
-     *
-     * @param aSearchData Criteria to search against.
-     * @param aAuxData  Pointer to auxiliary data, if needed.
-     *        Used when searching string in REFERENCE field we must know the sheet path
-     * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
-     * @return True if this component reference or value field matches the search criteria.
+     * @copydoc EDA_ITEM::Matches()
      */
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation );
 

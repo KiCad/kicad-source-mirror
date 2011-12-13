@@ -42,6 +42,8 @@
 
 const wxString traceFindReplace( wxT( "KicadFindReplace" ) );
 
+const wxString traceFindItem( wxT( "KicadFindItem" ) );
+
 
 bool sort_schematic_items( const SCH_ITEM* aItem1, const SCH_ITEM* aItem2 )
 {

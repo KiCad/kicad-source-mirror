@@ -1557,7 +1557,7 @@ void SCH_COMPONENT::Rotate( wxPoint rotationPoint )
 bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
                              wxPoint* aFindLocation )
 {
-    wxLogTrace( traceFindReplace, wxT( "  item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText() );
 
     // Components are searchable via the child field and pin item text.
     return false;

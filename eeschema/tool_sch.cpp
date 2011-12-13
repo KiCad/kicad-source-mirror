@@ -77,9 +77,9 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     msg = AddHotkeyName( HELP_FIND, s_Schematic_Hokeys_Descr, HK_FIND_ITEM, IS_COMMENT );
     m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiBitmap( find_xpm ), msg );
 
-    // m_HToolBar->AddTool( wxID_REPLACE, wxEmptyString, KiBitmap( find_replace_xpm ),
-    //                      wxNullBitmap, wxITEM_NORMAL, _( "Find and replace text" ),
-    //                      HELP_REPLACE, NULL );
+    m_HToolBar->AddTool( wxID_REPLACE, wxEmptyString, KiBitmap( find_replace_xpm ),
+                         wxNullBitmap, wxITEM_NORMAL, _( "Find and replace text" ),
+                         HELP_REPLACE, NULL );
 
     m_HToolBar->AddSeparator();
 

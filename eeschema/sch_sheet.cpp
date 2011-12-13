@@ -931,9 +931,11 @@ void SCH_SHEET::Resize( const wxSize& aSize )
 
 bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
 {
-    wxLogTrace( traceFindReplace, wxT( "  item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText() );
 
-    if( SCH_ITEM::Matches( m_fileName, aSearchData ) )
+    // Ignore the sheet file name if searching to replace.
+    if( !(aSearchData.GetFlags() & FR_SEARCH_REPLACE)
+        && SCH_ITEM::Matches( m_fileName, aSearchData ) )
     {
         if( aFindLocation )
             *aFindLocation = GetFileNamePosition();
@@ -950,6 +952,12 @@ bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
     }
 
     return false;
+}
+
+
+bool SCH_SHEET::Replace( wxFindReplaceData& aSearchData )
+{
+    return EDA_ITEM::Replace( aSearchData, m_name );
 }
 
 

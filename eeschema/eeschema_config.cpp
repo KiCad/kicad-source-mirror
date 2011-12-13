@@ -24,8 +24,7 @@
 #include "dialogs/dialog_color_config.h"
 #include "dialogs/dialog_eeschema_config.h"
 #include "dialogs/dialog_eeschema_options.h"
-
-#include <wx/fdrepdlg.h>
+#include "dialogs/dialog_schematic_find.h"
 
 
 #define HOTKEY_FILENAME         wxT( "eeschema" )
@@ -565,7 +564,7 @@ void SCH_EDIT_FRAME::LoadSettings()
     wxASSERT_MSG( m_findReplaceData,
                   wxT( "Find dialog data settings object not created. Bad programmer!" ) );
     cfg->Read( FindReplaceFlagsEntry, &tmp, (long) wxFR_DOWN );
-    m_findReplaceData->SetFlags( (wxUint32) tmp );
+    m_findReplaceData->SetFlags( (wxUint32) tmp & ~FR_REPLACE_ITEM_FOUND );
     m_findReplaceData->SetFindString( cfg->Read( FindStringEntry, wxEmptyString ) );
     m_findReplaceData->SetReplaceString( cfg->Read( ReplaceStringEntry, wxEmptyString ) );
 
@@ -643,7 +642,8 @@ void SCH_EDIT_FRAME::SaveSettings()
     cfg->Write( FindDialogHeightEntry, m_findDialogSize.GetHeight() );
     wxASSERT_MSG( m_findReplaceData,
                   wxT( "Find dialog data settings object not created. Bad programmer!" ) );
-    cfg->Write( FindReplaceFlagsEntry, (long) m_findReplaceData->GetFlags() );
+    cfg->Write( FindReplaceFlagsEntry,
+                (long) m_findReplaceData->GetFlags() & ~FR_REPLACE_ITEM_FOUND );
     cfg->Write( FindStringEntry, m_findReplaceData->GetFindString() );
     cfg->Write( ReplaceStringEntry, m_findReplaceData->GetReplaceString() );
 

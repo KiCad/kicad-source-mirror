@@ -303,12 +303,13 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
     wxString msg;
     SCH_FIND_REPLACE_DATA searchCriteria;
     bool warpCursor = !( aEvent.GetFlags() & FR_NO_WARP_CURSOR );
+    SCH_FIND_COLLECTOR_DATA data;
 
     searchCriteria.SetFlags( aEvent.GetFlags() );
     searchCriteria.SetFindString( aEvent.GetFindString() );
     searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
 
-    if( searchCriteria != m_foundItems.GetFindReplaceData() )
+    if( m_foundItems.GetFindReplaceData().ChangesSearch( searchCriteria ) )
     {
         if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
         {
@@ -316,69 +317,62 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
         }
         else if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
         {
-            m_foundItemIndex = 0;
             m_foundItems.Collect( searchCriteria, m_CurrentSheet );
         }
         else
         {
-            m_foundItemIndex = 0;
             m_foundItems.Collect( searchCriteria );
         }
     }
     else
     {
-        if( searchCriteria.GetFlags() & wxFR_DOWN )
-        {
-            if( !(searchCriteria.GetFlags() & FR_SEARCH_WRAP)
-                && (m_foundItemIndex == (m_foundItems.GetCount() - 1)) )
-                return;
+        EDA_ITEM* currentItem = m_foundItems.GetItem( data );
 
-            m_foundItemIndex += 1;
+        if( currentItem != NULL )
+            currentItem->SetForceVisible( false );
 
-            if( (m_foundItemIndex >= m_foundItems.GetCount())
-                && (searchCriteria.GetFlags() & FR_SEARCH_WRAP) )
-                m_foundItemIndex = 0;
-        }
-        else
-        {
-            if( !(searchCriteria.GetFlags() & FR_SEARCH_WRAP) && (m_foundItemIndex == 0) )
-                return;
-
-            m_foundItemIndex -= 1;
-
-            if( (m_foundItemIndex < 0) && (searchCriteria.GetFlags() & FR_SEARCH_WRAP) )
-                m_foundItemIndex = m_foundItems.GetCount() - 1;
-        }
+        m_foundItems.UpdateIndex();
     }
 
-    if( m_foundItems.GetCount() != 0 )
+    if( m_foundItems.GetItem( data ) != NULL )
     {
-        SCH_FIND_COLLECTOR_DATA data = m_foundItems.GetFindData( m_foundItemIndex );
-
-        wxLogTrace( traceFindReplace, wxT( "Found " ) + m_foundItems.GetText( m_foundItemIndex ) );
+        wxLogTrace( traceFindReplace, wxT( "Found " ) + m_foundItems.GetText() );
 
         SCH_SHEET_PATH* sheet = schematic.GetSheet( data.GetSheetPath() );
 
         wxCHECK_RET( sheet != NULL, wxT( "Could not find sheet path " ) +
                      data.GetSheetPath() );
 
+        // Make the item temporarily visible just in case it's hide flag is set.  This
+        // has no effect on objects that don't support hiding.  If this is a close find
+        // dialog event, clear the temporary visibility flag.
+        if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
+            m_foundItems.GetItem( data )->SetForceVisible( false );
+        else
+            m_foundItems.GetItem( data )->SetForceVisible( true );
+
         if( sheet->PathHumanReadable() != m_CurrentSheet->PathHumanReadable() )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
             m_CurrentSheet->UpdateAllScreenReferences();
+            SetScreen( sheet->LastScreen() );
         }
 
         sheet->LastScreen()->SetCrossHairPosition( data.GetPosition() );
 
         RedrawScreen( data.GetPosition(), warpCursor );
 
-        aEvent.SetFlags( aEvent.GetFlags() | FR_REPLACE_ITEM_FOUND );
-        msg = m_foundItems.GetText( m_foundItemIndex );
+        msg = m_foundItems.GetText();
+
+        if( aEvent.GetFlags() & FR_SEARCH_REPLACE )
+            aEvent.SetFlags( aEvent.GetFlags() | FR_REPLACE_ITEM_FOUND );
     }
     else
     {
-        aEvent.SetFlags( aEvent.GetFlags() & ~FR_REPLACE_ITEM_FOUND );
+        if( aEvent.GetFlags() & FR_SEARCH_REPLACE )
+            aEvent.SetFlags( aEvent.GetFlags() & ~FR_REPLACE_ITEM_FOUND );
+
         msg.Printf( _( "No item found matching %s." ), GetChars( aEvent.GetFindString() ) );
     }
 
@@ -388,23 +382,57 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 {
-    wxCHECK_RET( m_foundItems.IsValidIndex( m_foundItemIndex ),
-                 wxT( "No last find item to replace text." ) );
+    SCH_FIND_COLLECTOR_DATA data;
 
-    SCH_FIND_COLLECTOR_DATA data = m_foundItems.GetFindData( m_foundItemIndex );
+    bool warpCursor = !( aEvent.GetFlags() & FR_NO_WARP_CURSOR );
+    SCH_ITEM* item = (SCH_ITEM*) m_foundItems.GetItem( data );
+
+    wxCHECK_RET( item != NULL, wxT( "Invalid replace item in find collector list." ) );
 
     wxLogTrace( traceFindReplace, wxT( "Replacing %s with %s in item %s" ),
                 GetChars( aEvent.GetFindString() ), GetChars( aEvent.GetReplaceString() ),
-                GetChars( m_foundItems.GetText( m_foundItemIndex ) ) );
+                GetChars( m_foundItems.GetText() ) );
+
+    SCH_ITEM* undoItem = data.GetParent();
+
+    if( undoItem == NULL )
+        undoItem = item;
+
+    SetUndoItem( undoItem );
+
+    if( m_foundItems.ReplaceItem() )
+    {
+        SaveUndoItemInUndoList( undoItem );
+        RedrawScreen( data.GetPosition(), warpCursor );
+    }
 
     OnFindSchematicItem( aEvent );
 
     if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_REPLACE_ALL )
     {
-        wxLogTrace( traceFindReplace, wxT( "Replacing %s with %s in item %s" ),
-                    GetChars( aEvent.GetFindString() ), GetChars( aEvent.GetReplaceString() ),
-                    GetChars( m_foundItems.GetText( m_foundItemIndex ) ) );
+        item = (SCH_ITEM*) m_foundItems.GetItem( data );
 
-        OnFindSchematicItem( aEvent );
+        while( item != NULL )
+        {
+            wxLogTrace( traceFindReplace, wxT( "Replacing %s with %s in item %s" ),
+                        GetChars( aEvent.GetFindString() ), GetChars( aEvent.GetReplaceString() ),
+                        GetChars( m_foundItems.GetText() ) );
+
+            SCH_ITEM* undoItem = data.GetParent();
+
+            // Don't save child items in undo list.
+            if( undoItem == NULL )
+                undoItem = item;
+
+            SetUndoItem( undoItem );
+
+            if( m_foundItems.ReplaceItem() )
+            {
+                SaveUndoItemInUndoList( undoItem );
+                RedrawScreen( data.GetPosition(), warpCursor );
+            }
+
+            OnFindSchematicItem( aEvent );
+        }
     }
 }

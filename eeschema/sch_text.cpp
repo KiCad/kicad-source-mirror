@@ -167,7 +167,7 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
 
 bool SCH_TEXT::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint * aFindLocation )
 {
-    wxLogTrace( traceFindReplace, wxT( "  item " ) + GetSelectMenuText() );
+    wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText() );
 
     if( SCH_ITEM::Matches( m_Text, aSearchData ) )
     {

@@ -204,7 +204,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
     m_undoItem = NULL;
     m_hasAutoSave = true;
-    m_foundItemIndex = 0;
 
     CreateScreens();
 
