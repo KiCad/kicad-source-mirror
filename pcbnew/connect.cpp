@@ -90,6 +90,11 @@ public:
     void BuildPadsList( int aNetcode = -1 );
 
     /**
+     * @return the pads list used in connections calculations
+     */
+    std::vector<D_PAD*>& GetPadsList() { return m_sortedPads; }
+
+    /**
      * Function Build_CurrNet_SubNets_Connections
      * Connections to pads are assumed to be already initialized,
      * and are not recalculated
@@ -106,13 +111,13 @@ public:
     void Build_CurrNet_SubNets_Connections( TRACK* aFirstTrack, TRACK* aLastTrack );
 
     /**
-     * Function BuildCandidatesList
+     * Function BuildTracksCandidatesList
      * Fills m_Candidates with all connecting points (track ends or via location)
      * with tracks from aBegin to aEnd.
      * if aBegin == NULL, use first track in brd list
      * if aEnd == NULL, uses all tracks from aBegin in brd list
      */
-    void BuildCandidatesList( TRACK * aBegin = NULL, TRACK * aEnd = NULL);
+    void BuildTracksCandidatesList( TRACK * aBegin = NULL, TRACK * aEnd = NULL);
 
     /**
      * function SearchConnectedTracks
@@ -134,15 +139,15 @@ public:
     }
 
     /**
-     * function SearchConnectedToPads
+     * function SearchTracksConnectedToPads
      * Explores the list of pads and adds to m_PadsConnected member
      * of each track connected the pad(s) connected to
      */
-    void SearchConnectedToPads();
+    void SearchTracksConnectedToPads();
 
     /**
      * function CollectItemsNearTo
-     * Used by SearchConnectedToPads
+     * Used by SearchTracksConnectedToPads
      * Fills aList with pads near to aPosition
      * near means aPosition to pad position <= aDistMax
      * @param aList = list to fill
@@ -232,7 +237,7 @@ void CONNECTIONS::BuildPadsList( int aNetcode )
 }
 
 
-void CONNECTIONS::SearchConnectedToPads()
+void CONNECTIONS::SearchTracksConnectedToPads()
 {
     std::vector<CONNECTED_POINT*> candidates;
 
@@ -345,7 +350,7 @@ static bool sortConnectedPointByXthenYCoordinates( const CONNECTED_POINT & aRef,
     return aRef.GetPoint().x < aTst.GetPoint().x;
 }
 
-void CONNECTIONS::BuildCandidatesList( TRACK * aBegin, TRACK * aEnd)
+void CONNECTIONS::BuildTracksCandidatesList( TRACK * aBegin, TRACK * aEnd)
 {
     m_candidates.clear();
 
@@ -505,7 +510,7 @@ void CONNECTIONS::Build_CurrNet_SubNets_Connections( TRACK* aFirstTrack, TRACK* 
 
     // Pads subnets are expected already cleared, because this function
     // does not know the full list of pads
-    BuildCandidatesList( aFirstTrack, aLastTrack );
+    BuildTracksCandidatesList( aFirstTrack, aLastTrack );
     for( curr_track = aFirstTrack; curr_track != NULL; curr_track = curr_track->Next() )
     {
         // Clear track subnet id (Pads subnets are cleared outside this function)
@@ -807,10 +812,10 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 
     CONNECTIONS connections( m_Pcb );
     connections.BuildPadsList();
-    connections.BuildCandidatesList();
+    connections.BuildTracksCandidatesList();
 
     // First pass: build connections between track segments and pads.
-    connections.SearchConnectedToPads();
+    connections.SearchTracksConnectedToPads();
 
     /* For tracks connected to at least one pad,
      * set the track net code to the pad netcode
