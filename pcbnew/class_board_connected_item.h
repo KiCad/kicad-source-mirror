@@ -24,11 +24,12 @@ class BOARD_CONNECTED_ITEM : public BOARD_ITEM
 {
     friend class CONNECTIONS;
 
-private:
+public:
     // These 2 members are used for temporary storage during connections calculations:
     std::vector<TRACK*> m_TracksConnected;      // list of other tracks connected to me
     std::vector<D_PAD*> m_PadsConnected;        // list of other pads connected to me
 
+private:
     int         m_NetCode;      // Net number
 
     int         m_Subnet;       /* In rastnest routines : for the current net, block number
