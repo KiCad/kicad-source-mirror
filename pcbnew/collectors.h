@@ -176,6 +176,18 @@ public:
     }
 
     /**
+     * Function IgnoreModulesVals
+     * @return bool - true if should ignore modules values.
+     */
+    virtual     bool IgnoreModulesVals() const = 0;
+
+    /**
+     * Function IgnoreModulesRefs
+     * @return bool - true if should ignore module references.
+     */
+    virtual     bool IgnoreModulesRefs() const = 0;
+
+    /**
      * Function UseHitTesting
      * @return bool - true if Inspect() should use BOARD_ITEM::HitTest()
      *             or false if Inspect() should use BOARD_ITEM::BoundsTest().
@@ -383,6 +395,8 @@ private:
     bool    m_IgnoreModulesOnCmp;
     bool    m_IgnorePadsOnFront;
     bool    m_IgnorePadsOnBack;
+    bool    m_IgnoreModulesVals;
+    bool    m_IgnoreModulesRefs;
 
 public:
 
@@ -419,6 +433,9 @@ public:
 
         m_IgnorePadsOnFront         = false;
         m_IgnorePadsOnBack          = false;
+
+        m_IgnoreModulesVals         = false;
+        m_IgnoreModulesRefs         = false;
     }
 
 
@@ -550,6 +567,20 @@ public:
      */
     bool IgnorePadsOnFront() const { return m_IgnorePadsOnFront; }
     void SetIgnorePadsOnFront(bool ignore) { m_IgnorePadsOnFront = ignore; }
+
+    /**
+     * Function IgnoreModulesVals
+     * @return bool - true if should ignore modules values.
+     */
+    bool IgnoreModulesVals() const { return m_IgnoreModulesVals; }
+    void SetIgnoreModulesVals(bool ignore) { m_IgnoreModulesVals = ignore; }
+
+    /**
+     * Function IgnoreModulesRefs
+     * @return bool - true if should ignore modules references.
+     */
+    bool IgnoreModulesRefs() const { return m_IgnoreModulesRefs; }
+    void SetIgnoreModulesRefs(bool ignore) { m_IgnoreModulesRefs = ignore; }
 };
 
 
