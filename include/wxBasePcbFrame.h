@@ -84,12 +84,13 @@ protected:
     BOARD*              m_Pcb;
     GENERAL_COLLECTOR*  m_Collector;
 
+    /// Auxiliary tool bar typically shown below the main tool bar at the top of the
+    /// main window.
+    EDA_TOOLBAR* m_auxiliaryToolBar;
+
     void updateGridSelectBox();
     void updateZoomSelectBox();
     virtual void unitsChangeRefresh();
-
-
-
 
 public:
     PCB_BASE_FRAME( wxWindow* father, int idtype, const wxString& title,

@@ -79,7 +79,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     PCB_BASE_FRAME( father, CVPCB_DISPLAY_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "CmpFrame" );
-    m_Draw_Axis = true;         // true to draw axis.
+    m_showAxis = true;         // true to draw axis.
 
     // Give an icon
     wxIcon  icon;
@@ -124,9 +124,9 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     m_auimgr.AddPane( m_HToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top(). Row( 0 ) );
 
-    if( m_VToolBar )    // Currently, no vertical right toolbar.
-        m_auimgr.AddPane( m_VToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
+    if( m_drawToolBar )    // Currently, no vertical right toolbar.
+        m_auimgr.AddPane( m_drawToolBar,
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_drawToolBar" ) ).Right() );
 
     m_auimgr.AddPane( DrawPanel,
                       wxAuiPaneInfo().Name( wxT( "DisplayFrame" ) ).CentrePane() );
@@ -134,8 +134,8 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     m_auimgr.AddPane( m_messagePanel,
                       wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().Layer(10) );
 
-    m_auimgr.AddPane( m_OptionsToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left() );
+    m_auimgr.AddPane( m_optionsToolBar,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left() );
 
     m_auimgr.Update();
 
@@ -174,45 +174,45 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateVToolbar()
 
 void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
 {
-    if( m_OptionsToolBar )
+    if( m_optionsToolBar )
         return;
 
     // Create options tool bar.
-    m_OptionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
+    m_optionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
                                _( "Hide grid" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                KiBitmap( polar_coord_xpm ),
                                _( "Display polar coordinates" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
                                KiBitmap( unit_inch_xpm ),
                                _( "Units in inches" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
                                KiBitmap( unit_mm_xpm ),
                                _( "Units in millimeters" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiBitmap( cursor_shape_xpm ),
                                _( "Change cursor shape" ), wxITEM_CHECK  );
 
-    m_OptionsToolBar->AddSeparator();
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
+    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
                                KiBitmap( pad_sketch_xpm ),
                                _( "Show pads in outline mode" ), wxITEM_CHECK  );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, wxEmptyString,
                                KiBitmap( text_sketch_xpm ),
                                _( "Show texts in line mode" ), wxITEM_CHECK  );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, wxEmptyString,
                                KiBitmap( show_mod_edge_xpm ),
                                _( "Show outlines in line mode" ), wxITEM_CHECK  );
 
-    m_OptionsToolBar->Realize();
+    m_optionsToolBar->Realize();
 }
 
 
@@ -262,7 +262,7 @@ void DISPLAY_FOOTPRINTS_FRAME::OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent )
         i = 0;
 
     aEvent.Check( m_DisplayModText == 0 );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, msgTextsFill[i] );
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, msgTextsFill[i] );
 
 }
 
@@ -279,7 +279,7 @@ void DISPLAY_FOOTPRINTS_FRAME::OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent )
         i = 0;
 
     aEvent.Check( m_DisplayModEdge == 0 );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, msgEdgesFill[i] );
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, msgEdgesFill[i] );
 }
 
 

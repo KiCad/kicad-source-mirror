@@ -145,8 +145,8 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     GetBoard()->ComputeBoundingBox();
 
     // Save the auxiliary origin for the rest of the module
-    GencadOffsetX = m_Auxiliary_Axis_Position.x;
-    GencadOffsetY = m_Auxiliary_Axis_Position.y;
+    GencadOffsetX = m_originAxisPosition.x;
+    GencadOffsetY = m_originAxisPosition.y;
 
     // No idea on *why* this should be needed... maybe to fix net names?
     Compile_Ratsnest( NULL, true );
@@ -705,8 +705,8 @@ static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* aFrame )
     fputs( TO_UTF8( msg ), aFile );
     fputs( "UNITS INCH\n", aFile );
     msg.Printf( wxT( "ORIGIN %g %g\n" ),
-               MapXTo( aFrame->m_Auxiliary_Axis_Position.x ),
-               MapYTo( aFrame->m_Auxiliary_Axis_Position.y ) );
+                MapXTo( aFrame->GetOriginAxisPosition().x ),
+                MapYTo( aFrame->GetOriginAxisPosition().y ) );
     fputs( TO_UTF8( msg ), aFile );
     fputs( "INTERTRACK 0\n", aFile );
     fputs( "$ENDHEADER\n\n", aFile );

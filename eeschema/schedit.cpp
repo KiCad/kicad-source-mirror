@@ -550,7 +550,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
-    if( aEvent.GetEventObject() == m_VToolBar )
+    if( aEvent.GetEventObject() == m_drawToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 

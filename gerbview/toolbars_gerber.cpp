@@ -126,92 +126,92 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
 
 void GERBVIEW_FRAME::ReCreateVToolbar( void )
 {
-    if( m_VToolBar )
+    if( m_drawToolBar )
         return;
 
-    m_VToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
+    m_drawToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
 
     // Set up toolbar
-    m_VToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ) );
-    m_VToolBar->AddSeparator();
+    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ) );
+    m_drawToolBar->AddSeparator();
 
-    m_VToolBar->Realize();
+    m_drawToolBar->Realize();
 }
 
 
 void GERBVIEW_FRAME::ReCreateOptToolbar( void )
 {
-    if( m_OptionsToolBar )
+    if( m_optionsToolBar )
         return;
 
     // creation of tool bar options
-    m_OptionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, FALSE );
+    m_optionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, FALSE );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
                                _( "Turn grid off" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                KiBitmap( polar_coord_xpm ),
                                _( "Turn polar coordinate on" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
                                KiBitmap( unit_inch_xpm ),
                                _( "Set units to inches" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
                                KiBitmap( unit_mm_xpm ),
                                _( "Set units to millimeters" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiBitmap( cursor_shape_xpm ),
                                _( "Change cursor shape" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddSeparator();
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, wxEmptyString,
+    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, wxEmptyString,
                                KiBitmap( pad_sketch_xpm ),
                                _( "Show spots in sketch mode" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LINES_SKETCH, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LINES_SKETCH, wxEmptyString,
                                KiBitmap( showtrack_xpm ),
                                _( "Show lines in sketch mode" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, wxEmptyString,
                                KiBitmap( opt_show_polygon_xpm ),
                                _( "Show polygons in sketch mode" ),
                                wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_DCODES, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_DCODES, wxEmptyString,
                                KiBitmap( show_dcodenumber_xpm ),
                                _( "Show dcode number" ), wxITEM_CHECK );
 
     // tools to select draw mode in GerbView
-    m_OptionsToolBar->AddSeparator();
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_0, wxEmptyString,
+    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_0, wxEmptyString,
                                KiBitmap( gbr_select_mode0_xpm ),
                                _( "Show layers in raw mode \
 (could have problems with negative items when more than one gerber file is shown)" ),
                                wxITEM_CHECK );
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_1, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_1, wxEmptyString,
                                KiBitmap( gbr_select_mode1_xpm ),
                                _( "Show layers in stacked mode \
 (show negative items without artifacts, sometimes slow)" ),
                                wxITEM_CHECK );
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_2, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GBR_MODE_2, wxEmptyString,
                                KiBitmap( gbr_select_mode2_xpm ),
                                _( "Show layers in transparency mode \
 (show negative items without artifacts, sometimes slow)" ),
                                wxITEM_CHECK );
 
     // Tools to show/hide toolbars:
-    m_OptionsToolBar->AddSeparator();
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
+    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
                                wxEmptyString,
                                KiBitmap( layers_manager_xpm ),
                                _( "Show/hide the layers manager toolbar" ),
                                wxITEM_CHECK );
 
 
-    m_OptionsToolBar->Realize();
+    m_optionsToolBar->Realize();
 }
 
 
@@ -265,12 +265,12 @@ void GERBVIEW_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( m_show_layer_manager_tools );
 
-    if( m_OptionsToolBar )
+    if( m_optionsToolBar )
     {
         if( m_show_layer_manager_tools )
-            m_OptionsToolBar->SetToolShortHelp( aEvent.GetId(), _("Hide layers manager" ) );
+            m_optionsToolBar->SetToolShortHelp( aEvent.GetId(), _("Hide layers manager" ) );
         else
-            m_OptionsToolBar->SetToolShortHelp( aEvent.GetId(), _("Show layers manager" ) );
+            m_optionsToolBar->SetToolShortHelp( aEvent.GetId(), _("Show layers manager" ) );
     }
 }
 

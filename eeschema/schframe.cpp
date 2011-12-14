@@ -186,12 +186,12 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     EDA_DRAW_FRAME( father, SCHEMATIC_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "SchematicFrame" );
-    m_Draw_Axis = false;                // true to show axis
-    m_Draw_Sheet_Ref = true;            // true to show sheet references
+    m_showAxis = false;                 // true to show axis
+    m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_CurrentSheet = new SCH_SHEET_PATH();
     m_TextFieldSize = DEFAULT_SIZE_TEXT;
-    m_LibeditFrame = NULL;         // Component editor frame.
-    m_ViewlibFrame = NULL;         // Frame for browsing component libraries
+    m_LibeditFrame = NULL;              // Component editor frame.
+    m_ViewlibFrame = NULL;              // Frame for browsing component libraries
     m_DefaultSchematicFileName = NAMELESS_PROJECT;
     m_DefaultSchematicFileName += wxT( ".sch" );
     m_showAllPins = false;
@@ -253,12 +253,12 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
         m_auimgr.AddPane( m_HToolBar,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
 
-    if( m_VToolBar )
-        m_auimgr.AddPane( m_VToolBar, wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
+    if( m_drawToolBar )
+        m_auimgr.AddPane( m_drawToolBar, wxAuiPaneInfo( vert ).Name( wxT( "m_drawToolBar" ) ).Right() );
 
-    if( m_OptionsToolBar )
-        m_auimgr.AddPane( m_OptionsToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left() );
+    if( m_optionsToolBar )
+        m_auimgr.AddPane( m_optionsToolBar,
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left() );
 
     if( DrawPanel )
         m_auimgr.AddPane( DrawPanel, wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
@@ -585,7 +585,7 @@ void SCH_EDIT_FRAME::OnUpdateBusOrientation( wxUpdateUIEvent& aEvent )
                         _( "Draw horizontal and vertical wires and buses only" );
 
     aEvent.Check( g_HVLines );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_BUS_WIRES_ORIENT, tool_tip );
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_BUS_WIRES_ORIENT, tool_tip );
 }
 
 
@@ -595,7 +595,7 @@ void SCH_EDIT_FRAME::OnUpdateHiddenPins( wxUpdateUIEvent& aEvent )
                         _( "Show hidden pins" );
 
     aEvent.Check( m_showAllPins );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_HIDDEN_PINS, tool_tip );
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_HIDDEN_PINS, tool_tip );
 }
 
 

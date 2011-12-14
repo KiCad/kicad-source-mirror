@@ -82,6 +82,9 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
     int             m_RecordingMacros;
     MACROS_RECORDED m_Macros[10];
 
+    /// The auxiliary right vertical tool bar used to access the microwave tools.
+    EDA_TOOLBAR* m_microWaveToolBar;
+
 protected:
 
     PCB_LAYER_WIDGET* m_Layers;

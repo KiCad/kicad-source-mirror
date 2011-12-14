@@ -67,8 +67,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     m_FrameName = wxT( "GerberFrame" );
     m_show_layer_manager_tools = true;
 
-    m_Draw_Axis = true;         // true to show X and Y axis on screen
-    m_Draw_Sheet_Ref = false;   // true for reference drawings.
+    m_showAxis = true;          // true to show X and Y axis on screen
+    m_showBorderAndTitleBlock = false;   // true for reference drawings.
     m_HotkeysZoomAndGridList = s_Gerbview_Hokeys_Descr;
     m_SelLayerBox   = NULL;
     m_DCodeSelector = NULL;
@@ -132,16 +132,16 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
         m_auimgr.AddPane( m_HToolBar,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
 
-    if( m_VToolBar )
-        m_auimgr.AddPane( m_VToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Row( 1 ) );
+    if( m_drawToolBar )
+        m_auimgr.AddPane( m_drawToolBar,
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_drawToolBar" ) ).Right().Row( 1 ) );
 
     m_auimgr.AddPane( m_LayersManager,
                       lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 0 ) );
 
-    if( m_OptionsToolBar )
-        m_auimgr.AddPane( m_OptionsToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left() );
+    if( m_optionsToolBar )
+        m_auimgr.AddPane( m_optionsToolBar,
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left() );
 
     if( DrawPanel )
         m_auimgr.AddPane( DrawPanel,
@@ -223,7 +223,7 @@ void GERBVIEW_FRAME::LoadSettings()
 
     if( pageSize_opt > 0 )
     {
-        m_Draw_Sheet_Ref = true;
+        m_showBorderAndTitleBlock = true;
     }
 
     long tmp;
@@ -256,7 +256,7 @@ void GERBVIEW_FRAME::SaveSettings()
 
     long pageSize_opt = 0;
 
-    if( m_Draw_Sheet_Ref )
+    if( m_showBorderAndTitleBlock )
     {
         for( int ii = 1; g_GerberPageSizeList[ii] != NULL; ii++ )
         {

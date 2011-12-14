@@ -40,7 +40,7 @@ bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLay
 
     if( aPlotOriginIsAuxAxis )
     {
-        offset = m_Auxiliary_Axis_Position;
+        offset = m_originAxisPosition;
     }
     else
     {

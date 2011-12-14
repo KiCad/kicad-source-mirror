@@ -567,8 +567,8 @@ void KICAD_PLUGIN::loadSETUP()
             BIU gy = biuParse( data );
 
             /* @todo
-            m_Auxiliary_Axis_Position.x = gx;
-            m_Auxiliary_Axis_Position.y = gy;
+            m_originAxisPosition.x = gx;
+            m_originAxisPosition.y = gy;
             */
         }
 

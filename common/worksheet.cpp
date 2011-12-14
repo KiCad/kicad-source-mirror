@@ -993,7 +993,7 @@ Ki_WorkSheetData WS_Segm5_LT =
  */
 void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width )
 {
-    if( !m_Draw_Sheet_Ref )
+    if( !m_showBorderAndTitleBlock )
         return;
 
     Ki_PageDescr* Sheet = screen->m_CurrentSheetDesc;

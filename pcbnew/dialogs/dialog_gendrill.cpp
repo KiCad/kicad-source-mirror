@@ -340,7 +340,7 @@ void DIALOG_GENDRILL::SetParams( void )
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_FileDrillOffset = wxPoint( 0, 0 );
     else
-        m_FileDrillOffset = m_Parent->m_Auxiliary_Axis_Position;
+        m_FileDrillOffset = m_Parent->GetOriginAxisPosition();
 
     // get precision
     int idx = m_Choice_Precision->GetSelection();

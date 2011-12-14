@@ -40,7 +40,8 @@ DIALOG_PAGE_SHOW_PAGE_BORDERS::DIALOG_PAGE_SHOW_PAGE_BORDERS( GERBVIEW_FRAME *pa
     SetFocus();
 
     m_ShowPageLimits->SetSelection(0);
-    if( m_Parent->m_Draw_Sheet_Ref )
+
+    if( m_Parent->GetShowBorderAndTitleBlock() )
     {
         for( int ii = 1; g_GerberPageSizeList[ii] != NULL; ii++ )
         {
@@ -67,16 +68,12 @@ void DIALOG_PAGE_SHOW_PAGE_BORDERS::OnCancelButtonClick( wxCommandEvent& event )
 
 void DIALOG_PAGE_SHOW_PAGE_BORDERS::OnOKBUttonClick( wxCommandEvent& event )
 {
-    m_Parent->m_DisplayPadFill =  m_Parent->m_DisplayViaFill =
-        DisplayOpt.DisplayViaFill;
+    m_Parent->m_DisplayPadFill = m_Parent->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     m_Parent->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
 
     int idx = m_ShowPageLimits->GetSelection();
-    if( idx > 0 )
-        m_Parent->m_Draw_Sheet_Ref = true;
-    else
-        m_Parent->m_Draw_Sheet_Ref = false;
 
+    m_Parent->SetShowBorderAndTitleBlock( (idx > 0) ? true : false );
     m_Parent->GetScreen()->m_CurrentSheetDesc = g_GerberPageSizeList[idx];
 
     EndModal( wxID_OK );

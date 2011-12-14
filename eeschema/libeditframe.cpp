@@ -194,7 +194,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     wxASSERT( aParent );
 
     m_FrameName  = wxT( "LibeditFrame" );
-    m_Draw_Axis  = true;            // true to draw axis
+    m_showAxis   = true;            // true to draw axis
     m_configPath = wxT( "LibraryEditor" );
     SetShowDeMorgan( false );
     m_drawSpecificConvert = true;
@@ -250,11 +250,11 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     m_auimgr.AddPane( m_HToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
 
-    m_auimgr.AddPane( m_VToolBar,
+    m_auimgr.AddPane( m_drawToolBar,
                       wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
 
-    m_auimgr.AddPane( m_OptionsToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left() );
+    m_auimgr.AddPane( m_optionsToolBar,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left() );
 
     m_auimgr.AddPane( DrawPanel,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
@@ -450,7 +450,7 @@ void LIB_EDIT_FRAME::OnUpdateEditingPart( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( m_component != NULL );
 
-    if( m_component != NULL && aEvent.GetEventObject() == m_VToolBar )
+    if( m_component != NULL && aEvent.GetEventObject() == m_drawToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 

@@ -88,28 +88,25 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
 {
     wxSize minsize;
 
-    m_VToolBar            = NULL;
-    m_AuxVToolBar         = NULL;
-    m_OptionsToolBar      = NULL;
-    m_AuxiliaryToolBar    = NULL;
-    m_SelGridBox          = NULL;
-    m_SelZoomBox          = NULL;
+    m_drawToolBar         = NULL;
+    m_optionsToolBar      = NULL;
+    m_gridSelectBox       = NULL;
+    m_zoomSelectBox       = NULL;
     m_HotkeysZoomAndGridList = NULL;
 
     DrawPanel             = NULL;
     m_messagePanel        = NULL;
     m_currentScreen       = NULL;
     m_toolId              = ID_NO_TOOL_SELECTED;
-    m_ID_last_state       = ID_NO_TOOL_SELECTED;
+    m_lastDrawToolId      = ID_NO_TOOL_SELECTED;
     m_HTOOL_current_state = 0;
-    m_Draw_Axis           = false;  // true to draw axis.
-    m_Draw_Sheet_Ref      = false;  // true to display reference sheet.
-    m_Print_Sheet_Ref     = true;   // true to print reference sheet.
-    m_Draw_Auxiliary_Axis = false;  // true draw auxiliary axis.
-    m_Draw_Grid_Axis      = false;  // true to draw the grid axis
-    m_CursorShape         = 0;
+    m_showAxis            = false;      // true to draw axis.
+    m_showBorderAndTitleBlock = false;  // true to display reference sheet.
+    m_Print_Sheet_Ref     = true;       // true to print reference sheet.
+    m_showGridAxis        = false;      // true to draw the grid axis
+    m_cursorShape         = 0;
     m_LastGridSizeId      = 0;
-    m_DrawGrid            = true;   // hide/Show grid. default = show
+    m_DrawGrid            = true;       // hide/Show grid. default = show
     m_GridColor           = DARKGRAY;   // Grid color
     m_snapToGrid          = true;
 
@@ -229,7 +226,7 @@ void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
 {
     INSTALL_UNBUFFERED_DC( dc, DrawPanel );
     DrawPanel->CrossHairOff( &dc );
-    m_CursorShape = !m_CursorShape;
+    m_cursorShape = !m_cursorShape;
     DrawPanel->CrossHairOn( &dc );
 }
 
@@ -265,13 +262,13 @@ void EDA_DRAW_FRAME::OnUpdateGrid( wxUpdateUIEvent& aEvent )
     wxString tool_tip = IsGridVisible() ? _( "Hide grid" ) : _( "Show grid" );
 
     aEvent.Check( IsGridVisible() );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID, tool_tip );
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID, tool_tip );
 }
 
 
 void EDA_DRAW_FRAME::OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( m_CursorShape );
+    aEvent.Check( m_cursorShape );
 }
 
 
@@ -308,7 +305,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     if( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
     {
-        if( m_SelGridBox == NULL )
+        if( m_gridSelectBox == NULL )
             return;
 
         /*
@@ -316,9 +313,9 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
          * returns NULL in GTK.  This solution is not as elegant but
          * it works.
          */
-        int index = m_SelGridBox->GetSelection();
+        int index = m_gridSelectBox->GetSelection();
         wxASSERT( index != wxNOT_FOUND );
-        clientData = (int*) m_SelGridBox->wxItemContainer::GetClientData( index );
+        clientData = (int*) m_gridSelectBox->wxItemContainer::GetClientData( index );
 
         if( clientData != NULL )
             id = *clientData;
@@ -330,15 +327,15 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
         /* Update the grid select combobox if the grid size was changed
          * by menu event.
          */
-        if( m_SelGridBox != NULL )
+        if( m_gridSelectBox != NULL )
         {
-            for( size_t i = 0; i < m_SelGridBox->GetCount(); i++ )
+            for( size_t i = 0; i < m_gridSelectBox->GetCount(); i++ )
             {
-                clientData = (int*) m_SelGridBox->wxItemContainer::GetClientData( i );
+                clientData = (int*) m_gridSelectBox->wxItemContainer::GetClientData( i );
 
                 if( clientData && id == *clientData )
                 {
-                    m_SelGridBox->SetSelection( i );
+                    m_gridSelectBox->SetSelection( i );
                     break;
                 }
             }
@@ -364,12 +361,12 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
 void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 {
-    if( m_SelZoomBox == NULL )
+    if( m_zoomSelectBox == NULL )
         return;                        // Should not happen!
 
-    int id = m_SelZoomBox->GetCurrentSelection();
+    int id = m_zoomSelectBox->GetCurrentSelection();
 
-    if( id < 0 || !( id < (int)m_SelZoomBox->GetCount() ) )
+    if( id < 0 || !( id < (int)m_zoomSelectBox->GetCount() ) )
         return;
 
     if( id == 0 )                      // Auto zoom (Fit in Page)
@@ -839,7 +836,7 @@ void EDA_DRAW_FRAME::LoadSettings()
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
     EDA_BASE_FRAME::LoadSettings();
-    cfg->Read( m_FrameName + CursorShapeEntryKeyword, &m_CursorShape, ( long )0 );
+    cfg->Read( m_FrameName + CursorShapeEntryKeyword, &m_cursorShape, ( long )0 );
     bool btmp;
 
     if ( cfg->Read( m_FrameName + ShowGridEntryKeyword, &btmp ) )
@@ -861,7 +858,7 @@ void EDA_DRAW_FRAME::SaveSettings()
     wxConfig* cfg = wxGetApp().m_EDA_Config;
 
     EDA_BASE_FRAME::SaveSettings();
-    cfg->Write( m_FrameName + CursorShapeEntryKeyword, m_CursorShape );
+    cfg->Write( m_FrameName + CursorShapeEntryKeyword, m_cursorShape );
     cfg->Write( m_FrameName + ShowGridEntryKeyword, IsGridVisible() );
     cfg->Write( m_FrameName + GridColorEntryKeyword, GetGridColor() );
     cfg->Write( m_FrameName + LastGridSizeId, ( long ) m_LastGridSizeId );
