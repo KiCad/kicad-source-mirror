@@ -1695,7 +1695,7 @@ void KICAD_PLUGIN::loadPCB_TEXT()
             size.x      = biuParse( data, &data );
             size.y      = biuParse( data, &data );
             BIU thickn  = biuParse( data, &data );
-            int orient  = intParse( data );
+            double angle = degParse( data );
 
             // Ensure the text has minimal size to see this text on screen:
 
@@ -1715,7 +1715,7 @@ void KICAD_PLUGIN::loadPCB_TEXT()
             pcbtxt->SetSize( size );
 
             pcbtxt->SetThickness( thickn );
-            pcbtxt->SetOrientation( orient );
+            pcbtxt->SetOrientation( angle );
 
             pcbtxt->SetPosition( wxPoint( pos_x, pos_y ) );
         }
@@ -2667,7 +2667,7 @@ void KICAD_PLUGIN::saveBOARD() const
             savePCB_TEXT( (TEXTE_PCB*) gr );
             break;
         case PCB_LINE_T:
-            saveMODULE_EDGE( (EDGE_MODULE*) gr );
+            savePCB_LINE( (DRAWSEGMENT*) gr );
             break;
         case PCB_TARGET_T:
             savePCB_TARGET( (PCB_TARGET*) gr );
@@ -2717,8 +2717,7 @@ void KICAD_PLUGIN::saveNETINFO_ITEM( const NETINFO_ITEM* aNet ) const
 
 void KICAD_PLUGIN::saveNETCLASSES() const
 {
-    // @todo make m_NetClasses private
-    NETCLASSES nc = m_board->m_NetClasses;
+    const NETCLASSES& nc = m_board->m_NetClasses;
 
     // save the default first.
     saveNETCLASS( nc.GetDefault() );
@@ -2768,18 +2767,24 @@ void KICAD_PLUGIN::saveMODULE_TEXT( const TEXTE_MODULE* me ) const
     if( parent )
         orient += parent->GetOrientation();
 
-    fprintf( m_fp, "T%d %s %s %g %s %c %c %d %c %s\n",
-            me->GetType(),
-            fmtBIUPoint( me->GetPos0() ).c_str(),   // m_Pos0.x, m_Pos0.y,
-            fmtBIUSize( me->GetSize() ).c_str(),     // m_Size.y, m_Size.x,
-            orient,
-            fmtBIU( me->GetThickness() ).c_str(),   // m_Thickness,
-            me->IsMirrored() ? 'M' : 'N',
-            me->IsVisible() ? 'V' : 'I',
-            me->GetLayer(),
-            me->IsItalic() ? 'I' : 'N',
-            EscapedUTF8( me->GetText() ).c_str()
-            );
+    wxString txt = me->GetText();
+
+    fprintf( m_fp,  "T%d %s %s %g %s %c %c %d %c %s\n",
+                    me->GetType(),
+                    fmtBIUPoint( me->GetPos0() ).c_str(),   // m_Pos0.x, m_Pos0.y,
+#if 0
+                    fmtBIUSize( me->GetSize() ).c_str(),                    // m_Size.y, m_Size.x,
+#else
+                    fmtBIUPair( me->GetSize().y, me->GetSize().x ).c_str(),     // m_Size.y, m_Size.x,
+#endif
+                    orient,
+                    fmtBIU( me->GetThickness() ).c_str(),   // m_Thickness,
+                    me->IsMirrored() ? 'M' : 'N',
+                    me->IsVisible() ? 'V' : 'I',
+                    me->GetLayer(),
+                    me->IsItalic() ? 'I' : 'N',
+                    EscapedUTF8( txt ).c_str()
+                    );
 
     CHECK_WRITE_ERROR();
 }
@@ -2790,32 +2795,28 @@ void KICAD_PLUGIN::saveMODULE_EDGE( const EDGE_MODULE* me ) const
     switch( me->GetShape() )
     {
     case S_SEGMENT:
-        fprintf(    m_fp, "DS %s %s %s %d\n",
-                    fmtBIUPoint( me->m_Start0 ).c_str(),
-                    fmtBIUPoint( me->m_End0 ).c_str(),
-                    fmtBIU( me->GetWidth() ).c_str(),
-                    me->GetLayer() );
+        fprintf( m_fp,  "DS %s %s %s %d\n",
+                        fmtBIUPoint( me->m_Start0 ).c_str(),
+                        fmtBIUPoint( me->m_End0 ).c_str(),
+                        fmtBIU( me->GetWidth() ).c_str(),
+                        me->GetLayer() );
         break;
 
     case S_CIRCLE:
-        fprintf(    m_fp, "DC %s %s %s %d\n",
-                    fmtBIUPoint( me->m_Start0 ).c_str(),
-                    fmtBIUPoint( me->m_End0 ).c_str(),
-                    fmtBIU( me->GetWidth() ).c_str(),
-                    me->GetLayer() );
+        fprintf( m_fp,  "DC %s %s %s %d\n",
+                        fmtBIUPoint( me->m_Start0 ).c_str(),
+                        fmtBIUPoint( me->m_End0 ).c_str(),
+                        fmtBIU( me->GetWidth() ).c_str(),
+                        me->GetLayer() );
         break;
 
     case S_ARC:
-        {
-            double angle = me->GetAngle();
-
-            fprintf(    m_fp, "DA %s %s %g %s %d\n",
+        fprintf( m_fp,  "DA %s %s %g %s %d\n",
                         fmtBIUPoint( me->m_Start0 ).c_str(),
                         fmtBIUPoint( me->m_End0 ).c_str(),
-                        angle,
+                        me->GetAngle(),
                         fmtBIU( me->GetWidth() ).c_str(),
                         me->GetLayer() );
-        }
         break;
 
     case S_POLYGON:
@@ -2859,17 +2860,16 @@ void KICAD_PLUGIN::savePAD( const D_PAD* me ) const
         THROW_IO_ERROR( wxString::Format( UNKNOWN_PAD_FORMAT, me->GetShape() ) );
     }
 
-    fprintf(    m_fp, "Sh %s %c %s %s %g\n",
-                EscapedUTF8( me->GetPadName() ).c_str(),
-                cshape,
-                fmtBIUSize( me->GetSize() ).c_str(),
-                fmtBIUSize( me->GetDelta() ).c_str(),
-                me->GetOrientation() );
+    fprintf( m_fp,  "Sh %s %c %s %s %g\n",
+                    EscapedUTF8( me->GetPadName() ).c_str(),
+                    cshape,
+                    fmtBIUSize( me->GetSize() ).c_str(),
+                    fmtBIUSize( me->GetDelta() ).c_str(),
+                    me->GetOrientation() );
 
-    fprintf(    m_fp, "Dr %s %s",
-                fmtBIU( me->GetDrillSize().x ).c_str(),
-                fmtBIUSize( me->GetOffset() ).c_str()
-                );
+    fprintf( m_fp,  "Dr %s %s",
+                    fmtBIU( me->GetDrillSize().x ).c_str(),
+                    fmtBIUSize( me->GetOffset() ).c_str() );
 
     if( me->GetDrillShape() == PAD_OVAL )
     {
@@ -2891,7 +2891,7 @@ void KICAD_PLUGIN::savePAD( const D_PAD* me ) const
         THROW_IO_ERROR( wxString::Format( UNKNOWN_PAD_ATTRIBUTE, me->GetAttribute() ) );
     }
 
-    fprintf( m_fp, "At %s N %8.8X\n", texttype, me->GetLayerMask() );
+    fprintf( m_fp, "At %s N %X\n", texttype, me->GetLayerMask() );
 
     fprintf( m_fp, "Ne %d %s\n", me->GetNet(), EscapedUTF8( me->GetNetname() ).c_str() );
 
@@ -2925,25 +2925,17 @@ void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
 
     fprintf( m_fp, "$MODULE %s\n", TO_UTF8( me->GetLibRef() ) );
 
-    if( me->IsLocked() )
-        statusTxt[0] = 'F';
-    else
-        statusTxt[0] = '~';
-
-    if( me->IsPlaced() )
-        statusTxt[1] = 'P';
-    else
-        statusTxt[1] = '~';
-
+    statusTxt[0] = me->IsLocked() ? 'F' : '~';
+    statusTxt[1] = me->IsPlaced() ? 'P' : '~';
     statusTxt[2] = '\0';
 
-    fprintf( m_fp, "Po %s %g %d %8lX %8lX %s\n",
-             fmtBIUPoint( me->GetPosition() ).c_str(),    // m_Pos.x, m_Pos.y,
-             orient,
-             me->GetLayer(),
-             me->GetLastEditTime(),
-             me->GetTimeStamp(),
-             statusTxt );
+    fprintf( m_fp,  "Po %s %g %d %lX %lX %s\n",
+                    fmtBIUPoint( me->GetPosition() ).c_str(),    // m_Pos.x, m_Pos.y,
+                    orient,
+                    me->GetLayer(),
+                    me->GetLastEditTime(),
+                    me->GetTimeStamp(),
+                    statusTxt );
 
     fprintf( m_fp, "Li %s\n", TO_UTF8( me->GetLibRef() ) );
 
@@ -2957,7 +2949,7 @@ void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
         fprintf( m_fp, "Kw %s\n", TO_UTF8( me->GetKeywords() ) );
     }
 
-    fprintf( m_fp, "Sc %8lX\n", me->GetTimeStamp() );
+    fprintf( m_fp, "Sc %lX\n", me->GetTimeStamp() );
     fprintf( m_fp, "AR %s\n", TO_UTF8( me->GetPath() ) );
     fprintf( m_fp, "Op %X %X 0\n", me->m_CntRot90, me->m_CntRot180 );
 
@@ -2987,23 +2979,23 @@ void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
         fprintf( m_fp, "\n" );
     }
 
-    saveMODULE_TEXT( (TEXTE_MODULE*) &me->m_Reference );
+    saveMODULE_TEXT( me->m_Reference );
 
-    saveMODULE_TEXT( (TEXTE_MODULE*) &me->m_Value );
+    saveMODULE_TEXT( me->m_Value );
 
     // save drawing elements
-    for( BOARD_ITEM* item = me->m_Drawings;  item;  item = item->Next() )
+    for( BOARD_ITEM* gr = me->m_Drawings;  gr;  gr = gr->Next() )
     {
-        switch( item->Type() )
+        switch( gr->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            saveMODULE_TEXT( (TEXTE_MODULE*) item );
+            saveMODULE_TEXT( (TEXTE_MODULE*) gr );
             break;
         case PCB_MODULE_EDGE_T:
-            saveMODULE_EDGE( (EDGE_MODULE*) item );
+            saveMODULE_EDGE( (EDGE_MODULE*) gr );
             break;
         default:
-            THROW_IO_ERROR( wxString::Format( UNKNOWN_GRAPHIC_FORMAT, item->Type() ) );
+            THROW_IO_ERROR( wxString::Format( UNKNOWN_GRAPHIC_FORMAT, gr->Type() ) );
         }
     }
 
@@ -3012,7 +3004,7 @@ void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
 
     save3D( me );
 
-    fprintf( m_fp, "$EndMODULE  %s\n", TO_UTF8( me->GetLibRef() ) );
+    fprintf( m_fp, "$EndMODULE %s\n", TO_UTF8( me->GetLibRef() ) );
 
     CHECK_WRITE_ERROR();
 }
@@ -3053,7 +3045,7 @@ void KICAD_PLUGIN::savePCB_TARGET( const PCB_TARGET* me ) const
 {
     fprintf( m_fp, "$PCB_TARGET\n" );
 
-    fprintf( m_fp, "Po %X %d %s %s %s %8lX\n",
+    fprintf( m_fp, "Po %X %d %s %s %s %lX\n",
              me->GetShape(),
              me->GetLayer(),
              fmtBIUPoint( me->GetPosition() ).c_str(),
@@ -3081,7 +3073,7 @@ void KICAD_PLUGIN::savePCB_LINE( const DRAWSEGMENT* me ) const
 
     if( me->GetType() != S_CURVE )
     {
-        fprintf( m_fp, "De %d %d %g %8lX %X\n",
+        fprintf( m_fp, "De %d %d %g %lX %X\n",
                  me->GetLayer(),
                  me->GetType(),
                  me->GetAngle(),
@@ -3091,7 +3083,7 @@ void KICAD_PLUGIN::savePCB_LINE( const DRAWSEGMENT* me ) const
     }
     else
     {
-        fprintf( m_fp, "De %d %d %g %8lX %X %s %s\n",
+        fprintf( m_fp, "De %d %d %g %lX %X %s %s\n",
                  me->GetLayer(),
                  me->GetType(),
                  me->GetAngle(),
@@ -3120,7 +3112,7 @@ void KICAD_PLUGIN::saveTRACK( const TRACK* me ) const
             fmtBIU( me->GetWidth() ).c_str(),
             fmtBIU( me->GetDrill() ).c_str() );
 
-    fprintf(m_fp, "De %d %d %d %8lX %X\n",
+    fprintf(m_fp, "De %d %d %d %lX %X\n",
             me->GetLayer(), type, me->GetNet(),
             me->GetTimeStamp(), me->GetStatus() );
 }
@@ -3131,7 +3123,7 @@ void KICAD_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
     fprintf( m_fp, "$CZONE_OUTLINE\n" );
 
     // Save the outline main info
-    fprintf( m_fp,  "ZInfo %8lX %d %s\n",
+    fprintf( m_fp,  "ZInfo %lX %d %s\n",
                     me->GetTimeStamp(), me->GetNet(),
                     EscapedUTF8( me->GetNetName() ).c_str() );
 
@@ -3237,7 +3229,7 @@ void KICAD_PLUGIN::saveDIMENTION( const DIMENSION* me ) const
     // this old keyword is used here for compatibility
     fprintf( m_fp, "$COTATION\n" );
 
-    fprintf( m_fp, "Ge %d %d %8lX\n", me->GetShape(), me->GetLayer(), me->GetTimeStamp() );
+    fprintf( m_fp, "Ge %d %d %lX\n", me->GetShape(), me->GetLayer(), me->GetTimeStamp() );
 
     fprintf( m_fp, "Va %d\n", me->m_Value );
 
@@ -3332,7 +3324,7 @@ void KICAD_PLUGIN::savePCB_TEXT( const TEXTE_PCB* me ) const
     case GR_TEXT_HJUSTIFY_RIGHT:    hJustify = 'R';     break;
     }
 
-    fprintf( m_fp,  "De %d %d %8lX %s %c\n",
+    fprintf( m_fp,  "De %d %d %lX %s %c\n",
                     me->GetLayer(),
                     !me->IsMirrored(),
                     me->GetTimeStamp(),
