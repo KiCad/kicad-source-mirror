@@ -446,8 +446,21 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         }
     }
 
-#if !defined(USE_NEW_PCBNEW_SAVE)
+#if defined(USE_NEW_PCBNEW_SAVE)
 
+    try
+    {
+        IO_MGR::Save( IO_MGR::KICAD, pcbFileName.GetFullPath(), GetBoard(), NULL );
+    }
+    catch( IO_ERROR ioe )
+    {
+        wxString msg = wxString::Format(  _( "Error loading board.\n%s" ),
+                            ioe.errorText.GetData() );
+        wxMessageBox( msg, _( "Save Board File" ), wxICON_ERROR );
+        saveok = false;
+    }
+
+#else
     // Create the file
     FILE* dest;
     dest = wxFopen( pcbFileName.GetFullPath(), wxT( "wt" ) );
@@ -466,22 +479,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
         SavePcbFormatAscii( dest );
         fclose( dest );
-    }
-
-#else
-
-    try
-    {
-        IO_MGR::Save( IO_MGR::KICAD, pcbFileName.GetFullPath(), GetBoard(), NULL );          // overload
-    }
-    catch( IO_ERROR ioe )
-    {
-        wxString msg = wxString::Format(  _( "Error loading board.\n%s" ),
-                            ioe.errorText.GetData() );
-
-        wxMessageBox( msg, _( "Save Board File" ), wxICON_ERROR );
-
-        saveok = false;
     }
 
 #endif

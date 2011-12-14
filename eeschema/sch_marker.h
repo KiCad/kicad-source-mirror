@@ -28,8 +28,8 @@
  * @brief SCH_MARKER class definition.
  */
 
-#ifndef _TYPE_SCH_MARKER_H_
-#define _TYPE_SCH_MARKER_H_
+#ifndef TYPE_SCH_MARKER_H_
+#define TYPE_SCH_MARKER_H_
 
 #include "sch_item_struct.h"
 #include "class_marker_base.h"
@@ -128,8 +128,7 @@ public:
     virtual BITMAP_DEF GetMenuImage() const { return  erc_xpm; }
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os );
-
+    void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
@@ -138,4 +137,4 @@ public:
     virtual void doSetPosition( const wxPoint& aPosition ) { m_Pos = aPosition; }
 };
 
-#endif /* _TYPE_SCH_MARKER_H_ */
+#endif // TYPE_SCH_MARKER_H_

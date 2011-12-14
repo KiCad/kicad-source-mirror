@@ -2163,7 +2163,7 @@ bool LIB_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* 
 
 #if defined(DEBUG)
 
-void LIB_PIN::Show( int nestLevel, std::ostream& os )
+void LIB_PIN::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
                                  << " num=\"" << GetNumberString().mb_str()

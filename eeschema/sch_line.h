@@ -173,7 +173,7 @@ public:
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const;
+    void Show( int nestLevel, std::ostream& os ) const; // override
 #endif
 
 private:

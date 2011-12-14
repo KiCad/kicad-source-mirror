@@ -251,7 +251,7 @@ bool SCH_BITMAP::IsSelectStateChanged( const wxRect& aRect )
 
 
 #if defined(DEBUG)
-void SCH_BITMAP::Show( int nestLevel, std::ostream& os )
+void SCH_BITMAP::Show( int nestLevel, std::ostream& os ) const
 {
     // XML output:
     wxString s = GetClass();

@@ -142,7 +142,7 @@ public:
                                          */
 
 #if defined(DEBUG)
-    void Show( std::ostream& out, int ndx );
+    void Show( std::ostream& out, int ndx ) const;      // override
 #endif
 
     NETLIST_OBJECT();

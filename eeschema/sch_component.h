@@ -287,7 +287,7 @@ public:
     virtual void SwapData( SCH_ITEM* aItem );
 
     // returns a unique ID, in the form of a path.
-    wxString GetPath( SCH_SHEET_PATH* sheet );
+    wxString GetPath( const SCH_SHEET_PATH* sheet ) const;
 
     /**
      * Function IsReferenceStringValid (static)
@@ -297,18 +297,18 @@ public:
      * @param aReferenceString = the reference string to validate
      * @return true if OK
      */
-    static bool IsReferenceStringValid( const wxString &aReferenceString );
+    static bool IsReferenceStringValid( const wxString& aReferenceString );
 
     /**
      * Function GetRef
      * returns the reference, for the given sheet path.
      */
-    const wxString GetRef( SCH_SHEET_PATH* sheet );
+    const wxString GetRef( const SCH_SHEET_PATH* sheet );
 
     /**
      * Set the reference, for the given sheet path.
      */
-    void SetRef( SCH_SHEET_PATH* sheet, const wxString& ref );
+    void SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref );
 
     /**
      * Function AddHierarchicalReference
@@ -407,16 +407,7 @@ public:
     virtual bool IsReplaceable() const { return true; }
 
 #if defined(DEBUG)
-
-    /**
-     * Function Show
-     * is used to output the object tree, currently for debugging only.
-     * @param nestLevel An aid to prettier tree indenting, and is the level
-     *          of nesting of this object within the overall tree.
-     * @param os The ostream& to output to.
-     */
-    void Show( int nestLevel, std::ostream& os );
-
+    void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
 private:

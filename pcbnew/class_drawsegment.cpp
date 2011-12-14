@@ -501,14 +501,7 @@ wxString DRAWSEGMENT::GetSelectMenuText() const
 
 
 #if defined(DEBUG)
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
-void DRAWSEGMENT::Show( int nestLevel, std::ostream& os )
+void DRAWSEGMENT::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
 

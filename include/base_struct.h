@@ -705,8 +705,10 @@ public:
      *                  of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
-    virtual void Show( int nestLevel, std::ostream& os ) const;
+    virtual void Show( int nestLevel, std::ostream& os ) const = 0;
+    // pure virtual so compiler warns if somebody mucks up a derived declaration
 
+    void ShowDummy( std::ostream& os ) const;  ///< call this if you are a lazy developer
 
     /**
      * Function NestedSpace

@@ -732,7 +732,7 @@ void SCH_TEXT::doPlot( PLOTTER* aPlotter )
 
 #if defined(DEBUG)
 
-void SCH_TEXT::Show( int nestLevel, std::ostream& os )
+void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
 {
     // XML output:
     wxString s = GetClass();

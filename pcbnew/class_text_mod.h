@@ -4,8 +4,8 @@
  */
 
 
-#ifndef TEXT_MODULE_H
-#define TEXT_MODULE_H
+#ifndef TEXT_MODULE_H_
+#define TEXT_MODULE_H_
 
 
 #include "class_board_item.h"
@@ -188,17 +188,8 @@ public:
     virtual BITMAP_DEF GetMenuImage() const { return  footprint_text_xpm; }
 
 #if defined(DEBUG)
-
-    /**
-     * Function Show
-     * is used to output the object tree, currently for debugging only.
-     * @param nestLevel An aid to prettier tree indenting, and is the level
-     *                  of nesting of this object within the overall tree.
-     * @param os The ostream& to output to.
-     */
-    virtual void Show( int nestLevel, std::ostream& os );
-
+    void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
 };
 
-#endif // TEXT_MODULE_H
+#endif // TEXT_MODULE_H_

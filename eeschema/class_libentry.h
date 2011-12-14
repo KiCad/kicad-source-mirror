@@ -167,6 +167,10 @@ public:
     }
 
     bool operator==( const LIB_ALIAS* aAlias ) const { return this == aAlias; }
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+#endif
 };
 
 extern bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 );
@@ -672,7 +676,10 @@ public:
     bool ShowPinNumbers() { return m_showPinNumbers; }
 
     bool operator==( const LIB_COMPONENT* aComponent ) const { return this == aComponent; }
-};
 
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+#endif
+};
 
 #endif  //  CLASS_LIBENTRY_H

@@ -215,7 +215,6 @@ bool EDA_ITEM::operator<( const EDA_ITEM& aItem ) const
 
 #if defined(DEBUG)
 
-
 // A function that should have been in wxWidgets
 std::ostream& operator<<( std::ostream& out, const wxSize& size )
 {
@@ -232,14 +231,14 @@ std::ostream& operator<<( std::ostream& out, const wxPoint& pt )
 }
 
 
-void EDA_ITEM::Show( int nestLevel, std::ostream& os ) const
+void EDA_ITEM::ShowDummy( std::ostream& os ) const
 {
     // XML output:
     wxString s = GetClass();
 
-    NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << ">"
-                                 << " Need ::Show() override for this class "
-                                 << "</" << s.Lower().mb_str() << ">\n";
+    os << '<' << s.Lower().mb_str() << ">"
+       << " Need ::Show() override for this class "
+       << "</" << s.Lower().mb_str() << ">\n";
 }
 
 
@@ -252,7 +251,6 @@ std::ostream& EDA_ITEM::NestedSpace( int nestLevel, std::ostream& os )
 
     return os;
 }
-
 
 #endif
 

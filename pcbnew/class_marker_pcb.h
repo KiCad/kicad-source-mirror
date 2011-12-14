@@ -118,7 +118,10 @@ public:
     virtual wxString GetSelectMenuText() const;
 
     virtual BITMAP_DEF GetMenuImage() const { return  drc_xpm; }
-};
 
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+#endif
+};
 
 #endif      //  CLASS_MARKER_PCB_H

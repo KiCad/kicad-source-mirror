@@ -1569,7 +1569,7 @@ wxString TRACK::GetSelectMenuText() const
 
 #if defined(DEBUG)
 
-void TRACK::Show( int nestLevel, std::ostream& os )
+void TRACK::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
 
@@ -1589,7 +1589,7 @@ void TRACK::Show( int nestLevel, std::ostream& os )
 }
 
 
-void SEGVIA::Show( int nestLevel, std::ostream& os )
+void SEGVIA::Show( int nestLevel, std::ostream& os ) const
 {
     const char* cp;
 

@@ -416,6 +416,10 @@ public:
 
     FILL_T GetFillMode() const { return m_Fill; }
 
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+#endif
+
 protected:
 
     /**

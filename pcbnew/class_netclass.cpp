@@ -263,7 +263,7 @@ void BOARD::SynchronizeNetsAndNetClasses()
 
 #if defined(DEBUG)
 
-void NETCLASS::Show( int nestLevel, std::ostream& os )
+void NETCLASS::Show( int nestLevel, std::ostream& os ) const
 {
     // for now, make it look like XML:
     //NestedSpace( nestLevel, os )

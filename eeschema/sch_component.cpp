@@ -380,7 +380,7 @@ void SCH_COMPONENT::AddHierarchicalReference( const wxString& aPath,
 }
 
 
-wxString SCH_COMPONENT::GetPath( SCH_SHEET_PATH* sheet )
+wxString SCH_COMPONENT::GetPath( const SCH_SHEET_PATH* sheet ) const
 {
     wxCHECK_MSG( sheet != NULL, wxEmptyString,
                  wxT( "Cannot get component path with invalid sheet object." ) );
@@ -392,7 +392,7 @@ wxString SCH_COMPONENT::GetPath( SCH_SHEET_PATH* sheet )
 }
 
 
-const wxString SCH_COMPONENT::GetRef( SCH_SHEET_PATH* sheet )
+const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
 {
     wxString          path = GetPath( sheet );
     wxString          h_path, h_ref;
@@ -435,7 +435,7 @@ const wxString SCH_COMPONENT::GetRef( SCH_SHEET_PATH* sheet )
  * i.e starts by letter
  * returns true if OK
  */
-bool SCH_COMPONENT::IsReferenceStringValid( const wxString & aReferenceString )
+bool SCH_COMPONENT::IsReferenceStringValid( const wxString& aReferenceString )
 {
     wxString text = aReferenceString;
     bool ok = true;
@@ -454,7 +454,7 @@ bool SCH_COMPONENT::IsReferenceStringValid( const wxString & aReferenceString )
 }
 
 
-void SCH_COMPONENT::SetRef( SCH_SHEET_PATH* sheet, const wxString& ref )
+void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 {
     wxString          path = GetPath( sheet );
 
@@ -929,7 +929,7 @@ wxPoint SCH_COMPONENT::GetScreenCoord( const wxPoint& aPoint )
 
 #if defined(DEBUG)
 
-void SCH_COMPONENT::Show( int nestLevel, std::ostream& os )
+void SCH_COMPONENT::Show( int nestLevel, std::ostream& os ) const
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()

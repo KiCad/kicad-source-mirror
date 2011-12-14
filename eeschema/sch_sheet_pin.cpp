@@ -531,7 +531,7 @@ bool SCH_SHEET_PIN::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 
 #if defined(DEBUG)
 
-void SCH_SHEET_PIN::Show( int nestLevel, std::ostream& os )
+void SCH_SHEET_PIN::Show( int nestLevel, std::ostream& os ) const
 {
     // XML output:
     wxString s = GetClass();

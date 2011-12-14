@@ -161,7 +161,7 @@ public:
     virtual BITMAP_DEF GetMenuImage() const { return image_xpm; }
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os );
+    void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
 private:

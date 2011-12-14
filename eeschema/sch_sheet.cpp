@@ -1207,7 +1207,7 @@ void SCH_SHEET::doPlot( PLOTTER* aPlotter )
 
 #if defined(DEBUG)
 
-void SCH_SHEET::Show( int nestLevel, std::ostream& os )
+void SCH_SHEET::Show( int nestLevel, std::ostream& os ) const
 {
     // XML output:
     wxString s = GetClass();
@@ -1216,7 +1216,7 @@ void SCH_SHEET::Show( int nestLevel, std::ostream& os )
                                  << TO_UTF8( m_name ) << '"' << ">\n";
 
     // show all the pins, and check the linked list integrity
-    BOOST_FOREACH( SCH_SHEET_PIN& label, m_pins )
+    BOOST_FOREACH( const SCH_SHEET_PIN& label, m_pins )
     {
         label.Show( nestLevel + 1, os );
     }

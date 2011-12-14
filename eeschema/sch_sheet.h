@@ -170,10 +170,7 @@ public:
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
 
 #if defined(DEBUG)
-
-    // comment inherited by Doxygen from Base_Struct
-    void Show( int nestLevel, std::ostream& os );
-
+    void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
     /**
@@ -633,10 +630,7 @@ public:
                                  SCH_SHEET_PATH*          aSheetPath );
 
 #if defined(DEBUG)
-
-    // comment inherited by Doxygen from Base_Struct
-    void Show( int nestLevel, std::ostream& os );
-
+    void Show( int nestLevel, std::ostream& os ) const;     // override
 #endif
 
 protected:
