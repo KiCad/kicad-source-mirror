@@ -234,11 +234,11 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
                 if( tmpSegm.GetLayer() == EDGE_N )
                     tmpSegm.SetLayer( -1 );
 
-                tmpSegm.m_Start = edge->m_Start;
-                tmpSegm.m_End   = edge->m_End;
-                tmpSegm.m_Shape = edge->m_Shape;
-                tmpSegm.m_Width = edge->m_Width;
-                tmpSegm.m_Param = edge->m_Angle;
+                tmpSegm.SetStart( edge->GetStart() );
+                tmpSegm.SetEnd(   edge->GetEnd() );
+                tmpSegm.SetShape( edge->GetShape() );
+                tmpSegm.SetWidth( edge->GetWidth() );
+                tmpSegm.m_Param = edge->GetAngle();
                 tmpSegm.SetNet( -1 );
 
                 TraceSegmentPcb( aPcb, &tmpSegm, HOLE, marge, WRITE_CELL );
@@ -271,11 +271,11 @@ void PlaceCells( BOARD* aPcb, int net_code, int flag )
                 type_cell |= CELL_is_EDGE;
             }
 
-            tmpSegm.m_Start = DrawSegm->m_Start;
-            tmpSegm.m_End   = DrawSegm->m_End;
-            tmpSegm.m_Shape = DrawSegm->m_Shape;
-            tmpSegm.m_Width = DrawSegm->m_Width;
-            tmpSegm.m_Param = DrawSegm->m_Angle;
+            tmpSegm.SetStart( DrawSegm->GetStart() );
+            tmpSegm.SetEnd(   DrawSegm->GetEnd() );
+            tmpSegm.SetShape( DrawSegm->GetShape() );
+            tmpSegm.SetWidth( DrawSegm->GetWidth() );
+            tmpSegm.m_Param = DrawSegm->GetAngle();
             tmpSegm.SetNet( -1 );
 
             TraceSegmentPcb( aPcb, &tmpSegm, type_cell, marge, WRITE_CELL );

@@ -891,8 +891,8 @@ static void CreateBoardSection( FILE* aFile, BOARD* aPcb )
             {
                 // XXX GenCAD supports arc boundaries but I've seen nothing that reads them
                 fprintf( aFile, "LINE %g %g %g %g\n",
-                        MapXTo( drawseg->m_Start.x ), MapYTo( drawseg->m_Start.y ),
-                        MapXTo( drawseg->m_End.x ), MapYTo( drawseg->m_End.y ) );
+                        MapXTo( drawseg->GetStart().x ), MapYTo( drawseg->GetStart().y ),
+                        MapXTo( drawseg->GetEnd().x ), MapYTo( drawseg->GetEnd().y ) );
             }
         }
     }
@@ -1041,7 +1041,7 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
             if( PtEdge->GetLayer() == SILKSCREEN_N_FRONT
                 || PtEdge->GetLayer() == SILKSCREEN_N_BACK )
             {
-                switch( PtEdge->m_Shape )
+                switch( PtEdge->GetShape() )
                 {
                 case S_SEGMENT:
                     fprintf( aFile, "LINE %g %g %g %g\n",
@@ -1068,9 +1068,9 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
                     int arcendx, arcendy;
                     arcendx = PtEdge->m_End0.x - PtEdge->m_Start0.x;
                     arcendy = PtEdge->m_End0.y - PtEdge->m_Start0.y;
-                    RotatePoint( &arcendx, &arcendy, -PtEdge->m_Angle );
-                    arcendx += PtEdge->m_Start0.x;
-                    arcendy += PtEdge->m_Start0.y;
+                    RotatePoint( &arcendx, &arcendy, -PtEdge->GetAngle() );
+                    arcendx += PtEdge->GetStart0().x;
+                    arcendy += PtEdge->GetStart0().y;
                     if( Yaxis_sign == -1 )
                     {
                         // Flipping Y flips the arc direction too
@@ -1078,19 +1078,19 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module )
                                  (arcendx) / SCALE_FACTOR,
                                  (Yaxis_sign * arcendy) / SCALE_FACTOR,
                                  (PtEdge->m_End0.x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->m_End0.y) / SCALE_FACTOR,
-                                 (PtEdge->m_Start0.x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->m_Start0.y) / SCALE_FACTOR );
+                                 (Yaxis_sign * PtEdge->GetEnd0().y) / SCALE_FACTOR,
+                                 (PtEdge->GetStart0().x) / SCALE_FACTOR,
+                                 (Yaxis_sign * PtEdge->GetStart0().y) / SCALE_FACTOR );
                     }
                     else
                     {
                         fprintf( aFile, "ARC %g %g %g %g %g %g\n",
-                                 (PtEdge->m_End0.x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->m_End0.y) / SCALE_FACTOR,
+                                 (PtEdge->GetEnd0().x) / SCALE_FACTOR,
+                                 (Yaxis_sign * PtEdge->GetEnd0().y) / SCALE_FACTOR,
                                  (arcendx) / SCALE_FACTOR,
                                  (Yaxis_sign * arcendy) / SCALE_FACTOR,
-                                 (PtEdge->m_Start0.x) / SCALE_FACTOR,
-                                 (Yaxis_sign * PtEdge->m_Start0.y) / SCALE_FACTOR );
+                                 (PtEdge->GetStart0().x) / SCALE_FACTOR,
+                                 (Yaxis_sign * PtEdge->GetStart0().y) / SCALE_FACTOR );
                     }
                     break;
                 }

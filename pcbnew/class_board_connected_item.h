@@ -15,7 +15,7 @@ class D_PAD;
 
 /**
  * Class BOARD_CONNECTED_ITEM
- * This is a base class derived from BOARD_ITEM for items that can be connected
+ * is a base class derived from BOARD_ITEM for items that can be connected
  * and have a net, a netname, a clearance ...
  * mainly: tracks, pads and zones
  * Handle connection info
@@ -89,9 +89,9 @@ public:
 };
 
 
-/*
- * class BOARD_ITEM_LIST
- * Handles a collection of BOARD_ITEM elements
+/**
+ * Class BOARD_ITEM_LIST
+ * is a container for a list of BOARD_ITEMs.
  */
 class BOARD_ITEM_LIST : public BOARD_ITEM
 {
@@ -204,4 +204,4 @@ public:
 };
 
 
-#endif /* BOARD_CONNECTED_ITEM_H */
+#endif // BOARD_CONNECTED_ITEM_H

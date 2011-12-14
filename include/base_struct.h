@@ -447,7 +447,6 @@ public:
         return m_Status & type;
     }
 
-
     void SetState( int type, int state )
     {
         if( state )
@@ -456,13 +455,8 @@ public:
             m_Status &= ~type;
     }
 
-
-    int ReturnStatus() const {  return m_Status;  }
-
-    void SetStatus( int new_status )
-    {
-        m_Status = new_status;
-    }
+    int GetStatus() const           { return m_Status; }
+    void SetStatus( int aStatus )   { m_Status = aStatus; }
 
     void SetFlags( int aMask ) { m_Flags |= aMask; }
     void ClearFlags( int aMask = EDA_ITEM_ALL_FLAGS ) { m_Flags &= ~aMask; }
@@ -798,7 +792,7 @@ class EDA_TEXT
 public:
     wxString m_Text;
     int      m_Thickness;               ///< pen size used to draw this text
-    int      m_Orient;                  ///< Orient in 0.1 degrees
+    double   m_Orient;                  ///< Orient in 0.1 degrees
     wxPoint  m_Pos;                     ///< XY position of anchor text.
     wxSize   m_Size;                    ///< XY size of text
     bool     m_Mirror;                  ///< true iff mirrored
@@ -832,8 +826,8 @@ public:
      */
     int GetThickness() const { return m_Thickness; };
 
-    void SetOrientation( int aOrientation ) { m_Orient = aOrientation; }
-    int  GetOrientation() const { return m_Orient; }
+    void SetOrientation( double aOrientation ) { m_Orient = aOrientation; }
+    double GetOrientation() const { return m_Orient; }
 
     void SetItalic( bool isItalic ) { m_Italic = isItalic; }
     bool IsItalic() const { return m_Italic; }

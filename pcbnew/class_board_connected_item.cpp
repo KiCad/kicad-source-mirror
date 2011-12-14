@@ -115,25 +115,30 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
     // It is important that this be implemented without any sequential searching.
     // Simple array lookups should be fine, performance-wise.
     BOARD*  board = GetBoard();
+
     // DO NOT use wxASSERT, because GetNetClass is called inside an OnPaint event
     // and a call to wxASSERT can crash the application.
-    if( board == NULL )     // Should not occurs
+
+    if( board == NULL )     // Should not occur
     {
 #ifdef __WXDEBUG__
-        wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass():NULL board,type %d"), Type() );
+        wxLogWarning( wxT("BOARD_CONNECTED_ITEM::GetNetClass():NULL board,type %d"), Type() );
 #endif
         return NULL;
     }
 
-    NETCLASS* netclass = NULL;
-    NETINFO_ITEM* net = board->FindNet( GetNet() );
+    NETCLASS*       netclass = NULL;
+    int             netcode  = GetNet();
+    NETINFO_ITEM*   net = board->FindNet( netcode );
+
     if( net )
     {
         netclass = net->GetNetClass();
+
 #ifdef __WXDEBUG__
         if( netclass == NULL )
         {
-            wxLogWarning(wxT("BOARD_CONNECTED_ITEM::GetNetClass():NULL netclass,type %d"), Type());
+            wxLogWarning( wxT("BOARD_CONNECTED_ITEM::GetNetClass():NULL netclass,type %d"), Type() );
         }
 #endif
     }
@@ -148,10 +153,10 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
  * Function GetNetClassName
  * @return the Net Class name of this item
  */
-wxString BOARD_CONNECTED_ITEM::GetNetClassName( ) const
+wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
 {
-    wxString name;
-    NETCLASS*   myclass  = GetNetClass();
+    wxString    name;
+    NETCLASS*   myclass = GetNetClass();
 
     if( myclass )
         name = myclass->GetName();

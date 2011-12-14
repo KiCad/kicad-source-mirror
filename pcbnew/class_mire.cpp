@@ -43,6 +43,15 @@ PCB_TARGET::~PCB_TARGET()
 }
 
 
+void PCB_TARGET::Exchg( PCB_TARGET* source )
+{
+    EXCHG( m_Pos,   source->m_Pos );
+    EXCHG( m_Width, source->m_Width );
+    EXCHG( m_Size,  source->m_Size );
+    EXCHG( m_Shape, source->m_Shape );
+}
+
+
 void PCB_TARGET::Copy( PCB_TARGET* source )
 {
     m_Layer     = source->m_Layer;
@@ -143,12 +152,6 @@ bool PCB_TARGET::HitTest( const wxPoint& refPos )
 }
 
 
-/**
- * Function HitTest (overlayed)
- * tests if the given EDA_RECT intersect this object.
- * @param refArea : the given EDA_RECT
- * @return bool - true if a hit, else false
- */
 bool PCB_TARGET::HitTest( EDA_RECT& refArea )
 {
     if( refArea.Contains( m_Pos ) )
@@ -158,23 +161,12 @@ bool PCB_TARGET::HitTest( EDA_RECT& refArea )
 }
 
 
-/**
- * Function Rotate
- * Rotate this object.
- * @param aRotCentre - the rotation point.
- * @param aAngle - the rotation angle in 0.1 degree.
- */
-void PCB_TARGET::Rotate(const wxPoint& aRotCentre, int aAngle)
+void PCB_TARGET::Rotate(const wxPoint& aRotCentre, double aAngle)
 {
     RotatePoint( &m_Pos, aRotCentre, aAngle );
 }
 
 
-/**
- * Function Flip
- * Flip this object, i.e. change the board side for this object
- * @param aCentre - the rotation point.
- */
 void PCB_TARGET::Flip(const wxPoint& aCentre )
 {
     m_Pos.y  = aCentre.y - ( m_Pos.y - aCentre.y );

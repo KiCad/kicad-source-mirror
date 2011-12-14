@@ -20,46 +20,45 @@
 
 
 DIMENSION::DIMENSION( BOARD_ITEM* aParent ) :
-    BOARD_ITEM( aParent, PCB_DIMENSION_T )
+    BOARD_ITEM( aParent, PCB_DIMENSION_T ),
+    m_Text( this )
 {
     m_Layer = DRAW_LAYER;
     m_Width = 50;
     m_Value = 0;
     m_Shape = 0;
     m_Unit  = INCHES;
-    m_Text  = new TEXTE_PCB( this );
 }
 
 
 DIMENSION::~DIMENSION()
 {
-    delete m_Text;
 }
 
 
 void DIMENSION::SetPosition( const wxPoint& aPos )
 {
     m_Pos = aPos;
-    m_Text->SetPos( aPos );
+    m_Text.SetPos( aPos );
 }
 
 
 void DIMENSION::SetText( const wxString& aNewText )
 {
-    m_Text->SetText( aNewText );
+    m_Text.SetText( aNewText );
 }
 
 
 const wxString DIMENSION::GetText() const
 {
-    return m_Text->GetText();
+    return m_Text.GetText();
 }
 
 
 void DIMENSION::SetLayer( int aLayer )
 {
     m_Layer = aLayer;
-    m_Text->SetLayer( aLayer);
+    m_Text.SetLayer( aLayer);
 }
 
 
@@ -72,7 +71,7 @@ void DIMENSION::Copy( DIMENSION* source )
     m_Shape     = source->m_Shape;
     m_Unit      = source->m_Unit;
     SetTimeStamp( GetNewTimeStamp() );
-    m_Text->Copy( source->m_Text );
+    m_Text.Copy( &source->m_Text );
 
     m_crossBarOx    = source->m_crossBarOx;
     m_crossBarOy    = source->m_crossBarOy;
@@ -105,10 +104,10 @@ void DIMENSION::Copy( DIMENSION* source )
 }
 
 
-void DIMENSION::Move(const wxPoint& offset)
+void DIMENSION::Move( const wxPoint& offset )
 {
     m_Pos += offset;
-    m_Text->m_Pos += offset;
+    m_Text.m_Pos += offset;
     m_crossBarOx    += offset.x;
     m_crossBarOy    += offset.y;
     m_crossBarFx    += offset.x;
@@ -140,13 +139,13 @@ void DIMENSION::Move(const wxPoint& offset)
 }
 
 
-void DIMENSION::Rotate( const wxPoint& aRotCentre, int aAngle )
+void DIMENSION::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     RotatePoint( &m_Pos, aRotCentre, aAngle );
 
-    RotatePoint( &m_Text->m_Pos, aRotCentre, aAngle );
+    RotatePoint( &m_Text.m_Pos, aRotCentre, aAngle );
 
-    int newAngle = m_Text->GetOrientation() + aAngle;
+    double newAngle = m_Text.GetOrientation() + aAngle;
 
     if( newAngle >= 3600 )
         newAngle -= 3600;
@@ -154,7 +153,7 @@ void DIMENSION::Rotate( const wxPoint& aRotCentre, int aAngle )
     if( newAngle > 900  &&  newAngle < 2700 )
         newAngle -= 1800;
 
-    m_Text->SetOrientation( newAngle );
+    m_Text.SetOrientation( newAngle );
 
     RotatePoint( &m_crossBarOx, &m_crossBarOy, aRotCentre.x, aRotCentre.y, aAngle );
     RotatePoint( &m_crossBarFx, &m_crossBarFy, aRotCentre.x, aRotCentre.y, aAngle );
@@ -180,21 +179,21 @@ void DIMENSION::Flip( const wxPoint& aCentre )
 }
 
 
-void DIMENSION::Mirror(const wxPoint& axis_pos)
+void DIMENSION::Mirror( const wxPoint& axis_pos )
 {
 #define INVERT( pos )       (pos) = axis_pos.y - ( (pos) - axis_pos.y )
     INVERT( m_Pos.y );
-    INVERT( m_Text->m_Pos.y );
+    INVERT( m_Text.m_Pos.y );
 
     // invert angle
-    int newAngle = m_Text->GetOrientation();
+    double newAngle = m_Text.GetOrientation();
     if( newAngle >= 3600 )
         newAngle -= 3600;
 
     if( newAngle > 900  &&  newAngle < 2700 )
         newAngle -= 1800;
 
-    m_Text->SetOrientation( newAngle );
+    m_Text.SetOrientation( newAngle );
 
     INVERT( m_crossBarOy );
     INVERT( m_crossBarFy );
@@ -217,25 +216,25 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
 {
     #define ARROW_SIZE 500    //size of arrows
     int      ii;
-    int      mesure, deltax, deltay;            /* value of the measure on X and Y axes */
-    int      arrow_up_X = 0, arrow_up_Y = 0;    /* coordinates of arrow line / */
-    int      arrow_dw_X = 0, arrow_dw_Y = 0;    /* coordinates of arrow line \ */
-    int      hx, hy;                            /* dimension line interval */
-    float    angle, angle_f;
+    int      mesure, deltax, deltay;            //  value of the measure on X and Y axes
+    int      arrow_up_X = 0, arrow_up_Y = 0;    //  coordinates of arrow line /
+    int      arrow_dw_X = 0, arrow_dw_Y = 0;    //  coordinates of arrow line '\'
+    int      hx, hy;                            //  dimension line interval
+    double   angle, angle_f;
     wxString msg;
 
-    /* Init layer : */
-    m_Text->SetLayer( GetLayer() );
+    // Init layer :
+    m_Text.SetLayer( GetLayer() );
 
-    /* calculate the size of the dimension (text + line above the text) */
-    ii = m_Text->m_Size.y +
-         m_Text->GetThickness() + (m_Width * 3);
+    // calculate the size of the dimension (text + line above the text)
+    ii = m_Text.m_Size.y +
+         m_Text.GetThickness() + (m_Width * 3);
 
     deltax = m_featureLineDOx - m_featureLineGOx;
     deltay = m_featureLineDOy - m_featureLineGOy;
 
     // Calculate dimension value
-    mesure = wxRound(hypot( (double) deltax, (double) deltay ) );
+    mesure = wxRound( hypot( (double) deltax, (double) deltay ) );
 
     if( deltax || deltay )
         angle = atan2( (double) deltay, (double) deltax );
@@ -302,11 +301,11 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     m_featureLineDFx = m_crossBarFx + hx;
     m_featureLineDFy = m_crossBarFy + hy;
 
-    /* Calculate the better text position and orientation: */
-    m_Pos.x = m_Text->m_Pos.x = (m_crossBarFx + m_featureLineGFx) / 2;
-    m_Pos.y = m_Text->m_Pos.y = (m_crossBarFy + m_featureLineGFy) / 2;
+    // Calculate the better text position and orientation:
+    m_Pos.x = m_Text.m_Pos.x = (m_crossBarFx + m_featureLineGFx) / 2;
+    m_Pos.y = m_Text.m_Pos.y = (m_crossBarFy + m_featureLineGFy) / 2;
 
-    int newAngle = -(int) (angle * 1800 / M_PI);
+    double newAngle = -(angle * 1800 / M_PI);
     if( newAngle < 0 )
         newAngle += 3600;
 
@@ -316,7 +315,7 @@ void DIMENSION::AdjustDimensionDetails( bool aDoNotChangeText )
     if( newAngle > 900  &&  newAngle < 2700 )
         newAngle -= 1800;
 
-    m_Text->SetOrientation( newAngle );
+    m_Text.SetOrientation( newAngle );
 
     if( !aDoNotChangeText )
     {
@@ -334,7 +333,7 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxP
     ox = -offset.x;
     oy = -offset.y;
 
-    m_Text->Draw( panel, DC, mode_color, offset );
+    m_Text.Draw( panel, DC, mode_color, offset );
 
     BOARD * brd =  GetBoard( );
 
@@ -417,7 +416,7 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxP
 void DIMENSION::DisplayInfo( EDA_DRAW_FRAME* frame )
 {
     // for now, display only the text within the DIMENSION using class TEXTE_PCB.
-    m_Text->DisplayInfo( frame );
+    m_Text.DisplayInfo( frame );
 }
 
 
@@ -426,14 +425,14 @@ bool DIMENSION::HitTest( const wxPoint& aPoint )
     int ux0, uy0;
     int dx, dy, spot_cX, spot_cY;
 
-    if( m_Text && m_Text->TextHitTest( aPoint ) )
+    if( m_Text.TextHitTest( aPoint ) )
         return true;
 
-    /* Locate SEGMENTS? */
+    // Locate SEGMENTS?
     ux0 = m_crossBarOx;
     uy0 = m_crossBarOy;
 
-    /* Recalculate coordinates with ux0, uy0 = origin. */
+    // Recalculate coordinates with ux0, uy0 = origin.
     dx = m_crossBarFx - ux0;
     dy = m_crossBarFy - uy0;
 
@@ -533,7 +532,7 @@ EDA_RECT DIMENSION::GetBoundingBox() const
     EDA_RECT bBox;
     int xmin, xmax, ymin, ymax;
 
-    bBox = m_Text->GetTextBox( -1 );
+    bBox = m_Text.GetTextBox( -1 );
     xmin = bBox.GetX();
     xmax = bBox.GetRight();
     ymin = bBox.GetY();

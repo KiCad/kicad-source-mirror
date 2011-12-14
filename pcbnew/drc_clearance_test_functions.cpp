@@ -175,7 +175,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     if( aRefSeg->Type() == PCB_VIA_T )
     {
         // test if the via size is smaller than minimum
-        if( aRefSeg->Shape() == VIA_MICROVIA )
+        if( aRefSeg->GetShape() == VIA_MICROVIA )
         {
             if( aRefSeg->m_Width < netclass->GetuViaMinDiameter() )
             {
@@ -207,7 +207,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         // For microvias: test if they are blind vias and only between 2 layers
         // because they are used for very small drill size and are drill by laser
         // and **only one layer** can be drilled
-        if( aRefSeg->Shape() == VIA_MICROVIA )
+        if( aRefSeg->GetShape() == VIA_MICROVIA )
         {
             int  layer1, layer2;
             bool err = true;

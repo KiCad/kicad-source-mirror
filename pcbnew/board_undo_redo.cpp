@@ -185,61 +185,69 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     switch( aItem->Type() )
     {
     case PCB_MODULE_T:
-    {
-        MODULE* tmp = (MODULE*) DuplicateStruct( aImage );
-        ( (MODULE*) aImage )->Copy( (MODULE*) aItem );
-        ( (MODULE*) aItem )->Copy( tmp );
-        delete tmp;
-    }
-    break;
+        {
+            MODULE* tmp = (MODULE*) DuplicateStruct( aImage );
+            ( (MODULE*) aImage )->Copy( (MODULE*) aItem );
+            ( (MODULE*) aItem )->Copy( tmp );
+            delete tmp;
+        }
+        break;
 
     case PCB_ZONE_AREA_T:
-    {
-        ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) DuplicateStruct( aImage );
-        ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) aItem );
-        ( (ZONE_CONTAINER*) aItem )->Copy( tmp );
-        delete tmp;
-    }
-    break;
+        {
+            ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) DuplicateStruct( aImage );
+            ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) aItem );
+            ( (ZONE_CONTAINER*) aItem )->Copy( tmp );
+            delete tmp;
+        }
+        break;
 
     case PCB_LINE_T:
+#if 0
         EXCHG( ( (DRAWSEGMENT*) aItem )->m_Start, ( (DRAWSEGMENT*) aImage )->m_Start );
         EXCHG( ( (DRAWSEGMENT*) aItem )->m_End, ( (DRAWSEGMENT*) aImage )->m_End );
         EXCHG( ( (DRAWSEGMENT*) aItem )->m_Width, ( (DRAWSEGMENT*) aImage )->m_Width );
         EXCHG( ( (DRAWSEGMENT*) aItem )->m_Shape, ( (DRAWSEGMENT*) aImage )->m_Shape );
+#else
+        {
+            DRAWSEGMENT tmp = *(DRAWSEGMENT*) aImage;
+            *aImage = *aItem;
+            *aItem  = tmp;
+        }
+#endif
         break;
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
-    {
-        TRACK* track = (TRACK*) aItem;
-        TRACK* image = (TRACK*) aImage;
-        EXCHG( track->m_Start, image->m_Start );
-        EXCHG( track->m_End, image->m_End );
-        EXCHG( track->m_Width, image->m_Width );
-        EXCHG( track->m_Shape, image->m_Shape );
-        int atmp = track->GetDrillValue();
+        {
+            TRACK* track = (TRACK*) aItem;
+            TRACK* image = (TRACK*) aImage;
+            EXCHG( track->m_Start, image->m_Start );
+            EXCHG( track->m_End, image->m_End );
+            EXCHG( track->m_Width, image->m_Width );
+            EXCHG( track->m_Shape, image->m_Shape );
+            int atmp = track->GetDrillValue();
 
-        if( track->IsDrillDefault() )
-            atmp = -1;
+            if( track->IsDrillDefault() )
+                atmp = -1;
 
-        int itmp = image->GetDrillValue();
+            int itmp = image->GetDrillValue();
 
-        if( image->IsDrillDefault() )
-            itmp = -1;
+            if( image->IsDrillDefault() )
+                itmp = -1;
 
-        EXCHG(itmp, atmp );
+            EXCHG(itmp, atmp );
 
-        if( atmp > 0 )
-            track->SetDrillValue( atmp );
-        else
-            track->SetDrillDefault();
+            if( atmp > 0 )
+                track->SetDrill( atmp );
+            else
+                track->SetDrillDefault();
 
-        if( itmp > 0 )
-            image->SetDrillValue( itmp );
-        else
-            image->SetDrillDefault();
-    }
+            if( itmp > 0 )
+                image->SetDrill( itmp );
+            else
+                image->SetDrillDefault();
+        }
         break;
 
     case PCB_TEXT_T:
@@ -256,26 +264,23 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
         break;
 
     case PCB_TARGET_T:
-        EXCHG( ( (PCB_TARGET*) aItem )->m_Pos, ( (PCB_TARGET*) aImage )->m_Pos );
-        EXCHG( ( (PCB_TARGET*) aItem )->m_Width, ( (PCB_TARGET*) aImage )->m_Width );
-        EXCHG( ( (PCB_TARGET*) aItem )->m_Size, ( (PCB_TARGET*) aImage )->m_Size );
-        EXCHG( ( (PCB_TARGET*) aItem )->m_Shape, ( (PCB_TARGET*) aImage )->m_Shape );
+        ( (PCB_TARGET*) aItem )->Exchg( (PCB_TARGET*) aImage );
         break;
 
     case PCB_DIMENSION_T:
-    {
-        wxString txt = ( (DIMENSION*) aItem )->GetText();
-        ( (DIMENSION*) aItem )->SetText( ( (DIMENSION*) aImage )->GetText() );
-        ( (DIMENSION*) aImage )->SetText( txt );
-        EXCHG( ( (DIMENSION*) aItem )->m_Width, ( (DIMENSION*) aImage )->m_Width );
-        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Size, ( (DIMENSION*) aImage )->m_Text->m_Size );
-        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Pos, ( (DIMENSION*) aImage )->m_Text->m_Pos );
-        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Thickness,
-               ( (DIMENSION*) aImage )->m_Text->m_Thickness );
-        EXCHG( ( (DIMENSION*) aItem )->m_Text->m_Mirror,
-               ( (DIMENSION*) aImage )->m_Text->m_Mirror );
-    }
-    break;
+        {
+            wxString txt = ( (DIMENSION*) aItem )->GetText();
+            ( (DIMENSION*) aItem )->SetText( ( (DIMENSION*) aImage )->GetText() );
+            ( (DIMENSION*) aImage )->SetText( txt );
+            EXCHG( ( (DIMENSION*) aItem )->m_Width, ( (DIMENSION*) aImage )->m_Width );
+            EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Size, ( (DIMENSION*) aImage )->m_Text.m_Size );
+            EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Pos, ( (DIMENSION*) aImage )->m_Text.m_Pos );
+            EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Thickness,
+                   ( (DIMENSION*) aImage )->m_Text.m_Thickness );
+            EXCHG( ( (DIMENSION*) aItem )->m_Text.m_Mirror,
+                   ( (DIMENSION*) aImage )->m_Text.m_Mirror );
+        }
+        break;
 
     case PCB_ZONE_T:
     default:

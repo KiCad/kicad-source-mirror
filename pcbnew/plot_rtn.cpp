@@ -266,114 +266,90 @@ static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte, GRTraceMod
 }
 
 
-void PlotDimension( PLOTTER* plotter, DIMENSION* Dimension, int aLayerMask,
+void PlotDimension( PLOTTER* plotter, DIMENSION* aDim, int aLayerMask,
                     GRTraceMode trace_mode )
 {
-    DRAWSEGMENT* DrawTmp;
-
-    if( (GetLayerMask( Dimension->GetLayer() ) & aLayerMask) == 0 )
+    if( (GetLayerMask( aDim->GetLayer() ) & aLayerMask) == 0 )
         return;
 
-    DrawTmp = new DRAWSEGMENT( NULL );
+    DRAWSEGMENT draw;
 
-    DrawTmp->m_Width = (trace_mode==FILAIRE) ? -1 : Dimension->m_Width;
-    DrawTmp->SetLayer( Dimension->GetLayer() );
+    draw.SetWidth( (trace_mode==FILAIRE) ? -1 : aDim->GetWidth() );
+    draw.SetLayer( aDim->GetLayer() );
 
-    PlotTextePcb( plotter, Dimension->m_Text, aLayerMask, trace_mode );
+    PlotTextePcb( plotter, &aDim->m_Text, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->m_crossBarOx;
-    DrawTmp->m_Start.y = Dimension->m_crossBarOy;
-    DrawTmp->m_End.x = Dimension->m_crossBarFx;
-    DrawTmp->m_End.y = Dimension->m_crossBarFy;
-    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
+    draw.SetStart( wxPoint( aDim->m_crossBarOx, aDim->m_crossBarOy ));
+    draw.SetEnd(   wxPoint( aDim->m_crossBarFx, aDim->m_crossBarFy ));
+    PlotDrawSegment( plotter, &draw, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->m_featureLineGOx;
-    DrawTmp->m_Start.y = Dimension->m_featureLineGOy;
-    DrawTmp->m_End.x = Dimension->m_featureLineGFx;
-    DrawTmp->m_End.y = Dimension->m_featureLineGFy;
-    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
+    draw.SetStart( wxPoint( aDim->m_featureLineGOx, aDim->m_featureLineGOy ));
+    draw.SetEnd(   wxPoint( aDim->m_featureLineGFx, aDim->m_featureLineGFy ));
+    PlotDrawSegment( plotter, &draw, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->m_featureLineDOx;
-    DrawTmp->m_Start.y = Dimension->m_featureLineDOy;
-    DrawTmp->m_End.x = Dimension->m_featureLineDFx;
-    DrawTmp->m_End.y = Dimension->m_featureLineDFy;
-    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
+    draw.SetStart( wxPoint( aDim->m_featureLineDOx, aDim->m_featureLineDOy ));
+    draw.SetEnd(   wxPoint( aDim->m_featureLineDFx, aDim->m_featureLineDFy ));
+    PlotDrawSegment( plotter, &draw, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->m_arrowD1Ox;
-    DrawTmp->m_Start.y = Dimension->m_arrowD1Oy;
-    DrawTmp->m_End.x = Dimension->m_arrowD1Fx;
-    DrawTmp->m_End.y = Dimension->m_arrowD1Fy;
-    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
+    draw.SetStart( wxPoint( aDim->m_arrowD1Ox, aDim->m_arrowD1Oy ));
+    draw.SetEnd(   wxPoint( aDim->m_arrowD1Fx, aDim->m_arrowD1Fy ));
+    PlotDrawSegment( plotter, &draw, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->m_arrowD2Ox;
-    DrawTmp->m_Start.y = Dimension->m_arrowD2Oy;
-    DrawTmp->m_End.x = Dimension->m_arrowD2Fx;
-    DrawTmp->m_End.y = Dimension->m_arrowD2Fy;
-    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
+    draw.SetStart( wxPoint( aDim->m_arrowD2Ox, aDim->m_arrowD2Oy ));
+    draw.SetEnd(   wxPoint( aDim->m_arrowD2Fx, aDim->m_arrowD2Fy ));
+    PlotDrawSegment( plotter, &draw, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->m_arrowG1Ox;
-    DrawTmp->m_Start.y = Dimension->m_arrowG1Oy;
-    DrawTmp->m_End.x = Dimension->m_arrowG1Fx;
-    DrawTmp->m_End.y = Dimension->m_arrowG1Fy;
-    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
+    draw.SetStart( wxPoint( aDim->m_arrowG1Ox, aDim->m_arrowG1Oy ));
+    draw.SetEnd(   wxPoint( aDim->m_arrowG1Fx, aDim->m_arrowG1Fy ));
+    PlotDrawSegment( plotter, &draw, aLayerMask, trace_mode );
 
-    DrawTmp->m_Start.x = Dimension->m_arrowG2Ox;
-    DrawTmp->m_Start.y = Dimension->m_arrowG2Oy;
-    DrawTmp->m_End.x = Dimension->m_arrowG2Fx;
-    DrawTmp->m_End.y = Dimension->m_arrowG2Fy;
-    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
-
-    delete DrawTmp;
+    draw.SetStart( wxPoint( aDim->m_arrowG2Ox, aDim->m_arrowG2Oy ));
+    draw.SetEnd(   wxPoint( aDim->m_arrowG2Fx, aDim->m_arrowG2Fy ));
+    PlotDrawSegment( plotter, &draw, aLayerMask, trace_mode );
 }
 
 
-void PlotPcbTarget( PLOTTER* plotter, PCB_TARGET* Mire, int aLayerMask, GRTraceMode trace_mode )
+void PlotPcbTarget( PLOTTER* plotter, PCB_TARGET* aMire, int aLayerMask, GRTraceMode trace_mode )
 {
-    DRAWSEGMENT* DrawTmp;
-    int          dx1, dx2, dy1, dy2, radius;
+    int     dx1, dx2, dy1, dy2, radius;
 
-    if( (GetLayerMask( Mire->GetLayer() ) & aLayerMask) == 0 )
+    if( (GetLayerMask( aMire->GetLayer() ) & aLayerMask) == 0 )
         return;
 
-    DrawTmp = new DRAWSEGMENT( NULL );
+    DRAWSEGMENT  draw;
 
-    DrawTmp->m_Width = ( trace_mode == FILAIRE ) ? -1 : Mire->m_Width;
-    DrawTmp->SetLayer( Mire->GetLayer() );
+    draw.SetShape( S_CIRCLE );
+    draw.SetWidth( ( trace_mode == FILAIRE ) ? -1 : aMire->GetWidth() );
+    draw.SetLayer( aMire->GetLayer() );
 
-    DrawTmp->m_Start.x = Mire->m_Pos.x; DrawTmp->m_Start.y = Mire->m_Pos.y;
-    DrawTmp->m_End.x   = DrawTmp->m_Start.x + ( Mire->m_Size / 4 );
-    DrawTmp->m_End.y   = DrawTmp->m_Start.y;
-    DrawTmp->m_Shape   = S_CIRCLE;
-    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
+    draw.SetStart( aMire->GetPosition() );
+    draw.SetEnd( wxPoint( draw.GetStart().x + ( aMire->GetSize() / 4 ), draw.GetStart().y ));
+    PlotDrawSegment( plotter, &draw, aLayerMask, trace_mode );
 
-    DrawTmp->m_Shape = S_SEGMENT;
+    draw.SetShape( S_SEGMENT );
 
-    radius = Mire->m_Size / 2;
+    radius = aMire->GetSize() / 2;
     dx1    = radius;
     dy1    = 0;
     dx2    = 0;
     dy2    = radius;
 
-    if( Mire->m_Shape ) /* Shape X */
+    if( aMire->GetShape() )    // Shape X
     {
         dx1 = dy1 = ( radius * 7 ) / 5;
         dx2 = dx1;
         dy2 = -dy1;
     }
 
-    DrawTmp->m_Start.x = Mire->m_Pos.x - dx1;
-    DrawTmp->m_Start.y = Mire->m_Pos.y - dy1;
-    DrawTmp->m_End.x = Mire->m_Pos.x + dx1;
-    DrawTmp->m_End.y = Mire->m_Pos.y + dy1;
-    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
+    wxPoint mirePos( aMire->GetPosition() );
 
-    DrawTmp->m_Start.x = Mire->m_Pos.x - dx2;
-    DrawTmp->m_Start.y = Mire->m_Pos.y - dy2;
-    DrawTmp->m_End.x = Mire->m_Pos.x + dx2;
-    DrawTmp->m_End.y = Mire->m_Pos.y + dy2;
-    PlotDrawSegment( plotter, DrawTmp, aLayerMask, trace_mode );
+    draw.SetStart( wxPoint( mirePos.x - dx1, mirePos.y - dy1 ));
+    draw.SetEnd(   wxPoint( mirePos.x + dx1, mirePos.y + dy1 ));
+    PlotDrawSegment( plotter, &draw, aLayerMask, trace_mode );
 
-    delete DrawTmp;
+    draw.SetStart( wxPoint( mirePos.x - dx2, mirePos.y - dy2 ));
+    draw.SetEnd(   wxPoint( mirePos.x + dx2, mirePos.y + dy2 ));
+    PlotDrawSegment( plotter, &draw, aLayerMask, trace_mode );
 }
 
 
@@ -398,23 +374,21 @@ void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask, GRTraceMo
 }
 
 
-/* Plot a graphic item (outline) relative to a footprint */
-void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge, GRTraceMode trace_mode )
+/** Plot a graphic item (outline) relative to a footprint */
+void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* aEdge, GRTraceMode trace_mode )
 {
-    int     type_trace;         /* Type of item to plot. */
-    int     thickness;          /* Segment thickness. */
-    int     radius;             /* Circle radius. */
-    int     StAngle, EndAngle;
-    wxPoint pos, end;
+    int     type_trace;         // Type of item to plot.
+    int     thickness;          // Segment thickness.
+    int     radius;             // Circle radius.
 
-    if( PtEdge->Type() != PCB_MODULE_EDGE_T )
+    if( aEdge->Type() != PCB_MODULE_EDGE_T )
         return;
 
-    type_trace = PtEdge->m_Shape;
-    thickness  = PtEdge->m_Width;
+    type_trace = aEdge->GetShape();
+    thickness  = aEdge->GetWidth();
 
-    pos = PtEdge->m_Start;
-    end = PtEdge->m_End;
+    wxPoint pos( aEdge->GetStart() );
+    wxPoint end( aEdge->GetEnd() );
 
     switch( type_trace )
     {
@@ -429,48 +403,54 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge, GRTraceMode trace
         break;
 
     case S_ARC:
-        radius = (int) hypot( (double) ( end.x - pos.x ),
-                              (double) ( end.y - pos.y ) );
-        StAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
-        EndAngle = StAngle + PtEdge->m_Angle;
-        plotter->thick_arc( pos,
-                            -EndAngle,
-                            -StAngle,
-                            radius,
-                            thickness,
-                            trace_mode );
+        {
+            radius = (int) hypot( (double) ( end.x - pos.x ),
+                                  (double) ( end.y - pos.y ) );
+
+            double startAngle  = ArcTangente( end.y - pos.y, end.x - pos.x );
+
+            double endAngle = startAngle + aEdge->GetAngle();
+
+            plotter->thick_arc( pos,
+                                -endAngle,
+                                -startAngle,
+                                radius,
+                                thickness,
+                                trace_mode );
+        }
         break;
 
     case S_POLYGON:
-    {
-        std::vector<wxPoint> polyPoints = PtEdge->GetPolyPoints();
-
-        if( polyPoints.size() <= 1 )  // Malformed polygon
-            break;
-
-        // We must compute true coordinates from m_PolyList
-        // which are relative to module position, orientation 0
-        MODULE* module = PtEdge->GetParentModule();
-
-        static std::vector< wxPoint > cornerList;
-        cornerList.clear();
-
-        for( unsigned ii = 0; ii < polyPoints.size(); ii++ )
         {
-            wxPoint corner = polyPoints[ii];
+            const std::vector<wxPoint>& polyPoints = aEdge->GetPolyPoints();
 
-            if( module )
+            if( polyPoints.size() <= 1 )  // Malformed polygon
+                break;
+
+            // We must compute true coordinates from m_PolyList
+            // which are relative to module position, orientation 0
+            MODULE* module = aEdge->GetParentModule();
+
+            std::vector< wxPoint > cornerList;
+
+            cornerList.reserve( polyPoints.size() );
+
+            for( unsigned ii = 0; ii < polyPoints.size(); ii++ )
             {
-                RotatePoint( &corner, module->m_Orient );
-                corner += module->m_Pos;
+                wxPoint corner = polyPoints[ii];
+
+                if( module )
+                {
+                    RotatePoint( &corner, module->GetOrientation() );
+                    corner += module->GetPosition();
+                }
+
+                cornerList.push_back( corner );
             }
 
-            cornerList.push_back( corner );
+            plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness );
         }
-
-        plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness );
-    }
-    break;
+        break;
     }
 }
 
@@ -613,27 +593,26 @@ void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone, GRTraceMode trace
 
 /* Plot items type DRAWSEGMENT on layers allowed by aLayerMask
  */
-void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* pt_segm, int aLayerMask,
+void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* aSeg, int aLayerMask,
                       GRTraceMode trace_mode )
 {
-    wxPoint start, end;
     int     thickness;
     int     radius = 0, StAngle = 0, EndAngle = 0;
 
-    if( (GetLayerMask( pt_segm->GetLayer() ) & aLayerMask) == 0 )
+    if( (GetLayerMask( aSeg->GetLayer() ) & aLayerMask) == 0 )
         return;
 
     if( trace_mode == FILAIRE )
         thickness = g_PcbPlotOptions.m_PlotLineWidth;
     else
-        thickness = pt_segm->m_Width;
+        thickness = aSeg->GetWidth();
 
-    start = pt_segm->m_Start;
-    end   = pt_segm->m_End;
+    wxPoint start( aSeg->GetStart() );
+    wxPoint end(   aSeg->GetEnd() );
 
     plotter->set_current_line_width( thickness );
 
-    switch( pt_segm->m_Shape )
+    switch( aSeg->GetShape() )
     {
     case S_CIRCLE:
         radius = (int) hypot( (double) ( end.x - start.x ),
@@ -645,20 +624,21 @@ void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* pt_segm, int aLayerMask,
         radius = (int) hypot( (double) ( end.x - start.x ),
                               (double) ( end.y - start.y ) );
         StAngle  = ArcTangente( end.y - start.y, end.x - start.x );
-        EndAngle = StAngle + pt_segm->m_Angle;
+        EndAngle = StAngle + aSeg->GetAngle();
         plotter->thick_arc( start, -EndAngle, -StAngle, radius, thickness, trace_mode );
         break;
 
     case S_CURVE:
-    {
-        std::vector<wxPoint> bezierPoints = pt_segm->GetBezierPoints();
-        for( unsigned i = 1; i < bezierPoints.size(); i++ )
-            plotter->thick_segment( bezierPoints[i - 1],
-                                    bezierPoints[i],
-                                    thickness,
-                                    trace_mode );
+        {
+            const std::vector<wxPoint>& bezierPoints = aSeg->GetBezierPoints();
+
+            for( unsigned i = 1; i < bezierPoints.size(); i++ )
+                plotter->thick_segment( bezierPoints[i - 1],
+                                        bezierPoints[i],
+                                        thickness,
+                                        trace_mode );
+        }
         break;
-    }
 
     default:
         plotter->thick_segment( start, end, thickness, trace_mode );

@@ -64,21 +64,23 @@ void PCB_EDIT_FRAME::Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
 static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                           bool aErase )
 {
-    DRAWSEGMENT* Segment = (DRAWSEGMENT*) aPanel->GetScreen()->GetCurItem();
+    DRAWSEGMENT* segment = (DRAWSEGMENT*) aPanel->GetScreen()->GetCurItem();
 
-    if( Segment == NULL )
+    if( segment == NULL )
         return;
 
     if( aErase )
-        Segment->Draw( aPanel, aDC, GR_XOR );
+        segment->Draw( aPanel, aDC, GR_XOR );
 
     wxPoint delta;
     delta = aPanel->GetScreen()->GetCrossHairPosition() - s_LastPosition;
-    Segment->m_Start += delta;
-    Segment->m_End   += delta;
+
+    segment->SetStart( segment->GetStart() + delta );
+    segment->SetEnd(   segment->GetEnd()   + delta );
+
     s_LastPosition = aPanel->GetScreen()->GetCrossHairPosition();
 
-    Segment->Draw( aPanel, aDC, GR_XOR );
+    segment->Draw( aPanel, aDC, GR_XOR );
 }
 
 
@@ -221,10 +223,11 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape,
         SetCurItem( Segment = new DRAWSEGMENT( GetBoard() ) );
         Segment->m_Flags = IS_NEW;
         Segment->SetLayer( getActiveLayer() );
-        Segment->m_Width = s_large;
-        Segment->m_Shape = shape;
-        Segment->m_Angle = 900;
-        Segment->m_Start = Segment->m_End = GetScreen()->GetCrossHairPosition();
+        Segment->SetWidth( s_large );
+        Segment->SetShape( shape );
+        Segment->SetAngle( 900 );
+        Segment->SetStart( GetScreen()->GetCrossHairPosition() );
+        Segment->SetEnd( GetScreen()->GetCrossHairPosition() );
         DrawPanel->SetMouseCapture( DrawSegment, Abort_EditEdge );
     }
     else    /* The ending point ccordinate Segment->m_End was updated by he function
@@ -232,11 +235,11 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape,
              * during the segment creation
              */
     {
-        if( Segment->m_Start != Segment->m_End )
+        if( Segment->GetStart() != Segment->GetEnd() )
         {
-            if( Segment->m_Shape == S_SEGMENT )
+            if( Segment->GetShape() == S_SEGMENT )
             {
-                SaveCopyInUndoList(Segment, UR_NEW );
+                SaveCopyInUndoList( Segment, UR_NEW );
                 GetBoard()->Add( Segment );
 
                 OnModify();
@@ -250,11 +253,12 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape,
 
                 Segment->m_Flags = IS_NEW;
                 Segment->SetLayer( DrawItem->GetLayer() );
-                Segment->m_Width = s_large;
-                Segment->m_Shape = DrawItem->m_Shape;
-                Segment->m_Type  = DrawItem->m_Type;
-                Segment->m_Angle = DrawItem->m_Angle;
-                Segment->m_Start = Segment->m_End = DrawItem->m_End;
+                Segment->SetWidth( s_large );
+                Segment->SetShape( DrawItem->GetShape() );
+                Segment->SetType( DrawItem->GetType() );
+                Segment->SetAngle( DrawItem->GetAngle() );
+                Segment->SetStart( DrawItem->GetEnd() );
+                Segment->SetEnd( DrawItem->GetEnd() );
                 DrawSegment( DrawPanel, DC, wxDefaultPosition, false );
             }
             else
@@ -276,10 +280,10 @@ void PCB_EDIT_FRAME::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 
     Segment->Draw( DrawPanel, DC, GR_OR );
 
-    /* Delete if segment length is zero. */
-    if( Segment->m_Start == Segment->m_End )
+    // Delete if segment length is zero.
+    if( Segment->GetStart() == Segment->GetEnd() )
     {
-        Segment ->DeleteStructure();
+        Segment->DeleteStructure();
     }
     else
     {
@@ -309,15 +313,18 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     if( aErase )
         Segment->Draw( aPanel, aDC, GR_XOR );
 
-    if( Segments_45_Only && ( Segment->m_Shape == S_SEGMENT ) )
+    if( Segments_45_Only && Segment->GetShape() == S_SEGMENT )
     {
+        wxPoint pt;
+
         CalculateSegmentEndPoint( aPanel->GetScreen()->GetCrossHairPosition(),
-                                  Segment->m_Start.x, Segment->m_Start.y,
-                                  &Segment->m_End.x, &Segment->m_End.y );
+                                  Segment->GetStart().x, Segment->GetStart().y,
+                                  &pt.x, &pt.y );
+        Segment->SetEnd( pt );
     }
-    else    /* here the angle is arbitrary */
+    else    // here the angle is arbitrary
     {
-        Segment->m_End = aPanel->GetScreen()->GetCrossHairPosition();
+        Segment->SetEnd( aPanel->GetScreen()->GetCrossHairPosition() );
     }
 
     Segment->Draw( aPanel, aDC, GR_XOR );
