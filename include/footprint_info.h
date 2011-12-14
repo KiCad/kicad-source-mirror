@@ -43,7 +43,7 @@ public:
      * Function GetCount
      * @return the number of items stored in list
      */
-    unsigned GetCount() { return m_List.size(); }
+    unsigned GetCount() const { return m_List.size(); }
 
     /**
      * Function GetModuleInfo

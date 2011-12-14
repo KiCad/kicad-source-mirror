@@ -483,10 +483,10 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
         case PCB_MODULE_EDGE_T:
             {
                 EDGE_MODULE* em = (EDGE_MODULE*) item;
-                em->m_Start  += offset;
-                em->m_End    += offset;
-                em->m_Start0 += offset;
-                em->m_End0   += offset;
+                em->SetStart( em->GetStart() + offset );
+                em->SetEnd( em->GetEnd() + offset );
+                em->SetStart0( em->GetStart0() + offset );
+                em->SetEnd0( em->GetEnd0() + offset );
             }
             break;
 
@@ -537,20 +537,17 @@ void DeleteMarkedItems( MODULE* module )
 }
 
 
-/* Mirror marked items, refer to a Vertical axis at position offset
+/** Mirror marked items, refer to a Vertical axis at position offset
  */
 void MirrorMarkedItems( MODULE* module, wxPoint offset )
 {
 #define SETMIRROR( z ) (z) -= offset.x; (z) = -(z); (z) += offset.x;
-    EDA_ITEM*   item;
     wxPoint     tmp;
 
     if( module == NULL )
         return;
 
-    D_PAD* pad = module->m_Pads;
-
-    for( ; pad != NULL; pad = pad->Next() )
+    for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
     {
         if( pad->m_Selected == 0 )
             continue;
@@ -566,9 +563,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
         NORMALIZE_ANGLE_POS( pad->m_Orient );
     }
 
-    item = module->m_Drawings;
-
-    for( ; item != NULL; item = item->Next() )
+    for( EDA_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
     {
         if( item->m_Selected == 0 )
             continue;
@@ -578,11 +573,18 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
         case PCB_MODULE_EDGE_T:
             {
                 EDGE_MODULE* em = (EDGE_MODULE*) item;
-                SETMIRROR( em->m_Start.x );
-                em->m_Start0.x = em->m_Start.x;
-                SETMIRROR( em->m_End.x );
-                em->m_End0.x = em->m_End.x;
-                NEGATE( em->m_Angle );
+
+                tmp = em->GetStart0();
+                SETMIRROR( tmp.x );
+                em->SetStart0( tmp );
+                em->SetStartX( tmp.x );
+
+                tmp = em->GetEnd0();
+                SETMIRROR( tmp.x );
+                em->SetEnd0( tmp );
+                em->SetEndX( tmp.x );
+
+                em->SetAngle( -em->GetAngle() );
             }
             break;
 
@@ -607,19 +609,16 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
 }
 
 
-/* Rotate marked items, refer to a Vertical axis at position offset
+/** Rotate marked items, refer to a Vertical axis at position offset
  */
 void RotateMarkedItems( MODULE* module, wxPoint offset )
 {
 #define ROTATE( z ) RotatePoint( (&z), offset, 900 )
-    EDA_ITEM* item;
 
     if( module == NULL )
         return;
 
-    D_PAD* pad = module->m_Pads;
-
-    for( ; pad != NULL; pad = pad->Next() )
+    for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
     {
         if( pad->m_Selected == 0 )
             continue;
@@ -633,9 +632,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
         NORMALIZE_ANGLE_POS( pad->m_Orient );
     }
 
-    item = module->m_Drawings;
-
-    for( ; item != NULL; item = item->Next() )
+    for( EDA_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
     {
         if( item->m_Selected == 0 )
             continue;
@@ -645,10 +642,16 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
         case PCB_MODULE_EDGE_T:
             {
                 EDGE_MODULE* em = (EDGE_MODULE*) item;
-                ROTATE( em->m_Start );
-                em->m_Start0 = em->m_Start;
-                ROTATE( em->m_End );
-                em->m_End0 = em->m_End;
+
+                wxPoint tmp = em->GetStart();
+                ROTATE( tmp );
+                em->SetStart( tmp );
+                em->SetStart0( tmp );
+
+                tmp = em->GetEnd();
+                ROTATE( tmp );
+                em->SetEnd( tmp );
+                em->SetEnd0( tmp );
             }
             break;
 

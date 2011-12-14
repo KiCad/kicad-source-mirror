@@ -108,7 +108,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
             {
                 // Set new drill value. Note: currently microvias have only a default drill value
                 if( new_drill > 0 )
-                    aTrackItem->SetDrillValue(new_drill);
+                    aTrackItem->SetDrill( new_drill );
                 else
                     aTrackItem->SetDrillDefault();
             }

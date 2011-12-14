@@ -256,9 +256,9 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, in
     DRAWSEGMENT* drawitem = new DRAWSEGMENT( m_pcb, PCB_LINE_T );
 
     drawitem->SetLayer( aLayer );
-    drawitem->m_Start = aGbrItem->m_Start;
-    drawitem->m_End   = aGbrItem->m_End;
-    drawitem->m_Width = aGbrItem->m_Size.x;
+    drawitem->SetStart( aGbrItem->m_Start );
+    drawitem->SetEnd( aGbrItem->m_End );
+    drawitem->SetWidth( aGbrItem->m_Size.x );
 
     if( aGbrItem->m_Shape == GBR_ARC )
     {
@@ -267,20 +267,20 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, in
         double b  = atan2( (double)( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
                            (double)( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
 
-        drawitem->m_Shape   = S_ARC;
-        drawitem->m_Angle   = wxRound( (a - b) / M_PI * 1800.0 );
-        drawitem->m_Start = aGbrItem->m_ArcCentre;
+        drawitem->SetShape( S_ARC );
+        drawitem->SetAngle( wxRound( (a - b) / M_PI * 1800.0 ) );
+        drawitem->SetStart( aGbrItem->m_ArcCentre );
 
-        if( drawitem->m_Angle < 0 )
+        if( drawitem->GetAngle() < 0 )
         {
-            NEGATE( drawitem->m_Angle );
-            drawitem->m_End = aGbrItem->m_Start;
+            drawitem->SetAngle( -drawitem->GetAngle() );
+            drawitem->SetEnd( aGbrItem->m_Start );
         }
     }
 
     // Reverse Y axis:
-    NEGATE( drawitem->m_Start.y );
-    NEGATE( drawitem->m_End.y );
+    drawitem->SetStartY( -drawitem->GetStart().y );
+    drawitem->SetEndY( -drawitem->GetEnd().y );
 
     m_pcb->Add( drawitem );
 }

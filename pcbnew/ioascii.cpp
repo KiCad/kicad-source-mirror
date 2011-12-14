@@ -178,13 +178,13 @@ int PCB_BASE_FRAME::ReadListeSegmentDescr( LINE_READER* aReader,
         if( arg_count < 7 || drill <= 0 )
             newTrack->SetDrillDefault();
         else
-            newTrack->SetDrillValue( drill );
+            newTrack->SetDrill( drill );
 
         newTrack->SetLayer( layer );
 
         if( makeType == PCB_VIA_T ) // Ensure layers are OK when possible:
         {
-            if( newTrack->Shape() == VIA_THROUGH )
+            if( newTrack->GetShape() == VIA_THROUGH )
                 ( (SEGVIA*) newTrack )->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
         }
 
@@ -857,6 +857,8 @@ bool WriteSheetDescr( BASE_SCREEN* screen, FILE* File )
 }
 
 
+#if !defined( USE_NEW_PCBNEW_LOAD )
+
 static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
 {
     char    buf[1024];
@@ -963,8 +965,6 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
 }
 
 
-#if !defined( USE_NEW_PCBNEW_LOAD )
-
 int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 {
     wxBusyCursor dummy;
@@ -974,8 +974,6 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
     SetLocaleTo_C_standard();
 
     BOARD* board = GetBoard();
-
-    NbDraw = NbTrack = NbZone = NbMod = NbNets = -1;
 
     board->m_Status_Pcb = 0;
     board->m_NetClasses.Clear();

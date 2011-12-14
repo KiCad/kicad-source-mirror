@@ -737,7 +737,7 @@ void ZONE_CONTAINER::MoveEdge( const wxPoint& offset )
 }
 
 
-void ZONE_CONTAINER::Rotate( const wxPoint& centre, int angle )
+void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 {
     wxPoint pos;
 

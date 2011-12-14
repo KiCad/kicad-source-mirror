@@ -67,7 +67,7 @@ public:
     std::vector<TRACK*> m_TracksConnected;  // list of other tracks connected to me
     std::vector<D_PAD*> m_PadsConnected;    // list of pads connected to me
 
-    int         m_Param;            // Auxiliary variable ( used in some computations )
+    double      m_Param;            // Auxiliary variable ( used in some computations )
 
 protected:
     TRACK( const TRACK& track );    // protected so Copy() is used instead.
@@ -110,7 +110,7 @@ public:
      * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
+    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
 
     /**
      * Function Flip
@@ -119,17 +119,17 @@ public:
      */
     virtual void Flip( const wxPoint& aCentre );
 
-    const wxPoint GetPosition() const       // overload
-    {
-        return m_Start;  // it had to be start or end.
-    }
+    void SetPosition( const wxPoint& aPos )     { m_Start = aPos; }     // overload
+    const wxPoint GetPosition() const           { return m_Start; }     // overload
 
-    int GetWidth() const { return m_Width; }
-    void SetWidth( int aWidth ) { m_Width = aWidth; }
+    void SetWidth( int aWidth )                 { m_Width = aWidth; }
+    int GetWidth() const                        { return m_Width; }
 
-    void SetPosition( const wxPoint& aPos ) {  m_Start = aPos; }    // overload
+    void SetEnd( const wxPoint& aEnd )          { m_End = aEnd; }
+    const wxPoint& GetEnd() const               { return m_End; }
 
-    void SetEnd( const wxPoint& aEnd ) { m_End = aEnd; }
+    void SetStart( const wxPoint& aStart )      { m_Start = aStart; }
+    const wxPoint& GetStart() const             { return m_Start; }
 
     EDA_RECT GetBoundingBox() const;
 
@@ -168,8 +168,8 @@ public:
      */
     double GetLength() const
     {
-        int dx = m_Start.x - m_End.x;
-        int dy = m_Start.y - m_End.y;
+        double dx = m_Start.x - m_End.x;
+        double dy = m_Start.y - m_End.y;
 
         return hypot( dx, dy );
     }
@@ -179,7 +179,7 @@ public:
                const wxPoint& aOffset = ZeroOffset );
 
     /* divers */
-    int Shape() const { return m_Shape & 0xFF; }
+    int GetShape() const { return m_Shape & 0xFF; }
     void SetShape( int aShape ) { m_Shape = aShape; }
 
     /**
@@ -203,26 +203,34 @@ public:
      * Set the drill value for vias
      * @param drill_value = new drill value
     */
-    void SetDrillValue( int drill_value ) { m_Drill = drill_value; }
+    void SetDrill( int aDrill )             { m_Drill = aDrill; }
+
+    /**
+     * Function GetDrill
+     * returns the local drill setting for this VIA.  If you want the calculated value,
+     * use GetDrillValue() instead.
+     */
+    int GetDrill() const                    { return m_Drill; }
+
+    /**
+     * Function GetDrillValue
+     * "calculates" the drill value for vias (m-Drill if > 0, or default
+     * drill value for the board.
+     * @return real drill_value
+    */
+    int GetDrillValue() const;
 
     /**
      * Function SetDrillDefault
      * Set the drill value for vias at default value (-1)
     */
-    void SetDrillDefault( void ) { m_Drill = -1; }
+    void SetDrillDefault()      { m_Drill = -1; }
 
     /**
      * Function IsDrillDefault
      * @return true if the drill value is default value (-1)
     */
-    bool IsDrillDefault( void ) { return m_Drill <= 0; }
-
-    /**
-     * Function GetDrillValue
-     * calculate the drill value for vias (m-Drill if > 0, or default drill value for the board
-     * @return real drill_value
-    */
-    int GetDrillValue() const;
+    bool IsDrillDefault()       { return m_Drill <= 0; }
 
     /**
      * Function ReturnMaskLayer

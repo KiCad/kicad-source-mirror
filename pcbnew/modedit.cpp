@@ -696,17 +696,17 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
 {
     D_PAD*        pad = module->m_Pads;
-    EDA_ITEM*     PtStruct = module->m_Drawings;
+    EDA_ITEM*     item = module->m_Drawings;
     TEXTE_MODULE* textmod;
     EDGE_MODULE*  edgemod;
-    int           angle = 900; // Necessary +- 900 (+- 90 degrees) )
+    double        angle = 900; // Necessary +- 900 (+- 90 degrees) )
 
     switch( transform )
     {
     case ID_MODEDIT_MODULE_ROTATE:
         module->SetOrientation( angle );
 
-        for( ; pad != NULL; pad = (D_PAD*) pad->Next() )
+        for( ;  pad;  pad = pad->Next() )
         {
             pad->SetPos0( pad->m_Pos );
             pad->m_Orient -= angle;
@@ -727,18 +727,18 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
         if( module->m_Value->m_Orient >= 1800 )
             module->m_Value->m_Orient -= 1800;
 
-        for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+        for( ; item != NULL; item = item->Next() )
         {
-            if( PtStruct->Type() == PCB_MODULE_EDGE_T )
+            if( item->Type() == PCB_MODULE_EDGE_T )
             {
-                edgemod = (EDGE_MODULE*) PtStruct;
-                edgemod->m_Start0 = edgemod->m_Start;
-                edgemod->m_End0   = edgemod->m_End;
+                edgemod = (EDGE_MODULE*) item;
+                edgemod->SetStart0( edgemod->GetStart() );
+                edgemod->SetEnd0(   edgemod->GetEnd() );
             }
 
-            if( PtStruct->Type() == PCB_MODULE_TEXT_T )
+            else if( item->Type() == PCB_MODULE_TEXT_T )
             {
-                textmod = (TEXTE_MODULE*) PtStruct;
+                textmod = (TEXTE_MODULE*) item;
                 textmod->SetPos0( textmod->m_Pos );
             }
         }
@@ -758,7 +758,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
                 pad->m_Orient = 3600 - pad->m_Orient;
         }
 
-        /* Reverse mirror of reference. */
+        // Reverse mirror of reference.
         textmod = module->m_Reference;
         NEGATE( textmod->m_Pos.y );
         NEGATE( textmod->m_Pos0.y );
@@ -766,7 +766,7 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
         if( textmod->m_Orient )
             textmod->m_Orient = 3600 - textmod->m_Orient;
 
-        /* Reverse mirror of value. */
+        // Reverse mirror of value.
         textmod = module->m_Value;
         NEGATE( textmod->m_Pos.y );
         NEGATE( textmod->m_Pos0.y );
@@ -774,26 +774,28 @@ void FOOTPRINT_EDIT_FRAME::Transform( MODULE* module, int transform )
         if( textmod->m_Orient )
             textmod->m_Orient = 3600 - textmod->m_Orient;
 
-        /* Reverse mirror of footprints. */
-        PtStruct = module->m_Drawings;
+        // Reverse mirror of footprints.
+        item = module->m_Drawings;
 
-        for( ; PtStruct != NULL; PtStruct = PtStruct->Next() )
+        for( ; item;  item = item->Next() )
         {
-            switch( PtStruct->Type() )
+            switch( item->Type() )
             {
             case PCB_MODULE_EDGE_T:
-                edgemod = (EDGE_MODULE*) PtStruct;
-                NEGATE( edgemod->m_Start.y );
-                NEGATE( edgemod->m_End.y );
-                /* Invert local coordinates */
+                edgemod = (EDGE_MODULE*) item;
+
+                edgemod->SetStartY( -edgemod->GetStart().y );
+                edgemod->SetEndY( -edgemod->GetEnd().y );
+
+                // Invert local coordinates
                 NEGATE( edgemod->m_Start0.y );
                 NEGATE( edgemod->m_End0.y );
-                NEGATE( edgemod->m_Angle );
+                edgemod->SetAngle( -edgemod->GetAngle() );
                 break;
 
             case PCB_MODULE_TEXT_T:
-                /* Reverse mirror position and mirror. */
-                textmod = (TEXTE_MODULE*) PtStruct;
+                // Reverse mirror position and mirror.
+                textmod = (TEXTE_MODULE*) item;
                 NEGATE( textmod->m_Pos.y );
                 NEGATE( textmod->m_Pos0.y );
 

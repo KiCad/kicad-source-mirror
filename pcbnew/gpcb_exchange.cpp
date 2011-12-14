@@ -158,13 +158,15 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     #define TEXT_DEFAULT_SIZE  400
     #define OLD_GPCB_UNIT_CONV 10
     #define NEW_GPCB_UNIT_CONV 0.1
+
     FILE*         cmpfile;
     double        conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and Pcbnew 0.1
+
     // Old version unit = 1 mil, so conv_unit is 10 or 0.1
     bool          success = true;
-    char*         Line;
+    char*         line;
     long          ibuf[100];
-    EDGE_MODULE*  DrawSegm;
+    EDGE_MODULE*  drawSeg;
     D_PAD*        Pad;
     wxArrayString params;
     int           iprmcnt, icnt_max, iflgidx;
@@ -178,10 +180,10 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
     reader.ReadLine();
 
-    Line = reader.Line();
+    line = reader.Line();
 
     params.Clear();
-    Extract_Parameters( params, Line );
+    Extract_Parameters( params, line );
 
     iprmcnt  = 0;
     icnt_max = params.GetCount();
@@ -224,6 +226,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     iprmcnt++;
     for( int ii = 0; ii < 20; ii++ )
         ibuf[ii] = 0;
+
     for( int ii = 0; ii <= 8; ii++, iprmcnt++ ) // upt to 6 params + terminal char.
     {
         if( iprmcnt >= icnt_max )
@@ -239,7 +242,7 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                 if( ii <= 5 ) // no module position
                     idx = 0;
                 break;
-             }
+            }
             params[iprmcnt].ToLong( &ibuf[ii] );
         }
     }
@@ -265,9 +268,10 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
     while( reader.ReadLine() )
     {
-        Line = reader.Line();
+        line = reader.Line();
         params.Clear();
-        Extract_Parameters( params, Line );
+        Extract_Parameters( params, line );
+
         if( params.GetCount() > 3 )    // Test units value for a string line param (more than 3 params : ident [ xx ] )
         {
             if( params[1] == wxT( "(" ) )
@@ -278,17 +282,15 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
 
         if( params[0].CmpNoCase( wxT( "ElementLine" ) ) == 0 )      // line descr
         {                                                           // Format: ElementLine [X1 Y1 X2 Y2 Thickness]
-            DrawSegm = new EDGE_MODULE( this );
-            DrawSegm->SetLayer( SILKSCREEN_N_FRONT );
-            DrawSegm->m_Shape = S_SEGMENT;
+            wxPoint start0;
+            wxPoint end0;
+            int     width;
 
-            m_Drawings.PushBack( DrawSegm );
-
-            int* list[5] = {
-                &DrawSegm->m_Start0.x, &DrawSegm->m_Start0.y,
-                &DrawSegm->m_End0.x,   &DrawSegm->m_End0.y,
-                &DrawSegm->m_Width
-            };
+            int*    list[5] = {
+                        &start0.x, &start0.y,
+                        &end0.x,   &end0.y,
+                        &width
+                    };
 
             for( unsigned ii = 0; ii < 5; ii++ )
             {
@@ -301,18 +303,29 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                 }
             }
 
-            DrawSegm->SetDrawCoord();
+            drawSeg = new EDGE_MODULE( this );
+            drawSeg->SetLayer( SILKSCREEN_N_FRONT );
+            drawSeg->SetShape( S_SEGMENT );
+
+            drawSeg->SetStart0( start0 );
+            drawSeg->SetEnd0( end0 );
+            drawSeg->SetWidth( width );
+
+            drawSeg->SetDrawCoord();
+
+            m_Drawings.PushBack( drawSeg );
+
             continue;
         }
 
         if( params[0].CmpNoCase( wxT( "ElementArc" ) ) == 0 )       // Arc descr
         {                                                           // format: ElementArc [X Y Width Height StartAngle DeltaAngle Thickness]
             // Pcbnew does know ellipse so we must have Width = Height
-            DrawSegm = new EDGE_MODULE( this );
-            DrawSegm->SetLayer( SILKSCREEN_N_FRONT );
-            DrawSegm->m_Shape = S_ARC;
+            drawSeg = new EDGE_MODULE( this );
+            drawSeg->SetLayer( SILKSCREEN_N_FRONT );
+            drawSeg->SetShape( S_ARC );
 
-            m_Drawings.PushBack( DrawSegm );
+            m_Drawings.PushBack( drawSeg );
 
             for( unsigned ii = 0; ii < 7; ii++ )
             {
@@ -328,21 +341,29 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
                     ibuf[ii] = 0;
             }
 
-            int     radius = (ibuf[2] + ibuf[3]) / 4; // for and arc: ibuf[3] = ibuf[4]. Pcbnew does not know ellipses
+            // for and arc: ibuf[3] = ibuf[4]. Pcbnew does not know ellipses
+            int     radius = (ibuf[2] + ibuf[3]) / 4;
+
             wxPoint centre;
             centre.x = wxRound( ibuf[0] * conv_unit );
             centre.y = wxRound( ibuf[1] * conv_unit );
-            DrawSegm->m_Start0 = centre;
-            int start_angle = ibuf[4] * 10;     // Pcbnew uses 0.1 degrees as units
-            start_angle       -= 1800;          // Use normal X axis  as reference
-            DrawSegm->m_Angle  = ibuf[5] * 10;  // Angle value is clockwise in gpcb and Pcbnew
-            DrawSegm->m_End0.x = wxRound( radius * conv_unit );
-            DrawSegm->m_End0.y = 0;
-            RotatePoint( &DrawSegm->m_End0, -start_angle );// Calculate start point coordinate of arc
-            DrawSegm->m_End0 += centre;
 
-            DrawSegm->m_Width = wxRound( ibuf[6] * conv_unit );
-            DrawSegm->SetDrawCoord();
+            drawSeg->SetStart0( centre );
+
+            double start_angle = ibuf[4] * 10;  // Pcbnew uses 0.1 degrees as units
+            start_angle       -= 1800;          // Use normal X axis  as reference
+
+            drawSeg->SetAngle( ibuf[5] * 10 ); // Angle value is clockwise in gpcb and Pcbnew
+
+            drawSeg->SetEnd0( wxPoint( wxRound( radius * conv_unit ), 0 ) );
+
+            // Calculate start point coordinate of arc
+            wxPoint arcStart( drawSeg->GetEnd0() );
+            RotatePoint( &arcStart, -start_angle );
+            drawSeg->SetEnd0( centre + arcStart );
+
+            drawSeg->SetWidth( wxRound( ibuf[6] * conv_unit ) );
+            drawSeg->SetDrawCoord();
             continue;
         }
 

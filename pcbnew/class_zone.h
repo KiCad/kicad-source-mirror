@@ -3,8 +3,8 @@
  * @brief Classes to handle copper zones
  */
 
-#ifndef CLASS_ZONE_H
-#define CLASS_ZONE_H
+#ifndef CLASS_ZONE_H_
+#define CLASS_ZONE_H_
 
 
 #include <vector>
@@ -41,7 +41,7 @@ struct SEGMENT
         m_Start = aStart;
         m_End = aEnd;
     }
- };
+};
 
 
 /**
@@ -103,7 +103,6 @@ private:
 
 public:
     ZONE_CONTAINER( BOARD* parent );
-
     ~ZONE_CONTAINER();
 
     bool Save( FILE* aFile ) const;
@@ -224,9 +223,9 @@ public:
     /**
      * Function GetNetName
      * returns the net name.
-     * @return wxString - The net name.
+     * @return const wxString& - The net name.
      */
-    wxString GetNetName() const { return m_Netname; };
+    const wxString& GetNetName() const { return m_Netname; };
     void SetNetName( const wxString& aName ) { m_Netname = aName; }
 
     void SetFillMode( int aFillMode ) { m_FillMode = aFillMode; }
@@ -392,7 +391,7 @@ public:
      * @param centre = rot centre
      * @param angle = in 0.1 degree
      */
-    void Rotate( const wxPoint& centre, int angle );
+    void Rotate( const wxPoint& centre, double angle );
 
     /**
      * Function Flip
@@ -420,9 +419,9 @@ public:
         return wxT( "ZONE_CONTAINER" );
     }
 
-
     /** Access to m_Poly parameters
      */
+
 
     int GetNumCorners( void ) const
     {
@@ -500,4 +499,4 @@ public:
 };
 
 
-#endif  // #ifndef CLASS_ZONE_H
+#endif  // CLASS_ZONE_H_

@@ -3,8 +3,8 @@
  * @brief EDGE_MODULE class definition.
  */
 
-#ifndef _CLASS_EDGE_MOD_H_
-#define _CLASS_EDGE_MOD_H_
+#ifndef CLASS_EDGE_MOD_H_
+#define CLASS_EDGE_MOD_H_
 
 
 #include "class_drawsegment.h"
@@ -29,7 +29,13 @@ public:
     EDGE_MODULE* Next() const { return (EDGE_MODULE*) Pnext; }
     EDGE_MODULE* Back() const { return (EDGE_MODULE*) Pback; }
 
-    void Copy( EDGE_MODULE* source ); // copy structure
+    void Copy( EDGE_MODULE* source );           // copy structure
+
+    void SetStart0( const wxPoint& aPoint )     { m_Start0 = aPoint; }
+    const wxPoint& GetStart0() const            { return m_Start0; }
+
+    void SetEnd0( const wxPoint& aPoint )       { m_End0 = aPoint; }
+    const wxPoint& GetEnd0() const              { return m_End0; }
 
     /**
      * Function Save
@@ -88,4 +94,4 @@ public:
 #endif
 };
 
-#endif    // _CLASS_EDGE_MOD_H_
+#endif    // CLASS_EDGE_MOD_H_

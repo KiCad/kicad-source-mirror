@@ -593,16 +593,16 @@ static void export_vrml_arc( int layer, double startx, double starty, /*{{{*/
 static void export_vrml_drawsegment( DRAWSEGMENT* drawseg ) /*{{{*/
 {
     int    layer = drawseg->GetLayer();
-    double w     = drawseg->m_Width;
-    double x     = drawseg->m_Start.x;
-    double y     = drawseg->m_Start.y;
-    double xf    = drawseg->m_End.x;
-    double yf    = drawseg->m_End.y;
+    double w     = drawseg->GetWidth();
+    double x     = drawseg->GetStart().x;
+    double y     = drawseg->GetStart().y;
+    double xf    = drawseg->GetEnd().x;
+    double yf    = drawseg->GetEnd().y;
 
     /* Items on the edge layer are high, not thick */
     if( layer == EDGE_N )
     {
-        switch( drawseg->m_Shape )
+        switch( drawseg->GetShape() )
         {
         /* There is a special 'varc' primitive for this */
         case S_ARC:
@@ -630,7 +630,7 @@ static void export_vrml_drawsegment( DRAWSEGMENT* drawseg ) /*{{{*/
     }
     else
     {
-        switch( drawseg->m_Shape )
+        switch( drawseg->GetShape() )
         {
         case S_ARC:
             export_vrml_arc( layer, x, y, xf, yf, w, 3 );
@@ -856,13 +856,13 @@ static void export_vrml_text_module( TEXTE_MODULE* module ) /*{{{*/
 static void export_vrml_edge_module( EDGE_MODULE* module ) /*{{{*/
 {
     int    layer = module->GetLayer();
-    double x     = module->m_Start.x;
-    double y     = module->m_Start.y;
-    double xf    = module->m_End.x;
-    double yf    = module->m_End.y;
-    double w     = module->m_Width;
+    double x     = module->GetStart().x;
+    double y     = module->GetStart().y;
+    double xf    = module->GetEnd().x;
+    double yf    = module->GetEnd().y;
+    double w     = module->GetWidth();
 
-    switch( module->m_Shape )
+    switch( module->GetShape() )
     {
     case S_ARC:
         export_vrml_arc( layer, x, y, xf, yf, w, 3 );

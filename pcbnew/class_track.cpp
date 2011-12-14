@@ -186,7 +186,7 @@ wxString SEGVIA::GetSelectMenuText() const
 
     text << _( "Via" ) << wxT( " " ) << ShowWidth();
 
-    int shape = Shape();
+    int shape = GetShape();
 
     if( shape == VIA_BLIND_BURIED )
         text << wxT( " " ) << _( "Blind/Buried" );
@@ -231,7 +231,7 @@ TRACK::TRACK( const TRACK& Source ) :
 
     m_Flags     = Source.m_Flags;
     SetTimeStamp( Source.m_TimeStamp );
-    SetStatus( Source.ReturnStatus() );
+    SetStatus( Source.GetStatus() );
     m_Start = Source.m_Start;
     m_End   = Source.m_End;
     m_Width = Source.m_Width;
@@ -390,7 +390,7 @@ EDA_RECT TRACK::GetBoundingBox() const
 }
 
 
-void TRACK::Rotate( const wxPoint& aRotCentre, int aAngle )
+void TRACK::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     RotatePoint( &m_Start, aRotCentre, aAngle );
     RotatePoint( &m_End, aRotCentre, aAngle );
@@ -451,7 +451,7 @@ int TRACK::ReturnMaskLayer() const
 {
     if( Type() == PCB_VIA_T )
     {
-        int via_type = Shape();
+        int via_type = GetShape();
 
         if( via_type == VIA_THROUGH )
             return ALL_CU_LAYERS;
@@ -481,7 +481,7 @@ int TRACK::ReturnMaskLayer() const
 
 void SEGVIA::SetLayerPair( int top_layer, int bottom_layer )
 {
-    if( Shape() == VIA_THROUGH )
+    if( GetShape() == VIA_THROUGH )
     {
         top_layer    = LAYER_N_FRONT;
         bottom_layer = LAYER_N_BACK;
@@ -499,7 +499,7 @@ void SEGVIA::ReturnLayerPair( int* top_layer, int* bottom_layer ) const
     int b_layer = LAYER_N_BACK;
     int t_layer = LAYER_N_FRONT;
 
-    if( Shape() != VIA_THROUGH )
+    if( GetShape() != VIA_THROUGH )
     {
         b_layer = (m_Layer >> 4) & 15;
         t_layer = m_Layer & 15;
@@ -888,7 +888,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
 
     // for Micro Vias, draw a partial cross : X on component layer, or + on copper layer
     // (so we can see 2 superimposed microvias ):
-    if( Shape() == VIA_MICROVIA )
+    if( GetShape() == VIA_MICROVIA )
     {
         int ax, ay, bx, by;
 
@@ -926,7 +926,7 @@ void SEGVIA::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint
 
     // for Buried Vias, draw a partial line : orient depending on layer pair
     // (so we can see superimposed buried vias ):
-    if( Shape() == VIA_BLIND_BURIED )
+    if( GetShape() == VIA_BLIND_BURIED )
     {
         int ax = 0, ay = radius, bx = 0, by = drill_radius;
         int layer_top, layer_bottom;
@@ -1041,7 +1041,7 @@ void TRACK::DisplayInfoBase( EDA_DRAW_FRAME* frame )
     switch( Type() )
     {
     case PCB_VIA_T:
-        switch( Shape() )
+        switch( GetShape() )
         {
             default:
             case 0:
@@ -1593,7 +1593,7 @@ void SEGVIA::Show( int nestLevel, std::ostream& os )
 {
     const char* cp;
 
-    switch( Shape() )
+    switch( GetShape() )
     {
     case VIA_THROUGH:
         cp = "through";
