@@ -107,8 +107,9 @@ public:
      * when not tracks there are a cluster per pad
      * @param aFirstTrack = first track of the given net
      * @param aLastTrack = last track of the given net
+     * @param aNetcode = the netcode of the given net
      */
-    void Build_CurrNet_SubNets_Connections( TRACK* aFirstTrack, TRACK* aLastTrack );
+    void Build_CurrNet_SubNets_Connections( TRACK* aFirstTrack, TRACK* aLastTrack, int aNetcode );
 
     /**
      * Function BuildTracksCandidatesList
@@ -500,7 +501,7 @@ int CONNECTIONS::searchEntryPoint( const wxPoint & aPoint)
  * Connections to pads are assumed to be already initialized.
  * and are not recalculated
  */
-void CONNECTIONS::Build_CurrNet_SubNets_Connections( TRACK* aFirstTrack, TRACK* aLastTrack )
+void CONNECTIONS::Build_CurrNet_SubNets_Connections( TRACK* aFirstTrack, TRACK* aLastTrack, int aNetcode )
 {
 
     m_firstTrack = aFirstTrack;     // The first track used to build m_Candidates
@@ -525,8 +526,11 @@ void CONNECTIONS::Build_CurrNet_SubNets_Connections( TRACK* aFirstTrack, TRACK* 
             break;
     }
 
-    // Creates sub nets (clusters) for the current net:
+    // Update connections between tracks and pads
+    BuildPadsList( aNetcode );
+    SearchTracksConnectedToPads();
 
+    // Creates sub nets (clusters) for the current net:
     Propagate_SubNets();
 }
 
@@ -703,7 +707,7 @@ void PCB_BASE_FRAME::TestConnections()
         TRACK* lastTrack = track->GetEndNetCode( current_net_code );
 
         if( current_net_code )  // do not spend time if net code = 0 ( dummy net )
-            connections.Build_CurrNet_SubNets_Connections( track, lastTrack );
+            connections.Build_CurrNet_SubNets_Connections( track, lastTrack, current_net_code );
 
         track = lastTrack->Next();    // this is now the first track of the next net
     }
@@ -754,7 +758,7 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
 
         if( firstTrack && lastTrack ) // i.e. if there are segments
         {
-            connections.Build_CurrNet_SubNets_Connections( firstTrack, lastTrack );
+            connections.Build_CurrNet_SubNets_Connections( firstTrack, lastTrack, firstTrack->GetNet() );
         }
     }
 
