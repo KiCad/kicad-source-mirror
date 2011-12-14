@@ -72,7 +72,7 @@ GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( const GERBER_DRAW_ITEM& aSource ) :
     m_Flags     = aSource.m_Flags;
     SetTimeStamp( aSource.m_TimeStamp );
 
-    SetStatus( aSource.ReturnStatus() );
+    SetStatus( aSource.GetStatus() );
     m_Start         = aSource.m_Start;
     m_End           = aSource.m_End;
     m_Size          = aSource.m_Size;

@@ -515,15 +515,15 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
     double radius, width;
     char   line[1024];
 
-    ux0 = PtDrawSegment->m_Start.x * conv_unit;
-    uy0 = PtDrawSegment->m_Start.y * conv_unit;
+    ux0 = PtDrawSegment->GetStart().x * conv_unit;
+    uy0 = PtDrawSegment->GetStart().y * conv_unit;
 
-    dx = PtDrawSegment->m_End.x * conv_unit;
-    dy = PtDrawSegment->m_End.y * conv_unit;
+    dx = PtDrawSegment->GetEnd().x * conv_unit;
+    dy = PtDrawSegment->GetEnd().y * conv_unit;
 
-    width = PtDrawSegment->m_Width * conv_unit;
+    width = PtDrawSegment->GetWidth() * conv_unit;
 
-    switch( PtDrawSegment->m_Shape )
+    switch( PtDrawSegment->GetShape() )
     {
     case S_CIRCLE:
         radius = hypot( dx - ux0, dy - uy0 );
@@ -536,13 +536,15 @@ void WriteDrawSegmentPcb( DRAWSEGMENT* PtDrawSegment, FILE* rptfile )
 
     case S_ARC:
         {
-            int endx = PtDrawSegment->m_End.x, endy = PtDrawSegment->m_End.y;
+            int endx = PtDrawSegment->GetEnd().x;
+            int endy = PtDrawSegment->GetEnd().y;
+
             radius = hypot( dx - ux0, dy - uy0 );
             RotatePoint( &endx,
                          &endy,
-                         PtDrawSegment->m_Start.x,
-                         PtDrawSegment->m_Start.y,
-                         PtDrawSegment->m_Angle );
+                         PtDrawSegment->GetStart().x,
+                         PtDrawSegment->GetStart().y,
+                         PtDrawSegment->GetAngle() );
 
             fprintf( rptfile, "$ARC \n" );
             fprintf( rptfile, "centre %.6lf %.6lf\n", ux0, uy0 );

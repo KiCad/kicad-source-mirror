@@ -29,7 +29,7 @@ static void Abort_Move_ModuleOutline( EDA_DRAW_PANEL* Panel, wxDC* DC );
 static void ShowCurrentOutlineWhileMoving( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                            const wxPoint& aPosition, bool aErase );
 
-int            ArcValue = 900;
+static double  ArcValue = 900;
 static wxPoint MoveVector;              // Move vector for move edge
 static wxPoint CursorInitialPosition;   // Mouse cursor initial position for move command
 
@@ -49,23 +49,25 @@ void FOOTPRINT_EDIT_FRAME::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::Place_EdgeMod( EDGE_MODULE* Edge )
+void FOOTPRINT_EDIT_FRAME::Place_EdgeMod( EDGE_MODULE* aEdge )
 {
-    if( Edge == NULL )
+    if( aEdge == NULL )
         return;
 
-    Edge->m_Start -= MoveVector;
-    Edge->m_End   -= MoveVector;
+    aEdge->SetStart( aEdge->GetStart() - MoveVector );
+    aEdge->SetEnd(   aEdge->GetEnd()   - MoveVector );
 
-    Edge->m_Start0 -= MoveVector;
-    Edge->m_End0   -= MoveVector;
+    aEdge->SetStart0( aEdge->GetStart0() - MoveVector );
+    aEdge->SetEnd0(   aEdge->GetEnd0()   - MoveVector );
 
-    Edge->m_Flags = 0;
+    aEdge->m_Flags = 0;
     DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
     OnModify();
-    MODULE* Module = (MODULE*) Edge->GetParent();
-    Module->CalculateBoundingBox();
+
+    MODULE* module = (MODULE*) aEdge->GetParent();
+    module->CalculateBoundingBox();
+
     DrawPanel->Refresh( );
 }
 
@@ -109,22 +111,27 @@ static void ShowNewEdgeModule( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     if( Edge == NULL )
         return;
 
-    MODULE* Module = (MODULE*) Edge->GetParent();
+    MODULE* module = (MODULE*) Edge->GetParent();
 
     //  if( erase )
     {
         Edge->Draw( aPanel, aDC, GR_XOR );
     }
 
-    Edge->m_End = screen->GetCrossHairPosition();
+    Edge->SetEnd( screen->GetCrossHairPosition() );
 
-    /* Update relative coordinate. */
-    Edge->m_End0 = Edge->m_End - Module->m_Pos;
-    RotatePoint( &Edge->m_End0, -Module->m_Orient );
+    // Update relative coordinate.
+    Edge->SetEnd0( Edge->GetEnd() - module->GetPosition() );
+
+    wxPoint pt( Edge->GetEnd0() );
+
+    RotatePoint( &pt, -module->GetOrientation() );
+
+    Edge->SetEnd0( pt );
 
     Edge->Draw( aPanel, aDC, GR_XOR );
 
-    Module->CalculateBoundingBox();
+    module->CalculateBoundingBox();
 }
 
 
@@ -143,12 +150,12 @@ void FOOTPRINT_EDIT_FRAME::Edit_Edge_Width( EDGE_MODULE* aEdge )
             if( aEdge->Type() != PCB_MODULE_EDGE_T )
                 continue;
 
-            aEdge->m_Width = g_ModuleSegmentWidth;
+            aEdge->SetWidth( g_ModuleSegmentWidth );
         }
     }
     else
     {
-        aEdge->m_Width = g_ModuleSegmentWidth;
+        aEdge->SetWidth( g_ModuleSegmentWidth );
     }
 
     OnModify();
@@ -222,9 +229,9 @@ void FOOTPRINT_EDIT_FRAME::Enter_Edge_Width( EDGE_MODULE* aEdge )
 
     if( aEdge )
     {
-        MODULE* Module = GetBoard()->m_Modules;
-        aEdge->m_Width = g_ModuleSegmentWidth;
-        Module->CalculateBoundingBox();
+        MODULE* module = GetBoard()->m_Modules;
+        aEdge->SetWidth( g_ModuleSegmentWidth );
+        module->CalculateBoundingBox();
         OnModify();
     }
 }
@@ -297,18 +304,18 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
         Edge = new EDGE_MODULE( module );
         MoveVector.x = MoveVector.y = 0;
 
-        /* Add the new item to the Drawings list head*/
+        // Add the new item to the Drawings list head
         module->m_Drawings.PushFront( Edge );
 
-        /* Update characteristics of the segment or arc. */
+        // Update characteristics of the segment or arc.
         Edge->m_Flags = IS_NEW;
-        Edge->m_Angle = angle;
-        Edge->m_Shape = type_edge;
+        Edge->SetAngle( angle );
+        Edge->SetShape( type_edge );
 
-        if( Edge->m_Shape == S_ARC )
-            Edge->m_Angle = ArcValue;
+        if( Edge->GetShape() == S_ARC )
+            Edge->SetAngle( ArcValue );
 
-        Edge->m_Width = g_ModuleSegmentWidth;
+        Edge->SetWidth( g_ModuleSegmentWidth );
         Edge->SetLayer( module->GetLayer() );
 
         if( module->GetLayer() == LAYER_N_FRONT )
@@ -317,14 +324,14 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
         if( module->GetLayer() == LAYER_N_BACK )
             Edge->SetLayer( SILKSCREEN_N_BACK );
 
-        /* Initialize the starting point of the new segment or arc */
-        Edge->m_Start = GetScreen()->GetCrossHairPosition();
+        // Initialize the starting point of the new segment or arc
+        Edge->SetStart( GetScreen()->GetCrossHairPosition() );
 
-        /* Initialize the ending point of the new segment or arc */
-        Edge->m_End = Edge->m_Start;
+        // Initialize the ending point of the new segment or arc
+        Edge->SetEnd( Edge->GetStart() );
 
-        /* Initialize the relative coordinates */
-        Edge->m_Start0 = Edge->m_Start - module->m_Pos;
+        // Initialize the relative coordinates
+        Edge->SetStart0( Edge->GetStart() - module->GetPosition() );
 
         RotatePoint( &Edge->m_Start0, -module->m_Orient );
 
@@ -355,16 +362,20 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
                 Edge = newedge;     // point now new item
 
                 Edge->m_Flags = IS_NEW;
-                Edge->m_Width = g_ModuleSegmentWidth;
-                Edge->m_Start = GetScreen()->GetCrossHairPosition();
-                Edge->m_End   = Edge->m_Start;
+                Edge->SetWidth( g_ModuleSegmentWidth );
+                Edge->SetStart( GetScreen()->GetCrossHairPosition() );
+                Edge->SetEnd( Edge->GetStart() );
 
-                /* Update relative coordinate. */
-                Edge->m_Start0 = Edge->m_Start - module->m_Pos;
+                // Update relative coordinate.
+                Edge->SetStart0( Edge->GetStart() - module->GetPosition() );
 
-                RotatePoint( &Edge->m_Start0, -module->m_Orient );
+                wxPoint pt( Edge->GetStart0() );
 
-                Edge->m_End0 = Edge->m_Start0;
+                RotatePoint( &pt, -module->GetOrientation() );
+
+                Edge->SetStart0( pt );
+
+                Edge->SetEnd0( Edge->GetStart0() );
 
                 module->CalculateBoundingBox();
                 module->m_LastEdit_Time = time( NULL );
@@ -390,7 +401,7 @@ void FOOTPRINT_EDIT_FRAME::End_Edge_Module( EDGE_MODULE* Edge )
         Edge->m_Flags = 0;
 
         /* If last segment length is 0: remove it */
-        if( Edge->m_Start == Edge->m_End )
+        if( Edge->GetStart() == Edge->GetEnd() )
             Edge->DeleteStructure();
     }
 

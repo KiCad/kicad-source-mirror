@@ -90,7 +90,7 @@ void DialogGraphicItemProperties::initDlg( )
     wxString msg;
 
     // Change texts according to the segment shape:
-    switch ( m_Item->m_Shape )
+    switch ( m_Item->GetShape() )
     {
     case S_CIRCLE:
         m_Start_Center_XText->SetLabel(_("Center X"));
@@ -106,7 +106,7 @@ void DialogGraphicItemProperties::initDlg( )
         m_Start_Center_YText->SetLabel(_("Center Y"));
         m_EndX_Radius_Text->SetLabel(_("Start Point X"));
         m_EndY_Text->SetLabel(_("Start Point Y"));
-        msg << m_Item->m_Angle;
+        msg << m_Item->GetAngle();
         m_Angle_Ctrl->SetValue(msg);
         break;
 
@@ -118,23 +118,23 @@ void DialogGraphicItemProperties::initDlg( )
 
     AddUnitSymbol( *m_Start_Center_XText );
 
-    PutValueInLocalUnits( *m_Center_StartXCtrl, m_Item->m_Start.x,
+    PutValueInLocalUnits( *m_Center_StartXCtrl, m_Item->GetStart().x,
         m_Parent->m_InternalUnits );
 
     AddUnitSymbol( *m_Start_Center_YText );
-    PutValueInLocalUnits( *m_Center_StartYCtrl, m_Item->m_Start.y,
+    PutValueInLocalUnits( *m_Center_StartYCtrl, m_Item->GetStart().y,
         m_Parent->m_InternalUnits );
 
     AddUnitSymbol( *m_EndX_Radius_Text );
-    PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_Item->m_End.x,
+    PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_Item->GetEnd().x,
         m_Parent->m_InternalUnits );
 
     AddUnitSymbol( *m_EndY_Text );
-    PutValueInLocalUnits( *m_EndY_Ctrl, m_Item->m_End.y,
+    PutValueInLocalUnits( *m_EndY_Ctrl, m_Item->GetEnd().y,
         m_Parent->m_InternalUnits );
 
     AddUnitSymbol( *m_ItemThicknessText );
-    PutValueInLocalUnits( *m_ThicknessCtrl, m_Item->m_Width,
+    PutValueInLocalUnits( *m_ThicknessCtrl, m_Item->GetWidth(),
         m_Parent->m_InternalUnits );
 
     AddUnitSymbol( *m_DefaultThicknessText );
@@ -192,28 +192,22 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
         m_Item->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
 
     msg = m_Center_StartXCtrl->GetValue();
-    m_Item->m_Start.x = ReturnValueFromString( g_UserUnit, msg,
-        m_Parent->m_InternalUnits );
+    m_Item->SetStartX( ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits ));
 
     msg = m_Center_StartYCtrl->GetValue();
-    m_Item->m_Start.y = ReturnValueFromString( g_UserUnit, msg,
-        m_Parent->m_InternalUnits );
+    m_Item->SetStartY( ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits ));
 
     msg = m_EndX_Radius_Ctrl->GetValue();
-    m_Item->m_End.x = ReturnValueFromString( g_UserUnit, msg,
-        m_Parent->m_InternalUnits );
+    m_Item->SetEndX( ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits ));
 
     msg = m_EndY_Ctrl->GetValue();
-    m_Item->m_End.y = ReturnValueFromString( g_UserUnit, msg,
-        m_Parent->m_InternalUnits );
+    m_Item->SetEndY( ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits ));
 
     msg = m_ThicknessCtrl->GetValue();
-    m_Item->m_Width = ReturnValueFromString( g_UserUnit, msg,
-        m_Parent->m_InternalUnits );
+    m_Item->SetWidth( ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits ));
 
     msg = m_DefaultThicknessCtrl->GetValue();
-    int thickness = ReturnValueFromString( g_UserUnit, msg,
-        m_Parent->m_InternalUnits );
+    int thickness = ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits );
 
     m_Item->SetLayer( m_LayerSelection->GetCurrentSelection() + FIRST_NO_COPPER_LAYER);
 
@@ -222,12 +216,12 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
     else
          m_BrdSettings.m_DrawSegmentWidth = thickness;
 
-    if( m_Item->m_Shape == S_ARC )
+    if( m_Item->GetShape() == S_ARC )
     {
-        long angle;
-        m_Angle_Ctrl->GetValue().ToLong(&angle);
+        double angle;
+        m_Angle_Ctrl->GetValue().ToDouble( &angle );
         NORMALIZE_ANGLE_360(angle);
-        m_Item->m_Angle = angle;
+        m_Item->SetAngle( angle );
     }
 
     m_Parent->OnModify();

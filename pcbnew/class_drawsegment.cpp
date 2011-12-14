@@ -31,31 +31,40 @@ DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
 }
 
 
-DRAWSEGMENT:: ~DRAWSEGMENT()
+DRAWSEGMENT::~DRAWSEGMENT()
 {
+}
+
+
+const DRAWSEGMENT& DRAWSEGMENT::operator = ( const DRAWSEGMENT& rhs )
+{
+    // skip the linked list stuff, and parent
+
+    m_Type         = rhs.m_Type;
+    m_Layer        = rhs.m_Layer;
+    m_Width        = rhs.m_Width;
+    m_Start        = rhs.m_Start;
+    m_End          = rhs.m_End;
+    m_Shape        = rhs.m_Shape;
+    m_Angle        = rhs.m_Angle;
+    m_TimeStamp    = rhs.m_TimeStamp;
+    m_BezierC1     = rhs.m_BezierC1;
+    m_BezierC2     = rhs.m_BezierC1;
+    m_BezierPoints = rhs.m_BezierPoints;
+
+    return *this;
 }
 
 
 void DRAWSEGMENT::Copy( DRAWSEGMENT* source )
 {
-    if( source == NULL )
+    if( source == NULL )    // who would do this?
         return;
 
-    m_Type         = source->m_Type;
-    m_Layer        = source->m_Layer;
-    m_Width        = source->m_Width;
-    m_Start        = source->m_Start;
-    m_End          = source->m_End;
-    m_Shape        = source->m_Shape;
-    m_Angle        = source->m_Angle;
-    SetTimeStamp( source->m_TimeStamp );
-    m_BezierC1     = source->m_BezierC1;
-    m_BezierC2     = source->m_BezierC1;
-    m_BezierPoints = source->m_BezierPoints;
+    *this = *source;    // operator = ()
 }
 
-
-void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, int aAngle )
+void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     RotatePoint( &m_Start, aRotCentre, aAngle );
     RotatePoint( &m_End, aRotCentre, aAngle );
@@ -74,7 +83,26 @@ void DRAWSEGMENT::Flip( const wxPoint& aCentre )
 }
 
 
-wxPoint DRAWSEGMENT::GetStart() const
+const wxPoint DRAWSEGMENT::GetArcEnd() const
+{
+    wxPoint endPoint;         // start of arc
+
+    switch( m_Shape )
+    {
+    case S_ARC:
+        // rotate the starting point of the arc, given by m_End, through the
+        // angle m_Angle to get the ending point of the arc.
+        // m_Start is the arc centre
+        endPoint  = m_End;         // m_End = start point of arc
+        RotatePoint( &endPoint, m_Start, -m_Angle );
+    }
+
+    return endPoint;   // after rotation, the end of the arc.
+}
+
+
+/* use GetArcStart() now
+const wxPoint DRAWSEGMENT::GetStart() const
 {
     switch( m_Shape )
     {
@@ -88,7 +116,7 @@ wxPoint DRAWSEGMENT::GetStart() const
 }
 
 
-wxPoint DRAWSEGMENT::GetEnd() const
+const wxPoint DRAWSEGMENT::GetEnd() const
 {
     wxPoint endPoint;         // start of arc
 
@@ -108,6 +136,7 @@ wxPoint DRAWSEGMENT::GetEnd() const
         return m_End;
     }
 }
+*/
 
 
 void DRAWSEGMENT::SetAngle( double aAngle )

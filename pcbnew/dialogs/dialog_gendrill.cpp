@@ -164,11 +164,11 @@ void DIALOG_GENDRILL::InitDisplayParams( void )
         if( track->Type() != PCB_VIA_T )
             continue;
 
-        if( track->Shape() == VIA_THROUGH )
+        if( track->GetShape() == VIA_THROUGH )
             m_throughViasCount++;
-        else if( track->Shape() == VIA_MICROVIA )
+        else if( track->GetShape() == VIA_MICROVIA )
             m_microViasCount++;
-        else if( track->Shape() == VIA_BLIND_BURIED )
+        else if( track->GetShape() == VIA_BLIND_BURIED )
             m_blindOrBuriedViasCount++;
     }
 

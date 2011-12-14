@@ -102,13 +102,13 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME
 
     // Size:
     m_MireSizeCtrl = new EDA_VALUE_CTRL( this, _( "Size" ),
-                                         m_Target->m_Size,
+                                         m_Target->GetSize(),
                                          g_UserUnit, LeftBoxSizer,
                                          m_Parent->m_InternalUnits );
 
     // Width:
     m_MireWidthCtrl = new EDA_VALUE_CTRL( this, _( "Width" ),
-                                          m_Target->m_Width,
+                                          m_Target->GetWidth(),
                                           g_UserUnit, LeftBoxSizer,
                                           m_Parent->m_InternalUnits );
 
@@ -118,7 +118,7 @@ TARGET_PROPERTIES_DIALOG_EDITOR::TARGET_PROPERTIES_DIALOG_EDITOR( PCB_EDIT_FRAME
                                   _( "Target Shape:" ),
                                   wxDefaultPosition, wxSize( -1, -1 ),
                                   2, shape_list, 1 );
-    m_MireShape->SetSelection( m_Target->m_Shape ? 1 : 0 );
+    m_MireShape->SetSelection( m_Target->GetShape() ? 1 : 0 );
     LeftBoxSizer->Add( m_MireShape, 0, wxGROW | wxALL, 5 );
 
     GetSizer()->Fit( this );
@@ -146,9 +146,10 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
         m_Target->m_Flags |= IN_EDIT;      // set flag in edit to force
                                            // undo/redo/abort proper operation
 
-    m_Target->m_Width = m_MireWidthCtrl->GetValue();
-    MireDefaultSize    = m_Target->m_Size = m_MireSizeCtrl->GetValue();
-    m_Target->m_Shape = m_MireShape->GetSelection() ? 1 : 0;
+    m_Target->SetWidth( m_MireWidthCtrl->GetValue() );
+    MireDefaultSize  = m_MireSizeCtrl->GetValue();
+    m_Target->SetSize( m_MireSizeCtrl->GetValue() );
+    m_Target->SetShape( m_MireShape->GetSelection() ? 1 : 0 );
 
     m_Target->Draw( m_Parent->DrawPanel, m_DC, ( m_Target->m_Flags & IS_MOVED ) ? GR_XOR : GR_OR );
 
@@ -188,14 +189,14 @@ static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC )
         target->DeleteStructure();
         target = NULL;
     }
-    else    /* it is an existing item: retrieve initial values of parameters */
+    else    // it is an existing item: retrieve initial values of parameters
     {
         if( ( target->m_Flags & (IN_EDIT | IS_MOVED) ) )
         {
-            target->m_Pos   = s_TargetCopy.m_Pos;
-            target->m_Width = s_TargetCopy.m_Width;
-            target->m_Size  = s_TargetCopy.m_Size;
-            target->m_Shape = s_TargetCopy.m_Shape;
+            target->SetPosition( s_TargetCopy.GetPosition() );
+            target->SetWidth(    s_TargetCopy.GetWidth() );
+            target->SetSize(     s_TargetCopy.GetSize() );
+            target->SetShape(    s_TargetCopy.GetShape() );
         }
         target->m_Flags = 0;
         target->Draw( Panel, DC, GR_OR );
@@ -214,9 +215,9 @@ PCB_TARGET* PCB_EDIT_FRAME::CreateTarget( wxDC* DC )
     GetBoard()->Add( target );
 
     target->SetLayer( EDGE_N );
-    target->m_Width = GetBoard()->GetDesignSettings().m_EdgeSegmentWidth;
-    target->m_Size  = MireDefaultSize;
-    target->m_Pos  = DrawPanel->GetScreen()->GetCrossHairPosition();
+    target->SetWidth( GetBoard()->GetDesignSettings().m_EdgeSegmentWidth );
+    target->SetSize( MireDefaultSize );
+    target->SetPosition( DrawPanel->GetScreen()->GetCrossHairPosition() );
 
     PlaceTarget( target, DC );
 
@@ -257,7 +258,7 @@ void PCB_EDIT_FRAME::PlaceTarget( PCB_TARGET* aTarget, wxDC* DC )
 
     if( aTarget->m_Flags == IS_MOVED )
     {
-        SaveCopyInUndoList( aTarget, UR_MOVED, aTarget->m_Pos - s_TargetCopy.m_Pos );
+        SaveCopyInUndoList( aTarget, UR_MOVED, aTarget->GetPosition() - s_TargetCopy.GetPosition() );
         aTarget->m_Flags = 0;
         return;
     }
@@ -286,7 +287,7 @@ static void ShowTargetShapeWhileMovingMouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     if( aErase )
         target->Draw( aPanel, aDC, GR_XOR );
 
-    target->m_Pos = screen->GetCrossHairPosition();
+    target->SetPosition( screen->GetCrossHairPosition() );
 
     target->Draw( aPanel, aDC, GR_XOR );
 }

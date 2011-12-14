@@ -147,7 +147,7 @@ void clean_vias( BOARD * aPcb )
 
     for( track = aPcb->m_Track; track; track = track->Next() )
     {
-        if( track->Shape() != VIA_THROUGH )
+        if( track->GetShape() != VIA_THROUGH )
             continue;
 
         // Search and delete others vias at same location

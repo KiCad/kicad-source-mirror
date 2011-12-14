@@ -148,15 +148,15 @@ bool DRAWSEGMENT::Save( FILE* aFile ) const
 
     if( m_Type != S_CURVE )
     {
-        fprintf( aFile, "De %d %d %d %lX %X\n",
-                 m_Layer, m_Type, m_Angle,
-                 m_TimeStamp, ReturnStatus() );
+        fprintf( aFile, "De %d %d %g %lX %X\n",
+                 m_Layer, m_Type, GetAngle(),
+                 m_TimeStamp, GetStatus() );
     }
     else
     {
-        fprintf( aFile, "De %d %d %d %lX %X %d %d %d %d\n",
-                 m_Layer, m_Type, m_Angle,
-                 m_TimeStamp, ReturnStatus(),
+        fprintf( aFile, "De %d %d %g %lX %X %d %d %d %d\n",
+                 m_Layer, m_Type, GetAngle(),
+                 m_TimeStamp, GetStatus(),
                  m_BezierC1.x,m_BezierC1.y,
                  m_BezierC2.x,m_BezierC2.y);
     }
@@ -437,8 +437,8 @@ bool TEXTE_PCB::Save( FILE* aFile ) const
 
     delete list;
 
-    fprintf( aFile, "Po %d %d %d %d %d %d\n",
-             m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Thickness, m_Orient );
+    fprintf( aFile, "Po %d %d %d %d %d %g\n",
+             m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Thickness, GetOrientation() );
 
     char hJustify = 'L';
     switch( m_HJustify )
@@ -521,10 +521,10 @@ bool EDGE_MODULE::Save( FILE* aFile ) const
         break;
 
     case S_ARC:
-        ret = fprintf( aFile, "DA %d %d %d %d %d %d %d\n",
+        ret = fprintf( aFile, "DA %d %d %d %d %g %d %d\n",
                        m_Start0.x, m_Start0.y,
                        m_End0.x, m_End0.y,
-                       m_Angle,
+                       GetAngle(),
                        m_Width, m_Layer );
         break;
 
@@ -565,7 +565,7 @@ bool TRACK::Save( FILE* aFile ) const
 
     fprintf( aFile, "De %d %d %d %lX %X\n",
              m_Layer, type, GetNet(),
-             m_TimeStamp, ReturnStatus() );
+             m_TimeStamp, GetStatus() );
 
     return true;
 }
@@ -587,16 +587,16 @@ bool DIMENSION::Save( FILE* aFile ) const
 
     fprintf( aFile, "Va %d\n", m_Value );
 
-    if( !m_Text->m_Text.IsEmpty() )
-        fprintf( aFile, "Te %s\n", EscapedUTF8( m_Text->m_Text ).c_str() );
+    if( !m_Text.GetText().IsEmpty() )
+        fprintf( aFile, "Te %s\n", EscapedUTF8( m_Text.GetText() ).c_str() );
     else
         fprintf( aFile, "Te \"?\"\n" );
 
-    fprintf( aFile, "Po %d %d %d %d %d %d %d\n",
-             m_Text->m_Pos.x, m_Text->m_Pos.y,
-             m_Text->m_Size.x, m_Text->m_Size.y,
-             m_Text->GetThickness(), m_Text->GetOrientation(),
-             m_Text->m_Mirror ? 0 : 1 );
+    fprintf( aFile, "Po %d %d %d %d %d %g %d\n",
+             m_Text.m_Pos.x, m_Text.m_Pos.y,
+             m_Text.m_Size.x, m_Text.m_Size.y,
+             m_Text.GetThickness(), m_Text.GetOrientation(),
+             m_Text.m_Mirror ? 0 : 1 );
 
     fprintf( aFile, "Sb %d %d %d %d %d %d\n", S_SEGMENT,
              m_crossBarOx, m_crossBarOy,
@@ -747,9 +747,9 @@ bool MODULE::Save( FILE* aFile ) const
     else
         statusTxt[1] = '~';
 
-    fprintf( aFile, "Po %d %d %d %d %8.8lX %8.8lX %s\n",
+    fprintf( aFile, "Po %d %d %g %d %8.8lX %8.8lX %s\n",
              m_Pos.x, m_Pos.y,
-             m_Orient, m_Layer, m_LastEdit_Time,
+             GetOrientation(), m_Layer, m_LastEdit_Time,
              m_TimeStamp, statusTxt );
 
     fprintf( aFile, "Li %s\n", TO_UTF8( m_LibRef ) );
@@ -1158,11 +1158,14 @@ int MODULE::ReadDescr( LINE_READER* aReader )
         switch( Line[0] )
         {
         case 'P':
+            double orientation;
             memset( BufCar1, 0, sizeof(BufCar1) );
-            sscanf( PtLine, "%d %d %d %d %lX %lX %s",
+            sscanf( PtLine, "%d %d %lf %d %lX %lX %s",
                     &m_Pos.x, &m_Pos.y,
-                    &m_Orient, &m_Layer,
+                    &orientation, &m_Layer,
                     &m_LastEdit_Time, &m_TimeStamp, BufCar1 );
+
+            SetOrientation( orientation );
 
             m_ModuleStatus = 0;
 
@@ -1331,11 +1334,14 @@ int EDGE_MODULE::ReadDescr( LINE_READER* aReader )
     switch( m_Shape )
     {
     case S_ARC:
-        sscanf( Line + 3, "%d %d %d %d %d %d %d",
+        double angle;
+        sscanf( Line + 3, "%d %d %d %d %lf %d %d",
                 &m_Start0.x, &m_Start0.y,
                 &m_End0.x, &m_End0.y,
-                &m_Angle, &m_Width, &m_Layer );
-        NORMALIZE_ANGLE_360( m_Angle );
+                &angle, &m_Width, &m_Layer );
+
+        NORMALIZE_ANGLE_360( angle );
+        SetAngle( angle );
         break;
 
     case S_SEGMENT:
@@ -1441,14 +1447,14 @@ bool DIMENSION::ReadDimensionDescr( LINE_READER* aReader )
                 layer = LAST_NO_COPPER_LAYER;
 
             SetLayer( layer );
-            m_Text->SetLayer( layer );
+            m_Text.SetLayer( layer );
             continue;
         }
 
         if( Line[0] == 'T' )
         {
             ReadDelimitedText( Text, Line + 2, sizeof(Text) );
-            m_Text->m_Text = FROM_UTF8( Text );
+            m_Text.m_Text = FROM_UTF8( Text );
             continue;
         }
 
@@ -1458,15 +1464,15 @@ bool DIMENSION::ReadDimensionDescr( LINE_READER* aReader )
             int orientation;
             int thickness;
             sscanf( Line + 2, " %d %d %d %d %d %d %d",
-                    &m_Text->m_Pos.x, &m_Text->m_Pos.y,
-                    &m_Text->m_Size.x, &m_Text->m_Size.y,
+                    &m_Text.m_Pos.x, &m_Text.m_Pos.y,
+                    &m_Text.m_Size.x, &m_Text.m_Size.y,
                     &thickness, &orientation,
                     &normal_display );
 
-            m_Text->m_Mirror = normal_display ? false : true;
-            m_Pos = m_Text->m_Pos;
-            m_Text->SetOrientation( orientation );
-            m_Text->SetThickness( thickness );
+            m_Text.m_Mirror = normal_display ? false : true;
+            m_Pos = m_Text.m_Pos;
+            m_Text.SetOrientation( orientation );
+            m_Text.SetThickness( thickness );
             continue;
         }
 
@@ -1580,7 +1586,9 @@ bool DRAWSEGMENT::ReadDrawSegmentDescr( LINE_READER* aReader )
                     sscanf( token,"%d",&m_Type );
                     break;
                 case 2:
-                    sscanf( token,"%d",&m_Angle );
+                    double angle;
+                    sscanf( token, "%lf", &angle );
+                    SetAngle( angle );
                     break;
                 case 3:
                     sscanf( token,"%lX",&m_TimeStamp );
@@ -2062,9 +2070,12 @@ int TEXTE_PCB::ReadTextePcbDescr( LINE_READER* aReader )
         }
         if( strncmp( line, "Po", 2 ) == 0 )
         {
-            sscanf( line + 2, " %d %d %d %d %d %d",
+            double angle;
+            sscanf( line + 2, " %d %d %d %d %d %lf",
                     &m_Pos.x, &m_Pos.y, &m_Size.x, &m_Size.y,
-                    &m_Thickness, &m_Orient );
+                    &m_Thickness, &angle );
+
+            SetOrientation( angle );
 
             // Ensure the text has minimal size to see this text on screen:
             if( m_Size.x < 5 )
@@ -2135,6 +2146,7 @@ int TEXTE_MODULE::ReadDescr( LINE_READER* aReader )
     int     type;
     char    BufCar1[128], BufCar2[128], BufCar3[128];
     char*   line = aReader->Line();
+    double  angle;
 
     int     layer = SILKSCREEN_N_FRONT;
 
@@ -2142,15 +2154,18 @@ int TEXTE_MODULE::ReadDescr( LINE_READER* aReader )
     BufCar2[0] = 0;
     BufCar3[0] = 0;
 
-    if( sscanf( line + 1, "%d %d %d %d %d %d %d %s %s %d %s",
+    if( sscanf( line + 1, "%d %d %d %d %d %lf %d %s %s %d %s",
                 &type,
                 &m_Pos0.x, &m_Pos0.y,
                 &m_Size.y, &m_Size.x,
-                &m_Orient, &m_Thickness,
+                &angle,    &m_Thickness,
                 BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
     {
         success = true;
+
+        SetOrientation( angle );
     }
+
 
     if( (type != TEXT_is_REFERENCE) && (type != TEXT_is_VALUE) )
         type = TEXT_is_DIVERS;

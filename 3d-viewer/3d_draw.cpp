@@ -568,11 +568,14 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
     int color = g_ColorsSettings.GetLayerColor( layer );
 
     SetGLColor( color );
-    w  = segment->m_Width * g_Parm_3D_Visu.m_BoardScale;
-    x  = segment->m_Start.x * g_Parm_3D_Visu.m_BoardScale;
-    y  = segment->m_Start.y * g_Parm_3D_Visu.m_BoardScale;
-    xf = segment->m_End.x * g_Parm_3D_Visu.m_BoardScale;
-    yf = segment->m_End.y * g_Parm_3D_Visu.m_BoardScale;
+
+    w  = segment->GetWidth() * g_Parm_3D_Visu.m_BoardScale;
+
+    x  = segment->GetStart().x * g_Parm_3D_Visu.m_BoardScale;
+    y  = segment->GetStart().y * g_Parm_3D_Visu.m_BoardScale;
+
+    xf = segment->GetEnd().x * g_Parm_3D_Visu.m_BoardScale;
+    yf = segment->GetEnd().y * g_Parm_3D_Visu.m_BoardScale;
 
     if( layer == EDGE_N )
     {
@@ -581,10 +584,10 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
             glNormal3f( 0.0, 0.0, (layer == LAYER_N_BACK) ? -1.0 : 1.0 );
             zpos = g_Parm_3D_Visu.m_LayerZcoord[layer];
 
-            switch( segment->m_Shape )
+            switch( segment->GetShape() )
             {
             case S_ARC:
-                Draw3D_ArcSegment( x, -y, xf, -yf, (double) segment->m_Angle, w, zpos );
+                Draw3D_ArcSegment( x, -y, xf, -yf, segment->GetAngle(), w, zpos );
                 break;
 
             case S_CIRCLE:
@@ -604,10 +607,10 @@ void EDA_3D_CANVAS::Draw3D_DrawSegment( DRAWSEGMENT* segment )
 
         if( Get3DLayerEnable( layer ) )
         {
-            switch( segment->m_Shape )
+            switch( segment->GetShape() )
             {
             case S_ARC:
-                Draw3D_ArcSegment( x, -y, xf, -yf, (double) segment->m_Angle, w, zpos );
+                Draw3D_ArcSegment( x, -y, xf, -yf, segment->GetAngle(), w, zpos );
                 break;
 
             case S_CIRCLE:

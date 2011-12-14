@@ -212,13 +212,24 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, TYPE_COLLECTOR* items )
 
         wxASSERT( graphic->Type() == PCB_LINE_T );
 
-        if( aPoint == graphic->GetStart() || aPoint == graphic->GetEnd() )
+        switch( graphic->GetShape() )
         {
-            items->Remove(i);
-            return graphic;
+        case S_ARC:
+            if( aPoint == graphic->GetArcStart() || aPoint == graphic->GetArcEnd() )
+            {
+                items->Remove(i);
+                return graphic;
+            }
+            break;
+
+        default:
+            if( aPoint == graphic->GetStart() || aPoint == graphic->GetEnd() )
+            {
+                items->Remove(i);
+                return graphic;
+            }
         }
     }
-
 
 #if defined(DEBUG)
     printf("Unable to find segment matching point (%d,%d)\n",
@@ -229,7 +240,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, TYPE_COLLECTOR* items )
         DRAWSEGMENT* graphic = (DRAWSEGMENT*) (*items)[i];
 
         printf( "type=%s, GetStart()=%d,%d  GetEnd()=%d,%d\n",
-                TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->m_Shape ) ),
+                TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ),
                 graphic->GetStart().x,
                 graphic->GetStart().y,
                 graphic->GetEnd().x,
@@ -614,17 +625,17 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         SHAPE*          outline;
         PATH*           path;
 
-        switch( graphic->m_Shape )
+        switch( graphic->GetShape() )
         {
         case S_SEGMENT:
             outline = new SHAPE( image, T_outline );
             image->Append( outline );
             path = new PATH( outline );
             outline->SetShape( path );
-            path->SetAperture( scale( graphic->m_Width ) );
+            path->SetAperture( scale( graphic->GetWidth() ) );
             path->SetLayerId( "signal" );
-            path->AppendPoint( mapPt( graphic->m_Start0 ) );
-            path->AppendPoint( mapPt( graphic->m_End0 ) );
+            path->AppendPoint( mapPt( graphic->GetStart0() ) );
+            path->AppendPoint( mapPt( graphic->GetEnd0() ) );
             break;
 
         case S_CIRCLE:
@@ -636,7 +647,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
                 image->Append( outline );
                 path = new PATH( outline );
                 outline->SetShape( path );
-                path->SetAperture( scale( graphic->m_Width ) );
+                path->SetAperture( scale( graphic->GetWidth() ) );
                 path->SetLayerId( "signal" );
 
                 // Do the math using KiCad units, that way we stay out of the
@@ -645,8 +656,8 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
                 // lexer/beautifier, and the spec is not clear that this is
                 // required.  Fixed point floats are all that should be needed.
 
-                double  radius = hypot( double( graphic->m_Start.x - graphic->m_End.x ),
-                                        double( graphic->m_Start.y - graphic->m_End.y ) );
+                double  radius = hypot( double( graphic->GetStart().x - graphic->GetEnd().x ),
+                                        double( graphic->GetStart().y - graphic->GetEnd().y ) );
 
                 // better if evenly divisible into 360
                 const int DEGREE_INTERVAL = 18;         // 18 means 20 line segments
@@ -667,7 +678,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
         case S_ARC:
         default:
             D( printf("makeIMAGE(): unsupported shape %s\n",
-                      TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->m_Shape))  );)
+                      TO_UTF8( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ))  );)
             continue;
         }
     }
@@ -778,7 +789,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 
         for(;;)
         {
-            switch( graphic->m_Shape )
+            switch( graphic->GetShape() )
             {
             case S_SEGMENT:
                 {
@@ -807,14 +818,14 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                 {
                     const int STEPS =  9;      // in an arc of 90 degrees
 
-                    wxPoint start  = graphic->GetStart();
-                    wxPoint end    = graphic->GetEnd();
-                    wxPoint center = graphic->m_Start;
-                    int     angle  = -graphic->m_Angle;
+                    wxPoint start  = graphic->GetArcStart();
+                    wxPoint end    = graphic->GetArcEnd();
+                    wxPoint center = graphic->GetCenter();
+                    double  angle  = -graphic->GetAngle();
 
                     if( prevPt != start )
                     {
-                        wxASSERT( prevPt == graphic->GetEnd() );
+                        wxASSERT( prevPt == graphic->GetArcEnd() );
 
                         angle = -angle;
                         EXCHG( start, end );
@@ -824,7 +835,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
 
                     for( int step=1;  step<=STEPS;  ++step )
                     {
-                        int rotation = ( angle * step )/STEPS;
+                        double rotation = ( angle * step )/STEPS;
 
                         nextPt = start;
 
@@ -858,7 +869,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary ) throw( IO_ER
                     wxString error;
 
                     error.Printf( _("Unsupported DRAWSEGMENT type %s"),
-                        GetChars( BOARD_ITEM::ShowShape( (STROKE_T) graphic->m_Shape ) ) );
+                        GetChars( BOARD_ITEM::ShowShape( (STROKE_T) graphic->GetShape() ) ) );
 
                     ThrowIOError( error );
                 }

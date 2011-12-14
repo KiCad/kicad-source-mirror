@@ -5,6 +5,22 @@ Please add newer entries at the top, list the date and your name with
 email address.
 
 
+2011-Dec-13 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++common
+  * changed all the RotatePoint() functions in trigo.{h,cpp} to take a double as the
+    angle, which is still in tenths of degrees for now.
+  * EDA_TEXT::m_Orient is now double, still in tenths of degrees (for a short while),
+    but the double means parsing files and saving them use a different format string.
+++pcbnew
+  * DRAWSEGMENT::GetStart() and GetEnd() do not operate for S_ARC like they used to.
+    They are now simply accessors for m_Start and m_End.  Use DRAWSEGMENT::GetArcStart()
+    and GetArcEnd() and GetCenter() for arcs.  specctra_export.cpp was the only
+    source file dependent on the old behavior.
+  * DIMENSION::m_Text is now contained, not dynamically allocated.
+  * more kicad_plugin work.
+
+
 2011-Dec-9 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
 ++PCBNew

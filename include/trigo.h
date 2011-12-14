@@ -10,29 +10,29 @@
  * Calculate the new point of coord coord pX, pY,
  * for a rotation center 0, 0, and angle in (1 / 10 degree)
  */
-void RotatePoint( int *pX, int *pY, int angle );
+void RotatePoint( int *pX, int *pY, double angle );
 
 /*
  * Calculate the new point of coord coord pX, pY,
  * for a rotation center cx, cy, and angle in (1 / 10 degree)
  */
-void RotatePoint( int *pX, int *pY, int cx, int cy, int angle );
+void RotatePoint( int *pX, int *pY, int cx, int cy, double angle );
 
 /*
  * Calculates the new coord point point
  * for a rotation angle in (1 / 10 degree)
  */
-void RotatePoint( wxPoint* point, int angle );
+void RotatePoint( wxPoint* point, double angle );
 
 /*
  * Calculates the new coord point point
  * for a center rotation center and angle in (1 / 10 degree)
  */
-void RotatePoint( wxPoint *point, const wxPoint & centre, int angle );
+void RotatePoint( wxPoint *point, const wxPoint & centre, double angle );
 
-void RotatePoint( double *pX, double *pY, int angle );
+void RotatePoint( double *pX, double *pY, double angle );
 
-void RotatePoint( double *pX, double *pY, double cx, double cy, int angle );
+void RotatePoint( double *pX, double *pY, double cx, double cy, double angle );
 
 /* Return the arc tangent of 0.1 degrees coord vector dx, dy
  * between -1800 and 1800

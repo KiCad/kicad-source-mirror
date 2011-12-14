@@ -105,7 +105,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     // Usual via is from copper to component.
     // layer pair is LAYER_N_BACK and LAYER_N_FRONT.
     via->SetLayerPair( LAYER_N_BACK, LAYER_N_FRONT );
-    via->SetDrillValue( GetBoard()->GetCurrentViaDrill() );
+    via->SetDrill( GetBoard()->GetCurrentViaDrill() );
 
     int first_layer = getActiveLayer();
     int last_layer;
@@ -117,7 +117,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         last_layer = GetScreen()->m_Route_Layer_BOTTOM;
 
     /* Adjust the actual via layer pair */
-    switch ( via->Shape() )
+    switch ( via->GetShape() )
     {
         case VIA_BLIND_BURIED:
             via->SetLayerPair( first_layer, last_layer );
