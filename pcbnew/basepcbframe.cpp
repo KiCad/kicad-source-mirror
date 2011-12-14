@@ -104,6 +104,8 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
 
     m_FastGrid1           = 0;
     m_FastGrid2           = 0;
+
+    m_auxiliaryToolBar    = NULL;
 }
 
 
@@ -132,7 +134,7 @@ EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 
     if( area.GetWidth() == 0 && area.GetHeight() == 0 )
     {
-        if( m_Draw_Sheet_Ref )
+        if( m_showBorderAndTitleBlock )
         {
             area.SetOrigin( 0, 0 );
             area.SetEnd( GetScreen()->ReturnPageSize().x,
@@ -298,7 +300,7 @@ void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( DisplayOpt.DisplayPolarCood );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
                                         DisplayOpt.DisplayPolarCood ?
                                         _( "Display rectangular coordinates" ) :
                                         _( "Display polar coordinates" ) );
@@ -308,7 +310,7 @@ void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
 void PCB_BASE_FRAME::OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !m_DisplayPadFill );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
                                         m_DisplayPadFill ?
                                         _( "Show pads in outline mode" ) :
                                         _( "Show pads in fill mode" ) );
@@ -319,7 +321,7 @@ void PCB_BASE_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 {
     // No need to update the grid select box if it doesn't exist or the grid setting change
     // was made using the select box.
-    if( m_SelGridBox == NULL || m_AuxiliaryToolBar == NULL )
+    if( m_gridSelectBox == NULL || m_auxiliaryToolBar == NULL )
         return;
 
     int select = wxNOT_FOUND;
@@ -333,14 +335,14 @@ void PCB_BASE_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
         }
     }
 
-    if( select != m_SelGridBox->GetSelection() )
-        m_SelGridBox->SetSelection( select );
+    if( select != m_gridSelectBox->GetSelection() )
+        m_gridSelectBox->SetSelection( select );
 }
 
 
 void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 {
-    if( m_SelZoomBox == NULL || m_AuxiliaryToolBar == NULL )
+    if( m_zoomSelectBox == NULL || m_auxiliaryToolBar == NULL )
         return;
 
     int current = 0;
@@ -354,8 +356,8 @@ void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
         }
     }
 
-    if( current != m_SelZoomBox->GetSelection() )
-        m_SelZoomBox->SetSelection( current );
+    if( current != m_zoomSelectBox->GetSelection() )
+        m_zoomSelectBox->SetSelection( current );
 }
 
 
@@ -593,11 +595,11 @@ void PCB_BASE_FRAME::updateGridSelectBox()
     UpdateStatusBar();
     DisplayUnitsMsg();
 
-    if( m_SelGridBox == NULL )
+    if( m_gridSelectBox == NULL )
         return;
 
     // Update grid values with the current units setting.
-    m_SelGridBox->Clear();
+    m_gridSelectBox->Clear();
 
     wxString msg;
     wxString format = _( "Grid");
@@ -639,24 +641,24 @@ void PCB_BASE_FRAME::updateGridSelectBox()
         else
             msg = _( "User Grid" );
 
-        m_SelGridBox->Append( msg, (void*) &grid.m_Id );
+        m_gridSelectBox->Append( msg, (void*) &grid.m_Id );
 
         if( ( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) == GetScreen()->GetGrid( i ).m_Id )
-            m_SelGridBox->SetSelection( i );
+            m_gridSelectBox->SetSelection( i );
     }
 }
 
 
 void PCB_BASE_FRAME::updateZoomSelectBox()
 {
-    if( m_SelZoomBox == NULL )
+    if( m_zoomSelectBox == NULL )
         return;
 
     wxString msg;
 
-    m_SelZoomBox->Clear();
-    m_SelZoomBox->Append( _( "Auto" ) );
-    m_SelZoomBox->SetSelection( 0 );
+    m_zoomSelectBox->Clear();
+    m_zoomSelectBox->Append( _( "Auto" ) );
+    m_zoomSelectBox->SetSelection( 0 );
 
     for( int i = 0; i < (int)GetScreen()->m_ZoomList.GetCount(); i++ )
     {
@@ -666,9 +668,9 @@ void PCB_BASE_FRAME::updateZoomSelectBox()
         value.Printf( wxT( "%g" ), GetScreen()->m_ZoomList[i]);
         msg += value;
 
-        m_SelZoomBox->Append( msg );
+        m_zoomSelectBox->Append( msg );
 
         if( GetScreen()->GetZoom() == GetScreen()->m_ZoomList[i] )
-            m_SelZoomBox->SetSelection( i + 1 );
+            m_zoomSelectBox->SetSelection( i + 1 );
     }
 }

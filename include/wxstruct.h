@@ -376,19 +376,6 @@ class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 
 public:
     EDA_DRAW_PANEL*   DrawPanel;            // Draw area
-    EDA_TOOLBAR*      m_VToolBar;           // Vertical (right side) Toolbar
-    EDA_TOOLBAR*      m_AuxVToolBar;        // Auxiliary Vertical (right side)
-                                            // Toolbar
-    EDA_TOOLBAR*      m_OptionsToolBar;     // Options Toolbar (left side)
-    EDA_TOOLBAR*      m_AuxiliaryToolBar;   // Auxiliary Toolbar used in Pcbnew
-
-    wxComboBox*       m_SelGridBox;         // Choice box to choose the grid size
-    wxComboBox*       m_SelZoomBox;         // Choice box to choose the zoom value
-
-    int          m_CursorShape;             // shape for cursor (0 = default
-                                            // cursor)
-    int          m_ID_last_state;           // Id of previous active button
-                                            // on the vertical toolbar
     int          m_HTOOL_current_state;     // Id of active button on
                                             // horizontal toolbar
 
@@ -396,18 +383,7 @@ public:
                                             // = 1000 for Eeschema, = 10000
                                             // for Pcbnew and GerbView
 
-    bool         m_Draw_Axis;               // true to show X and Y axis
-    bool         m_Draw_Grid_Axis;          // true to show grid axis.
-    bool         m_Draw_Sheet_Ref;          // true to show frame references
-
     bool         m_Print_Sheet_Ref;         // true to print frame references
-    bool         m_Draw_Auxiliary_Axis;     /* true to show auxiliary axis.
-                                             * Used in Pcbnew: the auxiliary
-                                             * axis is the origin of
-                                             * coordinates for drill, gerber
-                                             * and component position files
-                                             */
-    wxPoint      m_Auxiliary_Axis_Position; // position of the auxiliary axis
 
 protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
@@ -415,8 +391,49 @@ protected:
     bool         m_DrawGrid;                // hide/Show grid
     int          m_GridColor;               // Grid color
 
+    /// Tool ID of previously active draw tool bar button.
+    int m_lastDrawToolId;
+                                            // on the vertical toolbar
+    /// The shape of the KiCad cursor.  The default value (0) is the normal cross
+    /// hair cursor.  Set to non-zero value to draw the full screen cursor.
+    /// @note This is not the system mouse cursor.
+    int m_cursorShape;
+
+    /// True shows the X and Y axis indicators.
+    bool m_showAxis;
+
+    /// True shows the grid axis indicators.
+    bool m_showGridAxis;
+
+    /// True shows the origin axis used to indicate the coordinate offset for
+    /// drill, gerber, and component position files.
+    bool m_showOriginAxis;
+
+    /// Position of the origin axis.
+    wxPoint m_originAxisPosition;
+
+    /// True shows the drawing border and title block.
+    bool m_showBorderAndTitleBlock;
+
+    /// Choice box to choose the grid size.
+    wxComboBox* m_gridSelectBox;
+
+    /// Choice box to choose the zoom value.
+    wxComboBox* m_zoomSelectBox;
+
+    /// The tool bar that contains the buttons for quick access to the application draw
+    /// tools.  It typically is located on the right side of the main window.
+    EDA_TOOLBAR* m_drawToolBar;
+
+    /// The options tool bar typcially located on the left edge of the main window.
+    EDA_TOOLBAR* m_optionsToolBar;
+
     /// Panel used to display information at the bottom of the main window.
     EDA_MSG_PANEL* m_messagePanel;
+
+    /// Let the #EDA_DRAW_PANEL object have access to the protected data since
+    /// it is closely tied to the #EDA_DRAW_FRAME.
+    friend class EDA_DRAW_PANEL;
 
 private:
     BASE_SCREEN* m_currentScreen;           ///< current used SCREEN
@@ -443,6 +460,18 @@ public:
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~EDA_DRAW_FRAME();
+
+    wxPoint GetOriginAxisPosition() const { return m_originAxisPosition; }
+
+    void SetOriginAxisPosition( const wxPoint& aPosition ) { m_originAxisPosition = aPosition; }
+
+    int GetCursorShape() const { return m_cursorShape; }
+
+    void SetCursorShape( int aCursorShape ) { m_cursorShape = aCursorShape; }
+
+    bool GetShowBorderAndTitleBlock() const { return m_showBorderAndTitleBlock; }
+
+    void SetShowBorderAndTitleBlock( bool aShow ) { m_showBorderAndTitleBlock = aShow; }
 
     virtual wxString GetScreenDesc();
 

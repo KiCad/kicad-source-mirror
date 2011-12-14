@@ -45,8 +45,8 @@ void PCB_BASE_FRAME::InstallGridFrame( const wxPoint& pos )
     dlg.SetGridSize( m_UserGridSize );
     dlg.SetGridOrigin( GetScreen()->m_GridOrigin );
 
-    if( m_SelGridBox )
-        dlg.SetGridForFastSwitching( m_SelGridBox->GetStrings(), m_FastGrid1, m_FastGrid2 );
+    if( m_gridSelectBox )
+        dlg.SetGridForFastSwitching( m_gridSelectBox->GetStrings(), m_FastGrid1, m_FastGrid2 );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

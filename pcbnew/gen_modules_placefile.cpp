@@ -93,7 +93,7 @@ void PCB_EDIT_FRAME::GenModulesPosition( wxCommandEvent& event )
     FILE*       fpBack = 0;
     bool        switchedLocale = false;
 
-    File_Place_Offset = m_Auxiliary_Axis_Position;
+    File_Place_Offset = m_originAxisPosition;
 
     /* Calculating the number of useful modules (CMS attribute, not VIRTUAL) */
     int moduleCount = 0;

@@ -65,7 +65,7 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
 
     m_PolarDisplay->SetSelection( DisplayOpt.DisplayPolarCood ? 1 : 0 );
     m_BoxUnits->SetSelection( g_UserUnit ? 1 : 0 );
-    m_CursorShape->SetSelection( m_Parent->m_CursorShape ? 1 : 0 );
+    m_CursorShape->SetSelection( m_Parent->GetCursorShape() ? 1 : 0 );
 
     // Show Option Draw Lines. We use DisplayPcbTrackFill as Lines draw option
     m_OptDisplayLines->SetSelection( DisplayOpt.DisplayPcbTrackFill ? 1 : 0 );
@@ -74,7 +74,8 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
     m_OptDisplayPolygons->SetSelection( g_DisplayPolygonsModeSketch ? 0 : 1 );
 
     m_ShowPageLimits->SetSelection(0);
-    if( m_Parent->m_Draw_Sheet_Ref )
+
+    if( m_Parent->GetShowBorderAndTitleBlock() )
     {
         for( int ii = 1; g_GerberPageSizeList[ii] != NULL; ii++ )
         {
@@ -92,14 +93,14 @@ void DIALOG_DISPLAY_OPTIONS::initOptDialog( )
 void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
 {
     DisplayOpt.DisplayPolarCood =
-        (m_PolarDisplay->GetSelection() == 0) ? FALSE : TRUE;
+        (m_PolarDisplay->GetSelection() == 0) ? false : true;
     g_UserUnit  = (m_BoxUnits->GetSelection() == 0) ? INCHES : MILLIMETRES;
-    m_Parent->m_CursorShape = m_CursorShape->GetSelection();
+    m_Parent->SetCursorShape( m_CursorShape->GetSelection() );
 
     if( m_OptDisplayLines->GetSelection() == 1 )
-        DisplayOpt.DisplayPcbTrackFill = TRUE;
+        DisplayOpt.DisplayPcbTrackFill = true;
     else
-        DisplayOpt.DisplayPcbTrackFill = FALSE;
+        DisplayOpt.DisplayPcbTrackFill = false;
 
     if( m_OptDisplayFlashedItems->GetSelection() == 1 )
     {
@@ -120,16 +121,12 @@ void DIALOG_DISPLAY_OPTIONS::OnOKBUttonClick( wxCommandEvent& event )
 
     m_Parent->SetElementVisibility( DCODES_VISIBLE, m_OptDisplayDCodes->GetValue() );
 
-    m_Parent->m_DisplayPadFill =  m_Parent->m_DisplayViaFill =
-        DisplayOpt.DisplayViaFill;
+    m_Parent->m_DisplayPadFill =  m_Parent->m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     m_Parent->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
 
     int idx = m_ShowPageLimits->GetSelection();
-    if( idx > 0 )
-        m_Parent->m_Draw_Sheet_Ref = true;
-    else
-        m_Parent->m_Draw_Sheet_Ref = false;
 
+    m_Parent->SetShowBorderAndTitleBlock( ( idx > 0 ) ? true : false );
     m_Parent->GetScreen()->m_CurrentSheetDesc = g_GerberPageSizeList[idx];
 
     EndModal( 1 );

@@ -52,46 +52,46 @@ extern int CreateNewLibAndSavePartId;
 
 void LIB_EDIT_FRAME::ReCreateVToolbar()
 {
-    if( m_VToolBar != NULL )
+    if( m_drawToolBar != NULL )
         return;
 
-    m_VToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
+    m_drawToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
 
     // Set up toolbar
-    m_VToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
-                         _( "Deselect current tool" ), wxITEM_CHECK );
+    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
+                            _( "Deselect current tool" ), wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString, KiBitmap( pin_xpm ),
-                         HELP_ADD_PIN, wxITEM_CHECK  );
+    m_drawToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString, KiBitmap( pin_xpm ),
+                            HELP_ADD_PIN, wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_BODY_TEXT_BUTT, wxEmptyString, KiBitmap( add_text_xpm ),
-                         HELP_ADD_BODYTEXT, wxITEM_CHECK  );
+    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_TEXT_BUTT, wxEmptyString, KiBitmap( add_text_xpm ),
+                            HELP_ADD_BODYTEXT, wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_BODY_RECT_BUTT, wxEmptyString, KiBitmap( add_rectangle_xpm ),
-                         HELP_ADD_BODYRECT, wxITEM_CHECK );
+    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_RECT_BUTT, wxEmptyString, KiBitmap( add_rectangle_xpm ),
+                            HELP_ADD_BODYRECT, wxITEM_CHECK );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_BODY_CIRCLE_BUTT, wxEmptyString, KiBitmap( add_circle_xpm ),
-                         HELP_ADD_BODYCIRCLE, wxITEM_CHECK  );
+    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_CIRCLE_BUTT, wxEmptyString, KiBitmap( add_circle_xpm ),
+                            HELP_ADD_BODYCIRCLE, wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_BODY_ARC_BUTT, wxEmptyString, KiBitmap( add_arc_xpm ),
-                         HELP_ADD_BODYARC, wxITEM_CHECK  );
+    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_ARC_BUTT, wxEmptyString, KiBitmap( add_arc_xpm ),
+                            HELP_ADD_BODYARC, wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_BODY_LINE_BUTT, wxEmptyString, KiBitmap( add_polygon_xpm ),
-                         HELP_ADD_BODYPOLYGON, wxITEM_CHECK  );
+    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_LINE_BUTT, wxEmptyString, KiBitmap( add_polygon_xpm ),
+                            HELP_ADD_BODYPOLYGON, wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_ANCHOR_ITEM_BUTT, wxEmptyString, KiBitmap( anchor_xpm ),
-                         _( "Move part anchor" ), wxITEM_CHECK  );
+    m_drawToolBar->AddTool( ID_LIBEDIT_ANCHOR_ITEM_BUTT, wxEmptyString, KiBitmap( anchor_xpm ),
+                            _( "Move part anchor" ), wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_IMPORT_BODY_BUTT, wxEmptyString, KiBitmap( import_xpm ),
-                         _( "Import existing drawings" ), wxITEM_CHECK  );
+    m_drawToolBar->AddTool( ID_LIBEDIT_IMPORT_BODY_BUTT, wxEmptyString, KiBitmap( import_xpm ),
+                            _( "Import existing drawings" ), wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_EXPORT_BODY_BUTT, wxEmptyString, KiBitmap( export_xpm ),
-                         _( "Export current drawing" ), wxITEM_CHECK  );
+    m_drawToolBar->AddTool( ID_LIBEDIT_EXPORT_BODY_BUTT, wxEmptyString, KiBitmap( export_xpm ),
+                            _( "Export current drawing" ), wxITEM_CHECK  );
 
-    m_VToolBar->AddTool( ID_LIBEDIT_DELETE_ITEM_BUTT, wxEmptyString, KiBitmap( delete_body_xpm ),
-                         HELP_DELETE_ITEMS, wxITEM_CHECK  );
+    m_drawToolBar->AddTool( ID_LIBEDIT_DELETE_ITEM_BUTT, wxEmptyString, KiBitmap( delete_body_xpm ),
+                            HELP_DELETE_ITEMS, wxITEM_CHECK  );
 
-    m_VToolBar->Realize();
+    m_drawToolBar->Realize();
 }
 
 
@@ -143,7 +143,8 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_HToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Undo last command" ), s_Schematic_Hokeys_Descr, HK_UNDO, IS_COMMENT );
     m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), msg );
-    msg = AddHotkeyName( _( "Redo the last command" ), s_Schematic_Hokeys_Descr, HK_REDO, IS_COMMENT );
+    msg = AddHotkeyName( _( "Redo the last command" ), s_Schematic_Hokeys_Descr, HK_REDO,
+                         IS_COMMENT );
     m_HToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), msg );
 
     m_HToolBar->AddSeparator();
@@ -209,24 +210,24 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
 void LIB_EDIT_FRAME::CreateOptionToolbar()
 {
-    if( m_OptionsToolBar )
+    if( m_optionsToolBar )
         return;
 
-    m_OptionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
+    m_optionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
                                _( "Turn grid off" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
                                KiBitmap( unit_inch_xpm ), _( "Units in inches" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
                                KiBitmap( unit_mm_xpm ),
                                _( "Units in millimeters" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiBitmap( cursor_shape_xpm ),
                                _( "Change cursor shape" ), wxITEM_CHECK );
 
-    m_OptionsToolBar->Realize();
+    m_optionsToolBar->Realize();
 }

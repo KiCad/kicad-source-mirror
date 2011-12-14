@@ -87,7 +87,7 @@ void PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
 void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !Drc_On );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
                                         Drc_On ?
                                         _( "Disable design rule checking" ) :
                                         _( "Enable design rule checking" ) );
@@ -96,7 +96,7 @@ void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
 void PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
                                         GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) ?
                                         _( "Hide board ratsnest" ) :
                                         _( "Show board ratsnest" ) );
@@ -106,7 +106,7 @@ void PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
 void PCB_EDIT_FRAME::OnUpdateShowModuleRatsnest( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( g_Show_Module_Ratsnest );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_RATSNEST,
                                         g_Show_Module_Ratsnest ?
                                         _( "Hide module ratsnest" ) :
                                         _( "Show module ratsnest" ) );
@@ -116,7 +116,7 @@ void PCB_EDIT_FRAME::OnUpdateShowModuleRatsnest( wxUpdateUIEvent& aEvent )
 void PCB_EDIT_FRAME::OnUpdateAutoDeleteTrack( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( g_AutoDeleteOldTrack );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_AUTO_DEL_TRACK,
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_AUTO_DEL_TRACK,
                                         g_AutoDeleteOldTrack ?
                                         _( "Disable auto delete old track" ) :
                                         _( "Enable auto delete old track" ) );
@@ -126,7 +126,7 @@ void PCB_EDIT_FRAME::OnUpdateAutoDeleteTrack( wxUpdateUIEvent& aEvent )
 void PCB_EDIT_FRAME::OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !m_DisplayViaFill );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
                                         m_DisplayViaFill ?
                                         _( "Show vias in outline mode" ) :
                                         _( "Show vias in fill mode" ) );
@@ -136,7 +136,7 @@ void PCB_EDIT_FRAME::OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent )
 void PCB_EDIT_FRAME::OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( !m_DisplayPcbTrackFill );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
                                         m_DisplayPcbTrackFill ?
                                         _( "Show tracks in outline mode" ) :
                                         _( "Show tracks in fill mode" ) );
@@ -146,7 +146,7 @@ void PCB_EDIT_FRAME::OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent )
 void PCB_EDIT_FRAME::OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( DisplayOpt.ContrastModeDisplay );
-    m_OptionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                                         DisplayOpt.ContrastModeDisplay ?
                                         _( "Normal contrast display mode" ) :
                                         _( "High contrast display mode" ) );
@@ -160,7 +160,7 @@ void PCB_EDIT_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateShowMicrowaveToolbar( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Check( m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).IsShown() );
+    aEvent.Check( m_auimgr.GetPane( wxT( "m_microWaveToolBar" ) ).IsShown() );
 }
 
 
@@ -172,6 +172,6 @@ void PCB_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 {
-    if( aEvent.GetEventObject() == m_VToolBar )
+    if( aEvent.GetEventObject() == m_drawToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
 }

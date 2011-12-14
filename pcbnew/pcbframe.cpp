@@ -267,18 +267,19 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     PCB_BASE_FRAME( parent, PCB_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "PcbFrame" );
-    m_Draw_Sheet_Ref = true;            // true to display sheet references
-    m_Draw_Axis = false;                 // true to display X and Y axis
-    m_Draw_Auxiliary_Axis = true;
-    m_Draw_Grid_Axis = true;
-    m_SelTrackWidthBox    = NULL;
+    m_showBorderAndTitleBlock = true;   // true to display sheet references
+    m_showAxis = false;                 // true to display X and Y axis
+    m_showOriginAxis = true;
+    m_showGridAxis = true;
+    m_SelTrackWidthBox = NULL;
     m_SelViaSizeBox = NULL;
-    m_SelLayerBox   = NULL;
+    m_SelLayerBox = NULL;
     m_show_microwave_tools = false;
     m_show_layer_manager_tools = true;
     m_HotkeysZoomAndGridList = g_Board_Editor_Hokeys_Descr;
     m_hasAutoSave = true;
     m_RecordingMacros = -1;
+    m_microWaveToolBar = NULL;
 
     for ( int i = 0; i < 10; i++ )
         m_Macros[i].m_Record.clear();
@@ -361,30 +362,30 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
                           wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
     }
 
-    if( m_AuxiliaryToolBar )    // the auxiliary horizontal toolbar, that shows track and via sizes, zoom ...)
+    if( m_auxiliaryToolBar )    // the auxiliary horizontal toolbar, that shows track and via sizes, zoom ...)
     {
-        m_auimgr.AddPane( m_AuxiliaryToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_AuxiliaryToolBar" ) ).Top().Row( 1 ) );
+        m_auimgr.AddPane( m_auxiliaryToolBar,
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_auxiliaryToolBar" ) ).Top().Row( 1 ) );
     }
 
-    if( m_AuxVToolBar )    // The auxiliary vertical right toolbar (currently microwave tools)
-        m_auimgr.AddPane( m_AuxVToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_AuxVToolBar" ) ).Right().Layer( 1 ).Position(1).Hide() );
+    if( m_microWaveToolBar )    // The auxiliary vertical right toolbar (currently microwave tools)
+        m_auimgr.AddPane( m_microWaveToolBar,
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_microWaveToolBar" ) ).Right().Layer( 1 ).Position(1).Hide() );
 
-    if( m_VToolBar )    // The main right vertical toolbar
-        m_auimgr.AddPane( m_VToolBar,
+    if( m_drawToolBar )    // The main right vertical toolbar
+        m_auimgr.AddPane( m_drawToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right().Layer( 2 ) );
 
     // Add the layer manager ( most right side of pcbframe )
     m_auimgr.AddPane( m_Layers, lyrs.Name( wxT( "m_LayersManagerToolBar" ) ).Right().Layer( 3 ) );
 
-    if( m_OptionsToolBar )    // The left vertical toolbar (fast acces display options of Pcbnew)
+    if( m_optionsToolBar )    // The left vertical toolbar (fast acces display options of Pcbnew)
     {
-        m_auimgr.AddPane( m_OptionsToolBar,
-                          wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ).Left().Layer(1) );
+        m_auimgr.AddPane( m_optionsToolBar,
+                          wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left().Layer(1) );
 
         m_auimgr.GetPane( wxT( "m_LayersManagerToolBar" ) ).Show( m_show_layer_manager_tools );
-        m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).Show( m_show_microwave_tools );
+        m_auimgr.GetPane( wxT( "m_microWaveToolBar" ) ).Show( m_show_microwave_tools );
     }
 
     if( DrawPanel )

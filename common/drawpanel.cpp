@@ -150,7 +150,7 @@ void EDA_DRAW_PANEL::DrawCrossHair( wxDC* aDC, int aColor )
 
     GRSetDrawMode( aDC, GR_XOR );
 
-    if( GetParent()->m_CursorShape == 1 )    /* Draws a crosshair. */
+    if( GetParent()->m_cursorShape != 0 )    /* Draws full screen crosshair. */
     {
         wxSize clientSize = GetClientSize();
         wxPoint lineStart = wxPoint( Cursor.x, aDC->DeviceToLogicalY( 0 ) );
@@ -535,7 +535,7 @@ void EDA_DRAW_PANEL::DrawBackGround( wxDC* DC )
         DrawGrid( DC );
 
     /* Draw axis */
-    if( GetParent()->m_Draw_Axis )
+    if( GetParent()->m_showAxis )
     {
         /* Draw the Y axis */
         GRDashedLine( &m_ClipBox, DC, 0, -screen->ReturnPageSize().y,
@@ -546,10 +546,10 @@ void EDA_DRAW_PANEL::DrawBackGround( wxDC* DC )
                       screen->ReturnPageSize().x, 0, 0, axis_color );
     }
 
-    if( GetParent()->m_Draw_Auxiliary_Axis )
+    if( GetParent()->m_showOriginAxis )
         DrawAuxiliaryAxis( DC, GR_COPY );
 
-    if( GetParent()->m_Draw_Grid_Axis )
+    if( GetParent()->m_showGridAxis )
         DrawGridAxis( DC, GR_COPY );
 }
 
@@ -676,7 +676,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
 
 void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode )
 {
-    if( GetParent()->m_Auxiliary_Axis_Position == wxPoint( 0, 0 ) )
+    if( GetParent()->m_originAxisPosition == wxPoint( 0, 0 ) )
         return;
 
     int          Color  = DARKRED;
@@ -686,18 +686,18 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode )
 
     /* Draw the Y axis */
     GRDashedLine( &m_ClipBox, aDC,
-                  GetParent()->m_Auxiliary_Axis_Position.x,
+                  GetParent()->m_originAxisPosition.x,
                   -screen->ReturnPageSize().y,
-                  GetParent()->m_Auxiliary_Axis_Position.x,
+                  GetParent()->m_originAxisPosition.x,
                   screen->ReturnPageSize().y,
                   0, Color );
 
     /* Draw the X axis */
     GRDashedLine( &m_ClipBox, aDC,
                   -screen->ReturnPageSize().x,
-                  GetParent()->m_Auxiliary_Axis_Position.y,
+                  GetParent()->m_originAxisPosition.y,
                   screen->ReturnPageSize().x,
-                  GetParent()->m_Auxiliary_Axis_Position.y,
+                  GetParent()->m_originAxisPosition.y,
                   0, Color );
 }
 
@@ -706,7 +706,7 @@ void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, int aDrawMode )
 {
     BASE_SCREEN* screen = GetScreen();
 
-    if( !GetParent()->m_Draw_Grid_Axis
+    if( !GetParent()->m_showGridAxis
         || ( screen->m_GridOrigin.x == 0 && screen->m_GridOrigin.y == 0 ) )
         return;
 

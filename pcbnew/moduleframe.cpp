@@ -142,9 +142,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
     PCB_BASE_FRAME( father, MODULE_EDITOR_FRAME, wxEmptyString, pos, size, style )
 {
     m_FrameName = wxT( "ModEditFrame" );
-    m_Draw_Sheet_Ref = false;   // true to show the frame references
-    m_Draw_Axis = true;         // true to show X and Y axis on screen
-    m_Draw_Grid_Axis = true;    // show the grid origin axis
+    m_showBorderAndTitleBlock = false;   // true to show the frame references
+    m_showAxis = true;                   // true to show X and Y axis on screen
+    m_showGridAxis = true;               // show the grid origin axis
     m_HotkeysZoomAndGridList = g_Module_Editor_Hokeys_Descr;
 
     // Give an icon
@@ -194,14 +194,14 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
     m_auimgr.AddPane( m_HToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top(). Row( 0 ) );
 
-    m_auimgr.AddPane( m_AuxiliaryToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_AuxiliaryToolBar" ) ).Top().Row( 1 ) );
+    m_auimgr.AddPane( m_auxiliaryToolBar,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_auxiliaryToolBar" ) ).Top().Row( 1 ) );
 
-    m_auimgr.AddPane( m_VToolBar,
+    m_auimgr.AddPane( m_drawToolBar,
                       wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
 
-    m_auimgr.AddPane( m_OptionsToolBar,
-                      wxAuiPaneInfo( vert ).Name( wxT( "m_OptionsToolBar" ) ). Left() );
+    m_auimgr.AddPane( m_optionsToolBar,
+                      wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ). Left() );
 
     m_auimgr.AddPane( DrawPanel,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
@@ -253,7 +253,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( GetBoard()->m_Modules != NULL );
 
-    if( aEvent.GetEventObject() == m_VToolBar )
+    if( aEvent.GetEventObject() == m_drawToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 

@@ -389,8 +389,8 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             if( data )
                 gy = atoi( data );
 
-            m_Auxiliary_Axis_Position.x = gx;
-            m_Auxiliary_Axis_Position.y = gy;
+            m_originAxisPosition.x = gx;
+            m_originAxisPosition.y = gy;
             continue;
         }
 
@@ -762,8 +762,8 @@ static int WriteSetup( FILE* aFile, PCB_EDIT_FRAME* aFrame, BOARD* aBoard )
 
     fprintf( aFile,
              "AuxiliaryAxisOrg %d %d\n",
-             aFrame->m_Auxiliary_Axis_Position.x,
-             aFrame->m_Auxiliary_Axis_Position.y );
+             aFrame->GetOriginAxisPosition().x,
+             aFrame->GetOriginAxisPosition().y );
 
     STRING_FORMATTER sf;
 

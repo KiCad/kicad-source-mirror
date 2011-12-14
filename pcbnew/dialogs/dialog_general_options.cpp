@@ -64,7 +64,7 @@ void Dialog_GeneralOptions::init()
     /* Set display options */
     m_PolarDisplay->SetSelection( DisplayOpt.DisplayPolarCood ? 1 : 0 );
     m_UnitsSelection->SetSelection( g_UserUnit ? 1 : 0 );
-    m_CursorShape->SetSelection( GetParent()->m_CursorShape ? 1 : 0 );
+    m_CursorShape->SetSelection( GetParent()->GetCursorShape() ? 1 : 0 );
 
 
     switch( g_RotationAngle )
@@ -107,15 +107,14 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 {
     EDA_UNITS_T ii;
 
-    DisplayOpt.DisplayPolarCood =
-        ( m_PolarDisplay->GetSelection() == 0 ) ? false : true;
+    DisplayOpt.DisplayPolarCood = ( m_PolarDisplay->GetSelection() == 0 ) ? false : true;
     ii = g_UserUnit;
     g_UserUnit = ( m_UnitsSelection->GetSelection() == 0 )  ? INCHES : MILLIMETRES;
 
     if( ii != g_UserUnit )
         GetParent()->ReCreateAuxiliaryToolbar();
 
-    GetParent()->m_CursorShape = m_CursorShape->GetSelection();
+    GetParent()->SetCursorShape( m_CursorShape->GetSelection() );
     GetParent()->SetAutoSaveInterval( m_SaveTime->GetValue() * 60 );
 
     g_RotationAngle = 10 * wxAtoi( m_RotationAngle->GetStringSelection() );
@@ -150,7 +149,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
-    bool state = m_OptionsToolBar->GetToolState( id );
+    bool state = m_optionsToolBar->GetToolState( id );
 
     switch( id )
     {
@@ -218,7 +217,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
         m_show_microwave_tools = state;
-        m_auimgr.GetPane( wxT( "m_AuxVToolBar" ) ).Show( m_show_microwave_tools );
+        m_auimgr.GetPane( wxT( "m_microWaveToolBar" ) ).Show( m_show_microwave_tools );
         m_auimgr.Update();
         break;
 

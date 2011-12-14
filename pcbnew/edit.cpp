@@ -169,8 +169,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( GetToolId() != id )
         {
-            if( m_ID_last_state != GetToolId() )
-                m_ID_last_state = GetToolId();
+            if( m_lastDrawToolId != GetToolId() )
+                m_lastDrawToolId = GetToolId();
 
             SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
         }
