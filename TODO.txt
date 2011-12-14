@@ -26,11 +26,6 @@ Common
   but is now in scripts/python/ky temporarily.
 
 
-CvPCB
------
-* Preview of the already assigned footprint.
-
-
 EESchema
 --------
 * Drag and drop between two EESchema windows.

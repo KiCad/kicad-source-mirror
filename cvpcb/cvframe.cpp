@@ -525,6 +525,25 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     }
 
     m_FootprintList->SetFootprintFilteredList( &m_components[ selection ], m_footprints );
+
+    // Preview of the already assigned footprint.
+    // Find the footprint that was already choosen for this component and select it.
+    wxString module = *(&m_components[ selection ].m_Module);
+
+    for( int ii = 0; ii < m_FootprintList->GetCount(); ii++ )
+    {
+        wxString footprintName;
+        wxString msg = (*m_FootprintList->m_ActiveFootprintList)[ii];
+        msg.Trim( true );
+        msg.Trim( false );
+        footprintName = msg.AfterFirst( wxChar( ' ' ) );
+
+        if( module.Cmp( footprintName ) == 0 )
+            m_FootprintList->SetSelection( ii, true );
+        else
+            m_FootprintList->SetSelection( ii, false );
+    }
+
     SendMessageToEESCHEMA();
     DisplayStatus();
 }
@@ -660,13 +679,13 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA()
 
     selection = m_ListCmp->GetSelection();
 
-	if ( selection < 0 )
-		selection = 0;
+    if ( selection < 0 )
+        selection = 0;
 
     if( &m_components[ selection ] == NULL )
-    	return;
+        return;
 
-	Component = &m_components[ selection ];
+    Component = &m_components[ selection ];
 
     sprintf( cmd, "$PART: \"%s\"", TO_UTF8( Component->m_Reference ) );
 
