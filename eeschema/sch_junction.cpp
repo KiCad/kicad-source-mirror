@@ -203,7 +203,7 @@ void SCH_JUNCTION::GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
 
 
 #if defined(DEBUG)
-void SCH_JUNCTION::Show( int nestLevel, std::ostream& os )
+void SCH_JUNCTION::Show( int nestLevel, std::ostream& os ) const
 {
     // XML output:
     wxString s = GetClass();

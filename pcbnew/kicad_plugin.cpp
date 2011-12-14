@@ -191,6 +191,9 @@ BOARD* KICAD_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPER
 
     m_reader = &reader;          // member function accessibility
 
+    m_board->m_Status_Pcb = 0;
+    m_board->m_NetClasses.Clear();
+
     init( aProperties );
 
     checkVersion();
@@ -2567,9 +2570,6 @@ void KICAD_PLUGIN::init( PROPERTIES* aProperties )
 #else
     diskToBiu = 1.0;                // BIUs are deci-mils
 #endif
-
-    m_board->m_Status_Pcb = 0;
-    m_board->m_NetClasses.Clear();
 }
 
 

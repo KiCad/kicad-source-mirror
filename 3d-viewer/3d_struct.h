@@ -80,6 +80,10 @@ public:
     S3D_MATERIAL* Back() const { return (S3D_MATERIAL*) Pback; }
 
     void SetMaterial();
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+#endif
 };
 
 
@@ -131,6 +135,10 @@ public:
     int  ReadAppearance( FILE* file, int* LineNum );
     int  ReadGeometry( FILE* file, int* LineNum );
     void Set_Object_Coords( std::vector< S3D_Vertex >& aVertices );
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+#endif
 };
 
 
@@ -150,6 +158,10 @@ public:
     Struct3D_Shape* Back() const { return (Struct3D_Shape*) Pback; }
 
     int ReadData( FILE* file, int* LineNum );
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+#endif
 };
 
 
@@ -185,5 +197,4 @@ public:
     void       SetToolTip( const wxString& text );
 };
 
-
-#endif /* STRUCT_3D_H */
+#endif // STRUCT_3D_H

@@ -154,6 +154,10 @@ public:
         return m_points[ aIndex ];
     }
 
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+#endif
+
 private:
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
     virtual bool doHitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const;

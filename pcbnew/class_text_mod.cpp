@@ -454,14 +454,7 @@ wxString TEXTE_MODULE::GetSelectMenuText() const
 
 #if defined(DEBUG)
 
-/**
- * Function Show
- * is used to output the object tree, currently for debugging only.
- * @param nestLevel An aid to prettier tree indenting, and is the level
- *          of nesting of this object within the overall tree.
- * @param os The ostream& to output to.
- */
-void TEXTE_MODULE::Show( int nestLevel, std::ostream& os )
+void TEXTE_MODULE::Show( int nestLevel, std::ostream& os ) const
 {
     // for now, make it look like XML:
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
@@ -470,6 +463,5 @@ void TEXTE_MODULE::Show( int nestLevel, std::ostream& os )
 //    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str()
 //                                 << ">\n";
 }
-
 
 #endif

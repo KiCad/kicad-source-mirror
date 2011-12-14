@@ -516,7 +516,7 @@ void BASE_SCREEN::InsertItem( EDA_ITEMS::iterator aIter, EDA_ITEM* aItem )
 
 #if defined(DEBUG)
 
-void BASE_SCREEN::Show( int nestLevel, std::ostream& os )
+void BASE_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
     EDA_ITEM* item = m_drawList;
 

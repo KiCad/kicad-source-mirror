@@ -143,6 +143,10 @@ public:
      * and clears the selected item list.
      */
     void Clear();
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const {}   // override
+#endif
 };
 
 

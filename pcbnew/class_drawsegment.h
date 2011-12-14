@@ -245,7 +245,7 @@ public:
     virtual BITMAP_DEF GetMenuImage() const { return  add_dashed_line_xpm; }
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os );
+    void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
 };
 

@@ -112,6 +112,10 @@ public:
     virtual wxString GetSelectMenuText() const;
 
     virtual BITMAP_DEF GetMenuImage() const { return  add_mires_xpm; }
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+#endif
 };
 
 

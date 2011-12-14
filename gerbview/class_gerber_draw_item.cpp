@@ -633,7 +633,7 @@ bool GERBER_DRAW_ITEM::HitTest( EDA_RECT& aRefArea )
 
 #if defined(DEBUG)
 
-void GERBER_DRAW_ITEM::Show( int nestLevel, std::ostream& os )
+void GERBER_DRAW_ITEM::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
 

@@ -2150,57 +2150,46 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
 
 #if defined(DEBUG)
 
-void BOARD::Show( int nestLevel, std::ostream& os )
+void BOARD::Show( int nestLevel, std::ostream& os ) const
 {
     BOARD_ITEM* p;
 
     // for now, make it look like XML:
-    NestedSpace( nestLevel,
-                 os ) << '<' << GetClass().Lower().mb_str() << ">\n";
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 
     // specialization of the output:
     NestedSpace( nestLevel + 1, os ) << "<modules>\n";
     p = m_Modules;
-
     for( ; p; p = p->Next() )
         p->Show( nestLevel + 2, os );
-
     NestedSpace( nestLevel + 1, os ) << "</modules>\n";
 
     NestedSpace( nestLevel + 1, os ) << "<pdrawings>\n";
     p = m_Drawings;
-
     for( ; p; p = p->Next() )
         p->Show( nestLevel + 2, os );
-
     NestedSpace( nestLevel + 1, os ) << "</pdrawings>\n";
 
     NestedSpace( nestLevel + 1, os ) << "<tracks>\n";
     p = m_Track;
-
     for( ; p; p = p->Next() )
         p->Show( nestLevel + 2, os );
-
     NestedSpace( nestLevel + 1, os ) << "</tracks>\n";
 
     NestedSpace( nestLevel + 1, os ) << "<zones>\n";
     p = m_Zone;
-
     for( ; p; p = p->Next() )
         p->Show( nestLevel + 2, os );
-
     NestedSpace( nestLevel + 1, os ) << "</zones>\n";
 
-    /*
-     *  NestedSpace( nestLevel+1, os ) << "<zone_container>\n";
-     *  for( ZONE_CONTAINERS::iterator i=m_ZoneDescriptorList.begin();
-     *  i!=m_ZoneDescriptorList.end();  ++i )
-     *   (*i)->Show( nestLevel+2, os );
-     *  NestedSpace( nestLevel+1, os ) << "</zone_container>\n";
-     */
+    NestedSpace( nestLevel+1, os ) << "<zone_containers>\n";
+    for( ZONE_CONTAINERS::const_iterator it = m_ZoneDescriptorList.begin();
+                it != m_ZoneDescriptorList.end();  ++it )
+        (*it)->Show( nestLevel+2, os );
+
+    NestedSpace( nestLevel+1, os ) << "</zone_containers>\n";
 
     p = (BOARD_ITEM*) m_Son;
-
     for( ; p; p = p->Next() )
     {
         p->Show( nestLevel + 1, os );

@@ -126,6 +126,10 @@ public:
     virtual void GetNetListItem( vector<NETLIST_OBJECT*>& aNetListItems,
                                  SCH_SHEET_PATH*          aSheetPath );
 
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+#endif
+
 private:
     virtual bool doIsConnected( const wxPoint& aPosition ) const;
     virtual bool doHitTest( const wxPoint& aPoint, int aAccuracy ) const;
