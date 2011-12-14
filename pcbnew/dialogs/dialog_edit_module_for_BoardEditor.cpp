@@ -73,7 +73,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
          (m_CurrentModule->GetLayer() == LAYER_N_BACK) ? 1 : 0 );
 
     bool select = FALSE;
-    switch( m_CurrentModule->m_Orient )
+    switch( (int) m_CurrentModule->GetOrientation() )
     {
     case 0:
         m_OrientCtrl->SetSelection( 0 );

@@ -83,12 +83,6 @@ protected:
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
 
-    int     NbDraw;
-    int     NbTrack;
-    int     NbZone;
-    int     NbMod;
-    int     NbNets;
-
     double  biuToDisk;      ///< convert from BIUs to disk engineering units with this scale factor
     double  diskToBiu;      ///< convert from disk engineering units to BIUs with this scale factor
 
@@ -135,9 +129,9 @@ protected:
     void load3D( MODULE* aModule );
     void loadPAD( MODULE* aModule );
     void loadMODULE_TEXT( TEXTE_MODULE* aText );
-    void loadEDGE_MODULE( MODULE* aModule );
+    void loadMODULE_EDGE( MODULE* aModule );
 
-    void loadDRAWSEGMENT();
+    void loadPCB_LINE();
     void loadNETINFO_ITEM();
     void loadPCB_TEXT();
     void loadNETCLASS();
@@ -206,16 +200,10 @@ protected:
     void saveNETCLASS( const NETCLASS* aNetclass ) const;
 
     void savePCB_TEXT( const TEXTE_PCB* aText ) const;
-    void saveEDGE_MODULE( const EDGE_MODULE* aEdge ) const;
-    void saveTARGET( const PCB_TARGET* aTarget ) const;
+    void savePCB_TARGET( const PCB_TARGET* aTarget ) const;
+    void savePCB_LINE( const DRAWSEGMENT* aStroke ) const;
     void saveDIMENTION( const DIMENSION* aDimension ) const;
     void saveTRACK( const TRACK* aTrack ) const;
-
-    /**
-     * Function saveSEGZONE
-     * saves the oldschool zones, now outdated in favor of polygon zones.
-     */
-    void saveSEGZONE( const SEGZONE* aZone ) const;
 
     /**
      * Function saveZONE_CONTAINER

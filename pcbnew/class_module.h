@@ -43,7 +43,7 @@ class MODULE : public BOARD_ITEM
 {
 
 public:
-    int               m_Orient;        // orientation in 0.1 degrees
+    double            m_Orient;        // orientation in 0.1 degrees
     wxPoint           m_Pos;           // Real coord on board
     DLIST<D_PAD>      m_Pads;          /* Pad list (linked list) */
     DLIST<BOARD_ITEM> m_Drawings;      /* Graphic items list (linked list) */
@@ -142,15 +142,11 @@ public:
      */
     EDA_RECT GetBoundingBox() const;
 
-    const wxPoint GetPosition() const   // overload
-    {
-        return m_Pos;
-    }
+    void SetPosition( const wxPoint& aPos );                    // overload
+    const wxPoint GetPosition() const       { return m_Pos; }   // overload
 
-    void SetPosition( const wxPoint& aPos );  // overload
-
-    void SetOrientation( int newangle );
-    int GetOrientation() const { return m_Orient; }
+    void SetOrientation( double newangle );
+    double GetOrientation() const { return m_Orient; }
 
     const wxString& GetLibRef() const { return m_LibRef; }
     void SetLibRef( const wxString& aLibRef ) { m_LibRef = aLibRef; }
@@ -192,7 +188,7 @@ public:
      * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
+    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
 
     /**
      * Function Flip

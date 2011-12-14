@@ -17,11 +17,10 @@ class EDA_DRAW_PANEL;
 
 class PCB_TARGET : public BOARD_ITEM
 {
-public:
-    int     m_Width;
-    wxPoint m_Pos;
     int     m_Shape;            // bit 0 : 0 = draw +, 1 = draw X
     int     m_Size;
+    int     m_Width;
+    wxPoint m_Pos;
 
 public:
     PCB_TARGET( BOARD_ITEM* aParent );
@@ -33,12 +32,23 @@ public:
     PCB_TARGET* Next() const { return (PCB_TARGET*) Pnext; }
     PCB_TARGET* Back() const { return (PCB_TARGET*) Pnext; }
 
-    const wxPoint GetPosition() const
-    {
-        return m_Pos;
-    }
+    void SetPosition( const wxPoint& aPos ) { m_Pos = aPos; }   // override
+    const wxPoint GetPosition() const       { return m_Pos; }   // override
 
-    void SetPosition( const wxPoint& aPos ) { m_Pos = aPos; }
+    void SetShape( int aShape )     { m_Shape = aShape; }
+    int GetShape() const            { return m_Shape; }
+
+    void SetSize( int aSize )       { m_Size = aSize; }
+    int GetSize() const             { return m_Size; }
+
+    void SetWidth( int aWidth )     { m_Width = aWidth; }
+    int GetWidth() const            { return m_Width; }
+
+    /**
+     * Function Exchg
+     * swaps data with another PCB_TARGET for use by undo-redo.
+     */
+    void Exchg( PCB_TARGET* aTarget );
 
     /**
      * Function Move
@@ -56,7 +66,7 @@ public:
      * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
+    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
 
     /**
      * Function Flip
@@ -79,7 +89,6 @@ public:
 
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode,
                const wxPoint& offset = ZeroOffset );
-
 
     /**
      * Function HitTest

@@ -3,8 +3,8 @@
  * @brief DIMENSION class definition.
  */
 
-#ifndef DIMENSION_H
-#define DIMENSION_H
+#ifndef DIMENSION_H_
+#define DIMENSION_H_
 
 
 #include "class_board_item.h"
@@ -21,10 +21,10 @@ public:
     int        m_Width;
     wxPoint    m_Pos;
     int        m_Shape;
-    int        m_Unit;  /* 0 = inches, 1 = mm */
-    int        m_Value; /* value of  PCB dimensions. */
+    int        m_Unit;          /// 0 = inches, 1 = mm
+    int        m_Value;         /// value of  PCB dimensions.
 
-    TEXTE_PCB* m_Text;
+    TEXTE_PCB  m_Text;
     int        m_crossBarOx, m_crossBarOy, m_crossBarFx, m_crossBarFy;
     int        m_featureLineGOx, m_featureLineGOy, m_featureLineGFx, m_featureLineGFy;
     int        m_featureLineDOx, m_featureLineDOy, m_featureLineDFx, m_featureLineDFy;
@@ -43,7 +43,7 @@ public:
 
     void SetTextSize( const wxSize& aTextSize )
     {
-        m_Text->SetSize( aTextSize );
+        m_Text.SetSize( aTextSize );
     }
 
     /**
@@ -52,6 +52,12 @@ public:
      * @param aLayer The layer number.
      */
     void SetLayer( int aLayer );
+
+    void SetShape( int aShape )         { m_Shape = aShape; }
+    int GetShape() const                { return m_Shape; }
+
+    int GetWidth() const                { return m_Width; }
+    void SetWidth( int aWidth )         { m_Width = aWidth; }
 
     /**
      * Function AdjustDimensionDetails
@@ -90,7 +96,7 @@ public:
      * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
+    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
 
     /**
      * Function Flip
@@ -151,4 +157,4 @@ public:
     virtual BITMAP_DEF GetMenuImage() const { return  add_dimension_xpm; }
 };
 
-#endif  // #define DIMENSION_H
+#endif  // DIMENSION_H_

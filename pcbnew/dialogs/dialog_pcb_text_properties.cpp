@@ -114,23 +114,23 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
         }
     }
 
-    switch( m_SelectedPCBText->m_Orient )
+    switch( (int) m_SelectedPCBText->GetOrientation() )
     {
-        default:
-            m_OrientationCtrl->SetSelection( 0 );
-            break;
-        case 900:
-        case -2700:
-            m_OrientationCtrl->SetSelection( 1 );
-            break;
-        case 1800:
-        case -1800:
-            m_OrientationCtrl->SetSelection( 2 );
-            break;
-        case 2700:
-        case -900:
-            m_OrientationCtrl->SetSelection( 3 );
-            break;
+    default:
+        m_OrientationCtrl->SetSelection( 0 );
+        break;
+    case 900:
+    case -2700:
+        m_OrientationCtrl->SetSelection( 1 );
+        break;
+    case 1800:
+    case -1800:
+        m_OrientationCtrl->SetSelection( 2 );
+        break;
+    case 2700:
+    case -900:
+        m_OrientationCtrl->SetSelection( 3 );
+        break;
     }
 
     if( m_SelectedPCBText->m_Mirror )

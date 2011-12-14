@@ -225,7 +225,7 @@ void KICAD_PLUGIN::loadAllSections( bool doAppend )
 
         else if( TESTLINE( "$DRAWSEGMENT" ) )
         {
-            loadDRAWSEGMENT();
+            loadPCB_LINE();
         }
 
         else if( TESTLINE( "$EQUIPOT" ) )
@@ -408,7 +408,7 @@ void KICAD_PLUGIN::loadGENERAL()
             m_board->SetBoundingBox( bbbox );
         }
 
-        // Read the number of segments of type DRAW, TRACK, ZONE
+        /* Read the number of segments of type DRAW, TRACK, ZONE
         else if( TESTLINE( "Ndraw" ) )
         {
             NbDraw = intParse( line + SZ( "Ndraw" ) );
@@ -433,6 +433,7 @@ void KICAD_PLUGIN::loadGENERAL()
         {
             NbNets = intParse( line + SZ( "Nnets" ) );
         }
+        */
 
         else if( TESTLINE( "$EndGENERAL" ) )
             return;     // preferred exit
@@ -854,7 +855,7 @@ void KICAD_PLUGIN::loadMODULE()
 
         if( TESTLINE( "D" ) )          // read a drawing item, e.g. "DS"
         {
-            loadEDGE_MODULE( module.get() );
+            loadMODULE_EDGE( module.get() );
         }
 
         else if( TESTLINE( "$PAD" ) )
@@ -1204,7 +1205,7 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
 }
 
 
-void KICAD_PLUGIN::loadEDGE_MODULE( MODULE* aModule )
+void KICAD_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 {
     STROKE_T shape;
     char* line = m_reader->Line();     // obtain current (old) line
@@ -1494,7 +1495,7 @@ void KICAD_PLUGIN::load3D( MODULE* aModule )
 }
 
 
-void KICAD_PLUGIN::loadDRAWSEGMENT()
+void KICAD_PLUGIN::loadPCB_LINE()
 {
     /* example:
         $DRAWSEGMENT
@@ -1564,7 +1565,7 @@ void KICAD_PLUGIN::loadDRAWSEGMENT()
                     dseg->SetAngle( angle );    // m_Angle
                     break;
                 case 3:
-                    long    timestamp;
+                    long timestamp;
                     timestamp = hexParse( data );
                     dseg->SetTimeStamp( timestamp );
                     break;
@@ -1808,7 +1809,7 @@ void KICAD_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         // "De 0 0 463 0 800000\r\n"
 
 #if 1
-        assert( TESTLINE( "Po" ) );
+        assert( TESTLINE( "De" ) );
 #else
         if( !TESTLINE( "De" ) )
         {
@@ -1861,13 +1862,13 @@ void KICAD_PLUGIN::loadTrackList( TRACK* aInsertBeforeMe, int aStructType )
         if( drill <= 0 )
             newTrack->SetDrillDefault();
         else
-            newTrack->SetDrillValue( drill );
+            newTrack->SetDrill( drill );
 
         newTrack->SetLayer( layer );
 
         if( makeType == PCB_VIA_T )     // Ensure layers are OK when possible:
         {
-            if( newTrack->Shape() == VIA_THROUGH )
+            if( newTrack->GetShape() == VIA_THROUGH )
                 ( (SEGVIA*) newTrack )->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
         }
 
@@ -2083,7 +2084,10 @@ void KICAD_PLUGIN::loadZONE_CONTAINER()
 
             zc->SetFillMode( fillmode ? 1 : 0 );
 
-            if( arcsegcount >= 32 /* ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF: don't really want pcbnew.h in here, after all, its a PLUGIN and global data is evil. */ )
+            // @todo ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF: don't really want pcbnew.h
+            // in here, after all, its a PLUGIN and global data is evil.
+            // put in accessor
+            if( arcsegcount >= 32 )
                 arcsegcount = 32;
 
             zc->SetArcSegCount( arcsegcount );
@@ -2228,7 +2232,7 @@ void KICAD_PLUGIN::loadDIMENSION()
 
             dim->SetLayer( layer );
             dim->SetTimeStamp( timestamp );
-            dim->m_Shape = shape;
+            dim->SetShape( shape );
         }
 
         else if( TESTLINE( "Te" ) )
@@ -2236,7 +2240,7 @@ void KICAD_PLUGIN::loadDIMENSION()
             char  buf[2048];
 
             ReadDelimitedText( buf, line + SZ( "Te" ), sizeof(buf) );
-            dim->m_Text->SetText( FROM_UTF8( buf ) );
+            dim->m_Text.SetText( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Po" ) )
@@ -2244,28 +2248,23 @@ void KICAD_PLUGIN::loadDIMENSION()
             // sscanf( Line + 2, " %d %d %d %d %d %d %d", &m_Text->m_Pos.x, &m_Text->m_Pos.y,
             // &m_Text->m_Size.x, &m_Text->m_Size.y, &thickness, &orientation, &normal_display );
 
-            int normal_display = 1;
-
-            BIU pos_x  = biuParse( line + SZ( "Po" ), &data );
-            BIU pos_y  = biuParse( data, &data );
-            BIU width  = biuParse( data, &data );
-            BIU height = biuParse( data, &data );
-            BIU thickn = biuParse( data, &data );
-            int orient = intParse( data, &data );
-
-            data = strtok( (char*) data, delims );
-            if( data )  // optional from old days?
-                normal_display = intParse( data );
+            BIU     pos_x  = biuParse( line + SZ( "Po" ), &data );
+            BIU     pos_y  = biuParse( data, &data );
+            BIU     width  = biuParse( data, &data );
+            BIU     height = biuParse( data, &data );
+            BIU     thickn = biuParse( data, &data );
+            double  orient = degParse( data, &data );
+            char*   mirror = strtok( (char*) data, delims );
 
             // This sets both DIMENSION's position and internal m_Text's.
             // @todo: But why do we even know about internal m_Text?
             dim->SetPosition( wxPoint( pos_x, pos_y ) );
             dim->SetTextSize( wxSize( width, height ) );
 
-            dim->m_Text->m_Mirror = normal_display ? false : true;
+            dim->m_Text.SetMirrored( mirror && *mirror == '0' );
 
-            dim->m_Text->SetThickness( thickn );
-            dim->m_Text->SetOrientation( orient );
+            dim->m_Text.SetThickness( thickn );
+            dim->m_Text.SetOrientation( orient );
         }
 
         else if( TESTLINE( "Sb" ) )
@@ -2396,6 +2395,7 @@ void KICAD_PLUGIN::loadPCB_TARGET()
 {
     while( READLINE() )
     {
+        const char* data;
         char* line = m_reader->Line();
 
         if( TESTLINE( "$EndPCB_TARGET" ) )
@@ -2405,8 +2405,6 @@ void KICAD_PLUGIN::loadPCB_TARGET()
 
         else if( TESTLINE( "Po" ) )
         {
-            const char* data;
-
             // sscanf( Line + 2, " %X %d %d %d %d %d %lX", &m_Shape, &m_Layer, &m_Pos.x, &m_Pos.y, &m_Size, &m_Width, &m_TimeStamp );
 
             int shape = intParse( line + SZ( "Po" ), &data );
@@ -2549,16 +2547,20 @@ double KICAD_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
 void KICAD_PLUGIN::init( PROPERTIES* aProperties )
 {
-    NbDraw = NbTrack = NbZone = NbMod = NbNets = -1;
-
+    // conversion factor for saving RAM BIUs to KICAD legacy file format.
 #if defined(KICAD_NANOMETRE)
-    biuToDisk = 1/1000000.0;        // BIUs are nanometers
+    biuToDisk = 1/1000000.0;        // BIUs are nanometers & file is mm
 #else
     biuToDisk = 1.0;                // BIUs are deci-mils
 #endif
 
-    // start by assuming the board is in deci-mils.
-    // if we see "Units mm" in the $GENERAL section, switch to 1000000.0 then.
+
+    // conversion factor for loading KICAD legacy file format into BIUs in RAM
+
+    // Start by assuming the *.brd file is in deci-mils.
+    // if we see "Units mm" in the $GENERAL section, set diskToBiu to 1000000.0
+    // then, during the file loading process, to start a conversion from
+    // mm to nanometers.
 
 #if defined(KICAD_NANOMETRE)
     diskToBiu = 2540.0;             // BIUs are nanometers
@@ -2605,12 +2607,12 @@ wxString KICAD_PLUGIN::writeError() const
 }
 
 #define CHECK_WRITE_ERROR() \
-    do { \
-        if( ferror( m_fp ) ) \
-        { \
-            THROW_IO_ERROR( writeError() ); \
-        } \
-    } while(0)
+do { \
+    if( ferror( m_fp ) ) \
+    { \
+        THROW_IO_ERROR( writeError() ); \
+    } \
+} while(0)
 
 
 void KICAD_PLUGIN::saveAllSections() const
@@ -2644,7 +2646,6 @@ void KICAD_PLUGIN::saveSETUP() const
 
 void KICAD_PLUGIN::saveBOARD() const
 {
-#if 1
     // save the nets
     int netcount = m_board->GetNetCount();
     for( int i = 0; i < netcount;  ++i )
@@ -2666,10 +2667,10 @@ void KICAD_PLUGIN::saveBOARD() const
             savePCB_TEXT( (TEXTE_PCB*) gr );
             break;
         case PCB_LINE_T:
-            saveEDGE_MODULE( (EDGE_MODULE*) gr );
+            saveMODULE_EDGE( (EDGE_MODULE*) gr );
             break;
         case PCB_TARGET_T:
-            saveTARGET( (PCB_TARGET*) gr );
+            savePCB_TARGET( (PCB_TARGET*) gr );
             break;
         case PCB_DIMENSION_T:
             saveDIMENTION( (DIMENSION*) gr );
@@ -2684,13 +2685,13 @@ void KICAD_PLUGIN::saveBOARD() const
     // save the tracks & vias
     fprintf( m_fp, "$TRACK\n" );
     for( TRACK* track = m_board->m_Track;  track; track = track->Next() )
-        saveTRACK( (TRACK*) track );
+        saveTRACK( track );
     fprintf( m_fp, "$EndTRACK\n" );
 
-    // save the zones
+    // save the old obsolete zones which were done by segments (tracks)
     fprintf( m_fp, "$ZONE\n" );
     for( SEGZONE* zone = m_board->m_Zone;  zone;  zone = zone->Next() )
-        saveSEGZONE( zone );
+        saveTRACK( zone );
     fprintf( m_fp, "$EndZONE\n" );
 
     // save the polygon (which are the newer technology) zones
@@ -2698,7 +2699,8 @@ void KICAD_PLUGIN::saveBOARD() const
         saveZONE_CONTAINER( m_board->GetArea( i ) );
 
     fprintf( m_fp, "$EndBOARD\n" );
-#endif
+
+    CHECK_WRITE_ERROR();
 }
 
 
@@ -2935,7 +2937,7 @@ void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
 
     statusTxt[2] = '\0';
 
-    fprintf( m_fp, "Po %s %g %d %8.8lX %8.8lX %s\n",
+    fprintf( m_fp, "Po %s %g %d %8lX %8lX %s\n",
              fmtBIUPoint( me->GetPosition() ).c_str(),    // m_Pos.x, m_Pos.y,
              orient,
              me->GetLayer(),
@@ -2955,7 +2957,7 @@ void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
         fprintf( m_fp, "Kw %s\n", TO_UTF8( me->GetKeywords() ) );
     }
 
-    fprintf( m_fp, "Sc %8.8lX\n", me->GetTimeStamp() );
+    fprintf( m_fp, "Sc %8lX\n", me->GetTimeStamp() );
     fprintf( m_fp, "AR %s\n", TO_UTF8( me->GetPath() ) );
     fprintf( m_fp, "Op %X %X 0\n", me->m_CntRot90, me->m_CntRot180 );
 
@@ -3011,6 +3013,8 @@ void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
     save3D( me );
 
     fprintf( m_fp, "$EndMODULE  %s\n", TO_UTF8( me->GetLibRef() ) );
+
+    CHECK_WRITE_ERROR();
 }
 
 
@@ -3045,234 +3049,177 @@ void KICAD_PLUGIN::save3D( const MODULE* me ) const
 }
 
 
-void KICAD_PLUGIN::saveTARGET(PCB_TARGET const*) const
+void KICAD_PLUGIN::savePCB_TARGET( const PCB_TARGET* me ) const
 {
+    fprintf( m_fp, "$PCB_TARGET\n" );
+
+    fprintf( m_fp, "Po %X %d %s %s %s %8lX\n",
+             me->GetShape(),
+             me->GetLayer(),
+             fmtBIUPoint( me->GetPosition() ).c_str(),
+             fmtBIU( me->GetSize() ).c_str(),
+             fmtBIU( me->GetWidth() ).c_str(),
+             me->GetTimeStamp()
+             );
+
+    fprintf( m_fp, "$EndPCB_TARGET\n" );
+
+    CHECK_WRITE_ERROR();
 }
 
 
-void KICAD_PLUGIN::saveTRACK(TRACK const*) const
+void KICAD_PLUGIN::savePCB_LINE( const DRAWSEGMENT* me ) const
 {
-}
+    fprintf( m_fp, "$DRAWSEGMENT\n" );
 
+    fprintf( m_fp, "Po %d %s %s %s\n",
+             me->GetShape(),
+             fmtBIUPoint( me->GetStart() ).c_str(),
+             fmtBIUPoint( me->GetEnd() ).c_str(),
+             fmtBIU( me->GetWidth() ).c_str()
+             );
 
-void KICAD_PLUGIN::saveSEGZONE(SEGZONE const*) const
-{
-}
-
-
-void KICAD_PLUGIN::saveZONE_CONTAINER(ZONE_CONTAINER const*) const
-{
-}
-
-
-void KICAD_PLUGIN::saveDIMENTION(DIMENSION const*) const
-{
-}
-
-
-void KICAD_PLUGIN::savePCB_TEXT(TEXTE_PCB const*) const
-{
-}
-
-
-void KICAD_PLUGIN::saveEDGE_MODULE(EDGE_MODULE const*) const
-{
-}
-
-
-#if 0
-
-bool DRAWSEGMENT::Save( FILE* m_fp ) const
-{
-    if( fprintf( m_fp, "$DRAWSEGMENT\n" ) != sizeof("$DRAWSEGMENT\n") - 1 )
-        return false;
-
-    fprintf( m_fp, "Po %d %d %d %d %d %d\n",
-             m_Shape,
-             m_Start.x, m_Start.y,
-             m_End.x, m_End.y, m_Width );
-
-    if( m_Type != S_CURVE )
+    if( me->GetType() != S_CURVE )
     {
-        fprintf( m_fp, "De %d %d %d %lX %X\n",
-                 m_Layer, m_Type, m_Angle,
-                 m_TimeStamp, ReturnStatus() );
+        fprintf( m_fp, "De %d %d %g %8lX %X\n",
+                 me->GetLayer(),
+                 me->GetType(),
+                 me->GetAngle(),
+                 me->GetTimeStamp(),
+                 me->GetStatus()
+                 );
     }
     else
     {
-        fprintf( m_fp, "De %d %d %d %lX %X %d %d %d %d\n",
-                 m_Layer, m_Type, m_Angle,
-                 m_TimeStamp, ReturnStatus(),
-                 m_BezierC1.x,m_BezierC1.y,
-                 m_BezierC2.x,m_BezierC2.y);
+        fprintf( m_fp, "De %d %d %g %8lX %X %s %s\n",
+                 me->GetLayer(),
+                 me->GetType(),
+                 me->GetAngle(),
+                 me->GetTimeStamp(),
+                 me->GetStatus(),
+                 fmtBIUPoint( me->GetBezControl1() ).c_str(),
+                 fmtBIUPoint( me->GetBezControl2() ).c_str()
+                 );
     }
 
-    if( fprintf( m_fp, "$EndDRAWSEGMENT\n" ) != sizeof("$EndDRAWSEGMENT\n") - 1 )
-        return false;
-
-    return true;
+    fprintf( m_fp, "$EndDRAWSEGMENT\n" );
 }
 
 
-bool PCB_TARGET::Save( FILE* m_fp ) const
+void KICAD_PLUGIN::saveTRACK( const TRACK* me ) const
 {
-    bool rc = false;
+    int type = 0;
 
-    if( fprintf( m_fp, "$PCB_TARGET\n" ) != sizeof("$PCB_TARGET\n")-1 )
-        goto out;
+    if( me->Type() == PCB_VIA_T )
+        type = 1;
 
-    fprintf( m_fp, "Po %X %d %d %d %d %d %8.8lX\n",
-             m_Shape, m_Layer,
-             m_Pos.x, m_Pos.y,
-             m_Size, m_Width, m_TimeStamp );
+    fprintf(m_fp, "Po %d %s %s %s %s\n",
+            me->GetShape(),
+            fmtBIUPoint( me->GetStart() ).c_str(),
+            fmtBIUPoint( me->GetEnd() ).c_str(),
+            fmtBIU( me->GetWidth() ).c_str(),
+            fmtBIU( me->GetDrill() ).c_str() );
 
-    if( fprintf( m_fp, "$EndPCB_TARGET\n" ) != sizeof("$EndPCB_TARGET\n")-1 )
-        goto out;
-
-    rc = true;
-
-out:
-    return rc;
+    fprintf(m_fp, "De %d %d %d %8lX %X\n",
+            me->GetLayer(), type, me->GetNet(),
+            me->GetTimeStamp(), me->GetStatus() );
 }
 
 
-bool ZONE_CONTAINER::Save( FILE* m_fp ) const
+void KICAD_PLUGIN::saveZONE_CONTAINER( const ZONE_CONTAINER* me ) const
 {
-    unsigned item_pos;
-    int      ret;
-    unsigned corners_count = m_Poly->corner.size();
-    int      outline_hatch;
-    char     padoption;
-
     fprintf( m_fp, "$CZONE_OUTLINE\n" );
 
     // Save the outline main info
-    ret = fprintf( m_fp, "ZInfo %8.8lX %d %s\n",
-                   m_TimeStamp, m_NetCode,
-                   EscapedUTF8( m_Netname ).c_str() );
-
-    if( ret < 3 )
-        return false;
+    fprintf( m_fp,  "ZInfo %8lX %d %s\n",
+                    me->GetTimeStamp(), me->GetNet(),
+                    EscapedUTF8( me->GetNetName() ).c_str() );
 
     // Save the outline layer info
-    ret = fprintf( m_fp, "ZLayer %d\n", m_Layer );
-
-    if( ret < 1 )
-        return false;
+    fprintf( m_fp, "ZLayer %d\n", me->GetLayer() );
 
     // Save the outline aux info
-    switch( m_Poly->GetHatchStyle() )
+    int outline_hatch;
+
+    switch( me->GetHatchStyle() )
     {
     default:
-    case CPolyLine::NO_HATCH:
-        outline_hatch = 'N';
-        break;
-
-    case CPolyLine::DIAGONAL_EDGE:
-        outline_hatch = 'E';
-        break;
-
-    case CPolyLine::DIAGONAL_FULL:
-        outline_hatch = 'F';
-        break;
+    case CPolyLine::NO_HATCH:       outline_hatch = 'N';    break;
+    case CPolyLine::DIAGONAL_EDGE:  outline_hatch = 'E';    break;
+    case CPolyLine::DIAGONAL_FULL:  outline_hatch = 'F';    break;
     }
 
-    ret = fprintf( m_fp, "ZAux %d %c\n", corners_count, outline_hatch );
-
-    if( ret < 2 )
-        return false;
+    fprintf( m_fp, "ZAux %d %c\n", me->GetNumCorners(), outline_hatch );
 
     // Save pad option and clearance
-    switch( m_PadOption )
+    char padoption;
+
+    switch( me->GetPadOption() )
     {
     default:
-    case PAD_IN_ZONE:
-        padoption = 'I';
-        break;
-
-    case THERMAL_PAD:
-        padoption = 'T';
-        break;
-
-    case PAD_NOT_IN_ZONE:
-        padoption = 'X';
-        break;
+    case PAD_IN_ZONE:       padoption = 'I';  break;
+    case THERMAL_PAD:       padoption = 'T';  break;
+    case PAD_NOT_IN_ZONE:   padoption = 'X';  break;
     }
 
-    ret = fprintf( m_fp, "ZClearance %d %c\n", m_ZoneClearance, padoption );
+    fprintf( m_fp,  "ZClearance %s %c\n",
+                    fmtBIU( me->GetZoneClearance() ).c_str(),
+                    padoption );
 
-    if( ret < 2 )
-        return false;
+    fprintf( m_fp, "ZMinThickness %s\n", fmtBIU( me->GetMinThickness() ).c_str() );
 
-    ret = fprintf( m_fp, "ZMinThickness %d\n", m_ZoneMinThickness );
+    fprintf( m_fp,  "ZOptions %d %d %c %s %s\n",
+                    me->GetFillMode(),
+                    me->GetArcSegCount(),
+                    me->IsFilled() ? 'S' : 'F',
+                    fmtBIU( me->GetThermalReliefGap() ).c_str(),
+                    fmtBIU( me->GetThermalReliefCopperBridge() ).c_str() );
 
-    if( ret < 1 )
-        return false;
+    fprintf( m_fp,  "ZSmoothing %d %s\n",
+                    me->GetCornerSmoothingType(),
+                    fmtBIU( me->GetCornerRadius() ).c_str() );
 
-    ret = fprintf( m_fp,
-                   "ZOptions %d %d %c %d %d\n",
-                   m_FillMode,
-                   m_ArcToSegmentsCount,
-                   m_IsFilled ? 'S' : 'F',
-                   m_ThermalReliefGap,
-                   m_ThermalReliefCopperBridge );
-
-    if( ret < 3 )
-        return false;
-
-    ret = fprintf( m_fp,
-                   "ZSmoothing %d %d\n",
-                   cornerSmoothingType, cornerRadius );
-
-    if( ret < 2 )
-        return false;
+    typedef std::vector< CPolyPt >    CPOLY_PTS;
 
     // Save the corner list
-    for( item_pos = 0; item_pos < corners_count; item_pos++ )
+    const CPOLY_PTS& cv = me->m_Poly->corner;
+    for( CPOLY_PTS::const_iterator it = cv.begin();  it != cv.end();  ++it )
     {
-        ret = fprintf( m_fp, "ZCorner %d %d %d\n",
-                       m_Poly->corner[item_pos].x, m_Poly->corner[item_pos].y,
-                       m_Poly->corner[item_pos].end_contour );
-
-        if( ret < 3 )
-            return false;
+        fprintf( m_fp,  "ZCorner %s %d\n",
+                        fmtBIUPair( it->x, it->y ).c_str(),
+                        it->end_contour );
     }
 
     // Save the PolysList
-    if( m_FilledPolysList.size() )
+    const CPOLY_PTS& fv = me->m_FilledPolysList;
+    if( fv.size() )
     {
         fprintf( m_fp, "$POLYSCORNERS\n" );
 
-        for( unsigned ii = 0; ii < m_FilledPolysList.size(); ii++ )
+        for( CPOLY_PTS::const_iterator it = fv.begin();  it != fv.end();  ++it )
         {
-            const CPolyPt* corner = &m_FilledPolysList[ii];
-            ret = fprintf( m_fp,
-                           "%d %d %d %d\n",
-                           corner->x,
-                           corner->y,
-                           corner->end_contour,
-                           corner->utility );
-
-            if( ret < 4 )
-                return false;
+            fprintf( m_fp, "%s %d %d\n",
+                           fmtBIUPair( it->x, it->y ).c_str(),
+                           it->end_contour,
+                           it->utility );
         }
 
         fprintf( m_fp, "$endPOLYSCORNERS\n" );
     }
 
+    typedef std::vector< SEGMENT > SEGMENTS;
+
     // Save the filling segments list
-    if( m_FillSegmList.size() )
+    const SEGMENTS& segs = me->m_FillSegmList;
+    if( segs.size() )
     {
         fprintf( m_fp, "$FILLSEGMENTS\n" );
 
-        for( unsigned ii = 0; ii < m_FillSegmList.size(); ii++ )
+        for( SEGMENTS::const_iterator it = segs.begin();  it != segs.end();  ++it )
         {
-            ret = fprintf( m_fp, "%d %d %d %d\n",
-                           m_FillSegmList[ii].m_Start.x, m_FillSegmList[ii].m_Start.y,
-                           m_FillSegmList[ii].m_End.x, m_FillSegmList[ii].m_End.y );
-
-            if( ret < 4 )
-                return false;
+            fprintf( m_fp, "%s %s\n",
+                           fmtBIUPoint( it->m_Start ).c_str(),
+                           fmtBIUPoint( it->m_End ).c_str() );
         }
 
         fprintf( m_fp, "$endFILLSEGMENTS\n" );
@@ -3280,21 +3227,82 @@ bool ZONE_CONTAINER::Save( FILE* m_fp ) const
 
     fprintf( m_fp, "$endCZONE_OUTLINE\n" );
 
-    return true;
+    CHECK_WRITE_ERROR();
 }
 
 
-bool TEXTE_PCB::Save( FILE* m_fp ) const
+void KICAD_PLUGIN::saveDIMENTION( const DIMENSION* me ) const
 {
-    if( m_Text.IsEmpty() )
-        return true;
+    // note: COTATION was the previous name of DIMENSION
+    // this old keyword is used here for compatibility
+    fprintf( m_fp, "$COTATION\n" );
 
-    if( fprintf( m_fp, "$TEXTPCB\n" ) != sizeof("$TEXTPCB\n") - 1 )
-        return false;
+    fprintf( m_fp, "Ge %d %d %8lX\n", me->GetShape(), me->GetLayer(), me->GetTimeStamp() );
 
-    const char* style = m_Italic ? "Italic" : "Normal";
+    fprintf( m_fp, "Va %d\n", me->m_Value );
 
-    wxArrayString* list = wxStringSplit( m_Text, '\n' );
+    if( !me->m_Text.GetText().IsEmpty() )
+        fprintf( m_fp, "Te %s\n", EscapedUTF8( me->m_Text.GetText() ).c_str() );
+    else
+        fprintf( m_fp, "Te \"?\"\n" );
+
+    fprintf( m_fp,  "Po %s %s %s %g %d\n",
+                    fmtBIUPoint( me->m_Text.GetPosition() ).c_str(),
+                    fmtBIUSize( me->m_Text.GetSize() ).c_str(),
+                    fmtBIU( me->m_Text.GetThickness() ).c_str(),
+                    me->m_Text.GetOrientation(),
+                    me->m_Text.IsMirrored() ? 0 : 1     // strange but true
+                    );
+
+    fprintf( m_fp,  "Sb %d %s %s %s\n", S_SEGMENT,
+                    fmtBIUPair( me->m_crossBarOx, me->m_crossBarOy ).c_str(),
+                    fmtBIUPair( me->m_crossBarFx, me->m_crossBarFy ).c_str(),
+                    fmtBIU( me->GetWidth() ).c_str() );
+
+    fprintf( m_fp,  "Sd %d %s %s %s\n", S_SEGMENT,
+                    fmtBIUPair( me->m_featureLineDOx, me->m_featureLineDOy ).c_str(),
+                    fmtBIUPair( me->m_featureLineDFx, me->m_featureLineDFy ).c_str(),
+                    fmtBIU( me->GetWidth() ).c_str() );
+
+    fprintf( m_fp,  "Sg %d %s %s %s\n", S_SEGMENT,
+                    fmtBIUPair( me->m_featureLineGOx, me->m_featureLineGOy ).c_str(),
+                    fmtBIUPair( me->m_featureLineGFx, me->m_featureLineGFy ).c_str(),
+                    fmtBIU( me->GetWidth() ).c_str() );
+
+    fprintf( m_fp,  "S1 %d %s %s %s\n", S_SEGMENT,
+                    fmtBIUPair( me->m_arrowD1Ox, me->m_arrowD1Oy ).c_str(),
+                    fmtBIUPair( me->m_arrowD1Fx, me->m_arrowD1Fy ).c_str(),
+                    fmtBIU( me->GetWidth() ).c_str() );
+
+    fprintf( m_fp,  "S2 %d %s %s %s\n", S_SEGMENT,
+                    fmtBIUPair( me->m_arrowD2Ox, me->m_arrowD2Oy ).c_str(),
+                    fmtBIUPair( me->m_arrowD2Fx, me->m_arrowD2Fy ).c_str(),
+                    fmtBIU( me->GetWidth() ).c_str() );
+
+    fprintf( m_fp,  "S3 %d %s %s %s\n", S_SEGMENT,
+                    fmtBIUPair( me->m_arrowG1Ox, me->m_arrowG1Oy ).c_str(),
+                    fmtBIUPair( me->m_arrowG1Fx, me->m_arrowG1Fy ).c_str(),
+                    fmtBIU( me->GetWidth() ).c_str() );
+
+    fprintf( m_fp,  "S4 %d %s %s %s\n", S_SEGMENT,
+                    fmtBIUPair( me->m_arrowG2Ox, me->m_arrowG2Oy ).c_str(),
+                    fmtBIUPair( me->m_arrowG2Fx, me->m_arrowG2Fy ).c_str(),
+                    fmtBIU( me->GetWidth() ).c_str() );
+
+    fprintf( m_fp, "$endCOTATION\n" );
+
+    CHECK_WRITE_ERROR();
+}
+
+
+void KICAD_PLUGIN::savePCB_TEXT( const TEXTE_PCB* me ) const
+{
+    if( me->GetText().IsEmpty() )
+        return;
+
+    fprintf( m_fp, "$TEXTPCB\n" );
+
+    wxArrayString* list = wxStringSplit( me->GetText(), '\n' );
 
     for( unsigned ii = 0; ii < list->Count(); ii++ )
     {
@@ -3308,118 +3316,28 @@ bool TEXTE_PCB::Save( FILE* m_fp ) const
 
     delete list;
 
-    fprintf( m_fp, "Po %d %d %d %d %d %d\n",
-             m_Pos.x, m_Pos.y, m_Size.x, m_Size.y, m_Thickness, m_Orient );
+    fprintf( m_fp,  "Po %s %s %s %g\n",
+                    fmtBIUPoint( me->GetPosition() ).c_str(),
+                    fmtBIUSize( me->GetSize() ).c_str(),
+                    fmtBIU( me->GetThickness() ).c_str(),
+                    me->GetOrientation() );
 
-    char hJustify = 'L';
-    switch( m_HJustify )
+    char hJustify;
+
+    switch( me->GetHorizJustify() )
     {
-    case GR_TEXT_HJUSTIFY_LEFT:
-        hJustify = 'L';
-        break;
-    case GR_TEXT_HJUSTIFY_CENTER:
-        hJustify = 'C';
-        break;
-    case GR_TEXT_HJUSTIFY_RIGHT:
-        hJustify = 'R';
-        break;
     default:
-        hJustify = 'C';
-        break;
+    case GR_TEXT_HJUSTIFY_CENTER:   hJustify = 'C';     break;
+    case GR_TEXT_HJUSTIFY_LEFT:     hJustify = 'L';     break;
+    case GR_TEXT_HJUSTIFY_RIGHT:    hJustify = 'R';     break;
     }
 
-    fprintf( m_fp, "De %d %d %lX %s %c\n", m_Layer,
-             m_Mirror ? 0 : 1,
-             m_TimeStamp, style, hJustify );
+    fprintf( m_fp,  "De %d %d %8lX %s %c\n",
+                    me->GetLayer(),
+                    !me->IsMirrored(),
+                    me->GetTimeStamp(),
+                    me->IsItalic() ? "Italic" : "Normal",
+                    hJustify );
 
-    if( fprintf( m_fp, "$EndTEXTPCB\n" ) != sizeof("$EndTEXTPCB\n") - 1 )
-        return false;
-
-    return true;
+    fprintf( m_fp, "$EndTEXTPCB\n" );
 }
-
-
-bool TRACK::Save( FILE* m_fp ) const
-{
-    int type = 0;
-
-    if( Type() == PCB_VIA_T )
-        type = 1;
-
-    fprintf( m_fp, "Po %d %d %d %d %d %d %d\n", m_Shape,
-             m_Start.x, m_Start.y, m_End.x, m_End.y, m_Width, m_Drill );
-
-    fprintf( m_fp, "De %d %d %d %lX %X\n",
-             m_Layer, type, GetNet(),
-             m_TimeStamp, ReturnStatus() );
-
-    return true;
-}
-
-
-bool DIMENSION::Save( FILE* m_fp ) const
-{
-    bool rc = false;
-
-    // note: COTATION was the previous name of DIMENSION
-    // this old keyword is used here for compatibility
-    const char keyWordLine[] = "$COTATION\n";
-    const char keyWordLineEnd[] = "$endCOTATION\n";
-
-    if( fputs( keyWordLine, m_fp ) == EOF )
-        goto out;
-
-    fprintf( m_fp, "Ge %d %d %lX\n", m_Shape, m_Layer, m_TimeStamp );
-
-    fprintf( m_fp, "Va %d\n", m_Value );
-
-    if( !m_Text->m_Text.IsEmpty() )
-        fprintf( m_fp, "Te %s\n", EscapedUTF8( m_Text->m_Text ).c_str() );
-    else
-        fprintf( m_fp, "Te \"?\"\n" );
-
-    fprintf( m_fp, "Po %d %d %d %d %d %d %d\n",
-             m_Text->m_Pos.x, m_Text->m_Pos.y,
-             m_Text->m_Size.x, m_Text->m_Size.y,
-             m_Text->GetThickness(), m_Text->GetOrientation(),
-             m_Text->m_Mirror ? 0 : 1 );
-
-    fprintf( m_fp, "Sb %d %d %d %d %d %d\n", S_SEGMENT,
-             m_crossBarOx, m_crossBarOy,
-             m_crossBarFx, m_crossBarFy, m_Width );
-
-    fprintf( m_fp, "Sd %d %d %d %d %d %d\n", S_SEGMENT,
-             m_featureLineDOx, m_featureLineDOy,
-             m_featureLineDFx, m_featureLineDFy, m_Width );
-
-    fprintf( m_fp, "Sg %d %d %d %d %d %d\n", S_SEGMENT,
-             m_featureLineGOx, m_featureLineGOy,
-             m_featureLineGFx, m_featureLineGFy, m_Width );
-
-    fprintf( m_fp, "S1 %d %d %d %d %d %d\n", S_SEGMENT,
-             m_arrowD1Ox, m_arrowD1Oy,
-             m_arrowD1Fx, m_arrowD1Fy, m_Width );
-
-    fprintf( m_fp, "S2 %d %d %d %d %d %d\n", S_SEGMENT,
-             m_arrowD2Ox, m_arrowD2Oy,
-             m_arrowD2Fx, m_arrowD2Fy, m_Width );
-
-
-    fprintf( m_fp, "S3 %d %d %d %d %d %d\n", S_SEGMENT,
-             m_arrowG1Ox, m_arrowG1Oy,
-             m_arrowG1Fx, m_arrowG1Fy, m_Width );
-
-    fprintf( m_fp, "S4 %d %d %d %d %d %d\n", S_SEGMENT,
-             m_arrowG2Ox, m_arrowG2Oy,
-             m_arrowG2Fx, m_arrowG2Fy, m_Width );
-
-    if( fputs( keyWordLineEnd, m_fp ) == EOF )
-        goto out;
-
-    rc = true;
-
-out:
-    return rc;
-}
-
-#endif

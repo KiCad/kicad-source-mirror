@@ -270,7 +270,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
         via = new SEGVIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
-        via->SetDrillValue( drillDiam );
+        via->SetDrill( drillDiam );
         via->m_Shape = VIA_THROUGH;
         via->m_Width = viaDiam;
         via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
@@ -288,7 +288,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
         via = new SEGVIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
-        via->SetDrillValue( drillDiam );
+        via->SetDrill( drillDiam );
         via->m_Shape = VIA_THROUGH;
         via->m_Width = viaDiam;
         via->SetLayerPair( LAYER_N_FRONT, LAYER_N_BACK );
@@ -329,7 +329,7 @@ SEGVIA* SPECCTRA_DB::makeVIA( PADSTACK* aPadstack, const POINT& aPoint, int aNet
 
         via = new SEGVIA( sessionBoard );
         via->SetPosition( mapPt( aPoint, routeResolution ) );
-        via->SetDrillValue( drillDiam );
+        via->SetDrill( drillDiam );
 
         if( (topLayerNdx==0 && botLayerNdx==1)
          || (topLayerNdx==copperLayerCount-2 && botLayerNdx==copperLayerCount-1))

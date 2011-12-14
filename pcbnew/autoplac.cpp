@@ -484,10 +484,10 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
             if( DrawSegm->GetLayer() != EDGE_N )
                 break;
 
-            TmpSegm.m_Start = DrawSegm->m_Start;
-            TmpSegm.m_End   = DrawSegm->m_End;
-            TmpSegm.m_Shape = DrawSegm->m_Shape;
-            TmpSegm.m_Param = DrawSegm->m_Angle;
+            TmpSegm.SetStart( DrawSegm->GetStart() );
+            TmpSegm.SetEnd(   DrawSegm->GetEnd() );
+            TmpSegm.SetShape( DrawSegm->GetShape() );
+            TmpSegm.m_Param = DrawSegm->GetAngle();
 
             TraceSegmentPcb( GetBoard(), &TmpSegm, HOLE | CELL_is_EDGE,
                              Board.m_GridRouting, WRITE_CELL );

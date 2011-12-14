@@ -215,7 +215,7 @@ int ArcTangente( int dy, int dx )
 }
 
 
-void RotatePoint( int* pX, int* pY, int angle )
+void RotatePoint( int* pX, int* pY, double angle )
 {
     int tmp;
 
@@ -248,7 +248,7 @@ void RotatePoint( int* pX, int* pY, int angle )
     }
     else
     {
-        double fangle = DEG2RAD( (double) angle / 10.0 );
+        double fangle = DEG2RAD( angle / 10.0 );
         double sinus = sin( fangle );
         double cosinus = cos( fangle );
         double fpx = (*pY * sinus ) + (*pX * cosinus );
@@ -259,7 +259,7 @@ void RotatePoint( int* pX, int* pY, int angle )
 }
 
 
-void RotatePoint( int* pX, int* pY, int cx, int cy, int angle )
+void RotatePoint( int* pX, int* pY, int cx, int cy, double angle )
 {
     int ox, oy;
 
@@ -273,7 +273,7 @@ void RotatePoint( int* pX, int* pY, int cx, int cy, int angle )
 }
 
 
-void RotatePoint( wxPoint* point, int angle )
+void RotatePoint( wxPoint* point, double angle )
 {
     int ox, oy;
 
@@ -286,7 +286,7 @@ void RotatePoint( wxPoint* point, int angle )
 }
 
 
-void RotatePoint( wxPoint* point, const wxPoint& centre, int angle )
+void RotatePoint( wxPoint* point, const wxPoint& centre, double angle )
 {
     int ox, oy;
 
@@ -299,7 +299,7 @@ void RotatePoint( wxPoint* point, const wxPoint& centre, int angle )
 }
 
 
-void RotatePoint( double* pX, double* pY, double cx, double cy, int angle )
+void RotatePoint( double* pX, double* pY, double cx, double cy, double angle )
 {
     double ox, oy;
 
@@ -313,7 +313,7 @@ void RotatePoint( double* pX, double* pY, double cx, double cy, int angle )
 }
 
 
-void RotatePoint( double* pX, double* pY, int angle )
+void RotatePoint( double* pX, double* pY, double angle )
 {
     double tmp;
 
@@ -346,7 +346,7 @@ void RotatePoint( double* pX, double* pY, int angle )
     }
     else
     {
-        double fangle = DEG2RAD( (double) angle / 10.0 );
+        double fangle = DEG2RAD( angle / 10.0 );
         double sinus = sin( fangle );
         double cosinus = cos( fangle );
 

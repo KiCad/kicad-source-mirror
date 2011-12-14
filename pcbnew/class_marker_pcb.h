@@ -59,7 +59,7 @@ public:
      * @param aRotCentre - the rotation point.
      * @param aAngle - the rotation angle in 0.1 degree.
      */
-    virtual void Rotate( const wxPoint& aRotCentre, int aAngle );
+    virtual void Rotate( const wxPoint& aRotCentre, double aAngle );
 
     /**
      * Function Flip

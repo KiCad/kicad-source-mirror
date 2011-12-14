@@ -371,7 +371,7 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
         {
             SEGVIA* Via = (SEGVIA*) pt_segm;
 
-            if( Via->Shape() == VIA_THROUGH )
+            if( Via->GetShape() == VIA_THROUGH )
                 continue;
 
             int     top_layer, bottom_layer;

@@ -92,19 +92,19 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         }
         else if( item->IsNew() )
         {
-            if( ( (EDGE_MODULE*) item )->m_Shape == S_CIRCLE )
+            if( ( (EDGE_MODULE*) item )->GetShape() == S_CIRCLE )
             {
                 End_Edge_Module( (EDGE_MODULE*) item );
                 SetCurItem( NULL );
                 DrawPanel->Refresh();
             }
-            else if( ( (EDGE_MODULE*) item )->m_Shape == S_ARC )
+            else if( ( (EDGE_MODULE*) item )->GetShape() == S_ARC )
             {
                 End_Edge_Module( (EDGE_MODULE*) item );
                 SetCurItem( NULL );
                 DrawPanel->Refresh();
             }
-            else if( ( (EDGE_MODULE*) item )->m_Shape == S_SEGMENT )
+            else if( ( (EDGE_MODULE*) item )->GetShape() == S_SEGMENT )
             {
                 SetCurItem( Begin_Edge_Module( (EDGE_MODULE*) item, DC, 0 ) );
             }
