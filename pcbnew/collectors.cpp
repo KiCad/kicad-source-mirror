@@ -280,6 +280,12 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, const void* testDa
 
             if( m_Guide->IgnoreMTextsOnCmp() && module->GetLayer()==LAYER_N_FRONT )
                 goto exit;
+
+            if( m_Guide->IgnoreModulesVals() && item == module->m_Value )
+                goto exit;
+
+            if( m_Guide->IgnoreModulesRefs() && item == module->m_Reference )
+                goto exit;
         }
         break;
 
