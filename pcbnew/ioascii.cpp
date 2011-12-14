@@ -1160,7 +1160,7 @@ int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
 
     // Switch the locale to standard C (needed to print floating point numbers
     // like 1.3)
-    SetLocaleTo_C_standard();
+    LOCALE_IO   toggle;
 
     /* Writing file header. */
     fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", BOARD_FILE_VERSION,
@@ -1179,7 +1179,6 @@ int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
 
     rc = GetBoard()->Save( aFile );
 
-    SetLocaleTo_Default();       // revert to the current locale
     wxEndBusyCursor();
 
     if( !rc )
