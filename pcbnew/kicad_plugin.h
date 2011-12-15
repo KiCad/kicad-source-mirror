@@ -73,6 +73,7 @@ protected:
 
     wxString        m_error;        ///< for throwing exceptions
     BOARD*          m_board;        ///< which BOARD, no ownership here
+    PROPERTIES*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
 
     LINE_READER*    m_reader;       ///< no ownership here.
     FILE*           m_fp;           ///< no ownership here.
@@ -89,7 +90,8 @@ protected:
     /**
      * Function biuParse
      * parses an ASCII decimal floating point value and scales it into a BIU
-     * according to the current value of diskToBui.
+     * according to the current value of diskToBui.  This fuction is the complement of
+     * fmtBIU().  One has to know what the other is doing.
      *
      * @param aValue is the ASCII value in C locale form with possible leading whitespace
      *
@@ -104,7 +106,8 @@ protected:
      * Function degParse
      * parses an ASCII decimal floating point value which is certainy an angle.  This
      * is a dedicated function for encapsulating support for the migration from
-     * tenths of degrees to degrees in floating point.
+     * tenths of degrees to degrees in floating point.  This function is the complement of
+     * fmtDEG().  One has to know what the other is doing.
      *
      * @param aValue is the ASCII value in C locale form with possible leading whitespace
      *
@@ -164,9 +167,15 @@ protected:
      */
     wxString writeError() const;
 
+    /// encapsulate the BIU formatting tricks in one place.
     int biuSprintf( char* buf, BIU aValue ) const;
 
-    /// convert a BIU to engineering units by scaling and formatting to ASCII.
+    /**
+     * Function fmtBIU
+     * converts a BIU to engineering units by scaling and formatting to ASCII.
+     * This function is the complement of biuParse().  One has to know what the
+     * other is doing.
+     */
     std::string fmtBIU( BIU aValue ) const;
 
     std::string fmtBIUPair( BIU first, BIU second ) const;
@@ -178,10 +187,16 @@ protected:
 
     std::string fmtBIUSize( const wxSize& aSize ) const
     {
-        // unfortunately there is inconsistency in the order of saving wxSize,
-        // so sometimes we use fmtBIUPair() directly in the saveXXX() functions.
         return fmtBIUPair( aSize.x, aSize.y );
     }
+
+    /**
+     * Function fmtDEG
+     * formats an angle in a way particular to a board file format.  This function
+     * is the opposite or complement of degParse().  One has to know what the
+     * other is doing.
+     */
+    std::string fmtDEG( double aAngle ) const;
 
     void saveAllSections() const;
     void saveGENERAL() const;

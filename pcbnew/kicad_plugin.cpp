@@ -191,9 +191,6 @@ BOARD* KICAD_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, PROPER
 
     m_reader = &reader;          // member function accessibility
 
-    m_board->m_Status_Pcb = 0;
-    m_board->m_NetClasses.Clear();
-
     init( aProperties );
 
     checkVersion();
@@ -2469,6 +2466,18 @@ std::string KICAD_PLUGIN::fmtBIU( BIU aValue ) const
 }
 
 
+std::string KICAD_PLUGIN::fmtDEG( double aAngle ) const
+{
+    char    temp[50];
+
+    // @todo a hook site to convert from tenths degrees to degrees for BOARD_FORMAT_VERSION 2.
+
+    int len = sprintf( temp, "%.10g", aAngle );
+
+    return std::string( temp, len );
+}
+
+
 std::string KICAD_PLUGIN::fmtBIUPair( BIU first, BIU second ) const
 {
     char    temp[100];
@@ -2550,6 +2559,8 @@ double KICAD_PLUGIN::degParse( const char* aValue, const char** nptrptr )
 
 void KICAD_PLUGIN::init( PROPERTIES* aProperties )
 {
+    m_props = aProperties;
+
     // conversion factor for saving RAM BIUs to KICAD legacy file format.
 #if defined(KICAD_NANOMETRE)
     biuToDisk = 1/1000000.0;        // BIUs are nanometers & file is mm
@@ -2597,6 +2608,12 @@ void KICAD_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* a
 
     init( aProperties );
 
+    if( m_props )
+    {
+        // save a file header, if caller provided one (with trailing \n hopefully).
+        fprintf( m_fp, "%s", TO_UTF8( (*m_props)[ wxT("header") ] ) );
+    }
+
     saveAllSections();
 }
 
@@ -2617,6 +2634,8 @@ do { \
 
 void KICAD_PLUGIN::saveAllSections() const
 {
+
+
     saveGENERAL();
 
     saveSHEET();
@@ -2629,18 +2648,179 @@ void KICAD_PLUGIN::saveAllSections() const
 
 void KICAD_PLUGIN::saveGENERAL() const
 {
+    fprintf( m_fp, "$GENERAL\n" );
+    fprintf( m_fp, "encoding utf-8\n" );
 
+    // tell folks the units used within the file, as early as possible here.
+#if defined(KICAD_NANOMETRE)
+    fprintf( m_fp, "Units mm\n" );
+#else
+    fprintf( m_fp, "Units deci-mils\n" );
+#endif
+
+    // Write copper layer count
+    fprintf( m_fp, "LayerCount %d\n", m_board->GetCopperLayerCount() );
+
+    /*  No, EnabledLayers has this information, plus g_TabAllCopperLayerMask is
+        global and globals are not allowed in a plugin.
+    fprintf( m_fp,
+             "Ly %8X\n",
+             g_TabAllCopperLayerMask[NbLayers - 1] | ALL_NO_CU_LAYERS );
+    */
+
+    fprintf( m_fp, "EnabledLayers %08X\n",  m_board->GetEnabledLayers() );
+    fprintf( m_fp, "Links %d\n",            m_board->GetRatsnestsCount() );
+    fprintf( m_fp, "NoConn %d\n",           m_board->m_NbNoconnect );
+
+    // Write Bounding box info
+    EDA_RECT bbbox = m_board->ComputeBoundingBox();
+    fprintf( m_fp,  "Di %s %s\n",
+                    fmtBIUPair( bbbox.GetX(), bbbox.GetY() ).c_str(),
+                    fmtBIUPair( bbbox.GetRight(), bbbox.GetBottom() ).c_str() );
+
+    fprintf( m_fp, "Ndraw %d\n",            m_board->m_Drawings.GetCount() );
+    fprintf( m_fp, "Ntrack %d\n",           m_board->GetNumSegmTrack() );
+    fprintf( m_fp, "Nzone %d\n",            m_board->GetNumSegmZone() );
+    fprintf( m_fp, "BoardThickness %s\n",   fmtBIU( m_board->GetDesignSettings().m_BoardThickness ).c_str() );
+    fprintf( m_fp, "Nmodule %d\n",          m_board->m_Modules.GetCount() );
+    fprintf( m_fp, "Nnets %d\n",            m_board->GetNetCount() );
+    fprintf( m_fp, "$EndGENERAL\n\n" );
 }
 
 
 void KICAD_PLUGIN::saveSHEET() const
 {
+#if 0   // @todo sheet not available here.  The sheet needs to go into the board if it is important enough to be saved with the board
+    Ki_PageDescr* sheet = screen->m_CurrentSheetDesc;
+
+    fprintf( m_fp, "$SHEETDESCR\n" );
+
+    fprintf( m_fp, "Sheet %s %d %d\n",
+                    TO_UTF8( sheet->m_Name ), sheet->m_Size.x, sheet->m_Size.y );   // in mm ?
+
+    fprintf( m_fp, "Title %s\n",        EscapedUTF8( screen->m_Title ).c_str() );
+    fprintf( m_fp, "Date %s\n",         EscapedUTF8( screen->m_Date ).c_str() );
+    fprintf( m_fp, "Rev %s\n",          EscapedUTF8( screen->m_Revision ).c_str() );
+    fprintf( m_fp, "Comp %s\n",         EscapedUTF8( screen->m_Company ).c_str() );
+    fprintf( m_fp, "Comment1 %s\n",     EscapedUTF8( screen->m_Commentaire1 ).c_str() );
+    fprintf( m_fp, "Comment2 %s\n",     EscapedUTF8( screen->m_Commentaire2 ).c_str() );
+    fprintf( m_fp, "Comment3 %s\n",     EscapedUTF8( screen->m_Commentaire3 ).c_str() );
+    fprintf( m_fp, "Comment4 %s\n",     EscapedUTF8( screen->m_Commentaire4 ).c_str() );
+
+    fprintf( m_fp, "$EndSHEETDESCR\n\n" );
+#endif
 }
 
 
 void KICAD_PLUGIN::saveSETUP() const
 {
+    NETCLASS* netclass_default = m_board->m_NetClasses.GetDefault();
 
+    fprintf( m_fp, "$SETUP\n" );
+
+    /*  Internal units are nobody's business, they are internal.
+        Units used in the file are now in the "Units" attribute of $GENERAL.
+    fprintf( m_fp,, "InternalUnit %f INCH\n", 1.0 / PCB_INTERNAL_UNIT );
+    */
+
+    fprintf( m_fp, "Layers %d\n", m_board->GetCopperLayerCount() );
+
+    unsigned layerMask = ALL_CU_LAYERS & m_board->GetEnabledLayers();
+
+    for( int layer = 0;  layerMask;  ++layer, layerMask >>= 1 )
+    {
+        if( layerMask & 1 )
+        {
+            fprintf( m_fp, "Layer[%d] %s %s\n", layer,
+                     TO_UTF8( m_board->GetLayerName( layer ) ),
+                     LAYER::ShowType( m_board->GetLayerType( layer ) ) );
+        }
+    }
+
+    // Save current default track width, for compatibility with older Pcbnew version;
+    fprintf( m_fp, "TrackWidth %s\n",  fmtBIU( m_board->GetCurrentTrackWidth() ).c_str() );
+
+    // Save custom tracks width list (the first is not saved here: this is the netclass value
+    for( unsigned ii = 1; ii < m_board->m_TrackWidthList.size(); ii++ )
+        fprintf( m_fp, "TrackWidthList %s\n", fmtBIU( m_board->m_TrackWidthList[ii] ).c_str() );
+
+    fprintf( m_fp, "TrackClearence %s\n",  fmtBIU( netclass_default->GetClearance() ).c_str() );
+
+    /* @todo no globals in a plugin.
+    fprintf( m_fp, "ZoneClearence %d\n", g_Zone_Default_Setting.m_ZoneClearance );
+    */
+
+    fprintf( m_fp, "TrackMinWidth %s\n", fmtBIU( m_board->GetDesignSettings().m_TrackMinWidth ).c_str() );
+
+    fprintf( m_fp, "DrawSegmWidth %s\n", fmtBIU( m_board->GetDesignSettings().m_DrawSegmentWidth ).c_str() );
+    fprintf( m_fp, "EdgeSegmWidth %s\n", fmtBIU( m_board->GetDesignSettings().m_EdgeSegmentWidth ).c_str() );
+
+    // Save current default via size, for compatibility with older Pcbnew version;
+    fprintf( m_fp, "ViaSize %s\n",  fmtBIU( netclass_default->GetViaDiameter() ).c_str() );
+    fprintf( m_fp, "ViaDrill %s\n", fmtBIU( netclass_default->GetViaDrill() ).c_str() );
+    fprintf( m_fp, "ViaMinSize %s\n", fmtBIU( m_board->GetDesignSettings().m_ViasMinSize ).c_str() );
+    fprintf( m_fp, "ViaMinDrill %s\n", fmtBIU( m_board->GetDesignSettings().m_ViasMinDrill ).c_str() );
+
+    // Save custom vias diameters list (the first is not saved here: this is
+    // the netclass value
+    for( unsigned ii = 1; ii < m_board->m_ViasDimensionsList.size(); ii++ )
+        fprintf( m_fp, "ViaSizeList %s %s\n",
+                 fmtBIU( m_board->m_ViasDimensionsList[ii].m_Diameter ).c_str(),
+                 fmtBIU( m_board->m_ViasDimensionsList[ii].m_Drill ).c_str() );
+
+    // for old versions compatibility:
+    fprintf( m_fp, "MicroViaSize %s\n", fmtBIU( netclass_default->GetuViaDiameter() ).c_str() );
+    fprintf( m_fp, "MicroViaDrill %s\n", fmtBIU( netclass_default->GetuViaDrill() ).c_str() );
+    fprintf( m_fp, "MicroViasAllowed %s\n", fmtBIU( m_board->GetDesignSettings().m_MicroViasAllowed ).c_str() );
+    fprintf( m_fp, "MicroViaMinSize %s\n", fmtBIU( m_board->GetDesignSettings().m_MicroViasMinSize ).c_str() );
+    fprintf( m_fp, "MicroViaMinDrill %s\n", fmtBIU( m_board->GetDesignSettings().m_MicroViasMinDrill ).c_str() );
+
+    fprintf( m_fp, "TextPcbWidth %s\n", fmtBIU( m_board->GetDesignSettings().m_PcbTextWidth ).c_str() );
+    fprintf( m_fp, "TextPcbSize %s\n",  fmtBIUSize( m_board->GetDesignSettings().m_PcbTextSize ).c_str() );
+
+    /* @todo no globals
+    fprintf( m_fp, "EdgeModWidth %d\n", g_ModuleSegmentWidth );
+    fprintf( m_fp, "TextModSize %d %d\n", g_ModuleTextSize.x, g_ModuleTextSize.y );
+    fprintf( m_fp, "TextModWidth %d\n", g_ModuleTextWidth );
+    fprintf( m_fp, "PadSize %d %d\n", g_Pad_Master.m_Size.x, g_Pad_Master.m_Size.y );
+    fprintf( m_fp, "PadDrill %d\n", g_Pad_Master.m_Drill.x );
+    */
+
+    fprintf( m_fp, "Pad2MaskClearance %s\n", fmtBIU( m_board->GetDesignSettings().m_SolderMaskMargin ).c_str() );
+
+    if( m_board->GetDesignSettings().m_SolderPasteMargin != 0 )
+        fprintf( m_fp, "Pad2PasteClearance %s\n", fmtBIU( m_board->GetDesignSettings().m_SolderPasteMargin ).c_str() );
+
+    if( m_board->GetDesignSettings().m_SolderPasteMarginRatio != 0 )
+        fprintf( m_fp, "Pad2PasteClearanceRatio %g\n", m_board->GetDesignSettings().m_SolderPasteMarginRatio );
+
+    /* @todo no aFrame
+    if ( aFrame->GetScreen()->m_GridOrigin != wxPoint( 0, 0 ) )
+    {
+        fprintf( m_fp, "GridOrigin %s\n", fmtBIUPoint( aFrame->GetScreen()->m_GridOrigin ).c_str() );
+    }
+    */
+
+    /* @todo no aFrame in a plugin
+    fprintf( m_fp, "AuxiliaryAxisOrg %s\n",   fmtBIUPoint( aFrame->GetOriginAxisPosition() ).c_str() );
+    */
+
+    /* @todo no globals
+    {
+        STRING_FORMATTER sf;
+
+        g_PcbPlotOptions.Format( &sf, 0 );
+
+        wxString record = FROM_UTF8( sf.GetString().c_str() );
+
+        record.Replace( wxT("\n"), wxT(""), true );
+        record.Replace( wxT("  "), wxT(" "), true);
+
+        fprintf( m_fp, "PcbPlotParams %s\n", TO_UTF8( record ) );
+    }
+    */
+
+    fprintf( m_fp, "$EndSETUP\n\n" );
 }
 
 
@@ -2769,7 +2949,7 @@ void KICAD_PLUGIN::saveMODULE_TEXT( const TEXTE_MODULE* me ) const
 
     wxString txt = me->GetText();
 
-    fprintf( m_fp,  "T%d %s %s %g %s %c %c %d %c %s\n",
+    fprintf( m_fp,  "T%d %s %s %s %s %c %c %d %c %s\n",
                     me->GetType(),
                     fmtBIUPoint( me->GetPos0() ).c_str(),   // m_Pos0.x, m_Pos0.y,
 #if 0
@@ -2777,7 +2957,7 @@ void KICAD_PLUGIN::saveMODULE_TEXT( const TEXTE_MODULE* me ) const
 #else
                     fmtBIUPair( me->GetSize().y, me->GetSize().x ).c_str(),     // m_Size.y, m_Size.x,
 #endif
-                    orient,
+                    fmtDEG( orient ).c_str(),
                     fmtBIU( me->GetThickness() ).c_str(),   // m_Thickness,
                     me->IsMirrored() ? 'M' : 'N',
                     me->IsVisible() ? 'V' : 'I',
@@ -2811,10 +2991,10 @@ void KICAD_PLUGIN::saveMODULE_EDGE( const EDGE_MODULE* me ) const
         break;
 
     case S_ARC:
-        fprintf( m_fp,  "DA %s %s %g %s %d\n",
+        fprintf( m_fp,  "DA %s %s %s %s %d\n",
                         fmtBIUPoint( me->m_Start0 ).c_str(),
                         fmtBIUPoint( me->m_End0 ).c_str(),
-                        me->GetAngle(),
+                        fmtDEG( me->GetAngle() ).c_str(),
                         fmtBIU( me->GetWidth() ).c_str(),
                         me->GetLayer() );
         break;
@@ -2860,12 +3040,12 @@ void KICAD_PLUGIN::savePAD( const D_PAD* me ) const
         THROW_IO_ERROR( wxString::Format( UNKNOWN_PAD_FORMAT, me->GetShape() ) );
     }
 
-    fprintf( m_fp,  "Sh %s %c %s %s %g\n",
+    fprintf( m_fp,  "Sh %s %c %s %s %s\n",
                     EscapedUTF8( me->GetPadName() ).c_str(),
                     cshape,
                     fmtBIUSize( me->GetSize() ).c_str(),
                     fmtBIUSize( me->GetDelta() ).c_str(),
-                    me->GetOrientation() );
+                    fmtDEG( me->GetOrientation() ).c_str() );
 
     fprintf( m_fp,  "Dr %s %s",
                     fmtBIU( me->GetDrillSize().x ).c_str(),
@@ -2929,9 +3109,9 @@ void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
     statusTxt[1] = me->IsPlaced() ? 'P' : '~';
     statusTxt[2] = '\0';
 
-    fprintf( m_fp,  "Po %s %g %d %lX %lX %s\n",
+    fprintf( m_fp,  "Po %s %s %d %lX %lX %s\n",
                     fmtBIUPoint( me->GetPosition() ).c_str(),    // m_Pos.x, m_Pos.y,
-                    orient,
+                    fmtDEG( orient ).c_str(),
                     me->GetLayer(),
                     me->GetLastEditTime(),
                     me->GetTimeStamp(),
@@ -3073,20 +3253,20 @@ void KICAD_PLUGIN::savePCB_LINE( const DRAWSEGMENT* me ) const
 
     if( me->GetType() != S_CURVE )
     {
-        fprintf( m_fp, "De %d %d %g %lX %X\n",
+        fprintf( m_fp, "De %d %d %s %lX %X\n",
                  me->GetLayer(),
                  me->GetType(),
-                 me->GetAngle(),
+                 fmtDEG( me->GetAngle() ).c_str(),
                  me->GetTimeStamp(),
                  me->GetStatus()
                  );
     }
     else
     {
-        fprintf( m_fp, "De %d %d %g %lX %X %s %s\n",
+        fprintf( m_fp, "De %d %d %s %lX %X %s %s\n",
                  me->GetLayer(),
                  me->GetType(),
-                 me->GetAngle(),
+                 fmtDEG( me->GetAngle() ).c_str(),
                  me->GetTimeStamp(),
                  me->GetStatus(),
                  fmtBIUPoint( me->GetBezControl1() ).c_str(),
@@ -3238,11 +3418,11 @@ void KICAD_PLUGIN::saveDIMENTION( const DIMENSION* me ) const
     else
         fprintf( m_fp, "Te \"?\"\n" );
 
-    fprintf( m_fp,  "Po %s %s %s %g %d\n",
+    fprintf( m_fp,  "Po %s %s %s %s %d\n",
                     fmtBIUPoint( me->m_Text.GetPosition() ).c_str(),
                     fmtBIUSize( me->m_Text.GetSize() ).c_str(),
                     fmtBIU( me->m_Text.GetThickness() ).c_str(),
-                    me->m_Text.GetOrientation(),
+                    fmtDEG( me->m_Text.GetOrientation() ).c_str(),
                     me->m_Text.IsMirrored() ? 0 : 1     // strange but true
                     );
 
@@ -3308,11 +3488,11 @@ void KICAD_PLUGIN::savePCB_TEXT( const TEXTE_PCB* me ) const
 
     delete list;
 
-    fprintf( m_fp,  "Po %s %s %s %g\n",
+    fprintf( m_fp,  "Po %s %s %s %s\n",
                     fmtBIUPoint( me->GetPosition() ).c_str(),
                     fmtBIUSize( me->GetSize() ).c_str(),
                     fmtBIU( me->GetThickness() ).c_str(),
-                    me->GetOrientation() );
+                    fmtDEG( me->GetOrientation() ).c_str() );
 
     char hJustify;
 
