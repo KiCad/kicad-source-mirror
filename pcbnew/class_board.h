@@ -845,7 +845,6 @@ public:
                m_ViasDimensionsList[m_ViaSizeSelector].m_Drill : -1;
     }
 
-
     /**
      * Function GetCurrentMicroViaSize
      * @return the current micro via size,

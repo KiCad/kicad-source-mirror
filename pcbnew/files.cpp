@@ -272,37 +272,52 @@ this file again." ) );
         m_DisplayPadFill = DisplayOpt.DisplayPadFill;
         m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     }
+    else
+    {
+        GetBoard()->m_NetClasses.Clear();
+    }
+
+    BOARD* loadedBoard = 0;   // it will be set to non-NULL if loadedOK
 
     try
     {
         // load or append either:
-        BOARD* board = IO_MGR::Load( IO_MGR::KICAD, GetScreen()->GetFileName(),
+        loadedBoard = IO_MGR::Load( IO_MGR::KICAD, GetScreen()->GetFileName(),
                             aAppend ? GetBoard() : NULL,
                             NULL );
 
         if( !aAppend )
         {
-            if( board->GetFileFormatVersionAtLoad() < BOARD_FILE_VERSION )
+            if( loadedBoard->GetFileFormatVersionAtLoad() < BOARD_FILE_VERSION )
             {
                 DisplayInfoMessage( this, _( "This file was created by an older \
 version of Pcbnew. It will be stored in the new file format when you save \
 this file again." ) );
             }
 
-            SetBoard( board );
+            SetBoard( loadedBoard );
         }
     }
     catch( IO_ERROR ioe )
     {
         wxString msg = wxString::Format(  _( "Error loading board.\n%s" ),
                             ioe.errorText.GetData() );
-
         wxMessageBox( msg, _( "Open Board File" ), wxICON_ERROR );
     }
 
     if( !aAppend )
     {
         LoadProjectSettings( GetScreen()->GetFileName() );
+    }
+
+    if( loadedBoard )
+    {
+        // we should not ask PLUGINs to do these items:
+        loadedBoard->BuildListOfNets();
+        loadedBoard->SynchronizeNetsAndNetClasses();
+
+        SetStatusText( wxEmptyString );
+        BestZoom();
     }
 
 #endif
@@ -448,16 +463,41 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
 #if defined(USE_NEW_PCBNEW_SAVE)
 
+    GetBoard()->m_Status_Pcb &= ~CONNEXION_OK;
+
+    GetBoard()->SynchronizeNetsAndNetClasses();
+
+    // Select default Netclass before writing file.
+    // Useful to save default values in headers
+    GetBoard()->SetCurrentNetClass( GetBoard()->m_NetClasses.GetDefault()->GetName() );
+
     try
     {
-        IO_MGR::Save( IO_MGR::KICAD, pcbFileName.GetFullPath(), GetBoard(), NULL );
+        wxString header = wxString::Format(
+                            wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by Pcbnew%s\n\n" ),
+                            BOARD_FILE_VERSION, TO_UTF8( DateAndTime() ),
+                            TO_UTF8( GetBuildVersion() ) );
+
+        PROPERTIES   props;
+
+        // wanting wxWidgets 2.9.x which can actually create a wxString() from
+        // a const char*, so don't have to use wxT()
+        props[ wxT("header") ] = header;
+
+        IO_MGR::Save( IO_MGR::KICAD, pcbFileName.GetFullPath(), GetBoard(), &props );
     }
     catch( IO_ERROR ioe )
     {
-        wxString msg = wxString::Format(  _( "Error loading board.\n%s" ),
+        wxString msg = wxString::Format(  _( "Error saving board.\n%s" ),
                             ioe.errorText.GetData() );
         wxMessageBox( msg, _( "Save Board File" ), wxICON_ERROR );
         saveok = false;
+    }
+
+    if( saveok )
+    {
+        GetScreen()->SetFileName( pcbFileName.GetFullPath() );
+        UpdateTitle();
     }
 
 #else
