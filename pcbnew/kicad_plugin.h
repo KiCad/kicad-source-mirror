@@ -104,7 +104,7 @@ protected:
 
     /**
      * Function degParse
-     * parses an ASCII decimal floating point value which is certainy an angle.  This
+     * parses an ASCII decimal floating point value which is certainly an angle.  This
      * is a dedicated function for encapsulating support for the migration from
      * tenths of degrees to degrees in floating point.  This function is the complement of
      * fmtDEG().  One has to know what the other is doing.
