@@ -1737,13 +1737,18 @@ void KICAD_PLUGIN::loadPCB_TEXT()
 
             GRTextHorizJustifyType hj;
 
-            switch( *hJustify )
+            if( hJustify )
             {
-            default:
-            case 'C':   hj = GR_TEXT_HJUSTIFY_CENTER;     break;
-            case 'L':   hj = GR_TEXT_HJUSTIFY_LEFT;       break;
-            case 'R':   hj = GR_TEXT_HJUSTIFY_RIGHT;      break;
+                switch( *hJustify )
+                {
+                default:
+                case 'C':   hj = GR_TEXT_HJUSTIFY_CENTER;     break;
+                case 'L':   hj = GR_TEXT_HJUSTIFY_LEFT;       break;
+                case 'R':   hj = GR_TEXT_HJUSTIFY_RIGHT;      break;
+                }
             }
+            else
+                hj = GR_TEXT_HJUSTIFY_CENTER;
 
             pcbtxt->SetHorizJustify( hj );
 
@@ -2204,7 +2209,7 @@ void KICAD_PLUGIN::loadDIMENSION()
         const char*  data;
         char* line = m_reader->Line();
 
-        if( TESTLINE( "$EndDIMENSION" ) )
+        if( TESTLINE( "$endCOTATION" ) )
         {
             m_board->Add( dim.release(), ADD_APPEND );
             return;     // preferred exit
@@ -2387,7 +2392,7 @@ void KICAD_PLUGIN::loadDIMENSION()
         }
     }
 
-    THROW_IO_ERROR( "Missing '$EndDIMENSION'" );
+    THROW_IO_ERROR( "Missing '$endCOTATION'" );
 }
 
 
