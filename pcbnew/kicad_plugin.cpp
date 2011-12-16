@@ -1358,6 +1358,9 @@ void KICAD_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     //     &m_Orient, &m_Thickness,               BufCar1, BufCar2, &layer, BufCar3 ) >= 10 )
 
     // e.g. "T1 6940 -16220 350 300 900 60 M I 20 N "CFCARD"\r\n"
+    // or    T1 0 500 600 400 900 80 M V 20 N"74LS245"
+    // ouch, the last example has no space between N and "74LS245" !
+    // that is an older version.
 
     int     type    = intParse( line+1, &data );
     BIU     pos0_x  = biuParse( data, &data );
@@ -1367,6 +1370,16 @@ void KICAD_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     double  orient  = degParse( data, &data );
     BIU     thickn  = biuParse( data, &data );
 
+    // read the quoted text before the first call to strtok() which introduces
+    // NULs into the string and chops it into mutliple C strings, something
+    // ReadDelimitedText() cannot traverse.
+
+    // convert the "quoted, escaped, UTF8, text" to a wxString, find it by skipping
+    // as far forward as needed until the first double quote.
+    ReadDelimitedText( &m_field, data );
+
+    aText->SetText( m_field );
+
     // after switching to strtok, there's no easy coming back because of the
     // embedded nul(s?) placed to the right of the current field.
     char*   mirror  = strtok( (char*) data, delims );
@@ -1374,7 +1387,6 @@ void KICAD_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     char*   tmp     = strtok( NULL, delims );
     int     layer   = tmp ? intParse( tmp ) : SILKSCREEN_N_FRONT;
     char*   italic  = strtok( NULL, delims );
-    char*   text    = strtok( NULL, delims );
 
     if( type != TEXT_is_REFERENCE && type != TEXT_is_VALUE )
         type = TEXT_is_DIVERS;
@@ -1408,7 +1420,11 @@ void KICAD_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     if( thickn < 1 )
         thickn = 1;
 
+    /*  this is better left to the save function, or to the accessor, since we will
+        be supporting more than one board format.
     aText->SetThickness( Clamp_Text_PenSize( thickn, aText->GetSize() ) );
+    */
+    aText->SetThickness( thickn );
 
     aText->SetMirrored( mirror && *mirror == 'M' );
 
@@ -1431,11 +1447,6 @@ void KICAD_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
 
     // Calculate the actual position.
     aText->SetDrawCoord();
-
-    // convert the "quoted, escaped, UTF8, text" to a wxString
-    ReadDelimitedText( &m_field, text ? text : "" );
-
-    aText->SetText( m_field );
 }
 
 
@@ -1707,12 +1718,15 @@ void KICAD_PLUGIN::loadPCB_TEXT()
                 sz.y = 5;
             */
 
+            pcbtxt->SetSize( size );
+
+            /* @todo move into an accessor
             // Set a reasonable width:
             if( thickn < 1 )
                 thickn = 1;
 
             thickn = Clamp_Text_PenSize( thickn, size );
-            pcbtxt->SetSize( size );
+            */
 
             pcbtxt->SetThickness( thickn );
             pcbtxt->SetOrientation( angle );
@@ -3076,7 +3090,7 @@ void KICAD_PLUGIN::savePAD( const D_PAD* me ) const
         THROW_IO_ERROR( wxString::Format( UNKNOWN_PAD_ATTRIBUTE, me->GetAttribute() ) );
     }
 
-    fprintf( m_fp, "At %s N %X\n", texttype, me->GetLayerMask() );
+    fprintf( m_fp, "At %s N %08X\n", texttype, me->GetLayerMask() );
 
     fprintf( m_fp, "Ne %d %s\n", me->GetNet(), EscapedUTF8( me->GetNetname() ).c_str() );
 
@@ -3114,7 +3128,7 @@ void KICAD_PLUGIN::saveMODULE( const MODULE* me ) const
     statusTxt[1] = me->IsPlaced() ? 'P' : '~';
     statusTxt[2] = '\0';
 
-    fprintf( m_fp,  "Po %s %s %d %lX %lX %s\n",
+    fprintf( m_fp,  "Po %s %s %d %08lX %08lX %s\n",
                     fmtBIUPoint( me->GetPosition() ).c_str(),    // m_Pos.x, m_Pos.y,
                     fmtDEG( orient ).c_str(),
                     me->GetLayer(),
@@ -3205,20 +3219,37 @@ void KICAD_PLUGIN::save3D( const MODULE* me ) const
 
             fprintf( m_fp, "Na %s\n", EscapedUTF8( t3D->m_Shape3DName ).c_str() );
 
-            fprintf( m_fp, "Sc %.16g %.16g %.16g\n",
-                     t3D->m_MatScale.x,
-                     t3D->m_MatScale.y,
-                     t3D->m_MatScale.z );
+            fprintf(m_fp,
+#if defined(DEBUG)
+                    // use old formats for testing, just to verify compatibility
+                    // using "diff", then switch to more concise form for release builds.
+                    "Sc %lf %lf %lf\n",
+#else
+                    "Sc %.16g %.16g %.16g\n",
+#endif
+                    t3D->m_MatScale.x,
+                    t3D->m_MatScale.y,
+                    t3D->m_MatScale.z );
 
-            fprintf( m_fp, "Of %.16g %.16g %.16g\n",
-                     t3D->m_MatPosition.x,
-                     t3D->m_MatPosition.y,
-                     t3D->m_MatPosition.z );
+            fprintf(m_fp,
+#if defined(DEBUG)
+                    "Of %lf %lf %lf\n",
+#else
+                    "Of %.16g %.16g %.16g\n",
+#endif
+                    t3D->m_MatPosition.x,
+                    t3D->m_MatPosition.y,
+                    t3D->m_MatPosition.z );
 
-            fprintf( m_fp, "Ro %.16g %.16g %.16g\n",
-                     t3D->m_MatRotation.x,
-                     t3D->m_MatRotation.y,
-                     t3D->m_MatRotation.z );
+            fprintf(m_fp,
+#if defined(DEBUG)
+                    "Ro %lf %lf %lf\n",
+#else
+                    "Ro %.16g %.16g %.16g\n",
+#endif
+                    t3D->m_MatRotation.x,
+                    t3D->m_MatRotation.y,
+                    t3D->m_MatRotation.z );
 
             fprintf( m_fp, "$EndSHAPE3D\n" );
         }
