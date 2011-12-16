@@ -21,7 +21,7 @@
  *
  */
 
-LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( EDA_TOOLBAR* parent, wxWindowID id,
+LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxAuiToolBar* parent, wxWindowID id,
                                         const wxPoint& pos, const wxSize& size,
                                         int n, const wxString choices[] ) :
     wxBitmapComboBox( parent, id, wxEmptyString, pos, size, n, choices, wxCB_READONLY )
@@ -35,7 +35,7 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( EDA_TOOLBAR* parent, wxWindowID id,
 }
 
 
-LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( EDA_TOOLBAR* parent, wxWindowID id,
+LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxAuiToolBar* parent, wxWindowID id,
                                         const wxPoint& pos, const wxSize& size,
                                         const wxArrayString& choices ) :
     wxBitmapComboBox( parent, id, wxEmptyString, pos, size, choices, wxCB_READONLY )

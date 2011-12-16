@@ -85,7 +85,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
                                 long style) :
     EDA_DRAW_FRAME( father, idtype, title, pos, size, style )
 {
-    m_InternalUnits       = PCB_INTERNAL_UNIT;  // Internal unit = 1/10000 inch
+    m_internalUnits       = PCB_INTERNAL_UNIT;  // Internal unit = 1/10000 inch
     m_Pcb                 = NULL;
 
     m_DisplayPadFill      = true;   // How to draw pads
@@ -504,7 +504,7 @@ void PCB_BASE_FRAME::UpdateStatusBar()
             break;
         }
 
-        Line.Printf( formatter, To_User_Unit( g_UserUnit, ro, m_InternalUnits ), theta );
+        Line.Printf( formatter, To_User_Unit( g_UserUnit, ro, m_internalUnits ), theta );
 
         // overwrite the absolute cartesian coordinates
         SetStatusText( Line, 2 );
@@ -624,7 +624,7 @@ void PCB_BASE_FRAME::updateGridSelectBox()
     for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
     {
         GRID_TYPE& grid = GetScreen()->GetGrid( i );
-        double value = To_User_Unit( g_UserUnit, grid.m_Size.x, m_InternalUnits );
+        double value = To_User_Unit( g_UserUnit, grid.m_Size.x, m_internalUnits );
 
         if( grid.m_Id != ID_POPUP_GRID_USER )
         {

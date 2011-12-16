@@ -121,23 +121,23 @@ void DialogEditModuleText::initDlg( )
 
     AddUnitSymbol( *m_SizeXTitle );
     PutValueInLocalUnits( *m_TxtSizeCtrlX, m_currentText->m_Size.x,
-        m_parent->m_InternalUnits );
+        m_parent->GetInternalUnits() );
 
     AddUnitSymbol( *m_SizeYTitle );
     PutValueInLocalUnits( *m_TxtSizeCtrlY, m_currentText->m_Size.y,
-        m_parent->m_InternalUnits );
+        m_parent->GetInternalUnits() );
 
     AddUnitSymbol( *m_PosXTitle );
     PutValueInLocalUnits( *m_TxtPosCtrlX, m_currentText->GetPos0().x,
-        m_parent->m_InternalUnits );
+        m_parent->GetInternalUnits() );
 
     AddUnitSymbol( *m_PosYTitle );
     PutValueInLocalUnits( *m_TxtPosCtrlY, m_currentText->GetPos0().y,
-        m_parent->m_InternalUnits );
+        m_parent->GetInternalUnits() );
 
     AddUnitSymbol( *m_WidthTitle );
     PutValueInLocalUnits( *m_TxtWidthCtlr, m_currentText->m_Thickness,
-        m_parent->m_InternalUnits );
+        m_parent->GetInternalUnits() );
 
     int text_orient = m_currentText->m_Orient;
     NORMALIZE_ANGLE_90(text_orient)
@@ -169,19 +169,19 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     wxPoint tmp;
 
     msg = m_TxtPosCtrlX->GetValue();
-    tmp.x = ReturnValueFromString( g_UserUnit, msg, m_parent->m_InternalUnits );
+    tmp.x = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
 
     msg = m_TxtPosCtrlY->GetValue();
-    tmp.y = ReturnValueFromString( g_UserUnit, msg, m_parent->m_InternalUnits );
+    tmp.y = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
 
     m_currentText->SetPos0( tmp );
 
     msg = m_TxtSizeCtrlX->GetValue();
     m_currentText->m_Size.x = ReturnValueFromString( g_UserUnit, msg,
-        m_parent->m_InternalUnits );
+        m_parent->GetInternalUnits() );
     msg = m_TxtSizeCtrlY->GetValue();
     m_currentText->m_Size.y = ReturnValueFromString( g_UserUnit, msg,
-        m_parent->m_InternalUnits );
+        m_parent->GetInternalUnits() );
 
     // Test for a reasonnable size:
     if( m_currentText->m_Size.x< TEXTS_MIN_SIZE )
@@ -190,7 +190,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
         m_currentText->m_Size.y = TEXTS_MIN_SIZE;
 
     msg = m_TxtWidthCtlr->GetValue();
-    int width = ReturnValueFromString( g_UserUnit, msg, m_parent->m_InternalUnits );
+    int width = ReturnValueFromString( g_UserUnit, msg, m_parent->GetInternalUnits() );
 
     // Test for a reasonnable width:
     if( width <= 1 )

@@ -79,7 +79,7 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
     AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
     m_DialogPenWidth->SetValue(
         ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness,
-                               m_Parent->m_InternalUnits ) );
+                               m_Parent->GetInternalUnits() ) );
     m_Print_Sheet_Ref->SetValue( s_Print_Frame_Ref );
 
     if( GetSizer() )
@@ -92,7 +92,7 @@ void DIALOG_SVG_PRINT::OnInitDialog( wxInitDialogEvent& event )
 void DIALOG_SVG_PRINT::SetPenWidth()
 {
     g_DrawDefaultLineThickness =
-        ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+    ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->GetInternalUnits() );
 
     if( g_DrawDefaultLineThickness > WIDTH_MAX_VALUE )
     {
@@ -106,7 +106,7 @@ void DIALOG_SVG_PRINT::SetPenWidth()
 
     m_DialogPenWidth->SetValue(
         ReturnStringFromValue( g_UserUnit, g_DrawDefaultLineThickness,
-                               m_Parent->m_InternalUnits ) );
+                               m_Parent->GetInternalUnits() ) );
 }
 
 
@@ -118,7 +118,7 @@ void DIALOG_SVG_PRINT::PrintSVGDoc( bool aPrintAll, bool aPrint_Sheet_Ref )
     SetPenWidth();
 
     g_DrawDefaultLineThickness =
-        ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+    ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->GetInternalUnits() );
 
     SCH_SCREEN* screen = (SCH_SCREEN*) m_Parent->GetScreen();
 
@@ -217,7 +217,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
     SetLocaleTo_C_standard();       // Switch the locale to standard C (needed
                                     // to print floating point numbers like 1.3)
 
-    float       dpi = (float) frame->m_InternalUnits;
+    float       dpi = (float) frame->GetInternalUnits();
     wxSVGFileDC dc( FullFileName, SheetSize.x, SheetSize.y, dpi );
 
     EDA_RECT    tmp = panel->m_ClipBox;

@@ -119,23 +119,23 @@ void DialogGraphicItemProperties::initDlg( )
     AddUnitSymbol( *m_Start_Center_XText );
 
     PutValueInLocalUnits( *m_Center_StartXCtrl, m_Item->GetStart().x,
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
 
     AddUnitSymbol( *m_Start_Center_YText );
     PutValueInLocalUnits( *m_Center_StartYCtrl, m_Item->GetStart().y,
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
 
     AddUnitSymbol( *m_EndX_Radius_Text );
     PutValueInLocalUnits( *m_EndX_Radius_Ctrl, m_Item->GetEnd().x,
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
 
     AddUnitSymbol( *m_EndY_Text );
     PutValueInLocalUnits( *m_EndY_Ctrl, m_Item->GetEnd().y,
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
 
     AddUnitSymbol( *m_ItemThicknessText );
     PutValueInLocalUnits( *m_ThicknessCtrl, m_Item->GetWidth(),
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
 
     AddUnitSymbol( *m_DefaultThicknessText );
 
@@ -147,7 +147,7 @@ void DialogGraphicItemProperties::initDlg( )
         thickness =  m_BrdSettings.m_DrawSegmentWidth;
 
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness,
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
 
     for( int layer=FIRST_NO_COPPER_LAYER; layer <= LAST_NO_COPPER_LAYER;  ++layer )
     {
@@ -176,7 +176,7 @@ void DialogGraphicItemProperties::OnLayerChoice( wxCommandEvent& event )
         thickness =  m_BrdSettings.m_DrawSegmentWidth;
 
     PutValueInLocalUnits( *m_DefaultThicknessCtrl, thickness,
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
 }
 
 /*******************************************************************/
@@ -192,22 +192,22 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
         m_Item->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
 
     msg = m_Center_StartXCtrl->GetValue();
-    m_Item->SetStartX( ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits ));
+    m_Item->SetStartX( ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() ));
 
     msg = m_Center_StartYCtrl->GetValue();
-    m_Item->SetStartY( ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits ));
+    m_Item->SetStartY( ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() ));
 
     msg = m_EndX_Radius_Ctrl->GetValue();
-    m_Item->SetEndX( ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits ));
+    m_Item->SetEndX( ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() ));
 
     msg = m_EndY_Ctrl->GetValue();
-    m_Item->SetEndY( ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits ));
+    m_Item->SetEndY( ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() ));
 
     msg = m_ThicknessCtrl->GetValue();
-    m_Item->SetWidth( ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits ));
+    m_Item->SetWidth( ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() ));
 
     msg = m_DefaultThicknessCtrl->GetValue();
-    int thickness = ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits );
+    int thickness = ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() );
 
     m_Item->SetLayer( m_LayerSelection->GetCurrentSelection() + FIRST_NO_COPPER_LAYER);
 

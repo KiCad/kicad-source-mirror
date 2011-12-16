@@ -15,7 +15,7 @@
 
 
 /*  Forward declarations of all top-level window classes. */
-class EDA_TOOLBAR;
+class wxAuiToolBar;
 class FOOTPRINTS_LISTBOX;
 class COMPONENTS_LISTBOX;
 class DISPLAY_FOOTPRINTS_FRAME;
@@ -32,7 +32,7 @@ public:
     FOOTPRINTS_LISTBOX*       m_FootprintList;
     COMPONENTS_LISTBOX*       m_ListCmp;
     DISPLAY_FOOTPRINTS_FRAME* m_DisplayFootprintFrame;
-    EDA_TOOLBAR* m_HToolBar;
+    wxAuiToolBar* m_mainToolBar;
     wxFileName m_NetlistFileName;
     wxArrayString             m_ModuleLibNames;
     wxArrayString             m_AliasLibNames;

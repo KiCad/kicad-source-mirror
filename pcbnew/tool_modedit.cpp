@@ -1,6 +1,32 @@
-/***********************************************/
-/* tool_modeit.cpp: footprint editor toolbars. */
-/***********************************************/
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2005 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file tool_modedit.cpp
+ * @brief Footprint editor tool bars
+ */
 
 #include "fctsys.h"
 
@@ -20,97 +46,99 @@
 
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 {
-    if( m_HToolBar  != NULL )
+    if( m_mainToolBar  != NULL )
         return;
 
     wxString msg;
 
-    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
+    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_MODEDIT_SELECT_CURRENT_LIB, wxEmptyString,
-                         KiBitmap( open_library_xpm ),
-                         _( "Select active library" ) );
+    m_mainToolBar->AddTool( ID_MODEDIT_SELECT_CURRENT_LIB, wxEmptyString,
+                            KiBitmap( open_library_xpm ),
+                            _( "Select active library" ) );
 
-    m_HToolBar->AddTool( ID_MODEDIT_SAVE_LIBMODULE, wxEmptyString, KiBitmap( save_library_xpm ),
-                         _( "Save module in active library" ) );
+    m_mainToolBar->AddTool( ID_MODEDIT_SAVE_LIBMODULE, wxEmptyString, KiBitmap( save_library_xpm ),
+                            _( "Save module in active library" ) );
 
-    m_HToolBar->AddTool( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART, wxEmptyString,
-                         KiBitmap( new_library_xpm ),
-                         _( "Create new library and save current module" ) );
+    m_mainToolBar->AddTool( ID_MODEDIT_CREATE_NEW_LIB_AND_SAVE_CURRENT_PART, wxEmptyString,
+                            KiBitmap( new_library_xpm ),
+                            _( "Create new library and save current module" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_MODEDIT_DELETE_PART, wxEmptyString, KiBitmap( delete_xpm ),
-                         _( "Delete part from active library" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_MODEDIT_DELETE_PART, wxEmptyString, KiBitmap( delete_xpm ),
+                            _( "Delete part from active library" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_MODEDIT_NEW_MODULE, wxEmptyString, KiBitmap( new_footprint_xpm ),
-                         _( "New module" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_MODEDIT_NEW_MODULE, wxEmptyString, KiBitmap( new_footprint_xpm ),
+                            _( "New module" ) );
 
-    m_HToolBar->AddTool( ID_MODEDIT_LOAD_MODULE, wxEmptyString,
-                         KiBitmap( load_module_lib_xpm ),
-                         _( "Load module from library" ) );
+    m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE, wxEmptyString,
+                            KiBitmap( load_module_lib_xpm ),
+                            _( "Load module from library" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, wxEmptyString,
-                         KiBitmap( load_module_board_xpm ),
-                         _( "Load module from current board" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_MODEDIT_LOAD_MODULE_FROM_BOARD, wxEmptyString,
+                            KiBitmap( load_module_board_xpm ),
+                            _( "Load module from current board" ) );
 
-    m_HToolBar->AddTool( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, wxEmptyString,
-                         KiBitmap( update_module_board_xpm ),
-                         _( "Update module in current board" ) );
+    m_mainToolBar->AddTool( ID_MODEDIT_UPDATE_MODULE_IN_BOARD, wxEmptyString,
+                            KiBitmap( update_module_board_xpm ),
+                            _( "Update module in current board" ) );
 
-    m_HToolBar->AddTool( ID_MODEDIT_INSERT_MODULE_IN_BOARD, wxEmptyString,
-                         KiBitmap( insert_module_board_xpm ),
-                         _( "Insert module into current board" ) );
+    m_mainToolBar->AddTool( ID_MODEDIT_INSERT_MODULE_IN_BOARD, wxEmptyString,
+                            KiBitmap( insert_module_board_xpm ),
+                            _( "Insert module into current board" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_MODEDIT_IMPORT_PART, wxEmptyString, KiBitmap( import_module_xpm ),
-                         _( "Import module" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_MODEDIT_IMPORT_PART, wxEmptyString, KiBitmap( import_module_xpm ),
+                            _( "Import module" ) );
 
-    m_HToolBar->AddTool( ID_MODEDIT_EXPORT_PART, wxEmptyString, KiBitmap( export_module_xpm ),
-                         _( "Export module" ) );
+    m_mainToolBar->AddTool( ID_MODEDIT_EXPORT_PART, wxEmptyString, KiBitmap( export_module_xpm ),
+                            _( "Export module" ) );
 
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ),
-                         _( "Undo last edition" ) );
-    m_HToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ),
-                         _( "Redo the last undo command" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ),
+                            _( "Undo last edition" ) );
+    m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ),
+                            _( "Redo the last undo command" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_MODEDIT_EDIT_MODULE_PROPERTIES, wxEmptyString,
-                         KiBitmap( module_options_xpm ),
-                         _( "Module properties" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_MODEDIT_EDIT_MODULE_PROPERTIES, wxEmptyString,
+                            KiBitmap( module_options_xpm ),
+                            _( "Module properties" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
-                         _( "Print module" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
+                            _( "Print module" ) );
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
 
     msg = AddHotkeyName( _( "Zoom out" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
 
-    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
+    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_REDRAW,
+                         IS_COMMENT );
+    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
 
     msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Editor_Hokeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_MODEDIT_PAD_SETTINGS, wxEmptyString, KiBitmap( options_pad_xpm ),
-                         _( "Pad settings" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_MODEDIT_PAD_SETTINGS, wxEmptyString, KiBitmap( options_pad_xpm ),
+                            _( "Pad settings" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_MODEDIT_CHECK, wxEmptyString,
-                         KiBitmap( module_check_xpm ),
-                         _( "Check module" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_MODEDIT_CHECK, wxEmptyString,
+                            KiBitmap( module_check_xpm ),
+                            _( "Check module" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_HToolBar->Realize();
+    m_mainToolBar->Realize();
 }
 
 
@@ -119,7 +147,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
     if( m_drawToolBar )
         return;
 
-    m_drawToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
+    m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
@@ -166,7 +195,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
         return;
 
     // Create options tool bar.
-    m_optionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
+    m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                         wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
                                _( "Hide grid" ), wxITEM_CHECK );
 
@@ -210,7 +240,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     if( m_auxiliaryToolBar )
         return;
 
-    m_auxiliaryToolBar = new EDA_TOOLBAR( TOOLBAR_AUX, this, ID_AUX_TOOLBAR, true );
+    m_auxiliaryToolBar = new wxAuiToolBar( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                           wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
     m_auxiliaryToolBar->AddSeparator();

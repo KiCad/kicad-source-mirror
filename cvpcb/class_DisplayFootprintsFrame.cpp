@@ -121,8 +121,8 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
 
 
 
-    m_auimgr.AddPane( m_HToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top(). Row( 0 ) );
+    m_auimgr.AddPane( m_mainToolBar,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top(). Row( 0 ) );
 
     if( m_drawToolBar )    // Currently, no vertical right toolbar.
         m_auimgr.AddPane( m_drawToolBar,
@@ -178,7 +178,8 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
         return;
 
     // Create options tool bar.
-    m_optionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
+    m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                         wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
                                _( "Hide grid" ), wxITEM_CHECK );
@@ -218,35 +219,36 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
 
 void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
 {
-    if( m_HToolBar != NULL )
+    if( m_mainToolBar != NULL )
         return;
 
-    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
+    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    m_HToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, KiBitmap( display_options_xpm ),
-                         _( "Display options" ) );
+    m_mainToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, KiBitmap( display_options_xpm ),
+                            _( "Display options" ) );
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
 
-    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ),
-                         _( "Zoom in (F1)" ) );
+    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ),
+                            _( "Zoom in (F1)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ),
-                         _( "Zoom out (F2)" ) );
+    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ),
+                            _( "Zoom out (F2)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ),
-                         _( "Redraw view (F3)" ) );
+    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ),
+                            _( "Redraw view (F3)" ) );
 
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ),
-                         _( "Zoom auto (Home)" ) );
+    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ),
+                            _( "Zoom auto (Home)" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, KiBitmap( three_d_xpm ),
-                         _( "3D Display" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, KiBitmap( three_d_xpm ),
+                            _( "3D Display" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
-    m_HToolBar->Realize();
+    m_mainToolBar->Realize();
 }
 
 

@@ -96,9 +96,9 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
         wxString path = sheetFoundIn->Path();
         wxString units = GetAbbreviatedUnitsLabel();
         double x = To_User_Unit( g_UserUnit, (double) lastMarker->GetPosition().x,
-                                 m_InternalUnits );
+                                 m_internalUnits );
         double y = To_User_Unit( g_UserUnit, (double) lastMarker->GetPosition().y,
-                                 m_InternalUnits );
+                                 m_internalUnits );
         msg.Printf( _( "Design rule check marker found in sheet %s at %0.3f%s, %0.3f%s" ),
                     GetChars( path ), x, GetChars( units ), y, GetChars( units) );
         SetStatusText( msg );

@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2005 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file tool_pcb.cpp
  * @brief PCB editor tool bars
@@ -166,10 +191,10 @@ void PCB_EDIT_FRAME::PrepareLayerIndicator()
      *  in order to delete the MemoryDC safely without deleting the bitmap */
     iconDC.SelectObject( wxNullBitmap );
 
-    if( m_HToolBar && ! first_call )
+    if( m_mainToolBar && ! first_call )
     {
-        m_HToolBar->SetToolBitmap( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, *LayerPairBitmap );
-        m_HToolBar->Refresh();
+        m_mainToolBar->SetToolBitmap( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, *LayerPairBitmap );
+        m_mainToolBar->Refresh();
     }
 }
 
@@ -180,108 +205,109 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 {
     wxString msg;
 
-    if( m_HToolBar )
+    if( m_mainToolBar )
         return;
 
     wxWindowUpdateLocker dummy( this );
 
-    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
-    m_HToolBar->SetRows( 1 );
+    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiBitmap( new_pcb_xpm ),
-                         _( "New board" ) );
-    m_HToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiBitmap( open_brd_file_xpm ),
-                         _( "Open existing board" ) );
-    m_HToolBar->AddTool( ID_SAVE_BOARD, wxEmptyString, KiBitmap( save_xpm ),
-                         _( "Save board" ) );
+    m_mainToolBar->AddTool( ID_NEW_BOARD, wxEmptyString, KiBitmap( new_pcb_xpm ),
+                            _( "New board" ) );
+    m_mainToolBar->AddTool( ID_LOAD_FILE, wxEmptyString, KiBitmap( open_brd_file_xpm ),
+                            _( "Open existing board" ) );
+    m_mainToolBar->AddTool( ID_SAVE_BOARD, wxEmptyString, KiBitmap( save_xpm ),
+                            _( "Save board" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiBitmap( sheetset_xpm ),
-                         _( "Page settings for paper size and texts" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiBitmap( sheetset_xpm ),
+                            _( "Page settings for paper size and texts" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString, KiBitmap( modedit_xpm ),
-                         _( "Open module editor" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_OPEN_MODULE_EDITOR, wxEmptyString, KiBitmap( modedit_xpm ),
+                            _( "Open module editor" ) );
 
 #if 0
     // Not yet existing commands
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
-                         _( "Cut selected item" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
+                            _( "Cut selected item" ) );
 
-    m_HToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button_xpm ),
-                         _( "Copy selected item" ) );
+    m_mainToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button_xpm ),
+                            _( "Copy selected item" ) );
 
-    m_HToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
-                         _( "Paste" ) );
+    m_mainToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
+                            _( "Paste" ) );
 #endif
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( HELP_UNDO, g_Board_Editor_Hokeys_Descr, HK_UNDO, IS_COMMENT );
-    m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), HELP_UNDO );
+    m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), HELP_UNDO );
     msg = AddHotkeyName( HELP_REDO, g_Board_Editor_Hokeys_Descr, HK_REDO, IS_COMMENT );
-    m_HToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), HELP_REDO );
+    m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), HELP_REDO );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
-                         _( "Print board" ) );
-    m_HToolBar->AddTool( ID_GEN_PLOT, wxEmptyString, KiBitmap( plot_xpm ),
-                         _( "Plot (HPGL, PostScript, or GERBER format)" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
+                            _( "Print board" ) );
+    m_mainToolBar->AddTool( ID_GEN_PLOT, wxEmptyString, KiBitmap( plot_xpm ),
+                            _( "Plot (HPGL, PostScript, or GERBER format)" ) );
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( HELP_ZOOM_IN, g_Board_Editor_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_OUT, g_Board_Editor_Hokeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Board_Editor_Hokeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
+    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Board_Editor_Hokeys_Descr, HK_ZOOM_REDRAW,
+                         IS_COMMENT );
+    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_FIT, g_Board_Editor_Hokeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( HELP_FIND, g_Board_Editor_Hokeys_Descr, HK_FIND_ITEM, IS_COMMENT );
-    m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiBitmap( find_xpm ), msg );
+    m_mainToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiBitmap( find_xpm ), msg );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
-                         _( "Read netlist" ) );
-    m_HToolBar->AddTool( ID_DRC_CONTROL, wxEmptyString, KiBitmap( erc_xpm ),
-                         _( "Perform design rules check" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
+                            _( "Read netlist" ) );
+    m_mainToolBar->AddTool( ID_DRC_CONTROL, wxEmptyString, KiBitmap( erc_xpm ),
+                            _( "Perform design rules check" ) );
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
 
     if( m_SelLayerBox == NULL )
-        m_SelLayerBox = new LAYER_BOX_SELECTOR( m_HToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
+        m_SelLayerBox = new LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_PCB_SELECT_LAYER );
 
-    ReCreateLayerBox( m_HToolBar );
-    m_HToolBar->AddControl( m_SelLayerBox );
+    ReCreateLayerBox( m_mainToolBar );
+    m_mainToolBar->AddControl( m_SelLayerBox );
 
     PrepareLayerIndicator();    // Initialize the bitmap with current
                                 // active layer colors for the next tool
-    m_HToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString,
-                         *LayerPairBitmap, SEL_LAYER_HELP );
+    m_mainToolBar->AddTool( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, wxEmptyString,
+                            *LayerPairBitmap, SEL_LAYER_HELP );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_TOOLBARH_PCB_MODE_MODULE, wxEmptyString, KiBitmap( mode_module_xpm ),
-                         _( "Mode footprint: manual and automatic move and place modules" ),
-                         wxITEM_CHECK );
-    m_HToolBar->AddTool( ID_TOOLBARH_PCB_MODE_TRACKS, wxEmptyString, KiBitmap( mode_track_xpm ),
-                         _( "Mode track: autorouting" ), wxITEM_CHECK );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_TOOLBARH_PCB_MODE_MODULE, wxEmptyString, KiBitmap( mode_module_xpm ),
+                            _( "Mode footprint: manual and automatic move and place modules" ),
+                            wxITEM_CHECK );
+    m_mainToolBar->AddTool( ID_TOOLBARH_PCB_MODE_TRACKS, wxEmptyString, KiBitmap( mode_track_xpm ),
+                            _( "Mode track: autorouting" ), wxITEM_CHECK );
 
     // Fast call to FreeROUTE Web Bases router
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, wxEmptyString,
-                         KiBitmap( web_support_xpm ),
-                         _( "Fast access to the Web Based FreeROUTE advanced router" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_TOOLBARH_PCB_FREEROUTE_ACCESS, wxEmptyString,
+                            KiBitmap( web_support_xpm ),
+                            _( "Fast access to the Web Based FreeROUTE advanced router" ) );
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_HToolBar->Realize();
+    m_mainToolBar->Realize();
 }
 
 
@@ -292,7 +318,8 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
 
     wxWindowUpdateLocker dummy( this );
 
-    m_optionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
+    m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                         wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_DRC_OFF, wxEmptyString, KiBitmap( drc_off_xpm ),
                                _( "Enable design rule checking" ), wxITEM_CHECK );
@@ -327,15 +354,14 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
                                wxITEM_CHECK );
 
     m_optionsToolBar->AddSeparator();
-    m_optionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES, wxEmptyString,
-                                    KiBitmap( show_zone_xpm ), wxNullBitmap,
-                                    _( "Show filled areas in zones" ) );
-    m_optionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, wxEmptyString,
-                                    KiBitmap( show_zone_disable_xpm ),
-                                    wxNullBitmap, _( "Do not show filled areas in zones" ));
-    m_optionsToolBar->AddRadioTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, wxEmptyString,
-                                    KiBitmap( show_zone_outline_only_xpm ), wxNullBitmap,
-                                    _( "Show outlines of filled areas only in zones" ) );
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_ZONES, wxEmptyString, KiBitmap( show_zone_xpm ),
+                               _( "Show filled areas in zones" ), wxITEM_CHECK );
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, wxEmptyString,
+                               KiBitmap( show_zone_disable_xpm ),
+                               _( "Do not show filled areas in zones" ) , wxITEM_CHECK );
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, wxEmptyString,
+                               KiBitmap( show_zone_outline_only_xpm ),
+                               _( "Show outlines of filled areas only in zones" ), wxITEM_CHECK );
 
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
@@ -384,7 +410,8 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
 
     wxWindowUpdateLocker dummy( this );
 
-    m_drawToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
+    m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
@@ -456,7 +483,9 @@ void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
 
     wxWindowUpdateLocker dummy(this);
 
-    m_microWaveToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_MICROWAVE_V_TOOLBAR, false );
+    m_microWaveToolBar = new wxAuiToolBar( this, ID_MICROWAVE_V_TOOLBAR, wxDefaultPosition,
+                                           wxDefaultSize,
+                                           wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
     m_microWaveToolBar->AddTool( ID_PCB_MUWAVE_TOOL_SELF_CMD, wxEmptyString,
@@ -503,7 +532,8 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     if( m_auxiliaryToolBar )
         return;
 
-    m_auxiliaryToolBar = new EDA_TOOLBAR( TOOLBAR_AUX, this, ID_AUX_TOOLBAR, true );
+    m_auxiliaryToolBar = new wxAuiToolBar( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                           wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     /* Set up toolbar items */
 
@@ -617,11 +647,12 @@ void PCB_EDIT_FRAME::updateViaSizeSelectBox()
 
     if( GetBoard()->m_ViaSizeSelector >= GetBoard()->m_ViasDimensionsList.size() )
         GetBoard()->m_ViaSizeSelector = 0;
+
     m_SelViaSizeBox->SetSelection( GetBoard()->m_ViaSizeSelector );
 }
 
 
-LAYER_BOX_SELECTOR* PCB_EDIT_FRAME::ReCreateLayerBox( EDA_TOOLBAR* parent )
+LAYER_BOX_SELECTOR* PCB_EDIT_FRAME::ReCreateLayerBox( wxAuiToolBar* parent )
 {
     if( m_SelLayerBox == NULL )
         return NULL;

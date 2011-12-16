@@ -42,7 +42,7 @@ void DIALOG_PADS_MASK_CLEARANCE::MyInit()
     m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
-    int Internal_Unit = m_Parent->m_InternalUnits;
+    int Internal_Unit = m_Parent->GetInternalUnits();
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
                            m_BrdSettings.m_SolderMaskMargin,
                           Internal_Unit );
@@ -70,10 +70,10 @@ void DIALOG_PADS_MASK_CLEARANCE::OnButtonOkClick( wxCommandEvent& event )
 /*******************************************************************/
 {
     m_BrdSettings.m_SolderMaskMargin =
-        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->m_InternalUnits );
+        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->GetInternalUnits() );
 
     m_BrdSettings.m_SolderPasteMargin =
-        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->m_InternalUnits );
+        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->GetInternalUnits() );
 
     double   dtmp = 0;
     wxString msg = m_SolderPasteMarginRatioCtrl->GetValue();

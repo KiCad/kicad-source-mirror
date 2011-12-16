@@ -86,15 +86,15 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     dlg.SetName( pin->GetName() );
     dlg.SetNameTextSize( ReturnStringFromValue( g_UserUnit,
                                                 pin->GetNameTextSize(),
-                                                m_InternalUnits ) );
+                                                m_internalUnits ) );
     dlg.SetNameTextSizeUnits( units );
     dlg.SetPadName( pin->GetNumberString() );
     dlg.SetPadNameTextSize( ReturnStringFromValue( g_UserUnit,
                                                    pin->GetNumberTextSize(),
-                                                  m_InternalUnits ) );
+                                                  m_internalUnits ) );
 
     dlg.SetPadNameTextSizeUnits( units );
-    dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->GetLength(), m_InternalUnits ) );
+    dlg.SetLength( ReturnStringFromValue( g_UserUnit, pin->GetLength(), m_internalUnits ) );
     dlg.SetLengthUnits( units );
     dlg.SetAddToAllParts( pin->GetUnit() == 0 );
     dlg.SetAddToAllBodyStyles( pin->GetConvert() == 0 );
@@ -122,10 +122,10 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
     }
 
     /* Save the pin properties to use for the next new pin. */
-    LastPinNameSize = ReturnValueFromString( g_UserUnit, dlg.GetNameTextSize(), m_InternalUnits );
-    LastPinNumSize = ReturnValueFromString( g_UserUnit, dlg.GetPadNameTextSize(), m_InternalUnits );
+    LastPinNameSize = ReturnValueFromString( g_UserUnit, dlg.GetNameTextSize(), m_internalUnits );
+    LastPinNumSize = ReturnValueFromString( g_UserUnit, dlg.GetPadNameTextSize(), m_internalUnits );
     LastPinOrient = LIB_PIN::GetOrientationCode( dlg.GetOrientation() );
-    LastPinLength = ReturnValueFromString( g_UserUnit, dlg.GetLength(), m_InternalUnits );
+    LastPinLength = ReturnValueFromString( g_UserUnit, dlg.GetLength(), m_internalUnits );
     LastPinShape = LIB_PIN::GetStyleCode( dlg.GetStyle() );
     LastPinType = dlg.GetElectricalType();
     LastPinCommonConvert = dlg.GetAddToAllBodyStyles();

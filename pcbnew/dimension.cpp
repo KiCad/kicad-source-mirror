@@ -92,23 +92,23 @@ DIALOG_DIMENSION_EDITOR::DIALOG_DIMENSION_EDITOR( PCB_EDIT_FRAME* aParent,
 
     // Enter size value in dialog
     PutValueInLocalUnits( *m_TxtSizeXCtrl, aDimension->m_Text.m_Size.x,
-                          m_Parent->m_InternalUnits );
+                          m_Parent->GetInternalUnits() );
     AddUnitSymbol( *m_staticTextSizeX );
     PutValueInLocalUnits( *m_TxtSizeYCtrl, aDimension->m_Text.m_Size.y,
-                          m_Parent->m_InternalUnits );
+                          m_Parent->GetInternalUnits() );
     AddUnitSymbol( *m_staticTextSizeY );
 
     // Enter lines thickness value in dialog
     PutValueInLocalUnits( *m_TxtWidthCtrl, aDimension->m_Width,
-                          m_Parent->m_InternalUnits );
+                          m_Parent->GetInternalUnits() );
     AddUnitSymbol( *m_staticTextWidth );
 
     // Enter position value in dialog
     PutValueInLocalUnits( *m_textCtrlPosX, aDimension->m_Text.m_Pos.x,
-                          m_Parent->m_InternalUnits );
+                          m_Parent->GetInternalUnits() );
     AddUnitSymbol( *m_staticTextPosX );
     PutValueInLocalUnits( *m_textCtrlPosY, aDimension->m_Text.m_Pos.y,
-                          m_Parent->m_InternalUnits );
+                          m_Parent->GetInternalUnits() );
     AddUnitSymbol( *m_staticTextPosY );
 
     for( int layer = FIRST_NO_COPPER_LAYER;  layer<NB_LAYERS;  layer++ )
@@ -149,24 +149,24 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
     // Get new size value:
     msg = m_TxtSizeXCtrl->GetValue();
     CurrentDimension->m_Text.m_Size.x = ReturnValueFromString( g_UserUnit, msg,
-                                                                m_Parent->m_InternalUnits );
+                                                                m_Parent->GetInternalUnits() );
     msg = m_TxtSizeYCtrl->GetValue();
     CurrentDimension->m_Text.m_Size.y = ReturnValueFromString( g_UserUnit, msg,
-                                                                m_Parent->m_InternalUnits );
+                                                                m_Parent->GetInternalUnits() );
 
     // Get new position value:
     // It will be copied later in dimension, because
     msg = m_textCtrlPosX->GetValue();
     CurrentDimension->m_Text.m_Pos.x = ReturnValueFromString( g_UserUnit, msg,
-                                                               m_Parent->m_InternalUnits );
+                                                               m_Parent->GetInternalUnits() );
     msg = m_textCtrlPosY->GetValue();
     CurrentDimension->m_Text.m_Pos.y = ReturnValueFromString( g_UserUnit, msg,
-                                                               m_Parent->m_InternalUnits );
+                                                               m_Parent->GetInternalUnits() );
 
     // Get new line thickness value:
     msg = m_TxtWidthCtrl->GetValue();
     int width = ReturnValueFromString( g_UserUnit, msg,
-                                       m_Parent->m_InternalUnits );
+                                       m_Parent->GetInternalUnits() );
     int maxthickness = Clamp_Text_PenSize( width, CurrentDimension->m_Text.m_Size );
 
     if( width > maxthickness )

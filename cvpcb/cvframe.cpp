@@ -109,7 +109,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
     m_ListCmp = NULL;
     m_FootprintList = NULL;
     m_DisplayFootprintFrame = NULL;
-    m_HToolBar = NULL;
+    m_mainToolBar = NULL;
     m_modified = false;
     m_isEESchemaNetlist     = false;
     m_KeepCvpcbOpen         = false;
@@ -166,9 +166,9 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
     info.InfoToolbarPane();
 
 
-    if( m_HToolBar )
-        m_auimgr.AddPane( m_HToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top() );
+    if( m_mainToolBar )
+        m_auimgr.AddPane( m_mainToolBar,
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top() );
 
     if( m_ListCmp )
         m_auimgr.AddPane( m_ListCmp,
@@ -189,7 +189,7 @@ CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 
     if( config )
     {
-        int state = m_HToolBar->GetToolState( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST );
+        int state = m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST );
         config->Write( wxT( FILTERFOOTPRINTKEY ), state );
     }
 
@@ -504,7 +504,7 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 {
     int selection;
 
-    if( !m_HToolBar->GetToolState( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
+    if( !m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
     {
         m_FootprintList->SetActiveFootprintList( true, true );
         return;
@@ -554,11 +554,11 @@ void CVPCB_MAINFRAME::OnSelectFilteringFootprint( wxCommandEvent& event )
     switch( event.GetId() )
     {
     case ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST:
-        m_HToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, false );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST, false );
         break;
 
     case ID_CVPCB_FOOTPRINT_DISPLAY_FULL_LIST:
-        m_HToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, false );
+        m_mainToolBar->ToggleTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST, false );
         break;
 
     default:

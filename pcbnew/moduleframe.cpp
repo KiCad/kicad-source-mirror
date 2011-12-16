@@ -191,8 +191,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
     EDA_PANEINFO mesg_pane;
     mesg_pane.MessageToolbarPane();
 
-    m_auimgr.AddPane( m_HToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top(). Row( 0 ) );
+    m_auimgr.AddPane( m_mainToolBar,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top(). Row( 0 ) );
 
     m_auimgr.AddPane( m_auxiliaryToolBar,
                       wxAuiPaneInfo( horiz ).Name( wxT( "m_auxiliaryToolBar" ) ).Top().Row( 1 ) );

@@ -147,7 +147,7 @@ void DIALOG_MODULE_MODULE_EDITOR::InitModeditProperties()
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
     wxString  msg;
-    int internalUnit = m_Parent->m_InternalUnits;
+    int internalUnit = m_Parent->GetInternalUnits();
     PutValueInLocalUnits( *m_NetClearanceValueCtrl,
                           m_CurrentModule->m_LocalClearance, internalUnit );
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
@@ -368,7 +368,7 @@ void DIALOG_MODULE_MODULE_EDITOR::OnOkClick( wxCommandEvent& event )
     m_CurrentModule->m_Value->Copy(m_ValueCopy );
 
     // Initialize masks clearances
-    int internalUnit = m_Parent->m_InternalUnits;
+    int internalUnit = m_Parent->GetInternalUnits();
     m_CurrentModule->m_LocalClearance =
         ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, internalUnit );
     m_CurrentModule->m_LocalSolderMaskMargin =

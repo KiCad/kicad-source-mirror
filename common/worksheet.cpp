@@ -1003,7 +1003,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
     EDA_Colors Color;
     wxString Line;
     Ki_WorkSheetData* WsItem;
-    int scale = m_InternalUnits / 1000;
+    int scale = m_internalUnits / 1000;
     wxSize size( SIZETEXT * scale, SIZETEXT * scale );
 #if defined(KICAD_GOST)
     wxSize size2( SIZETEXT * scale * 2, SIZETEXT * scale * 2);

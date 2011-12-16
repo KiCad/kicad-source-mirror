@@ -266,7 +266,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
     s_Parameters.m_PenDefaultSize = g_DrawDefaultLineThickness;
     AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize, m_Parent->GetInternalUnits() ) );
 
 
     // Create scale adjust option
@@ -420,7 +420,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
  * NOTE: s_Parameters.m_PenDefaultSize is in internal units
  */
 {
-    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->m_InternalUnits );
+    s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth, m_Parent->GetInternalUnits() );
 
     if( s_Parameters.m_PenDefaultSize > WIDTH_MAX_VALUE )
     {
@@ -435,7 +435,7 @@ void DIALOG_PRINT_USING_PRINTER::SetPenWidth()
     g_DrawDefaultLineThickness = s_Parameters.m_PenDefaultSize;
 
     m_DialogPenWidth->SetValue(
-        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize, m_Parent->m_InternalUnits ) );
+        ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize, m_Parent->GetInternalUnits() ) );
 }
 
 void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )

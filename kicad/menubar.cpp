@@ -296,43 +296,44 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
 {
     // Check if toolbar is not already created
-    if( m_HToolBar != NULL )
+    if( m_mainToolBar != NULL )
         return;
 
-    // Allocate memory for m_HToolBar
-    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, TRUE );
+    // Allocate memory for m_mainToolBar
+    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // New
-    m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
-                         KiBitmap( new_project_xpm ),
-                         _( "Start a new project" ) );
+    m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString,
+                            KiBitmap( new_project_xpm ),
+                            _( "Start a new project" ) );
 
     // Load
-    m_HToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString,
-                         KiBitmap( open_project_xpm ),
-                         _( "Load existing project" ) );
+    m_mainToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString,
+                            KiBitmap( open_project_xpm ),
+                            _( "Load existing project" ) );
 
     // Save
-    m_HToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,
-                         KiBitmap( save_project_xpm ),
-                         _( "Save current project" ) );
+    m_mainToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString,
+                            KiBitmap( save_project_xpm ),
+                            _( "Save current project" ) );
 
     // Separator
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
 
     // Archive
-    m_HToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
-                         KiBitmap( zip_xpm ),
-                         _( "Archive all project files" ) );
+    m_mainToolBar->AddTool( ID_SAVE_AND_ZIP_FILES, wxEmptyString,
+                            KiBitmap( zip_xpm ),
+                            _( "Archive all project files" ) );
 
     // Separator
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
 
     // Refresh project tree
-    m_HToolBar->AddTool( ID_PROJECT_TREE_REFRESH, wxEmptyString,
-                         KiBitmap( reload_xpm ),
-                         _( "Refresh project tree" ) );
+    m_mainToolBar->AddTool( ID_PROJECT_TREE_REFRESH, wxEmptyString,
+                            KiBitmap( reload_xpm ),
+                            _( "Refresh project tree" ) );
 
-    // Create m_HToolBar
-    m_HToolBar->Realize();
+    // Create m_mainToolBar
+    m_mainToolBar->Realize();
 }

@@ -82,8 +82,12 @@ class PCB_EDIT_FRAME : public PCB_BASE_FRAME
     int             m_RecordingMacros;
     MACROS_RECORDED m_Macros[10];
 
+    /// The command ID of the current auto place mode which will be set for either
+    /// automatic placement of tracks or modules.
+    int m_autoPlaceModeId;
+
     /// The auxiliary right vertical tool bar used to access the microwave tools.
-    EDA_TOOLBAR* m_microWaveToolBar;
+    wxAuiToolBar* m_microWaveToolBar;
 
 protected:
 
@@ -236,6 +240,8 @@ public:
     void OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectAutoTrackWidth( wxUpdateUIEvent& aEvent );
+    void OnUpdateAutoPlaceModulesMode( wxUpdateUIEvent& aEvent );
+    void OnUpdateAutoPlaceTracksMode( wxUpdateUIEvent& aEvent );
 
     /**
      * Function RecordMacros.
@@ -474,7 +480,7 @@ public:
     void ReCreateMicrowaveVToolbar();
     void ReCreateOptToolbar();
     void ReCreateMenuBar();
-    LAYER_BOX_SELECTOR* ReCreateLayerBox( EDA_TOOLBAR* parent );
+    LAYER_BOX_SELECTOR* ReCreateLayerBox( wxAuiToolBar* parent );
 
     /**
      * Function OnModify
@@ -1320,6 +1326,8 @@ public:
 
     // Autoplacement:
     void AutoPlace( wxCommandEvent& event );
+
+    void OnSelectAutoPlaceMode( wxCommandEvent& aEvent );
 
     /**
      * Function OnOrientFootprints

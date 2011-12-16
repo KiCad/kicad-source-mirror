@@ -99,10 +99,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_currentScreen       = NULL;
     m_toolId              = ID_NO_TOOL_SELECTED;
     m_lastDrawToolId      = ID_NO_TOOL_SELECTED;
-    m_HTOOL_current_state = 0;
     m_showAxis            = false;      // true to draw axis.
     m_showBorderAndTitleBlock = false;  // true to display reference sheet.
-    m_Print_Sheet_Ref     = true;       // true to print reference sheet.
     m_showGridAxis        = false;      // true to draw the grid axis
     m_cursorShape         = 0;
     m_LastGridSizeId      = 0;
@@ -111,7 +109,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_snapToGrid          = true;
 
     // Internal units per inch: = 1000 for schema, = 10000 for PCB
-    m_InternalUnits       = EESCHEMA_INTERNAL_UNIT;
+    m_internalUnits       = EESCHEMA_INTERNAL_UNIT;
     minsize.x             = 470;
     minsize.y             = 350 + m_MsgFrameHeight;
 
@@ -757,8 +755,8 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     SetStatusText( Line, 1 );
 
     /* Display absolute coordinates:  */
-    double dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x, m_InternalUnits );
-    double dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y, m_InternalUnits );
+    double dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x, m_internalUnits );
+    double dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y, m_internalUnits );
 
     /*
      * Converting from inches to mm can give some coordinates due to
@@ -767,8 +765,8 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
      */
     if ( g_UserUnit == MILLIMETRES )
     {
-        dXpos = RoundTo0( dXpos, (double)( m_InternalUnits / 10 ) );
-        dYpos = RoundTo0( dYpos, (double)( m_InternalUnits / 10 ) );
+        dXpos = RoundTo0( dXpos, (double)( m_internalUnits / 10 ) );
+        dYpos = RoundTo0( dYpos, (double)( m_internalUnits / 10 ) );
     }
 
     /* The following sadly is an if Eeschema/if Pcbnew */
@@ -777,7 +775,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     switch( g_UserUnit )
     {
     case INCHES:
-        if( m_InternalUnits == EESCHEMA_INTERNAL_UNIT )
+        if( m_internalUnits == EESCHEMA_INTERNAL_UNIT )
         {
             absformatter = wxT( "X %.3f  Y %.3f" );
             locformatter = wxT( "dx %.3f  dy %.3f" );
@@ -790,7 +788,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
         break;
 
     case MILLIMETRES:
-        if( m_InternalUnits == EESCHEMA_INTERNAL_UNIT )
+        if( m_internalUnits == EESCHEMA_INTERNAL_UNIT )
         {
             absformatter = wxT( "X %.2f  Y %.2f" );
             locformatter = wxT( "dx %.2f  dy %.2f" );
@@ -814,13 +812,13 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     /* Display relative coordinates:  */
     dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
     dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
-    dXpos = To_User_Unit( g_UserUnit, dx, m_InternalUnits );
-    dYpos = To_User_Unit( g_UserUnit, dy, m_InternalUnits );
+    dXpos = To_User_Unit( g_UserUnit, dx, m_internalUnits );
+    dYpos = To_User_Unit( g_UserUnit, dy, m_internalUnits );
 
     if( g_UserUnit == MILLIMETRES )
     {
-        dXpos = RoundTo0( dXpos, (double) ( m_InternalUnits / 10 ) );
-        dYpos = RoundTo0( dYpos, (double) ( m_InternalUnits / 10 ) );
+        dXpos = RoundTo0( dXpos, (double) ( m_internalUnits / 10 ) );
+        dYpos = RoundTo0( dYpos, (double) ( m_internalUnits / 10 ) );
     }
 
     /* We already decided the formatter above */
@@ -887,5 +885,5 @@ void EDA_DRAW_FRAME::ClearMsgPanel( void )
 
 wxString EDA_DRAW_FRAME::CoordinateToString( int aValue, bool aConvertToMils )
 {
-    return ::CoordinateToString( aValue, m_InternalUnits, aConvertToMils );
+    return ::CoordinateToString( aValue, m_internalUnits, aConvertToMils );
 }

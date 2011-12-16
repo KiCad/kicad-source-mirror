@@ -128,9 +128,9 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     lyrs.Caption( _( "Visibles" ) );
 
 
-    if( m_HToolBar )
-        m_auimgr.AddPane( m_HToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
+    if( m_mainToolBar )
+        m_auimgr.AddPane( m_mainToolBar,
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Row( 0 ) );
 
     if( m_drawToolBar )
         m_auimgr.AddPane( m_drawToolBar,

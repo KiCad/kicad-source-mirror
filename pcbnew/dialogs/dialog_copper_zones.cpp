@@ -84,13 +84,13 @@ void DIALOG_COPPER_ZONE::initDialog()
     AddUnitSymbol( *m_ClearanceValueTitle, g_UserUnit );
     msg = ReturnStringFromValue( g_UserUnit,
                                  m_Zone_Setting->m_ZoneClearance,
-                                 m_Parent->m_InternalUnits );
+                                 m_Parent->GetInternalUnits() );
     m_ZoneClearanceCtrl->SetValue( msg );
 
     AddUnitSymbol( *m_MinThicknessValueTitle, g_UserUnit );
     msg = ReturnStringFromValue( g_UserUnit,
                                  m_Zone_Setting->m_ZoneMinThickness,
-                                 m_Parent->m_InternalUnits );
+                                 m_Parent->GetInternalUnits() );
     m_ZoneMinThicknessCtrl->SetValue( msg );
 
     switch( m_Zone_Setting->m_Zone_Pad_Options )
@@ -298,7 +298,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     wxString txtvalue = m_ZoneClearanceCtrl->GetValue();
     m_Zone_Setting->m_ZoneClearance =
-        ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->m_InternalUnits );
+        ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->GetInternalUnits() );
 
     // Test if this is a reasonnable value for this parameter
     // A too large value can hang Pcbnew
@@ -311,7 +311,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     txtvalue = m_ZoneMinThicknessCtrl->GetValue();
     m_Zone_Setting->m_ZoneMinThickness =
-        ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->m_InternalUnits );
+        ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->GetInternalUnits() );
     if( m_Zone_Setting->m_ZoneMinThickness < 10 )
     {
         DisplayError( this,
@@ -321,7 +321,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
 
     m_Zone_Setting->SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
     txtvalue = m_cornerSmoothingCtrl->GetValue();
-    m_Zone_Setting->SetCornerRadius( ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->m_InternalUnits ) );
+    m_Zone_Setting->SetCornerRadius( ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->GetInternalUnits() ) );
 
     if( m_OrientEdgesOpt->GetSelection() == 0 )
         g_Zone_45_Only = FALSE;

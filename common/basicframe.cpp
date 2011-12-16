@@ -66,7 +66,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* father,
     wxSize minsize;
 
     m_Ident = idtype;
-    m_HToolBar = NULL;
+    m_mainToolBar = NULL;
     m_FrameIsActive = true;
     m_hasAutoSave = false;
     m_autoSaveState = false;

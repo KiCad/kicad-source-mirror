@@ -56,13 +56,13 @@ void DRC::ShowDialog()
 
         PutValueInLocalUnits( *m_ui->m_SetTrackMinWidthCtrl,
                               m_pcb->GetDesignSettings().m_TrackMinWidth,
-                              m_mainWindow->m_InternalUnits );
+                              m_mainWindow->GetInternalUnits() );
         PutValueInLocalUnits( *m_ui->m_SetViaMinSizeCtrl,
                               m_pcb->GetDesignSettings().m_ViasMinSize,
-                              m_mainWindow->m_InternalUnits );
+                              m_mainWindow->GetInternalUnits() );
         PutValueInLocalUnits( *m_ui->m_SetMicroViakMinSizeCtrl,
                               m_pcb->GetDesignSettings().m_MicroViasMinSize,
-                              m_mainWindow->m_InternalUnits );
+                              m_mainWindow->GetInternalUnits() );
 
         m_ui->m_CreateRptCtrl->SetValue( m_doCreateRptFile );
         m_ui->m_RptFilenameCtrl->SetValue( m_rptFilename );

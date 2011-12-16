@@ -14,7 +14,7 @@ class DCODE_SELECTION_BOX : public wxComboBox
 private:
     const wxArrayString* m_dcodeList;
 
-public: DCODE_SELECTION_BOX( EDA_TOOLBAR* aParent, wxWindowID aId,
+public: DCODE_SELECTION_BOX( wxAuiToolBar* aParent, wxWindowID aId,
                              const wxPoint& aLocation, const wxSize& aSize,
                              const wxArrayString& aChoices);
         ~DCODE_SELECTION_BOX();

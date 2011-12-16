@@ -65,7 +65,6 @@ set(COMMON_SRCS
     richio.cpp
     selcolor.cpp
     string.cpp
-    wineda_toolbar.cpp
     trigo.cpp
     worksheet.cpp
     wxwineda.cpp

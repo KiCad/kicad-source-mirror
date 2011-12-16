@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file tool_sch.cpp
  */
@@ -17,138 +42,140 @@
  */
 void SCH_EDIT_FRAME::ReCreateHToolbar()
 {
-    if( m_HToolBar != NULL )
+    if( m_mainToolBar != NULL )
         return;
 
     wxString msg;
-    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
+    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, KiBitmap( new_xpm ),
-                         _( "New schematic project" ) );
+    m_mainToolBar->AddTool( ID_NEW_PROJECT, wxEmptyString, KiBitmap( new_xpm ),
+                            _( "New schematic project" ) );
 
-    m_HToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString, KiBitmap( open_document_xpm ),
-                         _( "Open schematic project" ) );
+    m_mainToolBar->AddTool( ID_LOAD_PROJECT, wxEmptyString, KiBitmap( open_document_xpm ),
+                            _( "Open schematic project" ) );
 
-    m_HToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString, KiBitmap( save_project_xpm ),
-                         _( "Save schematic project" ) );
-
-
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_SAVE_PROJECT, wxEmptyString, KiBitmap( save_project_xpm ),
+                            _( "Save schematic project" ) );
 
 
-    m_HToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiBitmap( sheetset_xpm ),
-                         _( "Page settings" ) );
+    m_mainToolBar->AddSeparator();
 
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiBitmap( sheetset_xpm ),
+                            _( "Page settings" ) );
 
 
-    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
-                         _( "Print schematic" ) );
+    m_mainToolBar->AddSeparator();
 
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
+                            _( "Print schematic" ) );
 
 
-    m_HToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
-                         _( "Cut selected item" ) );
-
-    m_HToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button_xpm ),
-                         _( "Copy selected item" ) );
-
-    m_HToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
-                         _( "Paste" ) );
+    m_mainToolBar->AddSeparator();
 
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddTool( wxID_CUT, wxEmptyString, KiBitmap( cut_button_xpm ),
+                            _( "Cut selected item" ) );
+
+    m_mainToolBar->AddTool( wxID_COPY, wxEmptyString, KiBitmap( copy_button_xpm ),
+                            _( "Copy selected item" ) );
+
+    m_mainToolBar->AddTool( wxID_PASTE, wxEmptyString, KiBitmap( paste_xpm ),
+                            _( "Paste" ) );
+
+
+    m_mainToolBar->AddSeparator();
 
 
     msg = AddHotkeyName( HELP_UNDO, s_Schematic_Hokeys_Descr, HK_UNDO, IS_COMMENT );
-    m_HToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), msg );
+    m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiBitmap( undo_xpm ), msg );
 
     msg = AddHotkeyName( HELP_REDO, s_Schematic_Hokeys_Descr, HK_REDO, IS_COMMENT );
-    m_HToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), msg );
+    m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiBitmap( redo_xpm ), msg );
 
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
 
 
     msg = AddHotkeyName( HELP_FIND, s_Schematic_Hokeys_Descr, HK_FIND_ITEM, IS_COMMENT );
-    m_HToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiBitmap( find_xpm ), msg );
+    m_mainToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiBitmap( find_xpm ), msg );
 
-    m_HToolBar->AddTool( wxID_REPLACE, wxEmptyString, KiBitmap( find_replace_xpm ),
-                         wxNullBitmap, wxITEM_NORMAL, _( "Find and replace text" ),
-                         HELP_REPLACE, NULL );
+    m_mainToolBar->AddTool( wxID_REPLACE, wxEmptyString, KiBitmap( find_replace_xpm ),
+                            wxNullBitmap, wxITEM_NORMAL, _( "Find and replace text" ),
+                            HELP_REPLACE, NULL );
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
 
 
     msg = AddHotkeyName( HELP_ZOOM_IN, s_Schematic_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_OUT, s_Schematic_Hokeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_REDRAW, s_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
 
     msg = AddHotkeyName( HELP_ZOOM_FIT, s_Schematic_Hokeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
 
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
 
 
-    m_HToolBar->AddTool( ID_HIERARCHY, wxEmptyString, KiBitmap( hierarchy_nav_xpm ),
-                         _( "Navigate schematic hierarchy" ) );
+    m_mainToolBar->AddTool( ID_HIERARCHY, wxEmptyString, KiBitmap( hierarchy_nav_xpm ),
+                            _( "Navigate schematic hierarchy" ) );
 
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
 
 
-    m_HToolBar->AddTool( ID_TO_LIBRARY, wxEmptyString, KiBitmap( libedit_xpm ),
-                         _( "Library editor - Create and edit components" ) );
+    m_mainToolBar->AddTool( ID_TO_LIBRARY, wxEmptyString, KiBitmap( libedit_xpm ),
+                            _( "Library editor - Create and edit components" ) );
 
-    m_HToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
-                         _( "Library browser - Browse components" ) );
-
-
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
+                            _( "Library browser - Browse components" ) );
 
 
-    m_HToolBar->AddTool( ID_GET_ANNOTATE, wxEmptyString, KiBitmap( annotate_xpm ),
-                         _( "Annotate schematic" ) );
-
-    m_HToolBar->AddTool( ID_GET_ERC, wxEmptyString, KiBitmap( erc_xpm ),
-                         _( "Perform electric rules check" ) );
-
-    m_HToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
-                         _( "Generate netlist" ) );
-
-    m_HToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, KiBitmap( bom_xpm ),
-                         _( "Generate bill of materials and/or cross references" ) );
+    m_mainToolBar->AddSeparator();
 
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_GET_ANNOTATE, wxEmptyString, KiBitmap( annotate_xpm ),
+                            _( "Annotate schematic" ) );
+
+    m_mainToolBar->AddTool( ID_GET_ERC, wxEmptyString, KiBitmap( erc_xpm ),
+                            _( "Perform electric rules check" ) );
+
+    m_mainToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiBitmap( netlist_xpm ),
+                            _( "Generate netlist" ) );
+
+    m_mainToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, KiBitmap( bom_xpm ),
+                            _( "Generate bill of materials and/or cross references" ) );
 
 
-    m_HToolBar->AddTool( ID_TO_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
-                         _( "Run CvPcb to associate components and footprints" ) );
+    m_mainToolBar->AddSeparator();
 
-    m_HToolBar->AddTool( ID_TO_PCB, wxEmptyString, KiBitmap( pcbnew_xpm ),
-                         _( "Run Pcbnew to layout printed circuit board" ) );
 
-    m_HToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString, KiBitmap( import_footprint_names_xpm ),
-                         _( "Back annotate component foot prints" ) );
+    m_mainToolBar->AddTool( ID_TO_CVPCB, wxEmptyString, KiBitmap( cvpcb_xpm ),
+                            _( "Run CvPcb to associate components and footprints" ) );
+
+    m_mainToolBar->AddTool( ID_TO_PCB, wxEmptyString, KiBitmap( pcbnew_xpm ),
+                            _( "Run Pcbnew to layout printed circuit board" ) );
+
+    m_mainToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString,
+                            KiBitmap( import_footprint_names_xpm ),
+                            _( "Back annotate component foot prints" ) );
 
     // set icon paddings
-    m_HToolBar->SetToolBorderPadding(3); // padding
-    m_HToolBar->SetToolSeparation(0);
-    //m_HToolBar->SetMargins(0,1); // margins width and height
+    m_mainToolBar->SetToolBorderPadding(3); // padding
+    m_mainToolBar->SetToolSeparation(0);
+    //m_mainToolBar->SetMargins(0,1); // margins width and height
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes
-    m_HToolBar->Realize();
+    m_mainToolBar->Realize();
 }
 
 
@@ -159,7 +186,8 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     if( m_drawToolBar )
         return;
 
-    m_drawToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, false );
+    m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ),
@@ -245,7 +273,8 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     if( m_optionsToolBar )
         return;
 
-    m_optionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, false );
+    m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                         wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
                                KiBitmap( grid_xpm ),
@@ -292,12 +321,12 @@ void SCH_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_HIDDEN_PINS:
-        m_showAllPins = m_optionsToolBar->GetToolState( id );
+        m_showAllPins = m_optionsToolBar->GetToolToggled( id );
         DrawPanel->Refresh( );
         break;
 
     case ID_TB_OPTIONS_BUS_WIRES_ORIENT:
-        g_HVLines = m_optionsToolBar->GetToolState( id );
+        g_HVLines = m_optionsToolBar->GetToolToggled( id );
         break;
 
     default:

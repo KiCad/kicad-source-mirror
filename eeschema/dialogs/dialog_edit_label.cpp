@@ -175,7 +175,7 @@ void DialogLabelEditor::InitDialog()
     m_staticSizeUnits->SetLabel( msg );
 
     msg = ReturnStringFromValue( g_UserUnit, m_CurrentText->m_Size.x,
-                                 m_Parent->m_InternalUnits );
+                                 m_Parent->GetInternalUnits() );
     m_TextSize->SetValue( msg );
 
     if( m_CurrentText->Type() != SCH_GLOBAL_LABEL_T
@@ -239,7 +239,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
 
     m_CurrentText->SetOrientation( m_TextOrient->GetSelection() );
     text  = m_TextSize->GetValue();
-    value = ReturnValueFromString( g_UserUnit, text, m_Parent->m_InternalUnits );
+    value = ReturnValueFromString( g_UserUnit, text, m_Parent->GetInternalUnits() );
     m_CurrentText->m_Size.x = m_CurrentText->m_Size.y = value;
 
     if( m_TextShape )
