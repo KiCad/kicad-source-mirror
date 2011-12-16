@@ -111,7 +111,7 @@ static char s_ExportSeparator[] = ("\t;,.");
 DIALOG_BUILD_BOM::DIALOG_BUILD_BOM( EDA_DRAW_FRAME* parent ) :
     DIALOG_BUILD_BOM_BASE( parent )
 {
-    m_Config = wxGetApp().m_EDA_Config;
+    m_Config = wxGetApp().GetSettings();
     wxASSERT( m_Config != NULL );
 
     m_Parent = parent;

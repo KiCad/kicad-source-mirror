@@ -120,7 +120,7 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( PCB_EDIT_FRAME* parent )
 /*************************************************************************************/
 {
     m_Parent = parent;
-    m_Config = wxGetApp().m_EDA_Config;
+    m_Config = wxGetApp().GetSettings();
 
     InitValues( );
 

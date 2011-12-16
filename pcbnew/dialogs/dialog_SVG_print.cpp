@@ -52,8 +52,8 @@ DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( EDA_DRAW_FRAME* parent ) :
     DIALOG_SVG_PRINT_base( parent )
 {
     m_Parent = (PCB_BASE_FRAME*) parent;
-    m_Config = wxGetApp().m_EDA_Config;
-    initDialog( );
+    m_Config = wxGetApp().GetSettings();
+    initDialog();
     GetSizer()->SetSizeHints( this );
     Centre();
     m_buttonBoard->SetDefault();

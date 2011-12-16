@@ -185,7 +185,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( const wxString& title, long style ) :
 
 CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxConfig* config = wxGetApp().GetSettings();
 
     if( config )
     {
@@ -199,9 +199,9 @@ CVPCB_MAINFRAME::~CVPCB_MAINFRAME()
 
 void CVPCB_MAINFRAME::LoadSettings()
 {
-    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+    wxASSERT( wxGetApp().GetSettings() != NULL );
 
-    wxConfig* cfg = wxGetApp().m_EDA_Config;
+    wxConfig* cfg = wxGetApp().GetSettings();
 
     EDA_BASE_FRAME::LoadSettings();
     cfg->Read( KeepCvpcbOpenEntry, &m_KeepCvpcbOpen, true );
@@ -212,9 +212,9 @@ void CVPCB_MAINFRAME::LoadSettings()
 
 void CVPCB_MAINFRAME::SaveSettings()
 {
-    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+    wxASSERT( wxGetApp().GetSettings() != NULL );
 
-    wxConfig* cfg = wxGetApp().m_EDA_Config;
+    wxConfig* cfg = wxGetApp().GetSettings();
 
     EDA_BASE_FRAME::SaveSettings();
     cfg->Write( KeepCvpcbOpenEntry, m_KeepCvpcbOpen );
@@ -278,10 +278,10 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
     }
 
     // Close the help frame
-    if( wxGetApp().m_HtmlCtrl )
+    if( wxGetApp().GetHtmlHelpController() )
     {
-        if( wxGetApp().m_HtmlCtrl->GetFrame() )     // returns NULL if no help frame active
-            wxGetApp().m_HtmlCtrl->GetFrame()->Close( true );
+        if( wxGetApp().GetHtmlHelpController()->GetFrame() )// returns NULL if no help frame active
+            wxGetApp().GetHtmlHelpController()->GetFrame()->Close( true );
     }
 
     if( m_NetlistFileName.IsOk() )

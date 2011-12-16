@@ -283,7 +283,7 @@ void LAYERS_MAP_DIALOG::OnResetClick( wxCommandEvent& event )
  */
 void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxConfig* config = wxGetApp().GetSettings();
     config->Write( wxT("BrdLayersCount"), m_itemsCount );
 
     wxString key;
@@ -296,7 +296,7 @@ void LAYERS_MAP_DIALOG::OnStoreSetup( wxCommandEvent& event )
 
 void LAYERS_MAP_DIALOG::OnGetSetup( wxCommandEvent& event )
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxConfig* config = wxGetApp().GetSettings();
 
     config->Read( wxT("BrdLayersCount"), &m_exportBoardCopperLayersCount );
     normalizeBrdLayersCount();

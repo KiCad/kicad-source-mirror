@@ -829,9 +829,9 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
 
 void EDA_DRAW_FRAME::LoadSettings()
 {
-    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+    wxASSERT( wxGetApp().GetSettings() != NULL );
 
-    wxConfig* cfg = wxGetApp().m_EDA_Config;
+    wxConfig* cfg = wxGetApp().GetSettings();
 
     EDA_BASE_FRAME::LoadSettings();
     cfg->Read( m_FrameName + CursorShapeEntryKeyword, &m_cursorShape, ( long )0 );
@@ -851,9 +851,9 @@ void EDA_DRAW_FRAME::LoadSettings()
 
 void EDA_DRAW_FRAME::SaveSettings()
 {
-    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+    wxASSERT( wxGetApp().GetSettings() != NULL );
 
-    wxConfig* cfg = wxGetApp().m_EDA_Config;
+    wxConfig* cfg = wxGetApp().GetSettings();
 
     EDA_BASE_FRAME::SaveSettings();
     cfg->Write( m_FrameName + CursorShapeEntryKeyword, m_cursorShape );

@@ -34,7 +34,7 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_EDIT_FRAME* parent, ZONE_SETTING* zo
     DIALOG_COPPER_ZONE_BASE( parent )
 {
     m_Parent = parent;
-    m_Config = wxGetApp().m_EDA_Config;
+    m_Config = wxGetApp().GetSettings();
     m_Zone_Setting = zone_setting;
     m_NetSortingByPadCount = true;     // false = alphabetic sort, true = pad count sort
     m_OnExitCode = ZONE_ABORT;

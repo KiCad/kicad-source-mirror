@@ -1,9 +1,34 @@
-/***
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
  * @file edaapl.cpp
  *
- * @brief  For the main application: init functions, and language selection
- *         (locale handling)
- ***/
+ * @brief For the main application: init functions, and language selection
+ *        (locale handling)
+ */
 
 #include "fctsys.h"
 #include "gr_basic.h"
@@ -246,15 +271,13 @@ static struct LANGUAGE_DESCR s_Language_List[] =
 
 EDA_APP::EDA_APP()
 {
-    m_Checker     = NULL;
-    m_HtmlCtrl    = NULL;
-    m_EDA_Config  = NULL;
-    m_Env_Defined = false;
-    m_LanguageId  = wxLANGUAGE_DEFAULT;
-    m_PdfBrowserIsDefault = true;
+    m_Checker = NULL;
+    m_HtmlCtrl = NULL;
+    m_settings = NULL;
+    m_LanguageId = wxLANGUAGE_DEFAULT;
     m_Locale = NULL;
-    m_ProjectConfig    = NULL;
-    m_EDA_CommonConfig = NULL;
+    m_projectSettings = NULL;
+    m_commonSettings = NULL;
 }
 
 
@@ -263,13 +286,13 @@ EDA_APP::~EDA_APP()
     SaveSettings();
 
     /* delete user datas */
-    if( m_ProjectConfig )
-        delete m_ProjectConfig;
+    if( m_projectSettings )
+        delete m_projectSettings;
 
-    if( m_EDA_CommonConfig )
-        delete m_EDA_CommonConfig;
+    if( m_commonSettings )
+        delete m_commonSettings;
 
-    delete m_EDA_Config;
+    delete m_settings;
 
     if( m_Checker )
         delete m_Checker;
@@ -289,9 +312,9 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
      * the environment variable KICAD (if exists) gives the kicad path:
      * something like set KICAD=d:\kicad
      */
-    m_Env_Defined = wxGetEnv( wxT( "KICAD" ), &m_KicadEnv );
+    bool isDefined = wxGetEnv( wxT( "KICAD" ), &m_KicadEnv );
 
-    if( m_Env_Defined )    // ensure m_KicadEnv ends by "/"
+    if( isDefined )    // ensure m_KicadEnv ends by "/"
     {
         m_KicadEnv.Replace( WIN_STRING_DIR_SEP, UNIX_STRING_DIR_SEP );
 
@@ -313,10 +336,10 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
     SetVendorName( wxT( "KiCad" ) );
     SetAppName( aName.Lower() );
     SetTitle( aName );
-    m_EDA_Config = new wxConfig();
-    wxASSERT( m_EDA_Config != NULL );
-    m_EDA_CommonConfig = new wxConfig( CommonConfigPath );
-    wxASSERT( m_EDA_CommonConfig != NULL );
+    m_settings = new wxConfig();
+    wxASSERT( m_settings != NULL );
+    m_commonSettings = new wxConfig( CommonConfigPath );
+    wxASSERT( m_commonSettings != NULL );
 
     /* Install some image handlers, mainly for help */
     wxImage::AddHandler( new wxPNGHandler );
@@ -332,7 +355,7 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
 
     // Internationalization: loading the kicad suitable Dictionary
     wxString languageSel;
-    m_EDA_CommonConfig->Read( languageCfgKey, &languageSel);
+    m_commonSettings->Read( languageCfgKey, &languageSel);
     m_LanguageId = wxLANGUAGE_DEFAULT;
 
     // Search for the current selection
@@ -356,6 +379,15 @@ void EDA_APP::InitEDA_Appl( const wxString& aName, EDA_APP_T aId )
 }
 
 
+void EDA_APP::SetHtmlHelpController( wxHtmlHelpController* aController )
+{
+    if( m_HtmlCtrl )
+        delete m_HtmlCtrl;
+
+    m_HtmlCtrl = aController;
+}
+
+
 void EDA_APP::InitOnLineHelp()
 {
     wxString fullfilename = FindKicadHelpPath();
@@ -369,7 +401,7 @@ void EDA_APP::InitOnLineHelp()
         m_HtmlCtrl = new wxHtmlHelpController( wxHF_TOOLBAR | wxHF_CONTENTS |
                                                wxHF_PRINT | wxHF_OPEN_FILES
                                                /*| wxHF_SEARCH */ );
-        m_HtmlCtrl->UseConfig( m_EDA_CommonConfig );
+        m_HtmlCtrl->UseConfig( m_commonSettings );
         m_HtmlCtrl->SetTitleFormat( wxT( "KiCad Help" ) );
         m_HtmlCtrl->AddBook( fullfilename );
     }
@@ -620,7 +652,7 @@ void EDA_APP::SetDefaultSearchPaths( void )
 
 void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
 {
-    wxASSERT( m_EDA_Config != NULL && m_EDA_CommonConfig != NULL );
+    wxASSERT( m_settings != NULL && m_commonSettings != NULL );
 
     wxString Line;
 
@@ -628,7 +660,7 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
     m_HelpSize.y = 400;
 
     wxString languageSel;
-    m_EDA_CommonConfig->Read( languageCfgKey, &languageSel );
+    m_commonSettings->Read( languageCfgKey, &languageSel );
     m_LanguageId = wxLANGUAGE_DEFAULT;
 
     // Search for the current selection
@@ -641,21 +673,21 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
         }
     }
 
-    m_EditorName = m_EDA_CommonConfig->Read( wxT( "Editor" ) );
+    m_EditorName = m_commonSettings->Read( wxT( "Editor" ) );
 
-    m_fileHistory.Load( *m_EDA_Config );
+    m_fileHistory.Load( *m_settings );
 
-    m_EDA_Config->Read( wxT( "ShowPageLimits" ), &g_ShowPageLimits );
+    m_settings->Read( wxT( "ShowPageLimits" ), &g_ShowPageLimits );
 
     if( aReopenLastUsedDirectory )
     {
-        if( m_EDA_Config->Read( wxT( "WorkingDir" ), &Line ) && wxDirExists( Line ) )
+        if( m_settings->Read( wxT( "WorkingDir" ), &Line ) && wxDirExists( Line ) )
         {
             wxSetWorkingDirectory( Line );
         }
     }
 
-    m_EDA_Config->Read( wxT( "BgColor" ), &g_DrawBgColor );
+    m_settings->Read( wxT( "BgColor" ), &g_DrawBgColor );
 
     /* Load per-user search paths from settings file */
 
@@ -664,8 +696,8 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
 
     while( 1 )
     {
-        upath = m_EDA_CommonConfig->Read( wxString::Format( wxT( "LibraryPath%d" ), i ),
-                                          wxT( "" ) );
+        upath = m_commonSettings->Read( wxString::Format( wxT( "LibraryPath%d" ), i ),
+                                        wxT( "" ) );
 
         if( upath.IsSameAs( wxT( "" ) ) )
             break;
@@ -678,13 +710,13 @@ void EDA_APP::GetSettings( bool aReopenLastUsedDirectory )
 
 void EDA_APP::SaveSettings()
 {
-    wxASSERT( m_EDA_Config != NULL );
-    m_EDA_Config->Write( wxT( "ShowPageLimits" ), g_ShowPageLimits );
-    m_EDA_Config->Write( wxT( "WorkingDir" ), wxGetCwd() );
-    m_EDA_Config->Write( wxT( "BgColor" ), g_DrawBgColor );
+    wxASSERT( m_settings != NULL );
+    m_settings->Write( wxT( "ShowPageLimits" ), g_ShowPageLimits );
+    m_settings->Write( wxT( "WorkingDir" ), wxGetCwd() );
+    m_settings->Write( wxT( "BgColor" ), g_DrawBgColor );
 
     /* Save the file history list */
-    m_fileHistory.Save( *m_EDA_Config );
+    m_fileHistory.Save( *m_settings );
 }
 
 
@@ -734,7 +766,7 @@ bool EDA_APP::SetLanguage( bool first_time )
             }
         }
 
-        m_EDA_CommonConfig->Write( languageCfgKey, languageSel );
+        m_commonSettings->Write( languageCfgKey, languageSel );
     }
 
     // Test if floating point notation is working (bug in cross compilation, using wine)

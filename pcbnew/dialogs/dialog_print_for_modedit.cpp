@@ -85,7 +85,7 @@ DIALOG_PRINT_FOR_MODEDIT::DIALOG_PRINT_FOR_MODEDIT( EDA_DRAW_FRAME* parent ) :
 {
     m_Parent = parent;
     s_Parameters.m_ForceCentered = true;
-    m_Config = wxGetApp().m_EDA_Config;
+    m_Config = wxGetApp().GetSettings();
     InitValues();
 
     m_buttonPrint->SetDefault();

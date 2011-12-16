@@ -1066,7 +1066,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC:
     {
-        wxConfig* cfg = wxGetApp().m_EDA_CommonConfig;
+        wxConfig* cfg = wxGetApp().GetCommonSettings();
         cfg->Read( wxT( "module_doc_file" ), g_DocModulesFileName );
         GetAssociatedDocument( this, g_DocModulesFileName, &wxGetApp().GetLibraryPathList() );
     }

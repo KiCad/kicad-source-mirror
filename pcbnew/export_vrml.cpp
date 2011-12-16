@@ -51,7 +51,7 @@ public:
         DIALOG_EXPORT_3DFILE_BASE( parent )
     {
         m_parent = parent;
-        m_config = wxGetApp().m_EDA_Config;
+        m_config = wxGetApp().GetSettings();
         SetFocus();
         m_config->Read( OPTKEY_OUTPUT_UNIT, &m_unitsOpt );
         m_config->Read( OPTKEY_3DFILES_OPT, &m_3DFilesOpt );

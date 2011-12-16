@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2008-2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file appl_wxstruct.h
  * @brief Base class implementation for all KiCad applications.
@@ -34,43 +59,55 @@ class wxHtmlHelpController;
  */
 class EDA_APP : public wxApp
 {
-public:
-    EDA_APP_T m_Id;                         /* Used mainly to handle default paths libs
-                                             * m_Id = APP_EESCHEMA_T, APP_PCBNEW_T ... */
-    wxString m_Project;
+protected:
+    /// Used mainly to handle default paths libs m_Id = APP_EESCHEMA_T, APP_PCBNEW_T ...
+    EDA_APP_T m_Id;
+
+    /// Used to prevent multiple instances of an application from being run at the same time.
     wxSingleInstanceChecker* m_Checker;
 
-    wxPoint                  m_HelpPos;
-    wxSize                   m_HelpSize;
-    wxHtmlHelpController*    m_HtmlCtrl;
-    wxConfig*                m_EDA_Config;
-    wxConfig*                m_EDA_CommonConfig;
-    wxFileConfig*            m_ProjectConfig;
+    wxString m_Project;
+
+    /// The application specific configuration settings.
+    wxConfig* m_settings;
+
+    /// The configuration settings common to all KiCad applications.
+    wxConfig* m_commonSettings;
+
+    /// The current project specific settings.
+    wxFileConfig* m_projectSettings;
+
+    /// KiCad executable path.
+    wxString m_BinDir;
+
+    /// The KICAD system environment variable.
+    wxString m_KicadEnv;
+
+    /// The current locale.
+    wxLocale* m_Locale;
+
+    /// The current language setting.
+    int m_LanguageId;
+
+    /// The file name of the the program selected for browsing pdf files.
+    wxString m_PdfBrowser;
+
+    wxPathList               m_searchPaths;
+    wxFileHistory            m_fileHistory;
     wxString                 m_HelpFileName;
     wxString                 m_EditorName;
     wxString                 m_CurrentOptionFile;
     wxString                 m_CurrentOptionFileDateAndTime;
-
-    wxString                 m_BinDir;      /* KiCad executable path.*/
-    wxString                 m_KicadEnv;    /* environment variable KICAD */
-    bool                     m_Env_Defined; // true if environment KICAD is defined.
-
-    wxLocale*                m_Locale;      // The current locale.
-    int                      m_LanguageId;  // The current language setting.
-    wxString                 m_PdfBrowser;  // Name of the selected browser,
-                                            // for browsing pdf datasheets
-    bool m_PdfBrowserIsDefault;             // True if the pdf browser is the
-                                            // default (m_PdfBrowser not used)
-    wxPathList               m_searchPaths;
-    wxFileHistory            m_fileHistory;
-
-protected:
+    wxPoint                  m_HelpPos;
+    wxSize                   m_HelpSize;
+    wxHtmlHelpController*    m_HtmlCtrl;
     wxString                 m_Title;
     wxPathList               m_libSearchPaths;
     wxFileName               m_projectFileName;
     wxString                 m_LastVisitedLibPath;
 
-public: EDA_APP();
+public:
+    EDA_APP();
     ~EDA_APP();
 
     /**
@@ -79,6 +116,40 @@ public: EDA_APP();
      * @return true if the application can be started.
      */
     bool OnInit();
+
+    wxHtmlHelpController* GetHtmlHelpController() { return m_HtmlCtrl; }
+
+    void SetHtmlHelpController( wxHtmlHelpController* aController );
+
+    wxString GetHelpFileName() const { return m_HelpFileName; }
+
+    void SetHelpFileName( const wxString& aFileName ) { m_HelpFileName = aFileName; }
+
+    wxConfig* GetSettings() { return m_settings; }
+
+    wxConfig* GetCommonSettings() { return m_commonSettings; }
+
+    wxString GetEditorName() const { return m_EditorName; }
+
+    void SetEditorName( const wxString& aFileName ) { m_EditorName = aFileName; }
+
+    wxString GetCurrentOptionFile() const { return m_CurrentOptionFile; }
+
+    bool IsKicadEnvVariableDefined() const { return !m_KicadEnv.IsEmpty(); }
+
+    wxString GetKicadEnvVariable() const { return m_KicadEnv; }
+
+    wxString GetExecutablePath() const { return m_BinDir; }
+
+    wxLocale* GetLocale() { return m_Locale; }
+
+    wxString GetPdfBrowserFileName() const { return m_PdfBrowser; }
+
+    void SetPdfBrowserFileName( const wxString& aFileName ) { m_PdfBrowser = aFileName; }
+
+    bool UseSystemPdfBrowser() const { return m_PdfBrowser.IsEmpty(); }
+
+    wxFileHistory& GetFileHistory() { return m_fileHistory; }
 
     /**
      * Function SetBinDir
@@ -183,7 +254,7 @@ public: EDA_APP();
 
     /**
      * Function SaveCurrentSetupValues
-     * Save the current setup values in m_EDA_Config
+     * Save the current setup values in m_settings
      * saved parameters are parameters that have the .m_Setup member set to
      * true
      * @param aList = array of PARAM_CFG_BASE pointers
@@ -193,7 +264,7 @@ public: EDA_APP();
 
     /**
      * Function ReadCurrentSetupValues
-     * Read the current setup values previously saved, from m_EDA_Config
+     * Read the current setup values previously saved, from m_settings
      * saved parameters are parameters that have the .m_Setup member set to
      * true
      * @param aList = array of PARAM_CFG_BASE pointers

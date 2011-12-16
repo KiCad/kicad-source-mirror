@@ -121,11 +121,11 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Add this menu to list menu managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
     if( openRecentMenu )
-        wxGetApp().m_fileHistory.RemoveMenu( openRecentMenu );
+        wxGetApp().GetFileHistory().RemoveMenu( openRecentMenu );
 
     openRecentMenu = new wxMenu();
-    wxGetApp().m_fileHistory.UseMenu( openRecentMenu );
-    wxGetApp().m_fileHistory.AddFilesToMenu( );
+    wxGetApp().GetFileHistory().UseMenu( openRecentMenu );
+    wxGetApp().GetFileHistory().AddFilesToMenu( );
     AddMenuItem( fileMenu, openRecentMenu,
                  wxID_ANY,
                  _( "Open &Recent" ),
@@ -211,7 +211,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     SubMenuPdfBrowserChoice->Append( item );
     SubMenuPdfBrowserChoice->Check( ID_SELECT_DEFAULT_PDF_BROWSER,
-                                    wxGetApp().m_PdfBrowserIsDefault );
+                                    wxGetApp().UseSystemPdfBrowser() );
 
     // Favourite
     item = new wxMenuItem( SubMenuPdfBrowserChoice,
@@ -225,7 +225,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     SubMenuPdfBrowserChoice->Append( item );
     SubMenuPdfBrowserChoice->AppendSeparator();
     SubMenuPdfBrowserChoice->Check( ID_SELECT_PREFERED_PDF_BROWSER,
-                                    !wxGetApp().m_PdfBrowserIsDefault );
+                                    !wxGetApp().UseSystemPdfBrowser() );
 
     // Append PDF Viewer submenu to preferences
     AddMenuItem( SubMenuPdfBrowserChoice,

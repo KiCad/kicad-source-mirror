@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file netlist_control.cpp
  * @brief Dialog box for creating netlists.
@@ -58,8 +83,8 @@ wxString ReturnUserNetlistTypeName( bool first_item )
     msg = CUSTOM_NETLIST_TITLE;
     msg << index + 1;
 
-    if( wxGetApp().m_EDA_Config )
-        name = wxGetApp().m_EDA_Config->Read( msg );
+    if( wxGetApp().GetSettings() )
+        name = wxGetApp().GetSettings()->Read( msg );
 
     return name;
 }
@@ -332,7 +357,7 @@ void NETLIST_DIALOG::InstallCustomPages()
 
         msg = CUSTOM_NETLIST_COMMAND;
         msg << ii + 1;
-        wxString Command = wxGetApp().m_EDA_Config->Read( msg );
+        wxString Command = wxGetApp().GetSettings()->Read( msg );
 
         CurrPage->m_LowBoxSizer->Add( new wxStaticText( CurrPage,
                                                         -1, _( "Netlist command:" ) ), 0,
@@ -372,7 +397,7 @@ void NETLIST_DIALOG::AddNewPluginPanel( wxCommandEvent& event )
     wxString FullFileName, Mask, Path;
 
     Mask = wxT( "*" );
-    Path = wxGetApp().m_BinDir;
+    Path = wxGetApp().GetExecutablePath();
     FullFileName = EDA_FileSelector( _( "Plugin files:" ),
                                      Path,
                                      FullFileName,
@@ -650,7 +675,7 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
 void NETLIST_DIALOG::WriteCurrentNetlistSetup( void )
 {
     wxString  msg, Command;
-    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxConfig* config = wxGetApp().GetSettings();
 
     NetlistUpdateOpt();
 

@@ -21,9 +21,7 @@
 #include "dialog_pcbnew_config_libs_and_paths.h"
 
 
-/*****************************************************************/
 void PCB_EDIT_FRAME::InstallConfigFrame( )
-/*****************************************************************/
 {
     DIALOG_PCBNEW_CONFIG_LIBS dialog( this );
     dialog.ShowModal();
@@ -33,11 +31,11 @@ void PCB_EDIT_FRAME::InstallConfigFrame( )
 DIALOG_PCBNEW_CONFIG_LIBS::DIALOG_PCBNEW_CONFIG_LIBS( PCB_EDIT_FRAME* parent ):
     DIALOG_PCBNEW_CONFIG_LIBS_FBP(parent)
 {
-    m_Config = wxGetApp().m_EDA_CommonConfig;
+    m_Config = wxGetApp().GetCommonSettings();
 
     Init( );
 
-    wxString title = _( "from " ) + wxGetApp().m_CurrentOptionFile;
+    wxString title = _( "from " ) + wxGetApp().GetCurrentOptionFile();
     SetTitle( title );
 
     m_sdbSizer1OK->SetDefault();

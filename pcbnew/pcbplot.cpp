@@ -91,7 +91,7 @@ DIALOG_PLOT::DIALOG_PLOT( PCB_EDIT_FRAME* parent ) :
     DIALOG_PLOT_BASE( parent )
 {
     m_Parent = parent;
-    m_Config = wxGetApp().m_EDA_Config;
+    m_Config = wxGetApp().GetSettings();
 
     Init_Dialog();
 

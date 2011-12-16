@@ -513,8 +513,8 @@ void LIB_VIEW_FRAME::LoadSettings( )
 
     EDA_DRAW_FRAME::LoadSettings();
 
-    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_configPath );
-    cfg = wxGetApp().m_EDA_Config;
+    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
+    cfg = wxGetApp().GetSettings();
 
     m_LibListSize.x = 150; // default width of libs list
     m_CmpListSize.x = 150; // default width of component list
@@ -537,8 +537,8 @@ void LIB_VIEW_FRAME::SaveSettings()
 
     EDA_DRAW_FRAME::SaveSettings();
 
-    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_configPath );
-    cfg = wxGetApp().m_EDA_Config;
+    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
+    cfg = wxGetApp().GetSettings();
 
     if ( m_LibListSize.x )
         cfg->Write( LIBLIST_WIDTH_KEY, m_LibListSize.x );

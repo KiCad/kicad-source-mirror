@@ -100,7 +100,7 @@ DIALOG_GENDRILL::~DIALOG_GENDRILL()
 void DIALOG_GENDRILL::initDialog()
 {
     SetFocus(); // Under wxGTK: mandatory to close dialog by the ESC key
-    wxConfig* Config = wxGetApp().m_EDA_Config;
+    wxConfig* Config = wxGetApp().GetSettings();
 
     if( Config )
     {
@@ -234,7 +234,7 @@ void DIALOG_GENDRILL::UpdateConfig()
 {
     SetParams();
 
-    wxConfig* Config = wxGetApp().m_EDA_Config;
+    wxConfig* Config = wxGetApp().GetSettings();
 
     if( Config )
     {
