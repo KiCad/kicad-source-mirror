@@ -30,10 +30,10 @@ bool EDA_APP::ReCreatePrjConfig( const wxString& fileName,
     wxString defaultFileName;
 
     // Free old config file.
-    if( m_ProjectConfig )
+    if( m_projectSettings )
     {
-        delete m_ProjectConfig;
-        m_ProjectConfig = NULL;
+        delete m_projectSettings;
+        m_projectSettings = NULL;
     }
 
     /* Check the file name does not a KiCad project extension.
@@ -56,9 +56,9 @@ bool EDA_APP::ReCreatePrjConfig( const wxString& fileName,
     // Init local config filename
     if( ForceUseLocalConfig || fn.FileExists() )
     {
-        m_ProjectConfig = new wxFileConfig( wxEmptyString, wxEmptyString,
-                                            fn.GetFullPath(), wxEmptyString );
-        m_ProjectConfig->DontCreateOnDemand();
+        m_projectSettings = new wxFileConfig( wxEmptyString, wxEmptyString,
+                                              fn.GetFullPath(), wxEmptyString );
+        m_projectSettings->DontCreateOnDemand();
 
         if( ForceUseLocalConfig )
             return true;
@@ -74,9 +74,9 @@ bool EDA_APP::ReCreatePrjConfig( const wxString& fileName,
         int version = -1;
         int def_version = 0;
 
-        m_ProjectConfig->SetPath( GroupName );
-        version = m_ProjectConfig->Read( wxT( "version" ), def_version );
-        m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
+        m_projectSettings->SetPath( GroupName );
+        version = m_projectSettings->Read( wxT( "version" ), def_version );
+        m_projectSettings->SetPath( wxCONFIG_PATH_SEPARATOR );
 
         if( version > 0 )
         {
@@ -84,7 +84,7 @@ bool EDA_APP::ReCreatePrjConfig( const wxString& fileName,
         }
         else
         {
-            delete m_ProjectConfig;    // Version incorrect
+            delete m_projectSettings;    // Version incorrect
         }
     }
 
@@ -102,9 +102,9 @@ bool EDA_APP::ReCreatePrjConfig( const wxString& fileName,
     }
 
     // Create new project file using the default name.
-    m_ProjectConfig = new wxFileConfig( wxEmptyString, wxEmptyString,
-                                        wxEmptyString, fn.GetFullPath() );
-    m_ProjectConfig->DontCreateOnDemand();
+    m_projectSettings = new wxFileConfig( wxEmptyString, wxEmptyString,
+                                          wxEmptyString, fn.GetFullPath() );
+    m_projectSettings->DontCreateOnDemand();
 
     return false;
 }
@@ -122,30 +122,30 @@ void EDA_APP::WriteProjectConfig( const wxString&  fileName,
     /* Write time (especially to avoid bug wxFileConfig that writes the
      * wrong item if declaration [xx] in first line (If empty group)
      */
-    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
+    m_projectSettings->SetPath( wxCONFIG_PATH_SEPARATOR );
 
     msg = DateAndTime();
-    m_ProjectConfig->Write( wxT( "update" ), msg );
+    m_projectSettings->Write( wxT( "update" ), msg );
 
     msg = GetAppName();
-    m_ProjectConfig->Write( wxT( "last_client" ), msg );
+    m_projectSettings->Write( wxT( "last_client" ), msg );
 
     /* Save parameters */
-    m_ProjectConfig->DeleteGroup( GroupName );   // Erase all data
-    m_ProjectConfig->Flush();
+    m_projectSettings->DeleteGroup( GroupName );   // Erase all data
+    m_projectSettings->Flush();
 
-    m_ProjectConfig->SetPath( GroupName );
-    m_ProjectConfig->Write( wxT( "version" ), CONFIG_VERSION );
-    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
+    m_projectSettings->SetPath( GroupName );
+    m_projectSettings->Write( wxT( "version" ), CONFIG_VERSION );
+    m_projectSettings->SetPath( wxCONFIG_PATH_SEPARATOR );
 
     for( ; List != NULL && *List != NULL; List++ )
     {
         pt_cfg = *List;
 
         if( pt_cfg->m_Group )
-            m_ProjectConfig->SetPath( pt_cfg->m_Group );
+            m_projectSettings->SetPath( pt_cfg->m_Group );
         else
-            m_ProjectConfig->SetPath( GroupName );
+            m_projectSettings->SetPath( GroupName );
 
         if( pt_cfg->m_Setup )
             continue;
@@ -153,17 +153,17 @@ void EDA_APP::WriteProjectConfig( const wxString&  fileName,
         if ( pt_cfg->m_Type == PARAM_COMMAND_ERASE )    // Erase all data
         {
             if( pt_cfg->m_Ident )
-                m_ProjectConfig->DeleteGroup( pt_cfg->m_Ident );
+                m_projectSettings->DeleteGroup( pt_cfg->m_Ident );
         }
         else
         {
-            pt_cfg->SaveParam( m_ProjectConfig );
+            pt_cfg->SaveParam( m_projectSettings );
         }
     }
 
-    m_ProjectConfig->SetPath( UNIX_STRING_DIR_SEP );
-    delete m_ProjectConfig;
-    m_ProjectConfig = NULL;
+    m_projectSettings->SetPath( UNIX_STRING_DIR_SEP );
+    delete m_projectSettings;
+    m_projectSettings = NULL;
 }
 
 
@@ -176,25 +176,25 @@ void EDA_APP::WriteProjectConfig( const wxString&  fileName,
     /* Write date ( surtout pour eviter bug de wxFileConfig
      * qui se trompe de rubrique si declaration [xx] en premiere ligne
      * (en fait si groupe vide) */
-    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
+    m_projectSettings->SetPath( wxCONFIG_PATH_SEPARATOR );
 
-    m_ProjectConfig->Write( wxT( "update" ), DateAndTime() );
-    m_ProjectConfig->Write( wxT( "last_client" ), GetAppName() );
+    m_projectSettings->Write( wxT( "update" ), DateAndTime() );
+    m_projectSettings->Write( wxT( "last_client" ), GetAppName() );
 
     /* Save parameters */
-    m_ProjectConfig->DeleteGroup( GroupName );   // Erase all data
-    m_ProjectConfig->Flush();
+    m_projectSettings->DeleteGroup( GroupName );   // Erase all data
+    m_projectSettings->Flush();
 
-    m_ProjectConfig->SetPath( GroupName );
-    m_ProjectConfig->Write( wxT( "version" ), CONFIG_VERSION );
-    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
+    m_projectSettings->SetPath( GroupName );
+    m_projectSettings->Write( wxT( "version" ), CONFIG_VERSION );
+    m_projectSettings->SetPath( wxCONFIG_PATH_SEPARATOR );
 
     BOOST_FOREACH( const PARAM_CFG_BASE& param, params )
     {
         if( param.m_Group )
-            m_ProjectConfig->SetPath( param.m_Group );
+            m_projectSettings->SetPath( param.m_Group );
         else
-            m_ProjectConfig->SetPath( GroupName );
+            m_projectSettings->SetPath( GroupName );
 
         if( param.m_Setup )
             continue;
@@ -202,23 +202,23 @@ void EDA_APP::WriteProjectConfig( const wxString&  fileName,
         if ( param.m_Type == PARAM_COMMAND_ERASE )    // Erase all data
         {
             if( param.m_Ident )
-                m_ProjectConfig->DeleteGroup( param.m_Ident );
+                m_projectSettings->DeleteGroup( param.m_Ident );
         }
         else
         {
-            param.SaveParam( m_ProjectConfig );
+            param.SaveParam( m_projectSettings );
         }
     }
 
-    m_ProjectConfig->SetPath( UNIX_STRING_DIR_SEP );
-    delete m_ProjectConfig;
-    m_ProjectConfig = NULL;
+    m_projectSettings->SetPath( UNIX_STRING_DIR_SEP );
+    delete m_projectSettings;
+    m_projectSettings = NULL;
 }
 
 
 /**
  * Function SaveCurrentSetupValues
- * Save the current setup values in m_EDA_Config
+ * Save the current setup values in m_settings
  * saved parameters are parameters that have the .m_Setup member set to true
  * @param aList = array of PARAM_CFG_BASE pointers
  */
@@ -226,7 +226,7 @@ void EDA_APP::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
 {
     PARAM_CFG_BASE* pt_cfg;
 
-    if( m_EDA_Config == NULL )
+    if( m_settings == NULL )
         return;
 
     for( ; *aList != NULL; aList++ )
@@ -238,11 +238,11 @@ void EDA_APP::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
         if ( pt_cfg->m_Type == PARAM_COMMAND_ERASE )    // Erase all data
         {
             if( pt_cfg->m_Ident )
-                m_EDA_Config->DeleteGroup( pt_cfg->m_Ident );
+                m_settings->DeleteGroup( pt_cfg->m_Ident );
         }
         else
         {
-            pt_cfg->SaveParam( m_EDA_Config );
+            pt_cfg->SaveParam( m_settings );
         }
     }
 }
@@ -250,7 +250,7 @@ void EDA_APP::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
 
 void EDA_APP::SaveCurrentSetupValues( const PARAM_CFG_ARRAY& List )
 {
-    if( m_EDA_Config == NULL )
+    if( m_settings == NULL )
         return;
 
     BOOST_FOREACH( const PARAM_CFG_BASE& param, List )
@@ -261,10 +261,12 @@ void EDA_APP::SaveCurrentSetupValues( const PARAM_CFG_ARRAY& List )
         if ( param.m_Type == PARAM_COMMAND_ERASE )    // Erase all data
         {
             if( param.m_Ident )
-                m_EDA_Config->DeleteGroup( param.m_Ident );
+                m_settings->DeleteGroup( param.m_Ident );
         }
         else
-            param.SaveParam( m_EDA_Config );
+        {
+            param.SaveParam( m_settings );
+        }
     }
 }
 
@@ -279,8 +281,8 @@ bool EDA_APP::ReadProjectConfig( const wxString&  local_config_filename,
 
     ReCreatePrjConfig( local_config_filename, GroupName, false );
 
-    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
-    timestamp = m_ProjectConfig->Read( wxT( "update" ) );
+    m_projectSettings->SetPath( wxCONFIG_PATH_SEPARATOR );
+    timestamp = m_projectSettings->Read( wxT( "update" ) );
 
     if( Load_Only_if_New && ( !timestamp.IsEmpty() )
        && (timestamp == m_CurrentOptionFileDateAndTime) )
@@ -307,18 +309,18 @@ bool EDA_APP::ReadProjectConfig( const wxString&  local_config_filename,
         pt_cfg = *List;
 
         if( pt_cfg->m_Group )
-            m_ProjectConfig->SetPath( pt_cfg->m_Group );
+            m_projectSettings->SetPath( pt_cfg->m_Group );
         else
-            m_ProjectConfig->SetPath( GroupName );
+            m_projectSettings->SetPath( GroupName );
 
         if( pt_cfg->m_Setup )
             continue;
 
-        pt_cfg->ReadParam( m_ProjectConfig );
+        pt_cfg->ReadParam( m_projectSettings );
     }
 
-    delete m_ProjectConfig;
-    m_ProjectConfig = NULL;
+    delete m_projectSettings;
+    m_projectSettings = NULL;
 
     return true;
 }
@@ -333,8 +335,8 @@ bool EDA_APP::ReadProjectConfig( const wxString&  local_config_filename,
 
     ReCreatePrjConfig( local_config_filename, GroupName, false );
 
-    m_ProjectConfig->SetPath( wxCONFIG_PATH_SEPARATOR );
-    timestamp = m_ProjectConfig->Read( wxT( "update" ) );
+    m_projectSettings->SetPath( wxCONFIG_PATH_SEPARATOR );
+    timestamp = m_projectSettings->Read( wxT( "update" ) );
 
     if( Load_Only_if_New && ( !timestamp.IsEmpty() )
        && (timestamp == m_CurrentOptionFileDateAndTime) )
@@ -359,18 +361,18 @@ bool EDA_APP::ReadProjectConfig( const wxString&  local_config_filename,
     BOOST_FOREACH( const PARAM_CFG_BASE& param, params )
     {
         if( param.m_Group )
-            m_ProjectConfig->SetPath( param.m_Group );
+            m_projectSettings->SetPath( param.m_Group );
         else
-            m_ProjectConfig->SetPath( GroupName );
+            m_projectSettings->SetPath( GroupName );
 
         if( param.m_Setup )
             continue;
 
-        param.ReadParam( m_ProjectConfig );
+        param.ReadParam( m_projectSettings );
     }
 
-    delete m_ProjectConfig;
-    m_ProjectConfig = NULL;
+    delete m_projectSettings;
+    m_projectSettings = NULL;
 
     return true;
 }
@@ -387,7 +389,7 @@ void EDA_APP::ReadCurrentSetupValues( PARAM_CFG_BASE** aList )
         if( pt_cfg->m_Setup == false )
             continue;
 
-        pt_cfg->ReadParam( m_EDA_Config );
+        pt_cfg->ReadParam( m_settings );
     }
 }
 
@@ -399,7 +401,7 @@ void EDA_APP::ReadCurrentSetupValues( const PARAM_CFG_ARRAY& List )
         if( param.m_Setup == false )
             continue;
 
-        param.ReadParam( m_EDA_Config );
+        param.ReadParam( m_settings );
     }
 }
 

@@ -82,11 +82,11 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
     // Add this menu to list menu managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
     if( openRecentGbrMenu )
-        wxGetApp().m_fileHistory.RemoveMenu( openRecentGbrMenu );
+        wxGetApp().GetFileHistory().RemoveMenu( openRecentGbrMenu );
 
     openRecentGbrMenu = new wxMenu();
-    wxGetApp().m_fileHistory.UseMenu( openRecentGbrMenu );
-    wxGetApp().m_fileHistory.AddFilesToMenu();
+    wxGetApp().GetFileHistory().UseMenu( openRecentGbrMenu );
+    wxGetApp().GetFileHistory().AddFilesToMenu();
     AddMenuItem( fileMenu, openRecentGbrMenu,
                  wxID_ANY,
                  _( "Open &Recent Gerber File" ),

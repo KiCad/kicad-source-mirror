@@ -113,7 +113,7 @@ void EDA_3D_FRAME::OnCloseWindow( wxCloseEvent& Event )
 void EDA_3D_FRAME::GetSettings()
 {
     wxString  text;
-    wxConfig* config = wxGetApp().m_EDA_Config;  // Current config used by application
+    wxConfig* config = wxGetApp().GetSettings();  // Current config used by application
 
     if( config )
     {
@@ -140,7 +140,7 @@ void EDA_3D_FRAME::GetSettings()
 void EDA_3D_FRAME::SaveSettings()
 {
     wxString  text;
-    wxConfig* Config = wxGetApp().m_EDA_Config;  //  Current config used by application
+    wxConfig* Config = wxGetApp().GetSettings();  //  Current config used by application
 
     if( !Config )
         return;

@@ -200,7 +200,7 @@ double GERBVIEW_FRAME::BestZoom()
 
 void GERBVIEW_FRAME::LoadSettings()
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxConfig* config = wxGetApp().GetSettings();
 
     if( config == NULL )
         return;
@@ -245,7 +245,7 @@ void GERBVIEW_FRAME::LoadSettings()
 
 void GERBVIEW_FRAME::SaveSettings()
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxConfig* config = wxGetApp().GetSettings();
 
     if( config == NULL )
         return;

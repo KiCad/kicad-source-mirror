@@ -544,7 +544,7 @@ void PCB_EDIT_FRAME::ShowDesignRulesEditor( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::LoadSettings()
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxConfig* config = wxGetApp().GetSettings();
 
     if( config == NULL )
         return;
@@ -572,7 +572,7 @@ void PCB_EDIT_FRAME::LoadSettings()
 
 void PCB_EDIT_FRAME::SaveSettings()
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxConfig* config = wxGetApp().GetSettings();
 
     if( config == NULL )
         return;

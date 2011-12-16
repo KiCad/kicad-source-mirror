@@ -142,12 +142,12 @@ void KICAD_MANAGER_FRAME::OnCloseWindow( wxCloseEvent& Event )
     SaveSettings();
 
     // Close the help frame
-    if( wxGetApp().m_HtmlCtrl )
+    if( wxGetApp().GetHtmlHelpController() )
     {
-        if( wxGetApp().m_HtmlCtrl->GetFrame() )  // returns NULL if no help frame active
-            wxGetApp().m_HtmlCtrl->GetFrame()->Close( true );
+        if( wxGetApp().GetHtmlHelpController()->GetFrame() ) // returns NULL if no help frame active
+            wxGetApp().GetHtmlHelpController()->GetFrame()->Close( true );
 
-        wxGetApp().m_HtmlCtrl = NULL;
+        wxGetApp().SetHtmlHelpController( NULL );
     }
 
     m_LeftWin->Show( false );
@@ -258,9 +258,9 @@ void KICAD_MANAGER_FRAME::ClearMsg()
 
 void KICAD_MANAGER_FRAME::LoadSettings()
 {
-    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+    wxASSERT( wxGetApp().GetSettings() != NULL );
 
-    wxConfig* cfg = wxGetApp().m_EDA_Config;
+    wxConfig* cfg = wxGetApp().GetSettings();
 
     EDA_BASE_FRAME::LoadSettings();
     cfg->Read( TreeFrameWidthEntry, &m_LeftWin_Width );
@@ -269,9 +269,9 @@ void KICAD_MANAGER_FRAME::LoadSettings()
 
 void KICAD_MANAGER_FRAME::SaveSettings()
 {
-    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+    wxASSERT( wxGetApp().GetSettings() != NULL );
 
-    wxConfig* cfg = wxGetApp().m_EDA_Config;
+    wxConfig* cfg = wxGetApp().GetSettings();
 
     EDA_BASE_FRAME::SaveSettings();
 

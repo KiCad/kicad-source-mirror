@@ -51,7 +51,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module()
     bool      Footprint_Is_GPCB_Format = false;
 
     wxString  LastOpenedPathForLoading;
-    wxConfig* Config = wxGetApp().m_EDA_Config;
+    wxConfig* Config = wxGetApp().GetSettings();
 
     if( Config )
         Config->Read( EXPORT_IMPORT_LASTPATH_KEY, &LastOpenedPathForLoading );
@@ -145,7 +145,7 @@ void FOOTPRINT_EDIT_FRAME::Export_Module( MODULE* aModule, bool aCreateSysLib )
     wxFileName fn;
     FILE*      file;
     wxString   msg, path, title, wildcard;
-    wxConfig*  Config = wxGetApp().m_EDA_Config;
+    wxConfig*  Config = wxGetApp().GetSettings();
 
     if( aModule == NULL )
         return;

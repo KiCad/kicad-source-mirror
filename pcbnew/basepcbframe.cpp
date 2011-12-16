@@ -522,9 +522,9 @@ void PCB_BASE_FRAME::unitsChangeRefresh()
 
 void PCB_BASE_FRAME::LoadSettings()
 {
-    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+    wxASSERT( wxGetApp().GetSettings() != NULL );
 
-    wxConfig* cfg = wxGetApp().m_EDA_Config;
+    wxConfig* cfg = wxGetApp().GetSettings();
 
     EDA_DRAW_FRAME::LoadSettings();
 
@@ -566,9 +566,9 @@ void PCB_BASE_FRAME::LoadSettings()
 
 void PCB_BASE_FRAME::SaveSettings()
 {
-    wxASSERT( wxGetApp().m_EDA_Config != NULL );
+    wxASSERT( wxGetApp().GetSettings() != NULL );
 
-    wxConfig* cfg = wxGetApp().m_EDA_Config;
+    wxConfig* cfg = wxGetApp().GetSettings();
 
     EDA_DRAW_FRAME::SaveSettings();
     cfg->Write( m_FrameName + UserGridSizeXEntry, m_UserGridSize.x );

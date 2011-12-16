@@ -29,7 +29,7 @@ DIALOG_CVPCB_CONFIG::DIALOG_CVPCB_CONFIG( CVPCB_MAINFRAME* parent ) :
     fn.SetExt( ProjectFileExtension );
 
     m_Parent   = parent;
-    m_Config = wxGetApp().m_EDA_CommonConfig;
+    m_Config = wxGetApp().GetCommonSettings();
 
     Init( );
     title = _( "Project file: " ) + fn.GetFullPath();

@@ -102,8 +102,8 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;
 
-    if( wxGetApp().m_EDA_Config )
-        wxGetApp().m_EDA_Config->Read( wxT( "AutoPAN" ), &m_AutoPAN_Enable, true );
+    if( wxGetApp().GetSettings() )
+        wxGetApp().GetSettings()->Read( wxT( "AutoPAN" ), &m_AutoPAN_Enable, true );
 
     m_AutoPAN_Request    = false;
     m_Block_Enable       = false;
@@ -123,7 +123,7 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
 
 EDA_DRAW_PANEL::~EDA_DRAW_PANEL()
 {
-    wxGetApp().m_EDA_Config->Write( wxT( "AutoPAN" ), m_AutoPAN_Enable );
+    wxGetApp().GetSettings()->Write( wxT( "AutoPAN" ), m_AutoPAN_Enable );
 }
 
 

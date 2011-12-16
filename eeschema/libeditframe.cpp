@@ -291,8 +291,8 @@ void LIB_EDIT_FRAME::LoadSettings()
 
     EDA_DRAW_FRAME::LoadSettings();
 
-    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_configPath );
-    cfg = wxGetApp().m_EDA_Config;
+    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
+    cfg = wxGetApp().GetSettings();
 
     m_lastLibExportPath = cfg->Read( lastLibExportPathEntry, ::wxGetCwd() );
     m_lastLibImportPath = cfg->Read( lastLibImportPathEntry, ::wxGetCwd() );
@@ -312,8 +312,8 @@ void LIB_EDIT_FRAME::SaveSettings()
 
     EDA_DRAW_FRAME::SaveSettings();
 
-    wxConfigPathChanger cpc( wxGetApp().m_EDA_Config, m_configPath );
-    cfg = wxGetApp().m_EDA_Config;
+    wxConfigPathChanger cpc( wxGetApp().GetSettings(), m_configPath );
+    cfg = wxGetApp().GetSettings();
 
     cfg->Write( lastLibExportPathEntry, m_lastLibExportPath );
     cfg->Write( lastLibImportPathEntry, m_lastLibImportPath );

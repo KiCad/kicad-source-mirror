@@ -61,7 +61,7 @@ DIALOG_SVG_PRINT::DIALOG_SVG_PRINT( EDA_DRAW_FRAME* parent ) :
     DIALOG_SVG_PRINT_base( parent )
 {
     m_Parent   = parent;
-    m_Config   = wxGetApp().m_EDA_Config;
+    m_Config   = wxGetApp().GetSettings();
 }
 
 

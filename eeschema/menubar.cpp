@@ -86,11 +86,11 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Add this menu to list menu managed by m_fileHistory
     // (the file history will be updated when adding/removing files in history
     if( openRecentMenu )
-        wxGetApp().m_fileHistory.RemoveMenu( openRecentMenu );
+        wxGetApp().GetFileHistory().RemoveMenu( openRecentMenu );
 
     openRecentMenu = new wxMenu();
-    wxGetApp().m_fileHistory.UseMenu( openRecentMenu );
-    wxGetApp().m_fileHistory.AddFilesToMenu( openRecentMenu );
+    wxGetApp().GetFileHistory().UseMenu( openRecentMenu );
+    wxGetApp().GetFileHistory().AddFilesToMenu( openRecentMenu );
     AddMenuItem( fileMenu, openRecentMenu,
                  wxID_ANY, _( "Open &Recent" ),
                  _( "Open a recent opened schematic project" ),

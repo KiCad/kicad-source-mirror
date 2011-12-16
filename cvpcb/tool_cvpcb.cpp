@@ -39,7 +39,7 @@
 
 void CVPCB_MAINFRAME::ReCreateHToolbar()
 {
-    wxConfig* config = wxGetApp().m_EDA_Config;
+    wxConfig* config = wxGetApp().GetSettings();
 
     if( m_mainToolBar != NULL )
         return;

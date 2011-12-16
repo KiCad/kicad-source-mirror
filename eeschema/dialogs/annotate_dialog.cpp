@@ -54,7 +54,7 @@ DIALOG_ANNOTATE::DIALOG_ANNOTATE( SCH_EDIT_FRAME* parent )
 void DIALOG_ANNOTATE::InitValues()
 /*********************************/
 {
-    m_Config = wxGetApp().m_EDA_Config;
+    m_Config = wxGetApp().GetSettings();
     SetFocus();	// needed to close dialog by escape key
     if( m_Config )
     {

@@ -100,10 +100,8 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* father,
 
 EDA_BASE_FRAME::~EDA_BASE_FRAME()
 {
-    if( wxGetApp().m_HtmlCtrl )
-        delete wxGetApp().m_HtmlCtrl;
-
-    wxGetApp().m_HtmlCtrl = NULL;
+    if( wxGetApp().GetHtmlHelpController() )
+        wxGetApp().SetHtmlHelpController( NULL );
 
     delete m_autoSaveTimer;
 
@@ -174,7 +172,7 @@ void EDA_BASE_FRAME::LoadSettings()
     int       Ypos_min;
     wxConfig* config;
 
-    config = wxGetApp().m_EDA_Config;
+    config = wxGetApp().GetSettings();
 
     int maximized = 0;
 
@@ -219,7 +217,7 @@ void EDA_BASE_FRAME::SaveSettings()
     wxString text;
     wxConfig* config;
 
-    config = wxGetApp().m_EDA_Config;
+    config = wxGetApp().GetSettings();
 
     if( ( config == NULL ) || IsIconized() )
         return;
@@ -275,7 +273,7 @@ void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName,
     wxFileHistory * fileHistory = aFileHistory;
 
     if( fileHistory == NULL )
-        fileHistory = & wxGetApp().m_fileHistory;
+        fileHistory = & wxGetApp().GetFileHistory();
 
     fileHistory->AddFileToHistory( FullFileName );
 }
@@ -289,7 +287,7 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
     wxFileHistory * fileHistory = aFileHistory;
 
     if( fileHistory == NULL )
-        fileHistory = & wxGetApp().m_fileHistory;
+        fileHistory = & wxGetApp().GetFileHistory();
 
     int baseId = fileHistory->GetBaseId();
 
@@ -321,28 +319,28 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
     /* We have to get document for beginners,
      * or the the full specific doc
      * if event id is wxID_INDEX, we want the document for beginners.
-     * else the specific doc file (its name is in wxGetApp().m_HelpFileName)
+     * else the specific doc file (its name is in wxGetApp().GetHelpFileName())
      * The document for beginners is the same for all KiCad utilities
      */
     if( event.GetId() == wxID_INDEX )
     {
         // Temporary change the help filename
-        wxString tmp = wxGetApp().m_HelpFileName;
+        wxString tmp = wxGetApp().GetHelpFileName();
 
         // Search for "getting_started_in_kicad.pdf" or "Getting_Started_in_KiCad.pdf"
-        wxGetApp().m_HelpFileName = wxT( "getting_started_in_kicad.pdf" );
+        wxGetApp().GetHelpFileName() = wxT( "getting_started_in_kicad.pdf" );
         wxString helpFile = wxGetApp().GetHelpFile();
 
         if( !helpFile )
         {   // Try to find "Getting_Started_in_KiCad.pdf"
-            wxGetApp().m_HelpFileName = wxT( "Getting_Started_in_KiCad.pdf" );
+            wxGetApp().GetHelpFileName() = wxT( "Getting_Started_in_KiCad.pdf" );
             helpFile = wxGetApp().GetHelpFile();
         }
 
         if( !helpFile )
         {
             msg.Printf( _( "Help file %s could not be found." ),
-                        GetChars( wxGetApp().m_HelpFileName ) );
+                        GetChars( wxGetApp().GetHelpFileName() ) );
             DisplayError( this, msg );
         }
         else
@@ -350,26 +348,26 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
             GetAssociatedDocument( this, helpFile );
         }
 
-        wxGetApp().m_HelpFileName = tmp;
+        wxGetApp().SetHelpFileName( tmp );
         return;
     }
 
 #if defined ONLINE_HELP_FILES_FORMAT_IS_HTML
 
-    if( wxGetApp().m_HtmlCtrl == NULL )
+    if( wxGetApp().GetHtmlHelpController() == NULL )
     {
         wxGetApp().InitOnLineHelp();
     }
 
 
-    if( wxGetApp().m_HtmlCtrl )
+    if( wxGetApp().GetHtmlHelpController() )
     {
-        wxGetApp().m_HtmlCtrl->DisplayContents();
-        wxGetApp().m_HtmlCtrl->Display( wxGetApp().m_HelpFileName );
+        wxGetApp().GetHtmlHelpController()->DisplayContents();
+        wxGetApp().GetHtmlHelpController()->Display( wxGetApp().GetHelpFileName() );
     }
     else
     {
-        msg.Printf( _( "Help file %s not found." ), GetChars( wxGetApp().m_HelpFileName ) );
+        msg.Printf( _( "Help file %s not found." ), GetChars( wxGetApp().GetHelpFileName() ) );
         DisplayError( this, msg );
     }
 
@@ -379,7 +377,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
     if( !helpFile )
     {
         msg.Printf( _( "Help file %s could not be found." ),
-                    GetChars( wxGetApp().m_HelpFileName ) );
+                    GetChars( wxGetApp().GetHelpFileName() ) );
         DisplayError( this, msg );
     }
     else
@@ -395,7 +393,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
 
 void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
 {
-    wxFileName fn = wxGetApp().m_EditorName;
+    wxFileName fn = wxGetApp().GetEditorName();
     wxString wildcard( wxT( "*" ) );
 
 #ifdef __WINDOWS__
@@ -411,11 +409,11 @@ void EDA_BASE_FRAME::OnSelectPreferredEditor( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxASSERT( wxGetApp().m_EDA_CommonConfig );
+    wxASSERT( wxGetApp().GetCommonSettings() );
 
-    wxConfig* cfg = wxGetApp().m_EDA_CommonConfig;
-    wxGetApp().m_EditorName = dlg.GetPath();
-    cfg->Write( wxT( "Editor" ), wxGetApp().m_EditorName );
+    wxConfig* cfg = wxGetApp().GetCommonSettings();
+    wxGetApp().SetEditorName( dlg.GetPath() );
+    cfg->Write( wxT( "Editor" ), wxGetApp().GetEditorName() );
 }
 
 

@@ -53,7 +53,7 @@ DIALOG_EESCHEMA_CONFIG::DIALOG_EESCHEMA_CONFIG( SCH_EDIT_FRAME* aSchFrame,
 
     Init();
 
-    msg = _( "from " ) + wxGetApp().m_CurrentOptionFile;
+    msg = _( "from " ) + wxGetApp().GetCurrentOptionFile();
     SetTitle( msg );
 
     if( GetSizer() )
