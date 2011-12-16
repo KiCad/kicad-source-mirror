@@ -664,7 +664,7 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
             // one can argue that this 2nd test is not necessary, that any
             // two pads from a single module are acceptable.  This 2nd test
             // should eventually be a configuration option.
-            if( pad->m_NumPadName == aRefPad->m_NumPadName )
+            if( pad->PadNameEqual( aRefPad ) )
                 continue;
         }
 

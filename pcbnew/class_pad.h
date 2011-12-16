@@ -71,17 +71,20 @@ private:
     wxString m_Netname;         // Full net name like /mysheet/mysubsheet/vout used by Eeschema
     wxString m_ShortNetname;    // short net name, like vout from /mysheet/mysubsheet/vout
 
+    /// Pad name (4 char) or a long identifier (used in pad name
+    /// comparisons because  this is faster than string comparison)
+    union
+    {
+#define PADNAMEZ    4
+        char        m_Padname[PADNAMEZ];    // zero padded at end to full size
+        wxUint32    m_NumPadName;       // same number of bytes as m_Padname[]
+    };
+
+    int m_SubRatsnest;                  // variable used in rats nest computations
+                                        // handle subnet (block) number in ratsnest connection
 
 public:
     wxPoint m_Pos;                  // pad Position on board
-
-    union
-    {
-        unsigned long m_NumPadName;
-        char          m_Padname[4]; /* Pad name (4 char) or a long identifier (used in pad name
-                                     * comparisons because  this is faster than string comparison)
-                                     */
-    };
 
     int m_layerMask;                // Bitwise layer :1= copper layer, 15= cmp,
                                     // 2..14 = internal layers
@@ -134,10 +137,6 @@ public:
     double m_LocalSolderPasteMarginRatio;       // Local solder mask margin ratio value of pad size
                                                 // The final margin is the sum of these 2 values
 
-private:
-    int m_SubRatsnest;                  // variable used in rats nest computations
-                                        // handle subnet (block) number in ratsnest connection
-
 public:
     D_PAD( MODULE* parent );
     D_PAD( D_PAD* pad );
@@ -146,6 +145,14 @@ public:
     void Copy( D_PAD* source );
 
     D_PAD* Next() { return (D_PAD*) Pnext; }
+
+    void SetPadName( const wxString& name );    // Change pad name
+    const wxString GetPadName() const;
+
+    bool PadNameEqual( const D_PAD* other ) const
+    {
+        return m_NumPadName == other->m_NumPadName; // hide tricks behind sensible API
+    }
 
     /**
      * Function SetNetname
@@ -346,10 +353,6 @@ public:
      * @return the width of the segment
      */
     int BuildSegmentFromOvalShape( wxPoint& aSegStart, wxPoint& aSegEnd, int aRotation ) const;
-
-    void SetPadName( const wxString& name );    // Change pad name
-    void SetPadName( const char* aName );
-    const wxString GetPadName() const;
 
     void ReturnStringPadName( wxString& text ) const; // Return pad name as string in a buffer
 

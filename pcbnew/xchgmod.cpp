@@ -530,7 +530,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
 
         for( ; old_pad != NULL; old_pad = old_pad->Next() )
         {
-            if( strnicmp( pad->m_Padname, old_pad->m_Padname, sizeof(pad->m_Padname) ) == 0 )
+            if( pad->PadNameEqual( old_pad ) )
             {
                 pad->SetNetname( old_pad->GetNetname() );
                 pad->SetNet( old_pad->GetNet() );

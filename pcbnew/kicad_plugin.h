@@ -80,6 +80,7 @@ protected:
     wxString        m_filename;     ///< for saves only, name is in m_reader for loads
 
     wxString        m_field;        ///< reused to stuff MODULE fields.
+    int             m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( PROPERTIES* aProperties );
