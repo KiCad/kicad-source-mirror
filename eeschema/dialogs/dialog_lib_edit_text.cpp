@@ -61,7 +61,7 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
     if ( m_GraphicText )
     {
         msg = ReturnStringFromValue( g_UserUnit, m_GraphicText->m_Size.x,
-                                     m_Parent->m_InternalUnits );
+                                     m_Parent->GetInternalUnits() );
         m_TextSize->SetValue( msg );
         m_TextValue->SetValue( m_GraphicText->m_Text );
 
@@ -114,7 +114,7 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
     else
     {
         msg = ReturnStringFromValue( g_UserUnit, m_Parent->m_textSize,
-                                     m_Parent->m_InternalUnits );
+                                     m_Parent->GetInternalUnits() );
         m_TextSize->SetValue( msg );
 
         if ( ! m_Parent->m_drawSpecificUnit )
@@ -146,7 +146,7 @@ void DIALOG_LIB_EDIT_TEXT::OnOkClick( wxCommandEvent& event )
     Line = m_TextValue->GetValue();
     m_Parent->m_textOrientation = m_Orient->GetValue() ? TEXT_ORIENT_VERT : TEXT_ORIENT_HORIZ;
     wxString msg = m_TextSize->GetValue();
-    m_Parent->m_textSize = ReturnValueFromString( g_UserUnit, msg, m_Parent->m_InternalUnits );
+    m_Parent->m_textSize = ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() );
     m_Parent->m_drawSpecificConvert = m_CommonConvert->GetValue() ? false : true;
     m_Parent->m_drawSpecificUnit = m_CommonUnit->GetValue() ? false : true;
 

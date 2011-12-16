@@ -268,8 +268,8 @@ public:
 private:
     wxString        m_FrameName;      // name used for writing and reading setup. It is "Frame3D"
     EDA_3D_CANVAS*  m_Canvas;
-    EDA_TOOLBAR*    m_HToolBar;
-    EDA_TOOLBAR*    m_VToolBar;
+    wxAuiToolBar*   m_HToolBar;
+    wxAuiToolBar*   m_VToolBar;
     int             m_InternalUnits;
     wxPoint         m_FramePos;
     wxSize          m_FrameSize;

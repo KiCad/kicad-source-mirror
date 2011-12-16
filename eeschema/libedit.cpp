@@ -635,7 +635,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
     GetScreen()->ClearUndoRedoList();
     OnModify();
     DrawPanel->Refresh();
-    m_HToolBar->Refresh();
+    m_mainToolBar->Refresh();
 }
 
 

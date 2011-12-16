@@ -110,7 +110,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     m_SolderMaskMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
     m_SolderPasteMarginUnits->SetLabel( GetUnitsLabel( g_UserUnit ) );
 
-    int internalUnit = m_Parent->m_InternalUnits;
+    int internalUnit = m_Parent->GetInternalUnits();
     PutValueInLocalUnits( *m_NetClearanceValueCtrl,
                           m_CurrentModule->m_LocalClearance, internalUnit );
     PutValueInLocalUnits( *m_SolderMaskMarginCtrl,
@@ -463,11 +463,11 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     // Initialize masks clearances
     m_CurrentModule->m_LocalClearance =
-        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, m_Parent->m_InternalUnits );
+        ReturnValueFromTextCtrl( *m_NetClearanceValueCtrl, m_Parent->GetInternalUnits() );
     m_CurrentModule->m_LocalSolderMaskMargin =
-        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->m_InternalUnits );
+        ReturnValueFromTextCtrl( *m_SolderMaskMarginCtrl, m_Parent->GetInternalUnits() );
     m_CurrentModule->m_LocalSolderPasteMargin =
-        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->m_InternalUnits );
+        ReturnValueFromTextCtrl( *m_SolderPasteMarginCtrl, m_Parent->GetInternalUnits() );
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );

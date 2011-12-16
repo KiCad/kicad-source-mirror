@@ -71,7 +71,6 @@ class EDA_RECT;
 class EDA_DRAW_PANEL;
 class EDA_MSG_PANEL;
 class BASE_SCREEN;
-class EDA_TOOLBAR;
 class PARAM_CFG_BASE;
 class Ki_PageDescr;
 class PLOTTER;
@@ -98,13 +97,6 @@ enum id_drawframe {
     KICAD_MAIN_FRAME
 };
 
-enum id_toolbar {
-    TOOLBAR_MAIN = 1,       // Main horizontal Toolbar
-    TOOLBAR_TOOL,           // Right vertical Toolbar (list of tools)
-    TOOLBAR_OPTION,         // Left vertical Toolbar (option toolbar
-    TOOLBAR_AUX             // Secondary horizontal Toolbar
-};
-
 
 /// Custom trace mask to enable and disable auto save tracing.
 extern const wxChar* traceAutoSave;
@@ -123,7 +115,7 @@ protected:
     wxSize       m_FrameSize;
     int          m_MsgFrameHeight;
 
-    EDA_TOOLBAR* m_HToolBar;     // Standard horizontal Toolbar
+    wxAuiToolBar* m_mainToolBar; // Standard horizontal Toolbar
     bool         m_FrameIsActive;
     wxString     m_FrameName;    // name used for writing and reading setup
                                  // It is "SchematicFrame", "PcbFrame" ....
@@ -376,20 +368,16 @@ class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 
 public:
     EDA_DRAW_PANEL*   DrawPanel;            // Draw area
-    int          m_HTOOL_current_state;     // Id of active button on
-                                            // horizontal toolbar
-
-    int          m_InternalUnits;           // Internal units count in 1 inch
-                                            // = 1000 for Eeschema, = 10000
-                                            // for Pcbnew and GerbView
-
-    bool         m_Print_Sheet_Ref;         // true to print frame references
 
 protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
     int          m_LastGridSizeId;
     bool         m_DrawGrid;                // hide/Show grid
     int          m_GridColor;               // Grid color
+
+    /// Internal units count that is equivalent to 1 inch.  Set to 1000 (0.001") for
+    /// schematic drawing and 10000 (0.0001") for PCB drawing.
+    int m_internalUnits;
 
     /// Tool ID of previously active draw tool bar button.
     int m_lastDrawToolId;
@@ -423,10 +411,10 @@ protected:
 
     /// The tool bar that contains the buttons for quick access to the application draw
     /// tools.  It typically is located on the right side of the main window.
-    EDA_TOOLBAR* m_drawToolBar;
+    wxAuiToolBar* m_drawToolBar;
 
     /// The options tool bar typcially located on the left edge of the main window.
-    EDA_TOOLBAR* m_optionsToolBar;
+    wxAuiToolBar* m_optionsToolBar;
 
     /// Panel used to display information at the bottom of the main window.
     EDA_MSG_PANEL* m_messagePanel;
@@ -472,6 +460,8 @@ public:
     bool GetShowBorderAndTitleBlock() const { return m_showBorderAndTitleBlock; }
 
     void SetShowBorderAndTitleBlock( bool aShow ) { m_showBorderAndTitleBlock = aShow; }
+
+    int GetInternalUnits() const { return m_internalUnits; }
 
     virtual wxString GetScreenDesc();
 
@@ -877,10 +867,6 @@ protected:
     wxSize computeTextSize( const wxString& text );
 
 public:
-    EDA_DRAW_FRAME* m_Parent;
-    int m_BgColor;
-
-public:
     EDA_MSG_PANEL( EDA_DRAW_FRAME* parent, int id, const wxPoint& pos, const wxSize& size );
     ~EDA_MSG_PANEL();
 
@@ -924,45 +910,6 @@ public:
                         int color, int pad = 6 );
 
     DECLARE_EVENT_TABLE()
-};
-
-
-/**
- * Class EDA_TOOLBAR
- * is the base class for deriving KiCad tool bars.
- */
-class EDA_TOOLBAR : public wxAuiToolBar
-{
-public:
-    wxWindow*       m_Parent;
-    id_toolbar      m_Ident;
-    bool            m_Horizontal;       // some auxiliary TB are horizontal, others vertical
-
-public:
-    EDA_TOOLBAR( id_toolbar type, wxWindow* parent, wxWindowID id, bool horizontal );
-
-    bool GetToolState( int toolId ) { return GetToolToggled(toolId); };
-
-    void AddRadioTool( int             toolid,
-                       const wxString& label,
-                       const wxBitmap& bitmap,
-                       const wxBitmap& bmpDisabled = wxNullBitmap,
-                       const wxString& shortHelp = wxEmptyString,
-                       const wxString& longHelp = wxEmptyString,
-                       wxObject*       data = NULL )
-    {
-       AddTool( toolid, label, bitmap, bmpDisabled, wxITEM_CHECK,
-                shortHelp, longHelp, data );
-    };
-
-    void SetToolNormalBitmap( int id, const wxBitmap& bitmap ) {};
-    void SetRows( int nRows ) {};
-
-    /**
-     * Function GetDimension
-     * @return the dimension of this toolbar (Height if horizontal, Width if vertical.
-     */
-    int GetDimension();
 };
 
 

@@ -73,7 +73,7 @@ void DIALOG_SVG_PRINT::initDialog( )
     AddUnitSymbol( *m_TextPenWidth, g_UserUnit );
     m_DialogPenWidth->SetValue(
         ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize,
-                               m_Parent->m_InternalUnits ) );
+                               m_Parent->GetInternalUnits() ) );
 
     m_Print_Frame_Ref_Ctrl->SetValue( s_Parameters.m_Print_Sheet_Ref );
 
@@ -138,7 +138,7 @@ void DIALOG_SVG_PRINT::initDialog( )
 void DIALOG_SVG_PRINT::SetPenWidth()
 {
     s_Parameters.m_PenDefaultSize = ReturnValueFromTextCtrl( *m_DialogPenWidth,
-                                                  m_Parent->m_InternalUnits );
+                                                  m_Parent->GetInternalUnits() );
 
     if( s_Parameters.m_PenDefaultSize > WIDTH_MAX_VALUE )
     {
@@ -153,7 +153,7 @@ void DIALOG_SVG_PRINT::SetPenWidth()
     g_DrawDefaultLineThickness = s_Parameters.m_PenDefaultSize;
     m_DialogPenWidth->SetValue(
         ReturnStringFromValue( g_UserUnit, s_Parameters.m_PenDefaultSize,
-                               m_Parent->m_InternalUnits ) );
+                               m_Parent->GetInternalUnits() ) );
 }
 
 
@@ -239,11 +239,11 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
     SheetSize    = screen->m_CurrentSheetDesc->m_Size;  // size in 1/1000 inch
-    SheetSize.x *= m_Parent->m_InternalUnits / 1000;
-    SheetSize.y *= m_Parent->m_InternalUnits / 1000;    // size in pixels
+    SheetSize.x *= m_Parent->GetInternalUnits() / 1000;
+    SheetSize.y *= m_Parent->GetInternalUnits() / 1000;    // size in pixels
 
     screen->SetScalingFactor( 1.0 );
-    float dpi = (float)m_Parent->m_InternalUnits;
+    float dpi = (float)m_Parent->GetInternalUnits();
 
     EDA_DRAW_PANEL* panel = m_Parent->DrawPanel;
 

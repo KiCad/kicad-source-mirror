@@ -149,7 +149,7 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
 void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
-    bool state = m_optionsToolBar->GetToolState( id );
+    bool state = m_optionsToolBar->GetToolToggled( id );
 
     switch( id )
     {

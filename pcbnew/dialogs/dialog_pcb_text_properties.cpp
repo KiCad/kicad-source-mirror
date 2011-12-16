@@ -91,15 +91,15 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     *m_TextContentCtrl << m_SelectedPCBText->m_Text;
 
     PutValueInLocalUnits( *m_SizeXCtrl, m_SelectedPCBText->m_Size.x,
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
     PutValueInLocalUnits( *m_SizeYCtrl, m_SelectedPCBText->m_Size.y,
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
     PutValueInLocalUnits( *m_ThicknessCtrl, m_SelectedPCBText->m_Thickness,
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
     PutValueInLocalUnits( *m_PositionXCtrl, m_SelectedPCBText->m_Pos.x,
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
     PutValueInLocalUnits( *m_PositionYCtrl, m_SelectedPCBText->m_Pos.y,
-        m_Parent->m_InternalUnits );
+        m_Parent->GetInternalUnits() );
 
     int enabledLayers = m_Parent->GetBoard()->GetEnabledLayers();
     for( int layer = 0; layer < NB_LAYERS;  ++layer )
@@ -195,13 +195,13 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     }
 
     // Set PCB Text position
-    newPosition.x = ReturnValueFromString( g_UserUnit, m_PositionXCtrl->GetValue(), m_Parent->m_InternalUnits );
-    newPosition.y = ReturnValueFromString( g_UserUnit, m_PositionYCtrl->GetValue(), m_Parent->m_InternalUnits );
+    newPosition.x = ReturnValueFromString( g_UserUnit, m_PositionXCtrl->GetValue(), m_Parent->GetInternalUnits() );
+    newPosition.y = ReturnValueFromString( g_UserUnit, m_PositionYCtrl->GetValue(), m_Parent->GetInternalUnits() );
     m_SelectedPCBText->m_Pos  = newPosition;
 
     // Check constraints and set PCB Text size
-    newSize.x = ReturnValueFromString( g_UserUnit, m_SizeXCtrl->GetValue(), m_Parent->m_InternalUnits );
-    newSize.y = ReturnValueFromString( g_UserUnit, m_SizeYCtrl->GetValue(), m_Parent->m_InternalUnits );
+    newSize.x = ReturnValueFromString( g_UserUnit, m_SizeXCtrl->GetValue(), m_Parent->GetInternalUnits() );
+    newSize.y = ReturnValueFromString( g_UserUnit, m_SizeYCtrl->GetValue(), m_Parent->GetInternalUnits() );
 
     if( newSize.x < TEXTS_MIN_SIZE )
         newSize.x = TEXTS_MIN_SIZE;
@@ -214,7 +214,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     m_SelectedPCBText->m_Size = newSize;
 
     // Set the new thickness
-    m_SelectedPCBText->m_Thickness = ReturnValueFromString( g_UserUnit, m_ThicknessCtrl->GetValue(), m_Parent->m_InternalUnits );
+    m_SelectedPCBText->m_Thickness = ReturnValueFromString( g_UserUnit, m_ThicknessCtrl->GetValue(), m_Parent->GetInternalUnits() );
 
     // Test for acceptable values for thickness and size and clamp if fails
     int maxthickness = Clamp_Text_PenSize( m_SelectedPCBText->m_Thickness, m_SelectedPCBText->m_Size  );

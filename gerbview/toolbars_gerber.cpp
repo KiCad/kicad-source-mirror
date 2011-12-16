@@ -46,45 +46,46 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
     int           ii;
     wxString      msg;
 
-    if( m_HToolBar != NULL )
+    if( m_mainToolBar != NULL )
         return;
 
-    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
+    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
-    m_HToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString,
-                         KiBitmap( gerbview_clear_layers_xpm ),
-                         _( "Erase all layers" ) );
+    m_mainToolBar->AddTool( ID_GERBVIEW_ERASE_ALL, wxEmptyString,
+                            KiBitmap( gerbview_clear_layers_xpm ),
+                            _( "Erase all layers" ) );
 
-    m_HToolBar->AddTool( wxID_FILE, wxEmptyString, KiBitmap( gerber_file_xpm ),
-                         _( "Load a new Gerber file on the current layer. Previous data will be deleted" ) );
+    m_mainToolBar->AddTool( wxID_FILE, wxEmptyString, KiBitmap( gerber_file_xpm ),
+                            _( "Load a new Gerber file on the current layer. Previous data will be deleted" ) );
 
-    m_HToolBar->AddTool( ID_GERBVIEW_LOAD_DRILL_FILE, wxEmptyString,
-                         KiBitmap( gerbview_drill_file_xpm ),
-                         _( "Load an excellon drill file on the current layer. Previous data will be deleted" ) );
+    m_mainToolBar->AddTool( ID_GERBVIEW_LOAD_DRILL_FILE, wxEmptyString,
+                            KiBitmap( gerbview_drill_file_xpm ),
+                            _( "Load an excellon drill file on the current layer. Previous data will be deleted" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( ID_GERBVIEW_SET_PAGE_BORDER, wxEmptyString, KiBitmap( sheetset_xpm ),
-                         _( "Show/hide frame reference and select paper size for printing" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( ID_GERBVIEW_SET_PAGE_BORDER, wxEmptyString, KiBitmap( sheetset_xpm ),
+                            _( "Show/hide frame reference and select paper size for printing" ) );
 
-    m_HToolBar->AddSeparator();
-    m_HToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
-                         _( "Print layers" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiBitmap( print_button_xpm ),
+                            _( "Print layers" ) );
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Zoom in" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_IN,  IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiBitmap( zoom_in_xpm ), msg );
 
     msg = AddHotkeyName( _( "Zoom out" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_OUT,  IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiBitmap( zoom_out_xpm ), msg );
 
     msg = AddHotkeyName( _( "Redraw view" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_REDRAW,  IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiBitmap( zoom_redraw_xpm ), msg );
 
     msg = AddHotkeyName( _( "Zoom auto" ), s_Gerbview_Hokeys_Descr, HK_ZOOM_AUTO,  IS_COMMENT );
-    m_HToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
+    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ), msg );
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
 
     wxArrayString choices;
 
@@ -94,11 +95,11 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
         choices.Add( msg );
     }
 
-    m_SelLayerBox = new LAYER_BOX_SELECTOR( m_HToolBar, ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
+    m_SelLayerBox = new LAYER_BOX_SELECTOR( m_mainToolBar, ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
                                             wxDefaultPosition, wxSize( 150, -1 ), choices );
-    m_HToolBar->AddControl( m_SelLayerBox );
+    m_mainToolBar->AddControl( m_SelLayerBox );
 
-    m_HToolBar->AddSeparator();
+    m_mainToolBar->AddSeparator();
 
     m_DCodesList.Alloc(TOOLS_MAX_COUNT+1);
     m_DCodesList.Add( _( "No tool" ) );
@@ -110,17 +111,18 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
         m_DCodesList.Add( msg );
     }
 
-    m_DCodeSelector = new DCODE_SELECTION_BOX( m_HToolBar, ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
+    m_DCodeSelector = new DCODE_SELECTION_BOX( m_mainToolBar,
+                                               ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE,
                                                wxDefaultPosition, wxSize( 150, -1 ),
                                                m_DCodesList );
-    m_HToolBar->AddControl( m_DCodeSelector );
+    m_mainToolBar->AddControl( m_DCodeSelector );
 
-    m_TextInfo = new wxTextCtrl( m_HToolBar, wxID_ANY, wxEmptyString, wxDefaultPosition,
+    m_TextInfo = new wxTextCtrl( m_mainToolBar, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                  wxSize(150,-1), wxTE_READONLY );
-    m_HToolBar->AddControl( m_TextInfo );
+    m_mainToolBar->AddControl( m_TextInfo );
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_HToolBar->Realize();
+    m_mainToolBar->Realize();
 }
 
 
@@ -129,7 +131,8 @@ void GERBVIEW_FRAME::ReCreateVToolbar( void )
     if( m_drawToolBar )
         return;
 
-    m_drawToolBar = new EDA_TOOLBAR( TOOLBAR_TOOL, this, ID_V_TOOLBAR, FALSE );
+    m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                      wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiBitmap( cursor_xpm ) );
@@ -145,7 +148,8 @@ void GERBVIEW_FRAME::ReCreateOptToolbar( void )
         return;
 
     // creation of tool bar options
-    m_optionsToolBar = new EDA_TOOLBAR( TOOLBAR_OPTION, this, ID_OPT_TOOLBAR, FALSE );
+    m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                         wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_VERTICAL );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiBitmap( grid_xpm ),
                                _( "Turn grid off" ), wxITEM_CHECK );

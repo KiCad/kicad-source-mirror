@@ -63,7 +63,7 @@ class KICAD_MANAGER_FRAME : public EDA_BASE_FRAME
 public:
     TREE_PROJECT_FRAME* m_LeftWin;
     RIGHT_KM_FRAME*     m_RightWin;
-    EDA_TOOLBAR*        m_VToolBar;  // Vertical toolbar (not used)
+    wxAuiToolBar*       m_VToolBar;  // Vertical toolbar (not used)
     wxString            m_BoardFileName;
     wxString            m_SchematicRootFileName;
     wxFileName          m_ProjectFileName;

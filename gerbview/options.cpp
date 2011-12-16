@@ -28,7 +28,7 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
             break;
 
         default:
-            state = m_optionsToolBar->GetToolState( id );
+            state = m_optionsToolBar->GetToolToggled( id );
             break;
     }
 

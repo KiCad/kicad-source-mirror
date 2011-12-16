@@ -182,7 +182,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_subtractMaskFromSilk->SetValue( g_PcbPlotOptions.GetSubtractMaskFromSilk() );
 
     // Option to plot page references:
-    if( m_Parent->m_Print_Sheet_Ref )
+    if( m_Parent->GetPrintBorderAndTitleBlock() )
     {
         m_plotSheetRef->SetValue( g_PcbPlotOptions.m_PlotFrameRef );
     }

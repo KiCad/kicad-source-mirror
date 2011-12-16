@@ -81,8 +81,8 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     offset.x = GetScreen()->m_CurrentSheetDesc->m_Size.x / 2;
     offset.y = GetScreen()->m_CurrentSheetDesc->m_Size.y / 2;
     // offset is in mils, converts in internal units
-    offset.x *= m_InternalUnits / 1000;
-    offset.y *= m_InternalUnits / 1000;
+    offset.x *= m_internalUnits / 1000;
+    offset.y *= m_internalUnits / 1000;
 
     for( ; Module != NULL; Module = Module->Next() )
     {

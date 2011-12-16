@@ -40,7 +40,7 @@ void PCB_BASE_FRAME::InstallGridFrame( const wxPoint& pos )
 {
     DIALOG_SET_GRID dlg( this, pos );
 
-    dlg.m_internalUnits = m_InternalUnits;
+    dlg.m_internalUnits = m_internalUnits;
     dlg.SetGridUnits( m_UserGridUnit );
     dlg.SetGridSize( m_UserGridSize );
     dlg.SetGridOrigin( GetScreen()->m_GridOrigin );

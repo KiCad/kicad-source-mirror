@@ -190,7 +190,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 {
     SetFocus();     // Required under wxGTK if we want to demiss the dialog with the ESC key
 
-    int internalUnits = m_Parent->m_InternalUnits;
+    int internalUnits = m_Parent->GetInternalUnits();
     wxString msg;
     m_isFlipped = false;
     if( m_CurrentPad )
@@ -688,7 +688,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError )
 {
     long     PadLayerMask;
-    int      internalUnits = m_Parent->m_InternalUnits;
+    int      internalUnits = m_Parent->GetInternalUnits();
     wxString msg;
 
     aPad->m_Attribut = CodeType[m_PadType->GetSelection()];

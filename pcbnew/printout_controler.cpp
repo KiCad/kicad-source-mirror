@@ -163,8 +163,8 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
 
     SheetSize = screen->m_CurrentSheetDesc->m_Size;       // size in 1/1000 inch
-    SheetSize.x *= m_Parent->m_InternalUnits / 1000;
-    SheetSize.y *= m_Parent->m_InternalUnits / 1000;            // size in internal units
+    SheetSize.x *= m_Parent->GetInternalUnits() / 1000;
+    SheetSize.y *= m_Parent->GetInternalUnits() / 1000;            // size in internal units
 
     PCB_BASE_FRAME* pcbframe = (PCB_BASE_FRAME*) m_Parent;
 

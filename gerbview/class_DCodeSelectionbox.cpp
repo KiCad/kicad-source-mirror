@@ -14,7 +14,7 @@
 /* Helper class for displaying DCodes list */
 /*******************************************/
 
-DCODE_SELECTION_BOX::DCODE_SELECTION_BOX( EDA_TOOLBAR* aParent, wxWindowID aId,
+DCODE_SELECTION_BOX::DCODE_SELECTION_BOX( wxAuiToolBar* aParent, wxWindowID aId,
                                           const wxPoint& aLocation, const wxSize& aSize,
                                           const wxArrayString& aChoices  ) :
     wxComboBox( aParent, aId, wxEmptyString, aLocation, aSize, 0, NULL, wxCB_READONLY )

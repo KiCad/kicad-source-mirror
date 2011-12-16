@@ -42,7 +42,7 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
 
     dialog.SetWidthUnits( ReturnUnitSymbol( g_UserUnit ) );
 
-    wxString val = ReturnStringFromValue( g_UserUnit, m_drawLineWidth, m_InternalUnits );
+    wxString val = ReturnStringFromValue( g_UserUnit, m_drawLineWidth, m_internalUnits );
     dialog.SetWidth( val );
     dialog.SetApplyToAllUnits( !m_drawSpecificUnit );
     dialog.EnableApplyToAllUnits( component && component->GetPartCount() > 1 );
@@ -56,7 +56,7 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
         return;
 
     val = dialog.GetWidth();
-    m_drawLineWidth = ReturnValueFromString( g_UserUnit, val, m_InternalUnits );
+    m_drawLineWidth = ReturnValueFromString( g_UserUnit, val, m_internalUnits );
     m_drawSpecificConvert = !dialog.GetApplyToAllConversions();
     m_drawSpecificUnit    = !dialog.GetApplyToAllUnits();
 

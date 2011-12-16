@@ -119,7 +119,7 @@ void DIALOG_LIB_EDIT_PIN::OnPropertiesChange( wxCommandEvent& event )
 {
     if( ! IsShown() )   // do nothing at init time
         return;
-    int units = ((LIB_EDIT_FRAME*)GetParent())->m_InternalUnits;
+    int units = ((LIB_EDIT_FRAME*)GetParent())->GetInternalUnits();
     int pinNameSize = ReturnValueFromString( g_UserUnit, GetNameTextSize(), units );
     int pinNumSize = ReturnValueFromString( g_UserUnit, GetPadNameTextSize(), units);
     int pinOrient = LIB_PIN::GetOrientationCode( GetOrientation() );

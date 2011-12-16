@@ -41,7 +41,8 @@ void EDA_3D_FRAME::ReCreateHToolbar()
         return;
     }
 
-    m_HToolBar = new EDA_TOOLBAR( TOOLBAR_MAIN, this, ID_H_TOOLBAR, true );
+    m_HToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                   wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
     m_HToolBar->AddTool( ID_RELOAD3D_BOARD, wxEmptyString,

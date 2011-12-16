@@ -51,12 +51,12 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     dlg.SetFileName( aSheet->GetFileName() );
     dlg.SetFileNameTextSize( ReturnStringFromValue( g_UserUnit,
                                                     aSheet->GetFileNameSize(),
-                                                    m_InternalUnits ) );
+                                                    m_internalUnits ) );
     dlg.SetFileNameTextSizeUnits( units );
     dlg.SetSheetName( aSheet->GetName() );
     dlg.SetSheetNameTextSize( ReturnStringFromValue( g_UserUnit,
                                                      aSheet->GetSheetNameSize(),
-                                                     m_InternalUnits ) );
+                                                     m_internalUnits ) );
     dlg.SetSheetNameTextSizeUnits( units );
 
     /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier
@@ -194,11 +194,11 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
     aSheet->SetFileNameSize( ReturnValueFromString( g_UserUnit,
                                                     dlg.GetFileNameTextSize(),
-                                                    m_InternalUnits ) );
+                                                    m_internalUnits ) );
     aSheet->SetName( dlg.GetSheetName() );
     aSheet->SetSheetNameSize( ReturnValueFromString( g_UserUnit,
                                                      dlg.GetSheetNameTextSize(),
-                                                     m_InternalUnits ) );
+                                                     m_internalUnits ) );
 
     if( aSheet->GetName().IsEmpty() )
         aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ), aSheet->GetTimeStamp() ) );

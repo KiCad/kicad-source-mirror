@@ -44,7 +44,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
     wxString      msg;
 
     // Display current setup for tracks and vias
-    int           Internal_Unit = m_Parent->m_InternalUnits;
+    int           Internal_Unit = m_Parent->GetInternalUnits();
     BOARD*        board = m_Parent->GetBoard();
     NETCLASSES&   netclasses = board->m_NetClasses;
     NETINFO_ITEM* net = board->FindNet( m_Netcode );

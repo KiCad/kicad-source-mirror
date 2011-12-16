@@ -75,9 +75,9 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow*       parent,
     EDA_PANEINFO info;
     info.InfoToolbarPane();
 
-    if( m_HToolBar )
-        m_auimgr.AddPane( m_HToolBar,
-                          wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Layer( 1 ) );
+    if( m_mainToolBar )
+        m_auimgr.AddPane( m_mainToolBar,
+                          wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Layer( 1 ) );
 
     if( m_RightWin )
         m_auimgr.AddPane( m_RightWin,

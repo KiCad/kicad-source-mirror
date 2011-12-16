@@ -131,11 +131,11 @@ void DIALOG_DRC_CONTROL::InitValues()
 void DIALOG_DRC_CONTROL::SetDrcParmeters( )
 {
      m_BrdSettings.m_TrackMinWidth =
-        ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->m_InternalUnits );
+        ReturnValueFromTextCtrl( *m_SetTrackMinWidthCtrl, m_Parent->GetInternalUnits() );
      m_BrdSettings.m_ViasMinSize =
-        ReturnValueFromTextCtrl( *m_SetViaMinSizeCtrl, m_Parent->m_InternalUnits );
+        ReturnValueFromTextCtrl( *m_SetViaMinSizeCtrl, m_Parent->GetInternalUnits() );
      m_BrdSettings.m_MicroViasMinSize =
-        ReturnValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl, m_Parent->m_InternalUnits );
+        ReturnValueFromTextCtrl( *m_SetMicroViakMinSizeCtrl, m_Parent->GetInternalUnits() );
 
      m_Parent->GetBoard()->SetDesignSettings( m_BrdSettings );
 }

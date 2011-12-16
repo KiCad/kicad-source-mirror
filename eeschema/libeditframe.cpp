@@ -247,8 +247,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     EDA_PANEINFO mesg;
     mesg.MessageToolbarPane();
 
-    m_auimgr.AddPane( m_HToolBar,
-                      wxAuiPaneInfo( horiz ).Name( wxT( "m_HToolBar" ) ).Top().Row( 0 ) );
+    m_auimgr.AddPane( m_mainToolBar,
+                      wxAuiPaneInfo( horiz ).Name( wxT( "m_mainToolBar" ) ).Top().Row( 0 ) );
 
     m_auimgr.AddPane( m_drawToolBar,
                       wxAuiPaneInfo( vert ).Name( wxT( "m_VToolBar" ) ).Right() );
@@ -522,7 +522,7 @@ void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdateDeMorganNormal( wxUpdateUIEvent& event )
 {
-    if( m_HToolBar == NULL )
+    if( m_mainToolBar == NULL )
         return;
 
     event.Enable( GetShowDeMorgan() || ( m_component && m_component->HasConversion() ) );
@@ -532,7 +532,7 @@ void LIB_EDIT_FRAME::OnUpdateDeMorganNormal( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdateDeMorganConvert( wxUpdateUIEvent& event )
 {
-    if( m_HToolBar == NULL )
+    if( m_mainToolBar == NULL )
         return;
 
     event.Enable( GetShowDeMorgan() || ( m_component && m_component->HasConversion() ) );
@@ -674,7 +674,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_LIBEDIT_EDIT_PIN_BY_PIN:
-        m_editPinsPerPartOrConvert = m_HToolBar->GetToolState( ID_LIBEDIT_EDIT_PIN_BY_PIN );
+        m_editPinsPerPartOrConvert = m_mainToolBar->GetToolToggled( ID_LIBEDIT_EDIT_PIN_BY_PIN );
         break;
 
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
