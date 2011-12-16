@@ -141,6 +141,9 @@ const wxPoint D_PAD::ReturnShapePos()
 
 const wxString D_PAD::GetPadName() const
 {
+#if 0   // m_Padname is not ASCII and not UTF8, it is LATIN1 basically, whatever
+        // 8 bit font is supported in KiCad plotting and drawing.
+
     // Return pad name as wxString, assume it starts as a non-terminated
     // utf8 character sequence
 
@@ -151,11 +154,21 @@ const wxString D_PAD::GetPadName() const
     temp[sizeof(m_Padname)] = 0;
 
     return FROM_UTF8( temp );
+#else
+
+    wxString name;
+
+    ReturnStringPadName( name );
+    return name;
+#endif
 }
 
 
 void D_PAD::ReturnStringPadName( wxString& text ) const
 {
+#if 0   // m_Padname is not ASCII and not UTF8, it is LATIN1 basically, whatever
+        // 8 bit font is supported in KiCad plotting and drawing.
+
     // Return pad name as wxString, assume it starts as a non-terminated
     // utf8 character sequence
 
@@ -166,6 +179,20 @@ void D_PAD::ReturnStringPadName( wxString& text ) const
     temp[sizeof(m_Padname)] = 0;
 
     text = FROM_UTF8( temp );
+
+#else
+
+    text.Empty();
+
+    for( int ii = 0; ii < PADNAMEZ; ii++ )
+    {
+        if( !m_Padname[ii] )
+            break;
+
+        // add an unsigned 8 bit byte, which is LATIN1 or CRYLIC
+        text.Append( (unsigned char) m_Padname[ii] );
+    }
+#endif
 }
 
 
@@ -176,25 +203,17 @@ void D_PAD::SetPadName( const wxString& name )
 
     len = name.Length();
 
-    if( len > 4 )
-        len = 4;
+    if( len > PADNAMEZ )
+        len = PADNAMEZ;
+
+    // m_Padname[] is not UTF8, it is an 8 bit character that matches the KiCad font,
+    // so only copy the lower 8 bits of each character.
 
     for( ii = 0; ii < len; ii++ )
-        m_Padname[ii] = name.GetChar( ii );
+        m_Padname[ii] = (char) name.GetChar( ii );
 
-    for( ii = len; ii < 4; ii++ )
-        m_Padname[ii] = 0;
-}
-
-void D_PAD::SetPadName( const char* aName )
-{
-    unsigned i;
-
-    for( i=0; i<sizeof(m_Padname) && *aName;  ++i )
-        m_Padname[i] = *aName++;
-
-    while( i < sizeof(m_Padname) )
-        m_Padname[i++] = 0;
+    for( ii = len; ii < PADNAMEZ; ii++ )
+        m_Padname[ii] = '\0';
 }
 
 

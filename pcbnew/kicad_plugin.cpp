@@ -60,13 +60,7 @@
 #include <auto_ptr.h>
 #include <kicad_string.h>
 #include <macros.h>
-#include <build_version.h>
-
-//#include <fctsys.h>
-//#include <confirm.h>
-//#include <wxPcbStruct.h">
-//#include <pcbcommon.h>
-
+//#include <build_version.h>
 #include <zones.h>
 
 #ifdef CVPCB
@@ -90,16 +84,14 @@
 
 #include <wx/ffile.h>
 
+
+//#define KICAD_NANOMETRE
+
+
 #define VERSION_ERROR_FORMAT    _( "File '%s' is format version: %d.\nI only support format version <= %d.\nPlease upgrade PCBNew to load this file." )
 #define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
 #define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
 #define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
-
-/*
-#include <pcbnew.h>
-#include <pcbnew_id.h>
-#include <autorout.h>
-*/
 
 
 
@@ -330,6 +322,8 @@ void KICAD_PLUGIN::checkVersion()
         m_error.Printf( VERSION_ERROR_FORMAT, ver );
         THROW_IO_ERROR( m_error );
     }
+
+    m_loading_format_version = ver;
 }
 
 
@@ -1039,11 +1033,15 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
             // e.g. "Sh "A2" C 520 520 0 0 900"
             // or   "Sh "1" R 157 1378 0 0 900"
 
-            char    padname[sizeof(pad->m_Padname)+1];
+            // mypadname is LATIN1/CRYLIC for BOARD_FORMAT_VERSION 1,
+            // but for BOARD_FORMAT_VERSION 2, it is UTF8 from disk.
+            // So we have to go through two code paths.  Moving forward
+            // padnames will be in UTF8 on disk, as are all KiCad strings on disk.
+            char        mypadname[50];
 
             data = line + SZ( "Sh" ) + 1;   // +1 skips trailing whitespace
 
-            data = data + ReadDelimitedText( padname, data, sizeof(padname) ) + 1;  // +1 trailing whitespace
+            data = data + ReadDelimitedText( mypadname, data, sizeof(mypadname) ) + 1;  // +1 trailing whitespace
 
             // sscanf( PtLine, " %s %d %d %d %d %d", BufCar, &m_Size.x, &m_Size.y, &m_DeltaSize.x, &m_DeltaSize.y, &m_Orient );
 
@@ -1065,6 +1063,26 @@ void KICAD_PLUGIN::loadPAD( MODULE* aModule )
                     FROM_UTF8( line ).GetData(), m_reader->LineNumber() );
                 THROW_IO_ERROR( m_error );
             }
+
+            // go through a wxString to establish a universal character set properly
+            wxString    padname;
+
+            if( m_loading_format_version == 1 )
+            {
+                // add 8 bit bytes, file format 1 was KiCad font type byte,
+                // simply promote those 8 bit bytes up into UNICODE. (subset of LATIN1)
+                const unsigned char* cp = (unsigned char*) mypadname;
+                while( *cp )
+                {
+                    padname += *cp++;  // unsigned, ls 8 bits only
+                }
+            }
+            else
+            {
+                // version 2, which is UTF8.
+                padname = FROM_UTF8( mypadname );
+            }
+            // chances are both were ASCII, but why take chances?
 
             pad->SetPadName( padname );
             pad->SetShape( padshape );
@@ -3059,8 +3077,28 @@ void KICAD_PLUGIN::savePAD( const D_PAD* me ) const
         THROW_IO_ERROR( wxString::Format( UNKNOWN_PAD_FORMAT, me->GetShape() ) );
     }
 
+    // universal character set padname
+    wxString padname = me->GetPadName();
+
+#if BOARD_FORMAT_VERSION == 1
+
+    char mypadname[PADNAMEZ+1];
+
+    int i;
+    for( i = 0; i<PADNAMEZ && padname[i]; ++i )
+    {
+        // truncate from universal character down to 8 bit foreign jibber jabber byte
+        mypadname[i] = (char) padname[i];
+    }
+
+    mypadname[i] = 0;
+
+    fprintf( m_fp,  "Sh \"%s\" %c %s %s %s\n",
+                    mypadname,         // probably ASCII, but possibly jibber jabber
+#else
     fprintf( m_fp,  "Sh %s %c %s %s %s\n",
                     EscapedUTF8( me->GetPadName() ).c_str(),
+#endif
                     cshape,
                     fmtBIUSize( me->GetSize() ).c_str(),
                     fmtBIUSize( me->GetDelta() ).c_str(),

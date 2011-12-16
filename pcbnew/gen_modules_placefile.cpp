@@ -435,7 +435,7 @@ void PCB_EDIT_FRAME::GenModuleReport( wxCommandEvent& event )
 
         for( pad = Module->m_Pads; pad != NULL; pad = pad->Next() )
         {
-            fprintf( rptfile, "$PAD \"%.4s\"\n", pad->m_Padname );
+            fprintf( rptfile, "$PAD \"%s\"\n", TO_UTF8( pad->GetPadName() ) );
             sprintf( line, "position %9.6f %9.6f\n",
                      pad->m_Pos0.x * conv_unit,
                      pad->m_Pos0.y * conv_unit );
