@@ -176,7 +176,12 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         g_CurrentTrackSegment->m_End   = pos;
 
         if( pad )
+        {
             g_CurrentTrackSegment->m_PadsConnected.push_back( pad );
+            // Useful to display track length, if the pad has a die length:
+            g_CurrentTrackSegment->SetState( BEGIN_ONPAD, ON );
+            g_CurrentTrackSegment->start = pad;
+        }
 
         if( g_TwoSegmentTrackBuild )
         {

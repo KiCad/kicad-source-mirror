@@ -90,7 +90,6 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     if( aHotkeyCode == 0 )
         return;
 
-    wxPoint pos;
     bool    itemCurrentlyEdited = (GetCurItem() && GetCurItem()->m_Flags);
     MODULE* module = NULL;
     int evt_type = 0;       //Used to post a wxCommandEvent on demand
@@ -106,6 +105,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
     if( HK_Descr == NULL )
         HK_Descr = GetDescriptorFromHotkey( aHotkeyCode, board_edit_Hotkey_List );
+
 
     if( HK_Descr == NULL )
         return;
@@ -143,8 +143,6 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     // Create a wxCommandEvent that will be posted in some hot keys functions
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
-
-
 
     int            ll;
     unsigned int   cnt;
@@ -580,7 +578,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         // get any module, locked or not locked and toggle its locked status
         if( !itemCurrentlyEdited )
         {
-            pos = screen->RefPos( true );
+            wxPoint pos = screen->RefPos( true );
             module = GetBoard()->GetFootprint( pos, screen->m_Active_Layer, true );
         }
         else if( GetCurItem()->Type() == PCB_MODULE_T )
