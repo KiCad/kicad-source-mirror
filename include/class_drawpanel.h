@@ -177,6 +177,7 @@ public:
     void OnMouseEvent( wxMouseEvent& event );
     void OnMouseLeaving( wxMouseEvent& event );
     void OnKeyEvent( wxKeyEvent& event );
+    void OnCharHook( wxKeyEvent& event );
 
     void OnPan( wxCommandEvent& event );
 

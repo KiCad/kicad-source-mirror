@@ -63,7 +63,7 @@ BEGIN_EVENT_TABLE( EDA_DRAW_PANEL, wxScrolledWindow )
     EVT_MOUSEWHEEL( EDA_DRAW_PANEL::OnMouseWheel )
     EVT_MOUSE_EVENTS( EDA_DRAW_PANEL::OnMouseEvent )
     EVT_CHAR( EDA_DRAW_PANEL::OnKeyEvent )
-    EVT_CHAR_HOOK( EDA_DRAW_PANEL::OnKeyEvent )
+    EVT_CHAR_HOOK( EDA_DRAW_PANEL::OnCharHook )
     EVT_PAINT( EDA_DRAW_PANEL::OnPaint )
     EVT_ERASE_BACKGROUND( EDA_DRAW_PANEL::OnEraseBackground )
     EVT_SCROLLWIN( EDA_DRAW_PANEL::OnScroll )
@@ -1105,23 +1105,23 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 }
 
 
+
+void EDA_DRAW_PANEL::OnCharHook( wxKeyEvent& event )
+{
+    event.Skip();
+}
+
 void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 {
     int localkey;
     wxPoint pos;
 
-    localkey = event.GetKeyCode();
+ 	localkey = event.GetKeyCode();
 
     switch( localkey )
     {
-    case WXK_CONTROL:
-    case WXK_CAPITAL:
-    case WXK_SHIFT:
-    case WXK_NUMLOCK:
-    case WXK_LBUTTON:
-    case WXK_RBUTTON:
-    case WXK_ALT:
-        return;
+        default:
+            break;
 
     case WXK_ESCAPE:
         m_AbortRequest = true;
@@ -1130,7 +1130,6 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
             EndMouseCapture();
         else
             EndMouseCapture( ID_NO_TOOL_SELECTED, m_defaultCursor, wxEmptyString );
-
         break;
     }
 

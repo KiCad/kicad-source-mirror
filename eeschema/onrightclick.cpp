@@ -157,9 +157,11 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         }
 
         if( GetBusEntryShape( (SCH_BUS_ENTRY*) item ) == '\\' )
-            PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_SLASH, _( "Set Bus Entry /" ) );
+            AddMenuItem( PopMenu, ID_POPUP_SCH_ENTRY_SELECT_SLASH,
+                         _( "Set Bus Entry /" ), KiBitmap( change_entry_orient_xpm ) );
         else
-            PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH, _( "Set Bus Entry \\" ) );
+            AddMenuItem( PopMenu, ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH,
+                         _( "Set Bus Entry \\" ), KiBitmap( change_entry_orient_xpm ) );
 
         AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Bus Entry" ),
                      KiBitmap( delete_bus_xpm ) );

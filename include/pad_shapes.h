@@ -19,8 +19,8 @@
 
 /* PADS attributes */
 #define PAD_STANDARD    0       // Usual pad
-#define PAD_SMD         1       // Smd pad, appears on the layer paste (default)
-#define PAD_CONN        2       // Like smd, does not appear on the layer paste (default)
+#define PAD_SMD         1       // Smd pad, appears on the solder paste layer (default)
+#define PAD_CONN        2       // Like smd, does not appear on the solder paste layer (default)
 #define PAD_HOLE_NOT_PLATED 3   // like PAD_STANDARD, but not plated
                                 // mechanical used only
                                 // no connection allowed

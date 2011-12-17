@@ -484,11 +484,12 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         }
 
         msg = AddHotkeyName( _( "Place Via" ), g_Board_Editor_Hokeys_Descr, HK_ADD_VIA );
-        PopMenu->Append( ID_POPUP_PCB_PLACE_VIA, msg );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_VIA, msg, KiBitmap( via_xpm ) );
 
         msg = AddHotkeyName( _( "Switch Track Posture" ), g_Board_Editor_Hokeys_Descr,
                              HK_SWITCH_TRACK_POSTURE );
-        PopMenu->Append( ID_POPUP_PCB_SWITCH_TRACK_POSTURE, msg );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_SWITCH_TRACK_POSTURE, msg,
+                             KiBitmap( change_entry_orient_xpm ) );
 
         // See if we can place a Micro Via (4 or more layers, and start from an external layer):
         if( IsMicroViaAcceptable() )

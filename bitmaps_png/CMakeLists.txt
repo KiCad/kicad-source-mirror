@@ -156,6 +156,7 @@ set( BMAPS_MID
     browse_files
     cancel_tool
     cancel
+    change_entry_orient
     create_cmp_file
     checked_ok
     component_select_unit
@@ -239,9 +240,10 @@ set( BMAPS_MID
     gbr_select_mode2
     gerber_file
     gerber_recent_files
+    gerber_open_dcode_file
     gerbview_drill_file
     gerbview_clear_layers
-    gerber_open_dcode_file
+    gerbview_open_recent_drill_files
     general_deletions
     general_ratsnest
     glabel2label
@@ -478,6 +480,7 @@ set( BMAPS_MID
     unzip
     update_module_board
     up
+    via
     via_sketch
     warning
     web_support
