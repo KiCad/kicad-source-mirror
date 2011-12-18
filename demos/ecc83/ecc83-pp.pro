@@ -1,5 +1,5 @@
-update=03/12/2010 17:27:41
-last_client=pcbnew
+update=07/03/2011 07:10:15
+last_client=cvpcb
 [general]
 version=1
 RootSch=ecc83-pp.sch
@@ -65,14 +65,6 @@ LibName22=display
 LibName23=cypress
 LibName24=siliconi
 LibName25=contrib
-[cvpcb]
-version=1
-NetITyp=0
-NetIExt=.net
-PkgIExt=.pkg
-NetType=0
-[cvpcb/libraries]
-EquName1=devcms
 [pcbnew]
 version=1
 PadDrlX=760
@@ -92,8 +84,7 @@ TxtLar=120
 MSegLar=150
 LastNetListRead=
 [pcbnew/libraries]
-LibDir=
-LibName1=supports
+LibName1=dip_sockets
 LibName2=valves
 LibName3=connect
 LibName4=discret
@@ -101,3 +92,9 @@ LibName5=pin_array
 LibName6=divers
 LibName7=libcms
 LibName8=display
+LibDir=
+[cvpcb]
+version=1
+NetIExt=.net
+[cvpcb/libraries]
+EquName1=devcms
