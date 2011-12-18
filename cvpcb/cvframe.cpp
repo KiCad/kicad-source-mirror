@@ -500,36 +500,47 @@ void CVPCB_MAINFRAME::OnLeftDClick( wxListEvent& event )
 }
 
 
+/* Called when clicking on a component in component list window
+ * * Updates the filtered foorprint list, if the filtered list option is selected
+ * * Updates the current selected footprint in footprint list
+ * * Updates the footprint shown in footprint display window (if opened)
+ */
 void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
 {
-    int selection;
+    #define REDRAW_LIST true
+    #define SELECT_FULL_LIST true
+    int selection = -1;
 
     if( !m_mainToolBar->GetToolToggled( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST ) )
+        m_FootprintList->SetActiveFootprintList( SELECT_FULL_LIST, REDRAW_LIST );
+
+    else
     {
-        m_FootprintList->SetActiveFootprintList( true, true );
-        return;
+        selection = m_ListCmp->GetSelection();
+
+        if( selection < 0 )
+            m_FootprintList->SetActiveFootprintList( SELECT_FULL_LIST, REDRAW_LIST );
+
+        else
+        {
+            if( &m_components[ selection ] == NULL )
+                m_FootprintList->SetActiveFootprintList( SELECT_FULL_LIST, REDRAW_LIST );
+            else
+                m_FootprintList->SetFootprintFilteredList( &m_components[ selection ],
+                                                           m_footprints );
+        }
     }
 
     selection = m_ListCmp->GetSelection();
 
     if( selection < 0 )
-    {
-        m_FootprintList->SetActiveFootprintList( true, true );
         return;
-    }
-
-    if( &m_components[ selection ] == NULL )
-    {
-        m_FootprintList->SetActiveFootprintList( true, true );
-        return;
-    }
-
-    m_FootprintList->SetFootprintFilteredList( &m_components[ selection ], m_footprints );
 
     // Preview of the already assigned footprint.
     // Find the footprint that was already choosen for this component and select it.
     wxString module = *(&m_components[ selection ].m_Module);
 
+    bool found = false;
     for( int ii = 0; ii < m_FootprintList->GetCount(); ii++ )
     {
         wxString footprintName;
@@ -539,10 +550,23 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
         footprintName = msg.AfterFirst( wxChar( ' ' ) );
 
         if( module.Cmp( footprintName ) == 0 )
+        {
             m_FootprintList->SetSelection( ii, true );
-        else
-            m_FootprintList->SetSelection( ii, false );
+            found = true;
+            break;
+        }
     }
+    if( ! found )
+    {
+        int ii = m_FootprintList->GetSelection();
+        if ( ii >= 0 )
+            m_FootprintList->SetSelection( ii, false );
+        if( m_DisplayFootprintFrame )
+        {
+            CreateScreenCmp();
+        }
+    }
+
 
     SendMessageToEESCHEMA();
     DisplayStatus();

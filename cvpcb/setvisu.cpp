@@ -84,21 +84,28 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
 
         m_DisplayFootprintFrame->Zoom_Automatique( false );
         m_DisplayFootprintFrame->DrawPanel->Refresh();
-        m_DisplayFootprintFrame->UpdateStatusBar();    /* Display new cursor coordinates and zoom value */
+        // Display new cursor coordinates and zoom value:
+        m_DisplayFootprintFrame->UpdateStatusBar();
 
         if( m_DisplayFootprintFrame->m_Draw3DFrame )
             m_DisplayFootprintFrame->m_Draw3DFrame->NewDisplay();
     }
-    else if( !IsNew )
+    else if( !IsNew )   // No footprint to display. Erase old footprint, if any
     {
+        if( m_DisplayFootprintFrame->GetBoard()->m_Modules.GetCount() )
+        {
+            m_DisplayFootprintFrame->GetBoard()->m_Modules.DeleteAll();
+            m_DisplayFootprintFrame->Zoom_Automatique( false );
+            m_DisplayFootprintFrame->SetStatusText( wxEmptyString, 0 );
+            m_DisplayFootprintFrame->UpdateStatusBar();
+        }
+
         m_DisplayFootprintFrame->Refresh();
 
         if( m_DisplayFootprintFrame->m_Draw3DFrame )
             m_DisplayFootprintFrame->m_Draw3DFrame->NewDisplay();
     }
 }
-
-
 
 /*
  * Draws the current highlighted footprint.
@@ -130,22 +137,4 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
     {
         m_Modules->Draw( aPanel, aDC, GR_COPY );
     }
-}
-
-/* dummy_functions:
- *
- *  These functions are used in some classes.
- *  they are useful in Pcbnew, but have no meaning or are never used
- *  in CvPcb or GerbView.
- *  but they must exist because they appear in some classes.
- *  Do nothing in CvPcb.
- */
-TRACK* MarkTrace( BOARD* aPcb,
-                  TRACK* aStartSegm,
-                  int*   aSegmCount,
-                  int*   aTrackLen,
-                  int*   aLenDie,
-                  bool   aReorder )
-{
-    return NULL;
 }
