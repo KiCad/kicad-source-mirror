@@ -84,9 +84,11 @@ void EDA_ITEM::InitVars()
     m_List      = NULL;     // I am not on any list yet
     m_Image     = NULL;     // Link to an image copy for undelete or abort command
     m_Flags     = 0;        // flags for editions and other
-    SetTimeStamp( 0 );        // Time stamp used for logical links
+    SetTimeStamp( 0 );      // Time stamp used for logical links
     m_Status    = 0;
     m_Selected  = 0;        // Used by block commands, and selective editing
+    m_forceVisible = false; // true to override the visibility setting of the item.
+
 }
 
 
