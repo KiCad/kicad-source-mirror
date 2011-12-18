@@ -64,6 +64,18 @@ public:
 
     wxPoint m_End() const;
 
+    /**
+     * function GetBusEntryShape
+     * @return the shape of the bus entry, as an ascii code '/' or '\'
+     */
+    int GetBusEntryShape() const;
+
+    /**
+     * function SetBusEntryShape
+     * @param aShape = the shape of the bus entry, as an ascii code '/' or '\'
+     */
+    void SetBusEntryShape( int aShape );
+
     int GetWidth() const { return m_width; }
 
     void SetWidth( int aWidth ) { m_width = aWidth; }
