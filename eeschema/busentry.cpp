@@ -72,37 +72,12 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int en
     if( BusEntry->m_Flags == 0 )
         SaveCopyInUndoList( BusEntry, UR_CHANGED );
 
+    s_LastShape = entry_shape == '/' ? '/' : '\\';
+
     BusEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
-
-    wxSize size = BusEntry->GetSize();
-
-    switch( entry_shape )
-    {
-    case '\\':
-        s_LastShape = '\\';
-        size.y = 100;
-        BusEntry->SetSize( size );
-        break;
-
-    case '/':
-        s_LastShape = '/';
-        size.y = -100;
-        BusEntry->SetSize( size );
-        break;
-    }
-
+    BusEntry->SetBusEntryShape( s_LastShape );
     GetScreen()->TestDanglingEnds();
     BusEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+
     OnModify( );
-}
-
-
-int SCH_EDIT_FRAME::GetBusEntryShape( SCH_BUS_ENTRY* BusEntry )
-{
-    int entry_shape = '\\';
-
-    if( BusEntry->GetSize().y < 0 )
-        entry_shape = '/';
-
-    return entry_shape;
 }

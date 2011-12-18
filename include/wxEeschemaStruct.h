@@ -761,7 +761,6 @@ private:
     // Bus Entry
     SCH_BUS_ENTRY* CreateBusEntry( wxDC* DC, int entry_type );
     void SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int entry_type );
-    int GetBusEntryShape( SCH_BUS_ENTRY* BusEntry );
 
     /**
      * Function AddNoConnect
