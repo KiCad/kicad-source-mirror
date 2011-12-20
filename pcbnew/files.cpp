@@ -302,7 +302,7 @@ this file again." ) );
     {
         wxString msg = wxString::Format(  _( "Error loading board.\n%s" ),
                             ioe.errorText.GetData() );
-        wxMessageBox( msg, _( "Open Board File" ), wxICON_ERROR );
+        wxMessageBox( msg, _( "Open Board File" ), wxICON_ERROR | wxOK );
     }
 
     if( !aAppend )
