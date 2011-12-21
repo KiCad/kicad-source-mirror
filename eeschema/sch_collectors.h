@@ -221,6 +221,10 @@ class SCH_FIND_COLLECTOR : public COLLECTOR
     /// The current found item list index.
     int m_foundIndex;
 
+    /// A flag to indicate that the schemtic has been modified and a new search must be
+    /// performed even if the search criteria hasn't changed.
+    bool m_forceSearch;
+
     /**
      * Function atEnd
      * tests if #m_foundIndex is at the end of the list give the current find/replace
@@ -247,7 +251,10 @@ public:
     {
         SetScanTypes( aScanTypes );
         m_foundIndex = 0;
+        m_forceSearch = false;
     }
+
+    void SetForceSearch() { m_forceSearch = true; }
 
     /**
      * Function UpdateIndex
@@ -266,12 +273,19 @@ public:
     SCH_FIND_COLLECTOR_DATA GetFindData( int aIndex );
 
     /**
-     * Function GetFindReplaceData
+     * Function IsSearchRequired
+     * checks the current collector state agaianst \a aFindReplaceData to see if a new search
+     * needs to be performed to update the collector.
      *
-     * @return A reference to a #SCH_FIND_REPLACE_DATA object containing the current
-     *         search criteria.
+     * @param aFindReplaceData A #SCH_FIND_REPLACE_DATA object containing the search criteria
+     *                         to test for changes against the current search criteria.
+     * @return True if \a aFindReplaceData would require a new search to be performaed or
+     *         the force search flag is true.  Otherwise, false is returned.
      */
-    SCH_FIND_REPLACE_DATA& GetFindReplaceData() { return m_findReplaceData; }
+    bool IsSearchRequired( SCH_FIND_REPLACE_DATA& aFindReplaceData )
+    {
+        return m_findReplaceData.ChangesSearch( aFindReplaceData ) || m_forceSearch;
+    }
 
     /**
      * Function GetText()
