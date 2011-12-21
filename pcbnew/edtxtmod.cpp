@@ -48,7 +48,7 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
     if( Module )
         Module->m_Drawings.PushFront( Text );
 
-    Text->m_Flags = IS_NEW;
+    Text->SetFlags( IS_NEW );
 
     Text->m_Text = wxT( "text" );
 
@@ -62,7 +62,7 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
     InstallTextModOptionsFrame( Text, NULL );
     DrawPanel->MoveCursorToCrossHair();
 
-    Text->m_Flags = 0;
+    Text->ClearFlags();
 
     if( DC )
         Text->Draw( DrawPanel, DC, GR_OR );
@@ -82,7 +82,7 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MODULE* module = (MODULE*) Text->GetParent();
 
-    if( module && module->m_Flags == 0 && Text->m_Flags == 0 ) // prepare undo command
+    if( module && module->GetFlags() == 0 && Text->GetFlags() == 0 ) // prepare undo command
     {
         if( this->m_Ident == PCB_FRAME )
             SaveCopyInUndoList( module, UR_CHANGED );
@@ -151,7 +151,7 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     // If the text was moved (the move does not change internal data)
     // it could be rotated while moving. So set old value for orientation
-    if( (Text->m_Flags & IS_MOVED) )
+    if( Text->IsMoving() )
         Text->m_Orient = TextInitialOrientation;
 
     /* Redraw the text */
@@ -160,8 +160,8 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     // leave it at (0,0) so we can use it Rotate when not moving.
     MoveVector.x = MoveVector.y = 0;
 
-    Text->m_Flags   = 0;
-    Module->m_Flags = 0;
+    Text->ClearFlags();
+    Module->ClearFlags();
 
     screen->SetCurItem( NULL );
 }
@@ -178,8 +178,8 @@ void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     Module = (MODULE*) Text->GetParent();
 
-    Text->m_Flags   |= IS_MOVED;
-    Module->m_Flags |= IN_EDIT;
+    Text->SetFlags( IS_MOVED );
+    Module->SetFlags( IN_EDIT );
 
     MoveVector.x = MoveVector.y = 0;
 
@@ -227,8 +227,8 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             wxPoint textRelPos = Text->m_Pos - Module->m_Pos;
             RotatePoint( &textRelPos, -Module->m_Orient );
             Text->SetPos0( textRelPos );
-            Text->m_Flags   = 0;
-            Module->m_Flags = 0;
+            Text->ClearFlags();
+            Module->ClearFlags();
             Module->m_LastEdit_Time = time( NULL );
             OnModify();
 

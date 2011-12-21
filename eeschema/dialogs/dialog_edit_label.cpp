@@ -225,7 +225,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
     int      value;
 
     /* save old text in undo list if not already in edit */
-    if( m_CurrentText->m_Flags == 0 )
+    if( m_CurrentText->GetFlags() == 0 )
         m_Parent->SaveCopyInUndoList( m_CurrentText, UR_CHANGED );
 
     m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
@@ -234,7 +234,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
 
     if( !text.IsEmpty() )
         m_CurrentText->m_Text = text;
-    else if( (m_CurrentText->m_Flags & IS_NEW) == 0 )
+    else if( !m_CurrentText->IsNew() )
         DisplayError( this, _( "Empty Text!" ) );
 
     m_CurrentText->SetOrientation( m_TextOrient->GetSelection() );
@@ -266,7 +266,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
     m_Parent->OnModify();
 
     /* Make the text size as new default size if it is a new text */
-    if( (m_CurrentText->m_Flags & IS_NEW) != 0 )
+    if( m_CurrentText->IsNew() )
         g_DefaultTextLabelSize = m_CurrentText->m_Size.x;
 
     m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );

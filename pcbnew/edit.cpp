@@ -319,10 +319,12 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_PLACE_MOVED_TRACK_NODE:
         DrawPanel->MoveCursorToCrossHair();
-        if( GetCurItem()->m_Flags & IS_DRAGGED )
+
+        if( GetCurItem()->IsDragging() )
         {
             PlaceDraggedOrMovedTrackSegment( (TRACK*) GetCurItem(), &dc );
         }
+
         break;
 
     case ID_POPUP_PCB_SWITCH_TRACK_POSTURE:
@@ -346,7 +348,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_PLACE_VIA:
         DrawPanel->MoveCursorToCrossHair();
-        if( GetCurItem()->m_Flags & IS_DRAGGED )
+
+        if( GetCurItem()->IsDragging() )
         {
             PlaceDraggedOrMovedTrackSegment( (TRACK*) GetCurItem(), &dc );
         }
@@ -681,7 +684,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         /* This is a simple rotation, no other editing in progress */
-        if( !(GetCurItem()->m_Flags & IS_MOVED) )
+        if( !GetCurItem()->IsMoving() )
             SaveCopyInUndoList(GetCurItem(), UR_ROTATED, ((MODULE*)GetCurItem())->m_Pos);
 
         Rotate_Module( &dc, (MODULE*) GetCurItem(), g_RotationAngle, true );
@@ -709,7 +712,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         /* This is a simple rotation, no other editing in progress */
-        if( !(GetCurItem()->m_Flags & IS_MOVED) )
+        if( !GetCurItem()->IsMoving() )
             SaveCopyInUndoList( GetCurItem(), UR_ROTATED_CLOCKWISE,
                                 ((MODULE*)GetCurItem())->m_Pos );
 
@@ -738,7 +741,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         /* This is a simple flip, no other editing in progress */
-        if( !(GetCurItem()->m_Flags & IS_MOVED) )
+        if( !GetCurItem()->IsMoving() )
             SaveCopyInUndoList(GetCurItem(), UR_FLIPPED, ((MODULE*)GetCurItem())->m_Pos);
 
         Change_Side_Module( (MODULE*) GetCurItem(), &dc );
@@ -958,7 +961,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_DRAWING_LAYER:
-        if( GetCurItem()->m_Flags != 0 )
+        if( GetCurItem()->GetFlags() != 0 )
             break;
 
         Delete_Drawings_All_Layer( GetCurItem()->GetLayer() );

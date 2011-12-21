@@ -451,7 +451,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     wxPoint  modpos;
     wxString msg;
 
-    if( m_CurrentModule->m_Flags == 0 )       // this is a simple edition, we
+    if( m_CurrentModule->GetFlags() == 0 )    // this is a simple edition, we
                                               // must create an undo entry
         m_Parent->SaveCopyInUndoList( m_CurrentModule, UR_CHANGED );
 

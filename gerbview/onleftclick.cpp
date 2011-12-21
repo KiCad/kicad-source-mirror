@@ -26,11 +26,11 @@ void GERBVIEW_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
     {
-        if( DrawStruct && DrawStruct->m_Flags  )
+        if( DrawStruct && DrawStruct->GetFlags() )
         {
             msg.Printf( wxT( "GERBVIEW_FRAME::OnLeftClick err: Struct %d, m_Flags = %X" ),
                         (unsigned) DrawStruct->Type(),
-                        (unsigned) DrawStruct->m_Flags );
+                        (unsigned) DrawStruct->GetFlags() );
             wxFAIL_MSG( msg );
         }
         else

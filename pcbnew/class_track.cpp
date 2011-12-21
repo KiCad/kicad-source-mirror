@@ -58,7 +58,7 @@ static bool ShowClearance( const TRACK* aTrack )
     return aTrack->GetLayer() <= LAST_COPPER_LAYER
            && ( aTrack->Type() == PCB_TRACE_T || aTrack->Type() == PCB_VIA_T )
            && ( ( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
-            && ( aTrack->m_Flags & IS_DRAGGED || aTrack->m_Flags & IS_MOVED || aTrack->m_Flags & IS_NEW ) )
+                  && ( aTrack->IsDragging() || aTrack->IsMoving() || aTrack->IsNew() ) )
             || ( DisplayOpt.ShowTrackClearanceMode == SHOW_CLEARANCE_ALWAYS )
             );
 

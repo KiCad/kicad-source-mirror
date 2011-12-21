@@ -235,7 +235,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     // here the module is already in the BOARD, Create_1_Module() does that.
     module->m_LibRef    = wxT( "MuSelf" );
     module->m_Attributs = MOD_VIRTUAL | MOD_CMS;
-    module->m_Flags     = 0;
+    module->ClearFlags();
     module->m_Pos = Mself.m_End;
 
     // Generate segments

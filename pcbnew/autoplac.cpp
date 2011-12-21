@@ -405,11 +405,11 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
 
     for( ii = 0; ii < Board.m_Nrows; ii++ )
     {
-        oy = bbbox.m_Pos.y + ( ii * Board.m_GridRouting );
+        oy = bbbox.GetY() + ( ii * Board.m_GridRouting );
 
         for( jj = 0; jj < Board.m_Ncols; jj++ )
         {
-            ox = bbbox.m_Pos.x + (jj * Board.m_GridRouting);
+            ox = bbbox.GetX() + (jj * Board.m_GridRouting);
             color = BLACK;
 
             top_state    = GetCell( ii, jj, TOP );
@@ -455,8 +455,8 @@ int PCB_EDIT_FRAME::GenPlaceBoard()
     }
 
     /* The boundary box must have its start point on placing grid: */
-    bbbox.m_Pos.x -= bbbox.m_Pos.x % Board.m_GridRouting;
-    bbbox.m_Pos.y -= bbbox.m_Pos.y % Board.m_GridRouting;
+    bbbox.SetX( bbbox.GetX() - ( bbbox.GetX() % Board.m_GridRouting ) );
+    bbbox.SetY( bbbox.GetY() - ( bbbox.GetY() % Board.m_GridRouting ) );
 
     /* The boundary box must have its end point on placing grid: */
     wxPoint end = bbbox.GetEnd();
@@ -566,31 +566,31 @@ void PCB_EDIT_FRAME::GenModuleOnBoard( MODULE* Module )
     int    layerMask;
     D_PAD* Pad;
 
-    ox = Module->m_BoundaryBox.m_Pos.x - marge;
+    ox = Module->m_BoundaryBox.GetX() - marge;
     fx = Module->m_BoundaryBox.GetRight() + marge;
-    oy = Module->m_BoundaryBox.m_Pos.y - marge;
+    oy = Module->m_BoundaryBox.GetY() - marge;
     fy = Module->m_BoundaryBox.GetBottom() + marge;
 
-    if( ox < bbbox.m_Pos.x )
-        ox = bbbox.m_Pos.x;
+    if( ox < bbbox.GetX() )
+        ox = bbbox.GetX();
 
     if( ox > bbbox.GetRight() )
         ox = bbbox.GetRight();
 
-    if( fx < bbbox.m_Pos.x )
-        fx = bbbox.m_Pos.x;
+    if( fx < bbbox.GetX() )
+        fx = bbbox.GetX();
 
     if( fx > bbbox.GetRight() )
         fx = bbbox.GetRight();
 
-    if( oy < bbbox.m_Pos.y )
-        oy = bbbox.m_Pos.y;
+    if( oy < bbbox.GetY() )
+        oy = bbbox.GetY();
 
     if( oy > bbbox.GetBottom() )
         oy = bbbox.GetBottom();
 
-    if( fy < bbbox.m_Pos.y )
-        fy = bbbox.m_Pos.y;
+    if( fy < bbbox.GetY() )
+        fy = bbbox.GetY();
 
     if( fy > bbbox.GetBottom() )
         fy = bbbox.GetBottom();
@@ -636,17 +636,17 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
 
     aModule->DisplayInfo( this );
 
-    LastPosOK.x = bbbox.m_Pos.x;
-    LastPosOK.y = bbbox.m_Pos.y;
+    LastPosOK.x = bbbox.GetX();
+    LastPosOK.y = bbbox.GetY();
 
     cx = aModule->m_Pos.x; cy = aModule->m_Pos.y;
-    ox = aModule->m_BoundaryBox.m_Pos.x - cx;
-    fx = aModule->m_BoundaryBox.m_Size.x + ox;
-    oy = aModule->m_BoundaryBox.m_Pos.y - cy;
-    fy = aModule->m_BoundaryBox.m_Size.y + oy;
+    ox = aModule->m_BoundaryBox.GetX() - cx;
+    fx = aModule->m_BoundaryBox.GetWidth() + ox;
+    oy = aModule->m_BoundaryBox.GetY() - cy;
+    fy = aModule->m_BoundaryBox.GetHeight() + oy;
 
-    CurrPosition.x = bbbox.m_Pos.x - ox;
-    CurrPosition.y = bbbox.m_Pos.y - oy;
+    CurrPosition.x = bbbox.GetX() - ox;
+    CurrPosition.y = bbbox.GetY() - oy;
 
     /* Module placement on grid. */
     CurrPosition.x -= CurrPosition.x % Board.m_GridRouting;
@@ -699,13 +699,13 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         }
 
         cx = aModule->m_Pos.x; cy = aModule->m_Pos.y;
-        aModule->m_BoundaryBox.m_Pos.x = ox + CurrPosition.x;
-        aModule->m_BoundaryBox.m_Pos.y = oy + CurrPosition.y;
+        aModule->m_BoundaryBox.SetX( ox + CurrPosition.x );
+        aModule->m_BoundaryBox.SetY( oy + CurrPosition.y );
 
         DrawModuleOutlines( DrawPanel, aDC, aModule );
 
         g_Offset_Module.x = cx - CurrPosition.x;
-        CurrPosition.y    = bbbox.m_Pos.y - oy;
+        CurrPosition.y    = bbbox.GetY() - oy;
 
         /* Placement on grid. */
         CurrPosition.y -= CurrPosition.y % Board.m_GridRouting;
@@ -722,8 +722,8 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
                 Compute_Ratsnest_PlaceModule( aDC );
 
             showRat = 0;
-            aModule->m_BoundaryBox.m_Pos.x = ox + CurrPosition.x;
-            aModule->m_BoundaryBox.m_Pos.y = oy + CurrPosition.y;
+            aModule->m_BoundaryBox.SetX( ox + CurrPosition.x );
+            aModule->m_BoundaryBox.SetY( oy + CurrPosition.y );
 
             g_Offset_Module.y = cy - CurrPosition.y;
             DrawModuleOutlines( DrawPanel, aDC, aModule );
@@ -763,8 +763,8 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         Compute_Ratsnest_PlaceModule( aDC );
 
     /* Regeneration of the modified variable. */
-    aModule->m_BoundaryBox.m_Pos.x = ox + cx;
-    aModule->m_BoundaryBox.m_Pos.y = oy + cy;
+    aModule->m_BoundaryBox.SetX( ox + cx );
+    aModule->m_BoundaryBox.SetY( oy + cy );
     CurrPosition = LastPosOK;
 
     GetBoard()->m_Status_Pcb &= ~( RATSNEST_ITEM_LOCAL_OK | LISTE_PAD_OK );
@@ -786,10 +786,10 @@ int TstRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1, int side )
     int          row_min, row_max, col_min, col_max;
     unsigned int data;
 
-    ux0 -= Pcb->GetBoundingBox().m_Pos.x;
-    uy0 -= Pcb->GetBoundingBox().m_Pos.y;
-    ux1 -= Pcb->GetBoundingBox().m_Pos.x;
-    uy1 -= Pcb->GetBoundingBox().m_Pos.y;
+    ux0 -= Pcb->GetBoundingBox().GetX();
+    uy0 -= Pcb->GetBoundingBox().GetY();
+    ux1 -= Pcb->GetBoundingBox().GetX();
+    uy1 -= Pcb->GetBoundingBox().GetY();
 
     row_max = uy1 / Board.m_GridRouting;
     col_max = ux1 / Board.m_GridRouting;
@@ -843,10 +843,10 @@ unsigned int CalculateKeepOutArea( BOARD* Pcb, int ux0, int uy0, int ux1, int uy
     int          row_min, row_max, col_min, col_max;
     unsigned int keepOut;
 
-    ux0 -= Pcb->GetBoundingBox().m_Pos.x;
-    uy0 -= Pcb->GetBoundingBox().m_Pos.y;
-    ux1 -= Pcb->GetBoundingBox().m_Pos.x;
-    uy1 -= Pcb->GetBoundingBox().m_Pos.y;
+    ux0 -= Pcb->GetBoundingBox().GetX();
+    uy0 -= Pcb->GetBoundingBox().GetY();
+    ux1 -= Pcb->GetBoundingBox().GetX();
+    uy1 -= Pcb->GetBoundingBox().GetY();
 
     row_max = uy1 / Board.m_GridRouting;
     col_max = ux1 / Board.m_GridRouting;
@@ -902,9 +902,9 @@ int TstModuleOnBoard( BOARD* Pcb, MODULE* Module, bool TstOtherSide )
         side = BOTTOM; otherside = TOP;
     }
 
-    ox = Module->m_BoundaryBox.m_Pos.x;
+    ox = Module->m_BoundaryBox.GetX();
     fx = Module->m_BoundaryBox.GetRight();
-    oy = Module->m_BoundaryBox.m_Pos.y;
+    oy = Module->m_BoundaryBox.GetY();
     fy = Module->m_BoundaryBox.GetBottom();
 
     error = TstRectangle( Pcb, ox, oy, fx, fy, side );
@@ -1017,10 +1017,10 @@ static void CreateKeepOutRectangle( BOARD* Pcb,
     if( trace == 0 )
         return;
 
-    ux0 -= Pcb->GetBoundingBox().m_Pos.x;
-    uy0 -= Pcb->GetBoundingBox().m_Pos.y;
-    ux1 -= Pcb->GetBoundingBox().m_Pos.x;
-    uy1 -= Pcb->GetBoundingBox().m_Pos.y;
+    ux0 -= Pcb->GetBoundingBox().GetX();
+    uy0 -= Pcb->GetBoundingBox().GetY();
+    ux1 -= Pcb->GetBoundingBox().GetX();
+    uy1 -= Pcb->GetBoundingBox().GetY();
 
     ux0 -= marge; ux1 += marge;
     uy0 -= marge; uy1 += marge;

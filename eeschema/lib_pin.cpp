@@ -882,7 +882,7 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
 
     if( aColor < 0 )       // Used normal color or selected color
     {
-        if( (m_Selected & IS_SELECTED) )
+        if( IsSelected() )
             color = g_ItemSelectetColor;
     }
     else
@@ -1104,7 +1104,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
     GRSetDrawMode( DC, DrawMode );
 
     /* Get the num and name colors */
-    if( (Color < 0) && (m_Selected & IS_SELECTED) )
+    if( (Color < 0) && IsSelected() )
         Color = g_ItemSelectetColor;
 
     NameColor = (EDA_Colors) ( Color == -1 ? ReturnLayerColor( LAYER_PINNAM ) : Color );

@@ -38,7 +38,7 @@ static void Abort_Move_Pad( EDA_DRAW_PANEL* Panel, wxDC* DC )
         return;
 
     pad->Draw( Panel, DC, GR_XOR );
-    pad->m_Flags = 0;
+    pad->ClearFlags();
     pad->m_Pos   = Pad_OldPos;
     pad->Draw( Panel, DC, GR_XOR );
 
@@ -137,16 +137,15 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
 {
     if( aDraw )
     {
-        aPad->m_Flags |= DO_NOT_DRAW;
+        aPad->SetFlags( DO_NOT_DRAW );
         DrawPanel->RefreshDrawingRect( aPad->GetBoundingBox() );
-        aPad->m_Flags &= ~DO_NOT_DRAW;
+        aPad->ClearFlags( DO_NOT_DRAW );
     }
 
-    aPad->m_PadShape     = g_Pad_Master.m_PadShape;
+    aPad->m_PadShape = g_Pad_Master.m_PadShape;
     aPad->m_layerMask = g_Pad_Master.m_layerMask;
-    aPad->m_Attribut     = g_Pad_Master.m_Attribut;
-    aPad->m_Orient = g_Pad_Master.m_Orient +
-                     ( (MODULE*) aPad->GetParent() )->m_Orient;
+    aPad->m_Attribut = g_Pad_Master.m_Attribut;
+    aPad->m_Orient = g_Pad_Master.m_Orient + ( (MODULE*) aPad->GetParent() )->m_Orient;
     aPad->m_Size = g_Pad_Master.m_Size;
     aPad->m_DeltaSize  = wxSize( 0, 0 );
     aPad->m_Offset     = g_Pad_Master.m_Offset;
@@ -283,7 +282,7 @@ void PCB_BASE_FRAME::StartMovePad( D_PAD* Pad, wxDC* DC )
 
     /* Draw the pad  (SKETCH mode) */
     Pad->Draw( DrawPanel, DC, GR_XOR );
-    Pad->m_Flags |= IS_MOVED;
+    Pad->SetFlags( IS_MOVED );
     Pad->Draw( DrawPanel, DC, GR_XOR );
 
     /* Build the list of track segments to drag if the command is a drag pad*/
@@ -368,7 +367,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
     Pad->m_Pos0.x += dX;
     s_CurrentSelectedPad->m_Pos0.y += dY;
 
-    Pad->m_Flags = 0;
+    Pad->ClearFlags();
 
     if( DC )
         Pad->Draw( DrawPanel, DC, GR_OR );

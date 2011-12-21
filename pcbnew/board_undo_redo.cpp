@@ -569,7 +569,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             }
         }
 
-        item->m_Flags = 0;
+        item->ClearFlags();
 
         // see if we must rebuild ratsnets and pointers lists
         switch( item->Type() )

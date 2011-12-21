@@ -234,8 +234,8 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
 void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
 {
-    bool selected    = (Pin->m_Selected & IS_SELECTED) != 0;
-    bool not_in_move = (Pin->GetFlags() == 0);
+    bool selected    = Pin->IsSelected();
+    bool not_in_move = !Pin->IsMoving();
     wxString msg;
 
     if( not_in_move )

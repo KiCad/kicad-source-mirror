@@ -48,7 +48,7 @@ SCH_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusEntry( wxDC* DC, int entry_type )
     // Create and place a new bus entry at cursor position
     SCH_BUS_ENTRY* BusEntry = new SCH_BUS_ENTRY( GetScreen()->GetCrossHairPosition(), s_LastShape,
                                                  entry_type );
-    BusEntry->m_Flags = IS_NEW;
+    BusEntry->SetFlags( IS_NEW );
     BusEntry->Place( this, DC );
     OnModify();
     return BusEntry;
@@ -69,7 +69,7 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int en
     }
 
     /* Put old item in undo list if it is not currently in edit */
-    if( BusEntry->m_Flags == 0 )
+    if( BusEntry->GetFlags() == 0 )
         SaveCopyInUndoList( BusEntry, UR_CHANGED );
 
     s_LastShape = entry_shape == '/' ? '/' : '\\';

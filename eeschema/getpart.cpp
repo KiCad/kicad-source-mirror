@@ -369,8 +369,9 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
         return;
     }
 
-    int flags = DrawComponent->m_Flags;
-    if( DrawComponent->m_Flags )
+    int flags = DrawComponent->GetFlags();
+
+    if( DrawComponent->GetFlags() )
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
@@ -390,7 +391,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
     DrawComponent->SetFlags( flags );   // Restore m_Flag (modified by SetConvert())
 
     /* Redraw the component in the new position. */
-    if( DrawComponent->m_Flags & IS_MOVED )
+    if( DrawComponent->IsMoving() )
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
         DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );

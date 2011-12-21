@@ -248,7 +248,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
                     {
                         pt_del->UnLink();
                         pt_del->SetStatus( 0 );
-                        pt_del->m_Flags = 0;
+                        pt_del->ClearFlags();
                         ITEM_PICKER picker( pt_del, UR_DELETED );
                         aItemsListPicker->PushItem( picker );
                     }

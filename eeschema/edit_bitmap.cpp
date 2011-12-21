@@ -90,7 +90,7 @@ static void moveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosit
         aPanel->SetMouseCapture( NULL, NULL );  // Avoid loop in redraw panel
 
         int flgs = image->GetFlags();
-        image->m_Flags = 0;
+        image->ClearFlags();
         aPanel->RefreshDrawingRect( dirty );
         image->SetFlags( flgs );
         aPanel->SetMouseCapture( moveBitmap, abortMoveBitmap );

@@ -247,7 +247,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             module->SetPosition( wxPoint( 0, 0 ) );
 
             if( GetBoard()->m_Modules )
-                GetBoard()->m_Modules->m_Flags = 0;
+                GetBoard()->m_Modules->ClearFlags();
 
             Zoom_Automatique( false );
         }
@@ -340,7 +340,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             pcbframe->SaveCopyInUndoList( newmodule, UR_NEW );
         }
 
-        newmodule->m_Flags = 0;
+        newmodule->ClearFlags();
         GetScreen()->ClrModify();
         pcbframe->SetCurItem( NULL );
         mainpcb->m_Status_Pcb = 0;
@@ -358,7 +358,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         redraw = true;
 
         if( GetBoard()->m_Modules )
-            GetBoard()->m_Modules->m_Flags = 0;
+            GetBoard()->m_Modules->ClearFlags();
 
         GetScreen()->ClrModify();
         Zoom_Automatique( false );
@@ -402,7 +402,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
 
         if( GetBoard()->m_Modules )
-            GetBoard()->m_Modules->m_Flags = 0;
+            GetBoard()->m_Modules->ClearFlags();
 
         // if either m_Reference or m_Value are gone, reinstall them -
         // otherwise you cannot see what you are doing on board
@@ -446,7 +446,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             SetCurItem( GetBoard()->m_Modules );
             DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()-> GetCurItem() );
             int ret = dialog.ShowModal();
-            GetScreen()->GetCurItem()->m_Flags = 0;
+            GetScreen()->GetCurItem()->ClearFlags();
 
             if( ret > 0 )
                 DrawPanel->Refresh();
@@ -475,8 +475,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
         DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
         int ret = dialog.ShowModal();
-        GetScreen()->GetCurItem()->m_Flags = 0;
-        GetScreen()->GetCurItem()->m_Flags = 0;
+        GetScreen()->GetCurItem()->ClearFlags();
+        GetScreen()->GetCurItem()->ClearFlags();
         DrawPanel->MoveCursorToCrossHair();
 
         if( ret > 0 )
@@ -560,7 +560,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
         DrawPanel->MoveCursorToCrossHair();
 
-        if( (GetScreen()->GetCurItem()->m_Flags & IS_NEW) )
+        if( GetScreen()->GetCurItem()->IsNew() )
         {
             End_Edge_Module( (EDGE_MODULE*) GetScreen()->GetCurItem() );
             SetCurItem( NULL );

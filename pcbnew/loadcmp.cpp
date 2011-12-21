@@ -84,7 +84,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     GetBoard()->Add( aModule );
 
-    aModule->m_Flags = 0;
+    aModule->ClearFlags();
 
     GetBoard()->BuildListOfNets();
 
@@ -183,7 +183,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
         lastCommponentName = moduleName;
         AddHistoryComponentName( HistoryList, moduleName );
 
-        module->m_Flags     = IS_NEW;
+        module->SetFlags( IS_NEW );
         module->m_Link      = 0;
         module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;

@@ -49,11 +49,11 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     bool        exit = false;
     bool no_tool = GetToolId() == ID_NO_TOOL_SELECTED;
 
-    if( no_tool || ( DrawStruct && DrawStruct->m_Flags ) )
+    if( no_tool || ( DrawStruct && DrawStruct->GetFlags() ) )
     {
         DrawPanel->m_AutoPAN_Request = false;
 
-        if( DrawStruct && DrawStruct->m_Flags ) // Command in progress
+        if( DrawStruct && DrawStruct->GetFlags() ) // Command in progress
         {
             DrawPanel->m_IgnoreMouseEvents = true;
             DrawPanel->CrossHairOff( aDC );
@@ -76,7 +76,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
             case PCB_TRACE_T:
             case PCB_VIA_T:
-                if( DrawStruct->m_Flags & IS_DRAGGED )
+                if( DrawStruct->IsDragging() )
                 {
                     PlaceDraggedOrMovedTrackSegment( (TRACK*) DrawStruct, aDC );
                     exit = true;
@@ -209,7 +209,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_MIRE_BUTT:
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+        if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
             SetCurItem( (BOARD_ITEM*) CreateTarget( aDC ) );
             DrawPanel->MoveCursorToCrossHair();
@@ -243,7 +243,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             break;
         }
 
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+        if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
             DrawStruct = (BOARD_ITEM*) Begin_DrawSegment( NULL, shape, aDC );
             SetCurItem( DrawStruct );
@@ -267,7 +267,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             break;
         }
 
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+        if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
             DrawStruct = (BOARD_ITEM*) Begin_Route( NULL, aDC );
             SetCurItem( DrawStruct );
@@ -295,7 +295,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
          *  this can be start a new zone or select and move an existing zone outline corner
          *  if found near the mouse cursor
          */
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+        if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
             // there is no current item, try to find something under mouse
             DrawStruct = PcbGeneralLocateAndDisplay();
@@ -340,7 +340,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_ADD_TEXT_BUTT:
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+        if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
             SetCurItem( Create_Texte_Pcb( aDC ) );
             DrawPanel->MoveCursorToCrossHair();
@@ -359,7 +359,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_MODULE_BUTT:
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+        if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
             DrawPanel->MoveCursorToCrossHair();
             DrawStruct = (BOARD_ITEM*) Load_Module_From_Library( wxEmptyString, aDC );
@@ -387,7 +387,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             break;
         }
 
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+        if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
             DrawStruct = (BOARD_ITEM*) EditDimension( NULL, aDC );
             SetCurItem( DrawStruct );
@@ -408,11 +408,11 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_DELETE_ITEM_BUTT:
-        if( !DrawStruct || (DrawStruct->m_Flags == 0) )
+        if( !DrawStruct || (DrawStruct->GetFlags() == 0) )
         {
             DrawStruct = PcbGeneralLocateAndDisplay();
 
-            if( DrawStruct && (DrawStruct->m_Flags == 0) )
+            if( DrawStruct && (DrawStruct->GetFlags() == 0) )
             {
                 RemoveStruct( DrawStruct, aDC );
                 SetCurItem( DrawStruct = NULL );
@@ -451,12 +451,12 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags == 0) )
+        if( (DrawStruct == NULL) || (DrawStruct->GetFlags() == 0) )
         {
             DrawStruct = PcbGeneralLocateAndDisplay();
         }
 
-        if( (DrawStruct == NULL) || (DrawStruct->m_Flags != 0) )
+        if( (DrawStruct == NULL) || (DrawStruct->GetFlags() != 0) )
             break;
 
         SendMessageToEESCHEMA( DrawStruct );
@@ -473,7 +473,7 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
                 if( End_Route( (TRACK*) DrawStruct, aDC ) )
                     DrawPanel->m_AutoPAN_Request = false;
             }
-            else if( DrawStruct->m_Flags == 0 )
+            else if( DrawStruct->GetFlags() == 0 )
             {
                 Edit_TrackSegm_Width( aDC, (TRACK*) DrawStruct );
             }
@@ -495,8 +495,9 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
             break;
 
         case PCB_ZONE_AREA_T:
-            if( DrawStruct->m_Flags )
+            if( DrawStruct->GetFlags() )
                 break;
+
             OnEditItemRequest( aDC, DrawStruct );
             break;
 

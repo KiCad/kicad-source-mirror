@@ -120,7 +120,7 @@ bool Magnetize( BOARD* m_Pcb, PCB_EDIT_FRAME* frame, int aCurrentTool, wxSize gr
 
     // D( printf( "currTrack=%p currItem=%p currTrack->Type()=%d currItem->Type()=%d\n",  currTrack, currItem, currTrack ? currTrack->Type() : 0, currItem ? currItem->Type() : 0 ); )
 
-    if( !currTrack && currItem && currItem->Type()==PCB_VIA_T && currItem->m_Flags )
+    if( !currTrack && currItem && currItem->Type()==PCB_VIA_T && currItem->GetFlags() )
     {
         // moving a VIA
         currTrack = (TRACK*) currItem;

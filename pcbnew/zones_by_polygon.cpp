@@ -129,7 +129,7 @@ int PCB_EDIT_FRAME::Delete_LastCreatedCorner( wxDC* DC )
         DrawPanel->SetMouseCapture( NULL, NULL );
         SetCurItem( NULL );
         zone->RemoveAllContours();
-        zone->m_Flags = 0;
+        zone->ClearFlags();
     }
 
     return zone->GetNumCorners();
@@ -148,7 +148,7 @@ static void Abort_Zone_Create_Outline( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( zone )
     {
         zone->DrawWhileCreateOutline( Panel, DC, GR_XOR );
-        zone->m_Flags = 0;
+        zone->ClearFlags();
         zone->RemoveAllContours();
     }
 
@@ -194,9 +194,9 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Corner( wxDC* DC, ZONE_CONTAINER* zone_cont
     if ( IsNewCorner )
         zone_container->m_Poly->InsertCorner(corner_id-1, cx, cy );
 
-    zone_container->m_Flags  = IN_EDIT;
+    zone_container->SetFlags( IN_EDIT );
     DrawPanel->SetMouseCapture( Show_Zone_Corner_Or_Outline_While_Move_Mouse,
-                                  Abort_Zone_Move_Corner_Or_Outlines );
+                                Abort_Zone_Move_Corner_Or_Outlines );
     s_CornerInitialPosition = zone_container->GetCornerPosition( corner_id );
     s_CornerIsNew = IsNewCorner;
     s_AddCutoutToCurrentZone = false;
@@ -208,7 +208,7 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Drag_Outline_Edge( wxDC*           DC,
                                                         ZONE_CONTAINER* zone_container,
                                                         int             corner_id )
 {
-    zone_container->m_Flags = IS_DRAGGED;
+    zone_container->SetFlags( IS_DRAGGED );
     zone_container->m_CornerSelection = corner_id;
     DrawPanel->SetMouseCapture( Show_Zone_Corner_Or_Outline_While_Move_Mouse,
                                 Abort_Zone_Move_Corner_Or_Outlines );
@@ -243,7 +243,7 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_co
     SaveCopyOfZones( s_PickedList, GetBoard(), zone_container->GetNet(),
                      zone_container->GetLayer() );
 
-    zone_container->m_Flags  = IS_MOVED;
+    zone_container->SetFlags( IS_MOVED );
     DrawPanel->SetMouseCapture( Show_Zone_Corner_Or_Outline_While_Move_Mouse,
                                 Abort_Zone_Move_Corner_Or_Outlines );
     s_CursorLastPosition = s_CornerInitialPosition = GetScreen()->GetCrossHairPosition();
@@ -255,7 +255,7 @@ void PCB_EDIT_FRAME::Start_Move_Zone_Outlines( wxDC* DC, ZONE_CONTAINER* zone_co
 
 void PCB_EDIT_FRAME::End_Move_Zone_Corner_Or_Outlines( wxDC* DC, ZONE_CONTAINER* zone_container )
 {
-    zone_container->m_Flags  = 0;
+    zone_container->ClearFlags();
     DrawPanel->SetMouseCapture( NULL, NULL );
 
     if( DC )
@@ -359,13 +359,13 @@ void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC )
     PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Panel->GetParent();
     ZONE_CONTAINER*  zone_container = (ZONE_CONTAINER*) pcbframe->GetCurItem();
 
-    if( zone_container->m_Flags == IS_MOVED )
+    if( zone_container->IsMoving() )
     {
         wxPoint offset;
         offset = s_CornerInitialPosition - s_CursorLastPosition;
         zone_container->Move( offset );
     }
-    else if( zone_container->m_Flags == IS_DRAGGED )
+    else if( zone_container->IsDragging() )
     {
         wxPoint offset;
         offset = s_CornerInitialPosition - s_CursorLastPosition;
@@ -390,7 +390,7 @@ void Abort_Zone_Move_Corner_Or_Outlines( EDA_DRAW_PANEL* Panel, wxDC* DC )
     Panel->Refresh();
 
     pcbframe->SetCurItem( NULL );
-    zone_container->m_Flags  = 0;
+    zone_container->ClearFlags();
     s_AddCutoutToCurrentZone = false;
     s_CurrentZone = NULL;
 }
@@ -411,14 +411,14 @@ void Show_Zone_Corner_Or_Outline_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC*
 
     wxPoint          pos = pcbframe->GetScreen()->GetCrossHairPosition();
 
-    if( zone->m_Flags == IS_MOVED )
+    if( zone->IsMoving() )
     {
         wxPoint offset;
         offset = pos - s_CursorLastPosition;
         zone->Move( offset );
         s_CursorLastPosition = pos;
     }
-    else if( zone->m_Flags == IS_DRAGGED )
+    else if( zone->IsDragging() )
     {
         wxPoint offset;
         offset = pos - s_CursorLastPosition;
@@ -533,7 +533,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
     // if first segment
     if(  zone->GetNumCorners() == 0 )
     {
-        zone->m_Flags = IS_NEW;
+        zone->SetFlags( IS_NEW );
         zone->SetTimeStamp( GetNewTimeStamp() );
         g_Zone_Default_Setting.ExportSetting( *zone );
         zone->m_Poly->Start( g_Zone_Default_Setting.m_CurrentZone_Layer,
@@ -544,7 +544,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
 
         if( Drc_On && (m_drc->Drc( zone, 0 ) == BAD_DRC) && zone->IsOnCopperLayer() )
         {
-            zone->m_Flags = 0;
+            zone->ClearFlags();
             zone->RemoveAllContours();
 
             // use the form of SetCurItem() which does not write to the msg panel,
@@ -608,7 +608,7 @@ bool PCB_EDIT_FRAME::End_Zone( wxDC* DC )
         }
     }
 
-    zone->m_Flags = 0;
+    zone->ClearFlags();
 
     zone->DrawWhileCreateOutline( DrawPanel, DC, GR_XOR );
 

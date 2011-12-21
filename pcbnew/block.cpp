@@ -610,7 +610,7 @@ void PCB_EDIT_FRAME::Block_Delete()
         case PCB_MODULE_T:
         {
             MODULE* module = (MODULE*) item;
-            module->m_Flags = 0;
+            module->ClearFlags();
             module->UnLink();
             m_Pcb->m_Status_Pcb = 0;
         }
@@ -675,7 +675,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
         switch( item->Type() )
         {
         case PCB_MODULE_T:
-            ( (MODULE*) item )->m_Flags = 0;
+            ( (MODULE*) item )->ClearFlags();
             m_Pcb->m_Status_Pcb = 0;
             break;
 
@@ -736,7 +736,7 @@ void PCB_EDIT_FRAME::Block_Flip()
         switch( item->Type() )
         {
         case PCB_MODULE_T:
-            item->m_Flags = 0;
+            item->ClearFlags();
             m_Pcb->m_Status_Pcb = 0;
             break;
 
@@ -791,7 +791,7 @@ void PCB_EDIT_FRAME::Block_Move()
         {
         case PCB_MODULE_T:
             m_Pcb->m_Status_Pcb = 0;
-            item->m_Flags = 0;
+            item->ClearFlags();
             break;
 
         /* Move track segments */
@@ -851,7 +851,7 @@ void PCB_EDIT_FRAME::Block_Duplicate()
                 MODULE* module = (MODULE*) item;
                 MODULE* new_module;
                 m_Pcb->m_Status_Pcb = 0;
-                module->m_Flags     = 0;
+                module->ClearFlags();
                 newitem = new_module = new MODULE( m_Pcb );
                 new_module->Copy( module );
                 new_module->SetTimeStamp( GetNewTimeStamp() );
