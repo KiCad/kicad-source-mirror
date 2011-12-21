@@ -40,7 +40,7 @@ void FOOTPRINT_EDIT_FRAME::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
         return;
 
     Edge->Draw( DrawPanel, DC, GR_XOR );
-    Edge->m_Flags |= IS_MOVED;
+    Edge->SetFlags( IS_MOVED );
     MoveVector.x   = MoveVector.y = 0;
     CursorInitialPosition    = GetScreen()->GetCrossHairPosition();
     DrawPanel->SetMouseCapture( ShowCurrentOutlineWhileMoving, Abort_Move_ModuleOutline );
@@ -60,7 +60,7 @@ void FOOTPRINT_EDIT_FRAME::Place_EdgeMod( EDGE_MODULE* aEdge )
     aEdge->SetStart0( aEdge->GetStart0() - MoveVector );
     aEdge->SetEnd0(   aEdge->GetEnd0()   - MoveVector );
 
-    aEdge->m_Flags = 0;
+    aEdge->ClearFlags();
     DrawPanel->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
     OnModify();
@@ -278,7 +278,7 @@ static void Abort_Move_ModuleOutline( EDA_DRAW_PANEL* Panel, wxDC* DC )
         else   // On aborting, move existing outline to its initial position.
         {
             Edge->Draw( Panel, DC, GR_XOR, MoveVector );
-            Edge->m_Flags = 0;
+            Edge->ClearFlags();
             Edge->Draw( Panel, DC, GR_OR );
         }
     }
@@ -308,7 +308,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
         module->m_Drawings.PushFront( Edge );
 
         // Update characteristics of the segment or arc.
-        Edge->m_Flags = IS_NEW;
+        Edge->SetFlags( IS_NEW );
         Edge->SetAngle( angle );
         Edge->SetShape( type_edge );
 
@@ -357,11 +357,11 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
 
                 // insert _after_ Edge, which is the same as inserting before Edge->Next()
                 module->m_Drawings.Insert( newedge, Edge->Next() );
-                Edge->m_Flags = 0;
+                Edge->ClearFlags();
 
                 Edge = newedge;     // point now new item
 
-                Edge->m_Flags = IS_NEW;
+                Edge->SetFlags( IS_NEW );
                 Edge->SetWidth( g_ModuleSegmentWidth );
                 Edge->SetStart( GetScreen()->GetCrossHairPosition() );
                 Edge->SetEnd( Edge->GetStart() );
@@ -398,7 +398,7 @@ void FOOTPRINT_EDIT_FRAME::End_Edge_Module( EDGE_MODULE* Edge )
 
     if( Edge )
     {
-        Edge->m_Flags = 0;
+        Edge->ClearFlags();
 
         /* If last segment length is 0: remove it */
         if( Edge->GetStart() == Edge->GetEnd() )

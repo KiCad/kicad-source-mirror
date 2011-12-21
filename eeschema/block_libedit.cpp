@@ -201,7 +201,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         if( GetScreen()->m_BlockLocate.m_Command != BLOCK_SELECT_ITEMS_ONLY &&  m_component )
             m_component->ClearSelectedItems();
 
-        GetScreen()->m_BlockLocate.m_Flags   = 0;
+        GetScreen()->m_BlockLocate.ClearFlags();
         GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
         GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
         GetScreen()->SetCurItem( NULL );
@@ -298,7 +298,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     OnModify();
 
-    GetScreen()->m_BlockLocate.m_Flags   = 0;
+    GetScreen()->m_BlockLocate.ClearFlags();
     GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
     GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
     GetScreen()->SetCurItem( NULL );

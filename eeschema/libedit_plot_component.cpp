@@ -72,7 +72,7 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
          * the margin is 10% the size of the component size
          */
         wxSize pagesize = GetScreen()->ReturnPageSize( );
-        wxSize componentSize = m_component->GetBoundingBox( m_unit, m_convert ).m_Size;
+        wxSize componentSize = m_component->GetBoundingBox( m_unit, m_convert ).GetSize();
 
         // Add a small margin to the plot bounding box
         componentSize.x = (int)(componentSize.x * 1.2);

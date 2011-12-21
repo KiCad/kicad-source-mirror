@@ -224,7 +224,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
         pos = GetScreen()->GetCrossHairPosition();
 
         aDimension = new DIMENSION( GetBoard() );
-        aDimension->m_Flags = IS_NEW;
+        aDimension->SetFlags( IS_NEW );
 
         aDimension->SetLayer( getActiveLayer() );
 
@@ -276,7 +276,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
     }
 
     aDimension->Draw( DrawPanel, aDC, GR_OR );
-    aDimension->m_Flags = 0;
+    aDimension->ClearFlags();
 
     /* ADD this new item in list */
     GetBoard()->Add( aDimension );
@@ -380,7 +380,7 @@ void PCB_EDIT_FRAME::BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC )
     initialTextPosition = aItem->m_Text.m_Pos;
 
     aItem->Draw( DrawPanel, DC, GR_XOR );
-    aItem->m_Flags |= IS_MOVED;
+    aItem->SetFlags( IS_MOVED );
     aItem->DisplayInfo( this );
 
     GetScreen()->SetCrossHairPosition( aItem->m_Text.m_Pos );
@@ -426,7 +426,7 @@ void AbortMoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
     dimension->Draw( aPanel, aDC, GR_XOR );
     dimension->m_Text.m_Pos = initialTextPosition;
-    dimension->m_Flags = 0;
+    dimension->ClearFlags();
     dimension->Draw( aPanel, aDC, GR_OR );
 }
 
@@ -448,5 +448,5 @@ void PCB_EDIT_FRAME::PlaceDimensionText( DIMENSION* aItem, wxDC* DC )
     SaveCopyInUndoList( aItem, UR_CHANGED );
     EXCHG( aItem->m_Text.m_Pos, initialTextPosition );
 
-    aItem->m_Flags = 0;
+    aItem->ClearFlags();
 }

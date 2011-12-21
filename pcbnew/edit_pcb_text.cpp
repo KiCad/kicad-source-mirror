@@ -51,7 +51,7 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 
     SwapData(TextePcb, &s_TextCopy);
-    TextePcb->m_Flags = 0;
+    TextePcb->ClearFlags();
     TextePcb->Draw( Panel, DC, GR_OR );
 }
 
@@ -73,12 +73,14 @@ void PCB_EDIT_FRAME::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     if( TextePcb->IsNew() )  // If new: prepare undo command
     {
         SaveCopyInUndoList( TextePcb, UR_NEW );
-        TextePcb->m_Flags = 0;
+        TextePcb->ClearFlags();
         return;
     }
 
-    if( TextePcb->m_Flags == IS_MOVED ) // If moved only
+    if( TextePcb->IsMoving() ) // If moved only
+    {
         SaveCopyInUndoList( TextePcb, UR_MOVED, TextePcb->m_Pos - s_TextCopy.m_Pos );
+    }
     else
     {
         // Restore initial params
@@ -89,7 +91,7 @@ void PCB_EDIT_FRAME::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
         // Restore current params
     }
 
-    TextePcb->m_Flags = 0;
+    TextePcb->ClearFlags();
 }
 
 
@@ -105,7 +107,7 @@ void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
         s_TextCopy.Copy( TextePcb );
 
     TextePcb->Draw( DrawPanel, DC, GR_XOR );
-    TextePcb->m_Flags |= IS_MOVED;
+    TextePcb->SetFlags( IS_MOVED );
     TextePcb->DisplayInfo( this );
 
     GetScreen()->SetCrossHairPosition( TextePcb->GetPosition() );
@@ -159,7 +161,7 @@ TEXTE_PCB* PCB_EDIT_FRAME::Create_Texte_Pcb( wxDC* DC )
     GetBoard()->Add( TextePcb );
 
     /* Update text properties. */
-    TextePcb->m_Flags = IS_NEW;
+    TextePcb->SetFlags( IS_NEW );
     TextePcb->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
     TextePcb->m_Mirror = false;
 
@@ -204,10 +206,10 @@ void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     TextePcb->Draw( DrawPanel, DC, drawmode );
     TextePcb->DisplayInfo( this );
 
-    if( TextePcb->m_Flags == 0 )    // i.e. not edited, or moved
+    if( TextePcb->GetFlags() == 0 )    // i.e. not edited, or moved
         SaveCopyInUndoList( TextePcb, UR_ROTATED, TextePcb->m_Pos );
     else                 // set flag edit, to show it was a complex command
-        TextePcb->m_Flags |= IN_EDIT;
+        TextePcb->SetFlags( IN_EDIT );
 
     OnModify();
 }

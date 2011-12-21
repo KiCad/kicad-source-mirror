@@ -161,7 +161,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
     // Draw the graphic items
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
-        if( item->m_Flags & IS_MOVED )
+        if( item->IsMoving() )
             continue;
 
         switch( item->Type() )
@@ -185,7 +185,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
 
         // Areas must be drawn here only if not moved or dragged,
         // because these areas are drawn by ManageCursor() in a specific manner
-        if ( (zone->m_Flags & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
+        if ( (zone->GetFlags() & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
         {
             zone->Draw( aPanel, DC, aDrawMode );
             zone->DrawFilledArea( aPanel, DC, aDrawMode );
@@ -197,7 +197,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
         bool display = true;
         int  layerMask = ALL_CU_LAYERS;
 
-        if( module->m_Flags & IS_MOVED )
+        if( module->IsMoving() )
             continue;
 
         if( !IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) ) )

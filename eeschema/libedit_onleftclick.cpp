@@ -22,7 +22,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     if( m_component == NULL )   // No component loaded !
         return;
 
-    if( item == NULL || item->m_Flags == 0 )
+    if( item == NULL || item->GetFlags() == 0 )
     {
         item = LocateItemUsingCursor( aPosition );
 
@@ -40,7 +40,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
-        if( item && item->m_Flags )   // moved object
+        if( item && item->GetFlags() )   // moved object
         {
             switch( item->Type() )
             {
@@ -56,7 +56,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         break;
 
     case ID_LIBEDIT_PIN_BUTT:
-        if( m_drawItem == NULL || m_drawItem->m_Flags == 0 )
+        if( m_drawItem == NULL || m_drawItem->GetFlags() == 0 )
         {
             CreatePin( DC );
         }
@@ -71,7 +71,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     case ID_LIBEDIT_BODY_CIRCLE_BUTT:
     case ID_LIBEDIT_BODY_RECT_BUTT:
     case ID_LIBEDIT_BODY_TEXT_BUTT:
-        if( m_drawItem == NULL || m_drawItem->m_Flags == 0 )
+        if( m_drawItem == NULL || m_drawItem->GetFlags() == 0 )
         {
             m_drawItem = CreateGraphicItem( m_component, DC );
         }
@@ -118,7 +118,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
     if( m_component == NULL )
         return;
 
-    if( ( m_drawItem == NULL ) || ( m_drawItem->m_Flags == 0 ) )
+    if( ( m_drawItem == NULL ) || ( m_drawItem->GetFlags() == 0 ) )
     {   // We can locate an item
         m_drawItem = LocateItemUsingCursor( aPosition );
 
@@ -140,7 +140,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
     switch( m_drawItem->Type() )
     {
     case LIB_PIN_T:
-        if( m_drawItem->m_Flags == 0 )
+        if( m_drawItem->GetFlags() == 0 )
         {
             wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
             cmd.SetId( ID_LIBEDIT_EDIT_PIN );
@@ -151,14 +151,14 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
     case LIB_ARC_T:
     case LIB_CIRCLE_T:
     case LIB_RECTANGLE_T:
-        if( m_drawItem->m_Flags == 0 )
+        if( m_drawItem->GetFlags() == 0 )
         {
             EditGraphicSymbol( DC, m_drawItem );
         }
         break;
 
     case LIB_POLYLINE_T:
-        if( m_drawItem->m_Flags == 0 )
+        if( m_drawItem->GetFlags() == 0 )
         {
             EditGraphicSymbol( DC, m_drawItem );
         }
@@ -169,14 +169,14 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
         break;
 
     case LIB_TEXT_T:
-        if( m_drawItem->m_Flags == 0 )
+        if( m_drawItem->GetFlags() == 0 )
         {
             EditSymbolText( DC, m_drawItem );
         }
         break;
 
     case LIB_FIELD_T:
-        if( m_drawItem->m_Flags == 0 )
+        if( m_drawItem->GetFlags() == 0 )
         {
             EditField( DC, (LIB_FIELD*) m_drawItem );
         }

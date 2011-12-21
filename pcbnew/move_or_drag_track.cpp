@@ -123,7 +123,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
                 Track->m_End.x -= dx;
                 Track->m_End.y -= dy;
 
-                Track->m_Flags = 0;
+                Track->ClearFlags();
             }
 
             DrawTraces( Panel, DC, NewTrack, NbPtNewTrack, GR_OR );
@@ -140,7 +140,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
         TRACK* Track = g_DragSegmentList[jj].m_Segm;
         g_DragSegmentList[jj].SetInitialValues();
         Track->SetState( IN_EDIT, OFF );
-        Track->m_Flags = 0;
+        Track->ClearFlags();
         Track->Draw( Panel, DC, GR_OR );
     }
 
@@ -192,10 +192,10 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
 
     for( ; (ii > 0) && (Track != NULL); ii--, Track = Track->Next() )
     {
-        if( Track->m_Flags & STARTPOINT )
+        if( Track->GetFlags() & STARTPOINT )
             Track->m_Start += moveVector;
 
-        if( Track->m_Flags & ENDPOINT )
+        if( Track->GetFlags() & ENDPOINT )
             Track->m_End += moveVector;
     }
 
@@ -209,10 +209,10 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
         if( aErase )
             Track->Draw( aPanel, aDC, draw_mode );
 
-        if( Track->m_Flags & STARTPOINT )
+        if( Track->GetFlags() & STARTPOINT )
             Track->m_Start += moveVector;
 
-        if( Track->m_Flags & ENDPOINT )
+        if( Track->GetFlags() & ENDPOINT )
             Track->m_End += moveVector;
 
         Track->Draw( aPanel, aDC, draw_mode );
@@ -471,7 +471,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
 
         if( tSegmentToEnd )
         {
-            if( tSegmentToEnd->m_Flags & STARTPOINT )
+            if( tSegmentToEnd->GetFlags() & STARTPOINT )
                 tSegmentToEnd->m_Start = Track->m_End;
             else
                 tSegmentToEnd->m_End = Track->m_End;
@@ -479,7 +479,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
 
         if( tSegmentToStart )
         {
-            if( tSegmentToStart->m_Flags & STARTPOINT )
+            if( tSegmentToStart->GetFlags() & STARTPOINT )
                 tSegmentToStart->m_Start = Track->m_Start;
             else
                 tSegmentToStart->m_End = Track->m_Start;
@@ -558,7 +558,7 @@ bool InitialiseDragParameters()
     // Init parameters for the starting point of the moved segment
     if( tSegmentToStart )
     {
-        if( tSegmentToStart->m_Flags & ENDPOINT )
+        if( tSegmentToStart->GetFlags() & ENDPOINT )
         {
             tx1 = (double) tSegmentToStart->m_Start.x;
             ty1 = (double) tSegmentToStart->m_Start.y;
@@ -601,7 +601,7 @@ bool InitialiseDragParameters()
     if( tSegmentToEnd )
     {
         //check if second line is vertical
-        if( tSegmentToEnd->m_Flags & STARTPOINT )
+        if( tSegmentToEnd->GetFlags() & STARTPOINT )
         {
             tx1 = (double) tSegmentToEnd->m_Start.x;
             ty1 = (double) tSegmentToEnd->m_Start.y;
@@ -698,7 +698,7 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
 
     if( aTrack->Type() == PCB_VIA_T )     // For a via: always drag it
     {
-        aTrack->m_Flags = IS_DRAGGED | STARTPOINT | ENDPOINT;
+        aTrack->SetFlags( IS_DRAGGED | STARTPOINT | ENDPOINT );
 
         if( aCommand != ID_POPUP_PCB_MOVE_TRACK_SEGMENT )
         {
@@ -719,8 +719,8 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
         switch( aCommand )
         {
         case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:   // Move segment
-            aTrack->m_Flags |= IS_DRAGGED | ENDPOINT | STARTPOINT;
-            AddSegmentToDragList( DrawPanel, aDC, aTrack->m_Flags, aTrack );
+            aTrack->SetFlags( IS_DRAGGED | ENDPOINT | STARTPOINT );
+            AddSegmentToDragList( DrawPanel, aDC, aTrack->GetFlags(), aTrack );
             break;
 
         case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:   // drag a segment
@@ -729,7 +729,7 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
                                          aTrack->ReturnMaskLayer(),
                                          aTrack->GetNet() );
             pos = aTrack->m_End;
-            aTrack->m_Flags |= IS_DRAGGED | ENDPOINT | STARTPOINT;
+            aTrack->SetFlags( IS_DRAGGED | ENDPOINT | STARTPOINT );
             Collect_TrackSegmentsToDrag( DrawPanel, aDC, pos,
                                          aTrack->ReturnMaskLayer(),
                                          aTrack->GetNet() );
@@ -744,7 +744,7 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
             break;
         }
 
-        aTrack->m_Flags |= IS_DRAGGED;
+        aTrack->SetFlags( IS_DRAGGED );
     }
 
     // Prepare the Undo command
@@ -760,7 +760,7 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
         s_ItemsListPicker.PushItem( picker );
         draggedtrack = (TRACK*) picker.m_Link;
         draggedtrack->SetStatus( 0 );
-        draggedtrack->m_Flags = 0;
+        draggedtrack->ClearFlags();
     }
 
     s_LastPos = PosInit;
@@ -929,7 +929,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
 
     NewTrack = NULL;
     NbPtNewTrack   = 0;
-    track->m_Flags = IS_DRAGGED;
+    track->SetFlags( IS_DRAGGED );
 
     if( TrackToStartPoint )
     {
@@ -939,7 +939,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
             flag = ENDPOINT;
 
         AddSegmentToDragList( DrawPanel, DC, flag, TrackToStartPoint );
-        track->m_Flags |= STARTPOINT;
+        track->SetFlags( STARTPOINT );
     }
 
     if( TrackToEndPoint )
@@ -950,10 +950,10 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
             flag = ENDPOINT;
 
         AddSegmentToDragList( DrawPanel, DC, flag, TrackToEndPoint );
-        track->m_Flags |= ENDPOINT;
+        track->SetFlags( ENDPOINT );
     }
 
-    AddSegmentToDragList( DrawPanel, DC, track->m_Flags, track );
+    AddSegmentToDragList( DrawPanel, DC, track->GetFlags(), track );
 
 
     PosInit   = GetScreen()->GetCrossHairPosition();
@@ -975,7 +975,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
         s_ItemsListPicker.PushItem( picker );
         draggedtrack = (TRACK*) picker.m_Link;
         draggedtrack->SetStatus( 0 );
-        draggedtrack->m_Flags = 0;
+        draggedtrack->ClearFlags();
     }
 
     if( !InitialiseDragParameters() )
@@ -1019,7 +1019,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     int draw_mode = GR_OR | GR_HIGHLIGHT;
 
     // DRC Ok: place track segments
-    Track->m_Flags = 0;
+    Track->ClearFlags();
     Track->SetState( IN_EDIT, OFF );
     Track->Draw( DrawPanel, DC, draw_mode );
 
@@ -1028,7 +1028,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     {
         Track = g_DragSegmentList[ii].m_Segm;
         Track->SetState( IN_EDIT, OFF );
-        Track->m_Flags = 0;
+        Track->ClearFlags();
         Track->Draw( DrawPanel, DC, draw_mode );
 
         /* Test the connections modified by the move

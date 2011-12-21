@@ -313,7 +313,7 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset
 
     SCH_FIELD* field = GetField( REFERENCE );
 
-    if( field->IsVisible() && !( field->m_Flags & IS_MOVED ) )
+    if( field->IsVisible() && !field->IsMoving() )
     {
         field->Draw( panel, DC, offset, DrawMode );
     }
@@ -322,7 +322,7 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset
     {
         field = GetField( ii );
 
-        if( field->m_Flags & IS_MOVED )
+        if( field->IsMoving() )
             continue;
 
         field->Draw( panel, DC, offset, DrawMode );

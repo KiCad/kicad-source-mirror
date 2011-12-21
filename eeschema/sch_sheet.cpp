@@ -649,7 +649,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     /* Draw text : SheetLabel */
     BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_pins )
     {
-        if( !( sheetPin.m_Flags & IS_MOVED ) )
+        if( !sheetPin.IsMoving() )
             sheetPin.Draw( aPanel, aDC, aOffset, aDrawMode, aColor );
     }
 }
@@ -676,7 +676,7 @@ EDA_RECT SCH_SHEET::GetBoundingBox() const
     end += m_pos;
 
     // Move upper and lower limits to include texts:
-    box.m_Pos.y  -= wxRound( m_sheetNameSize * 1.3 ) + 8;
+    box.SetY( box.GetY() - ( wxRound( m_sheetNameSize * 1.3 ) + 8 ) );
     end.y += wxRound( m_fileNameSize * 1.3 ) + 8;
 
     box.SetEnd( end );

@@ -54,7 +54,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     CMP_LIBRARY*   Lib;
 
     /* Exit if no library entry is selected or a command is in progress. */
-    if( m_component == NULL || ( m_drawItem && m_drawItem->m_Flags ) )
+    if( m_component == NULL || ( m_drawItem && m_drawItem->GetFlags() ) )
         return;
 
     DrawPanel->m_IgnoreMouseEvents = true;
@@ -115,8 +115,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
         if( item.GetConvert() )
             item.SetConvert( m_convert );
 
-        item.m_Flags    = IS_NEW;
-        item.m_Selected = IS_SELECTED;
+        item.SetFlags( IS_NEW | SELECTED );
 
         LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
         newItem->SetParent( m_component );
@@ -126,7 +125,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     m_component->RemoveDuplicateDrawItems();
     m_component->ClearSelectedItems();
 
-    OnModify( );
+    OnModify();
     DrawPanel->Refresh();
 
     delete Lib;

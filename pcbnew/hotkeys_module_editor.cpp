@@ -27,7 +27,7 @@ void FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
 
     bool           blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
     BOARD_ITEM*    item     = GetCurItem();
-    bool           ItemFree = (item == 0) || (item->m_Flags == 0);
+    bool           ItemFree = (item == 0) || (item->GetFlags() == 0);
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
@@ -119,7 +119,7 @@ void FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
 bool FOOTPRINT_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool        itemCurrentlyEdited = item && item->m_Flags;
+    bool        itemCurrentlyEdited = item && item->GetFlags();
     bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
 
     if( itemCurrentlyEdited || blockActive )
@@ -174,7 +174,7 @@ bool FOOTPRINT_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 bool FOOTPRINT_EDIT_FRAME::OnHotkeyDeleteItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool        itemCurrentlyEdited = item && item->m_Flags;
+    bool        itemCurrentlyEdited = item && item->GetFlags();
     bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
 
     if( itemCurrentlyEdited || blockActive )
@@ -229,8 +229,8 @@ bool FOOTPRINT_EDIT_FRAME::OnHotkeyDeleteItem( int aIdCommand )
 bool FOOTPRINT_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool        itemCurrentlyEdited = item && item->m_Flags;
-    bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
+    bool        itemCurrentlyEdited = item && item->GetFlags();
+    bool        blockActive = GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE;
 
     if( itemCurrentlyEdited || blockActive )
         return false;
@@ -284,7 +284,7 @@ bool FOOTPRINT_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 bool FOOTPRINT_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool        itemCurrentlyEdited = item && item->m_Flags;
+    bool        itemCurrentlyEdited = item && item->GetFlags();
     int         evt_type    = 0; // Used to post a wxCommandEvent on demand
     bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
 

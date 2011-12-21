@@ -552,7 +552,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     }
 
     GetBoard()->m_Status_Pcb = 0;
-    aNewModule->m_Flags = 0;
+    aNewModule->ClearFlags();
     OnModify();
 }
 

@@ -172,15 +172,15 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
 
     // If no other command in progress, prepare undo command
     // (for a command in progress, will be made later, at the completion of command)
-    if( m_SelectedPCBText->m_Flags == 0 )
+    if( m_SelectedPCBText->GetFlags() == 0 )
         m_Parent->SaveCopyInUndoList( m_SelectedPCBText, UR_CHANGED );
 
     /* set flag in edit to force undo/redo/abort proper operation,
      * and avoid new calls to SaveCopyInUndoList for the same text
      * this can occurs when a text is moved, and then rotated, edited ..
     */
-    if( m_SelectedPCBText->m_Flags != 0 )
-        m_SelectedPCBText->m_Flags |= IN_EDIT;
+    if( m_SelectedPCBText->GetFlags() != 0 )
+        m_SelectedPCBText->SetFlags( IN_EDIT );
 
     // Erase old text on screen if context is available
     if( m_DC )

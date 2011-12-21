@@ -309,7 +309,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     if( ! nextcmd )
     {
-        block->m_Flags   = 0;
+        block->ClearFlags();
         block->m_State   = STATE_NO_BLOCK;
         block->m_Command = BLOCK_IDLE;
         GetScreen()->SetCurItem( NULL );

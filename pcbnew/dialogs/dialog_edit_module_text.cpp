@@ -160,7 +160,7 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     if( m_dc )     //Erase old text on screen
     {
         m_currentText->Draw( m_parent->DrawPanel, m_dc, GR_XOR,
-            (m_currentText->m_Flags & IS_MOVED) ? MoveVector : wxPoint( 0, 0 ) );
+                             (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
     }
     m_currentText->m_Text = m_Name->GetValue();
 
@@ -212,9 +212,11 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     if( m_dc )     // Display new text
     {
         m_currentText->Draw( m_parent->DrawPanel, m_dc, GR_XOR,
-            (m_currentText->m_Flags & IS_MOVED) ? MoveVector : wxPoint( 0, 0 ) );
+                             (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
     }
+
     m_parent->OnModify();
+
     if( m_module )
         m_module->m_LastEdit_Time = time( NULL );
 

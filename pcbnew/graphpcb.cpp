@@ -197,8 +197,8 @@ void TraceFilledCircle( BOARD* Pcb,
         break;
     }
 
-    cx -= Pcb->GetBoundingBox().m_Pos.x;
-    cy -= Pcb->GetBoundingBox().m_Pos.y;
+    cx -= Pcb->GetBoundingBox().GetX();
+    cy -= Pcb->GetBoundingBox().GetY();
 
     distmin = radius;
 
@@ -298,10 +298,10 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
     half_width = ( pt_segm->m_Width / 2 ) + marge;
 
     /* Calculate the bounding rectangle of the segment (if H, V or Via) */
-    ux0 = pt_segm->m_Start.x - Pcb->GetBoundingBox().m_Pos.x;
-    uy0 = pt_segm->m_Start.y - Pcb->GetBoundingBox().m_Pos.y;
-    ux1 = pt_segm->m_End.x - Pcb->GetBoundingBox().m_Pos.x;
-    uy1 = pt_segm->m_End.y - Pcb->GetBoundingBox().m_Pos.y;
+    ux0 = pt_segm->m_Start.x - Pcb->GetBoundingBox().GetX();
+    uy0 = pt_segm->m_Start.y - Pcb->GetBoundingBox().GetY();
+    ux1 = pt_segm->m_End.x - Pcb->GetBoundingBox().GetX();
+    uy1 = pt_segm->m_End.y - Pcb->GetBoundingBox().GetY();
 
     /* Test if VIA (filled circle was drawn) */
     if( pt_segm->Type() == PCB_VIA_T )
@@ -558,10 +558,10 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
         break;
     }
 
-    ux0 -= Pcb->GetBoundingBox().m_Pos.x;
-    uy0 -= Pcb->GetBoundingBox().m_Pos.y;
-    ux1 -= Pcb->GetBoundingBox().m_Pos.x;
-    uy1 -= Pcb->GetBoundingBox().m_Pos.y;
+    ux0 -= Pcb->GetBoundingBox().GetX();
+    uy0 -= Pcb->GetBoundingBox().GetY();
+    ux1 -= Pcb->GetBoundingBox().GetX();
+    uy1 -= Pcb->GetBoundingBox().GetY();
 
     /* Calculating limits coord cells belonging to the rectangle. */
     row_max = uy1 / Board.m_GridRouting;
@@ -650,10 +650,10 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
         break;
     }
 
-    ux0 -= Pcb->GetBoundingBox().m_Pos.x;
-    uy0 -= Pcb->GetBoundingBox().m_Pos.y;
-    ux1 -= Pcb->GetBoundingBox().m_Pos.x;
-    uy1 -= Pcb->GetBoundingBox().m_Pos.y;
+    ux0 -= Pcb->GetBoundingBox().GetX();
+    uy0 -= Pcb->GetBoundingBox().GetY();
+    ux1 -= Pcb->GetBoundingBox().GetX();
+    uy1 -= Pcb->GetBoundingBox().GetY();
 
     cx    = (ux0 + ux1) / 2;
     cy    = (uy0 + uy1) / 2;

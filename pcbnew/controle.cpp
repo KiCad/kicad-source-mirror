@@ -312,7 +312,7 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
     EDA_ITEM* DrawStruct = GetScreen()->GetCurItem();
 
-    if( DrawStruct && DrawStruct->m_Flags )
+    if( DrawStruct && DrawStruct->GetFlags() )
         keep_on_grid = true;
 
     if( keep_on_grid )

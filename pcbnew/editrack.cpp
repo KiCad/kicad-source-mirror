@@ -114,7 +114,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             HighLight( aDC );
 
         g_CurrentTrackList.PushBack( new TRACK( GetBoard() ) );
-        g_CurrentTrackSegment->m_Flags = IS_NEW;
+        g_CurrentTrackSegment->SetFlags( IS_NEW );
 
         GetBoard()->SetHighLightNet( 0 );
 
@@ -256,7 +256,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
             TRACK* newTrack = g_CurrentTrackSegment->Copy();
             g_CurrentTrackList.PushBack( newTrack );
-            newTrack->m_Flags = IS_NEW;
+            newTrack->SetFlags( IS_NEW );
 
             newTrack->SetState( BEGIN_ONPAD | END_ONPAD, OFF );
 
@@ -494,7 +494,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
 
         for( track = firstTrack; track && i < newCount; ++i, track = track->Next() )
         {
-            track->m_Flags = 0;
+            track->ClearFlags();
             track->SetState( BUSY, OFF );
         }
 

@@ -203,9 +203,9 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         /* Erase module on screen */
         if( aDraw )
         {
-            Module->m_Flags |= DO_NOT_DRAW;
+            Module->SetFlags( DO_NOT_DRAW );
             DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
-            Module->m_Flags &= ~DO_NOT_DRAW;
+            Module->ClearFlags( DO_NOT_DRAW );
         }
 
         D_PAD* pt_pad = (D_PAD*) Module->m_Pads;

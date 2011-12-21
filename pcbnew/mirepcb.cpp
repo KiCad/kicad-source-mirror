@@ -139,19 +139,19 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
     m_Target->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
 
     // Save old item in undo list, if is is not currently edited (will be later if so)
-    if( m_Target->m_Flags == 0 )
+    if( m_Target->GetFlags() == 0 )
         m_Parent->SaveCopyInUndoList( m_Target, UR_CHANGED );
 
-    if( m_Target->m_Flags != 0 )           // other edition in progress (MOVE, NEW ..)
-        m_Target->m_Flags |= IN_EDIT;      // set flag in edit to force
-                                           // undo/redo/abort proper operation
+    if( m_Target->GetFlags() != 0 )         // other edition in progress (MOVE, NEW ..)
+        m_Target->SetFlags( IN_EDIT );      // set flag in edit to force
+                                            // undo/redo/abort proper operation
 
     m_Target->SetWidth( m_MireWidthCtrl->GetValue() );
     MireDefaultSize  = m_MireSizeCtrl->GetValue();
     m_Target->SetSize( m_MireSizeCtrl->GetValue() );
     m_Target->SetShape( m_MireShape->GetSelection() ? 1 : 0 );
 
-    m_Target->Draw( m_Parent->DrawPanel, m_DC, ( m_Target->m_Flags & IS_MOVED ) ? GR_XOR : GR_OR );
+    m_Target->Draw( m_Parent->DrawPanel, m_DC, ( m_Target->IsMoving() ) ? GR_XOR : GR_OR );
 
     m_Parent->OnModify();
     EndModal( 1 );
@@ -191,14 +191,14 @@ static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC )
     }
     else    // it is an existing item: retrieve initial values of parameters
     {
-        if( ( target->m_Flags & (IN_EDIT | IS_MOVED) ) )
+        if( ( target->GetFlags() & (IN_EDIT | IS_MOVED) ) )
         {
             target->SetPosition( s_TargetCopy.GetPosition() );
             target->SetWidth(    s_TargetCopy.GetWidth() );
             target->SetSize(     s_TargetCopy.GetSize() );
             target->SetShape(    s_TargetCopy.GetShape() );
         }
-        target->m_Flags = 0;
+        target->ClearFlags();
         target->Draw( Panel, DC, GR_OR );
     }
 }
@@ -210,7 +210,7 @@ PCB_TARGET* PCB_EDIT_FRAME::CreateTarget( wxDC* DC )
 {
     PCB_TARGET* target = new PCB_TARGET( GetBoard() );
 
-    target->m_Flags = IS_NEW;
+    target->SetFlags( IS_NEW );
 
     GetBoard()->Add( target );
 
@@ -233,7 +233,7 @@ void PCB_EDIT_FRAME::BeginMoveTarget( PCB_TARGET* aTarget, wxDC* DC )
         return;
 
     s_TargetCopy      = *aTarget;
-    aTarget->m_Flags |= IS_MOVED;
+    aTarget->SetFlags( IS_MOVED );
     DrawPanel->SetMouseCapture( ShowTargetShapeWhileMovingMouse, AbortMoveAndEditTarget );
     SetCurItem( aTarget );
 }
@@ -252,25 +252,26 @@ void PCB_EDIT_FRAME::PlaceTarget( PCB_TARGET* aTarget, wxDC* DC )
     if( aTarget->IsNew() )
     {
         SaveCopyInUndoList( aTarget, UR_NEW );
-        aTarget->m_Flags = 0;
+        aTarget->ClearFlags();
         return;
     }
 
-    if( aTarget->m_Flags == IS_MOVED )
+    if( aTarget->GetFlags() == IS_MOVED )
     {
-        SaveCopyInUndoList( aTarget, UR_MOVED, aTarget->GetPosition() - s_TargetCopy.GetPosition() );
-        aTarget->m_Flags = 0;
+        SaveCopyInUndoList( aTarget, UR_MOVED,
+                            aTarget->GetPosition() - s_TargetCopy.GetPosition() );
+        aTarget->ClearFlags();
         return;
     }
 
-    if( (aTarget->m_Flags & IN_EDIT) )
+    if( (aTarget->GetFlags() & IN_EDIT) )
     {
         SwapData( aTarget, &s_TargetCopy );
         SaveCopyInUndoList( aTarget, UR_CHANGED );
         SwapData( aTarget, &s_TargetCopy );
     }
 
-    aTarget->m_Flags = 0;
+    aTarget->ClearFlags();
 }
 
 
