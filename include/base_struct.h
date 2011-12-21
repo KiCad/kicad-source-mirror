@@ -661,9 +661,11 @@ public:
      *
      * @param aSearchData A reference to a wxFindReplaceData object containing the
      *                    search and replace criteria.
+     * @param aAuxData A pointer to optional data required for the search or NULL
+     *                 if not used.
      * @return True if the item text was modified, otherwise false.
      */
-    virtual bool Replace( wxFindReplaceData& aSearchData ) { return false; }
+    virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL ) { return false; }
 
     /**
      * Function IsReplaceable

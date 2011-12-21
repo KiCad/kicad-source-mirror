@@ -309,13 +309,14 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
     searchCriteria.SetFindString( aEvent.GetFindString() );
     searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
 
-    if( m_foundItems.GetFindReplaceData().ChangesSearch( searchCriteria ) )
+    if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
     {
-        if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
-        {
-            warpCursor = true;
-        }
-        else if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
+        if( m_foundItems.GetCount() == 0 )
+            return;
+    }
+    else if( m_foundItems.IsSearchRequired( searchCriteria ) )
+    {
+        if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
         {
             m_foundItems.Collect( searchCriteria, m_CurrentSheet );
         }

@@ -545,6 +545,9 @@ void SCH_EDIT_FRAME::OnModify()
     GetScreen()->SetModify();
     GetScreen()->SetSave();
 
+    if( m_dlgFindReplace == NULL )
+        m_foundItems.SetForceSearch();
+
     wxString    date = GenDate();
     SCH_SCREENS s_list;
 
@@ -558,6 +561,7 @@ void SCH_EDIT_FRAME::OnModify()
     for( ; screen != NULL; screen = s_list.GetNext() )
         screen->m_Date = date;
 }
+
 
 /*****************************************************************************
 * Enable or disable menu entry and toolbar buttons according to current
@@ -680,7 +684,6 @@ void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& aEvent )
 
     m_dlgFindReplace->SetFindEntries( m_findStringHistoryList );
     m_dlgFindReplace->SetReplaceEntries( m_replaceStringHistoryList );
-    m_dlgFindReplace->SetMinSize( m_dlgFindReplace->GetBestSize() );
     m_dlgFindReplace->Show( true );
 }
 

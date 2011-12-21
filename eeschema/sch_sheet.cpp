@@ -955,7 +955,7 @@ bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
 }
 
 
-bool SCH_SHEET::Replace( wxFindReplaceData& aSearchData )
+bool SCH_SHEET::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     return EDA_ITEM::Replace( aSearchData, m_name );
 }
