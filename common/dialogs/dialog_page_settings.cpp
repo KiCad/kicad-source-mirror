@@ -23,14 +23,6 @@
 
 #include "dialog_page_settings.h"
 
-#define NB_ITEMS 11
-Ki_PageDescr* SheetList[NB_ITEMS + 1] =
-{
-    &g_Sheet_A4,   &g_Sheet_A3, &g_Sheet_A2, &g_Sheet_A1, &g_Sheet_A0,
-    &g_Sheet_A,    &g_Sheet_B,  &g_Sheet_C,  &g_Sheet_D,  &g_Sheet_E,
-    &g_Sheet_user, NULL
-};
-
 
 void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 {
@@ -43,13 +35,12 @@ void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 
 
 DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent ) :
-    DIALOG_PAGES_SETTINGS_BASE( parent )
+    DIALOG_PAGES_SETTINGS_BASE( parent ),
+    m_user_size( wxT( "User" ) )
 {
     m_Parent   = parent;
     m_Screen   = m_Parent->GetScreen();
-    m_Modified = 0;
-    m_SelectedSheet    = NULL;
-    m_CurrentSelection = 0;
+    m_modified = false;
 
     initDialog();
 
@@ -65,10 +56,11 @@ DIALOG_PAGES_SETTINGS::~DIALOG_PAGES_SETTINGS()
 
 void DIALOG_PAGES_SETTINGS::initDialog()
 {
-    wxString msg;
+    wxString    msg;
+    double      userSizeX;
+    double      userSizeY;
 
     SetFocus();
-    SearchPageSizeSelection();
 
     // Init display value for sheet User size
     wxString format = m_TextSheetCount->GetLabel();
@@ -78,38 +70,49 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     msg.Printf( format, m_Screen->m_ScreenNumber );
     m_TextSheetNumber->SetLabel( msg );
 
+    m_page = m_Parent->GetPageSettings();
+
+    setCurrentPageSizeSelection();
+
     switch( g_UserUnit )
     {
     case MILLIMETRES:
-        UserSizeX  = (double) g_Sheet_user.m_Size.x * 25.4 / 1000;
-        UserSizeY  = (double) g_Sheet_user.m_Size.y * 25.4 / 1000;
-        msg.Printf( wxT( "%.2f" ), UserSizeX );
+        userSizeX  = m_user_size.GetWidthInches()  * 25.4;
+        userSizeY  = m_user_size.GetHeightInches() * 25.4;
+
+        msg.Printf( wxT( "%.2f" ), userSizeX );
         m_TextUserSizeX->SetValue( msg );
-        msg.Printf( wxT( "%.2f" ), UserSizeY );
+
+        msg.Printf( wxT( "%.2f" ), userSizeY );
         m_TextUserSizeY->SetValue( msg );
         break;
 
+    default:
     case INCHES:
-        UserSizeX  = (double) g_Sheet_user.m_Size.x / 1000;
-        UserSizeY  = (double) g_Sheet_user.m_Size.y / 1000;
-        msg.Printf( wxT( "%.3f" ), UserSizeX );
+        userSizeX  = m_user_size.GetWidthInches();
+        userSizeY  = m_user_size.GetHeightInches();
+
+        msg.Printf( wxT( "%.3f" ), userSizeX );
         m_TextUserSizeX->SetValue( msg );
-        msg.Printf( wxT( "%.3f" ), UserSizeY );
+
+        msg.Printf( wxT( "%.3f" ), userSizeY );
         m_TextUserSizeY->SetValue( msg );
         break;
 
+/*  // you want it in 1/1000ths of an inch, why?
     case UNSCALED_UNITS:
-        UserSizeX  = g_Sheet_user.m_Size.x;
-        UserSizeY  = g_Sheet_user.m_Size.y;
-        msg.Printf( wxT( "%f" ), UserSizeX );
+        userSizeX  = m_user_size.GetWidthInches() * 1000;
+        userSizeY  = m_user_size.GetHeightInches() * 1000;
+        msg.Printf( wxT( "%f" ), m_userSizeX );
         m_TextUserSizeX->SetValue( msg );
-        msg.Printf( wxT( "%f" ), UserSizeY );
+        msg.Printf( wxT( "%f" ), m_userSizeY );
         m_TextUserSizeY->SetValue( msg );
         break;
+*/
     }
 
     // Set validators
-    m_PageSizeBox->SetValidator( wxGenericValidator( &m_CurrentSelection ) );
+//    m_PageSizeBox->SetValidator( wxGenericValidator( &m_CurrentSelection ) );
     m_TextRevision->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Revision ) );
     m_TextTitle->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Title ) );
     m_TextCompany->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Company ) );
@@ -139,7 +142,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
 void DIALOG_PAGES_SETTINGS::OnCloseWindow( wxCloseEvent& event )
 {
-    EndModal( m_Modified );
+    EndModal( m_modified );
 }
 
 
@@ -150,7 +153,7 @@ void DIALOG_PAGES_SETTINGS::OnCloseWindow( wxCloseEvent& event )
 void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
 {
     SavePageSettings( event );
-    m_Modified = 1;
+    m_modified = true;
     Close( true );
 }
 
@@ -167,8 +170,9 @@ void DIALOG_PAGES_SETTINGS::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
 {
-    double      dtmp;
     wxString    msg;
+    double      userSizeX;
+    double      userSizeY;
 
     m_Screen->m_Revision       = m_TextRevision->GetValue();
     m_Screen->m_Company        = m_TextCompany->GetValue();
@@ -179,49 +183,41 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
     m_Screen->m_Commentaire4   = m_TextComment4->GetValue();
 
     msg = m_TextUserSizeX->GetValue();
-    msg.ToDouble( &dtmp );
-    UserSizeX = dtmp;
+    msg.ToDouble( &userSizeX );
+
     msg = m_TextUserSizeY->GetValue();
-    msg.ToDouble( &dtmp );
-    UserSizeY = dtmp;
+    msg.ToDouble( &userSizeY );
 
-    int ii = m_PageSizeBox->GetSelection();
+    int radioSelection = m_PageSizeBox->GetSelection();
+    if( radioSelection < 0 )
+        radioSelection = 0;
 
-    if( ii < 0 )
-        ii = 0;
+    wxString paperType = m_PageSizeBox->GetString( radioSelection );
 
-    m_SelectedSheet = SheetList[ii];
-    m_Screen->m_CurrentSheetDesc = m_SelectedSheet;
+    m_page.SetType( paperType );
+
+    m_Parent->SetPageSettings( m_page );
 
     switch( g_UserUnit )
     {
     case MILLIMETRES:
-        g_Sheet_user.m_Size.x  = (int) ( UserSizeX * 1000 / 25.4 );
-        g_Sheet_user.m_Size.y  = (int) ( UserSizeY * 1000 / 25.4 );
+        PAGE_INFO::SetUserWidthInches( userSizeX / 25.4 );
+        PAGE_INFO::SetUserHeightInches( userSizeY / 25.4 );
         break;
 
+    default:
     case INCHES:
-        g_Sheet_user.m_Size.x  = (int) ( UserSizeX * 1000 );
-        g_Sheet_user.m_Size.y  = (int) ( UserSizeY * 1000 );
+        PAGE_INFO::SetUserWidthInches( userSizeX );
+        PAGE_INFO::SetUserHeightInches( userSizeY );
         break;
 
+/*      // set in 1/1000ths of an inch, but why?
     case UNSCALED_UNITS:
-        g_Sheet_user.m_Size.x  = (int) ( UserSizeX );
-        g_Sheet_user.m_Size.y  = (int) ( UserSizeY );
+        PAGE_INFO::SetUserWidthInches( userSizeX /1000 );
+        PAGE_INFO::SetUserHeightInches( userSizeY /1000 );
         break;
+*/
     }
-
-    if( g_Sheet_user.m_Size.x < 6000 )
-        g_Sheet_user.m_Size.x = 6000;
-
-    if( g_Sheet_user.m_Size.x > 44000 )
-        g_Sheet_user.m_Size.x = 44000;
-
-    if( g_Sheet_user.m_Size.y < 4000 )
-        g_Sheet_user.m_Size.y = 4000;
-
-    if( g_Sheet_user.m_Size.y > 44000 )
-        g_Sheet_user.m_Size.y = 44000;
 
 #ifdef EESCHEMA
     /* Exports settings to other sheets if requested: */
@@ -265,21 +261,19 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
 }
 
 
-/* Search the correct index to activate the radiobox list size selection
- * according to the current page size
- */
-void DIALOG_PAGES_SETTINGS::SearchPageSizeSelection()
+void DIALOG_PAGES_SETTINGS::setCurrentPageSizeSelection()
 {
-    Ki_PageDescr*   sheet;
-    int             ii;
+    wxString    curPaperType = m_page.GetType();
 
-    m_CurrentSelection = NB_ITEMS - 1;
-
-    for( ii = 0; ii < NB_ITEMS; ii++ )
+    for( unsigned i = 0;  i < m_PageSizeBox->GetCount();  ++i )
     {
-        sheet = SheetList[ii];
-
-        if( m_Parent->GetScreen()->m_CurrentSheetDesc == sheet )
-            m_CurrentSelection = ii;
+        if( m_PageSizeBox->GetString( i ) == curPaperType )
+        {
+            m_PageSizeBox->SetSelection( i );
+            return;
+        }
     }
+
+    // m_PageSizeBox->SetSelection( 1 );        // wxFormBuilder does this, control there
 }
+

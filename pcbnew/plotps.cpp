@@ -24,15 +24,19 @@
 bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int aLayer,
                                              bool aUseA4, GRTraceMode aTraceMode )
 {
-    wxSize        SheetSize;
-    wxSize        PaperSize;
-    wxSize        BoardSize;
-    wxPoint       BoardCenter;
-    bool          Center = false;
-    Ki_PageDescr* currentsheet = GetScreen()->m_CurrentSheetDesc;
-    double        scale, paperscale;
-    Ki_PageDescr* SheetPS;
-    wxPoint       offset;
+    const PAGE_INFO&    pageInfo = GetPageSettings();
+
+    wxSize      paperSizeIU;
+    wxSize      boardSize;
+    wxPoint     boardCenter;
+    bool        center = false;
+    double      scale;
+    double      paperscale;
+    wxPoint     offset;
+    LOCALE_IO   toggle;
+    PAGE_INFO   pageA4( wxT( "A4" ) );
+
+    const PAGE_INFO*  sheetPS;
 
     FILE* output_file = wxFopen( aFullFileName, wxT( "wt" ) );
 
@@ -41,45 +45,43 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
         return false;
     }
 
-    SetLocaleTo_C_standard();
-
     if( g_PcbPlotOptions.m_PlotScale != 1.0 || g_PcbPlotOptions.m_AutoScale )
-        Center = true;  // when scale != 1.0 we must calculate the position in page
-                        // because actual position has no meaning
+    {
+        // when scale != 1.0 we must calculate the position in page
+        // because actual position has no meaning
+        center = true;
+    }
 
     // Set default line width
     if( g_PcbPlotOptions.m_PlotLineWidth < 1 )
         g_PcbPlotOptions.m_PlotLineWidth = 1;
 
-    SheetSize.x = currentsheet->m_Size.x * U_PCB;
-    SheetSize.y = currentsheet->m_Size.y * U_PCB;
+    wxSize pageSizeIU = GetPageSizeIU();
 
     if( aUseA4 )
     {
-        SheetPS     = &g_Sheet_A4;
-        PaperSize.x = g_Sheet_A4.m_Size.x * U_PCB;
-        PaperSize.y = g_Sheet_A4.m_Size.y * U_PCB;
-        paperscale  = (float) PaperSize.x / SheetSize.x;
+        sheetPS     = &pageA4;
+        paperSizeIU = pageA4.GetSizeIU();
+        paperscale  = (double) paperSizeIU.x / pageSizeIU.x;
     }
     else
     {
-        SheetPS    = currentsheet;
-        PaperSize  = SheetSize;
+        sheetPS     = &pageInfo;
+        paperSizeIU = pageSizeIU;
         paperscale = 1;
     }
 
     EDA_RECT bbbox = GetBoardBoundingBox();
 
-    BoardSize   = bbbox.GetSize();
-    BoardCenter = bbbox.Centre();
+    boardSize   = bbbox.GetSize();
+    boardCenter = bbbox.Centre();
 
     if( g_PcbPlotOptions.m_AutoScale )       // Optimum scale
     {
-        double Xscale, Yscale;
-
         // Fit to 80% of the page
-        Xscale = (PaperSize.x * 0.8) / BoardSize.x;
-        Yscale = (PaperSize.y * 0.8) / BoardSize.y;
+        double Xscale = (paperSizeIU.x * 0.8) / boardSize.x;
+        double Yscale = (paperSizeIU.y * 0.8) / boardSize.y;
+
         scale  = MIN( Xscale, Yscale );
     }
     else
@@ -87,10 +89,10 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
         scale = g_PcbPlotOptions.m_PlotScale * paperscale;
     }
 
-    if( Center )
+    if( center )
     {
-        offset.x = wxRound( (double) BoardCenter.x - ( (double) PaperSize.x / 2.0 ) / scale );
-        offset.y = wxRound( (double) BoardCenter.y - ( (double) PaperSize.y / 2.0 ) / scale );
+        offset.x = wxRound( (double) boardCenter.x - ( (double) paperSizeIU.x / 2.0 ) / scale );
+        offset.y = wxRound( (double) boardCenter.y - ( (double) paperSizeIU.y / 2.0 ) / scale );
     }
     else
     {
@@ -99,7 +101,9 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     }
 
     PS_PLOTTER* plotter = new PS_PLOTTER();
-    plotter->set_paper_size( SheetPS );
+
+    plotter->SetPageSettings( *sheetPS );
+
     plotter->set_scale_adjust( g_PcbPlotOptions.m_FineScaleAdjustX,
                                g_PcbPlotOptions.m_FineScaleAdjustY );
     plotter->set_viewport( offset, scale, g_PcbPlotOptions.m_PlotMirror );
@@ -109,7 +113,7 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     plotter->start_plot( output_file );
 
     /* The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway */
-    if( g_PcbPlotOptions.m_PlotFrameRef && !Center )
+    if( g_PcbPlotOptions.m_PlotFrameRef && !center )
         PlotWorkSheet( plotter, GetScreen() );
 
     // If plot a negative board:
@@ -131,7 +135,6 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
     Plot_Layer( plotter, aLayer, aTraceMode );
     plotter->end_plot();
     delete plotter;
-    SetLocaleTo_Default();
 
     return true;
 }

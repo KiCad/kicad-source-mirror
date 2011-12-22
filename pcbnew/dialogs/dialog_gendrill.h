@@ -54,7 +54,8 @@ private:
     static bool m_createRpt;           // true to create a drill file report
     static int m_createMap;            // > 0 to create a map file report
 
-public: DIALOG_GENDRILL( PCB_EDIT_FRAME* parent );
+public:
+    DIALOG_GENDRILL( PCB_EDIT_FRAME* parent );
     ~DIALOG_GENDRILL();
 
 private:

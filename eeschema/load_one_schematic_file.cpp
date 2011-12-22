@@ -305,11 +305,11 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* aScre
     char            Text[256];
     char            buf[1024];
     int             ii;
-    Ki_PageDescr*   wsheet = &g_Sheet_A4;
+    PAGE_INFO*   wsheet = &g_Sheet_A4;
     wxSize          PageSize;
     char*           line;
 
-    static Ki_PageDescr* SheetFormatList[] =
+    static PAGE_INFO* SheetFormatList[] =
     {
         &g_Sheet_A4,   &g_Sheet_A3,   &g_Sheet_A2,   &g_Sheet_A1, &g_Sheet_A0,
         &g_Sheet_A,    &g_Sheet_B,    &g_Sheet_C,    &g_Sheet_D,  &g_Sheet_E,

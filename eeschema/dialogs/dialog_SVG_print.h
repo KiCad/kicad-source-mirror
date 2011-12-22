@@ -4,7 +4,6 @@
 
 
 class EDA_DRAW_FRAME;
-class BASE_SCREEN;
 
 
 #include "dialog_SVG_print_base.h"

@@ -14,7 +14,7 @@
 #include "class_pad.h"
 #include "class_colors_design_settings.h"
 #include "class_board_design_settings.h"
-
+#include "common.h"                         // PAGE_INFO
 
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
@@ -27,7 +27,7 @@ class D_PAD;
 class MARKER_PCB;
 
 
-// buffer of item candidates when search for items on the same track.
+// non-owning container of item candidates when searching for items on the same track.
 typedef std::vector< TRACK* > TRACK_PTRS;
 
 
@@ -174,6 +174,7 @@ private:
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
     COLORS_DESIGN_SETTINGS* m_colorsSettings;       // Link to current colors settings
+    PAGE_INFO               m_paper;
 
     /**
      * Function chainMarkedSegments
@@ -534,15 +535,14 @@ public:
      */
     void SetDesignSettings( const BOARD_DESIGN_SETTINGS& aDesignSettings );
 
+    const PAGE_INFO& GetPageSettings() const                { return m_paper; }
+    void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
+
     /**
      * Function SetBoardSettings
      * @return the current COLORS_DESIGN_SETTINGS in use
      */
-    COLORS_DESIGN_SETTINGS* GetColorsSettings() const
-    {
-        return m_colorsSettings;
-    }
-
+    COLORS_DESIGN_SETTINGS* GetColorsSettings() const { return m_colorsSettings; }
 
     /**
      * Function SetColorsSettings
@@ -552,7 +552,6 @@ public:
     {
         m_colorsSettings = aColorsSettings;
     }
-
 
     /**
      * Function GetLayerName

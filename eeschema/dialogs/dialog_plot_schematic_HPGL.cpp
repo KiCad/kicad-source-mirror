@@ -54,7 +54,7 @@ enum PageFormatReq
     PAGE_SIZE_E
 };
 
-static Ki_PageDescr* Plot_sheet_list[] =
+static PAGE_INFO* Plot_sheet_list[] =
 {
     NULL,
     &g_Sheet_A4,
@@ -99,7 +99,7 @@ private:
     void HPGL_Plot( bool aPlotAll );
     void Plot_Schematic_HPGL( bool aPlotAll, int HPGL_SheetSize );
     void Plot_1_Page_HPGL( const wxString& FileName,
-                           SCH_SCREEN* screen, Ki_PageDescr* sheet,
+                           SCH_SCREEN* screen, PAGE_INFO* sheet,
                            wxPoint& offset, double plot_scale );
     void ReturnSheetDims( SCH_SCREEN* screen, wxSize& SheetSize, wxPoint& SheetOffset );
 };
@@ -245,7 +245,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::HPGL_Plot( bool aPlotAll )
 
     if( m_pageSizeSelect != PAGE_DEFAULT )
     {
-        Ki_PageDescr* plot_sheet = Plot_sheet_list[m_pageSizeSelect];
+        PAGE_INFO* plot_sheet = Plot_sheet_list[m_pageSizeSelect];
         wxString msg = m_PlotOrgPosition_X->GetValue();
         plot_sheet->m_Offset.x =
             ReturnValueFromString( g_UserUnit, msg, EESCHEMA_INTERNAL_UNIT );
@@ -265,7 +265,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::ReturnSheetDims( SCH_SCREEN* screen,
                                                   wxSize&     SheetSize,
                                                   wxPoint&    SheetOffset )
 {
-    Ki_PageDescr* PlotSheet;
+    PAGE_INFO* PlotSheet;
 
     if( screen == NULL )
         screen = m_Parent->GetScreen();
@@ -283,7 +283,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll, int HPGL_Sh
     SCH_SCREEN*            screen    = m_Parent->GetScreen();
     SCH_SHEET_PATH*        sheetpath;
     SCH_SHEET_PATH         oldsheetpath = m_Parent->GetCurrentSheet();
-    Ki_PageDescr*          PlotSheet;
+    PAGE_INFO*          PlotSheet;
     wxSize                 SheetSize;
     wxPoint                SheetOffset, PlotOffset;
 
@@ -353,7 +353,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_Schematic_HPGL( bool aPlotAll, int HPGL_Sh
 
 void DIALOG_PLOT_SCHEMATIC_HPGL::Plot_1_Page_HPGL( const wxString& FileName,
                                                    SCH_SCREEN*     screen,
-                                                   Ki_PageDescr*   sheet,
+                                                   PAGE_INFO*   sheet,
                                                    wxPoint&        offset,
                                                    double          plot_scale )
 {

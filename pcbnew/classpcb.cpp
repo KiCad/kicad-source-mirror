@@ -32,8 +32,8 @@ static const double PcbZoomList[] =
     200.0, 350.0, 500.0, 1000.0, 2000.0
 };
 
-#define PCB_ZOOM_LIST_CNT ( sizeof( PcbZoomList ) / sizeof( PcbZoomList[0] ) )
-#define MM_TO_PCB_UNITS 10000.0 / 25.4
+#define PCB_ZOOM_LIST_CNT   ( sizeof( PcbZoomList ) / sizeof( PcbZoomList[0] ) )
+#define MM_TO_PCB_UNITS     (10000.0 / 25.4)
 
 
 /* Default grid sizes for PCB editor screens. */
@@ -82,8 +82,13 @@ PCB_SCREEN::PCB_SCREEN() : BASE_SCREEN( SCREEN_T )
     for( i = 0; i < PCB_GRID_LIST_CNT; i++ )
         AddGrid( PcbGridList[i] );
 
-    SetGrid( wxRealPoint( 500, 500 ) );        /* Set the working grid size to a reasonnable value (in 1/10000 inch) */
-    Init();
+    // Set the working grid size to a reasonnable value (in 1/10000 inch)
+    SetGrid( wxRealPoint( 500, 500 ) );
+
+    m_Active_Layer       = LAYER_N_BACK;      // default active layer = bottom layer
+    m_Route_Layer_TOP    = LAYER_N_FRONT;     // default layers pair for vias (bottom to top)
+    m_Route_Layer_BOTTOM = LAYER_N_BACK;
+    m_Zoom = 150;                             // a default value for zoom
 }
 
 
@@ -93,17 +98,7 @@ PCB_SCREEN::~PCB_SCREEN()
 }
 
 
-void PCB_SCREEN::Init()
-{
-    InitDatas();
-    m_Active_Layer       = LAYER_N_BACK;      /* default active layer = bottom layer */
-    m_Route_Layer_TOP    = LAYER_N_FRONT;     /* default layers pair for vias (bottom to top) */
-    m_Route_Layer_BOTTOM = LAYER_N_BACK;
-    m_Zoom = 150;                             /* a default value for zoom */
-}
-
-
-int PCB_SCREEN::GetInternalUnits( void )
+int PCB_SCREEN::GetInternalUnits()
 {
     return PCB_INTERNAL_UNIT;
 }

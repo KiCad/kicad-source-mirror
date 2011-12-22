@@ -70,6 +70,7 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
 
     SetScreen( new PCB_SCREEN() );
     GetScreen()->Init();
+
     setActiveLayer(FIRST_COPPER_LAYER);
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();

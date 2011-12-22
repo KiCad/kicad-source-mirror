@@ -125,6 +125,33 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
     m_Pcb = aBoard;
 }
 
+void PCB_BASE_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
+{
+    wxASSERT( m_Pcb );
+    m_Pcb->SetPageSettings( aPageSettings );
+}
+
+
+const PAGE_INFO& PCB_BASE_FRAME::GetPageSettings() const
+{
+    wxASSERT( m_Pcb );
+    return m_Pcb->GetPageSettings();
+}
+
+
+const wxSize PCB_BASE_FRAME::GetPageSizeIU() const
+{
+    wxASSERT( m_Pcb );
+    const PAGE_INFO& page = m_Pcb->GetPageSettings();
+
+    // convert paper size into internal units.
+#if defined( KICAD_NANOMETRE )
+    return page.GetSizeMils() * 25400;  // nanometers
+#else
+    return page.GetSizeMils() * 10;     // deci-mils
+#endif
+}
+
 
 EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 {
@@ -134,18 +161,17 @@ EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 
     if( area.GetWidth() == 0 && area.GetHeight() == 0 )
     {
+        wxSize pageSize = GetPageSizeIU();
+
         if( m_showBorderAndTitleBlock )
         {
             area.SetOrigin( 0, 0 );
-            area.SetEnd( GetScreen()->ReturnPageSize().x,
-                         GetScreen()->ReturnPageSize().y );
+            area.SetEnd( pageSize.x, pageSize.y );
         }
         else
         {
-            area.SetOrigin( -GetScreen()->ReturnPageSize().x / 2,
-                            -GetScreen()->ReturnPageSize().y / 2 );
-            area.SetEnd( GetScreen()->ReturnPageSize().x / 2,
-                         GetScreen()->ReturnPageSize().y / 2 );
+            area.SetOrigin( -pageSize.x / 2, -pageSize.y / 2 );
+            area.SetEnd( pageSize.x / 2, pageSize.y / 2 );
         }
     }
 

@@ -184,12 +184,9 @@ void D_PAD::ReturnStringPadName( wxString& text ) const
 
     text.Empty();
 
-    for( int ii = 0; ii < PADNAMEZ; ii++ )
+    for( int ii = 0;  ii < PADNAMEZ && m_Padname[ii];  ii++ )
     {
-        if( !m_Padname[ii] )
-            break;
-
-        // add an unsigned 8 bit byte, which is LATIN1 or CRYLIC
+        // m_Padname is 8 bit KiCad font junk, do not sign extend
         text.Append( (unsigned char) m_Padname[ii] );
     }
 #endif

@@ -112,6 +112,10 @@ public:
      */
     EDA_RECT    GetBoardBoundingBox( bool aBoardEdgesOnly = false ) const;
 
+    void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload
+    const PAGE_INFO& GetPageSettings() const;                   // overload
+    const wxSize GetPageSizeIU() const;                         // overload
+
     /**
      * Function SetBoard
      * sets the m_Pcb member in such as way as to ensure deleting any previous

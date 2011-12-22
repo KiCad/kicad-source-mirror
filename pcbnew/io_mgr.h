@@ -119,6 +119,8 @@ public:
      * implementation knows about, or it can be used to write a portion of
      * aBoard to a special kind of export file.
      *
+     * @param aFileType is the PCB_FILE_T of file to save.
+     *
      * @param aFileName is the name of a file to save to on disk.
      * @param aBoard is the BOARD document (data tree) to save or export to disk.
      *

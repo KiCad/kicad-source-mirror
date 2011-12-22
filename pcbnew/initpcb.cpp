@@ -42,21 +42,22 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
     SetBoard( new BOARD() );
     SetCurItem( NULL );
 
-    /* clear filename, to avoid overwriting an old file */
+    // clear filename, to avoid overwriting an old file
     GetScreen()->GetFileName().Empty();
 
-    /* Init new grid size */
-    wxRealPoint gridsize = GetScreen()->GetGridSize();
-    GetScreen()->Init();
-    GetScreen()->SetGrid( gridsize );
+    // preserve grid size accross call to InitDataPoints()
+
+//  wxRealPoint gridsize = GetScreen()->GetGridSize();
+    GetScreen()->InitDataPoints( GetPageSizeIU() );
+//  GetScreen()->SetGrid( gridsize );
 
     GetBoard()->ResetHighLight();
 
     // Enable all layers (SetCopperLayerCount() will adjust the copper layers enabled)
-    GetBoard()->SetEnabledLayers(ALL_LAYERS);
+    GetBoard()->SetEnabledLayers( ALL_LAYERS );
 
     // Default copper layers count set to 2: double layer board
-    GetBoard()->SetCopperLayerCount(2);
+    GetBoard()->SetCopperLayerCount( 2 );
 
     // Update display:
     GetBoard()->SetVisibleLayers( ALL_LAYERS );
@@ -91,15 +92,15 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool aQuery )
     // Delete the current footprint
     GetBoard()->m_Modules.DeleteAll();
 
-    /* init pointeurs  et variables */
+    // init pointeurs  et variables
     GetScreen()->GetFileName().Empty();
 
     SetCurItem( NULL );
 
-    /* Init parametres de gestion */
-    wxRealPoint gridsize = GetScreen()->GetGridSize();
-    GetScreen()->Init();
-    GetScreen()->SetGrid( gridsize );
+    // preserve grid size accross call to InitDataPoints()
+//    wxRealPoint gridsize = GetScreen()->GetGridSize();
+    GetScreen()->InitDataPoints( GetPageSizeIU() );
+//    GetScreen()->SetGrid( gridsize );
 
     Zoom_Automatique( false );
 

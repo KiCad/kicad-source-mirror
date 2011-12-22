@@ -32,7 +32,7 @@ int      g_DisplayPolygonsModeSketch;
 GERBER_IMAGE*  g_GERBER_List[32];
 
 // List of page sizes
-Ki_PageDescr* g_GerberPageSizeList[] =
+PAGE_INFO* g_GerberPageSizeList[] =
 {
     &g_Sheet_GERBER,    // Full size page selection, and do not show page limits
     &g_Sheet_GERBER,    // Full size page selection, and show page limits

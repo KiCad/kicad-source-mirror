@@ -19,7 +19,7 @@ class GERBVIEW_FRAME;
 //class BOARD;
 
 class GERBER_IMAGE;
-class Ki_PageDescr;
+class PAGE_INFO;
 
 
 // Type of photoplotter action:
@@ -56,8 +56,6 @@ extern int     g_DisplayPolygonsModeSketch;
 
 extern const wxString GerbviewProjectFileExt;
 extern const wxString GerbviewProjectFileWildcard;
-
-extern Ki_PageDescr* g_GerberPageSizeList[];
 
 // Interpolation type
 enum Gerb_Interpolation

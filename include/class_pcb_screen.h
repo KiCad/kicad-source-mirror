@@ -2,8 +2,8 @@
  * @file class_pcb_screen.h
  */
 
-#ifndef __CLASSPCB_SCREEN_H__
-#define __CLASSPCB_SCREEN_H__
+#ifndef CLASS_PCB_SCREEN_H_
+#define CLASS_PCB_SCREEN_H_
 
 
 #include "class_base_screen.h"
@@ -26,17 +26,17 @@ public:
     ~PCB_SCREEN();
 
     PCB_SCREEN* Next() { return (PCB_SCREEN*) Pnext; }
-    void        Init();
+
     void        SetNextZoom();
     void        SetPreviousZoom();
     void        SetLastZoom();
 
-    virtual int GetInternalUnits( void );
+    virtual int GetInternalUnits();
 
     /**
      * Function GetCurItem
      * returns the currently selected BOARD_ITEM, overriding
-     *BASE_SCREEN::GetCurItem().
+     * BASE_SCREEN::GetCurItem().
      * @return BOARD_ITEM* - the one selected, or NULL.
      */
     BOARD_ITEM* GetCurItem() const
@@ -73,5 +73,4 @@ public:
     void ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount = -1 );
 };
 
-
-#endif /* __CLASSPCB_SCREEN_H__ */
+#endif  // CLASS_PCB_SCREEN_H_

@@ -70,7 +70,7 @@ private:
     void initOptVars();
     void createPSFile();
     void plotOneSheetPS( const wxString& FileName,
-                         SCH_SCREEN* screen, Ki_PageDescr* sheet,
+                         SCH_SCREEN* screen, PAGE_INFO* sheet,
                          wxPoint plot_offset, double scale );
 };
 /* static members (static to remember last state): */
@@ -176,8 +176,8 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
     SCH_SHEET_PATH* sheetpath;
     SCH_SHEET_PATH  oldsheetpath = m_Parent->GetCurrentSheet(); // sheetpath is saved here
     wxString        plotFileName;
-    Ki_PageDescr*   actualPage;                                 // page size selected in schematic
-    Ki_PageDescr*   plotPage;                                   // page size selected to plot
+    PAGE_INFO*   actualPage;                                 // page size selected in schematic
+    PAGE_INFO*   plotPage;                                   // page size selected to plot
     wxPoint         plot_offset;
 
     /* When printing all pages, the printed page is not the current page.
@@ -254,7 +254,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
 
 void DIALOG_PLOT_SCHEMATIC_PS::plotOneSheetPS( const wxString& FileName,
                                                SCH_SCREEN*     screen,
-                                               Ki_PageDescr*   sheet,
+                                               PAGE_INFO*   sheet,
                                                wxPoint         plot_offset,
                                                double          scale )
 {

@@ -101,7 +101,8 @@ SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
 {
     size_t i;
 
-    SetDrawItems( NULL );                  /* Schematic items list */
+    SetDrawItems( NULL );               // Schematic items list
+
     m_Zoom = 32;
 
     for( i = 0; i < SCHEMATIC_ZOOM_LIST_CNT; i++ )
@@ -110,12 +111,12 @@ SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
     for( i = 0; i < SCHEMATIC_GRID_LIST_CNT; i++ )
         AddGrid( SchematicGridList[i] );
 
-    SetGrid( wxRealPoint( 50, 50 ) );   /* Default grid size. */
+    SetGrid( wxRealPoint( 50, 50 ) );   // Default grid size.
     m_refCount = 0;
-    m_Center = false;                   /* Suitable for schematic only. For
-                                         * libedit and viewlib, must be set
-                                         * to true */
-    InitDatas();
+
+    m_Center = false;                   // Suitable for schematic only. For
+                                        // libedit and viewlib, must be set
+                                        // to true
 }
 
 
@@ -1547,3 +1548,18 @@ int SCH_SCREENS::GetMarkerCount( int aMarkerType )
 
     return count;
 }
+
+#if defined(DEBUG)
+void SCH_SCREEN::Show( int nestLevel, std::ostream& os ) const
+{
+    // for now, make it look like XML, expand on this later.
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
+
+    for( EDA_ITEM* item = m_drawList;  item;  item = item->Next() )
+    {
+        item->Show( nestLevel+1, os );
+    }
+
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
+}
+#endif

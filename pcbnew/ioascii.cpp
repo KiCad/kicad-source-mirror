@@ -786,7 +786,7 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
     EDA_ITEM* PtStruct = GetBoard()->m_Modules;
     int       NbModules, NbDrawItem, NbLayers;
 
-    /* Write copper layer count */
+    // Write copper layer count
     NbLayers = GetBoard()->GetCopperLayerCount();
     fprintf( File, "$GENERAL\n" );
     fprintf( File, "encoding utf-8\n");
@@ -801,7 +801,7 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
     fprintf( File, "Links %d\n", GetBoard()->GetRatsnestsCount() );
     fprintf( File, "NoConn %d\n", GetBoard()->m_NbNoconnect );
 
-    // Write Bounding box info
+    // Write board's bounding box info
     EDA_RECT bbbox = GetBoard()->ComputeBoundingBox();
     fprintf( File, "Di %d %d %d %d\n",
              bbbox.GetX(),
@@ -809,8 +809,8 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
              bbbox.GetRight(),
              bbbox.GetBottom() );
 
-    /* Write segment count for footprints, drawings, track and zones */
-    /* Calculate the footprint count */
+    // Write segment count for footprints, drawings, track and zones
+    // Calculate the footprint count
     for( NbModules = 0; PtStruct != NULL; PtStruct = PtStruct->Next() )
         NbModules++;
 
@@ -836,13 +836,14 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
  * @param screen BASE_SCREEN to save
  * @param File = an open FILE to write info
  */
-bool WriteSheetDescr( BASE_SCREEN* screen, FILE* File )
+static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, BASE_SCREEN* screen, FILE* File )
 {
-    Ki_PageDescr* sheet = screen->m_CurrentSheetDesc;
-
     fprintf( File, "$SHEETDESCR\n" );
     fprintf( File, "Sheet %s %d %d\n",
-             TO_UTF8( sheet->m_Name ), sheet->m_Size.x, sheet->m_Size.y );
+             TO_UTF8( aPageSettings.GetType() ),
+             aPageSettings.GetSizeMils().x,
+             aPageSettings.GetSizeMils().y );
+
     fprintf( File, "Title %s\n",        EscapedUTF8( screen->m_Title ).c_str() );
     fprintf( File, "Date %s\n",         EscapedUTF8( screen->m_Date ).c_str() );
     fprintf( File, "Rev %s\n",          EscapedUTF8( screen->m_Revision ).c_str() );
@@ -859,7 +860,7 @@ bool WriteSheetDescr( BASE_SCREEN* screen, FILE* File )
 
 #if !defined( USE_NEW_PCBNEW_LOAD )
 
-static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
+static bool ReadSheetDescr( BOARD* aBoard, BASE_SCREEN* screen, LINE_READER* aReader )
 {
     char    buf[1024];
     char*   text;
@@ -873,32 +874,41 @@ static bool ReadSheetDescr( BASE_SCREEN* screen, LINE_READER* aReader )
 
         if( strnicmp( line, "Sheet", 4 ) == 0 )
         {
-            text = strtok( line, " \t\n\r" );
-            text = strtok( NULL, " \t\n\r" );
-            Ki_PageDescr* sheet = g_SheetSizeList[0];
-            int           ii;
+            // e.g. "Sheet A3 16535 11700"
+            // width and height are in 1/1000th of an inch, always
 
-            for( ii = 0; sheet != NULL; ii++, sheet = g_SheetSizeList[ii] )
+            PAGE_INFO   page;
+            char*       sname  = strtok( line + SZ( "Sheet" ), delims );
+
+            if( sname )
             {
-                if( stricmp( TO_UTF8( sheet->m_Name ), text ) == 0 )
+                wxString wname = FROM_UTF8( sname );
+                if( !page.SetType( wname ) )
                 {
-                    screen->m_CurrentSheetDesc = sheet;
-
-                    if( sheet == &g_Sheet_user )
-                    {
-                        text = strtok( NULL, " \t\n\r" );
-
-                        if( text )
-                            sheet->m_Size.x = atoi( text );
-
-                        text = strtok( NULL, " \t\n\r" );
-
-                        if( text )
-                            sheet->m_Size.y = atoi( text );
-                    }
-
-                    break;
+                    m_error.Printf( _( "Unknown sheet type '%s' on line:%d" ),
+                                wname.GetData(), m_reader->LineNumber() );
+                    THROW_IO_ERROR( m_error );
                 }
+
+                // only parse the width and height if page size is "User"
+                if( wname == wxT( "User" ) )
+                {
+                    char*   width  = strtok( line, delims );
+                    char*   height = strtok( line, delims );
+
+                    if( width && height )
+                    {
+                        // legacy disk file describes paper in mils
+                        // (1/1000th of an inch)
+                        int w = intParse( width );
+                        int h = intParse( height );
+
+                        page.SetWidthInches(  w / 1000.0 );
+                        page.SetHeightInches( h / 1000.0 );
+                    }
+                }
+
+                aBoard->SetPageSettings( page );
             }
 
             continue;
@@ -1098,7 +1108,7 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 
         if( TESTLINE( "SHEETDESCR" ) )
         {
-            ReadSheetDescr( GetScreen(), aReader );
+            ReadSheetDescr( board, GetScreen(), aReader );
             continue;
         }
 
@@ -1162,7 +1172,7 @@ int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
     // like 1.3)
     LOCALE_IO   toggle;
 
-    /* Writing file header. */
+    // Writing file header.
     fprintf( aFile, "PCBNEW-BOARD Version %d date %s\n\n", BOARD_FILE_VERSION,
              TO_UTF8( DateAndTime() ) );
     fprintf( aFile, "# Created by Pcbnew%s\n\n", TO_UTF8( GetBuildVersion() ) );
@@ -1174,7 +1184,7 @@ int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
     GetBoard()->SetCurrentNetClass( GetBoard()->m_NetClasses.GetDefault()->GetName() );
 
     WriteGeneralDescrPcb( aFile );
-    WriteSheetDescr( GetScreen(), aFile );
+    WriteSheetDescr( GetBoard()->GetPageSettings(), GetScreen(), aFile );
     WriteSetup( aFile, this, GetBoard() );
 
     rc = GetBoard()->Save( aFile );

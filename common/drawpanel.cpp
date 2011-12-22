@@ -527,23 +527,24 @@ void EDA_DRAW_PANEL::ReDraw( wxDC* DC, bool erasebg )
 void EDA_DRAW_PANEL::DrawBackGround( wxDC* DC )
 {
     int          axis_color = BLUE;
-    BASE_SCREEN* screen     = GetScreen();
 
     GRSetDrawMode( DC, GR_COPY );
 
     if( GetParent()->IsGridVisible() )
         DrawGrid( DC );
 
-    /* Draw axis */
+    // Draw axis
     if( GetParent()->m_showAxis )
     {
-        /* Draw the Y axis */
-        GRDashedLine( &m_ClipBox, DC, 0, -screen->ReturnPageSize().y,
-                      0, screen->ReturnPageSize().y, 0, axis_color );
+        wxSize  pageSize = GetParent()->GetPageSizeIU();
 
-        /* Draw the X axis */
-        GRDashedLine( &m_ClipBox, DC, -screen->ReturnPageSize().x, 0,
-                      screen->ReturnPageSize().x, 0, 0, axis_color );
+        // Draw the Y axis
+        GRDashedLine( &m_ClipBox, DC, 0, -pageSize.y,
+                      0, pageSize.y, 0, axis_color );
+
+        // Draw the X axis
+        GRDashedLine( &m_ClipBox, DC, -pageSize.x, 0,
+                      pageSize.x, 0, 0, axis_color );
     }
 
     if( GetParent()->m_showOriginAxis )
@@ -679,26 +680,26 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode )
     if( GetParent()->m_originAxisPosition == wxPoint( 0, 0 ) )
         return;
 
-    int          Color  = DARKRED;
-    BASE_SCREEN* screen = GetScreen();
+    int     color    = DARKRED;
+    wxSize  pageSize = GetParent()->GetPageSizeIU();
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    /* Draw the Y axis */
+    // Draw the Y axis
     GRDashedLine( &m_ClipBox, aDC,
                   GetParent()->m_originAxisPosition.x,
-                  -screen->ReturnPageSize().y,
+                  -pageSize.y,
                   GetParent()->m_originAxisPosition.x,
-                  screen->ReturnPageSize().y,
-                  0, Color );
+                  pageSize.y,
+                  0, color );
 
-    /* Draw the X axis */
+    // Draw the X axis
     GRDashedLine( &m_ClipBox, aDC,
-                  -screen->ReturnPageSize().x,
+                  -pageSize.x,
                   GetParent()->m_originAxisPosition.y,
-                  screen->ReturnPageSize().x,
+                  pageSize.x,
                   GetParent()->m_originAxisPosition.y,
-                  0, Color );
+                  0, color );
 }
 
 
@@ -710,25 +711,26 @@ void EDA_DRAW_PANEL::DrawGridAxis( wxDC* aDC, int aDrawMode )
         || ( screen->m_GridOrigin.x == 0 && screen->m_GridOrigin.y == 0 ) )
         return;
 
-    int Color  = GetParent()->GetGridColor();
+    int     color    = GetParent()->GetGridColor();
+    wxSize  pageSize = GetParent()->GetPageSizeIU();
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    /* Draw the Y axis */
+    // Draw the Y axis
     GRDashedLine( &m_ClipBox, aDC,
                   screen->m_GridOrigin.x,
-                  -screen->ReturnPageSize().y,
+                  -pageSize.y,
                   screen->m_GridOrigin.x,
-                  screen->ReturnPageSize().y,
-                  0, Color );
+                  pageSize.y,
+                  0, color );
 
-    /* Draw the X axis */
+    // Draw the X axis
     GRDashedLine( &m_ClipBox, aDC,
-                  -screen->ReturnPageSize().x,
+                  -pageSize.x,
                   screen->m_GridOrigin.y,
-                  screen->ReturnPageSize().x,
+                  pageSize.x,
                   screen->m_GridOrigin.y,
-                  0, Color );
+                  0, color );
 }
 
 
