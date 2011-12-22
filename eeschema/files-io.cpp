@@ -75,7 +75,8 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, int aSaveType, bool aCreat
             if( schematicFileName.FileExists() )
             {
                 backupFileName.SetExt( g_SchematicBackupFileExtension );
-                wxRemoveFile( backupFileName.GetFullPath() );
+                if( backupFileName.FileExists() )
+                    wxRemoveFile( backupFileName.GetFullPath() );
 
                 if( !wxRenameFile( schematicFileName.GetFullPath(), backupFileName.GetFullPath() ) )
                 {

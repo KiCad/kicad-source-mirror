@@ -299,10 +299,10 @@ this file again." ) );
         }
     }
     catch( IO_ERROR ioe )
-    {
+    {wxMessageBox("catch");
         wxString msg = wxString::Format(  _( "Error loading board.\n%s" ),
                             ioe.errorText.GetData() );
-        wxMessageBox( msg, _( "Open Board File" ), wxICON_ERROR | wxOK );
+        wxMessageBox( msg, _( "Open Board File" ), wxOK | wxICON_ERROR );
     }
 
     if( !aAppend )
@@ -490,7 +490,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     {
         wxString msg = wxString::Format(  _( "Error saving board.\n%s" ),
                             ioe.errorText.GetData() );
-        wxMessageBox( msg, _( "Save Board File" ), wxICON_ERROR );
+        wxMessageBox( msg, _( "Save Board File" ), wxICON_ERROR | wxOK );
         saveok = false;
     }
 

@@ -937,7 +937,6 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     wxString     cmp_name;
     int          pad_count = 2;
     EDGE_MODULE* edge;
-    int          npoints;
 
     WinEDA_SetParamShapeFrame* frame = new WinEDA_SetParamShapeFrame( this, wxPoint( -1, -1 ) );
 
@@ -988,7 +987,6 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
 
     edge->SetShape( S_POLYGON );
     edge->SetLayer( LAYER_N_FRONT );
-    npoints = PolyEdges.size();
 
     std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
     polyPoints.reserve( 2 * PolyEdges.size() + 2 );

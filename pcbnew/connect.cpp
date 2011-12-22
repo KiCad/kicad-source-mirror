@@ -856,8 +856,6 @@ void PCB_BASE_FRAME::TestConnections()
 
     m_Pcb->Test_Connections_To_Copper_Areas();
 
-// int st = clock(); // For test only, will be removed
-
     // Test existing connections net by net
     // note some nets can have no tracks, and pads intersecting
     // so Build_CurrNet_SubNets_Connections must be called for each net
@@ -888,8 +886,6 @@ void PCB_BASE_FRAME::TestConnections()
     int netsCount = m_Pcb->GetNetCount();
     for( int net = last_net_tested+1; net < netsCount; net++ )
         connections.Build_CurrNet_SubNets_Connections( NULL, NULL, net );
-
-// wxLogMessage("time %g ms", (double)(clock() - st)*1000.0/CLOCKS_PER_SEC);
 
     Merge_SubNets_Connected_By_CopperAreas( m_Pcb );
 

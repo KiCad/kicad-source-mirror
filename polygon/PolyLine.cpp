@@ -478,7 +478,7 @@ int CPolyLine::MakeKboolPoly( int aStart_contour, int aEnd_contour, std::vector<
                         x = x1;
                         y = y1;
                     }
-                    booleng->AddPoint( x1, y1 );
+                    booleng->AddPoint( x, y );
                     ivtx++;
                 }
             }
