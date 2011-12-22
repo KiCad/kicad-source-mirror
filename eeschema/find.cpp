@@ -208,7 +208,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
 
         /* There may be need to reframe the drawing */
-        if( ! DrawPanel->IsPointOnDisplay( pos ) )
+        if( ! m_canvas->IsPointOnDisplay( pos ) )
         {
             centerAndRedraw = true;
         }
@@ -221,16 +221,16 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
         else
         {
-            INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+            INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
-            DrawPanel->CrossHairOff( &dc );
+            m_canvas->CrossHairOff( &dc );
 
             if( aWarpMouse )
-                DrawPanel->MoveCursor( pos );
+                m_canvas->MoveCursor( pos );
 
             GetScreen()->SetCrossHairPosition(pos);
 
-            DrawPanel->CrossHairOn( &dc );
+            m_canvas->CrossHairOn( &dc );
         }
     }
 

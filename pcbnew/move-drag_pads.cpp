@@ -138,7 +138,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     if( aDraw )
     {
         aPad->SetFlags( DO_NOT_DRAW );
-        DrawPanel->RefreshDrawingRect( aPad->GetBoundingBox() );
+        m_canvas->RefreshDrawingRect( aPad->GetBoundingBox() );
         aPad->ClearFlags( DO_NOT_DRAW );
     }
 
@@ -175,7 +175,7 @@ void PCB_BASE_FRAME::Import_Pad_Settings( D_PAD* aPad, bool aDraw )
     aPad->ComputeShapeMaxRadius();
 
     if( aDraw )
-        DrawPanel->RefreshDrawingRect( aPad->GetBoundingBox() );
+        m_canvas->RefreshDrawingRect( aPad->GetBoundingBox() );
 
     ( (MODULE*) aPad->GetParent() )->m_LastEdit_Time = time( NULL );
 }
@@ -227,7 +227,7 @@ void PCB_BASE_FRAME::AddPad( MODULE* Module, bool draw )
     Pad->DisplayInfo( this );
 
     if( draw )
-        DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
+        m_canvas->RefreshDrawingRect( Module->GetBoundingBox() );
 }
 
 
@@ -262,7 +262,7 @@ void PCB_BASE_FRAME::DeletePad( D_PAD* aPad, bool aQuery )
 
     m_Pcb->m_Status_Pcb = 0;
     aPad->DeleteStructure();
-    DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
+    m_canvas->RefreshDrawingRect( Module->GetBoundingBox() );
     Module->CalculateBoundingBox();
 
     OnModify();
@@ -278,16 +278,16 @@ void PCB_BASE_FRAME::StartMovePad( D_PAD* Pad, wxDC* DC )
     s_CurrentSelectedPad = Pad;
     Pad_OldPos = Pad->m_Pos;
     Pad->DisplayInfo( this );
-    DrawPanel->SetMouseCapture( Show_Pad_Move, Abort_Move_Pad );
+    m_canvas->SetMouseCapture( Show_Pad_Move, Abort_Move_Pad );
 
     /* Draw the pad  (SKETCH mode) */
-    Pad->Draw( DrawPanel, DC, GR_XOR );
+    Pad->Draw( m_canvas, DC, GR_XOR );
     Pad->SetFlags( IS_MOVED );
-    Pad->Draw( DrawPanel, DC, GR_XOR );
+    Pad->Draw( m_canvas, DC, GR_XOR );
 
     /* Build the list of track segments to drag if the command is a drag pad*/
     if( g_Drag_Pistes_On )
-        Build_1_Pad_SegmentsToDrag( DrawPanel, DC, Pad );
+        Build_1_Pad_SegmentsToDrag( m_canvas, DC, Pad );
     else
         EraseDragList();
 }
@@ -339,7 +339,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
     }
 
     Pad->m_Pos = pad_curr_position;
-    Pad->Draw( DrawPanel, DC, GR_XOR );
+    Pad->Draw( m_canvas, DC, GR_XOR );
 
     /* Redraw dragged track segments */
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
@@ -356,7 +356,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
         Track->SetState( IN_EDIT, OFF );
 
         if( DC )
-            Track->Draw( DrawPanel, DC, GR_OR );
+            Track->Draw( m_canvas, DC, GR_OR );
     }
 
     /* Compute local coordinates (i.e refer to Module position and for Module orient = 0) */
@@ -370,7 +370,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
     Pad->ClearFlags();
 
     if( DC )
-        Pad->Draw( DrawPanel, DC, GR_OR );
+        Pad->Draw( m_canvas, DC, GR_OR );
 
     Module->CalculateBoundingBox();
     Module->m_LastEdit_Time = time( NULL );
@@ -378,7 +378,7 @@ void PCB_BASE_FRAME::PlacePad( D_PAD* Pad, wxDC* DC )
     EraseDragList();
 
     OnModify();
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
     m_Pcb->m_Status_Pcb &= ~( LISTE_RATSNEST_ITEM_OK | CONNEXION_OK );
 }
 
@@ -398,7 +398,7 @@ void PCB_BASE_FRAME::RotatePad( D_PAD* Pad, wxDC* DC )
     OnModify();
 
     if( DC )
-        Module->Draw( DrawPanel, DC, GR_XOR );
+        Module->Draw( m_canvas, DC, GR_XOR );
 
     EXCHG( Pad->m_Size.x, Pad->m_Size.y );
     EXCHG( Pad->m_Drill.x, Pad->m_Drill.y );
@@ -411,5 +411,5 @@ void PCB_BASE_FRAME::RotatePad( D_PAD* Pad, wxDC* DC )
     Pad->DisplayInfo( this );
 
     if( DC )
-        Module->Draw( DrawPanel, DC, GR_OR );
+        Module->Draw( m_canvas, DC, GR_OR );
 }

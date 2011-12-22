@@ -122,13 +122,13 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     {
         BlockState   state   = GetScreen()->m_BlockLocate.m_State;
         CmdBlockType command = GetScreen()->m_BlockLocate.m_Command;
-        DrawPanel->m_endMouseCaptureCallback( DrawPanel, DC );
+        m_canvas->m_endMouseCaptureCallback( m_canvas, DC );
         GetScreen()->m_BlockLocate.m_State   = state;
         GetScreen()->m_BlockLocate.m_Command = command;
-        DrawPanel->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
+        m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
         GetScreen()->SetCrossHairPosition( wxPoint(  GetScreen()->m_BlockLocate.GetRight(),
                                                      GetScreen()->m_BlockLocate.GetBottom() ) );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
     }
 
     switch( GetScreen()->m_BlockLocate.m_Command )
@@ -146,21 +146,21 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         {
             nextcmd = true;
 
-            if( DrawPanel->IsMouseCaptured() )
+            if( m_canvas->IsMouseCaptured() )
             {
-                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
-                DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
-                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+                m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
             }
 
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
-            DrawPanel->Refresh( true );
+            m_canvas->Refresh( true );
         }
         break;
 
     case BLOCK_PRESELECT_MOVE:     /* Move with preselection list*/
         nextcmd = true;
-        DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+        m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
         GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
         break;
 
@@ -218,9 +218,9 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         GetScreen()->ClearBlockCommand();
         SetCurItem( NULL );
-        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
+        m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
                                     false );
-        DrawPanel->Refresh( true );
+        m_canvas->Refresh( true );
     }
 
     return nextcmd;
@@ -231,7 +231,7 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
     MODULE* currentModule = GetBoard()->m_Modules;
 
-    if( !DrawPanel->IsMouseCaptured() )
+    if( !m_canvas->IsMouseCaptured() )
     {
         DisplayError( this, wxT( "HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
@@ -249,7 +249,7 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( currentModule, UR_MODEDIT );
         MoveMarkedItems( currentModule, GetScreen()->m_BlockLocate.m_MoveVector );
-        DrawPanel->Refresh( true );
+        m_canvas->Refresh( true );
         break;
 
     case BLOCK_COPY:     /* Copy */
@@ -288,8 +288,8 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
     GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
     SetCurItem( NULL );
-    DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString, false );
-    DrawPanel->Refresh( true );
+    m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString, false );
+    m_canvas->Refresh( true );
 }
 
 

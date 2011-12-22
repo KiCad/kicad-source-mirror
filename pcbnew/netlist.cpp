@@ -308,7 +308,7 @@ bool PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFullFilename,
     }
 
     GetBoard()->DisplayInfo( this );
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 
     return true;
 }

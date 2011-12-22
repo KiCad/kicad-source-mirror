@@ -258,7 +258,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
         LoadProjectFile( wxEmptyString, true );
         Zoom_Automatique( false );
         SetSheetNumberAndCount();
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         return true;
     }
 
@@ -354,7 +354,7 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     Zoom_Automatique( false );
     SetSheetNumberAndCount();
-    DrawPanel->Refresh( true );
+    m_canvas->Refresh( true );
     return diag;
 }
 

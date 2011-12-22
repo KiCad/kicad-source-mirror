@@ -43,7 +43,8 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         {
             DisplayOpt.DisplayPadFill = m_DisplayPadFill = true;
         }
-        DrawPanel->Refresh( true );
+
+        m_canvas->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_LINES_SKETCH:
@@ -57,7 +58,8 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
             m_DisplayPcbTrackFill = true;
             DisplayOpt.DisplayPcbTrackFill = true;
         }
-        DrawPanel->Refresh( true );
+
+        m_canvas->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH:
@@ -65,12 +67,13 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
             g_DisplayPolygonsModeSketch = 1;
         else
             g_DisplayPolygonsModeSketch = 0;
-        DrawPanel->Refresh( true );
+
+        m_canvas->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_DCODES:
         SetElementVisibility( DCODES_VISIBLE, state );
-        DrawPanel->Refresh( true );
+        m_canvas->Refresh( true );
         break;
 
     case ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR:

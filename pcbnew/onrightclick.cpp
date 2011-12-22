@@ -55,11 +55,11 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     bool        locate_track = false;
     bool        blockActive  = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
 
-    wxClientDC  dc( DrawPanel );
+    wxClientDC  dc( m_canvas );
 
     BOARD_ITEM* item = GetCurItem();
 
-    DrawPanel->m_CanStartBlock = -1;    // Avoid to start a block coomand when clicking on menu
+    m_canvas->m_CanStartBlock = -1;    // Avoid to start a block coomand when clicking on menu
 
     // If a command or a block is in progress:
     // Put the Cancel command (if needed) and the End command
@@ -71,7 +71,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         return true;
     }
 
-    DrawPanel->CrossHairOff( &dc );
+    m_canvas->CrossHairOff( &dc );
 
     if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
@@ -119,12 +119,12 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         // previously picked at this position
         if( !item || cursorPos != selectPos )
         {
-            DrawPanel->m_AbortRequest = false;
+            m_canvas->m_AbortRequest = false;
             item = PcbGeneralLocateAndDisplay();
 
-            if( DrawPanel->m_AbortRequest )
+            if( m_canvas->m_AbortRequest )
             {
-                DrawPanel->CrossHairOn( &dc );
+                m_canvas->CrossHairOn( &dc );
                 return false;
             }
         }
@@ -404,7 +404,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         break;
     }
 
-    DrawPanel->CrossHairOn( &dc );
+    m_canvas->CrossHairOn( &dc );
     return true;
 }
 

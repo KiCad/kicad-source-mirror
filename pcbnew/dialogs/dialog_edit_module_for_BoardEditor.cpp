@@ -457,8 +457,8 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     if( m_DC )
     {
-        m_Parent->DrawPanel->CrossHairOff( m_DC );
-        m_CurrentModule->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
+        m_Parent->GetCanvas()->CrossHairOff( m_DC );
+        m_CurrentModule->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
     }
 
     // Initialize masks clearances
@@ -475,8 +475,10 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     // A margin ratio de -50% means no paste on a pad, the ratio must be >= 50%
     if( dtmp < -50 )
         dtmp = -50;
+
     if( dtmp > +100 )
         dtmp = +100;
+
     m_CurrentModule->m_LocalSolderPasteMarginRatio = dtmp / 100;
 
     // Set Module Position
@@ -518,6 +520,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
     long orient = 0;
     msg = m_OrientValue->GetValue();
     msg.ToLong( &orient );
+
     if( m_CurrentModule->m_Orient != orient )
         m_CurrentModule->Rotate( m_CurrentModule->m_Pos,
                                  orient - m_CurrentModule->m_Orient );
@@ -537,14 +540,19 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     /* Update 3D shape list */
     int         ii = m_3D_ShapeNameListBox->GetSelection();
+
     if( ii >= 0 )
         TransfertDisplayTo3DValues( ii  );
+
     S3D_MASTER* draw3D = m_CurrentModule->m_3D_Drawings;
+
     for( unsigned ii = 0; ii < m_Shapes3D_list.size(); ii++ )
     {
         S3D_MASTER* draw3DCopy = m_Shapes3D_list[ii];
+
         if( draw3DCopy->m_Shape3DName.IsEmpty() )
             continue;
+
         if( draw3D == NULL )
         {
             draw3D = new S3D_MASTER( draw3D );
@@ -561,6 +569,7 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     // Remove old extra 3D shapes
     S3D_MASTER* nextdraw3D;
+
     for( ; draw3D != NULL; draw3D = nextdraw3D )
     {
         nextdraw3D = (S3D_MASTER*) draw3D->Next();
@@ -580,8 +589,8 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
 
     if( m_DC )
     {
-        m_CurrentModule->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
-        m_Parent->DrawPanel->CrossHairOn( m_DC );
+        m_CurrentModule->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
+        m_Parent->GetCanvas()->CrossHairOn( m_DC );
     }
 }
 

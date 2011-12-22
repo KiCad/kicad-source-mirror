@@ -32,8 +32,8 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         {
             DisplayCmpDoc();
 
-            if( DrawPanel->m_AbortRequest )
-                DrawPanel->m_AbortRequest = false;
+            if( m_canvas->m_AbortRequest )
+                m_canvas->m_AbortRequest = false;
         }
     }
 
@@ -97,12 +97,12 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
         SaveCopyInUndoList( m_component );
         PlaceAnchor();
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         break;
 
     default:
         wxFAIL_MSG( wxString::Format( wxT( "Unhandled command ID %d" ), GetToolId() ) );
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         break;
     }
 }
@@ -135,7 +135,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
     else
         return;
 
-    DrawPanel->m_IgnoreMouseEvents = true;
+    m_canvas->m_IgnoreMouseEvents = true;
 
     switch( m_drawItem->Type() )
     {
@@ -187,6 +187,6 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
         break;
     }
 
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = false;
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->m_IgnoreMouseEvents = false;
 }

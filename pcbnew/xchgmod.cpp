@@ -28,7 +28,8 @@ private:
     PCB_EDIT_FRAME* m_Parent;
     MODULE*         m_CurrentModule;
 
-public: DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* aParent, MODULE* aModule );
+public:
+    DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* aParent, MODULE* aModule );
     ~DIALOG_EXCHANGE_MODULE() { };
 
 private:
@@ -255,7 +256,7 @@ void DIALOG_EXCHANGE_MODULE::Change_Current_Module()
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
 
-        m_Parent->DrawPanel->Refresh();
+        m_Parent->GetCanvas()->Refresh();
     }
 
     if( pickList.GetCount() )
@@ -344,7 +345,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
 
-        m_Parent->DrawPanel->Refresh();
+        m_Parent->GetCanvas()->Refresh();
     }
 
     if( pickList.GetCount() )
@@ -397,7 +398,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
 
-        m_Parent->DrawPanel->Refresh();
+        m_Parent->GetCanvas()->Refresh();
     }
 
     if( pickList.GetCount() )

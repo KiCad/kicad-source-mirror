@@ -136,7 +136,7 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnCancelClick( wxCommandEvent& event )
  */
 void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
 {
-    m_Target->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
+    m_Target->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
 
     // Save old item in undo list, if is is not currently edited (will be later if so)
     if( m_Target->GetFlags() == 0 )
@@ -151,7 +151,7 @@ void TARGET_PROPERTIES_DIALOG_EDITOR::OnOkClick( wxCommandEvent& event )
     m_Target->SetSize( m_MireSizeCtrl->GetValue() );
     m_Target->SetShape( m_MireShape->GetSelection() ? 1 : 0 );
 
-    m_Target->Draw( m_Parent->DrawPanel, m_DC, ( m_Target->IsMoving() ) ? GR_XOR : GR_OR );
+    m_Target->Draw( m_Parent->GetCanvas(), m_DC, ( m_Target->IsMoving() ) ? GR_XOR : GR_OR );
 
     m_Parent->OnModify();
     EndModal( 1 );
@@ -163,7 +163,7 @@ void PCB_EDIT_FRAME::DeleteTarget( PCB_TARGET* aTarget, wxDC* DC )
     if( aTarget == NULL )
         return;
 
-    aTarget->Draw( DrawPanel, DC, GR_XOR );
+    aTarget->Draw( m_canvas, DC, GR_XOR );
     SaveCopyInUndoList( aTarget, UR_DELETED );
     aTarget->UnLink();
 }
@@ -217,7 +217,7 @@ PCB_TARGET* PCB_EDIT_FRAME::CreateTarget( wxDC* DC )
     target->SetLayer( EDGE_N );
     target->SetWidth( GetBoard()->GetDesignSettings().m_EdgeSegmentWidth );
     target->SetSize( MireDefaultSize );
-    target->SetPosition( DrawPanel->GetScreen()->GetCrossHairPosition() );
+    target->SetPosition( m_canvas->GetScreen()->GetCrossHairPosition() );
 
     PlaceTarget( target, DC );
 
@@ -234,7 +234,7 @@ void PCB_EDIT_FRAME::BeginMoveTarget( PCB_TARGET* aTarget, wxDC* DC )
 
     s_TargetCopy      = *aTarget;
     aTarget->SetFlags( IS_MOVED );
-    DrawPanel->SetMouseCapture( ShowTargetShapeWhileMovingMouse, AbortMoveAndEditTarget );
+    m_canvas->SetMouseCapture( ShowTargetShapeWhileMovingMouse, AbortMoveAndEditTarget );
     SetCurItem( aTarget );
 }
 
@@ -244,8 +244,8 @@ void PCB_EDIT_FRAME::PlaceTarget( PCB_TARGET* aTarget, wxDC* DC )
     if( aTarget == NULL )
         return;
 
-    aTarget->Draw( DrawPanel, DC, GR_OR );
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    aTarget->Draw( m_canvas, DC, GR_OR );
+    m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
     OnModify();
 

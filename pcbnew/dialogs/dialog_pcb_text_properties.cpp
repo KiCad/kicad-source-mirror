@@ -68,11 +68,11 @@ DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent,
  */
 void PCB_EDIT_FRAME::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
 {
-    DrawPanel->m_IgnoreMouseEvents = TRUE;
+    m_canvas->m_IgnoreMouseEvents = TRUE;
     DIALOG_PCB_TEXT_PROPERTIES dlg( this, TextPCB, DC );
     dlg.ShowModal();
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = FALSE;
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->m_IgnoreMouseEvents = FALSE;
 }
 
 
@@ -102,6 +102,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
         m_Parent->GetInternalUnits() );
 
     int enabledLayers = m_Parent->GetBoard()->GetEnabledLayers();
+
     for( int layer = 0; layer < NB_LAYERS;  ++layer )
     {
         if( enabledLayers & (1 << layer) )
@@ -109,6 +110,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
             layerList.push_back( layer );
             int itemIndex =
                 m_LayerSelectionCtrl->Append( m_Parent->GetBoard()->GetLayerName( layer ) );
+
             if( m_SelectedPCBText->GetLayer() == layer )
                 m_LayerSelectionCtrl->SetSelection( itemIndex );
         }
@@ -119,14 +121,17 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
     default:
         m_OrientationCtrl->SetSelection( 0 );
         break;
+
     case 900:
     case -2700:
         m_OrientationCtrl->SetSelection( 1 );
         break;
+
     case 1800:
     case -1800:
         m_OrientationCtrl->SetSelection( 2 );
         break;
+
     case 2700:
     case -900:
         m_OrientationCtrl->SetSelection( 3 );
@@ -185,7 +190,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     // Erase old text on screen if context is available
     if( m_DC )
     {
-        m_SelectedPCBText->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
+        m_SelectedPCBText->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
     }
 
     // Set the new text content
@@ -195,32 +200,45 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     }
 
     // Set PCB Text position
-    newPosition.x = ReturnValueFromString( g_UserUnit, m_PositionXCtrl->GetValue(), m_Parent->GetInternalUnits() );
-    newPosition.y = ReturnValueFromString( g_UserUnit, m_PositionYCtrl->GetValue(), m_Parent->GetInternalUnits() );
+    newPosition.x = ReturnValueFromString( g_UserUnit, m_PositionXCtrl->GetValue(),
+                                           m_Parent->GetInternalUnits() );
+    newPosition.y = ReturnValueFromString( g_UserUnit, m_PositionYCtrl->GetValue(),
+                                           m_Parent->GetInternalUnits() );
     m_SelectedPCBText->m_Pos  = newPosition;
 
     // Check constraints and set PCB Text size
-    newSize.x = ReturnValueFromString( g_UserUnit, m_SizeXCtrl->GetValue(), m_Parent->GetInternalUnits() );
-    newSize.y = ReturnValueFromString( g_UserUnit, m_SizeYCtrl->GetValue(), m_Parent->GetInternalUnits() );
+    newSize.x = ReturnValueFromString( g_UserUnit, m_SizeXCtrl->GetValue(),
+                                       m_Parent->GetInternalUnits() );
+    newSize.y = ReturnValueFromString( g_UserUnit, m_SizeYCtrl->GetValue(),
+                                       m_Parent->GetInternalUnits() );
 
     if( newSize.x < TEXTS_MIN_SIZE )
         newSize.x = TEXTS_MIN_SIZE;
+
     if( newSize.y < TEXTS_MIN_SIZE )
         newSize.y = TEXTS_MIN_SIZE;
+
     if( newSize.x > TEXTS_MAX_WIDTH )
         newSize.x = TEXTS_MAX_WIDTH;
+
     if( newSize.y > TEXTS_MAX_WIDTH )
         newSize.y = TEXTS_MAX_WIDTH;
+
     m_SelectedPCBText->m_Size = newSize;
 
     // Set the new thickness
-    m_SelectedPCBText->m_Thickness = ReturnValueFromString( g_UserUnit, m_ThicknessCtrl->GetValue(), m_Parent->GetInternalUnits() );
+    m_SelectedPCBText->m_Thickness = ReturnValueFromString( g_UserUnit,
+                                                            m_ThicknessCtrl->GetValue(),
+                                                            m_Parent->GetInternalUnits() );
 
     // Test for acceptable values for thickness and size and clamp if fails
-    int maxthickness = Clamp_Text_PenSize( m_SelectedPCBText->m_Thickness, m_SelectedPCBText->m_Size  );
+    int maxthickness = Clamp_Text_PenSize( m_SelectedPCBText->m_Thickness,
+                                           m_SelectedPCBText->m_Size  );
+
     if( m_SelectedPCBText->m_Thickness > maxthickness )
     {
-        DisplayError(NULL, _("The text thickness is too large for the text size. It will be clamped"));
+        DisplayError( NULL,
+                      _( "The text thickness is too large for the text size. It will be clamped" ) );
         m_SelectedPCBText->m_Thickness = maxthickness;
     }
 
@@ -255,8 +273,9 @@ void DIALOG_PCB_TEXT_PROPERTIES::OnOkClick( wxCommandEvent& event )
     // Finally, display new text if there is a context to do so
     if( m_DC )
     {
-        m_SelectedPCBText->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
+        m_SelectedPCBText->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
     }
+
     m_Parent->OnModify();
     EndModal( 1 );
 }

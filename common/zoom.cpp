@@ -22,10 +22,10 @@ void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 
     // Move the mouse cursor to the on grid graphic cursor position
     if( aWarpPointer )
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
 
-    DrawPanel->Refresh();
-    DrawPanel->Update();
+    m_canvas->Refresh();
+    m_canvas->Update();
  }
 
 
@@ -55,7 +55,7 @@ void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
 
     /* Compute the best zoom */
     Rect.Normalize();
-    size = DrawPanel->GetClientSize();
+    size = m_canvas->GetClientSize();
 
     // Use ceil to at least show the full rect
     scalex    = (double) Rect.GetSize().x / size.x;
@@ -73,7 +73,7 @@ void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
  */
 void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
 {
-    if( DrawPanel == NULL )
+    if( m_canvas == NULL )
         return;
 
     int          i;
@@ -105,7 +105,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_ZOOM_REDRAW:
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_ZOOM_CENTER:
@@ -121,7 +121,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CANCEL:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         break;
 
     default:
@@ -149,7 +149,7 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     int         maxZoomIds;
     int         zoom;
     wxString    msg;
-    BASE_SCREEN * screen = DrawPanel->GetScreen();
+    BASE_SCREEN * screen = m_canvas->GetScreen();
 
     msg = AddHotkeyName( _( "Center" ), m_HotkeysZoomAndGridList, HK_ZOOM_CENTER );
     AddMenuItem( MasterMenu, ID_POPUP_ZOOM_CENTER, msg, KiBitmap( zoom_center_on_screen_xpm ) );

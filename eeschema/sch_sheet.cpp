@@ -484,12 +484,12 @@ void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     {
         // fix size and position of the new sheet
         // using the last values set by the m_mouseCaptureCallback function
-        frame->DrawPanel->SetMouseCapture( NULL, NULL );
+        frame->GetCanvas()->SetMouseCapture( NULL, NULL );
 
         if( !frame->EditSheet( this, DC ) )
         {
             frame->GetScreen()->SetCurItem( NULL );
-            Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+            Draw( frame->GetCanvas(), DC, wxPoint( 0, 0 ), g_XorMode );
             delete this;
             return;
         }

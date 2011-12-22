@@ -24,25 +24,25 @@ void GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     case WXK_NUMPAD8:
     case WXK_UP:
         pos.y -= wxRound( gridSize.y );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:
     case WXK_DOWN:
         pos.y += wxRound( gridSize.y );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:
     case WXK_LEFT:
         pos.x -= wxRound( gridSize.x );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:
     case WXK_RIGHT:
         pos.x += wxRound( gridSize.x );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
 
     default:
@@ -55,13 +55,13 @@ void GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
     {
         pos = GetScreen()->GetCrossHairPosition();
         GetScreen()->SetCrossHairPosition( oldpos );
-        DrawPanel->CrossHairOff( aDC );
+        m_canvas->CrossHairOff( aDC );
         GetScreen()->SetCrossHairPosition( pos );
-        DrawPanel->CrossHairOn( aDC );
+        m_canvas->CrossHairOn( aDC );
 
-        if( DrawPanel->IsMouseCaptured() )
+        if( m_canvas->IsMouseCaptured() )
         {
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, true );
+            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, true );
         }
     }
 

@@ -49,22 +49,22 @@ void FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     {
     case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
         m_DisplayPadFill = !m_optionsToolBar->GetToolToggled( id );
-        DrawPanel->Refresh( );
+        m_canvas->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
         m_DisplayViaFill = !m_optionsToolBar->GetToolToggled( id );
-        DrawPanel->Refresh( );
+        m_canvas->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
         m_DisplayModText = m_optionsToolBar->GetToolToggled( id ) ? SKETCH : FILLED;
-        DrawPanel->Refresh( );
+        m_canvas->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
         m_DisplayModEdge = m_optionsToolBar->GetToolToggled( id ) ? SKETCH : FILLED;
-        DrawPanel->Refresh( );
+        m_canvas->Refresh( );
         break;
 
     default:

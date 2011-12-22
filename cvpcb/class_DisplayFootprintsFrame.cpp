@@ -128,7 +128,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
         m_auimgr.AddPane( m_drawToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_drawToolBar" ) ).Right() );
 
-    m_auimgr.AddPane( DrawPanel,
+    m_auimgr.AddPane( m_canvas,
                       wxAuiPaneInfo().Name( wxT( "DisplayFrame" ) ).CentrePane() );
 
     m_auimgr.AddPane( m_messagePanel,
@@ -313,7 +313,7 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         if( m_DisplayModText > 2 )
             m_DisplayModText = 0;
 
-        DrawPanel->Refresh( );
+        m_canvas->Refresh( );
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
@@ -322,7 +322,7 @@ void DISPLAY_FOOTPRINTS_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         if( m_DisplayModEdge > 2 )
             m_DisplayModEdge = 0;
 
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     default:
@@ -381,25 +381,25 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPositi
     case WXK_NUMPAD8:       /* cursor moved up */
     case WXK_UP:
         pos.y -= wxRound( gridSize.y );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:       /* cursor moved down */
     case WXK_DOWN:
         pos.y += wxRound( gridSize.y );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:       /*  cursor moved left */
     case WXK_LEFT:
         pos.x -= wxRound( gridSize.x );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:      /*  cursor moved right */
     case WXK_RIGHT:
         pos.x += wxRound( gridSize.x );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
     }
 
@@ -409,13 +409,13 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPositi
     {
         pos = screen->GetCrossHairPosition();
         screen->SetCrossHairPosition( oldpos );
-        DrawPanel->CrossHairOff( aDC );
+        m_canvas->CrossHairOff( aDC );
         screen->SetCrossHairPosition( pos );
-        DrawPanel->CrossHairOn( aDC );
+        m_canvas->CrossHairOn( aDC );
 
-        if( DrawPanel->IsMouseCaptured() )
+        if( m_canvas->IsMouseCaptured() )
         {
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, 0 );
+            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, 0 );
         }
     }
 

@@ -30,7 +30,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
 /* Note: none of these events require aborting the current command (if any)
  * (like move, edit or block command)
  * so we do not test for a current command in progress and call
- *  DrawPanel->m_endMouseCaptureCallback( DrawPanel, &dc );
+ *  m_canvas->m_endMouseCaptureCallback( m_canvas, &dc );
  */
     switch( id )
     {
@@ -46,7 +46,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_SELECT_AUTO_WIDTH:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth = true;
         break;
 
@@ -58,7 +58,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_WIDTH6:
     case ID_POPUP_PCB_SELECT_WIDTH7:
     case ID_POPUP_PCB_SELECT_WIDTH8:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         GetBoard()->GetDesignSettings().m_UseConnectedTrackWidth = false;
         ii = id - ID_POPUP_PCB_SELECT_WIDTH1;
         GetBoard()->m_TrackWidthSelector = ii;
@@ -72,7 +72,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_VIASIZE6:
     case ID_POPUP_PCB_SELECT_VIASIZE7:
     case ID_POPUP_PCB_SELECT_VIASIZE8:   // select the new current value for via size (via diameter)
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         ii = id - ID_POPUP_PCB_SELECT_VIASIZE1;
         GetBoard()->m_ViaSizeSelector = ii;
         break;

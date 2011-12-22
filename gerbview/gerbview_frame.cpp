@@ -75,8 +75,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     m_displayMode   = 0;
     m_drillFileHistory.SetBaseId( ID_GERBVIEW_DRILL_FILE1 );
 
-    if( DrawPanel )
-        DrawPanel->m_Block_Enable = true;
+    if( m_canvas )
+        m_canvas->m_Block_Enable = true;
 
     // Give an icon
     wxIcon icon;
@@ -98,7 +98,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     if( screenHeight <= 900 )
         pointSize = (pointSize * 8) / 10;
 
-    m_LayersManager = new GERBER_LAYER_WIDGET( this, DrawPanel, pointSize );
+    m_LayersManager = new GERBER_LAYER_WIDGET( this, m_canvas, pointSize );
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
@@ -143,8 +143,8 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
         m_auimgr.AddPane( m_optionsToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left() );
 
-    if( DrawPanel )
-        m_auimgr.AddPane( DrawPanel,
+    if( m_canvas )
+        m_auimgr.AddPane( m_canvas,
                           wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     if( m_messagePanel )
@@ -187,7 +187,7 @@ double GERBVIEW_FRAME::BestZoom()
         bbox.Merge( gerb_item->GetBoundingBox() );
     }
 
-    wxSize size = DrawPanel->GetClientSize();
+    wxSize size = m_canvas->GetClientSize();
 
     double x = (double) bbox.GetWidth() / (double) size.x;
     double y = (double) bbox.GetHeight() / (double) size.y;

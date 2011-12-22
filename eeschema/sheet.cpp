@@ -163,8 +163,8 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
             }
         }
 
-        aSheet->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-        DrawPanel->m_IgnoreMouseEvents = true;
+        aSheet->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
+        m_canvas->m_IgnoreMouseEvents = true;
 
         if( isUndoable )
             SaveCopyInUndoList( aSheet, UR_CHANGED );
@@ -203,9 +203,9 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
     if( aSheet->GetName().IsEmpty() )
         aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ), aSheet->GetTimeStamp() ) );
 
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = false;
-    aSheet->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->m_IgnoreMouseEvents = false;
+    aSheet->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     OnModify();
 
     return true;
@@ -320,12 +320,12 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
     // also need to update the hierarchy, if we are adding
     // a sheet to a screen that already has multiple instances (!)
     GetScreen()->SetCurItem( sheet );
-    DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, false );
-    DrawPanel->CrossHairOff( aDC );
+    m_canvas->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
+    m_canvas->m_mouseCaptureCallback( m_canvas, aDC, wxDefaultPosition, false );
+    m_canvas->CrossHairOff( aDC );
     GetScreen()->SetCrossHairPosition( sheet->GetResizePosition() );
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->CrossHairOn( aDC );
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->CrossHairOn( aDC );
 
     return sheet;
 }
@@ -340,16 +340,16 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
                  wxString::Format( wxT( "Cannot perform sheet resize on %s object." ),
                                    GetChars( aSheet->GetClass() ) ) );
 
-    DrawPanel->CrossHairOff( aDC );
+    m_canvas->CrossHairOff( aDC );
     GetScreen()->SetCrossHairPosition( aSheet->GetResizePosition() );
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->CrossHairOn( aDC );
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->CrossHairOn( aDC );
 
     SetUndoItem( aSheet );
     aSheet->SetFlags( IS_RESIZED );
 
-    DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
+    m_canvas->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
+    m_canvas->m_mouseCaptureCallback( m_canvas, aDC, wxDefaultPosition, true );
 
     if( aSheet->IsNew() )    // not already in edit, save a copy for undo/redo
         SetUndoItem( aSheet );
@@ -361,15 +361,15 @@ void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
     if( ( aSheet == NULL ) || ( aSheet->Type() != SCH_SHEET_T ) )
         return;
 
-    DrawPanel->CrossHairOff( aDC );
+    m_canvas->CrossHairOff( aDC );
     GetScreen()->SetCrossHairPosition( aSheet->GetPosition() );
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
     if( !aSheet->IsNew() )
         SetUndoItem( aSheet );
 
     aSheet->SetFlags( IS_MOVED );
-    DrawPanel->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
-    DrawPanel->CrossHairOn( aDC );
+    m_canvas->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
+    m_canvas->m_mouseCaptureCallback( m_canvas, aDC, wxDefaultPosition, true );
+    m_canvas->CrossHairOn( aDC );
 }

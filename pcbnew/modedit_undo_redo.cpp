@@ -73,7 +73,7 @@ void FOOTPRINT_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     SetCurItem( NULL );
 
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -102,5 +102,5 @@ void FOOTPRINT_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     SetCurItem( NULL );
 
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }

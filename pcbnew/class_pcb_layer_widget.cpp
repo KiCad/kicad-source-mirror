@@ -301,7 +301,7 @@ void PCB_LAYER_WIDGET::OnLayerColorChange( int aLayer, int aColor )
 {
     myframe->GetBoard()->SetLayerColor( aLayer, aColor );
     myframe->ReCreateLayerBox( NULL );
-    myframe->DrawPanel->Refresh();
+    myframe->GetCanvas()->Refresh();
 }
 
 bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
@@ -311,7 +311,7 @@ bool PCB_LAYER_WIDGET::OnLayerSelect( int aLayer )
     myframe->setActiveLayer( aLayer, false );
 
     if(DisplayOpt.ContrastModeDisplay)
-        myframe->DrawPanel->Refresh();
+        myframe->GetCanvas()->Refresh();
 
     return true;
 }
@@ -330,13 +330,13 @@ void PCB_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal 
     brd->SetVisibleLayers( visibleLayers );
 
     if( isFinal )
-        myframe->DrawPanel->Refresh();
+        myframe->GetCanvas()->Refresh();
 }
 
 void PCB_LAYER_WIDGET::OnRenderColorChange( int aId, int aColor )
 {
     myframe->GetBoard()->SetVisibleElementColor( aId, aColor );
-    myframe->DrawPanel->Refresh();
+    myframe->GetCanvas()->Refresh();
 }
 
 void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
@@ -365,7 +365,7 @@ void PCB_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
         brd->SetElementVisibility( aId, isEnabled );
     }
 
-    myframe->DrawPanel->Refresh();
+    myframe->GetCanvas()->Refresh();
 }
 
 //-----</LAYER_WIDGET callbacks>------------------------------------------

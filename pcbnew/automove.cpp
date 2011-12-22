@@ -69,7 +69,7 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
     if( m_mainToolBar == NULL )
         return;
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     switch( id )
     {
@@ -93,15 +93,15 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
         return;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        if( DrawPanel->IsMouseCaptured() )
+        if( m_canvas->IsMouseCaptured() )
         {
-            DrawPanel->m_endMouseCaptureCallback( DrawPanel, &dc );
+            m_canvas->m_endMouseCaptureCallback( m_canvas, &dc );
         }
 
         break;
 
     default:   // Abort a current command (if any)
-        DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
         break;
     }
 
@@ -293,7 +293,7 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
     if( newList.GetCount() )
         SaveCopyInUndoList( newList, UR_CHANGED );
 
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 

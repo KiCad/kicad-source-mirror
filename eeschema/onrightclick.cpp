@@ -76,7 +76,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     bool      BlockActive = GetScreen()->IsBlockActive();
 
     // Do not start a block command  on context menu.
-    DrawPanel->m_CanStartBlock = -1;
+    m_canvas->m_CanStartBlock = -1;
 
     if( BlockActive )
     {
@@ -91,9 +91,9 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         item = LocateAndShowItem( aPosition, SCH_COLLECTOR::AllItemsButPins );
 
         // If the clarify item selection context menu is aborted, don't show the context menu.
-        if( item == NULL && DrawPanel->m_AbortRequest )
+        if( item == NULL && m_canvas->m_AbortRequest )
         {
-            DrawPanel->m_AbortRequest = false;
+            m_canvas->m_AbortRequest = false;
             return false;
         }
     }

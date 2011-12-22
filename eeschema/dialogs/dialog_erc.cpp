@@ -113,7 +113,7 @@ void DIALOG_ERC::OnEraseDrcMarkersClick( wxCommandEvent& event )
 
     ScreenList.DeleteAllMarkers( MARK_ERC );
     m_MarkersList->ClearList();
-    m_Parent->DrawPanel->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 }
 
 
@@ -563,7 +563,7 @@ void DIALOG_ERC::TestErc( wxArrayString* aMessagesList )
     DisplayERC_MarkersList();
 
     // Display new markers:
-    m_Parent->DrawPanel->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 
     if( m_writeErcFile )
     {

@@ -204,7 +204,7 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         if( aDraw )
         {
             Module->SetFlags( DO_NOT_DRAW );
-            DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
+            m_canvas->RefreshDrawingRect( Module->GetBoundingBox() );
             Module->ClearFlags( DO_NOT_DRAW );
         }
 
@@ -279,7 +279,7 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         Module->CalculateBoundingBox();
 
         if( aDraw )
-            DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
+            m_canvas->RefreshDrawingRect( Module->GetBoundingBox() );
     }
 
     OnModify();

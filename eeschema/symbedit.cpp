@@ -57,7 +57,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     if( m_component == NULL || ( m_drawItem && m_drawItem->GetFlags() ) )
         return;
 
-    DrawPanel->m_IgnoreMouseEvents = true;
+    m_canvas->m_IgnoreMouseEvents = true;
 
     wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
 
@@ -69,8 +69,8 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
         return;
 
     GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = FALSE;
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->m_IgnoreMouseEvents = FALSE;
 
     wxFileName fn = dlg.GetPath();
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
@@ -126,7 +126,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     m_component->ClearSelectedItems();
 
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 
     delete Lib;
 }
@@ -250,5 +250,5 @@ void LIB_EDIT_FRAME::PlaceAnchor()
 
     /* Redraw the symbol */
     RedrawScreen( wxPoint( 0 , 0 ), true );
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }

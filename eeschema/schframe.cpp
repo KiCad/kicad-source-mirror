@@ -224,8 +224,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    if( DrawPanel )
-        DrawPanel->m_Block_Enable = true;
+    if( m_canvas )
+        m_canvas->m_Block_Enable = true;
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -260,8 +260,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
         m_auimgr.AddPane( m_optionsToolBar,
                           wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ).Left() );
 
-    if( DrawPanel )
-        m_auimgr.AddPane( DrawPanel, wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
+    if( m_canvas )
+        m_auimgr.AddPane( m_canvas, wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     if( m_messagePanel )
         m_auimgr.AddPane( m_messagePanel, wxAuiPaneInfo( mesg ).Name( wxT( "MsgPanel" ) ).Bottom().
@@ -492,7 +492,7 @@ double SCH_EDIT_FRAME::BestZoom()
     dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
     dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
 
-    size = DrawPanel->GetClientSize();
+    size = m_canvas->GetClientSize();
 
     // Reserve no margin because best zoom shows the full page
     // and margins are already included in function that draws the sheet refernces
@@ -653,7 +653,7 @@ void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& aEvent )
     wxCHECK_RET( m_findReplaceData != NULL,
                  wxT( "Forgot to create find/replace data.  Bad Programmer!" ) );
 
-    this->DrawPanel->m_IgnoreMouseEvents = true;
+    this->GetCanvas()->m_IgnoreMouseEvents = true;
 
     if( m_dlgFindReplace )
     {
@@ -704,7 +704,7 @@ void SCH_EDIT_FRAME::OnFindDialogClose( wxFindDialogEvent& event )
         m_dlgFindReplace = NULL;
     }
 
-    DrawPanel->m_IgnoreMouseEvents = false;
+    m_canvas->m_IgnoreMouseEvents = false;
 }
 
 
@@ -722,7 +722,7 @@ void SCH_EDIT_FRAME::OnLoadFile( wxCommandEvent& event )
 void SCH_EDIT_FRAME::OnLoadStuffFile( wxCommandEvent& event )
 {
     ReadInputStuffFile();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -876,7 +876,7 @@ void SCH_EDIT_FRAME::SVG_Print( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode, void* aData )
 {
-    GetScreen()->Draw( DrawPanel, aDC, GR_DEFAULT_DRAWMODE );
+    GetScreen()->Draw( m_canvas, aDC, GR_DEFAULT_DRAWMODE );
     TraceWorkSheet( aDC, GetScreen(), g_DrawDefaultLineThickness );
 }
 
@@ -890,7 +890,7 @@ void SCH_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
         && (index >= 0 && index < m_collectedItems.GetCount()) )
     {
         SCH_ITEM* item = m_collectedItems[index];
-        DrawPanel->m_AbortRequest = false;
+        m_canvas->m_AbortRequest = false;
         GetScreen()->SetCurItem( item );
     }
 }

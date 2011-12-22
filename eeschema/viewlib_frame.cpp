@@ -191,8 +191,8 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
 
     DisplayLibInfos();
 
-    if( DrawPanel )
-        DrawPanel->SetAcceleratorTable( table );
+    if( m_canvas )
+        m_canvas->SetAcceleratorTable( table );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -227,7 +227,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
                       Left().Row( 1 ) );
 
     // Manage the draw panel
-    m_auimgr.AddPane( DrawPanel,
+    m_auimgr.AddPane( m_canvas,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).Centre() );
 
     // Manage the message panel
@@ -354,7 +354,7 @@ double LIB_VIEW_FRAME::BestZoom()
         return bestzoom;
     }
 
-    wxSize size = DrawPanel->GetClientSize();
+    wxSize size = m_canvas->GetClientSize();
 
     EDA_RECT BoundaryBox = component->GetBoundingBox( m_unit, m_convert );
 
@@ -407,7 +407,7 @@ void LIB_VIEW_FRAME::ReCreateListLib()
     ReCreateListCmp();
     ReCreateHToolbar();
     DisplayLibInfos();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -462,7 +462,7 @@ void LIB_VIEW_FRAME::ClickOnLibList( wxCommandEvent& event )
 
     m_libraryName = name;
     ReCreateListCmp();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
     DisplayLibInfos();
     ReCreateHToolbar();
 }
@@ -485,7 +485,7 @@ void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
         m_convert = 1;
         Zoom_Automatique( false );
         ReCreateHToolbar();
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
     }
 }
 

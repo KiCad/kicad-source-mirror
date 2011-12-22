@@ -110,12 +110,12 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
         // PCB_BASE_FRAME::ProcessItemSelection()
         // and it calls SetCurItem() which in turn calls DisplayInfo() on the
         // item.
-        DrawPanel->m_AbortRequest = true;   // changed in false if an item
+        m_canvas->m_AbortRequest = true;   // changed in false if an item
         PopupMenu( &itemMenu );             // m_AbortRequest = false if an
                                             // item is selected
 
-        DrawPanel->MoveCursorToCrossHair();
-        DrawPanel->m_IgnoreMouseEvents = false;
+        m_canvas->MoveCursorToCrossHair();
+        m_canvas->m_IgnoreMouseEvents = false;
 
         // The function ProcessItemSelection() has set the current item, return it.
         item = GetCurItem();
@@ -156,7 +156,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     wxPoint    pos;
     bool       redraw = false;
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     wxGetMousePosition( &pos.x, &pos.y );
 
@@ -195,14 +195,14 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
     default:
-        if( DrawPanel->IsMouseCaptured() )
+        if( m_canvas->IsMouseCaptured() )
         {
             //  for all other commands: stop the move in progress
-            DrawPanel->m_endMouseCaptureCallback( DrawPanel, &dc );
+            m_canvas->m_endMouseCaptureCallback( m_canvas, &dc );
         }
 
         if( id != ID_POPUP_CANCEL_CURRENT_COMMAND )
-            SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
 
         break;
     }
@@ -449,7 +449,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             GetScreen()->GetCurItem()->ClearFlags();
 
             if( ret > 0 )
-                DrawPanel->Refresh();
+                m_canvas->Refresh();
         }
         break;
 
@@ -460,13 +460,13 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         Rotate_Module( NULL, (MODULE*) GetScreen()->GetCurItem(), 900, true );
         redraw = true;
         break;
 
     case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         Rotate_Module( NULL, (MODULE*) GetScreen()->GetCurItem(), -900, true );
         redraw = true;
         break;
@@ -477,16 +477,16 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         int ret = dialog.ShowModal();
         GetScreen()->GetCurItem()->ClearFlags();
         GetScreen()->GetCurItem()->ClearFlags();
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
 
         if( ret > 0 )
-            DrawPanel->Refresh();
+            m_canvas->Refresh();
     }
     break;
 
     case ID_POPUP_PCB_MOVE_PAD_REQUEST:
     {
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         StartMovePad( (D_PAD*) GetScreen()->GetCurItem(), &dc );
     }
     break;
@@ -494,7 +494,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_EDIT_PAD:
     {
         InstallPadOptionsFrame( (D_PAD*) GetScreen()->GetCurItem() );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
     }
     break;
 
@@ -502,36 +502,36 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         DeletePad( (D_PAD*) GetScreen()->GetCurItem(), false );
         SetCurItem( NULL );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_IMPORT_PAD_SETTINGS:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), true );
         break;
 
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         Global_Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), true );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_EXPORT_PAD_SETTINGS:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         Export_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem() );
         break;
 
     case ID_POPUP_PCB_EDIT_TEXTMODULE:
     {
         InstallTextModOptionsFrame( (TEXTE_MODULE*) GetScreen()->GetCurItem(), &dc );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
     }
     break;
 
     case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:
     {
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         StartMoveTexteModule( (TEXTE_MODULE*) GetScreen()->GetCurItem(), &dc );
     }
     break;
@@ -539,7 +539,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_ROTATE_TEXTMODULE:
     {
         RotateTextModule( (TEXTE_MODULE*) GetScreen()->GetCurItem(), &dc );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
     }
     break;
 
@@ -547,18 +547,18 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
         DeleteTextModule( (TEXTE_MODULE*) GetScreen()->GetCurItem() );
         SetCurItem( NULL );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_MOVE_EDGE:
     {
         Start_Move_EdgeMod( (EDGE_MODULE*) GetScreen()->GetCurItem(), &dc );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
     }
     break;
 
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
 
         if( GetScreen()->GetCurItem()->IsNew() )
         {
@@ -578,40 +578,40 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         Enter_Edge_Width( edge );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
 
         if( edge )
-            DrawPanel->Refresh();
+            m_canvas->Refresh();
     }
     break;
 
     case ID_POPUP_PCB_EDIT_WIDTH_CURRENT_EDGE:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Width( (EDGE_MODULE*) GetScreen()->GetCurItem() );
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_PCB_EDIT_WIDTH_ALL_EDGE:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Width( NULL );
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_PCB_EDIT_LAYER_CURRENT_EDGE:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Layer( (EDGE_MODULE*) GetScreen()->GetCurItem() );
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_PCB_EDIT_LAYER_ALL_EDGE:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         Edit_Edge_Layer( NULL );
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_PCB_DELETE_EDGE:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         RemoveStruct( GetScreen()->GetCurItem() );
         SetCurItem( NULL );
         break;
@@ -647,14 +647,14 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PLACE_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
-        DrawPanel->m_AutoPAN_Request = false;
+        m_canvas->m_AutoPAN_Request = false;
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        DrawPanel->m_AutoPAN_Request = false;
+        m_canvas->m_AutoPAN_Request = false;
         HandleBlockPlace( &dc );
         break;
 
@@ -689,7 +689,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
 
     if( redraw )
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
 }
 
 
@@ -826,7 +826,7 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
 
-    SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+    SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
 
     switch( id )
     {
@@ -866,7 +866,7 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
         {
             SetToolID( id, wxCURSOR_ARROW, _( "Pad settings" ) );
             InstallPadOptionsFrame( NULL );
-            SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         }
         break;
 
@@ -876,6 +876,6 @@ void FOOTPRINT_EDIT_FRAME::OnVerticalToolbar( wxCommandEvent& aEvent )
 
     default:
         wxFAIL_MSG( wxT( "Unknown command id." ) );
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
     }
 }

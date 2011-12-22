@@ -20,7 +20,7 @@ void PCB_EDIT_FRAME::ProcessMuWaveFunctions( wxCommandEvent& event )
 {
     int        id = event.GetId();
     wxPoint    pos;
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     wxGetMousePosition( &pos.x, &pos.y );
 
@@ -32,7 +32,7 @@ void PCB_EDIT_FRAME::ProcessMuWaveFunctions( wxCommandEvent& event )
         break;
 
     default:        // End block command in progress.
-        DrawPanel->EndMouseCapture( );
+        m_canvas->EndMouseCapture( );
         break;
     }
 
@@ -93,9 +93,9 @@ void PCB_EDIT_FRAME::MuWaveCommand( wxDC* DC, const wxPoint& MousePos )
         break;
 
     default:
-        DrawPanel->SetCursor( wxCURSOR_ARROW );
+        m_canvas->SetCursor( wxCURSOR_ARROW );
         DisplayError( this, wxT( "PCB_EDIT_FRAME::MuWaveCommand() id error" ) );
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         break;
     }
 
@@ -104,5 +104,5 @@ void PCB_EDIT_FRAME::MuWaveCommand( wxDC* DC, const wxPoint& MousePos )
         StartMove_Module( module, DC );
     }
 
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 }

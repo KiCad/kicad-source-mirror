@@ -47,16 +47,16 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( GetScreen() == NULL )
         return;
 
-    DrawPanel->DrawBackGround( DC );
+    m_canvas->DrawBackGround( DC );
 
-    GetScreen()->Draw( DrawPanel, DC, GR_DEFAULT_DRAWMODE );
+    GetScreen()->Draw( m_canvas, DC, GR_DEFAULT_DRAWMODE );
 
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
-    if( DrawPanel->IsMouseCaptured() )
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, FALSE );
+    if( m_canvas->IsMouseCaptured() )
+        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, FALSE );
 
-    DrawPanel->DrawCrossHair( DC );
+    m_canvas->DrawCrossHair( DC );
 
     // Display the sheet filename, and the sheet path, for non root sheets
     if( GetScreen()->GetFileName() == m_DefaultSchematicFileName )

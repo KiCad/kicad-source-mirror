@@ -600,7 +600,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
 
         // redraw the area where the pad was, without pad (delete pad on screen)
         m_CurrentPad->SetFlags( DO_NOT_DRAW );
-        m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentPad->GetBoundingBox() );
+        m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentPad->GetBoundingBox() );
         m_CurrentPad->ClearFlags( DO_NOT_DRAW );
 
         // Update values
@@ -673,7 +673,7 @@ void DIALOG_PAD_PROPERTIES::PadPropertiesAccept( wxCommandEvent& event )
         m_CurrentPad->DisplayInfo( m_Parent );
 
         // redraw the area where the pad was
-        m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentPad->GetBoundingBox() );
+        m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentPad->GetBoundingBox() );
         m_Parent->OnModify();
     }
 

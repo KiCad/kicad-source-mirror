@@ -129,7 +129,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
     {
         s_ConnexionStartPoint = cursorpos;
         s_OldWiresList = GetScreen()->ExtractWires( true );
-        GetScreen()->SchematicCleanUp( DrawPanel );
+        GetScreen()->SchematicCleanUp( m_canvas );
 
         switch( type )
         {
@@ -160,7 +160,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         }
 
         GetScreen()->SetCurItem( newsegment );
-        DrawPanel->SetMouseCapture( DrawSegment, AbortCreateNewLine );
+        m_canvas->SetMouseCapture( DrawSegment, AbortCreateNewLine );
         m_itemToRepeat = NULL;
     }
     else    // A segment is in progress: terminates the current segment and add a new segment.
@@ -181,7 +181,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
                 return;
         }
 
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
         /* Creates the new segment, or terminates the command
          * if the end point is on a pin, junction or an other wire or bus */
@@ -193,9 +193,9 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
 
         oldsegment->SetNext( GetScreen()->GetDrawItems() );
         GetScreen()->SetDrawItems( oldsegment );
-        DrawPanel->CrossHairOff( DC );     // Erase schematic cursor
-        oldsegment->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-        DrawPanel->CrossHairOn( DC );      // Display schematic cursor
+        m_canvas->CrossHairOff( DC );     // Erase schematic cursor
+        oldsegment->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        m_canvas->CrossHairOn( DC );      // Display schematic cursor
 
         /* Create a new segment, and chain it after the current new segment */
         if( nextsegment )
@@ -218,7 +218,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         oldsegment->SetFlags( SELECTED );
         newsegment->SetFlags( IS_NEW );
         GetScreen()->SetCurItem( newsegment );
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
         /* This is the first segment: Now we know the start segment position.
          * Create a junction if needed. Note: a junction can be needed later,
@@ -282,7 +282,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
         GetScreen()->SetDrawItems( lastsegment );
     }
 
-    DrawPanel->EndMouseCapture( -1, -1, wxEmptyString, false );
+    m_canvas->EndMouseCapture( -1, -1, wxEmptyString, false );
     GetScreen()->SetCurItem( NULL );
 
     wxPoint end_point, alt_end_point;
@@ -298,7 +298,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
         alt_end_point = lastsegment->GetStartPoint();
     }
 
-    GetScreen()->SchematicCleanUp( DrawPanel );
+    GetScreen()->SchematicCleanUp( m_canvas );
 
     /* clear flags and find last segment entered, for repeat function */
     segment = (SCH_LINE*) GetScreen()->GetDrawItems();
@@ -329,10 +329,10 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
     if( GetScreen()->IsJunctionNeeded( s_ConnexionStartPoint ) )
         AddJunction( DC, s_ConnexionStartPoint );
 
-    GetScreen()->TestDanglingEnds( DrawPanel, DC );
+    GetScreen()->TestDanglingEnds( m_canvas, DC );
 
     /* Redraw wires and junctions which can be changed by TestDanglingEnds() */
-    DrawPanel->CrossHairOff( DC );   // Erase schematic cursor
+    m_canvas->CrossHairOff( DC );   // Erase schematic cursor
     EDA_ITEM* item = GetScreen()->GetDrawItems();
 
     while( item )
@@ -341,7 +341,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
         {
         case SCH_JUNCTION_T:
         case SCH_LINE_T:
-            DrawPanel->RefreshDrawingRect( item->GetBoundingBox() );
+            m_canvas->RefreshDrawingRect( item->GetBoundingBox() );
             break;
 
         default:
@@ -351,7 +351,7 @@ void SCH_EDIT_FRAME::EndSegment( wxDC* DC )
         item = item->Next();
     }
 
-    DrawPanel->CrossHairOn( DC );    // Display schematic cursor
+    m_canvas->CrossHairOn( DC );    // Display schematic cursor
 
     SaveCopyInUndoList( s_OldWiresList, UR_WIRE_IMAGE );
     s_OldWiresList = NULL;
@@ -436,15 +436,15 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
         }
 
         polyLine->SetPoint( idx, endpos );
-        polyLine->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+        polyLine->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
     }
     else
     {
-        DrawSegment( DrawPanel, DC, wxDefaultPosition, false );
+        DrawSegment( m_canvas, DC, wxDefaultPosition, false );
     }
 
     screen->RemoveFromDrawList( screen->GetCurItem() );
-    DrawPanel->m_mouseCaptureCallback = NULL;
+    m_canvas->m_mouseCaptureCallback = NULL;
     screen->SetCurItem( NULL );
 }
 
@@ -456,9 +456,9 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( wxDC* aDC, const wxPoint& aPosition,
 
     m_itemToRepeat = junction;
 
-    DrawPanel->CrossHairOff( aDC );     // Erase schematic cursor
-    junction->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    DrawPanel->CrossHairOn( aDC );      // Display schematic cursor
+    m_canvas->CrossHairOff( aDC );     // Erase schematic cursor
+    junction->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    m_canvas->CrossHairOn( aDC );      // Display schematic cursor
 
     junction->SetNext( GetScreen()->GetDrawItems() );
     GetScreen()->SetDrawItems( junction );
@@ -478,9 +478,9 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( wxDC* aDC, const wxPoint& aPositio
     NewNoConnect   = new SCH_NO_CONNECT( aPosition );
     m_itemToRepeat = NewNoConnect;
 
-    DrawPanel->CrossHairOff( aDC );     // Erase schematic cursor
-    NewNoConnect->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    DrawPanel->CrossHairOn( aDC );      // Display schematic cursor
+    m_canvas->CrossHairOff( aDC );     // Erase schematic cursor
+    NewNoConnect->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    m_canvas->CrossHairOn( aDC );      // Display schematic cursor
 
     NewNoConnect->SetNext( GetScreen()->GetDrawItems() );
     GetScreen()->SetDrawItems( NewNoConnect );
@@ -528,7 +528,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         m_itemToRepeat->SetFlags( IS_NEW );
         ( (SCH_COMPONENT*) m_itemToRepeat )->SetTimeStamp( GetNewTimeStamp() );
         m_itemToRepeat->Move( pos );
-        m_itemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+        m_itemToRepeat->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
         MoveItem( m_itemToRepeat, DC );
         return;
     }
@@ -543,7 +543,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
         m_itemToRepeat->SetNext( GetScreen()->GetDrawItems() );
         GetScreen()->SetDrawItems( m_itemToRepeat );
         GetScreen()->TestDanglingEnds();
-        m_itemToRepeat->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        m_itemToRepeat->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
         SaveCopyInUndoList( m_itemToRepeat, UR_NEW );
         m_itemToRepeat->ClearFlags();
     }

@@ -101,7 +101,7 @@ void PCB_EDIT_FRAME::ListNetsAndSelect( wxCommandEvent& event )
 
     if( found )
     {
-        INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+        INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
         if( GetBoard()->IsHighLightNetON() )
             HighLight( &dc );
@@ -177,5 +177,5 @@ void PCB_EDIT_FRAME::HighLight( wxDC* DC )
     else
         GetBoard()->HighLightON();
 
-    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHighLightNetCode() );
+    GetBoard()->DrawHighLight( m_canvas, DC, GetBoard()->GetHighLightNetCode() );
 }
