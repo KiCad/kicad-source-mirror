@@ -102,7 +102,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
     if( aTrack == NULL )  /* Starting a new track segment */
     {
-        DrawPanel->SetMouseCapture( ShowNewTrackWhenMovingCursor, Abort_Create_Track );
+        m_canvas->SetMouseCapture( ShowNewTrackWhenMovingCursor, Abort_Create_Track );
 
         // Prepare the undo command info
         s_ItemsListPicker.ClearListAndDeleteItems();  // Should not be necessary, but...
@@ -157,7 +157,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         D( g_CurrentTrackList.VerifyListIntegrity(); );
 
         GetBoard()->HighLightON();
-        GetBoard()->DrawHighLight( DrawPanel, aDC, GetBoard()->GetHighLightNetCode() );
+        GetBoard()->DrawHighLight( m_canvas, aDC, GetBoard()->GetHighLightNetCode() );
 
         // Display info about track Net class, and init track and vias sizes:
         g_CurrentTrackSegment->SetNet( GetBoard()->GetHighLightNetCode() );
@@ -200,7 +200,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         g_CurrentTrackSegment->DisplayInfoBase( this );
         SetCurItem( g_CurrentTrackSegment, false );
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, false );
+        m_canvas->m_mouseCaptureCallback( m_canvas, aDC, wxDefaultPosition, false );
 
         if( Drc_On )
         {
@@ -245,7 +245,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             /* Erase old track on screen */
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
-            ShowNewTrackWhenMovingCursor( DrawPanel, aDC, wxDefaultPosition, false );
+            ShowNewTrackWhenMovingCursor( m_canvas, aDC, wxDefaultPosition, false );
 
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
@@ -282,7 +282,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
             /* Show the new position */
-            ShowNewTrackWhenMovingCursor( DrawPanel, aDC, wxDefaultPosition, false );
+            ShowNewTrackWhenMovingCursor( m_canvas, aDC, wxDefaultPosition, false );
         }
     }
 
@@ -424,8 +424,8 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
     if( Begin_Route( aTrack, aDC ) == NULL )
         return false;
 
-    ShowNewTrackWhenMovingCursor( DrawPanel, aDC, wxDefaultPosition, true );
-    ShowNewTrackWhenMovingCursor( DrawPanel, aDC, wxDefaultPosition, false );
+    ShowNewTrackWhenMovingCursor( m_canvas, aDC, wxDefaultPosition, true );
+    ShowNewTrackWhenMovingCursor( m_canvas, aDC, wxDefaultPosition, false );
     TraceAirWiresToTargets( aDC );
 
     /* cleanup
@@ -513,7 +513,7 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
         GetBoard()->DisplayInfo( this );
 
         // Redraw the entire new track.
-        DrawTraces( DrawPanel, aDC, firstTrack, newCount, GR_OR );
+        DrawTraces( m_canvas, aDC, firstTrack, newCount, GR_OR );
     }
 
     wxASSERT( g_FirstTrackSegment == NULL );
@@ -526,9 +526,9 @@ bool PCB_EDIT_FRAME::End_Route( TRACK* aTrack, wxDC* aDC )
     GetBoard()->PopHighLight();
 
     if( GetBoard()->IsHighLightNetON() )
-        GetBoard()->DrawHighLight( DrawPanel, aDC, GetBoard()->GetHighLightNetCode() );
+        GetBoard()->DrawHighLight( m_canvas, aDC, GetBoard()->GetHighLightNetCode() );
 
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
 
     return true;

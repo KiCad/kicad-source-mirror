@@ -204,7 +204,7 @@ static int overbar_position( int size_v, int thickness )
 /**
  * Function DrawGraphicText
  * Draw a graphic text (like module texts)
- *  @param aPanel = the current DrawPanel. NULL if draw within a 3D GL Canvas
+ *  @param aPanel = the current m_canvas. NULL if draw within a 3D GL Canvas
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)
  *  @param aColor (enum EDA_Colors) = text color

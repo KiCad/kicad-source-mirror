@@ -345,14 +345,14 @@ bool SCH_FIELD::Save( FILE* aFile ) const
 
 void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
-    frame->DrawPanel->SetMouseCapture( NULL, NULL );
+    frame->GetCanvas()->SetMouseCapture( NULL, NULL );
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
 
     // save old cmp in undo list
     frame->SaveUndoItemInUndoList( component );
 
-    Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    Draw( frame->GetCanvas(), DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     ClearFlags();
     frame->GetScreen()->SetCurItem( NULL );
     frame->OnModify();

@@ -96,7 +96,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     static wxString lastCommponentName;
 
     m_itemToRepeat = NULL;
-    DrawPanel->m_IgnoreMouseEvents = true;
+    m_canvas->m_IgnoreMouseEvents = true;
 
     if( !libname.IsEmpty() )
     {
@@ -122,8 +122,8 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
     if ( dlg.ShowModal() == wxID_CANCEL )
     {
-        DrawPanel->m_IgnoreMouseEvents = false;
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->m_IgnoreMouseEvents = false;
+        m_canvas->MoveCursorToCrossHair();
         return NULL;
     }
 
@@ -140,8 +140,8 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
     if( Name.IsEmpty() )
     {
-        DrawPanel->m_IgnoreMouseEvents = false;
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->m_IgnoreMouseEvents = false;
+        m_canvas->MoveCursorToCrossHair();
         return NULL;
     }
 
@@ -157,8 +157,8 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
         if( Name.IsEmpty() )
         {
-            DrawPanel->m_IgnoreMouseEvents = false;
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->m_IgnoreMouseEvents = false;
+            m_canvas->MoveCursorToCrossHair();
             return NULL;
         }
     }
@@ -168,8 +168,8 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
         if( GetNameOfPartToLoad( this, Library, Name ) == 0 )
         {
-            DrawPanel->m_IgnoreMouseEvents = false;
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->m_IgnoreMouseEvents = false;
+            m_canvas->MoveCursorToCrossHair();
             return NULL;
         }
     }
@@ -180,8 +180,8 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
         if( Name.IsEmpty() )
         {
-            DrawPanel->m_IgnoreMouseEvents = false;
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->m_IgnoreMouseEvents = false;
+            m_canvas->MoveCursorToCrossHair();
             return NULL;
         }
     }
@@ -200,14 +200,14 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
         if( Entry == NULL )
         {
-            DrawPanel->m_IgnoreMouseEvents = false;
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->m_IgnoreMouseEvents = false;
+            m_canvas->MoveCursorToCrossHair();
             return NULL;
         }
     }
 
-    DrawPanel->m_IgnoreMouseEvents = false;
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->MoveCursorToCrossHair();
 
     if( Entry == NULL )
     {
@@ -230,7 +230,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     // Set the component value that can differ from component name in lib, for aliases
     component->GetField( VALUE )->m_Text = Name;
     component->DisplayInfo( this );
-    component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+    component->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     component->SetFlags( IS_NEW );
 
     MoveItem( (SCH_ITEM*) component, DC );
@@ -252,7 +252,7 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
     if( component->GetFlags() == 0 )
     {
@@ -260,27 +260,27 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
         GetScreen()->SetCurItem( NULL );
     }
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     // Erase the previous component in it's current orientation.
 
-    DrawPanel->CrossHairOff( &dc );
+    m_canvas->CrossHairOff( &dc );
 
     if( component->GetFlags() )
-        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
-        DrawPanel->RefreshDrawingRect( component->GetBoundingBox() );
+        m_canvas->RefreshDrawingRect( component->GetBoundingBox() );
 
     component->SetOrientation( aOrientation );
 
     /* Redraw the component in the new position. */
     if( component->GetFlags() )
-        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
-        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    DrawPanel->CrossHairOn( &dc );
-    GetScreen()->TestDanglingEnds( DrawPanel, &dc );
+    m_canvas->CrossHairOn( &dc );
+    GetScreen()->TestDanglingEnds( m_canvas, &dc );
     OnModify();
 }
 
@@ -296,9 +296,9 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
     wxCHECK_RET( item != NULL && item->Type() == SCH_COMPONENT_T,
                  wxT( "Cannot select unit of invalid schematic item." ) );
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
@@ -330,9 +330,9 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
         SaveCopyInUndoList( component, UR_CHANGED );
 
     if( flags )
-        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
-        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode );
+        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
 
     /* Update the unit number. */
     component->SetUnitSelection( m_CurrentSheet, unit );
@@ -342,11 +342,11 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
 
     /* Redraw the component in the new position. */
     if( flags )
-        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
-        component->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    screen->TestDanglingEnds( DrawPanel, &dc );
+    screen->TestDanglingEnds( m_canvas, &dc );
     OnModify();
 }
 
@@ -372,9 +372,9 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
     int flags = DrawComponent->GetFlags();
 
     if( DrawComponent->GetFlags() )
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+        DrawComponent->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+        DrawComponent->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
 
     DrawComponent->SetConvert( DrawComponent->GetConvert() + 1 );
 
@@ -392,10 +392,10 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC )
 
     /* Redraw the component in the new position. */
     if( DrawComponent->IsMoving() )
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
+        DrawComponent->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
     else
-        DrawComponent->Draw( DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        DrawComponent->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    GetScreen()->TestDanglingEnds( DrawPanel, DC );
+    GetScreen()->TestDanglingEnds( m_canvas, DC );
     OnModify( );
 }

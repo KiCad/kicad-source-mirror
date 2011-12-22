@@ -214,7 +214,7 @@ void DialogLabelEditor::OnOkClick( wxCommandEvent& aEvent )
 
 void DialogLabelEditor::OnCancelClick( wxCommandEvent& aEvent )
 {
-    m_Parent->DrawPanel->MoveCursorToCrossHair();
+    m_Parent->GetCanvas()->MoveCursorToCrossHair();
     EndModal( wxID_CANCEL );
 }
 
@@ -228,7 +228,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
     if( m_CurrentText->GetFlags() == 0 )
         m_Parent->SaveCopyInUndoList( m_CurrentText, UR_CHANGED );
 
-    m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
+    m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
 
     text = m_textLabel->GetValue();
 
@@ -269,7 +269,7 @@ void DialogLabelEditor::TextPropertiesAccept( wxCommandEvent& aEvent )
     if( m_CurrentText->IsNew() )
         g_DefaultTextLabelSize = m_CurrentText->m_Size.x;
 
-    m_Parent->DrawPanel->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
-    m_Parent->DrawPanel->MoveCursorToCrossHair();
+    m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
+    m_Parent->GetCanvas()->MoveCursorToCrossHair();
     EndModal( wxID_OK );
 }

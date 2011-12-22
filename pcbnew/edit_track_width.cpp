@@ -142,10 +142,10 @@ void PCB_EDIT_FRAME::Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem )
     {
         TRACK* oldsegm = (TRACK*) itemsListPicker.GetPickedItemLink( 0 );
         wxASSERT( oldsegm );
-        DrawPanel->CrossHairOff( aDC );                  // Erase cursor shape
-        oldsegm->Draw( DrawPanel, aDC, GR_XOR );         // Erase old track shape
-        aTrackItem->Draw( DrawPanel, aDC, GR_OR );       // Display new track shape
-        DrawPanel->CrossHairOn( aDC );                   // Display cursor shape
+        m_canvas->CrossHairOff( aDC );                  // Erase cursor shape
+        oldsegm->Draw( m_canvas, aDC, GR_XOR );         // Erase old track shape
+        aTrackItem->Draw( m_canvas, aDC, GR_OR );       // Display new track shape
+        m_canvas->CrossHairOn( aDC );                   // Display cursor shape
     }
 
     SaveCopyInUndoList( itemsListPicker, UR_CHANGED );
@@ -187,17 +187,17 @@ void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
     // Some segment have changed: redraw them and save in undo list
     if( aDC )
     {
-        DrawPanel->CrossHairOff( aDC );                     // Erase cursor shape
+        m_canvas->CrossHairOff( aDC );                     // Erase cursor shape
 
         for( unsigned ii = 0; ii < itemsListPicker.GetCount(); ii++ )
         {
             TRACK* segm = (TRACK*) itemsListPicker.GetPickedItemLink( ii );
-            segm->Draw( DrawPanel, aDC, GR_XOR );            // Erase old track shape
+            segm->Draw( m_canvas, aDC, GR_XOR );            // Erase old track shape
             segm = (TRACK*) itemsListPicker.GetPickedItem( ii );
-            segm->Draw( DrawPanel, aDC, GR_OR );             // Display new track shape
+            segm->Draw( m_canvas, aDC, GR_OR );             // Display new track shape
         }
 
-        DrawPanel->CrossHairOn( aDC );                   // Display cursor shape
+        m_canvas->CrossHairOn( aDC );                   // Display cursor shape
     }
 
     SaveCopyInUndoList( itemsListPicker, UR_CHANGED );

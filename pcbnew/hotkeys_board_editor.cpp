@@ -62,7 +62,7 @@ void PCB_EDIT_FRAME::CallMacros( wxDC* aDC, const wxPoint& aPosition, int aNumbe
 
     tPosition = screen->GetNearestGridPosition( aPosition );
 
-    DrawPanel->CrossHairOff( aDC );
+    m_canvas->CrossHairOff( aDC );
     screen->SetMousePosition( tPosition );
     GeneralControl( aDC, tPosition );
 
@@ -80,7 +80,7 @@ void PCB_EDIT_FRAME::CallMacros( wxDC* aDC, const wxPoint& aPosition, int aNumbe
     cmd.SetId( ID_ZOOM_REDRAW );
     GetEventHandler()->ProcessEvent( cmd );
 
-    DrawPanel->CrossHairOn( aDC );
+    m_canvas->CrossHairOn( aDC );
 }
 
 
@@ -408,7 +408,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         DisplayOpt.DisplayPcbTrackFill ^= 1;
         DisplayOpt.DisplayPcbTrackFill &= 1;
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case HK_DELETE:
@@ -451,7 +451,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( itemCurrentlyEdited && GetCurItem()->IsTrack() && GetCurItem()->IsNew() )
         {
             // A new track is in progress: call to End_Route()
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             End_Route( (TRACK*) GetCurItem(), aDC );
         }
 
@@ -553,7 +553,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             SetCurItem( track );
 
             if( track )
-                DrawPanel->m_AutoPAN_Request = true;
+                m_canvas->m_AutoPAN_Request = true;
         }
         else if( GetCurItem()->IsNew() )
         {
@@ -564,7 +564,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             if( track )      // A new segment was created
                 SetCurItem( track, false );
 
-            DrawPanel->m_AutoPAN_Request = true;
+            m_canvas->m_AutoPAN_Request = true;
         }
 
         break;
@@ -904,12 +904,12 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
     bool no_tool = GetToolId() == ID_NO_TOOL_SELECTED;
     bool itemCurrentlyEdited = item && item->GetFlags();
 
-    DrawPanel->m_AutoPAN_Request = false;
+    m_canvas->m_AutoPAN_Request = false;
 
     if( itemCurrentlyEdited )
     {
-        DrawPanel->m_IgnoreMouseEvents = true;
-        DrawPanel->CrossHairOff( aDC );
+        m_canvas->m_IgnoreMouseEvents = true;
+        m_canvas->CrossHairOff( aDC );
 
         switch( item->Type() )
         {
@@ -950,8 +950,8 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
             break;
         }
 
-        DrawPanel->m_IgnoreMouseEvents = false;
-        DrawPanel->CrossHairOn( aDC );
+        m_canvas->m_IgnoreMouseEvents = false;
+        m_canvas->CrossHairOn( aDC );
 
         return true;
     }

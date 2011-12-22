@@ -56,18 +56,18 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
     case ID_GERBVIEW_ERASE_ALL:
         Clear_Pcb( true );
         Zoom_Automatique( false );
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         ClearMsgPanel();
         break;
 
     case ID_GERBVIEW_LOAD_DRILL_FILE:
         LoadExcellonFiles( wxEmptyString );
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_GERBVIEW_LOAD_DCODE_FILE:
         LoadDCodeFile( wxEmptyString );
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     default:

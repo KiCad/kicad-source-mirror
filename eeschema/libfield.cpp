@@ -144,7 +144,7 @@ this component?" ),
     if( !aField->InEditMode() )
     {
         SaveCopyInUndoList( parent );
-        ( (LIB_ITEM*) aField )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+        ( (LIB_ITEM*) aField )->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, g_XorMode,
                                       &fieldText, DefaultTransform );
     }
 
@@ -152,7 +152,7 @@ this component?" ),
     if( !aField->InEditMode() )
     {
         fieldText = aField->GetFullText( m_unit );
-        ( (LIB_ITEM*) aField )->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode,
+        ( (LIB_ITEM*) aField )->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, g_XorMode,
                                       &fieldText, DefaultTransform );
     }
 

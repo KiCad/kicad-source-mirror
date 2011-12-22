@@ -61,13 +61,13 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
  */
 void PCB_EDIT_FRAME::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 {
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
 
     if( TextePcb == NULL )
         return;
 
-    TextePcb->Draw( DrawPanel, DC, GR_OR );
+    TextePcb->Draw( m_canvas, DC, GR_OR );
     OnModify();
 
     if( TextePcb->IsNew() )  // If new: prepare undo command
@@ -106,16 +106,16 @@ void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
     if( !TextePcb->IsNew() )
         s_TextCopy.Copy( TextePcb );
 
-    TextePcb->Draw( DrawPanel, DC, GR_XOR );
+    TextePcb->Draw( m_canvas, DC, GR_XOR );
     TextePcb->SetFlags( IS_MOVED );
     TextePcb->DisplayInfo( this );
 
     GetScreen()->SetCrossHairPosition( TextePcb->GetPosition() );
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
-    DrawPanel->SetMouseCapture( Move_Texte_Pcb, Abort_Edit_Pcb_Text );
+    m_canvas->SetMouseCapture( Move_Texte_Pcb, Abort_Edit_Pcb_Text );
     SetCurItem( TextePcb );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 }
 
 
@@ -142,11 +142,11 @@ void PCB_EDIT_FRAME::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     if( TextePcb == NULL )
         return;
 
-    TextePcb->Draw( DrawPanel, DC, GR_XOR );
+    TextePcb->Draw( m_canvas, DC, GR_XOR );
 
     SaveCopyInUndoList( TextePcb, UR_DELETED );
     TextePcb->UnLink();
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
 }
 
@@ -197,13 +197,13 @@ void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
         return;
 
     /* Erase previous text. */
-    TextePcb->Draw( DrawPanel, DC, GR_XOR );
+    TextePcb->Draw( m_canvas, DC, GR_XOR );
 
     TextePcb->m_Orient += angle;
     NORMALIZE_ANGLE_POS( TextePcb->m_Orient );
 
     /* Redraw text in new position. */
-    TextePcb->Draw( DrawPanel, DC, drawmode );
+    TextePcb->Draw( m_canvas, DC, drawmode );
     TextePcb->DisplayInfo( this );
 
     if( TextePcb->GetFlags() == 0 )    // i.e. not edited, or moved

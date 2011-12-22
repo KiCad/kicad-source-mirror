@@ -118,6 +118,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
         message = _( "Clear and annotate all of the components " );
     else
         message = _( "Annotate only the unannotated components " );
+
     if( GetLevel() )
         message += _( "on the entire schematic?" );
     else
@@ -125,13 +126,14 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
 
     message += _( "\n\nThis operation will change the current annotation and cannot be undone." );
     response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
+
     if (response == wxCANCEL)
         return;
 
     m_Parent->AnnotateComponents( GetLevel(), (ANNOTATE_ORDER_T) GetSortOrder(),
                                   (ANNOTATE_OPTION_T) GetAnnotateAlgo(),
                                   GetResetItems() , true );
-    m_Parent->DrawPanel->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 
     m_btnClear->Enable();
 }
@@ -150,12 +152,13 @@ void DIALOG_ANNOTATE::OnClearAnnotationCmpClick( wxCommandEvent& event )
         message += _( "the current sheet?" );
 
     message += _( "\n\nThis operation will clear the existing annotation and cannot be undone." );
-    response = wxMessageBox( message, wxT( "" ),
-                             wxICON_EXCLAMATION | wxOK | wxCANCEL );
+    response = wxMessageBox( message, wxT( "" ), wxICON_EXCLAMATION | wxOK | wxCANCEL );
+
     if (response == wxCANCEL)
         return;
+
     m_Parent->DeleteAnnotation( GetLevel() ? false : true );
-    m_Parent->DrawPanel->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 
     m_btnClear->Enable(false);
 }

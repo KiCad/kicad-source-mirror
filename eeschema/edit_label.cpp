@@ -60,12 +60,12 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem, wxDC* aDC )
     if( aTextItem->GetFlags() == 0 )
         SaveCopyInUndoList( aTextItem, UR_CHANGED );
 
-    DrawPanel->CrossHairOff( aDC );
-    aTextItem->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    m_canvas->CrossHairOff( aDC );
+    aTextItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     aTextItem->SetOrientation( orient );
     OnModify();
-    aTextItem->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
-    DrawPanel->CrossHairOn( aDC );
+    aTextItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
+    m_canvas->CrossHairOn( aDC );
 }
 
 
@@ -106,7 +106,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
     textItem->m_Size.x = textItem->m_Size.y = g_DefaultTextLabelSize;
     textItem->SetFlags( IS_NEW | IS_MOVED );
 
-    textItem->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    textItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     EditSchematicText( textItem );
 
     if( textItem->m_Text.IsEmpty() )
@@ -124,7 +124,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
         lastGlobalLabelShape = textItem->GetShape();
     }
 
-    textItem->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    textItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     MoveItem( (SCH_ITEM*) textItem, aDC );
 
     return textItem;
@@ -220,17 +220,17 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
      * put in undo list later, at the end of the current command (if not aborted)
      */
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
-    DrawPanel->CrossHairOff( &dc );   // Erase schematic cursor
-    text->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
+    m_canvas->CrossHairOff( &dc );   // Erase schematic cursor
+    text->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
 
     screen->RemoveFromDrawList( text );
     screen->AddToDrawList( newtext );
     GetScreen()->SetCurItem( newtext );
     m_itemToRepeat = NULL;
     OnModify();
-    newtext->Draw( DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    DrawPanel->CrossHairOn( &dc );    // redraw schematic cursor
+    newtext->Draw( m_canvas, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    m_canvas->CrossHairOn( &dc );    // redraw schematic cursor
 
     if( text->IsNew() )
     {

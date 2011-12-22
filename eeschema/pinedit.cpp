@@ -116,7 +116,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
         if( pin->IsNew() )
         {
             pin->SetFlags( IS_CANCELLED );
-            DrawPanel->EndMouseCapture();
+            m_canvas->EndMouseCapture();
         }
         return;
     }
@@ -152,7 +152,7 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
 
         OnModify( );
         pin->DisplayInfo( this );
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
     }
 
     pin->EnableEditMode( false, m_editPinsPerPartOrConvert );
@@ -220,12 +220,12 @@ void LIB_EDIT_FRAME::PlacePin( wxDC* DC )
 
         if( ask_for_pin && SynchronizePins() )
         {
-            DrawPanel->m_IgnoreMouseEvents = true;
+            m_canvas->m_IgnoreMouseEvents = true;
             status =
                 IsOK( this, _( "This position is already occupied by \
 another pin. Continue?" ) );
-            DrawPanel->MoveCursorToCrossHair();
-            DrawPanel->m_IgnoreMouseEvents = false;
+            m_canvas->MoveCursorToCrossHair();
+            m_canvas->m_IgnoreMouseEvents = false;
 
             if( !status )
                 return;
@@ -241,7 +241,7 @@ another pin. Continue?" ) );
     else
         SaveCopyInUndoList( m_component );
 
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
     OnModify();
     CurrentPin->SetPosition( newpos );
 
@@ -268,11 +268,11 @@ another pin. Continue?" ) );
         Pin->ClearFlags();
     }
 
-    DrawPanel->CrossHairOff( DC );
+    m_canvas->CrossHairOff( DC );
     bool showPinText = true;
-    CurrentPin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
+    CurrentPin->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE,
                       &showPinText, DefaultTransform );
-    DrawPanel->CrossHairOn( DC );
+    m_canvas->CrossHairOn( DC );
 
     m_drawItem = NULL;
 }
@@ -313,13 +313,13 @@ void LIB_EDIT_FRAME::StartMovePin( wxDC* DC )
 
     startPos.x = OldPos.x;
     startPos.y = -OldPos.y;
-    DrawPanel->CrossHairOff( DC );
+    m_canvas->CrossHairOff( DC );
     GetScreen()->SetCrossHairPosition( startPos );
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
     CurrentPin->DisplayInfo( this );
-    DrawPanel->SetMouseCapture( DrawMovePin, AbortPinMove );
-    DrawPanel->CrossHairOn( DC );
+    m_canvas->SetMouseCapture( DrawMovePin, AbortPinMove );
+    m_canvas->CrossHairOn( DC );
 }
 
 
@@ -398,12 +398,12 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     pin->SetUnit( LastPinCommonUnit ? 0 : m_unit );
     pin->SetVisible( LastPinVisible );
     PinPreviousPos = pin->GetPosition();
-    DrawPanel->m_IgnoreMouseEvents = true;
+    m_canvas->m_IgnoreMouseEvents = true;
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetId( ID_LIBEDIT_EDIT_PIN );
     GetEventHandler()->ProcessEvent( cmd );
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = false;
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->m_IgnoreMouseEvents = false;
 
     if( pin->GetFlags() & IS_CANCELLED )
     {
@@ -412,10 +412,10 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     else
     {
         ClearTempCopyComponent();
-        DrawPanel->SetMouseCapture( DrawMovePin, AbortPinMove );
+        m_canvas->SetMouseCapture( DrawMovePin, AbortPinMove );
 
         if( DC )
-            pin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, wxCOPY, &showPinText,
+            pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, wxCOPY, &showPinText,
                        DefaultTransform );
 
     }
@@ -503,7 +503,7 @@ void LIB_EDIT_FRAME::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
         if( selected && !Pin->IsSelected() )
             continue;
 
-        Pin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, g_XorMode, &showPinText, DefaultTransform );
+        Pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, g_XorMode, &showPinText, DefaultTransform );
 
         switch( id )
         {
@@ -520,7 +520,7 @@ void LIB_EDIT_FRAME::GlobalSetPins( wxDC* DC, LIB_PIN* MasterPin, int id )
             break;
         }
 
-        Pin->Draw( DrawPanel, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE, &showPinText,
+        Pin->Draw( m_canvas, DC, wxPoint( 0, 0 ), -1, GR_DEFAULT_DRAWMODE, &showPinText,
                    DefaultTransform );
     }
 }
@@ -553,7 +553,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
         Pin->SetFlags( IS_LINKED );
 
     wxPoint savepos = GetScreen()->GetCrossHairPosition();
-    DrawPanel->CrossHairOff( DC );
+    m_canvas->CrossHairOff( DC );
     GetScreen()->SetCrossHairPosition( wxPoint( Pin->GetPosition().x, -Pin->GetPosition().y ) );
 
     // Add this new pin in list, and creates pins for others parts if needed
@@ -563,7 +563,7 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     m_lastDrawItem = Pin;
 
     GetScreen()->SetCrossHairPosition( savepos );
-    DrawPanel->CrossHairOn( DC );
+    m_canvas->CrossHairOn( DC );
 
     Pin->DisplayInfo( this );
     OnModify( );

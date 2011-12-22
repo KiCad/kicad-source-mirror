@@ -74,10 +74,10 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int en
 
     s_LastShape = entry_shape == '/' ? '/' : '\\';
 
-    BusEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+    BusEntry->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
     BusEntry->SetBusEntryShape( s_LastShape );
     GetScreen()->TestDanglingEnds();
-    BusEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+    BusEntry->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
 
     OnModify( );
 }

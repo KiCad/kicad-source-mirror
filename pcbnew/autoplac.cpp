@@ -117,8 +117,8 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     if( GetBoard()->m_Modules == NULL )
         return;
 
-    DrawPanel->m_AbortRequest = false;
-    DrawPanel->m_AbortEnable  = true;
+    m_canvas->m_AbortRequest = false;
+    m_canvas->m_AbortEnable  = true;
 
     switch( place_mode )
     {
@@ -247,7 +247,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
         if( Module->m_ModuleStatus & MODULE_to_PLACE )  // Erase from screen
         {
             NbModules++;
-            Module->Draw( DrawPanel, DC, GR_XOR );
+            Module->Draw( m_canvas, DC, GR_XOR );
         }
         else
         {
@@ -390,8 +390,8 @@ end_of_tst:
 
     GetBoard()->m_Status_Pcb = 0;
     Compile_Ratsnest( DC, true );
-    DrawPanel->ReDraw( DC, true );
-    DrawPanel->m_AbortEnable = false;
+    m_canvas->ReDraw( DC, true );
+    m_canvas->m_AbortEnable = false;
 }
 
 
@@ -431,7 +431,7 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
                     color = DARKGRAY;
             }
 
-            GRPutPixel( &DrawPanel->m_ClipBox, DC, ox, oy, color );
+            GRPutPixel( &m_canvas->m_ClipBox, DC, ox, oy, color );
         }
     }
 }
@@ -680,7 +680,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         }
     }
 
-    DrawModuleOutlines( DrawPanel, aDC, aModule );
+    DrawModuleOutlines( m_canvas, aDC, aModule );
 
     mincout = -1.0;
     SetStatusText( wxT( "Score ??, pos ??" ) );
@@ -690,19 +690,19 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     {
         wxYield();
 
-        if( DrawPanel->m_AbortRequest )
+        if( m_canvas->m_AbortRequest )
         {
             if( IsOK( this, _( "Ok to abort?" ) ) )
                 return ESC;
             else
-                DrawPanel->m_AbortRequest = false;
+                m_canvas->m_AbortRequest = false;
         }
 
         cx = aModule->m_Pos.x; cy = aModule->m_Pos.y;
         aModule->m_BoundaryBox.SetX( ox + CurrPosition.x );
         aModule->m_BoundaryBox.SetY( oy + CurrPosition.y );
 
-        DrawModuleOutlines( DrawPanel, aDC, aModule );
+        DrawModuleOutlines( m_canvas, aDC, aModule );
 
         g_Offset_Module.x = cx - CurrPosition.x;
         CurrPosition.y    = bbbox.GetY() - oy;
@@ -710,13 +710,13 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         /* Placement on grid. */
         CurrPosition.y -= CurrPosition.y % Board.m_GridRouting;
 
-        DrawModuleOutlines( DrawPanel, aDC, aModule );
+        DrawModuleOutlines( m_canvas, aDC, aModule );
 
         for( ; CurrPosition.y < bbbox.GetBottom() - fy;
              CurrPosition.y += Board.m_GridRouting )
         {
             /* Erase traces. */
-            DrawModuleOutlines( DrawPanel, aDC, aModule );
+            DrawModuleOutlines( m_canvas, aDC, aModule );
 
             if( showRat )
                 Compute_Ratsnest_PlaceModule( aDC );
@@ -726,7 +726,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
             aModule->m_BoundaryBox.SetY( oy + CurrPosition.y );
 
             g_Offset_Module.y = cy - CurrPosition.y;
-            DrawModuleOutlines( DrawPanel, aDC, aModule );
+            DrawModuleOutlines( m_canvas, aDC, aModule );
             keepOut = TstModuleOnBoard( GetBoard(), aModule, TstOtherSide );
 
             if( keepOut >= 0 ) /* c a d if the module can be placed. */
@@ -757,7 +757,7 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
         }
     }
 
-    DrawModuleOutlines( DrawPanel, aDC, aModule );  /* erasing the last traces */
+    DrawModuleOutlines( m_canvas, aDC, aModule );  /* erasing the last traces */
 
     if( showRat )
         Compute_Ratsnest_PlaceModule( aDC );
@@ -956,7 +956,7 @@ float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 
             if( AutoPlaceShowAll )
             {
-                GRLine( &DrawPanel->m_ClipBox, DC, ox, oy, fx, fy, 0, color );
+                GRLine( &m_canvas->m_ClipBox, DC, ox, oy, fx, fy, 0, color );
             }
 
             /* Cost of the ratsnest. */

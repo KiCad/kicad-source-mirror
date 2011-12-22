@@ -57,7 +57,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     if( ( GetToolId() == ID_NO_TOOL_SELECTED ) || ( item && item->GetFlags() ) )
     {
-        DrawPanel->m_AutoPAN_Request = false;
+        m_canvas->m_AutoPAN_Request = false;
         m_itemToRepeat = NULL;
 
         if( item && item->GetFlags() )
@@ -79,7 +79,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 item->Place( this, aDC );
                 GetScreen()->SetCurItem( NULL );
                 GetScreen()->TestDanglingEnds();
-                DrawPanel->Refresh( true );
+                m_canvas->Refresh( true );
                 return;
 
             case SCH_LINE_T:    // May already be drawing segment.
@@ -129,16 +129,16 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             m_itemToRepeat = AddNoConnect( aDC, gridPosition );
             GetScreen()->SetCurItem( m_itemToRepeat );
-            DrawPanel->m_AutoPAN_Request = true;
+            m_canvas->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = false;
+            m_canvas->m_AutoPAN_Request = false;
         }
 
         GetScreen()->TestDanglingEnds();
-        DrawPanel->Refresh( true );
+        m_canvas->Refresh( true );
         break;
 
     case ID_JUNCTION_BUTT:
@@ -146,16 +146,16 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             m_itemToRepeat = AddJunction( aDC, gridPosition, true );
             GetScreen()->SetCurItem( m_itemToRepeat );
-            DrawPanel->m_AutoPAN_Request = true;
+            m_canvas->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = false;
+            m_canvas->m_AutoPAN_Request = false;
         }
 
         GetScreen()->TestDanglingEnds();
-        DrawPanel->Refresh( true );
+        m_canvas->Refresh( true );
         break;
 
     case ID_WIRETOBUS_ENTRY_BUTT:
@@ -165,15 +165,15 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             item = CreateBusEntry( aDC, ( GetToolId() == ID_WIRETOBUS_ENTRY_BUTT ) ?
                                    WIRE_TO_BUS : BUS_TO_BUS );
             GetScreen()->SetCurItem( item );
-            DrawPanel->m_AutoPAN_Request = true;
+            m_canvas->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
             GetScreen()->SetCurItem( NULL );
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( true );
-            DrawPanel->m_AutoPAN_Request = false;
+            m_canvas->Refresh( true );
+            m_canvas->m_AutoPAN_Request = false;
         }
         break;
 
@@ -183,29 +183,29 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     case ID_WIRE_BUTT:
         BeginSegment( aDC, LAYER_WIRE );
-        DrawPanel->m_AutoPAN_Request = true;
+        m_canvas->m_AutoPAN_Request = true;
         break;
 
     case ID_BUS_BUTT:
         BeginSegment( aDC, LAYER_BUS );
-        DrawPanel->m_AutoPAN_Request = true;
+        m_canvas->m_AutoPAN_Request = true;
         break;
 
     case ID_LINE_COMMENT_BUTT:
         BeginSegment( aDC, LAYER_NOTES );
-        DrawPanel->m_AutoPAN_Request = true;
+        m_canvas->m_AutoPAN_Request = true;
         break;
 
     case ID_TEXT_COMMENT_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_NOTES ) );
-            DrawPanel->m_AutoPAN_Request = true;
+            m_canvas->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = false;
+            m_canvas->m_AutoPAN_Request = false;
         }
         break;
 
@@ -213,12 +213,12 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             GetScreen()->SetCurItem( CreateNewImage( aDC ) );
-            DrawPanel->m_AutoPAN_Request = true;
+            m_canvas->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = false;
+            m_canvas->m_AutoPAN_Request = false;
         }
         break;
 
@@ -226,14 +226,14 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_LOCLABEL ) );
-            DrawPanel->m_AutoPAN_Request = true;
+            m_canvas->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = false;
+            m_canvas->m_AutoPAN_Request = false;
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( true );
+            m_canvas->Refresh( true );
         }
         break;
 
@@ -247,14 +247,14 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             if( GetToolId() == ID_HIERLABEL_BUTT )
                 GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_HIERLABEL ) );
 
-            DrawPanel->m_AutoPAN_Request = true;
+            m_canvas->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = false;
+            m_canvas->m_AutoPAN_Request = false;
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( true );
+            m_canvas->Refresh( true );
         }
         break;
 
@@ -262,14 +262,14 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             GetScreen()->SetCurItem( CreateSheet( aDC ) );
-            DrawPanel->m_AutoPAN_Request = true;
+            m_canvas->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = false;
+            m_canvas->m_AutoPAN_Request = false;
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( true );
+            m_canvas->Refresh( true );
         }
         break;
 
@@ -292,7 +292,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             item->Place( this, aDC );
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( true );
+            m_canvas->Refresh( true );
         }
         break;
 
@@ -300,14 +300,14 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (item == NULL) || (item->GetFlags() == 0) )
         {
             GetScreen()->SetCurItem( Load_Component( aDC, wxEmptyString, s_CmpNameList, true ) );
-            DrawPanel->m_AutoPAN_Request = true;
+            m_canvas->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = false;
+            m_canvas->m_AutoPAN_Request = false;
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( true );
+            m_canvas->Refresh( true );
         }
         break;
 
@@ -316,19 +316,19 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             GetScreen()->SetCurItem( Load_Component( aDC, wxT( "power" ),
                                                      s_PowerNameList, false ) );
-            DrawPanel->m_AutoPAN_Request = true;
+            m_canvas->m_AutoPAN_Request = true;
         }
         else
         {
             item->Place( this, aDC );
-            DrawPanel->m_AutoPAN_Request = false;
+            m_canvas->m_AutoPAN_Request = false;
             GetScreen()->TestDanglingEnds();
-            DrawPanel->Refresh( true );
+            m_canvas->Refresh( true );
         }
         break;
 
     default:
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         wxFAIL_MSG( wxT( "SCH_EDIT_FRAME::OnLeftClick invalid tool ID <" ) +
                     wxString::Format( wxT( "%d> selected." ), GetToolId() ) );
     }
@@ -368,7 +368,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
         case SCH_COMPONENT_T:
             EditComponent( (SCH_COMPONENT*) item );
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             break;
 
         case SCH_TEXT_T:
@@ -384,7 +384,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
         case SCH_FIELD_T:
             EditComponentFieldText( (SCH_FIELD*) item, aDC );
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             break;
 
         case SCH_MARKER_T:

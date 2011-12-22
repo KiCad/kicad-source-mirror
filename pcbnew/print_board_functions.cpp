@@ -63,7 +63,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     DisplayOpt.DisplayZonesMode    = 0;
     DisplayOpt.DisplayNetNamesMode = 0;
 
-    DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
+    m_canvas->m_PrintIsMirrored = aPrintMirrorMode;
 
     // The OR mode is used in color mode, but be aware the background *must be
     // BLACK.  In the print page dialog, we first print in BLACK, and after
@@ -80,6 +80,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     wxPoint offset;
     offset.x = GetScreen()->m_CurrentSheetDesc->m_Size.x / 2;
     offset.y = GetScreen()->m_CurrentSheetDesc->m_Size.y / 2;
+
     // offset is in mils, converts in internal units
     offset.x *= m_internalUnits / 1000;
     offset.y *= m_internalUnits / 1000;
@@ -87,13 +88,13 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     for( ; Module != NULL; Module = Module->Next() )
     {
         Module->Move( offset );
-        Print_Module( DrawPanel, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
+        Print_Module( m_canvas, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
         Module->Move( -offset );
     }
 
     D_PAD::m_PadSketchModePenSize = tmp;
 
-    DrawPanel->m_PrintIsMirrored = false;
+    m_canvas->m_PrintIsMirrored = false;
 
     DisplayOpt = save_opt;
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
@@ -194,7 +195,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     DisplayOpt.DisplayZonesMode    = 0;
     DisplayOpt.DisplayNetNamesMode = 0;
 
-    DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
+    m_canvas->m_PrintIsMirrored = aPrintMirrorMode;
 
     // The OR mode is used in color mode, but be aware the background *must be
     // BLACK.  In the print page dialog, we first print in BLACK, and after
@@ -217,7 +218,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             if( ( ( 1 << item->GetLayer() ) & aPrintMaskLayer ) == 0 )
                 break;
 
-            item->Draw( DrawPanel, aDC, drawmode );
+            item->Draw( m_canvas, aDC, drawmode );
             break;
 
         case PCB_MARKER_T:
@@ -239,7 +240,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             int radius = pt_trace->m_Width >> 1;
             int color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + pt_trace->m_Shape );
             GRSetDrawMode( aDC, drawmode );
-            GRFilledCircle( &DrawPanel->m_ClipBox, aDC,
+            GRFilledCircle( &m_canvas->m_ClipBox, aDC,
                             pt_trace->m_Start.x,
                             pt_trace->m_Start.y,
                             radius,
@@ -247,7 +248,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         }
         else
         {
-            pt_trace->Draw( DrawPanel, aDC, drawmode );
+            pt_trace->Draw( m_canvas, aDC, drawmode );
         }
     }
 
@@ -258,7 +259,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         if( ( aPrintMaskLayer & pt_trace->ReturnMaskLayer() ) == 0 )
             continue;
 
-        pt_trace->Draw( DrawPanel, aDC, drawmode );
+        pt_trace->Draw( m_canvas, aDC, drawmode );
     }
 
     /* Draw filled areas (i.e. zones) */
@@ -269,7 +270,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         if( ( aPrintMaskLayer & ( 1 << zone->GetLayer() ) ) == 0 )
             continue;
 
-        zone->DrawFilledArea( DrawPanel, aDC, drawmode );
+        zone->DrawFilledArea( m_canvas, aDC, drawmode );
     }
 
     // Draw footprints, this is done at last in order to print the pad holes in
@@ -280,7 +281,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     for( ; Module != NULL; Module = Module->Next() )
     {
-        Print_Module( DrawPanel, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
+        Print_Module( m_canvas, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
     }
 
     D_PAD::m_PadSketchModePenSize = tmp;
@@ -309,7 +310,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
                 else
                     diameter = pt_trace->GetDrillValue();
 
-                GRFilledCircle( &DrawPanel->m_ClipBox, aDC,
+                GRFilledCircle( &m_canvas->m_ClipBox, aDC,
                                 pt_trace->m_Start.x, pt_trace->m_Start.y,
                                 diameter/2,
                                 0, color, color );
@@ -319,7 +320,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         GRForceBlackPen( blackpenstate );
     }
 
-    DrawPanel->m_PrintIsMirrored = false;
+    m_canvas->m_PrintIsMirrored = false;
 
     DisplayOpt = save_opt;
     GetScreen()->m_Active_Layer = activeLayer;

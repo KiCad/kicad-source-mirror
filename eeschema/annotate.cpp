@@ -148,7 +148,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     m_CurrentSheet->UpdateAllScreenReferences();
     SetSheetNumberAndCount();
 
-    DrawPanel->Refresh( true );
+    m_canvas->Refresh( true );
 }
 
 

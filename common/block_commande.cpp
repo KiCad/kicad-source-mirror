@@ -228,11 +228,11 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:            /* mirror */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
-        Block->InitData( DrawPanel, startpos );
+        Block->InitData( m_canvas, startpos );
         break;
 
     case BLOCK_PASTE:
-        Block->InitData( DrawPanel, startpos );
+        Block->InitData( m_canvas, startpos );
         Block->m_BlockLastCursorPosition.x = 0;
         Block->m_BlockLastCursorPosition.y = 0;
         InitBlockPasteInfos();
@@ -241,11 +241,11 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
         {
             DisplayError( this, wxT( "No Block to paste" ), 20 );
             GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-            DrawPanel->m_mouseCaptureCallback = NULL;
+            m_canvas->m_mouseCaptureCallback = NULL;
             return true;
         }
 
-        if( !DrawPanel->IsMouseCaptured() )
+        if( !m_canvas->IsMouseCaptured() )
         {
             Block->m_ItemsSelection.ClearItemsList();
             DisplayError( this,
@@ -254,7 +254,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
         }
 
         Block->m_State = STATE_BLOCK_MOVE;
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, startpos, false );
+        m_canvas->m_mouseCaptureCallback( m_canvas, DC, startpos, false );
         break;
 
     default:

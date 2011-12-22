@@ -175,7 +175,7 @@ double PCB_BASE_FRAME::BestZoom( void )
     dx = bbbox.GetWidth();
     dy = bbbox.GetHeight();
 
-    size = DrawPanel->GetClientSize();
+    size = m_canvas->GetClientSize();
 
     if( size.x )
         ii = (double)(dx + ( size.x / 2) ) / (double) size.x;
@@ -201,10 +201,10 @@ void PCB_BASE_FRAME::CursorGoto(  const wxPoint& aPos )
 
     PCB_SCREEN* screen = (PCB_SCREEN*)GetScreen();
 
-    wxClientDC dc( DrawPanel );
+    wxClientDC dc( m_canvas );
 
     /* There may be need to reframe the drawing. */
-    if( !DrawPanel->IsPointOnDisplay( aPos ) )
+    if( !m_canvas->IsPointOnDisplay( aPos ) )
     {
         screen->SetCrossHairPosition( aPos );
         RedrawScreen( aPos, true );
@@ -212,10 +212,10 @@ void PCB_BASE_FRAME::CursorGoto(  const wxPoint& aPos )
     else
     {
         // Put cursor on item position
-        DrawPanel->CrossHairOff( &dc );
+        m_canvas->CrossHairOff( &dc );
         screen->SetCrossHairPosition( aPos );
-        DrawPanel->MoveCursorToCrossHair();
-        DrawPanel->CrossHairOn( &dc );
+        m_canvas->MoveCursorToCrossHair();
+        m_canvas->CrossHairOn( &dc );
     }
 }
 
@@ -278,7 +278,7 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, int layer )
     GetScreen()->m_Active_Layer = layer;
 
     if( DisplayOpt.ContrastModeDisplay )
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
 }
 
 
@@ -293,7 +293,7 @@ void PCB_BASE_FRAME::OnTogglePolarCoords( wxCommandEvent& aEvent )
 void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 {
     m_DisplayPadFill = DisplayOpt.DisplayPadFill = !m_DisplayPadFill;
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -371,7 +371,7 @@ void PCB_BASE_FRAME::ProcessItemSelection( wxCommandEvent& aEvent )
     if( id >= ID_POPUP_PCB_ITEM_SELECTION_START && id <= ID_POPUP_PCB_ITEM_SELECTION_END )
     {
         BOARD_ITEM* item = (*m_Collector)[itemNdx];
-        DrawPanel->m_AbortRequest = false;
+        m_canvas->m_AbortRequest = false;
 
 #if 0 && defined (DEBUG)
         item->Show( 0, std::cout );
@@ -455,8 +455,8 @@ void PCB_BASE_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
 
     // must do this after the tool has been set, otherwise pad::Draw() does
     // not show proper color when DisplayOpt.ContrastModeDisplay is true.
-    if( redraw && DrawPanel)
-        DrawPanel->Refresh();
+    if( redraw && m_canvas)
+        m_canvas->Refresh();
 }
 
 

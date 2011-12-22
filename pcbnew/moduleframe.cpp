@@ -177,8 +177,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    if( DrawPanel )
-        DrawPanel->m_Block_Enable = true;
+    if( m_canvas )
+        m_canvas->m_Block_Enable = true;
 
     m_auimgr.SetManagedWindow( this );
 
@@ -203,7 +203,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
     m_auimgr.AddPane( m_optionsToolBar,
                       wxAuiPaneInfo( vert ).Name( wxT( "m_optionsToolBar" ) ). Left() );
 
-    m_auimgr.AddPane( DrawPanel,
+    m_auimgr.AddPane( m_canvas,
                       wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     m_auimgr.AddPane( m_messagePanel,
@@ -375,25 +375,25 @@ void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
     case WXK_NUMPAD8:
     case WXK_UP:
         pos.y -= wxRound( gridSize.y );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD2:
     case WXK_DOWN:
         pos.y += wxRound( gridSize.y );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD4:
     case WXK_LEFT:
         pos.x -= wxRound( gridSize.x );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
 
     case WXK_NUMPAD6:
     case WXK_RIGHT:
         pos.x += wxRound( gridSize.x );
-        DrawPanel->MoveCursor( pos );
+        m_canvas->MoveCursor( pos );
         break;
 
     default:
@@ -406,23 +406,25 @@ void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
     {
         pos = GetScreen()->GetCrossHairPosition();
         GetScreen()->SetCrossHairPosition( oldpos );
-        DrawPanel->CrossHairOff( aDC );
+        m_canvas->CrossHairOff( aDC );
         GetScreen()->SetCrossHairPosition( pos );
-        DrawPanel->CrossHairOn( aDC );
+        m_canvas->CrossHairOn( aDC );
 
-        if( DrawPanel->IsMouseCaptured() )
+        if( m_canvas->IsMouseCaptured() )
         {
 #ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( DrawPanel->m_overlay, (wxWindowDC*)aDC );
+            wxDCOverlay oDC( m_canvas->m_overlay, (wxWindowDC*)aDC );
             oDC.Clear();
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, false );
+            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, false );
 #else
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, aPosition, true );
+            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, true );
 #endif
         }
 #ifdef USE_WX_OVERLAY
         else
-            DrawPanel->m_overlay.Reset();
+        {
+            m_canvas->m_overlay.Reset();
+        }
 #endif
     }
 

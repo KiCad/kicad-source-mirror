@@ -25,7 +25,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* item = GetCurItem();
 
-    DrawPanel->CrossHairOff( DC );
+    m_canvas->CrossHairOff( DC );
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
     {
@@ -96,13 +96,13 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             {
                 End_Edge_Module( (EDGE_MODULE*) item );
                 SetCurItem( NULL );
-                DrawPanel->Refresh();
+                m_canvas->Refresh();
             }
             else if( ( (EDGE_MODULE*) item )->GetShape() == S_ARC )
             {
                 End_Edge_Module( (EDGE_MODULE*) item );
                 SetCurItem( NULL );
-                DrawPanel->Refresh();
+                m_canvas->Refresh();
             }
             else if( ( (EDGE_MODULE*) item )->GetShape() == S_SEGMENT )
             {
@@ -144,16 +144,16 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
         // Replace the module in position 0, to recalculate absolutes coordinates of items
         module->SetPosition( wxPoint( 0, 0 ) );
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         SetCurItem( NULL );
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
     }
     break;
 
     case ID_MODEDIT_PLACE_GRID_COORD:
-        DrawPanel->DrawGridAxis( DC, GR_XOR );
+        m_canvas->DrawGridAxis( DC, GR_XOR );
         GetScreen()->m_GridOrigin = GetScreen()->GetCrossHairPosition();
-        DrawPanel->DrawGridAxis( DC, GR_COPY );
+        m_canvas->DrawGridAxis( DC, GR_COPY );
         GetScreen()->SetModify();
         break;
 
@@ -176,10 +176,10 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     default:
         DisplayError( this, wxT( "FOOTPRINT_EDIT_FRAME::ProcessCommand error" ) );
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
     }
 
-    DrawPanel->CrossHairOn( DC );
+    m_canvas->CrossHairOn( DC );
 }
 
 
@@ -416,7 +416,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         {
         case PCB_PAD_T:
             InstallPadOptionsFrame( (D_PAD*) item );
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             break;
 
         case PCB_MODULE_T:
@@ -424,16 +424,16 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
             DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) item );
             int ret = dialog.ShowModal();
             GetScreen()->GetCurItem()->ClearFlags();
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
 
             if( ret > 0 )
-                DrawPanel->Refresh();
+                m_canvas->Refresh();
         }
         break;
 
         case PCB_MODULE_TEXT_T:
             InstallTextModOptionsFrame( (TEXTE_MODULE*) item, DC );
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             break;
 
         default:
@@ -448,7 +448,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         {
             End_Edge_Module( (EDGE_MODULE*) item );
             SetCurItem( NULL );
-            DrawPanel->Refresh();
+            m_canvas->Refresh();
         }
 
         break;

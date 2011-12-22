@@ -286,7 +286,7 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 
         if( ( aNetcode <= 0 ) || ( aNetcode == item.GetNet() ) )
         {
-            item.Draw( DrawPanel, aDC, GR_XOR, wxPoint( 0, 0 ) );
+            item.Draw( m_canvas, aDC, GR_XOR, wxPoint( 0, 0 ) );
         }
     }
 }
@@ -719,14 +719,14 @@ void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
         if( rats->m_Status & LOCAL_RATSNEST_ITEM )
         {
             g_ColorsSettings.SetItemColor(RATSNEST_VISIBLE, YELLOW);
-            rats->Draw( DrawPanel, DC, GR_XOR, g_Offset_Module );
+            rats->Draw( m_canvas, DC, GR_XOR, g_Offset_Module );
         }
         else
         {
             g_ColorsSettings.SetItemColor(RATSNEST_VISIBLE, tmpcolor);
             wxPoint tmp = rats->m_PadStart->m_Pos;
             rats->m_PadStart->m_Pos -= g_Offset_Module;
-            rats->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
+            rats->Draw( m_canvas, DC, GR_XOR, wxPoint( 0, 0 ) );
             rats->m_PadStart->m_Pos = tmp;
         }
     }
@@ -876,6 +876,6 @@ void PCB_BASE_FRAME::TraceAirWiresToTargets( wxDC* aDC )
         if( ii >= g_MaxLinksShowed )
             break;
 
-        GRLine( &DrawPanel->m_ClipBox, aDC, s_CursorPos, s_TargetsLocations[ii], 0, YELLOW );
+        GRLine( &m_canvas->m_ClipBox, aDC, s_CursorPos, s_TargetsLocations[ii], 0, YELLOW );
     }
 }

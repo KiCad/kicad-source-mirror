@@ -109,7 +109,7 @@ void LIB_EDIT_FRAME::InstallFieldsEditorDialog( wxCommandEvent& event )
     if( m_component == NULL )
         return;
 
-    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB dlg( this, m_component );
 

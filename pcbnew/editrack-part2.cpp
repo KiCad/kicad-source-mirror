@@ -92,7 +92,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     itmp = g_CurrentTrackList.GetCount();
     Begin_Route( g_CurrentTrackSegment, DC );
 
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
     /* create the via */
     SEGVIA* via    = new SEGVIA( GetBoard() );
@@ -153,7 +153,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         /* DRC fault: the Via cannot be placed here ... */
         delete via;
 
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
         // delete the track(s) added in Begin_Route()
         while( g_CurrentTrackList.GetCount() > itmp )
@@ -207,7 +207,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         g_CurrentTrackList.PushBack( g_CurrentTrackSegment->Copy() );
     }
 
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
     via->DisplayInfo( this );
 
     UpdateStatusBar();
@@ -253,7 +253,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
                     if( ( net->m_Status & CH_ACTIF ) == 0 )
                         continue;
 
-                    net->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
+                    net->Draw( m_canvas, DC, GR_XOR, wxPoint( 0, 0 ) );
                 }
             }
         }
@@ -290,7 +290,7 @@ void PCB_EDIT_FRAME::Show_1_Ratsnest( EDA_ITEM* item, wxDC* DC )
                             if( (net->m_Status & CH_ACTIF) == 0 )
                                 continue;
 
-                            net->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
+                            net->Draw( m_canvas, DC, GR_XOR, wxPoint( 0, 0 ) );
                         }
                     }
                 }
@@ -320,7 +320,7 @@ void PCB_EDIT_FRAME::HighlightUnconnectedPads( wxDC* DC )
         if( (net->m_Status & CH_ACTIF) == 0 )
             continue;
 
-        net->m_PadStart->Draw( DrawPanel, DC, GR_OR | GR_HIGHLIGHT );
-        net->m_PadEnd->Draw( DrawPanel, DC, GR_OR | GR_HIGHLIGHT );
+        net->m_PadStart->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
+        net->m_PadEnd->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
     }
 }

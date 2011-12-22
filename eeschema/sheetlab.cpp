@@ -75,7 +75,7 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
         return wxID_CANCEL;
 
     if( aDC )
-        aSheetPin->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+        aSheetPin->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     if( !aSheetPin->IsNew() )
     {
@@ -89,7 +89,7 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, wxDC* aDC )
     aSheetPin->SetShape( dlg.GetConnectionType() );
 
     if( aDC )
-        aSheetPin->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        aSheetPin->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
     return wxID_OK;
 }

@@ -362,7 +362,7 @@ void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
     SetSheetNumberAndCount();
 
     GetScreen()->TestDanglingEnds();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -385,5 +385,5 @@ void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
     SetSheetNumberAndCount();
 
     GetScreen()->TestDanglingEnds();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }

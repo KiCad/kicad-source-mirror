@@ -39,13 +39,13 @@ void FOOTPRINT_EDIT_FRAME::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
     if( Edge == NULL )
         return;
 
-    Edge->Draw( DrawPanel, DC, GR_XOR );
+    Edge->Draw( m_canvas, DC, GR_XOR );
     Edge->SetFlags( IS_MOVED );
     MoveVector.x   = MoveVector.y = 0;
     CursorInitialPosition    = GetScreen()->GetCrossHairPosition();
-    DrawPanel->SetMouseCapture( ShowCurrentOutlineWhileMoving, Abort_Move_ModuleOutline );
+    m_canvas->SetMouseCapture( ShowCurrentOutlineWhileMoving, Abort_Move_ModuleOutline );
     SetCurItem( Edge );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 }
 
 
@@ -61,14 +61,14 @@ void FOOTPRINT_EDIT_FRAME::Place_EdgeMod( EDGE_MODULE* aEdge )
     aEdge->SetEnd0(   aEdge->GetEnd0()   - MoveVector );
 
     aEdge->ClearFlags();
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
     OnModify();
 
     MODULE* module = (MODULE*) aEdge->GetParent();
     module->CalculateBoundingBox();
 
-    DrawPanel->Refresh( );
+    m_canvas->Refresh( );
 }
 
 
@@ -337,7 +337,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
 
         Edge->m_End0 = Edge->m_Start0;
         module->CalculateBoundingBox();
-        DrawPanel->SetMouseCapture( ShowNewEdgeModule, Abort_Move_ModuleOutline );
+        m_canvas->SetMouseCapture( ShowNewEdgeModule, Abort_Move_ModuleOutline );
     }
     /* Segment creation in progress.
      * The ending coordinate is updated by the function
@@ -350,7 +350,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
         {
             if( Edge->m_Start0 != Edge->m_End0 )
             {
-                Edge->Draw( DrawPanel, DC, GR_OR );
+                Edge->Draw( m_canvas, DC, GR_OR );
 
                 EDGE_MODULE* newedge = new EDGE_MODULE( module );
                 newedge->Copy( Edge );
@@ -408,5 +408,5 @@ void FOOTPRINT_EDIT_FRAME::End_Edge_Module( EDGE_MODULE* Edge )
     Module->CalculateBoundingBox();
     Module->m_LastEdit_Time = time( NULL );
     OnModify();
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
 }

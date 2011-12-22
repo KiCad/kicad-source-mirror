@@ -37,8 +37,9 @@ void GERBVIEW_FRAME::InstallGerberOptionsDialog( wxCommandEvent& event )
 {
         DIALOG_DISPLAY_OPTIONS dlg( this );
         int opt = dlg.ShowModal();
+
         if (opt > 0 )
-            DrawPanel->Refresh();
+            m_canvas->Refresh();
 }
 
 DIALOG_DISPLAY_OPTIONS::DIALOG_DISPLAY_OPTIONS( GERBVIEW_FRAME *parent) :

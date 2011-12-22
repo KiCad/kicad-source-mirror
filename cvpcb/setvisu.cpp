@@ -83,7 +83,8 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
             m_DisplayFootprintFrame->GetBoard()->m_Modules.PushBack( mod );
 
         m_DisplayFootprintFrame->Zoom_Automatique( false );
-        m_DisplayFootprintFrame->DrawPanel->Refresh();
+        m_DisplayFootprintFrame->GetCanvas()->Refresh();
+
         // Display new cursor coordinates and zoom value:
         m_DisplayFootprintFrame->UpdateStatusBar();
 
@@ -115,15 +116,15 @@ void DISPLAY_FOOTPRINTS_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( !GetBoard() )
         return;
 
-    DrawPanel->DrawBackGround( DC );
-    GetBoard()->Draw( DrawPanel, DC, GR_COPY );
+    m_canvas->DrawBackGround( DC );
+    GetBoard()->Draw( m_canvas, DC, GR_COPY );
 
     MODULE* Module = GetBoard()->m_Modules;
 
     if ( Module )
         Module->DisplayInfo( this );
 
-    DrawPanel->DrawCrossHair( DC );
+    m_canvas->DrawCrossHair( DC );
 }
 
 

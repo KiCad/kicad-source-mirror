@@ -702,7 +702,7 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
 
         if( aCommand != ID_POPUP_PCB_MOVE_TRACK_SEGMENT )
         {
-            Collect_TrackSegmentsToDrag( DrawPanel, aDC, aTrack->m_Start,
+            Collect_TrackSegmentsToDrag( m_canvas, aDC, aTrack->m_Start,
                                          aTrack->ReturnMaskLayer(),
                                          aTrack->GetNet() );
         }
@@ -720,24 +720,24 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
         {
         case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:   // Move segment
             aTrack->SetFlags( IS_DRAGGED | ENDPOINT | STARTPOINT );
-            AddSegmentToDragList( DrawPanel, aDC, aTrack->GetFlags(), aTrack );
+            AddSegmentToDragList( m_canvas, aDC, aTrack->GetFlags(), aTrack );
             break;
 
         case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:   // drag a segment
             pos = aTrack->m_Start;
-            Collect_TrackSegmentsToDrag( DrawPanel, aDC, pos,
+            Collect_TrackSegmentsToDrag( m_canvas, aDC, pos,
                                          aTrack->ReturnMaskLayer(),
                                          aTrack->GetNet() );
             pos = aTrack->m_End;
             aTrack->SetFlags( IS_DRAGGED | ENDPOINT | STARTPOINT );
-            Collect_TrackSegmentsToDrag( DrawPanel, aDC, pos,
+            Collect_TrackSegmentsToDrag( m_canvas, aDC, pos,
                                          aTrack->ReturnMaskLayer(),
                                          aTrack->GetNet() );
             break;
 
         case ID_POPUP_PCB_MOVE_TRACK_NODE:  // Drag via or move node
             pos = (diag & STARTPOINT) ? aTrack->m_Start : aTrack->m_End;
-            Collect_TrackSegmentsToDrag( DrawPanel, aDC, pos,
+            Collect_TrackSegmentsToDrag( m_canvas, aDC, pos,
                                          aTrack->ReturnMaskLayer(),
                                          aTrack->GetNet() );
             PosInit = pos;
@@ -764,13 +764,13 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
     }
 
     s_LastPos = PosInit;
-    DrawPanel->SetMouseCapture( Show_MoveNode, Abort_MoveTrack );
+    m_canvas->SetMouseCapture( Show_MoveNode, Abort_MoveTrack );
 
     GetBoard()->SetHighLightNet( aTrack->GetNet() );
     GetBoard()->HighLightON();
 
-    GetBoard()->DrawHighLight( DrawPanel, aDC, GetBoard()->GetHighLightNetCode() );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, aDC, wxDefaultPosition, true );
+    GetBoard()->DrawHighLight( m_canvas, aDC, GetBoard()->GetHighLightNetCode() );
+    m_canvas->m_mouseCaptureCallback( m_canvas, aDC, wxDefaultPosition, true );
 }
 
 
@@ -938,7 +938,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
         if( track->m_Start != TrackToStartPoint->m_Start )
             flag = ENDPOINT;
 
-        AddSegmentToDragList( DrawPanel, DC, flag, TrackToStartPoint );
+        AddSegmentToDragList( m_canvas, DC, flag, TrackToStartPoint );
         track->SetFlags( STARTPOINT );
     }
 
@@ -949,20 +949,20 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
         if( track->m_End != TrackToEndPoint->m_Start )
             flag = ENDPOINT;
 
-        AddSegmentToDragList( DrawPanel, DC, flag, TrackToEndPoint );
+        AddSegmentToDragList( m_canvas, DC, flag, TrackToEndPoint );
         track->SetFlags( ENDPOINT );
     }
 
-    AddSegmentToDragList( DrawPanel, DC, track->GetFlags(), track );
+    AddSegmentToDragList( m_canvas, DC, track->GetFlags(), track );
 
 
     PosInit   = GetScreen()->GetCrossHairPosition();
     s_LastPos = GetScreen()->GetCrossHairPosition();
-    DrawPanel->SetMouseCapture( Show_Drag_Track_Segment_With_Cte_Slope, Abort_MoveTrack );
+    m_canvas->SetMouseCapture( Show_Drag_Track_Segment_With_Cte_Slope, Abort_MoveTrack );
 
     GetBoard()->SetHighLightNet( track->GetNet() );
     GetBoard()->HighLightON();
-    GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHighLightNetCode() );
+    GetBoard()->DrawHighLight( m_canvas, DC, GetBoard()->GetHighLightNetCode() );
 
     // Prepare the Undo command
     ITEM_PICKER picker( NULL, UR_CHANGED );
@@ -981,8 +981,8 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     if( !InitialiseDragParameters() )
     {
         DisplayError( this, _( "Unable to drag this segment: two collinear segments" ) );
-        DrawPanel->m_mouseCaptureCallback = NULL;
-        Abort_MoveTrack( DrawPanel, DC );
+        m_canvas->m_mouseCaptureCallback = NULL;
+        Abort_MoveTrack( m_canvas, DC );
         return;
     }
 }
@@ -1021,7 +1021,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     // DRC Ok: place track segments
     Track->ClearFlags();
     Track->SetState( IN_EDIT, OFF );
-    Track->Draw( DrawPanel, DC, draw_mode );
+    Track->Draw( m_canvas, DC, draw_mode );
 
     /* Draw dragged tracks */
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
@@ -1029,7 +1029,7 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
         Track = g_DragSegmentList[ii].m_Segm;
         Track->SetState( IN_EDIT, OFF );
         Track->ClearFlags();
-        Track->Draw( DrawPanel, DC, draw_mode );
+        Track->Draw( m_canvas, DC, draw_mode );
 
         /* Test the connections modified by the move
          *  (only pad connection must be tested, track connection will be
@@ -1061,12 +1061,12 @@ bool PCB_EDIT_FRAME::PlaceDraggedOrMovedTrackSegment( TRACK* Track, wxDC* DC )
     GetBoard()->PopHighLight();
 
     if( GetBoard()->IsHighLightNetON() )
-        GetBoard()->DrawHighLight( DrawPanel, DC, GetBoard()->GetHighLightNetCode() );
+        GetBoard()->DrawHighLight( m_canvas, DC, GetBoard()->GetHighLightNetCode() );
 
     OnModify();
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
 
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 
     if( current_net_code > 0 )
         TestNetConnection( DC, current_net_code );

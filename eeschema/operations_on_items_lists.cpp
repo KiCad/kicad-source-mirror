@@ -142,6 +142,7 @@ void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList )
 void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot delete invalid item." ) );
+
     if( aItem == NULL )
         return;
 
@@ -155,7 +156,7 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem )
                      wxT( "Sheet label has invalid parent item." ) );
         SaveCopyInUndoList( (SCH_ITEM*) sheet, UR_CHANGED );
         sheet->RemovePin( (SCH_SHEET_PIN*) aItem );
-        DrawPanel->RefreshDrawingRect( sheet->GetBoundingBox() );
+        m_canvas->RefreshDrawingRect( sheet->GetBoundingBox() );
     }
     else
     {
@@ -165,7 +166,7 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem )
         aItem->SetBack( NULL );  // Only one struct -> no link
 
         SaveCopyInUndoList( aItem, UR_DELETED );
-        DrawPanel->RefreshDrawingRect( aItem->GetBoundingBox() );
+        m_canvas->RefreshDrawingRect( aItem->GetBoundingBox() );
     }
 }
 

@@ -451,7 +451,7 @@ bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos )
     if( GetBoard() && GetBoard()->m_PcbFrame )
     {
         // Use grid size because it is known
-        wxRealPoint grid = GetBoard()->m_PcbFrame->DrawPanel->GetGrid();
+        wxRealPoint grid = GetBoard()->m_PcbFrame->GetCanvas()->GetGrid();
         min_dist = wxRound( MIN( grid.x, grid.y ) );
     }
 #endif
@@ -497,7 +497,7 @@ bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos )
     if( GetBoard() && GetBoard()->m_PcbFrame )
     {
         // Use grid size because it is known
-        wxRealPoint grid = GetBoard()->m_PcbFrame->DrawPanel->GetGrid();
+        wxRealPoint grid = GetBoard()->m_PcbFrame->GetCanvas()->GetGrid();
         min_dist = wxRound( MIN( grid.x, grid.y ) );
     }
 #endif

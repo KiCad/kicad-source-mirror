@@ -88,9 +88,9 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg )
 {
-    wxSize     image_size = DrawPanel->GetClientSize();
+    wxSize     image_size = m_canvas->GetClientSize();
 
-    wxClientDC dc( DrawPanel );
+    wxClientDC dc( m_canvas );
     wxBitmap   bitmap( image_size.x, image_size.y );
     wxMemoryDC memdc;
 
@@ -125,7 +125,7 @@ void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode
     plot_offset.x = pagesize.x/2;
     plot_offset.y = pagesize.y/2;
 
-    m_component->Draw( DrawPanel, aDC, plot_offset, m_unit, m_convert, GR_DEFAULT_DRAWMODE );
+    m_component->Draw( m_canvas, aDC, plot_offset, m_unit, m_convert, GR_DEFAULT_DRAWMODE );
 }
 
 
