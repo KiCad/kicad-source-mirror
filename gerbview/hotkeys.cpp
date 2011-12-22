@@ -136,15 +136,16 @@ void GERBVIEW_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
         break;
 
     case HK_SWITCH_GBR_ITEMS_DISPLAY_MODE:
-        DisplayOpt.DisplayPcbTrackFill ^= 1; DisplayOpt.DisplayPcbTrackFill &= 1;
-        DrawPanel->Refresh();
+        DisplayOpt.DisplayPcbTrackFill ^= 1;
+        DisplayOpt.DisplayPcbTrackFill &= 1;
+        m_canvas->Refresh();
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:
         if( getActiveLayer() > 0 )
         {
             setActiveLayer( getActiveLayer() - 1 );
-            DrawPanel->Refresh();
+            m_canvas->Refresh();
         }
         break;
 
@@ -152,7 +153,7 @@ void GERBVIEW_FRAME::OnHotKey( wxDC* DC, int hotkey, EDA_ITEM* DrawStruct )
         if( getActiveLayer() < 31 )
         {
             setActiveLayer( getActiveLayer() + 1 );
-            DrawPanel->Refresh();
+            m_canvas->Refresh();
         }
         break;
     }

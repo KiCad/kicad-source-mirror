@@ -92,13 +92,13 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     {
         BlockState state     = GetScreen()->m_BlockLocate.m_State;
         CmdBlockType command = GetScreen()->m_BlockLocate.m_Command;
-        DrawPanel->m_endMouseCaptureCallback( DrawPanel, DC );
+        m_canvas->m_endMouseCaptureCallback( m_canvas, DC );
         GetScreen()->m_BlockLocate.m_State   = state;
         GetScreen()->m_BlockLocate.m_Command = command;
-        DrawPanel->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
+        m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
         GetScreen()->SetCrossHairPosition( wxPoint( GetScreen()->m_BlockLocate.GetRight(),
                                                     GetScreen()->m_BlockLocate.GetBottom() ) );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
     }
 
     switch( GetScreen()->m_BlockLocate.m_Command )
@@ -118,21 +118,21 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         {
             nextCmd = true;
 
-            if( DrawPanel->IsMouseCaptured() )
+            if( m_canvas->IsMouseCaptured() )
             {
-                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
-                DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
-                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+                m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
             }
 
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
-            DrawPanel->Refresh( true );
+            m_canvas->Refresh( true );
         }
         break;
 
     case BLOCK_PRESELECT_MOVE:     /* Move with preselection list*/
         nextCmd = true;
-        DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+        m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
         GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
         break;
 
@@ -201,13 +201,13 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         if( GetScreen()->m_BlockLocate.m_Command != BLOCK_SELECT_ITEMS_ONLY &&  m_component )
             m_component->ClearSelectedItems();
 
-        GetScreen()->m_BlockLocate.m_Flags   = 0;
+        GetScreen()->m_BlockLocate.ClearFlags();
         GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
         GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
         GetScreen()->SetCurItem( NULL );
-        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
-                                    false );
-        DrawPanel->Refresh( true );
+        m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
+                                   false );
+        m_canvas->Refresh( true );
     }
 
     return nextCmd;
@@ -218,7 +218,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
     wxPoint pt;
 
-    if( !DrawPanel->IsMouseCaptured() )
+    if( !m_canvas->IsMouseCaptured() )
     {
         DisplayError( this, wxT( "HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
@@ -244,7 +244,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         if ( m_component )
             m_component->MoveSelectedItems( pt );
 
-        DrawPanel->Refresh( true );
+        m_canvas->Refresh( true );
         break;
 
     case BLOCK_COPY:     /* Copy */
@@ -298,12 +298,12 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     OnModify();
 
-    GetScreen()->m_BlockLocate.m_Flags   = 0;
+    GetScreen()->m_BlockLocate.ClearFlags();
     GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
     GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
     GetScreen()->SetCurItem( NULL );
-    DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString, false );
-    DrawPanel->Refresh( true );
+    m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString, false );
+    m_canvas->Refresh( true );
 }
 
 

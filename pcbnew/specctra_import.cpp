@@ -32,7 +32,7 @@
 */
 
 
-#include "class_drawpanel.h"    // DrawPanel
+#include "class_drawpanel.h"    // m_canvas
 #include "confirm.h"            // DisplayError()
 #include "gestfich.h"           // EDA_FileSelector()
 #include "wxPcbStruct.h"
@@ -131,7 +131,7 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 
     SetStatusText( wxString( _( "Session file imported and merged OK." ) ) );
 
-    DrawPanel->Refresh( true );
+    m_canvas->Refresh( true );
 }
 
 

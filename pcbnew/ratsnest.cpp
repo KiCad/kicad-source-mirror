@@ -239,7 +239,7 @@ void PCB_BASE_FRAME::Build_Board_Ratsnest()
 
         net->m_RatsnestStartIdx = m_Pcb->GetRatsnestsCount();
 
-        min_spanning_tree.MSP_Init( &net->m_ListPad );
+        min_spanning_tree.MSP_Init( &net->m_PadInNetList );
         min_spanning_tree.BuildTree();
         min_spanning_tree.AddTreeToRatsnest( m_Pcb->m_FullRatsnest );
         net->m_RatsnestEndIdx = m_Pcb->GetRatsnestsCount();
@@ -286,7 +286,7 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 
         if( ( aNetcode <= 0 ) || ( aNetcode == item.GetNet() ) )
         {
-            item.Draw( DrawPanel, aDC, GR_XOR, wxPoint( 0, 0 ) );
+            item.Draw( m_canvas, aDC, GR_XOR, wxPoint( 0, 0 ) );
         }
     }
 }
@@ -344,11 +344,11 @@ static int tst_links_between_blocks( NETINFO_ITEM*          aNetinfo,
         EXCHG( min_id, subratsnest_id );
 
     // Merge the 2 blocks in one sub ratsnest:
-    for( unsigned ii = 0; ii < aNetinfo->m_ListPad.size(); ii++ )
+    for( unsigned ii = 0; ii < aNetinfo->m_PadInNetList.size(); ii++ )
     {
-        if( aNetinfo->m_ListPad[ii]->GetSubRatsnest() == subratsnest_id )
+        if( aNetinfo->m_PadInNetList[ii]->GetSubRatsnest() == subratsnest_id )
         {
-            aNetinfo->m_ListPad[ii]->SetSubRatsnest( min_id );
+            aNetinfo->m_PadInNetList[ii]->SetSubRatsnest( min_id );
         }
     }
 
@@ -457,9 +457,9 @@ void PCB_BASE_FRAME::TestForActiveLinksInRatsnest( int aNetCode )
 
         // Create subratsnests id from subnets created by existing tracks:
         int subratsnest = 0;
-        for( unsigned ip = 0; ip < net->m_ListPad.size(); ip++ )
+        for( unsigned ip = 0; ip < net->m_PadInNetList.size(); ip++ )
         {
-            pad = net->m_ListPad[ip];
+            pad = net->m_PadInNetList[ip];
             int subnet = pad->GetSubNet();
             pad->SetSubRatsnest( subnet );
             subratsnest = MAX( subratsnest, subnet );
@@ -567,9 +567,9 @@ void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule )
                 return;
             }
 
-            for( unsigned jj = 0; jj < net->m_ListPad.size(); jj++ )
+            for( unsigned jj = 0; jj < net->m_PadInNetList.size(); jj++ )
             {
-                pad_externe = net->m_ListPad[jj];
+                pad_externe = net->m_PadInNetList[jj];
 
                 if( pad_externe->GetParent() == aModule )
                     continue;
@@ -719,14 +719,14 @@ void PCB_BASE_FRAME::TraceModuleRatsNest( wxDC* DC )
         if( rats->m_Status & LOCAL_RATSNEST_ITEM )
         {
             g_ColorsSettings.SetItemColor(RATSNEST_VISIBLE, YELLOW);
-            rats->Draw( DrawPanel, DC, GR_XOR, g_Offset_Module );
+            rats->Draw( m_canvas, DC, GR_XOR, g_Offset_Module );
         }
         else
         {
             g_ColorsSettings.SetItemColor(RATSNEST_VISIBLE, tmpcolor);
             wxPoint tmp = rats->m_PadStart->m_Pos;
             rats->m_PadStart->m_Pos -= g_Offset_Module;
-            rats->Draw( DrawPanel, DC, GR_XOR, wxPoint( 0, 0 ) );
+            rats->Draw( m_canvas, DC, GR_XOR, wxPoint( 0, 0 ) );
             rats->m_PadStart->m_Pos = tmp;
         }
     }
@@ -819,9 +819,9 @@ void PCB_BASE_FRAME::BuildAirWiresTargetsList( BOARD_CONNECTED_ITEM* aItemRef,
 
         // Create a list of pads candidates ( pads not already connected to the
         // current track ):
-        for( unsigned ii = 0; ii < net->m_ListPad.size(); ii++ )
+        for( unsigned ii = 0; ii < net->m_PadInNetList.size(); ii++ )
         {
-            D_PAD* pad = net->m_ListPad[ii];
+            D_PAD* pad = net->m_PadInNetList[ii];
 
             if( pad == aItemRef )
                 continue;
@@ -876,6 +876,6 @@ void PCB_BASE_FRAME::TraceAirWiresToTargets( wxDC* aDC )
         if( ii >= g_MaxLinksShowed )
             break;
 
-        GRLine( &DrawPanel->m_ClipBox, aDC, s_CursorPos, s_TargetsLocations[ii], 0, YELLOW );
+        GRLine( &m_canvas->m_ClipBox, aDC, s_CursorPos, s_TargetsLocations[ii], 0, YELLOW );
     }
 }

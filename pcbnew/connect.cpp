@@ -50,17 +50,32 @@ static void RebuildTrackChain( BOARD* pcb );
 class CONNECTED_POINT
 {
 private:
-    TRACK * m_track;      // a link to the parent item (track or via)
-    wxPoint m_point;      // the connection point
+    BOARD_CONNECTED_ITEM * m_item;  // a link to the parent item (track, via or pad)
+    wxPoint m_point;                // the connection point
 
 public:
-    CONNECTED_POINT( TRACK * aTrack, wxPoint & aPoint)
+    CONNECTED_POINT( TRACK * aTrack, const wxPoint & aPoint)
     {
-        m_track = aTrack;
+        m_item = aTrack;
         m_point = aPoint;
     }
 
-    TRACK * GetTrack() const { return m_track; }
+    CONNECTED_POINT( D_PAD * aPad, const wxPoint & aPoint)
+    {
+        m_item = aPad;
+        m_point = aPoint;
+    }
+
+    TRACK * GetTrack() const
+    {
+        return m_item->Type() != PCB_PAD_T ? (TRACK*) m_item : NULL ;
+    }
+
+    D_PAD * GetPad() const
+    {
+        return m_item->Type() == PCB_PAD_T ? (D_PAD*) m_item : NULL;
+    }
+
     const wxPoint & GetPoint() const { return m_point; }
 };
 
@@ -96,9 +111,8 @@ public:
 
     /**
      * Function Build_CurrNet_SubNets_Connections
-     * Connections to pads are assumed to be already initialized,
-     * and are not recalculated
-     * An be called after a track change (delete or add a track):
+     * should be called after a track change (delete or add a track):
+     * Connections to pads and to tracks are recalculated
      *   If a track is deleted, the other pointers to pads do not change.
      *   When a new track is added in track list, its pointers to pads are already initialized
      * Builds the subnets inside a net (tracks from aFirstTrack to aFirstTrack).
@@ -115,10 +129,16 @@ public:
      * Function BuildTracksCandidatesList
      * Fills m_Candidates with all connecting points (track ends or via location)
      * with tracks from aBegin to aEnd.
-     * if aBegin == NULL, use first track in brd list
-     * if aEnd == NULL, uses all tracks from aBegin in brd list
+     * if aEnd == NULL, uses all tracks from aBegin
      */
-    void BuildTracksCandidatesList( TRACK * aBegin = NULL, TRACK * aEnd = NULL);
+    void BuildTracksCandidatesList( TRACK * aBegin, TRACK * aEnd = NULL);
+
+    /**
+     * Function BuildPadsCandidatesList
+     * Fills m_Candidates with all pads connecting points (pads position)
+     * m_sortedPads must be built
+     */
+    void BuildPadsCandidatesList();
 
     /**
      * function SearchConnectedTracks
@@ -140,9 +160,21 @@ public:
     }
 
     /**
-     * function SearchTracksConnectedToPads
+     * function SearchConnectionsPadsToIntersectingPads
      * Explores the list of pads and adds to m_PadsConnected member
-     * of each track connected the pad(s) connected to
+     * of each pad pads connected to
+     * Here, connections are due to intersecting pads, not tracks
+     * m_sortedPads must be initialized
+     */
+    void SearchConnectionsPadsToIntersectingPads();
+
+    /**
+     * function SearchTracksConnectedToPads
+     * Explores the list of pads.
+     * Adds to m_PadsConnected member of each track the pad(s) connected to
+     * Adds to m_TracksConnected member of each pad the track(s) connected to
+     * D_PAD::m_TracksConnected is cleared before adding items
+     * TRACK::m_PadsConnected is not cleared
      */
     void SearchTracksConnectedToPads();
 
@@ -176,29 +208,39 @@ public:
 
 private:
     /**
-     * function searchEntryPoint
+     * function searchEntryPointInCandidatesList
      * Search an item in m_Connected connected to aPoint
      * note m_Connected containts usually more than one candidate
-     * and searchEntryPoint returns an index to one of these candidates
+     * and searchEntryPointInCandidatesList returns an index to one of these candidates
      * Others are neightbor of the indexed item.
      * @param aPoint is the reference coordinates
      * @return the index of item found or -1 if no candidate
      */
-    int searchEntryPoint( const wxPoint & aPoint);
+    int searchEntryPointInCandidatesList( const wxPoint & aPoint);
 
     /**
      * Function Merge_SubNets
-     * Change a subnet value to a new value, for tracks ans pads which are connected to
-     * corresponding track for pads and tracks, this is the .m_Subnet member that is tested
-     * and modified these members are block numbers (or cluster numbers) for a given net
-     * The result is 2 cluster (or subnets) are merged into only one.
-     * Note: the resulting sub net value is the smallest between aOldSubNet et aNewSubNet
+     * Change a subnet old value to a new value, for tracks and pads which are connected to
+     * tracks from m_firstTrack to m_lastTrack and their connected pads.
+     * and modify the subnet parameter (change the old value to the new value).
+     * After that, 2 cluster (or subnets) are merged into only one.
+     * Note: the resulting sub net value is the smallest between aOldSubNet and aNewSubNet
      * @return modification count
      * @param aOldSubNet = subnet value to modify
      * @param aNewSubNet = new subnet value for each item which have old_val as subnet value
      */
     int Merge_SubNets( int aOldSubNet, int aNewSubNet );
 
+    /**
+     * Function Merge_PadsSubNets
+     * Change a subnet value to a new value, in m_sortedPads pad list
+     * After that, 2 cluster (or subnets) are merged into only one.
+     * Note: the resulting subnet value is the smallest between aOldSubNet et aNewSubNet
+     * @return modification count
+     * @param aOldSubNet = subnet value to modify
+     * @param aNewSubNet = new subnet value for each item which have old_val as subnet value
+     */
+    int Merge_PadsSubNets( int aOldSubNet, int aNewSubNet );
 };
 
 
@@ -216,28 +258,49 @@ void CONNECTIONS::BuildPadsList( int aNetcode )
 {
     // Creates sorted pad list if not exists
     m_sortedPads.clear();
-    if( aNetcode < 0 )
-        m_brd->GetSortedPadListByXthenYCoord( m_sortedPads );
-    else
+    m_brd->GetSortedPadListByXthenYCoord( m_sortedPads, aNetcode < 0 ? -1 : aNetcode );
+}
+
+/* Explores the list of pads and adds to m_PadsConnected member
+ * of each pad pads connected to
+ * Here, connections are due to intersecting pads, not tracks
+ */
+void CONNECTIONS::SearchConnectionsPadsToIntersectingPads()
+{
+    std::vector<CONNECTED_POINT*> candidates;
+
+    BuildPadsCandidatesList();
+
+    for( unsigned ii = 0; ii < m_sortedPads.size(); ii++ )
     {
-        std::vector<D_PAD*> buffer;
-        m_brd->GetSortedPadListByXthenYCoord( buffer );
-        int icnt = 0;
-        for( unsigned ii = 0; ii < buffer.size(); ii++ )
+        D_PAD * pad = m_sortedPads[ii];
+        pad->m_PadsConnected.clear();
+        candidates.clear();
+        CollectItemsNearTo( candidates, pad->ReturnShapePos(), pad->m_ShapeMaxRadius );
+        // add pads to pad.m_PadsConnected, if they are connected
+        for( unsigned jj = 0; jj < candidates.size(); jj++ )
         {
-            if( buffer[ii]->GetNet() == aNetcode )
-                icnt++;
-        }
-        m_sortedPads.reserve(icnt);
-        for( unsigned ii = 0; ii < buffer.size(); ii++ )
-        {
-            if( buffer[ii]->GetNet() == aNetcode )
-                m_sortedPads.push_back( buffer[ii] );
+            CONNECTED_POINT * item = candidates[jj];
+            D_PAD * candidate_pad = item->GetPad();
+            if( pad == candidate_pad )
+                continue;
+
+            if( (pad->m_layerMask & candidate_pad->m_layerMask) == 0 )
+                continue;
+            if( pad->HitTest( item->GetPoint() ) )
+            {
+                pad->m_PadsConnected.push_back( candidate_pad );
+            }
         }
     }
 }
 
-
+/* Explores the list of pads
+ * Adds to m_PadsConnected member of each track the pad(s) connected to
+ * Adds to m_TracksConnected member of each pad the track(s) connected to
+ * D_PAD::m_TracksConnected is cleared before adding items
+ * TRACK::m_PadsConnected is not cleared
+ */
 void CONNECTIONS::SearchTracksConnectedToPads()
 {
     std::vector<CONNECTED_POINT*> candidates;
@@ -245,18 +308,21 @@ void CONNECTIONS::SearchTracksConnectedToPads()
     for( unsigned ii = 0; ii < m_sortedPads.size(); ii++ )
     {
         D_PAD * pad = m_sortedPads[ii];
+        pad->m_TracksConnected.clear();
         candidates.clear();
-        CollectItemsNearTo( candidates, pad->ReturnShapePos(), pad->m_ShapeMaxRadius );
+
+        CollectItemsNearTo( candidates, pad->GetPosition(), pad->m_ShapeMaxRadius );
+
         // add this pad to track.m_PadsConnected, if it is connected
         for( unsigned jj = 0; jj < candidates.size(); jj++ )
         {
-            CONNECTED_POINT * item = candidates[jj];
-            if( (pad->m_layerMask & item->GetTrack()->ReturnMaskLayer()) == 0 )
+            CONNECTED_POINT * cp_item = candidates[jj];
+            if( (pad->m_layerMask & cp_item->GetTrack()->ReturnMaskLayer()) == 0 )
                 continue;
-            if( pad->HitTest( item->GetPoint() ) )
+            if( pad->HitTest( cp_item->GetPoint() ) )
             {
-                item->GetTrack()->m_PadsConnected.push_back( pad );
-                pad->m_TracksConnected.push_back( item->GetTrack() );
+                cp_item->GetTrack()->m_PadsConnected.push_back( pad );
+                pad->m_TracksConnected.push_back( cp_item->GetTrack() );
             }
         }
     }
@@ -288,8 +354,11 @@ void CONNECTIONS::CollectItemsNearTo( std::vector<CONNECTED_POINT*>& aList,
 
         CONNECTED_POINT& item = m_candidates[idx];
 
-        if( item.GetPoint().x == aPosition.x )
+        int dist = item.GetPoint().x - aPosition.x;
+        if( abs(dist) <= aDistMax )
+        {
             break;   // A good entry point is found. The list can be scanned from this point.
+        }
 
         else if( item.GetPoint().x < aPosition.x ) // We should search after this item
         {
@@ -339,6 +408,19 @@ void CONNECTIONS::CollectItemsNearTo( std::vector<CONNECTED_POINT*>& aList,
     }
 }
 
+
+void CONNECTIONS::BuildPadsCandidatesList()
+{
+    m_candidates.clear();
+    m_candidates.reserve( m_sortedPads.size() );
+    for( unsigned ii = 0; ii < m_sortedPads.size(); ii++ )
+    {
+        D_PAD * pad = m_sortedPads[ii];
+        CONNECTED_POINT candidate( pad, pad->GetPosition() );
+        m_candidates.push_back( candidate );
+    }
+}
+
 /* sort function used to sort .m_Connected by X the Y values
  * items are sorted by X coordinate value,
  * and for same X value, by Y coordinate value.
@@ -355,10 +437,10 @@ void CONNECTIONS::BuildTracksCandidatesList( TRACK * aBegin, TRACK * aEnd)
 {
     m_candidates.clear();
 
-    if( aBegin == NULL )
-        aBegin = m_brd->m_Track;
+//    if( aBegin == NULL )
+//        aBegin = m_brd->m_Track;
 
-    m_firstTrack = aBegin;
+    m_firstTrack = m_lastTrack = aBegin;
 
     unsigned ii = 0;
     // Count candidates ( i.e. end points )
@@ -406,7 +488,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
     wxPoint position = aTrack->m_Start;
     for( int kk = 0; kk < 2; kk++ )
     {
-        int idx = searchEntryPoint( position );
+        int idx = searchEntryPointInCandidatesList( position );
         if ( idx >= 0 )
         {
             // search after:
@@ -441,7 +523,7 @@ int CONNECTIONS::SearchConnectedTracks( const TRACK * aTrack )
     return count;
 }
 
-int CONNECTIONS::searchEntryPoint( const wxPoint & aPoint)
+int CONNECTIONS::searchEntryPointInCandidatesList( const wxPoint & aPoint)
 {
     // Search the aPoint coordinates in m_Candidates
     // m_Candidates is sorted by X then Y values, and a fast binary search is used
@@ -498,25 +580,24 @@ int CONNECTIONS::searchEntryPoint( const wxPoint & aPoint)
 }
 
 /* Used after a track change (delete a track ou add a track)
- * Connections to pads are assumed to be already initialized.
- * and are not recalculated
+ * Connections to pads are recalculated
+ * Note also aFirstTrack (and aLastTrack ) can be NULL
  */
 void CONNECTIONS::Build_CurrNet_SubNets_Connections( TRACK* aFirstTrack, TRACK* aLastTrack, int aNetcode )
 {
-
     m_firstTrack = aFirstTrack;     // The first track used to build m_Candidates
     m_lastTrack = aLastTrack;       // The last track used to build m_Candidates
-
-    TRACK* curr_track;
 
     // Pads subnets are expected already cleared, because this function
     // does not know the full list of pads
     BuildTracksCandidatesList( aFirstTrack, aLastTrack );
+    TRACK* curr_track;
     for( curr_track = aFirstTrack; curr_track != NULL; curr_track = curr_track->Next() )
     {
         // Clear track subnet id (Pads subnets are cleared outside this function)
         curr_track->SetSubNet( 0 );
         curr_track->m_TracksConnected.clear();
+        curr_track->m_PadsConnected.clear();
 
         // Update connections between tracks:
         SearchConnectedTracks( curr_track );
@@ -530,10 +611,42 @@ void CONNECTIONS::Build_CurrNet_SubNets_Connections( TRACK* aFirstTrack, TRACK* 
     BuildPadsList( aNetcode );
     SearchTracksConnectedToPads();
 
+    // Update connections between intersecting pads (no tracks)
+    SearchConnectionsPadsToIntersectingPads();
+
     // Creates sub nets (clusters) for the current net:
     Propagate_SubNets();
 }
 
+
+/**
+ * Change a subnet value to a new value, in m_sortedPads pad list
+ * After that, 2 cluster (or subnets) are merged into only one.
+ * Note: the resulting subnet value is the smallest between aOldSubNet et aNewSubNet
+ */
+int CONNECTIONS::Merge_PadsSubNets( int aOldSubNet, int aNewSubNet )
+{
+    int    change_count = 0;
+
+    if( aOldSubNet == aNewSubNet )
+        return 0;
+
+    if( (aOldSubNet > 0) && (aOldSubNet < aNewSubNet) )
+        EXCHG( aOldSubNet, aNewSubNet );
+
+    // Examine connections between intersecting pads
+    for( unsigned ii = 0; ii < m_sortedPads.size(); ii++ )
+    {
+        D_PAD * curr_pad = m_sortedPads[ii];
+        if( curr_pad->GetSubNet() != aOldSubNet )
+            continue;
+
+        change_count++;
+        curr_pad->SetSubNet( aNewSubNet );
+    }
+
+    return change_count;
+}
 
 /*
  * Change a subnet value to a new value, for tracks and pads which are connected to.
@@ -595,13 +708,54 @@ int CONNECTIONS::Merge_SubNets( int aOldSubNet, int aNewSubNet )
  */
 void CONNECTIONS::Propagate_SubNets()
 {
-    TRACK*      curr_track;
-    int         sub_netcode;
+    int sub_netcode = 0;
 
-    curr_track = (TRACK*)m_firstTrack;
-    sub_netcode = 1;
-    curr_track->SetSubNet( sub_netcode );
+    // Examine connections between intersecting pads
+    for( unsigned ii = 0; ii < m_sortedPads.size(); ii++ )
+    {
+        D_PAD * curr_pad = m_sortedPads[ii];
+        for( unsigned jj = 0; jj < curr_pad->m_PadsConnected.size(); jj++ )
+        {
+            D_PAD * pad = curr_pad->m_PadsConnected[jj];
+            if( curr_pad->GetSubNet() )
+            {
+                if( pad->GetSubNet() > 0 )
+                {
+                    // The pad is already a cluster member, so we can merge the 2 clusters
+                    Merge_PadsSubNets( pad->GetSubNet(), curr_pad->GetSubNet() );
+                }
+                else
+                {
+                    // The pad is not yet attached to a cluster,
+                    // so we can add this pad to the cluster
+                    pad->SetSubNet( curr_pad->GetSubNet() );
+                }
+            }
+            else                              /* the track segment is not attached to a cluster */
+            {
+                if( pad->GetSubNet() > 0 )
+                {
+                    // it is connected to a pad in a cluster, merge this pad
+                    curr_pad->SetSubNet( pad->GetSubNet() );
+                }
+                else
+                {
+                    // it is connected to a pad not in a cluster,
+                    // so we must create a new cluster (only with the 2 pads.
+                    sub_netcode++;
+                    curr_pad->SetSubNet( sub_netcode );
+                    pad->SetSubNet( curr_pad->GetSubNet() );
+                }
+            }
+        }
+    }
 
+    sub_netcode++;
+    TRACK* curr_track = (TRACK*)m_firstTrack;
+    if( curr_track )
+        curr_track->SetSubNet( sub_netcode );
+
+    // Examine connections between trcaks and pads
     for( ; curr_track != NULL; curr_track = curr_track->Next() )
     {
         /* First: handling connections to pads */
@@ -683,6 +837,12 @@ void CONNECTIONS::Propagate_SubNets()
     }
 }
 
+/*
+ * Test all connections of the board,
+ * and update subnet variable of pads and tracks
+ * TestForActiveLinksInRatsnest must be called after this function
+ * to update active/inactive ratsnest items status
+ */
 void PCB_BASE_FRAME::TestConnections()
 {
     // Clear the cluster identifier for all pads
@@ -697,20 +857,35 @@ void PCB_BASE_FRAME::TestConnections()
     m_Pcb->Test_Connections_To_Copper_Areas();
 
     // Test existing connections net by net
+    // note some nets can have no tracks, and pads intersecting
+    // so Build_CurrNet_SubNets_Connections must be called for each net
     CONNECTIONS connections( m_Pcb );
+    int last_net_tested = 0;
+    int current_net_code = 0;
     for( TRACK* track = m_Pcb->m_Track; track; )
     {
         // At this point, track is the first track of a given net
-        int    current_net_code = track->GetNet();
-
+        current_net_code = track->GetNet();
         // Get last track of the current net
         TRACK* lastTrack = track->GetEndNetCode( current_net_code );
 
-        if( current_net_code )  // do not spend time if net code = 0 ( dummy net )
+        if( current_net_code > 0 )  // do not spend time if net code = 0 ( dummy net )
+        {
+            // Test all previous nets having no tracks
+            for( int net = last_net_tested+1; net < current_net_code; net++ )
+                connections.Build_CurrNet_SubNets_Connections( NULL, NULL, net );
+
             connections.Build_CurrNet_SubNets_Connections( track, lastTrack, current_net_code );
+            last_net_tested = current_net_code;
+        }
 
         track = lastTrack->Next();    // this is now the first track of the next net
     }
+
+    // Test last nets without tracks, if any
+    int netsCount = m_Pcb->GetNetCount();
+    for( int net = last_net_tested+1; net < netsCount; net++ )
+        connections.Build_CurrNet_SubNets_Connections( NULL, NULL, net );
 
     Merge_SubNets_Connected_By_CopperAreas( m_Pcb );
 
@@ -816,7 +991,7 @@ void PCB_BASE_FRAME::RecalculateAllTracksNetcode()
 
     CONNECTIONS connections( m_Pcb );
     connections.BuildPadsList();
-    connections.BuildTracksCandidatesList();
+    connections.BuildTracksCandidatesList(m_Pcb->m_Track);
 
     // First pass: build connections between track segments and pads.
     connections.SearchTracksConnectedToPads();

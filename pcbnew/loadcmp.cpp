@@ -84,7 +84,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     GetBoard()->Add( aModule );
 
-    aModule->m_Flags = 0;
+    aModule->ClearFlags();
 
     GetBoard()->BuildListOfNets();
 
@@ -125,7 +125,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
 
     if( moduleName.IsEmpty() )  /* Cancel command */
     {
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         return NULL;
     }
 
@@ -139,7 +139,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
 
         if( moduleName.IsEmpty() )  /* Cancel command */
         {
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             return NULL;
         }
     }
@@ -148,9 +148,10 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
     {
         AllowWildSeach = false;
         moduleName     = Select_1_Module_From_List( this, library, moduleName, wxEmptyString );
+
         if( moduleName.IsEmpty() )
         {
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             return NULL;    /* Cancel command. */
         }
     }
@@ -166,7 +167,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
 
         if( moduleName.IsEmpty() )
         {
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             return NULL;    /* Cancel command. */
         }
         else
@@ -176,14 +177,14 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
     }
 
     GetScreen()->SetCrossHairPosition( curspos );
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
     if( module )
     {
         lastCommponentName = moduleName;
         AddHistoryComponentName( HistoryList, moduleName );
 
-        module->m_Flags     = IS_NEW;
+        module->SetFlags( IS_NEW );
         module->m_Link      = 0;
         module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;
@@ -200,7 +201,7 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
         RecalculateAllTracksNetcode();
 
         if( DC )
-            module->Draw( DrawPanel, DC, GR_OR );
+            module->Draw( m_canvas, DC, GR_OR );
     }
 
     return module;

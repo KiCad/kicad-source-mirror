@@ -25,9 +25,9 @@ void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
     if( event.GetId() == ID_GEN_COPY_BLOCK_TO_CLIPBOARD )
     {
         if( GetScreen()->IsBlockActive() )
-            DrawPanel->SetCursor( wxCursor( DrawPanel->GetDefaultCursor() ) );
+            m_canvas->SetCursor( wxCursor( m_canvas->GetDefaultCursor() ) );
 
-        DrawPanel->EndMouseCapture();
+        m_canvas->EndMouseCapture();
     }
 }
 
@@ -48,7 +48,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
     int     ClipboardSizeX, ClipboardSizeY;
     bool    DrawBlock = false;
     wxRect  DrawArea;
-    BASE_SCREEN* screen = aFrame->DrawPanel->GetScreen();
+    BASE_SCREEN* screen = aFrame->GetCanvas()->GetScreen();
 
     /* scale is the ratio resolution/internal units */
     float   scale = 82.0 / aFrame->GetInternalUnits();
@@ -73,7 +73,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
 
     wxMetafileDC dc;
 
-    EDA_RECT tmp = aFrame->DrawPanel->m_ClipBox;
+    EDA_RECT tmp = aFrame->GetCanvas()->m_ClipBox;
     GRResetPenAndBrush( &dc );
     const bool plotBlackAndWhite = false;
     GRForceBlackPen( plotBlackAndWhite );
@@ -81,10 +81,10 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
     dc.SetUserScale( scale, scale );
     ClipboardSizeX = dc.MaxX() + 10;
     ClipboardSizeY = dc.MaxY() + 10;
-    aFrame->DrawPanel->m_ClipBox.SetX( 0 );
-    aFrame->DrawPanel->m_ClipBox.SetY( 0 );
-    aFrame->DrawPanel->m_ClipBox.SetWidth( 0x7FFFFF0 );
-    aFrame->DrawPanel->m_ClipBox.SetHeight( 0x7FFFFF0 );
+    aFrame->GetCanvas()->m_ClipBox.SetX( 0 );
+    aFrame->GetCanvas()->m_ClipBox.SetY( 0 );
+    aFrame->GetCanvas()->m_ClipBox.SetWidth( 0x7FFFFF0 );
+    aFrame->GetCanvas()->m_ClipBox.SetHeight( 0x7FFFFF0 );
 
     if( DrawBlock )
     {
@@ -94,7 +94,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
     const int maskLayer = 0xFFFFFFFF;
     aFrame->PrintPage( &dc, maskLayer, false );
     screen->m_IsPrinting = false;
-    aFrame->DrawPanel->m_ClipBox = tmp;
+    aFrame->GetCanvas()->m_ClipBox = tmp;
     wxMetafile* mf = dc.Close();
 
     if( mf )

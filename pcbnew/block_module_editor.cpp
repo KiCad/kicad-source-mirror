@@ -55,7 +55,6 @@
 
 
 #define BLOCK_COLOR BROWN
-#define IS_SELECTED 1
 
 
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
@@ -123,13 +122,13 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     {
         BlockState   state   = GetScreen()->m_BlockLocate.m_State;
         CmdBlockType command = GetScreen()->m_BlockLocate.m_Command;
-        DrawPanel->m_endMouseCaptureCallback( DrawPanel, DC );
+        m_canvas->m_endMouseCaptureCallback( m_canvas, DC );
         GetScreen()->m_BlockLocate.m_State   = state;
         GetScreen()->m_BlockLocate.m_Command = command;
-        DrawPanel->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
+        m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
         GetScreen()->SetCrossHairPosition( wxPoint(  GetScreen()->m_BlockLocate.GetRight(),
                                                      GetScreen()->m_BlockLocate.GetBottom() ) );
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
     }
 
     switch( GetScreen()->m_BlockLocate.m_Command )
@@ -147,21 +146,21 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         {
             nextcmd = true;
 
-            if( DrawPanel->IsMouseCaptured() )
+            if( m_canvas->IsMouseCaptured() )
             {
-                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
-                DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
-                DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+                m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
             }
 
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
-            DrawPanel->Refresh( true );
+            m_canvas->Refresh( true );
         }
         break;
 
     case BLOCK_PRESELECT_MOVE:     /* Move with preselection list*/
         nextcmd = true;
-        DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+        m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
         GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
         break;
 
@@ -219,9 +218,9 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
         GetScreen()->ClearBlockCommand();
         SetCurItem( NULL );
-        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
+        m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
                                     false );
-        DrawPanel->Refresh( true );
+        m_canvas->Refresh( true );
     }
 
     return nextcmd;
@@ -232,7 +231,7 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
     MODULE* currentModule = GetBoard()->m_Modules;
 
-    if( !DrawPanel->IsMouseCaptured() )
+    if( !m_canvas->IsMouseCaptured() )
     {
         DisplayError( this, wxT( "HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
@@ -250,7 +249,7 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         GetScreen()->m_BlockLocate.ClearItemsList();
         SaveCopyInUndoList( currentModule, UR_MODEDIT );
         MoveMarkedItems( currentModule, GetScreen()->m_BlockLocate.m_MoveVector );
-        DrawPanel->Refresh( true );
+        m_canvas->Refresh( true );
         break;
 
     case BLOCK_COPY:     /* Copy */
@@ -285,12 +284,12 @@ void FOOTPRINT_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     OnModify();
 
-    GetScreen()->m_BlockLocate.m_Flags   = 0;
+    GetScreen()->m_BlockLocate.ClearFlags();
     GetScreen()->m_BlockLocate.m_State   = STATE_NO_BLOCK;
     GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
     SetCurItem( NULL );
-    DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString, false );
-    DrawPanel->Refresh( true );
+    m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString, false );
+    m_canvas->Refresh( true );
 }
 
 
@@ -322,7 +321,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
             for( ; item != NULL; item = item->Next() )
             {
-                if( item->m_Selected == 0 )
+                if( !item->IsSelected() )
                     continue;
 
                 switch( item->Type() )
@@ -341,7 +340,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
             for( ; pad != NULL; pad = pad->Next() )
             {
-                if( pad->m_Selected == 0 )
+                if( !pad->IsSelected() )
                     continue;
 
                 pad->Draw( aPanel, aDC, g_XorMode, move_offset );
@@ -361,7 +360,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
         for( ; item != NULL; item = item->Next() )
         {
-            if( item->m_Selected == 0 )
+            if( !item->IsSelected() )
                 continue;
 
             switch( item->Type() )
@@ -380,7 +379,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
         for( ; pad != NULL; pad = pad->Next() )
         {
-            if( pad->m_Selected == 0 )
+            if( !pad->IsSelected() )
                 continue;
 
             pad->Draw( aPanel, aDC, g_XorMode, move_offset );
@@ -398,22 +397,22 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
 
     for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
     {
-        if( pad->m_Selected == 0 )
+        if( !pad->IsSelected() )
             continue;
 
-        pad->m_Selected = 0;
+        pad->ClearFlags( SELECTED );
         D_PAD* NewPad = new D_PAD( module );
         NewPad->Copy( pad );
-        NewPad->m_Selected = IS_SELECTED;
+        NewPad->SetFlags( SELECTED );
         module->m_Pads.PushFront( NewPad );
     }
 
     for( BOARD_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
     {
-        if( item->m_Selected == 0 )
+        if( !item->IsSelected() )
             continue;
 
-        item->m_Selected = 0;
+        item->ClearFlags( SELECTED );
 
         switch( item->Type() )
         {
@@ -421,7 +420,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
             TEXTE_MODULE * textm;
             textm = new TEXTE_MODULE( module );
             textm->Copy( (TEXTE_MODULE*) item );
-            textm->m_Selected = IS_SELECTED;
+            textm->SetFlags( SELECTED );
             module->m_Drawings.PushFront( textm );
             break;
 
@@ -429,7 +428,7 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
             EDGE_MODULE * edge;
             edge = new EDGE_MODULE( module );
             edge->Copy( (EDGE_MODULE*) item );
-            edge->m_Selected = IS_SELECTED;
+            edge->SetFlags( SELECTED );
             module->m_Drawings.PushFront( edge );
             break;
 
@@ -456,7 +455,7 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
 
     for( ; pad != NULL; pad = pad->Next() )
     {
-        if( pad->m_Selected == 0 )
+        if( !pad->IsSelected() )
             continue;
 
         pad->SetPosition( pad->GetPosition() + offset );
@@ -467,7 +466,7 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
 
     for( ; item != NULL; item = item->Next() )
     {
-        if( item->m_Selected == 0 )
+        if( !item->IsSelected() )
             continue;
 
         switch( item->Type() )
@@ -494,7 +493,7 @@ void MoveMarkedItems( MODULE* module, wxPoint offset )
             ;
         }
 
-        item->m_Flags = item->m_Selected = 0;
+        item->ClearFlags();
     }
 }
 
@@ -517,7 +516,7 @@ void DeleteMarkedItems( MODULE* module )
     {
         next_pad = pad->Next();
 
-        if( pad->m_Selected == 0 )
+        if( !pad->IsSelected() )
             continue;
 
         pad->DeleteStructure();
@@ -529,7 +528,7 @@ void DeleteMarkedItems( MODULE* module )
     {
         next_item = item->Next();
 
-        if( item->m_Selected == 0 )
+        if( !item->IsSelected() )
             continue;
 
         item->DeleteStructure();
@@ -549,7 +548,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
 
     for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
     {
-        if( pad->m_Selected == 0 )
+        if( pad->IsSelected() )
             continue;
 
         tmp = pad->GetPosition();
@@ -565,7 +564,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
 
     for( EDA_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
     {
-        if( item->m_Selected == 0 )
+        if( !item->IsSelected() )
             continue;
 
         switch( item->Type() )
@@ -603,8 +602,7 @@ void MirrorMarkedItems( MODULE* module, wxPoint offset )
             break;
         }
 
-        item->m_Flags = 0;
-        item->m_Selected = 0;
+        item->ClearFlags();
     }
 }
 
@@ -620,7 +618,7 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
 
     for( D_PAD* pad = module->m_Pads;  pad;  pad = pad->Next() )
     {
-        if( pad->m_Selected == 0 )
+        if( !pad->IsSelected() )
             continue;
 
         wxPoint pos = pad->GetPosition();
@@ -634,43 +632,43 @@ void RotateMarkedItems( MODULE* module, wxPoint offset )
 
     for( EDA_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
     {
-        if( item->m_Selected == 0 )
+        if( !item->IsSelected() )
             continue;
 
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-            {
-                EDGE_MODULE* em = (EDGE_MODULE*) item;
+        {
+            EDGE_MODULE* em = (EDGE_MODULE*) item;
 
-                wxPoint tmp = em->GetStart();
-                ROTATE( tmp );
-                em->SetStart( tmp );
-                em->SetStart0( tmp );
+            wxPoint tmp = em->GetStart();
+            ROTATE( tmp );
+            em->SetStart( tmp );
+            em->SetStart0( tmp );
 
-                tmp = em->GetEnd();
-                ROTATE( tmp );
-                em->SetEnd( tmp );
-                em->SetEnd0( tmp );
-            }
-            break;
+            tmp = em->GetEnd();
+            ROTATE( tmp );
+            em->SetEnd( tmp );
+            em->SetEnd0( tmp );
+        }
+        break;
 
         case PCB_MODULE_TEXT_T:
-            {
-                TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
-                wxPoint pos = tm->GetPosition();
-                ROTATE( pos );
-                tm->SetPosition( pos );
-                tm->SetPos0( tm->GetPosition() );
-                tm->SetOrientation( tm->GetOrientation() + 900 );
-            }
-            break;
+        {
+            TEXTE_MODULE* tm = (TEXTE_MODULE*) item;
+            wxPoint pos = tm->GetPosition();
+            ROTATE( pos );
+            tm->SetPosition( pos );
+            tm->SetPos0( tm->GetPosition() );
+            tm->SetOrientation( tm->GetOrientation() + 900 );
+        }
+        break;
 
         default:
             ;
         }
 
-        item->m_Flags = item->m_Selected = 0;
+        item->ClearFlags();
     }
 }
 
@@ -685,12 +683,16 @@ void ClearMarkItems( MODULE* module )
     item = module->m_Drawings;
 
     for( ; item != NULL; item = item->Next() )
-        item->m_Flags = item->m_Selected = 0;
+    {
+        item->ClearFlags();
+    }
 
     item = module->m_Pads;
 
     for( ; item != NULL; item = item->Next() )
-        item->m_Flags = item->m_Selected = 0;
+    {
+        item->ClearFlags();
+    }
 }
 
 
@@ -711,12 +713,12 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
 
     for( ; pad != NULL; pad = pad->Next() )
     {
-        pad->m_Selected = 0;
+        pad->ClearFlags( SELECTED );
         pos = pad->GetPosition();
 
         if( Rect.Contains( pos ) )
         {
-            pad->m_Selected = IS_SELECTED;
+            pad->SetFlags( SELECTED );
             ItemsCount++;
         }
     }
@@ -725,14 +727,14 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
 
     for( ; item != NULL; item = item->Next() )
     {
-        item->m_Selected = 0;
+        item->ClearFlags( SELECTED );
 
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
             if( ((EDGE_MODULE*)item )->HitTest( Rect ) )
             {
-                item->m_Selected = IS_SELECTED;
+                item->SetFlags( SELECTED );
                 ItemsCount++;
             }
 
@@ -743,7 +745,7 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
 
             if( Rect.Contains( pos ) )
             {
-                item->m_Selected = IS_SELECTED;
+                item->SetFlags( SELECTED );
                 ItemsCount++;
             }
 

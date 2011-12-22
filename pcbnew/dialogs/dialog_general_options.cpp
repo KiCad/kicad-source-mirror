@@ -88,7 +88,7 @@ void Dialog_GeneralOptions::init()
     m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
-    m_AutoPANOpt->SetValue( GetParent()->DrawPanel->m_AutoPAN_Enable );
+    m_AutoPANOpt->SetValue( GetParent()->GetCanvas()->m_AutoPAN_Enable );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
     m_Track_DoubleSegm_Ctrl->SetValue( g_TwoSegmentTrackBuild );
 
@@ -126,14 +126,14 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     if( m_Board->IsElementVisible(RATSNEST_VISIBLE) != m_ShowGlobalRatsnest->GetValue() )
     {
         GetParent()->SetElementVisibility(RATSNEST_VISIBLE, m_ShowGlobalRatsnest->GetValue() );
-        GetParent()->DrawPanel->Refresh( );
+        GetParent()->GetCanvas()->Refresh( );
     }
 
     g_Show_Module_Ratsnest = m_ShowModuleRatsnest->GetValue();
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
     Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
     g_Track_45_Only_Allowed    = m_Track_45_Only_Ctrl->GetValue();
-    GetParent()->DrawPanel->m_AutoPAN_Enable = m_AutoPANOpt->GetValue();
+    GetParent()->GetCanvas()->m_AutoPAN_Enable = m_AutoPANOpt->GetValue();
     g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();
 
     g_MagneticPadOption   = m_MagneticPadOptCtrl->GetSelection();
@@ -159,9 +159,9 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         if( GetToolId() == ID_TRACK_BUTT )
         {
             if( Drc_On )
-                DrawPanel->SetCursor( wxCURSOR_PENCIL );
+                m_canvas->SetCursor( wxCURSOR_PENCIL );
             else
-                DrawPanel->SetCursor( wxCURSOR_QUESTION_ARROW );
+                m_canvas->SetCursor( wxCURSOR_QUESTION_ARROW );
         }
 
         break;
@@ -174,7 +174,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
             Compile_Ratsnest( NULL, true );
         }
 
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_MODULE_RATSNEST:
@@ -187,32 +187,32 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_ZONES:
         DisplayOpt.DisplayZonesMode = 0;
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
         DisplayOpt.DisplayZonesMode = 1;
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
         DisplayOpt.DisplayZonesMode = 2;
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
         m_DisplayViaFill = DisplayOpt.DisplayViaFill = !state;
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
         m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill = !state;
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         DisplayOpt.ContrastModeDisplay = state;
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:

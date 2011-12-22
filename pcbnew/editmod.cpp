@@ -147,7 +147,7 @@ void FOOTPRINT_EDIT_FRAME::RemoveStruct( EDA_ITEM* Item )
 
     case PCB_MODULE_EDGE_T:
         Delete_Edge_Module( (EDGE_MODULE*) Item );
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
         break;
 
     case PCB_MODULE_T:

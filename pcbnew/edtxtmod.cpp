@@ -48,7 +48,7 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
     if( Module )
         Module->m_Drawings.PushFront( Text );
 
-    Text->m_Flags = IS_NEW;
+    Text->SetFlags( IS_NEW );
 
     Text->m_Text = wxT( "text" );
 
@@ -60,12 +60,12 @@ TEXTE_MODULE* PCB_BASE_FRAME::CreateTextModule( MODULE* Module, wxDC* DC )
     Text->SetLocalCoord();
 
     InstallTextModOptionsFrame( Text, NULL );
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
-    Text->m_Flags = 0;
+    Text->ClearFlags();
 
     if( DC )
-        Text->Draw( DrawPanel, DC, GR_OR );
+        Text->Draw( m_canvas, DC, GR_OR );
 
     Text->DisplayInfo( this );
 
@@ -82,21 +82,21 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MODULE* module = (MODULE*) Text->GetParent();
 
-    if( module && module->m_Flags == 0 && Text->m_Flags == 0 ) // prepare undo command
+    if( module && module->GetFlags() == 0 && Text->GetFlags() == 0 ) // prepare undo command
     {
         if( this->m_Ident == PCB_FRAME )
             SaveCopyInUndoList( module, UR_CHANGED );
     }
 
     // we expect MoveVector to be (0,0) if there is no move in progress
-    Text->Draw( DrawPanel, DC, GR_XOR, MoveVector );
+    Text->Draw( m_canvas, DC, GR_XOR, MoveVector );
 
     Text->m_Orient += 900;
 
     while( Text->m_Orient >= 1800 )
         Text->m_Orient -= 1800;
 
-    Text->Draw( DrawPanel, DC, GR_XOR, MoveVector );
+    Text->Draw( m_canvas, DC, GR_XOR, MoveVector );
     Text->DisplayInfo( this );
 
     if( module )
@@ -120,7 +120,7 @@ void PCB_BASE_FRAME::DeleteTextModule( TEXTE_MODULE* Text )
 
     if( Text->GetType() == TEXT_is_DIVERS )
     {
-        DrawPanel->RefreshDrawingRect( Text->GetBoundingBox() );
+        m_canvas->RefreshDrawingRect( Text->GetBoundingBox() );
         Text->DeleteStructure();
         OnModify();
         Module->m_LastEdit_Time = time( NULL );
@@ -151,7 +151,7 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
     // If the text was moved (the move does not change internal data)
     // it could be rotated while moving. So set old value for orientation
-    if( (Text->m_Flags & IS_MOVED) )
+    if( Text->IsMoving() )
         Text->m_Orient = TextInitialOrientation;
 
     /* Redraw the text */
@@ -160,8 +160,8 @@ static void AbortMoveTextModule( EDA_DRAW_PANEL* Panel, wxDC* DC )
     // leave it at (0,0) so we can use it Rotate when not moving.
     MoveVector.x = MoveVector.y = 0;
 
-    Text->m_Flags   = 0;
-    Module->m_Flags = 0;
+    Text->ClearFlags();
+    Module->ClearFlags();
 
     screen->SetCurItem( NULL );
 }
@@ -178,8 +178,8 @@ void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     Module = (MODULE*) Text->GetParent();
 
-    Text->m_Flags   |= IS_MOVED;
-    Module->m_Flags |= IN_EDIT;
+    Text->SetFlags( IS_MOVED );
+    Module->SetFlags( IN_EDIT );
 
     MoveVector.x = MoveVector.y = 0;
 
@@ -188,13 +188,13 @@ void PCB_BASE_FRAME::StartMoveTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 
     // Center cursor on initial position of text
     GetScreen()->SetCrossHairPosition( TextInitialPosition );
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
     Text->DisplayInfo( this );
 
     SetCurItem( Text );
-    DrawPanel->SetMouseCapture( Show_MoveTexte_Module, AbortMoveTextModule );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
+    m_canvas->SetMouseCapture( Show_MoveTexte_Module, AbortMoveTextModule );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, true );
 }
 
 
@@ -204,8 +204,8 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
 {
     if( Text != NULL )
     {
-        DrawPanel->RefreshDrawingRect( Text->GetBoundingBox() );
-        Text->DrawUmbilical( DrawPanel, DC, GR_XOR, -MoveVector );
+        m_canvas->RefreshDrawingRect( Text->GetBoundingBox() );
+        Text->DrawUmbilical( m_canvas, DC, GR_XOR, -MoveVector );
 
         /* Update the coordinates for anchor. */
         MODULE* Module = (MODULE*) Text->GetParent();
@@ -227,13 +227,13 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
             wxPoint textRelPos = Text->m_Pos - Module->m_Pos;
             RotatePoint( &textRelPos, -Module->m_Orient );
             Text->SetPos0( textRelPos );
-            Text->m_Flags   = 0;
-            Module->m_Flags = 0;
+            Text->ClearFlags();
+            Module->ClearFlags();
             Module->m_LastEdit_Time = time( NULL );
             OnModify();
 
             /* Redraw text. */
-            DrawPanel->RefreshDrawingRect( Text->GetBoundingBox() );
+            m_canvas->RefreshDrawingRect( Text->GetBoundingBox() );
         }
         else
         {
@@ -244,7 +244,7 @@ void PCB_BASE_FRAME::PlaceTexteModule( TEXTE_MODULE* Text, wxDC* DC )
     // leave it at (0,0) so we can use it Rotate when not moving.
     MoveVector.x = MoveVector.y = 0;
 
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
 }
 
 
@@ -328,7 +328,7 @@ void PCB_BASE_FRAME::ResetTextSize( BOARD_ITEM* aItem, wxDC* aDC )
     text->SetThickness( newThickness );
 
     if( aDC )
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
 
     OnModify();
 }
@@ -433,7 +433,7 @@ void PCB_BASE_FRAME::ResetModuleTextSizes( int aType, wxDC* aDC )
     }
 
     if( aDC )
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
 
     OnModify();
 }

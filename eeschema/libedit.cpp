@@ -118,7 +118,7 @@ void LIB_EDIT_FRAME::LoadOneLibraryPart( wxCommandEvent& event )
     wxString   CmpName;
     LIB_ALIAS* LibEntry = NULL;
 
-    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     if( GetScreen()->IsModify()
         && !IsOK( this, _( "Current part not saved.\n\nDiscard current changes?" ) ) )
@@ -235,7 +235,7 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     if( GetScreen() == NULL )
         return;
 
-    DrawPanel->DrawBackGround( DC );
+    m_canvas->DrawBackGround( DC );
 
     if( m_component )
     {
@@ -246,15 +246,15 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
         wxString fieldText = Field->m_Text;
         wxString fieldfullText = Field->GetFullText( m_unit );
         Field->m_Text = fieldfullText;
-        m_component->Draw( DrawPanel, DC, wxPoint( 0, 0 ), m_unit,
+        m_component->Draw( m_canvas, DC, wxPoint( 0, 0 ), m_unit,
                            m_convert, GR_DEFAULT_DRAWMODE );
         Field->m_Text = fieldText;
     }
 
-    if( DrawPanel->IsMouseCaptured() )
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    if( m_canvas->IsMouseCaptured() )
+        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
-    DrawPanel->DrawCrossHair( DC );
+    m_canvas->DrawCrossHair( DC );
 
     DisplayLibInfos();
     UpdateStatusBar();
@@ -266,7 +266,7 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
     wxFileName fn;
     wxString   msg;
 
-    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     if( m_library == NULL )
     {
@@ -456,7 +456,7 @@ void LIB_EDIT_FRAME::DeleteOnePart( wxCommandEvent& event )
     wxArrayString ListNames;
     wxString      msg;
 
-    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     m_lastDrawItem = NULL;
     m_drawItem = NULL;
@@ -536,7 +536,7 @@ All changes will be lost. Discard changes?" ) ) )
         m_aliasName.Empty();
     }
 
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -550,7 +550,7 @@ void LIB_EDIT_FRAME::CreateNewLibraryPart( wxCommandEvent& event )
 lost!\n\nClear the current component from the screen?" ) ) )
         return;
 
-    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     m_drawItem = NULL;
 
@@ -634,7 +634,7 @@ lost!\n\nClear the current component from the screen?" ) ) )
     m_lastDrawItem = NULL;
     GetScreen()->ClearUndoRedoList();
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
     m_mainToolBar->Refresh();
 }
 

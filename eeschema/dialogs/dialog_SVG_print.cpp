@@ -212,7 +212,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
     SheetSize = screen->ReturnPageSize();      // page size in 1/1000 inch, ie in internal units
 
     screen->SetScalingFactor( 1.0 );
-    EDA_DRAW_PANEL* panel = frame->DrawPanel;
+    EDA_DRAW_PANEL* panel = frame->GetCanvas();
 
     SetLocaleTo_C_standard();       // Switch the locale to standard C (needed
                                     // to print floating point numbers like 1.3)

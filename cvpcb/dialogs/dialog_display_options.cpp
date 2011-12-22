@@ -68,7 +68,7 @@ void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::UpdateObjectSettings( void )
     m_Parent->m_DisplayModText = m_TextDisplayOption->GetSelection();
     m_Parent->m_DisplayPadNum  = m_IsShowPadNum->GetValue();
     m_Parent->m_DisplayPadFill = m_IsShowPadFill->GetValue();
-    m_Parent->DrawPanel->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 }
 
 

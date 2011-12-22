@@ -203,12 +203,9 @@ public:
                           void* aAuxData, wxPoint* aFindLocation );
 
     /**
-     * @copydoc EDA_ITEM::Replace(wxFindReplaceData&)
+     * @copydoc EDA_ITEM::Replace(wxFindReplaceData&,void*)
      */
-    virtual bool Replace( wxFindReplaceData& aSearchData )
-    {
-        return EDA_ITEM::Replace( aSearchData, m_Text );
-    }
+    virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL );
 
     virtual wxString GetSelectMenuText() const;
 

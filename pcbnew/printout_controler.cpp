@@ -265,7 +265,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     if( m_PrintParams.m_Print_Black_and_White )
         GRForceBlackPen( true );
 
-    EDA_DRAW_PANEL* panel = m_Parent->DrawPanel;
+    EDA_DRAW_PANEL* panel = m_Parent->GetCanvas();
     EDA_RECT        tmp   = panel->m_ClipBox;
 
     // Set clip box to the max size

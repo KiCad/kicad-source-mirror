@@ -77,23 +77,23 @@ int GERBVIEW_FRAME::ReturnBlockCommand( int key )
 
 void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
 {
-    wxASSERT( DrawPanel->IsMouseCaptured() );
+    wxASSERT( m_canvas->IsMouseCaptured() );
 
     GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
 
     switch( GetScreen()->m_BlockLocate.m_Command )
     {
     case BLOCK_MOVE:                /* Move */
-        if( DrawPanel->IsMouseCaptured() )
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+        if( m_canvas->IsMouseCaptured() )
+            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
         Block_Move( DC );
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_COPY:     /* Copy */
-        if( DrawPanel->IsMouseCaptured() )
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+        if( m_canvas->IsMouseCaptured() )
+            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
         Block_Duplicate( DC );
         GetScreen()->m_BlockLocate.ClearItemsList();
@@ -116,7 +116,7 @@ void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
         break;
     }
 
-    DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString, false );
+    m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString, false );
     GetScreen()->SetModify();
     GetScreen()->ClearBlockCommand();
 
@@ -131,7 +131,7 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
     bool nextcmd  = false;
     bool zoom_command = false;
 
-    if( DrawPanel->IsMouseCaptured() )
+    if( m_canvas->IsMouseCaptured() )
 
         switch( GetScreen()->m_BlockLocate.m_Command )
         {
@@ -139,14 +139,14 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
         case BLOCK_COPY:            /* Copy */
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             nextcmd = true;
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
-            DrawPanel->m_mouseCaptureCallback = DrawMovingBlockOutlines;
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
             break;
 
         case BLOCK_DELETE: /* Delete */
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
             Block_Delete( DC );
             break;
 
@@ -172,8 +172,8 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
     if( ! nextcmd )
     {
         GetScreen()->ClearBlockCommand();
-        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
-                                    false );
+        m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
+                                   false );
     }
 
     if( zoom_command )
@@ -257,10 +257,10 @@ void GERBVIEW_FRAME::Block_Move( wxDC* DC )
     wxPoint oldpos;
 
     oldpos = GetScreen()->GetCrossHairPosition();
-    DrawPanel->m_mouseCaptureCallback = NULL;
+    m_canvas->m_mouseCaptureCallback = NULL;
 
     GetScreen()->SetCrossHairPosition( oldpos );
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
     GetScreen()->SetModify();
     GetScreen()->m_BlockLocate.Normalize();
 
@@ -276,7 +276,7 @@ void GERBVIEW_FRAME::Block_Move( wxDC* DC )
             gerb_item->MoveAB( delta );
     }
 
-    DrawPanel->Refresh( true );
+    m_canvas->Refresh( true );
 }
 
 
@@ -286,10 +286,10 @@ void GERBVIEW_FRAME::Block_Duplicate( wxDC* DC )
     wxPoint oldpos;
 
     oldpos = GetScreen()->GetCrossHairPosition();
-    DrawPanel->m_mouseCaptureCallback = NULL;
+    m_canvas->m_mouseCaptureCallback = NULL;
 
     GetScreen()->SetCrossHairPosition( oldpos );
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
     GetScreen()->SetModify();
     GetScreen()->m_BlockLocate.Normalize();
 
@@ -297,9 +297,11 @@ void GERBVIEW_FRAME::Block_Duplicate( wxDC* DC )
 
     /* Copy items in block */
     BOARD_ITEM* item = GetBoard()->m_Drawings;
+
     for( ; item; item = item->Next() )
     {
         GERBER_DRAW_ITEM* gerb_item = (GERBER_DRAW_ITEM*) item;
+
         if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
         {
             /* this item must be duplicated */
@@ -309,5 +311,5 @@ void GERBVIEW_FRAME::Block_Duplicate( wxDC* DC )
         }
     }
 
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }

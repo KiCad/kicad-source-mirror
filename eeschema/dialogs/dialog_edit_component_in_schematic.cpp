@@ -29,7 +29,7 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     wxCHECK_RET( aComponent != NULL && aComponent->Type() == SCH_COMPONENT_T,
                  wxT( "Invalid component object pointer.  Bad Programmer!" )  );
 
-    DrawPanel->m_IgnoreMouseEvents = true;
+    m_canvas->m_IgnoreMouseEvents = true;
 
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC* dlg = new DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( this );
 
@@ -54,8 +54,8 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     // so it comes up wide enough next time.
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = dlg->GetSize();
 
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = false;
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->m_IgnoreMouseEvents = false;
     dlg->Destroy();
 }
 
@@ -283,7 +283,7 @@ Do you wish to remove this and all remaining undefined fields?" ),
 
     m_Parent->OnModify();
     m_Parent->GetScreen()->TestDanglingEnds();
-    m_Parent->DrawPanel->Refresh( true );
+    m_Parent->GetCanvas()->Refresh( true );
 
     EndModal( 0 );
 }
@@ -834,8 +834,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
     if( m_Cmp->m_Flags == 0 )
         m_Parent->SaveCopyInUndoList( m_Cmp, UR_CHANGED );
 
-    INSTALL_UNBUFFERED_DC( dc, m_Parent->DrawPanel );
-    m_Cmp->Draw( m_Parent->DrawPanel, &dc, wxPoint( 0, 0 ), g_XorMode );
+    INSTALL_UNBUFFERED_DC( dc, m_Parent->GetCanvas() );
+    m_Cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), g_XorMode );
 
     // Initialize field values to default values found in library:
     LIB_FIELD& refField = entry->GetReferenceField();
@@ -850,6 +850,6 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::SetInitCmp( wxCommandEvent& event )
 
     m_Parent->OnModify();
 
-    m_Cmp->Draw( m_Parent->DrawPanel, &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    m_Cmp->Draw( m_Parent->GetCanvas(), &dc, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     EndModal( 1 );
 }

@@ -386,8 +386,8 @@ EDA_RECT DRAWSEGMENT::GetBoundingBox() const
             if( ii == 0 )
                 p_end = pt;
 
-            bbox.m_Pos.x = MIN( bbox.m_Pos.x, pt.x );
-            bbox.m_Pos.y = MIN( bbox.m_Pos.y, pt.y );
+            bbox.SetX( MIN( bbox.GetX(), pt.x ) );
+            bbox.SetY( MIN( bbox.GetY(), pt.y ) );
             p_end.x   = MAX( p_end.x, pt.x );
             p_end.y   = MAX( p_end.y, pt.y );
         }

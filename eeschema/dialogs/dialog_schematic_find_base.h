@@ -48,6 +48,7 @@ class DIALOG_SCH_FIND_BASE : public wxDialog
 		wxCheckBox* m_checkAllFields;
 		wxCheckBox* m_checkAllPins;
 		wxCheckBox* m_checkCurrentSheetOnly;
+		wxCheckBox* m_checkReplaceReferences;
 		wxCheckBox* m_checkNoWarpCursor;
 		wxButton* m_buttonFind;
 		wxButton* m_buttonReplace;

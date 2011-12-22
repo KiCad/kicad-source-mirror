@@ -144,11 +144,11 @@ void SCH_SHEET_PIN::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
     }
 
     ClearFlags();
-    sheet->Draw( aFrame->DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    sheet->Draw( aFrame->GetCanvas(), aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
     // Make sure we don't call the abort move function.
-    aFrame->DrawPanel->SetMouseCapture( NULL, NULL );
-    aFrame->DrawPanel->EndMouseCapture();
+    aFrame->GetCanvas()->SetMouseCapture( NULL, NULL );
+    aFrame->GetCanvas()->EndMouseCapture();
 }
 
 

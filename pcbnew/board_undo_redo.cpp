@@ -569,7 +569,7 @@ void PCB_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             }
         }
 
-        item->m_Flags = 0;
+        item->ClearFlags();
 
         // see if we must rebuild ratsnets and pointers lists
         switch( item->Type() )
@@ -662,7 +662,7 @@ void PCB_EDIT_FRAME::GetBoardFromUndoList( wxCommandEvent& event )
     GetScreen()->PushCommandToRedoList( List );
 
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -690,7 +690,7 @@ void PCB_EDIT_FRAME::GetBoardFromRedoList( wxCommandEvent& event )
     GetScreen()->PushCommandToUndoList( List );
 
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 

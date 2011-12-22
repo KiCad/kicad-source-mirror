@@ -213,12 +213,12 @@ void MODULE::Copy( MODULE* aModule )
  */
 void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoint& aOffset )
 {
-    if( (m_Flags & DO_NOT_DRAW) || (m_Flags & IS_MOVED) )
+    if( (m_Flags & DO_NOT_DRAW) || (IsMoving()) )
         return;
 
     for( D_PAD* pad = m_Pads;  pad;  pad = pad->Next() )
     {
-        if( pad->m_Flags & IS_MOVED )
+        if( pad->IsMoving() )
             continue;
 
         pad->Draw( aPanel, aDC, aDrawMode, aOffset );
@@ -232,19 +232,19 @@ void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoi
     /* Draw graphic items */
     if( brd->IsElementVisible( MOD_REFERENCES_VISIBLE ) )
     {
-        if( !(m_Reference->m_Flags & IS_MOVED) )
+        if( !(m_Reference->IsMoving()) )
             m_Reference->Draw( aPanel, aDC, aDrawMode, aOffset );
     }
 
     if( brd->IsElementVisible( MOD_VALUES_VISIBLE ) )
     {
-        if( !(m_Value->m_Flags & IS_MOVED) )
+        if( !(m_Value->IsMoving()) )
             m_Value->Draw( aPanel, aDC, aDrawMode, aOffset );
     }
 
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
-        if( item->m_Flags & IS_MOVED )
+        if( item->IsMoving() )
             continue;
 
         switch( item->Type() )
@@ -303,7 +303,7 @@ EDA_RECT MODULE::GetFootPrintRect() const
 {
     EDA_RECT area;
 
-    area.m_Pos = m_Pos;
+    area.SetOrigin( m_Pos );
     area.SetEnd( m_Pos );
     area.Inflate( 50 );       // Give a min size
 
@@ -425,10 +425,10 @@ bool MODULE::HitTest( const wxPoint& aRefPos )
 
 bool MODULE::HitTest( EDA_RECT& aRefArea )
 {
-    if( m_BoundaryBox.m_Pos.x < aRefArea.GetX() )
+    if( m_BoundaryBox.GetX() < aRefArea.GetX() )
         return false;
 
-    if( m_BoundaryBox.m_Pos.y < aRefArea.GetY() )
+    if( m_BoundaryBox.GetY() < aRefArea.GetY() )
         return false;
 
     if( m_BoundaryBox.GetRight() > aRefArea.GetRight() )
@@ -576,8 +576,8 @@ void MODULE::Show( int nestLevel, std::ostream& os ) const
     " layer=\"" << board->GetLayerName( m_Layer ).mb_str() << '"' <<
     ">\n";
 
-    NestedSpace( nestLevel + 1, os ) <<
-    "<boundingBox" << m_BoundaryBox.m_Pos << m_BoundaryBox.m_Size << "/>\n";
+    NestedSpace( nestLevel + 1, os ) << "<boundingBox" << m_BoundaryBox.GetPosition()
+                                     << m_BoundaryBox.GetSize() << "/>\n";
 
     NestedSpace( nestLevel + 1, os ) << "<orientation tenths=\"" << m_Orient
                                      << "\"/>\n";

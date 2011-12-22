@@ -33,7 +33,7 @@ void FOOTPRINT_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     GetScreen()->PushCommandToUndoList( lastcmd );
     /* Clear current flags (which can be temporary set by a current edit command) */
     for( item = CopyItem->m_Drawings; item != NULL; item = item->Next() )
-        item->m_Flags = 0;
+        item->ClearFlags();
 
     /* Clear redo list, because after new save there is no redo to do */
     GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
@@ -73,7 +73,7 @@ void FOOTPRINT_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     SetCurItem( NULL );
 
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -102,5 +102,5 @@ void FOOTPRINT_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     SetCurItem( NULL );
 
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }

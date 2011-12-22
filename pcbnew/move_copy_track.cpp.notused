@@ -103,7 +103,7 @@ static void Exit_MoveTrack( WinEDA_DrawPanel* Panel, wxDC* DC )
         TRACK* Track = pt_drag->m_Segm;
         pt_drag->SetInitialValues();
         Track->SetState( EDIT, OFF );
-        Track->m_Flags = 0;
+        Track->ClearFlags();
         Track->Draw( Panel, DC, GR_OR );
     }
 
@@ -249,7 +249,7 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
     }
 
     // DRC Ok: place track segments
-    Track->m_Flags = 0;
+    Track->ClearFlags();
     Track->Draw( DrawPanel, DC, GR_OR );
 
     /* Tracage des segments dragges */
@@ -258,7 +258,7 @@ bool WinEDA_PcbFrame::PlaceDraggedTrackSegment( TRACK* Track, wxDC* DC )
     {
         Track = pt_drag->m_Segm;
         Track->SetState( EDIT, OFF );
-        Track->m_Flags = 0;
+        Track->ClearFlags();
         Track->Draw( DrawPanel, DC, GR_OR );
     }
 

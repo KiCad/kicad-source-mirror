@@ -173,7 +173,7 @@ void PCB_EDIT_FRAME::Autoroute( wxDC* DC, int mode )
     /* Construction of the track list for router. */
     Build_Work( GetBoard() );
 
-    // DisplayBoard(DrawPanel, DC);
+    // DisplayBoard(m_canvas, DC);
 
     if( Nb_Sides == TWO_SIDES )
         Solve( DC, TWO_SIDES ); /* double face */

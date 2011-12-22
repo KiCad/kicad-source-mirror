@@ -25,11 +25,11 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 {
     BOARD_ITEM* item = GetCurItem();
 
-    DrawPanel->CrossHairOff( DC );
+    m_canvas->CrossHairOff( DC );
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
     {
-        if( item && item->m_Flags ) // Move item command in progress
+        if( item && item->GetFlags() ) // Move item command in progress
         {
             switch( item->Type() )
             {
@@ -50,9 +50,9 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             {
                 wxString msg;
                 msg.Printf( wxT( "WinEDA_ModEditFrame::OnLeftClick err:Struct %d, m_Flag %X" ),
-                            item->Type(), item->m_Flags );
+                            item->Type(), item->GetFlags() );
                 DisplayError( this, msg );
-                item->m_Flags = 0;
+                item->ClearFlags();
                 break;
             }
             }
@@ -61,7 +61,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     item = GetCurItem();
 
-    if( !item || (item->m_Flags == 0) )
+    if( !item || (item->GetFlags() == 0) )
     {
         if( !wxGetKeyState( WXK_SHIFT ) && !wxGetKeyState( WXK_ALT )
            && !wxGetKeyState( WXK_CONTROL ) )
@@ -78,7 +78,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     case ID_MODEDIT_CIRCLE_TOOL:
     case ID_MODEDIT_ARC_TOOL:
     case ID_MODEDIT_LINE_TOOL:
-        if( !item || item->m_Flags == 0 )
+        if( !item || item->GetFlags() == 0 )
         {
             int shape = S_SEGMENT;
 
@@ -96,13 +96,13 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
             {
                 End_Edge_Module( (EDGE_MODULE*) item );
                 SetCurItem( NULL );
-                DrawPanel->Refresh();
+                m_canvas->Refresh();
             }
             else if( ( (EDGE_MODULE*) item )->GetShape() == S_ARC )
             {
                 End_Edge_Module( (EDGE_MODULE*) item );
                 SetCurItem( NULL );
-                DrawPanel->Refresh();
+                m_canvas->Refresh();
             }
             else if( ( (EDGE_MODULE*) item )->GetShape() == S_SEGMENT )
             {
@@ -116,8 +116,8 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_MODEDIT_DELETE_TOOL:
-        if( item == NULL ||           // No item to delete
-            (item->m_Flags != 0) )    // Item in edit, cannot delete it
+        if( item == NULL ||              // No item to delete
+            (item->GetFlags() != 0) )    // Item in edit, cannot delete it
             break;
 
         if( item->Type() != PCB_MODULE_T ) // Cannot delete the module itself
@@ -134,26 +134,26 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         MODULE* module = GetBoard()->m_Modules;
 
         if( module == NULL    // No module loaded
-            || (module->m_Flags != 0) )
+            || (module->GetFlags() != 0) )
             break;
 
-        module->m_Flags = 0;
+        module->ClearFlags();
         SaveCopyInUndoList( module, UR_MODEDIT );
         Place_Ancre( module );      // set the new relatives internal coordinates of items
         RedrawScreen( wxPoint( 0, 0 ), true );
 
         // Replace the module in position 0, to recalculate absolutes coordinates of items
         module->SetPosition( wxPoint( 0, 0 ) );
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         SetCurItem( NULL );
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
     }
     break;
 
     case ID_MODEDIT_PLACE_GRID_COORD:
-        DrawPanel->DrawGridAxis( DC, GR_XOR );
+        m_canvas->DrawGridAxis( DC, GR_XOR );
         GetScreen()->m_GridOrigin = GetScreen()->GetCrossHairPosition();
-        DrawPanel->DrawGridAxis( DC, GR_COPY );
+        m_canvas->DrawGridAxis( DC, GR_COPY );
         GetScreen()->SetModify();
         break;
 
@@ -176,10 +176,10 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     default:
         DisplayError( this, wxT( "FOOTPRINT_EDIT_FRAME::ProcessCommand error" ) );
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
     }
 
-    DrawPanel->CrossHairOn( DC );
+    m_canvas->CrossHairOn( DC );
 }
 
 
@@ -191,7 +191,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
     bool        blockActive = GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE;
 
     // Simple location of elements where possible.
-    if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+    if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
     {
         SetCurItem( item = ModeditLocateAndDisplay() );
     }
@@ -199,16 +199,18 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
     // End command in progress.
     if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
-        if( item && item->m_Flags )
-            AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ), KiBitmap( cancel_xpm ) );
+        if( item && item->GetFlags() )
+            AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ),
+                         KiBitmap( cancel_xpm ) );
         else
-            AddMenuItem( PopMenu, ID_POPUP_CLOSE_CURRENT_TOOL, _( "End Tool" ), KiBitmap( cancel_tool_xpm ) );
+            AddMenuItem( PopMenu, ID_POPUP_CLOSE_CURRENT_TOOL, _( "End Tool" ),
+                         KiBitmap( cancel_tool_xpm ) );
 
         PopMenu->AppendSeparator();
     }
     else
     {
-        if( (item && item->m_Flags) || blockActive )
+        if( (item && item->GetFlags()) || blockActive )
         {
             if( blockActive )  // Put block commands in list
             {
@@ -246,7 +248,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
     if( (item == NULL) || blockActive )
         return true;
 
-    int flags = item->m_Flags;
+    int flags = item->GetFlags();
 
     switch( item->Type() )
     {
@@ -255,7 +257,8 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         wxMenu* transform_choice = new wxMenu;
         AddMenuItem( transform_choice, ID_MODEDIT_MODULE_ROTATE, _( "Rotate" ),
                      KiBitmap( rotate_module_pos_xpm ) );
-        AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MIRROR, _( "Mirror" ), KiBitmap( mirror_h_xpm ) );
+        AddMenuItem( transform_choice, ID_MODEDIT_MODULE_MIRROR, _( "Mirror" ),
+                     KiBitmap( mirror_h_xpm ) );
         msg = AddHotkeyName( _( "Edit Module" ), g_Module_Editor_Hokeys_Descr, HK_EDIT_ITEM );
         AddMenuItem( PopMenu, ID_POPUP_PCB_EDIT_MODULE, msg, KiBitmap( edit_module_xpm ) );
         AddMenuItem( PopMenu, transform_choice, ID_MODEDIT_TRANSFORM_MODULE,
@@ -398,12 +401,12 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
-        if( ( item == NULL ) || ( item->m_Flags == 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
             item = ModeditLocateAndDisplay();
         }
 
-        if( ( item == NULL ) || ( item->m_Flags != 0 ) )
+        if( ( item == NULL ) || ( item->GetFlags() != 0 ) )
             break;
 
         // Item found
@@ -413,24 +416,24 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         {
         case PCB_PAD_T:
             InstallPadOptionsFrame( (D_PAD*) item );
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             break;
 
         case PCB_MODULE_T:
         {
             DIALOG_MODULE_MODULE_EDITOR dialog( this, (MODULE*) item );
             int ret = dialog.ShowModal();
-            GetScreen()->GetCurItem()->m_Flags = 0;
-            DrawPanel->MoveCursorToCrossHair();
+            GetScreen()->GetCurItem()->ClearFlags();
+            m_canvas->MoveCursorToCrossHair();
 
             if( ret > 0 )
-                DrawPanel->Refresh();
+                m_canvas->Refresh();
         }
         break;
 
         case PCB_MODULE_TEXT_T:
             InstallTextModOptionsFrame( (TEXTE_MODULE*) item, DC );
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             break;
 
         default:
@@ -445,7 +448,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
         {
             End_Edge_Module( (EDGE_MODULE*) item );
             SetCurItem( NULL );
-            DrawPanel->Refresh();
+            m_canvas->Refresh();
         }
 
         break;

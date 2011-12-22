@@ -222,7 +222,7 @@ public:
     int m_Flag;                        // used in some calculations. Had no
                                        // special meaning
 
-    std::vector <D_PAD*> m_ListPad;    // List of pads connected to this net
+    std::vector <D_PAD*> m_PadInNetList;    // List of pads connected to this net
 
     unsigned m_RatsnestStartIdx;       /* Starting point of ratsnests of this
                                         * net (included) in a general buffer of
@@ -369,7 +369,7 @@ public:
 
     void SetNet( int aNetCode ) { m_NetCode = aNetCode; }
 
-    int GetNodesCount() const { return m_ListPad.size(); }
+    int GetNodesCount() const { return m_PadInNetList.size(); }
 
     /**
      * Function GetNetname

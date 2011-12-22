@@ -1034,7 +1034,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
     if( !screen->m_IsPrinting & g_ShowPageLimits )
     {
         GRSetDrawMode( DC, GR_COPY );
-        GRRect( &DrawPanel->m_ClipBox, DC, 0, 0,
+        GRRect( &m_canvas->m_ClipBox, DC, 0, 0,
                 pageSize.x * scale, pageSize.y * scale, width,
                 g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
     }
@@ -1052,13 +1052,13 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
     yg   = pageSize.y - pageInfo.GetBottomMarginMils();
 
 #if defined(KICAD_GOST)
-    GRRect( &DrawPanel->m_ClipBox, DC, refx * scale, refy * scale,
+    GRRect( &m_canvas->m_ClipBox, DC, refx * scale, refy * scale,
             xg * scale, yg * scale, width, Color );
 
 #else
     for( ii = 0; ii < 2; ii++ )
     {
-        GRRect( &DrawPanel->m_ClipBox, DC, refx * scale, refy * scale,
+        GRRect( &m_canvas->m_ClipBox, DC, refx * scale, refy * scale,
                 xg * scale, yg * scale, width, Color );
 
         refx += GRID_REF_W; refy += GRID_REF_W;
@@ -1085,7 +1085,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_PODPIS_LU:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            DrawGraphicText( DrawPanel, DC, pos, Color,
+            DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_VERT, size,
                              GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_BOTTOM,
                              width, false, false );
@@ -1094,7 +1094,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_SEGMENT_LU:
             xg = pageInfo.GetLeftMargin() - WsItem->m_Endx;
             yg = pageSize.y - pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-            GRLine( &DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+            GRLine( &m_canvas->m_ClipBox, DC, pos.x, pos.y,
                     xg * scale, yg * scale, width, Color );
             break;
         }
@@ -1111,7 +1111,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_SEGMENT_LT:
             xg = pageInfo.GetLeftMarginMils() + WsItem->m_Endx;
             yg = pageInfo.GetBottomMarginMils() + WsItem->m_Endy;
-            GRLine( &DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+            GRLine( &m_canvas->m_ClipBox, DC, pos.x, pos.y,
                     xg * scale, yg * scale, width, Color );
             break;
         }
@@ -1134,11 +1134,10 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 
         if( ii < xg - PAS_REF / 2 )
         {
-            GRLine( &DrawPanel->m_ClipBox, DC, ii * scale, refy * scale,
+            GRLine( &m_canvas->m_ClipBox, DC, ii * scale, refy * scale,
                     ii * scale, ( refy + GRID_REF_W ) * scale, width, Color );
         }
-
-        DrawGraphicText( DrawPanel, DC,
+        DrawGraphicText( m_canvas, DC,
                          wxPoint( ( ii - gxpas / 2 ) * scale,
                                   ( refy + GRID_REF_W / 2 ) * scale ),
                          Color, Line, TEXT_ORIENT_HORIZ, size_ref,
@@ -1147,11 +1146,10 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 
         if( ii < xg - PAS_REF / 2 )
         {
-            GRLine( &DrawPanel->m_ClipBox, DC, ii * scale, yg * scale,
+            GRLine( &m_canvas->m_ClipBox, DC, ii * scale, yg * scale,
                     ii * scale, ( yg - GRID_REF_W ) * scale, width, Color );
         }
-
-        DrawGraphicText( DrawPanel, DC,
+        DrawGraphicText( m_canvas, DC,
                          wxPoint( ( ii - gxpas / 2 ) * scale,
                                   ( yg - GRID_REF_W / 2) * scale ),
                          Color, Line, TEXT_ORIENT_HORIZ, size_ref,
@@ -1171,11 +1169,11 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 
         if( ii < yg - PAS_REF / 2 )
         {
-            GRLine( &DrawPanel->m_ClipBox, DC, refx * scale, ii * scale,
+            GRLine( &m_canvas->m_ClipBox, DC, refx * scale, ii * scale,
                     ( refx + GRID_REF_W ) * scale, ii * scale, width, Color );
         }
 
-        DrawGraphicText( DrawPanel, DC,
+        DrawGraphicText( m_canvas, DC,
                          wxPoint( ( refx + GRID_REF_W / 2 ) * scale,
                                   ( ii - gypas / 2 ) * scale ),
                          Color, Line, TEXT_ORIENT_HORIZ, size_ref,
@@ -1184,11 +1182,10 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 
         if( ii < yg - PAS_REF / 2 )
         {
-            GRLine( &DrawPanel->m_ClipBox, DC, xg * scale, ii * scale,
+            GRLine( &m_canvas->m_ClipBox, DC, xg * scale, ii * scale,
                     ( xg - GRID_REF_W ) * scale, ii * scale, width, Color );
         }
-
-        DrawGraphicText( DrawPanel, DC,
+        DrawGraphicText( m_canvas, DC,
                          wxPoint( ( xg - GRID_REF_W / 2 ) * scale,
                                   ( ii - gxpas / 2 ) * scale ),
                          Color, Line, TEXT_ORIENT_HORIZ, size_ref,
@@ -1224,8 +1221,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             case WS_PODPIS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-
-                DrawGraphicText( DrawPanel, DC, pos, Color,
+                DrawGraphicText( m_canvas, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  width, false, false );
@@ -1239,7 +1235,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                     msg = WsItem->m_Legende;
                 if( screen->m_NumberOfScreen > 1 )
                     msg << screen->m_ScreenNumber;
-                DrawGraphicText( DrawPanel, DC, pos, Color, msg,
+                DrawGraphicText( m_canvas, DC, pos, Color, msg,
                                  TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
                                  GR_TEXT_VJUSTIFY_CENTER, width, false, false );
                 break;
@@ -1248,7 +1244,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
                 msg << screen->m_NumberOfScreen;
-                DrawGraphicText( DrawPanel, DC, pos, Color, msg,
+                DrawGraphicText( m_canvas, DC, pos, Color, msg,
                                  TEXT_ORIENT_HORIZ, size, GR_TEXT_HJUSTIFY_LEFT,
                                  GR_TEXT_VJUSTIFY_CENTER, width, false, false );
                 break;
@@ -1257,7 +1253,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 msg = screen->m_Company;
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                    DrawGraphicText( m_canvas, DC, pos, Color,
                                      msg, TEXT_ORIENT_HORIZ, size1_5,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                      width,
@@ -1269,7 +1265,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 msg = screen->m_Title;
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                    DrawGraphicText( m_canvas, DC, pos, Color,
                                      msg, TEXT_ORIENT_HORIZ, size1_5,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                      width,
@@ -1281,14 +1277,14 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 msg = screen->m_Commentaire1;
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                    DrawGraphicText( m_canvas, DC, pos, Color,
                                      msg, TEXT_ORIENT_HORIZ, size3,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                      width,
                                      false, false );
                     pos.x = (pageInfo.GetLeftMarginMils() + 1260) * scale;
                     pos.y = (pageInfo.GetTopMarginMils() + 270) * scale;
-                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                    DrawGraphicText( m_canvas, DC, pos, Color,
                                      msg, 1800, size2,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                      width,
@@ -1300,7 +1296,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 msg = screen->m_Commentaire2;
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                    DrawGraphicText( m_canvas, DC, pos, Color,
                                      msg, TEXT_ORIENT_HORIZ, size,
                                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                      width, false, false );
@@ -1311,7 +1307,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 msg = screen->m_Commentaire3;
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                    DrawGraphicText( m_canvas, DC, pos, Color,
                                      msg, TEXT_ORIENT_HORIZ, size,
                                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                      width, false, false );
@@ -1322,7 +1318,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 msg = screen->m_Commentaire4;
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                    DrawGraphicText( m_canvas, DC, pos, Color,
                                      msg, TEXT_ORIENT_HORIZ, size,
                                      GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                      width, false, false );
@@ -1340,7 +1336,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                      pageInfo.GetRightMarginMils() - WsItem->m_Endx;
                 yg = pageSize.y -
                      pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-                GRLine( &DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+                GRLine( &m_canvas->m_ClipBox, DC, pos.x, pos.y,
                         xg * scale, yg * scale, width, Color );
                 break;
             }
@@ -1361,14 +1357,14 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 msg = screen->m_Commentaire1;
                 if( !msg.IsEmpty() )
                 {
-                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                    DrawGraphicText( m_canvas, DC, pos, Color,
                                      msg, TEXT_ORIENT_HORIZ, size3,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                      width,
                                      false, false );
                     pos.x = (pageInfo.GetLeftMarginMils() + 1260) * scale;
                     pos.y = (pageInfo.GetTopMarginMils() + 270) * scale;
-                    DrawGraphicText( DrawPanel, DC, pos, Color,
+                    DrawGraphicText( m_canvas, DC, pos, Color,
                                      msg, 1800, size2,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                      width,
@@ -1379,7 +1375,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             case WS_PODPIS_D:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-                DrawGraphicText( DrawPanel, DC, pos, Color,
+                DrawGraphicText( m_canvas, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  width,
@@ -1390,7 +1386,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
                 msg << screen->m_ScreenNumber;
-                DrawGraphicText( DrawPanel, DC, pos, Color,
+                DrawGraphicText( m_canvas, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  width, false, false );
@@ -1404,7 +1400,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                      pageInfo.GetRightMarginMils() - WsItem->m_Endx;
                 yg = pageSize.y -
                      pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-                GRLine( &DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+                GRLine( &m_canvas->m_ClipBox, DC, pos.x, pos.y,
                         xg * scale, yg * scale, width, Color );
                 break;
             }
@@ -1428,7 +1424,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
             msg += screen->m_Date;
-            DrawGraphicText( DrawPanel, DC, pos, Color,
+            DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                              width, false, true );
@@ -1438,7 +1434,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
             msg += screen->m_Revision;
-            DrawGraphicText( DrawPanel, DC, pos, Color,
+            DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                              GetPenSizeForBold( MIN( size.x, size.y ) ),
@@ -1450,7 +1446,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 msg = WsItem->m_Legende;
             msg += g_ProductName + wxGetApp().GetAppName();
             msg += wxT( " " ) + GetBuildVersion();
-            DrawGraphicText( DrawPanel, DC, pos, Color,
+            DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                              width, false, false );
@@ -1460,7 +1456,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
             msg += pageInfo.GetType();
-            DrawGraphicText( DrawPanel, DC, pos, Color,
+            DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                              width, false, false );
@@ -1471,7 +1467,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
             msg << screen->m_ScreenNumber << wxT( "/" ) << screen->m_NumberOfScreen;
-            DrawGraphicText( DrawPanel, DC, pos, Color,
+            DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                              width, false, false );
@@ -1486,7 +1482,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 msg = WsItem->m_Legende;
 
             msg << fname << wxT( "." ) << fext;
-            DrawGraphicText( DrawPanel, DC, pos, Color,
+            DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                              width, false, false );
@@ -1497,7 +1493,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
             msg += GetScreenDesc();
-            DrawGraphicText( DrawPanel, DC, pos, Color,
+            DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                              width, false, false );
@@ -1510,7 +1506,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             msg += screen->m_Company;
             if( !msg.IsEmpty() )
             {
-                DrawGraphicText( DrawPanel, DC, pos, Color,
+                DrawGraphicText( m_canvas, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  GetPenSizeForBold( MIN( size.x, size.y ) ),
@@ -1523,7 +1519,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
             msg += screen->m_Title;
-            DrawGraphicText( DrawPanel, DC, pos, Color,
+            DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                              GetPenSizeForBold( MIN( size.x, size.y ) ),
@@ -1536,7 +1532,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             msg += screen->m_Commentaire1;
             if( !msg.IsEmpty() )
             {
-                DrawGraphicText( DrawPanel, DC, pos, Color,
+                DrawGraphicText( m_canvas, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  width, false, false );
@@ -1550,7 +1546,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             msg += screen->m_Commentaire2;
             if( !msg.IsEmpty() )
             {
-                DrawGraphicText( DrawPanel, DC, pos, Color,
+                DrawGraphicText( m_canvas, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  width, false, false );
@@ -1564,7 +1560,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             msg += screen->m_Commentaire3;
             if( !msg.IsEmpty() )
             {
-                DrawGraphicText( DrawPanel, DC, pos, Color,
+                DrawGraphicText( m_canvas, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  width, false, false );
@@ -1578,7 +1574,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             msg += screen->m_Commentaire4;
             if( !msg.IsEmpty() )
             {
-                DrawGraphicText( DrawPanel, DC, pos, Color,
+                DrawGraphicText( m_canvas, DC, pos, Color,
                                  msg, TEXT_ORIENT_HORIZ, size,
                                  GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
                                  width, false, false );
@@ -1601,7 +1597,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                  GRID_REF_W - pageInfo.GetRightMarginMils() - WsItem->m_Endx;
             yg = pageSize.y -
                  GRID_REF_W - pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-            GRLine( &DrawPanel->m_ClipBox, DC, pos.x, pos.y,
+            GRLine( &m_canvas->m_ClipBox, DC, pos.x, pos.y,
                     xg * scale, yg * scale, width, Color );
             break;
         }

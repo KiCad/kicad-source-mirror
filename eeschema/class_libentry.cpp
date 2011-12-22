@@ -293,7 +293,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
             if( drawItem.m_Fill != FILLED_WITH_BG_BODYCOLOR )
                 continue;
 
-            if( aOnlySelected && drawItem.m_Selected == 0 )
+            if( aOnlySelected && !drawItem.IsSelected() )
                 continue;
 
             // Do not draw an item while moving (the cursor handler does that)
@@ -323,7 +323,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
 
     BOOST_FOREACH( LIB_ITEM& drawItem, drawings )
     {
-        if( aOnlySelected && drawItem.m_Selected == 0 )
+        if( aOnlySelected && !drawItem.IsSelected() )
             continue;
 
         // Do not draw an item while moving (the cursor handler does that)
@@ -1199,7 +1199,6 @@ void LIB_COMPONENT::ClearStatus()
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
         item.m_Flags = 0;
-        item.m_Selected = 0;
     }
 }
 
@@ -1210,7 +1209,7 @@ int LIB_COMPONENT::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool a
 
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
-        item.m_Selected = 0;
+        item.ClearFlags( SELECTED );
 
         if( ( item.m_Unit && item.m_Unit != aUnit )
             || ( item.m_Convert && item.m_Convert != aConvert ) )
@@ -1226,7 +1225,7 @@ int LIB_COMPONENT::SelectItems( EDA_RECT& aRect, int aUnit, int aConvert, bool a
 
         if( item.Inside( aRect ) )
         {
-            item.m_Selected = IS_SELECTED;
+            item.SetFlags( SELECTED );
             itemCount++;
         }
     }
@@ -1239,11 +1238,11 @@ void LIB_COMPONENT::MoveSelectedItems( const wxPoint& aOffset )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
-        if( item.m_Selected == 0 )
+        if( !item.IsSelected() )
             continue;
 
         item.SetOffset( aOffset );
-        item.m_Flags = item.m_Selected = 0;
+        item.m_Flags = 0;
     }
 
     drawings.sort();
@@ -1253,7 +1252,9 @@ void LIB_COMPONENT::MoveSelectedItems( const wxPoint& aOffset )
 void LIB_COMPONENT::ClearSelectedItems()
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
-        item.m_Flags = item.m_Selected = 0;
+    {
+        item.m_Flags = 0;
+    }
 }
 
 
@@ -1272,13 +1273,14 @@ void LIB_COMPONENT::DeleteSelectedItems()
         {
 #if 0   // Set to 1 to allows fields deletion on block delete or other global command
             LIB_FIELD& field = ( LIB_FIELD& ) *item;
+
             if( (field.GetId() == REFERENCE) || (field.m_FieldId == VALUE) ||
                 (field.m_Attributs & TEXT_NO_VISIBLE) )
 #endif
-                item->m_Selected = 0;
+                item->ClearFlags( SELECTED );
         }
 
-        if( item->m_Selected == 0 )
+        if( !item->IsSelected() )
             item++;
         else
             item = drawings.erase( item );
@@ -1298,17 +1300,18 @@ void LIB_COMPONENT::CopySelectedItems( const wxPoint& aOffset )
     for( unsigned ii = 0; ii < icnt; ii++  )
     {
         LIB_ITEM& item = drawings[ii];
+
         // We *do not* copy fields because they are unique for the whole component
         // so skip them (do not duplicate) if they are flagged selected.
         if( item.Type() == LIB_FIELD_T )
-            item.m_Selected = 0;
+            item.ClearFlags( SELECTED );
 
-        if( item.m_Selected == 0 )
+        if( !item.IsSelected() )
             continue;
 
-        item.m_Selected = 0;
+        item.ClearFlags( SELECTED );
         LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
-        newItem->m_Selected = IS_SELECTED;
+        newItem->SetFlags( SELECTED );
         drawings.push_back( newItem );
     }
 
@@ -1322,11 +1325,11 @@ void LIB_COMPONENT::MirrorSelectedItemsH( const wxPoint& aCenter )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
-        if( item.m_Selected == 0 )
+        if( !item.IsSelected() )
             continue;
 
         item.MirrorHorizontal( aCenter );
-        item.m_Flags = item.m_Selected = 0;
+        item.m_Flags = 0;
     }
 
     drawings.sort();
@@ -1336,11 +1339,11 @@ void LIB_COMPONENT::MirrorSelectedItemsV( const wxPoint& aCenter )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
-        if( item.m_Selected == 0 )
+        if( !item.IsSelected() )
             continue;
 
         item.MirrorVertical( aCenter );
-        item.m_Flags = item.m_Selected = 0;
+        item.m_Flags = 0;
     }
 
     drawings.sort();
@@ -1350,11 +1353,11 @@ void LIB_COMPONENT::RotateSelectedItems( const wxPoint& aCenter )
 {
     BOOST_FOREACH( LIB_ITEM& item, drawings )
     {
-        if( item.m_Selected == 0 )
+        if( !item.IsSelected() )
             continue;
 
         item.Rotate( aCenter );
-        item.m_Flags = item.m_Selected = 0;
+        item.m_Flags = 0;
     }
 
     drawings.sort();

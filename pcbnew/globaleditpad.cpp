@@ -203,9 +203,9 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         /* Erase module on screen */
         if( aDraw )
         {
-            Module->m_Flags |= DO_NOT_DRAW;
-            DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
-            Module->m_Flags &= ~DO_NOT_DRAW;
+            Module->SetFlags( DO_NOT_DRAW );
+            m_canvas->RefreshDrawingRect( Module->GetBoundingBox() );
+            Module->ClearFlags( DO_NOT_DRAW );
         }
 
         D_PAD* pt_pad = (D_PAD*) Module->m_Pads;
@@ -279,7 +279,7 @@ void PCB_BASE_FRAME::Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw )
         Module->CalculateBoundingBox();
 
         if( aDraw )
-            DrawPanel->RefreshDrawingRect( Module->GetBoundingBox() );
+            m_canvas->RefreshDrawingRect( Module->GetBoundingBox() );
     }
 
     OnModify();

@@ -62,8 +62,8 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     SetShowDeMorgan( m_component->HasConversion() );
     DisplayLibInfos();
     DisplayCmpDoc();
-    OnModify( );
-    DrawPanel->Refresh();
+    OnModify();
+    m_canvas->Refresh();
 }
 
 
@@ -99,5 +99,5 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     DisplayLibInfos();
     DisplayCmpDoc();
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }

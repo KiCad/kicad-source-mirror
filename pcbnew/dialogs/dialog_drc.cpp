@@ -556,13 +556,11 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 
 void DIALOG_DRC_CONTROL::RedrawDrawPanel()
 {
-    m_Parent->DrawPanel->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 }
 
 
-/*********************************************************/
 void DIALOG_DRC_CONTROL::DelDRCMarkers()
-/*********************************************************/
 {
     m_Parent->SetCurItem( NULL );           // clear curr item, because it could be a DRC marker
     m_ClearanceListBox->DeleteAllItems();
@@ -611,6 +609,7 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
     if( curTab == 0 )
     {
         selectedIndex = m_ClearanceListBox->GetSelection();
+
         if( selectedIndex != wxNOT_FOUND )
         {
             m_ClearanceListBox->DeleteItem( selectedIndex );
@@ -622,6 +621,7 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
     else if( curTab == 1 )
     {
         selectedIndex = m_UnconnectedListBox->GetSelection();
+
         if( selectedIndex != wxNOT_FOUND )
         {
             m_UnconnectedListBox->DeleteItem( selectedIndex );

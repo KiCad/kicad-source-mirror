@@ -501,7 +501,7 @@ void DRC::testUnconnected()
 {
     if( (m_pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
     {
-        wxClientDC dc( m_mainWindow->DrawPanel );
+        wxClientDC dc( m_mainWindow->GetCanvas() );
         m_mainWindow->Compile_Ratsnest( &dc, true );
     }
 

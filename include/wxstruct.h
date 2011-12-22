@@ -366,14 +366,14 @@ class EDA_DRAW_FRAME : public EDA_BASE_FRAME
     ///< Id of active button on the vertical toolbar.
     int m_toolId;
 
-public:
-    EDA_DRAW_PANEL*   DrawPanel;            // Draw area
-
 protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
     int         m_LastGridSizeId;
     bool        m_DrawGrid;                 // hide/Show grid
     int         m_GridColor;                // Grid color
+
+    /// The area to draw on.
+    EDA_DRAW_PANEL* m_canvas;
 
     /// Internal units count that is equivalent to 1 inch.  Set to 1000 (0.001") for
     /// schematic drawing and 10000 (0.0001") for PCB drawing.
@@ -381,7 +381,7 @@ protected:
 
     /// Tool ID of previously active draw tool bar button.
     int m_lastDrawToolId;
-                                            // on the vertical toolbar
+
     /// The shape of the KiCad cursor.  The default value (0) is the normal cross
     /// hair cursor.  Set to non-zero value to draw the full screen cursor.
     /// @note This is not the system mouse cursor.
@@ -472,6 +472,8 @@ public:
     void SetShowBorderAndTitleBlock( bool aShow ) { m_showBorderAndTitleBlock = aShow; }
 
     int GetInternalUnits() const { return m_internalUnits; }
+
+    EDA_DRAW_PANEL* GetCanvas() { return m_canvas; }
 
     virtual wxString GetScreenDesc();
 

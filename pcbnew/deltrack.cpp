@@ -57,7 +57,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             D( g_CurrentTrackList.VerifyListIntegrity(); )
 
             // Delete the current trace
-            ShowNewTrackWhenMovingCursor( DrawPanel, DC, wxDefaultPosition, false );
+            ShowNewTrackWhenMovingCursor( m_canvas, DC, wxDefaultPosition, false );
 
             // delete the most recently entered
             delete g_CurrentTrackList.PopBack();
@@ -100,7 +100,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
 
             if( g_CurrentTrackList.GetCount() == 0 )
             {
-                DrawPanel->SetMouseCapture( NULL, NULL );
+                m_canvas->SetMouseCapture( NULL, NULL );
 
                 if( GetBoard()->IsHighLightNetON() )
                     HighLight( DC );
@@ -110,8 +110,8 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             }
             else
             {
-                if( DrawPanel->IsMouseCaptured() )
-                    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+                if( m_canvas->IsMouseCaptured() )
+                    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
                 return g_CurrentTrackSegment;
             }
@@ -126,7 +126,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
     container->Remove( aTrack );
 
     // redraw the area where the track was
-    DrawPanel->RefreshDrawingRect( aTrack->GetBoundingBox() );
+    m_canvas->RefreshDrawingRect( aTrack->GetBoundingBox() );
 
     SaveCopyInUndoList( aTrack, UR_DELETED );
     OnModify();
@@ -176,7 +176,7 @@ void PCB_EDIT_FRAME::Delete_net( wxDC* DC, TRACK* aTrack )
         GetBoard()->m_Track.Remove( segm );
 
         // redraw the area where the track was
-        DrawPanel->RefreshDrawingRect( segm->GetBoundingBox() );
+        m_canvas->RefreshDrawingRect( segm->GetBoundingBox() );
         picker.m_PickedItem     = segm;
         picker.m_PickedItemType = segm->Type();
         itemsList.PushItem( picker );
@@ -225,7 +225,7 @@ void PCB_EDIT_FRAME::Remove_One_Track( wxDC* DC, TRACK* pt_segm )
         GetBoard()->m_Track.Remove( tracksegment );
 
         // redraw the area where the track was
-        DrawPanel->RefreshDrawingRect( tracksegment->GetBoundingBox() );
+        m_canvas->RefreshDrawingRect( tracksegment->GetBoundingBox() );
         picker.m_PickedItem     = tracksegment;
         picker.m_PickedItemType = tracksegment->Type();
         itemsList.PushItem( picker );

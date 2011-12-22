@@ -29,8 +29,8 @@ void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
     DIALOG_PAGES_SETTINGS frame( this );
     int diag = frame.ShowModal();
 
-    if( DrawPanel && diag )
-        DrawPanel->Refresh();
+    if( m_canvas && diag )
+        m_canvas->Refresh();
 }
 
 
@@ -257,7 +257,7 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
 #endif
 
     m_Screen->SetModify();
-    m_Parent->DrawPanel->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 }
 
 

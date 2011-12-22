@@ -484,12 +484,12 @@ void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     {
         // fix size and position of the new sheet
         // using the last values set by the m_mouseCaptureCallback function
-        frame->DrawPanel->SetMouseCapture( NULL, NULL );
+        frame->GetCanvas()->SetMouseCapture( NULL, NULL );
 
         if( !frame->EditSheet( this, DC ) )
         {
             frame->GetScreen()->SetCurItem( NULL );
-            Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+            Draw( frame->GetCanvas(), DC, wxPoint( 0, 0 ), g_XorMode );
             delete this;
             return;
         }
@@ -649,7 +649,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     /* Draw text : SheetLabel */
     BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_pins )
     {
-        if( !( sheetPin.m_Flags & IS_MOVED ) )
+        if( !sheetPin.IsMoving() )
             sheetPin.Draw( aPanel, aDC, aOffset, aDrawMode, aColor );
     }
 }
@@ -676,7 +676,7 @@ EDA_RECT SCH_SHEET::GetBoundingBox() const
     end += m_pos;
 
     // Move upper and lower limits to include texts:
-    box.m_Pos.y  -= wxRound( m_sheetNameSize * 1.3 ) + 8;
+    box.SetY( box.GetY() - ( wxRound( m_sheetNameSize * 1.3 ) + 8 ) );
     end.y += wxRound( m_fileNameSize * 1.3 ) + 8;
 
     box.SetEnd( end );
@@ -955,7 +955,7 @@ bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
 }
 
 
-bool SCH_SHEET::Replace( wxFindReplaceData& aSearchData )
+bool SCH_SHEET::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     return EDA_ITEM::Replace( aSearchData, m_name );
 }

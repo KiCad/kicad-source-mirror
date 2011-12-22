@@ -89,7 +89,7 @@ void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
         m_lastLibImportPath = fn.GetPath();
         DisplayLibInfos();
         GetScreen()->ClearUndoRedoList();
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
     }
 
     delete LibTmp;

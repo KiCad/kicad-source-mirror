@@ -1210,8 +1210,11 @@ public:
      * those pointers are only references to pads which are owned by the BOARD
      * through other links.
      * @param aVector Where to put the pad pointers.
+     * @param aNetCode = the netcode filter:
+     *                  = -1 to build the full pad list.
+     *                  = a given netcode to build the pad list relative to the given net
      */
-    void GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector );
+    void GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNetCode = -1 );
 
     /**
      * Function GetTrace

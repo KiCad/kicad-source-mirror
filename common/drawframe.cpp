@@ -94,7 +94,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_zoomSelectBox       = NULL;
     m_HotkeysZoomAndGridList = NULL;
 
-    DrawPanel             = NULL;
+    m_canvas              = NULL;
     m_messagePanel        = NULL;
     m_currentScreen       = NULL;
     m_toolId              = ID_NO_TOOL_SELECTED;
@@ -142,7 +142,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
     m_FramePos.x   = m_FramePos.y = 0;
     m_FrameSize.y -= m_MsgFrameHeight;
 
-    DrawPanel = new EDA_DRAW_PANEL( this, -1, wxPoint( 0, 0 ), m_FrameSize );
+    m_canvas = new EDA_DRAW_PANEL( this, -1, wxPoint( 0, 0 ), m_FrameSize );
     m_messagePanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_FrameSize.y ),
                                          wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
 
@@ -182,8 +182,8 @@ void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
 {
     m_FrameIsActive = event.GetActive();
 
-    if( DrawPanel )
-        DrawPanel->m_CanStartBlock = -1;
+    if( m_canvas )
+        m_canvas->m_CanStartBlock = -1;
 
     event.Skip();   // required under wxMAC
 }
@@ -191,8 +191,8 @@ void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
 
 void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 {
-    if( DrawPanel )
-        DrawPanel->m_CanStartBlock = -1;
+    if( m_canvas )
+        m_canvas->m_CanStartBlock = -1;
 
     event.Skip();
 }
@@ -201,7 +201,7 @@ void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {
     SetGridVisibility( !IsGridVisible() );
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -222,10 +222,10 @@ void EDA_DRAW_FRAME::OnSelectUnits( wxCommandEvent& aEvent )
 
 void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
 {
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
-    DrawPanel->CrossHairOff( &dc );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
+    m_canvas->CrossHairOff( &dc );
     m_cursorShape = !m_cursorShape;
-    DrawPanel->CrossHairOn( &dc );
+    m_canvas->CrossHairOn( &dc );
 }
 
 
@@ -445,9 +445,9 @@ void EDA_DRAW_FRAME::SetToolID( int aId, int aCursor, const wxString& aToolMsg )
     // Keep default cursor in toolbars
     SetCursor( wxNullCursor );
 
-    // Change DrawPanel cursor if requested.
-    if( DrawPanel && aCursor >= 0 )
-        DrawPanel->SetCurrentCursor( aCursor );
+    // Change m_canvas cursor if requested.
+    if( m_canvas && aCursor >= 0 )
+        m_canvas->SetCurrentCursor( aCursor );
 
     DisplayToolMsg( aToolMsg );
 
@@ -486,7 +486,7 @@ int EDA_DRAW_FRAME::ReturnBlockCommand( int key )
 void EDA_DRAW_FRAME::InitBlockPasteInfos()
 {
     GetScreen()->m_BlockLocate.ClearItemsList();
-    DrawPanel->m_mouseCaptureCallback = NULL;
+    m_canvas->m_mouseCaptureCallback = NULL;
 }
 
 
@@ -508,7 +508,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
     BASE_SCREEN* screen = GetScreen();
     bool noRefresh = true;
 
-    if( screen == NULL || DrawPanel == NULL )
+    if( screen == NULL || m_canvas == NULL )
         return;
 
     double scalar = screen->GetScalingFactor();
@@ -518,7 +518,7 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
 
     // Calculate the portion of the drawing that can be displayed in the
     // client area at the current zoom level.
-    clientSize = DrawPanel->GetClientSize();
+    clientSize = m_canvas->GetClientSize();
 
     // The logical size of the client window.
     logicalClientSize.x = wxRound( (double) clientSize.x / scalar );
@@ -693,12 +693,12 @@ SetScrollbars(%d, %d, %d, %d, %d, %d)" ),
                 screen->m_ScrollbarNumber.x, screen->m_ScrollbarNumber.y,
                 screen->m_ScrollbarPos.x, screen->m_ScrollbarPos.y );
 
-    DrawPanel->SetScrollbars( screen->m_ScrollPixelsPerUnitX,
-                              screen->m_ScrollPixelsPerUnitY,
-                              screen->m_ScrollbarNumber.x,
-                              screen->m_ScrollbarNumber.y,
-                              screen->m_ScrollbarPos.x,
-                              screen->m_ScrollbarPos.y, noRefresh );
+    m_canvas->SetScrollbars( screen->m_ScrollPixelsPerUnitX,
+                             screen->m_ScrollPixelsPerUnitY,
+                             screen->m_ScrollbarNumber.x,
+                             screen->m_ScrollbarNumber.y,
+                             screen->m_ScrollbarPos.x,
+                             screen->m_ScrollbarPos.y, noRefresh );
 }
 
 

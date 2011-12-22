@@ -32,13 +32,13 @@ void PCB_EDIT_FRAME::Start_Move_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
     if( drawitem == NULL )
         return;
 
-    drawitem->Draw( DrawPanel, DC, GR_XOR );
-    drawitem->m_Flags |= IS_MOVED;
+    drawitem->Draw( m_canvas, DC, GR_XOR );
+    drawitem->SetFlags( IS_MOVED );
     s_InitialPosition = s_LastPosition = GetScreen()->GetCrossHairPosition();
     drawitem->DisplayInfo( this );
-    DrawPanel->SetMouseCapture( Move_Segment, Abort_EditEdge );
+    m_canvas->SetMouseCapture( Move_Segment, Abort_EditEdge );
     SetCurItem( drawitem );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 }
 
 
@@ -50,10 +50,10 @@ void PCB_EDIT_FRAME::Place_DrawItem( DRAWSEGMENT* drawitem, wxDC* DC )
     if( drawitem == NULL )
         return;
 
-    drawitem->m_Flags = 0;
+    drawitem->ClearFlags();
     SaveCopyInUndoList(drawitem, UR_MOVED, s_LastPosition - s_InitialPosition);
-    drawitem->Draw( DrawPanel, DC, GR_OR );
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    drawitem->Draw( m_canvas, DC, GR_OR );
+    m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
     OnModify();
 }
@@ -96,7 +96,7 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     {
         /* Delete current segment. */
         DisplayOpt.DisplayDrawItems = SKETCH;
-        Segment->Draw( DrawPanel, DC, GR_XOR );
+        Segment->Draw( m_canvas, DC, GR_XOR );
         PtStruct = Segment->Back();
         Segment ->DeleteStructure();
 
@@ -106,10 +106,10 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         DisplayOpt.DisplayDrawItems = track_fill_copy;
         SetCurItem( NULL );
     }
-    else if( Segment->m_Flags == 0 )
+    else if( Segment->GetFlags() == 0 )
     {
-        Segment->Draw( DrawPanel, DC, GR_XOR );
-        Segment->m_Flags = 0;
+        Segment->Draw( m_canvas, DC, GR_XOR );
+        Segment->ClearFlags();
         SaveCopyInUndoList(Segment, UR_DELETED);
         Segment->UnLink();
         SetCurItem( NULL );
@@ -195,7 +195,7 @@ static void Abort_EditEdge( EDA_DRAW_PANEL* Panel, wxDC* DC )
         Panel->GetScreen()->SetCrossHairPosition( s_InitialPosition );
         Panel->m_mouseCaptureCallback( Panel, DC, wxDefaultPosition, true );
         Panel->GetScreen()->SetCrossHairPosition( pos );
-        Segment->m_Flags = 0;
+        Segment->ClearFlags();
         Segment->Draw( Panel, DC, GR_OR );
     }
 
@@ -221,14 +221,14 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape,
     if( Segment == NULL )        /* Create new trace. */
     {
         SetCurItem( Segment = new DRAWSEGMENT( GetBoard() ) );
-        Segment->m_Flags = IS_NEW;
+        Segment->SetFlags( IS_NEW );
         Segment->SetLayer( getActiveLayer() );
         Segment->SetWidth( s_large );
         Segment->SetShape( shape );
         Segment->SetAngle( 900 );
         Segment->SetStart( GetScreen()->GetCrossHairPosition() );
         Segment->SetEnd( GetScreen()->GetCrossHairPosition() );
-        DrawPanel->SetMouseCapture( DrawSegment, Abort_EditEdge );
+        m_canvas->SetMouseCapture( DrawSegment, Abort_EditEdge );
     }
     else    /* The ending point ccordinate Segment->m_End was updated by he function
              * DrawSegment() called on a move mouse event
@@ -243,15 +243,15 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape,
                 GetBoard()->Add( Segment );
 
                 OnModify();
-                Segment->m_Flags = 0;
+                Segment->ClearFlags();
 
-                Segment->Draw( DrawPanel, DC, GR_OR );
+                Segment->Draw( m_canvas, DC, GR_OR );
 
                 DrawItem = Segment;
 
                 SetCurItem( Segment = new DRAWSEGMENT( GetBoard() ) );
 
-                Segment->m_Flags = IS_NEW;
+                Segment->SetFlags( IS_NEW );
                 Segment->SetLayer( DrawItem->GetLayer() );
                 Segment->SetWidth( s_large );
                 Segment->SetShape( DrawItem->GetShape() );
@@ -259,7 +259,7 @@ DRAWSEGMENT* PCB_EDIT_FRAME::Begin_DrawSegment( DRAWSEGMENT* Segment, int shape,
                 Segment->SetAngle( DrawItem->GetAngle() );
                 Segment->SetStart( DrawItem->GetEnd() );
                 Segment->SetEnd( DrawItem->GetEnd() );
-                DrawSegment( DrawPanel, DC, wxDefaultPosition, false );
+                DrawSegment( m_canvas, DC, wxDefaultPosition, false );
             }
             else
             {
@@ -278,7 +278,7 @@ void PCB_EDIT_FRAME::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     if( Segment == NULL )
         return;
 
-    Segment->Draw( DrawPanel, DC, GR_OR );
+    Segment->Draw( m_canvas, DC, GR_OR );
 
     // Delete if segment length is zero.
     if( Segment->GetStart() == Segment->GetEnd() )
@@ -287,13 +287,13 @@ void PCB_EDIT_FRAME::End_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     }
     else
     {
-        Segment->m_Flags = 0;
+        Segment->ClearFlags();
         GetBoard()->Add( Segment );
         OnModify();
         SaveCopyInUndoList( Segment, UR_NEW );
     }
 
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
 }
 

@@ -90,7 +90,7 @@ static void moveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosit
         aPanel->SetMouseCapture( NULL, NULL );  // Avoid loop in redraw panel
 
         int flgs = image->GetFlags();
-        image->m_Flags = 0;
+        image->ClearFlags();
         aPanel->RefreshDrawingRect( dirty );
         image->SetFlags( flgs );
         aPanel->SetMouseCapture( moveBitmap, abortMoveBitmap );
@@ -133,9 +133,9 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage( wxDC* aDC )
 
 
     image->SetFlags( IS_NEW | IS_MOVED );
-    image->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    image->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 
-    DrawPanel->SetMouseCapture( moveBitmap, abortMoveBitmap );
+    m_canvas->SetMouseCapture( moveBitmap, abortMoveBitmap );
     GetScreen()->SetCurItem( image );
 
     OnModify();
@@ -146,16 +146,16 @@ void SCH_EDIT_FRAME::MoveImage( SCH_BITMAP* aImageItem, wxDC* aDC )
 {
     aImageItem->SetFlags( IS_MOVED );
 
-    DrawPanel->SetMouseCapture( moveBitmap, abortMoveBitmap );
+    m_canvas->SetMouseCapture( moveBitmap, abortMoveBitmap );
     GetScreen()->SetCurItem( aImageItem );
     m_itemToRepeat = NULL;
 
     SetUndoItem( aImageItem );
 
-    DrawPanel->CrossHairOff( aDC );
+    m_canvas->CrossHairOff( aDC );
     GetScreen()->SetCrossHairPosition( aImageItem->GetPosition() );
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->CrossHairOn( aDC );
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->CrossHairOn( aDC );
 
     OnModify();
 }
@@ -167,7 +167,7 @@ void SCH_EDIT_FRAME::RotateImage( SCH_BITMAP* aItem )
 
     aItem->Rotate( aItem->GetPosition() );
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 void SCH_EDIT_FRAME::MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis )
@@ -181,7 +181,7 @@ void SCH_EDIT_FRAME::MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis )
         aItem->Mirror_Y( aItem->GetPosition().x );
 
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 void SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )
@@ -196,5 +196,5 @@ void SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )
 
     dlg.TransfertToImage(aItem->m_Image);
     OnModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }

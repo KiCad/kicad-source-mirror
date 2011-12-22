@@ -289,14 +289,17 @@ bool DIALOG_COLOR_CONFIG::UpdateColorsSettings()
         g_DrawBgColor = BLACK;
 
     bool warning = false;
+
     for( int ii = 0;  ii < MAX_LAYERS;  ii++ )
     {
         g_LayerDescr.LayerColor[ ii ] = currentColors[ ii ];
+
         if( g_DrawBgColor == g_LayerDescr.LayerColor[ ii ] )
             warning = true;
     }
 
     m_Parent->SetGridColor( g_LayerDescr.LayerColor[LAYER_GRID] );
+
     if( g_DrawBgColor == g_LayerDescr.LayerColor[ LAYER_GRID ] )
         warning = true;
 
@@ -311,11 +314,9 @@ void DIALOG_COLOR_CONFIG::OnOkClick( wxCommandEvent& event )
     // Prompt the user if an item has the same color as the background
     // because this item cannot be seen:
     if( warning )
-        wxMessageBox(
-    _("Warning:\nSome items have the same color as the background\nand they will not be seen on screen")
-                    );
+        wxMessageBox( _("Warning:\nSome items have the same color as the background\nand they will not be seen on screen") );
 
-    m_Parent->DrawPanel->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 
     EndModal( 1 );
 }
@@ -330,7 +331,7 @@ void DIALOG_COLOR_CONFIG::OnCancelClick( wxCommandEvent& event )
 void DIALOG_COLOR_CONFIG::OnApplyClick( wxCommandEvent& event )
 {
     UpdateColorsSettings();
-    m_Parent->DrawPanel->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 }
 
 

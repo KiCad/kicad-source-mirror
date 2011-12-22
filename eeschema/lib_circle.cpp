@@ -228,7 +228,7 @@ void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 
     if( aColor < 0 )       // Used normal color or selected color
     {
-        if( ( m_Selected & IS_SELECTED ) )
+        if( IsSelected() )
             color = g_ItemSelectetColor;
     }
     else

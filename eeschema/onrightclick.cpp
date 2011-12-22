@@ -62,6 +62,7 @@ static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component );
 static void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field );
 static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* aFrame );
 static void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap );
+static void AddMenusForBusEntry( wxMenu* aPopMenu, SCH_BUS_ENTRY * aBusEntry );
 
 
 
@@ -75,7 +76,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     bool      BlockActive = GetScreen()->IsBlockActive();
 
     // Do not start a block command  on context menu.
-    DrawPanel->m_CanStartBlock = -1;
+    m_canvas->m_CanStartBlock = -1;
 
     if( BlockActive )
     {
@@ -90,9 +91,9 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         item = LocateAndShowItem( aPosition, SCH_COLLECTOR::AllItemsButPins );
 
         // If the clarify item selection context menu is aborted, don't show the context menu.
-        if( item == NULL && DrawPanel->m_AbortRequest )
+        if( item == NULL && m_canvas->m_AbortRequest )
         {
-            DrawPanel->m_AbortRequest = false;
+            m_canvas->m_AbortRequest = false;
             return false;
         }
     }
@@ -149,20 +150,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
 
     case SCH_BUS_ENTRY_T:
-        if( !flags )
-        {
-            wxString msg = AddHotkeyName( _( "Move Bus Entry" ), s_Schematic_Hokeys_Descr,
-                                          HK_MOVE_COMPONENT_OR_ITEM );
-            AddMenuItem( PopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
-        }
-
-        if( GetBusEntryShape( (SCH_BUS_ENTRY*) item ) == '\\' )
-            PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_SLASH, _( "Set Bus Entry /" ) );
-        else
-            PopMenu->Append( ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH, _( "Set Bus Entry \\" ) );
-
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE, _( "Delete Bus Entry" ),
-                     KiBitmap( delete_bus_xpm ) );
+        AddMenusForBusEntry( PopMenu, (SCH_BUS_ENTRY*) item );
         break;
 
     case SCH_MARKER_T:
@@ -745,4 +733,25 @@ void AddMenusForBitmap( wxMenu* aPopMenu, SCH_BITMAP * aBitmap )
         msg = AddHotkeyName( _( "Delete Image" ), s_Schematic_Hokeys_Descr, HK_DELETE );
         AddMenuItem( aPopMenu, ID_POPUP_SCH_DELETE, msg, KiBitmap( delete_xpm ) );
     }
+}
+
+void AddMenusForBusEntry( wxMenu* aPopMenu, SCH_BUS_ENTRY * aBusEntry )
+{
+    wxString msg;
+    if( !aBusEntry->GetFlags() )
+    {
+        msg = AddHotkeyName( _( "Move Bus Entry" ), s_Schematic_Hokeys_Descr,
+                                      HK_MOVE_COMPONENT_OR_ITEM );
+        AddMenuItem( aPopMenu, ID_SCH_MOVE_ITEM, msg, KiBitmap( move_xpm ) );
+    }
+
+    if( aBusEntry->GetBusEntryShape() == '\\' )
+        AddMenuItem( aPopMenu, ID_POPUP_SCH_ENTRY_SELECT_SLASH,
+                     _( "Set Bus Entry Shape /" ), KiBitmap( change_entry_orient_xpm ) );
+    else
+        AddMenuItem( aPopMenu, ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH,
+                     _( "Set Bus Entry Shape \\" ), KiBitmap( change_entry_orient_xpm ) );
+
+    msg = AddHotkeyName( _( "Delete Bus Entry" ), s_Schematic_Hokeys_Descr, HK_DELETE );
+    AddMenuItem( aPopMenu, ID_POPUP_SCH_DELETE, msg, KiBitmap( delete_xpm ) );
 }

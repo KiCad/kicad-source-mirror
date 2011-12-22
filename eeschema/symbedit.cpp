@@ -54,10 +54,10 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     CMP_LIBRARY*   Lib;
 
     /* Exit if no library entry is selected or a command is in progress. */
-    if( m_component == NULL || ( m_drawItem && m_drawItem->m_Flags ) )
+    if( m_component == NULL || ( m_drawItem && m_drawItem->GetFlags() ) )
         return;
 
-    DrawPanel->m_IgnoreMouseEvents = true;
+    m_canvas->m_IgnoreMouseEvents = true;
 
     wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
 
@@ -69,8 +69,8 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
         return;
 
     GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = FALSE;
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->m_IgnoreMouseEvents = FALSE;
 
     wxFileName fn = dlg.GetPath();
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
@@ -115,8 +115,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
         if( item.GetConvert() )
             item.SetConvert( m_convert );
 
-        item.m_Flags    = IS_NEW;
-        item.m_Selected = IS_SELECTED;
+        item.SetFlags( IS_NEW | SELECTED );
 
         LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
         newItem->SetParent( m_component );
@@ -126,8 +125,8 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     m_component->RemoveDuplicateDrawItems();
     m_component->ClearSelectedItems();
 
-    OnModify( );
-    DrawPanel->Refresh();
+    OnModify();
+    m_canvas->Refresh();
 
     delete Lib;
 }
@@ -251,5 +250,5 @@ void LIB_EDIT_FRAME::PlaceAnchor()
 
     /* Redraw the symbol */
     RedrawScreen( wxPoint( 0 , 0 ), true );
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }

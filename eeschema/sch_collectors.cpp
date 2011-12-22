@@ -408,20 +408,22 @@ wxString SCH_FIND_COLLECTOR::GetText()
     SCH_FIND_COLLECTOR_DATA data = m_data[ m_foundIndex ];
     EDA_ITEM* foundItem = m_List[ m_foundIndex ];
 
-    wxCHECK_MSG( foundItem != NULL, wxEmptyString, wxT( "Inavalid found item pointer." ) );
+    wxCHECK_MSG( foundItem != NULL, wxEmptyString, wxT( "Invalid found item pointer." ) );
 
     wxString msg;
 
     if( data.GetParent() )
     {
-        msg = _( "Child item " ) + foundItem->GetSelectMenuText() +
-              _( " of parent item " ) + data.GetParent()->GetSelectMenuText() +
-              _( " found in sheet " ) + data.GetSheetPath();
+        msg.Printf( _( "Child item %s of parent item %s found in sheet %s" ),
+                    GetChars( foundItem->GetSelectMenuText() ),
+                    GetChars( data.GetParent()->GetSelectMenuText() ),
+                    GetChars( data.GetSheetPath() ) );
     }
     else
     {
-        msg = _( "Item " ) + foundItem->GetSelectMenuText() + _( " found in sheet " ) +
-              data.GetSheetPath();
+        msg.Printf( _( "Item %s found in sheet %s" ),
+                    GetChars( foundItem->GetSelectMenuText() ),
+                    GetChars( data.GetSheetPath() ) );
     }
 
     return msg;
@@ -494,13 +496,14 @@ SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, const void* aTestDat
 void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
                                   SCH_SHEET_PATH* aSheetPath )
 {
-    if( !m_findReplaceData.ChangesSearch( aFindReplaceData ) )
+    if( !m_findReplaceData.ChangesSearch( aFindReplaceData ) && !m_List.empty() && !m_forceSearch )
         return;
 
     m_findReplaceData = aFindReplaceData;
     Empty();                 // empty the collection just in case
     m_data.clear();
     m_foundIndex = 0;
+    m_forceSearch = false;
 
     if( aSheetPath )
     {

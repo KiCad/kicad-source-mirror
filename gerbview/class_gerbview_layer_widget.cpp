@@ -176,7 +176,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         }
 
         myframe->GetBoard()->SetVisibleLayers( visibleLayers );
-        myframe->DrawPanel->Refresh();
+        myframe->GetCanvas()->Refresh();
         break;
     }
 }
@@ -188,6 +188,7 @@ void GERBER_LAYER_WIDGET::ReFill()
     BOARD*  brd = myframe->GetBoard();
     int     layer;
     ClearLayerRows();
+
     for( layer = 0; layer < LAYER_COUNT; layer++ )
     {
         wxString msg;
@@ -205,7 +206,7 @@ void GERBER_LAYER_WIDGET::OnLayerColorChange( int aLayer, int aColor )
 {
     myframe->GetBoard()->SetLayerColor( aLayer, aColor );
     myframe->m_SelLayerBox->ResyncBitmapOnly();
-    myframe->DrawPanel->Refresh();
+    myframe->GetCanvas()->Refresh();
 }
 
 bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
@@ -215,8 +216,9 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
     int layer = myframe->getActiveLayer( );
     myframe->setActiveLayer( aLayer, false );
     myframe->syncLayerBox();
+
     if( layer != myframe->getActiveLayer( ) )
-        myframe->DrawPanel->Refresh();
+        myframe->GetCanvas()->Refresh();
 
     return true;
 }
@@ -234,13 +236,13 @@ void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFin
     brd->SetVisibleLayers( visibleLayers );
 
     if( isFinal )
-        myframe->DrawPanel->Refresh();
+        myframe->GetCanvas()->Refresh();
 }
 
 void GERBER_LAYER_WIDGET::OnRenderColorChange( int aId, int aColor )
 {
     myframe->GetBoard()->SetVisibleElementColor( aId, aColor );
-    myframe->DrawPanel->Refresh();
+    myframe->GetCanvas()->Refresh();
 }
 
 void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
@@ -248,7 +250,7 @@ void GERBER_LAYER_WIDGET::OnRenderEnable( int aId, bool isEnabled )
     BOARD*  brd = myframe->GetBoard();
         brd->SetElementVisibility( aId, isEnabled );
 
-    myframe->DrawPanel->Refresh();
+    myframe->GetCanvas()->Refresh();
 }
 
 //-----</LAYER_WIDGET callbacks>------------------------------------------

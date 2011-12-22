@@ -94,7 +94,7 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
     OnModify( );
 
     DrawItem->DisplayInfo( this );
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -123,7 +123,7 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
 {
-    DrawPanel->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
+    m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
     wxPoint drawPos = GetScreen()->GetCrossHairPosition( true );
 
     // no temp copy -> the current version of component will be used for Undo
@@ -155,10 +155,10 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
         Text->m_Orient = m_textOrientation;
 
         // Enter the graphic text info
-        DrawPanel->m_IgnoreMouseEvents = true;
+        m_canvas->m_IgnoreMouseEvents = true;
         EditSymbolText( NULL, Text );
-        DrawPanel->m_IgnoreMouseEvents = false;
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->m_IgnoreMouseEvents = false;
+        m_canvas->MoveCursorToCrossHair();
 
         if( Text->m_Text.IsEmpty() )
         {
@@ -188,16 +188,16 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_COMPONENT* LibEntry, wxDC* DC )
             m_drawItem->SetConvert( m_convert );
 
         // Draw initial symbol:
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
     }
     else
     {
-        DrawPanel->EndMouseCapture();
+        m_canvas->EndMouseCapture();
         return NULL;
     }
 
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = FALSE;
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->m_IgnoreMouseEvents = FALSE;
 
     return m_drawItem;
 }
@@ -214,7 +214,7 @@ void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 
     if( m_drawItem->ContinueEdit( pos ) )
     {
-        m_drawItem->Draw( DrawPanel, DC, pos, -1, g_XorMode, NULL, DefaultTransform );
+        m_drawItem->Draw( m_canvas, DC, pos, -1, g_XorMode, NULL, DefaultTransform );
         return;
     }
 
@@ -262,8 +262,8 @@ void LIB_EDIT_FRAME::StartMoveDrawSymbol( wxDC* DC )
 
     TempCopyComponent();
     m_drawItem->BeginEdit( IS_MOVED, GetScreen()->GetCrossHairPosition( true ) );
-    DrawPanel->SetMouseCapture( RedrawWhileMovingCursor, AbortSymbolTraceOn );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
+    m_canvas->SetMouseCapture( RedrawWhileMovingCursor, AbortSymbolTraceOn );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, true );
 }
 
 
@@ -275,8 +275,8 @@ void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC )
 
     TempCopyComponent();
     m_drawItem->BeginEdit( IS_RESIZED, GetScreen()->GetCrossHairPosition( true ) );
-    DrawPanel->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, true );
+    m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, true );
 }
 
 
@@ -308,7 +308,7 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
     if( GetToolId() != ID_NO_TOOL_SELECTED )
         SetCursor( wxCURSOR_PENCIL );
     else
-        SetCursor( DrawPanel->GetDefaultCursor() );
+        SetCursor( m_canvas->GetDefaultCursor() );
 
     if( GetTempCopyComponent() )    // used when editing an existing item
         SaveCopyInUndoList( GetTempCopyComponent() );
@@ -325,6 +325,6 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
 
     OnModify();
 
-    DrawPanel->SetMouseCapture( NULL, NULL );
-    DrawPanel->Refresh();
+    m_canvas->SetMouseCapture( NULL, NULL );
+    m_canvas->Refresh();
 }

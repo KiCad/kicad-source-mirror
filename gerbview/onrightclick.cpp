@@ -20,10 +20,10 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     bool        BlockActive = (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
 
     // Do not initiate a start block validation on menu.
-    DrawPanel->m_CanStartBlock = -1;
+    m_canvas->m_CanStartBlock = -1;
 
     // Simple location of elements where possible.
-    if( ( DrawStruct == NULL ) || ( DrawStruct->m_Flags == 0 ) )
+    if( ( DrawStruct == NULL ) || ( DrawStruct->GetFlags() == 0 ) )
     {
         DrawStruct = Locate( aPosition, CURSEUR_OFF_GRILLE );
     }
@@ -31,7 +31,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     // If command in progress, end command.
     if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
-        if( DrawStruct && DrawStruct->m_Flags )
+        if( DrawStruct && DrawStruct->GetFlags() )
             AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                          _( "Cancel" ), KiBitmap( cancel_xpm )  );
         else
@@ -42,7 +42,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     }
     else
     {
-        if( (DrawStruct && DrawStruct->m_Flags) || BlockActive )
+        if( (DrawStruct && DrawStruct->GetFlags()) || BlockActive )
         {
             if( BlockActive )
             {

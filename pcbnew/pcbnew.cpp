@@ -196,7 +196,7 @@ Changing extension to .brd." ), GetChars( fn.GetFullPath() ) );
      * This is more a workaround than a fix.
      */
     frame->SetFocus();
-    frame->DrawPanel->SetFocus();
+    frame->GetCanvas()->SetFocus();
 
     return true;
 }

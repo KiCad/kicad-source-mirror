@@ -121,15 +121,15 @@ static bool InstallBlockCmdFrame( PCB_BASE_FRAME* parent, const wxString& title 
 {
     wxPoint oldpos = parent->GetScreen()->GetCrossHairPosition();
 
-    parent->DrawPanel->m_IgnoreMouseEvents = true;
+    parent->GetCanvas()->m_IgnoreMouseEvents = true;
     DIALOG_BLOCK_OPTIONS * dlg = new DIALOG_BLOCK_OPTIONS( parent, title );
 
     int cmd = dlg->ShowModal();
     dlg->Destroy();
 
     parent->GetScreen()->SetCrossHairPosition( oldpos );
-    parent->DrawPanel->MoveCursorToCrossHair();
-    parent->DrawPanel->m_IgnoreMouseEvents = false;
+    parent->GetCanvas()->MoveCursorToCrossHair();
+    parent->GetCanvas()->m_IgnoreMouseEvents = false;
 
     return cmd == wxID_OK;
 }
@@ -219,7 +219,7 @@ int PCB_EDIT_FRAME::ReturnBlockCommand( int aKey )
 
 void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 {
-    if( !DrawPanel->IsMouseCaptured() )
+    if( !m_canvas->IsMouseCaptured() )
     {
         DisplayError( this, wxT( "Error in HandleBlockPLace : m_mouseCaptureCallback = NULL" ) );
     }
@@ -234,16 +234,16 @@ void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_DRAG:                /* Drag */
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
-        if( DrawPanel->IsMouseCaptured() )
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+        if( m_canvas->IsMouseCaptured() )
+            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
         Block_Move();
         GetScreen()->m_BlockLocate.ClearItemsList();
         break;
 
     case BLOCK_COPY:     /* Copy */
-        if( DrawPanel->IsMouseCaptured() )
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+        if( m_canvas->IsMouseCaptured() )
+            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
         Block_Duplicate();
         GetScreen()->m_BlockLocate.ClearItemsList();
@@ -259,7 +259,7 @@ void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     OnModify();
 
-    DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString, false );
+    m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString, false );
     GetScreen()->ClearBlockCommand();
 
     if( GetScreen()->m_BlockLocate.GetCount() )
@@ -278,8 +278,8 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     // If coming here after cancel block, clean up and exit
     if( GetScreen()->m_BlockLocate.m_State == STATE_NO_BLOCK )
     {
-        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
-                                    false );
+        m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
+                                   false );
         GetScreen()->ClearBlockCommand();
         return false;
     }
@@ -293,11 +293,11 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             cancelCmd = true;
 
             // undraw block outline
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
         }
         else
         {
-            DrawAndSizingBlockOutlines( DrawPanel, DC, wxDefaultPosition, false );
+            DrawAndSizingBlockOutlines( m_canvas, DC, wxDefaultPosition, false );
             Block_SelectItems();
 
             // Exit if no items found
@@ -306,7 +306,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         }
     }
 
-    if( !cancelCmd && DrawPanel->IsMouseCaptured() )
+    if( !cancelCmd && m_canvas->IsMouseCaptured() )
     {
         switch( GetScreen()->m_BlockLocate.m_Command )
         {
@@ -320,24 +320,24 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         case BLOCK_PRESELECT_MOVE:  /* Move with preselection list*/
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             nextcmd = true;
-            DrawPanel->m_mouseCaptureCallback = drawMovingBlock;
-            DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+            m_canvas->m_mouseCaptureCallback = drawMovingBlock;
+            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
             break;
 
         case BLOCK_DELETE: /* Delete */
-            DrawPanel->m_mouseCaptureCallback = NULL;
+            m_canvas->m_mouseCaptureCallback = NULL;
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             Block_Delete();
             break;
 
         case BLOCK_ROTATE: /* Rotation */
-            DrawPanel->m_mouseCaptureCallback = NULL;
+            m_canvas->m_mouseCaptureCallback = NULL;
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             Block_Rotate();
             break;
 
         case BLOCK_FLIP: /* Flip */
-            DrawPanel->m_mouseCaptureCallback = NULL;
+            m_canvas->m_mouseCaptureCallback = NULL;
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             Block_Flip();
             break;
@@ -357,7 +357,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
             // Turn off the redraw block routine now so it is not displayed
             // with one corner at the new center of the screen
-            DrawPanel->m_mouseCaptureCallback = NULL;
+            m_canvas->m_mouseCaptureCallback = NULL;
             Window_Zoom( GetScreen()->m_BlockLocate );
             break;
 
@@ -369,8 +369,8 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     if( ! nextcmd )
     {
         GetScreen()->ClearBlockCommand();
-        DrawPanel->EndMouseCapture( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString,
-                                    false );
+        m_canvas->EndMouseCapture( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString,
+                                   false );
     }
 
     return nextcmd;
@@ -610,7 +610,7 @@ void PCB_EDIT_FRAME::Block_Delete()
         case PCB_MODULE_T:
         {
             MODULE* module = (MODULE*) item;
-            module->m_Flags = 0;
+            module->ClearFlags();
             module->UnLink();
             m_Pcb->m_Status_Pcb = 0;
         }
@@ -647,7 +647,7 @@ void PCB_EDIT_FRAME::Block_Delete()
     SaveCopyInUndoList( *itemsList, UR_DELETED );
 
     Compile_Ratsnest( NULL, true );
-    DrawPanel->Refresh( true );
+    m_canvas->Refresh( true );
 }
 
 
@@ -675,7 +675,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
         switch( item->Type() )
         {
         case PCB_MODULE_T:
-            ( (MODULE*) item )->m_Flags = 0;
+            ( (MODULE*) item )->ClearFlags();
             m_Pcb->m_Status_Pcb = 0;
             break;
 
@@ -707,7 +707,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
     SaveCopyInUndoList( *itemsList, UR_ROTATED, centre );
 
     Compile_Ratsnest( NULL, true );
-    DrawPanel->Refresh( true );
+    m_canvas->Refresh( true );
 }
 
 
@@ -736,7 +736,7 @@ void PCB_EDIT_FRAME::Block_Flip()
         switch( item->Type() )
         {
         case PCB_MODULE_T:
-            item->m_Flags = 0;
+            item->ClearFlags();
             m_Pcb->m_Status_Pcb = 0;
             break;
 
@@ -768,7 +768,7 @@ void PCB_EDIT_FRAME::Block_Flip()
 
     SaveCopyInUndoList( *itemsList, UR_FLIPPED, center );
     Compile_Ratsnest( NULL, true );
-    DrawPanel->Refresh( true );
+    m_canvas->Refresh( true );
 }
 
 
@@ -791,7 +791,7 @@ void PCB_EDIT_FRAME::Block_Move()
         {
         case PCB_MODULE_T:
             m_Pcb->m_Status_Pcb = 0;
-            item->m_Flags = 0;
+            item->ClearFlags();
             break;
 
         /* Move track segments */
@@ -822,7 +822,7 @@ void PCB_EDIT_FRAME::Block_Move()
     SaveCopyInUndoList( *itemsList, UR_MOVED, MoveVector );
 
     Compile_Ratsnest( NULL, true );
-    DrawPanel->Refresh( true );
+    m_canvas->Refresh( true );
 }
 
 
@@ -851,7 +851,7 @@ void PCB_EDIT_FRAME::Block_Duplicate()
                 MODULE* module = (MODULE*) item;
                 MODULE* new_module;
                 m_Pcb->m_Status_Pcb = 0;
-                module->m_Flags     = 0;
+                module->ClearFlags();
                 newitem = new_module = new MODULE( m_Pcb );
                 new_module->Copy( module );
                 new_module->SetTimeStamp( GetNewTimeStamp() );
@@ -937,5 +937,5 @@ void PCB_EDIT_FRAME::Block_Duplicate()
         SaveCopyInUndoList( newList, UR_NEW );
 
     Compile_Ratsnest( NULL, true );
-    DrawPanel->Refresh( true );
+    m_canvas->Refresh( true );
 }

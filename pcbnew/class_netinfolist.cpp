@@ -115,7 +115,7 @@ void NETINFO_LIST::buildListOfNets()
         }
 
         pad->SetNet( netcode );
-        net_item->m_ListPad.push_back( pad );
+        net_item->m_PadInNetList.push_back( pad );
         nodes_count ++;
         last_pad = pad;
     }
