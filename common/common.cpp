@@ -46,31 +46,6 @@
  *       application class.
  */
 
-/* Standard page sizes in 1/1000 inch */
-#if defined(KICAD_GOST)
-Ki_PageDescr  g_Sheet_A4( wxSize( 8283, 11700 ), wxPoint( 0, 0 ), wxT( "A4" ) );
-#else
-Ki_PageDescr  g_Sheet_A4( wxSize( 11700, 8267 ), wxPoint( 0, 0 ), wxT( "A4" ) );
-#endif
-Ki_PageDescr  g_Sheet_A3( wxSize( 16535, 11700 ), wxPoint( 0, 0 ), wxT( "A3" ) );
-Ki_PageDescr  g_Sheet_A2( wxSize( 23400, 16535 ), wxPoint( 0, 0 ), wxT( "A2" ) );
-Ki_PageDescr  g_Sheet_A1( wxSize( 33070, 23400 ), wxPoint( 0, 0 ), wxT( "A1" ) );
-Ki_PageDescr  g_Sheet_A0( wxSize( 46800, 33070 ), wxPoint( 0, 0 ), wxT( "A0" ) );
-Ki_PageDescr  g_Sheet_A( wxSize( 11000, 8500 ), wxPoint( 0, 0 ), wxT( "A" ) );
-Ki_PageDescr  g_Sheet_B( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "B" ) );
-Ki_PageDescr  g_Sheet_C( wxSize( 22000, 17000 ), wxPoint( 0, 0 ), wxT( "C" ) );
-Ki_PageDescr  g_Sheet_D( wxSize( 34000, 22000 ), wxPoint( 0, 0 ), wxT( "D" ) );
-Ki_PageDescr  g_Sheet_E( wxSize( 44000, 34000 ), wxPoint( 0, 0 ), wxT( "E" ) );
-Ki_PageDescr  g_Sheet_GERBER( wxSize( 32000, 32000 ), wxPoint( 0, 0 ), wxT( "GERBER" ) );
-Ki_PageDescr  g_Sheet_user( wxSize( 17000, 11000 ), wxPoint( 0, 0 ), wxT( "User" ) );
-
-Ki_PageDescr* g_SheetSizeList[NB_ITEMS + 1] =
-{
-    &g_Sheet_A4,   &g_Sheet_A3, &g_Sheet_A2, &g_Sheet_A1, &g_Sheet_A0,
-    &g_Sheet_A,    &g_Sheet_B,  &g_Sheet_C,  &g_Sheet_D,  &g_Sheet_E,
-    &g_Sheet_user, NULL
-};
-
 
 const wxString ProjectFileExtension( wxT( "pro" ) );
 const wxString SchematicFileExtension( wxT( "sch" ) );
@@ -199,12 +174,88 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString )
 }
 
 
-Ki_PageDescr::Ki_PageDescr( const wxSize& size, const wxPoint& offset, const wxString& name )
+//-----<PAGE_INFO>-------------------------------------------------------------
+
+// Standard page sizes in 1/1000 inch
+#if defined(KICAD_GOST)
+static const PAGE_INFO  pageA4(    wxSize(  8283, 11700 ),  wxPoint( 0, 0 ), wxT( "A4" ) );
+#else
+static const PAGE_INFO  pageA4(    wxSize( 11700,  8267 ),  wxPoint( 0, 0 ), wxT( "A4" ) );
+#endif
+static const PAGE_INFO  pageA3(    wxSize( 16535, 11700 ),  wxPoint( 0, 0 ), wxT( "A3" ) );
+static const PAGE_INFO  pageA2(    wxSize( 23400, 16535 ),  wxPoint( 0, 0 ), wxT( "A2" ) );
+static const PAGE_INFO  pageA1(    wxSize( 33070, 23400 ),  wxPoint( 0, 0 ), wxT( "A1" ) );
+static const PAGE_INFO  pageA0(    wxSize( 46800, 33070 ),  wxPoint( 0, 0 ), wxT( "A0" ) );
+static const PAGE_INFO  pageA(     wxSize( 11000,  8500 ),  wxPoint( 0, 0 ), wxT( "A" ) );
+static const PAGE_INFO  pageB(     wxSize( 17000, 11000 ),  wxPoint( 0, 0 ), wxT( "B" ) );
+static const PAGE_INFO  pageC(     wxSize( 22000, 17000 ),  wxPoint( 0, 0 ), wxT( "C" ) );
+static const PAGE_INFO  pageD(     wxSize( 34000, 22000 ),  wxPoint( 0, 0 ), wxT( "D" ) );
+static const PAGE_INFO  pageE(     wxSize( 44000, 34000 ),  wxPoint( 0, 0 ), wxT( "E" ) );
+static const PAGE_INFO  pageGERBER(wxSize( 32000, 32000 ),  wxPoint( 0, 0 ), wxT( "GERBER" ) );
+
+double PAGE_INFO::s_user_width  = 17.0;
+double PAGE_INFO::s_user_height = 11.0;
+static const PAGE_INFO  pageUser(  wxSize( 17000, 11000 ),  wxPoint( 0, 0 ), wxT( "User" ) );
+
+/*
+static const PAGE_INFO* pageSizes[] =
 {
-    // All sizes are in 1/1000 inch
-    m_Size   = size;
-    m_Offset = offset;
-    m_Name   = name;
+    &pageA4,    &pageA3,    &pageA2,    &pageA1,    &pageA0,
+    &pageA,     &pageB,     &pageC,     &pageD,     &pageE,      &pageUser,
+};
+
+
+PAGE_INFOS PAGE_INFO::GetStandardSizes()
+{
+    return PAGE_INFOS( pageSizes, pageSizes + DIM( pageSizes ) );
+}
+*/
+
+bool PAGE_INFO::SetType( const wxString& aType )
+{
+    bool rc = true;
+
+    if( aType == pageA4.GetType() )
+        *this = pageA4;
+    else if( aType == pageA3.GetType() )
+        *this = pageA3;
+    else if( aType == pageA2.GetType() )
+        *this = pageA2;
+    else if( aType == pageA1.GetType() )
+        *this = pageA1;
+    else if( aType == pageA0.GetType() )
+        *this = pageA0;
+    else if( aType == pageA.GetType() )
+        *this = pageA;
+    else if( aType == pageB.GetType() )
+        *this = pageB;
+    else if( aType == pageC.GetType() )
+        *this = pageC;
+    else if( aType == pageD.GetType() )
+        *this = pageD;
+    else if( aType == pageE.GetType() )
+        *this = pageE;
+    else if( aType == pageUser.GetType() )
+    {
+        *this  = pageUser;
+        m_widthInches  = s_user_width;
+        m_heightInches = s_user_height;
+    }
+    else
+        rc = false;
+
+    return rc;
+}
+
+
+PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxPoint& aOffsetMils, const wxString& aType )
+{
+    // aSizeMils is in 1/1000th of an inch
+    SetWidthInches(  aSizeMils.x / 1000.0 );
+    SetHeightInches( aSizeMils.y / 1000.0 );
+
+    m_Offset = aOffsetMils;
+    m_Type   = aType;
 
     // Adjust the default value for margins to 400 mils (0,4 inch or 10 mm)
 #if defined(KICAD_GOST)
@@ -216,6 +267,50 @@ Ki_PageDescr::Ki_PageDescr( const wxSize& size, const wxPoint& offset, const wxS
     m_LeftMargin = m_RightMargin = m_TopMargin = m_BottomMargin = 400;
 #endif
 }
+
+
+PAGE_INFO::PAGE_INFO( const wxString& aType )
+{
+    SetType( aType );
+}
+
+
+void PAGE_INFO::SetWidthInches( double aWidthInInches )
+{
+    // limit resolution to 1/1000th of an inch
+    m_widthInches = double( int( aWidthInInches * 1000 + 500 ) / 1000 );
+}
+
+
+void PAGE_INFO::SetHeightInches( double aHeightInInches )
+{
+    // limit resolution to 1/1000th of an inch
+    m_heightInches = double( int( aHeightInInches * 1000 + 500 ) / 1000 );
+}
+
+
+void PAGE_INFO::SetUserWidthInches( double aWidthInInches )
+{
+    if( aWidthInInches < 6.0 )
+        aWidthInInches = 6.0;
+    else if( aWidthInInches > 44.0 )
+        aWidthInInches = 44.0;
+
+    s_user_width = aWidthInInches;
+}
+
+void PAGE_INFO::SetUserHeightInches( double aHeightInInches )
+{
+    if( aHeightInInches < 4.0 )
+        aHeightInInches = 4.0;
+    else if( aHeightInInches > 44.0 )
+        aHeightInInches = 44.0;
+
+    s_user_height = aHeightInInches;
+}
+
+
+//-----</PAGE_INFO>------------------------------------------------------------
 
 
 wxString ReturnUnitSymbol( EDA_UNITS_T aUnit, const wxString& formatString )

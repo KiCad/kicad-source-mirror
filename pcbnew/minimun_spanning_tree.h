@@ -70,7 +70,7 @@ private:
      *   updates d so that the values are correct (goes through target's
      *   neighbours making sure that the distances between them and the tree
      *   are indeed minimum)
-     * @param target = index of curr item
+     * @param aTarget = index of curr item
      */
     void updateDistances( int aTarget );
 

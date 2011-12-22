@@ -64,7 +64,7 @@ private:
     void initOptVars();
     void CreateDXFFile();
     void PlotOneSheetDXF( const wxString& FileName,
-                         SCH_SCREEN* screen, Ki_PageDescr* sheet,
+                         SCH_SCREEN* screen, PAGE_INFO* sheet,
                          wxPoint plot_offset, double scale );
 };
 /* static members (static to remember last state): */
@@ -148,7 +148,7 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
     SCH_SHEET_PATH* sheetpath;
     SCH_SHEET_PATH  oldsheetpath = schframe->GetCurrentSheet();
     wxString        PlotFileName;
-    Ki_PageDescr*   PlotSheet;
+    PAGE_INFO*   PlotSheet;
     wxPoint         plot_offset;
 
     /* When printing all pages, the printed page is not the current page.
@@ -208,7 +208,7 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
 
 void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString& FileName,
                                                  SCH_SCREEN*     screen,
-                                                 Ki_PageDescr*   sheet,
+                                                 PAGE_INFO*   sheet,
                                                  wxPoint         plot_offset,
                                                  double          scale )
 {

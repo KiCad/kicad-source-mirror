@@ -524,12 +524,11 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
     logicalClientSize.x = wxRound( (double) clientSize.x / scalar );
     logicalClientSize.y = wxRound( (double) clientSize.y / scalar );
 
-    // The upper left corner of the drawing in device units.
-    int w = screen->ReturnPageSize().x;
-    int h = screen->ReturnPageSize().y;
+    // A corner of the drawing in internal units.
+    wxSize corner = GetPageSizeIU();
 
     // The drawing rectangle logical units
-    wxRect drawingRect( wxPoint( 0, 0 ),  wxSize( w, h ) );
+    wxRect drawingRect( wxPoint( 0, 0 ),  corner );
 
     wxLogTrace( traceScrollSettings, wxT( "Logical drawing rect = ( %d, %d, %d, %d )." ),
                 drawingRect.x, drawingRect.y, drawingRect.width, drawingRect.height );

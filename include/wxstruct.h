@@ -72,7 +72,7 @@ class EDA_DRAW_PANEL;
 class EDA_MSG_PANEL;
 class BASE_SCREEN;
 class PARAM_CFG_BASE;
-class Ki_PageDescr;
+class PAGE_INFO;
 class PLOTTER;
 
 enum id_librarytype {
@@ -371,9 +371,9 @@ public:
 
 protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
-    int          m_LastGridSizeId;
-    bool         m_DrawGrid;                // hide/Show grid
-    int          m_GridColor;               // Grid color
+    int         m_LastGridSizeId;
+    bool        m_DrawGrid;                 // hide/Show grid
+    int         m_GridColor;                // Grid color
 
     /// Internal units count that is equivalent to 1 inch.  Set to 1000 (0.001") for
     /// schematic drawing and 10000 (0.0001") for PCB drawing.
@@ -448,6 +448,16 @@ public:
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~EDA_DRAW_FRAME();
+
+    virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) = 0;
+    virtual const PAGE_INFO& GetPageSettings() const = 0;
+
+    /**
+     * Function GetPageSizeIU
+     * works off of GetPageSettings() to return the size of the paper page in
+     * the internal units of this particular view.
+     */
+    virtual const wxSize GetPageSizeIU() const = 0;
 
     wxPoint GetOriginAxisPosition() const { return m_originAxisPosition; }
 
@@ -653,13 +663,13 @@ public:
 
     /**
      * Function GetXYSheetReferences
-     * Return the X,Y sheet references where the point position is located
+     * returns the X,Y sheet references where the point position is located
      * @param aScreen = screen to use
      * @param aPosition = position to identify by YX ref
      * @return a wxString containing the message locator like A3 or B6
      *         (or ?? if out of page limits)
      */
-    wxString GetXYSheetReferences( BASE_SCREEN* aScreen, const wxPoint& aPosition );
+    const wxString GetXYSheetReferences( const wxPoint& aPosition );
 
     void DisplayToolMsg( const wxString& msg );
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;

@@ -10,10 +10,7 @@
 
 #include <vector>
 #include "drawtxt.h"
-
-
-class Ki_PageDescr;
-
+#include "common.h"         // PAGE_INFO
 
 /**
  * Enum PlotFormat
@@ -26,6 +23,7 @@ enum PlotFormat {
     PLOT_FORMAT_POST,
     PLOT_FORMAT_DXF
 };
+
 
 class PLOTTER
 {
@@ -70,8 +68,8 @@ public: PLOTTER( PlotFormat aPlotType );
         return color_mode;
     }
 
+    void SetPageSettings( const PAGE_INFO& aPageSettings );
 
-    virtual void set_paper_size( Ki_PageDescr* sheet );
     virtual void set_current_line_width( int width ) = 0;
     virtual void set_default_line_width( int width ) = 0;
     virtual void set_color( int color )  = 0;
@@ -226,7 +224,7 @@ protected:
     bool          plotMirror;
     wxString      creator;
     wxString      filename;
-    Ki_PageDescr* sheet;
+    PAGE_INFO     pageInfo;
     wxSize        paper_size;
 };
 

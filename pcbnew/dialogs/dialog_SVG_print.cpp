@@ -226,39 +226,40 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
                                  BASE_SCREEN*    screen,
                                  bool            aPrint_Frame_Ref )
 {
-    int     tmpzoom;
-    wxPoint tmp_startvisu;
-    wxSize  SheetSize;  // Sheet size in internal units
-    wxPoint old_org;
-    bool    success = true;
+    // const PAGE_INFO&    pageInfo = m_Parent->GetPageSettings();
 
-    /* Change frames and local settings */
+    LOCALE_IO   toggle;
+    int         tmpzoom;
+    wxPoint     tmp_startvisu;
+    wxPoint     old_org;
+    bool        success = true;
+
+    // Change frames and local settings
     tmp_startvisu = screen->m_StartVisu;
     tmpzoom = screen->GetZoom();
     old_org = screen->m_DrawOrg;
+
     screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
-    SheetSize    = screen->m_CurrentSheetDesc->m_Size;  // size in 1/1000 inch
-    SheetSize.x *= m_Parent->GetInternalUnits() / 1000;
-    SheetSize.y *= m_Parent->GetInternalUnits() / 1000;    // size in pixels
 
     screen->SetScalingFactor( 1.0 );
     float dpi = (float)m_Parent->GetInternalUnits();
 
     EDA_DRAW_PANEL* panel = m_Parent->DrawPanel;
 
-    SetLocaleTo_C_standard();       // Switch the locale to standard C (needed
-                                    // to print floating point numbers like 1.3)
-    wxSVGFileDC       dc( FullFileName, SheetSize.x, SheetSize.y, dpi );
+    // paper pageSize is in internal units, either nanometers or deci-mils
+    wxSize  pageSize = m_Parent->GetPageSizeIU();
+
+    wxSVGFileDC       dc( FullFileName, pageSize.x, pageSize.y, dpi );
 
     EDA_RECT          tmp = panel->m_ClipBox;
     GRResetPenAndBrush( &dc );
     GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? false : true );
     s_Parameters.m_DrillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
 
-
     panel->m_ClipBox.SetX( 0 );
     panel->m_ClipBox.SetY( 0 );
+
     // Set clip box to the max size
     #define MAX_VALUE (INT_MAX/2)   // MAX_VALUE is the max we can use in an integer
                                     // and that allows calculations without overflow
@@ -273,9 +274,9 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     if( aPrint_Frame_Ref )
         m_Parent->TraceWorkSheet( &dc, screen, s_Parameters.m_PenDefaultSize );
 
-    m_Parent->PrintPage( &dc,  m_PrintMaskLayer, false, &s_Parameters);
+    m_Parent->PrintPage( &dc, m_PrintMaskLayer, false, &s_Parameters);
     g_DrawBgColor = bg_color;
-    SetLocaleTo_Default();          // revert to the current locale
+
     screen->m_IsPrinting = false;
     panel->m_ClipBox     = tmp;
 

@@ -32,9 +32,12 @@
 #ifndef INCLUDE__COMMON_H_
 #define INCLUDE__COMMON_H_
 
+#include <vector>
+
 #include "wx/wx.h"
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
+
 
 class wxAboutDialogInfo;
 class BASE_SCREEN;
@@ -54,12 +57,11 @@ class EDA_DRAW_PANEL;
                                                      * flag for block commands
                                                      */
 
-// default name for nameless projects
+/// default name for nameless projects
 #define NAMELESS_PROJECT wxT( "noname" )
 
-#define NB_ITEMS 11
 
-/* Pseudo key codes for command panning */
+/// Pseudo key codes for command panning
 enum pseudokeys {
     EDA_PANNING_UP_KEY = 1,
     EDA_PANNING_DOWN_KEY,
@@ -124,38 +126,101 @@ enum EDA_UNITS_T {
 class LibNameList;
 
 
-/* Class to handle pages sizes:
+class PAGE_INFO;
+
+/**
+ * Class PAGE_INFO
+ * describes the page size and margins of a paper page on which to
+ * eventually print or plot.  Since paper is often described in inches,
+ * (and due to legacy code), inches, mils, and internal units (IU) are supported
+ * in the accessors.  Again, we are describing paper in this class.
  */
-class Ki_PageDescr
+class PAGE_INFO
 {
-// All sizes are in 1/1000 inch
 public:
-    wxSize   m_Size;    /* page size in 1/1000 inch */
-    wxPoint  m_Offset;  /* plot offset in 1/1000 inch */
-    wxString m_Name;
-    int      m_LeftMargin;
-    int      m_RightMargin;
-    int      m_TopMargin;
-    int      m_BottomMargin;
+    PAGE_INFO( const wxString& aType = wxT( "A3" ) );
+    PAGE_INFO( const wxSize& aSizeMils, const wxPoint& aOffsetMils, const wxString& aName );
 
-public:
-    Ki_PageDescr( const wxSize& size, const wxPoint& offset, const wxString& name );
+    const wxString& GetType() const { return m_Type; }
+
+    /**
+     * Function SetType
+     * sets the name of the page type and also the sizes and margins
+     * commonly associated with that type name.
+     *
+     * @param aStandardPageDescriptionName is a wxString constant giving one of:
+     * "A4" "A3" "A2" "A1" "A0" "A" "B" "C" "D" "E" "GERBER", or "User".  If "User"
+     * then the width and height are custom, and will be set according to previous calls
+     * to static PAGE_INFO::SetUserWidthInches( double aWidthInInches ) and
+     * static PAGE_INFO::SetUserHeightInches( double aHeightInInches );
+     *
+     * @return bool - true iff @a aStandarePageDescription was a recognized type.
+     */
+    bool SetType( const wxString& aStandardPageDescriptionName );
+
+    void SetWidthInches(  double aWidthInInches );
+    void SetHeightInches( double aHeightInInches );
+
+    double GetWidthInches() const       { return m_widthInches;  }
+    double GetHeightInches() const      { return m_heightInches; }
+
+    int GetWidthMils() const            { return int( 1000 * m_widthInches );  }
+    int GetHeightMils() const           { return int( 1000 * m_heightInches ); }
+    const wxSize GetSizeMils() const    { return wxSize( GetWidthMils(), GetHeightMils() ); }
+
+    // accessors returning Internal Units
+#if defined(PCBNEW)
+# if defined(KICAD_NANOMETRE)
+    int GetWidthIU() const  { return int( 2.54e7 * m_widthInches );  }
+    int GetHeightIU() const { return int( 2.54e7 * m_heightInches ); }
+# else
+    int GetWidthIU() const  { return int( 10000  * m_widthInches );  }
+    int GetHeightIU() const { return int( 10000  * m_heightInches ); }
+# endif
+    const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
+#elif defined(EESCHEMA)
+    int GetWidthIU() const  { return int( 1000  * m_widthInches );  }
+    int GetHeightIU() const { return int( 1000  * m_heightInches ); }
+    const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
+#endif
+
+    wxPoint GetOffsetMils() const   { return m_Offset; }
+
+    int GetLeftMarginMils() const   { return m_LeftMargin; }
+    int GetRightMarginMils() const  { return m_RightMargin; }
+    int GetTopMarginMils() const    { return m_TopMargin; }
+    int GetBottomMarginMils() const { return m_BottomMargin; }
+
+    /**
+     * Function SetUserWidthInches
+     * sets the width of type "User" page in inches.
+     */
+    static void SetUserWidthInches( double aWidthInInches );
+
+    /**
+     * Function SetUserHeightInches
+     * sets the height type "User" page in inches.
+     */
+    static void SetUserHeightInches( double aHeightInInches );
+
+#define PAGE_INFO_COUNT     11      ///< count of standard page sizes
+
+private:
+    wxString    m_Type;            ///< paper type: A4, A3, etc.
+
+    double      m_widthInches;
+    double      m_heightInches;
+
+    wxPoint     m_Offset;          ///< plot offset in 1/1000 inches
+
+    int         m_LeftMargin;
+    int         m_RightMargin;
+    int         m_TopMargin;
+    int         m_BottomMargin;
+
+    static double s_user_height;
+    static double s_user_width;
 };
-
-
-extern Ki_PageDescr   g_Sheet_A4;
-extern Ki_PageDescr   g_Sheet_A3;
-extern Ki_PageDescr   g_Sheet_A2;
-extern Ki_PageDescr   g_Sheet_A1;
-extern Ki_PageDescr   g_Sheet_A0;
-extern Ki_PageDescr   g_Sheet_A;
-extern Ki_PageDescr   g_Sheet_B;
-extern Ki_PageDescr   g_Sheet_C;
-extern Ki_PageDescr   g_Sheet_D;
-extern Ki_PageDescr   g_Sheet_E;
-extern Ki_PageDescr   g_Sheet_GERBER;
-extern Ki_PageDescr   g_Sheet_user;
-extern Ki_PageDescr*  g_SheetSizeList[];
 
 
 extern wxString       g_ProductName;

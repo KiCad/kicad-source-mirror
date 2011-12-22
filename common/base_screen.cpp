@@ -40,7 +40,6 @@
 
 BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_ITEM( aType )
 {
-    m_drawList         = NULL;   /* Draw items list */
     m_UndoRedoCountMax = 10;     /* undo/Redo command Max depth, 10 is a reasonable value */
     m_FirstRedraw      = true;
     m_ScreenNumber     = 1;
@@ -49,12 +48,9 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_ITEM( aType )
     m_Grid.m_Size      = wxRealPoint( 50, 50 );   /* Default grid size */
     m_Grid.m_Id        = ID_POPUP_GRID_LEVEL_50;
     m_Center           = true;
-    m_CurrentSheetDesc = &g_Sheet_A4;
     m_IsPrinting       = false;
     m_ScrollPixelsPerUnitX = 1;
     m_ScrollPixelsPerUnitY = 1;
-
-    InitDatas();
 }
 
 
@@ -63,36 +59,7 @@ BASE_SCREEN::~BASE_SCREEN()
 }
 
 
-void BASE_SCREEN::InitDatas()
-{
-    if( m_Center )
-    {
-        m_crossHairPosition.x = m_crossHairPosition.y = 0;
-        m_DrawOrg.x = -ReturnPageSize().x / 2;
-        m_DrawOrg.y = -ReturnPageSize().y / 2;
-    }
-    else
-    {
-        m_DrawOrg.x = m_DrawOrg.y = 0;
-        m_crossHairPosition.x = ReturnPageSize().x / 2;
-        m_crossHairPosition.y = ReturnPageSize().y / 2;
-    }
-
-    m_O_Curseur.x = m_O_Curseur.y = 0;
-
-    SetCurItem( NULL );
-
-    m_FlagModified = false;   // Set when any change is made on broad.
-    m_FlagSave = false;       // Used in auto save set when an auto save is required.
-}
-
-
-int BASE_SCREEN::GetInternalUnits( void )
-{
-    return EESCHEMA_INTERNAL_UNIT;
-}
-
-
+/*
 wxSize BASE_SCREEN::ReturnPageSize( void )
 {
     int internal_units = GetInternalUnits();
@@ -109,6 +76,39 @@ void BASE_SCREEN::SetPageSize( wxSize& aPageSize )
 
     m_CurrentSheetDesc->m_Size.x = (int) ((double)aPageSize.x * 1000 / internal_units);
     m_CurrentSheetDesc->m_Size.y = (int) ((double)aPageSize.y * 1000 / internal_units);
+}
+*/
+
+
+void BASE_SCREEN::InitDataPoints( const wxSize& aPageSizeInternalUnits )
+{
+    if( m_Center )
+    {
+        m_crossHairPosition.x = m_crossHairPosition.y = 0;
+
+        m_DrawOrg.x = -aPageSizeInternalUnits.x / 2;
+        m_DrawOrg.y = -aPageSizeInternalUnits.y / 2;
+    }
+    else
+    {
+        m_DrawOrg.x = m_DrawOrg.y = 0;
+
+        m_crossHairPosition.x = aPageSizeInternalUnits.x / 2;
+        m_crossHairPosition.y = aPageSizeInternalUnits.y / 2;
+    }
+
+    m_O_Curseur.x = m_O_Curseur.y = 0;
+
+    SetCurItem( NULL );
+
+    m_FlagModified = false;   // Set when any change is made on board.
+    m_FlagSave = false;       // Used in auto save set when an auto save is required.
+}
+
+
+int BASE_SCREEN::GetInternalUnits( void )
+{
+    return EESCHEMA_INTERNAL_UNIT;
 }
 
 
@@ -513,22 +513,3 @@ void BASE_SCREEN::InsertItem( EDA_ITEMS::iterator aIter, EDA_ITEM* aItem )
     m_items.insert( aIter, aItem );
 }
 
-
-#if defined(DEBUG)
-
-void BASE_SCREEN::Show( int nestLevel, std::ostream& os ) const
-{
-    EDA_ITEM* item = m_drawList;
-
-    // for now, make it look like XML, expand on this later.
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
-
-    for(  ; item;  item = item->Next() )
-    {
-        item->Show( nestLevel+1, os );
-    }
-
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
-}
-
-#endif

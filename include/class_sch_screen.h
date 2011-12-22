@@ -55,14 +55,20 @@ enum SCH_LINE_TEST_T
 };
 
 
-/* Max number of sheets in a hierarchy project: */
-#define NB_MAX_SHEET 500
+/// Max number of sheets in a hierarchy project
+#define NB_MAX_SHEET    500
 
 
 class SCH_SCREEN : public BASE_SCREEN
 {
-    int       m_refCount;     ///< Number of sheets referencing this screen.
-                              ///< Delete when it goes to zero.
+    int         m_refCount;     ///< Number of sheets referencing this screen.
+                                ///< Delete when it goes to zero.
+
+                                /// The size of the paper to print or plot on
+    PAGE_INFO   m_paper;        // keep with the MVC model as this class gets split
+
+    SCH_ITEM*   m_drawList;     ///< Object list for the screen.
+                                /// @todo use DLIST<SCH_ITEM> or superior container
 
     /**
      * Function addConnectedItemsToBlock
@@ -85,6 +91,9 @@ public:
         return wxT( "SCH_SCREEN" );
     }
 
+    const PAGE_INFO& GetPageSettings() const                { return m_paper; }
+    void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
+
     void DecRefCount();
 
     void IncRefCount();
@@ -93,12 +102,10 @@ public:
 
     /**
      * Function GetDrawItems().
-     *
      * @return - A pointer to the first item in the linked list of draw items.
      */
-    virtual SCH_ITEM* GetDrawItems() const { return (SCH_ITEM*) BASE_SCREEN::GetDrawItems(); }
-
-    virtual void SetDrawItems( SCH_ITEM* aItem ) { BASE_SCREEN::SetDrawItems( aItem ); }
+    SCH_ITEM* GetDrawItems() const          { return m_drawList; }
+    void SetDrawItems( SCH_ITEM* aItem )    { m_drawList = aItem; }
 
     /**
      * Function GetCurItem
@@ -456,6 +463,10 @@ public:
     {
         BASE_SCREEN::InsertItem( aIter, (EDA_ITEM*) aItem );
     }
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const;     // overload
+#endif
 };
 
 

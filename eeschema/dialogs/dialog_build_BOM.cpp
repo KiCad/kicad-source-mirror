@@ -567,8 +567,8 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
                                        bool CompactForm )
 {
 #if defined(KICAD_GOST)
-	wxString outStr;
-	wxString tmpStr;
+    wxString outStr;
+    wxString tmpStr;
 
 #endif
     if( IsFieldChecked( FOOTPRINT ) )
@@ -577,7 +577,7 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
         {
 #if defined(KICAD_GOST)
             outStr.Printf( wxT( "%c%s" ), s_ExportSeparatorSymbol,
-						   GetChars( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
+                           GetChars( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
 #else
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
                      TO_UTF8( DrawLibItem->GetField( FOOTPRINT )->m_Text ) );
@@ -602,10 +602,10 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 
         if( CompactForm )
 #if defined(KICAD_GOST)
-		{
+        {
             tmpStr.Printf( wxT( "%c%s" ), s_ExportSeparatorSymbol,
                            GetChars( DrawLibItem->GetField( ii )->m_Text ) );
-        	outStr += tmpStr;
+            outStr += tmpStr;
         }
 #else
             fprintf( f, "%c%s", s_ExportSeparatorSymbol,
@@ -613,10 +613,10 @@ void DIALOG_BUILD_BOM::PrintFieldData( FILE* f, SCH_COMPONENT* DrawLibItem,
 #endif
         else
 #if defined(KICAD_GOST)
-		{
+        {
             tmpStr.Printf( wxT( "; %-12s" ),
                            GetChars( DrawLibItem->GetField( ii )->m_Text ) );
-        	outStr += tmpStr;
+            outStr += tmpStr;
         }
 #else
             fprintf( f, "; %-12s",
@@ -750,11 +750,11 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*               f,
                 {
 #if defined(KICAD_GOST)
                     strCur.Printf( wxT( "%c%s" ), s_ExportSeparatorSymbol, GetChars( msg ) );
-                    msg = m_Parent->GetXYSheetReferences( screen, comp->GetPosition() );
+                    msg = m_Parent->GetXYSheetReferences( comp->GetPosition() );
                     strCur.Printf( wxT( "%c%s)" ), s_ExportSeparatorSymbol, GetChars( msg ) );
 #else
                     fprintf( f, "%c%s", s_ExportSeparatorSymbol, TO_UTF8( msg ) );
-                    msg = m_Parent->GetXYSheetReferences( screen, comp->GetPosition() );
+                    msg = m_Parent->GetXYSheetReferences( comp->GetPosition() );
                     fprintf( f, "%c%s)", s_ExportSeparatorSymbol,
                              TO_UTF8( msg ) );
 #endif
@@ -762,7 +762,7 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*               f,
                 else
                 {
                     fprintf( f, "   (Sheet %s)", TO_UTF8( msg ) );
-                    msg = m_Parent->GetXYSheetReferences( screen, comp->GetPosition() );
+                    msg = m_Parent->GetXYSheetReferences( comp->GetPosition() );
                     fprintf( f, "   (loc %s)", TO_UTF8( msg ) );
                 }
             }
@@ -828,8 +828,8 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*               f,
 #if defined(KICAD_GOST)
     else
     {
-    	switch (amount)
-      	{
+        switch (amount)
+        {
         case 1:
             fprintf( f, "%s%s%c%d\n", CmpNameFirst.c_str(), TO_UTF8( strPred ),
                      s_ExportSeparatorSymbol, amount );
@@ -844,8 +844,8 @@ int DIALOG_BUILD_BOM::PrintComponentsListByRef( FILE*               f,
             fprintf( f, "%s..%s%s%c%d\n", CmpNameFirst.c_str(), CmpNameLast.c_str(),
                      TO_UTF8( strPred ), s_ExportSeparatorSymbol, amount );
             break;
-      	}
-	}
+        }
+    }
 #endif
 
     return 0;
@@ -1060,13 +1060,13 @@ int DIALOG_BUILD_BOM::PrintComponentsListByVal( FILE*               f,
             {
                 msg = aList[ii].GetSheetPath().PathHumanReadable();
                 fprintf( f, "   (Sheet %s)", TO_UTF8( msg ) );
-                msg = m_Parent->GetXYSheetReferences( screen, DrawLibItem->GetPosition() );
+                msg = m_Parent->GetXYSheetReferences( DrawLibItem->GetPosition() );
                 fprintf( f, "   (loc %s)", TO_UTF8( msg ) );
             }
         }
 
 #if defined(KICAD_GOST)
-		fprintf( f, "%s", TO_UTF8( PrintFieldData( DrawLibItem ) ) );
+        fprintf( f, "%s", TO_UTF8( PrintFieldData( DrawLibItem ) ) );
 #else
         PrintFieldData( f, DrawLibItem );
 #endif

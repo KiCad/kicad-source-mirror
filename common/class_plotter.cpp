@@ -32,7 +32,6 @@ PLOTTER::PLOTTER( PlotFormat aPlotType )
     output_file   = 0;
     color_mode    = false;      /* Start as a BW plot */
     negative_mode = false;
-    sheet = NULL;
 }
 
 
@@ -424,12 +423,12 @@ void PLOTTER::thick_circle( wxPoint pos, int diametre, int width,
 }
 
 
-void PLOTTER::set_paper_size( Ki_PageDescr* asheet )
+void PLOTTER::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     wxASSERT( !output_file );
-    sheet = asheet;
+    pageInfo = aPageSettings;
 
-    // Sheets are in mils, plotter works with decimals
-    paper_size.x = sheet->m_Size.x * 10;
-    paper_size.y = sheet->m_Size.y * 10;
+    // PAGE_INFO is in mils, plotter works with decimals
+    paper_size = pageInfo.GetSizeMils() * 10;
 }
+

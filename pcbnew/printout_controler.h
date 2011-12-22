@@ -52,8 +52,8 @@ public:
 class BOARD_PRINTOUT_CONTROLER : public wxPrintout
 {
 private:
-    EDA_DRAW_FRAME* m_Parent;
-    PRINT_PARAMETERS m_PrintParams;
+    EDA_DRAW_FRAME*     m_Parent;
+    PRINT_PARAMETERS    m_PrintParams;
 
 public:
     BOARD_PRINTOUT_CONTROLER( const PRINT_PARAMETERS& print_params,

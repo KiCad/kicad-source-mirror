@@ -20,25 +20,24 @@
 
 
 void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
-                      Ki_PageDescr* aSheet,
+                      const PAGE_INFO& aSheet,
                       std::vector<HOLE_INFO> aHoleListBuffer,
                       std::vector<DRILL_TOOL> aToolListBuffer,
                       bool aUnit_Drill_is_Inch, int format,
                       const wxPoint& auxoffset )
 {
-    int       x, y;
-    int       plotX, plotY, TextWidth;
-    double    scale = 1.0;
-    int       intervalle = 0, CharSize = 0;
-    EDA_ITEM* PtStruct;
-    char      line[1024];
-    int       dX, dY;
-    wxPoint   BoardCentre;
-    wxPoint   offset;
-    wxString  msg;
-    PLOTTER*  plotter = NULL;
-
-    SetLocaleTo_C_standard();  // Use the standard notation for float numbers
+    int         x, y;
+    int         plotX, plotY, TextWidth;
+    double      scale = 1.0;
+    int         intervalle = 0, CharSize = 0;
+    EDA_ITEM*   PtStruct;
+    char        line[1024];
+    int         dX, dY;
+    wxPoint     BoardCentre;
+    wxPoint     offset;
+    wxString    msg;
+    PLOTTER*    plotter = NULL;
+    LOCALE_IO   toggle;         // use standard notation for float numbers
 
     // Calculate dimensions and center of PCB
     EDA_RECT bbbox = aPcb->ComputeBoundingBox();
@@ -58,7 +57,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         plotter->set_viewport( offset, scale, 0 );
         break;
 
-    case PLOT_FORMAT_HPGL:  /* Scale for HPGL format. */
+    case PLOT_FORMAT_HPGL:  // Scale for HPGL format.
     {
         offset.x = 0;
         offset.y = 0;
@@ -68,29 +67,29 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         hpgl_plotter->set_pen_number( g_PcbPlotOptions.m_HPGLPenNum );
         hpgl_plotter->set_pen_speed( g_PcbPlotOptions.m_HPGLPenSpeed );
         hpgl_plotter->set_pen_overlap( 0 );
-        plotter->set_paper_size( aSheet );
+        plotter->SetPageSettings( aSheet );
         plotter->set_viewport( offset, scale, 0 );
     }
     break;
 
     case PLOT_FORMAT_POST:
     {
-        Ki_PageDescr* SheetPS = &g_Sheet_A4;
-        wxSize        SheetSize;
-        SheetSize.x = SheetPS->m_Size.x * U_PCB;
-        SheetSize.y = SheetPS->m_Size.y * U_PCB;
-        /* Keep size for drill legend */
-        double Xscale = (double) ( SheetSize.x * 0.8 ) / dX;
-        double Yscale = (double) ( SheetSize.y * 0.6 ) / dY;
+        PAGE_INFO   pageA4( wxT( "A4" ) );
+        wxSize      pageSizeIU = pageA4.GetSizeIU();
+
+        // Keep size for drill legend
+        double Xscale = (double) ( pageSizeIU.x * 0.8 ) / dX;
+        double Yscale = (double) ( pageSizeIU.y * 0.6 ) / dY;
 
         scale = MIN( Xscale, Yscale );
 
-        offset.x  = (int) ( (double) BoardCentre.x - ( (double) SheetSize.x / 2.0 ) / scale );
-        offset.y  = (int) ( (double) BoardCentre.y - ( (double) SheetSize.y / 2.0 ) / scale );
-        offset.y += SheetSize.y / 8;      /* offset to legend */
+        offset.x  = (int) ( (double) BoardCentre.x - ( (double) pageSizeIU.x / 2.0 ) / scale );
+        offset.y  = (int) ( (double) BoardCentre.y - ( (double) pageSizeIU.y / 2.0 ) / scale );
+
+        offset.y += pageSizeIU.y / 8;      // offset to legend
         PS_PLOTTER* ps_plotter = new PS_PLOTTER;
         plotter = ps_plotter;
-        ps_plotter->set_paper_size( SheetPS );
+        ps_plotter->SetPageSettings( pageA4 );
         plotter->set_viewport( offset, scale, 0 );
         break;
     }
@@ -102,7 +101,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         scale    = 1;
         DXF_PLOTTER* dxf_plotter = new DXF_PLOTTER;
         plotter = dxf_plotter;
-        plotter->set_paper_size( aSheet );
+        plotter->SetPageSettings( aSheet );
         plotter->set_viewport( offset, scale, 0 );
         break;
     }
@@ -116,7 +115,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     plotter->set_default_line_width( 10 );
     plotter->start_plot( aFile );
 
-    /* Draw items on edge layer */
+    // Draw items on edge layer
 
     for( PtStruct = aPcb->m_Drawings; PtStruct != NULL; PtStruct = PtStruct->Next() )
     {
@@ -154,19 +153,19 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
     // Plot board outlines and drill map
     Gen_Drill_PcbMap( aPcb, plotter, aHoleListBuffer, aToolListBuffer );
 
-    /* Print a list of symbols used. */
-    CharSize = 800;                        /* text size in 1/10000 mils */
+    // Print a list of symbols used.
+    CharSize = 800;                        // text size in 1/10000 mils
     double CharScale = 1.0 / scale;        /* real scale will be CharScale
                                             * scale_x, because the global
                                             * plot scale is scale_x */
     TextWidth  = (int) ( (CharSize * CharScale) / 10 );   // Set text width (thickness)
     intervalle = (int) ( CharSize * CharScale ) + TextWidth;
 
-    /* Trace information. */
+    // Trace information.
     plotX = (int) ( (double) bbbox.GetX() + 200.0 * CharScale );
     plotY = bbbox.GetBottom() + intervalle;
 
-    /* Plot title  "Info" */
+    // Plot title  "Info"
     wxString Text = wxT( "Drill Map:" );
     plotter->text( wxPoint( plotX, plotY ), BLACK, Text, 0,
                    wxSize( (int) ( CharSize * CharScale ),
@@ -188,7 +187,7 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
         y = (int) ( (double) plotY + (double) CharSize * CharScale );
         plotter->marker( wxPoint( x, y ), plot_diam, ii );
 
-        /* Trace the legends. */
+        // Trace the legends.
 
         // List the diameter of each drill in the selected Drill Unit,
         // and then its diameter in the other Drill Unit.
@@ -235,7 +234,6 @@ void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,
 
     plotter->end_plot();
     delete plotter;
-    SetLocaleTo_Default();     // Revert to local notation for float numbers
 }
 
 
@@ -251,7 +249,7 @@ void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* aPlotter,
 {
     wxPoint pos;
 
-    /* create the drill list */
+    // create the drill list
     if( aToolListBuffer.size() > 13 )
     {
         DisplayInfoMessage( NULL,
