@@ -235,15 +235,29 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_TRACK_WIDTH_TO_NEXT:
+        if( GetCanvas()->m_mouseCaptureCallback == ShowNewTrackWhenMovingCursor )
+            ShowNewTrackWhenMovingCursor( GetCanvas(), aDC, wxDefaultPosition, false );
+
         GetBoard()->m_TrackWidthSelector = ( GetBoard()->m_TrackWidthSelector + 1 ) %
                                            GetBoard()->m_TrackWidthList.size();
+
+        if( GetCanvas()->m_mouseCaptureCallback == ShowNewTrackWhenMovingCursor )
+            ShowNewTrackWhenMovingCursor( GetCanvas(), aDC, wxDefaultPosition, false );
+
         break;
 
     case HK_SWITCH_TRACK_WIDTH_TO_PREVIOUS:
+        if( GetCanvas()->m_mouseCaptureCallback == ShowNewTrackWhenMovingCursor )
+            ShowNewTrackWhenMovingCursor( GetCanvas(), aDC, wxDefaultPosition, false );
+
         if( GetBoard()->m_TrackWidthSelector == 0 )
             GetBoard()->m_TrackWidthSelector = GetBoard()->m_TrackWidthList.size();
 
         GetBoard()->m_TrackWidthSelector--;
+
+        if( GetCanvas()->m_mouseCaptureCallback == ShowNewTrackWhenMovingCursor )
+            ShowNewTrackWhenMovingCursor( GetCanvas(), aDC, wxDefaultPosition, false );
+
         break;
 
     case HK_SWITCH_GRID_TO_FASTGRID1:
