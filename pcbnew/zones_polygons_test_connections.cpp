@@ -31,11 +31,9 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode );
 void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 {
     // list of pads and tracks candidates on this layer and on this net.
-    std::vector <BOARD_CONNECTED_ITEM*> Candidates;
-    int                   subnet = 0;
-    int                   netcode;
-    ZONE_CONTAINER*       curr_zone;
-    BOARD_CONNECTED_ITEM* item;
+    // It is static to avoid multiple memory realloc.
+    static std::vector <BOARD_CONNECTED_ITEM*> Candidates;
+
 
     // clear .m_ZoneSubnet parameter for pads
     for( MODULE* module = m_Modules;  module;  module = module->Next() )
@@ -53,13 +51,14 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
     }
 
     // examine all zones, net by net:
+    int subnet = 0;
     for( int index = 0; index < GetAreaCount(); index++ )
     {
-        curr_zone = GetArea( index );
+        ZONE_CONTAINER* curr_zone = GetArea( index );
         if( !curr_zone->IsOnCopperLayer() )
             continue;
 
-        netcode = curr_zone->GetNet();
+        int netcode = curr_zone->GetNet();
         if( (aNetcode >= 0) && !( aNetcode == netcode ) )
             continue;
 
@@ -71,21 +70,22 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 
         // At this point, layers are not considered, because areas on different layers can
         // be connected by a via or a pad.
-        for( MODULE* module = m_Modules;  module;  module = module->Next() )
-        {
-            for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
-            {
-                if( pad->GetNet() != curr_zone->GetNet() )
-                    continue;
 
-                Candidates.push_back( pad );
-            }
-        }
+        // Build the list of pads candidates connected to the net:
+        NETINFO_ITEM* net = FindNet( netcode );
+        wxASSERT( net );
+        if( net == NULL )
+            continue;
+        Candidates.reserve( net->m_PadInNetList.size() );
+        for( unsigned ii = 0; ii < net->m_PadInNetList.size(); ii++ )
+            Candidates.push_back( net->m_PadInNetList[ii] );
 
-        for( TRACK* track = m_Track; track;  track = track->Next() )
+        // Build the list of track candidates connected to the net:
+        TRACK* track = m_Track.GetFirst()->GetStartNetCode( netcode );
+        for( ; track; track = track->Next() )
         {
             if( track->GetNet() != netcode )
-                continue;
+                break;
             Candidates.push_back( track );
         }
 
@@ -102,7 +102,7 @@ void BOARD::Test_Connections_To_Copper_Areas( int aNetcode )
 
                 for( unsigned ic = 0; ic < Candidates.size(); ic++ )
                 { // test if this area is connected to a board item:
-                    item = Candidates[ic];
+                    BOARD_CONNECTED_ITEM* item = Candidates[ic];
 
                     if( !item->IsOnLayer( curr_zone->GetLayer() ) )
                         continue;
@@ -212,10 +212,6 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb )
  */
 void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
 {
-    BOARD_CONNECTED_ITEM* item;
-    int  old_subnet, subnet, next_subnet_free_number;
-    int  old_zone_subnet, zone_subnet;
-
     // Ensure a zone with the given netcode exists: examine all zones:
     bool found = false;
 
@@ -233,34 +229,37 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
     if( !found )  // No zone with this netcode, therefore no connection by zone
         return;
 
-    std::vector <BOARD_CONNECTED_ITEM*> Candidates;  // list of pads and tracks candidates to test.
+    // list of pads and tracks candidates to test:
+    // It is static to avoid multiple memory realloc.
+    static std::vector <BOARD_CONNECTED_ITEM*> Candidates;
+    Candidates.clear();
 
-    // Build a list of candidates connected to the net:
-    next_subnet_free_number = 0;
+    // Build the list of pads candidates connected to the net:
+    NETINFO_ITEM* net = aPcb->FindNet( aNetcode );
+    wxASSERT( net );
+    Candidates.reserve( net->m_PadInNetList.size() );
+    for( unsigned ii = 0; ii < net->m_PadInNetList.size(); ii++ )
+        Candidates.push_back( net->m_PadInNetList[ii] );
 
-    for( MODULE* module = aPcb->m_Modules;  module;  module = module->Next() )
+    // Build the list of track candidates connected to the net:
+    TRACK* track;
+    track = aPcb->m_Track.GetFirst()->GetStartNetCode( aNetcode );
+    for( ; track; track = track->Next() )
     {
-        for( D_PAD* pad = module->m_Pads; pad != NULL; pad = pad->Next() )
-        {
-            if( pad->GetNet() == aNetcode )
-            {
-                Candidates.push_back( pad );
-                next_subnet_free_number = MAX( next_subnet_free_number, pad->GetSubNet() );
-            }
-        }
-    }
-
-    for( TRACK* track = aPcb->m_Track; track;  track = track->Next() )
-    {
-        if( track->GetNet() == aNetcode )
-        {
-            Candidates.push_back( track );
-            next_subnet_free_number = MAX( next_subnet_free_number, track->GetSubNet() );
-        }
+        if( track->GetNet() != aNetcode )
+            break;
+        Candidates.push_back( track );
     }
 
     if( Candidates.size() == 0 )
         return;
+
+    int next_subnet_free_number = 0;
+    for( unsigned ii = 0; ii < Candidates.size(); ii++ )
+    {
+        int subnet = Candidates[ii]->GetSubNet();
+        next_subnet_free_number = MAX( next_subnet_free_number, subnet );
+    }
 
     next_subnet_free_number++;     // This is a subnet we can use with not connected items
                                    // by tracks, but connected by zone.
@@ -269,12 +268,12 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
     sort( Candidates.begin(), Candidates.end(), CmpZoneSubnetValue );
 
     // Some items can be not connected, but they can be connected to a filled area:
-    // give them a subnet common to these items connected only by the area, and not already used.
+    // give them a subnet common to these items connected only by the area,
+    // and not already used.
     // a value like next_subnet_free_number+zone_subnet is right
     for( unsigned jj = 0; jj < Candidates.size(); jj++ )
     {
-        item = Candidates[jj];
-
+        BOARD_CONNECTED_ITEM* item = Candidates[jj];
         if ( item->GetSubNet() == 0 && (item->GetZoneSubNet() > 0) )
         {
             item->SetSubNet( next_subnet_free_number + item->GetZoneSubNet() );
@@ -283,18 +282,17 @@ void Merge_SubNets_Connected_By_CopperAreas( BOARD* aPcb, int aNetcode )
 
     // Now, for each zone subnet, we search for 2 items with different subnets.
     // if found, the 2 subnet are merged in the whole candidate list.
-    old_subnet      = 0;
-    old_zone_subnet = 0;
-
+    int old_subnet      = 0;
+    int old_zone_subnet = 0;
     for( unsigned ii = 0; ii < Candidates.size(); ii++ )
     {
-        item = Candidates[ii];
-        zone_subnet = item->GetZoneSubNet();
+        BOARD_CONNECTED_ITEM* item = Candidates[ii];
+        int zone_subnet = item->GetZoneSubNet();
 
         if( zone_subnet == 0 )  // Not connected by a filled area, skip it
             continue;
 
-        subnet = item->GetSubNet();
+        int subnet = item->GetSubNet();
 
         if( zone_subnet != old_zone_subnet )  // a new zone subnet is found
         {

@@ -408,20 +408,22 @@ wxString SCH_FIND_COLLECTOR::GetText()
     SCH_FIND_COLLECTOR_DATA data = m_data[ m_foundIndex ];
     EDA_ITEM* foundItem = m_List[ m_foundIndex ];
 
-    wxCHECK_MSG( foundItem != NULL, wxEmptyString, wxT( "Inavalid found item pointer." ) );
+    wxCHECK_MSG( foundItem != NULL, wxEmptyString, wxT( "Invalid found item pointer." ) );
 
     wxString msg;
 
     if( data.GetParent() )
     {
-        msg = _( "Child item " ) + foundItem->GetSelectMenuText() +
-              _( " of parent item " ) + data.GetParent()->GetSelectMenuText() +
-              _( " found in sheet " ) + data.GetSheetPath();
+        msg.Printf( _( "Child item %s of parent item %s found in sheet %s" ),
+                    GetChars( foundItem->GetSelectMenuText() ),
+                    GetChars( data.GetParent()->GetSelectMenuText() ),
+                    GetChars( data.GetSheetPath() ) );
     }
     else
     {
-        msg = _( "Item " ) + foundItem->GetSelectMenuText() + _( " found in sheet " ) +
-              data.GetSheetPath();
+        msg.Printf( _( "Item %s found in sheet %s" ),
+                    GetChars( foundItem->GetSelectMenuText() ),
+                    GetChars( data.GetSheetPath() ) );
     }
 
     return msg;
