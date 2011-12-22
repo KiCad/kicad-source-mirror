@@ -111,7 +111,7 @@ void GERBVIEW_FRAME::Erase_Current_Layer( bool query )
     }
 
     GetScreen()->SetModify();
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();
 }

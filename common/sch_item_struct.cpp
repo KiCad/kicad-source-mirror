@@ -100,13 +100,13 @@ void SCH_ITEM::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
     m_Flags = 0;
     screen->SetModify();
     screen->SetCurItem( NULL );
-    aFrame->DrawPanel->SetMouseCapture( NULL, NULL );
-    aFrame->DrawPanel->EndMouseCapture();
+    aFrame->GetCanvas()->SetMouseCapture( NULL, NULL );
+    aFrame->GetCanvas()->EndMouseCapture();
 
     if( aDC )
     {
-        EDA_CROSS_HAIR_MANAGER( aFrame->DrawPanel, aDC );  // Erase schematic cursor
-        Draw( aFrame->DrawPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+        EDA_CROSS_HAIR_MANAGER( aFrame->GetCanvas(), aDC );  // Erase schematic cursor
+        Draw( aFrame->GetCanvas(), aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     }
 }
 

@@ -292,7 +292,7 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     {
         color = g_InvisibleItemColor;
     }
-    else if( ( m_Selected & IS_SELECTED ) && ( aColor < 0 ) )
+    else if( IsSelected() && ( aColor < 0 ) )
     {
         color = g_ItemSelectetColor;
     }

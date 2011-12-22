@@ -1,3 +1,28 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file block_commande.cpp
  * @brief Common routines for managing on block commands.
@@ -155,7 +180,7 @@ void BLOCK_SELECTOR::ClearListAndDeleteItems()
  */
 void BLOCK_SELECTOR::PushItem( ITEM_PICKER& aItem )
 {
-    m_ItemsSelection.PushItem(  aItem );
+    m_ItemsSelection.PushItem( aItem );
 }
 
 
@@ -181,7 +206,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
     if( ( Block->m_Command != BLOCK_IDLE ) || ( Block->m_State != STATE_NO_BLOCK ) )
         return false;
 
-    Block->m_Flags   = 0;
+    Block->ClearFlags();
     Block->m_Command = (CmdBlockType) ReturnBlockCommand( key );
 
     if( Block->m_Command == 0 )
@@ -203,11 +228,11 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
     case BLOCK_MIRROR_X:
     case BLOCK_MIRROR_Y:            /* mirror */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
-        Block->InitData( DrawPanel, startpos );
+        Block->InitData( m_canvas, startpos );
         break;
 
     case BLOCK_PASTE:
-        Block->InitData( DrawPanel, startpos );
+        Block->InitData( m_canvas, startpos );
         Block->m_BlockLastCursorPosition.x = 0;
         Block->m_BlockLastCursorPosition.y = 0;
         InitBlockPasteInfos();
@@ -216,11 +241,11 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
         {
             DisplayError( this, wxT( "No Block to paste" ), 20 );
             GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-            DrawPanel->m_mouseCaptureCallback = NULL;
+            m_canvas->m_mouseCaptureCallback = NULL;
             return true;
         }
 
-        if( !DrawPanel->IsMouseCaptured() )
+        if( !m_canvas->IsMouseCaptured() )
         {
             Block->m_ItemsSelection.ClearItemsList();
             DisplayError( this,
@@ -229,7 +254,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
         }
 
         Block->m_State = STATE_BLOCK_MOVE;
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, startpos, false );
+        m_canvas->m_mouseCaptureCallback( m_canvas, DC, startpos, false );
         break;
 
     default:
@@ -298,7 +323,7 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* Panel, wxDC* DC )
             screen->m_BlockLocate.ClearItemsList();
     }
 
-    screen->m_BlockLocate.m_Flags = 0;
+    screen->m_BlockLocate.ClearFlags();
     screen->m_BlockLocate.m_State = STATE_NO_BLOCK;
     screen->m_BlockLocate.m_Command = BLOCK_ABORT;
     Panel->GetParent()->HandleBlockEnd( DC );

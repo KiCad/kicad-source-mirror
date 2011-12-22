@@ -39,13 +39,13 @@ void FOOTPRINT_EDIT_FRAME::Start_Move_EdgeMod( EDGE_MODULE* Edge, wxDC* DC )
     if( Edge == NULL )
         return;
 
-    Edge->Draw( DrawPanel, DC, GR_XOR );
-    Edge->m_Flags |= IS_MOVED;
+    Edge->Draw( m_canvas, DC, GR_XOR );
+    Edge->SetFlags( IS_MOVED );
     MoveVector.x   = MoveVector.y = 0;
     CursorInitialPosition    = GetScreen()->GetCrossHairPosition();
-    DrawPanel->SetMouseCapture( ShowCurrentOutlineWhileMoving, Abort_Move_ModuleOutline );
+    m_canvas->SetMouseCapture( ShowCurrentOutlineWhileMoving, Abort_Move_ModuleOutline );
     SetCurItem( Edge );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 }
 
 
@@ -60,15 +60,15 @@ void FOOTPRINT_EDIT_FRAME::Place_EdgeMod( EDGE_MODULE* aEdge )
     aEdge->SetStart0( aEdge->GetStart0() - MoveVector );
     aEdge->SetEnd0(   aEdge->GetEnd0()   - MoveVector );
 
-    aEdge->m_Flags = 0;
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    aEdge->ClearFlags();
+    m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
     OnModify();
 
     MODULE* module = (MODULE*) aEdge->GetParent();
     module->CalculateBoundingBox();
 
-    DrawPanel->Refresh( );
+    m_canvas->Refresh( );
 }
 
 
@@ -278,7 +278,7 @@ static void Abort_Move_ModuleOutline( EDA_DRAW_PANEL* Panel, wxDC* DC )
         else   // On aborting, move existing outline to its initial position.
         {
             Edge->Draw( Panel, DC, GR_XOR, MoveVector );
-            Edge->m_Flags = 0;
+            Edge->ClearFlags();
             Edge->Draw( Panel, DC, GR_OR );
         }
     }
@@ -308,7 +308,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
         module->m_Drawings.PushFront( Edge );
 
         // Update characteristics of the segment or arc.
-        Edge->m_Flags = IS_NEW;
+        Edge->SetFlags( IS_NEW );
         Edge->SetAngle( angle );
         Edge->SetShape( type_edge );
 
@@ -337,7 +337,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
 
         Edge->m_End0 = Edge->m_Start0;
         module->CalculateBoundingBox();
-        DrawPanel->SetMouseCapture( ShowNewEdgeModule, Abort_Move_ModuleOutline );
+        m_canvas->SetMouseCapture( ShowNewEdgeModule, Abort_Move_ModuleOutline );
     }
     /* Segment creation in progress.
      * The ending coordinate is updated by the function
@@ -350,18 +350,18 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
         {
             if( Edge->m_Start0 != Edge->m_End0 )
             {
-                Edge->Draw( DrawPanel, DC, GR_OR );
+                Edge->Draw( m_canvas, DC, GR_OR );
 
                 EDGE_MODULE* newedge = new EDGE_MODULE( module );
                 newedge->Copy( Edge );
 
                 // insert _after_ Edge, which is the same as inserting before Edge->Next()
                 module->m_Drawings.Insert( newedge, Edge->Next() );
-                Edge->m_Flags = 0;
+                Edge->ClearFlags();
 
                 Edge = newedge;     // point now new item
 
-                Edge->m_Flags = IS_NEW;
+                Edge->SetFlags( IS_NEW );
                 Edge->SetWidth( g_ModuleSegmentWidth );
                 Edge->SetStart( GetScreen()->GetCrossHairPosition() );
                 Edge->SetEnd( Edge->GetStart() );
@@ -398,7 +398,7 @@ void FOOTPRINT_EDIT_FRAME::End_Edge_Module( EDGE_MODULE* Edge )
 
     if( Edge )
     {
-        Edge->m_Flags = 0;
+        Edge->ClearFlags();
 
         /* If last segment length is 0: remove it */
         if( Edge->GetStart() == Edge->GetEnd() )
@@ -408,5 +408,5 @@ void FOOTPRINT_EDIT_FRAME::End_Edge_Module( EDGE_MODULE* Edge )
     Module->CalculateBoundingBox();
     Module->m_LastEdit_Time = time( NULL );
     OnModify();
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
 }

@@ -421,5 +421,5 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
         }
     }
 
-    DrawPanel->Refresh( true );
+    m_canvas->Refresh( true );
 }

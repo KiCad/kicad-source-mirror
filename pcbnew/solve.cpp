@@ -267,8 +267,8 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
     bool          stop = false;
     wxString      msg;
 
-    DrawPanel->m_AbortRequest = false;
-    DrawPanel->m_AbortEnable  = true;
+    m_canvas->m_AbortRequest = false;
+    m_canvas->m_AbortEnable  = true;
 
     s_Clearance = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
 
@@ -289,7 +289,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
         /* Test to stop routing ( escape key pressed ) */
         wxYield();
 
-        if( DrawPanel->m_AbortRequest )
+        if( m_canvas->m_AbortRequest )
         {
             if( IsOK( this, _( "Abort routing?" ) ) )
             {
@@ -299,7 +299,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
             }
             else
             {
-                DrawPanel->m_AbortRequest = 0;
+                m_canvas->m_AbortRequest = 0;
             }
         }
 
@@ -317,13 +317,13 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
         }
 
         pt_cur_ch = pt_cur_ch;
-        segm_oX = GetBoard()->GetBoundingBox().m_Pos.x + (Board.m_GridRouting * col_source);
-        segm_oY = GetBoard()->GetBoundingBox().m_Pos.y + (Board.m_GridRouting * row_source);
-        segm_fX = GetBoard()->GetBoundingBox().m_Pos.x + (Board.m_GridRouting * col_target);
-        segm_fY = GetBoard()->GetBoundingBox().m_Pos.y + (Board.m_GridRouting * row_target);
+        segm_oX = GetBoard()->GetBoundingBox().GetX() + (Board.m_GridRouting * col_source);
+        segm_oY = GetBoard()->GetBoundingBox().GetY() + (Board.m_GridRouting * row_source);
+        segm_fX = GetBoard()->GetBoundingBox().GetX() + (Board.m_GridRouting * col_target);
+        segm_fY = GetBoard()->GetBoundingBox().GetY() + (Board.m_GridRouting * row_target);
 
         /* Draw segment. */
-        GRLine( &DrawPanel->m_ClipBox,
+        GRLine( &m_canvas->m_ClipBox,
                 DC,
                 segm_oX,
                 segm_oY,
@@ -331,8 +331,8 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
                 segm_fY,
                 0,
                 WHITE | GR_XOR );
-        pt_cur_ch->m_PadStart->Draw( DrawPanel, DC, GR_OR | GR_HIGHLIGHT );
-        pt_cur_ch->m_PadEnd->Draw( DrawPanel, DC, GR_OR | GR_HIGHLIGHT );
+        pt_cur_ch->m_PadStart->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
+        pt_cur_ch->m_PadEnd->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
 
         success = Autoroute_One_Track( this,
                                        DC,
@@ -371,14 +371,14 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
         AppendMsgPanel( wxT( "Not Connected" ), msg, CYAN );
 
         /* Delete routing from display. */
-        pt_cur_ch->m_PadStart->Draw( DrawPanel, DC, GR_AND );
-        pt_cur_ch->m_PadEnd->Draw( DrawPanel, DC, GR_AND );
+        pt_cur_ch->m_PadStart->Draw( m_canvas, DC, GR_AND );
+        pt_cur_ch->m_PadEnd->Draw( m_canvas, DC, GR_AND );
 
         if( stop )
             break;
     }
 
-    DrawPanel->m_AbortEnable = false;
+    m_canvas->m_AbortEnable = false;
 
     SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
     s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
@@ -469,9 +469,9 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
      */
     {
         int cX = ( Board.m_GridRouting * col_source )
-                 + pcbframe->GetBoard()->GetBoundingBox().m_Pos.x;
+                 + pcbframe->GetBoard()->GetBoundingBox().GetX();
         int cY = ( Board.m_GridRouting * row_source )
-                 + pcbframe->GetBoard()->GetBoundingBox().m_Pos.y;
+                 + pcbframe->GetBoard()->GetBoundingBox().GetY();
         int dx = pt_cur_ch->m_PadStart->m_Size.x / 2;
         int dy = pt_cur_ch->m_PadStart->m_Size.y / 2;
         int px = pt_cur_ch->m_PadStart->GetPosition().x;
@@ -484,9 +484,9 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             goto end_of_route;
 
         cX = ( Board.m_GridRouting * col_target )
-             + pcbframe->GetBoard()->GetBoundingBox().m_Pos.x;
+             + pcbframe->GetBoard()->GetBoundingBox().GetX();
         cY = ( Board.m_GridRouting * row_target )
-             + pcbframe->GetBoard()->GetBoundingBox().m_Pos.y;
+             + pcbframe->GetBoard()->GetBoundingBox().GetY();
         dx = pt_cur_ch->m_PadEnd->m_Size.x / 2;
         dy = pt_cur_ch->m_PadEnd->m_Size.y / 2;
         px = pt_cur_ch->m_PadEnd->GetPosition().x;
@@ -608,7 +608,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         {
             /* Remove link. */
             GRSetDrawMode( DC, GR_XOR );
-            GRLine( &pcbframe->DrawPanel->m_ClipBox,
+            GRLine( &pcbframe->GetCanvas()->m_ClipBox,
                     DC,
                     segm_oX,
                     segm_oY,
@@ -627,7 +627,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             break;                  /* Routing complete. */
         }
 
-        if( pcbframe->DrawPanel->m_AbortRequest )
+        if( pcbframe->GetCanvas()->m_AbortRequest )
         {
             result = STOP_FROM_ESC;
             break;
@@ -1170,11 +1170,11 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
         g_CurrentTrackSegment->SetLayer( 0x0F );
 
         g_CurrentTrackSegment->m_Start.x   =
-            g_CurrentTrackSegment->m_End.x = pcb->GetBoundingBox().m_Pos.x +
+            g_CurrentTrackSegment->m_End.x = pcb->GetBoundingBox().GetX() +
                                              ( Board.m_GridRouting * row );
 
         g_CurrentTrackSegment->m_Start.y   =
-            g_CurrentTrackSegment->m_End.y = pcb->GetBoundingBox().m_Pos.y +
+            g_CurrentTrackSegment->m_End.y = pcb->GetBoundingBox().GetY() +
                                              ( Board.m_GridRouting * col );
 
         g_CurrentTrackSegment->m_Width = pcb->GetCurrentViaSize();
@@ -1194,9 +1194,9 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
             g_CurrentTrackSegment->SetLayer( Route_Layer_TOP );
 
         g_CurrentTrackSegment->SetState( TRACK_AR, ON );
-        g_CurrentTrackSegment->m_End.x = pcb->GetBoundingBox().m_Pos.x +
+        g_CurrentTrackSegment->m_End.x = pcb->GetBoundingBox().GetX() +
                                          ( Board.m_GridRouting * row );
-        g_CurrentTrackSegment->m_End.y = pcb->GetBoundingBox().m_Pos.y +
+        g_CurrentTrackSegment->m_End.y = pcb->GetBoundingBox().GetY() +
                                          ( Board.m_GridRouting * col );
         g_CurrentTrackSegment->SetNet( current_net_code );
 
@@ -1274,7 +1274,7 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
 
     int dx0, dy0, dx1, dy1;
     int marge, via_marge;
-    EDA_DRAW_PANEL* panel = pcbframe->DrawPanel;
+    EDA_DRAW_PANEL* panel = pcbframe->GetCanvas();
     PCB_SCREEN* screen = pcbframe->GetScreen();
 
     marge = s_Clearance + ( pcbframe->GetBoard()->GetCurrentTrackWidth() / 2 );

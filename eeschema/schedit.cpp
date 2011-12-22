@@ -100,17 +100,17 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_DELETE:
 
         // Stop the current command (if any) but keep the current tool
-        DrawPanel->EndMouseCapture();
+        m_canvas->EndMouseCapture();
         break;
 
     default:
 
         // Stop the current command and deselect the current tool
-        DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
         break;
     }
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
     item = screen->GetCurItem();    // Can be modified by previous calls.
 
     switch( id )
@@ -134,30 +134,30 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) item, '/' );
         break;
 
     case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         SetBusEntryShape( &dc, (SCH_BUS_ENTRY*) item, '\\' );
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        if( DrawPanel->IsMouseCaptured() )
+        if( m_canvas->IsMouseCaptured() )
         {
-            DrawPanel->EndMouseCapture();
-            SetToolID( GetToolId(), DrawPanel->GetCurrentCursor(), wxEmptyString );
+            m_canvas->EndMouseCapture();
+            SetToolID( GetToolId(), m_canvas->GetCurrentCursor(), wxEmptyString );
         }
         else
         {
-            SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         }
 
         break;
 
     case ID_POPUP_END_LINE:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         EndSegment( &dc );
         break;
 
@@ -168,24 +168,24 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_DELETE_NODE:
     case ID_POPUP_SCH_DELETE_CONNECTION:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION );
         screen->SetCurItem( NULL );
         m_itemToRepeat = NULL;
-        screen->TestDanglingEnds( DrawPanel, &dc );
-        DrawPanel->Refresh();
+        screen->TestDanglingEnds( m_canvas, &dc );
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_SCH_BREAK_WIRE:
     {
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         SCH_ITEM* oldWiresList = screen->ExtractWires( true );
         screen->BreakSegment( screen->GetCrossHairPosition() );
 
         if( oldWiresList )
             SaveCopyInUndoList( oldWiresList, UR_WIRE_IMAGE );
 
-        screen->TestDanglingEnds( DrawPanel, &dc );
+        screen->TestDanglingEnds( m_canvas, &dc );
     }
     break;
 
@@ -197,19 +197,19 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         DeleteItem( item );
         screen->SetCurItem( NULL );
         m_itemToRepeat = NULL;
-        screen->TestDanglingEnds( DrawPanel, &dc );
+        screen->TestDanglingEnds( m_canvas, &dc );
         SetSheetNumberAndCount();
         OnModify();
         break;
 
     case ID_POPUP_SCH_END_SHEET:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         item->Place( this, &dc );
         break;
 
     case ID_POPUP_SCH_RESIZE_SHEET:
         ReSizeSheet( (SCH_SHEET*) item, &dc );
-        screen->TestDanglingEnds( DrawPanel, &dc );
+        screen->TestDanglingEnds( m_canvas, &dc );
         break;
 
     case ID_POPUP_IMPORT_GLABEL:
@@ -236,12 +236,12 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             SaveCopyInUndoList( sheet, UR_CHANGED );
             sheet->CleanupSheet();
             OnModify();
-            DrawPanel->RefreshDrawingRect( sheet->GetBoundingBox() );
+            m_canvas->RefreshDrawingRect( sheet->GetBoundingBox() );
         }
         break;
 
     case ID_POPUP_SCH_INIT_CMP:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
@@ -249,7 +249,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         // Ensure the struct is a component (could be a struct of a component, like Field, text..)
         if( item && item->Type() == SCH_COMPONENT_T )
         {
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             ConvertPart( (SCH_COMPONENT*) item, &dc );
         }
 
@@ -291,8 +291,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        DrawPanel->m_AutoPAN_Request = false;
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
@@ -301,25 +301,25 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_DELETE_BLOCK:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         HandleBlockEndByPopUp( BLOCK_DELETE, &dc );
         SetSheetNumberAndCount();
         break;
 
     case ID_POPUP_COPY_BLOCK:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         HandleBlockEndByPopUp( BLOCK_COPY, &dc );
         break;
 
     case ID_POPUP_DRAG_BLOCK:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         HandleBlockEndByPopUp( BLOCK_DRAG, &dc );
         break;
 
     case ID_POPUP_SCH_ADD_JUNCTION:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         screen->SetCurItem( AddJunction( &dc, screen->GetCrossHairPosition(), true ) );
-        screen->TestDanglingEnds( DrawPanel, &dc );
+        screen->TestDanglingEnds( m_canvas, &dc );
         screen->SetCurItem( NULL );
         break;
 
@@ -332,7 +332,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( item )
         {
             item->Place( this, &dc );
-            screen->TestDanglingEnds( DrawPanel, &dc );
+            screen->TestDanglingEnds( m_canvas, &dc );
             screen->SetCurItem( NULL );
         }
 
@@ -380,7 +380,7 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
             return;
     }
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     switch( item->Type() )
     {
@@ -426,18 +426,18 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
 
     if( screen->IsBlockActive() )
     {
-        DrawPanel->SetCursor( wxCursor( DrawPanel->GetDefaultCursor() ) );
+        m_canvas->SetCursor( wxCursor( m_canvas->GetDefaultCursor() ) );
         screen->ClearBlockCommand();
 
         // Stop the current command (if any) but keep the current tool
-        DrawPanel->EndMouseCapture();
+        m_canvas->EndMouseCapture();
     }
     else
     {
-        if( DrawPanel->IsMouseCaptured() ) // Stop the current command but keep the current tool
-            DrawPanel->EndMouseCapture();
+        if( m_canvas->IsMouseCaptured() ) // Stop the current command but keep the current tool
+            m_canvas->EndMouseCapture();
         else                    // Deselect current tool
-            DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+            m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
      }
 }
 
@@ -447,12 +447,12 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     int id = aEvent.GetId();
 
     // Stop the current command and deselect the current tool.
-    DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     switch( id )
     {
     case ID_NO_TOOL_SELECTED:
-        SetToolID( id, DrawPanel->GetDefaultCursor(), _( "No tool selected" ) );
+        SetToolID( id, m_canvas->GetDefaultCursor(), _( "No tool selected" ) );
         break;
 
     case ID_HIERARCHY_PUSH_POP_BUTT:
@@ -542,7 +542,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
         wxPoint pos = data->GetPosition();
 
-        INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+        INSTALL_UNBUFFERED_DC( dc, m_canvas );
         OnLeftClick( &dc, pos );
     }
 }
@@ -563,7 +563,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
 
     if( screen->GetConnection( pos, pickList, aFullConnection ) != 0 )
     {
-        DeleteItemsInList( DrawPanel, pickList );
+        DeleteItemsInList( m_canvas, pickList );
         OnModify();
     }
 }
@@ -585,7 +585,7 @@ bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
         DeleteItem( item );
 
         if( itemHasConnections )
-            screen->TestDanglingEnds( DrawPanel, DC );
+            screen->TestDanglingEnds( m_canvas, DC );
 
         OnModify();
         return true;
@@ -676,18 +676,18 @@ void SCH_EDIT_FRAME::MoveItem( SCH_ITEM* aItem, wxDC* aDC )
 
     aItem->SetFlags( IS_MOVED );
 
-    DrawPanel->CrossHairOff( aDC );
+    m_canvas->CrossHairOff( aDC );
 
     if( aItem->Type() != SCH_SHEET_PIN_T )
         GetScreen()->SetCrossHairPosition( aItem->GetPosition() );
 
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
     OnModify();
-    DrawPanel->SetMouseCapture( moveItem, abortMoveItem );
+    m_canvas->SetMouseCapture( moveItem, abortMoveItem );
     GetScreen()->SetCurItem( aItem );
-    moveItem( DrawPanel, aDC, wxDefaultPosition, true );
-    DrawPanel->CrossHairOn( aDC );
+    moveItem( m_canvas, aDC, wxDefaultPosition, true );
+    m_canvas->CrossHairOn( aDC );
 }
 
 
@@ -696,7 +696,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM* item = screen->GetCurItem();
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     if( item == NULL )
     {
@@ -739,12 +739,12 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         ChangeTextOrient( (SCH_TEXT*) item, &dc );
         break;
 
     case SCH_FIELD_T:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         RotateField( (SCH_FIELD*) item, &dc );
         break;
 
@@ -768,7 +768,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM* item = screen->GetCurItem();
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     if( item == NULL )
     {
@@ -856,7 +856,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM* item = screen->GetCurItem();
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     if( item == NULL )
     {
@@ -889,7 +889,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_SHEET_T:
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
 
         // The easiest way to handle a drag component or sheet command
         // is to simulate a block drag command
@@ -920,7 +920,7 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM* item = screen->GetCurItem();
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     if( item == NULL )
     {

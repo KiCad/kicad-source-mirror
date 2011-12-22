@@ -300,7 +300,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     if( screenHeight <= 900 )
         pointSize = (pointSize * 8) / 10;
 
-    m_Layers = new PCB_LAYER_WIDGET( this, DrawPanel, pointSize );
+    m_Layers = new PCB_LAYER_WIDGET( this, m_canvas, pointSize );
 
     m_drc = new DRC( this );        // these 2 objects point to each other
 
@@ -328,8 +328,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     GetScreen()->AddGrid( m_UserGridSize, m_UserGridUnit, ID_POPUP_GRID_USER );
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
-    if( DrawPanel )
-        DrawPanel->m_Block_Enable = true;
+    if( m_canvas )
+        m_canvas->m_Block_Enable = true;
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -391,8 +391,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
         m_auimgr.GetPane( wxT( "m_microWaveToolBar" ) ).Show( m_show_microwave_tools );
     }
 
-    if( DrawPanel )
-        m_auimgr.AddPane( DrawPanel,
+    if( m_canvas )
+        m_auimgr.AddPane( m_canvas,
                           wxAuiPaneInfo().Name( wxT( "DrawFrame" ) ).CentrePane() );
 
     if( m_messagePanel )
@@ -451,7 +451,7 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    DrawPanel->m_AbortRequest = true;
+    m_canvas->m_AbortRequest = true;
 
     if( GetScreen()->IsModify() )
     {

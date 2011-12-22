@@ -165,7 +165,7 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     DisplayOpt.DisplayDrawItems = m_OptDisplayDrawings->GetSelection();
     DisplayOpt.DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
 
-    m_Parent->DrawPanel->Refresh();
+    m_Parent->GetCanvas()->Refresh();
 
     EndModal( 1 );
 }

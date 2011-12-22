@@ -74,7 +74,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
     // Don't use GetText() here.  If the field is the reference designator and it's parent
     // component has multiple parts, we don't want the part suffix added to the field.
     wxString newtext = aField->m_Text;
-    DrawPanel->m_IgnoreMouseEvents = true;
+    m_canvas->m_IgnoreMouseEvents = true;
 
     wxString title;
     title.Printf( _( "Edit %s Field" ), GetChars( aField->GetName() ) );
@@ -82,8 +82,8 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
     wxTextEntryDialog dlg( this, wxEmptyString , title, newtext );
     int response = dlg.ShowModal();
 
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = false;
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->m_IgnoreMouseEvents = false;
     newtext = dlg.GetValue( );
     newtext.Trim( true );
     newtext.Trim( false );
@@ -91,7 +91,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
     if ( response != wxID_OK || newtext == aField->GetText() )
         return;  // canceled by user
 
-    aField->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     if( !newtext.IsEmpty() )
     {
@@ -135,7 +135,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
         }
     }
 
-    aField->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
     component->DisplayInfo( this );
     OnModify();
 }
@@ -152,14 +152,14 @@ void SCH_EDIT_FRAME::RotateField( SCH_FIELD* aField, wxDC* aDC )
     if( aField->GetFlags() == 0 )
         SaveCopyInUndoList( component, UR_CHANGED );
 
-    aField->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     if( aField->m_Orient == TEXT_ORIENT_HORIZ )
         aField->m_Orient = TEXT_ORIENT_VERT;
     else
         aField->m_Orient = TEXT_ORIENT_HORIZ;
 
-    aField->Draw( DrawPanel, aDC, wxPoint( 0, 0 ), g_XorMode );
+    aField->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
 
     OnModify();
 }

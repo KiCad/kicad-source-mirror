@@ -208,7 +208,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
 
         /* There may be need to reframe the drawing */
-        if( ! DrawPanel->IsPointOnDisplay( pos ) )
+        if( ! m_canvas->IsPointOnDisplay( pos ) )
         {
             centerAndRedraw = true;
         }
@@ -221,16 +221,16 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
         else
         {
-            INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+            INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
-            DrawPanel->CrossHairOff( &dc );
+            m_canvas->CrossHairOff( &dc );
 
             if( aWarpMouse )
-                DrawPanel->MoveCursor( pos );
+                m_canvas->MoveCursor( pos );
 
             GetScreen()->SetCrossHairPosition(pos);
 
-            DrawPanel->CrossHairOn( &dc );
+            m_canvas->CrossHairOn( &dc );
         }
     }
 
@@ -309,13 +309,14 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
     searchCriteria.SetFindString( aEvent.GetFindString() );
     searchCriteria.SetReplaceString( aEvent.GetReplaceString() );
 
-    if( m_foundItems.GetFindReplaceData().ChangesSearch( searchCriteria ) )
+    if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
     {
-        if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_CLOSE )
-        {
-            warpCursor = true;
-        }
-        else if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
+        if( m_foundItems.GetCount() == 0 )
+            return;
+    }
+    else if( m_foundItems.IsSearchRequired( searchCriteria ) )
+    {
+        if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
         {
             m_foundItems.Collect( searchCriteria, m_CurrentSheet );
         }

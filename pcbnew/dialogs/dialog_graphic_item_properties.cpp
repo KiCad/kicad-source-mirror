@@ -70,12 +70,13 @@ void PCB_EDIT_FRAME::InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxD
         DisplayError(this, wxT("InstallGraphicItemPropertiesDialog() error: NULL item"));
         return;
     }
-    DrawPanel->m_IgnoreMouseEvents = TRUE;
+
+    m_canvas->m_IgnoreMouseEvents = TRUE;
     DialogGraphicItemProperties* dialog = new DialogGraphicItemProperties( this,
-        aItem, aDC );
+                                                                           aItem, aDC );
     dialog->ShowModal(); dialog->Destroy();
-    DrawPanel->MoveCursorToCrossHair();
-    DrawPanel->m_IgnoreMouseEvents = FALSE;
+    m_canvas->MoveCursorToCrossHair();
+    m_canvas->m_IgnoreMouseEvents = FALSE;
 }
 
 /**************************************************************************/
@@ -188,8 +189,9 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
     m_Parent->SaveCopyInUndoList( m_Item, UR_CHANGED );
 
     wxString msg;
+
     if( m_DC )
-        m_Item->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
+        m_Item->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
 
     msg = m_Center_StartXCtrl->GetValue();
     m_Item->SetStartX( ReturnValueFromString( g_UserUnit, msg, m_Parent->GetInternalUnits() ));
@@ -225,8 +227,10 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
     }
 
     m_Parent->OnModify();
+
     if( m_DC )
-        m_Item->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
+        m_Item->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
+
     m_Item->DisplayInfo( m_Parent );
 
     m_Parent->GetBoard()->SetDesignSettings( m_BrdSettings );

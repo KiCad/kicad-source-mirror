@@ -67,7 +67,8 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	
 	leftSizer->Add( leftGridSizer, 0, wxALL|wxEXPAND, 6 );
 	
-	m_checkWholeWord = new wxCheckBox( this, wxID_ANY, _("Match &whole word"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkWholeWord = new wxCheckBox( this, wxID_ANY, _("Match whole wor&d"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkWholeWord->SetValue(true); 
 	leftSizer->Add( m_checkWholeWord, 0, wxALL, 6 );
 	
 	m_checkMatchCase = new wxCheckBox( this, wxID_ANY, _("&Match case"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -80,16 +81,21 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	m_checkWrap->SetValue(true); 
 	leftSizer->Add( m_checkWrap, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
-	m_checkAllFields = new wxCheckBox( this, wxID_ANY, _("Search all component &fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkAllFields = new wxCheckBox( this, wxID_ANY, _("Search all com&ponent fields"), wxDefaultPosition, wxDefaultSize, 0 );
 	leftSizer->Add( m_checkAllFields, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
-	m_checkAllPins = new wxCheckBox( this, wxID_ANY, _("Search all pin names and numbers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkAllPins = new wxCheckBox( this, wxID_ANY, _("Search all pin &names and numbers"), wxDefaultPosition, wxDefaultSize, 0 );
 	leftSizer->Add( m_checkAllPins, 0, wxBOTTOM|wxRIGHT|wxLEFT, 6 );
 	
-	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current sheet on&ly"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkCurrentSheetOnly = new wxCheckBox( this, wxID_ANY, _("Search the current &sheet onl&y"), wxDefaultPosition, wxDefaultSize, 0 );
 	leftSizer->Add( m_checkCurrentSheetOnly, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
-	m_checkNoWarpCursor = new wxCheckBox( this, wxID_ANY, _("Do not warp cursor to found item"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkReplaceReferences = new wxCheckBox( this, wxID_ANY, _("Replace componen&t reference designators"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkReplaceReferences->Hide();
+	
+	leftSizer->Add( m_checkReplaceReferences, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
+	
+	m_checkNoWarpCursor = new wxCheckBox( this, wxID_ANY, _("D&o not warp cursor to found item"), wxDefaultPosition, wxDefaultSize, 0 );
 	leftSizer->Add( m_checkNoWarpCursor, 0, wxBOTTOM|wxLEFT|wxRIGHT, 6 );
 	
 	mainSizer->Add( leftSizer, 1, wxALL|wxEXPAND, 6 );

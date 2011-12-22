@@ -349,7 +349,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
                 msg.Printf( _( "Error reading PcbPlotParams from %s:\n%s" ),
                             aReader->GetSource().GetData(),
                             e.errorText.GetData() );
-                wxMessageBox( msg, _( "Open Board File" ), wxICON_ERROR );
+                wxMessageBox( msg, _( "Open Board File" ), wxOK | wxICON_ERROR );
             }
 
             continue;

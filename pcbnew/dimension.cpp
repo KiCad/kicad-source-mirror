@@ -134,7 +134,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 {
     if( m_DC )     // Delete old text.
     {
-        CurrentDimension->Draw( m_Parent->DrawPanel, m_DC, GR_XOR );
+        CurrentDimension->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
     }
 
     m_Parent->SaveCopyInUndoList(CurrentDimension, UR_CHANGED);
@@ -184,7 +184,7 @@ void DIALOG_DIMENSION_EDITOR::OnOKClick( wxCommandEvent& event )
 
     if( m_DC )     // Display new text
     {
-        CurrentDimension->Draw( m_Parent->DrawPanel, m_DC, GR_OR );
+        CurrentDimension->Draw( m_Parent->GetCanvas(), m_DC, GR_OR );
     }
 
     m_Parent->OnModify();
@@ -224,7 +224,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
         pos = GetScreen()->GetCrossHairPosition();
 
         aDimension = new DIMENSION( GetBoard() );
-        aDimension->m_Flags = IS_NEW;
+        aDimension->SetFlags( IS_NEW );
 
         aDimension->SetLayer( getActiveLayer() );
 
@@ -262,9 +262,9 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
 
         aDimension->AdjustDimensionDetails( );
 
-        aDimension->Draw( DrawPanel, aDC, GR_XOR );
+        aDimension->Draw( m_canvas, aDC, GR_XOR );
 
-        DrawPanel->SetMouseCapture( BuildDimension, AbortBuildDimension );
+        m_canvas->SetMouseCapture( BuildDimension, AbortBuildDimension );
         return aDimension;
     }
 
@@ -275,8 +275,8 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
         return aDimension;
     }
 
-    aDimension->Draw( DrawPanel, aDC, GR_OR );
-    aDimension->m_Flags = 0;
+    aDimension->Draw( m_canvas, aDC, GR_OR );
+    aDimension->ClearFlags();
 
     /* ADD this new item in list */
     GetBoard()->Add( aDimension );
@@ -285,7 +285,7 @@ DIMENSION* PCB_EDIT_FRAME::EditDimension( DIMENSION* aDimension, wxDC* aDC )
     SaveCopyInUndoList( aDimension, UR_NEW );
 
     OnModify();
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
 
     return NULL;
 }
@@ -361,7 +361,7 @@ void PCB_EDIT_FRAME::DeleteDimension( DIMENSION* aDimension, wxDC* aDC )
         return;
 
     if( aDC )
-        aDimension->Draw( DrawPanel, aDC, GR_XOR );
+        aDimension->Draw( m_canvas, aDC, GR_XOR );
 
     SaveCopyInUndoList( aDimension, UR_DELETED );
     aDimension->UnLink();
@@ -379,16 +379,16 @@ void PCB_EDIT_FRAME::BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC )
     // Store the initial position for undo/abort command
     initialTextPosition = aItem->m_Text.m_Pos;
 
-    aItem->Draw( DrawPanel, DC, GR_XOR );
-    aItem->m_Flags |= IS_MOVED;
+    aItem->Draw( m_canvas, DC, GR_XOR );
+    aItem->SetFlags( IS_MOVED );
     aItem->DisplayInfo( this );
 
     GetScreen()->SetCrossHairPosition( aItem->m_Text.m_Pos );
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
-    DrawPanel->SetMouseCapture( MoveDimensionText, AbortMoveDimensionText );
+    m_canvas->SetMouseCapture( MoveDimensionText, AbortMoveDimensionText );
     SetCurItem( aItem );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 }
 
 
@@ -426,7 +426,7 @@ void AbortMoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
     dimension->Draw( aPanel, aDC, GR_XOR );
     dimension->m_Text.m_Pos = initialTextPosition;
-    dimension->m_Flags = 0;
+    dimension->ClearFlags();
     dimension->Draw( aPanel, aDC, GR_OR );
 }
 
@@ -435,18 +435,18 @@ void AbortMoveDimensionText( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
  */
 void PCB_EDIT_FRAME::PlaceDimensionText( DIMENSION* aItem, wxDC* DC )
 {
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
 
     if( aItem == NULL )
         return;
 
-    aItem->Draw( DrawPanel, DC, GR_OR );
+    aItem->Draw( m_canvas, DC, GR_OR );
     OnModify();
 
     EXCHG( aItem->m_Text.m_Pos, initialTextPosition );
     SaveCopyInUndoList( aItem, UR_CHANGED );
     EXCHG( aItem->m_Text.m_Pos, initialTextPosition );
 
-    aItem->m_Flags = 0;
+    aItem->ClearFlags();
 }

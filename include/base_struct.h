@@ -185,7 +185,7 @@ public:
  */
 class EDA_RECT
 {
-public:
+private:
     wxPoint m_Pos;      // Rectangle Origin
     wxSize  m_Size;     // Rectangle Size
 
@@ -344,7 +344,7 @@ public:
 #define BEGIN_ONPAD    (1 << 22)   ///< Pcbnew: flag set for track segment starting on a pad
 #define END_ONPAD      (1 << 23)   ///< Pcbnew: flag set for track segment ending on a pad
 #define BUSY           (1 << 24)   ///< Pcbnew: flag indicating that the structure has
-                                   // already been edited, in some functions
+                                   ///< already been edited, in some functions
 #define EDA_ITEM_ALL_FLAGS -1
 
 
@@ -377,14 +377,12 @@ protected:
     /// Set to true to override the visibility setting of the item.
     bool          m_forceVisible;
 
-public:
-    int           m_Flags;        // flags for editing and other uses.
+    /// Flag bits for editing and other uses.
+    int           m_Flags;
 
-    int           m_Selected;     /* Used by block commands, and selective editing */
+    // Link to an copy of the item use to save the item's state for undo/redo feature.
+    EDA_ITEM*     m_Image;
 
-    // member used in undo/redo function
-    EDA_ITEM*     m_Image;        // Link to an image copy to save a copy of
-                                  // old parameters values
 private:
     void InitVars();
 
@@ -461,6 +459,8 @@ public:
     void SetFlags( int aMask ) { m_Flags |= aMask; }
     void ClearFlags( int aMask = EDA_ITEM_ALL_FLAGS ) { m_Flags &= ~aMask; }
     int GetFlags() const { return m_Flags; }
+
+    void SetImage( EDA_ITEM* aItem ) { m_Image = aItem; }
 
     /**
      * Function SetForceVisible
@@ -661,9 +661,11 @@ public:
      *
      * @param aSearchData A reference to a wxFindReplaceData object containing the
      *                    search and replace criteria.
+     * @param aAuxData A pointer to optional data required for the search or NULL
+     *                 if not used.
      * @return True if the item text was modified, otherwise false.
      */
-    virtual bool Replace( wxFindReplaceData& aSearchData ) { return false; }
+    virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL ) { return false; }
 
     /**
      * Function IsReplaceable

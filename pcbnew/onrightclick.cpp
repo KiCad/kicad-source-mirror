@@ -55,11 +55,11 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     bool        locate_track = false;
     bool        blockActive  = (GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE);
 
-    wxClientDC  dc( DrawPanel );
+    wxClientDC  dc( m_canvas );
 
     BOARD_ITEM* item = GetCurItem();
 
-    DrawPanel->m_CanStartBlock = -1;    // Avoid to start a block coomand when clicking on menu
+    m_canvas->m_CanStartBlock = -1;    // Avoid to start a block coomand when clicking on menu
 
     // If a command or a block is in progress:
     // Put the Cancel command (if needed) and the End command
@@ -71,11 +71,11 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         return true;
     }
 
-    DrawPanel->CrossHairOff( &dc );
+    m_canvas->CrossHairOff( &dc );
 
     if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
-        if( item && item->m_Flags )
+        if( item && item->GetFlags() )
         {
             AddMenuItem( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ),
                          KiBitmap( cancel_xpm ) );
@@ -90,7 +90,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     }
     else
     {
-        if( item && item->m_Flags )
+        if( item && item->GetFlags() )
         {
             AddMenuItem( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                          _( "Cancel" ), KiBitmap( cancel_xpm ) );
@@ -113,18 +113,18 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
      * not the current item being edited. In such case we cannot call
      * PcbGeneralLocateAndDisplay().
      */
-    if( !item || (item->m_Flags == 0) )
+    if( !item || (item->GetFlags() == 0) )
     {
         // show "item selector" menu only if no item now or selected item was not
         // previously picked at this position
         if( !item || cursorPos != selectPos )
         {
-            DrawPanel->m_AbortRequest = false;
+            m_canvas->m_AbortRequest = false;
             item = PcbGeneralLocateAndDisplay();
 
-            if( DrawPanel->m_AbortRequest )
+            if( m_canvas->m_AbortRequest )
             {
-                DrawPanel->CrossHairOn( &dc );
+                m_canvas->CrossHairOn( &dc );
                 return false;
             }
         }
@@ -133,7 +133,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     item = GetCurItem();
 
     if( item )
-        flags = item->m_Flags;
+        flags = item->GetFlags();
     else
         flags = 0;
 
@@ -404,7 +404,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         break;
     }
 
-    DrawPanel->CrossHairOn( &dc );
+    m_canvas->CrossHairOn( &dc );
     return true;
 }
 
@@ -437,7 +437,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
     updateTraceWidthSelectBox();
     updateViaSizeSelectBox();
 
-    int flags = Track->m_Flags;
+    int flags = Track->GetFlags();
 
     if( flags == 0 )
     {
@@ -484,11 +484,12 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
         }
 
         msg = AddHotkeyName( _( "Place Via" ), g_Board_Editor_Hokeys_Descr, HK_ADD_VIA );
-        PopMenu->Append( ID_POPUP_PCB_PLACE_VIA, msg );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_PLACE_VIA, msg, KiBitmap( via_xpm ) );
 
         msg = AddHotkeyName( _( "Switch Track Posture" ), g_Board_Editor_Hokeys_Descr,
                              HK_SWITCH_TRACK_POSTURE );
-        PopMenu->Append( ID_POPUP_PCB_SWITCH_TRACK_POSTURE, msg );
+        AddMenuItem( PopMenu, ID_POPUP_PCB_SWITCH_TRACK_POSTURE, msg,
+                             KiBitmap( change_entry_orient_xpm ) );
 
         // See if we can place a Micro Via (4 or more layers, and start from an external layer):
         if( IsMicroViaAcceptable() )
@@ -580,14 +581,14 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
 {
     wxString msg;
 
-    if( edge_zone->m_Flags == IS_DRAGGED )
+    if( edge_zone->GetFlags() == IS_DRAGGED )
     {
         AddMenuItem( aPopMenu, ID_POPUP_PCB_PLACE_DRAGGED_ZONE_OUTLINE_SEGMENT,
                      _( "Place Edge Outline" ), KiBitmap( apply_xpm ) );
     }
-    else if( edge_zone->m_Flags )
+    else if( edge_zone->GetFlags() )
     {
-        if( (edge_zone->m_Flags & IN_EDIT ) )
+        if( (edge_zone->GetFlags() & IN_EDIT ) )
             AddMenuItem( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
                          _( "Place Corner" ), KiBitmap( apply_xpm ) );
         else
@@ -659,7 +660,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
 void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu )
 {
     wxMenu*  sub_menu_footprint;
-    int      flags = aModule->m_Flags;
+    int      flags = aModule->GetFlags();
     wxString msg;
 
     sub_menu_footprint = new wxMenu;
@@ -704,7 +705,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
 void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* menu )
 {
     wxMenu*  sub_menu_Fp_text;
-    int      flags = FpText->m_Flags;
+    int      flags = FpText->GetFlags();
 
     wxString msg = FpText->GetSelectMenuText();
 
@@ -757,7 +758,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* me
 void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 {
     wxMenu* sub_menu_Pad;
-    int     flags = Pad->m_Flags;
+    int     flags = Pad->GetFlags();
 
     if( flags )     // Currently in edit, no others commands possible
         return;
@@ -819,7 +820,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 void PCB_EDIT_FRAME::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
 {
     wxMenu*  sub_menu_Text;
-    int      flags = Text->m_Flags;
+    int      flags = Text->GetFlags();
 
     wxString msg = Text->GetSelectMenuText();
 

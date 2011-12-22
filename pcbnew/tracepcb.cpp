@@ -68,29 +68,29 @@ void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     GRSetDrawMode( DC, GR_COPY );
 
-    DrawPanel->DrawBackGround( DC );
+    m_canvas->DrawBackGround( DC );
     TraceWorkSheet( DC, screen, 0 );
 
     /* Redraw the footprints */
     for( MODULE* module = GetBoard()->m_Modules;  module;  module = module->Next() )
     {
-        module->Draw( DrawPanel, DC, GR_OR );
+        module->Draw( m_canvas, DC, GR_OR );
     }
 
 #ifdef USE_WX_OVERLAY
     if( IsShown() )
     {
-        DrawPanel->m_overlay.Reset();
-        wxDCOverlay overlaydc( DrawPanel->m_overlay, (wxWindowDC*)DC );
+        m_canvas->m_overlay.Reset();
+        wxDCOverlay overlaydc( m_canvas->m_overlay, (wxWindowDC*)DC );
         overlaydc.Clear();
     }
 #endif
 
-    if( DrawPanel->IsMouseCaptured() )
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    if( m_canvas->IsMouseCaptured() )
+        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
     /* Redraw the cursor */
-    DrawPanel->DrawCrossHair( DC );
+    m_canvas->DrawCrossHair( DC );
 }
 
 
@@ -105,28 +105,28 @@ void PCB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     GRSetDrawMode( DC, GR_COPY );
 
-    DrawPanel->DrawBackGround( DC );
+    m_canvas->DrawBackGround( DC );
 
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
-    GetBoard()->Draw( DrawPanel, DC, GR_OR );
+    GetBoard()->Draw( m_canvas, DC, GR_OR );
 
     DrawGeneralRatsnest( DC );
 
 #ifdef USE_WX_OVERLAY
     if( IsShown() )
     {
-        DrawPanel->m_overlay.Reset();
-        wxDCOverlay overlaydc( DrawPanel->m_overlay, (wxWindowDC*)DC );
+        m_canvas->m_overlay.Reset();
+        wxDCOverlay overlaydc( m_canvas->m_overlay, (wxWindowDC*)DC );
         overlaydc.Clear();
     }
 #endif
 
-    if( DrawPanel->IsMouseCaptured() )
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    if( m_canvas->IsMouseCaptured() )
+        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
     // Redraw the cursor
-    DrawPanel->DrawCrossHair( DC );
+    m_canvas->DrawCrossHair( DC );
 }
 
 
@@ -161,7 +161,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
     // Draw the graphic items
     for( BOARD_ITEM* item = m_Drawings;  item;  item = item->Next() )
     {
-        if( item->m_Flags & IS_MOVED )
+        if( item->IsMoving() )
             continue;
 
         switch( item->Type() )
@@ -185,7 +185,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
 
         // Areas must be drawn here only if not moved or dragged,
         // because these areas are drawn by ManageCursor() in a specific manner
-        if ( (zone->m_Flags & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
+        if ( (zone->GetFlags() & (IN_EDIT | IS_DRAGGED | IS_MOVED)) == 0 )
         {
             zone->Draw( aPanel, DC, aDrawMode );
             zone->DrawFilledArea( aPanel, DC, aDrawMode );
@@ -197,7 +197,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
         bool display = true;
         int  layerMask = ALL_CU_LAYERS;
 
-        if( module->m_Flags & IS_MOVED )
+        if( module->IsMoving() )
             continue;
 
         if( !IsElementVisible( PCB_VISIBLE(MOD_FR_VISIBLE) ) )
@@ -232,7 +232,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, int aDrawMode, const wxPoint
 }
 
 
-void BOARD::DrawHighLight( EDA_DRAW_PANEL* aDrawPanel, wxDC* DC, int aNetCode )
+void BOARD::DrawHighLight( EDA_DRAW_PANEL* am_canvas, wxDC* DC, int aNetCode )
 {
     int draw_mode;
 
@@ -248,7 +248,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* aDrawPanel, wxDC* DC, int aNetCode )
     {
         if( (*zc)->GetNet() == aNetCode )
         {
-            (*zc)->Draw( aDrawPanel, DC, draw_mode );
+            (*zc)->Draw( am_canvas, DC, draw_mode );
         }
     }
 
@@ -259,7 +259,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* aDrawPanel, wxDC* DC, int aNetCode )
         {
             if( pad->GetNet() == aNetCode )
             {
-                pad->Draw( aDrawPanel, DC, draw_mode );
+                pad->Draw( am_canvas, DC, draw_mode );
             }
         }
     }
@@ -269,7 +269,7 @@ void BOARD::DrawHighLight( EDA_DRAW_PANEL* aDrawPanel, wxDC* DC, int aNetCode )
     {
         if( seg->GetNet() == aNetCode )
         {
-            seg->Draw( aDrawPanel, DC, draw_mode );
+            seg->Draw( am_canvas, DC, draw_mode );
         }
     }
 }

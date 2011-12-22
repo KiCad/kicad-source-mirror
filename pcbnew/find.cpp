@@ -60,8 +60,7 @@ void WinEDA_PcbFindFrame::FindItem( wxCommandEvent& event )
 
     s_OldStringFound = m_NewText->GetValue();
 
-    m_Parent->DrawPanel->GetViewStart( &screen->m_StartVisu.x,
-                                       &screen->m_StartVisu.y );
+    m_Parent->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
 
     if( FindMarker )
     {

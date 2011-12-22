@@ -106,7 +106,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar( void )
                  wxID_ANY,
                  _( "Open Recent Dri&ll File" ),
                  _( "Open a recent opened drill file" ),
-                 KiBitmap( open_project_xpm ) );
+                 KiBitmap( gerbview_open_recent_drill_files_xpm ) );
 
     // Separator
     fileMenu->AppendSeparator();

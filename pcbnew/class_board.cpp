@@ -1672,10 +1672,22 @@ static bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
 }
 
 
-void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector )
+void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNetCode )
 {
-    aVector.insert( aVector.end(), m_NetInfo.m_PadsFullList.begin(),
-                    m_NetInfo.m_PadsFullList.end() );
+    if( aNetCode < 0 )
+    {
+        aVector.insert( aVector.end(), m_NetInfo.m_PadsFullList.begin(),
+                        m_NetInfo.m_PadsFullList.end() );
+    }
+    else
+    {
+        const NETINFO_ITEM* net = m_NetInfo.GetNetItem( aNetCode );
+        if( net )
+        {
+            aVector.insert( aVector.end(), net->m_PadInNetList.begin(),
+                            net->m_PadInNetList.end() );
+        }
+    }
 
     sort( aVector.begin(), aVector.end(), sortPadsByXthenYCoord );
 }

@@ -214,7 +214,7 @@ void LIB_RECTANGLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     if( aColor < 0 )       // Used normal color or selected color
     {
-        if( m_Selected & IS_SELECTED )
+        if( IsSelected() )
             color = g_ItemSelectetColor;
     }
     else

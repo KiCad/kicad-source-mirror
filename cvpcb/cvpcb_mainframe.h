@@ -54,6 +54,14 @@ public:
 
     void             OnLeftClick( wxListEvent& event );
     void             OnLeftDClick( wxListEvent& event );
+
+    /**
+     * Function OnSelectComponent
+     * Called when clicking on a component in component list window
+     * * Updates the filtered foorprint list, if the filtered list option is selected
+     * * Updates the current selected footprint in footprint list
+     * * Updates the footprint shown in footprint display window (if opened)
+     */
     void             OnSelectComponent( wxListEvent& event );
 
     void             OnQuit( wxCommandEvent& event );

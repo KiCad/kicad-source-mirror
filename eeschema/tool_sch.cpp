@@ -302,6 +302,7 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
                                KiBitmap( lines90_xpm ),
                                _( "HV orientation for wires and bus" ),
                                wxITEM_CHECK );
+
     // set icon paddings
     m_optionsToolBar->SetToolBorderPadding(2); // padding
     m_optionsToolBar->SetToolSeparation(0);
@@ -313,7 +314,7 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 
 void SCH_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
-    if( DrawPanel == NULL )
+    if( m_canvas == NULL )
         return;
 
     int id = event.GetId();
@@ -322,7 +323,7 @@ void SCH_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     {
     case ID_TB_OPTIONS_HIDDEN_PINS:
         m_showAllPins = m_optionsToolBar->GetToolToggled( id );
-        DrawPanel->Refresh( );
+        m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_BUS_WIRES_ORIENT:

@@ -127,7 +127,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        DrawPanel->EndMouseCapture();
+        m_canvas->EndMouseCapture();
 
         if( GetScreen()->m_BlockLocate.m_Command != BLOCK_IDLE )
         {
@@ -138,26 +138,28 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         if( GetToolId() == ID_NO_TOOL_SELECTED )
-            SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+            SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         else
-            DrawPanel->SetCursor( DrawPanel->GetCurrentCursor() );
+            m_canvas->SetCursor( m_canvas->GetCurrentCursor() );
         break;
 
     default:
-        DrawPanel->EndMouseCapture();
+        m_canvas->EndMouseCapture();
         break;
     }
 
-    INSTALL_UNBUFFERED_DC( dc, DrawPanel );
+    INSTALL_UNBUFFERED_DC( dc, m_canvas );
 
     switch( id )
     {
     case ID_GERBVIEW_SET_PAGE_BORDER:
         {
         DIALOG_PAGE_SHOW_PAGE_BORDERS dlg( this );
+
         if (dlg.ShowModal() == wxID_OK )
-            DrawPanel->Refresh();
+            m_canvas->Refresh();
         }
+
         break;
 
     case ID_GERBVIEW_GLOBAL_DELETE:
@@ -166,11 +168,11 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_NO_TOOL_SELECTED:
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
-        SetToolID( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor(), wxEmptyString );
+        SetToolID( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor(), wxEmptyString );
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -182,7 +184,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PLACE_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
-        DrawPanel->m_AutoPAN_Request = FALSE;
+        m_canvas->m_AutoPAN_Request = FALSE;
         HandleBlockPlace( &dc );
         break;
 
@@ -211,13 +213,15 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 void GERBVIEW_FRAME::OnSelectActiveDCode( wxCommandEvent& event )
 {
     GERBER_IMAGE* gerber_image = g_GERBER_List[getActiveLayer()];
+
     if( gerber_image )
     {
         int tool = m_DCodeSelector->GetSelectedDCodeId();
+
         if( tool != gerber_image->m_Selected_Tool )
         {
             gerber_image->m_Selected_Tool = tool;
-            DrawPanel->Refresh();
+            m_canvas->Refresh();
         }
     }
 }
@@ -231,8 +235,9 @@ void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
     int layer = getActiveLayer();
 
     setActiveLayer( event.GetSelection() );
+
     if( layer != getActiveLayer() )
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
 }
 
 
@@ -283,7 +288,7 @@ void GERBVIEW_FRAME::OnSelectDisplayMode( wxCommandEvent& event )
     }
 
     if( GetDisplayMode() != oldMode )
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
 }
 
 void GERBVIEW_FRAME::OnQuit( wxCommandEvent& event )

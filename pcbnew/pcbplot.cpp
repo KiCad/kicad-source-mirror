@@ -291,7 +291,7 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
             wxMessageBox( wxT( "Cannot make path relative (target volume different from board file volume)!" ),
-                          wxT( "Plot Output Directory" ), wxICON_ERROR );
+                          wxT( "Plot Output Directory" ), wxOK | wxICON_ERROR );
     }
 
     m_outputDirectoryName->SetValue( dirName.GetFullPath() );
@@ -568,7 +568,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         msg.Printf( wxT( " Cannot make %s absolute with respect to %s!" ),
                     GetChars( outputDir.GetPath() ),
                     GetChars( boardFilePath ) );
-        wxMessageBox( msg, wxT( "Plot" ), wxICON_ERROR );
+        wxMessageBox( msg, wxT( "Plot" ), wxOK | wxICON_ERROR );
         return;
     }
 
@@ -582,7 +582,8 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         }
         else
         {
-            wxMessageBox( wxT( "Cannot create output directory!" ), wxT( "Plot" ), wxICON_ERROR );
+            wxMessageBox( wxT( "Cannot create output directory!" ),
+                               wxT( "Plot" ), wxOK | wxICON_ERROR );
             return;
         }
     }

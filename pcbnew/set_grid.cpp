@@ -64,7 +64,7 @@ void PCB_BASE_FRAME::InstallGridFrame( const wxPoint& pos )
     if( GetScreen()->GetGridId() == ID_POPUP_GRID_USER )
         GetScreen()->SetGrid( ID_POPUP_GRID_USER  );
 
-    DrawPanel->Refresh();
+    m_canvas->Refresh();
 }
 
 

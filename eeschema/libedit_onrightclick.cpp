@@ -51,9 +51,9 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         item = LocateItemUsingCursor( aPosition );
 
         // If the clarify item selection context menu is aborted, don't show the context menu.
-        if( item == NULL && DrawPanel->m_AbortRequest )
+        if( item == NULL && m_canvas->m_AbortRequest )
         {
-            DrawPanel->m_AbortRequest = false;
+            m_canvas->m_AbortRequest = false;
             return false;
         }
 
@@ -234,8 +234,8 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
 void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
 {
-    bool selected    = (Pin->m_Selected & IS_SELECTED) != 0;
-    bool not_in_move = (Pin->GetFlags() == 0);
+    bool selected    = Pin->IsSelected();
+    bool not_in_move = !Pin->IsMoving();
     wxString msg;
 
     if( not_in_move )

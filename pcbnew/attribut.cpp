@@ -51,10 +51,10 @@ void PCB_EDIT_FRAME::Attribut_Segment( TRACK* track, wxDC* DC, bool Flag_On )
         return;
 
     OnModify();
-    DrawPanel->CrossHairOff( DC );   // Erase cursor shape
+    m_canvas->CrossHairOff( DC );   // Erase cursor shape
     track->SetState( TRACK_LOCKED, Flag_On );
-    track->Draw( DrawPanel, DC, GR_OR | GR_HIGHLIGHT );
-    DrawPanel->CrossHairOn( DC );    // Display cursor shape
+    track->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
+    m_canvas->CrossHairOn( DC );    // Display cursor shape
     track->DisplayInfo( this );
 }
 
@@ -68,9 +68,9 @@ void PCB_EDIT_FRAME::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
     if( (track == NULL ) || (track->Type() == PCB_ZONE_T) )
         return;
 
-    DrawPanel->CrossHairOff( DC );   // Erase cursor shape
+    m_canvas->CrossHairOff( DC );   // Erase cursor shape
     Track = GetBoard()->MarkTrace( track, &nb_segm, NULL, NULL, true );
-    DrawTraces( DrawPanel, DC, Track, nb_segm, GR_OR | GR_HIGHLIGHT );
+    DrawTraces( m_canvas, DC, Track, nb_segm, GR_OR | GR_HIGHLIGHT );
 
     for( ; (Track != NULL) && (nb_segm > 0); nb_segm-- )
     {
@@ -79,7 +79,7 @@ void PCB_EDIT_FRAME::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
         Track = Track->Next();
     }
 
-    DrawPanel->CrossHairOn( DC );    // Display cursor shape
+    m_canvas->CrossHairOn( DC );    // Display cursor shape
 
     OnModify();
 }
@@ -103,7 +103,7 @@ void PCB_EDIT_FRAME::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
         }
     }
 
-    DrawPanel->CrossHairOff( DC );     // Erase cursor shape
+    m_canvas->CrossHairOff( DC );     // Erase cursor shape
 
     while( Track )                  /* Flag change */
     {
@@ -112,10 +112,10 @@ void PCB_EDIT_FRAME::Attribut_net( wxDC* DC, int net_code, bool Flag_On )
 
         OnModify();
         Track->SetState( TRACK_LOCKED, Flag_On );
-        Track->Draw( DrawPanel, DC, GR_OR | GR_HIGHLIGHT );
+        Track->Draw( m_canvas, DC, GR_OR | GR_HIGHLIGHT );
         Track = Track->Next();
     }
 
-    DrawPanel->CrossHairOn( DC );    // Display cursor shape
+    m_canvas->CrossHairOn( DC );    // Display cursor shape
     OnModify();
 }

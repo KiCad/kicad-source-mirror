@@ -345,14 +345,14 @@ bool SCH_FIELD::Save( FILE* aFile ) const
 
 void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
-    frame->DrawPanel->SetMouseCapture( NULL, NULL );
+    frame->GetCanvas()->SetMouseCapture( NULL, NULL );
 
     SCH_COMPONENT* component = (SCH_COMPONENT*) GetParent();
 
     // save old cmp in undo list
     frame->SaveUndoItemInUndoList( component );
 
-    Draw( frame->DrawPanel, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    Draw( frame->GetCanvas(), DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     ClearFlags();
     frame->GetScreen()->SetCurItem( NULL );
     frame->OnModify();
@@ -364,7 +364,8 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
     bool match;
     wxString text = GetText();
 
-    if( (m_id > VALUE) && !(aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS) )
+    if( ((m_id > VALUE) && !(aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS))
+        || ((m_id == REFERENCE) && !(aSearchData.GetFlags() & FR_REPLACE_REFERENCES)) )
         return false;
 
     wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText() );
@@ -395,6 +396,40 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
     }
 
     return false;
+}
+
+
+bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
+{
+    bool isReplaced;
+    wxString text = GetText();
+
+    if( m_id == REFERENCE && aAuxData != NULL )
+    {
+        wxCHECK_MSG( aSearchData.GetFlags() & FR_REPLACE_REFERENCES, false,
+                     wxT( "Invalid replace component reference field call." ) ) ;
+
+        SCH_COMPONENT* component = (SCH_COMPONENT*) m_Parent;
+
+        wxCHECK_MSG( component != NULL, false,
+                     wxT( "No component associated with field" ) + text );
+
+        text = component->GetRef( (SCH_SHEET_PATH*) aAuxData );
+
+        if( component->GetPartCount() > 1 )
+            text << LIB_COMPONENT::ReturnSubReference( component->GetUnit() );
+
+        isReplaced = EDA_ITEM::Replace( aSearchData, text );
+
+        if( isReplaced )
+            component->SetRef( (SCH_SHEET_PATH*) aAuxData, text );
+    }
+    else
+    {
+        isReplaced = EDA_ITEM::Replace( aSearchData, m_Text );
+    }
+
+    return isReplaced;
 }
 
 

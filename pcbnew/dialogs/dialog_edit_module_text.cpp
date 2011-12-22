@@ -45,14 +45,13 @@ private:
     void OnCancelClick( wxCommandEvent& event );
 };
 
-/*************************************************************************************/
+
 void PCB_BASE_FRAME::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC )
-/**************************************************************************************/
 {
-    DrawPanel->m_IgnoreMouseEvents = TRUE;
+    m_canvas->m_IgnoreMouseEvents = TRUE;
     DialogEditModuleText dialog( this, TextMod, DC );
     dialog.ShowModal();
-    DrawPanel->m_IgnoreMouseEvents = FALSE;
+    m_canvas->m_IgnoreMouseEvents = FALSE;
 }
 
 
@@ -85,9 +84,7 @@ void DialogEditModuleText::OnCancelClick( wxCommandEvent& event )
 }
 
 
-/********************************************************/
 void DialogEditModuleText::initDlg( )
-/********************************************************/
 {
     SetFocus();
 
@@ -97,13 +94,14 @@ void DialogEditModuleText::initDlg( )
     {
         wxString format = m_ModuleInfoText->GetLabel();
         msg.Printf( format,
-            GetChars( m_module->m_Reference->m_Text ),
-            GetChars( m_module->m_Value->m_Text ),
-            (float) m_module->m_Orient / 10 );
+                    GetChars( m_module->m_Reference->m_Text ),
+                    GetChars( m_module->m_Value->m_Text ),
+                    (float) m_module->m_Orient / 10 );
     }
-
     else
+    {
         msg.Empty();
+    }
 
     m_ModuleInfoText->SetLabel( msg );
 
@@ -141,6 +139,7 @@ void DialogEditModuleText::initDlg( )
 
     int text_orient = m_currentText->m_Orient;
     NORMALIZE_ANGLE_90(text_orient)
+
     if( (text_orient != 0) )
         m_Orient->SetSelection( 1 );
 
@@ -149,18 +148,17 @@ void DialogEditModuleText::initDlg( )
 }
 
 
-/*********************************************************************************/
 void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
-/*********************************************************************************/
 {
     wxString msg;
 
     if ( m_module)
         m_parent->SaveCopyInUndoList( m_module, UR_CHANGED );
+
     if( m_dc )     //Erase old text on screen
     {
-        m_currentText->Draw( m_parent->DrawPanel, m_dc, GR_XOR,
-            (m_currentText->m_Flags & IS_MOVED) ? MoveVector : wxPoint( 0, 0 ) );
+        m_currentText->Draw( m_parent->GetCanvas(), m_dc, GR_XOR,
+                             (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
     }
     m_currentText->m_Text = m_Name->GetValue();
 
@@ -195,12 +193,16 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     // Test for a reasonnable width:
     if( width <= 1 )
         width = 1;
+
     int maxthickness = Clamp_Text_PenSize(width, m_currentText->m_Size );
+
     if( width > maxthickness )
     {
-        DisplayError(NULL, _("The text thickness is too large for the text size. It will be clamped"));
+        DisplayError( NULL,
+                      _( "The text thickness is too large for the text size. It will be clamped" ) );
         width = maxthickness;
     }
+
     m_currentText->SetThickness( width );
 
     m_currentText->SetVisible( m_Show->GetSelection() == 0 );
@@ -209,12 +211,15 @@ void DialogEditModuleText::OnOkClick( wxCommandEvent& event )
     m_currentText->m_Orient = text_orient;
 
     m_currentText->SetDrawCoord();
+
     if( m_dc )     // Display new text
     {
-        m_currentText->Draw( m_parent->DrawPanel, m_dc, GR_XOR,
-            (m_currentText->m_Flags & IS_MOVED) ? MoveVector : wxPoint( 0, 0 ) );
+        m_currentText->Draw( m_parent->GetCanvas(), m_dc, GR_XOR,
+                             (m_currentText->IsMoving()) ? MoveVector : wxPoint( 0, 0 ) );
     }
+
     m_parent->OnModify();
+
     if( m_module )
         m_module->m_LastEdit_Time = time( NULL );
 

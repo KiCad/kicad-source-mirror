@@ -62,7 +62,7 @@ void PCB_EDIT_FRAME::OnFileHistory( wxCommandEvent& event )
 
     if( fn != wxEmptyString )
     {
-        DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
         ::wxSetWorkingDirectory( ::wxPathOnly( fn ) );
         LoadOnePcbFile( fn );
     }
@@ -77,9 +77,9 @@ void PCB_EDIT_FRAME::Files_io( wxCommandEvent& event )
     // If an edition is in progress, stop it.
     // For something else than save, get rid of current tool.
     if( id == ID_SAVE_BOARD )
-        DrawPanel->EndMouseCapture( -1, DrawPanel->GetDefaultCursor() );
+        m_canvas->EndMouseCapture( -1, m_canvas->GetDefaultCursor() );
     else
-        DrawPanel->EndMouseCapture( ID_NO_TOOL_SELECTED, DrawPanel->GetDefaultCursor() );
+        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
 
     switch( id )
     {
@@ -299,10 +299,10 @@ this file again." ) );
         }
     }
     catch( IO_ERROR ioe )
-    {
+    {wxMessageBox("catch");
         wxString msg = wxString::Format(  _( "Error loading board.\n%s" ),
                             ioe.errorText.GetData() );
-        wxMessageBox( msg, _( "Open Board File" ), wxICON_ERROR );
+        wxMessageBox( msg, _( "Open Board File" ), wxOK | wxICON_ERROR );
     }
 
     if( !aAppend )
@@ -490,7 +490,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     {
         wxString msg = wxString::Format(  _( "Error saving board.\n%s" ),
                             ioe.errorText.GetData() );
-        wxMessageBox( msg, _( "Save Board File" ), wxICON_ERROR );
+        wxMessageBox( msg, _( "Save Board File" ), wxICON_ERROR | wxOK );
         saveok = false;
     }
 

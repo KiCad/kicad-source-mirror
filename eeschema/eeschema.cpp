@@ -170,13 +170,13 @@ bool EDA_APP::OnInit()
         wxSetWorkingDirectory( filename.GetPath() );
 
         if( frame->LoadOneEEProject( filename.GetFullPath(), false ) )
-            frame->DrawPanel->Refresh( true );
+            frame->GetCanvas()->Refresh( true );
     }
     else
     {
         // Read a default config file if no file to load.
         frame->LoadProjectFile( wxEmptyString, true );
-        frame->DrawPanel->Refresh( true );
+        frame->GetCanvas()->Refresh( true );
     }
 
     return true;

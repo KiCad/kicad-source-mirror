@@ -56,11 +56,11 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, int aPrintMasklayer,
     DisplayOpt.DisplayZonesMode    = 0;
     g_DisplayPolygonsModeSketch    = 0;
 
-    DrawPanel->m_PrintIsMirrored = aPrintMirrorMode;
+    m_canvas->m_PrintIsMirrored = aPrintMirrorMode;
 
-    GetBoard()->Draw( DrawPanel, aDC, -1, wxPoint( 0, 0 ) );
+    GetBoard()->Draw( m_canvas, aDC, -1, wxPoint( 0, 0 ) );
 
-    DrawPanel->m_PrintIsMirrored = false;
+    m_canvas->m_PrintIsMirrored = false;
 
     // Restore draw options:
     GetBoard()->SetVisibleLayers( visiblemask );
@@ -96,22 +96,22 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     }
 
     // Draw according to the current setting.  This needs to be GR_COPY or GR_OR.
-    GetBoard()->Draw( DrawPanel, DC, drawMode, wxPoint( 0, 0 ) );
+    GetBoard()->Draw( m_canvas, DC, drawMode, wxPoint( 0, 0 ) );
 
     // Draw the "background" now, i.e. grid and axis after gerber layers
     // because most of time the actual background is erased by successive drawings of each gerber
     // layer mainly in COPY mode
-    DrawPanel->DrawBackGround( DC );
+    m_canvas->DrawBackGround( DC );
 
     if( IsElementVisible( DCODES_VISIBLE ) )
         DrawItemsDCodeID( DC, GR_COPY );
 
     TraceWorkSheet( DC, screen, 0 );
 
-    if( DrawPanel->IsMouseCaptured() )
-        DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    if( m_canvas->IsMouseCaptured() )
+        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 
-    DrawPanel->DrawCrossHair( DC );
+    m_canvas->DrawCrossHair( DC );
 
     // Display the filename and the layer name (found in the gerber files, if any)
     // relative to the active layer
@@ -406,7 +406,7 @@ void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
 
         int color = g_ColorsSettings.GetItemColor( DCODES_VISIBLE );
 
-        DrawGraphicText( DrawPanel, aDC, pos, (EDA_Colors) color, Line,
+        DrawGraphicText( m_canvas, aDC, pos, (EDA_Colors) color, Line,
                          orient, wxSize( width, width ),
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                          0, false, false );

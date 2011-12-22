@@ -310,7 +310,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     // Wire to Bus entry
     text = AddHotkeyName( _( "Wire to Bus &Entry" ), s_Schematic_Hokeys_Descr,
-                          HK_ADD_WIRE_ENTRY, IS_ACCELERATOR );    // addan accelerator, not a shortcut
+                          HK_ADD_WIRE_ENTRY, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( placeMenu, ID_WIRETOBUS_ENTRY_BUTT, text,
                  HELP_PLACE_WIRE2BUS_ENTRY,
                  KiBitmap( add_line2bus_xpm ) );

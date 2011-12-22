@@ -251,16 +251,17 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
     pos.y  = wxRound( ibuf[idx+1] * conv_unit );
     m_Reference->SetPos( pos );
     m_Reference->SetPos0( pos );
-    m_Reference->m_Orient = ibuf[idx+2] ? 900 : 0;
+    m_Reference->SetOrientation( ibuf[idx+2] ? 900 : 0 );
 
     // Calculate size: default is 40 mils (400 pcb units)
     // real size is:  default * ibuf[idx+3] / 100 (size in gpcb is given in percent of default size
     int tsize = ( ibuf[idx+3] * TEXT_DEFAULT_SIZE ) / 100;
     int thickness = m_Reference->m_Size.x / 6;
-    m_Reference->m_Size.x = m_Reference->m_Size.y = MAX( 40, tsize );
+    tsize = MAX( 40, tsize );
+    m_Reference->SetSize( wxSize( tsize, tsize ) );
     m_Reference->m_Thickness  = thickness;
-    m_Value->m_Orient = m_Reference->m_Orient;
-    m_Value->m_Size   = m_Reference->m_Size;
+    m_Value->SetOrientation( m_Reference->GetOrientation() );
+    m_Value->SetSize( m_Reference->GetSize() );
     m_Value->m_Thickness  = m_Reference->m_Thickness;
     pos.y += tsize + thickness;
     m_Value->SetPos( pos );
@@ -421,11 +422,14 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             // Negate angle (due to Y reversed axis) and convert it to internal units
             angle = - angle * 1800.0 / M_PI;
             Pad->SetOrientation( wxRound( angle ) );
-            Pad->m_Pos.x  = (ibuf[0] + ibuf[2]) / 2;
-            Pad->m_Pos.y  = (ibuf[1] + ibuf[3]) / 2;
+            wxPoint padPos;
+            padPos.x  = (ibuf[0] + ibuf[2]) / 2;
+            padPos.y  = (ibuf[1] + ibuf[3]) / 2;
             Pad->m_Size.x = wxRound( hypot( (double)delta.x, (double)delta.y ) ) + ibuf[4];
             Pad->m_Size.y = ibuf[4];
-            Pad->m_Pos += m_Pos;
+            padPos += m_Pos;
+            Pad->SetPos0( padPos );
+            Pad->SetPosition( padPos );
 
             if( !TestFlags( params[iflgidx], 0x0100, wxT( "square" ) ) )
             {
@@ -478,13 +482,14 @@ bool MODULE::Read_GPCB_Descr( const wxString& CmpFullFileName )
             {
                 Pad->SetPadName( params[9] );
             }
-
-            Pad->m_Pos.x   = ibuf[0];
-            Pad->m_Pos.y   = ibuf[1];
+            wxPoint padPos;
+            padPos.x = ibuf[0];
+            padPos.y = ibuf[1];
             Pad->m_Drill.x = Pad->m_Drill.y = ibuf[5];
             Pad->m_Size.x  = Pad->m_Size.y = ibuf[3] + Pad->m_Drill.x;
-            Pad->m_Pos.x  += m_Pos.x;
-            Pad->m_Pos.y  += m_Pos.y;
+            padPos += m_Pos;
+            Pad->SetPos0( padPos );
+            Pad->SetPosition( padPos );
 
             if( (Pad->m_PadShape == PAD_ROUND) && (Pad->m_Size.x != Pad->m_Size.y) )
                 Pad->m_PadShape = PAD_OVAL;

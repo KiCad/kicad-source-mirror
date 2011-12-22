@@ -234,18 +234,17 @@ void PCB_BASE_FRAME::SelectLayerPair()
         return;
     }
 
-    SELECT_LAYERS_PAIR_DIALOG* frame =
-        new SELECT_LAYERS_PAIR_DIALOG( this );
+    SELECT_LAYERS_PAIR_DIALOG* frame = new SELECT_LAYERS_PAIR_DIALOG( this );
 
     int result = frame->ShowModal();
     frame->Destroy();
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
     // if user changed colors and we are in high contrast mode, then redraw
     // because the PAD_SMD pads may change color.
     if( result >= 0  &&  DisplayOpt.ContrastModeDisplay )
     {
-        DrawPanel->Refresh();
+        m_canvas->Refresh();
     }
 }
 

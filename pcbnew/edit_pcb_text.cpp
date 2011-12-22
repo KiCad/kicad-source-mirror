@@ -51,7 +51,7 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
 
 
     SwapData(TextePcb, &s_TextCopy);
-    TextePcb->m_Flags = 0;
+    TextePcb->ClearFlags();
     TextePcb->Draw( Panel, DC, GR_OR );
 }
 
@@ -61,24 +61,26 @@ void Abort_Edit_Pcb_Text( EDA_DRAW_PANEL* Panel, wxDC* DC )
  */
 void PCB_EDIT_FRAME::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
 {
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
 
     if( TextePcb == NULL )
         return;
 
-    TextePcb->Draw( DrawPanel, DC, GR_OR );
+    TextePcb->Draw( m_canvas, DC, GR_OR );
     OnModify();
 
     if( TextePcb->IsNew() )  // If new: prepare undo command
     {
         SaveCopyInUndoList( TextePcb, UR_NEW );
-        TextePcb->m_Flags = 0;
+        TextePcb->ClearFlags();
         return;
     }
 
-    if( TextePcb->m_Flags == IS_MOVED ) // If moved only
+    if( TextePcb->IsMoving() ) // If moved only
+    {
         SaveCopyInUndoList( TextePcb, UR_MOVED, TextePcb->m_Pos - s_TextCopy.m_Pos );
+    }
     else
     {
         // Restore initial params
@@ -89,7 +91,7 @@ void PCB_EDIT_FRAME::Place_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
         // Restore current params
     }
 
-    TextePcb->m_Flags = 0;
+    TextePcb->ClearFlags();
 }
 
 
@@ -104,16 +106,16 @@ void PCB_EDIT_FRAME::StartMoveTextePcb( TEXTE_PCB* TextePcb, wxDC* DC )
     if( !TextePcb->IsNew() )
         s_TextCopy.Copy( TextePcb );
 
-    TextePcb->Draw( DrawPanel, DC, GR_XOR );
-    TextePcb->m_Flags |= IS_MOVED;
+    TextePcb->Draw( m_canvas, DC, GR_XOR );
+    TextePcb->SetFlags( IS_MOVED );
     TextePcb->DisplayInfo( this );
 
     GetScreen()->SetCrossHairPosition( TextePcb->GetPosition() );
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
-    DrawPanel->SetMouseCapture( Move_Texte_Pcb, Abort_Edit_Pcb_Text );
+    m_canvas->SetMouseCapture( Move_Texte_Pcb, Abort_Edit_Pcb_Text );
     SetCurItem( TextePcb );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 }
 
 
@@ -140,11 +142,11 @@ void PCB_EDIT_FRAME::Delete_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     if( TextePcb == NULL )
         return;
 
-    TextePcb->Draw( DrawPanel, DC, GR_XOR );
+    TextePcb->Draw( m_canvas, DC, GR_XOR );
 
     SaveCopyInUndoList( TextePcb, UR_DELETED );
     TextePcb->UnLink();
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
     SetCurItem( NULL );
 }
 
@@ -159,7 +161,7 @@ TEXTE_PCB* PCB_EDIT_FRAME::Create_Texte_Pcb( wxDC* DC )
     GetBoard()->Add( TextePcb );
 
     /* Update text properties. */
-    TextePcb->m_Flags = IS_NEW;
+    TextePcb->SetFlags( IS_NEW );
     TextePcb->SetLayer( ( (PCB_SCREEN*) GetScreen() )->m_Active_Layer );
     TextePcb->m_Mirror = false;
 
@@ -195,19 +197,19 @@ void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
         return;
 
     /* Erase previous text. */
-    TextePcb->Draw( DrawPanel, DC, GR_XOR );
+    TextePcb->Draw( m_canvas, DC, GR_XOR );
 
     TextePcb->m_Orient += angle;
     NORMALIZE_ANGLE_POS( TextePcb->m_Orient );
 
     /* Redraw text in new position. */
-    TextePcb->Draw( DrawPanel, DC, drawmode );
+    TextePcb->Draw( m_canvas, DC, drawmode );
     TextePcb->DisplayInfo( this );
 
-    if( TextePcb->m_Flags == 0 )    // i.e. not edited, or moved
+    if( TextePcb->GetFlags() == 0 )    // i.e. not edited, or moved
         SaveCopyInUndoList( TextePcb, UR_ROTATED, TextePcb->m_Pos );
     else                 // set flag edit, to show it was a complex command
-        TextePcb->m_Flags |= IN_EDIT;
+        TextePcb->SetFlags( IN_EDIT );
 
     OnModify();
 }

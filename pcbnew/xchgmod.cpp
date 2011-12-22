@@ -28,7 +28,8 @@ private:
     PCB_EDIT_FRAME* m_Parent;
     MODULE*         m_CurrentModule;
 
-public: DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* aParent, MODULE* aModule );
+public:
+    DIALOG_EXCHANGE_MODULE( PCB_EDIT_FRAME* aParent, MODULE* aModule );
     ~DIALOG_EXCHANGE_MODULE() { };
 
 private:
@@ -151,7 +152,6 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
     FILE*       FichCmp, * NewFile;
     char        line[1024];
     wxString    msg;
-    char*       rs;
 
     if( old_name == new_name )
         return 0;
@@ -189,7 +189,7 @@ int DIALOG_EXCHANGE_MODULE::Maj_ListeCmp( const wxString& reference,
         return 1;
     }
 
-    rs = fgets( line, sizeof(line), FichCmp );
+    fgets( line, sizeof(line), FichCmp );
 
     fprintf( NewFile, "Cmp-Mod V01 Genere par PcbNew le %s\n", TO_UTF8( DateAndTime() ) );
 
@@ -256,7 +256,7 @@ void DIALOG_EXCHANGE_MODULE::Change_Current_Module()
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
 
-        m_Parent->DrawPanel->Refresh();
+        m_Parent->GetCanvas()->Refresh();
     }
 
     if( pickList.GetCount() )
@@ -345,7 +345,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleId( bool aUseValue )
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
 
-        m_Parent->DrawPanel->Refresh();
+        m_Parent->GetCanvas()->Refresh();
     }
 
     if( pickList.GetCount() )
@@ -398,7 +398,7 @@ void DIALOG_EXCHANGE_MODULE::Change_ModuleAll()
         if( m_Parent->GetBoard()->IsElementVisible( RATSNEST_VISIBLE ) )
             m_Parent->Compile_Ratsnest( NULL, true );
 
-        m_Parent->DrawPanel->Refresh();
+        m_Parent->GetCanvas()->Refresh();
     }
 
     if( pickList.GetCount() )
@@ -552,7 +552,7 @@ void PCB_EDIT_FRAME::Exchange_Module( MODULE*            aOldModule,
     }
 
     GetBoard()->m_Status_Pcb = 0;
-    aNewModule->m_Flags = 0;
+    aNewModule->ClearFlags();
     OnModify();
 }
 
@@ -587,7 +587,6 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
     MODULE*     Module = GetBoard()->m_Modules;
     wxString    msg;
     wxString    wildcard;
-    char*       rs;
 
     if( Module == NULL )
     {
@@ -618,7 +617,7 @@ void PCB_EDIT_FRAME::RecreateCmpFileFromBoard( wxCommandEvent& aEvent )
         return;
     }
 
-    rs = fgets( line, sizeof(line), FichCmp );
+    fgets( line, sizeof(line), FichCmp );
     fprintf( FichCmp, "Cmp-Mod V01 Genere par PcbNew le %s\n", TO_UTF8( DateAndTime() ) );
 
     for( ; Module != NULL; Module = Module->Next() )

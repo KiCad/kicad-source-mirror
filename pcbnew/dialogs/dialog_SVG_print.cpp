@@ -245,7 +245,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     screen->SetScalingFactor( 1.0 );
     float dpi = (float)m_Parent->GetInternalUnits();
 
-    EDA_DRAW_PANEL* panel = m_Parent->DrawPanel;
+    EDA_DRAW_PANEL* panel = m_Parent->GetCanvas();
 
     // paper pageSize is in internal units, either nanometers or deci-mils
     wxSize  pageSize = m_Parent->GetPageSizeIU();

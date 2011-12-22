@@ -63,7 +63,7 @@ BEGIN_EVENT_TABLE( EDA_DRAW_PANEL, wxScrolledWindow )
     EVT_MOUSEWHEEL( EDA_DRAW_PANEL::OnMouseWheel )
     EVT_MOUSE_EVENTS( EDA_DRAW_PANEL::OnMouseEvent )
     EVT_CHAR( EDA_DRAW_PANEL::OnKeyEvent )
-    EVT_CHAR_HOOK( EDA_DRAW_PANEL::OnKeyEvent )
+    EVT_CHAR_HOOK( EDA_DRAW_PANEL::OnCharHook )
     EVT_PAINT( EDA_DRAW_PANEL::OnPaint )
     EVT_ERASE_BACKGROUND( EDA_DRAW_PANEL::OnEraseBackground )
     EVT_SCROLLWIN( EDA_DRAW_PANEL::OnScroll )
@@ -421,15 +421,15 @@ void EDA_DRAW_PANEL::SetClipBox( wxDC& aDC, const wxRect* aRect )
     clipBox.Inflate( CLIP_BOX_PADDING );
 
     // Convert from device units to drawing units.
-    m_ClipBox.m_Pos = wxPoint( aDC.DeviceToLogicalX( clipBox.x ),
-                               aDC.DeviceToLogicalY( clipBox.y ) );
-    m_ClipBox.m_Size = wxSize( aDC.DeviceToLogicalXRel( clipBox.width ),
-                               aDC.DeviceToLogicalYRel( clipBox.height ) );
+    m_ClipBox.SetOrigin( wxPoint( aDC.DeviceToLogicalX( clipBox.x ),
+                                  aDC.DeviceToLogicalY( clipBox.y ) ) );
+    m_ClipBox.SetSize( wxSize( aDC.DeviceToLogicalXRel( clipBox.width ),
+                               aDC.DeviceToLogicalYRel( clipBox.height ) ) );
 
     wxLogTrace( KICAD_TRACE_COORDS,
                 wxT( "Device clip box=(%d, %d, %d, %d), Logical clip box=(%d, %d, %d, %d)" ),
                 clipBox.x, clipBox.y, clipBox.width, clipBox.height,
-                m_ClipBox.m_Pos.x, m_ClipBox.m_Pos.y, m_ClipBox.m_Size.x, m_ClipBox.m_Size.y );
+                m_ClipBox.GetX(), m_ClipBox.GetY(), m_ClipBox.GetWidth(), m_ClipBox.GetHeight() );
 }
 
 
@@ -574,7 +574,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     screenGridSize.x = aDC->LogicalToDeviceXRel( wxRound( gridSize.x ) );
     screenGridSize.y = aDC->LogicalToDeviceYRel( wxRound( gridSize.y ) );
 
-    org = m_ClipBox.m_Pos;
+    org = m_ClipBox.GetPosition();
 
     if( screenGridSize.x < MIN_GRID_SIZE || screenGridSize.y < MIN_GRID_SIZE )
     {
@@ -668,7 +668,7 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     for( double x = (double) org.x; x <= right; x += gridSize.x )
     {
         aDC->Blit( scaleDC.LogicalToDeviceX( wxRound( x ) ),
-                   scaleDC.LogicalToDeviceY( m_ClipBox.m_Pos.y ),
+                   scaleDC.LogicalToDeviceY( m_ClipBox.GetY() ),
                    1, tmpBM.GetHeight(), &tmpDC, 0, 0, wxCOPY, true );
     }
 #endif
@@ -1107,23 +1107,23 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 }
 
 
+
+void EDA_DRAW_PANEL::OnCharHook( wxKeyEvent& event )
+{
+    event.Skip();
+}
+
 void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 {
     int localkey;
     wxPoint pos;
 
-    localkey = event.GetKeyCode();
+ 	localkey = event.GetKeyCode();
 
     switch( localkey )
     {
-    case WXK_CONTROL:
-    case WXK_CAPITAL:
-    case WXK_SHIFT:
-    case WXK_NUMLOCK:
-    case WXK_LBUTTON:
-    case WXK_RBUTTON:
-    case WXK_ALT:
-        return;
+        default:
+            break;
 
     case WXK_ESCAPE:
         m_AbortRequest = true;
@@ -1132,7 +1132,6 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
             EndMouseCapture();
         else
             EndMouseCapture( ID_NO_TOOL_SELECTED, m_defaultCursor, wxEmptyString );
-
         break;
     }
 

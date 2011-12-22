@@ -48,7 +48,7 @@ SCH_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusEntry( wxDC* DC, int entry_type )
     // Create and place a new bus entry at cursor position
     SCH_BUS_ENTRY* BusEntry = new SCH_BUS_ENTRY( GetScreen()->GetCrossHairPosition(), s_LastShape,
                                                  entry_type );
-    BusEntry->m_Flags = IS_NEW;
+    BusEntry->SetFlags( IS_NEW );
     BusEntry->Place( this, DC );
     OnModify();
     return BusEntry;
@@ -69,40 +69,15 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int en
     }
 
     /* Put old item in undo list if it is not currently in edit */
-    if( BusEntry->m_Flags == 0 )
+    if( BusEntry->GetFlags() == 0 )
         SaveCopyInUndoList( BusEntry, UR_CHANGED );
 
-    BusEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+    s_LastShape = entry_shape == '/' ? '/' : '\\';
 
-    wxSize size = BusEntry->GetSize();
-
-    switch( entry_shape )
-    {
-    case '\\':
-        s_LastShape = '\\';
-        size.y = 100;
-        BusEntry->SetSize( size );
-        break;
-
-    case '/':
-        s_LastShape = '/';
-        size.y = -100;
-        BusEntry->SetSize( size );
-        break;
-    }
-
+    BusEntry->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
+    BusEntry->SetBusEntryShape( s_LastShape );
     GetScreen()->TestDanglingEnds();
-    BusEntry->Draw( DrawPanel, DC, wxPoint( 0, 0 ), g_XorMode );
+    BusEntry->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
+
     OnModify( );
-}
-
-
-int SCH_EDIT_FRAME::GetBusEntryShape( SCH_BUS_ENTRY* BusEntry )
-{
-    int entry_shape = '\\';
-
-    if( BusEntry->GetSize().y < 0 )
-        entry_shape = '/';
-
-    return entry_shape;
 }

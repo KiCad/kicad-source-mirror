@@ -1,0 +1,25 @@
+# EESchema Netlist Version 1.1 created  19/12/2011 12:55:28
+(
+ ( /4EE5056D $noname  P4 CONN_1 {Lib=CONN_1}
+  (    1 /NET1 )
+ )
+ ( /4EE5056C $noname  P3 CONN_1 {Lib=CONN_1}
+  (    1 /NET1 )
+ )
+ ( /4EDF7CC5 $noname  P1 CONN_1 {Lib=CONN_1}
+  (    1 /NET2 )
+ )
+ ( /4EDF7CC0 $noname  P2 CONN_1 {Lib=CONN_1}
+  (    1 /NET2 )
+ )
+)
+*
+{ Pin List by Nets
+Net 1 "/NET1" "NET1"
+ P4 1
+ P3 1
+Net 2 "/NET2" "NET2"
+ P1 1
+ P2 1
+}
+#End

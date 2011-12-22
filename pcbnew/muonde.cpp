@@ -168,8 +168,8 @@ void PCB_EDIT_FRAME::Begin_Self( wxDC* DC )
     GetScreen()->m_O_Curseur = GetScreen()->GetCrossHairPosition();
     UpdateStatusBar();
 
-    DrawPanel->SetMouseCapture( ShowBoundingBoxMicroWaveInductor, Exit_Self );
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
+    m_canvas->SetMouseCapture( ShowBoundingBoxMicroWaveInductor, Exit_Self );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
 }
 
 
@@ -179,8 +179,8 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     int      ll;
     wxString msg;
 
-    DrawPanel->m_mouseCaptureCallback( DrawPanel, DC, wxDefaultPosition, false );
-    DrawPanel->SetMouseCapture( NULL, NULL );
+    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+    m_canvas->SetMouseCapture( NULL, NULL );
 
     if( Self_On == 0 )
     {
@@ -235,7 +235,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     // here the module is already in the BOARD, Create_1_Module() does that.
     module->m_LibRef    = wxT( "MuSelf" );
     module->m_Attributs = MOD_VIRTUAL | MOD_CMS;
-    module->m_Flags     = 0;
+    module->ClearFlags();
     module->m_Pos = Mself.m_End;
 
     // Generate segments
@@ -290,7 +290,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     module->m_Value->SetPos0( module->m_Value->m_Pos - module->m_Pos );
 
     module->CalculateBoundingBox();
-    module->Draw( DrawPanel, DC, GR_OR );
+    module->Draw( m_canvas, DC, GR_OR );
 
     return module;
 }
@@ -615,7 +615,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
 
     if( dlg.ShowModal() != wxID_OK )
     {
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         return NULL; // cancelled by user
     }
 
@@ -633,7 +633,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
 
         if( angledlg.ShowModal() != wxID_OK )
         {
-            DrawPanel->MoveCursorToCrossHair();
+            m_canvas->MoveCursorToCrossHair();
             return NULL; // cancelled by user
         }
 
@@ -653,7 +653,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWaveComponent( int shape_type )
 
     if( abort )
     {
-        DrawPanel->MoveCursorToCrossHair();
+        m_canvas->MoveCursorToCrossHair();
         return NULL;
     }
 
@@ -937,7 +937,6 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
     wxString     cmp_name;
     int          pad_count = 2;
     EDGE_MODULE* edge;
-    int          npoints;
 
     WinEDA_SetParamShapeFrame* frame = new WinEDA_SetParamShapeFrame( this, wxPoint( -1, -1 ) );
 
@@ -945,7 +944,7 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
 
     frame->Destroy();
 
-    DrawPanel->MoveCursorToCrossHair();
+    m_canvas->MoveCursorToCrossHair();
 
     if( ok != 1 )
     {
@@ -988,7 +987,6 @@ MODULE* PCB_EDIT_FRAME::Create_MuWavePolygonShape()
 
     edge->SetShape( S_POLYGON );
     edge->SetLayer( LAYER_N_FRONT );
-    npoints = PolyEdges.size();
 
     std::vector<wxPoint> polyPoints = edge->GetPolyPoints();
     polyPoints.reserve( 2 * PolyEdges.size() + 2 );
@@ -1077,7 +1075,7 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* Module )
         return;
     }
 
-    Module->Draw( DrawPanel, DC, GR_XOR );
+    Module->Draw( m_canvas, DC, GR_XOR );
 
     /* Calculate the current dimension. */
     gap_size = next_pad->m_Pos0.x - pad->m_Pos0.x - pad->m_Size.x;
@@ -1109,5 +1107,5 @@ void PCB_EDIT_FRAME::Edit_Gap( wxDC* DC, MODULE* Module )
     RotatePoint( &next_pad->m_Pos.x, &next_pad->m_Pos.y,
                  Module->m_Pos.x, Module->m_Pos.y, Module->m_Orient );
 
-    Module->Draw( DrawPanel, DC, GR_OR );
+    Module->Draw( m_canvas, DC, GR_OR );
 }

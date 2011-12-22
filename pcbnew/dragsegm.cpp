@@ -148,10 +148,10 @@ void AddSegmentToDragList( EDA_DRAW_PANEL* panel, wxDC* DC, int flag, TRACK* Tra
     Track->SetState( IN_EDIT, ON );
 
     if( (flag & STARTPOINT) )
-        Track->m_Flags |= STARTPOINT;
+        Track->SetFlags( STARTPOINT );
 
     if( (flag & ENDPOINT) )
-        Track->m_Flags |= ENDPOINT;
+        Track->SetFlags( ENDPOINT );
 
     Track->Draw( panel, DC, GR_XOR );
     g_DragSegmentList.push_back( wrapper );
@@ -177,15 +177,15 @@ void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
         if( ( LayerMask & track->ReturnMaskLayer() ) == 0 )
             continue;                       // Cannot be connected, not on the same layer
 
-        if( track->m_Flags & IS_DRAGGED )
+        if( track->IsDragging() )
             continue;                       // already put in list
 
         int flag = 0;
 
-        if( (track->m_Start == aRefPos) && ((track->m_Flags & STARTPOINT) == 0) )
+        if( (track->m_Start == aRefPos) && ((track->GetFlags() & STARTPOINT) == 0) )
             flag |= STARTPOINT;
 
-        if( track->m_End == aRefPos && ((track->m_Flags & ENDPOINT) == 0)  )
+        if( track->m_End == aRefPos && ((track->GetFlags() & ENDPOINT) == 0)  )
             flag |= ENDPOINT;
 
         // Note: vias will be flagged with both STARTPOINT and ENDPOINT
@@ -213,7 +213,7 @@ void Collect_TrackSegmentsToDrag( EDA_DRAW_PANEL* panel, wxDC* DC,
 void EraseDragList()
 {
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
-        g_DragSegmentList[ii].m_Segm->m_Flags = 0;
+        g_DragSegmentList[ii].m_Segm->ClearFlags();
 
     g_DragSegmentList.clear();
 }

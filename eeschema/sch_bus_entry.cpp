@@ -296,3 +296,37 @@ void SCH_BUS_ENTRY::doPlot( PLOTTER* aPlotter )
     aPlotter->move_to( m_pos );
     aPlotter->finish_to( m_End() );
 }
+
+/* SetBusEntryShape:
+ * Set the shape of the bus entry.
+ * aShape = ascii code '/' or '\'
+ */
+void SCH_BUS_ENTRY::SetBusEntryShape( int aShape )
+{
+    switch( aShape )
+    {
+    case '\\':
+        if( m_size.y < 0 )
+            m_size.y = -m_size.y;
+        break;
+
+    case '/':
+        if( m_size.y > 0 )
+            m_size.y = -m_size.y;
+        break;
+    }
+}
+
+
+/* GetBusEntryShape:
+ * return the shape of the bus entry, as an ascii code '/' or '\'
+ */
+int SCH_BUS_ENTRY::GetBusEntryShape() const
+{
+    int shape = '\\';
+
+    if( GetSize().y < 0 )
+        shape = '/';
+
+    return shape;
+}
