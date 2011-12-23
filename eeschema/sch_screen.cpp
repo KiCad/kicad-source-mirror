@@ -970,8 +970,8 @@ bool SCH_SCREEN::BreakSegment( const wxPoint& aPoint )
 
         // Break the segment at aPoint and create a new segment.
         newSegment = new SCH_LINE( *segment );
-        newSegment->GetStartPoint() = aPoint;
-        segment->GetEndPoint() = newSegment->GetStartPoint();
+        newSegment->SetStartPoint( aPoint );
+        segment->SetEndPoint( aPoint );
         newSegment->SetNext( segment->Next() );
         segment->SetNext( newSegment );
         item = newSegment;
