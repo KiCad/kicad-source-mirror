@@ -322,7 +322,8 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
     if( libFileName.FileExists() )
     {
         backupFileName.SetExt( wxT( "bak" ) );
-        wxRemoveFile( backupFileName.GetFullPath() );
+        if( backupFileName.FileExists() )
+            wxRemoveFile( backupFileName.GetFullPath() );
 
         if( !wxRenameFile( libFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
@@ -361,7 +362,8 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
     if( docFileName.FileExists() )
     {
         backupFileName.SetExt( wxT( "bck" ) );
-        wxRemoveFile( backupFileName.GetFullPath() );
+        if( backupFileName.FileExists() )
+            wxRemoveFile( backupFileName.GetFullPath() );
 
         if( !wxRenameFile( docFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
