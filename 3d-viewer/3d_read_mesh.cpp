@@ -49,13 +49,20 @@ int S3D_MASTER::ReadData()
         return 1;
     }
 
-    if( wxFileName::FileExists( m_Shape3DName ) )
+    wxString shape3DNname = m_Shape3DName;
+#ifdef __WINDOWS__
+    shape3DNname.Replace( wxT("/"), wxT("\\") );
+#else
+    shape3DNname.Replace( wxT("\\"), wxT("/") );
+#endif
+
+    if( wxFileName::FileExists( shape3DNname ) )
     {
-        FullFilename = m_Shape3DName;
+        FullFilename = shape3DNname;
     }
     else
     {
-        fn = m_Shape3DName;
+        fn = shape3DNname;
         FullFilename = wxGetApp().FindLibraryPath( fn );
 
         if( FullFilename.IsEmpty() )
