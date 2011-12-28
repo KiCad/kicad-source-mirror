@@ -1583,12 +1583,12 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, i
     int idxmax = aPadList.size()-1;
 
     int delta = aPadList.size();
-    if( delta & 1 && delta > 1 )
-        delta += 1;
-    delta /= 2;
-    int idx = delta;        // Starting index is the middle of list
+
+    int idx = 0;        // Starting index is the beginning of list
     while( delta )
     {
+        // Calculate half size of remaining interval to test.
+        // Ensure the computed value is not truncated (too small)
         if( (delta & 1) && ( delta > 1 ) )
             delta++;
         delta /= 2;
