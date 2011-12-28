@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-26 17:52+0300\n"
-"PO-Revision-Date: 2011-12-26 17:58+0300\n"
+"POT-Creation-Date: 2011-12-28 10:48+0300\n"
+"PO-Revision-Date: 2011-12-28 10:49+0300\n"
 "Last-Translator: faa <andrf@mail.ru>\n"
 "Language-Team: KiCAD russian team <andrf@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -1201,7 +1201,7 @@ msgid "Footprint"
 msgstr "Посадочное место"
 
 #: eeschema/lib_field.cpp:599
-#: eeschema/libedit.cpp:448
+#: eeschema/libedit.cpp:450
 msgid "Datasheet"
 msgstr "Документация"
 
@@ -1251,7 +1251,7 @@ msgid "All"
 msgstr "Все"
 
 #: eeschema/lib_draw_item.cpp:84
-#: eeschema/libedit.cpp:431
+#: eeschema/libedit.cpp:433
 msgid "Unit"
 msgstr "Элемент"
 
@@ -1264,7 +1264,7 @@ msgid "yes"
 msgstr "да"
 
 #: eeschema/lib_draw_item.cpp:94
-#: eeschema/libedit.cpp:434
+#: eeschema/libedit.cpp:436
 msgid "Convert"
 msgstr "Преобразовать"
 
@@ -1341,7 +1341,7 @@ msgid "Could not create copy of part <%s> in library <%s>."
 msgstr "Нельзя создавать копию компонента <%s> в библитеке <%s>."
 
 #: eeschema/libedit.cpp:273
-#: eeschema/libedit.cpp:659
+#: eeschema/libedit.cpp:661
 msgid "No library specified."
 msgstr "Не указана библиотека."
 
@@ -1361,78 +1361,78 @@ msgstr "Изменить файл библиотеки \""
 msgid "\"?"
 msgstr "\"?"
 
-#: eeschema/libedit.cpp:350
+#: eeschema/libedit.cpp:351
 msgid "Error occurred while saving library file \""
 msgstr "Ошибка при записи файла библиотеки \""
 
-#: eeschema/libedit.cpp:350
-#: eeschema/libedit.cpp:390
+#: eeschema/libedit.cpp:351
+#: eeschema/libedit.cpp:392
 msgid "\"."
 msgstr "\"."
 
-#: eeschema/libedit.cpp:351
-#: eeschema/libedit.cpp:391
+#: eeschema/libedit.cpp:352
+#: eeschema/libedit.cpp:393
 msgid "*** ERROR: ***"
 msgstr "*** ОШИБКА: ***"
 
-#: eeschema/libedit.cpp:389
+#: eeschema/libedit.cpp:391
 msgid "Error occurred while saving library document file \""
 msgstr "Ошибка при записи файла библиотеки \""
 
-#: eeschema/libedit.cpp:396
+#: eeschema/libedit.cpp:398
 msgid "Library file \""
 msgstr "Файл библиотеки \""
 
-#: eeschema/libedit.cpp:398
+#: eeschema/libedit.cpp:400
 msgid "Document file \""
 msgstr "Файл документа \""
 
-#: eeschema/libedit.cpp:415
+#: eeschema/libedit.cpp:417
 msgid "Part"
 msgstr " Часть"
 
-#: eeschema/libedit.cpp:418
+#: eeschema/libedit.cpp:420
 msgid "None"
 msgstr "Отсутствует"
 
-#: eeschema/libedit.cpp:426
+#: eeschema/libedit.cpp:428
 msgid "Alias"
 msgstr "Псевдоним"
 
-#: eeschema/libedit.cpp:438
+#: eeschema/libedit.cpp:440
 msgid "Body"
 msgstr "Контур"
 
-#: eeschema/libedit.cpp:441
+#: eeschema/libedit.cpp:443
 msgid "Power Symbol"
 msgstr "Символ питания"
 
-#: eeschema/libedit.cpp:443
+#: eeschema/libedit.cpp:445
 msgid "Component"
 msgstr "Компонент"
 
-#: eeschema/libedit.cpp:446
+#: eeschema/libedit.cpp:448
 msgid "Description"
 msgstr "Описание"
 
-#: eeschema/libedit.cpp:447
+#: eeschema/libedit.cpp:449
 msgid "Key words"
 msgstr "Ключевые слова"
 
-#: eeschema/libedit.cpp:470
+#: eeschema/libedit.cpp:472
 msgid "Please select a component library."
 msgstr "Выберите библиотеку компонентов."
 
-#: eeschema/libedit.cpp:479
+#: eeschema/libedit.cpp:481
 #, c-format
 msgid "Component library <%s> is empty."
 msgstr "Библиотека компонентов <%s> пустая."
 
-#: eeschema/libedit.cpp:480
+#: eeschema/libedit.cpp:482
 msgid "Delete Entry Error"
 msgstr "Ошибка удаления"
 
-#: eeschema/libedit.cpp:484
+#: eeschema/libedit.cpp:486
 #, c-format
 msgid ""
 "Select 1 of %d components to delete\n"
@@ -1441,27 +1441,27 @@ msgstr ""
 "Выберите 1 из %d компонентов для удаления\n"
 "из библиотеки <%s>."
 
-#: eeschema/libedit.cpp:488
+#: eeschema/libedit.cpp:490
 msgid "Delete Component"
 msgstr "Удалить компонент"
 
-#: eeschema/libedit.cpp:497
+#: eeschema/libedit.cpp:499
 #, c-format
 msgid "Entry <%s> not found in library <%s>."
 msgstr "Компонент <%s> не найден в библиотеке <%s>."
 
-#: eeschema/libedit.cpp:504
+#: eeschema/libedit.cpp:506
 #, c-format
 msgid "Delete component \"%s\" from library \"%s\"?"
 msgstr "Удалить компонент \"%s\" из библиотеки \"%s\"?"
 
-#: eeschema/libedit.cpp:522
+#: eeschema/libedit.cpp:524
 msgid "The component being deleted has been modified. All changes will be lost. Discard changes?"
 msgstr ""
 "Удаляемый компонент был изменен. Все изменения будут потеряны.\n"
 "Отказаться от изменений?"
 
-#: eeschema/libedit.cpp:549
+#: eeschema/libedit.cpp:551
 msgid ""
 "All changes to the current component will be lost!\n"
 "\n"
@@ -1471,25 +1471,25 @@ msgstr ""
 "\n"
 "Очистить текущий компонент на экране?"
 
-#: eeschema/libedit.cpp:565
+#: eeschema/libedit.cpp:567
 msgid "This new component has no name and cannot be created. Aborted"
 msgstr "Новый компонент не имеет имени и не может быть создан. Создание прервано"
 
-#: eeschema/libedit.cpp:580
+#: eeschema/libedit.cpp:582
 #, c-format
 msgid "Component \"%s\" already exists in library \"%s\"."
 msgstr "Компонент \"%s\" уже есть в библиотеке \"%s\"."
 
-#: eeschema/libedit.cpp:650
+#: eeschema/libedit.cpp:652
 msgid "No component to save."
 msgstr "Нет компонента для сохранения."
 
-#: eeschema/libedit.cpp:669
+#: eeschema/libedit.cpp:671
 #, c-format
 msgid "Component \"%s\" already exists. Change it?"
 msgstr "Компонент\"%s\" существует. Изменить его?"
 
-#: eeschema/libedit.cpp:686
+#: eeschema/libedit.cpp:688
 #, c-format
 msgid "Component %s saved in library %s"
 msgstr "Компонент %s сохранен в библиотеке %s"
@@ -7988,7 +7988,7 @@ msgstr "Перех.отв. близко к дорожке"
 
 #: pcbnew/class_drc_item.cpp:62
 msgid "Two track ends"
-msgstr "Два конца жорожки"
+msgstr "Два конца дорожки"
 
 #: pcbnew/class_drc_item.cpp:64
 msgid "This looks bad"
@@ -15787,11 +15787,3 @@ msgstr "Свойства размерной линии"
 msgid "Pcb Calculator"
 msgstr "Калькулятор для печатных плат"
 
-#~ msgid "Child item "
-#~ msgstr "Подчиненный элемент"
-
-#~ msgid " of parent item "
-#~ msgstr "от элемента"
-
-#~ msgid "Item "
-#~ msgstr "Элемент"
