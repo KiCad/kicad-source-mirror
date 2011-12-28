@@ -342,12 +342,12 @@ void CONNECTIONS::CollectItemsNearTo( std::vector<CONNECTED_POINT*>& aList,
     int idxmax = m_candidates.size()-1;
 
     int delta = m_candidates.size();
-    if( delta & 1 && delta > 1 )
-        delta += 1;
-    delta /= 2;
-    int idx = delta;        // Starting index is the middle of list
+
+    int idx = 0;        // Starting index is the beginning of list
     while( delta )
     {
+        // Calculate half size of remaining interval to test.
+        // Ensure the computed value is not truncated (too small)
         if( (delta & 1) && ( delta > 1 ) )
             delta++;
         delta /= 2;
@@ -530,12 +530,12 @@ int CONNECTIONS::searchEntryPointInCandidatesList( const wxPoint & aPoint)
     int idxmax = m_candidates.size()-1;
 
     int delta = m_candidates.size();
-    if( delta & 1 && delta > 1 )
-        delta += 1;
-    delta /= 2;
-    int idx = delta;        // Starting index is the middle of list
+
+    int idx = 0;        // Starting index is the beginning of list
     while( delta )
     {
+        // Calculate half size of remaining interval to test.
+        // Ensure the computed value is not truncated (too small)
         if( (delta & 1) && ( delta > 1 ) )
             delta++;
         delta /= 2;
