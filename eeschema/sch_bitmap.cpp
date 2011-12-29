@@ -190,7 +190,7 @@ void SCH_BITMAP::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset
         wxSize size = m_Image->GetSize();
         pos.x -= size.x / 2;
         pos.y -= size.y / 2;
-        GRRect( &aPanel->m_ClipBox, aDC, pos.x, pos.y,
+        GRRect( aPanel->GetClipBox(), aDC, pos.x, pos.y,
                 pos.x + size.x, pos.y + size.y, 0, aColor );
     }
 }

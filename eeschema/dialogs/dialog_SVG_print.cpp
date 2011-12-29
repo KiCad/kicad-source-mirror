@@ -220,15 +220,13 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
     float       dpi = (float) frame->GetInternalUnits();
     wxSVGFileDC dc( FullFileName, SheetSize.x, SheetSize.y, dpi );
 
-    EDA_RECT    tmp = panel->m_ClipBox;
+    EDA_RECT    tmp = *panel->GetClipBox();
     GRResetPenAndBrush( &dc );
     GRForceBlackPen( aPrintBlackAndWhite );
 
 
-    panel->m_ClipBox.SetX( -0x3FFFFF0 );
-    panel->m_ClipBox.SetY( -0x3FFFFF0 );
-    panel->m_ClipBox.SetWidth( 0x7FFFFF0 );
-    panel->m_ClipBox.SetHeight( 0x7FFFFF0 );
+    panel->SetClipBox( EDA_RECT( wxPoint( -0x3FFFFF0, -0x3FFFFF0 ),
+                                 wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
 
     screen->m_IsPrinting = true;
     screen->Draw( panel, &dc, GR_COPY );
@@ -238,7 +236,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
 
     SetLocaleTo_Default();       // revert to the current locale
     screen->m_IsPrinting   = false;
-    panel->m_ClipBox       = tmp;
+    panel->SetClipBox( tmp );
 
 
     GRForceBlackPen( false );

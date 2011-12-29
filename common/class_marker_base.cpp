@@ -162,7 +162,7 @@ void MARKER_BASE::DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
         corners[ii] += m_Pos + aOffset;
     }
 
-    GRClosedPoly( &aPanel->m_ClipBox, aDC, CORNERS_COUNT, corners,
+    GRClosedPoly( aPanel->GetClipBox(), aDC, CORNERS_COUNT, corners,
                   true,         // = Filled
                   0,            // outline width
                   m_Color,      // outline color

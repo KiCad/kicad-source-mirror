@@ -240,13 +240,14 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 
     if( ( m_Flags & STARTPOINT ) == 0 )
         start += offset;
+
     if( ( m_Flags & ENDPOINT ) == 0 )
         end += offset;
 
     if( m_Layer == LAYER_NOTES )
-        GRDashedLine( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y, width, color );
+        GRDashedLine( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y, width, color );
     else
-        GRLine( &panel->m_ClipBox, DC, start, end, width, color );
+        GRLine( panel->GetClipBox(), DC, start, end, width, color );
 
     if( m_startIsDangling )
         DrawDanglingSymbol( panel, DC, start, color );

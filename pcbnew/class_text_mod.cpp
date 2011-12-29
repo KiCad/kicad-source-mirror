@@ -253,10 +253,10 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const w
 
         int anchor_size = DC->DeviceToLogicalXRel( 2 );
 
-        GRLine( &panel->m_ClipBox, DC,
+        GRLine( panel->GetClipBox(), DC,
                 pos.x - anchor_size, pos.y,
                 pos.x + anchor_size, pos.y, 0, color );
-        GRLine( &panel->m_ClipBox, DC,
+        GRLine( panel->GetClipBox(), DC,
                 pos.x, pos.y - anchor_size,
                 pos.x, pos.y + anchor_size, 0, color );
     }
@@ -300,11 +300,12 @@ void TEXTE_MODULE::DrawUmbilical( EDA_DRAW_PANEL* aPanel,
                                   const wxPoint&  aOffset )
 {
     MODULE* parent = (MODULE*) GetParent();
+
     if( !parent )
         return;
 
     GRSetDrawMode( aDC, GR_XOR );
-    GRLine( &aPanel->m_ClipBox, aDC,
+    GRLine( aPanel->GetClipBox(), aDC,
             parent->GetPosition(), GetPosition() + aOffset,
             0, UMBILICAL_COLOR);
 }

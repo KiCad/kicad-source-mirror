@@ -198,8 +198,8 @@ public:
                                                double                 aCorrectionFactor );
     /**
      * Function SetDrillValue
-     * Set the drill value for vias
-     * @param drill_value = new drill value
+     * sets the drill value for vias.
+     * @param aDrill = new drill value
     */
     void SetDrill( int aDrill )             { m_Drill = aDrill; }
 

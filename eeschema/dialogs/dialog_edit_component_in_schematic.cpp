@@ -29,7 +29,7 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     wxCHECK_RET( aComponent != NULL && aComponent->Type() == SCH_COMPONENT_T,
                  wxT( "Invalid component object pointer.  Bad Programmer!" )  );
 
-    m_canvas->m_IgnoreMouseEvents = true;
+    m_canvas->SetIgnoreMouseEvents( true );
 
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC* dlg = new DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( this );
 
@@ -55,7 +55,7 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = dlg->GetSize();
 
     m_canvas->MoveCursorToCrossHair();
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
     dlg->Destroy();
 }
 

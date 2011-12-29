@@ -363,8 +363,12 @@ public:
  */
 class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 {
+private:
     ///< Id of active button on the vertical toolbar.
     int m_toolId;
+
+    BASE_SCREEN* m_currentScreen;           ///< current used SCREEN
+    bool         m_snapToGrid;              ///< Indicates if cursor should be snapped to grid.
 
 protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
@@ -419,13 +423,14 @@ protected:
     /// Panel used to display information at the bottom of the main window.
     EDA_MSG_PANEL* m_messagePanel;
 
+#ifdef USE_WX_OVERLAY
+    // MAC Uses overlay to workaround the wxINVERT and wxXOR miss
+    wxOverlay m_overlay;
+#endif
+
     /// Let the #EDA_DRAW_PANEL object have access to the protected data since
     /// it is closely tied to the #EDA_DRAW_FRAME.
     friend class EDA_DRAW_PANEL;
-
-private:
-    BASE_SCREEN* m_currentScreen;           ///< current used SCREEN
-    bool         m_snapToGrid;              ///< Indicates if cursor should be snapped to grid.
 
 protected:
     void SetScreen( BASE_SCREEN* aScreen )

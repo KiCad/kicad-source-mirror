@@ -184,7 +184,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PLACE_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
-        m_canvas->m_AutoPAN_Request = FALSE;
+        m_canvas->SetAutoPanRequest( false );
         HandleBlockPlace( &dc );
         break;
 

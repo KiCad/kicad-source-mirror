@@ -220,12 +220,12 @@ void LIB_EDIT_FRAME::PlacePin( wxDC* DC )
 
         if( ask_for_pin && SynchronizePins() )
         {
-            m_canvas->m_IgnoreMouseEvents = true;
+            m_canvas->SetIgnoreMouseEvents( true );
             status =
                 IsOK( this, _( "This position is already occupied by \
 another pin. Continue?" ) );
             m_canvas->MoveCursorToCrossHair();
-            m_canvas->m_IgnoreMouseEvents = false;
+            m_canvas->SetIgnoreMouseEvents( false );
 
             if( !status )
                 return;
@@ -398,12 +398,12 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     pin->SetUnit( LastPinCommonUnit ? 0 : m_unit );
     pin->SetVisible( LastPinVisible );
     PinPreviousPos = pin->GetPosition();
-    m_canvas->m_IgnoreMouseEvents = true;
+    m_canvas->SetIgnoreMouseEvents( true );
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetId( ID_LIBEDIT_EDIT_PIN );
     GetEventHandler()->ProcessEvent( cmd );
     m_canvas->MoveCursorToCrossHair();
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
 
     if( pin->GetFlags() & IS_CANCELLED )
     {

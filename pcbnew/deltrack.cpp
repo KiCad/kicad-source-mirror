@@ -111,7 +111,7 @@ TRACK* PCB_EDIT_FRAME::Delete_Segment( wxDC* DC, TRACK* aTrack )
             else
             {
                 if( m_canvas->IsMouseCaptured() )
-                    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+                    m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
                 return g_CurrentTrackSegment;
             }

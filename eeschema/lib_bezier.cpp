@@ -332,15 +332,15 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     GRSetDrawMode( aDC, aDrawMode );
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
+        GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(),
                 &PolyPointsTraslated[0], 1, GetPenSize(),
                 (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
                 ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
-        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
+        GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(),
                 &PolyPointsTraslated[0], 1, GetPenSize(), color, color );
     else
-        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(),
+        GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(),
                 &PolyPointsTraslated[0], 0, GetPenSize(), color, color );
 
     /* Set to one (1) to draw bounding box around bezier curve to validate
@@ -348,7 +348,7 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 #if 0
     EDA_RECT bBox = GetBoundingBox();
     bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
-    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+    GRRect( aPanel->GetClipBox(), aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }

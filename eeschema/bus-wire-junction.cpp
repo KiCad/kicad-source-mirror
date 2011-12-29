@@ -181,7 +181,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
                 return;
         }
 
-        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         /* Creates the new segment, or terminates the command
          * if the end point is on a pin, junction or an other wire or bus */
@@ -218,7 +218,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         oldsegment->SetFlags( SELECTED );
         newsegment->SetFlags( IS_NEW );
         GetScreen()->SetCurItem( newsegment );
-        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         /* This is the first segment: Now we know the start segment position.
          * Create a junction if needed. Note: a junction can be needed later,
@@ -444,7 +444,7 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
     }
 
     screen->RemoveFromDrawList( screen->GetCurItem() );
-    m_canvas->m_mouseCaptureCallback = NULL;
+    m_canvas->SetMouseCaptureCallback( NULL );
     screen->SetCurItem( NULL );
 }
 

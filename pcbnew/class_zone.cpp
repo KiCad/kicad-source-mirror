@@ -179,7 +179,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const
         lines.push_back( seg_end );
     }
 
-    GRLineArray( &panel->m_ClipBox, DC, lines, 0, color );
+    GRLineArray( panel->GetClipBox(), DC, lines, 0, color );
 
     // draw hatches
     lines.clear();
@@ -195,7 +195,7 @@ void ZONE_CONTAINER::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int aDrawMode, const
         lines.push_back( seg_end );
     }
 
-    GRLineArray( &panel->m_ClipBox, DC, lines, 0, color );
+    GRLineArray( panel->GetClipBox(), DC, lines, 0, color );
 }
 
 
@@ -290,11 +290,11 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
                         if( CornersTypeBuffer[ie] == 0 )   // Draw only basic outlines, not extra segments
                         {
                             if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
-                                GRCSegm( &panel->m_ClipBox, DC,
+                                GRCSegm( panel->GetClipBox(), DC,
                                          x0, y0, x1, y1,
                                          m_ZoneMinThickness, color );
                             else
-                                GRFillCSegm( &panel->m_ClipBox, DC,
+                                GRFillCSegm( panel->GetClipBox(), DC,
                                              x0, y0, x1, y1,
                                              m_ZoneMinThickness, color );
                         }
@@ -303,7 +303,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
 
                 // Draw areas:
                 if( m_FillMode==0  && !outline_mode )
-                    GRPoly( &panel->m_ClipBox, DC, CornersBuffer.size(), &CornersBuffer[0],
+                    GRPoly( panel->GetClipBox(), DC, CornersBuffer.size(), &CornersBuffer[0],
                             true, 0, color, color );
             }
 
@@ -320,10 +320,10 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
             wxPoint end   = m_FillSegmList[ic].m_End + offset;
 
             if( !DisplayOpt.DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
-                GRCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y,
+                GRCSegm( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y,
                          m_ZoneMinThickness, color );
             else
-                GRFillCSegm( &panel->m_ClipBox, DC, start.x, start.y, end.x, end.y,
+                GRFillCSegm( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y,
                              m_ZoneMinThickness, color );
         }
     }
@@ -415,9 +415,9 @@ void ZONE_CONTAINER::DrawWhileCreateOutline( EDA_DRAW_PANEL* panel, wxDC* DC, in
         GRSetDrawMode( DC, current_gr_mode );
 
         if( is_close_segment )
-            GRLine( &panel->m_ClipBox, DC, xi, yi, xf, yf, 0, WHITE );
+            GRLine( panel->GetClipBox(), DC, xi, yi, xf, yf, 0, WHITE );
         else
-            GRLine( &panel->m_ClipBox, DC, xi, yi, xf, yf, 0, color );
+            GRLine( panel->GetClipBox(), DC, xi, yi, xf, yf, 0, color );
     }
 }
 

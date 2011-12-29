@@ -105,7 +105,7 @@ void SCH_EDIT_FRAME::InitBlockPasteInfos()
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
     block->m_ItemsSelection.CopyList( m_blockItems.m_ItemsSelection );
-    m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+    m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
 }
 
 
@@ -139,7 +139,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_DRAG:        /* Drag */
     case BLOCK_MOVE:        /* Move */
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         SaveCopyInUndoList( block->m_ItemsSelection, UR_MOVED, block->m_MoveVector );
         MoveItemsInList( block->m_ItemsSelection, block->m_MoveVector );
@@ -149,7 +149,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_COPY:                /* Copy */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         DuplicateItemsInList( GetScreen(), block->m_ItemsSelection, block->m_MoveVector );
 
@@ -161,7 +161,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     case BLOCK_PASTE:
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         PasteListOfItems( DC );
         block->ClearItemsList();
@@ -206,8 +206,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         BlockState   state   = block->m_State;
         CmdBlockType command = block->m_Command;
 
-        if( m_canvas->m_endMouseCaptureCallback )
-            m_canvas->m_endMouseCaptureCallback( m_canvas, DC );
+        m_canvas->CallEndMouseCapture( DC );
 
         block->m_State   = state;
         block->m_Command = command;
@@ -243,14 +242,14 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             {
                 nextcmd = true;
                 GetScreen()->SelectBlockItems();
-                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
-                m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
-                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+                m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
+                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
                 block->m_State = STATE_BLOCK_MOVE;
             }
             else
             {
-                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
                 m_canvas->SetMouseCapture( NULL, NULL );
             }
             break;
@@ -352,7 +351,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_DRAG:     /* move to Drag */
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         // Clear list of items to move, and rebuild it with items to drag:
         block->ClearItemsList();
@@ -366,7 +365,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
             GetScreen()->SelectBlockItems();
 
             if( m_canvas->IsMouseCaptured() )
-                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
             block->m_State = STATE_BLOCK_MOVE;
         }
@@ -374,7 +373,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_DELETE:     /* move to Delete */
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
@@ -388,7 +387,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_SAVE:     /* Save list in paste buffer*/
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
@@ -399,7 +398,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
         break;
 
     case BLOCK_ZOOM:     /* Window Zoom */
-        m_canvas->m_endMouseCaptureCallback( m_canvas, DC );
+        m_canvas->CallEndMouseCapture( DC );
         m_canvas->SetCursor( m_canvas->GetDefaultCursor() );
         Window_Zoom( GetScreen()->m_BlockLocate );
         break;
@@ -407,7 +406,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_ROTATE:
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
@@ -426,7 +425,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_MIRROR_X:
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {
@@ -444,7 +443,7 @@ void SCH_EDIT_FRAME::HandleBlockEndByPopUp( int Command, wxDC* DC )
 
     case BLOCK_MIRROR_Y:
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         if( block->GetCount() )
         {

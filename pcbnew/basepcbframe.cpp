@@ -371,7 +371,7 @@ void PCB_BASE_FRAME::ProcessItemSelection( wxCommandEvent& aEvent )
     if( id >= ID_POPUP_PCB_ITEM_SELECTION_START && id <= ID_POPUP_PCB_ITEM_SELECTION_END )
     {
         BOARD_ITEM* item = (*m_Collector)[itemNdx];
-        m_canvas->m_AbortRequest = false;
+        m_canvas->SetAbortRequest( false );
 
 #if 0 && defined (DEBUG)
         item->Show( 0, std::cout );

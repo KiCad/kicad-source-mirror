@@ -37,9 +37,6 @@
 #include "wx/fileconf.h"
 
 class wxAboutDialogInfo;
-class BASE_SCREEN;
-class EDA_DRAW_FRAME;
-class EDA_DRAW_PANEL;
 
 /* Flag for special keys */
 #define GR_KB_RIGHTSHIFT 0x10000000                 /* Keybd states: right

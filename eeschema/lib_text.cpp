@@ -403,7 +403,7 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
     grBox.SetOrigin( aTransform.TransformCoordinate( bBox.GetOrigin() ) );
     grBox.SetEnd( aTransform.TransformCoordinate( bBox.GetEnd() ) );
     grBox.Move( aOffset );
-    GRRect( &aPanel->m_ClipBox, aDC, grBox, 0, LIGHTMAGENTA );
+    GRRect( aPanel->GetClipBox(), aDC, grBox, 0, LIGHTMAGENTA );
 #endif
 }
 

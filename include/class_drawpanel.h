@@ -63,37 +63,34 @@ private:
     int m_scrollIncrementY;       ///< Y axis scroll increment in pixels per unit.
     wxPoint m_CursorStartPos;     ///< Used for testing the cursor movement.
 
-public:
-    EDA_RECT m_ClipBox;           // the clipbox used in screen redraw (usually gives the
-                                  // visible area in internal units)
-    bool m_AbortRequest;          // Flag to abort long commands
-    bool m_AbortEnable;           // true if abort button or menu to be displayed
+    /// The drawing area used to redraw the screen which is usually the visible area
+    /// of the drawing in internal units.
+    EDA_RECT m_ClipBox;
 
-    bool m_AutoPAN_Enable;        // true to allow auto pan
-    bool m_AutoPAN_Request;       // true to request an auto pan (will be made only if
-                                  // m_AutoPAN_Enable = true)
-    int m_IgnoreMouseEvents;      // when non-zero (true), then ignore mouse events
-    bool m_Block_Enable;          // true to accept Block Commands
+    bool m_abortRequest;          ///< Flag used to abort long commands.
+
+    bool m_enableAutoPan;         ///< True to enable automatic panning.
+
+    /// true to request an auto pan.  Valid only when m_enableAutoPan = true.
+    bool m_requestAutoPan;
+
+    bool m_ignoreMouseEvents;     ///< Ignore mouse events when true.
+
+    bool m_enableBlockCommands;   ///< True enables block commands.
+
+    /// True when drawing in mirror mode. Used by the draw arc function, because arcs
+    /// are oriented, and in mirror mode, orientations are reversed.
+    bool m_PrintIsMirrored;
+
+    /// Mouse capture move callback function.
+    MOUSE_CAPTURE_CALLBACK m_mouseCaptureCallback;
+
+    /// Abort mouse capture callback function.
+    END_MOUSE_CAPTURE_CALLBACK m_endMouseCaptureCallback;
 
     // useful to avoid false start block in certain cases
     // (like switch from a sheet to an other sheet
-    int m_CanStartBlock;          // >= 0 (or >= n) if a block can start
-    bool m_PrintIsMirrored;       // True when drawing in mirror mode. Used in draw arc function,
-                                  // because arcs are oriented, and in mirror mode, orientations
-                                  // are reversed
-
-#ifdef USE_WX_OVERLAY
-    // MAC Uses overlay to workaround the wxINVERT and wxXOR miss
-    wxOverlay m_overlay;
-#endif
-
-    /* Cursor management (used in editing functions) */
-
-    /* Mouse capture move callback function. */
-    MOUSE_CAPTURE_CALLBACK m_mouseCaptureCallback;
-
-    /* Abort mouse capture callback function. */
-    END_MOUSE_CAPTURE_CALLBACK m_endMouseCaptureCallback;
+    int m_canStartBlock;          // >= 0 (or >= n) if a block can start
 
 public:
 
@@ -106,6 +103,29 @@ public:
 
     void OnPaint( wxPaintEvent& event );
 
+    EDA_RECT* GetClipBox() { return &m_ClipBox; }
+
+    void SetClipBox( const EDA_RECT& aRect ) { m_ClipBox = aRect; }
+
+    bool GetAbortRequest() const { return m_abortRequest; }
+
+    void SetAbortRequest( bool aAbortRequest ) { m_abortRequest = aAbortRequest; }
+
+    bool GetEnableAutoPan() const { return m_enableAutoPan; }
+
+    void SetEnableAutoPan( bool aEnable ) { m_enableAutoPan = aEnable; }
+
+    void SetAutoPanRequest( bool aEnable ) { m_requestAutoPan = aEnable; }
+
+    void SetIgnoreMouseEvents( bool aIgnore ) { m_ignoreMouseEvents = aIgnore; }
+
+    void SetEnableBlockCommands( bool aEnable ) { m_enableBlockCommands = aEnable; }
+
+    bool GetPrintMirrored() const { return m_PrintIsMirrored; }
+
+    void SetPrintMirrored( bool aMirror ) { m_PrintIsMirrored = aMirror; }
+
+    void SetCanStartBlock( int aStartBlock ) { m_canStartBlock = aStartBlock; }
 
     /**
      * Function DrawBackGround
@@ -151,7 +171,7 @@ public:
      * Function OnActivate
      * handles window activation events.
      * <p>
-     * The member m_CanStartBlock is initialize to avoid a block start command on activation
+     * The member m_canStartBlock is initialize to avoid a block start command on activation
      * (because a left mouse button can be pressed and no block command wanted.  This happens
      * when enter on a hierarchy sheet on double click.
      *</p>
@@ -310,6 +330,13 @@ public:
         m_endMouseCaptureCallback = aEndMouseCaptureCallback;
     }
 
+
+    void SetMouseCaptureCallback( MOUSE_CAPTURE_CALLBACK aMouseCaptureCallback )
+    {
+        m_mouseCaptureCallback = aMouseCaptureCallback;
+    }
+
+
     /**
      * Function EndMouseCapture
      * ends mouse a capture.
@@ -327,6 +354,26 @@ public:
                           bool aCallEndFunc = true );
 
     inline bool IsMouseCaptured() const { return m_mouseCaptureCallback != NULL; }
+
+    /**
+     * Function CallMouseCapture
+     * calls the mouse capture callback.
+     *
+     * @param aDC A point to a wxDC object to perform any drawing upon.
+     * @param aPosition A referecnce to a wxPoint object containing the current cursor
+     *                  position.
+     * @param aErase True indicates the item being drawn should be erase before drawing
+     *               it a \a aPosition.
+     */
+    void CallMouseCapture( wxDC* aDC, const wxPoint& aPosition, bool aErase );
+
+    /**
+     * Function CallEndMouseCapture
+     * calls the end mouse capture callback.
+     *
+     * @param aDC A point to a wxDC object to perform any drawing upon.
+     */
+    void CallEndMouseCapture( wxDC* aDC );
 
     /**
      * Function SetCurrentCursor

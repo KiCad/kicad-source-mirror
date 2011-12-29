@@ -225,7 +225,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     if( m_canvas )
-        m_canvas->m_Block_Enable = true;
+        m_canvas->SetEnableBlockCommands( true );
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -653,7 +653,7 @@ void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& aEvent )
     wxCHECK_RET( m_findReplaceData != NULL,
                  wxT( "Forgot to create find/replace data.  Bad Programmer!" ) );
 
-    this->GetCanvas()->m_IgnoreMouseEvents = true;
+    this->GetCanvas()->SetIgnoreMouseEvents( true );
 
     if( m_dlgFindReplace )
     {
@@ -704,7 +704,7 @@ void SCH_EDIT_FRAME::OnFindDialogClose( wxFindDialogEvent& event )
         m_dlgFindReplace = NULL;
     }
 
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
 }
 
 
@@ -890,7 +890,7 @@ void SCH_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
         && (index >= 0 && index < m_collectedItems.GetCount()) )
     {
         SCH_ITEM* item = m_collectedItems[index];
-        m_canvas->m_AbortRequest = false;
+        m_canvas->SetAbortRequest( false );
         GetScreen()->SetCurItem( item );
     }
 }

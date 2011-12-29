@@ -199,7 +199,7 @@ void SCH_BUS_ENTRY::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOff
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    GRLine( &aPanel->m_ClipBox, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
+    GRLine( aPanel->GetClipBox(), aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
             m_End().x + aOffset.x, m_End().y + aOffset.y, GetPenSize(), color );
 }
 

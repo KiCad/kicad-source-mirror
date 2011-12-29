@@ -329,7 +329,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     if( m_canvas )
-        m_canvas->m_Block_Enable = true;
+        m_canvas->SetEnableBlockCommands( true );
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -451,7 +451,7 @@ void PCB_EDIT_FRAME::OnQuit( wxCommandEvent& event )
 
 void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    m_canvas->m_AbortRequest = true;
+    m_canvas->SetAbortRequest( true );
 
     if( GetScreen()->IsModify() )
     {

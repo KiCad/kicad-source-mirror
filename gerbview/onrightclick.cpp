@@ -20,7 +20,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     bool        BlockActive = (GetScreen()->m_BlockLocate.m_Command !=  BLOCK_IDLE);
 
     // Do not initiate a start block validation on menu.
-    m_canvas->m_CanStartBlock = -1;
+    m_canvas->SetCanStartBlock( -1 );
 
     // Simple location of elements where possible.
     if( ( DrawStruct == NULL ) || ( DrawStruct->GetFlags() == 0 ) )

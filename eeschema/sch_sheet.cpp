@@ -608,7 +608,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    GRRect( &aPanel->m_ClipBox, aDC, pos.x, pos.y,
+    GRRect( aPanel->GetClipBox(), aDC, pos.x, pos.y,
             pos.x + m_size.x, pos.y + m_size.y, lineWidth, color );
 
     pos_sheetname = GetSheetNamePosition() + aOffset;

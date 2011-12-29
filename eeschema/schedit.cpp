@@ -291,7 +291,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;

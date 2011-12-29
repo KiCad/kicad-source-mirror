@@ -364,7 +364,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
         if( !isDark )
             isFilled = true;
 
-        DrawGbrPoly( &aPanel->m_ClipBox, aDC, color, aOffset, isFilled );
+        DrawGbrPoly( aPanel->GetClipBox(), aDC, color, aOffset, isFilled );
         break;
 
     case GBR_CIRCLE:
@@ -376,14 +376,14 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
         if( !isFilled )
         {
             // draw the border of the pen's path using two circles, each as narrow as possible
-            GRCircle( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+            GRCircle( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
                       radius - halfPenWidth, 0, color );
-            GRCircle( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+            GRCircle( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
                       radius + halfPenWidth, 0, color );
         }
         else    // Filled mode
         {
-            GRCircle( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+            GRCircle( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
                       radius, m_Size.x, color );
         }
         break;
@@ -393,21 +393,21 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
         // a round pen only is expected.
 
 #if 0   // for arc debug only
-        GRLine( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+        GRLine( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
                 GetABPosition( m_ArcCentre ), 0, color );
-        GRLine( &aPanel->m_ClipBox, aDC, GetABPosition( m_End ),
+        GRLine( aPanel->GetClipBox(), aDC, GetABPosition( m_End ),
                 GetABPosition( m_ArcCentre ), 0, color );
 #endif
 
         if( !isFilled )
         {
-            GRArc1( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+            GRArc1( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
                     GetABPosition( m_End ), GetABPosition( m_ArcCentre ),
                     0, color );
         }
         else
         {
-            GRArc1( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+            GRArc1( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
                     GetABPosition( m_End ), GetABPosition( m_ArcCentre ),
                     m_Size.x, color );
         }
@@ -420,7 +420,7 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
     case GBR_SPOT_POLY:
     case GBR_SPOT_MACRO:
         isFilled = DisplayOpt.DisplayPadFill ? true : false;
-        d_codeDescr->DrawFlashedShape( this, &aPanel->m_ClipBox, aDC, color, alt_color,
+        d_codeDescr->DrawFlashedShape( this, aPanel->GetClipBox(), aDC, color, alt_color,
                                        m_Start, isFilled );
         break;
 
@@ -435,18 +435,18 @@ void GERBER_DRAW_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode,
             if( m_PolyCorners.size() == 0 )
                 ConvertSegmentToPolygon( );
 
-            DrawGbrPoly( &aPanel->m_ClipBox, aDC, color, aOffset, isFilled );
+            DrawGbrPoly( aPanel->GetClipBox(), aDC, color, aOffset, isFilled );
         }
         else
         {
             if( !isFilled )
             {
-                    GRCSegm( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                    GRCSegm( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
                              GetABPosition( m_End ), m_Size.x, color );
             }
             else
             {
-                GRFilledSegment( &aPanel->m_ClipBox, aDC, GetABPosition( m_Start ),
+                GRFilledSegment( aPanel->GetClipBox(), aDC, GetABPosition( m_Start ),
                                  GetABPosition( m_End ), m_Size.x, color );
             }
         }
