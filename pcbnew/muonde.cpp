@@ -118,7 +118,7 @@ static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     if( aErase )
     {
-        GRPoly( &aPanel->m_ClipBox, aDC, 5, poly, false, 0, YELLOW, YELLOW );
+        GRPoly( aPanel->GetClipBox(), aDC, 5, poly, false, 0, YELLOW, YELLOW );
     }
 
     Mself.m_End = aPanel->GetScreen()->GetCrossHairPosition();
@@ -137,7 +137,7 @@ static void ShowBoundingBoxMicroWaveInductor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     poly[3] = Mself.m_Start + pt;
     poly[4] = poly[0];
 
-    GRPoly( &aPanel->m_ClipBox, aDC, 5, poly, false, 0, YELLOW, YELLOW );
+    GRPoly( aPanel->GetClipBox(), aDC, 5, poly, false, 0, YELLOW, YELLOW );
 }
 
 
@@ -146,7 +146,7 @@ void Exit_Self( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( Self_On )
     {
         Self_On = 0;
-        Panel->m_mouseCaptureCallback( Panel, DC, wxDefaultPosition, 0 );
+        Panel->CallMouseCapture( DC, wxDefaultPosition, 0 );
     }
 }
 
@@ -169,7 +169,7 @@ void PCB_EDIT_FRAME::Begin_Self( wxDC* DC )
     UpdateStatusBar();
 
     m_canvas->SetMouseCapture( ShowBoundingBoxMicroWaveInductor, Exit_Self );
-    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+    m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 }
 
 
@@ -179,7 +179,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     int      ll;
     wxString msg;
 
-    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+    m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
     m_canvas->SetMouseCapture( NULL, NULL );
 
     if( Self_On == 0 )

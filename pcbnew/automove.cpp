@@ -95,7 +95,7 @@ void PCB_EDIT_FRAME::AutoPlace( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         if( m_canvas->IsMouseCaptured() )
         {
-            m_canvas->m_endMouseCaptureCallback( m_canvas, &dc );
+            m_canvas->CallEndMouseCapture( &dc );
         }
 
         break;

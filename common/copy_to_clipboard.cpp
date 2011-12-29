@@ -1,9 +1,30 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        copy_to_clipboard.cpp
-// Author:      jean-pierre Charras
-// Created:     18 aug 2006
-// Licence:     License GNU
-/////////////////////////////////////////////////////////////////////////////
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+/**
+ * @file copy_to_clipboard.cpp
+ */
 
 #include "wx/metafile.h"
 #include "fctsys.h"
@@ -73,7 +94,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
 
     wxMetafileDC dc;
 
-    EDA_RECT tmp = aFrame->GetCanvas()->m_ClipBox;
+    EDA_RECT tmp = *aFrame->GetCanvas()->GetClipBox();
     GRResetPenAndBrush( &dc );
     const bool plotBlackAndWhite = false;
     GRForceBlackPen( plotBlackAndWhite );
@@ -81,10 +102,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
     dc.SetUserScale( scale, scale );
     ClipboardSizeX = dc.MaxX() + 10;
     ClipboardSizeY = dc.MaxY() + 10;
-    aFrame->GetCanvas()->m_ClipBox.SetX( 0 );
-    aFrame->GetCanvas()->m_ClipBox.SetY( 0 );
-    aFrame->GetCanvas()->m_ClipBox.SetWidth( 0x7FFFFF0 );
-    aFrame->GetCanvas()->m_ClipBox.SetHeight( 0x7FFFFF0 );
+    aFrame->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
 
     if( DrawBlock )
     {
@@ -94,7 +112,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
     const int maskLayer = 0xFFFFFFFF;
     aFrame->PrintPage( &dc, maskLayer, false );
     screen->m_IsPrinting = false;
-    aFrame->GetCanvas()->m_ClipBox = tmp;
+    aFrame->GetCanvas()->SetClipBox( tmp );
     wxMetafile* mf = dc.Close();
 
     if( mf )

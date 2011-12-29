@@ -876,6 +876,6 @@ void PCB_BASE_FRAME::TraceAirWiresToTargets( wxDC* aDC )
         if( ii >= g_MaxLinksShowed )
             break;
 
-        GRLine( &m_canvas->m_ClipBox, aDC, s_CursorPos, s_TargetsLocations[ii], 0, YELLOW );
+        GRLine( m_canvas->GetClipBox(), aDC, s_CursorPos, s_TargetsLocations[ii], 0, YELLOW );
     }
 }

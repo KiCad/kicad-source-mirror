@@ -494,10 +494,10 @@ void EDA_TEXT::DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         int cX = aPos.x + aOffset.x;
         int cY = aPos.y + aOffset.y;
 
-        GRLine( &aPanel->m_ClipBox, aDC, cX - anchor_size, cY,
+        GRLine( aPanel->GetClipBox(), aDC, cX - anchor_size, cY,
                 cX + anchor_size, cY, 0, aAnchor_color );
 
-        GRLine( &aPanel->m_ClipBox, aDC, cX, cY - anchor_size,
+        GRLine( aPanel->GetClipBox(), aDC, cX, cY - anchor_size,
                 cX, cY + anchor_size, 0, aAnchor_color );
     }
 

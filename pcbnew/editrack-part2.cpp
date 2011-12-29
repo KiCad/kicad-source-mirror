@@ -92,7 +92,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     itmp = g_CurrentTrackList.GetCount();
     Begin_Route( g_CurrentTrackSegment, DC );
 
-    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+    m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
     /* create the via */
     SEGVIA* via    = new SEGVIA( GetBoard() );
@@ -153,7 +153,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         /* DRC fault: the Via cannot be placed here ... */
         delete via;
 
-        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         // delete the track(s) added in Begin_Route()
         while( g_CurrentTrackList.GetCount() > itmp )
@@ -207,7 +207,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
         g_CurrentTrackList.PushBack( g_CurrentTrackSegment->Copy() );
     }
 
-    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+    m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
     via->DisplayInfo( this );
 
     UpdateStatusBar();

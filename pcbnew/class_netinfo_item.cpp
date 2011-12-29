@@ -172,6 +172,6 @@ void RATSNEST_ITEM::Draw( EDA_DRAW_PANEL* panel,
 
     int color = g_ColorsSettings.GetItemColor(RATSNEST_VISIBLE);
 
-    GRLine( &panel->m_ClipBox, DC, m_PadStart->m_Pos - aOffset,
+    GRLine( panel->GetClipBox(), DC, m_PadStart->m_Pos - aOffset,
             m_PadEnd->m_Pos - aOffset, 0, color );
 }

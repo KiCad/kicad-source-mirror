@@ -134,7 +134,7 @@ void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    GRFilledCircle( &aPanel->m_ClipBox, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
+    GRFilledCircle( aPanel->GetClipBox(), aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
                     ( m_size.x / 2 ), 0, color, color );
 }
 

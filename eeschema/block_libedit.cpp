@@ -92,7 +92,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
     {
         BlockState state     = GetScreen()->m_BlockLocate.m_State;
         CmdBlockType command = GetScreen()->m_BlockLocate.m_Command;
-        m_canvas->m_endMouseCaptureCallback( m_canvas, DC );
+        m_canvas->CallEndMouseCapture( DC );
         GetScreen()->m_BlockLocate.m_State   = state;
         GetScreen()->m_BlockLocate.m_Command = command;
         m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
@@ -120,9 +120,9 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
             if( m_canvas->IsMouseCaptured() )
             {
-                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
-                m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
-                m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+                m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
+                m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
             }
 
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
@@ -132,7 +132,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
     case BLOCK_PRESELECT_MOVE:     /* Move with preselection list*/
         nextCmd = true;
-        m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
+        m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
         GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
         break;
 

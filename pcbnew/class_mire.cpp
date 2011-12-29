@@ -98,12 +98,12 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wx
         width = 0;
 
     case FILLED:
-        GRCircle( &panel->m_ClipBox, DC, ox, oy, radius, width, gcolor );
+        GRCircle( panel->GetClipBox(), DC, ox, oy, radius, width, gcolor );
         break;
 
     case SKETCH:
-        GRCircle( &panel->m_ClipBox, DC, ox, oy, radius + (width / 2), gcolor );
-        GRCircle( &panel->m_ClipBox, DC, ox, oy, radius - (width / 2), gcolor );
+        GRCircle( panel->GetClipBox(), DC, ox, oy, radius + (width / 2), gcolor );
+        GRCircle( panel->GetClipBox(), DC, ox, oy, radius - (width / 2), gcolor );
         break;
     }
 
@@ -125,13 +125,13 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wx
     {
     case FILAIRE:
     case FILLED:
-        GRLine( &panel->m_ClipBox, DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
-        GRLine( &panel->m_ClipBox, DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
+        GRLine( panel->GetClipBox(), DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
+        GRLine( panel->GetClipBox(), DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
         break;
 
     case SKETCH:
-        GRCSegm( &panel->m_ClipBox, DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
-        GRCSegm( &panel->m_ClipBox, DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
+        GRCSegm( panel->GetClipBox(), DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
+        GRCSegm( panel->GetClipBox(), DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );
         break;
     }
 }

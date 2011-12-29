@@ -334,18 +334,18 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset
     {
         EDA_RECT BoundaryBox;
         BoundaryBox = GetBoundingBox();
-        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
+        GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
 #if 1
         if( GetField( REFERENCE )->IsVisible() )
         {
             BoundaryBox = GetField( REFERENCE )->GetBoundingBox();
-            GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
+            GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
         }
 
         if( GetField( VALUE )->IsVisible() )
         {
             BoundaryBox = GetField( VALUE )->GetBoundingBox();
-            GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
+            GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
         }
 #endif
     }

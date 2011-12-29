@@ -415,7 +415,7 @@ void DISPLAY_FOOTPRINTS_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPositi
 
         if( m_canvas->IsMouseCaptured() )
         {
-            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, 0 );
+            m_canvas->CallMouseCapture( aDC, aPosition, 0 );
         }
     }
 

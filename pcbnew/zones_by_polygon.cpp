@@ -122,7 +122,7 @@ int PCB_EDIT_FRAME::Delete_LastCreatedCorner( wxDC* DC )
         zone->m_Poly->DeleteCorner( zone->GetNumCorners() - 1 );
 
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
     }
     else
     {
@@ -467,7 +467,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             zone->SetLayer( getActiveLayer() );
 
             // Prompt user for parameters:
-            m_canvas->m_IgnoreMouseEvents = true;
+            m_canvas->SetIgnoreMouseEvents( true );
 
             if( zone->IsOnCopperLayer() )
             {   // Put a zone on a copper layer
@@ -496,7 +496,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
             }
 
             m_canvas->MoveCursorToCrossHair();
-            m_canvas->m_IgnoreMouseEvents = false;
+            m_canvas->SetIgnoreMouseEvents( false );
 
             if( diag ==  ZONE_ABORT )
                 return 0;
@@ -718,7 +718,7 @@ static void Show_New_Edge_While_Move_Mouse( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container )
 {
     int diag;
-    m_canvas->m_IgnoreMouseEvents = true;
+    m_canvas->SetIgnoreMouseEvents( true );
 
     /* Save initial zones configuration, for undo/redo, before adding new zone
      * note the net name and the layer can be changed, so we must save all zones
@@ -740,7 +740,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( wxDC* DC, ZONE_CONTAINER* zone_container 
     }
 
     m_canvas->MoveCursorToCrossHair();
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
 
     if( diag == ZONE_ABORT )
     {

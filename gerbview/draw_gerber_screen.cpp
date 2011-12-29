@@ -56,11 +56,11 @@ void GERBVIEW_FRAME::PrintPage( wxDC* aDC, int aPrintMasklayer,
     DisplayOpt.DisplayZonesMode    = 0;
     g_DisplayPolygonsModeSketch    = 0;
 
-    m_canvas->m_PrintIsMirrored = aPrintMirrorMode;
+    m_canvas->SetPrintMirrored( aPrintMirrorMode );
 
     GetBoard()->Draw( m_canvas, aDC, -1, wxPoint( 0, 0 ) );
 
-    m_canvas->m_PrintIsMirrored = false;
+    m_canvas->SetPrintMirrored( false );
 
     // Restore draw options:
     GetBoard()->SetVisibleLayers( visiblemask );
@@ -109,7 +109,7 @@ void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     TraceWorkSheet( DC, screen, 0 );
 
     if( m_canvas->IsMouseCaptured() )
-        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
     m_canvas->DrawCrossHair( DC );
 
@@ -158,7 +158,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
 
     // these parameters are saved here, because they are modified
     // and restored later
-    EDA_RECT   drawBox = aPanel->m_ClipBox;
+    EDA_RECT drawBox = *aPanel->GetClipBox();
     double scale;
     aDC->GetUserScale(&scale, &scale);
     wxPoint dev_org = aDC->GetDeviceOrigin();
@@ -171,7 +171,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoin
         screenBitmap = new wxBitmap( bitmapWidth, bitmapHeight );
         layerDC.SelectObject( *layerBitmap );
         aPanel->DoPrepareDC( layerDC );
-        aPanel->m_ClipBox = drawBox;
+        aPanel->SetClipBox( drawBox );
         layerDC.SetBackground( bgBrush );
         layerDC.SetBackgroundMode( wxSOLID );
         layerDC.Clear();

@@ -207,7 +207,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* aFrame )
     if( aFrame->GetBoard()->m_Track == NULL )
         return;
 
-    aFrame->GetCanvas()->m_AbortRequest = false;
+    aFrame->GetCanvas()->SetAbortRequest( false );
 
     // correct via m_End defects
     for( segment = aFrame->GetBoard()->m_Track;  segment;  segment = next )
@@ -231,7 +231,7 @@ static void DeleteUnconnectedTracks( PCB_EDIT_FRAME* aFrame )
     {
         next = segment->Next();
 
-        if( aFrame->GetCanvas()->m_AbortRequest )
+        if( aFrame->GetCanvas()->GetAbortRequest() )
             break;
 
         if( segment->GetNet() != oldnetcode )
@@ -412,7 +412,7 @@ static void clean_segments( PCB_EDIT_FRAME* aFrame )
     int             flag, no_inc;
     wxString        msg;
 
-    aFrame->GetCanvas()->m_AbortRequest = false;
+    aFrame->GetCanvas()->SetAbortRequest( false );
 
     // Delete null segments
     for( segment = aFrame->GetBoard()->m_Track;  segment;  segment = nextsegment )
@@ -475,7 +475,7 @@ static void clean_segments( PCB_EDIT_FRAME* aFrame )
 
         nextsegment = segment->Next();
 
-        if( aFrame->GetCanvas()->m_AbortRequest )
+        if( aFrame->GetCanvas()->GetAbortRequest() )
             return;
 
         if( segment->Type() != PCB_TRACE_T )
@@ -856,13 +856,13 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* aFrame )
     int             nb_new_trace = 0;
     wxString        msg;
 
-    aFrame->GetCanvas()->m_AbortRequest = false;
+    aFrame->GetCanvas()->SetAbortRequest( false );
 
     for( segment = aFrame->GetBoard()->m_Track;  segment;  segment = segment->Next() )
     {
         D_PAD*          pad;
 
-        if( aFrame->GetCanvas()->m_AbortRequest )
+        if( aFrame->GetCanvas()->GetAbortRequest() )
             return;
 
         pad = aFrame->GetBoard()->GetPad( segment, START );

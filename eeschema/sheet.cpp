@@ -164,7 +164,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         }
 
         aSheet->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
-        m_canvas->m_IgnoreMouseEvents = true;
+        m_canvas->SetIgnoreMouseEvents( true );
 
         if( isUndoable )
             SaveCopyInUndoList( aSheet, UR_CHANGED );
@@ -204,7 +204,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         aSheet->SetName( wxString::Format( wxT( "Sheet%8.8lX" ), aSheet->GetTimeStamp() ) );
 
     m_canvas->MoveCursorToCrossHair();
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
     aSheet->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     OnModify();
 
@@ -321,7 +321,7 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
     // a sheet to a screen that already has multiple instances (!)
     GetScreen()->SetCurItem( sheet );
     m_canvas->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
-    m_canvas->m_mouseCaptureCallback( m_canvas, aDC, wxDefaultPosition, false );
+    m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
     m_canvas->CrossHairOff( aDC );
     GetScreen()->SetCrossHairPosition( sheet->GetResizePosition() );
     m_canvas->MoveCursorToCrossHair();
@@ -349,7 +349,7 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
     aSheet->SetFlags( IS_RESIZED );
 
     m_canvas->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
-    m_canvas->m_mouseCaptureCallback( m_canvas, aDC, wxDefaultPosition, true );
+    m_canvas->CallMouseCapture( aDC, wxDefaultPosition, true );
 
     if( aSheet->IsNew() )    // not already in edit, save a copy for undo/redo
         SetUndoItem( aSheet );
@@ -370,6 +370,6 @@ void SCH_EDIT_FRAME::StartMoveSheet( SCH_SHEET* aSheet, wxDC* aDC )
 
     aSheet->SetFlags( IS_MOVED );
     m_canvas->SetMouseCapture( MoveOrResizeSheet, ExitSheet );
-    m_canvas->m_mouseCaptureCallback( m_canvas, aDC, wxDefaultPosition, true );
+    m_canvas->CallMouseCapture( aDC, wxDefaultPosition, true );
     m_canvas->CrossHairOn( aDC );
 }

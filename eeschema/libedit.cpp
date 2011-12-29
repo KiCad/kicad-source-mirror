@@ -252,7 +252,7 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     }
 
     if( m_canvas->IsMouseCaptured() )
-        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
     m_canvas->DrawCrossHair( DC );
 

@@ -57,7 +57,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
     if( m_component == NULL || ( m_drawItem && m_drawItem->GetFlags() ) )
         return;
 
-    m_canvas->m_IgnoreMouseEvents = true;
+    m_canvas->SetIgnoreMouseEvents( true );
 
     wxString default_path = wxGetApp().ReturnLastVisitedLibraryPath();
 
@@ -70,7 +70,7 @@ void LIB_EDIT_FRAME::LoadOneSymbol()
 
     GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
     m_canvas->MoveCursorToCrossHair();
-    m_canvas->m_IgnoreMouseEvents = FALSE;
+    m_canvas->SetIgnoreMouseEvents( false );
 
     wxFileName fn = dlg.GetPath();
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );

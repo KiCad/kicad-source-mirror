@@ -387,7 +387,7 @@ void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOn
             return;
     }
 
-    m_canvas->m_AbortRequest = false;
+    m_canvas->SetAbortRequest( false );
 
     // Create a new, empty library if no old lib, or if archive all modules
     if( !NewModulesOnly || !file_exists )
@@ -430,7 +430,7 @@ void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOn
         DisplayActivity( (int) ( ii * step ), wxEmptyString );
 
         /* Check for request to stop backup (ESCAPE key actuated) */
-        if( m_canvas->m_AbortRequest )
+        if( m_canvas->GetAbortRequest() )
             break;
     }
 }

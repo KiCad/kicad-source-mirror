@@ -235,28 +235,28 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_TRACK_WIDTH_TO_NEXT:
-        if( GetCanvas()->m_mouseCaptureCallback == ShowNewTrackWhenMovingCursor )
-            ShowNewTrackWhenMovingCursor( GetCanvas(), aDC, wxDefaultPosition, false );
+        if( GetCanvas()->IsMouseCaptured() )
+            GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
 
         GetBoard()->m_TrackWidthSelector = ( GetBoard()->m_TrackWidthSelector + 1 ) %
                                            GetBoard()->m_TrackWidthList.size();
 
-        if( GetCanvas()->m_mouseCaptureCallback == ShowNewTrackWhenMovingCursor )
-            ShowNewTrackWhenMovingCursor( GetCanvas(), aDC, wxDefaultPosition, false );
+        if( GetCanvas()->IsMouseCaptured() )
+            GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
 
         break;
 
     case HK_SWITCH_TRACK_WIDTH_TO_PREVIOUS:
-        if( GetCanvas()->m_mouseCaptureCallback == ShowNewTrackWhenMovingCursor )
-            ShowNewTrackWhenMovingCursor( GetCanvas(), aDC, wxDefaultPosition, false );
+        if( GetCanvas()->IsMouseCaptured() )
+            GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
 
         if( GetBoard()->m_TrackWidthSelector == 0 )
             GetBoard()->m_TrackWidthSelector = GetBoard()->m_TrackWidthList.size();
 
         GetBoard()->m_TrackWidthSelector--;
 
-        if( GetCanvas()->m_mouseCaptureCallback == ShowNewTrackWhenMovingCursor )
-            ShowNewTrackWhenMovingCursor( GetCanvas(), aDC, wxDefaultPosition, false );
+        if( GetCanvas()->IsMouseCaptured() )
+            GetCanvas()->CallMouseCapture( aDC, wxDefaultPosition, false );
 
         break;
 
@@ -567,7 +567,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             SetCurItem( track );
 
             if( track )
-                m_canvas->m_AutoPAN_Request = true;
+                m_canvas->SetAutoPanRequest( true );
         }
         else if( GetCurItem()->IsNew() )
         {
@@ -578,7 +578,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
             if( track )      // A new segment was created
                 SetCurItem( track, false );
 
-            m_canvas->m_AutoPAN_Request = true;
+            m_canvas->SetAutoPanRequest( true );
         }
 
         break;
@@ -918,11 +918,11 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
     bool no_tool = GetToolId() == ID_NO_TOOL_SELECTED;
     bool itemCurrentlyEdited = item && item->GetFlags();
 
-    m_canvas->m_AutoPAN_Request = false;
+    m_canvas->SetAutoPanRequest( false );
 
     if( itemCurrentlyEdited )
     {
-        m_canvas->m_IgnoreMouseEvents = true;
+        m_canvas->SetIgnoreMouseEvents( true );
         m_canvas->CrossHairOff( aDC );
 
         switch( item->Type() )
@@ -964,7 +964,7 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
             break;
         }
 
-        m_canvas->m_IgnoreMouseEvents = false;
+        m_canvas->SetIgnoreMouseEvents( false );
         m_canvas->CrossHairOn( aDC );
 
         return true;

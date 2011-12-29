@@ -165,7 +165,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     default:        // Finish (abort) the command
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_endMouseCaptureCallback( m_canvas, &dc );
+            m_canvas->CallEndMouseCapture( &dc );
 
         if( GetToolId() != id )
         {
@@ -213,14 +213,14 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PLACE_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         HandleBlockPlace( &dc );
         break;
 
@@ -332,13 +332,13 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
          * switch from _/  to -\ .
          * If a track is in progress, it will be redrawn
         */
-        if( m_canvas->m_mouseCaptureCallback == ShowNewTrackWhenMovingCursor )
-            ShowNewTrackWhenMovingCursor( m_canvas, &dc, wxDefaultPosition, false );
+        if( m_canvas->IsMouseCaptured() )
+            m_canvas->CallMouseCapture( &dc, wxDefaultPosition, false );
 
         g_Alternate_Track_Posture = !g_Alternate_Track_Posture;
 
-        if( m_canvas->m_mouseCaptureCallback == ShowNewTrackWhenMovingCursor )
-            ShowNewTrackWhenMovingCursor( m_canvas, &dc, wxDefaultPosition, false );
+        if( m_canvas->IsMouseCaptured() )
+            m_canvas->CallMouseCapture( &dc, wxDefaultPosition, false );
 
         break;
 
@@ -445,13 +445,13 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_ZONE_ADD_SIMILAR_ZONE:
         m_canvas->MoveCursorToCrossHair();
-        m_canvas->m_AutoPAN_Request = true;
+        m_canvas->SetAutoPanRequest( true );
         Add_Similar_Zone( &dc, (ZONE_CONTAINER*) GetCurItem() );
         break;
 
     case ID_POPUP_PCB_ZONE_ADD_CUTOUT_ZONE:
         m_canvas->MoveCursorToCrossHair();
-        m_canvas->m_AutoPAN_Request = true;
+        m_canvas->SetAutoPanRequest( true );
         Add_Zone_Cutout( &dc, (ZONE_CONTAINER*) GetCurItem() );
         break;
 
@@ -476,7 +476,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
         m_canvas->MoveCursorToCrossHair();
         ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->m_AutoPAN_Request = true;
+        m_canvas->SetAutoPanRequest( true );
         Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->m_CornerSelection, false );
         break;
     }
@@ -485,7 +485,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
         m_canvas->MoveCursorToCrossHair();
         ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->m_AutoPAN_Request = true;
+        m_canvas->SetAutoPanRequest( true );
         Start_Move_Zone_Drag_Outline_Edge( &dc, zone_cont, zone_cont->m_CornerSelection );
         break;
     }
@@ -494,7 +494,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
         m_canvas->MoveCursorToCrossHair();
         ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
-        m_canvas->m_AutoPAN_Request = true;
+        m_canvas->SetAutoPanRequest( true );
         Start_Move_Zone_Outlines( &dc, zone_cont );
         break;
     }
@@ -513,7 +513,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         zone_cont->m_Poly->InsertCorner( zone_cont->m_CornerSelection, pos.x, pos.y );
         zone_cont->m_CornerSelection++;
         zone_cont->Draw( m_canvas, &dc, GR_XOR );
-        m_canvas->m_AutoPAN_Request = true;
+        m_canvas->SetAutoPanRequest( true );
         Start_Move_Zone_Corner( &dc, zone_cont, zone_cont->m_CornerSelection, true );
         break;
     }
@@ -524,7 +524,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         ZONE_CONTAINER* zone_cont = (ZONE_CONTAINER*) GetCurItem();
         End_Move_Zone_Corner_Or_Outlines( &dc, zone_cont );
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         break;
     }
 
@@ -576,7 +576,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST:
         StartMoveTextePcb( (TEXTE_PCB*) GetCurItem(), &dc );
-        m_canvas->m_AutoPAN_Request = true;
+        m_canvas->SetAutoPanRequest( true );
         break;
 
     case ID_POPUP_PCB_DRAG_MODULE_REQUEST:
@@ -1000,7 +1000,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 SetCurItem( NULL );
         }
 
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         break;
 
     case ID_POPUP_PCB_DELETE_ZONE_LAST_CREATED_CORNER:
@@ -1092,7 +1092,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     }
 
     m_canvas->CrossHairOn( &dc );
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
 }
 
 

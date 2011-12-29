@@ -324,11 +324,10 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     tmp_startvisu = aScreen->m_StartVisu;
     oldZoom = aScreen->GetZoom();
     old_org = aScreen->m_DrawOrg;
-    oldClipBox = panel->m_ClipBox;
+    oldClipBox = *panel->GetClipBox();
 
     /* Change scale factor, offsets, and clip box to print the whole page. */
-    panel->m_ClipBox.SetOrigin( wxPoint( 0, 0 ) );
-    panel->m_ClipBox.SetSize( wxSize( 0x7FFFFF0, 0x7FFFFF0 ) );
+    panel->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
 
     bool printReference = parent->GetPrintSheetReference();
 
@@ -378,7 +377,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     g_DrawBgColor = bg_color;
     aScreen->m_IsPrinting = false;
-    panel->m_ClipBox = oldClipBox;
+    panel->SetClipBox( oldClipBox );
 
     GRForceBlackPen( false );
 

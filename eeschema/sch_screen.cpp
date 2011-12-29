@@ -608,7 +608,7 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aC
 
         // uncomment line below when there is a virtual
         // EDA_ITEM::GetBoundingBox()
-        //      if( panel->m_ClipBox.Intersects( Structs->GetBoundingBox()
+        //      if( panel->GetClipBox().Intersects( Structs->GetBoundingBox()
         // ) )
         item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
     }

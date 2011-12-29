@@ -187,13 +187,13 @@ void SCH_POLYLINE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
     if( m_Layer == LAYER_NOTES )
     {
         for( unsigned i = 1; i < GetCornerCount(); i++ )
-            GRDashedLineTo( &aPanel->m_ClipBox, aDC, m_points[i].x + aOffset.x,
+            GRDashedLineTo( aPanel->GetClipBox(), aDC, m_points[i].x + aOffset.x,
                             m_points[i].y + aOffset.y, width, color );
     }
     else
     {
         for( unsigned i = 1; i < GetCornerCount(); i++ )
-            GRLineTo( &aPanel->m_ClipBox, aDC, m_points[i].x + aOffset.x,
+            GRLineTo( aPanel->GetClipBox(), aDC, m_points[i].x + aOffset.x,
                       m_points[i].y + aOffset.y, width, color );
     }
 }
