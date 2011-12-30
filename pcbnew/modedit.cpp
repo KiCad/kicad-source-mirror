@@ -512,7 +512,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-        Global_Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), true );
+        // Calls the global change dialog:
+        DlgGlobalChange_PadSettings( (D_PAD*) GetScreen()->GetCurItem() );
         m_canvas->MoveCursorToCrossHair();
         break;
 
