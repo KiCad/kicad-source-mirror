@@ -756,7 +756,7 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL  && *p == 'P' )
         m_options = ENTRY_POWER;
 
-    /* Read next lines */
+    // Read next lines, until "ENDDEF" is found
     while( aLineReader.ReadLine() )
     {
         line = aLineReader.Line();
@@ -766,11 +766,14 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
         /* This is the error flag ( if an error occurs, Res = FALSE) */
         Res = true;
 
+        if( *line == '#' )      // a comment
+            continue;
+
         if( (*line == 'T') && (*(line + 1) == 'i') )
             Res = LoadDateAndTime( aLineReader );
         else if( *line == 'F' )
             Res = LoadField( aLineReader, Msg );
-        else if( strcmp( p, "ENDDEF" ) == 0 )
+        else if( strcmp( p, "ENDDEF" ) == 0 )   // End of component description
             break;
         else if( strcmp( p, "DRAW" ) == 0 )
             Res = LoadDrawEntries( aLineReader, Msg );

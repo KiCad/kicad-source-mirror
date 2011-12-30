@@ -403,6 +403,7 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 
     if( m_foundItems.ReplaceItem() )
     {
+        OnModify();
         SaveUndoItemInUndoList( undoItem );
         RedrawScreen( data.GetPosition(), warpCursor );
     }
@@ -411,9 +412,7 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 
     if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_REPLACE_ALL )
     {
-        item = (SCH_ITEM*) m_foundItems.GetItem( data );
-
-        while( item != NULL )
+        while( ( item = (SCH_ITEM*) m_foundItems.GetItem( data ) ) != NULL )
         {
             wxLogTrace( traceFindReplace, wxT( "Replacing %s with %s in item %s" ),
                         GetChars( aEvent.GetFindString() ), GetChars( aEvent.GetReplaceString() ),
@@ -429,6 +428,7 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 
             if( m_foundItems.ReplaceItem() )
             {
+                OnModify();
                 SaveUndoItemInUndoList( undoItem );
                 RedrawScreen( data.GetPosition(), warpCursor );
             }
