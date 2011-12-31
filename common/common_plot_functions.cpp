@@ -21,7 +21,8 @@
  */
 void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
 {
-#define WSTEXTSIZE 50   // Text size in mils
+#define WSTEXTSIZE      50   // Text size in mils
+
     const PAGE_INFO&    pageInfo = GetPageSettings();
     wxSize              pageSize = pageInfo.GetSizeMils();  // mils
     int                 xg, yg;
@@ -29,12 +30,13 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     wxPoint             pos, ref;
     EDA_Colors          color;
 
-    /* Scale to convert dimension in 1/1000 in into internal units
-     * (1/1000 inc for Eeschema, 1/10000 for Pcbnew. */
+    // paper is sized in mils.  Here is a conversion factor to
+    // scale mils to internal units.
     int      conv_unit = screen->GetInternalUnits() / 1000;
 
     wxString msg;
     wxSize   text_size;
+
 #if defined(KICAD_GOST)
     wxSize   text_size2;
     wxSize   text_size3;
@@ -43,16 +45,18 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     int      UpperLimit = VARIABLE_BLOCK_START_POSITION;
     bool     bold = false;
 #endif
-    bool     italic     = false;
+
+    bool     italic    = false;
     bool     thickness = 0;      //@todo : use current pen
 
     color = BLACK;
     plotter->set_color( color );
 
-    /* Plot edge. */
+    // Plot edge.
     ref.x = pageInfo.GetLeftMarginMils() * conv_unit;
-    ref.y = pageInfo.GetTopMarginMils() * conv_unit;
-    xg    = ( pageSize.x - pageInfo.GetRightMarginMils() ) * conv_unit;
+    ref.y = pageInfo.GetTopMarginMils()  * conv_unit;
+
+    xg    = ( pageSize.x - pageInfo.GetRightMarginMils() )  * conv_unit;
     yg    = ( pageSize.y - pageInfo.GetBottomMarginMils() ) * conv_unit;
 
 #if defined(KICAD_GOST)
@@ -67,22 +71,30 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     pos.y = yg;
     plotter->line_to( pos );
     plotter->finish_to( ref );
+
 #else
+
     for( unsigned ii = 0; ii < 2; ii++ )
     {
         plotter->move_to( ref );
+
         pos.x = xg;
         pos.y = ref.y;
         plotter->line_to( pos );
+
         pos.x = xg;
         pos.y = yg;
         plotter->line_to( pos );
+
         pos.x = ref.x;
         pos.y = yg;
         plotter->line_to( pos );
+
         plotter->finish_to( ref );
+
         ref.x += GRID_REF_W * conv_unit;
         ref.y += GRID_REF_W * conv_unit;
+
         xg    -= GRID_REF_W * conv_unit;
         yg    -= GRID_REF_W * conv_unit;
     }
@@ -151,7 +163,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
 
 #else
 
-    /* Plot legend along the X axis. */
+    // Plot legend along the X axis.
     int ipas  = ( xg - ref.x ) / PAS_REF;
     int gxpas = ( xg - ref.x ) / ipas;
     for( int ii = ref.x + gxpas, jj = 1; ipas > 0; ii += gxpas, jj++, ipas-- )
@@ -193,7 +205,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                        thickness, italic, false );
     }
 
-    /* Plot legend along the Y axis. */
+    // Plot legend along the Y axis.
     ipas  = ( yg - ref.y ) / PAS_REF;
     int gypas = (  yg - ref.y ) / ipas;
     for( int ii = ref.y + gypas, jj = 0; ipas > 0; ii += gypas, jj++, ipas-- )
@@ -237,7 +249,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
 
 #endif
 
-    /* Plot the worksheet. */
+    // Plot the worksheet.
     text_size.x = SIZETEXT * conv_unit;
     text_size.y = SIZETEXT * conv_unit;
 
@@ -248,6 +260,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     text_size3.y = SIZETEXT * conv_unit * 3;
     text_size1_5.x = SIZETEXT * conv_unit * 1.5;
     text_size1_5.y = SIZETEXT * conv_unit * 1.5;
+
     ref.x = pageSize.x - pageInfo.GetRightMarginMils();
     ref.y = pageSize.y - pageInfo.GetBottomMarginMils();
 
@@ -401,7 +414,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             switch( WsItem->m_Type )
             {
             case WS_CADRE:
-            /* Begin list number > 1 */
+            // Begin list number > 1
                 msg = screen->m_Commentaire1;
                 if( !msg.IsEmpty() )
                 {

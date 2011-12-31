@@ -794,7 +794,7 @@ bool SCH_SHEET::Load( SCH_EDIT_FRAME* aFrame )
         }
         else
         {
-            SetScreen( new SCH_SCREEN() );
+            SetScreen( new SCH_SCREEN( GetPageSettings().GetSizeIU() ) );
             success = aFrame->LoadOneEEFile( m_screen, m_fileName );
 
             if( success )

@@ -21,6 +21,8 @@ class GERBVIEW_FRAME;
 class GERBER_IMAGE;
 class PAGE_INFO;
 
+/// List of page sizes
+extern const wxChar* g_GerberPageSizeList[8];
 
 // Type of photoplotter action:
 #define GERB_ACTIVE_DRAW 1      // Activate light (lower pen)
@@ -28,12 +30,13 @@ class PAGE_INFO;
 #define GERB_FLASH       3      // Flash
 
 
-typedef enum
+enum PlotFormat
 {
     FORMAT_HPGL,
     FORMAT_GERBER,
     FORMAT_POST
-} PlotFormat;
+};
+
 
 /**
  * Enum ITEM_VISIBLE

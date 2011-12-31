@@ -125,10 +125,14 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
     m_Pcb = aBoard;
 }
 
+
 void PCB_BASE_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     wxASSERT( m_Pcb );
     m_Pcb->SetPageSettings( aPageSettings );
+
+    if( GetScreen() )
+        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
 }
 
 
@@ -142,14 +146,25 @@ const PAGE_INFO& PCB_BASE_FRAME::GetPageSettings() const
 const wxSize PCB_BASE_FRAME::GetPageSizeIU() const
 {
     wxASSERT( m_Pcb );
-    const PAGE_INFO& page = m_Pcb->GetPageSettings();
 
-    // convert paper size into internal units.
-#if defined( KICAD_NANOMETRE )
-    return page.GetSizeMils() * 25400;  // nanometers
-#else
-    return page.GetSizeMils() * 10;     // deci-mils
-#endif
+    // this function is only needed because EDA_DRAW_FRAME is not compiled
+    // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
+    // into an application specific source file.
+    return m_Pcb->GetPageSettings().GetSizeIU();
+}
+
+
+const wxPoint& PCB_BASE_FRAME::GetOriginAxisPosition() const
+{
+    wxASSERT( m_Pcb );
+    return m_Pcb->GetOriginAxisPosition();
+}
+
+
+void PCB_BASE_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
+{
+    wxASSERT( m_Pcb );
+    m_Pcb->SetOriginAxisPosition( aPosition );
 }
 
 

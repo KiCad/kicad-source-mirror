@@ -564,10 +564,7 @@ void KICAD_PLUGIN::loadSETUP()
             BIU gx = biuParse( line + SZ( "AuxiliaryAxisOrg" ), &data );
             BIU gy = biuParse( data );
 
-            /* @todo
-            m_originAxisPosition.x = gx;
-            m_originAxisPosition.y = gy;
-            */
+            m_board->SetOriginAxisPosition( wxPoint( gx, gy ) );
         }
 
 #if 1 // defined(PCBNEW)

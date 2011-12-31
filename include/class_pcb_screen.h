@@ -22,7 +22,13 @@ public:
     int m_Route_Layer_BOTTOM;
 
 public:
-    PCB_SCREEN();
+
+    /**
+     * Constructor
+     * @param aPageSizeIU is the size of the initial paper page in internal units.
+     */
+    PCB_SCREEN( const wxSize& aPageSizeIU );
+
     ~PCB_SCREEN();
 
     PCB_SCREEN* Next() { return (PCB_SCREEN*) Pnext; }

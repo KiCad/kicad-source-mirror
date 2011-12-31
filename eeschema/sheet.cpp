@@ -116,7 +116,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )
         }
         else                                                   // New file.
         {
-            aSheet->SetScreen( new SCH_SCREEN() );
+            aSheet->SetScreen( new SCH_SCREEN( GetPageSettings().GetSizeIU() ) );
             aSheet->GetScreen()->SetFileName( fileName.GetFullPath() );
         }
     }

@@ -389,8 +389,7 @@ int PCB_BASE_FRAME::ReadSetup( LINE_READER* aReader )
             if( data )
                 gy = atoi( data );
 
-            m_originAxisPosition.x = gx;
-            m_originAxisPosition.y = gy;
+            SetOriginAxisPosition( wxPoint( gx, gy ) );
             continue;
         }
 

@@ -6,6 +6,7 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "macros.h"
 #include "trigo.h"
 #include "class_pcb_screen.h"
 #include "pcbnew.h"
@@ -25,19 +26,18 @@
  * Zoom 5 and 10 can create artefacts when drawing (integer overflow in low level graphic
  * functions )
  */
-static const double PcbZoomList[] =
+static const double pcbZoomList[] =
 {
     0.5,    1.0,   1.5,   2.0,   3.0, 4.5, 7.0,
     10.0, 15.0, 22.0, 35.0, 50.0, 80.0, 120.0,
     200.0, 350.0, 500.0, 1000.0, 2000.0
 };
 
-#define PCB_ZOOM_LIST_CNT   ( sizeof( PcbZoomList ) / sizeof( PcbZoomList[0] ) )
 #define MM_TO_PCB_UNITS     (10000.0 / 25.4)
 
 
-/* Default grid sizes for PCB editor screens. */
-static GRID_TYPE PcbGridList[] =
+// Default grid sizes for PCB editor screens.
+static GRID_TYPE pcbGridList[] =
 {
     // predefined grid list in 0.0001 inches
     { ID_POPUP_GRID_LEVEL_1000,     wxRealPoint( 1000,                    1000 )                      },
@@ -66,21 +66,15 @@ static GRID_TYPE PcbGridList[] =
     { ID_POPUP_GRID_LEVEL_0_0_1MM,  wxRealPoint( MM_TO_PCB_UNITS * 0.01,  MM_TO_PCB_UNITS * 0.01 )     }
 };
 
-#define PCB_GRID_LIST_CNT ( sizeof( PcbGridList ) / sizeof( GRID_TYPE ) )
 
-
-/*******************************************************************/
-/* Class PCB_SCREEN: class to handle parametres to display a board */
-/********************************************************************/
-PCB_SCREEN::PCB_SCREEN() : BASE_SCREEN( SCREEN_T )
+PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
+    BASE_SCREEN( SCREEN_T )
 {
-    size_t i;
+    for( unsigned i = 0; i < DIM( pcbZoomList );  ++i )
+        m_ZoomList.Add( pcbZoomList[i] );
 
-    for( i = 0; i < PCB_ZOOM_LIST_CNT; i++ )
-        m_ZoomList.Add( PcbZoomList[i] );
-
-    for( i = 0; i < PCB_GRID_LIST_CNT; i++ )
-        AddGrid( PcbGridList[i] );
+    for( unsigned i = 0; i < DIM( pcbGridList );  ++i )
+        AddGrid( pcbGridList[i] );
 
     // Set the working grid size to a reasonnable value (in 1/10000 inch)
     SetGrid( wxRealPoint( 500, 500 ) );
@@ -88,7 +82,10 @@ PCB_SCREEN::PCB_SCREEN() : BASE_SCREEN( SCREEN_T )
     m_Active_Layer       = LAYER_N_BACK;      // default active layer = bottom layer
     m_Route_Layer_TOP    = LAYER_N_FRONT;     // default layers pair for vias (bottom to top)
     m_Route_Layer_BOTTOM = LAYER_N_BACK;
-    m_Zoom = 150;                             // a default value for zoom
+
+    SetZoom( 150 );                           // a default value for zoom
+
+    InitDataPoints( aPageSizeIU );
 }
 
 
@@ -104,14 +101,6 @@ int PCB_SCREEN::GetInternalUnits()
 }
 
 
-/*************************/
-/* class DISPLAY_OPTIONS */
-/*************************/
-
-/*
- *  Handle display options like enable/disable some optional drawings:
- */
-
 DISPLAY_OPTIONS::DISPLAY_OPTIONS()
 {
     DisplayPadFill          = FILLED;
@@ -121,7 +110,7 @@ DISPLAY_OPTIONS::DISPLAY_OPTIONS()
 
     DisplayModEdge          = true;
     DisplayModText          = true;
-    DisplayPcbTrackFill     = true;  /* false = sketch , true = filled */
+    DisplayPcbTrackFill     = true;  // false = sketch , true = filled
     ShowTrackClearanceMode  = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
     m_DisplayViaMode        = VIA_HOLE_NOT_SHOW;
 

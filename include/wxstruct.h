@@ -397,9 +397,6 @@ protected:
     /// drill, gerber, and component position files.
     bool m_showOriginAxis;
 
-    /// Position of the origin axis.
-    wxPoint m_originAxisPosition;
-
     /// True shows the drawing border and title block.
     bool m_showBorderAndTitleBlock;
 
@@ -459,9 +456,8 @@ public:
      */
     virtual const wxSize GetPageSizeIU() const = 0;
 
-    wxPoint GetOriginAxisPosition() const { return m_originAxisPosition; }
-
-    void SetOriginAxisPosition( const wxPoint& aPosition ) { m_originAxisPosition = aPosition; }
+    virtual const wxPoint& GetOriginAxisPosition() const = 0;
+    virtual void SetOriginAxisPosition( const wxPoint& aPosition ) = 0;
 
     int GetCursorShape() const { return m_cursorShape; }
 
@@ -666,7 +662,6 @@ public:
     /**
      * Function GetXYSheetReferences
      * returns the X,Y sheet references where the point position is located
-     * @param aScreen = screen to use
      * @param aPosition = position to identify by YX ref
      * @return a wxString containing the message locator like A3 or B6
      *         (or ?? if out of page limits)

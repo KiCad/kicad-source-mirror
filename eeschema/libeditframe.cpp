@@ -209,8 +209,10 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
 
     SetIcon( icon );
 
-    SetScreen( new SCH_SCREEN() );
+    SetScreen( new SCH_SCREEN( GetPageSettings().GetSizeIU() ) );
+
     GetScreen()->m_Center = true;
+
     GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
 
     LoadSettings();

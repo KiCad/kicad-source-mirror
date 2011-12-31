@@ -84,8 +84,10 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* father,
         SetSize( 0, 0, minsize.x, minsize.y );
 
     // Create child subwindows.
-    GetClientSize( &m_FrameSize.x, &m_FrameSize.y ); /* dimensions of the user area of the main
-                                                      * window */
+
+    // Dimensions of the user area of the main window.
+    GetClientSize( &m_FrameSize.x, &m_FrameSize.y );
+
     m_FramePos.x = m_FramePos.y = 0;
     m_FrameSize.y -= m_MsgFrameHeight;
 
@@ -180,12 +182,16 @@ void EDA_BASE_FRAME::LoadSettings()
     {
         text = m_FrameName + wxT( "Pos_x" );
         config->Read( text, &m_FramePos.x );
+
         text = m_FrameName + wxT( "Pos_y" );
         config->Read( text, &m_FramePos.y );
+
         text = m_FrameName + wxT( "Size_x" );
         config->Read( text, &m_FrameSize.x, 600 );
+
         text = m_FrameName + wxT( "Size_y" );
         config->Read( text, &m_FrameSize.y, 400 );
+
         text = m_FrameName + wxT( "Maximized" );
         config->Read( text, &maximized, 0 );
 
@@ -214,10 +220,8 @@ void EDA_BASE_FRAME::LoadSettings()
 
 void EDA_BASE_FRAME::SaveSettings()
 {
-    wxString text;
-    wxConfig* config;
-
-    config = wxGetApp().GetSettings();
+    wxString    text;
+    wxConfig*   config = wxGetApp().GetSettings();
 
     if( ( config == NULL ) || IsIconized() )
         return;
@@ -227,12 +231,16 @@ void EDA_BASE_FRAME::SaveSettings()
 
     text = m_FrameName + wxT( "Pos_x" );
     config->Write( text, (long) m_FramePos.x );
+
     text = m_FrameName + wxT( "Pos_y" );
     config->Write( text, (long) m_FramePos.y );
+
     text = m_FrameName + wxT( "Size_x" );
     config->Write( text, (long) m_FrameSize.x );
+
     text = m_FrameName + wxT( "Size_y" );
     config->Write( text, (long) m_FrameSize.y );
+
     text = m_FrameName + wxT( "Maximized" );
     config->Write( text, IsMaximized() );
 
@@ -270,7 +278,7 @@ void EDA_BASE_FRAME::DisplayActivity( int PerCent, const wxString& Text )
 void EDA_BASE_FRAME::UpdateFileHistory( const wxString& FullFileName,
                                         wxFileHistory * aFileHistory )
 {
-    wxFileHistory * fileHistory = aFileHistory;
+    wxFileHistory* fileHistory = aFileHistory;
 
     if( fileHistory == NULL )
         fileHistory = & wxGetApp().GetFileHistory();
@@ -284,7 +292,7 @@ wxString EDA_BASE_FRAME::GetFileFromHistory( int cmdId, const wxString& type,
 {
     wxString fn, msg;
     size_t   i;
-    wxFileHistory * fileHistory = aFileHistory;
+    wxFileHistory* fileHistory = aFileHistory;
 
     if( fileHistory == NULL )
         fileHistory = & wxGetApp().GetFileHistory();

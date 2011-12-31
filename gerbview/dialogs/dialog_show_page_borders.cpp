@@ -29,9 +29,11 @@
 
 #include "fctsys.h"
 #include "common.h"
+#include "macros.h"
 
 #include "gerbview.h"
 #include "dialog_show_page_borders.h"
+
 
 DIALOG_PAGE_SHOW_PAGE_BORDERS::DIALOG_PAGE_SHOW_PAGE_BORDERS( GERBVIEW_FRAME *parent) :
     DIALOG_PAGE_SHOW_PAGE_BORDERS_BASE( parent, wxID_ANY )
@@ -43,11 +45,13 @@ DIALOG_PAGE_SHOW_PAGE_BORDERS::DIALOG_PAGE_SHOW_PAGE_BORDERS( GERBVIEW_FRAME *pa
 
     if( m_Parent->GetShowBorderAndTitleBlock() )
     {
-        for( int ii = 1; g_GerberPageSizeList[ii] != NULL; ii++ )
+        wxString curPaperType = m_Parent->GetPageSettings().GetType();
+
+        for( unsigned i = 1;  i<DIM( g_GerberPageSizeList );  ++i )
         {
-            if( m_Parent->GetScreen()->m_CurrentSheetDesc == g_GerberPageSizeList[ii] )
+            if( curPaperType == g_GerberPageSizeList[i] )
             {
-                m_ShowPageLimits->SetSelection(ii);
+                m_ShowPageLimits->SetSelection( i );
                 break;
             }
         }
@@ -73,8 +77,9 @@ void DIALOG_PAGE_SHOW_PAGE_BORDERS::OnOKBUttonClick( wxCommandEvent& event )
 
     int idx = m_ShowPageLimits->GetSelection();
 
-    m_Parent->SetShowBorderAndTitleBlock( (idx > 0) ? true : false );
-    m_Parent->GetScreen()->m_CurrentSheetDesc = g_GerberPageSizeList[idx];
+    m_Parent->SetShowBorderAndTitleBlock( idx > 0 ? true : false );
+
+    m_Parent->SetPageSettings( PAGE_INFO( g_GerberPageSizeList[idx] ) );
 
     EndModal( wxID_OK );
 }

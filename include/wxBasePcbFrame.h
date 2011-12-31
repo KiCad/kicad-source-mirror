@@ -116,6 +116,9 @@ public:
     const PAGE_INFO& GetPageSettings() const;                   // overload
     const wxSize GetPageSizeIU() const;                         // overload
 
+    const wxPoint& GetOriginAxisPosition() const;               // overload
+    void SetOriginAxisPosition( const wxPoint& aPosition );     // overload
+
     /**
      * Function SetBoard
      * sets the m_Pcb member in such as way as to ensure deleting any previous

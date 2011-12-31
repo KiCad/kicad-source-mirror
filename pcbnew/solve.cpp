@@ -477,7 +477,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         int px = pt_cur_ch->m_PadStart->GetPosition().x;
         int py = pt_cur_ch->m_PadStart->GetPosition().y;
 
-        if( ( ( pt_cur_ch->m_PadStart->m_Orient / 900 ) & 1 ) != 0 )
+        if( ( ( int( pt_cur_ch->m_PadStart->m_Orient ) / 900 ) & 1 ) != 0 )
             EXCHG( dx, dy );
 
         if( ( abs( cX - px ) > dx ) || ( abs( cY - py ) > dy ) )
@@ -492,7 +492,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         px = pt_cur_ch->m_PadEnd->GetPosition().x;
         py = pt_cur_ch->m_PadEnd->GetPosition().y;
 
-        if( ( (pt_cur_ch->m_PadEnd->m_Orient / 900) & 1 ) != 0 )
+        if( ( ( int( pt_cur_ch->m_PadEnd->m_Orient ) / 900) & 1 ) != 0 )
             EXCHG( dx, dy );
 
         if( ( abs( cX - px ) > dx ) || ( abs( cY - py ) > dy ) )

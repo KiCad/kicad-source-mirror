@@ -299,7 +299,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_PadOrientCtrl->SetValue( msg );
 
     // Pad Orient
-    switch( m_dummyPad->m_Orient )
+    switch( int( m_dummyPad->GetOrientation() ) )
     {
     case 0:
         m_PadOrient->SetSelection( 0 );
@@ -314,7 +314,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         break;
 
     case 1800:
-    case - 1800:
+    case -1800:
         m_PadOrient->SetSelection( 3 );
         break;
 
