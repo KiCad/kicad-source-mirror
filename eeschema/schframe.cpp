@@ -345,7 +345,7 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     if( g_RootSheet->GetScreen() == NULL )
     {
-        g_RootSheet->SetScreen( new SCH_SCREEN() );
+        g_RootSheet->SetScreen( new SCH_SCREEN( GetPageSettings().GetSizeIU() ) );
         SetScreen( g_RootSheet->GetScreen() );
     }
 
@@ -355,7 +355,7 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_CurrentSheet->Push( g_RootSheet );
 
     if( GetScreen() == NULL )
-        SetScreen( new SCH_SCREEN() );
+        SetScreen( new SCH_SCREEN( GetPageSettings().GetSizeIU() ) );
 
     GetScreen()->SetZoom( 32.0 );
     GetScreen()->m_UndoRedoCountMax = 10;

@@ -677,7 +677,9 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
 
 void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode )
 {
-    if( GetParent()->m_originAxisPosition == wxPoint( 0, 0 ) )
+    wxPoint origin = GetParent()->GetOriginAxisPosition();
+
+    if( origin == wxPoint( 0, 0 ) )
         return;
 
     int     color    = DARKRED;
@@ -687,18 +689,18 @@ void EDA_DRAW_PANEL::DrawAuxiliaryAxis( wxDC* aDC, int aDrawMode )
 
     // Draw the Y axis
     GRDashedLine( &m_ClipBox, aDC,
-                  GetParent()->m_originAxisPosition.x,
+                  origin.x,
                   -pageSize.y,
-                  GetParent()->m_originAxisPosition.x,
+                  origin.x,
                   pageSize.y,
                   0, color );
 
     // Draw the X axis
     GRDashedLine( &m_ClipBox, aDC,
                   -pageSize.x,
-                  GetParent()->m_originAxisPosition.y,
+                  origin.y,
                   pageSize.x,
-                  GetParent()->m_originAxisPosition.y,
+                  origin.y,
                   0, color );
 }
 
@@ -1118,7 +1120,7 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     int localkey;
     wxPoint pos;
 
- 	localkey = event.GetKeyCode();
+    localkey = event.GetKeyCode();
 
     switch( localkey )
     {

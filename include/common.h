@@ -134,6 +134,8 @@ class PAGE_INFO;
  * eventually print or plot.  Since paper is often described in inches,
  * (and due to legacy code), inches, mils, and internal units (IU) are supported
  * in the accessors.  Again, we are describing paper in this class.
+ *
+ * @author Dick Hollenbeck
  */
 class PAGE_INFO
 {
@@ -168,7 +170,8 @@ public:
     int GetHeightMils() const           { return int( 1000 * m_heightInches ); }
     const wxSize GetSizeMils() const    { return wxSize( GetWidthMils(), GetHeightMils() ); }
 
-    // accessors returning Internal Units
+    // Accessors returning "Internal Units (IU)".  IUs are mils in EESCHEMA,
+    // and either deci-mils or nanometers in PCBNew.
 #if defined(PCBNEW)
 # if defined(KICAD_NANOMETRE)
     int GetWidthIU() const  { return int( 2.54e7 * m_widthInches );  }
@@ -203,7 +206,11 @@ public:
      */
     static void SetUserHeightInches( double aHeightInInches );
 
-#define PAGE_INFO_COUNT     11      ///< count of standard page sizes
+    /**
+     * Function GetStandardSizes
+     * returns the standard page types, such as "A4", "A3", etc.
+     */
+    static wxArrayString GetStandardSizes();
 
 private:
     wxString    m_Type;            ///< paper type: A4, A3, etc.

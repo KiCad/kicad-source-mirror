@@ -48,8 +48,9 @@
 
 
 // Config keywords
-const wxString GerbviewShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
-const wxString GerbviewShowDCodes( wxT( "ShowDCodesOpt" ) );
+static const wxString cfgShowPageSizeOption( wxT( "ShowPageSizeOpt" ) );
+static const wxString cfgShowDCodes( wxT( "ShowDCodesOpt" ) );
+static const wxString cfgShowBorderAndTitleBlock( wxT( "ShowBorderAndTitleBlock" ) );
 
 
 /*************************************/
@@ -84,11 +85,15 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     SetIcon( icon );
 
     SetBoard( new BOARD() );
+
     GetBoard()->SetEnabledLayers( FULL_LAYERS );     // All 32 layers enabled at first.
     GetBoard()->SetVisibleLayers( FULL_LAYERS );     // All 32 layers visible.
 
-    SetScreen( new PCB_SCREEN() );
-    GetScreen()->m_CurrentSheetDesc = &g_Sheet_GERBER;
+    // BOARD was constructed with "A3", change to "GERBER"
+    PAGE_INFO   pageInfo( wxT( "GERBER" ) );
+    GetBoard()->SetPageSettings( pageInfo );
+
+    SetScreen( new PCB_SCREEN( pageInfo.GetSizeIU() ) );
 
    // Create the PCB_LAYER_WIDGET *after* SetBoard():
     wxFont font = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -209,23 +214,25 @@ void GERBVIEW_FRAME::LoadSettings()
 
     wxGetApp().ReadCurrentSetupValues( GetConfigurationSettings() );
 
-    wxString    pageType;
+    PAGE_INFO   pageInfo( wxT( "GERBER" ) );
 
-    config->Read( GerbviewShowPageSizeOption, &pageType, wxT( "GERBER" ) );
+    config->Read( cfgShowBorderAndTitleBlock, &m_showBorderAndTitleBlock, false );
 
-    PAGE_INFO   pageInfo( pageType );
+    if( m_showBorderAndTitleBlock )
+    {
+        wxString    pageType;
+
+        config->Read( cfgShowPageSizeOption, &pageType, wxT( "GERBER" ) );
+
+        pageInfo.SetType( pageType );
+    }
 
     SetPageSettings( pageInfo );
 
     GetScreen()->InitDataPoints( pageInfo.GetSizeIU() );
 
-    if( pageSize_opt > 0 )
-    {
-        m_showBorderAndTitleBlock = true;
-    }
-
     long tmp;
-    config->Read( GerbviewShowDCodes, &tmp, 1 );
+    config->Read( cfgShowDCodes, &tmp, 1 );
     SetElementVisibility( DCODES_VISIBLE, tmp );
 
     // because we have 2 file historues, we must read this one
@@ -252,22 +259,10 @@ void GERBVIEW_FRAME::SaveSettings()
 
     wxGetApp().SaveCurrentSetupValues( GetConfigurationSettings() );
 
-    long pageSize_opt = 0;
+    config->Write( cfgShowPageSizeOption, GetPageSettings().GetType() );
+    config->Write( cfgShowBorderAndTitleBlock, m_showBorderAndTitleBlock );
+    config->Write( cfgShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
 
-    if( m_showBorderAndTitleBlock )
-    {
-        for( int ii = 1; g_GerberPageSizeList[ii] != NULL; ii++ )
-        {
-            if( GetScreen()->m_CurrentSheetDesc == g_GerberPageSizeList[ii] )
-            {
-                pageSize_opt = ii;
-                break;
-            }
-        }
-    }
-
-    config->Write( GerbviewShowPageSizeOption, GetPageSettings().GetType() );
-    config->Write( GerbviewShowDCodes, IsElementVisible( DCODES_VISIBLE ) );
     // Save the drill file history list.
     // Because we have 2 file histories, we must save this one
     // in a specific path

@@ -92,6 +92,9 @@ class BASE_SCREEN : public EDA_ITEM
      */
     wxPoint m_crossHairPosition;
 
+    double     m_Zoom;          ///< Current zoom coefficient.
+
+
 public:
     wxPoint m_DrawOrg;          ///< offsets for drawing the circuit on the screen
 
@@ -101,6 +104,7 @@ public:
     // Scrollbars management:
     int     m_ScrollPixelsPerUnitX; ///< Pixels per scroll unit in the horizontal direction.
     int     m_ScrollPixelsPerUnitY; ///< Pixels per scroll unit in the vertical direction.
+
     wxSize  m_ScrollbarNumber;      /* Current virtual draw area size in scroll units.
                                      * m_ScrollbarNumber * m_ScrollPixelsPerUnit =
                                      * virtual draw area size in pixels */
@@ -142,7 +146,6 @@ public:
     wxPoint	m_GridOrigin;
 
     wxArrayDouble m_ZoomList;       ///< Array of standard zoom (i.e. scale) coefficients.
-    double     m_Zoom;              ///< Current zoom coefficient.
     bool       m_IsPrinting;
 
 public:

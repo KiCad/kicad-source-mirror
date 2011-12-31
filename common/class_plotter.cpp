@@ -119,7 +119,6 @@ void PLOTTER::center_square( const wxPoint& position, int diametre, FILL_T fill 
     corner_list.push_back( corner );
 
     PlotPoly( corner_list, fill );
-
 }
 
 
@@ -428,7 +427,7 @@ void PLOTTER::SetPageSettings( const PAGE_INFO& aPageSettings )
     wxASSERT( !output_file );
     pageInfo = aPageSettings;
 
-    // PAGE_INFO is in mils, plotter works with decimals
+    // PAGE_INFO is in mils, plotter works with deci-mils
     paper_size = pageInfo.GetSizeMils() * 10;
 }
 

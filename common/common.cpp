@@ -197,19 +197,32 @@ double PAGE_INFO::s_user_width  = 17.0;
 double PAGE_INFO::s_user_height = 11.0;
 static const PAGE_INFO  pageUser(  wxSize( 17000, 11000 ),  wxPoint( 0, 0 ), wxT( "User" ) );
 
-/*
-static const PAGE_INFO* pageSizes[] =
-{
-    &pageA4,    &pageA3,    &pageA2,    &pageA1,    &pageA0,
-    &pageA,     &pageB,     &pageC,     &pageD,     &pageE,      &pageUser,
+static const PAGE_INFO* stdPageSizes[] = {
+    &pageA4,
+    &pageA3,
+    &pageA2,
+    &pageA1,
+    &pageA0,
+    &pageA,
+    &pageB,
+    &pageC,
+    &pageD,
+    &pageE,
+    // &pageGERBER,  omitted, not standard
+    &pageUser,
 };
 
 
-PAGE_INFOS PAGE_INFO::GetStandardSizes()
+wxArrayString PAGE_INFO::GetStandardSizes()
 {
-    return PAGE_INFOS( pageSizes, pageSizes + DIM( pageSizes ) );
+    wxArrayString ret;
+
+    for( unsigned i=0;  i < DIM( stdPageSizes );  ++i )
+        ret.Add( stdPageSizes[i]->GetType() );
+
+    return ret;
 }
-*/
+
 
 bool PAGE_INFO::SetType( const wxString& aType )
 {
@@ -235,6 +248,8 @@ bool PAGE_INFO::SetType( const wxString& aType )
         *this = pageD;
     else if( aType == pageE.GetType() )
         *this = pageE;
+    else if( aType == pageGERBER.GetType() )
+        *this = pageGERBER;
     else if( aType == pageUser.GetType() )
     {
         *this  = pageUser;
@@ -278,14 +293,18 @@ PAGE_INFO::PAGE_INFO( const wxString& aType )
 void PAGE_INFO::SetWidthInches( double aWidthInInches )
 {
     // limit resolution to 1/1000th of an inch
-    m_widthInches = double( int( aWidthInInches * 1000 + 500 ) / 1000 );
+    int mils = aWidthInInches * 1000 + 0.5;
+
+    m_widthInches = mils / 1000.0;
 }
 
 
 void PAGE_INFO::SetHeightInches( double aHeightInInches )
 {
     // limit resolution to 1/1000th of an inch
-    m_heightInches = double( int( aHeightInInches * 1000 + 500 ) / 1000 );
+    int mils = aHeightInInches * 1000 + 0.5;
+
+    m_heightInches = mils / 1000.0;
 }
 
 

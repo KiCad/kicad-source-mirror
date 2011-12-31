@@ -97,7 +97,8 @@ static GRID_TYPE SchematicGridList[] = {
 #define SCHEMATIC_GRID_LIST_CNT ( sizeof( SchematicGridList ) / sizeof( GRID_TYPE ) )
 
 
-SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
+SCH_SCREEN::SCH_SCREEN( const wxSize& aPageSizeIU ) :
+    BASE_SCREEN( SCH_SCREEN_T )
 {
     size_t i;
 
@@ -114,9 +115,10 @@ SCH_SCREEN::SCH_SCREEN( KICAD_T type ) : BASE_SCREEN( type )
     SetGrid( wxRealPoint( 50, 50 ) );   // Default grid size.
     m_refCount = 0;
 
-    m_Center = false;                   // Suitable for schematic only. For
-                                        // libedit and viewlib, must be set
-                                        // to true
+    // Suitable for schematic only. For libedit and viewlib, must be set to true
+    m_Center = false;
+
+    InitDataPoints( aPageSizeIU );
 }
 
 

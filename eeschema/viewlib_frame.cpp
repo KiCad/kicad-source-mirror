@@ -125,7 +125,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     if( m_Semaphore )
         MakeModal(true);
 
-    SetScreen( new SCH_SCREEN() );
+    SetScreen( new SCH_SCREEN( GetPageSettings().GetSizeIU() ) );
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
     LoadSettings();
 

@@ -83,7 +83,13 @@ class SCH_SCREEN : public BASE_SCREEN
     void addConnectedItemsToBlock( const wxPoint& aPosition );
 
 public:
-    SCH_SCREEN( KICAD_T aType = SCH_SCREEN_T );
+
+    /**
+     * Constructor
+     * @param aPageSizeIU is the size of the initial paper page in internal units.
+     */
+    SCH_SCREEN( const wxSize& aPageSizeIU );
+
     ~SCH_SCREEN();
 
     virtual wxString GetClass() const

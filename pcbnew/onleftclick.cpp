@@ -423,7 +423,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     case ID_PCB_PLACE_OFFSET_COORD_BUTT:
         m_canvas->DrawAuxiliaryAxis( aDC, GR_XOR );
-        m_originAxisPosition = GetScreen()->GetCrossHairPosition();
+        SetOriginAxisPosition( GetScreen()->GetCrossHairPosition() );
         m_canvas->DrawAuxiliaryAxis( aDC, GR_COPY );
         OnModify();
         break;

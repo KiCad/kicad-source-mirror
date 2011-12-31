@@ -254,9 +254,9 @@ public:
 
     /**
      * Function SaveCurrentSetupValues
-     * Save the current setup values in m_settings
-     * saved parameters are parameters that have the .m_Setup member set to
-     * true
+     * saves the current setup values in m_settings.
+     * Saved parameters are parameters that have the .m_Setup member set to
+     * true.
      * @param aList = array of PARAM_CFG_BASE pointers
      */
     void SaveCurrentSetupValues( PARAM_CFG_BASE** aList );
@@ -264,9 +264,9 @@ public:
 
     /**
      * Function ReadCurrentSetupValues
-     * Read the current setup values previously saved, from m_settings
-     * saved parameters are parameters that have the .m_Setup member set to
-     * true
+     * reads the current setup values previously saved, from m_settings.
+     * Saved parameters are parameters that have the .m_Setup member set to
+     * true.
      * @param aList = array of PARAM_CFG_BASE pointers
      */
     void ReadCurrentSetupValues( PARAM_CFG_BASE** aList );

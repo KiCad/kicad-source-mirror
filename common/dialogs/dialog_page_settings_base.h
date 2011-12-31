@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun  6 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -80,16 +80,17 @@ class DIALOG_PAGES_SETTINGS_BASE : public wxDialog
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseWindow( wxCloseEvent& event ){ event.Skip(); }
-		virtual void OnTextctrlUserPageSizeXTextUpdated( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnTextctrlUserPageSizeYTextUpdated( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCheckboxTitleClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnCancelClick( wxCommandEvent& event ){ event.Skip(); }
-		virtual void OnOkClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnTextctrlUserPageSizeXTextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnTextctrlUserPageSizeYTextUpdated( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCheckboxTitleClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
-		DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 439,497 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		
+		DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 439,497 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PAGES_SETTINGS_BASE();
 	
 };

@@ -16,6 +16,7 @@
 #include "wxstruct.h"
 
 #include "wx/valgen.h"
+#include <wx/tokenzr.h>
 
 #ifdef EESCHEMA
 #include "general.h"
@@ -66,6 +67,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     wxString format = m_TextSheetCount->GetLabel();
     msg.Printf( format, m_Screen->m_NumberOfScreen );
     m_TextSheetCount->SetLabel( msg );
+
     format = m_TextSheetNumber->GetLabel();
     msg.Printf( format, m_Screen->m_ScreenNumber );
     m_TextSheetNumber->SetLabel( msg );
@@ -192,6 +194,7 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
     if( radioSelection < 0 )
         radioSelection = 0;
 
+    // wxFormBuilder must use "A4", "A3", etc for choices, in all languages/translations
     wxString paperType = m_PageSizeBox->GetString( radioSelection );
 
     m_page.SetType( paperType );
@@ -220,13 +223,13 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
     }
 
 #ifdef EESCHEMA
-    /* Exports settings to other sheets if requested: */
+    // Exports settings to other sheets if requested:
     SCH_SCREEN* screen;
 
-    /* Build the screen list */
+    // Build the screen list
     SCH_SCREENS ScreenList;
 
-    /* Update the datas */
+    // Update the datas
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
         if( screen == m_Screen )
@@ -265,12 +268,24 @@ void DIALOG_PAGES_SETTINGS::setCurrentPageSizeSelection()
 {
     wxString    curPaperType = m_page.GetType();
 
+    // use wxFormBuilder to store the sheet type in the wxRadioButton's label
+    // i.e. "A4", "A3", etc, anywhere within the text of the label.
+
+    D(printf("m_PageSizeBox->GetCount() = %d\n", (int) m_PageSizeBox->GetCount() );)
+
+    // search all the child wxRadioButtons for a label containing our paper type
     for( unsigned i = 0;  i < m_PageSizeBox->GetCount();  ++i )
     {
-        if( m_PageSizeBox->GetString( i ) == curPaperType )
+        // parse each label looking for curPaperType within it
+        wxStringTokenizer st( m_PageSizeBox->GetString( i ) );
+
+        while( st.HasMoreTokens() )
         {
-            m_PageSizeBox->SetSelection( i );
-            return;
+            if( st.GetNextToken() == curPaperType )
+            {
+                m_PageSizeBox->SetSelection( i );
+                return;
+            }
         }
     }
 

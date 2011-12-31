@@ -114,6 +114,10 @@ else()
     set( PCB_COMMON_SRCS ${PCB_COMMON_SRCS} ../pcbnew/item_io.cpp )
 endif()
 
+# add -DPCBNEW to compilation of these PCBNEW sources
+set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
+    COMPILE_DEFINITIONS "PCBNEW"
+    )
 
 add_library(pcbcommon ${PCB_COMMON_SRCS})
 

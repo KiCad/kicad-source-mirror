@@ -176,6 +176,9 @@ private:
     COLORS_DESIGN_SETTINGS* m_colorsSettings;       // Link to current colors settings
     PAGE_INFO               m_paper;
 
+    /// Position of the origin axis.
+    wxPoint             m_originAxisPosition;
+
     /**
      * Function chainMarkedSegments
      * is used by MarkTrace() to set the BUSY flag of connected segments of the trace
@@ -537,6 +540,9 @@ public:
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
+
+    const wxPoint& GetOriginAxisPosition() const            { return m_originAxisPosition; }
+    void SetOriginAxisPosition( const wxPoint& aPosition )  { m_originAxisPosition = aPosition; }
 
     /**
      * Function SetBoardSettings
