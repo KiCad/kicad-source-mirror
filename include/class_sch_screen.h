@@ -449,13 +449,6 @@ public:
      * @return The number of items in the pick list.
      */
     int UpdatePickList();
-
-    virtual void AddItem( SCH_ITEM* aItem ) { BASE_SCREEN::AddItem( (EDA_ITEM*) aItem ); }
-
-    virtual void InsertItem(  EDA_ITEMS::iterator aIter, SCH_ITEM* aItem )
-    {
-        BASE_SCREEN::InsertItem( aIter, (EDA_ITEM*) aItem );
-    }
 };
 
 
