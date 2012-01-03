@@ -1767,7 +1767,7 @@ void KICAD_PLUGIN::loadPCB_TEXT()
             pcbtxt->SetTimeStamp( timestamp );
             pcbtxt->SetItalic( !strcmp( style, "Italic" ) );
 
-            GRTextHorizJustifyType hj;
+            EDA_TEXT_HJUSTIFY_T hj;
 
             if( hJustify )
             {
@@ -1780,7 +1780,9 @@ void KICAD_PLUGIN::loadPCB_TEXT()
                 }
             }
             else
+            {
                 hj = GR_TEXT_HJUSTIFY_CENTER;
+            }
 
             pcbtxt->SetHorizJustify( hj );
 

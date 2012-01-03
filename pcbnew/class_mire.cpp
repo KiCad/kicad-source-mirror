@@ -88,13 +88,13 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wx
     width   = m_Width;
 
     if( DC->LogicalToDeviceXRel( width ) < 2 )
-        typeaff = FILAIRE;
+        typeaff = LINE;
 
     radius = m_Size / 4;
 
     switch( typeaff )
     {
-    case FILAIRE:
+    case LINE:
         width = 0;
 
     case FILLED:
@@ -123,7 +123,7 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wx
 
     switch( typeaff )
     {
-    case FILAIRE:
+    case LINE:
     case FILLED:
         GRLine( panel->GetClipBox(), DC, ox - dx1, oy - dy1, ox + dx1, oy + dy1, width, gcolor );
         GRLine( panel->GetClipBox(), DC, ox - dx2, oy - dy2, ox + dx2, oy + dy2, width, gcolor );

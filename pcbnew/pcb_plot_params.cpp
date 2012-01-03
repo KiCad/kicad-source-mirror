@@ -319,7 +319,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
             aPcbPlotParams->m_PlotViaOnMaskLayer = ParseBool();
             break;
         case T_mode:
-            aPcbPlotParams->m_PlotMode = (GRTraceMode)ParseInt( 0, 2 );
+            aPcbPlotParams->m_PlotMode = (EDA_DRAW_MODE_T)ParseInt( 0, 2 );
             break;
         case T_useauxorigin:
             aPcbPlotParams->useAuxOrigin = ParseBool();

@@ -507,24 +507,24 @@ public:
     bool ExportToGerberFile( const wxString& aFullFileName,
                              int             aLayer,
                              bool            aPlotOriginIsAuxAxis,
-                             GRTraceMode     aTraceMode );
+                             EDA_DRAW_MODE_T aTraceMode );
 
     bool ExportToHpglFile( const wxString& aFullFileName,
                            int             aLayer,
-                           GRTraceMode     aTraceMode );
+                           EDA_DRAW_MODE_T aTraceMode );
 
     bool ExportToPostScriptFile( const wxString& aFullFileName,
                                  int             aLayer,
                                  bool            aUseA4,
-                                 GRTraceMode     aTraceMode );
+                                 EDA_DRAW_MODE_T aTraceMode );
 
     bool ExportToDxfFile( const wxString& aFullFileName,
                           int             aLayer,
-                          GRTraceMode     aTraceMode );
+                          EDA_DRAW_MODE_T aTraceMode );
 
-    void Plot_Layer( PLOTTER*    plotter,
-                     int         Layer,
-                     GRTraceMode trace_mode );
+    void Plot_Layer( PLOTTER*        plotter,
+                     int             Layer,
+                     EDA_DRAW_MODE_T trace_mode );
 
     /**
      * Function Plot_Standard_Layer
@@ -540,10 +540,10 @@ public:
      *                      have the same size. Used in GERBER format only.
      */
     void Plot_Standard_Layer( PLOTTER* aPlotter, int aLayerMask,
-                              bool aPlotVia, GRTraceMode aPlotMode,
+                              bool aPlotVia, EDA_DRAW_MODE_T aPlotMode,
                               bool aSkipNPTH_Pads = false );
 
-    void PlotSilkScreen( PLOTTER* plotter, int masque_layer, GRTraceMode trace_mode );
+    void PlotSilkScreen( PLOTTER* plotter, int masque_layer, EDA_DRAW_MODE_T trace_mode );
 
     /**
      * Function PlotDrillMark
@@ -556,7 +556,7 @@ public:
      * @param aSmallDrillShape = true to plot a small drill shape, false to
      *                           plot the actual drill shape
      */
-    void PlotDrillMark( PLOTTER* aPlotter, GRTraceMode aTraceMode, bool aSmallDrillShape );
+    void PlotDrillMark( PLOTTER* aPlotter, EDA_DRAW_MODE_T aTraceMode, bool aSmallDrillShape );
 
     /* Functions relative to Undo/redo commands:
      */

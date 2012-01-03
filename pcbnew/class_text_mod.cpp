@@ -238,7 +238,7 @@ void TEXTE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const w
     orient = GetDrawRotation();
     width  = m_Thickness;
 
-    if( ( frame->m_DisplayModText == FILAIRE )
+    if( ( frame->m_DisplayModText == LINE )
         || ( DC->LogicalToDeviceXRel( width ) < MIN_DRAW_WIDTH ) )
         width = 0;
     else if( frame->m_DisplayModText == SKETCH )

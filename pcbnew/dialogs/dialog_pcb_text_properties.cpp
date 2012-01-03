@@ -149,7 +149,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
         m_StyleCtrl->SetSelection( 0 );
 
     // Set justification
-    GRTextHorizJustifyType hJustify = m_SelectedPCBText->GetHorizJustify();
+    EDA_TEXT_HJUSTIFY_T hJustify = m_SelectedPCBText->GetHorizJustify();
     m_justifyChoice->SetSelection( (int) hJustify + 1 );
 
     // Set focus on most important control

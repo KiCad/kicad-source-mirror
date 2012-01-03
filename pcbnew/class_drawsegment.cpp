@@ -187,14 +187,14 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         mode = SKETCH;
 
     if( l_trace < DC->DeviceToLogicalXRel( MIN_DRAW_WIDTH ) )
-        mode = FILAIRE;
+        mode = LINE;
 
     switch( m_Shape )
     {
     case S_CIRCLE:
         radius = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
 
-        if( mode == FILAIRE )
+        if( mode == LINE )
         {
             GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius, color );
         }
@@ -228,9 +228,8 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         }
 
 
-        if( mode == FILAIRE )
-            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
-                   radius, color );
+        if( mode == LINE )
+            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle, radius, color );
 
         else if( mode == SKETCH )
         {
@@ -249,7 +248,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
             m_BezierPoints = Bezier2Poly(m_Start,m_BezierC1, m_BezierC2, m_End);
 
             for (unsigned int i=1; i < m_BezierPoints.size(); i++) {
-                if( mode == FILAIRE )
+                if( mode == LINE )
                     GRLine( panel->GetClipBox(), DC,
                             m_BezierPoints[i].x, m_BezierPoints[i].y,
                             m_BezierPoints[i-1].x, m_BezierPoints[i-1].y, 0,
@@ -271,7 +270,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
             }
          break;
     default:
-        if( mode == FILAIRE )
+        if( mode == LINE )
         {
             GRLine( panel->GetClipBox(), DC, ux0, uy0, dx, dy, 0, color );
         }

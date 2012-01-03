@@ -746,25 +746,24 @@ typedef std::vector< EDA_ITEM* > EDA_ITEMS;
 
 // Graphic Text justify:
 // Values -1,0,1 are used in computations, do not change them
-enum  GRTextHorizJustifyType {
+enum EDA_TEXT_HJUSTIFY_T {
     GR_TEXT_HJUSTIFY_LEFT   = -1,
     GR_TEXT_HJUSTIFY_CENTER = 0,
     GR_TEXT_HJUSTIFY_RIGHT  = 1
 };
 
 
-enum GRTextVertJustifyType {
-    GR_TEXT_VJUSTIFY_TOP = -1,
+enum EDA_TEXT_VJUSTIFY_T {
+    GR_TEXT_VJUSTIFY_TOP    = -1,
     GR_TEXT_VJUSTIFY_CENTER = 0,
     GR_TEXT_VJUSTIFY_BOTTOM = 1
 };
 
 /* Options to show solid segments (segments, texts...) */
-enum GRTraceMode {
-    FILAIRE = 0,        // segments are drawn as lines
+enum EDA_DRAW_MODE_T {
+    LINE = 0,           // segments are drawn as lines
     FILLED,             // normal mode: segments have thickness
-    SKETCH              // sketch mode: segments have thickness, but are not
-                        // filled
+    SKETCH              // sketch mode: segments have thickness, but are not filled
 };
 
 /**
@@ -803,8 +802,8 @@ public:
     int      m_Attributs;               ///< bit flags such as visible, etc.
     bool     m_Italic;                  ///< should be italic font (if available)
     bool     m_Bold;                    ///< should be bold font (if available)
-    GRTextHorizJustifyType m_HJustify;  ///< horizontal justification
-    GRTextVertJustifyType  m_VJustify;  ///< vertical justification
+    EDA_TEXT_HJUSTIFY_T m_HJustify;     ///< horizontal justification
+    EDA_TEXT_VJUSTIFY_T m_VJustify;     ///< vertical justification
 
     bool     m_MultilineAllowed;        /**< true to use multiline option, false
                                          * to use only single line text
@@ -866,12 +865,12 @@ public:
      * @param aOffset = draw offset (usually (0,0))
      * @param aColor = text color
      * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
-     * @param aDisplay_mode = FILAIRE, FILLED or SKETCH
+     * @param aDisplay_mode = LINE, FILLED or SKETCH
      * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                const wxPoint& aOffset, EDA_Colors aColor,
-               int aDrawMode, GRTraceMode aDisplay_mode = FILAIRE,
+               int aDrawMode, EDA_DRAW_MODE_T aDisplay_mode = LINE,
                EDA_Colors aAnchor_color = UNSPECIFIED_COLOR );
 
 private:
@@ -885,14 +884,14 @@ private:
      * @param aOffset = draw offset (usually (0,0))
      * @param aColor = text color
      * @param aDrawMode = GR_OR, GR_XOR.., -1 to use the current mode.
-     * @param aFillMode = FILAIRE, FILLED or SKETCH
+     * @param aFillMode = LINE, FILLED or SKETCH
      * @param aAnchor_color = anchor color ( UNSPECIFIED_COLOR = do not draw anchor ).
      * @param aText = the single line of text to draw.
      * @param aPos = the position of this line ).
      */
     void DrawOneLineOfText( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                             const wxPoint& aOffset, EDA_Colors aColor,
-                            int aDrawMode, GRTraceMode aFillMode,
+                            int aDrawMode, EDA_DRAW_MODE_T aFillMode,
                             EDA_Colors aAnchor_color, wxString& aText,
                             wxPoint aPos );
 
@@ -972,10 +971,10 @@ public:
      */
     virtual const wxString GetText() const { return m_Text; }
 
-    GRTextHorizJustifyType GetHorizJustify() const { return m_HJustify; };
-    GRTextVertJustifyType GetVertJustify() const { return m_VJustify; };
-    void SetHorizJustify( GRTextHorizJustifyType aType ) { m_HJustify = aType; };
-    void SetVertJustify( GRTextVertJustifyType aType ) { m_VJustify = aType; };
+    EDA_TEXT_HJUSTIFY_T GetHorizJustify() const { return m_HJustify; };
+    EDA_TEXT_VJUSTIFY_T GetVertJustify() const { return m_VJustify; };
+    void SetHorizJustify( EDA_TEXT_HJUSTIFY_T aType ) { m_HJustify = aType; };
+    void SetVertJustify( EDA_TEXT_VJUSTIFY_T aType ) { m_VJustify = aType; };
 };
 
 #endif // BASE_STRUCT_H_

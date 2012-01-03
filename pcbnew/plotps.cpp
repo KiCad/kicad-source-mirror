@@ -22,7 +22,7 @@
  * If layer < 0: all layers are plotted.
  */
 bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int aLayer,
-                                             bool aUseA4, GRTraceMode aTraceMode )
+                                             bool aUseA4, EDA_DRAW_MODE_T aTraceMode )
 {
     wxSize        SheetSize;
     wxSize        PaperSize;

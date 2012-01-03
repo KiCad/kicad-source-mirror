@@ -369,14 +369,14 @@ void GERBER_PLOTTER::PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFac
 /* Function flash_pad_circle
  * Plot a circular pad or via at the user position pos
  */
-void GERBER_PLOTTER::flash_pad_circle( wxPoint pos, int diametre, GRTraceMode trace_mode )
+void GERBER_PLOTTER::flash_pad_circle( wxPoint pos, int diametre, EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( output_file );
     wxSize size( diametre, diametre );
 
     switch( trace_mode )
     {
-    case FILAIRE:
+    case LINE:
     case SKETCH:
         set_current_line_width( -1 );
         circle( pos, diametre - current_pen_width, NO_FILL );
@@ -398,7 +398,7 @@ void GERBER_PLOTTER::flash_pad_circle( wxPoint pos, int diametre, GRTraceMode tr
  * For any orientation the shape is drawn as a segment
  */
 void GERBER_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                     GRTraceMode trace_mode )
+                                     EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( output_file );
     int x0, y0, x1, y1, delta;
@@ -455,7 +455,7 @@ void GERBER_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
  * For others shape the direction is plotted as a polygon.
  */
 void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
-                                     int orient, GRTraceMode trace_mode )
+                                     int orient, EDA_DRAW_MODE_T trace_mode )
 
 {
     wxASSERT( output_file );
@@ -472,7 +472,7 @@ void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
     case 1800:
         switch( trace_mode )
         {
-        case FILAIRE:
+        case LINE:
         case SKETCH:
             set_current_line_width( -1 );
             rect( wxPoint( pos.x - (size.x - current_pen_width) / 2,
@@ -522,7 +522,7 @@ void GERBER_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
  * Plot mode  = FILLED or SKETCH
  */
  void GERBER_PLOTTER::flash_pad_trapez( wxPoint aPadPos,  wxPoint aCorners[4],
-                                        int aPadOrient, GRTraceMode aTrace_Mode )
+                                        int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 
 {
     // polygon corners list

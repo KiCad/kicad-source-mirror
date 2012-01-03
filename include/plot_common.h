@@ -121,22 +121,22 @@ public: PLOTTER( PlotFormat aPlotType );
     virtual void PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor ) = 0;
 
     virtual void thick_segment( wxPoint start, wxPoint end, int width,
-                                GRTraceMode tracemode );
+                                EDA_DRAW_MODE_T tracemode );
     virtual void thick_arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
-                            int width, GRTraceMode tracemode );
+                            int width, EDA_DRAW_MODE_T tracemode );
     virtual void thick_rect( wxPoint p1, wxPoint p2, int width,
-                             GRTraceMode tracemode );
+                             EDA_DRAW_MODE_T tracemode );
     virtual void thick_circle( wxPoint pos, int diametre, int width,
-                               GRTraceMode tracemode );
+                               EDA_DRAW_MODE_T tracemode );
     virtual void pen_to( wxPoint pos, char plume ) = 0;
 
     // Flash primitives
     virtual void flash_pad_circle( wxPoint pos, int diametre,
-                                   GRTraceMode trace_mode ) = 0;
+                                   EDA_DRAW_MODE_T trace_mode ) = 0;
     virtual void flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                 GRTraceMode trace_mode ) = 0;
+                                 EDA_DRAW_MODE_T trace_mode ) = 0;
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
-                                 int orient, GRTraceMode trace_mode ) = 0;
+                                 int orient, EDA_DRAW_MODE_T trace_mode ) = 0;
 
     /** virtual function flash_pad_trapez
      * flash a trapezoidal pad
@@ -146,7 +146,7 @@ public: PLOTTER( PlotFormat aPlotType );
      * @param aTrace_Mode = FILLED or SKETCH
      */
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
-                                   int aPadOrient, GRTraceMode aTrace_Mode ) = 0;
+                                   int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode ) = 0;
 
     // Convenience functions
     void move_to( wxPoint pos )
@@ -180,12 +180,13 @@ public: PLOTTER( PlotFormat aPlotType );
                const wxString&             aText,
                int                         aOrient,
                const wxSize&               aSize,
-               enum GRTextHorizJustifyType aH_justify,
-               enum GRTextVertJustifyType  aV_justify,
+               enum EDA_TEXT_HJUSTIFY_T    aH_justify,
+               enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                int                         aWidth,
                bool                        aItalic,
                bool                        aBold );
-    void           marker( const wxPoint& position, int diametre, int aShapeId );
+
+    void marker( const wxPoint& position, int diametre, int aShapeId );
 
     /**
      * Function SetLayerPolarity
@@ -202,7 +203,7 @@ protected:
 
     // Helper function for sketched filler segment
     void           segment_as_oval( wxPoint start, wxPoint end, int width,
-                                    GRTraceMode tracemode );
+                                    EDA_DRAW_MODE_T tracemode );
     void           sketch_oval( wxPoint pos, wxSize size, int orient, int width );
 
     virtual void   user_to_device_coordinates( wxPoint& pos );
@@ -303,19 +304,19 @@ public: HPGL_PLOTTER() : PLOTTER( PLOT_FORMAT_HPGL )
     virtual void PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor );
 
     virtual void thick_segment( wxPoint start, wxPoint end, int width,
-                                GRTraceMode tracemode );
+                                EDA_DRAW_MODE_T tracemode );
     virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
                       FILL_T fill, int width = -1 );
     virtual void pen_to( wxPoint pos, char plume );
     virtual void flash_pad_circle( wxPoint pos, int diametre,
-                                   GRTraceMode trace_mode );
+                                   EDA_DRAW_MODE_T trace_mode );
     virtual void flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                 GRTraceMode trace_mode );
+                                 EDA_DRAW_MODE_T trace_mode );
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
-                                 int orient, GRTraceMode trace_mode );
+                                 int orient, EDA_DRAW_MODE_T trace_mode );
 
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
-                                   int aPadOrient, GRTraceMode aTrace_Mode );
+                                   int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 
     virtual void SetLayerPolarity( bool aPositive ) {}
 
@@ -380,14 +381,14 @@ public: PS_PLOTTER() : PLOTTER( PLOT_FORMAT_POST )
 
     virtual void pen_to( wxPoint pos, char plume );
     virtual void flash_pad_circle( wxPoint pos, int diametre,
-                                   GRTraceMode trace_mode );
+                                   EDA_DRAW_MODE_T trace_mode );
     virtual void flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                 GRTraceMode trace_mode );
+                                 EDA_DRAW_MODE_T trace_mode );
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
-                                 int orient, GRTraceMode trace_mode );
+                                 int orient, EDA_DRAW_MODE_T trace_mode );
 
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
-                                   int aPadOrient, GRTraceMode aTrace_Mode );
+                                   int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 
     virtual void SetLayerPolarity( bool aPositive ) {}
 
@@ -459,14 +460,14 @@ public: GERBER_PLOTTER() : PLOTTER( PLOT_FORMAT_GERBER )
 
     virtual void pen_to( wxPoint pos, char plume );
     virtual void flash_pad_circle( wxPoint pos, int diametre,
-                                   GRTraceMode trace_mode );
+                                   EDA_DRAW_MODE_T trace_mode );
     virtual void flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                 GRTraceMode trace_mode );
+                                 EDA_DRAW_MODE_T trace_mode );
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
-                                 int orient, GRTraceMode trace_mode );
+                                 int orient, EDA_DRAW_MODE_T trace_mode );
 
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
-                                   int aPadOrient, GRTraceMode aTrace_Mode );
+                                   int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 
     virtual void                    SetLayerPolarity( bool aPositive );
 
@@ -538,19 +539,19 @@ public: DXF_PLOTTER() : PLOTTER( PLOT_FORMAT_DXF )
     virtual void PlotImage( wxImage & aImage, wxPoint aPos, double aScaleFactor );
 
     virtual void thick_segment( wxPoint start, wxPoint end, int width,
-                                GRTraceMode tracemode );
+                                EDA_DRAW_MODE_T tracemode );
     virtual void arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
                       FILL_T fill, int width = -1 );
     virtual void pen_to( wxPoint pos, char plume );
     virtual void flash_pad_circle( wxPoint pos, int diametre,
-                                   GRTraceMode trace_mode );
+                                   EDA_DRAW_MODE_T trace_mode );
     virtual void flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                 GRTraceMode trace_mode );
+                                 EDA_DRAW_MODE_T trace_mode );
     virtual void flash_pad_rect( wxPoint pos, wxSize size,
-                                 int orient, GRTraceMode trace_mode );
+                                 int orient, EDA_DRAW_MODE_T trace_mode );
 
     virtual void flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
-                                   int aPadOrient, GRTraceMode aTrace_Mode );
+                                   int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode );
 
     virtual void SetLayerPolarity( bool aPositive ) {}
 

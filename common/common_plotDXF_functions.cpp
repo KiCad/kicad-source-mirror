@@ -213,15 +213,17 @@ void DXF_PLOTTER::set_dash( bool dashed )
  * @param aPlotMode = FILLED, SKETCH ..
  */
 void DXF_PLOTTER::thick_segment( wxPoint aStart, wxPoint aEnd, int aWidth,
-                                 GRTraceMode aPlotMode )
+                                 EDA_DRAW_MODE_T aPlotMode )
 {
-    if( aPlotMode == FILAIRE )  /* just a line is Ok */
+    if( aPlotMode == LINE )  /* just a line is Ok */
     {
         move_to( aStart );
         finish_to( aEnd );
     }
     else
+    {
         segment_as_oval( aStart, aEnd, aWidth, aPlotMode );
+    }
 }
 
 
@@ -253,7 +255,7 @@ void DXF_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int radius,
 
 /* Plot oval pad at position. */
 void DXF_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                  GRTraceMode trace_mode )
+                                  EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( output_file );
 
@@ -272,7 +274,7 @@ void DXF_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 
 /* Plot round pad or via. */
 void DXF_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
-                                    GRTraceMode trace_mode )
+                                    EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( output_file );
     circle( pos, diametre, NO_FILL );
@@ -283,7 +285,7 @@ void DXF_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
  * Plot rectangular pad vertical or horizontal (rectangular Pad)
  */
 void DXF_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
-                                  int orient, GRTraceMode trace_mode )
+                                  int orient, EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( output_file );
     wxSize size;
@@ -353,7 +355,7 @@ void DXF_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
  * Plot mode = FILLED, SKETCH (unused)
  */
 void DXF_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
-                                     int aPadOrient, GRTraceMode aTrace_Mode )
+                                    int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 {
     wxASSERT( output_file );
     wxPoint coord[4];       /* coord actual corners of a trapezoidal trace */
