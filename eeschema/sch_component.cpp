@@ -1252,8 +1252,8 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             int  fieldNdx;
 
             wxString fieldText;
-            GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
-            GRTextVertJustifyType  vjustify = GR_TEXT_VJUSTIFY_CENTER;
+            EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
+            EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
 
             ptcar = (char*) aLine;
 

@@ -38,24 +38,24 @@ class ZONE_CONTAINER;
 
 
 void PlotTextePcb( PLOTTER* plotter, TEXTE_PCB* pt_texte, int masque_layer,
-                   GRTraceMode trace_mode );
+                   EDA_DRAW_MODE_T trace_mode );
 
 /* Plat PCB text type, ie other than text on modules
  * prepare the plot settings of text */
 void PlotDrawSegment( PLOTTER* plotter, DRAWSEGMENT* PtSegm, int masque_layer,
-                      GRTraceMode trace_mode );
+                      EDA_DRAW_MODE_T trace_mode );
 
 void PlotDimension( PLOTTER* plotter, DIMENSION* Dimension, int masque_layer,
-                    GRTraceMode trace_mode );
+                    EDA_DRAW_MODE_T trace_mode );
 
 void PlotPcbTarget( PLOTTER* plotter, PCB_TARGET* PtMire, int masque_layer,
-                    GRTraceMode trace_mode );
+                    EDA_DRAW_MODE_T trace_mode );
 
 void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
-                        GRTraceMode trace_mode );
+                        EDA_DRAW_MODE_T trace_mode );
 
 void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
-                      GRTraceMode trace_mode );
+                      EDA_DRAW_MODE_T trace_mode );
 
 /* PLOTGERB.CPP */
 void SelectD_CODE_For_LineDraw( PLOTTER* plotter, int aSize );

@@ -454,7 +454,7 @@ bool PS_PLOTTER::end_plot()
  * The shape is drawn as a segment
  */
 void PS_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                 GRTraceMode modetrace )
+                                 EDA_DRAW_MODE_T modetrace )
 {
     wxASSERT( output_file );
     int x0, y0, x1, y1, delta;
@@ -487,7 +487,7 @@ void PS_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 /* Plot round pad or via.
  */
 void PS_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
-                                   GRTraceMode modetrace )
+                                   EDA_DRAW_MODE_T modetrace )
 {
     wxASSERT( output_file );
 
@@ -507,7 +507,7 @@ void PS_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
 /* Plot rectangular pad in any orientation.
  */
 void PS_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
-                                 int orient, GRTraceMode trace_mode )
+                                 int orient, EDA_DRAW_MODE_T trace_mode )
 {
     static std::vector< wxPoint > cornerList;
     cornerList.clear();
@@ -555,7 +555,7 @@ void PS_PLOTTER::flash_pad_rect( wxPoint pos, wxSize size,
  * Plot mode FILLED or SKETCH
  */
 void PS_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
-                                     int aPadOrient, GRTraceMode aTrace_Mode )
+                                   int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 {
     static std::vector< wxPoint > cornerList;
     cornerList.clear();

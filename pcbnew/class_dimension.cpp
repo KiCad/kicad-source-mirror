@@ -347,11 +347,11 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxP
     width   = m_Width;
 
     if( DC->LogicalToDeviceXRel( width ) < 2 )
-        typeaff = FILAIRE;
+        typeaff = LINE;
 
     switch( typeaff )
     {
-    case FILAIRE:
+    case LINE:
         width = 0;
 
     case FILLED:

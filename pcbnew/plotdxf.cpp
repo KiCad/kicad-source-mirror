@@ -16,7 +16,7 @@
 
 
 bool PCB_BASE_FRAME::ExportToDxfFile( const wxString& aFullFileName, int aLayer,
-                                      GRTraceMode aTraceMode )
+                                      EDA_DRAW_MODE_T aTraceMode )
 {
     Ki_PageDescr* currentsheet = GetScreen()->m_CurrentSheetDesc;
 

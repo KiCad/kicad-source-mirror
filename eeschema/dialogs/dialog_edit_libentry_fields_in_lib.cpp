@@ -712,12 +712,12 @@ bool DIALOG_EDIT_LIBENTRY_FIELDS_IN_LIB::copyPanelToSelectedField()
         field.m_Orient = TEXT_ORIENT_HORIZ;
 
     // Copy the text justification
-    static const GRTextHorizJustifyType hjustify[3] = {
+    static const EDA_TEXT_HJUSTIFY_T hjustify[3] = {
         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_HJUSTIFY_CENTER,
         GR_TEXT_HJUSTIFY_RIGHT
     };
 
-    static const GRTextVertJustifyType vjustify[3] = {
+    static const EDA_TEXT_VJUSTIFY_T vjustify[3] = {
         GR_TEXT_VJUSTIFY_BOTTOM, GR_TEXT_VJUSTIFY_CENTER,
         GR_TEXT_VJUSTIFY_TOP
     };

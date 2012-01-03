@@ -119,12 +119,12 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     }
 
     if( DC->LogicalToDeviceXRel( m_Width ) < MIN_DRAW_WIDTH )
-        typeaff = FILAIRE;
+        typeaff = LINE;
 
     switch( type_trace )
     {
     case S_SEGMENT:
-        if( typeaff == FILAIRE )
+        if( typeaff == LINE )
             GRLine( panel->GetClipBox(), DC, ux0, uy0, dx, dy, 0, color );
         else if( typeaff == FILLED )
             GRLine( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
@@ -137,7 +137,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     case S_CIRCLE:
         radius = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
 
-        if( typeaff == FILAIRE )
+        if( typeaff == LINE )
         {
             GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius, color );
         }
@@ -164,7 +164,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         if( StAngle > EndAngle )
             EXCHG( StAngle, EndAngle );
 
-        if( typeaff == FILAIRE )
+        if( typeaff == LINE )
         {
             GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle, radius, color );
         }

@@ -546,8 +546,8 @@ void SCH_FIELD::doPlot( PLOTTER* aPlotter )
      * and use GetBoundaryBox to know the text coordinate considered as centered
      */
     EDA_RECT BoundaryBox = GetBoundingBox();
-    GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
-    GRTextVertJustifyType vjustify  = GR_TEXT_VJUSTIFY_CENTER;
+    EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
+    EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
     wxPoint  textpos = BoundaryBox.Centre();
 
     int      thickness = GetPenSize();
