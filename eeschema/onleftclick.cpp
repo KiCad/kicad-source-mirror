@@ -76,10 +76,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             case SCH_FIELD_T:
             case SCH_BITMAP_T:
             case SCH_NO_CONNECT_T:
-                item->Place( this, aDC );
-                GetScreen()->SetCurItem( NULL );
-                GetScreen()->TestDanglingEnds();
-                m_canvas->Refresh( true );
+                addCurrentItemToList( aDC );
                 return;
 
             case SCH_LINE_T:    // May already be drawing segment.
@@ -133,12 +130,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            item->Place( this, aDC );
-            m_canvas->SetAutoPanRequest( false );
+            addCurrentItemToList( aDC );
         }
 
-        GetScreen()->TestDanglingEnds();
-        m_canvas->Refresh( true );
         break;
 
     case ID_JUNCTION_BUTT:
@@ -150,30 +144,22 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            item->Place( this, aDC );
-            m_canvas->SetAutoPanRequest( false );
+            addCurrentItemToList( aDC );
         }
 
-        GetScreen()->TestDanglingEnds();
-        m_canvas->Refresh( true );
         break;
 
     case ID_WIRETOBUS_ENTRY_BUTT:
     case ID_BUSTOBUS_ENTRY_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            item = CreateBusEntry( aDC, ( GetToolId() == ID_WIRETOBUS_ENTRY_BUTT ) ?
-                                   WIRE_TO_BUS : BUS_TO_BUS );
-            GetScreen()->SetCurItem( item );
+            CreateBusEntry( aDC, ( GetToolId() == ID_WIRETOBUS_ENTRY_BUTT ) ?
+                            WIRE_TO_BUS : BUS_TO_BUS );
             m_canvas->SetAutoPanRequest( true );
         }
         else
         {
-            item->Place( this, aDC );
-            GetScreen()->SetCurItem( NULL );
-            GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh( true );
-            m_canvas->SetAutoPanRequest( false );
+            addCurrentItemToList( aDC );
         }
         break;
 
@@ -204,9 +190,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            item->Place( this, aDC );
-            m_canvas->SetAutoPanRequest( false );
+            addCurrentItemToList( aDC );
         }
+
         break;
 
     case ID_ADD_IMAGE_BUTT:
@@ -217,9 +203,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            item->Place( this, aDC );
-            m_canvas->SetAutoPanRequest( false );
+            addCurrentItemToList( aDC );
         }
+
         break;
 
     case ID_LABEL_BUTT:
@@ -230,11 +216,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            item->Place( this, aDC );
-            m_canvas->SetAutoPanRequest( false );
-            GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh( true );
+            addCurrentItemToList( aDC );
         }
+
         break;
 
     case ID_GLABEL_BUTT:
@@ -251,26 +235,27 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            item->Place( this, aDC );
-            m_canvas->SetAutoPanRequest( false );
-            GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh( true );
+            addCurrentItemToList( aDC );
         }
+
         break;
 
     case ID_SHEET_SYMBOL_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            GetScreen()->SetCurItem( CreateSheet( aDC ) );
-            m_canvas->SetAutoPanRequest( true );
+            item = CreateSheet( aDC );
+
+            if( item != NULL )
+            {
+                GetScreen()->SetCurItem( item );
+                m_canvas->SetAutoPanRequest( true );
+            }
         }
         else
         {
-            item->Place( this, aDC );
-            m_canvas->SetAutoPanRequest( false );
-            GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh( true );
+            addCurrentItemToList( aDC );
         }
+
         break;
 
     case ID_IMPORT_HLABEL_BUTT:
@@ -290,10 +275,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else if( (item->Type() == SCH_SHEET_PIN_T) && (item->GetFlags() != 0) )
         {
-            item->Place( this, aDC );
-            GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh( true );
+            addCurrentItemToList( aDC );
         }
+
         break;
 
     case ID_SCH_PLACE_COMPONENT:
@@ -304,11 +288,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            item->Place( this, aDC );
-            m_canvas->SetAutoPanRequest( false );
-            GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh( true );
+            addCurrentItemToList( aDC );
         }
+
         break;
 
     case ID_PLACE_POWER_BUTT:
@@ -320,11 +302,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            item->Place( this, aDC );
-            m_canvas->SetAutoPanRequest( false );
-            GetScreen()->TestDanglingEnds();
-            m_canvas->Refresh( true );
+            addCurrentItemToList( aDC );
         }
+
         break;
 
     default:
