@@ -180,15 +180,6 @@ public:
                        int             aColor = -1 ) = 0;
 
     /**
-     * Function Place
-     * place the schematic item into the draw list.
-     * <p>
-     * If the schematic item is a new item or is modified, it is added to undo list.
-     * </p>
-     */
-    virtual void Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC );
-
-    /**
      * Function Move
      * moves the item by \a aMoveVector to a new position.
      * @param aMoveVector = the displacement vector

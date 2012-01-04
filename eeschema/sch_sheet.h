@@ -148,8 +148,6 @@ public:
      */
     SCH_SHEET* GetParent() const { return (SCH_SHEET*) m_Parent; }
 
-    void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
-
     /**
      * Function Save
      * writes the data structures for this object out to a FILE in "*.sch"
@@ -341,8 +339,6 @@ public:
      * @return True if the sheet loaded successfully.
      */
     virtual bool Load( LINE_READER& aLine, wxString& aErrorMsg );
-
-    void Place( SCH_EDIT_FRAME* frame, wxDC* DC );
 
     void DisplayInfo( EDA_DRAW_FRAME* frame );
 
