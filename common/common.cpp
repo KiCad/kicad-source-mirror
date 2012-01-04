@@ -178,24 +178,24 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString )
 
 // Standard page sizes in 1/1000 inch
 #if defined(KICAD_GOST)
-static const PAGE_INFO  pageA4(    wxSize(  8283, 11700 ),  wxPoint( 0, 0 ), wxT( "A4" ) );
+static const PAGE_INFO  pageA4(    wxSize(  8283, 11700 ),  wxT( "A4" ) );
 #else
-static const PAGE_INFO  pageA4(    wxSize( 11700,  8267 ),  wxPoint( 0, 0 ), wxT( "A4" ) );
+static const PAGE_INFO  pageA4(    wxSize( 11700,  8267 ),  wxT( "A4" ) );
 #endif
-static const PAGE_INFO  pageA3(    wxSize( 16535, 11700 ),  wxPoint( 0, 0 ), wxT( "A3" ) );
-static const PAGE_INFO  pageA2(    wxSize( 23400, 16535 ),  wxPoint( 0, 0 ), wxT( "A2" ) );
-static const PAGE_INFO  pageA1(    wxSize( 33070, 23400 ),  wxPoint( 0, 0 ), wxT( "A1" ) );
-static const PAGE_INFO  pageA0(    wxSize( 46800, 33070 ),  wxPoint( 0, 0 ), wxT( "A0" ) );
-static const PAGE_INFO  pageA(     wxSize( 11000,  8500 ),  wxPoint( 0, 0 ), wxT( "A" ) );
-static const PAGE_INFO  pageB(     wxSize( 17000, 11000 ),  wxPoint( 0, 0 ), wxT( "B" ) );
-static const PAGE_INFO  pageC(     wxSize( 22000, 17000 ),  wxPoint( 0, 0 ), wxT( "C" ) );
-static const PAGE_INFO  pageD(     wxSize( 34000, 22000 ),  wxPoint( 0, 0 ), wxT( "D" ) );
-static const PAGE_INFO  pageE(     wxSize( 44000, 34000 ),  wxPoint( 0, 0 ), wxT( "E" ) );
-static const PAGE_INFO  pageGERBER(wxSize( 32000, 32000 ),  wxPoint( 0, 0 ), wxT( "GERBER" ) );
+static const PAGE_INFO  pageA3(    wxSize( 16535, 11700 ),  wxT( "A3" ) );
+static const PAGE_INFO  pageA2(    wxSize( 23400, 16535 ),  wxT( "A2" ) );
+static const PAGE_INFO  pageA1(    wxSize( 33070, 23400 ),  wxT( "A1" ) );
+static const PAGE_INFO  pageA0(    wxSize( 46800, 33070 ),  wxT( "A0" ) );
+static const PAGE_INFO  pageA(     wxSize( 11000,  8500 ),  wxT( "A" ) );
+static const PAGE_INFO  pageB(     wxSize( 17000, 11000 ),  wxT( "B" ) );
+static const PAGE_INFO  pageC(     wxSize( 22000, 17000 ),  wxT( "C" ) );
+static const PAGE_INFO  pageD(     wxSize( 34000, 22000 ),  wxT( "D" ) );
+static const PAGE_INFO  pageE(     wxSize( 44000, 34000 ),  wxT( "E" ) );
+static const PAGE_INFO  pageGERBER(wxSize( 32000, 32000 ),  wxT( "GERBER" ) );
 
 double PAGE_INFO::s_user_width  = 17.0;
 double PAGE_INFO::s_user_height = 11.0;
-static const PAGE_INFO  pageUser(  wxSize( 17000, 11000 ),  wxPoint( 0, 0 ), wxT( "User" ) );
+static const PAGE_INFO  pageUser(  wxSize( 17000, 11000 ),  wxT( "User" ) );
 
 static const PAGE_INFO* stdPageSizes[] = {
     &pageA4,
@@ -263,13 +263,12 @@ bool PAGE_INFO::SetType( const wxString& aType )
 }
 
 
-PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxPoint& aOffsetMils, const wxString& aType )
+PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType )
 {
     // aSizeMils is in 1/1000th of an inch
     SetWidthInches(  aSizeMils.x / 1000.0 );
     SetHeightInches( aSizeMils.y / 1000.0 );
 
-    m_Offset = aOffsetMils;
     m_Type   = aType;
 
     // Adjust the default value for margins to 400 mils (0,4 inch or 10 mm)

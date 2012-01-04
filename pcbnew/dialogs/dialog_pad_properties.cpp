@@ -343,7 +343,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         break;
     }
 
-    msg.Printf( wxT( "%d" ), m_dummyPad->m_Orient );
+    msg.Printf( wxT( "%g" ), m_dummyPad->GetOrientation() );
     m_PadOrientCtrl->SetValue( msg );
 
     // Type of pad selection
@@ -493,7 +493,7 @@ void DIALOG_PAD_PROPERTIES::PadOrientEvent( wxCommandEvent& event )
     }
 
     wxString msg;
-    msg.Printf( wxT( "%d" ), m_dummyPad->m_Orient );
+    msg.Printf( wxT( "%g" ), m_dummyPad->GetOrientation() );
     m_PadOrientCtrl->SetValue( msg );
 
     TransfertDataToPad( m_dummyPad );
@@ -775,10 +775,11 @@ bool DIALOG_PAD_PROPERTIES::TransfertDataToPad( D_PAD* aPad, bool aPromptOnError
     aPad->m_Offset.x = ReturnValueFromTextCtrl( *m_ShapeOffset_X_Ctrl, internalUnits );
     aPad->m_Offset.y = ReturnValueFromTextCtrl( *m_ShapeOffset_Y_Ctrl, internalUnits );
 
-    long orient_value = 0;
+    double orient_value = 0;
     msg = m_PadOrientCtrl->GetValue();
-    msg.ToLong( &orient_value );
-    aPad->m_Orient = orient_value;
+    msg.ToDouble( &orient_value );
+
+    aPad->SetOrientation( orient_value );
 
     msg = m_PadNumCtrl->GetValue().Left( 4 );
     aPad->SetPadName( msg );

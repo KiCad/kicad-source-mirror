@@ -605,7 +605,7 @@ void CVPCB_MAINFRAME::DisplayStatus()
 {
     wxString msg;
 
-    msg.Printf( _( "Components: %d (free: %d)" ), m_components.size(), m_undefinedComponentCnt );
+    msg.Printf( _( "Components: %d (free: %d)" ), (int) m_components.size(), m_undefinedComponentCnt );
     SetStatusText( msg, 0 );
 
     SetStatusText( wxEmptyString, 1 );
@@ -614,10 +614,10 @@ void CVPCB_MAINFRAME::DisplayStatus()
     {
         if( m_FootprintList->m_UseFootprintFullList )
             msg.Printf( _( "Footprints (All): %d" ),
-                        m_FootprintList->m_ActiveFootprintList->GetCount() );
+                        (int) m_FootprintList->m_ActiveFootprintList->GetCount() );
         else
             msg.Printf( _( "Footprints (filtered): %d" ),
-                        m_FootprintList->m_ActiveFootprintList->GetCount() );
+                        (int) m_FootprintList->m_ActiveFootprintList->GetCount() );
     }
     else
     {

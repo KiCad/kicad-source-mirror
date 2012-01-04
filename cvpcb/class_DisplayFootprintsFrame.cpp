@@ -87,7 +87,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( CVPCB_MAINFRAME* father,
     SetIcon( icon );
 
     SetBoard( new BOARD() );
-    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
+    SetScreen( new PCB_SCREEN( GetPageSizeIU() ) );
 
     LoadSettings();
 

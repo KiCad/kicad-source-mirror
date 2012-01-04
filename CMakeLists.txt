@@ -22,8 +22,8 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 
 option(USE_PNG_BITMAPS "use PNG bitmaps instead of XPM (default ON)" ON)
 
-option(USE_NEW_PCBNEW_LOAD "use new plugin support for legacy file format (default OFF)" OFF)
-option(USE_NEW_PCBNEW_SAVE "use new plugin support for legacy file format (default OFF)" OFF)
+option(USE_NEW_PCBNEW_LOAD "use new plugin support for legacy file format (default ON)" ON)
+option(USE_NEW_PCBNEW_SAVE "use new plugin support for legacy file format (default ON)" ON)
 
 # Russian GOST patch
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
@@ -264,6 +264,11 @@ add_subdirectory(potrace)
 add_subdirectory(bitmap2component)
 add_subdirectory(pcb_calculator)
 #add_subdirectory(new)
+
+
+add_executable( container_test EXCLUDE_FROM_ALL container_test.cpp )
+target_link_libraries( container_test common polygon bitmaps ${wxWidgets_LIBRARIES} )
+
 
 #############
 # Resources #

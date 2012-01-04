@@ -119,7 +119,7 @@ void FOOTPRINTS_LISTBOX::SetFootprintFullList( FOOTPRINT_LIST& list )
     for( unsigned ii = 0; ii < list.GetCount(); ii++ )
     {
         FOOTPRINT_INFO & footprint = list.GetItem(ii);
-        msg.Printf( wxT( "%3d %s" ), m_FullFootprintList.GetCount() + 1,
+        msg.Printf( wxT( "%3d %s" ), (int) m_FullFootprintList.GetCount() + 1,
                    GetChars(footprint.m_Module) );
         m_FullFootprintList.Add( msg );
     }
