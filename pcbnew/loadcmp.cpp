@@ -91,9 +91,13 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
     PlaceModule( aModule, NULL );
 
+    // Put it on FRONT layer,
+    // because this is the default in ModEdit, and in libs
     if( aModule->GetLayer() != LAYER_N_FRONT )
         aModule->Flip( aModule->m_Pos );
 
+    // Put it in orientation 0,
+    // because this is the default orientation in ModEdit, and in libs
     Rotate_Module( NULL, aModule, 0, false );
     GetScreen()->ClrModify();
     Zoom_Automatique( false );
@@ -189,15 +193,15 @@ MODULE* PCB_BASE_FRAME::Load_Module_From_Library( const wxString& library, wxDC*
         module->SetTimeStamp( GetNewTimeStamp() );
         GetBoard()->m_Status_Pcb = 0;
         module->SetPosition( curspos );
+        // Put it on FRONT layer,
+        // (Can be stored on BACK layer if the lib is an archive built from a board)
+        if( module->GetLayer() != LAYER_N_FRONT )
+            module->Flip( module->m_Pos );
+        // Put in in orientation 0,
+        // even if it is not saved with with orientation 0 in lib
+        // (Can happen if the lib is an archive built from a board)
+        Rotate_Module( NULL, module, 0, false );
 
-        /* TODO: call RecalculateAllTracksNetcode() only if some pads pads have
-         * a netname.
-         * If all pads are not connected (usually the case in module libraries,
-         * rebuild only the pad and list of nets ( faster)
-         */
-
-
-//        GetBoard()->m_Pcb->m_NetInfo.BuildListOfNets();
         RecalculateAllTracksNetcode();
 
         if( DC )

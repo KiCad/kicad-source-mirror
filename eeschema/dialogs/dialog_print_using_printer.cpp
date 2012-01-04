@@ -326,9 +326,12 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     old_org = aScreen->m_DrawOrg;
     oldClipBox = *panel->GetClipBox();
 
-    /* Change scale factor, offsets, and clip box to print the whole page. */
-    panel->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
+    // Change clip box to print the whole page.
+    #define MAX_VALUE (INT_MAX/2)   // MAX_VALUE is the max we can use in an integer
+                                    // and that allows calculations without overflow
+    panel->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( MAX_VALUE, MAX_VALUE ) ) );
 
+    // Change scale factor and offset to print the whole page.
     bool printReference = parent->GetPrintSheetReference();
 
     if( printReference )
