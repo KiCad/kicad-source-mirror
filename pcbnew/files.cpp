@@ -299,9 +299,10 @@ this file again." ) );
         }
     }
     catch( IO_ERROR ioe )
-    {wxMessageBox("catch");
+    {
         wxString msg = wxString::Format(  _( "Error loading board.\n%s" ),
                             ioe.errorText.GetData() );
+
         wxMessageBox( msg, _( "Open Board File" ), wxOK | wxICON_ERROR );
     }
 

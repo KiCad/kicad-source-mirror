@@ -64,8 +64,8 @@ class SCH_SCREEN : public BASE_SCREEN
     int         m_refCount;     ///< Number of sheets referencing this screen.
                                 ///< Delete when it goes to zero.
 
-                                /// The size of the paper to print or plot on
-    PAGE_INFO   m_paper;        // keep with the MVC model as this class gets split
+    /// The size of the paper to print or plot on
+    PAGE_INFO   m_paper;        // keep with the MVC 'model' as this class gets split
 
     SCH_ITEM*   m_drawList;     ///< Object list for the screen.
                                 /// @todo use DLIST<SCH_ITEM> or superior container

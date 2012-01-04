@@ -367,7 +367,7 @@ wxString PCB_BASE_FRAME::Select_1_Module_From_List( EDA_DRAW_FRAME* aWindow,
 
     if( footprint_names_list.GetCount() )
     {
-        msg.Printf( _( "Modules [%d items]" ), footprint_names_list.GetCount() );
+        msg.Printf( _( "Modules [%d items]" ), (int) footprint_names_list.GetCount() );
         EDA_LIST_DIALOG dlg( aWindow, msg, footprint_names_list, OldName,
                              DisplayCmpDoc, GetComponentDialogPosition() );
 

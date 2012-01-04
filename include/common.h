@@ -44,13 +44,13 @@ class BASE_SCREEN;
 class EDA_DRAW_FRAME;
 class EDA_DRAW_PANEL;
 
-/* Flag for special keys */
+// Flag for special keys
 #define GR_KB_RIGHTSHIFT 0x10000000                 /* Keybd states: right
                                                      * shift key depressed */
 #define GR_KB_LEFTSHIFT  0x20000000                 /* left shift key depressed
                                                      */
-#define GR_KB_CTRL       0x40000000                 /* CTRL depressed */
-#define GR_KB_ALT        0x80000000                 /* ALT depressed */
+#define GR_KB_CTRL       0x40000000                 // CTRL depressed
+#define GR_KB_ALT        0x80000000                 // ALT depressed
 #define GR_KB_SHIFT      (GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT)
 #define GR_KB_SHIFTCTRL  (GR_KB_SHIFT | GR_KB_CTRL)
 #define MOUSE_MIDDLE     0x08000000                 /* Middle button mouse
@@ -74,7 +74,7 @@ enum pseudokeys {
 
 #define ESC 27
 
-/* TODO Executable names TODO*/
+// TODO Executable names TODO
 #ifdef __WINDOWS__
 #define CVPCB_EXE           wxT( "cvpcb.exe" )
 #define PCBNEW_EXE          wxT( "pcbnew.exe" )
@@ -101,7 +101,7 @@ enum pseudokeys {
 #endif
 
 
-/* Graphic Texts Orientation in 0.1 degree*/
+// Graphic Texts Orientation in 0.1 degree
 #define TEXT_ORIENT_HORIZ 0
 #define TEXT_ORIENT_VERT  900
 
@@ -116,13 +116,13 @@ enum EDA_UNITS_T {
 };
 
 #if defined(KICAD_GOST)
-#define GOST_LEFTMARGIN   800    /* 20mm */
-#define GOST_RIGHTMARGIN  200    /* 5mm */
-#define GOST_TOPMARGIN    200    /* 5mm */
-#define GOST_BOTTOMMARGIN 200    /* 5mm */
+#define GOST_LEFTMARGIN   800    // 20mm
+#define GOST_RIGHTMARGIN  200    // 5mm
+#define GOST_TOPMARGIN    200    // 5mm
+#define GOST_BOTTOMMARGIN 200    // 5mm
 
 #endif
-/* forward declarations: */
+// forward declarations:
 class LibNameList;
 
 
@@ -131,9 +131,8 @@ class PAGE_INFO;
 /**
  * Class PAGE_INFO
  * describes the page size and margins of a paper page on which to
- * eventually print or plot.  Since paper is often described in inches,
- * (and due to legacy code), inches, mils, and internal units (IU) are supported
- * in the accessors.  Again, we are describing paper in this class.
+ * eventually print or plot.  Here paper is described in inches, but
+ * accessors for mils, and internal units (IU) are supported.
  *
  * @author Dick Hollenbeck
  */
@@ -141,7 +140,7 @@ class PAGE_INFO
 {
 public:
     PAGE_INFO( const wxString& aType = wxT( "A3" ) );
-    PAGE_INFO( const wxSize& aSizeMils, const wxPoint& aOffsetMils, const wxString& aName );
+    PAGE_INFO( const wxSize& aSizeMils, const wxString& aName );
 
     const wxString& GetType() const { return m_Type; }
 
@@ -187,7 +186,7 @@ public:
     const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
 #endif
 
-    wxPoint GetOffsetMils() const   { return m_Offset; }
+//    wxPoint GetOffsetMils() const   { return m_Offset; }
 
     int GetLeftMarginMils() const   { return m_LeftMargin; }
     int GetRightMarginMils() const  { return m_RightMargin; }
@@ -218,7 +217,7 @@ private:
     double      m_widthInches;
     double      m_heightInches;
 
-    wxPoint     m_Offset;          ///< plot offset in 1/1000 inches
+//    wxPoint     m_Offset;          ///< plot offset in 1/1000 inches
 
     int         m_LeftMargin;
     int         m_RightMargin;
@@ -232,10 +231,10 @@ private:
 
 extern wxString       g_ProductName;
 
-/* Default user lib path can be left void, if the standard lib path is used */
+/// Default user lib path can be left void, if the standard lib path is used
 extern wxString       g_UserLibDirBuffer;
 
-extern bool           g_ShowPageLimits; // true to display the page limits
+extern bool           g_ShowPageLimits;     ///< true to display the page limits
 
 /**
  * File extension definitions.  Please do not changes these.  If a different
@@ -263,10 +262,10 @@ extern const wxString MacrosFileWildcard;
 extern const wxString AllFilesWildcard;
 
 
-// Name of default configuration file. (kicad.pro)
+/// Name of default configuration file. (kicad.pro)
 extern wxString     g_Prj_Default_Config_FullFilename;
 
-// Name of local configuration file. (<curr projet>.pro)
+/// Name of local configuration file. (<curr projet>.pro)
 extern wxString     g_Prj_Config_LocalFilename;
 
 extern EDA_UNITS_T  g_UserUnit;     ///< display units
@@ -275,7 +274,7 @@ extern EDA_UNITS_T  g_UserUnit;     ///< display units
 extern int          g_GhostColor;
 
 
-/* COMMON.CPP */
+// COMMON.CPP
 
 /**
  * Function SetLocaleTo_C_standard

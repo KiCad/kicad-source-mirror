@@ -620,7 +620,7 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, int aDrawMode, int aC
 
 void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 {
-    for( SCH_ITEM* item = GetDrawItems(); item != NULL; item = item->Next() )
+    for( SCH_ITEM* item = GetDrawItems();  item;  item = item->Next() )
     {
         aPlotter->set_current_line_width( item->GetPenSize() );
         item->Plot( aPlotter );
