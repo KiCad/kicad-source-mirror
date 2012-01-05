@@ -97,14 +97,15 @@ static GRID_TYPE SchematicGridList[] = {
 #define SCHEMATIC_GRID_LIST_CNT ( sizeof( SchematicGridList ) / sizeof( GRID_TYPE ) )
 
 
-SCH_SCREEN::SCH_SCREEN( const wxSize& aPageSizeIU ) :
-    BASE_SCREEN( SCH_SCREEN_T )
+SCH_SCREEN::SCH_SCREEN() :
+    BASE_SCREEN( SCH_SCREEN_T ),
+    m_paper( wxT( "A4" ) )
 {
     size_t i;
 
     SetDrawItems( NULL );               // Schematic items list
 
-    m_Zoom = 32;
+    SetZoom( 32 );
 
     for( i = 0; i < SCHEMATIC_ZOOM_LIST_CNT; i++ )
         m_ZoomList.Add( SchematicZoomList[i] );
@@ -118,7 +119,7 @@ SCH_SCREEN::SCH_SCREEN( const wxSize& aPageSizeIU ) :
     // Suitable for schematic only. For libedit and viewlib, must be set to true
     m_Center = false;
 
-    InitDataPoints( aPageSizeIU );
+    InitDataPoints( m_paper.GetSizeIU() );
 }
 
 
@@ -574,8 +575,8 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
      * sheet ( ScreenNumber = 1 ) within the files
      */
 
-    if( fprintf( aFile, "$Descr %s %d %d\n", TO_UTF8( m_CurrentSheetDesc->m_Name ),
-                 m_CurrentSheetDesc->m_Size.x, m_CurrentSheetDesc->m_Size.y ) < 0
+    if( fprintf( aFile, "$Descr %s %d %d\n", TO_UTF8( m_paper.GetType() ),
+                 m_paper.GetWidthMils(), m_paper.GetHeightMils() ) < 0
         || fprintf( aFile, "encoding utf-8\n") < 0
         || fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen ) < 0
         || fprintf( aFile, "Title %s\n",    EscapedUTF8( m_Title ).c_str() ) < 0

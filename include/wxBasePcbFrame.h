@@ -133,8 +133,6 @@ public:
         return m_Pcb;
     }
 
-    BOARD_DESIGN_SETTINGS* GetDesignSettings();
-
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
@@ -147,10 +145,7 @@ public:
     virtual void SetToolID( int aId, int aCursor, const wxString& aToolMsg );
     virtual void UpdateStatusBar();
 
-    virtual PCB_SCREEN* GetScreen() const
-    {
-        return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen();
-    }
+    PCB_SCREEN* GetScreen() const { return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
 
     /**
      * Function BestZoom

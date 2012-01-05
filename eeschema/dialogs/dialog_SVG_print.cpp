@@ -238,7 +238,6 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
     screen->m_IsPrinting   = false;
     panel->m_ClipBox       = tmp;
 
-
     GRForceBlackPen( false );
 
     screen->m_StartVisu    = tmp_startvisu;

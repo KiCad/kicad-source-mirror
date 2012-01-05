@@ -176,7 +176,7 @@ private:
     COLORS_DESIGN_SETTINGS* m_colorsSettings;       // Link to current colors settings
     PAGE_INFO               m_paper;
 
-    /// Position of the origin axis.
+    /// Position of the origin axis, which is used in exports mostly
     wxPoint             m_originAxisPosition;
 
     /**

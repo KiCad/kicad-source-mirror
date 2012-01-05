@@ -65,7 +65,10 @@ class SCH_SCREEN : public BASE_SCREEN
                                 ///< Delete when it goes to zero.
 
     /// The size of the paper to print or plot on
-    PAGE_INFO   m_paper;        // keep with the MVC 'model' as this class gets split
+    PAGE_INFO   m_paper;        // keep with the MVC 'model' if this class gets split
+
+    /// Position of the origin axis, which is used in exports mostly, but not yet in EESCHEMA
+    wxPoint     m_originAxisPosition;
 
     SCH_ITEM*   m_drawList;     ///< Object list for the screen.
                                 /// @todo use DLIST<SCH_ITEM> or superior container
@@ -86,9 +89,8 @@ public:
 
     /**
      * Constructor
-     * @param aPageSizeIU is the size of the initial paper page in internal units.
      */
-    SCH_SCREEN( const wxSize& aPageSizeIU );
+    SCH_SCREEN();
 
     ~SCH_SCREEN();
 
@@ -99,6 +101,9 @@ public:
 
     const PAGE_INFO& GetPageSettings() const                { return m_paper; }
     void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
+
+    const wxPoint& GetOriginAxisPosition() const            { return m_originAxisPosition; }
+    void SetOriginAxisPosition( const wxPoint& aPosition )  { m_originAxisPosition = aPosition; }
 
     void DecRefCount();
 

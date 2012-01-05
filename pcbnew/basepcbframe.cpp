@@ -48,7 +48,7 @@
 #include "class_drawpanel.h"
 
 
-/* Configuration entry names. */
+// Configuration entry names.
 static const wxString UserGridSizeXEntry( wxT( "PcbUserGrid_X" ) );
 static const wxString UserGridSizeYEntry( wxT( "PcbUserGrid_Y" ) );
 static const wxString UserGridUnitsEntry( wxT( "PcbUserGrid_Unit" ) );
@@ -94,7 +94,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
 
     m_DisplayModEdge      = FILLED; // How to display module drawings (line/ filled / sketch)
     m_DisplayModText      = FILLED; // How to display module texts (line/ filled / sketch)
-    m_DisplayPcbTrackFill = true;   /* false = sketch , true = filled */
+    m_DisplayPcbTrackFill = true;   // false = sketch , true = filled
     m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
     m_ModuleEditFrame     = NULL;   // Frame for footprint edition
 
@@ -194,14 +194,7 @@ EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 }
 
 
-BOARD_DESIGN_SETTINGS* PCB_BASE_FRAME::GetDesignSettings()
-{
-    wxASSERT( m_Pcb );
-    return m_Pcb ? &m_Pcb->GetDesignSettings() : NULL;
-}
-
-
-double PCB_BASE_FRAME::BestZoom( void )
+double PCB_BASE_FRAME::BestZoom()
 {
     int    dx, dy;
 
@@ -236,7 +229,7 @@ double PCB_BASE_FRAME::BestZoom( void )
 }
 
 
-void PCB_BASE_FRAME::CursorGoto(  const wxPoint& aPos )
+void PCB_BASE_FRAME::CursorGoto( const wxPoint& aPos )
 {
     // factored out of pcbnew/find.cpp
 
@@ -244,7 +237,7 @@ void PCB_BASE_FRAME::CursorGoto(  const wxPoint& aPos )
 
     wxClientDC dc( m_canvas );
 
-    /* There may be need to reframe the drawing. */
+    // There may be need to reframe the drawing.
     if( !m_canvas->IsPointOnDisplay( aPos ) )
     {
         screen->SetCrossHairPosition( aPos );
@@ -267,7 +260,7 @@ void PCB_BASE_FRAME::ReCreateMenuBar( void )
 }
 
 
-/* Virtual functions: Do nothing for PCB_BASE_FRAME window */
+// Virtual functions: Do nothing for PCB_BASE_FRAME window
 void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
 }

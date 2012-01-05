@@ -142,8 +142,7 @@ public:
     wxString        m_Commentaire3;
     wxString        m_Commentaire4;
 
-    /* Grid and zoom values. */
-    wxPoint	m_GridOrigin;
+    wxPoint	        m_GridOrigin;
 
     wxArrayDouble m_ZoomList;       ///< Array of standard zoom (i.e. scale) coefficients.
     bool       m_IsPrinting;

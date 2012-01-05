@@ -79,8 +79,8 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     switch( g_UserUnit )
     {
     case MILLIMETRES:
-        userSizeX  = m_user_size.GetWidthInches()  * 25.4;
-        userSizeY  = m_user_size.GetHeightInches() * 25.4;
+        userSizeX  = m_user_size.GetWidthMils()  * 25.4e-3;
+        userSizeY  = m_user_size.GetHeightMils() * 25.4e-3;
 
         msg.Printf( wxT( "%.2f" ), userSizeX );
         m_TextUserSizeX->SetValue( msg );
@@ -91,8 +91,8 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
     default:
     case INCHES:
-        userSizeX  = m_user_size.GetWidthInches();
-        userSizeY  = m_user_size.GetHeightInches();
+        userSizeX  = m_user_size.GetWidthMils() / 1000.0;
+        userSizeY  = m_user_size.GetHeightMils() / 1000.0;
 
         msg.Printf( wxT( "%.3f" ), userSizeX );
         m_TextUserSizeX->SetValue( msg );
@@ -101,10 +101,10 @@ void DIALOG_PAGES_SETTINGS::initDialog()
         m_TextUserSizeY->SetValue( msg );
         break;
 
-/*  // you want it in 1/1000ths of an inch, why?
+/*  // you want it in mils, why?
     case UNSCALED_UNITS:
-        userSizeX  = m_user_size.GetWidthInches() * 1000;
-        userSizeY  = m_user_size.GetHeightInches() * 1000;
+        userSizeX  = m_user_size.GetWidthMils();
+        userSizeY  = m_user_size.GetHeightMils();
         msg.Printf( wxT( "%f" ), m_userSizeX );
         m_TextUserSizeX->SetValue( msg );
         msg.Printf( wxT( "%f" ), m_userSizeY );
@@ -204,20 +204,20 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
     switch( g_UserUnit )
     {
     case MILLIMETRES:
-        PAGE_INFO::SetUserWidthInches( userSizeX / 25.4 );
-        PAGE_INFO::SetUserHeightInches( userSizeY / 25.4 );
+        PAGE_INFO::SetUserWidthMils( int( userSizeX * 1000.0 / 25.4 ) );
+        PAGE_INFO::SetUserHeightMils( int( userSizeY * 1000.0 / 25.4 ) );
         break;
 
     default:
     case INCHES:
-        PAGE_INFO::SetUserWidthInches( userSizeX );
-        PAGE_INFO::SetUserHeightInches( userSizeY );
+        PAGE_INFO::SetUserWidthMils( int( 1000 * userSizeX ) );
+        PAGE_INFO::SetUserHeightMils( int( 1000 * userSizeY ) );
         break;
 
 /*      // set in 1/1000ths of an inch, but why?
     case UNSCALED_UNITS:
-        PAGE_INFO::SetUserWidthInches( userSizeX /1000 );
-        PAGE_INFO::SetUserHeightInches( userSizeY /1000 );
+        PAGE_INFO::SetUserWidthMils( (int) userSizeX );
+        PAGE_INFO::SetUserHeightMils( (int) userSizeY );
         break;
 */
     }

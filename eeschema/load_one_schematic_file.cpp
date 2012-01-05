@@ -48,7 +48,7 @@
 #include "sch_bitmap.h"
 
 
-bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* Window );
+bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* Window );
 
 static void LoadLayers( LINE_READER* aLine );
 
@@ -300,45 +300,20 @@ static void LoadLayers( LINE_READER* aLine )
 
 
 /* Read the schematic header. */
-bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, BASE_SCREEN* aScreen )
+bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* aScreen )
 {
-    char            Text[256];
+    char            text[256];
     char            buf[1024];
-    int             ii;
-    PAGE_INFO*   wsheet = &g_Sheet_A4;
-    wxSize          PageSize;
-    char*           line;
+    wxSize          pageSize;
+    char*           line = aLine->Line();
 
-    static PAGE_INFO* SheetFormatList[] =
-    {
-        &g_Sheet_A4,   &g_Sheet_A3,   &g_Sheet_A2,   &g_Sheet_A1, &g_Sheet_A0,
-        &g_Sheet_A,    &g_Sheet_B,    &g_Sheet_C,    &g_Sheet_D,  &g_Sheet_E,
-        &g_Sheet_user, NULL
-    };
+    sscanf( line, "%s %s %d %d", text, text, &pageSize.x, &pageSize.y );
 
-    line = aLine->Line();
+    wxString pagename = FROM_UTF8( text );
 
-    sscanf( line, "%s %s %d %d", Text, Text, &PageSize.x, &PageSize.y );
+    PAGE_INFO       pageInfo;
 
-    wxString pagename = FROM_UTF8( Text );
-
-    for( ii = 0; SheetFormatList[ii] != NULL; ii++ )
-    {
-        wsheet = SheetFormatList[ii];
-
-        if( wsheet->m_Name.CmpNoCase( pagename ) == 0 ) /* Descr found ! */
-        {
-            // Get the user page size and make it the default
-            if( wsheet == &g_Sheet_user )
-            {
-                g_Sheet_user.m_Size = PageSize;
-            }
-
-            break;
-        }
-    }
-
-    if( SheetFormatList[ii] == NULL )
+    if( !pageInfo.SetType( pagename ) )
     {
         aMsgDiag.Printf( wxT( "Eeschema file dimension definition error \
 line %d, \aAbort reading file.\n" ),
@@ -346,7 +321,13 @@ line %d, \aAbort reading file.\n" ),
         aMsgDiag << FROM_UTF8( line );
     }
 
-    aScreen->m_CurrentSheetDesc = wsheet;
+    if( pagename == wxT( "User" ) )
+    {
+        pageInfo.SetWidthMils( pageSize.x );
+        pageInfo.SetHeightMils( pageSize.y );
+    }
+
+    aScreen->SetPageSettings( pageInfo );
 
     for( ; ; )
     {

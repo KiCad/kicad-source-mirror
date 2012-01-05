@@ -41,7 +41,7 @@
 #include "worksheet.h"
 #include "dialog_hotkeys_editor.h"
 
-#include "class_pad.h"
+#include "class_board.h"
 
 #include "pcbplot.h"
 #include "pcbnew.h"
@@ -210,7 +210,7 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
 PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
 {
     PARAM_CFG_ARRAY         pca;
-    BOARD_DESIGN_SETTINGS&  bds = *GetDesignSettings();
+    BOARD_DESIGN_SETTINGS&  bds = GetBoard()->GetDesignSettings();
 
     pca.push_back( new PARAM_CFG_FILENAME( wxT( "LibDir" ),&g_UserLibDirBuffer,
                                                            GROUPLIB ) );

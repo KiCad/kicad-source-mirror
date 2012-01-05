@@ -176,53 +176,53 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString )
 
 //-----<PAGE_INFO>-------------------------------------------------------------
 
-// Standard page sizes in 1/1000 inch
+// Standard page sizes in mils
 #if defined(KICAD_GOST)
-static const PAGE_INFO  pageA4(    wxSize(  8283, 11700 ),  wxT( "A4" ) );
+const PAGE_INFO  PAGE_INFO::pageA4(    wxSize(  8283, 11700 ),  wxT( "A4" ) );
 #else
-static const PAGE_INFO  pageA4(    wxSize( 11700,  8267 ),  wxT( "A4" ) );
+const PAGE_INFO  PAGE_INFO::pageA4(    wxSize( 11700,  8267 ),  wxT( "A4" ) );
 #endif
-static const PAGE_INFO  pageA3(    wxSize( 16535, 11700 ),  wxT( "A3" ) );
-static const PAGE_INFO  pageA2(    wxSize( 23400, 16535 ),  wxT( "A2" ) );
-static const PAGE_INFO  pageA1(    wxSize( 33070, 23400 ),  wxT( "A1" ) );
-static const PAGE_INFO  pageA0(    wxSize( 46800, 33070 ),  wxT( "A0" ) );
-static const PAGE_INFO  pageA(     wxSize( 11000,  8500 ),  wxT( "A" ) );
-static const PAGE_INFO  pageB(     wxSize( 17000, 11000 ),  wxT( "B" ) );
-static const PAGE_INFO  pageC(     wxSize( 22000, 17000 ),  wxT( "C" ) );
-static const PAGE_INFO  pageD(     wxSize( 34000, 22000 ),  wxT( "D" ) );
-static const PAGE_INFO  pageE(     wxSize( 44000, 34000 ),  wxT( "E" ) );
-static const PAGE_INFO  pageGERBER(wxSize( 32000, 32000 ),  wxT( "GERBER" ) );
+const PAGE_INFO  PAGE_INFO::pageA3(    wxSize( 16535, 11700 ),  wxT( "A3" ) );
+const PAGE_INFO  PAGE_INFO::pageA2(    wxSize( 23400, 16535 ),  wxT( "A2" ) );
+const PAGE_INFO  PAGE_INFO::pageA1(    wxSize( 33070, 23400 ),  wxT( "A1" ) );
+const PAGE_INFO  PAGE_INFO::pageA0(    wxSize( 46800, 33070 ),  wxT( "A0" ) );
+const PAGE_INFO  PAGE_INFO::pageA(     wxSize( 11000,  8500 ),  wxT( "A" ) );
+const PAGE_INFO  PAGE_INFO::pageB(     wxSize( 17000, 11000 ),  wxT( "B" ) );
+const PAGE_INFO  PAGE_INFO::pageC(     wxSize( 22000, 17000 ),  wxT( "C" ) );
+const PAGE_INFO  PAGE_INFO::pageD(     wxSize( 34000, 22000 ),  wxT( "D" ) );
+const PAGE_INFO  PAGE_INFO::pageE(     wxSize( 44000, 34000 ),  wxT( "E" ) );
+const PAGE_INFO  PAGE_INFO::pageGERBER(wxSize( 32000, 32000 ),  wxT( "GERBER" ) );
+const PAGE_INFO  PAGE_INFO::pageUser(  wxSize( 17000, 11000 ),  wxT( "User" ) );
 
-double PAGE_INFO::s_user_width  = 17.0;
-double PAGE_INFO::s_user_height = 11.0;
-static const PAGE_INFO  pageUser(  wxSize( 17000, 11000 ),  wxT( "User" ) );
+int PAGE_INFO::s_user_width  = 17000;
+int PAGE_INFO::s_user_height = 11000;
 
-static const PAGE_INFO* stdPageSizes[] = {
-    &pageA4,
-    &pageA3,
-    &pageA2,
-    &pageA1,
-    &pageA0,
-    &pageA,
-    &pageB,
-    &pageC,
-    &pageD,
-    &pageE,
-    // &pageGERBER,  omitted, not standard
-    &pageUser,
-};
-
-
+/*
 wxArrayString PAGE_INFO::GetStandardSizes()
 {
     wxArrayString ret;
+
+    static const PAGE_INFO* stdPageSizes[] = {
+        &pageA4,
+        &pageA3,
+        &pageA2,
+        &pageA1,
+        &pageA0,
+        &pageA,
+        &pageB,
+        &pageC,
+        &pageD,
+        &pageE,
+        // &pageGERBER,     // standard?
+        &pageUser,
+    };
 
     for( unsigned i=0;  i < DIM( stdPageSizes );  ++i )
         ret.Add( stdPageSizes[i]->GetType() );
 
     return ret;
 }
-
+*/
 
 bool PAGE_INFO::SetType( const wxString& aType )
 {
@@ -252,9 +252,13 @@ bool PAGE_INFO::SetType( const wxString& aType )
         *this = pageGERBER;
     else if( aType == pageUser.GetType() )
     {
+        // pageUser is const, and may not and does not hold the custom size,
+        // so customize *this later
         *this  = pageUser;
-        m_widthInches  = s_user_width;
-        m_heightInches = s_user_height;
+
+        // customize:
+        m_size.x = s_user_width;
+        m_size.y = s_user_height;
     }
     else
         rc = false;
@@ -263,22 +267,18 @@ bool PAGE_INFO::SetType( const wxString& aType )
 }
 
 
-PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType )
+PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType ) :
+    m_size( aSizeMils )
 {
-    // aSizeMils is in 1/1000th of an inch
-    SetWidthInches(  aSizeMils.x / 1000.0 );
-    SetHeightInches( aSizeMils.y / 1000.0 );
+    m_type   = aType;
 
-    m_Type   = aType;
-
-    // Adjust the default value for margins to 400 mils (0,4 inch or 10 mm)
 #if defined(KICAD_GOST)
-    m_LeftMargin   = GOST_LEFTMARGIN;
-    m_RightMargin  = GOST_RIGHTMARGIN;
-    m_TopMargin    = GOST_TOPMARGIN;
-    m_BottomMargin = GOST_BOTTOMMARGIN;
+    m_left_margin   = GOST_LEFTMARGIN;
+    m_right_margin  = GOST_RIGHTMARGIN;
+    m_top_margin    = GOST_TOPMARGIN;
+    m_bottom_margin = GOST_BOTTOMMARGIN;
 #else
-    m_LeftMargin = m_RightMargin = m_TopMargin = m_BottomMargin = 400;
+    m_left_margin = m_right_margin = m_top_margin = m_bottom_margin = 400;
 #endif
 }
 
@@ -289,42 +289,24 @@ PAGE_INFO::PAGE_INFO( const wxString& aType )
 }
 
 
-void PAGE_INFO::SetWidthInches( double aWidthInInches )
+void PAGE_INFO::SetUserWidthMils( int aWidthInMils )
 {
-    // limit resolution to 1/1000th of an inch
-    int mils = aWidthInInches * 1000 + 0.5;
+    if( aWidthInMils < 6000 )
+        aWidthInMils = 6000;
+    else if( aWidthInMils > 44000 )
+        aWidthInMils = 44000;
 
-    m_widthInches = mils / 1000.0;
+    s_user_width = aWidthInMils;
 }
 
-
-void PAGE_INFO::SetHeightInches( double aHeightInInches )
+void PAGE_INFO::SetUserHeightMils( int aHeightInMils )
 {
-    // limit resolution to 1/1000th of an inch
-    int mils = aHeightInInches * 1000 + 0.5;
+    if( aHeightInMils < 4000 )
+        aHeightInMils = 4000;
+    else if( aHeightInMils > 44000 )
+        aHeightInMils = 44000;
 
-    m_heightInches = mils / 1000.0;
-}
-
-
-void PAGE_INFO::SetUserWidthInches( double aWidthInInches )
-{
-    if( aWidthInInches < 6.0 )
-        aWidthInInches = 6.0;
-    else if( aWidthInInches > 44.0 )
-        aWidthInInches = 44.0;
-
-    s_user_width = aWidthInInches;
-}
-
-void PAGE_INFO::SetUserHeightInches( double aHeightInInches )
-{
-    if( aHeightInInches < 4.0 )
-        aHeightInInches = 4.0;
-    else if( aHeightInInches > 44.0 )
-        aHeightInInches = 44.0;
-
-    s_user_height = aHeightInInches;
+    s_user_height = aHeightInMils;
 }
 
 

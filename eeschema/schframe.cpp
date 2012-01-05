@@ -285,6 +285,39 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 }
 
 
+void SCH_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
+{
+    GetScreen()->SetPageSettings( aPageSettings );
+}
+
+
+const PAGE_INFO& SCH_EDIT_FRAME::GetPageSettings () const
+{
+    return GetScreen()->GetPageSettings();
+}
+
+
+const wxSize SCH_EDIT_FRAME::GetPageSizeIU() const
+{
+    // GetSizeIU is compile time dependent:
+    return GetScreen()->GetPageSettings().GetSizeIU();
+}
+
+
+const wxPoint& SCH_EDIT_FRAME::GetOriginAxisPosition() const
+{
+    wxASSERT( GetScreen() );
+    return GetScreen()->GetOriginAxisPosition();
+}
+
+
+void SCH_EDIT_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
+{
+    wxASSERT( GetScreen() );
+    GetScreen()->SetOriginAxisPosition( aPosition );
+}
+
+
 void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 {
     SCH_SCREEN* screen = GetScreen();
@@ -345,7 +378,7 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     if( g_RootSheet->GetScreen() == NULL )
     {
-        g_RootSheet->SetScreen( new SCH_SCREEN( GetPageSettings().GetSizeIU() ) );
+        g_RootSheet->SetScreen( new SCH_SCREEN() );
         SetScreen( g_RootSheet->GetScreen() );
     }
 
@@ -355,7 +388,7 @@ void SCH_EDIT_FRAME::CreateScreens()
     m_CurrentSheet->Push( g_RootSheet );
 
     if( GetScreen() == NULL )
-        SetScreen( new SCH_SCREEN( GetPageSettings().GetSizeIU() ) );
+        SetScreen( new SCH_SCREEN() );
 
     GetScreen()->SetZoom( 32.0 );
     GetScreen()->m_UndoRedoCountMax = 10;
@@ -489,8 +522,8 @@ double SCH_EDIT_FRAME::BestZoom()
     int    dx, dy;
     wxSize size;
 
-    dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
-    dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
+    dx = GetScreen()->GetPageSettings().GetWidthIU();
+    dy = GetScreen()->GetPageSettings().GetHeightIU();
 
     size = m_canvas->GetClientSize();
 
