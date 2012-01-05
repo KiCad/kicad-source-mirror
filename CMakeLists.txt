@@ -22,8 +22,8 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 
 option(USE_PNG_BITMAPS "use PNG bitmaps instead of XPM (default ON)" ON)
 
-option(USE_NEW_PCBNEW_LOAD "use new plugin support for legacy file format (default ON)" ON)
-option(USE_NEW_PCBNEW_SAVE "use new plugin support for legacy file format (default ON)" ON)
+option(USE_NEW_PCBNEW_LOAD "use new plugin support for legacy file format" OFF)
+option(USE_NEW_PCBNEW_SAVE "use new plugin support for legacy file format" OFF)
 
 # Russian GOST patch
 option(wxUSE_UNICODE "enable/disable building unicode (default OFF)")
