@@ -466,8 +466,8 @@ void KICAD_PLUGIN::loadSHEET()
                 // only parse the width and height if page size is "User"
                 if( wname == wxT( "User" ) )
                 {
-                    char*   width  = strtok( line, delims );
-                    char*   height = strtok( line, delims );
+                    char*   width  = strtok( NULL, delims );
+                    char*   height = strtok( NULL, delims );
 
                     if( width && height )
                     {
