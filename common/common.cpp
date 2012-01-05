@@ -299,6 +299,7 @@ void PAGE_INFO::SetUserWidthMils( int aWidthInMils )
     s_user_width = aWidthInMils;
 }
 
+
 void PAGE_INFO::SetUserHeightMils( int aHeightInMils )
 {
     if( aHeightInMils < 4000 )
@@ -308,7 +309,6 @@ void PAGE_INFO::SetUserHeightMils( int aHeightInMils )
 
     s_user_height = aHeightInMils;
 }
-
 
 //-----</PAGE_INFO>------------------------------------------------------------
 
@@ -541,7 +541,6 @@ wxArrayString* wxStringSplit( wxString aString, wxChar aSplitter )
  */
 double To_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value )
 {
-
     switch( aUnit )
     {
     case MILLIMETRES:
