@@ -52,7 +52,7 @@ static void TraceFilledCircle( BOARD* Pcb,
 static void TraceCircle( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
                          int color, int op_logic );
 
-/* Macro call to update cell. */
+// Macro call to update cell.
 #define OP_CELL( layer, dy, dx )                                        \
     {                                                                   \
         if( layer < 0 )                                                 \
@@ -109,10 +109,10 @@ void PlacePad( BOARD* Pcb, D_PAD* pt_pad, int color, int marge, int op_logic )
         dy += abs( pt_pad->m_DeltaSize.x ) / 2;
     }
 
-    if( ( pt_pad->m_Orient % 900 ) == 0 ) /* The pad is a rectangle
-                                           * horizontally or vertically. */
+    // The pad is a rectangle horizontally or vertically.
+    if( int( pt_pad->GetOrientation() ) % 900 == 0 )
     {
-        /* Orientation turned 90 deg. */
+        // Orientation turned 90 deg.
         if( ( pt_pad->m_Orient == 900 ) || ( pt_pad->m_Orient == 2700 ) )
         {
             EXCHG( dx, dy );
@@ -158,17 +158,17 @@ void TraceFilledCircle( BOARD* Pcb,
     int   tstwrite = 0;
     int   distmin;
 
-    /* Determine occupied layer. */
+    // Determine occupied layer.
 
     /* Single routing layer on bitmap and BOTTOM
      * Route_Layer_B = Route_Layer_A */
 
     if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
-        trace = 1;       /* Trace on BOTTOM */
+        trace = 1;       // Trace on BOTTOM
 
     if( aLayerMask & GetLayerMask( Route_Layer_TOP ) )
         if( Nb_Sides )
-            trace |= 2;  /* Trace on TOP */
+            trace |= 2;  // Trace on TOP
 
     if( trace == 0 )
         return;
@@ -202,13 +202,13 @@ void TraceFilledCircle( BOARD* Pcb,
 
     distmin = radius;
 
-    /* Calculate the bounding rectangle of the circle. */
+    // Calculate the bounding rectangle of the circle.
     ux0 = cx - radius;
     uy0 = cy - radius;
     ux1 = cx + radius;
     uy1 = cy + radius;
 
-    /* Calculate limit coordinates of cells belonging to the rectangle. */
+    // Calculate limit coordinates of cells belonging to the rectangle.
     row_max = uy1 / Board.m_GridRouting;
     col_max = ux1 / Board.m_GridRouting;
     row_min = uy0 / Board.m_GridRouting;  // if (uy0 > row_min*Board.m_GridRouting) row_min++;
@@ -226,7 +226,7 @@ void TraceFilledCircle( BOARD* Pcb,
     if( col_max >= (Ncols - 1) )
         col_max = Ncols - 1;
 
-    /* Calculate coordinate limits of cell belonging to the rectangle. */
+    // Calculate coordinate limits of cell belonging to the rectangle.
     if( row_min > row_max )
         row_max = row_min;
 
@@ -265,7 +265,7 @@ void TraceFilledCircle( BOARD* Pcb,
      * (Adverse event: pad off grid in the center of the 4 neighboring
      * diagonal) */
     distmin  = Board.m_GridRouting / 2 + 1;
-    fdistmin = ( (float) distmin * distmin ) * 2; /* Distance to center point diagonally */
+    fdistmin = ( (float) distmin * distmin ) * 2; // Distance to center point diagonally
 
     for( row = row_min; row <= row_max; row++ )
     {
@@ -297,13 +297,13 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
 
     half_width = ( pt_segm->m_Width / 2 ) + marge;
 
-    /* Calculate the bounding rectangle of the segment (if H, V or Via) */
+    // Calculate the bounding rectangle of the segment (if H, V or Via)
     ux0 = pt_segm->m_Start.x - Pcb->GetBoundingBox().GetX();
     uy0 = pt_segm->m_Start.y - Pcb->GetBoundingBox().GetY();
     ux1 = pt_segm->m_End.x - Pcb->GetBoundingBox().GetX();
     uy1 = pt_segm->m_End.y - Pcb->GetBoundingBox().GetY();
 
-    /* Test if VIA (filled circle was drawn) */
+    // Test if VIA (filled circle was drawn)
     if( pt_segm->Type() == PCB_VIA_T )
     {
         int mask_layer = 0;
@@ -333,7 +333,7 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
     if( color == VIA_IMPOSSIBLE )
         layer = -1;
 
-    /* The segment is here a straight line or a circle or an arc.: */
+    // The segment is here a straight line or a circle or an arc.:
     if( pt_segm->m_Shape == S_CIRCLE )
     {
         TraceCircle( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
@@ -346,7 +346,7 @@ void TraceSegmentPcb( BOARD* Pcb, TRACK* pt_segm, int color, int marge, int op_l
         return;
     }
 
-    /* The segment is here a line segment. */
+    // The segment is here a line segment.
     if( ( ux0 != ux1 ) && ( uy0 != uy1 ) ) // Segment tilts.
     {
         DrawSegmentQcq( ux0, uy0, ux1, uy1, half_width, layer, color, op_logic );
@@ -396,7 +396,7 @@ void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_
         lim = y1 / Board.m_GridRouting;
         dx  = x0 / Board.m_GridRouting;
 
-        /* Clipping limits of board. */
+        // Clipping limits of board.
         if( ( dx < 0 ) || ( dx >= Ncols ) )
             return;
 
@@ -423,7 +423,7 @@ void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_
         lim = x1 / Board.m_GridRouting;
         dy  = y0 / Board.m_GridRouting;
 
-        /* Clipping limits of board. */
+        // Clipping limits of board.
         if( ( dy < 0 ) || ( dy >= Nrows ) )
             return;
 
@@ -441,8 +441,8 @@ void TracePcbLine( int x0, int y0, int x1, int y1, int layer, int color, int op_
         return;
     }
 
-    /* Here is some perspective: using the algorithm LUCAS. */
-    if( abs( x1 - x0 ) >= abs( y1 - y0 ) ) /* segment slightly inclined/ */
+    // Here is some perspective: using the algorithm LUCAS.
+    if( abs( x1 - x0 ) >= abs( y1 - y0 ) ) // segment slightly inclined/
     {
         if( x1 < x0 )
         {
@@ -526,10 +526,10 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
     void (* WriteCell)( int, int, int, MATRIX_CELL );
 
     if( ( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) ) )
-        trace = 1;     /* Trace on BOTTOM */
+        trace = 1;     // Trace on BOTTOM
 
     if( ( aLayerMask & GetLayerMask( Route_Layer_TOP ) ) && Nb_Sides )
-        trace |= 2;    /* Trace on TOP */
+        trace |= 2;    // Trace on TOP
 
     if( trace == 0 )
         return;
@@ -563,7 +563,7 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
     ux1 -= Pcb->GetBoundingBox().GetX();
     uy1 -= Pcb->GetBoundingBox().GetY();
 
-    /* Calculating limits coord cells belonging to the rectangle. */
+    // Calculating limits coord cells belonging to the rectangle.
     row_max = uy1 / Board.m_GridRouting;
     col_max = ux1 / Board.m_GridRouting;
     row_min = uy0 / Board.m_GridRouting;
@@ -606,8 +606,8 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
                            int angle, int aLayerMask, int color, int op_logic )
 {
     int  row, col;
-    int  cx, cy;    /* Center of rectangle */
-    int  radius;     /* Radius of the circle */
+    int  cx, cy;    // Center of rectangle
+    int  radius;     // Radius of the circle
     int  row_min, row_max, col_min, col_max;
     int  rotrow, rotcol;
     int  trace = 0;
@@ -615,12 +615,12 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
     void (* WriteCell)( int, int, int, MATRIX_CELL );
 
     if( aLayerMask & GetLayerMask( Route_Layer_BOTTOM ) )
-        trace = 1;     /* Trace on BOTTOM */
+        trace = 1;     // Trace on BOTTOM
 
     if( aLayerMask & GetLayerMask( Route_Layer_TOP ) )
     {
         if( Nb_Sides )
-            trace |= 2;  /* Trace on TOP */
+            trace |= 2;  // Trace on TOP
     }
 
     if( trace == 0 )
@@ -660,7 +660,7 @@ void TraceFilledRectangle( BOARD* Pcb, int ux0, int uy0, int ux1, int uy1,
     radius = (int) sqrt( (double) ( cx - ux0 ) * ( cx - ux0 )
                        + (double) ( cy - uy0 ) * ( cy - uy0 ) );
 
-    /* Calculating coordinate limits belonging to the rectangle. */
+    // Calculating coordinate limits belonging to the rectangle.
     row_max = ( cy + radius ) / Board.m_GridRouting;
     col_max = ( cx + radius ) / Board.m_GridRouting;
     row_min = ( cy - radius ) / Board.m_GridRouting;
@@ -756,14 +756,14 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
         break;
     }
 
-    /* Make coordinate ux1 tj > ux0 to simplify calculations */
+    // Make coordinate ux1 tj > ux0 to simplify calculations
     if( ux1 < ux0 )
     {
         EXCHG( ux1, ux0 );
         EXCHG( uy1, uy0 );
     }
 
-    /* Calculating the incrementing the Y axis */
+    // Calculating the incrementing the Y axis
     inc = 1;
 
     if( uy1 < uy0 )
@@ -819,7 +819,7 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
             angle = -900;
     }
 
-    RotatePoint( &dx, &dy, angle );   /* dx = length, dy = 0 */
+    RotatePoint( &dx, &dy, angle );   // dx = length, dy = 0
 
     for( col = col_min; col <= col_max; col++ )
     {
@@ -833,7 +833,7 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
             RotatePoint( &cx, &cy, angle );
 
             if( abs( cy ) > lg )
-                continue;             /* The point is too far on the Y axis. */
+                continue;             // The point is too far on the Y axis.
 
             /* This point a test is close to the segment: the position
              * along the X axis must be tested.
@@ -844,7 +844,7 @@ void DrawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, int layer,
                 continue;
             }
 
-            /* Examination of extremities are rounded. */
+            // Examination of extremities are rounded.
             if( ( cx < 0 ) && ( cx >= -lg ) )
             {
                 if( ( ( cx * cx ) + ( cy * cy ) ) <= ( lg * lg ) )

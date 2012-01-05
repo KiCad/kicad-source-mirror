@@ -142,9 +142,8 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 {
     int          tmpzoom;
     wxPoint      tmp_startvisu;
-    wxSize       SheetSize;     // Page size in internal units
     wxPoint      old_org;
-    wxPoint      DrawOffset; // Offset de trace
+    wxPoint      DrawOffset;    // Offset de trace
     double       userscale;
     double       DrawZoom = 1;
     wxDC*        dc = GetDC();
@@ -153,65 +152,68 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     wxBusyCursor dummy;
 
-    /* Save old draw scale and draw offset */
+    // Save old draw scale and draw offset
     tmp_startvisu = screen->m_StartVisu;
     tmpzoom = screen->GetZoom();
     old_org = screen->m_DrawOrg;
-    /* Change draw scale and offset to draw the whole page */
+
+    // Change draw scale and offset to draw the whole page
     screen->SetScalingFactor( DrawZoom );
     screen->m_DrawOrg.x   = screen->m_DrawOrg.y = 0;
     screen->m_StartVisu.x = screen->m_StartVisu.y = 0;
 
-    SheetSize = screen->m_CurrentSheetDesc->m_Size;       // size in 1/1000 inch
-    SheetSize.x *= m_Parent->GetInternalUnits() / 1000;
-    SheetSize.y *= m_Parent->GetInternalUnits() / 1000;            // size in internal units
-
     PCB_BASE_FRAME* pcbframe = (PCB_BASE_FRAME*) m_Parent;
 
-    EDA_RECT brd_BBox = pcbframe->GetBoard()->ComputeBoundingBox();
+    wxSize  pageSizeIU = pcbframe->GetPageSizeIU();  // internal units
+    EDA_RECT bbbox     = pcbframe->GetBoard()->ComputeBoundingBox();
 
     // In module editor, the module is located at 0,0 but for printing
-    // it is moved to SheetSize.x/2, SheetSize.y/2.
+    // it is moved to pageSizeIU.x/2, pageSizeIU.y/2.
     // So the equivalent board must be moved:
     if( m_Parent->IsType( MODULE_EDITOR_FRAME ) )
     {
-        wxPoint mv_offset;
-        mv_offset.x = SheetSize.x / 2;
-        mv_offset.y = SheetSize.y / 2;
-        brd_BBox.Move( mv_offset );
+        bbbox.Move( wxPoint( pageSizeIU.x/2, pageSizeIU.y/2 ) );
     }
 
-    /* Compute the PCB size in internal units*/
+    // Compute the PCB size in internal units
     userscale = m_PrintParams.m_PrintScale;
 
-    if( userscale == 0 )            //  fit in page
+    if( userscale == 0 )                //  fit in page
     {
-        int extra_margin = 4000*2;    // Margin = 4000 units pcb = 0.4 inch
-        SheetSize.x = brd_BBox.GetWidth() + extra_margin;
-        SheetSize.y = brd_BBox.GetHeight() + extra_margin;
+        // Margin = 0.4 inch
+#if defined(KICAD_NANOMETRE)
+        int extra_margin = int( 0.4 * 25400 );      // nanometers
+#else
+        int extra_margin = int( 0.4 * 1000 );       // deci-mils
+#endif
+
+        pageSizeIU.x = bbbox.GetWidth()  + extra_margin * 2;
+        pageSizeIU.y = bbbox.GetHeight() + extra_margin * 2;
+
         userscale   = 0.99;
     }
-
 
     if( (m_PrintParams.m_PrintScale > 1.0)          //  scale > 1 -> Recadrage
        || (m_PrintParams.m_PrintScale == 0) )       //  fit in page
     {
-        DrawOffset += brd_BBox.Centre();
+        DrawOffset += bbbox.Centre();
     }
 
     if( m_PrintParams.m_PageSetupData )
     {
         wxSize pagesize;
-        pagesize.x = (int)  (SheetSize.x / userscale);
-        pagesize.y = (int)  (SheetSize.y / userscale);
-        FitThisSizeToPageMargins(pagesize, *m_PrintParams.m_PageSetupData );
+
+        pagesize.x = int( pageSizeIU.x / userscale );
+        pagesize.y = int( pageSizeIU.y / userscale );
+
+        FitThisSizeToPageMargins( pagesize, *m_PrintParams.m_PageSetupData );
     }
 
     // Compute Accurate scale 1
     if( userscale == 1.0 )
     {
         // We want a 1:1 scale and margins for printing
-        MapScreenSizeToPaper( );
+        MapScreenSizeToPaper();
         int w, h;
         GetPPIPrinter( &w, &h );
         double accurate_Xscale = ( (double) ( DrawZoom * w ) ) / (double) PCB_INTERNAL_UNIT;
@@ -264,7 +266,6 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     if( m_PrintParams.m_Print_Black_and_White )
         GRForceBlackPen( true );
 
-
     EDA_DRAW_PANEL* panel = m_Parent->GetCanvas();
     EDA_RECT        tmp   = *panel->GetClipBox();
 
@@ -304,7 +305,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
          * for scales > 1, the DrawOffset was already computed to have the board centre
          * to the middle of the page.
          */
-        wxPoint pcb_centre = brd_BBox.Centre();
+        wxPoint pcb_centre = bbbox.Centre();
 
         if( userscale <= 1.0 )
             DrawOffset.y += pcb_centre.y - (ysize / 2);

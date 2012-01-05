@@ -48,7 +48,7 @@
 #include "class_drawpanel.h"
 
 
-/* Configuration entry names. */
+// Configuration entry names.
 static const wxString UserGridSizeXEntry( wxT( "PcbUserGrid_X" ) );
 static const wxString UserGridSizeYEntry( wxT( "PcbUserGrid_Y" ) );
 static const wxString UserGridUnitsEntry( wxT( "PcbUserGrid_Unit" ) );
@@ -94,7 +94,7 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( wxWindow*       father,
 
     m_DisplayModEdge      = FILLED; // How to display module drawings (line/ filled / sketch)
     m_DisplayModText      = FILLED; // How to display module texts (line/ filled / sketch)
-    m_DisplayPcbTrackFill = true;   /* false = sketch , true = filled */
+    m_DisplayPcbTrackFill = true;   // false = sketch , true = filled
     m_Draw3DFrame         = NULL;   // Display Window in 3D mode (OpenGL)
     m_ModuleEditFrame     = NULL;   // Frame for footprint edition
 
@@ -126,6 +126,48 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 }
 
 
+void PCB_BASE_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
+{
+    wxASSERT( m_Pcb );
+    m_Pcb->SetPageSettings( aPageSettings );
+
+    if( GetScreen() )
+        GetScreen()->InitDataPoints( aPageSettings.GetSizeIU() );
+}
+
+
+const PAGE_INFO& PCB_BASE_FRAME::GetPageSettings() const
+{
+    wxASSERT( m_Pcb );
+    return m_Pcb->GetPageSettings();
+}
+
+
+const wxSize PCB_BASE_FRAME::GetPageSizeIU() const
+{
+    wxASSERT( m_Pcb );
+
+    // this function is only needed because EDA_DRAW_FRAME is not compiled
+    // with either -DPCBNEW or -DEESCHEMA, so the virtual is used to route
+    // into an application specific source file.
+    return m_Pcb->GetPageSettings().GetSizeIU();
+}
+
+
+const wxPoint& PCB_BASE_FRAME::GetOriginAxisPosition() const
+{
+    wxASSERT( m_Pcb );
+    return m_Pcb->GetOriginAxisPosition();
+}
+
+
+void PCB_BASE_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
+{
+    wxASSERT( m_Pcb );
+    m_Pcb->SetOriginAxisPosition( aPosition );
+}
+
+
 EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 {
     wxASSERT( m_Pcb );
@@ -134,18 +176,17 @@ EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 
     if( area.GetWidth() == 0 && area.GetHeight() == 0 )
     {
+        wxSize pageSize = GetPageSizeIU();
+
         if( m_showBorderAndTitleBlock )
         {
             area.SetOrigin( 0, 0 );
-            area.SetEnd( GetScreen()->ReturnPageSize().x,
-                         GetScreen()->ReturnPageSize().y );
+            area.SetEnd( pageSize.x, pageSize.y );
         }
         else
         {
-            area.SetOrigin( -GetScreen()->ReturnPageSize().x / 2,
-                            -GetScreen()->ReturnPageSize().y / 2 );
-            area.SetEnd( GetScreen()->ReturnPageSize().x / 2,
-                         GetScreen()->ReturnPageSize().y / 2 );
+            area.SetOrigin( -pageSize.x / 2, -pageSize.y / 2 );
+            area.SetEnd( pageSize.x / 2, pageSize.y / 2 );
         }
     }
 
@@ -153,14 +194,7 @@ EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 }
 
 
-BOARD_DESIGN_SETTINGS* PCB_BASE_FRAME::GetDesignSettings()
-{
-    wxASSERT( m_Pcb );
-    return m_Pcb ? &m_Pcb->GetDesignSettings() : NULL;
-}
-
-
-double PCB_BASE_FRAME::BestZoom( void )
+double PCB_BASE_FRAME::BestZoom()
 {
     int    dx, dy;
 
@@ -195,7 +229,7 @@ double PCB_BASE_FRAME::BestZoom( void )
 }
 
 
-void PCB_BASE_FRAME::CursorGoto(  const wxPoint& aPos )
+void PCB_BASE_FRAME::CursorGoto( const wxPoint& aPos )
 {
     // factored out of pcbnew/find.cpp
 
@@ -203,7 +237,7 @@ void PCB_BASE_FRAME::CursorGoto(  const wxPoint& aPos )
 
     wxClientDC dc( m_canvas );
 
-    /* There may be need to reframe the drawing. */
+    // There may be need to reframe the drawing.
     if( !m_canvas->IsPointOnDisplay( aPos ) )
     {
         screen->SetCrossHairPosition( aPos );
@@ -226,7 +260,7 @@ void PCB_BASE_FRAME::ReCreateMenuBar( void )
 }
 
 
-/* Virtual functions: Do nothing for PCB_BASE_FRAME window */
+// Virtual functions: Do nothing for PCB_BASE_FRAME window
 void PCB_BASE_FRAME::Show3D_Frame( wxCommandEvent& event )
 {
 }

@@ -21,18 +21,22 @@
  */
 void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
 {
-#define WSTEXTSIZE 50   // Text size in mils
-    Ki_PageDescr* Sheet = screen->m_CurrentSheetDesc;
-    int           xg, yg;
-    wxSize        PageSize;
-    wxPoint       pos, ref;
-    EDA_Colors    color;
+#define WSTEXTSIZE      50   // Text size in mils
 
-    /* Scale to convert dimension in 1/1000 in into internal units
-     * (1/1000 inc for Eeschema, 1/10000 for Pcbnew. */
+    const PAGE_INFO&    pageInfo = GetPageSettings();
+    wxSize              pageSize = pageInfo.GetSizeMils();  // mils
+    int                 xg, yg;
+
+    wxPoint             pos, ref;
+    EDA_Colors          color;
+
+    // paper is sized in mils.  Here is a conversion factor to
+    // scale mils to internal units.
     int      conv_unit = screen->GetInternalUnits() / 1000;
+
     wxString msg;
     wxSize   text_size;
+
 #if defined(KICAD_GOST)
     wxSize   text_size2;
     wxSize   text_size3;
@@ -41,20 +45,19 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     int      UpperLimit = VARIABLE_BLOCK_START_POSITION;
     bool     bold = false;
 #endif
-    bool     italic     = false;
+
+    bool     italic    = false;
     bool     thickness = 0;      //@todo : use current pen
 
     color = BLACK;
     plotter->set_color( color );
 
-    PageSize.x = Sheet->m_Size.x;
-    PageSize.y = Sheet->m_Size.y;
+    // Plot edge.
+    ref.x = pageInfo.GetLeftMarginMils() * conv_unit;
+    ref.y = pageInfo.GetTopMarginMils()  * conv_unit;
 
-    /* Plot edge. */
-    ref.x = Sheet->m_LeftMargin * conv_unit;
-    ref.y = Sheet->m_TopMargin * conv_unit;
-    xg    = ( PageSize.x - Sheet->m_RightMargin ) * conv_unit;
-    yg    = ( PageSize.y - Sheet->m_BottomMargin ) * conv_unit;
+    xg    = ( pageSize.x - pageInfo.GetRightMarginMils() )  * conv_unit;
+    yg    = ( pageSize.y - pageInfo.GetBottomMarginMils() ) * conv_unit;
 
 #if defined(KICAD_GOST)
     plotter->move_to( ref );
@@ -68,22 +71,30 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     pos.y = yg;
     plotter->line_to( pos );
     plotter->finish_to( ref );
+
 #else
+
     for( unsigned ii = 0; ii < 2; ii++ )
     {
         plotter->move_to( ref );
+
         pos.x = xg;
         pos.y = ref.y;
         plotter->line_to( pos );
+
         pos.x = xg;
         pos.y = yg;
         plotter->line_to( pos );
+
         pos.x = ref.x;
         pos.y = yg;
         plotter->line_to( pos );
+
         plotter->finish_to( ref );
+
         ref.x += GRID_REF_W * conv_unit;
         ref.y += GRID_REF_W * conv_unit;
+
         xg    -= GRID_REF_W * conv_unit;
         yg    -= GRID_REF_W * conv_unit;
     }
@@ -93,12 +104,13 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     text_size.x = WSTEXTSIZE * conv_unit;
     text_size.y = WSTEXTSIZE * conv_unit;
 
-    ref.x = Sheet->m_LeftMargin;
-    ref.y = Sheet->m_TopMargin;                         /* Upper left corner in
-                                                         * 1/1000 inch */
-    xg    = ( PageSize.x - Sheet->m_RightMargin );
-    yg    = ( PageSize.y - Sheet->m_BottomMargin );     /* lower right corner
-                                                         * in 1/1000 inch */
+    // upper left corner in mils
+    ref.x = pageInfo.GetLeftMarginMils();
+    ref.y = pageInfo.GetTopMarginMils();
+
+    // lower right corner in mils
+    xg    = ( pageSize.x - pageInfo.GetRightMarginMils() );
+    yg    = ( pageSize.y - pageInfo.GetBottomMarginMils() );
 
 #if defined(KICAD_GOST)
     for( Ki_WorkSheetData* WsItem = &WS_Segm1_LU;
@@ -151,7 +163,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
 
 #else
 
-    /* Plot legend along the X axis. */
+    // Plot legend along the X axis.
     int ipas  = ( xg - ref.x ) / PAS_REF;
     int gxpas = ( xg - ref.x ) / ipas;
     for( int ii = ref.x + gxpas, jj = 1; ipas > 0; ii += gxpas, jj++, ipas-- )
@@ -193,7 +205,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                        thickness, italic, false );
     }
 
-    /* Plot legend along the Y axis. */
+    // Plot legend along the Y axis.
     ipas  = ( yg - ref.y ) / PAS_REF;
     int gypas = (  yg - ref.y ) / ipas;
     for( int ii = ref.y + gypas, jj = 0; ipas > 0; ii += gypas, jj++, ipas-- )
@@ -237,9 +249,10 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
 
 #endif
 
-    /* Plot the worksheet. */
+    // Plot the worksheet.
     text_size.x = SIZETEXT * conv_unit;
     text_size.y = SIZETEXT * conv_unit;
+
 #if defined(KICAD_GOST)
     text_size2.x = SIZETEXT * conv_unit * 2;
     text_size2.y = SIZETEXT * conv_unit * 2;
@@ -247,8 +260,9 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
     text_size3.y = SIZETEXT * conv_unit * 3;
     text_size1_5.x = SIZETEXT * conv_unit * 1.5;
     text_size1_5.y = SIZETEXT * conv_unit * 1.5;
-    ref.x = PageSize.x - Sheet->m_RightMargin;
-    ref.y = PageSize.y - Sheet->m_BottomMargin;
+
+    ref.x = pageSize.x - pageInfo.GetRightMarginMils();
+    ref.y = pageSize.y - pageInfo.GetBottomMarginMils();
 
     if( screen->m_ScreenNumber == 1 )
     {
@@ -287,7 +301,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
                 if( screen->m_NumberOfScreen > 1 )
-            	    msg << screen->m_ScreenNumber;
+                    msg << screen->m_ScreenNumber;
                 plotter->text( pos, color,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
@@ -297,7 +311,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             case WS_SHEETS:
                 if( WsItem->m_Legende )
                     msg = WsItem->m_Legende;
-        	msg << screen->m_NumberOfScreen;
+            msg << screen->m_NumberOfScreen;
                 plotter->text( pos, color,
                                msg, TEXT_ORIENT_HORIZ, text_size,
                                GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
@@ -334,8 +348,8 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                                    msg, TEXT_ORIENT_HORIZ, text_size3,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
-                    pos.x = (Sheet->m_LeftMargin + 1260) * conv_unit;
-                    pos.y = (Sheet->m_TopMargin + 270) * conv_unit;
+                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * conv_unit;
+                    pos.y = (pageInfo.GetTopMarginMils() + 270) * conv_unit;
                     plotter->text( pos, color,
                                    msg.GetData(), 1800, text_size2,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
@@ -400,7 +414,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             switch( WsItem->m_Type )
             {
             case WS_CADRE:
-            /* Begin list number > 1 */
+            // Begin list number > 1
                 msg = screen->m_Commentaire1;
                 if( !msg.IsEmpty() )
                 {
@@ -408,8 +422,8 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                                    msg, TEXT_ORIENT_HORIZ, text_size3,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                    thickness, italic, false );
-                    pos.x = (Sheet->m_LeftMargin + 1260) * conv_unit;
-                    pos.y = (Sheet->m_TopMargin + 270) * conv_unit;
+                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * conv_unit;
+                    pos.y = (pageInfo.GetTopMarginMils() + 270) * conv_unit;
                     plotter->text( pos, color,
                                    msg, 1800, text_size2,
                                    GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
@@ -444,9 +458,11 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             }
         }
     }
+
 #else
-    ref.x = PageSize.x - GRID_REF_W - Sheet->m_RightMargin;
-    ref.y = PageSize.y - GRID_REF_W - Sheet->m_BottomMargin;
+
+    ref.x = pageSize.x - GRID_REF_W - pageInfo.GetRightMarginMils();
+    ref.y = pageSize.y - GRID_REF_W - pageInfo.GetBottomMarginMils();
 
     for( Ki_WorkSheetData* WsItem = &WS_Date;
          WsItem != NULL;
@@ -477,7 +493,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             break;
 
         case WS_SIZESHEET:
-            msg += screen->m_CurrentSheetDesc->m_Name;
+            msg += pageInfo.GetType();
             break;
 
         case WS_IDENTSHEET:

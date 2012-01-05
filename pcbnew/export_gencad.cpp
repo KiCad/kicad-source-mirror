@@ -145,8 +145,8 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     GetBoard()->ComputeBoundingBox();
 
     // Save the auxiliary origin for the rest of the module
-    GencadOffsetX = m_originAxisPosition.x;
-    GencadOffsetY = m_originAxisPosition.y;
+    GencadOffsetX = GetOriginAxisPosition().x;
+    GencadOffsetY = GetOriginAxisPosition().y;
 
     // No idea on *why* this should be needed... maybe to fix net names?
     Compile_Ratsnest( NULL, true );

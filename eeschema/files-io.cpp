@@ -244,7 +244,10 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
 
     if( aIsNew )
     {
-        screen->m_CurrentSheetDesc = &g_Sheet_A4;
+        /* SCH_SCREEN constructor does this now
+        screen->SetPageSettings( PAGE_INFO( wxT( "A4" ) ) );
+        */
+
         screen->SetZoom( 32 );
         screen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
         screen->m_Title = NAMELESS_PROJECT;

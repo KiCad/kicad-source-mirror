@@ -12,19 +12,17 @@
 #include "macros.h"
 #include "kicad_string.h"
 
-/* HPGL scale factor. */
+// HPGL scale factor.
 const double SCALE_HPGL = 0.102041;
 
 
-/* Set the plot offset for the current plotting
- */
 void HPGL_PLOTTER::set_viewport( wxPoint aOffset, double aScale, bool aMirror )
 {
     wxASSERT( !output_file );
     plot_offset  = aOffset;
     plot_scale   = aScale;
     device_scale = SCALE_HPGL;
-    set_default_line_width( 100 ); /* default line width in 1 / 1000 inch */
+    set_default_line_width( 100 ); // default line width in 1 / 1000 inch
     plotMirror = aMirror;
 }
 
@@ -88,7 +86,7 @@ void HPGL_PLOTTER::PlotPoly( std::vector< wxPoint >& aCornerList, FILL_T aFill, 
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
         line_to( aCornerList[ii] );
 
-    /* Close polygon if filled. */
+    // Close polygon if filled.
     if( aFill )
     {
         int ii = aCornerList.size() - 1;
@@ -172,16 +170,19 @@ void HPGL_PLOTTER::pen_control( int plume )
 void HPGL_PLOTTER::pen_to( wxPoint pos, char plume )
 {
     wxASSERT( output_file );
+
     if( plume == 'Z' )
     {
         pen_control( 'Z' );
         return;
     }
+
     pen_control( plume );
     user_to_device_coordinates( pos );
 
     if( pen_lastpos != pos )
         fprintf( output_file, "PA %d,%d;\n", pos.x, pos.y );
+
     pen_lastpos = pos;
 }
 
@@ -246,7 +247,7 @@ void HPGL_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
         angle = (StAngle - EndAngle) / 10.0;
     else
         angle = (EndAngle - StAngle) / 10.0;
-    /* Calculate start point, */
+    // Calculate start point,
     cmap.x = (int) ( centre.x + ( rayon * cos( StAngle * M_PI / 1800 ) ) );
     cmap.y = (int) ( centre.y - ( rayon * sin( StAngle * M_PI / 1800 ) ) );
     user_to_device_coordinates( cmap );
@@ -280,7 +281,7 @@ void HPGL_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
         if( orient >= 3600 )
             orient -= 3600;
     }
-    deltaxy = size.y - size.x;     /* distance between centers of the oval */
+    deltaxy = size.y - size.x;     // distance between centers of the oval
 
     if( trace_mode == FILLED )
     {
@@ -295,7 +296,7 @@ void HPGL_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
         flash_pad_circle( wxPoint( cx + pos.x,
                                    cy + pos.y ), size.x, trace_mode );
     }
-    else    /* Plot in SKETCH mode. */
+    else    // Plot in SKETCH mode.
     {
         sketch_oval( pos, size, orient, wxRound( pen_diameter ) );
     }
@@ -330,7 +331,7 @@ void HPGL_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
 
     fprintf( output_file, "PA %d,%d;CI %d;\n", pos.x, pos.y, rsize.x );
 
-    if( trace_mode == FILLED )        /* Plot in filled mode. */
+    if( trace_mode == FILLED )        // Plot in filled mode.
     {
         if( delta > 0 )
         {
@@ -378,7 +379,7 @@ void HPGL_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
     if( size.y < 0 )
         size.y = 0;
 
-    /* If a dimension is zero, the trace is reduced to 1 line. */
+    // If a dimension is zero, the trace is reduced to 1 line.
     if( size.x == 0 )
     {
         ox = pos.x;
@@ -428,7 +429,7 @@ void HPGL_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
 
     if( trace_mode == FILLED )
     {
-        /* Plot in filled mode. */
+        // Plot in filled mode.
         delta = (int) (pen_diameter - pen_overlap);
 
         if( delta > 0 )
@@ -510,11 +511,11 @@ void HPGL_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
     {
         // TODO: replace this par the HPGL plot polygon.
         int jj;
-        /* Fill the shape */
+        // Fill the shape
         move = wxRound( pen_diameter - pen_overlap );
-        /* Calculate fill height. */
+        // Calculate fill height.
 
-        if( polygone[0].y == polygone[3].y ) /* Horizontal */
+        if( polygone[0].y == polygone[3].y ) // Horizontal
         {
             jj = polygone[3].y - (int) ( pen_diameter + ( 2 * pen_overlap ) );
         }
@@ -523,10 +524,10 @@ void HPGL_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
             jj = polygone[3].x - (int) ( pen_diameter + ( 2 * pen_overlap ) );
         }
 
-        /* Calculation of dd = number of segments was traced to fill. */
+        // Calculation of dd = number of segments was traced to fill.
         jj = jj / (int) ( pen_diameter - pen_overlap );
 
-        /* Trace the outline. */
+        // Trace the outline.
         for( ; jj > 0; jj-- )
         {
             polygone[0].x += move;
@@ -538,7 +539,7 @@ void HPGL_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
             polygone[3].x -= move;
             polygone[3].y -= move;
 
-            /* Test for crossed vertexes. */
+            // Test for crossed vertexes.
             if( polygone[0].x > polygone[3].x ) /* X axis intersection on
                                                  *vertexes 0 and 3 */
             {

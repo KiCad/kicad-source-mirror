@@ -77,7 +77,7 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     break;
 
 
-    /* Hotkey IDs */
+    // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_SHOW_EDITOR:
         InstallHotkeyFrame( this, s_Eeschema_Hokeys_Descr );
         break;
@@ -145,7 +145,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     break;
 
 
-    /* Hotkey IDs */
+    // Hotkey IDs
     case ID_PREFERENCES_HOTKEY_EXPORT_CONFIG:
         ExportHotkeyConfigToFile( s_Eeschema_Hokeys_Descr );
         break;
@@ -267,7 +267,7 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
                                                       NET_TYPE_PCBNEW,
                                                       NET_TYPE_CUSTOM_MAX ) );
 
-    /* NOTE: Left as global until supporting code  can be fixed. */
+    // NOTE: Left as global until supporting code  can be fixed.
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "HPGLSpd" ),
                                                       &g_HPGL_Pen_Descr.m_Pen_Speed,
                                                       20, 2, 45 ) );
@@ -277,6 +277,8 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "HPGLNum" ),
                                                       &g_HPGL_Pen_Descr.m_Pen_Num,
                                                       1, 1, 8 ) );
+
+/* these globals don't exist
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offX_A4" ),
                                                       &g_Sheet_A4.m_Offset.x ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_A4" ),
@@ -317,6 +319,8 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
                                                       &g_Sheet_E.m_Offset.x ) );
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "offY_E" ),
                                                       &g_Sheet_E.m_Offset.y ) );
+*/
+
     m_projectFileParams.push_back( new PARAM_CFG_INT( wxT( "RptD_X" ),
                                                       &g_RepeatStep.x,
                                                       0, -1000, +1000 ) );
@@ -362,7 +366,7 @@ bool SCH_EDIT_FRAME::LoadProjectFile( const wxString& aFileName, bool aForceRere
         IsRead = false;
     }
 
-    /* User library path takes precedent over default library search paths. */
+    // User library path takes precedent over default library search paths.
     wxGetApp().InsertLibraryPath( m_userLibraryPath, 1 );
 
     /* If the list is void, force loading the library "power.lib" that is
@@ -382,7 +386,7 @@ void SCH_EDIT_FRAME::SaveProjectFile()
 {
     wxFileName fn;
 
-    fn = g_RootSheet->GetScreen()->GetFileName();  /*ConfigFileName*/
+    fn = g_RootSheet->GetScreen()->GetFileName();  //ConfigFileName
     fn.SetExt( ProjectFileExtension );
 
     if( !IsWritable( fn ) )
@@ -528,7 +532,7 @@ void SCH_EDIT_FRAME::LoadSettings()
     cfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
     cfg->Read( HorzVertLinesOnlyEntry, &g_HVLines, true );
 
-    /* Load print preview window session settings. */
+    // Load print preview window session settings.
     cfg->Read( PreviewFramePositionXEntry, &tmp, -1 );
     m_previewPosition.x = (int) tmp;
     cfg->Read( PreviewFramePositionYEntry, &tmp, -1 );
@@ -538,7 +542,7 @@ void SCH_EDIT_FRAME::LoadSettings()
     cfg->Read( PreviewFrameHeightEntry, &tmp, -1 );
     m_previewSize.SetHeight( (int) tmp );
 
-    /* Load print dialog session settings. */
+    // Load print dialog session settings.
     cfg->Read( PrintDialogPositionXEntry, &tmp, -1 );
     m_printDialogPosition.x = (int) tmp;
     cfg->Read( PrintDialogPositionYEntry, &tmp, -1 );
@@ -552,7 +556,7 @@ void SCH_EDIT_FRAME::LoadSettings()
     cfg->Read( SpiceNetNamesEntry,  &g_OptNetListUseNames, false );
     cfg->Read( SimulatorCommandEntry, &m_simulatorCommand );
 
-    /* Load find dialog session setting. */
+    // Load find dialog session setting.
     cfg->Read( FindDialogPositionXEntry, &tmp, -1 );
     m_findDialogPosition.x = (int) tmp;
     cfg->Read( FindDialogPositionYEntry, &tmp, -1 );
@@ -568,7 +572,7 @@ void SCH_EDIT_FRAME::LoadSettings()
     m_findReplaceData->SetFindString( cfg->Read( FindStringEntry, wxEmptyString ) );
     m_findReplaceData->SetReplaceString( cfg->Read( ReplaceStringEntry, wxEmptyString ) );
 
-    /* Load the find and replace string history list. */
+    // Load the find and replace string history list.
     for ( size_t i = 0; i < FR_HISTORY_LIST_CNT; i++ )
     {
         wxString tmpHistory;
@@ -619,13 +623,13 @@ void SCH_EDIT_FRAME::SaveSettings()
     cfg->Write( ShowHiddenPinsEntry, m_showAllPins );
     cfg->Write( HorzVertLinesOnlyEntry, g_HVLines );
 
-    /* Save print preview window session settings. */
+    // Save print preview window session settings.
     cfg->Write( PreviewFramePositionXEntry, m_previewPosition.x );
     cfg->Write( PreviewFramePositionYEntry, m_previewPosition.y );
     cfg->Write( PreviewFrameWidthEntry, m_previewSize.GetWidth() );
     cfg->Write( PreviewFrameHeightEntry, m_previewSize.GetHeight() );
 
-    /* Save print dialog session settings. */
+    // Save print dialog session settings.
     cfg->Write( PrintDialogPositionXEntry, m_printDialogPosition.x );
     cfg->Write( PrintDialogPositionYEntry, m_printDialogPosition.y );
     cfg->Write( PrintDialogWidthEntry, m_printDialogSize.GetWidth() );
@@ -635,7 +639,7 @@ void SCH_EDIT_FRAME::SaveSettings()
     cfg->Write( SpiceNetNamesEntry,  g_OptNetListUseNames );
     cfg->Write( SimulatorCommandEntry, m_simulatorCommand );
 
-    /* Save find dialog session setting. */
+    // Save find dialog session setting.
     cfg->Write( FindDialogPositionXEntry, m_findDialogPosition.x );
     cfg->Write( FindDialogPositionYEntry, m_findDialogPosition.y );
     cfg->Write( FindDialogWidthEntry, m_findDialogSize.GetWidth() );
@@ -647,7 +651,7 @@ void SCH_EDIT_FRAME::SaveSettings()
     cfg->Write( FindStringEntry, m_findReplaceData->GetFindString() );
     cfg->Write( ReplaceStringEntry, m_findReplaceData->GetReplaceString() );
 
-    /* Save the find and replace string history list. */
+    // Save the find and replace string history list.
     size_t i;
     wxString tmpHistory;
     wxString entry;     // invoke constructor outside of any loops

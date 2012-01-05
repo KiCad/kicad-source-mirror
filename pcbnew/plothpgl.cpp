@@ -20,15 +20,14 @@
 bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer,
                                        EDA_DRAW_MODE_T aTraceMode )
 {
-    wxSize        SheetSize;
-    wxSize        BoardSize;
-    wxPoint       BoardCenter;
-    bool          Center = false;
-    Ki_PageDescr* currentsheet = GetScreen()->m_CurrentSheetDesc;
-    double        scale;
-    wxPoint       offset;
+    wxSize      boardSize;
+    wxPoint     boardCenter;
+    bool        center = false;
+    double      scale;
+    wxPoint     offset;
+    LOCALE_IO   toggle;
 
-    FILE* output_file = wxFopen( aFullFileName, wxT( "wt" ) );
+    FILE*       output_file = wxFopen( aFullFileName, wxT( "wt" ) );
 
     if( output_file == NULL )
     {
@@ -52,29 +51,26 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
                                  g_PcbPlotOptions.m_PlotScale );
 
 
-    SetLocaleTo_C_standard();
-
     if( g_PcbPlotOptions.m_PlotScale != 1.0 || g_PcbPlotOptions.m_AutoScale )
-        Center = true;  // when scale != 1.0 we must calculate the position in page
-                        // because actual position has no meaning
+    {
+        // when scale != 1.0 we must calculate the position in page
+        // because actual position has no meaning
+        center = true;
+    }
 
-    // Scale units from 0.0001" to HPGL plot units.
-    SheetSize.x = currentsheet->m_Size.x * U_PCB;
-    SheetSize.y = currentsheet->m_Size.y * U_PCB;
+    wxSize pageSizeIU = GetPageSizeIU();
 
     // Calculate the center of the PCB
     EDA_RECT bbbox = GetBoardBoundingBox();
 
-    BoardSize   = bbbox.GetSize();
-    BoardCenter = bbbox.Centre();
+    boardSize   = bbbox.GetSize();
+    boardCenter = bbbox.Centre();
 
     if( g_PcbPlotOptions.m_AutoScale )       // Optimum scale
     {
-        double Xscale, Yscale;
-
         // Fit to 80% of the page
-        Xscale = ( ( SheetSize.x * 0.8 ) / BoardSize.x );
-        Yscale = ( ( SheetSize.y * 0.8 ) / BoardSize.y );
+        double Xscale = ( ( pageSizeIU.x * 0.8 ) / boardSize.x );
+        double Yscale = ( ( pageSizeIU.y * 0.8 ) / boardSize.y );
         scale  = MIN( Xscale, Yscale );
     }
     else
@@ -83,12 +79,12 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     }
 
     // Calculate the page size offset.
-    if( Center )
+    if( center )
     {
-        offset.x = wxRound( (double) BoardCenter.x -
-                            ( (double) SheetSize.x / 2.0 ) / scale );
-        offset.y = wxRound( (double) BoardCenter.y -
-                            ( (double) SheetSize.y / 2.0 ) / scale );
+        offset.x = wxRound( (double) boardCenter.x -
+                            ( (double) pageSizeIU.x / 2.0 ) / scale );
+        offset.y = wxRound( (double) boardCenter.y -
+                            ( (double) pageSizeIU.y / 2.0 ) / scale );
     }
     else
     {
@@ -97,7 +93,9 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     }
 
     HPGL_PLOTTER* plotter = new HPGL_PLOTTER();
-    plotter->set_paper_size( currentsheet );
+
+    plotter->SetPageSettings( GetPageSettings() );
+
     plotter->set_viewport( offset, scale, g_PcbPlotOptions.m_PlotMirror );
     plotter->set_default_line_width( g_PcbPlotOptions.m_PlotLineWidth );
     plotter->set_creator( wxT( "PCBNEW-HPGL" ) );
@@ -108,14 +106,13 @@ bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer
     plotter->set_pen_diameter( pen_diam );
     plotter->start_plot( output_file );
 
-    /* The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway */
-    if( g_PcbPlotOptions.m_PlotFrameRef && !Center )
+    // The worksheet is not significant with scale!=1... It is with paperscale!=1, anyway
+    if( g_PcbPlotOptions.m_PlotFrameRef && !center )
         PlotWorkSheet( plotter, GetScreen() );
 
     Plot_Layer( plotter, aLayer, aTraceMode );
     plotter->end_plot();
     delete plotter;
-    SetLocaleTo_Default();
 
     return true;
 }

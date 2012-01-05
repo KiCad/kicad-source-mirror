@@ -666,7 +666,7 @@ bool D_PAD::Save( FILE* aFile ) const
         break;
     }
 
-    fprintf( aFile, "Sh \"%.4s\" %c %d %d %d %d %d\n",
+    fprintf( aFile, "Sh \"%.4s\" %c %d %d %d %d %g\n",
              m_Padname, cshape, m_Size.x, m_Size.y,
              m_DeltaSize.x, m_DeltaSize.y, m_Orient );
 
@@ -938,7 +938,7 @@ int D_PAD::ReadDescr( LINE_READER* aReader )
             if( *PtLine == '"' )
                 PtLine++;
 
-            nn = sscanf( PtLine, " %s %d %d %d %d %d",
+            nn = sscanf( PtLine, " %s %d %d %d %d %lf",
                          BufCar, &m_Size.x, &m_Size.y,
                          &m_DeltaSize.x, &m_DeltaSize.y,
                          &m_Orient );

@@ -199,7 +199,7 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
 {
     int     tmpzoom;
     wxPoint tmp_startvisu;
-    wxSize  SheetSize;  // Sheet size in internal units
+    wxSize  sheetSize;          // Sheet size in internal units
     wxPoint old_org;
     bool    success = true;
 
@@ -209,16 +209,15 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
     screen->m_DrawOrg.x    = screen->m_DrawOrg.y = 0;
     screen->m_StartVisu.x  = screen->m_StartVisu.y = 0;
 
-    SheetSize = screen->ReturnPageSize();      // page size in 1/1000 inch, ie in internal units
+    sheetSize = screen->GetPageSettings().GetSizeIU();  // page size in 1/1000 inch, ie in internal units
 
     screen->SetScalingFactor( 1.0 );
     EDA_DRAW_PANEL* panel = frame->GetCanvas();
 
-    SetLocaleTo_C_standard();       // Switch the locale to standard C (needed
-                                    // to print floating point numbers like 1.3)
+    LOCALE_IO   toggle;
 
     float       dpi = (float) frame->GetInternalUnits();
-    wxSVGFileDC dc( FullFileName, SheetSize.x, SheetSize.y, dpi );
+    wxSVGFileDC dc( FullFileName, sheetSize.x, sheetSize.y, dpi );
 
     EDA_RECT    tmp = *panel->GetClipBox();
     GRResetPenAndBrush( &dc );
@@ -234,10 +233,8 @@ bool DIALOG_SVG_PRINT::DrawSVGPage( EDA_DRAW_FRAME* frame,
     if( aPrint_Sheet_Ref )
         frame->TraceWorkSheet( &dc, screen, g_DrawDefaultLineThickness );
 
-    SetLocaleTo_Default();       // revert to the current locale
     screen->m_IsPrinting   = false;
     panel->SetClipBox( tmp );
-
 
     GRForceBlackPen( false );
 

@@ -68,8 +68,8 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
     GetBoard()->m_NbNodes     = 0;
     GetBoard()->m_NbNoconnect = 0;
 
-    SetScreen( new PCB_SCREEN() );
-    GetScreen()->Init();
+    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
+
     setActiveLayer(FIRST_COPPER_LAYER);
     m_LayersManager->UpdateLayerIcons();
     syncLayerBox();

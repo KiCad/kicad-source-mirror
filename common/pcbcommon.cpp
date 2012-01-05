@@ -47,6 +47,9 @@ class MODULE;
  */
 int GetLayerMask( int aLayerNumber )
 {
+    wxASSERT( aLayerNumber < LAYER_COUNT && aLayerNumber >= 0 );
+
+#if 0
     // Look up Table for conversion one layer number -> one bit layer mask:
     static int tabOneLayerMask[LAYER_COUNT] =
     {
@@ -60,8 +63,10 @@ int GetLayerMask( int aLayerNumber )
         0x10000000, 0x20000000, 0x40000000, 0x80000000
     };
 
-    wxASSERT( aLayerNumber < LAYER_COUNT && aLayerNumber >= 0 );
     return( tabOneLayerMask[aLayerNumber] );
+#else
+    return 1 << aLayerNumber;
+#endif
 }
 
 /* Look up Table for conversion copper layer count -> general copper layer

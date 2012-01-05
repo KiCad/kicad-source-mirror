@@ -18,7 +18,7 @@
 bool PCB_BASE_FRAME::ExportToDxfFile( const wxString& aFullFileName, int aLayer,
                                       EDA_DRAW_MODE_T aTraceMode )
 {
-    Ki_PageDescr* currentsheet = GetScreen()->m_CurrentSheetDesc;
+    LOCALE_IO   toggle;
 
     FILE* output_file = wxFopen( aFullFileName, wxT( "wt" ) );
 
@@ -27,10 +27,8 @@ bool PCB_BASE_FRAME::ExportToDxfFile( const wxString& aFullFileName, int aLayer,
         return false;
     }
 
-    SetLocaleTo_C_standard();
-
     DXF_PLOTTER* plotter = new DXF_PLOTTER();
-    plotter->set_paper_size( currentsheet );
+    plotter->SetPageSettings( GetPageSettings() );
     plotter->set_viewport( wxPoint( 0, 0 ), 1, 0 );
     plotter->set_creator( wxT( "PCBNEW-DXF" ) );
     plotter->set_filename( aFullFileName );
@@ -42,7 +40,5 @@ bool PCB_BASE_FRAME::ExportToDxfFile( const wxString& aFullFileName, int aLayer,
     Plot_Layer( plotter, aLayer, aTraceMode );
     plotter->end_plot();
     delete plotter;
-    SetLocaleTo_Default();
-
     return true;
 }

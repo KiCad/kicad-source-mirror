@@ -98,7 +98,7 @@
 /// C string compare test for a specific length of characters.
 /// The -1 is to omit the trailing \0 which is included in sizeof() on a
 /// string constant.
-#define TESTLINE( x )   (strncmp( line, x, sizeof(x) - 1 ) == 0)
+#define TESTLINE( x )   (strnicmp( line, x, sizeof(x)-1 ) == 0)
 
 /// Get the length of a string constant, at compile time
 #define SZ( x )         (sizeof(x)-1)
@@ -440,7 +440,6 @@ void KICAD_PLUGIN::loadGENERAL()
 void KICAD_PLUGIN::loadSHEET()
 {
     char    buf[260];
-    char*   text;
 
     while( READLINE() )
     {
@@ -448,33 +447,41 @@ void KICAD_PLUGIN::loadSHEET()
 
         if( TESTLINE( "Sheet" ) )
         {
-            text = strtok( line, delims );
-            text = strtok( NULL, delims );
+            // e.g. "Sheet A3 16535 11700"
+            // width and height are in 1/1000th of an inch, always
 
-            Ki_PageDescr* sheet = g_SheetSizeList[0];
-            int           ii;
+            PAGE_INFO   page;
+            char*       sname  = strtok( line + SZ( "Sheet" ), delims );
 
-            for( ii = 0; sheet != NULL; ii++, sheet = g_SheetSizeList[ii] )
+            if( sname )
             {
-                if( !stricmp( TO_UTF8( sheet->m_Name ), text ) )
+                wxString wname = FROM_UTF8( sname );
+                if( !page.SetType( wname ) )
                 {
-//  @todo           screen->m_CurrentSheetDesc = sheet;
-
-                    if( sheet == &g_Sheet_user )
-                    {
-                        text = strtok( NULL, delims );
-
-                        if( text )
-                            sheet->m_Size.x = intParse( text );
-
-                        text = strtok( NULL, delims );
-
-                        if( text )
-                            sheet->m_Size.y = intParse( text );
-                    }
-
-                    break;
+                    m_error.Printf( _( "Unknown sheet type '%s' on line:%d" ),
+                                wname.GetData(), m_reader->LineNumber() );
+                    THROW_IO_ERROR( m_error );
                 }
+
+                // only parse the width and height if page size is "User"
+                if( wname == wxT( "User" ) )
+                {
+                    char*   width  = strtok( NULL, delims );
+                    char*   height = strtok( NULL, delims );
+
+                    if( width && height )
+                    {
+                        // legacy disk file describes paper in mils
+                        // (1/1000th of an inch)
+                        int w = intParse( width );
+                        int h = intParse( height );
+
+                        page.SetWidthMils(  w );
+                        page.SetHeightMils( h );
+                    }
+                }
+
+                m_board->SetPageSettings( page );
             }
         }
 
@@ -557,10 +564,7 @@ void KICAD_PLUGIN::loadSETUP()
             BIU gx = biuParse( line + SZ( "AuxiliaryAxisOrg" ), &data );
             BIU gy = biuParse( data );
 
-            /* @todo
-            m_originAxisPosition.x = gx;
-            m_originAxisPosition.y = gy;
-            */
+            m_board->SetOriginAxisPosition( wxPoint( gx, gy ) );
         }
 
 #if 1 // defined(PCBNEW)
@@ -2729,14 +2733,17 @@ void KICAD_PLUGIN::saveGENERAL() const
 
 void KICAD_PLUGIN::saveSHEET() const
 {
-#if 0   // @todo sheet not available here.  The sheet needs to go into the board if it is important enough to be saved with the board
-    Ki_PageDescr* sheet = screen->m_CurrentSheetDesc;
+    const PAGE_INFO& pageInfo = m_board->GetPageSettings();
 
     fprintf( m_fp, "$SHEETDESCR\n" );
 
-    fprintf( m_fp, "Sheet %s %d %d\n",
-                    TO_UTF8( sheet->m_Name ), sheet->m_Size.x, sheet->m_Size.y );   // in mm ?
+    // paper is described in mils
+    fprintf( m_fp,  "Sheet %s %d %d\n",
+                    TO_UTF8( pageInfo.GetType() ),
+                    pageInfo.GetSizeMils().x,
+                    pageInfo.GetSizeMils().y );
 
+#if 0   // @todo sheet not available here.  The sheet needs to go into the board if it is important enough to be saved with the board
     fprintf( m_fp, "Title %s\n",        EscapedUTF8( screen->m_Title ).c_str() );
     fprintf( m_fp, "Date %s\n",         EscapedUTF8( screen->m_Date ).c_str() );
     fprintf( m_fp, "Rev %s\n",          EscapedUTF8( screen->m_Revision ).c_str() );
@@ -2746,8 +2753,9 @@ void KICAD_PLUGIN::saveSHEET() const
     fprintf( m_fp, "Comment3 %s\n",     EscapedUTF8( screen->m_Commentaire3 ).c_str() );
     fprintf( m_fp, "Comment4 %s\n",     EscapedUTF8( screen->m_Commentaire4 ).c_str() );
 
-    fprintf( m_fp, "$EndSHEETDESCR\n\n" );
 #endif
+
+    fprintf( m_fp, "$EndSHEETDESCR\n\n" );
 }
 
 
@@ -3079,26 +3087,29 @@ void KICAD_PLUGIN::savePAD( const D_PAD* me ) const
         THROW_IO_ERROR( wxString::Format( UNKNOWN_PAD_FORMAT, me->GetShape() ) );
     }
 
-    // universal character set padname
-    wxString padname = me->GetPadName();
+#if BOARD_FORMAT_VERSION == 1       // saving mode is a compile time option
 
-#if BOARD_FORMAT_VERSION == 1
+    wxString    wpadname = me->GetPadName();    // universal character set padname
+    std::string spadname;
 
-    char mypadname[PADNAMEZ+1];
-
-    int i;
-    for( i = 0; i<PADNAMEZ && padname[i]; ++i )
+    for( unsigned i = 0; wpadname.size(); ++i )
     {
-        // truncate from universal character down to 8 bit foreign jibber jabber byte
-        mypadname[i] = (char) padname[i];
+        // truncate from universal character down to 8 bit foreign jibber
+        // jabber byte.  This basically duplicates what was done in the old
+        // BOARD_FORMAT_VERSION 1 code.  Any characters that were in the 8 bit
+        // character space were OK.
+        spadname += (char) wpadname[i];
     }
 
-    mypadname[i] = 0;
-
     fprintf( m_fp,  "Sh \"%s\" %c %s %s %s\n",
-                    mypadname,         // probably ASCII, but possibly jibber jabber
+                    spadname.c_str(),  // probably ASCII, but possibly jibber jabber
 #else
+
     fprintf( m_fp,  "Sh %s %c %s %s %s\n",
+                    // legacy VERSION 2 simply uses UTF8, wrapped in quotes,
+                    // and 99.99 % of the time there is no difference between 1 & 2,
+                    // since ASCII is a subset of UTF8.  But if they were not using
+                    // ASCII pad names, then there is a difference in the file.
                     EscapedUTF8( me->GetPadName() ).c_str(),
 #endif
                     cshape,

@@ -265,6 +265,39 @@ LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 }
 
 
+void LIB_VIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
+{
+    GetScreen()->SetPageSettings( aPageSettings );
+}
+
+
+const PAGE_INFO& LIB_VIEW_FRAME::GetPageSettings () const
+{
+    return GetScreen()->GetPageSettings();
+}
+
+
+const wxSize LIB_VIEW_FRAME::GetPageSizeIU() const
+{
+    // GetSizeIU is compile time dependent:
+    return GetScreen()->GetPageSettings().GetSizeIU();
+}
+
+
+const wxPoint& LIB_VIEW_FRAME::GetOriginAxisPosition() const
+{
+    wxASSERT( GetScreen() );
+    return GetScreen()->GetOriginAxisPosition();
+}
+
+
+void LIB_VIEW_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
+{
+    wxASSERT( GetScreen() );
+    GetScreen()->SetOriginAxisPosition( aPosition );
+}
+
+
 void LIB_VIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     SaveSettings();

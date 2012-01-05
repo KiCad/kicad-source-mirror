@@ -19,8 +19,10 @@ class GERBVIEW_FRAME;
 //class BOARD;
 
 class GERBER_IMAGE;
-class Ki_PageDescr;
+class PAGE_INFO;
 
+/// List of page sizes
+extern const wxChar* g_GerberPageSizeList[8];
 
 // Type of photoplotter action:
 #define GERB_ACTIVE_DRAW 1      // Activate light (lower pen)
@@ -28,12 +30,13 @@ class Ki_PageDescr;
 #define GERB_FLASH       3      // Flash
 
 
-typedef enum
+enum PlotFormat
 {
     FORMAT_HPGL,
     FORMAT_GERBER,
     FORMAT_POST
-} PlotFormat;
+};
+
 
 /**
  * Enum ITEM_VISIBLE
@@ -56,8 +59,6 @@ extern int     g_DisplayPolygonsModeSketch;
 
 extern const wxString GerbviewProjectFileExt;
 extern const wxString GerbviewProjectFileWildcard;
-
-extern Ki_PageDescr* g_GerberPageSizeList[];
 
 // Interpolation type
 enum Gerb_Interpolation

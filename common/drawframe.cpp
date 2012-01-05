@@ -51,7 +51,7 @@
 static const wxString traceScrollSettings( wxT( "KicadScrollSettings" ) );
 
 
-/* Configuration entry names. */
+// Configuration entry names.
 static const wxString CursorShapeEntryKeyword( wxT( "CursorShape" ) );
 static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
 static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
@@ -115,7 +115,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& ti
 
     SetSizeHints( minsize.x, minsize.y, -1, -1, -1, -1 );
 
-    /* Make sure window has a sane minimum size. */
+    // Make sure window has a sane minimum size.
     if( ( size.x < minsize.x ) || ( size.y < minsize.y ) )
         SetSize( 0, 0, minsize.x, minsize.y );
 
@@ -524,12 +524,11 @@ void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPosition )
     logicalClientSize.x = wxRound( (double) clientSize.x / scalar );
     logicalClientSize.y = wxRound( (double) clientSize.y / scalar );
 
-    // The upper left corner of the drawing in device units.
-    int w = screen->ReturnPageSize().x;
-    int h = screen->ReturnPageSize().y;
+    // A corner of the drawing in internal units.
+    wxSize corner = GetPageSizeIU();
 
     // The drawing rectangle logical units
-    wxRect drawingRect( wxPoint( 0, 0 ),  wxSize( w, h ) );
+    wxRect drawingRect( wxPoint( 0, 0 ),  corner );
 
     wxLogTrace( traceScrollSettings, wxT( "Logical drawing rect = ( %d, %d, %d, %d )." ),
                 drawingRect.x, drawingRect.y, drawingRect.width, drawingRect.height );
@@ -749,12 +748,12 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     if( !screen )
         return;
 
-    /* Display Zoom level: zoom = zoom_coeff/ZoomScalar */
+    // Display Zoom level: zoom = zoom_coeff/ZoomScalar
     Line.Printf( wxT( "Z %g" ), screen->GetZoom() );
 
     SetStatusText( Line, 1 );
 
-    /* Display absolute coordinates:  */
+    // Display absolute coordinates:
     double dXpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().x, m_internalUnits );
     double dYpos = To_User_Unit( g_UserUnit, screen->GetCrossHairPosition().y, m_internalUnits );
 
@@ -769,7 +768,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
         dYpos = RoundTo0( dYpos, (double)( m_internalUnits / 10 ) );
     }
 
-    /* The following sadly is an if Eeschema/if Pcbnew */
+    // The following sadly is an if Eeschema/if Pcbnew
     wxString absformatter;
     wxString locformatter;
     switch( g_UserUnit )
@@ -809,7 +808,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     Line.Printf( absformatter, dXpos, dYpos );
     SetStatusText( Line, 2 );
 
-    /* Display relative coordinates:  */
+    // Display relative coordinates:
     dx = screen->GetCrossHairPosition().x - screen->m_O_Curseur.x;
     dy = screen->GetCrossHairPosition().y - screen->m_O_Curseur.y;
     dXpos = To_User_Unit( g_UserUnit, dx, m_internalUnits );
@@ -821,7 +820,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
         dYpos = RoundTo0( dYpos, (double) ( m_internalUnits / 10 ) );
     }
 
-    /* We already decided the formatter above */
+    // We already decided the formatter above
     Line.Printf( locformatter, dXpos, dYpos );
     SetStatusText( Line, 3 );
 }

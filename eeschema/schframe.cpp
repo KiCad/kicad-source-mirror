@@ -285,6 +285,39 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 }
 
 
+void SCH_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
+{
+    GetScreen()->SetPageSettings( aPageSettings );
+}
+
+
+const PAGE_INFO& SCH_EDIT_FRAME::GetPageSettings () const
+{
+    return GetScreen()->GetPageSettings();
+}
+
+
+const wxSize SCH_EDIT_FRAME::GetPageSizeIU() const
+{
+    // GetSizeIU is compile time dependent:
+    return GetScreen()->GetPageSettings().GetSizeIU();
+}
+
+
+const wxPoint& SCH_EDIT_FRAME::GetOriginAxisPosition() const
+{
+    wxASSERT( GetScreen() );
+    return GetScreen()->GetOriginAxisPosition();
+}
+
+
+void SCH_EDIT_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
+{
+    wxASSERT( GetScreen() );
+    GetScreen()->SetOriginAxisPosition( aPosition );
+}
+
+
 void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 {
     SCH_SCREEN* screen = GetScreen();
@@ -489,8 +522,8 @@ double SCH_EDIT_FRAME::BestZoom()
     int    dx, dy;
     wxSize size;
 
-    dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
-    dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
+    dx = GetScreen()->GetPageSettings().GetWidthIU();
+    dy = GetScreen()->GetPageSettings().GetHeightIU();
 
     size = m_canvas->GetClientSize();
 

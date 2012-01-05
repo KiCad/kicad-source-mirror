@@ -95,7 +95,7 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent 
     m_checkMonochrome->SetValue( aParent->GetPrintMonochrome() );
 
 #ifdef __WXMAC__
-    /* Problems with modal on wx-2.9 - Anyway preview is standard for OSX */
+    // Problems with modal on wx-2.9 - Anyway preview is standard for OSX
    m_buttonPreview->Hide();
 #endif
 }
@@ -310,7 +310,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 {
     int      oldZoom;
     wxPoint  tmp_startvisu;
-    wxSize   SheetSize;      // Page size in internal units
+    wxSize   pageSizeIU;             // Page size in internal units
     wxPoint  old_org;
     EDA_RECT oldClipBox;
     wxRect   fitRect;
@@ -320,10 +320,11 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     wxBusyCursor dummy;
 
-    /* Save current scale factor, offsets, and clip box. */
+    // Save current scale factor, offsets, and clip box.
     tmp_startvisu = aScreen->m_StartVisu;
     oldZoom = aScreen->GetZoom();
     old_org = aScreen->m_DrawOrg;
+
     oldClipBox = *panel->GetClipBox();
 
     // Change clip box to print the whole page.
@@ -336,9 +337,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     if( printReference )
     {
-        /* Draw the page to a memory and let the dc calculate the drawing
-         * limits.
-         */
+        // Draw the page to a memory and let the dc calculate the drawing limits.
         wxBitmap psuedoBitmap( 1, 1 );
         wxMemoryDC memDC;
         memDC.SelectObject( psuedoBitmap );
@@ -348,16 +347,17 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
         wxLogDebug( wxT( "MinX = %d, MaxX = %d, MinY = %d, MaxY = %d" ),
                     memDC.MinX(), memDC.MaxX(), memDC.MinY(), memDC.MaxY() );
 
-        SheetSize.x = memDC.MaxX() - memDC.MinX();
-        SheetSize.y = memDC.MaxY() - memDC.MinY();
+        pageSizeIU.x = memDC.MaxX() - memDC.MinX();
+        pageSizeIU.y = memDC.MaxY() - memDC.MinY();
 
-        FitThisSizeToPageMargins( SheetSize, parent->GetPageSetupData() );
+        FitThisSizeToPageMargins( pageSizeIU, parent->GetPageSetupData() );
         fitRect = GetLogicalPageMarginsRect( parent->GetPageSetupData() );
     }
     else
     {
-        SheetSize = aScreen->m_CurrentSheetDesc->m_Size;
-        FitThisSizeToPaper( SheetSize );
+        pageSizeIU = aScreen->GetPageSettings().GetSizeIU();
+
+        FitThisSizeToPaper( pageSizeIU );
         fitRect = GetLogicalPaperRect();
     }
 

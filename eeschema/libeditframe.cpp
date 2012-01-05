@@ -210,7 +210,9 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     SetIcon( icon );
 
     SetScreen( new SCH_SCREEN() );
+
     GetScreen()->m_Center = true;
+
     GetScreen()->SetCrossHairPosition( wxPoint( 0, 0 ) );
 
     LoadSettings();
@@ -282,6 +284,39 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
         delete m_tempCopyComponent;
 
     m_tempCopyComponent = NULL;
+}
+
+
+void LIB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
+{
+    GetScreen()->SetPageSettings( aPageSettings );
+}
+
+
+const PAGE_INFO& LIB_EDIT_FRAME::GetPageSettings () const
+{
+    return GetScreen()->GetPageSettings();
+}
+
+
+const wxSize LIB_EDIT_FRAME::GetPageSizeIU() const
+{
+    // GetSizeIU is compile time dependent:
+    return GetScreen()->GetPageSettings().GetSizeIU();
+}
+
+
+const wxPoint& LIB_EDIT_FRAME::GetOriginAxisPosition() const
+{
+    wxASSERT( GetScreen() );
+    return GetScreen()->GetOriginAxisPosition();
+}
+
+
+void LIB_EDIT_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
+{
+    wxASSERT( GetScreen() );
+    GetScreen()->SetOriginAxisPosition( aPosition );
 }
 
 
@@ -377,8 +412,11 @@ double LIB_EDIT_FRAME::BestZoom()
     }
     else
     {
-        dx = GetScreen()->m_CurrentSheetDesc->m_Size.x;
-        dy = GetScreen()->m_CurrentSheetDesc->m_Size.y;
+        const PAGE_INFO& pageInfo = GetScreen()->GetPageSettings();
+
+        dx = pageInfo.GetSizeIU().x;
+        dy = pageInfo.GetSizeIU().y;
+
         GetScreen()->SetScrollCenterPosition( wxPoint( 0, 0 ) );
     }
 

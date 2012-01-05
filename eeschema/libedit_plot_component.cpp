@@ -33,54 +33,71 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
     switch( event.GetId() )
     {
     case ID_LIBEDIT_GEN_PNG_FILE:
-    {
-        bool       fmt_is_jpeg = false; // could be selectable later. so keep this option.
+        {
+            bool       fmt_is_jpeg = false; // could be selectable later. so keep this option.
 
-        file_ext = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
-        mask     = wxT( "*." ) + file_ext;
-        wxFileName fn( cmp->GetName() );
-        fn.SetExt( file_ext );
+            file_ext = fmt_is_jpeg ? wxT( "jpg" ) : wxT( "png" );
+            mask     = wxT( "*." ) + file_ext;
+            wxFileName fn( cmp->GetName() );
+            fn.SetExt( file_ext );
 
-        FullFileName = EDA_FileSelector( _( "Filename:" ), wxGetCwd(),
-                                         fn.GetFullName(), file_ext, mask, this,
-                                         wxFD_SAVE, true );
+            FullFileName = EDA_FileSelector( _( "Filename:" ), wxGetCwd(),
+                                             fn.GetFullName(), file_ext, mask, this,
+                                             wxFD_SAVE, true );
 
-        if( FullFileName.IsEmpty() )
-            return;
+            if( FullFileName.IsEmpty() )
+                return;
 
-        // calling wxYield is mandatory under Linux, after closing the file selector dialog
-        // to refresh the screen before creating the PNG or JPEG image from screen
-        wxYield();
-        CreatePNGorJPEGFile( FullFileName, fmt_is_jpeg );
-    }
+            // calling wxYield is mandatory under Linux, after closing the file selector dialog
+            // to refresh the screen before creating the PNG or JPEG image from screen
+            wxYield();
+            CreatePNGorJPEGFile( FullFileName, fmt_is_jpeg );
+        }
         break;
 
     case ID_LIBEDIT_GEN_SVG_FILE:
-    {
-        file_ext = wxT( "svg" );
-        mask     = wxT( "*." ) + file_ext;
-        wxFileName fn( cmp->GetName() );
-        fn.SetExt( file_ext );
-        FullFileName = EDA_FileSelector( _( "Filename:" ), wxGetCwd(),
-                                         fn.GetFullName(), file_ext, mask, this,
-                                         wxFD_SAVE, true );
+        {
+            file_ext = wxT( "svg" );
+            mask     = wxT( "*." ) + file_ext;
+            wxFileName fn( cmp->GetName() );
+            fn.SetExt( file_ext );
+            FullFileName = EDA_FileSelector( _( "Filename:" ), wxGetCwd(),
+                                             fn.GetFullName(), file_ext, mask, this,
+                                             wxFD_SAVE, true );
 
-        if( FullFileName.IsEmpty() )
-            return;
+            if( FullFileName.IsEmpty() )
+                return;
 
-        /* Give a size to the SVG draw area = component size + margin
-         * the margin is 10% the size of the component size
-         */
-        wxSize pagesize = GetScreen()->ReturnPageSize( );
-        wxSize componentSize = m_component->GetBoundingBox( m_unit, m_convert ).GetSize();
+#if 0       // would the PAGE_INFO margins work for this old code:
 
-        // Add a small margin to the plot bounding box
-        componentSize.x = (int)(componentSize.x * 1.2);
-        componentSize.y = (int)(componentSize.y * 1.2);
-        GetScreen()->SetPageSize( componentSize );
-        SVG_Print_Component( FullFileName );
-        GetScreen()->SetPageSize( pagesize );
-    }
+            // Give a size to the SVG draw area = component size + margin
+            // the margin is 10% the size of the component size
+            wxSize pagesize = GetScreen()->ReturnPageSize( );
+            wxSize componentSize = m_component->GetBoundingBox( m_unit, m_convert ).GetSize();
+
+            // Add a small margin to the plot bounding box
+            componentSize.x = (int)(componentSize.x * 1.2);
+            componentSize.y = (int)(componentSize.y * 1.2);
+
+            GetScreen()->SetPageSize( componentSize );
+            SVG_Print_Component( FullFileName );
+            GetScreen()->SetPageSize( pagesize );
+
+#else
+            PAGE_INFO pageSave = GetScreen()->GetPageSettings();
+            PAGE_INFO pageTemp = pageSave;
+
+            wxSize componentSize = m_component->GetBoundingBox( m_unit, m_convert ).GetSize();
+
+            // Add a small margin to the plot bounding box
+            pageTemp.SetWidthMils(  int( componentSize.x * 1.2 ) );
+            pageTemp.SetHeightMils( int( componentSize.y * 1.2 ) );
+
+            GetScreen()->SetPageSettings( pageTemp );
+            SVG_Print_Component( FullFileName );
+            GetScreen()->SetPageSettings( pageSave );
+#endif
+        }
         break;
     }
 }
@@ -116,7 +133,8 @@ void LIB_EDIT_FRAME::PrintPage( wxDC* aDC, int aPrintMask, bool aPrintMirrorMode
     if( ! m_component )
         return;
 
-    wxSize pagesize = GetScreen()->ReturnPageSize();
+    wxSize pagesize = GetScreen()->GetPageSettings().GetSizeIU();
+
     /* Plot item centered to the page
      * In libedit, the component is centered at 0,0 coordinates.
      * So we must plot it with an offset = pagesize/2.

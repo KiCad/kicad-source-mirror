@@ -5,15 +5,12 @@
  * @file plot_common.h
  */
 
-#ifndef __INCLUDE__PLOT_COMMON_H__
-#define __INCLUDE__PLOT_COMMON_H__ 1
+#ifndef PLOT_COMMON_H_
+#define PLOT_COMMON_H_
 
 #include <vector>
 #include "drawtxt.h"
-
-
-class Ki_PageDescr;
-
+#include "common.h"         // PAGE_INFO
 
 /**
  * Enum PlotFormat
@@ -27,11 +24,11 @@ enum PlotFormat {
     PLOT_FORMAT_DXF
 };
 
+
 class PLOTTER
 {
 public:
-    PlotFormat m_PlotType;          // type of plot
-public: PLOTTER( PlotFormat aPlotType );
+    PLOTTER( PlotFormat aPlotType );
 
     virtual ~PLOTTER()
     {
@@ -47,8 +44,7 @@ public: PLOTTER( PlotFormat aPlotType );
      * Function GetPlotterType
      * @return the format of the plot file
      */
-    PlotFormat GetPlotterType()
-    { return m_PlotType; }
+    PlotFormat GetPlotterType()    { return m_PlotType; }
 
     virtual bool start_plot( FILE* fout ) = 0;
     virtual bool end_plot() = 0;
@@ -58,20 +54,18 @@ public: PLOTTER( PlotFormat aPlotType );
         negative_mode = _negative;
     }
 
-
     virtual void set_color_mode( bool _color_mode )
     {
         color_mode = _color_mode;
     }
-
 
     bool get_color_mode() const
     {
         return color_mode;
     }
 
+    void SetPageSettings( const PAGE_INFO& aPageSettings );
 
-    virtual void set_paper_size( Ki_PageDescr* sheet );
     virtual void set_current_line_width( int width ) = 0;
     virtual void set_default_line_width( int width ) = 0;
     virtual void set_color( int color )  = 0;
@@ -82,13 +76,12 @@ public: PLOTTER( PlotFormat aPlotType );
         creator = _creator;
     }
 
-
     virtual void set_filename( const wxString& _filename )
     {
         filename = _filename;
     }
 
-
+    /// Set the plot offset for the current plotting
     virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror ) = 0;
 
     // Standard primitives
@@ -154,12 +147,10 @@ public: PLOTTER( PlotFormat aPlotType );
         pen_to( pos, 'U' );
     }
 
-
     void line_to( wxPoint pos )
     {
         pen_to( pos, 'D' );
     }
-
 
     void finish_to( wxPoint pos )
     {
@@ -167,13 +158,11 @@ public: PLOTTER( PlotFormat aPlotType );
         pen_to( pos, 'Z' );
     }
 
-
     void pen_finish()
     {
         // Shortcut
         pen_to( wxPoint( 0, 0 ), 'Z' );
     }
-
 
     void text( const wxPoint&              aPos,
                enum EDA_Colors             aColor,
@@ -210,14 +199,20 @@ protected:
     virtual void   user_to_device_size( wxSize& size );
     virtual double user_to_device_size( double size );
 
-    // Plot scale
+    PlotFormat    m_PlotType;
+
+    /// Plot scale
     double        plot_scale;
-    // Device scale (from decimils to device units)
+
+    /// Device scale (from decimils to device units)
     double        device_scale;
-    // Plot offset (in decimils)
+
+    /// Plot offset (in decimils)
     wxPoint       plot_offset;
-    // Output file
+
+    /// Output file
     FILE*         output_file;
+
     // Pen handling
     bool          color_mode, negative_mode;
     int           default_pen_width;
@@ -227,16 +222,18 @@ protected:
     bool          plotMirror;
     wxString      creator;
     wxString      filename;
-    Ki_PageDescr* sheet;
+    PAGE_INFO     pageInfo;
     wxSize        paper_size;
 };
 
+
 class HPGL_PLOTTER : public PLOTTER
 {
-public: HPGL_PLOTTER() : PLOTTER( PLOT_FORMAT_HPGL )
+public:
+    HPGL_PLOTTER() :
+        PLOTTER( PLOT_FORMAT_HPGL )
     {
     }
-
 
     virtual bool start_plot( FILE* fout );
     virtual bool end_plot();
@@ -246,17 +243,18 @@ public: HPGL_PLOTTER() : PLOTTER( PLOT_FORMAT_HPGL )
     {
         // Handy override
         current_pen_width = wxRound( pen_diameter );
-    };
+    }
+
     virtual void set_default_line_width( int width ) {};
     virtual void set_dash( bool dashed );
 
     virtual void set_color( int color ) {};
+
     virtual void set_pen_speed( int speed )
     {
         wxASSERT( output_file == 0 );
         pen_speed = speed;
     }
-
 
     virtual void set_pen_number( int number )
     {
@@ -264,13 +262,11 @@ public: HPGL_PLOTTER() : PLOTTER( PLOT_FORMAT_HPGL )
         pen_number = number;
     }
 
-
     virtual void set_pen_diameter( double diameter )
     {
         wxASSERT( output_file == 0 );
         pen_diameter = diameter;
     }
-
 
     virtual void set_pen_overlap( double overlap )
     {
@@ -278,10 +274,10 @@ public: HPGL_PLOTTER() : PLOTTER( PLOT_FORMAT_HPGL )
         pen_overlap = overlap;
     }
 
-
     virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror );
     virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
     virtual void circle( wxPoint pos, int diametre, FILL_T fill, int width = -1 );
+
     /*
      * Function PlotPoly
      * Draw a polygon (filled or not) in HPGL format
@@ -332,12 +328,13 @@ protected:
 
 class PS_PLOTTER : public PLOTTER
 {
-public: PS_PLOTTER() : PLOTTER( PLOT_FORMAT_POST )
+public:
+    PS_PLOTTER() :
+        PLOTTER( PLOT_FORMAT_POST )
     {
         plot_scale_adjX = 1;
         plot_scale_adjY = 1;
     }
-
 
     virtual bool start_plot( FILE* fout );
     virtual bool end_plot();
@@ -351,7 +348,6 @@ public: PS_PLOTTER() : PLOTTER( PLOT_FORMAT_POST )
         plot_scale_adjX = scaleX;
         plot_scale_adjY = scaleY;
     }
-
 
     virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror );
     virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
@@ -419,7 +415,9 @@ struct APERTURE
 
 class GERBER_PLOTTER : public PLOTTER
 {
-public: GERBER_PLOTTER() : PLOTTER( PLOT_FORMAT_GERBER )
+public:
+    GERBER_PLOTTER() :
+        PLOTTER( PLOT_FORMAT_GERBER )
     {
         work_file  = 0;
         final_file = 0;
@@ -431,7 +429,7 @@ public: GERBER_PLOTTER() : PLOTTER( PLOT_FORMAT_GERBER )
     virtual void set_current_line_width( int width );
     virtual void set_default_line_width( int width );
 
-/* RS274X has no dashing, nor colours */
+    // RS274X has no dashing, nor colours
     virtual void set_dash( bool dashed ) {};
     virtual void set_color( int color ) {};
     virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror );
@@ -472,8 +470,7 @@ public: GERBER_PLOTTER() : PLOTTER( PLOT_FORMAT_GERBER )
     virtual void                    SetLayerPolarity( bool aPositive );
 
 protected:
-    void                select_aperture( const wxSize&           size,
-                                                     APERTURE::Aperture_Type type );
+    void  select_aperture( const wxSize& size, APERTURE::Aperture_Type type );
 
     std::vector<APERTURE>::iterator
                         get_aperture( const wxSize& size, APERTURE::Aperture_Type type );
@@ -487,9 +484,12 @@ protected:
     std::vector<APERTURE>::iterator current_aperture;
 };
 
+
 class DXF_PLOTTER : public PLOTTER
 {
-public: DXF_PLOTTER() : PLOTTER( PLOT_FORMAT_DXF )
+public:
+    DXF_PLOTTER() :
+        PLOTTER( PLOT_FORMAT_DXF )
     {
     }
 
@@ -559,4 +559,4 @@ protected:
     int current_color;
 };
 
-#endif  // __INCLUDE__PLOT_COMMON_H__
+#endif  // PLOT_COMMON_H_
