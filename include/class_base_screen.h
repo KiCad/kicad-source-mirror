@@ -37,11 +37,10 @@
 #include "common.h"
 
 
-// Forward declarations:
-class Ki_PageDescr;
-
-
-/* Simple class for handling grid arrays. */
+/**
+ * Class GRID_TYPE
+ * is for grid arrays.
+ */
 class GRID_TYPE
 {
 public:
@@ -59,7 +58,6 @@ public:
         return *this;
     }
 
-
     const bool operator==( const GRID_TYPE& item ) const
     {
         return m_Size == item.m_Size && m_Id == item.m_Id;
@@ -72,12 +70,11 @@ typedef std::vector< GRID_TYPE > GRIDS;
 
 /**
  * Class BASE_SCREEN
- * handle how to draw a screen (a board, a schematic ...)
+ * handles how to draw a screen (a board, a schematic ...)
  */
 class BASE_SCREEN : public EDA_ITEM
 {
     GRIDS     m_grids;          ///< List of valid grid sizes.
-    EDA_ITEM* m_drawList;       ///< Object list for the screen.
     wxString  m_fileName;       ///< File used to load the screen.
     char      m_FlagRefreshReq; ///< Indicates that the screen should be redrawn.
     bool      m_FlagModified;   ///< Indicates current drawing has been modified.
@@ -94,19 +91,24 @@ class BASE_SCREEN : public EDA_ITEM
      */
     wxPoint m_crossHairPosition;
 
+    double     m_Zoom;          ///< Current zoom coefficient.
+
+
 public:
-    wxPoint m_DrawOrg;          /* offsets for drawing the circuit on the screen */
+    wxPoint m_DrawOrg;          ///< offsets for drawing the circuit on the screen
 
     wxPoint m_O_Curseur;        /* Relative Screen cursor coordinate (on grid)
                                  * in user units. (coordinates from last reset position)*/
 
     // Scrollbars management:
-    int     m_ScrollPixelsPerUnitX; /* Pixels per scroll unit in the horizontal direction. */
-    int     m_ScrollPixelsPerUnitY; /* Pixels per scroll unit in the vertical direction. */
+    int     m_ScrollPixelsPerUnitX; ///< Pixels per scroll unit in the horizontal direction.
+    int     m_ScrollPixelsPerUnitY; ///< Pixels per scroll unit in the vertical direction.
+
     wxSize  m_ScrollbarNumber;      /* Current virtual draw area size in scroll units.
                                      * m_ScrollbarNumber * m_ScrollPixelsPerUnit =
                                      * virtual draw area size in pixels */
-    wxPoint m_ScrollbarPos;     /* Current scroll bar position in scroll units. */
+
+    wxPoint m_ScrollbarPos;     ///< Current scroll bar position in scroll units.
 
     wxPoint m_StartVisu;        /* Coordinates in drawing units of the current
                                  * view position (upper left corner of device)
@@ -117,18 +119,16 @@ public:
                                   * > 0 except for schematics.
                                   * false: when coordinates can only be >= 0
                                   * Schematic */
-    bool m_FirstRedraw;
+    bool    m_FirstRedraw;
 
     // Undo/redo list of commands
-    UNDO_REDO_CONTAINER m_UndoList;          /* Objects list for the undo command (old data) */
-    UNDO_REDO_CONTAINER m_RedoList;          /* Objects list for the redo command (old data) */
-    unsigned            m_UndoRedoCountMax;  // undo/Redo command Max depth
+    UNDO_REDO_CONTAINER m_UndoList;          ///< Objects list for the undo command (old data)
+    UNDO_REDO_CONTAINER m_RedoList;          ///< Objects list for the redo command (old data)
+    unsigned            m_UndoRedoCountMax;  ///< undo/Redo command Max depth
 
-    /* block control */
-    BLOCK_SELECTOR      m_BlockLocate;       /* Block description for block commands */
+    // block control
+    BLOCK_SELECTOR      m_BlockLocate;       ///< Block description for block commands
 
-    /* Page description */
-    Ki_PageDescr*       m_CurrentSheetDesc;
     int             m_ScreenNumber;
     int             m_NumberOfScreen;
 
@@ -141,11 +141,9 @@ public:
     wxString        m_Commentaire3;
     wxString        m_Commentaire4;
 
-    /* Grid and zoom values. */
-    wxPoint	m_GridOrigin;
+    wxPoint	        m_GridOrigin;
 
-    wxArrayDouble m_ZoomList;       /* Array of standard zoom (i.e. scale) coefficients. */
-    double     m_Zoom;              /* Current zoom coefficient. */
+    wxArrayDouble m_ZoomList;       ///< Array of standard zoom (i.e. scale) coefficients.
     bool       m_IsPrinting;
 
 public:
@@ -161,23 +159,11 @@ public:
 
     EDA_ITEM* GetCurItem() const { return m_CurrentItem; }
 
-    /**
-     * Function GetDrawItems().
-     *
-     * @return - A pointer to the first item in the linked list of draw items.
-     */
-    virtual EDA_ITEM* GetDrawItems() const { return m_drawList; }
-
-    virtual void SetDrawItems( EDA_ITEM* aItem ) { m_drawList = aItem; }
-
-    void InitDatas();
+    void InitDataPoints( const wxSize& aPageSizeInternalUnits );
 
     void SetFileName( const wxString& aFileName ) { m_fileName = aFileName; }
 
     wxString GetFileName() const { return m_fileName; }
-
-    void SetPageSize( wxSize& aPageSize );
-    wxSize ReturnPageSize( void );
 
     /**
      * Function GetInternalUnits
@@ -459,6 +445,5 @@ public:
     void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
 };
-
 
 #endif  // CLASS_BASE_SCREEN_H_

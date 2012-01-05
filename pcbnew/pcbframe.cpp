@@ -317,8 +317,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     SetIcon( icon );
 
     m_internalUnits = PCB_INTERNAL_UNIT;    // Unites internes = 1/10000 inch
-    SetScreen( new PCB_SCREEN() );
-    GetScreen()->m_Center = false;          // PCB drawings start in the upper left corner.
+
+    SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
+
+    // PCB drawings start in the upper left corner.
+    GetScreen()->m_Center = false;
 
     // LoadSettings() *after* creating m_LayersManager, because LoadSettings()
     // initialize parameters in m_LayersManager
@@ -403,7 +406,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( wxWindow* parent, const wxString& title,
     m_Layers->ReFillRender();   // Update colors in Render after the config is read
     syncLayerWidget();
     m_auimgr.Update();
-
 }
 
 

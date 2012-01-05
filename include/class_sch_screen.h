@@ -55,14 +55,23 @@ enum SCH_LINE_TEST_T
 };
 
 
-/* Max number of sheets in a hierarchy project: */
-#define NB_MAX_SHEET 500
+/// Max number of sheets in a hierarchy project
+#define NB_MAX_SHEET    500
 
 
 class SCH_SCREEN : public BASE_SCREEN
 {
-    int       m_refCount;     ///< Number of sheets referencing this screen.
-                              ///< Delete when it goes to zero.
+    int         m_refCount;     ///< Number of sheets referencing this screen.
+                                ///< Delete when it goes to zero.
+
+    /// The size of the paper to print or plot on
+    PAGE_INFO   m_paper;        // keep with the MVC 'model' if this class gets split
+
+    /// Position of the origin axis, which is used in exports mostly, but not yet in EESCHEMA
+    wxPoint     m_originAxisPosition;
+
+    SCH_ITEM*   m_drawList;     ///< Object list for the screen.
+                                /// @todo use DLIST<SCH_ITEM> or superior container
 
     /**
      * Function addConnectedItemsToBlock
@@ -77,13 +86,24 @@ class SCH_SCREEN : public BASE_SCREEN
     void addConnectedItemsToBlock( const wxPoint& aPosition );
 
 public:
-    SCH_SCREEN( KICAD_T aType = SCH_SCREEN_T );
+
+    /**
+     * Constructor
+     */
+    SCH_SCREEN();
+
     ~SCH_SCREEN();
 
     virtual wxString GetClass() const
     {
         return wxT( "SCH_SCREEN" );
     }
+
+    const PAGE_INFO& GetPageSettings() const                { return m_paper; }
+    void SetPageSettings( const PAGE_INFO& aPageSettings )  { m_paper = aPageSettings; }
+
+    const wxPoint& GetOriginAxisPosition() const            { return m_originAxisPosition; }
+    void SetOriginAxisPosition( const wxPoint& aPosition )  { m_originAxisPosition = aPosition; }
 
     void DecRefCount();
 
@@ -93,12 +113,10 @@ public:
 
     /**
      * Function GetDrawItems().
-     *
      * @return - A pointer to the first item in the linked list of draw items.
      */
-    virtual SCH_ITEM* GetDrawItems() const { return (SCH_ITEM*) BASE_SCREEN::GetDrawItems(); }
-
-    virtual void SetDrawItems( SCH_ITEM* aItem ) { BASE_SCREEN::SetDrawItems( aItem ); }
+    SCH_ITEM* GetDrawItems() const          { return m_drawList; }
+    void SetDrawItems( SCH_ITEM* aItem )    { m_drawList = aItem; }
 
     /**
      * Function GetCurItem
@@ -449,6 +467,10 @@ public:
      * @return The number of items in the pick list.
      */
     int UpdatePickList();
+
+#if defined(DEBUG)
+    void Show( int nestLevel, std::ostream& os ) const;     // overload
+#endif
 };
 
 

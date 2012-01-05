@@ -216,12 +216,6 @@ void EDA_APP::WriteProjectConfig( const wxString&  fileName,
 }
 
 
-/**
- * Function SaveCurrentSetupValues
- * Save the current setup values in m_settings
- * saved parameters are parameters that have the .m_Setup member set to true
- * @param aList = array of PARAM_CFG_BASE pointers
- */
 void EDA_APP::SaveCurrentSetupValues( PARAM_CFG_BASE** aList )
 {
     PARAM_CFG_BASE* pt_cfg;
@@ -253,12 +247,15 @@ void EDA_APP::SaveCurrentSetupValues( const PARAM_CFG_ARRAY& List )
     if( m_settings == NULL )
         return;
 
-    BOOST_FOREACH( const PARAM_CFG_BASE& param, List )
+    unsigned count = List.size();
+    for( unsigned i=0;  i<count;  ++i )
     {
+        const PARAM_CFG_BASE& param = List[i];
+
         if( param.m_Setup == false )
             continue;
 
-        if ( param.m_Type == PARAM_COMMAND_ERASE )    // Erase all data
+        if( param.m_Type == PARAM_COMMAND_ERASE )       // Erase all data
         {
             if( param.m_Ident )
                 m_settings->DeleteGroup( param.m_Ident );
@@ -441,10 +438,6 @@ PARAM_CFG_INT::PARAM_CFG_INT( bool Insetup, const wxChar* ident, int* ptparam,
 }
 
 
-/** ReadParam
- * read the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that store the parameter
- */
 void PARAM_CFG_INT::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -459,10 +452,6 @@ void PARAM_CFG_INT::ReadParam( wxConfigBase* aConfig ) const
 }
 
 
-/** SaveParam
- * save the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that can store the parameter
- */
 void PARAM_CFG_INT::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -495,10 +484,6 @@ PARAM_CFG_SETCOLOR::PARAM_CFG_SETCOLOR( bool          Insetup,
 }
 
 
-/** ReadParam
- * read the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that store the parameter
- */
 void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -511,10 +496,6 @@ void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig ) const
 }
 
 
-/** SaveParam
- * save the the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that can store the parameter
- */
 void PARAM_CFG_SETCOLOR::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -553,10 +534,6 @@ PARAM_CFG_DOUBLE::PARAM_CFG_DOUBLE( bool          Insetup,
 }
 
 
-/** ReadParam
- * read the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that store the parameter
- */
 void PARAM_CFG_DOUBLE::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -582,10 +559,6 @@ void PARAM_CFG_DOUBLE::ReadParam( wxConfigBase* aConfig ) const
 }
 
 
-/** SaveParam
- * save the the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that can store the parameter
- */
 void PARAM_CFG_DOUBLE::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -617,10 +590,6 @@ PARAM_CFG_BOOL::PARAM_CFG_BOOL( bool          Insetup,
 }
 
 
-/** ReadParam
- * read the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that store the parameter
- */
 void PARAM_CFG_BOOL::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -632,10 +601,6 @@ void PARAM_CFG_BOOL::ReadParam( wxConfigBase* aConfig ) const
 }
 
 
-/** SaveParam
- * save the the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that can store the parameter
- */
 void PARAM_CFG_BOOL::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -666,10 +631,6 @@ PARAM_CFG_WXSTRING::PARAM_CFG_WXSTRING( bool Insetup, const wxChar* ident,
 }
 
 
-/** ReadParam
- * read the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that store the parameter
- */
 void PARAM_CFG_WXSTRING::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -678,10 +639,6 @@ void PARAM_CFG_WXSTRING::ReadParam( wxConfigBase* aConfig ) const
 }
 
 
-/** SaveParam
- * save the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that can store the parameter
- */
 void PARAM_CFG_WXSTRING::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -701,10 +658,6 @@ PARAM_CFG_FILENAME::PARAM_CFG_FILENAME( const wxChar* ident,
 }
 
 
-/** ReadParam
- * read the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that store the parameter
- */
 void PARAM_CFG_FILENAME::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -720,10 +673,6 @@ void PARAM_CFG_FILENAME::ReadParam( wxConfigBase* aConfig ) const
 }
 
 
-/** SaveParam
- * save the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that can store the parameter
- */
 void PARAM_CFG_FILENAME::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -745,10 +694,6 @@ PARAM_CFG_LIBNAME_LIST::PARAM_CFG_LIBNAME_LIST( const wxChar*  ident,
 }
 
 
-/** ReadParam
- * read the value of parameter this stored in aConfig
- * @param aConfig = the wxConfigBase that store the parameter
- */
 void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -778,10 +723,6 @@ void PARAM_CFG_LIBNAME_LIST::ReadParam( wxConfigBase* aConfig ) const
 }
 
 
-/** SaveParam
- * save the value of parameter this in aConfig (list of parameters)
- * @param aConfig = the wxConfigBase that can store the parameter
- */
 void PARAM_CFG_LIBNAME_LIST::SaveParam( wxConfigBase* aConfig ) const
 {
     if( m_Pt_param == NULL || aConfig == NULL )
@@ -799,6 +740,7 @@ void PARAM_CFG_LIBNAME_LIST::SaveParam( wxConfigBase* aConfig ) const
         // We use indexlib+1 because first lib name is LibName1
         configkey << (indexlib + 1);
         libname = libname_list->Item( indexlib );
+
         // filenames are stored using Unix notation
         libname.Replace(wxT("\\"), wxT("/") );
         aConfig->Write( configkey, libname );

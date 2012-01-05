@@ -35,26 +35,28 @@
 #include "id.h"
 
 
-#define CURSOR_SIZE 12  /* size of the cross cursor. */
+#define CURSOR_SIZE     12      /// size of the cross cursor.
 
 
-BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) : EDA_ITEM( aType )
+BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) :
+    EDA_ITEM( aType )
 {
-    m_drawList         = NULL;   /* Draw items list */
-    m_UndoRedoCountMax = 10;     /* undo/Redo command Max depth, 10 is a reasonable value */
+    m_UndoRedoCountMax = 10;     // undo/Redo command Max depth, 10 is a reasonable value
     m_FirstRedraw      = true;
     m_ScreenNumber     = 1;
-    m_NumberOfScreen   = 1;      /* Hierarchy: Root: ScreenNumber = 1 */
+    m_NumberOfScreen   = 1;      // Hierarchy: Root: ScreenNumber = 1
     m_Zoom             = 32.0;
-    m_Grid.m_Size      = wxRealPoint( 50, 50 );   /* Default grid size */
+    m_Grid.m_Size      = wxRealPoint( 50, 50 );   // Default grid size
     m_Grid.m_Id        = ID_POPUP_GRID_LEVEL_50;
     m_Center           = true;
-    m_CurrentSheetDesc = &g_Sheet_A4;
     m_IsPrinting       = false;
     m_ScrollPixelsPerUnitX = 1;
     m_ScrollPixelsPerUnitY = 1;
 
-    InitDatas();
+    m_FlagModified     = false;     // Set when any change is made on board.
+    m_FlagSave         = false;     // Used in auto save set when an auto save is required.
+
+    SetCurItem( NULL );
 }
 
 
@@ -63,52 +65,30 @@ BASE_SCREEN::~BASE_SCREEN()
 }
 
 
-void BASE_SCREEN::InitDatas()
+void BASE_SCREEN::InitDataPoints( const wxSize& aPageSizeIU )
 {
     if( m_Center )
     {
         m_crossHairPosition.x = m_crossHairPosition.y = 0;
-        m_DrawOrg.x = -ReturnPageSize().x / 2;
-        m_DrawOrg.y = -ReturnPageSize().y / 2;
+
+        m_DrawOrg.x = -aPageSizeIU.x / 2;
+        m_DrawOrg.y = -aPageSizeIU.y / 2;
     }
     else
     {
         m_DrawOrg.x = m_DrawOrg.y = 0;
-        m_crossHairPosition.x = ReturnPageSize().x / 2;
-        m_crossHairPosition.y = ReturnPageSize().y / 2;
+
+        m_crossHairPosition.x = aPageSizeIU.x / 2;
+        m_crossHairPosition.y = aPageSizeIU.y / 2;
     }
 
     m_O_Curseur.x = m_O_Curseur.y = 0;
-
-    SetCurItem( NULL );
-
-    m_FlagModified = false;   // Set when any change is made on broad.
-    m_FlagSave = false;       // Used in auto save set when an auto save is required.
 }
 
 
 int BASE_SCREEN::GetInternalUnits( void )
 {
     return EESCHEMA_INTERNAL_UNIT;
-}
-
-
-wxSize BASE_SCREEN::ReturnPageSize( void )
-{
-    int internal_units = GetInternalUnits();
-    wxSize size = m_CurrentSheetDesc->m_Size;
-    size.x =  (int)( (double)size.x * internal_units / 1000 );
-    size.y =  (int)( (double)size.y * internal_units / 1000 );
-
-    return size;
-}
-
-void BASE_SCREEN::SetPageSize( wxSize& aPageSize )
-{
-    int internal_units = GetInternalUnits();
-
-    m_CurrentSheetDesc->m_Size.x = (int) ((double)aPageSize.x * 1000 / internal_units);
-    m_CurrentSheetDesc->m_Size.y = (int) ((double)aPageSize.y * 1000 / internal_units);
 }
 
 
@@ -124,12 +104,12 @@ void BASE_SCREEN::SetScalingFactor(double aScale )
     double zoom = aScale;
 
     // Limit zoom to max and min allowed values:
-    if (zoom < m_ZoomList[0])
+    if( zoom < m_ZoomList[0] )
         zoom = m_ZoomList[0];
 
     int idxmax = m_ZoomList.GetCount() - 1;
 
-    if (zoom > m_ZoomList[idxmax])
+    if( zoom > m_ZoomList[idxmax] )
         zoom = m_ZoomList[idxmax];
 
     SetZoom( zoom );
@@ -151,13 +131,13 @@ bool BASE_SCREEN::SetFirstZoom()
     {
         if( m_Zoom != 1.0 )
         {
-            m_Zoom = 1.0;
+            SetZoom( 1.0 );
             return true;
         }
     }
     else if( m_Zoom != m_ZoomList[0] )
     {
-        m_Zoom = m_ZoomList[0];
+        SetZoom( m_ZoomList[0] );
         return true;
     }
 
@@ -193,7 +173,7 @@ bool BASE_SCREEN::SetNextZoom()
     {
         if( m_Zoom < m_ZoomList[i] )
         {
-            m_Zoom = m_ZoomList[i];
+            SetZoom( m_ZoomList[i] );
             return true;
         }
     }
@@ -213,7 +193,7 @@ bool BASE_SCREEN::SetPreviousZoom()
     {
         if( m_Zoom > m_ZoomList[i - 1] )
         {
-            m_Zoom = m_ZoomList[i - 1];
+            SetZoom( m_ZoomList[i - 1] );
             return true;
         }
     }
@@ -227,7 +207,7 @@ bool BASE_SCREEN::SetLastZoom()
     if( m_ZoomList.IsEmpty() || m_Zoom == m_ZoomList.Last() )
         return false;
 
-    m_Zoom = m_ZoomList.Last();
+    SetZoom( m_ZoomList.Last() );
     return true;
 }
 
@@ -466,7 +446,7 @@ void BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
 {
     m_UndoList.PushCommand( aNewitem );
 
-    /* Delete the extra items, if count max reached */
+    // Delete the extra items, if count max reached
     int extraitems = GetUndoCommandCount() - m_UndoRedoCountMax;
 
     if( extraitems > 0 ) // Delete the extra items
@@ -478,7 +458,7 @@ void BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
 {
     m_RedoList.PushCommand( aNewitem );
 
-    /* Delete the extra items, if count max reached */
+    // Delete the extra items, if count max reached
     int extraitems = GetRedoCommandCount() - m_UndoRedoCountMax;
 
     if( extraitems > 0 ) // Delete the extra items
@@ -502,15 +482,15 @@ PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromRedoList( )
 
 void BASE_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
-    EDA_ITEM* item = m_drawList;
-
     // for now, make it look like XML, expand on this later.
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 
-    for(  ; item;  item = item->Next() )
+    /* this class will eventually go away, but here's a place holder until then.
+    for( EDA_ITEM* item = m_drawList;  item;  item = item->Next() )
     {
         item->Show( nestLevel+1, os );
     }
+    */
 
     NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }

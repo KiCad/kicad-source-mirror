@@ -112,6 +112,13 @@ public:
      */
     EDA_RECT    GetBoardBoundingBox( bool aBoardEdgesOnly = false ) const;
 
+    void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload
+    const PAGE_INFO& GetPageSettings() const;                   // overload
+    const wxSize GetPageSizeIU() const;                         // overload
+
+    const wxPoint& GetOriginAxisPosition() const;               // overload
+    void SetOriginAxisPosition( const wxPoint& aPosition );     // overload
+
     /**
      * Function SetBoard
      * sets the m_Pcb member in such as way as to ensure deleting any previous
@@ -126,8 +133,6 @@ public:
         return m_Pcb;
     }
 
-    BOARD_DESIGN_SETTINGS* GetDesignSettings();
-
     // General
     virtual void OnCloseWindow( wxCloseEvent& Event ) = 0;
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) { }
@@ -140,10 +145,7 @@ public:
     virtual void SetToolID( int aId, int aCursor, const wxString& aToolMsg );
     virtual void UpdateStatusBar();
 
-    virtual PCB_SCREEN* GetScreen() const
-    {
-        return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen();
-    }
+    PCB_SCREEN* GetScreen() const { return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
 
     /**
      * Function BestZoom

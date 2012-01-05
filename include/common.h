@@ -32,31 +32,33 @@
 #ifndef INCLUDE__COMMON_H_
 #define INCLUDE__COMMON_H_
 
+#include <vector>
+
 #include "wx/wx.h"
 #include "wx/confbase.h"
 #include "wx/fileconf.h"
 
+
 class wxAboutDialogInfo;
 
-/* Flag for special keys */
+// Flag for special keys
 #define GR_KB_RIGHTSHIFT 0x10000000                 /* Keybd states: right
                                                      * shift key depressed */
 #define GR_KB_LEFTSHIFT  0x20000000                 /* left shift key depressed
                                                      */
-#define GR_KB_CTRL       0x40000000                 /* CTRL depressed */
-#define GR_KB_ALT        0x80000000                 /* ALT depressed */
+#define GR_KB_CTRL       0x40000000                 // CTRL depressed
+#define GR_KB_ALT        0x80000000                 // ALT depressed
 #define GR_KB_SHIFT      (GR_KB_LEFTSHIFT | GR_KB_RIGHTSHIFT)
 #define GR_KB_SHIFTCTRL  (GR_KB_SHIFT | GR_KB_CTRL)
 #define MOUSE_MIDDLE     0x08000000                 /* Middle button mouse
                                                      * flag for block commands
                                                      */
 
-// default name for nameless projects
+/// default name for nameless projects
 #define NAMELESS_PROJECT wxT( "noname" )
 
-#define NB_ITEMS 11
 
-/* Pseudo key codes for command panning */
+/// Pseudo key codes for command panning
 enum pseudokeys {
     EDA_PANNING_UP_KEY = 1,
     EDA_PANNING_DOWN_KEY,
@@ -69,7 +71,7 @@ enum pseudokeys {
 
 #define ESC 27
 
-/* TODO Executable names TODO*/
+// TODO Executable names TODO
 #ifdef __WINDOWS__
 #define CVPCB_EXE           wxT( "cvpcb.exe" )
 #define PCBNEW_EXE          wxT( "pcbnew.exe" )
@@ -96,7 +98,7 @@ enum pseudokeys {
 #endif
 
 
-/* Graphic Texts Orientation in 0.1 degree*/
+// Graphic Texts Orientation in 0.1 degree
 #define TEXT_ORIENT_HORIZ 0
 #define TEXT_ORIENT_VERT  900
 
@@ -111,56 +113,146 @@ enum EDA_UNITS_T {
 };
 
 #if defined(KICAD_GOST)
-#define GOST_LEFTMARGIN   800    /* 20mm */
-#define GOST_RIGHTMARGIN  200    /* 5mm */
-#define GOST_TOPMARGIN    200    /* 5mm */
-#define GOST_BOTTOMMARGIN 200    /* 5mm */
+#define GOST_LEFTMARGIN   800    // 20mm
+#define GOST_RIGHTMARGIN  200    // 5mm
+#define GOST_TOPMARGIN    200    // 5mm
+#define GOST_BOTTOMMARGIN 200    // 5mm
 
 #endif
-/* forward declarations: */
+// forward declarations:
 class LibNameList;
 
 
-/* Class to handle pages sizes:
+//class PAGE_INFO;
+
+/**
+ * Class PAGE_INFO
+ * describes the page size and margins of a paper page on which to
+ * eventually print or plot.  Paper sizes are often described in inches.
+ * Here paper is described in 1/1000th of an inch (mils).  For convenience
+ * there are some read only accessors for internal units (IU), which is a compile
+ * time calculation, not runtime.
+ *
+ * @author Dick Hollenbeck
  */
-class Ki_PageDescr
+class PAGE_INFO
 {
-// All sizes are in 1/1000 inch
 public:
-    wxSize   m_Size;    /* page size in 1/1000 inch */
-    wxPoint  m_Offset;  /* plot offset in 1/1000 inch */
-    wxString m_Name;
-    int      m_LeftMargin;
-    int      m_RightMargin;
-    int      m_TopMargin;
-    int      m_BottomMargin;
+    PAGE_INFO( const wxString& aType = wxT( "A3" ) );
+    PAGE_INFO( const wxSize& aSizeMils, const wxString& aName );
 
-public:
-    Ki_PageDescr( const wxSize& size, const wxPoint& offset, const wxString& name );
+    const wxString& GetType() const { return m_type; }
+
+    /**
+     * Function SetType
+     * sets the name of the page type and also the sizes and margins
+     * commonly associated with that type name.
+     *
+     * @param aStandardPageDescriptionName is a wxString constant giving one of:
+     * "A4" "A3" "A2" "A1" "A0" "A" "B" "C" "D" "E" "GERBER", or "User".  If "User"
+     * then the width and height are custom, and will be set according to previous calls
+     * to static PAGE_INFO::SetUserWidthMils() and
+     * static PAGE_INFO::SetUserHeightMils();
+     *
+     * @return bool - true iff @a aStandarePageDescription was a recognized type.
+     */
+    bool SetType( const wxString& aStandardPageDescriptionName );
+
+    void SetWidthMils(  int aWidthInMils )  { m_size.x = aWidthInMils; }
+    int GetWidthMils() const                { return m_size.x;  }
+
+    void SetHeightMils( int aHeightInMils ) { m_size.y = aHeightInMils; }
+    int GetHeightMils() const               { return m_size.y; }
+
+    const wxSize& GetSizeMils() const       { return m_size; }
+
+    // Accessors returning "Internal Units (IU)".  IUs are mils in EESCHEMA,
+    // and either deci-mils or nanometers in PCBNew.
+#if defined(PCBNEW)
+# if defined(KICAD_NANOMETRE)
+    int GetWidthIU() const  { return int( 2.54e4 * GetWidthMils() );  }
+    int GetHeightIU() const { return int( 2.54e4 * GetHeightMils() ); }
+# else
+    int GetWidthIU() const  { return int( 10 * GetWidthMils() );  }
+    int GetHeightIU() const { return int( 10 * GetHeightMils() ); }
+# endif
+    const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
+#elif defined(EESCHEMA)
+    int GetWidthIU() const  { return GetWidthMils();  }
+    int GetHeightIU() const { return GetHeightMils(); }
+    const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
+#endif
+
+//    wxPoint GetOffsetMils() const   { return m_Offset; }
+
+    int GetLeftMarginMils() const           { return m_left_margin; }
+    int GetRightMarginMils() const          { return m_right_margin; }
+    int GetTopMarginMils() const            { return m_top_margin; }
+    int GetBottomMarginMils() const         { return m_bottom_margin; }
+
+    void SetLeftMarginMils( int aMargin )   { m_left_margin = aMargin; }
+    void SetRightMarginMils( int aMargin )  { m_right_margin = aMargin; }
+    void SetTopMarginMils( int aMargin )    { m_top_margin = aMargin; }
+    void SetBottomMarginMils( int aMargin ) { m_bottom_margin = aMargin; }
+
+    /**
+     * Function SetUserWidthMils
+     * sets the width of type "User" page in mils.
+     */
+    static void SetUserWidthMils( int aWidthInMils );
+
+    /**
+     * Function SetUserHeightMils
+     * sets the height type "User" page in mils.
+     */
+    static void SetUserHeightMils( int aHeightInMils );
+
+    /**
+     * Function GetStandardSizes
+     * returns the standard page types, such as "A4", "A3", etc.
+    static wxArrayString GetStandardSizes();
+     */
+
+private:
+
+    // standard pre-defined sizes
+    static const PAGE_INFO pageA4;
+    static const PAGE_INFO pageA3;
+    static const PAGE_INFO pageA2;
+    static const PAGE_INFO pageA1;
+    static const PAGE_INFO pageA0;
+    static const PAGE_INFO pageA;
+    static const PAGE_INFO pageB;
+    static const PAGE_INFO pageC;
+    static const PAGE_INFO pageD;
+    static const PAGE_INFO pageE;
+    static const PAGE_INFO pageGERBER;
+    static const PAGE_INFO pageUser;
+
+    // all dimensions here are in mils
+
+    wxString    m_type;             ///< paper type: A4, A3, etc.
+
+    wxSize      m_size;             ///< mils
+
+//    wxPoint     m_offset_mils;    ///< plot offset in mils
+
+    int         m_left_margin;
+    int         m_right_margin;
+    int         m_top_margin;
+    int         m_bottom_margin;
+
+    static int s_user_height;
+    static int s_user_width;
 };
-
-
-extern Ki_PageDescr   g_Sheet_A4;
-extern Ki_PageDescr   g_Sheet_A3;
-extern Ki_PageDescr   g_Sheet_A2;
-extern Ki_PageDescr   g_Sheet_A1;
-extern Ki_PageDescr   g_Sheet_A0;
-extern Ki_PageDescr   g_Sheet_A;
-extern Ki_PageDescr   g_Sheet_B;
-extern Ki_PageDescr   g_Sheet_C;
-extern Ki_PageDescr   g_Sheet_D;
-extern Ki_PageDescr   g_Sheet_E;
-extern Ki_PageDescr   g_Sheet_GERBER;
-extern Ki_PageDescr   g_Sheet_user;
-extern Ki_PageDescr*  g_SheetSizeList[];
 
 
 extern wxString       g_ProductName;
 
-/* Default user lib path can be left void, if the standard lib path is used */
+/// Default user lib path can be left void, if the standard lib path is used
 extern wxString       g_UserLibDirBuffer;
 
-extern bool           g_ShowPageLimits; // true to display the page limits
+extern bool           g_ShowPageLimits;     ///< true to display the page limits
 
 /**
  * File extension definitions.  Please do not changes these.  If a different
@@ -188,10 +280,10 @@ extern const wxString MacrosFileWildcard;
 extern const wxString AllFilesWildcard;
 
 
-// Name of default configuration file. (kicad.pro)
+/// Name of default configuration file. (kicad.pro)
 extern wxString     g_Prj_Default_Config_FullFilename;
 
-// Name of local configuration file. (<curr projet>.pro)
+/// Name of local configuration file. (<curr projet>.pro)
 extern wxString     g_Prj_Config_LocalFilename;
 
 extern EDA_UNITS_T  g_UserUnit;     ///< display units
@@ -200,7 +292,7 @@ extern EDA_UNITS_T  g_UserUnit;     ///< display units
 extern int          g_GhostColor;
 
 
-/* COMMON.CPP */
+// COMMON.CPP
 
 /**
  * Function SetLocaleTo_C_standard

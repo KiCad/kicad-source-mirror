@@ -14,12 +14,11 @@
 class DIALOG_PAGES_SETTINGS: public DIALOG_PAGES_SETTINGS_BASE
 {
 private:
-    EDA_DRAW_FRAME *m_Parent;
-    BASE_SCREEN * m_Screen;
-    int m_Modified;
-    Ki_PageDescr * m_SelectedSheet;
-    float UserSizeX, UserSizeY;
-    int m_CurrentSelection;
+    EDA_DRAW_FRAME* m_Parent;
+    BASE_SCREEN*    m_Screen;
+    bool            m_modified;
+    PAGE_INFO       m_page;             ///< the one being edited
+    PAGE_INFO       m_user_size;        ///< instantiated just to get the size
 
 public:
     DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent );
@@ -37,7 +36,8 @@ private:
 
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
     void OnCancelClick( wxCommandEvent& event );
-    void SearchPageSizeSelection();
+
+    void setCurrentPageSizeSelection();
     void SavePageSettings(wxCommandEvent& event);
     void ReturnSizeSelected(wxCommandEvent& event);
 

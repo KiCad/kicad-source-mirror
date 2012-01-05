@@ -16,7 +16,7 @@
 
 #include "build_version.h"
 
-/* Must be defined in main applications: */
+// Must be defined in main applications:
 
 Ki_WorkSheetData WS_Date =
 {
@@ -186,7 +186,9 @@ Ki_WorkSheetData WS_Comment4 =
     NULL,            NULL
 };
 
-Ki_WorkSheetData WS_MostLeftLine =   /* Left vertical segment  */
+
+/// Left vertical segment
+Ki_WorkSheetData WS_MostLeftLine =
 {
     WS_LEFT_SEGMENT,
 #if defined(KICAD_GOST)
@@ -200,8 +202,9 @@ Ki_WorkSheetData WS_MostLeftLine =   /* Left vertical segment  */
     NULL,             NULL
 };
 
-Ki_WorkSheetData WS_SeparatorLine = /* horizontal segment between filename
-                                     * and comments */
+
+/// horizontal segment between filename and comments
+Ki_WorkSheetData WS_SeparatorLine =
 {
     WS_SEGMENT,
     &WS_MostUpperLine,
@@ -211,7 +214,9 @@ Ki_WorkSheetData WS_SeparatorLine = /* horizontal segment between filename
     NULL,             NULL
 };
 
-Ki_WorkSheetData WS_MostUpperLine = /* superior horizontal segment */
+
+/// superior horizontal segment
+Ki_WorkSheetData WS_MostUpperLine =
 {
     WS_UPPER_SEGMENT,
     &WS_Segm3,
@@ -225,7 +230,9 @@ Ki_WorkSheetData WS_MostUpperLine = /* superior horizontal segment */
     NULL,            NULL
 };
 
-Ki_WorkSheetData WS_Segm3 =     /* horizontal segment above COMPANY NAME */
+
+/// horizontal segment above COMPANY NAME
+Ki_WorkSheetData WS_Segm3 =
 {
     WS_SEGMENT,
     &WS_Segm4,
@@ -239,7 +246,9 @@ Ki_WorkSheetData WS_Segm3 =     /* horizontal segment above COMPANY NAME */
     NULL,       NULL
 };
 
-Ki_WorkSheetData WS_Segm4 =     /* vertical segment of the left REV and SHEET */
+
+/// vertical segment of the left REV and SHEET
+Ki_WorkSheetData WS_Segm4 =
 {
     WS_SEGMENT,
     &WS_Segm5,
@@ -252,6 +261,7 @@ Ki_WorkSheetData WS_Segm4 =     /* vertical segment of the left REV and SHEET */
 #endif
     NULL,                  NULL
 };
+
 
 Ki_WorkSheetData WS_Segm5 =
 {
@@ -267,6 +277,7 @@ Ki_WorkSheetData WS_Segm5 =
     NULL,      NULL
 };
 
+
 Ki_WorkSheetData WS_Segm6 =
 {
     WS_SEGMENT,
@@ -280,6 +291,7 @@ Ki_WorkSheetData WS_Segm6 =
 #endif
     NULL,       NULL
 };
+
 
 Ki_WorkSheetData WS_Segm7 =
 {
@@ -989,14 +1001,14 @@ Ki_WorkSheetData WS_Segm5_LT =
 };
 
 
-/* Draw the page reference sheet.
- */
 void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_width )
 {
     if( !m_showBorderAndTitleBlock )
         return;
 
-    Ki_PageDescr* Sheet = screen->m_CurrentSheetDesc;
+    const PAGE_INFO&  pageInfo = GetPageSettings();
+    wxSize  pageSize = pageInfo.GetSizeMils();
+
     int ii, jj, xg, yg, ipas, gxpas, gypas;
     wxPoint pos;
     int refx, refy;
@@ -1017,28 +1029,27 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
     int width = line_width;
 
     Color = RED;
-    if( Sheet == NULL )
-    {
-        DisplayError( this,
-                      wxT( "EDA_DRAW_FRAME::TraceWorkSheet() error: NULL Sheet" ) );
-        return;
-    }
 
     // if not printing, draw the page limits:
     if( !screen->m_IsPrinting & g_ShowPageLimits )
     {
         GRSetDrawMode( DC, GR_COPY );
         GRRect( m_canvas->GetClipBox(), DC, 0, 0,
-                Sheet->m_Size.x * scale, Sheet->m_Size.y * scale, width,
+                pageSize.x * scale, pageSize.y * scale, width,
                 g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
     }
 
     GRSetDrawMode( DC, GR_COPY );
-    /* Draw the border. */
-    refx = Sheet->m_LeftMargin;
-    refy = Sheet->m_TopMargin;                      /* Upper left corner */
-    xg   = Sheet->m_Size.x - Sheet->m_RightMargin;
-    yg   = Sheet->m_Size.y - Sheet->m_BottomMargin; /* lower right corner */
+
+    // Draw the border.
+
+    // Upper left corner
+    refx = pageInfo.GetLeftMarginMils();
+    refy = pageInfo.GetTopMarginMils();
+
+    // lower right corner
+    xg   = pageSize.x - pageInfo.GetRightMarginMils();
+    yg   = pageSize.y - pageInfo.GetBottomMarginMils();
 
 #if defined(KICAD_GOST)
     GRRect( m_canvas->GetClipBox(), DC, refx * scale, refy * scale,
@@ -1056,10 +1067,11 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 
 #endif
 
-    /* Draw the reference legends. */
-    refx = Sheet->m_LeftMargin;
+    // Draw the reference legends.
+    refx = pageInfo.GetLeftMarginMils();
+
 #if defined(KICAD_GOST)
-    refy = Sheet->m_Size.y - Sheet->m_BottomMargin; /* Lower left corner */
+    refy = pageSize.y - pageInfo.GetBottomMargin(); // Lower left corner
     for( WsItem = &WS_Segm1_LU; WsItem != NULL; WsItem = WsItem->Pnext )
     {
         pos.x = ( refx - WsItem->m_Posx ) * scale;
@@ -1080,15 +1092,15 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             break;
 
         case WS_SEGMENT_LU:
-            xg = Sheet->m_LeftMargin - WsItem->m_Endx;
-            yg = Sheet->m_Size.y - Sheet->m_BottomMargin - WsItem->m_Endy;
+            xg = pageInfo.GetLeftMargin() - WsItem->m_Endx;
+            yg = pageSize.y - pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
             GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
                     xg * scale, yg * scale, width, Color );
             break;
         }
     }
 
-    refy = Sheet->m_BottomMargin; /* Left Top corner */
+    refy = pageInfo.GetBottomMarginMils(); // Left Top corner
     for( WsItem = &WS_Segm1_LT; WsItem != NULL; WsItem = WsItem->Pnext )
     {
         pos.x = ( refx + WsItem->m_Posx ) * scale;
@@ -1097,24 +1109,29 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         switch( WsItem->m_Type )
         {
         case WS_SEGMENT_LT:
-            xg = Sheet->m_LeftMargin + WsItem->m_Endx;
-            yg = Sheet->m_BottomMargin + WsItem->m_Endy;
-            GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
+            xg = pageInfo.GetLeftMarginMils() + WsItem->m_Endx;
+            yg = pageInfo.GetBottomMarginMils() + WsItem->m_Endy;
+            GRLine( &m_canvas->GetClipBox(), DC, pos.x, pos.y,
                     xg * scale, yg * scale, width, Color );
             break;
         }
     }
 
 #else
-    refy = Sheet->m_TopMargin;                      /* Upper left corner */
-    xg   = Sheet->m_Size.x - Sheet->m_RightMargin;
-    yg   = Sheet->m_Size.y - Sheet->m_BottomMargin; /* lower right corner */
+
+    // Upper left corner
+    refy = pageInfo.GetTopMarginMils();
+
+    // lower right corner
+    xg   = pageSize.x - pageInfo.GetRightMarginMils();
+    yg   = pageSize.y - pageInfo.GetBottomMarginMils();
 
     ipas  = ( xg - refx ) / PAS_REF;
     gxpas = ( xg - refx ) / ipas;
     for( ii = refx + gxpas, jj = 1; ipas > 0; ii += gxpas, jj++, ipas-- )
     {
         Line.Printf( wxT( "%d" ), jj );
+
         if( ii < xg - PAS_REF / 2 )
         {
             GRLine( m_canvas->GetClipBox(), DC, ii * scale, refy * scale,
@@ -1126,6 +1143,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                          Color, Line, TEXT_ORIENT_HORIZ, size_ref,
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                          width, false, false );
+
         if( ii < xg - PAS_REF / 2 )
         {
             GRLine( m_canvas->GetClipBox(), DC, ii * scale, yg * scale,
@@ -1161,6 +1179,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                          Color, Line, TEXT_ORIENT_HORIZ, size_ref,
                          GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                          width, false, false );
+
         if( ii < yg - PAS_REF / 2 )
         {
             GRLine( m_canvas->GetClipBox(), DC, xg * scale, ii * scale,
@@ -1177,8 +1196,10 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 #endif
 
 #if defined(KICAD_GOST)
-    refx = Sheet->m_Size.x - Sheet->m_RightMargin;
-    refy = Sheet->m_Size.y - Sheet->m_BottomMargin; /* lower right corner */
+    // lower right corner
+    refx = pageSize.x - pageInfo.GetRightMarginMils();
+    refy = pageSize.y - pageInfo.GetBottomMarginMils();
+
     if( screen->m_ScreenNumber == 1 )
     {
         for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
@@ -1261,8 +1282,8 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                      width,
                                      false, false );
-                    pos.x = (Sheet->m_LeftMargin + 1260) * scale;
-                    pos.y = (Sheet->m_TopMargin + 270) * scale;
+                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * scale;
+                    pos.y = (pageInfo.GetTopMarginMils() + 270) * scale;
                     DrawGraphicText( m_canvas, DC, pos, Color,
                                      msg, 1800, size2,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
@@ -1311,11 +1332,11 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 pos.y = ( refy - WsItem->m_Posy ) * scale;
 
             case WS_SEGMENT:
-                xg = Sheet->m_Size.x -
-                     Sheet->m_RightMargin - WsItem->m_Endx;
-                yg = Sheet->m_Size.y -
-                     Sheet->m_BottomMargin - WsItem->m_Endy;
-                GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
+                xg = pageSize.x -
+                     pageInfo.GetRightMarginMils() - WsItem->m_Endx;
+                yg = pageSize.y -
+                     pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
+                GRLine( &m_canvas->GetClipBox(), DC, pos.x, pos.y,
                         xg * scale, yg * scale, width, Color );
                 break;
             }
@@ -1328,10 +1349,11 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             pos.x = ( refx - WsItem->m_Posx ) * scale;
             pos.y = ( refy - WsItem->m_Posy ) * scale;
             msg.Empty();
+
             switch( WsItem->m_Type )
             {
             case WS_CADRE:
-            /* Begin list number > 1 */
+            // Begin list number > 1
                 msg = screen->m_Commentaire1;
                 if( !msg.IsEmpty() )
                 {
@@ -1340,8 +1362,8 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                      width,
                                      false, false );
-                    pos.x = (Sheet->m_LeftMargin + 1260) * scale;
-                    pos.y = (Sheet->m_TopMargin + 270) * scale;
+                    pos.x = (pageInfo.GetLeftMarginMils() + 1260) * scale;
+                    pos.y = (pageInfo.GetTopMarginMils() + 270) * scale;
                     DrawGraphicText( m_canvas, DC, pos, Color,
                                      msg, 1800, size2,
                                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
@@ -1374,19 +1396,21 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 pos.y = ( refy - WsItem->m_Posy ) * scale;
 
             case WS_SEGMENT_D:
-                xg = Sheet->m_Size.x -
-                     Sheet->m_RightMargin - WsItem->m_Endx;
-                yg = Sheet->m_Size.y -
-                     Sheet->m_BottomMargin - WsItem->m_Endy;
-                GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
+                xg = pageSize.x -
+                     pageInfo.GetRightMarginMils() - WsItem->m_Endx;
+                yg = pageSize.y -
+                     pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
+                GRLine( &m_canvas->GetClipBox(), DC, pos.x, pos.y,
                         xg * scale, yg * scale, width, Color );
                 break;
             }
         }
     }
+
 #else
-    refx = Sheet->m_Size.x - Sheet->m_RightMargin - GRID_REF_W;
-    refy = Sheet->m_Size.y - Sheet->m_BottomMargin - GRID_REF_W;
+
+    refx = pageSize.x - pageInfo.GetRightMarginMils()  - GRID_REF_W;
+    refy = pageSize.y - pageInfo.GetBottomMarginMils() - GRID_REF_W;
 
     for( WsItem = &WS_Date; WsItem != NULL; WsItem = WsItem->Pnext )
     {
@@ -1431,7 +1455,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_SIZESHEET:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += Sheet->m_Name;
+            msg += pageInfo.GetType();
             DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
@@ -1569,10 +1593,10 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             pos.y = (refy - WsItem->m_Posy) * scale;
 
         case WS_SEGMENT:
-            xg = Sheet->m_Size.x -
-                 GRID_REF_W - Sheet->m_RightMargin - WsItem->m_Endx;
-            yg = Sheet->m_Size.y -
-                 GRID_REF_W - Sheet->m_BottomMargin - WsItem->m_Endy;
+            xg = pageSize.x -
+                 GRID_REF_W - pageInfo.GetRightMarginMils() - WsItem->m_Endx;
+            yg = pageSize.y -
+                 GRID_REF_W - pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
             GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
                     xg * scale, yg * scale, width, Color );
             break;
@@ -1583,50 +1607,43 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 }
 
 
-/**
- * Function GetXYSheetReferences
- * Return the X,Y sheet references where the point position is located
- * @param aScreen = screen to use
- * @param aPosition = position to identify by YX ref
- * @return a wxString containing the message locator like A3 or B6 (or ?? if out of page limits)
- */
-wxString EDA_DRAW_FRAME::GetXYSheetReferences( BASE_SCREEN* aScreen, const wxPoint& aPosition )
+const wxString EDA_DRAW_FRAME::GetXYSheetReferences( const wxPoint& aPosition )
 {
-    Ki_PageDescr* Sheet = aScreen->m_CurrentSheetDesc;
-    int ii, xg, yg, ipas, gxpas, gypas;
-    int refx, refy;
-    wxString msg;
+    const PAGE_INFO& pageInfo = GetPageSettings();
 
-    if( Sheet == NULL )
-    {
-        DisplayError( this,
-                      wxT( "EDA_DRAW_FRAME::GetXYSheetReferences() error: NULL Sheet" ) );
-        return msg;
-    }
+    int         ii;
+    int         xg, yg;
+    int         ipas;
+    int         gxpas, gypas;
+    int         refx, refy;
+    wxString    msg;
 
-    refx = Sheet->m_LeftMargin;
-    refy = Sheet->m_TopMargin;                      /* Upper left corner */
-    xg   = Sheet->m_Size.x - Sheet->m_RightMargin;
-    yg   = Sheet->m_Size.y - Sheet->m_BottomMargin; /* lower right corner */
+    // Upper left corner
+    refx = pageInfo.GetLeftMarginMils();
+    refy = pageInfo.GetTopMarginMils();
 
-    /* Get the Y axis identifier (A symbol A ... Z) */
+    // lower right corner
+    xg   = pageInfo.GetSizeMils().x - pageInfo.GetRightMarginMils();
+    yg   = pageInfo.GetSizeMils().y - pageInfo.GetBottomMarginMils();
+
+    // Get the Y axis identifier (A symbol A ... Z)
     if( aPosition.y < refy || aPosition.y > yg )  // Ouside of Y limits
         msg << wxT( "?" );
     else
     {
-        ipas  = ( yg - refy ) / PAS_REF;      // ipas = Y count sections
-        gypas = ( yg - refy ) / ipas;        // gypas = Y section size
+        ipas  = ( yg - refy ) / PAS_REF;        // ipas = Y count sections
+        gypas = ( yg - refy ) / ipas;           // gypas = Y section size
         ii    = ( aPosition.y - refy ) / gypas;
         msg.Printf( wxT( "%c" ), 'A' + ii );
     }
 
-    /* Get the X axis identifier (A number 1 ... n) */
+    // Get the X axis identifier (A number 1 ... n)
     if( aPosition.x < refx || aPosition.x > xg )  // Ouside of X limits
         msg << wxT( "?" );
     else
     {
-        ipas  = ( xg - refx ) / PAS_REF;  // ipas = X count sections
-        gxpas = ( xg - refx ) / ipas;    // gxpas = X section size
+        ipas  = ( xg - refx ) / PAS_REF;        // ipas = X count sections
+        gxpas = ( xg - refx ) / ipas;           // gxpas = X section size
 
         ii = ( aPosition.x - refx ) / gxpas;
         msg << ii + 1;

@@ -119,7 +119,7 @@ public:
 
     int     m_ShapeMaxRadius;       // radius of the circle containing the pad shape
     int     m_Attribut;             // NORMAL, PAD_SMD, PAD_CONN, PAD_HOLE_NOT_PLATED
-    int     m_Orient;               // in 1/10 degrees
+    double  m_Orient;               // in 1/10 degrees
 
     static int m_PadSketchModePenSize;  // Pen size used to draw pads in sketch mode
                                         // (mode used to print pads on silkscreen layer)
@@ -205,11 +205,11 @@ public:
      * sets the rotation angle of the pad.
      * @param aAngle is tenths of degrees, but will soon be degrees.
      */
-    void SetOrientation( double aAngle )        { m_Orient = (int) aAngle; }    // manage migration to degrees
+    void SetOrientation( double aAngle )        { m_Orient = aAngle; }    // manage migration to degrees
 
     /**
      * Function GetOrientation
-     * returns the rotation angle of the pad in tenths of degress, but soon degress.
+     * returns the rotation angle of the pad in tenths of degress, but soon degrees.
      */
     double  GetOrientation() const { return m_Orient; }
 

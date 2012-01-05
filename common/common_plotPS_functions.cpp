@@ -366,7 +366,7 @@ bool PS_PLOTTER::start_plot( FILE* fout )
     fprintf( output_file, "%%%%Pages: 1\n" );
     fprintf( output_file, "%%%%PageOrder: Ascend\n" );
 
-    // Print boundary box in 1/72 pixels per inch, box is in decimals
+    // Print boundary box in 1/72 pixels per inch, box is in deci-mils
     const double CONV_SCALE = DECIMIL_TO_INCH * 72;
 
     // The coordinates of the lower left corner of the boundary
@@ -388,18 +388,20 @@ bool PS_PLOTTER::start_plot( FILE* fout )
     //
     // (NOTE: m_Size.y is *supposed* to be listed before m_Size.x;
     // the order in which they are specified is not wrong!)
-    // Also note sheet->m_Size is given in mils, not in decimils and must be
-    // sheet->m_Size * 10 in decimals
-    if( sheet->m_Name.Cmp( wxT( "User" ) ) == 0 )
+    // Also note pageSize is given in mils, not in internal units and must be
+    // converted to internal units.
+    wxSize pageSize = pageInfo.GetSizeMils();
+
+    if( pageInfo.GetType().Cmp( wxT( "User" ) ) == 0 )
         fprintf( output_file, "%%%%DocumentMedia: Custom %d %d 0 () ()\n",
-                 wxRound( sheet->m_Size.y * 10 * CONV_SCALE ),
-                 wxRound( sheet->m_Size.x * 10 * CONV_SCALE ) );
+                 wxRound( pageSize.y * 10 * CONV_SCALE ),
+                 wxRound( pageSize.x * 10 * CONV_SCALE ) );
 
     else  // ( if sheet->m_Name does not equal "User" )
         fprintf( output_file, "%%%%DocumentMedia: %s %d %d 0 () ()\n",
-                 TO_UTF8( sheet->m_Name ),
-                 wxRound( sheet->m_Size.y * 10 * CONV_SCALE ),
-                 wxRound( sheet->m_Size.x * 10 * CONV_SCALE ) );
+                 TO_UTF8( pageInfo.GetType() ),
+                 wxRound( pageSize.y * 10 * CONV_SCALE ),
+                 wxRound( pageSize.x * 10 * CONV_SCALE ) );
 
     fprintf( output_file, "%%%%Orientation: Landscape\n" );
 

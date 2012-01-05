@@ -17,7 +17,7 @@ class PCB_TARGET;
 class ZONE_CONTAINER;
 
 
-/* Shared Config keys for plot and print */
+// Shared Config keys for plot and print
 #define OPTKEY_LAYERBASE             wxT( "PlotLayer_%d" )
 #define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
 #define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
@@ -27,10 +27,10 @@ class ZONE_CONTAINER;
 #define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
 #define OPTKEY_PRINT_PADS_DRILL      wxT( "PrintPadsDrillOpt" )
 
-/* Conversion unit constants. */
-/* Convert pcb dimension of 0.1 mil to PS units of inches. */
+// Conversion unit constants.
+// Convert pcb dimension of 0.1 mil to PS units of inches.
 #define SCALE_PS .0001
-/* Convert dimension 0.1 mil -> HPGL units: */
+// Convert dimension 0.1 mil -> HPGL units:
 #define SCALE_HPGL 0.102041
 
 // Small drill marks diameter value (in internal value = 1/10000 inch)
@@ -57,8 +57,8 @@ void Plot_1_EdgeModule( PLOTTER* plotter, EDGE_MODULE* PtEdge,
 void PlotFilledAreas( PLOTTER* plotter, ZONE_CONTAINER* aZone,
                       EDA_DRAW_MODE_T trace_mode );
 
-/* PLOTGERB.CPP */
+// PLOTGERB.CPP
 void SelectD_CODE_For_LineDraw( PLOTTER* plotter, int aSize );
 
 
-#endif  /* #define PCBPLOT_H */
+#endif // #define PCBPLOT_H

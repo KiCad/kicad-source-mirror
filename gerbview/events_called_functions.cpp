@@ -154,12 +154,11 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
     case ID_GERBVIEW_SET_PAGE_BORDER:
         {
-        DIALOG_PAGE_SHOW_PAGE_BORDERS dlg( this );
+            DIALOG_PAGE_SHOW_PAGE_BORDERS dlg( this );
 
-        if (dlg.ShowModal() == wxID_OK )
-            m_canvas->Refresh();
+            if( dlg.ShowModal() == wxID_OK )
+                m_canvas->Refresh();
         }
-
         break;
 
     case ID_GERBVIEW_GLOBAL_DELETE:

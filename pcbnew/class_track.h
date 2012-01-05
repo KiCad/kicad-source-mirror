@@ -197,9 +197,9 @@ public:
                                                int                    aCircleToSegmentsCount,
                                                double                 aCorrectionFactor );
     /**
-     * Function SetDrillValue
+     * Function SetDrill
      * sets the drill value for vias.
-     * @param aDrill = new drill value
+     * @param aDrill is the new drill diameter
     */
     void SetDrill( int aDrill )             { m_Drill = aDrill; }
 

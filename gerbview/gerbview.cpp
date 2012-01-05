@@ -29,17 +29,20 @@ COLORS_DESIGN_SETTINGS g_ColorsSettings;
 int      g_Default_GERBER_Format;
 int      g_DisplayPolygonsModeSketch;
 
-GERBER_IMAGE*  g_GERBER_List[32];
 
-// List of page sizes
-Ki_PageDescr* g_GerberPageSizeList[] =
-{
-    &g_Sheet_GERBER,    // Full size page selection, and do not show page limits
-    &g_Sheet_GERBER,    // Full size page selection, and show page limits
-    &g_Sheet_A4,   &g_Sheet_A3, &g_Sheet_A2,
-    &g_Sheet_A,    &g_Sheet_B,  &g_Sheet_C,
-    NULL                // End of list
- };
+const wxChar* g_GerberPageSizeList[] = {
+    wxT( "GERBER" ),    // index 0: full size page selection, and do not show page limits
+    wxT( "GERBER" ),    // index 1: full size page selection, and show page limits
+    wxT( "A4" ),
+    wxT( "A3" ),
+    wxT( "A2" ),
+    wxT( "A" ),
+    wxT( "B" ),
+    wxT( "C" ),
+};
+
+
+GERBER_IMAGE*  g_GERBER_List[32];
 
 
 IMPLEMENT_APP( EDA_APP )

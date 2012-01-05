@@ -31,11 +31,10 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
                                       bool  aPrintMirrorMode,
                                       void * aData)
 {
-    MODULE* Module;
-    int drawmode = GR_COPY;
-    DISPLAY_OPTIONS      save_opt;
-    BOARD*               Pcb   = GetBoard();
-    int                  defaultPenSize = 50;
+    int     drawmode = GR_COPY;
+    int     defaultPenSize = 50;
+
+    DISPLAY_OPTIONS save_opt;
 
     PRINT_PARAMETERS * printParameters = (PRINT_PARAMETERS*) aData; // can be null
     PRINT_PARAMETERS::DrillShapeOptT drillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
@@ -74,22 +73,17 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     // Draw footprints, this is done at last in order to print the pad holes in
     // white (or g_DrawBgColor) after the tracks and zones
-    Module = (MODULE*) Pcb->m_Modules;
     int tmp = D_PAD::m_PadSketchModePenSize;
     D_PAD::m_PadSketchModePenSize = defaultPenSize;
-    wxPoint offset;
-    offset.x = GetScreen()->m_CurrentSheetDesc->m_Size.x / 2;
-    offset.y = GetScreen()->m_CurrentSheetDesc->m_Size.y / 2;
 
-    // offset is in mils, converts in internal units
-    offset.x *= m_internalUnits / 1000;
-    offset.y *= m_internalUnits / 1000;
+    wxSize  pageSizeIU = GetPageSizeIU() / 2;
+    wxPoint offset( pageSizeIU.x, pageSizeIU.y );
 
-    for( ; Module != NULL; Module = Module->Next() )
+    for( MODULE* module = GetBoard()->m_Modules;  module;  module = module->Next() )
     {
-        Module->Move( offset );
-        Print_Module( m_canvas, aDC, Module, drawmode, aPrintMaskLayer, drillShapeOpt );
-        Module->Move( -offset );
+        module->Move( offset );
+        Print_Module( m_canvas, aDC, module, drawmode, aPrintMaskLayer, drillShapeOpt );
+        module->Move( -offset );
     }
 
     D_PAD::m_PadSketchModePenSize = tmp;
@@ -101,7 +95,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     m_DisplayPadFill = DisplayOpt.DisplayPadFill;
     m_DisplayViaFill = DisplayOpt.DisplayViaFill;
     m_DisplayPadNum  = DisplayOpt.DisplayPadNum;
-    GetBoard()->SetElementVisibility(NO_CONNECTS_VISIBLE, nctmp);
+    GetBoard()->SetElementVisibility( NO_CONNECTS_VISIBLE, nctmp );
 }
 
 

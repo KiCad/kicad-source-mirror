@@ -72,7 +72,7 @@ class EDA_DRAW_PANEL;
 class EDA_MSG_PANEL;
 class BASE_SCREEN;
 class PARAM_CFG_BASE;
-class Ki_PageDescr;
+class PAGE_INFO;
 class PLOTTER;
 
 enum id_librarytype {
@@ -363,7 +363,10 @@ public:
  */
 class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 {
-private:
+    /// Let the #EDA_DRAW_PANEL object have access to the protected data since
+    /// it is closely tied to the #EDA_DRAW_FRAME.
+    friend class EDA_DRAW_PANEL;
+
     ///< Id of active button on the vertical toolbar.
     int m_toolId;
 
@@ -372,9 +375,9 @@ private:
 
 protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
-    int          m_LastGridSizeId;
-    bool         m_DrawGrid;                // hide/Show grid
-    int          m_GridColor;               // Grid color
+    int         m_LastGridSizeId;
+    bool        m_DrawGrid;                 // hide/Show grid
+    int         m_GridColor;                // Grid color
 
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
@@ -401,9 +404,6 @@ protected:
     /// drill, gerber, and component position files.
     bool m_showOriginAxis;
 
-    /// Position of the origin axis.
-    wxPoint m_originAxisPosition;
-
     /// True shows the drawing border and title block.
     bool m_showBorderAndTitleBlock;
 
@@ -428,15 +428,9 @@ protected:
     wxOverlay m_overlay;
 #endif
 
-    /// Let the #EDA_DRAW_PANEL object have access to the protected data since
-    /// it is closely tied to the #EDA_DRAW_FRAME.
-    friend class EDA_DRAW_PANEL;
-
 protected:
-    void SetScreen( BASE_SCREEN* aScreen )
-    {
-        m_currentScreen = aScreen;
-    }
+
+    void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
     /**
      * Function unitsChangeRefresh
@@ -447,6 +441,7 @@ protected:
      */
     virtual void unitsChangeRefresh();
 
+
 public:
     EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& title,
                     const wxPoint& pos, const wxSize& size,
@@ -454,9 +449,18 @@ public:
 
     ~EDA_DRAW_FRAME();
 
-    wxPoint GetOriginAxisPosition() const { return m_originAxisPosition; }
+    virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) = 0;
+    virtual const PAGE_INFO& GetPageSettings() const = 0;
 
-    void SetOriginAxisPosition( const wxPoint& aPosition ) { m_originAxisPosition = aPosition; }
+    /**
+     * Function GetPageSizeIU
+     * works off of GetPageSettings() to return the size of the paper page in
+     * the internal units of this particular view.
+     */
+    virtual const wxSize GetPageSizeIU() const = 0;
+
+    virtual const wxPoint& GetOriginAxisPosition() const = 0;
+    virtual void SetOriginAxisPosition( const wxPoint& aPosition ) = 0;
 
     int GetCursorShape() const { return m_cursorShape; }
 
@@ -473,11 +477,12 @@ public:
     virtual wxString GetScreenDesc();
 
     /**
-     * Function GetBaseScreen
-     * is virtual and returns a pointer to a BASE_SCREEN or one of its
-     * derivatives.  It may be overloaded by derived classes.
+     * Function GetScreen
+     * returns a pointer to a BASE_SCREEN or one of its
+     * derivatives.  It is overloaded by derived classes to return
+     * SCH_SCREEN or PCB_SCREEN.
      */
-    virtual BASE_SCREEN* GetScreen() const { return m_currentScreen; }
+    virtual BASE_SCREEN* GetScreen() const  { return m_currentScreen; }
 
     void OnMenuOpen( wxMenuEvent& event );
     void  OnMouseEvent( wxMouseEvent& event );
@@ -660,13 +665,12 @@ public:
 
     /**
      * Function GetXYSheetReferences
-     * Return the X,Y sheet references where the point position is located
-     * @param aScreen = screen to use
+     * returns the X,Y sheet references where the point position is located
      * @param aPosition = position to identify by YX ref
      * @return a wxString containing the message locator like A3 or B6
      *         (or ?? if out of page limits)
      */
-    wxString GetXYSheetReferences( BASE_SCREEN* aScreen, const wxPoint& aPosition );
+    const wxString GetXYSheetReferences( const wxPoint& aPosition );
 
     void DisplayToolMsg( const wxString& msg );
     virtual void RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;

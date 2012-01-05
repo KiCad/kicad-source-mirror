@@ -350,6 +350,20 @@ public:
 
     SCH_SCREEN* GetScreen() const;
 
+    // note: a common base class shared between LIB_EDIT_FRAME, LIB_VIEW_FRAME, and SCH_EDIT_FRAME
+    // would allow sharing of these three functions:
+
+    // note: a common base class shared between LIB_EDIT_FRAME, LIB_VIEW_FRAME, and SCH_EDIT_FRAME
+    // would allow sharing of these 5 functions:
+
+    void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload EDA_DRAW_FRAME
+    const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
+    const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME
+
+    const wxPoint& GetOriginAxisPosition() const;               // overload EDA_DRAW_FRAME
+    void SetOriginAxisPosition( const wxPoint& aPosition );     // overload EDA_DRAW_FRAME
+
+
     virtual wxString GetScreenDesc();
 
     void InstallConfigFrame( wxCommandEvent& event );

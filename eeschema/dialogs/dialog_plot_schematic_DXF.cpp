@@ -63,11 +63,11 @@ private:
     void initDlg();
     void initOptVars();
     void CreateDXFFile();
-    void PlotOneSheetDXF( const wxString& FileName,
-                         SCH_SCREEN* screen, Ki_PageDescr* sheet,
+    void PlotOneSheetDXF( const wxString& FileName, SCH_SCREEN* screen,
                          wxPoint plot_offset, double scale );
 };
-/* static members (static to remember last state): */
+
+// static members (static to remember last state):
 bool DIALOG_PLOT_SCHEMATIC_DXF::m_plotColorOpt   = false;
 bool DIALOG_PLOT_SCHEMATIC_DXF::m_plot_Sheet_Ref = true;
 
@@ -147,8 +147,7 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
     SCH_SCREEN*     screen    = schframe->GetScreen();
     SCH_SHEET_PATH* sheetpath;
     SCH_SHEET_PATH  oldsheetpath = schframe->GetCurrentSheet();
-    wxString        PlotFileName;
-    Ki_PageDescr*   PlotSheet;
+    wxString        plotFileName;
     wxPoint         plot_offset;
 
     /* When printing all pages, the printed page is not the current page.
@@ -186,15 +185,14 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
             sheetpath = SheetList.GetNext();
         }
 
-        PlotSheet = screen->m_CurrentSheetDesc;
         double scale = 10;
 
         plot_offset.x = 0;
         plot_offset.y = 0;
 
-        PlotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT( ".dxf" );
+        plotFileName = schframe->GetUniqueFilenameForCurrentSheet() + wxT( ".dxf" );
 
-        PlotOneSheetDXF( PlotFileName, screen, PlotSheet, plot_offset, scale );
+        PlotOneSheetDXF( plotFileName, screen, plot_offset, scale );
 
         if( !m_select_PlotAll )
             break;
@@ -206,14 +204,14 @@ void DIALOG_PLOT_SCHEMATIC_DXF::CreateDXFFile( )
 }
 
 
-void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString& FileName,
-                                                 SCH_SCREEN*     screen,
-                                                 Ki_PageDescr*   sheet,
-                                                 wxPoint         plot_offset,
-                                                 double          scale )
+void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString&    FileName,
+                                                 SCH_SCREEN*        screen,
+                                                 wxPoint            plot_offset,
+                                                 double             scale )
 {
-    wxString msg;
 
+
+    wxString msg;
     FILE*    output_file = wxFopen( FileName, wxT( "wt" ) );
 
     if( output_file == NULL )
@@ -227,13 +225,17 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString& FileName,
     msg.Printf( _( "Plot: %s " ), GetChars( FileName ) );
     m_MsgBox->AppendText( msg );
 
-    SetLocaleTo_C_standard();
+    LOCALE_IO   toggle;
+
     DXF_PLOTTER* plotter = new DXF_PLOTTER();
-    plotter->set_paper_size( sheet );
+
+    const PAGE_INFO&   pageInfo = screen->GetPageSettings();
+    plotter->SetPageSettings( pageInfo );
+
     plotter->set_viewport( plot_offset, scale, 0 );
     plotter->set_color_mode( m_plotColorOpt );
 
-    /* Init : */
+    // Init :
     plotter->set_creator( wxT( "Eeschema-DXF" ) );
     plotter->set_filename( FileName );
     plotter->start_plot( output_file );
@@ -246,10 +248,9 @@ void DIALOG_PLOT_SCHEMATIC_DXF::PlotOneSheetDXF( const wxString& FileName,
 
     screen->Plot( plotter );
 
-    /* fin */
+    // finish
     plotter->end_plot();
     delete plotter;
-    SetLocaleTo_Default();
 
     m_MsgBox->AppendText( wxT( "Ok\n" ) );
 }

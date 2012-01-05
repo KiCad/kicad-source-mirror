@@ -35,12 +35,12 @@ bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLay
 
     wxPoint offset;
 
-    /* Calculate scaling from Pcbnew units (in 0.1 mil or 0.0001 inch) to gerber units */
+    // Calculate scaling from Pcbnew units (in 0.1 mil or 0.0001 inch) to gerber units
     double scale = g_PcbPlotOptions.m_PlotScale;
 
     if( aPlotOriginIsAuxAxis )
     {
-        offset = m_originAxisPosition;
+        offset = GetOriginAxisPosition();
     }
     else
     {
@@ -48,9 +48,11 @@ bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLay
         offset.y = 0;
     }
 
-    SetLocaleTo_C_standard();
+    LOCALE_IO   toggle;
+
     PLOTTER* plotter = new GERBER_PLOTTER();
-    /* No mirror and scaling for gerbers! */
+
+    // No mirror and scaling for gerbers!
     plotter->set_viewport( offset, scale, 0 );
     plotter->set_default_line_width( g_PcbPlotOptions.m_PlotLineWidth );
     plotter->set_creator( wxT( "PCBNEW-RS274X" ) );
@@ -78,7 +80,6 @@ bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLay
     }
 
     delete plotter;
-    SetLocaleTo_Default();
 
     return true;
 }

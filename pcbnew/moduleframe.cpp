@@ -160,7 +160,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
     SetBoard( g_ModuleEditor_Pcb );
 
     if( s_screenModule == NULL )
-        s_screenModule = new PCB_SCREEN();
+        s_screenModule = new PCB_SCREEN( GetPageSettings().GetSizeIU() );
 
     SetScreen( s_screenModule );
     GetBoard()->SetDesignSettings( s_ModuleEditorDesignSetting );

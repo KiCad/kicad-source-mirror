@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2008)
+// C++ code generated with wxFormBuilder (version Jun  6 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -28,7 +28,7 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	LeftColumnSizer->SetFlexibleDirection( wxBOTH );
 	LeftColumnSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	wxString m_PageSizeBoxChoices[] = { _("Size A4"), _("Size A3"), _("Size A2"), _("Size A1"), _("Size A0"), _("Size A"), _("Size B"), _("Size C"), _("Size D"), _("Size E"), _("User size") };
+	wxString m_PageSizeBoxChoices[] = { _("A4"), _("A3"), _("A2"), _("A1"), _("A0"), _("A"), _("B"), _("C"), _("D"), _("E"), _("User") };
 	int m_PageSizeBoxNChoices = sizeof( m_PageSizeBoxChoices ) / sizeof( wxString );
 	m_PageSizeBox = new wxRadioBox( this, wxID_ANY, _("Page Size:"), wxDefaultPosition, wxDefaultSize, m_PageSizeBoxNChoices, m_PageSizeBoxChoices, 1, wxRA_SPECIFY_COLS );
 	m_PageSizeBox->SetSelection( 1 );
@@ -108,7 +108,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	RevisionSizer->Add( m_TextRevision, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_RevisionExport = new wxCheckBox( this, ID_CHECKBOX_REVISION, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	RevisionSizer->Add( m_RevisionExport, 0, wxALL, 5 );
 	
 	RightColumnSizer->Add( RevisionSizer, 1, wxEXPAND, 5 );
@@ -122,7 +121,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	TitleSizer->Add( m_TextTitle, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_TitleExport = new wxCheckBox( this, wxID_ANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	TitleSizer->Add( m_TitleExport, 0, wxALL, 5 );
 	
 	RightColumnSizer->Add( TitleSizer, 1, wxEXPAND, 5 );
@@ -136,7 +134,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	CompanySizer->Add( m_TextCompany, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_CompanyExport = new wxCheckBox( this, ID_CHECKBOX_COMPANY, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	CompanySizer->Add( m_CompanyExport, 0, wxALL, 5 );
 	
 	RightColumnSizer->Add( CompanySizer, 1, wxEXPAND, 5 );
@@ -150,7 +147,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	Comment1Sizer->Add( m_TextComment1, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_Comment1Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT1, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	Comment1Sizer->Add( m_Comment1Export, 0, wxALL, 5 );
 	
 	RightColumnSizer->Add( Comment1Sizer, 1, wxEXPAND, 5 );
@@ -164,7 +160,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	Comment2Sizer->Add( m_TextComment2, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_Comment2Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT2, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	Comment2Sizer->Add( m_Comment2Export, 0, wxALL, 5 );
 	
 	RightColumnSizer->Add( Comment2Sizer, 1, wxEXPAND, 5 );
@@ -178,7 +173,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	Comment3Sizer->Add( m_TextComment3, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_Comment3Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT3, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	Comment3Sizer->Add( m_Comment3Export, 0, wxALL, 5 );
 	
 	RightColumnSizer->Add( Comment3Sizer, 1, wxEXPAND, 5 );
@@ -192,7 +186,6 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	Comment4Sizer->Add( m_TextComment4, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_Comment4Export = new wxCheckBox( this, ID_CHECKBOX_COMMENT4, _("Export to other sheets"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	Comment4Sizer->Add( m_Comment4Export, 0, wxALL, 5 );
 	
 	RightColumnSizer->Add( Comment4Sizer, 1, wxEXPAND, 5 );
@@ -230,4 +223,5 @@ DIALOG_PAGES_SETTINGS_BASE::~DIALOG_PAGES_SETTINGS_BASE()
 	m_TitleExport->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCheckboxTitleClick ), NULL, this );
 	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCancelClick ), NULL, this );
 	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnOkClick ), NULL, this );
+	
 }

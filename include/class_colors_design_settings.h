@@ -9,7 +9,9 @@
 #define LAYERSCOLORSBUFFERSIZE 32
 #define ITEMSCOLORSBUFFERSIZE 32
 
-/* Class for handle list of color settings for designs in Eeschema, Pcbnew and GerbView
+/**
+ * Class COLORS_DESIGN_SETTINGS
+ * is a list of color settings for designs in Eeschema, Pcbnew and GerbView
  */
 class COLORS_DESIGN_SETTINGS
 {

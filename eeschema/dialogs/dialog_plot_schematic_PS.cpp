@@ -70,12 +70,13 @@ private:
     void initOptVars();
     void createPSFile();
     void plotOneSheetPS( const wxString& FileName,
-                         SCH_SCREEN* screen, Ki_PageDescr* sheet,
+                         SCH_SCREEN* screen, const PAGE_INFO& pageInfo,
                          wxPoint plot_offset, double scale );
 };
-/* static members (static to remember last state): */
+
+// static members (static to remember last state):
 bool DIALOG_PLOT_SCHEMATIC_PS::m_plotColorOpt   = false;
-int DIALOG_PLOT_SCHEMATIC_PS:: m_pageSizeSelect = PAGE_SIZE_AUTO;
+int  DIALOG_PLOT_SCHEMATIC_PS::m_pageSizeSelect = PAGE_SIZE_AUTO;
 bool DIALOG_PLOT_SCHEMATIC_PS::m_plot_Sheet_Ref = true;
 
 
@@ -172,13 +173,13 @@ void DIALOG_PLOT_SCHEMATIC_PS::initOptVars()
 
 void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
 {
-    SCH_SCREEN*     screen    = m_Parent->GetScreen();
-    SCH_SHEET_PATH* sheetpath;
-    SCH_SHEET_PATH  oldsheetpath = m_Parent->GetCurrentSheet(); // sheetpath is saved here
-    wxString        plotFileName;
-    Ki_PageDescr*   actualPage;                                 // page size selected in schematic
-    Ki_PageDescr*   plotPage;                                   // page size selected to plot
-    wxPoint         plot_offset;
+    SCH_SCREEN*         screen    = m_Parent->GetScreen();
+    SCH_SHEET_PATH*     sheetpath;
+    SCH_SHEET_PATH      oldsheetpath = m_Parent->GetCurrentSheet(); // sheetpath is saved here
+    wxString            plotFileName;
+    PAGE_INFO           actualPage;                                 // page size selected in schematic
+    PAGE_INFO           plotPage;                                   // page size selected to plot
+    wxPoint             plot_offset;
 
     /* When printing all pages, the printed page is not the current page.
      * In complex hierarchies, we must update component references
@@ -213,16 +214,16 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
             sheetpath = SheetList.GetNext();
         }
 
-        actualPage = screen->m_CurrentSheetDesc;
+        actualPage = screen->GetPageSettings();
 
         switch( m_pageSizeSelect )
         {
         case PAGE_SIZE_A:
-            plotPage = &g_Sheet_A;
+            plotPage.SetType( wxT( "A" ) );
             break;
 
         case PAGE_SIZE_A4:
-            plotPage = &g_Sheet_A4;
+            plotPage.SetType( wxT( "A4" ) );
             break;
 
         case PAGE_SIZE_AUTO:
@@ -231,8 +232,9 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
             break;
         }
 
-        double scalex = (double) plotPage->m_Size.x / actualPage->m_Size.x;
-        double scaley = (double) plotPage->m_Size.y / actualPage->m_Size.y;
+        double scalex = (double) plotPage.GetWidthMils()  / actualPage.GetWidthMils();
+        double scaley = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
+
         double scale  = 10 * MIN( scalex, scaley );
 
         plot_offset.x = 0;
@@ -252,11 +254,11 @@ void DIALOG_PLOT_SCHEMATIC_PS::createPSFile()
 }
 
 
-void DIALOG_PLOT_SCHEMATIC_PS::plotOneSheetPS( const wxString& FileName,
-                                               SCH_SCREEN*     screen,
-                                               Ki_PageDescr*   sheet,
-                                               wxPoint         plot_offset,
-                                               double          scale )
+void DIALOG_PLOT_SCHEMATIC_PS::plotOneSheetPS( const wxString&  FileName,
+                                               SCH_SCREEN*      screen,
+                                               const PAGE_INFO& pageInfo,
+                                               wxPoint          plot_offset,
+                                               double           scale )
 {
     wxString msg;
 
@@ -276,12 +278,12 @@ void DIALOG_PLOT_SCHEMATIC_PS::plotOneSheetPS( const wxString& FileName,
     m_MsgBox->AppendText( msg );
 
     PS_PLOTTER* plotter = new PS_PLOTTER();
-    plotter->set_paper_size( sheet );
+    plotter->SetPageSettings( pageInfo );
     plotter->set_viewport( plot_offset, scale, 0 );
     plotter->set_default_line_width( g_DrawDefaultLineThickness );
     plotter->set_color_mode( m_plotColorOpt );
 
-    /* Init : */
+    // Init :
     plotter->set_creator( wxT( "Eeschema-PS" ) );
     plotter->set_filename( FileName );
     plotter->start_plot( output_file );

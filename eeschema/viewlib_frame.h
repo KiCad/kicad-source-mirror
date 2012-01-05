@@ -34,12 +34,11 @@
 #include <wx/gdicmn.h>
 
 #include "wxstruct.h"
-
+#include "class_sch_screen.h"
 
 class wxSashLayoutWindow;
 class wxListBox;
 class wxSemaphore;
-class SCH_SCREEN;
 class CMP_LIBRARY;
 
 
@@ -108,7 +107,17 @@ public:
     void ClickOnCmpList( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );
 
-    SCH_SCREEN* GetScreen() { return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
+    SCH_SCREEN* GetScreen() const { return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
+
+    // note: a common base class shared between LIB_EDIT_FRAME, LIB_VIEW_FRAME, and SCH_EDIT_FRAME
+    // would allow sharing of these 5 functions:
+
+    void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload EDA_DRAW_FRAME
+    const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
+    const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME
+
+    const wxPoint& GetOriginAxisPosition() const;               // overload EDA_DRAW_FRAME
+    void SetOriginAxisPosition( const wxPoint& aPosition );     // overload EDA_DRAW_FRAME
 
     void GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey = 0 );
 
