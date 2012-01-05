@@ -267,8 +267,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
     bool          stop = false;
     wxString      msg;
 
-    m_canvas->m_AbortRequest = false;
-    m_canvas->m_AbortEnable  = true;
+    m_canvas->SetAbortRequest( false );
 
     s_Clearance = GetBoard()->m_NetClasses.GetDefault()->GetClearance();
 
@@ -289,7 +288,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
         /* Test to stop routing ( escape key pressed ) */
         wxYield();
 
-        if( m_canvas->m_AbortRequest )
+        if( m_canvas->GetAbortRequest() )
         {
             if( IsOK( this, _( "Abort routing?" ) ) )
             {
@@ -299,7 +298,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
             }
             else
             {
-                m_canvas->m_AbortRequest = 0;
+                m_canvas->SetAbortRequest( false );
             }
         }
 
@@ -323,7 +322,7 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
         segm_fY = GetBoard()->GetBoundingBox().GetY() + (Board.m_GridRouting * row_target);
 
         /* Draw segment. */
-        GRLine( &m_canvas->m_ClipBox,
+        GRLine( m_canvas->GetClipBox(),
                 DC,
                 segm_oX,
                 segm_oY,
@@ -377,8 +376,6 @@ int PCB_EDIT_FRAME::Solve( wxDC* DC, int two_sides )
         if( stop )
             break;
     }
-
-    m_canvas->m_AbortEnable = false;
 
     SaveCopyInUndoList( s_ItemsListPicker, UR_UNSPECIFIED );
     s_ItemsListPicker.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
@@ -608,7 +605,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
         {
             /* Remove link. */
             GRSetDrawMode( DC, GR_XOR );
-            GRLine( &pcbframe->GetCanvas()->m_ClipBox,
+            GRLine( pcbframe->GetCanvas()->GetClipBox(),
                     DC,
                     segm_oX,
                     segm_oY,
@@ -627,7 +624,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
             break;                  /* Routing complete. */
         }
 
-        if( pcbframe->GetCanvas()->m_AbortRequest )
+        if( pcbframe->GetCanvas()->GetAbortRequest() )
         {
             result = STOP_FROM_ESC;
             break;
@@ -635,6 +632,7 @@ static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,
 
         /* report every COUNT new nodes or so */
         #define COUNT 20000
+
         if( ( OpenNodes - lastopen > COUNT )
            || ( ClosNodes - lastclos > COUNT )
            || ( MoveNodes - lastmove > COUNT ) )

@@ -59,7 +59,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
     BOARD_ITEM* item = GetCurItem();
 
-    m_canvas->m_CanStartBlock = -1;    // Avoid to start a block coomand when clicking on menu
+    m_canvas->SetCanStartBlock( -1 );    // Avoid to start a block coomand when clicking on menu
 
     // If a command or a block is in progress:
     // Put the Cancel command (if needed) and the End command
@@ -119,10 +119,10 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         // previously picked at this position
         if( !item || cursorPos != selectPos )
         {
-            m_canvas->m_AbortRequest = false;
+            m_canvas->SetAbortRequest( false );
             item = PcbGeneralLocateAndDisplay();
 
-            if( m_canvas->m_AbortRequest )
+            if( m_canvas->GetAbortRequest() )
             {
                 m_canvas->CrossHairOn( &dc );
                 return false;

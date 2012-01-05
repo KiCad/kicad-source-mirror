@@ -388,7 +388,7 @@ void PCB_EDIT_FRAME::BeginMoveDimensionText( DIMENSION* aItem, wxDC* DC )
 
     m_canvas->SetMouseCapture( MoveDimensionText, AbortMoveDimensionText );
     SetCurItem( aItem );
-    m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+    m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 }
 
 

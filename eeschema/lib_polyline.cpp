@@ -305,14 +305,14 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
     GRSetDrawMode( aDC, aDrawMode );
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
+        GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
                 (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
                 ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE  )
-        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
+        GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
                 color, color );
     else
-        GRPoly( &aPanel->m_ClipBox, aDC, m_PolyPoints.size(), buffer, 0, GetPenSize(),
+        GRPoly( aPanel->GetClipBox(), aDC, m_PolyPoints.size(), buffer, 0, GetPenSize(),
                 color, color );
 
     delete[] buffer;
@@ -322,7 +322,7 @@ void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint
 #if 0
     EDA_RECT bBox = GetBoundingBox();
     bBox.Inflate( m_Thickness + 1, m_Thickness + 1 );
-    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+    GRRect( aPanel->GetClipBox(), aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }

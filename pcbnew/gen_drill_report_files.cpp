@@ -272,7 +272,7 @@ void Gen_Drill_PcbMap( BOARD* aPcb, PLOTTER* aPlotter,
             wxSize oblong_size;
             oblong_size = aHoleListBuffer[ii].m_Hole_Size;
             aPlotter->flash_pad_oval( pos, oblong_size,
-                                      aHoleListBuffer[ii].m_Hole_Orient, FILAIRE );
+                                      aHoleListBuffer[ii].m_Hole_Orient, LINE );
         }
     }
 }

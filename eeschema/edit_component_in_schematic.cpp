@@ -74,7 +74,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
     // Don't use GetText() here.  If the field is the reference designator and it's parent
     // component has multiple parts, we don't want the part suffix added to the field.
     wxString newtext = aField->m_Text;
-    m_canvas->m_IgnoreMouseEvents = true;
+    m_canvas->SetIgnoreMouseEvents( true );
 
     wxString title;
     title.Printf( _( "Edit %s Field" ), GetChars( aField->GetName() ) );
@@ -83,7 +83,7 @@ create a new power component with the new value." ), GetChars( entry->GetName() 
     int response = dlg.ShowModal();
 
     m_canvas->MoveCursorToCrossHair();
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
     newtext = dlg.GetValue( );
     newtext.Trim( true );
     newtext.Trim( false );

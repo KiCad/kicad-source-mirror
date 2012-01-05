@@ -48,10 +48,10 @@ private:
 
 void PCB_BASE_FRAME::InstallTextModOptionsFrame( TEXTE_MODULE* TextMod, wxDC* DC )
 {
-    m_canvas->m_IgnoreMouseEvents = TRUE;
+    m_canvas->SetIgnoreMouseEvents( true );
     DialogEditModuleText dialog( this, TextMod, DC );
     dialog.ShowModal();
-    m_canvas->m_IgnoreMouseEvents = FALSE;
+    m_canvas->SetIgnoreMouseEvents( false );
 }
 
 

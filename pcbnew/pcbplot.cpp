@@ -434,7 +434,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.m_DrillShapeOpt =
         (PCB_PLOT_PARAMS::DrillShapeOptT) m_drillShapeOpt->GetSelection();
     tempOptions.m_PlotMirror = m_plotMirrorOpt->GetValue();
-    tempOptions.m_PlotMode   = (GRTraceMode) m_plotModeOpt->GetSelection();
+    tempOptions.m_PlotMode   = (EDA_DRAW_MODE_T) m_plotModeOpt->GetSelection();
     tempOptions.m_PlotViaOnMaskLayer = m_plotNoViaOnMaskOpt->GetValue();
 
     // Update settings from text fields. Rewrite values back to the fields,

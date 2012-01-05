@@ -230,8 +230,8 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
                       const wxString& aText,
                       int aOrient,
                       const wxSize& aSize,
-                      enum GRTextHorizJustifyType aH_justify,
-                      enum GRTextVertJustifyType aV_justify,
+                      enum EDA_TEXT_HJUSTIFY_T aH_justify,
+                      enum EDA_TEXT_VJUSTIFY_T aV_justify,
                       int aWidth,
                       bool aItalic,
                       bool aBold,
@@ -249,7 +249,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
     int       overbar_italic_comp;          // Italic compensation for overbar
     EDA_RECT* clipBox;                      // Clip box used in basic draw functions
 
-    clipBox = aPanel ? &aPanel->m_ClipBox : NULL;
+    clipBox = aPanel ? aPanel->GetClipBox() : NULL;
     #define        BUF_SIZE 100
     wxPoint coord[BUF_SIZE + 1];                // Buffer coordinate used to draw polylines (one char shape)
     bool    sketch_mode    = false;
@@ -292,10 +292,10 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
         xc = current_char_pos.x;
         yc = current_char_pos.y;
 
-        x0 = aPanel->m_ClipBox.GetX() - ll;
-        y0 = aPanel->m_ClipBox.GetY() - ll;
-        xm = aPanel->m_ClipBox.GetRight() + ll;
-        ym = aPanel->m_ClipBox.GetBottom() + ll;
+        x0 = aPanel->GetClipBox()->GetX() - ll;
+        y0 = aPanel->GetClipBox()->GetY() - ll;
+        xm = aPanel->GetClipBox()->GetRight() + ll;
+        ym = aPanel->GetClipBox()->GetBottom() + ll;
 
         if( xc < x0 )
             return;
@@ -366,7 +366,7 @@ void DrawGraphicText( EDA_DRAW_PANEL* aPanel,
             aCallback( current_char_pos.x, current_char_pos.y, end.x, end.y );
         }
         else
-            GRLine( &aPanel->m_ClipBox, aDC,
+            GRLine( aPanel->GetClipBox(), aDC,
                     current_char_pos.x, current_char_pos.y, end.x, end.y, aWidth, aColor );
 
         return;
@@ -521,8 +521,8 @@ void PLOTTER::text( const wxPoint&              aPos,
                     const wxString&             aText,
                     int                         aOrient,
                     const wxSize&               aSize,
-                    enum GRTextHorizJustifyType aH_justify,
-                    enum GRTextVertJustifyType  aV_justify,
+                    enum EDA_TEXT_HJUSTIFY_T    aH_justify,
+                    enum EDA_TEXT_VJUSTIFY_T    aV_justify,
                     int                         aWidth,
                     bool                        aItalic,
                     bool                        aBold )

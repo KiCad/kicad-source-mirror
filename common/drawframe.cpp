@@ -183,7 +183,7 @@ void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
     m_FrameIsActive = event.GetActive();
 
     if( m_canvas )
-        m_canvas->m_CanStartBlock = -1;
+        m_canvas->SetCanStartBlock( -1 );
 
     event.Skip();   // required under wxMAC
 }
@@ -192,7 +192,7 @@ void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
 void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 {
     if( m_canvas )
-        m_canvas->m_CanStartBlock = -1;
+        m_canvas->SetCanStartBlock( -1 );
 
     event.Skip();
 }
@@ -486,7 +486,7 @@ int EDA_DRAW_FRAME::ReturnBlockCommand( int key )
 void EDA_DRAW_FRAME::InitBlockPasteInfos()
 {
     GetScreen()->m_BlockLocate.ClearItemsList();
-    m_canvas->m_mouseCaptureCallback = NULL;
+    m_canvas->SetMouseCaptureCallback( NULL );
 }
 
 

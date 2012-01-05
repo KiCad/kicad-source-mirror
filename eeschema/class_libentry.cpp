@@ -362,9 +362,9 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
 #if 0
     int len = aDc->DeviceToLogicalXRel( 3 );
 
-    GRLine( &aPanel->m_ClipBox, aDc, aOffset.x, aOffset.y - len, aOffset.x,
+    GRLine( aPanel->GetClipBox(), aDc, aOffset.x, aOffset.y - len, aOffset.x,
             aOffset.y + len, 0, aColor );
-    GRLine( &aPanel->m_ClipBox, aDc, aOffset.x - len, aOffset.y, aOffset.x + len,
+    GRLine( aPanel->GetClipBox(), aDc, aOffset.x - len, aOffset.y, aOffset.x + len,
             aOffset.y, 0, aColor );
 #endif
 
@@ -372,7 +372,7 @@ void LIB_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOff
      * the bounding box calculations. */
 #if 0
     EDA_RECT bBox = GetBoundingBox( aMulti, aConvert );
-    GRRect( &aPanel->m_ClipBox, aDc, bBox.GetOrigin().x, bBox.GetOrigin().y,
+    GRRect( aPanel->GetClipBox(), aDc, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }
@@ -756,7 +756,7 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
     if( ( p = strtok( NULL, " \t\n" ) ) != NULL  && *p == 'P' )
         m_options = ENTRY_POWER;
 
-    /* Read next lines */
+    // Read next lines, until "ENDDEF" is found
     while( aLineReader.ReadLine() )
     {
         line = aLineReader.Line();
@@ -766,11 +766,14 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
         /* This is the error flag ( if an error occurs, Res = FALSE) */
         Res = true;
 
+        if( *line == '#' )      // a comment
+            continue;
+
         if( (*line == 'T') && (*(line + 1) == 'i') )
             Res = LoadDateAndTime( aLineReader );
         else if( *line == 'F' )
             Res = LoadField( aLineReader, Msg );
-        else if( strcmp( p, "ENDDEF" ) == 0 )
+        else if( strcmp( p, "ENDDEF" ) == 0 )   // End of component description
             break;
         else if( strcmp( p, "DRAW" ) == 0 )
             Res = LoadDrawEntries( aLineReader, Msg );

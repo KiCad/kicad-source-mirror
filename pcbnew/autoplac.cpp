@@ -117,8 +117,7 @@ void PCB_EDIT_FRAME::AutoPlaceModule( MODULE* Module, int place_mode, wxDC* DC )
     if( GetBoard()->m_Modules == NULL )
         return;
 
-    m_canvas->m_AbortRequest = false;
-    m_canvas->m_AbortEnable  = true;
+    m_canvas->SetAbortRequest( false );
 
     switch( place_mode )
     {
@@ -391,7 +390,6 @@ end_of_tst:
     GetBoard()->m_Status_Pcb = 0;
     Compile_Ratsnest( DC, true );
     m_canvas->ReDraw( DC, true );
-    m_canvas->m_AbortEnable = false;
 }
 
 
@@ -431,7 +429,7 @@ void PCB_EDIT_FRAME::DrawInfoPlace( wxDC* DC )
                     color = DARKGRAY;
             }
 
-            GRPutPixel( &m_canvas->m_ClipBox, DC, ox, oy, color );
+            GRPutPixel( m_canvas->GetClipBox(), DC, ox, oy, color );
         }
     }
 }
@@ -690,12 +688,12 @@ int PCB_EDIT_FRAME::GetOptimalModulePlacement( MODULE* aModule, wxDC* aDC )
     {
         wxYield();
 
-        if( m_canvas->m_AbortRequest )
+        if( m_canvas->GetAbortRequest() )
         {
             if( IsOK( this, _( "Ok to abort?" ) ) )
                 return ESC;
             else
-                m_canvas->m_AbortRequest = false;
+                m_canvas->SetAbortRequest( false );
         }
 
         cx = aModule->m_Pos.x; cy = aModule->m_Pos.y;
@@ -956,7 +954,7 @@ float PCB_EDIT_FRAME::Compute_Ratsnest_PlaceModule( wxDC* DC )
 
             if( AutoPlaceShowAll )
             {
-                GRLine( &m_canvas->m_ClipBox, DC, ox, oy, fx, fy, 0, color );
+                GRLine( m_canvas->GetClipBox(), DC, ox, oy, fx, fy, 0, color );
             }
 
             /* Cost of the ratsnest. */

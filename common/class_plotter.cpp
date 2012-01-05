@@ -252,7 +252,7 @@ void PLOTTER::marker( const wxPoint& position, int diametre, int aShapeId )
 
 /* Convert a thick segment and plot it as an oval */
 void PLOTTER::segment_as_oval( wxPoint start, wxPoint end, int width,
-                               GRTraceMode tracemode )
+                               EDA_DRAW_MODE_T tracemode )
 {
     wxPoint center( (start.x + end.x) / 2, (start.y + end.y) / 2 );
     wxSize  size( end.x - start.x, end.y - start.y );
@@ -326,12 +326,12 @@ void PLOTTER::sketch_oval( wxPoint pos, wxSize size, int orient,
 /* Plot 1 segment like a track segment
  */
 void PLOTTER::thick_segment( wxPoint start, wxPoint end, int width,
-                             GRTraceMode tracemode )
+                             EDA_DRAW_MODE_T tracemode )
 {
     switch( tracemode )
     {
     case FILLED:
-    case FILAIRE:
+    case LINE:
         set_current_line_width( tracemode==FILLED ? width : -1 );
         move_to( start );
         finish_to( end );
@@ -346,11 +346,11 @@ void PLOTTER::thick_segment( wxPoint start, wxPoint end, int width,
 
 
 void PLOTTER::thick_arc( wxPoint centre, int StAngle, int EndAngle, int radius,
-                         int width, GRTraceMode tracemode )
+                         int width, EDA_DRAW_MODE_T tracemode )
 {
     switch( tracemode )
     {
-    case FILAIRE:
+    case LINE:
         set_current_line_width( -1 );
         arc( centre, StAngle, EndAngle, radius, NO_FILL, -1 );
         break;
@@ -371,11 +371,11 @@ void PLOTTER::thick_arc( wxPoint centre, int StAngle, int EndAngle, int radius,
 
 
 void PLOTTER::thick_rect( wxPoint p1, wxPoint p2, int width,
-                          GRTraceMode tracemode )
+                          EDA_DRAW_MODE_T tracemode )
 {
     switch( tracemode )
     {
-    case FILAIRE:
+    case LINE:
         rect( p1, p2, NO_FILL, -1 );
         break;
 
@@ -401,11 +401,11 @@ void PLOTTER::thick_rect( wxPoint p1, wxPoint p2, int width,
 
 
 void PLOTTER::thick_circle( wxPoint pos, int diametre, int width,
-                            GRTraceMode tracemode )
+                            EDA_DRAW_MODE_T tracemode )
 {
     switch( tracemode )
     {
-    case FILAIRE:
+    case LINE:
         circle( pos, diametre, NO_FILL, -1 );
         break;
 

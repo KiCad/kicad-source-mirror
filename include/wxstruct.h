@@ -370,6 +370,9 @@ class EDA_DRAW_FRAME : public EDA_BASE_FRAME
     ///< Id of active button on the vertical toolbar.
     int m_toolId;
 
+    BASE_SCREEN* m_currentScreen;           ///< current used SCREEN
+    bool         m_snapToGrid;              ///< Indicates if cursor should be snapped to grid.
+
 protected:
     EDA_HOTKEY_CONFIG* m_HotkeysZoomAndGridList;
     int         m_LastGridSizeId;
@@ -420,9 +423,10 @@ protected:
     /// Panel used to display information at the bottom of the main window.
     EDA_MSG_PANEL* m_messagePanel;
 
-private:
-    BASE_SCREEN* m_currentScreen;           ///< current used SCREEN
-    bool         m_snapToGrid;              ///< Indicates if cursor should be snapped to grid.
+#ifdef USE_WX_OVERLAY
+    // MAC Uses overlay to workaround the wxINVERT and wxXOR miss
+    wxOverlay m_overlay;
+#endif
 
 protected:
 

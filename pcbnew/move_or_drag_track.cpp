@@ -87,7 +87,7 @@ static void Abort_MoveTrack( EDA_DRAW_PANEL* Panel, wxDC* DC )
     Panel->GetScreen()->SetCrossHairPosition( PosInit );
 
     if( Panel->IsMouseCaptured() )
-        Panel->m_mouseCaptureCallback( Panel, DC, wxDefaultPosition, true );
+        Panel->CallMouseCapture( DC, wxDefaultPosition, true );
 
     Panel->GetScreen()->SetCrossHairPosition( oldpos );
     pcb->HighLightOFF();
@@ -770,7 +770,7 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
     GetBoard()->HighLightON();
 
     GetBoard()->DrawHighLight( m_canvas, aDC, GetBoard()->GetHighLightNetCode() );
-    m_canvas->m_mouseCaptureCallback( m_canvas, aDC, wxDefaultPosition, true );
+    m_canvas->CallMouseCapture( aDC, wxDefaultPosition, true );
 }
 
 
@@ -981,7 +981,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     if( !InitialiseDragParameters() )
     {
         DisplayError( this, _( "Unable to drag this segment: two collinear segments" ) );
-        m_canvas->m_mouseCaptureCallback = NULL;
+        m_canvas->SetMouseCaptureCallback( NULL );
         Abort_MoveTrack( m_canvas, DC );
         return;
     }

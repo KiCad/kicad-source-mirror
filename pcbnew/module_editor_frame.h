@@ -334,6 +334,15 @@ public:
     /* Function to place a graphic item type EDGE_MODULE currently moved */
     void Place_EdgeMod( EDGE_MODULE* drawitem );
 
+    /**
+     * Function DlgGlobalChange_PadSettings
+     * Function to change pad caracteristics for the given footprint
+     * or all footprints which look like the given footprint
+     * Options are set by the opened dialog.
+     * @param aPad is the pattern. The given footprint is the parent of this pad
+     */
+    void DlgGlobalChange_PadSettings( D_PAD* aPad );
+
     // handlers for libraries:
     void Delete_Module_In_Library( const wxString& libname );
 

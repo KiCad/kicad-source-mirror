@@ -347,63 +347,63 @@ void DIMENSION::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int mode_color, const wxP
     width   = m_Width;
 
     if( DC->LogicalToDeviceXRel( width ) < 2 )
-        typeaff = FILAIRE;
+        typeaff = LINE;
 
     switch( typeaff )
     {
-    case FILAIRE:
+    case LINE:
         width = 0;
 
     case FILLED:
-        GRLine( &panel->m_ClipBox, DC,
+        GRLine( panel->GetClipBox(), DC,
                 m_crossBarOx - ox, m_crossBarOy - oy,
                 m_crossBarFx - ox, m_crossBarFy - oy, width, gcolor );
-        GRLine( &panel->m_ClipBox, DC,
+        GRLine( panel->GetClipBox(), DC,
                 m_featureLineGOx - ox, m_featureLineGOy - oy,
                 m_featureLineGFx - ox, m_featureLineGFy - oy, width, gcolor );
-        GRLine( &panel->m_ClipBox, DC,
+        GRLine( panel->GetClipBox(), DC,
                 m_featureLineDOx - ox, m_featureLineDOy - oy,
                 m_featureLineDFx - ox, m_featureLineDFy - oy, width, gcolor );
-        GRLine( &panel->m_ClipBox, DC,
+        GRLine( panel->GetClipBox(), DC,
                 m_arrowD1Ox - ox, m_arrowD1Oy - oy,
                 m_arrowD1Fx - ox, m_arrowD1Fy - oy, width, gcolor );
-        GRLine( &panel->m_ClipBox, DC,
+        GRLine( panel->GetClipBox(), DC,
                 m_arrowD2Ox - ox, m_arrowD2Oy - oy,
                 m_arrowD2Fx - ox, m_arrowD2Fy - oy, width, gcolor );
-        GRLine( &panel->m_ClipBox, DC,
+        GRLine( panel->GetClipBox(), DC,
                 m_arrowG1Ox - ox, m_arrowG1Oy - oy,
                 m_arrowG1Fx - ox, m_arrowG1Fy - oy, width, gcolor );
-        GRLine( &panel->m_ClipBox, DC,
+        GRLine( panel->GetClipBox(), DC,
                 m_arrowG2Ox - ox, m_arrowG2Oy - oy,
                 m_arrowG2Fx - ox, m_arrowG2Fy - oy, width, gcolor );
         break;
 
     case SKETCH:
-        GRCSegm( &panel->m_ClipBox, DC,
+        GRCSegm( panel->GetClipBox(), DC,
                  m_crossBarOx - ox, m_crossBarOy - oy,
                  m_crossBarFx - ox, m_crossBarFy - oy,
                  width, gcolor );
-        GRCSegm( &panel->m_ClipBox, DC,
+        GRCSegm( panel->GetClipBox(), DC,
                  m_featureLineGOx - ox, m_featureLineGOy - oy,
                  m_featureLineGFx - ox, m_featureLineGFy - oy,
                  width, gcolor );
-        GRCSegm( &panel->m_ClipBox, DC,
+        GRCSegm( panel->GetClipBox(), DC,
                  m_featureLineDOx - ox, m_featureLineDOy - oy,
                  m_featureLineDFx - ox, m_featureLineDFy - oy,
                  width, gcolor );
-        GRCSegm( &panel->m_ClipBox, DC,
+        GRCSegm( panel->GetClipBox(), DC,
                  m_arrowD1Ox - ox, m_arrowD1Oy - oy,
                  m_arrowD1Fx - ox, m_arrowD1Fy - oy,
                  width, gcolor );
-        GRCSegm( &panel->m_ClipBox, DC,
+        GRCSegm( panel->GetClipBox(), DC,
                  m_arrowD2Ox - ox, m_arrowD2Oy - oy,
                  m_arrowD2Fx - ox, m_arrowD2Fy - oy,
                  width, gcolor );
-        GRCSegm( &panel->m_ClipBox, DC,
+        GRCSegm( panel->GetClipBox(), DC,
                  m_arrowG1Ox - ox, m_arrowG1Oy - oy,
                  m_arrowG1Fx - ox, m_arrowG1Fy - oy,
                  width, gcolor );
-        GRCSegm( &panel->m_ClipBox, DC,
+        GRCSegm( panel->GetClipBox(), DC,
                  m_arrowG2Ox - ox, m_arrowG2Oy - oy,
                  m_arrowG2Fx - ox, m_arrowG2Fy - oy,
                  width, gcolor );

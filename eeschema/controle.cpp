@@ -62,9 +62,9 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
 
     // If the user aborted the clarification context menu, don't show it again at the
     // off grid position.
-    if( !item && m_canvas->m_AbortRequest )
+    if( !item && m_canvas->GetAbortRequest() )
     {
-        m_canvas->m_AbortRequest = false;
+        m_canvas->SetAbortRequest( false );
         return NULL;
     }
 
@@ -73,7 +73,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KIC
 
     if( !item )
     {
-        m_canvas->m_AbortRequest = false;  // Just in case the user aborted the context menu.
+        m_canvas->SetAbortRequest( false );  // Just in case the user aborted the context menu.
         return NULL;
     }
 
@@ -171,7 +171,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
 
             // Set to NULL in case user aborts the clarification context menu.
             GetScreen()->SetCurItem( NULL );
-            m_canvas->m_AbortRequest = true;   // Changed to false if an item is selected
+            m_canvas->SetAbortRequest( true );   // Changed to false if an item is selected
             PopupMenu( &selectMenu );
             m_canvas->MoveCursorToCrossHair();
             item = GetScreen()->GetCurItem();
@@ -247,16 +247,18 @@ void SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         if( m_canvas->IsMouseCaptured() )
         {
 #ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( m_canvas->m_overlay, (wxWindowDC*)aDC );
+            wxDCOverlay oDC( m_overlay, (wxWindowDC*)aDC );
             oDC.Clear();
-            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, false );
+            m_canvas->CallMouseCapture( aDC, aPosition, false );
 #else
-            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, true );
+            m_canvas->CallMouseCapture( aDC, aPosition, true );
 #endif
         }
 #ifdef USE_WX_OVERLAY
         else
-            m_canvas->m_overlay.Reset();
+        {
+            m_overlay.Reset();
+        }
 #endif
     }
 
@@ -330,16 +332,18 @@ void LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         if( m_canvas->IsMouseCaptured() )
         {
 #ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( m_canvas->m_overlay, (wxWindowDC*)aDC );
+            wxDCOverlay oDC( m_overlay, (wxWindowDC*)aDC );
             oDC.Clear();
-            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, false );
+            m_canvas->CallMouseCapture( aDC, aPosition, false );
 #else
-            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, true );
+            m_canvas->CallMouseCapture( aDC, aPosition, true );
 #endif
         }
 #ifdef USE_WX_OVERLAY
         else
-            m_canvas->m_overlay.Reset();
+        {
+            m_overlay.Reset();
+        }
 #endif
     }
 
@@ -409,7 +413,7 @@ void LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
 
         if( m_canvas->IsMouseCaptured() )
         {
-            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, true );
+            m_canvas->CallMouseCapture( aDC, aPosition, true );
         }
     }
 

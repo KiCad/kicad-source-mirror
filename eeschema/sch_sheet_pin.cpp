@@ -126,32 +126,6 @@ void SCH_SHEET_PIN::SetNumber( int aNumber )
 }
 
 
-void SCH_SHEET_PIN::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
-{
-    SCH_SHEET* sheet = (SCH_SHEET*) GetParent();
-
-    wxCHECK_RET( (sheet != NULL) && (sheet->Type() == SCH_SHEET_T),
-                 wxT( "Cannot place sheet pin in invalid schematic sheet object." ) );
-
-    if( IsNew() )
-    {
-        aFrame->SaveCopyInUndoList( sheet, UR_CHANGED );
-        sheet->AddPin( this );
-    }
-    else    // Sheet pin already existed and was only moved.
-    {
-        aFrame->SaveUndoItemInUndoList( sheet );
-    }
-
-    ClearFlags();
-    sheet->Draw( aFrame->GetCanvas(), aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-
-    // Make sure we don't call the abort move function.
-    aFrame->GetCanvas()->SetMouseCapture( NULL, NULL );
-    aFrame->GetCanvas()->EndMouseCapture();
-}
-
-
 void SCH_SHEET_PIN::SetEdge( int aEdge )
 {
     SCH_SHEET* Sheet = (SCH_SHEET*) GetParent();

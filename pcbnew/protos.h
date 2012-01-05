@@ -70,8 +70,8 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
                                    bool aErase );
 
 /**
- * Determine coordinate for a segment direction of 0, 90 or 45 degrees,
- * depending on it's position from the origin (ox, oy) and \a aPosiition..
+ * Determine coordinate for a segment direction of 0, 90, or 45 degrees
+ * depending on it's position from the origin (ox, oy) and \a aPosiition.
  */
 void CalculateSegmentEndPoint( const wxPoint& aPosition, int ox, int oy, int* fx, int* fy );
 

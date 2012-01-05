@@ -148,8 +148,10 @@ void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    GRLine( &aPanel->m_ClipBox, aDC, pX - delta, pY - delta, pX + delta, pY + delta, width, color );
-    GRLine( &aPanel->m_ClipBox, aDC, pX + delta, pY - delta, pX - delta, pY + delta, width, color );
+    GRLine( aPanel->GetClipBox(), aDC, pX - delta, pY - delta, pX + delta, pY + delta,
+            width, color );
+    GRLine( aPanel->GetClipBox(), aDC, pX + delta, pY - delta, pX - delta, pY + delta,
+            width, color );
 }
 
 

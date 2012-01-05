@@ -88,6 +88,9 @@
  * $Endmodule
  */
 
+/// Get the length of a string constant, at compile time
+#define SZ( x )         (sizeof(x)-1)
+
 static int NbDraw, NbTrack, NbZone, NbMod, NbNets;
 
 static const char delims[] = " =\n\r";
@@ -862,7 +865,6 @@ static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, BASE_SCREEN* screen
 static bool ReadSheetDescr( BOARD* aBoard, BASE_SCREEN* screen, LINE_READER* aReader )
 {
     char    buf[1024];
-    char*   text;
 
     while( aReader->ReadLine() )
     {
@@ -884,9 +886,11 @@ static bool ReadSheetDescr( BOARD* aBoard, BASE_SCREEN* screen, LINE_READER* aRe
                 wxString wname = FROM_UTF8( sname );
                 if( !page.SetType( wname ) )
                 {
+                    /* this entire file is soon to be deleted.
                     m_error.Printf( _( "Unknown sheet type '%s' on line:%d" ),
                                 wname.GetData(), m_reader->LineNumber() );
                     THROW_IO_ERROR( m_error );
+                    */
                 }
 
                 // only parse the width and height if page size is "User"
@@ -899,11 +903,11 @@ static bool ReadSheetDescr( BOARD* aBoard, BASE_SCREEN* screen, LINE_READER* aRe
                     {
                         // legacy disk file describes paper in mils
                         // (1/1000th of an inch)
-                        int w = intParse( width );
-                        int h = intParse( height );
+                        int w = atoi( width );
+                        int h = atoi( height );
 
-                        page.SetWidthInches(  w / 1000.0 );
-                        page.SetHeightInches( h / 1000.0 );
+                        page.SetWidthMils(  w );
+                        page.SetHeightMils( h );
                     }
                 }
 

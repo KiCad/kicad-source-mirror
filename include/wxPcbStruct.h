@@ -878,6 +878,16 @@ public:
     void StartMove_Module( MODULE* module, wxDC* DC );
 
     /**
+     * Function DlgGlobalChange_PadSettings
+     * Function to change pad caracteristics for the given footprint
+     * or all footprints which look like the given footprint
+     * Options are set by the opened dialog.
+     * @param aPad is the pattern. The given footprint is the parent of this pad
+     * @param aRedraw: if true: redraws the footprint
+     */
+    void DlgGlobalChange_PadSettings( D_PAD* aPad, bool aRedraw );
+
+    /**
      * Function Delete Module
      * Remove a footprint from m_Modules linked list and put it in undelete buffer
      * The ratsnest and pad list are recalculated

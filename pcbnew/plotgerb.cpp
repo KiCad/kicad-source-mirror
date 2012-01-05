@@ -24,7 +24,7 @@
 
 
 bool PCB_BASE_FRAME::ExportToGerberFile( const wxString& aFullFileName, int aLayer,
-                                         bool aPlotOriginIsAuxAxis, GRTraceMode aTraceMode )
+                                         bool aPlotOriginIsAuxAxis, EDA_DRAW_MODE_T aTraceMode )
 {
     FILE* output_file = wxFopen( aFullFileName, wxT( "wt" ) );
 

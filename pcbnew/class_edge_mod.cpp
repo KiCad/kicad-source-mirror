@@ -119,38 +119,38 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
     }
 
     if( DC->LogicalToDeviceXRel( m_Width ) < MIN_DRAW_WIDTH )
-        typeaff = FILAIRE;
+        typeaff = LINE;
 
     switch( type_trace )
     {
     case S_SEGMENT:
-        if( typeaff == FILAIRE )
-            GRLine( &panel->m_ClipBox, DC, ux0, uy0, dx, dy, 0, color );
+        if( typeaff == LINE )
+            GRLine( panel->GetClipBox(), DC, ux0, uy0, dx, dy, 0, color );
         else if( typeaff == FILLED )
-            GRLine( &panel->m_ClipBox, DC, ux0, uy0, dx, dy, m_Width, color );
+            GRLine( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
         else
             // SKETCH Mode
-            GRCSegm( &panel->m_ClipBox, DC, ux0, uy0, dx, dy, m_Width, color );
+            GRCSegm( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
 
         break;
 
     case S_CIRCLE:
         radius = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
 
-        if( typeaff == FILAIRE )
+        if( typeaff == LINE )
         {
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius, color );
+            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius, color );
         }
         else
         {
             if( typeaff == FILLED )
             {
-                GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius, m_Width, color );
+                GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius, m_Width, color );
             }
             else        // SKETCH Mode
             {
-                GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius + (m_Width / 2), color );
-                GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius - (m_Width / 2), color );
+                GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius + (m_Width / 2), color );
+                GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius - (m_Width / 2), color );
             }
         }
 
@@ -164,19 +164,19 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         if( StAngle > EndAngle )
             EXCHG( StAngle, EndAngle );
 
-        if( typeaff == FILAIRE )
+        if( typeaff == LINE )
         {
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, radius, color );
+            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle, radius, color );
         }
         else if( typeaff == FILLED )
         {
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle, radius, m_Width, color );
+            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle, radius, m_Width, color );
         }
         else        // SKETCH Mode
         {
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
                    radius + (m_Width / 2), color );
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
                    radius - (m_Width / 2), color );
         }
         break;
@@ -196,7 +196,7 @@ void EDGE_MODULE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
             pt += module->m_Pos - offset;
         }
 
-        GRPoly( &panel->m_ClipBox, DC, points.size(), &points[0], true, m_Width, color, color );
+        GRPoly( panel->GetClipBox(), DC, points.size(), &points[0], true, m_Width, color, color );
         break;
     }
 }

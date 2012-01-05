@@ -327,7 +327,26 @@ public:
     void PlacePad( D_PAD* Pad, wxDC* DC );
     void Export_Pad_Settings( D_PAD* aPad );
     void Import_Pad_Settings( D_PAD* aPad, bool aDraw );
-    void Global_Import_Pad_Settings( D_PAD* aPad, bool aDraw );
+
+    /**
+     * Function GlobalChange_PadSettings
+     * Function to change pad caracteristics for the given footprint
+     * or all footprints which look like the given footprint
+     * @param aPad is the pattern. The given footprint is the parent of this pad
+     * @param aSameFootprints: if true, make changes on all identical footprints
+     * @param aPadShapeFilter: if true, make changes only on pads having the same shape as aPad
+     * @param aPadOrientFilter: if true, make changes only on pads having the same orientation as aPad
+     * @param aPadLayerFilter: if true, make changes only on pads having the same layers as aPad
+     * @param aRedraw: if true: redraws the footprint
+     * @param aSaveForUndo: if true: create an entry in the Undo/Redo list
+     *        (usually: true in Schematic editor, false in Module editor)
+     */
+    void GlobalChange_PadSettings( D_PAD* aPad,
+                                    bool aSameFootprints,
+                                    bool aPadShapeFilter,
+                                    bool aPadOrientFilter,
+                                    bool aPadLayerFilter,
+                                    bool aRedraw, bool aSaveForUndo );
 
     // loading footprints
 
@@ -490,24 +509,24 @@ public:
     bool ExportToGerberFile( const wxString& aFullFileName,
                              int             aLayer,
                              bool            aPlotOriginIsAuxAxis,
-                             GRTraceMode     aTraceMode );
+                             EDA_DRAW_MODE_T aTraceMode );
 
     bool ExportToHpglFile( const wxString& aFullFileName,
                            int             aLayer,
-                           GRTraceMode     aTraceMode );
+                           EDA_DRAW_MODE_T aTraceMode );
 
     bool ExportToPostScriptFile( const wxString& aFullFileName,
                                  int             aLayer,
                                  bool            aUseA4,
-                                 GRTraceMode     aTraceMode );
+                                 EDA_DRAW_MODE_T aTraceMode );
 
     bool ExportToDxfFile( const wxString& aFullFileName,
                           int             aLayer,
-                          GRTraceMode     aTraceMode );
+                          EDA_DRAW_MODE_T aTraceMode );
 
-    void Plot_Layer( PLOTTER*    plotter,
-                     int         Layer,
-                     GRTraceMode trace_mode );
+    void Plot_Layer( PLOTTER*        plotter,
+                     int             Layer,
+                     EDA_DRAW_MODE_T trace_mode );
 
     /**
      * Function Plot_Standard_Layer
@@ -523,10 +542,10 @@ public:
      *                      have the same size. Used in GERBER format only.
      */
     void Plot_Standard_Layer( PLOTTER* aPlotter, int aLayerMask,
-                              bool aPlotVia, GRTraceMode aPlotMode,
+                              bool aPlotVia, EDA_DRAW_MODE_T aPlotMode,
                               bool aSkipNPTH_Pads = false );
 
-    void PlotSilkScreen( PLOTTER* plotter, int masque_layer, GRTraceMode trace_mode );
+    void PlotSilkScreen( PLOTTER* plotter, int masque_layer, EDA_DRAW_MODE_T trace_mode );
 
     /**
      * Function PlotDrillMark
@@ -539,7 +558,7 @@ public:
      * @param aSmallDrillShape = true to plot a small drill shape, false to
      *                           plot the actual drill shape
      */
-    void PlotDrillMark( PLOTTER* aPlotter, GRTraceMode aTraceMode, bool aSmallDrillShape );
+    void PlotDrillMark( PLOTTER* aPlotter, EDA_DRAW_MODE_T aTraceMode, bool aSmallDrillShape );
 
     /* Functions relative to Undo/redo commands:
      */

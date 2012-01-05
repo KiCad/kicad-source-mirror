@@ -225,7 +225,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     if( m_canvas )
-        m_canvas->m_Block_Enable = true;
+        m_canvas->SetEnableBlockCommands( true );
 
     ReCreateMenuBar();
     ReCreateHToolbar();
@@ -686,7 +686,7 @@ void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& aEvent )
     wxCHECK_RET( m_findReplaceData != NULL,
                  wxT( "Forgot to create find/replace data.  Bad Programmer!" ) );
 
-    this->GetCanvas()->m_IgnoreMouseEvents = true;
+    this->GetCanvas()->SetIgnoreMouseEvents( true );
 
     if( m_dlgFindReplace )
     {
@@ -737,7 +737,7 @@ void SCH_EDIT_FRAME::OnFindDialogClose( wxFindDialogEvent& event )
         m_dlgFindReplace = NULL;
     }
 
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
 }
 
 
@@ -923,7 +923,7 @@ void SCH_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
         && (index >= 0 && index < m_collectedItems.GetCount()) )
     {
         SCH_ITEM* item = m_collectedItems[index];
-        m_canvas->m_AbortRequest = false;
+        m_canvas->SetAbortRequest( false );
         GetScreen()->SetCurItem( item );
     }
 }
@@ -934,4 +934,81 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
     SCH_SHEET_LIST SheetList;
 
     return SheetList.IsAutoSaveRequired();
+}
+
+
+void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
+{
+    SCH_SCREEN* screen = GetScreen();
+    SCH_ITEM* item = screen->GetCurItem();
+
+    wxCHECK_RET( item != NULL, wxT( "Cannot add current item to list." ) );
+
+    m_canvas->SetAutoPanRequest( false );
+
+    SCH_ITEM* undoItem = item;
+
+    if( item->Type() == SCH_SHEET_PIN_T )
+    {
+        SCH_SHEET* sheet = (SCH_SHEET*) item->GetParent();
+
+        wxCHECK_RET( (sheet != NULL) && (sheet->Type() == SCH_SHEET_T),
+                     wxT( "Cannot place sheet pin in invalid schematic sheet object." ) );
+
+        undoItem = sheet;
+    }
+
+    if( item->IsNew() )
+    {
+        if( item->Type() == SCH_SHEET_T )
+        {
+            // Fix the size and position of the new sheet using the last values set by
+            // the m_mouseCaptureCallback function.
+            m_canvas->SetMouseCapture( NULL, NULL );
+
+            if( !EditSheet( (SCH_SHEET*)item, aDC ) )
+            {
+                screen->SetCurItem( NULL );
+                item->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
+                delete item;
+                return;
+            }
+
+            SetSheetNumberAndCount();
+        }
+
+        if( undoItem == item )
+        {
+            if( !screen->CheckIfOnDrawList( item ) )  // don't want a loop!
+                screen->AddToDrawList( item );
+
+            SetRepeatItem( item );
+
+            SaveCopyInUndoList( undoItem, UR_NEW );
+        }
+        else
+        {
+            SaveCopyInUndoList( undoItem, UR_CHANGED );
+            ( (SCH_SHEET*)undoItem )->AddPin( (SCH_SHEET_PIN*) item );
+        }
+    }
+    else
+    {
+        SaveUndoItemInUndoList( undoItem );
+    }
+
+    item->ClearFlags();
+    screen->SetModify();
+    screen->SetCurItem( NULL );
+    m_canvas->SetMouseCapture( NULL, NULL );
+    m_canvas->EndMouseCapture();
+
+    if( item->IsConnectable() )
+        screen->TestDanglingEnds();
+
+    if( aDC )
+    {
+        EDA_CROSS_HAIR_MANAGER( m_canvas, aDC );  // Erase schematic cursor
+        undoItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    }
 }

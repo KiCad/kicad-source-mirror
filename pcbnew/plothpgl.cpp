@@ -18,7 +18,7 @@
 
 
 bool PCB_BASE_FRAME::ExportToHpglFile( const wxString& aFullFileName, int aLayer,
-                                       GRTraceMode aTraceMode )
+                                       EDA_DRAW_MODE_T aTraceMode )
 {
     wxSize      boardSize;
     wxPoint     boardCenter;

@@ -131,10 +131,10 @@ void BLOCK_SELECTOR::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
     GRSetDrawMode( aDC, aDrawMode );
 
     if(  w == 0 || h == 0 )
-        GRLine( &aPanel->m_ClipBox, aDC, GetX() + aOffset.x, GetY() + aOffset.y,
+        GRLine( aPanel->GetClipBox(), aDC, GetX() + aOffset.x, GetY() + aOffset.y,
                 GetRight() + aOffset.x, GetBottom() + aOffset.y, 0, aColor );
     else
-        GRRect( &aPanel->m_ClipBox, aDC, GetX() + aOffset.x, GetY() + aOffset.y,
+        GRRect( aPanel->GetClipBox(), aDC, GetX() + aOffset.x, GetY() + aOffset.y,
                 GetRight() + aOffset.x, GetBottom() + aOffset.y, 0, aColor );
 }
 
@@ -241,7 +241,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
         {
             DisplayError( this, wxT( "No Block to paste" ), 20 );
             GetScreen()->m_BlockLocate.m_Command = BLOCK_IDLE;
-            m_canvas->m_mouseCaptureCallback = NULL;
+            m_canvas->SetMouseCaptureCallback( NULL );
             return true;
         }
 
@@ -254,7 +254,7 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* DC, int key, const wxPoint& startpo
         }
 
         Block->m_State = STATE_BLOCK_MOVE;
-        m_canvas->m_mouseCaptureCallback( m_canvas, DC, startpos, false );
+        m_canvas->CallMouseCapture( DC, startpos, false );
         break;
 
     default:
@@ -314,7 +314,7 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* Panel, wxDC* DC )
     if( Panel->IsMouseCaptured() )      /* Erase current drawing on screen */
     {
         /* Clear block outline. */
-        Panel->m_mouseCaptureCallback( Panel, DC, wxDefaultPosition, false );
+        Panel->CallMouseCapture( DC, wxDefaultPosition, false );
         Panel->SetMouseCapture( NULL, NULL );
         screen->SetCurItem( NULL );
 

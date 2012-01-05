@@ -11,6 +11,10 @@
 #include "common.h"             // EDA_UNITS_T
 
 
+class EDA_DRAW_FRAME;
+
+
+
 /**
  * class EDA_LIST_DIALOG
  *

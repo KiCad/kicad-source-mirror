@@ -43,15 +43,17 @@
 static int     s_LastShape = '\\';
 
 
-SCH_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusEntry( wxDC* DC, int entry_type )
+SCH_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusEntry( wxDC* aDC, int aType )
 {
+    SCH_SCREEN* screen = GetScreen();
+
     // Create and place a new bus entry at cursor position
-    SCH_BUS_ENTRY* BusEntry = new SCH_BUS_ENTRY( GetScreen()->GetCrossHairPosition(), s_LastShape,
-                                                 entry_type );
-    BusEntry->SetFlags( IS_NEW );
-    BusEntry->Place( this, DC );
-    OnModify();
-    return BusEntry;
+    SCH_BUS_ENTRY* busEntry = new SCH_BUS_ENTRY( screen->GetCrossHairPosition(), s_LastShape,
+                                                 aType );
+    busEntry->SetFlags( IS_NEW );
+    GetScreen()->SetCurItem( busEntry );
+    addCurrentItemToList( aDC );
+    return busEntry;
 }
 
 

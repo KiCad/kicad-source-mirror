@@ -244,19 +244,19 @@ void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
         fill = NO_FILL;
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, m_Radius, GetPenSize(),
+        GRFilledCircle( aPanel->GetClipBox(), aDC, pos1.x, pos1.y, m_Radius, GetPenSize(),
                         (m_Flags & IS_MOVED) ? color : ReturnLayerColor( LAYER_DEVICE_BACKGROUND ),
                         ReturnLayerColor( LAYER_DEVICE_BACKGROUND ) );
     else if( fill == FILLED_SHAPE )
-        GRFilledCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, m_Radius, 0, color, color );
+        GRFilledCircle( aPanel->GetClipBox(), aDC, pos1.x, pos1.y, m_Radius, 0, color, color );
     else
-        GRCircle( &aPanel->m_ClipBox, aDC, pos1.x, pos1.y, m_Radius, GetPenSize(), color );
+        GRCircle( aPanel->GetClipBox(), aDC, pos1.x, pos1.y, m_Radius, GetPenSize(), color );
 
     /* Set to one (1) to draw bounding box around circle to validate bounding
      * box calculation. */
 #if 0
     EDA_RECT bBox = GetBoundingBox();
-    GRRect( &aPanel->m_ClipBox, aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
+    GRRect( aPanel->GetClipBox(), aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
             bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
 #endif
 }

@@ -24,7 +24,7 @@
  */
 
 /**
- * @file edaapl.cpp
+ * @file edaappl.cpp
  *
  * @brief For the main application: init functions, and language selection
  *        (locale handling)

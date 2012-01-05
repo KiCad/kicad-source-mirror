@@ -62,7 +62,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
     DisplayOpt.DisplayZonesMode    = 0;
     DisplayOpt.DisplayNetNamesMode = 0;
 
-    m_canvas->m_PrintIsMirrored = aPrintMirrorMode;
+    m_canvas->SetPrintMirrored( aPrintMirrorMode );
 
     // The OR mode is used in color mode, but be aware the background *must be
     // BLACK.  In the print page dialog, we first print in BLACK, and after
@@ -88,7 +88,7 @@ void FOOTPRINT_EDIT_FRAME::PrintPage( wxDC* aDC,
 
     D_PAD::m_PadSketchModePenSize = tmp;
 
-    m_canvas->m_PrintIsMirrored = false;
+    m_canvas->SetPrintMirrored( false );
 
     DisplayOpt = save_opt;
     m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
@@ -189,7 +189,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
     DisplayOpt.DisplayZonesMode    = 0;
     DisplayOpt.DisplayNetNamesMode = 0;
 
-    m_canvas->m_PrintIsMirrored = aPrintMirrorMode;
+    m_canvas->SetPrintMirrored( aPrintMirrorMode );
 
     // The OR mode is used in color mode, but be aware the background *must be
     // BLACK.  In the print page dialog, we first print in BLACK, and after
@@ -234,7 +234,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
             int radius = pt_trace->m_Width >> 1;
             int color = g_ColorsSettings.GetItemColor( VIAS_VISIBLE + pt_trace->m_Shape );
             GRSetDrawMode( aDC, drawmode );
-            GRFilledCircle( &m_canvas->m_ClipBox, aDC,
+            GRFilledCircle( m_canvas->GetClipBox(), aDC,
                             pt_trace->m_Start.x,
                             pt_trace->m_Start.y,
                             radius,
@@ -304,7 +304,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
                 else
                     diameter = pt_trace->GetDrillValue();
 
-                GRFilledCircle( &m_canvas->m_ClipBox, aDC,
+                GRFilledCircle( m_canvas->GetClipBox(), aDC,
                                 pt_trace->m_Start.x, pt_trace->m_Start.y,
                                 diameter/2,
                                 0, color, color );
@@ -314,7 +314,7 @@ void PCB_EDIT_FRAME::PrintPage( wxDC* aDC,
         GRForceBlackPen( blackpenstate );
     }
 
-    m_canvas->m_PrintIsMirrored = false;
+    m_canvas->SetPrintMirrored( false );
 
     DisplayOpt = save_opt;
     GetScreen()->m_Active_Layer = activeLayer;

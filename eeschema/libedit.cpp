@@ -252,7 +252,7 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     }
 
     if( m_canvas->IsMouseCaptured() )
-        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
     m_canvas->DrawCrossHair( DC );
 
@@ -322,7 +322,8 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
     if( libFileName.FileExists() )
     {
         backupFileName.SetExt( wxT( "bak" ) );
-        wxRemoveFile( backupFileName.GetFullPath() );
+        if( backupFileName.FileExists() )
+            wxRemoveFile( backupFileName.GetFullPath() );
 
         if( !wxRenameFile( libFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {
@@ -361,7 +362,8 @@ void LIB_EDIT_FRAME::SaveActiveLibrary( wxCommandEvent& event )
     if( docFileName.FileExists() )
     {
         backupFileName.SetExt( wxT( "bck" ) );
-        wxRemoveFile( backupFileName.GetFullPath() );
+        if( backupFileName.FileExists() )
+            wxRemoveFile( backupFileName.GetFullPath() );
 
         if( !wxRenameFile( docFileName.GetFullPath(), backupFileName.GetFullPath() ) )
         {

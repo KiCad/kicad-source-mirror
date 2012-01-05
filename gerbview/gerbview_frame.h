@@ -459,12 +459,12 @@ public: GERBVIEW_FRAME( wxWindow* father, const wxString& title,
     void Genere_GERBER( const wxString& FullFileName, int Layers );
     void Genere_PS( const wxString& FullFileName, int Layers );
     void Plot_Layer_HPGL( FILE* File, int masque_layer,int garde, bool trace_via,
-                          GRTraceMode trace_mode );
+                          EDA_DRAW_MODE_T trace_mode );
     void Plot_Layer_GERBER( FILE* File, int masque_layer, int garde, bool trace_via,
-                            GRTraceMode trace_mode );
+                            EDA_DRAW_MODE_T trace_mode );
     int Gen_D_CODE_File( const wxString& Name_File );
     void Plot_Layer_PS( FILE* File, int masque_layer, int garde, bool trace_via,
-                        GRTraceMode trace_mode );
+                        EDA_DRAW_MODE_T trace_mode );
 
     void Files_io( wxCommandEvent& event );
 

@@ -376,7 +376,7 @@ void D_PAD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDraw_mode, const wxPoi
     if( !IsOnLayer( screen->m_Active_Layer ) && DisplayOpt.ContrastModeDisplay )
         drawInfo.m_Display_netname = false;
 
-    DrawShape( &aPanel->m_ClipBox, aDC, drawInfo );
+    DrawShape( aPanel->GetClipBox(), aDC, drawInfo );
 }
 
 

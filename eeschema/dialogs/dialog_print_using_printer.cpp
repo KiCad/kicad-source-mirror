@@ -324,19 +324,20 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
     tmp_startvisu = aScreen->m_StartVisu;
     oldZoom = aScreen->GetZoom();
     old_org = aScreen->m_DrawOrg;
-    oldClipBox = panel->m_ClipBox;
 
-    // Change scale factor, offsets, and clip box to print the whole page.
-    panel->m_ClipBox.SetOrigin( wxPoint( 0, 0 ) );
-    panel->m_ClipBox.SetSize( wxSize( 0x7FFFFF0, 0x7FFFFF0 ) );
+    oldClipBox = *panel->GetClipBox();
 
+    // Change clip box to print the whole page.
+    #define MAX_VALUE (INT_MAX/2)   // MAX_VALUE is the max we can use in an integer
+                                    // and that allows calculations without overflow
+    panel->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( MAX_VALUE, MAX_VALUE ) ) );
+
+    // Change scale factor and offset to print the whole page.
     bool printReference = parent->GetPrintSheetReference();
 
     if( printReference )
     {
-        /* Draw the page to a memory and let the dc calculate the drawing
-         * limits.
-         */
+        // Draw the page to a memory and let the dc calculate the drawing limits.
         wxBitmap psuedoBitmap( 1, 1 );
         wxMemoryDC memDC;
         memDC.SelectObject( psuedoBitmap );
@@ -379,7 +380,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     g_DrawBgColor = bg_color;
     aScreen->m_IsPrinting = false;
-    panel->m_ClipBox = oldClipBox;
+    panel->SetClipBox( oldClipBox );
 
     GRForceBlackPen( false );
 

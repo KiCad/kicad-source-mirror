@@ -397,7 +397,7 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
 #if 0
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
+        GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }
@@ -1225,7 +1225,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + aOffset );
-    GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
+    GRPoly( panel->GetClipBox(), DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
     if( m_isDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + aOffset, color );
@@ -1234,7 +1234,7 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
 #if 0
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
+        GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }
@@ -1562,7 +1562,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
     EXCHG( linewidth, m_Thickness );            // set initial value
 
     CreateGraphicShape( Poly, m_Pos + offset );
-    GRPoly( &panel->m_ClipBox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
+    GRPoly( panel->GetClipBox(), DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
 
     if( m_isDangling )
         DrawDanglingSymbol( panel, DC, m_Pos + offset, color );
@@ -1571,7 +1571,7 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 #if 0
     {
         EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
+        GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
     }
 #endif
 }

@@ -85,7 +85,7 @@ void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
     {
     case BLOCK_MOVE:                /* Move */
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         Block_Move( DC );
         GetScreen()->m_BlockLocate.ClearItemsList();
@@ -93,7 +93,7 @@ void GERBVIEW_FRAME::HandleBlockPlace( wxDC* DC )
 
     case BLOCK_COPY:     /* Copy */
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         Block_Duplicate( DC );
         GetScreen()->m_BlockLocate.ClearItemsList();
@@ -139,14 +139,14 @@ bool GERBVIEW_FRAME::HandleBlockEnd( wxDC* DC )
         case BLOCK_COPY:            /* Copy */
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             nextcmd = true;
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
-            m_canvas->m_mouseCaptureCallback = DrawMovingBlockOutlines;
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+            m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
             break;
 
         case BLOCK_DELETE: /* Delete */
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
             Block_Delete( DC );
             break;
 
@@ -257,7 +257,7 @@ void GERBVIEW_FRAME::Block_Move( wxDC* DC )
     wxPoint oldpos;
 
     oldpos = GetScreen()->GetCrossHairPosition();
-    m_canvas->m_mouseCaptureCallback = NULL;
+    m_canvas->SetMouseCaptureCallback( NULL );
 
     GetScreen()->SetCrossHairPosition( oldpos );
     m_canvas->MoveCursorToCrossHair();
@@ -286,7 +286,7 @@ void GERBVIEW_FRAME::Block_Duplicate( wxDC* DC )
     wxPoint oldpos;
 
     oldpos = GetScreen()->GetCrossHairPosition();
-    m_canvas->m_mouseCaptureCallback = NULL;
+    m_canvas->SetMouseCaptureCallback( NULL );
 
     GetScreen()->SetCrossHairPosition( oldpos );
     m_canvas->MoveCursorToCrossHair();

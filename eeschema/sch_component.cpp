@@ -334,18 +334,18 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset
     {
         EDA_RECT BoundaryBox;
         BoundaryBox = GetBoundingBox();
-        GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
+        GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
 #if 1
         if( GetField( REFERENCE )->IsVisible() )
         {
             BoundaryBox = GetField( REFERENCE )->GetBoundingBox();
-            GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
+            GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
         }
 
         if( GetField( VALUE )->IsVisible() )
         {
             BoundaryBox = GetField( VALUE )->GetBoundingBox();
-            GRRect( &panel->m_ClipBox, DC, BoundaryBox, 0, BROWN );
+            GRRect( panel->GetClipBox(), DC, BoundaryBox, 0, BROWN );
         }
 #endif
     }
@@ -1252,8 +1252,8 @@ bool SCH_COMPONENT::Load( LINE_READER& aLine, wxString& aErrorMsg )
             int  fieldNdx;
 
             wxString fieldText;
-            GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
-            GRTextVertJustifyType  vjustify = GR_TEXT_VJUSTIFY_CENTER;
+            EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
+            EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
 
             ptcar = (char*) aLine;
 

@@ -178,7 +178,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( wxWindow*       father,
     ReCreateOptToolbar();
 
     if( m_canvas )
-        m_canvas->m_Block_Enable = true;
+        m_canvas->SetEnableBlockCommands( true );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -413,17 +413,17 @@ void FOOTPRINT_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, 
         if( m_canvas->IsMouseCaptured() )
         {
 #ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( m_canvas->m_overlay, (wxWindowDC*)aDC );
+            wxDCOverlay oDC( m_overlay, (wxWindowDC*)aDC );
             oDC.Clear();
-            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, false );
+            m_canvas->CallMouseCapture( aDC, aPosition, false );
 #else
-            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, true );
+            m_canvas->CallMouseCapture( aDC, aPosition, true );
 #endif
         }
 #ifdef USE_WX_OVERLAY
         else
         {
-            m_canvas->m_overlay.Reset();
+            m_overlay.Reset();
         }
 #endif
     }

@@ -262,17 +262,17 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     screen->m_DrawOrg = DrawOffset;
 
     GRResetPenAndBrush( dc );
+
     if( m_PrintParams.m_Print_Black_and_White )
         GRForceBlackPen( true );
 
     EDA_DRAW_PANEL* panel = m_Parent->GetCanvas();
-    EDA_RECT        tmp   = panel->m_ClipBox;
+    EDA_RECT        tmp   = *panel->GetClipBox();
 
     // Set clip box to the max size
     #define MAX_VALUE (INT_MAX/2)   // MAX_VALUE is the max we can use in an integer
                                     // and that allows calculations without overflow
-    panel->m_ClipBox.SetOrigin( wxPoint( 0, 0 ) );
-    panel->m_ClipBox.SetSize( wxSize( MAX_VALUE, MAX_VALUE ) );
+    panel->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( MAX_VALUE, MAX_VALUE ) ) );
 
     m_Parent->GetScreen()->m_IsPrinting = true;
     int bg_color = g_DrawBgColor;
@@ -284,6 +284,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
     {
         // To plot mirror, we reverse the y axis, and modify the plot y origin
         dc->SetAxisOrientation( true, true );
+
         if( userscale < 1.0 )
             scaley /= userscale;
 
@@ -310,7 +311,8 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
             DrawOffset.y += pcb_centre.y - (ysize / 2);
 
         dc->SetLogicalOrigin( screen->m_DrawOrg.x, screen->m_DrawOrg.y );
-        panel->m_ClipBox.SetOrigin( wxPoint( -MAX_VALUE/2, -MAX_VALUE/2 ) );
+        panel->SetClipBox( EDA_RECT( wxPoint( -MAX_VALUE/2, -MAX_VALUE/2 ),
+                                     panel->GetClipBox()->GetSize() ) );
     }
 
     g_DrawBgColor = WHITE;
@@ -332,7 +334,7 @@ void BOARD_PRINTOUT_CONTROLER::DrawPage()
 
     g_DrawBgColor = bg_color;
     m_Parent->GetScreen()->m_IsPrinting = false;
-    panel->m_ClipBox = tmp;
+    panel->SetClipBox( tmp );
 
     GRForceBlackPen( false );
 
