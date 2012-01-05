@@ -66,7 +66,8 @@ void TEXTE_PCB::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
 
     int color = brd->GetLayerColor( m_Layer );
 
-    GRTraceMode fillmode = FILLED;
+    EDA_DRAW_MODE_T fillmode = FILLED;
+
     if( DisplayOpt.DisplayDrawItems == SKETCH )
         fillmode = SKETCH;
 

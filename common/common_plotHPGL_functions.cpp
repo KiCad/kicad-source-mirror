@@ -204,13 +204,13 @@ void HPGL_PLOTTER::set_dash( bool dashed )
  * @param width = segment width (thickness)
  * @param tracemode = FILLED, SKETCH ..
  */
-void HPGL_PLOTTER::thick_segment( wxPoint start, wxPoint end, int width, GRTraceMode tracemode )
+void HPGL_PLOTTER::thick_segment( wxPoint start, wxPoint end, int width, EDA_DRAW_MODE_T tracemode )
 {
     wxASSERT( output_file );
     wxPoint center;
     wxSize  size;
 
-    if( (pen_diameter >= width) || (tracemode == FILAIRE) )  /* just a line is
+    if( (pen_diameter >= width) || (tracemode == LINE) )  /* just a line is
                                                               * Ok */
     {
         move_to( start );
@@ -267,7 +267,7 @@ void HPGL_PLOTTER::arc( wxPoint centre, int StAngle, int EndAngle, int rayon,
 /* Plot oval pad.
  */
 void HPGL_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
-                                   GRTraceMode trace_mode )
+                                   EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( output_file );
     int deltaxy, cx, cy;
@@ -306,7 +306,7 @@ void HPGL_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 /* Plot round pad or via.
  */
 void HPGL_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
-                                     GRTraceMode trace_mode )
+                                     EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( output_file );
     int rayon, delta;
@@ -315,7 +315,8 @@ void HPGL_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
 
     delta = wxRound( pen_diameter - pen_overlap );
     rayon = diametre / 2;
-    if( trace_mode != FILAIRE )
+
+    if( trace_mode != LINE )
     {
         rayon = ( diametre - wxRound( pen_diameter ) ) / 2;
     }
@@ -357,7 +358,7 @@ void HPGL_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
  * Units are user units
  */
 void HPGL_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
-                                   int orient, GRTraceMode trace_mode )
+                                   int orient, EDA_DRAW_MODE_T trace_mode )
 {
     wxASSERT( output_file );
     wxSize size;
@@ -367,7 +368,7 @@ void HPGL_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
     size.x = padsize.x / 2;
     size.y = padsize.y / 2;
 
-    if( trace_mode != FILAIRE )
+    if( trace_mode != LINE )
     {
         size.x = (padsize.x - (int) pen_diameter) / 2;
         size.y = (padsize.y - (int) pen_diameter) / 2;
@@ -475,7 +476,7 @@ void HPGL_PLOTTER::flash_pad_rect( wxPoint pos, wxSize padsize,
  * Plot mode FILLED or SKETCH
  */
 void HPGL_PLOTTER::flash_pad_trapez( wxPoint aPadPos, wxPoint aCorners[4],
-                                     int aPadOrient, GRTraceMode aTrace_Mode )
+                                     int aPadOrient, EDA_DRAW_MODE_T aTrace_Mode )
 {
     wxASSERT( output_file );
     wxPoint polygone[4];        // coordinates of corners relatives to the pad

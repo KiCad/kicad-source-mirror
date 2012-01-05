@@ -252,19 +252,15 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
 
     wxSVGFileDC       dc( FullFileName, pageSize.x, pageSize.y, dpi );
 
-    EDA_RECT          tmp = panel->m_ClipBox;
+    EDA_RECT          tmp = *panel->GetClipBox();
     GRResetPenAndBrush( &dc );
     GRForceBlackPen( m_ModeColorOption->GetSelection() == 0 ? false : true );
     s_Parameters.m_DrillShapeOpt = PRINT_PARAMETERS::FULL_DRILL_SHAPE;
 
-    panel->m_ClipBox.SetX( 0 );
-    panel->m_ClipBox.SetY( 0 );
-
     // Set clip box to the max size
     #define MAX_VALUE (INT_MAX/2)   // MAX_VALUE is the max we can use in an integer
                                     // and that allows calculations without overflow
-    panel->m_ClipBox.SetWidth( MAX_VALUE );
-    panel->m_ClipBox.SetHeight( MAX_VALUE );
+    panel->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( MAX_VALUE, MAX_VALUE ) ) );
 
     screen->m_IsPrinting = true;
 
@@ -278,7 +274,7 @@ bool DIALOG_SVG_PRINT::DrawPage( const wxString& FullFileName,
     g_DrawBgColor = bg_color;
 
     screen->m_IsPrinting = false;
-    panel->m_ClipBox     = tmp;
+    panel->SetClipBox( tmp );
 
     GRForceBlackPen( false );
 

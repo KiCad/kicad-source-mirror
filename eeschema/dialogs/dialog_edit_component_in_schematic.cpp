@@ -29,7 +29,7 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     wxCHECK_RET( aComponent != NULL && aComponent->Type() == SCH_COMPONENT_T,
                  wxT( "Invalid component object pointer.  Bad Programmer!" )  );
 
-    m_canvas->m_IgnoreMouseEvents = true;
+    m_canvas->SetIgnoreMouseEvents( true );
 
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC* dlg = new DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( this );
 
@@ -55,7 +55,7 @@ void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
     DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_LastSize = dlg->GetSize();
 
     m_canvas->MoveCursorToCrossHair();
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
     dlg->Destroy();
 }
 
@@ -685,12 +685,12 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyPanelToSelectedField()
     rotateCheckBox->SetValue( field.m_Orient == TEXT_ORIENT_VERT );
 
     // Copy the text justification
-    GRTextHorizJustifyType hjustify[3] = {
+    EDA_TEXT_HJUSTIFY_T hjustify[3] = {
         GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_HJUSTIFY_CENTER,
         GR_TEXT_HJUSTIFY_RIGHT
     };
 
-    GRTextVertJustifyType vjustify[3] = {
+    EDA_TEXT_VJUSTIFY_T vjustify[3] = {
         GR_TEXT_VJUSTIFY_BOTTOM, GR_TEXT_VJUSTIFY_CENTER,
         GR_TEXT_VJUSTIFY_TOP
     };

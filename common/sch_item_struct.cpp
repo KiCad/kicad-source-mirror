@@ -80,37 +80,6 @@ SCH_ITEM::~SCH_ITEM()
 }
 
 
-void SCH_ITEM::Place( SCH_EDIT_FRAME* aFrame, wxDC* aDC )
-{
-    SCH_SCREEN* screen = aFrame->GetScreen();
-
-    if( IsNew() )
-    {
-        if( !screen->CheckIfOnDrawList( this ) )  // don't want a loop!
-            screen->AddToDrawList( this );
-
-        aFrame->SetRepeatItem( this );
-        aFrame->SaveCopyInUndoList( this, UR_NEW );
-    }
-    else
-    {
-        aFrame->SaveUndoItemInUndoList( this );
-    }
-
-    m_Flags = 0;
-    screen->SetModify();
-    screen->SetCurItem( NULL );
-    aFrame->GetCanvas()->SetMouseCapture( NULL, NULL );
-    aFrame->GetCanvas()->EndMouseCapture();
-
-    if( aDC )
-    {
-        EDA_CROSS_HAIR_MANAGER( aFrame->GetCanvas(), aDC );  // Erase schematic cursor
-        Draw( aFrame->GetCanvas(), aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-    }
-}
-
-
 bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
 {
     if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )

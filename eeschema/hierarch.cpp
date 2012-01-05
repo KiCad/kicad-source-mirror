@@ -280,7 +280,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     // update the References
     m_CurrentSheet->UpdateAllScreenReferences();
     SetSheetNumberAndCount();
-    m_canvas->m_CanStartBlock = -1;
+    m_canvas->SetCanStartBlock( -1 );
 
     if( screen->m_FirstRedraw )
     {

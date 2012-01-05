@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -117,14 +117,13 @@ DIALOG_SCH_FIND_BASE::DIALOG_SCH_FIND_BASE( wxWindow* parent, wxWindowID id, con
 	
 	rightSizer->Add( m_buttonReplaceAll, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 6 );
 	
-	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonCancel = new wxButton( this, wxID_CANCEL, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	rightSizer->Add( m_buttonCancel, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 6 );
 	
 	mainSizer->Add( rightSizer, 0, wxALL|wxEXPAND, 6 );
 	
 	this->SetSizer( mainSizer );
 	this->Layout();
-	mainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	

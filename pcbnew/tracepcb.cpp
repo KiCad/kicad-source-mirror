@@ -80,14 +80,14 @@ void FOOTPRINT_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 #ifdef USE_WX_OVERLAY
     if( IsShown() )
     {
-        m_canvas->m_overlay.Reset();
-        wxDCOverlay overlaydc( m_canvas->m_overlay, (wxWindowDC*)DC );
+        m_overlay.Reset();
+        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)DC );
         overlaydc.Clear();
     }
 #endif
 
     if( m_canvas->IsMouseCaptured() )
-        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
     /* Redraw the cursor */
     m_canvas->DrawCrossHair( DC );
@@ -116,14 +116,14 @@ void PCB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 #ifdef USE_WX_OVERLAY
     if( IsShown() )
     {
-        m_canvas->m_overlay.Reset();
-        wxDCOverlay overlaydc( m_canvas->m_overlay, (wxWindowDC*)DC );
+        m_overlay.Reset();
+        wxDCOverlay overlaydc( m_overlay, (wxWindowDC*)DC );
         overlaydc.Clear();
     }
 #endif
 
     if( m_canvas->IsMouseCaptured() )
-        m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
     // Redraw the cursor
     m_canvas->DrawCrossHair( DC );

@@ -121,7 +121,7 @@ static bool InstallBlockCmdFrame( PCB_BASE_FRAME* parent, const wxString& title 
 {
     wxPoint oldpos = parent->GetScreen()->GetCrossHairPosition();
 
-    parent->GetCanvas()->m_IgnoreMouseEvents = true;
+    parent->GetCanvas()->SetIgnoreMouseEvents( true );
     DIALOG_BLOCK_OPTIONS * dlg = new DIALOG_BLOCK_OPTIONS( parent, title );
 
     int cmd = dlg->ShowModal();
@@ -129,7 +129,7 @@ static bool InstallBlockCmdFrame( PCB_BASE_FRAME* parent, const wxString& title 
 
     parent->GetScreen()->SetCrossHairPosition( oldpos );
     parent->GetCanvas()->MoveCursorToCrossHair();
-    parent->GetCanvas()->m_IgnoreMouseEvents = false;
+    parent->GetCanvas()->SetIgnoreMouseEvents( false );
 
     return cmd == wxID_OK;
 }
@@ -235,7 +235,7 @@ void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_MOVE:                /* Move */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         Block_Move();
         GetScreen()->m_BlockLocate.ClearItemsList();
@@ -243,7 +243,7 @@ void PCB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
     case BLOCK_COPY:     /* Copy */
         if( m_canvas->IsMouseCaptured() )
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         Block_Duplicate();
         GetScreen()->m_BlockLocate.ClearItemsList();
@@ -293,7 +293,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             cancelCmd = true;
 
             // undraw block outline
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
         }
         else
         {
@@ -320,24 +320,24 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
         case BLOCK_PRESELECT_MOVE:  /* Move with preselection list*/
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_MOVE;
             nextcmd = true;
-            m_canvas->m_mouseCaptureCallback = drawMovingBlock;
-            m_canvas->m_mouseCaptureCallback( m_canvas, DC, wxDefaultPosition, false );
+            m_canvas->SetMouseCaptureCallback( drawMovingBlock );
+            m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
             break;
 
         case BLOCK_DELETE: /* Delete */
-            m_canvas->m_mouseCaptureCallback = NULL;
+            m_canvas->SetMouseCaptureCallback( NULL );
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             Block_Delete();
             break;
 
         case BLOCK_ROTATE: /* Rotation */
-            m_canvas->m_mouseCaptureCallback = NULL;
+            m_canvas->SetMouseCaptureCallback( NULL );
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             Block_Rotate();
             break;
 
         case BLOCK_FLIP: /* Flip */
-            m_canvas->m_mouseCaptureCallback = NULL;
+            m_canvas->SetMouseCaptureCallback( NULL );
             GetScreen()->m_BlockLocate.m_State = STATE_BLOCK_STOP;
             Block_Flip();
             break;
@@ -357,7 +357,7 @@ bool PCB_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
 
             // Turn off the redraw block routine now so it is not displayed
             // with one corner at the new center of the screen
-            m_canvas->m_mouseCaptureCallback = NULL;
+            m_canvas->SetMouseCaptureCallback( NULL );
             Window_Zoom( GetScreen()->m_BlockLocate );
             break;
 

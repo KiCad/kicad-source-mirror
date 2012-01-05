@@ -77,7 +77,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( wxWindow*       father,
     m_drillFileHistory.SetBaseId( ID_GERBVIEW_DRILL_FILE1 );
 
     if( m_canvas )
-        m_canvas->m_Block_Enable = true;
+        m_canvas->SetEnableBlockCommands( true );
 
     // Give an icon
     wxIcon icon;

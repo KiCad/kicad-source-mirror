@@ -88,7 +88,7 @@ void Dialog_GeneralOptions::init()
     m_TrackAutodel->SetValue( g_AutoDeleteOldTrack );
     m_Track_45_Only_Ctrl->SetValue( g_Track_45_Only_Allowed );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
-    m_AutoPANOpt->SetValue( GetParent()->GetCanvas()->m_AutoPAN_Enable );
+    m_AutoPANOpt->SetValue( GetParent()->GetCanvas()->GetEnableAutoPan() );
     m_Segments_45_Only_Ctrl->SetValue( Segments_45_Only );
     m_Track_DoubleSegm_Ctrl->SetValue( g_TwoSegmentTrackBuild );
 
@@ -133,9 +133,8 @@ void Dialog_GeneralOptions::OnOkClick( wxCommandEvent& event )
     g_AutoDeleteOldTrack   = m_TrackAutodel->GetValue();
     Segments_45_Only = m_Segments_45_Only_Ctrl->GetValue();
     g_Track_45_Only_Allowed    = m_Track_45_Only_Ctrl->GetValue();
-    GetParent()->GetCanvas()->m_AutoPAN_Enable = m_AutoPANOpt->GetValue();
+    GetParent()->GetCanvas()->SetEnableAutoPan( m_AutoPANOpt->GetValue() );
     g_TwoSegmentTrackBuild = m_Track_DoubleSegm_Ctrl->GetValue();
-
     g_MagneticPadOption   = m_MagneticPadOptCtrl->GetSelection();
     g_MagneticTrackOption = m_MagneticTrackOptCtrl->GetSelection();
 

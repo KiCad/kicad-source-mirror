@@ -478,18 +478,21 @@ PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromRedoList( )
 }
 
 
-void BASE_SCREEN::AddItem( EDA_ITEM* aItem )
+#if defined(DEBUG)
+
+void BASE_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
-    wxCHECK_RET( aItem != NULL, wxT( "Attempt to add NULL item pointer to " ) + GetClass() +
-                 wxT( "item list" ) );
-    m_items.push_back( aItem );
+    // for now, make it look like XML, expand on this later.
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
+
+    /* this class will eventually go away, but here's a place holder until then.
+    for( EDA_ITEM* item = m_drawList;  item;  item = item->Next() )
+    {
+        item->Show( nestLevel+1, os );
+    }
+    */
+
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
-
-void BASE_SCREEN::InsertItem( EDA_ITEMS::iterator aIter, EDA_ITEM* aItem )
-{
-    wxCHECK_RET( aItem != NULL, wxT( "Attempt to insert NULL item pointer to " ) + GetClass() +
-                 wxT( "item list" ) );
-    m_items.insert( aIter, aItem );
-}
-
+#endif

@@ -74,7 +74,6 @@ typedef std::vector< GRID_TYPE > GRIDS;
  */
 class BASE_SCREEN : public EDA_ITEM
 {
-    EDA_ITEMS m_items;          ///< The drawing items associated with this screen.
     GRIDS     m_grids;          ///< List of valid grid sizes.
     wxString  m_fileName;       ///< File used to load the screen.
     char      m_FlagRefreshReq; ///< Indicates that the screen should be redrawn.
@@ -432,18 +431,6 @@ public:
         return wxT( "BASE_SCREEN" );
     }
 
-    /**
-     * Helpers for accessing the draw item list.
-     */
-    EDA_ITEMS::iterator Begin() { return m_items.begin(); }
-    EDA_ITEMS::iterator End() { return m_items.end(); }
-    virtual void AddItem( EDA_ITEM* aItem );
-    virtual void InsertItem(  EDA_ITEMS::iterator aIter, EDA_ITEM* aItem );
-
-    /**
-     * Function IsBlockActive
-     * returns true if a block command is in progress.
-     */
     inline bool IsBlockActive() const { return !m_BlockLocate.IsIdle(); }
 
     void ClearBlockCommand() { m_BlockLocate.Clear(); }
@@ -455,7 +442,7 @@ public:
     }
 
 #if defined(DEBUG)
-    void Show( int nestLevel, std::ostream& os ) const { ShowDummy( os ); } // override
+    void Show( int nestLevel, std::ostream& os ) const;     // overload
 #endif
 };
 

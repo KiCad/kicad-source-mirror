@@ -191,7 +191,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     dlg.SetAutoSaveInterval( GetAutoSaveInterval() / 60 );
     dlg.SetShowGrid( IsGridVisible() );
     dlg.SetShowHiddenPins( m_showAllPins );
-    dlg.SetEnableAutoPan( m_canvas->m_AutoPAN_Enable );
+    dlg.SetEnableAutoPan( m_canvas->GetEnableAutoPan() );
     dlg.SetEnableHVBusOrientation( g_HVLines );
     dlg.SetShowPageLimits( g_ShowPageLimits );
     dlg.Layout();
@@ -222,7 +222,7 @@ void SCH_EDIT_FRAME::OnSetOptions( wxCommandEvent& event )
     SetAutoSaveInterval( dlg.GetAutoSaveInterval() * 60 );
     SetGridVisibility( dlg.GetShowGrid() );
     m_showAllPins = dlg.GetShowHiddenPins();
-    m_canvas->m_AutoPAN_Enable = dlg.GetEnableAutoPan();
+    m_canvas->SetEnableAutoPan( dlg.GetEnableAutoPan() );
     g_HVLines = dlg.GetEnableHVBusOrientation();
     g_ShowPageLimits = dlg.GetShowPageLimits();
 

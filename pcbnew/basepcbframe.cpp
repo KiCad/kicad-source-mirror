@@ -405,7 +405,7 @@ void PCB_BASE_FRAME::ProcessItemSelection( wxCommandEvent& aEvent )
     if( id >= ID_POPUP_PCB_ITEM_SELECTION_START && id <= ID_POPUP_PCB_ITEM_SELECTION_END )
     {
         BOARD_ITEM* item = (*m_Collector)[itemNdx];
-        m_canvas->m_AbortRequest = false;
+        m_canvas->SetAbortRequest( false );
 
 #if 0 && defined (DEBUG)
         item->Show( 0, std::cout );
@@ -583,12 +583,12 @@ void PCB_BASE_FRAME::LoadSettings()
     cfg->Read( m_FrameName + FastGrid2Entry, &itmp, ( long )0);
     m_FastGrid2 = itmp;
 
-    if( m_DisplayModEdge < FILAIRE || m_DisplayModEdge > SKETCH )
+    if( m_DisplayModEdge < LINE || m_DisplayModEdge > SKETCH )
         m_DisplayModEdge = FILLED;
 
     cfg->Read( m_FrameName + DisplayModuleTextEntry, &m_DisplayModText, ( long )FILLED );
 
-    if( m_DisplayModText < FILAIRE || m_DisplayModText > SKETCH )
+    if( m_DisplayModText < LINE || m_DisplayModText > SKETCH )
         m_DisplayModText = FILLED;
 
     // WxWidgets 2.9.1 seems call setlocale( LC_NUMERIC, "" )

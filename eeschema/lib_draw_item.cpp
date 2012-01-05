@@ -140,7 +140,7 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, 
         if( m_eraseLastDrawItem )
         {
             GRSetDrawMode( aDC, g_XorMode );
-            drawEditGraphics( &aPanel->m_ClipBox, aDC, color );
+            drawEditGraphics( aPanel->GetClipBox(), aDC, color );
             drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData, aTransform );
         }
 
@@ -148,7 +148,7 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, 
         calcEdit( aOffset );
 
         // Draw the items using the new attributes.
-        drawEditGraphics( &aPanel->m_ClipBox, aDC, color );
+        drawEditGraphics( aPanel->GetClipBox(), aDC, color );
         drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData, aTransform );
 
         m_Fill = fillMode;

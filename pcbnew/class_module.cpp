@@ -99,11 +99,11 @@ void MODULE::DrawAncre( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
     if( GetBoard()->IsElementVisible( ANCHOR_VISIBLE ) )
     {
         int color = g_ColorsSettings.GetItemColor( ANCHOR_VISIBLE );
-        GRLine( &panel->m_ClipBox, DC,
+        GRLine( panel->GetClipBox(), DC,
                 m_Pos.x - offset.x - anchor_size, m_Pos.y - offset.y,
                 m_Pos.x - offset.x + anchor_size, m_Pos.y - offset.y,
                 0, color );
-        GRLine( &panel->m_ClipBox, DC,
+        GRLine( panel->GetClipBox(), DC,
                 m_Pos.x - offset.x, m_Pos.y - offset.y - anchor_size,
                 m_Pos.x - offset.x, m_Pos.y - offset.y + anchor_size,
                 0, color );
@@ -261,7 +261,7 @@ void MODULE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, int aDrawMode, const wxPoi
 
     // Enable these line to draw m_BoundaryBox (debug tests purposes only)
 #if 0
-    GRRect( &aPanel->m_ClipBox, aDC, m_BoundaryBox, 0, BROWN );
+    GRRect( aPanel->GetClipBox(), aDC, m_BoundaryBox, 0, BROWN );
 #endif
 
 }

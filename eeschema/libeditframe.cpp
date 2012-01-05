@@ -226,7 +226,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
     if( m_canvas )
-        m_canvas->m_Block_Enable = true;
+        m_canvas->SetEnableBlockCommands( true );
 
     EnsureActiveLibExists();
     ReCreateMenuBar();
@@ -654,7 +654,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     int     id = event.GetId();
     wxPoint pos;
 
-    m_canvas->m_IgnoreMouseEvents = true;
+    m_canvas->SetIgnoreMouseEvents( true );
 
     wxGetMousePosition( &pos.x, &pos.y );
     pos.y += 20;
@@ -826,55 +826,55 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ZOOM_BLOCK:
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         GetScreen()->m_BlockLocate.m_Command = BLOCK_ZOOM;
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_DELETE_BLOCK:
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         GetScreen()->m_BlockLocate.m_Command = BLOCK_DELETE;
         m_canvas->MoveCursorToCrossHair();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_SELECT_ITEMS_BLOCK:
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         GetScreen()->m_BlockLocate.m_Command = BLOCK_SELECT_ITEMS_ONLY;
         m_canvas->MoveCursorToCrossHair();
         HandleBlockEnd( &dc );
         break;
 
     case ID_POPUP_MIRROR_Y_BLOCK:
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         GetScreen()->m_BlockLocate.m_Command = BLOCK_MIRROR_Y;
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_MIRROR_X_BLOCK:
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         GetScreen()->m_BlockLocate.m_Command = BLOCK_MIRROR_X;
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_ROTATE_BLOCK:
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         GetScreen()->m_BlockLocate.m_Command = BLOCK_ROTATE;
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
@@ -884,7 +884,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
         m_lastDrawItem = NULL;
@@ -1110,7 +1110,7 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
     }
 
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
 }
 
 
@@ -1198,7 +1198,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
 
             // Set to NULL in case user aborts the clarification context menu.
             m_drawItem = NULL;
-            m_canvas->m_AbortRequest = true;   // Changed to false if an item is selected
+            m_canvas->SetAbortRequest( true );   // Changed to false if an item is selected
             PopupMenu( &selectMenu );
             m_canvas->MoveCursorToCrossHair();
             item = m_drawItem;
@@ -1250,7 +1250,7 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC )
     {
         if( m_canvas->IsMouseCaptured() )
         {
-            m_canvas->m_endMouseCaptureCallback( m_canvas, aDC );
+            m_canvas->CallEndMouseCapture( aDC );
         }
         else
         {
@@ -1275,7 +1275,7 @@ void LIB_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
         && (index >= 0 && index < m_collectedItems.GetCount()) )
     {
         LIB_ITEM* item = m_collectedItems[index];
-        m_canvas->m_AbortRequest = false;
+        m_canvas->SetAbortRequest( false );
         m_drawItem = item;
     }
 }

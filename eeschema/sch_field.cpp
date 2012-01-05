@@ -201,7 +201,7 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
 #if 0
 
     // Draw boundary box:
-    GRRect( &panel->m_ClipBox, DC, boundaryBox, 0, BROWN );
+    GRRect( panel->GetClipBox(), DC, boundaryBox, 0, BROWN );
 
     // Draw the text anchor point
 
@@ -211,9 +211,9 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
     textpos  = parentComponent->GetScreenCoord( textpos );
     textpos += parentComponent->GetPosition();
     const int len = 10;
-    GRLine( &panel->m_ClipBox, DC,
+    GRLine( panel->GetClipBox(), DC,
             textpos.x - len, textpos.y, textpos.x + len, textpos.y, 0, BLUE );
-    GRLine( &panel->m_ClipBox, DC,
+    GRLine( panel->GetClipBox(), DC,
             textpos.x, textpos.y - len, textpos.x, textpos.y + len, 0, BLUE );
 #endif
 }
@@ -546,8 +546,8 @@ void SCH_FIELD::doPlot( PLOTTER* aPlotter )
      * and use GetBoundaryBox to know the text coordinate considered as centered
      */
     EDA_RECT BoundaryBox = GetBoundingBox();
-    GRTextHorizJustifyType hjustify = GR_TEXT_HJUSTIFY_CENTER;
-    GRTextVertJustifyType vjustify  = GR_TEXT_VJUSTIFY_CENTER;
+    EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;
+    EDA_TEXT_VJUSTIFY_T vjustify = GR_TEXT_VJUSTIFY_CENTER;
     wxPoint  textpos = BoundaryBox.Centre();
 
     int      thickness = GetPenSize();

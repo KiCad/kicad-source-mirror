@@ -253,7 +253,7 @@ void DisplayBoard( EDA_DRAW_PANEL* panel, wxDC* DC )
             {
                 for( i = 0; i < maxi; i++ )
                     for( j = 0; j < maxi; j++ )
-                        GRPutPixel( &panel->m_ClipBox, DC,
+                        GRPutPixel( panel->GetClipBox(), DC,
                                     ( col * maxi ) + i + DRAW_OFFSET_X,
                                     ( row * maxi ) + j + DRAW_OFFSET_Y, color );
 

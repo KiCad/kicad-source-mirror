@@ -71,12 +71,11 @@ void PCB_EDIT_FRAME::InstallGraphicItemPropertiesDialog(DRAWSEGMENT * aItem, wxD
         return;
     }
 
-    m_canvas->m_IgnoreMouseEvents = TRUE;
-    DialogGraphicItemProperties* dialog = new DialogGraphicItemProperties( this,
-                                                                           aItem, aDC );
+    m_canvas->SetIgnoreMouseEvents( true );
+    DialogGraphicItemProperties* dialog = new DialogGraphicItemProperties( this, aItem, aDC );
     dialog->ShowModal(); dialog->Destroy();
     m_canvas->MoveCursorToCrossHair();
-    m_canvas->m_IgnoreMouseEvents = FALSE;
+    m_canvas->SetIgnoreMouseEvents( false );
 }
 
 /**************************************************************************/

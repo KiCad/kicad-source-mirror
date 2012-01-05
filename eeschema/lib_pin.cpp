@@ -853,7 +853,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
     /* Set to one (1) to draw bounding box around pin to validate bounding
      * box calculation. */
 #if 0
-    EDA_RECT* clipbox = aPanel ? &aPanel->m_ClipBox : NULL;
+    EDA_RECT* clipbox = aPanel ? aPanel->GetClipBox() : NULL;
     TRANSFORM transform = DefaultTransform;
     DefaultTransform = aTransform;
     EDA_RECT  bBox    = GetBoundingBox();
@@ -876,7 +876,7 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel,
     int       color;
     int       width   = GetPenSize();
     int       posX    = aPinPos.x, posY = aPinPos.y, len = m_length;
-    EDA_RECT* clipbox = aPanel ? &aPanel->m_ClipBox : NULL;
+    EDA_RECT* clipbox = aPanel ? aPanel->GetClipBox() : NULL;
 
     color = ReturnLayerColor( LAYER_PIN );
 

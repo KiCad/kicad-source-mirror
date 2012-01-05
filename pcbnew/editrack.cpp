@@ -200,7 +200,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
         g_CurrentTrackSegment->DisplayInfoBase( this );
         SetCurItem( g_CurrentTrackSegment, false );
-        m_canvas->m_mouseCaptureCallback( m_canvas, aDC, wxDefaultPosition, false );
+        m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
 
         if( Drc_On )
         {
@@ -686,7 +686,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
         {
             int color = g_ColorsSettings.GetLayerColor( g_CurrentTrackSegment->GetLayer() );
 
-            GRCircle( &aPanel->m_ClipBox, aDC, g_CurrentTrackSegment->m_End.x,
+            GRCircle( aPanel->GetClipBox(), aDC, g_CurrentTrackSegment->m_End.x,
                       g_CurrentTrackSegment->m_End.y,
                       ( netclass->GetViaDiameter() / 2 ) + netclass->GetClearance(),
                       color );
@@ -754,7 +754,7 @@ void ShowNewTrackWhenMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPo
     {
         int color = g_ColorsSettings.GetLayerColor(g_CurrentTrackSegment->GetLayer());
 
-        GRCircle( &aPanel->m_ClipBox, aDC, g_CurrentTrackSegment->m_End.x,
+        GRCircle( aPanel->GetClipBox(), aDC, g_CurrentTrackSegment->m_End.x,
                   g_CurrentTrackSegment->m_End.y,
                   ( netclass->GetViaDiameter() / 2 ) + netclass->GetClearance(),
                   color );

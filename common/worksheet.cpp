@@ -1034,7 +1034,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
     if( !screen->m_IsPrinting & g_ShowPageLimits )
     {
         GRSetDrawMode( DC, GR_COPY );
-        GRRect( &m_canvas->m_ClipBox, DC, 0, 0,
+        GRRect( m_canvas->GetClipBox(), DC, 0, 0,
                 pageSize.x * scale, pageSize.y * scale, width,
                 g_DrawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
     }
@@ -1052,13 +1052,13 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
     yg   = pageSize.y - pageInfo.GetBottomMarginMils();
 
 #if defined(KICAD_GOST)
-    GRRect( &m_canvas->m_ClipBox, DC, refx * scale, refy * scale,
+    GRRect( m_canvas->GetClipBox(), DC, refx * scale, refy * scale,
             xg * scale, yg * scale, width, Color );
 
 #else
     for( ii = 0; ii < 2; ii++ )
     {
-        GRRect( &m_canvas->m_ClipBox, DC, refx * scale, refy * scale,
+        GRRect( m_canvas->GetClipBox(), DC, refx * scale, refy * scale,
                 xg * scale, yg * scale, width, Color );
 
         refx += GRID_REF_W; refy += GRID_REF_W;
@@ -1094,7 +1094,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_SEGMENT_LU:
             xg = pageInfo.GetLeftMargin() - WsItem->m_Endx;
             yg = pageSize.y - pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-            GRLine( &m_canvas->m_ClipBox, DC, pos.x, pos.y,
+            GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
                     xg * scale, yg * scale, width, Color );
             break;
         }
@@ -1111,7 +1111,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_SEGMENT_LT:
             xg = pageInfo.GetLeftMarginMils() + WsItem->m_Endx;
             yg = pageInfo.GetBottomMarginMils() + WsItem->m_Endy;
-            GRLine( &m_canvas->m_ClipBox, DC, pos.x, pos.y,
+            GRLine( &m_canvas->GetClipBox(), DC, pos.x, pos.y,
                     xg * scale, yg * scale, width, Color );
             break;
         }
@@ -1134,7 +1134,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 
         if( ii < xg - PAS_REF / 2 )
         {
-            GRLine( &m_canvas->m_ClipBox, DC, ii * scale, refy * scale,
+            GRLine( m_canvas->GetClipBox(), DC, ii * scale, refy * scale,
                     ii * scale, ( refy + GRID_REF_W ) * scale, width, Color );
         }
         DrawGraphicText( m_canvas, DC,
@@ -1146,7 +1146,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 
         if( ii < xg - PAS_REF / 2 )
         {
-            GRLine( &m_canvas->m_ClipBox, DC, ii * scale, yg * scale,
+            GRLine( m_canvas->GetClipBox(), DC, ii * scale, yg * scale,
                     ii * scale, ( yg - GRID_REF_W ) * scale, width, Color );
         }
         DrawGraphicText( m_canvas, DC,
@@ -1169,7 +1169,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 
         if( ii < yg - PAS_REF / 2 )
         {
-            GRLine( &m_canvas->m_ClipBox, DC, refx * scale, ii * scale,
+            GRLine( m_canvas->GetClipBox(), DC, refx * scale, ii * scale,
                     ( refx + GRID_REF_W ) * scale, ii * scale, width, Color );
         }
 
@@ -1182,7 +1182,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
 
         if( ii < yg - PAS_REF / 2 )
         {
-            GRLine( &m_canvas->m_ClipBox, DC, xg * scale, ii * scale,
+            GRLine( m_canvas->GetClipBox(), DC, xg * scale, ii * scale,
                     ( xg - GRID_REF_W ) * scale, ii * scale, width, Color );
         }
         DrawGraphicText( m_canvas, DC,
@@ -1336,7 +1336,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                      pageInfo.GetRightMarginMils() - WsItem->m_Endx;
                 yg = pageSize.y -
                      pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-                GRLine( &m_canvas->m_ClipBox, DC, pos.x, pos.y,
+                GRLine( &m_canvas->GetClipBox(), DC, pos.x, pos.y,
                         xg * scale, yg * scale, width, Color );
                 break;
             }
@@ -1400,7 +1400,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                      pageInfo.GetRightMarginMils() - WsItem->m_Endx;
                 yg = pageSize.y -
                      pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-                GRLine( &m_canvas->m_ClipBox, DC, pos.x, pos.y,
+                GRLine( &m_canvas->GetClipBox(), DC, pos.x, pos.y,
                         xg * scale, yg * scale, width, Color );
                 break;
             }
@@ -1597,7 +1597,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                  GRID_REF_W - pageInfo.GetRightMarginMils() - WsItem->m_Endx;
             yg = pageSize.y -
                  GRID_REF_W - pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-            GRLine( &m_canvas->m_ClipBox, DC, pos.x, pos.y,
+            GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
                     xg * scale, yg * scale, width, Color );
             break;
         }

@@ -110,12 +110,11 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
         // PCB_BASE_FRAME::ProcessItemSelection()
         // and it calls SetCurItem() which in turn calls DisplayInfo() on the
         // item.
-        m_canvas->m_AbortRequest = true;   // changed in false if an item
-        PopupMenu( &itemMenu );             // m_AbortRequest = false if an
-                                            // item is selected
+        m_canvas->SetAbortRequest( true );   // changed in false if an item
+        PopupMenu( &itemMenu );              // m_AbortRequest = false if an item is selected
 
         m_canvas->MoveCursorToCrossHair();
-        m_canvas->m_IgnoreMouseEvents = false;
+        m_canvas->SetIgnoreMouseEvents( false );
 
         // The function ProcessItemSelection() has set the current item, return it.
         item = GetCurItem();
@@ -198,7 +197,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( m_canvas->IsMouseCaptured() )
         {
             //  for all other commands: stop the move in progress
-            m_canvas->m_endMouseCaptureCallback( m_canvas, &dc );
+            m_canvas->CallEndMouseCapture( &dc );
         }
 
         if( id != ID_POPUP_CANCEL_CURRENT_COMMAND )
@@ -513,7 +512,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_MODEDIT );
-        Global_Import_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem(), true );
+        // Calls the global change dialog:
+        DlgGlobalChange_PadSettings( (D_PAD*) GetScreen()->GetCurItem() );
         m_canvas->MoveCursorToCrossHair();
         break;
 
@@ -647,14 +647,14 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PLACE_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_MOVE;
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         HandleBlockPlace( &dc );
         break;
 
     case ID_POPUP_COPY_BLOCK:
         GetScreen()->m_BlockLocate.m_Command = BLOCK_COPY;
         GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         HandleBlockPlace( &dc );
         break;
 

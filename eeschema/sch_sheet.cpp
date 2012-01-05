@@ -477,30 +477,6 @@ int SCH_SHEET::GetMinHeight() const
 }
 
 
-void SCH_SHEET::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
-{
-    /* Place list structures for new sheet. */
-    if( IsNew() )
-    {
-        // fix size and position of the new sheet
-        // using the last values set by the m_mouseCaptureCallback function
-        frame->GetCanvas()->SetMouseCapture( NULL, NULL );
-
-        if( !frame->EditSheet( this, DC ) )
-        {
-            frame->GetScreen()->SetCurItem( NULL );
-            Draw( frame->GetCanvas(), DC, wxPoint( 0, 0 ), g_XorMode );
-            delete this;
-            return;
-        }
-
-        frame->SetSheetNumberAndCount();
-    }
-
-    SCH_ITEM::Place( frame, DC ); //puts it on the GetDrawItems().
-}
-
-
 /**
  * Delete sheet labels which do not have corresponding hierarchical label.
  */
@@ -608,7 +584,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    GRRect( &aPanel->m_ClipBox, aDC, pos.x, pos.y,
+    GRRect( aPanel->GetClipBox(), aDC, pos.x, pos.y,
             pos.x + m_size.x, pos.y + m_size.y, lineWidth, color );
 
     pos_sheetname = GetSheetNamePosition() + aOffset;

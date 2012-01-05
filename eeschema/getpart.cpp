@@ -96,7 +96,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
     static wxString lastCommponentName;
 
     m_itemToRepeat = NULL;
-    m_canvas->m_IgnoreMouseEvents = true;
+    m_canvas->SetIgnoreMouseEvents( true );
 
     if( !libname.IsEmpty() )
     {
@@ -122,7 +122,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
     if ( dlg.ShowModal() == wxID_CANCEL )
     {
-        m_canvas->m_IgnoreMouseEvents = false;
+        m_canvas->SetIgnoreMouseEvents( false );
         m_canvas->MoveCursorToCrossHair();
         return NULL;
     }
@@ -140,7 +140,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
     if( Name.IsEmpty() )
     {
-        m_canvas->m_IgnoreMouseEvents = false;
+        m_canvas->SetIgnoreMouseEvents( false );
         m_canvas->MoveCursorToCrossHair();
         return NULL;
     }
@@ -157,7 +157,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
         if( Name.IsEmpty() )
         {
-            m_canvas->m_IgnoreMouseEvents = false;
+            m_canvas->SetIgnoreMouseEvents( false );
             m_canvas->MoveCursorToCrossHair();
             return NULL;
         }
@@ -168,7 +168,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
         if( GetNameOfPartToLoad( this, Library, Name ) == 0 )
         {
-            m_canvas->m_IgnoreMouseEvents = false;
+            m_canvas->SetIgnoreMouseEvents( false );
             m_canvas->MoveCursorToCrossHair();
             return NULL;
         }
@@ -180,7 +180,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
         if( Name.IsEmpty() )
         {
-            m_canvas->m_IgnoreMouseEvents = false;
+            m_canvas->SetIgnoreMouseEvents( false );
             m_canvas->MoveCursorToCrossHair();
             return NULL;
         }
@@ -200,13 +200,13 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*           DC,
 
         if( Entry == NULL )
         {
-            m_canvas->m_IgnoreMouseEvents = false;
+            m_canvas->SetIgnoreMouseEvents( false );
             m_canvas->MoveCursorToCrossHair();
             return NULL;
         }
     }
 
-    m_canvas->m_IgnoreMouseEvents = false;
+    m_canvas->SetIgnoreMouseEvents( false );
     m_canvas->MoveCursorToCrossHair();
 
     if( Entry == NULL )

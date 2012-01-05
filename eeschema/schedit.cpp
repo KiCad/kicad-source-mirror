@@ -1,4 +1,4 @@
-/*
+ /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
@@ -204,7 +204,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_END_SHEET:
         m_canvas->MoveCursorToCrossHair();
-        item->Place( this, &dc );
+        addCurrentItemToList( &dc );
         break;
 
     case ID_POPUP_SCH_RESIZE_SHEET:
@@ -291,7 +291,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PLACE_BLOCK:
-        m_canvas->m_AutoPAN_Request = false;
+        m_canvas->SetAutoPanRequest( false );
         m_canvas->MoveCursorToCrossHair();
         HandleBlockPlace( &dc );
         break;
@@ -330,11 +330,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         item = screen->GetCurItem();
 
         if( item )
-        {
-            item->Place( this, &dc );
-            screen->TestDanglingEnds( m_canvas, &dc );
-            screen->SetCurItem( NULL );
-        }
+            addCurrentItemToList( &dc );
 
         break;
 

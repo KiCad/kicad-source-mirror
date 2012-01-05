@@ -68,11 +68,11 @@ DIALOG_PCB_TEXT_PROPERTIES::DIALOG_PCB_TEXT_PROPERTIES( PCB_EDIT_FRAME* parent,
  */
 void PCB_EDIT_FRAME::InstallTextPCBOptionsFrame( TEXTE_PCB* TextPCB, wxDC* DC )
 {
-    m_canvas->m_IgnoreMouseEvents = TRUE;
+    m_canvas->SetIgnoreMouseEvents( true );
     DIALOG_PCB_TEXT_PROPERTIES dlg( this, TextPCB, DC );
     dlg.ShowModal();
     m_canvas->MoveCursorToCrossHair();
-    m_canvas->m_IgnoreMouseEvents = FALSE;
+    m_canvas->SetIgnoreMouseEvents( false );
 }
 
 
@@ -149,7 +149,7 @@ void DIALOG_PCB_TEXT_PROPERTIES::MyInit()
         m_StyleCtrl->SetSelection( 0 );
 
     // Set justification
-    GRTextHorizJustifyType hJustify = m_SelectedPCBText->GetHorizJustify();
+    EDA_TEXT_HJUSTIFY_T hJustify = m_SelectedPCBText->GetHorizJustify();
     m_justifyChoice->SetSelection( (int) hJustify + 1 );
 
     // Set focus on most important control

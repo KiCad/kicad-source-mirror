@@ -234,18 +234,18 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
          * a m_IgnoreMouseEvents++ )
          *  was not balanced with the -- (now m_IgnoreMouseEvents=false), so I had to revert.
          *  Somebody should track down these and make them balanced.
-         *  m_canvas->m_IgnoreMouseEvents = true;
+         *  m_canvas->SetIgnoreMouseEvents( true );
          */
 
         // this menu's handler is void PCB_BASE_FRAME::ProcessItemSelection()
         // and it calls SetCurItem() which in turn calls DisplayInfo() on the item.
-        m_canvas->m_AbortRequest = true;   // changed in false if an item is selected
+        m_canvas->SetAbortRequest( true );   // changed in false if an item is selected
         PopupMenu( &itemMenu );
 
         m_canvas->MoveCursorToCrossHair();
 
         // The function ProcessItemSelection() has set the current item, return it.
-        if( m_canvas->m_AbortRequest )     // Nothing selected
+        if( m_canvas->GetAbortRequest() )     // Nothing selected
             item = NULL;
         else
             item = GetCurItem();
@@ -352,17 +352,17 @@ void PCB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aH
         if( m_canvas->IsMouseCaptured() )
         {
 #ifdef USE_WX_OVERLAY
-            wxDCOverlay oDC( m_canvas->m_overlay, (wxWindowDC*)aDC );
+            wxDCOverlay oDC( m_overlay, (wxWindowDC*)aDC );
             oDC.Clear();
-            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, false );
+            m_canvas->CallMouseCapture( aDC, aPosition, false );
 #else
-            m_canvas->m_mouseCaptureCallback( m_canvas, aDC, aPosition, true );
+            m_canvas->CallMouseCapture( aDC, aPosition, true );
 #endif
         }
 #ifdef USE_WX_OVERLAY
         else
         {
-            m_canvas->m_overlay.Reset();
+            m_overlay.Reset();
         }
 #endif
     }

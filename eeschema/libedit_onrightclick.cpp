@@ -51,9 +51,9 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         item = LocateItemUsingCursor( aPosition );
 
         // If the clarify item selection context menu is aborted, don't show the context menu.
-        if( item == NULL && m_canvas->m_AbortRequest )
+        if( item == NULL && m_canvas->GetAbortRequest() )
         {
-            m_canvas->m_AbortRequest = false;
+            m_canvas->SetAbortRequest( false );
             return false;
         }
 

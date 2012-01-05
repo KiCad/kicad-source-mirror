@@ -187,25 +187,25 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         mode = SKETCH;
 
     if( l_trace < DC->DeviceToLogicalXRel( MIN_DRAW_WIDTH ) )
-        mode = FILAIRE;
+        mode = LINE;
 
     switch( m_Shape )
     {
     case S_CIRCLE:
         radius = (int) hypot( (double) (dx - ux0), (double) (dy - uy0) );
 
-        if( mode == FILAIRE )
+        if( mode == LINE )
         {
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius, color );
+            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius, color );
         }
         else if( mode == SKETCH )
         {
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius - l_trace, color );
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius + l_trace, color );
+            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius - l_trace, color );
+            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius + l_trace, color );
         }
         else
         {
-            GRCircle( &panel->m_ClipBox, DC, ux0, uy0, radius, m_Width, color );
+            GRCircle( panel->GetClipBox(), DC, ux0, uy0, radius, m_Width, color );
         }
 
         break;
@@ -216,7 +216,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         StAngle  = (int) ArcTangente( dy - uy0, dx - ux0 );
         EndAngle = StAngle + m_Angle;
 
-        if( !panel->m_PrintIsMirrored )
+        if( !panel->GetPrintMirrored() )
         {
             if( StAngle > EndAngle )
                 EXCHG( StAngle, EndAngle );
@@ -228,20 +228,19 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
         }
 
 
-        if( mode == FILAIRE )
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
-                   radius, color );
+        if( mode == LINE )
+            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle, radius, color );
 
         else if( mode == SKETCH )
         {
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
                    radius - l_trace, color );
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
                    radius + l_trace, color );
         }
         else
         {
-            GRArc( &panel->m_ClipBox, DC, ux0, uy0, StAngle, EndAngle,
+            GRArc( panel->GetClipBox(), DC, ux0, uy0, StAngle, EndAngle,
                    radius, m_Width, color );
         }
         break;
@@ -249,21 +248,21 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
             m_BezierPoints = Bezier2Poly(m_Start,m_BezierC1, m_BezierC2, m_End);
 
             for (unsigned int i=1; i < m_BezierPoints.size(); i++) {
-                if( mode == FILAIRE )
-                    GRLine( &panel->m_ClipBox, DC,
+                if( mode == LINE )
+                    GRLine( panel->GetClipBox(), DC,
                             m_BezierPoints[i].x, m_BezierPoints[i].y,
                             m_BezierPoints[i-1].x, m_BezierPoints[i-1].y, 0,
                             color );
                 else if( mode == SKETCH )
                 {
-                    GRCSegm( &panel->m_ClipBox, DC,
-                            m_BezierPoints[i].x, m_BezierPoints[i].y,
-                            m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
+                    GRCSegm( panel->GetClipBox(), DC,
+                             m_BezierPoints[i].x, m_BezierPoints[i].y,
+                             m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
                              m_Width, color );
                 }
                 else
                 {
-                    GRFillCSegm( &panel->m_ClipBox, DC,
+                    GRFillCSegm( panel->GetClipBox(), DC,
                                  m_BezierPoints[i].x, m_BezierPoints[i].y,
                                  m_BezierPoints[i-1].x, m_BezierPoints[i-1].y,
                                  m_Width, color );
@@ -271,19 +270,17 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wx
             }
          break;
     default:
-        if( mode == FILAIRE )
+        if( mode == LINE )
         {
-            GRLine( &panel->m_ClipBox, DC, ux0, uy0, dx, dy, 0, color );
+            GRLine( panel->GetClipBox(), DC, ux0, uy0, dx, dy, 0, color );
         }
         else if( mode == SKETCH )
         {
-            GRCSegm( &panel->m_ClipBox, DC, ux0, uy0, dx, dy,
-                     m_Width, color );
+            GRCSegm( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
         }
         else
         {
-            GRFillCSegm( &panel->m_ClipBox, DC, ux0, uy0, dx, dy,
-                         m_Width, color );
+            GRFillCSegm( panel->GetClipBox(), DC, ux0, uy0, dx, dy, m_Width, color );
         }
 
         break;

@@ -181,6 +181,14 @@ protected:
      */
     virtual bool isAutoSaveRequired() const;
 
+    /**
+     * Function addCurrentItemToList
+     * adds the item currently being edited to the schematic and adds the changes to
+     * the undo/redo container.
+     *
+     * @param aDC A pointer the device context to draw on when not NULL.
+     */
+    void addCurrentItemToList( wxDC* aDC );
 
 public:
     SCH_EDIT_FRAME( wxWindow* father,

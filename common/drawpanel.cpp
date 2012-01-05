@@ -94,19 +94,19 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_ClipBox.SetSize( size );
     m_ClipBox.SetX( 0 );
     m_ClipBox.SetY( 0 );
-    m_CanStartBlock     = -1; // Command block can start if >= 0
-    m_AbortEnable       = m_AbortRequest = false;
-    m_AutoPAN_Enable    = true;
-    m_IgnoreMouseEvents = 0;
+    m_canStartBlock = -1;       // Command block can start if >= 0
+    m_abortRequest = false;
+    m_enableAutoPan = true;
+    m_ignoreMouseEvents = false;
 
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;
 
     if( wxGetApp().GetSettings() )
-        wxGetApp().GetSettings()->Read( wxT( "AutoPAN" ), &m_AutoPAN_Enable, true );
+        wxGetApp().GetSettings()->Read( wxT( "AutoPAN" ), &m_enableAutoPan, true );
 
-    m_AutoPAN_Request    = false;
-    m_Block_Enable       = false;
+    m_requestAutoPan = false;
+    m_enableBlockCommands = false;
 
 #ifdef __WXMAC__
     m_defaultCursor = m_currentCursor = wxCURSOR_CROSS;
@@ -116,14 +116,14 @@ EDA_DRAW_PANEL::EDA_DRAW_PANEL( EDA_DRAW_FRAME* parent, int id,
     m_showCrossHair = true;
 #endif
 
-    m_cursorLevel     = 0;
+    m_cursorLevel = 0;
     m_PrintIsMirrored = false;
 }
 
 
 EDA_DRAW_PANEL::~EDA_DRAW_PANEL()
 {
-    wxGetApp().GetSettings()->Write( wxT( "AutoPAN" ), m_AutoPAN_Enable );
+    wxGetApp().GetSettings()->Write( wxT( "AutoPAN" ), m_enableAutoPan );
 }
 
 
@@ -306,7 +306,7 @@ void EDA_DRAW_PANEL::MoveCursor( const wxPoint& aPosition )
 
 void EDA_DRAW_PANEL::OnActivate( wxActivateEvent& event )
 {
-    m_CanStartBlock = -1;   // Block Command can't start
+    m_canStartBlock = -1;   // Block Command can't start
     event.Skip();
 }
 
@@ -751,10 +751,10 @@ bool EDA_DRAW_PANEL::OnRightClick( wxMouseEvent& event )
     GetParent()->AddMenuZoomAndGrid( &MasterMenu );
 
     pos = event.GetPosition();
-    m_IgnoreMouseEvents = true;
+    m_ignoreMouseEvents = true;
     PopupMenu( &MasterMenu, pos );
     MoveCursorToCrossHair();
-    m_IgnoreMouseEvents = false;
+    m_ignoreMouseEvents = false;
 
     return true;
 }
@@ -763,9 +763,9 @@ bool EDA_DRAW_PANEL::OnRightClick( wxMouseEvent& event )
 void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
 {
     if( m_mouseCaptureCallback == NULL )          // No command in progress.
-        m_AutoPAN_Request = false;
+        m_requestAutoPan = false;
 
-    if( !m_AutoPAN_Enable || !m_AutoPAN_Request || m_IgnoreMouseEvents )
+    if( !m_enableAutoPan || !m_requestAutoPan || m_ignoreMouseEvents )
         return;
 
     // Auto pan if mouse is leave working area:
@@ -785,7 +785,7 @@ void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
 
 void EDA_DRAW_PANEL::OnMouseWheel( wxMouseEvent& event )
 {
-    if( m_IgnoreMouseEvents )
+    if( m_ignoreMouseEvents )
         return;
 
     wxRect rect = wxRect( wxPoint( 0, 0 ), GetClientSize() );
@@ -857,18 +857,18 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     /* Count the drag events.  Used to filter mouse moves before starting a
      * block command.  A block command can be started only if
      * MinDragEventCount > MIN_DRAG_COUNT_FOR_START_BLOCK_COMMAND
-     * and m_CanStartBlock >= 0
+     * and m_canStartBlock >= 0
      * in order to avoid spurious block commands.
      */
     static int MinDragEventCount;
 
     if( event.Leaving() )
     {
-        m_CanStartBlock = -1;
+        m_canStartBlock = -1;
     }
 
     if( !IsMouseCaptured() )          // No mouse capture in progress.
-        m_AutoPAN_Request = false;
+        m_requestAutoPan = false;
 
     if( GetParent()->IsActive() )
         SetFocus();
@@ -886,7 +886,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         return;
     }
 
-    if( m_IgnoreMouseEvents )
+    if( m_ignoreMouseEvents )
         return;
 
     if( event.LeftIsDown() )
@@ -973,7 +973,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     if( LastPanel != this )
     {
         MinDragEventCount = 0;
-        m_CanStartBlock   = -1;
+        m_canStartBlock   = -1;
     }
 
     /* A new command block can start after a release buttons
@@ -985,7 +985,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     if( !event.LeftIsDown() && !event.MiddleIsDown() )
     {
         MinDragEventCount = 0;
-        m_CanStartBlock   = 0;
+        m_canStartBlock   = 0;
 
         /* Remember the last cursor position when a drag mouse starts
          * this is the last position ** before ** clicking a button
@@ -997,7 +997,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         m_CursorStartPos = screen->GetCrossHairPosition();
     }
 
-    if( m_Block_Enable && !(localbutt & GR_M_DCLICK) )
+    if( m_enableBlockCommands && !(localbutt & GR_M_DCLICK) )
     {
         if( !screen->IsBlockActive() )
         {
@@ -1008,12 +1008,12 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         {
             if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
             {
-                m_AutoPAN_Request = false;
+                m_requestAutoPan = false;
                 GetParent()->HandleBlockPlace( &DC );
                 ignoreNextLeftButtonRelease = true;
             }
         }
-        else if( ( m_CanStartBlock >= 0 )
+        else if( ( m_canStartBlock >= 0 )
                 && ( event.LeftIsDown() || event.MiddleIsDown() )
                 && !IsMouseCaptured() )
         {
@@ -1042,7 +1042,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                     }
                     else
                     {
-                        m_AutoPAN_Request = true;
+                        m_requestAutoPan = true;
                         SetCursor( wxCURSOR_SIZING );
                     }
                 }
@@ -1068,19 +1068,19 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 if( m_endMouseCaptureCallback )
                 {
                     m_endMouseCaptureCallback( this, &DC );
-                    m_AutoPAN_Request = false;
+                    m_requestAutoPan = false;
                 }
 
                 SetCursor( m_currentCursor );
            }
             else if( screen->m_BlockLocate.m_State == STATE_BLOCK_END )
             {
-                m_AutoPAN_Request = false;
+                m_requestAutoPan = false;
                 GetParent()->HandleBlockEnd( &DC );
                 SetCursor( m_currentCursor );
                 if( screen->m_BlockLocate.m_State == STATE_BLOCK_MOVE )
                 {
-                    m_AutoPAN_Request = true;
+                    m_requestAutoPan = true;
                     SetCursor( wxCURSOR_HAND );
                 }
            }
@@ -1128,7 +1128,7 @@ void EDA_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
             break;
 
     case WXK_ESCAPE:
-        m_AbortRequest = true;
+        m_abortRequest = true;
 
         if( IsMouseCaptured() )
             EndMouseCapture();
@@ -1231,11 +1231,29 @@ void EDA_DRAW_PANEL::EndMouseCapture( int id, int cursor, const wxString& title,
 
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;
-    m_AutoPAN_Request = false;
+    m_requestAutoPan = false;
 
     if( id != -1 && cursor != -1 )
     {
         wxASSERT( cursor > wxCURSOR_NONE && cursor < wxCURSOR_MAX );
         GetParent()->SetToolID( id, cursor, title );
     }
+}
+
+
+void EDA_DRAW_PANEL::CallMouseCapture( wxDC* aDC, const wxPoint& aPosition, bool aErase )
+{
+    wxCHECK_RET( aDC != NULL, wxT( "Invalid device context." ) );
+    wxCHECK_RET( m_mouseCaptureCallback != NULL, wxT( "Mouse capture callback not set." ) );
+
+    m_mouseCaptureCallback( this, aDC, aPosition, aErase );
+}
+
+
+void EDA_DRAW_PANEL::CallEndMouseCapture( wxDC* aDC )
+{
+    wxCHECK_RET( aDC != NULL, wxT( "Invalid device context." ) );
+    wxCHECK_RET( m_endMouseCaptureCallback != NULL, wxT( "End mouse capture callback not set." ) );
+
+    m_endMouseCaptureCallback( this, aDC );
 }
