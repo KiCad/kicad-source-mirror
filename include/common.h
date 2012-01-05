@@ -123,8 +123,6 @@ enum EDA_UNITS_T {
 class LibNameList;
 
 
-//class PAGE_INFO;
-
 /**
  * Class PAGE_INFO
  * describes the page size and margins of a paper page on which to
@@ -197,13 +195,15 @@ public:
 
     /**
      * Function SetUserWidthMils
-     * sets the width of type "User" page in mils.
+     * sets the width of type "User" page in mils, for any type "User" page
+     * constructed or made via SetType() after making this call.
      */
     static void SetUserWidthMils( int aWidthInMils );
 
     /**
      * Function SetUserHeightMils
-     * sets the height type "User" page in mils.
+     * sets the height type "User" page in mils, for any type "User" page
+     * constructed or made via SetType() after making this call.
      */
     static void SetUserHeightMils( int aHeightInMils );
 
@@ -232,10 +232,7 @@ private:
     // all dimensions here are in mils
 
     wxString    m_type;             ///< paper type: A4, A3, etc.
-
     wxSize      m_size;             ///< mils
-
-//    wxPoint     m_offset_mils;    ///< plot offset in mils
 
     int         m_left_margin;
     int         m_right_margin;
