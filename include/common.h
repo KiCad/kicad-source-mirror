@@ -126,13 +126,15 @@ enum EDA_UNITS_T {
 class LibNameList;
 
 
-class PAGE_INFO;
+//class PAGE_INFO;
 
 /**
  * Class PAGE_INFO
  * describes the page size and margins of a paper page on which to
- * eventually print or plot.  Here paper is described in inches, but
- * accessors for mils, and internal units (IU) are supported.
+ * eventually print or plot.  Paper sizes are often described in inches.
+ * Here paper is described in 1/1000th of an inch (mils).  For convenience
+ * there are some read only accessors for internal units (IU), which is a compile
+ * time calculation, not runtime.
  *
  * @author Dick Hollenbeck
  */
@@ -142,7 +144,7 @@ public:
     PAGE_INFO( const wxString& aType = wxT( "A3" ) );
     PAGE_INFO( const wxSize& aSizeMils, const wxString& aName );
 
-    const wxString& GetType() const { return m_Type; }
+    const wxString& GetType() const { return m_type; }
 
     /**
      * Function SetType
@@ -152,80 +154,99 @@ public:
      * @param aStandardPageDescriptionName is a wxString constant giving one of:
      * "A4" "A3" "A2" "A1" "A0" "A" "B" "C" "D" "E" "GERBER", or "User".  If "User"
      * then the width and height are custom, and will be set according to previous calls
-     * to static PAGE_INFO::SetUserWidthInches( double aWidthInInches ) and
-     * static PAGE_INFO::SetUserHeightInches( double aHeightInInches );
+     * to static PAGE_INFO::SetUserWidthMils() and
+     * static PAGE_INFO::SetUserHeightMils();
      *
      * @return bool - true iff @a aStandarePageDescription was a recognized type.
      */
     bool SetType( const wxString& aStandardPageDescriptionName );
 
-    void SetWidthInches(  double aWidthInInches );
-    void SetHeightInches( double aHeightInInches );
+    void SetWidthMils(  int aWidthInMils )  { m_size.x = aWidthInMils; }
+    int GetWidthMils() const                { return m_size.x;  }
 
-    double GetWidthInches() const       { return m_widthInches;  }
-    double GetHeightInches() const      { return m_heightInches; }
+    void SetHeightMils( int aHeightInMils ) { m_size.y = aHeightInMils; }
+    int GetHeightMils() const               { return m_size.y; }
 
-    int GetWidthMils() const            { return int( 1000 * m_widthInches );  }
-    int GetHeightMils() const           { return int( 1000 * m_heightInches ); }
-    const wxSize GetSizeMils() const    { return wxSize( GetWidthMils(), GetHeightMils() ); }
+    const wxSize& GetSizeMils() const       { return m_size; }
 
     // Accessors returning "Internal Units (IU)".  IUs are mils in EESCHEMA,
     // and either deci-mils or nanometers in PCBNew.
 #if defined(PCBNEW)
 # if defined(KICAD_NANOMETRE)
-    int GetWidthIU() const  { return int( 2.54e7 * m_widthInches );  }
-    int GetHeightIU() const { return int( 2.54e7 * m_heightInches ); }
+    int GetWidthIU() const  { return int( 2.54e4 * GetWidthMils() );  }
+    int GetHeightIU() const { return int( 2.54e4 * GetHeightMils() ); }
 # else
-    int GetWidthIU() const  { return int( 10000  * m_widthInches );  }
-    int GetHeightIU() const { return int( 10000  * m_heightInches ); }
+    int GetWidthIU() const  { return int( 10 * GetWidthMils() );  }
+    int GetHeightIU() const { return int( 10 * GetHeightMils() ); }
 # endif
     const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
 #elif defined(EESCHEMA)
-    int GetWidthIU() const  { return int( 1000  * m_widthInches );  }
-    int GetHeightIU() const { return int( 1000  * m_heightInches ); }
+    int GetWidthIU() const  { return GetWidthMils();  }
+    int GetHeightIU() const { return GetHeightMils(); }
     const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
 #endif
 
 //    wxPoint GetOffsetMils() const   { return m_Offset; }
 
-    int GetLeftMarginMils() const   { return m_LeftMargin; }
-    int GetRightMarginMils() const  { return m_RightMargin; }
-    int GetTopMarginMils() const    { return m_TopMargin; }
-    int GetBottomMarginMils() const { return m_BottomMargin; }
+    int GetLeftMarginMils() const           { return m_left_margin; }
+    int GetRightMarginMils() const          { return m_right_margin; }
+    int GetTopMarginMils() const            { return m_top_margin; }
+    int GetBottomMarginMils() const         { return m_bottom_margin; }
+
+    void SetLeftMarginMils( int aMargin )   { m_left_margin = aMargin; }
+    void SetRightMarginMils( int aMargin )  { m_right_margin = aMargin; }
+    void SetTopMarginMils( int aMargin )    { m_top_margin = aMargin; }
+    void SetBottomMarginMils( int aMargin ) { m_bottom_margin = aMargin; }
 
     /**
-     * Function SetUserWidthInches
-     * sets the width of type "User" page in inches.
+     * Function SetUserWidthMils
+     * sets the width of type "User" page in mils.
      */
-    static void SetUserWidthInches( double aWidthInInches );
+    static void SetUserWidthMils( int aWidthInMils );
 
     /**
-     * Function SetUserHeightInches
-     * sets the height type "User" page in inches.
+     * Function SetUserHeightMils
+     * sets the height type "User" page in mils.
      */
-    static void SetUserHeightInches( double aHeightInInches );
+    static void SetUserHeightMils( int aHeightInMils );
 
     /**
      * Function GetStandardSizes
      * returns the standard page types, such as "A4", "A3", etc.
-     */
     static wxArrayString GetStandardSizes();
+     */
 
 private:
-    wxString    m_Type;            ///< paper type: A4, A3, etc.
 
-    double      m_widthInches;
-    double      m_heightInches;
+    // standard pre-defined sizes
+    static const PAGE_INFO pageA4;
+    static const PAGE_INFO pageA3;
+    static const PAGE_INFO pageA2;
+    static const PAGE_INFO pageA1;
+    static const PAGE_INFO pageA0;
+    static const PAGE_INFO pageA;
+    static const PAGE_INFO pageB;
+    static const PAGE_INFO pageC;
+    static const PAGE_INFO pageD;
+    static const PAGE_INFO pageE;
+    static const PAGE_INFO pageGERBER;
+    static const PAGE_INFO pageUser;
 
-//    wxPoint     m_Offset;          ///< plot offset in 1/1000 inches
+    // all dimensions here are in mils
 
-    int         m_LeftMargin;
-    int         m_RightMargin;
-    int         m_TopMargin;
-    int         m_BottomMargin;
+    wxString    m_type;             ///< paper type: A4, A3, etc.
 
-    static double s_user_height;
-    static double s_user_width;
+    wxSize      m_size;             ///< mils
+
+//    wxPoint     m_offset_mils;    ///< plot offset in mils
+
+    int         m_left_margin;
+    int         m_right_margin;
+    int         m_top_margin;
+    int         m_bottom_margin;
+
+    static int s_user_height;
+    static int s_user_width;
 };
 
 

@@ -100,7 +100,7 @@ private:
     void OnPlotCurrent( wxCommandEvent& event );
     void OnPlotAll( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
-    void AcceptplotOffset( wxCommandEvent& event );
+    void AcceptPlotOffset( wxCommandEvent& event );
 
     void initDlg();
     void SetPenSpeed();
@@ -119,7 +119,7 @@ private:
 // static members (static to remember last state):
 HPGL_PAGEZ_T DIALOG_PLOT_SCHEMATIC_HPGL:: s_pageSizeSelect = PAGE_DEFAULT;
 bool DIALOG_PLOT_SCHEMATIC_HPGL::s_plot_Sheet_Ref = true;
-
+wxSize DIALOG_PLOT_SCHEMATIC_HPGL::s_Offset;
 
 void SCH_EDIT_FRAME::ToPlot_HPGL( wxCommandEvent& event )
 {
@@ -202,7 +202,7 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::SetPageOffsetValue()
 }
 
 
-void DIALOG_PLOT_SCHEMATIC_HPGL::AcceptplotOffset( wxCommandEvent& event )
+void DIALOG_PLOT_SCHEMATIC_HPGL::AcceptPlotOffset( wxCommandEvent& event )
 {
     s_pageSizeSelect = (HPGL_PAGEZ_T) m_SizeOption->GetSelection();
 

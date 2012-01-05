@@ -125,7 +125,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaph
     if( m_Semaphore )
         MakeModal(true);
 
-    SetScreen( new SCH_SCREEN( GetPageSettings().GetSizeIU() ) );
+    SetScreen( new SCH_SCREEN() );
     GetScreen()->m_Center = true;      // Center coordinate origins on screen.
     LoadSettings();
 
@@ -262,6 +262,39 @@ LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
     SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) wxGetApp().GetTopWindow();
     frame->SetLibraryViewerWindow( NULL );
+}
+
+
+void LIB_VIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
+{
+    GetScreen()->SetPageSettings( aPageSettings );
+}
+
+
+const PAGE_INFO& LIB_VIEW_FRAME::GetPageSettings () const
+{
+    return GetScreen()->GetPageSettings();
+}
+
+
+const wxSize LIB_VIEW_FRAME::GetPageSizeIU() const
+{
+    // GetSizeIU is compile time dependent:
+    return GetScreen()->GetPageSettings().GetSizeIU();
+}
+
+
+const wxPoint& LIB_VIEW_FRAME::GetOriginAxisPosition() const
+{
+    wxASSERT( GetScreen() );
+    return GetScreen()->GetOriginAxisPosition();
+}
+
+
+void LIB_VIEW_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
+{
+    wxASSERT( GetScreen() );
+    GetScreen()->SetOriginAxisPosition( aPosition );
 }
 
 

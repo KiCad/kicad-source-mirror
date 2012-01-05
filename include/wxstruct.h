@@ -363,6 +363,10 @@ public:
  */
 class EDA_DRAW_FRAME : public EDA_BASE_FRAME
 {
+    /// Let the #EDA_DRAW_PANEL object have access to the protected data since
+    /// it is closely tied to the #EDA_DRAW_FRAME.
+    friend class EDA_DRAW_PANEL;
+
     ///< Id of active button on the vertical toolbar.
     int m_toolId;
 
@@ -416,19 +420,13 @@ protected:
     /// Panel used to display information at the bottom of the main window.
     EDA_MSG_PANEL* m_messagePanel;
 
-    /// Let the #EDA_DRAW_PANEL object have access to the protected data since
-    /// it is closely tied to the #EDA_DRAW_FRAME.
-    friend class EDA_DRAW_PANEL;
-
 private:
     BASE_SCREEN* m_currentScreen;           ///< current used SCREEN
     bool         m_snapToGrid;              ///< Indicates if cursor should be snapped to grid.
 
 protected:
-    void SetScreen( BASE_SCREEN* aScreen )
-    {
-        m_currentScreen = aScreen;
-    }
+
+    void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
 
     /**
      * Function unitsChangeRefresh
@@ -438,6 +436,7 @@ protected:
      * in your derived class or the status bar will not get updated properly.
      */
     virtual void unitsChangeRefresh();
+
 
 public:
     EDA_DRAW_FRAME( wxWindow* father, int idtype, const wxString& title,
@@ -474,11 +473,12 @@ public:
     virtual wxString GetScreenDesc();
 
     /**
-     * Function GetBaseScreen
-     * is virtual and returns a pointer to a BASE_SCREEN or one of its
-     * derivatives.  It may be overloaded by derived classes.
+     * Function GetScreen
+     * returns a pointer to a BASE_SCREEN or one of its
+     * derivatives.  It is overloaded by derived classes to return
+     * SCH_SCREEN or PCB_SCREEN.
      */
-    virtual BASE_SCREEN* GetScreen() const { return m_currentScreen; }
+    virtual BASE_SCREEN* GetScreen() const  { return m_currentScreen; }
 
     void OnMenuOpen( wxMenuEvent& event );
     void  OnMouseEvent( wxMouseEvent& event );

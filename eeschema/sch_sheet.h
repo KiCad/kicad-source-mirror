@@ -243,6 +243,8 @@ typedef boost::ptr_vector<SCH_SHEET_PIN> SCH_SHEET_PINS;
  */
 class SCH_SHEET : public SCH_ITEM
 {
+    friend class SCH_SHEET_PIN;
+
     /// Screen that contains the physical data for the sheet.  In complex hierarchies
     /// multiple sheets can share a common screen.
     SCH_SCREEN* m_screen;
@@ -269,8 +271,6 @@ class SCH_SHEET : public SCH_ITEM
 
     /// The size of the sheet.
     wxSize m_size;
-
-    friend class SCH_SHEET_PIN;
 
 public:
     SCH_SHEET( const wxPoint& pos = wxPoint( 0, 0 ) );

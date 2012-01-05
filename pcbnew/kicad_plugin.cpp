@@ -476,8 +476,8 @@ void KICAD_PLUGIN::loadSHEET()
                         int w = intParse( width );
                         int h = intParse( height );
 
-                        page.SetWidthInches(  w / 1000.0 );
-                        page.SetHeightInches( h / 1000.0 );
+                        page.SetWidthMils(  w );
+                        page.SetHeightMils( h );
                     }
                 }
 
