@@ -785,6 +785,16 @@ public:
     void RecreateCmpFileFromBoard( wxCommandEvent& aEvent );
 
     /**
+     * Function ArchiveModulesOnBoard
+     * Save modules in a library:
+     * @param aLibName: the full filename of the library to create or modify
+     * @param aNewModulesOnly:
+     *              true : save modules not already existing in this lib
+     *              false: save all modules
+     */
+    void ArchiveModulesOnBoard( const wxString& aLibName, bool aNewModulesOnly );
+
+    /**
      * Function RecreateBOMFileFromBoard
      * Creates a BOM file from the current loaded board
      */

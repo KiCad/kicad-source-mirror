@@ -348,11 +348,15 @@ void FOOTPRINT_EDIT_FRAME::Delete_Module_In_Library( const wxString& aLibname )
 }
 
 
-void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOnly )
+/* Save modules in a library:
+ * param aNewModulesOnly:
+ *              true : save modules not already existing in this lib
+ *              false: save all modules
+ */
+void PCB_EDIT_FRAME::ArchiveModulesOnBoard( const wxString& aLibName, bool aNewModulesOnly )
 {
-    int      ii, NbModules = 0;
-    MODULE*  Module;
-    wxString fileName = LibName, path;
+    wxString fileName = aLibName;
+    wxString path;
 
     if( GetBoard()->m_Modules == NULL )
     {
@@ -362,7 +366,7 @@ void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOn
 
     path = wxGetApp().ReturnLastVisitedLibraryPath();
 
-    if( LibName.IsEmpty() )
+    if( aLibName.IsEmpty() )
     {
         wxFileDialog dlg( this, _( "Library" ), path,
                           wxEmptyString, ModuleFileWildcard,
@@ -378,7 +382,7 @@ void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOn
     wxGetApp().SaveLastVisitedLibraryPath( fn.GetPath() );
     bool       file_exists = wxFileExists( fileName );
 
-    if( !NewModulesOnly && file_exists )
+    if( !aNewModulesOnly && file_exists )
     {
         wxString msg;
         msg.Printf( _( "File %s exists, OK to replace ?" ), GetChars( fileName ) );
@@ -390,7 +394,7 @@ void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOn
     m_canvas->SetAbortRequest( false );
 
     // Create a new, empty library if no old lib, or if archive all modules
-    if( !NewModulesOnly || !file_exists )
+    if( !aNewModulesOnly || !file_exists )
     {
         FILE* lib_module;
 
@@ -409,25 +413,13 @@ void PCB_BASE_FRAME::Archive_Modules( const wxString& LibName, bool NewModulesOn
         fclose( lib_module );
     }
 
-    /* Calculate the number of modules. */
-    Module = (MODULE*) GetBoard()->m_Modules;
-
-    for( ; Module != NULL; Module = (MODULE*) Module->Next() )
-        NbModules++;
-
-    double step = 100.0 / NbModules;
-    DisplayActivity( 0, wxEmptyString );
-
-    Module = (MODULE*) GetBoard()->m_Modules;
-
-    for( ii = 1; Module != NULL; ii++, Module = (MODULE*) Module->Next() )
+    MODULE*  Module = (MODULE*) GetBoard()->m_Modules;
+    for( int ii = 1; Module != NULL; ii++, Module = Module->Next() )
     {
         if( Save_Module_In_Library( fileName, Module,
-                                    NewModulesOnly ? false : true,
+                                    aNewModulesOnly ? false : true,
                                     false ) == 0 )
             break;
-
-        DisplayActivity( (int) ( ii * step ), wxEmptyString );
 
         /* Check for request to stop backup (ESCAPE key actuated) */
         if( m_canvas->GetAbortRequest() )
@@ -604,7 +596,8 @@ bool PCB_BASE_FRAME::Save_Module_In_Library( const wxString& aLibName,
     }
 
     /* Write the new footprint ( append it to the list of footprint ) */
-    tmp = aModule->GetTimeStamp(); aModule->SetTimeStamp( 0 );
+    tmp = aModule->GetTimeStamp();
+    aModule->SetTimeStamp( 0 );
     aModule->Save( dest );
     aModule->SetTimeStamp( tmp );
 
