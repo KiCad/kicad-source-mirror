@@ -370,7 +370,7 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( const wxString& aLibName, bool aNewM
     {
         wxFileDialog dlg( this, _( "Library" ), path,
                           wxEmptyString, ModuleFileWildcard,
-                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                          wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return;
@@ -413,12 +413,26 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( const wxString& aLibName, bool aNewM
         fclose( lib_module );
     }
 
-    MODULE*  Module = (MODULE*) GetBoard()->m_Modules;
-    for( int ii = 1; Module != NULL; ii++, Module = Module->Next() )
+    MODULE*  module = (MODULE*) GetBoard()->m_Modules;
+    for( int ii = 1; module != NULL; ii++, module = module->Next() )
     {
-        if( Save_Module_In_Library( fileName, Module,
-                                    aNewModulesOnly ? false : true,
-                                    false ) == 0 )
+        // Save footprints in default orientation (0.0) and default layer (FRONT layer)
+        int orient = module->GetOrientation();
+        if ( orient != 0 )
+            module->SetOrientation( 0 );
+        int layer = module->GetLayer();
+        if(layer != LAYER_N_FRONT )
+            module->Flip( module->m_Pos );
+
+        bool success = Save_Module_In_Library( fileName, module,
+                                    aNewModulesOnly ? false : true, false );
+        // Restore previous orientation and/or side
+        if(layer != module->GetLayer() )
+            module->Flip( module->m_Pos );
+        if ( orient != 0 )
+            module->SetOrientation( orient );
+
+        if( !success )
             break;
 
         /* Check for request to stop backup (ESCAPE key actuated) */
