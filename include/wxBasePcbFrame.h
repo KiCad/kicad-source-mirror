@@ -233,14 +233,6 @@ public:
                                  bool            aOverwrite,
                                  bool            aDisplayDialog );
 
-    /**
-     * Function Archive_Modules
-     * Save in the library:
-     * All new modules (ie modules not found in this lib) (if NewModulesOnly == true)
-     * all modules (if NewModulesOnly == false)
-     */
-    void Archive_Modules( const wxString& LibName, bool NewModulesOnly );
-
     MODULE* GetModuleByName();
 
     /**

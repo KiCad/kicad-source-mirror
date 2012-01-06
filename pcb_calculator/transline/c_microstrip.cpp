@@ -123,12 +123,6 @@ void C_MICROSTRIP::delta_u_thickness()
  */
 void C_MICROSTRIP::compute_single_line()
 {
-    double w_h, ht_h;
-    double Z0_single, er_eff_single;
-
-    ht_h = ht / h;
-    w_h  = w / h;
-
     if( aux_ms == NULL )
         aux_ms = new MICROSTRIP();
 
@@ -144,9 +138,6 @@ void C_MICROSTRIP::compute_single_line()
     aux_ms->murC = murC;
     aux_ms->microstrip_Z0();
     aux_ms->dispersion();
-
-    er_eff_single = aux_ms->er_eff_0;
-    Z0_single     = aux_ms->Z0_0;
 }
 
 

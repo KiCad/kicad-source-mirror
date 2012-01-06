@@ -1076,11 +1076,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     break;
 
     case ID_MENU_ARCHIVE_NEW_MODULES:
-        Archive_Modules( wxEmptyString, true );
+        ArchiveModulesOnBoard( wxEmptyString, true );
         break;
 
     case ID_MENU_ARCHIVE_ALL_MODULES:
-        Archive_Modules( wxEmptyString, false );
+        ArchiveModulesOnBoard( wxEmptyString, false );
         break;
 
     default:

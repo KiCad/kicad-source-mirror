@@ -36,6 +36,19 @@
  * They can be renamed and can appear in reports
  */
 
+/* set USE_TEXT_JUSTIFY_INITIAL_BEHAVIOR to 0 to use
+ * a justification relative to the text itself
+ * i.e. justification relative to an horizontal text
+ * or to 1 to keep the initial Eeschema behavior
+ * The initial behavior is:
+ *  For vertical texts, exchange the horizontal and the vertical justification
+ *  The idea is to keep the justification always left or top for instance,
+ *  no matter the text orientation
+ *  This is a bit tricky when you want to change a text field justification
+ *  when the fiels and the component are both rotated 90.0 degrees
+ */
+#define USE_TEXT_JUSTIFY_INITIAL_BEHAVIOR 0
+
 #include "fctsys.h"
 #include "class_drawpanel.h"
 #include "base_struct.h"
@@ -265,7 +278,29 @@ EDA_RECT SCH_FIELD::GetBoundingBox() const
     linewidth = Clamp_Text_PenSize( linewidth, m_Size, m_Bold );
 
     // Calculate the text bounding box:
-    EDA_RECT rect = GetTextBox( -1, linewidth );
+    EDA_RECT rect;
+
+    // set USE_TEXT_JUSTIFY_INITIAL_BEHAVIOR to 0 to use
+    // a justification relative to the text itself
+    // i.e. justification relative to an horizontal text
+    // or to 1 to keep the initial behavior
+#if (USE_TEXT_JUSTIFY_INITIAL_BEHAVIOR == 1 )
+    if( m_Orient == TEXT_ORIENT_VERT )
+    {
+        // For vertical texts, exchange the horizontal and the vertical justification
+        // The idea is to keep the justification always left or top for instance,
+        // no matter the text orientation
+        SCH_FIELD text( *this );    // Make a local copy to swap justifications
+                                    // because GetBoundingBox() is const
+        int tmp = (int)text.m_VJustify;
+        NEGATE( tmp );
+        text.m_VJustify  = (EDA_TEXT_VJUSTIFY_T)text.m_HJustify;
+        text.m_HJustify = (EDA_TEXT_HJUSTIFY_T)tmp;
+        rect = text.GetTextBox( -1, linewidth );
+    }
+    else
+#endif
+        rect = GetTextBox( -1, linewidth );
 
     // Calculate the bounding box position relative to the component:
     wxPoint origin = parentComponent->GetPosition();
