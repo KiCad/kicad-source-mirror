@@ -286,6 +286,21 @@ int BOARD::GetBiggestClearanceValue()
 }
 
 
+int BOARD::GetSmallestClearanceValue()
+{
+    int clearance = m_NetClasses.GetDefault()->GetClearance();
+
+    //Read list of Net Classes
+    for( NETCLASSES::const_iterator nc = m_NetClasses.begin(); nc != m_NetClasses.end(); nc++ )
+    {
+        NETCLASS* netclass = nc->second;
+        clearance = MIN( clearance, netclass->GetClearance() );
+    }
+
+    return clearance;
+}
+
+
 int BOARD::GetCurrentMicroViaSize()
 {
     NETCLASS* netclass = m_NetClasses.Find( m_CurrentNetClassName );

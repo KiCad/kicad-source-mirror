@@ -32,6 +32,12 @@ static void Plot_Edges_Modules( PLOTTER* plotter, BOARD* pcb, int aLayerMask,
 static void PlotTextModule( PLOTTER* plotter, TEXTE_MODULE* pt_texte,
                             EDA_DRAW_MODE_T trace_mode );
 
+static int doIntValueFitToBand( int aInt, int aMin, int aMax )
+{
+    if( aInt < aMin ) return aMin;
+    if( aInt > aMax ) return aMax;
+    return aInt;
+}   
 
 /* Creates the plot for silkscreen layers
  */
@@ -808,6 +814,12 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
             shape_pos = pad->ReturnShapePos();
             pos = shape_pos;
             wxSize margin;
+            double width_adj = 0;
+            
+            if( aLayerMask & ALL_CU_LAYERS )
+            {
+                width_adj =  aPlotter->get_plot_width_adj();
+            }
 
             switch( aLayerMask &
                    ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT |
@@ -827,8 +839,8 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
                 break;
             }
 
-            size.x = pad->m_Size.x + ( 2 * margin.x );
-            size.y = pad->m_Size.y + ( 2 * margin.y );
+            size.x = pad->m_Size.x + ( 2 * margin.x ) + width_adj;
+            size.y = pad->m_Size.y + ( 2 * margin.y ) + width_adj;
 
             /* Don't draw a null size item : */
             if( size.x <= 0 || size.y <= 0 )
@@ -895,14 +907,20 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
                 continue;
 
             int via_margin = 0;
+            double width_adj = 0;
 
             // If the current layer is a solder mask, use the global mask
             // clearance for vias
             if( ( aLayerMask & ( SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT ) ) )
                 via_margin = GetBoard()->GetDesignSettings().m_SolderMaskMargin;
+            
+            if( aLayerMask & ALL_CU_LAYERS )
+            {
+                width_adj =  aPlotter->get_plot_width_adj();
+            }
 
             pos    = Via->m_Start;
-            size.x = size.y = Via->m_Width + 2 * via_margin;
+            size.x = size.y = Via->m_Width + 2 * via_margin + width_adj;
 
             /* Don't draw a null size item : */
             if( size.x <= 0 )
@@ -923,7 +941,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
         if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
             continue;
 
-        size.x = size.y = track->m_Width;
+        size.x = size.y = track->m_Width + aPlotter->get_plot_width_adj();
         pos    = track->m_Start;
         end    = track->m_End;
 
@@ -938,7 +956,7 @@ void PCB_BASE_FRAME::Plot_Standard_Layer( PLOTTER*        aPlotter,
         if( (GetLayerMask( track->GetLayer() ) & aLayerMask) == 0 )
             continue;
 
-        size.x = size.y = track->m_Width;
+        size.x = size.y = track->m_Width + aPlotter->get_plot_width_adj();
         pos    = track->m_Start;
         end    = track->m_End;
 
@@ -990,12 +1008,15 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
             continue;
 
         pos = pts->m_Start;
-
+        
+        // It is quite possible that the real drill value is less then small drill value.
         if( g_PcbPlotOptions.m_DrillShapeOpt == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE )
-            diam.x = diam.y = SMALL_DRILL;
+            diam.x = diam.y = MIN( SMALL_DRILL, pts->GetDrillValue() );
         else
             diam.x = diam.y = pts->GetDrillValue();
-
+        
+        diam.x -= aPlotter->get_plot_width_adj();
+        diam.x = doIntValueFitToBand( diam.x, 1, pts->m_Width - 1 );
         aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
     }
 
@@ -1012,11 +1033,18 @@ void PCB_BASE_FRAME::PlotDrillMark( PLOTTER*        aPlotter,
             if( PtPad->m_DrillShape == PAD_OVAL )
             {
                 diam = PtPad->m_Drill;
+                diam.x -= aPlotter->get_plot_width_adj();
+                diam.x = doIntValueFitToBand( diam.x, 1, PtPad->m_Size.x - 1 );
+                diam.y -= aPlotter->get_plot_width_adj();
+                diam.y = doIntValueFitToBand( diam.y, 1, PtPad->m_Size.y - 1 );
                 aPlotter->flash_pad_oval( pos, diam, PtPad->m_Orient, aTraceMode );
             }
             else
             {
-                diam.x = aSmallDrillShape ? SMALL_DRILL : PtPad->m_Drill.x;
+                // It is quite possible that the real pad drill value is less then small drill value.
+                diam.x = aSmallDrillShape ? MIN( SMALL_DRILL, PtPad->m_Drill.x ) : PtPad->m_Drill.x;
+                diam.x -= aPlotter->get_plot_width_adj();
+                diam.x = doIntValueFitToBand( diam.x, 1, PtPad->m_Size.x - 1 );
                 aPlotter->flash_pad_circle( pos, diam.x, aTraceMode );
             }
         }

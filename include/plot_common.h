@@ -71,6 +71,20 @@ public:
     virtual void set_color( int color )  = 0;
     virtual void set_dash( bool dashed ) = 0;
 
+    virtual int get_current_line_width()
+    {
+        return current_pen_width;
+    }
+
+    virtual void set_plot_width_adj( double width )
+    {
+    }
+
+    virtual double get_plot_width_adj()
+    {
+        return 0.;
+    }
+
     virtual void set_creator( const wxString& _creator )
     {
         creator = _creator;
@@ -390,6 +404,7 @@ public:
 
 protected:
     double plot_scale_adjX, plot_scale_adjY;
+    double plot_width_adj;
 };
 
 /* Class to handle a D_CODE when plotting a board : */

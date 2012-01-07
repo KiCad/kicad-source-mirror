@@ -491,16 +491,18 @@ void PS_PLOTTER::flash_pad_oval( wxPoint pos, wxSize size, int orient,
 void PS_PLOTTER::flash_pad_circle( wxPoint pos, int diametre,
                                    EDA_DRAW_MODE_T modetrace )
 {
+    int current_line_width;
     wxASSERT( output_file );
 
     set_current_line_width( -1 );
-    if( current_pen_width >= diametre )
-        set_current_line_width( diametre );
+    current_line_width = get_current_line_width();
+    if( current_line_width > diametre )
+        current_line_width = diametre;
 
     if( modetrace == FILLED )
-        circle( pos, diametre - current_pen_width, FILLED_SHAPE );
+        circle( pos, diametre - current_pen_width, FILLED_SHAPE, current_line_width );
     else
-        circle( pos, diametre - current_pen_width, NO_FILL );
+        circle( pos, diametre - current_pen_width, NO_FILL, current_line_width );
 
     set_current_line_width( -1 );
 }

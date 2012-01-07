@@ -102,6 +102,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     scaleSelection         = 1;
     m_FineScaleAdjustX     = 1.0;
     m_FineScaleAdjustY     = 1.0;
+    m_FineWidthAdjust      = 0.;
     outputDirectory        = wxT( "" );
 }
 

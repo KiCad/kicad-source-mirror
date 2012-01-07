@@ -86,6 +86,8 @@ public:
     // Only X and Y dimensions are adjusted: circles are plotted as circle, even if X and Y fine scale differ.
     double      m_FineScaleAdjustX;     // fine scale adjust X axis
     double      m_FineScaleAdjustY;     // dine scale adjust Y axis
+    // These width factor is intended to compensate plotters (and mainly printers) line width error.
+    double      m_FineWidthAdjust;
 
 private:
     long        layerSelection;

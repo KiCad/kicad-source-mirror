@@ -24,6 +24,7 @@
 /* Keywords to r/w options in m_Config */
 #define CONFIG_XFINESCALE_ADJ    wxT( "PlotXFineScaleAdj" )
 #define CONFIG_YFINESCALE_ADJ    wxT( "PlotYFineScaleAdj" )
+#define CONFIG_PS_FINEWIDTH_ADJ  wxT( "PSPlotFineWidthAdj" )
 
 // Define min and max reasonable values for print scale
 #define MIN_SCALE 0.01
@@ -59,10 +60,13 @@ class DIALOG_PLOT : public DIALOG_PLOT_BASE
 private:
     PCB_EDIT_FRAME*  m_Parent;
     wxConfig*        m_Config;
-    std::vector<int> layerList;         // List to hold CheckListBox layer numbers
+    std::vector<int> layerList;               // List to hold CheckListBox layer numbers
     double           m_XScaleAdjust;
     double           m_YScaleAdjust;
-    static wxPoint   prevPosition;      // Dialog position & size
+    double           m_PSWidthAdjust;         // Global width correction for exact width postscript output.
+    double           m_WidthAdjustMinValue;   // Global width correction
+    double           m_WidthAdjustMaxValue;   // margins.
+    static wxPoint   prevPosition;            // Dialog position & size
     static wxSize    prevSize;
 
 public:
@@ -114,6 +118,12 @@ void DIALOG_PLOT::Init_Dialog()
 
     m_Config->Read( CONFIG_XFINESCALE_ADJ, &m_XScaleAdjust );
     m_Config->Read( CONFIG_YFINESCALE_ADJ, &m_YScaleAdjust );
+    m_Config->Read( CONFIG_PS_FINEWIDTH_ADJ, &m_PSWidthAdjust);
+    
+    // The reasonable width correction value must be in a range of
+    // [-(MinTrackWidth-1), +(MinClearanceValue-1)] decimils.
+    m_WidthAdjustMinValue = -(board->GetDesignSettings().m_TrackMinWidth - 1);
+    m_WidthAdjustMaxValue = board->GetSmallestClearanceValue() - 1;
 
     m_plotFormatOpt->SetSelection( g_PcbPlotOptions.GetPlotFormat() );
 
@@ -135,6 +145,9 @@ void DIALOG_PLOT::Init_Dialog()
     msg = ReturnStringFromValue( g_UserUnit, g_PcbPlotOptions.GetPlotLineWidth(),
                                  PCB_INTERNAL_UNIT );
     m_linesWidth->AppendText( msg );
+    
+    // Set units for PS global width correction.
+    AddUnitSymbol( *m_textPSFineAdjustWidth, g_UserUnit );
 
     m_useAuxOriginCheckBox->SetValue( g_PcbPlotOptions.GetUseAuxOrigin() );
 
@@ -148,6 +161,13 @@ void DIALOG_PLOT::Init_Dialog()
 
     msg.Printf( wxT( "%f" ), m_YScaleAdjust );
     m_fineAdjustYscaleOpt->AppendText( msg );
+    
+    // Test for a reasonable PS width correction value. Set to 0 if problem.
+    if( m_PSWidthAdjust < m_WidthAdjustMinValue || m_PSWidthAdjust > m_WidthAdjustMaxValue )
+        m_PSWidthAdjust = 0.;
+
+    msg.Printf( wxT( "%f" ), To_User_Unit( g_UserUnit, m_PSWidthAdjust, PCB_INTERNAL_UNIT ) );
+    m_PSFineAdjustWidthOpt->AppendText( msg );
 
     m_plotPSNegativeOpt->SetValue( g_PcbPlotOptions.m_PlotPSNegative );
     m_forcePSA4OutputOpt->SetValue( g_PcbPlotOptions.GetPsA4Output() );
@@ -319,6 +339,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_scaleOpt->Enable( true );
         m_fineAdjustXscaleOpt->Enable( true );
         m_fineAdjustYscaleOpt->Enable( true );
+        m_PSFineAdjustWidthOpt->Enable( true );
         m_plotPSNegativeOpt->Enable( true );
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
         m_PlotOptionsSizer->Hide( m_HPGLOptionsSizer );
@@ -345,6 +366,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_scaleOpt->Enable( false );
         m_fineAdjustXscaleOpt->Enable( false );
         m_fineAdjustYscaleOpt->Enable( false );
+        m_PSFineAdjustWidthOpt->Enable( false );
         m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
         m_PlotOptionsSizer->Show( m_GerberOptionsSizer );
@@ -370,6 +392,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_scaleOpt->Enable( true );
         m_fineAdjustXscaleOpt->Enable( false );
         m_fineAdjustYscaleOpt->Enable( false );
+        m_PSFineAdjustWidthOpt->Enable( false );
         m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
@@ -397,6 +420,7 @@ void DIALOG_PLOT::SetPlotFormat( wxCommandEvent& event )
         m_scaleOpt->SetSelection( 1 );
         m_fineAdjustXscaleOpt->Enable( false );
         m_fineAdjustYscaleOpt->Enable( false );
+        m_PSFineAdjustWidthOpt->Enable( false );
         m_plotPSNegativeOpt->SetValue( false );
         m_plotPSNegativeOpt->Enable( false );
         m_PlotOptionsSizer->Hide( m_GerberOptionsSizer );
@@ -516,6 +540,25 @@ void DIALOG_PLOT::applyPlotSettings()
     }
 
     m_Config->Write( CONFIG_YFINESCALE_ADJ, m_YScaleAdjust );
+    
+    // PS Width correction
+    msg = m_PSFineAdjustWidthOpt->GetValue();
+    tmpDouble = ReturnValueFromString( g_UserUnit, msg, PCB_INTERNAL_UNIT );
+
+    if( !setDouble( &m_PSWidthAdjust, tmpDouble, m_WidthAdjustMinValue, m_WidthAdjustMaxValue ) )
+    {
+        msg = ReturnStringFromValue( g_UserUnit, m_PSWidthAdjust, PCB_INTERNAL_UNIT );
+        m_PSFineAdjustWidthOpt->SetValue( msg );
+        msg.Printf( wxT( "Width correction constrained!\n"
+                    "The reasonable width correction value must be in a range of [%+f; %+f]" ),
+                    To_User_Unit( g_UserUnit, m_WidthAdjustMinValue, PCB_INTERNAL_UNIT ),
+                    To_User_Unit( g_UserUnit, m_WidthAdjustMaxValue, PCB_INTERNAL_UNIT ) );
+        msg += ( g_UserUnit == INCHES )? _(" (\")") : _(" (mm)");
+        msg += wxT( " for current design rules!\n" );
+        m_messagesBox->AppendText( msg );
+    }
+
+    m_Config->Write( CONFIG_PS_FINEWIDTH_ADJ, m_PSWidthAdjust );
 
     tempOptions.SetUseGerberExtensions( m_useGerberExtensions->GetValue() );
 
@@ -623,6 +666,9 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
 
     if( m_fineAdjustYscaleOpt->IsEnabled() && m_YScaleAdjust != 0.0 )
         g_PcbPlotOptions.m_FineScaleAdjustY = m_YScaleAdjust;
+
+    if( m_PSFineAdjustWidthOpt->IsEnabled() )
+        g_PcbPlotOptions.m_FineWidthAdjust = m_PSWidthAdjust;
 
     switch( g_PcbPlotOptions.GetPlotFormat() )
     {
