@@ -179,7 +179,6 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_GerberOptionsSizer->Add( m_excludeEdgeLayerOpt, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
 	
 	m_subtractMaskFromSilk = new wxCheckBox( this, wxID_ANY, _("Subtract soldermask from silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_subtractMaskFromSilk->SetValue(true); 
 	m_subtractMaskFromSilk->SetToolTip( _("Remove silkscreen from areas without soldermask") );
 	
 	m_GerberOptionsSizer->Add( m_subtractMaskFromSilk, 0, wxTOP|wxRIGHT|wxLEFT, 2 );
@@ -267,6 +266,20 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizer19->Add( m_fineAdjustYscaleOpt, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	bSizer17->Add( bSizer19, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer191;
+	bSizer191 = new wxBoxSizer( wxVERTICAL );
+	
+	m_textPSFineAdjustWidth = new wxStaticText( this, wxID_ANY, _("Width correction"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_textPSFineAdjustWidth->Wrap( -1 );
+	bSizer191->Add( m_textPSFineAdjustWidth, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	
+	m_PSFineAdjustWidthOpt = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_PSFineAdjustWidthOpt->SetToolTip( _("Set global width correction for exact width postscript output.\nThese width correction is intended to compensate tracks width and also pads and vias size errors.\nThe reasonable width correction value must be in a range of [-(MinTrackWidth-1), +(MinClearanceValue-1)] in decimils.") );
+	
+	bSizer191->Add( m_PSFineAdjustWidthOpt, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	
+	bSizer17->Add( bSizer191, 1, wxEXPAND, 5 );
 	
 	m_PSOptionsSizer->Add( bSizer17, 1, wxEXPAND, 5 );
 	

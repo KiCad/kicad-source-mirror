@@ -817,6 +817,12 @@ public:
     int GetBiggestClearanceValue();
 
     /**
+     * Function GetSmallestClearanceValue
+     * @return the smallest clearance value found in NetClasses list
+     */
+    int GetSmallestClearanceValue();
+
+    /**
      * Function GetCurrentTrackWidth
      * @return the current track width, according to the selected options
      * ( using the default netclass value or a preset value )

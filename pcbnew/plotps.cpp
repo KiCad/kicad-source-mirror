@@ -106,6 +106,7 @@ bool PCB_BASE_FRAME::ExportToPostScriptFile( const wxString& aFullFileName, int 
 
     plotter->set_scale_adjust( g_PcbPlotOptions.m_FineScaleAdjustX,
                                g_PcbPlotOptions.m_FineScaleAdjustY );
+    plotter->set_plot_width_adj( g_PcbPlotOptions.m_FineWidthAdjust );
     plotter->set_viewport( offset, scale, g_PcbPlotOptions.m_PlotMirror );
     plotter->set_default_line_width( g_PcbPlotOptions.m_PlotLineWidth );
     plotter->set_creator( wxT( "PCBNEW-PS" ) );
