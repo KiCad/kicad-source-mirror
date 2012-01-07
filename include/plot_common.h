@@ -362,6 +362,16 @@ public:
         plot_scale_adjX = scaleX;
         plot_scale_adjY = scaleY;
     }
+ 
+    virtual void set_plot_width_adj( double width )
+    {
+        plot_width_adj = width;
+    }
+    
+    virtual double get_plot_width_adj()
+    {
+        return plot_width_adj;
+    }
 
     virtual void set_viewport( wxPoint aOffset, double aScale, bool aMirror );
     virtual void rect( wxPoint p1, wxPoint p2, FILL_T fill, int width = -1 );
