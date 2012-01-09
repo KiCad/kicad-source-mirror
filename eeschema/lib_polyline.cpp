@@ -54,14 +54,6 @@ LIB_POLYLINE::LIB_POLYLINE( LIB_COMPONENT* aParent ) :
 }
 
 
-LIB_POLYLINE::LIB_POLYLINE( const LIB_POLYLINE& polyline ) :
-    LIB_ITEM( polyline )
-{
-    m_PolyPoints = polyline.m_PolyPoints;   // Vector copy
-    m_Width = polyline.m_Width;
-}
-
-
 bool LIB_POLYLINE::Save( OUTPUTFORMATTER& aFormatter )
 {
     int ccount = GetCornerCount();

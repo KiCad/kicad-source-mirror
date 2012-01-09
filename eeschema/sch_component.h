@@ -401,6 +401,8 @@ public:
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 
+    SCH_ITEM& operator=( const SCH_ITEM& aItem );
+
     /**
      * @copydoc EDA_ITEM::IsReplaceable()
      */

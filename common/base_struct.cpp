@@ -212,6 +212,27 @@ bool EDA_ITEM::operator<( const EDA_ITEM& aItem ) const
 }
 
 
+EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
+{
+    wxCHECK_MSG( Type() == aItem.Type(), *this,
+                 wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
+                 GetClass() );
+
+    if( &aItem != this )
+    {
+        // Do not assign the linked list pointers.
+        m_StructType = aItem.m_StructType;
+        m_Parent     = aItem.m_Parent;
+        m_Son        = aItem.m_Son;
+        m_Flags      = aItem.m_Flags;
+        SetTimeStamp( aItem.m_TimeStamp );
+        m_Status     = aItem.m_Status;
+    }
+
+    return *this;
+}
+
+
 #if defined(DEBUG)
 
 // A function that should have been in wxWidgets

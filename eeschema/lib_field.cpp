@@ -59,23 +59,6 @@ LIB_FIELD::LIB_FIELD( int idfield ) : LIB_ITEM( LIB_FIELD_T, NULL )
 }
 
 
-LIB_FIELD::LIB_FIELD( const LIB_FIELD& field ) : LIB_ITEM( field )
-{
-    m_id        = field.m_id;
-    m_Pos       = field.m_Pos;
-    m_Size      = field.m_Size;
-    m_Thickness = field.m_Thickness;
-    m_Orient    = field.m_Orient;
-    m_Attributs = field.m_Attributs;
-    m_Text      = field.m_Text;
-    m_name      = field.m_name;
-    m_HJustify  = field.m_HJustify;
-    m_VJustify  = field.m_VJustify;
-    m_Italic    = field.m_Italic;
-    m_Bold      = field.m_Bold;
-}
-
-
 LIB_FIELD::~LIB_FIELD()
 {
 }

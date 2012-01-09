@@ -198,22 +198,6 @@ LIB_PIN::LIB_PIN( LIB_COMPONENT* aParent ) :
 }
 
 
-LIB_PIN::LIB_PIN( const LIB_PIN& pin ) : LIB_ITEM( pin )
-{
-    m_position = pin.m_position;
-    m_length = pin.m_length;
-    m_orientation = pin.m_orientation;
-    m_shape = pin.m_shape;
-    m_type = pin.m_type;
-    m_attributes = pin.m_attributes;
-    m_number = pin.m_number;
-    m_numTextSize = pin.m_numTextSize;
-    m_nameTextSize = pin.m_nameTextSize;
-    m_width = pin.m_width;
-    m_name = pin.m_name;
-}
-
-
 void LIB_PIN::SetName( const wxString& aName )
 {
     wxString tmp = ( aName.IsEmpty() ) ? wxT( "~" ) : aName;

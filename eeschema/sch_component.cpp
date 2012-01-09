@@ -1780,6 +1780,37 @@ bool SCH_COMPONENT::operator <( const SCH_ITEM& aItem ) const
 }
 
 
+SCH_ITEM& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
+{
+    wxCHECK_MSG( Type() == aItem.Type(), *this,
+                 wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
+                 GetClass() );
+
+    if( &aItem != this )
+    {
+        SCH_ITEM::operator=( aItem );
+
+        SCH_COMPONENT* component = (SCH_COMPONENT*) &aItem;
+        m_ChipName = component->m_ChipName;
+        m_Pos = component->m_Pos;
+        m_unit = component->m_unit;
+        m_convert = component->m_convert;
+        m_transform = component->m_transform;
+        m_PathsAndReferences = component->m_PathsAndReferences;
+
+        m_Fields = component->m_Fields;    // std::vector's assignment operator.
+
+        // Reparent fields after assignment to new component.
+        for( int ii = 0; ii < GetFieldCount();  ++ii )
+        {
+            GetField( ii )->SetParent( this );
+        }
+    }
+
+    return *this;
+}
+
+
 bool SCH_COMPONENT::doHitTest( const wxPoint& aPoint, int aAccuracy ) const
 {
     EDA_RECT bBox = GetBodyBoundingBox();

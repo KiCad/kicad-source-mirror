@@ -53,6 +53,7 @@ public:
         delete m_Image;
     }
 
+    SCH_ITEM& operator=( const SCH_ITEM& aItem );
 
     /*
      * Accessors:

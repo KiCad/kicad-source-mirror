@@ -141,7 +141,7 @@ public:
     SCH_ITEM* Clone() const { return ( SCH_ITEM* ) EDA_ITEM::Clone(); }
 
     /**
-     * Function SwapDate
+     * Function SwapData
      * swap the internal data structures \a aItem with the schematic item.
      * Obviously, aItem must have the same type than me
      * @param aItem The item to swap the data structures with.
@@ -351,6 +351,8 @@ public:
     void SetPosition( const wxPoint& aPosition ) { doSetPosition( aPosition ); }
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
+
+    virtual SCH_ITEM& operator=( const SCH_ITEM& aItem );
 
     /**
      * @note - The DoXXX() functions below are used to enforce the interface while retaining

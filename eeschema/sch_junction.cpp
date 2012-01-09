@@ -53,14 +53,6 @@ SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :
 }
 
 
-SCH_JUNCTION::SCH_JUNCTION( const SCH_JUNCTION& aJunction ) :
-    SCH_ITEM( aJunction )
-{
-    m_pos = aJunction.m_pos;
-    m_size = aJunction.m_size;
-}
-
-
 bool SCH_JUNCTION::Save( FILE* aFile ) const
 {
     bool success = true;
