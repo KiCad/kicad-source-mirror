@@ -15,6 +15,7 @@
 #include "class_colors_design_settings.h"
 #include "class_board_design_settings.h"
 #include "common.h"                         // PAGE_INFO
+#include "class_title_block.h"
 
 class PCB_BASE_FRAME;
 class PCB_EDIT_FRAME;
@@ -173,8 +174,9 @@ private:
     NETINFO_LIST        m_NetInfo;                      ///< net info list (name, design constraints ..
 
     BOARD_DESIGN_SETTINGS   m_designSettings;
-    COLORS_DESIGN_SETTINGS* m_colorsSettings;       // Link to current colors settings
+    COLORS_DESIGN_SETTINGS* m_colorsSettings;
     PAGE_INFO               m_paper;
+    TITLE_BLOCK             m_titles;                   ///< text in lower right of screen and plots
 
     /// Position of the origin axis, which is used in exports mostly
     wxPoint             m_originAxisPosition;
@@ -543,6 +545,9 @@ public:
 
     const wxPoint& GetOriginAxisPosition() const            { return m_originAxisPosition; }
     void SetOriginAxisPosition( const wxPoint& aPosition )  { m_originAxisPosition = aPosition; }
+
+    TITLE_BLOCK& GetTitleBlock()                            { return m_titles; }
+    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }
 
     /**
      * Function SetBoardSettings

@@ -17,7 +17,6 @@ private:
     EDA_DRAW_FRAME* m_Parent;
     BASE_SCREEN*    m_Screen;
     bool            m_modified;
-    PAGE_INFO       m_page;             ///< the one being edited
     PAGE_INFO       m_user_size;        ///< instantiated just to get the size
 
 public:
@@ -37,7 +36,7 @@ private:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
     void OnCancelClick( wxCommandEvent& event );
 
-    void setCurrentPageSizeSelection();
+    void setCurrentPageSizeSelection( const wxString& aPaperSize );
     void SavePageSettings(wxCommandEvent& event);
     void ReturnSizeSelected(wxCommandEvent& event);
 

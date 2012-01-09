@@ -168,6 +168,20 @@ void PCB_BASE_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
 }
 
 
+const TITLE_BLOCK& PCB_BASE_FRAME::GetTitleBlock() const
+{
+    wxASSERT( m_Pcb );
+    return m_Pcb->GetTitleBlock();
+}
+
+
+void PCB_BASE_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
+{
+    wxASSERT( m_Pcb );
+    m_Pcb->SetTitleBlock( aTitleBlock );
+}
+
+
 EDA_RECT PCB_BASE_FRAME::GetBoardBoundingBox( bool aBoardEdgesOnly ) const
 {
     wxASSERT( m_Pcb );
@@ -618,11 +632,13 @@ void PCB_BASE_FRAME::SaveSettings()
 }
 
 
-void PCB_BASE_FRAME::OnModify( )
+void PCB_BASE_FRAME::OnModify()
 {
     GetScreen()->SetModify();
     GetScreen()->SetSave();
-    GetScreen()->m_Date = GenDate();
+
+    wxASSERT( m_Pcb );
+    m_Pcb->GetTitleBlock().SetDate();
 }
 
 

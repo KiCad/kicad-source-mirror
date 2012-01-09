@@ -34,6 +34,7 @@
 #include "macros.h"
 #include "sch_item_struct.h"
 #include "class_base_screen.h"
+#include "class_title_block.h"
 
 #include "../eeschema/general.h"
 
@@ -66,6 +67,8 @@ class SCH_SCREEN : public BASE_SCREEN
 
     /// The size of the paper to print or plot on
     PAGE_INFO   m_paper;        // keep with the MVC 'model' if this class gets split
+
+    TITLE_BLOCK m_titles;
 
     /// Position of the origin axis, which is used in exports mostly, but not yet in EESCHEMA
     wxPoint     m_originAxisPosition;
@@ -104,6 +107,10 @@ public:
 
     const wxPoint& GetOriginAxisPosition() const            { return m_originAxisPosition; }
     void SetOriginAxisPosition( const wxPoint& aPosition )  { m_originAxisPosition = aPosition; }
+
+    const TITLE_BLOCK& GetTitleBlock() const                { return m_titles; }
+    //TITLE_BLOCK& GetTitleBlock() const                      { return (TITLE_BLOCK&) m_titles; }
+    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }
 
     void DecRefCount();
 
@@ -521,7 +528,7 @@ public:
      * @see GetDate()
      * @param aDate The date string to set for each screen.
      */
-    void SetDate( const wxString& aDate );
+    void SetDate( const wxString& aDate = GenDate() );
 
     /**
      * Function DeleteAllMarkers

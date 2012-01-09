@@ -1,4 +1,5 @@
-
+#ifndef RICHIO_H_
+#define RICHIO_H_
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -22,9 +23,6 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-
-#ifndef RICHIO_H_
-#define RICHIO_H_
 
 
 // This file defines 3 classes useful for working with DSN text files and is named

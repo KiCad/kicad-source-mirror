@@ -150,14 +150,9 @@ void SCH_SCREEN::Clear()
 
     /* Clear the project settings. */
     m_ScreenNumber = m_NumberOfScreen = 1;
-    m_Title.Empty();
-    m_Revision.Empty();
-    m_Company.Empty();
-    m_Commentaire1.Empty();
-    m_Commentaire2.Empty();
-    m_Commentaire3.Empty();
-    m_Commentaire4.Empty();
-    m_Date = GenDate();
+
+    m_titles.Clear();
+    m_titles.SetDate();
 }
 
 
@@ -574,19 +569,20 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
      * simple hierarchy and flat hierarchy.  Used also to search the root
      * sheet ( ScreenNumber = 1 ) within the files
      */
+    const TITLE_BLOCK& tb = GetTitleBlock();
 
     if( fprintf( aFile, "$Descr %s %d %d\n", TO_UTF8( m_paper.GetType() ),
                  m_paper.GetWidthMils(), m_paper.GetHeightMils() ) < 0
         || fprintf( aFile, "encoding utf-8\n") < 0
         || fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen ) < 0
-        || fprintf( aFile, "Title %s\n",    EscapedUTF8( m_Title ).c_str() ) < 0
-        || fprintf( aFile, "Date %s\n",     EscapedUTF8( m_Date ).c_str() ) < 0
-        || fprintf( aFile, "Rev %s\n",      EscapedUTF8( m_Revision ).c_str() ) < 0
-        || fprintf( aFile, "Comp %s\n",     EscapedUTF8( m_Company ).c_str() ) < 0
-        || fprintf( aFile, "Comment1 %s\n", EscapedUTF8( m_Commentaire1 ).c_str() ) < 0
-        || fprintf( aFile, "Comment2 %s\n", EscapedUTF8( m_Commentaire2 ).c_str() ) < 0
-        || fprintf( aFile, "Comment3 %s\n", EscapedUTF8( m_Commentaire3 ).c_str() ) < 0
-        || fprintf( aFile, "Comment4 %s\n", EscapedUTF8( m_Commentaire4 ).c_str() ) < 0
+        || fprintf( aFile, "Title %s\n",    EscapedUTF8( tb.GetTitle() ).c_str() ) < 0
+        || fprintf( aFile, "Date %s\n",     EscapedUTF8( tb.GetDate() ).c_str() ) < 0
+        || fprintf( aFile, "Rev %s\n",      EscapedUTF8( tb.GetRevision() ).c_str() ) < 0
+        || fprintf( aFile, "Comp %s\n",     EscapedUTF8( tb.GetCompany() ).c_str() ) < 0
+        || fprintf( aFile, "Comment1 %s\n", EscapedUTF8( tb.GetComment1() ).c_str() ) < 0
+        || fprintf( aFile, "Comment2 %s\n", EscapedUTF8( tb.GetComment2() ).c_str() ) < 0
+        || fprintf( aFile, "Comment3 %s\n", EscapedUTF8( tb.GetComment3() ).c_str() ) < 0
+        || fprintf( aFile, "Comment4 %s\n", EscapedUTF8( tb.GetComment4() ).c_str() ) < 0
         || fprintf( aFile, "$EndDescr\n" ) < 0 )
         return false;
 
@@ -1492,7 +1488,11 @@ int SCH_SCREENS::ReplaceDuplicateTimeStamps()
 void SCH_SCREENS::SetDate( const wxString& aDate )
 {
     for( size_t i = 0;  i < m_screens.size();  i++ )
-        m_screens[i]->m_Date = aDate;
+    {
+        TITLE_BLOCK tb = m_screens[i]->GetTitleBlock();
+        tb.SetDate( aDate );
+        m_screens[i]->SetTitleBlock( tb );
+    }
 }
 
 

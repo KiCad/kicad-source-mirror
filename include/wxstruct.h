@@ -74,6 +74,7 @@ class BASE_SCREEN;
 class PARAM_CFG_BASE;
 class PAGE_INFO;
 class PLOTTER;
+class TITLE_BLOCK;
 
 enum id_librarytype {
     LIBRARY_TYPE_EESCHEMA,
@@ -461,6 +462,9 @@ public:
 
     virtual const wxPoint& GetOriginAxisPosition() const = 0;
     virtual void SetOriginAxisPosition( const wxPoint& aPosition ) = 0;
+
+    virtual const TITLE_BLOCK& GetTitleBlock() const = 0;
+    virtual void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) = 0;
 
     int GetCursorShape() const { return m_cursorShape; }
 
