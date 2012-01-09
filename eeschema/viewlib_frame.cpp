@@ -100,7 +100,7 @@ static wxAcceleratorEntry accels[] =
 
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( wxWindow* father, CMP_LIBRARY* Library, wxSemaphore* semaphore ) :
-    EDA_DRAW_FRAME( father, VIEWER_FRAME, _( "Library Browser" ),
+    SCH_BASE_FRAME( father, VIEWER_FRAME, _( "Library Browser" ),
                     wxDefaultPosition, wxDefaultSize )
 {
     wxAcceleratorTable table( ACCEL_TABLE_CNT, accels );
@@ -262,39 +262,6 @@ LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
     SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) wxGetApp().GetTopWindow();
     frame->SetLibraryViewerWindow( NULL );
-}
-
-
-void LIB_VIEW_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
-{
-    GetScreen()->SetPageSettings( aPageSettings );
-}
-
-
-const PAGE_INFO& LIB_VIEW_FRAME::GetPageSettings () const
-{
-    return GetScreen()->GetPageSettings();
-}
-
-
-const wxSize LIB_VIEW_FRAME::GetPageSizeIU() const
-{
-    // GetSizeIU is compile time dependent:
-    return GetScreen()->GetPageSettings().GetSizeIU();
-}
-
-
-const wxPoint& LIB_VIEW_FRAME::GetOriginAxisPosition() const
-{
-    wxASSERT( GetScreen() );
-    return GetScreen()->GetOriginAxisPosition();
-}
-
-
-void LIB_VIEW_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
-{
-    wxASSERT( GetScreen() );
-    GetScreen()->SetOriginAxisPosition( aPosition );
 }
 
 

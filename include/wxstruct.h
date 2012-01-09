@@ -28,8 +28,8 @@
  * @brief Base window classes and related definitions.
  */
 
-#ifndef  WXSTRUCT_H
-#define  WXSTRUCT_H
+#ifndef  WXSTRUCT_H_
+#define  WXSTRUCT_H_
 
 
 #include <vector>
@@ -1177,4 +1177,4 @@ public:
 
 };
 
-#endif  /* WXSTRUCT_H */
+#endif  // WXSTRUCT_H_
