@@ -13,6 +13,7 @@
 #include "wxstruct.h"
 #include "appl_wxstruct.h"
 #include "worksheet.h"
+#include "class_title_block.h"
 
 #include "build_version.h"
 
@@ -1423,7 +1424,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_DATE:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += screen->m_Date;
+            msg += GetTitleBlock().GetDate();
             DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
@@ -1433,7 +1434,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_REV:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += screen->m_Revision;
+            msg += GetTitleBlock().GetRevision();
             DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
@@ -1503,7 +1504,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_COMPANY_NAME:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += screen->m_Company;
+            msg += GetTitleBlock().GetCompany();
             if( !msg.IsEmpty() )
             {
                 DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1518,7 +1519,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_TITLE:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += screen->m_Title;
+            msg += GetTitleBlock().GetTitle();
             DrawGraphicText( m_canvas, DC, pos, Color,
                              msg, TEXT_ORIENT_HORIZ, size,
                              GR_TEXT_HJUSTIFY_LEFT, GR_TEXT_VJUSTIFY_CENTER,
@@ -1529,7 +1530,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_COMMENT1:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += screen->m_Commentaire1;
+            msg += GetTitleBlock().GetComment1();
             if( !msg.IsEmpty() )
             {
                 DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1543,7 +1544,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_COMMENT2:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += screen->m_Commentaire2;
+            msg += GetTitleBlock().GetComment2();
             if( !msg.IsEmpty() )
             {
                 DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1557,7 +1558,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_COMMENT3:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += screen->m_Commentaire3;
+            msg += GetTitleBlock().GetComment3();
             if( !msg.IsEmpty() )
             {
                 DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1571,7 +1572,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_COMMENT4:
             if( WsItem->m_Legende )
                 msg = WsItem->m_Legende;
-            msg += screen->m_Commentaire4;
+            msg += GetTitleBlock().GetComment4();
             if( !msg.IsEmpty() )
             {
                 DrawGraphicText( m_canvas, DC, pos, Color,

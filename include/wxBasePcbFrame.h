@@ -119,6 +119,9 @@ public:
     const wxPoint& GetOriginAxisPosition() const;               // overload
     void SetOriginAxisPosition( const wxPoint& aPosition );     // overload
 
+    const TITLE_BLOCK& GetTitleBlock() const;                   // overload
+    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload
+
     /**
      * Function SetBoard
      * sets the m_Pcb member in such as way as to ensure deleting any previous

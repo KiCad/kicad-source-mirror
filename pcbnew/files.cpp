@@ -420,10 +420,13 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
         GetScreen()->SetFileName( aFileName );
     }
 
-    /* If changes are made, update the board date */
+    // If changes are made, update the board date
     if( GetScreen()->IsModify() )
     {
-        GetScreen()->m_Date = GenDate();
+        TITLE_BLOCK tb = GetTitleBlock();
+
+        tb.SetDate();
+        SetTitleBlock( tb );
     }
 
     pcbFileName = GetScreen()->GetFileName();
@@ -480,9 +483,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
         PROPERTIES   props;
 
-        // wanting wxWidgets 2.9.x which can actually create a wxString() from
-        // a const char*, so don't have to use wxT()
-        props[ wxT("header") ] = header;
+        props["header"] = header;
 
         IO_MGR::Save( IO_MGR::KICAD, pcbFileName.GetFullPath(), GetBoard(), &props );
     }
