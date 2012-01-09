@@ -1072,7 +1072,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
     refx = pageInfo.GetLeftMarginMils();
 
 #if defined(KICAD_GOST)
-    refy = pageSize.y - pageInfo.GetBottomMargin(); // Lower left corner
+    refy = pageSize.y - pageInfo.GetBottomMarginMils(); // Lower left corner
     for( WsItem = &WS_Segm1_LU; WsItem != NULL; WsItem = WsItem->Pnext )
     {
         pos.x = ( refx - WsItem->m_Posx ) * scale;
@@ -1093,7 +1093,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             break;
 
         case WS_SEGMENT_LU:
-            xg = pageInfo.GetLeftMargin() - WsItem->m_Endx;
+            xg = pageInfo.GetLeftMarginMils() - WsItem->m_Endx;
             yg = pageSize.y - pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
             GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
                     xg * scale, yg * scale, width, Color );
@@ -1112,7 +1112,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
         case WS_SEGMENT_LT:
             xg = pageInfo.GetLeftMarginMils() + WsItem->m_Endx;
             yg = pageInfo.GetBottomMarginMils() + WsItem->m_Endy;
-            GRLine( &m_canvas->GetClipBox(), DC, pos.x, pos.y,
+            GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
                     xg * scale, yg * scale, width, Color );
             break;
         }
@@ -1251,7 +1251,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_COMPANY_NAME:
-                msg = screen->m_Company;
+        	msg = GetTitleBlock().GetCompany();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1263,7 +1263,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_TITLE:
-                msg = screen->m_Title;
+        	msg = GetTitleBlock().GetTitle();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1275,7 +1275,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_COMMENT1:
-                msg = screen->m_Commentaire1;
+        	msg = GetTitleBlock().GetComment1();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1294,7 +1294,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_COMMENT2:
-                msg = screen->m_Commentaire2;
+        	msg = GetTitleBlock().GetComment2();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1305,7 +1305,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_COMMENT3:
-                msg = screen->m_Commentaire3;
+        	msg = GetTitleBlock().GetComment3();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1316,7 +1316,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_COMMENT4:
-                msg = screen->m_Commentaire4;
+        	msg = GetTitleBlock().GetComment4();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1337,7 +1337,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                      pageInfo.GetRightMarginMils() - WsItem->m_Endx;
                 yg = pageSize.y -
                      pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-                GRLine( &m_canvas->GetClipBox(), DC, pos.x, pos.y,
+                GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
                         xg * scale, yg * scale, width, Color );
                 break;
             }
@@ -1355,7 +1355,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             {
             case WS_CADRE:
             // Begin list number > 1
-                msg = screen->m_Commentaire1;
+        	msg = GetTitleBlock().GetComment1();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1401,7 +1401,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                      pageInfo.GetRightMarginMils() - WsItem->m_Endx;
                 yg = pageSize.y -
                      pageInfo.GetBottomMarginMils() - WsItem->m_Endy;
-                GRLine( &m_canvas->GetClipBox(), DC, pos.x, pos.y,
+                GRLine( m_canvas->GetClipBox(), DC, pos.x, pos.y,
                         xg * scale, yg * scale, width, Color );
                 break;
             }
