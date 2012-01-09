@@ -312,6 +312,7 @@ bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* aScree
     wxString pagename = FROM_UTF8( text );
 
     PAGE_INFO       pageInfo;
+    TITLE_BLOCK     tb;
 
     if( !pageInfo.SetType( pagename ) )
     {
@@ -337,7 +338,10 @@ line %d, \aAbort reading file.\n" ),
         line = aLine->Line();
 
         if( strnicmp( line, "$End", 4 ) == 0 )
+        {
+            aScreen->SetTitleBlock( tb );
             break;
+        }
 
         if( strnicmp( line, "Sheet", 2 ) == 0 )
             sscanf( line + 5, " %d %d",
@@ -346,56 +350,56 @@ line %d, \aAbort reading file.\n" ),
         if( strnicmp( line, "Title", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Title = FROM_UTF8( buf );
+            tb.SetTitle( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Date", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Date = FROM_UTF8( buf );
+            tb.SetDate( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Rev", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Revision = FROM_UTF8( buf );
+            tb.SetRevision( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Comp", 4 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Company = FROM_UTF8( buf );
+            tb.SetCompany( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Comment1", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Commentaire1 = FROM_UTF8( buf );
+            tb.SetComment1( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Comment2", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Commentaire2 = FROM_UTF8( buf );
+            tb.SetComment2( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Comment3", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Commentaire3 = FROM_UTF8( buf );
+            tb.SetComment3( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Comment4", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            aScreen->m_Commentaire4 = FROM_UTF8( buf );
+            tb.SetComment4( FROM_UTF8( buf ) );
             continue;
         }
     }

@@ -250,14 +250,17 @@ bool SCH_EDIT_FRAME::LoadOneEEProject( const wxString& aFileName, bool aIsNew )
 
         screen->SetZoom( 32 );
         screen->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
-        screen->m_Title = NAMELESS_PROJECT;
-        screen->m_Title += wxT( ".sch" );
-        GetScreen()->SetFileName( screen->m_Title );
-        screen->m_Company.Empty();
-        screen->m_Commentaire1.Empty();
-        screen->m_Commentaire2.Empty();
-        screen->m_Commentaire3.Empty();
-        screen->m_Commentaire4.Empty();
+
+        TITLE_BLOCK tb;
+        wxString    title;
+
+        title += NAMELESS_PROJECT;
+        title += wxT( ".sch" );
+        tb.SetTitle( title );
+        screen->SetTitleBlock( tb );
+
+        GetScreen()->SetFileName( title );
+
         LoadProjectFile( wxEmptyString, true );
         Zoom_Automatique( false );
         SetSheetNumberAndCount();

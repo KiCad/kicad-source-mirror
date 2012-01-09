@@ -838,7 +838,7 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
  * @param screen BASE_SCREEN to save
  * @param File = an open FILE to write info
  */
-static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, BASE_SCREEN* screen, FILE* File )
+static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, const TITLE_BLOCK& aTitleBlock, FILE* File )
 {
     fprintf( File, "$SHEETDESCR\n" );
     fprintf( File, "Sheet %s %d %d\n",
@@ -846,14 +846,14 @@ static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, BASE_SCREEN* screen
              aPageSettings.GetSizeMils().x,
              aPageSettings.GetSizeMils().y );
 
-    fprintf( File, "Title %s\n",        EscapedUTF8( screen->m_Title ).c_str() );
-    fprintf( File, "Date %s\n",         EscapedUTF8( screen->m_Date ).c_str() );
-    fprintf( File, "Rev %s\n",          EscapedUTF8( screen->m_Revision ).c_str() );
-    fprintf( File, "Comp %s\n",         EscapedUTF8( screen->m_Company ).c_str() );
-    fprintf( File, "Comment1 %s\n",     EscapedUTF8( screen->m_Commentaire1 ).c_str() );
-    fprintf( File, "Comment2 %s\n",     EscapedUTF8( screen->m_Commentaire2 ).c_str() );
-    fprintf( File, "Comment3 %s\n",     EscapedUTF8( screen->m_Commentaire3 ).c_str() );
-    fprintf( File, "Comment4 %s\n",     EscapedUTF8( screen->m_Commentaire4 ).c_str() );
+    fprintf( File, "Title %s\n",        EscapedUTF8( aTitleBlock.GetTitle() ).c_str() );
+    fprintf( File, "Date %s\n",         EscapedUTF8( aTitleBlock.GetDate() ).c_str() );
+    fprintf( File, "Rev %s\n",          EscapedUTF8( aTitleBlock.GetRevision() ).c_str() );
+    fprintf( File, "Comp %s\n",         EscapedUTF8( aTitleBlock.GetCompany() ).c_str() );
+    fprintf( File, "Comment1 %s\n",     EscapedUTF8( aTitleBlock.GetComment1() ).c_str() );
+    fprintf( File, "Comment2 %s\n",     EscapedUTF8( aTitleBlock.GetComment2() ).c_str() );
+    fprintf( File, "Comment3 %s\n",     EscapedUTF8( aTitleBlock.GetComment3() ).c_str() );
+    fprintf( File, "Comment4 %s\n",     EscapedUTF8( aTitleBlock.GetComment4() ).c_str() );
 
     fprintf( File, "$EndSHEETDESCR\n\n" );
     return true;
@@ -862,16 +862,20 @@ static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, BASE_SCREEN* screen
 
 #if !defined( USE_NEW_PCBNEW_LOAD )
 
-static bool ReadSheetDescr( BOARD* aBoard, BASE_SCREEN* screen, LINE_READER* aReader )
+static bool ReadSheetDescr( BOARD* aBoard, LINE_READER* aReader )
 {
-    char    buf[1024];
+    char        buf[1024];
+    TITLE_BLOCK tb;
 
     while( aReader->ReadLine() )
     {
         char* line = aReader->Line();
 
         if( strnicmp( line, "$End", 4 ) == 0 )
+        {
+            aBoard->SetTitleBlock( tb );
             return true;
+        }
 
         if( strnicmp( line, "Sheet", 4 ) == 0 )
         {
@@ -920,56 +924,56 @@ static bool ReadSheetDescr( BOARD* aBoard, BASE_SCREEN* screen, LINE_READER* aRe
         if( strnicmp( line, "Title", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            screen->m_Title = FROM_UTF8( buf );
+            tb.SetTitle( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Date", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            screen->m_Date = FROM_UTF8( buf );
+            tb.SetDate( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Rev", 2 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            screen->m_Revision = FROM_UTF8( buf );
+            tb.SetRevision( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Comp", 4 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            screen->m_Company = FROM_UTF8( buf );
+            tb.SetCompany( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Comment1", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            screen->m_Commentaire1 = FROM_UTF8( buf );
+            tb.SetComment1( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Comment2", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            screen->m_Commentaire2 = FROM_UTF8( buf );
+            tb.SetComment2( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Comment3", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            screen->m_Commentaire3 = FROM_UTF8( buf );
+            tb.SetComment3( FROM_UTF8( buf ) );
             continue;
         }
 
         if( strnicmp( line, "Comment4", 8 ) == 0 )
         {
             ReadDelimitedText( buf, line, 256 );
-            screen->m_Commentaire4 = FROM_UTF8( buf );
+            tb.SetComment4( FROM_UTF8( buf ) );
             continue;
         }
     }
@@ -1111,7 +1115,7 @@ int PCB_EDIT_FRAME::ReadPcbFile( LINE_READER* aReader, bool Append )
 
         if( TESTLINE( "SHEETDESCR" ) )
         {
-            ReadSheetDescr( board, GetScreen(), aReader );
+            ReadSheetDescr( board, aReader );
             continue;
         }
 
@@ -1187,7 +1191,7 @@ int PCB_EDIT_FRAME::SavePcbFormatAscii( FILE* aFile )
     GetBoard()->SetCurrentNetClass( GetBoard()->m_NetClasses.GetDefault()->GetName() );
 
     WriteGeneralDescrPcb( aFile );
-    WriteSheetDescr( GetBoard()->GetPageSettings(), GetScreen(), aFile );
+    WriteSheetDescr( GetBoard()->GetPageSettings(), GetBoard()->GetTitleBlock(), aFile );
     WriteSetup( aFile, this, GetBoard() );
 
     rc = GetBoard()->Save( aFile );

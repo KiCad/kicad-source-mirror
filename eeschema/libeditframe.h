@@ -28,14 +28,14 @@
  * @brief Definition of class LIB_EDIT_FRAME
  */
 
-#ifndef __LIBEDITFRM_H__
-#define __LIBEDITFRM_H__
+#ifndef LIBEDITFRM_H_
+#define LIBEDITFRM_H_
 
-#include "wxstruct.h"
-#include "class_sch_screen.h"
+#include <sch_base_frame.h>
+#include <class_sch_screen.h>
 
-#include "lib_draw_item.h"
-#include "lib_collectors.h"
+#include <lib_draw_item.h>
+#include <lib_collectors.h>
 
 
 class SCH_EDIT_FRAME;
@@ -49,7 +49,7 @@ class DIALOG_LIB_EDIT_TEXT;
 /**
  * The component library editor main window.
  */
-class LIB_EDIT_FRAME : public EDA_DRAW_FRAME
+class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 {
     LIB_COMPONENT* m_tempCopyComponent;  ///< Temporary copy of current component during edit.
     LIB_COLLECTOR m_collectedItems;      // Used for hit testing.
@@ -122,9 +122,9 @@ class LIB_EDIT_FRAME : public EDA_DRAW_FRAME
     LIB_ITEM* locateItem( const wxPoint& aPosition, const KICAD_T aFilterList[] );
 
 public:
-    LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent, const wxString& title,
-                    const wxPoint& pos, const wxSize& size,
-                    long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
+    LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent, const wxString& aTitle,
+                    const wxPoint& aPosition, const wxSize& aSize,
+                    long aStyle = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~LIB_EDIT_FRAME();
 
@@ -256,18 +256,6 @@ public:
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu );
     double BestZoom();         // Returns the best zoom
     void OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
-
-    SCH_SCREEN* GetScreen() const { return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
-
-    // note: a common base class shared between LIB_EDIT_FRAME, LIB_VIEW_FRAME, and SCH_EDIT_FRAME
-    // would allow sharing of these 5 functions:
-
-    void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload EDA_DRAW_FRAME
-    const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
-    const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME
-
-    const wxPoint& GetOriginAxisPosition() const;               // overload EDA_DRAW_FRAME
-    void SetOriginAxisPosition( const wxPoint& aPosition );     // overload EDA_DRAW_FRAME
 
     void OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL );
 
@@ -599,4 +587,4 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-#endif  /* __LIBEDITFRM_H__ */
+#endif  // LIBEDITFRM_H_

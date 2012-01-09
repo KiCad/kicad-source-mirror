@@ -74,15 +74,16 @@ typedef std::vector< GRID_TYPE > GRIDS;
  */
 class BASE_SCREEN : public EDA_ITEM
 {
-    GRIDS     m_grids;          ///< List of valid grid sizes.
-    wxString  m_fileName;       ///< File used to load the screen.
-    char      m_FlagRefreshReq; ///< Indicates that the screen should be redrawn.
-    bool      m_FlagModified;   ///< Indicates current drawing has been modified.
-    bool      m_FlagSave;       ///< Indicates automatic file save.
-    EDA_ITEM* m_CurrentItem;    ///< Currently selected object
-    GRID_TYPE m_Grid;           ///< Current grid selection.
-    wxPoint   m_scrollCenter;   ///< Current scroll center point in logical units.
-    wxPoint   m_MousePosition;  ///< Mouse cursor coordinate in logical units.
+    GRIDS       m_grids;          ///< List of valid grid sizes.
+    wxString    m_fileName;       ///< File used to load the screen.
+    char        m_FlagRefreshReq; ///< Indicates that the screen should be redrawn.
+    bool        m_FlagModified;   ///< Indicates current drawing has been modified.
+    bool        m_FlagSave;       ///< Indicates automatic file save.
+    EDA_ITEM*   m_CurrentItem;    ///< Currently selected object
+    GRID_TYPE   m_Grid;           ///< Current grid selection.
+    wxPoint     m_scrollCenter;   ///< Current scroll center point in logical units.
+    wxPoint     m_MousePosition;  ///< Mouse cursor coordinate in logical units.
+
 
     /**
      * The cross hair position in logical (drawing) units.  The cross hair is not the cursor
@@ -131,15 +132,6 @@ public:
 
     int             m_ScreenNumber;
     int             m_NumberOfScreen;
-
-    wxString        m_Title;
-    wxString        m_Date;
-    wxString        m_Revision;
-    wxString        m_Company;
-    wxString        m_Commentaire1;
-    wxString        m_Commentaire2;
-    wxString        m_Commentaire3;
-    wxString        m_Commentaire4;
 
     wxPoint	        m_GridOrigin;
 

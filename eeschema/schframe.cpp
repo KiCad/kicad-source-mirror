@@ -183,7 +183,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
                                 long            style ) :
-    EDA_DRAW_FRAME( father, SCHEMATIC_FRAME, title, pos, size, style )
+    SCH_BASE_FRAME( father, SCHEMATIC_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "SchematicFrame" );
     m_showAxis = false;                 // true to show axis
@@ -285,39 +285,6 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 }
 
 
-void SCH_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
-{
-    GetScreen()->SetPageSettings( aPageSettings );
-}
-
-
-const PAGE_INFO& SCH_EDIT_FRAME::GetPageSettings () const
-{
-    return GetScreen()->GetPageSettings();
-}
-
-
-const wxSize SCH_EDIT_FRAME::GetPageSizeIU() const
-{
-    // GetSizeIU is compile time dependent:
-    return GetScreen()->GetPageSettings().GetSizeIU();
-}
-
-
-const wxPoint& SCH_EDIT_FRAME::GetOriginAxisPosition() const
-{
-    wxASSERT( GetScreen() );
-    return GetScreen()->GetOriginAxisPosition();
-}
-
-
-void SCH_EDIT_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
-{
-    wxASSERT( GetScreen() );
-    GetScreen()->SetOriginAxisPosition( aPosition );
-}
-
-
 void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 {
     SCH_SCREEN* screen = GetScreen();
@@ -383,7 +350,11 @@ void SCH_EDIT_FRAME::CreateScreens()
     }
 
     g_RootSheet->GetScreen()->SetFileName( m_DefaultSchematicFileName );
-    g_RootSheet->GetScreen()->m_Date     = GenDate();
+
+    TITLE_BLOCK tb = g_RootSheet->GetScreen()->GetTitleBlock();
+    tb.SetDate();
+    g_RootSheet->GetScreen()->SetTitleBlock( tb );
+
     m_CurrentSheet->Clear();
     m_CurrentSheet->Push( g_RootSheet );
 
@@ -581,7 +552,6 @@ void SCH_EDIT_FRAME::OnModify()
     if( m_dlgFindReplace == NULL )
         m_foundItems.SetForceSearch();
 
-    wxString    date = GenDate();
     SCH_SCREENS s_list;
 
     // Set the date for each sheet
@@ -589,10 +559,7 @@ void SCH_EDIT_FRAME::OnModify()
     // >> change only the current sheet
     // >> change all sheets.
     // I believe all sheets in a project must have the same date
-    SCH_SCREEN* screen = s_list.GetFirst();
-
-    for( ; screen != NULL; screen = s_list.GetNext() )
-        screen->m_Date = date;
+    s_list.SetDate();
 }
 
 

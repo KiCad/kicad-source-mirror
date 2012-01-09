@@ -114,6 +114,7 @@ set(EESCHEMA_SRCS
     onrightclick.cpp
     operations_on_items_lists.cpp
     pinedit.cpp
+    sch_base_frame.cpp
     sch_bitmap.cpp
     sch_bus_entry.cpp
     sch_collectors.cpp

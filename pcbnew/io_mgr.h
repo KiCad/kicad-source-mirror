@@ -25,13 +25,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/string.h>
-#include <wx/hashmap.h>
 #include <richio.h>
-
-
-// http://docs.wxwidgets.org/trunk/classwx_hash_map.html
-WX_DECLARE_STRING_HASH_MAP( wxString, PROPERTIES );
+#include <hashtables.h>
 
 class BOARD;
 class PLUGIN;

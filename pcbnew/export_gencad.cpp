@@ -683,12 +683,11 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 }
 
 
-/* Creates the header section; some of the data come from the frame
- * (actually the screen), not from the pcb */
+// Creates the header section
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* aFrame )
 {
     wxString    msg;
-    PCB_SCREEN* screen = (PCB_SCREEN*) ( aFrame->GetScreen() );
+    PCB_SCREEN* screen = (PCB_SCREEN*) aFrame->GetScreen();
 
     fputs( "$HEADER\n", aFile );
     fputs( "GENCAD 1.4\n", aFile );
@@ -698,16 +697,22 @@ static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* aFrame )
                GetChars( wxGetApp().GetAppName() ),
                GetChars( GetBuildVersion() ) );
     fputs( TO_UTF8( msg ), aFile );
+
     msg = wxT( "DRAWING \"" ) + screen->GetFileName() + wxT( "\"\n" );
     fputs( TO_UTF8( msg ), aFile );
-    msg = wxT( "REVISION \"" ) + screen->m_Revision + wxT( " " ) +
-          screen->m_Date + wxT( "\"\n" );
+
+    const TITLE_BLOCK&  tb = aFrame->GetTitleBlock();
+
+    msg = wxT( "REVISION \"" ) + tb.GetRevision() + wxT( " " ) + tb.GetDate() + wxT( "\"\n" );
+
     fputs( TO_UTF8( msg ), aFile );
     fputs( "UNITS INCH\n", aFile );
+
     msg.Printf( wxT( "ORIGIN %g %g\n" ),
                 MapXTo( aFrame->GetOriginAxisPosition().x ),
                 MapYTo( aFrame->GetOriginAxisPosition().y ) );
     fputs( TO_UTF8( msg ), aFile );
+
     fputs( "INTERTRACK 0\n", aFile );
     fputs( "$ENDHEADER\n\n", aFile );
 

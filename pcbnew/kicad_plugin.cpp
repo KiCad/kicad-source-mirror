@@ -439,7 +439,8 @@ void KICAD_PLUGIN::loadGENERAL()
 
 void KICAD_PLUGIN::loadSHEET()
 {
-    char    buf[260];
+    char        buf[260];
+    TITLE_BLOCK tb;
 
     while( READLINE() )
     {
@@ -488,56 +489,56 @@ void KICAD_PLUGIN::loadSHEET()
         else if( TESTLINE( "Title" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-
-#if 0   // @todo "screen" not available here
-            screen->m_Title = FROM_UTF8( buf );
+            tb.SetTitle( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Date" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            screen->m_Date = FROM_UTF8( buf );
+            tb.SetDate( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Rev" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            screen->m_Revision = FROM_UTF8( buf );
+            tb.SetRevision( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Comp" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            screen->m_Company = FROM_UTF8( buf );
+            tb.SetCompany( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Comment1" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            screen->m_Commentaire1 = FROM_UTF8( buf );
+            tb.SetComment1( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Comment2" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            screen->m_Commentaire2 = FROM_UTF8( buf );
+            tb.SetComment2( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Comment3" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            screen->m_Commentaire3 = FROM_UTF8( buf );
+            tb.SetComment3( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "Comment4" ) )
         {
             ReadDelimitedText( buf, line, sizeof(buf) );
-            screen->m_Commentaire4 = FROM_UTF8( buf );
-#endif
+            tb.SetComment4( FROM_UTF8( buf ) );
         }
 
         else if( TESTLINE( "$EndSHEETDESCR" ) )
+        {
+            m_board->SetTitleBlock( tb );
             return;             // preferred exit
+        }
     }
 
     THROW_IO_ERROR( "Missing '$EndSHEETDESCR'" );
@@ -2654,7 +2655,7 @@ void KICAD_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* a
     if( m_props )
     {
         // save a file header, if caller provided one (with trailing \n hopefully).
-        fprintf( m_fp, "%s", TO_UTF8( (*m_props)[ wxT("header") ] ) );
+        fprintf( m_fp, "%s", TO_UTF8( (*m_props)["header"] ) );
     }
 
     saveAllSections();
@@ -2733,7 +2734,8 @@ void KICAD_PLUGIN::saveGENERAL() const
 
 void KICAD_PLUGIN::saveSHEET() const
 {
-    const PAGE_INFO& pageInfo = m_board->GetPageSettings();
+    const PAGE_INFO&    pageInfo = m_board->GetPageSettings();
+    const TITLE_BLOCK&  tb = m_board->GetTitleBlock();
 
     fprintf( m_fp, "$SHEETDESCR\n" );
 
@@ -2743,18 +2745,14 @@ void KICAD_PLUGIN::saveSHEET() const
                     pageInfo.GetSizeMils().x,
                     pageInfo.GetSizeMils().y );
 
-#if 0   // @todo sheet not available here.  The sheet needs to go into the board if it is important enough to be saved with the board
-    fprintf( m_fp, "Title %s\n",        EscapedUTF8( screen->m_Title ).c_str() );
-    fprintf( m_fp, "Date %s\n",         EscapedUTF8( screen->m_Date ).c_str() );
-    fprintf( m_fp, "Rev %s\n",          EscapedUTF8( screen->m_Revision ).c_str() );
-    fprintf( m_fp, "Comp %s\n",         EscapedUTF8( screen->m_Company ).c_str() );
-    fprintf( m_fp, "Comment1 %s\n",     EscapedUTF8( screen->m_Commentaire1 ).c_str() );
-    fprintf( m_fp, "Comment2 %s\n",     EscapedUTF8( screen->m_Commentaire2 ).c_str() );
-    fprintf( m_fp, "Comment3 %s\n",     EscapedUTF8( screen->m_Commentaire3 ).c_str() );
-    fprintf( m_fp, "Comment4 %s\n",     EscapedUTF8( screen->m_Commentaire4 ).c_str() );
-
-#endif
-
+    fprintf( m_fp, "Title %s\n",        EscapedUTF8( tb.GetTitle() ).c_str() );
+    fprintf( m_fp, "Date %s\n",         EscapedUTF8( tb.GetDate() ).c_str() );
+    fprintf( m_fp, "Rev %s\n",          EscapedUTF8( tb.GetRevision() ).c_str() );
+    fprintf( m_fp, "Comp %s\n",         EscapedUTF8( tb.GetCompany() ).c_str() );
+    fprintf( m_fp, "Comment1 %s\n",     EscapedUTF8( tb.GetComment1() ).c_str() );
+    fprintf( m_fp, "Comment2 %s\n",     EscapedUTF8( tb.GetComment2() ).c_str() );
+    fprintf( m_fp, "Comment3 %s\n",     EscapedUTF8( tb.GetComment3() ).c_str() );
+    fprintf( m_fp, "Comment4 %s\n",     EscapedUTF8( tb.GetComment4() ).c_str() );
     fprintf( m_fp, "$EndSHEETDESCR\n\n" );
 }
 

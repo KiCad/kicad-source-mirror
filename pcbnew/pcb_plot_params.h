@@ -1,4 +1,5 @@
-
+#ifndef PCB_PLOT_PARAMS_H_
+#define PCB_PLOT_PARAMS_H_
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -22,18 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_PLOT_PARAMS_H_
-#define PCB_PLOT_PARAMS_H_
-
 #include <wx/wx.h>
-#include "base_struct.h"
 #include "pcb_plot_params_lexer.h"
+#include "base_struct.h"
 
-class PCB_PLOT_PARAMS;
 class PCB_PLOT_PARAMS_PARSER;
-
-extern PCB_PLOT_PARAMS g_PcbPlotOptions;
-
 
 /**
  * Class PCB_PLOT_PARAMS
@@ -43,31 +37,32 @@ class PCB_PLOT_PARAMS
 {
     friend class PCB_PLOT_PARAMS_PARSER;
 public:
-    bool        m_ExcludeEdgeLayer;     // True: do not plot edge layer when plotting other layers
-                                        // False: Edge layer always plotted (merged) when plotting other layers
+    bool        m_ExcludeEdgeLayer;     ///< True: do not plot edge layer when plotting other layers
+                                        ///< False: Edge layer always plotted (merged) when plotting other layers
     int         m_PlotLineWidth;
-    bool        m_PlotFrameRef;         // True to plot/print frame references
-    bool        m_PlotViaOnMaskLayer;   // True if vias are drawn on Mask layer
-                                        // (ie protected by mask)
-    EDA_DRAW_MODE_T m_PlotMode;         // LINE, FILLED or SKETCH: select how to plot filled objects.
-                                        // depending on plot format or layers, all options are not always allowed
+    bool        m_PlotFrameRef;         ///< True to plot/print frame references
+    bool        m_PlotViaOnMaskLayer;   ///< True if vias are drawn on Mask layer
+                                        ///< (ie protected by mask)
+    EDA_DRAW_MODE_T m_PlotMode;         ///< LINE, FILLED or SKETCH: select how to plot filled objects.
+                                        ///< depending on plot format or layers, all options are not always allowed
     int         m_HPGLPenNum;
     int         m_HPGLPenSpeed;
     int         m_HPGLPenDiam;
     int         m_HPGLPenOvr;
-    int         m_PlotPSColorOpt;       // True for color Postscript output
-    bool        m_PlotPSNegative;       // True to create a  negative board ps plot
+    int         m_PlotPSColorOpt;       ///< True for color Postscript output
+    bool        m_PlotPSNegative;       ///< True to create a  negative board ps plot
 
-    // Flags to enable or disable ploting of various PCB elements.
-    bool        m_SkipNPTH_Pads;        // true to disable plot NPTH pads if hole and size have same value
-                                        // GERBER only
+    //  Flags to enable or disable ploting of various PCB elements.
+
+    bool        m_SkipNPTH_Pads;        ///< true to disable plot NPTH pads if hole and size have same value
+                                        ///< GERBER only
     bool        m_PlotReference;
     bool        m_PlotValue;
     bool        m_PlotTextOther;
     bool        m_PlotInvisibleTexts;
-    bool        m_PlotPadsOnSilkLayer;  // allows pads outlines on silkscreen layer (when pads are also o, silk screen
+    bool        m_PlotPadsOnSilkLayer;  ///< allows pads outlines on silkscreen layer (when pads are also o, silk screen
 
-    int         m_PlotFormat;           // id for plot format (see enum PlotFormat in plot_common.h) */
+    int         m_PlotFormat;           ///< id for plot format (see enum PlotFormat in plot_common.h) */
     bool        m_PlotMirror;
 
     enum DrillShapeOptT {
@@ -75,18 +70,21 @@ public:
         SMALL_DRILL_SHAPE = 1,
         FULL_DRILL_SHAPE  = 2
     };
-    DrillShapeOptT m_DrillShapeOpt;     // For postscript output: holes can be not plotted,
-                                        // or have a small size or plotted with their actual size
-    bool        m_AutoScale;            // If true, use the better scale to fit in page
-    double      m_PlotScale;            // The global scale factor. a 1.0 scale factor plot a board
-                                        // with its actual size.
+    DrillShapeOptT m_DrillShapeOpt;     ///< For postscript output: holes can be not plotted,
+                                        ///< or have a small size or plotted with their actual size
+    bool        m_AutoScale;            ///< If true, use the better scale to fit in page
+    double      m_PlotScale;            ///< The global scale factor. a 1.0 scale factor plot a board
+                                        ///< with its actual size.
 
     // These next two scale factors are intended to compensable plotters (and mainly printers) X and Y scale error.
     // Therefore they are expected very near 1.0
     // Only X and Y dimensions are adjusted: circles are plotted as circle, even if X and Y fine scale differ.
-    double      m_FineScaleAdjustX;     // fine scale adjust X axis
-    double      m_FineScaleAdjustY;     // dine scale adjust Y axis
-    // These width factor is intended to compensate plotters (and mainly printers) line width error.
+
+    double      m_FineScaleAdjustX;     ///< fine scale adjust X axis
+    double      m_FineScaleAdjustY;     ///< dine scale adjust Y axis
+
+    /// This width factor is intended to compensate printers and plotters that do
+    /// not strictly obey line width settings.
     double      m_FineWidthAdjust;
 
 private:
@@ -157,5 +155,8 @@ public:
      */
     int ParseInt( int aMin, int aMax ) throw( IO_ERROR );
 };
+
+
+extern PCB_PLOT_PARAMS g_PcbPlotOptions;
 
 #endif // PCB_PLOT_PARAMS_H_
