@@ -183,7 +183,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( wxWindow*       father,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
                                 long            style ) :
-    EDA_DRAW_FRAME( father, SCHEMATIC_FRAME, title, pos, size, style )
+    SCH_BASE_FRAME( father, SCHEMATIC_FRAME, title, pos, size, style )
 {
     m_FrameName = wxT( "SchematicFrame" );
     m_showAxis = false;                 // true to show axis
@@ -282,39 +282,6 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     SAFE_DELETE( g_RootSheet );
     SAFE_DELETE( m_findReplaceData );
     CMP_LIBRARY::RemoveAllLibraries();
-}
-
-
-void SCH_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
-{
-    GetScreen()->SetPageSettings( aPageSettings );
-}
-
-
-const PAGE_INFO& SCH_EDIT_FRAME::GetPageSettings () const
-{
-    return GetScreen()->GetPageSettings();
-}
-
-
-const wxSize SCH_EDIT_FRAME::GetPageSizeIU() const
-{
-    // GetSizeIU is compile time dependent:
-    return GetScreen()->GetPageSettings().GetSizeIU();
-}
-
-
-const wxPoint& SCH_EDIT_FRAME::GetOriginAxisPosition() const
-{
-    wxASSERT( GetScreen() );
-    return GetScreen()->GetOriginAxisPosition();
-}
-
-
-void SCH_EDIT_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
-{
-    wxASSERT( GetScreen() );
-    GetScreen()->SetOriginAxisPosition( aPosition );
 }
 
 

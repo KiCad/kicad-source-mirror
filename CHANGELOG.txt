@@ -7,6 +7,9 @@ KiCad ChangeLog 2012
     Carve out TITLE_BLOCK from BASE_SCREEN, add include/hashtables.h and
     put class PROPERTIES in there.  Change PROPERTIES to use "const char*"
     as the key instead of wxString.
+++eeschema
+    Add shim class SCH_BASE_FRAME which introduces the data model SCH_SCREEN
+    to the frame class hierarchy.
 
 
 2012-Jan-5 UPDATE Dick Hollenbeck <dick@softplc.com>

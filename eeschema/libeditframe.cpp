@@ -189,7 +189,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( SCH_EDIT_FRAME* aParent,
                                 const wxPoint&  pos,
                                 const wxSize&   size,
                                 long            style ) :
-    EDA_DRAW_FRAME( aParent, LIBEDITOR_FRAME, title, pos, size, style )
+    SCH_BASE_FRAME( aParent, LIBEDITOR_FRAME, title, pos, size, style )
 {
     wxASSERT( aParent );
 
@@ -284,39 +284,6 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
         delete m_tempCopyComponent;
 
     m_tempCopyComponent = NULL;
-}
-
-
-void LIB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
-{
-    GetScreen()->SetPageSettings( aPageSettings );
-}
-
-
-const PAGE_INFO& LIB_EDIT_FRAME::GetPageSettings () const
-{
-    return GetScreen()->GetPageSettings();
-}
-
-
-const wxSize LIB_EDIT_FRAME::GetPageSizeIU() const
-{
-    // GetSizeIU is compile time dependent:
-    return GetScreen()->GetPageSettings().GetSizeIU();
-}
-
-
-const wxPoint& LIB_EDIT_FRAME::GetOriginAxisPosition() const
-{
-    wxASSERT( GetScreen() );
-    return GetScreen()->GetOriginAxisPosition();
-}
-
-
-void LIB_EDIT_FRAME::SetOriginAxisPosition( const wxPoint& aPosition )
-{
-    wxASSERT( GetScreen() );
-    GetScreen()->SetOriginAxisPosition( aPosition );
 }
 
 
