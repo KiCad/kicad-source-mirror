@@ -14,7 +14,7 @@
 #include "macros.h"
 #include "class_base_screen.h"
 #include "drawtxt.h"
-
+#include "class_title_block.h"
 
 /* Plot sheet references
  * margin is in mils (1/1000 inch)
@@ -479,12 +479,12 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
         switch( WsItem->m_Type )
         {
         case WS_DATE:
-            msg += screen->m_Date;
+            msg += GetTitleBlock().GetDate();
             bold = true;
             break;
 
         case WS_REV:
-            msg += screen->m_Revision;
+            msg += GetTitleBlock().GetRevision();
             bold = true;
             break;
 
@@ -517,37 +517,37 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             break;
 
         case WS_COMPANY_NAME:
-            msg += screen->m_Company;
+            msg += GetTitleBlock().GetCompany();
             if( !msg.IsEmpty() )
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             bold = true;
             break;
 
         case WS_TITLE:
-            msg += screen->m_Title;
+            msg += GetTitleBlock().GetTitle();
             bold = true;
             break;
 
         case WS_COMMENT1:
-            msg += screen->m_Commentaire1;
+            msg += GetTitleBlock().GetComment1();
             if( !msg.IsEmpty() )
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;
 
         case WS_COMMENT2:
-            msg += screen->m_Commentaire2;
+            msg += GetTitleBlock().GetComment2();
             if( !msg.IsEmpty() )
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;
 
         case WS_COMMENT3:
-            msg += screen->m_Commentaire3;
+            msg += GetTitleBlock().GetComment3();
             if( !msg.IsEmpty() )
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;
 
         case WS_COMMENT4:
-            msg += screen->m_Commentaire4;
+            msg += GetTitleBlock().GetComment4();
             if( !msg.IsEmpty() )
                 UpperLimit = MAX( UpperLimit, WsItem->m_Posy + SIZETEXT );
             break;

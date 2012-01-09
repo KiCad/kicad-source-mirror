@@ -72,9 +72,9 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     msg.Printf( format, m_Screen->m_ScreenNumber );
     m_TextSheetNumber->SetLabel( msg );
 
-    m_page = m_Parent->GetPageSettings();
+    PAGE_INFO   pageInfo = m_Parent->GetPageSettings();
 
-    setCurrentPageSizeSelection();
+    setCurrentPageSizeSelection( pageInfo.GetType() );
 
     switch( g_UserUnit )
     {
@@ -113,8 +113,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 */
     }
 
-    // Set validators
-//    m_PageSizeBox->SetValidator( wxGenericValidator( &m_CurrentSelection ) );
+#if 0
     m_TextRevision->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Revision ) );
     m_TextTitle->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Title ) );
     m_TextCompany->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Company ) );
@@ -122,6 +121,18 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     m_TextComment2->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Commentaire2 ) );
     m_TextComment3->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Commentaire3 ) );
     m_TextComment4->SetValidator( wxTextValidator( wxFILTER_NONE, &m_Screen->m_Commentaire4 ) );
+#else
+
+    TITLE_BLOCK tb = m_Parent->GetTitleBlock();
+
+    m_TextRevision->SetValue( tb.GetRevision() );
+    m_TextTitle->SetValue( tb.GetTitle() );
+    m_TextCompany->SetValue( tb.GetCompany() );
+    m_TextComment1->SetValue( tb.GetComment1() );
+    m_TextComment2->SetValue( tb.GetComment2() );
+    m_TextComment3->SetValue( tb.GetComment3() );
+    m_TextComment4->SetValue( tb.GetComment4() );
+#endif
 
 #ifndef EESCHEMA
     m_RevisionExport->Show( false );
@@ -175,14 +186,15 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
     wxString    msg;
     double      userSizeX;
     double      userSizeY;
+    TITLE_BLOCK tb;
 
-    m_Screen->m_Revision       = m_TextRevision->GetValue();
-    m_Screen->m_Company        = m_TextCompany->GetValue();
-    m_Screen->m_Title          = m_TextTitle->GetValue();
-    m_Screen->m_Commentaire1   = m_TextComment1->GetValue();
-    m_Screen->m_Commentaire2   = m_TextComment2->GetValue();
-    m_Screen->m_Commentaire3   = m_TextComment3->GetValue();
-    m_Screen->m_Commentaire4   = m_TextComment4->GetValue();
+    tb.SetRevision( m_TextRevision->GetValue() );
+    tb.SetCompany(  m_TextCompany->GetValue() );
+    tb.SetTitle(    m_TextTitle->GetValue() );
+    tb.SetComment1( m_TextComment1->GetValue() );
+    tb.SetComment2( m_TextComment2->GetValue() );
+    tb.SetComment3( m_TextComment3->GetValue() );
+    tb.SetComment4( m_TextComment4->GetValue() );
 
     msg = m_TextUserSizeX->GetValue();
     msg.ToDouble( &userSizeX );
@@ -195,11 +207,11 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
         radioSelection = 0;
 
     // wxFormBuilder must use "A4", "A3", etc for choices, in all languages/translations
-    wxString paperType = m_PageSizeBox->GetString( radioSelection );
+    wxString    paperType = m_PageSizeBox->GetString( radioSelection );
+    PAGE_INFO   pageInfo( paperType );
 
-    m_page.SetType( paperType );
-
-    m_Parent->SetPageSettings( m_page );
+    m_Parent->SetPageSettings( pageInfo );
+    m_Parent->SetTitleBlock( tb );
 
     switch( g_UserUnit )
     {
@@ -229,32 +241,36 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
     // Build the screen list
     SCH_SCREENS ScreenList;
 
-    // Update the datas
+    // Update title blocks for all screens
     for( screen = ScreenList.GetFirst(); screen != NULL; screen = ScreenList.GetNext() )
     {
         if( screen == m_Screen )
             continue;
 
+        TITLE_BLOCK tb2 = screen->GetTitleBlock();
+
         if( m_RevisionExport->IsChecked() )
-            screen->m_Revision = m_Screen->m_Revision;
+            tb2.SetRevision( tb.GetRevision() );
 
         if( m_TitleExport->IsChecked() )
-            screen->m_Title = m_Screen->m_Title;
+            tb2.SetTitle( tb.GetTitle() );
 
         if( m_CompanyExport->IsChecked() )
-            screen->m_Company = m_Screen->m_Company;
+            tb2.SetCompany( tb.GetCompany() );
 
         if( m_Comment1Export->IsChecked() )
-            screen->m_Commentaire1 = m_Screen->m_Commentaire1;
+            tb2.SetComment1( tb.GetComment1() );
 
         if( m_Comment2Export->IsChecked() )
-            screen->m_Commentaire2 = m_Screen->m_Commentaire2;
+            tb2.SetComment2( tb.GetComment2() );
 
         if( m_Comment3Export->IsChecked() )
-            screen->m_Commentaire3 = m_Screen->m_Commentaire3;
+            tb2.SetComment3( tb.GetComment3() );
 
         if( m_Comment4Export->IsChecked() )
-            screen->m_Commentaire4 = m_Screen->m_Commentaire4;
+            tb2.SetComment4( tb.GetComment4() );
+
+        screen->SetTitleBlock( tb2 );
     }
 
 #endif
@@ -264,10 +280,8 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
 }
 
 
-void DIALOG_PAGES_SETTINGS::setCurrentPageSizeSelection()
+void DIALOG_PAGES_SETTINGS::setCurrentPageSizeSelection( const wxString& aPaperSize )
 {
-    wxString    curPaperType = m_page.GetType();
-
     // use wxFormBuilder to store the sheet type in the wxRadioButton's label
     // i.e. "A4", "A3", etc, anywhere within the text of the label.
 
@@ -276,12 +290,12 @@ void DIALOG_PAGES_SETTINGS::setCurrentPageSizeSelection()
     // search all the child wxRadioButtons for a label containing our paper type
     for( unsigned i = 0;  i < m_PageSizeBox->GetCount();  ++i )
     {
-        // parse each label looking for curPaperType within it
+        // parse each label looking for aPaperSize within it
         wxStringTokenizer st( m_PageSizeBox->GetString( i ) );
 
         while( st.HasMoreTokens() )
         {
-            if( st.GetNextToken() == curPaperType )
+            if( st.GetNextToken() == aPaperSize )
             {
                 m_PageSizeBox->SetSelection( i );
                 return;

@@ -1,3 +1,24 @@
+KiCad ChangeLog 2012
+====================
+
+2012-Jan-9 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all
+  * Carve out TITLE_BLOCK from BASE_SCREEN
+  * Add include/hashtables.h and put class PROPERTIES in there.
+    Change PROPERTIES to use "const char*" as the key instead of wxString.
+++eeschema
+  * Add shim class SCH_BASE_FRAME which introduces the data model SCH_SCREEN
+    to the frame EESCHEMA frame class hierarchy and allows sharing of:
+    SCH_SCREEN* GetScreen() const;                              // overload EDA_DRAW_FRAME
+    void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload EDA_DRAW_FRAME
+    const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
+    const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME
+    const wxPoint& GetOriginAxisPosition() const;               // overload EDA_DRAW_FRAME
+    void SetOriginAxisPosition( const wxPoint& aPosition );     // overload EDA_DRAW_FRAME
+    const TITLE_BLOCK& GetTitleBlock() const;                   // overload EDA_DRAW_FRAME
+    void SetTitleBlock( const TITLE_BLOCK& aTitleBlock );       // overload EDA_DRAW_FRAME
+
 
 2012-Jan-5 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================

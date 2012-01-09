@@ -30,7 +30,7 @@
 #ifndef  WX_EESCHEMA_STRUCT_H
 #define  WX_EESCHEMA_STRUCT_H
 
-#include "wxstruct.h"
+#include "sch_base_frame.h"
 #include "param_config.h"
 #include "class_undoredo_container.h"
 #include "template_fieldnames.h"
@@ -110,7 +110,7 @@ enum SCH_SEARCH_T {
 /**
  * Schematic editor (Eeschema) main window.
  */
-class SCH_EDIT_FRAME : public EDA_DRAW_FRAME
+class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 {
 private:
     SCH_SHEET_PATH*       m_CurrentSheet;    ///< which sheet we are presently working on.
@@ -197,6 +197,8 @@ public:
                     long style = KICAD_DEFAULT_DRAWFRAME_STYLE );
 
     ~SCH_EDIT_FRAME();
+
+    SCH_SCREEN* GetScreen() const;                  // overload SCH_BASE_FRAME
 
     void OnCloseWindow( wxCloseEvent& Event );
 
@@ -347,22 +349,6 @@ public:
      * and update the date in frame reference
      */
     void OnModify();
-
-    SCH_SCREEN* GetScreen() const;
-
-    // note: a common base class shared between LIB_EDIT_FRAME, LIB_VIEW_FRAME, and SCH_EDIT_FRAME
-    // would allow sharing of these three functions:
-
-    // note: a common base class shared between LIB_EDIT_FRAME, LIB_VIEW_FRAME, and SCH_EDIT_FRAME
-    // would allow sharing of these 5 functions:
-
-    void SetPageSettings( const PAGE_INFO& aPageSettings );     // overload EDA_DRAW_FRAME
-    const PAGE_INFO& GetPageSettings () const;                  // overload EDA_DRAW_FRAME
-    const wxSize GetPageSizeIU() const;                         // overload EDA_DRAW_FRAME
-
-    const wxPoint& GetOriginAxisPosition() const;               // overload EDA_DRAW_FRAME
-    void SetOriginAxisPosition( const wxPoint& aPosition );     // overload EDA_DRAW_FRAME
-
 
     virtual wxString GetScreenDesc();
 

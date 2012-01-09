@@ -29,6 +29,7 @@
 #include "plot_common.h"
 #include "macros.h"
 
+
 #define PLOT_LINEWIDTH_MIN        0
 #define PLOT_LINEWIDTH_MAX        200
 #define HPGL_PEN_DIAMETER_MIN     0
@@ -392,27 +393,28 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams ) throw( IO_
 
 bool PCB_PLOT_PARAMS_PARSER::ParseBool() throw( IO_ERROR )
 {
-    T token;
-    token = NeedSYMBOL();
+    T token = NeedSYMBOL();
+
     if( token != T_false && token != T_true )
         Expecting( "true|false" );
-    return (token == T_true);
+
+    return token == T_true;
 }
 
 
 int PCB_PLOT_PARAMS_PARSER::ParseInt( int aMin, int aMax ) throw( IO_ERROR )
 {
-    T token;
-    int i;
-    token = NextTok();
+    T token = NextTok();
+
     if( token != T_NUMBER )
         Expecting( T_NUMBER );
-    i = atoi( CurText() );
 
-    if( i < aMin )
-        i = aMin;
-    else if( i > aMax )
-        i = aMax;
+    int val = atoi( CurText() );
 
-    return i;
+    if( val < aMin )
+        val = aMin;
+    else if( val > aMax )
+        val = aMax;
+
+    return val;
 }
