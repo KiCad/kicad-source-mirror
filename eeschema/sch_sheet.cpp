@@ -1181,6 +1181,39 @@ void SCH_SHEET::doPlot( PLOTTER* aPlotter )
 }
 
 
+SCH_ITEM& SCH_SHEET::operator=( const SCH_ITEM& aItem )
+{
+    wxLogDebug( wxT( "Sheet assignment operator." ) );
+
+    wxCHECK_MSG( Type() == aItem.Type(), *this,
+                 wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
+                 GetClass() );
+
+    if( &aItem != this )
+    {
+        SCH_ITEM::operator=( aItem );
+
+        SCH_SHEET* sheet = (SCH_SHEET*) &aItem;
+
+        m_pos = sheet->m_pos;
+        m_size = sheet->m_size;
+        m_name = sheet->m_name;
+        m_sheetNameSize = sheet->m_sheetNameSize;
+        m_fileNameSize = sheet->m_fileNameSize;
+        m_pins = sheet->m_pins;
+
+        // Ensure sheet labels have their #m_Parent member pointing really on their
+        // parent, after assigning.
+        BOOST_FOREACH( SCH_SHEET_PIN& sheetPin, m_pins )
+        {
+            sheetPin.SetParent( this );
+        }
+    }
+
+    return *this;
+}
+
+
 #if defined(DEBUG)
 
 void SCH_SHEET::Show( int nestLevel, std::ostream& os ) const

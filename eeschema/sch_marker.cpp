@@ -43,13 +43,6 @@ SCH_MARKER::SCH_MARKER( const wxPoint& pos, const wxString& text ) :
 }
 
 
-SCH_MARKER::SCH_MARKER( const SCH_MARKER& aMarker ) :
-    SCH_ITEM( aMarker ),
-    MARKER_BASE( aMarker )
-{
-}
-
-
 SCH_MARKER::~SCH_MARKER()
 {
 }

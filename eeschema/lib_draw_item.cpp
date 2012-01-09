@@ -58,18 +58,6 @@ LIB_ITEM::LIB_ITEM( KICAD_T        aType,
 }
 
 
-LIB_ITEM::LIB_ITEM( const LIB_ITEM& aItem ) :
-    EDA_ITEM( aItem )
-{
-    m_Unit = aItem.m_Unit;
-    m_Convert = aItem.m_Convert;
-    m_Fill = aItem.m_Fill;
-    m_typeName = aItem.m_typeName;
-    m_isFillable = aItem.m_isFillable;
-    m_eraseLastDrawItem = false;
-}
-
-
 void LIB_ITEM::DisplayInfo( EDA_DRAW_FRAME* aFrame )
 {
     wxString msg;
@@ -81,6 +69,7 @@ void LIB_ITEM::DisplayInfo( EDA_DRAW_FRAME* aFrame )
         msg = _( "All" );
     else
         msg.Printf( wxT( "%d" ), m_Unit );
+
     aFrame->AppendMsgPanel( _( "Unit" ), msg, BROWN );
 
     if( m_Convert == 0 )
@@ -91,6 +80,7 @@ void LIB_ITEM::DisplayInfo( EDA_DRAW_FRAME* aFrame )
         msg = _( "yes" );
     else
         msg = wxT( "?" );
+
     aFrame->AppendMsgPanel( _( "Convert" ), msg, BROWN );
 }
 

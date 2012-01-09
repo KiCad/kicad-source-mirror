@@ -54,16 +54,6 @@ LIB_CIRCLE::LIB_CIRCLE( LIB_COMPONENT* aParent ) :
 }
 
 
-LIB_CIRCLE::LIB_CIRCLE( const LIB_CIRCLE& aCircle ) :
-    LIB_ITEM( aCircle )
-{
-    m_Pos    = aCircle.m_Pos;
-    m_Radius = aCircle.m_Radius;
-    m_Fill   = aCircle.m_Fill;
-    m_Width  = aCircle.m_Width;
-}
-
-
 bool LIB_CIRCLE::Save( OUTPUTFORMATTER& aFormatter )
 {
     aFormatter.Print( 0, "C %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,

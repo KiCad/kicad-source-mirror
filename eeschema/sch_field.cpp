@@ -80,15 +80,6 @@ SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent,
 }
 
 
-SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
-    SCH_ITEM( aField ),
-    EDA_TEXT( aField )
-{
-    m_id = aField.m_id;
-    m_name = aField.m_name;
-}
-
-
 SCH_FIELD::~SCH_FIELD()
 {
 }

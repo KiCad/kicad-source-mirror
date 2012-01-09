@@ -55,14 +55,6 @@ SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
 }
 
 
-SCH_NO_CONNECT::SCH_NO_CONNECT( const SCH_NO_CONNECT& aNoConnect ) :
-    SCH_ITEM( aNoConnect )
-{
-    m_pos = aNoConnect.m_pos;
-    m_size = aNoConnect.m_size;
-}
-
-
 EDA_ITEM* SCH_NO_CONNECT::doClone() const
 {
     return new SCH_NO_CONNECT( *this );

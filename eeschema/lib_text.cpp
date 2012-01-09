@@ -44,7 +44,7 @@
 #include "lib_text.h"
 
 
-LIB_TEXT::LIB_TEXT(LIB_COMPONENT * aParent) :
+LIB_TEXT::LIB_TEXT( LIB_COMPONENT * aParent ) :
     LIB_ITEM( LIB_TEXT_T, aParent ),
     EDA_TEXT()
 {

@@ -67,6 +67,27 @@ SCH_BITMAP::SCH_BITMAP( const SCH_BITMAP& aSchBitmap ) :
 }
 
 
+SCH_ITEM& SCH_BITMAP::operator=( const SCH_ITEM& aItem )
+{
+    wxCHECK_MSG( Type() == aItem.Type(), *this,
+                 wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
+                 GetClass() );
+
+    if( &aItem != this )
+    {
+        SCH_ITEM::operator=( aItem );
+
+        SCH_BITMAP* bitmap = (SCH_BITMAP*) &aItem;
+
+        delete m_Image;
+        m_Image = new BITMAP_BASE( *bitmap->m_Image );
+        m_Pos = bitmap->m_Pos;
+    }
+
+    return *this;
+}
+
+
 bool SCH_BITMAP::ReadImageFile( const wxString& aFullFilename )
 {
     return m_Image->ReadImageFile( aFullFilename );

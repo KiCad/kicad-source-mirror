@@ -92,19 +92,6 @@ LIB_ARC::LIB_ARC( LIB_COMPONENT* aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
 }
 
 
-LIB_ARC::LIB_ARC( const LIB_ARC& aArc ) : LIB_ITEM( aArc )
-{
-    m_Radius   = aArc.m_Radius;
-    m_t1       = aArc.m_t1;
-    m_t2       = aArc.m_t2;
-    m_Width    = aArc.m_Width;
-    m_Fill     = aArc.m_Fill;
-    m_Pos      = aArc.m_Pos;
-    m_ArcStart = aArc.m_ArcStart;
-    m_ArcEnd   = aArc.m_ArcEnd;
-}
-
-
 bool LIB_ARC::Save( OUTPUTFORMATTER& aFormatter )
 {
     int x1 = m_t1;

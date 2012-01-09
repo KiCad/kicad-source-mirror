@@ -49,7 +49,9 @@ class SCH_LINE : public SCH_ITEM
 
 public:
     SCH_LINE( const wxPoint& pos = wxPoint( 0, 0 ), int layer = LAYER_NOTES );
+
     SCH_LINE( const SCH_LINE& aLine );
+
     ~SCH_LINE() { }
 
     SCH_LINE* Next() const { return (SCH_LINE*) Pnext; }

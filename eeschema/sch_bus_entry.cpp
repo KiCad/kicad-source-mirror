@@ -61,15 +61,6 @@ SCH_BUS_ENTRY::SCH_BUS_ENTRY( const wxPoint& pos, int shape, int id ) :
 }
 
 
-SCH_BUS_ENTRY::SCH_BUS_ENTRY( const SCH_BUS_ENTRY& aBusEntry ) :
-    SCH_ITEM( aBusEntry )
-{
-    m_pos = aBusEntry.m_pos;
-    m_size = aBusEntry.m_size;
-    m_width = aBusEntry.m_width;
-}
-
-
 EDA_ITEM* SCH_BUS_ENTRY::doClone() const
 {
     return new SCH_BUS_ENTRY( *this );

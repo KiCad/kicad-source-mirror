@@ -698,6 +698,15 @@ public:
      */
     static bool Sort( const EDA_ITEM* aLeft, const EDA_ITEM* aRight ) { return *aLeft < *aRight; }
 
+    /**
+     * Operator assignment
+     * is used to assign the members of \a aItem to another object.
+     *
+     * @warning This is still a work in progress and not ready for prime time.  Do not use
+     *          as there is a known issue with wxString buffers.
+     */
+    virtual EDA_ITEM& operator=( const EDA_ITEM& aItem );
+
 #if defined(DEBUG)
 
     /**

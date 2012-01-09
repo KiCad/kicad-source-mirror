@@ -102,6 +102,23 @@ bool SCH_ITEM::operator < ( const SCH_ITEM& aItem ) const
 }
 
 
+SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
+{
+    wxCHECK_MSG( Type() == aItem.Type(), *this,
+                 wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
+                 GetClass() );
+
+    if( &aItem != this )
+    {
+        EDA_ITEM::operator=( aItem );
+        m_Layer = aItem.m_Layer;
+        m_connections = aItem.m_connections;
+    }
+
+    return *this;
+}
+
+
 void SCH_ITEM::doPlot( PLOTTER* aPlotter )
 {
     wxFAIL_MSG( wxT( "doPlot() method not implemented for class " ) + GetClass() );

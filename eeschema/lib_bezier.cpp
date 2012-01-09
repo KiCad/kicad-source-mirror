@@ -53,15 +53,6 @@ LIB_BEZIER::LIB_BEZIER( LIB_COMPONENT* aParent ) :
 }
 
 
-LIB_BEZIER::LIB_BEZIER( const LIB_BEZIER& aBezier ) : LIB_ITEM( aBezier )
-{
-    m_PolyPoints   = aBezier.m_PolyPoints;
-    m_BezierPoints = aBezier.m_BezierPoints;   // Vector copy
-    m_Width        = aBezier.m_Width;
-    m_Fill         = aBezier.m_Fill;
-}
-
-
 bool LIB_BEZIER::Save( OUTPUTFORMATTER& aFormatter )
 {
     int ccount = GetCornerCount();

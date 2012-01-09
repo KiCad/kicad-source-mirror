@@ -60,14 +60,6 @@ SCH_POLYLINE::SCH_POLYLINE( int layer ) :
 }
 
 
-SCH_POLYLINE::SCH_POLYLINE( const SCH_POLYLINE& aPolyLine ) :
-    SCH_ITEM( aPolyLine )
-{
-    m_width = aPolyLine.m_width;
-    m_points = aPolyLine.m_points;
-}
-
-
 SCH_POLYLINE::~SCH_POLYLINE()
 {
 }

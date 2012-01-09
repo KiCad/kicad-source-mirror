@@ -62,14 +62,6 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
 }
 
 
-SCH_SHEET_PIN::SCH_SHEET_PIN( const SCH_SHEET_PIN& aSheetLabel ) :
-    SCH_HIERLABEL( aSheetLabel )
-{
-    m_number = aSheetLabel.m_number;
-    m_edge = aSheetLabel.m_edge;
-}
-
-
 EDA_ITEM* SCH_SHEET_PIN::doClone() const
 {
     return new SCH_SHEET_PIN( *this );

@@ -759,12 +759,6 @@ SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text ) :
 }
 
 
-SCH_LABEL::SCH_LABEL( const SCH_LABEL& aLabel ) :
-    SCH_TEXT( aLabel )
-{
-}
-
-
 EDA_ITEM* SCH_LABEL::doClone() const
 {
     return new SCH_LABEL( *this );
@@ -964,12 +958,6 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
     m_shape = NET_BIDI;
     m_isDangling = true;
     m_MultilineAllowed = false;
-}
-
-
-SCH_GLOBALLABEL::SCH_GLOBALLABEL( const SCH_GLOBALLABEL& aGlobalLabel ) :
-    SCH_TEXT( aGlobalLabel )
-{
 }
 
 
@@ -1399,12 +1387,6 @@ SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T 
     m_shape = NET_INPUT;
     m_isDangling = true;
     m_MultilineAllowed = false;
-}
-
-
-SCH_HIERLABEL::SCH_HIERLABEL( const SCH_HIERLABEL& aHierLabel ) :
-    SCH_TEXT( aHierLabel )
-{
 }
 
 

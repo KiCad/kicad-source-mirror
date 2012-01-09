@@ -1,7 +1,3 @@
-/**
- * @file edit_bitmap.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -26,6 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * @file edit_bitmap.cpp
+ */
+
 #include "fctsys.h"
 #include "gr_basic.h"
 #include "macros.h"
@@ -38,6 +38,9 @@
 #include "general.h"
 #include "sch_bitmap.h"
 #include "dialog_image_editor.h"
+
+#include <algorithm>
+
 
 static void abortMoveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
@@ -67,7 +70,7 @@ static void abortMoveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
         // Never delete existing item, because it can be referenced by an undo/redo command
         // Just restore its data
-        item->SwapData( olditem );
+        swap( *item, *olditem );
     }
 
     screen->SetCurItem( item );

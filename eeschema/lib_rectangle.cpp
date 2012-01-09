@@ -55,16 +55,6 @@ LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :
 }
 
 
-LIB_RECTANGLE::LIB_RECTANGLE( const LIB_RECTANGLE& aRect ) :
-    LIB_ITEM( aRect )
-{
-    m_Pos   = aRect.m_Pos;
-    m_End   = aRect.m_End;
-    m_Width = aRect.m_Width;
-    m_Fill  = aRect.m_Fill;
-}
-
-
 bool LIB_RECTANGLE::Save( OUTPUTFORMATTER& aFormatter )
 {
     aFormatter.Print( 0, "S %d %d %d %d %d %d %d %c\n", m_Pos.x, m_Pos.y,
