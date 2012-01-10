@@ -614,6 +614,12 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
     if( brd->IsLayerVisible( m_Layer ) == false && !( draw_mode & GR_HIGHLIGHT ) )
         return;
 
+#ifdef USE_WX_OVERLAY
+    // If dragged not draw in OnPaint otherwise remains impressed in wxOverlay
+    if( (m_Flags && IS_DRAGGED) && DC->IsKindOf(wxCLASSINFO(wxPaintDC)))
+      return;
+#endif
+
     if( DisplayOpt.ContrastModeDisplay )
     {
         if( !IsOnLayer( curr_layer ) )

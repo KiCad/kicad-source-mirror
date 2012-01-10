@@ -172,7 +172,11 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
 
     DisplayOpt.DisplayPcbTrackFill = false;
 
+#ifndef USE_WX_OVERLAY
     aErase = true;
+#else
+    aErase = false;
+#endif
 
     /* erase the current moved track segments from screen */
     if( aErase )
@@ -180,6 +184,7 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
         if( NewTrack )
             DrawTraces( aPanel, aDC, NewTrack, NbPtNewTrack, draw_mode );
     }
+
 
     /* set the new track coordinates */
     wxPoint Pos = screen->GetCrossHairPosition();
@@ -199,8 +204,10 @@ static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPo
             Track->m_End += moveVector;
     }
 
+#ifndef USE_WX_OVERLAY
     /* Redraw the current moved track segments */
     DrawTraces( aPanel, aDC, NewTrack, NbPtNewTrack, draw_mode );
+#endif
 
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
@@ -318,6 +325,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
 
     /* Undraw the current moved track segments before modification*/
 
+#ifndef USE_WX_OVERLAY
 //  if( erase )
     {
         Track->Draw( aPanel, aDC, draw_mode );
@@ -328,6 +336,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
         if( tSegmentToEnd )
             tSegmentToEnd->Draw( aPanel, aDC, draw_mode );
     }
+#endif 
 
     /* Compute the new track segment position */
     wxPoint Pos = screen->GetCrossHairPosition();
