@@ -602,7 +602,12 @@ void EDA_DRAW_PANEL::DrawGrid( wxDC* aDC )
     // Use a pixel based draw to display grid.  There are a lot of calls, so the cost is
     // high and grid is slowly drawn on some platforms.  Please note that this should
     // always be enabled until the bitmap based solution below is fixed.
+#ifndef __WXMAC__
     GRSetColorPen( aDC, GetParent()->GetGridColor() );
+#else
+    // On mac (Cocoa), a point isn't a pixel and being of size 1 don't survive to antialiasing
+    GRSetColorPen( aDC, GetParent()->GetGridColor(), aDC->DeviceToLogicalXRel(2) );
+#endif
 
     int xpos;
     double right = ( double ) m_ClipBox.GetRight();
