@@ -235,7 +235,7 @@ double PCB_BASE_FRAME::BestZoom()
     else
         jj = 32.0;
 
-    double bestzoom = MAX( ii, jj );
+    double bestzoom = max( ii, jj );
 
     GetScreen()->SetScrollCenterPosition( bbbox.Centre() );
 

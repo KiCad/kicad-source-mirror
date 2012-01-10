@@ -317,7 +317,7 @@ void PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         if( GetBoard()->GetCopperLayerCount() < 2 ) // Single layer
             ll = LAYER_N_BACK;
         else if( ll == LAYER_N_FRONT )
-            ll = MAX( LAYER_N_BACK, GetBoard()->GetCopperLayerCount() - 2 );
+            ll = max( LAYER_N_BACK, GetBoard()->GetCopperLayerCount() - 2 );
         else
             ll--;
 

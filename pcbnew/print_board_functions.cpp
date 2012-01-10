@@ -354,8 +354,8 @@ static void Print_Module( EDA_DRAW_PANEL* aPanel, wxDC* aDC, MODULE* aModule,
                 pt_pad->m_Drill = wxSize(0,0);
                 break;
             case PRINT_PARAMETERS::SMALL_DRILL_SHAPE:
-                pt_pad->m_Drill.x = MIN(SMALL_DRILL,pt_pad->m_Drill.x);
-                pt_pad->m_Drill.y = MIN(SMALL_DRILL,pt_pad->m_Drill.y);
+                pt_pad->m_Drill.x = min(SMALL_DRILL,pt_pad->m_Drill.x);
+                pt_pad->m_Drill.y = min(SMALL_DRILL,pt_pad->m_Drill.y);
                 break;
             case PRINT_PARAMETERS::FULL_DRILL_SHAPE:
                 // Do nothing

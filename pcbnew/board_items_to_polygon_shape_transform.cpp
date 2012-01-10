@@ -532,27 +532,9 @@ void D_PAD:: TransformShapeWithClearanceToPolygon( std:: vector < CPolyPt>& aCor
  * and then moved and rotated acroding to the pad position and orientation
  */
 
-/* WARNING:
- * When Kbool calculates the filled areas :
- * i.e when substracting holes (thermal shapes) to the full zone area
- * under certains circumstances kboll drop some holes.
- * These circumstances are:
- * some identical holes (same thermal shape and size) are *exactly* on the same vertical line
- * And
- * nothing else between holes
- * And
- * angles less than 90 deg between 2 consecutive lines in hole outline (sometime occurs without
- * this condition)
- * And
- * a hole above the identical holes
- *
- * In fact, it is easy to find these conditions in pad arrays.
- * So to avoid this, the workaround is do not use holes outlines that include
- * angles less than 90 deg between 2 consecutive lines
- * this is made in round and oblong thermal reliefs
- *
+/*
  * Note 1: polygons are drawm using outlines witk a thickness = aMinThicknessValue
- * so shapes must keep in account this outline thickness
+ * so shapes must take in account this outline thickness
  *
  * Note 2:
  *      Trapezoidal pads are not considered here because they are very special case

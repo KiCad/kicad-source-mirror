@@ -40,11 +40,12 @@ int ZONE_CONTAINER::BuildFilledPolysListData( BOARD* aPcb )
      * this zone
      */
 
-    if( GetNumCorners() <= 2 )  // malformed zone. Kbool does not like it ...
+    if( GetNumCorners() <= 2 )  // malformed zone. polygon calculations do not like it ...
         return 0;
 
     // Make a smoothed polygon out of the user-drawn polygon if required
-    if( smoothedPoly ) {
+    if( smoothedPoly )
+    {
         delete smoothedPoly;
         smoothedPoly = NULL;
     }

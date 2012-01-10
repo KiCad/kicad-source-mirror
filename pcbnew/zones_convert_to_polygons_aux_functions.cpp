@@ -42,7 +42,7 @@ void BuildUnconnectedThermalStubsPolygonList( std::vector<CPolyPt>& aCornerBuffe
     EDA_RECT item_boundingbox;
     EDA_RECT zone_boundingbox  = aZone->GetBoundingBox();
     int      biggest_clearance = aPcb->GetBiggestClearanceValue();
-    biggest_clearance = MAX( biggest_clearance, zone_clearance );
+    biggest_clearance = max( biggest_clearance, zone_clearance );
     zone_boundingbox.Inflate( biggest_clearance );
 
     // half size of the pen used to draw/plot zones outlines

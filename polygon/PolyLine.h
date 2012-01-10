@@ -42,18 +42,6 @@ enum
  */
 void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles = false );
 
-
-#define PCBU_PER_MIL 10
-#define NM_PER_MIL   10 // 25400
-
-#define to_int( x ) wxRound( (x) )
-#ifndef MIN
-#define MIN( x1, x2 ) ( (x1) > (x2) ? (x2) : (x1) )
-#endif
-#ifndef MAX
-#define MAX( x1, x2 ) ( (x1) > (x2) ? (x1) : (x2) )
-#endif
-
 class CRect
 {
 public:
