@@ -10,7 +10,7 @@
 
 #include "PolyLine.h"
 
-using namespace std;
+#define NM_PER_MIL 25400
 
 
 /**
@@ -732,7 +732,6 @@ bool FindLineEllipseIntersections( double a, double b, double c, double d, doubl
 }
 
 
-
 // Get clearance between 2 segments
 // Returns point in segment closest to other segment in x, y
 // in clearance > max_cl, just returns max_cl and doesn't return x,y
@@ -916,7 +915,6 @@ int GetClearanceBetweenSegments( int x1i, int y1i, int x1f, int y1f, int style1,
 }
 
 
-
 // Get min. distance from (x,y) to line y = a + bx
 // if b > DBL_MAX/10, assume vertical line at x = a
 // returns closest point on line in xp, yp
@@ -1056,7 +1054,7 @@ int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
     double yr = el2->yrad*yscale;
     // now test NSTEPS positions in arc, moving clockwise (ie. decreasing theta)
     double step = M_PI/((NSTEPS-1)*2.0);
-    double d_prev=0, th_prev;
+    double d_prev=0;
     double th_interp;
     double th1;
     int n = 0;
@@ -1101,7 +1099,6 @@ int GetArcIntersections( EllipseKH * el1, EllipseKH * el2,
             }
         }
         d_prev = d;
-        th_prev = theta;
     }
     if( x1 )
         *x1 = xret[0];
@@ -1196,4 +1193,3 @@ double GetArcClearance( EllipseKH * el1, EllipseKH * el2,
         *y1 = ymin;
     return dmin;
 }
-

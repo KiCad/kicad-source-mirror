@@ -7,14 +7,27 @@
 #include <vector>
 
 #include "fctsys.h"
+#include "config.h"
 
 #include "PolyLine.h"
 #include "gr_basic.h"
 #include "bezier_curves.h"
 #include "polygon_test_point_inside.h"
 
-using namespace std;
+#if defined(KICAD_NANOMETRE)
+#define PCBU_PER_MIL (1000.0*25.4)
+#else
+#define PCBU_PER_MIL 10
+#endif
 
+#define to_int( x ) wxRound( (x) )
+
+#ifndef MIN
+#define MIN( x1, x2 ) ( (x1) > (x2) ? (x2) : (x1) )
+#endif
+#ifndef MAX
+#define MAX( x1, x2 ) ( (x1) > (x2) ? (x1) : (x2) )
+#endif
 
 #define pi M_PI
 
@@ -1386,20 +1399,12 @@ int CPolyLine::GetClosed()
 void CPolyLine::Hatch()
 {
     m_HatchLines.clear();
-    if( m_HatchStyle == NO_HATCH )
-    {
-        return;
-    }
 
-    int layer = GetLayer();
+    if( m_HatchStyle == NO_HATCH )
+        return;
 
     if( !GetClosed() )   // If not closed, the poly is beeing created and not finalised. Not not hatch
         return;
-
-    enum {
-        MAXPTS = 100
-    };
-    int    xx[MAXPTS], yy[MAXPTS];
 
     // define range for hatch lines
     int    min_x = corner[0].x;
@@ -1418,13 +1423,19 @@ void CPolyLine::Hatch()
             max_y = corner[ic].y;
     }
 
-    int    slope_flag = (layer & 1) ? 1 : -1; // 1 or -1
-    double slope = 0.707106 * slope_flag;
+    // Calculate spacing betwwen 2 hatch lines
     int    spacing;
     if( m_HatchStyle == DIAGONAL_EDGE )
-        spacing = 10 * PCBU_PER_MIL;
+        spacing = 20 * PCBU_PER_MIL;
     else
         spacing = 50 * PCBU_PER_MIL;
+    // set the "lenght" of hatch lines (the lenght on horizontal axis)
+    double hatch_line_len = 20 * PCBU_PER_MIL;
+
+    // To have a better look, give a slope depending on the layer
+    int layer = GetLayer();
+    int slope_flag = (layer & 1) ? 1 : -1; // 1 or -1
+    double slope = 0.707106 * slope_flag;   // 45 degrees slope
     int max_a, min_a;
     if( slope_flag == 1 )
     {
@@ -1438,7 +1449,8 @@ void CPolyLine::Hatch()
     }
     min_a = (min_a / spacing) * spacing;
 
-    // calculate an offset depending on layer number, for a better display of hatches on a multilayer board
+    // calculate an offset depending on layer number,
+    // for a better look of hatches on a multilayer board
     int offset = (layer * 7) / 8;
     min_a += offset;
 
@@ -1446,112 +1458,119 @@ void CPolyLine::Hatch()
     int nc = corner.size();
 
     // loop through hatch lines
-    for( int a = min_a; a<max_a; a += spacing )
+    #define MAXPTS 200      // Usually we store only few values
+                            // depending on the compexity of the zone outline
+    static std::vector <CPoint> pointbuffer;
+    pointbuffer.clear();
+    pointbuffer.reserve(MAXPTS+2);
+    for( int a = min_a; a < max_a; a += spacing )
     {
         // get intersection points for this hatch line
-        int nloops = 0;
-        int npts;
 
-        // make this a loop in case my homebrew hatching algorithm screws up
-        do
+        // Note: because we should have an even number of intersections with the
+        // current hatch line and the zone outline, if we have an odd count if found
+        // we skip this line (should not occur)
+        pointbuffer.clear();
+        int i_start_contour = 0;
+        for( int ic = 0; ic<nc; ic++ )
         {
-            npts = 0;
-            int i_start_contour = 0;
-            for( int ic = 0; ic<nc; ic++ )
+            double x, y, x2, y2;
+            int    ok;
+            if( corner[ic].end_contour || ( ic == (int) (corner.size() - 1) ) )
             {
-                double x, y, x2, y2;
-                int    ok;
-                if( corner[ic].end_contour || ( ic == (int) (corner.size() - 1) ) )
-                {
-                    ok = FindLineSegmentIntersection( a, slope,
-                        corner[ic].x, corner[ic].y,
-                        corner[i_start_contour].x,
-                        corner[i_start_contour].y,
-                        side_style[ic],
-                        &x, &y, &x2, &y2 );
-                    i_start_contour = ic + 1;
-                }
-                else
-                {
-                    ok = FindLineSegmentIntersection( a, slope,
-                        corner[ic].x, corner[ic].y,
-                        corner[ic + 1].x, corner[ic + 1].y,
-                        side_style[ic],
-                        &x, &y, &x2, &y2 );
-                }
-                if( ok )
-                {
-                    xx[npts] = (int) x;
-                    yy[npts] = (int) y;
-                    npts++;
-                    wxASSERT( npts<MAXPTS );    // overflow
-                }
-                if( ok == 2 )
-                {
-                    xx[npts] = (int) x2;
-                    yy[npts] = (int) y2;
-                    npts++;
-                    wxASSERT( npts<MAXPTS );    // overflow
-                }
+                ok = FindLineSegmentIntersection( a, slope,
+                    corner[ic].x, corner[ic].y,
+                    corner[i_start_contour].x,
+                    corner[i_start_contour].y,
+                    side_style[ic],
+                    &x, &y, &x2, &y2 );
+                i_start_contour = ic + 1;
             }
+            else
+            {
+                ok = FindLineSegmentIntersection( a, slope,
+                    corner[ic].x, corner[ic].y,
+                    corner[ic + 1].x, corner[ic + 1].y,
+                    side_style[ic],
+                    &x, &y, &x2, &y2 );
+            }
+            if( ok )
+            {
+                CPoint point( (int) x, (int) y);
+                pointbuffer.push_back( point );
+            }
+            if( ok == 2 )
+            {
+                CPoint point( (int) x2, (int) y2);
+                pointbuffer.push_back( point );
+            }
+            if( pointbuffer.size() >= MAXPTS )    // overflow
+            {
+                wxASSERT( 0 );
+                break;
+            }
+        }
 
-            nloops++;
-            a += PCBU_PER_MIL / 100;
-        } while( npts % 2 != 0 && nloops < 3 );
-
-/*  DICK 1/22/08: this was firing repeatedly on me, needed to comment out to get
-* my work done:
-*         wxASSERT( npts%2==0 );	// odd number of intersection points, error
-*/
+        // ensure we have found an even intersection points count
+        // because a segment has 2 points.
+        // if not, this is a strange case (a bug ?) so skip this hatch
+        if( pointbuffer.size() % 2 != 0 )
+            continue;
 
         // sort points in order of descending x (if more than 2)
-        if( npts>2 )
+        if( pointbuffer.size() > 2 )
         {
-            for( int istart = 0; istart<(npts - 1); istart++ )
+            for( unsigned istart = 0; istart < (pointbuffer.size() - 1); istart++ )
             {
                 int max_x = INT_MIN;
                 int imax  = INT_MIN;
-                for( int i = istart; i<npts; i++ )
+                for( unsigned i = istart; i < pointbuffer.size(); i++ )
                 {
-                    if( xx[i] > max_x )
+                    if( pointbuffer[i].x > max_x )
                     {
-                        max_x = xx[i];
+                        max_x = pointbuffer[i].x;
                         imax  = i;
                     }
                 }
 
-                int temp = xx[istart];
-                xx[istart] = xx[imax];
-                xx[imax]   = temp;
-                temp = yy[istart];
-                yy[istart] = yy[imax];
-                yy[imax]   = temp;
+                CPoint temp = pointbuffer[istart];
+                pointbuffer[istart] = pointbuffer[imax];
+                pointbuffer[imax]   = temp;
             }
         }
 
-        // draw lines
-        for( int ip = 0; ip<npts; ip += 2 )
+        // creates lines
+        for( unsigned ip = 0; ip < pointbuffer.size(); ip += 2 )
         {
-            double dx = xx[ip + 1] - xx[ip];
-            if( m_HatchStyle == DIAGONAL_FULL || fabs( dx ) < 40 * NM_PER_MIL )
+            double dx = pointbuffer[ip + 1].x - pointbuffer[ip].x;
+            // Push only one line for diagonal hatch,
+            // or for small lines < twice the line len
+            // else push 2 small lines
+            if( m_HatchStyle == DIAGONAL_FULL || fabs( dx ) < 2 * hatch_line_len )
             {
-                m_HatchLines.push_back( CSegment( xx[ip], yy[ip], xx[ip + 1], yy[ip + 1] ) );
+                m_HatchLines.push_back( CSegment( pointbuffer[ip].x,
+                                                  pointbuffer[ip].y,
+                                                  pointbuffer[ip + 1].x,
+                                                  pointbuffer[ip + 1].y ) );
             }
             else
             {
-                double dy    = yy[ip + 1] - yy[ip];
+                double dy    = pointbuffer[ip + 1].y - pointbuffer[ip].y;
                 double slope = dy / dx;
                 if( dx > 0 )
-                    dx = 20 * NM_PER_MIL;
+                    dx = hatch_line_len;
                 else
-                    dx = -20 * NM_PER_MIL;
-                double x1 = xx[ip] + dx;
-                double x2 = xx[ip + 1] - dx;
-                double y1 = yy[ip] + dx * slope;
-                double y2 = yy[ip + 1] - dx * slope;
-                m_HatchLines.push_back( CSegment( xx[ip], yy[ip], to_int( x1 ), to_int( y1 ) ) );
-                m_HatchLines.push_back( CSegment( xx[ip + 1], yy[ip + 1], to_int( x2 ),
-                        to_int( y2 ) ) );
+                    dx = -hatch_line_len;
+                double x1 = pointbuffer[ip].x + dx;
+                double x2 = pointbuffer[ip + 1].x - dx;
+                double y1 = pointbuffer[ip].y + dx * slope;
+                double y2 = pointbuffer[ip + 1].y - dx * slope;
+                m_HatchLines.push_back( CSegment( pointbuffer[ip].x,
+                                                  pointbuffer[ip].y,
+                                                  to_int( x1 ), to_int( y1 ) ) );
+                m_HatchLines.push_back( CSegment( pointbuffer[ip + 1].x,
+                                                  pointbuffer[ip + 1].y,
+                                                  to_int( x2 ), to_int( y2 ) ) );
             }
         }
     }

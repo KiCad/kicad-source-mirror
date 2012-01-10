@@ -31,7 +31,6 @@
 #include "common.h"
 #include "trigo.h"
 #include "pcbstruct.h"
-#include "macros.h"
 #include "drawtxt.h"
 #include "confirm.h"
 #include "layers_id_colors_and_visibility.h"
@@ -171,7 +170,7 @@ GLuint EDA_3D_CANVAS::CreateDrawGL_List()
     if( g_Parm_3D_Visu.m_Layers < 2 )
         g_Parm_3D_Visu.m_Layers = 2;
 
-    g_Parm_3D_Visu.m_BoardScale = 2.0 / MAX( g_Parm_3D_Visu.m_BoardSize.x,
+    g_Parm_3D_Visu.m_BoardScale = 2.0 / max( g_Parm_3D_Visu.m_BoardSize.x,
                                              g_Parm_3D_Visu.m_BoardSize.y );
 
     // @TODO: epoxy_width (board thickness) must be set by user,
@@ -911,7 +910,7 @@ void D_PAD::Draw3D( EDA_3D_CANVAS* glcanvas )
     scale = g_Parm_3D_Visu.m_BoardScale;
     holeX = (double) m_Drill.x * scale / 2;
     holeY = (double) m_Drill.y * scale / 2;
-    hole  = MIN( holeX, holeY );
+    hole  = fmin( holeX, holeY );
 
     /* Calculate the center of the pad. */
     shape_pos = ReturnShapePos();
@@ -1505,10 +1504,12 @@ void CALLBACK tesswxPoint2Vertex( const GLvoid* data )
 
 void CALLBACK tessErrorCB( GLenum errorCode )
 {
+#if defined(DEBUG)
     const GLubyte* errorStr;
 
     errorStr = gluErrorString( errorCode );
 
     // DEBUG //
     D( printf( "Tess ERROR: %s\n", errorStr ); )
+#endif
 }

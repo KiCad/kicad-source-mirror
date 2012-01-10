@@ -164,7 +164,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
     EDA_RECT item_boundingbox;
     EDA_RECT zone_boundingbox  = GetBoundingBox();
     int      biggest_clearance = aPcb->GetBiggestClearanceValue();
-    biggest_clearance = MAX( biggest_clearance, zone_clearance );
+    biggest_clearance = max( biggest_clearance, zone_clearance );
     zone_boundingbox.Inflate( biggest_clearance );
 
     /*
@@ -220,7 +220,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
                 if( item_boundingbox.Intersects( zone_boundingbox ) )
                 {
-                    int clearance = MAX( zone_clearance, item_clearance );
+                    int clearance = max( zone_clearance, item_clearance );
                     pad->TransformShapeWithClearanceToPolygon( cornerBufferPolysToSubstract,
                                                                clearance,
                                                                s_CircleToSegmentsCount,
@@ -267,7 +267,7 @@ void ZONE_CONTAINER::AddClearanceAreasPolygonsToPolysList( BOARD* aPcb )
 
         if( item_boundingbox.Intersects( zone_boundingbox ) )
         {
-            int clearance = MAX( zone_clearance, item_clearance );
+            int clearance = max( zone_clearance, item_clearance );
             track->TransformShapeWithClearanceToPolygon( cornerBufferPolysToSubstract,
                                                          clearance,
                                                          s_CircleToSegmentsCount,

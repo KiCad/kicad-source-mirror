@@ -187,10 +187,10 @@ void DIALOG_SCH_FIND::SendEvent( const wxEventType& aEventType )
     {
         event.SetReplaceString( m_comboReplace->GetValue() );
         flags |= FR_SEARCH_REPLACE;
-
-        if( m_checkReplaceReferences->GetValue() )
-            flags |= FR_REPLACE_REFERENCES;
     }
+
+    if( m_checkReplaceReferences->GetValue() )
+        flags |= FR_REPLACE_REFERENCES;
 
     if( m_radioForward->GetValue() )
         flags |= wxFR_DOWN;
@@ -231,6 +231,15 @@ void DIALOG_SCH_FIND::SendEvent( const wxEventType& aEventType )
     event.SetFlags( flags );
 
     m_findReplaceData->SetFlags( event.GetFlags() );
+
+    // when we are no using the find/replace (just find)
+    // FR_REPLACE_REFERENCES flag bit is always set to 1 in event flags
+    // but not set in m_findReplaceData
+    if ( ! HasFlag( wxFR_REPLACEDIALOG ) )
+    {
+        flags |= FR_REPLACE_REFERENCES;
+        event.SetFlags( flags );
+    }
 
     if( !GetEventHandler()->ProcessEvent( event ) )
     {

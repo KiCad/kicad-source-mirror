@@ -336,7 +336,7 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
                                    wxPoint(0, 0), CPolyLine::NO_HATCH );
 
                 // remove the poly that was automatically created for the new area
-                // and replace it with a poly from NormalizeWithKbool
+                // and replace it with a poly from NormalizeAreaOutlines
                 delete NewArea->m_Poly;
                 NewArea->m_Poly = new_p;
                 NewArea->m_Poly->Draw();

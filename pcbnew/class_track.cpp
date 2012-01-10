@@ -611,7 +611,7 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, int draw_mode, const wxPoint&
     BOARD * brd =  GetBoard( );
     color = brd->GetLayerColor(m_Layer);
 
-    if( brd->IsLayerVisible( m_Layer ) == false && ( color & HIGHLIGHT_FLAG ) != HIGHLIGHT_FLAG )
+    if( brd->IsLayerVisible( m_Layer ) == false && !( draw_mode & GR_HIGHLIGHT ) )
         return;
 
     if( DisplayOpt.ContrastModeDisplay )

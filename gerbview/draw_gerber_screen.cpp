@@ -383,7 +383,7 @@ void GERBVIEW_FRAME::DrawItemsDCodeID( wxDC* aDC, int aDrawMode )
         if( gerb_item->GetDcodeDescr() )
             width = gerb_item->GetDcodeDescr()->GetShapeDim( gerb_item );
         else
-            width = MIN( gerb_item->m_Size.x, gerb_item->m_Size.y );
+            width = min( gerb_item->m_Size.x, gerb_item->m_Size.y );
 
         orient = TEXT_ORIENT_HORIZ;
 
