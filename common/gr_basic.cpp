@@ -357,6 +357,12 @@ void GRSetColorPen( wxDC* DC, int Color, int width, wxPenStyle style )
     if( width < 0 )
         width = 0;
 
+#ifdef __WXMAC__
+    // Under OSX when wxPen is set to 0, cocoa follows the request drawing nothing
+    if( width == 0)
+        width = DC->DeviceToLogicalXRel( 1 );
+#endif
+
     if( s_ForceBlackPen )
     {
         Color = BLACK;
