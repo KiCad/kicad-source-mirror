@@ -46,6 +46,10 @@
 #include "colors.h"
 #include "common.h"
 
+#ifdef USE_WX_OVERLAY
+#include <wx/overlay.h>
+#endif
+
 // C++ guarantees that operator delete checks its argument for null-ness
 #ifndef SAFE_DELETE
 #define SAFE_DELETE( p ) delete (p); (p) = NULL;

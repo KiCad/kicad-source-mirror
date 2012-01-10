@@ -33,7 +33,6 @@
 
 #include "colors.h"
 #include "base_struct.h"
-#include <wx/overlay.h>
 
 class EDA_DRAW_FRAME;
 class BASE_SCREEN;
