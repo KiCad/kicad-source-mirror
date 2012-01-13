@@ -4,7 +4,7 @@
 #include <deque>
 #include <dlist.h>
 #include <time.h>
-
+#include <common.h>
 
 #define TEST_NODES      100000000
 
@@ -15,22 +15,6 @@ typedef boost::ptr_vector<EDA_ITEM>  EDA_ITEMV;
 
 
 void heap_warm_up();
-
-
-/**
- * Function GetRunningMicroSecs
- * returns current relative time in microsecs.
- */
-unsigned GetRunningMicroSecs()
-{
-    struct timespec	now;
-
-    clock_gettime( CLOCK_MONOTONIC, &now );
-
-    unsigned usecs = now.tv_nsec/1000 + now.tv_sec * 1000 * 1000;
-    return usecs;
-}
-
 
 int main( int argc, char** argv )
 {

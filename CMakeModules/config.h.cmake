@@ -23,6 +23,9 @@
 #define hypot _hypot
 #endif
 
+#cmakedefine HAVE_CLOCK_GETTIME
+#cmakedefine HAVE_GETTIMEOFDAY_FUNC
+
 #cmakedefine MALLOC_IN_STDLIB_H
 
 #if !defined( MALLOC_IN_STDLIB_H )

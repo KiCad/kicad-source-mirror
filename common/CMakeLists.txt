@@ -54,6 +54,7 @@ set(COMMON_SRCS
     eda_doc.cpp
     filter_reader.cpp
     gestfich.cpp
+    getrunningmicrosecs.cpp
     gr_basic.cpp
     hotkeys_basic.cpp
     hotkey_grid_table.cpp
