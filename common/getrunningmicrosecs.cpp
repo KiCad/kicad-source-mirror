@@ -40,23 +40,34 @@ unsigned GetRunningMicroSecs()
 
 unsigned GetRunningMicroSecs()
 {
-    LARGE_INTEGER   curtime;
+    FILETIME    now;
 
-    static unsigned timerFreq;              // timer frequency
+    GetSystemTimeAsFileTime( &now );
 
-    if( !timerFreq )
-    {
-        QueryPerformanceFrequency( &curtime );
+    typedef unsigned long long UINT64;
 
-        timerFreq = curtime.QuadPart / 1000000;     // i.e., ticks per usec
+    UINT64 t = (UINT64(now.dwHighDateTime) << 32) + now.dwLowDateTime;
 
-        assert( timerFreq );
-    }
+    t /= 10;
 
-    QueryPerformanceCounter( &curtime );
-
-    return ( curtime.LowPart / timerFreq );
+    return unsigned( t );
 }
+
+
+#if 0
+// test program
+#include <stdio.h>
+int main( int argc, char** argv )
+{
+    unsigned then = GetRunningMicroSecs();
+
+    Sleep( 2000 );      // Windows Sleep( msecs )
+
+    printf( "delta: %u\n", GetRunningMicroSecs() - then );
+
+    return 0;
+}
+#endif
 
 #endif
 
