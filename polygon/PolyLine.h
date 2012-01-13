@@ -140,10 +140,11 @@ public:
 
     void       RemoveAllContours( void );
 
-    // drawing functions
-    void       Undraw();
-    void       Draw();
+    // Remove or create hatch
+    void       UnHatch();
     void       Hatch();
+
+    // Transform functions
     void       MoveOrigin( int x_off, int y_off );
 
     // misc. functions
@@ -174,7 +175,7 @@ public:
     int        GetSideStyle( int is );
 
     int        GetHatchStyle() { return m_HatchStyle; }
-    void       SetHatch( int hatch ) { Undraw(); m_HatchStyle = hatch; Draw(); };
+    void       SetHatch( int hatch ) { m_HatchStyle = hatch; Hatch(); };
     void       SetX( int ic, int x );
     void       SetY( int ic, int y );
     void       SetEndContour( int ic, bool end_contour );
@@ -246,24 +247,22 @@ public:
      */
     void FreeKboolEngine( ) { delete m_Kbool_Poly_Engine; m_Kbool_Poly_Engine = NULL; }
 
+    // Bezier Support
+    void AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3);
+    void AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4);
+
 
 private:
     int m_layer;    // layer to draw on
     int m_Width;    // lines width when drawing. Provided but not really used
     int utility;
+    Bool_Engine* m_Kbool_Poly_Engine; // polygons set in kbool engine data
+
 public:
     std::vector <CPolyPt>  corner;              // array of points for corners
     std::vector <int>      side_style;          // array of styles for sides
     int m_HatchStyle;                           // hatch style, see enum above
     std::vector <CSegment> m_HatchLines;        // hatch lines
-private:
-    Bool_Engine*           m_Kbool_Poly_Engine; // polygons set in kbool engine data
-    bool bDrawn;
-
-    // Bezier Support
-public:
-    void AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3);
-    void AppendBezier(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4);
 };
 
 #endif  // #ifndef POLYLINE_H

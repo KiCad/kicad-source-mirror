@@ -320,7 +320,7 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
 //**    if( test == 1 )
     {
         std::vector<CPolyLine*>* pa = new std::vector<CPolyLine*>;
-        curr_polygon->Undraw();
+        curr_polygon->UnHatch();
         int n_poly = aCurrArea->m_Poly->NormalizeAreaOutlines( pa, bRetainArcs );
 
         // i.e if clipping has created some polygons, we must add these new copper areas.
@@ -339,12 +339,12 @@ int BOARD::ClipAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList,
                 // and replace it with a poly from NormalizeAreaOutlines
                 delete NewArea->m_Poly;
                 NewArea->m_Poly = new_p;
-                NewArea->m_Poly->Draw();
+                NewArea->m_Poly->Hatch();
                 NewArea->utility = 1;
             }
         }
 
-        curr_polygon->Draw();
+        curr_polygon->Hatch();
         delete pa;
     }
 
@@ -901,7 +901,7 @@ int BOARD::CombineAreas( PICKED_ITEMS_LIST* aDeletedList, ZONE_CONTAINER* area_r
     area_ref->utility = 1;
     area_ref->m_Poly->RestoreArcs( &arc_array1 );
     area_ref->m_Poly->RestoreArcs( &arc_array2 );
-    area_ref->m_Poly->Draw();
+    area_ref->m_Poly->Hatch();
     delete booleng;
     return 1;
 }

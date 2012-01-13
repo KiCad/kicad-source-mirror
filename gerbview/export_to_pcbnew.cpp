@@ -326,35 +326,35 @@ void GBR_TO_PCB_EXPORTER::export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem
 
 void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem, int aLayer )
 {
-#if 0       // TODO: does not work in all cases, so needs some work
     double a  = atan2( (double)( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y ),
                         (double)( aGbrItem->m_Start.x - aGbrItem->m_ArcCentre.x ) );
     double b  = atan2( (double)( aGbrItem->m_End.y - aGbrItem->m_ArcCentre.y ),
                         (double)( aGbrItem->m_End.x - aGbrItem->m_ArcCentre.x ) );
 
-    int arc_angle   = wxRound( ( (a - b) / M_PI * 1800.0 ) );
     wxPoint start = aGbrItem->m_Start;
     wxPoint end = aGbrItem->m_End;
     /* Because Pcbnew does not know arcs in tracks,
-     * approximate arc by segments (16 segment per 360 deg)
+     * approximate arc by segments (SEG_COUNT__CIRCLE segment per 360 deg)
+     * The arc is drawn in an anticlockwise direction from the start point to the end point.
      */
-    #define DELTA 3600/16
+    #define SEG_COUNT_CIRCLE 16
+    #define DELTA_ANGLE 2*M_PI/SEG_COUNT_CIRCLE
 
-    if( arc_angle < 0 )
-    {
-        NEGATE( arc_angle );
-        EXCHG( start, end );
-    }
+    // calculate the number of segments from a to b.
+    // we want CNT_PER_360 segments fo a circle
+    if( a > b )
+        b += 2*M_PI;
 
     wxPoint curr_start = start;
 
-    for( int rot = DELTA; rot < (arc_angle - DELTA); rot += DELTA )
+    int ii = 1;
+    for( double rot = a; rot < (b - DELTA_ANGLE); rot += DELTA_ANGLE, ii++ )
     {
         TRACK * newtrack = new TRACK( m_pcb );
         newtrack->SetLayer( aLayer );
         newtrack->m_Start = curr_start;
         wxPoint curr_end = start;
-        RotatePoint( &curr_end, aGbrItem->m_ArcCentre, rot );
+        RotatePoint( &curr_end, aGbrItem->m_ArcCentre, -(int)(DELTA_ANGLE * ii * 1800 / M_PI) );
         newtrack->m_End = curr_end;
         newtrack->m_Width = aGbrItem->m_Size.x;
         // Reverse Y axis:
@@ -376,7 +376,6 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
         NEGATE( newtrack->m_End.y );
         m_pcb->Add( newtrack );
     }
-#endif
 }
 
 

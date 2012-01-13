@@ -5,12 +5,12 @@
 //
 #include <math.h>
 #include <vector>
+#include <algorithm>
 
 #include "fctsys.h"
-#include "config.h"
+#include "config.h"     // to define KICAD_NANOMETRE
 
 #include "PolyLine.h"
-#include "gr_basic.h"
 #include "bezier_curves.h"
 #include "polygon_test_point_inside.h"
 
@@ -44,7 +44,7 @@ CPolyLine::CPolyLine()
 //
 CPolyLine::~CPolyLine()
 {
-    Undraw();
+    UnHatch();
     if( m_Kbool_Poly_Engine )
         delete m_Kbool_Poly_Engine;
 }
@@ -81,7 +81,7 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
     else
         MakeKboolPoly( -1, -1, NULL );
 
-    Undraw();
+    UnHatch();
 
     /* now, recreate polys
      * if more than one outside contour are found, extra CPolyLines will be created
@@ -649,7 +649,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
             poly = this;
         else
             poly = (*pa)[ip - 1];
-        poly->Undraw();
+        poly->UnHatch();
         for( int ic = 0; ic<poly->GetNumCorners(); ic++ )
             poly->SetUtility( ic, 0 );
 
@@ -805,7 +805,7 @@ void CPolyLine::Start( int layer, int x, int y, int hatch )
 //
 void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
 {
-    Undraw();
+    UnHatch();
     CPolyPt poly_pt( x, y );
     poly_pt.end_contour = FALSE;
 
@@ -815,7 +815,7 @@ void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
     if( corner.size() > 0 && !corner[corner.size() - 1].end_contour )
         side_style[corner.size() - 1] = style;
     if( bDraw )
-        Draw();
+        Hatch();
 }
 
 
@@ -827,11 +827,11 @@ void CPolyLine::Close( int style, bool bDraw )
     {
         wxASSERT( 0 );
     }
-    Undraw();
+    UnHatch();
     side_style[corner.size() - 1] = style;
     corner[corner.size() - 1].end_contour = TRUE;
     if( bDraw )
-        Draw();
+        Hatch();
 }
 
 
@@ -839,10 +839,10 @@ void CPolyLine::Close( int style, bool bDraw )
 //
 void CPolyLine::MoveCorner( int ic, int x, int y )
 {
-    Undraw();
+    UnHatch();
     corner[ic].x = x;
     corner[ic].y = y;
-    Draw();
+    Hatch();
 }
 
 
@@ -850,7 +850,7 @@ void CPolyLine::MoveCorner( int ic, int x, int y )
 //
 void CPolyLine::DeleteCorner( int ic, bool bDraw )
 {
-    Undraw();
+    UnHatch();
     int  icont   = GetContour( ic );
     int  istart  = GetContourStart( icont );
     int  iend    = GetContourEnd( icont );
@@ -878,7 +878,7 @@ void CPolyLine::DeleteCorner( int ic, bool bDraw )
         RemoveContour( icont );
     }
     if( bDraw )
-        Draw();
+        Hatch();
 }
 
 
@@ -892,7 +892,7 @@ void CPolyLine::RemoveContour( int icont )
  * remove a contour only if there is more than 1 contour
  */
 {
-    Undraw();
+    UnHatch();
     int istart = GetContourStart( icont );
     int iend   = GetContourEnd( icont );
 
@@ -916,7 +916,7 @@ void CPolyLine::RemoveContour( int icont )
             side_style.erase( side_style.begin() + ic );
         }
     }
-    Draw();
+    Hatch();
 }
 
 
@@ -1140,7 +1140,7 @@ void CPolyLine::RemoveAllContours( void )
  */
 void CPolyLine::InsertCorner( int ic, int x, int y )
 {
-    Undraw();
+    UnHatch();
     if( (unsigned) (ic) >= corner.size() )
     {
         corner.push_back( CPolyPt( x, y ) );
@@ -1160,31 +1160,15 @@ void CPolyLine::InsertCorner( int ic, int x, int y )
             corner[ic].end_contour = FALSE;
         }
     }
-    Draw();
+    Hatch();
 }
 
 
 // undraw polyline by removing all graphic elements from display list
 //
-void CPolyLine::Undraw()
+void CPolyLine::UnHatch()
 {
     m_HatchLines.clear();
-    bDrawn = FALSE;
-}
-
-
-// draw polyline by adding all graphics to display list
-// if side style is ARC_CW or ARC_CCW but endpoints are not angled,
-// convert to STRAIGHT
-//
-void CPolyLine::Draw()
-{
-    // first, undraw if necessary
-    if( bDrawn )
-        Undraw();
-
-    Hatch();
-    bDrawn = TRUE;
 }
 
 
@@ -1226,10 +1210,10 @@ CRect CPolyLine::GetCornerBounds()
     r.right = r.top = INT_MIN;
     for( unsigned i = 0; i<corner.size(); i++ )
     {
-        r.left   = MIN( r.left, corner[i].x );
-        r.right  = MAX( r.right, corner[i].x );
-        r.bottom = MIN( r.bottom, corner[i].y );
-        r.top    = MAX( r.top, corner[i].y );
+        r.left   = min( r.left, corner[i].x );
+        r.right  = max( r.right, corner[i].x );
+        r.bottom = min( r.bottom, corner[i].y );
+        r.top    = max( r.top, corner[i].y );
     }
 
     return r;
@@ -1355,7 +1339,7 @@ int CPolyLine::GetContourSize( int icont )
 
 void CPolyLine::SetSideStyle( int is, int style )
 {
-    Undraw();
+    UnHatch();
     CPoint p1, p2;
     if( is == (int) (corner.size() - 1) )
     {
@@ -1375,7 +1359,7 @@ void CPolyLine::SetSideStyle( int is, int style )
         side_style[is] = STRAIGHT;
     else
         side_style[is] = style;
-    Draw();
+    Hatch();
 }
 
 
@@ -1394,8 +1378,13 @@ int CPolyLine::GetClosed()
 }
 
 
-// draw hatch lines
+// Creates hatch lines inside the outline of the complex polygon
 //
+// sort function used in ::Hatch to sort points by descending CPoint.x values
+bool sort_ends_by_descending_X( const CPoint& ref,  const CPoint& tst )
+{
+    return tst.x < ref.x;
+}
 void CPolyLine::Hatch()
 {
     m_HatchLines.clear();
@@ -1468,7 +1457,8 @@ void CPolyLine::Hatch()
         // get intersection points for this hatch line
 
         // Note: because we should have an even number of intersections with the
-        // current hatch line and the zone outline, if we have an odd count if found
+        // current hatch line and the zone outline (a closed polygon,
+        // or a set of closed polygons), if an odd count is found
         // we skip this line (should not occur)
         pointbuffer.clear();
         int i_start_contour = 0;
@@ -1512,34 +1502,19 @@ void CPolyLine::Hatch()
         }
 
         // ensure we have found an even intersection points count
-        // because a segment has 2 points.
+        // because intersections are the ends of segments
+        // inside the polygon(s) and a segment has 2 ends.
         // if not, this is a strange case (a bug ?) so skip this hatch
         if( pointbuffer.size() % 2 != 0 )
             continue;
 
-        // sort points in order of descending x (if more than 2)
+        // sort points in order of descending x (if more than 2) to
+        // ensure the starting point and the ending point of the same segment
+        // are stored one just after the other.
         if( pointbuffer.size() > 2 )
-        {
-            for( unsigned istart = 0; istart < (pointbuffer.size() - 1); istart++ )
-            {
-                int max_x = INT_MIN;
-                int imax  = INT_MIN;
-                for( unsigned i = istart; i < pointbuffer.size(); i++ )
-                {
-                    if( pointbuffer[i].x > max_x )
-                    {
-                        max_x = pointbuffer[i].x;
-                        imax  = i;
-                    }
-                }
+            sort( pointbuffer.begin(), pointbuffer.end(), sort_ends_by_descending_X );
 
-                CPoint temp = pointbuffer[istart];
-                pointbuffer[istart] = pointbuffer[imax];
-                pointbuffer[imax]   = temp;
-            }
-        }
-
-        // creates lines
+        // creates lines or short segments inside the complex polygon
         for( unsigned ip = 0; ip < pointbuffer.size(); ip += 2 )
         {
             double dx = pointbuffer[ip + 1].x - pointbuffer[ip].x;
@@ -1609,7 +1584,7 @@ bool CPolyLine::TestPointInside( int px, int py )
 //
 void CPolyLine::Copy( CPolyLine* src )
 {
-    Undraw();
+    UnHatch();
     m_HatchStyle = src->m_HatchStyle;
     // copy corners, using vector copy
     corner = src->corner;
@@ -1636,19 +1611,19 @@ bool CPolyLine::IsCutoutContour( int icont )
 
 void CPolyLine::MoveOrigin( int x_off, int y_off )
 {
-    Undraw();
+    UnHatch();
     for( int ic = 0; ic < GetNumCorners(); ic++ )
     {
         SetX( ic, GetX( ic ) + x_off );
         SetY( ic, GetY( ic ) + y_off );
     }
 
-    Draw();
+    Hatch();
 }
 
 
 // Set various parameters:
-//   the calling function should Undraw() before calling them,
+//   the calling function should UnHatch() before calling them,
 //   and Draw() after
 //
 void CPolyLine::SetX( int ic, int x )
