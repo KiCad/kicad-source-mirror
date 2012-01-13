@@ -60,7 +60,6 @@
 #include <auto_ptr.h>
 #include <kicad_string.h>
 #include <macros.h>
-//#include <build_version.h>
 #include <zones.h>
 
 #ifdef CVPCB
@@ -256,13 +255,11 @@ void KICAD_PLUGIN::loadAllSections( bool doAppend )
             loadPCB_TARGET();
         }
 
-#if defined(PCBNEW)
         else if( TESTLINE( "$ZONE" ) )
         {
             SEGZONE* insertBeforeMe = doAppend ? NULL : m_board->m_Zone.GetFirst();
             loadTrackList( insertBeforeMe, PCB_ZONE_T );
         }
-#endif
 
         else if( TESTLINE( "$GENERAL" ) )
         {
@@ -568,8 +565,6 @@ void KICAD_PLUGIN::loadSETUP()
             m_board->SetOriginAxisPosition( wxPoint( gx, gy ) );
         }
 
-#if 1 // defined(PCBNEW)
-
         else if( TESTLINE( "Layers" ) )
         {
             int tmp = intParse( line + SZ( "Layers" ) );
@@ -786,7 +781,6 @@ void KICAD_PLUGIN::loadSETUP()
             GetScreen()->m_GridOrigin.y = Oy;
             */
         }
-#endif
 
         else if( TESTLINE( "$EndSETUP" ) )
         {
@@ -2846,9 +2840,7 @@ void KICAD_PLUGIN::saveSETUP() const
     }
     */
 
-    /* @todo no aFrame in a plugin
-    fprintf( m_fp, "AuxiliaryAxisOrg %s\n",   fmtBIUPoint( aFrame->GetOriginAxisPosition() ).c_str() );
-    */
+    fprintf( m_fp, "AuxiliaryAxisOrg %s\n", fmtBIUPoint( m_board->GetOriginAxisPosition() ).c_str() );
 
     /* @todo no globals
     {

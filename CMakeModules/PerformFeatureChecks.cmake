@@ -39,6 +39,9 @@
 macro(perform_feature_checks)
 
     include(CheckIncludeFile)
+    #include(CheckFunctionExists)
+    include(CheckLibraryExists)
+    include(CheckSymbolExists)
 
     check_include_file("malloc.h" HAVE_MALLOC_H)
 
@@ -55,7 +58,6 @@ macro(perform_feature_checks)
     # re-introduce this.
     # check_include_file("strings.h" HAVE_STRINGS_H)
 
-    include(CheckSymbolExists)
     check_symbol_exists(strcasecmp "string.h" HAVE_STRCASECMP)
     check_symbol_exists(strcasecmp "strings.h" HAVE_STRCASECMP)
     check_symbol_exists(strncasecmp "string.h" HAVE_STRNCASECMP)
@@ -69,6 +71,12 @@ macro(perform_feature_checks)
     check_symbol_exists(_strnicmp "string.h" HAVE_ISO_STRNICMP)
     check_symbol_exists(_snprintf "stdio.h" HAVE_ISO_SNPRINTF)
     check_symbol_exists(_hypot "math.h" HAVE_ISO_HYPOT)
+
+    #check_symbol_exists(clock_gettime "time.h" HAVE_CLOCK_GETTIME) non-standard library, does not work
+    check_library_exists(rt clock_gettime "" HAVE_CLOCK_GETTIME)
+
+    # HAVE_GETTIMEOFDAY is already in use within 2.9 wxWidgets, so use HAVE_GETTIMEOFDAY_FUNC
+    check_symbol_exists(gettimeofday "sys/time.h" HAVE_GETTIMEOFDAY_FUNC)
 
     # Generate config.h.
     configure_file(${PROJECT_SOURCE_DIR}/CMakeModules/config.h.cmake

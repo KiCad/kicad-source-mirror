@@ -506,4 +506,12 @@ int From_User_Unit( EDA_UNITS_T aUnit, double val, int internal_unit_value );
  */
 wxString GenDate();
 
+/**
+ * Function GetRunningMicroSecs
+ * returns an ever increasing indication of elapsed microseconds.  Use this
+ * by computing differences between two calls.
+ * @author Dick Hollenbeck
+ */
+unsigned GetRunningMicroSecs();
+
 #endif  // INCLUDE__COMMON_H_
