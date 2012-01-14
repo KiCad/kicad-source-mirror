@@ -2123,7 +2123,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     newPoint.x += aSegment->m_Start.x;
     newPoint.y += aSegment->m_Start.y;
 
-    TRACK* newTrack = aSegment->Copy();
+    TRACK* newTrack = (TRACK*)aSegment->Clone();
 
     if( aList )
     {
@@ -2139,7 +2139,7 @@ TRACK* BOARD::CreateLockPoint( wxPoint& aPosition, TRACK* aSegment, PICKED_ITEMS
     if( aList )
     {
         ITEM_PICKER picker( aSegment, UR_CHANGED );
-        picker.m_Link = aSegment->Copy();
+        picker.m_Link = aSegment->Clone();
         aList->PushItem( picker );
     }
 

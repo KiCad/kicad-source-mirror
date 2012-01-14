@@ -19,10 +19,12 @@ BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype 
 }
 
 
-BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& src ) :
-    BOARD_ITEM( src )
+BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem ) :
+    BOARD_ITEM( aItem )
 {
-    m_Layer = src.m_Layer;
+    m_NetCode = aItem.m_NetCode;
+    m_Subnet = aItem.m_Subnet;
+    m_ZoneSubnet = aItem.m_ZoneSubnet;
 }
 
 

@@ -1165,8 +1165,8 @@ bool NETLIST_READER::loadNewModules()
             if( Module == NULL )
                 continue;            // Module does not exist in library.
 
-            MODULE* newmodule = new MODULE( pcb );
-            newmodule->Copy( Module );
+            MODULE* newmodule = new MODULE( *Module );
+            newmodule->SetParent( pcb );
 
             pcb->Add( newmodule, ADD_APPEND );
 

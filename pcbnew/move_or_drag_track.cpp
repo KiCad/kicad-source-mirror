@@ -758,14 +758,14 @@ void PCB_EDIT_FRAME::StartMoveOneNodeOrSegment( TRACK* aTrack, wxDC* aDC, int aC
 
     // Prepare the Undo command
     ITEM_PICKER picker( aTrack, UR_CHANGED );
-    picker.m_Link = aTrack->Copy();
+    picker.m_Link = aTrack->Clone();
     s_ItemsListPicker.PushItem( picker );
 
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         TRACK* draggedtrack = g_DragSegmentList[ii].m_Segm;
         picker.m_PickedItem = draggedtrack;
-        picker.m_Link = draggedtrack->Copy();
+        picker.m_Link = draggedtrack->Clone();
         s_ItemsListPicker.PushItem( picker );
         draggedtrack = (TRACK*) picker.m_Link;
         draggedtrack->SetStatus( 0 );
@@ -980,7 +980,7 @@ void PCB_EDIT_FRAME::Start_DragTrackSegmentAndKeepSlope( TRACK* track, wxDC*  DC
     {
         TRACK* draggedtrack = g_DragSegmentList[ii].m_Segm;
         picker.m_PickedItem = draggedtrack;
-        picker.m_Link = draggedtrack->Copy();
+        picker.m_Link = draggedtrack->Clone();
         s_ItemsListPicker.PushItem( picker );
         draggedtrack = (TRACK*) picker.m_Link;
         draggedtrack->SetStatus( 0 );

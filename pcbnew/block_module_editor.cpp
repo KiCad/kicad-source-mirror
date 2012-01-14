@@ -401,11 +401,13 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
             continue;
 
         pad->ClearFlags( SELECTED );
-        D_PAD* NewPad = new D_PAD( module );
-        NewPad->Copy( pad );
+        D_PAD* NewPad = new D_PAD( *pad );
+        NewPad->SetParent( module );
         NewPad->SetFlags( SELECTED );
         module->m_Pads.PushFront( NewPad );
     }
+
+    BOARD_ITEM* newItem;
 
     for( BOARD_ITEM* item = module->m_Drawings;  item;  item = item->Next() )
     {
@@ -414,28 +416,10 @@ void CopyMarkedItems( MODULE* module, wxPoint offset )
 
         item->ClearFlags( SELECTED );
 
-        switch( item->Type() )
-        {
-        case PCB_MODULE_TEXT_T:
-            TEXTE_MODULE * textm;
-            textm = new TEXTE_MODULE( module );
-            textm->Copy( (TEXTE_MODULE*) item );
-            textm->SetFlags( SELECTED );
-            module->m_Drawings.PushFront( textm );
-            break;
-
-        case PCB_MODULE_EDGE_T:
-            EDGE_MODULE * edge;
-            edge = new EDGE_MODULE( module );
-            edge->Copy( (EDGE_MODULE*) item );
-            edge->SetFlags( SELECTED );
-            module->m_Drawings.PushFront( edge );
-            break;
-
-        default:
-            DisplayError( NULL, wxT( "CopyMarkedItems: type undefined" ) );
-            break;
-        }
+        newItem = (BOARD_ITEM*)item->Clone();
+        newItem->SetParent( module );
+        newItem->SetFlags( SELECTED );
+        module->m_Drawings.PushFront( newItem );
     }
 
     MoveMarkedItems( module, offset );

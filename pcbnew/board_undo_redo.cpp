@@ -72,8 +72,6 @@
  *
  */
 
-BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem );
-
 
 /**
  * Function TestForExistingItem
@@ -186,7 +184,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
     {
     case PCB_MODULE_T:
         {
-            MODULE* tmp = (MODULE*) DuplicateStruct( aImage );
+            MODULE* tmp = (MODULE*) aImage->Clone();
             ( (MODULE*) aImage )->Copy( (MODULE*) aItem );
             ( (MODULE*) aItem )->Copy( tmp );
             delete tmp;
@@ -195,7 +193,7 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 
     case PCB_ZONE_AREA_T:
         {
-            ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) DuplicateStruct( aImage );
+            ZONE_CONTAINER* tmp = (ZONE_CONTAINER*) aImage->Clone();
             ( (ZONE_CONTAINER*) aImage )->Copy( (ZONE_CONTAINER*) aItem );
             ( (ZONE_CONTAINER*) aItem )->Copy( tmp );
             delete tmp;
@@ -290,98 +288,6 @@ void SwapData( BOARD_ITEM* aItem, BOARD_ITEM* aImage )
 }
 
 
-/* Routine to create a new copy of given struct.
- *  The new object is not put in list (not linked)
- */
-BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem )
-{
-    if( aItem == NULL )
-    {
-        wxMessageBox( wxT( "DuplicateStruct() error: NULL aItem" ) );
-        return NULL;
-    }
-
-    switch( aItem->Type() )
-    {
-    case PCB_MODULE_T:
-    {
-        MODULE* new_module;
-        new_module = new MODULE( (BOARD*) aItem->GetParent() );
-        new_module->Copy( (MODULE*) aItem );
-        return new_module;
-    }
-
-    case PCB_TRACE_T:
-    {
-        TRACK* new_track = ( (TRACK*) aItem )->Copy();
-        return new_track;
-    }
-
-    case PCB_VIA_T:
-    {
-        SEGVIA* new_via = (SEGVIA*)( (SEGVIA*) aItem )->Copy();
-        return new_via;
-    }
-
-    case PCB_ZONE_T:
-    {
-        SEGZONE* new_segzone = (SEGZONE*)( (SEGZONE*) aItem )->Copy();
-        return new_segzone;
-    }
-
-    case PCB_ZONE_AREA_T:
-    {
-        ZONE_CONTAINER* new_zone = new ZONE_CONTAINER( (BOARD*) aItem->GetParent() );
-        new_zone->Copy( (ZONE_CONTAINER*) aItem );
-        return new_zone;
-    }
-
-    case PCB_LINE_T:
-    {
-        DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( aItem->GetParent() );
-        new_drawsegment->Copy( (DRAWSEGMENT*) aItem );
-        return new_drawsegment;
-    }
-    break;
-
-    case PCB_TEXT_T:
-    {
-        TEXTE_PCB* new_pcbtext = new TEXTE_PCB( aItem->GetParent() );
-        new_pcbtext->Copy( (TEXTE_PCB*) aItem );
-        return new_pcbtext;
-    }
-    break;
-
-    case PCB_TARGET_T:
-    {
-        PCB_TARGET* target = new PCB_TARGET( aItem->GetParent() );
-        target->Copy( (PCB_TARGET*) aItem );
-        return target;
-    }
-    break;
-
-    case PCB_DIMENSION_T:
-    {
-        DIMENSION* new_cotation = new DIMENSION( aItem->GetParent() );
-        new_cotation->Copy( (DIMENSION*) aItem );
-        return new_cotation;
-    }
-    break;
-
-    default:
-    {
-        wxString msg;
-        msg << wxT( "DuplicateStruct error: unexpected StructType " ) <<
-        aItem->Type() << wxT( " " ) << aItem->GetClass();
-        wxMessageBox( msg );
-    }
-    break;
-    }
-
-    return NULL;
-}
-
-
 /*
  * Function SaveCopyInUndoList
  * Create a copy of the current board item, and put it in the undo list.
@@ -412,9 +318,11 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     {
     case UR_CHANGED:                        /* Create a copy of schematic */
         if( itemWrapper.m_Link == NULL )    // When not null, the copy is already done
-            itemWrapper.m_Link = DuplicateStruct( aItem );;
+            itemWrapper.m_Link = aItem->Clone();;
+
         if( itemWrapper.m_Link )
             commandToUndo->PushItem( itemWrapper );
+
         break;
 
     case UR_NEW:
@@ -444,7 +352,9 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
         GetScreen()->ClearUndoORRedoList( GetScreen()->m_RedoList );
     }
     else
+    {
         delete commandToUndo;
+    }
 }
 
 
@@ -478,6 +388,7 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
         }
 
         wxASSERT( item );
+
         switch( command )
         {
         case UR_CHANGED:
@@ -487,9 +398,11 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
              * If this link is not null, the copy is already done
              */
             if( commandToUndo->GetPickedItemLink( ii ) == NULL )
-                commandToUndo->SetPickedItemLink( DuplicateStruct( item ), ii );
+                commandToUndo->SetPickedItemLink( item->Clone(), ii );
+
             if( commandToUndo->GetPickedItemLink( ii ) == NULL )
                  wxMessageBox( wxT( "SaveCopyInUndoList() in UR_CHANGED mode: NULL link" ) );
+
             break;
 
         case UR_MOVED:
@@ -506,7 +419,9 @@ void PCB_EDIT_FRAME::SaveCopyInUndoList( PICKED_ITEMS_LIST& aItemsList,
             msg.Printf( wxT( "SaveCopyInUndoList() error (unknown code %X)" ), command );
             wxMessageBox( msg );
         }
+
         break;
+
         }
     }
 

@@ -1219,7 +1219,7 @@ static void OrCell_Trace( BOARD* pcb, int col, int row,
             {
                 g_CurrentTrackSegment->m_Start = pt_cur_ch->m_PadEnd->GetPosition();
 
-                newTrack = g_CurrentTrackSegment->Copy();
+                newTrack = (TRACK*)g_CurrentTrackSegment->Clone();
                 newTrack->m_Start = g_CurrentTrackSegment->m_End;
 
                 g_CurrentTrackList.PushBack( newTrack );
@@ -1292,7 +1292,7 @@ static void AddNewTrace( PCB_EDIT_FRAME* pcbframe, wxDC* DC )
     }
     else
     {
-        TRACK* newTrack = g_CurrentTrackSegment->Copy();
+        TRACK* newTrack = (TRACK*)g_CurrentTrackSegment->Clone();
 
         newTrack->m_End   = pt_cur_ch->m_PadStart->GetPosition();
         newTrack->m_Start = g_CurrentTrackSegment->m_End;

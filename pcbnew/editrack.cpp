@@ -186,7 +186,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
         if( g_TwoSegmentTrackBuild )
         {
             // Create 2nd segment
-            g_CurrentTrackList.PushBack( g_CurrentTrackSegment->Copy() );
+            g_CurrentTrackList.PushBack( (TRACK*)g_CurrentTrackSegment->Clone() );
 
             D( g_CurrentTrackList.VerifyListIntegrity(); );
 
@@ -254,7 +254,7 @@ TRACK* PCB_EDIT_FRAME::Begin_Route( TRACK* aTrack, wxDC* aDC )
 
             TRACK* previousTrack = g_CurrentTrackSegment;
 
-            TRACK* newTrack = g_CurrentTrackSegment->Copy();
+            TRACK* newTrack = (TRACK*)g_CurrentTrackSegment->Clone();
             g_CurrentTrackList.PushBack( newTrack );
             newTrack->SetFlags( IS_NEW );
 
@@ -327,7 +327,7 @@ bool PCB_EDIT_FRAME::Add45DegreeSegment( wxDC* aDC )
         return false;
 
     /* Create a new segment and connect it with the previous 2 segments. */
-    TRACK* newTrack = curTrack->Copy();
+    TRACK* newTrack = (TRACK*)curTrack->Clone();
 
     newTrack->m_Start = prevTrack->m_End;
     newTrack->m_End   = curTrack->m_Start;
@@ -1079,7 +1079,7 @@ void EnsureEndTrackOnPad( D_PAD* Pad )
     if( !g_CurrentTrackSegment->IsNull() )
     {
         /* Must create a new segment, from track end to pad center */
-        g_CurrentTrackList.PushBack( lasttrack->Copy() );
+        g_CurrentTrackList.PushBack( (TRACK*)lasttrack->Clone() );
 
         lasttrack->end = g_CurrentTrackSegment;
     }

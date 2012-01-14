@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 1992-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 /**
  * @file class_module.cpp
  * @brief TEXT_MODULE class implementation.
@@ -23,11 +47,13 @@
 
 
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
-    BOARD_ITEM( parent, PCB_MODULE_TEXT_T ), EDA_TEXT()
+    BOARD_ITEM( parent, PCB_MODULE_TEXT_T ),
+    EDA_TEXT()
 {
     MODULE* Module = (MODULE*) m_Parent;
 
     m_Type = text_type;         /* Reference */
+
     if( (m_Type != TEXT_is_REFERENCE) && (m_Type != TEXT_is_VALUE) )
         m_Type = TEXT_is_DIVERS;
 
@@ -36,6 +62,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :
     m_Thickness  = 120;   /* Set default dimension to a reasonable value. */
 
     SetLayer( SILKSCREEN_N_FRONT );
+
     if( Module && ( Module->Type() == PCB_MODULE_T ) )
     {
         m_Pos = Module->m_Pos;
@@ -85,13 +112,13 @@ void TEXTE_MODULE::Copy( TEXTE_MODULE* source )
 }
 
 
-int TEXTE_MODULE:: GetLength() const
+int TEXTE_MODULE::GetLength() const
 {
     return m_Text.Len();
 }
 
 // Update draw coordinates
-void TEXTE_MODULE:: SetDrawCoord()
+void TEXTE_MODULE::SetDrawCoord()
 {
     MODULE* Module = (MODULE*) m_Parent;
 
@@ -110,7 +137,7 @@ void TEXTE_MODULE:: SetDrawCoord()
 
 // Update "local" coordinates (coordinates relatives to the footprint
 //  anchor point)
-void TEXTE_MODULE:: SetLocalCoord()
+void TEXTE_MODULE::SetLocalCoord()
 {
     MODULE* Module = (MODULE*) m_Parent;
 
@@ -450,6 +477,12 @@ wxString TEXTE_MODULE::GetSelectMenuText() const
     }
 
     return text;
+}
+
+
+EDA_ITEM* TEXTE_MODULE::doClone() const
+{
+    return new TEXTE_MODULE( *this );
 }
 
 

@@ -797,7 +797,7 @@ static void ConnectDanglingEndToVia( BOARD* pcb )
             if( other->m_End != via->GetPosition() && via->HitTest( other->m_Start )
              && !other->start )
             {
-                TRACK* newTrack = other->Copy();
+                TRACK* newTrack = (TRACK*)other->Clone();
 
                 pcb->m_Track.Insert( newTrack, other->Next() );
 
@@ -821,7 +821,7 @@ static void ConnectDanglingEndToVia( BOARD* pcb )
             else if( other->m_Start != via->GetPosition() && via->HitTest( other->m_End )
                   && !other->end )
             {
-                TRACK* newTrack = other->Copy();
+                TRACK* newTrack = (TRACK*)other->Clone();
 
                 pcb->m_Track.Insert( newTrack, other->Next() );
 
@@ -874,7 +874,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* aFrame )
             {
                 if( segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, START ) == NULL )
                 {
-                    TRACK* newTrack = segment->Copy();
+                    TRACK* newTrack = (TRACK*)segment->Clone();
 
                     aFrame->GetBoard()->m_Track.Insert( newTrack, segment->Next() );
 
@@ -896,7 +896,7 @@ void ConnectDanglingEndToPad( PCB_EDIT_FRAME* aFrame )
             {
                 if( segment->GetTrace( aFrame->GetBoard()->m_Track, NULL, END ) == NULL )
                 {
-                    TRACK* newTrack = segment->Copy();
+                    TRACK* newTrack = (TRACK*)segment->Clone();
 
                     aFrame->GetBoard()->m_Track.Insert( newTrack, segment->Next() );
 

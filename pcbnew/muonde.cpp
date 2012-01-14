@@ -267,8 +267,7 @@ MODULE* PCB_EDIT_FRAME::Genere_Self( wxDC* DC )
     PtPad->m_PadShape     = PAD_CIRCLE;
     PtPad->ComputeShapeMaxRadius();
 
-    D_PAD* newpad = new D_PAD( module );
-    newpad->Copy( PtPad );
+    D_PAD* newpad = new D_PAD( *PtPad );
 
     module->m_Pads.Insert( newpad, PtPad->Next() );
 
