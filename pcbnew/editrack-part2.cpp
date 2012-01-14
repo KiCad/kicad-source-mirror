@@ -183,7 +183,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
      * it will become the new current segment (from via to the mouse cursor)
      */
 
-    TRACK* track = lastNonVia->Copy();
+    TRACK* track = (TRACK*)lastNonVia->Clone();
 
     /* the above creates a new segment from the last entered segment, with the
      * current width, flags, netcode, etc... values.
@@ -204,7 +204,7 @@ bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )
     if( g_TwoSegmentTrackBuild )
     {
         // Create a second segment (we must have 2 track segments to adjust)
-        g_CurrentTrackList.PushBack( g_CurrentTrackSegment->Copy() );
+        g_CurrentTrackList.PushBack( (TRACK*)g_CurrentTrackSegment->Clone() );
     }
 
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );

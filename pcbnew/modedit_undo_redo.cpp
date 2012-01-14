@@ -22,8 +22,7 @@ void FOOTPRINT_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM*    aItem,
     MODULE*            CopyItem;
     PICKED_ITEMS_LIST* lastcmd;
 
-    CopyItem = new MODULE( GetBoard() );
-    CopyItem->Copy( (MODULE*) aItem );
+    CopyItem = new MODULE( *( (MODULE*) aItem ) );
     CopyItem->SetParent( GetBoard() );
 
     lastcmd = new PICKED_ITEMS_LIST();

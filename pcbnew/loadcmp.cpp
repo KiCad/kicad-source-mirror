@@ -76,8 +76,8 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     Clear_Pcb( false );
 
     GetBoard()->m_Status_Pcb = 0;
-    newModule = new MODULE( GetBoard() );
-    newModule->Copy( aModule );
+    newModule = new MODULE( *aModule );
+    newModule->SetParent( GetBoard() );
     newModule->m_Link = aModule->GetTimeStamp();
 
     aModule = newModule;

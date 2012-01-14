@@ -68,7 +68,9 @@ EDA_ITEM::EDA_ITEM( const EDA_ITEM& base )
     m_Parent     = base.m_Parent;
     m_Son        = base.m_Son;
     m_Flags      = base.m_Flags;
-    SetTimeStamp( base.m_TimeStamp );
+
+    // A copy of an item cannot have the same time stamp as the original item.
+    SetTimeStamp( GetNewTimeStamp() );
     m_Status     = base.m_Status;
 }
 
@@ -214,19 +216,17 @@ bool EDA_ITEM::operator<( const EDA_ITEM& aItem ) const
 
 EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 {
-    wxCHECK_MSG( Type() == aItem.Type(), *this,
-                 wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
-                 GetClass() );
-
     if( &aItem != this )
     {
-        // Do not assign the linked list pointers.
+        m_StructType = aItem.Type();
+        Pnext = aItem.Pnext;
+        Pback = aItem.Pback;
         m_StructType = aItem.m_StructType;
-        m_Parent     = aItem.m_Parent;
-        m_Son        = aItem.m_Son;
-        m_Flags      = aItem.m_Flags;
+        m_Parent = aItem.m_Parent;
+        m_Son = aItem.m_Son;
+        m_Flags = aItem.m_Flags;
         SetTimeStamp( aItem.m_TimeStamp );
-        m_Status     = aItem.m_Status;
+        m_Status = aItem.m_Status;
     }
 
     return *this;

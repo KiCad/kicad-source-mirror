@@ -41,7 +41,8 @@ private:
 
 public:
     BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype );
-    BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& src );
+
+    BOARD_CONNECTED_ITEM( const BOARD_CONNECTED_ITEM& aItem );
 
     /**
      * Function GetNet

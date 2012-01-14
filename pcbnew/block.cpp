@@ -834,100 +834,27 @@ void PCB_EDIT_FRAME::Block_Duplicate()
 
     PICKED_ITEMS_LIST* itemsList = &GetScreen()->m_BlockLocate.m_ItemsSelection;
 
-    PICKED_ITEMS_LIST  newList;
+    PICKED_ITEMS_LIST newList;
     newList.m_Status = UR_NEW;
 
-    ITEM_PICKER        picker( NULL, UR_NEW );
-    BOARD_ITEM*        newitem;
+    ITEM_PICKER picker( NULL, UR_NEW );
+    BOARD_ITEM* newitem;
 
     for( unsigned ii = 0; ii < itemsList->GetCount(); ii++ )
     {
         BOARD_ITEM* item = (BOARD_ITEM*) itemsList->GetPickedItem( ii );
-        newitem = NULL;
-        switch( item->Type() )
-        {
-        case PCB_MODULE_T:
-            {
-                MODULE* module = (MODULE*) item;
-                MODULE* new_module;
-                m_Pcb->m_Status_Pcb = 0;
-                module->ClearFlags();
-                newitem = new_module = new MODULE( m_Pcb );
-                new_module->Copy( module );
-                new_module->SetTimeStamp( GetNewTimeStamp() );
-                m_Pcb->m_Modules.PushFront( new_module );
-            }
-            break;
 
-        case PCB_TRACE_T:
-        case PCB_VIA_T:
-            {
-                TRACK* track = (TRACK*) item;
-                m_Pcb->m_Status_Pcb = 0;
-                TRACK* new_track = track->Copy();
-                newitem = new_track;
-                m_Pcb->m_Track.PushFront( new_track );
-            }
-            break;
+        newitem = (BOARD_ITEM*)item->Clone();
 
-        case PCB_ZONE_T:                  // SEG_ZONE items are now deprecated
-            break;
+        if( item->Type() == PCB_MODULE_T )
+            m_Pcb->m_Status_Pcb = 0;
 
-        case PCB_ZONE_AREA_T:
-            {
-                ZONE_CONTAINER* new_zone = new ZONE_CONTAINER( (BOARD*) item->GetParent() );
-                new_zone->Copy( (ZONE_CONTAINER*) item );
-                new_zone->SetTimeStamp( GetNewTimeStamp() );
-                newitem = new_zone;
-                m_Pcb->Add( new_zone );
-            }
-            break;
-
-        case PCB_LINE_T:
-            {
-                DRAWSEGMENT* new_drawsegment = new DRAWSEGMENT( m_Pcb );
-                new_drawsegment->Copy( (DRAWSEGMENT*) item );
-                m_Pcb->Add( new_drawsegment );
-                newitem = new_drawsegment;
-            }
-            break;
-
-        case PCB_TEXT_T:
-        {
-            TEXTE_PCB* new_pcbtext = new TEXTE_PCB( m_Pcb );
-            new_pcbtext->Copy( (TEXTE_PCB*) item );
-            m_Pcb->Add( new_pcbtext );
-            newitem = new_pcbtext;
-        }
-        break;
-
-        case PCB_TARGET_T:
-            {
-                PCB_TARGET* target = new PCB_TARGET( m_Pcb );
-                target->Copy( (PCB_TARGET*) item );
-                m_Pcb->Add( target );
-                newitem = target;
-            }
-            break;
-
-        case PCB_DIMENSION_T:
-            {
-                DIMENSION* new_cotation = new DIMENSION( m_Pcb );
-                new_cotation->Copy( (DIMENSION*) item );
-                m_Pcb->Add( new_cotation );
-                newitem = new_cotation;
-            }
-            break;
-
-        default:
-            wxMessageBox( wxT( "PCB_EDIT_FRAME::Block_Duplicate( ) error: unexpected type" ) );
-            break;
-        }
+        m_Pcb->Add( newitem );
 
         if( newitem )
         {
             newitem->Move( MoveVector );
-            picker.m_PickedItem     = newitem;
+            picker.m_PickedItem = newitem;
             picker.m_PickedItemType = newitem->Type();
             newList.PushItem( picker );
         }

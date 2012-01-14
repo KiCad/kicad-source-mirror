@@ -99,8 +99,8 @@ void PCB_EDIT_FRAME::StartMove_Module( MODULE* module, wxDC* DC )
     s_PickedList.ClearItemsList();  // Should be empty, but...
 
     // Creates a copy of the current module, for abort and undo commands
-    s_ModuleInitialCopy = new MODULE( GetBoard() );
-    s_ModuleInitialCopy->Copy( module );
+    s_ModuleInitialCopy = (MODULE*)module->Clone();
+    s_ModuleInitialCopy->SetParent( GetBoard() );
     s_ModuleInitialCopy->ClearFlags();
 
     SetCurItem( module );
@@ -122,7 +122,7 @@ void PCB_EDIT_FRAME::StartMove_Module( MODULE* module, wxDC* DC )
         {
             TRACK* segm = g_DragSegmentList[ii].m_Segm;
             itemWrapper.m_PickedItem = segm;
-            itemWrapper.m_Link = segm->Copy();
+            itemWrapper.m_Link = segm->Clone();
             itemWrapper.m_Link->SetState( IN_EDIT, OFF );
             s_PickedList.PushItem( itemWrapper );
         }

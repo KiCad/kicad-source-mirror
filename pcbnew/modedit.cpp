@@ -309,8 +309,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
 
         // Create the "new" module
-        MODULE* newmodule = new MODULE( mainpcb );
-        newmodule->Copy( module_in_edit );
+        MODULE* newmodule = new MODULE( *module_in_edit );
+        newmodule->SetParent( mainpcb );
         newmodule->m_Link = 0;
 
         // Put the footprint in the main pcb linked list.

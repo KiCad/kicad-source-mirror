@@ -130,6 +130,12 @@ TRACK::TRACK( BOARD_ITEM* aParent, KICAD_T idtype ) :
 }
 
 
+EDA_ITEM* TRACK::doClone() const
+{
+    return new TRACK( *this );
+}
+
+
 wxString TRACK::ShowWidth() const
 {
     wxString msg;
@@ -143,6 +149,12 @@ wxString TRACK::ShowWidth() const
 SEGZONE::SEGZONE( BOARD_ITEM* aParent ) :
     TRACK( aParent, PCB_ZONE_T )
 {
+}
+
+
+EDA_ITEM* SEGZONE::doClone() const
+{
+    return new SEGZONE( *this );
 }
 
 
@@ -175,6 +187,12 @@ wxString SEGZONE::GetSelectMenuText() const
 SEGVIA::SEGVIA( BOARD_ITEM* aParent ) :
     TRACK( aParent, PCB_VIA_T )
 {
+}
+
+
+EDA_ITEM* SEGVIA::doClone() const
+{
+    return new SEGVIA( *this );
 }
 
 
@@ -219,40 +237,6 @@ wxString SEGVIA::GetSelectMenuText() const
     }
 
     return text;
-}
-
-
-// Copy constructor
-TRACK::TRACK( const TRACK& Source ) :
-    BOARD_CONNECTED_ITEM( Source )
-{
-    m_Shape = Source.m_Shape;
-    SetNet( Source.GetNet() );
-
-    m_Flags     = Source.m_Flags;
-    SetTimeStamp( Source.m_TimeStamp );
-    SetStatus( Source.GetStatus() );
-    m_Start = Source.m_Start;
-    m_End   = Source.m_End;
-    m_Width = Source.m_Width;
-    m_Drill = Source.m_Drill;
-    SetSubNet( Source.GetSubNet() );
-    m_Param = Source.m_Param;
-}
-
-
-TRACK* TRACK::Copy() const
-{
-    if( Type() == PCB_TRACE_T )
-        return new TRACK( *this );
-
-    if( Type() == PCB_VIA_T )
-        return new SEGVIA( (const SEGVIA &) * this );
-
-    if( Type() == PCB_ZONE_T )
-        return new SEGZONE( (const SEGZONE &) * this );
-
-    return NULL;    // should never happen
 }
 
 

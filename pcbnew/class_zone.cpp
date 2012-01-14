@@ -65,10 +65,37 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :
 }
 
 
+ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
+    BOARD_CONNECTED_ITEM( aZone )
+{
+    // Should the copy be on the same net?
+    SetNet( aZone.GetNet() );
+    m_Poly = new CPolyLine( *aZone.m_Poly );
+
+    // For corner moving, corner index to drag, or -1 if no selection
+    m_CornerSelection = -1;
+    m_ZoneClearance = aZone.m_ZoneClearance;     // clearance value
+    m_ZoneMinThickness = aZone.m_ZoneMinThickness;
+    m_FillMode = aZone.m_FillMode;               // Filling mode (segments/polygons)
+    m_ArcToSegmentsCount = aZone.m_ArcToSegmentsCount;
+    m_PadOption = aZone.m_PadOption;
+    m_ThermalReliefGap = aZone.m_ThermalReliefGap;
+    m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
+    m_FilledPolysList = aZone.m_FilledPolysList;
+    m_FillSegmList = aZone.m_FillSegmList;
+}
+
+
 ZONE_CONTAINER::~ZONE_CONTAINER()
 {
     delete m_Poly;
     m_Poly = NULL;
+}
+
+
+EDA_ITEM* ZONE_CONTAINER::doClone() const
+{
+    return new ZONE_CONTAINER( *this );
 }
 
 

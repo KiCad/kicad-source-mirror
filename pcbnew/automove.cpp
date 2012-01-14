@@ -44,7 +44,6 @@
 #include "class_board.h"
 #include "class_module.h"
 
-extern BOARD_ITEM* DuplicateStruct( BOARD_ITEM* aItem );
 
 typedef enum {
     FIXE_MODULE,
@@ -265,7 +264,7 @@ void PCB_EDIT_FRAME::AutoMoveModulesOnPcb( bool PlaceModulesHorsPcb )
         }
 
         // Undo: add copy of old Module to undo
-        picker.m_Link           = DuplicateStruct( Module );
+        picker.m_Link           = Module->Clone();
         picker.m_PickedItemType = Module->Type();
 
         if( current.x > (Xsize_allowed + start.x) )

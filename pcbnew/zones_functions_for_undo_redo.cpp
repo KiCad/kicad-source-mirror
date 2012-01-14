@@ -132,8 +132,8 @@ int SaveCopyOfZones( PICKED_ITEMS_LIST& aPickList, BOARD* aPcb, int aNetCode, in
         if( aLayer >= 0 && aLayer != zone->GetLayer() )
             continue;
 
-        ZONE_CONTAINER* zoneDup = new ZONE_CONTAINER( aPcb );
-        zoneDup->Copy( zone );
+        ZONE_CONTAINER* zoneDup = new ZONE_CONTAINER( *zone );
+        zoneDup->SetParent( aPcb );
         ITEM_PICKER     picker( zone, UR_CHANGED );
         picker.m_Link = zoneDup;
         picker.m_PickedItemType = zone->Type();
@@ -211,7 +211,8 @@ void UpdateCopyOfZonesList( PICKED_ITEMS_LIST& aPickList,
                     else
                         wxMessageBox( wxT( "UpdateCopyOfZonesList() error: link = NULL" ) );
 
-                    aPickList.SetPickedItemLink( NULL, kk );    // the copy was deleted; the link does not exists now
+                    // the copy was deleted; the link does not exists now.
+                    aPickList.SetPickedItemLink( NULL, kk );
                     delete zcopy;
                 }
 

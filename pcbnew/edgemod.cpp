@@ -374,8 +374,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* Edge,
             {
                 Edge->Draw( m_canvas, DC, GR_OR );
 
-                EDGE_MODULE* newedge = new EDGE_MODULE( module );
-                newedge->Copy( Edge );
+                EDGE_MODULE* newedge = new EDGE_MODULE( *Edge );
 
                 // insert _after_ Edge, which is the same as inserting before Edge->Next()
                 module->m_Drawings.Insert( newedge, Edge->Next() );
