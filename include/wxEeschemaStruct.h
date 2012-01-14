@@ -766,6 +766,19 @@ private:
      */
     void SetLanguage( wxCommandEvent& event );
 
+    /**
+     * Function UpdateTitle
+     * sets the main window title bar text.
+     * <p>
+     * If file name defined by SCH_SCREEN::m_FileName is not set, the title is set to the
+     * application name appended with no file.
+     * Otherwise, the title is set to the hierarchical sheet path and the full file name,
+     * and read only is appended to the title if the user does not have write
+     * access to the file.
+     * </p>
+     */
+    void UpdateTitle();
+
     // Bus Entry
     SCH_BUS_ENTRY* CreateBusEntry( wxDC* DC, int entry_type );
     void SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY* BusEntry, int entry_type );

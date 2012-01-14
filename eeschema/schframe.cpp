@@ -62,6 +62,8 @@
 #include "dialogs/dialog_SVG_print.h"
 
 #include <wx/display.h>
+#include <build_version.h>
+
 
 
 BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
@@ -977,5 +979,49 @@ void SCH_EDIT_FRAME::addCurrentItemToList( wxDC* aDC )
     {
         EDA_CROSS_HAIR_MANAGER( m_canvas, aDC );  // Erase schematic cursor
         undoItem->Draw( m_canvas, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
+    }
+}
+
+/* sets the main window title bar text.
+ * If file name defined by SCH_SCREEN::m_FileName is not set, the title is set to the
+ * application name appended with no file.
+ * Otherwise, the title is set to the hierarchical sheet path and the full file name,
+ * and read only is appended to the title if the user does not have write
+ * access to the file.
+ */
+void SCH_EDIT_FRAME::UpdateTitle()
+{
+    wxString title;
+
+    if( GetScreen()->GetFileName() == m_DefaultSchematicFileName )
+    {
+        wxString msg = wxGetApp().GetAppName() + wxT( " " ) + GetBuildVersion();
+        title.Printf( wxT( "%s [%s]" ), GetChars( msg), GetChars( GetScreen()->GetFileName() ) );
+        SetTitle( title );
+    }
+    else
+    {
+        wxFileName fn( GetScreen()->GetFileName() );
+
+        // Often the /path/to/filedir is blank because of the FullFileName argument
+        // passed to LoadOneEEFile() which omits the path on non-root schematics.
+        // Making the path absolute solves this problem.
+        fn.MakeAbsolute();
+        title = wxChar( '[' );
+        title << fn.GetName() << wxChar( ' ' );
+        title << m_CurrentSheet->PathHumanReadable() << wxChar( ']' );
+
+        title << wxChar( ' ' );
+        title << wxChar( '(' ) << fn.GetPath() << wxChar( ')' );
+
+        if( fn.FileExists() )
+        {
+            if( !fn.IsFileWritable() )
+                title << _( " [Read Only]" );
+        }
+        else
+            title << _( " [no file]" );
+
+        SetTitle( title );
     }
 }
