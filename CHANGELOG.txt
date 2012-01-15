@@ -135,6 +135,16 @@ Pcbnew:
   * Remove scary frame window pointer member from board item objects.
   * Add draw bounding box to gerber draw item for debugging purposes.
 
+2012-Sept-8 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all
+  * Write an automatic bitmap generation script in cmake, PNG2cpp.cmake
+  * Write an infrastructure generate *.png files from inkscape files, and do
+    it maintaing the "as needed" change detection support.
+  * Support an *.SVG maintainer mode, AND an *.SVG user mode.
+  * Engineer a seemless switchover from old style xpm files, with minimal
+    impact to system wide source code.
+
 2011-Sept-07, UPDATE Andrey Fedorushkov <andrf@mail.ru>
 ================================================================================
 Pcbnew:
