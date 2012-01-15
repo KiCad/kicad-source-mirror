@@ -1,0 +1,297 @@
+KiCad ChangeLog 2011
+====================
+
+Please add newer entries at the top, list the date and your name with
+email address.
+
+
+2011-Dec-19, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+Pcbnew:
+    Enhanced algorithms to calculate board connections:
+    - A track is seen connected to a pad if the track end is inside the pad shape.
+    - Pads inside pads are now seen connected, if the center of the pad is
+      *inside* the other pad.
+       (this is made to be sure a large copper area is shared by the 2 pads,
+       and to keep algorithm fast).
+    Algorithm to calculate pads connections is still very fast.
+    However some other functions (drag pads, track len calculation ...)
+    still need the track end exactly on the pad position.
+
+
+2011-Dec-13 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++common
+  * changed all the RotatePoint() functions in trigo.{h,cpp} to take a double as the
+    angle, which is still in tenths of degrees for now.
+  * EDA_TEXT::m_Orient is now double, still in tenths of degrees (for a short while),
+    but the double means parsing files and saving them use a different format string.
+++pcbnew
+  * DRAWSEGMENT::GetStart() and GetEnd() do not operate for S_ARC like they used to.
+    They are now simply accessors for m_Start and m_End.  Use DRAWSEGMENT::GetArcStart()
+    and GetArcEnd() and GetCenter() for arcs.  specctra_export.cpp was the only
+    source file dependent on the old behavior.
+  * DIMENSION::m_Text is now contained, not dynamically allocated.
+  * more kicad_plugin work.
+
+
+2011-Dec-9 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++PCBNew
+  * added BOARD::GetPad(int), made BOARD::m_NetInfo private, and contained
+    within the BOARD, not dynamically allocated and owned via pointer.
+  * added BOARD::GetPadCount()
+  * changed NETINFO_LIST::GetCount() to GetNetCount()
+  * added BOARD::GetNetCount()
+  * more kicad_plugin work.
+
+2011-Dec-5 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++PCBNew
+  * Removed Pcb_Frame argument from BOARD() constructor, since it precludes
+    having a BOARD being edited by more than one editor, it was a bad design.
+    And this meant removing m_PcbFrame from BOARD.
+  * removed BOARD::SetWindowFrame(), since BOARD::m_PcbFrame gone.
+  * Removed the global BOARD_DESIGN_SETTINGS which was in class_board.cpp
+  * Added BOARD_DESIGN_SETTINGS to the BOARD class, a full instance
+  * A couple of dialogs now only change BOARD_DESIGN_SETTINGS when OK is pressed,
+    such as dialog_mask_clearance, dialog_drc, etc.
+  * Removed common/pcbcommon.cpp's int g_CurrentVersionPCB = 1 and replaced it
+    with build_version.h's #define BOARD_FILE_VERSION, although there may be a
+    better place for this constant.
+  * Made the public functions in PARAM_CFG_ARRAY be type const.
+    void SaveParam(..) const and void ReadParam(..) const
+  * PARAM_CFG_BASE now has virtual destructor since we have various ways of
+    destroying the derived classes and boost::ptr_vector must be told about this.
+  * Pass const PARAM_CFG_ARRAY& instead of PARAM_CFG_ARRAY so that we can use
+    an automatic PARAM_CFG_ARRAY which is on the stack.
+  * PCB_EDIT_FRAME::GetProjectFileParameters() may no longer cache the array,
+    since it has to access the current BOARD and the BOARD can change.
+    Remember BOARD_DESIGN_SETTINGS are now in the BOARD.
+  * Made the m_BoundingBox member private, this was a brutally hard task,
+    and indicative of the lack of commitment to accessors and object oriented
+    design on the part of KiCad developers.  We must do better.
+    Added BOARD::GetBoundingBox, SetBoundingBox(), ComputeBoundingBox().
+  * Added PCB_BASE_FRAME::GetBoardBoundingBox() which calls BOARD::ComputeBoundingBox()
+
+
+2011-Dec-04, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+Pcbnew:
+    Enhanced algorithms to calculate board connections:
+    Previously, a track was seen connected to a pad only if the track end is
+    exactly on the pad position.
+    Now a track is seen connected to a pad if the track end is inside the pad shape.
+    Algorithm to calculate pads connections to track is still very fast.
+    However some other functions (drag pads, track len calculation ...)
+    still need the track end exactly on the pad position.
+
+2011-Nov-27 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++PCBNew
+  * Add PLUGIN and IO_MGR classes.
+  * Remove one argument from BOARD constructor,
+  * add BOARD::SetWindowFrame()
+
+2011-sept-13 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+  PCBNew locate code refactoring.
+
+  * Move various locate functions into the appropriate board item object.
+  * Unified best zoom for all frames derived from PCB_BASE_FRAME.
+  * Remove track.cpp as it is no longer needed.
+  * Dead code removal.
+  * Remove scary frame window pointer member from board item objects.
+  * Add draw bounding box to gerber draw item for debugging purposes.
+
+2012-Sept-8 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all
+  * Write an automatic bitmap generation script in cmake, PNG2cpp.cmake
+  * Write an infrastructure generate *.png files from inkscape files, and do
+    it maintaing the "as needed" change detection support.
+  * Support an *.SVG maintainer mode, AND an *.SVG user mode.
+  * Engineer a seemless switchover from old style xpm files, with minimal
+    impact to system wide source code.
+
+2011-Sept-07, UPDATE Andrey Fedorushkov <andrf@mail.ru>
+================================================================================
+Pcbnew:
+    Add hotkey "P" - place item
+    Add Roman Bashkov patch for record/play sequence hotkey macros
+    Add record and play macros for sequence hotkey.
+        Macros set to numeric key 0..9:
+        <Ctrl>+<numkey> - start record macros
+        <hotkey> <mouse move> ... <hotkey>|<mouse place>
+        <Ctrl>+<numkey> - end record macros
+        <numkey> - play macros
+    Add menu save/read macros to/from xml-file
+    Add configure rotate angle for rotate module: 45 or 90 deg.
+    Fix segfault when move/drag segment if disconnected to pad
+
+2011-Sept-01, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+    Add Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com> in contributors list.
+Eeschema:
+    Graphic texts ans labels: fix fully broken undo/redo code relative to the way undo/redo command
+    handles changes (maintly move) for labels
+    Fix minor bug for undo command relative to block rotate
+    Remove dead code.
+    Add new class BITMAP_BASE, and (for Eeschema) SCH_BITMAP to handle bitmap images in schematic.
+    Remember plot Bitmaps in not possble with all plotters.
+
+
+2011-Aug-19, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+Pcbnew:
+    Add support for not plated through holes (NPTH) pads
+    * These NPTH pads are used for mechanical purpose only, and cannot be connected to a net.
+    * When these pads have a same size and shape for the hole and the pad, the pad is not plotted
+    in GERBER files.
+
+2011-Apr-12, UPDATE Jerry Jacobs <xor.gate.engineering@gmail.com>
+================================================================================
+Minor UI changes that affect OS X platform.
+ - Fix for opening the help contents
+ - Fix for opening files with the default editor
+ - Fix for opening PDF files
+
+Solved all with the BSD open command, for other OS'es which have X11 and
+utilities they can use the xdg-open command which I added to the pdf viewer tries
+list.
+
+Kicad projectview:
+Remove not-existing files when a empty project is created, this confuses when
+users try to open it. Show a entry that the project is empty instead of these
+void files.
+
+2011-Apr-6, UPDATE Jerry Jacobs <xor.gate.engineering@gmail.com>
+================================================================================
+Cleanup of all the menubar code to have the same style, remove the C comments.
+Make the wxMenu behave native on OSX for KiCad, CvPCB and Gerbview and remove
+unneeded ifdefs when using the wxIDs. Add a OnQuit for the gerber frame.
+Change item->SetBitmap( item ) to use macro SET_BITMAP for menu items.
+
+2011-Apr-4, UPDATE Jerry Jacobs <xor.gate.engineering@gmail.com>
+================================================================================
+More native OSX changes, this removes some WXMAC defines replaced by wxID
+macros. These are handled by wxWidgets itself and reduces in-app platform
+defines. More work needs to be done for CvPCB and Gerbview.
+
+All:
+     Hotkey names in menu's all have tabs, this looks more uniform and pretty.
+
+EESschema & PCBNew:
+     Fix about and preferences wxMenu to be more native (remove unneeded WXMAC )
+     Disable all icons in wxMenu on OSX with macro SETBITMAPS
+
+jp charras:
+    SETBITMAPS is incorrectly used here. change to SET_BITMAP
+
+2011-Mar-25 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+  EESchema multiple item hit testing and other minor improvements.
+
+  * Add item clarification context menu to EESchema when multiple unresolved
+    items are found at the current cross hair position.
+  * Add collector class SCH_COLLECTOR for supporting multiple item hit testing.
+  * Removed bit wise masked filtering from schematic item hit testing.
+  * Removed all old hit testing functions and methods scattered about the
+    EESchema source code.
+  * Move terminal point test function into SCH_SCREEN object.
+  * Fixed bug in terminal point test when terminating a bus to a label.
+  * Define the < operator for sorting schematic items.
+  * Add area calculation method to EDA_Rect item.
+  * Add method for returning an item's bitmap for menu display purposes.
+  * Add method for returning an item's menu text for menu display purposes.
+  * Changed EDA_ITEMS container from boost::ptr_vector to std::vector.
+  * Factor coordinate string conversion code from EDA_DRAW_FRAME to function CoordinateToString().
+
+2011-Mar-16, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+Gerbview:
+    Added: read Excellon files created by Pcbnew.
+    The full Excellon command set is not supported, but drill files created by Pcbnew are supported.
+
+2011-Feb-05, UPDATE Jean-Pierre Charras <jean-pierre.charras@gipsa-lab.inpg.fr>
+================================================================================
+CvPcb:
+    Code cleanup. Rename WinEDA_CvpcbFrame to CVPCB_MAINFRAME,
+        according to coding style policy.
+    Change in CvPcb:
+        CvPcb does not use now .dcm files, only .mod files,
+        to read modules keywords and doc
+
+
+2011-Feb-2 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++common:
+  * macros.h now has TO_UTF8() and FROM_UTF8() which are working converters
+    to and from UTF-8 encoding for any wxWidgets build mode.  We can switch to
+    them at any time.  I am using them now for specctra conversions and
+    elsewhere where I wanted gauranteed UTF8 encoding.
+  * added OUTPUTFORMATTER::Quoted( const wxString& ) to simplify converting
+    to UTF8 encoded s-expression atoms.  The recommended technique is now simply:
+        out->Quoted( wxString ).c_str()
+
+2011-Jan-30 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all:
+  * DSNLEXER::NextTok() now uses two separate modes to parse quoted strings.
+    This gives us the freedom to control our own destiny separate from the
+    constraints put on us by the Specctra DSN spec.
+  * Added Documentation/s-expressions.txt to explain all this.
+  * Enhanced our quoting protocol by moving away from doubling up double quotes
+    to a C like escape mechanism.
+  * Now support multi-line strings, which when properly escaped, can still be
+    read in as a token originating on a single line.
+
+2011-Jan-21 UPDATE Wayne Stambaugh <stambaughw@verizon.net>
+================================================================================
+  EESchema code refactoring and coding policy naming fixes.
+
+  * Move schematic wire and bus break code into schematic screen object.
+  * Move schematic test for dangling ends into schematic screen object.
+  * Remove left over debugging output in schematic screen object.
+  * Remove unused file eeschema/cleanup.cpp.
+  * Fix bug in schematic line object hit test algorithm.
+  * Fix a string concatenation compile error added in r2752.
+  * Rename class WinEDA_BasicFrame to EDA_BASE_FRAME.
+  * Rename class WinEDA_DrawFrame to EDA_DRAW_FRAME.
+  * Rename class WinEDA_DrawPanel to EDA_DRAW_PANEL.
+
+2011-Jan-19 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all:
+  * TokenList2DsnLexer.cmake now supports comments, which start with a leading
+    # character, and may be either on their own line or on a line after a token.
+  * DSNLEXER::PopReader() now pops even the last LINE_READER* and returns it.
+++pcbnew:
+  * SPECCTRA_DB now inherits from new class SPECCTRA_LEXER, which led to a great
+    deal of simplification and code factoring.
+  * Moved specctra keywords into specctra.keywords.
+
+2011-Jan-17 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all:
+  * TokenList2DsnLexer.cmake now wraps each token enum in its own namespace. It
+    also no longer setup of the "using" directive in the header file, which was
+    bad behavior.  C++ enum values will have name collisions unless the enums
+    themselves are different namespaces.
+++new:
+  * Sweet library is now a DSO/DLL.
+  * Brought in SWIG to do a wrap of the Sweet DSO/DLL for unit testing
+    and scripting.  The SWIG DSO/DLLs are built separate from the Sweet DSO/DLL
+    and are also optional.
+
+2011-Jan-1 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++new:
+  * Added the basic structure to the Sweet parser in sch_part.cpp.
+  * Got inheritence working off of the 'extends' keyword and PART::inherit()
+  * Tossed the units support out of sweet.keywords, since we agreed to go dimensionless.
+++richio:
+  * Added the problemInputLine support to PARSE_ERROR, so UI can show the
+    offending line of bytes.  Yes bytes, not even guaranteed to be characters.
+
+
