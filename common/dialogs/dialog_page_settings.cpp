@@ -196,22 +196,13 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
     tb.SetComment3( m_TextComment3->GetValue() );
     tb.SetComment4( m_TextComment4->GetValue() );
 
+    m_Parent->SetTitleBlock( tb );
+
     msg = m_TextUserSizeX->GetValue();
     msg.ToDouble( &userSizeX );
 
     msg = m_TextUserSizeY->GetValue();
     msg.ToDouble( &userSizeY );
-
-    int radioSelection = m_PageSizeBox->GetSelection();
-    if( radioSelection < 0 )
-        radioSelection = 0;
-
-    // wxFormBuilder must use "A4", "A3", etc for choices, in all languages/translations
-    wxString    paperType = m_PageSizeBox->GetString( radioSelection );
-    PAGE_INFO   pageInfo( paperType );
-
-    m_Parent->SetPageSettings( pageInfo );
-    m_Parent->SetTitleBlock( tb );
 
     switch( g_UserUnit )
     {
@@ -233,6 +224,19 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
         break;
 */
     }
+
+    int radioSelection = m_PageSizeBox->GetSelection();
+    if( radioSelection < 0 )
+        radioSelection = 0;
+
+    // wxFormBuilder must use "A4", "A3", etc for choices, in all languages/translations
+    wxString    paperType = m_PageSizeBox->GetString( radioSelection );
+
+    // construct pageInfo _after_ user settings have been established in case the
+    // paperType is "User", otherwise User with and height will not go into effect right away.
+    PAGE_INFO   pageInfo( paperType );
+
+    m_Parent->SetPageSettings( pageInfo );
 
 #ifdef EESCHEMA
     // Exports settings to other sheets if requested:
