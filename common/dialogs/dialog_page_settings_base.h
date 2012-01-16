@@ -11,16 +11,16 @@
 #include <wx/intl.h>
 
 #include <wx/string.h>
-#include <wx/radiobox.h>
+#include <wx/choice.h>
 #include <wx/gdicmn.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
+#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -50,15 +50,12 @@ class DIALOG_PAGES_SETTINGS_BASE : public wxDialog
 	private:
 	
 	protected:
-		wxRadioBox* m_PageSizeBox;
-		
-		wxCheckBox* m_landscapeCheckbox;
+		wxChoice* m_paperSizeComboBox;
+		wxChoice* m_orientationComboBox;
 		wxStaticText* UserPageSizeX;
 		wxTextCtrl* m_TextUserSizeX;
 		wxStaticText* UserPageSizeY;
 		wxTextCtrl* m_TextUserSizeY;
-		
-		
 		wxStaticText* m_TextSheetCount;
 		
 		wxStaticText* m_TextSheetNumber;
@@ -82,7 +79,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public wxDialog
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
-		virtual void onRadioButtonSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onPaperSizeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTextctrlUserPageSizeXTextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTextctrlUserPageSizeYTextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckboxTitleClick( wxCommandEvent& event ) { event.Skip(); }

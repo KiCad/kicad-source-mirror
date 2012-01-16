@@ -247,6 +247,11 @@ private:
     static const PAGE_INFO pageD;
     static const PAGE_INFO pageE;
     static const PAGE_INFO pageGERBER;
+
+    static const PAGE_INFO pageUSLetter;
+    static const PAGE_INFO pageUSLegal;
+    static const PAGE_INFO pageUSLedger;
+
     static const PAGE_INFO pageUser;
 
     // all dimensions here are in mils
