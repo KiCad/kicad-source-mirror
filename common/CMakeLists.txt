@@ -32,6 +32,7 @@ set(COMMON_SRCS
     class_bitmap_base.cpp
     class_colors_design_settings.cpp
     class_marker_base.cpp
+    class_page_info.cpp
     class_plotter.cpp
     class_undoredo_container.cpp
     common.cpp

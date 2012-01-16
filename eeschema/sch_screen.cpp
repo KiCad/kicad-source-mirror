@@ -574,7 +574,7 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
     if( fprintf( aFile, "$Descr %s %d %d%s\n", TO_UTF8( m_paper.GetType() ),
                  m_paper.GetWidthMils(),
                  m_paper.GetHeightMils(),
-                 m_paper.GetType() != wxT( "User" ) && m_paper.IsPortrait() ?
+                 !m_paper.IsCustom() && m_paper.IsPortrait() ?
                     " portrait" : ""
                  ) < 0
         || fprintf( aFile, "encoding utf-8\n") < 0

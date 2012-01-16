@@ -465,8 +465,8 @@ void KICAD_PLUGIN::loadSHEET()
                 char*   height = strtok( NULL, delims );
                 char*   orient = strtok( NULL, delims );
 
-                // only parse the width and height if page size is "User"
-                if( wname == wxT( "User" ) )
+                // only parse the width and height if page size is custom ("User")
+                if( wname == PAGE_INFO::Custom )
                 {
                     if( width && height )
                     {
@@ -2742,9 +2742,9 @@ void KICAD_PLUGIN::saveSHEET() const
     // paper is described in mils
     fprintf( m_fp,  "Sheet %s %d %d%s\n",
                     TO_UTF8( pageInfo.GetType() ),
-                    pageInfo.GetSizeMils().x,
-                    pageInfo.GetSizeMils().y
-                    pageInfo.GetType() != wxT( "User" ) && pageInfo.IsPortrait() ?
+                    pageInfo.GetWidthMils(),
+                    pageInfo.GetHeightMils(),
+                    !pageInfo.IsCustom() && pageInfo.IsPortrait() ?
                         " portrait" : ""
                     );
 

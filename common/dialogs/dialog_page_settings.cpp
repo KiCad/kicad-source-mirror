@@ -37,7 +37,7 @@ void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 
 DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent ) :
     DIALOG_PAGES_SETTINGS_BASE( parent ),
-    m_user_size( wxT( "User" ) )
+    m_user_size( PAGE_INFO::Custom )
 {
     m_Parent   = parent;
     m_Screen   = m_Parent->GetScreen();
@@ -74,7 +74,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
     const PAGE_INFO& pageInfo = m_Parent->GetPageSettings();
 
-    if( wxT( "User" ) != pageInfo.GetType() )
+    if( !pageInfo.IsCustom() )
         m_landscapeCheckbox->SetValue( !pageInfo.IsPortrait() );
 
     setCurrentPageSizeSelection( pageInfo.GetType() );
@@ -177,7 +177,7 @@ void DIALOG_PAGES_SETTINGS::OnCancelClick( wxCommandEvent& event )
 
 void DIALOG_PAGES_SETTINGS::onRadioButtonSelected()
 {
-    if( wxT( "User" ) == m_PageSizeBox->GetStringSelection() )
+    if( PAGE_INFO::Custom == m_PageSizeBox->GetStringSelection() )
     {
         m_landscapeCheckbox->Enable( false );
     }
@@ -246,10 +246,10 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
     wxString    paperType = m_PageSizeBox->GetString( radioSelection );
 
     // construct pageInfo _after_ user settings have been established in case the
-    // paperType is "User", otherwise User with and height will not go into effect right away.
+    // paperType is custom, otherwise User width and height will not go into effect right away.
     PAGE_INFO   pageInfo( paperType );
 
-    if( wxT( "User" ) != paperType )
+    if( PAGE_INFO::Custom != paperType )
         pageInfo.SetPortrait( !m_landscapeCheckbox->IsChecked() );
 
     m_Parent->SetPageSettings( pageInfo );

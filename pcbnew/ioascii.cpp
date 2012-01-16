@@ -843,9 +843,9 @@ static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, const TITLE_BLOCK& 
     fprintf( File, "$SHEETDESCR\n" );
     fprintf( File, "Sheet %s %d %d%s\n",
              TO_UTF8( aPageSettings.GetType() ),
-             aPageSettings.GetSizeMils().x,
-             aPageSettings.GetSizeMils().y,
-             aPageSettings.GetType() != wxT( "User" ) && aPageSettings.IsPortrait() ?
+             aPageSettings.GetWidthMils(),
+             aPageSettings.GetHeightMils(),
+             !aPageSettings.IsCustom() && aPageSettings.IsPortrait() ?
                 " portrait" : ""
              );
 
@@ -905,7 +905,7 @@ static bool ReadSheetDescr( BOARD* aBoard, LINE_READER* aReader )
                 char*   orient = strtok( NULL, delims );
 
                 // only keep width and height if page size is "User"
-                if( wname == wxT( "User" ) )
+                if( wname == PAGE_INFO::Custom )
                 {
                     if( width && height )
                     {
