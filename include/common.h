@@ -136,6 +136,9 @@ class LibNameList;
 class PAGE_INFO
 {
 public:
+
+    static const wxString Custom;     /// "User" defined page type
+
     PAGE_INFO( const wxString& aType = wxT( "A3" ) );
     PAGE_INFO( const wxSize& aSizeMils, const wxString& aName );
 
@@ -154,6 +157,12 @@ public:
      */
     bool SetType( const wxString& aStandardPageDescriptionName );
     const wxString& GetType() const { return m_type; }
+
+    /**
+     * Function IsCustom
+     * returns true if the type is "User"
+     */
+    bool IsCustom() const;
 
     /**
      * Function SetPortrait

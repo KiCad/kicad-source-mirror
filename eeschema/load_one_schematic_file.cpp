@@ -326,7 +326,7 @@ line %d, \aAbort reading file.\n" ),
         aMsgDiag << FROM_UTF8( line );
     }
 
-    if( pagename == wxT( "User" ) )
+    if( pagename == PAGE_INFO::Custom )
     {
         if( width && height )
         {
@@ -338,7 +338,7 @@ line %d, \aAbort reading file.\n" ),
         }
     }
 
-    // portrait only supported in non "User" sizes
+    // portrait only supported in non custom sizes
     else if( orient && !strcmp( orient, "portrait" ) )
     {
         pageInfo.SetPortrait( true );

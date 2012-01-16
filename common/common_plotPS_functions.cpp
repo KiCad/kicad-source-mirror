@@ -392,12 +392,12 @@ bool PS_PLOTTER::start_plot( FILE* fout )
     // converted to internal units.
     wxSize pageSize = pageInfo.GetSizeMils();
 
-    if( pageInfo.GetType().Cmp( wxT( "User" ) ) == 0 )
+    if( pageInfo.IsCustom() )
         fprintf( output_file, "%%%%DocumentMedia: Custom %d %d 0 () ()\n",
                  wxRound( pageSize.y * 10 * CONV_SCALE ),
                  wxRound( pageSize.x * 10 * CONV_SCALE ) );
 
-    else  // ( if sheet->m_Name does not equal "User" )
+    else  // a standard paper size
         fprintf( output_file, "%%%%DocumentMedia: %s %d %d 0 () ()\n",
                  TO_UTF8( pageInfo.GetType() ),
                  wxRound( pageSize.y * 10 * CONV_SCALE ),
