@@ -72,9 +72,15 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     msg.Printf( format, m_Screen->m_ScreenNumber );
     m_TextSheetNumber->SetLabel( msg );
 
-    PAGE_INFO   pageInfo = m_Parent->GetPageSettings();
+    const PAGE_INFO& pageInfo = m_Parent->GetPageSettings();
+
+    if( wxT( "User" ) != pageInfo.GetType() )
+        m_landscapeCheckbox->SetValue( !pageInfo.IsPortrait() );
 
     setCurrentPageSizeSelection( pageInfo.GetType() );
+
+    // only a click fires the radiobutton selected event, so have to fabricate this check
+    onRadioButtonSelected();
 
     switch( g_UserUnit )
     {
@@ -149,19 +155,11 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 }
 
 
-/*!
- * wxEVT_CLOSE_WINDOW event handler for ID_DIALOG
- */
-
 void DIALOG_PAGES_SETTINGS::OnCloseWindow( wxCloseEvent& event )
 {
     EndModal( m_modified );
 }
 
-
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_OK
- */
 
 void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
 {
@@ -171,13 +169,28 @@ void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
 }
 
 
-/*!
- * wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
- */
-
 void DIALOG_PAGES_SETTINGS::OnCancelClick( wxCommandEvent& event )
 {
     Close( true );
+}
+
+
+void DIALOG_PAGES_SETTINGS::onRadioButtonSelected()
+{
+    if( wxT( "User" ) == m_PageSizeBox->GetStringSelection() )
+    {
+        m_landscapeCheckbox->Enable( false );
+    }
+    else
+    {
+        m_landscapeCheckbox->Enable( true );
+    }
+}
+
+
+void DIALOG_PAGES_SETTINGS::onRadioButtonSelected( wxCommandEvent& event )
+{
+    onRadioButtonSelected();    // no event arg
 }
 
 
@@ -235,6 +248,9 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
     // construct pageInfo _after_ user settings have been established in case the
     // paperType is "User", otherwise User with and height will not go into effect right away.
     PAGE_INFO   pageInfo( paperType );
+
+    if( wxT( "User" ) != paperType )
+        pageInfo.SetPortrait( !m_landscapeCheckbox->IsChecked() );
 
     m_Parent->SetPageSettings( pageInfo );
 
@@ -306,7 +322,5 @@ void DIALOG_PAGES_SETTINGS::setCurrentPageSizeSelection( const wxString& aPaperS
             }
         }
     }
-
-    // m_PageSizeBox->SetSelection( 1 );        // wxFormBuilder does this, control there
 }
 

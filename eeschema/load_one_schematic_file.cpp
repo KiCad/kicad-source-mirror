@@ -298,18 +298,22 @@ static void LoadLayers( LINE_READER* aLine )
     }
 }
 
+/// Get the length of a string constant, at compile time
+#define SZ( x )         (sizeof(x)-1)
+
+static const char delims[] = " \t\r\n";
 
 /* Read the schematic header. */
 bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* aScreen )
 {
-    char            text[256];
-    char            buf[1024];
-    wxSize          pageSize;
-    char*           line = aLine->Line();
+    char*   line = aLine->Line();
 
-    sscanf( line, "%s %s %d %d", text, text, &pageSize.x, &pageSize.y );
+    char*   pageType = strtok( line + SZ( "$Descr" ), delims );
+    char*   width    = strtok( NULL, delims );
+    char*   height   = strtok( NULL, delims );
+    char*   orient   = strtok( NULL, delims );
 
-    wxString pagename = FROM_UTF8( text );
+    wxString pagename = FROM_UTF8( pageType );
 
     PAGE_INFO       pageInfo;
     TITLE_BLOCK     tb;
@@ -324,14 +328,28 @@ line %d, \aAbort reading file.\n" ),
 
     if( pagename == wxT( "User" ) )
     {
-        pageInfo.SetWidthMils( pageSize.x );
-        pageInfo.SetHeightMils( pageSize.y );
+        if( width && height )
+        {
+            int w = atoi( width );
+            int h = atoi( height );
+
+            pageInfo.SetWidthMils( w );
+            pageInfo.SetHeightMils( h );
+        }
+    }
+
+    // portrait only supported in non "User" sizes
+    else if( orient && !strcmp( orient, "portrait" ) )
+    {
+        pageInfo.SetPortrait( true );
     }
 
     aScreen->SetPageSettings( pageInfo );
 
-    for( ; ; )
+    for(;;)
     {
+        char    buf[1024];
+
         if( !aLine->ReadLine() )
             return true;
 

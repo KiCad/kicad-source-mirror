@@ -139,8 +139,6 @@ public:
     PAGE_INFO( const wxString& aType = wxT( "A3" ) );
     PAGE_INFO( const wxSize& aSizeMils, const wxString& aName );
 
-    const wxString& GetType() const { return m_type; }
-
     /**
      * Function SetType
      * sets the name of the page type and also the sizes and margins
@@ -155,14 +153,27 @@ public:
      * @return bool - true iff @a aStandarePageDescription was a recognized type.
      */
     bool SetType( const wxString& aStandardPageDescriptionName );
+    const wxString& GetType() const { return m_type; }
 
-    void SetWidthMils(  int aWidthInMils )  { m_size.x = aWidthInMils; }
-    int GetWidthMils() const                { return m_size.x;  }
+    /**
+     * Function SetPortrait
+     * will rotate the paper page 90 degrees.  This PAGE_INFO may either be in
+     * portrait or landscape mode.  Use this function to change from one to the
+     * other mode.
+     * @param isPortrait if true and not already in portrait mode, will change
+     *  this PAGE_INFO to portrait mode.  Or if false and not already in landscape mode,
+     *  will change this PAGE_INFO to landscape mode.
+     */
+    void SetPortrait( bool isPortrait );
+    bool IsPortrait() const { return m_portrait; }
 
-    void SetHeightMils( int aHeightInMils ) { m_size.y = aHeightInMils; }
-    int GetHeightMils() const               { return m_size.y; }
+    void SetWidthMils(  int aWidthInMils );
+    int GetWidthMils() const;
 
-    const wxSize& GetSizeMils() const       { return m_size; }
+    void SetHeightMils( int aHeightInMils );
+    int GetHeightMils() const;
+
+    const wxSize& GetSizeMils() const;
 
     // Accessors returning "Internal Units (IU)".  IUs are mils in EESCHEMA,
     // and either deci-mils or nanometers in PCBNew.
@@ -238,6 +249,8 @@ private:
     int         m_right_margin;
     int         m_top_margin;
     int         m_bottom_margin;
+
+    bool        m_portrait;         ///< true if portrait, false if landscape
 
     static int s_user_height;
     static int s_user_width;

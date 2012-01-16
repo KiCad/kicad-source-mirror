@@ -571,8 +571,12 @@ bool SCH_SCREEN::Save( FILE* aFile ) const
      */
     const TITLE_BLOCK& tb = GetTitleBlock();
 
-    if( fprintf( aFile, "$Descr %s %d %d\n", TO_UTF8( m_paper.GetType() ),
-                 m_paper.GetWidthMils(), m_paper.GetHeightMils() ) < 0
+    if( fprintf( aFile, "$Descr %s %d %d%s\n", TO_UTF8( m_paper.GetType() ),
+                 m_paper.GetWidthMils(),
+                 m_paper.GetHeightMils(),
+                 m_paper.GetType() != wxT( "User" ) && m_paper.IsPortrait() ?
+                    " portrait" : ""
+                 ) < 0
         || fprintf( aFile, "encoding utf-8\n") < 0
         || fprintf( aFile, "Sheet %d %d\n", m_ScreenNumber, m_NumberOfScreen ) < 0
         || fprintf( aFile, "Title %s\n",    EscapedUTF8( tb.GetTitle() ).c_str() ) < 0

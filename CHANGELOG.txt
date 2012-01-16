@@ -4,6 +4,17 @@ KiCad ChangeLog 2012
 Please add newer entries at the top, list the date and your name with
 email address.
 
+2012-Jan-15 UPDATE Dick Hollenbeck <dick@softplc.com>
+================================================================================
+++all
+    Add "portrait" support to the page size settings for all standard paper
+    sizes.  Tested with postscript output only.  Required minor file format changes
+    to reflect the "portrait" setting.  common/dialogs/dialog_page_settings.cpp
+    uses a checkbox but its name is "Landscape", which is inverted from portrait,
+    but since it is the more common choice, I used that rather than portrait.
+    The tooltip for that checkbox makes it clear.  No portrait mode is supported
+    for "User" paper size.
+
 
 2012-Jan-9 UPDATE Dick Hollenbeck <dick@softplc.com>
 ================================================================================
