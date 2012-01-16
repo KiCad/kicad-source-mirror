@@ -2654,8 +2654,9 @@ void KICAD_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, PROPERTIES* a
 
     if( m_props )
     {
+        wxString header = (*m_props)["header"];
         // save a file header, if caller provided one (with trailing \n hopefully).
-        fprintf( m_fp, "%s", TO_UTF8( (*m_props)["header"] ) );
+        fprintf( m_fp, "%s", TO_UTF8( header ) );
     }
 
     saveAllSections();

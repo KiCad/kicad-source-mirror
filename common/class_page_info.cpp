@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -29,22 +30,28 @@ const wxString PAGE_INFO::Custom( wxT( "User" ) );
 
 // Standard page sizes in mils, all constants
 #if defined(KICAD_GOST)
-const PAGE_INFO  PAGE_INFO::pageA4(    wxSize(  8283, 11700 ),  wxT( "A4" ) );
+const PAGE_INFO  PAGE_INFO::pageA4(     wxSize(  8268, 11700 ),  wxT( "A4" ) );
 #else
-const PAGE_INFO  PAGE_INFO::pageA4(    wxSize( 11700,  8267 ),  wxT( "A4" ) );
+const PAGE_INFO  PAGE_INFO::pageA4(     wxSize( 11700,  8268 ),  wxT( "A4" ) );
 #endif
-const PAGE_INFO  PAGE_INFO::pageA3(    wxSize( 16535, 11700 ),  wxT( "A3" ) );
-const PAGE_INFO  PAGE_INFO::pageA2(    wxSize( 23400, 16535 ),  wxT( "A2" ) );
-const PAGE_INFO  PAGE_INFO::pageA1(    wxSize( 33070, 23400 ),  wxT( "A1" ) );
-const PAGE_INFO  PAGE_INFO::pageA0(    wxSize( 46800, 33070 ),  wxT( "A0" ) );
-const PAGE_INFO  PAGE_INFO::pageA(     wxSize( 11000,  8500 ),  wxT( "A" ) );
-const PAGE_INFO  PAGE_INFO::pageB(     wxSize( 17000, 11000 ),  wxT( "B" ) );
-const PAGE_INFO  PAGE_INFO::pageC(     wxSize( 22000, 17000 ),  wxT( "C" ) );
-const PAGE_INFO  PAGE_INFO::pageD(     wxSize( 34000, 22000 ),  wxT( "D" ) );
-const PAGE_INFO  PAGE_INFO::pageE(     wxSize( 44000, 34000 ),  wxT( "E" ) );
-const PAGE_INFO  PAGE_INFO::pageGERBER(wxSize( 32000, 32000 ),  wxT( "GERBER" ) );
-const PAGE_INFO  PAGE_INFO::pageUser(  wxSize( 17000, 11000 ),  Custom );
+const PAGE_INFO  PAGE_INFO::pageA3(     wxSize( 16535, 11700 ),  wxT( "A3" ) );
+const PAGE_INFO  PAGE_INFO::pageA2(     wxSize( 23400, 16535 ),  wxT( "A2" ) );
+const PAGE_INFO  PAGE_INFO::pageA1(     wxSize( 33070, 23400 ),  wxT( "A1" ) );
+const PAGE_INFO  PAGE_INFO::pageA0(     wxSize( 46800, 33070 ),  wxT( "A0" ) );
+const PAGE_INFO  PAGE_INFO::pageA(      wxSize( 11000,  8500 ),  wxT( "A" ) );
+const PAGE_INFO  PAGE_INFO::pageB(      wxSize( 17000, 11000 ),  wxT( "B" ) );
+const PAGE_INFO  PAGE_INFO::pageC(      wxSize( 22000, 17000 ),  wxT( "C" ) );
+const PAGE_INFO  PAGE_INFO::pageD(      wxSize( 34000, 22000 ),  wxT( "D" ) );
+const PAGE_INFO  PAGE_INFO::pageE(      wxSize( 44000, 34000 ),  wxT( "E" ) );
+const PAGE_INFO  PAGE_INFO::pageGERBER( wxSize( 32000, 32000 ),  wxT( "GERBER" ) );
+const PAGE_INFO  PAGE_INFO::pageUser(   wxSize( 17000, 11000 ),  Custom );
 
+// US paper sizes
+const PAGE_INFO  PAGE_INFO::pageUSLetter( wxSize( 11000, 8500  ),  wxT( "USLetter" ) );
+const PAGE_INFO  PAGE_INFO::pageUSLegal(  wxSize( 14000, 8500  ),  wxT( "USLegal" ) );
+const PAGE_INFO  PAGE_INFO::pageUSLedger( wxSize( 17000, 11000 ),  wxT( "USLedger" ) );
+
+// Custom paper size for next instantiation of type "User"
 int PAGE_INFO::s_user_width  = 17000;
 int PAGE_INFO::s_user_height = 11000;
 
@@ -65,6 +72,9 @@ wxArrayString PAGE_INFO::GetStandardSizes()
         &pageD,
         &pageE,
         // &pageGERBER,     // standard?
+        &pageUSLetter,
+        &pageUSLegal,
+        &pageUSLedger,
         &pageUser,
     };
 
@@ -122,6 +132,12 @@ bool PAGE_INFO::SetType( const wxString& aType )
         *this = pageE;
     else if( aType == pageGERBER.GetType() )
         *this = pageGERBER;
+    else if( aType == pageUSLetter.GetType() )
+        *this = pageUSLetter;
+    else if( aType == pageUSLegal.GetType() )
+        *this = pageUSLegal;
+    else if( aType == pageUSLedger.GetType() )
+        *this = pageUSLedger;
     else if( aType == pageUser.GetType() )
     {
         // pageUser is const, and may not and does not hold the custom size,
@@ -201,4 +217,3 @@ void PAGE_INFO::SetHeightMils( int aHeightInMils )
 {
     m_size.y = clampHeight( aHeightInMils );
 }
-
