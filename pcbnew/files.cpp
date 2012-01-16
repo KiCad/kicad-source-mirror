@@ -478,8 +478,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     {
         wxString header = wxString::Format(
                             wxT( "PCBNEW-BOARD Version %d date %s\n\n# Created by Pcbnew%s\n\n" ),
-                            BOARD_FILE_VERSION, TO_UTF8( DateAndTime() ),
-                            TO_UTF8( GetBuildVersion() ) );
+                            BOARD_FILE_VERSION, DateAndTime().GetData(),
+                            GetBuildVersion().GetData() );
 
         PROPERTIES   props;
 
