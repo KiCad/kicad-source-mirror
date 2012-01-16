@@ -85,7 +85,7 @@ endif(APPLE)
 ###
 # Link executable target cvpcb with correct libraries
 ###
-target_link_libraries(cvpcb 3d-viewer common pcbcommon polygon bitmaps kbool
+target_link_libraries(cvpcb 3d-viewer pcbcommon common polygon bitmaps kbool
                       ${OPENGL_LIBRARIES}
                       ${wxWidgets_LIBRARIES}
                       ${GDI_PLUS_LIBRARIES}
