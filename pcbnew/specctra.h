@@ -3668,6 +3668,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
     void doCIRCLE( CIRCLE* growth ) throw( IO_ERROR );
     void doQARC( QARC* growth ) throw( IO_ERROR );
     void doWINDOW( WINDOW* growth ) throw( IO_ERROR );
+    void doCONNECT( CONNECT* growth ) throw( IO_ERROR );
     void doREGION( REGION* growth ) throw( IO_ERROR );
     void doCLASS_CLASS( CLASS_CLASS* growth ) throw( IO_ERROR );
     void doLAYER_RULE( LAYER_RULE* growth ) throw( IO_ERROR );

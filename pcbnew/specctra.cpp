@@ -872,6 +872,41 @@ void SPECCTRA_DB::doKEEPOUT( KEEPOUT* growth ) throw( IO_ERROR )
 }
 
 
+void SPECCTRA_DB::doCONNECT( CONNECT* growth ) throw( IO_ERROR )
+{
+    /*  from page 143 of specctra spec:
+
+        (connect
+            {(terminal <object_type> [<pin_reference> ])}
+        )
+    */
+
+    T       tok = NextTok();
+
+    while( tok != T_RIGHT )
+    {
+        if( tok!=T_LEFT )
+            Expecting( T_LEFT );
+
+        tok = NextTok();
+
+        switch( tok )
+        {
+        case T_terminal:
+            // since we do not use the terminal information, simlpy toss it.
+            while( ( tok = NextTok() ) != T_RIGHT && tok != T_EOF )
+                ;
+            break;
+
+        default:
+            Unexpected( CurText() );
+        }
+
+        tok = NextTok();
+    }
+}
+
+
 void SPECCTRA_DB::doWINDOW( WINDOW* growth ) throw( IO_ERROR )
 {
     T       tok = NextTok();
@@ -2823,10 +2858,8 @@ void SPECCTRA_DB::doWIRE( WIRE* growth ) throw( IO_ERROR )
         case T_connect:
             if( growth->connect )
                 Unexpected( tok );
-/* @todo
             growth->connect = new CONNECT( growth );
             doCONNECT( growth->connect );
-*/
             break;
 
         case T_supply:
@@ -3245,7 +3278,14 @@ void SPECCTRA_DB::doROUTE( ROUTE* growth ) throw( IO_ERROR )
 
         case T_parser:
             if( growth->parser )
+            {
+#if 0           // Electra 2.9.1 emits two (parser ) elements in a row.
+                // Work around their bug for now.
                 Unexpected( tok );
+#else
+                delete growth->parser;
+#endif
+            }
             growth->parser = new PARSER( growth );
             doPARSER( growth->parser );
             break;

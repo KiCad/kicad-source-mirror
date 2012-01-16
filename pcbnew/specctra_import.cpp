@@ -95,7 +95,7 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
 
     SPECCTRA_DB     db;
 
-    SetLocaleTo_C_standard( );    // Switch the locale to standard C
+    LOCALE_IO       toggle;
 
     try
     {
@@ -104,8 +104,6 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
     }
     catch( IO_ERROR& ioe )
     {
-        SetLocaleTo_Default( );    // revert to the current locale
-
         ioe.errorText += '\n';
         ioe.errorText += _("BOARD may be corrupted, do not save it.");
         ioe.errorText += '\n';
@@ -114,8 +112,6 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
         DisplayError( this, ioe.errorText );
         return;
     }
-
-    SetLocaleTo_Default( );    // revert to the current locale
 
     OnModify();
     GetBoard()->m_Status_Pcb = 0;
@@ -363,8 +359,10 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
     if( !session )
         ThrowIOError( _("Session file is missing the \"session\" section") );
 
+    /* Dick 16-Jan-2012: session need not have a placement section.
     if( !session->placement )
         ThrowIOError( _("Session file is missing the \"placement\" section") );
+    */
 
     if( !session->route )
         ThrowIOError( _("Session file is missing the \"routes\" section") );
@@ -379,65 +377,66 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard ) throw( IO_ERROR )
 
     buildLayerMaps( aBoard );
 
-#if 1
-    // Walk the PLACEMENT object's COMPONENTs list, and for each PLACE within
-    // each COMPONENT, reposition and re-orient each component and put on
-    // correct side of the board.
-    COMPONENTS& components = session->placement->components;
-    for( COMPONENTS::iterator comp=components.begin();  comp!=components.end();  ++comp )
+    if( session->placement )
     {
-        PLACES& places = comp->places;
-        for( unsigned i=0; i<places.size();  ++i )
+        // Walk the PLACEMENT object's COMPONENTs list, and for each PLACE within
+        // each COMPONENT, reposition and re-orient each component and put on
+        // correct side of the board.
+        COMPONENTS& components = session->placement->components;
+        for( COMPONENTS::iterator comp=components.begin();  comp!=components.end();  ++comp )
         {
-            PLACE* place = &places[i];  // '&' even though places[] holds a pointer!
-
-            wxString reference = FROM_UTF8( place->component_id.c_str() );
-            MODULE* module = aBoard->FindModuleByReference( reference );
-            if( !module )
+            PLACES& places = comp->places;
+            for( unsigned i=0; i<places.size();  ++i )
             {
-                ThrowIOError(
-                   _("Session file has 'reference' to non-existent component \"%s\""),
-                   GetChars( reference ) );
-            }
+                PLACE* place = &places[i];  // '&' even though places[] holds a pointer!
 
-            if( !place->hasVertex )
-                continue;
-
-            UNIT_RES* resolution = place->GetUnits();
-            wxASSERT( resolution );
-
-            wxPoint newPos = mapPt( place->vertex, resolution );
-            module->SetPosition( newPos );
-
-            if( place->side == T_front )
-            {
-                // convert from degrees to tenths of degrees used in KiCad.
-                int orientation = (int) (place->rotation * 10.0);
-                if( module->GetLayer() != LAYER_N_FRONT )
+                wxString reference = FROM_UTF8( place->component_id.c_str() );
+                MODULE* module = aBoard->FindModuleByReference( reference );
+                if( !module )
                 {
-                    // module is on copper layer (back)
-                    module->Flip( module->m_Pos );
+                    ThrowIOError(
+                       _("Session file has 'reference' to non-existent component \"%s\""),
+                       GetChars( reference ) );
                 }
-                module->SetOrientation( orientation );
-            }
-            else if( place->side == T_back )
-            {
-                int orientation = (int) ((place->rotation + 180.0) * 10.0);
-                if( module->GetLayer() != LAYER_N_BACK )
+
+                if( !place->hasVertex )
+                    continue;
+
+                UNIT_RES* resolution = place->GetUnits();
+                wxASSERT( resolution );
+
+                wxPoint newPos = mapPt( place->vertex, resolution );
+                module->SetPosition( newPos );
+
+                if( place->side == T_front )
                 {
-                    // module is on component layer (front)
-                    module->Flip( module->m_Pos );
+                    // convert from degrees to tenths of degrees used in KiCad.
+                    int orientation = (int) (place->rotation * 10.0);
+                    if( module->GetLayer() != LAYER_N_FRONT )
+                    {
+                        // module is on copper layer (back)
+                        module->Flip( module->m_Pos );
+                    }
+                    module->SetOrientation( orientation );
                 }
-                module->SetOrientation( orientation );
-            }
-            else
-            {
-                // as I write this, the PARSER *is* catching this, so we should never see below:
-                wxFAIL_MSG( wxT("DSN::PARSER did not catch an illegal side := 'back|front'") );
+                else if( place->side == T_back )
+                {
+                    int orientation = (int) ((place->rotation + 180.0) * 10.0);
+                    if( module->GetLayer() != LAYER_N_BACK )
+                    {
+                        // module is on component layer (front)
+                        module->Flip( module->m_Pos );
+                    }
+                    module->SetOrientation( orientation );
+                }
+                else
+                {
+                    // as I write this, the PARSER *is* catching this, so we should never see below:
+                    wxFAIL_MSG( wxT("DSN::PARSER did not catch an illegal side := 'back|front'") );
+                }
             }
         }
     }
-#endif
 
     routeResolution = session->route->GetUnits();
 
