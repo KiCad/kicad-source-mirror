@@ -75,12 +75,14 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     const PAGE_INFO& pageInfo = m_Parent->GetPageSettings();
 
     if( !pageInfo.IsCustom() )
-        m_landscapeCheckbox->SetValue( !pageInfo.IsPortrait() );
+        m_orientationComboBox->SetSelection( pageInfo.IsPortrait() );
 
     setCurrentPageSizeSelection( pageInfo.GetType() );
 
-    // only a click fires the radiobutton selected event, so have to fabricate this check
-    onRadioButtonSelected();
+    // only a click fires the selection changed event, so have to fabricate this check
+    wxCommandEvent junk;
+
+    onPaperSizeChoice( junk );
 
     switch( g_UserUnit )
     {
@@ -175,22 +177,16 @@ void DIALOG_PAGES_SETTINGS::OnCancelClick( wxCommandEvent& event )
 }
 
 
-void DIALOG_PAGES_SETTINGS::onRadioButtonSelected()
+void DIALOG_PAGES_SETTINGS::onPaperSizeChoice( wxCommandEvent& event )
 {
-    if( PAGE_INFO::Custom == m_PageSizeBox->GetStringSelection() )
+    if( m_paperSizeComboBox->GetStringSelection().Contains( PAGE_INFO::Custom ) )
     {
-        m_landscapeCheckbox->Enable( false );
+        m_orientationComboBox->Enable( false );
     }
     else
     {
-        m_landscapeCheckbox->Enable( true );
+        m_orientationComboBox->Enable( true );
     }
-}
-
-
-void DIALOG_PAGES_SETTINGS::onRadioButtonSelected( wxCommandEvent& event )
-{
-    onRadioButtonSelected();    // no event arg
 }
 
 
@@ -238,19 +234,27 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
 */
     }
 
-    int radioSelection = m_PageSizeBox->GetSelection();
-    if( radioSelection < 0 )
-        radioSelection = 0;
-
     // wxFormBuilder must use "A4", "A3", etc for choices, in all languages/translations
-    wxString    paperType = m_PageSizeBox->GetString( radioSelection );
+    wxString    paperType = m_paperSizeComboBox->GetStringSelection();
 
     // construct pageInfo _after_ user settings have been established in case the
     // paperType is custom, otherwise User width and height will not go into effect right away.
-    PAGE_INFO   pageInfo( paperType );
+    PAGE_INFO   pageInfo;
 
-    if( PAGE_INFO::Custom != paperType )
-        pageInfo.SetPortrait( !m_landscapeCheckbox->IsChecked() );
+    if( paperType.Contains( PAGE_INFO::Custom ) )
+    {
+        pageInfo.SetType( PAGE_INFO::Custom );
+    }
+    else
+    {
+        pageInfo.SetPortrait( m_orientationComboBox->GetSelection() );
+
+        // here we assume translators will keep original paper size spellings
+        if( !pageInfo.SetType( paperType ) )
+        {
+            wxASSERT_MSG( FALSE, wxT( "the translation for paper size must preserve original spellings" ) );
+        }
+    }
 
     m_Parent->SetPageSettings( pageInfo );
 
@@ -305,19 +309,19 @@ void DIALOG_PAGES_SETTINGS::setCurrentPageSizeSelection( const wxString& aPaperS
     // use wxFormBuilder to store the sheet type in the wxRadioButton's label
     // i.e. "A4", "A3", etc, anywhere within the text of the label.
 
-    D(printf("m_PageSizeBox->GetCount() = %d\n", (int) m_PageSizeBox->GetCount() );)
+    D(printf("m_paperSizeComboBox->GetCount() = %d\n", (int) m_paperSizeComboBox->GetCount() );)
 
     // search all the child wxRadioButtons for a label containing our paper type
-    for( unsigned i = 0;  i < m_PageSizeBox->GetCount();  ++i )
+    for( unsigned i = 0;  i < m_paperSizeComboBox->GetCount();  ++i )
     {
         // parse each label looking for aPaperSize within it
-        wxStringTokenizer st( m_PageSizeBox->GetString( i ) );
+        wxStringTokenizer st( m_paperSizeComboBox->GetString( i ) );
 
         while( st.HasMoreTokens() )
         {
             if( st.GetNextToken() == aPaperSize )
             {
-                m_PageSizeBox->SetSelection( i );
+                m_paperSizeComboBox->SetSelection( i );
                 return;
             }
         }
