@@ -177,12 +177,12 @@ public:
     bool IsPortrait() const { return m_portrait; }
 
     void SetWidthMils(  int aWidthInMils );
-    int GetWidthMils() const;
+    int GetWidthMils() const { return m_size.x; }
 
     void SetHeightMils( int aHeightInMils );
-    int GetHeightMils() const;
+    int GetHeightMils() const { return m_size.y; }
 
-    const wxSize& GetSizeMils() const;
+    const wxSize& GetSizeMils() const { return m_size; }
 
     // Accessors returning "Internal Units (IU)".  IUs are mils in EESCHEMA,
     // and either deci-mils or nanometers in PCBNew.

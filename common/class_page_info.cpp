@@ -197,26 +197,8 @@ void PAGE_INFO::SetWidthMils(  int aWidthInMils )
 }
 
 
-int PAGE_INFO::GetWidthMils() const
-{
-    return m_size.x;
-}
-
-
 void PAGE_INFO::SetHeightMils( int aHeightInMils )
 {
     m_size.y = clampHeight( aHeightInMils );
-}
-
-
-int PAGE_INFO::GetHeightMils() const
-{
-    return m_size.y;
-}
-
-
-const wxSize& PAGE_INFO::GetSizeMils() const
-{
-    return m_size;
 }
 
