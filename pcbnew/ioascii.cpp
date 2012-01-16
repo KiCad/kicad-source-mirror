@@ -841,10 +841,13 @@ bool PCB_EDIT_FRAME::WriteGeneralDescrPcb( FILE* File )
 static bool WriteSheetDescr( const PAGE_INFO& aPageSettings, const TITLE_BLOCK& aTitleBlock, FILE* File )
 {
     fprintf( File, "$SHEETDESCR\n" );
-    fprintf( File, "Sheet %s %d %d\n",
+    fprintf( File, "Sheet %s %d %d%s\n",
              TO_UTF8( aPageSettings.GetType() ),
              aPageSettings.GetSizeMils().x,
-             aPageSettings.GetSizeMils().y );
+             aPageSettings.GetSizeMils().y,
+             aPageSettings.GetType() != wxT( "User" ) && aPageSettings.IsPortrait() ?
+                " portrait" : ""
+             );
 
     fprintf( File, "Title %s\n",        EscapedUTF8( aTitleBlock.GetTitle() ).c_str() );
     fprintf( File, "Date %s\n",         EscapedUTF8( aTitleBlock.GetDate() ).c_str() );
@@ -897,12 +900,13 @@ static bool ReadSheetDescr( BOARD* aBoard, LINE_READER* aReader )
                     */
                 }
 
-                // only parse the width and height if page size is "User"
+                char*   width  = strtok( NULL, delims );
+                char*   height = strtok( NULL, delims );
+                char*   orient = strtok( NULL, delims );
+
+                // only keep width and height if page size is "User"
                 if( wname == wxT( "User" ) )
                 {
-                    char*   width  = strtok( NULL, delims );
-                    char*   height = strtok( NULL, delims );
-
                     if( width && height )
                     {
                         // legacy disk file describes paper in mils
@@ -913,6 +917,11 @@ static bool ReadSheetDescr( BOARD* aBoard, LINE_READER* aReader )
                         page.SetWidthMils(  w );
                         page.SetHeightMils( h );
                     }
+                }
+
+                if( orient && !strcmp( orient, "portrait" ) )
+                {
+                    page.SetPortrait( true );
                 }
 
                 aBoard->SetPageSettings( page );

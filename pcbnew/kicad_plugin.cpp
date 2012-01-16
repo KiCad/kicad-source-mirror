@@ -461,12 +461,13 @@ void KICAD_PLUGIN::loadSHEET()
                     THROW_IO_ERROR( m_error );
                 }
 
+                char*   width  = strtok( NULL, delims );
+                char*   height = strtok( NULL, delims );
+                char*   orient = strtok( NULL, delims );
+
                 // only parse the width and height if page size is "User"
                 if( wname == wxT( "User" ) )
                 {
-                    char*   width  = strtok( NULL, delims );
-                    char*   height = strtok( NULL, delims );
-
                     if( width && height )
                     {
                         // legacy disk file describes paper in mils
@@ -477,6 +478,11 @@ void KICAD_PLUGIN::loadSHEET()
                         page.SetWidthMils(  w );
                         page.SetHeightMils( h );
                     }
+                }
+
+                if( orient && !strcmp( orient, "portrait" ) )
+                {
+                    page.SetPortrait( true );
                 }
 
                 m_board->SetPageSettings( page );
@@ -2734,10 +2740,13 @@ void KICAD_PLUGIN::saveSHEET() const
     fprintf( m_fp, "$SHEETDESCR\n" );
 
     // paper is described in mils
-    fprintf( m_fp,  "Sheet %s %d %d\n",
+    fprintf( m_fp,  "Sheet %s %d %d%s\n",
                     TO_UTF8( pageInfo.GetType() ),
                     pageInfo.GetSizeMils().x,
-                    pageInfo.GetSizeMils().y );
+                    pageInfo.GetSizeMils().y
+                    pageInfo.GetType() != wxT( "User" ) && pageInfo.IsPortrait() ?
+                        " portrait" : ""
+                    );
 
     fprintf( m_fp, "Title %s\n",        EscapedUTF8( tb.GetTitle() ).c_str() );
     fprintf( m_fp, "Date %s\n",         EscapedUTF8( tb.GetDate() ).c_str() );

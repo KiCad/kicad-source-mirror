@@ -176,7 +176,7 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString )
 
 //-----<PAGE_INFO>-------------------------------------------------------------
 
-// Standard page sizes in mils
+// Standard page sizes in mils, all constants
 #if defined(KICAD_GOST)
 const PAGE_INFO  PAGE_INFO::pageA4(    wxSize(  8283, 11700 ),  wxT( "A4" ) );
 #else
@@ -224,6 +224,27 @@ wxArrayString PAGE_INFO::GetStandardSizes()
 }
 */
 
+PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType ) :
+    m_type( aType ),
+    m_size( aSizeMils ),
+    m_portrait( false )
+{
+#if defined(KICAD_GOST)
+    m_left_margin   = GOST_LEFTMARGIN;
+    m_right_margin  = GOST_RIGHTMARGIN;
+    m_top_margin    = GOST_TOPMARGIN;
+    m_bottom_margin = GOST_BOTTOMMARGIN;
+#else
+    m_left_margin = m_right_margin = m_top_margin = m_bottom_margin = 400;
+#endif
+}
+
+
+PAGE_INFO::PAGE_INFO( const wxString& aType )
+{
+    SetType( aType );
+}
+
 bool PAGE_INFO::SetType( const wxString& aType )
 {
     bool rc = true;
@@ -267,47 +288,79 @@ bool PAGE_INFO::SetType( const wxString& aType )
 }
 
 
-PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType ) :
-    m_size( aSizeMils )
+void PAGE_INFO::SetPortrait( bool isPortrait )
 {
-    m_type   = aType;
+    if( m_portrait != isPortrait )
+    {
+        // swap x and y in m_size
+        m_size = wxSize( m_size.y, m_size.x );
 
-#if defined(KICAD_GOST)
-    m_left_margin   = GOST_LEFTMARGIN;
-    m_right_margin  = GOST_RIGHTMARGIN;
-    m_top_margin    = GOST_TOPMARGIN;
-    m_bottom_margin = GOST_BOTTOMMARGIN;
-#else
-    m_left_margin = m_right_margin = m_top_margin = m_bottom_margin = 400;
-#endif
+        m_portrait = isPortrait;
+
+        // margins are not touched.
+    }
 }
 
 
-PAGE_INFO::PAGE_INFO( const wxString& aType )
+static int clampWidth( int aWidthInMils )
 {
-    SetType( aType );
-}
-
-
-void PAGE_INFO::SetUserWidthMils( int aWidthInMils )
-{
-    if( aWidthInMils < 6000 )
-        aWidthInMils = 6000;
-    else if( aWidthInMils > 44000 )
+    if( aWidthInMils < 4000 )       // 4" is about a baseball card
+        aWidthInMils = 4000;
+    else if( aWidthInMils > 44000 ) //44" is plotter size
         aWidthInMils = 44000;
-
-    s_user_width = aWidthInMils;
+    return aWidthInMils;
 }
 
 
-void PAGE_INFO::SetUserHeightMils( int aHeightInMils )
+static int clampHeight( int aHeightInMils )
 {
     if( aHeightInMils < 4000 )
         aHeightInMils = 4000;
     else if( aHeightInMils > 44000 )
         aHeightInMils = 44000;
+    return aHeightInMils;
+}
 
-    s_user_height = aHeightInMils;
+
+void PAGE_INFO::SetUserWidthMils( int aWidthInMils )
+{
+    s_user_width = clampWidth( aWidthInMils );
+}
+
+
+void PAGE_INFO::SetUserHeightMils( int aHeightInMils )
+{
+    s_user_height = clampHeight( aHeightInMils );
+}
+
+
+void PAGE_INFO::SetWidthMils(  int aWidthInMils )
+{
+    m_size.x = clampWidth( aWidthInMils );
+}
+
+
+int PAGE_INFO::GetWidthMils() const
+{
+    return m_size.x;
+}
+
+
+void PAGE_INFO::SetHeightMils( int aHeightInMils )
+{
+    m_size.y = clampHeight( aHeightInMils );
+}
+
+
+int PAGE_INFO::GetHeightMils() const
+{
+    return m_size.y;
+}
+
+
+const wxSize& PAGE_INFO::GetSizeMils() const
+{
+    return m_size;
 }
 
 //-----</PAGE_INFO>------------------------------------------------------------

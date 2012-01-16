@@ -16,11 +16,11 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/checkbox.h>
+#include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/sizer.h>
-#include <wx/checkbox.h>
-#include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -52,6 +52,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public wxDialog
 	protected:
 		wxRadioBox* m_PageSizeBox;
 		
+		wxCheckBox* m_landscapeCheckbox;
 		wxStaticText* UserPageSizeX;
 		wxTextCtrl* m_TextUserSizeX;
 		wxStaticText* UserPageSizeY;
@@ -81,6 +82,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public wxDialog
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
+		virtual void onRadioButtonSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTextctrlUserPageSizeXTextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTextctrlUserPageSizeYTextUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCheckboxTitleClick( wxCommandEvent& event ) { event.Skip(); }
@@ -90,7 +92,7 @@ class DIALOG_PAGES_SETTINGS_BASE : public wxDialog
 	
 	public:
 		
-		DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 439,497 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Page Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_PAGES_SETTINGS_BASE();
 	
 };

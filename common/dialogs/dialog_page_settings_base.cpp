@@ -31,11 +31,22 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	wxString m_PageSizeBoxChoices[] = { _("A4"), _("A3"), _("A2"), _("A1"), _("A0"), _("A"), _("B"), _("C"), _("D"), _("E"), _("User") };
 	int m_PageSizeBoxNChoices = sizeof( m_PageSizeBoxChoices ) / sizeof( wxString );
 	m_PageSizeBox = new wxRadioBox( this, wxID_ANY, _("Page Size:"), wxDefaultPosition, wxDefaultSize, m_PageSizeBoxNChoices, m_PageSizeBoxChoices, 1, wxRA_SPECIFY_COLS );
-	m_PageSizeBox->SetSelection( 1 );
+	m_PageSizeBox->SetSelection( 9 );
 	LeftColumnSizer->Add( m_PageSizeBox, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	LeftColumnSizer->Add( 5, 0, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizer8;
+	sbSizer8 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Orientation:") ), wxVERTICAL );
+	
+	m_landscapeCheckbox = new wxCheckBox( this, wxID_ANY, _("Landscape"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_landscapeCheckbox->SetValue(true); 
+	m_landscapeCheckbox->SetToolTip( _("Check for landscape, uncheck for portrait") );
+	
+	sbSizer8->Add( m_landscapeCheckbox, 0, wxALL|wxEXPAND, 5 );
+	
+	LeftColumnSizer->Add( sbSizer8, 1, wxALL|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizerXsize;
 	bSizerXsize = new wxBoxSizer( wxVERTICAL );
@@ -204,9 +215,11 @@ DIALOG_PAGES_SETTINGS_BASE::DIALOG_PAGES_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCloseWindow ) );
+	m_PageSizeBox->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::onRadioButtonSelected ), NULL, this );
 	m_TextUserSizeX->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnTextctrlUserPageSizeXTextUpdated ), NULL, this );
 	m_TextUserSizeY->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnTextctrlUserPageSizeYTextUpdated ), NULL, this );
 	m_TitleExport->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCheckboxTitleClick ), NULL, this );
@@ -218,6 +231,7 @@ DIALOG_PAGES_SETTINGS_BASE::~DIALOG_PAGES_SETTINGS_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCloseWindow ) );
+	m_PageSizeBox->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::onRadioButtonSelected ), NULL, this );
 	m_TextUserSizeX->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnTextctrlUserPageSizeXTextUpdated ), NULL, this );
 	m_TextUserSizeY->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnTextctrlUserPageSizeYTextUpdated ), NULL, this );
 	m_TitleExport->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PAGES_SETTINGS_BASE::OnCheckboxTitleClick ), NULL, this );

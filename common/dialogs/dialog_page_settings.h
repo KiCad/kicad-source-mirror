@@ -36,10 +36,14 @@ private:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
     void OnCancelClick( wxCommandEvent& event );
 
+    /// wxEVT_COMMAND_RADIOBOX_SELECTED
+    void onRadioButtonSelected( wxCommandEvent& event );
+
     void setCurrentPageSizeSelection( const wxString& aPaperSize );
     void SavePageSettings(wxCommandEvent& event);
     void ReturnSizeSelected(wxCommandEvent& event);
 
+    void onRadioButtonSelected();
 };
 
 #endif  // _DIALOG_PAGES_SETTINGS_H_
