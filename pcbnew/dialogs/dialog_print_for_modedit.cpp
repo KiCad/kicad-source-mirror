@@ -70,12 +70,14 @@ void FOOTPRINT_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
             DisplayError( this, _( "Error Init Printer info" ) );
         }
         s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
-        s_PrintData->SetOrientation( DEFAULT_ORIENTATION_PAPER );
     }
+
+    s_PrintData->SetOrientation( GetPageSettings().IsPortrait() ? wxPORTRAIT : wxLANDSCAPE );
 
     DIALOG_PRINT_FOR_MODEDIT* frame = new DIALOG_PRINT_FOR_MODEDIT( this );
 
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
 }
 
 /*************************************************************************************/

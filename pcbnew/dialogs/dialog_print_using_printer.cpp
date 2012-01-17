@@ -64,7 +64,7 @@ private:
     void OnPageSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
-	void OnScaleSelectionClick( wxCommandEvent& event );
+    void OnScaleSelectionClick( wxCommandEvent& event );
 
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
     void SetPrintParameters( );
@@ -105,8 +105,9 @@ void PCB_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
             DisplayError( this, _( "Error Init Printer info" ) );
         }
         s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
-        s_PrintData->SetOrientation( DEFAULT_ORIENTATION_PAPER );
     }
+
+    s_PrintData->SetOrientation( GetPageSettings().IsPortrait() ? wxPORTRAIT : wxLANDSCAPE );
 
     DIALOG_PRINT_USING_PRINTER* frame = new DIALOG_PRINT_USING_PRINTER( this );
 
