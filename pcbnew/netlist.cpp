@@ -1013,9 +1013,11 @@ bool NETLIST_READER::readModuleComponentLinkfile( const wxString* aCmpIdent,
     if( cmpFile == NULL )
     {
         wxString msg;
-        msg.Printf( _( "File <%s> not found, use Netlist for lib module selection" ),
+        msg.Printf( _( "File <%s> not found, use Netlist for footprints selection" ),
                    GetChars( m_cmplistFullName ) );
-        DisplayError( NULL, msg, 20 );
+
+        if( m_messageWindow )
+            m_messageWindow->AppendText( msg );
         return false;
     }
 
