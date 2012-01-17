@@ -59,7 +59,7 @@ private:
     void OnPageSetup( wxCommandEvent& event );
     void OnPrintPreview( wxCommandEvent& event );
     void OnPrintButtonClick( wxCommandEvent& event );
-	void OnScaleSelectionClick( wxCommandEvent& event );
+    void OnScaleSelectionClick( wxCommandEvent& event );
 
     void OnButtonCancelClick( wxCommandEvent& event ) { Close(); }
     void SetPrintParameters( );
@@ -95,12 +95,14 @@ void GERBVIEW_FRAME::ToPrinter( wxCommandEvent& event )
             DisplayError( this, _( "Error Init Printer info" ) );
         }
         g_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGHT;
-        g_PrintData->SetOrientation( DEFAULT_ORIENTATION_PAPER );
     }
+
+    g_PrintData->SetOrientation( GetPageSettings().IsPortrait() ? wxPORTRAIT : wxLANDSCAPE );
 
     DIALOG_PRINT_USING_PRINTER* frame = new DIALOG_PRINT_USING_PRINTER( this );
 
-    frame->ShowModal(); frame->Destroy();
+    frame->ShowModal();
+    frame->Destroy();
 }
 
 
