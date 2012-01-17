@@ -85,10 +85,17 @@ wxArrayString PAGE_INFO::GetStandardSizes()
 }
 */
 
+
+inline void PAGE_INFO::updatePortrait()
+{
+    // update m_portrait based on orientation of m_size.x and m_size.y
+    m_portrait = ( m_size.y > m_size.x );
+}
+
+
 PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType ) :
     m_type( aType ),
-    m_size( aSizeMils ),
-    m_portrait( false )
+    m_size( aSizeMils )
 {
 #if defined(KICAD_GOST)
     m_left_margin   = GOST_LEFTMARGIN;
@@ -98,6 +105,8 @@ PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType ) :
 #else
     m_left_margin = m_right_margin = m_top_margin = m_bottom_margin = 400;
 #endif
+
+    updatePortrait();
 }
 
 
@@ -105,6 +114,7 @@ PAGE_INFO::PAGE_INFO( const wxString& aType )
 {
     SetType( aType );
 }
+
 
 bool PAGE_INFO::SetType( const wxString& aType )
 {
@@ -147,6 +157,8 @@ bool PAGE_INFO::SetType( const wxString& aType )
         // customize:
         m_size.x = s_user_width;
         m_size.y = s_user_height;
+
+        updatePortrait();
     }
     else
         rc = false;
@@ -170,7 +182,7 @@ void PAGE_INFO::SetPortrait( bool isPortrait )
 
         m_portrait = isPortrait;
 
-        // margins are not touched.
+        // margins are not touched, do that if you want
     }
 }
 
@@ -210,10 +222,13 @@ void PAGE_INFO::SetUserHeightMils( int aHeightInMils )
 void PAGE_INFO::SetWidthMils(  int aWidthInMils )
 {
     m_size.x = clampWidth( aWidthInMils );
+    updatePortrait();
 }
 
 
 void PAGE_INFO::SetHeightMils( int aHeightInMils )
 {
     m_size.y = clampHeight( aHeightInMils );
+    updatePortrait();
 }
+

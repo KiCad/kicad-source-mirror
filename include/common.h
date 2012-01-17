@@ -148,9 +148,10 @@ public:
      * commonly associated with that type name.
      *
      * @param aStandardPageDescriptionName is a wxString constant giving one of:
-     * "A4" "A3" "A2" "A1" "A0" "A" "B" "C" "D" "E" "GERBER", or "User".  If "User"
-     * then the width and height are custom, and will be set according to previous calls
-     * to static PAGE_INFO::SetUserWidthMils() and
+     * "A4" "A3" "A2" "A1" "A0" "A" "B" "C" "D" "E" "GERBER", "USLetter", "USLegal",
+     * "USLedger", or "User".  If "User" then the width and height are custom,
+     * and will be set according to <b>previous</b> calls to
+     * static PAGE_INFO::SetUserWidthMils() and
      * static PAGE_INFO::SetUserHeightMils();
      *
      * @return bool - true iff @a aStandarePageDescription was a recognized type.
@@ -268,6 +269,8 @@ private:
 
     static int s_user_height;
     static int s_user_width;
+
+    void updatePortrait();
 };
 
 
