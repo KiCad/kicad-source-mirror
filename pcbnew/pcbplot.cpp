@@ -302,16 +302,16 @@ void DIALOG_PLOT::OnOutputDirectoryBrowseClicked( wxCommandEvent& event )
 
     wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
 
-    wxMessageDialog dialog( this, wxT( "Use a relative path? "),
-                            wxT( "Plot Output Directory" ),
+    wxMessageDialog dialog( this, _( "Use a relative path? "),
+                            _( "Plot Output Directory" ),
                             wxYES_NO | wxICON_QUESTION | wxYES_DEFAULT );
 
     if( dialog.ShowModal() == wxID_YES ) {
         wxString boardFilePath = ( (wxFileName) m_Parent->GetScreen()->GetFileName()).GetPath();
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
-            wxMessageBox( wxT( "Cannot make path relative (target volume different from board file volume)!" ),
-                          wxT( "Plot Output Directory" ), wxOK | wxICON_ERROR );
+            wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),
+                          _( "Plot Output Directory" ), wxOK | wxICON_ERROR );
     }
 
     m_outputDirectoryName->SetValue( dirName.GetFullPath() );
@@ -471,7 +471,7 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenDiameter(), UNITS_MILS );
         m_HPGLPenSizeOpt->SetValue( msg );
-        msg.Printf( wxT( "HPGL pen size constrained!\n" ) );
+        msg.Printf( _( "HPGL pen size constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
 
@@ -483,7 +483,7 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg = ReturnStringFromValue( UNSCALED_UNITS, tempOptions.GetHpglPenSpeed(), 1 );
         m_HPGLPenSpeedOpt->SetValue( msg );
-        msg.Printf( wxT( "HPGL pen speed constrained!\n" ) );
+        msg.Printf( _( "HPGL pen speed constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
 
@@ -495,7 +495,7 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetHpglPenOverlay(), UNITS_MILS );
         m_HPGLPenOverlayOpt->SetValue( msg );
-        msg.Printf( wxT( "HPGL pen overlay constrained!\n" ) );
+        msg.Printf( _( "HPGL pen overlay constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
 
@@ -508,7 +508,7 @@ void DIALOG_PLOT::applyPlotSettings()
         msg = ReturnStringFromValue( g_UserUnit, tempOptions.GetPlotLineWidth(),
                                      PCB_INTERNAL_UNIT );
         m_linesWidth->SetValue( msg );
-        msg.Printf( wxT( "Default linewidth constrained!\n" ) );
+        msg.Printf( _( "Default linewidth constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
 
@@ -521,7 +521,7 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg.Printf( wxT( "%f" ), m_XScaleAdjust );
         m_fineAdjustXscaleOpt->SetValue( msg );
-        msg.Printf( wxT( "X scale constrained!\n" ) );
+        msg.Printf( _( "X scale constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
 
@@ -535,7 +535,7 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg.Printf( wxT( "%f" ), m_YScaleAdjust );
         m_fineAdjustYscaleOpt->SetValue( msg );
-        msg.Printf( wxT( "Y scale constrained!\n" ) );
+        msg.Printf( _( "Y scale constrained!\n" ) );
         m_messagesBox->AppendText( msg );
     }
 
@@ -549,12 +549,11 @@ void DIALOG_PLOT::applyPlotSettings()
     {
         msg = ReturnStringFromValue( g_UserUnit, m_PSWidthAdjust, PCB_INTERNAL_UNIT );
         m_PSFineAdjustWidthOpt->SetValue( msg );
-        msg.Printf( wxT( "Width correction constrained!\n"
-                    "The reasonable width correction value must be in a range of [%+f; %+f]" ),
+        msg.Printf( _( "Width correction constrained!\nThe reasonable width correction value must be in a range of [%+f; %+f]" ),
                     To_User_Unit( g_UserUnit, m_WidthAdjustMinValue, PCB_INTERNAL_UNIT ),
                     To_User_Unit( g_UserUnit, m_WidthAdjustMaxValue, PCB_INTERNAL_UNIT ) );
         msg += ( g_UserUnit == INCHES )? _(" (\")") : _(" (mm)");
-        msg += wxT( " for current design rules!\n" );
+        msg += _( " for current design rules!\n" );
         m_messagesBox->AppendText( msg );
     }
 
@@ -608,10 +607,10 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
     if( !outputDir.MakeAbsolute( boardFilePath ) )
     {
         wxString msg;
-        msg.Printf( wxT( " Cannot make %s absolute with respect to %s!" ),
+        msg.Printf( _( " Cannot make %s absolute with respect to %s!" ),
                     GetChars( outputDir.GetPath() ),
                     GetChars( boardFilePath ) );
-        wxMessageBox( msg, wxT( "Plot" ), wxOK | wxICON_ERROR );
+        wxMessageBox( msg, _( "Plot" ), wxOK | wxICON_ERROR );
         return;
     }
 
@@ -620,13 +619,13 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         if( wxMkdir( outputDir.GetPath() ) )
         {
             wxString msg;
-            msg.Printf( wxT( "Directory %s created.\n" ), GetChars( outputDir.GetPath() ) );
+            msg.Printf( _( "Directory %s created.\n" ), GetChars( outputDir.GetPath() ) );
             m_messagesBox->AppendText( msg );
         }
         else
         {
-            wxMessageBox( wxT( "Cannot create output directory!" ),
-                               wxT( "Plot" ), wxOK | wxICON_ERROR );
+            wxMessageBox( _( "Cannot create output directory!" ),
+                               _( "Plot" ), wxOK | wxICON_ERROR );
             return;
         }
     }
