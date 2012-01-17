@@ -79,10 +79,9 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
     setCurrentPageSizeSelection( pageInfo.GetType() );
 
-    // only a click fires the selection changed event, so have to fabricate this check
-    wxCommandEvent junk;
-
-    onPaperSizeChoice( junk );
+    // only a click fires the "selection changed" event, so have to fabricate this check
+    wxCommandEvent dummy;
+    onPaperSizeChoice( dummy );
 
     switch( g_UserUnit )
     {
@@ -247,13 +246,15 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
     }
     else
     {
-        pageInfo.SetPortrait( m_orientationComboBox->GetSelection() );
-
         // here we assume translators will keep original paper size spellings
         if( !pageInfo.SetType( paperType ) )
         {
             wxASSERT_MSG( FALSE, wxT( "the translation for paper size must preserve original spellings" ) );
         }
+
+        // set portrait _after_ setting size/type above
+        int choice = m_orientationComboBox->GetSelection();
+        pageInfo.SetPortrait( choice );
     }
 
     m_Parent->SetPageSettings( pageInfo );
