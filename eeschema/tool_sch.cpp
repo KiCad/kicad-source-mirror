@@ -218,14 +218,14 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddTool( ID_NOCONN_BUTT, wxEmptyString, KiBitmap( noconn_xpm ),
                             HELP_PLACE_NC_FLAG, wxITEM_CHECK );
 
+    m_drawToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString, KiBitmap( add_junction_xpm ),
+                            HELP_PLACE_JUNCTION, wxITEM_CHECK );
+
     m_drawToolBar->AddTool( ID_LABEL_BUTT, wxEmptyString, KiBitmap( add_line_label_xpm ),
                             HELP_PLACE_NETLABEL, wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_GLABEL_BUTT, wxEmptyString, KiBitmap( add_glabel_xpm ),
                             HELP_PLACE_GLOBALLABEL, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString, KiBitmap( add_junction_xpm ),
-                            HELP_PLACE_JUNCTION, wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_HIERLABEL_BUTT, wxEmptyString,
                             KiBitmap( add_hierarchical_label_xpm ),
