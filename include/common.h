@@ -112,13 +112,7 @@ enum EDA_UNITS_T {
     UNSCALED_UNITS = 2
 };
 
-#if defined(KICAD_GOST)
-#define GOST_LEFTMARGIN   800    // 20mm
-#define GOST_RIGHTMARGIN  200    // 5mm
-#define GOST_TOPMARGIN    200    // 5mm
-#define GOST_BOTTOMMARGIN 200    // 5mm
 
-#endif
 // forward declarations:
 class LibNameList;
 
@@ -189,11 +183,11 @@ public:
     // and either deci-mils or nanometers in PCBNew.
 #if defined(PCBNEW)
 # if defined(KICAD_NANOMETRE)
-    int GetWidthIU() const  { return int( 2.54e4 * GetWidthMils() );  }
-    int GetHeightIU() const { return int( 2.54e4 * GetHeightMils() ); }
+    int GetWidthIU() const  { return 25400 * GetWidthMils();  }
+    int GetHeightIU() const { return 25400 * GetHeightMils(); }
 # else
-    int GetWidthIU() const  { return int( 10 * GetWidthMils() );  }
-    int GetHeightIU() const { return int( 10 * GetHeightMils() ); }
+    int GetWidthIU() const  { return 10 * GetWidthMils();  }
+    int GetHeightIU() const { return 10 * GetHeightMils(); }
 # endif
     const wxSize GetSizeIU() const  { return wxSize( GetWidthIU(), GetHeightIU() ); }
 #elif defined(EESCHEMA)
