@@ -29,11 +29,14 @@
 const wxString PAGE_INFO::Custom( wxT( "User" ) );
 
 // Standard page sizes in mils, all constants
+
+// A4 see:  https://lists.launchpad.net/kicad-developers/msg07389.html
 #if defined(KICAD_GOST)
-const PAGE_INFO  PAGE_INFO::pageA4(     wxSize(  8268, 11700 ),  wxT( "A4" ) );
+const PAGE_INFO  PAGE_INFO::pageA4(     wxSize(  8268, 11693 ),  wxT( "A4" ) );
 #else
-const PAGE_INFO  PAGE_INFO::pageA4(     wxSize( 11700,  8268 ),  wxT( "A4" ) );
+const PAGE_INFO  PAGE_INFO::pageA4(     wxSize( 11693,  8268 ),  wxT( "A4" ) );
 #endif
+
 const PAGE_INFO  PAGE_INFO::pageA3(     wxSize( 16535, 11700 ),  wxT( "A3" ) );
 const PAGE_INFO  PAGE_INFO::pageA2(     wxSize( 23400, 16535 ),  wxT( "A2" ) );
 const PAGE_INFO  PAGE_INFO::pageA1(     wxSize( 33070, 23400 ),  wxT( "A1" ) );
@@ -93,17 +96,29 @@ inline void PAGE_INFO::updatePortrait()
 }
 
 
+
 PAGE_INFO::PAGE_INFO( const wxSize& aSizeMils, const wxString& aType ) :
     m_type( aType ),
     m_size( aSizeMils )
 {
+
 #if defined(KICAD_GOST)
-    m_left_margin   = GOST_LEFTMARGIN;
-    m_right_margin  = GOST_RIGHTMARGIN;
-    m_top_margin    = GOST_TOPMARGIN;
-    m_bottom_margin = GOST_BOTTOMMARGIN;
+/*
+#define GOST_LEFTMARGIN   800    // 20mm
+#define GOST_RIGHTMARGIN  200    // 5mm
+#define GOST_TOPMARGIN    200    // 5mm
+#define GOST_BOTTOMMARGIN 200    // 5mm
+*/
+
+    m_left_margin   = 800;      // 20mm
+    m_right_margin  = 200;      // 5mm
+    m_top_margin    = 200;      // 5mm
+    m_bottom_margin = 200;      // 5mm
 #else
-    m_left_margin = m_right_margin = m_top_margin = m_bottom_margin = 400;
+    m_left_margin   =
+    m_right_margin  =
+    m_top_margin    =
+    m_bottom_margin = 400;
 #endif
 
     updatePortrait();
