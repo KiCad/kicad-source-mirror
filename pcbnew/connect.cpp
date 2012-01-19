@@ -897,7 +897,7 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
 {
     wxString msg;
 
-    if( aNetCode == 0 )
+    if( aNetCode <= 0 ) // -1 = not existing net, 0 = dummy net
         return;
 
     if( (m_Pcb->m_Status_Pcb & LISTE_RATSNEST_ITEM_OK) == 0 )
@@ -947,14 +947,19 @@ void PCB_BASE_FRAME::TestNetConnection( wxDC* aDC, int aNetCode )
     /* Display results */
     int net_notconnected_count = 0;
     NETINFO_ITEM* net = m_Pcb->FindNet( aNetCode );
-    for( unsigned ii = net->m_RatsnestStartIdx; ii < net->m_RatsnestEndIdx; ii++ )
+    if( net )       // Should not occur, but ...
     {
-        if( m_Pcb->m_FullRatsnest[ii].IsActive() )
-            net_notconnected_count++;
+        for( unsigned ii = net->m_RatsnestStartIdx; ii < net->m_RatsnestEndIdx; ii++ )
+        {
+            if( m_Pcb->m_FullRatsnest[ii].IsActive() )
+                net_notconnected_count++;
+        }
+        msg.Printf( wxT( "links %d nc %d  net:nc %d" ),
+                    m_Pcb->GetRatsnestsCount(), m_Pcb->GetNoconnectCount(),
+                    net_notconnected_count );
     }
-    msg.Printf( wxT( "links %d nc %d  net:nc %d" ),
-                m_Pcb->GetRatsnestsCount(), m_Pcb->GetNoconnectCount(),
-                net_notconnected_count );
+    else
+        msg.Printf( wxT( "net not found: netcode %d" ),aNetCode );
 
     SetStatusText( msg );
     return;
