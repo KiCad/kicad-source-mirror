@@ -49,6 +49,11 @@
 #define HELP_PLACE_GRAPHICLINES _( "Place graphic lines or polygons" )
 #define HELP_PLACE_GRAPHICTEXTS _( "Place graphic text (comment)" )
 
+#define HELP_ANNOTATE _( "Annotate the components in the schematic" )
+#define HELP_RUN_LIB_EDITOR _( "Library editor - Create and edit components" )
+#define HELP_RUN_LIB_VIEWER _( "Library browser - Browse components" )
+#define HELP_GENERATE_BOM _( "Generate bill of materials and/or cross references" )
+#define HELP_IMPORT_FOOTPRINTS _( "Import footprint selection from CvPcb in components footprint field" )
 
 // Component editor:
 #define HELP_ADD_PIN _( "Add pins to the component" )

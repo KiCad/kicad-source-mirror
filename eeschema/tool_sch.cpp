@@ -134,17 +134,17 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
 
     m_mainToolBar->AddTool( ID_TO_LIBRARY, wxEmptyString, KiBitmap( libedit_xpm ),
-                            _( "Library editor - Create and edit components" ) );
+                            HELP_RUN_LIB_EDITOR );
 
     m_mainToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString, KiBitmap( library_browse_xpm ),
-                            _( "Library browser - Browse components" ) );
+                            HELP_RUN_LIB_VIEWER );
 
 
     m_mainToolBar->AddSeparator();
 
 
     m_mainToolBar->AddTool( ID_GET_ANNOTATE, wxEmptyString, KiBitmap( annotate_xpm ),
-                            _( "Annotate schematic" ) );
+                            HELP_ANNOTATE );
 
     m_mainToolBar->AddTool( ID_GET_ERC, wxEmptyString, KiBitmap( erc_xpm ),
                             _( "Perform electric rules check" ) );
@@ -153,7 +153,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
                             _( "Generate netlist" ) );
 
     m_mainToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, KiBitmap( bom_xpm ),
-                            _( "Generate bill of materials and/or cross references" ) );
+                            HELP_GENERATE_BOM );
 
 
     m_mainToolBar->AddSeparator();
@@ -167,7 +167,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddTool( ID_BACKANNO_ITEMS, wxEmptyString,
                             KiBitmap( import_footprint_names_xpm ),
-                            _( "Back annotate component foot prints" ) );
+                            HELP_IMPORT_FOOTPRINTS );
 
     // set icon paddings
     m_mainToolBar->SetToolBorderPadding(3); // padding

@@ -97,8 +97,7 @@ int PCB_EDIT_FRAME::EraseRedundantTrack( wxDC*              aDC,
     /* Flags for cleaning the net. */
     for( pt_del = bufStart;  pt_del;  pt_del = pt_del->Next() )
     {
-        //D( printf( "track %p turning off BUSY | IN_EDIT | IS_LINKED\n", pt_del ); )
-        D( std::cout<<"track "<<pt_del<<" turning off BUSY | IN_EDIT | IS_LINKED"<<std::endl; )
+//        D( std::cout<<"track "<<pt_del<<" turning off BUSY | IN_EDIT | IS_LINKED"<<std::endl; )
         pt_del->SetState( BUSY | IN_EDIT | IS_LINKED, OFF );
 
         if( pt_del == bufEnd )  // Last segment reached
