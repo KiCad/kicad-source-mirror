@@ -1,15 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  8 2010)
+// C++ code generated with wxFormBuilder (version Jun 30 2011)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __dialog_global_deletion_base__
-#define __dialog_global_deletion_base__
+#ifndef __DIALOG_GLOBAL_DELETION_BASE_H__
+#define __DIALOG_GLOBAL_DELETION_BASE_H__
 
+#include <wx/artprov.h>
+#include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-
 #include <wx/string.h>
 #include <wx/checkbox.h>
 #include <wx/gdicmn.h>
@@ -18,6 +19,10 @@
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/radiobox.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -40,22 +45,30 @@ class DIALOG_GLOBAL_DELETION_BASE : public wxDialog
 		wxCheckBox* m_DelTracks;
 		wxCheckBox* m_DelMarkers;
 		wxCheckBox* m_DelAlls;
+		wxStaticBoxSizer* sbTrackFilter;
 		wxCheckBox* m_TrackFilterAR;
 		wxCheckBox* m_TrackFilterLocked;
-		
-		wxButton* m_buttonOK;
-		wxButton* m_buttonCancel;
+		wxCheckBox* m_TrackFilterNormal;
+		wxCheckBox* m_TrackFilterVias;
+		wxRadioBox* m_rbLayersOption;
+		wxStaticText* m_staticText1;
+		wxTextCtrl* m_textCtrlCurrLayer;
+		wxStaticLine* m_staticline1;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1OK;
+		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCheckDeleteTracks( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 365,242 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_GLOBAL_DELETION_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 365,292 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_GLOBAL_DELETION_BASE();
 	
 };
 
-#endif //__dialog_global_deletion_base__
+#endif //__DIALOG_GLOBAL_DELETION_BASE_H__

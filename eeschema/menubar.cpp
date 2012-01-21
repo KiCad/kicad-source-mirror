@@ -458,20 +458,17 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;
 
-    // Library viewer
-    AddMenuItem( toolsMenu,
-                 ID_TO_LIBRARY,
-                 _( "Library &Browser" ),
-                 _( "Library browser" ),
-                 KiBitmap( library_browse_xpm ) );
-
-
     // Library editor
     AddMenuItem( toolsMenu,
                  ID_TO_LIBRARY,
-                 _( "Library &Editor" ),
-                 _( "Library editor" ),
+                 _( "Library &Editor" ), HELP_RUN_LIB_EDITOR,
                  KiBitmap( libedit_xpm ) );
+
+    // Library viewer
+    AddMenuItem( toolsMenu,
+                 ID_TO_LIBVIEW,
+                 _( "Library &Browser" ),  HELP_RUN_LIB_VIEWER,
+                 KiBitmap( library_browse_xpm ) );
 
     // Separator
     toolsMenu->AppendSeparator();
@@ -479,8 +476,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Annotate
     AddMenuItem( toolsMenu,
                  ID_GET_ANNOTATE,
-                 _( "&Annotate" ),
-                 _( "Annotate the components in the schematic" ),
+                 _( "&Annotate" ), HELP_ANNOTATE,
                  KiBitmap( annotate_xpm ) );
 
     // ERC
@@ -501,8 +497,8 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( toolsMenu,
                  ID_GET_TOOLS,
                  _( "Generate Bill of &Materials" ),
-                 _( "Generate bill of materials" ),
-                 KiBitmap( tools_xpm ) );
+                 HELP_GENERATE_BOM,
+                 KiBitmap( bom_xpm ) );
 
     // Separator
     toolsMenu->AppendSeparator();
@@ -521,6 +517,10 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
                  _( "Run Pcbnew" ),
                  KiBitmap( pcbnew_xpm ) );
 
+    AddMenuItem( toolsMenu, ID_BACKANNO_ITEMS,
+                 _( "Import Footprint Selection" ),
+                 HELP_IMPORT_FOOTPRINTS,
+                 KiBitmap( import_footprint_names_xpm ) );
 
     // Help Menu:
     wxMenu* helpMenu = new wxMenu;

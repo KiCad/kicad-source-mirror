@@ -508,6 +508,7 @@ void DRC::testUnconnected()
     if( m_pcb->GetRatsnestsCount() == 0 )
         return;
 
+    wxString msg;
     for( unsigned ii = 0; ii < m_pcb->GetRatsnestsCount();  ++ii )
     {
         RATSNEST_ITEM& rat = m_pcb->m_FullRatsnest[ii];
@@ -518,8 +519,9 @@ void DRC::testUnconnected()
         D_PAD*    padStart = rat.m_PadStart;
         D_PAD*    padEnd   = rat.m_PadEnd;
 
+        msg = padStart->GetSelectMenuText() + wxT( " net " ) + padStart->GetNetname();
         DRC_ITEM* uncItem = new DRC_ITEM( DRCE_UNCONNECTED_PADS,
-                                          padStart->GetSelectMenuText(),
+                                          msg,
                                           padEnd->GetSelectMenuText(),
                                           padStart->GetPosition(), padEnd->GetPosition() );
 

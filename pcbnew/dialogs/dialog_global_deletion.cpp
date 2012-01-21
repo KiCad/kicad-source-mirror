@@ -22,6 +22,11 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent )
     : DIALOG_GLOBAL_DELETION_BASE( parent )
 {
     m_Parent = parent;
+    m_currentLayer = 0;
+    m_TrackFilterAR->Enable( m_DelTracks->GetValue() );
+    m_TrackFilterLocked->Enable( m_DelTracks->GetValue() );
+    m_TrackFilterNormal->Enable( m_DelTracks->GetValue() );
+    m_TrackFilterVias->Enable( m_DelTracks->GetValue() );
     SetFocus();
 
     GetSizer()->SetSizeHints(this);
@@ -32,9 +37,24 @@ DIALOG_GLOBAL_DELETION::DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent )
 void PCB_EDIT_FRAME::InstallPcbGlobalDeleteFrame( const wxPoint& pos )
 {
     DIALOG_GLOBAL_DELETION dlg( this );
+    dlg.SetCurrentLayer( getActiveLayer() );
+
     dlg.ShowModal();
 }
 
+void DIALOG_GLOBAL_DELETION::SetCurrentLayer( int aLayer )
+{
+    m_currentLayer = aLayer;
+    m_textCtrlCurrLayer->SetValue( m_Parent->GetBoard()->GetLayerName( aLayer ) );
+}
+
+void DIALOG_GLOBAL_DELETION::OnCheckDeleteTracks( wxCommandEvent& event )
+{
+    m_TrackFilterAR->Enable( m_DelTracks->GetValue() );
+    m_TrackFilterLocked->Enable( m_DelTracks->GetValue() );
+    m_TrackFilterNormal->Enable( m_DelTracks->GetValue() );
+    m_TrackFilterVias->Enable( m_DelTracks->GetValue() );
+}
 
 void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
 {
@@ -60,7 +80,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         {
             gen_rastnest = true;
 
-            /* ZEG_ZONE items used in Zone filling selection are now deprecated :
+            /* SEG_ZONE items used in Zone filling selection are now deprecated :
             * and are deleted but not put in undo buffer if exist
             */
             pcb->m_Zone.DeleteAll();
@@ -75,12 +95,18 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
         }
 
         int masque_layer = 0;
+        int layers_filter = ALL_LAYERS;
+        if( m_rbLayersOption->GetSelection() != 0 )     // Use current layer only
+            layers_filter = 1 << m_currentLayer;
+
 
         if( m_DelDrawings->GetValue() )
-            masque_layer = (~EDGE_LAYER) & 0x1FFF0000;
+            masque_layer = (~EDGE_LAYER) & ALL_NO_CU_LAYERS;
 
         if( m_DelBoardEdges->GetValue() )
             masque_layer |= EDGE_LAYER;
+
+        layers_filter &= layers_filter;
 
         for( item = pcb->m_Drawings; item != NULL; item = nextitem )
         {
@@ -121,16 +147,27 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete( )
             if( !m_TrackFilterAR->GetValue() )
                 track_mask_filter |= TRACK_AR;
 
-            for( item = pcb->m_Track; item != NULL; item = nextitem )
+            TRACK * nexttrack;
+            for( TRACK *track = pcb->m_Track; track != NULL; track = nexttrack )
             {
-                nextitem = item->Next();
+                nexttrack = track->Next();
 
-                if( (item->GetState( TRACK_LOCKED | TRACK_AR ) & track_mask_filter) != 0 )
+                if( (track->GetState( TRACK_LOCKED | TRACK_AR ) & track_mask_filter) != 0 )
                     continue;
 
-                itemPicker.m_PickedItem = item;
+                if( (track->GetState( TRACK_LOCKED | TRACK_AR ) == 0) &&
+                    !m_TrackFilterNormal->GetValue() )
+                    continue;
+
+                if( (track->Type() == PCB_VIA_T)  && !m_TrackFilterVias->GetValue() )
+                    continue;
+
+                if( (track->ReturnMaskLayer() & layers_filter) == 0 )
+                    continue;
+
+                itemPicker.m_PickedItem = track;
                 pickersList.PushItem( itemPicker );
-                item->UnLink();
+                track->UnLink();
                 gen_rastnest = true;
             }
         }
