@@ -277,7 +277,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, /*{{{*/
         "            }\n",
         "          }\n",
         "          geometry IndexedFaceSet {\n",
-        "            solid TRUE\n",
+        "            solid true\n",
         "            coord Coordinate {\n",
         "              point [\n",
         0,                                          /* Coordinates marker */

@@ -1120,7 +1120,7 @@ void LIB_PIN::DrawPinTexts( EDA_DRAW_PANEL* panel,
     }
 
     if( m_name.IsEmpty() )
-        DrawPinName = FALSE;
+        DrawPinName = false;
 
     if( TextInside )  /* Draw the text inside, but the pin numbers outside. */
     {
@@ -1415,7 +1415,7 @@ void LIB_PIN::PlotPinTexts( PLOTTER* plotter,
     }
 
     if( m_name.IsEmpty() )
-        DrawPinName = FALSE;
+        DrawPinName = false;
 
     /* Draw the text inside, but the pin numbers outside. */
     if( TextInside )

@@ -73,7 +73,7 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
     if( m_canvas->IsMouseCaptured() )
-        m_canvas->CallMouseCapture( DC, wxDefaultPosition, FALSE );
+        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
     m_canvas->DrawCrossHair( DC );
 

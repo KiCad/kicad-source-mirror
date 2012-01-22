@@ -48,13 +48,13 @@ public:
     ~FOOTPRINTS_LISTBOX();
 
     int      GetCount();
-    void     SetSelection( unsigned index, bool State = TRUE );
+    void     SetSelection( unsigned index, bool State = true );
     void     SetString( unsigned linecount, const wxString& text );
     void     AppendLine( const wxString& text );
     void     SetFootprintFullList( FOOTPRINT_LIST& list );
     void     SetFootprintFilteredList( COMPONENT*      Component,
                                        FOOTPRINT_LIST& list );
-    void     SetActiveFootprintList( bool FullList, bool Redraw = FALSE );
+    void     SetActiveFootprintList( bool FullList, bool Redraw = false );
 
     wxString GetSelectedFootprint();
     wxString OnGetItemText( long item, long column ) const;
@@ -88,7 +88,7 @@ public:
     void     Clear();
     int      GetCount();
     wxString OnGetItemText( long item, long column ) const;
-    void     SetSelection( unsigned index, bool State = TRUE );
+    void     SetSelection( unsigned index, bool State = true );
     void     SetString( unsigned linecount, const wxString& text );
     void     AppendLine( const wxString& text );
 

@@ -56,8 +56,8 @@ extern int  PrintListeGLabel( FILE* f, std::vector <BOM_LABEL>& aList );
 
 
 /* Local variables */
-static bool     s_ListByRef    = TRUE;
-static bool     s_ListByValue  = TRUE;
+static bool     s_ListByRef    = true;
+static bool     s_ListByValue  = true;
 static bool     s_ListWithSubCmponents;
 static bool     s_ListHierarchicalPinByName;
 static bool     s_ListBySheet;
@@ -465,7 +465,7 @@ void DIALOG_BUILD_BOM::CreateExportList( const wxString& aFullFileName,
         cmplist.RemoveSubComponentsFromList();
 
     // create the file
-    PrintComponentsListByRef( f, cmplist, TRUE, aIncludeSubComponents );
+    PrintComponentsListByRef( f, cmplist, true, aIncludeSubComponents );
 
     fclose( f );
 }

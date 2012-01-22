@@ -166,7 +166,7 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
     m_unitCount           = 1;
     m_pinNameOffset       = 40;
     m_options             = ENTRY_NORMAL;
-    m_unitsLocked         = FALSE;
+    m_unitsLocked         = false;
     m_showPinNumbers      = true;
     m_showPinNames        = true;
 
@@ -763,7 +763,7 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
         p = strtok( line, " \t\r\n" );
 
-        /* This is the error flag ( if an error occurs, Res = FALSE) */
+        /* This is the error flag ( if an error occurs, Res = false) */
         Res = true;
 
         if( *line == '#' )      // a comment

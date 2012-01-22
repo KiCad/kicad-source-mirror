@@ -249,7 +249,7 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
         // here we assume translators will keep original paper size spellings
         if( !pageInfo.SetType( paperType ) )
         {
-            wxASSERT_MSG( FALSE, wxT( "the translation for paper size must preserve original spellings" ) );
+            wxASSERT_MSG( false, wxT( "the translation for paper size must preserve original spellings" ) );
         }
 
         // set portrait _after_ setting size/type above

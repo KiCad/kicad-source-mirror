@@ -116,7 +116,7 @@ int CVPCB_MAINFRAME::GenNetlistPcbnew( FILE* file,bool isEESchemaNetlist )
  */
 void WriteFootprintFilterInfos( FILE* file, COMPONENT_LIST& list )
 {
-    bool       WriteHeader = FALSE;
+    bool       WriteHeader = false;
 
     BOOST_FOREACH( COMPONENT& component, list )
     {
@@ -127,7 +127,7 @@ void WriteFootprintFilterInfos( FILE* file, COMPONENT_LIST& list )
         if( !WriteHeader )
         {
             fprintf( file, "{ Allowed footprints by component:\n" );
-            WriteHeader = TRUE;
+            WriteHeader = true;
         }
         fprintf( file, "$component %s\n",
                  TO_UTF8( component.m_Reference ) );

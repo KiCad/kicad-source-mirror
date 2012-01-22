@@ -273,7 +273,7 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
                                      mask,
                                      this,
                                      wxFD_OPEN,
-                                     TRUE
+                                     true
                                      );
 
     if( fullfilename == wxEmptyString )

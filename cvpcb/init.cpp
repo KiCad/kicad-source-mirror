@@ -53,13 +53,13 @@ void CVPCB_MAINFRAME::SetNewPkg( const wxString& package )
         m_undefinedComponentCnt -= 1;
 
     m_ListCmp->SetString( NumCmp, msg );
-    m_ListCmp->SetSelection( NumCmp, FALSE );
+    m_ListCmp->SetSelection( NumCmp, false );
 
     // We activate next component:
     if( NumCmp < (m_ListCmp->GetCount() - 1) )
         NumCmp++;
 
-    m_ListCmp->SetSelection( NumCmp, TRUE );
+    m_ListCmp->SetSelection( NumCmp, true );
 
     DisplayStatus();
 }
@@ -107,7 +107,7 @@ bool CVPCB_MAINFRAME::ReadNetList()
     }
 
     if( !m_components.empty() )
-        m_ListCmp->SetSelection( 0, TRUE );
+        m_ListCmp->SetSelection( 0, true );
 
     DisplayStatus();
 

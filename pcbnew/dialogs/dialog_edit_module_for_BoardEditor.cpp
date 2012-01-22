@@ -72,7 +72,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
     m_LayerCtrl->SetSelection(
          (m_CurrentModule->GetLayer() == LAYER_N_BACK) ? 1 : 0 );
 
-    bool select = FALSE;
+    bool select = false;
     switch( (int) m_CurrentModule->GetOrientation() )
     {
     case 0:
@@ -96,7 +96,7 @@ void DIALOG_MODULE_BOARD_EDITOR::InitBoardProperties()
 
     default:
         m_OrientCtrl->SetSelection( 4 );
-        select = TRUE;
+        select = true;
         break;
     }
 
@@ -168,27 +168,27 @@ void DIALOG_MODULE_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent& event )
     switch( m_OrientCtrl->GetSelection() )
     {
     case 0:
-        m_OrientValue->Enable( FALSE );
+        m_OrientValue->Enable( false );
         m_OrientValue->SetValue( wxT( "0" ) );
         break;
 
     case 1:
-        m_OrientValue->Enable( FALSE );
+        m_OrientValue->Enable( false );
         m_OrientValue->SetValue( wxT( "900" ) );
         break;
 
     case 2:
-        m_OrientValue->Enable( FALSE );
+        m_OrientValue->Enable( false );
         m_OrientValue->SetValue( wxT( "2700" ) );
         break;
 
     case 3:
-        m_OrientValue->Enable( FALSE );
+        m_OrientValue->Enable( false );
         m_OrientValue->SetValue( wxT( "1800" ) );
         break;
 
     default:
-        m_OrientValue->Enable( TRUE );
+        m_OrientValue->Enable( true );
         break;
     }
 }
@@ -398,7 +398,7 @@ void DIALOG_MODULE_BOARD_EDITOR::Browse3DLib( wxCommandEvent& event )
                                      mask,
                                      this,
                                      wxFD_OPEN,
-                                     TRUE
+                                     true
                                      );
 
     if( fullfilename == wxEmptyString )
@@ -526,14 +526,14 @@ void DIALOG_MODULE_BOARD_EDITOR::OnOkClick( wxCommandEvent& event )
                                  orient - m_CurrentModule->m_Orient );
 
     // Set component side, that also have effect on the fields positions on board
-    bool change_layer = FALSE;
+    bool change_layer = false;
     if( m_LayerCtrl->GetSelection() == 0 )     // layer req = COMPONENT
     {
         if( m_CurrentModule->GetLayer() == LAYER_N_BACK )
-            change_layer = TRUE;
+            change_layer = true;
     }
     else if( m_CurrentModule->GetLayer() == LAYER_N_FRONT )
-        change_layer = TRUE;
+        change_layer = true;
 
     if( change_layer )
         m_CurrentModule->Flip( m_CurrentModule->m_Pos );

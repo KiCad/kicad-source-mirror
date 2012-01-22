@@ -97,7 +97,7 @@ void CVPCB_MAINFRAME::BuildCmpListBox()
     }
 
     m_ListCmp->SetItemCount( m_ListCmp->m_ComponentList.Count() );
-    m_ListCmp->SetSelection( 0, TRUE );
+    m_ListCmp->SetSelection( 0, true );
 }
 
 

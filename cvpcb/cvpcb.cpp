@@ -101,7 +101,7 @@ bool EDA_APP::OnInit()
     SetTopWindow( frame );
 
     frame->LoadProjectFile( filename.GetFullPath() );
-    frame->Show( TRUE );
+    frame->Show( true );
     frame->BuildFOOTPRINTS_LISTBOX();
 
     if( filename.IsOk() && filename.FileExists() )

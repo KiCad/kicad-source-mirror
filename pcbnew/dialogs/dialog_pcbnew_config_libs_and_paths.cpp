@@ -165,7 +165,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnButtonUpClick( wxCommandEvent& event )
         m_ListLibr->SetSelection(jj-1);
     }
 
-    m_LibListChanged = TRUE;
+    m_LibListChanged = true;
 }
 
 
@@ -199,7 +199,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnButtonDownClick( wxCommandEvent& event )
         m_ListLibr->SetSelection(jj+1);
     }
 
-    m_LibListChanged = TRUE;
+    m_LibListChanged = true;
 }
 
 
@@ -215,7 +215,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnRemoveLibClick( wxCommandEvent& event )
     for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
     {
         m_ListLibr->Delete( selections[ii] );
-        m_LibListChanged = TRUE;
+        m_LibListChanged = true;
     }
 }
 
@@ -280,7 +280,7 @@ void DIALOG_PCBNEW_CONFIG_LIBS::OnAddOrInsertLibClick( wxCommandEvent& event )
         //Add or insert new library name, if not already in list
         if( m_ListLibr->FindString( libfilename, fn.IsCaseSensitive() ) == wxNOT_FOUND )
         {
-            m_LibListChanged = TRUE;
+            m_LibListChanged = true;
 
             if( event.GetId() == ID_ADD_LIB )
                 m_ListLibr->Append( libfilename );

@@ -106,12 +106,12 @@ void DIALOG_DISPLAY_OPTIONS::OnOkClick(wxCommandEvent& event)
     if ( m_Show_Page_Limits->GetSelection() == 0 )
         g_ShowPageLimits = true;
     else
-        g_ShowPageLimits = FALSE;
+        g_ShowPageLimits = false;
 
     if ( m_OptDisplayTracks->GetSelection() == 1 )
         DisplayOpt.DisplayPcbTrackFill = true;
     else
-        DisplayOpt.DisplayPcbTrackFill = FALSE;
+        DisplayOpt.DisplayPcbTrackFill = false;
 
     m_Parent->m_DisplayPcbTrackFill = DisplayOpt.DisplayPcbTrackFill;
     DisplayOpt.m_DisplayViaMode = (VIA_DISPLAY_MODE_T) m_OptDisplayViaHole->GetSelection();

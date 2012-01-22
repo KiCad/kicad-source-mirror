@@ -293,7 +293,7 @@ int SCH_COMPONENT::GetPartCount() const
 void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
                           int DrawMode, int Color, bool DrawPinText )
 {
-    bool           dummy = FALSE;
+    bool           dummy = false;
 
     LIB_COMPONENT* Entry = CMP_LIBRARY::FindLibraryComponent( m_ChipName );
 
@@ -854,7 +854,7 @@ void SCH_COMPONENT::SetOrientation( int aOrientation )
         break;
 
     default:
-        transform = FALSE;
+        transform = false;
         wxMessageBox( wxT( "SetRotateMiroir() error: ill value" ) );
         break;
     }

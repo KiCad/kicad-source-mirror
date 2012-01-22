@@ -688,7 +688,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
                                                    TREE_PROJECT - 1,
                                                    TREE_PROJECT - 1 );
 
-    m_TreeProject->SetItemBold( rootcellule, TRUE );
+    m_TreeProject->SetItemBold( rootcellule, true );
 
     m_TreeProject->SetItemData( rootcellule,
                                 new TREEPROJECT_ITEM( TREE_PROJECT,
