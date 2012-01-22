@@ -28,17 +28,23 @@
 /*
     This implements loading and saving a BOARD, behind the PLUGIN interface.
 
+    The definitions:
+
+    *) a Board Internal Unit (BIU) is a unit of length that is used only internally
+       to PCBNEW, and is nanometers when this work is done, but deci-mils until done.
+
     The philosophies:
-    *) a BIU is a unit of length and is nanometers when this work is done, but deci-mils until done.
+
     *) BIUs should be typed as such to distinguish them from ints.  This is mostly
        for human readability, and having the type nearby in the source supports this readability.
     *) Do not assume that BIUs will always be int, doing a sscanf() into a BIU
-       does not make sense in case the size of the BUI changes.
+       does not make sense in case the size of the BIU changes.
     *) variables are put onto the stack in an automatic, even when it might look
        more efficient to do otherwise.  This is so we can seem them with a debugger.
     *) Global variables should not be touched from within a PLUGIN, since it will eventually
        be in a DLL/DSO.  This includes window information too.  The PLUGIN API knows
-       nothing of wxFrame or globals.
+       nothing of wxFrame or globals and all error reporting must be done by throwing
+       an exception.
     *) No wxWindowing calls are made in here, since the UI resides higher up than in here,
        and is going to process a bucket of detailed information thrown from down here
        in the form of an exception if an error happens.
@@ -46,7 +52,10 @@
        Simply avoiding strtok() more often than the old code washes out performance losses.
        Remember strncmp() will bail as soon as a mismatch happens, not going all the way
        to end of string unless a full match.
-    *) angles are in the process of migrating to doubles, and 'int' if used, is only shortterm.
+    *) angles are in the process of migrating to doubles, and 'int' if used, is
+       only shortterm, and along with this a change, and transition from from
+       "tenths of degrees" to simply "degrees" in the double (which has no problem
+       representing any portion of a degree).
 */
 
 
