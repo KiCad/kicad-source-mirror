@@ -234,7 +234,7 @@ void DialogGraphicItemProperties::OnOkClick( wxCommandEvent& event )
 
     m_Parent->GetBoard()->SetDesignSettings( m_BrdSettings );
 
-    Close( TRUE );
+    Close( true );
 }
 
 void DialogGraphicItemProperties::OnCancelClick( wxCommandEvent& event )

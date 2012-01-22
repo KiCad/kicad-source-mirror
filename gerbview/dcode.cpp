@@ -85,8 +85,8 @@ void D_CODE::Clear_D_CODE_Data()
     m_Shape      = APT_CIRCLE;
     m_Drill.x    = m_Drill.y = 0;
     m_DrillShape = APT_DEF_NO_HOLE;
-    m_InUse      = FALSE;
-    m_Defined    = FALSE;
+    m_InUse      = false;
+    m_Defined    = false;
     m_Macro      = NULL;
     m_Rotation   = 0.0;
     m_EdgesCount = 0;

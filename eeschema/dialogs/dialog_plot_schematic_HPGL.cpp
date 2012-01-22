@@ -191,13 +191,13 @@ void DIALOG_PLOT_SCHEMATIC_HPGL::SetPageOffsetValue()
 
         m_PlotOrgPosition_Y->SetValue( msg );
 
-        m_PlotOrgPosition_X->Enable( TRUE );
-        m_PlotOrgPosition_Y->Enable( TRUE );
+        m_PlotOrgPosition_X->Enable( true );
+        m_PlotOrgPosition_Y->Enable( true );
     }
     else
     {
-        m_PlotOrgPosition_X->Enable( FALSE );
-        m_PlotOrgPosition_Y->Enable( FALSE );
+        m_PlotOrgPosition_X->Enable( false );
+        m_PlotOrgPosition_Y->Enable( false );
     }
 }
 

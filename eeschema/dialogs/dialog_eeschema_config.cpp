@@ -128,7 +128,7 @@ void DIALOG_EESCHEMA_CONFIG::OnButtonUpClick( wxCommandEvent& event )
         m_ListLibr->SetSelection(jj-1);
     }
 
-    m_LibListChanged = TRUE;
+    m_LibListChanged = true;
 }
 
 
@@ -162,7 +162,7 @@ void DIALOG_EESCHEMA_CONFIG::OnButtonDownClick( wxCommandEvent& event )
         m_ListLibr->SetSelection(jj+1);
     }
 
-    m_LibListChanged = TRUE;
+    m_LibListChanged = true;
 }
 
 
@@ -243,7 +243,7 @@ void DIALOG_EESCHEMA_CONFIG::OnRemoveLibClick( wxCommandEvent& event )
     for( int ii = selections.GetCount()-1; ii >= 0; ii-- )
     {
         m_ListLibr->Delete( selections[ii] );
-        m_LibListChanged = TRUE;
+        m_LibListChanged = true;
     }
 
     // Select next item after deleted in m_ListLibr
@@ -321,7 +321,7 @@ void DIALOG_EESCHEMA_CONFIG::OnAddOrInsertLibClick( wxCommandEvent& event )
         //Add or insert new library name, if not already in list
         if( m_ListLibr->FindString( libfilename, fn.IsCaseSensitive() ) == wxNOT_FOUND )
         {
-            m_LibListChanged = TRUE;
+            m_LibListChanged = true;
 
             if( event.GetId() == ID_ADD_LIB )
                 m_ListLibr->Append( libfilename );

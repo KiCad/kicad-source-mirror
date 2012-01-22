@@ -105,10 +105,10 @@ void DIALOG_NETLIST::OnReadNetlistFileClick( wxCommandEvent& event )
 
     m_Parent->ReadPcbNetlist( m_NetlistFilenameCtrl->GetValue(),
                               fn.GetFullPath(), m_MessageWindow,
-                              m_ChangeExistingFootprintCtrl->GetSelection() == 1 ? TRUE : FALSE,
-                              m_DeleteBadTracks->GetSelection() == 1 ? TRUE : FALSE,
-                              m_RemoveExtraFootprintsCtrl->GetSelection() == 1 ? TRUE : FALSE,
-                              m_Select_By_Timestamp->GetSelection() == 1 ? TRUE : FALSE );
+                              m_ChangeExistingFootprintCtrl->GetSelection() == 1 ? true : false,
+                              m_DeleteBadTracks->GetSelection() == 1 ? true : false,
+                              m_RemoveExtraFootprintsCtrl->GetSelection() == 1 ? true : false,
+                              m_Select_By_Timestamp->GetSelection() == 1 ? true : false );
 }
 
 
@@ -124,7 +124,7 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
 
 void DIALOG_NETLIST::OnCompileRatsnestClick( wxCommandEvent& event )
 {
-    m_Parent->Compile_Ratsnest( m_DC, TRUE );
+    m_Parent->Compile_Ratsnest( m_DC, true );
 }
 
 

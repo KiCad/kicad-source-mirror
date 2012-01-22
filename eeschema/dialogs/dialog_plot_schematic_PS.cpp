@@ -140,7 +140,7 @@ void DIALOG_PLOT_SCHEMATIC_PS::OnPlotCurrent( wxCommandEvent& event )
 
 void DIALOG_PLOT_SCHEMATIC_PS::OnPlotAll( wxCommandEvent& event )
 {
-    m_select_PlotAll = TRUE;
+    m_select_PlotAll = true;
 
     initOptVars();
     createPSFile();

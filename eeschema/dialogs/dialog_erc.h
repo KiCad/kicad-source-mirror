@@ -15,7 +15,7 @@
 
 /* Variable locales */
 extern int           DiagErc[PIN_NMAX][PIN_NMAX];
-extern bool          DiagErcTableInit; // go to TRUE after DiagErc init
+extern bool          DiagErcTableInit; // go to true after DiagErc init
 extern int           DefaultDiagErc[PIN_NMAX][PIN_NMAX];
 extern const wxChar* CommentERC_H[];
 extern const wxChar* CommentERC_V[];
@@ -57,7 +57,7 @@ public:
     void OnResetMatrixClick( wxCommandEvent& event );
 
     // Double click on a marker info:
-	void OnLeftDClickMarkersList( wxCommandEvent& event );
+    void OnLeftDClickMarkersList( wxCommandEvent& event );
 
     void TestErc( wxArrayString* aMessagesList );
     void DisplayERC_MarkersList();

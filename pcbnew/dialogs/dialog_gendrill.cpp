@@ -320,7 +320,7 @@ void DIALOG_GENDRILL::SetParams( void )
     m_createMap = m_Choice_Drill_Map->GetSelection();
     m_createRpt = m_Choice_Drill_Report->GetSelection();
 
-    m_UnitDrillIsInch = (m_Choice_Unit->GetSelection() == 0) ? FALSE : TRUE;
+    m_UnitDrillIsInch = (m_Choice_Unit->GetSelection() == 0) ? false : true;
     m_MinimalHeader   = m_Check_Minimal->IsChecked();
     m_Mirror = m_Check_Mirror->IsChecked();
     m_ZerosFormat = m_Choice_Zeros_Format->GetSelection();

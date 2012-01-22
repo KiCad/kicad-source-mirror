@@ -324,9 +324,9 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aPromptForErrors, bool aUseExportab
     m_Zone_Setting->SetCornerRadius( ReturnValueFromString( g_UserUnit, txtvalue, m_Parent->GetInternalUnits() ) );
 
     if( m_OrientEdgesOpt->GetSelection() == 0 )
-        g_Zone_45_Only = FALSE;
+        g_Zone_45_Only = false;
     else
-        g_Zone_45_Only = TRUE;
+        g_Zone_45_Only = true;
 
     m_Zone_Setting->m_ThermalReliefGap = ReturnValueFromTextCtrl( *m_AntipadSizeValue,
                                                                        PCB_INTERNAL_UNIT );

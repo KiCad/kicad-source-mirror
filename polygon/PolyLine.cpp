@@ -59,7 +59,7 @@ CPolyLine::~CPolyLine()
  * because copper areas have only one outside contour
  * Therefore, if this results in new CPolyLines, return them as std::vector pa
  * @param aExtraPolyList: pointer on a std::vector<CPolyLine*> to store extra CPolyLines
- * @param bRetainArcs == TRUE, try to retain arcs in polys
+ * @param bRetainArcs == true, try to retain arcs in polys
  * @return number of external contours, or -1 if error
  */
 int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, bool bRetainArcs )
@@ -150,7 +150,7 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
             }
 
             m_Kbool_Poly_Engine->EndPolygonGet();
-            polyline->Close( STRAIGHT, FALSE );
+            polyline->Close( STRAIGHT, false );
             n_ext_cont++;
         }
     }
@@ -194,10 +194,10 @@ int CPolyLine::NormalizeWithKbool( std::vector<CPolyLine*> * aExtraPolyList, boo
             {
                 int x = (*hole)[ii]; ii++;
                 int y = (*hole)[ii];
-                polyline->AppendCorner( x, y, STRAIGHT, FALSE );
+                polyline->AppendCorner( x, y, STRAIGHT, false );
             }
 
-            polyline->Close( STRAIGHT, FALSE );
+            polyline->Close( STRAIGHT, false );
         }
     }
 
@@ -605,7 +605,7 @@ void ArmBoolEng( Bool_Engine* aBooleng, bool aConvertHoles )
     aBooleng->SetSmoothAber( SMOOTHABER );
     aBooleng->SetMaxlinemerge( MAXLINEMERGE );
     aBooleng->SetRoundfactor( ROUNDFACTOR );
-    aBooleng->SetWindingRule( TRUE );           // This is the default kbool value
+    aBooleng->SetWindingRule( true );           // This is the default kbool value
 
     if( aConvertHoles )
     {
@@ -668,7 +668,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
         int arc_yf  = (*arc_array)[iarc].yf;
         int n_steps = (*arc_array)[iarc].n_steps;
         int style   = (*arc_array)[iarc].style;
-        bFound = FALSE;
+        bFound = false;
 
         // loop through polys
         for( int ip = 0; ip<n_polys; ip++ )
@@ -701,7 +701,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
                             if( xf == arc_xf && yf == arc_yf )
                             {
                                 // arc from ic to ic2
-                                bFound    = TRUE;
+                                bFound    = true;
                                 arc_start = ic;
                                 arc_end   = ic2;
                             }
@@ -716,7 +716,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
                                 if( xf == arc_xf && yf == arc_yf )
                                 {
                                     // arc from ic2 to ic
-                                    bFound    = TRUE;
+                                    bFound    = true;
                                     arc_start = ic2;
                                     arc_end   = ic;
                                     style = 3 - style;
@@ -751,7 +751,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
         }
 
         if( bFound )
-            (*arc_array)[iarc].bFound = TRUE;
+            (*arc_array)[iarc].bFound = true;
     }
 
     // now delete all marked corners
@@ -764,7 +764,7 @@ int CPolyLine::RestoreArcs( std::vector<CArc> * arc_array, std::vector<CPolyLine
         for( int ic = poly->GetNumCorners() - 1; ic>=0; ic-- )
         {
             if( poly->GetUtility( ic ) )
-                poly->DeleteCorner( ic, FALSE );
+                poly->DeleteCorner( ic, false );
         }
     }
 
@@ -794,7 +794,7 @@ void CPolyLine::Start( int layer, int x, int y, int hatch )
     m_layer      = layer;
     m_HatchStyle = hatch;
     CPolyPt poly_pt( x, y );
-    poly_pt.end_contour = FALSE;
+    poly_pt.end_contour = false;
 
     corner.push_back( poly_pt );
     side_style.push_back( 0 );
@@ -807,7 +807,7 @@ void CPolyLine::AppendCorner( int x, int y, int style, bool bDraw )
 {
     UnHatch();
     CPolyPt poly_pt( x, y );
-    poly_pt.end_contour = FALSE;
+    poly_pt.end_contour = false;
 
     // add entries for new corner and side
     corner.push_back( poly_pt );
@@ -829,7 +829,7 @@ void CPolyLine::Close( int style, bool bDraw )
     }
     UnHatch();
     side_style[corner.size() - 1] = style;
-    corner[corner.size() - 1].end_contour = TRUE;
+    corner[corner.size() - 1].end_contour = true;
     if( bDraw )
         Hatch();
 }
@@ -870,7 +870,7 @@ void CPolyLine::DeleteCorner( int ic, bool bDraw )
         corner.erase( corner.begin() + ic );
         side_style.erase( side_style.begin() + ic );
         if( ic == iend )
-            corner[ic - 1].end_contour = TRUE;
+            corner[ic - 1].end_contour = true;
     }
     if( bClosed && GetContourSize( icont ) < 3 )
     {
@@ -1156,8 +1156,8 @@ void CPolyLine::InsertCorner( int ic, int x, int y )
     {
         if( corner[ic].end_contour )
         {
-            corner[ic + 1].end_contour = TRUE;
-            corner[ic].end_contour = FALSE;
+            corner[ic + 1].end_contour = true;
+            corner[ic].end_contour = false;
         }
     }
     Hatch();

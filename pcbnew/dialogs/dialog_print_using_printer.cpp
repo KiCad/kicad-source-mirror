@@ -508,7 +508,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
 
     frame->Initialize();
-    frame->Show( TRUE );
+    frame->Show( true );
 }
 
 
@@ -541,7 +541,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     ( (wxPostScriptDC*) dc )->SetResolution( 600 );  // Postscript DC resolution is 600 ppi
 #endif
 
-    if( !printer.Print( this, &printout, TRUE ) )
+    if( !printer.Print( this, &printout, true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
             DisplayError( this, _( "There was a problem printing" ) );

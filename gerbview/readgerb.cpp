@@ -45,7 +45,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName,
     {
         msg = _( "File " ) + GERBER_FullFileName + _( " not found" );
         DisplayError( this, msg, 10 );
-        return FALSE;
+        return false;
     }
 
     gerber->m_FileName = GERBER_FullFileName;

@@ -30,9 +30,9 @@
 #include "wx/image.h"
 #include "macros.h"
 
-#define wxSVG_DEBUG FALSE
+#define wxSVG_DEBUG false
 
-// or TRUE to see the calls being executed
+// or true to see the calls being executed
 #define newline    wxString( wxT( "\n" ) )
 #define space      wxString( wxT( " " ) )
 #define semicolon  wxString( wxT( ";" ) )
@@ -85,7 +85,7 @@ wxString wxBrushString( wxColour c, int style )
         break;
 
     default:
-        wxASSERT_MSG( FALSE, wxT( "wxSVGFileDC::Requested Brush Style not available" ) );
+        wxASSERT_MSG( false, wxT( "wxSVGFileDC::Requested Brush Style not available" ) );
     }
 
     s = s + newline;
@@ -103,8 +103,8 @@ void wxSVGFileDC::Init( wxString f, int Width, int Height, float dpi )
     m_width  = Width;
     m_height = Height;
 
-    m_clipping = FALSE;
-    m_OK = TRUE;
+    m_clipping = false;
+    m_OK = true;
 
     m_mm_to_pix_x = dpi / 25.4;
     m_mm_to_pix_y = dpi / 25.4;
@@ -132,7 +132,7 @@ void wxSVGFileDC::Init( wxString f, int Width, int Height, float dpi )
     m_font  = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 
-    m_graphics_changed = TRUE;
+    m_graphics_changed = true;
 
     ////////////////////code here
 
@@ -626,7 +626,7 @@ void wxSVGFileDC::SetBrush( const wxBrush& brush )
 {
     m_brush = brush;
 
-    m_graphics_changed = TRUE;
+    m_graphics_changed = true;
     wxASSERT_MSG( !wxSVG_DEBUG, wxT( "wxSVGFileDC::SetBrush Call executed" ) );
 }
 
@@ -637,7 +637,7 @@ void wxSVGFileDC::SetPen( const wxPen& pen )
     // dashes, stipple :  not implemented
     m_pen = pen;
 
-    m_graphics_changed = TRUE;
+    m_graphics_changed = true;
     wxASSERT_MSG( !wxSVG_DEBUG, wxT( "wxSVGFileDC::SetPen Call executed" ) );
 }
 
@@ -697,7 +697,7 @@ void wxSVGFileDC::NewGraphics()
         break;
 
     default:
-        wxASSERT_MSG( FALSE,
+        wxASSERT_MSG( false,
                       wxT( "wxSVGFileDC::SetPen Call called to set a Style which is not available" )
                       );
         sWarn = sWarn + wxT(
@@ -710,7 +710,7 @@ void wxSVGFileDC::NewGraphics()
 
     s = sBrush + sPenCap + sPenJoin + sPenStyle + sLast + newline + sWarn;
     write( s );
-    m_graphics_changed = FALSE;
+    m_graphics_changed = false;
     wxASSERT_MSG( !wxSVG_DEBUG, wxT( "wxSVGFileDC::NewGraphics Call executed" ) );
 }
 
@@ -730,7 +730,7 @@ void wxSVGFileDC::ComputeScaleAndOrigin()
     m_scaleY  = m_logicalScaleY * m_userScaleY;
     m_OriginX = m_logicalOriginX * m_logicalScaleX + m_deviceOriginX;
     m_OriginY = m_logicalOriginY * m_logicalScaleY + m_deviceOriginY;
-    m_graphics_changed = TRUE;
+    m_graphics_changed = true;
 }
 
 
@@ -771,8 +771,8 @@ void wxSVGFileDC::SetMapMode( int mode )
     /*  we don't do this mega optimisation
      *  if (mode != wxMM_TEXT)
      *  {
-     *      m_needComputeScaleX = TRUE;
-     *      m_needComputeScaleY = TRUE;
+     *      m_needComputeScaleX = true;
+     *      m_needComputeScaleY = true;
      *  }
      */
 }
@@ -833,22 +833,22 @@ void wxSVGFileDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 // export a bitmap as a raster image in png
 bool wxSVGFileDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                           wxDC* source, wxCoord xsrc, wxCoord ysrc,
-                          int logicalFunc /*= wxCOPY*/, bool useMask /*= FALSE*/,
+                          int logicalFunc /*= wxCOPY*/, bool useMask /*= false*/,
                           wxCoord /*xsrcMask = -1*/, wxCoord /*ysrcMask = -1*/ )
 {
     if( logicalFunc != wxCOPY )
     {
-        wxASSERT_MSG( FALSE,
+        wxASSERT_MSG( false,
                       wxT( "wxSVGFileDC::DoBlit Call requested nonCopy mode; this is not possible" )
                       );
-        return FALSE;
+        return false;
     }
-    if( useMask != FALSE )
+    if( useMask != false )
     {
-        wxASSERT_MSG( FALSE,
+        wxASSERT_MSG( false,
                       wxT( "wxSVGFileDC::DoBlit Call requested False mask ; this is not possible" )
                       );
-        return FALSE;
+        return false;
     }
     wxBitmap   myBitmap( width, height );
     wxMemoryDC memDC;
@@ -857,7 +857,7 @@ bool wxSVGFileDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord h
     memDC.SelectObject( wxNullBitmap );
     DoDrawBitmap( myBitmap, xdest, ydest );
     wxASSERT_MSG( !wxSVG_DEBUG, wxT( "wxSVGFileDC::DoBlit Call executed" ) );
-    return FALSE;
+    return false;
 }
 
 

@@ -96,7 +96,7 @@ void GERBVIEW_FRAME::ExportDataInPcbnewFormat( wxCommandEvent& event )
                                      msg,
                                      this,
                                      wxFD_SAVE,
-                                     FALSE
+                                     false
                                      );
     if( FullFileName == wxEmptyString )
         return;

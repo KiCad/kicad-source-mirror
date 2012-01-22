@@ -500,7 +500,7 @@ bool WriteDiagnosticERC( const wxString& aFullFileName )
     int             count = 0;
 
     if( ( file = wxFopen( aFullFileName, wxT( "wt" ) ) ) == NULL )
-        return FALSE;
+        return false;
 
     msg = _( "ERC report" );
 

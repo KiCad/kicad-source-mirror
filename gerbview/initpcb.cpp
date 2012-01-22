@@ -42,12 +42,12 @@ bool GERBVIEW_FRAME::Clear_Pcb( bool query )
     int layer;
 
     if( GetBoard() == NULL )
-        return FALSE;
+        return false;
 
     if( query && GetScreen()->IsModify() )
     {
         if( !IsOK( this, _( "Current data will be lost?" ) ) )
-            return FALSE;
+            return false;
     }
 
     SetCurItem( NULL );
