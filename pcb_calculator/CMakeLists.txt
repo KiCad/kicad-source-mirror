@@ -66,9 +66,10 @@ if(APPLE)
         ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
 endif(APPLE)
 
-target_link_libraries( pcb_calculator common polygon bitmaps
-                        ${wxWidgets_LIBRARIES}
-                        )
+target_link_libraries( pcb_calculator
+    common polygon bitmaps
+    ${wxWidgets_LIBRARIES}
+    )
 
 install(TARGETS pcb_calculator
         DESTINATION ${KICAD_BIN}
