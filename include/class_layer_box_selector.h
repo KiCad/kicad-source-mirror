@@ -1,7 +1,7 @@
 #ifndef CLASS_LAYER_BOX_SELECTOR_H
 #define CLASS_LAYER_BOX_SELECTOR_H 1
 
-#include "hotkeys_basic.h"
+#include <hotkeys_basic.h>
 #include <wx/bmpcbox.h>
 
 

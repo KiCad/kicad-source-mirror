@@ -31,7 +31,7 @@
 #define _SCH_JUNCTION_H_
 
 
-#include "sch_item_struct.h"
+#include <sch_item_struct.h>
 
 
 class SCH_JUNCTION : public SCH_ITEM

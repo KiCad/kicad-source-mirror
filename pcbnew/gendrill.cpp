@@ -33,27 +33,27 @@
  * and the CNC-7 manual.
  */
 
-#include "fctsys.h"
+#include <fctsys.h>
 
 #include <vector>
 
-#include "plot_common.h"
-#include "trigo.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "wxPcbStruct.h"
-#include "macros.h"
-#include "appl_wxstruct.h"
-#include "build_version.h"
+#include <plot_common.h>
+#include <trigo.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <wxPcbStruct.h>
+#include <macros.h>
+#include <appl_wxstruct.h>
+#include <build_version.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
-#include "pcbplot.h"
-#include "pcbnew.h"
-#include "gendrill.h"
+#include <pcbplot.h>
+#include <pcbnew.h>
+#include <gendrill.h>
 
-#include "dialog_gendrill.h"   //  Dialog box for drill file generation
+#include <dialog_gendrill.h>   //  Dialog box for drill file generation
 
 
 const wxString DrillFileExtension( wxT( "drl" ) );

@@ -31,11 +31,11 @@
 #define  WXPCB_STRUCT_H
 
 
-#include "wxBasePcbFrame.h"
-#include "param_config.h"
-#include "class_layer_box_selector.h"
-#include "class_macros_record.h"
-#include "class_undoredo_container.h"
+#include <wxBasePcbFrame.h>
+#include <param_config.h>
+#include <class_layer_box_selector.h>
+#include <class_macros_record.h>
+#include <class_undoredo_container.h>
 
 
 #ifndef PCB_INTERNAL_UNIT

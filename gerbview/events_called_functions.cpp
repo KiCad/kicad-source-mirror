@@ -3,21 +3,21 @@
  * @brief GerbView command event functions.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "common.h"
-#include "gestfich.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <common.h>
+#include <gestfich.h>
 
-#include "gerbview.h"
-#include "kicad_device_context.h"
-#include "gerbview_id.h"
-#include "class_GERBER.h"
-#include "dialog_helpers.h"
-#include "class_DCodeSelectionbox.h"
-#include "class_gerbview_layer_widget.h"
-#include "dialog_show_page_borders.h"
+#include <gerbview.h>
+#include <kicad_device_context.h>
+#include <gerbview_id.h>
+#include <class_GERBER.h>
+#include <dialog_helpers.h>
+#include <class_DCodeSelectionbox.h>
+#include <class_gerbview_layer_widget.h>
+#include <dialog_show_page_borders.h>
 
 
 // Event table:

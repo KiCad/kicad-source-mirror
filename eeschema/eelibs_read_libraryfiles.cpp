@@ -3,16 +3,16 @@
  * @brief Functions to handle reading component library files.
  */
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "macros.h"
-#include "appl_wxstruct.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <macros.h>
+#include <appl_wxstruct.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "class_library.h"
+#include <general.h>
+#include <class_library.h>
 
-#include "html_messagebox.h"
+#include <html_messagebox.h>
 
 
 void SCH_EDIT_FRAME::LoadLibraries( void )

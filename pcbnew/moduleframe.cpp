@@ -28,23 +28,23 @@
  * @brief Footprint (module) editor main window.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
-#include "dialog_helpers.h"
-#include "3d_viewer.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
+#include <dialog_helpers.h>
+#include <3d_viewer.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
-#include "pcbnew.h"
-#include "protos.h"
-#include "pcbnew_id.h"
-#include "hotkeys.h"
-#include "module_editor_frame.h"
+#include <pcbnew.h>
+#include <protos.h>
+#include <pcbnew_id.h>
+#include <hotkeys.h>
+#include <module_editor_frame.h>
 
 
 static PCB_SCREEN* s_screenModule = NULL;   // the PCB_SCREEN used by the footprint editor

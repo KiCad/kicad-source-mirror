@@ -2,19 +2,19 @@
 /* onleftclick.cpp: functions called on left or double left click */
 /******************************************************************/
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "common.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <common.h>
 //#include "gestfich.h"
 //#include "appl_wxstruct.h"
 
-#include "gerbview.h"
+#include <gerbview.h>
 //#include "pcbplot.h"
 //#include "kicad_device_context.h"
-#include "gerbview_id.h"
-#include "class_GERBER.h"
-#include "dialog_helpers.h"
-#include "class_DCodeSelectionbox.h"
+#include <gerbview_id.h>
+#include <class_GERBER.h>
+#include <dialog_helpers.h>
+#include <class_DCodeSelectionbox.h>
 
 /* Process the command triggered by the left button of the mouse when a tool
  * is already selected.

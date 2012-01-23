@@ -31,9 +31,9 @@
 #define CLASS_TRACK_H
 
 
-#include "class_board_item.h"
-#include "class_board_connected_item.h"
-#include "PolyLine.h"
+#include <class_board_item.h>
+#include <class_board_connected_item.h>
+#include <PolyLine.h>
 
 
 class TRACK;

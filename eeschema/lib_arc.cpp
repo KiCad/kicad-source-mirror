@@ -27,19 +27,19 @@
  * @file lib_arc.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "plot_common.h"
-#include "trigo.h"
-#include "wxstruct.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <plot_common.h>
+#include <trigo.h>
+#include <wxstruct.h>
+#include <richio.h>
 
-#include "general.h"
-#include "protos.h"
-#include "lib_arc.h"
-#include "transform.h"
+#include <general.h>
+#include <protos.h>
+#include <lib_arc.h>
+#include <transform.h>
 
 
 //! @brief Given three points A B C, compute the circumcenter of the resulting triangle

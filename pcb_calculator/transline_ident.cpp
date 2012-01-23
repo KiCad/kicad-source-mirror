@@ -6,27 +6,27 @@
 
 
 // Bitmaps:
-#include "c_microstrip.xpm"
-#include "microstrip.xpm"
-#include "twistedpair.xpm"
-#include "coax.xpm"
-#include "cpw.xpm"
-#include "cpw_back.xpm"
-#include "stripline.xpm"
-#include "rectwaveguide.xpm"
+#include <c_microstrip.xpm>
+#include <microstrip.xpm>
+#include <twistedpair.xpm>
+#include <coax.xpm>
+#include <cpw.xpm>
+#include <cpw_back.xpm>
+#include <stripline.xpm>
+#include <rectwaveguide.xpm>
 
 // transline specific functions:
-#include "transline.h"
-#include "microstrip.h"
-#include "coplanar.h"
-#include "rectwaveguide.h"
-#include "coax.h"
-#include "c_microstrip.h"
-#include "stripline.h"
-#include "twistedpair.h"
+#include <transline.h>
+#include <microstrip.h>
+#include <coplanar.h>
+#include <rectwaveguide.h>
+#include <coax.h>
+#include <c_microstrip.h>
+#include <stripline.h>
+#include <twistedpair.h>
 
-#include "transline_ident.h"
-#include "UnitSelector.h"
+#include <transline_ident.h>
+#include <UnitSelector.h>
 
 
 /*

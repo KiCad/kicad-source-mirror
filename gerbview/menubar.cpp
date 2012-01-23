@@ -27,13 +27,13 @@
  * @file gerbview/menubar.cpp
  * @brief (Re)Create the main menubar for GerbView
  */
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "appl_wxstruct.h"
+#include <appl_wxstruct.h>
 
-#include "gerbview.h"
-#include "gerbview_id.h"
-#include "hotkeys.h"
+#include <gerbview.h>
+#include <gerbview_id.h>
+#include <hotkeys.h>
 
 
 void GERBVIEW_FRAME::ReCreateMenuBar( void )

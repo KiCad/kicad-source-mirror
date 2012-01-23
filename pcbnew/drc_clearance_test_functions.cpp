@@ -31,19 +31,19 @@
 /* DRC control				*/
 /****************************/
 
-#include "fctsys.h"
-#include "wxPcbStruct.h"
-#include "trigo.h"
+#include <fctsys.h>
+#include <wxPcbStruct.h>
+#include <trigo.h>
 
-#include "pcbnew.h"
-#include "protos.h"
-#include "drc_stuff.h"
+#include <pcbnew.h>
+#include <protos.h>
+#include <drc_stuff.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_zone.h"
-#include "class_marker_pcb.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_zone.h>
+#include <class_marker_pcb.h>
 
 
 /* compare 2 trapezoids (can be rectangle) and return true if distance > aDist

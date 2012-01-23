@@ -2,9 +2,9 @@
 // Name:        3d_class.cpp
 /////////////////////////////////////////////////////////////////////////////
 
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "3d_viewer.h"
+#include <3d_viewer.h>
 
 
 S3D_Vertex::S3D_Vertex()

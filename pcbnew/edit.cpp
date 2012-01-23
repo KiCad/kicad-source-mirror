@@ -28,29 +28,29 @@
  * @brief Edit PCB implementation.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "eda_doc.h"
-#include "gestfich.h"
-#include "kicad_device_context.h"
-#include "wxPcbStruct.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <eda_doc.h>
+#include <gestfich.h>
+#include <kicad_device_context.h>
+#include <wxPcbStruct.h>
+#include <pcbcommon.h>
 
-#include "pcbnew_id.h"
-#include "pcbnew.h"
-#include "module_editor_frame.h"
-#include "protos.h"
+#include <pcbnew_id.h>
+#include <pcbnew.h>
+#include <module_editor_frame.h>
+#include <protos.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_zone.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_zone.h>
 
-#include "dialog_drc.h"
+#include <dialog_drc.h>
 
-#include "dialog_global_edit_tracks_and_vias.h"
+#include <dialog_global_edit_tracks_and_vias.h>
 
 // Uncomment following line to enable wxBell() command (which beeps speaker)
 // #include <wx/utils.h>

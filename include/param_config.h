@@ -6,8 +6,8 @@
 #ifndef PARAM_CONFIG_H_
 #define PARAM_CONFIG_H_
 
-#include "wx/confbase.h"
-#include "wx/fileconf.h"
+#include <wx/confbase.h>
+#include <wx/fileconf.h>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 

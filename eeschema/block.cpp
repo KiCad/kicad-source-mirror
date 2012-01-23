@@ -27,25 +27,25 @@
  * @file eeschema/block.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "class_library.h"
-#include "lib_pin.h"
-#include "protos.h"
-#include "sch_bus_entry.h"
-#include "sch_marker.h"
-#include "sch_junction.h"
-#include "sch_line.h"
-#include "sch_no_connect.h"
-#include "sch_text.h"
-#include "sch_component.h"
-#include "sch_sheet.h"
+#include <general.h>
+#include <class_library.h>
+#include <lib_pin.h>
+#include <protos.h>
+#include <sch_bus_entry.h>
+#include <sch_marker.h>
+#include <sch_junction.h>
+#include <sch_line.h>
+#include <sch_no_connect.h>
+#include <sch_text.h>
+#include <sch_component.h>
+#include <sch_sheet.h>
 
 #include <boost/foreach.hpp>
 

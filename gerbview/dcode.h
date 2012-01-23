@@ -32,7 +32,7 @@
 
 #include <vector>
 
-#include "base_struct.h"
+#include <base_struct.h>
 
 
 class GERBER_DRAW_ITEM;

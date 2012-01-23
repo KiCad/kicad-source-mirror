@@ -2,13 +2,13 @@
  * @file eda_dde.cpp
  */
 
-#include "fctsys.h"
-#include "eda_dde.h"
-#include "wxstruct.h"
-#include "id.h"
+#include <fctsys.h>
+#include <eda_dde.h>
+#include <wxstruct.h>
+#include <id.h>
 
-#include "common.h"
-#include "macros.h"
+#include <common.h>
+#include <macros.h>
 
 wxString HOSTNAME( wxT( "localhost" ) );
 

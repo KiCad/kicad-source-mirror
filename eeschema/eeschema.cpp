@@ -27,20 +27,20 @@
  * @file eeschema.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "eda_dde.h"
-#include "id.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <eda_dde.h>
+#include <id.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "hotkeys.h"
-#include "dialogs/dialog_color_config.h"
-#include "transform.h"
+#include <general.h>
+#include <protos.h>
+#include <hotkeys.h>
+#include <dialogs/dialog_color_config.h>
+#include <transform.h>
 
 #include <wx/snglinst.h>
 

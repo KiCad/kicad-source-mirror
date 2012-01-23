@@ -3,14 +3,14 @@
  * @brief Set up the basic primitives for Layer control.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxBasePcbFrame.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxBasePcbFrame.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
 
 enum layer_sel_id {

@@ -28,17 +28,17 @@
  */
 
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "drawtxt.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <drawtxt.h>
 
-#include "gerbview.h"
-#include "class_board_design_settings.h"
-#include "colors_selection.h"
-#include "class_gerber_draw_item.h"
-#include "class_GERBER.h"
+#include <gerbview.h>
+#include <class_board_design_settings.h>
+#include <colors_selection.h>
+#include <class_gerber_draw_item.h>
+#include <class_GERBER.h>
 
 
 void GERBVIEW_FRAME::PrintPage( wxDC* aDC, int aPrintMasklayer,

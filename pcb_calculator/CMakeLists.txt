@@ -1,11 +1,14 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/bitmaps
-                    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-                    ${CMAKE_CURRENT_SOURCE_DIR}/transline
-                    ${CMAKE_CURRENT_SOURCE_DIR}/attenuators
-                    ../polygon
-                    ${CMAKE_SOURCE_DIR}/common
-                    )
+
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    bitmaps
+    dialogs
+    transline
+    attenuators
+    ../polygon
+    ../common
+    ${INC_AFTER}
+    )
 
 set(PCB_CALCULATOR_SRCS
     attenuators.cpp

@@ -32,19 +32,19 @@
 */
 
 
-#include "class_drawpanel.h"    // m_canvas
-#include "confirm.h"            // DisplayError()
-#include "gestfich.h"           // EDA_FileSelector()
-#include "wxPcbStruct.h"
+#include <class_drawpanel.h>    // m_canvas
+#include <confirm.h>            // DisplayError()
+#include <gestfich.h>           // EDA_FileSelector()
+#include <wxPcbStruct.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_edge_mod.h"
-#include "class_track.h"
-#include "class_zone.h"
-#include "class_drawsegment.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_edge_mod.h>
+#include <class_track.h>
+#include <class_zone.h>
+#include <class_drawsegment.h>
 
-#include "specctra.h"
+#include <specctra.h>
 
 
 using namespace DSN;

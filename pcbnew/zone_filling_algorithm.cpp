@@ -6,15 +6,15 @@
 
 #include <algorithm> // sort
 
-#include "fctsys.h"
-#include "trigo.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <trigo.h>
+#include <wxPcbStruct.h>
 
-#include "class_zone.h"
+#include <class_zone.h>
 
-#include "pcbnew.h"
-#include "zones.h"
-#include "protos.h"
+#include <pcbnew.h>
+#include <zones.h>
+#include <protos.h>
 
 /* Local functions */
 

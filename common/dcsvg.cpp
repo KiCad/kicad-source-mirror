@@ -9,14 +9,14 @@
 
 
 // For compilers that support precompilation, includes "wx/wx.h".
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+#include <wx/wx.h>
 #endif
 
 #if wxCHECK_VERSION( 2, 9, 0 )
@@ -25,10 +25,10 @@
 
 #else
 
-#include "dcsvg.h"
+#include <dcsvg.h>
 
-#include "wx/image.h"
-#include "macros.h"
+#include <wx/image.h>
+#include <macros.h>
 
 #define wxSVG_DEBUG false
 

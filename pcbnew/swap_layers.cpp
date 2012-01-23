@@ -3,19 +3,19 @@
  * @brief Dialog to swap layers.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
 
-#include "class_board.h"
-#include "class_track.h"
-#include "class_drawsegment.h"
+#include <class_board.h>
+#include <class_track.h>
+#include <class_drawsegment.h>
 
-#include "pcbnew.h"
-#include "protos.h"
+#include <pcbnew.h>
+#include <protos.h>
 
-#include "wx/statline.h"
+#include <wx/statline.h>
 
 
 #define LAYER_NO_CHANGE NB_LAYERS

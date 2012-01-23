@@ -28,30 +28,30 @@
  * @brief Net list generation code.
  */
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "appl_wxstruct.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <appl_wxstruct.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "netlist.h"
-#include "netlist_control.h"
-#include "protos.h"
-#include "class_library.h"
-#include "lib_pin.h"
-#include "sch_component.h"
-#include "sch_text.h"
-#include "sch_sheet.h"
+#include <general.h>
+#include <netlist.h>
+#include <netlist_control.h>
+#include <protos.h>
+#include <class_library.h>
+#include <lib_pin.h>
+#include <sch_component.h>
+#include <sch_text.h>
+#include <sch_sheet.h>
 
 #include <wx/tokenzr.h>
 
 
 
-#include "xnode.h"      // also nests: <wx/xml/xml.h>
+#include <xnode.h>      // also nests: <wx/xml/xml.h>
 
-#include "build_version.h"
+#include <build_version.h>
 
 #define INTERMEDIATE_NETLIST_EXT wxT("xml")
 

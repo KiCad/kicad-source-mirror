@@ -23,9 +23,9 @@
  */
 
 
-#include "fctsys.h"
-#include "dlist.h"
-#include "base_struct.h"
+#include <fctsys.h>
+#include <dlist.h>
+#include <base_struct.h>
 
 
 /* Implement the class DHEAD from dlist.h */

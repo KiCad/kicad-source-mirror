@@ -7,7 +7,7 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include "greymap.h"
+#include <greymap.h>
 
 struct render_s
 {

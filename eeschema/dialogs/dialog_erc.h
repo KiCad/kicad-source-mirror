@@ -11,7 +11,7 @@
 #include <vector>
 
 
-#include "dialog_erc_base.h"
+#include <dialog_erc_base.h>
 
 /* Variable locales */
 extern int           DiagErc[PIN_NMAX][PIN_NMAX];

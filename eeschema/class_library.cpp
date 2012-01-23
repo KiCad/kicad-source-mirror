@@ -27,18 +27,18 @@
  * @file class_library.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "eda_doc.h"
-#include "wxstruct.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <eda_doc.h>
+#include <wxstruct.h>
+#include <richio.h>
 
-#include "general.h"
-#include "protos.h"
-#include "class_library.h"
+#include <general.h>
+#include <protos.h>
+#include <class_library.h>
 
 #include <boost/foreach.hpp>
 

@@ -28,24 +28,24 @@
  * @brief Code to load and save Eeschema files.
  */
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "wxEeschemaStruct.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <wxEeschemaStruct.h>
+#include <richio.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_bus_entry.h"
-#include "sch_marker.h"
-#include "sch_junction.h"
-#include "sch_line.h"
-#include "sch_no_connect.h"
-#include "sch_component.h"
-#include "sch_polyline.h"
-#include "sch_text.h"
-#include "sch_sheet.h"
-#include "sch_bitmap.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_bus_entry.h>
+#include <sch_marker.h>
+#include <sch_junction.h>
+#include <sch_line.h>
+#include <sch_no_connect.h>
+#include <sch_component.h>
+#include <sch_polyline.h>
+#include <sch_text.h>
+#include <sch_sheet.h>
+#include <sch_bitmap.h>
 
 
 bool ReadSchemaDescr( LINE_READER* aLine, wxString& aMsgDiag, SCH_SCREEN* Window );

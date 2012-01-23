@@ -1,7 +1,7 @@
 #ifndef __GERBVIEW_ID_H__
 #define __GERBVIEW_ID_H__
 
-#include "id.h"
+#include <id.h>
 
 /**
  * Command IDs for the printed circuit board editor.

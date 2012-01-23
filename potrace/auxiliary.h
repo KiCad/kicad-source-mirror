@@ -9,13 +9,13 @@
 #define AUXILIARY_H
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 /* ---------------------------------------------------------------------- */
 /* point arithmetic */
 
-#include "potracelib.h"
+#include <potracelib.h>
 
 struct point_s
 {

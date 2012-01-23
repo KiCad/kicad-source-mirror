@@ -2,21 +2,21 @@
  * Module editor: Dialog box for editing module properties in the pcb editor. *
  ******************************************************************************/
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "pcbnew.h"
-#include "appl_wxstruct.h"
-#include "gestfich.h"
-#include "3d_struct.h"
-#include "3d_viewer.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <pcbnew.h>
+#include <appl_wxstruct.h>
+#include <gestfich.h>
+#include <3d_struct.h>
+#include <3d_viewer.h>
+#include <wxPcbStruct.h>
 
-#include "class_module.h"
-#include "class_text_mod.h"
+#include <class_module.h>
+#include <class_text_mod.h>
 
-#include "dialog_edit_module_for_BoardEditor.h"
+#include <dialog_edit_module_for_BoardEditor.h>
 
 
 DIALOG_MODULE_BOARD_EDITOR::DIALOG_MODULE_BOARD_EDITOR( PCB_EDIT_FRAME*  aParent,

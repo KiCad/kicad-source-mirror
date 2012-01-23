@@ -33,11 +33,11 @@
 //#define STAND_ALONE     1   // define to enable test program for LAYER_WIDGET
 
 
-#include "layer_widget.h"
+#include <layer_widget.h>
 
-#include "macros.h"
-#include "common.h"
-#include "colors.h"
+#include <macros.h>
+#include <common.h>
+#include <colors.h>
 #include <wx/colour.h>
 
 #define BUTT_SIZE_X             20

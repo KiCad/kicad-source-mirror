@@ -5,7 +5,7 @@
 #ifndef _DIALOG_PAGES_SETTINGS_H_
 #define _DIALOG_PAGES_SETTINGS_H_
 
-#include "dialog_page_settings_base.h"
+#include <dialog_page_settings_base.h>
 
 /*!
  * DIALOG_PAGES_SETTINGS class declaration

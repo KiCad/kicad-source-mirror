@@ -27,21 +27,21 @@
  * @file eeschema/hotkeys.cpp
  */
 
-#include "fctsys.h"
-#include "eeschema_id.h"
-#include "hotkeys.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <eeschema_id.h>
+#include <hotkeys.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "libeditframe.h"
-#include "class_libentry.h"
-#include "sch_junction.h"
-#include "sch_line.h"
-#include "sch_component.h"
-#include "sch_sheet.h"
+#include <general.h>
+#include <protos.h>
+#include <libeditframe.h>
+#include <class_libentry.h>
+#include <sch_junction.h>
+#include <sch_line.h>
+#include <sch_component.h>
+#include <sch_sheet.h>
 
-#include "dialogs/dialog_schematic_find.h"
+#include <dialogs/dialog_schematic_find.h>
 
 
 /* How to add a new hotkey:

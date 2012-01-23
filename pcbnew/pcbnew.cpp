@@ -27,23 +27,23 @@
  * @brief Pcbnew main program.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "wxPcbStruct.h"
-#include "eda_dde.h"
-#include "pcbcommon.h"
-#include "colors_selection.h"
-#include "gr_basic.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <wxPcbStruct.h>
+#include <eda_dde.h>
+#include <pcbcommon.h>
+#include <colors_selection.h>
+#include <gr_basic.h>
 
 #include <wx/file.h>
 #include <wx/snglinst.h>
 
-#include "pcbnew.h"
-#include "protos.h"
-#include "hotkeys.h"
+#include <pcbnew.h>
+#include <protos.h>
+#include <hotkeys.h>
 
 
 // Colors for layers and items

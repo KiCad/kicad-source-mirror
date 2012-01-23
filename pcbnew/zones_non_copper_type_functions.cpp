@@ -2,18 +2,18 @@
  * @file zones_non_copper_type_functions.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
 
-#include "class_board.h"
-#include "class_zone.h"
+#include <class_board.h>
+#include <class_zone.h>
 
-#include "pcbnew.h"
-#include "zones.h"
+#include <pcbnew.h>
+#include <zones.h>
 
-#include "dialog_non_copper_zones_properties_base.h"
+#include <dialog_non_copper_zones_properties_base.h>
 
 
 /* Class DialogNonCopperZonesEditor

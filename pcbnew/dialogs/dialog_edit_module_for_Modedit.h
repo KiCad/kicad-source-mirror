@@ -7,7 +7,7 @@
 
 // Include the wxFormBuider header base:
 #include <vector>
-#include "dialog_edit_module_for_Modedit_base.h"
+#include <dialog_edit_module_for_Modedit_base.h>
 
 /**************************************/
 /* class DIALOG_MODULE_MODULE_EDITOR */
@@ -40,7 +40,7 @@ private:
     void OnEditValue( wxCommandEvent& event );
     void OnEditReference( wxCommandEvent& event );
     void On3DShapeSelection( wxCommandEvent& event );
-	void On3DShapeNameSelected( wxCommandEvent& event );
+    void On3DShapeNameSelected( wxCommandEvent& event );
     void BrowseAndAdd3DLib( wxCommandEvent& event );
     void Remove3DShape( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );

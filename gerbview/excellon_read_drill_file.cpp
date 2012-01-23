@@ -56,21 +56,21 @@
  *  T0
  *  M30
  */
-#include "fctsys.h"
-#include "common.h"
-#include "confirm.h"
+#include <fctsys.h>
+#include <common.h>
+#include <confirm.h>
 
-#include "gerbview.h"
-#include "trigo.h"
-#include "macros.h"
-#include "class_gerber_draw_item.h"
-#include "class_GERBER.h"
-#include "class_excellon.h"
-#include "kicad_string.h"
+#include <gerbview.h>
+#include <trigo.h>
+#include <macros.h>
+#include <class_gerber_draw_item.h>
+#include <class_GERBER.h>
+#include <class_excellon.h>
+#include <kicad_string.h>
 
 #include <math.h>
 
-#include "html_messagebox.h"
+#include <html_messagebox.h>
 
 extern int    ReadInt( char*& text, bool aSkipSeparator = true );
 extern double ReadDouble( char*& text, bool aSkipSeparator = true );

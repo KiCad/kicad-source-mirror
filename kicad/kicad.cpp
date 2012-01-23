@@ -3,8 +3,8 @@
  * @brief Main KiCad library manager file
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
 
 #ifdef USE_SPLASH_IMAGE
   #define SPLASH_IMAGE logo_kicad.png
@@ -12,10 +12,10 @@
   #include "wx/mediactrl.h"
 #endif
 
-#include "kicad.h"
-#include "tree_project_frame.h"
+#include <kicad.h>
+#include <tree_project_frame.h>
 
-#include "build_version.h"
+#include <build_version.h>
 
 const wxString g_KicadPrjFilenameExtension( wxT( ".pro" ) );
 

@@ -3,9 +3,9 @@
 // Author:      jean-pierre Charras
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 
-#include "dialog_cleaning_options.h"
+#include <dialog_cleaning_options.h>
 
 
 DIALOG_CLEANING_OPTIONS::DIALOG_CLEANING_OPTIONS( wxWindow* parent ):

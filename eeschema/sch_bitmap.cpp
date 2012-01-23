@@ -26,19 +26,19 @@
  * @file sch_bitmap.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "trigo.h"
-#include "richio.h"
-#include "plot_common.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <trigo.h>
+#include <richio.h>
+#include <plot_common.h>
 
-#include "wxEeschemaStruct.h"
-#include "general.h"
-#include "sch_bitmap.h"
+#include <wxEeschemaStruct.h>
+#include <general.h>
+#include <sch_bitmap.h>
 
-#include "protos.h"
+#include <protos.h>
 
 #include <wx/mstream.h>
 

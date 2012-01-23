@@ -28,21 +28,21 @@
  * @brief Eeschema pin edit code.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "class_sch_screen.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <class_sch_screen.h>
 
-#include "libeditframe.h"
-#include "eeschema_id.h"
-#include "class_libentry.h"
-#include "lib_pin.h"
-#include "general.h"
-#include "protos.h"
+#include <libeditframe.h>
+#include <eeschema_id.h>
+#include <class_libentry.h>
+#include <lib_pin.h>
+#include <general.h>
+#include <protos.h>
 
-#include "../common/dialogs/dialog_display_info_HTML_base.h"
-#include "dialog_lib_edit_pin.h"
+#include <../common/dialogs/dialog_display_info_HTML_base.h>
+#include <dialog_lib_edit_pin.h>
 
 
 extern void IncrementLabelMember( wxString& name );

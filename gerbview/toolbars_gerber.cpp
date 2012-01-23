@@ -28,18 +28,18 @@
  * @brief Build tool bars
  */
 
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "common.h"
-#include "macros.h"
-#include "gerbview.h"
-#include "bitmaps.h"
-#include "gerbview_id.h"
-#include "hotkeys.h"
-#include "class_GERBER.h"
-#include "class_layer_box_selector.h"
-#include "class_DCodeSelectionbox.h"
-#include "dialog_helpers.h"
+#include <common.h>
+#include <macros.h>
+#include <gerbview.h>
+#include <bitmaps.h>
+#include <gerbview_id.h>
+#include <hotkeys.h>
+#include <class_GERBER.h>
+#include <class_layer_box_selector.h>
+#include <class_DCodeSelectionbox.h>
+#include <dialog_helpers.h>
 
 void GERBVIEW_FRAME::ReCreateHToolbar( void )
 {

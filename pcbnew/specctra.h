@@ -32,12 +32,12 @@
 //  see http://www.boost.org/libs/ptr_container/doc/ptr_set.html
 #include <boost/ptr_container/ptr_set.hpp>
 
-#include "fctsys.h"
-#include "macros.h"              // MAX definition.
+#include <fctsys.h>
+#include <macros.h>              // MAX definition.
 
-#include "specctra_lexer.h"
+#include <specctra_lexer.h>
 
-#include "pcbnew.h"
+#include <pcbnew.h>
 
 
 class TYPE_COLLECTOR;           // outside the DSN namespace

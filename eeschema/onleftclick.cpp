@@ -27,23 +27,23 @@
  * @file eeschema/onleftclick.cpp
  */
 
-#include "fctsys.h"
-#include "eeschema_id.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <eeschema_id.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_bus_entry.h"
-#include "sch_text.h"
-#include "sch_marker.h"
-#include "sch_junction.h"
-#include "sch_line.h"
-#include "sch_no_connect.h"
-#include "sch_component.h"
-#include "sch_sheet.h"
-#include "sch_bitmap.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_bus_entry.h>
+#include <sch_text.h>
+#include <sch_marker.h>
+#include <sch_junction.h>
+#include <sch_line.h>
+#include <sch_no_connect.h>
+#include <sch_component.h>
+#include <sch_sheet.h>
+#include <sch_bitmap.h>
 
 
 static wxArrayString s_CmpNameList;

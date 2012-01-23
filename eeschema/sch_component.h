@@ -32,9 +32,9 @@
 #define COMPONENT_CLASS_H
 
 
-#include "sch_field.h"
-#include "transform.h"
-#include "general.h"
+#include <sch_field.h>
+#include <transform.h>
+#include <general.h>
 
 
 class SCH_SHEET_PATH;

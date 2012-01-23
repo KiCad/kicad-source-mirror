@@ -28,21 +28,21 @@
 /* DRC control              */
 /****************************/
 
-#include "fctsys.h"
-#include "wxPcbStruct.h"
-#include "trigo.h"
-#include "class_board_design_settings.h"
+#include <fctsys.h>
+#include <wxPcbStruct.h>
+#include <trigo.h>
+#include <class_board_design_settings.h>
 
-#include "class_module.h"
-#include "class_track.h"
-#include "class_pad.h"
-#include "class_zone.h"
+#include <class_module.h>
+#include <class_track.h>
+#include <class_pad.h>
+#include <class_zone.h>
 
-#include "pcbnew.h"
-#include "protos.h"
-#include "drc_stuff.h"
+#include <pcbnew.h>
+#include <protos.h>
+#include <drc_stuff.h>
 
-#include "dialog_drc.h"
+#include <dialog_drc.h>
 
 
 void DRC::ShowDialog()

@@ -31,12 +31,12 @@
 #ifndef CLASS_SCREEN_H
 #define CLASS_SCREEN_H
 
-#include "macros.h"
-#include "sch_item_struct.h"
-#include "class_base_screen.h"
-#include "class_title_block.h"
+#include <macros.h>
+#include <sch_item_struct.h>
+#include <class_base_screen.h>
+#include <class_title_block.h>
 
-#include "../eeschema/general.h"
+#include <../eeschema/general.h>
 
 
 class LIB_PIN;

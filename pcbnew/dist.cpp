@@ -3,12 +3,12 @@
  * @brief Routines to calculate PCB editor auto routing distances.
  */
 
-#include "fctsys.h"
-#include "macros.h"
-#include "common.h"
-#include "pcbnew.h"
-#include "autorout.h"
-#include "cell.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <common.h>
+#include <pcbnew.h>
+#include <autorout.h>
+#include <cell.h>
 
 
 /* The tables of distances and keep out areas are established on the basis of not

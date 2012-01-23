@@ -2,15 +2,15 @@
 /* Set up color Layers for Eeschema
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "wxstruct.h"
-#include "class_drawpanel.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <wxstruct.h>
+#include <class_drawpanel.h>
 
-#include "general.h"
-#include "protos.h"
+#include <general.h>
+#include <protos.h>
 
-#include "dialog_color_config.h"
+#include <dialog_color_config.h>
 
 
 #define ID_COLOR_SETUP  1800

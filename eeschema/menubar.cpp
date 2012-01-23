@@ -31,16 +31,16 @@
 #pragma implementation
 #endif
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "eeschema_id.h"
-#include "hotkeys.h"
+#include <general.h>
+#include <protos.h>
+#include <eeschema_id.h>
+#include <hotkeys.h>
 
-#include "help_common_strings.h"
+#include <help_common_strings.h>
 
 /**
  * @brief (Re)Create the menubar for the schematic frame

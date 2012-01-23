@@ -31,12 +31,12 @@
 #pragma implementation
 #endif
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "gestfich.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <gestfich.h>
 
-#include "kicad.h"
+#include <kicad.h>
 
 #include <wx/fontdlg.h>
 

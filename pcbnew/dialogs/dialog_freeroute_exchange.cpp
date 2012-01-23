@@ -2,17 +2,17 @@
 // Name:        dialog_freeroute.cpp
 /////////////////////////////////////////////////////////////////////////////
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <macros.h>
 
-#include "../common/dialogs/dialog_display_info_HTML_base.h"
+#include <../common/dialogs/dialog_display_info_HTML_base.h>
 
-#include "dialog_freeroute_exchange.h"
+#include <dialog_freeroute_exchange.h>
 
 
 #define FREEROUTE_URL_KEY wxT( "freeroute_url" )
@@ -63,7 +63,7 @@ void DIALOG_FREEROUTE::MyInit()
 }
 
 const char * s_FreeRouteHelpInfo =
-#include "dialog_freeroute_exchange_help_html.h"
+#include <dialog_freeroute_exchange_help_html.h>
 ;
 void DIALOG_FREEROUTE::OnHelpButtonClick( wxCommandEvent& event )
 {

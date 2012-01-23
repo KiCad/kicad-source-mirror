@@ -7,12 +7,12 @@
 #include <vector>
 #include <algorithm>
 
-#include "fctsys.h"
-#include "config.h"     // to define KICAD_NANOMETRE
+#include <fctsys.h>
+#include <config.h>     // to define KICAD_NANOMETRE
 
-#include "PolyLine.h"
-#include "bezier_curves.h"
-#include "polygon_test_point_inside.h"
+#include <PolyLine.h>
+#include <bezier_curves.h>
+#include <polygon_test_point_inside.h>
 
 #if defined(KICAD_NANOMETRE)
 #define PCBU_PER_MIL (1000.0*25.4)

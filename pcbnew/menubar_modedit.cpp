@@ -27,14 +27,14 @@
  * @file pcbnew/menubar_modedit.cpp
  * @brief (Re)Create the main menubar for the module editor
  */
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "module_editor_frame.h"
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <module_editor_frame.h>
 
-#include "protos.h"
-#include "pcbnew_id.h"
+#include <protos.h>
+#include <pcbnew_id.h>
 
 
 void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()

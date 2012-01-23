@@ -28,20 +28,20 @@
  * MIRE class definition (targets for photo plots)
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "kicad_string.h"
-#include "pcbcommon.h"
-#include "colors_selection.h"
-#include "trigo.h"
-#include "macros.h"
-#include "protos.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <kicad_string.h>
+#include <pcbcommon.h>
+#include <colors_selection.h>
+#include <trigo.h>
+#include <macros.h>
+#include <protos.h>
+#include <richio.h>
 
-#include "class_board.h"
-#include "class_mire.h"
+#include <class_board.h>
+#include <class_mire.h>
 
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :

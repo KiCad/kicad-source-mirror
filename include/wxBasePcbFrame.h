@@ -34,10 +34,10 @@
 
 #include <vector>
 
-#include "wxstruct.h"
-#include "base_struct.h"
-#include "richio.h"
-#include "class_pcb_screen.h"
+#include <wxstruct.h>
+#include <base_struct.h>
+#include <richio.h>
+#include <class_pcb_screen.h>
 
 #ifndef PCB_INTERNAL_UNIT
 #define PCB_INTERNAL_UNIT 10000

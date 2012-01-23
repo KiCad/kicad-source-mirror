@@ -4,16 +4,16 @@
  *        except for tracks (see class_track.cpp).
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "macros.h"
-#include "trigo.h"
-#include "class_pcb_screen.h"
-#include "pcbnew.h"
-#include "class_board_design_settings.h"
-#include "layers_id_colors_and_visibility.h"
+#include <fctsys.h>
+#include <common.h>
+#include <macros.h>
+#include <trigo.h>
+#include <class_pcb_screen.h>
+#include <pcbnew.h>
+#include <class_board_design_settings.h>
+#include <layers_id_colors_and_visibility.h>
 
-#include "pcbnew_id.h"
+#include <pcbnew_id.h>
 
 
 /* Default Pcbnew zoom values.

@@ -33,28 +33,28 @@
  *  search a component in libraries, a marker ...,
  *  in current sheet or whole the project
  */
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "class_library.h"
-#include "lib_pin.h"
-#include "sch_marker.h"
-#include "sch_component.h"
-#include "sch_sheet.h"
-#include "sch_sheet_path.h"
+#include <general.h>
+#include <protos.h>
+#include <class_library.h>
+#include <lib_pin.h>
+#include <sch_marker.h>
+#include <sch_component.h>
+#include <sch_sheet.h>
+#include <sch_sheet_path.h>
 
-#include "kicad_device_context.h"
+#include <kicad_device_context.h>
 
 #include <boost/foreach.hpp>
 
-#include "dialogs/dialog_schematic_find.h"
+#include <dialogs/dialog_schematic_find.h>
 
 
 void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )

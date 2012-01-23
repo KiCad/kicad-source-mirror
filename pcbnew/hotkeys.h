@@ -5,7 +5,7 @@
 #ifndef _PCBNEW_KOTKEYS_H
 #define _PCBNEW_HOTKEYS_H
 
-#include "hotkeys_basic.h"
+#include <hotkeys_basic.h>
 
 // List of hot keys id.
 // see also enum common_hotkey_id_commnand in hotkeys_basic.h

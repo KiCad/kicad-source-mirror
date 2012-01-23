@@ -27,25 +27,25 @@
  * @file eeschema/onrightclick.cpp
  */
 
-#include "fctsys.h"
-#include "eeschema_id.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <eeschema_id.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "hotkeys.h"
-#include "class_library.h"
-#include "sch_bus_entry.h"
-#include "sch_marker.h"
-#include "sch_text.h"
-#include "sch_junction.h"
-#include "sch_component.h"
-#include "sch_line.h"
-#include "sch_no_connect.h"
-#include "sch_sheet.h"
-#include "sch_sheet_path.h"
-#include "sch_bitmap.h"
+#include <general.h>
+#include <hotkeys.h>
+#include <class_library.h>
+#include <sch_bus_entry.h>
+#include <sch_marker.h>
+#include <sch_text.h>
+#include <sch_junction.h>
+#include <sch_component.h>
+#include <sch_line.h>
+#include <sch_no_connect.h>
+#include <sch_sheet.h>
+#include <sch_sheet_path.h>
+#include <sch_bitmap.h>
 
 #include <iostream>
 

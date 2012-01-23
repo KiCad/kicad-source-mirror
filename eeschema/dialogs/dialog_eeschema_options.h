@@ -31,7 +31,7 @@
 #ifndef __dialog_eeschema_options__
 #define __dialog_eeschema_options__
 
-#include "dialog_eeschema_options_base.h"
+#include <dialog_eeschema_options_base.h>
 
 class DIALOG_EESCHEMA_OPTIONS : public DIALOG_EESCHEMA_OPTIONS_BASE
 {

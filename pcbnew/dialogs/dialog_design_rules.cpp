@@ -30,21 +30,21 @@
 
 /* functions relatives to the design rules editor
  */
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <macros.h>
 
-#include "confirm.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
+#include <confirm.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <class_board_design_settings.h>
 
-#include "pcbnew_id.h"
-#include "class_track.h"
+#include <pcbnew_id.h>
+#include <class_track.h>
 
-#include "dialog_design_rules.h"
-#include "wx/generic/gridctrl.h"
-#include "dialog_design_rules_aux_helper_class.h"
+#include <dialog_design_rules.h>
+#include <wx/generic/gridctrl.h>
+#include <dialog_design_rules_aux_helper_class.h>
 
 
 // Column labels for net lists

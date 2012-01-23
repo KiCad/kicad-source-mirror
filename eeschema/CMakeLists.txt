@@ -1,11 +1,14 @@
 add_definitions(-DEESCHEMA)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-                    ${CMAKE_SOURCE_DIR}/common
-                    ${CMAKE_SOURCE_DIR}/common/dialogs
-                    ${Boost_INCLUDE_DIR}
-                   )
+
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    ./dialogs
+    ../common
+    ../common/dialogs
+    ${Boost_INCLUDE_DIR}
+    ${INC_AFTER}
+    )
 
 set(EESCHEMA_SRCS
     annotate.cpp
@@ -145,12 +148,18 @@ set(EESCHEMA_SRCS
     tool_viewlib.cpp
     transform.cpp
     viewlib_frame.cpp
-    viewlibs.cpp)
+    viewlibs.cpp
 
-set(EESCHEMA_EXTRA_SRCS
-    ../common/dialogs/dialog_page_settings.cpp
+    # This file does not look common.
+    # Keep it after template_fieldnames_keywords.cpp
     ../common/sch_item_struct.cpp
-)
+    )
+
+
+set(EESCHEMA_COMMON_SRCS
+    ../common/dialogs/dialog_page_settings.cpp
+    )
+
 
 if(WIN32)
     if(MINGW)
@@ -186,8 +195,11 @@ make_lexer(
     TFIELD_T
     )
 
-add_executable(eeschema WIN32 MACOSX_BUNDLE ${EESCHEMA_SRCS} ${EESCHEMA_EXTRA_SRCS}
-    ${EESCHEMA_RESOURCES})
+add_executable(eeschema WIN32 MACOSX_BUNDLE
+    ${EESCHEMA_SRCS}
+    ${EESCHEMA_COMMON_SRCS}
+    ${EESCHEMA_RESOURCES}
+    )
 
 if(APPLE)
     set_target_properties(eeschema PROPERTIES MACOSX_BUNDLE_INFO_PLIST

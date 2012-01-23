@@ -5,7 +5,7 @@
 #define FCTSYS_H
 
 // For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -62,6 +62,6 @@
 #define wxNullPtr ((void *)NULL)
 #endif
 
-#include "config.h"
+#include <config.h>
 
 #endif /* FCTSYS_H */

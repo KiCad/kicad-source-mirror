@@ -69,6 +69,10 @@ option( MAINTAIN_PNGS
         "Set to true if you are a PNG maintainer and have the required tools given in the bitmaps_png/CMakeLists.txt file (default OFF)."
         OFF)
 
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    ${INC_AFTER}
+    )
 
 
 # Plan for three sizes of bitmaps:

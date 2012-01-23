@@ -28,19 +28,19 @@
  * @brief LIB_CIRCLE class implementation.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "plot_common.h"
-#include "trigo.h"
-#include "wxstruct.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <plot_common.h>
+#include <trigo.h>
+#include <wxstruct.h>
+#include <richio.h>
 
-#include "general.h"
-#include "protos.h"
-#include "lib_circle.h"
-#include "transform.h"
+#include <general.h>
+#include <protos.h>
+#include <lib_circle.h>
+#include <transform.h>
 
 
 LIB_CIRCLE::LIB_CIRCLE( LIB_COMPONENT* aParent ) :

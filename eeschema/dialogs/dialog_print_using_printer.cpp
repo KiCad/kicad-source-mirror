@@ -2,20 +2,20 @@
 /* File: dialog_print_using_printer.cpp */
 /****************************************/
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "class_sch_screen.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <class_sch_screen.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "eeschema_config.h"
-#include "sch_sheet.h"
-#include "sch_sheet_path.h"
+#include <general.h>
+#include <eeschema_config.h>
+#include <sch_sheet.h>
+#include <sch_sheet_path.h>
 
-#include "dialog_print_using_printer.h"
+#include <dialog_print_using_printer.h>
 
 
 /**

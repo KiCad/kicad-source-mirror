@@ -26,15 +26,15 @@
  * @file gerbview/initpcb.cpp
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
+#include <fctsys.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
 
-#include "gerbview.h"
-#include "class_gerber_draw_item.h"
-#include "class_GERBER.h"
-#include "class_gerbview_layer_widget.h"
+#include <gerbview.h>
+#include <class_gerber_draw_item.h>
+#include <class_GERBER.h>
+#include <class_gerbview_layer_widget.h>
 
 
 bool GERBVIEW_FRAME::Clear_Pcb( bool query )

@@ -8,17 +8,17 @@
 /* Handle the Pcbnew library config (library list, and default lib path)
  */
 
-#include "fctsys.h"
+#include <fctsys.h>
 #include <wx/tokenzr.h>
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "pcbnew.h"
-#include "macros.h"
-#include "wxPcbStruct.h"
-#include "pcbcommon.h"
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <pcbnew.h>
+#include <macros.h>
+#include <wxPcbStruct.h>
+#include <pcbcommon.h>
 
-#include "dialog_pcbnew_config_libs_and_paths.h"
+#include <dialog_pcbnew_config_libs_and_paths.h>
 
 
 void PCB_EDIT_FRAME::InstallConfigFrame( )

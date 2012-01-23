@@ -30,7 +30,7 @@
 #ifndef CLASS_PIN_H
 #define CLASS_PIN_H
 
-#include "lib_draw_item.h"
+#include <lib_draw_item.h>
 
 
 #define TARGET_PIN_RADIUS   12  /* Circle diameter drawn at the active end of pins */

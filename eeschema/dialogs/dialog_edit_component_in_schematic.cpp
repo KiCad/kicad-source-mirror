@@ -4,20 +4,20 @@
 
 #include <wx/tooltip.h>
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "class_sch_screen.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <class_sch_screen.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "class_library.h"
-#include "sch_component.h"
-#include "dialog_helpers.h"
+#include <general.h>
+#include <class_library.h>
+#include <sch_component.h>
+#include <dialog_helpers.h>
 
-#include "dialog_edit_component_in_schematic.h"
+#include <dialog_edit_component_in_schematic.h>
 
 
 int DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::s_SelectedRow;
@@ -814,7 +814,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::copyOptionsToPanel()
 }
 
 
-#include "kicad_device_context.h"
+#include <kicad_device_context.h>
 
 /* reinitialize components parameters to default values found in lib
  */

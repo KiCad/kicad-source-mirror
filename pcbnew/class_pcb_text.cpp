@@ -27,23 +27,23 @@
  * @brief Class TEXTE_PCB texts on copper or technical layers implementation
  */
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "gr_basic.h"
-#include "base_struct.h"
-#include "drawtxt.h"
-#include "kicad_string.h"
-#include "trigo.h"
-#include "pcbcommon.h"
-#include "colors_selection.h"
-#include "richio.h"
-#include "class_drawpanel.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <gr_basic.h>
+#include <base_struct.h>
+#include <drawtxt.h>
+#include <kicad_string.h>
+#include <trigo.h>
+#include <pcbcommon.h>
+#include <colors_selection.h>
+#include <richio.h>
+#include <class_drawpanel.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_pcb_text.h"
+#include <class_board.h>
+#include <class_pcb_text.h>
 
-#include "protos.h"
+#include <protos.h>
 
 
 TEXTE_PCB::TEXTE_PCB( BOARD_ITEM* parent ) :

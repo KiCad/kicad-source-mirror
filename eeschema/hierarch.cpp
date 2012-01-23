@@ -27,17 +27,17 @@
  * @file hierarch.cpp
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "sch_sheet.h"
-#include "sch_sheet_path.h"
+#include <general.h>
+#include <sch_sheet.h>
+#include <sch_sheet_path.h>
 
-#include "wx/imaglist.h"
-#include "wx/treectrl.h"
+#include <wx/imaglist.h>
+#include <wx/treectrl.h>
 
 
 enum

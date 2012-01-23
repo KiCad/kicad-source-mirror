@@ -27,9 +27,9 @@
 #include <string.h>
 #include <math.h>
 
-#include "units.h"
-#include "transline.h"
-#include "stripline.h"
+#include <units.h>
+#include <transline.h>
+#include <stripline.h>
 
 STRIPLINE::STRIPLINE() : TRANSLINE()
 {

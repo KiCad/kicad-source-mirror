@@ -27,18 +27,18 @@
  * @file eeschema/cross-probing.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "macros.h"
-#include "eda_dde.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <macros.h>
+#include <eda_dde.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "eeschema_id.h"
-#include "protos.h"
-#include "lib_draw_item.h"
-#include "lib_pin.h"
-#include "sch_component.h"
+#include <general.h>
+#include <eeschema_id.h>
+#include <protos.h>
+#include <lib_draw_item.h>
+#include <lib_pin.h>
+#include <sch_component.h>
 
 
 /**

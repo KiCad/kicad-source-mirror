@@ -26,10 +26,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "dialog_drc.h"
-#include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
+#include <fctsys.h>
+#include <dialog_drc.h>
+#include <wxPcbStruct.h>
+#include <class_board_design_settings.h>
 
 
 // dialog should remember its previous screen position and size

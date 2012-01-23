@@ -23,8 +23,8 @@
  */
 
 
-#include "sch_canvas.h"
-#include "sch_part.h"
+#include <sch_canvas.h>
+#include <sch_part.h>
 #include <gal/font/newstroke_font.h>
 
 

@@ -2,24 +2,24 @@
  * @file pcbnew/pcbplot.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "plot_common.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "wxPcbStruct.h"
-#include "pcbplot.h"
-#include "worksheet.h"
-#include "pcbstruct.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <plot_common.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <wxPcbStruct.h>
+#include <pcbplot.h>
+#include <worksheet.h>
+#include <pcbstruct.h>
+#include <macros.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
-#include "pcbnew.h"
-#include "pcbnew_id.h"
-#include "protos.h"
-#include "dialog_plot_base.h"
-#include "pcb_plot_params.h"
+#include <pcbnew.h>
+#include <pcbnew_id.h>
+#include <protos.h>
+#include <dialog_plot_base.h>
+#include <pcb_plot_params.h>
 
 /* Keywords to r/w options in m_Config */
 #define CONFIG_XFINESCALE_ADJ    wxT( "PlotXFineScaleAdj" )
@@ -119,7 +119,7 @@ void DIALOG_PLOT::Init_Dialog()
     m_Config->Read( CONFIG_XFINESCALE_ADJ, &m_XScaleAdjust );
     m_Config->Read( CONFIG_YFINESCALE_ADJ, &m_YScaleAdjust );
     m_Config->Read( CONFIG_PS_FINEWIDTH_ADJ, &m_PSWidthAdjust);
-    
+
     // The reasonable width correction value must be in a range of
     // [-(MinTrackWidth-1), +(MinClearanceValue-1)] decimils.
     m_WidthAdjustMinValue = -(board->GetDesignSettings().m_TrackMinWidth - 1);
@@ -145,7 +145,7 @@ void DIALOG_PLOT::Init_Dialog()
     msg = ReturnStringFromValue( g_UserUnit, g_PcbPlotOptions.GetPlotLineWidth(),
                                  PCB_INTERNAL_UNIT );
     m_linesWidth->AppendText( msg );
-    
+
     // Set units for PS global width correction.
     AddUnitSymbol( *m_textPSFineAdjustWidth, g_UserUnit );
 
@@ -161,7 +161,7 @@ void DIALOG_PLOT::Init_Dialog()
 
     msg.Printf( wxT( "%f" ), m_YScaleAdjust );
     m_fineAdjustYscaleOpt->AppendText( msg );
-    
+
     // Test for a reasonable PS width correction value. Set to 0 if problem.
     if( m_PSWidthAdjust < m_WidthAdjustMinValue || m_PSWidthAdjust > m_WidthAdjustMaxValue )
         m_PSWidthAdjust = 0.;
@@ -540,7 +540,7 @@ void DIALOG_PLOT::applyPlotSettings()
     }
 
     m_Config->Write( CONFIG_YFINESCALE_ADJ, m_YScaleAdjust );
-    
+
     // PS Width correction
     msg = m_PSFineAdjustWidthOpt->GetValue();
     tmpDouble = ReturnValueFromString( g_UserUnit, msg, PCB_INTERNAL_UNIT );

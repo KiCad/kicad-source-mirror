@@ -31,10 +31,10 @@
 #define _PAD_H_
 
 
-#include "class_board_item.h"
-#include "class_board_connected_item.h"
-#include "pad_shapes.h"
-#include "PolyLine.h"
+#include <class_board_item.h>
+#include <class_board_connected_item.h>
+#include <pad_shapes.h>
+#include <PolyLine.h>
 
 
 class LINE_READER;

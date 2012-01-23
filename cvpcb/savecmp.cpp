@@ -2,18 +2,18 @@
 /* savecmp.cpp  */
 /****************/
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "macros.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <macros.h>
+#include <appl_wxstruct.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
 
-#include "build_version.h"
+#include <build_version.h>
 
 
 /* File header. */

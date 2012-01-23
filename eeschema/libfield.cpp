@@ -2,17 +2,17 @@
 /*  Component library edit field manipulation code.  */
 /*****************************************************/
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "class_sch_screen.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <class_sch_screen.h>
 
-#include "general.h"
-#include "sch_component.h"
-#include "libeditframe.h"
-#include "class_library.h"
-#include "template_fieldnames.h"
+#include <general.h>
+#include <sch_component.h>
+#include <libeditframe.h>
+#include <class_library.h>
+#include <template_fieldnames.h>
 
 
 void LIB_EDIT_FRAME::EditField( wxDC* DC, LIB_FIELD* aField )

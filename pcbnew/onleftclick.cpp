@@ -28,17 +28,17 @@
  * @brief Functions called when the left button is clicked or double clicked.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
 
-#include "class_board.h"
-#include "class_zone.h"
-#include "class_pcb_text.h"
+#include <class_board.h>
+#include <class_zone.h>
+#include <class_pcb_text.h>
 
-#include "pcbnew.h"
-#include "pcbnew_id.h"
+#include <pcbnew.h>
+#include <pcbnew_id.h>
 
 
 /* Handle the left button mouse click, when a tool is active

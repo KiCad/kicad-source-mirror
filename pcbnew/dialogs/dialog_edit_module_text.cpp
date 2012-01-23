@@ -5,20 +5,20 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#include "fctsys.h"
-#include "macros.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "pcbnew.h"
-#include "drawtxt.h"
-#include "confirm.h"
-#include "wxBasePcbFrame.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <pcbnew.h>
+#include <drawtxt.h>
+#include <confirm.h>
+#include <wxBasePcbFrame.h>
 
-#include "class_module.h"
-#include "class_text_mod.h"
+#include <class_module.h>
+#include <class_text_mod.h>
 
-#include "dialog_edit_module_text_base.h"
+#include <dialog_edit_module_text_base.h>
 
 
 extern wxPoint MoveVector;  // Move vector for move edge, imported from edtxtmod.cpp

@@ -6,8 +6,8 @@
 #pragma implementation
 #endif
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
 #include <wx/fs_zip.h>
 #include <wx/zipstrm.h>
 #include <wx/docview.h>
@@ -15,12 +15,12 @@
 #include <wx/zstream.h>
 #include <wx/dir.h>
 
-#include "confirm.h"
-#include "gestfich.h"
-#include "macros.h"
+#include <confirm.h>
+#include <gestfich.h>
+#include <macros.h>
 
-#include "kicad.h"
-#include "prjconfig.h"
+#include <kicad.h>
+#include <prjconfig.h>
 
 static const wxString ZipFileExtension( wxT( "zip" ) );
 static const wxString ZipFileWildcard( wxT( "Zip file (*.zip) | *.zip" ) );

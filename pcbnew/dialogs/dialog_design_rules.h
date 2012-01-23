@@ -5,9 +5,9 @@
 #ifndef __dialog_design_rules_h_
 #define __dialog_design_rules_h_
 
-#include "../class_board.h"
+#include <../class_board.h>
 
-#include "dialog_design_rules_base.h"
+#include <dialog_design_rules_base.h>
 
 
 class PCB_EDIT_FRAME;

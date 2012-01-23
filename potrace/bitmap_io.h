@@ -9,7 +9,7 @@
 #define BITMAP_IO_H
 
 #include <stdio.h>
-#include "bitmap.h"
+#include <bitmap.h>
 
 /* Note that bitmaps are stored bottom to top, i.e., the first
  *  scanline is the bottom-most one */

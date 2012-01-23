@@ -5,18 +5,18 @@
 /* functions relatives to the dialog opened from the main menu :
     Prefernces/display
 */
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "pcbstruct.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <pcbstruct.h>
+#include <pcbcommon.h>
 
-#include "pcbnew_id.h"
+#include <pcbnew_id.h>
 
-#include "dialog_display_options.h"
-#include "dialog_display_options_base.h"
+#include <dialog_display_options.h>
+#include <dialog_display_options_base.h>
 
 
 void PCB_EDIT_FRAME::InstallDisplayOptionsDialog( wxCommandEvent& aEvent )

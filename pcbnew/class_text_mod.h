@@ -32,7 +32,7 @@
 #define TEXT_MODULE_H_
 
 
-#include "class_board_item.h"
+#include <class_board_item.h>
 
 
 class LINE_READER;

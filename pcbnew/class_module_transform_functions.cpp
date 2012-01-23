@@ -3,17 +3,17 @@
  * @brief Functions of class MODULE to handle some geometric changes such as move, rotate ...
  */
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "trigo.h"
-#include "pcbcommon.h"
-#include "pcbnew.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <trigo.h>
+#include <pcbcommon.h>
+#include <pcbnew.h>
+#include <macros.h>
 
-#include "protos.h"
-#include "class_pad.h"
-#include "class_edge_mod.h"
-#include "class_module.h"
+#include <protos.h>
+#include <class_pad.h>
+#include <class_edge_mod.h>
+#include <class_module.h>
 
 
 /* Calculate the layer number for changing cu / cmp layers for Cu / CMP

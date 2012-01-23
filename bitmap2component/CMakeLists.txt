@@ -1,8 +1,11 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ../potrace
-                    ../polygon/kbool/include
-                    ${CMAKE_SOURCE_DIR}/common
-                    )
+
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    ../potrace
+    ../polygon/kbool/include
+    ../common
+    ${INC_AFTER}
+    )
 
 set(BITMAP2COMPONENT_SRCS
     bitmap2component.cpp

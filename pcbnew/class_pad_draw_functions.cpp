@@ -27,23 +27,23 @@
  * @file class_pad_draw_functions.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "trigo.h"
-#include "class_pcb_screen.h"
-#include "class_drawpanel.h"
-#include "drawtxt.h"
-#include "layers_id_colors_and_visibility.h"
-#include "wxBasePcbFrame.h"
-#include "pcbcommon.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <trigo.h>
+#include <class_pcb_screen.h>
+#include <class_drawpanel.h>
+#include <drawtxt.h>
+#include <layers_id_colors_and_visibility.h>
+#include <wxBasePcbFrame.h>
+#include <pcbcommon.h>
+#include <macros.h>
 
-#include "pcbnew_id.h"             // ID_TRACK_BUTT
-#include "pcbnew.h"
-#include "colors_selection.h"
+#include <pcbnew_id.h>             // ID_TRACK_BUTT
+#include <pcbnew.h>
+#include <colors_selection.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
 
 /* uncomment this line to show this pad with its specfic size and color

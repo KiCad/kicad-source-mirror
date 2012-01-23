@@ -7,18 +7,18 @@
 
 #include <wx/wx.h>
 #include <wx/imaglist.h>
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "PolyLine.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "trigo.h"
-#include "zones.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <PolyLine.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <trigo.h>
+#include <zones.h>
 
-#include "dialog_copper_zones.h"
-#include "class_zone_setting.h"
-#include "class_board.h"
+#include <dialog_copper_zones.h>
+#include <class_zone_setting.h>
+#include <class_board.h>
 
 
 #define LAYER_BITMAP_SIZE_X 20

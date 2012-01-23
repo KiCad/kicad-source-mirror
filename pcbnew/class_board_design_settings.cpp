@@ -3,14 +3,14 @@
  * BOARD_DESIGN_SETTINGS class functions.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "layers_id_colors_and_visibility.h"
+#include <fctsys.h>
+#include <common.h>
+#include <layers_id_colors_and_visibility.h>
 
-#include "pcbnew.h"
-#include "class_board_design_settings.h"
+#include <pcbnew.h>
+#include <class_board_design_settings.h>
 
-#include "class_track.h"
+#include <class_track.h>
 
 
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS()

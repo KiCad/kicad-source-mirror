@@ -5,15 +5,15 @@
 /* Read a nelist type Eeschema or OrcadPCB2 and build the component list
  */
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <macros.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
-#include "richio.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
+#include <richio.h>
 
 
 #define SEPARATEUR '|'  /* Separator character in NetList */

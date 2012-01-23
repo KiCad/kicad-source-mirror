@@ -32,8 +32,8 @@
 #define CLASS_SCH_FIELD_H
 
 
-#include "sch_item_struct.h"
-#include "general.h"
+#include <sch_item_struct.h>
+#include <general.h>
 
 
 class SCH_EDIT_FRAME;

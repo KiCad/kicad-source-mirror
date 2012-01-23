@@ -28,16 +28,16 @@
  * @brief Common routines for managing on block commands.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "wxstruct.h"
-#include "common.h"
-#include "macros.h"
-#include "base_struct.h"
-#include "class_base_screen.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "block_commande.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <wxstruct.h>
+#include <common.h>
+#include <macros.h>
+#include <base_struct.h>
+#include <class_base_screen.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <block_commande.h>
 
 
 BLOCK_SELECTOR::BLOCK_SELECTOR() :

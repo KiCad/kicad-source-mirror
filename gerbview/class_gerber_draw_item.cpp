@@ -26,20 +26,20 @@
  * @file class_gerber_draw_item.cpp
  */
 
-#include "fctsys.h"
-#include "polygons_defs.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "trigo.h"
-#include "class_drawpanel.h"
-#include "drawtxt.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <polygons_defs.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <trigo.h>
+#include <class_drawpanel.h>
+#include <drawtxt.h>
+#include <macros.h>
 
-#include "gerbview.h"
-#include "class_board_design_settings.h"
-#include "colors_selection.h"
-#include "class_gerber_draw_item.h"
-#include "class_GERBER.h"
+#include <gerbview.h>
+#include <class_board_design_settings.h>
+#include <colors_selection.h>
+#include <class_gerber_draw_item.h>
+#include <class_GERBER.h>
 
 
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( BOARD_ITEM* aParent, GERBER_IMAGE* aGerberparams ) :

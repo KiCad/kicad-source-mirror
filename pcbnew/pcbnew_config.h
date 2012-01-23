@@ -6,8 +6,8 @@
 #ifndef _PCBNEW_CONFIG_H_
 #define _PCBNEW_CONFIG_H_
 
-#include "param_config.h"
-#include "colors_selection.h"
+#include <param_config.h>
+#include <colors_selection.h>
 
 #define GROUP       wxT( "/pcbnew" )
 #define GROUPLIB    wxT( "/pcbnew/libraries" )

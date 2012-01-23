@@ -2,12 +2,12 @@
 /* listboxes.cpp: class for displaying footprint list and component list */
 /*************************************************************************/
 
-#include "fctsys.h"
-#include "wxstruct.h"
+#include <fctsys.h>
+#include <wxstruct.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
-#include "cvstruct.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
+#include <cvstruct.h>
 
 
 /**************************************************/

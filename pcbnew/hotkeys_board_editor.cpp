@@ -2,20 +2,20 @@
  * @file hotkeys_board_editor.cpp
  */
 
-#include "fctsys.h"
-#include "wxPcbStruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <wxPcbStruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
 
-#include "pcbnew.h"
-#include "pcbnew_id.h"
-#include "hotkeys.h"
-#include "protos.h"
+#include <pcbnew.h>
+#include <pcbnew_id.h>
+#include <hotkeys.h>
+#include <protos.h>
 
 /* How to add a new hotkey:
  * see hotkeys.cpp

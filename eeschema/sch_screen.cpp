@@ -28,28 +28,28 @@
  * @brief Implementation of SCH_SCREEN and SCH_SCREENS classes.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "kicad_string.h"
-#include "eeschema_id.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "sch_item_struct.h"
-#include "wxEeschemaStruct.h"
-#include "plot_common.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <kicad_string.h>
+#include <eeschema_id.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <sch_item_struct.h>
+#include <wxEeschemaStruct.h>
+#include <plot_common.h>
 
-#include "general.h"
-#include "protos.h"
-#include "netlist.h"
-#include "class_library.h"
-#include "sch_junction.h"
-#include "sch_bus_entry.h"
-#include "sch_line.h"
-#include "sch_marker.h"
-#include "sch_no_connect.h"
-#include "sch_sheet.h"
-#include "sch_component.h"
-#include "sch_text.h"
+#include <general.h>
+#include <protos.h>
+#include <netlist.h>
+#include <class_library.h>
+#include <sch_junction.h>
+#include <sch_bus_entry.h>
+#include <sch_line.h>
+#include <sch_marker.h>
+#include <sch_no_connect.h>
+#include <sch_sheet.h>
+#include <sch_component.h>
+#include <sch_text.h>
 
 #include <boost/foreach.hpp>
 

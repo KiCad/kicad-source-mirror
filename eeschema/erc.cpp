@@ -28,19 +28,19 @@
  * @brief Electrical Rules Check implementation.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "kicad_string.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <kicad_string.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "netlist.h"
-#include "lib_pin.h"
-#include "protos.h"
-#include "erc.h"
-#include "sch_marker.h"
-#include "sch_component.h"
-#include "sch_sheet.h"
+#include <general.h>
+#include <netlist.h>
+#include <lib_pin.h>
+#include <protos.h>
+#include <erc.h>
+#include <sch_marker.h>
+#include <sch_component.h>
+#include <sch_sheet.h>
 
 
 /* ERC tests :

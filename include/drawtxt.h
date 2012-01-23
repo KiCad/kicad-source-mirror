@@ -7,7 +7,7 @@
 #ifndef __INCLUDE__DRAWTXT_H__
 #define __INCLUDE__DRAWTXT_H__ 1
 
-#include "base_struct.h"
+#include <base_struct.h>
 
 class EDA_DRAW_PANEL;
 class PLOTTER;

@@ -27,25 +27,25 @@
  * @file 3d_aux.cpp
  */
 
-#include "fctsys.h"
+#include <fctsys.h>
 
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
 #endif
 
-#include "common.h"
-#include "trigo.h"
-#include "wxBasePcbFrame.h"
+#include <common.h>
+#include <trigo.h>
+#include <wxBasePcbFrame.h>
 
-#include "class_board_design_settings.h"
-#include "class_zone.h"
-#include "class_text_mod.h"
-#include "class_module.h"
-#include "class_drawsegment.h"
-#include "class_pcb_text.h"
+#include <class_board_design_settings.h>
+#include <class_zone.h>
+#include <class_text_mod.h>
+#include <class_module.h>
+#include <class_drawsegment.h>
+#include <class_pcb_text.h>
 
-#include "3d_viewer.h"
-#include "trackball.h"
+#include <3d_viewer.h>
+#include <trackball.h>
 
 
 void S3D_MASTER::Set_Object_Coords( std::vector< S3D_Vertex >& aVertices )

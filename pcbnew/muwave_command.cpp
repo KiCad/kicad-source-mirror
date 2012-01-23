@@ -2,16 +2,16 @@
 /* muwave_command.cpp: micro wave functions commands */
 /*****************************************************/
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
 
-#include "pcbnew_id.h"
-#include "kicad_device_context.h"
+#include <pcbnew_id.h>
+#include <kicad_device_context.h>
 
-#include "protos.h"
+#include <protos.h>
 
 
 /* Handle microwave commands.

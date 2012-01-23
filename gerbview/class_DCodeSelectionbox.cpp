@@ -2,13 +2,13 @@
 /* class_DCodeSelectionbox.cpp: class for displaying DCodes list */
 /*****************************************************************/
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "wxstruct.h"
-#include "class_drawpanel.h"
-#include "gerbview.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <wxstruct.h>
+#include <class_drawpanel.h>
+#include <gerbview.h>
 
-#include "class_DCodeSelectionbox.h"
+#include <class_DCodeSelectionbox.h>
 
 /*******************************************/
 /* Helper class for displaying DCodes list */

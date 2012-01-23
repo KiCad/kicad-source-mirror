@@ -8,21 +8,23 @@
  * invoked in Pcbnew instead.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "base_struct.h"
-#include "class_drawpanel.h"
-#include "class_sch_screen.h"
-#include "wxstruct.h"
+#include <fctsys.h>
+#include <common.h>
+#include <base_struct.h>
+#include <class_drawpanel.h>
+#include <class_title_block.h>
+#include <wxstruct.h>
+#include <class_base_screen.h>
 
-#include "wx/valgen.h"
+#include <wx/valgen.h>
 #include <wx/tokenzr.h>
 
 #ifdef EESCHEMA
-#include "general.h"
+#include <class_sch_screen.h>
+#include <general.h>
 #endif
 
-#include "dialog_page_settings.h"
+#include <dialog_page_settings.h>
 
 
 void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
@@ -63,6 +65,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
     SetFocus();
 
+#ifdef EESCHEMA
     // Init display value for sheet User size
     wxString format = m_TextSheetCount->GetLabel();
     msg.Printf( format, m_Screen->m_NumberOfScreen );
@@ -71,6 +74,10 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     format = m_TextSheetNumber->GetLabel();
     msg.Printf( format, m_Screen->m_ScreenNumber );
     m_TextSheetNumber->SetLabel( msg );
+#else
+    m_TextSheetCount->Show(false);
+    m_TextSheetNumber->Show(false);
+#endif
 
     const PAGE_INFO& pageInfo = m_Parent->GetPageSettings();
 

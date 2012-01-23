@@ -1,11 +1,11 @@
-#include "fctsys.h"
-#include "macros.h"
-#include "gr_basic.h"
-#include "libeditframe.h"
-#include "class_libentry.h"
-#include "lib_pin.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <gr_basic.h>
+#include <libeditframe.h>
+#include <class_libentry.h>
+#include <lib_pin.h>
 
-#include "dialog_lib_edit_pin.h"
+#include <dialog_lib_edit_pin.h>
 
 // dialog should remember its previous screen position and size
 // Not also if the defaut size is > s_LastSize, default size is used

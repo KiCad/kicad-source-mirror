@@ -28,22 +28,22 @@
  * @brief Export GenCAD 1.4 format.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "appl_wxstruct.h"
-#include "wxPcbStruct.h"
-#include "trigo.h"
-#include "build_version.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <appl_wxstruct.h>
+#include <wxPcbStruct.h>
+#include <trigo.h>
+#include <build_version.h>
+#include <macros.h>
 
-#include "pcbnew.h"
+#include <pcbnew.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_edge_mod.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_edge_mod.h>
 
 
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* frame );

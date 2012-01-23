@@ -3,19 +3,19 @@
  * @brief Autorouting command and control.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "wxPcbStruct.h"
-#include "gr_basic.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <wxPcbStruct.h>
+#include <gr_basic.h>
 
-#include "pcbnew.h"
-#include "cell.h"
-#include "zones.h"
-#include "ar_protos.h"
+#include <pcbnew.h>
+#include <cell.h>
+#include <zones.h>
+#include <ar_protos.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
 
 
 int E_scale;         /* Scaling factor of distance tables. */

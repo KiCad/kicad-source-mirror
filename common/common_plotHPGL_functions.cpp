@@ -3,14 +3,14 @@
  * @brief KiCad: Common plot HPGL Routines
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "trigo.h"
-#include "wxstruct.h"
-#include "base_struct.h"
-#include "plot_common.h"
-#include "macros.h"
-#include "kicad_string.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <trigo.h>
+#include <wxstruct.h>
+#include <base_struct.h>
+#include <plot_common.h>
+#include <macros.h>
+#include <kicad_string.h>
 
 // HPGL scale factor.
 const double SCALE_HPGL = 0.102041;

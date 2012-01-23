@@ -27,11 +27,11 @@
 
 #include <algorithm>
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "common.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <common.h>
 
-#include "dialog_hotkeys_editor.h"
+#include <dialog_hotkeys_editor.h>
 
 void InstallHotkeyFrame( EDA_DRAW_FRAME* parent, EDA_HOTKEY_CONFIG* hotkeys )
 {

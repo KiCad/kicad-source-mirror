@@ -3,14 +3,17 @@ add_definitions(-DGERBVIEW -DPCBNEW)
 ###
 # Includes
 ###
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${Boost_INCLUDE_DIR}
-                    ./dialogs
-                    ../3d-viewer
-                    ../common
-                    ../cvpcb
-                    ../pcbnew
-                    ../polygon)
+
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    ../pcbnew
+    dialogs
+    ../3d-viewer
+    ../polygon
+    ${INC_AFTER}
+    )
+
+
 ###
 # Sources
 ###

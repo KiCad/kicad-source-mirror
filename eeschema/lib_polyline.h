@@ -30,7 +30,7 @@
 #ifndef _LIB_POLYLINE_H_
 #define _LIB_POLYLINE_H_
 
-#include "lib_draw_item.h"
+#include <lib_draw_item.h>
 
 
 class LIB_POLYLINE : public LIB_ITEM

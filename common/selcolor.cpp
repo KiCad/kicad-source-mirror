@@ -5,14 +5,14 @@
 /* Dialog for selecting color from the palette of available colors.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
+#include <fctsys.h>
+#include <gr_basic.h>
 
-#include "common.h"
-#include "colors.h"
-#include "macros.h"
+#include <common.h>
+#include <colors.h>
+#include <macros.h>
 
-#include "wx/statline.h"
+#include <wx/statline.h>
 
 
 enum colors_id {

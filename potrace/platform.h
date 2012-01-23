@@ -8,7 +8,7 @@
 #define PLATFORM_H
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 /* in Windows, set all file i/o to binary */

@@ -2,8 +2,8 @@
 /* routines to handle bezier curves */
 /************************************/
 
-#include "fctsys.h"
-#include "bezier_curves.h"
+#include <fctsys.h>
+#include <bezier_curves.h>
 
 
 #define add_segment(segment) if(s_bezier_Points_Buffer[s_bezier_Points_Buffer.size()-1] != segment) s_bezier_Points_Buffer.push_back(segment);

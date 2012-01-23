@@ -24,7 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "newstroke_font.h"
+#include <newstroke_font.h>
 
 const char* const newstroke_font[] =
 {

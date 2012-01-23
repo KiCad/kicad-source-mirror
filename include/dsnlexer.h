@@ -29,7 +29,7 @@
 #include <string>
 #include <vector>
 
-#include "richio.h"
+#include <richio.h>
 
 #ifndef SWIG
 /**

@@ -27,15 +27,15 @@
  * @file eeschema/menubar_libedit.cpp
  * @brief (Re)Create the main menubar for the component editor frame (LibEdit)
  */
-#include "fctsys.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
 
-#include "general.h"
-#include "libeditframe.h"
-#include "eeschema_id.h"
-#include "hotkeys.h"
+#include <general.h>
+#include <libeditframe.h>
+#include <eeschema_id.h>
+#include <hotkeys.h>
 
-#include "help_common_strings.h"
+#include <help_common_strings.h>
 
 /**
  * @brief (Re)Create the menubar for the component editor frame

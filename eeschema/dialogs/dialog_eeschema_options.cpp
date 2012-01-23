@@ -26,10 +26,10 @@
  * @file dialog_eeschema_options.cpp
  */
 
-#include "fctsys.h"
-#include "class_base_screen.h"
+#include <fctsys.h>
+#include <class_base_screen.h>
 
-#include "dialog_eeschema_options.h"
+#include <dialog_eeschema_options.h>
 
 
 DIALOG_EESCHEMA_OPTIONS::DIALOG_EESCHEMA_OPTIONS( wxWindow* parent ) :

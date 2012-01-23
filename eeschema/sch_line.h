@@ -31,7 +31,7 @@
 #define _SCH_LINE_H_
 
 
-#include "sch_item_struct.h"
+#include <sch_item_struct.h>
 
 
 /**

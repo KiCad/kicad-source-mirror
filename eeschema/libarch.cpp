@@ -28,18 +28,18 @@
  * @brief Module for generation of component archive files.
  */
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "class_sch_screen.h"
-#include "wxstruct.h"
-#include "sch_item_struct.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <class_sch_screen.h>
+#include <wxstruct.h>
+#include <sch_item_struct.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "netlist.h"
-#include "protos.h"
-#include "class_library.h"
-#include "sch_component.h"
+#include <general.h>
+#include <netlist.h>
+#include <protos.h>
+#include <class_library.h>
+#include <sch_component.h>
 
 #include <wx/wfstream.h>
 

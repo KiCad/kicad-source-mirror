@@ -7,7 +7,7 @@
 #ifndef _DIALOG_BUILD_BOM_H_
 #define _DIALOG_BUILD_BOM_H_
 
-#include "dialog_build_BOM_base.h"
+#include <dialog_build_BOM_base.h>
 
 
 class EDA_DRAW_FRAME;

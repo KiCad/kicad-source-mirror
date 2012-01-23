@@ -4,21 +4,21 @@
 // Licence:     gpl
 /////////////////////////////////////////////////////////////////////////////
 
-#include "fctsys.h"
+#include <fctsys.h>
 #include <wx/tokenzr.h>
-#include "appl_wxstruct.h"
-#include "common.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "id.h"
-#include "macros.h"
+#include <appl_wxstruct.h>
+#include <common.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <id.h>
+#include <macros.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
 
-#include "protos.h"
+#include <protos.h>
 
-#include "dialog_cvpcb_config.h"
+#include <dialog_cvpcb_config.h>
 
 
 DIALOG_CVPCB_CONFIG::DIALOG_CVPCB_CONFIG( CVPCB_MAINFRAME* parent ) :
