@@ -26,7 +26,6 @@ set(COMMON_ABOUT_DLG_SRCS
 
 set(COMMON_SRCS
     ${COMMON_ABOUT_DLG_SRCS}
-    base_screen.cpp
     base_struct.cpp
     basicframe.cpp
     bezier_curves.cpp
@@ -81,6 +80,7 @@ set(COMMON_SRCS
 add_library(common ${COMMON_SRCS})
 
 set(PCB_COMMON_SRCS
+    base_screen.cpp
     pcbcommon.cpp
     footprint_info.cpp
     class_layer_box_selector.cpp

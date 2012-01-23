@@ -75,9 +75,10 @@ endif(APPLE)
 # Create the cvpcb executable
 ###
 add_executable(cvpcb WIN32 MACOSX_BUNDLE
-               ${CVPCB_SRCS}
-               ${CVPCB_DIALOGS}
-               ${CVPCB_RESOURCES})
+    ${CVPCB_SRCS}
+    ${CVPCB_DIALOGS}
+    ${CVPCB_RESOURCES}
+    )
 
 ###
 # Set properties for APPLE on cvpcb target
@@ -89,11 +90,18 @@ endif(APPLE)
 ###
 # Link executable target cvpcb with correct libraries
 ###
-target_link_libraries(cvpcb 3d-viewer pcbcommon common polygon bitmaps kbool
-                      ${OPENGL_LIBRARIES}
-                      ${wxWidgets_LIBRARIES}
-                      ${GDI_PLUS_LIBRARIES}
-                     )
+target_link_libraries(cvpcb
+    3d-viewer
+    pcbcommon
+    common
+    polygon
+    bitmaps
+    kbool
+    ${OPENGL_LIBRARIES}
+    ${wxWidgets_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
+    )
+
 ###
 # Add cvpcb as install target
 ###
