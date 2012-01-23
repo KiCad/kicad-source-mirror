@@ -29,7 +29,7 @@
 #ifndef _DIALOG_GRAPHIC_ITEMS_OPTIONS_H_
 #define _DIALOG_GRAPHIC_ITEMS_OPTIONS_H_
 
-#include "dialog_graphic_items_options_base.h"
+#include <dialog_graphic_items_options_base.h>
 
 /*!
  * DIALOG_GRAPHIC_ITEMS_OPTIONS class declaration

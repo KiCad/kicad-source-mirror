@@ -3,15 +3,15 @@
 /********************************/
 
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "trigo.h"
-#include "macros.h"
-#include "base_struct.h"
-#include "class_base_screen.h"
-#include "bezier_curves.h"
-#include "math_for_graphics.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <trigo.h>
+#include <macros.h>
+#include <base_struct.h>
+#include <class_base_screen.h>
+#include <bezier_curves.h>
+#include <math_for_graphics.h>
 #include <wx/graphics.h>
 
 
@@ -1381,7 +1381,7 @@ void GRSFilledRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y
 /* Note: aClipBox == NULL is legal, so if aClipBox == NULL,
  * the polygon is drawn, but not clipped
  */
-#include "SutherlandHodgmanClipPoly.h"
+#include <SutherlandHodgmanClipPoly.h>
 
 void ClipAndDrawFilledPoly( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPoints[], int n )
 {

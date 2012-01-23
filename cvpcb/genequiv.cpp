@@ -2,13 +2,13 @@
 /* genequiv.cpp  */
 /*****************/
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "confirm.h"
-#include "gestfich.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <confirm.h>
+#include <gestfich.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
 
 
 void CVPCB_MAINFRAME::WriteStuffList( wxCommandEvent& event )

@@ -7,7 +7,7 @@
 #define _AR_PROTOS_H_
 
 
-#include "autorout.h"
+#include <autorout.h>
 
 
 class PCB_EDIT_FRAME;

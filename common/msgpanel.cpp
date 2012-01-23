@@ -27,10 +27,10 @@
 #pragma implementation
 #endif
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "common.h"
-#include "colors.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <common.h>
+#include <colors.h>
 
 
 BEGIN_EVENT_TABLE( EDA_MSG_PANEL, wxPanel )

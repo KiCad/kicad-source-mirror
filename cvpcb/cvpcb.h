@@ -5,7 +5,7 @@
 #ifndef __CVPCB_H__
 #define __CVPCB_H__
 
-#include "pcbcommon.h"
+#include <pcbcommon.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>

@@ -3,15 +3,15 @@
 /***************************/
 
 
-#include "fctsys.h"
-#include "common.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "macros.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <common.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <macros.h>
+#include <appl_wxstruct.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
 
 static void WriteFootprintFilterInfos( FILE* dest, COMPONENT_LIST& list );
 

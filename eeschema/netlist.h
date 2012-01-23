@@ -32,11 +32,11 @@
 #define _NETLIST_H_
 
 
-#include "macros.h"
+#include <macros.h>
 
-#include "class_libentry.h"
-#include "sch_sheet_path.h"
-#include "sch_component.h"
+#include <class_libentry.h>
+#include <sch_sheet_path.h>
+#include <sch_component.h>
 
 
 class SCH_COMPONENT;

@@ -3,15 +3,15 @@
  * Load and save project configuration files (*.pro)
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "prjconfig.h"
-#include "kicad.h"
-#include "tree_project_frame.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <prjconfig.h>
+#include <kicad.h>
+#include <tree_project_frame.h>
 
-#include "build_version.h"
+#include <build_version.h>
 
 static const wxString GeneralGroupName( wxT( "/general" ) );
 

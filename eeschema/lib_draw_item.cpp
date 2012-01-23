@@ -27,14 +27,14 @@
  * @file lib_draw_item.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "wxstruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <wxstruct.h>
 
-#include "protos.h"
-#include "general.h"
-#include "lib_draw_item.h"
+#include <protos.h>
+#include <general.h>
+#include <lib_draw_item.h>
 
 const int fill_tab[3] = { 'N', 'F', 'f' };
 

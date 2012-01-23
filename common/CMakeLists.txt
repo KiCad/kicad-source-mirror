@@ -1,12 +1,16 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-                    ${Boost_INCLUDE_DIR}
-                    ../3d-viewer
-                    ../pcbnew
-                    ../polygon
-                   )
 
-set( COMMON_ABOUT_DLG_SRCS
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    ./dialogs
+    ./dialog_about
+    ${Boost_INCLUDE_DIR}
+    ../3d-viewer
+    ../pcbnew
+    ../polygon
+    ${INC_AFTER}
+    )
+
+set(COMMON_ABOUT_DLG_SRCS
     dialog_about/AboutDialog_main.cpp
     dialog_about/dialog_about.cpp
     dialog_about/dialog_about_base.cpp
@@ -18,7 +22,7 @@ set( COMMON_ABOUT_DLG_SRCS
     dialogs/dialog_hotkeys_editor.cpp
     dialogs/dialog_hotkeys_editor_base.cpp
     dialogs/dialog_page_settings_base.cpp
-)
+    )
 
 set(COMMON_SRCS
     ${COMMON_ABOUT_DLG_SRCS}
@@ -72,7 +76,7 @@ set(COMMON_SRCS
     wxwineda.cpp
     xnode.cpp
     zoom.cpp
-)
+    )
 
 add_library(common ${COMMON_SRCS})
 
@@ -107,8 +111,8 @@ set(PCB_COMMON_SRCS
     ../pcbnew/collectors.cpp
     ../pcbnew/sel_layer.cpp
     pcb_plot_params_keywords.cpp
+    dialogs/dialog_page_settings.cpp
 )
-
 
 if ( USE_NEW_PCBNEW_LOAD OR USE_NEW_PCBNEW_SAVE )
     set( PCB_COMMON_SRCS ${PCB_COMMON_SRCS} ../pcbnew/item_io.cpp ../pcbnew/io_mgr.cpp ../pcbnew/kicad_plugin.cpp )
@@ -123,6 +127,7 @@ set_source_files_properties( ${PCB_COMMON_SRCS} PROPERTIES
 
 add_library(pcbcommon ${PCB_COMMON_SRCS})
 
+
 # auto-generate netlist_lexer.h and netlist_keywords.cpp
 make_lexer(
     ${CMAKE_CURRENT_SOURCE_DIR}/netlist.keywords
@@ -133,11 +138,11 @@ make_lexer(
 
 # auto-generate pcb_plot_params_lexer.h and pcb_plot_params_keywords.cpp
 make_lexer(
-   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params.keywords
-   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_lexer.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
-   PCBPLOTPARAMS_T
-   )
+    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params.keywords
+    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_lexer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/pcb_plot_params_keywords.cpp
+    PCBPLOTPARAMS_T
+    )
 
 # The dsntest may not build properly using MS Visual Studio.
 if(NOT MSVC)
@@ -147,4 +152,3 @@ if(NOT MSVC)
     target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} )
 
 endif( NOT MSVC )
-

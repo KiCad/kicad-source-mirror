@@ -7,7 +7,7 @@
 #ifndef _DIALOG_PCBNEW_CONFIG_LIBS_H_
 #define _DIALOG_PCBNEW_CONFIG_LIBS_H_
 
-#include "dialog_pcbnew_config_libs_and_paths_fbp.h"
+#include <dialog_pcbnew_config_libs_and_paths_fbp.h>
 
 class DIALOG_PCBNEW_CONFIG_LIBS : public DIALOG_PCBNEW_CONFIG_LIBS_FBP
 {
@@ -26,12 +26,12 @@ private:
     void OnRemoveLibClick( wxCommandEvent& event );
     void OnAddOrInsertLibClick( wxCommandEvent& event );
     void OnAddOrInsertPath( wxCommandEvent& event );
-	void OnOkClick( wxCommandEvent& event );
-	void OnCancelClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event );
     void OnRemoveUserPath( wxCommandEvent& event );
-	void OnBrowseModDocFile( wxCommandEvent& event );
-	void OnButtonUpClick( wxCommandEvent& event );
-	void OnButtonDownClick( wxCommandEvent& event );
+    void OnBrowseModDocFile( wxCommandEvent& event );
+    void OnButtonUpClick( wxCommandEvent& event );
+    void OnButtonDownClick( wxCommandEvent& event );
 
 
 public:

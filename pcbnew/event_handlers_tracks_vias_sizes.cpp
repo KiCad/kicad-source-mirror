@@ -4,17 +4,17 @@
  */
 
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
-#include "dialog_helpers.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
+#include <dialog_helpers.h>
 
-#include "pcbnew_id.h"
-#include "pcbnew.h"
+#include <pcbnew_id.h>
+#include <pcbnew.h>
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
 
 /**

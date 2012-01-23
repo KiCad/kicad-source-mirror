@@ -31,10 +31,10 @@
 #define  WX_GERBER_STRUCT_H
 
 
-#include "param_config.h"
-#include "wxBasePcbFrame.h"
+#include <param_config.h>
+#include <wxBasePcbFrame.h>
 
-#include "../pcbnew/class_board.h"
+#include <../pcbnew/class_board.h>
 
 
 class DCODE_SELECTION_BOX;

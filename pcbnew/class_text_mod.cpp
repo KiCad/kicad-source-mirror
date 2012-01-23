@@ -27,23 +27,23 @@
  * @brief TEXT_MODULE class implementation.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "wxstruct.h"
-#include "trigo.h"
-#include "class_drawpanel.h"
-#include "drawtxt.h"
-#include "kicad_string.h"
-#include "pcbcommon.h"
-#include "colors_selection.h"
-#include "richio.h"
-#include "macros.h"
-#include "wxBasePcbFrame.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <wxstruct.h>
+#include <trigo.h>
+#include <class_drawpanel.h>
+#include <drawtxt.h>
+#include <kicad_string.h>
+#include <pcbcommon.h>
+#include <colors_selection.h>
+#include <richio.h>
+#include <macros.h>
+#include <wxBasePcbFrame.h>
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
-#include "pcbnew.h"
+#include <pcbnew.h>
 
 
 TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, int text_type ) :

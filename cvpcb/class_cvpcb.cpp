@@ -2,11 +2,11 @@
  * @file class_cvpcb.cpp
  */
 
-#include "fctsys.h"
-#include "kicad_string.h"
+#include <fctsys.h>
+#include <kicad_string.h>
 
-#include "cvpcb.h"
-#include "footprint_info.h"
+#include <cvpcb.h>
+#include <footprint_info.h>
 
 
 PIN::PIN()

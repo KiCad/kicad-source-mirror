@@ -2,23 +2,23 @@
  * @file cvpcb/loadcmp.cpp
  */
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "gr_basic.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "macros.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <gr_basic.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <macros.h>
+#include <appl_wxstruct.h>
 
-#include "pcbstruct.h"
-#include "class_module.h"
+#include <pcbstruct.h>
+#include <class_module.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
-#include "class_DisplayFootprintsFrame.h"
-#include "richio.h"
-#include "filter_reader.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
+#include <class_DisplayFootprintsFrame.h>
+#include <richio.h>
+#include <filter_reader.h>
 
 
 /**

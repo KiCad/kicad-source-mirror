@@ -30,7 +30,7 @@
 #include <cctype>
 
 
-#include "dsnlexer.h"
+#include <dsnlexer.h>
 
 //#include "fctsys.h"
 //#include "pcbnew.h"

@@ -3,13 +3,17 @@ add_definitions(-DCVPCB)
 ###
 # Includes
 ###
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
-                    ${Boost_INCLUDE_DIR}
-                    ../3d-viewer
-                    ../pcbnew
-                    ../polygon
-                    ${CMAKE_SOURCE_DIR}/common)
+
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    ./dialogs
+    ${Boost_INCLUDE_DIR}
+    ../3d-viewer
+    ../pcbnew
+    ../polygon
+    ../common
+    ${INC_AFTER}
+    )
 
 ###
 # Sources

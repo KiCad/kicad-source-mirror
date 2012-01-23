@@ -2,15 +2,15 @@
  * @file pcbnew/initpcb.cpp
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
-#include "pcbnew.h"
-#include "module_editor_frame.h"
+#include <pcbnew.h>
+#include <module_editor_frame.h>
 
 
 /**

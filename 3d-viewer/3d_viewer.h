@@ -30,14 +30,14 @@
 #ifndef __3D_VIEWER_H__
 #define __3D_VIEWER_H__
 
-#include "wxBasePcbFrame.h"        // m_auimanager member.
+#include <wxBasePcbFrame.h>        // m_auimanager member.
 
 
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
 #endif
 
-#include "wx/glcanvas.h"
+#include <wx/glcanvas.h>
 
 #ifdef __WXMAC__
 #  ifdef __DARWIN__
@@ -49,8 +49,8 @@
 #  include <GL/glu.h>
 #endif
 
-#include "3d_struct.h"
-#include "id.h"
+#include <3d_struct.h>
+#include <id.h>
 
 
 class BOARD_DESIGN_SETTINGS;

@@ -3,25 +3,25 @@
  * @brief Manage module (footprint) libraries.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "wxPcbStruct.h"
-#include "dialog_helpers.h"
-#include "richio.h"
-#include "filter_reader.h"
-#include "pcbcommon.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <wxPcbStruct.h>
+#include <dialog_helpers.h>
+#include <richio.h>
+#include <filter_reader.h>
+#include <pcbcommon.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
-#include "pcbnew.h"
-#include "class_footprint_library.h"
-#include "module_editor_frame.h"
+#include <pcbnew.h>
+#include <class_footprint_library.h>
+#include <module_editor_frame.h>
 
 
 /*

@@ -6,16 +6,16 @@
  * @file select_layers_to_pcb.cpp
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "appl_wxstruct.h"
-#include "gerbview.h"
-#include "gerbview_id.h"
-#include "class_board_design_settings.h"
-#include "class_GERBER.h"
-#include "wx/statline.h"
+#include <fctsys.h>
+#include <common.h>
+#include <appl_wxstruct.h>
+#include <gerbview.h>
+#include <gerbview_id.h>
+#include <class_board_design_settings.h>
+#include <class_GERBER.h>
+#include <wx/statline.h>
 
-#include "select_layers_to_pcb.h"
+#include <select_layers_to_pcb.h>
 
 #define LAYER_UNSELECTED NB_LAYERS
 

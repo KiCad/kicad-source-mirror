@@ -6,7 +6,7 @@
  * Copyright: Rafael Sokolowski ()
  * License:
  **************************************************************/
-#include "dialog_about.h"
+#include <dialog_about.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class dialog_about methods

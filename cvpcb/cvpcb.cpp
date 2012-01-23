@@ -2,20 +2,20 @@
  * @file cvpcb.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "appl_wxstruct.h"
-#include "wxstruct.h"
-#include "confirm.h"
-#include "gestfich.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <appl_wxstruct.h>
+#include <wxstruct.h>
+#include <confirm.h>
+#include <gestfich.h>
 
-#include "cvpcb.h"
-#include "zones.h"
-#include "cvpcb_mainframe.h"
-#include "colors_selection.h"
-#include "cvpcb_id.h"
+#include <cvpcb.h>
+#include <zones.h>
+#include <cvpcb_mainframe.h>
+#include <colors_selection.h>
+#include <cvpcb_id.h>
 
-#include "build_version.h"
+#include <build_version.h>
 
 #include <wx/snglinst.h>
 

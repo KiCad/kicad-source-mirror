@@ -28,19 +28,19 @@
  * @brief Function to update toolbars UI after changing parameters.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "wxPcbStruct.h"
-#include "3d_viewer.h"
-#include "dialog_helpers.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <wxPcbStruct.h>
+#include <3d_viewer.h>
+#include <dialog_helpers.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
-#include "pcbnew.h"
-#include "pcbnew_id.h"
-#include "drc_stuff.h"
+#include <pcbnew.h>
+#include <pcbnew_id.h>
+#include <drc_stuff.h>
 
 
 void PCB_EDIT_FRAME::OnUpdateLayerPair( wxUpdateUIEvent& aEvent )

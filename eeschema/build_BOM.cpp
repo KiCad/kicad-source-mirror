@@ -31,15 +31,15 @@
 #include <algorithm> // to use sort vector
 #include <vector>
 
-#include "fctsys.h"
-#include "class_sch_screen.h"
-#include "kicad_string.h"
+#include <fctsys.h>
+#include <class_sch_screen.h>
+#include <kicad_string.h>
 
-#include "general.h"
-#include "sch_sheet.h"
-#include "sch_component.h"
-#include "template_fieldnames.h"
-#include "netlist.h"
+#include <general.h>
+#include <sch_sheet.h>
+#include <sch_component.h>
+#include <template_fieldnames.h>
+#include <netlist.h>
 
 
 /* Fill aList  with labels

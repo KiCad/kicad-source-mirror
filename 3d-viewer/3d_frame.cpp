@@ -2,15 +2,15 @@
 // Name:        3d_frame.cpp
 /////////////////////////////////////////////////////////////////////////////
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
 
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
 #endif
 
-#include "3d_viewer.h"
-#include "trackball.h"
+#include <3d_viewer.h>
+#include <trackball.h>
 
 #include <wx/colordlg.h>
 #include <wxstruct.h>

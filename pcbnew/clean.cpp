@@ -29,13 +29,13 @@
  */
 
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "pcbcommon.h"
-#include "wxPcbStruct.h"
-#include "pcbnew.h"
-#include "class_board.h"
-#include "class_track.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <pcbcommon.h>
+#include <wxPcbStruct.h>
+#include <pcbnew.h>
+#include <class_board.h>
+#include <class_track.h>
 
 /* local functions : */
 static void     clean_segments( PCB_EDIT_FRAME* aFrame );
@@ -47,7 +47,7 @@ static void     CleanupTracks( PCB_EDIT_FRAME* aFrame,
                              bool aCleanVias, bool aMergeSegments,
                              bool aDeleteUnconnectedSegm, bool aConnectToPads );
 
-#include "dialog_cleaning_options.h"
+#include <dialog_cleaning_options.h>
 
 #define CONN2PAD_ENBL
 

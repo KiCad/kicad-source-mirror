@@ -26,18 +26,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "pcbplot.h"
-#include "gendrill.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <pcbplot.h>
+#include <gendrill.h>
 
-#include "class_board.h"
-#include "class_track.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_track.h>
+#include <class_module.h>
 
-#include "dialog_gendrill.h"
+#include <dialog_gendrill.h>
 
 
 // Keywords for read and write config

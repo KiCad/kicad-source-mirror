@@ -6,15 +6,15 @@
 // Licence:     GPL
 /////////////////////////////////////////////////////////////////////////////
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <class_board_design_settings.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
-#include "dialog_mask_clearance.h"
+#include <dialog_mask_clearance.h>
 
 /**
  *  DIALOG_PADS_MASK_CLEARANCE_BASE, derived from DIALOG_PADS_MASK_CLEARANCE_BASE_BASE

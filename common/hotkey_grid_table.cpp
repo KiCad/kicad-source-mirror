@@ -1,4 +1,4 @@
-#include "hotkey_grid_table.h"
+#include <hotkey_grid_table.h>
 
 /*
  *  Reads the hotkey table from its stored format into a format suitable

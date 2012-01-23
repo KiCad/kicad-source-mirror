@@ -3,7 +3,7 @@
  */
 
 
-#include "wxBasePcbFrame.h"
+#include <wxBasePcbFrame.h>
 
 
 class CVPCB_MAINFRAME;

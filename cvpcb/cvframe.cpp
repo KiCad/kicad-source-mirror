@@ -27,23 +27,23 @@
  * @file cvframe.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "macros.h"
-#include "confirm.h"
-#include "eda_doc.h"
-#include "eda_dde.h"
-#include "gestfich.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <macros.h>
+#include <confirm.h>
+#include <eda_doc.h>
+#include <eda_dde.h>
+#include <gestfich.h>
 
-#include "cvpcb_mainframe.h"
-#include "cvstruct.h"
-#include "dialog_cvpcb_config.h"
-#include "class_DisplayFootprintsFrame.h"
-#include "cvpcb_id.h"
-#include "html_messagebox.h"
+#include <cvpcb_mainframe.h>
+#include <cvstruct.h>
+#include <dialog_cvpcb_config.h>
+#include <class_DisplayFootprintsFrame.h>
+#include <cvpcb_id.h>
+#include <html_messagebox.h>
 
 
-#include "build_version.h"
+#include <build_version.h>
 
 #define FRAME_MIN_SIZE_X 450
 #define FRAME_MIN_SIZE_Y 300

@@ -49,22 +49,22 @@
  */
 #define USE_TEXT_JUSTIFY_INITIAL_BEHAVIOR 0
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "base_struct.h"
-#include "gr_basic.h"
-#include "drawtxt.h"
-#include "macros.h"
-#include "trigo.h"
-#include "wxEeschemaStruct.h"
-#include "plot_common.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <base_struct.h>
+#include <gr_basic.h>
+#include <drawtxt.h>
+#include <macros.h>
+#include <trigo.h>
+#include <wxEeschemaStruct.h>
+#include <plot_common.h>
 
-#include "general.h"
-#include "protos.h"
-#include "class_library.h"
-#include "sch_component.h"
-#include "sch_field.h"
-#include "kicad_string.h"
+#include <general.h>
+#include <protos.h>
+#include <class_library.h>
+#include <sch_component.h>
+#include <sch_field.h>
+#include <kicad_string.h>
 
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent, wxString aName ) :

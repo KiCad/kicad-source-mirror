@@ -2,7 +2,7 @@
  * @file eeschema_config.h
  */
 
-#include "param_config.h"
+#include <param_config.h>
 
 #define GROUP       wxT( "/eeschema" )
 #define GROUPCOMMON wxT( "/common" )

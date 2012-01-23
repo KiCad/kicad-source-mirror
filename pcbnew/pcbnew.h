@@ -6,8 +6,8 @@
 #define PCBNEW_H
 
 
-#include "fctsys.h"         // PCB_INTERNAL_UNIT and EESCHEMA_INTERNAL_UNIT definitions.
-#include "base_struct.h"    // IS_DRAGGED and IN_EDIT definitions.
+#include <fctsys.h>         // PCB_INTERNAL_UNIT and EESCHEMA_INTERNAL_UNIT definitions.
+#include <base_struct.h>    // IS_DRAGGED and IN_EDIT definitions.
 
 
 #define U_PCB (PCB_INTERNAL_UNIT / EESCHEMA_INTERNAL_UNIT)

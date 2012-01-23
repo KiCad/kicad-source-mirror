@@ -28,24 +28,24 @@
  * @brief Class and functions to handle a graphic segments.
  */
 
-#include "fctsys.h"
-#include "macros.h"
-#include "wxstruct.h"
-#include "gr_basic.h"
-#include "bezier_curves.h"
-#include "class_drawpanel.h"
-#include "kicad_string.h"
-#include "colors_selection.h"
-#include "trigo.h"
-#include "richio.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <wxstruct.h>
+#include <gr_basic.h>
+#include <bezier_curves.h>
+#include <class_drawpanel.h>
+#include <kicad_string.h>
+#include <colors_selection.h>
+#include <trigo.h>
+#include <richio.h>
+#include <pcbcommon.h>
 
-#include "pcbnew.h"
-#include "protos.h"
+#include <pcbnew.h>
+#include <protos.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_drawsegment.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_drawsegment.h>
 
 
 DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :

@@ -21,14 +21,14 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include "wx/wx.h"
-#include "wx/config.h"
-#include "wx/filename.h"
+#include <wx/wx.h>
+#include <wx/config.h>
+#include <wx/filename.h>
 
-#include "pcb_calculator_frame_base.h"
+#include <pcb_calculator_frame_base.h>
 
-#include "pcb_calculator.h"
-#include "UnitSelector.h"
+#include <pcb_calculator.h>
+#include <UnitSelector.h>
 
 extern double ReturnDoubleFromString( const wxString& TextValue );
 

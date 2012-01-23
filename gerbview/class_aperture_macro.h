@@ -33,8 +33,8 @@
 #include <vector>
 #include <set>
 
-#include "base_struct.h"
-#include "class_am_param.h"
+#include <base_struct.h>
+#include <class_am_param.h>
 
 /*
  *  An aperture macro defines a complex shape and is a list of aperture primitives.

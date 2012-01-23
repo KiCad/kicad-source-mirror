@@ -2,24 +2,24 @@
  * Functions to draw and plot text on screen
  * @file drawtxt.cpp
  */
-#include "fctsys.h"
-#include "gr_basic.h"
+#include <fctsys.h>
+#include <gr_basic.h>
 
-#include "common.h"
-#include "plot_common.h"
+#include <common.h>
+#include <plot_common.h>
 
-#include "trigo.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "class_base_screen.h"
+#include <trigo.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <class_base_screen.h>
 
 #ifndef DEFAULT_SIZE_TEXT
 #   define DEFAULT_SIZE_TEXT 50
 #endif
 
 #define EDA_DRAWBASE
-#include "newstroke_font.h"
-#include "plot_common.h"
+#include <newstroke_font.h>
+#include <plot_common.h>
 
 /* factor used to calculate actual size of shapes from hershey fonts (could be adjusted depending on the font name)
  * Its value is choosen in order to have letters like M, P .. vertical size equal to the vertical char size parameter

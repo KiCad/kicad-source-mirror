@@ -2,12 +2,12 @@
 /**** rs274_read_XY_and_IJ_coordinates.cpp ****/
 /**********************************************/
 
-#include "fctsys.h"
-#include "common.h"
+#include <fctsys.h>
+#include <common.h>
 
-#include "gerbview.h"
-#include "macros.h"
-#include "class_GERBER.h"
+#include <gerbview.h>
+#include <macros.h>
+#include <class_GERBER.h>
 
 
 /* These routines read the text string point from Text.

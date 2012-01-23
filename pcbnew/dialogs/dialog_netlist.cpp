@@ -4,18 +4,18 @@
 // Licence:     GPL
 /////////////////////////////////////////////////////////////////////////////
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "macros.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <macros.h>
+#include <pcbcommon.h>
 
-#include "pcbnew_config.h"
-#include "class_board_design_settings.h"
+#include <pcbnew_config.h>
+#include <class_board_design_settings.h>
 
-#include "dialog_netlist.h"
+#include <dialog_netlist.h>
 
 void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 {

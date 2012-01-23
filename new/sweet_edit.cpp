@@ -41,7 +41,7 @@
 #include <math/vector2d.h>
 #include <math/matrix3x3.h>
 
-#include "sweet_editor_panel.h"
+#include <sweet_editor_panel.h>
 
 #define screenSizeX 640
 #define screenSizeY 480

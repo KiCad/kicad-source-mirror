@@ -27,21 +27,21 @@
  * @file eeschema/netlist.cpp
  */
 
-#include "fctsys.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "netlist.h"
-#include "protos.h"
-#include "class_library.h"
-#include "lib_pin.h"
-#include "sch_junction.h"
-#include "sch_component.h"
-#include "sch_line.h"
-#include "sch_no_connect.h"
-#include "sch_text.h"
-#include "sch_sheet.h"
-#include "algorithm"
+#include <general.h>
+#include <netlist.h>
+#include <protos.h>
+#include <class_library.h>
+#include <lib_pin.h>
+#include <sch_junction.h>
+#include <sch_component.h>
+#include <sch_line.h>
+#include <sch_no_connect.h>
+#include <sch_text.h>
+#include <sch_sheet.h>
+#include <algorithm>
 
 #include <boost/foreach.hpp>
 

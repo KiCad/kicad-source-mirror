@@ -22,11 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "collectors.h"
-#include "class_board_item.h"             // class BOARD_ITEM
+#include <collectors.h>
+#include <class_board_item.h>             // class BOARD_ITEM
 
-#include "class_module.h"
-#include "class_pad.h"
+#include <class_module.h>
+#include <class_pad.h>
 
 
 /*  This module contains out of line member functions for classes given in

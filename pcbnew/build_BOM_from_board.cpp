@@ -1,16 +1,16 @@
 /* build_BOM_from_board.cpp */
 
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
 #include <wx/listimpl.cpp>
 

@@ -6,7 +6,7 @@
 #ifndef __INCLUDE_DIALOG_GET_COMPONENT_H__
 #define __INCLUDE_DIALOG_GET_COMPONENT_H__
 
-#include "../common/dialogs/dialog_get_component_base.h"
+#include <../common/dialogs/dialog_get_component_base.h>
 
 wxPoint  GetComponentDialogPosition( void );
 

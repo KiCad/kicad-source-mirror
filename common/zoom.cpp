@@ -6,14 +6,14 @@
  * Manage zoom, grid step, and auto crop.
  */
 
-#include "fctsys.h"
-#include "macros.h"
-#include "id.h"
-#include "class_drawpanel.h"
-#include "class_base_screen.h"
-#include "wxstruct.h"
-#include "kicad_device_context.h"
-#include "hotkeys_basic.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <id.h>
+#include <class_drawpanel.h>
+#include <class_base_screen.h>
+#include <wxstruct.h>
+#include <kicad_device_context.h>
+#include <hotkeys_basic.h>
 
 
 void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )

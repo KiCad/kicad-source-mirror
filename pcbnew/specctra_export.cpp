@@ -31,27 +31,27 @@
     Also see the comments at the top of the specctra.cpp file itself.
 */
 
-#include "wxPcbStruct.h"
-#include "pcbstruct.h"          // HISTORY_NUMBER
-#include "confirm.h"            // DisplayError()
-#include "gestfich.h"           // EDA_FileSelector()
-#include "trigo.h"              // RotatePoint()
+#include <wxPcbStruct.h>
+#include <pcbstruct.h>          // HISTORY_NUMBER
+#include <confirm.h>            // DisplayError()
+#include <gestfich.h>           // EDA_FileSelector()
+#include <trigo.h>              // RotatePoint()
 
 #include <set>                  // std::set
 #include <map>                  // std::map
 
 #include <boost/utility.hpp>    // boost::addressof()
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_edge_mod.h"
-#include "class_track.h"
-#include "class_zone.h"
-#include "class_drawsegment.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_edge_mod.h>
+#include <class_track.h>
+#include <class_zone.h>
+#include <class_drawsegment.h>
 
-#include "collectors.h"
+#include <collectors.h>
 
-#include "specctra.h"
+#include <specctra.h>
 
 
 using namespace DSN;

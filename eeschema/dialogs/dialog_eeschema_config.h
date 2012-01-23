@@ -3,7 +3,7 @@
 #define _DIALOG_EESCHEMA_CONFIG_H_
 
 
-#include "dialog_eeschema_config_fbp.h"
+#include <dialog_eeschema_config_fbp.h>
 
 
 class SCH_EDIT_FRAME;
@@ -26,11 +26,11 @@ private:
     void OnRemoveLibClick( wxCommandEvent& event );
     void OnAddOrInsertLibClick( wxCommandEvent& event );
     void OnAddOrInsertPath( wxCommandEvent& event );
-	void OnOkClick( wxCommandEvent& event );
-	void OnCancelClick( wxCommandEvent& event );
+    void OnOkClick( wxCommandEvent& event );
+    void OnCancelClick( wxCommandEvent& event );
     void OnRemoveUserPath( wxCommandEvent& event );
-	void OnButtonUpClick( wxCommandEvent& event );
-	void OnButtonDownClick( wxCommandEvent& event );
+    void OnButtonUpClick( wxCommandEvent& event );
+    void OnButtonDownClick( wxCommandEvent& event );
 
 
 public:

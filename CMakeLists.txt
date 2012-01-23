@@ -229,12 +229,20 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/include/config.h)
     add_definitions(-DHAVE_SVN_REVISION)
 endif(EXISTS ${CMAKE_SOURCE_DIR}/include/config.h)
 
+# For include_directories(BEFORE ...), which _reverses_
+# the order during insertion, so put first wanted last, which is
+# ${CMAKE_SOURCE_DIR/include.  Use '.' for current source dir since
+# we don't want expansion here and now, and don't need expansion of
+# ${CMAKE_CURRENT_SOURCE_DIR}, '.' will work for any source directory.
+set(INC_BEFORE
+    .
+    ${CMAKE_SOURCE_DIR}/include
+    )
 
-# Include paths.
-include_directories(${CMAKE_SOURCE_DIR}/include
-                    ${CMAKE_SOURCE_DIR}/share
-                    ${CMAKE_BINARY_DIR})
-
+set(INC_AFTER
+    #include <config.h>
+    ${CMAKE_BINARY_DIR}
+    )
 
 #================================================
 # Let CMake look in these directories for nested
@@ -251,6 +259,7 @@ if( USE_PNG_BITMAPS )
 else()
     add_subdirectory(bitmaps_xpm)
 endif()
+
 
 add_subdirectory(common)
 add_subdirectory(cvpcb)

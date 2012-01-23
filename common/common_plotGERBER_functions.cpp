@@ -3,17 +3,17 @@
  * @brief Common GERBER plot routines.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "trigo.h"
-#include "wxstruct.h"
-#include "base_struct.h"
-#include "common.h"
-#include "plot_common.h"
-#include "macros.h"
-#include "kicad_string.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <trigo.h>
+#include <wxstruct.h>
+#include <base_struct.h>
+#include <common.h>
+#include <plot_common.h>
+#include <macros.h>
+#include <kicad_string.h>
 
-#include "build_version.h"
+#include <build_version.h>
 
 
 /**

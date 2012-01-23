@@ -34,15 +34,15 @@
 #include <wx/statline.h>
 #include <wx/platinfo.h>
 
-#include "build_version.h"
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "online_help.h"
-#include "id.h"
-#include "confirm.h"
-#include "eda_doc.h"
-#include "wxstruct.h"
-#include "macros.h"
+#include <build_version.h>
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <online_help.h>
+#include <id.h>
+#include <confirm.h>
+#include <eda_doc.h>
+#include <wxstruct.h>
+#include <macros.h>
 
 
 /// The default auto save interval is 10 minutes.

@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 
-#include "bitmap.h"
+#include <bitmap.h>
 
 #define INTBITS ( 8 * sizeof(int) )
 

@@ -2,16 +2,16 @@
  * @file eda_doc.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "common.h"
-#include "confirm.h"
-#include "gestfich.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <common.h>
+#include <confirm.h>
+#include <gestfich.h>
 
 #include <wx/mimetype.h>
 #include <wx/tokenzr.h>
 #include <wx/filename.h>
-#include "macros.h"
+#include <macros.h>
 
 
 void EDA_APP::ReadPdfBrowserInfos()

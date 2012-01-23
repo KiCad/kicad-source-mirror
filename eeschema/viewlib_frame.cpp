@@ -27,18 +27,18 @@
  * @file viewlib_frame.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "eeschema_id.h"
-#include "class_drawpanel.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <eeschema_id.h>
+#include <class_drawpanel.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "viewlib_frame.h"
-#include "class_library.h"
-#include "hotkeys.h"
-#include "dialog_helpers.h"
+#include <general.h>
+#include <protos.h>
+#include <viewlib_frame.h>
+#include <class_library.h>
+#include <hotkeys.h>
+#include <dialog_helpers.h>
 
 
 /**

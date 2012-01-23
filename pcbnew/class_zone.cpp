@@ -28,24 +28,24 @@
  * @brief Implementation of class to handle copper zones.
  */
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "trigo.h"
-#include "class_pcb_screen.h"
-#include "class_drawpanel.h"
-#include "kicad_string.h"
-#include "pcbcommon.h"
-#include "colors_selection.h"
-#include "richio.h"
-#include "macros.h"
-#include "wxBasePcbFrame.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <trigo.h>
+#include <class_pcb_screen.h>
+#include <class_drawpanel.h>
+#include <kicad_string.h>
+#include <pcbcommon.h>
+#include <colors_selection.h>
+#include <richio.h>
+#include <macros.h>
+#include <wxBasePcbFrame.h>
 
-#include "protos.h"
-#include "class_board.h"
-#include "class_zone.h"
+#include <protos.h>
+#include <class_board.h>
+#include <class_zone.h>
 
-#include "pcbnew.h"
-#include "zones.h"
+#include <pcbnew.h>
+#include <zones.h>
 
 
 ZONE_CONTAINER::ZONE_CONTAINER( BOARD* parent ) :

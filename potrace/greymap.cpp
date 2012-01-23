@@ -12,7 +12,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "greymap.h"
+#include <greymap.h>
 
 #define INTBITS ( 8 * sizeof(int) )
 

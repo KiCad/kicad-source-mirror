@@ -2,17 +2,17 @@
 // Name:        dialog_display_options.cpp
 // Licence:     GPL
 /////////////////////////////////////////////////////////////////////////////
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "wxstruct.h"
-#include "common.h"
-#include "cvpcb.h"
-#include "class_drawpanel.h"
-#include "footprint_info.h"
-#include "cvstruct.h"
-#include "class_DisplayFootprintsFrame.h"
+#include <wxstruct.h>
+#include <common.h>
+#include <cvpcb.h>
+#include <class_drawpanel.h>
+#include <footprint_info.h>
+#include <cvstruct.h>
+#include <class_DisplayFootprintsFrame.h>
 
-#include "dialog_display_options.h"
+#include <dialog_display_options.h>
 
 
 void DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay( wxCommandEvent& event )

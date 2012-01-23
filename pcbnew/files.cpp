@@ -28,26 +28,26 @@
  * @brief Read and write board files.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "wxPcbStruct.h"
-#include "macros.h"
-#include "pcbcommon.h"
-#include "3d_viewer.h"
-#include "richio.h"
-#include "filter_reader.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <wxPcbStruct.h>
+#include <macros.h>
+#include <pcbcommon.h>
+#include <3d_viewer.h>
+#include <richio.h>
+#include <filter_reader.h>
+#include <appl_wxstruct.h>
 
-#include "pcbnew.h"
-#include "protos.h"
-#include "pcbnew_id.h"
-#include "io_mgr.h"
+#include <pcbnew.h>
+#include <protos.h>
+#include <pcbnew_id.h>
+#include <io_mgr.h>
 
-#include "class_board.h"
-#include "build_version.h"      // BOARD_FILE_VERSION
+#include <class_board.h>
+#include <build_version.h>      // BOARD_FILE_VERSION
 
 
 static const wxString pcbBackupFileExtension(  wxT( "000" ) );

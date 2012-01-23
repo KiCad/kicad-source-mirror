@@ -28,18 +28,18 @@
  * @brief Class SCH_LINE implementation
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "trigo.h"
-#include "richio.h"
-#include "plot_common.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <trigo.h>
+#include <richio.h>
+#include <plot_common.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_line.h"
-#include "class_netlist_object.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_line.h>
+#include <class_netlist_object.h>
 
 #include <boost/foreach.hpp>
 

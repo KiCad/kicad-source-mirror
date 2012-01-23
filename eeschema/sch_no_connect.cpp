@@ -28,19 +28,19 @@
  * @brief Class SCH_NO_CONNECT implementation.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "common.h"
-#include "trigo.h"
-#include "richio.h"
-#include "plot_common.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <common.h>
+#include <trigo.h>
+#include <richio.h>
+#include <plot_common.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_no_connect.h"
-#include "class_netlist_object.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_no_connect.h>
+#include <class_netlist_object.h>
 
 
 SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :

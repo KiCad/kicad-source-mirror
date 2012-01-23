@@ -3,7 +3,7 @@
 #define _DIALOG_SVG_PRINT_H_
 
 
-#include "dialog_SVG_print_base.h"
+#include <dialog_SVG_print_base.h>
 
 
 class BASE_SCREEN;

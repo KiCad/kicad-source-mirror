@@ -3,18 +3,18 @@
  * @brief PCB editor autorouting and "graphics" routines.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "macros.h"
-#include "trigo.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <common.h>
+#include <macros.h>
+#include <trigo.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
-#include "class_track.h"
+#include <class_board.h>
+#include <class_track.h>
 
-#include "pcbnew.h"
-#include "cell.h"
-#include "ar_protos.h"
+#include <pcbnew.h>
+#include <cell.h>
+#include <ar_protos.h>
 
 
 int  ToMatrixCoordinate( int aPhysicalCoordinate );

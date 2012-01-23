@@ -8,7 +8,7 @@
 #ifndef _DIALOG_CVPCB_CONFIG_H_
 #define _DIALOG_CVPCB_CONFIG_H_
 
-#include "dialog_cvpcb_config_fbp.h"
+#include <dialog_cvpcb_config_fbp.h>
 
 class DIALOG_CVPCB_CONFIG : public DIALOG_CVPCB_CONFIG_FBP
 {
@@ -31,8 +31,8 @@ private:
     void OnBrowseModDocFile( wxCommandEvent& event );
     void OnAddOrInsertPath( wxCommandEvent& event );
     void OnRemoveUserPath( wxCommandEvent& event );
-	void OnButtonUpClick( wxCommandEvent& event );
-	void OnButtonDownClick( wxCommandEvent& event );
+    void OnButtonUpClick( wxCommandEvent& event );
+    void OnButtonDownClick( wxCommandEvent& event );
 
 
 public:

@@ -1,4 +1,4 @@
-#include "dialog_lib_edit_draw_item.h"
+#include <dialog_lib_edit_draw_item.h>
 
 
 DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( wxWindow* parent,

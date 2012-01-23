@@ -35,7 +35,7 @@
 #include <wx/docview.h>
 #include <wx/config.h>
 #include <wx/filename.h>
-#include "param_config.h"
+#include <param_config.h>
 
 
 enum EDA_APP_T {

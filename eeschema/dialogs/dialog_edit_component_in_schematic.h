@@ -3,10 +3,10 @@
 #define __dialog_edit_component_in_schematic__
 
 
-#include "sch_field.h"
-#include "template_fieldnames.h"
+#include <sch_field.h>
+#include <template_fieldnames.h>
 
-#include "dialog_edit_component_in_schematic_fbp.h"
+#include <dialog_edit_component_in_schematic_fbp.h>
 
 
 class SCH_EDIT_FRAME;

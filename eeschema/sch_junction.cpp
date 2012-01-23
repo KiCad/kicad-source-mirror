@@ -27,19 +27,19 @@
  * @file sch_junction.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "trigo.h"
-#include "common.h"
-#include "richio.h"
-#include "plot_common.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <trigo.h>
+#include <common.h>
+#include <richio.h>
+#include <plot_common.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_junction.h"
-#include "class_netlist_object.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_junction.h>
+#include <class_netlist_object.h>
 
 
 SCH_JUNCTION::SCH_JUNCTION( const wxPoint& pos ) :

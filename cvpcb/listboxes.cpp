@@ -3,14 +3,14 @@
  * @brief Implementation of class for displaying footprint list and component lists.
  */
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <macros.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
-#include "cvstruct.h"
-#include "cvpcb_id.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
+#include <cvstruct.h>
+#include <cvpcb_id.h>
 
 
 /******************************************************************************

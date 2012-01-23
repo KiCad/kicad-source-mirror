@@ -31,10 +31,10 @@
 #ifndef  CLASS_BASE_SCREEN_H_
 #define  CLASS_BASE_SCREEN_H_
 
-#include "base_struct.h"
-#include "class_undoredo_container.h"
-#include "block_commande.h"
-#include "common.h"
+#include <base_struct.h>
+#include <class_undoredo_container.h>
+#include <block_commande.h>
+#include <common.h>
 
 
 /**

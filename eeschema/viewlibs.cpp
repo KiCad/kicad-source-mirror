@@ -2,20 +2,20 @@
  * @file viewlibs.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "eda_doc.h"
-#include "class_sch_screen.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <eda_doc.h>
+#include <class_sch_screen.h>
 
-#include "general.h"
-#include "protos.h"
-#include "viewlib_frame.h"
-#include "eeschema_id.h"
-#include "class_library.h"
-#include "dialog_helpers.h"
+#include <general.h>
+#include <protos.h>
+#include <viewlib_frame.h>
+#include <eeschema_id.h>
+#include <class_library.h>
+#include <dialog_helpers.h>
 
 
 #define NEXT_PART      1

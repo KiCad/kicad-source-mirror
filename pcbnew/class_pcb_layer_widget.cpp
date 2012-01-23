@@ -28,22 +28,22 @@
 /* class_pcb_layer_widget.cpp - Pcbnew layers manager */
 /******************************************************/
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
-#include "pcbstruct.h"      // enum PCB_VISIBLE
-#include "layer_widget.h"
-#include "macros.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
+#include <pcbstruct.h>      // enum PCB_VISIBLE
+#include <layer_widget.h>
+#include <macros.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
-#include "class_pcb_layer_widget.h"
+#include <class_board.h>
+#include <class_pcb_layer_widget.h>
 
-#include "pcbnew.h"
-#include "collectors.h"
-#include "pcbnew_id.h"
+#include <pcbnew.h>
+#include <collectors.h>
+#include <pcbnew_id.h>
 
 
 /**

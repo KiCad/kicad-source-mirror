@@ -5,15 +5,15 @@
 // Licence:     GPL
 /////////////////////////////////////////////////////////////////////////////
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "class_drawpanel.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <class_drawpanel.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
-#include "dialog_global_edit_tracks_and_vias.h"
+#include <dialog_global_edit_tracks_and_vias.h>
 
 
 /**
@@ -134,7 +134,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::MyInit()
         for( int jj = 0; jj < m_gridDisplayCurrentSettings->GetNumberCols(); jj++ )
             m_gridDisplayCurrentSettings->SetReadOnly( ii, jj, true );
     }
-    
+
     // needs wxWidgets version >= 2.8.8:
     m_gridDisplayCurrentSettings->SetRowLabelSize(wxGRID_AUTOSIZE);
 

@@ -28,20 +28,20 @@
  * @brief Code for handling schematic sheet labels.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "trigo.h"
-#include "eeschema_id.h"
-#include "class_drawpanel.h"
-#include "drawtxt.h"
-#include "wxEeschemaStruct.h"
-#include "plot_common.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <trigo.h>
+#include <eeschema_id.h>
+#include <class_drawpanel.h>
+#include <drawtxt.h>
+#include <wxEeschemaStruct.h>
+#include <plot_common.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_text.h"
-#include "class_netlist_object.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_text.h>
+#include <class_netlist_object.h>
 
 
 extern void IncrementLabelMember( wxString& name );

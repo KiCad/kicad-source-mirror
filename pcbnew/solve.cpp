@@ -27,21 +27,21 @@
  * @file solve.cpp
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
-#include "class_track.h"
+#include <class_board.h>
+#include <class_track.h>
 
-#include "pcbnew.h"
-#include "protos.h"
-#include "ar_protos.h"
-#include "cell.h"
+#include <pcbnew.h>
+#include <protos.h>
+#include <ar_protos.h>
+#include <cell.h>
 
 
 static int Autoroute_One_Track( PCB_EDIT_FRAME* pcbframe,

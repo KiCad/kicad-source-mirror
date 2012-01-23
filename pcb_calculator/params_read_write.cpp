@@ -27,9 +27,9 @@
 #include <wx/msgdlg.h>
 #include <wx/log.h>
 
-#include "pcb_calculator_frame_base.h"
-#include "pcb_calculator.h"
-#include "transline.h"
+#include <pcb_calculator_frame_base.h>
+#include <pcb_calculator.h>
+#include <transline.h>
 
 /*
  * Return the value from a string,

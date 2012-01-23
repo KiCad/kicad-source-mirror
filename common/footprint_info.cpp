@@ -7,21 +7,21 @@
  * Functions to read footprint libraries and fill m_footprints by available footprints names
  * and their documentation (comments and keywords)
  */
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "common.h"
-#include "kicad_string.h"
-#include "macros.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <common.h>
+#include <kicad_string.h>
+#include <macros.h>
+#include <appl_wxstruct.h>
 
-#include "pcbcommon.h"
-#include "pcbstruct.h"
-#include "richio.h"
-#include "filter_reader.h"
-#include "footprint_info.h"
+#include <pcbcommon.h>
+#include <pcbstruct.h>
+#include <richio.h>
+#include <filter_reader.h>
+#include <footprint_info.h>
 
-#include "class_pad.h"
-#include "class_module.h"
+#include <class_pad.h>
+#include <class_module.h>
 
 
 /* Read the list of libraries (*.mod files)

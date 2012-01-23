@@ -5,19 +5,19 @@
 /* , In library editor, create the pop menu when clicking on mouse right button
  */
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "eeschema_id.h"
-#include "hotkeys.h"
-#include "class_drawpanel.h"
-#include "class_sch_screen.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <eeschema_id.h>
+#include <hotkeys.h>
+#include <class_drawpanel.h>
+#include <class_sch_screen.h>
 
-#include "general.h"
-#include "protos.h"
-#include "libeditframe.h"
-#include "class_libentry.h"
-#include "lib_pin.h"
-#include "lib_polyline.h"
+#include <general.h>
+#include <protos.h>
+#include <libeditframe.h>
+#include <class_libentry.h>
+#include <lib_pin.h>
+#include <lib_polyline.h>
 
 
 /* functions to add commands and submenus depending on the item */

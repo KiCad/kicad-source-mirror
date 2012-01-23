@@ -1,7 +1,7 @@
 #ifndef __dialog_general_options_h
 #define __dialog_general_options_h
 
-#include "dialog_general_options_BoardEditor_base.h"
+#include <dialog_general_options_BoardEditor_base.h>
 
 class Dialog_GeneralOptions : public DialogGeneralOptionsBoardEditor_base
 {

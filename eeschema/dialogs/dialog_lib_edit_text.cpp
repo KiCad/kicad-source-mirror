@@ -27,17 +27,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "class_drawpanel.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <class_drawpanel.h>
 
-#include "general.h"
-#include "libeditframe.h"
-#include "class_libentry.h"
-#include "lib_text.h"
+#include <general.h>
+#include <libeditframe.h>
+#include <class_libentry.h>
+#include <lib_text.h>
 
-#include "dialog_lib_edit_text.h"
+#include <dialog_lib_edit_text.h>
 
 
 DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( LIB_EDIT_FRAME* aParent, LIB_TEXT* aText ) :

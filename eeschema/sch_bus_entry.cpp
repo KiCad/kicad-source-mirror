@@ -28,18 +28,18 @@
  *
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "trigo.h"
-#include "common.h"
-#include "richio.h"
-#include "plot_common.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <trigo.h>
+#include <common.h>
+#include <richio.h>
+#include <plot_common.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_bus_entry.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_bus_entry.h>
 
 
 SCH_BUS_ENTRY::SCH_BUS_ENTRY( const wxPoint& pos, int shape, int id ) :

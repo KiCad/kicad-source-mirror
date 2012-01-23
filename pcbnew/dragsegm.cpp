@@ -4,17 +4,17 @@
 
 /* Fichier dragsegm.cpp */
 
-#include "fctsys.h"
-#include "common.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "wxBasePcbFrame.h"
+#include <fctsys.h>
+#include <common.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <wxBasePcbFrame.h>
 
-#include "drag.h"
-#include "pcbnew.h"
+#include <drag.h>
+#include <pcbnew.h>
 
-#include "class_module.h"
-#include "class_board.h"
+#include <class_module.h>
+#include <class_board.h>
 
 
 /* a list of DRAG_SEGM items used to move or drag tracks */

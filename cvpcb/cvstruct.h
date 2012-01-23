@@ -5,8 +5,8 @@
 #ifndef CVSTRUCT_H
 #define CVSTRUCT_H
 
-#include "wx/listctrl.h"
-#include "cvpcb.h"
+#include <wx/listctrl.h>
+#include <cvpcb.h>
 
 /*  Forward declarations of all top-level window classes. */
 class CVPCB_MAINFRAME;

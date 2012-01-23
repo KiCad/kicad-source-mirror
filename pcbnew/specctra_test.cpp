@@ -34,8 +34,8 @@
 #include <cstdarg>
 #include <cstdio>
 
-#include "specctra.h"
-#include "common.h"
+#include <specctra.h>
+#include <common.h>
 
 
 using namespace DSN;

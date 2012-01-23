@@ -28,18 +28,17 @@
  * @brief Implementation of EDA_ITEM and EDA_TEXT base classes for KiCad.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "trigo.h"
-#include "common.h"
-#include "macros.h"
-#include "wxstruct.h"
-#include "class_drawpanel.h"
-#include "class_base_screen.h"
-#include "drawtxt.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <trigo.h>
+#include <common.h>
+#include <macros.h>
+#include <wxstruct.h>
+#include <class_drawpanel.h>
+#include <class_base_screen.h>
+#include <drawtxt.h>
 
 #include "../eeschema/dialogs/dialog_schematic_find.h"
-
 
 enum textbox {
     ID_TEXTBOX_LIST = 8010

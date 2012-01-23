@@ -23,8 +23,8 @@
  */
 
 
-#include "xnode.h"
-#include "macros.h"
+#include <xnode.h>
+#include <macros.h>
 
 typedef wxXmlProperty   XATTR;
 

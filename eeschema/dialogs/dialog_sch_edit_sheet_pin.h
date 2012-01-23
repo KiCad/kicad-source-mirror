@@ -8,7 +8,7 @@
  */
 
 
-#include "dialog_sch_edit_sheet_pin_base.h"
+#include <dialog_sch_edit_sheet_pin_base.h>
 
 
 class DIALOG_SCH_EDIT_SHEET_PIN : public DIALOG_SCH_EDIT_SHEET_PIN_BASE

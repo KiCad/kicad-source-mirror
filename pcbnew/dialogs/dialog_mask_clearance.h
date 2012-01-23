@@ -9,7 +9,7 @@
 #ifndef _DIALOG_MASK_CLEARANCE_H_
 #define _DIALOG_MASK_CLEARANCE_H_
 
-#include "dialog_mask_clearance_base.h"
+#include <dialog_mask_clearance_base.h>
 
 /**
  *  DIALOG_PADS_MASK_CLEARANCE, derived from DIALOG_PADS_MASK_CLEARANCE_BASE

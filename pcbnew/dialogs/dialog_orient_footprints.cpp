@@ -26,18 +26,18 @@
  */
 
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
-#include "dialog_orient_footprints_base.h"
+#include <dialog_orient_footprints_base.h>
 
 
 

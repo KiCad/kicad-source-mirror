@@ -28,19 +28,19 @@
  * @brief Create and edit the SCH_SHEET_PIN items.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_sheet.h"
-#include "dialog_helpers.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_sheet.h>
+#include <dialog_helpers.h>
 
-#include "dialogs/dialog_sch_edit_sheet_pin.h"
+#include <dialogs/dialog_sch_edit_sheet_pin.h>
 
 
 int SCH_EDIT_FRAME::m_lastSheetPinType = NET_INPUT;

@@ -50,12 +50,12 @@
 #include <cstdarg>
 #include <cstdio>
 
-#include "build_version.h"
+#include <build_version.h>
 
-#include "class_board.h"
-#include "class_track.h"
+#include <class_board.h>
+#include <class_track.h>
 
-#include "specctra.h"
+#include <specctra.h>
 #include <wx/wfstream.h>        // wxFFileOutputStream
 
 

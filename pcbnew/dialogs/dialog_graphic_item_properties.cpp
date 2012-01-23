@@ -10,19 +10,19 @@
  * items on edge layers are considered as graphic items
  * Pcb texts are not always graphic items and are not handled here
  */
-#include "fctsys.h"
-#include "macros.h"
-#include "gr_basic.h"
-#include "confirm.h"
-#include "class_drawpanel.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "class_board_design_settings.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <gr_basic.h>
+#include <confirm.h>
+#include <class_drawpanel.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <class_board_design_settings.h>
 
-#include "class_board.h"
-#include "class_drawsegment.h"
+#include <class_board.h>
+#include <class_drawsegment.h>
 
-#include "dialog_graphic_item_properties_base.h"
+#include <dialog_graphic_item_properties_base.h>
 
 
 ///////////////////////////////////////////////////////////////////////////

@@ -5,7 +5,7 @@
 #ifndef _BOARD_DESIGN_SETTING_H
 #define _BOARD_DESIGN_SETTING_H
 
-#include "pcbstruct.h"      // NB_COLORS
+#include <pcbstruct.h>      // NB_COLORS
 
 // Class for handle current printed board design settings
 class BOARD_DESIGN_SETTINGS

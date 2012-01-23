@@ -25,19 +25,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "confirm.h"
-#include "plot_common.h"
-#include "worksheet.h"
-#include "class_sch_screen.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <confirm.h>
+#include <plot_common.h>
+#include <worksheet.h>
+#include <class_sch_screen.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_sheet_path.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_sheet_path.h>
 
-#include "dialog_plot_schematic_HPGL_base.h"
+#include <dialog_plot_schematic_HPGL_base.h>
 
 
 enum HPGL_PAGEZ_T

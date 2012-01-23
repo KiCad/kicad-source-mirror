@@ -32,7 +32,7 @@
 #define CLASS_EDGE_MOD_H_
 
 
-#include "class_drawsegment.h"
+#include <class_drawsegment.h>
 
 
 class LINE_READER;

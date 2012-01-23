@@ -27,23 +27,23 @@
  * @file gerbview_frame.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "wxstruct.h"
-#include "class_drawpanel.h"
-#include "build_version.h"
-#include "macros.h"
-#include "class_layer_box_selector.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <wxstruct.h>
+#include <class_drawpanel.h>
+#include <build_version.h>
+#include <macros.h>
+#include <class_layer_box_selector.h>
 
-#include "gerbview.h"
-#include "class_gerber_draw_item.h"
-#include "pcbplot.h"
-#include "gerbview_id.h"
-#include "hotkeys.h"
-#include "class_GERBER.h"
-#include "dialog_helpers.h"
-#include "class_DCodeSelectionbox.h"
-#include "class_gerbview_layer_widget.h"
+#include <gerbview.h>
+#include <class_gerber_draw_item.h>
+#include <pcbplot.h>
+#include <gerbview_id.h>
+#include <hotkeys.h>
+#include <class_GERBER.h>
+#include <dialog_helpers.h>
+#include <class_DCodeSelectionbox.h>
+#include <class_gerbview_layer_widget.h>
 
 
 

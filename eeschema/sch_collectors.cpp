@@ -26,13 +26,13 @@
  * @file sch_collectors.cpp
  */
 
-#include "macros.h"
+#include <macros.h>
 
-#include "general.h"
-#include "transform.h"
-#include "sch_collectors.h"
-#include "sch_component.h"
-#include "sch_line.h"
+#include <general.h>
+#include <transform.h>
+#include <sch_collectors.h>
+#include <sch_component.h>
+#include <sch_line.h>
 
 
 const KICAD_T SCH_COLLECTOR::AllItems[] = {

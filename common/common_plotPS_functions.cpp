@@ -3,14 +3,14 @@
  * @brief Kicad: Common plot Postscript Routines
  */
 
-#include "fctsys.h"
-#include "trigo.h"
-#include "wxstruct.h"
-#include "base_struct.h"
-#include "common.h"
-#include "plot_common.h"
-#include "macros.h"
-#include "kicad_string.h"
+#include <fctsys.h>
+#include <trigo.h>
+#include <wxstruct.h>
+#include <base_struct.h>
+#include <common.h>
+#include <plot_common.h>
+#include <macros.h>
+#include <kicad_string.h>
 
 
 /* Set the plot offset for the current plotting */

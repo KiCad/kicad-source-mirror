@@ -2,20 +2,20 @@
 /* WORKSHEET.CPP */
 /*****************/
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "class_base_screen.h"
-#include "drawtxt.h"
-#include "confirm.h"
-#include "wxstruct.h"
-#include "appl_wxstruct.h"
-#include "worksheet.h"
-#include "class_title_block.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <class_base_screen.h>
+#include <drawtxt.h>
+#include <confirm.h>
+#include <wxstruct.h>
+#include <appl_wxstruct.h>
+#include <worksheet.h>
+#include <class_title_block.h>
 
-#include "build_version.h"
+#include <build_version.h>
 
 // Must be defined in main applications:
 
@@ -1251,7 +1251,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_COMPANY_NAME:
-        	msg = GetTitleBlock().GetCompany();
+            msg = GetTitleBlock().GetCompany();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1263,7 +1263,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_TITLE:
-        	msg = GetTitleBlock().GetTitle();
+            msg = GetTitleBlock().GetTitle();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1275,7 +1275,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_COMMENT1:
-        	msg = GetTitleBlock().GetComment1();
+            msg = GetTitleBlock().GetComment1();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1294,7 +1294,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_COMMENT2:
-        	msg = GetTitleBlock().GetComment2();
+            msg = GetTitleBlock().GetComment2();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1305,7 +1305,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_COMMENT3:
-        	msg = GetTitleBlock().GetComment3();
+            msg = GetTitleBlock().GetComment3();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1316,7 +1316,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
                 break;
 
             case WS_COMMENT4:
-        	msg = GetTitleBlock().GetComment4();
+            msg = GetTitleBlock().GetComment4();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,
@@ -1355,7 +1355,7 @@ void EDA_DRAW_FRAME::TraceWorkSheet( wxDC* DC, BASE_SCREEN* screen, int line_wid
             {
             case WS_CADRE:
             // Begin list number > 1
-        	msg = GetTitleBlock().GetComment1();
+            msg = GetTitleBlock().GetComment1();
                 if( !msg.IsEmpty() )
                 {
                     DrawGraphicText( m_canvas, DC, pos, Color,

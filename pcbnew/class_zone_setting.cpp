@@ -3,24 +3,24 @@
 /******************************************************/
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+#include <wx/wx.h>
 #endif
 
 /* For compilers that support precompilation:
  */
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "common.h"
-#include "pcbnew.h"
-#include "zones.h"
+#include <common.h>
+#include <pcbnew.h>
+#include <zones.h>
 
-#include "class_zone.h"
+#include <class_zone.h>
 
 ZONE_SETTING::ZONE_SETTING( void )
 {

@@ -2,11 +2,11 @@
 /* pcbplot.cpp */
 /***************/
 
-#include "fctsys.h"
-#include "common.h"
+#include <fctsys.h>
+#include <common.h>
 
-#include "gerbview.h"
-#include "pcbplot.h"
+#include <gerbview.h>
+#include <pcbplot.h>
 
 
 /* The group of plot options - sadly global XXX */

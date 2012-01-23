@@ -9,8 +9,8 @@
 #define PLOT_COMMON_H_
 
 #include <vector>
-#include "drawtxt.h"
-#include "common.h"         // PAGE_INFO
+#include <drawtxt.h>
+#include <common.h>         // PAGE_INFO
 
 /**
  * Enum PlotFormat
@@ -362,12 +362,12 @@ public:
         plot_scale_adjX = scaleX;
         plot_scale_adjY = scaleY;
     }
- 
+
     virtual void set_plot_width_adj( double width )
     {
         plot_width_adj = width;
     }
-    
+
     virtual double get_plot_width_adj()
     {
         return plot_width_adj;

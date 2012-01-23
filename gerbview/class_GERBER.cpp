@@ -27,14 +27,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <macros.h>
 
-#include "gerbview.h"
-#include "class_GERBER.h"
+#include <gerbview.h>
+#include <class_GERBER.h>
 
 
 /**

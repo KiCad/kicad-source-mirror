@@ -2,21 +2,21 @@
 /* Functions to create drill data used to create files and report files */
 /************************************************************************/
 
-#include "fctsys.h"
-#include "common.h"
-#include "plot_common.h"
-#include "base_struct.h"
-#include "colors.h"
-#include "drawtxt.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <common.h>
+#include <plot_common.h>
+#include <base_struct.h>
+#include <colors.h>
+#include <drawtxt.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <macros.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
-#include "pcbnew.h"
-#include "pcbplot.h"
-#include "gendrill.h"
+#include <pcbnew.h>
+#include <pcbplot.h>
+#include <gendrill.h>
 
 
 void GenDrillMapFile( BOARD* aPcb, FILE* aFile, const wxString& aFullFileName,

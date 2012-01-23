@@ -28,14 +28,14 @@
  * for more info
  */
 
-#include "wx/wx.h"
-#include "wx/config.h"
+#include <wx/wx.h>
+#include <wx/config.h>
 
-#include "pcb_calculator_frame_base.h"
+#include <pcb_calculator_frame_base.h>
 
-#include "pcb_calculator.h"
-#include "UnitSelector.h"
-#include "units_scales.h"
+#include <pcb_calculator.h>
+#include <UnitSelector.h>
+#include <units_scales.h>
 
 extern double ReturnDoubleFromString( const wxString& TextValue );
 

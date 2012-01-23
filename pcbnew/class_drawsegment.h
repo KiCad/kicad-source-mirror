@@ -32,8 +32,8 @@
 #define CLASS_DRAWSEGMENT_H_
 
 
-#include "class_board_item.h"
-#include "PolyLine.h"
+#include <class_board_item.h>
+#include <PolyLine.h>
 
 
 class LINE_READER;

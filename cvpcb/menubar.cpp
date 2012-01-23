@@ -26,14 +26,14 @@
  * @file cvpcb/menubar.cpp
  * @brief (Re)Create the menubar for CvPcb
  */
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "gestfich.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <gestfich.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
-#include "cvpcb_id.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
+#include <cvpcb_id.h>
 
 
 /**

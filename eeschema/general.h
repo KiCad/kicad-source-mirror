@@ -8,8 +8,8 @@
 #include <wx/string.h>
 #include <wx/gdicmn.h>
 
-#include "block_commande.h"
-#include "class_netlist_object.h"
+#include <block_commande.h>
+#include <class_netlist_object.h>
 
 
 class SCH_ITEM;

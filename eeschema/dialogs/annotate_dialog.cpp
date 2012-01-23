@@ -28,12 +28,12 @@
  */
 
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "wxEeschemaStruct.h"
-#include "class_drawpanel.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <wxEeschemaStruct.h>
+#include <class_drawpanel.h>
 
-#include "annotate_dialog.h"
+#include <annotate_dialog.h>
 
 #define KEY_ANNOTATE_SORT_OPTION wxT("AnnotateSortOption")
 #define KEY_ANNOTATE_ALGO_OPTION wxT("AnnotateAlgoOption")

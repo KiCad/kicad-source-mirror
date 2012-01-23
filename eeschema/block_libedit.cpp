@@ -27,15 +27,15 @@
  * @file block_libedit.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
 
-#include "general.h"
-#include "class_library.h"
-#include "protos.h"
-#include "libeditframe.h"
+#include <general.h>
+#include <class_library.h>
+#include <protos.h>
+#include <libeditframe.h>
 
 
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,

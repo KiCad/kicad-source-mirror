@@ -29,16 +29,16 @@
  */
 
 // For compilers that support precompilation, includes "wx.h".
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
 
-#include "common.h"
-#include "macros.h"
-#include "gestfich.h"
+#include <common.h>
+#include <macros.h>
+#include <gestfich.h>
 
-#include "wx/mimetype.h"
-#include "wx/filename.h"
+#include <wx/mimetype.h>
+#include <wx/filename.h>
 
 
 /* List of default paths used to locate help files and KiCad library files.
@@ -520,7 +520,7 @@ wxString& EDA_APP::GetEditorName()
     // We get the preferred editor name from environment variable first.
     if( editorname.IsEmpty() )
     {
-	// If there is no EDITOR variable set, try the desktop default
+    // If there is no EDITOR variable set, try the desktop default
         if(!wxGetEnv( wxT( "EDITOR" ), &editorname ))
         {
 #ifdef __WXOSX__

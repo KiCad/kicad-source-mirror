@@ -35,16 +35,16 @@
 #include <vector>
 
 #include <wx/socket.h>
-#include "wx/log.h"
-#include "wx/config.h"
+#include <wx/log.h>
+#include <wx/config.h>
 #include <wx/wxhtml.h>
 #include <wx/laywin.h>
 #include <wx/aui/aui.h>
 #include <wx/docview.h>
 
-#include "bitmaps.h"
-#include "colors.h"
-#include "common.h"
+#include <bitmaps.h>
+#include <colors.h>
+#include <common.h>
 
 #ifdef USE_WX_OVERLAY
 #include <wx/overlay.h>

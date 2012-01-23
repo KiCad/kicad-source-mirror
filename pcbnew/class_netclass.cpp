@@ -24,15 +24,15 @@
  */
 
 
-#include "fctsys.h"
-#include "common.h"
-#include "kicad_string.h"
-#include "pcbnew.h"
-#include "richio.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <common.h>
+#include <kicad_string.h>
+#include <pcbnew.h>
+#include <richio.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_netclass.h"
+#include <class_board.h>
+#include <class_netclass.h>
 
 
 // This will get mapped to "kicad_default" in the specctra_export.

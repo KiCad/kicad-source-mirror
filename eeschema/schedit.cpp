@@ -27,26 +27,26 @@
  * @file schedit.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "eda_doc.h"
-#include "wxEeschemaStruct.h"
-#include "kicad_device_context.h"
-#include "hotkeys_basic.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <eda_doc.h>
+#include <wxEeschemaStruct.h>
+#include <kicad_device_context.h>
+#include <hotkeys_basic.h>
 
-#include "general.h"
-#include "eeschema_id.h"
-#include "protos.h"
-#include "class_library.h"
-#include "sch_bus_entry.h"
-#include "sch_marker.h"
-#include "sch_component.h"
-#include "sch_junction.h"
-#include "sch_line.h"
-#include "sch_sheet.h"
+#include <general.h>
+#include <eeschema_id.h>
+#include <protos.h>
+#include <class_library.h>
+#include <sch_bus_entry.h>
+#include <sch_marker.h>
+#include <sch_component.h>
+#include <sch_junction.h>
+#include <sch_line.h>
+#include <sch_sheet.h>
 
 
 void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )

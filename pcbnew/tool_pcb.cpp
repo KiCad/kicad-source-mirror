@@ -28,20 +28,20 @@
  * @brief PCB editor tool bars
  */
 
-#include "fctsys.h"
-#include "help_common_strings.h"
-#include "dialog_helpers.h"
-#include "class_layer_box_selector.h"
-#include "colors_selection.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <help_common_strings.h>
+#include <dialog_helpers.h>
+#include <class_layer_box_selector.h>
+#include <colors_selection.h>
+#include <wxPcbStruct.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
-#include "pcbnew.h"
-#include "pcbnew_id.h"
-#include "hotkeys.h"
+#include <pcbnew.h>
+#include <pcbnew_id.h>
+#include <hotkeys.h>
 
-#include "wx/wupdlock.h"
+#include <wx/wupdlock.h>
 
 
 #ifdef __UNIX__

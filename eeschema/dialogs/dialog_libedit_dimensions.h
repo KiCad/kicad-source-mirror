@@ -3,7 +3,7 @@
 #define _DIALOG_LIBEDIT_DIMENSIONS_H_
 
 
-#include "dialog_libedit_dimensions_base.h"
+#include <dialog_libedit_dimensions_base.h>
 
 
 class LIB_EDIT_FRAME;

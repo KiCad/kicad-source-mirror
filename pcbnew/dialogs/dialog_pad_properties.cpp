@@ -3,23 +3,23 @@
 /* see also dialog_pad_properties.xxx (built with wxFormBuilder)   */
 /*******************************************************************/
 
-#include "fctsys.h"
-#include "common.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "pcbnew.h"
-#include "trigo.h"
-#include "macros.h"
-#include "wxBasePcbFrame.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <common.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <pcbnew.h>
+#include <trigo.h>
+#include <macros.h>
+#include <wxBasePcbFrame.h>
+#include <pcbcommon.h>
 
 #include <wx/dcbuffer.h>
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
-#include "dialog_pad_properties_base.h"
+#include <dialog_pad_properties_base.h>
 
 
 #define NBSHAPES 4

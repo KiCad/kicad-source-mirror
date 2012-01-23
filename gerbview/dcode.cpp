@@ -28,17 +28,17 @@
  * @brief D_CODE class implementation
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "macros.h"
-#include "trigo.h"
-#include "gr_basic.h"
+#include <fctsys.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <macros.h>
+#include <trigo.h>
+#include <gr_basic.h>
 
-#include "gerbview.h"
-#include "class_gerber_draw_item.h"
-#include "class_GERBER.h"
+#include <gerbview.h>
+#include <class_gerber_draw_item.h>
+#include <class_GERBER.h>
 
 #define DEFAULT_SIZE 100
 

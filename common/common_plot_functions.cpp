@@ -3,18 +3,18 @@
  * @brief Kicad: Common plot Postscript Routines
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "trigo.h"
-#include "wxstruct.h"
-#include "base_struct.h"
-#include "common.h"
-#include "plot_common.h"
-#include "worksheet.h"
-#include "macros.h"
-#include "class_base_screen.h"
-#include "drawtxt.h"
-#include "class_title_block.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <trigo.h>
+#include <wxstruct.h>
+#include <base_struct.h>
+#include <common.h>
+#include <plot_common.h>
+#include <worksheet.h>
+#include <macros.h>
+#include <class_base_screen.h>
+#include <drawtxt.h>
+#include <class_title_block.h>
 
 /* Plot sheet references
  * margin is in mils (1/1000 inch)
@@ -319,7 +319,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 break;
 
             case WS_COMPANY_NAME:
-        	msg = GetTitleBlock().GetCompany();
+            msg = GetTitleBlock().GetCompany();
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
@@ -330,7 +330,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 break;
 
             case WS_TITLE:
-        	msg = GetTitleBlock().GetTitle();
+            msg = GetTitleBlock().GetTitle();
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
@@ -341,7 +341,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 break;
 
             case WS_COMMENT1:
-        	msg = GetTitleBlock().GetComment1();
+            msg = GetTitleBlock().GetComment1();
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
@@ -358,7 +358,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 break;
 
             case WS_COMMENT2:
-        	msg = GetTitleBlock().GetComment2();
+            msg = GetTitleBlock().GetComment2();
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
@@ -369,7 +369,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 break;
 
             case WS_COMMENT3:
-        	msg = GetTitleBlock().GetComment3();
+            msg = GetTitleBlock().GetComment3();
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
@@ -380,7 +380,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
                 break;
 
             case WS_COMMENT4:
-        	msg = GetTitleBlock().GetComment4();
+            msg = GetTitleBlock().GetComment4();
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,
@@ -415,7 +415,7 @@ void EDA_DRAW_FRAME::PlotWorkSheet( PLOTTER* plotter, BASE_SCREEN* screen )
             {
             case WS_CADRE:
             // Begin list number > 1
-        	msg = GetTitleBlock().GetComment1();
+            msg = GetTitleBlock().GetComment1();
                 if( !msg.IsEmpty() )
                 {
                     plotter->text( pos, color,

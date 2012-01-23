@@ -6,16 +6,16 @@
 #include <algorithm> // to use sort vector
 #include <vector>
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
 
-#include "netlist.h"
-#include "class_library.h"
-#include "protos.h"
-#include "sch_component.h"
-#include "lib_pin.h"
+#include <netlist.h>
+#include <class_library.h>
+#include <protos.h>
+#include <sch_component.h>
+#include <lib_pin.h>
 
 
 void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )

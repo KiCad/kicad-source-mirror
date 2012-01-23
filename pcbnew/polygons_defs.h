@@ -6,7 +6,7 @@
 #ifndef _POLYGONS_DEFS_H_
 #define _POLYGONS_DEFS_H_
 
-#include "boost/polygon/polygon.hpp"
+#include <boost/polygon/polygon.hpp>
 
 // Define some types used here from boost::polygon
 namespace bpl = boost::polygon;         // bpl = boost polygon library

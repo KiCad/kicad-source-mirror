@@ -28,21 +28,21 @@
  * @brief SCH_SHEET_PATH class implementation.
  */
 
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "general.h"
-#include "dlist.h"
-#include "class_sch_screen.h"
-#include "sch_item_struct.h"
+#include <general.h>
+#include <dlist.h>
+#include <class_sch_screen.h>
+#include <sch_item_struct.h>
 
-#include "netlist.h"
-#include "class_library.h"
-#include "sch_sheet.h"
-#include "sch_sheet_path.h"
-#include "sch_component.h"
-#include "template_fieldnames.h"
+#include <netlist.h>
+#include <class_library.h>
+#include <sch_sheet.h>
+#include <sch_sheet_path.h>
+#include <sch_component.h>
+#include <template_fieldnames.h>
 
-#include "dialogs/dialog_schematic_find.h"
+#include <dialogs/dialog_schematic_find.h>
 
 
 SCH_SHEET_PATH::SCH_SHEET_PATH()

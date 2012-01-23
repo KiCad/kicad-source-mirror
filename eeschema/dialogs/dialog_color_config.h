@@ -2,7 +2,7 @@
 #ifndef _DIALOG_COLOR_CONFIG_H_
 #define _DIALOG_COLOR_CONFIG_H_
 
-#include "wx/statline.h"
+#include <wx/statline.h>
 
 
 class wxBoxSizer;

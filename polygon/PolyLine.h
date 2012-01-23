@@ -17,8 +17,8 @@
 
 #include <vector>
 
-#include "kbool/include/kbool/booleng.h"
-#include "pad_shapes.h"
+#include <kbool/include/kbool/booleng.h>
+#include <pad_shapes.h>
 
 // inflection modes for DS_LINE and DS_LINE_VERTEX, used in math_for_graphics.cpp
 enum
@@ -69,7 +69,7 @@ public:
 };
 
 
-#include "math_for_graphics.h"
+#include <math_for_graphics.h>
 
 class CArc
 {
@@ -100,7 +100,7 @@ public:
     { return (x != cpt2.x) || (y != cpt2.y) || (end_contour != cpt2.end_contour); }
 };
 
-#include "polygon_test_point_inside.h"
+#include <polygon_test_point_inside.h>
 
 class CPolyLine
 {

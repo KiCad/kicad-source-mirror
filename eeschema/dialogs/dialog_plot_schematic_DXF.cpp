@@ -25,20 +25,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "plot_common.h"
-#include "confirm.h"
-#include "worksheet.h"
-#include "class_sch_screen.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <plot_common.h>
+#include <confirm.h>
+#include <worksheet.h>
+#include <class_sch_screen.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_sheet_path.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_sheet_path.h>
 
-#include "dialog_plot_schematic_DXF_base.h"
+#include <dialog_plot_schematic_DXF_base.h>
 
 class DIALOG_PLOT_SCHEMATIC_DXF : public DIALOG_PLOT_SCHEMATIC_DXF_BASE
 {

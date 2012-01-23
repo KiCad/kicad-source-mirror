@@ -5,18 +5,18 @@
 // Set this to 1 if you want to test PostScript printing under MSW.
 #define wxTEST_POSTSCRIPT_IN_MSW 1
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
 
-#include "dialog_print_using_printer_base.h"
-#include "printout_controler.h"
+#include <dialog_print_using_printer_base.h>
+#include <printout_controler.h>
 
-#include "gerbview.h"
-#include "pcbplot.h"
-#include "class_board_design_settings.h"
+#include <gerbview.h>
+#include <pcbplot.h>
+#include <class_board_design_settings.h>
 
 #define WIDTH_MAX_VALUE           1000
 #define WIDTH_MIN_VALUE           1

@@ -28,27 +28,27 @@
  */
 
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "block_commande.h"
-#include "pcbcommon.h"
-#include "wxPcbStruct.h"
-#include "trigo.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <block_commande.h>
+#include <pcbcommon.h>
+#include <wxPcbStruct.h>
+#include <trigo.h>
 
-#include "class_board.h"
-#include "class_track.h"
-#include "class_drawsegment.h"
-#include "class_pcb_text.h"
-#include "class_mire.h"
-#include "class_module.h"
-#include "class_dimension.h"
-#include "class_zone.h"
+#include <class_board.h>
+#include <class_track.h>
+#include <class_drawsegment.h>
+#include <class_pcb_text.h>
+#include <class_mire.h>
+#include <class_module.h>
+#include <class_dimension.h>
+#include <class_zone.h>
 
-#include "dialog_block_options_base.h"
+#include <dialog_block_options_base.h>
 
-#include "pcbnew.h"
-#include "protos.h"
+#include <pcbnew.h>
+#include <protos.h>
 
 #define BLOCK_OUTLINE_COLOR YELLOW
 

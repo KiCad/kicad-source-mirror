@@ -31,8 +31,8 @@
 #ifndef _LIB_ITEM_H_
 #define _LIB_ITEM_H_
 
-#include "base_struct.h"
-#include "transform.h"
+#include <base_struct.h>
+#include <transform.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

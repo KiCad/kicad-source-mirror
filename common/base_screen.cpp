@@ -28,11 +28,11 @@
  * @brief BASE_SCREEN object implementation.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "base_struct.h"
-#include "class_base_screen.h"
-#include "id.h"
+#include <fctsys.h>
+#include <common.h>
+#include <base_struct.h>
+#include <class_base_screen.h>
+#include <id.h>
 
 
 #define CURSOR_SIZE     12      /// size of the cross cursor.

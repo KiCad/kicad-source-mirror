@@ -42,17 +42,17 @@
  * and ones they are modified (changes, deletion or addition)
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <wxPcbStruct.h>
 
-#include "class_board.h"
-#include "class_zone.h"
+#include <class_board.h>
+#include <class_zone.h>
 
-#include "pcbnew.h"
-#include "zones.h"
-#include "zones_functions_for_undo_redo.h"
+#include <pcbnew.h>
+#include <zones.h>
+#include <zones_functions_for_undo_redo.h>
 
 /**
  * Function IsSame

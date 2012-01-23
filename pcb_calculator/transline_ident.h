@@ -9,7 +9,7 @@
 #include <wx/config.h>
 #include <wx/bitmap.h>
 
-#include "transline.h"
+#include <transline.h>
 
 // An enum to handle muwave shapes:
 enum transline_type_id {

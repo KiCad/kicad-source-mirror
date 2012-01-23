@@ -1,23 +1,23 @@
 /**
  * @file 3d_canvas.cpp
 */
-#include "fctsys.h"
-#include "trigo.h"
+#include <fctsys.h>
+#include <trigo.h>
 
-#include "wx/image.h"
+#include <wx/image.h>
 
 #if !wxUSE_GLCANVAS
 #error Please set wxUSE_GLCANVAS to 1 in setup.h.
 #endif
 
-#include "wx/dataobj.h"
-#include "wx/clipbrd.h"
+#include <wx/dataobj.h>
+#include <wx/clipbrd.h>
 #include <wx/wupdlock.h>
 
-#include "gestfich.h"
+#include <gestfich.h>
 
-#include "3d_viewer.h"
-#include "trackball.h"
+#include <3d_viewer.h>
+#include <trackball.h>
 
 
 // -----------------

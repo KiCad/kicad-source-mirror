@@ -26,8 +26,8 @@
 #define _LIB_COLLECTORS_H_
 
 
-#include "class_collector.h"
-#include "lib_draw_item.h"
+#include <class_collector.h>
+#include <lib_draw_item.h>
 
 
 class LIB_COLLECTOR;

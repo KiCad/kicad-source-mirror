@@ -7,7 +7,7 @@
 // #include <wx/bitmap.h>   // only to define wxBitmap
 class wxBitmap;     // only to define wxBitmap
 
-#include "config.h"
+#include <config.h>
 
 
 #if defined(USE_PNG_BITMAPS)

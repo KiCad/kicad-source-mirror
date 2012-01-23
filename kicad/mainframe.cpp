@@ -7,14 +7,14 @@
 #pragma implementation
 #endif
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <macros.h>
 
-#include "kicad.h"
-#include "tree_project_frame.h"
+#include <kicad.h>
+#include <tree_project_frame.h>
 
 
 static const wxString TreeFrameWidthEntry( wxT( "LeftWinWidth" ) );

@@ -3,9 +3,9 @@
  * @brief Trigonometric functions.
  */
 
-#include "fctsys.h"
-#include "macros.h"
-#include "trigo.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <trigo.h>
 
 
 bool TestSegmentHit( wxPoint aRefPoint, wxPoint aStart, wxPoint aEnd, int aDist )

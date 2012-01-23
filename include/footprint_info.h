@@ -8,7 +8,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/foreach.hpp>
 
-#include "kicad_string.h"
+#include <kicad_string.h>
 
 /*
  * class FOOTPRINT_INFO is a helper class to handle the list of footprints

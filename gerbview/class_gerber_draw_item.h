@@ -29,8 +29,8 @@
 #ifndef CLASS_GERBER_DRAW_ITEM_H
 #define CLASS_GERBER_DRAW_ITEM_H
 
-#include "base_struct.h"
-#include "class_board_item.h"
+#include <base_struct.h>
+#include <class_board_item.h>
 
 
 class GERBER_IMAGE;

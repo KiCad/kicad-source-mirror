@@ -32,16 +32,16 @@
  * according to items and error ode
 */
 
-#include "fctsys.h"
-#include "common.h"
-#include "pcbnew.h"
-#include "class_board_design_settings.h"
+#include <fctsys.h>
+#include <common.h>
+#include <pcbnew.h>
+#include <class_board_design_settings.h>
 
-#include "drc_stuff.h"
-#include "class_pad.h"
-#include "class_track.h"
-#include "class_zone.h"
-#include "class_marker_pcb.h"
+#include <drc_stuff.h>
+#include <class_pad.h>
+#include <class_track.h>
+#include <class_zone.h>
+#include <class_marker_pcb.h>
 
 
 MARKER_PCB* DRC::fillMarker( TRACK* aTrack, BOARD_ITEM* aItem, int aErrorCode, MARKER_PCB* fillMe )
