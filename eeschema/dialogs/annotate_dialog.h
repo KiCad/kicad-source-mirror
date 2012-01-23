@@ -24,7 +24,7 @@
 #ifndef _ANNOTATE_DIALOG_H_
 #define _ANNOTATE_DIALOG_H_
 
-#include "dialog_annotate_base.h"
+#include <dialog_annotate_base.h>
 
 
 class SCH_EDIT_FRAME;

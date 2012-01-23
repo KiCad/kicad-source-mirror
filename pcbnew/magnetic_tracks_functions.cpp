@@ -8,17 +8,17 @@
  *  the distance is the clearance between tracks)
  */
 
-#include "fctsys.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "macros.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <macros.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
-#include "class_track.h"
+#include <class_board.h>
+#include <class_track.h>
 
-#include "protos.h"
-#include "pcbnew_id.h"
+#include <protos.h>
+#include <pcbnew_id.h>
 
 
 /**

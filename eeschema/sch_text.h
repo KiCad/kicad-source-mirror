@@ -32,8 +32,8 @@
 #define CLASS_TEXT_LABEL_H
 
 
-#include "macros.h"
-#include "sch_item_struct.h"
+#include <macros.h>
+#include <sch_item_struct.h>
 
 
 class LINE_READER;

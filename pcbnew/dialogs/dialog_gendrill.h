@@ -29,7 +29,7 @@
 #ifndef _DIALOG_GENDRILL_H_
 #define _DIALOG_GENDRILL_H_
 
-#include "dialog_gendrill_base.h"
+#include <dialog_gendrill_base.h>
 
 class DIALOG_GENDRILL : public DIALOG_GENDRILL_BASE
 {

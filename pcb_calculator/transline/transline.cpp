@@ -22,8 +22,8 @@
  */
 
 #include <limits>
-#include "transline.h"
-#include "units.h"
+#include <transline.h>
+#include <units.h>
 
 #ifndef INFINITY
 #define INFINITY std::numeric_limits<double>::infinity()
@@ -37,7 +37,7 @@
 #ifdef _MSC_VER
 inline bool isinf(double x)
 {
-	return x == INFINITY; // return true if x is infinity
+    return x == INFINITY; // return true if x is infinity
 }
 
 inline double asinh(double x)

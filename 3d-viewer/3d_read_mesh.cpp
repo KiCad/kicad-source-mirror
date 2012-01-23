@@ -27,13 +27,13 @@
  * @file 3d_read_mesh.cpp
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "macros.h"
-#include "kicad_string.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <common.h>
+#include <macros.h>
+#include <kicad_string.h>
+#include <appl_wxstruct.h>
 
-#include "3d_viewer.h"
+#include <3d_viewer.h>
 
 
 int S3D_MASTER::ReadData()

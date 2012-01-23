@@ -9,9 +9,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "potracelib.h"
-#include "lists.h"
-#include "curve.h"
+#include <potracelib.h>
+#include <lists.h>
+#include <curve.h>
 
 #define SAFE_MALLOC( var, n, typ ) \
     if( ( var = (typ*) malloc( (n)* sizeof(typ) ) ) == NULL ) \

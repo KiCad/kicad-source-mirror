@@ -5,18 +5,18 @@
 // Set this to 1 if you want to test PostScript printing under MSW.
 #define wxTEST_POSTSCRIPT_IN_MSW 1
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
 
-#include "dialog_print_using_printer_base.h"
-#include "printout_controler.h"
+#include <dialog_print_using_printer_base.h>
+#include <printout_controler.h>
 
-#include "gerbview.h"
-#include "pcbplot.h"
-#include "class_board_design_settings.h"
+#include <gerbview.h>
+#include <pcbplot.h>
+#include <class_board_design_settings.h>
 
 #define WIDTH_MAX_VALUE           1000
 #define WIDTH_MIN_VALUE           1
@@ -158,7 +158,7 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
         m_BoxSelectLayer[ii] = new wxCheckBox( this, -1, msg );
 
         if( mask & s_SelectedLayers )
-            m_BoxSelectLayer[ii]->SetValue( TRUE );
+            m_BoxSelectLayer[ii]->SetValue( true );
         if( ii < 16 )
             m_leftLayersBoxSizer->Add( m_BoxSelectLayer[ii],
                                          wxGROW | wxLEFT | wxRIGHT | wxTOP | wxADJUST_MINSIZE );
@@ -418,7 +418,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
 
     frame->Initialize();
-    frame->Show( TRUE );
+    frame->Show( true );
 }
 
 
@@ -451,7 +451,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     ( (wxPostScriptDC*) dc )->SetResolution( 600 );  // Postscript DC resolution is 600 ppi
 #endif
 
-    if( !printer.Print( this, &printout, TRUE ) )
+    if( !printer.Print( this, &printout, true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
             DisplayError( this, _( "There was a problem printing" ) );

@@ -27,7 +27,7 @@
 #define _CLASS_UNDOREDO_CONTAINER_H
 #include <vector>
 
-#include "base_struct.h"
+#include <base_struct.h>
 
 
 class PICKED_ITEMS_LIST;

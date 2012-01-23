@@ -6,15 +6,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "potracelib.h"
-#include "curve.h"
-#include "decompose.h"
-#include "trace.h"
-#include "progress.h"
-#include "potrace_version.h"
+#include <potracelib.h>
+#include <curve.h>
+#include <decompose.h>
+#include <trace.h>
+#include <progress.h>
+#include <potrace_version.h>
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 /* default parameters */

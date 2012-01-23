@@ -28,19 +28,19 @@
  * @brief Implementation of the SCH_SHEET_PIN class.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "drawtxt.h"
-#include "plot_common.h"
-#include "trigo.h"
-#include "richio.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <drawtxt.h>
+#include <plot_common.h>
+#include <trigo.h>
+#include <richio.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_sheet.h"
-#include "kicad_string.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_sheet.h>
+#include <kicad_string.h>
 
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :

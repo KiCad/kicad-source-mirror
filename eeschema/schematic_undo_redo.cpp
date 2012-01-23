@@ -28,21 +28,21 @@
  * @brief Eeschema undo and redo functions for schematic editor.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_bus_entry.h"
-#include "sch_marker.h"
-#include "sch_junction.h"
-#include "sch_line.h"
-#include "sch_no_connect.h"
-#include "sch_component.h"
-#include "sch_polyline.h"
-#include "sch_sheet.h"
-#include "sch_bitmap.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_bus_entry.h>
+#include <sch_marker.h>
+#include <sch_junction.h>
+#include <sch_line.h>
+#include <sch_no_connect.h>
+#include <sch_component.h>
+#include <sch_polyline.h>
+#include <sch_sheet.h>
+#include <sch_bitmap.h>
 
 
 /* Functions to undo and redo edit commands.

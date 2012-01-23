@@ -9,10 +9,10 @@
 #include <vector>
 #include <utility>
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "common.h"
-#include "hotkeys_basic.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <common.h>
+#include <hotkeys_basic.h>
 
 class HotkeyGridTable : public wxGridTableBase
 {

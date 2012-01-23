@@ -28,30 +28,30 @@
  * @brief LIB_EDIT_FRAME class is the component library editor frame.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "eda_doc.h"
-#include "gr_basic.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <eda_doc.h>
+#include <gr_basic.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "eeschema_id.h"
-#include "libeditframe.h"
-#include "class_library.h"
-#include "lib_polyline.h"
+#include <general.h>
+#include <protos.h>
+#include <eeschema_id.h>
+#include <libeditframe.h>
+#include <class_library.h>
+#include <lib_polyline.h>
 
-#include "kicad_device_context.h"
-#include "hotkeys.h"
+#include <kicad_device_context.h>
+#include <hotkeys.h>
 
-#include "dialogs/dialog_lib_edit_text.h"
-#include "dialogs/dialog_SVG_print.h"
-#include "dialogs/dialog_edit_component_in_lib.h"
-#include "dialogs/dialog_libedit_dimensions.h"
+#include <dialogs/dialog_lib_edit_text.h>
+#include <dialogs/dialog_SVG_print.h>
+#include <dialogs/dialog_edit_component_in_lib.h>
+#include <dialogs/dialog_libedit_dimensions.h>
 
-#include "dialog_helpers.h"
+#include <dialog_helpers.h>
 
 #include <boost/foreach.hpp>
 

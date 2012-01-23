@@ -26,7 +26,7 @@
 
 #include <cstdarg>
 
-#include "richio.h"
+#include <richio.h>
 
 // This file defines 3 classes useful for working with DSN text files and is named
 // "richio" after its author, Richard Hollenbeck, aka Dick Hollenbeck.

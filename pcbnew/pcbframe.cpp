@@ -29,29 +29,29 @@
  * @brief PCB editor main window implementation.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
-#include "pcbcommon.h"      // enum PCB_VISIBLE
-#include "collectors.h"
-#include "build_version.h"
-#include "macros.h"
-#include "3d_viewer.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
+#include <pcbcommon.h>      // enum PCB_VISIBLE
+#include <collectors.h>
+#include <build_version.h>
+#include <macros.h>
+#include <3d_viewer.h>
 
-#include "pcbnew.h"
-#include "protos.h"
-#include "pcbnew_id.h"
-#include "drc_stuff.h"
-#include "layer_widget.h"
-#include "dialog_design_rules.h"
-#include "class_pcb_layer_widget.h"
-#include "hotkeys.h"
-#include "pcbnew_config.h"
-#include "module_editor_frame.h"
-#include "dialog_SVG_print.h"
-#include "dialog_helpers.h"
+#include <pcbnew.h>
+#include <protos.h>
+#include <pcbnew_id.h>
+#include <drc_stuff.h>
+#include <layer_widget.h>
+#include <dialog_design_rules.h>
+#include <class_pcb_layer_widget.h>
+#include <hotkeys.h>
+#include <pcbnew_config.h>
+#include <module_editor_frame.h>
+#include <dialog_SVG_print.h>
+#include <dialog_helpers.h>
 
 
 extern int g_DrawDefaultLineThickness;

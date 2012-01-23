@@ -6,7 +6,7 @@
 class EDA_DRAW_FRAME;
 
 
-#include "dialog_SVG_print_base.h"
+#include <dialog_SVG_print_base.h>
 
 
 class DIALOG_SVG_PRINT : public DIALOG_SVG_PRINT_base

@@ -27,20 +27,20 @@
  * @file lib_bezier.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "plot_common.h"
-#include "trigo.h"
-#include "wxstruct.h"
-#include "bezier_curves.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <plot_common.h>
+#include <trigo.h>
+#include <wxstruct.h>
+#include <bezier_curves.h>
+#include <richio.h>
 
-#include "general.h"
-#include "protos.h"
-#include "lib_bezier.h"
-#include "transform.h"
+#include <general.h>
+#include <protos.h>
+#include <lib_bezier.h>
+#include <transform.h>
 
 
 LIB_BEZIER::LIB_BEZIER( LIB_COMPONENT* aParent ) :

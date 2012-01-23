@@ -5,7 +5,7 @@
 #define FCTSYS_H
 
 // For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -49,11 +49,6 @@
 #define UNIX_STRING_DIR_SEP wxT( "/" )
 #define WIN_STRING_DIR_SEP  wxT( "\\" )
 
-#ifndef TRUE
-#define TRUE       ((bool)1)
-#define FALSE      ((bool)0)
-#endif
-
 #define USE_RESIZE_BORDER
 #if defined(__UNIX__) || defined(USE_RESIZE_BORDER)
 #define MAYBE_RESIZE_BORDER wxRESIZE_BORDER   // linux users like resizeable
@@ -67,6 +62,6 @@
 #define wxNullPtr ((void *)NULL)
 #endif
 
-#include "config.h"
+#include <config.h>
 
 #endif /* FCTSYS_H */

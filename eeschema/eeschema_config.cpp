@@ -2,29 +2,29 @@
  * @file eeschema_config.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <wxEeschemaStruct.h>
 
-#include "eeschema_id.h"
-#include "general.h"
-#include "netlist_control.h"
-#include "protos.h"
-#include "libeditframe.h"
-#include "eeschema_config.h"
-#include "worksheet.h"
-#include "hotkeys.h"
-#include "sch_sheet.h"
+#include <eeschema_id.h>
+#include <general.h>
+#include <netlist_control.h>
+#include <protos.h>
+#include <libeditframe.h>
+#include <eeschema_config.h>
+#include <worksheet.h>
+#include <hotkeys.h>
+#include <sch_sheet.h>
 
-#include "dialog_hotkeys_editor.h"
+#include <dialog_hotkeys_editor.h>
 
-#include "dialogs/dialog_color_config.h"
-#include "dialogs/dialog_eeschema_config.h"
-#include "dialogs/dialog_eeschema_options.h"
-#include "dialogs/dialog_schematic_find.h"
+#include <dialogs/dialog_color_config.h>
+#include <dialogs/dialog_eeschema_config.h>
+#include <dialogs/dialog_eeschema_options.h>
+#include <dialogs/dialog_schematic_find.h>
 
 
 #define HOTKEY_FILENAME         wxT( "eeschema" )

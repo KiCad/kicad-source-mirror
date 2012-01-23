@@ -6,7 +6,7 @@
 
 #include <vector>
 #include <wx/gdicmn.h>
-#include "class_track.h"
+#include <class_track.h>
 
 
 class wxDC;

@@ -31,8 +31,8 @@
 #ifndef TYPE_SCH_MARKER_H_
 #define TYPE_SCH_MARKER_H_
 
-#include "sch_item_struct.h"
-#include "class_marker_base.h"
+#include <sch_item_struct.h>
+#include <class_marker_base.h>
 
 /* Marker are mainly used to show an ERC error
  */

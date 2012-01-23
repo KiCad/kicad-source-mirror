@@ -5,19 +5,19 @@
 // Set this to 1 if you want to test PostScript printing under MSW.
 #define wxTEST_POSTSCRIPT_IN_MSW 1
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
 
-#include "printout_controler.h"
-#include "pcbnew.h"
-#include "pcbplot.h"
+#include <printout_controler.h>
+#include <pcbnew.h>
+#include <pcbplot.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
-#include "dialog_print_using_printer_base.h"
+#include <dialog_print_using_printer_base.h>
 
 
 #define WIDTH_MAX_VALUE           1000
@@ -508,7 +508,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, WPos, WSize );
 
     frame->Initialize();
-    frame->Show( TRUE );
+    frame->Show( true );
 }
 
 
@@ -541,7 +541,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     ( (wxPostScriptDC*) dc )->SetResolution( 600 );  // Postscript DC resolution is 600 ppi
 #endif
 
-    if( !printer.Print( this, &printout, TRUE ) )
+    if( !printer.Print( this, &printout, true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
             DisplayError( this, _( "There was a problem printing" ) );

@@ -23,12 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "base_struct.h"
+#include <fctsys.h>
+#include <common.h>
+#include <base_struct.h>
 
-#include "base_struct.h"
-#include "class_undoredo_container.h"
+#include <base_struct.h>
+#include <class_undoredo_container.h>
 
 
 ITEM_PICKER::ITEM_PICKER( EDA_ITEM* aItem, UNDO_REDO_T aUndoRedoStatus )

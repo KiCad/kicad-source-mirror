@@ -27,16 +27,16 @@
  * @file sheet.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "sch_sheet.h"
+#include <general.h>
+#include <sch_sheet.h>
 
-#include "dialogs/dialog_sch_sheet_props.h"
+#include <dialogs/dialog_sch_sheet_props.h>
 
 
 bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, wxDC* aDC )

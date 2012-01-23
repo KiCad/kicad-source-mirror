@@ -7,7 +7,7 @@
 #define BOARD_CONNECTED_ITEM_H
 
 
-#include "class_board_item.h"
+#include <class_board_item.h>
 
 class NETCLASS;
 class TRACK;

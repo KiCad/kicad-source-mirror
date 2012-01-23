@@ -1,21 +1,21 @@
-#include "fctsys.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "wxPcbStruct.h"
-#include "drawtxt.h"
-#include "trigo.h"
-#include "appl_wxstruct.h"
-#include "3d_struct.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <wxPcbStruct.h>
+#include <drawtxt.h>
+#include <trigo.h>
+#include <appl_wxstruct.h>
+#include <3d_struct.h>
+#include <macros.h>
 
-#include "pcbnew.h"
+#include <pcbnew.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_edge_mod.h"
-#include "class_pcb_text.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_edge_mod.h>
+#include <class_pcb_text.h>
 
 #include <vector>
 #include <cmath>
@@ -31,7 +31,7 @@ static void ChangeIllegalCharacters( wxString & aFileName, bool aDirSepIsIllegal
 /* the dialog to create VRML files, derived from DIALOG_EXPORT_3DFILE_BASE,
  * created by wxFormBuilder
  */
-#include "dialog_export_3Dfiles_base.h" // the wxFormBuilder header file
+#include <dialog_export_3Dfiles_base.h> // the wxFormBuilder header file
 
 #define OPTKEY_OUTPUT_UNIT wxT("VrmlExportUnit" )
 #define OPTKEY_3DFILES_OPT wxT("VrmlExport3DShapeFilesOpt" )
@@ -277,7 +277,7 @@ static void write_triangle_bag( FILE* output_file, int color_index, /*{{{*/
         "            }\n",
         "          }\n",
         "          geometry IndexedFaceSet {\n",
-        "            solid TRUE\n",
+        "            solid true\n",
         "            coord Coordinate {\n",
         "              point [\n",
         0,                                          /* Coordinates marker */

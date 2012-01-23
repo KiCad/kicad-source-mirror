@@ -9,13 +9,13 @@
 #include <string.h>
 #include <limits.h>
 
-#include "potracelib.h"
-#include "curve.h"
-#include "lists.h"
-#include "auxiliary.h"
-#include "bitmap.h"
-#include "decompose.h"
-#include "progress.h"
+#include <potracelib.h>
+#include <curve.h>
+#include <lists.h>
+#include <auxiliary.h>
+#include <bitmap.h>
+#include <decompose.h>
+#include <progress.h>
 
 /* ---------------------------------------------------------------------- */
 /* auxiliary bitmap manipulations */

@@ -3,10 +3,10 @@
  * @brief Frame showing fast launch buttons and messages box
  */
 
-#include "fctsys.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <macros.h>
 
-#include "kicad.h"
+#include <kicad.h>
 
 
 RIGHT_KM_FRAME::RIGHT_KM_FRAME( KICAD_MANAGER_FRAME* parent ) :

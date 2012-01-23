@@ -9,9 +9,9 @@
 #ifndef _SELECT_LAYERS_TO_PCB_H_
 #define _SELECT_LAYERS_TO_PCB_H_
 
-#include "wx/statline.h"
+#include <wx/statline.h>
 
-#include "dialogs/dialog_layers_select_to_pcb_base.h"
+#include <dialogs/dialog_layers_select_to_pcb_base.h>
 
 #define LAYER_UNSELECTED NB_LAYERS
 
@@ -26,7 +26,7 @@ private:
     GERBVIEW_FRAME* m_Parent;
     int m_itemsCount;
     int m_exportBoardCopperLayersCount;
-	wxFlexGridSizer* m_flexRightColumnBoxSizer;     // An extra wxFlexGridSizer used
+    wxFlexGridSizer* m_flexRightColumnBoxSizer;     // An extra wxFlexGridSizer used
                                                     // when we have more than 16 gerber files loaded
     int    m_layersLookUpTable[32+1];               // Indexes Gerber layers to PCB file layers
                                                     // the last value in table is the number of copper layers
@@ -42,14 +42,14 @@ public: LAYERS_MAP_DIALOG( GERBVIEW_FRAME* parent );
 private:
     void initDialog();
     void normalizeBrdLayersCount();
-	void OnBrdLayersCountSelection( wxCommandEvent& event );
+    void OnBrdLayersCountSelection( wxCommandEvent& event );
     void OnSelectLayer( wxCommandEvent& event );
     void OnOkClick( wxCommandEvent& event );
     void OnCancelClick( wxCommandEvent& event );
 
     void OnStoreSetup( wxCommandEvent& event );
     void OnGetSetup( wxCommandEvent& event );
-	void OnResetClick( wxCommandEvent& event );
+    void OnResetClick( wxCommandEvent& event );
 
     DECLARE_EVENT_TABLE()
 };

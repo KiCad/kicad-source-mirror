@@ -1,5 +1,7 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    )
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    ${INC_AFTER}
+    )
 
 set(POTRACE_SRCS
     bitmap_io.cpp

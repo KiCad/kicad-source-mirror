@@ -26,10 +26,10 @@
 #include <wx/config.h>
 #include <wx/msgdlg.h>
 
-#include "pcb_calculator_frame_base.h"
-#include "pcb_calculator.h"
-#include "UnitSelector.h"
-#include "units_scales.h"
+#include <pcb_calculator_frame_base.h>
+#include <pcb_calculator.h>
+#include <UnitSelector.h>
+#include <units_scales.h>
 
 // A helper class to handle min values
 // Values are in meters.

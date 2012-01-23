@@ -31,8 +31,8 @@
 #ifndef BASE_STRUCT_H_
 #define BASE_STRUCT_H_
 
-#include "colors.h"
-#include "bitmaps.h"
+#include <colors.h>
+#include <bitmaps.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

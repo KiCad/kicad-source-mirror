@@ -34,9 +34,9 @@
 #include <string.h>
 #include <math.h>
 
-#include "units.h"
-#include "transline.h"
-#include "coax.h"
+#include <units.h>
+#include <transline.h>
+#include <coax.h>
 
 COAX::COAX() : TRANSLINE()
 {

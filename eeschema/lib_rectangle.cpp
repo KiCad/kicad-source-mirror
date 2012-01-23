@@ -27,19 +27,19 @@
  * @file lib_rectangle.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "class_drawpanel.h"
-#include "plot_common.h"
-#include "trigo.h"
-#include "wxstruct.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <class_drawpanel.h>
+#include <plot_common.h>
+#include <trigo.h>
+#include <wxstruct.h>
+#include <richio.h>
 
-#include "general.h"
-#include "protos.h"
-#include "lib_rectangle.h"
-#include "transform.h"
+#include <general.h>
+#include <protos.h>
+#include <lib_rectangle.h>
+#include <transform.h>
 
 
 LIB_RECTANGLE::LIB_RECTANGLE( LIB_COMPONENT* aParent ) :

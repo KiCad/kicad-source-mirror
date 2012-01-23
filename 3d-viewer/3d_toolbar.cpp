@@ -27,9 +27,9 @@
  * @file 3d_toolbar.cpp
  */
 
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "3d_viewer.h"
+#include <3d_viewer.h>
 
 
 void EDA_3D_FRAME::ReCreateHToolbar()

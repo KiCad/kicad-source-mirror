@@ -32,7 +32,7 @@
 
 #include <vector>
 
-#include "base_struct.h"
+#include <base_struct.h>
 
 
 class GERBER_DRAW_ITEM;
@@ -99,8 +99,8 @@ public:
     APERTURE_DEF_HOLETYPE m_DrillShape;     /* shape of the hole (0 = no hole, round = 1, rect = 2) */
     double                m_Rotation;       /* shape rotation in degrees */
     int                   m_EdgesCount;     /* in aperture definition Polygon only: number of edges for the polygon */
-    bool                  m_InUse;          /* FALSE if not used */
-    bool                  m_Defined;        /* FALSE if not defined */
+    bool                  m_InUse;          /* false if not used */
+    bool                  m_Defined;        /* false if not defined */
     wxString              m_SpecialDescr;
 
 public:

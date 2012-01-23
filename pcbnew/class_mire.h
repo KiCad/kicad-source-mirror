@@ -32,7 +32,7 @@
 #define MIRE_H
 
 
-#include "class_board_item.h"
+#include <class_board_item.h>
 
 
 class EDA_RECT;

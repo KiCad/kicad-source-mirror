@@ -3,40 +3,40 @@
  * @brief Routines for reading and saving of structures in ASCII file common to Pcbnew and CvPcb.
  */
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "kicad_string.h"
-#include "build_version.h"
-#include "wxPcbStruct.h"
-#include "richio.h"
-#include "macros.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <kicad_string.h>
+#include <build_version.h>
+#include <wxPcbStruct.h>
+#include <richio.h>
+#include <macros.h>
+#include <pcbcommon.h>
 
 /**
  * @todo Fix having to recompile the same file with a different defintion.  This is
  *       what C++ derivation was designed to solve.
  */
 #ifdef PCBNEW
-#include "zones.h"
+#include <zones.h>
 #endif
 
 #ifdef CVPCB
-#include "cvpcb.h"
+#include <cvpcb.h>
 #endif
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_pcb_text.h"
-#include "class_zone.h"
-#include "class_dimension.h"
-#include "class_drawsegment.h"
-#include "class_mire.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_pcb_text.h>
+#include <class_zone.h>
+#include <class_dimension.h>
+#include <class_drawsegment.h>
+#include <class_mire.h>
 
-#include "pcbnew.h"
-#include "pcbnew_id.h"
-#include "autorout.h"
-#include "pcb_plot_params.h"
+#include <pcbnew.h>
+#include <pcbnew_id.h>
+#include <autorout.h>
+#include <pcb_plot_params.h>
 
 
 /* ASCII format of structures:

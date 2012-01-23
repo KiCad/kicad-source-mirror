@@ -2,15 +2,15 @@
  * @file selpart.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "confirm.h"
-#include "wxstruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <confirm.h>
+#include <wxstruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "class_library.h"
-#include "dialog_helpers.h"
+#include <general.h>
+#include <protos.h>
+#include <class_library.h>
+#include <dialog_helpers.h>
 
 
 CMP_LIBRARY* SelectLibraryFromList( EDA_DRAW_FRAME* frame )

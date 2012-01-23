@@ -30,8 +30,8 @@
 #ifndef STRUCT_3D_H
 #define STRUCT_3D_H
 
-#include "common.h"
-#include "base_struct.h"
+#include <common.h>
+#include <base_struct.h>
 
 
 /* 3D modeling units -> PCB units conversion scale:

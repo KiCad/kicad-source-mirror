@@ -2,16 +2,16 @@
  * @file class_netinfolist.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "class_drawpanel.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <class_drawpanel.h>
 
-#include "pcbnew.h"
+#include <pcbnew.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_netinfo.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_netinfo.h>
 
 
 // Constructor and destructor

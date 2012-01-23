@@ -32,9 +32,9 @@
 #define _CLASS_NETLIST_OBJECT_H_
 
 
-#include "sch_sheet_path.h"
+#include <sch_sheet_path.h>
 
-#include "lib_pin.h"      // LIB_PIN::ReturnPinStringNum( m_PinNum )
+#include <lib_pin.h>      // LIB_PIN::ReturnPinStringNum( m_PinNum )
 
 
 class NETLIST_OBJECT;

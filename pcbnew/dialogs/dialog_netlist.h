@@ -9,28 +9,28 @@
 #ifndef _DIALOG_NETLIST_H_
 #define _DIALOG_NETLIST_H_
 
-#include "dialog_netlist_fbp.h"
+#include <dialog_netlist_fbp.h>
 
 
 class DIALOG_NETLIST : public DIALOG_NETLIST_FBP
 {
-	private:
+    private:
     PCB_EDIT_FRAME * m_Parent;
     wxDC * m_DC;
 
 
-	public:
-		DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
+    public:
+        DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxDC * aDC,
                         const wxString & aNetlistFull_Filename );
-		~DIALOG_NETLIST() {};
+        ~DIALOG_NETLIST() {};
 
         void Init();
-		// Virtual event handlers, overide them in your derived class
-		void OnOpenNelistClick( wxCommandEvent& event );
-		void OnReadNetlistFileClick( wxCommandEvent& event );
-		void OnTestFootprintsClick( wxCommandEvent& event );
-		void OnCompileRatsnestClick( wxCommandEvent& event );
-		void OnCancelClick( wxCommandEvent& event );
+        // Virtual event handlers, overide them in your derived class
+        void OnOpenNelistClick( wxCommandEvent& event );
+        void OnReadNetlistFileClick( wxCommandEvent& event );
+        void OnTestFootprintsClick( wxCommandEvent& event );
+        void OnCompileRatsnestClick( wxCommandEvent& event );
+        void OnCancelClick( wxCommandEvent& event );
 
 };
 

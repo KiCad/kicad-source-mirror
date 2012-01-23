@@ -24,8 +24,8 @@
  */
 
 #include <wx/wx.h>
-#include "pcb_plot_params_lexer.h"
-#include "base_struct.h"
+#include <pcb_plot_params_lexer.h>
+#include <base_struct.h>
 
 class PCB_PLOT_PARAMS_PARSER;
 

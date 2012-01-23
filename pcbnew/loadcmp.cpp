@@ -27,27 +27,27 @@
  * @brief Footprints selection and loading functions.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "eda_doc.h"
-#include "kicad_string.h"
-#include "appl_wxstruct.h"
-#include "wxPcbStruct.h"
-#include "dialog_helpers.h"
-#include "filter_reader.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <eda_doc.h>
+#include <kicad_string.h>
+#include <appl_wxstruct.h>
+#include <wxPcbStruct.h>
+#include <dialog_helpers.h>
+#include <filter_reader.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
-#include "pcbnew.h"
-#include "module_editor_frame.h"
-#include "footprint_info.h"
-#include "class_footprint_library.h"
-#include "dialog_get_component.h"
+#include <pcbnew.h>
+#include <module_editor_frame.h>
+#include <footprint_info.h>
+#include <class_footprint_library.h>
+#include <dialog_get_component.h>
 
 
 static void DisplayCmpDoc( wxString& Name );

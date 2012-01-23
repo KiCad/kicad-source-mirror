@@ -10,7 +10,7 @@
 class LIB_DRAW_ITEM;
 
 
-#include "dialog_lib_edit_draw_item_base.h"
+#include <dialog_lib_edit_draw_item_base.h>
 
 
 /**
@@ -19,8 +19,8 @@ class LIB_DRAW_ITEM;
 class DIALOG_LIB_EDIT_DRAW_ITEM : public DIALOG_LIB_EDIT_DRAW_ITEM_BASE
 {
 public:
-	/** Constructor */
-	DIALOG_LIB_EDIT_DRAW_ITEM( wxWindow* parent, const wxString& itemName );
+    /** Constructor */
+    DIALOG_LIB_EDIT_DRAW_ITEM( wxWindow* parent, const wxString& itemName );
 
     wxString GetWidth( void );
     void SetWidth( const wxString& width );

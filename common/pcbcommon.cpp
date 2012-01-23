@@ -30,13 +30,13 @@
  * back into the application layer.
  */
 
-#include "fctsys.h"
-#include "pcbcommon.h"
-#include "plot_common.h"
+#include <fctsys.h>
+#include <pcbcommon.h>
+#include <plot_common.h>
 
-#include "class_pad.h"
-#include "class_zone_setting.h"
-#include "class_board_design_settings.h"
+#include <class_pad.h>
+#include <class_zone_setting.h>
+#include <class_board_design_settings.h>
 
 
 class MODULE;

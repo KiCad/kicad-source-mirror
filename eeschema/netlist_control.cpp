@@ -38,19 +38,19 @@
  * but there are not really plugins, there are only external binaries
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "netlist.h"
-#include "protos.h"
-#include "sch_sheet.h"
-#include "dialog_helpers.h"
-#include "netlist_control.h"
-#include "dialogs/annotate_dialog.h"
+#include <general.h>
+#include <netlist.h>
+#include <protos.h>
+#include <sch_sheet.h>
+#include <dialog_helpers.h>
+#include <netlist_control.h>
+#include <dialogs/annotate_dialog.h>
 
 
 

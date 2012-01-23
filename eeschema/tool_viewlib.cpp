@@ -28,16 +28,16 @@
  * @brief Build the toolbars for the library browser.
  */
 
-#include "fctsys.h"
-#include "macros.h"
-#include "eeschema_id.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <eeschema_id.h>
 
-#include "general.h"
-#include "protos.h"
-#include "hotkeys.h"
-#include "class_library.h"
-#include "viewlib_frame.h"
-#include "dialog_helpers.h"
+#include <general.h>
+#include <protos.h>
+#include <hotkeys.h>
+#include <class_library.h>
+#include <viewlib_frame.h>
+#include <dialog_helpers.h>
 
 
 void LIB_VIEW_FRAME::ReCreateHToolbar()

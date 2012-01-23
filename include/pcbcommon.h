@@ -6,8 +6,8 @@
 #define __PCBCOMMON_H__
 
 
-#include "dlist.h"
-#include "layers_id_colors_and_visibility.h"  // LAYER_COUNT and NB_COPPER_LAYERS definitions.
+#include <dlist.h>
+#include <layers_id_colors_and_visibility.h>  // LAYER_COUNT and NB_COPPER_LAYERS definitions.
 
 //#include <wx/string.h>                        // wxString class.
 //#include <wx/arrstr.h>                        // wxArrayString class.

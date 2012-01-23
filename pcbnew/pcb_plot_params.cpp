@@ -23,11 +23,11 @@
  */
 
 #include <wx/wx.h>
-#include "pcb_plot_params.h"
-#include "pcb_plot_params_lexer.h"
-#include "layers_id_colors_and_visibility.h"
-#include "plot_common.h"
-#include "macros.h"
+#include <pcb_plot_params.h>
+#include <pcb_plot_params_lexer.h>
+#include <layers_id_colors_and_visibility.h>
+#include <plot_common.h>
+#include <macros.h>
 
 
 #define PLOT_LINEWIDTH_MIN        0

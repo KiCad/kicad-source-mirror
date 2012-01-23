@@ -3,17 +3,17 @@
  * @brief Functions to edit targets (class MIRE).
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "wxPcbStruct.h"
-#include "dialog_helpers.h"
-#include "gr_basic.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <wxPcbStruct.h>
+#include <dialog_helpers.h>
+#include <gr_basic.h>
 
-#include "class_board.h"
-#include "class_mire.h"
+#include <class_board.h>
+#include <class_mire.h>
 
-#include "pcbnew.h"
-#include "protos.h"
+#include <pcbnew.h>
+#include <protos.h>
 
 
 /* Routines Locales */

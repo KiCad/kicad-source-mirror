@@ -28,24 +28,24 @@
  * @brief Routiness to automatically place MODULES on a board.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <pcbcommon.h>
 
-#include "protos.h"
-#include "ar_protos.h"
-#include "cell.h"
-#include "colors_selection.h"
+#include <protos.h>
+#include <ar_protos.h>
+#include <cell.h>
+#include <colors_selection.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_drawsegment.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_drawsegment.h>
 
 
 #define GAIN            16

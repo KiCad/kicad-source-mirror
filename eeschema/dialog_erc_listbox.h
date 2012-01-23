@@ -10,9 +10,9 @@
 #include <wx/htmllbox.h>
 #include <vector>
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "sch_marker.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <sch_marker.h>
 
 /**
  * Class ERC_HTML_LISTBOX

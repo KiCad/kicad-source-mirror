@@ -27,28 +27,28 @@
  * @file class_libentry.cpp
  */
 
-#include "fctsys.h"
-#include "macros.h"
-#include "kicad_string.h"
-#include "class_drawpanel.h"
-#include "plot_common.h"
-#include "gr_basic.h"
-#include "class_sch_screen.h"
-#include "richio.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <kicad_string.h>
+#include <class_drawpanel.h>
+#include <plot_common.h>
+#include <gr_basic.h>
+#include <class_sch_screen.h>
+#include <richio.h>
 
-#include "general.h"
-#include "protos.h"
-#include "template_fieldnames.h"
-#include "transform.h"
-#include "class_library.h"
-#include "class_libentry.h"
-#include "lib_pin.h"
-#include "lib_arc.h"
-#include "lib_bezier.h"
-#include "lib_circle.h"
-#include "lib_polyline.h"
-#include "lib_rectangle.h"
-#include "lib_text.h"
+#include <general.h>
+#include <protos.h>
+#include <template_fieldnames.h>
+#include <transform.h>
+#include <class_library.h>
+#include <class_libentry.h>
+#include <lib_pin.h>
+#include <lib_arc.h>
+#include <lib_bezier.h>
+#include <lib_circle.h>
+#include <lib_polyline.h>
+#include <lib_rectangle.h>
+#include <lib_text.h>
 
 #include <boost/foreach.hpp>
 
@@ -166,7 +166,7 @@ LIB_COMPONENT::LIB_COMPONENT( const wxString& aName, CMP_LIBRARY* aLibrary ) :
     m_unitCount           = 1;
     m_pinNameOffset       = 40;
     m_options             = ENTRY_NORMAL;
-    m_unitsLocked         = FALSE;
+    m_unitsLocked         = false;
     m_showPinNumbers      = true;
     m_showPinNames        = true;
 
@@ -763,7 +763,7 @@ bool LIB_COMPONENT::Load( LINE_READER& aLineReader, wxString& aErrorMsg )
 
         p = strtok( line, " \t\r\n" );
 
-        /* This is the error flag ( if an error occurs, Res = FALSE) */
+        /* This is the error flag ( if an error occurs, Res = false) */
         Res = true;
 
         if( *line == '#' )      // a comment

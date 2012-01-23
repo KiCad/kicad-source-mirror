@@ -2,23 +2,23 @@
  * @file modedit_onclick.cpp
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "3d_viewer.h"
-#include "wxPcbStruct.h"
-#include "gr_basic.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <3d_viewer.h>
+#include <wxPcbStruct.h>
+#include <gr_basic.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_edge_mod.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_edge_mod.h>
 
-#include "pcbnew.h"
-#include "protos.h"
-#include "pcbnew_id.h"
-#include "hotkeys.h"
-#include "module_editor_frame.h"
-#include "dialog_edit_module_for_Modedit.h"
+#include <pcbnew.h>
+#include <protos.h>
+#include <pcbnew_id.h>
+#include <hotkeys.h>
+#include <module_editor_frame.h>
+#include <dialog_edit_module_for_Modedit.h>
 
 
 void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )

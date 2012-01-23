@@ -4,18 +4,18 @@
 
 #include <algorithm> // sort
 
-#include "fctsys.h"
-#include "common.h"
-#include "plot_common.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <common.h>
+#include <plot_common.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
 
-#include "pcbnew.h"
-#include "pcbplot.h"
-#include "gendrill.h"
+#include <pcbnew.h>
+#include <pcbplot.h>
+#include <gendrill.h>
 
 
 /* Local Functions */

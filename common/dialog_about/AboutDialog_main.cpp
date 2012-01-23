@@ -6,8 +6,8 @@
  * Copyright: Rafael Sokolowski ()
  * License:
  **************************************************************/
-#include "dialog_about.h"
-#include "aboutinfo.h"
+#include <dialog_about.h>
+#include <aboutinfo.h>
 #include <wx/aboutdlg.h>
 #include <wx/textctrl.h>
 
@@ -18,11 +18,11 @@
  *  edit_module_xpm[];
  *  icon_kicad_xpm[];   // Icon of the application
  */
-#include "bitmaps.h"
-#include "wxstruct.h"
-#include "common.h"
-#include "appl_wxstruct.h"
-#include "build_version.h"
+#include <bitmaps.h>
+#include <wxstruct.h>
+#include <common.h>
+#include <appl_wxstruct.h>
+#include <build_version.h>
 
 
 #include <wx/arrimpl.cpp>
@@ -88,7 +88,7 @@ static void InitKiCadAboutNew( AboutAppInfo& info )
     /* Operating System Information */
 
 #if defined __WIN64__
-	libVersion << wxT( "on 64 Bits Windows" );
+    libVersion << wxT( "on 64 Bits Windows" );
 
 #   elif defined __WINDOWS__
     libVersion << wxT( "on 32 Bits Windows" );

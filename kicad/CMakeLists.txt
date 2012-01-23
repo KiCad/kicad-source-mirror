@@ -1,8 +1,11 @@
 add_definitions(-DKICAD)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${Boost_INCLUDE_DIR}
-                    )
+include_directories(BEFORE ${INC_BEFORE})
+include_directories(
+    ${Boost_INCLUDE_DIR}
+    ${INC_AFTER}
+    )
+
 
 set(KICAD_SRCS
     class_treeprojectfiles.cpp
@@ -44,9 +47,9 @@ add_executable(kicad WIN32 MACOSX_BUNDLE
 
 if(APPLE)
     set_target_properties(kicad PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
-	target_link_libraries(kicad common bitmaps kbool polygon ${wxWidgets_LIBRARIES})
+    target_link_libraries(kicad common bitmaps kbool polygon ${wxWidgets_LIBRARIES})
 else(APPLE)
-	target_link_libraries(kicad common bitmaps kbool polygon ${wxWidgets_LIBRARIES} ${GDI_PLUS_LIBRARIES})
+    target_link_libraries(kicad common bitmaps kbool polygon ${wxWidgets_LIBRARIES} ${GDI_PLUS_LIBRARIES})
 endif(APPLE)
 
 install(TARGETS kicad

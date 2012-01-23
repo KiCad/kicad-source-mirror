@@ -3,11 +3,11 @@
  * @brief Class BOARD_ITEM definition and  some basic functions.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "pcbnew.h"
+#include <fctsys.h>
+#include <common.h>
+#include <pcbnew.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
 
 wxString BOARD_ITEM::ShowShape( STROKE_T aShape )

@@ -3,11 +3,11 @@
  * utilities to display some error, warning and info short messges
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "wx/wx.h"
-#include "wx/html/htmlwin.h"
-#include "html_messagebox.h"
+#include <fctsys.h>
+#include <common.h>
+#include <wx/wx.h>
+#include <wx/html/htmlwin.h>
+#include <html_messagebox.h>
 
 
 void DisplayError( wxWindow* parent, const wxString& text, int displaytime )

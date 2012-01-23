@@ -26,27 +26,27 @@
  * @file dialog_build_BOM.cpp
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "kicad_string.h"
-#include "class_sch_screen.h"
-#include "wxstruct.h"
-#include "build_version.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <kicad_string.h>
+#include <class_sch_screen.h>
+#include <wxstruct.h>
+#include <build_version.h>
 
-#include "general.h"
-#include "netlist.h"
-#include "template_fieldnames.h"
-#include "sch_component.h"
-#include "sch_sheet.h"
-#include "class_library.h"
+#include <general.h>
+#include <netlist.h>
+#include <template_fieldnames.h>
+#include <sch_component.h>
+#include <sch_sheet.h>
+#include <class_library.h>
 
-#include "wx/valgen.h"
+#include <wx/valgen.h>
 
-#include "dialog_build_BOM.h"
+#include <dialog_build_BOM.h>
 
-#include "protos.h"
+#include <protos.h>
 
 
 extern void GenListeGLabels( std::vector <BOM_LABEL>& aList );
@@ -56,8 +56,8 @@ extern int  PrintListeGLabel( FILE* f, std::vector <BOM_LABEL>& aList );
 
 
 /* Local variables */
-static bool     s_ListByRef    = TRUE;
-static bool     s_ListByValue  = TRUE;
+static bool     s_ListByRef    = true;
+static bool     s_ListByValue  = true;
 static bool     s_ListWithSubCmponents;
 static bool     s_ListHierarchicalPinByName;
 static bool     s_ListBySheet;
@@ -465,7 +465,7 @@ void DIALOG_BUILD_BOM::CreateExportList( const wxString& aFullFileName,
         cmplist.RemoveSubComponentsFromList();
 
     // create the file
-    PrintComponentsListByRef( f, cmplist, TRUE, aIncludeSubComponents );
+    PrintComponentsListByRef( f, cmplist, true, aIncludeSubComponents );
 
     fclose( f );
 }

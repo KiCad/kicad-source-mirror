@@ -10,12 +10,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "potracelib.h"
-#include "curve.h"
-#include "lists.h"
-#include "auxiliary.h"
-#include "trace.h"
-#include "progress.h"
+#include <potracelib.h>
+#include <curve.h>
+#include <lists.h>
+#include <auxiliary.h>
+#include <trace.h>
+#include <progress.h>
 
 #define INFTY  10000000 /* it suffices that this is longer than any
                          *  path; it need not be really infinite */

@@ -6,20 +6,20 @@
 #include <limits.h>
 #include <algorithm>
 
-#include "fctsys.h"
-#include "common.h"
-#include "pcbcommon.h"
-#include "wxBasePcbFrame.h"
-#include "build_version.h"      // BOARD_FILE_VERSION
+#include <fctsys.h>
+#include <common.h>
+#include <pcbcommon.h>
+#include <wxBasePcbFrame.h>
+#include <build_version.h>      // BOARD_FILE_VERSION
 
-#include "pcbnew.h"
-#include "colors_selection.h"
+#include <pcbnew.h>
+#include <colors_selection.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
-#include "class_zone.h"
-#include "class_marker_pcb.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
+#include <class_zone.h>
+#include <class_marker_pcb.h>
 
 
 /* This is an odd place for this, but CvPcb won't link if it is

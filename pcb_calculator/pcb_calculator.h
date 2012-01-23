@@ -5,11 +5,11 @@
 #ifndef  PCB_CALCULATOR_H
 #define  PCB_CALCULATOR_H
 
-#include "pcb_calculator_frame_base.h"
+#include <pcb_calculator_frame_base.h>
 
-#include "transline.h"          // Included for SUBST_PRMS_ID definition.
-#include "transline_ident.h"
-#include "attenuator_classes.h"
+#include <transline.h>          // Included for SUBST_PRMS_ID definition.
+#include <transline_ident.h>
+#include <attenuator_classes.h>
 
 /* Class PCB_CALCULATOR_FRAME_BASE
 This is the main frame for this application
@@ -38,9 +38,9 @@ private:
     // Event handlers
     // These 3 functions are called by the OnPaint event, to draw
     // icons that show the current item on the specific panels
-	void OnPaintTranslinePanel( wxPaintEvent& event );
-	void OnPaintAttenuatorPanel( wxPaintEvent& event );
-	void OnPaintAttFormulaPanel( wxPaintEvent& event );
+    void OnPaintTranslinePanel( wxPaintEvent& event );
+    void OnPaintAttenuatorPanel( wxPaintEvent& event );
+    void OnPaintAttFormulaPanel( wxPaintEvent& event );
 
     // Config read-write
     void ReadConfig();
@@ -82,42 +82,42 @@ private:
      * Function OnTranslineSelection
      * Called on new transmission line selection
     */
-	void OnTranslineSelection( wxCommandEvent& event );
+    void OnTranslineSelection( wxCommandEvent& event );
 
     /**
      * Function OnTranslineAnalyse
      * Run a new analyse for the current transline with current parameters
      * and displays the electrical parmeters
      */
-	void OnTranslineAnalyse( wxCommandEvent& event );
+    void OnTranslineAnalyse( wxCommandEvent& event );
 
     /**
      * Function OnTranslineSynthetize
      * Run a new synthezis for the current transline with current parameters
      * and displays the geometrical parmeters
      */
-	void OnTranslineSynthetize( wxCommandEvent& event );
+    void OnTranslineSynthetize( wxCommandEvent& event );
 
     /**
      * Function OnTranslineEpsilonR_Button
      * Shows a list of current relative dielectric constant(Er)
      * and set the selected value in main dialog frame
      */
-	void OnTranslineEpsilonR_Button( wxCommandEvent& event );
+    void OnTranslineEpsilonR_Button( wxCommandEvent& event );
 
     /**
      * Function OnTranslineTanD_Button
      * Shows a list of current dielectric loss factor (tangent delta)
      * and set the selected value in main dialog frame
      */
-	void OnTranslineTanD_Button( wxCommandEvent& event );
+    void OnTranslineTanD_Button( wxCommandEvent& event );
 
     /**
      * Function OnTranslineRho_Button
      * Shows a list of current Specific resistance list (rho)
      * and set the selected value in main dialog frame
      */
-	void OnTranslineRho_Button( wxCommandEvent& event );
+    void OnTranslineRho_Button( wxCommandEvent& event );
 
     /**
      * Function TranslineTypeSelection
@@ -127,7 +127,7 @@ private:
      * Irrelevant parameters texts are blanked.
      * @param aType = the transline_type_id of the new selected transline
     */
-	void TranslineTypeSelection( enum transline_type_id aType );
+    void TranslineTypeSelection( enum transline_type_id aType );
 
     /**
      * Function TransfDlgDataToTranslineParams
@@ -149,7 +149,7 @@ private:
     void TransfAttenuatorResultsToPanel();
 
     // Regulators Panel
-	void OnRegulatorCalcButtonClick( wxCommandEvent& event );
+    void OnRegulatorCalcButtonClick( wxCommandEvent& event );
     void RegulatorsSolve();
 
 public:

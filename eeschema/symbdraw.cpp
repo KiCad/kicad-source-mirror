@@ -28,23 +28,23 @@
  * @brief Create, move .. graphic shapes used to build and draw a component (lines, arcs ..)
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "class_sch_screen.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <class_sch_screen.h>
 
-#include "eeschema_id.h"
-#include "general.h"
-#include "libeditframe.h"
-#include "class_libentry.h"
-#include "lib_arc.h"
-#include "lib_circle.h"
-#include "lib_polyline.h"
-#include "lib_rectangle.h"
-#include "lib_text.h"
+#include <eeschema_id.h>
+#include <general.h>
+#include <libeditframe.h>
+#include <class_libentry.h>
+#include <lib_arc.h>
+#include <lib_circle.h>
+#include <lib_polyline.h>
+#include <lib_rectangle.h>
+#include <lib_text.h>
 
-#include "dialogs/dialog_lib_edit_draw_item.h"
+#include <dialogs/dialog_lib_edit_draw_item.h>
 
 
 static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,

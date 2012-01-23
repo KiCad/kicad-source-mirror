@@ -26,7 +26,7 @@
  *
  * Returns
  * true if the selected component
- * FALSE canceled order
+ * false canceled order
  * Place the name of the component has loaded, select from a list in
  * BufName
  */

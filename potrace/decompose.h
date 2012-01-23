@@ -7,8 +7,8 @@
 #ifndef DECOMPOSE_H
 #define DECOMPOSE_H
 
-#include "potracelib.h"
-#include "progress.h"
+#include <potracelib.h>
+#include <progress.h>
 
 int bm_to_pathlist( const potrace_bitmap_t* bm,
                     path_t**                plistp,

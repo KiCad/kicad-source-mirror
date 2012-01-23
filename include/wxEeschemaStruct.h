@@ -30,13 +30,13 @@
 #ifndef  WX_EESCHEMA_STRUCT_H
 #define  WX_EESCHEMA_STRUCT_H
 
-#include "sch_base_frame.h"
-#include "param_config.h"
-#include "class_undoredo_container.h"
-#include "template_fieldnames.h"
-#include "block_commande.h"
-#include "class_sch_screen.h"
-#include "sch_collectors.h"
+#include <sch_base_frame.h>
+#include <param_config.h>
+#include <class_undoredo_container.h>
+#include <template_fieldnames.h>
+#include <block_commande.h>
+#include <class_sch_screen.h>
+#include <sch_collectors.h>
 
 
 class LIB_EDIT_FRAME;

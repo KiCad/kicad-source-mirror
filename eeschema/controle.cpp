@@ -27,24 +27,24 @@
  * eeschema/controle.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "eda_dde.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <eda_dde.h>
+#include <wxEeschemaStruct.h>
 
-#include "eeschema_id.h"
-#include "general.h"
-#include "hotkeys.h"
-#include "protos.h"
-#include "libeditframe.h"
-#include "viewlib_frame.h"
-#include "lib_draw_item.h"
-#include "lib_pin.h"
-#include "sch_sheet.h"
-#include "sch_sheet_path.h"
-#include "sch_marker.h"
-#include "sch_component.h"
+#include <eeschema_id.h>
+#include <general.h>
+#include <hotkeys.h>
+#include <protos.h>
+#include <libeditframe.h>
+#include <viewlib_frame.h>
+#include <lib_draw_item.h>
+#include <lib_pin.h>
+#include <sch_sheet.h>
+#include <sch_sheet_path.h>
+#include <sch_marker.h>
+#include <sch_component.h>
 
 
 SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KICAD_T aFilterList[],

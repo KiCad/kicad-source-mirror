@@ -4,17 +4,17 @@
  *        some pieces of code come from FreePCB.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "confirm.h"
-#include "class_undoredo_container.h"
+#include <fctsys.h>
+#include <common.h>
+#include <confirm.h>
+#include <class_undoredo_container.h>
 
-#include "class_board.h"
-#include "class_zone.h"
-#include "class_marker_pcb.h"
+#include <class_board.h>
+#include <class_zone.h>
+#include <class_marker_pcb.h>
 
-#include "pcbnew.h"
-#include "drc_stuff.h"
+#include <pcbnew.h>
+#include <drc_stuff.h>
 
 
 static bool bDontShowSelfIntersectionArcsWarning;

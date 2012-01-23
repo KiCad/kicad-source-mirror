@@ -28,17 +28,17 @@
  * @brief Pcbnew footprint (module) editor options.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
 
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "module_editor_frame.h"
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <module_editor_frame.h>
 
-#include "pcbnew_id.h"
+#include <pcbnew_id.h>
 
-#include "protos.h"
+#include <protos.h>
 
 
 void FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )

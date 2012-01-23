@@ -2,14 +2,14 @@
 /* projet_config.cpp */
 /*********************/
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "appl_wxstruct.h"
-#include "common.h"
-#include "kicad_string.h"
-#include "gestfich.h"
-#include "wxstruct.h"
-#include "param_config.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <appl_wxstruct.h>
+#include <common.h>
+#include <kicad_string.h>
+#include <gestfich.h>
+#include <wxstruct.h>
+#include <param_config.h>
 
 #include <wx/apptrait.h>
 #include <wx/stdpaths.h>

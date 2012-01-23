@@ -28,20 +28,20 @@
  * @brief GerbView configuration.
 */
 
-#include "fctsys.h"
-#include "macros.h"
-#include "id.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "gestfich.h"
-#include "pcbcommon.h"
-#include "param_config.h"
-#include "colors_selection.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <id.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <gestfich.h>
+#include <pcbcommon.h>
+#include <param_config.h>
+#include <colors_selection.h>
 
-#include "gerbview.h"
-#include "hotkeys.h"
-#include "class_board_design_settings.h"
-#include "dialog_hotkeys_editor.h"
+#include <gerbview.h>
+#include <hotkeys.h>
+#include <class_board_design_settings.h>
+#include <dialog_hotkeys_editor.h>
 
 
 #define GROUP wxT("/gerbview")

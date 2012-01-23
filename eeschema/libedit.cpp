@@ -28,23 +28,23 @@
  * @brief Eeschema component library editor.
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "macros.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "class_sch_screen.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <macros.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <class_sch_screen.h>
 
-#include "eeschema_id.h"
-#include "general.h"
-#include "protos.h"
-#include "libeditframe.h"
-#include "class_library.h"
-#include "template_fieldnames.h"
+#include <eeschema_id.h>
+#include <general.h>
+#include <protos.h>
+#include <libeditframe.h>
+#include <class_library.h>
+#include <template_fieldnames.h>
 
-#include "dialogs/dialog_lib_new_component.h"
+#include <dialogs/dialog_lib_new_component.h>
 
 #include <wx/wfstream.h>
 

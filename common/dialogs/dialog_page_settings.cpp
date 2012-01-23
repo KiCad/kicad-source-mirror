@@ -8,21 +8,27 @@
  * invoked in Pcbnew instead.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "base_struct.h"
-#include "class_drawpanel.h"
-#include "class_sch_screen.h"
-#include "wxstruct.h"
+#include <fctsys.h>
+#include <common.h>
+#include <base_struct.h>
+#include <class_drawpanel.h>
+#include <class_title_block.h>
+#include <wxstruct.h>
+#include <class_base_screen.h>
 
-#include "wx/valgen.h"
+#include <wx/valgen.h>
 #include <wx/tokenzr.h>
 
 #ifdef EESCHEMA
-#include "general.h"
+#include <class_sch_screen.h>
+#include <general.h>
 #endif
 
-#include "dialog_page_settings.h"
+#include <dialog_page_settings.h>
+
+// dialog should remember its previous screen position and size
+wxPoint DIALOG_PAGES_SETTINGS::s_LastPos( -1, -1 );
+wxSize  DIALOG_PAGES_SETTINGS::s_LastSize;
 
 
 void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
@@ -63,6 +69,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
     SetFocus();
 
+#ifdef EESCHEMA
     // Init display value for sheet User size
     wxString format = m_TextSheetCount->GetLabel();
     msg.Printf( format, m_Screen->m_NumberOfScreen );
@@ -71,6 +78,10 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     format = m_TextSheetNumber->GetLabel();
     msg.Printf( format, m_Screen->m_ScreenNumber );
     m_TextSheetNumber->SetLabel( msg );
+#else
+    m_TextSheetCount->Show(false);
+    m_TextSheetNumber->Show(false);
+#endif
 
     const PAGE_INFO& pageInfo = m_Parent->GetPageSettings();
 
@@ -153,6 +164,35 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
     // Make the OK button the default.
     m_sdbSizer1OK->SetDefault();
+}
+
+
+bool DIALOG_PAGES_SETTINGS::Show( bool show )
+{
+    bool ret;
+
+    if( show )
+    {
+        ret = DIALOG_PAGES_SETTINGS_BASE::Show( show );
+
+        if( s_LastPos.x != -1 )
+        {
+            SetSize( s_LastPos.x, s_LastPos.y, s_LastSize.x, s_LastSize.y, 0 );
+        }
+        else
+        {
+            // Do nothing: last position not yet saved.
+        }
+    }
+    else
+    {
+        // Save the dialog's position before hiding
+        s_LastPos  = GetPosition();
+        s_LastSize = GetSize();
+        ret = DIALOG_PAGES_SETTINGS_BASE::Show( show );
+    }
+
+    return ret;
 }
 
 
@@ -249,7 +289,7 @@ void DIALOG_PAGES_SETTINGS::SavePageSettings( wxCommandEvent& event )
         // here we assume translators will keep original paper size spellings
         if( !pageInfo.SetType( paperType ) )
         {
-            wxASSERT_MSG( FALSE, wxT( "the translation for paper size must preserve original spellings" ) );
+            wxASSERT_MSG( false, wxT( "the translation for paper size must preserve original spellings" ) );
         }
 
         // set portrait _after_ setting size/type above

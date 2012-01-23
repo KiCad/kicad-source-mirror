@@ -27,21 +27,21 @@
  * @file eeredraw.cpp
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "class_library.h"
-#include "sch_bus_entry.h"
-#include "sch_component.h"
-#include "sch_junction.h"
-#include "sch_line.h"
-#include "sch_no_connect.h"
-#include "sch_polyline.h"
-#include "sch_sheet.h"
-#include "sch_sheet_path.h"
+#include <general.h>
+#include <class_library.h>
+#include <sch_bus_entry.h>
+#include <sch_component.h>
+#include <sch_junction.h>
+#include <sch_line.h>
+#include <sch_no_connect.h>
+#include <sch_polyline.h>
+#include <sch_sheet.h>
+#include <sch_sheet_path.h>
 
 
 void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& pos, int Color )
@@ -73,7 +73,7 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
     TraceWorkSheet( DC, GetScreen(), g_DrawDefaultLineThickness );
 
     if( m_canvas->IsMouseCaptured() )
-        m_canvas->CallMouseCapture( DC, wxDefaultPosition, FALSE );
+        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
     m_canvas->DrawCrossHair( DC );
 

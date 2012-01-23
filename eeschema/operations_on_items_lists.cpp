@@ -4,21 +4,21 @@
  *        lists of schematic items.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "protos.h"
-#include "sch_bus_entry.h"
-#include "sch_marker.h"
-#include "sch_line.h"
-#include "sch_no_connect.h"
-#include "sch_polyline.h"
-#include "sch_sheet.h"
-#include "sch_component.h"
-#include "sch_junction.h"
+#include <general.h>
+#include <protos.h>
+#include <sch_bus_entry.h>
+#include <sch_marker.h>
+#include <sch_line.h>
+#include <sch_no_connect.h>
+#include <sch_polyline.h>
+#include <sch_sheet.h>
+#include <sch_component.h>
+#include <sch_junction.h>
 
 
 void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )

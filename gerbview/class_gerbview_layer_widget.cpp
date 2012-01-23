@@ -29,17 +29,17 @@
  * @brief  GerbView layers manager.
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "pcbstruct.h"
-#include "macros.h"
-#include "class_layer_box_selector.h"
+#include <fctsys.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <pcbstruct.h>
+#include <macros.h>
+#include <class_layer_box_selector.h>
 
-#include "gerbview.h"
-#include "class_GERBER.h"
-#include "layer_widget.h"
-#include "class_gerbview_layer_widget.h"
+#include <gerbview.h>
+#include <class_GERBER.h>
+#include <layer_widget.h>
+#include <class_gerbview_layer_widget.h>
 
 
 /*

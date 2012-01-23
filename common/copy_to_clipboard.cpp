@@ -26,15 +26,15 @@
  * @file copy_to_clipboard.cpp
  */
 
-#include "wx/metafile.h"
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "id.h"
-#include "class_drawpanel.h"
-#include "class_base_screen.h"
-#include "confirm.h"
-#include "wxstruct.h"
+#include <wx/metafile.h>
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <id.h>
+#include <class_drawpanel.h>
+#include <class_base_screen.h>
+#include <confirm.h>
+#include <wxstruct.h>
 
 static bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame );
 

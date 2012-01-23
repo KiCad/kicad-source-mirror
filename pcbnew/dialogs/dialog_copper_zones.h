@@ -5,7 +5,7 @@
 
 #include <wx/wx.h>
 #include <wx/listctrl.h>
-#include "dialog_copper_zones_base.h"
+#include <dialog_copper_zones_base.h>
 
 /**
  * Class DIALOG_COPPER_ZONE

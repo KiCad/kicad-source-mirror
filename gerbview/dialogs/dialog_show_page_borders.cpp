@@ -27,12 +27,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <common.h>
+#include <macros.h>
 
-#include "gerbview.h"
-#include "dialog_show_page_borders.h"
+#include <gerbview.h>
+#include <dialog_show_page_borders.h>
 
 
 DIALOG_PAGE_SHOW_PAGE_BORDERS::DIALOG_PAGE_SHOW_PAGE_BORDERS( GERBVIEW_FRAME *parent) :

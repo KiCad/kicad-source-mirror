@@ -2,10 +2,10 @@
 #ifndef _TEMPLATE_FIELDNAME_H_
 #define _TEMPLATE_FIELDNAME_H_
 
-#include "richio.h"
-#include "wxstruct.h"
-#include "macros.h"
-#include "template_fieldnames_lexer.h"
+#include <richio.h>
+#include <wxstruct.h>
+#include <macros.h>
+#include <template_fieldnames_lexer.h>
 
 class TEMPLATE_FIELDNAMES_LEXER;
 

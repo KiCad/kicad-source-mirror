@@ -2,12 +2,12 @@
 /*  dialog_get_component.cpp     */
 /*********************************/
 
-#include "fctsys.h"
+#include <fctsys.h>
 //#include "gr_basic.h"
-#include "common.h"
-#include "macros.h"
-#include "wxstruct.h"
-#include "dialog_get_component.h"
+#include <common.h>
+#include <macros.h>
+#include <wxstruct.h>
+#include <dialog_get_component.h>
 
 
 /****************************************************************************/

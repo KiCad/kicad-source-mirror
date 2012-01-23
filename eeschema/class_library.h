@@ -33,7 +33,7 @@
 
 #include <wx/filename.h>
 
-#include "class_libentry.h"
+#include <class_libentry.h>
 
 
 class LINE_READER;

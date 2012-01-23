@@ -5,7 +5,7 @@
 #ifndef CURVE_H
 #define CURVE_H
 
-#include "auxiliary.h"
+#include <auxiliary.h>
 
 /* vertex is c[1] for tag=POTRACE_CORNER, and the intersection of
  *  .c[-1][2]..c[0] and c[1]..c[2] for tag=POTRACE_CURVETO. alpha is only

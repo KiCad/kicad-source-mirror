@@ -2,26 +2,26 @@
  * @file setvisu.cpp
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "bitmaps.h"
+#include <fctsys.h>
+#include <common.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <bitmaps.h>
 
-#include "class_board.h"
-#include "class_module.h"
+#include <class_board.h>
+#include <class_module.h>
 
-#include "cvpcb.h"
-#include "cvpcb_mainframe.h"
-#include "cvstruct.h"
-#include "class_DisplayFootprintsFrame.h"
+#include <cvpcb.h>
+#include <cvpcb_mainframe.h>
+#include <cvstruct.h>
+#include <class_DisplayFootprintsFrame.h>
 
 /*
  * NOTE: There is something in 3d_viewer.h that causes a compiler error in
  *       <boost/foreach.hpp> in Linux so move it after cvpcb.h where it is
  *       included to prevent the error from occurring.
  */
-#include "3d_viewer.h"
+#include <3d_viewer.h>
 
 
 /*

@@ -9,17 +9,17 @@
 * DXF
 ******************************************/
 
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "trigo.h"
-#include "wxstruct.h"
-#include "base_struct.h"
-#include "common.h"
-#include "plot_common.h"
-#include "worksheet.h"
-#include "macros.h"
-#include "class_base_screen.h"
-#include "drawtxt.h"
+#include <trigo.h>
+#include <wxstruct.h>
+#include <base_struct.h>
+#include <common.h>
+#include <plot_common.h>
+#include <worksheet.h>
+#include <macros.h>
+#include <class_base_screen.h>
+#include <drawtxt.h>
 
 PLOTTER::PLOTTER( PlotFormat aPlotType )
 {

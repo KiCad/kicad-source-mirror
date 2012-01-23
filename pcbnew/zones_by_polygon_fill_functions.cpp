@@ -28,18 +28,18 @@
 
 #include <wx/progdlg.h>
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "wxPcbStruct.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <wxPcbStruct.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_track.h"
-#include "class_zone.h"
+#include <class_board.h>
+#include <class_track.h>
+#include <class_zone.h>
 
-#include "pcbnew.h"
-#include "zones.h"
+#include <pcbnew.h>
+#include <zones.h>
 
 
 /**

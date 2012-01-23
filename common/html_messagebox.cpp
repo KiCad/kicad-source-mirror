@@ -1,6 +1,6 @@
-#include "fctsys.h"
-#include "html_messagebox.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <html_messagebox.h>
+#include <macros.h>
 
 HTML_MESSAGE_BOX::HTML_MESSAGE_BOX( wxWindow* parent, const wxString & aTitle,
                                       wxPoint aPos, wxSize aSize)

@@ -10,19 +10,19 @@
  * Note: these ports must be enabled for firewall protection
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "wxPcbStruct.h"
-#include "eda_dde.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <wxPcbStruct.h>
+#include <eda_dde.h>
+#include <macros.h>
 
-#include "pcbnew_id.h"
-#include "class_board.h"
-#include "class_module.h"
+#include <pcbnew_id.h>
+#include <class_board.h>
+#include <class_module.h>
 
-#include "collectors.h"
-#include "pcbnew.h"
-#include "protos.h"
+#include <collectors.h>
+#include <pcbnew.h>
+#include <protos.h>
 
 
 /**

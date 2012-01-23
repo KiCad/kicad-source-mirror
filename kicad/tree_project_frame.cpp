@@ -4,19 +4,19 @@
  */
 
 
-#include "fctsys.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "appl_wxstruct.h"
+#include <fctsys.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <appl_wxstruct.h>
 
-#include "kicad.h"
-#include "tree_project_frame.h"
-#include "class_treeprojectfiles.h"
-#include "class_treeproject_item.h"
+#include <kicad.h>
+#include <tree_project_frame.h>
+#include <class_treeprojectfiles.h>
+#include <class_treeproject_item.h>
 
-#include "wx/regex.h"
-#include "wx/dir.h"
-#include "wx/imaglist.h"
+#include <wx/regex.h>
+#include <wx/dir.h>
+#include <wx/imaglist.h>
 
 
 /* Note about the tree project build process:
@@ -688,7 +688,7 @@ void TREE_PROJECT_FRAME::ReCreateTreePrj()
                                                    TREE_PROJECT - 1,
                                                    TREE_PROJECT - 1 );
 
-    m_TreeProject->SetItemBold( rootcellule, TRUE );
+    m_TreeProject->SetItemBold( rootcellule, true );
 
     m_TreeProject->SetItemData( rootcellule,
                                 new TREEPROJECT_ITEM( TREE_PROJECT,

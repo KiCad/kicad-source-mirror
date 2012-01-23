@@ -31,8 +31,8 @@
 #ifndef  PANEL_WXSTRUCT_H
 #define  PANEL_WXSTRUCT_H
 
-#include "colors.h"
-#include "base_struct.h"
+#include <colors.h>
+#include <base_struct.h>
 
 class EDA_DRAW_FRAME;
 class BASE_SCREEN;

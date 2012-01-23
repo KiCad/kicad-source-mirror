@@ -2,20 +2,20 @@
 /* NETINFO_ITEM class, to handle info on nets (netnames, net constraints */
 /*************************************************************************/
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "wxBasePcbFrame.h"
-#include "common.h"
-#include "kicad_string.h"
-#include "pcbnew.h"
-#include "colors_selection.h"
-#include "richio.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <wxBasePcbFrame.h>
+#include <common.h>
+#include <kicad_string.h>
+#include <pcbnew.h>
+#include <colors_selection.h>
+#include <richio.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_module.h"
-#include "class_track.h"
+#include <class_board.h>
+#include <class_module.h>
+#include <class_track.h>
 
 
 /*********************************************************/

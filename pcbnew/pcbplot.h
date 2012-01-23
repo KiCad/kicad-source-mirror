@@ -5,7 +5,7 @@
 #ifndef PCBPLOT_H
 #define PCBPLOT_H
 
-#include "pcb_plot_params.h"
+#include <pcb_plot_params.h>
 
 
 class PLOTTER;

@@ -2,20 +2,20 @@
 /* Dialog box for editing module	properties and carateristics in module editor (modedit)*/
 /*******************************************************************************************/
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "pcbnew.h"
-#include "appl_wxstruct.h"
-#include "gestfich.h"
-#include "3d_struct.h"
-#include "3d_viewer.h"
-#include "wxPcbStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <pcbnew.h>
+#include <appl_wxstruct.h>
+#include <gestfich.h>
+#include <3d_struct.h>
+#include <3d_viewer.h>
+#include <wxPcbStruct.h>
 
-#include "class_module.h"
-#include "class_text_mod.h"
-#include "module_editor_frame.h"
-#include "dialog_edit_module_for_Modedit.h"
+#include <class_module.h>
+#include <class_text_mod.h>
+#include <module_editor_frame.h>
+#include <dialog_edit_module_for_Modedit.h>
 
 
 DIALOG_MODULE_MODULE_EDITOR::DIALOG_MODULE_MODULE_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
@@ -273,7 +273,7 @@ void DIALOG_MODULE_MODULE_EDITOR::BrowseAndAdd3DLib( wxCommandEvent& event )
                                      mask,
                                      this,
                                      wxFD_OPEN,
-                                     TRUE
+                                     true
                                      );
 
     if( fullfilename == wxEmptyString )

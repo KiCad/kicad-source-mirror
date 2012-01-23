@@ -4,14 +4,14 @@
 
 /* file class_marker.cpp */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "wxstruct.h"
-#include "trigo.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <wxstruct.h>
+#include <trigo.h>
 
-#include "pcbnew.h"
-#include "class_marker_pcb.h"
+#include <pcbnew.h>
+#include <class_marker_pcb.h>
 
 
 #define SCALING_FACTOR 30       // Adjust the actual size of markers, when using default shape

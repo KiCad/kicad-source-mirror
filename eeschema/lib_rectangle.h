@@ -30,7 +30,7 @@
 #ifndef _LIB_RECTANGLE_H_
 #define _LIB_RECTANGLE_H_
 
-#include "lib_draw_item.h"
+#include <lib_draw_item.h>
 
 
 class LIB_RECTANGLE  : public LIB_ITEM

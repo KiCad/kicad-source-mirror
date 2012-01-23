@@ -26,10 +26,10 @@
  * @file gerbview/controle.cpp
  */
 
-#include "fctsys.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "gerbview.h"
+#include <fctsys.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <gerbview.h>
 
 
 void GERBVIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, int aHotKey )

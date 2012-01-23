@@ -27,17 +27,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "class_drawpanel.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <class_drawpanel.h>
 
-#include "general.h"
-#include "libeditframe.h"
-#include "class_libentry.h"
-#include "lib_text.h"
+#include <general.h>
+#include <libeditframe.h>
+#include <class_libentry.h>
+#include <lib_text.h>
 
-#include "dialog_lib_edit_text.h"
+#include <dialog_lib_edit_text.h>
 
 
 DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( LIB_EDIT_FRAME* aParent, LIB_TEXT* aText ) :
@@ -66,11 +66,11 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
         m_TextValue->SetValue( m_GraphicText->m_Text );
 
         if ( m_GraphicText->GetUnit() == 0 )
-            m_CommonUnit->SetValue( TRUE );
+            m_CommonUnit->SetValue( true );
         if ( m_GraphicText->GetConvert() == 0 )
-            m_CommonConvert->SetValue( TRUE );
+            m_CommonConvert->SetValue( true );
         if ( m_GraphicText->m_Orient == TEXT_ORIENT_VERT )
-            m_Orient->SetValue( TRUE );
+            m_Orient->SetValue( true );
 
         int shape = 0;
         if ( m_GraphicText->m_Italic )
@@ -118,11 +118,11 @@ void DIALOG_LIB_EDIT_TEXT::initDlg( )
         m_TextSize->SetValue( msg );
 
         if ( ! m_Parent->m_drawSpecificUnit )
-            m_CommonUnit->SetValue( TRUE );
+            m_CommonUnit->SetValue( true );
         if ( ! m_Parent->m_drawSpecificConvert )
-            m_CommonConvert->SetValue( TRUE );
+            m_CommonConvert->SetValue( true );
         if ( m_Parent->m_textOrientation == TEXT_ORIENT_VERT )
-            m_Orient->SetValue( TRUE );
+            m_Orient->SetValue( true );
     }
 
     msg = m_TextSizeText->GetLabel() + ReturnUnitSymbol();

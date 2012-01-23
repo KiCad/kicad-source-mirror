@@ -26,19 +26,19 @@
 /* Dialog editor for text on copper and technical layers (TEXTE_PCB class) */
 /***************************************************************************/
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "drawtxt.h"
-#include "confirm.h"
-#include "dialog_helpers.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <drawtxt.h>
+#include <confirm.h>
+#include <dialog_helpers.h>
 
-#include "class_board.h"
-#include "class_pcb_text.h"
+#include <class_board.h>
+#include <class_pcb_text.h>
 
-#include "dialog_pcb_text_properties.h"
+#include <dialog_pcb_text_properties.h>
 
 
 /**

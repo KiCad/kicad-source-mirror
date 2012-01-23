@@ -28,12 +28,12 @@
  * @brief Class NETLIST_OBJECT to handle 1 item connected (in netlist and erc calculations)
  */
 
-#include "fctsys.h"
-#include "macros.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <macros.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "sch_component.h"
+#include <general.h>
+#include <sch_component.h>
 
 #if defined(DEBUG)
 

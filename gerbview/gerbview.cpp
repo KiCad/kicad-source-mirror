@@ -3,22 +3,22 @@
  * @brief GERBVIEW main file.
  */
 
-#include "fctsys.h"
-#include "appl_wxstruct.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gestfich.h"
-#include "gr_basic.h"
+ #include <fctsys.h>
+#include <appl_wxstruct.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gestfich.h>
+#include <gr_basic.h>
 
-#include "gerbview.h"
-#include "gerbview_id.h"
-#include "pcbplot.h"
-#include "zones.h"
-#include "class_board_design_settings.h"
-#include "colors_selection.h"
-#include "hotkeys.h"
+#include <gerbview.h>
+#include <gerbview_id.h>
+#include <pcbplot.h>
+#include <zones.h>
+#include <class_board_design_settings.h>
+#include <colors_selection.h>
+#include <hotkeys.h>
 
-#include "build_version.h"
+#include <build_version.h>
 
 #include <wx/file.h>
 #include <wx/snglinst.h>

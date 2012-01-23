@@ -2,13 +2,13 @@
  * @file displlst.cpp
  */
 
-#include "fctsys.h"
-#include "wxstruct.h"
-#include "gr_basic.h"
-#include "common.h"
-#include "macros.h"
-#include "kicad_string.h"
-#include "dialog_helpers.h"
+#include <fctsys.h>
+#include <wxstruct.h>
+#include <gr_basic.h>
+#include <common.h>
+#include <macros.h>
+#include <kicad_string.h>
+#include <dialog_helpers.h>
 
 
 enum listbox {

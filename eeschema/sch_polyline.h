@@ -32,7 +32,7 @@
 #define _SCH_POLYLINE_H_
 
 
-#include "sch_item_struct.h"
+#include <sch_item_struct.h>
 
 
 class SCH_POLYLINE : public SCH_ITEM

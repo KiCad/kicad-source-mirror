@@ -28,16 +28,16 @@
  */
 
 
-#include "fctsys.h"
-#include "common.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "gr_basic.h"
+#include <fctsys.h>
+#include <common.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <gr_basic.h>
 
-#include "gerbview.h"
-#include "class_gerber_draw_item.h"
+#include <gerbview.h>
+#include <class_gerber_draw_item.h>
 
-#include "wx/debug.h"
+#include <wx/debug.h>
 
 #define BLOCK_COLOR BROWN
 

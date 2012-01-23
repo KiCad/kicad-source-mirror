@@ -27,17 +27,17 @@
  * @brief Editimg of text on copper and technical layers (TEXTE_PCB class)
  */
 
-#include "fctsys.h"
-#include "gr_basic.h"
-#include "class_drawpanel.h"
-#include "pcbnew.h"
-#include "wxPcbStruct.h"
-#include "macros.h"
+#include <fctsys.h>
+#include <gr_basic.h>
+#include <class_drawpanel.h>
+#include <pcbnew.h>
+#include <wxPcbStruct.h>
+#include <macros.h>
 
-#include "class_board.h"
-#include "class_pcb_text.h"
+#include <class_board.h>
+#include <class_pcb_text.h>
 
-#include "protos.h"
+#include <protos.h>
 
 
 static void Move_Texte_Pcb( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,

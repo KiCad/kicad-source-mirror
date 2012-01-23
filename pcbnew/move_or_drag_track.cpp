@@ -28,22 +28,22 @@
  * @brief Track editing routines to move and drag track segments or node.
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "confirm.h"
-#include "wxPcbStruct.h"
-#include "trigo.h"
-#include "macros.h"
-#include "gr_basic.h"
-#include "pcbcommon.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <wxPcbStruct.h>
+#include <trigo.h>
+#include <macros.h>
+#include <gr_basic.h>
+#include <pcbcommon.h>
 
-#include "class_board.h"
+#include <class_board.h>
 
-#include "pcbnew.h"
-#include "drc_stuff.h"
-#include "drag.h"
-#include "pcbnew_id.h"
-#include "protos.h"
+#include <pcbnew.h>
+#include <drc_stuff.h>
+#include <drag.h>
+#include <pcbnew_id.h>
+#include <protos.h>
 
 
 static void Show_MoveNode( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
@@ -336,7 +336,7 @@ static void Show_Drag_Track_Segment_With_Cte_Slope( EDA_DRAW_PANEL* aPanel, wxDC
         if( tSegmentToEnd )
             tSegmentToEnd->Draw( aPanel, aDC, draw_mode );
     }
-#endif 
+#endif
 
     /* Compute the new track segment position */
     wxPoint Pos = screen->GetCrossHairPosition();

@@ -27,15 +27,15 @@
  * @file tool_sch.cpp
  */
 
-#include "fctsys.h"
-#include "class_drawpanel.h"
-#include "wxEeschemaStruct.h"
+#include <fctsys.h>
+#include <class_drawpanel.h>
+#include <wxEeschemaStruct.h>
 
-#include "general.h"
-#include "hotkeys.h"
-#include "eeschema_id.h"
+#include <general.h>
+#include <hotkeys.h>
+#include <eeschema_id.h>
 
-#include "help_common_strings.h"
+#include <help_common_strings.h>
 
 
 /* Create  the main Horizontal Toolbar for the schematic editor

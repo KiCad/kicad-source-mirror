@@ -7,17 +7,17 @@
 *****************************************************************************/
 #include <math.h>
 
-#include "attenuator_classes.h"
+#include <attenuator_classes.h>
 
 // Bitmaps:
-#include "att_pi.xpm"
-#include "att_tee.xpm"
-#include "att_bridge.xpm"
-#include "att_splitter.xpm"
-#include "pi_formula.xpm"
-#include "tee_formula.xpm"
-#include "bridged_tee_formula.xpm"
-#include "splitter_formula.xpm"
+#include <att_pi.xpm>
+#include <att_tee.xpm>
+#include <att_bridge.xpm>
+#include <att_splitter.xpm>
+#include <pi_formula.xpm>
+#include <tee_formula.xpm>
+#include <bridged_tee_formula.xpm>
+#include <splitter_formula.xpm>
 
 #ifndef NULL
 #define NULL 0

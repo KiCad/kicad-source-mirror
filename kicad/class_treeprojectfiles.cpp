@@ -3,15 +3,15 @@
  * this is the wxTreeCtrl that shows a KiCad tree project files
  */
 
-#include "fctsys.h"
+#include <fctsys.h>
 
-#include "kicad.h"
-#include "tree_project_frame.h"
-#include "class_treeprojectfiles.h"
-#include "class_treeproject_item.h"
+#include <kicad.h>
+#include <tree_project_frame.h>
+#include <class_treeprojectfiles.h>
+#include <class_treeproject_item.h>
 
-#include "wx/regex.h"
-#include "wx/imaglist.h"
+#include <wx/regex.h>
+#include <wx/imaglist.h>
 
 
 IMPLEMENT_ABSTRACT_CLASS( TREEPROJECTFILES, wxTreeCtrl )
@@ -33,7 +33,7 @@ TREEPROJECTFILES::TREEPROJECTFILES( TREE_PROJECT_FRAME* parent ) :
     iconsize.y = dummy.GetHeight();
 
     // Make an image list containing small icons
-    m_ImageList = new wxImageList( iconsize.x, iconsize.y, TRUE, TREE_MAX );
+    m_ImageList = new wxImageList( iconsize.x, iconsize.y, true, TREE_MAX );
 
     m_ImageList->Add( KiBitmap( kicad_icon_small_xpm ) );       // TREE_PROJECT
     m_ImageList->Add( KiBitmap( eeschema_xpm ) );               // TREE_SCHEMA

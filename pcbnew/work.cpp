@@ -28,12 +28,12 @@
  * @brief Automatic routing routines
  */
 
-#include "fctsys.h"
-#include "common.h"
+#include <fctsys.h>
+#include <common.h>
 
-#include "pcbnew.h"
-#include "cell.h"
-#include "ar_protos.h"
+#include <pcbnew.h>
+#include <cell.h>
+#include <ar_protos.h>
 
 
 struct CWORK /* a unit of work is a hole-pair to connect */
