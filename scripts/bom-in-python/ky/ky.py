@@ -298,11 +298,11 @@ class netlist():
             self.libparts.append(part(self._curr_element))
 
         # If this element is a net, add it to the nets list
-        if self._curr_element.name = "net"
+        if self._curr_element.name == "net":
             self.nets.append(self._curr_element)
         
         # If this element is a library, add it to the libraries list
-        if self._curr_element.name = "library"
+        if self._curr_element.name == "library":
             self.libraries.append(self._curr_element)
                 
         return self._curr_element        
