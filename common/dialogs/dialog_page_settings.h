@@ -19,9 +19,20 @@ private:
     bool            m_modified;
     PAGE_INFO       m_user_size;        ///< instantiated just to get the size
 
+    static wxSize   s_LastSize;		        ///< last position and size
+    static wxPoint	s_LastPos;
+
 public:
     DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent );
     ~DIALOG_PAGES_SETTINGS();
+
+    /**
+     * Function Show
+     * overloads the wxDialog::Show() function so it can position the
+     * dialog at its remembered size and position.
+     */
+    bool Show( bool show );
+
 
 private:
     /// Initialises member variables

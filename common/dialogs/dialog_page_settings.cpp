@@ -26,6 +26,10 @@
 
 #include <dialog_page_settings.h>
 
+// dialog should remember its previous screen position and size
+wxPoint DIALOG_PAGES_SETTINGS::s_LastPos( -1, -1 );
+wxSize  DIALOG_PAGES_SETTINGS::s_LastSize;
+
 
 void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 {
@@ -160,6 +164,35 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
     // Make the OK button the default.
     m_sdbSizer1OK->SetDefault();
+}
+
+
+bool DIALOG_PAGES_SETTINGS::Show( bool show )
+{
+    bool ret;
+
+    if( show )
+    {
+        ret = DIALOG_PAGES_SETTINGS_BASE::Show( show );
+
+        if( s_LastPos.x != -1 )
+        {
+            SetSize( s_LastPos.x, s_LastPos.y, s_LastSize.x, s_LastSize.y, 0 );
+        }
+        else
+        {
+            // Do nothing: last position not yet saved.
+        }
+    }
+    else
+    {
+        // Save the dialog's position before hiding
+        s_LastPos  = GetPosition();
+        s_LastSize = GetSize();
+        ret = DIALOG_PAGES_SETTINGS_BASE::Show( show );
+    }
+
+    return ret;
 }
 
 
